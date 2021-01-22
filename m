@@ -2,192 +2,228 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+X-Spam-Status: No, score=-15.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 58FF3C433DB
-	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 20:59:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7D35C433E6
+	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 21:16:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1520923B09
-	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 20:59:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A66AD23B09
+	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 21:16:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730733AbhAVU5G (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 22 Jan 2021 15:57:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50620 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730831AbhAVUzN (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 22 Jan 2021 15:55:13 -0500
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77BC2C061786;
-        Fri, 22 Jan 2021 12:54:33 -0800 (PST)
-Received: by mail-oi1-x22e.google.com with SMTP id x137so6250329oix.11;
-        Fri, 22 Jan 2021 12:54:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=nYq626qG3iPZ8mDSqFFjj9nxHU5At0ReYF42/qIrow0=;
-        b=DCBJJHvDe4bD5Ts3xqg0loaxnKTefbV6eXf7xb1hJ5CBabgE+ReGB/q1SBfLWBa4V/
-         ej1Jidj6diIRIIcZxKJntLYhKoGYyv1ObVYgc6Nvik2FpzaB1a9tSFuGffUS6VIMhggK
-         ZvQdzQC5alzDxETHy4VOfgyQNKZFJClVbKkNic6ChIgIUlII+S9qrxYfKXgL6XbrSWnS
-         X6o5Fgi7koQaGR4SBSh0sMlsF5ytpi17ns76QHzTc3eo3FKklQGn6eyzh/2P80yzCG1H
-         W2z/663hRibQgl0sMT2YF19VDwyH9K65wMpPF92WY+CvpLWKuY2YUAvp3WAwPfNl8BhO
-         bVPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=nYq626qG3iPZ8mDSqFFjj9nxHU5At0ReYF42/qIrow0=;
-        b=btoTWb7Qd3xRqnIGFvLwcfTD/Sb7x2+cWzyqPrzPAJlNchhce+cZYps5tlb/GvpeSY
-         AhkO83GMwohba+ejgPP6CDIcMuj7zNR7K02+swVBykb24k7lLZSbmJ+MUztT+jVPHJWT
-         /XYPfIvGwdgXf8vqsM9odh5SxC5QND5EnauS/LjrtLCdTlsjSMb8xxFVZ0MMSYuwx/hl
-         O/2XQ8FVnnyvghrwFmtCGAnLdhiTNc2Q+5BhKWpoh0njUzaGA9QmknFJAjyoYu2eRlcz
-         aXjbB515K0GOVmykKPkSNig36FX/naEirSBzCeHs18Qlm5gtpwlkd9QoqEWvak+k3T77
-         U06Q==
-X-Gm-Message-State: AOAM533Z28JYzyVsYoEJvYONHvA7h+GX+g0HTMUqnfywr+xliUdXwE9p
-        d3Dmj3FLyqLLFtH8hLSAJajr+ZGiTJArEQ==
-X-Google-Smtp-Source: ABdhPJxHmUm9+lfgTdBg4MRseeoE/oJZL/GInrjmqGTi1OLnZS5CNNJSHivoKEd78Qs7v2zePq8juA==
-X-Received: by 2002:aca:3f07:: with SMTP id m7mr4391473oia.104.1611348872763;
-        Fri, 22 Jan 2021 12:54:32 -0800 (PST)
-Received: from unknown.attlocal.net ([2600:1700:65a0:ab60:1c14:d05:b7d:917b])
-        by smtp.gmail.com with ESMTPSA id k18sm1349193otj.36.2021.01.22.12.54.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Jan 2021 12:54:32 -0800 (PST)
-From:   Cong Wang <xiyou.wangcong@gmail.com>
-To:     netdev@vger.kernel.org
-Cc:     bpf@vger.kernel.org, jhs@mojatatu.com, andrii@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, kafai@fb.com,
-        Cong Wang <cong.wang@bytedance.com>,
-        Dongdong Wang <wangdongdong.6@bytedance.com>
-Subject: [Patch bpf-next v5 2/3] selftests/bpf: add test cases for bpf timeout map
-Date:   Fri, 22 Jan 2021 12:54:14 -0800
-Message-Id: <20210122205415.113822-3-xiyou.wangcong@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210122205415.113822-1-xiyou.wangcong@gmail.com>
-References: <20210122205415.113822-1-xiyou.wangcong@gmail.com>
+        id S1728327AbhAVUtM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 22 Jan 2021 15:49:12 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:54359 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728807AbhAVUjb (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 22 Jan 2021 15:39:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1611347885;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pEI40Ew5bwMka3bTZV7b6s1ZtJVnwzQh64Wl80oBfFk=;
+        b=TUbYvlyxOe80Lp6u7LcGNP/L2Xv0kDLZn3k6uDvuG4rYVhV3f6FsiWUaMutFD5xY8zrwJn
+        oD9/cpEd+pEILMazbxH74NwaSjG70HX92GhVS50kyoWYb+1Up3A4YMoLsMwF25l1pmn7Xl
+        yzCAmVX56dQuFtOzFV5UwwrGceny+FY=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-351-JHemyTeyMoS4StwE5N74hA-1; Fri, 22 Jan 2021 15:38:01 -0500
+X-MC-Unique: JHemyTeyMoS4StwE5N74hA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D0B261926DA0;
+        Fri, 22 Jan 2021 20:37:58 +0000 (UTC)
+Received: from krava (unknown [10.40.192.97])
+        by smtp.corp.redhat.com (Postfix) with SMTP id AB8C460D01;
+        Fri, 22 Jan 2021 20:37:49 +0000 (UTC)
+Date:   Fri, 22 Jan 2021 21:37:48 +0100
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andriin@fb.com>, dwarves@vger.kernel.org,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Yonghong Song <yhs@fb.com>, Hao Luo <haoluo@google.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Mark Wielaard <mjw@redhat.com>
+Subject: Re: [PATCH 2/2] bpf_encoder: Translate SHN_XINDEX in symbol's
+ st_shndx values
+Message-ID: <20210122203748.GA70760@krava>
+References: <20210122163920.59177-1-jolsa@kernel.org>
+ <20210122163920.59177-3-jolsa@kernel.org>
+ <CAEf4BzbC-s=27vmcJ1KYLVKgGbns2py1bHny3Q_yr4v3Oe49RQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzbC-s=27vmcJ1KYLVKgGbns2py1bHny3Q_yr4v3Oe49RQ@mail.gmail.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Cong Wang <cong.wang@bytedance.com>
+On Fri, Jan 22, 2021 at 12:16:42PM -0800, Andrii Nakryiko wrote:
+> On Fri, Jan 22, 2021 at 8:46 AM Jiri Olsa <jolsa@kernel.org> wrote:
+> >
+> > For very large ELF objects (with many sections), we could
+> > get special value SHN_XINDEX (65535) for symbol's st_shndx.
+> >
+> > This patch is adding code to detect the optional extended
+> > section index table and use it to resolve symbol's section
+> > index.
+> >
+> > Adding elf_symtab__for_each_symbol_index macro that returns
+> > symbol's section index and usign it in collect functions.
+> >
+> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > ---
+> >  btf_encoder.c | 59 +++++++++++++++++++++++++++++++++++++--------------
+> >  elf_symtab.c  | 39 +++++++++++++++++++++++++++++++++-
+> >  elf_symtab.h  |  2 ++
+> >  3 files changed, 83 insertions(+), 17 deletions(-)
+> >
+> > diff --git a/btf_encoder.c b/btf_encoder.c
+> > index 5557c9efd365..56ee55965093 100644
+> > --- a/btf_encoder.c
+> > +++ b/btf_encoder.c
+> > @@ -63,13 +63,13 @@ static void delete_functions(void)
+> >  #define max(x, y) ((x) < (y) ? (y) : (x))
+> >  #endif
+> >
+> > -static int collect_function(struct btf_elf *btfe, GElf_Sym *sym)
+> > +static int collect_function(struct btf_elf *btfe, GElf_Sym *sym,
+> > +                           Elf32_Word sym_sec_idx)
+> 
+> nit: we use size_t or int for this, no need for libelf types here, imo
 
-Add some test cases in test_maps.c for timeout map, which focus
-on testing timeout. The parallel tests make sure to catch race
-conditions and the large map test stresses GC.
+ok
 
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Dongdong Wang <wangdongdong.6@bytedance.com>
-Signed-off-by: Cong Wang <cong.wang@bytedance.com>
----
- tools/testing/selftests/bpf/test_maps.c | 68 +++++++++++++++++++++++++
- 1 file changed, 68 insertions(+)
+> 
+> 
+> 
+> >  {
+> >         struct elf_function *new;
+> >         static GElf_Shdr sh;
+> > -       static int last_idx;
+> > +       static Elf32_Word last_idx;
+> >         const char *name;
+> > -       int idx;
+> >
+> >         if (elf_sym__type(sym) != STT_FUNC)
+> >                 return 0;
+> > @@ -90,12 +90,10 @@ static int collect_function(struct btf_elf *btfe, GElf_Sym *sym)
+> >                 functions = new;
+> >         }
+> >
+> > -       idx = elf_sym__section(sym);
+> > -
+> > -       if (idx != last_idx) {
+> > -               if (!elf_section_by_idx(btfe->elf, &sh, idx))
+> > +       if (sym_sec_idx != last_idx) {
+> > +               if (!elf_section_by_idx(btfe->elf, &sh, sym_sec_idx))
+> >                         return 0;
+> > -               last_idx = idx;
+> > +               last_idx = sym_sec_idx;
+> >         }
+> >
+> >         functions[functions_cnt].name = name;
+> > @@ -542,14 +540,15 @@ static bool percpu_var_exists(uint64_t addr, uint32_t *sz, const char **name)
+> >         return true;
+> >  }
+> >
+> > -static int collect_percpu_var(struct btf_elf *btfe, GElf_Sym *sym)
+> > +static int collect_percpu_var(struct btf_elf *btfe, GElf_Sym *sym,
+> > +                             Elf32_Word sym_sec_idx)
+> 
+> nit: same, size_t or just int would be fine
+> 
+> >  {
+> >         const char *sym_name;
+> >         uint64_t addr;
+> >         uint32_t size;
+> >
+> >         /* compare a symbol's shndx to determine if it's a percpu variable */
+> > -       if (elf_sym__section(sym) != btfe->percpu_shndx)
+> > +       if (sym_sec_idx != btfe->percpu_shndx)
+> >                 return 0;
+> >         if (elf_sym__type(sym) != STT_OBJECT)
+> >                 return 0;
+> > @@ -585,12 +584,13 @@ static int collect_percpu_var(struct btf_elf *btfe, GElf_Sym *sym)
+> >         return 0;
+> >  }
+> >
+> > -static void collect_symbol(GElf_Sym *sym, struct funcs_layout *fl)
+> > +static void collect_symbol(GElf_Sym *sym, struct funcs_layout *fl,
+> > +                          Elf32_Word sym_sec_idx)
+> >  {
+> >         if (!fl->mcount_start &&
+> >             !strcmp("__start_mcount_loc", elf_sym__name(sym, btfe->symtab))) {
+> >                 fl->mcount_start = sym->st_value;
+> > -               fl->mcount_sec_idx = sym->st_shndx;
+> > +               fl->mcount_sec_idx = sym_sec_idx;
+> >         }
+> >
+> >         if (!fl->mcount_stop &&
+> > @@ -598,9 +598,36 @@ static void collect_symbol(GElf_Sym *sym, struct funcs_layout *fl)
+> >                 fl->mcount_stop = sym->st_value;
+> >  }
+> >
+> > +static bool elf_sym__get(Elf_Data *syms, Elf_Data *syms_sec_idx_table,
+> > +                        int id, GElf_Sym *sym, Elf32_Word *sym_sec_idx)
+> 
+> This is a generic function, why don't you want to move it into elf_symtab.h?
+> 
+> > +{
+> > +       if (!gelf_getsym(syms, id, sym))
+> > +               return false;
+> > +
+> > +       *sym_sec_idx = sym->st_shndx;
+> > +
+> > +       if (sym->st_shndx == SHN_XINDEX) {
+> > +               if (!syms_sec_idx_table)
+> > +                       return false;
+> > +               if (!gelf_getsymshndx(syms, syms_sec_idx_table,
+> > +                                     id, sym, sym_sec_idx))
+> > +                       return false;
+> 
+> You also ignored my feedback about not fetching symbol twice. Why?
 
-diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/selftests/bpf/test_maps.c
-index 51adc42b2b40..58b4712a0f98 100644
---- a/tools/testing/selftests/bpf/test_maps.c
-+++ b/tools/testing/selftests/bpf/test_maps.c
-@@ -639,6 +639,52 @@ static void test_stackmap(unsigned int task, void *data)
- 	close(fd);
- }
- 
-+static void test_timeout_map(unsigned int task, void *data)
-+{
-+	int val1 = 1, val2 = 2, val3 = 3;
-+	int key1 = 1, key2 = 2, key3 = 3;
-+	int fd;
-+
-+	fd = bpf_create_map(BPF_MAP_TYPE_TIMEOUT_HASH, sizeof(int), sizeof(int),
-+			    3, map_flags);
-+	if (fd < 0) {
-+		printf("Failed to create timeout map '%s'!\n", strerror(errno));
-+		exit(1);
-+	}
-+
-+	/* Timeout after 1 secs */
-+	assert(bpf_map_update_elem(fd, &key1, &val1, (u64)1000<<32) == 0);
-+	/* Timeout after 2 secs */
-+	assert(bpf_map_update_elem(fd, &key2, &val2, (u64)2000<<32) == 0);
-+	/* Timeout after 10 secs */
-+	assert(bpf_map_update_elem(fd, &key3, &val3, (u64)10000<<32) == 0);
-+
-+	sleep(1);
-+	assert(bpf_map_lookup_elem(fd, &key1, &val1) != 0);
-+	val2 = 0;
-+	assert(bpf_map_lookup_elem(fd, &key2, &val2) == 0 && val2 == 2);
-+
-+	sleep(1);
-+	assert(bpf_map_lookup_elem(fd, &key1, &val1) != 0);
-+	assert(bpf_map_lookup_elem(fd, &key2, &val2) != 0);
-+
-+	/* Modify timeout to expire it earlier */
-+	val3 = 0;
-+	assert(bpf_map_lookup_elem(fd, &key3, &val3) == 0 && val3 == 3);
-+	assert(bpf_map_update_elem(fd, &key3, &val3, (u64)1000<<32) == 0);
-+	sleep(1);
-+	assert(bpf_map_lookup_elem(fd, &key3, &val3) != 0);
-+
-+	/* Add one elem expired immediately and try to delete this expired */
-+	assert(bpf_map_update_elem(fd, &key3, &val3, 0) == 0);
-+	assert(bpf_map_delete_elem(fd, &key3) == -1 && errno == ENOENT);
-+
-+	/* Add one elem and let the map removal clean up */
-+	assert(bpf_map_update_elem(fd, &key3, &val3, (u64)10000<<32) == 0);
-+
-+	close(fd);
-+}
-+
- #include <sys/ioctl.h>
- #include <arpa/inet.h>
- #include <sys/select.h>
-@@ -1305,6 +1351,7 @@ static void test_map_stress(void)
- 
- 	run_parallel(100, test_arraymap, NULL);
- 	run_parallel(100, test_arraymap_percpu, NULL);
-+	run_parallel(100, test_timeout_map, NULL);
- }
- 
- #define TASKS 1024
-@@ -1759,6 +1806,25 @@ static void test_reuseport_array(void)
- 	close(map_fd);
- }
- 
-+static void test_large_timeout_map(int nr_elems)
-+{
-+	int val, key;
-+	int i, fd;
-+
-+	fd = bpf_create_map(BPF_MAP_TYPE_TIMEOUT_HASH, sizeof(int), sizeof(int),
-+			    nr_elems, map_flags);
-+	if (fd < 0) {
-+		printf("Failed to create a large timeout map '%s'!\n", strerror(errno));
-+		exit(1);
-+	}
-+	for (i = 0; i < nr_elems; i++) {
-+		key = val = i;
-+		/* Timeout after 10 secs */
-+		assert(bpf_map_update_elem(fd, &key, &val, (u64)10000<<32) == 0);
-+	}
-+	close(fd);
-+}
-+
- static void run_all_tests(void)
- {
- 	test_hashmap(0, NULL);
-@@ -1788,6 +1854,8 @@ static void run_all_tests(void)
- 	test_stackmap(0, NULL);
- 
- 	test_map_in_map();
-+
-+	test_large_timeout_map(1000000);
- }
- 
- #define DEFINE_TEST(name) extern void test_##name(void);
--- 
-2.25.1
+ugh, I did not read your last 2 comments.. let me check that, sry
+
+> 
+> > +       }
+> > +
+> > +       return true;
+> > +}
+> > +
+> > +#define elf_symtab__for_each_symbol_index(symtab, id, sym, sym_sec_idx)                \
+> > +       for (id = 0;                                                            \
+> > +            id < symtab->nr_syms &&                                            \
+> > +            elf_sym__get(symtab->syms, symtab->syms_sec_idx_table,             \
+> > +                         id, &sym, &sym_sec_idx);                              \
+> > +            id++)
+> 
+> This should be in elf_symtab.h next to elf_symtab__for_each_symbol.
+> 
+> And thinking a bit more, the variant with just ignoring symbols that
+> we failed to get is probably a safer alternative. I.e., currently
+> there is no way to communicate that we terminated iteration with
+> error, so it's probably better to skip failed symbols and still get
+> the rest, no? I was hoping to discuss stuff like this on the previous
+> version of the patch...
+
+I was thinking of that, but then I thought it's better to fail,
+than have possibly wrong data in BTF, because the ELF data is
+possibly damaged? no idea.. so I took the safer way
+
+jirka
 
