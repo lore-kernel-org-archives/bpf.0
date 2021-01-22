@@ -2,76 +2,131 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-16.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F4044C433E0
-	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 22:35:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D02C5C433DB
+	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 22:39:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A582D23B06
-	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 22:35:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9EFE823A84
+	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 22:39:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729377AbhAVWej (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 22 Jan 2021 17:34:39 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38214 "EHLO mail.kernel.org"
+        id S1728139AbhAVWjj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 22 Jan 2021 17:39:39 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35772 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729855AbhAVWeX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 22 Jan 2021 17:34:23 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AB26023AA1
-        for <bpf@vger.kernel.org>; Fri, 22 Jan 2021 22:33:38 +0000 (UTC)
+        id S1728218AbhAVTqy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 22 Jan 2021 14:46:54 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C42EB23AF8;
+        Fri, 22 Jan 2021 19:46:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611354819;
-        bh=uEpvD96tWcat/Dhjsboc8KcFrUlWjIqjdqBATng0ZIE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=RM7lLLs2y2584/lY+Lax4ET+BNerAZIbGHcDDXPva3GHSdujnALdi+OzW1dWBMDJb
-         cDHZcVWCJKHTFGQxNAH+BlKmiKjeRqcygCm1hDA2/XxeCmKWCkNUHo4sV5LZK+S2Il
-         pYU7EulEbzP23v0NQVr4d3pTAURp1BnSKbNxs7D9r2qNeKzt9Hcbv5blNY4WG5uWW5
-         GYl++TrzcD9tHBcIgUmNH3JRGH5lABbm1K6rXgLxXQohEeXGEpvVb7tqtPZkeNUgcd
-         fjPnzjcLgV21LxW0hdCkGcR0DlLRwcufRBfQkXtwaz48oFRtPOBh0ddwRh5Mqyja6r
-         I8VVHfR4dJp/Q==
-Received: by mail-lj1-f178.google.com with SMTP id a25so7177562ljn.0
-        for <bpf@vger.kernel.org>; Fri, 22 Jan 2021 14:33:38 -0800 (PST)
-X-Gm-Message-State: AOAM532WtumrNt4UXvD1TwbPKo9cBilB95skHhMyk/t7puD3Z197EbT8
-        /7sLqBIROcWp0Rh/CUu7FUvug9nCQEaKykdb8CyOZQ==
-X-Google-Smtp-Source: ABdhPJwMj1N+Iqqglo06Li/iSweJcrBrd6oY1WBmInh5vbzzo0ZcaAODlHptVUHsj9RlFretP+NHltWh1ZQhtL/rakE=
-X-Received: by 2002:a2e:2c11:: with SMTP id s17mr945935ljs.468.1611354816974;
- Fri, 22 Jan 2021 14:33:36 -0800 (PST)
+        s=k20201202; t=1611344764;
+        bh=LoPSxz6L3iDXqEs2jPt4YU+xS4K6WyCltNO2CZ1Vlec=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rBn7Eo1pVfpt5omsgk6bk0QegCBPnFUPyHKqQAaY7gN3h8oGrOdxpjwTTxOq5apYL
+         UVgy3IbjR8vps8nvQ+Es6sJrvdVCHc7EvrWxGeurdvDIoO+M4mWMycAinePvHto1Oz
+         rHP+w09VJb7QiE6m2h1dayTnAPqB77FBmsgy4QwKQQzstTykQvgv7Tht20FP1DVb+O
+         ldQb/mc/q6HaVJXzAWnCnLH5lI4F7batCdOEj+ucsA7KkDd37jJMz+Tak40ZwVS0cY
+         P3p0K2l1FX/rvCbQiUhVJ9r/z0Q275U41uwET1kIyUKER4U8ZRNmsoucoYMwAZE1YB
+         DGS2BVX5Gb2mg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 02F3E40513; Fri, 22 Jan 2021 16:45:59 -0300 (-03)
+Date:   Fri, 22 Jan 2021 16:45:59 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andriin@fb.com>, dwarves@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Yonghong Song <yhs@fb.com>, Hao Luo <haoluo@google.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Mark Wielaard <mjw@redhat.com>
+Subject: Re: [PATCH 1/2] elf_symtab: Add support for SHN_XINDEX index to
+ elf_section_by_name
+Message-ID: <20210122194559.GA617095@kernel.org>
+References: <20210122163920.59177-1-jolsa@kernel.org>
+ <20210122163920.59177-2-jolsa@kernel.org>
 MIME-Version: 1.0
-References: <20210122123003.46125-1-mikko.ylinen@linux.intel.com>
-In-Reply-To: <20210122123003.46125-1-mikko.ylinen@linux.intel.com>
-From:   KP Singh <kpsingh@kernel.org>
-Date:   Fri, 22 Jan 2021 23:33:26 +0100
-X-Gmail-Original-Message-ID: <CACYkzJ6sMBvZ_ZG9++jwpQ+JQL3PL02okhD0O5Ftz4Hd7jEC3Q@mail.gmail.com>
-Message-ID: <CACYkzJ6sMBvZ_ZG9++jwpQ+JQL3PL02okhD0O5Ftz4Hd7jEC3Q@mail.gmail.com>
-Subject: Re: [PATCH] bpf: Drop disabled LSM hooks from the sleepable set
-To:     Mikko Ylinen <mikko.ylinen@linux.intel.com>
-Cc:     bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        KP Singh <kpsingh@google.com>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210122163920.59177-2-jolsa@kernel.org>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Jan 22, 2021 at 1:32 PM Mikko Ylinen
-<mikko.ylinen@linux.intel.com> wrote:
->
-> Networking LSM hooks are conditionally enabled and when building the new
-> sleepable BPF LSM hooks with the networking LSM hooks disabled, the
-> following build error occurs:
->
-> BTFIDS  vmlinux
-> FAILED unresolved symbol bpf_lsm_socket_socketpair
->
-> To fix the error, conditionally add the networking LSM hooks to the
-> sleepable set.
->
-> Fixes: 423f16108c9d8 ("bpf: Augment the set of sleepable LSM hooks")
-> Signed-off-by: Mikko Ylinen <mikko.ylinen@linux.intel.com>
+Em Fri, Jan 22, 2021 at 05:39:19PM +0100, Jiri Olsa escreveu:
+> In case the elf's header e_shstrndx contains SHN_XINDEX,
+> we need to call elf_getshdrstrndx to get the proper
+> string table index.
 
-Thanks!
+Applied, but changed the changelog comment to:
 
-Acked-by: KP Singh <kpsingh@kernel.org>
+------------------------------------------------------------------
+elf_symtab: Handle SHN_XINDEX index in elf_section_by_name()
+
+Use elf_getshdrstrndx() to cover the case where the ELF header
+'e_shstrndx' field contains the special value SHN_XINDEX so that we get
+the proper string table index.
+
+This is necessary to handle files with over 65536 sections, such as when
+building the kernel with -f[function|data]-sections.  Other cases may
+include when using FG-ASLR, LTO.
+
+With so many sections, ELF is using extended section index table, which
+is used to hold values for some of the indexes and extra code is needed
+to retrieve them.
+------------------------------------------------------------------
+
+This is from the thread, so that we can have a more comprehensive idea
+of what is this SHN_XINDEX and where it can show up when looking at this
+code 10 years from now (or next month) :-)
+
+Holler if I've messed up something.
+
+Thanks,
+
+- Arnaldo
+ 
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> ---
+>  dutil.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/dutil.c b/dutil.c
+> index 7b667647420f..11fb7202049c 100644
+> --- a/dutil.c
+> +++ b/dutil.c
+> @@ -179,12 +179,18 @@ Elf_Scn *elf_section_by_name(Elf *elf, GElf_Ehdr *ep,
+>  {
+>  	Elf_Scn *sec = NULL;
+>  	size_t cnt = 1;
+> +	size_t str_idx;
+> +
+> +	if (elf_getshdrstrndx(elf, &str_idx))
+> +		return NULL;
+>  
+>  	while ((sec = elf_nextscn(elf, sec)) != NULL) {
+>  		char *str;
+>  
+>  		gelf_getshdr(sec, shp);
+> -		str = elf_strptr(elf, ep->e_shstrndx, shp->sh_name);
+> +		str = elf_strptr(elf, str_idx, shp->sh_name);
+> +		if (!str)
+> +			return NULL;
+>  		if (!strcmp(name, str)) {
+>  			if (index)
+>  				*index = cnt;
+> -- 
+> 2.26.2
+> 
+
+-- 
+
+- Arnaldo
