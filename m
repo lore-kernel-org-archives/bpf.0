@@ -2,103 +2,64 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-23.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 49D52C433E0
-	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 17:06:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 12C67C433DB
+	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 17:12:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1642A233FA
-	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 17:06:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CB08A23A79
+	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 17:12:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729577AbhAVRGY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 22 Jan 2021 12:06:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57568 "EHLO
+        id S1729770AbhAVRMM convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 22 Jan 2021 12:12:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729716AbhAVRFr (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 22 Jan 2021 12:05:47 -0500
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C17FCC061788
-        for <bpf@vger.kernel.org>; Fri, 22 Jan 2021 09:05:06 -0800 (PST)
-Received: by mail-qk1-x72e.google.com with SMTP id 143so5773160qke.10
-        for <bpf@vger.kernel.org>; Fri, 22 Jan 2021 09:05:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PagpKKYHrimAyJj24L8Bk3YzjjtGo1A9w2b9ySnmzPg=;
-        b=kkjk18XUfWrHShM1sL++Cd5qQ9OQcDVLjnQ7LCi95k5HaFWDy3RzUKGFKurj5yc9JK
-         rbHhxtb3HKzv786f/RFp5TSZL+JsJPyb9EVd98C+rkP9sQ5OI9Qp6IMjRa5bP0n2UhFz
-         lVRRBUMTGjvq11/UaHnm63dMlMgMf8Xl6jau+hc+r4jupSvLTCEOL4NYLN6ZtCYlH2au
-         edckYYC/85VYSi8+2b9MVLvrrCLMUrQwfHleSPuCbwMTmyX4pX6yK8Ngv5qgjrlWcjuS
-         gDiUGgxmM1+/T5z5sjis1DgHKWoge6JJ46645SjsF5g8QKyz4fOjrw5I/v6rHXmfVrmn
-         ku/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PagpKKYHrimAyJj24L8Bk3YzjjtGo1A9w2b9ySnmzPg=;
-        b=fj/yWGB6UCDVEPl3/60TVORu1+yg/fVRcLRcHlE2WaBCI7MQ8N2/euZ8twaCVzWt/S
-         iPeIlYaTqeVM59MAO8UYW4f1sL79UEe4LfgXOPiH+KOo1em2NdnWJkwJuNqQG/39ZnKY
-         QZqqr9P0dOMXtv6wTaPQk+EWSqG3WTuRcRPNed0RVO1DxI7OaU1jduvLI1GeABKyUFyC
-         BUsKrCkRNIYe5hTmFabRSd2PxCKKoyoG6WOouk6an4A+LpFhQhhXNIumehJpePk+l+FB
-         KFjt4NpvoB/E82ymd3xE2dqm5BeWY7WFzBgUg2k71P/2W2rMBSQcGlnoF415JBi3M9H+
-         ZyHQ==
-X-Gm-Message-State: AOAM531tpGbORVspKpLDfNJ0KRz1Psllw7X7yUXUSx0O1xAVWif4T7GS
-        CkinTBchNSCm3YQTaEDFmh5MCOwFLbMuQ4wnK7Hwrg==
-X-Google-Smtp-Source: ABdhPJyLhQKL59L23NciXi/VFE/tmeccGcXmCOvRVM4ez0WSsphAE3r/WXK2sadIT/5VOKo24wEphlOx8ufuEjQzLr8=
-X-Received: by 2002:a37:6c81:: with SMTP id h123mr1995282qkc.448.1611335105786;
- Fri, 22 Jan 2021 09:05:05 -0800 (PST)
-MIME-Version: 1.0
-References: <20210122164232.61770-1-loris.reiff@liblor.ch> <20210122164232.61770-2-loris.reiff@liblor.ch>
-In-Reply-To: <20210122164232.61770-2-loris.reiff@liblor.ch>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Fri, 22 Jan 2021 09:04:54 -0800
-Message-ID: <CAKH8qBtOVr_y2r2dSC+p7E1jfehXsh-RUdNLeo3n7zquMzogBw@mail.gmail.com>
+        with ESMTP id S1728924AbhAVRL1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 22 Jan 2021 12:11:27 -0500
+Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [IPv6:2001:67c:2050::465:101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DDC6C06174A;
+        Fri, 22 Jan 2021 09:10:45 -0800 (PST)
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [80.241.60.241])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4DMm440hJdzQlXV;
+        Fri, 22 Jan 2021 18:10:44 +0100 (CET)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp2.mailbox.org ([80.241.60.241])
+        by spamfilter03.heinlein-hosting.de (spamfilter03.heinlein-hosting.de [80.241.56.117]) (amavisd-new, port 10030)
+        with ESMTP id QNJYTFKJSUwS; Fri, 22 Jan 2021 18:10:40 +0100 (CET)
+Date:   Fri, 22 Jan 2021 18:10:36 +0100
+From:   Loris Reiff <loris.reiff@liblor.ch>
 Subject: Re: [PATCH 2/2] bpf: cgroup: Fix problematic bounds check
-To:     Loris Reiff <loris.reiff@liblor.ch>
+To:     Stanislav Fomichev <sdf@google.com>
 Cc:     bpf <bpf@vger.kernel.org>, Netdev <netdev@vger.kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>, kpsingh@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        John Fastabend <john.fastabend@gmail.com>,
+        "kpsingh@kernel.org" <kpsingh@kernel.org>
+References: <20210122164232.61770-1-loris.reiff@liblor.ch>
+        <20210122164232.61770-2-loris.reiff@liblor.ch>
+        <CAKH8qBtOVr_y2r2dSC+p7E1jfehXsh-RUdNLeo3n7zquMzogBw@mail.gmail.com>
+In-Reply-To: <CAKH8qBtOVr_y2r2dSC+p7E1jfehXsh-RUdNLeo3n7zquMzogBw@mail.gmail.com>
+MIME-Version: 1.0
+Message-Id: <1611335290.xzns3v78m5.astroid@localhost.localdomain.none>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-MBO-SPAM-Probability: 
+X-Rspamd-Score: -2.00 / 15.00 / 15.00
+X-Rspamd-Queue-Id: 9E09117CC
+X-Rspamd-UID: b2379c
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Jan 22, 2021 at 8:43 AM Loris Reiff <loris.reiff@liblor.ch> wrote:
->
-> Since ctx.optlen is signed, a larger value than max_value could be
-> passed, as it is later on used as unsigned, which causes a WARN_ON_ONCE
-> in the copy_to_user.
->
-> Fixes: 0d01da6afc54 ("bpf: implement getsockopt and setsockopt hooks")
-> Signed-off-by: Loris Reiff <loris.reiff@liblor.ch>
-> ---
->  kernel/bpf/cgroup.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-> index 6ec8f02f4..6aa9e10c6 100644
-> --- a/kernel/bpf/cgroup.c
-> +++ b/kernel/bpf/cgroup.c
-> @@ -1464,7 +1464,7 @@ int __cgroup_bpf_run_filter_getsockopt(struct sock *sk, int level,
->                 goto out;
->         }
->
-> -       if (ctx.optlen > max_optlen) {
-> +       if (ctx.optlen > max_optlen || ctx.optlen < 0) {
->                 ret = -EFAULT;
->                 goto out;
->         }
-> --
-> 2.29.2
-Thanks! I assume this is only an issue if the BPF program is written
-incorrectly.
+Excerpts from Stanislav Fomichev's message of January 22, 2021 18:04:
+> Thanks! I assume this is only an issue if the BPF program is written
+> incorrectly.
 
-Reviewed-by: Stanislav Fomichev <sdf@google.com>
+Yes exactly.
