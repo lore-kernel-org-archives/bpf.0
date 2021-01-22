@@ -2,230 +2,93 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD4E1C4361A
-	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 16:46:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DD45C433E0
+	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 16:51:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8136223A84
-	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 16:46:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EFF9A23A9A
+	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 16:51:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729610AbhAVQZR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 22 Jan 2021 11:25:17 -0500
-Received: from mail2.protonmail.ch ([185.70.40.22]:22807 "EHLO
-        mail2.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729598AbhAVQZL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 22 Jan 2021 11:25:11 -0500
-Date:   Fri, 22 Jan 2021 16:24:17 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
-        t=1611332664; bh=0XqNUwlQ8fpKxv5Ne2GqdJi36Jlx2ZgxyrvnesA4vCQ=;
-        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=ZeasStcty7Ro1QLfQXPpxq9ViE63PveckERmPRlit8m0mNWEgZxcaqBuPhdZsw9+s
-         8UFQVeGcIfq++QT/jGQQs9QcGeJtfYku8X8pD3xEsl2E6n4Okv24nTWXg46qBKLw3T
-         2ALHAq2HXnTInnMEkVRnU1qUlxwyAk02hV2Zu+IDyWQ2MZV1hWtdxp6+pdWpPWOekw
-         /UZIYmCj6dV2td644iJfigLVqIccHO4SlWXq1cQzdBKU98ePvaokaeWc7vKf+e6GZV
-         S0sQrinP22/YFOHs7PgvvR+oycqxRitrRwGMDLd73yXQDTt8sWsx1mOamARzPQ64rE
-         EUhbwrg7P/cUw==
-To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-From:   Alexander Lobakin <alobakin@pm.me>
-Cc:     Alexander Lobakin <alobakin@pm.me>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, bjorn@kernel.org,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        virtualization@lists.linux-foundation.org, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: Re: [PATCH bpf-next v3 3/3] xsk: build skb by page
-Message-ID: <20210122162350.8846-1-alobakin@pm.me>
-In-Reply-To: <1611329789.3222687-1-xuanzhuo@linux.alibaba.com>
-References: <1611329789.3222687-1-xuanzhuo@linux.alibaba.com>
+        id S1729577AbhAVQuL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 22 Jan 2021 11:50:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52856 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729390AbhAVQnq (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 22 Jan 2021 11:43:46 -0500
+Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [IPv6:2001:67c:2050::465:102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA3D6C061797;
+        Fri, 22 Jan 2021 08:43:09 -0800 (PST)
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:105:465:1:2:0])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4DMlSB6qB8zQlYw;
+        Fri, 22 Jan 2021 17:43:06 +0100 (CET)
+Authentication-Results: gerste.heinlein-support.de (amavisd-new);
+        dkim=pass (2048-bit key) reason="pass (just generated, assumed good)"
+        header.d=mailbox.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mailbox.org; h=
+        content-transfer-encoding:mime-version:references:in-reply-to
+        :message-id:date:date:subject:subject:from:from:received; s=
+        mail20150812; t=1611333783; bh=EXY5UBekWmdLcrCcU6mcp7T2dzDQIdcDp
+        LiEPkUlz70=; b=tS/5HHjEMv9zxzMEvWCn4JcH1ftjmJL+vAZNfkrBkP3DhjYGt
+        Oj7S8pKnGBt6I6l8GAcKc3txaW/vhylwDnSYvUYHQjxFkIfgK1+gOvrgPAJZBtK5
+        i4rRBbXh2I5PpAQ6a8mU4Moc1AsMBgwAh0DfniazS7tgeQJzxKlUy18Bj5WEY9GP
+        8WiCcJJst3Zwkis5esmfbYJ61QbfaShuyTu/VKYr9GhZYe+crSCSIZe9Lh1e8Q6c
+        664/metpOM9xksdq2Whwp5rjHBsnxhrNUSqNiCdRsFDzR3q3jdMpVKqqocYH+U7Z
+        gYEDFb5nVUDXqSfo9w/pD3r43/AF3gZtMOkXQ==
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp2.mailbox.org ([80.241.60.241])
+        by gerste.heinlein-support.de (gerste.heinlein-support.de [91.198.250.173]) (amavisd-new, port 10030)
+        with ESMTP id KqCf4o-Nc0xX; Fri, 22 Jan 2021 17:43:03 +0100 (CET)
+From:   Loris Reiff <loris.reiff@liblor.ch>
+To:     bpf@vger.kernel.org
+Cc:     netdev@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        Loris Reiff <loris.reiff@liblor.ch>
+Subject: [PATCH 2/2] bpf: cgroup: Fix problematic bounds check
+Date:   Fri, 22 Jan 2021 17:42:32 +0100
+Message-Id: <20210122164232.61770-2-loris.reiff@liblor.ch>
+In-Reply-To: <20210122164232.61770-1-loris.reiff@liblor.ch>
+References: <20210122164232.61770-1-loris.reiff@liblor.ch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-MBO-SPAM-Probability: **
+X-Rspamd-Score: 1.80 / 15.00 / 15.00
+X-Rspamd-Queue-Id: DFC9117BA
+X-Rspamd-UID: 65af45
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Date: Fri, 22 Jan 2021 23:36:29 +0800
+Since ctx.optlen is signed, a larger value than max_value could be
+passed, as it is later on used as unsigned, which causes a WARN_ON_ONCE
+in the copy_to_user.
 
-> On Fri, 22 Jan 2021 12:08:00 +0000, Alexander Lobakin <alobakin@pm.me> wr=
-ote:
-> > From: Alexander Lobakin <alobakin@pm.me>
-> > Date: Fri, 22 Jan 2021 11:55:35 +0000
-> >
-> > > From: Alexander Lobakin <alobakin@pm.me>
-> > > Date: Fri, 22 Jan 2021 11:47:45 +0000
-> > >
-> > > > From: Eric Dumazet <eric.dumazet@gmail.com>
-> > > > Date: Thu, 21 Jan 2021 16:41:33 +0100
-> > > >
-> > > > > On 1/21/21 2:47 PM, Xuan Zhuo wrote:
-> > > > > > This patch is used to construct skb based on page to save memor=
-y copy
-> > > > > > overhead.
-> > > > > >
-> > > > > > This function is implemented based on IFF_TX_SKB_NO_LINEAR. Onl=
-y the
-> > > > > > network card priv_flags supports IFF_TX_SKB_NO_LINEAR will use =
-page to
-> > > > > > directly construct skb. If this feature is not supported, it is=
- still
-> > > > > > necessary to copy data to construct skb.
-> > > > > >
-> > > > > > ---------------- Performance Testing ------------
-> > > > > >
-> > > > > > The test environment is Aliyun ECS server.
-> > > > > > Test cmd:
-> > > > > > ```
-> > > > > > xdpsock -i eth0 -t  -S -s <msg size>
-> > > > > > ```
-> > > > > >
-> > > > > > Test result data:
-> > > > > >
-> > > > > > size    64      512     1024    1500
-> > > > > > copy    1916747 1775988 1600203 1440054
-> > > > > > page    1974058 1953655 1945463 1904478
-> > > > > > percent 3.0%    10.0%   21.58%  32.3%
-> > > > > >
-> > > > > > Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-> > > > > > Reviewed-by: Dust Li <dust.li@linux.alibaba.com>
-> > > > > > ---
-> > > > > >  net/xdp/xsk.c | 104 ++++++++++++++++++++++++++++++++++++++++++=
-++++++----------
-> > > > > >  1 file changed, 86 insertions(+), 18 deletions(-)
-> > > > > >
-> > > > > > diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> > > > > > index 4a83117..38af7f1 100644
-> > > > > > --- a/net/xdp/xsk.c
-> > > > > > +++ b/net/xdp/xsk.c
-> > > > > > @@ -430,6 +430,87 @@ static void xsk_destruct_skb(struct sk_buf=
-f *skb)
-> > > > > >  =09sock_wfree(skb);
-> > > > > >  }
-> > > > > >
-> > > > > > +static struct sk_buff *xsk_build_skb_zerocopy(struct xdp_sock =
-*xs,
-> > > > > > +=09=09=09=09=09      struct xdp_desc *desc)
-> > > > > > +{
-> > > > > > +=09u32 len, offset, copy, copied;
-> > > > > > +=09struct sk_buff *skb;
-> > > > > > +=09struct page *page;
-> > > > > > +=09void *buffer;
-> > > > > > +=09int err, i;
-> > > > > > +=09u64 addr;
-> > > > > > +
-> > > > > > +=09skb =3D sock_alloc_send_skb(&xs->sk, 0, 1, &err);
-> >
-> > Also,
-> > maybe we should allocate it with NET_SKB_PAD so NIC drivers could
-> > use some reserved space?
-> >
-> > =09=09skb =3D sock_alloc_send_skb(&xs->sk, NET_SKB_PAD, 1, &err);
-> > =09=09...
-> > =09=09skb_reserve(skb, NET_SKB_PAD);
-> >
-> > Eric, what do you think?
->=20
-> I think you are right. Some space should be added to continuous equipment=
-. This
-> space should also be added in the copy mode below. Is LL_RESERVED_SPACE m=
-ore
-> appropriate?
+Fixes: 0d01da6afc54 ("bpf: implement getsockopt and setsockopt hooks")
+Signed-off-by: Loris Reiff <loris.reiff@liblor.ch>
+---
+ kernel/bpf/cgroup.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-No. If you look at __netdev_alloc_skb() and __napi_alloc_skb(), they
-reserve NET_SKB_PAD at the beginning of linear area. Documentation of
-__build_skb() also says that driver should reserve NET_SKB_PAD before
-the actual frame, so it is a standartized hardware-independent
-headroom.
-Leaving that space in skb->head will allow developers to implement
-IFF_TX_SKB_NO_LINEAR in a wider variety of drivers, especially when
-a driver has to prepend some sort of data before the actual frame.
-Since it's usually of a size of one cacheline, shouldn't be a big
-deal.
-
-
-[ I also had an idea of allocating an skb with a headroom of
-NET_SKB_PAD + 256 bytes, so nearly all drivers could just call
-pskb_pull_tail() to support such type of skbuffs without much
-effort, but I think that it's better to teach drivers to support
-xmitting of really headless ones. If virtio_net can do it, why
-shouldn't the others ]
-
-> > > > > > +=09if (unlikely(!skb))
-> > > > > > +=09=09return ERR_PTR(err);
-> > > > > > +
-> > > > > > +=09addr =3D desc->addr;
-> > > > > > +=09len =3D desc->len;
-> > > > > > +
-> > > > > > +=09buffer =3D xsk_buff_raw_get_data(xs->pool, addr);
-> > > > > > +=09offset =3D offset_in_page(buffer);
-> > > > > > +=09addr =3D buffer - xs->pool->addrs;
-> > > > > > +
-> > > > > > +=09for (copied =3D 0, i =3D 0; copied < len; i++) {
-> > > > > > +=09=09page =3D xs->pool->umem->pgs[addr >> PAGE_SHIFT];
-> > > > > > +
-> > > > > > +=09=09get_page(page);
-> > > > > > +
-> > > > > > +=09=09copy =3D min_t(u32, PAGE_SIZE - offset, len - copied);
-> > > > > > +
-> > > > > > +=09=09skb_fill_page_desc(skb, i, page, offset, copy);
-> > > > > > +
-> > > > > > +=09=09copied +=3D copy;
-> > > > > > +=09=09addr +=3D copy;
-> > > > > > +=09=09offset =3D 0;
-> > > > > > +=09}
-> > > > > > +
-> > > > > > +=09skb->len +=3D len;
-> > > > > > +=09skb->data_len +=3D len;
-> > > > >
-> > > > > > +=09skb->truesize +=3D len;
-> > > > >
-> > > > > This is not the truesize, unfortunately.
-> > > > >
-> > > > > We need to account for the number of pages, not number of bytes.
-> > > >
-> > > > The easiest solution is:
-> > > >
-> > > > =09skb->truesize +=3D PAGE_SIZE * i;
-> > > >
-> > > > i would be equal to skb_shinfo(skb)->nr_frags after exiting the loo=
-p.
-> > >
-> > > Oops, pls ignore this. I forgot that XSK buffers are not
-> > > "one per page".
-> > > We need to count the number of pages manually and then do
-> > >
-> > > =09skb->truesize +=3D PAGE_SIZE * npages;
-> > >
-> > > Right.
-> > >
-> > > > > > +
-> > > > > > +=09refcount_add(len, &xs->sk.sk_wmem_alloc);
-> > > > > > +
-> > > > > > +=09return skb;
-> > > > > > +}
-> > > > > > +
-> > > >
-> > > > Al
-> > >
-> > > Thanks,
-> > > Al
-> >
-> > Al
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index 6ec8f02f4..6aa9e10c6 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -1464,7 +1464,7 @@ int __cgroup_bpf_run_filter_getsockopt(struct sock *sk, int level,
+ 		goto out;
+ 	}
+ 
+-	if (ctx.optlen > max_optlen) {
++	if (ctx.optlen > max_optlen || ctx.optlen < 0) {
+ 		ret = -EFAULT;
+ 		goto out;
+ 	}
+-- 
+2.29.2
 
