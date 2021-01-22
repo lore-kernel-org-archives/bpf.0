@@ -2,208 +2,122 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B79EEC433E0
-	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 20:37:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24F5DC433DB
+	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 20:56:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 80DBF23B04
-	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 20:37:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DA26723B09
+	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 20:56:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729392AbhAVUgw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 22 Jan 2021 15:36:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44884 "EHLO
+        id S1730938AbhAVU4S (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 22 Jan 2021 15:56:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729568AbhAVUdF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 22 Jan 2021 15:33:05 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CAB2C06174A;
-        Fri, 22 Jan 2021 12:32:50 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id k4so6696091ybp.6;
-        Fri, 22 Jan 2021 12:32:50 -0800 (PST)
+        with ESMTP id S1730343AbhAVUzL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 22 Jan 2021 15:55:11 -0500
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D53F4C06174A;
+        Fri, 22 Jan 2021 12:54:30 -0800 (PST)
+Received: by mail-ot1-x32d.google.com with SMTP id 36so6454759otp.2;
+        Fri, 22 Jan 2021 12:54:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Q0GZ7NuevMmCMIuPI0eOAmyldT5LRIFt3Apaz8yFSO8=;
-        b=NnsP8lLaIUuEVQJndMp0ZMQpSrHbQWGP/mSgSnedY0FgEne6Jw9G7C9LFDlqKkpvoM
-         N5NqLaqHgcIlc2WWszawJY/I14Tv72xIkCwD9nZrvwHagh5Fvxgfdnz0HKMqfRkkKOMy
-         qWCq6HfyRKWDVjHYPWNQ4OUhG5H3BvMr6Kx7KxyL1gF1bc7/6WwIp6tRYUJBOOhpVYn1
-         57S9wnCloQHHijIiKfcniY7RWzBeIDqBiCBqI/ID4WfYYfKKElyqmqN8nNq1OpXzOsuQ
-         b7+h4PypTBh78F1oS0f40G0g/DYTJjka9vfezyUJzJ4Zbd1FN/8L/D5idoYvNd1AFyXr
-         F1cw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DOVTjNJRZMnM+kceEiLJHqeJw55QWfuw/x9E/sbQ+ws=;
+        b=tsowucZcMrElg3LFFkcBe5NB2AVwbMPq8ozIsRn+8iVFSgNMrkLEJOYPLYSwFGLNIG
+         wwj5leUpJ8um/r3oTocXEbPNP+JwAIcuOhohmUlN1eTqWf59hgQaPVIR4v/rwZ9JF/9P
+         Wtby9GYcEGdDBrZXD6S7THp1Aq4Iu0DXq8KAPaozjrWFxrzU66GoVQFxegcVnCQhc01d
+         ljDuw1PbQj/Ntd7xiKDwLd7WZhVeOVyE162UxDNKx9lpPnp+25tqJdRZJb7DAIeTXWKZ
+         P6Qkp+XpWkccZdkeHkgRzN28GJ7o/Hb44//gADbEtT1DjAxIihM6AE4xGaL57nWQjjeM
+         lT1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Q0GZ7NuevMmCMIuPI0eOAmyldT5LRIFt3Apaz8yFSO8=;
-        b=Hk43FFN4y+VSCadIWjGADlOvnO3SJsLLXzdSZXI0YEjEg8CQPCRzdw0bZo15uetJSD
-         D88lKhzI1l58S/I7+mhACPILvCE/26b5uUdK4bALnOfj/S9f4YA8bnubht/aZRJbdY9g
-         b3Do00pCeBghfdM1av9IM/eI1TTeuqiqOLAkBKY/fZFUK4ebCmWaC5tE/kmFdRBPaPsQ
-         QC6ydZj6ewlAfvERuwdeD3WQWpb5CvoKHGkMutxzR5iEAOFdEvIfm1VRKxsL7pEJty5n
-         aMxk7lEDDHdzS5fvBTs/+WPbliEOytQjDEscmaiC6QjbAacs5djGZ9iCbT1VmzVEEERY
-         1uIA==
-X-Gm-Message-State: AOAM533U37Ho1AcZKnSRaLzlWM43IGdQTOM2gKATazPfaZa08hu2POws
-        AV406kk6XradtcKinzx+P/q8Ghas5p5oJ5RiKuU=
-X-Google-Smtp-Source: ABdhPJzALC+KkY5L36vrXXI9OUok+525SBRRsx9IGOrNcc7mmpminaBQtrQ48fkp7rmczcZ5NrRWWfcH9Osq1tbonFw=
-X-Received: by 2002:a25:4b86:: with SMTP id y128mr8724204yba.403.1611347569578;
- Fri, 22 Jan 2021 12:32:49 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DOVTjNJRZMnM+kceEiLJHqeJw55QWfuw/x9E/sbQ+ws=;
+        b=kOMUdR4i1qG6GXfDYrsg2bvablgfZ9dz27vvN5dEYOlaHUtU55yw7fGYL2IQl2MbSf
+         qaxoeTy3tkxcvgX4oaP9lLnwMDIkbNmNV0ALdK5OZvla+H1ViXa1Ypwd3MmPRELLkL3f
+         ntAJgpilyH12tXfxlzeCRz/qjVN8OZfZNxbe4RN46SGMJYcR7ipl9+XGY8QVjU6VChvc
+         vSxc8Fg6lUuFfFsepLmkAhUtTO3H0AecVqFslfcjXivPqQsmXP0nVL0dTWOc8J1E6Ku5
+         /+Ltqch+h3gDsykFUD7h0+GQghEBwBiMxni78Mywc1OGIQ2uKJrTV79FbAys4LshM7kM
+         nTHQ==
+X-Gm-Message-State: AOAM533lzWR3j6KepEIjXbsOP73RWLJ6HGPZyJ2VP3xYRgy7lzy4fYCA
+        dJek39bMGtxyRsbvbU/cbKYhAP5LINYrcg==
+X-Google-Smtp-Source: ABdhPJyUCqTvmyTHgFTrTyMm8d1WftmtHPiqwbInT1YSC4ZjbU8TiM2PZHVVmd5ffREIHYFtOuoNww==
+X-Received: by 2002:a9d:4917:: with SMTP id e23mr2343802otf.143.1611348869858;
+        Fri, 22 Jan 2021 12:54:29 -0800 (PST)
+Received: from unknown.attlocal.net ([2600:1700:65a0:ab60:1c14:d05:b7d:917b])
+        by smtp.gmail.com with ESMTPSA id k18sm1349193otj.36.2021.01.22.12.54.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Jan 2021 12:54:29 -0800 (PST)
+From:   Cong Wang <xiyou.wangcong@gmail.com>
+To:     netdev@vger.kernel.org
+Cc:     bpf@vger.kernel.org, jhs@mojatatu.com, andrii@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, kafai@fb.com,
+        Cong Wang <cong.wang@bytedance.com>
+Subject: [Patch bpf-next v5 0/3] bpf: introduce timeout hash map
+Date:   Fri, 22 Jan 2021 12:54:12 -0800
+Message-Id: <20210122205415.113822-1-xiyou.wangcong@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20210119155953.803818-1-revest@chromium.org> <20210119155953.803818-3-revest@chromium.org>
- <CAEf4BzYH26E_ASgX8rny-ZihEvD4K3PXZJvAi7nZrYLSLpKo+A@mail.gmail.com> <CABRcYm+gWJcsFxqriUMHeu3sFFLWWRGy=_wQ5R6hNoYu92c0PQ@mail.gmail.com>
-In-Reply-To: <CABRcYm+gWJcsFxqriUMHeu3sFFLWWRGy=_wQ5R6hNoYu92c0PQ@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 22 Jan 2021 12:32:38 -0800
-Message-ID: <CAEf4BzY8kv5rWVjr_x5hcyd9DH7sKOGLHWBXwfhoLdK9JD6rSA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v5 3/4] selftests/bpf: Integrate the
- socket_cookie test to test_progs
-To:     Florent Revest <revest@chromium.org>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        KP Singh <kpsingh@chromium.org>,
-        Florent Revest <revest@google.com>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Jan 22, 2021 at 6:35 AM Florent Revest <revest@chromium.org> wrote:
->
-> On Thu, Jan 21, 2021 at 8:55 AM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Tue, Jan 19, 2021 at 8:00 AM Florent Revest <revest@chromium.org> wrote:
-> > >
-> > > Currently, the selftest for the BPF socket_cookie helpers is built and
-> > > run independently from test_progs. It's easy to forget and hard to
-> > > maintain.
-> > >
-> > > This patch moves the socket cookies test into prog_tests/ and vastly
-> > > simplifies its logic by:
-> > > - rewriting the loading code with BPF skeletons
-> > > - rewriting the server/client code with network helpers
-> > > - rewriting the cgroup code with test__join_cgroup
-> > > - rewriting the error handling code with CHECKs
-> > >
-> > > Signed-off-by: Florent Revest <revest@chromium.org>
-> > > ---
-> >
-> > Few nits below regarding skeleton and ASSERT_xxx usage.
-> >
-> > >  tools/testing/selftests/bpf/Makefile          |   3 +-
-> > >  .../selftests/bpf/prog_tests/socket_cookie.c  |  82 +++++++
-> > >  .../selftests/bpf/progs/socket_cookie_prog.c  |   2 -
-> > >  .../selftests/bpf/test_socket_cookie.c        | 208 ------------------
-> >
-> > please also update .gitignore
->
-> Good catch!
->
-> > >  4 files changed, 83 insertions(+), 212 deletions(-)
-> > >  create mode 100644 tools/testing/selftests/bpf/prog_tests/socket_cookie.c
-> > >  delete mode 100644 tools/testing/selftests/bpf/test_socket_cookie.c
-> > >
-> >
-> > [...]
-> >
-> > > +
-> > > +       skel = socket_cookie_prog__open_and_load();
-> > > +       if (CHECK(!skel, "socket_cookie_prog__open_and_load",
-> > > +                 "skeleton open_and_load failed\n"))
-> >
-> > nit: ASSERT_PTR_OK
->
-> Ah great, I find the ASSERT semantic much easier to follow than CHECKs.
->
-> > > +               return;
-> > > +
-> > > +       cgroup_fd = test__join_cgroup("/socket_cookie");
-> > > +       if (CHECK(cgroup_fd < 0, "join_cgroup", "cgroup creation failed\n"))
-> > > +               goto destroy_skel;
-> > > +
-> > > +       set_link = bpf_program__attach_cgroup(skel->progs.set_cookie,
-> > > +                                             cgroup_fd);
-> >
-> > you can use skel->links->set_cookie here and it will be auto-destroyed
-> > when the whole skeleton is destroyed. More simplification.
->
-> Sick. :)
->
-> > > +       if (CHECK(IS_ERR(set_link), "set-link-cg-attach", "err %ld\n",
-> > > +                 PTR_ERR(set_link)))
-> > > +               goto close_cgroup_fd;
-> > > +
-> > > +       update_link = bpf_program__attach_cgroup(skel->progs.update_cookie,
-> > > +                                                cgroup_fd);
-> >
-> > same as above, no need to maintain your link outside of skeleton
-> >
-> >
-> > > +       if (CHECK(IS_ERR(update_link), "update-link-cg-attach", "err %ld\n",
-> > > +                 PTR_ERR(update_link)))
-> > > +               goto free_set_link;
-> > > +
-> > > +       server_fd = start_server(AF_INET6, SOCK_STREAM, "::1", 0, 0);
-> > > +       if (CHECK(server_fd < 0, "start_server", "errno %d\n", errno))
-> > > +               goto free_update_link;
-> > > +
-> > > +       client_fd = connect_to_fd(server_fd, 0);
-> > > +       if (CHECK(client_fd < 0, "connect_to_fd", "errno %d\n", errno))
-> > > +               goto close_server_fd;
-> >
-> > nit: ASSERT_OK is nicer (here and in few other places)
->
-> Did you mean ASSERT_OK for the two following err checks ?
->
-> ASSERT_OK does not seem right for a fd check where we want fd to be
-> positive. ASSERT_OK does: "bool ___ok = ___res == 0;"
->
-> I will keep my "CHECK(fd < 0" but maybe there could be an
-> ASSERT_POSITIVE that does "bool ___ok = ___res >= 0;"
+From: Cong Wang <cong.wang@bytedance.com>
 
-Ah, I missed that it's returning FD, sorry. For FD we'd have to add
-the ASSERT_GEQ(fd, 0, "blah") variant. So yeah, stick to CHECK for
-now.
+This patchset introduces a new eBPF hash map whose elements have
+timeouts. Patch 1 is the implementation of timeout map, patch 2 adds
+some test cases for timeout map in test_maps, and patch 3 adds a test
+case in map ptr test. This patchset has been tested with the provided
+test cases for hours.
 
->
-> > > +
-> > > +       err = bpf_map_lookup_elem(bpf_map__fd(skel->maps.socket_cookies),
-> > > +                                 &client_fd, &val);
-> > > +       if (CHECK(err, "map_lookup", "err %d errno %d\n", err, errno))
-> > > +               goto close_client_fd;
-> > > +
-> > > +       err = getsockname(client_fd, (struct sockaddr *)&addr, &addr_len);
-> > > +       if (CHECK(err, "getsockname", "Can't get client local addr\n"))
-> > > +               goto close_client_fd;
-> > > +
-> > > +       cookie_expected_value = (ntohs(addr.sin6_port) << 8) | 0xFF;
-> > > +       CHECK(val.cookie_value != cookie_expected_value, "",
-> > > +             "Unexpected value in map: %x != %x\n", val.cookie_value,
-> > > +             cookie_expected_value);
-> >
-> > nit: ASSERT_NEQ is nicer
->
-> Indeed.
->
-> > > +
-> > > +close_client_fd:
-> > > +       close(client_fd);
-> > > +close_server_fd:
-> > > +       close(server_fd);
-> > > +free_update_link:
-> > > +       bpf_link__destroy(update_link);
-> > > +free_set_link:
-> > > +       bpf_link__destroy(set_link);
-> > > +close_cgroup_fd:
-> > > +       close(cgroup_fd);
-> > > +destroy_skel:
-> > > +       socket_cookie_prog__destroy(skel);
-> > > +}
-> >
-> > [...]
+Please check each patch description for more details.
+
+---
+v5: add a lost piece of patch during rebase
+    fix the extra_elems corner case
+    add a stress test case
+
+v4: merge gc_work into gc_idle_work to avoid a nasty race condition
+    fix a potential use-after-free
+    add one more test case
+    improve comments and update changelog
+
+v3: move gc list from bucket to elem
+    reuse lru_node in struct htab_elem
+    drop patches which are no longer necessary
+    fix delete path
+    add a test case for delete path
+    add parallel test cases
+    change timeout to ms
+    drop batch ops
+
+v2: fix hashmap ptr test
+    add a test case in map ptr test
+    factor out htab_timeout_map_alloc()
+
+Cong Wang (3):
+  bpf: introduce timeout hash map
+  selftests/bpf: add test cases for bpf timeout map
+  selftests/bpf: add timeout map check in map_ptr tests
+
+ include/linux/bpf_types.h                     |   1 +
+ include/uapi/linux/bpf.h                      |   5 +-
+ kernel/bpf/hashtab.c                          | 274 +++++++++++++++++-
+ kernel/bpf/syscall.c                          |   3 +-
+ tools/include/uapi/linux/bpf.h                |   1 +
+ .../selftests/bpf/progs/map_ptr_kern.c        |  20 ++
+ tools/testing/selftests/bpf/test_maps.c       |  68 +++++
+ 7 files changed, 357 insertions(+), 15 deletions(-)
+
+-- 
+2.25.1
+
