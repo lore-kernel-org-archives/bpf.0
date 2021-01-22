@@ -2,109 +2,125 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-23.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45903C4160E
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E975C4361A
 	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 18:10:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 18A8923AFA
-	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 18:10:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 05AB923AC2
+	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 18:10:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729108AbhAVR0g (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 22 Jan 2021 12:26:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57406 "EHLO
+        id S1728808AbhAVR0U (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 22 Jan 2021 12:26:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729740AbhAVRFA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 22 Jan 2021 12:05:00 -0500
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7C28C061786
-        for <bpf@vger.kernel.org>; Fri, 22 Jan 2021 09:04:18 -0800 (PST)
-Received: by mail-qt1-x831.google.com with SMTP id z9so4600453qtv.6
-        for <bpf@vger.kernel.org>; Fri, 22 Jan 2021 09:04:18 -0800 (PST)
+        with ESMTP id S1729033AbhAVPtD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 22 Jan 2021 10:49:03 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3702BC0612F2;
+        Fri, 22 Jan 2021 07:47:44 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id h7so8147512lfc.6;
+        Fri, 22 Jan 2021 07:47:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LkXre3Jn5BQNLfYvq2ivFLi/y/XcVxQ/mvEDUU0zFUM=;
-        b=aoCtGDeoCpDuZ1M8hmOguwCqCcdPweO66+78DRPhUdJmBTVuBVsXUOJHicfzJEjlhr
-         1UVmndO5Z+DmmkChJq0UN9Qh/xWgge9WH9166mtn4yOLhj2O9703VgJc7ljORbPjqmQx
-         q1LHMhoS0oPw1GyaUP4HUaagl0Q7ADyP7H1L+miS0SX//Ow6XbdZOzc6/vZT/Hcn9dR/
-         vn5U4JSeqJvl8jfXqdGqZp0Emqt4T6ieC//nLtT6jFqfIhyaZPUNbfQseQBBW0zaE4wU
-         0t39QbyrVWg6de/Wns7Ot/zMl/cXyHM9MQZnyP6cKYRYQP0rLiAADAy9UarF1mROSTwQ
-         gFvw==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=JlfeYn4HFiJpHf15ex05CldQ0EQy4DxuxZ0ZzVxDhNs=;
+        b=QGkhk7XXtOrVW13j51U8Ff2bD0QJk7+enN2gaT54pqsrIhn+nyjL3WirTTk1f/lpWd
+         +E2qUghgVtRVJYHV2iXYM7ToNpZxzvoJHV+TLeOz2ZAZsHxmUCQVKob0c7k+6pD7wBld
+         5QDdPrakED1mprib7mkSmCdw+2IxhGD50BKyw6IpyKDLxSBLCIdib4q0Q68epysQBz1J
+         eMfPQEii9Z5VszT3ppFkwU0+qiMvIoKt1CwxHgzyWH+m4EN87FlMNXo02jl3zZS9ts0D
+         ov0Jve/q0s6cP1NZvytjjyvRO5fBH+MEqTsbBvK3IVVfd14HOSUPgnuQb9zMN78uwUTb
+         6dIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LkXre3Jn5BQNLfYvq2ivFLi/y/XcVxQ/mvEDUU0zFUM=;
-        b=YbLlozcpKwljkG2bV5Fjsxs+dr3cEC+GfdMsZrhiVPC9hW3AcAym+TmZ9c/d1XGZMe
-         h+YBjEAvlE+pCtfygOpFgDRI+Kyq3ZTNv4IKBEEebbxwRj2OT9QhYwcKHqeFLfcMeMDU
-         g87Pbf3ABgDHJt6ICKY/rW+v3JthkgtaEA79AxbP5tHM3xDvMjpMN668I2G6MobBvFSV
-         WYOydOE2Ksm3iaIxiF49TT7pLUHHoT3pm6MZgO25mImcKkgriFR/Vkegb2aFFSrOESSk
-         ZC8TDZV6Albu7WHhNh9zqxCJEoo4+4uHc7uN6hDc6GykcWvRWiut7epamGZgEwwuwkHa
-         my+Q==
-X-Gm-Message-State: AOAM532SCMSLY13vz8mLD8/GaK3oUyJS7ZJUdN1soASrKiWGtTVZFFsW
-        P9FtcYa4E1BLsfPakEa2MrXaN11ZWzmuEn6EOxOyEg==
-X-Google-Smtp-Source: ABdhPJyIloiXBIr5YvNM8BIAng+QSQEug8CjQEDk0vbyqGkd+rKpaD+MeeZqw+cctMfxM8PgY9TZXF3ZoQK/5mrXu2o=
-X-Received: by 2002:ac8:524f:: with SMTP id y15mr5264291qtn.266.1611335057791;
- Fri, 22 Jan 2021 09:04:17 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=JlfeYn4HFiJpHf15ex05CldQ0EQy4DxuxZ0ZzVxDhNs=;
+        b=dOU21RVDxU1bBk5z68vJHoCA62L1mqh7US6wgM4L2a0IL07t+kj5TebzB/Ue6p3ye9
+         oBO4xdEcFAR7eL5H/aRsiJlhA5gL5IWl5cWXuJFB+whLQoy60WA9a3/EIxiUbYThqW15
+         8oZc9AtR9V3p1YvJ7mOfEcnL++2kjbQRLzXJNa/CgMDy4Rfntp4971JI2CA75sUHC+bu
+         4ev4u3BgEkZQ/Hie+/LMeSbS6no0PaFQzcosMjVRhnuB6Gn7K9VmVotLHk/BG/Ah6c2v
+         Ss2wSZf8G/8MK9PMm7tLd3+HEeEDJY70zP33avzbQ3/Q7CFTmfKLFQHul+ezySj6u/kD
+         gkIg==
+X-Gm-Message-State: AOAM5314IOutTmJPeS8VjKeiUvgWCX0DpFAuEKSU8mTgVv40UtXLfL5m
+        ntZngaxhpMuUnYFBSQSZuIE=
+X-Google-Smtp-Source: ABdhPJyXPxnlLv2Nv4R22XP8efR/6zlut0Kju7/TOvNhqbn5Ilzx6hYRZfNdcc23lGt62rQecnhqzQ==
+X-Received: by 2002:a05:6512:b1b:: with SMTP id w27mr979300lfu.10.1611330462780;
+        Fri, 22 Jan 2021 07:47:42 -0800 (PST)
+Received: from btopel-mobl.ger.intel.com (c213-102-90-208.bredband.comhem.se. [213.102.90.208])
+        by smtp.gmail.com with ESMTPSA id w17sm928589lft.52.2021.01.22.07.47.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Jan 2021 07:47:42 -0800 (PST)
+From:   =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@gmail.com>
+To:     ast@kernel.org, daniel@iogearbox.net, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
+        magnus.karlsson@intel.com, jonathan.lemon@gmail.com,
+        ciara.loftus@intel.com, weqaar.a.janjua@intel.com
+Subject: [PATCH bpf-next 09/12] selftests/bpf: define local variables at the beginning of a block
+Date:   Fri, 22 Jan 2021 16:47:22 +0100
+Message-Id: <20210122154725.22140-10-bjorn.topel@gmail.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20210122154725.22140-1-bjorn.topel@gmail.com>
+References: <20210122154725.22140-1-bjorn.topel@gmail.com>
 MIME-Version: 1.0
-References: <20210122164232.61770-1-loris.reiff@liblor.ch>
-In-Reply-To: <20210122164232.61770-1-loris.reiff@liblor.ch>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Fri, 22 Jan 2021 09:04:07 -0800
-Message-ID: <CAKH8qBvy0aRODNXtdseu5ygLMzAKPD-N8H1=GfGqPz--v83KpQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] bpf: cgroup: Fix optlen WARN_ON_ONCE toctou
-To:     Loris Reiff <loris.reiff@liblor.ch>
-Cc:     bpf <bpf@vger.kernel.org>, Netdev <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>, kpsingh@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Jan 22, 2021 at 8:43 AM Loris Reiff <loris.reiff@liblor.ch> wrote:
->
-> A toctou issue in `__cgroup_bpf_run_filter_getsockopt` can trigger a
-> WARN_ON_ONCE in a check of `copy_from_user`.
-> `*optlen` is checked to be non-negative in the individual getsockopt
-> functions beforehand. Changing `*optlen` in a race to a negative value
-> will result in a `copy_from_user(ctx.optval, optval, ctx.optlen)` with
-> `ctx.optlen` being a negative integer.
->
-> Fixes: 0d01da6afc54 ("bpf: implement getsockopt and setsockopt hooks")
-> Signed-off-by: Loris Reiff <loris.reiff@liblor.ch>
-> ---
->  kernel/bpf/cgroup.c | 5 +++++
->  1 file changed, 5 insertions(+)
->
-> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-> index 96555a8a2..6ec8f02f4 100644
-> --- a/kernel/bpf/cgroup.c
-> +++ b/kernel/bpf/cgroup.c
-> @@ -1442,6 +1442,11 @@ int __cgroup_bpf_run_filter_getsockopt(struct sock *sk, int level,
->                         goto out;
->                 }
->
-> +               if (ctx.optlen < 0) {
-> +                       ret = -EFAULT;
-> +                       goto out;
-> +               }
-> +
->                 if (copy_from_user(ctx.optval, optval,
->                                    min(ctx.optlen, max_optlen)) != 0) {
->                         ret = -EFAULT;
-> --
-> 2.29.2
-Good point, user's optlen can be concurrently changed after the kernel
-updated it.
+From: Björn Töpel <bjorn.topel@intel.com>
 
-Reviewed-by: Stanislav Fomichev <sdf@google.com>
+Use C89 rules for variable definition.
+
+Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
+---
+ tools/testing/selftests/bpf/xdpxceiver.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/xdpxceiver.c b/tools/testing/selftests/bpf/xdpxceiver.c
+index 993ce9b7aa76..34bdcae9b908 100644
+--- a/tools/testing/selftests/bpf/xdpxceiver.c
++++ b/tools/testing/selftests/bpf/xdpxceiver.c
+@@ -567,9 +567,11 @@ static void rx_pkt(struct xsk_socket_info *xsk, struct pollfd *fds)
+ 	}
+ 
+ 	for (i = 0; i < rcvd; i++) {
+-		u64 addr = xsk_ring_cons__rx_desc(&xsk->rx, idx_rx)->addr;
+-		(void)xsk_ring_cons__rx_desc(&xsk->rx, idx_rx++)->len;
+-		u64 orig = xsk_umem__extract_addr(addr);
++		u64 addr, orig;
++
++		addr = xsk_ring_cons__rx_desc(&xsk->rx, idx_rx)->addr;
++		xsk_ring_cons__rx_desc(&xsk->rx, idx_rx++);
++		orig = xsk_umem__extract_addr(addr);
+ 
+ 		addr = xsk_umem__add_offset_to_addr(addr);
+ 		pkt_node_rx = malloc(sizeof(struct pkt) + PKT_SIZE);
+@@ -905,6 +907,8 @@ static void *worker_testapp_validate(void *arg)
+ 
+ static void testapp_validate(void)
+ {
++	struct timespec max_wait = { 0, 0 };
++
+ 	pthread_attr_init(&attr);
+ 	pthread_attr_setstacksize(&attr, THREAD_STACK);
+ 
+@@ -929,8 +933,6 @@ static void testapp_validate(void)
+ 			exit_with_error(errno);
+ 	}
+ 
+-	struct timespec max_wait = { 0, 0 };
+-
+ 	if (clock_gettime(CLOCK_REALTIME, &max_wait))
+ 		exit_with_error(errno);
+ 	max_wait.tv_sec += TMOUT_SEC;
+-- 
+2.27.0
+
