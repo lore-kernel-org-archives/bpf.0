@@ -2,182 +2,303 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3367C433DB
-	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 22:57:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2195DC433E9
+	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 22:59:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8C43523AAC
-	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 22:57:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E0DF923ACA
+	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 22:59:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728586AbhAVW5c (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 22 Jan 2021 17:57:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48648 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728476AbhAVW4n (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 22 Jan 2021 17:56:43 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E92C06174A;
-        Fri, 22 Jan 2021 14:56:03 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id k132so7041069ybf.2;
-        Fri, 22 Jan 2021 14:56:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=P0ru974B6Q7RoDzmI3kqeFvMXnnLKfdBNCMfCCuAQoc=;
-        b=Dy3XH+z66gPAWI5CiE1jF47tii7PIt2u0jWt0l1d1mQMedGBEj7G7JhEvyT3i0O1yO
-         oBEgVViqSsj0piUDEGmkTBycvCBXeEmnsimtKVPB8TclbnIFh+aRgVRFSEpSJTtw5+uB
-         eesPfdfkMVexptkNMeC+9KY9H2ZWze2h1ZCeYGrgKp58oTD3UfO7Y5pL7Ivgk8PIgJ4T
-         5/G51j1WDjAPgp824+W8SRGzX0IgOacQI22ChB9+LweK4YY25n/0RvcZUF0+HBHDgYAy
-         JU6q5HEjansFuQ2ojT77//s1+e7Z30S/9hTJbIIEF3H9We2hOCvRv0UvAHbnkJujiQwD
-         ge3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=P0ru974B6Q7RoDzmI3kqeFvMXnnLKfdBNCMfCCuAQoc=;
-        b=KhiZQGm8mawm/H5B5vv7/2UgU3DZagIQhvXnQ0ZC6KyB1l4e0DP0KHZZvdMSEm7Pbw
-         nQ8r+e+tJa8vdjlvbjr+NjJZGIFVkW2KdczEUBUCuqCjspZsYO2x5zI9b0e9H4pUx3ZW
-         ZB/rtfExGATnKaidHQGHr5vqDD+FpAWFjy/yDqX91OQg/XPc51+/eAijaoYc5P9/sOwG
-         GW/9dBRmUjg+pGmRZkG9rDwUlfohysKD3GiArYWz1F1/4Jc7Fpcxc5tQb5fOmJPa8HiQ
-         ImS6/UpmHwPcpo0dccaLbpYMkK/Mt4x23H26gava/0nrZ1CaWfGhZXlpKqe2wcvTEtUL
-         A6aQ==
-X-Gm-Message-State: AOAM533z6YVCYLPpGLaiMblPmIi0Zl/cN273JZiMacqZhGV4d5KGzTIM
-        B5DsrRiwTBiKLnS2js7JGXCt89sqg4keizbCMmE=
-X-Google-Smtp-Source: ABdhPJyxyI3w5nhampQQpIxt6t3H3fRoaOerAjdnOfYSALoPKMFIljdbUWvNiE7K9t0IRENryz1WOmeg71PwQaQOBzc=
-X-Received: by 2002:a25:4b86:: with SMTP id y128mr9448441yba.403.1611356162405;
- Fri, 22 Jan 2021 14:56:02 -0800 (PST)
-MIME-Version: 1.0
-References: <20210121202203.9346-1-jolsa@kernel.org> <20210121202203.9346-3-jolsa@kernel.org>
- <CAEf4BzZquSn0Th7bpVuM0M4XbTPU5-9jDPPd5RJBS5AH2zqaMA@mail.gmail.com> <20210122204654.GB70760@krava>
-In-Reply-To: <20210122204654.GB70760@krava>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 22 Jan 2021 14:55:51 -0800
-Message-ID: <CAEf4BzaRrMp1+2dgv_1WrkBt+=KF1BJnN_KGwZKx5gDg7t++Yg@mail.gmail.com>
-Subject: Re: [PATCH 2/3] bpf_encoder: Translate SHN_XINDEX in symbol's
- st_shndx values
-To:     Jiri Olsa <jolsa@redhat.com>
-Cc:     Jiri Olsa <jolsa@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        id S1730862AbhAVTkk (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 22 Jan 2021 14:40:40 -0500
+Received: from mail2.protonmail.ch ([185.70.40.22]:63013 "EHLO
+        mail2.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729752AbhAVSqg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 22 Jan 2021 13:46:36 -0500
+Date:   Fri, 22 Jan 2021 18:45:33 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
+        t=1611341138; bh=2ILzHi/ReYeZyxyrJVxJwSXtgiG9Sy5HC6N/+GXYepg=;
+        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
+        b=YPsITljI0xVWT7arGTO6Fep3NgpuTX8DMLiLb6ohxQO8xHqcLBtYay69XrBkuOwjr
+         49z+Ff4ysFCxhp9Od96KjzxzP9ZVvQQMb1SX4iuT2Rj9gCzWNEBSiBQsymrVi1ntOB
+         c0UovLfOooz55rkDjzOh5MQXeUOXE0huVIjfD3LhZdwd0o61dNGDGS+M9neiGJ/woE
+         AgI28xjGVmh96KupPcjtF/soRBSwad/UayBSdXz0Ta0mXEyacpI+FlZxIRvNWki3eF
+         MOgGkr/d6mHNNt93Vw1tMgzbWXBRbSRopf6IiWfA5M/u7bGHbYTIyDyzH+G2KO0wj+
+         oWy/372pR8YaQ==
+To:     Magnus Karlsson <magnus.karlsson@gmail.com>
+From:   Alexander Lobakin <alobakin@pm.me>
+Cc:     Alexander Lobakin <alobakin@pm.me>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Eric Dumazet <eric.dumazet@gmail.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Bjorn Topel <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>, dwarves@vger.kernel.org,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Yonghong Song <yhs@fb.com>, Hao Luo <haoluo@google.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Mark Wielaard <mjw@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        virtualization@lists.linux-foundation.org,
+        bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Reply-To: Alexander Lobakin <alobakin@pm.me>
+Subject: Re: [PATCH bpf-next v3 3/3] xsk: build skb by page
+Message-ID: <20210122184457.37812-1-alobakin@pm.me>
+In-Reply-To: <CAJ8uoz310du+0qsdGWKtsrK3tBxGFTr=kWkT+GwY1GqN=A2ejQ@mail.gmail.com>
+References: <1611329955.4913929-2-xuanzhuo@linux.alibaba.com> <20210122172534.9896-1-alobakin@pm.me> <CAJ8uoz310du+0qsdGWKtsrK3tBxGFTr=kWkT+GwY1GqN=A2ejQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Jan 22, 2021 at 12:47 PM Jiri Olsa <jolsa@redhat.com> wrote:
->
-> On Thu, Jan 21, 2021 at 03:32:40PM -0800, Andrii Nakryiko wrote:
->
-> SNIP
->
-> > > @@ -598,9 +599,36 @@ static void collect_symbol(GElf_Sym *sym, struct funcs_layout *fl)
-> > >                 fl->mcount_stop = sym->st_value;
-> > >  }
+From: Magnus Karlsson <magnus.karlsson@gmail.com>
+Date: Fri, 22 Jan 2021 19:37:06 +0100
+
+> On Fri, Jan 22, 2021 at 6:26 PM Alexander Lobakin <alobakin@pm.me> wrote:
+> >
+> > From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+> > Date: Fri, 22 Jan 2021 23:39:15 +0800
+> >
+> > > On Fri, 22 Jan 2021 13:55:14 +0100, Magnus Karlsson <magnus.karlsson@=
+gmail.com> wrote:
+> > > > On Fri, Jan 22, 2021 at 1:39 PM Alexander Lobakin <alobakin@pm.me> =
+wrote:
+> > > > >
+> > > > > From: Magnus Karlsson <magnus.karlsson@gmail.com>
+> > > > > Date: Fri, 22 Jan 2021 13:18:47 +0100
+> > > > >
+> > > > > > On Fri, Jan 22, 2021 at 12:57 PM Alexander Lobakin <alobakin@pm=
+.me> wrote:
+> > > > > > >
+> > > > > > > From: Alexander Lobakin <alobakin@pm.me>
+> > > > > > > Date: Fri, 22 Jan 2021 11:47:45 +0000
+> > > > > > >
+> > > > > > > > From: Eric Dumazet <eric.dumazet@gmail.com>
+> > > > > > > > Date: Thu, 21 Jan 2021 16:41:33 +0100
+> > > > > > > >
+> > > > > > > > > On 1/21/21 2:47 PM, Xuan Zhuo wrote:
+> > > > > > > > > > This patch is used to construct skb based on page to sa=
+ve memory copy
+> > > > > > > > > > overhead.
+> > > > > > > > > >
+> > > > > > > > > > This function is implemented based on IFF_TX_SKB_NO_LIN=
+EAR. Only the
+> > > > > > > > > > network card priv_flags supports IFF_TX_SKB_NO_LINEAR w=
+ill use page to
+> > > > > > > > > > directly construct skb. If this feature is not supporte=
+d, it is still
+> > > > > > > > > > necessary to copy data to construct skb.
+> > > > > > > > > >
+> > > > > > > > > > ---------------- Performance Testing ------------
+> > > > > > > > > >
+> > > > > > > > > > The test environment is Aliyun ECS server.
+> > > > > > > > > > Test cmd:
+> > > > > > > > > > ```
+> > > > > > > > > > xdpsock -i eth0 -t  -S -s <msg size>
+> > > > > > > > > > ```
+> > > > > > > > > >
+> > > > > > > > > > Test result data:
+> > > > > > > > > >
+> > > > > > > > > > size    64      512     1024    1500
+> > > > > > > > > > copy    1916747 1775988 1600203 1440054
+> > > > > > > > > > page    1974058 1953655 1945463 1904478
+> > > > > > > > > > percent 3.0%    10.0%   21.58%  32.3%
+> > > > > > > > > >
+> > > > > > > > > > Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+> > > > > > > > > > Reviewed-by: Dust Li <dust.li@linux.alibaba.com>
+> > > > > > > > > > ---
+> > > > > > > > > >  net/xdp/xsk.c | 104 ++++++++++++++++++++++++++++++++++=
+++++++++++++++----------
+> > > > > > > > > >  1 file changed, 86 insertions(+), 18 deletions(-)
+> > > > > > > > > >
+> > > > > > > > > > diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> > > > > > > > > > index 4a83117..38af7f1 100644
+> > > > > > > > > > --- a/net/xdp/xsk.c
+> > > > > > > > > > +++ b/net/xdp/xsk.c
+> > > > > > > > > > @@ -430,6 +430,87 @@ static void xsk_destruct_skb(struc=
+t sk_buff *skb)
+> > > > > > > > > >   sock_wfree(skb);
+> > > > > > > > > >  }
+> > > > > > > > > >
+> > > > > > > > > > +static struct sk_buff *xsk_build_skb_zerocopy(struct x=
+dp_sock *xs,
+> > > > > > > > > > +                                       struct xdp_desc=
+ *desc)
+> > > > > > > > > > +{
+> > > > > > > > > > + u32 len, offset, copy, copied;
+> > > > > > > > > > + struct sk_buff *skb;
+> > > > > > > > > > + struct page *page;
+> > > > > > > > > > + void *buffer;
+> > > > > > > > > > + int err, i;
+> > > > > > > > > > + u64 addr;
+> > > > > > > > > > +
+> > > > > > > > > > + skb =3D sock_alloc_send_skb(&xs->sk, 0, 1, &err);
+> > > > > > > > > > + if (unlikely(!skb))
+> > > > > > > > > > +         return ERR_PTR(err);
+> > > > > > > > > > +
+> > > > > > > > > > + addr =3D desc->addr;
+> > > > > > > > > > + len =3D desc->len;
+> > > > > > > > > > +
+> > > > > > > > > > + buffer =3D xsk_buff_raw_get_data(xs->pool, addr);
+> > > > > > > > > > + offset =3D offset_in_page(buffer);
+> > > > > > > > > > + addr =3D buffer - xs->pool->addrs;
+> > > > > > > > > > +
+> > > > > > > > > > + for (copied =3D 0, i =3D 0; copied < len; i++) {
+> > > > > > > > > > +         page =3D xs->pool->umem->pgs[addr >> PAGE_SHI=
+FT];
+> > > > > > > > > > +
+> > > > > > > > > > +         get_page(page);
+> > > > > > > > > > +
+> > > > > > > > > > +         copy =3D min_t(u32, PAGE_SIZE - offset, len -=
+ copied);
+> > > > > > > > > > +
+> > > > > > > > > > +         skb_fill_page_desc(skb, i, page, offset, copy=
+);
+> > > > > > > > > > +
+> > > > > > > > > > +         copied +=3D copy;
+> > > > > > > > > > +         addr +=3D copy;
+> > > > > > > > > > +         offset =3D 0;
+> > > > > > > > > > + }
+> > > > > > > > > > +
+> > > > > > > > > > + skb->len +=3D len;
+> > > > > > > > > > + skb->data_len +=3D len;
+> > > > > > > > >
+> > > > > > > > > > + skb->truesize +=3D len;
+> > > > > > > > >
+> > > > > > > > > This is not the truesize, unfortunately.
+> > > > > > > > >
+> > > > > > > > > We need to account for the number of pages, not number of=
+ bytes.
+> > > > > > > >
+> > > > > > > > The easiest solution is:
+> > > > > > > >
+> > > > > > > >       skb->truesize +=3D PAGE_SIZE * i;
+> > > > > > > >
+> > > > > > > > i would be equal to skb_shinfo(skb)->nr_frags after exiting=
+ the loop.
+> > > > > > >
+> > > > > > > Oops, pls ignore this. I forgot that XSK buffers are not
+> > > > > > > "one per page".
+> > > > > > > We need to count the number of pages manually and then do
+> > > > > > >
+> > > > > > >         skb->truesize +=3D PAGE_SIZE * npages;
+> > > > > > >
+> > > > > > > Right.
+> > > > > >
+> > > > > > There are two possible packet buffer (chunks) sizes in a umem, =
+2K and
+> > > > > > 4K on a system with a PAGE_SIZE of 4K. If I remember correctly,=
+ and
+> > > > > > please correct me if wrong, truesize is used for memory account=
+ing.
+> > > > > > But in this code, no kernel memory has been allocated (apart fr=
+om the
+> > > > > > skb). The page is just a part of the umem that has been already
+> > > > > > allocated beforehand and by user-space in this case. So what sh=
+ould
+> > > > > > truesize be in this case? Do we add 0, chunk_size * i, or the
+> > > > > > complicated case of counting exactly how many 4K pages that are=
+ used
+> > > > > > when the chunk_size is 2K, as two chunks could occupy the same =
+page,
+> > > > > > or just the upper bound of PAGE_SIZE * i that is likely a good
+> > > > > > approximation in most cases? Just note that there might be othe=
+r uses
+> > > > > > of truesize that I am unaware of that could impact this choice.
+> > > > >
+> > > > > Truesize is "what amount of memory does this skb occupy with all =
+its
+> > > > > fragments, linear space and struct sk_buff itself". The closest i=
+t
+> > > > > will be to the actual value, the better.
+> > > > > In this case, I think adding of chunk_size * i would be enough.
+> > > >
+> > > > Sounds like a good approximation to me.
+> > > >
+> > > > > (PAGE_SIZE * i can be overwhelming when chunk_size is 2K, especia=
+lly
+> > > > > for setups with PAGE_SIZE > SZ_4K)
+> > > >
+> > > > You are right. That would be quite horrible on a system with a page=
+ size of 64K.
 > > >
-> > > +static bool elf_sym__get(Elf_Data *syms, Elf_Data *syms_sec_idx_table,
-> > > +                        int id, GElf_Sym *sym, Elf32_Word *sym_sec_idx)
-> > > +{
-> > > +       if (!gelf_getsym(syms, id, sym))
-> > > +               return false;
-> > > +
-> > > +       *sym_sec_idx = sym->st_shndx;
-> > > +
-> > > +       if (sym->st_shndx == SHN_XINDEX) {
-> > > +               if (!syms_sec_idx_table)
-> > > +                       return false;
-> > > +               if (!gelf_getsymshndx(syms, syms_sec_idx_table,
-> > > +                                     id, sym, sym_sec_idx))
+> > > Thank you everyone, I learned it.
+> > >
+> > > I also think it is appropriate to add a chunk size here, and there is=
+ actually
+> > > only one chunk here, so it's very simple
+> > >
+> > >       skb->truesize +=3D xs->pool->chunk_size;
 > >
-> >
-> > gelf_getsymshndx() is supposed to work even for cases that don't use
-> > extended numbering, so this should work, right?
-> >
-> > if (!gelf_getsymshndx(syms, syms_sec_idx_table, id, sym, sym_sec_idx))
-> >     return false;
-> >
->
-> it seems you're right, gelf_getsymshndx seem to work for
-> both cases, I'll check
->
->
-> > if (sym->st_shndx == SHN_XINDEX)
-> >   *sym_sec_idx = sym->st_shndx;
->
-> I don't understand this..  gelf_getsymshndx will return both
-> symbol and proper index, no? also sym_sec_idx is already
-> assigned from previou call
+> > umem chunks can't cross page boundaries. So if you're sure that
+> > there could be only one chunk, you don't need the loop at all,
+> > if I'm not missing anything.
+>=20
+> In the default mode, this is true. But in the unaligned_chunk mode
+> that can be set on the umem, the chunk may cross one page boundary, so
+> we need the loop and the chunk_size * i in the assignment of truesize.
+> So "i" can be 1 or 2, but nothing else.
 
-Reading (some) implementation of gelf_getsymshndx() that I found
-online, it won't set sym_sec_idx, if the symbol *doesn't* use extended
-numbering. But it will still return symbol data. So to return the
-section index in all cases, we need to check again *after* we got
-symbol, and if it's not extended, then set index manually.
+Ah, unaligned mode, sure. Thanks for explanation!
+Right, we need the loop and skb->truesize +=3D xs->pool->chunk_size * i
+then.
 
->
+> > > In addition, I actually borrowed from the tcp code:
+> > >
+> > >    tcp_build_frag:
+> > >    --------------
+> > >
+> > >       if (can_coalesce) {
+> > >               skb_frag_size_add(&skb_shinfo(skb)->frags[i - 1], copy)=
+;
+> > >       } else {
+> > >               get_page(page);
+> > >               skb_fill_page_desc(skb, i, page, offset, copy);
+> > >       }
+> > >
+> > >       if (!(flags & MSG_NO_SHARED_FRAGS))
+> > >               skb_shinfo(skb)->flags |=3D SKBFL_SHARED_FRAG;
+> > >
+> > >       skb->len +=3D copy;
+> > >       skb->data_len +=3D copy;
+> > >       skb->truesize +=3D copy;
+> > >
+> > > So, here is one bug?
 > >
-> > return true;
+> > skb_frag_t is an alias to struct bvec. It doesn't contain info about
+> > real memory consumption, so there's no other option buf just to add
+> > "copy" to truesize.
+> > XSK is different in this term, as it operates with chunks of a known
+> > size.
 > >
-> > ?
-> >
-> > > +                       return false;
-> > > +       }
-> > > +
-> > > +       return true;
-> > > +}
-> > > +
-> > > +#define elf_symtab__for_each_symbol_index(symtab, id, sym, sym_sec_idx)                \
-> > > +       for (id = 0, elf_sym__get(symtab->syms, symtab->syms_sec_idx_table,     \
-> > > +                                 id, &sym, &sym_sec_idx);                      \
-> > > +            id < symtab->nr_syms;                                              \
-> > > +            id++, elf_sym__get(symtab->syms, symtab->syms_sec_idx_table,       \
-> > > +                               id, &sym, &sym_sec_idx))
-> >
-> > what do we want to do if elf_sym__get() returns error (false)? We can
-> > either stop or ignore that symbol, right? But currently you are
-> > returning invalid symbol data.
-> >
-> > so either
-> >
-> > for (id = 0; id < symtab->nr_syms && elf_sym__get(symtab->syms,
-> > symtab->syms_sec_idx_table, d, &sym, &sym_sec_idx); id++)
-> >
-> > or
-> >
-> > for (id = 0; id < symtab->nr_syms; id++)
-> >   if (elf_sym__get(symtab->syms, symtab->syms_sec_idx_table, d, &sym,
-> > &sym_sec_idx))
->
-> if we go ahead with skipping symbols, this one seems good
+> > > Thanks.
+> > >
+> > > >
+> > > > > > > > > > +
+> > > > > > > > > > + refcount_add(len, &xs->sk.sk_wmem_alloc);
+> > > > > > > > > > +
+> > > > > > > > > > + return skb;
+> > > > > > > > > > +}
+> > > > > > > > > > +
+> > > > > > > >
+> > > > > > > > Al
+> > > > > > >
+> > > > > > > Thanks,
+> > > > > > > Al
+> > > > >
+> > > > > Al
 
-I think skipping symbols is nicer. If ELF is totally broken, then all
-symbols are going to be ignored anyway. If it's some one-off issue for
-a specific symbol, we'll just ignore it (unfortunately, silently).
-
->
-> >
-> >
-> > But the current variant looks broken. Oh, and
-> > elf_symtab__for_each_symbol() is similarly broken, can you please fix
-> > that as well?
-> >
-> > And this new macro should probably be in elf_symtab.h, along the
-> > elf_symtab__for_each_symbol.
->
-> thanks,
-> jirka
->
