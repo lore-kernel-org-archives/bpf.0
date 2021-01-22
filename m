@@ -2,97 +2,97 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AB337C433E9
-	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 17:21:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C042C10DC2
+	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 17:21:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7BF2523433
+	by mail.kernel.org (Postfix) with ESMTP id E1A6523A9C
 	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 17:21:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728902AbhAVQtV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 22 Jan 2021 11:49:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52854 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729386AbhAVQnq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 22 Jan 2021 11:43:46 -0500
-Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [IPv6:2001:67c:2050::465:102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B37CCC061794;
-        Fri, 22 Jan 2021 08:43:09 -0800 (PST)
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:105:465:1:1:0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S1729495AbhAVQrn convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 22 Jan 2021 11:47:43 -0500
+Received: from us-smtp-delivery-44.mimecast.com ([205.139.111.44]:54425 "EHLO
+        us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728923AbhAVQlC (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 22 Jan 2021 11:41:02 -0500
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-510-N9qlE5usPrW3BIiYOoXJhw-1; Fri, 22 Jan 2021 11:39:36 -0500
+X-MC-Unique: N9qlE5usPrW3BIiYOoXJhw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4DMlS919QJzQlYs;
-        Fri, 22 Jan 2021 17:43:05 +0100 (CET)
-Authentication-Results: spamfilter06.heinlein-hosting.de (amavisd-new);
-        dkim=pass (2048-bit key) reason="pass (just generated, assumed good)"
-        header.d=mailbox.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mailbox.org; h=
-        content-transfer-encoding:mime-version:message-id:date:date
-        :subject:subject:from:from:received; s=mail20150812; t=
-        1611333777; bh=Lh2xfkUbit1Y/Lo9qAlrk6Bt3Nw0IkInj3l415cJVDA=; b=l
-        l1gvic6Z5Mm26JDD4PeFolt+OHTiOCKNObJRwAQRy+M2OcNIj/3jbUGxetb/P4xR
-        U1actvoCYj6kajYCJh+JAqDINbkCOCw7PZa8uGW3zPY4hsA6zu+VVEJ/5DR89VFA
-        SiaDAeQ/eI7642d6xK2Bae6wuWNgH8dBWfNMxz4m75EA7s1xMPgKN8HAAEF/N9oL
-        ehxDP4ksrmbPhX517eNHxOJJlLFKnD5Xxz4NtcZs1O3hjcimvwzEQcNjpw0CtpF/
-        lqOlZoanipoVgq/hiGlEEtg/MxCai+w+/3J7hnU064I88uZDjyK2LPE0XYBUKLcK
-        UBFTD7LFPPN5zSf4GbXog==
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp1.mailbox.org ([80.241.60.240])
-        by spamfilter06.heinlein-hosting.de (spamfilter06.heinlein-hosting.de [80.241.56.125]) (amavisd-new, port 10030)
-        with ESMTP id KUGvmkt91g7F; Fri, 22 Jan 2021 17:42:57 +0100 (CET)
-From:   Loris Reiff <loris.reiff@liblor.ch>
-To:     bpf@vger.kernel.org
-Cc:     netdev@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        Loris Reiff <loris.reiff@liblor.ch>
-Subject: [PATCH 1/2] bpf: cgroup: Fix optlen WARN_ON_ONCE toctou
-Date:   Fri, 22 Jan 2021 17:42:31 +0100
-Message-Id: <20210122164232.61770-1-loris.reiff@liblor.ch>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 674FC107AD26;
+        Fri, 22 Jan 2021 16:39:34 +0000 (UTC)
+Received: from krava.redhat.com (unknown [10.40.192.97])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4C3855C5E0;
+        Fri, 22 Jan 2021 16:39:31 +0000 (UTC)
+From:   Jiri Olsa <jolsa@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andriin@fb.com>
+Cc:     dwarves@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, Yonghong Song <yhs@fb.com>,
+        Hao Luo <haoluo@google.com>, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Mark Wielaard <mjw@redhat.com>
+Subject: [PATCH 1/2] elf_symtab: Add support for SHN_XINDEX index to elf_section_by_name
+Date:   Fri, 22 Jan 2021 17:39:19 +0100
+Message-Id: <20210122163920.59177-2-jolsa@kernel.org>
+In-Reply-To: <20210122163920.59177-1-jolsa@kernel.org>
+References: <20210122163920.59177-1-jolsa@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-MBO-SPAM-Probability: **
-X-Rspamd-Score: 1.80 / 15.00 / 15.00
-X-Rspamd-Queue-Id: C547C186B
-X-Rspamd-UID: 3024cb
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jolsa@kernel.org
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: kernel.org
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=WINDOWS-1252
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-A toctou issue in `__cgroup_bpf_run_filter_getsockopt` can trigger a
-WARN_ON_ONCE in a check of `copy_from_user`.
-`*optlen` is checked to be non-negative in the individual getsockopt
-functions beforehand. Changing `*optlen` in a race to a negative value
-will result in a `copy_from_user(ctx.optval, optval, ctx.optlen)` with
-`ctx.optlen` being a negative integer.
+In case the elf's header e_shstrndx contains SHN_XINDEX,
+we need to call elf_getshdrstrndx to get the proper
+string table index.
 
-Fixes: 0d01da6afc54 ("bpf: implement getsockopt and setsockopt hooks")
-Signed-off-by: Loris Reiff <loris.reiff@liblor.ch>
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- kernel/bpf/cgroup.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ dutil.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-index 96555a8a2..6ec8f02f4 100644
---- a/kernel/bpf/cgroup.c
-+++ b/kernel/bpf/cgroup.c
-@@ -1442,6 +1442,11 @@ int __cgroup_bpf_run_filter_getsockopt(struct sock *sk, int level,
- 			goto out;
- 		}
- 
-+		if (ctx.optlen < 0) {
-+			ret = -EFAULT;
-+			goto out;
-+		}
+diff --git a/dutil.c b/dutil.c
+index 7b667647420f..11fb7202049c 100644
+--- a/dutil.c
++++ b/dutil.c
+@@ -179,12 +179,18 @@ Elf_Scn *elf_section_by_name(Elf *elf, GElf_Ehdr *ep,
+ {
+ 	Elf_Scn *sec = NULL;
+ 	size_t cnt = 1;
++	size_t str_idx;
 +
- 		if (copy_from_user(ctx.optval, optval,
- 				   min(ctx.optlen, max_optlen)) != 0) {
- 			ret = -EFAULT;
++	if (elf_getshdrstrndx(elf, &str_idx))
++		return NULL;
+ 
+ 	while ((sec = elf_nextscn(elf, sec)) != NULL) {
+ 		char *str;
+ 
+ 		gelf_getshdr(sec, shp);
+-		str = elf_strptr(elf, ep->e_shstrndx, shp->sh_name);
++		str = elf_strptr(elf, str_idx, shp->sh_name);
++		if (!str)
++			return NULL;
+ 		if (!strcmp(name, str)) {
+ 			if (index)
+ 				*index = cnt;
 -- 
-2.29.2
+2.26.2
 
