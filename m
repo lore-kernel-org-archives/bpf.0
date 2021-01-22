@@ -2,75 +2,147 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-23.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F60FC433E0
-	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 22:22:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C9C42C433E0
+	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 22:23:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5671E23A5C
-	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 22:22:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8CBB123A5C
+	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 22:23:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729206AbhAVWVH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 22 Jan 2021 17:21:07 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36856 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728945AbhAVWUu (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 22 Jan 2021 17:20:50 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id 5C36123B06;
-        Fri, 22 Jan 2021 22:20:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611354010;
-        bh=hWx6nRV1ARYPk2gv222CAqE4BbnDgp36UxP9O6ASPj0=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=cCV2zShoT26XrnoBDjrTnY55E0/JWHIi+dtBVFPmqR4fs+lVKb3DRfPeujMYc18uz
-         WGuOKMIR1Ol2NHxZznO2At4SRY/rdzFE1TaKeC9xpGeWVQLtcjC3Fnj+Oh0Is01Yw+
-         dtkv/rNczlVa2ZWwD0sas68cwAHgURzfo48XUeIF0kQxr6v9QSKyRVUpyAMkt1rBOX
-         7CaH8fKqFEMnzVFBuZJWhFu6VDNGIgJbZ8k3aIq6J+w6f1ABGW0WDIVPKcGjoNEmId
-         QHSy6BvBRkJqq/CB7l+e/0yQaLNq2w46TiviCJZxCYQfVMA0EmN37XCR+4is9yY80L
-         bCtypfoJ+xt9Q==
-Content-Type: text/plain; charset="utf-8"
+        id S1728403AbhAVWXA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 22 Jan 2021 17:23:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37562 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730666AbhAVTyp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 22 Jan 2021 14:54:45 -0500
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0342FC06174A
+        for <bpf@vger.kernel.org>; Fri, 22 Jan 2021 11:54:03 -0800 (PST)
+Received: by mail-qk1-x736.google.com with SMTP id x81so3488874qkb.0
+        for <bpf@vger.kernel.org>; Fri, 22 Jan 2021 11:54:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=o3+2RrVerjMaWuS5/ui/Sx1ksZD77pxsUnMtE6ueQUw=;
+        b=Px2iN2UyfVAQro3oP7tv3xH1JBVH4ZW100K5nazymj8nxitzrw5ztR0doNRZJoGquj
+         4DYiTQQ8R+2lEi7xJbRtYD130dRvsEWCBy5Yyzb5QdAJeZEMWY/59xZ8fJGvxTElDTDC
+         oBI6LEyj4NjF2vb1+5kICsLCvAM0HjeduezoNCkp6Ks0UbtNunNdAwzjoG99itoPkHnv
+         K+JMIobKhFpJNB8kg2pCcFKjjUv4pk635LTHy3HRdxCy4z5Lm6xVq7X/F1A96Ll/SwH9
+         kSfAVhI0JcTT6kXBZrodK7i6rSa3vp7gQGfypHDke/xUU1ap2OHfJ0a4Xy+RruVzERak
+         3K0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=o3+2RrVerjMaWuS5/ui/Sx1ksZD77pxsUnMtE6ueQUw=;
+        b=Vl4Q84JullE5ajG9iQJ4SJifthl1KGm/MqWY5FiRmdxJZF94nNW/mMeJXdgJH67iOK
+         9/lGFqm2+HY5J4blbr330Ax7pE+BouVZet46Esbx4hkWXuFZcW1TqIj4HHHxGL3KH/gQ
+         KEHAAsPZRV3j0Dstm1N8pekU2jiAB/OvwGFwcAw6/Hnm1WtuLxzPdhoAavYGx098NSm/
+         z45CBcUEC/KQDYlPFi3NzCgiHxI16+fsNy7zZMv8uLMxGIN7+zInumpYmJHeamKqYT+/
+         T7R8b1Qlb4/kZ+5O7MtI7HR7+AGsF/+Spa3UAtYz88LOWq9lN9NIZSWe6Yg23OPNlo3/
+         aByA==
+X-Gm-Message-State: AOAM531+FSn7iTEEOPydbRx0vrmiRn4+jpf4fOkzGKKn9F3SbyJfcjrs
+        9eWkK6cddRSstXK00QfQV+eVp1JbmNFtMitrZrtS/A==
+X-Google-Smtp-Source: ABdhPJzSM43NTCuGbPUVg21hUwmPCbZ2cc61t0SNIgR0kc0idNF01oQm06wIsE897ym/NCYi1bXoOgg0zr2YcZnX2B0=
+X-Received: by 2002:a05:620a:22ab:: with SMTP id p11mr6315334qkh.237.1611345241897;
+ Fri, 22 Jan 2021 11:54:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] bpf: put file handler if no storage found
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <161135401031.12943.10675610849465609420.git-patchwork-notify@kernel.org>
-Date:   Fri, 22 Jan 2021 22:20:10 +0000
-References: <20210121020856.25507-1-bianpan2016@163.com>
-In-Reply-To: <20210121020856.25507-1-bianpan2016@163.com>
-To:     Pan Bian <bianpan2016@163.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20210121012241.2109147-1-sdf@google.com> <YAspc5rk2sNWojDQ@rdna-mbp.dhcp.thefacebook.com>
+In-Reply-To: <YAspc5rk2sNWojDQ@rdna-mbp.dhcp.thefacebook.com>
+From:   Stanislav Fomichev <sdf@google.com>
+Date:   Fri, 22 Jan 2021 11:53:51 -0800
+Message-ID: <CAKH8qBumq7cHDeCpvA1T_rJyvY8+9uCUyb--YAhvcAx3p58faw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf: allow rewriting to ports under ip_unprivileged_port_start
+To:     Andrey Ignatov <rdna@fb.com>
+Cc:     Martin KaFai Lau <kafai@fb.com>, Netdev <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
-
-This patch was applied to bpf/bpf.git (refs/heads/master):
-
-On Wed, 20 Jan 2021 18:08:56 -0800 you wrote:
-> Put file f if inode_storage_ptr() returns NULL.
-> 
-> Fixes: 8ea636848aca ("bpf: Implement bpf_local_storage for inodes")
-> Acked-by: KP Singh <kpsingh@kernel.org>
-> Signed-off-by: Pan Bian <bianpan2016@163.com>
-> ---
->  kernel/bpf/bpf_inode_storage.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-
-Here is the summary with links:
-  - bpf: put file handler if no storage found
-    https://git.kernel.org/bpf/bpf/c/524db191d2f5
-
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+On Fri, Jan 22, 2021 at 11:37 AM Andrey Ignatov <rdna@fb.com> wrote:
+>
+> Stanislav Fomichev <sdf@google.com> [Wed, 2021-01-20 18:09 -0800]:
+> > At the moment, BPF_CGROUP_INET{4,6}_BIND hooks can rewrite user_port
+> > to the privileged ones (< ip_unprivileged_port_start), but it will
+> > be rejected later on in the __inet_bind or __inet6_bind.
+> >
+> > Let's export 'port_changed' event from the BPF program and bypass
+> > ip_unprivileged_port_start range check when we've seen that
+> > the program explicitly overrode the port. This is accomplished
+> > by generating instructions to set ctx->port_changed along with
+> > updating ctx->user_port.
+> >
+> > Signed-off-by: Stanislav Fomichev <sdf@google.com>
+> > ---
+> ...
+> > @@ -244,17 +245,27 @@ int bpf_percpu_cgroup_storage_update(struct bpf_map *map, void *key,
+> >       if (cgroup_bpf_enabled(type))   {                                      \
+> >               lock_sock(sk);                                                 \
+> >               __ret = __cgroup_bpf_run_filter_sock_addr(sk, uaddr, type,     \
+> > -                                                       t_ctx);              \
+> > +                                                       t_ctx, NULL);        \
+> >               release_sock(sk);                                              \
+> >       }                                                                      \
+> >       __ret;                                                                 \
+> >  })
+> >
+> > -#define BPF_CGROUP_RUN_PROG_INET4_BIND_LOCK(sk, uaddr)                              \
+> > -     BPF_CGROUP_RUN_SA_PROG_LOCK(sk, uaddr, BPF_CGROUP_INET4_BIND, NULL)
+> > -
+> > -#define BPF_CGROUP_RUN_PROG_INET6_BIND_LOCK(sk, uaddr)                              \
+> > -     BPF_CGROUP_RUN_SA_PROG_LOCK(sk, uaddr, BPF_CGROUP_INET6_BIND, NULL)
+> > +#define BPF_CGROUP_RUN_PROG_INET_BIND_LOCK(sk, uaddr, type, flags)          \
+> > +({                                                                          \
+> > +     bool port_changed = false;                                             \
+>
+> I see the discussion with Martin in [0] on the program overriding the
+> port but setting exactly same value as it already contains. Commenting
+> on this patch since the code is here.
+>
+> From what I understand there is no use-case to support overriding the
+> port w/o changing the value to just bypass the capability. In this case
+> the code can be simplified.
+>
+> Here instead of introducing port_changed you can just remember the
+> original ((struct sockaddr_in *)uaddr)->sin_port or
+> ((struct sockaddr_in6 *)uaddr)->sin6_port (they have same offset/size so
+> it can be simplified same way as in sock_addr_convert_ctx_access() for
+> user_port) ...
+>
+> > +     int __ret = 0;                                                         \
+> > +     if (cgroup_bpf_enabled(type))   {                                      \
+> > +             lock_sock(sk);                                                 \
+> > +             __ret = __cgroup_bpf_run_filter_sock_addr(sk, uaddr, type,     \
+> > +                                                       NULL,                \
+> > +                                                       &port_changed);      \
+> > +             release_sock(sk);                                              \
+> > +             if (port_changed)                                              \
+>
+> ... and then just compare the original and the new ports here.
+>
+> The benefits will be:
+> * no need to introduce port_changed field in struct bpf_sock_addr_kern;
+> * no need to do change program instructions;
+> * no need to think about compiler optimizing out those instructions;
+> * no need to think about multiple programs coordination, the flag will
+>   be set only if port has actually changed what is easy to reason about
+>   from user perspective.
+>
+> wdyt?
+Martin mentioned in another email that we might want to do that when
+we rewrite only the address portion of it.
+I think it makes sense. Imagine doing 1.1.1.1:50 -> 2.2.2.2:50 it
+seems like it should also work, right?
+And in this case, we need to store and compare addresses as well and
+it becomes messy :-/
+It also seems like it would be nice to have this 'bypass
+cap_net_bind_service" without changing the address while we are at it.
