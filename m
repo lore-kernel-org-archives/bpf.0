@@ -2,121 +2,164 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C76BFC433E6
-	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 10:41:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B6C67C433E6
+	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 11:50:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 766AD222B6
-	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 10:41:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 83F55238EE
+	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 11:50:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727483AbhAVKgZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 22 Jan 2021 05:36:25 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:30920 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728043AbhAVKe0 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 22 Jan 2021 05:34:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1611311565;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IShh/PB74Qh7ZVtwc2vsohdpK5rU9/+uE6woLaCXjt4=;
-        b=QRs3j9dPPiZ24xXHLJCTWSOt1GsqYmMp6wRPdDus3jlxAvMMvgkh43K+FDmZozt3oytvCh
-        FoWxyx6hw84gQjoayAQtq7w/fWPDWdhUgieFYaMzWihkrLAc8MEdr5Bkmfb/lgbtA9xSqj
-        e00uORx4YPm2fiC+NJryp73FZ+Zc1i0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-319-Jb8oDqr2MC-jVWyfrSMdHw-1; Fri, 22 Jan 2021 05:32:43 -0500
-X-MC-Unique: Jb8oDqr2MC-jVWyfrSMdHw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9A1EB1005504;
-        Fri, 22 Jan 2021 10:32:41 +0000 (UTC)
-Received: from carbon (unknown [10.36.110.4])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7D8E671D55;
-        Fri, 22 Jan 2021 10:32:33 +0000 (UTC)
-Date:   Fri, 22 Jan 2021 11:32:32 +0100
-From:   Jesper Dangaard Brouer <brouer@redhat.com>
-To:     Hangbin Liu <liuhangbin@gmail.com>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        id S1726997AbhAVLuG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 22 Jan 2021 06:50:06 -0500
+Received: from mail-40131.protonmail.ch ([185.70.40.131]:39636 "EHLO
+        mail-40131.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727744AbhAVLsf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 22 Jan 2021 06:48:35 -0500
+Date:   Fri, 22 Jan 2021 11:47:45 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
+        t=1611316068; bh=25qDxJLd92A3UCe0EKzxSRMKM/TP8P/UR+NwEW5WA6w=;
+        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
+        b=Ga1tZXjAsfI2SVVUNdSPKuUuKR8i/NdZCALGZ86SPm6Wu21SBlddyXIttnkimDWNp
+         9m5yzcDI5Dm+GOV05DGVfIJ0ZrG9aV+7J56HTfc0UO+MOEWxVfwBElqeG1oDqLXKOv
+         5glXm+BGSOqmmkY1KesAc7pjnMRJpCvl09loYAa9i+9eQVE+gWIfRi9r2oNMRnRgbN
+         lEQR6E5fOYz8jqvXytwD04J6+Oh1tyrRqc7pXAjU3bV8SYfuBUrAXmxiw+NRwDAG/Q
+         /M58i914HpODoSo78Sj2TqsGZEu7BYthkM7zYcYUoQW0Q2UIm7swQilQRLtH6Otl2B
+         b0YNe/ng+7kJw==
+To:     Eric Dumazet <eric.dumazet@gmail.com>
+From:   Alexander Lobakin <alobakin@pm.me>
+Cc:     Alexander Lobakin <alobakin@pm.me>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        =?utf-8?Q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
-        Yonghong Song <yhs@fb.com>,
-        Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdlbnNlbg==?= <toke@redhat.com>,
-        brouer@redhat.com
-Subject: Re: [PATCHv10 bpf-next] samples/bpf: add xdp program on egress for
- xdp_redirect_map
-Message-ID: <20210122113232.70040869@carbon>
-In-Reply-To: <20210122025007.2968381-1-liuhangbin@gmail.com>
-References: <20210121130642.2943811-1-liuhangbin@gmail.com>
-        <20210122025007.2968381-1-liuhangbin@gmail.com>
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        virtualization@lists.linux-foundation.org, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Reply-To: Alexander Lobakin <alobakin@pm.me>
+Subject: Re: [PATCH bpf-next v3 3/3] xsk: build skb by page
+Message-ID: <20210122114729.1758-1-alobakin@pm.me>
+In-Reply-To: <dcee4592-9fa9-adbb-55ca-58a962076e7a@gmail.com>
+References: <cover.1611236588.git.xuanzhuo@linux.alibaba.com> <340f1dfa40416dd966a56e08507daba82d633088.1611236588.git.xuanzhuo@linux.alibaba.com> <dcee4592-9fa9-adbb-55ca-58a962076e7a@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, 22 Jan 2021 10:50:07 +0800
-Hangbin Liu <liuhangbin@gmail.com> wrote:
+From: Eric Dumazet <eric.dumazet@gmail.com>
+Date: Thu, 21 Jan 2021 16:41:33 +0100
 
-> This patch add a xdp program on egress to show that we can modify
-> the packet on egress. In this sample we will set the pkt's src
-> mac to egress's mac address. The xdp_prog will be attached when
-> -X option supplied.
-> 
-> Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
-> ---
+> On 1/21/21 2:47 PM, Xuan Zhuo wrote:
+> > This patch is used to construct skb based on page to save memory copy
+> > overhead.
+> >=20
+> > This function is implemented based on IFF_TX_SKB_NO_LINEAR. Only the
+> > network card priv_flags supports IFF_TX_SKB_NO_LINEAR will use page to
+> > directly construct skb. If this feature is not supported, it is still
+> > necessary to copy data to construct skb.
+> >=20
+> > ---------------- Performance Testing ------------
+> >=20
+> > The test environment is Aliyun ECS server.
+> > Test cmd:
+> > ```
+> > xdpsock -i eth0 -t  -S -s <msg size>
+> > ```
+> >=20
+> > Test result data:
+> >=20
+> > size    64      512     1024    1500
+> > copy    1916747 1775988 1600203 1440054
+> > page    1974058 1953655 1945463 1904478
+> > percent 3.0%    10.0%   21.58%  32.3%
+> >=20
+> > Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+> > Reviewed-by: Dust Li <dust.li@linux.alibaba.com>
+> > ---
+> >  net/xdp/xsk.c | 104 ++++++++++++++++++++++++++++++++++++++++++++++++--=
+--------
+> >  1 file changed, 86 insertions(+), 18 deletions(-)
+> >=20
+> > diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> > index 4a83117..38af7f1 100644
+> > --- a/net/xdp/xsk.c
+> > +++ b/net/xdp/xsk.c
+> > @@ -430,6 +430,87 @@ static void xsk_destruct_skb(struct sk_buff *skb)
+> >  =09sock_wfree(skb);
+> >  }
+> > =20
+> > +static struct sk_buff *xsk_build_skb_zerocopy(struct xdp_sock *xs,
+> > +=09=09=09=09=09      struct xdp_desc *desc)
+> > +{
+> > +=09u32 len, offset, copy, copied;
+> > +=09struct sk_buff *skb;
+> > +=09struct page *page;
+> > +=09void *buffer;
+> > +=09int err, i;
+> > +=09u64 addr;
+> > +
+> > +=09skb =3D sock_alloc_send_skb(&xs->sk, 0, 1, &err);
+> > +=09if (unlikely(!skb))
+> > +=09=09return ERR_PTR(err);
+> > +
+> > +=09addr =3D desc->addr;
+> > +=09len =3D desc->len;
+> > +
+> > +=09buffer =3D xsk_buff_raw_get_data(xs->pool, addr);
+> > +=09offset =3D offset_in_page(buffer);
+> > +=09addr =3D buffer - xs->pool->addrs;
+> > +
+> > +=09for (copied =3D 0, i =3D 0; copied < len; i++) {
+> > +=09=09page =3D xs->pool->umem->pgs[addr >> PAGE_SHIFT];
+> > +
+> > +=09=09get_page(page);
+> > +
+> > +=09=09copy =3D min_t(u32, PAGE_SIZE - offset, len - copied);
+> > +
+> > +=09=09skb_fill_page_desc(skb, i, page, offset, copy);
+> > +
+> > +=09=09copied +=3D copy;
+> > +=09=09addr +=3D copy;
+> > +=09=09offset =3D 0;
+> > +=09}
+> > +
+> > +=09skb->len +=3D len;
+> > +=09skb->data_len +=3D len;
+>=20
+> > +=09skb->truesize +=3D len;
+>=20
+> This is not the truesize, unfortunately.
+>=20
+> We need to account for the number of pages, not number of bytes.
 
-I think we have nitpicked this enough ;-)
+The easiest solution is:
 
-Acked-by: Jesper Dangaard Brouer <brouer@redhat.com>
+=09skb->truesize +=3D PAGE_SIZE * i;
 
-> v10:
-> make xdp_redirect_map() always inline.
-> 
-> v9:
-> roll back to just set src mac to egress interface mac on 2nd xdp prog,
-> this could avoid packet reorder introduce in patch v6.
-> 
-> v8: Fix some checkpatch issues.
-> 
-> v7:
-> a) use bpf_object__find_program_by_name() instad of
->    bpf_object__find_program_by_title()
-> b) set default devmap fd to 0
-> 
-> v6: no code update, only rebase the code on latest bpf-next
-> 
-> v5:
-> a) close fd when err out in get_mac_addr()
-> b) exit program when both -S and -X supplied.
-> 
-> v4:
-> a) Update get_mac_addr socket create
-> b) Load dummy prog regardless of 2nd xdp prog on egress
-> 
-> v3:
-> a) modify the src mac address based on egress mac
-> 
-> v2:
-> a) use pkt counter instead of IP ttl modification on egress program
-> b) make the egress program selectable by option -X
-> ---
->  samples/bpf/xdp_redirect_map_kern.c |  60 +++++++++++++--
->  samples/bpf/xdp_redirect_map_user.c | 112 +++++++++++++++++++++++-----
->  2 files changed, 147 insertions(+), 25 deletions(-)
- 
--- 
-Best regards,
-  Jesper Dangaard Brouer
-  MSc.CS, Principal Kernel Engineer at Red Hat
-  LinkedIn: http://www.linkedin.com/in/brouer
+i would be equal to skb_shinfo(skb)->nr_frags after exiting the loop.
+
+> > +
+> > +=09refcount_add(len, &xs->sk.sk_wmem_alloc);
+> > +
+> > +=09return skb;
+> > +}
+> > +
+
+Al
 
