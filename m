@@ -8,54 +8,54 @@ X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB142C433E0
-	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 11:58:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E403C433DB
+	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 12:02:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 98DE5235F7
-	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 11:58:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E918C23122
+	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 12:02:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726578AbhAVL6j (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 22 Jan 2021 06:58:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34546 "EHLO
+        id S1727366AbhAVMCB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 22 Jan 2021 07:02:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727724AbhAVK5C (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 22 Jan 2021 05:57:02 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC015C061793;
-        Fri, 22 Jan 2021 02:54:02 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id o13so6945158lfr.3;
-        Fri, 22 Jan 2021 02:54:02 -0800 (PST)
+        with ESMTP id S1727847AbhAVKyp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 22 Jan 2021 05:54:45 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AD55C06178B;
+        Fri, 22 Jan 2021 02:54:01 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id x23so5996402lji.7;
+        Fri, 22 Jan 2021 02:54:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Dvl6nZooWLAwBGhT8ta9ggmv3K+yrSjtoMwqodirQJ0=;
-        b=R9HzGvvZESvsn6JfbBWvjmTH623bem2hYyB388ERMFw2gFjbra2GUSd8BH3qyBabN0
-         eW9FN2qfEFE7tZzkAf5nIiHWVkodYErn2MGlg2GcF0WSw2i/ZrDfMtMy0r4l3HjzJTE8
-         McxLWxHtTwKKNXuH/z6/Lb5ElXul5qmB/wg1ndHPCca0NFI9+FByJWBXRzx8V/dpkgt2
-         0v3A3pVrFNjn4q8TaiU9LAsbShqBH0t+Y/udGHVdsMYMut/vsO/m57Dcrm7F+SHJROS3
-         KSvEOz5THWgfFTI1rDnVi12F6thF9mKBgIcD2tvWmNKCrjT5sQxK8dyBCOjgeg0/myiK
-         n0iA==
+        bh=DIoaswv7B1iicUnLwGWig+2UbyTxVZWzlqhoeUIxenk=;
+        b=Aoo8DM1/97CyxI8eDrSo8GY/MTrS/ySxhpEl7dqNW6hwrMmR3d02gjRS2x31TijGtz
+         TrjqIJ36cgKdJYkCfxA5gydspNfdQEtsXlNhLTwl9zQ6wRxpwyljQddMhIXwA02CPOym
+         Ofwap2ZLw0pxiHFbYWHKRE2hmG1NwhHM5XdCJwY5AkLujXXyNcQUeQSnF0uJKe97pdPU
+         hiW7Yaeh2bfNSy0+u/AImFfWbMJkOMReJ1iL1/0h+xwttmTdVUcmGPd9bsjQE6h7B183
+         be6XLninUo6isnbJcJw2ugMhhEcmV80r5gTSj7pE88I3/J8q7xVPqyBgZzC8i/JKcpAH
+         S/jA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Dvl6nZooWLAwBGhT8ta9ggmv3K+yrSjtoMwqodirQJ0=;
-        b=X7R8Q6GLuWwPtH6pHucRseDHyoTeECCnXkQxnWK7csOrrvhGOtwWrXdxoMKz6uFfxa
-         ugFD8izWflx9Tsg4y8ZdnqaZJgzobYRUIMjhpf8w+aYzdOAlBo4KUmTaNTAh0ogzYuUL
-         3UzMxf3IqbYZ+wrRvF+4/aKpthSpy2swin88IAbXJ1yaKoTah+AExbfbZPBzvM2t/gjN
-         E/3zVH6WlkPLVK7w3TMlG4LmCPVNO5ywTMhVifS29AbPne6OHv7Y1TCJdxsqhEHW8+N2
-         DhBbUQHQdMGTHS2sBgKTUdCGodSBv+OXKI08NMEEycuUHJv9G+2M5r+TTG6eJIfCzIlJ
-         FijA==
-X-Gm-Message-State: AOAM531ex9R7cx0bhzoZp9vlOTnTAcYZZp1wXPjA0yyLChfAZTURV1wu
-        hyAf+xizNzJhBAYYK+QN7ec=
-X-Google-Smtp-Source: ABdhPJwwefbxC2ns0ZGBtL/2096CW5QEUQ4ympc/q562C2lMn80GvMLESbXVDtKSubKzyXMlWD3XcQ==
-X-Received: by 2002:a05:6512:6f:: with SMTP id i15mr548843lfo.426.1611312841251;
-        Fri, 22 Jan 2021 02:54:01 -0800 (PST)
+        bh=DIoaswv7B1iicUnLwGWig+2UbyTxVZWzlqhoeUIxenk=;
+        b=iyOkK7DKEqBxBgest7ZqdTbs8PRKGYbqdZEgfx2juyqyjWQY29t6AbotJ5X/S2LDMk
+         xYhfUTV8BUxLHhDqX9mwg2bkKSsQkEEF/2Qzbs+SP4Lxi9GbAlBGpuo8AkOf2p8KNRyl
+         2/5ZFtyqFf7ZI0x0h6ZmmGa2VyozBHPRTdHcbsGdWZnxr+AykeNR9Mpzn/6fdImeBu3X
+         0znXHe7UHfFNfhygxdgw0QWi4Lfd/ROU5UQXD/rCI9yeT8XflXMlIDB/gDGbU3VpeqWU
+         sxo6QU+dZMaEkocNNEVSEbLmWYA+nw9qXKQ75VkFw2hf5uF49fjY7Cbo6DMSfzZvCjn9
+         O9vg==
+X-Gm-Message-State: AOAM533g677tAhGz9Z8n9UgC5kcd4W+A+1e3zDn7x8hNiiJKhqsCKf5N
+        2uSAQu+2DeKHF/LoPVE8NcE=
+X-Google-Smtp-Source: ABdhPJy/ppHP7o13BG30n7hpJE+1iACUpMWLv+Mfp3RKgYfpyIDZHwJ8UOaXQOVEJ4QGznvM6BFUjw==
+X-Received: by 2002:a2e:97c3:: with SMTP id m3mr267043ljj.286.1611312839883;
+        Fri, 22 Jan 2021 02:53:59 -0800 (PST)
 Received: from btopel-mobl.ger.intel.com (c213-102-90-208.bredband.comhem.se. [213.102.90.208])
-        by smtp.gmail.com with ESMTPSA id g14sm409580lja.120.2021.01.22.02.54.00
+        by smtp.gmail.com with ESMTPSA id g14sm409580lja.120.2021.01.22.02.53.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Jan 2021 02:54:00 -0800 (PST)
+        Fri, 22 Jan 2021 02:53:59 -0800 (PST)
 From:   =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@gmail.com>
 To:     ast@kernel.org, daniel@iogearbox.net, netdev@vger.kernel.org,
         bpf@vger.kernel.org
@@ -64,10 +64,10 @@ Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
         kuba@kernel.org, jonathan.lemon@gmail.com, maximmi@nvidia.com,
         davem@davemloft.net, hawk@kernel.org, john.fastabend@gmail.com,
         ciara.loftus@intel.com, weqaar.a.janjua@intel.com,
-        andrii@kernel.org, Marek Majtyka <alardam@gmail.com>
-Subject: [PATCH bpf-next 3/3] libbpf, xsk: select AF_XDP BPF program based on kernel version
-Date:   Fri, 22 Jan 2021 11:53:51 +0100
-Message-Id: <20210122105351.11751-4-bjorn.topel@gmail.com>
+        andrii@kernel.org
+Subject: [PATCH bpf-next 2/3] xsk: fold xp_assign_dev and __xp_assign_dev
+Date:   Fri, 22 Jan 2021 11:53:50 +0100
+Message-Id: <20210122105351.11751-3-bjorn.topel@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210122105351.11751-1-bjorn.topel@gmail.com>
 References: <20210122105351.11751-1-bjorn.topel@gmail.com>
@@ -80,133 +80,52 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Björn Töpel <bjorn.topel@intel.com>
 
-Add detection for kernel version, and adapt the BPF program based on
-kernel support. This way, users will get the best possible performance
-from the BPF program.
+Fold xp_assign_dev and __xp_assign_dev. The former directly calls the
+latter.
 
 Reviewed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Acked-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
-Signed-off-by: Marek Majtyka  <alardam@gmail.com>
 ---
- tools/lib/bpf/xsk.c | 82 +++++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 79 insertions(+), 3 deletions(-)
+ net/xdp/xsk_buff_pool.c | 12 +++---------
+ 1 file changed, 3 insertions(+), 9 deletions(-)
 
-diff --git a/tools/lib/bpf/xsk.c b/tools/lib/bpf/xsk.c
-index e3e41ceeb1bc..1df8c133a5bc 100644
---- a/tools/lib/bpf/xsk.c
-+++ b/tools/lib/bpf/xsk.c
-@@ -46,6 +46,11 @@
-  #define PF_XDP AF_XDP
- #endif
+diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
+index 20598eea658c..8de01aaac4a0 100644
+--- a/net/xdp/xsk_buff_pool.c
++++ b/net/xdp/xsk_buff_pool.c
+@@ -119,8 +119,8 @@ static void xp_disable_drv_zc(struct xsk_buff_pool *pool)
+ 	}
+ }
  
-+enum xsk_prog {
-+	XSK_PROG_FALLBACK,
-+	XSK_PROG_REDIRECT_FLAGS,
-+};
-+
- struct xsk_umem {
- 	struct xsk_ring_prod *fill_save;
- 	struct xsk_ring_cons *comp_save;
-@@ -351,6 +356,55 @@ int xsk_umem__create_v0_0_2(struct xsk_umem **umem_ptr, void *umem_area,
- COMPAT_VERSION(xsk_umem__create_v0_0_2, xsk_umem__create, LIBBPF_0.0.2)
- DEFAULT_VERSION(xsk_umem__create_v0_0_4, xsk_umem__create, LIBBPF_0.0.4)
- 
-+
-+static enum xsk_prog get_xsk_prog(void)
-+{
-+	enum xsk_prog detected = XSK_PROG_FALLBACK;
-+	struct bpf_load_program_attr prog_attr;
-+	struct bpf_create_map_attr map_attr;
-+	__u32 size_out, retval, duration;
-+	char data_in = 0, data_out;
-+	struct bpf_insn insns[] = {
-+		BPF_LD_MAP_FD(BPF_REG_1, 0),
-+		BPF_MOV64_IMM(BPF_REG_2, 0),
-+		BPF_MOV64_IMM(BPF_REG_3, XDP_PASS),
-+		BPF_EMIT_CALL(BPF_FUNC_redirect_map),
-+		BPF_EXIT_INSN(),
-+	};
-+	int prog_fd, map_fd, ret;
-+
-+	memset(&map_attr, 0, sizeof(map_attr));
-+	map_attr.map_type = BPF_MAP_TYPE_XSKMAP;
-+	map_attr.key_size = sizeof(int);
-+	map_attr.value_size = sizeof(int);
-+	map_attr.max_entries = 1;
-+
-+	map_fd = bpf_create_map_xattr(&map_attr);
-+	if (map_fd < 0)
-+		return detected;
-+
-+	insns[0].imm = map_fd;
-+
-+	memset(&prog_attr, 0, sizeof(prog_attr));
-+	prog_attr.prog_type = BPF_PROG_TYPE_XDP;
-+	prog_attr.insns = insns;
-+	prog_attr.insns_cnt = ARRAY_SIZE(insns);
-+	prog_attr.license = "GPL";
-+
-+	prog_fd = bpf_load_program_xattr(&prog_attr, NULL, 0);
-+	if (prog_fd < 0) {
-+		close(map_fd);
-+		return detected;
-+	}
-+
-+	ret = bpf_prog_test_run(prog_fd, 0, &data_in, 1, &data_out, &size_out, &retval, &duration);
-+	if (!ret && retval == XDP_PASS)
-+		detected = XSK_PROG_REDIRECT_FLAGS;
-+	close(prog_fd);
-+	close(map_fd);
-+	return detected;
-+}
-+
- static int xsk_load_xdp_prog(struct xsk_socket *xsk)
+-static int __xp_assign_dev(struct xsk_buff_pool *pool,
+-			   struct net_device *netdev, u16 queue_id, u16 flags)
++int xp_assign_dev(struct xsk_buff_pool *pool,
++		  struct net_device *netdev, u16 queue_id, u16 flags)
  {
- 	static const int log_buf_size = 16 * 1024;
-@@ -358,7 +412,7 @@ static int xsk_load_xdp_prog(struct xsk_socket *xsk)
- 	char log_buf[log_buf_size];
- 	int err, prog_fd;
+ 	bool force_zc, force_copy;
+ 	struct netdev_bpf bpf;
+@@ -191,12 +191,6 @@ static int __xp_assign_dev(struct xsk_buff_pool *pool,
+ 	return err;
+ }
  
--	/* This is the C-program:
-+	/* This is the fallback C-program:
- 	 * SEC("xdp_sock") int xdp_sock_prog(struct xdp_md *ctx)
- 	 * {
- 	 *     int ret, index = ctx->rx_queue_index;
-@@ -414,9 +468,31 @@ static int xsk_load_xdp_prog(struct xsk_socket *xsk)
- 		/* The jumps are to this instruction */
- 		BPF_EXIT_INSN(),
- 	};
--	size_t insns_cnt = sizeof(prog) / sizeof(struct bpf_insn);
+-int xp_assign_dev(struct xsk_buff_pool *pool, struct net_device *dev,
+-		  u16 queue_id, u16 flags)
+-{
+-	return __xp_assign_dev(pool, dev, queue_id, flags);
+-}
+-
+ int xp_assign_dev_shared(struct xsk_buff_pool *pool, struct xdp_umem *umem,
+ 			 struct net_device *dev, u16 queue_id)
+ {
+@@ -210,7 +204,7 @@ int xp_assign_dev_shared(struct xsk_buff_pool *pool, struct xdp_umem *umem,
+ 	if (pool->uses_need_wakeup)
+ 		flags |= XDP_USE_NEED_WAKEUP;
  
--	prog_fd = bpf_load_program(BPF_PROG_TYPE_XDP, prog, insns_cnt,
-+	/* This is the post-5.3 kernel C-program:
-+	 * SEC("xdp_sock") int xdp_sock_prog(struct xdp_md *ctx)
-+	 * {
-+	 *     return bpf_redirect_map(&xsks_map, ctx->rx_queue_index, XDP_PASS);
-+	 * }
-+	 */
-+	struct bpf_insn prog_redirect_flags[] = {
-+		/* r2 = *(u32 *)(r1 + 16) */
-+		BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, 16),
-+		/* r1 = xskmap[] */
-+		BPF_LD_MAP_FD(BPF_REG_1, ctx->xsks_map_fd),
-+		/* r3 = XDP_PASS */
-+		BPF_MOV64_IMM(BPF_REG_3, 2),
-+		/* call bpf_redirect_map */
-+		BPF_EMIT_CALL(BPF_FUNC_redirect_map),
-+		BPF_EXIT_INSN(),
-+	};
-+	size_t insns_cnt[] = {sizeof(prog) / sizeof(struct bpf_insn),
-+			      sizeof(prog_redirect_flags) / sizeof(struct bpf_insn),
-+	};
-+	struct bpf_insn *progs[] = {prog, prog_redirect_flags};
-+	enum xsk_prog option = get_xsk_prog();
-+
-+	prog_fd = bpf_load_program(BPF_PROG_TYPE_XDP, progs[option], insns_cnt[option],
- 				   "LGPL-2.1 or BSD-2-Clause", 0, log_buf,
- 				   log_buf_size);
- 	if (prog_fd < 0) {
+-	return __xp_assign_dev(pool, dev, queue_id, flags);
++	return xp_assign_dev(pool, dev, queue_id, flags);
+ }
+ 
+ void xp_clear_dev(struct xsk_buff_pool *pool)
 -- 
 2.27.0
 
