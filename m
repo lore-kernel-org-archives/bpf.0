@@ -2,107 +2,230 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=BAYES_00,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A1F6EC43332
-	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 16:46:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD4E1C4361A
+	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 16:46:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 72B4723A84
-	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 16:46:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8136223A84
+	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 16:46:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728555AbhAVQlC convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 22 Jan 2021 11:41:02 -0500
-Received: from us-smtp-delivery-44.mimecast.com ([207.211.30.44]:31535 "EHLO
-        us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728786AbhAVQkv (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 22 Jan 2021 11:40:51 -0500
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-293-VaGEYQ1jOLC_DYulxn_qRw-1; Fri, 22 Jan 2021 11:39:33 -0500
-X-MC-Unique: VaGEYQ1jOLC_DYulxn_qRw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id EDF2B84A5E1;
-        Fri, 22 Jan 2021 16:39:30 +0000 (UTC)
-Received: from krava.redhat.com (unknown [10.40.192.97])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7117971CBF;
-        Fri, 22 Jan 2021 16:39:21 +0000 (UTC)
-From:   Jiri Olsa <jolsa@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        id S1729610AbhAVQZR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 22 Jan 2021 11:25:17 -0500
+Received: from mail2.protonmail.ch ([185.70.40.22]:22807 "EHLO
+        mail2.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729598AbhAVQZL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 22 Jan 2021 11:25:11 -0500
+Date:   Fri, 22 Jan 2021 16:24:17 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
+        t=1611332664; bh=0XqNUwlQ8fpKxv5Ne2GqdJi36Jlx2ZgxyrvnesA4vCQ=;
+        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
+        b=ZeasStcty7Ro1QLfQXPpxq9ViE63PveckERmPRlit8m0mNWEgZxcaqBuPhdZsw9+s
+         8UFQVeGcIfq++QT/jGQQs9QcGeJtfYku8X8pD3xEsl2E6n4Okv24nTWXg46qBKLw3T
+         2ALHAq2HXnTInnMEkVRnU1qUlxwyAk02hV2Zu+IDyWQ2MZV1hWtdxp6+pdWpPWOekw
+         /UZIYmCj6dV2td644iJfigLVqIccHO4SlWXq1cQzdBKU98ePvaokaeWc7vKf+e6GZV
+         S0sQrinP22/YFOHs7PgvvR+oycqxRitrRwGMDLd73yXQDTt8sWsx1mOamARzPQ64rE
+         EUhbwrg7P/cUw==
+To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+From:   Alexander Lobakin <alobakin@pm.me>
+Cc:     Alexander Lobakin <alobakin@pm.me>,
+        Eric Dumazet <eric.dumazet@gmail.com>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, bjorn@kernel.org,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>
-Cc:     dwarves@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, Yonghong Song <yhs@fb.com>,
-        Hao Luo <haoluo@google.com>, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Mark Wielaard <mjw@redhat.com>
-Subject: [PATCHv3 0/2] libbpf: Add support to use optional extended section index table
-Date:   Fri, 22 Jan 2021 17:39:18 +0100
-Message-Id: <20210122163920.59177-1-jolsa@kernel.org>
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        virtualization@lists.linux-foundation.org, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Reply-To: Alexander Lobakin <alobakin@pm.me>
+Subject: Re: [PATCH bpf-next v3 3/3] xsk: build skb by page
+Message-ID: <20210122162350.8846-1-alobakin@pm.me>
+In-Reply-To: <1611329789.3222687-1-xuanzhuo@linux.alibaba.com>
+References: <1611329789.3222687-1-xuanzhuo@linux.alibaba.com>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jolsa@kernel.org
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: kernel.org
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset=WINDOWS-1252
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-hi,
-kpatch guys hit an issue with pahole over their vmlinux, which
-contains many (over 100000) sections, pahole crashes.
+From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Date: Fri, 22 Jan 2021 23:36:29 +0800
 
-With so many sections, ELF is using extended section index table,
-which is used to hold values for some of the indexes and extra
-code is needed to retrieve them.
+> On Fri, 22 Jan 2021 12:08:00 +0000, Alexander Lobakin <alobakin@pm.me> wr=
+ote:
+> > From: Alexander Lobakin <alobakin@pm.me>
+> > Date: Fri, 22 Jan 2021 11:55:35 +0000
+> >
+> > > From: Alexander Lobakin <alobakin@pm.me>
+> > > Date: Fri, 22 Jan 2021 11:47:45 +0000
+> > >
+> > > > From: Eric Dumazet <eric.dumazet@gmail.com>
+> > > > Date: Thu, 21 Jan 2021 16:41:33 +0100
+> > > >
+> > > > > On 1/21/21 2:47 PM, Xuan Zhuo wrote:
+> > > > > > This patch is used to construct skb based on page to save memor=
+y copy
+> > > > > > overhead.
+> > > > > >
+> > > > > > This function is implemented based on IFF_TX_SKB_NO_LINEAR. Onl=
+y the
+> > > > > > network card priv_flags supports IFF_TX_SKB_NO_LINEAR will use =
+page to
+> > > > > > directly construct skb. If this feature is not supported, it is=
+ still
+> > > > > > necessary to copy data to construct skb.
+> > > > > >
+> > > > > > ---------------- Performance Testing ------------
+> > > > > >
+> > > > > > The test environment is Aliyun ECS server.
+> > > > > > Test cmd:
+> > > > > > ```
+> > > > > > xdpsock -i eth0 -t  -S -s <msg size>
+> > > > > > ```
+> > > > > >
+> > > > > > Test result data:
+> > > > > >
+> > > > > > size    64      512     1024    1500
+> > > > > > copy    1916747 1775988 1600203 1440054
+> > > > > > page    1974058 1953655 1945463 1904478
+> > > > > > percent 3.0%    10.0%   21.58%  32.3%
+> > > > > >
+> > > > > > Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+> > > > > > Reviewed-by: Dust Li <dust.li@linux.alibaba.com>
+> > > > > > ---
+> > > > > >  net/xdp/xsk.c | 104 ++++++++++++++++++++++++++++++++++++++++++=
+++++++----------
+> > > > > >  1 file changed, 86 insertions(+), 18 deletions(-)
+> > > > > >
+> > > > > > diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> > > > > > index 4a83117..38af7f1 100644
+> > > > > > --- a/net/xdp/xsk.c
+> > > > > > +++ b/net/xdp/xsk.c
+> > > > > > @@ -430,6 +430,87 @@ static void xsk_destruct_skb(struct sk_buf=
+f *skb)
+> > > > > >  =09sock_wfree(skb);
+> > > > > >  }
+> > > > > >
+> > > > > > +static struct sk_buff *xsk_build_skb_zerocopy(struct xdp_sock =
+*xs,
+> > > > > > +=09=09=09=09=09      struct xdp_desc *desc)
+> > > > > > +{
+> > > > > > +=09u32 len, offset, copy, copied;
+> > > > > > +=09struct sk_buff *skb;
+> > > > > > +=09struct page *page;
+> > > > > > +=09void *buffer;
+> > > > > > +=09int err, i;
+> > > > > > +=09u64 addr;
+> > > > > > +
+> > > > > > +=09skb =3D sock_alloc_send_skb(&xs->sk, 0, 1, &err);
+> >
+> > Also,
+> > maybe we should allocate it with NET_SKB_PAD so NIC drivers could
+> > use some reserved space?
+> >
+> > =09=09skb =3D sock_alloc_send_skb(&xs->sk, NET_SKB_PAD, 1, &err);
+> > =09=09...
+> > =09=09skb_reserve(skb, NET_SKB_PAD);
+> >
+> > Eric, what do you think?
+>=20
+> I think you are right. Some space should be added to continuous equipment=
+. This
+> space should also be added in the copy mode below. Is LL_RESERVED_SPACE m=
+ore
+> appropriate?
 
-This patchset adds the support for pahole to properly read string
-table index and symbol's section index, which are used in btf_encoder.
-
-This patchset also adds support for libbpf to properly parse .BTF
-section on such object.
-
-This patchset is based on previously posted fix [1].
-
-v3 changes:
-  - directly bail out for !str in elf_section_by_name [Andrii]
-  - use symbol index in collect_function [Andrii] 
-  - use symbol index in collect_percpu_var
-  - change elf_symtab__for_each_symbol_index, move elf_sym__get
-    to for's condition part
-  - libbpf patch got merged
-
-v2 changes:
-  - many variables renames [Andrii]
-  - use elf_getshdrstrndx() unconditionally [Andrii]
-  - add elf_symtab__for_each_symbol_index macro [Andrii]
-  - add more comments [Andrii]
-  - verify that extended symtab section type is SHT_SYMTAB_SHNDX [Andrii]
-  - fix Joe's crash in dwarves build, wrong sym.st_shndx assignment
-
-thanks,
-jirka
+No. If you look at __netdev_alloc_skb() and __napi_alloc_skb(), they
+reserve NET_SKB_PAD at the beginning of linear area. Documentation of
+__build_skb() also says that driver should reserve NET_SKB_PAD before
+the actual frame, so it is a standartized hardware-independent
+headroom.
+Leaving that space in skb->head will allow developers to implement
+IFF_TX_SKB_NO_LINEAR in a wider variety of drivers, especially when
+a driver has to prepend some sort of data before the actual frame.
+Since it's usually of a size of one cacheline, shouldn't be a big
+deal.
 
 
-[1] https://lore.kernel.org/bpf/20210113102509.1338601-1-jolsa@kernel.org/
----
-Jiri Olsa (2):
-      elf_symtab: Add support for SHN_XINDEX index to elf_section_by_name
-      bpf_encoder: Translate SHN_XINDEX in symbol's st_shndx values
+[ I also had an idea of allocating an skb with a headroom of
+NET_SKB_PAD + 256 bytes, so nearly all drivers could just call
+pskb_pull_tail() to support such type of skbuffs without much
+effort, but I think that it's better to teach drivers to support
+xmitting of really headless ones. If virtio_net can do it, why
+shouldn't the others ]
 
- btf_encoder.c | 59 +++++++++++++++++++++++++++++++++++++++++++----------------
- dutil.c       |  8 +++++++-
- elf_symtab.c  | 39 ++++++++++++++++++++++++++++++++++++++-
- elf_symtab.h  |  2 ++
- 4 files changed, 90 insertions(+), 18 deletions(-)
+> > > > > > +=09if (unlikely(!skb))
+> > > > > > +=09=09return ERR_PTR(err);
+> > > > > > +
+> > > > > > +=09addr =3D desc->addr;
+> > > > > > +=09len =3D desc->len;
+> > > > > > +
+> > > > > > +=09buffer =3D xsk_buff_raw_get_data(xs->pool, addr);
+> > > > > > +=09offset =3D offset_in_page(buffer);
+> > > > > > +=09addr =3D buffer - xs->pool->addrs;
+> > > > > > +
+> > > > > > +=09for (copied =3D 0, i =3D 0; copied < len; i++) {
+> > > > > > +=09=09page =3D xs->pool->umem->pgs[addr >> PAGE_SHIFT];
+> > > > > > +
+> > > > > > +=09=09get_page(page);
+> > > > > > +
+> > > > > > +=09=09copy =3D min_t(u32, PAGE_SIZE - offset, len - copied);
+> > > > > > +
+> > > > > > +=09=09skb_fill_page_desc(skb, i, page, offset, copy);
+> > > > > > +
+> > > > > > +=09=09copied +=3D copy;
+> > > > > > +=09=09addr +=3D copy;
+> > > > > > +=09=09offset =3D 0;
+> > > > > > +=09}
+> > > > > > +
+> > > > > > +=09skb->len +=3D len;
+> > > > > > +=09skb->data_len +=3D len;
+> > > > >
+> > > > > > +=09skb->truesize +=3D len;
+> > > > >
+> > > > > This is not the truesize, unfortunately.
+> > > > >
+> > > > > We need to account for the number of pages, not number of bytes.
+> > > >
+> > > > The easiest solution is:
+> > > >
+> > > > =09skb->truesize +=3D PAGE_SIZE * i;
+> > > >
+> > > > i would be equal to skb_shinfo(skb)->nr_frags after exiting the loo=
+p.
+> > >
+> > > Oops, pls ignore this. I forgot that XSK buffers are not
+> > > "one per page".
+> > > We need to count the number of pages manually and then do
+> > >
+> > > =09skb->truesize +=3D PAGE_SIZE * npages;
+> > >
+> > > Right.
+> > >
+> > > > > > +
+> > > > > > +=09refcount_add(len, &xs->sk.sk_wmem_alloc);
+> > > > > > +
+> > > > > > +=09return skb;
+> > > > > > +}
+> > > > > > +
+> > > >
+> > > > Al
+> > >
+> > > Thanks,
+> > > Al
+> >
+> > Al
 
