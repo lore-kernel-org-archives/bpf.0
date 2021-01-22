@@ -8,63 +8,63 @@ X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C46BC43142
-	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 18:10:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69D21C433DB
+	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 18:10:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 38B3223AC1
-	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 18:10:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3AFE223A9C
+	for <bpf@archiver.kernel.org>; Fri, 22 Jan 2021 18:10:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729485AbhAVR0E (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 22 Jan 2021 12:26:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40824 "EHLO
+        id S1729468AbhAVRZ4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 22 Jan 2021 12:25:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729038AbhAVPtD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 22 Jan 2021 10:49:03 -0500
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA09C06121D;
-        Fri, 22 Jan 2021 07:47:47 -0800 (PST)
-Received: by mail-lj1-x22e.google.com with SMTP id n11so7028386lji.5;
-        Fri, 22 Jan 2021 07:47:47 -0800 (PST)
+        with ESMTP id S1729251AbhAVPsv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 22 Jan 2021 10:48:51 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBB85C061356;
+        Fri, 22 Jan 2021 07:47:42 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id b26so8119468lff.9;
+        Fri, 22 Jan 2021 07:47:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=9lypuuFapCkdEuGmqYnc3gh+0SvDvs04apzCvLnPK8w=;
-        b=vAj681rSrtdPDrq2yBjvzEPUOgg2fDUR6XMyOpXO+7qSgD+Lq5yKYteP4AgWedEZG0
-         T8xjCXrYzI+S6BWHy9r0ObbuwlUrdiDFjXDGSmA9aMQJ1RlzqKMQ96djB+sFu2tPEyn5
-         b8Qh6EP1FX31rX+/hALxZHl6Hty/z8gbLYJpr6VSCxwkyVZBXAdPQOATOCtdr/Eunz8n
-         MXfedswejUqhfzcl7/hjoSPlDowBy9B+Wli3fNeCO50WoSdai7CyZKZ5OMg23k+fIQEV
-         9+aNeSf5V7VSHfypmbipaAMSRAIJZdx+KIJfjH9RmdPer/iOW/qBtixb3sepFflZa/zl
-         M1Sg==
+        bh=0kqZW1nBtOtWqAlYCZDluyRBJN4NJNIsym7whQUc+x0=;
+        b=kECSjdtfM3Dy4LH4y2a1JtFnPtu2G1UbOJQNe9CcEK3HurNIYFTqnnkJzlUFdBfayQ
+         lnRYP5PN1X+wJfp8vmAG4C9Zm/Cqpmd/TqZw804JnuXvhTK9/LWHNvYImRt5RQ4GEWB3
+         sBUEko270upAXZB1b3NyY9YUnxBap9TvRO8DXSWQuwESbXr4XK6C7DZGAZBiuqefQKIY
+         RAtpmrvzh6BoZysvWX8sGmYr7Mg08BggmFb866YZmTp8+yw0OF1cZHZH53LwwHT5Xwqy
+         cfaiCvvY6w30cWfRo6mNxBRs9S4KObmLJueB7RXQZJ35iCeyLdaKdTtqV43qQMbx0Ziq
+         iYcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=9lypuuFapCkdEuGmqYnc3gh+0SvDvs04apzCvLnPK8w=;
-        b=b+bh0Hk0DQ+IcmWIcJvtJ8xu2BDpopmY2tNv8fHU7JE4cz8CvqWvB/NtbaoPvcKGPq
-         H4qVz42KMFA4Sxn9O4tjwVuvPJSAbvUaaKZfygp9j16cdXgyvD+k3O51a0t92mly1sOv
-         UmLq5BOXt2h/AxbaU1z1TJE6cnMZNY6ndVs3xLqUDHFJybGSRTxvs3FQ4pH7Masnmzpw
-         fDECnPvqn4SgzFOTuTokH8fZX3/GTezn8iAremR3lzb+9ELo6OVdEfhBrXKCo3x2L0su
-         FRh5ebm9h/TWcG9D98a610mgZgIUf7r0wBBwlKR4pfXTW8F5FO9fJYh1N8kQn7gPuao0
-         nrIw==
-X-Gm-Message-State: AOAM533nVgdNFoXFQLe7ZVFAo5jXkQZXlu723RUZMfrODDh77ieagDDy
-        NEae+F08qmNWIHKPEFtPMWo=
-X-Google-Smtp-Source: ABdhPJzFf9bpEciMgCRoP5fkXkb6O/kWNbxwfLJI03mUyHkpf+bw6zQaTEVP0gWYGXySbuieLBC2sw==
-X-Received: by 2002:a05:651c:1395:: with SMTP id k21mr1762545ljb.225.1611330465960;
-        Fri, 22 Jan 2021 07:47:45 -0800 (PST)
+        bh=0kqZW1nBtOtWqAlYCZDluyRBJN4NJNIsym7whQUc+x0=;
+        b=XSS/FzfHDLuypAEG8497+i7Q9+ka7Zoe2kIeBL7Tbmxb1DlpCAzqSOcpNVP3lXZ9Lm
+         +AwRDBdlC7RTpaXDuIDPGP+J8KX54uYNxCLPd0onpVGFxtJl8m467uj3Fcn8gzsQ3SPq
+         cWpnBCPtZXK8oHmDot60Lb4m9rzAERySA9TWBPdiIt0cmusJKWIguOE7N+P1y7z8bRKI
+         OH3uhcJ1ZNfEq758A7+KGjgElPHy4N6I0310++uScPe8IvC6kVOvI5Q7xtEgmmWOiK6E
+         7qR2XIxDCX7h8QkLXa80yFMSV2Gm6KOcRSAKvh7NbveF9lVR4871t5ksjFMyw8t9H84y
+         ZGQw==
+X-Gm-Message-State: AOAM531iH7JIn5c2sRqKQCsTDOtPNSoVjn8RWUkhOAwmlr63F47Cvxw/
+        ApB+3gs35dWKAfjgtvIQCeM=
+X-Google-Smtp-Source: ABdhPJyfWM7PoI2RHhEZYYHJgkpW3T/0x9IDPm9+SVENAIy/FpQf6xDhBnw4Y8N4xUtzX7HXtDXgHA==
+X-Received: by 2002:a05:6512:909:: with SMTP id e9mr370121lft.359.1611330461355;
+        Fri, 22 Jan 2021 07:47:41 -0800 (PST)
 Received: from btopel-mobl.ger.intel.com (c213-102-90-208.bredband.comhem.se. [213.102.90.208])
-        by smtp.gmail.com with ESMTPSA id w17sm928589lft.52.2021.01.22.07.47.44
+        by smtp.gmail.com with ESMTPSA id w17sm928589lft.52.2021.01.22.07.47.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Jan 2021 07:47:45 -0800 (PST)
+        Fri, 22 Jan 2021 07:47:40 -0800 (PST)
 From:   =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@gmail.com>
 To:     ast@kernel.org, daniel@iogearbox.net, netdev@vger.kernel.org,
         bpf@vger.kernel.org
 Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
         magnus.karlsson@intel.com, jonathan.lemon@gmail.com,
         ciara.loftus@intel.com, weqaar.a.janjua@intel.com
-Subject: [PATCH bpf-next 11/12] selftests/bpf: consistent malloc/calloc usage
-Date:   Fri, 22 Jan 2021 16:47:24 +0100
-Message-Id: <20210122154725.22140-12-bjorn.topel@gmail.com>
+Subject: [PATCH bpf-next 08/12] selftests/bpf: change type from void * to struct generic_data *
+Date:   Fri, 22 Jan 2021 16:47:21 +0100
+Message-Id: <20210122154725.22140-9-bjorn.topel@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210122154725.22140-1-bjorn.topel@gmail.com>
 References: <20210122154725.22140-1-bjorn.topel@gmail.com>
@@ -77,74 +77,44 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Björn Töpel <bjorn.topel@intel.com>
 
-Use calloc instead of malloc where it makes sense, and avoid C++-style
-void *-cast.
+Instead of casting from void *, let us use the actual type in
+gen_udp_hdr().
 
 Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
 ---
- tools/testing/selftests/bpf/xdpxceiver.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ tools/testing/selftests/bpf/xdpxceiver.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/xdpxceiver.c b/tools/testing/selftests/bpf/xdpxceiver.c
-index 2da59b142c03..a64e2a929e70 100644
+index c2cfc0b6d19e..993ce9b7aa76 100644
 --- a/tools/testing/selftests/bpf/xdpxceiver.c
 +++ b/tools/testing/selftests/bpf/xdpxceiver.c
-@@ -411,7 +411,7 @@ static int validate_interfaces(void)
- 		if (strcmp(ifdict[i]->nsname, "")) {
- 			struct targs *targs;
+@@ -246,13 +246,13 @@ static void gen_ip_hdr(struct ifobject *ifobject, struct iphdr *ip_hdr)
+ 	ip_hdr->check = 0;
+ }
  
--			targs = (struct targs *)malloc(sizeof(struct targs));
-+			targs = malloc(sizeof(*targs));
- 			if (!targs)
- 				exit_with_error(errno);
+-static void gen_udp_hdr(void *data, struct ifobject *ifobject, struct udphdr *udp_hdr)
++static void gen_udp_hdr(struct generic_data *data, struct ifobject *ifobject,
++			struct udphdr *udp_hdr)
+ {
+ 	udp_hdr->source = htons(ifobject->src_port);
+ 	udp_hdr->dest = htons(ifobject->dst_port);
+ 	udp_hdr->len = htons(UDP_PKT_SIZE);
+-	memset32_htonl(pkt_data + PKT_HDR_SIZE,
+-		       htonl(((struct generic_data *)data)->seqnum), UDP_PKT_DATA_SIZE);
++	memset32_htonl(pkt_data + PKT_HDR_SIZE, htonl(data->seqnum), UDP_PKT_DATA_SIZE);
+ }
  
-@@ -578,7 +578,7 @@ static void rx_pkt(struct xsk_socket_info *xsk, struct pollfd *fds)
- 		if (!pkt_node_rx)
- 			exit_with_error(errno);
- 
--		pkt_node_rx->pkt_frame = (char *)malloc(PKT_SIZE);
-+		pkt_node_rx->pkt_frame = malloc(PKT_SIZE);
- 		if (!pkt_node_rx->pkt_frame)
- 			exit_with_error(errno);
- 
-@@ -739,8 +739,8 @@ static void worker_pkt_validate(void)
- 		if (iphdr->version == IP_PKT_VER && iphdr->tos == IP_PKT_TOS) {
- 			payloadseqnum = *((uint32_t *)(pkt_node_rx_q->pkt_frame + PKT_HDR_SIZE));
- 			if (debug_pkt_dump && payloadseqnum != EOT) {
--				pkt_obj = (struct pkt_frame *)malloc(sizeof(struct pkt_frame));
--				pkt_obj->payload = (char *)malloc(PKT_SIZE);
-+				pkt_obj = malloc(sizeof(*pkt_obj));
-+				pkt_obj->payload = malloc(PKT_SIZE);
- 				memcpy(pkt_obj->payload, pkt_node_rx_q->pkt_frame, PKT_SIZE);
- 				pkt_buf[payloadseqnum] = pkt_obj;
- 			}
-@@ -865,7 +865,7 @@ static void *worker_testapp_validate(void *arg)
- 
- 		TAILQ_INIT(&head);
- 		if (debug_pkt_dump) {
--			pkt_buf = malloc(sizeof(struct pkt_frame **) * num_frames);
-+			pkt_buf = calloc(num_frames, sizeof(*pkt_buf));
- 			if (!pkt_buf)
- 				exit_with_error(errno);
- 		}
-@@ -1017,7 +1017,7 @@ int main(int argc, char **argv)
- 	u16 UDP_DST_PORT = 2020;
- 	u16 UDP_SRC_PORT = 2121;
- 
--	ifaceconfig = (struct ifaceconfigobj *)malloc(sizeof(struct ifaceconfigobj));
-+	ifaceconfig = malloc(sizeof(struct ifaceconfigobj));
- 	memcpy(ifaceconfig->dst_mac, MAC1, ETH_ALEN);
- 	memcpy(ifaceconfig->src_mac, MAC2, ETH_ALEN);
- 	inet_aton(IP1, &ifaceconfig->dst_ip);
-@@ -1026,7 +1026,7 @@ int main(int argc, char **argv)
- 	ifaceconfig->src_port = UDP_SRC_PORT;
- 
- 	for (int i = 0; i < MAX_INTERFACES; i++) {
--		ifdict[i] = (struct ifobject *)malloc(sizeof(struct ifobject));
-+		ifdict[i] = malloc(sizeof(struct ifobject));
- 		if (!ifdict[i])
- 			exit_with_error(errno);
- 
+ static void gen_udp_csum(struct udphdr *udp_hdr, struct iphdr *ip_hdr)
+@@ -841,7 +841,7 @@ static void *worker_testapp_validate(void *arg)
+ 				data->seqnum = -1;
+ 			else
+ 				data->seqnum = i;
+-			gen_udp_hdr((void *)data, ifobject, udp_hdr);
++			gen_udp_hdr(data, ifobject, udp_hdr);
+ 			gen_ip_hdr(ifobject, ip_hdr);
+ 			gen_udp_csum(udp_hdr, ip_hdr);
+ 			gen_eth_hdr(ifobject, eth_hdr);
 -- 
 2.27.0
 
