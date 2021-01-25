@@ -2,41 +2,43 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27EAEC433DB
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 40196C433E6
 	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 05:36:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EC5F62223D
-	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 05:36:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0FF5A22B2C
+	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 05:36:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729217AbhAZFgC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 26 Jan 2021 00:36:02 -0500
-Received: from mga09.intel.com ([134.134.136.24]:59440 "EHLO mga09.intel.com"
+        id S1728159AbhAZFgH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 26 Jan 2021 00:36:07 -0500
+Received: from mga04.intel.com ([192.55.52.120]:4706 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728159AbhAYMki (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 25 Jan 2021 07:40:38 -0500
-IronPort-SDR: vPvt62oTPN60vrv/jDdDaYTC3NpFgPai9m+vhJ81gF2M/EYUvrtoO3ajinejb/egcNf5/nqsgK
- 4fOn7piS7d0A==
-X-IronPort-AV: E=McAfee;i="6000,8403,9874"; a="179865104"
+        id S1728196AbhAYMmZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 25 Jan 2021 07:42:25 -0500
+IronPort-SDR: upo2iEezrbsOqSXFQukqXk+q0pH/OQMsQ7zqTYNrDwfvim2JAYiMVef1Oujd9oMPH/P+q2hPPr
+ cwZvduJgjnpw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9874"; a="177145414"
 X-IronPort-AV: E=Sophos;i="5.79,373,1602572400"; 
-   d="scan'208";a="179865104"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2021 04:39:39 -0800
-IronPort-SDR: iSRPcwWmcLKh4CvReFLRHIVwl4jVTyQwJFnFERsqE/azz/nC1aTCId+veT2oFmfZvc5S+UVDYD
- AHjKiaLHJewg==
+   d="scan'208";a="177145414"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2021 04:37:29 -0800
+IronPort-SDR: wZw4bW3WjKnu2fFH3hkaiu+PLe0dvYjc0jEnD3Stplg0mOgtq2xRmDX9r+Gu7pzWU3yikIypRN
+ /JtD9dHSl/cg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.79,373,1602572400"; 
-   d="scan'208";a="472282481"
+   d="scan'208";a="387355317"
 Received: from ranger.igk.intel.com ([10.102.21.164])
-  by fmsmga001.fm.intel.com with ESMTP; 25 Jan 2021 04:39:35 -0800
-Date:   Mon, 25 Jan 2021 13:29:33 +0100
+  by orsmga008.jf.intel.com with ESMTP; 25 Jan 2021 04:37:26 -0800
+Date:   Mon, 25 Jan 2021 13:27:24 +0100
 From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
-Cc:     Hangbin Liu <liuhangbin@gmail.com>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, Jiri Benc <jbenc@redhat.com>,
+To:     Hangbin Liu <liuhangbin@gmail.com>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
+        Jiri Benc <jbenc@redhat.com>,
         Jesper Dangaard Brouer <brouer@redhat.com>,
         Eelco Chaudron <echaudro@redhat.com>, ast@kernel.org,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -45,80 +47,83 @@ Cc:     Hangbin Liu <liuhangbin@gmail.com>, bpf@vger.kernel.org,
         Andrii Nakryiko <andrii.nakryiko@gmail.com>,
         Alexei Starovoitov <alexei.starovoitov@gmail.com>,
         John Fastabend <john.fastabend@gmail.com>
-Subject: Re: [PATCHv16 bpf-next 1/6] bpf: run devmap xdp_prog on flush
- instead of bulk enqueue
-Message-ID: <20210125122933.GB18646@ranger.igk.intel.com>
+Subject: Re: [PATCHv16 bpf-next 3/6] xdp: add a new helper for dev map
+ multicast support
+Message-ID: <20210125122724.GA18646@ranger.igk.intel.com>
 References: <20210120022514.2862872-1-liuhangbin@gmail.com>
  <20210122074652.2981711-1-liuhangbin@gmail.com>
- <20210122074652.2981711-2-liuhangbin@gmail.com>
- <20210122105043.GB52373@ranger.igk.intel.com>
- <871red6qhr.fsf@toke.dk>
- <20210125033025.GL1421720@Leo-laptop-t470s>
- <87r1m9mfd5.fsf@toke.dk>
+ <20210122074652.2981711-4-liuhangbin@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87r1m9mfd5.fsf@toke.dk>
+In-Reply-To: <20210122074652.2981711-4-liuhangbin@gmail.com>
 User-Agent: Mutt/1.12.1 (2019-06-15)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Jan 25, 2021 at 12:21:26PM +0100, Toke Høiland-Jørgensen wrote:
-> Hangbin Liu <liuhangbin@gmail.com> writes:
+On Fri, Jan 22, 2021 at 03:46:49PM +0800, Hangbin Liu wrote:
+> This patch is for xdp multicast support. which has been discussed
+> before[0], The goal is to be able to implement an OVS-like data plane in
+> XDP, i.e., a software switch that can forward XDP frames to multiple ports.
 > 
-> > On Fri, Jan 22, 2021 at 02:38:40PM +0100, Toke Høiland-Jørgensen wrote:
-> >> >>  out:
-> >> >> +	drops = cnt - sent;
-> >> >>  	bq->count = 0;
-> >> >>  
-> >> >>  	trace_xdp_devmap_xmit(bq->dev_rx, dev, sent, drops, err);
-> >> >>  	bq->dev_rx = NULL;
-> >> >> +	bq->xdp_prog = NULL;
-> >> >
-> >> > One more question, do you really have to do that per each bq_xmit_all
-> >> > call? Couldn't you clear it in __dev_flush ?
-> >> >
-> >> > Or IOW - what's the rationale behind storing xdp_prog in
-> >> > xdp_dev_bulk_queue. Why can't you propagate the dst->xdp_prog and rely on
-> >> > that without that local pointer?
-> >> >
-> >> > You probably have an answer for that, so maybe include it in commit
-> >> > message.
-> >> >
-> >> > BTW same question for clearing dev_rx. To me this will be the same for all
-> >> > bq_xmit_all() calls that will happen within same napi.
-> >> 
-> >> I think you're right: When bq_xmit_all() is called from bq_enqueue(),
-> >> another packet will always be enqueued immediately after, so clearing
-> >> out all of those things in bq_xmit_all() is redundant. This also
-> >> includes the list_del on bq->flush_node, BTW.
-> >> 
-> >> And while we're getting into e micro-optimisations: In bq_enqueue() we
-> >> have two checks:
-> >> 
-> >> 	if (!bq->dev_rx)
-> >> 		bq->dev_rx = dev_rx;
-> >> 
-> >> 	bq->q[bq->count++] = xdpf;
-> >> 
-> >> 	if (!bq->flush_node.prev)
-> >> 		list_add(&bq->flush_node, flush_list);
-> >> 
-> >> 
-> >> those two if() checks can be collapsed into one, since the list and the
-> >> dev_rx field are only ever modified together. This will also be the case
-> >> for bq->xdp_prog, so putting all three under the same check in
-> >> bq_enqueue() and only clearing them in __dev_flush() would be a win, I
-> >> suppose - nice catch! :)
+> To achieve this, an application needs to specify a group of interfaces
+> to forward a packet to. It is also common to want to exclude one or more
+> physical interfaces from the forwarding operation - e.g., to forward a
+> packet to all interfaces in the multicast group except the interface it
+> arrived on. While this could be done simply by adding more groups, this
+> quickly leads to a combinatorial explosion in the number of groups an
+> application has to maintain.
+> 
+> To avoid the combinatorial explosion, we propose to include the ability
+> to specify an "exclude group" as part of the forwarding operation. This
+> needs to be a group (instead of just a single port index), because a
+> physical interface can be part of a logical grouping, such as a bond
+> device.
+> 
+> Thus, the logical forwarding operation becomes a "set difference"
+> operation, i.e. "forward to all ports in group A that are not also in
+> group B". This series implements such an operation using device maps to
+> represent the groups. This means that the XDP program specifies two
+> device maps, one containing the list of netdevs to redirect to, and the
+> other containing the exclude list.
+> 
+> To achieve this, I re-implement a new helper bpf_redirect_map_multi()
+> to accept two maps, the forwarding map and exclude map. The forwarding
+> map could be DEVMAP or DEVMAP_HASH, but the exclude map *must* be
+> DEVMAP_HASH to get better performace. If user don't want to use exclude
+> map and just want simply stop redirecting back to ingress device, they
+> can use flag BPF_F_EXCLUDE_INGRESS.
 
-Huh, nice further optimization! :) Of course I agree on that.
+Hangbin,
 
-> >
-> > Thanks for the advice, so how about modify it like:
+before you submit next revision, could you try to apply imperative mood to
+your commit messages?
+
+From Documentation/process/submitting-patches.rst:
+
+<quote>
+Describe your changes in imperative mood, e.g. "make xyzzy do frotz"
+instead of "[This patch] makes xyzzy do frotz" or "[I] changed xyzzy
+to do frotz", as if you are giving orders to the codebase to change
+its behaviour.
+</quote>
+
+That's the thing I'm trying to remind people internally and it feels like
+we keep on forgetting about that.
+
+Thanks!
+
 > 
-> Yup, exactly! :)
+> As both bpf_xdp_redirect_map() and this new helpers are using struct
+> bpf_redirect_info, I add a new ex_map and set tgt_value to NULL in the
+> new helper to make a difference with bpf_xdp_redirect_map().
 > 
-> -Toke
+> Also I keep the general data path in net/core/filter.c, the native data
+> path in kernel/bpf/devmap.c so we can use direct calls to get better
+> performace.
+> 
+> [0] https://xdp-project.net/#Handling-multicast
+> 
+> Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
 > 
