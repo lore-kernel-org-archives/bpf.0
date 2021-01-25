@@ -2,157 +2,326 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C7DAC433DB
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3ADAC433E9
 	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 05:36:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5D017206F7
+	by mail.kernel.org (Postfix) with ESMTP id AA08F206F7
 	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 05:36:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726308AbhAZFfU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 26 Jan 2021 00:35:20 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:43723 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726548AbhAYJZ5 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 25 Jan 2021 04:25:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1611566668;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QDsYKYdE9xnD8PZO2/oXTlbgUjCrmpaZCS6Ef2BKYBQ=;
-        b=JZfX+YSWSGyH2eays9Ag11hkyy7/zqDeydZ4xVxWGVfDMKKzc+Vap6v2DVnYbRe7/pkHk9
-        EsGXsYV5IpzBWcCNWZC3Wpy0/zo0Em7yghRNWo33xSzfm8bKrV9D5iH92FJRpdPiMx9GpK
-        0EW21VtxP8uP5XLOIptUz6NTNLiSIe8=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-539-yLYxnAOfN3av0bSrpVTM1w-1; Mon, 25 Jan 2021 03:41:59 -0500
-X-MC-Unique: yLYxnAOfN3av0bSrpVTM1w-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4C7A18018A7;
-        Mon, 25 Jan 2021 08:41:57 +0000 (UTC)
-Received: from carbon (unknown [10.36.110.4])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4FF5F7216D;
-        Mon, 25 Jan 2021 08:41:49 +0000 (UTC)
-Date:   Mon, 25 Jan 2021 09:41:48 +0100
-From:   Jesper Dangaard Brouer <brouer@redhat.com>
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        Daniel Borkmann <borkmann@iogearbox.net>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        maze@google.com, lmb@cloudflare.com, shaun@tigera.io,
-        Lorenzo Bianconi <lorenzo@kernel.org>, marek@cloudflare.com,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>, eyal.birger@gmail.com,
-        colrack@gmail.com, brouer@redhat.com
-Subject: Re: [PATCH bpf-next V12 4/7] bpf: add BPF-helper for MTU checking
-Message-ID: <20210125094148.2b3bb128@carbon>
-In-Reply-To: <6772a12b-2a60-bb3b-93df-1d6d6c7c7fd7@iogearbox.net>
-References: <161098881526.108067.7603213364270807261.stgit@firesoul>
-        <161098887018.108067.13643446976934084937.stgit@firesoul>
-        <6772a12b-2a60-bb3b-93df-1d6d6c7c7fd7@iogearbox.net>
+        id S1729182AbhAZFfu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 26 Jan 2021 00:35:50 -0500
+Received: from mga09.intel.com ([134.134.136.24]:41204 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726945AbhAYJjw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 25 Jan 2021 04:39:52 -0500
+IronPort-SDR: omxEZ6P+Ga6Gk0CzAI1rfqSSn8O79FdCavnqYUrbpeMndw0f05j2F30Q/eo/3StC1pRHL0Maxe
+ cau9Oyq6G+vA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9874"; a="179844627"
+X-IronPort-AV: E=Sophos;i="5.79,373,1602572400"; 
+   d="scan'208";a="179844627"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2021 01:37:26 -0800
+IronPort-SDR: ko7Uo4WJw9itTzOFDTka1rJkYNFeWmAKNi04eUwFJNcJ9BijN/oxsq+95s0rjkq0kyhz1TKket
+ Nor2d42br3IQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.79,373,1602572400"; 
+   d="scan'208";a="577321022"
+Received: from silpixa00399839.ir.intel.com (HELO localhost.localdomain) ([10.237.222.142])
+  by fmsmga005.fm.intel.com with ESMTP; 25 Jan 2021 01:37:24 -0800
+From:   Ciara Loftus <ciara.loftus@intel.com>
+To:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        magnus.karlsson@intel.com, bjorn@kernel.org,
+        weqaar.a.janjua@intel.com
+Cc:     Ciara Loftus <ciara.loftus@intel.com>
+Subject: [PATCH bpf-next 4/6] selftests/bpf: XSK_TRACE_DROP_RXQ_FULL test
+Date:   Mon, 25 Jan 2021 09:07:37 +0000
+Message-Id: <20210125090739.1045-5-ciara.loftus@intel.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210125090739.1045-1-ciara.loftus@intel.com>
+References: <20210125090739.1045-1-ciara.loftus@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sat, 23 Jan 2021 02:35:41 +0100
-Daniel Borkmann <daniel@iogearbox.net> wrote:
+This test limits the size of the RXQ and does not read
+from it. Packets are transmitted. Traces are expected
+which report packet drops for packets which could not
+fit in the limited size rxq. The test validates that
+these traces were successfully generated.
 
-> > + *		The *flags* argument can be a combination of one or more of the
-> > + *		following values:
-> > + *
-> > + *		**BPF_MTU_CHK_SEGS**
-> > + *			This flag will only works for *ctx* **struct sk_buff**.
-> > + *			If packet context contains extra packet segment buffers
-> > + *			(often knows as GSO skb), then MTU check is harder to
-> > + *			check at this point, because in transmit path it is
-> > + *			possible for the skb packet to get re-segmented
-> > + *			(depending on net device features).  This could still be
-> > + *			a MTU violation, so this flag enables performing MTU
-> > + *			check against segments, with a different violation
-> > + *			return code to tell it apart. Check cannot use len_diff.
-> > + *
-> > + *		On return *mtu_len* pointer contains the MTU value of the net
-> > + *		device.  Remember the net device configured MTU is the L3 size,
-> > + *		which is returned here and XDP and TX length operate at L2.
-> > + *		Helper take this into account for you, but remember when using
-> > + *		MTU value in your BPF-code.  On input *mtu_len* must be a valid
-> > + *		pointer and be initialized (to zero), else verifier will reject
-> > + *		BPF program.
-> > + *
-> > + *	Return
-> > + *		* 0 on success, and populate MTU value in *mtu_len* pointer.
-> > + *
-> > + *		* < 0 if any input argument is invalid (*mtu_len* not updated)
-> > + *
-> > + *		MTU violations return positive values, but also populate MTU
-> > + *		value in *mtu_len* pointer, as this can be needed for
-> > + *		implementing PMTU handing:
-> > + *
-> > + *		* **BPF_MTU_CHK_RET_FRAG_NEEDED**
-> > + *		* **BPF_MTU_CHK_RET_SEGS_TOOBIG**
-> > + *
-> >    */  
-> [...]
-> > +BPF_CALL_5(bpf_skb_check_mtu, struct sk_buff *, skb,
-> > +	   u32, ifindex, u32 *, mtu_len, s32, len_diff, u64, flags)
-> > +{
-> > +	int ret = BPF_MTU_CHK_RET_FRAG_NEEDED;
-> > +	struct net_device *dev = skb->dev;
-> > +	int skb_len, dev_len;
-> > +	int mtu;
-> > +
-> > +	if (unlikely(flags & ~(BPF_MTU_CHK_SEGS)))
-> > +		return -EINVAL;
-> > +
-> > +	dev = __dev_via_ifindex(dev, ifindex);
-> > +	if (unlikely(!dev))
-> > +		return -ENODEV;
-> > +
-> > +	mtu = READ_ONCE(dev->mtu);
-> > +
-> > +	dev_len = mtu + dev->hard_header_len;
-> > +	skb_len = skb->len + len_diff; /* minus result pass check */
-> > +	if (skb_len <= dev_len) {
-> > +		ret = BPF_MTU_CHK_RET_SUCCESS;
-> > +		goto out;
-> > +	}
-> > +	/* At this point, skb->len exceed MTU, but as it include length of all
-> > +	 * segments, it can still be below MTU.  The SKB can possibly get
-> > +	 * re-segmented in transmit path (see validate_xmit_skb).  Thus, user
-> > +	 * must choose if segs are to be MTU checked.
-> > +	 */
-> > +	if (skb_is_gso(skb)) {
-> > +		ret = BPF_MTU_CHK_RET_SUCCESS;
-> > +
-> > +		if (flags & BPF_MTU_CHK_SEGS &&
-> > +		    !skb_gso_validate_network_len(skb, mtu))
-> > +			ret = BPF_MTU_CHK_RET_SEGS_TOOBIG;  
-> 
-> I think that looks okay overall now. One thing that will easily slip through
-> is that in the helper description you mentioned 'Check cannot use len_diff.'
-> for BPF_MTU_CHK_SEGS flag. So right now for non-zero len_diff the user
-> will still get BPF_MTU_CHK_RET_SUCCESS if the current length check via
-> skb_gso_validate_network_len(skb, mtu) passes. If it cannot be checked,
-> maybe enforce len_diff == 0 for gso skbs on BPF_MTU_CHK_SEGS?
+Signed-off-by: Ciara Loftus <ciara.loftus@intel.com>
+---
+ tools/testing/selftests/bpf/test_xsk.sh  | 25 ++++++
+ tools/testing/selftests/bpf/xdpxceiver.c | 96 ++++++++++++++++++++++--
+ tools/testing/selftests/bpf/xdpxceiver.h |  7 ++
+ 3 files changed, 120 insertions(+), 8 deletions(-)
 
-Ok. Do you want/think this can be enforced by the verifier or are you
-simply requesting that the helper will return -EINVAL (or another errno)?
-
+diff --git a/tools/testing/selftests/bpf/test_xsk.sh b/tools/testing/selftests/bpf/test_xsk.sh
+index 2b4a4f42b220..a085ef0602a7 100755
+--- a/tools/testing/selftests/bpf/test_xsk.sh
++++ b/tools/testing/selftests/bpf/test_xsk.sh
+@@ -83,6 +83,7 @@ done
+ 
+ TEST_NAME="PREREQUISITES"
+ DEFAULTPKTS=10000
++TRACEPKTS=64
+ 
+ URANDOM=/dev/urandom
+ [ ! -e "${URANDOM}" ] && { echo "${URANDOM} not found. Skipping tests."; test_exit 1 1; }
+@@ -246,6 +247,30 @@ retval=$?
+ test_status $retval "${TEST_NAME}"
+ statusList+=($retval)
+ 
++### TEST 10
++TEST_NAME="SKB TRACE DROP RXQ_FULL"
++
++vethXDPgeneric ${VETH0} ${VETH1} ${NS1}
++
++params=("-S" "-t" "0" "-C" "${TRACEPKTS}")
++execxdpxceiver params
++
++retval=$?
++test_status $retval "${TEST_NAME}"
++statusList+=($retval)
++
++### TEST 11
++TEST_NAME="DRV TRACE DROP RXQ_FULL"
++
++vethXDPnative ${VETH0} ${VETH1} ${NS1}
++
++params=("-N" "-t" "0" "-C" "${TRACEPKTS}")
++execxdpxceiver params
++
++retval=$?
++test_status $retval "${TEST_NAME}"
++statusList+=($retval)
++
+ ## END TESTS
+ 
+ cleanup_exit ${VETH0} ${VETH1} ${NS1}
+diff --git a/tools/testing/selftests/bpf/xdpxceiver.c b/tools/testing/selftests/bpf/xdpxceiver.c
+index 95e5cddc3f78..321b8013c709 100644
+--- a/tools/testing/selftests/bpf/xdpxceiver.c
++++ b/tools/testing/selftests/bpf/xdpxceiver.c
+@@ -33,6 +33,8 @@
+  *       Configure sockets as bi-directional tx/rx sockets, sets up fill and
+  *       completion rings on each socket, tx/rx in both directions. Only nopoll
+  *       mode is used
++ *    e. Tracing - XSK_TRACE_DROP_RXQ_FULL
++ *       Reduce the RXQ size and do not read from it. Validate traces.
+  *
+  * 2. AF_XDP DRV/Native mode
+  *    Works on any netdevice with XDP_REDIRECT support, driver dependent. Processes
+@@ -44,8 +46,9 @@
+  *    d. Bi-directional sockets
+  *    - Only copy mode is supported because veth does not currently support
+  *      zero-copy mode
++ *    e. Tracing - XSK_TRACE_DROP_RXQ_FULL
+  *
+- * Total tests: 8
++ * Total tests: 10
+  *
+  * Flow:
+  * -----
+@@ -310,7 +313,9 @@ static int xsk_configure_socket(struct ifobject *ifobject)
+ 		exit_with_error(errno);
+ 
+ 	ifobject->xsk->umem = ifobject->umem;
+-	cfg.rx_size = XSK_RING_CONS__DEFAULT_NUM_DESCS;
++	cfg.rx_size = opt_trace_enable && (opt_trace_code == XSK_TRACE_DROP_RXQ_FULL) ?
++						TRACE_RXQ_FULL_RXQ_SIZE :
++						XSK_RING_CONS__DEFAULT_NUM_DESCS;
+ 	cfg.tx_size = XSK_RING_PROD__DEFAULT_NUM_DESCS;
+ 	cfg.libbpf_flags = 0;
+ 	cfg.xdp_flags = opt_xdp_flags;
+@@ -363,7 +368,7 @@ static void usage(const char *prog)
+ 	    "  -B, --bidi           Bi-directional sockets test\n"
+ 	    "  -D, --debug          Debug mode - dump packets L2 - L5\n"
+ 	    "  -C, --tx-pkt-count=n Number of packets to send\n"
+-	    "  -t, --trace-enable   Enable trace\n";
++	    "  -t, --trace-enable=n Enable trace and execute test 'n'\n";
+ 	ksft_print_msg(str, prog);
+ }
+ 
+@@ -452,7 +457,7 @@ static void parse_command_line(int argc, char **argv)
+ 	opterr = 0;
+ 
+ 	for (;;) {
+-		c = getopt_long(argc, argv, "i:q:pSNcTBDC:t", long_options, &option_index);
++		c = getopt_long(argc, argv, "i:q:pSNcTBDC:t:", long_options, &option_index);
+ 
+ 		if (c == -1)
+ 			break;
+@@ -505,6 +510,7 @@ static void parse_command_line(int argc, char **argv)
+ 			break;
+ 		case 't':
+ 			opt_trace_enable = 1;
++			opt_trace_code = atoi(optarg);
+ 			break;
+ 		default:
+ 			usage(basename(argv[0]));
+@@ -731,6 +737,29 @@ static void worker_pkt_dump(void)
+ 	}
+ }
+ 
++static void worker_trace_validate(FILE *fp, char *ifname)
++{
++	char trace_str[128];
++	char *line = NULL;
++	size_t len = 0;
++	int ret = 0;
++
++	snprintf(trace_str, sizeof(trace_str),
++		"xsk_packet_drop: netdev: %s qid 0 reason: %s",
++		ifname, reason_str);
++
++	while (trace_counter != expected_traces) {
++		while ((ret = getline(&line, &len, fp)) == EOF)
++			continue;
++		if (strstr(line, trace_str) != NULL)
++			trace_counter++;
++	}
++
++	sigvar = 1;
++
++	fclose(fp);
++}
++
+ static void worker_pkt_validate(void)
+ {
+ 	u32 payloadseqnum = -2;
+@@ -859,6 +888,25 @@ static int enable_disable_trace(bool enable)
+ 	return ret;
+ }
+ 
++static FILE *get_eof_trace(void)
++{
++	FILE *ret_fp;
++	char *line = NULL;
++	size_t len = 0;
++	int ret = 0;
++
++	ret_fp = fopen(TRACE_FILE, "r");
++	if (ret_fp == NULL) {
++		ksft_print_msg("Error opening %s\n", TRACE_FILE);
++		return NULL;
++	}
++
++	/* Go to end of file and record the file pointer */
++	while ((ret = getline(&line, &len, ret_fp)) != EOF)
++		;
++
++	return ret_fp;
++}
+ 
+ static void *worker_testapp_validate(void *arg)
+ {
+@@ -913,8 +961,17 @@ static void *worker_testapp_validate(void *arg)
+ 		tx_only_all(arg);
+ 	} else if (((struct ifobject *)arg)->fv.vector == rx) {
+ 		struct pollfd fds[MAX_SOCKS] = { };
++		FILE *tr_fp = NULL;
+ 		int ret;
+ 
++		if (opt_trace_enable) {
++			tr_fp = get_eof_trace();
++			if (tr_fp == NULL) {
++				ksft_print_msg("Error getting EOF of trace\n");
++				exit_with_error(-1);
++			}
++		}
++
+ 		if (!bidi_pass)
+ 			thread_common_ops(arg, bufs, &sync_mutex_tx, &spinning_rx);
+ 
+@@ -941,15 +998,22 @@ static void *worker_testapp_validate(void *arg)
+ 				if (ret <= 0)
+ 					continue;
+ 			}
+-			rx_pkt(((struct ifobject *)arg)->xsk, fds);
+-			worker_pkt_validate();
++
++			if (!opt_trace_enable) {
++				rx_pkt(((struct ifobject *)arg)->xsk, fds);
++				worker_pkt_validate();
++			} else {
++				worker_trace_validate(tr_fp, ((struct ifobject *)arg)->ifname);
++			}
+ 
+ 			if (sigvar)
+ 				break;
+ 		}
+ 
+-		ksft_print_msg("Received %d packets on interface %s\n",
+-			       pkt_counter, ((struct ifobject *)arg)->ifname);
++		ksft_print_msg("%s %d packets on interface %s\n",
++			       opt_trace_enable ? "Traced" : "Received",
++			       opt_trace_enable ? trace_counter : pkt_counter,
++			       ((struct ifobject *)arg)->ifname);
+ 
+ 		if (opt_teardown)
+ 			ksft_print_msg("Destroying socket\n");
+@@ -1104,6 +1168,22 @@ int main(int argc, char **argv)
+ 			ksft_test_result_fail("ERROR: failed to enable tracing for trace test\n");
+ 			ksft_exit_xfail();
+ 		}
++		switch (opt_trace_code) {
++		case XSK_TRACE_DROP_RXQ_FULL:
++			if (opt_pkt_count <= TRACE_RXQ_FULL_RXQ_SIZE ||
++				(opt_pkt_count > TRACE_MAX_PKTS)) {
++				ksft_test_result_fail("ERROR: invalid packet count %i\n",
++						      opt_pkt_count);
++				ksft_exit_xfail();
++			}
++			expected_traces = opt_pkt_count - TRACE_RXQ_FULL_RXQ_SIZE;
++			reason_str = "rxq full";
++			break;
++		default:
++			ksft_test_result_fail("ERROR: unsupported trace %i\n",
++						opt_trace_code);
++			ksft_exit_xfail();
++		}
+ 	}
+ 
+ 	pthread_init_mutex();
+diff --git a/tools/testing/selftests/bpf/xdpxceiver.h b/tools/testing/selftests/bpf/xdpxceiver.h
+index d6542fe42324..432c2c20abeb 100644
+--- a/tools/testing/selftests/bpf/xdpxceiver.h
++++ b/tools/testing/selftests/bpf/xdpxceiver.h
+@@ -42,6 +42,9 @@
+ #define POLL_TMOUT 1000
+ #define NEED_WAKEUP true
+ #define TRACE_ENABLE_FILE "/sys/kernel/debug/tracing/events/xsk/xsk_packet_drop/enable"
++#define TRACE_FILE "/sys/kernel/debug/tracing/trace"
++#define TRACE_RXQ_FULL_RXQ_SIZE 32 /* must be smaller than fq */
++#define TRACE_MAX_PKTS 100 /* limit size to avoid filling trace buffer */
+ 
+ typedef __u32 u32;
+ typedef __u16 u16;
+@@ -66,11 +69,15 @@ static int opt_teardown;
+ static int opt_bidi;
+ static u32 opt_xdp_bind_flags = XDP_USE_NEED_WAKEUP;
+ static int opt_trace_enable;
++static int opt_trace_code;
+ static int reset_trace;
+ static u8 pkt_data[XSK_UMEM__DEFAULT_FRAME_SIZE];
+ static u32 pkt_counter;
++static u32 trace_counter;
+ static u32 prev_pkt = -1;
+ static int sigvar;
++static int expected_traces;
++static const char *reason_str;
+ 
+ struct xsk_umem_info {
+ 	struct xsk_ring_prod fq;
 -- 
-Best regards,
-  Jesper Dangaard Brouer
-  MSc.CS, Principal Kernel Engineer at Red Hat
-  LinkedIn: http://www.linkedin.com/in/brouer
+2.17.1
 
