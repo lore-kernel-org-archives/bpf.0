@@ -2,236 +2,144 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-23.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0651DC433DB
-	for <bpf@archiver.kernel.org>; Mon, 25 Jan 2021 23:39:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA0A0C433E0
+	for <bpf@archiver.kernel.org>; Mon, 25 Jan 2021 23:49:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CB03922AAA
-	for <bpf@archiver.kernel.org>; Mon, 25 Jan 2021 23:39:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A4EDA229EF
+	for <bpf@archiver.kernel.org>; Mon, 25 Jan 2021 23:49:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732875AbhAYXjA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 25 Jan 2021 18:39:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51136 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732901AbhAYXii (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 25 Jan 2021 18:38:38 -0500
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBA4CC06178C
-        for <bpf@vger.kernel.org>; Mon, 25 Jan 2021 15:37:45 -0800 (PST)
-Received: by mail-qv1-xf32.google.com with SMTP id w11so1120674qvz.12
-        for <bpf@vger.kernel.org>; Mon, 25 Jan 2021 15:37:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xQCUN625VAgpGUPUXKsLzb9sl6V+DmdN8TP1oPnRPiM=;
-        b=QuIOe7Uty7UBgeM3KwR6M0kBnNb168EYXOal4GAsZu5s+o6XWG3KM2umTQR50IKoFx
-         VFEVeTkbcbL779I57zZbr+swDovwha3emwdbIhRfEByIEqDGggGcnYTcpdcFh82V3sq9
-         KE9jRJTedaLl0HGBp1D1L9GSqOm060FojWjkJevtjFRJXHI3CE354Q1B4oBSyxzVSuwC
-         JOaq3UNdKcJMK4W8sECH1G1jL8t1EOLjggDnDySB7F1muQ1zbVXN91B77JbV7LsWohSp
-         bhN3CxlhzhGjklJyjFDnnJrw8h+5KadfVGFs6brfVjzjbfqObv7FFCtwcvFBCmiHPk7y
-         DPnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xQCUN625VAgpGUPUXKsLzb9sl6V+DmdN8TP1oPnRPiM=;
-        b=W9fhaktf/StiZipBJ5Qlgj3CZ1Y5qHCbnBvxUM3gTis82IA7YUfGeghx2T79DeiVFL
-         0zgbnY7RhODbxU3MjvSz9zEYi3SKcpkzlOse61iFNFeMQFBLcLQ2ujXuCKdEChJqHJm9
-         qV1GGP709ULF83cqLiSEBGbFO+JRIZPsSJKJKnJJs4cpQuXDI79eBxuahhUrSynGFEad
-         k2V4B6yMONhaDn1V1CeBENGaFlkQOiFVClejo9GbkBrmPvI6TF0RuaiTRwo+9m1vBmf9
-         TvMYfwl8yc/rSEswB43Mmq1rcPSWyKymA6xph/Wo7HRZbLvuyJIZMNeN/jiS37HMYX9W
-         wFRg==
-X-Gm-Message-State: AOAM531zSu6qvLWWJdwppp3pRm2Yt7jwOw3OzkPAdUry6Az104e0H0jX
-        +2lB8uFF1IEUTfZgYfSmkTxt3VVqTbV68J2g7W2P5A==
-X-Google-Smtp-Source: ABdhPJxcyBLLRSQVFwQ2Vionp60H5PIjYkov5j44oew/iGDuiGR6Ix0Q7Bi/M6YJIK3D4ZOm6ipXqNMvdVC0u0MeOvs=
-X-Received: by 2002:ad4:486e:: with SMTP id u14mr3178530qvy.21.1611617864845;
- Mon, 25 Jan 2021 15:37:44 -0800 (PST)
+        id S1731193AbhAYXth (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 25 Jan 2021 18:49:37 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58784 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732553AbhAYVNo (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 25 Jan 2021 16:13:44 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9684A207B1;
+        Mon, 25 Jan 2021 21:12:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611609174;
+        bh=+7/JFcAs+r5TtRk8YUAj0V2gIvU9ZzWSvrnlc++n4Tg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=AHuQ4tPHNSLwfaIpQuUoRkmuQiUx4BqrrF+8oGZ+HAsyzhRMayzSTu3hn/odj5f/H
+         HK2icuEmUuIJuweyiXEhJDdgmOb+B2K+pVLeQX1FuRehC4oMmSVZOC7cWr7D9McA2K
+         xG4rtddSLzHbZ2J0+DzDUjrLIleCXOeq6B6cSBx/zFzZvslVG6pFzXHpZgEEDkd16t
+         OyAbv4x+Pvmy+10TGUPr97Cwvgzl6meH4k8Xw2eWy4WORWXGCWNmdbG3OiuczjVD8q
+         92Qv+TaNY+6hn7AcvwUdkdN78rQBfgZDWfSsK5mgTgYhKqzfL2hr5OkFTkK450lWSI
+         AN4yYCk/25c7A==
+Date:   Mon, 25 Jan 2021 13:12:52 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     syzbot <syzbot+a1c17e56a8a62294c714@syzkaller.appspotmail.com>
+Cc:     alexanderduyck@fb.com, andrii@kernel.org, ast@kernel.org,
+        bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
+        edumazet@google.com, hawk@kernel.org, john.fastabend@gmail.com,
+        kafai@fb.com, kpsingh@kernel.org, linux-kernel@vger.kernel.org,
+        mst@redhat.com, netdev@vger.kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com,
+        Willem de Bruijn <willemb@google.com>
+Subject: Re: WARNING in pskb_expand_head
+Message-ID: <20210125131252.4e17d3f3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <0000000000005d4f3205b9ab95f4@google.com>
+References: <0000000000005d4f3205b9ab95f4@google.com>
 MIME-Version: 1.0
-References: <20210125172641.3008234-1-sdf@google.com> <20210125172641.3008234-2-sdf@google.com>
- <20210125232949.46r26lcc3wyieoaj@kafai-mbp>
-In-Reply-To: <20210125232949.46r26lcc3wyieoaj@kafai-mbp>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Mon, 25 Jan 2021 15:37:34 -0800
-Message-ID: <CAKH8qBuQ8icMgxiozme=HgXcE5Tm937PwNMjFAn0tSAUcMDaYQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: verify that rebinding to
- port < 1024 from BPF works
-To:     Martin KaFai Lau <kafai@fb.com>
-Cc:     Netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrey Ignatov <rdna@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Jan 25, 2021 at 3:30 PM Martin KaFai Lau <kafai@fb.com> wrote:
->
-> On Mon, Jan 25, 2021 at 09:26:41AM -0800, Stanislav Fomichev wrote:
-> > BPF rewrites from 111 to 111, but it still should mark the port as
-> > "changed".
-> > We also verify that if port isn't touched by BPF, it's still prohibited.
-> The description requires an update.
-Good point, will update this one and the comment!
+CC Willem just in case
 
-> >
-> > Cc: Andrey Ignatov <rdna@fb.com>
-> > Cc: Martin KaFai Lau <kafai@fb.com>
-> > Signed-off-by: Stanislav Fomichev <sdf@google.com>
-> > ---
-> >  .../selftests/bpf/prog_tests/bind_perm.c      | 85 +++++++++++++++++++
-> >  tools/testing/selftests/bpf/progs/bind_perm.c | 36 ++++++++
-> >  2 files changed, 121 insertions(+)
-> >  create mode 100644 tools/testing/selftests/bpf/prog_tests/bind_perm.c
-> >  create mode 100644 tools/testing/selftests/bpf/progs/bind_perm.c
-> >
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/bind_perm.c b/tools/testing/selftests/bpf/prog_tests/bind_perm.c
-> > new file mode 100644
-> > index 000000000000..61307d4494bf
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/bpf/prog_tests/bind_perm.c
-> > @@ -0,0 +1,85 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +#include <test_progs.h>
-> > +#include "bind_perm.skel.h"
-> > +
-> > +#include <sys/types.h>
-> > +#include <sys/socket.h>
-> > +#include <sys/capability.h>
-> > +
-> > +static int duration;
-> > +
-> > +void try_bind(int port, int expected_errno)
-> > +{
-> > +     struct sockaddr_in sin = {};
-> > +     int fd = -1;
-> > +
-> > +     fd = socket(AF_INET, SOCK_STREAM, 0);
-> > +     if (CHECK(fd < 0, "fd", "errno %d", errno))
-> > +             goto close_socket;
-> > +
-> > +     sin.sin_family = AF_INET;
-> > +     sin.sin_port = htons(port);
-> > +
-> > +     errno = 0;
-> > +     bind(fd, (struct sockaddr *)&sin, sizeof(sin));
-> > +     ASSERT_EQ(errno, expected_errno, "bind");
-> > +
-> > +close_socket:
-> > +     if (fd >= 0)
-> > +             close(fd);
-> > +}
-> > +
-> > +void cap_net_bind_service(cap_flag_value_t flag)
-> > +{
-> > +     const cap_value_t cap_net_bind_service = CAP_NET_BIND_SERVICE;
-> > +     cap_t caps;
-> > +
-> > +     caps = cap_get_proc();
-> > +     if (CHECK(!caps, "cap_get_proc", "errno %d", errno))
-> > +             goto free_caps;
-> > +
-> > +     if (CHECK(cap_set_flag(caps, CAP_EFFECTIVE, 1, &cap_net_bind_service,
-> > +                            CAP_CLEAR),
-> > +               "cap_set_flag", "errno %d", errno))
-> > +             goto free_caps;
-> > +
-> > +     if (CHECK(cap_set_flag(caps, CAP_EFFECTIVE, 1, &cap_net_bind_service,
-> > +                            CAP_CLEAR),
-> > +               "cap_set_flag", "errno %d", errno))
-> These two back-to-back cap_set_flag() looks incorrect.
-> Also, the "cap_flag_value_t flag" is unused.
-Ah, true, I never reset back CAP_NET_BIND_SERVICE, will fix, thanks!
+On Sun, 24 Jan 2021 12:51:20 -0800 syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    7d68e382 bpf: Permit size-0 datasec
+> git tree:       bpf-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=132567e7500000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=e0c7843b8af99dff
+> dashboard link: https://syzkaller.appspot.com/bug?extid=a1c17e56a8a62294c714
+> compiler:       gcc (GCC) 10.1.0-syz 20200507
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17ae23af500000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13856bc7500000
+> 
+> The issue was bisected to:
+> 
+> commit 3226b158e67cfaa677fd180152bfb28989cb2fac
+> Author: Eric Dumazet <edumazet@google.com>
+> Date:   Wed Jan 13 16:18:19 2021 +0000
+> 
+>     net: avoid 32 x truesize under-estimation for tiny skbs
+> 
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=151a3027500000
+> final oops:     https://syzkaller.appspot.com/x/report.txt?x=171a3027500000
+> console output: https://syzkaller.appspot.com/x/log.txt?x=131a3027500000
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+a1c17e56a8a62294c714@syzkaller.appspotmail.com
+> Fixes: 3226b158e67c ("net: avoid 32 x truesize under-estimation for tiny skbs")
+> 
+> RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000001bbbbbb
+> R10: 0000000000000000 R11: 0000000000000246 R12: ffffffffffffffff
+> R13: 0000000000000004 R14: 0000000000000000 R15: 0000000000000000
+> ------------[ cut here ]------------
+> WARNING: CPU: 1 PID: 8703 at mm/page_alloc.c:4976 __alloc_pages_nodemask+0x5f8/0x730 mm/page_alloc.c:5011
+> Modules linked in:
+> CPU: 1 PID: 8703 Comm: syz-executor857 Not tainted 5.11.0-rc3-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> RIP: 0010:__alloc_pages_nodemask+0x5f8/0x730 mm/page_alloc.c:4976
+> Code: 00 00 0c 00 0f 85 a7 00 00 00 8b 3c 24 4c 89 f2 44 89 e6 c6 44 24 70 00 48 89 6c 24 58 e8 d0 d7 ff ff 49 89 c5 e9 ea fc ff ff <0f> 0b e9 b5 fd ff ff 89 74 24 14 4c 89 4c 24 08 4c 89 74 24 18 e8
+> RSP: 0018:ffffc90001ecf910 EFLAGS: 00010246
+> RAX: 0000000000000000 RBX: 1ffff920003d9f26 RCX: 0000000000000000
+> RDX: 0000000000000000 RSI: dffffc0000000000 RDI: 0000000000060a20
+> RBP: 0000000000020a20 R08: 0000000000000000 R09: 0000000000000001
+> R10: ffffffff86f1be3c R11: 0000000000000000 R12: 0000000000000012
+> R13: 0000000020010300 R14: 0000000000060a20 R15: 0000000000000000
+> FS:  0000000001148880(0000) GS:ffff8880b9f00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00000000006d5090 CR3: 000000001d414000 CR4: 00000000001506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  __alloc_pages include/linux/gfp.h:511 [inline]
+>  __alloc_pages_node include/linux/gfp.h:524 [inline]
+>  alloc_pages_node include/linux/gfp.h:538 [inline]
+>  kmalloc_large_node+0x60/0x110 mm/slub.c:3984
+>  __kmalloc_node_track_caller+0x319/0x3f0 mm/slub.c:4481
+>  __kmalloc_reserve net/core/skbuff.c:150 [inline]
+>  pskb_expand_head+0xae9/0x1050 net/core/skbuff.c:1632
+>  __skb_grow include/linux/skbuff.h:2748 [inline]
+>  tun_napi_alloc_frags drivers/net/tun.c:1377 [inline]
+>  tun_get_user+0x1f52/0x3690 drivers/net/tun.c:1730
+>  tun_chr_write_iter+0xe1/0x1d0 drivers/net/tun.c:1926
+>  call_write_iter include/linux/fs.h:1901 [inline]
+>  new_sync_write+0x426/0x650 fs/read_write.c:518
+>  vfs_write+0x791/0xa30 fs/read_write.c:605
+>  ksys_write+0x12d/0x250 fs/read_write.c:658
+>  do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
+>  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+> RIP: 0033:0x4440a9
+> Code: e8 6c 05 03 00 48 83 c4 18 c3 0f 1f 80 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 0f 83 9b 07 fc ff c3 66 2e 0f 1f 84 00 00 00 00
+> RSP: 002b:00007fffdb5a8e08 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+> RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00000000004440a9
+> RDX: 000000002001016f RSI: 0000000020000380 RDI: 0000000000000003
+> RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000001bbbbbb
+> R10: 0000000000000000 R11: 0000000000000246 R12: ffffffffffffffff
+> R13: 0000000000000004 R14: 0000000000000000 R15: 0000000000000000
+> 
+> 
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+> syzbot can test patches for this issue, for details see:
+> https://goo.gl/tpsmEJ#testing-patches
 
-> > +             goto free_caps;
-> > +
-> > +     if (CHECK(cap_set_proc(caps), "cap_set_proc", "errno %d", errno))
-> > +             goto free_caps;
-> > +
-> > +free_caps:
-> > +     if (CHECK(cap_free(caps), "cap_free", "errno %d", errno))
-> > +             goto free_caps;
-> There is a loop.
->
-> > +}
-> > +
-> > +void test_bind_perm(void)
-> > +{
-> > +     struct bind_perm *skel;
-> > +     int cgroup_fd;
-> > +
-> > +     cgroup_fd = test__join_cgroup("/bind_perm");
-> > +     if (CHECK(cgroup_fd < 0, "cg-join", "errno %d", errno))
-> > +             return;
-> > +
-> > +     skel = bind_perm__open_and_load();
-> > +     if (!ASSERT_OK_PTR(skel, "skel"))
-> > +             goto close_cgroup_fd;
-> > +
-> > +     skel->links.bind_v4_prog = bpf_program__attach_cgroup(skel->progs.bind_v4_prog, cgroup_fd);
-> > +     if (!ASSERT_OK_PTR(skel, "bind_v4_prog"))
-> > +             goto close_skeleton;
-> > +
-> > +     cap_net_bind_service(CAP_CLEAR);
-> > +     try_bind(110, EACCES);
-> > +     try_bind(111, 0);
-> > +     cap_net_bind_service(CAP_SET);
-> > +
-> > +close_skeleton:
-> > +     bind_perm__destroy(skel);
-> > +close_cgroup_fd:
-> > +     close(cgroup_fd);
-> > +}
-> > diff --git a/tools/testing/selftests/bpf/progs/bind_perm.c b/tools/testing/selftests/bpf/progs/bind_perm.c
-> > new file mode 100644
-> > index 000000000000..31ae8d599796
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/bpf/progs/bind_perm.c
-> > @@ -0,0 +1,36 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +
-> > +#include <linux/stddef.h>
-> > +#include <linux/bpf.h>
-> > +#include <sys/types.h>
-> > +#include <sys/socket.h>
-> > +#include <bpf/bpf_helpers.h>
-> > +#include <bpf/bpf_endian.h>
-> > +
-> > +SEC("cgroup/bind4")
-> > +int bind_v4_prog(struct bpf_sock_addr *ctx)
-> > +{
-> > +     struct bpf_sock *sk;
-> > +     __u32 user_ip4;
-> > +     __u16 user_port;
-> > +
-> > +     sk = ctx->sk;
-> > +     if (!sk)
-> > +             return 0;
-> > +
-> > +     if (sk->family != AF_INET)
-> > +             return 0;
-> > +
-> > +     if (ctx->type != SOCK_STREAM)
-> > +             return 0;
-> > +
-> > +     /* Rewriting to the same value should still cause
-> > +      * permission check to be bypassed.
-> > +      */
-> This comment is out dated also.
->
-> > +     if (ctx->user_port == bpf_htons(111))
-> > +             return 3;
-> > +
-> > +     return 1;
-> > +}
-> > +
-> > +char _license[] SEC("license") = "GPL";
-> > --
-> > 2.30.0.280.ga3ce27912f-goog
-> >
