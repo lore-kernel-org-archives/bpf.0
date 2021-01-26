@@ -2,147 +2,107 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80409C43381
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 531FEC433E9
 	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 18:46:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4FCB722228
+	by mail.kernel.org (Postfix) with ESMTP id 240FA22A85
 	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 18:46:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730041AbhAZRTW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 26 Jan 2021 12:19:22 -0500
-Received: from mga04.intel.com ([192.55.52.120]:61804 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389844AbhAZI26 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 26 Jan 2021 03:28:58 -0500
-IronPort-SDR: c/oUV9WrXBtopzhLZZk586mtofw1KfCnVABZUf8uHdTmSNGP482DN/nEbMIlKBh3p/V36djWwd
- lVwRLSoeZv2A==
-X-IronPort-AV: E=McAfee;i="6000,8403,9875"; a="177298559"
-X-IronPort-AV: E=Sophos;i="5.79,375,1602572400"; 
-   d="scan'208";a="177298559"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2021 00:22:42 -0800
-IronPort-SDR: ZVamXvb4GAa9vt3hDURDumQQtFCWZbRDOEZOkW+9BdTpbXkkfGR0Wg/gIWGGdhyt0m91ooVGJM
- YtfMFpGtJ3vQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,375,1602572400"; 
-   d="scan'208";a="361901164"
-Received: from silpixa00399839.ir.intel.com (HELO localhost.localdomain) ([10.237.222.142])
-  by fmsmga008.fm.intel.com with ESMTP; 26 Jan 2021 00:22:34 -0800
-From:   Ciara Loftus <ciara.loftus@intel.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        magnus.karlsson@intel.com, bjorn@kernel.org,
-        weqaar.a.janjua@intel.com
-Cc:     Ciara Loftus <ciara.loftus@intel.com>
-Subject: [PATCH bpf-next v2 6/6] selftests/bpf: XSK_TRACE_DROP_FQ_EMPTY test
-Date:   Tue, 26 Jan 2021 07:52:39 +0000
-Message-Id: <20210126075239.25378-7-ciara.loftus@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210126075239.25378-1-ciara.loftus@intel.com>
-References: <20210126075239.25378-1-ciara.loftus@intel.com>
+        id S2387616AbhAZRT0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 26 Jan 2021 12:19:26 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:37133 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2390026AbhAZJPH (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 26 Jan 2021 04:15:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1611652421;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZQNMLxZXL4V+OpSXDYs3PfwSfoYKXj1zeTe+gx9+fVk=;
+        b=iWljQ9OXM9/cGP5O5HDQkf2WOj6pK9gYQTeYYx1GURxnHQzmJghu2cHAzarvxdYKHyzaDO
+        1QVOnLWKduffzbm9VfJPcxU+xVfSwmk9WRwCuwnGax9BnpJwNjprXvzVpqIzRCR7/7A9ws
+        yCqAod8Cm+4kZ7WxBpLVCdAimVg33s4=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-381-Gz-I5AYiO9-Nc9EqgAIqwA-1; Tue, 26 Jan 2021 04:13:36 -0500
+X-MC-Unique: Gz-I5AYiO9-Nc9EqgAIqwA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id AE03A10054FF;
+        Tue, 26 Jan 2021 09:13:34 +0000 (UTC)
+Received: from carbon (unknown [10.36.110.4])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 391621F0;
+        Tue, 26 Jan 2021 09:13:27 +0000 (UTC)
+Date:   Tue, 26 Jan 2021 10:13:25 +0100
+From:   Jesper Dangaard Brouer <brouer@redhat.com>
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        Daniel Borkmann <borkmann@iogearbox.net>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        maze@google.com, lmb@cloudflare.com, shaun@tigera.io,
+        Lorenzo Bianconi <lorenzo@kernel.org>, marek@cloudflare.com,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>, eyal.birger@gmail.com,
+        colrack@gmail.com, brouer@redhat.com
+Subject: Re: [PATCH bpf-next V12 4/7] bpf: add BPF-helper for MTU checking
+Message-ID: <20210126101325.75097ddb@carbon>
+In-Reply-To: <3c542e42-2033-aca6-ba0e-4854c24980c2@iogearbox.net>
+References: <161098881526.108067.7603213364270807261.stgit@firesoul>
+        <161098887018.108067.13643446976934084937.stgit@firesoul>
+        <6772a12b-2a60-bb3b-93df-1d6d6c7c7fd7@iogearbox.net>
+        <20210125094148.2b3bb128@carbon>
+        <3c542e42-2033-aca6-ba0e-4854c24980c2@iogearbox.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This test skips the populating of the fill queue which
-causes packet drops and traces reporting the drop. The
-test validates that these traces were successfully
-generated.
+On Mon, 25 Jan 2021 23:27:22 +0100
+Daniel Borkmann <daniel@iogearbox.net> wrote:
 
-Signed-off-by: Ciara Loftus <ciara.loftus@intel.com>
----
- tools/testing/selftests/bpf/test_xsk.sh  | 24 ++++++++++++++++++++++++
- tools/testing/selftests/bpf/xdpxceiver.c | 13 +++++++++++--
- 2 files changed, 35 insertions(+), 2 deletions(-)
+> >>> +	/* At this point, skb->len exceed MTU, but as it include length of all
+> >>> +	 * segments, it can still be below MTU.  The SKB can possibly get
+> >>> +	 * re-segmented in transmit path (see validate_xmit_skb).  Thus, user
+> >>> +	 * must choose if segs are to be MTU checked.
+> >>> +	 */
+> >>> +	if (skb_is_gso(skb)) {
+> >>> +		ret = BPF_MTU_CHK_RET_SUCCESS;
+> >>> +
+> >>> +		if (flags & BPF_MTU_CHK_SEGS &&
+> >>> +		    !skb_gso_validate_network_len(skb, mtu))
+> >>> +			ret = BPF_MTU_CHK_RET_SEGS_TOOBIG;  
+> >>
+> >> I think that looks okay overall now. One thing that will easily slip through
+> >> is that in the helper description you mentioned 'Check cannot use len_diff.'
+> >> for BPF_MTU_CHK_SEGS flag. So right now for non-zero len_diff the user
+> >> will still get BPF_MTU_CHK_RET_SUCCESS if the current length check via
+> >> skb_gso_validate_network_len(skb, mtu) passes. If it cannot be checked,
+> >> maybe enforce len_diff == 0 for gso skbs on BPF_MTU_CHK_SEGS?  
+> > 
+> > Ok. Do you want/think this can be enforced by the verifier or are you
+> > simply requesting that the helper will return -EINVAL (or another errno)?  
+> 
+> Simple -EINVAL should be fine in this case. Generally, we can detect this from
+> verifier side but I don't think the extra complexity is worth it especially given
+> this is dependent on BPF_MTU_CHK_SEGS and otherwise can be non-zero.
 
-diff --git a/tools/testing/selftests/bpf/test_xsk.sh b/tools/testing/selftests/bpf/test_xsk.sh
-index 95ceee151de1..997ba0aa79db 100755
---- a/tools/testing/selftests/bpf/test_xsk.sh
-+++ b/tools/testing/selftests/bpf/test_xsk.sh
-@@ -295,6 +295,30 @@ retval=$?
- test_status $retval "${TEST_NAME}"
- statusList+=($retval)
- 
-+### TEST 14
-+TEST_NAME="SKB TRACE DROP FQ_EMPTY"
-+
-+vethXDPgeneric ${VETH0} ${VETH1} ${NS1}
-+
-+params=("-S" "-t" "2" "-C" "${TRACEPKTS}")
-+execxdpxceiver params
-+
-+retval=$?
-+test_status $retval "${TEST_NAME}"
-+statusList+=($retval)
-+
-+### TEST 15
-+TEST_NAME="DRV TRACE DROP FQ_EMPTY"
-+
-+vethXDPnative ${VETH0} ${VETH1} ${NS1}
-+
-+params=("-N" "-t" "2" "-C" "${TRACEPKTS}")
-+execxdpxceiver params
-+
-+retval=$?
-+test_status $retval "${TEST_NAME}"
-+statusList+=($retval)
-+
- ## END TESTS
- 
- cleanup_exit ${VETH0} ${VETH1} ${NS1}
-diff --git a/tools/testing/selftests/bpf/xdpxceiver.c b/tools/testing/selftests/bpf/xdpxceiver.c
-index bee10bb686fc..49c2d42b5882 100644
---- a/tools/testing/selftests/bpf/xdpxceiver.c
-+++ b/tools/testing/selftests/bpf/xdpxceiver.c
-@@ -37,6 +37,8 @@
-  *       Reduce the RXQ size and do not read from it. Validate traces.
-  *    f. Tracing - XSK_TRACE_DROP_PKT_TOO_BIG
-  *       Increase the headroom size and send packets. Validate traces.
-+ *    g. Tracing - XSK_TRACE_DROP_FQ_EMPTY
-+ *       Do not populate the fill queue and send packets. Validate traces.
-  *
-  * 2. AF_XDP DRV/Native mode
-  *    Works on any netdevice with XDP_REDIRECT support, driver dependent. Processes
-@@ -50,8 +52,9 @@
-  *      zero-copy mode
-  *    e. Tracing - XSK_TRACE_DROP_RXQ_FULL
-  *    f. Tracing - XSK_TRACE_DROP_PKT_TOO_BIG
-+ *    g. Tracing - XSK_TRACE_DROP_FQ_EMPTY
-  *
-- * Total tests: 12
-+ * Total tests: 14
-  *
-  * Flow:
-  * -----
-@@ -981,7 +984,9 @@ static void *worker_testapp_validate(void *arg)
- 			thread_common_ops(ifobject, bufs, &sync_mutex_tx, &spinning_rx);
- 
- 		ksft_print_msg("Interface [%s] vector [Rx]\n", ifobject->ifname);
--		xsk_populate_fill_ring(ifobject->umem);
-+		if (opt_trace_code != XSK_TRACE_DROP_FQ_EMPTY)
-+			xsk_populate_fill_ring(ifobject->umem);
-+
- 
- 		TAILQ_INIT(&head);
- 		if (debug_pkt_dump) {
-@@ -1188,6 +1193,10 @@ int main(int argc, char **argv)
- 			expected_traces = opt_pkt_count;
- 			reason_str = "packet too big";
- 			break;
-+		case XSK_TRACE_DROP_FQ_EMPTY:
-+			expected_traces = opt_pkt_count;
-+			reason_str = "fq empty";
-+			break;
- 		default:
- 			ksft_test_result_fail("ERROR: unsupported trace %i\n",
- 						opt_trace_code);
+Luckily this was also my choice in V13 that I've already send out.
+
+https://lore.kernel.org/netdev/161159457239.321749.9067604476261493815.stgit@firesoul/
 -- 
-2.17.1
+Best regards,
+  Jesper Dangaard Brouer
+  MSc.CS, Principal Kernel Engineer at Red Hat
+  LinkedIn: http://www.linkedin.com/in/brouer
 
