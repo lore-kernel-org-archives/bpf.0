@@ -4,109 +4,235 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E3CE8C433DB
-	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 05:38:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EF85C43381
+	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 05:38:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C07AB22ADF
+	by mail.kernel.org (Postfix) with ESMTP id EFC0922B2C
 	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 05:38:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730016AbhAZFiK (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 26 Jan 2021 00:38:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46120 "EHLO
+        id S2388027AbhAZFiS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 26 Jan 2021 00:38:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731954AbhAZB1P (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 25 Jan 2021 20:27:15 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8A26C0698D4;
-        Mon, 25 Jan 2021 17:26:26 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id e67so15203083ybc.12;
-        Mon, 25 Jan 2021 17:26:26 -0800 (PST)
+        with ESMTP id S1730834AbhAZBuH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 25 Jan 2021 20:50:07 -0500
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FA46C0617A9;
+        Mon, 25 Jan 2021 16:28:26 -0800 (PST)
+Received: by mail-yb1-xb34.google.com with SMTP id b11so15100099ybj.9;
+        Mon, 25 Jan 2021 16:28:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TJ1MOV1sLhRzD9dsnoNfW9onPTJTHyufrbfsglTYLYQ=;
-        b=EfJnubrvjHb/BqtUfrnZejoWcTf9CKQc0Og7bC1Qegt44CrVRVvWyCj+mpxY3JyQqk
-         fYPnLZcyGJqg1VImtwoi5KWF7G270cHWfxzfe9DvqrtYiUVaF2sQqydLA55F13TGwzWg
-         9CA4KjsskKyLY4SOtQY6jvr5dAF5thLrqC1xCilHbXryaud7WU1XZjpLqyxFpx/jLWRU
-         BgvVfLoZx0WL5Ca6z7K25AMl4G5MKzVOMuGMNJID0m/gC0slR2u6DMb4q4PpyG3ealyg
-         SGTNKV6tqkdv7OHJPB6fhpWzKmpJ5K35iqQUN8/EDdUPWvsCxiMSTabSSPc6Dg2kzgHJ
-         JC6Q==
+         :cc:content-transfer-encoding;
+        bh=ND23aPy8zpGQ99qhXMXe1prkSdeC2noDocOwnTidYzU=;
+        b=o/ythDK4DuFyaDDje0Lhh+YPdmJYIXXRWa5vD2ise5bX45vQV1ffUkh1Dq4GNneWaf
+         OHiZ0HkGKP44jRoATWP6ESdo4h/ZEMOgAmhkdkWobnaeTRzI634BgqzmMY0cUJnO+SFy
+         o24lD7VeuH6y5tmMJ+jq6KBuu9FMTUa24GvmyOXjAlaZQNR3j3suJPPZJ+0qjPIPxp+3
+         Tjj4CG9Ij7/4uyyibZJT72tnuyRmbnovesKNmWaMwC1pviqo3BEGkbP7vcLkas12M3N/
+         nML/Bzde8WNGe9vfke3wetnRI5rkY7DsC4/VgKsGyhUzlFFNWSMO36G92bbUW3z35A5N
+         w1pA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TJ1MOV1sLhRzD9dsnoNfW9onPTJTHyufrbfsglTYLYQ=;
-        b=KSx1B8XM4FiEdzVRwpTqm5FiIifSUVDuV86w6n1JrGukAg+zcKsuC+3EiRFhyo1Z0C
-         2WicrjiPDo/QZ0rjy2BREOC/7lEQU4kmpgkFTWqccVz4kHloM4oSd2Gtq8Jv4PPSUCrl
-         7bUWpDSuyfSzAy44iFeM8ntEQ5GpkJ8LeMygmmwHgvIAr1GP8ENGWD9ph4cc7ZTo3HSa
-         2EJhyQlrBFWk519I1X/p9caVuFN6AXXw+zFtYlMFJZu7sE656t6JOx84aaUrpAwovqBI
-         wRHFTuunREcjXHytqzWUwqUPu5I93p0N3BRzXGy9yx13wQ4Dz2pKj+439qWlkJnaWLsE
-         jIrw==
-X-Gm-Message-State: AOAM530jc3CgNpP1bX6Lj/dTDLoIltBgchc85jS9oaOqSr+0ZHuoH0mF
-        JiU6v//IZuLmdBuXDdYBMtXrWO6WSv0xjWtYMew=
-X-Google-Smtp-Source: ABdhPJx04na/2x4JVJ5DEA6knJaGMhDp8y0R7IZqRkqqcdm2FlMlj1ZM8po33S7jTgUBspPx+yrOMQNV6cTrs6GkENY=
-X-Received: by 2002:a25:a183:: with SMTP id a3mr4771090ybi.459.1611624386074;
- Mon, 25 Jan 2021 17:26:26 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ND23aPy8zpGQ99qhXMXe1prkSdeC2noDocOwnTidYzU=;
+        b=FGg41glkCFSahlMTVmYnUkfGemj1p5gocNh8dapc2XFD7dxfjbJkrnvZxAuGhJeUg6
+         QNiVZwPQ9ehPXYwKMoPfwSAtxlHIoMA11IrYQqz/N1eaONGEtvxWjaBKAeP/86ZbOKb4
+         yJEN0/KaVXg9bxn71UCwgVFvbMb46LIxaTKpp+Q0etwCr+sjjTV112dQiYBJ2CQdAjVq
+         ZnNZ+Bvo/6QL4+SHTLxue/GSXc1TV7gzhCfSaSU6w/tCWXVlkbOmOS8fm9Cg2wwP+txC
+         Ho8VRlLTepbmtJwysv1p9nEBGONiVNfK+mJ9k2CmGyr03zbGOeuTmP6JqwwXlmBFoish
+         G0ZA==
+X-Gm-Message-State: AOAM533xm62zXkqVF8MR+uhjT6Xg7dKMTUyJ3PyJKipiaZ/B8SX+ZW92
+        uCf7+G6698DyHGXhdBijJeDbLpkSgeDwBgYhLRA=
+X-Google-Smtp-Source: ABdhPJxBC7znTdaYeDTd9iTlVEm0Wia5u7iSqG3qiL+UZjWU+vb7pIlvv9dGxFiGKCaH6oBZm9+67ffCkukK1b3/U7w=
+X-Received: by 2002:a25:548:: with SMTP id 69mr4443197ybf.510.1611620904937;
+ Mon, 25 Jan 2021 16:28:24 -0800 (PST)
 MIME-Version: 1.0
-References: <20210110070341.1380086-1-andrii@kernel.org> <161048280875.1131.14039972740532054006.git-patchwork-notify@kernel.org>
- <4f19b649-a837-48af-90d1-c4692580053d@www.fastmail.com>
-In-Reply-To: <4f19b649-a837-48af-90d1-c4692580053d@www.fastmail.com>
+References: <20210118160139.1971039-1-gprocida@google.com> <20210118160139.1971039-4-gprocida@google.com>
+ <CAEf4BzazvC9H=K_A9KamGTB3iKtjuNxd4hEvwFOnkPdnszo6Bw@mail.gmail.com>
+ <CAGvU0HmE+gs8eNQcXmFrEERHaiGEnMgqxBho4Ny3DLCe6WR55Q@mail.gmail.com>
+ <CAEf4BzZQvLofuVHPqu1ybsTVrM9pFRCRSR5UEFdNJq3Ha8=Luw@mail.gmail.com> <CAGvU0HmsoTSoPP=uJ679i2xH5k9o3iS=NCUyt2eVC63ShzVctw@mail.gmail.com>
+In-Reply-To: <CAGvU0HmsoTSoPP=uJ679i2xH5k9o3iS=NCUyt2eVC63ShzVctw@mail.gmail.com>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 25 Jan 2021 17:26:15 -0800
-Message-ID: <CAEf4BzY4LWhyHfd3OpvrM5DB7qieOemcxzp0GBtqWJTw56PMCg@mail.gmail.com>
-Subject: Re: [PATCH bpf 1/2] bpf: allow empty module BTFs
-To:     Christopher William Snowhill <chris@kode54.net>
-Cc:     patchwork-bot+netdevbpf@kernel.org,
+Date:   Mon, 25 Jan 2021 16:28:14 -0800
+Message-ID: <CAEf4BzZPSEsKn6DiFwffTW81iFPVO329RAnA+bm0NPPiBqnqag@mail.gmail.com>
+Subject: Re: [PATCH 3/3] btf_encoder: Set .BTF section alignment to 16
+To:     Giuliano Procida <gprocida@google.com>
+Cc:     dwarves@vger.kernel.org, kernel-team@android.com,
+        =?UTF-8?Q?Matthias_M=C3=A4nnich?= <maennich@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
         Kernel Team <kernel-team@fb.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sun, Jan 24, 2021 at 2:28 AM Christopher William Snowhill
-<chris@kode54.net> wrote:
+On Mon, Jan 25, 2021 at 4:53 AM Giuliano Procida <gprocida@google.com> wrot=
+e:
 >
-> When is this being applied to an actual kernel? 5.11 is still quite broken without these two patches. Unless you're not using a vfat EFI partition, I guess.
+> Hi.
 >
-
-It's in v5.11-rc5.
-
-> On Tue, Jan 12, 2021, at 12:20 PM, patchwork-bot+netdevbpf@kernel.org wrote:
-> > Hello:
+> On Thu, 21 Jan 2021 at 20:08, Andrii Nakryiko <andrii.nakryiko@gmail.com>=
+ wrote:
 > >
-> > This series was applied to bpf/bpf.git (refs/heads/master):
-> >
-> > On Sat, 9 Jan 2021 23:03:40 -0800 you wrote:
-> > > Some modules don't declare any new types and end up with an empty BTF,
-> > > containing only valid BTF header and no types or strings sections. This
-> > > currently causes BTF validation error. There is nothing wrong with such BTF,
-> > > so fix the issue by allowing module BTFs with no types or strings.
+> > On Thu, Jan 21, 2021 at 3:07 AM Giuliano Procida <gprocida@google.com> =
+wrote:
 > > >
-> > > Reported-by: Christopher William Snowhill <chris@kode54.net>
-> > > Fixes: 36e68442d1af ("bpf: Load and verify kernel module BTFs")
-> > > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> > > Hi.
 > > >
-> > > [...]
+> > > On Thu, 21 Jan 2021 at 07:16, Andrii Nakryiko <andrii.nakryiko@gmail.=
+com> wrote:
+> > >>
+> > >> On Mon, Jan 18, 2021 at 8:01 AM Giuliano Procida <gprocida@google.co=
+m> wrote:
+> > >> >
+> > >> > This is to avoid misaligned access when memory-mapping ELF section=
+s.
+> > >> >
+> > >> > Signed-off-by: Giuliano Procida <gprocida@google.com>
+> > >> > ---
+> > >> >  libbtf.c | 8 ++++++++
+> > >> >  1 file changed, 8 insertions(+)
+> > >> >
+> > >> > diff --git a/libbtf.c b/libbtf.c
+> > >> > index 7552d8e..2f12d53 100644
+> > >> > --- a/libbtf.c
+> > >> > +++ b/libbtf.c
+> > >> > @@ -797,6 +797,14 @@ static int btf_elf__write(const char *filenam=
+e, struct btf *btf)
+> > >> >                         goto unlink;
+> > >> >                 }
+> > >> >
+> > >> > +               snprintf(cmd, sizeof(cmd), "%s --set-section-align=
+ment .BTF=3D16 %s",
+> > >> > +                        llvm_objcopy, filename);
+> > >>
+> > >> does it align inside the ELF file to 16 bytes, or does it request th=
+e
+> > >> linker to align it at 16 byte alignment in memory? Given .BTF sectio=
+n
+> > >> is not loadable, trying to understand the implications.
+> > >>
+> > >
+> > > We have a tool that loads BTF from ELF files. It uses mmap and "parse=
+s" the BTF as structs in memory. The ELF file is mapped with page alignment=
+ but the BTF section within it has no alignment at all. Using MSAN (IIRC) w=
+e get warnings about misaligned accesses. Everything within BTF itself is n=
+aturally aligned, so it makes sense to align the section within ELF as well=
+. There are probably some architectures where this makes the difference bet=
+ween working and SIGBUS.
+> > >
 > >
-> > Here is the summary with links:
-> >   - [bpf,1/2] bpf: allow empty module BTFs
-> >     https://git.kernel.org/bpf/bpf/c/bcc5e6162d66
-> >   - [bpf,2/2] libbpf: allow loading empty BTFs
-> >     https://git.kernel.org/bpf/bpf/c/b8d52264df85
+> > Right, ok, thanks for explaining!
 > >
-> > You are awesome, thank you!
+> > > I did try to get objcopy to set alignment at the point the section is=
+ added. However, this didn't work.
+> > >
+> > >>
+> > >>
+> > >> > +               if (system(cmd)) {
+> > >>
+> > >> Also curious, if objcopy emits error (saying that
+> > >> --set-section-alignment argument is not recognized), will that error
+> > >> be shown in stdout? or system() consumes it without redirecting it t=
+o
+> > >> stdout?
+> > >>
+> > >
+> > > I believe it goes to stderr. I would need to check. system() will not=
+ consume this. I'm not keen to write stderr (or stdout) post-processing cod=
+e in plain C.
+> > >
+> >
+> > You can use popen() to capture/hide output, this is a better
+> > alternative to system() in this case. We don't want "expected
+> > warnings" in kernel build process.
+> >
+> > >>
+> > >> > +                       /* non-fatal, this is a nice-to-have and i=
+t's only supported from LLVM 10 */
+> > >> > +                       fprintf(stderr, "%s: warning: failed to al=
+ign .BTF section in '%s': %d!\n",
+> > >> > +                               __func__, filename, errno);
+> > >>
+> > >> Probably better to emit this warning only in verbose mode, otherwise
+> > >> lots of people will start complaining that they get some new warning=
+s
+> > >> from pahole.
+> > >>
+> > >
+> > > It may be better to just use POSIX and ELF APIs directly instead of o=
+bjcopy. This way the section can be added with the right alignment directly=
+. pahole is already linked against libelf and if we could get rid of the ex=
+ternal dependency on objcopy it would be a win in more than one way.
+> >
+> > This would be great, yes. At some point I remember giving it a try,
+> > but for some reason I couldn't make libelf flush data and update
+> > section headers properly. Maybe you'll have better luck. Though I
+> > think I was trying to mark section loadable, and eventually I probably
+> > managed to do that, but still abandoned it (it's not enough to mark
+> > section loadable, you have to assign it to ELF segment as well, which
+> > libelf doesn't allow to do and you need linker support). Anyways, give
+> > it a try, it should work.
+>
+> I struggled for a day and a bit and have got this (ELF_F_LAYOUT etc.)
+> working. There are some caveats:
+>
+> 1. Laying out only the new / updated sections can leave gaps.
+>
+> In practice, for vmlinux, it's a very small hole. To fix this, I'd
+> need to reposition .strtab as well as .BTF and .shstrtab.
+>
+> 2. vmlinux increases in size as llvm-objcopy was trimming down .strtab.
+>
+> I know very little about this, but I'd guess that the kernel linker
+> scripts are leaving strings in .strtab that are not referenced by
+> .symtab.
+>
+> I'll send a short series out for review soon.
+
+1. Hm.. I realized I don't get why you need 16-byte alignment. Can you
+comment on why 8 doesn't work?
+
+2. If you care about vmlinux BTF only, I think an easier way to ensure
+proper alignment is to adjust include/asm-generic/vmlinux.lds.h and
+add `. =3D ALIGN(8);` before .BTF (see how we ensure 4-byte alignment
+for .BTF_ids)
+
+If you have code ready to get rid of llvm-objcopy requirement for
+pahole, please still post, but we'll need to test it very thoroughly
+to ensure there are no regressions before landing in pahole.
+
+>
+> Giuliano.
+>
+> >
+> > >
+> > >>
+> > >>
+> > >> > +               }
+> > >> > +
+> > >> >                 err =3D 0;
+> > >> >         unlink:
+> > >> >                 unlink(tmp_fn);
+> > >> > --
+> > >> > 2.30.0.284.gd98b1dd5eaa7-goog
+> > >> >
+> > >
+> > >
+> > > I'll see if I can spend a little time on this idea instead.
+> > >
+> > > Regards,
+> > > Giuliano.
+> >
 > > --
-> > Deet-doot-dot, I am a bot.
-> > https://korg.docs.kernel.org/patchwork/pwbot.html
-> >
-> >
+> > To unsubscribe from this group and stop receiving emails from it, send =
+an email to kernel-team+unsubscribe@android.com.
 > >
