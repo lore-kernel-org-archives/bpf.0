@@ -2,263 +2,408 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1ED85C433E0
-	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 05:39:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66D8EC433E0
+	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 07:38:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D40F1229C4
-	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 05:39:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2714C2251D
+	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 07:38:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388050AbhAZFiz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 26 Jan 2021 00:38:55 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:15612 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727193AbhAZCtz (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 25 Jan 2021 21:49:55 -0500
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 10Q05O6n031233
-        for <bpf@vger.kernel.org>; Mon, 25 Jan 2021 16:12:30 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : content-type : content-transfer-encoding :
- mime-version; s=facebook; bh=Xt6hpuokcSoHInuJjC3bH76rsACcbFBKy8Zmx0JECQU=;
- b=KWxutWzIXszGs95bQecNUKGXlH7O1hxSO+bTJgvvZxafu40hZj1INTq00pH3xioySvkV
- VzJHqoL0hSBbIFM/3L5EAM9kN4pxoNVzHhO9xo820UJ8ykWfMZEotf8bgEVnpyTL33d2
- IxHnXy4D3rzu/ZN4XMedQK39Vm8tHdVPA4Y= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 368j6uuy57-12
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 25 Jan 2021 16:12:30 -0800
-Received: from intmgw001.05.ash9.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Mon, 25 Jan 2021 16:12:22 -0800
-Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id E97523704F94; Mon, 25 Jan 2021 16:12:19 -0800 (PST)
-From:   Yonghong Song <yhs@fb.com>
-To:     <bpf@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
-        <x86@kernel.org>, KP Singh <kpsingh@kernel.org>
-Subject: [PATCH bpf] x86/bpf: handle bpf-program-triggered exceptions properly
-Date:   Mon, 25 Jan 2021 16:12:19 -0800
-Message-ID: <20210126001219.845816-1-yhs@fb.com>
-X-Mailer: git-send-email 2.24.1
-X-FB-Internal: Safe
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        id S2387731AbhAZHh7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 26 Jan 2021 02:37:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40340 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389330AbhAZHfy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 26 Jan 2021 02:35:54 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FFF2C061352;
+        Mon, 25 Jan 2021 23:34:35 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id r38so5072642pgk.13;
+        Mon, 25 Jan 2021 23:34:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=K8K+DfoUZWImJdEP+cZPLuNCu4SiIDceVZmhx0OoC0Y=;
+        b=hg9nO2K/i9r/UyEZvbNJE1BJCxxUppAd8KbfmapQdR0NkvXaiBUYunTbzrsAQuT3Gw
+         zZbPNoxvn7Io05dnniYKAn5La7J+sFPbYRRIef547bQoO1zRs8UjfKDlRPuZCvMrTjvq
+         9KCjtUJhPQfwfBmtLOjZVT9V+s0AIH/dOR5r2q2NfryVG1tOefkymQ5JFDnlRPUSj8q8
+         Bq8W8z2/dCK4NvJOjKqLrZcZivbnZ2WVRqtbaXKOAtUNkkR/tmDf42tK6uA/AsC8lmdz
+         bF6choTJqe/4Mm3mFiUjp9b/oQMSWhPsFeNaQYUQoiG6Y00jvtpEfYD+KEWpNwk2FH4P
+         za7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=K8K+DfoUZWImJdEP+cZPLuNCu4SiIDceVZmhx0OoC0Y=;
+        b=PwX/ZA+EUpgPyeKjA95gauyf9r7s5talquWYgzLdytsYSOc1egwFHBN0rh4Rm2dUGr
+         hzihw237rzC7pBoeTZXZd0cOv6wx8U2mb1Y23SiRyxVEOnBffnR0bUXrrcMIBMzM6Uvz
+         Hp3FRWmKwiqLfL0Rlqjc47FuALfA6Jg+5pwBewqCZ2QyRyiuZTnHtYPGM4VgFMGL1k7t
+         8qdLLPQjIt6hnoVKg5gAFm7zRvmjWC8BF0CC3yItqUdld6Q93V/6+mLuDaq6ngemH0TC
+         x2OgcW6cTApZKLmK1BHWaLG8VsY1gufiOcD84EqOnIakMnXhJa9DeaP8HkKZkEl6pBpW
+         i8Sw==
+X-Gm-Message-State: AOAM530uTwBIxRXe7KMnB6tWVC/OQu8ztkL38+d0xt1fKmZuIKli0DNq
+        n2eDFdoXSFMH7Sk2cMpPJuSo/3pAtdzEjoVo3GQ/s6++F1vREw==
+X-Google-Smtp-Source: ABdhPJztkUrqzvfAA2lSYND1A/WLy8+ZgLHrZS3GBu49etta47Of3rVWljiyw+/QuMiRLmqXpy1cSxSq/2Dhv+bAj34=
+X-Received: by 2002:a63:d917:: with SMTP id r23mr4605204pgg.126.1611646474932;
+ Mon, 25 Jan 2021 23:34:34 -0800 (PST)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
- definitions=2021-01-25_10:2021-01-25,2021-01-25 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
- phishscore=0 clxscore=1015 bulkscore=0 mlxscore=0 adultscore=0
- mlxlogscore=999 impostorscore=0 lowpriorityscore=0 spamscore=0
- priorityscore=1501 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2009150000 definitions=main-2101250122
-X-FB-Internal: deliver
+References: <CAJ8uoz30r_-6CwZcte0R_9+6BVUFcvMEW4FG-tutBtJn2FD_bw@mail.gmail.com>
+ <1611587242.9653594-2-xuanzhuo@linux.alibaba.com>
+In-Reply-To: <1611587242.9653594-2-xuanzhuo@linux.alibaba.com>
+From:   Magnus Karlsson <magnus.karlsson@gmail.com>
+Date:   Tue, 26 Jan 2021 08:34:23 +0100
+Message-ID: <CAJ8uoz3hoegNYwjaW9zzFJ7dQJRSFTG3b0e23KpF=6ym7DcmJw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 3/3] xsk: build skb by page
+To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Cc:     Eric Dumazet <eric.dumazet@gmail.com>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Bjorn Topel <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        virtualization@lists.linux-foundation.org,
+        bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Alexander Lobakin <alobakin@pm.me>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When reviewing patch ([1]), which adds a script to run bpf selftest
-through qemu at /sbin/init stage, I found the following kernel bug
-warning:
+On Mon, Jan 25, 2021 at 4:22 PM Xuan Zhuo <xuanzhuo@linux.alibaba.com> wrote:
+>
+> On Mon, 25 Jan 2021 14:16:16 +0100, Magnus Karlsson <magnus.karlsson@gmail.com> wrote:
+> > On Mon, Jan 25, 2021 at 1:43 PM Xuan Zhuo <xuanzhuo@linux.alibaba.com> wrote:
+> > >
+> > > On Mon, 25 Jan 2021 08:44:38 +0100, Magnus Karlsson <magnus.karlsson@gmail.com> wrote:
+> > > > On Mon, Jan 25, 2021 at 3:27 AM Xuan Zhuo <xuanzhuo@linux.alibaba.com> wrote:
+> > > > >
+> > > > > On Fri, 22 Jan 2021 19:37:06 +0100, Magnus Karlsson <magnus.karlsson@gmail.com> wrote:
+> > > > > > On Fri, Jan 22, 2021 at 6:26 PM Alexander Lobakin <alobakin@pm.me> wrote:
+> > > > > > >
+> > > > > > > From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+> > > > > > > Date: Fri, 22 Jan 2021 23:39:15 +0800
+> > > > > > >
+> > > > > > > > On Fri, 22 Jan 2021 13:55:14 +0100, Magnus Karlsson <magnus.karlsson@gmail.com> wrote:
+> > > > > > > > > On Fri, Jan 22, 2021 at 1:39 PM Alexander Lobakin <alobakin@pm.me> wrote:
+> > > > > > > > > >
+> > > > > > > > > > From: Magnus Karlsson <magnus.karlsson@gmail.com>
+> > > > > > > > > > Date: Fri, 22 Jan 2021 13:18:47 +0100
+> > > > > > > > > >
+> > > > > > > > > > > On Fri, Jan 22, 2021 at 12:57 PM Alexander Lobakin <alobakin@pm.me> wrote:
+> > > > > > > > > > > >
+> > > > > > > > > > > > From: Alexander Lobakin <alobakin@pm.me>
+> > > > > > > > > > > > Date: Fri, 22 Jan 2021 11:47:45 +0000
+> > > > > > > > > > > >
+> > > > > > > > > > > > > From: Eric Dumazet <eric.dumazet@gmail.com>
+> > > > > > > > > > > > > Date: Thu, 21 Jan 2021 16:41:33 +0100
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > > On 1/21/21 2:47 PM, Xuan Zhuo wrote:
+> > > > > > > > > > > > > > > This patch is used to construct skb based on page to save memory copy
+> > > > > > > > > > > > > > > overhead.
+> > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > This function is implemented based on IFF_TX_SKB_NO_LINEAR. Only the
+> > > > > > > > > > > > > > > network card priv_flags supports IFF_TX_SKB_NO_LINEAR will use page to
+> > > > > > > > > > > > > > > directly construct skb. If this feature is not supported, it is still
+> > > > > > > > > > > > > > > necessary to copy data to construct skb.
+> > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > ---------------- Performance Testing ------------
+> > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > The test environment is Aliyun ECS server.
+> > > > > > > > > > > > > > > Test cmd:
+> > > > > > > > > > > > > > > ```
+> > > > > > > > > > > > > > > xdpsock -i eth0 -t  -S -s <msg size>
+> > > > > > > > > > > > > > > ```
+> > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > Test result data:
+> > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > size    64      512     1024    1500
+> > > > > > > > > > > > > > > copy    1916747 1775988 1600203 1440054
+> > > > > > > > > > > > > > > page    1974058 1953655 1945463 1904478
+> > > > > > > > > > > > > > > percent 3.0%    10.0%   21.58%  32.3%
+> > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+> > > > > > > > > > > > > > > Reviewed-by: Dust Li <dust.li@linux.alibaba.com>
+> > > > > > > > > > > > > > > ---
+> > > > > > > > > > > > > > >  net/xdp/xsk.c | 104 ++++++++++++++++++++++++++++++++++++++++++++++++----------
+> > > > > > > > > > > > > > >  1 file changed, 86 insertions(+), 18 deletions(-)
+> > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> > > > > > > > > > > > > > > index 4a83117..38af7f1 100644
+> > > > > > > > > > > > > > > --- a/net/xdp/xsk.c
+> > > > > > > > > > > > > > > +++ b/net/xdp/xsk.c
+> > > > > > > > > > > > > > > @@ -430,6 +430,87 @@ static void xsk_destruct_skb(struct sk_buff *skb)
+> > > > > > > > > > > > > > >   sock_wfree(skb);
+> > > > > > > > > > > > > > >  }
+> > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > +static struct sk_buff *xsk_build_skb_zerocopy(struct xdp_sock *xs,
+> > > > > > > > > > > > > > > +                                       struct xdp_desc *desc)
+> > > > > > > > > > > > > > > +{
+> > > > > > > > > > > > > > > + u32 len, offset, copy, copied;
+> > > > > > > > > > > > > > > + struct sk_buff *skb;
+> > > > > > > > > > > > > > > + struct page *page;
+> > > > > > > > > > > > > > > + void *buffer;
+> > > > > > > > > > > > > > > + int err, i;
+> > > > > > > > > > > > > > > + u64 addr;
+> > > > > > > > > > > > > > > +
+> > > > > > > > > > > > > > > + skb = sock_alloc_send_skb(&xs->sk, 0, 1, &err);
+> > > > > > > > > > > > > > > + if (unlikely(!skb))
+> > > > > > > > > > > > > > > +         return ERR_PTR(err);
+> > > > > > > > > > > > > > > +
+> > > > > > > > > > > > > > > + addr = desc->addr;
+> > > > > > > > > > > > > > > + len = desc->len;
+> > > > > > > > > > > > > > > +
+> > > > > > > > > > > > > > > + buffer = xsk_buff_raw_get_data(xs->pool, addr);
+> > > > > > > > > > > > > > > + offset = offset_in_page(buffer);
+> > > > > > > > > > > > > > > + addr = buffer - xs->pool->addrs;
+> > > > > > > > > > > > > > > +
+> > > > > > > > > > > > > > > + for (copied = 0, i = 0; copied < len; i++) {
+> > > > > > > > > > > > > > > +         page = xs->pool->umem->pgs[addr >> PAGE_SHIFT];
+> > > > > > > > > > > > > > > +
+> > > > > > > > > > > > > > > +         get_page(page);
+> > > > > > > > > > > > > > > +
+> > > > > > > > > > > > > > > +         copy = min_t(u32, PAGE_SIZE - offset, len - copied);
+> > > > > > > > > > > > > > > +
+> > > > > > > > > > > > > > > +         skb_fill_page_desc(skb, i, page, offset, copy);
+> > > > > > > > > > > > > > > +
+> > > > > > > > > > > > > > > +         copied += copy;
+> > > > > > > > > > > > > > > +         addr += copy;
+> > > > > > > > > > > > > > > +         offset = 0;
+> > > > > > > > > > > > > > > + }
+> > > > > > > > > > > > > > > +
+> > > > > > > > > > > > > > > + skb->len += len;
+> > > > > > > > > > > > > > > + skb->data_len += len;
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > + skb->truesize += len;
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > This is not the truesize, unfortunately.
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > We need to account for the number of pages, not number of bytes.
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > The easiest solution is:
+> > > > > > > > > > > > >
+> > > > > > > > > > > > >       skb->truesize += PAGE_SIZE * i;
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > i would be equal to skb_shinfo(skb)->nr_frags after exiting the loop.
+> > > > > > > > > > > >
+> > > > > > > > > > > > Oops, pls ignore this. I forgot that XSK buffers are not
+> > > > > > > > > > > > "one per page".
+> > > > > > > > > > > > We need to count the number of pages manually and then do
+> > > > > > > > > > > >
+> > > > > > > > > > > >         skb->truesize += PAGE_SIZE * npages;
+> > > > > > > > > > > >
+> > > > > > > > > > > > Right.
+> > > > > > > > > > >
+> > > > > > > > > > > There are two possible packet buffer (chunks) sizes in a umem, 2K and
+> > > > > > > > > > > 4K on a system with a PAGE_SIZE of 4K. If I remember correctly, and
+> > > > > > > > > > > please correct me if wrong, truesize is used for memory accounting.
+> > > > > > > > > > > But in this code, no kernel memory has been allocated (apart from the
+> > > > > > > > > > > skb). The page is just a part of the umem that has been already
+> > > > > > > > > > > allocated beforehand and by user-space in this case. So what should
+> > > > > > > > > > > truesize be in this case? Do we add 0, chunk_size * i, or the
+> > > > > > > > > > > complicated case of counting exactly how many 4K pages that are used
+> > > > > > > > > > > when the chunk_size is 2K, as two chunks could occupy the same page,
+> > > > > > > > > > > or just the upper bound of PAGE_SIZE * i that is likely a good
+> > > > > > > > > > > approximation in most cases? Just note that there might be other uses
+> > > > > > > > > > > of truesize that I am unaware of that could impact this choice.
+> > > > > > > > > >
+> > > > > > > > > > Truesize is "what amount of memory does this skb occupy with all its
+> > > > > > > > > > fragments, linear space and struct sk_buff itself". The closest it
+> > > > > > > > > > will be to the actual value, the better.
+> > > > > > > > > > In this case, I think adding of chunk_size * i would be enough.
+> > > > > > > > >
+> > > > > > > > > Sounds like a good approximation to me.
+> > > > > > > > >
+> > > > > > > > > > (PAGE_SIZE * i can be overwhelming when chunk_size is 2K, especially
+> > > > > > > > > > for setups with PAGE_SIZE > SZ_4K)
+> > > > > > > > >
+> > > > > > > > > You are right. That would be quite horrible on a system with a page size of 64K.
+> > > > > > > >
+> > > > > > > > Thank you everyone, I learned it.
+> > > > > > > >
+> > > > > > > > I also think it is appropriate to add a chunk size here, and there is actually
+> > > > > > > > only one chunk here, so it's very simple
+> > > > > > > >
+> > > > > > > >       skb->truesize += xs->pool->chunk_size;
+> > > > > > >
+> > > > > > > umem chunks can't cross page boundaries. So if you're sure that
+> > > > > > > there could be only one chunk, you don't need the loop at all,
+> > > > > > > if I'm not missing anything.
+> > > > > >
+> > > > > > In the default mode, this is true. But in the unaligned_chunk mode
+> > > > > > that can be set on the umem, the chunk may cross one page boundary, so
+> > > > > > we need the loop and the chunk_size * i in the assignment of truesize.
+> > > > > > So "i" can be 1 or 2, but nothing else.
+> > > > >
+> > > > > According to my understanding, in the unaligned mode, a desc will also refer to
+> > > > > a chunk, although the chunk here may occupy multiple pages. And here is just a
+> > > > > desc constructed into a skb, skb takes the largest amount from umem is a
+> > > > > chunk, so what is the situation of i = 2 here? Did I miss something?
+> > > >
+> > > > A desc refers to a single packet, not a single chunk. One packet can
+> > > > occupy either one or two chunks in the unaligned mode and when this
+> > > > happens to be two, these two chunks might be on different pages. In
+> > > > this case, you will go through the loop twice and produce two
+> > > > fragments.
+> > > >
+> > > > In the aligned mode, every packet starts at the beginning of each
+> > > > chunk (if there is no headroom) and can only occupy a single chunk
+> > > > since no packet can be larger than the chunk size. In the unaligned
+> > > > mode, the packet can start anywhere within the chunk and might even
+> > > > continue into the next chunk, but never more than that since the max
+> > > > packet size is still the chunk size. Why unaligned mode? This provides
+> > > > the user-space with complete freedom on how to optimize the placement
+> > > > of the packets in the umem and this might lead to better overall
+> > > > performance. Note that if we just look at the kernel part, unaligned
+> > > > mode is slower than aligned, but that might not be true on the overall
+> > > > level.
+> > >
+> > > Thank you very much, very detailed explanation.
+> > >
+> > > I have a question: You said that in the case of unaligned mode, the packet
+> > > pointed by desc may use two consecutive chunks at the same time. How do we
+> > > ensure that we can apply for two consecutive chunks?
+> >
+> > I am not sure I understand "apply for", sorry. But in unaligned mode,
+> > we reject any desc that spans two chunks that are not physically
+> > consecutive in memory. So users of unaligned mode usually use huge
+> > pages to make sure that this happens rarely and that these "breaks"
+> > are well known to the entity in user-space that places the packets in
+> > the umem (i.e., do not create packets that cross huge page boundaries
+> > would suffice).
+> >
+> > > Back to this patch, is it okay to deal with it this way?
+> > >
+> > >         buffer = xsk_buff_raw_get_data(xs->pool, addr);
+> > >
+> > >         .....
+> > >
+> > >         if (pool->unaligned) {
+> > >                 u64 l;
+> > >
+> > >                 l = (buffer - xs->pool->addrs) % xs->pool->chunk_size;
+> > >                 if (xs->pool->chunk_size - l < desc->len)
+> > >                         skb->truesize += xs->pool->chunk_size * 2;
+> > >                 else
+> > >                         skb->truesize += xs->pool->chunk_size;
+> > >         } else {
+> > >                 skb->truesize += xs->pool->chunk_size;
+> > >         }
+> >
+> > Why would not skb->truesize += xs->pool->chunk_size * i; work in both
+> > cases? The copy = min_t(u32, PAGE_SIZE - offset, len - copied);
+> > statement together with the loop itself should take care of the case
+> > when the packet spans two pages as PAGE_SIZE - offset < len it will
+> > loop again and copy the rest. In that case, i == 2 when you exit the
+> > loop.
+>
+> Sorry, I feel that my understanding of the unaligned mode has not been very
+> deep. So there may be some problems in understanding.
+>
+> Assuming that the page is 4k, the chunk size is 2k, and a packet is placed at
+> the 1k position, it may occupy two chunk, as long as it is larger than 1k, but
+> it only uses one page. like this:
+>
+>      0         2k        4k
+>      |        page       |
+>      |   chunk |  chunk  |
+>            | packet |
+>
+> In my code, I want to find several pages occupied by desc and insert these pages
+> into skb, so i = 1.
 
-[  112.118892] BUG: sleeping function called from invalid context at arch/x=
-86/mm/fault.c:1351
-[  112.119805] in_atomic(): 0, irqs_disabled(): 0, non_block: 0, pid: 354, =
-name: new_name
-[  112.120512] 3 locks held by new_name/354:
-[  112.120868]  #0: ffff88800476e0a0 (&p->lock){+.+.}-{3:3}, at: bpf_seq_re=
-ad+0x3a/0x3d0
-[  112.121573]  #1: ffffffff82d69800 (rcu_read_lock){....}-{1:2}, at: bpf_i=
-ter_run_prog+0x5/0x160
-[  112.122348]  #2: ffff8880061c2088 (&mm->mmap_lock#2){++++}-{3:3}, at: ex=
-c_page_fault+0x1a1/0x640
-[  112.123128] Preemption disabled at:
-[  112.123130] [<ffffffff8108f913>] migrate_disable+0x33/0x80
-[  112.123942] CPU: 0 PID: 354 Comm: new_name Tainted: G           O      5=
-.11.0-rc4-00524-g6e66fbb
-10597-dirty #1249
-[  112.124822] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS =
-1.9.3-1.el7.centos 04/01
-/2014
-[  112.125614] Call Trace:
-[  112.125835]  dump_stack+0x77/0x97
-[  112.126137]  ___might_sleep.cold.119+0xf2/0x106
-[  112.126537]  exc_page_fault+0x1c1/0x640
-[  112.126888]  asm_exc_page_fault+0x1e/0x30
-[  112.127241] RIP: 0010:bpf_prog_0a182df2d34af188_dump_bpf_prog+0xf5/0xb3c
-[  112.127825] Code: 00 00 8b 7d f4 41 8b 76 44 48 39 f7 73 06 48 01 fb 49 =
-89 df 4c 89 7d d8 49 8b
-bd 20 01 00 00 48 89 7d e0 49 8b bd e0 00 00 00 <48> 8b 7f 20 48 01 d7 48 8=
-9 7d e8 48 89 e9 48 83 c
-1 d0 48 8b 7d c8
-[  112.129433] RSP: 0018:ffffc9000035fdc8 EFLAGS: 00010282
-[  112.129895] RAX: 0000000000000000 RBX: ffff888005a49458 RCX: 00000000000=
-00024
-[  112.130509] RDX: 00000000000002f0 RSI: 0000000000000509 RDI: 00000000000=
-00000
-[  112.131126] RBP: ffffc9000035fe20 R08: 0000000000000001 R09: 00000000000=
-00000
-[  112.131737] R10: 0000000000000002 R11: 0000000000000000 R12: 00000000000=
-00400
-[  112.132355] R13: ffff888006085800 R14: ffff888004718540 R15: ffff888005a=
-49458
-[  112.132990]  ? bpf_prog_0a182df2d34af188_dump_bpf_prog+0xc8/0xb3c
-[  112.133526]  bpf_iter_run_prog+0x75/0x160
-[  112.133880]  __bpf_prog_seq_show+0x39/0x40
-[  112.134258]  bpf_seq_read+0xf6/0x3d0
-[  112.134582]  vfs_read+0xa3/0x1b0
-[  112.134873]  ksys_read+0x4f/0xc0
-[  112.135166]  do_syscall_64+0x2d/0x40
-[  112.135482]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+Got it, thanks! I actually think this approximation for truesize would
+be the best one and we do not have to care about packets striding
+chunk or page borders for the truesize calculation:
 
-To reproduce the issue, with patch [1] and use the following script:
-  tools/testing/selftests/bpf/run_in_vm.sh -- cat /sys/fs/bpf/progs.debug
+skb->truesize += pool->unaligned ? desc->len : pool->chunk_size;
 
-The reason of the above kernel warning is due to bpf program
-tries to dereference an address of 0 and which is not caught
-by bpf exception handling logic.
+For the aligned case, truesize is always one chunk as there can only
+be one packet per chunk. For the unaligned case, truesize is just the
+length of the packet since you can put many of these into the same
+chunk or page. If you have a 2K chunk and a packet length of 256
+bytes, you can put 8 packets into one single chunk. So adding
+chunk_size for every single packet in the unaligned case would yield a
+very bad approximation. We argued in the same way when we chose to use
+chunk_size instead of PAGE_SIZE for the aligned case. The strength of
+the unaligned case is that you can put many packets in a single chunk
+(when packet size is low enough), so users tend to do this. If you do
+not do this, then the aligned mode should be used as it will provide
+better performance.
 
-...
-SEC("iter/bpf_prog")
-int dump_bpf_prog(struct bpf_iter__bpf_prog *ctx)
-{
-	struct bpf_prog *prog =3D ctx->prog;
-	struct bpf_prog_aux *aux;
-	...
-	if (!prog)
-		return 0;
-	aux =3D prog->aux;
-	...
-	... aux->dst_prog->aux->name ...
-	return 0;
-}
-
-If the aux->dst_prog is NULL pointer, a fault will happen when trying
-to access aux->dst_prog->aux.
-
-In arch/x86/mm/fault.c function do_usr_addr_fault(), we have following code
-         if (unlikely(cpu_feature_enabled(X86_FEATURE_SMAP) &&
-                      !(hw_error_code & X86_PF_USER) &&
-                      !(regs->flags & X86_EFLAGS_AC)))
-         {
-                 bad_area_nosemaphore(regs, hw_error_code, address);
-                 return;
-         }
-
-When the test is run normally after login prompt, cpu_feature_enabled(X86_F=
-EATURE_SMAP)
-is true and bad_area_nosemaphore() is called and then fixup_exception() is =
-called,
-where bpf specific handler is able to fixup the exception.
-
-But when the test is run at /sbin/init time, cpu_feature_enabled(X86_FEATUR=
-E_SMAP) is
-false, the control reaches
-         if (unlikely(!mmap_read_trylock(mm))) {
-                 if (!user_mode(regs) && !search_exception_tables(regs->ip)=
-) {
-                         /*
-                          * Fault from code in kernel from
-                          * which we do not expect faults.
-                          */
-                         bad_area_nosemaphore(regs, hw_error_code, address);
-                         return;
-                 }
-retry:
-                 mmap_read_lock(mm);
-         } else {
-                 /*
-                  * The above down_read_trylock() might have succeeded in
-                  * which case we'll have missed the might_sleep() from
-                  * down_read():
-                  */
-                 might_sleep();
-         }
-and might_sleep() is triggered and the above kernel warning is print.
-
-To fix the issue, before the above mmap_read_trylock(), we will check
-whether fault ip can be served by bpf exception handler or not, if
-yes, the exception will be fixed up and return.
-
-[1] https://lore.kernel.org/bpf/20210123004445.299149-1-kpsingh@kernel.org/
-
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: KP Singh <kpsingh@kernel.org>
-Signed-off-by: Yonghong Song <yhs@fb.com>
----
- arch/x86/include/asm/extable.h |  3 +++
- arch/x86/mm/extable.c          | 14 ++++++++++++++
- arch/x86/mm/fault.c            |  9 +++++++++
- 3 files changed, 26 insertions(+)
-
-diff --git a/arch/x86/include/asm/extable.h b/arch/x86/include/asm/extable.h
-index 1f0cbc52937c..1e99da15336c 100644
---- a/arch/x86/include/asm/extable.h
-+++ b/arch/x86/include/asm/extable.h
-@@ -38,6 +38,9 @@ enum handler_type {
-=20
- extern int fixup_exception(struct pt_regs *regs, int trapnr,
- 			   unsigned long error_code, unsigned long fault_addr);
-+extern int fixup_bpf_exception(struct pt_regs *regs, int trapnr,
-+			       unsigned long error_code,
-+			       unsigned long fault_addr);
- extern int fixup_bug(struct pt_regs *regs, int trapnr);
- extern enum handler_type ex_get_fault_handler_type(unsigned long ip);
- extern void early_fixup_exception(struct pt_regs *regs, int trapnr);
-diff --git a/arch/x86/mm/extable.c b/arch/x86/mm/extable.c
-index b93d6cd08a7f..311da42c0aec 100644
---- a/arch/x86/mm/extable.c
-+++ b/arch/x86/mm/extable.c
-@@ -155,6 +155,20 @@ enum handler_type ex_get_fault_handler_type(unsigned l=
-ong ip)
- 		return EX_HANDLER_OTHER;
- }
-=20
-+int fixup_bpf_exception(struct pt_regs *regs, int trapnr,
-+			unsigned long error_code, unsigned long fault_addr)
-+{
-+	const struct exception_table_entry *e;
-+	ex_handler_t handler;
-+
-+	e =3D search_bpf_extables(regs->ip);
-+	if (!e)
-+		return 0;
-+
-+	handler =3D ex_fixup_handler(e);
-+	return handler(e, regs, trapnr, error_code, fault_addr);
-+}
-+
- int fixup_exception(struct pt_regs *regs, int trapnr, unsigned long error_=
-code,
- 		    unsigned long fault_addr)
- {
-diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
-index f1f1b5a0956a..e8182d30bf67 100644
---- a/arch/x86/mm/fault.c
-+++ b/arch/x86/mm/fault.c
-@@ -1317,6 +1317,15 @@ void do_user_addr_fault(struct pt_regs *regs,
- 		if (emulate_vsyscall(hw_error_code, regs, address))
- 			return;
- 	}
-+
-+#ifdef CONFIG_BPF_JIT
-+	/*
-+	 * Faults incurred by bpf program might need emulation, i.e.,
-+	 * clearing the dest register.
-+	 */
-+	if (fixup_bpf_exception(regs, X86_TRAP_PF, hw_error_code, address))
-+		return;
-+#endif
- #endif
-=20
- 	/*
---=20
-2.24.1
-
+> Thanks.
+>
+> >
+> > But it would be great if you could test that your code can deal with
+> > this. How about extending the xsk selftests with a case for unaligned
+> > mode? Should be quite straightforward. Just make sure you put the
+> > packets next to each other so that some of them will cross page
+> > boundaries.
+> >
+> > > Thanks.
+> > >
+> > > >
+> > > > > Thanks.
+> > > > >
+> > > > > >
+> > > > > > > > In addition, I actually borrowed from the tcp code:
+> > > > > > > >
+> > > > > > > >    tcp_build_frag:
+> > > > > > > >    --------------
+> > > > > > > >
+> > > > > > > >       if (can_coalesce) {
+> > > > > > > >               skb_frag_size_add(&skb_shinfo(skb)->frags[i - 1], copy);
+> > > > > > > >       } else {
+> > > > > > > >               get_page(page);
+> > > > > > > >               skb_fill_page_desc(skb, i, page, offset, copy);
+> > > > > > > >       }
+> > > > > > > >
+> > > > > > > >       if (!(flags & MSG_NO_SHARED_FRAGS))
+> > > > > > > >               skb_shinfo(skb)->flags |= SKBFL_SHARED_FRAG;
+> > > > > > > >
+> > > > > > > >       skb->len += copy;
+> > > > > > > >       skb->data_len += copy;
+> > > > > > > >       skb->truesize += copy;
+> > > > > > > >
+> > > > > > > > So, here is one bug?
+> > > > > > >
+> > > > > > > skb_frag_t is an alias to struct bvec. It doesn't contain info about
+> > > > > > > real memory consumption, so there's no other option buf just to add
+> > > > > > > "copy" to truesize.
+> > > > > > > XSK is different in this term, as it operates with chunks of a known
+> > > > > > > size.
+> > > > > > >
+> > > > > > > > Thanks.
+> > > > > > > >
+> > > > > > > > >
+> > > > > > > > > > > > > > > +
+> > > > > > > > > > > > > > > + refcount_add(len, &xs->sk.sk_wmem_alloc);
+> > > > > > > > > > > > > > > +
+> > > > > > > > > > > > > > > + return skb;
+> > > > > > > > > > > > > > > +}
+> > > > > > > > > > > > > > > +
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > Al
+> > > > > > > > > > > >
+> > > > > > > > > > > > Thanks,
+> > > > > > > > > > > > Al
+> > > > > > > > > >
+> > > > > > > > > > Al
+> > > > > > >
