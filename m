@@ -2,139 +2,217 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3334DC433E0
-	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 18:46:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB456C433DB
+	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 19:41:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E91A622B51
-	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 18:46:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C1897221F0
+	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 19:41:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726694AbhAZRTJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 26 Jan 2021 12:19:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50368 "EHLO
+        id S2388039AbhAZFip (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 26 Jan 2021 00:38:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729657AbhAZGKJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 26 Jan 2021 01:10:09 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E945C061786
-        for <bpf@vger.kernel.org>; Mon, 25 Jan 2021 22:07:50 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id p21so16158330lfu.11
-        for <bpf@vger.kernel.org>; Mon, 25 Jan 2021 22:07:50 -0800 (PST)
+        with ESMTP id S1731709AbhAZCKl (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 25 Jan 2021 21:10:41 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 116D8C061574
+        for <bpf@vger.kernel.org>; Mon, 25 Jan 2021 18:10:00 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id r32so15317837ybd.5
+        for <bpf@vger.kernel.org>; Mon, 25 Jan 2021 18:10:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=FCbMLWW5bVffrqr9um5oYecFlM1kbr4873eHTOb2t48=;
-        b=PAN+lkXniUPYfDHH11kDGA73xk4k9o2VjzkUq5HpajDLtyhOajaMp6/cNvKUN1HU+o
-         PlqrReYYQJh9XFtJb45NHmcMZ/WVSWMS5cfSOtWEAC5SnWq8rhRG/nOQebgNfNYAmwWs
-         gsDfDUcx1AkYPrLc/rQsgD8SjJBpCUkUg5K17smIhaMIKAaMBFdysB4l/txEYY/mCl43
-         Nj1KkQGNyGmuXhYTMvCahqmsdpp5QPxCxAA6IGEYuU/uqe2mSHjwgKIY+fD8BalveiIN
-         5XjV/F9eauY/lT4XtbsF7uAPv9sGD5lUp1MEHJ0zVnS0d64pSxOhXV6yfQ/lo/4iTP9z
-         qDvg==
+        bh=4gzTH46StfxgzTobR6yoYZoV6c5J1I7aOAZjzCN9JA4=;
+        b=gLN/hWRNS7mzauj4iBEr0QWSkcnHUgTi4UtMzmQR8verpZXdkkK2XbJBOqyNzOtne/
+         3P+yy1r723r/zitHykcrQAtYwiD1OG/Jjpj26J6AC335pb6oce/Xjq7psBL0IzHfeBYP
+         nBY9FnFNXLGx6MJGr+JfWvvBlaDm5zzZD4Z3RuVUBCVnLuWmiaYfgJXNeR7Pw8KxcSyu
+         fb3ltARN8RUukpGQ7bLzvBbH2kK83RHpcSgcIJBx3kvyQihPa/HEfDEjThGjgDPySa0N
+         tPvQIm0daMw34dmsDbgyysNeVBUW6RxLB4gjTfOyf6nU3Oo3PO+ublwL3a85cSIZjSsa
+         1JFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=FCbMLWW5bVffrqr9um5oYecFlM1kbr4873eHTOb2t48=;
-        b=j+7eag3CP9+uZXCmBYSS/yM696+aKspw8BF0eKSe5IVQz+3MfbPkYEpZKFDtsx7TJE
-         ZEeQeuKEnKbqai9KQihw/U6lqN+kUeBKXCqFW2fTy0Of+cMh6Dip4QG4mHBuUT+amTI4
-         zpsIKVd2kCo8xv8x1f5uyc7rjGeyAUk9srxjE5BZKc3gRNyCRv1jysHTabGp4l6Am2fM
-         JGyL0qM2RSLtARimH/Z5CuOIkhzPO7w9XeTNKH2K98kWpYmSuO1G//nHFs+OPNpRZXmk
-         /DWwvljqOgoiLYeZuCApBLvyz8tsEyuOSzxho/QMMHNvGQClNf2Q4HdplnmdeTvjc0lL
-         ZKWg==
-X-Gm-Message-State: AOAM531BR/EyYjLiQvhSg3r48MmNs6Tgwxy+sN5piW0nqZ7G/3++XXEr
-        Z2sa6j/YuXAXkntJJBzHtE6kE6Vrpc0TUPW2IW8ixw==
-X-Google-Smtp-Source: ABdhPJyTKRyBk8XKzykbg5u2jKjrYFjDG7fe6dvuGWjSH15tC/W1Z3swZInyvNclf1S/ewZvoIv06IiKYi20LUeniik=
-X-Received: by 2002:a19:c20b:: with SMTP id l11mr1813705lfc.47.1611641268394;
- Mon, 25 Jan 2021 22:07:48 -0800 (PST)
+        bh=4gzTH46StfxgzTobR6yoYZoV6c5J1I7aOAZjzCN9JA4=;
+        b=C6lTehg2DpYhQOKEN4M7x9w0OqoTAMtSi0boHm/KnnIRUHStfowkF06PEQeUKT1pGx
+         5ZgTCOonWiIH5kG/D1WPl9j0JcPlGoQAEsoqa9faGrWe0jTg9Eiu0Y0/65YK8xk8b+Az
+         vwaD6o9nvghmCdn1v37m448670P/OfCxzFuwztmHSZL2es43gj21sCsinAxIfBX59KGI
+         Jb5Jox+R2qIK/Crkr4eJUJoTnOKv2R2kVVg804i3b/5B5BSTNRBYUHpZS1ikprYhjwph
+         mdJoODvWa5fzSCyOHIr6aLupUAw9PdPTBmtlGWANs3fCiNysMYN/fBHRgWOqhu0Vlc47
+         iyfA==
+X-Gm-Message-State: AOAM532g7mmiD/xmat3ukxOY7hevd2TGXPCkCjRbMmcHCRv/vhFwLmXV
+        Asun1lZIMkfoNOkFWdYi6YDu2b7A5EqUEttWg7xp5FHSIA0VtA==
+X-Google-Smtp-Source: ABdhPJytM1JfDy/sWyKXT+WPItC/vOpILS0BEk15n/s+Uu5csq6tdsDG+JD78xEr9tDc/zcO/aROYfVYsBChC7pvN4A=
+X-Received: by 2002:a25:4b86:: with SMTP id y128mr4980865yba.403.1611626999264;
+ Mon, 25 Jan 2021 18:09:59 -0800 (PST)
 MIME-Version: 1.0
-References: <20210125154938.40504-1-quentin@isovalent.com>
-In-Reply-To: <20210125154938.40504-1-quentin@isovalent.com>
-From:   David Gow <davidgow@google.com>
-Date:   Tue, 26 Jan 2021 14:07:36 +0800
-Message-ID: <CABVgOSmr7xKAS-L+=fA9QnECv76bwLnTt_+kP6VnxSTmZ3Bx3A@mail.gmail.com>
-Subject: Re: [PATCH] bpf: fix build for BPF preload when $(O) points to a
- relative path
-To:     Quentin Monnet <quentin@isovalent.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
+References: <20210123004445.299149-1-kpsingh@kernel.org> <20210123004445.299149-2-kpsingh@kernel.org>
+In-Reply-To: <20210123004445.299149-2-kpsingh@kernel.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 25 Jan 2021 18:09:48 -0800
+Message-ID: <CAEf4BzbvEcE=9uXpz2SHKfw8oTxt7V8cSjUYQpJroP5MyxkA0w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/2] bpf: Helper script for running BPF
+ presubmit tests
+To:     KP Singh <kpsingh@kernel.org>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Brendan Higgins <brendanhiggins@google.com>
+        Andrii Nakryiko <andrii@kernel.org>,
+        Florent Revest <revest@chromium.org>,
+        Brendan Jackman <jackmanb@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Jan 25, 2021 at 11:49 PM Quentin Monnet <quentin@isovalent.com> wrote:
+On Fri, Jan 22, 2021 at 4:44 PM KP Singh <kpsingh@kernel.org> wrote:
 >
-> Building the kernel with CONFIG_BPF_PRELOAD, and by providing a relative
-> path for the output directory, may fail with the following error:
+> The script runs the BPF selftests locally on the same kernel image
+> as they would run post submit in the BPF continuous integration
+> framework.
 >
->   $ make O=build bindeb-pkg
->   ...
->   /.../linux/tools/scripts/Makefile.include:5: *** O=build does not exist.  Stop.
->   make[7]: *** [/.../linux/kernel/bpf/preload/Makefile:9: kernel/bpf/preload/libbpf.a] Error 2
->   make[6]: *** [/.../linux/scripts/Makefile.build:500: kernel/bpf/preload] Error 2
->   make[5]: *** [/.../linux/scripts/Makefile.build:500: kernel/bpf] Error 2
->   make[4]: *** [/.../linux/Makefile:1799: kernel] Error 2
->   make[4]: *** Waiting for unfinished jobs....
+> The goal of the script is to allow contributors to run selftests locally
+> in the same environment to check if their changes would end up breaking
+> the BPF CI and reduce the back-and-forth between the maintainers and the
+> developers.
 >
-> In the case above, for the "bindeb-pkg" target, the error is produced by
-> the "dummy" check in Makefile.include, called from libbpf's Makefile.
-> This check changes directory to $(PWD) before checking for the existence
-> of $(O). But at this step we have $(PWD) pointing to "/.../linux/build",
-> and $(O) pointing to "build". So the Makefile.include tries in fact to
-> assert the existence of a directory named "/.../linux/build/build",
-> which does not exist.
->
-> By contrast, other tools called from the main Linux Makefile get the
-> variable set to $(abspath $(objtree)), where $(objtree) is ".". We can
-> update the Makefile for kernel/bpf/preload to set $(O) to the same
-> value, to permit compiling with a relative path for output. Note that
-> apart from the Makefile.include, the variable $(O) is not used in
-> libbpf's build system.
->
-> Note that the error does not occur for all make targets and
-> architectures combinations.
->
-> - On x86, "make O=build vmlinux" appears to work fine.
->   $(PWD) points to "/.../linux/tools", but $(O) points to the absolute
->   path "/.../linux/build" and the test succeeds.
-> - On UML, it has been reported to fail with a message similar to the
->   above (see [0]).
-> - On x86, "make O=build bindeb-pkg" fails, as described above.
->
-> It is unsure where the different values for $(O) and $(PWD) come from
-> (likely some recursive make with different arguments at some point), and
-> because several targets are broken, it feels safer to fix the $(O) value
-> passed to libbpf rather than to hunt down all changes to the variable.
->
-> David Gow previously posted a slightly different version of this patch
-> as a RFC [0], two months ago or so.
->
-> [0] https://lore.kernel.org/bpf/20201119085022.3606135-1-davidgow@google.com/t/#u
->
-> Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-> Cc: Brendan Higgins <brendanhiggins@google.com>
-> Cc: David Gow <davidgow@google.com>
-> Reported-by: David Gow <davidgow@google.com>
-> Signed-off-by: Quentin Monnet <quentin@isovalent.com>
+> Signed-off-by: KP Singh <kpsingh@kernel.org>
 > ---
 
-Thanks for following up on this. I've tested it against my usecase
-(allyesconfig with ARCH=um), and it fixes the issue nicely.
+This is great, thanks a lot for working on this! This is great
+especially for ad-hoc contributors who don't have qemu workflow setup.
+Below are some comments for the extra polish :)
 
-Tested-by: David Gow <davidgow@google.com>
+1. There is this long list output at the beginning:
 
-While I tend to agree it'd be nicer to track down the place $(O) and
-$(PWD) are broken, too, given that there seem to be a number of
-different ways to trigger this (bindeb-pkg and ARCH=um), I'm not sure
-there's only one breakage to find.
+https://libbpf-vmtest.s3-us-west-1.amazonaws.com/x86_64/vmlinux-5.5.0.zst
+https://libbpf-vmtest....
 
-Cheers,
--- David
+Can we omit that?
+
+2. Then something is re-downloaded every single time:
+
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 77713  100 77713    0     0   509k      0 --:--:-- --:--:-- --:--:--  512k
+
+Unless it's to check if something newer appeared in S3, would be nice
+to skip that step.
+
+3. Every single time I run the script it actually rebuilds kernel.
+Somehow Linux Makefile's logic to do nothing if nothing changed in
+Linux source code doesn't kick in, I wonder why? It's quite annoying
+and time-consuming for frequent selftest reruns. What's weird is that
+individual .o's are not re-built, but kernel is still re-linked and
+BTF is re-generated, which is the slow part :(
+
+4. Selftests are re-built from scratch every single time, even if
+nothing changed. Again, strange because they won't do it normally. And
+given there is a fixed re-usable .bpf_selftests "cache directory", we
+should be able to set everything up so that no extra compilation is
+performed, no?
+
+5. Before VM is started there is:
+
+
+#!/bin/bash
+
+{
+
+        cd /root/bpf
+        echo ./test_progs
+        ./test_progs
+} 2>&1 | tee /root/bpf_selftests.2021-01-25_17-56-11.log
+poweroff -f
+
+
+Which is probably useful in rare cases for debugging purposes, but is
+just distracting in common case. Would it be able to have verbose flag
+for your script that would omit output like this by default?
+
+6. Was too lazy to check, but once VM boots and before specified
+command is run, there is a bunch of verbose script echoing:
+
++ for path in /etc/rcS.d/S*
+
+If that's part of libbpf CI's image, let's fix it there. If not, let's
+fix it in your script?
+
+7. Is it just me, or when ./test_progs is run inside VM, it's output
+is somehow heavily buffered and delayed? I get no output for a while,
+and then a whole bunch of lines with already passed tests.  Curious if
+anyone else noticed that as well. When I run the same image locally
+and manually (not through your script), I don't have this issue.
+
+8. I noticed that even if the command succeeds (e.g., ./test_progs in
+my case), the script exits with non-zero error code (32 in my case).
+That's suboptimal, because you can't use that script to detect test
+failures.
+
+But again, it's the polish feedback, great work!
+
+>  tools/testing/selftests/bpf/run_in_vm.sh | 353 +++++++++++++++++++++++
+>  1 file changed, 353 insertions(+)
+>  create mode 100755 tools/testing/selftests/bpf/run_in_vm.sh
+>
+> diff --git a/tools/testing/selftests/bpf/run_in_vm.sh b/tools/testing/selftests/bpf/run_in_vm.sh
+> new file mode 100755
+> index 000000000000..09bb9705acb3
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/run_in_vm.sh
+> @@ -0,0 +1,353 @@
+> +#!/bin/bash
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +set -u
+> +set -e
+> +
+> +QEMU_BINARY="${QEMU_BINARY:="qemu-system-x86_64"}"
+> +X86_BZIMAGE="arch/x86/boot/bzImage"
+
+Might be worth it to mention that this only works with x86_64 (due to
+image restrictions at least, right?).
+
+> +DEFAULT_COMMAND="./test_progs"
+> +MOUNT_DIR="mnt"
+> +ROOTFS_IMAGE="root.img"
+> +OUTPUT_DIR="$HOME/.bpf_selftests"
+> +KCONFIG_URL="https://raw.githubusercontent.com/libbpf/libbpf/master/travis-ci/vmtest/configs/latest.config"
+> +INDEX_URL="https://raw.githubusercontent.com/libbpf/libbpf/master/travis-ci/vmtest/configs/INDEX"
+> +NUM_COMPILE_JOBS="$(nproc)"
+> +
+> +usage()
+> +{
+> +       cat <<EOF
+> +Usage: $0 [-k] [-i] [-d <output_dir>] -- [<command>]
+> +
+> +<command> is the command you would normally run when you are in
+> +tools/testing/selftests/bpf. e.g:
+> +
+> +       $0 -- ./test_progs -t test_lsm
+> +
+> +If no command is specified, "${DEFAULT_COMMAND}" will be run by
+> +default.
+> +
+> +If you build your kernel using KBUILD_OUTPUT= or O= options, these
+> +can be passed as environment variables to the script:
+> +
+> +  O=<path_relative_to_cwd> $0 -- ./test_progs -t test_lsm
+
+"relative_to_cwd" is a bit misleading, it could be an absolute path as
+well, I presume. So I'd just say "O=<kernel_build_path>" or something
+along those lines.
+
+> +
+> +or
+> +
+> +  KBUILD_OUTPUT=<path_relative_to_cwd> $0 -- ./test_progs -t test_lsm
+> +
+
+[...]
