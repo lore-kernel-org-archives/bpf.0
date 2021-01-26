@@ -2,46 +2,48 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 156CFC433DB
-	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 08:26:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 83094C433DB
+	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 08:27:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C2D2A21BE5
-	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 08:25:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 31E33221EB
+	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 08:27:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389936AbhAZIZf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 26 Jan 2021 03:25:35 -0500
+        id S2389932AbhAZI0l (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 26 Jan 2021 03:26:41 -0500
 Received: from mga04.intel.com ([192.55.52.120]:61804 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389899AbhAZIX2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 26 Jan 2021 03:23:28 -0500
-IronPort-SDR: qF4snHF/SGjf6ypwfMx6DvfRei7EaCU2+nCdTd37V1l645Kk+L5Y3RoDkg+G3Alj+WvRAk+CxN
- 0QbJWkdiONww==
-X-IronPort-AV: E=McAfee;i="6000,8403,9875"; a="177298550"
+        id S2389955AbhAZIZj (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 26 Jan 2021 03:25:39 -0500
+IronPort-SDR: 25ip74m4BJWRWm3NesmW0obK5xAdaX87Yj1uzXvOQI27S1BzJ5iT/bQNqTKSTnGnifKVpcWpvG
+ BDmZKkvaK9cg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9875"; a="177298552"
 X-IronPort-AV: E=Sophos;i="5.79,375,1602572400"; 
-   d="scan'208";a="177298550"
+   d="scan'208";a="177298552"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2021 00:22:40 -0800
-IronPort-SDR: e0caeeVkEdwiT5do/YeoVxH8vGJ7nvneHHRlccWDt8bOyqMfCpiaFbnWrfy6l5F3lmQb3+cabU
- 3033dhUTBSJA==
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2021 00:22:41 -0800
+IronPort-SDR: qS4IRyNGKOilW1IYHpqR8gdQ/cI1NAPkcvRrS1XCztr1fNR2/RwSx+wT7qhBxlmnbZEY1pPVAd
+ 6ok8B3f05ATA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.79,375,1602572400"; 
-   d="scan'208";a="361901075"
+   d="scan'208";a="361901151"
 Received: from silpixa00399839.ir.intel.com (HELO localhost.localdomain) ([10.237.222.142])
-  by fmsmga008.fm.intel.com with ESMTP; 26 Jan 2021 00:22:23 -0800
+  by fmsmga008.fm.intel.com with ESMTP; 26 Jan 2021 00:22:26 -0800
 From:   Ciara Loftus <ciara.loftus@intel.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         magnus.karlsson@intel.com, bjorn@kernel.org,
         weqaar.a.janjua@intel.com
 Cc:     Ciara Loftus <ciara.loftus@intel.com>
-Subject: [PATCH bpf-next v2 0/6] AF_XDP Packet Drop Tracing
-Date:   Tue, 26 Jan 2021 07:52:33 +0000
-Message-Id: <20210126075239.25378-1-ciara.loftus@intel.com>
+Subject: [PATCH bpf-next v2 2/6] selftests/bpf: restructure setting the packet count
+Date:   Tue, 26 Jan 2021 07:52:35 +0000
+Message-Id: <20210126075239.25378-3-ciara.loftus@intel.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210126075239.25378-1-ciara.loftus@intel.com>
+References: <20210126075239.25378-1-ciara.loftus@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -49,60 +51,120 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This series introduces tracing infrastructure for AF_XDP sockets (xsks).
-A trace event 'xsk_packet_drop' is created which can be enabled by toggling
+Prior to this, the packet count was fixed at 10000
+for every test. Future tracing tests need to modify
+the count, so make it possible to set the count from
+test_xsk.h using the -C opt.
 
-/sys/kernel/debug/tracing/events/xsk/xsk_packet_drop/enable
+Signed-off-by: Ciara Loftus <ciara.loftus@intel.com>
+---
+ tools/testing/selftests/bpf/test_xsk.sh    | 17 +++++++++--------
+ tools/testing/selftests/bpf/xsk_prereqs.sh |  3 +--
+ 2 files changed, 10 insertions(+), 10 deletions(-)
 
-When enabled and packets are dropped in the kernel, traces are generated
-which describe the reason for the packet drop as well as the netdev and
-qid information of the xsk which encountered the drop.
-
-Example traces:
-
-507.588563: xsk_packet_drop: netdev: eth0 qid 0 reason: rxq full
-507.588567: xsk_packet_drop: netdev: eth0 qid 0 reason: packet too big
-507.588568: xsk_packet_drop: netdev: eth0 qid 0 reason: fq empty
-
-The event can also be monitored using perf:
-
-perf stat -a -e xsk:xsk_packet_drop
-
-Three selftests are added which each ensure the appropriate traces are
-generated for the following scenarios:
-* rx queue full
-* packet too big
-* fill queue empty
-
-v1->v2:
-* Rebase on top of Björn's cleanup series.
-* Fixed packet count for trace tests which don't need EOT frame.
-
-This series applies on commit 190d1c921ad0862da14807e1670f54020f48e889
-
-Ciara Loftus (6):
-  xsk: add tracepoints for packet drops
-  selftests/bpf: restructure setting the packet count
-  selftests/bpf: add framework for xsk selftests
-  selftests/bpf: XSK_TRACE_DROP_RXQ_FULL test
-  selftests/bpf: XSK_TRACE_DROP_PKT_TOO_BIG test
-  selftests/bpf: XSK_TRACE_DROP_FQ_EMPTY test
-
- MAINTAINERS                                |   1 +
- include/linux/bpf_trace.h                  |   1 +
- include/trace/events/xsk.h                 |  45 +++++
- include/uapi/linux/if_xdp.h                |   8 +
- kernel/bpf/core.c                          |   1 +
- net/xdp/xsk.c                              |   5 +
- net/xdp/xsk_buff_pool.c                    |   8 +-
- tools/include/uapi/linux/if_xdp.h          |   8 +
- tools/testing/selftests/bpf/test_xsk.sh    |  90 +++++++++-
- tools/testing/selftests/bpf/xdpxceiver.c   | 192 +++++++++++++++++++--
- tools/testing/selftests/bpf/xdpxceiver.h   |  10 ++
- tools/testing/selftests/bpf/xsk_prereqs.sh |   3 +-
- 12 files changed, 348 insertions(+), 24 deletions(-)
- create mode 100644 include/trace/events/xsk.h
-
+diff --git a/tools/testing/selftests/bpf/test_xsk.sh b/tools/testing/selftests/bpf/test_xsk.sh
+index 88a7483eaae4..2b4a4f42b220 100755
+--- a/tools/testing/selftests/bpf/test_xsk.sh
++++ b/tools/testing/selftests/bpf/test_xsk.sh
+@@ -82,6 +82,7 @@ do
+ done
+ 
+ TEST_NAME="PREREQUISITES"
++DEFAULTPKTS=10000
+ 
+ URANDOM=/dev/urandom
+ [ ! -e "${URANDOM}" ] && { echo "${URANDOM} not found. Skipping tests."; test_exit 1 1; }
+@@ -154,7 +155,7 @@ TEST_NAME="SKB NOPOLL"
+ 
+ vethXDPgeneric ${VETH0} ${VETH1} ${NS1}
+ 
+-params=("-S")
++params=("-S" "-C" "${DEFAULTPKTS}")
+ execxdpxceiver params
+ 
+ retval=$?
+@@ -166,7 +167,7 @@ TEST_NAME="SKB POLL"
+ 
+ vethXDPgeneric ${VETH0} ${VETH1} ${NS1}
+ 
+-params=("-S" "-p")
++params=("-S" "-p" "-C" "${DEFAULTPKTS}")
+ execxdpxceiver params
+ 
+ retval=$?
+@@ -178,7 +179,7 @@ TEST_NAME="DRV NOPOLL"
+ 
+ vethXDPnative ${VETH0} ${VETH1} ${NS1}
+ 
+-params=("-N")
++params=("-N" "-C" "${DEFAULTPKTS}")
+ execxdpxceiver params
+ 
+ retval=$?
+@@ -190,7 +191,7 @@ TEST_NAME="DRV POLL"
+ 
+ vethXDPnative ${VETH0} ${VETH1} ${NS1}
+ 
+-params=("-N" "-p")
++params=("-N" "-p" "-C" "${DEFAULTPKTS}")
+ execxdpxceiver params
+ 
+ retval=$?
+@@ -202,7 +203,7 @@ TEST_NAME="SKB SOCKET TEARDOWN"
+ 
+ vethXDPgeneric ${VETH0} ${VETH1} ${NS1}
+ 
+-params=("-S" "-T")
++params=("-S" "-T" "-C" "${DEFAULTPKTS}")
+ execxdpxceiver params
+ 
+ retval=$?
+@@ -214,7 +215,7 @@ TEST_NAME="DRV SOCKET TEARDOWN"
+ 
+ vethXDPnative ${VETH0} ${VETH1} ${NS1}
+ 
+-params=("-N" "-T")
++params=("-N" "-T" "-C" "${DEFAULTPKTS}")
+ execxdpxceiver params
+ 
+ retval=$?
+@@ -226,7 +227,7 @@ TEST_NAME="SKB BIDIRECTIONAL SOCKETS"
+ 
+ vethXDPgeneric ${VETH0} ${VETH1} ${NS1}
+ 
+-params=("-S" "-B")
++params=("-S" "-B" "-C" "${DEFAULTPKTS}")
+ execxdpxceiver params
+ 
+ retval=$?
+@@ -238,7 +239,7 @@ TEST_NAME="DRV BIDIRECTIONAL SOCKETS"
+ 
+ vethXDPnative ${VETH0} ${VETH1} ${NS1}
+ 
+-params=("-N" "-B")
++params=("-N" "-B" "-C" "${DEFAULTPKTS}")
+ execxdpxceiver params
+ 
+ retval=$?
+diff --git a/tools/testing/selftests/bpf/xsk_prereqs.sh b/tools/testing/selftests/bpf/xsk_prereqs.sh
+index 9d54c4645127..41dd713d14df 100755
+--- a/tools/testing/selftests/bpf/xsk_prereqs.sh
++++ b/tools/testing/selftests/bpf/xsk_prereqs.sh
+@@ -15,7 +15,6 @@ NC='\033[0m'
+ STACK_LIM=131072
+ SPECFILE=veth.spec
+ XSKOBJ=xdpxceiver
+-NUMPKTS=10000
+ 
+ validate_root_exec()
+ {
+@@ -131,5 +130,5 @@ execxdpxceiver()
+ 			copy[$index]=${!current}
+ 		done
+ 
+-	./${XSKOBJ} -i ${VETH0} -i ${VETH1},${NS1} ${copy[*]} -C ${NUMPKTS}
++	./${XSKOBJ} -i ${VETH0} -i ${VETH1},${NS1} ${copy[*]}
+ }
 -- 
 2.17.1
 
