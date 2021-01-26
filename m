@@ -2,75 +2,113 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-20.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 424B5C433E6
-	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 16:11:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F983C43381
+	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 16:12:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0F62821E92
-	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 16:11:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EB9C323109
+	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 16:12:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404355AbhAZQK5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 26 Jan 2021 11:10:57 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51010 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404480AbhAZQKv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 26 Jan 2021 11:10:51 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id 8825021E92;
-        Tue, 26 Jan 2021 16:10:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611677410;
-        bh=3iSSaXDYEP4kn4RdZmyK9hoYwtGVODXjkRw+i+Zs/Ck=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=iq+w4TMlaCU6kNmODDVA4/k1cLPDsnmjIQ4p4PVq+c1tZwccwscBV6F9r4XDXf2TK
-         Jx6payQM5FLRzmPK8XgV1FpNjHKSmmq5B0SH++m36XwDJmJV7P1EX2Zup3/DstXR1l
-         XVBjto2m3SAYa3VlL50K43F/RcbH4GvcHkS/zNBaXsiF2W3iuSJeFpGFscSIUdL3t+
-         rkudW1KlZLBdBP5qVeBkEpCRGXu3QGGiCimMiCrgQseLvd92nswBBdWF0VsFPQcvJw
-         vezMgPUCqK3klWfSZPV4AXgRz9VDggDY0GBqG0uzT/5UNwTwCHjcZ8Yznys818K2O9
-         WWMHpsr1ZnTYQ==
-Content-Type: text/plain; charset="utf-8"
+        id S2404058AbhAZQCW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 26 Jan 2021 11:02:22 -0500
+Received: from www62.your-server.de ([213.133.104.62]:55492 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391626AbhAZQCJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 26 Jan 2021 11:02:09 -0500
+Received: from sslproxy05.your-server.de ([78.46.172.2])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1l4QmC-0007wD-Pt; Tue, 26 Jan 2021 17:01:08 +0100
+Received: from [85.7.101.30] (helo=pc-9.home)
+        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1l4QmC-000VGR-Et; Tue, 26 Jan 2021 17:01:08 +0100
+Subject: Re: [PATCH bpf-next] samples/bpf: Add include dir for MIPS Loongson64
+ to fix build errors
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        clang-built-linux@googlegroups.com, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>
+References: <1611669925-25315-1-git-send-email-yangtiezhu@loongson.cn>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <67891f2f-a374-54fb-e6e5-44145190934f@iogearbox.net>
+Date:   Tue, 26 Jan 2021 17:01:07 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] selftests/bpf: don't exit on failed bpf_testmod
- unload
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <161167741047.22282.14409289492552812997.git-patchwork-notify@kernel.org>
-Date:   Tue, 26 Jan 2021 16:10:10 +0000
-References: <20210126065019.1268027-1-andrii@kernel.org>
-In-Reply-To: <20210126065019.1268027-1-andrii@kernel.org>
-To:     Andrii Nakryiko <andrii@kernel.org>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, ast@fb.com,
-        daniel@iogearbox.net, kernel-team@fb.com
+In-Reply-To: <1611669925-25315-1-git-send-email-yangtiezhu@loongson.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.102.4/26061/Tue Jan 26 13:29:51 2021)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
-
-This patch was applied to bpf/bpf-next.git (refs/heads/master):
-
-On Mon, 25 Jan 2021 22:50:18 -0800 you wrote:
-> Fix bug in handling bpf_testmod unloading that will cause test_progs exiting
-> prematurely if bpf_testmod unloading failed. This is especially problematic
-> when running a subset of test_progs that doesn't require root permissions and
-> doesn't rely on bpf_testmod, yet will fail immediately due to exit(1) in
-> unload_bpf_testmod().
+On 1/26/21 3:05 PM, Tiezhu Yang wrote:
+> There exists many build errors when make M=samples/bpf on the Loongson
+> platform, this issue is MIPS related, x86 compiles just fine.
 > 
-> Fixes: 9f7fa225894c ("selftests/bpf: Add bpf_testmod kernel module for testing")
-> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> Here are some errors:
+[...]
 > 
-> [...]
+> So we can do the similar things in samples/bpf/Makefile, just add
+> platform specific and generic include dir for MIPS Loongson64 to
+> fix the build errors.
 
-Here is the summary with links:
-  - [bpf-next] selftests/bpf: don't exit on failed bpf_testmod unload
-    https://git.kernel.org/bpf/bpf-next/c/86ce322d21eb
+Your patch from [0] said ...
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+   There exists many build warnings when make M=samples/bpf on the Loongson
+   platform, this issue is MIPS related, x86 compiles just fine.
 
+   Here are some warnings:
+   [...]
+
+   With #ifndef __SANE_USERSPACE_TYPES__  in tools/include/linux/types.h,
+   the above error has gone and this ifndef change does not hurt other
+   compilations.
+
+... which ave the impression that all the issues were fixed. What else
+is needed aside from this patch here? More samples/bpf fixes coming? If
+yes, please all submit them as a series instead of individual ones.
+
+  [0] https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/commit/?id=190d1c921ad0862da14807e1670f54020f48e889
+
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> ---
+>   samples/bpf/Makefile | 4 ++++
+>   1 file changed, 4 insertions(+)
+> 
+> diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
+> index 362f314..45ceca4 100644
+> --- a/samples/bpf/Makefile
+> +++ b/samples/bpf/Makefile
+> @@ -185,6 +185,10 @@ endif
+>   
+>   ifeq ($(ARCH), mips)
+>   TPROGS_CFLAGS += -D__SANE_USERSPACE_TYPES__
+> +ifdef CONFIG_MACH_LOONGSON64
+> +BPF_EXTRA_CFLAGS += -I$(srctree)/arch/mips/include/asm/mach-loongson64
+> +BPF_EXTRA_CFLAGS += -I$(srctree)/arch/mips/include/asm/mach-generic
+> +endif
+>   endif
+>   
+>   TPROGS_CFLAGS += -Wall -O2
+> 
 
