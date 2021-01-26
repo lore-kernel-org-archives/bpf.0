@@ -2,94 +2,263 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B6CEC433E0
-	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 05:38:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1ED85C433E0
+	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 05:39:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EBB1A229C4
-	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 05:38:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D40F1229C4
+	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 05:39:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731263AbhAZFiv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 26 Jan 2021 00:38:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60682 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732010AbhAZCeu (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 25 Jan 2021 21:34:50 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C60EC061573
-        for <bpf@vger.kernel.org>; Mon, 25 Jan 2021 18:34:08 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id e206so3085073ybh.13
-        for <bpf@vger.kernel.org>; Mon, 25 Jan 2021 18:34:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=g3pjtshA3y0EzC6IGe5deZzOWbI81Aa8oxWCKQUy+JY=;
-        b=ZphAAVdvIBzWIx/Lu1/7Ynjj5kw6jZSJnc30oZZRiXXnq+A9wVSoO/yJZ7+r4PihuY
-         AFx3EdgcZ+Jbr4S+2HnRSLMQ8Q1HgbNixMrem+krfRMcgsI/dUJrdLYxRVi4rG4ZvEuM
-         xQQxT/UXHrK+/wxOqxUPEsF8ZDkWQniUvhKItBJ1njIy/qqhYEOwQr0OwRm0Ry+6IWBP
-         n/4K97CNFtT8YAM1dt2+RhiVcXNOg0jycytlRAGn8Zn0D5jExqP3WB9y3A/mKxNJpFcb
-         BcWjgcWxrK7qlwTtqH3vCIoOUZGo342exXtlNnBcrCvgUpOUyMiyhBP5z+gTs2WhVuEc
-         k/eA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=g3pjtshA3y0EzC6IGe5deZzOWbI81Aa8oxWCKQUy+JY=;
-        b=Yl5GFwluTyBxCPjihd3cgYjBH257GpcwZ5vAiKbBX7jU4zvDf+TQr9V3S8Zusk/wJ7
-         jEm4JS+SPiMAWDYcwBr450fKCZ//zRaUn2mkVwXumZRsX0jFqSwom3FDBTk7ykAB6EXj
-         fo7hK3UZPX8KxpruprhY5S8tYBlx+SgOSq1DRvUTb7rqxlXRXFxQ8Aj4jCojqsIeVFN8
-         kzNKSv1cpiKurBURpSFjg2hX2C2vUNbV/EqcDyrm04ZgnPUyL+1437JhRpbqXLhQml22
-         uVwL1D9Z83+unWjChz+HlsGYiKe9Z1qNkIasTWjRYW0BnhwnAoO59sfsXcuKtQC8EonR
-         DOcg==
-X-Gm-Message-State: AOAM5311cw3ARH+M96MY+AakGpe7KjJ0VvS/4mZf8jxz+ZDKsCxICIFY
-        uMX7+LzcVHKUTX67JRpZ8FEY94XKYuNM7pxmTfc=
-X-Google-Smtp-Source: ABdhPJwABHXfa2uwMuDI1JICdbqnt9NYWTOJmgfLDa2s0Yp+9s+s8E+gQJUnakKRF/Hi3fjBMho8rcHB6rD0TZSi9Qs=
-X-Received: by 2002:a25:548:: with SMTP id 69mr5013514ybf.510.1611628447506;
- Mon, 25 Jan 2021 18:34:07 -0800 (PST)
+        id S2388050AbhAZFiz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 26 Jan 2021 00:38:55 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:15612 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727193AbhAZCtz (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 25 Jan 2021 21:49:55 -0500
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 10Q05O6n031233
+        for <bpf@vger.kernel.org>; Mon, 25 Jan 2021 16:12:30 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : content-type : content-transfer-encoding :
+ mime-version; s=facebook; bh=Xt6hpuokcSoHInuJjC3bH76rsACcbFBKy8Zmx0JECQU=;
+ b=KWxutWzIXszGs95bQecNUKGXlH7O1hxSO+bTJgvvZxafu40hZj1INTq00pH3xioySvkV
+ VzJHqoL0hSBbIFM/3L5EAM9kN4pxoNVzHhO9xo820UJ8ykWfMZEotf8bgEVnpyTL33d2
+ IxHnXy4D3rzu/ZN4XMedQK39Vm8tHdVPA4Y= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 368j6uuy57-12
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Mon, 25 Jan 2021 16:12:30 -0800
+Received: from intmgw001.05.ash9.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Mon, 25 Jan 2021 16:12:22 -0800
+Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
+        id E97523704F94; Mon, 25 Jan 2021 16:12:19 -0800 (PST)
+From:   Yonghong Song <yhs@fb.com>
+To:     <bpf@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
+        <x86@kernel.org>, KP Singh <kpsingh@kernel.org>
+Subject: [PATCH bpf] x86/bpf: handle bpf-program-triggered exceptions properly
+Date:   Mon, 25 Jan 2021 16:12:19 -0800
+Message-ID: <20210126001219.845816-1-yhs@fb.com>
+X-Mailer: git-send-email 2.24.1
+X-FB-Internal: Safe
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-References: <20210124194909.453844-1-andreimatei1@gmail.com> <20210124194909.453844-5-andreimatei1@gmail.com>
-In-Reply-To: <20210124194909.453844-5-andreimatei1@gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 25 Jan 2021 18:33:56 -0800
-Message-ID: <CAEf4BzYncMLH8z0D-TMjzekSp0eAPw963dWg91uaKR+nFiBg8w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 4/5] selftest/bpf: move utility function to
- tests header
-To:     Andrei Matei <andreimatei1@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
+ definitions=2021-01-25_10:2021-01-25,2021-01-25 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
+ phishscore=0 clxscore=1015 bulkscore=0 mlxscore=0 adultscore=0
+ mlxlogscore=999 impostorscore=0 lowpriorityscore=0 spamscore=0
+ priorityscore=1501 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2009150000 definitions=main-2101250122
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sun, Jan 24, 2021 at 11:54 AM Andrei Matei <andreimatei1@gmail.com> wrote:
->
-> get_base_addr is generally useful for tests attaching uprobes. This
-> patch moves it from one particular test to test_progs.{h,c}. The
-> function will be used by a second test in the next patch.
->
-> Signed-off-by: Andrei Matei <andreimatei1@gmail.com>
-> ---
+When reviewing patch ([1]), which adds a script to run bpf selftest
+through qemu at /sbin/init stage, I found the following kernel bug
+warning:
 
-trace_helpers.{c,h} seem more appropriate as a destination
+[  112.118892] BUG: sleeping function called from invalid context at arch/x=
+86/mm/fault.c:1351
+[  112.119805] in_atomic(): 0, irqs_disabled(): 0, non_block: 0, pid: 354, =
+name: new_name
+[  112.120512] 3 locks held by new_name/354:
+[  112.120868]  #0: ffff88800476e0a0 (&p->lock){+.+.}-{3:3}, at: bpf_seq_re=
+ad+0x3a/0x3d0
+[  112.121573]  #1: ffffffff82d69800 (rcu_read_lock){....}-{1:2}, at: bpf_i=
+ter_run_prog+0x5/0x160
+[  112.122348]  #2: ffff8880061c2088 (&mm->mmap_lock#2){++++}-{3:3}, at: ex=
+c_page_fault+0x1a1/0x640
+[  112.123128] Preemption disabled at:
+[  112.123130] [<ffffffff8108f913>] migrate_disable+0x33/0x80
+[  112.123942] CPU: 0 PID: 354 Comm: new_name Tainted: G           O      5=
+.11.0-rc4-00524-g6e66fbb
+10597-dirty #1249
+[  112.124822] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS =
+1.9.3-1.el7.centos 04/01
+/2014
+[  112.125614] Call Trace:
+[  112.125835]  dump_stack+0x77/0x97
+[  112.126137]  ___might_sleep.cold.119+0xf2/0x106
+[  112.126537]  exc_page_fault+0x1c1/0x640
+[  112.126888]  asm_exc_page_fault+0x1e/0x30
+[  112.127241] RIP: 0010:bpf_prog_0a182df2d34af188_dump_bpf_prog+0xf5/0xb3c
+[  112.127825] Code: 00 00 8b 7d f4 41 8b 76 44 48 39 f7 73 06 48 01 fb 49 =
+89 df 4c 89 7d d8 49 8b
+bd 20 01 00 00 48 89 7d e0 49 8b bd e0 00 00 00 <48> 8b 7f 20 48 01 d7 48 8=
+9 7d e8 48 89 e9 48 83 c
+1 d0 48 8b 7d c8
+[  112.129433] RSP: 0018:ffffc9000035fdc8 EFLAGS: 00010282
+[  112.129895] RAX: 0000000000000000 RBX: ffff888005a49458 RCX: 00000000000=
+00024
+[  112.130509] RDX: 00000000000002f0 RSI: 0000000000000509 RDI: 00000000000=
+00000
+[  112.131126] RBP: ffffc9000035fe20 R08: 0000000000000001 R09: 00000000000=
+00000
+[  112.131737] R10: 0000000000000002 R11: 0000000000000000 R12: 00000000000=
+00400
+[  112.132355] R13: ffff888006085800 R14: ffff888004718540 R15: ffff888005a=
+49458
+[  112.132990]  ? bpf_prog_0a182df2d34af188_dump_bpf_prog+0xc8/0xb3c
+[  112.133526]  bpf_iter_run_prog+0x75/0x160
+[  112.133880]  __bpf_prog_seq_show+0x39/0x40
+[  112.134258]  bpf_seq_read+0xf6/0x3d0
+[  112.134582]  vfs_read+0xa3/0x1b0
+[  112.134873]  ksys_read+0x4f/0xc0
+[  112.135166]  do_syscall_64+0x2d/0x40
+[  112.135482]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
 
->  .../selftests/bpf/prog_tests/attach_probe.c   | 21 ----------------
->  tools/testing/selftests/bpf/test_progs.c      | 25 +++++++++++++++++++
->  tools/testing/selftests/bpf/test_progs.h      |  1 +
->  3 files changed, 26 insertions(+), 21 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/attach_probe.c b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-> index a0ee87c8e1ea..3bda8acbbafb 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-> @@ -2,27 +2,6 @@
->  #include <test_progs.h>
->  #include "test_attach_probe.skel.h"
->
+To reproduce the issue, with patch [1] and use the following script:
+  tools/testing/selftests/bpf/run_in_vm.sh -- cat /sys/fs/bpf/progs.debug
 
-[...]
+The reason of the above kernel warning is due to bpf program
+tries to dereference an address of 0 and which is not caught
+by bpf exception handling logic.
+
+...
+SEC("iter/bpf_prog")
+int dump_bpf_prog(struct bpf_iter__bpf_prog *ctx)
+{
+	struct bpf_prog *prog =3D ctx->prog;
+	struct bpf_prog_aux *aux;
+	...
+	if (!prog)
+		return 0;
+	aux =3D prog->aux;
+	...
+	... aux->dst_prog->aux->name ...
+	return 0;
+}
+
+If the aux->dst_prog is NULL pointer, a fault will happen when trying
+to access aux->dst_prog->aux.
+
+In arch/x86/mm/fault.c function do_usr_addr_fault(), we have following code
+         if (unlikely(cpu_feature_enabled(X86_FEATURE_SMAP) &&
+                      !(hw_error_code & X86_PF_USER) &&
+                      !(regs->flags & X86_EFLAGS_AC)))
+         {
+                 bad_area_nosemaphore(regs, hw_error_code, address);
+                 return;
+         }
+
+When the test is run normally after login prompt, cpu_feature_enabled(X86_F=
+EATURE_SMAP)
+is true and bad_area_nosemaphore() is called and then fixup_exception() is =
+called,
+where bpf specific handler is able to fixup the exception.
+
+But when the test is run at /sbin/init time, cpu_feature_enabled(X86_FEATUR=
+E_SMAP) is
+false, the control reaches
+         if (unlikely(!mmap_read_trylock(mm))) {
+                 if (!user_mode(regs) && !search_exception_tables(regs->ip)=
+) {
+                         /*
+                          * Fault from code in kernel from
+                          * which we do not expect faults.
+                          */
+                         bad_area_nosemaphore(regs, hw_error_code, address);
+                         return;
+                 }
+retry:
+                 mmap_read_lock(mm);
+         } else {
+                 /*
+                  * The above down_read_trylock() might have succeeded in
+                  * which case we'll have missed the might_sleep() from
+                  * down_read():
+                  */
+                 might_sleep();
+         }
+and might_sleep() is triggered and the above kernel warning is print.
+
+To fix the issue, before the above mmap_read_trylock(), we will check
+whether fault ip can be served by bpf exception handler or not, if
+yes, the exception will be fixed up and return.
+
+[1] https://lore.kernel.org/bpf/20210123004445.299149-1-kpsingh@kernel.org/
+
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: KP Singh <kpsingh@kernel.org>
+Signed-off-by: Yonghong Song <yhs@fb.com>
+---
+ arch/x86/include/asm/extable.h |  3 +++
+ arch/x86/mm/extable.c          | 14 ++++++++++++++
+ arch/x86/mm/fault.c            |  9 +++++++++
+ 3 files changed, 26 insertions(+)
+
+diff --git a/arch/x86/include/asm/extable.h b/arch/x86/include/asm/extable.h
+index 1f0cbc52937c..1e99da15336c 100644
+--- a/arch/x86/include/asm/extable.h
++++ b/arch/x86/include/asm/extable.h
+@@ -38,6 +38,9 @@ enum handler_type {
+=20
+ extern int fixup_exception(struct pt_regs *regs, int trapnr,
+ 			   unsigned long error_code, unsigned long fault_addr);
++extern int fixup_bpf_exception(struct pt_regs *regs, int trapnr,
++			       unsigned long error_code,
++			       unsigned long fault_addr);
+ extern int fixup_bug(struct pt_regs *regs, int trapnr);
+ extern enum handler_type ex_get_fault_handler_type(unsigned long ip);
+ extern void early_fixup_exception(struct pt_regs *regs, int trapnr);
+diff --git a/arch/x86/mm/extable.c b/arch/x86/mm/extable.c
+index b93d6cd08a7f..311da42c0aec 100644
+--- a/arch/x86/mm/extable.c
++++ b/arch/x86/mm/extable.c
+@@ -155,6 +155,20 @@ enum handler_type ex_get_fault_handler_type(unsigned l=
+ong ip)
+ 		return EX_HANDLER_OTHER;
+ }
+=20
++int fixup_bpf_exception(struct pt_regs *regs, int trapnr,
++			unsigned long error_code, unsigned long fault_addr)
++{
++	const struct exception_table_entry *e;
++	ex_handler_t handler;
++
++	e =3D search_bpf_extables(regs->ip);
++	if (!e)
++		return 0;
++
++	handler =3D ex_fixup_handler(e);
++	return handler(e, regs, trapnr, error_code, fault_addr);
++}
++
+ int fixup_exception(struct pt_regs *regs, int trapnr, unsigned long error_=
+code,
+ 		    unsigned long fault_addr)
+ {
+diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
+index f1f1b5a0956a..e8182d30bf67 100644
+--- a/arch/x86/mm/fault.c
++++ b/arch/x86/mm/fault.c
+@@ -1317,6 +1317,15 @@ void do_user_addr_fault(struct pt_regs *regs,
+ 		if (emulate_vsyscall(hw_error_code, regs, address))
+ 			return;
+ 	}
++
++#ifdef CONFIG_BPF_JIT
++	/*
++	 * Faults incurred by bpf program might need emulation, i.e.,
++	 * clearing the dest register.
++	 */
++	if (fixup_bpf_exception(regs, X86_TRAP_PF, hw_error_code, address))
++		return;
++#endif
+ #endif
+=20
+ 	/*
+--=20
+2.24.1
+
