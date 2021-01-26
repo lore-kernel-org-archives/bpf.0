@@ -2,121 +2,103 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3147CC43603
-	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 16:39:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3AE51C433E6
+	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 18:46:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0CCC922273
-	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 16:39:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0748A22228
+	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 18:46:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726347AbhAZIaO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 26 Jan 2021 03:30:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51424 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389930AbhAZI1Q (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 26 Jan 2021 03:27:16 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEDD2C061574;
-        Tue, 26 Jan 2021 00:26:35 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id r38so5142383pgk.13;
-        Tue, 26 Jan 2021 00:26:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=eLDX3EtsebNExHOoaDQTARUSCDGmDLN0hLIYtdMe5Zo=;
-        b=oKsdV7Y0HbiUUSRJyCavI1dIcTiZFyRU8XBbGbvxZkaVZ6rAmFcfHawAu2qrycyoNb
-         NTs8gAXGG2LZ3hIZtWw5F4gVZexZpGcDW8iSK07RoIegEdOrvNFPYH+6ufhLwEMmQ7IZ
-         9+Vd0WMiNGqLYLMVFPldalJlnrwNUxq1VytOcW8aKt/01UPOc4eQw7ymtbinKB/cqHIi
-         fKq5y98APc3DPl66ug7EfRyE4274m+WNau4cR3mvtsQxIx6RdEuCB93Z93rw7DIKEgKQ
-         nBvaB7tLHWnkR28swJo4doU4XTIk5wvI5X65kNqn/3uTlGB/Kv6yW1TxVBr8FNNSOLO2
-         ySHw==
+        id S2390579AbhAZRTZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 26 Jan 2021 12:19:25 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:40600 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2390347AbhAZIqn (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 26 Jan 2021 03:46:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1611650717;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9gzTd6btxu4Ytm03Yrm00pwQppiXc/JxoltINtOzavM=;
+        b=Gc48h2lmr1GaI5TUFhT4tDzBuMboPdN+DNHVEds8MMu7CWKNxQqLsL8oQtA5bOWka3a8Ki
+        BCfr/1ltWaSdRRV+bACQIEG0WZJGyKzkkcCjJtyOnZzWcqdsG8hrOlieobc+BUkNS+uDtS
+        WtewN5SYt/eyB82uxFfNIkyBYQmKq7M=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-240-iWOmM8b0NYKP-S0E0gCgZg-1; Tue, 26 Jan 2021 03:45:15 -0500
+X-MC-Unique: iWOmM8b0NYKP-S0E0gCgZg-1
+Received: by mail-ej1-f70.google.com with SMTP id z2so4709815ejf.3
+        for <bpf@vger.kernel.org>; Tue, 26 Jan 2021 00:45:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=eLDX3EtsebNExHOoaDQTARUSCDGmDLN0hLIYtdMe5Zo=;
-        b=K0D1FhvI1f5NapXjOAJ6/VLcdiMiYSgL8TgekVFHqH5+Qgch+BkJ8rlvCmWrvzRKsh
-         5LZ0jsT2MQsHsQNG6kQRHJhsnJCRF0NpAmqMAZRXSVXxIL/bKE8Eo5kdRY4EtqLTZMhH
-         v17PSXwIi7lrvIegy7vaoIt75ofqeFVBLOtDTLTlh91Gqfyw0E5Ajd/9kBG1U9r2N345
-         62uEkJGxgimbfFg/LzLu1wNa6GB5F2DsqnlbG1p62V1OJsK3JVC89tPpiTMqRw7edYdg
-         l15fLlA86fy5ky+o90O2eTmaqUA3CyHszlx+AazjhMGszqCpS/pqO3WKEVs06L+nm7rU
-         HW9A==
-X-Gm-Message-State: AOAM532BLw3fGtlwURL49ltDoMVF/JdlWliUP/TUFxSLFtiGXgkrUp8Q
-        wzzN/XK+uinW1yUt+pTj0Wo=
-X-Google-Smtp-Source: ABdhPJxZdoQajeF68VODbuKRDysR+73tDTaxFHrq/Y1k/ZkKqWUX0VoCFlzMDMhoa51q4gdqytfXiw==
-X-Received: by 2002:a63:5c61:: with SMTP id n33mr4784020pgm.153.1611649594685;
-        Tue, 26 Jan 2021 00:26:34 -0800 (PST)
-Received: from android.asia-east2-a.c.savvy-summit-295307.internal (53.207.96.34.bc.googleusercontent.com. [34.96.207.53])
-        by smtp.googlemail.com with ESMTPSA id 7sm18135890pfh.142.2021.01.26.00.26.31
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=9gzTd6btxu4Ytm03Yrm00pwQppiXc/JxoltINtOzavM=;
+        b=Nx2DZC3Eu5bMbBQuKeNyM4IfDabPwoU5lbcZ1BYykWVpSnj6FDJBXYkejwH9+x4G1y
+         F2oxQvoluj03uRxEwWRcl1V2roW6Ka3RrVob4gtSW/7y2M41MRmDO/3JmsXj3n+aRscx
+         uPApEQkStkPmy0328KX28REgHdPqj6HBf2CcOK/62DLVxLWq4YEwgWb2lW2sZiQvTT3q
+         a728S58u6o+ozbCLoscP2ssABHwl9XA/Z8xwU8jWxepgohw+i+iCNFWIbNNjKKaeI2gu
+         a13/kx35IScrMfv/jeWoPnKCqv978C0xn7m2KnYFgM5dSFFmFrnTHV0z+0Wy5fyQBowB
+         bx5Q==
+X-Gm-Message-State: AOAM532fq7L3yrwbuTQ4JML8zy7+5ZLX35ydMLUY/J9ZCFEZoifX1gLO
+        DHqJDFLRXvjdf9cV6Ncm0hpZX1QeBK+LiQY+ujtziZPAVcOMf8HTHPXCrwTdsowYExT/3Xe/IMa
+        Nf3M9occGeZjs
+X-Received: by 2002:a17:906:3a13:: with SMTP id z19mr2929236eje.317.1611650714305;
+        Tue, 26 Jan 2021 00:45:14 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx03Mfbqu1LpR8FbZ3JbEqBq8v6YQIBFfG+PF3Y7BTCckd7Z8SXCcUKEb/nMVNSKlNABdcH4w==
+X-Received: by 2002:a17:906:3a13:: with SMTP id z19mr2929218eje.317.1611650713949;
+        Tue, 26 Jan 2021 00:45:13 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id y8sm11850387edd.97.2021.01.26.00.45.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jan 2021 00:26:33 -0800 (PST)
-From:   Bui Quang Minh <minhquangbui99@gmail.com>
-To:     ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net,
-        kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        kpsingh@kernel.org, jakub@cloudflare.com, lmb@cloudflare.com
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, minhquangbui99@gmail.com
-Subject: [PATCH] bpf: Fix integer overflow in argument calculation for bpf_map_area_alloc
-Date:   Tue, 26 Jan 2021 08:26:06 +0000
-Message-Id: <20210126082606.3183-1-minhquangbui99@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 26 Jan 2021 00:45:13 -0800 (PST)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id A46B4180349; Tue, 26 Jan 2021 09:45:11 +0100 (CET)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Ciara Loftus <ciara.loftus@intel.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, magnus.karlsson@intel.com, bjorn@kernel.org,
+        weqaar.a.janjua@intel.com
+Cc:     Ciara Loftus <ciara.loftus@intel.com>,
+        Neil Horman <nhorman@tuxdriver.com>
+Subject: Re: [PATCH bpf-next v2 0/6] AF_XDP Packet Drop Tracing
+In-Reply-To: <20210126075239.25378-1-ciara.loftus@intel.com>
+References: <20210126075239.25378-1-ciara.loftus@intel.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Tue, 26 Jan 2021 09:45:11 +0100
+Message-ID: <87bldccciw.fsf@toke.dk>
+MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-In 32-bit architecture, the result of sizeof() is a 32-bit integer so
-the expression becomes the multiplication between 2 32-bit integer which
-can potentially leads to integer overflow. As a result,
-bpf_map_area_alloc() allocates less memory than needed.
+Ciara Loftus <ciara.loftus@intel.com> writes:
 
-Fix this by casting 1 operand to u64.
+> This series introduces tracing infrastructure for AF_XDP sockets (xsks).
+> A trace event 'xsk_packet_drop' is created which can be enabled by toggling
+>
+> /sys/kernel/debug/tracing/events/xsk/xsk_packet_drop/enable
+>
+> When enabled and packets are dropped in the kernel, traces are generated
+> which describe the reason for the packet drop as well as the netdev and
+> qid information of the xsk which encountered the drop.
+>
+> Example traces:
+>
+> 507.588563: xsk_packet_drop: netdev: eth0 qid 0 reason: rxq full
+> 507.588567: xsk_packet_drop: netdev: eth0 qid 0 reason: packet too big
+> 507.588568: xsk_packet_drop: netdev: eth0 qid 0 reason: fq empty
+>
+> The event can also be monitored using perf:
+>
+> perf stat -a -e xsk:xsk_packet_drop
 
-Signed-off-by: Bui Quang Minh <minhquangbui99@gmail.com>
----
- kernel/bpf/devmap.c | 4 ++--
- net/core/sock_map.c | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Would it make sense to also hook this up to drop_monitor?
 
-diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
-index f6e9c68afdd4..e849c3e8a49f 100644
---- a/kernel/bpf/devmap.c
-+++ b/kernel/bpf/devmap.c
-@@ -92,7 +92,7 @@ static struct hlist_head *dev_map_create_hash(unsigned int entries,
- 	int i;
- 	struct hlist_head *hash;
- 
--	hash = bpf_map_area_alloc(entries * sizeof(*hash), numa_node);
-+	hash = bpf_map_area_alloc((u64) entries * sizeof(*hash), numa_node);
- 	if (hash != NULL)
- 		for (i = 0; i < entries; i++)
- 			INIT_HLIST_HEAD(&hash[i]);
-@@ -143,7 +143,7 @@ static int dev_map_init_map(struct bpf_dtab *dtab, union bpf_attr *attr)
- 
- 		spin_lock_init(&dtab->index_lock);
- 	} else {
--		dtab->netdev_map = bpf_map_area_alloc(dtab->map.max_entries *
-+		dtab->netdev_map = bpf_map_area_alloc((u64) dtab->map.max_entries *
- 						      sizeof(struct bpf_dtab_netdev *),
- 						      dtab->map.numa_node);
- 		if (!dtab->netdev_map)
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index 64b5ec14ff50..7a42016a981d 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -44,7 +44,7 @@ static struct bpf_map *sock_map_alloc(union bpf_attr *attr)
- 	bpf_map_init_from_attr(&stab->map, attr);
- 	raw_spin_lock_init(&stab->lock);
- 
--	stab->sks = bpf_map_area_alloc(stab->map.max_entries *
-+	stab->sks = bpf_map_area_alloc((u64) stab->map.max_entries *
- 				       sizeof(struct sock *),
- 				       stab->map.numa_node);
- 	if (!stab->sks) {
--- 
-2.17.1
+-Toke
 
