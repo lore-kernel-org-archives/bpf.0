@@ -2,261 +2,218 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F63EC433DB
-	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 08:28:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B84E4C433E0
+	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 08:41:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E276722242
-	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 08:28:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 667512065D
+	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 08:41:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390026AbhAZI2Z (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 26 Jan 2021 03:28:25 -0500
-Received: from mga04.intel.com ([192.55.52.120]:62057 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389798AbhAZI0E (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 26 Jan 2021 03:26:04 -0500
-IronPort-SDR: W/D5FQNyT6LPewH20Q/IgQEyuB0YhdTXnnphLhVLmT1lI/tkPev6x2QZWMvr6em644ZTG2o50X
- Exf307TsVhCA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9875"; a="177298551"
-X-IronPort-AV: E=Sophos;i="5.79,375,1602572400"; 
-   d="scan'208";a="177298551"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2021 00:22:40 -0800
-IronPort-SDR: 81q4VsQb/M2TyviKcXvu6RsiKJ9rkfEwSMfAOf3dxEtTzThYELJzH41X9HqEvp9IxGvHcZDmOl
- fEqS1QcfxQ+A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,375,1602572400"; 
-   d="scan'208";a="361901146"
-Received: from silpixa00399839.ir.intel.com (HELO localhost.localdomain) ([10.237.222.142])
-  by fmsmga008.fm.intel.com with ESMTP; 26 Jan 2021 00:22:25 -0800
-From:   Ciara Loftus <ciara.loftus@intel.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        magnus.karlsson@intel.com, bjorn@kernel.org,
-        weqaar.a.janjua@intel.com
-Cc:     Ciara Loftus <ciara.loftus@intel.com>
-Subject: [PATCH bpf-next v2 1/6] xsk: add tracepoints for packet drops
-Date:   Tue, 26 Jan 2021 07:52:34 +0000
-Message-Id: <20210126075239.25378-2-ciara.loftus@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210126075239.25378-1-ciara.loftus@intel.com>
-References: <20210126075239.25378-1-ciara.loftus@intel.com>
+        id S1729091AbhAZIlh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 26 Jan 2021 03:41:37 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:36028 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730785AbhAZIkO (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 26 Jan 2021 03:40:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1611650321;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AkXC1zXFV2gPXqR41W/MxNBLdY5rI7YrQ0qNjPQBT+k=;
+        b=JPVIhLNWltbt1PzLpJ+swoqgdyzLUYzKvMqcYv7yghQ1vcl2a0mEZaahGj3YN/awxCwm2E
+        47cd06fb/AhMdW1BpWPm2n26Jb6u+sWydvV+Q4qv1Uk364tB8Yq0MUK7ETThEQDl3+bYXD
+        Dj+NDVSK4Mo5PF07ey0lAXCM+Sr+KZA=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-353--A5M0qV9Mde95S4tTnSA7g-1; Tue, 26 Jan 2021 03:38:37 -0500
+X-MC-Unique: -A5M0qV9Mde95S4tTnSA7g-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3D5FB8017FB;
+        Tue, 26 Jan 2021 08:38:29 +0000 (UTC)
+Received: from carbon (unknown [10.36.110.4])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id AFB8374AD3;
+        Tue, 26 Jan 2021 08:38:24 +0000 (UTC)
+Date:   Tue, 26 Jan 2021 09:38:23 +0100
+From:   Jesper Dangaard Brouer <brouer@redhat.com>
+To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
+Cc:     brouer@redhat.com, ast@kernel.org, daniel@iogearbox.net,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        =?UTF-8?B?QmrDtnJuIFTDtnBl?= =?UTF-8?B?bA==?= 
+        <bjorn.topel@intel.com>, magnus.karlsson@intel.com,
+        maciej.fijalkowski@intel.com, kuba@kernel.org,
+        jonathan.lemon@gmail.com, maximmi@nvidia.com, davem@davemloft.net,
+        hawk@kernel.org, john.fastabend@gmail.com, ciara.loftus@intel.com,
+        weqaar.a.janjua@intel.com, andrii@kernel.org,
+        Marek Majtyka <alardam@gmail.com>
+Subject: Re: [PATCH bpf-next 3/3] libbpf, xsk: select AF_XDP BPF program
+ based on kernel version
+Message-ID: <20210126093823.633448e0@carbon>
+In-Reply-To: <20210122105351.11751-4-bjorn.topel@gmail.com>
+References: <20210122105351.11751-1-bjorn.topel@gmail.com>
+        <20210122105351.11751-4-bjorn.topel@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This commit introduces static perf tracepoints for AF_XDP which
-report information about packet drops, such as the netdev, qid and
-high level reason for the drop. The tracepoint can be
-enabled/disabled by toggling
-/sys/kernel/debug/tracing/events/xsk/xsk_packet_drop/enable
+On Fri, 22 Jan 2021 11:53:51 +0100
+Bj=C3=B6rn T=C3=B6pel <bjorn.topel@gmail.com> wrote:
 
-Signed-off-by: Ciara Loftus <ciara.loftus@intel.com>
----
- MAINTAINERS                       |  1 +
- include/linux/bpf_trace.h         |  1 +
- include/trace/events/xsk.h        | 45 +++++++++++++++++++++++++++++++
- include/uapi/linux/if_xdp.h       |  8 ++++++
- kernel/bpf/core.c                 |  1 +
- net/xdp/xsk.c                     |  5 ++++
- net/xdp/xsk_buff_pool.c           |  8 +++++-
- tools/include/uapi/linux/if_xdp.h |  8 ++++++
- 8 files changed, 76 insertions(+), 1 deletion(-)
- create mode 100644 include/trace/events/xsk.h
+> From: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>
+>=20
+> Add detection for kernel version, and adapt the BPF program based on
+> kernel support. This way, users will get the best possible performance
+> from the BPF program.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 1df56a32d2df..efe6662d4198 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -19440,6 +19440,7 @@ S:	Maintained
- F:	Documentation/networking/af_xdp.rst
- F:	include/net/xdp_sock*
- F:	include/net/xsk_buff_pool.h
-+F:	include/trace/events/xsk.h
- F:	include/uapi/linux/if_xdp.h
- F:	include/uapi/linux/xdp_diag.h
- F:	include/net/netns/xdp.h
-diff --git a/include/linux/bpf_trace.h b/include/linux/bpf_trace.h
-index ddf896abcfb6..477d29b6c2c1 100644
---- a/include/linux/bpf_trace.h
-+++ b/include/linux/bpf_trace.h
-@@ -3,5 +3,6 @@
- #define __LINUX_BPF_TRACE_H__
- 
- #include <trace/events/xdp.h>
-+#include <trace/events/xsk.h>
- 
- #endif /* __LINUX_BPF_TRACE_H__ */
-diff --git a/include/trace/events/xsk.h b/include/trace/events/xsk.h
-new file mode 100644
-index 000000000000..4f5629ba1b0f
---- /dev/null
-+++ b/include/trace/events/xsk.h
-@@ -0,0 +1,45 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/* Copyright(c) 2021 Intel Corporation. */
-+
-+#undef TRACE_SYSTEM
-+#define TRACE_SYSTEM xsk
-+
-+#if !defined(_TRACE_XSK_H) || defined(TRACE_HEADER_MULTI_READ)
-+#define _TRACE_XSK_H
-+
-+#include <linux/if_xdp.h>
-+#include <linux/tracepoint.h>
-+
-+#define print_reason(val) \
-+	__print_symbolic(val, \
-+			{ XSK_TRACE_DROP_RXQ_FULL, "rxq full" }, \
-+			{ XSK_TRACE_DROP_PKT_TOO_BIG, "packet too big" }, \
-+			{ XSK_TRACE_DROP_FQ_EMPTY, "fq empty" }, \
-+			{ XSK_TRACE_DROP_POOL_EMPTY, "xskb pool empty" }, \
-+			{ XSK_TRACE_DROP_DRV_ERR_TX, "driver error on tx" })
-+
-+TRACE_EVENT(xsk_packet_drop,
-+
-+	TP_PROTO(char *name, u16 queue_id, u32 reason),
-+
-+	TP_ARGS(name, queue_id, reason),
-+
-+	TP_STRUCT__entry(
-+		__field(char *, name)
-+		__field(u16, queue_id)
-+		__field(u32, reason)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->name = name;
-+		__entry->queue_id = queue_id;
-+		__entry->reason = reason;
-+	),
-+
-+	TP_printk("netdev: %s qid %u reason: %s", __entry->name,
-+			__entry->queue_id, print_reason(__entry->reason))
-+);
-+
-+#endif /* _TRACE_XSK_H */
-+
-+#include <trace/define_trace.h>
-diff --git a/include/uapi/linux/if_xdp.h b/include/uapi/linux/if_xdp.h
-index a78a8096f4ce..5f1b8bf99bb5 100644
---- a/include/uapi/linux/if_xdp.h
-+++ b/include/uapi/linux/if_xdp.h
-@@ -108,4 +108,12 @@ struct xdp_desc {
- 
- /* UMEM descriptor is __u64 */
- 
-+enum xdp_trace_reasons {
-+	XSK_TRACE_DROP_RXQ_FULL,
-+	XSK_TRACE_DROP_PKT_TOO_BIG,
-+	XSK_TRACE_DROP_FQ_EMPTY,
-+	XSK_TRACE_DROP_POOL_EMPTY,
-+	XSK_TRACE_DROP_DRV_ERR_TX,
-+};
-+
- #endif /* _LINUX_IF_XDP_H */
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 5bbd4884ff7a..442b0d7f9bf8 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2362,3 +2362,4 @@ EXPORT_SYMBOL(bpf_stats_enabled_key);
- 
- EXPORT_TRACEPOINT_SYMBOL_GPL(xdp_exception);
- EXPORT_TRACEPOINT_SYMBOL_GPL(xdp_bulk_tx);
-+EXPORT_TRACEPOINT_SYMBOL_GPL(xsk_packet_drop);
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index 4faabd1ecfd1..9b850716630b 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -11,6 +11,7 @@
- 
- #define pr_fmt(fmt) "AF_XDP: %s: " fmt, __func__
- 
-+#include <linux/bpf_trace.h>
- #include <linux/if_xdp.h>
- #include <linux/init.h>
- #include <linux/sched/mm.h>
-@@ -158,6 +159,7 @@ static int __xsk_rcv_zc(struct xdp_sock *xs, struct xdp_buff *xdp, u32 len)
- 	addr = xp_get_handle(xskb);
- 	err = xskq_prod_reserve_desc(xs->rx, addr, len);
- 	if (err) {
-+		trace_xsk_packet_drop(xs->dev->name, xs->queue_id, XSK_TRACE_DROP_RXQ_FULL);
- 		xs->rx_queue_full++;
- 		return err;
- 	}
-@@ -192,6 +194,7 @@ static int __xsk_rcv(struct xdp_sock *xs, struct xdp_buff *xdp)
- 
- 	len = xdp->data_end - xdp->data;
- 	if (len > xsk_pool_get_rx_frame_size(xs->pool)) {
-+		trace_xsk_packet_drop(xs->dev->name, xs->queue_id, XSK_TRACE_DROP_PKT_TOO_BIG);
- 		xs->rx_dropped++;
- 		return -ENOSPC;
- 	}
-@@ -516,6 +519,8 @@ static int xsk_generic_xmit(struct sock *sk)
- 		if (err == NET_XMIT_DROP) {
- 			/* SKB completed but not sent */
- 			err = -EBUSY;
-+			trace_xsk_packet_drop(xs->dev->name, xs->queue_id,
-+					      XSK_TRACE_DROP_DRV_ERR_TX);
- 			goto out;
- 		}
- 
-diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
-index 8de01aaac4a0..d3c1ca83c75d 100644
---- a/net/xdp/xsk_buff_pool.c
-+++ b/net/xdp/xsk_buff_pool.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- 
-+#include <linux/bpf_trace.h>
- #include <net/xsk_buff_pool.h>
- #include <net/xdp_sock.h>
- #include <net/xdp_sock_drv.h>
-@@ -445,8 +446,11 @@ static struct xdp_buff_xsk *__xp_alloc(struct xsk_buff_pool *pool)
- 	u64 addr;
- 	bool ok;
- 
--	if (pool->free_heads_cnt == 0)
-+	if (pool->free_heads_cnt == 0) {
-+		trace_xsk_packet_drop(pool->netdev->name, pool->queue_id,
-+				      XSK_TRACE_DROP_POOL_EMPTY);
- 		return NULL;
-+	}
- 
- 	xskb = pool->free_heads[--pool->free_heads_cnt];
- 
-@@ -454,6 +458,8 @@ static struct xdp_buff_xsk *__xp_alloc(struct xsk_buff_pool *pool)
- 		if (!xskq_cons_peek_addr_unchecked(pool->fq, &addr)) {
- 			pool->fq->queue_empty_descs++;
- 			xp_release(xskb);
-+			trace_xsk_packet_drop(pool->netdev->name, pool->queue_id,
-+					      XSK_TRACE_DROP_FQ_EMPTY);
- 			return NULL;
- 		}
- 
-diff --git a/tools/include/uapi/linux/if_xdp.h b/tools/include/uapi/linux/if_xdp.h
-index a78a8096f4ce..5f1b8bf99bb5 100644
---- a/tools/include/uapi/linux/if_xdp.h
-+++ b/tools/include/uapi/linux/if_xdp.h
-@@ -108,4 +108,12 @@ struct xdp_desc {
- 
- /* UMEM descriptor is __u64 */
- 
-+enum xdp_trace_reasons {
-+	XSK_TRACE_DROP_RXQ_FULL,
-+	XSK_TRACE_DROP_PKT_TOO_BIG,
-+	XSK_TRACE_DROP_FQ_EMPTY,
-+	XSK_TRACE_DROP_POOL_EMPTY,
-+	XSK_TRACE_DROP_DRV_ERR_TX,
-+};
-+
- #endif /* _LINUX_IF_XDP_H */
--- 
-2.17.1
+You say "detection for kernel version", but doesn't the code detect the
+feature rather than kernel version ?
+
+If so, please update the description.
+
+> Reviewed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+> Acked-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+> Signed-off-by: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>
+> Signed-off-by: Marek Majtyka  <alardam@gmail.com>
+> ---
+>  tools/lib/bpf/xsk.c | 82 +++++++++++++++++++++++++++++++++++++++++++--
+>  1 file changed, 79 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/tools/lib/bpf/xsk.c b/tools/lib/bpf/xsk.c
+> index e3e41ceeb1bc..1df8c133a5bc 100644
+> --- a/tools/lib/bpf/xsk.c
+> +++ b/tools/lib/bpf/xsk.c
+> @@ -46,6 +46,11 @@
+>   #define PF_XDP AF_XDP
+>  #endif
+> =20
+> +enum xsk_prog {
+> +	XSK_PROG_FALLBACK,
+> +	XSK_PROG_REDIRECT_FLAGS,
+> +};
+> +
+>  struct xsk_umem {
+>  	struct xsk_ring_prod *fill_save;
+>  	struct xsk_ring_cons *comp_save;
+> @@ -351,6 +356,55 @@ int xsk_umem__create_v0_0_2(struct xsk_umem **umem_p=
+tr, void *umem_area,
+>  COMPAT_VERSION(xsk_umem__create_v0_0_2, xsk_umem__create, LIBBPF_0.0.2)
+>  DEFAULT_VERSION(xsk_umem__create_v0_0_4, xsk_umem__create, LIBBPF_0.0.4)
+> =20
+> +
+> +static enum xsk_prog get_xsk_prog(void)
+> +{
+> +	enum xsk_prog detected =3D XSK_PROG_FALLBACK;
+> +	struct bpf_load_program_attr prog_attr;
+> +	struct bpf_create_map_attr map_attr;
+> +	__u32 size_out, retval, duration;
+> +	char data_in =3D 0, data_out;
+> +	struct bpf_insn insns[] =3D {
+> +		BPF_LD_MAP_FD(BPF_REG_1, 0),
+> +		BPF_MOV64_IMM(BPF_REG_2, 0),
+> +		BPF_MOV64_IMM(BPF_REG_3, XDP_PASS),
+> +		BPF_EMIT_CALL(BPF_FUNC_redirect_map),
+> +		BPF_EXIT_INSN(),
+> +	};
+> +	int prog_fd, map_fd, ret;
+> +
+> +	memset(&map_attr, 0, sizeof(map_attr));
+> +	map_attr.map_type =3D BPF_MAP_TYPE_XSKMAP;
+> +	map_attr.key_size =3D sizeof(int);
+> +	map_attr.value_size =3D sizeof(int);
+> +	map_attr.max_entries =3D 1;
+> +
+> +	map_fd =3D bpf_create_map_xattr(&map_attr);
+> +	if (map_fd < 0)
+> +		return detected;
+> +
+> +	insns[0].imm =3D map_fd;
+> +
+> +	memset(&prog_attr, 0, sizeof(prog_attr));
+> +	prog_attr.prog_type =3D BPF_PROG_TYPE_XDP;
+> +	prog_attr.insns =3D insns;
+> +	prog_attr.insns_cnt =3D ARRAY_SIZE(insns);
+> +	prog_attr.license =3D "GPL";
+> +
+> +	prog_fd =3D bpf_load_program_xattr(&prog_attr, NULL, 0);
+> +	if (prog_fd < 0) {
+> +		close(map_fd);
+> +		return detected;
+> +	}
+> +
+> +	ret =3D bpf_prog_test_run(prog_fd, 0, &data_in, 1, &data_out, &size_out=
+, &retval, &duration);
+> +	if (!ret && retval =3D=3D XDP_PASS)
+> +		detected =3D XSK_PROG_REDIRECT_FLAGS;
+> +	close(prog_fd);
+> +	close(map_fd);
+> +	return detected;
+> +}
+> +
+>  static int xsk_load_xdp_prog(struct xsk_socket *xsk)
+>  {
+>  	static const int log_buf_size =3D 16 * 1024;
+> @@ -358,7 +412,7 @@ static int xsk_load_xdp_prog(struct xsk_socket *xsk)
+>  	char log_buf[log_buf_size];
+>  	int err, prog_fd;
+> =20
+> -	/* This is the C-program:
+> +	/* This is the fallback C-program:
+>  	 * SEC("xdp_sock") int xdp_sock_prog(struct xdp_md *ctx)
+>  	 * {
+>  	 *     int ret, index =3D ctx->rx_queue_index;
+> @@ -414,9 +468,31 @@ static int xsk_load_xdp_prog(struct xsk_socket *xsk)
+>  		/* The jumps are to this instruction */
+>  		BPF_EXIT_INSN(),
+>  	};
+> -	size_t insns_cnt =3D sizeof(prog) / sizeof(struct bpf_insn);
+> =20
+> -	prog_fd =3D bpf_load_program(BPF_PROG_TYPE_XDP, prog, insns_cnt,
+> +	/* This is the post-5.3 kernel C-program:
+> +	 * SEC("xdp_sock") int xdp_sock_prog(struct xdp_md *ctx)
+> +	 * {
+> +	 *     return bpf_redirect_map(&xsks_map, ctx->rx_queue_index, XDP_PASS=
+);
+> +	 * }
+> +	 */
+> +	struct bpf_insn prog_redirect_flags[] =3D {
+> +		/* r2 =3D *(u32 *)(r1 + 16) */
+> +		BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, 16),
+> +		/* r1 =3D xskmap[] */
+> +		BPF_LD_MAP_FD(BPF_REG_1, ctx->xsks_map_fd),
+> +		/* r3 =3D XDP_PASS */
+> +		BPF_MOV64_IMM(BPF_REG_3, 2),
+> +		/* call bpf_redirect_map */
+> +		BPF_EMIT_CALL(BPF_FUNC_redirect_map),
+> +		BPF_EXIT_INSN(),
+> +	};
+> +	size_t insns_cnt[] =3D {sizeof(prog) / sizeof(struct bpf_insn),
+> +			      sizeof(prog_redirect_flags) / sizeof(struct bpf_insn),
+> +	};
+> +	struct bpf_insn *progs[] =3D {prog, prog_redirect_flags};
+> +	enum xsk_prog option =3D get_xsk_prog();
+> +
+> +	prog_fd =3D bpf_load_program(BPF_PROG_TYPE_XDP, progs[option], insns_cn=
+t[option],
+>  				   "LGPL-2.1 or BSD-2-Clause", 0, log_buf,
+>  				   log_buf_size);
+>  	if (prog_fd < 0) {
+
+
+
+--=20
+Best regards,
+  Jesper Dangaard Brouer
+  MSc.CS, Principal Kernel Engineer at Red Hat
+  LinkedIn: http://www.linkedin.com/in/brouer
 
