@@ -2,129 +2,200 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AE4FEC433DB
-	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 05:38:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EF96C43381
+	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 05:38:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6A13E22ADF
-	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 05:38:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 38571229C4
+	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 05:38:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731709AbhAZFis (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 26 Jan 2021 00:38:48 -0500
-Received: from out5-smtp.messagingengine.com ([66.111.4.29]:37069 "EHLO
-        out5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731263AbhAZCSo (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 25 Jan 2021 21:18:44 -0500
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.42])
-        by mailout.nyi.internal (Postfix) with ESMTP id 0938F5C0176;
-        Mon, 25 Jan 2021 21:17:31 -0500 (EST)
-Received: from imap6 ([10.202.2.56])
-  by compute2.internal (MEProxy); Mon, 25 Jan 2021 21:17:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kode54.net; h=
-        mime-version:message-id:in-reply-to:references:date:from:to:cc
-        :subject:content-type; s=fm2; bh=735hv4Tvj+thMpNngNIzqfBhcBDwojM
-        fJpUzLTedE6o=; b=pVFpn8v3qAbmr2OoqdKgfWkqjIU6M3vY92pWTxF7InYco3u
-        oa+WorMQNBVhm8ot/xGm5wZ9Sx8RB0/R6YMZk5SgThkH4nX9hH5QdLTddIA6bmQU
-        4BE5pySIXkyzzaMQdsC6NrK6N8F6ca4LyJv/KrYKA/HfRiUfDR2/xoySBJdeJvWO
-        RQA7FG8rmjwEecDMgMKgOH9Fr7EK1irY/Cw8nxLJxmYbD4H8DxBJYatikzBfH+jv
-        Rb2yEx91JB0RH9/0KjhvNVs7PgPN36E9oAr9XCBw9g5x6/bOznuwUJea3TRxUJ9u
-        KZtwoNwrm3lm50A2rKi8P04Yw9zxnW//BFmt63g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=735hv4
-        Tvj+thMpNngNIzqfBhcBDwojMfJpUzLTedE6o=; b=q59W6fQhajGm5T1F9BTP8o
-        L5swcW1MW4L0ts5Y0eNKAkVIe/jbpFMSgsx9FZRuKlY6S45JBuvtSc45vUjA/ciD
-        yMod/gEurcc6QW8JllyS9aUJ7piW/90I1b7yHifkf8if4iqbSt9Mvokl/A03odFQ
-        jXmFQF6dOHrTHNeHvVGvCOZDSNbQtIpSHh4Xj35hrciceHwk7muP5We/+DOVFB4D
-        G2JXqjQ/ZOwStEIEX5WDgDsmVPIKIjkystnT9t4fCqlXobvJXK3XnrHEP27oZ1Qx
-        ZxewuOp8ao++EMo6F1cJanf4ZcrRRgKjbvdUz9sASfdVu/qxTX5JoSxg/9D0oPZA
-        ==
-X-ME-Sender: <xms:unsPYI18mbGmEeU71voby2Ivw1_gMUtEatHJBtbp8gmEZJgUzTJ-Fw>
-    <xme:unsPYDHSMuSWnBEz9kKj5ZMIV9MjAknkXmPebHjONTJbl0V1Eqz37XXM4HJiUPm08
-    yA7wMBmevEJqxUt2Lg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrvdeggdegvdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedfvehhrhhi
-    shhtohhphhgvrhcuhghilhhlihgrmhcuufhnohifhhhilhhlfdcuoegthhhrihhssehkoh
-    guvgehgedrnhgvtheqnecuggftrfgrthhtvghrnhepteelueegledvteehveefiefhveev
-    gefhteefiedtveekhfehledvjeffudelgfegnecuffhomhgrihhnpehkvghrnhgvlhdroh
-    hrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegt
-    hhhrihhssehkohguvgehgedrnhgvth
-X-ME-Proxy: <xmx:unsPYA7dBw0ZgwLur30miIuBh9S9UHMSRz631tfRDEDE5uSu0qTtzw>
-    <xmx:unsPYB0fv86tr3hIl-R8OwQ2ganBcVYjh2jd6DlXRNIsjwU35VvZtg>
-    <xmx:unsPYLERVM4cqeat6ZGTQ6xPFOn4ROEcHz-KMR6_8alCSn5JgpNGFw>
-    <xmx:u3sPYMP1y_ttj9Rz0oXdScMp6qjRt1wFssuqhwGAJqVyelN8puwlIg>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id A729924063D; Mon, 25 Jan 2021 21:17:30 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-78-g36b56e88ef-fm-20210120.001-g36b56e88
-Mime-Version: 1.0
-Message-Id: <64ab3a61-1488-4334-8831-60e7052864d7@www.fastmail.com>
-In-Reply-To: <CAEf4BzY4LWhyHfd3OpvrM5DB7qieOemcxzp0GBtqWJTw56PMCg@mail.gmail.com>
-References: <20210110070341.1380086-1-andrii@kernel.org>
- <161048280875.1131.14039972740532054006.git-patchwork-notify@kernel.org>
- <4f19b649-a837-48af-90d1-c4692580053d@www.fastmail.com>
- <CAEf4BzY4LWhyHfd3OpvrM5DB7qieOemcxzp0GBtqWJTw56PMCg@mail.gmail.com>
-Date:   Mon, 25 Jan 2021 18:17:10 -0800
-From:   "Christopher William Snowhill" <chris@kode54.net>
-To:     "Andrii Nakryiko" <andrii.nakryiko@gmail.com>
-Cc:     patchwork-bot+netdevbpf <patchwork-bot+netdevbpf@kernel.org>,
-        "Andrii Nakryiko" <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        "Alexei Starovoitov" <ast@fb.com>,
-        "Daniel Borkmann" <daniel@iogearbox.net>,
-        "Kernel Team" <kernel-team@fb.com>
-Subject: Re: [PATCH bpf 1/2] bpf: allow empty module BTFs
-Content-Type: text/plain
+        id S2388046AbhAZFix (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 26 Jan 2021 00:38:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33232 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732145AbhAZCi2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 25 Jan 2021 21:38:28 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74360C06174A
+        for <bpf@vger.kernel.org>; Mon, 25 Jan 2021 18:37:47 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id v200so982483ybe.1
+        for <bpf@vger.kernel.org>; Mon, 25 Jan 2021 18:37:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9NJe5WK5Sk1NsrlE0JFCIeyxgxOfnhe4uSSalUBLNO8=;
+        b=oF6tFnjblfCY2JD/3DmAI/trsnWHVtioYaTozIn/ZA8xIpG38oh4Bty9XeE+HgKgtI
+         i4Hk4hB5GnUqSPPeYnfOJ9wmWDOu3V/jqpRXCXVD2QmfFntiF+Hpyg1oNyfoAcUDOoxN
+         Gq9PfUKUUgMJDK9a9jbsXNfDtQuOuQ+682hgIkNWr+l0OLX2TpNvnqibiGTD0/nQJt3J
+         Fjw3cmzgdGMl1+7b1IDHKNFF2BdRu/uAriYVxw5OZk76HAg+l86U4Zhjkgnix4KHY4LM
+         ONKNGohyYuN87TQi9uiRMKp6OIjbOtW4k89vtEb310rnt+rAVfSxPlqCF91jM4DisY+5
+         hZRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9NJe5WK5Sk1NsrlE0JFCIeyxgxOfnhe4uSSalUBLNO8=;
+        b=sNBEyghMBvrJhG8LaTa9kHx7AaNBMbFP+K1GUTn2KzSxxMWEtmXwlFRjZaC6++4NEc
+         zn2gMedd865B0+4ZqjarLAco0+20HJUEt9rLlNROpAjoU/jFJDzXuzBeyRQGUa7EGN2F
+         ALuhoCxEWm4TuWTvYOB7WBq8UphvTTLrrF9j1HpX3GWqB/IvTB0bBv7Pyho7++kuExcv
+         kXCue4mBsnmFpsljWQEisR1pKZSwX2spzRTK5p8LRjccCUXnfaZbxcUaWr7bMGmKPQ9y
+         sK8YyRia7hC4YVvp4xdhC4LqmiZ8y1FsN3+ZrMB/p1XbcLighezHFXi6IrvGqEM5CBOA
+         ynXQ==
+X-Gm-Message-State: AOAM533k6M89VSw9Sbqc+btMLPpWxHiTPK9JBAMMa2EeyLk6YgOobIzc
+        8LhwiBictJi3SR8DMNn/3Qo5eqFzUYOBmM76VMI=
+X-Google-Smtp-Source: ABdhPJy34BeIm3BfmLmvrg1gOFr5c/6O5ts+0xEVNE7n6VaVZZ/NJXnKMN+60AJBUz0y4iwGnjMVeECPDAYB1SyIy6M=
+X-Received: by 2002:a25:1287:: with SMTP id 129mr4990392ybs.27.1611628666797;
+ Mon, 25 Jan 2021 18:37:46 -0800 (PST)
+MIME-Version: 1.0
+References: <20210124194909.453844-1-andreimatei1@gmail.com> <20210124194909.453844-6-andreimatei1@gmail.com>
+In-Reply-To: <20210124194909.453844-6-andreimatei1@gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 25 Jan 2021 18:37:36 -0800
+Message-ID: <CAEf4Bzb3cw1zPfvdpZg2X+N5SS+H-NJJzrsDjW-9xEDFjRKA1g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 5/5] selftest/bpf: add test for var-offset
+ stack access
+To:     Andrei Matei <andreimatei1@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Aha, that was just released. Nice. I'll report this to the issue tracker where I had lodged the bpf patches for QoL use when testing rc4 and older.
+On Sun, Jan 24, 2021 at 11:54 AM Andrei Matei <andreimatei1@gmail.com> wrote:
+>
+> Add a higher-level test (C BPF program) for the new functionality -
+> variable access stack reads and writes.
+>
+> Signed-off-by: Andrei Matei <andreimatei1@gmail.com>
+> ---
+>  .../selftests/bpf/prog_tests/stack_var_off.c  | 56 +++++++++++++++++++
+>  .../selftests/bpf/progs/test_stack_var_off.c  | 43 ++++++++++++++
+>  2 files changed, 99 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/stack_var_off.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/test_stack_var_off.c
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/stack_var_off.c b/tools/testing/selftests/bpf/prog_tests/stack_var_off.c
+> new file mode 100644
+> index 000000000000..c4c47fb0f0af
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/stack_var_off.c
+> @@ -0,0 +1,56 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <test_progs.h>
+> +#include "test_stack_var_off.skel.h"
+> +
+> +int dummy;
+> +
+> +noinline void uprobed_function(char *s, int len)
+> +{
+> +       /* Do something to keep the compiler from removing the function.
+> +        */
+> +       dummy++;
+> +}
+> +
+> +void test_stack_var_off(void)
+> +{
+> +       int duration = 0;
+> +       struct bpf_link *uprobe_link;
+> +       struct test_stack_var_off *skel;
+> +       size_t uprobe_offset;
+> +       ssize_t base_addr;
+> +       char s[100];
+> +
+> +       base_addr = get_base_addr();
+> +       if (CHECK(base_addr < 0, "get_base_addr",
+> +                 "failed to find base addr: %zd", base_addr))
+> +               return;
+> +       uprobe_offset = (size_t)&uprobed_function - base_addr;
+> +
+> +       skel = test_stack_var_off__open_and_load();
+> +       if (CHECK(!skel, "skel_open", "failed to open skeleton\n"))
+> +               return;
+> +       if (CHECK(!skel->bss, "check_bss", ".bss wasn't mmap()-ed\n"))
+> +               goto cleanup;
+> +
+> +       uprobe_link = bpf_program__attach_uprobe(skel->progs.uprobe,
+> +                                                false /* retprobe */,
+> +                                                0 /* self pid */,
+> +                                                "/proc/self/exe",
+> +                                                uprobe_offset);
+> +       if (CHECK(IS_ERR(uprobe_link), "attach_uprobe",
+> +                 "err %ld\n", PTR_ERR(uprobe_link)))
+> +               goto cleanup;
+> +       skel->links.uprobe = uprobe_link;
+> +
+> +       /* trigger uprobe */
+> +       s[0] = 1;
+> +       s[1] = 10;
+> +       uprobed_function(&s[0], 2);
 
-On Mon, Jan 25, 2021, at 5:26 PM, Andrii Nakryiko wrote:
-> On Sun, Jan 24, 2021 at 2:28 AM Christopher William Snowhill
-> <chris@kode54.net> wrote:
-> >
-> > When is this being applied to an actual kernel? 5.11 is still quite broken without these two patches. Unless you're not using a vfat EFI partition, I guess.
-> >
-> 
-> It's in v5.11-rc5.
-> 
-> > On Tue, Jan 12, 2021, at 12:20 PM, patchwork-bot+netdevbpf@kernel.org wrote:
-> > > Hello:
-> > >
-> > > This series was applied to bpf/bpf.git (refs/heads/master):
-> > >
-> > > On Sat, 9 Jan 2021 23:03:40 -0800 you wrote:
-> > > > Some modules don't declare any new types and end up with an empty BTF,
-> > > > containing only valid BTF header and no types or strings sections. This
-> > > > currently causes BTF validation error. There is nothing wrong with such BTF,
-> > > > so fix the issue by allowing module BTFs with no types or strings.
-> > > >
-> > > > Reported-by: Christopher William Snowhill <chris@kode54.net>
-> > > > Fixes: 36e68442d1af ("bpf: Load and verify kernel module BTFs")
-> > > > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-> > > >
-> > > > [...]
-> > >
-> > > Here is the summary with links:
-> > >   - [bpf,1/2] bpf: allow empty module BTFs
-> > >     https://git.kernel.org/bpf/bpf/c/bcc5e6162d66
-> > >   - [bpf,2/2] libbpf: allow loading empty BTFs
-> > >     https://git.kernel.org/bpf/bpf/c/b8d52264df85
-> > >
-> > > You are awesome, thank you!
-> > > --
-> > > Deet-doot-dot, I am a bot.
-> > > https://korg.docs.kernel.org/patchwork/pwbot.html
-> > >
-> > >
-> > >
+I don't think uprobe() is essential to this test and just obscured
+what is being tested. I'd just use a global variable to pass whatever
+input data you need and use usleep(1), just like lots of other tests.
+
+> +
+> +       if (CHECK(skel->bss->uprobe_res != 10, "check_uprobe_res",
+> +                 "wrong uprobe res: %d\n", skel->bss->uprobe_res))
+> +               goto cleanup;
+> +
+> +cleanup:
+> +       test_stack_var_off__destroy(skel);
+> +}
+> diff --git a/tools/testing/selftests/bpf/progs/test_stack_var_off.c b/tools/testing/selftests/bpf/progs/test_stack_var_off.c
+> new file mode 100644
+> index 000000000000..44f982684541
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/test_stack_var_off.c
+> @@ -0,0 +1,43 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +// Copyright (c) 2017 Facebook
+> +
+> +#include <linux/ptrace.h>
+> +#include <linux/bpf.h>
+> +#include <bpf/bpf_helpers.h>
+> +#include <bpf/bpf_tracing.h>
+> +
+> +int uprobe_res;
+> +
+> +SEC("uprobe/func")
+> +int BPF_KPROBE(uprobe, char *s, int len)
+> +{
+> +       /* This BPF program performs variable-offset reads and writes on a
+> +        * stack-allocated buffer.
+> +        */
+> +       char buf[16];
+> +       unsigned long idx;
+> +       char out;
+> +
+> +       /* Zero-out the buffer so we can read anywhere inside it. */
+> +       __builtin_memset(&buf, 0, 16);
+> +       /* Copy the contents of s from user-space. */
+> +       len &= 0xf;
+> +       if (bpf_probe_read_user(&buf, len, s)) {
+> +               bpf_printk("error reading user mem\n");
+> +               return 1;
+> +       }
+> +       /* Index into the buffer at an unknown offset that comes from the
+> +        * buffer itself. This is a variable-offset stack read.
+> +        */
+> +       idx = buf[0];
+> +       idx &= 0xf;
+> +       out = buf[idx];
+> +       /* Append something to the buffer. The position where we append it
+> +        * is unknown. This is a variable-offset stack write.
+> +        */
+> +       buf[len] = buf[idx];
+> +       uprobe_res = out;
+> +       return 0;
+> +}
+> +
+> +char _license[] SEC("license") = "GPL";
+> --
+> 2.27.0
 >
