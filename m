@@ -2,113 +2,156 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F983C43381
-	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 16:12:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CE936C433E9
+	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 16:16:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EB9C323109
-	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 16:12:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9E92C22DFB
+	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 16:16:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404058AbhAZQCW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 26 Jan 2021 11:02:22 -0500
-Received: from www62.your-server.de ([213.133.104.62]:55492 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391626AbhAZQCJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 26 Jan 2021 11:02:09 -0500
-Received: from sslproxy05.your-server.de ([78.46.172.2])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1l4QmC-0007wD-Pt; Tue, 26 Jan 2021 17:01:08 +0100
-Received: from [85.7.101.30] (helo=pc-9.home)
-        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1l4QmC-000VGR-Et; Tue, 26 Jan 2021 17:01:08 +0100
-Subject: Re: [PATCH bpf-next] samples/bpf: Add include dir for MIPS Loongson64
- to fix build errors
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        clang-built-linux@googlegroups.com, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>
-References: <1611669925-25315-1-git-send-email-yangtiezhu@loongson.cn>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <67891f2f-a374-54fb-e6e5-44145190934f@iogearbox.net>
-Date:   Tue, 26 Jan 2021 17:01:07 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S2391223AbhAZQOy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 26 Jan 2021 11:14:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40164 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2392214AbhAZQOG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 26 Jan 2021 11:14:06 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4CCFC061A29
+        for <bpf@vger.kernel.org>; Tue, 26 Jan 2021 08:13:25 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id kg20so23280346ejc.4
+        for <bpf@vger.kernel.org>; Tue, 26 Jan 2021 08:13:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uYjhI9Zs729gEk72NbctUgKe2hbWHlrBlwkbt1TwJow=;
+        b=W+h7X+uus9hJKu8qXg9P1U4DIto5ByGHdTbf+NTfA4ES20D2WbTr0MWpYbi2vzIX+6
+         fVnxPcEM72PL5UuketJW8f5NbFOWvju6O0aerbXl+6TIgKOCRFp0GonoDuaHVEZizve/
+         j1gMnJ2pTGwfUoUVA3pv2F+aB6yreT3NNTamEFDzwkQqjFI7HtXv9s6hsn2oWDlcYpkr
+         0R+SnR+7RCzdaEbZ9q6aa433uBvaa3RfSsL0NAVDYKysQ1u/dwin9gS9ruuYbTWmlhmQ
+         Vw37iCZ0co4Brc6Elcf2qyfr+oU5OQflhOBIeeSB9J8FIfeDKgHM5AnJTzb5iRm5etB+
+         0aqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uYjhI9Zs729gEk72NbctUgKe2hbWHlrBlwkbt1TwJow=;
+        b=rbFKeZCbPtVbwc+hl5Zmy3NqMSTU568oB4ftsLQxs7+i4RVgqj67YvTK0ZnLcUgPmh
+         8Me4SPe6Yw2txgQpK0DY7pCUDHUt8rG7tQaVvnsxVXM5qyzIfYoSVtJ3RsZ09QMYCjtt
+         M4GzlXYqk2dQP31NNW7Rsvx6qZivVp8C45hozvUL3MRLdcNouSIinNa4KohajJDjNdM7
+         uRCf+CF3BEdY/GNJCf+KN1gC4cNdQEjOHbG0p6VqCkOL9zH0T3CKMsOIZHH8AsZkMVIC
+         qSZbLWY3EUaZTm5KUYdyj9jhqnEd32M8HFoGEjrV4IDyelDr7GbtHftB/EDyQ3dzJ5aH
+         AGUQ==
+X-Gm-Message-State: AOAM533EIal87pVVv3ydnY2RQtvLREPbJMCQMdxzG/ktUzQKIP28QUOI
+        ZTO/HnxLnmj3OWAW7SCc1am9Nw==
+X-Google-Smtp-Source: ABdhPJznhk70RsoMMkEfODd7T5VGUlA0+gOKPb2sl0nJ4IT0dMXY9P0b8jHPqT3GEnXmc2xpBNhclw==
+X-Received: by 2002:a17:906:48f:: with SMTP id f15mr3991893eja.392.1611677604418;
+        Tue, 26 Jan 2021 08:13:24 -0800 (PST)
+Received: from localhost.localdomain ([194.35.116.76])
+        by smtp.gmail.com with ESMTPSA id dd27sm12804927edb.23.2021.01.26.08.13.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Jan 2021 08:13:23 -0800 (PST)
+From:   Quentin Monnet <quentin@isovalent.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        Quentin Monnet <quentin@isovalent.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        David Gow <davidgow@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Subject: [PATCH bpf v2] bpf: fix build for BPF preload when $(O) points to a relative path
+Date:   Tue, 26 Jan 2021 16:13:20 +0000
+Message-Id: <20210126161320.24561-1-quentin@isovalent.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <1611669925-25315-1-git-send-email-yangtiezhu@loongson.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.102.4/26061/Tue Jan 26 13:29:51 2021)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 1/26/21 3:05 PM, Tiezhu Yang wrote:
-> There exists many build errors when make M=samples/bpf on the Loongson
-> platform, this issue is MIPS related, x86 compiles just fine.
-> 
-> Here are some errors:
-[...]
-> 
-> So we can do the similar things in samples/bpf/Makefile, just add
-> platform specific and generic include dir for MIPS Loongson64 to
-> fix the build errors.
+Building the kernel with CONFIG_BPF_PRELOAD, and by providing a relative
+path for the output directory, may fail with the following error:
 
-Your patch from [0] said ...
+  $ make O=build bindeb-pkg
+  ...
+  /.../linux/tools/scripts/Makefile.include:5: *** O=build does not exist.  Stop.
+  make[7]: *** [/.../linux/kernel/bpf/preload/Makefile:9: kernel/bpf/preload/libbpf.a] Error 2
+  make[6]: *** [/.../linux/scripts/Makefile.build:500: kernel/bpf/preload] Error 2
+  make[5]: *** [/.../linux/scripts/Makefile.build:500: kernel/bpf] Error 2
+  make[4]: *** [/.../linux/Makefile:1799: kernel] Error 2
+  make[4]: *** Waiting for unfinished jobs....
 
-   There exists many build warnings when make M=samples/bpf on the Loongson
-   platform, this issue is MIPS related, x86 compiles just fine.
+In the case above, for the "bindeb-pkg" target, the error is produced by
+the "dummy" check in Makefile.include, called from libbpf's Makefile.
+This check changes directory to $(PWD) before checking for the existence
+of $(O). But at this step we have $(PWD) pointing to "/.../linux/build",
+and $(O) pointing to "build". So the Makefile.include tries in fact to
+assert the existence of a directory named "/.../linux/build/build",
+which does not exist.
 
-   Here are some warnings:
-   [...]
+Note that the error does not occur for all make targets and
+architectures combinations. This was observed on x86 for "bindeb-pkg",
+or for a regular build for UML [0].
 
-   With #ifndef __SANE_USERSPACE_TYPES__  in tools/include/linux/types.h,
-   the above error has gone and this ifndef change does not hurt other
-   compilations.
+Here are some details. The root Makefile recursively calls itself once,
+after changing directory to $(O). The content for the variable $(PWD) is
+preserved across recursive calls to make, so it is unchanged at this
+step. For "bindeb-pkg", $(PWD) is eventually updated because the target
+writes a new Makefile (as debian/rules) and calls it indirectly through
+dpkg-buildpackage. This script does not preserve $(PWD), which is reset
+to the current working directory when the target in debian/rules is
+called.
 
-... which ave the impression that all the issues were fixed. What else
-is needed aside from this patch here? More samples/bpf fixes coming? If
-yes, please all submit them as a series instead of individual ones.
+Although not investigated, it seems likely that something similar causes
+UML to change its value for $(PWD).
 
-  [0] https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/commit/?id=190d1c921ad0862da14807e1670f54020f48e889
+Non-trivial fixes could be to remove the use of $(PWD) from the "dummy"
+check, or to make sure that $(PWD) and $(O) are preserved or updated to
+always play well and form a valid $(PWD)/$(O) path across the different
+targets and architectures. Instead, we take a simpler approach and just
+update $(O) when calling libbpf's Makefile, so it points to an absolute
+path which should always resolve for the "dummy" check run (through
+includes) by that Makefile.
 
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> ---
->   samples/bpf/Makefile | 4 ++++
->   1 file changed, 4 insertions(+)
-> 
-> diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
-> index 362f314..45ceca4 100644
-> --- a/samples/bpf/Makefile
-> +++ b/samples/bpf/Makefile
-> @@ -185,6 +185,10 @@ endif
->   
->   ifeq ($(ARCH), mips)
->   TPROGS_CFLAGS += -D__SANE_USERSPACE_TYPES__
-> +ifdef CONFIG_MACH_LOONGSON64
-> +BPF_EXTRA_CFLAGS += -I$(srctree)/arch/mips/include/asm/mach-loongson64
-> +BPF_EXTRA_CFLAGS += -I$(srctree)/arch/mips/include/asm/mach-generic
-> +endif
->   endif
->   
->   TPROGS_CFLAGS += -Wall -O2
-> 
+David Gow previously posted a slightly different version of this patch
+as a RFC [0], two months ago or so.
+
+[0] https://lore.kernel.org/bpf/20201119085022.3606135-1-davidgow@google.com/t/#u
+
+v2: Use $(LIBBPF_OUT) instead of $(abspath .), and improve commit log
+
+Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Brendan Higgins <brendanhiggins@google.com>
+Cc: David Gow <davidgow@google.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Reported-by: David Gow <davidgow@google.com>
+Signed-off-by: Quentin Monnet <quentin@isovalent.com>
+---
+ kernel/bpf/preload/Makefile | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/bpf/preload/Makefile b/kernel/bpf/preload/Makefile
+index 23ee310b6eb4..1951332dd15f 100644
+--- a/kernel/bpf/preload/Makefile
++++ b/kernel/bpf/preload/Makefile
+@@ -4,8 +4,11 @@ LIBBPF_SRCS = $(srctree)/tools/lib/bpf/
+ LIBBPF_A = $(obj)/libbpf.a
+ LIBBPF_OUT = $(abspath $(obj))
+ 
++# Although not in use by libbpf's Makefile, set $(O) so that the "dummy" test
++# in tools/scripts/Makefile.include always succeeds when building the kernel
++# with $(O) pointing to a relative path, as in "make O=build bindeb-pkg".
+ $(LIBBPF_A):
+-	$(Q)$(MAKE) -C $(LIBBPF_SRCS) OUTPUT=$(LIBBPF_OUT)/ $(LIBBPF_OUT)/libbpf.a
++	$(Q)$(MAKE) -C $(LIBBPF_SRCS) O=$(LIBBPF_OUT)/ OUTPUT=$(LIBBPF_OUT)/ $(LIBBPF_OUT)/libbpf.a
+ 
+ userccflags += -I $(srctree)/tools/include/ -I $(srctree)/tools/include/uapi \
+ 	-I $(srctree)/tools/lib/ -Wno-unused-result
+-- 
+2.25.1
 
