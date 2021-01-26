@@ -2,144 +2,111 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9FB4FC433E0
-	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 05:38:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3CE8C433DB
+	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 05:38:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 69CB2229C4
-	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 05:38:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C07AB22ADF
+	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 05:38:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728949AbhAZFh6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 26 Jan 2021 00:37:58 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:31170 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729906AbhAYRKy (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 25 Jan 2021 12:10:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1611594568;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gPZFpN+oBirNrqNtbu3XBQMkOtPoKz1KHF5o+KEb6HE=;
-        b=VkuiXn/KifsgeSE30SQ9/9PQd4hVtznGEMOCoJPVXnL+Ehp0Uri4cyXX7Yn2Shvqln9Q+j
-        bbRkHnkvw+enCsRR75sOz70/ZAPOZifaM1822MUXHH9YPCwA3jGvEEAgCEGRhCoSrLpBAK
-        EGDWzvCkwV9Mm8/xGQ2G+ddCirCNQrI=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-251-ZlPuu6xcNCW0jYoYMCCNRQ-1; Mon, 25 Jan 2021 12:09:24 -0500
-X-MC-Unique: ZlPuu6xcNCW0jYoYMCCNRQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id BD6B8802B45;
-        Mon, 25 Jan 2021 17:09:21 +0000 (UTC)
-Received: from firesoul.localdomain (unknown [10.40.208.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3354A1007639;
-        Mon, 25 Jan 2021 17:09:18 +0000 (UTC)
-Received: from [192.168.42.3] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id 39E2732233490;
-        Mon, 25 Jan 2021 18:09:17 +0100 (CET)
-Subject: [PATCH bpf-next V13 1/7] bpf: Remove MTU check in __bpf_skb_max_len
-From:   Jesper Dangaard Brouer <brouer@redhat.com>
-To:     bpf@vger.kernel.org
-Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
-        Daniel Borkmann <borkmann@iogearbox.net>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        maze@google.com, lmb@cloudflare.com, shaun@tigera.io,
-        Lorenzo Bianconi <lorenzo@kernel.org>, marek@cloudflare.com,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>, eyal.birger@gmail.com,
-        colrack@gmail.com
-Date:   Mon, 25 Jan 2021 18:09:17 +0100
-Message-ID: <161159455715.321749.12122913350638192791.stgit@firesoul>
-In-Reply-To: <161159451743.321749.17528005626909164523.stgit@firesoul>
-References: <161159451743.321749.17528005626909164523.stgit@firesoul>
-User-Agent: StGit/0.19
+        id S1730016AbhAZFiK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 26 Jan 2021 00:38:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46120 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731954AbhAZB1P (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 25 Jan 2021 20:27:15 -0500
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8A26C0698D4;
+        Mon, 25 Jan 2021 17:26:26 -0800 (PST)
+Received: by mail-yb1-xb33.google.com with SMTP id e67so15203083ybc.12;
+        Mon, 25 Jan 2021 17:26:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TJ1MOV1sLhRzD9dsnoNfW9onPTJTHyufrbfsglTYLYQ=;
+        b=EfJnubrvjHb/BqtUfrnZejoWcTf9CKQc0Og7bC1Qegt44CrVRVvWyCj+mpxY3JyQqk
+         fYPnLZcyGJqg1VImtwoi5KWF7G270cHWfxzfe9DvqrtYiUVaF2sQqydLA55F13TGwzWg
+         9CA4KjsskKyLY4SOtQY6jvr5dAF5thLrqC1xCilHbXryaud7WU1XZjpLqyxFpx/jLWRU
+         BgvVfLoZx0WL5Ca6z7K25AMl4G5MKzVOMuGMNJID0m/gC0slR2u6DMb4q4PpyG3ealyg
+         SGTNKV6tqkdv7OHJPB6fhpWzKmpJ5K35iqQUN8/EDdUPWvsCxiMSTabSSPc6Dg2kzgHJ
+         JC6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TJ1MOV1sLhRzD9dsnoNfW9onPTJTHyufrbfsglTYLYQ=;
+        b=KSx1B8XM4FiEdzVRwpTqm5FiIifSUVDuV86w6n1JrGukAg+zcKsuC+3EiRFhyo1Z0C
+         2WicrjiPDo/QZ0rjy2BREOC/7lEQU4kmpgkFTWqccVz4kHloM4oSd2Gtq8Jv4PPSUCrl
+         7bUWpDSuyfSzAy44iFeM8ntEQ5GpkJ8LeMygmmwHgvIAr1GP8ENGWD9ph4cc7ZTo3HSa
+         2EJhyQlrBFWk519I1X/p9caVuFN6AXXw+zFtYlMFJZu7sE656t6JOx84aaUrpAwovqBI
+         wRHFTuunREcjXHytqzWUwqUPu5I93p0N3BRzXGy9yx13wQ4Dz2pKj+439qWlkJnaWLsE
+         jIrw==
+X-Gm-Message-State: AOAM530jc3CgNpP1bX6Lj/dTDLoIltBgchc85jS9oaOqSr+0ZHuoH0mF
+        JiU6v//IZuLmdBuXDdYBMtXrWO6WSv0xjWtYMew=
+X-Google-Smtp-Source: ABdhPJx04na/2x4JVJ5DEA6knJaGMhDp8y0R7IZqRkqqcdm2FlMlj1ZM8po33S7jTgUBspPx+yrOMQNV6cTrs6GkENY=
+X-Received: by 2002:a25:a183:: with SMTP id a3mr4771090ybi.459.1611624386074;
+ Mon, 25 Jan 2021 17:26:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+References: <20210110070341.1380086-1-andrii@kernel.org> <161048280875.1131.14039972740532054006.git-patchwork-notify@kernel.org>
+ <4f19b649-a837-48af-90d1-c4692580053d@www.fastmail.com>
+In-Reply-To: <4f19b649-a837-48af-90d1-c4692580053d@www.fastmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 25 Jan 2021 17:26:15 -0800
+Message-ID: <CAEf4BzY4LWhyHfd3OpvrM5DB7qieOemcxzp0GBtqWJTw56PMCg@mail.gmail.com>
+Subject: Re: [PATCH bpf 1/2] bpf: allow empty module BTFs
+To:     Christopher William Snowhill <chris@kode54.net>
+Cc:     patchwork-bot+netdevbpf@kernel.org,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Multiple BPF-helpers that can manipulate/increase the size of the SKB uses
-__bpf_skb_max_len() as the max-length. This function limit size against
-the current net_device MTU (skb->dev->mtu).
+On Sun, Jan 24, 2021 at 2:28 AM Christopher William Snowhill
+<chris@kode54.net> wrote:
+>
+> When is this being applied to an actual kernel? 5.11 is still quite broken without these two patches. Unless you're not using a vfat EFI partition, I guess.
+>
 
-When a BPF-prog grow the packet size, then it should not be limited to the
-MTU. The MTU is a transmit limitation, and software receiving this packet
-should be allowed to increase the size. Further more, current MTU check in
-__bpf_skb_max_len uses the MTU from ingress/current net_device, which in
-case of redirects uses the wrong net_device.
+It's in v5.11-rc5.
 
-This patch keeps a sanity max limit of SKB_MAX_ALLOC (16KiB). The real limit
-is elsewhere in the system. Jesper's testing[1] showed it was not possible
-to exceed 8KiB when expanding the SKB size via BPF-helper. The limiting
-factor is the define KMALLOC_MAX_CACHE_SIZE which is 8192 for
-SLUB-allocator (CONFIG_SLUB) in-case PAGE_SIZE is 4096. This define is
-in-effect due to this being called from softirq context see code
-__gfp_pfmemalloc_flags() and __do_kmalloc_node(). Jakub's testing showed
-that frames above 16KiB can cause NICs to reset (but not crash). Keep this
-sanity limit at this level as memory layer can differ based on kernel
-config.
-
-[1] https://github.com/xdp-project/bpf-examples/tree/master/MTU-tests
-
-Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
-Acked-by: John Fastabend <john.fastabend@gmail.com>
----
- net/core/filter.c |   12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
-
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 9ab94e90d660..5beadd659091 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -3552,11 +3552,7 @@ static int bpf_skb_net_shrink(struct sk_buff *skb, u32 off, u32 len_diff,
- 	return 0;
- }
- 
--static u32 __bpf_skb_max_len(const struct sk_buff *skb)
--{
--	return skb->dev ? skb->dev->mtu + skb->dev->hard_header_len :
--			  SKB_MAX_ALLOC;
--}
-+#define BPF_SKB_MAX_LEN SKB_MAX_ALLOC
- 
- BPF_CALL_4(sk_skb_adjust_room, struct sk_buff *, skb, s32, len_diff,
- 	   u32, mode, u64, flags)
-@@ -3605,7 +3601,7 @@ BPF_CALL_4(bpf_skb_adjust_room, struct sk_buff *, skb, s32, len_diff,
- {
- 	u32 len_cur, len_diff_abs = abs(len_diff);
- 	u32 len_min = bpf_skb_net_base_len(skb);
--	u32 len_max = __bpf_skb_max_len(skb);
-+	u32 len_max = BPF_SKB_MAX_LEN;
- 	__be16 proto = skb->protocol;
- 	bool shrink = len_diff < 0;
- 	u32 off;
-@@ -3688,7 +3684,7 @@ static int bpf_skb_trim_rcsum(struct sk_buff *skb, unsigned int new_len)
- static inline int __bpf_skb_change_tail(struct sk_buff *skb, u32 new_len,
- 					u64 flags)
- {
--	u32 max_len = __bpf_skb_max_len(skb);
-+	u32 max_len = BPF_SKB_MAX_LEN;
- 	u32 min_len = __bpf_skb_min_len(skb);
- 	int ret;
- 
-@@ -3764,7 +3760,7 @@ static const struct bpf_func_proto sk_skb_change_tail_proto = {
- static inline int __bpf_skb_change_head(struct sk_buff *skb, u32 head_room,
- 					u64 flags)
- {
--	u32 max_len = __bpf_skb_max_len(skb);
-+	u32 max_len = BPF_SKB_MAX_LEN;
- 	u32 new_len = skb->len + head_room;
- 	int ret;
- 
-
-
+> On Tue, Jan 12, 2021, at 12:20 PM, patchwork-bot+netdevbpf@kernel.org wrote:
+> > Hello:
+> >
+> > This series was applied to bpf/bpf.git (refs/heads/master):
+> >
+> > On Sat, 9 Jan 2021 23:03:40 -0800 you wrote:
+> > > Some modules don't declare any new types and end up with an empty BTF,
+> > > containing only valid BTF header and no types or strings sections. This
+> > > currently causes BTF validation error. There is nothing wrong with such BTF,
+> > > so fix the issue by allowing module BTFs with no types or strings.
+> > >
+> > > Reported-by: Christopher William Snowhill <chris@kode54.net>
+> > > Fixes: 36e68442d1af ("bpf: Load and verify kernel module BTFs")
+> > > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> > >
+> > > [...]
+> >
+> > Here is the summary with links:
+> >   - [bpf,1/2] bpf: allow empty module BTFs
+> >     https://git.kernel.org/bpf/bpf/c/bcc5e6162d66
+> >   - [bpf,2/2] libbpf: allow loading empty BTFs
+> >     https://git.kernel.org/bpf/bpf/c/b8d52264df85
+> >
+> > You are awesome, thank you!
+> > --
+> > Deet-doot-dot, I am a bot.
+> > https://korg.docs.kernel.org/patchwork/pwbot.html
+> >
+> >
+> >
