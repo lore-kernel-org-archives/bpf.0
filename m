@@ -2,157 +2,151 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60EF7C4332E
-	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 22:56:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66D0DC433E0
+	for <bpf@archiver.kernel.org>; Wed, 27 Jan 2021 04:45:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4915220684
-	for <bpf@archiver.kernel.org>; Tue, 26 Jan 2021 22:56:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 38DF62070E
+	for <bpf@archiver.kernel.org>; Wed, 27 Jan 2021 04:45:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730793AbhAZWzW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 26 Jan 2021 17:55:22 -0500
-Received: from www62.your-server.de ([213.133.104.62]:38600 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728175AbhAZWGA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 26 Jan 2021 17:06:00 -0500
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1l4WSI-0007jY-Jj; Tue, 26 Jan 2021 23:04:58 +0100
-Received: from [85.7.101.30] (helo=pc-9.home)
-        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1l4WSI-000TDX-BY; Tue, 26 Jan 2021 23:04:58 +0100
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Subject: Re: [Patch bpf-next v5 1/3] bpf: introduce timeout hash map
-To:     Cong Wang <xiyou.wangcong@gmail.com>, netdev@vger.kernel.org
-Cc:     bpf@vger.kernel.org, jhs@mojatatu.com, andrii@kernel.org,
-        ast@kernel.org, kafai@fb.com, Cong Wang <cong.wang@bytedance.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Dongdong Wang <wangdongdong.6@bytedance.com>
-References: <20210122205415.113822-1-xiyou.wangcong@gmail.com>
- <20210122205415.113822-2-xiyou.wangcong@gmail.com>
-Message-ID: <d69d44ca-206c-d818-1177-c8f14d8be8d1@iogearbox.net>
-Date:   Tue, 26 Jan 2021 23:04:57 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S234146AbhA0EpJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 26 Jan 2021 23:45:09 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:35288 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2392344AbhA0BmB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 26 Jan 2021 20:42:01 -0500
+Received: from [10.130.0.135] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxS+ShxBBgWooNAA--.21016S3;
+        Wed, 27 Jan 2021 09:40:50 +0800 (CST)
+Subject: Re: [PATCH bpf-next] samples/bpf: Add include dir for MIPS Loongson64
+ to fix build errors
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>
+References: <1611669925-25315-1-git-send-email-yangtiezhu@loongson.cn>
+ <67891f2f-a374-54fb-e6e5-44145190934f@iogearbox.net>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        clang-built-linux@googlegroups.com, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <add50f8c-7592-75ec-ffb2-84c4280f2fc7@loongson.cn>
+Date:   Wed, 27 Jan 2021 09:40:49 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-In-Reply-To: <20210122205415.113822-2-xiyou.wangcong@gmail.com>
+In-Reply-To: <67891f2f-a374-54fb-e6e5-44145190934f@iogearbox.net>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.102.4/26061/Tue Jan 26 13:29:51 2021)
+X-CM-TRANSID: AQAAf9DxS+ShxBBgWooNAA--.21016S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxXFyxXrW5ZFW7WFyfWr13XFb_yoW5XrWfpa
+        n3uanrKrWUXry5GayxCryUWr4Yy398G3yYgFWrWr45Aa4qqasagr4ktrW5urZ3GryIya1S
+        yr9xKF98GF1kZ37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBY14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxV
+        WxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
+        Yx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbV
+        WUJVW8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+        Y2ka0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCY02Avz4vE14v_KwCF04k20xvY0x0EwI
+        xGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480
+        Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7
+        IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k2
+        6cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x
+        0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUb9mitUUUUU==
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 1/22/21 9:54 PM, Cong Wang wrote:
-> From: Cong Wang <cong.wang@bytedance.com>
-> 
-> This borrows the idea from conntrack and will be used for conntrack in
-> ebpf too. Each element in a timeout map has a user-specified timeout
-> in msecs, after it expires it will be automatically removed from the
-> map. Cilium already does the same thing, it uses a regular map or LRU
-> map to track connections and has its own GC in user-space. This does
-> not scale well when we have millions of connections, as each removal
-> needs a syscall. Even if we could batch the operations, it still needs
-> to copy a lot of data between kernel and user space.
-> 
-> There are two cases to consider here:
-> 
-> 1. When the timeout map is idle, i.e. no one updates or accesses it,
->     we rely on the delayed work to scan the whole hash table and remove
->     these expired. The delayed work is scheduled every 1 sec when idle,
->     which is also what conntrack uses. It is fine to scan the whole
->     table as we do not actually remove elements during this scan,
->     instead we simply queue them to the lockless list and defer all the
->     removals to the next schedule.
-> 
-> 2. When the timeout map is actively accessed, we could reach expired
->     elements before the idle work automatically scans them, we can
->     simply skip them and schedule the delayed work immediately to do
->     the actual removals. We have to avoid taking locks on fast path.
-> 
-> The timeout of an element can be set or updated via bpf_map_update_elem()
-> and we reuse the upper 32-bit of the 64-bit flag for the timeout value,
-> as there are only a few bits are used currently. Note, a zero timeout
-> means to expire immediately.
-> 
-> To avoid adding memory overhead to regular map, we have to reuse some
-> field in struct htab_elem, that is, lru_node. Otherwise we would have
-> to rewrite a lot of code.
-> 
-> For now, batch ops is not supported, we can add it later if needed.
+On 01/27/2021 12:01 AM, Daniel Borkmann wrote:
+> On 1/26/21 3:05 PM, Tiezhu Yang wrote:
+>> There exists many build errors when make M=samples/bpf on the Loongson
+>> platform, this issue is MIPS related, x86 compiles just fine.
+>>
+>> Here are some errors:
+> [...]
+>>
+>> So we can do the similar things in samples/bpf/Makefile, just add
+>> platform specific and generic include dir for MIPS Loongson64 to
+>> fix the build errors.
+>
+> Your patch from [0] said ...
+>
+>   There exists many build warnings when make M=samples/bpf on the 
+> Loongson
+>   platform, this issue is MIPS related, x86 compiles just fine.
+>
+>   Here are some warnings:
+>   [...]
+>
+>   With #ifndef __SANE_USERSPACE_TYPES__  in tools/include/linux/types.h,
+>   the above error has gone and this ifndef change does not hurt other
+>   compilations.
+>
+> ... which ave the impression that all the issues were fixed. What else
+> is needed aside from this patch here? More samples/bpf fixes coming? If
+> yes, please all submit them as a series instead of individual ones.
 
-Back in earlier conversation [0], I mentioned also LRU map flavors and to look
-into adding a flag, so we wouldn't need new BPF_MAP_TYPE_TIMEOUT_HASH/*LRU types
-that replicate existing types once again just with the timeout in addition, so
-UAPI wise new map type is not great.
+Hi Daniel,
 
-Given you mention Cilium above, only for kernels where there is no LRU hash map,
-that is < 4.10, we rely on plain hash, everything else LRU + prealloc to mitigate
-ddos by refusing to add new entries when full whereas less active ones will be
-purged instead. Timeout /only/ for plain hash is less useful overall, did you
-sketch a more generic approach in the meantime that would work for all the htab/lru
-flavors (and ideally as non-delayed_work based)?
+Thanks for your reply.
 
-   [0] https://lore.kernel.org/bpf/20201214201118.148126-1-xiyou.wangcong@gmail.com/
+This is the last samples/bpf patch to fix the obvious build issues when
+make M=samples/bpf on the MIPS Loongson64 platform.
 
-[...]
-> @@ -1012,6 +1081,8 @@ static int htab_map_update_elem(struct bpf_map *map, void *key, void *value,
->   			copy_map_value_locked(map,
->   					      l_old->key + round_up(key_size, 8),
->   					      value, false);
-> +			if (timeout_map)
-> +				l_old->expires = msecs_to_expire(timeout);
->   			return 0;
->   		}
->   		/* fall through, grab the bucket lock and lookup again.
-> @@ -1020,6 +1091,7 @@ static int htab_map_update_elem(struct bpf_map *map, void *key, void *value,
->   		 */
->   	}
->   
-> +again:
->   	ret = htab_lock_bucket(htab, b, hash, &flags);
->   	if (ret)
->   		return ret;
-> @@ -1040,26 +1112,41 @@ static int htab_map_update_elem(struct bpf_map *map, void *key, void *value,
->   		copy_map_value_locked(map,
->   				      l_old->key + round_up(key_size, 8),
->   				      value, false);
-> +		if (timeout_map)
-> +			l_old->expires = msecs_to_expire(timeout);
->   		ret = 0;
->   		goto err;
->   	}
->   
->   	l_new = alloc_htab_elem(htab, key, value, key_size, hash, false, false,
-> -				l_old);
-> +				timeout_map, l_old);
->   	if (IS_ERR(l_new)) {
-> -		/* all pre-allocated elements are in use or memory exhausted */
->   		ret = PTR_ERR(l_new);
-> +		if (ret == -EAGAIN) {
-> +			htab_unlock_bucket(htab, b, hash, flags);
-> +			htab_gc_elem(htab, l_old);
-> +			mod_delayed_work(system_unbound_wq, &htab->gc_work, 0);
-> +			goto again;
+There is another MIPS patch to fix the following build error when make
+M=samples/bpf, but it seems a common and known issue when build MIPS
+kernel used with clang [1]:
 
-Also this one looks rather worrying, so the BPF prog is stalled here, loop-waiting
-in (e.g. XDP) hot path for system_unbound_wq to kick in to make forward progress?
+./arch/mips/include/asm/checksum.h:161:9: error: unsupported inline asm: 
+input with type 'unsigned long' matching output with type '__wsum' (aka 
+'unsigned int')
+         : "0" ((__force unsigned long)daddr),
+                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 error generated.
 
-> +		}
-> +		/* all pre-allocated elements are in use or memory exhausted */
->   		goto err;
->   	}
->   
-> +	if (timeout_map)
-> +		l_new->expires = msecs_to_expire(timeout);
-> +
+Because these two patches are independent, this one is bpf-next related,
+the other one is mips-next related, so I submit them sepearately.
+
+[1] 
+https://lore.kernel.org/linux-mips/CAG_fn=W0JHf8QyUX==+rQMp8PoULHrsQCa9Htffws31ga8k-iw@mail.gmail.com/
+
+Thanks,
+Tiezhu
+
+>
+>  [0] 
+> https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/commit/?id=190d1c921ad0862da14807e1670f54020f48e889
+>
+>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+>> ---
+>>   samples/bpf/Makefile | 4 ++++
+>>   1 file changed, 4 insertions(+)
+>>
+>> diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
+>> index 362f314..45ceca4 100644
+>> --- a/samples/bpf/Makefile
+>> +++ b/samples/bpf/Makefile
+>> @@ -185,6 +185,10 @@ endif
+>>     ifeq ($(ARCH), mips)
+>>   TPROGS_CFLAGS += -D__SANE_USERSPACE_TYPES__
+>> +ifdef CONFIG_MACH_LOONGSON64
+>> +BPF_EXTRA_CFLAGS += -I$(srctree)/arch/mips/include/asm/mach-loongson64
+>> +BPF_EXTRA_CFLAGS += -I$(srctree)/arch/mips/include/asm/mach-generic
+>> +endif
+>>   endif
+>>     TPROGS_CFLAGS += -Wall -O2
+>>
+
