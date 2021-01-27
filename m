@@ -2,258 +2,103 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-6.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79679C433E6
-	for <bpf@archiver.kernel.org>; Wed, 27 Jan 2021 15:55:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B29EC433DB
+	for <bpf@archiver.kernel.org>; Wed, 27 Jan 2021 16:01:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2C347207FB
-	for <bpf@archiver.kernel.org>; Wed, 27 Jan 2021 15:55:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E2A08207D2
+	for <bpf@archiver.kernel.org>; Wed, 27 Jan 2021 16:01:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236550AbhA0PzG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 27 Jan 2021 10:55:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34400 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236732AbhA0Pxr (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 27 Jan 2021 10:53:47 -0500
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5045FC061574;
-        Wed, 27 Jan 2021 07:53:07 -0800 (PST)
-Received: by mail-io1-xd34.google.com with SMTP id y19so2333001iov.2;
-        Wed, 27 Jan 2021 07:53:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:message-id:in-reply-to:references:subject
-         :mime-version:content-transfer-encoding;
-        bh=//wYoBrgSV3+Y7ZtW7mN0X5EZ4X9Xhzqkl+AgunMKHI=;
-        b=IOvv4p8NftAs7W4o7D1cjuMYDRdD0JARQiJrXcFW3L4FZw2KlDNPknPZQtNvYuRcEp
-         kZgEasKJL5e1rxs7n7CPh/5+q9I+olokOfcg6DDe1AtoXVAPI3LRGa+oUKKsl0kDCL04
-         Mc0p5MO7LdRIzdpYs3re7AzdSoYtWxAaYAoRgsmf+risKCAIM1pZnxJI9JnngLMWjpOE
-         97+kzU+lX18CyHnzO4TVb4BQvjYSJewW2PJXLOVT33vQesgsD+uLXD2sKY4z28CsAErD
-         SCUYUTQQlh1xNHmsOhsruQEb6x9IhymSJNqwLvRzdyf1KA128YtBfx8RpzjXJ5sZw3k7
-         ZnQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
-         :references:subject:mime-version:content-transfer-encoding;
-        bh=//wYoBrgSV3+Y7ZtW7mN0X5EZ4X9Xhzqkl+AgunMKHI=;
-        b=qO4N0uyMkCdRY8ZYntOw/r7fXcRWZULfBBatXIQt7s7cB8f4WDza9Xe0G6cqWD/We9
-         VL3bloW3i16j4yFPFZOfx2X523XIdBw7nXKvD7qc93dZhQFqxIPYAi61Jc7YLdEbj+Aa
-         GOcvypoH9Y8veR0TcHQwL2ioj3OlIQehS3ParG2crC/lT8/g6e1Fcihw7n2jXv85YhBp
-         M1Epw4D1juKw5wWLjUTkX01DZRuHBbYKutik1nHuxXqCcqu00mdDmCy/10z7qOD45nDc
-         3zwdfY7ET9YQZt22b1RgnC95cRGdbZwh7ovN91ur9PX+r66eo1RaSAtRHd28ASheQG5c
-         cLWg==
-X-Gm-Message-State: AOAM532t9luf7jmy0FW3L573VVma9nVCnSRWJtowM2RaQDiiA/Ha73I9
-        UQCFf1mLlBXiXekS2YIRqQY=
-X-Google-Smtp-Source: ABdhPJyq2nFIMBUJIALdzI//lQJwHnFT8HLxKRQMYCwWCw236kvk55JHmGk8oVOPJD5MJUUXqFmPZQ==
-X-Received: by 2002:a05:6638:d0b:: with SMTP id q11mr9270229jaj.88.1611762786654;
-        Wed, 27 Jan 2021 07:53:06 -0800 (PST)
-Received: from localhost ([172.243.146.206])
-        by smtp.gmail.com with ESMTPSA id h14sm1226885ilh.63.2021.01.27.07.53.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Jan 2021 07:53:05 -0800 (PST)
-Date:   Wed, 27 Jan 2021 07:52:56 -0800
-From:   John Fastabend <john.fastabend@gmail.com>
-To:     Jesper Dangaard Brouer <brouer@redhat.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Hangbin Liu <liuhangbin@gmail.com>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, Jiri Benc <jbenc@redhat.com>,
+        id S1343900AbhA0QBV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 27 Jan 2021 11:01:21 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:22713 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236894AbhA0P74 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 27 Jan 2021 10:59:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1611763110;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RRdCTN25BNxrn+QlHK+1vo/ZCSmfHH6VXv68N8oXCM0=;
+        b=HrszeDxcPrP4VWpSO4o8vKyDzdpwOCddLPEHpYsQ8CCaRYw9UfDwXVKJP8Wz7jumC53o+7
+        lXnMlrl+NPaTa/Mbuf/GSiFt311UgCh0AjZi4mdqIC/uvHxknyYh1rExkRP0XcKJT048dR
+        Om1VkFpA0EKBLVsMfIZa1vNK1jRMbPI=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-506-zMZJwoqOOgO_pm2HvqiO7w-1; Wed, 27 Jan 2021 10:58:26 -0500
+X-MC-Unique: zMZJwoqOOgO_pm2HvqiO7w-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 74691107ACE3;
+        Wed, 27 Jan 2021 15:58:24 +0000 (UTC)
+Received: from carbon (unknown [10.36.110.4])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3290D60864;
+        Wed, 27 Jan 2021 15:58:11 +0000 (UTC)
+Date:   Wed, 27 Jan 2021 16:58:10 +0100
+From:   Jesper Dangaard Brouer <brouer@redhat.com>
+To:     Hangbin Liu <liuhangbin@gmail.com>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        Toke =?UTF-8?B?SMO4aWxh?= =?UTF-8?B?bmQtSsO4cmdlbnNlbg==?= 
+        <toke@redhat.com>, Jiri Benc <jbenc@redhat.com>,
         Eelco Chaudron <echaudro@redhat.com>, ast@kernel.org,
         Daniel Borkmann <daniel@iogearbox.net>,
         Lorenzo Bianconi <lorenzo.bianconi@redhat.com>,
         David Ahern <dsahern@gmail.com>,
         Andrii Nakryiko <andrii.nakryiko@gmail.com>,
         Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
         brouer@redhat.com
-Message-ID: <60118c586000d_9913c208c2@john-XPS-13-9370.notmuch>
-In-Reply-To: <20210127160029.73f22659@carbon>
+Subject: Re: [PATCHv17 bpf-next 1/6] bpf: run devmap xdp_prog on flush
+ instead of bulk enqueue
+Message-ID: <20210127165810.7ab9c8b8@carbon>
+In-Reply-To: <20210125124516.3098129-2-liuhangbin@gmail.com>
 References: <20210122074652.2981711-1-liuhangbin@gmail.com>
- <20210125124516.3098129-1-liuhangbin@gmail.com>
- <20210125124516.3098129-2-liuhangbin@gmail.com>
- <6011183d4628_86d69208ba@john-XPS-13-9370.notmuch>
- <87lfcesomf.fsf@toke.dk>
- <20210127122050.GA41732@ranger.igk.intel.com>
- <20210127160029.73f22659@carbon>
-Subject: Re: [PATCHv17 bpf-next 1/6] bpf: run devmap xdp_prog on flush instead
- of bulk enqueue
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+        <20210125124516.3098129-1-liuhangbin@gmail.com>
+        <20210125124516.3098129-2-liuhangbin@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Jesper Dangaard Brouer wrote:
-> On Wed, 27 Jan 2021 13:20:50 +0100
-> Maciej Fijalkowski <maciej.fijalkowski@intel.com> wrote:
-> =
+On Mon, 25 Jan 2021 20:45:11 +0800
+Hangbin Liu <liuhangbin@gmail.com> wrote:
 
-> > On Wed, Jan 27, 2021 at 10:41:44AM +0100, Toke H=C3=B8iland-J=C3=B8rg=
-ensen wrote:
-> > > John Fastabend <john.fastabend@gmail.com> writes:
-> > >   =
+> By using xdp_redirect_map in sample/bpf and send pkts via pktgen cmd:
+> ./pktgen_sample03_burst_single_flow.sh -i eno1 -d $dst_ip -m $dst_mac -t 10 -s 64
+> 
+> There are about +/- 0.1M deviation for native testing, the performance
+> improved for the base-case, but some drop back with xdp devmap prog attached.
+> 
+> Version          | Test                           | Generic | Native | Native + 2nd xdp_prog
+> 5.10 rc6         | xdp_redirect_map   i40e->i40e  |    2.0M |   9.1M |  8.0M
+> 5.10 rc6         | xdp_redirect_map   i40e->veth  |    1.7M |  11.0M |  9.7M
+> 5.10 rc6 + patch | xdp_redirect_map   i40e->i40e  |    2.0M |   9.5M |  7.5M
+> 5.10 rc6 + patch | xdp_redirect_map   i40e->veth  |    1.7M |  11.6M |  9.1M
 
-> > > > Hangbin Liu wrote:  =
+I want to highlight the improvement 9.1M -> 9.5M.  This is the native
+(40e->i40e) case where the isn't any "2nd xdp_prog".
 
-> > > >> From: Jesper Dangaard Brouer <brouer@redhat.com>
-> > > >> =
+This means that when we introduced the "2nd xdp_prog", we lost a little
+performance without noticing (death-by-a-1000-paper-cuts), for the
+baseline case where this feature is not used/activated.
 
-> > > >> This changes the devmap XDP program support to run the program w=
-hen the
-> > > >> bulk queue is flushed instead of before the frame is enqueued. T=
-his has
-> > > >> a couple of benefits:
-> > > >> =
+This patch regains that performance for our baseline.  That in itself
+make this patch worth it.
 
-> > > >> - It "sorts" the packets by destination devmap entry, and then r=
-uns the
-> > > >>   same BPF program on all the packets in sequence. This ensures =
-that we
-> > > >>   keep the XDP program and destination device properties hot in =
-I-cache.
-> > > >> =
+-- 
+Best regards,
+  Jesper Dangaard Brouer
+  MSc.CS, Principal Kernel Engineer at Red Hat
+  LinkedIn: http://www.linkedin.com/in/brouer
 
-> > > >> - It makes the multicast implementation simpler because it can j=
-ust
-> > > >>   enqueue packets using bq_enqueue() without having to deal with=
- the
-> > > >>   devmap program at all.
-> > > >> =
-
-> > > >> The drawback is that if the devmap program drops the packet, the=
- enqueue
-> > > >> step is redundant. However, arguably this is mostly visible in a=
-
-> > > >> micro-benchmark, and with more mixed traffic the I-cache benefit=
- should
-> > > >> win out. The performance impact of just this patch is as follows=
-:
-> > > >> =
-
-> > > >> The bq_xmit_all's logic is also refactored and error label is re=
-moved.
-> > > >> When bq_xmit_all() is called from bq_enqueue(), another packet w=
-ill
-> > > >> always be enqueued immediately after, so clearing dev_rx, xdp_pr=
-og and
-> > > >> flush_node in bq_xmit_all() is redundant. Let's move the clear t=
-o
-> > > >> __dev_flush(), and only check them once in bq_enqueue() since th=
-ey are
-> > > >> all modified together.
-> > > >> =
-
-> > > >> By using xdp_redirect_map in sample/bpf and send pkts via pktgen=
- cmd:
-> > > >> ./pktgen_sample03_burst_single_flow.sh -i eno1 -d $dst_ip -m $ds=
-t_mac -t 10 -s 64
-> > > >> =
-
-> > > >> There are about +/- 0.1M deviation for native testing, the perfo=
-rmance
-> > > >> improved for the base-case, but some drop back with xdp devmap p=
-rog attached.
-> > > >> =
-
-> > > >> Version          | Test                           | Generic | Na=
-tive | Native + 2nd xdp_prog
-> > > >> 5.10 rc6         | xdp_redirect_map   i40e->i40e  |    2.0M |   =
-9.1M |  8.0M
-> > > >> 5.10 rc6         | xdp_redirect_map   i40e->veth  |    1.7M |  1=
-1.0M |  9.7M
-> > > >> 5.10 rc6 + patch | xdp_redirect_map   i40e->i40e  |    2.0M |   =
-9.5M |  7.5M
-> > > >> 5.10 rc6 + patch | xdp_redirect_map   i40e->veth  |    1.7M |  1=
-1.6M |  9.1M
-> > > >>   =
-
-> > > >
-> > > > [...]
-
-Acked-by: John Fastabend <john.fastabend@gmail.com>
-
-> > > >>  static void bq_xmit_all(struct xdp_dev_bulk_queue *bq, u32 flag=
-s)
-> > > >>  {
-> > > >>  	struct net_device *dev =3D bq->dev;
-> > > >> -	int sent =3D 0, drops =3D 0, err =3D 0;
-> > > >> +	unsigned int cnt =3D bq->count;
-> > > >> +	int drops =3D 0, err =3D 0;
-> > > >> +	int to_send =3D cnt;
-> > > >> +	int sent =3D cnt;
-> > > >>  	int i;
-> > > >>  =
-
-> > > >> -	if (unlikely(!bq->count))
-> > > >> +	if (unlikely(!cnt))
-> > > >>  		return;
-> > > >>  =
-
-> > > >> -	for (i =3D 0; i < bq->count; i++) {
-> > > >> +	for (i =3D 0; i < cnt; i++) {
-> > > >>  		struct xdp_frame *xdpf =3D bq->q[i];
-> > > >>  =
-
-> > > >>  		prefetch(xdpf);
-> > > >>  	}
-> > > >>  =
-
-> > > >> -	sent =3D dev->netdev_ops->ndo_xdp_xmit(dev, bq->count, bq->q, =
-flags);
-> > > >> +	if (bq->xdp_prog) {
-> > > >> +		to_send =3D dev_map_bpf_prog_run(bq->xdp_prog, bq->q, cnt, de=
-v);
-> > > >> +		if (!to_send) {
-> > > >> +			sent =3D 0;
-> > > >> +			goto out;
-> > > >> +		}
-> > > >> +		drops =3D cnt - to_send;
-> > > >> +	}  =
-
-> > > >
-> > > > I might be missing something about how *bq works here. What happe=
-ns when
-> > > > dev_map_bpf_prog_run returns to_send < cnt?
-> > > >
-> > > > So I read this as it will send [0, to_send] and [to_send, cnt] wi=
-ll be
-> > > > dropped? How do we know the bpf prog would have dropped the set,
-> > > > [to_send+1, cnt]?  =
-
-> > =
-
-> > You know that via recalculation of 'drops' value after you returned f=
-rom
-> > dev_map_bpf_prog_run() which later on is provided onto trace_xdp_devm=
-ap_xmit.
-> > =
-
-> > > =
-
-> > > Because dev_map_bpf_prog_run() compacts the array:
-> > > =
-
-> > > +		case XDP_PASS:
-> > > +			err =3D xdp_update_frame_from_buff(&xdp, xdpf);
-> > > +			if (unlikely(err < 0))
-> > > +				xdp_return_frame_rx_napi(xdpf);
-> > > +			else
-> > > +				frames[nframes++] =3D xdpf;
-> > > +			break;  =
-
-> > =
-
-> > To expand this a little, 'frames' array is reused and 'nframes' above=
- is
-> > the value that is returned and we store it onto 'to_send' variable.
-> > =
-
-
-In the morning with coffee looks good to me. Thanks Toke, Jesper.=
