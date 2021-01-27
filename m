@@ -2,143 +2,166 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.2 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 49AFCC433DB
-	for <bpf@archiver.kernel.org>; Wed, 27 Jan 2021 04:49:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32B1DC433DB
+	for <bpf@archiver.kernel.org>; Wed, 27 Jan 2021 05:47:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 165782070C
-	for <bpf@archiver.kernel.org>; Wed, 27 Jan 2021 04:49:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EBA1F2070E
+	for <bpf@archiver.kernel.org>; Wed, 27 Jan 2021 05:47:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233129AbhA0EpH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 26 Jan 2021 23:45:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43576 "EHLO
+        id S229520AbhA0Frk (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 27 Jan 2021 00:47:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S317670AbhA0BMu (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 26 Jan 2021 20:12:50 -0500
-Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com [IPv6:2607:f8b0:4864:20::934])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B1DEC061573
-        for <bpf@vger.kernel.org>; Tue, 26 Jan 2021 17:11:18 -0800 (PST)
-Received: by mail-ua1-x934.google.com with SMTP id g5so181301uak.10
-        for <bpf@vger.kernel.org>; Tue, 26 Jan 2021 17:11:17 -0800 (PST)
+        with ESMTP id S238648AbhA0E1T (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 26 Jan 2021 23:27:19 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D428C061222;
+        Tue, 26 Jan 2021 20:23:49 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id j21so330905pls.7;
+        Tue, 26 Jan 2021 20:23:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sy4DPtbk4kdU94XXdxoQUPQpfIoQqtYk3SL5LWyKtwE=;
-        b=gaZ3K2sJv306H70bkAr+1zdQmm/uw0+A0jGvI8iLti5iMO2s4Q9BXOF1b+GLAG032Z
-         4v+QsLrk4RbZkKB7W+2sXvKecOCWTX0FfDRmtp2VZWX6Jz0NsuP3Sdww2yLXFUsd6qp+
-         mjMaw12WT9jkva+Hq7eSG02jjMyyhc6dqrWwZq1kgn9YwOVcNGpY+x/mYkBgjPbKn5Lj
-         Jw7qlHvsr3Miy2cgYhgyv+3+SCcDB4nNo1CVH4+lqf5KRMjF7doqi14dAJudkru/dV01
-         5B4HdphZRgzIR/SYYagMvv/xUwKOApu7DBoVvjh5pCx0+iwPwU8dTRtr54L0zVK1nhcq
-         02Rw==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=PKMm5WhbWomId6dxJtacT4f+Nb7CE6/RbR+lQ9lmvb8=;
+        b=UW33n3jIrggYz8eQvlnv9rDrFdzrfgPgGdjalR9v2xllzOnf1kAkZFmJwHc2UdcKPO
+         kQe7jUjYGLp4dApSP0ZRnEavAo2kfz4QSb1BncBDwk0jgM4jOhe8tHNDGdobFRA53syd
+         CNL1uyWHgiEyJsighUHWku3991edDvA+BJ2IoZjZuoHVbxm6znDXQQJpHSDrcSHmqFRg
+         LTfCDVY3+hKudRCtZ2YY6TgyZABOPu3dlmHkjvVQ7bWU/O0v7lznEOyYOQWM0zdl5zSE
+         YHLNeucGEF+A0ZhoUa/2B0YtGvhoBaRPOmGM0GTO3IrJN3LNZ7yOjcSWCk1G9ubFK+dH
+         vkfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sy4DPtbk4kdU94XXdxoQUPQpfIoQqtYk3SL5LWyKtwE=;
-        b=JgkeHfCOdyM+5G0PBPpVyWNKeBfVGTf15uxIZyWPKPnssN1XN50tlv7jR7vEEotjd7
-         v1phqBcePyf9ktjAQfQBA/+wRcEYPHObicHnbe5AmEMQQTQBZ/qCRk0EIzRwvr4JrkfU
-         CAnFqiXthxbBSVJjvk0vR2/EZImz87B3tVIFGgD58lWVhovLFjrtMMWxeH/4vN7QHsy7
-         cykOigSI+Ge68lNuM9giwwBubjtYcyxXiP4SnyMphwXbH2hNmMl5CMhtLJQMKS+wHaw4
-         x5kAKBQaiZ0QbPgplj8j8CCbFGofjhwwfCEASQXuV0jlRioG8IRk1Y28Y4ze3vkUvCLp
-         qJPA==
-X-Gm-Message-State: AOAM531jAqrnHJWAd88p5IRLyHIGlfdM/3ixEreJM5ta/RjN6llBYfB0
-        LzoQyG5ZoFelYVc/+Dk1gb4oeJoSEuQ7VxiAABE4gQ==
-X-Google-Smtp-Source: ABdhPJz/YC6DfVHyoNFtk2FYryoau+UyvFitsxeyrfgIC/iovFXBUyb7M+DmLlO8RIpgjYOcQiU9C9E3hjRlzAR/IGU=
-X-Received: by 2002:ab0:6654:: with SMTP id b20mr6697997uaq.49.1611709876951;
- Tue, 26 Jan 2021 17:11:16 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=PKMm5WhbWomId6dxJtacT4f+Nb7CE6/RbR+lQ9lmvb8=;
+        b=LkXkJQ7Woem6GmnIBAQyz5Sxv0wk+bstjIsgNUqwLfM4w49WvenCx/LK00yMXcKWfu
+         aYBrD5cvXJ0BXs46NrAE6TeI4z79/PyFt8ef3tB5u6GpW0n738kAVhjE2xXMKUlR5hSN
+         YqkY3rjRUQUB3QoKX045CiGuNW/opTjaB1cRsOTLylAZUKxzO8EuCa5XP5kK1fkHtA1z
+         eVS5WMvd4RG6m8U/xFM4of06ZhaJBcwUr2BbOBn/MguX1kB9Iz0ntSKedXXuejAX3nk3
+         91xxzHz1rNODL+DeoaDFjmMcXIQpmE4lXrfKRCgutthLro7u3dU0ig9kdskzUcwRF4Oz
+         ImGw==
+X-Gm-Message-State: AOAM531EH6PTn5ZhavnirS+Rk8MYmYUL3TV1F0sB59ggrFOPuLMx2g1I
+        83y++V5VBhpbeEYRbKnGjC4=
+X-Google-Smtp-Source: ABdhPJyJiZ1xdd00sOoiKgrEjoKuhoY44Kn3r4lbP0vycU+dJuEXzZdcYHq6tuAEpXZUgpmZuBalmA==
+X-Received: by 2002:a17:90a:4a4:: with SMTP id g33mr3330295pjg.221.1611721428398;
+        Tue, 26 Jan 2021 20:23:48 -0800 (PST)
+Received: from ubuntu ([1.53.255.147])
+        by smtp.gmail.com with ESMTPSA id n12sm605264pff.29.2021.01.26.20.23.43
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 26 Jan 2021 20:23:47 -0800 (PST)
+Date:   Wed, 27 Jan 2021 11:23:41 +0700
+From:   Bui Quang Minh <minhquangbui99@gmail.com>
+To:     Lorenz Bauer <lmb@cloudflare.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, hawk@kernel.org,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        kpsingh@kernel.org, Jakub Sitnicki <jakub@cloudflare.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] bpf: Fix integer overflow in argument calculation for
+ bpf_map_area_alloc
+Message-ID: <20210127042341.GA4948@ubuntu>
+References: <20210126082606.3183-1-minhquangbui99@gmail.com>
+ <CACAyw99bEYWJCSGqfLiJ9Jp5YE1ZsZSiJxb4RFUTwbofipf0dA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20210125130625.2030186-1-gprocida@google.com> <20210126195542.GB120879@krava>
-In-Reply-To: <20210126195542.GB120879@krava>
-From:   Giuliano Procida <gprocida@google.com>
-Date:   Wed, 27 Jan 2021 01:10:40 +0000
-Message-ID: <CAGvU0H=CFBmGeNx_4zJt9ou8r31knPcq0doOi-3p5JqnaQbp7w@mail.gmail.com>
-Subject: Re: [PATCH dwarves 0/4] BTF ELF writing changes
-To:     Jiri Olsa <jolsa@redhat.com>
-Cc:     dwarves@vger.kernel.org, acme@kernel.org,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        =?UTF-8?Q?Matthias_M=C3=A4nnich?= <maennich@google.com>,
-        kernel-team@android.com, Kernel Team <kernel-team@fb.com>,
-        bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACAyw99bEYWJCSGqfLiJ9Jp5YE1ZsZSiJxb4RFUTwbofipf0dA@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi.
+On Tue, Jan 26, 2021 at 09:36:57AM +0000, Lorenz Bauer wrote:
+> On Tue, 26 Jan 2021 at 08:26, Bui Quang Minh <minhquangbui99@gmail.com> wrote:
+> >
+> > In 32-bit architecture, the result of sizeof() is a 32-bit integer so
+> > the expression becomes the multiplication between 2 32-bit integer which
+> > can potentially leads to integer overflow. As a result,
+> > bpf_map_area_alloc() allocates less memory than needed.
+> >
+> > Fix this by casting 1 operand to u64.
+> 
+> Some quick thoughts:
+> * Should this have a Fixes tag?
 
-On Tue, 26 Jan 2021 at 19:56, Jiri Olsa <jolsa@redhat.com> wrote:
->
-> On Mon, Jan 25, 2021 at 01:06:21PM +0000, Giuliano Procida wrote:
-> > Hi.
-> >
-> > This follows on from my change to improve the error handling around
-> > llvm-objcopy in libbtf.c.
-> >
-> > Note on recipients: Please let me know if I should adjust To or CC.
-> >
-> > Note on style: I've generally placed declarations as allowed by C99,
-> > closest to point of use. Let me know if you'd prefer otherwise.
-> >
-> > 1. Improve ELF error reporting
-> >
-> > 2. Add .BTF section using libelf
-> >
-> > This shows the minimal amount of code needed to drive libelf. However,
-> > it leaves layout up to libelf, which is almost certainly not wanted.
-> >
-> > As an unexpcted side-effect, vmlinux is larger than before. It seems
-> > llvm-objcopy likes to trim down .strtab.
-> >
-> > 3. Manually lay out updated ELF sections
-> >
-> > This does full layout of new and updated ELF sections. If the update
-> > ELF sections were not the last ones in the file by offset, then it can
-> > leave gaps between sections.
-> >
-> > 4. Align .BTF section to 8 bytes
-> >
-> > This was my original aim.
-> >
-> > Regards.
-> >
-> > Giuliano Procida (4):
-> >   btf_encoder: Improve ELF error reporting
-> >   btf_encoder: Add .BTF section using libelf
-> >   btf_encoder: Manually lay out updated ELF sections
-> >   btf_encoder: Align .BTF section to 8 bytes
->
-> hi,
-> I can't apply this on dwarves git master, which commit is it based on?
->
+Ok, I will add Fixes tag in later version patch.
 
-It's based on:
-https://www.spinics.net/lists/dwarves/msg00775.html (0/3)
-https://www.spinics.net/lists/dwarves/msg00774.html (1/3, unrelated fix)
-https://www.spinics.net/lists/dwarves/msg00773.html (2/3, this is the
-one you'll need for a clean git am; obsoleted by this new series)
-(3/3 was abandoned)
+> * Seems like there are quite a few similar calls scattered around
+> (cpumap, etc.). Did you audit these as well?
 
-Arnaldo did say the two commits were applied... but perhaps they
-haven't been pushed to public master yet.
+I spotted another bug after re-auditting. In hashtab, there ares 2 places using
+the same calls
 
-> thanks,
-> jirka
->
+	static struct bpf_map *htab_map_alloc(union bpf_attr *attr)
+	{
+		/* ... snip ... */
+		if (htab->n_buckets == 0 ||
+		    htab->n_buckets > U32_MAX / sizeof(struct bucket))
+			goto free_htab;
 
-You're welcome.
-Giuliano.
+		htab->buckets = bpf_map_area_alloc(htab->n_buckets *
+						   sizeof(struct bucket),
+						   htab->map.numa_node);
+	}
 
-> >
-> >  libbtf.c | 222 +++++++++++++++++++++++++++++++++++++++++++------------
-> >  1 file changed, 175 insertions(+), 47 deletions(-)
-> >
-> > --
-> > 2.30.0.280.ga3ce27912f-goog
-> >
->
+This is safe because of the above check.
+
+	static int prealloc_init(struct bpf_htab *htab)
+	{
+		u32 num_entries = htab->map.max_entries;
+		htab->elems = bpf_map_area_alloc(htab->elem_size * num_entries,
+						 htab->map.numa_node);
+	}
+
+This is not safe since there is no limit check in elem_size.
+
+In cpumap,
+
+	static struct bpf_map *cpu_map_alloc(union bpf_attr *attr)
+	{
+		cmap->cpu_map = bpf_map_area_alloc(cmap->map.max_entries *
+						   sizeof(struct bpf_cpu_map_entry *),
+						   cmap->map.numa_node);
+	}
+
+I think this is safe because max_entries is not permitted to be larger than NR_CPUS.
+
+In stackmap, there is a place that I'm not very sure about
+
+	static int prealloc_elems_and_freelist(struct bpf_stack_map *smap)
+	{
+		u32 elem_size = sizeof(struct stack_map_bucket) + smap->map.value_size;
+		smap->elems = bpf_map_area_alloc(elem_size * smap->map.max_entries,
+						 smap->map.numa_node);
+	}
+
+This is called after another bpf_map_area_alloc in stack_map_alloc(). In the first
+bpf_map_area_alloc() the argument is calculated in an u64 variable; so if in the second
+one, there is an integer overflow then the first one must be called with size > 4GB. I 
+think the first one will probably fail (I am not sure about the actual limit of vmalloc()),
+so the second one might not be called.
+
+Overall, I think it is error prone in this pattern, maybe we should use typecasting in all
+similar calls or make a comment why we don't use typecasting. As I see typecasting is not so
+expensive and we can typecast the sizeof() operand so this change only affect 32-bit
+architecture.
+
+> * I'd prefer a calloc style version of bpf_map_area_alloc although
+> that might conflict with Fixes tag.
+
+Yes, I think the calloc style will prevent this kind of integer overflow bug.
+
+Thank you,
+Quang Minh.
+
