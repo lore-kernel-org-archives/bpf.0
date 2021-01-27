@@ -2,146 +2,167 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 15B8CC43217
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 102EAC432C3
 	for <bpf@archiver.kernel.org>; Wed, 27 Jan 2021 04:49:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id ED0842070C
+	by mail.kernel.org (Postfix) with ESMTP id D6BBC2070E
 	for <bpf@archiver.kernel.org>; Wed, 27 Jan 2021 04:49:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239521AbhA0EpM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 26 Jan 2021 23:45:12 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49200 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2392490AbhA0Bmz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 26 Jan 2021 20:42:55 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 40B5E2054F;
-        Wed, 27 Jan 2021 01:42:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611711731;
-        bh=q3fl+AqaHUpl8oSKS49a3q3xuvlYipyvIkNT2pZDOrY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MBGqrUEydgRCZJ+E31IPdkBBQwZdsH3lcJCY4Pqg39e7u0CJOfyDe5++yY4AqbJEF
-         f4eJwi+sl4a4WRTDH/Gu7eumWD0omDzdeOedDHdYAwKyCw4gQB9ksrPm8xHSrDaVVG
-         a7/wxeP0+YtpWkRhCoCrQMozFPL5gMF6Xm4v5z5NtWyMbKSkoqXd7wm/JBVAbLc4Ao
-         4a5ZIHf4461aMICcwGmrKDPCCIi2uF86DQyTSpHUUjL5Hva/C8AZI7ClBAhp8WjWx8
-         EiwOsqigWvb+tP3mqW0RzYD70pPK/6cLSDgjWtt12t3Z5jmnoGA9Of2LTy+afXq+KR
-         Iq5tTj7sYQd2g==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id A90A840513; Tue, 26 Jan 2021 22:42:08 -0300 (-03)
-Date:   Tue, 26 Jan 2021 22:42:08 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Giuliano Procida <gprocida@google.com>
-Cc:     Jiri Olsa <jolsa@redhat.com>, dwarves@vger.kernel.org,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Matthias =?iso-8859-1?Q?M=E4nnich?= <maennich@google.com>,
-        kernel-team@android.com, Kernel Team <kernel-team@fb.com>,
-        bpf <bpf@vger.kernel.org>
-Subject: Re: [PATCH dwarves 0/4] BTF ELF writing changes
-Message-ID: <20210127014208.GD106434@kernel.org>
-References: <20210125130625.2030186-1-gprocida@google.com>
- <20210126195542.GB120879@krava>
- <CAGvU0H=CFBmGeNx_4zJt9ou8r31knPcq0doOi-3p5JqnaQbp7w@mail.gmail.com>
+        id S234482AbhA0EpN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 26 Jan 2021 23:45:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37158 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232154AbhA0DC5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 26 Jan 2021 22:02:57 -0500
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAC37C061351
+        for <bpf@vger.kernel.org>; Tue, 26 Jan 2021 18:31:46 -0800 (PST)
+Received: by mail-io1-xd2d.google.com with SMTP id h11so358458ioh.11
+        for <bpf@vger.kernel.org>; Tue, 26 Jan 2021 18:31:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Ifb0D+1WqBBzNJ8/3rrdcsNeQPMZ9f86icYxJTZY2Tk=;
+        b=m8njW5xDAER3TzGAaksIvhJpZmn2lOmuB8gchvUxH1GVpbz6h2XQRmr7ommg3CM4wK
+         Eo5ll2kQdGUX8UUY0rikyTAbrEk6TLznXlHcScmP2vHz3C2ibwJHWJ6C5D732TwDpd7I
+         M/GXf4DHXwthymIvylsvglnnTJJRsb0AoPeYuIX5Zx29XmFZvpdnvUqlSfu3jx7TuBe3
+         yQ1msQhSYbeSc/XO+He/VdWIXMhKY2mtDWovwJ6ao6rf4oF9iwORyfS/VuN4G18njWhu
+         QGC1NXCYRPiNUYwnXOGX4kPU5Q26SCmiXXas45Ver6C2cck5b3YWGADF3oqgcrwMQux9
+         oRsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Ifb0D+1WqBBzNJ8/3rrdcsNeQPMZ9f86icYxJTZY2Tk=;
+        b=hvIlAy9EduwQ8AxA0308FNzQzdsZGDczt0l5BtPOPtkn6BnzWscLoSk0xgtyH8Vd6r
+         V3IWOfHtQ5luQFXiwHY9mIxeW7ft5m/nX8xcBuVretzlMcJzMeltL47cZcnPq+nVF4hx
+         UX3KxPwlJbAoTD1R138k2SPDQZ575tb9yTPXCGu7qubNLLXNa5Ne+FH4PRST+zX5mPWE
+         qNl5PkS/qcBoHIRxu5N1FiwV0Vr7ckFi5e4JhsWc/CyiGcpCpK8z9wHvvz1LI/ABUTaF
+         r++fcvSWnwBsoGKbkKc62VjmeUaf8M9in1GHLkwaOQrNtzR3LM6IjlJl2n36C8PkkSOY
+         wv+Q==
+X-Gm-Message-State: AOAM530r839Vez1RlNHSHQr/yKTE+fIyWvBrau3zBzt5QbG46e0+aPgY
+        9FypPbop0Y9ZY/oAwuBt5vaGXk2Z5YKu0AUXUnym49/o+N4=
+X-Google-Smtp-Source: ABdhPJyczj+qLYBazhpHBIoxXfzQqDGoHbb3V4Bu2VJaeb78N/Z62RDtgcvN/xzk9dM31jqvD8BGQWpkhmXuQLkqY9A=
+X-Received: by 2002:a02:9042:: with SMTP id y2mr7246290jaf.94.1611714705821;
+ Tue, 26 Jan 2021 18:31:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGvU0H=CFBmGeNx_4zJt9ou8r31knPcq0doOi-3p5JqnaQbp7w@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
+References: <20210124190532.428065-1-andreimatei1@gmail.com> <7d33b412-260f-f4d6-2ed0-b5076dc37179@iogearbox.net>
+In-Reply-To: <7d33b412-260f-f4d6-2ed0-b5076dc37179@iogearbox.net>
+From:   Andrei Matei <andreimatei1@gmail.com>
+Date:   Tue, 26 Jan 2021 21:31:33 -0500
+Message-ID: <CABWLset0EgvNF5nCdYHNMaqYFg8MYZfqpHren41EuRP1Azax-w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] selftest/bpf: testing for multiple logs on REJECT
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Em Wed, Jan 27, 2021 at 01:10:40AM +0000, Giuliano Procida escreveu:
-> Hi.
-> 
-> On Tue, 26 Jan 2021 at 19:56, Jiri Olsa <jolsa@redhat.com> wrote:
+On Tue, Jan 26, 2021 at 6:21 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
+>
+> On 1/24/21 8:05 PM, Andrei Matei wrote:
+> > This patch adds support to verifier tests to check for a succession of
+> > verifier log messages on program load failure. This makes the
+> > errstr field work uniformly across REJECT and VERBOSE_ACCEPT checks.
 > >
-> > On Mon, Jan 25, 2021 at 01:06:21PM +0000, Giuliano Procida wrote:
-> > > Hi.
-> > >
-> > > This follows on from my change to improve the error handling around
-> > > llvm-objcopy in libbtf.c.
-> > >
-> > > Note on recipients: Please let me know if I should adjust To or CC.
-> > >
-> > > Note on style: I've generally placed declarations as allowed by C99,
-> > > closest to point of use. Let me know if you'd prefer otherwise.
-> > >
-> > > 1. Improve ELF error reporting
-> > >
-> > > 2. Add .BTF section using libelf
-> > >
-> > > This shows the minimal amount of code needed to drive libelf. However,
-> > > it leaves layout up to libelf, which is almost certainly not wanted.
-> > >
-> > > As an unexpcted side-effect, vmlinux is larger than before. It seems
-> > > llvm-objcopy likes to trim down .strtab.
-> > >
-> > > 3. Manually lay out updated ELF sections
-> > >
-> > > This does full layout of new and updated ELF sections. If the update
-> > > ELF sections were not the last ones in the file by offset, then it can
-> > > leave gaps between sections.
-> > >
-> > > 4. Align .BTF section to 8 bytes
-> > >
-> > > This was my original aim.
-> > >
-> > > Regards.
-> > >
-> > > Giuliano Procida (4):
-> > >   btf_encoder: Improve ELF error reporting
-> > >   btf_encoder: Add .BTF section using libelf
-> > >   btf_encoder: Manually lay out updated ELF sections
-> > >   btf_encoder: Align .BTF section to 8 bytes
+> > This patch also increases the maximum size of an accepted series of
+> > messages to test from 80 chars to 200 chars. This is in order to keep
+> > existing tests working, which sometimes test for messages larger than 80
+> > chars (which was accepted in the REJECT case, when testing for a single
+> > message, but ironically not in the VERBOSE_ACCEPT case, when testing for
+> > possibly multiple messages).
+> > And example of such a long, checked message is in bounds.c:
+> > "R1 has unknown scalar with mixed signed bounds, pointer arithmetic with
+> > it prohibited for !root"
 > >
-> > hi,
-> > I can't apply this on dwarves git master, which commit is it based on?
+> > Signed-off-by: Andrei Matei <andreimatei1@gmail.com>
+> > ---
+> >   tools/testing/selftests/bpf/test_verifier.c | 15 ++++++++++++---
+> >   1 file changed, 12 insertions(+), 3 deletions(-)
 > >
-> 
-> It's based on:
-> https://www.spinics.net/lists/dwarves/msg00775.html (0/3)
-> https://www.spinics.net/lists/dwarves/msg00774.html (1/3, unrelated fix)
-> https://www.spinics.net/lists/dwarves/msg00773.html (2/3, this is the
-> one you'll need for a clean git am; obsoleted by this new series)
-> (3/3 was abandoned)
-> 
-> Arnaldo did say the two commits were applied... but perhaps they
-> haven't been pushed to public master yet.
-
-I pushed what I have now, please check if anything is missing.
-
-I'm now working on DWARF4's DW_AT_data_bit_offset, that gcc uses when
-dwarf-5 is asked for, I should have something usable tomorrow and
-hopefully this will be the last stuff to get into 1.20.
-
-dd
-
-thanks,
-
-- Arnaldo
- 
-> > thanks,
-> > jirka
+> > diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
+> > index 59bfa6201d1d..69298bf8ee86 100644
+> > --- a/tools/testing/selftests/bpf/test_verifier.c
+> > +++ b/tools/testing/selftests/bpf/test_verifier.c
+> > @@ -88,6 +88,9 @@ struct bpf_test {
+> >       int fixup_map_event_output[MAX_FIXUPS];
+> >       int fixup_map_reuseport_array[MAX_FIXUPS];
+> >       int fixup_map_ringbuf[MAX_FIXUPS];
+> > +     /* Expected verifier log output for result REJECT or VERBOSE_ACCEPT. Can be a
+> > +      * tab-separated sequence of expected strings.
+> > +      */
+> >       const char *errstr;
+> >       const char *errstr_unpriv;
+> >       uint32_t insn_processed;
+> > @@ -995,9 +998,11 @@ static int do_prog_test_run(int fd_prog, bool unpriv, uint32_t expected_val,
+> >       return 0;
+> >   }
 > >
-> 
-> You're welcome.
-> Giuliano.
-> 
-> > >
-> > >  libbtf.c | 222 +++++++++++++++++++++++++++++++++++++++++++------------
-> > >  1 file changed, 175 insertions(+), 47 deletions(-)
-> > >
-> > > --
-> > > 2.30.0.280.ga3ce27912f-goog
-> > >
+> > +/* Returns true if every part of exp (tab-separated) appears in log, in order.
+> > + */
+> >   static bool cmp_str_seq(const char *log, const char *exp)
+> >   {
+> > -     char needle[80];
+> > +     char needle[200];
+> >       const char *p, *q;
+> >       int len;
 > >
+> > @@ -1015,7 +1020,7 @@ static bool cmp_str_seq(const char *log, const char *exp)
+> >               needle[len] = 0;
+> >               q = strstr(log, needle);
+> >               if (!q) {
+> > -                     printf("FAIL\nUnexpected verifier log in successful load!\n"
+> > +                     printf("FAIL\nUnexpected verifier log!\n"
+> >                              "EXP: %s\nRES:\n", needle);
+> >                       return false;
+> >               }
+> > @@ -1130,7 +1135,11 @@ static void do_test_single(struct bpf_test *test, bool unpriv,
+> >                       printf("FAIL\nUnexpected success to load!\n");
+> >                       goto fail_log;
+> >               }
+> > -             if (!expected_err || !strstr(bpf_vlog, expected_err)) {
+> > +             if (!expected_err) {
+> > +                     printf("FAIL\nTestcase bug; missing expected_err\n");
+> > +                     goto fail_log;
+>
+> Do we have an in-tree case like this?
 
--- 
+You're asking if there are tests with expected_res == REJECT and
+expected_err == NULL?
+There are no such test cases, and the intention of this "testcase bug"
+check was to keep it that way.
+I can simply fold it into the test failure below, as you're suggesting.
 
-- Arnaldo
+> Given this would also be visible below with 'EXP:'
+> being (null), I might simplify and just replace the strstr() with cmp_str_seq().
+>
+> Also, could you elaborate on which test cases need the cmp_str_seq() conversion?
+
+There are VERBOSE_ACCEPT tests that you a tab-separated list of
+expected messages; see precise.c.
+There are no such REJECT tests yet. I was about to introduce one in
+another patch that's inflight, but I ended
+up not needing to. Still, I figured that unifying the capabilities of
+.errstr between VERBOSE_ACCEPT and REJECT
+is a good idea. If you don't think so, I'm happy to drop this patch.
+
+>
+> > +             }
+> > +             if ((strlen(expected_err) > 0) && !cmp_str_seq(bpf_vlog, expected_err)) {
+>
+> (nit: no extra '()' needed, but either way I'd rather opt for '!expected_err ||
+> !cmp_str_seq(bpf_vlog, expected_err)' anyway)
+>
+> >                       printf("FAIL\nUnexpected error message!\n\tEXP: %s\n\tRES: %s\n",
+> >                             expected_err, bpf_vlog);
+> >                       goto fail_log;
+> >
+>
