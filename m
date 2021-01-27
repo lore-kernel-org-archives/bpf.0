@@ -2,76 +2,107 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-23.2 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ADB75C433E0
-	for <bpf@archiver.kernel.org>; Wed, 27 Jan 2021 21:33:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 284E1C43381
+	for <bpf@archiver.kernel.org>; Wed, 27 Jan 2021 21:43:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5512664DCC
-	for <bpf@archiver.kernel.org>; Wed, 27 Jan 2021 21:33:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CE74664DC4
+	for <bpf@archiver.kernel.org>; Wed, 27 Jan 2021 21:43:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235300AbhA0VdT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 27 Jan 2021 16:33:19 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54120 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232435AbhA0VbJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 27 Jan 2021 16:31:09 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id D8A9E64DCC;
-        Wed, 27 Jan 2021 21:30:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611783009;
-        bh=0q5sDg8bmZxPtZGnEYMQ4V1nzFuO4kZO0OjqrA+hhO4=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=W2N6yaBZO08eMYsdzYpMBLNLviq3hASShAYAkRWyjBhsBSviQdUuWezRfjf2sSXjs
-         kk2EehFUR0qkgM3rxpQrbdozg0VaU7DWUhNXiZcVngWmOAl+WXs7Wy6rVZ+AW8R/Lo
-         3yIQ8hBedtXS8sebypWJw1jI0zgD5C5k83uaGw9dhf7O1d/x/XyYLmdy8fkY2Bp0v5
-         5lFJv+291pT+Ew6Qbo+NWuPiKuABrzcZLa7f1VO0isVPXLYbWCLIhm/joTy+6Belgh
-         ltuA6lsh1zj58lu0ZslZvjRGwNB87uwywKQr2zIxN5awyoojSSVLDdTGAJG9LBYWpJ
-         K1Q6QQHJGmCYQ==
-Content-Type: text/plain; charset="utf-8"
+        id S233228AbhA0Vmp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 27 Jan 2021 16:42:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51078 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235811AbhA0Vdp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 27 Jan 2021 16:33:45 -0500
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C732C06174A
+        for <bpf@vger.kernel.org>; Wed, 27 Jan 2021 13:32:59 -0800 (PST)
+Received: by mail-qv1-xf2c.google.com with SMTP id p5so1830574qvs.7
+        for <bpf@vger.kernel.org>; Wed, 27 Jan 2021 13:32:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nB36mhe50GjyeA/BjfyL20F/M3CBxc8N3/xYACYJ5lU=;
+        b=nndsGpc+WylQa3lNtHEx03OFAolP92vLHdKvZSeBIHWEvPyF0ul3rmxAbIHYmaDTGd
+         ef+Uk4pOhEXcJExam6HmXmK0XOgj3EieVhfZnSfO5IooiIT4kyeD4lQSh0JFePIpioq4
+         QCB1xF4lT4qt7wJxEL+cbxs543yaKNtxK/2wegIQ2b1L13BtEjNilVhbXGPOlmGxdCkn
+         inbH1dV1gpL43IJqYvVpukG65wIraCbWc83oLQi7HsGHiwZtVJ3DnEInqp5pC5gNVAf/
+         oRDwPAq/wyBxVzpgZSuRUwfuqwTQf9zAIWl/Mw8PH0YgKI0v3ZWr4i0CjQ7apIlvF/Pk
+         Xk1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nB36mhe50GjyeA/BjfyL20F/M3CBxc8N3/xYACYJ5lU=;
+        b=f8cYPAJUA8ClDpIKXx0dP/Ln3SoFjenzKiL5HMXMkTuMjC9v3Q9XgzUccZ5Roalmv4
+         uNJPz4tgVL14AgPgURfDC1satN6xdONAdF9aYMJpx7oJvAbzTC7pd16pm2UWnBg9CeU7
+         /rnsl7aF60l1FkXfaOnCx0rKBw96bUd+BGrklMvDRrCo+jN/IeeC0+VfKhdezpYbyRCp
+         jn1J8dI5m2LnguSm+mlegqshksE0IuhFN24MlXqNagsLmcVaii7Han4BOfK2lX66+vzu
+         5L5NWuuQuzb3E0dyIYu50rslHvMQZ/cUyTWev17NZKSY5VK+vDMRZZoWlCfFwUHCksfn
+         n45g==
+X-Gm-Message-State: AOAM531uNluofyCZn/ByRZjbKVj5LWEl1TrS1cXPwf3WASt0soXbTDlu
+        0mbuaK3mGyYFCYUJo8Fm88hK1OU0HeXnjN0EXfR8tg==
+X-Google-Smtp-Source: ABdhPJzwNkv7FMJe7epvNR+Gp2aA+mp30pz1WQuWEPswVydA9SzEcoXSOvOJplOg7+XsrqffDUXFZtuMeKphbl45zk4=
+X-Received: by 2002:a0c:ab8b:: with SMTP id j11mr12443151qvb.0.1611783178007;
+ Wed, 27 Jan 2021 13:32:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] bpf: change 'BPF_ADD' to 'BPF_AND' in
- print_bpf_insn()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <161178300980.5444.2843489458453917484.git-patchwork-notify@kernel.org>
-Date:   Wed, 27 Jan 2021 21:30:09 +0000
-References: <20210127022507.23674-1-dong.menglong@zte.com.cn>
-In-Reply-To: <20210127022507.23674-1-dong.menglong@zte.com.cn>
-To:     Menglong Dong <menglong8.dong@gmail.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, jackmanb@google.com,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dong.menglong@zte.com.cn
+References: <20210127174714.2240395-1-sdf@google.com> <c3bf8a04-818a-248c-fd27-d33b5dc4d826@iogearbox.net>
+In-Reply-To: <c3bf8a04-818a-248c-fd27-d33b5dc4d826@iogearbox.net>
+From:   Stanislav Fomichev <sdf@google.com>
+Date:   Wed, 27 Jan 2021 13:32:47 -0800
+Message-ID: <CAKH8qBvx3F+fYE7-heTgxTa7yKPiUOdsLfTQ7TRmJX2bLapmbw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: enable bpf_{g,s}etsockopt in BPF_CGROUP_UDP{4,6}_SENDMSG
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
-
-This patch was applied to bpf/bpf-next.git (refs/heads/master):
-
-On Tue, 26 Jan 2021 18:25:07 -0800 you wrote:
-> From: Menglong Dong <dong.menglong@zte.com.cn>
-> 
-> This 'BPF_ADD' is duplicated, and I belive it should be 'BPF_AND'.
-> 
-> Fixes: 981f94c3e921 ("bpf: Add bitwise atomic instructions")
-> Signed-off-by: Menglong Dong <dong.menglong@zte.com.cn>
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf-next] bpf: change 'BPF_ADD' to 'BPF_AND' in print_bpf_insn()
-    https://git.kernel.org/bpf/bpf-next/c/60e578e82b7d
-
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+On Wed, Jan 27, 2021 at 1:30 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
+>
+> On 1/27/21 6:47 PM, Stanislav Fomichev wrote:
+> > Can be used to query/modify socket state for unconnected UDP sendmsg.
+> > Those hooks run as BPF_CGROUP_RUN_SA_PROG_LOCK and operate on
+> > a locked socket.
+> >
+> > Signed-off-by: Stanislav Fomichev <sdf@google.com>
+> > ---
+> >   net/core/filter.c                                 | 4 ++++
+> >   tools/testing/selftests/bpf/progs/sendmsg4_prog.c | 7 +++++++
+> >   tools/testing/selftests/bpf/progs/sendmsg6_prog.c | 7 +++++++
+> >   3 files changed, 18 insertions(+)
+> >
+> > diff --git a/net/core/filter.c b/net/core/filter.c
+> > index 9ab94e90d660..3d7f78a19565 100644
+> > --- a/net/core/filter.c
+> > +++ b/net/core/filter.c
+> > @@ -7023,6 +7023,8 @@ sock_addr_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+> >               case BPF_CGROUP_INET6_BIND:
+> >               case BPF_CGROUP_INET4_CONNECT:
+> >               case BPF_CGROUP_INET6_CONNECT:
+> > +             case BPF_CGROUP_UDP4_SENDMSG:
+> > +             case BPF_CGROUP_UDP6_SENDMSG:
+> >                       return &bpf_sock_addr_setsockopt_proto;
+> >               default:
+> >                       return NULL;
+> > @@ -7033,6 +7035,8 @@ sock_addr_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+> >               case BPF_CGROUP_INET6_BIND:
+> >               case BPF_CGROUP_INET4_CONNECT:
+> >               case BPF_CGROUP_INET6_CONNECT:
+> > +             case BPF_CGROUP_UDP4_SENDMSG:
+> > +             case BPF_CGROUP_UDP6_SENDMSG:
+> >                       return &bpf_sock_addr_getsockopt_proto;
+>
+> Patch looks good, could we at this point also add all the others that run under
+> BPF_CGROUP_RUN_SA_PROG_LOCK while at it, that is v4/v6 flavors of recvmsg as well
+> as peername/sockname?
+Sounds good, will resend with more hooks added.
