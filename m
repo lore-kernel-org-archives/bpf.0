@@ -2,166 +2,165 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 13FF1C433DB
-	for <bpf@archiver.kernel.org>; Thu, 28 Jan 2021 15:18:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D46FC433E0
+	for <bpf@archiver.kernel.org>; Thu, 28 Jan 2021 16:15:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B0C2B64DE5
-	for <bpf@archiver.kernel.org>; Thu, 28 Jan 2021 15:18:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C58F064DEF
+	for <bpf@archiver.kernel.org>; Thu, 28 Jan 2021 16:15:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbhA1PSX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 28 Jan 2021 10:18:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53436 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231390AbhA1PSO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 28 Jan 2021 10:18:14 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F55BC0613D6;
-        Thu, 28 Jan 2021 07:17:34 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id a20so4031276pjs.1;
-        Thu, 28 Jan 2021 07:17:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=2Nye8p/WF2NWdxjWCcs2X/vHGUhlnVaM/5kQ/1QbWn4=;
-        b=bCsqzeuAGuApSZxxJAxr75qJ6gUgKRhrPGQz7yXrp/xRnXsoWxybscn4vh5QrsNaCz
-         WGvjTsbc0j/TCCqYassW1O3Aj4UA9+6wUte1CheKYLbln16eYunXmiS6njtyf53J4z8x
-         fy2Bs1YR/wQNpMc6SRoarSzGbsxL/o4EyiDDfDpCOPtibpm1yyQiay56ZI0+6Z534X9F
-         tER6yltuLGG/ThN9I/waSYyu+DAkZzvdPtTINvjH8pzC8Xzh2J4hVT3phFO2gIXZ74gk
-         Nmfq4df1X31bmJVBshpd66Y31NOpDpHa5GylyKb3a+fDroT9tkcmoE2PZ9Yb40Xa24St
-         2oaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=2Nye8p/WF2NWdxjWCcs2X/vHGUhlnVaM/5kQ/1QbWn4=;
-        b=JhlQwU9jHcsI7s0phu/+hM/xmM5MoIH/mrA4q5RqSgh88imLRMtaxEQd0900ApM579
-         nA6LzoB1nl/Wsw24zOeqHWxXV61TXPKQuxwH8ojmc6+ik+XllMsgjyrxUGgP7ZIG83gn
-         AxRjqna1nYNLmU5UsGHHuICrSjWO7Y/wKrCU/zVUyVH4QN4bzg0nYi6vsITqJ0HNW+Du
-         VxZawFBpq2poDnKUILGo5PXz9vGFnTwjRGS5+vfBZ3DWmwv25mjC1q2zeb0C4aYRTNg9
-         MJIzskUv+5DHWy+VvZyPv8bPhlnU/rN3lIMKIeXnbm7bHwWJgEzJew4GONjVR6b7Q6rz
-         2cXg==
-X-Gm-Message-State: AOAM532+qMRbtz34zUw7XWsdLRzEkrzKrxbMvGfTvHSbeMr1O/zS+s5Z
-        GMHMKoKMKTCrcjF32L/UStw=
-X-Google-Smtp-Source: ABdhPJwsZmg60NuhdyVTl0ndOhEzxWR2wvZ9Xe6KyHOOKqOBHUgMZIrAS9dWYtala5iaIw2DUWdPgg==
-X-Received: by 2002:a17:902:b213:b029:db:3a3e:d8ad with SMTP id t19-20020a170902b213b02900db3a3ed8admr47121plr.73.1611847053795;
-        Thu, 28 Jan 2021 07:17:33 -0800 (PST)
-Received: from [192.168.1.18] (i121-115-229-245.s42.a013.ap.plala.or.jp. [121.115.229.245])
-        by smtp.googlemail.com with ESMTPSA id ne6sm5330632pjb.44.2021.01.28.07.17.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Jan 2021 07:17:33 -0800 (PST)
-Subject: Re: [PATCH bpf-next 1/3] net: veth: introduce bulking for XDP_PASS
-To:     Lorenzo Bianconi <lorenzo@kernel.org>, bpf@vger.kernel.org
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, lorenzo.bianconi@redhat.com,
-        brouer@redhat.com, toke@redhat.com
-References: <cover.1611685778.git.lorenzo@kernel.org>
- <adca75284e30320e9d692d618a6349319d9340f3.1611685778.git.lorenzo@kernel.org>
-From:   Toshiaki Makita <toshiaki.makita1@gmail.com>
-Message-ID: <de16aab2-58a5-dd0b-1577-4fa04a6806ce@gmail.com>
-Date:   Fri, 29 Jan 2021 00:17:27 +0900
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        id S232316AbhA1QOg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 28 Jan 2021 11:14:36 -0500
+Received: from mx2.suse.de ([195.135.220.15]:47214 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232348AbhA1QNU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 28 Jan 2021 11:13:20 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1611850353; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+        bh=XpZP8Czrv53NTPF8NHyUx6KMQP8yKg0kQ17Cu9rLhII=;
+        b=nl/4tn+y42yJoy12hc9xtvLD3RuDQgSQbRXiOW9jsgsEvGSBYWsy0ABnGooJxcC0KtbExG
+        JHuijLSdkvZJUZ5TXC8g+vQ7cqEEf0QDTgi39xOR3Ki/yaFr1lNXUfKcgGvzeFkEUo/uSb
+        dni2T5We2bF/y1yNkaPm++Q7Mii3SNk=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 6E0C4ACB7;
+        Thu, 28 Jan 2021 16:12:33 +0000 (UTC)
+Subject: Re: kprobes broken since 0d00449c7a28 ("x86: Replace ist_enter() with
+ nmi_enter()")
+To:     Masami Hiramatsu <masami.hiramatsu@gmail.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>, bpf@vger.kernel.org
+References: <25cd2608-03c2-94b8-7760-9de9935fde64@suse.com>
+ <20210128001353.66e7171b395473ef992d6991@kernel.org>
+ <20210128002452.a79714c236b69ab9acfa986c@kernel.org>
+ <a35a6f15-9ab1-917c-d443-23d3e78f2d73@suse.com>
+ <20210128103415.d90be51ec607bb6123b2843c@kernel.org>
+ <20210128123842.c9e33949e62f504b84bfadf5@gmail.com>
+From:   Nikolay Borisov <nborisov@suse.com>
+Autocrypt: addr=nborisov@suse.com; prefer-encrypt=mutual; keydata=
+ mQINBFiKBz4BEADNHZmqwhuN6EAzXj9SpPpH/nSSP8YgfwoOqwrP+JR4pIqRK0AWWeWCSwmZ
+ T7g+RbfPFlmQp+EwFWOtABXlKC54zgSf+uulGwx5JAUFVUIRBmnHOYi/lUiE0yhpnb1KCA7f
+ u/W+DkwGerXqhhe9TvQoGwgCKNfzFPZoM+gZrm+kWv03QLUCr210n4cwaCPJ0Nr9Z3c582xc
+ bCUVbsjt7BN0CFa2BByulrx5xD9sDAYIqfLCcZetAqsTRGxM7LD0kh5WlKzOeAXj5r8DOrU2
+ GdZS33uKZI/kZJZVytSmZpswDsKhnGzRN1BANGP8sC+WD4eRXajOmNh2HL4P+meO1TlM3GLl
+ EQd2shHFY0qjEo7wxKZI1RyZZ5AgJnSmehrPCyuIyVY210CbMaIKHUIsTqRgY5GaNME24w7h
+ TyyVCy2qAM8fLJ4Vw5bycM/u5xfWm7gyTb9V1TkZ3o1MTrEsrcqFiRrBY94Rs0oQkZvunqia
+ c+NprYSaOG1Cta14o94eMH271Kka/reEwSZkC7T+o9hZ4zi2CcLcY0DXj0qdId7vUKSJjEep
+ c++s8ncFekh1MPhkOgNj8pk17OAESanmDwksmzh1j12lgA5lTFPrJeRNu6/isC2zyZhTwMWs
+ k3LkcTa8ZXxh0RfWAqgx/ogKPk4ZxOXQEZetkEyTFghbRH2BIwARAQABtCNOaWtvbGF5IEJv
+ cmlzb3YgPG5ib3Jpc292QHN1c2UuY29tPokCOAQTAQIAIgUCWIo48QIbAwYLCQgHAwIGFQgC
+ CQoLBBYCAwECHgECF4AACgkQcb6CRuU/KFc0eg/9GLD3wTQz9iZHMFbjiqTCitD7B6dTLV1C
+ ddZVlC8Hm/TophPts1bWZORAmYIihHHI1EIF19+bfIr46pvfTu0yFrJDLOADMDH+Ufzsfy2v
+ HSqqWV/nOSWGXzh8bgg/ncLwrIdEwBQBN9SDS6aqsglagvwFD91UCg/TshLlRxD5BOnuzfzI
+ Leyx2c6YmH7Oa1R4MX9Jo79SaKwdHt2yRN3SochVtxCyafDlZsE/efp21pMiaK1HoCOZTBp5
+ VzrIP85GATh18pN7YR9CuPxxN0V6IzT7IlhS4Jgj0NXh6vi1DlmKspr+FOevu4RVXqqcNTSS
+ E2rycB2v6cttH21UUdu/0FtMBKh+rv8+yD49FxMYnTi1jwVzr208vDdRU2v7Ij/TxYt/v4O8
+ V+jNRKy5Fevca/1xroQBICXsNoFLr10X5IjmhAhqIH8Atpz/89ItS3+HWuE4BHB6RRLM0gy8
+ T7rN6ja+KegOGikp/VTwBlszhvfLhyoyjXI44Tf3oLSFM+8+qG3B7MNBHOt60CQlMkq0fGXd
+ mm4xENl/SSeHsiomdveeq7cNGpHi6i6ntZK33XJLwvyf00PD7tip/GUj0Dic/ZUsoPSTF/mG
+ EpuQiUZs8X2xjK/AS/l3wa4Kz2tlcOKSKpIpna7V1+CMNkNzaCOlbv7QwprAerKYywPCoOSC
+ 7P25Ag0EWIoHPgEQAMiUqvRBZNvPvki34O/dcTodvLSyOmK/MMBDrzN8Cnk302XfnGlW/YAQ
+ csMWISKKSpStc6tmD+2Y0z9WjyRqFr3EGfH1RXSv9Z1vmfPzU42jsdZn667UxrRcVQXUgoKg
+ QYx055Q2FdUeaZSaivoIBD9WtJq/66UPXRRr4H/+Y5FaUZx+gWNGmBT6a0S/GQnHb9g3nonD
+ jmDKGw+YO4P6aEMxyy3k9PstaoiyBXnzQASzdOi39BgWQuZfIQjN0aW+Dm8kOAfT5i/yk59h
+ VV6v3NLHBjHVw9kHli3jwvsizIX9X2W8tb1SefaVxqvqO1132AO8V9CbE1DcVT8fzICvGi42
+ FoV/k0QOGwq+LmLf0t04Q0csEl+h69ZcqeBSQcIMm/Ir+NorfCr6HjrB6lW7giBkQl6hhomn
+ l1mtDP6MTdbyYzEiBFcwQD4terc7S/8ELRRybWQHQp7sxQM/Lnuhs77MgY/e6c5AVWnMKd/z
+ MKm4ru7A8+8gdHeydrRQSWDaVbfy3Hup0Ia76J9FaolnjB8YLUOJPdhI2vbvNCQ2ipxw3Y3c
+ KhVIpGYqwdvFIiz0Fej7wnJICIrpJs/+XLQHyqcmERn3s/iWwBpeogrx2Lf8AGezqnv9woq7
+ OSoWlwXDJiUdaqPEB/HmGfqoRRN20jx+OOvuaBMPAPb+aKJyle8zABEBAAGJAh8EGAECAAkF
+ AliKBz4CGwwACgkQcb6CRuU/KFdacg/+M3V3Ti9JYZEiIyVhqs+yHb6NMI1R0kkAmzsGQ1jU
+ zSQUz9AVMR6T7v2fIETTT/f5Oout0+Hi9cY8uLpk8CWno9V9eR/B7Ifs2pAA8lh2nW43FFwp
+ IDiSuDbH6oTLmiGCB206IvSuaQCp1fed8U6yuqGFcnf0ZpJm/sILG2ECdFK9RYnMIaeqlNQm
+ iZicBY2lmlYFBEaMXHoy+K7nbOuizPWdUKoKHq+tmZ3iA+qL5s6Qlm4trH28/fPpFuOmgP8P
+ K+7LpYLNSl1oQUr+WlqilPAuLcCo5Vdl7M7VFLMq4xxY/dY99aZx0ZJQYFx0w/6UkbDdFLzN
+ upT7NIN68lZRucImffiWyN7CjH23X3Tni8bS9ubo7OON68NbPz1YIaYaHmnVQCjDyDXkQoKC
+ R82Vf9mf5slj0Vlpf+/Wpsv/TH8X32ajva37oEQTkWNMsDxyw3aPSps6MaMafcN7k60y2Wk/
+ TCiLsRHFfMHFY6/lq/c0ZdOsGjgpIK0G0z6et9YU6MaPuKwNY4kBdjPNBwHreucrQVUdqRRm
+ RcxmGC6ohvpqVGfhT48ZPZKZEWM+tZky0mO7bhZYxMXyVjBn4EoNTsXy1et9Y1dU3HVJ8fod
+ 5UqrNrzIQFbdeM0/JqSLrtlTcXKJ7cYFa9ZM2AP7UIN9n1UWxq+OPY9YMOewVfYtL8M=
+Message-ID: <e8bae974-190b-f247-0d89-6cea4fd4cc39@suse.com>
+Date:   Thu, 28 Jan 2021 18:12:32 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <adca75284e30320e9d692d618a6349319d9340f3.1611685778.git.lorenzo@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20210128123842.c9e33949e62f504b84bfadf5@gmail.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 2021/01/27 3:41, Lorenzo Bianconi wrote:
-> Introduce bulking support for XDP_PASS verdict forwarding skbs to
-> the networking stack
+
+
+On 28.01.21 г. 5:38 ч., Masami Hiramatsu wrote:
+> Hi,
+
+<snip>
+
 > 
-> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+> Alexei, could you tell me what is the concerning situation for bpf?
+
+Another data point masami is that this affects bpf kprobes which are
+entered via int3, alternatively if the kprobe is entered via
+kprobe_ftrace_handler it works as expected. I haven't been able to
+determine why a particular bpf probe won't use ftrace's infrastructure
+if it's put at the beginning of the function.  An alternative call chain
+is :
+
+ => __ftrace_trace_stack
+ => trace_call_bpf
+ => kprobe_perf_func
+ => kprobe_ftrace_handler
+ => 0xffffffffc095d0c8
+ => btrfs_validate_metadata_buffer
+ => end_bio_extent_readpage
+ => end_workqueue_fn
+ => btrfs_work_helper
+ => process_one_work
+ => worker_thread
+ => kthread
+ => ret_from_fork
+
+> 
+> Thank you,
+> 
+> From c5cd0e5f60ef6494c9e1579ec1b82b7344c41f9a Mon Sep 17 00:00:00 2001
+> From: Masami Hiramatsu <mhiramat@kernel.org>
+> Date: Thu, 28 Jan 2021 12:31:02 +0900
+> Subject: [PATCH] tracing: bpf: Remove in_nmi() check from kprobe handler
+> 
+> Since commit 0d00449c7a28 ("x86: Replace ist_enter() with nmi_enter()") has
+> changed the kprobe handler to run in the NMI context, in_nmi() always returns
+> true. This means the bpf events on kprobes always skipped.
+> 
+> Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
 > ---
->   drivers/net/veth.c | 43 ++++++++++++++++++++++++++-----------------
->   1 file changed, 26 insertions(+), 17 deletions(-)
+>  kernel/trace/bpf_trace.c | 3 ---
+>  1 file changed, 3 deletions(-)
 > 
-> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-> index 6e03b619c93c..23137d9966da 100644
-> --- a/drivers/net/veth.c
-> +++ b/drivers/net/veth.c
-> @@ -35,6 +35,7 @@
->   #define VETH_XDP_HEADROOM	(XDP_PACKET_HEADROOM + NET_IP_ALIGN)
->   
->   #define VETH_XDP_TX_BULK_SIZE	16
-> +#define VETH_XDP_BATCH		8
->   
->   struct veth_stats {
->   	u64	rx_drops;
-> @@ -787,27 +788,35 @@ static int veth_xdp_rcv(struct veth_rq *rq, int budget,
->   	int i, done = 0;
->   
->   	for (i = 0; i < budget; i++) {
-> -		void *ptr = __ptr_ring_consume(&rq->xdp_ring);
-> -		struct sk_buff *skb;
-> +		void *frames[VETH_XDP_BATCH];
-> +		void *skbs[VETH_XDP_BATCH];
-> +		int i, n_frame, n_skb = 0;
-
-'i' is a shadowed variable. I think this may be confusing.
-
->   
-> -		if (!ptr)
-> +		n_frame = __ptr_ring_consume_batched(&rq->xdp_ring, frames,
-> +						     VETH_XDP_BATCH);
-
-This apparently exceeds the budget.
-This will process budget*VETH_XDP_BATCH packets at most.
-(You are probably aware of this because you return 'i' instead of 'done'?)
-
-Also I'm not sure if we need to introduce __ptr_ring_consume_batched() here.
-The function just does __ptr_ring_consume() n times.
-
-IIUC Your final code looks like this:
-
-for (budget) {
-	n_frame = __ptr_ring_consume_batched(VETH_XDP_BATCH);
-	for (n_frame) {
-		if (frame is XDP)
-			xdpf[n_xdpf++] = to_xdp(frame);
-		else
-			skbs[n_skb++] = frame;
-	}
-
-	if (n_xdpf)
-		veth_xdp_rcv_batch(xdpf);
-
-	for (n_skb) {
-		skb = veth_xdp_rcv_skb(skbs[i]);
-		napi_gro_receive(skb);
-	}
-}
-
-Your code processes VETH_XDP_BATCH packets at a time no matter whether each of them 
-is xdp_frame or skb, but I think you actually want to process VETH_XDP_BATCH 
-xdp_frames at a time?
-Then, why not doing like this?
-
-for (budget) {
-	ptr = __ptr_ring_consume();
-	if (ptr is XDP) {
-		if (n_xdpf >= VETH_XDP_BATCH) {
-			veth_xdp_rcv_batch(xdpf);
-			n_xdpf = 0;
-		}
-		xdpf[n_xdpf++] = to_xdp(ptr);
-	} else {
-		skb = veth_xdp_rcv_skb(ptr);
-		napi_gro_receive(skb);
-	}
-}
-if (n_xdpf)
-	veth_xdp_rcv_batch(xdpf);
-
-Toshiaki Makita
+> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> index 6c0018abe68a..764400260eb6 100644
+> --- a/kernel/trace/bpf_trace.c
+> +++ b/kernel/trace/bpf_trace.c
+> @@ -96,9 +96,6 @@ unsigned int trace_call_bpf(struct trace_event_call *call, void *ctx)
+>  {
+>  	unsigned int ret;
+>  
+> -	if (in_nmi()) /* not supported yet */
+> -		return 1;
+> -
+>  	cant_sleep();
+>  
+>  	if (unlikely(__this_cpu_inc_return(bpf_prog_active) != 1)) {
+> 
