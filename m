@@ -2,227 +2,147 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6591AC433E0
-	for <bpf@archiver.kernel.org>; Thu, 28 Jan 2021 04:10:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 965DBC433E0
+	for <bpf@archiver.kernel.org>; Thu, 28 Jan 2021 06:29:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 197DC64D9F
-	for <bpf@archiver.kernel.org>; Thu, 28 Jan 2021 04:10:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3E28A64DDC
+	for <bpf@archiver.kernel.org>; Thu, 28 Jan 2021 06:29:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231260AbhA1EKY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 27 Jan 2021 23:10:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51406 "EHLO
+        id S229545AbhA1G3I (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 28 Jan 2021 01:29:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbhA1EKL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 27 Jan 2021 23:10:11 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C26AC061786;
-        Wed, 27 Jan 2021 19:38:48 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id p15so3064465pjv.3;
-        Wed, 27 Jan 2021 19:38:48 -0800 (PST)
+        with ESMTP id S229504AbhA1G3I (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 28 Jan 2021 01:29:08 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E6A1C061573;
+        Wed, 27 Jan 2021 22:28:27 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id lw17so4252502pjb.0;
+        Wed, 27 Jan 2021 22:28:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=qIUaDsS3TlIZbhKyHx6NwpLW6Nt70ekQtolYf9/XSE4=;
-        b=BfZUONoI/oMuQVqqie1EtCfkpQpGaMMSZeoARnty8VDv46F/l3NNuBkkIqVky+WJYZ
-         K4SO5o8OYNGU4j++oWSeJD26zlvv+X9BS82wXhJJQjP/XGqbqI2U6iyoGSvXs4Uy6+wU
-         BpaLVeKaFoOAdZGIwxL+vCzXAVI6JXKGqz1aO0v19ZCQmVOrcYiK2t6efKS6T1ZU2jJL
-         DgN3+pTBjLiA6eDgWvRX9LFLkvNaWNiGt+F1EIUhqlq1vLuSzElHV8jYh4XJ2fcG415d
-         QfMBfEnT/opAA/kXSBQ/J6FiSqbGDvGDu011VLZc/LhPkZFt/WcuxbMCjqfesiXdobcv
-         cJoQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=DAbNeqn4HrFrwHesm9EjNkW+m3p+6Gw00s2+sHZm0lg=;
+        b=GwVoXgW8/huQGLo9yRdTRNCp+UlxLS5bainwfcCUT0dMAg6pp6hEKZvdxHYZBK1h4P
+         5gRJ6c7QEExmrHQlgT0fMfOWij6wS1EcFt0k0l7F7sLa4aT2Yf/SdyhFoLzw2goqhh+P
+         sYkWkHX/8Fzf/rYc23XArIE3UAcOf9665sqyC6Qw0HWoiU/fh6lqhrX486TQ0hhzt4kA
+         Qey3M3/BtblX9QOGUFGcRoDgXDPq9blgooQeKPaT5rnM5MXlYsuyc5y2dz1j3w4/PYpH
+         0uECw3yrVT1DhXL/OHlTWjGLNYQc4qtkz9UKaDdksAvn5VerdFdAO/ylfvzuSQdOGjCa
+         PLzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=qIUaDsS3TlIZbhKyHx6NwpLW6Nt70ekQtolYf9/XSE4=;
-        b=gMJ3uDlPpAWQ1PHRYIIG0Y0809UbGX2703t9S1qWcrSyGKHtn37Z4xW76wySIXeYD8
-         8oFbBkoYN/9nekEtipg1A98G6ZjcBcSBXBaU6+reDn66JFBR4EQKektypJcJfHa7zMIl
-         inyMWEBOj9OrloSZ4sxbgNR5KDYths0gkLkwFCMM7gaHx62yVf/dXzGRWB8e0uSGXKXg
-         rqipkX7Ru5+JmZzBfZuwGqhvD1jACvBZEYbURbREp2U4JzIL37KWQwMTSYmq8AHOzAyz
-         IpxTy4xpeMEoGkR+XL5z/zeVN+ac9uYgPwprfMvNkqx1emfj3K0O/pbGpnS70qD+qVKb
-         ybMg==
-X-Gm-Message-State: AOAM531DZGbfS9N93ymhwnnVvM/gRv/pYpA6CaZfDFyFAX/YxDve/lMy
-        pcQkFkRGJ/T0/32AjG9vxKWk2XWRM9QvZpPX
-X-Google-Smtp-Source: ABdhPJwE6QB1xC4MSSr4U96XQc8VXCcwYGuhcZ1xBfLcEnYi/8WDOgHRyf6F7Bd8GOI0Kuoo6q3Hbw==
-X-Received: by 2002:a17:902:9049:b029:da:efd6:4c12 with SMTP id w9-20020a1709029049b02900daefd64c12mr14373276plz.12.1611805127489;
-        Wed, 27 Jan 2021 19:38:47 -0800 (PST)
-Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp. [210.141.244.193])
-        by smtp.gmail.com with ESMTPSA id d21sm3393117pjz.39.2021.01.27.19.38.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Jan 2021 19:38:46 -0800 (PST)
-Date:   Thu, 28 Jan 2021 12:38:42 +0900
-From:   Masami Hiramatsu <masami.hiramatsu@gmail.com>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Nikolay Borisov <nborisov@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>, bpf@vger.kernel.org
-Subject: Re: kprobes broken since 0d00449c7a28
- ("x86: Replace ist_enter() with nmi_enter()")
-Message-Id: <20210128123842.c9e33949e62f504b84bfadf5@gmail.com>
-In-Reply-To: <20210128103415.d90be51ec607bb6123b2843c@kernel.org>
-References: <25cd2608-03c2-94b8-7760-9de9935fde64@suse.com>
-        <20210128001353.66e7171b395473ef992d6991@kernel.org>
-        <20210128002452.a79714c236b69ab9acfa986c@kernel.org>
-        <a35a6f15-9ab1-917c-d443-23d3e78f2d73@suse.com>
-        <20210128103415.d90be51ec607bb6123b2843c@kernel.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DAbNeqn4HrFrwHesm9EjNkW+m3p+6Gw00s2+sHZm0lg=;
+        b=IKd04m9oiM6BTYUgWgzp+JswoCt5ES9NPr724FeSQbluqGURa7wp/vLG3Sb1ikXCsL
+         ptLyT0Tc+rXIVUxQp1gFTSqRysQazcYC/GlrEV1c5fEtjOQOb8lvxVWb6XKUVzXSO6Cy
+         NRhmFkuNOONH8J5BAyzVpBC74QqwioLmeq2eyDzxhxlGRBULYQSeeOMwwGvil3cT3Ew6
+         IWypHTeFvfF4cV74FiEU3EHt2Gg3p7xHhz0WFsmbnyBfzDeEJa+cneVl6Aekushwg8pZ
+         e+SBeLPFsKLKogKmnUTmyvHBAgosbKJEI6lN6maGrJffS2LJmB5/gYyk+R1wXvhFYQ2b
+         1wMg==
+X-Gm-Message-State: AOAM5338t1OfELcFKVvG0/MePFnh+NsF866eXqUYHjQkIKeNR5Ez/BLj
+        cmvUtrIlBpwPBfHapLwOnLiEmMK2dKIW3WYCBuU=
+X-Google-Smtp-Source: ABdhPJzFVvjKbtEKY7g/qQjhsm6z2fa/ElvnLyetxE5toYVafRRG6gYuQflfNb9g3mdeeoRBrcXU6cXgxj3kXZtkRog=
+X-Received: by 2002:a17:902:9d8d:b029:df:e5a6:1ef7 with SMTP id
+ c13-20020a1709029d8db02900dfe5a61ef7mr15010646plq.77.1611815306375; Wed, 27
+ Jan 2021 22:28:26 -0800 (PST)
+MIME-Version: 1.0
+References: <20210122205415.113822-1-xiyou.wangcong@gmail.com>
+ <20210122205415.113822-2-xiyou.wangcong@gmail.com> <d69d44ca-206c-d818-1177-c8f14d8be8d1@iogearbox.net>
+ <CAM_iQpW8aeh190G=KVA9UEZ_6+UfenQxgPXuw784oxCaMfXjng@mail.gmail.com> <CAADnVQKmNiHj8qy1yqbOrf-OMyhnn8fKm87w6YMfkiDHkBpJVg@mail.gmail.com>
+In-Reply-To: <CAADnVQKmNiHj8qy1yqbOrf-OMyhnn8fKm87w6YMfkiDHkBpJVg@mail.gmail.com>
+From:   Cong Wang <xiyou.wangcong@gmail.com>
+Date:   Wed, 27 Jan 2021 22:28:15 -0800
+Message-ID: <CAM_iQpXAQ7AMz34=o5E=81RFGFsQB5jCDTCCaVdHokU6kaJQsQ@mail.gmail.com>
+Subject: Re: [Patch bpf-next v5 1/3] bpf: introduce timeout hash map
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Linux Kernel Network Developers <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, Jamal Hadi Salim <jhs@mojatatu.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Dongdong Wang <wangdongdong.6@bytedance.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi,
+On Wed, Jan 27, 2021 at 10:00 AM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Tue, Jan 26, 2021 at 11:00 PM Cong Wang <xiyou.wangcong@gmail.com> wrote:
+> > > >               ret = PTR_ERR(l_new);
+> > > > +             if (ret == -EAGAIN) {
+> > > > +                     htab_unlock_bucket(htab, b, hash, flags);
+> > > > +                     htab_gc_elem(htab, l_old);
+> > > > +                     mod_delayed_work(system_unbound_wq, &htab->gc_work, 0);
+> > > > +                     goto again;
+> > >
+> > > Also this one looks rather worrying, so the BPF prog is stalled here, loop-waiting
+> > > in (e.g. XDP) hot path for system_unbound_wq to kick in to make forward progress?
+> >
+> > In this case, the old one is scheduled for removal in GC, we just wait for GC
+> > to finally remove it. It won't stall unless GC itself or the worker scheduler is
+> > wrong, both of which should be kernel bugs.
+> >
+> > If we don't do this, users would get a -E2BIG when it is not too big. I don't
+> > know a better way to handle this sad situation, maybe returning -EBUSY
+> > to users and let them call again?
+>
+> I think using wq for timers is a non-starter.
+> Tying a hash/lru map with a timer is not a good idea either.
 
-On Thu, 28 Jan 2021 10:34:15 +0900
-Masami Hiramatsu <mhiramat@kernel.org> wrote:
+Both xt_hashlimit and nf_conntrack_core use delayed/deferrable
+works, probably since their beginnings. They seem to have started
+well. ;)
 
-> On Wed, 27 Jan 2021 19:57:56 +0200
-> Nikolay Borisov <nborisov@suse.com> wrote:
-> 
-> > 
-> > 
-> > On 27.01.21 г. 17:24 ч., Masami Hiramatsu wrote:
-> > > On Thu, 28 Jan 2021 00:13:53 +0900
-> > > Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> > > 
-> > >> Hi Nikolay,
-> > >>
-> > >> On Wed, 27 Jan 2021 15:43:29 +0200
-> > >> Nikolay Borisov <nborisov@suse.com> wrote:
-> > >>
-> > >>> Hello,
-> > >>>
-> > >>> I'm currently seeing latest Linus' master being somewhat broken w.r.t
-> > >>> krpobes. In particular I have the following test-case:
-> > >>>
-> > >>> #!/bin/bash
-> > >>>
-> > >>> mkfs.btrfs -f /dev/vdc &> /dev/null
-> > >>> mount /dev/vdc /media/scratch/
-> > >>>
-> > >>> bpftrace -e 'kprobe:btrfs_sync_file {printf("kprobe: %s\n", kstack());}'
-> > >>> &>bpf-output &
-> > >>> bpf_trace_pid=$!
-> > >>>
-> > >>> # force btrfs_sync_file to be called
-> > >>> sleep 2
-> > >>> xfs_io -f -c "pwrite 0 4m" -c "fsync" /media/scratch/file5
-> > >>>
-> > >>> kill $bpf_trace_pid
-> > >>> sleep 1
-> > >>>
-> > >>> grep -q kprobe bpf-output
-> > >>> retval=$?
-> > >>> rm -f bpf-output
-> > >>> umount /media/scratch
-> > >>>
-> > >>> exit $retval
-> > >>>
-> > >>> It traces btrfs_sync_file which is called when fsync is executed on a
-> > >>> btrfs file, however I don't see the stacktrace being printed i.e the
-> > >>> kprobe doesn't fire at all. The following alternative program:
-> > >>>
-> > >>> bpftrace -e 'tracepoint:btrfs:btrfs_sync_file {printf("tracepoint:
-> > >>> %s\n", kstack());} kprobe:btrfs_sync_file {printf("kprobe: %s\n",
-> > >>> kstack());}'
-> > >>>
-> > >>> only prints the stack from the tracepoint and not from the kprobe, given
-> > >>> that the tracepoint is called from the btrfs_sync_file function.
-> > >>
-> > >> Thank you for reporting!
-> > >>
-> > >> If you don't mind, could you confirm it with ftrace (tracefs)?
-> > >> bpftrace etc. involves too many things. It is better to test with
-> > >> simpler way to test it.
-> > >> I'm not familer with the bpftrace, but I think you can check it with
-> > >>
-> > >> # cd /sys/kernel/debug/tracing
-> > >> # echo p:myevent btrfs_sync_file >> kprobe_events
-> > >> # echo stacktrace > events/kprobes/myevent/trigger
-> > >>  (or echo 1 > options/stacktrace , if trigger file doesn't exist)
-> > > 
-> > > Of course, also you have to enable the event.
-> > >  # echo 1 > events/kprobes/myevent/enable
-> > > 
-> > > And check the results
-> > > 
-> > >  # cat trace
-> > > 
-> > > 
-> > >> Could you also share your kernel config, so that we can reproduce it?
-> > > 
-> > 
-> > I've attached the config and indeed with the scenario you proposed it
-> > seems to works. I see:
-> > 
-> >        xfs_io-20280   [000] d.Z.  9900.748633: myevent:
-> > (btrfs_sync_file+0x0/0x580)
-> >           xfs_io-20280   [000] d.Z.  9900.748647: <stack trace>
-> >  => kprobe_trace_func
-> >  => kprobe_dispatcher
-> >  => kprobe_int3_handler
-> >  => exc_int3
-> >  => asm_exc_int3
-> >  => btrfs_sync_file
-> >  => do_fsync
-> >  => __x64_sys_fsync
-> >  => do_syscall_64
-> >  => entry_SYSCALL_64_after_hwframe
-> 
-> Hmm, then there might be a problem in bpftrace or ebpf (need more info).
-> At least kprobes itself isn't broken.
-> I guess they check "in_nmi()" and skip such event?
+>
+> I think timers have to be done as independent objects similar to
+> how the kernel uses them.
+> Then there will be no question whether lru or hash map needs it.
 
-Yeah, there is. Nikolay, could you try this tentative patch?
+Yeah, this probably could make the code easier, but when we have
+millions of entries in a map, millions of timers would certainly bring
+a lot of CPU overhead (timer interrupt storm?).
 
-Of course this just drops the NMI check from the handler, so alternative
-checker is required. But I'm not sure what the original code concerns.
-As far as I can see, there seems no re-entrant block flag, nor locks
-among ebpf programs in runtime.
 
-Alexei, could you tell me what is the concerning situation for bpf?
+> The bpf prog author will be able to use timers with either.
+> The prog will be able to use timers without hash maps too.
+>
+> I'm proposing a timer map where each object will go through
+> bpf_timer_setup(timer, callback, flags);
+> where "callback" is a bpf subprogram.
+> Corresponding bpf_del_timer and bpf_mod_timer would work the same way
+> they are in the kernel.
+> The tricky part is kernel style of using from_timer() to access the
+> object with additional info.
+> I think bpf timer map can model it the same way.
+> At map creation time the value_size will specify the amount of extra
+> bytes necessary.
+> Another alternative is to pass an extra data argument to a callback.
 
-Thank you,
+Hmm, this idea is very interesting. I still think arming a timer,
+whether a kernel timer or a bpf timer, for each entry is overkill,
+but we can arm one for each map, something like:
 
-From c5cd0e5f60ef6494c9e1579ec1b82b7344c41f9a Mon Sep 17 00:00:00 2001
-From: Masami Hiramatsu <mhiramat@kernel.org>
-Date: Thu, 28 Jan 2021 12:31:02 +0900
-Subject: [PATCH] tracing: bpf: Remove in_nmi() check from kprobe handler
+bpf_timer_run(interval, bpf_prog, &any_map);
 
-Since commit 0d00449c7a28 ("x86: Replace ist_enter() with nmi_enter()") has
-changed the kprobe handler to run in the NMI context, in_nmi() always returns
-true. This means the bpf events on kprobes always skipped.
+so we run 'bpf_prog' on any map every 'interval', but the 'bpf_prog'
+would have to iterate the whole map during each interval to delete
+the expired ones. This is probably doable: the timestamps can be
+stored either as a part of key or value, and bpf_jiffies64() is already
+available, users would have to discard expired ones after lookup
+when they are faster than the timer GC.
 
-Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
----
- kernel/trace/bpf_trace.c | 3 ---
- 1 file changed, 3 deletions(-)
+Let me take a deeper look tomorrow.
 
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 6c0018abe68a..764400260eb6 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -96,9 +96,6 @@ unsigned int trace_call_bpf(struct trace_event_call *call, void *ctx)
- {
- 	unsigned int ret;
- 
--	if (in_nmi()) /* not supported yet */
--		return 1;
--
- 	cant_sleep();
- 
- 	if (unlikely(__this_cpu_inc_return(bpf_prog_active) != 1)) {
--- 
-2.25.1
-
--- 
-Masami Hiramatsu
+Thanks.
