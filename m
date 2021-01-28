@@ -2,52 +2,55 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DED9C433E0
-	for <bpf@archiver.kernel.org>; Thu, 28 Jan 2021 00:22:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B467FC433DB
+	for <bpf@archiver.kernel.org>; Thu, 28 Jan 2021 00:23:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 41BF561492
-	for <bpf@archiver.kernel.org>; Thu, 28 Jan 2021 00:22:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7C53661492
+	for <bpf@archiver.kernel.org>; Thu, 28 Jan 2021 00:23:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231847AbhA1AWR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 27 Jan 2021 19:22:17 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:2928 "EHLO
+        id S231315AbhA1AXC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 27 Jan 2021 19:23:02 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:49866 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231622AbhA1AVR (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 27 Jan 2021 19:21:17 -0500
+        by vger.kernel.org with ESMTP id S231772AbhA1AVW (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 27 Jan 2021 19:21:22 -0500
 Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 10S0DxiU003231
-        for <bpf@vger.kernel.org>; Wed, 27 Jan 2021 16:20:36 -0800
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 10S0DuGd003037
+        for <bpf@vger.kernel.org>; Wed, 27 Jan 2021 16:20:42 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=qSl0hIbsWjbdFiMIHrNNvB79aitkeKbYCX0qUJKiMOg=;
- b=nou/auOnrvK9wdWtTh5FEZxMFW7VjSk5o37UsPEVVVMrbMaFs2ra2jomWisZkD8N5R5k
- LAvgH0u41xtLxsFdICpy/EYM2hSUVYntmvlMOM/9xBJ5wt/BfEYoQ8R5p6058WVxP+EK
- 5tnnuty3bVWCu/ifefN3foimkCbQDt5Ppbc= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 36awcpp7jw-5
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=xw7lWCeLzzObrvYrpYTfD77frYhsCS+HfiI62osPAeI=;
+ b=lGwmEdrIWiMPysTX4aiqk1LN5fGCZ1Rf2E7vMNpIATXvxYqohuleDqOpqxsLhfwo/2x+
+ TG+/PAlDIbDOfoB+er1/A5H0ObAZvqyRv7/qWskc0tSDYjT9+LsbM2yVgChf1tpiJx2c
+ quN/Ns4FvzKE5yb8VTTaH8MSXBguFcPTNZM= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 36awcpp7k8-6
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 27 Jan 2021 16:20:36 -0800
-Received: from intmgw001.37.frc1.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 27 Jan 2021 16:20:42 -0800
+Received: from intmgw001.05.ash9.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 27 Jan 2021 16:20:35 -0800
+ 15.1.1979.3; Wed, 27 Jan 2021 16:20:41 -0800
 Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id 8116762E0B6C; Wed, 27 Jan 2021 16:20:32 -0800 (PST)
+        id 385C262E0B6C; Wed, 27 Jan 2021 16:20:40 -0800 (PST)
 From:   Song Liu <songliubraving@fb.com>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
 CC:     <mingo@redhat.com>, <peterz@infradead.org>, <daniel@iogearbox.net>,
         <kpsingh@chromium.org>, <kernel-team@fb.com>,
         Song Liu <songliubraving@fb.com>
-Subject: [PATCH v3 bpf-next 0/4] bpf: enable task local storage for tracing programs
-Date:   Wed, 27 Jan 2021 16:19:44 -0800
-Message-ID: <20210128001948.1637901-1-songliubraving@fb.com>
+Subject: [PATCH v3 bpf-next 3/4] bpf: runqslower: prefer using local vmlimux to generate vmlinux.h
+Date:   Wed, 27 Jan 2021 16:19:47 -0800
+Message-ID: <20210128001948.1637901-4-songliubraving@fb.com>
 X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20210128001948.1637901-1-songliubraving@fb.com>
+References: <20210128001948.1637901-1-songliubraving@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
@@ -55,7 +58,7 @@ Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
  definitions=2021-01-27_10:2021-01-27,2021-01-27 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
- phishscore=0 bulkscore=0 mlxlogscore=800 priorityscore=1501 spamscore=0
+ phishscore=0 bulkscore=0 mlxlogscore=551 priorityscore=1501 spamscore=0
  impostorscore=0 lowpriorityscore=0 mlxscore=0 adultscore=0 suspectscore=0
  clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2101280000
@@ -64,54 +67,34 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This set enables task local storage for non-BPF_LSM programs.
+Update the Makefile to prefer using $(O)/mvlinux, $(KBUILD_OUTPUT)/vmlinu=
+x
+(for selftests) or ../../../vmlinux. These two files should have latest
+definitions for vmlinux.h.
 
-It is common for tracing BPF program to access per-task data. Currently,
-these data are stored in hash tables with pid as the key. In
-bcc/libbpftools [1], 9 out of 23 tools use such hash tables. However,
-hash table is not ideal for many use case. Task local storage provides
-better usability and performance for BPF programs. Please refer to 4/4 fo=
-r
-some performance comparison of task local storage vs. hash table.
+Signed-off-by: Song Liu <songliubraving@fb.com>
+---
+ tools/bpf/runqslower/Makefile | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Changes v2 =3D> v3:
-1. Make the selftest more robust. (Andrii)
-2. Small changes with runqslower. (Andrii)
-3. Shortern CC list to make it easy for vger.
-
-Changes v1 =3D> v2:
-1. Do not allocate task local storage when the task is being freed.
-2. Revise the selftest and added a new test for a task being freed.
-3. Minor changes in runqslower.
-
-Song Liu (4):
-  bpf: enable task local storage for tracing programs
-  selftests/bpf: add non-BPF_LSM test for task local storage
-  bpf: runqslower: prefer using local vmlimux to generate vmlinux.h
-  bpf: runqslower: use task local storage
-
- include/linux/bpf.h                           |  7 ++
- include/linux/bpf_lsm.h                       | 22 ------
- include/linux/bpf_types.h                     |  2 +-
- include/linux/sched.h                         |  5 ++
- kernel/bpf/Makefile                           |  3 +-
- kernel/bpf/bpf_local_storage.c                | 28 +++++---
- kernel/bpf/bpf_lsm.c                          |  4 --
- kernel/bpf/bpf_task_storage.c                 | 34 +++------
- kernel/fork.c                                 |  5 ++
- kernel/trace/bpf_trace.c                      |  4 ++
- tools/bpf/runqslower/Makefile                 |  5 +-
- tools/bpf/runqslower/runqslower.bpf.c         | 33 +++++----
- .../bpf/prog_tests/task_local_storage.c       | 69 +++++++++++++++++++
- .../selftests/bpf/progs/task_local_storage.c  | 64 +++++++++++++++++
- .../bpf/progs/task_local_storage_exit_creds.c | 32 +++++++++
- 15 files changed, 239 insertions(+), 78 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/task_local_sto=
-rage.c
- create mode 100644 tools/testing/selftests/bpf/progs/task_local_storage.=
-c
- create mode 100644 tools/testing/selftests/bpf/progs/task_local_storage_=
-exit_creds.c
-
---
+diff --git a/tools/bpf/runqslower/Makefile b/tools/bpf/runqslower/Makefil=
+e
+index 4d5ca54fcd4c8..e6d1f85a3871f 100644
+--- a/tools/bpf/runqslower/Makefile
++++ b/tools/bpf/runqslower/Makefile
+@@ -19,7 +19,10 @@ CFLAGS :=3D -g -Wall
+=20
+ # Try to detect best kernel BTF source
+ KERNEL_REL :=3D $(shell uname -r)
+-VMLINUX_BTF_PATHS :=3D /sys/kernel/btf/vmlinux /boot/vmlinux-$(KERNEL_RE=
+L)
++VMLINUX_BTF_PATHS :=3D $(if $(O),$(O)/vmlinux)		\
++	$(if $(KBUILD_OUTPUT),$(KBUILD_OUTPUT)/vmlinux) \
++	../../../vmlinux /sys/kernel/btf/vmlinux	\
++	/boot/vmlinux-$(KERNEL_REL)
+ VMLINUX_BTF_PATH :=3D $(or $(VMLINUX_BTF),$(firstword			       \
+ 					  $(wildcard $(VMLINUX_BTF_PATHS))))
+=20
+--=20
 2.24.1
+
