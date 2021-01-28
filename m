@@ -4,167 +4,122 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E62DC433E6
-	for <bpf@archiver.kernel.org>; Thu, 28 Jan 2021 02:47:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8724AC433E0
+	for <bpf@archiver.kernel.org>; Thu, 28 Jan 2021 04:06:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3ACCB64DE5
-	for <bpf@archiver.kernel.org>; Thu, 28 Jan 2021 02:47:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 37C1C64DD6
+	for <bpf@archiver.kernel.org>; Thu, 28 Jan 2021 04:06:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231146AbhA1Cqx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 27 Jan 2021 21:46:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33564 "EHLO
+        id S231293AbhA1EGf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 27 Jan 2021 23:06:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbhA1Cqv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 27 Jan 2021 21:46:51 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A55C061574;
-        Wed, 27 Jan 2021 18:46:11 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id e18so4533131lja.12;
-        Wed, 27 Jan 2021 18:46:11 -0800 (PST)
+        with ESMTP id S231299AbhA1EFc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 27 Jan 2021 23:05:32 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85BC3C0617AB;
+        Wed, 27 Jan 2021 19:53:47 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id cq1so3079965pjb.4;
+        Wed, 27 Jan 2021 19:53:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TrqL8fMmc/YuzLkjoUY1WX8ImMuGKrQku2H0kOgVXK8=;
-        b=UN+NJtuH55rMzgqCQ+n1FytwSr7tk2GLxxQ2Z2dL0eb0aunqK8U+m6gaIFSAVX78HT
-         rzAEie0oZ4FZOIiKH82CKwvXfGh3Q4cZ6M90QJdCLrUE8YhBSAWGnZkrum2boP2KOmtZ
-         sltRaAp8z+EDGgs1U/uDAK5TedmDlXUvQsM58j21PFd7XISWxbKm0hQKL+IsR69r5iXG
-         Rd+Vf3BwE1pVjeyH6eSiqNWLbqRzaNYtYd5HrGTRN37RwVpXf8q/c3Uyh4jyQ3k22srg
-         9h3v3kkgkfm51t8bbLQTtrehs5Et0gdG81Rw3VPZVq0DZU5P6NUl4OtQdfq6RV0TdWKE
-         48og==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=vL2Ls/K94DeV6njPMNfjB8BEObaZUQsRgrO5DBIVlqM=;
+        b=Q4JbkF8MvUQcA+j2Fl1/8WFHpjVicak5lU39i8WrOCah3GfZrLnhHkSIratFBbWfND
+         FV55Y+d6ifPevS0yp4si2ndwtaksmcOXpCX395FnAMwGtu6I0L2mG5I2QEInhu58snWQ
+         sCZM2+cLYU3kKbaS9N+OyfpNwOIZKqYnSBzRGVB2rjECMlAWxBCyEzhOUCso071oh0oY
+         6UCpKuxoSIyyDMCmmqbX6vH+U8w7XwSbLr15b+IVSfh4gqrqeKhip/tDrlnTAWiS2hJY
+         ZrXbdH9u5jCo2VZ7M7LEJzV0Gdu5AsoYukgGp6YB3g3kou0YFKNOKI2kSLcs7cmY1PPX
+         EY5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TrqL8fMmc/YuzLkjoUY1WX8ImMuGKrQku2H0kOgVXK8=;
-        b=b77STCnb3sttMQN0h28Ed+8iF9irYwQfk3T095SwfLzX2EnO8UGhrrxEzvLUjzjmBU
-         WktTSVMCPoZxdV9zKogrddNpzBvO/0n+8m3g2ZDF5WA4zlONwz5xwxnDovWjpcZO6cVB
-         4NxQYqcdb22C68zoyl/hAxxfG5bOwQTOCRzYkiatQykFureZ2RlvLQ2ehLgTrIobX7/6
-         yH6Ke4blJ/Jazz2rjbZlOE01TxvuA+efP4b7HY5w0GzUSyvjPvf7rgN2t7IJlp9UF1l5
-         kI5EpLMbxRa/pCc3NUec5BpMoYOWK9igFTvcB0tLXWvsSshgRHk7kpQV9JVbweZtpKgI
-         pszw==
-X-Gm-Message-State: AOAM531d10rekcfq6m6SA4ceaxW8qZEEMl6BG1T68+hzor08W3xMZbem
-        9wAzax+0cQY/w/qg9DbnnnPkX+xTJL2+KhICWxI=
-X-Google-Smtp-Source: ABdhPJzIQqUaQ+XSqOhgdWdfBgfCvFsGd5UfFsYXCkSxVHxlPEgF+7tDHYQQfsZ5eTwhWxN/sTMkCna73rtCWIcCrEg=
-X-Received: by 2002:a2e:54d:: with SMTP id 74mr6881989ljf.44.1611801969818;
- Wed, 27 Jan 2021 18:46:09 -0800 (PST)
-MIME-Version: 1.0
-References: <20210122205415.113822-1-xiyou.wangcong@gmail.com>
- <20210122205415.113822-2-xiyou.wangcong@gmail.com> <d69d44ca-206c-d818-1177-c8f14d8be8d1@iogearbox.net>
- <CAM_iQpW8aeh190G=KVA9UEZ_6+UfenQxgPXuw784oxCaMfXjng@mail.gmail.com>
- <CAADnVQKmNiHj8qy1yqbOrf-OMyhnn8fKm87w6YMfkiDHkBpJVg@mail.gmail.com> <b646c7b5-be91-79c6-4538-e41a10d4b9ae@iogearbox.net>
-In-Reply-To: <b646c7b5-be91-79c6-4538-e41a10d4b9ae@iogearbox.net>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 27 Jan 2021 18:45:58 -0800
-Message-ID: <CAADnVQLB_+MS7EB9GbONV_DXdFP8AdQsjqEhxOEDRHfCmUp+wg@mail.gmail.com>
-Subject: Re: [Patch bpf-next v5 1/3] bpf: introduce timeout hash map
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Cong Wang <xiyou.wangcong@gmail.com>,
-        Linux Kernel Network Developers <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Jamal Hadi Salim <jhs@mojatatu.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Cong Wang <cong.wang@bytedance.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vL2Ls/K94DeV6njPMNfjB8BEObaZUQsRgrO5DBIVlqM=;
+        b=TL36t5dT1LLDLDEdZfMIjfTWABCf8YG95vjNvseQ8UJE2rtjCcr0XRPyy/hpKGGctb
+         kp9qLv1s3bDV774HQBWisvrOU1y/svliQnfdshb6CoBcaMzhyW8OOa35sj0pPd4PKAW/
+         VbAAXrtY3g0DXXbIzqpQyfZpiMuvsvoVFi0RIwt6jgtNqEgtPU/4A27/HKtVv0d9LCnm
+         Fz+kR5XbkuJjji6RTMga99ElOqGK++1xyK9SqNai4c5ypIlECV96J8ur/jN6N/iwkbba
+         cFdGgIf03BYR/phvyrOeUBJF1D6njazxyo36SWLCbWUcQ56ahGiJNcvKjjoRv3hICDoy
+         MlqA==
+X-Gm-Message-State: AOAM530+0Gjq150ZacuXbGuJt8HFTWpcqv8ZzfsBJ2cZy9Vw8qjTIUfA
+        2Tb6FeSbHhy/1bAOuwcIxMk=
+X-Google-Smtp-Source: ABdhPJxvy3q8H2306Ycyakn+l2HhardN2cj2y5jBnKXTt04ZrCDa/tUlj8oyBs0K2Q1TRw+cK4gFXw==
+X-Received: by 2002:a17:90a:1109:: with SMTP id d9mr9152958pja.94.1611806027035;
+        Wed, 27 Jan 2021 19:53:47 -0800 (PST)
+Received: from Leo-laptop-t470s ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id b17sm3603179pfo.151.2021.01.27.19.53.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Jan 2021 19:53:46 -0800 (PST)
+Date:   Thu, 28 Jan 2021 11:53:00 +0800
+From:   Hangbin Liu <liuhangbin@gmail.com>
+To:     John Fastabend <john.fastabend@gmail.com>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
+        Jiri Benc <jbenc@redhat.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Eelco Chaudron <echaudro@redhat.com>, ast@kernel.org,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Lorenzo Bianconi <lorenzo.bianconi@redhat.com>,
+        David Ahern <dsahern@gmail.com>,
         Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Dongdong Wang <wangdongdong.6@bytedance.com>,
-        Yonghong Song <yhs@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Subject: Re: [PATCHv17 bpf-next 5/6] selftests/bpf: Add verifier tests for
+ bpf arg ARG_CONST_MAP_PTR_OR_NULL
+Message-ID: <20210128035300.GQ1421720@Leo-laptop-t470s>
+References: <20210122074652.2981711-1-liuhangbin@gmail.com>
+ <20210125124516.3098129-1-liuhangbin@gmail.com>
+ <20210125124516.3098129-6-liuhangbin@gmail.com>
+ <6011e82feb2_a0fd920881@john-XPS-13-9370.notmuch>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6011e82feb2_a0fd920881@john-XPS-13-9370.notmuch>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Jan 27, 2021 at 2:48 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
->
-> On 1/27/21 7:00 PM, Alexei Starovoitov wrote:
-> > On Tue, Jan 26, 2021 at 11:00 PM Cong Wang <xiyou.wangcong@gmail.com> wrote:
-> >>>>                ret = PTR_ERR(l_new);
-> >>>> +             if (ret == -EAGAIN) {
-> >>>> +                     htab_unlock_bucket(htab, b, hash, flags);
-> >>>> +                     htab_gc_elem(htab, l_old);
-> >>>> +                     mod_delayed_work(system_unbound_wq, &htab->gc_work, 0);
-> >>>> +                     goto again;
-> >>>
-> >>> Also this one looks rather worrying, so the BPF prog is stalled here, loop-waiting
-> >>> in (e.g. XDP) hot path for system_unbound_wq to kick in to make forward progress?
-> >>
-> >> In this case, the old one is scheduled for removal in GC, we just wait for GC
-> >> to finally remove it. It won't stall unless GC itself or the worker scheduler is
-> >> wrong, both of which should be kernel bugs.
-> >>
-> >> If we don't do this, users would get a -E2BIG when it is not too big. I don't
-> >> know a better way to handle this sad situation, maybe returning -EBUSY
-> >> to users and let them call again?
-> >
-> > I think using wq for timers is a non-starter.
-> > Tying a hash/lru map with a timer is not a good idea either.
->
-> Thinking some more, given we have jiffies64 helper and atomic ops for BPF by now,
-> we would technically only need the ability to delete entries via bpf iter progs
-> (d6c4503cc296 ("bpf: Implement bpf iterator for hash maps")) which could then be
-> kicked off from user space at e.g. dynamic intervals which would be the equivalent
-> for the wq in here. That patch could then be implemented this way. I presume
-> the ability to delete map entries from bpf iter progs would be generic and useful
-> enough anyway.
+On Wed, Jan 27, 2021 at 02:24:47PM -0800, John Fastabend wrote:
+> [...]
+> 
+> > +{
+> > +	"ARG_CONST_MAP_PTR_OR_NULL: null pointer for ex_map",
+> > +	.insns = {
+> > +		BPF_MOV64_IMM(BPF_REG_1, 0),
+> > +		/* bpf_redirect_map_multi arg1 (in_map) */
+> > +		BPF_LD_MAP_FD(BPF_REG_1, 0),
+> > +		/* bpf_redirect_map_multi arg2 (ex_map) */
+> > +		BPF_MOV64_IMM(BPF_REG_2, 0),
+> > +		/* bpf_redirect_map_multi arg3 (flags) */
+> > +		BPF_MOV64_IMM(BPF_REG_3, 0),
+> > +		BPF_EMIT_CALL(BPF_FUNC_redirect_map_multi),
+> > +		BPF_EXIT_INSN(),
+> > +	},
+> > +	.fixup_map_devmap = { 1 },
+> > +	.result = ACCEPT,
+> > +	.prog_type = BPF_PROG_TYPE_XDP,
+> > +	.retval = 4,
+> 
+> Do we need one more case where this is map_or_null? In above
+> ex_map will be scalar tnum_const=0 and be exactly a null. This
+> will push verifier here,
+> 
+>   meta->map_ptr = register_is_null(reg) ? NULL : reg->map_ptr;
+> 
+> In the below case it is known to be not null.
+> 
+> Is it also interesting to have a case where register_is_null(reg)
+> check fails and reg->map_ptr is set, but may be null.
 
-I think bpf_iter for maps doesn't hold bucket lock anymore, so delete of the
-same element should be allowed already. Unless I've mistaken wip patches
-with landed ones.
-Soon there will be support for bpf_map_for_each_elem() iterator
-running from the bpf program itself, so even more ways to do GC like work.
+Hi John,
 
-> > I think timers have to be done as independent objects similar to
-> > how the kernel uses them.
-> > Then there will be no question whether lru or hash map needs it.
-> > The bpf prog author will be able to use timers with either.
-> > The prog will be able to use timers without hash maps too.
-> >
-> > I'm proposing a timer map where each object will go through
-> > bpf_timer_setup(timer, callback, flags);
-> > where "callback" is a bpf subprogram.
-> > Corresponding bpf_del_timer and bpf_mod_timer would work the same way
-> > they are in the kernel.
-> > The tricky part is kernel style of using from_timer() to access the
-> > object with additional info.
->
-> Would this mean N timer objs for N map elems? I presume not given this could be
-> racy and would have huge extra mem overhead.
+I'm not familiar with the test_verifier syntax. Doesn't
+BPF_LD_MAP_FD(BPF_REG_1, 0) just assign the register with map NULL?
 
-hmm. Not sure I got the point about overhead.
-sizeof(struct timer_list) == 40 bytes.
-Not a lot of overhead even if there is a timer object per flow.
-When bpf_map_for_each_elem() lands the bpf prog could have one
-timer that will kick one a second (or whatever GC period the prog author wants)
-and does bpf_map_for_each_elem() once callback fires to delete elems
-older than whatever interval the prog needs.
-imo that would be a true generic way to combine
-bpf_maps, bpf_iters and bpf_timers.
-
-> Either way, timer obj could work, but
-> then at the same time you could probably also solve it with the above; it's not
-> like you need the timer to kick in at some /exact/ time, but rather at some point
-> to clean up stale entries before the map gets full and worst case refuses updates
-> for new entries. (In the ideal case though we wouldn't need the extra effort to
-> search deeply for elements w/o penalizing the fast-path lookup costs too much when
-> walking the bucket.)
-
-Right. I wasn't suggesting to mess with the timer object at every lookup.
-My understanding that mod_timer() isn't that fast to call a million
-times a second.
-bpf progs would have to be smart.
-
-Instead of timer objects as a timer map (a collection of timers that
-bpf progs can manipulate)
-we can introduce them similar to "struct bpf_spin_lock".
-Then "struct bpf_timer foo;" field can be embedded inside any map value
-(both hash and array). The verifier work would be a bit trickier than
-support for bpf_spin_lock,
-but certainly doable.
-
-My main point was that bpf should grow with small composable
-building blocks instead of single purpose constructs.
-I view hashmap+GC as an example of something that should be split
-into smaller blocks.
+Thanks
+hangbin
