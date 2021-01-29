@@ -2,41 +2,37 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A6C79C433DB
-	for <bpf@archiver.kernel.org>; Fri, 29 Jan 2021 12:05:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CDCB2C433DB
+	for <bpf@archiver.kernel.org>; Fri, 29 Jan 2021 16:32:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5F5A664E91
-	for <bpf@archiver.kernel.org>; Fri, 29 Jan 2021 12:05:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 94AAA64E07
+	for <bpf@archiver.kernel.org>; Fri, 29 Jan 2021 16:32:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232333AbhA2MEV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 29 Jan 2021 07:04:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36600 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232326AbhA2MCR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 29 Jan 2021 07:02:17 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E240C08ECA4;
-        Fri, 29 Jan 2021 02:21:15 -0800 (PST)
-Received: from zn.tnic (p200300ec2f0c9a00c2508fce5f12579a.dip0.t-ipconnect.de [IPv6:2003:ec:2f0c:9a00:c250:8fce:5f12:579a])
+        id S231303AbhA2Qbj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 29 Jan 2021 11:31:39 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:43504 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230009AbhA2Qb2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 29 Jan 2021 11:31:28 -0500
+Received: from zn.tnic (p200300ec2f0c9a00bc6c1bcbdaab9684.dip0.t-ipconnect.de [IPv6:2003:ec:2f0c:9a00:bc6c:1bcb:daab:9684])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A974D1EC026D;
-        Fri, 29 Jan 2021 11:21:10 +0100 (CET)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5929D1EC01B7;
+        Fri, 29 Jan 2021 17:30:47 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1611915670;
+        t=1611937847;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=TVLhEv6qFkJVfRGbRCeWnctSeyH/2aF863ezHXsArvw=;
-        b=erNdzR8S0vCkAaDIcWEZuGKQk4j4hHdj0CaAHILELw+fn/JXJlOTzwZ30WCZs/K2z9dGjS
-        24canQOHf8ZnUrv898FXTNxUFjY5Gj1mDjXUdu12OhUgtuR2tSl/HFc4D17HJs1JhQv6Hp
-        yBHs112GHBP977M3ycTPGXi5MsyTmKE=
-Date:   Fri, 29 Jan 2021 11:21:05 +0100
+        bh=37ypfY0hcyBwq6ff9BIdbEdz5BSxq7t0VPLakd3OmOU=;
+        b=J+YLSW9EWKGY6If2T9zKyjHGgY6x4bYBPaNCW9sNx/PtVhqqhiGAfvxNOSNuRcFYqdcK10
+        HuXbSkVfhEn6EvOkb5GfGAkJ5uuQD34uOlfsZSEYuMtE0wqUcZpzrDldn223q7LVeN34Sx
+        RUOmrLP+mvIAAb/hqyJqZf8kdNsctoI=
+Date:   Fri, 29 Jan 2021 17:30:48 +0100
 From:   Borislav Petkov <bp@alien8.de>
 To:     Josh Poimboeuf <jpoimboe@redhat.com>
 Cc:     x86@kernel.org, Masami Hiramatsu <masami.hiramatsu@gmail.com>,
@@ -47,10 +43,8 @@ Cc:     x86@kernel.org, Masami Hiramatsu <masami.hiramatsu@gmail.com>,
         Steven Rostedt <rostedt@goodmis.org>,
         Nikolay Borisov <nborisov@suse.com>
 Subject: Re: [PATCH] x86: Disable CET instrumentation in the kernel
-Message-ID: <20210129102105.GA27841@zn.tnic>
-References: <25cd2608-03c2-94b8-7760-9de9935fde64@suse.com>
- <20210128001353.66e7171b395473ef992d6991@kernel.org>
- <20210128002452.a79714c236b69ab9acfa986c@kernel.org>
+Message-ID: <20210129163048.GD27841@zn.tnic>
+References: <20210128002452.a79714c236b69ab9acfa986c@kernel.org>
  <a35a6f15-9ab1-917c-d443-23d3e78f2d73@suse.com>
  <20210128103415.d90be51ec607bb6123b2843c@kernel.org>
  <20210128123842.c9e33949e62f504b84bfadf5@gmail.com>
@@ -58,51 +52,33 @@ References: <25cd2608-03c2-94b8-7760-9de9935fde64@suse.com>
  <eb1ec6a3-9e11-c769-84a4-228f23dc5e23@suse.com>
  <20210128165014.xc77qtun6fl2qfun@treble>
  <20210128215219.6kct3h2eiustncws@treble>
+ <20210129102105.GA27841@zn.tnic>
+ <20210129151034.iba4eaa2fuxsipqa@treble>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210128215219.6kct3h2eiustncws@treble>
+In-Reply-To: <20210129151034.iba4eaa2fuxsipqa@treble>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Jan 28, 2021 at 03:52:19PM -0600, Josh Poimboeuf wrote:
-> 
-> With retpolines disabled, some configurations of GCC will add Intel CET
-> instrumentation to the kernel by default.  That breaks certain tracing
-> scenarios by adding a superfluous ENDBR64 instruction before the fentry
-> call, for functions which can be called indirectly.
-> 
-> CET instrumentation isn't currently necessary in the kernel, as CET is
-> only supported in user space.  Disable it unconditionally.
-> 
-> Reported-by: Nikolay Borisov <nborisov@suse.com>
-> Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
-> ---
->  Makefile          | 6 ------
->  arch/x86/Makefile | 3 +++
->  2 files changed, 3 insertions(+), 6 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index e0af7a4a5598..51c2bf34142d 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -948,12 +948,6 @@ KBUILD_CFLAGS   += $(call cc-option,-Werror=designated-init)
->  # change __FILE__ to the relative path from the srctree
->  KBUILD_CPPFLAGS += $(call cc-option,-fmacro-prefix-map=$(srctree)/=)
->  
-> -# ensure -fcf-protection is disabled when using retpoline as it is
-> -# incompatible with -mindirect-branch=thunk-extern
-> -ifdef CONFIG_RETPOLINE
-> -KBUILD_CFLAGS += $(call cc-option,-fcf-protection=none)
-> -endif
-> -
+On Fri, Jan 29, 2021 at 09:10:34AM -0600, Josh Poimboeuf wrote:
+> Maybe eventually.  But the enablement (actually enabling CET/CFI/etc)
+> happens in the arch code anyway, right?  So it could be a per-arch
+> decision.
 
-Why is that even here, in the main Makefile if this cf-protection thing
-is x86-specific?
+Right.
 
-Are we going to move it back there when some other arch gets CET or
-CET-like support?
+Ok, for this one, what about
+
+Cc: <stable@vger.kernel.org>
+
+?
+
+What are "some configurations of GCC"? If it can be reproduced with
+what's released out there, maybe that should go in now, even for 5.11?
+
+Hmm?
 
 -- 
 Regards/Gruss,
