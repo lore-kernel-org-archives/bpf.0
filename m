@@ -2,106 +2,79 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 12C0AC433E0
-	for <bpf@archiver.kernel.org>; Fri, 29 Jan 2021 18:08:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2919EC433E6
+	for <bpf@archiver.kernel.org>; Fri, 29 Jan 2021 19:03:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C802964E1B
-	for <bpf@archiver.kernel.org>; Fri, 29 Jan 2021 18:08:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C966564DE3
+	for <bpf@archiver.kernel.org>; Fri, 29 Jan 2021 19:03:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232020AbhA2SIA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 29 Jan 2021 13:08:00 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:25316 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232550AbhA2SHu (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 29 Jan 2021 13:07:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1611943582;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=V9wwVs7bE4eUGywhu7/y58AMJb7GSg2J1O0tKjzQHCI=;
-        b=cJkvcNrYX3NBrE5E8WQEfobIeayLBvLe2+F87OrwQQEyDiaRaHraUYfs4awamt5kh482Fr
-        e1lYvceeFlHEyPV4mJfxd5pl7opgUEEjTNlnFc+miY3UVfFQCbRJaq4TwJv/skyiJPMtyN
-        /A2eeIo2yoB7LBBQdpmoXQUMIzwVoW0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-104--BI2lw_SMW2OCKQ8iUs3KQ-1; Fri, 29 Jan 2021 13:06:18 -0500
-X-MC-Unique: -BI2lw_SMW2OCKQ8iUs3KQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S232827AbhA2TDY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 29 Jan 2021 14:03:24 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50278 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232896AbhA2TCg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 29 Jan 2021 14:02:36 -0500
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5223580DDE1;
-        Fri, 29 Jan 2021 18:06:16 +0000 (UTC)
-Received: from carbon (unknown [10.36.110.4])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 96AAA5C1B4;
-        Fri, 29 Jan 2021 18:06:09 +0000 (UTC)
-Date:   Fri, 29 Jan 2021 19:06:06 +0100
-From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
-To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
-        "Fijalkowski, Maciej" <maciej.fijalkowski@intel.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>, maximmi@nvidia.com,
-        David Miller <davem@davemloft.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdlbnNlbg==?= <toke@redhat.com>
-Subject: Re: [RFC PATCH bpf-next] bpf, xdp: per-map bpf_redirect_map
- functions for XDP
-Message-ID: <20210129190606.33c697cf@carbon>
-In-Reply-To: <CAJ+HfNiFtRd-KKMB1t3Mi3MZ=C+u5TTM5YFnzJFfR4Ruzc7c9Q@mail.gmail.com>
-References: <20210129153215.190888-1-bjorn.topel@gmail.com>
-        <CAJ+HfNiFtRd-KKMB1t3Mi3MZ=C+u5TTM5YFnzJFfR4Ruzc7c9Q@mail.gmail.com>
-Organization: Red Hat Inc.
+        by mail.kernel.org (Postfix) with ESMTPSA id 49AED64DE3;
+        Fri, 29 Jan 2021 19:01:05 +0000 (UTC)
+Date:   Fri, 29 Jan 2021 14:01:03 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Nikolay Borisov <nborisov@suse.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: Re: kprobes broken since 0d00449c7a28 ("x86: Replace ist_enter()
+ with nmi_enter()")
+Message-ID: <20210129140103.3ce971b7@gandalf.local.home>
+In-Reply-To: <20210129175943.GH8912@worktop.programming.kicks-ass.net>
+References: <20210128123842.c9e33949e62f504b84bfadf5@gmail.com>
+        <e8bae974-190b-f247-0d89-6cea4fd4cc39@suse.com>
+        <eb1ec6a3-9e11-c769-84a4-228f23dc5e23@suse.com>
+        <YBMBTsY1uuQb9wCP@hirez.programming.kicks-ass.net>
+        <20210129013452.njuh3fomws62m4rc@ast-mbp.dhcp.thefacebook.com>
+        <YBPNyRyrkzw2echi@hirez.programming.kicks-ass.net>
+        <20210129224011.81bcdb3eba1227c414e69e1f@kernel.org>
+        <20210129105952.74dc8464@gandalf.local.home>
+        <20210129162438.GC8912@worktop.programming.kicks-ass.net>
+        <CAADnVQLMqHpSsZ1OdZRFmKqNWKiRq3dxRxw+y=kvMdmkN7htUw@mail.gmail.com>
+        <20210129175943.GH8912@worktop.programming.kicks-ass.net>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, 29 Jan 2021 16:35:47 +0100
-Bj=C3=B6rn T=C3=B6pel <bjorn.topel@gmail.com> wrote:
+On Fri, 29 Jan 2021 18:59:43 +0100
+Peter Zijlstra <peterz@infradead.org> wrote:
 
-> On Fri, 29 Jan 2021 at 16:32, Bj=C3=B6rn T=C3=B6pel <bjorn.topel@gmail.co=
-m> wrote:
-> >
-> > From: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>
-> > =20
-> [...]
-> >
-> > For AF_XDP rxdrop this yields +600Mpps. I'll do CPU/DEVMAP
-> > measurements for the patch proper.
-> > =20
->=20
-> Kpps, not Mpps. :-P
+> On Fri, Jan 29, 2021 at 09:45:48AM -0800, Alexei Starovoitov wrote:
+> > Same things apply to bpf side. We can statically prove safety for
+> > ftrace and kprobe attaching whereas to deal with NMI situation we
+> > have to use run-time checks for recursion prevention, etc.  
+> 
+> I have no idea what you're saying. You can attach to functions that are
+> called with random locks held, you can create kprobes in some very
+> sensitive places.
+> 
+> What can you staticlly prove about that?
 
-+600Kpps from 24Mpps to 24.6Mpps I assume.  This corresponds to approx
-1 ns ((1/24-1/24.6)*1000 =3D 1.01626 ns).
+I think the main difference is, if you attach a kprobe or ftrace function,
+you can theoretically analyze the location before you do the attachment.
 
-This also correlate with saving one function call, which is basically
-what the patch does.
+Does, the NMI context mean "in_nmi()" returns true? Because there's cases
+in ftrace callbacks where that is checked (like the stack tracer). And
+having ftrace return true for "in_nmi()" will break a lot of existing
+utilities.
 
-Fresh measurement "Intel(R) Xeon(R) CPU E5-1650 v4 @ 3.60GHz" with [1]:
- time_bench: Type:funcion_call_cost Per elem: 3 cycles(tsc) 1.053 ns
- time_bench: Type:func_ptr_call_cost Per elem: 4 cycles(tsc) 1.317 ns
-
-[1] https://github.com/netoptimizer/prototype-kernel/blob/master/kernel/lib=
-/time_bench_sample.c
---=20
-Best regards,
-  Jesper Dangaard Brouer
-  MSc.CS, Principal Kernel Engineer at Red Hat
-  LinkedIn: http://www.linkedin.com/in/brouer
-
+-- Steve
