@@ -2,91 +2,125 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 03445C433DB
-	for <bpf@archiver.kernel.org>; Fri, 29 Jan 2021 16:33:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A118BC433DB
+	for <bpf@archiver.kernel.org>; Fri, 29 Jan 2021 16:48:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C578260C41
-	for <bpf@archiver.kernel.org>; Fri, 29 Jan 2021 16:33:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 72AF064E03
+	for <bpf@archiver.kernel.org>; Fri, 29 Jan 2021 16:48:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbhA2Qdc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 29 Jan 2021 11:33:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38728 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231244AbhA2Qbc (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 29 Jan 2021 11:31:32 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEBB1C0613D6;
-        Fri, 29 Jan 2021 08:25:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=yiqFfxPWjaBBtMQaM+MAoojFayOhd4kIg0RTmjiEmOo=; b=ojhbcyf9SCPvTLZTogs2KrgZ7S
-        ZLPgcka/xchmQCpmMifqdDSJvVJBIYZqv1tVP1hGLOgXDG3yyTHsHUyk7sHcy6UVHTHomiQkRkdHi
-        afcJH9vFuryu+jA+bv8n2Uge/Qf07cY/y052xTeFy4dVGac7ipDIiuE+N2R1j7455nvr0Ou/WC6jk
-        MHL/HtK7hiYIow7RkUyHFE1hdSEj6Txqg+9pmpWjNI434Iu+PD+2BETXTIrH5QHKurF9GW+sbtXm2
-        fcmNyfcnsOvPheKRb1o5nxILO5yksWW8IWKXwXUpJpl8b9jAvF+7gQ5KPSCIMF6OhGtj0NbvTdIrm
-        lOCspA4g==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1l5WZc-00A14C-Bi; Fri, 29 Jan 2021 16:24:42 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A7521981070; Fri, 29 Jan 2021 17:24:38 +0100 (CET)
-Date:   Fri, 29 Jan 2021 17:24:38 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Nikolay Borisov <nborisov@suse.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>, bpf@vger.kernel.org,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: Re: kprobes broken since 0d00449c7a28 ("x86: Replace ist_enter()
- with nmi_enter()")
-Message-ID: <20210129162438.GC8912@worktop.programming.kicks-ass.net>
-References: <a35a6f15-9ab1-917c-d443-23d3e78f2d73@suse.com>
- <20210128103415.d90be51ec607bb6123b2843c@kernel.org>
- <20210128123842.c9e33949e62f504b84bfadf5@gmail.com>
- <e8bae974-190b-f247-0d89-6cea4fd4cc39@suse.com>
- <eb1ec6a3-9e11-c769-84a4-228f23dc5e23@suse.com>
- <YBMBTsY1uuQb9wCP@hirez.programming.kicks-ass.net>
- <20210129013452.njuh3fomws62m4rc@ast-mbp.dhcp.thefacebook.com>
- <YBPNyRyrkzw2echi@hirez.programming.kicks-ass.net>
- <20210129224011.81bcdb3eba1227c414e69e1f@kernel.org>
- <20210129105952.74dc8464@gandalf.local.home>
+        id S231680AbhA2QsI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 29 Jan 2021 11:48:08 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:38870 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231646AbhA2Qq6 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 29 Jan 2021 11:46:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1611938732;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ck2gV0VuH7GBK/QhpVV19oowTPnRxR9Fj1/n8dmUshs=;
+        b=IMML3lCUzOD8lVezHDe/ffBQB4Iyfp/GT7+gHRqpleJpT+68c6MWpUH7clYgkejowAgYsH
+        AOSplzhVjYqkY7udEcwgqCIMKTwmeGznz2NLXCUbKJblOVm+tINpXcsRPTOPFRuwnEvkjZ
+        Dry6Ov2KXqJ09VUUyvxtM0K0bA1kXLs=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-229-X3kO08IuOsC6jjCYXQgp6g-1; Fri, 29 Jan 2021 11:45:30 -0500
+X-MC-Unique: X3kO08IuOsC6jjCYXQgp6g-1
+Received: by mail-ej1-f72.google.com with SMTP id k3so4191938ejr.16
+        for <bpf@vger.kernel.org>; Fri, 29 Jan 2021 08:45:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=ck2gV0VuH7GBK/QhpVV19oowTPnRxR9Fj1/n8dmUshs=;
+        b=Gwo5Mxa5grpDdUvty36vsCR2KCjNC1md/hzpXn2VfR72N+rdxfJj5wbLrtwCa38Wpz
+         RxrJr4tMlg5Jm1NcE/QrhjdjJ1CqegUFc9zRccpHMUqLAcFTyH+G5CMzf2qERkW4aXC0
+         AmLBnU58Zc1ptuLnfYJjjIANI0WGMNpNzOVNDsbpNrg4oq74LyYQzd1zc3qyHxUDdvXY
+         g5vd7cBL+JiMp/TM7te4zdnSYGODOZ/GPawXMiJ1d5ttmaYdHW5nBs/DaXBIu0Sc4n9v
+         0tlr086I158i6ui6RNva9adJ76OIrFxzWObhbGqYe7CaVwC/azcbRtiezcr+nAM0LSkf
+         8dkQ==
+X-Gm-Message-State: AOAM531fEvRLgCcwIFlaHH1sSaTdaZHsbX4S0sSO69i2nHsXFBAM67iY
+        njQpQ79SI51DMbtL8Jwmvs/qJ2lQxQdqSJ2xkzbUokTaWgo/frdRmuoEuSB91A7Ns4VY6PU2WXu
+        tza83OyM5zPnn
+X-Received: by 2002:a17:906:19c3:: with SMTP id h3mr5354777ejd.429.1611938728987;
+        Fri, 29 Jan 2021 08:45:28 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxKpxUYoG1lbAwAaLwecC1FX99XnsCjATniGAZbZE7z0grlFcWGVX/gJNRVjxorx1Erb8Laww==
+X-Received: by 2002:a17:906:19c3:: with SMTP id h3mr5354742ejd.429.1611938728619;
+        Fri, 29 Jan 2021 08:45:28 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id qk1sm4032098ejb.86.2021.01.29.08.45.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Jan 2021 08:45:27 -0800 (PST)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 718D6180331; Fri, 29 Jan 2021 17:45:27 +0100 (CET)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
+        ast@kernel.org, daniel@iogearbox.net, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Cc:     =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        magnus.karlsson@intel.com, maciej.fijalkowski@intel.com,
+        kuba@kernel.org, jonathan.lemon@gmail.com, maximmi@nvidia.com,
+        davem@davemloft.net, hawk@kernel.org, john.fastabend@gmail.com
+Subject: Re: [RFC PATCH bpf-next] bpf, xdp: per-map bpf_redirect_map
+ functions for XDP
+In-Reply-To: <20210129153215.190888-1-bjorn.topel@gmail.com>
+References: <20210129153215.190888-1-bjorn.topel@gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Fri, 29 Jan 2021 17:45:27 +0100
+Message-ID: <87im7fy9nc.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210129105952.74dc8464@gandalf.local.home>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Jan 29, 2021 at 10:59:52AM -0500, Steven Rostedt wrote:
-> On Fri, 29 Jan 2021 22:40:11 +0900
-> Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> 
-> > > So what, they can all happen with random locks held. Marking them as NMI
-> > > enables a whole bunch of sanity checks that are entirely appropriate.  
-> > 
-> > How about introducing an idea of Asynchronous NMI (ANMI) and Synchronous
-> > NMI (SNMI)? kprobes and ftrace is synchronously called and can be controlled
-> > (we can expect the context) but ANMI may be caused by asynchronous 
-> > hardware events on any context.
-> > 
-> > If we can distinguish those 2 NMIs on preempt count, bpf people can easily
-> > avoid the inevitable situation.
-> 
-> I don't like the name NMI IN SNMI, because they are not NMIs. They are
-> actually more like kernel exceptions. Even page faults in the kernel is
-> similar to a kprobe breakpoint or ftrace. It can happen anywhere, with any
-> lock held. Perhaps we need a kernel exception context? Which by definition
-> is synchronous.
+Bj=C3=B6rn T=C3=B6pel <bjorn.topel@gmail.com> writes:
 
-What problem are you trying to solve? AFAICT all these contexts have the
-same restrictions, why try and muck about with different names for the
-same thing?
+> From: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>
+>
+> Currently the bpf_redirect_map() implementation dispatches to the
+> correct map-lookup function via a switch-statement. To avoid the
+> dispatching, this change adds one bpf_redirect_map() implementation per
+> map. Correct function is automatically selected by the BPF verifier.
+>
+> Signed-off-by: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>
+> ---
+> Hi XDP-folks!
+>
+> This is another take on my bpf_redirect_xsk() patch [1]. I figured I
+> send it as an RFC for some early input. My plan is to include it as
+> part of the xdp_do_redirect() optimization of [1].
+
+Assuming the maintainers are OK with the special-casing in the verifier,
+this looks like a neat way to avoid the runtime overhead to me. The
+macro hackery is not the prettiest; I wonder if the same effect could be
+achieved by using inline functions? If not, at least a comment
+explaining the reasoning (and that the verifier will substitute the
+right function) might be nice? Mostly in relation to this bit:
+
+>  static const struct bpf_func_proto bpf_xdp_redirect_map_proto =3D {
+> -	.func           =3D bpf_xdp_redirect_map,
+> +	.func           =3D bpf_xdp_redirect_devmap,
+
+Ah, if only we were writing the kernel in a language with proper macro
+support... One can dream! :)
+
+>> For AF_XDP rxdrop this yields +600Mpps. I'll do CPU/DEVMAP
+>> measurements for the patch proper.
+>>
+>
+> Kpps, not Mpps. :-P
+
+Aww, too bad ;)
+Still, nice!
+
+-Toke
+
