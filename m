@@ -2,128 +2,114 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0618C433E6
-	for <bpf@archiver.kernel.org>; Sat, 30 Jan 2021 09:43:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 063EDC433E0
+	for <bpf@archiver.kernel.org>; Sat, 30 Jan 2021 11:36:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 86D4664DDC
-	for <bpf@archiver.kernel.org>; Sat, 30 Jan 2021 09:43:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D6D1A64DE7
+	for <bpf@archiver.kernel.org>; Sat, 30 Jan 2021 11:36:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231701AbhA3Jnt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 30 Jan 2021 04:43:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34236 "EHLO
+        id S230198AbhA3LgO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 30 Jan 2021 06:36:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233436AbhA3DJ7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 29 Jan 2021 22:09:59 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6298AC061794;
-        Fri, 29 Jan 2021 19:08:44 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id md11so6761507pjb.0;
-        Fri, 29 Jan 2021 19:08:44 -0800 (PST)
+        with ESMTP id S230080AbhA3LgN (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 30 Jan 2021 06:36:13 -0500
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D09CC061574
+        for <bpf@vger.kernel.org>; Sat, 30 Jan 2021 03:35:32 -0800 (PST)
+Received: by mail-il1-x12e.google.com with SMTP id e7so10942278ile.7
+        for <bpf@vger.kernel.org>; Sat, 30 Jan 2021 03:35:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=fxxmy0+c2BO16EPS4+AnuzVSZ0E7CPss9SONuFG9YHI=;
-        b=PEGwURYigrOxtk6A4BMnJcnVgyrOUdWGAsh7VPX3Te6XTPF3Fv8Ujuh3Is2A/i6bxl
-         Dh96clPK2Qsu3As+pokjdjH+CqDxLUNtORvzUEzSaXQLI7cQcU9UlugfdHEZ31zX2fWl
-         3oXK+GaB/SXdsdkZWViVT3auEdgzXejg+3Vmpw/ERdAxjR+/wNg3SMJE0HQ7i0oAzEQv
-         0H20zJnkVoJ5GxJ1y7c1vhxQxA7ELWn/xv0qAWR3RV6fFD2pNkMK9xtwhZKzAtn+Lwqv
-         jqDk8V8x+Kc663xwpwhQuR0INWZPBovJdT/ZcOqHwT7F4iQEsteTEB1meazJyQC3kGd0
-         BBvA==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9NCnhzl3YFEPYjNGC3qVLj8vYdo08Rot3lfgCi1SOm8=;
+        b=Bgn9foxGZlyyabnHETDbJjU5AMo0XpBpFT8DJXOlvelcE2lxlJa90eytB1TDXH4NNZ
+         j75s7bsHpo/P9IVvS4nDoaMltX0X3R5GoTLeTr3761RxOfewt0t2TOSeBiYsnt5/8uiK
+         z7KlIpr3W0uqqJZZEu5RLIhvKSYaqlslMB0nU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fxxmy0+c2BO16EPS4+AnuzVSZ0E7CPss9SONuFG9YHI=;
-        b=NFH1ZoKFQNk+3u6rmIlFYocdBqdiorOHIPqzK6H/bHTbV/cZsXzrl4JCAq4su+oMF+
-         UWx8OprY8+8RjWUq5ayX2tjs9eGWTttptI1hgEw17M8V0icEE2+hwqMqmlwFRU70Z2VO
-         KOc6GGxIZA8QpeZrElXpC25/KhzPquNCULswd0vnMpdHcziynYiAdgwUzMUZWu9wUWIz
-         MnOcidp4JrBRBthtwz/DFwnqO1WgmWnPr3aprNpICSoZAHyfxl9Fg9vb1ly23X/2srPR
-         hFdcNnR4U6sPMC3CZ12CmZgDQQOTdZClQiuBvKE3fZYYiazMfnq9ZJPGXr+ywaqXkC2B
-         2vzQ==
-X-Gm-Message-State: AOAM533+tAa+nflD7Mg6t8d0f7lDweBGuMr1iICl6/59+3BvrRAG4Ziv
-        ow9JHm5msO4SkLPBv/2OLVQ=
-X-Google-Smtp-Source: ABdhPJw5pwwaClMLSiLgtaKds7hTF0U0HeHTIDUdkl2XiaqjnKvp6+VyLRjVD2pwpMwvShpDqKxIXg==
-X-Received: by 2002:a17:90a:4494:: with SMTP id t20mr7280543pjg.155.1611976123785;
-        Fri, 29 Jan 2021 19:08:43 -0800 (PST)
-Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::5:a3a0])
-        by smtp.gmail.com with ESMTPSA id u31sm10527671pgl.9.2021.01.29.19.08.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Jan 2021 19:08:42 -0800 (PST)
-Date:   Fri, 29 Jan 2021 19:08:40 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Nikolay Borisov <nborisov@suse.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: Re: kprobes broken since 0d00449c7a28 ("x86: Replace ist_enter()
- with nmi_enter()")
-Message-ID: <20210130030840.hodq2ixpkdoue5jd@ast-mbp.dhcp.thefacebook.com>
-References: <eb1ec6a3-9e11-c769-84a4-228f23dc5e23@suse.com>
- <YBMBTsY1uuQb9wCP@hirez.programming.kicks-ass.net>
- <20210129013452.njuh3fomws62m4rc@ast-mbp.dhcp.thefacebook.com>
- <YBPNyRyrkzw2echi@hirez.programming.kicks-ass.net>
- <20210129224011.81bcdb3eba1227c414e69e1f@kernel.org>
- <20210129105952.74dc8464@gandalf.local.home>
- <20210129162438.GC8912@worktop.programming.kicks-ass.net>
- <CAADnVQLMqHpSsZ1OdZRFmKqNWKiRq3dxRxw+y=kvMdmkN7htUw@mail.gmail.com>
- <20210129175943.GH8912@worktop.programming.kicks-ass.net>
- <20210130110249.61fdad8f0cfe51a121c72302@kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9NCnhzl3YFEPYjNGC3qVLj8vYdo08Rot3lfgCi1SOm8=;
+        b=Y0wgVwsvifP6Iggz7zS7isjHCcpAY9tch3rvEzI8IB0d14x0805VJsluUP0/jvKRw3
+         HslExOB22LVyCNjh43kg1SkXSWEl+4ytMMpQ+wrUa/KTW5nEymLg2z9lDoFXokHmSlgn
+         JijRWfgdQib5s+sezRUAxwUtkwor/yeFrz7oskXIqzDrYs08oPLuSyvdenn8yxLnMTMU
+         RmXUHnbuNJslGmACzWlHLVRE+fO2cblO9h76HqPQEi9EOn8Gc6n4paoK3hvWWlBiHybx
+         MjFInu+VfEHPVBPCSxv3JXVRb6CqfOPIq/oJV6OG9KnZ92LGjcpj8n+afIDL4+sGYYWL
+         PAgQ==
+X-Gm-Message-State: AOAM530OcOm53X1umequnOibWKzsoRMXgtrOUiYwaYcbgmjDeWEtdEPJ
+        0iOCtLdvzjGuauUv0kkIbAlwIcCx0WkrNuyavx+PnFTbQ9A=
+X-Google-Smtp-Source: ABdhPJxCMB1eZhCgwfrf/Jc3O0TGysSi3yor9ipDeAEks5wHQVEdQga2elTpsMmiFzdOqdOus3+fUD6tlMWFR4rSEfQ=
+X-Received: by 2002:a05:6e02:4cd:: with SMTP id f13mr6087304ils.42.1612006531743;
+ Sat, 30 Jan 2021 03:35:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210130110249.61fdad8f0cfe51a121c72302@kernel.org>
+References: <20210126183559.1302406-1-revest@chromium.org> <20210126183559.1302406-2-revest@chromium.org>
+ <CAEf4BzZ9MmdeR9P7bybXEM77MV6C-T=yZPugLOHSFC1ES2e4=g@mail.gmail.com>
+In-Reply-To: <CAEf4BzZ9MmdeR9P7bybXEM77MV6C-T=yZPugLOHSFC1ES2e4=g@mail.gmail.com>
+From:   Florent Revest <revest@chromium.org>
+Date:   Sat, 30 Jan 2021 12:35:21 +0100
+Message-ID: <CABRcYmK1kAFAu=8CCVv+zYLFui5B_+jOJj6NpE0jW3Ers7Y6ZQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v6 2/5] bpf: Expose bpf_get_socket_cookie to
+ tracing programs
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        KP Singh <kpsingh@chromium.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        KP Singh <kpsingh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sat, Jan 30, 2021 at 11:02:49AM +0900, Masami Hiramatsu wrote:
-> On Fri, 29 Jan 2021 18:59:43 +0100
-> Peter Zijlstra <peterz@infradead.org> wrote:
-> 
-> > On Fri, Jan 29, 2021 at 09:45:48AM -0800, Alexei Starovoitov wrote:
-> > > Same things apply to bpf side. We can statically prove safety for
-> > > ftrace and kprobe attaching whereas to deal with NMI situation we
-> > > have to use run-time checks for recursion prevention, etc.
-> > 
-> > I have no idea what you're saying. You can attach to functions that are
-> > called with random locks held, you can create kprobes in some very
-> > sensitive places.
-> > 
-> > What can you staticlly prove about that?
-> 
-> For the bpf and the kprobe tracer, if a probe hits in the NMI context,
-> it can call the handler with another handler processing events.
-> 
-> kprobes is carefully avoiding the deadlock by checking recursion
-> with per-cpu variable. But if the handler is shared with the other events
-> like tracepoints, it needs to its own recursion cheker too.
-> 
-> So, Alexei, maybe you need something like this instead of in_nmi() check.
-> 
-> DEFINE_PER_CPU(bool, under_running_bpf);
-> 
-> common_handler()
-> {
-> 	if (__this_cpu_read(under_running_bpf))
-> 		return;
-> 	__this_cpu_write(under_running_bpf, true);
-> 	/* execute bpf prog */
-> 	__this_cpu_write(under_running_bpf, false);	
-> }
-> 
-> Does this work for you?
+On Wed, Jan 27, 2021 at 10:01 PM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Tue, Jan 26, 2021 at 10:36 AM Florent Revest <revest@chromium.org> wrote:
+> >
+> > This needs a new helper that:
+> > - can work in a sleepable context (using sock_gen_cookie)
+> > - takes a struct sock pointer and checks that it's not NULL
+> >
+> > Signed-off-by: Florent Revest <revest@chromium.org>
+> > Acked-by: KP Singh <kpsingh@kernel.org>
+> > ---
+> >  include/linux/bpf.h            |  1 +
+> >  include/uapi/linux/bpf.h       |  8 ++++++++
+> >  kernel/trace/bpf_trace.c       |  2 ++
+> >  net/core/filter.c              | 12 ++++++++++++
+> >  tools/include/uapi/linux/bpf.h |  8 ++++++++
+> >  5 files changed, 31 insertions(+)
+> >
+> > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> > index 1aac2af12fed..26219465e1f7 100644
+> > --- a/include/linux/bpf.h
+> > +++ b/include/linux/bpf.h
+> > @@ -1874,6 +1874,7 @@ extern const struct bpf_func_proto bpf_per_cpu_ptr_proto;
+> >  extern const struct bpf_func_proto bpf_this_cpu_ptr_proto;
+> >  extern const struct bpf_func_proto bpf_ktime_get_coarse_ns_proto;
+> >  extern const struct bpf_func_proto bpf_sock_from_file_proto;
+> > +extern const struct bpf_func_proto bpf_get_socket_ptr_cookie_proto;
+> >
+> >  const struct bpf_func_proto *bpf_tracing_func_proto(
+> >         enum bpf_func_id func_id, const struct bpf_prog *prog);
+> > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> > index 0b735c2729b2..5855c398d685 100644
+> > --- a/include/uapi/linux/bpf.h
+> > +++ b/include/uapi/linux/bpf.h
+> > @@ -1673,6 +1673,14 @@ union bpf_attr {
+> >   *     Return
+> >   *             A 8-byte long unique number.
+> >   *
+> > + * u64 bpf_get_socket_cookie(void *sk)
+>
+> should the type be `struct sock *` then?
 
-This exactly check is already in trace_call_bpf.
-Right after if (in_nmi()).
-See bpf_prog_active. It serves different purpose though.
-Simply removing if (in_nmi()) from trace_call_bpf is a bit scary.
-I need to analyze all code paths first.
+Oh, absolutely. :) Thank you Andrii
