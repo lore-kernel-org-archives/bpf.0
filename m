@@ -2,87 +2,118 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2B3CC433DB
-	for <bpf@archiver.kernel.org>; Sat, 30 Jan 2021 09:22:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C6F08C433E0
+	for <bpf@archiver.kernel.org>; Sat, 30 Jan 2021 09:35:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C7BEA64E02
-	for <bpf@archiver.kernel.org>; Sat, 30 Jan 2021 09:22:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A050F64E12
+	for <bpf@archiver.kernel.org>; Sat, 30 Jan 2021 09:35:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231503AbhA3JVw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 30 Jan 2021 04:21:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56868 "EHLO
+        id S231202AbhA3JfR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 30 Jan 2021 04:35:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231361AbhA3JVh (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 30 Jan 2021 04:21:37 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EB25C061351;
-        Sat, 30 Jan 2021 00:29:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=aUJjQWq04yfyD9i9zO9j9MoGWuJhNQkIG0RfzLvmCjA=; b=AT4G5Roe61L1QOg1iL8NT3diId
-        42noT2VCN+nZqZwZifNNJEuAKpdH9LFV6XvuCR3Uh2zfpajNaXsXiOg5n76Xq+NBj44mhCd45f4WK
-        eGp6KoJxSAMs2NlxP8XP2d1NYecOYacNLHC9fOVgnRWkpQvgE01aUKSDy2ZaLDGi6ZA4y7e+tmeAx
-        gY80zaBz5B4mvLEBLsYBKTfgPNSZ/XxlzcSK1tVUmDePgWrWCQ2Ujda9G13fGP5YnasTTzKrgMZY0
-        obzMbUh9zhtbhTd2lBIKIv0sQlZnb6eGD+cWnEUCkJAL78Ao5rRa1GFTof64b0Abo37Rk3UDBgmus
-        iKoOBy7Q==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1l5lcQ-00AslN-Dx; Sat, 30 Jan 2021 08:28:37 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 05FD83011E6;
-        Sat, 30 Jan 2021 09:28:32 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id E15272DACC7DB; Sat, 30 Jan 2021 09:28:32 +0100 (CET)
-Date:   Sat, 30 Jan 2021 09:28:32 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Nikolay Borisov <nborisov@suse.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: Re: kprobes broken since 0d00449c7a28 ("x86: Replace ist_enter()
- with nmi_enter()")
-Message-ID: <YBUYsFlxjsQxuvfB@hirez.programming.kicks-ass.net>
-References: <YBMBTsY1uuQb9wCP@hirez.programming.kicks-ass.net>
- <20210129013452.njuh3fomws62m4rc@ast-mbp.dhcp.thefacebook.com>
- <YBPNyRyrkzw2echi@hirez.programming.kicks-ass.net>
- <20210129224011.81bcdb3eba1227c414e69e1f@kernel.org>
- <20210129105952.74dc8464@gandalf.local.home>
- <20210129162438.GC8912@worktop.programming.kicks-ass.net>
- <CAADnVQLMqHpSsZ1OdZRFmKqNWKiRq3dxRxw+y=kvMdmkN7htUw@mail.gmail.com>
- <20210129175943.GH8912@worktop.programming.kicks-ass.net>
- <20210129140103.3ce971b7@gandalf.local.home>
- <20210129162454.293523c6@gandalf.local.home>
+        with ESMTP id S233384AbhA3DVf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 29 Jan 2021 22:21:35 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D374C061793
+        for <bpf@vger.kernel.org>; Fri, 29 Jan 2021 19:13:41 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id i187so15234980lfd.4
+        for <bpf@vger.kernel.org>; Fri, 29 Jan 2021 19:13:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9VIpF+PbaHraNBTaBA2nhbf4llFtewHGcpC0aXFC+UY=;
+        b=IqDwv5WYIZk1wjEDO2VyhbkzZvQXPaZg1nfPpQl/UHEOUIhJ9Pl4YOzr7GlnhBgYnA
+         gQcRuRPkNEFbRUc2gFSkPPnct+pPmACr87KYwfEZVvgAj6ORu+25QZq+OI10+028U4zw
+         IDkYHiq0+1IyJfImiypb6KKQdt2WJd+QqYEAEBQ7yVRn6azVRL0a4kmEoiMue5H+nQzO
+         lEFUruTwmEwNF85WpvcBfwzdvefr3NuBgQYZ+nurAFZiGPOY7MK+V0d7NSkx1FXnY+KC
+         v0/dc1N7I/5Xk+thez/Y4Y8PXrl0CCerKbT6+oT414cRtqv7StHVZkyLZbB0O2DaNArk
+         WRrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9VIpF+PbaHraNBTaBA2nhbf4llFtewHGcpC0aXFC+UY=;
+        b=rp9VSQzJm7F8qPRyAhLh0SQzP0nvOXHgV0y23DbnKxzfXnn62EtkEguzRHhw7gk7Md
+         8+bmxZr5/ACrwDVRDDoXU0V+qsFs6moDZ9D0tsafKUpd2cBw6Hai2VvIJHxBrNn/vjaf
+         sIGK7OThmyK/hRY9iSmzIF7j2IMatYpiQL6m294TmCpT0ZxNDN7/aADkXdeJU+ZdhruL
+         NwQo+ayk/jYTtMwoc4QbRHW5TvpcmSSoO0WY5gmegbITUF9BQYiIgoN8T+MqY6gv51jS
+         WjqCrJjoHWY5DsUH8rVzukoROazWSW9Ssv4e9buM4NFAkknUGFo/bguSj1UiLhN+SnFl
+         hk4g==
+X-Gm-Message-State: AOAM5329lGU/W4N0yUfti03uyJHK2n35xzQgQptBmkv8I8LMFi5cQ39p
+        sfTggFhhrC+9zCesgPSlXMztXYR5zeeeRJPWLZ8Drigc
+X-Google-Smtp-Source: ABdhPJzV5CAdQEnkO5fTe00ZwSp1WoecpzNvdOjcas13WRcJXzdjLAKE3+Cc9WWf849GpVhFg+i4+IDwqYkRV7oR14U=
+X-Received: by 2002:a05:6512:2254:: with SMTP id i20mr3598833lfu.534.1611976412644;
+ Fri, 29 Jan 2021 19:13:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210129162454.293523c6@gandalf.local.home>
+References: <CAHC9VhQgy959hkpU8fwZnrTqGphVSA+ONF99Yy4ZQFyjQ_030A@mail.gmail.com>
+ <CAADnVQJaJ0i2L2k-dM+neeT61q+pwEd+F6ASGh4Xbi-ogj0hfQ@mail.gmail.com> <CAHC9VhSTJ=009hsXm=8jtQ_ZL-n=+tzKPbWj2Cnoa5w3iVNuew@mail.gmail.com>
+In-Reply-To: <CAHC9VhSTJ=009hsXm=8jtQ_ZL-n=+tzKPbWj2Cnoa5w3iVNuew@mail.gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Fri, 29 Jan 2021 19:13:21 -0800
+Message-ID: <CAADnVQKbku+Mv++h2TKYZfFN7NjPgaeLHJsw0oFNUhjUZ6ehSQ@mail.gmail.com>
+Subject: Re: selftest/bpf/test_verifier_log fails on v5.11-rc5
+To:     Paul Moore <paul@paul-moore.com>, Jiri Olsa <jolsa@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     bpf <bpf@vger.kernel.org>, Ondrej Mosnacek <omosnace@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Jan 29, 2021 at 04:24:54PM -0500, Steven Rostedt wrote:
-> Specifically, kprobe and ftrace callbacks may have this:
-> 
-> 	if (in_nmi())
-> 		return;
-> 
-> 	raw_spin_lock_irqsave(&lock, flags);
-> 	[..]
-> 	raw_spin_unlock_irqrestore(&lock, flags);
-> 
-> Which is totally fine to have,
+On Fri, Jan 29, 2021 at 2:15 PM Paul Moore <paul@paul-moore.com> wrote:
+>
+> On Mon, Jan 25, 2021 at 5:42 PM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> > On Mon, Jan 25, 2021 at 12:54 PM Paul Moore <paul@paul-moore.com> wrote:
+> > >
+> > > Hello all,
+> > >
+> > > My apologies if this has already been reported, but I didn't see
+> > > anything obvious with a quick search through the archives.  I have a
+> > > test program that behaves very similar to the existing
+> > > selftest/bpf/test_verifier_log test that has started failing this week
+> > > with v5.11-rc5; it ran without problem last week on v5.11-rc4.  Is
+> > > this a known problem with a fix already, or is this something new?
+> > >
+> > > % uname -r
+> > > 5.11.0-0.rc5.134.fc34.x86_64
+> > > % pwd
+> > > /.../linux/tools/testing/selftests/bpf
+> > > % git log --oneline | head -n 1
+> > > 6ee1d745b7c9 Linux 5.11-rc5
+> > > % make test_verifier_log
+> > >   ...
+> > >   BINARY   test_verifier_log
+> > > % ./test_verifier_log
+> > > Test log_level 0...
+> > > Test log_size < 128...
+> > > Test log_buff = NULL...
+> > > Test oversized buffer...
+> > > ERROR: Program load returned: ret:-1/errno:22, expected ret:-1/errno:13
+> >
+> > Thanks for reporting.
+> > bpf and bpf-next don't have this issue. Not sure what changed.
+>
+> I haven't had a chance to look into this any further, but Ondrej
+> Mosnacek (CC'd) found the following today:
+>
+> "So I was trying to debug this further and I think I've identified what
+> triggers the problem. It seems that the BTF debuginfo generation
+> became broken with CONFIG_DEBUG_INFO_DWARF4=n somewhere between -rc4
+> and -rc5. It also seems to depend on a recent (Fedora Rawhide) version
+> of some component of the build system (GCC, probably), because the
+> problem disappeared when I tried to build the "bad" kernel in F33
+> buildroot instead of Rawhide."
 
-Why? There's a distinct lack of explaining here.
-
-Note that we ripped out all such dodgy locking from kretprobes.
+I see. There were fixes for dwarf and btf, but I lost the track.
+I believe it was a combination of gcc bug that was worked around in pahole.
+Arnaldo, Jiri, Andrii,
+what is the status? Did all fixes land in pahole?
