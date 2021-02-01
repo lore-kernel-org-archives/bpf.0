@@ -2,112 +2,133 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C5D0FC433E0
-	for <bpf@archiver.kernel.org>; Mon,  1 Feb 2021 11:25:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93F63C433E0
+	for <bpf@archiver.kernel.org>; Mon,  1 Feb 2021 12:06:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7FA6D64DAF
-	for <bpf@archiver.kernel.org>; Mon,  1 Feb 2021 11:25:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6190461477
+	for <bpf@archiver.kernel.org>; Mon,  1 Feb 2021 12:06:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233525AbhBALYi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 1 Feb 2021 06:24:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45360 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233542AbhBALYc (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 1 Feb 2021 06:24:32 -0500
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25B92C061573;
-        Mon,  1 Feb 2021 03:23:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=BjxzCjyvE86hv4IVx4QuIbHwWzdS3+eGyttOKbxAB1s=; b=1UZSHSE/zTgS5jW4wzsPVCDL60
-        8VH/s7SxOrxeCDJunG8y0vlAez0DHYRzD2dS1/WLjLRfOxUBT+6DYQ0dRSsPEdvQX5g4BMTuHbyPG
-        Ztj21/eGMwfD91RRyEEfwiZBhgDfD+V4jcwLLcKAZTKRFetfuV/qE0xrAqNAyhmZPou9ShTe/8dbh
-        2T1go5K2FcC/Jyf+xWf1cMriDQQLhsBg0vBqLc37igYiglgkfe+o3ZH7NFAknT1O9QErYdUgWFYMz
-        f1gT+GxD/VoY6ijmbVkYWzbQuYmsfpqk9CBYFT0BZWDPupcMYYWw0bvqUoVwVrlGhf09t+KdBqj5i
-        BCK5OPag==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1l6XIz-0000G3-Ni; Mon, 01 Feb 2021 11:23:41 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5AF083011FE;
-        Mon,  1 Feb 2021 12:23:39 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 4884221A2F1EA; Mon,  1 Feb 2021 12:23:39 +0100 (CET)
-Date:   Mon, 1 Feb 2021 12:23:39 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, andrii@kernel.org,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>, kpsingh@kernel.org,
-        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>
-Subject: Re: corrupted pvqspinlock in htab_map_update_elem
-Message-ID: <YBfkuyIfB1+VRxXP@hirez.programming.kicks-ass.net>
-References: <CACT4Y+YJp0t0HA3+wDsAVxgTK4J+Pvht-J4-ENkOtS=C=Fhtzg@mail.gmail.com>
- <YBfPAvBa8bbSU2nZ@hirez.programming.kicks-ass.net>
+        id S231295AbhBAMF4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 1 Feb 2021 07:05:56 -0500
+Received: from szxga04-in.huawei.com ([45.249.212.190]:11665 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231226AbhBAMFo (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 1 Feb 2021 07:05:44 -0500
+Received: from DGGEMS401-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4DTmmn3R03zlF16;
+        Mon,  1 Feb 2021 20:03:21 +0800 (CST)
+Received: from huawei.com (10.175.124.27) by DGGEMS401-HUB.china.huawei.com
+ (10.3.19.201) with Microsoft SMTP Server id 14.3.498.0; Mon, 1 Feb 2021
+ 20:04:56 +0800
+From:   wanghongzhe <wanghongzhe@huawei.com>
+To:     <keescook@chromium.org>, <luto@amacapital.net>, <wad@chromium.org>,
+        <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <kafai@fb.com>, <songliubraving@fb.com>, <yhs@fb.com>,
+        <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>
+Subject: [PATCH] seccomp: Improve performance by optimizing memory barrier
+Date:   Mon, 1 Feb 2021 20:49:41 +0800
+Message-ID: <1612183781-15469-1-git-send-email-wanghongzhe@huawei.com>
+X-Mailer: git-send-email 1.7.12.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YBfPAvBa8bbSU2nZ@hirez.programming.kicks-ass.net>
+Content-Type: text/plain
+X-Originating-IP: [10.175.124.27]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Feb 01, 2021 at 10:50:58AM +0100, Peter Zijlstra wrote:
+If a thread(A)'s TSYNC flag is set from seccomp(), then it will
+synchronize its seccomp filter to other threads(B) in same thread
+group. To avoid race condition, seccomp puts rmb() between
+reading the mode and filter in seccomp check patch(in B thread).
+As a result, every syscall's seccomp check is slowed down by the
+memory barrier.
 
-> >  queued_spin_unlock arch/x86/include/asm/qspinlock.h:56 [inline]
-> >  lockdep_unlock+0x10e/0x290 kernel/locking/lockdep.c:124
-> >  debug_locks_off_graph_unlock kernel/locking/lockdep.c:165 [inline]
-> >  print_usage_bug kernel/locking/lockdep.c:3710 [inline]
-> 
-> Ha, I think you hit a bug in lockdep.
+However, we can optimize it by calling rmb() only when filter is
+NULL and reading it again after the barrier, which means the rmb()
+is called only once in thread lifetime.
 
-Something like so I suppose.
+The 'filter is NULL' conditon means that it is the first time
+attaching filter and is by other thread(A) using TSYNC flag.
+In this case, thread B may read the filter first and mode later
+in CPU out-of-order exection. After this time, the thread B's
+mode is always be set, and there will no race condition with the
+filter/bitmap.
 
+In addtion, we should puts a write memory barrier between writing
+the filter and mode in smp_mb__before_atomic(), to avoid
+the race condition in TSYNC case.
+
+Signed-off-by: wanghongzhe <wanghongzhe@huawei.com>
 ---
-Subject: locking/lockdep: Avoid unmatched unlock
-From: Peter Zijlstra <peterz@infradead.org>
-Date: Mon Feb 1 11:55:38 CET 2021
+ kernel/seccomp.c | 31 ++++++++++++++++++++++---------
+ 1 file changed, 22 insertions(+), 9 deletions(-)
 
-Commit f6f48e180404 ("lockdep: Teach lockdep about "USED" <- "IN-NMI"
-inversions") overlooked that print_usage_bug() releases the graph_lock
-and called it without the graph lock held.
-
-Fixes: f6f48e180404 ("lockdep: Teach lockdep about "USED" <- "IN-NMI" inversions")
-Reported-by: Dmitry Vyukov <dvyukov@google.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- kernel/locking/lockdep.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
---- a/kernel/locking/lockdep.c
-+++ b/kernel/locking/lockdep.c
-@@ -3773,7 +3773,7 @@ static void
- print_usage_bug(struct task_struct *curr, struct held_lock *this,
- 		enum lock_usage_bit prev_bit, enum lock_usage_bit new_bit)
- {
--	if (!debug_locks_off_graph_unlock() || debug_locks_silent)
-+	if (!debug_locks_off() || debug_locks_silent)
- 		return;
+diff --git a/kernel/seccomp.c b/kernel/seccomp.c
+index 952dc1c90229..b944cb2b6b94 100644
+--- a/kernel/seccomp.c
++++ b/kernel/seccomp.c
+@@ -397,8 +397,20 @@ static u32 seccomp_run_filters(const struct seccomp_data *sd,
+ 			READ_ONCE(current->seccomp.filter);
  
- 	pr_warn("\n");
-@@ -3814,6 +3814,7 @@ valid_state(struct task_struct *curr, st
- 	    enum lock_usage_bit new_bit, enum lock_usage_bit bad_bit)
- {
- 	if (unlikely(hlock_class(this)->usage_mask & (1 << bad_bit))) {
-+		graph_unlock()
- 		print_usage_bug(curr, this, bad_bit, new_bit);
- 		return 0;
+ 	/* Ensure unexpected behavior doesn't result in failing open. */
+-	if (WARN_ON(f == NULL))
+-		return SECCOMP_RET_KILL_PROCESS;
++	if (WARN_ON(f == NULL)) {
++		/*
++		 * Make sure the first filter addtion (from another
++		 * thread using TSYNC flag) are seen.
++		 */
++		rmb();
++		
++		/* Read again */
++		f = READ_ONCE(current->seccomp.filter);
++
++		/* Ensure unexpected behavior doesn't result in failing open. */
++		if (WARN_ON(f == NULL))
++			return SECCOMP_RET_KILL_PROCESS;
++	}
+ 
+ 	if (seccomp_cache_check_allow(f, sd))
+ 		return SECCOMP_RET_ALLOW;
+@@ -614,9 +626,16 @@ static inline void seccomp_sync_threads(unsigned long flags)
+ 		 * equivalent (see ptrace_may_access), it is safe to
+ 		 * allow one thread to transition the other.
+ 		 */
+-		if (thread->seccomp.mode == SECCOMP_MODE_DISABLED)
++		if (thread->seccomp.mode == SECCOMP_MODE_DISABLED) {
++			/*
++			 * Make sure mode cannot be set before the filter
++			 * are set.
++			 */
++			smp_mb__before_atomic();
++
+ 			seccomp_assign_mode(thread, SECCOMP_MODE_FILTER,
+ 					    flags);
++		}
  	}
+ }
+ 
+@@ -1160,12 +1179,6 @@ static int __seccomp_filter(int this_syscall, const struct seccomp_data *sd,
+ 	int data;
+ 	struct seccomp_data sd_local;
+ 
+-	/*
+-	 * Make sure that any changes to mode from another thread have
+-	 * been seen after SYSCALL_WORK_SECCOMP was seen.
+-	 */
+-	rmb();
+-
+ 	if (!sd) {
+ 		populate_seccomp_data(&sd_local);
+ 		sd = &sd_local;
+-- 
+2.19.1
+
