@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D249C433E9
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A571FC4332D
 	for <bpf@archiver.kernel.org>; Mon,  1 Feb 2021 10:54:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6AC7A64E56
+	by mail.kernel.org (Postfix) with ESMTP id 844AB64E2A
 	for <bpf@archiver.kernel.org>; Mon,  1 Feb 2021 10:54:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233113AbhBAKyd (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 1 Feb 2021 05:54:33 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:32644 "EHLO
+        id S233372AbhBAKyf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 1 Feb 2021 05:54:35 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:34198 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233315AbhBAKx4 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 1 Feb 2021 05:53:56 -0500
+        by vger.kernel.org with ESMTP id S233355AbhBAKyG (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 1 Feb 2021 05:54:06 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1612176749;
+        s=mimecast20190719; t=1612176758;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=GlWyJZFPLvZd2uOv7XebixcLIn4+3bgaof6lmFszE7I=;
-        b=By7dWwz3Nh4Y8e+W9/Fjw682ro9Woegy45cHfBSPABLHD3fjolKyqVx/iFB33FW4F/evYI
-        bP2NWv4BVBhMeRhN+LK0Ks5pBYvEWVlFAQNdMHsEq0LRIcqJ2NlueX1Un8zbbtFWPT907C
-        1JFQO6HkFk8c0y3Vi4/6fI3jtXiS0kI=
+        bh=m/zaAlY/HliwcBtbS5eD3HPwtWgTT1nU1M3LrJmX7sc=;
+        b=eCw3TvSdMgq14pEzh7ba3BmyymNZAsGOw+AFvaUxyRDPjPIOiRQs3EYtLymJvoU7tbuQCX
+        BGKFB+6EvgmIaMNfNjNU/ZRX95o47QVTumhTt+2Y0vT+vesj4qAUs3IlDYlCTUwT84TPWv
+        MVS5Nk8oxKBZTRnQKCOxVcpa/qYo9W8=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-283-kHgL-fz0P2-YeE_z9P5-4w-1; Mon, 01 Feb 2021 05:52:28 -0500
-X-MC-Unique: kHgL-fz0P2-YeE_z9P5-4w-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+ us-mta-407-3XMezw5DPDKv3DXLVB-nww-1; Mon, 01 Feb 2021 05:52:35 -0500
+X-MC-Unique: 3XMezw5DPDKv3DXLVB-nww-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 44D22800D62;
-        Mon,  1 Feb 2021 10:52:26 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 33249180E473;
+        Mon,  1 Feb 2021 10:52:33 +0000 (UTC)
 Received: from firesoul.localdomain (unknown [10.40.208.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A50CA2C169;
-        Mon,  1 Feb 2021 10:52:22 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A956910016DB;
+        Mon,  1 Feb 2021 10:52:32 +0000 (UTC)
 Received: from [192.168.42.3] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id 97A6930736C73;
-        Mon,  1 Feb 2021 11:52:21 +0100 (CET)
-Subject: [PATCH bpf-next V14 3/7] bpf: bpf_fib_lookup return MTU value as
- output when looked up
+        by firesoul.localdomain (Postfix) with ESMTP id BCAEF30736C73;
+        Mon,  1 Feb 2021 11:52:31 +0100 (CET)
+Subject: [PATCH bpf-next V14 5/7] bpf: drop MTU check when doing TC-BPF
+ redirect to ingress
 From:   Jesper Dangaard Brouer <brouer@redhat.com>
 To:     bpf@vger.kernel.org
 Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
@@ -56,193 +56,179 @@ Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
         John Fastabend <john.fastabend@gmail.com>,
         Jakub Kicinski <kuba@kernel.org>, eyal.birger@gmail.com,
         colrack@gmail.com
-Date:   Mon, 01 Feb 2021 11:52:21 +0100
-Message-ID: <161217674155.494501.14340759090892160708.stgit@firesoul>
+Date:   Mon, 01 Feb 2021 11:52:31 +0100
+Message-ID: <161217675170.494501.11194096254681150724.stgit@firesoul>
 In-Reply-To: <161217668357.494501.557971074995969677.stgit@firesoul>
 References: <161217668357.494501.557971074995969677.stgit@firesoul>
 User-Agent: StGit/0.19
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The BPF-helpers for FIB lookup (bpf_xdp_fib_lookup and bpf_skb_fib_lookup)
-can perform MTU check and return BPF_FIB_LKUP_RET_FRAG_NEEDED. The BPF-prog
-don't know the MTU value that caused this rejection.
+The use-case for dropping the MTU check when TC-BPF does redirect to
+ingress, is described by Eyal Birger in email[0]. The summary is the
+ability to increase packet size (e.g. with IPv6 headers for NAT64) and
+ingress redirect packet and let normal netstack fragment packet as needed.
 
-If the BPF-prog wants to implement PMTU (Path MTU Discovery) (rfc1191) it
-need to know this MTU value for the ICMP packet.
+[0] https://lore.kernel.org/netdev/CAHsH6Gug-hsLGHQ6N0wtixdOa85LDZ3HNRHVd0opR=19Qo4W4Q@mail.gmail.com/
 
-Patch change lookup and result struct bpf_fib_lookup, to contain this MTU
-value as output via a union with 'tot_len' as this is the value used for
-the MTU lookup.
+V9:
+ - Make net_device "up" (IFF_UP) check explicit in skb_do_redirect
 
-V5:
- - Fixed uninit value spotted by Dan Carpenter.
- - Name struct output member mtu_result
+V4:
+ - Keep net_device "up" (IFF_UP) check.
+ - Adjustment to handle bpf_redirect_peer() helper
 
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
 Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
 Acked-by: John Fastabend <john.fastabend@gmail.com>
 ---
- include/uapi/linux/bpf.h       |   11 +++++++++--
- net/core/filter.c              |   22 +++++++++++++++-------
- tools/include/uapi/linux/bpf.h |   11 +++++++++--
- 3 files changed, 33 insertions(+), 11 deletions(-)
+ include/linux/netdevice.h |   32 ++++++++++++++++++++++++++++++--
+ net/core/dev.c            |   32 ++++++++++++++------------------
+ net/core/filter.c         |    6 +++---
+ 3 files changed, 47 insertions(+), 23 deletions(-)
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index c001766adcbc..05bfc8c843dc 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -2231,6 +2231,9 @@ union bpf_attr {
-  *		* > 0 one of **BPF_FIB_LKUP_RET_** codes explaining why the
-  *		  packet is not forwarded or needs assist from full stack
-  *
-+ *		If lookup fails with BPF_FIB_LKUP_RET_FRAG_NEEDED, then the MTU
-+ *		was exceeded and output params->mtu_result contains the MTU.
-+ *
-  * long bpf_sock_hash_update(struct bpf_sock_ops *skops, struct bpf_map *map, void *key, u64 flags)
-  *	Description
-  *		Add an entry to, or update a sockhash *map* referencing sockets.
-@@ -4981,9 +4984,13 @@ struct bpf_fib_lookup {
- 	__be16	sport;
- 	__be16	dport;
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index 5b949076ed23..b7915484369c 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -3926,14 +3926,42 @@ int xdp_umem_query(struct net_device *dev, u16 queue_id);
  
--	/* total length of packet from network header - used for MTU check */
--	__u16	tot_len;
-+	union {	/* used for MTU check */
-+		/* input to lookup */
-+		__u16	tot_len; /* L3 length from network hdr (iph->tot_len) */
+ int __dev_forward_skb(struct net_device *dev, struct sk_buff *skb);
+ int dev_forward_skb(struct net_device *dev, struct sk_buff *skb);
++int dev_forward_skb_nomtu(struct net_device *dev, struct sk_buff *skb);
+ bool is_skb_forwardable(const struct net_device *dev,
+ 			const struct sk_buff *skb);
  
-+		/* output: MTU value */
-+		__u16	mtu_result;
-+	};
- 	/* input: L3 device index for lookup
- 	 * output: device index from FIB lookup
- 	 */
++static __always_inline bool __is_skb_forwardable(const struct net_device *dev,
++						 const struct sk_buff *skb,
++						 const bool check_mtu)
++{
++	const u32 vlan_hdr_len = 4; /* VLAN_HLEN */
++	unsigned int len;
++
++	if (!(dev->flags & IFF_UP))
++		return false;
++
++	if (!check_mtu)
++		return true;
++
++	len = dev->mtu + dev->hard_header_len + vlan_hdr_len;
++	if (skb->len <= len)
++		return true;
++
++	/* if TSO is enabled, we don't care about the length as the packet
++	 * could be forwarded without being segmented before
++	 */
++	if (skb_is_gso(skb))
++		return true;
++
++	return false;
++}
++
+ static __always_inline int ____dev_forward_skb(struct net_device *dev,
+-					       struct sk_buff *skb)
++					       struct sk_buff *skb,
++					       const bool check_mtu)
+ {
+ 	if (skb_orphan_frags(skb, GFP_ATOMIC) ||
+-	    unlikely(!is_skb_forwardable(dev, skb))) {
++	    unlikely(!__is_skb_forwardable(dev, skb, check_mtu))) {
+ 		atomic_long_inc(&dev->rx_dropped);
+ 		kfree_skb(skb);
+ 		return NET_RX_DROP;
+diff --git a/net/core/dev.c b/net/core/dev.c
+index bae35c1ae192..87bb2cd62189 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -2194,28 +2194,14 @@ static inline void net_timestamp_set(struct sk_buff *skb)
+ 
+ bool is_skb_forwardable(const struct net_device *dev, const struct sk_buff *skb)
+ {
+-	unsigned int len;
+-
+-	if (!(dev->flags & IFF_UP))
+-		return false;
+-
+-	len = dev->mtu + dev->hard_header_len + VLAN_HLEN;
+-	if (skb->len <= len)
+-		return true;
+-
+-	/* if TSO is enabled, we don't care about the length as the packet
+-	 * could be forwarded without being segmented before
+-	 */
+-	if (skb_is_gso(skb))
+-		return true;
+-
+-	return false;
++	return __is_skb_forwardable(dev, skb, true);
+ }
+ EXPORT_SYMBOL_GPL(is_skb_forwardable);
+ 
+-int __dev_forward_skb(struct net_device *dev, struct sk_buff *skb)
++int __dev_forward_skb2(struct net_device *dev, struct sk_buff *skb,
++		     bool check_mtu)
+ {
+-	int ret = ____dev_forward_skb(dev, skb);
++	int ret = ____dev_forward_skb(dev, skb, check_mtu);
+ 
+ 	if (likely(!ret)) {
+ 		skb->protocol = eth_type_trans(skb, dev);
+@@ -2224,6 +2210,11 @@ int __dev_forward_skb(struct net_device *dev, struct sk_buff *skb)
+ 
+ 	return ret;
+ }
++
++int __dev_forward_skb(struct net_device *dev, struct sk_buff *skb)
++{
++	return __dev_forward_skb2(dev, skb, true);
++}
+ EXPORT_SYMBOL_GPL(__dev_forward_skb);
+ 
+ /**
+@@ -2250,6 +2241,11 @@ int dev_forward_skb(struct net_device *dev, struct sk_buff *skb)
+ }
+ EXPORT_SYMBOL_GPL(dev_forward_skb);
+ 
++int dev_forward_skb_nomtu(struct net_device *dev, struct sk_buff *skb)
++{
++	return __dev_forward_skb2(dev, skb, false) ?: netif_rx_internal(skb);
++}
++
+ static inline int deliver_skb(struct sk_buff *skb,
+ 			      struct packet_type *pt_prev,
+ 			      struct net_device *orig_dev)
 diff --git a/net/core/filter.c b/net/core/filter.c
-index 252fbb294001..7b1b9baaabd5 100644
+index f6777e8f9ff7..28735dbb7059 100644
 --- a/net/core/filter.c
 +++ b/net/core/filter.c
-@@ -5289,12 +5289,14 @@ static const struct bpf_func_proto bpf_skb_get_xfrm_state_proto = {
- #if IS_ENABLED(CONFIG_INET) || IS_ENABLED(CONFIG_IPV6)
- static int bpf_fib_set_fwd_params(struct bpf_fib_lookup *params,
- 				  const struct neighbour *neigh,
--				  const struct net_device *dev)
-+				  const struct net_device *dev, u32 mtu)
+@@ -2083,13 +2083,13 @@ static const struct bpf_func_proto bpf_csum_level_proto = {
+ 
+ static inline int __bpf_rx_skb(struct net_device *dev, struct sk_buff *skb)
  {
- 	memcpy(params->dmac, neigh->ha, ETH_ALEN);
- 	memcpy(params->smac, dev->dev_addr, ETH_ALEN);
- 	params->h_vlan_TCI = 0;
- 	params->h_vlan_proto = 0;
-+	if (mtu)
-+		params->mtu_result = mtu; /* union with tot_len */
- 
- 	return 0;
+-	return dev_forward_skb(dev, skb);
++	return dev_forward_skb_nomtu(dev, skb);
  }
-@@ -5310,8 +5312,8 @@ static int bpf_ipv4_fib_lookup(struct net *net, struct net_device *dev,
- 	struct neighbour *neigh;
- 	struct fib_result res;
- 	struct flowi4 fl4;
-+	u32 mtu = 0;
- 	int err;
--	u32 mtu;
  
- 	/* verify forwarding is enabled on this interface */
- 	in_dev = __in_dev_get_rcu(dev);
-@@ -5374,8 +5376,10 @@ static int bpf_ipv4_fib_lookup(struct net *net, struct net_device *dev,
+ static inline int __bpf_rx_skb_no_mac(struct net_device *dev,
+ 				      struct sk_buff *skb)
+ {
+-	int ret = ____dev_forward_skb(dev, skb);
++	int ret = ____dev_forward_skb(dev, skb, false);
  
- 	if (check_mtu) {
- 		mtu = ip_mtu_from_fib_result(&res, params->ipv4_dst);
--		if (params->tot_len > mtu)
-+		if (params->tot_len > mtu) {
-+			params->mtu_result = mtu; /* union with tot_len */
- 			return BPF_FIB_LKUP_RET_FRAG_NEEDED;
-+		}
- 	}
- 
- 	nhc = res.nhc;
-@@ -5409,7 +5413,7 @@ static int bpf_ipv4_fib_lookup(struct net *net, struct net_device *dev,
- 	if (!neigh)
- 		return BPF_FIB_LKUP_RET_NO_NEIGH;
- 
--	return bpf_fib_set_fwd_params(params, neigh, dev);
-+	return bpf_fib_set_fwd_params(params, neigh, dev, mtu);
- }
- #endif
- 
-@@ -5426,7 +5430,7 @@ static int bpf_ipv6_fib_lookup(struct net *net, struct net_device *dev,
- 	struct flowi6 fl6;
- 	int strict = 0;
- 	int oif, err;
--	u32 mtu;
-+	u32 mtu = 0;
- 
- 	/* link local addresses are never forwarded */
- 	if (rt6_need_strict(dst) || rt6_need_strict(src))
-@@ -5497,8 +5501,10 @@ static int bpf_ipv6_fib_lookup(struct net *net, struct net_device *dev,
- 
- 	if (check_mtu) {
- 		mtu = ipv6_stub->ip6_mtu_from_fib6(&res, dst, src);
--		if (params->tot_len > mtu)
-+		if (params->tot_len > mtu) {
-+			params->mtu_result = mtu; /* union with tot_len */
- 			return BPF_FIB_LKUP_RET_FRAG_NEEDED;
-+		}
- 	}
- 
- 	if (res.nh->fib_nh_lws)
-@@ -5518,7 +5524,7 @@ static int bpf_ipv6_fib_lookup(struct net *net, struct net_device *dev,
- 	if (!neigh)
- 		return BPF_FIB_LKUP_RET_NO_NEIGH;
- 
--	return bpf_fib_set_fwd_params(params, neigh, dev);
-+	return bpf_fib_set_fwd_params(params, neigh, dev, mtu);
- }
- #endif
- 
-@@ -5601,6 +5607,8 @@ BPF_CALL_4(bpf_skb_fib_lookup, struct sk_buff *, skb,
- 		 */
- 		if (!is_skb_forwardable(dev, skb))
- 			rc = BPF_FIB_LKUP_RET_FRAG_NEEDED;
-+
-+		params->mtu_result = dev->mtu; /* union with tot_len */
- 	}
- 
- 	return rc;
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index c001766adcbc..05bfc8c843dc 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -2231,6 +2231,9 @@ union bpf_attr {
-  *		* > 0 one of **BPF_FIB_LKUP_RET_** codes explaining why the
-  *		  packet is not forwarded or needs assist from full stack
-  *
-+ *		If lookup fails with BPF_FIB_LKUP_RET_FRAG_NEEDED, then the MTU
-+ *		was exceeded and output params->mtu_result contains the MTU.
-+ *
-  * long bpf_sock_hash_update(struct bpf_sock_ops *skops, struct bpf_map *map, void *key, u64 flags)
-  *	Description
-  *		Add an entry to, or update a sockhash *map* referencing sockets.
-@@ -4981,9 +4984,13 @@ struct bpf_fib_lookup {
- 	__be16	sport;
- 	__be16	dport;
- 
--	/* total length of packet from network header - used for MTU check */
--	__u16	tot_len;
-+	union {	/* used for MTU check */
-+		/* input to lookup */
-+		__u16	tot_len; /* L3 length from network hdr (iph->tot_len) */
- 
-+		/* output: MTU value */
-+		__u16	mtu_result;
-+	};
- 	/* input: L3 device index for lookup
- 	 * output: device index from FIB lookup
- 	 */
+ 	if (likely(!ret)) {
+ 		skb->dev = dev;
+@@ -2480,7 +2480,7 @@ int skb_do_redirect(struct sk_buff *skb)
+ 			goto out_drop;
+ 		dev = ops->ndo_get_peer_dev(dev);
+ 		if (unlikely(!dev ||
+-			     !is_skb_forwardable(dev, skb) ||
++			     !(dev->flags & IFF_UP) ||
+ 			     net_eq(net, dev_net(dev))))
+ 			goto out_drop;
+ 		skb->dev = dev;
 
 
