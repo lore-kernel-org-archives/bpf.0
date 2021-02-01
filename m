@@ -2,175 +2,175 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D024C433E6
-	for <bpf@archiver.kernel.org>; Mon,  1 Feb 2021 15:25:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 301D8C433DB
+	for <bpf@archiver.kernel.org>; Mon,  1 Feb 2021 15:41:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DFF4564DBD
-	for <bpf@archiver.kernel.org>; Mon,  1 Feb 2021 15:25:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EEFF060238
+	for <bpf@archiver.kernel.org>; Mon,  1 Feb 2021 15:41:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231148AbhBAPZi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 1 Feb 2021 10:25:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33132 "EHLO
+        id S231855AbhBAPlV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 1 Feb 2021 10:41:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231381AbhBAOuP (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 1 Feb 2021 09:50:15 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75D22C061573
-        for <bpf@vger.kernel.org>; Mon,  1 Feb 2021 06:49:29 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id e15so13414624wme.0
-        for <bpf@vger.kernel.org>; Mon, 01 Feb 2021 06:49:29 -0800 (PST)
+        with ESMTP id S231754AbhBAPkt (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 1 Feb 2021 10:40:49 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BD7EC06174A
+        for <bpf@vger.kernel.org>; Mon,  1 Feb 2021 07:39:19 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id m12so1338258pjs.4
+        for <bpf@vger.kernel.org>; Mon, 01 Feb 2021 07:39:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=EGmzCB5chSwq9pe2qQDXhGstL/uSMglbti4AeZbvc9M=;
-        b=T0u0mZ+Z3spqI5csq8199vdWw2F0HEI5De5S85KRWxCdxr+4jQR5HF/ESPI+khBobI
-         0kID6zY387C7nAXsNhluEAdeknIbOqrsZ2D0JaogcRsYEATDQywghJ/9qSSQ5q5A55FI
-         yWsOBfzIjs33oPqk4PuKrYwi8nfXeV5MoJxBo=
+        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
+        h=content-transfer-encoding:from:mime-version:subject:date:message-id
+         :references:cc:in-reply-to:to;
+        bh=PXC9eT33XzY/s4/vcYqNkyG5cAOxeL/xc7nss0BbEbE=;
+        b=VfHp/waiZVqG2VDLYSCVYni+7TYwgejrhlmjxrZQPg/myt0JuK1hvsksaPeX56eouz
+         YvaYjD76uTNSZTgRc9lSDkf3hskX7knWLkL3VgZvzyUEj1HLUwrZN136fb01ZQsB6cJy
+         /2KgJLegnL/j+w8LwgrSldhKBFFTxAYqyWKmAJdixHeEtH7IoT47lkeIfmAUUbbuU1RD
+         K/mhF1z6uYSFrY29pcvya2Z8d5G84IuRs5jdkPRJkmGZGKtq0yE0LnsNua3aDp31ktje
+         dye2sTlibbtSQ5yspjGveBvKwIQyPlQRz56GvoIA0YtnvtRWhwygEv5yt9otMSiFou6w
+         LnJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=EGmzCB5chSwq9pe2qQDXhGstL/uSMglbti4AeZbvc9M=;
-        b=VJcwJFjGx4R/LxkeuGhJOEgIzh5G71qwSL/lbcglmFLaHaeIoxRHwKsC/NjjQcoKw4
-         /8ogKcUr7A4KHEPDhARiHrnkyZdOIl50C0Wqdej44ZAbrbZDBad1sdzAYNtZK2V3fS5R
-         I9E9Tb/fZmVGNlmgTLH8PcdUIULBrs9NJ9st+DiCoXUJvNyvIf7Ccv8o+pR86M59P4Bw
-         kOraPOJNuKVgIn0VheHt04+fD1RPMeh8tWsvEPdI085r6NOzsBCYe/xm+pLr/7sFv6qe
-         ynka97UkY0en62xuziBzht5nMYLBq41UpATMWuOX9ydsjeuMrQjezpbo30xODUbUSUFu
-         05/Q==
-X-Gm-Message-State: AOAM533Qc3mwxd77QsmxDh9YBKfBE1WjTYEQo9rOgTqYjvk/C+wxzfQA
-        eWoIaLaV6EaJdr4+nLZxwd/W4g==
-X-Google-Smtp-Source: ABdhPJzB4Q25SCm85fnRZK3Sfm9L/kEowDZQU6EzC3QxehecRfUoCDENb9bS5nw1au+0MSHzKsed+A==
-X-Received: by 2002:a7b:cd97:: with SMTP id y23mr15626961wmj.0.1612190968210;
-        Mon, 01 Feb 2021 06:49:28 -0800 (PST)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id z18sm26511725wro.91.2021.02.01.06.49.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Feb 2021 06:49:27 -0800 (PST)
-Date:   Mon, 1 Feb 2021 15:49:25 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Dave Airlie <airlied@gmail.com>
-Cc:     Kenny Ho <y2kenny@gmail.com>, Kenny Ho <Kenny.Ho@amd.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>, bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
-        "open list:CONTROL GROUP (CGROUP)" <cgroups@vger.kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Brian Welty <brian.welty@intel.com>
-Subject: Re: [RFC] Add BPF_PROG_TYPE_CGROUP_IOCTL
-Message-ID: <YBgU9Vu0BGV8kCxD@phenom.ffwll.local>
-References: <20201007152355.2446741-1-Kenny.Ho@amd.com>
- <CAOWid-d=a1Q3R92s7GrzxWhXx7_dc8NQvQg7i7RYTVv3+jHxkQ@mail.gmail.com>
- <20201103053244.khibmr66p7lhv7ge@ast-mbp.dhcp.thefacebook.com>
- <CAOWid-eQSPru0nm8+Xo3r6C0pJGq+5r8mzM8BL2dgNn2c9mt2Q@mail.gmail.com>
- <CAADnVQKuoZDB-Xga5STHdGSxvSP=B6jQ40kLdpL1u+J98bv65A@mail.gmail.com>
- <CAOWid-czZphRz6Y-H3OcObKCH=bLLC3=bOZaSB-6YBE56+Qzrg@mail.gmail.com>
- <20201103210418.q7hddyl7rvdplike@ast-mbp.dhcp.thefacebook.com>
- <CAOWid-djQ_NRfCbOTnZQ-A8Pr7jMP7KuZEJDSsvzWkdw7qc=yA@mail.gmail.com>
- <20201103232805.6uq4zg3gdvw2iiki@ast-mbp.dhcp.thefacebook.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201103232805.6uq4zg3gdvw2iiki@ast-mbp.dhcp.thefacebook.com>
-X-Operating-System: Linux phenom 5.7.0-1-amd64 
+        h=x-gm-message-state:content-transfer-encoding:from:mime-version
+         :subject:date:message-id:references:cc:in-reply-to:to;
+        bh=PXC9eT33XzY/s4/vcYqNkyG5cAOxeL/xc7nss0BbEbE=;
+        b=dPqfyAVNH820MT/f9rntUgAJaizLiYYGIvpWNgK/cWB5LJie5ngzJDdSYit2ig44TM
+         fXrG9lLNnoGeLxYrX6DP+x2pJ0N4DkugjTxWT6ZP9F6FDHAhXi5qNpfDkDL9te5mB589
+         jYNHjplyZPZEgztIOrwqeJwZ653bh03TxFjrTqwrCdDR0VzvPBRox1G1Sra5hXoXLimN
+         l/B41qvUzfSM8eHUiGoJFnAkYMSojbm/dJtXew+Y3w4QFSFzjeKi+RGuHj1nSgT1hzI9
+         ZySIzZ/TzS75U58xriraFBwmYEUw+UcpPxuffdRuBs/W3grA8LjRWhMJWScjDV+D0bsZ
+         +J9A==
+X-Gm-Message-State: AOAM533y+lokRYje+pTqRGvNP4iUibLepVgCEV63fpsbPyBWDO2uPEP2
+        GtO9QlM8vO1sksp9pDKy+58KFg==
+X-Google-Smtp-Source: ABdhPJwue7vFFQ464PTMfBB6M+kFjxBcFe9G0nU2E0WWVBkUYxVCp/LHVgQR2W3uryeS6UoegxhGVg==
+X-Received: by 2002:a17:902:b116:b029:e1:58b2:2280 with SMTP id q22-20020a170902b116b02900e158b22280mr5849921plr.29.1612193958610;
+        Mon, 01 Feb 2021 07:39:18 -0800 (PST)
+Received: from ?IPv6:2601:646:c200:1ef2:7d9a:44be:c6b1:962b? ([2601:646:c200:1ef2:7d9a:44be:c6b1:962b])
+        by smtp.gmail.com with ESMTPSA id w66sm18563296pfd.48.2021.02.01.07.39.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 01 Feb 2021 07:39:17 -0800 (PST)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From:   Andy Lutomirski <luto@amacapital.net>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH] seccomp: Improve performance by optimizing memory barrier
+Date:   Mon, 1 Feb 2021 07:39:16 -0800
+Message-Id: <B1DC6A42-15AF-4804-B20E-FC6E2BDD1C8E@amacapital.net>
+References: <1612183830-15506-1-git-send-email-wanghongzhe@huawei.com>
+Cc:     keescook@chromium.org, wad@chromium.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+In-Reply-To: <1612183830-15506-1-git-send-email-wanghongzhe@huawei.com>
+To:     wanghongzhe <wanghongzhe@huawei.com>
+X-Mailer: iPhone Mail (18C66)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Adding gpu folks.
-
-On Tue, Nov 03, 2020 at 03:28:05PM -0800, Alexei Starovoitov wrote:
-> On Tue, Nov 03, 2020 at 05:57:47PM -0500, Kenny Ho wrote:
-> > On Tue, Nov 3, 2020 at 4:04 PM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> > >
-> > > On Tue, Nov 03, 2020 at 02:19:22PM -0500, Kenny Ho wrote:
-> > > > On Tue, Nov 3, 2020 at 12:43 AM Alexei Starovoitov
-> > > > <alexei.starovoitov@gmail.com> wrote:
-> > > > > On Mon, Nov 2, 2020 at 9:39 PM Kenny Ho <y2kenny@gmail.com> wrote:
-> > >
-> > > Sounds like either bpf_lsm needs to be made aware of cgv2 (which would
-> > > be a great thing to have regardless) or cgroup-bpf needs a drm/gpu specific hook.
-> > > I think generic ioctl hook is too broad for this use case.
-> > > I suspect drm/gpu internal state would be easier to access inside
-> > > bpf program if the hook is next to gpu/drm. At ioctl level there is 'file'.
-> > > It's probably too abstract for the things you want to do.
-> > > Like how VRAM/shader/etc can be accessed through file?
-> > > Probably possible through a bunch of lookups and dereferences, but
-> > > if the hook is custom to GPU that info is likely readily available.
-> > > Then such cgroup-bpf check would be suitable in execution paths where
-> > > ioctl-based hook would be too slow.
-> > Just to clarify, when you say drm specific hook, did you mean just a
-> > unique attach_type or a unique prog_type+attach_type combination?  (I
-> > am still a bit fuzzy on when a new prog type is needed vs a new attach
-> > type.  I think prog type is associated with a unique type of context
-> > that the bpf prog will get but I could be missing some nuances.)
-> > 
-> > When I was thinking of doing an ioctl wide hook, the file would be the
-> > device file and the thinking was to have a helper function provided by
-> > device drivers to further disambiguate.  For our (AMD's) driver, we
-> > have a bunch of ioctls for set/get/create/destroy
-> > (https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/amd/amdkfd/kfd_chardev.c#L1763)
-> > so the bpf prog can make the decision after the disambiguation.  For
-> > example, we have an ioctl called "kfd_ioctl_set_cu_mask."  You can
-> 
-> Thanks for the pointer.
-> That's one monster ioctl. So much copy_from_user.
-> BPF prog would need to be sleepable to able to examine the args in such depth.
-> After quick glance at the code I would put a new hook into
-> kfd_ioctl() right before
-> retcode = func(filep, process, kdata);
-> At this point kdata is already copied from user space 
-> and usize, that is cmd specific, is known.
-> So bpf prog wouldn't need to copy that data again.
-> That will save one copy.
-> To drill into details of kfd_ioctl_set_cu_mask() the prog would
-> need to be sleepable to do second copy_from_user of cu_mask.
-> At least it's not that big.
-> Yes, the attachment point will be amd driver specific,
-> but the program doesn't need to be.
-> It can be generic tracing prog that is agumented to use BTF.
-> Something like writeable tracepoint with BTF support would do.
-> So on the bpf side there will be minimal amount of changes.
-> And in the driver you'll add one or few writeable tracepoints
-> and the result of the tracepoint will gate
-> retcode = func(filep, process, kdata);
-> call in kfd_ioctl().
-> The writeable tracepoint would need to be cgroup-bpf based.
-> So that's the only tricky part. BPF infra doesn't have
-> cgroup+tracepoint scheme. It's probably going to be useful
-> in other cases like this. See trace_nbd_send_request.
 
 
-Yeah I think this proposal doesn't work:
+> On Feb 1, 2021, at 4:06 AM, wanghongzhe <wanghongzhe@huawei.com> wrote:
+>=20
+> =EF=BB=BFIf a thread(A)'s TSYNC flag is set from seccomp(), then it will
+> synchronize its seccomp filter to other threads(B) in same thread
+> group. To avoid race condition, seccomp puts rmb() between
+> reading the mode and filter in seccomp check patch(in B thread).
+> As a result, every syscall's seccomp check is slowed down by the
+> memory barrier.
+>=20
+> However, we can optimize it by calling rmb() only when filter is
+> NULL and reading it again after the barrier, which means the rmb()
+> is called only once in thread lifetime.
+>=20
+> The 'filter is NULL' conditon means that it is the first time
+> attaching filter and is by other thread(A) using TSYNC flag.
+> In this case, thread B may read the filter first and mode later
+> in CPU out-of-order exection. After this time, the thread B's
+> mode is always be set, and there will no race condition with the
+> filter/bitmap.
+>=20
+> In addtion, we should puts a write memory barrier between writing
+> the filter and mode in smp_mb__before_atomic(), to avoid
+> the race condition in TSYNC case.
 
-- inspecting ioctl arguments that need copying outside of the
-  driver/subsystem doing that copying is fundamentally racy
+I haven=E2=80=99t fully worked this out, but rmb() is bogus. This should be s=
+mp_rmb().
 
-- there's been a pile of cgroups proposal to manage gpus at the drm
-  subsystem level, some by Kenny, and frankly this at least looks a bit
-  like a quick hack to sidestep the consensus process for that.
-
-So once we push this into drivers it's not going to be a bpf hook anymore
-I think.
-
-Cheers, Daniel
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+>=20
+> Signed-off-by: wanghongzhe <wanghongzhe@huawei.com>
+> ---
+> kernel/seccomp.c | 31 ++++++++++++++++++++++---------
+> 1 file changed, 22 insertions(+), 9 deletions(-)
+>=20
+> diff --git a/kernel/seccomp.c b/kernel/seccomp.c
+> index 952dc1c90229..b944cb2b6b94 100644
+> --- a/kernel/seccomp.c
+> +++ b/kernel/seccomp.c
+> @@ -397,8 +397,20 @@ static u32 seccomp_run_filters(const struct seccomp_d=
+ata *sd,
+>            READ_ONCE(current->seccomp.filter);
+>=20
+>    /* Ensure unexpected behavior doesn't result in failing open. */
+> -    if (WARN_ON(f =3D=3D NULL))
+> -        return SECCOMP_RET_KILL_PROCESS;
+> +    if (WARN_ON(f =3D=3D NULL)) {
+> +        /*
+> +         * Make sure the first filter addtion (from another
+> +         * thread using TSYNC flag) are seen.
+> +         */
+> +        rmb();
+> +       =20
+> +        /* Read again */
+> +        f =3D READ_ONCE(current->seccomp.filter);
+> +
+> +        /* Ensure unexpected behavior doesn't result in failing open. */
+> +        if (WARN_ON(f =3D=3D NULL))
+> +            return SECCOMP_RET_KILL_PROCESS;
+> +    }
+>=20
+>    if (seccomp_cache_check_allow(f, sd))
+>        return SECCOMP_RET_ALLOW;
+> @@ -614,9 +626,16 @@ static inline void seccomp_sync_threads(unsigned long=
+ flags)
+>         * equivalent (see ptrace_may_access), it is safe to
+>         * allow one thread to transition the other.
+>         */
+> -        if (thread->seccomp.mode =3D=3D SECCOMP_MODE_DISABLED)
+> +        if (thread->seccomp.mode =3D=3D SECCOMP_MODE_DISABLED) {
+> +            /*
+> +             * Make sure mode cannot be set before the filter
+> +             * are set.
+> +             */
+> +            smp_mb__before_atomic();
+> +
+>            seccomp_assign_mode(thread, SECCOMP_MODE_FILTER,
+>                        flags);
+> +        }
+>    }
+> }
+>=20
+> @@ -1160,12 +1179,6 @@ static int __seccomp_filter(int this_syscall, const=
+ struct seccomp_data *sd,
+>    int data;
+>    struct seccomp_data sd_local;
+>=20
+> -    /*
+> -     * Make sure that any changes to mode from another thread have
+> -     * been seen after SYSCALL_WORK_SECCOMP was seen.
+> -     */
+> -    rmb();
+> -
+>    if (!sd) {
+>        populate_seccomp_data(&sd_local);
+>        sd =3D &sd_local;
+> --=20
+> 2.19.1
+>=20
