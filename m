@@ -2,178 +2,91 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E5DCC433E0
-	for <bpf@archiver.kernel.org>; Mon,  1 Feb 2021 12:26:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 46038C433DB
+	for <bpf@archiver.kernel.org>; Mon,  1 Feb 2021 13:35:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E7C4764E08
-	for <bpf@archiver.kernel.org>; Mon,  1 Feb 2021 12:26:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ECF1C64EA3
+	for <bpf@archiver.kernel.org>; Mon,  1 Feb 2021 13:35:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229842AbhBAM0T (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 1 Feb 2021 07:26:19 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60304 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229593AbhBAM0R (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 1 Feb 2021 07:26:17 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5586C64E94;
-        Mon,  1 Feb 2021 12:25:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612182335;
-        bh=e2jG+zzIh5aQTBEtHSs+bfDaoZFcDXPOqEaGKDpMWcE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Tt8YiZFOD+GPqYfQdOQ+i7CpNDkBXZfsSeq2BTpNoWxzicKJXlQE/+w/N+NEu5koN
-         vV34eX3GR+cpOqCc4GTYQhUsb8oJAggIzxvA4AF3fwjxeNfqjePGSGwedoe9UFimlG
-         pTcr6r7f3/CeeqJ7DRfWaTKXxJUl+ma/IeqkUzbwwyD0Acn82xSjZj5wPY3E2v1DrK
-         pZLbviYXcXdDnga5BqlMLMD4PATL5R671uQitjkuHzNTJsbEMyNWjrzyU6A/yMurcw
-         FNgDWooD+Y6pvHYnsqPFw33himDX+N1kdRJKTcHq/a4fTY3XE0EO9oB9AarLXVmum+
-         sHMO5t3clgGgg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id BDB0040513; Mon,  1 Feb 2021 09:25:32 -0300 (-03)
-Date:   Mon, 1 Feb 2021 09:25:32 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Jiri Olsa <jolsa@redhat.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Paul Moore <paul@paul-moore.com>, Jiri Olsa <jolsa@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Ondrej Mosnacek <omosnace@redhat.com>
-Subject: Re: selftest/bpf/test_verifier_log fails on v5.11-rc5
-Message-ID: <20210201122532.GE794568@kernel.org>
-References: <CAHC9VhQgy959hkpU8fwZnrTqGphVSA+ONF99Yy4ZQFyjQ_030A@mail.gmail.com>
- <CAADnVQJaJ0i2L2k-dM+neeT61q+pwEd+F6ASGh4Xbi-ogj0hfQ@mail.gmail.com>
- <CAHC9VhSTJ=009hsXm=8jtQ_ZL-n=+tzKPbWj2Cnoa5w3iVNuew@mail.gmail.com>
- <CAADnVQKbku+Mv++h2TKYZfFN7NjPgaeLHJsw0oFNUhjUZ6ehSQ@mail.gmail.com>
- <YBXGChWt/E2UDgZc@krava>
- <YBci6Y8bNZd6KRdw@krava>
+        id S231745AbhBANez (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 1 Feb 2021 08:34:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45134 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231575AbhBANev (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 1 Feb 2021 08:34:51 -0500
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FAB9C06174A;
+        Mon,  1 Feb 2021 05:34:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=eu7VX8JvvszySJwHZVTokupuwHECVWP055L+vUMCliY=; b=kqNV/MnPMGMuePTDqne9Tb7qUx
+        22kFtr3q5TR4oQmDl0ZZCik4Fj0OTwXfR7Qspzv8IOCAruTq8HYub/ibswiukXiTXYCBeDS6Bfqf0
+        LfUvM3DtejdPryUgo+MSS1kt57QBIuXVFjyWM5D/zGTSzGRwfUgnbqsIpOAbTV0YRzqyow2tG1gQr
+        C+AUDpwFDFDkT4WXcAruB3h76YZmIjS1uu2pLracRfrR55pvzTo4gFOpJLbxTMljKXkjW5iB6RgOJ
+        naL8Mtm2Eg7pEMFnuqeZfbc3tCSJPcG6V4Npt3FNWXsSPYYYZyBUxauMeP9F+Uj4teK28TaYq8Nit
+        SvfuAAig==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1l6ZKv-00017P-Mk; Mon, 01 Feb 2021 13:33:49 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 15B943011FE;
+        Mon,  1 Feb 2021 14:33:46 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id BA97E2B802295; Mon,  1 Feb 2021 14:33:46 +0100 (CET)
+Date:   Mon, 1 Feb 2021 14:33:46 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, andrii@kernel.org,
+        Martin KaFai Lau <kafai@fb.com>,
+        David Miller <davem@davemloft.net>, kpsingh@kernel.org,
+        John Fastabend <john.fastabend@gmail.com>,
+        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: extended bpf_send_signal_thread with argument
+Message-ID: <YBgDOnhrYjByjdIb@hirez.programming.kicks-ass.net>
+References: <CACT4Y+a7UBQpAY4vwT8Od0JhwbwcDrbJXZ_ULpPfJZ42Ew-yCQ@mail.gmail.com>
+ <YBfIUwtK+QqVlfRt@hirez.programming.kicks-ass.net>
+ <CACT4Y+Yq69nvj2KZUQrYqtyu+Low+jCCcH++U_vuiHkhezQHGw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YBci6Y8bNZd6KRdw@krava>
-X-Url:  http://acmel.wordpress.com
+In-Reply-To: <CACT4Y+Yq69nvj2KZUQrYqtyu+Low+jCCcH++U_vuiHkhezQHGw@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Em Sun, Jan 31, 2021 at 10:36:41PM +0100, Jiri Olsa escreveu:
-> On Sat, Jan 30, 2021 at 09:48:13PM +0100, Jiri Olsa wrote:
+On Mon, Feb 01, 2021 at 10:42:47AM +0100, Dmitry Vyukov wrote:
+> On Mon, Feb 1, 2021 at 10:22 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > On Sun, Jan 31, 2021 at 12:14:02PM +0100, Dmitry Vyukov wrote:
+> > > Hi,
+> > >
+> > > I would like to send a signal from a bpf program invoked from a
+> > > perf_event. There is:
+> >
+> > You can't. Sending signals requires sighand lock, and you're not allowed
+> > to take locks from perf_event context.
 > 
-> SNIP
 > 
-> > > > > > % uname -r
-> > > > > > 5.11.0-0.rc5.134.fc34.x86_64
-> > > > > > % pwd
-> > > > > > /.../linux/tools/testing/selftests/bpf
-> > > > > > % git log --oneline | head -n 1
-> > > > > > 6ee1d745b7c9 Linux 5.11-rc5
-> > > > > > % make test_verifier_log
-> > > > > >   ...
-> > > > > >   BINARY   test_verifier_log
-> > > > > > % ./test_verifier_log
-> > > > > > Test log_level 0...
-> > > > > > Test log_size < 128...
-> > > > > > Test log_buff = NULL...
-> > > > > > Test oversized buffer...
-> > > > > > ERROR: Program load returned: ret:-1/errno:22, expected ret:-1/errno:13
-> > > > >
-> > > > > Thanks for reporting.
-> > > > > bpf and bpf-next don't have this issue. Not sure what changed.
-> > > >
-> > > > I haven't had a chance to look into this any further, but Ondrej
-> > > > Mosnacek (CC'd) found the following today:
-> > > >
-> > > > "So I was trying to debug this further and I think I've identified what
-> > > > triggers the problem. It seems that the BTF debuginfo generation
-> > > > became broken with CONFIG_DEBUG_INFO_DWARF4=n somewhere between -rc4
-> > > > and -rc5. It also seems to depend on a recent (Fedora Rawhide) version
-> > > > of some component of the build system (GCC, probably), because the
-> > > > problem disappeared when I tried to build the "bad" kernel in F33
-> > > > buildroot instead of Rawhide."
-> > > 
-> > > I see. There were fixes for dwarf and btf, but I lost the track.
-> > > I believe it was a combination of gcc bug that was worked around in pahole.
-> > > Arnaldo, Jiri, Andrii,
-> > > what is the status? Did all fixes land in pahole?
-> > 
-> > I checked on rawhide and besides many pahole warnings,
-> > the resulted BTF data have many duplications in core structs
-> > 
-> > 	  BTFIDS  vmlinux
-> > 	WARN: multiple IDs found for 'task_struct': 132, 1247 - using 132
-> > 	WARN: multiple IDs found for 'file': 440, 1349 - using 440
-> > 	WARN: multiple IDs found for 'inode': 698, 1645 - using 698
-> > 	WARN: multiple IDs found for 'path': 729, 1672 - using 729
-> > 	WARN: multiple IDs found for 'task_struct': 132, 2984 - using 132
-> > 	WARN: multiple IDs found for 'task_struct': 132, 3043 - using 132
-> > 	WARN: multiple IDs found for 'file': 440, 3085 - using 440
-> > 	WARN: multiple IDs found for 'seq_file': 1469, 3125 - using 1469
-> > 	WARN: multiple IDs found for 'inode': 698, 3336 - using 698
-> > 	WARN: multiple IDs found for 'path': 729, 3366 - using 729
-> > 	WARN: multiple IDs found for 'task_struct': 132, 5337 - using 132
-> > 	WARN: multiple IDs found for 'inode': 698, 5360 - using 698
-> > 	WARN: multiple IDs found for 'path': 729, 5388 - using 729
-> > 	WARN: multiple IDs found for 'file': 440, 5412 - using 440
-> > 	WARN: multiple IDs found for 'seq_file': 1469, 5639 - using 1469
-> > 	WARN: multiple IDs found for 'task_struct': 132, 6243 - using 132
-> > 	...
-> > 
-> > 	# gcc --version
-> > 	gcc (GCC) 11.0.0 20210123 (Red Hat 11.0.0-0)
-> > 
-> > I'm guessing there are some DWARF changes that screwed BTF
-> > generation.. I'll check
-> > 
-> > it's not covered by the fix I posted recently, but I think
-> > Arnaldo is now fixing some related stuff.. Arnaldo, maybe
-> > you are seeing same errors?
+> Then we just found a vulnerability because there is
+> bpf_send_signal_thread which can be attached to perf and it passes the
+> verifier :)
+> https://elixir.bootlin.com/linux/v5.11-rc5/source/kernel/trace/bpf_trace.c#L1145
 > 
-> with Arnaldo's fixes I see less struct duplications,
-> but still there's some
-> 
-> > 
-> > I uploaded the build log from linking part to:
-> >   http://people.redhat.com/~jolsa/build.out.gz
-> 
-> however looks like we don't handle DW_FORM_implicit_const
-> when counting the byte offset.. it was used for some struct
-> members in my vmlinux, so we got zero for byte offset and
-> that created another unique struct
-> 
-> with patch below I no longer see any struct duplication,
-> also test_verifier_log is working for me, but I could
-> not reproduce the error before
-> 
-> I'll post full dwarves patch after some more testing
-> 
-> also I wonder we could somehow use btf_check_all_metas
-> from kernel after we build BTF data, that'd help to catch
-> this earlier/easier ;-) I'll check on this
+> It can defer sending the signal to the exit of irq context:
+> https://elixir.bootlin.com/linux/v5.11-rc5/source/kernel/trace/bpf_trace.c#L1108
+> Perhaps this is what makes it work?
 
-Seems like a good idea indeed :-)
-
-I'm applying the patch below with your Signed-off-by, etc, ok?
-
-- Arnaldo
- 
-> jirka
-> 
-> 
-> ---
-> diff --git a/dwarf_loader.c b/dwarf_loader.c
-> index ac22c1b..e2981a4 100644
-> --- a/dwarf_loader.c
-> +++ b/dwarf_loader.c
-> @@ -296,6 +296,7 @@ static Dwarf_Off __attr_offset(Dwarf_Attribute *attr)
->  	Dwarf_Block block;
->  
->  	switch (dwarf_whatform(attr)) {
-> +	case DW_FORM_implicit_const:
->  	case DW_FORM_data1:
->  	case DW_FORM_data2:
->  	case DW_FORM_data4:
-> 
-
--- 
-
-- Arnaldo
+Yes.
