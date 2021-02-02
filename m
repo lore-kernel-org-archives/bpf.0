@@ -2,138 +2,236 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02161C433E6
-	for <bpf@archiver.kernel.org>; Tue,  2 Feb 2021 16:48:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C605C433DB
+	for <bpf@archiver.kernel.org>; Tue,  2 Feb 2021 16:50:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B452F64F86
-	for <bpf@archiver.kernel.org>; Tue,  2 Feb 2021 16:48:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4FE8864F76
+	for <bpf@archiver.kernel.org>; Tue,  2 Feb 2021 16:50:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236771AbhBBQsC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Feb 2021 11:48:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56982 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236758AbhBBQq5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 2 Feb 2021 11:46:57 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD7EC0613ED;
-        Tue,  2 Feb 2021 08:46:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=9Xq3+Qjdwj+GhQbI6GS2G9oLuGd9Efu1ya5uWYO1ET0=; b=ItiwRUM9onvOiBevrnXhCIUw6Y
-        ti6CvS2rl/jIKRPPZagfLgQQLdBNtQ48A/dFgW33OIuoIqmnAXHDzsdtuQiTO70W1gxGkHkvzHBI7
-        9pFNQFPYYLvyl6z+BlYJGqTFOMhC78GxSwJ52sfYacU9XFfMjC4MhQdDnL1bOrbzFw3cw192viPjp
-        Mxj1BcE9AuHkWc+bCkOUctAu/V8hIGptXkppsM3WdjTt+7ha++svsXNYwARt2vDuSYuXnzeKs5Vz0
-        AH3m33rNIuZD4Qr/1wZnczQgvJ3PYacyRJjeyjhiCGxdlR9MOwjVstu35vnHsKOTPsV0lUSzD+v3E
-        rDL0OqkA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1l6yoG-00FTPf-Fp; Tue, 02 Feb 2021 16:45:51 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 404AF3011FE;
-        Tue,  2 Feb 2021 17:45:47 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 2AA4C2B7AB29D; Tue,  2 Feb 2021 17:45:47 +0100 (CET)
-Date:   Tue, 2 Feb 2021 17:45:47 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Nikolay Borisov <nborisov@suse.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: Re: kprobes broken since 0d00449c7a28 ("x86: Replace ist_enter()
- with nmi_enter()")
-Message-ID: <YBmBu0c24RjNYFet@hirez.programming.kicks-ass.net>
-References: <20210129105952.74dc8464@gandalf.local.home>
- <20210129162438.GC8912@worktop.programming.kicks-ass.net>
- <CAADnVQLMqHpSsZ1OdZRFmKqNWKiRq3dxRxw+y=kvMdmkN7htUw@mail.gmail.com>
- <20210129175943.GH8912@worktop.programming.kicks-ass.net>
- <20210129140103.3ce971b7@gandalf.local.home>
- <20210129162454.293523c6@gandalf.local.home>
- <YBUYsFlxjsQxuvfB@hirez.programming.kicks-ass.net>
- <20210130074410.6384c2e2@oasis.local.home>
- <YBktVT+z7sV/vEPU@hirez.programming.kicks-ass.net>
- <20210202095249.5abd6780@gandalf.local.home>
+        id S236881AbhBBQu3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Feb 2021 11:50:29 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:52446 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236219AbhBBQ3d (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 2 Feb 2021 11:29:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1612283238;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9seBZNHM+5uP+de0lrHuyXLHlHRuD9Gu/yddHt+Xx60=;
+        b=Ssn+BDUFLzn7ffzTNwd9nfpfaUIYJWgBmu/5kxdVSY5RaVCXmeLs30fJ7umQhIq4YS0yWK
+        CEkRY8RMwt7qVJ+TqetanrcSFRMjATYKqzs92lUd6itSp6npfP8PBIC99QMXZFReaeHSNj
+        rsFOHXbZTcFvomc3c/RrLx8fwFOjwM8=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-475-_eJ182O6O1e1opvoipW1ww-1; Tue, 02 Feb 2021 11:27:14 -0500
+X-MC-Unique: _eJ182O6O1e1opvoipW1ww-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A60101934100;
+        Tue,  2 Feb 2021 16:27:11 +0000 (UTC)
+Received: from firesoul.localdomain (unknown [10.40.208.19])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3613819C71;
+        Tue,  2 Feb 2021 16:27:08 +0000 (UTC)
+Received: from [192.168.42.3] (localhost [IPv6:::1])
+        by firesoul.localdomain (Postfix) with ESMTP id 1065030736C73;
+        Tue,  2 Feb 2021 17:27:07 +0100 (CET)
+Subject: [PATCH bpf-next V15 5/7] bpf: drop MTU check when doing TC-BPF
+ redirect to ingress
+From:   Jesper Dangaard Brouer <brouer@redhat.com>
+To:     bpf@vger.kernel.org
+Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
+        Daniel Borkmann <borkmann@iogearbox.net>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        maze@google.com, lmb@cloudflare.com, shaun@tigera.io,
+        Lorenzo Bianconi <lorenzo@kernel.org>, marek@cloudflare.com,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>, eyal.birger@gmail.com,
+        colrack@gmail.com
+Date:   Tue, 02 Feb 2021 17:27:07 +0100
+Message-ID: <161228322699.576669.4552578542207702644.stgit@firesoul>
+In-Reply-To: <161228314075.576669.15427172810948915572.stgit@firesoul>
+References: <161228314075.576669.15427172810948915572.stgit@firesoul>
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210202095249.5abd6780@gandalf.local.home>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Feb 02, 2021 at 09:52:49AM -0500, Steven Rostedt wrote:
+The use-case for dropping the MTU check when TC-BPF does redirect to
+ingress, is described by Eyal Birger in email[0]. The summary is the
+ability to increase packet size (e.g. with IPv6 headers for NAT64) and
+ingress redirect packet and let normal netstack fragment packet as needed.
 
-> But from a handler, you could do:
-> 
-> 	if (in_nmi())
-> 		return;
-> 	local_irq_save(flags);
-> 	/* Now you are safe from being re-entrant. */
+[0] https://lore.kernel.org/netdev/CAHsH6Gug-hsLGHQ6N0wtixdOa85LDZ3HNRHVd0opR=19Qo4W4Q@mail.gmail.com/
 
-But that's an utter crap thing to do. That's like saying I don't care
-about my events, at which point you might as well not bother at all.
+V15:
+ - missing static for function declaration
 
-And you can still do that, you just get less coverage today than you
-used to. You used to throw things under the bus, now you throw more
-under the bus. If you didn't care, I can't seem to find myself caring
-either.
+V9:
+ - Make net_device "up" (IFF_UP) check explicit in skb_do_redirect
 
-> Where as there's no equivalent in a NMI handler. That's what makes
-> kprobe/ftrace handlers different than NMI handlers.
+V4:
+ - Keep net_device "up" (IFF_UP) check.
+ - Adjustment to handle bpf_redirect_peer() helper
 
-I don't see how.
+Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
+Acked-by: John Fastabend <john.fastabend@gmail.com>
+---
+ include/linux/netdevice.h |   32 ++++++++++++++++++++++++++++++--
+ net/core/dev.c            |   32 ++++++++++++++------------------
+ net/core/filter.c         |    6 +++---
+ 3 files changed, 47 insertions(+), 23 deletions(-)
 
-> > Also, given how everything can nest, it had better all be lockless
-> > anyway. You can get your regular function trace interrupted, which can
-> > hit a #DB, which can function trace, which can #BP which can function
-> > trace again which can get #NMI etc.. Many wonderfun nestings possible.
-> 
-> I would call #DB an #BP handlers very special.
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index 5b949076ed23..b7915484369c 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -3926,14 +3926,42 @@ int xdp_umem_query(struct net_device *dev, u16 queue_id);
+ 
+ int __dev_forward_skb(struct net_device *dev, struct sk_buff *skb);
+ int dev_forward_skb(struct net_device *dev, struct sk_buff *skb);
++int dev_forward_skb_nomtu(struct net_device *dev, struct sk_buff *skb);
+ bool is_skb_forwardable(const struct net_device *dev,
+ 			const struct sk_buff *skb);
+ 
++static __always_inline bool __is_skb_forwardable(const struct net_device *dev,
++						 const struct sk_buff *skb,
++						 const bool check_mtu)
++{
++	const u32 vlan_hdr_len = 4; /* VLAN_HLEN */
++	unsigned int len;
++
++	if (!(dev->flags & IFF_UP))
++		return false;
++
++	if (!check_mtu)
++		return true;
++
++	len = dev->mtu + dev->hard_header_len + vlan_hdr_len;
++	if (skb->len <= len)
++		return true;
++
++	/* if TSO is enabled, we don't care about the length as the packet
++	 * could be forwarded without being segmented before
++	 */
++	if (skb_is_gso(skb))
++		return true;
++
++	return false;
++}
++
+ static __always_inline int ____dev_forward_skb(struct net_device *dev,
+-					       struct sk_buff *skb)
++					       struct sk_buff *skb,
++					       const bool check_mtu)
+ {
+ 	if (skb_orphan_frags(skb, GFP_ATOMIC) ||
+-	    unlikely(!is_skb_forwardable(dev, skb))) {
++	    unlikely(!__is_skb_forwardable(dev, skb, check_mtu))) {
+ 		atomic_long_inc(&dev->rx_dropped);
+ 		kfree_skb(skb);
+ 		return NET_RX_DROP;
+diff --git a/net/core/dev.c b/net/core/dev.c
+index bae35c1ae192..e0bc6fb3639b 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -2194,28 +2194,14 @@ static inline void net_timestamp_set(struct sk_buff *skb)
+ 
+ bool is_skb_forwardable(const struct net_device *dev, const struct sk_buff *skb)
+ {
+-	unsigned int len;
+-
+-	if (!(dev->flags & IFF_UP))
+-		return false;
+-
+-	len = dev->mtu + dev->hard_header_len + VLAN_HLEN;
+-	if (skb->len <= len)
+-		return true;
+-
+-	/* if TSO is enabled, we don't care about the length as the packet
+-	 * could be forwarded without being segmented before
+-	 */
+-	if (skb_is_gso(skb))
+-		return true;
+-
+-	return false;
++	return __is_skb_forwardable(dev, skb, true);
+ }
+ EXPORT_SYMBOL_GPL(is_skb_forwardable);
+ 
+-int __dev_forward_skb(struct net_device *dev, struct sk_buff *skb)
++static int __dev_forward_skb2(struct net_device *dev, struct sk_buff *skb,
++			      bool check_mtu)
+ {
+-	int ret = ____dev_forward_skb(dev, skb);
++	int ret = ____dev_forward_skb(dev, skb, check_mtu);
+ 
+ 	if (likely(!ret)) {
+ 		skb->protocol = eth_type_trans(skb, dev);
+@@ -2224,6 +2210,11 @@ int __dev_forward_skb(struct net_device *dev, struct sk_buff *skb)
+ 
+ 	return ret;
+ }
++
++int __dev_forward_skb(struct net_device *dev, struct sk_buff *skb)
++{
++	return __dev_forward_skb2(dev, skb, true);
++}
+ EXPORT_SYMBOL_GPL(__dev_forward_skb);
+ 
+ /**
+@@ -2250,6 +2241,11 @@ int dev_forward_skb(struct net_device *dev, struct sk_buff *skb)
+ }
+ EXPORT_SYMBOL_GPL(dev_forward_skb);
+ 
++int dev_forward_skb_nomtu(struct net_device *dev, struct sk_buff *skb)
++{
++	return __dev_forward_skb2(dev, skb, false) ?: netif_rx_internal(skb);
++}
++
+ static inline int deliver_skb(struct sk_buff *skb,
+ 			      struct packet_type *pt_prev,
+ 			      struct net_device *orig_dev)
+diff --git a/net/core/filter.c b/net/core/filter.c
+index f6777e8f9ff7..28735dbb7059 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -2083,13 +2083,13 @@ static const struct bpf_func_proto bpf_csum_level_proto = {
+ 
+ static inline int __bpf_rx_skb(struct net_device *dev, struct sk_buff *skb)
+ {
+-	return dev_forward_skb(dev, skb);
++	return dev_forward_skb_nomtu(dev, skb);
+ }
+ 
+ static inline int __bpf_rx_skb_no_mac(struct net_device *dev,
+ 				      struct sk_buff *skb)
+ {
+-	int ret = ____dev_forward_skb(dev, skb);
++	int ret = ____dev_forward_skb(dev, skb, false);
+ 
+ 	if (likely(!ret)) {
+ 		skb->dev = dev;
+@@ -2480,7 +2480,7 @@ int skb_do_redirect(struct sk_buff *skb)
+ 			goto out_drop;
+ 		dev = ops->ndo_get_peer_dev(dev);
+ 		if (unlikely(!dev ||
+-			     !is_skb_forwardable(dev, skb) ||
++			     !(dev->flags & IFF_UP) ||
+ 			     net_eq(net, dev_net(dev))))
+ 			goto out_drop;
+ 		skb->dev = dev;
 
-They are, just like NMI is special, which is why they're classed
-together.
 
-> Question: Do #DB and #BP set "in_interrupt()"? Because the function tracer
-> has infrastructure to prevent recursion in the same context.
-
-Sure we _could_ do that, but then we get into the 'fun' problem of
-getting a breakpoint/int3 at random places and calling random code and
-having deadlocks because they take the same lock.
-
-There was very little that stopped that from happening.
-
-> That is, a
-> ftrace handler calls something that gets traced, the recursion protection
-> will detect that and prevent the handler from being called again. But the
-> recursion protection is interrupt context aware and lets the handler get
-> called again if the recursion happens from a different context:
-
-> If #DB and #BP do not change the in_interrupt() context, then the above
-> still will protect the ftrace handlers from recursion due to them.
-
-But it doesn't help with:
-
-	spin_lock_irq(&foo); // task context
-	#DB
-	  spin_lock_irq(&foo); // interrupt context per your above
-
-All you need to do is put a breakpoint on a piece of code that holds a
-spinlock and a handler that takes the same spinlock.
-
-There was very little from stopping that.
-
-> That would require refactoring all the code that's been around since 2008.
-
-Because I couldn't tell why/if any of that was correct at all. #DB/#BP
-don't play by the normal rules. They're _far_ more NMI-like than they're
-IRQ-like due to ignoring IF.
