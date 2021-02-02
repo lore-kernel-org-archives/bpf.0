@@ -2,132 +2,79 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B151C433E0
-	for <bpf@archiver.kernel.org>; Tue,  2 Feb 2021 01:51:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 124FBC433DB
+	for <bpf@archiver.kernel.org>; Tue,  2 Feb 2021 04:31:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6C86264DA5
-	for <bpf@archiver.kernel.org>; Tue,  2 Feb 2021 01:51:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D6CB564EB8
+	for <bpf@archiver.kernel.org>; Tue,  2 Feb 2021 04:31:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbhBBBvE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 1 Feb 2021 20:51:04 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:2574 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbhBBBvD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 1 Feb 2021 20:51:03 -0500
-Received: from dggeme708-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4DV74Y4XV4zW3WX;
-        Tue,  2 Feb 2021 09:48:13 +0800 (CST)
-Received: from dggeme758-chm.china.huawei.com (10.3.19.104) by
- dggeme708-chm.china.huawei.com (10.1.199.104) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2106.2; Tue, 2 Feb 2021 09:50:18 +0800
-Received: from dggeme758-chm.china.huawei.com ([10.6.80.69]) by
- dggeme758-chm.china.huawei.com ([10.6.80.69]) with mapi id 15.01.2106.006;
- Tue, 2 Feb 2021 09:50:18 +0800
-From:   "Wanghongzhe (Hongzhe, EulerOS)" <wanghongzhe@huawei.com>
-To:     Andy Lutomirski <luto@amacapital.net>
-CC:     "keescook@chromium.org" <keescook@chromium.org>,
-        "wad@chromium.org" <wad@chromium.org>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "kafai@fb.com" <kafai@fb.com>,
-        "songliubraving@fb.com" <songliubraving@fb.com>,
-        "yhs@fb.com" <yhs@fb.com>,
-        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
-        "kpsingh@kernel.org" <kpsingh@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
-Subject: RE: [PATCH] seccomp: Improve performance by optimizing memory barrier
-Thread-Topic: [PATCH] seccomp: Improve performance by optimizing memory
- barrier
-Thread-Index: AQHW+JKVO2If6N9YNUuKsZSbR9a9o6pC6YoAgAEvrUA=
-Date:   Tue, 2 Feb 2021 01:50:18 +0000
-Message-ID: <003c156cf88c4ccd82d50e450c4696ed@huawei.com>
-References: <1612183830-15506-1-git-send-email-wanghongzhe@huawei.com>
- <B1DC6A42-15AF-4804-B20E-FC6E2BDD1C8E@amacapital.net>
-In-Reply-To: <B1DC6A42-15AF-4804-B20E-FC6E2BDD1C8E@amacapital.net>
-Accept-Language: en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.174.177.164]
+        id S231640AbhBBEau (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 1 Feb 2021 23:30:50 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60246 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231494AbhBBEas (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 1 Feb 2021 23:30:48 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id 7CE1264E9E;
+        Tue,  2 Feb 2021 04:30:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612240207;
+        bh=YLHi1Cwx3S3ifeYbkWuF4+Xh5WBWUvKIxdSReU/zWWY=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=WKBnrN91wWAnA7Jk/LLlaSNCP6nKN131w7hfZS6X6ABliYYWNa/v0Iv813PIaXm+f
+         AqvDW+VceOxdRWRNefpBwBpMK4MAi3Ta7ZEjrIfb0Ccid7mJc4QmhtQElBih3qbrRP
+         mj1fpN39IoHRwruIFb+dl9eepdE1STQPcL7pgfQVnEh9lQMdXO/ja2BeghLwL+zwDI
+         KJW8kKbmW3xzlp2mpNP0SLczo2AhvZ1HwneaOEWgKCf5QBTGu4l/5n9xNhh9i0peEY
+         WiyGL0ok0nL3De4Px3LV6/+F978yzdgr4ds86jwyKUW3fzF1eAcFII+iR3meMdDc/U
+         GvLo4/6QASjXw==
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
+Subject: Re: [RESEND PATCH net v4] udp: ipv4: manipulate network header of NATed
+ UDP GRO fraglist
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <161224020742.9509.1331877778578098305.git-patchwork-notify@kernel.org>
+Date:   Tue, 02 Feb 2021 04:30:07 +0000
+References: <1611962007-80092-1-git-send-email-dseok.yi@samsung.com>
+In-Reply-To: <1611962007-80092-1-git-send-email-dseok.yi@samsung.com>
+To:     Dongseok Yi <dseok.yi@samsung.com>
+Cc:     davem@davemloft.net, steffen.klassert@secunet.com, alobakin@pm.me,
+        namkyu78.kim@samsung.com, kuba@kernel.org, yoshfuji@linux-ipv6.org,
+        dsahern@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, willemb@google.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-DQo+PiBPbiBGZWIgMSwgMjAyMSwgYXQgNDowNiBBTSwgd2FuZ2hvbmd6aGUgPHdhbmdob25nemhl
-QGh1YXdlaS5jb20+IHdyb3RlOg0KPj4gDQo+PiDvu79JZiBhIHRocmVhZChBKSdzIFRTWU5DIGZs
-YWcgaXMgc2V0IGZyb20gc2VjY29tcCgpLCB0aGVuIGl0IHdpbGwgDQo+PiBzeW5jaHJvbml6ZSBp
-dHMgc2VjY29tcCBmaWx0ZXIgdG8gb3RoZXIgdGhyZWFkcyhCKSBpbiBzYW1lIHRocmVhZCANCj4+
-IGdyb3VwLiBUbyBhdm9pZCByYWNlIGNvbmRpdGlvbiwgc2VjY29tcCBwdXRzIHJtYigpIGJldHdl
-ZW4gcmVhZGluZyB0aGUgDQo+PiBtb2RlIGFuZCBmaWx0ZXIgaW4gc2VjY29tcCBjaGVjayBwYXRj
-aChpbiBCIHRocmVhZCkuDQo+PiBBcyBhIHJlc3VsdCwgZXZlcnkgc3lzY2FsbCdzIHNlY2NvbXAg
-Y2hlY2sgaXMgc2xvd2VkIGRvd24gYnkgdGhlIA0KPj4gbWVtb3J5IGJhcnJpZXIuDQo+PiANCj4+
-IEhvd2V2ZXIsIHdlIGNhbiBvcHRpbWl6ZSBpdCBieSBjYWxsaW5nIHJtYigpIG9ubHkgd2hlbiBm
-aWx0ZXIgaXMgTlVMTCANCj4+IGFuZCByZWFkaW5nIGl0IGFnYWluIGFmdGVyIHRoZSBiYXJyaWVy
-LCB3aGljaCBtZWFucyB0aGUgcm1iKCkgaXMgDQo+PiBjYWxsZWQgb25seSBvbmNlIGluIHRocmVh
-ZCBsaWZldGltZS4NCj4+IA0KPj4gVGhlICdmaWx0ZXIgaXMgTlVMTCcgY29uZGl0b24gbWVhbnMg
-dGhhdCBpdCBpcyB0aGUgZmlyc3QgdGltZSANCj4+IGF0dGFjaGluZyBmaWx0ZXIgYW5kIGlzIGJ5
-IG90aGVyIHRocmVhZChBKSB1c2luZyBUU1lOQyBmbGFnLg0KPj4gSW4gdGhpcyBjYXNlLCB0aHJl
-YWQgQiBtYXkgcmVhZCB0aGUgZmlsdGVyIGZpcnN0IGFuZCBtb2RlIGxhdGVyIGluIENQVSANCj4+
-IG91dC1vZi1vcmRlciBleGVjdGlvbi4gQWZ0ZXIgdGhpcyB0aW1lLCB0aGUgdGhyZWFkIEIncyBt
-b2RlIGlzIGFsd2F5cyANCj4+IGJlIHNldCwgYW5kIHRoZXJlIHdpbGwgbm8gcmFjZSBjb25kaXRp
-b24gd2l0aCB0aGUgZmlsdGVyL2JpdG1hcC4NCj4+IA0KPj4gSW4gYWRkdGlvbiwgd2Ugc2hvdWxk
-IHB1dHMgYSB3cml0ZSBtZW1vcnkgYmFycmllciBiZXR3ZWVuIHdyaXRpbmcgdGhlIA0KPj4gZmls
-dGVyIGFuZCBtb2RlIGluIHNtcF9tYl9fYmVmb3JlX2F0b21pYygpLCB0byBhdm9pZCB0aGUgcmFj
-ZSANCj4+IGNvbmRpdGlvbiBpbiBUU1lOQyBjYXNlLg0KPg0KPiBJIGhhdmVu4oCZdCBmdWxseSB3
-b3JrZWQgdGhpcyBvdXQsIGJ1dCBybWIoKSBpcyBib2d1cy4gVGhpcyBzaG91bGQgYmUgc21wX3Jt
-YigpLg0KDQpZZXMsIEkgdGhpbmsgeW91IGFyZSByaWdodC5JIHdpbGwgZml4IGl0IGFuZCBzZW5k
-IGFub3RoZXIgcGF0Y2guDQo+PiANCj4+IFNpZ25lZC1vZmYtYnk6IHdhbmdob25nemhlIDx3YW5n
-aG9uZ3poZUBodWF3ZWkuY29tPg0KPj4gLS0tDQo+PiBrZXJuZWwvc2VjY29tcC5jIHwgMzEgKysr
-KysrKysrKysrKysrKysrKysrKy0tLS0tLS0tLQ0KPj4gMSBmaWxlIGNoYW5nZWQsIDIyIGluc2Vy
-dGlvbnMoKyksIDkgZGVsZXRpb25zKC0pDQo+PiANCj4+IGRpZmYgLS1naXQgYS9rZXJuZWwvc2Vj
-Y29tcC5jIGIva2VybmVsL3NlY2NvbXAuYyBpbmRleCANCj4+IDk1MmRjMWM5MDIyOS4uYjk0NGNi
-MmI2Yjk0IDEwMDY0NA0KPj4gLS0tIGEva2VybmVsL3NlY2NvbXAuYw0KPj4gKysrIGIva2VybmVs
-L3NlY2NvbXAuYw0KPj4gQEAgLTM5Nyw4ICszOTcsMjAgQEAgc3RhdGljIHUzMiBzZWNjb21wX3J1
-bl9maWx0ZXJzKGNvbnN0IHN0cnVjdCBzZWNjb21wX2RhdGEgKnNkLA0KPj4gICAgICAgICAgICBS
-RUFEX09OQ0UoY3VycmVudC0+c2VjY29tcC5maWx0ZXIpOw0KPj4gDQo+PiAgICAvKiBFbnN1cmUg
-dW5leHBlY3RlZCBiZWhhdmlvciBkb2Vzbid0IHJlc3VsdCBpbiBmYWlsaW5nIG9wZW4uICovDQo+
-PiAtICAgIGlmIChXQVJOX09OKGYgPT0gTlVMTCkpDQo+PiAtICAgICAgICByZXR1cm4gU0VDQ09N
-UF9SRVRfS0lMTF9QUk9DRVNTOw0KPj4gKyAgICBpZiAoV0FSTl9PTihmID09IE5VTEwpKSB7DQo+
-PiArICAgICAgICAvKg0KPj4gKyAgICAgICAgICogTWFrZSBzdXJlIHRoZSBmaXJzdCBmaWx0ZXIg
-YWRkdGlvbiAoZnJvbSBhbm90aGVyDQo+PiArICAgICAgICAgKiB0aHJlYWQgdXNpbmcgVFNZTkMg
-ZmxhZykgYXJlIHNlZW4uDQo+PiArICAgICAgICAgKi8NCj4+ICsgICAgICAgIHJtYigpOw0KPj4g
-KyAgICAgICAgDQo+PiArICAgICAgICAvKiBSZWFkIGFnYWluICovDQo+PiArICAgICAgICBmID0g
-UkVBRF9PTkNFKGN1cnJlbnQtPnNlY2NvbXAuZmlsdGVyKTsNCj4+ICsNCj4+ICsgICAgICAgIC8q
-IEVuc3VyZSB1bmV4cGVjdGVkIGJlaGF2aW9yIGRvZXNuJ3QgcmVzdWx0IGluIGZhaWxpbmcgb3Bl
-bi4gKi8NCj4+ICsgICAgICAgIGlmIChXQVJOX09OKGYgPT0gTlVMTCkpDQo+PiArICAgICAgICAg
-ICAgcmV0dXJuIFNFQ0NPTVBfUkVUX0tJTExfUFJPQ0VTUzsNCj4+ICsgICAgfQ0KPj4gDQo+PiAg
-ICBpZiAoc2VjY29tcF9jYWNoZV9jaGVja19hbGxvdyhmLCBzZCkpDQo+PiAgICAgICAgcmV0dXJu
-IFNFQ0NPTVBfUkVUX0FMTE9XOw0KPj4gQEAgLTYxNCw5ICs2MjYsMTYgQEAgc3RhdGljIGlubGlu
-ZSB2b2lkIHNlY2NvbXBfc3luY190aHJlYWRzKHVuc2lnbmVkIGxvbmcgZmxhZ3MpDQo+PiAgICAg
-ICAgICogZXF1aXZhbGVudCAoc2VlIHB0cmFjZV9tYXlfYWNjZXNzKSwgaXQgaXMgc2FmZSB0bw0K
-Pj4gICAgICAgICAqIGFsbG93IG9uZSB0aHJlYWQgdG8gdHJhbnNpdGlvbiB0aGUgb3RoZXIuDQo+
-PiAgICAgICAgICovDQo+PiAtICAgICAgICBpZiAodGhyZWFkLT5zZWNjb21wLm1vZGUgPT0gU0VD
-Q09NUF9NT0RFX0RJU0FCTEVEKQ0KPj4gKyAgICAgICAgaWYgKHRocmVhZC0+c2VjY29tcC5tb2Rl
-ID09IFNFQ0NPTVBfTU9ERV9ESVNBQkxFRCkgew0KPj4gKyAgICAgICAgICAgIC8qDQo+PiArICAg
-ICAgICAgICAgICogTWFrZSBzdXJlIG1vZGUgY2Fubm90IGJlIHNldCBiZWZvcmUgdGhlIGZpbHRl
-cg0KPj4gKyAgICAgICAgICAgICAqIGFyZSBzZXQuDQo+PiArICAgICAgICAgICAgICovDQo+PiAr
-ICAgICAgICAgICAgc21wX21iX19iZWZvcmVfYXRvbWljKCk7DQo+PiArDQo+PiAgICAgICAgICAg
-IHNlY2NvbXBfYXNzaWduX21vZGUodGhyZWFkLCBTRUNDT01QX01PREVfRklMVEVSLA0KPj4gICAg
-ICAgICAgICAgICAgICAgICAgICBmbGFncyk7DQo+PiArICAgICAgICB9DQo+PiAgICB9DQo+PiB9
-DQo+PiANCj4+IEBAIC0xMTYwLDEyICsxMTc5LDYgQEAgc3RhdGljIGludCBfX3NlY2NvbXBfZmls
-dGVyKGludCB0aGlzX3N5c2NhbGwsIGNvbnN0IHN0cnVjdCBzZWNjb21wX2RhdGEgKnNkLA0KPj4g
-ICAgaW50IGRhdGE7DQo+PiAgICBzdHJ1Y3Qgc2VjY29tcF9kYXRhIHNkX2xvY2FsOw0KPj4gDQo+
-PiAtICAgIC8qDQo+PiAtICAgICAqIE1ha2Ugc3VyZSB0aGF0IGFueSBjaGFuZ2VzIHRvIG1vZGUg
-ZnJvbSBhbm90aGVyIHRocmVhZCBoYXZlDQo+PiAtICAgICAqIGJlZW4gc2VlbiBhZnRlciBTWVND
-QUxMX1dPUktfU0VDQ09NUCB3YXMgc2Vlbi4NCj4+IC0gICAgICovDQo+PiAtICAgIHJtYigpOw0K
-Pj4gLQ0KPj4gICAgaWYgKCFzZCkgew0KPj4gICAgICAgIHBvcHVsYXRlX3NlY2NvbXBfZGF0YSgm
-c2RfbG9jYWwpOw0KPj4gICAgICAgIHNkID0gJnNkX2xvY2FsOw0KPj4gLS0NCj4+IDIuMTkuMQ0K
-Pj4gDQo=
+Hello:
+
+This patch was applied to netdev/net.git (refs/heads/master):
+
+On Sat, 30 Jan 2021 08:13:27 +0900 you wrote:
+> UDP/IP header of UDP GROed frag_skbs are not updated even after NAT
+> forwarding. Only the header of head_skb from ip_finish_output_gso ->
+> skb_gso_segment is updated but following frag_skbs are not updated.
+> 
+> A call path skb_mac_gso_segment -> inet_gso_segment ->
+> udp4_ufo_fragment -> __udp_gso_segment -> __udp_gso_segment_list
+> does not try to update UDP/IP header of the segment list but copy
+> only the MAC header.
+> 
+> [...]
+
+Here is the summary with links:
+  - [RESEND,net,v4] udp: ipv4: manipulate network header of NATed UDP GRO fraglist
+    https://git.kernel.org/netdev/net/c/c3df39ac9b0e
+
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
