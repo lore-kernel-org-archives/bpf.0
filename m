@@ -2,118 +2,114 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 18354C433E0
-	for <bpf@archiver.kernel.org>; Tue,  2 Feb 2021 17:58:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D46FC433E6
+	for <bpf@archiver.kernel.org>; Tue,  2 Feb 2021 18:33:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D577564F6A
-	for <bpf@archiver.kernel.org>; Tue,  2 Feb 2021 17:58:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BAFB564F7E
+	for <bpf@archiver.kernel.org>; Tue,  2 Feb 2021 18:33:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233938AbhBBR5U (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Feb 2021 12:57:20 -0500
-Received: from mga06.intel.com ([134.134.136.31]:52438 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233617AbhBBOIi (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 2 Feb 2021 09:08:38 -0500
-IronPort-SDR: uuWQrAJv6HznOcPUXDmNRhQCMNFLNjmmGAcRFuP5brHlwg1etL7X+ZjP1eeFbCd+AhbTIEEWAM
- YiNGxwvkW0MA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9882"; a="242371356"
-X-IronPort-AV: E=Sophos;i="5.79,395,1602572400"; 
-   d="scan'208";a="242371356"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2021 06:06:41 -0800
-IronPort-SDR: ps3hgjD1G3sVoi9k7wIiBWgO8svlPpNyykoQuHcZDvUISEXCSHeBtCqr4/cFV4tZBPNcgYwHfX
- KJ87Ng6khMFw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,395,1602572400"; 
-   d="scan'208";a="479774614"
-Received: from silpixa00399839.ir.intel.com (HELO localhost.localdomain) ([10.237.222.142])
-  by fmsmga001.fm.intel.com with ESMTP; 02 Feb 2021 06:06:39 -0800
-From:   Ciara Loftus <ciara.loftus@intel.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        magnus.karlsson@intel.com, bjorn@kernel.org,
-        weqaar.a.janjua@intel.com
-Cc:     daniel@iogearbox.net, Ciara Loftus <ciara.loftus@intel.com>
-Subject: [PATCH bpf-next v3 0/6] AF_XDP Packet Drop Tracing
-Date:   Tue,  2 Feb 2021 13:36:36 +0000
-Message-Id: <20210202133642.8562-1-ciara.loftus@intel.com>
-X-Mailer: git-send-email 2.17.1
+        id S234485AbhBBSc5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Feb 2021 13:32:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51400 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238694AbhBBSb1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 2 Feb 2021 13:31:27 -0500
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD578C0613ED;
+        Tue,  2 Feb 2021 10:30:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=jFGMt/5rvZkOd4kJq4sdHZEiD2PN74Dx0ZAKwhJWvEU=; b=Z8xIBS0FsqnMJFgEQ0eLvw3f8X
+        FbBGHTxQZbnZJrLRO4VjHEGfCgyvYi9mAHy4FevWoNdz7dJgitQSZCQElU764JLE/WqyQyheXR8c6
+        0rwEMVSUmUkmcpsdn/mOP57DbkvC4QlSAVNcMO7R5HV+9Matczizc6cXxbC9lY8a9NwCA14YrKkh1
+        dqvYW81Uliy8NnctdU9RuX1l69nlG10l3zmDHDY3hDBxr5zu8BWhhGgr9NdmYdPvtu6GUcwVY9B0s
+        U6S2W6AmcrZbJKwDlbsybn82CKW5LFxegyALTemTNwKbZc0qDMcCtVfFIhdNShbjSCTVsQstRAAPC
+        2LPa6Xtw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1l70Rg-0005bW-3A; Tue, 02 Feb 2021 18:30:36 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8950D301179;
+        Tue,  2 Feb 2021 19:30:34 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 73BBE203B8CC7; Tue,  2 Feb 2021 19:30:34 +0100 (CET)
+Date:   Tue, 2 Feb 2021 19:30:34 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Nikolay Borisov <nborisov@suse.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: Re: kprobes broken since 0d00449c7a28 ("x86: Replace ist_enter()
+ with nmi_enter()")
+Message-ID: <YBmaStZn9XEU0QE+@hirez.programming.kicks-ass.net>
+References: <CAADnVQLMqHpSsZ1OdZRFmKqNWKiRq3dxRxw+y=kvMdmkN7htUw@mail.gmail.com>
+ <20210129175943.GH8912@worktop.programming.kicks-ass.net>
+ <20210129140103.3ce971b7@gandalf.local.home>
+ <20210129162454.293523c6@gandalf.local.home>
+ <YBUYsFlxjsQxuvfB@hirez.programming.kicks-ass.net>
+ <20210130074410.6384c2e2@oasis.local.home>
+ <YBktVT+z7sV/vEPU@hirez.programming.kicks-ass.net>
+ <20210202095249.5abd6780@gandalf.local.home>
+ <YBmBu0c24RjNYFet@hirez.programming.kicks-ass.net>
+ <20210202115623.08e8164d@gandalf.local.home>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210202115623.08e8164d@gandalf.local.home>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This series introduces tracing infrastructure for AF_XDP sockets (xsk).
-A trace event 'xsk_packet_drop' is created which can be enabled by toggling
+On Tue, Feb 02, 2021 at 11:56:23AM -0500, Steven Rostedt wrote:
 
-/sys/kernel/debug/tracing/events/xsk/xsk_packet_drop/enable
+> NMIs are special, and they always have been. They shouldn't be doing much
+> anyway. If they are, then that's a problem.
 
-When enabled and packets or empty packet buffers are dropped in the kernel,
-traces are generated which describe the reason for the packet drop, the netdev
-and qid information of the xsk which encountered the drop, and some more
-information depending on what type of drop was encountered that will tell
-the user why the packet was dropped.  This information should help a user
-troubleshoot packet drops by providing an extra level of detail which is not
-available through use of simple counters
+There is a fair amount of NMI level code these days, and it seems to be
+ever increasing...
 
-Example traces:
-xsk_packet_drop: netdev: ve3213 qid 0 reason: packet too big: len 3000 max 2048 not_used 0
-xsk_packet_drop: netdev: ve3213 qid 0 reason: invalid fill addr: addr 520192 not_used 0 not_used 0
-xsk_packet_drop: netdev: ve9266 qid 0 reason: invalid tx desc: addr 0 len 4097 options 0
+> My question wasn't to have them do it, I was simply asking if they do. I
+> was assuming that they do not.
 
-It was decided to use a single event 'xsk_packet_drop' to capture these three
-drop types. This means that for some of them, there is some redundant information
-in the trace marked as 'not_used'. An alternative to this would be to introduce 3
-separate event types under xsk, each with their own appropriate trace format.
-Suggestions are welcome on which approach would be better to take.
+per nmi_enter() we do:
 
-The event can be monitored using perf:
-perf stat -a -e xsk:xsk_packet_drop
+  __preempt_count_add(NMI_OFFSET + HARDIRQ_OFFSET);       \
 
-A selftest is added for each drop type. These tests provide the conditions to
-trigger the traces and ensure that the appropriate traces are generated.
+> > But it doesn't help with:
+> > 
+> > 	spin_lock_irq(&foo); // task context
+> > 	#DB
+> > 	  spin_lock_irq(&foo); // interrupt context per your above
+> 
+> The statement above said:
+> 
+>  "If #DB and #BP do not change the in_interrupt() context"
+> 
+> Which would make the above be in the same context and the handler would
+> not be called for the #DB case.
 
-v2->v3:
-* Removed some traces which traced events which were not technically drops eg.
-when the rxq is full.
-* Introduced traces for descriptor validation on RX and TX and selftests for both
+But then replace the above #DB with __fentry__ and explain how it is
+fundamentally different? And consider that direct call into god knows
+what code option you have. That doesn't go past any recursion checks
+IIRC.
 
-v1->v2:
-* Rebase on top of Björn's cleanup series.
-* Fixed packet count for trace tests which don't need EOT frame.
+> I'm fine with #DB and #BP being a "in_nmi()", as they are probably even
+> more special than NMIs.
 
-This series applies on commit 61ca36c8c4eb3bae35a285b1ae18c514cde65439
+That does mean that kprobes are then fundamentally running from
+in_nmi(), which is what started all this.
 
-Ciara Loftus (6):
-  xsk: add tracepoints for packet drops
-  selftests/bpf: restructure setting the packet count
-  selftests/bpf: add framework for xsk selftests
-  selftests/bpf: XSK_TRACE_DROP_PKT_TOO_BIG test
-  selftests/bpf: XSK_TRACE_INVALID_FILLADDR test
-  selftests/bpf: XSK_TRACE_INVALID_DESC_TX test
-
- MAINTAINERS                                |   1 +
- include/linux/bpf_trace.h                  |   1 +
- include/trace/events/xsk.h                 |  73 ++++++++
- include/uapi/linux/if_xdp.h                |   6 +
- kernel/bpf/core.c                          |   1 +
- net/xdp/xsk.c                              |   7 +-
- net/xdp/xsk_buff_pool.c                    |   3 +
- net/xdp/xsk_queue.h                        |   4 +
- tools/include/uapi/linux/if_xdp.h          |   6 +
- tools/testing/selftests/bpf/test_xsk.sh    |  90 ++++++++-
- tools/testing/selftests/bpf/xdpxceiver.c   | 206 +++++++++++++++++++--
- tools/testing/selftests/bpf/xdpxceiver.h   |   9 +
- tools/testing/selftests/bpf/xsk_prereqs.sh |   3 +-
- 13 files changed, 381 insertions(+), 29 deletions(-)
- create mode 100644 include/trace/events/xsk.h
-
--- 
-2.17.1
-
+Sure, the opt-probes and ftrace-probes don't actually have in_nmi() set
+today (because they don't trigger an exception), but given that that is
+all optional, any kprobe handler had better be in_nmi() clean.
