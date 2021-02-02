@@ -2,120 +2,141 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED690C433E0
-	for <bpf@archiver.kernel.org>; Tue,  2 Feb 2021 07:49:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F08CAC433E0
+	for <bpf@archiver.kernel.org>; Tue,  2 Feb 2021 09:29:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A45C964EED
-	for <bpf@archiver.kernel.org>; Tue,  2 Feb 2021 07:49:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9E97860C3E
+	for <bpf@archiver.kernel.org>; Tue,  2 Feb 2021 09:29:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230073AbhBBHt2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Feb 2021 02:49:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54352 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbhBBHtX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 2 Feb 2021 02:49:23 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA0C1C06174A;
-        Mon,  1 Feb 2021 23:48:43 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id b187so5448814ybg.9;
-        Mon, 01 Feb 2021 23:48:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kTgnxV4+sEWrA1Wks3E2hJC5HV3CMr0sX+l9RmTre/w=;
-        b=AaBOs1Ru/uoqWd/fHRBX2YO2CPwo1si9mYUXREqa8BNx+lUA3Fir/LYPUCvy8zbMI7
-         pbiMOJuvtV3x1+cryA1X/zEzTi6TMMQRkER4/ZY4P2GZqHYG5iyT2RO4SUevlxk3vRse
-         b89sqlchmUm4k02+DTrLfKFaoo7bdHMsKKMQWVy11K3pEIS0Yv6K5AV9+S7/8ST3UuTH
-         pJAs1LMqy8c3NVqP55dwPOyo97AKFNqV/6LhVqj04XsVSPGthtOLPb2DZhLz1g7UNlnm
-         BtLj2S7IX8UKMPHwGoMS68GOC7GuqgKkTj6oYawwrFvpmacHMKNzLQrlDaqI7lbaIxhN
-         swkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kTgnxV4+sEWrA1Wks3E2hJC5HV3CMr0sX+l9RmTre/w=;
-        b=bG4ObU8vq+YXagnE1pnezpDAICVshXRniSVAeSScpDHyQGNytGHZhTBFYBhimUizSs
-         yB8kX/QMEZdFJscZnbqHp3QNk9K3KaFEa7w3tY0YqIgJQpk7zxeUBfcWPAgnwY22jEqX
-         SZAi11BmIWKdsNovxps4/vaLyDMFiPXrXy0lO2UhBM1B6wKbrbGJICEEwqEpiumwfpPO
-         NC0P+UWX8x5g5rEICT+1KEzojBR37/WhdJm6Lz3BwR6+2A549WI7Ea0+wxrI2vR3aXEI
-         90zI8kTAKWhje52AzjUWLmYKSIdDcq9O5B46TneiymfLm9cwA2SXyyC0OLisGCdO5peA
-         F23Q==
-X-Gm-Message-State: AOAM530uDc/m+DfIroZv2vB9UkkCKor97zJ1Lbsw3jcNL0PZ4g8IR7sC
-        YUp+F3z9HM/9UoECHeZyEKn+VRsRVpwStAhbMVo=
-X-Google-Smtp-Source: ABdhPJzb6QRLNIs1Utk2oI4rqA0kbxcCRyQoEUBSYc/DnpqM9mJBcaZBoKSWHaL496EEBPWSKifoHPmv/dSGkp+TUcI=
-X-Received: by 2002:a25:f40e:: with SMTP id q14mr30111092ybd.230.1612252123007;
- Mon, 01 Feb 2021 23:48:43 -0800 (PST)
+        id S232842AbhBBJ3X (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Feb 2021 04:29:23 -0500
+Received: from szxga05-in.huawei.com ([45.249.212.191]:12006 "EHLO
+        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231860AbhBBJ3T (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 2 Feb 2021 04:29:19 -0500
+Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4DVKGC1hlszjHBK;
+        Tue,  2 Feb 2021 17:27:15 +0800 (CST)
+Received: from huawei.com (10.175.124.27) by DGGEMS406-HUB.china.huawei.com
+ (10.3.19.206) with Microsoft SMTP Server id 14.3.498.0; Tue, 2 Feb 2021
+ 17:28:23 +0800
+From:   wanghongzhe <wanghongzhe@huawei.com>
+To:     <luto@amacapital.net>
+CC:     <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
+        <daniel@iogearbox.net>, <john.fastabend@gmail.com>, <kafai@fb.com>,
+        <keescook@chromium.org>, <kpsingh@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <songliubraving@fb.com>, <wad@chromium.org>,
+        <wanghongzhe@huawei.com>, <yhs@fb.com>
+Subject: [PATCH v1 1/1] Firstly, as Andy mentioned, this should be smp_rmb() instead of rmb(). considering that TSYNC is a cross-thread situation, and rmb() is a mandatory barrier which should not be used to control SMP effects, since mandatory barriers impose unnecessary overhead on both SMP and UP systems, as kernel Documentation said.
+Date:   Tue, 2 Feb 2021 18:13:07 +0800
+Message-ID: <1612260787-28015-1-git-send-email-wanghongzhe@huawei.com>
+X-Mailer: git-send-email 1.7.12.4
+In-Reply-To: <B1DC6A42-15AF-4804-B20E-FC6E2BDD1C8E@amacapital.net>
+References: <B1DC6A42-15AF-4804-B20E-FC6E2BDD1C8E@amacapital.net>
 MIME-Version: 1.0
-References: <20210112184004.1302879-1-jolsa@kernel.org> <f3790a7d-73bc-d634-5994-d049c7a73eae@redhat.com>
- <20210121133825.GB12699@kernel.org> <CA+icZUVsdcTEJjwpB7=05W5-+roKf66qTwP+M6QJKTnuP6TOVQ@mail.gmail.com>
- <CAEf4BzaVAp=W47KmMsfpj_wuJR-Gvmav=tdKdoHKAC3AW-976w@mail.gmail.com>
- <CA+icZUW6g9=sMD3hj5g+ZXOwE_DxfxO3SX2Tb-bFTiWnQLb_EA@mail.gmail.com>
- <CAEf4BzZ-uU3vkMA1RPt1f2HbgaHoenTxeVadyxuLuFGwN9ntyw@mail.gmail.com> <20210128200046.GA794568@kernel.org>
-In-Reply-To: <20210128200046.GA794568@kernel.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 1 Feb 2021 23:48:32 -0800
-Message-ID: <CAEf4BzbXhn2qAwNyDx6Oqaj7+RdBtjnPPLe27=B0-aB9yY+Xmw@mail.gmail.com>
-Subject: Re: [RFT] pahole 1.20 RC was Re: [PATCH] btf_encoder: Add extra
- checks for symbol names
-To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Cc:     Sedat Dilek <sedat.dilek@gmail.com>,
-        Tom Stellard <tstellar@redhat.com>,
-        Jiri Olsa <jolsa@kernel.org>, dwarves@vger.kernel.org,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
-        Hao Luo <haoluo@google.com>, Mark Wielaard <mark@klomp.org>,
-        =?UTF-8?Q?Daniel_P=2E_Berrang=C3=A9?= <berrange@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Originating-IP: [10.175.124.27]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Jan 28, 2021 at 12:00 PM Arnaldo Carvalho de Melo
-<arnaldo.melo@gmail.com> wrote:
->
-> Em Thu, Jan 21, 2021 at 08:11:17PM -0800, Andrii Nakryiko escreveu:
-> > On Thu, Jan 21, 2021 at 6:07 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> > > Do you want Nick's DWARF v5 patch-series as a base?
->
-> > Arnaldo was going to figure out the DWARF v5 problem, so I'm leaving
-> > it up to him. I'm curious about DWARF v4 problems because no one yet
-> > reported that previously.
->
-> I think I have the reported one fixed, Andrii, can you please do
-> whatever pre-release tests you can in your environment with what is in:
->
+Secondly, the smp_rmb() should be put between reading SYSCALL_WORK_SECCOMP and reading
+seccomp.mode, not between reading seccomp.mode and seccomp->filter, to make
+sure that any changes to mode from another thread have been seen after
+SYSCALL_WORK_SECCOMP was seen, as the original comment shown. This issue seems to be
+misintroduced at 13aa72f0fd0a9f98a41cefb662487269e2f1ad65 which aims to
+refactor the filter callback and the API. So the intuitive solution is to put
+it back like:
 
-Hi Arnaldo,
+Thirdly, however, we can go further to improve the performace of checking
+syscall, considering that smp_rmb is always executed on the syscall-check
+path at each time for both FILTER and STRICT check while the TSYNC case
+which may lead to race condition is just a rare situation, and that in
+some arch like Arm64 smp_rmb is dsb(ishld) not a cheap barrier() in x86-64.
 
-Sorry for the delay, just back from a short PTO.
+As a result, smp_rmb() should only be executed when necessary, e.g, it is
+only necessary when current thread's mode is SECCOMP_MODE_DISABLED at the
+first TYSNCed time, because after that the current thread's mode will always
+be SECCOMP_MODE_FILTER (and SYSCALL_WORK_SECCOMP will always be set) and can not be
+changed anymore by anyone. In other words, after that, any thread can not
+change the mode (and SYSCALL_WORK_SECCOMP), so the race condition disappeared, and
+no more smb_rmb() needed ever.
 
-It all looks to be working fine on my side. There is a compilation
-error in our libbpf CI when building the latest pahole from sources
-due to DW_FORM_implicit_const being undefined. I'm updating our VMs to
-use Ubuntu Focal 20.04, up from Bionic 18.04, and that should
-hopefully solve the issue due to newer versions of libdw. If you worry
-about breaking others, though, we might want to add #ifndef guards and
-re-define DW_FORM_implicit_const as 0x21 explicitly in pahole source
-code.
+So the solution is to read mode again behind smp_rmb() after the mode is seen
+as SECCOMP_MODE_DISABLED by current thread at the first TSYNCed time, and if
+the new mode don't equals to SECCOMP_MODE_FILTER, do BUG(), go to FILTER path
+otherwise.
 
-But otherwise, all good from what I can see in my environment. Looking
-forward to 1.20 release! I'll let you know if, after updating to
-Ubuntu Focal, any new pahole issues crop up.
+RFC -> v1:
+ - replace rmb() with smp_rmb()
+ - move the smp_rmb() logic to the middle between SYSCALL_WORK_SECCOMP and mode
 
+Signed-off-by: wanghongzhe <wanghongzhe@huawei.com>
+Reviewed-by: Andy Lutomirski <luto@amacapital.net>
+---
+ kernel/seccomp.c | 25 +++++++++++++++++--------
+ 1 file changed, 17 insertions(+), 8 deletions(-)
 
-> https://git.kernel.org/pub/scm/devel/pahole/pahole.git/log/?h=DW_AT_data_bit_offset
->
-> ?
->
-> The cset has the tests I performed and the references to the bugzilla
-> ticket and Daniel has tested as well for his XDR + gcc 11 problem.
->
-> Thanks,
->
-> - Arnaldo
+diff --git a/kernel/seccomp.c b/kernel/seccomp.c
+index 952dc1c90229..a621fb913ec6 100644
+--- a/kernel/seccomp.c
++++ b/kernel/seccomp.c
+@@ -1160,12 +1160,6 @@ static int __seccomp_filter(int this_syscall, const struct seccomp_data *sd,
+ 	int data;
+ 	struct seccomp_data sd_local;
+ 
+-	/*
+-	 * Make sure that any changes to mode from another thread have
+-	 * been seen after SYSCALL_WORK_SECCOMP was seen.
+-	 */
+-	rmb();
+-
+ 	if (!sd) {
+ 		populate_seccomp_data(&sd_local);
+ 		sd = &sd_local;
+@@ -1289,7 +1283,6 @@ static int __seccomp_filter(int this_syscall, const struct seccomp_data *sd,
+ 
+ int __secure_computing(const struct seccomp_data *sd)
+ {
+-	int mode = current->seccomp.mode;
+ 	int this_syscall;
+ 
+ 	if (IS_ENABLED(CONFIG_CHECKPOINT_RESTORE) &&
+@@ -1299,10 +1292,26 @@ int __secure_computing(const struct seccomp_data *sd)
+ 	this_syscall = sd ? sd->nr :
+ 		syscall_get_nr(current, current_pt_regs());
+ 
+-	switch (mode) {
++	/*
++	 * Make sure that any changes to mode from another thread have
++	 * been seen after SYSCALL_WORK_SECCOMP was seen.
++	 */
++	smp_rmb();
++
++	switch (current->seccomp.mode) {
+ 	case SECCOMP_MODE_STRICT:
+ 		__secure_computing_strict(this_syscall);  /* may call do_exit */
+ 		return 0;
++	/*
++	 * Make sure that change to mode (from SECCOMP_MODE_DISABLED to
++	 * SECCOMP_MODE_FILTER) from another thread using TSYNC ability
++	 * have been seen after SYSCALL_WORK_SECCOMP was seen. Read mode again behind
++	 * smp_rmb(), if it equals SECCOMP_MODE_FILTER, go to the right path.
++	 */
++	case SECCOMP_MODE_DISABLED:
++		smp_rmb();
++		if (unlikely(current->seccomp.mode != SECCOMP_MODE_FILTER))
++			BUG();
+ 	case SECCOMP_MODE_FILTER:
+ 		return __seccomp_filter(this_syscall, sd, false);
+ 	default:
+-- 
+2.19.1
+
