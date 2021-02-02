@@ -2,113 +2,259 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B2048C433DB
-	for <bpf@archiver.kernel.org>; Tue,  2 Feb 2021 19:36:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8543C433E6
+	for <bpf@archiver.kernel.org>; Tue,  2 Feb 2021 19:56:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 813D664E4D
-	for <bpf@archiver.kernel.org>; Tue,  2 Feb 2021 19:36:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8047264E2C
+	for <bpf@archiver.kernel.org>; Tue,  2 Feb 2021 19:56:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233294AbhBBTgL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Feb 2021 14:36:11 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51286 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239877AbhBBTfj (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 2 Feb 2021 14:35:39 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A3F3A64E39;
-        Tue,  2 Feb 2021 19:34:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612294498;
-        bh=WC5Lt7FO1YCCTlx62ZrKm1lIJjAacPhiw1YwF3tHUJ8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=HeNWkMoDFzRTV5ILjCtPyxS6/ZeLWABp9ipxmY0mPZ/HqVYwm1x44OnL02CuYAft2
-         0EGKzulbkp2NFOKpDhRuaVz3N5g0mFFusjnVHWRRe5jnP/9VDWTNDEqdsGJF8FeBL/
-         CyfzeTZumODueoaPmZ0kNC0qooUOGKGecoYVs8/f1AywzzH4vYqfWuw0hPvPkjE5C/
-         cW3q5thnzxvZqv3rHYFXaRY0F4oEACAj5kYumtwCT/Q0aIhyMeZ17Xym/ehOtsPNWt
-         yQ2Iuum6N1R/+rvPtqIS+2YNkCFjX7MrOuOxcXwGMsC8LaI8YQT03Fk+yP4S/jYq3J
-         GVb3sSo1u2gEQ==
-Date:   Tue, 2 Feb 2021 11:34:56 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdlbnNlbg==?= <toke@redhat.com>
-Cc:     Marek Majtyka <alardam@gmail.com>,
-        Saeed Mahameed <saeed@kernel.org>,
-        David Ahern <dsahern@gmail.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jesper Dangaard Brouer <jbrouer@redhat.com>,
+        id S233095AbhBBT43 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Feb 2021 14:56:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47288 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233068AbhBBNut (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 2 Feb 2021 08:50:49 -0500
+Received: from mail-qk1-x749.google.com (mail-qk1-x749.google.com [IPv6:2607:f8b0:4864:20::749])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90108C0613ED
+        for <bpf@vger.kernel.org>; Tue,  2 Feb 2021 05:50:08 -0800 (PST)
+Received: by mail-qk1-x749.google.com with SMTP id o16so4507628qkj.15
+        for <bpf@vger.kernel.org>; Tue, 02 Feb 2021 05:50:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=paDnnRUZgFLJW6O0aJLXVvHItkFJZQG5OI0wx8WFRDk=;
+        b=Qy/q/+H2CEHwHD8Qpqz5e8CzV1q/kaW1SYbvkDYJZA19qB5/8x/cv4GBqG6x13wMVI
+         oycMy0iqViP7WXLLwB7QSyQVboNpLfhZYnNzDD6bA9l1bDcU8RnhEoUwZ5ueCCgXK1Xt
+         MdASwdn1NYJiamDTiGX9c90F5+Jw5P9XmZlO/OQhcTMQOaW+BULPqTFEz8IeLCr78fOk
+         MRA8Ud4qHr08X8YBJJs3puMNEateyTJxjnfDfm5riak1dbiVnqjy1Ip8DuWtN/D7NXdE
+         WsnpZ+d2ksNlN4lBkccTcSk3m2WN9FHY8Vsf5k7kJMVGmPRbqD/hVXlFim4J4ta1xmbn
+         rYjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=paDnnRUZgFLJW6O0aJLXVvHItkFJZQG5OI0wx8WFRDk=;
+        b=pVxyIlNmGdl4uyZYPTbSq0HpRk7X7J6+0SPpcJQwlhxiv41SD1pBURv8v5dtfiEUAT
+         9zLoKGPnnMgLpdzbj06Ei4fcKk4yY6UzfujKk+iPw4bucI3UaO86Yd+oCXqtcK+EvsCy
+         i8GPMb/ycgQR6cKbGUR1kcl0EqtAEOpb8nU7ltnRVEIAAKWYJnLjpm4qp8HotenF6ykX
+         K/L+2248YTDtDJaYzB8XUHoWoubwk0uDbtssu7Yq8VX77IZG3NzNjXyUQ1ZanU8iqQyC
+         exggVVXVd8WRk/t3IDVJN5As6lHl+c1ZIh73/qTATBeOgPxT2A78PtH8XUDnN5tS0pyh
+         8hpA==
+X-Gm-Message-State: AOAM53258ZW4xtSTG9ohxQogvtA4iZrfYPYq8+3opBl5R+YZecWr8s3C
+        9/dQ02ahqqQv3C5MxxUvJT9uKU3SuTvyq5plRe4PGCdNU7yBFMjhPQlp0Gvn9V+aUlHb+I+f70a
+        zybG4RmK4f4RBuol2qniufQKbPj3b7rBkdjVwRiv8avBglJ5DWsdlp6f6fRY6o3s=
+X-Google-Smtp-Source: ABdhPJxdmOVEfHyty+oRjH4/+bJcKQP8dsrF1DlnRj1Cn/OtoNCWi/IlXZqZx13WCUeU8gn2PErBVfv8Xsvs4Q==
+Sender: "jackmanb via sendgmr" <jackmanb@beeg.c.googlers.com>
+X-Received: from beeg.c.googlers.com ([fda3:e722:ac3:10:28:9cb1:c0a8:11db])
+ (user=jackmanb job=sendgmr) by 2002:a0c:c3c9:: with SMTP id
+ p9mr20112733qvi.49.1612273807536; Tue, 02 Feb 2021 05:50:07 -0800 (PST)
+Date:   Tue,  2 Feb 2021 13:50:02 +0000
+Message-Id: <20210202135002.4024825-1-jackmanb@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.30.0.365.g02bc693789-goog
+Subject: [PATCH bpf-next v3] bpf: Propagate stack bounds to registers in
+ atomics w/ BPF_FETCH
+From:   Brendan Jackman <jackmanb@google.com>
+To:     bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Maciej Fijalkowski <maciejromanfijalkowski@gmail.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
         Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>, hawk@kernel.org,
-        bpf <bpf@vger.kernel.org>,
-        intel-wired-lan <intel-wired-lan@lists.osuosl.org>,
-        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
-        jeffrey.t.kirsher@intel.com
-Subject: Re: [PATCH v2 bpf 1/5] net: ethtool: add xdp properties flag set
-Message-ID: <20210202113456.30cfe21e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <87bld2smi9.fsf@toke.dk>
-References: <20201204102901.109709-1-marekx.majtyka@intel.com>
-        <878sad933c.fsf@toke.dk>
-        <20201204124618.GA23696@ranger.igk.intel.com>
-        <048bd986-2e05-ee5b-2c03-cd8c473f6636@iogearbox.net>
-        <20201207135433.41172202@carbon>
-        <5fce960682c41_5a96208e4@john-XPS-13-9370.notmuch>
-        <20201207230755.GB27205@ranger.igk.intel.com>
-        <5fd068c75b92d_50ce20814@john-XPS-13-9370.notmuch>
-        <20201209095454.GA36812@ranger.igk.intel.com>
-        <20201209125223.49096d50@carbon>
-        <e1573338-17c0-48f4-b4cd-28eeb7ce699a@gmail.com>
-        <1e5e044c8382a68a8a547a1892b48fb21d53dbb9.camel@kernel.org>
-        <cb6b6f50-7cf1-6519-a87a-6b0750c24029@gmail.com>
-        <f4eb614ac91ee7623d13ea77ff3c005f678c512b.camel@kernel.org>
-        <d5be0627-6a11-9c1f-8507-cc1a1421dade@gmail.com>
-        <6f8c23d4ac60525830399754b4891c12943b63ac.camel@kernel.org>
-        <CAAOQfrHN1-oHmbOksDv-BKWv4gDF2zHZ5dTew6R_QTh6s_1abg@mail.gmail.com>
-        <87h7mvsr0e.fsf@toke.dk>
-        <CAAOQfrHA+-BsikeQzXYcK_32BZMbm54x5p5YhAiBj==uaZvG1w@mail.gmail.com>
-        <87bld2smi9.fsf@toke.dk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+        KP Singh <kpsingh@chromium.org>,
+        Florent Revest <revest@chromium.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-kernel@vger.kernel.org, Brendan Jackman <jackmanb@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, 02 Feb 2021 13:05:34 +0100 Toke H=C3=B8iland-J=C3=B8rgensen wrote:
-> Marek Majtyka <alardam@gmail.com> writes:
->=20
-> > Thanks Toke,
-> >
-> > In fact, I was waiting for a single confirmation, disagreement or
-> > comment. I have it now. As there are no more comments, I am getting
-> > down to work right away. =20
->=20
-> Awesome! And sorry for not replying straight away - I hate it when I
-> send out something myself and receive no replies, so I suppose I should
-> get better at not doing that myself :)
->=20
-> As for the inclusion of the XDP_BASE / XDP_LIMITED_BASE sets (which I
-> just realised I didn't reply to), I am fine with defining XDP_BASE as a
-> shortcut for TX/ABORTED/PASS/DROP, but think we should skip
-> XDP_LIMITED_BASE and instead require all new drivers to implement the
-> full XDP_BASE set straight away. As long as we're talking about
-> features *implemented* by the driver, at least; i.e., it should still be
-> possible to *deactivate* XDP_TX if you don't want to use the HW
-> resources, but I don't think there's much benefit from defining the
-> LIMITED_BASE set as a shortcut for this mode...
+When BPF_FETCH is set, atomic instructions load a value from memory
+into a register. The current verifier code first checks via
+check_mem_access whether we can access the memory, and then checks
+via check_reg_arg whether we can write into the register.
 
-I still have mixed feelings about these flags. The first step IMO
-should be adding validation tests. I bet^W pray every vendor has
-validation tests but since they are not unified we don't know what
-level of interoperability we're achieving in practice. That doesn't
-matter for trivial feature like base actions, but we'll inevitably=20
-move on to defining more advanced capabilities and the question of
-"what supporting X actually mean" will come up (3 years later, when
-we don't remember ourselves).
+For loads, check_reg_arg has the side-effect of marking the
+register's value as unkonwn, and check_mem_access has the side effect
+of propagating bounds from memory to the register. This currently only
+takes effect for stack memory.
+
+Therefore with the current order, bounds information is thrown away,
+but by simply reversing the order of check_reg_arg
+vs. check_mem_access, we can instead propagate bounds smartly.
+
+A simple test is added with an infinite loop that can only be proved
+unreachable if this propagation is present. This is implemented both
+with C and directly in test_verifier using assembly.
+
+Suggested-by: John Fastabend <john.fastabend@gmail.com>
+Signed-off-by: Brendan Jackman <jackmanb@google.com>
+---
+
+Difference from v2->v3 [1]:
+
+ * Fixed missing ENABLE_ATOMICS_TESTS check.
+
+Difference from v1->v2:
+
+ * Reworked commit message to clarify this only affects stack memory
+ * Added the Suggested-by
+ * Added a C-based test.
+
+[1]: https://lore.kernel.org/bpf/CA+i-1C2ZWUbGxWJ8kAxbri9rBboyuMaVj_BBhg+2Zf_Su9BOJA@mail.gmail.com/T/#t
+
+ kernel/bpf/verifier.c                         | 32 +++++++++++--------
+ .../selftests/bpf/prog_tests/atomic_bounds.c  | 15 +++++++++
+ .../selftests/bpf/progs/atomic_bounds.c       | 24 ++++++++++++++
+ .../selftests/bpf/verifier/atomic_bounds.c    | 27 ++++++++++++++++
+ 4 files changed, 84 insertions(+), 14 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/atomic_bounds.c
+ create mode 100644 tools/testing/selftests/bpf/progs/atomic_bounds.c
+ create mode 100644 tools/testing/selftests/bpf/verifier/atomic_bounds.c
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 972fc38eb62d..5e09632efddb 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -3665,9 +3665,26 @@ static int check_atomic(struct bpf_verifier_env *env, int insn_idx, struct bpf_i
+ 		return -EACCES;
+ 	}
+
++	if (insn->imm & BPF_FETCH) {
++		if (insn->imm == BPF_CMPXCHG)
++			load_reg = BPF_REG_0;
++		else
++			load_reg = insn->src_reg;
++
++		/* check and record load of old value */
++		err = check_reg_arg(env, load_reg, DST_OP);
++		if (err)
++			return err;
++	} else {
++		/* This instruction accesses a memory location but doesn't
++		 * actually load it into a register.
++		 */
++		load_reg = -1;
++	}
++
+ 	/* check whether we can read the memory */
+ 	err = check_mem_access(env, insn_idx, insn->dst_reg, insn->off,
+-			       BPF_SIZE(insn->code), BPF_READ, -1, true);
++			       BPF_SIZE(insn->code), BPF_READ, load_reg, true);
+ 	if (err)
+ 		return err;
+
+@@ -3677,19 +3694,6 @@ static int check_atomic(struct bpf_verifier_env *env, int insn_idx, struct bpf_i
+ 	if (err)
+ 		return err;
+
+-	if (!(insn->imm & BPF_FETCH))
+-		return 0;
+-
+-	if (insn->imm == BPF_CMPXCHG)
+-		load_reg = BPF_REG_0;
+-	else
+-		load_reg = insn->src_reg;
+-
+-	/* check and record load of old value */
+-	err = check_reg_arg(env, load_reg, DST_OP);
+-	if (err)
+-		return err;
+-
+ 	return 0;
+ }
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/atomic_bounds.c b/tools/testing/selftests/bpf/prog_tests/atomic_bounds.c
+new file mode 100644
+index 000000000000..addf127068e4
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/atomic_bounds.c
+@@ -0,0 +1,15 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <test_progs.h>
++
++#include "atomic_bounds.skel.h"
++
++void test_atomic_bounds(void)
++{
++	struct atomic_bounds *skel;
++	__u32 duration = 0;
++
++	skel = atomic_bounds__open_and_load();
++	if (CHECK(!skel, "skel_load", "couldn't load program\n"))
++		return;
++}
+diff --git a/tools/testing/selftests/bpf/progs/atomic_bounds.c b/tools/testing/selftests/bpf/progs/atomic_bounds.c
+new file mode 100644
+index 000000000000..e5fff7fc7f8f
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/atomic_bounds.c
+@@ -0,0 +1,24 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include <stdbool.h>
++
++#ifdef ENABLE_ATOMICS_TESTS
++bool skip_tests __attribute((__section__(".data"))) = false;
++#else
++bool skip_tests = true;
++#endif
++
++SEC("fentry/bpf_fentry_test1")
++int BPF_PROG(sub, int x)
++{
++#ifdef ENABLE_ATOMICS_TESTS
++	int a = 0;
++	int b = __sync_fetch_and_add(&a, 1);
++	/* b is certainly 0 here. Can the verifier tell? */
++	while (b)
++		continue;
++#endif
++	return 0;
++}
+diff --git a/tools/testing/selftests/bpf/verifier/atomic_bounds.c b/tools/testing/selftests/bpf/verifier/atomic_bounds.c
+new file mode 100644
+index 000000000000..e82183e4914f
+--- /dev/null
++++ b/tools/testing/selftests/bpf/verifier/atomic_bounds.c
+@@ -0,0 +1,27 @@
++{
++	"BPF_ATOMIC bounds propagation, mem->reg",
++	.insns = {
++		/* a = 0; */
++		/*
++		 * Note this is implemented with two separate instructions,
++		 * where you might think one would suffice:
++		 *
++		 * BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
++		 *
++		 * This is because BPF_ST_MEM doesn't seem to set the stack slot
++		 * type to 0 when storing an immediate.
++		 */
++		BPF_MOV64_IMM(BPF_REG_0, 0),
++		BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -8),
++		/* b = atomic_fetch_add(&a, 1); */
++		BPF_MOV64_IMM(BPF_REG_1, 1),
++		BPF_ATOMIC_OP(BPF_DW, BPF_ADD | BPF_FETCH, BPF_REG_10, BPF_REG_1, -8),
++		/* Verifier should be able to tell that this infinite loop isn't reachable. */
++		/* if (b) while (true) continue; */
++		BPF_JMP_IMM(BPF_JNE, BPF_REG_1, 0, -1),
++		BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.result_unpriv = REJECT,
++	.errstr_unpriv = "back-edge",
++},
+
+base-commit: 61ca36c8c4eb3bae35a285b1ae18c514cde65439
+--
+2.30.0.365.g02bc693789-goog
+
