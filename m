@@ -2,150 +2,176 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9920CC433E0
-	for <bpf@archiver.kernel.org>; Tue,  2 Feb 2021 16:59:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E103C433E6
+	for <bpf@archiver.kernel.org>; Tue,  2 Feb 2021 17:41:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 41CC164E3F
-	for <bpf@archiver.kernel.org>; Tue,  2 Feb 2021 16:59:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 40BDA64DA3
+	for <bpf@archiver.kernel.org>; Tue,  2 Feb 2021 17:41:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237081AbhBBQ7Y (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Feb 2021 11:59:24 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37322 "EHLO mail.kernel.org"
+        id S233913AbhBBOM1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Feb 2021 09:12:27 -0500
+Received: from mga06.intel.com ([134.134.136.31]:52468 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236955AbhBBQ5T (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 2 Feb 2021 11:57:19 -0500
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8884164DB2;
-        Tue,  2 Feb 2021 16:56:25 +0000 (UTC)
-Date:   Tue, 2 Feb 2021 11:56:23 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Nikolay Borisov <nborisov@suse.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: Re: kprobes broken since 0d00449c7a28 ("x86: Replace ist_enter()
- with nmi_enter()")
-Message-ID: <20210202115623.08e8164d@gandalf.local.home>
-In-Reply-To: <YBmBu0c24RjNYFet@hirez.programming.kicks-ass.net>
-References: <20210129105952.74dc8464@gandalf.local.home>
-        <20210129162438.GC8912@worktop.programming.kicks-ass.net>
-        <CAADnVQLMqHpSsZ1OdZRFmKqNWKiRq3dxRxw+y=kvMdmkN7htUw@mail.gmail.com>
-        <20210129175943.GH8912@worktop.programming.kicks-ass.net>
-        <20210129140103.3ce971b7@gandalf.local.home>
-        <20210129162454.293523c6@gandalf.local.home>
-        <YBUYsFlxjsQxuvfB@hirez.programming.kicks-ass.net>
-        <20210130074410.6384c2e2@oasis.local.home>
-        <YBktVT+z7sV/vEPU@hirez.programming.kicks-ass.net>
-        <20210202095249.5abd6780@gandalf.local.home>
-        <YBmBu0c24RjNYFet@hirez.programming.kicks-ass.net>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        id S233919AbhBBOK6 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 2 Feb 2021 09:10:58 -0500
+IronPort-SDR: +PHnuxBFln5o1dyVt73zeErXMPYIa2+niJ2oJiIr6zx7V+rXJBlYMUvK97F6mkMXXK9jxs0S9v
+ wfzYAZFjaMUw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9882"; a="242371383"
+X-IronPort-AV: E=Sophos;i="5.79,395,1602572400"; 
+   d="scan'208";a="242371383"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2021 06:06:51 -0800
+IronPort-SDR: x0WXxixx7pB8UIOaDk+1N7mzB2xBj958woDYx5x7Py6L5RoPy2Iu3hVskdxGHa8YiqynEianZV
+ A2h2XBAr/rww==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.79,395,1602572400"; 
+   d="scan'208";a="479774967"
+Received: from silpixa00399839.ir.intel.com (HELO localhost.localdomain) ([10.237.222.142])
+  by fmsmga001.fm.intel.com with ESMTP; 02 Feb 2021 06:06:49 -0800
+From:   Ciara Loftus <ciara.loftus@intel.com>
+To:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        magnus.karlsson@intel.com, bjorn@kernel.org,
+        weqaar.a.janjua@intel.com
+Cc:     daniel@iogearbox.net, Ciara Loftus <ciara.loftus@intel.com>
+Subject: [PATCH bpf-next v3 5/6] selftests/bpf: XSK_TRACE_INVALID_FILLADDR test
+Date:   Tue,  2 Feb 2021 13:36:41 +0000
+Message-Id: <20210202133642.8562-6-ciara.loftus@intel.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210202133642.8562-1-ciara.loftus@intel.com>
+References: <20210202133642.8562-1-ciara.loftus@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, 2 Feb 2021 17:45:47 +0100
-Peter Zijlstra <peterz@infradead.org> wrote:
+This test supplies invalid addresses to the fill
+queue at init. On RX, traces are expected which report
+the invalid address which look like so:
 
-> On Tue, Feb 02, 2021 at 09:52:49AM -0500, Steven Rostedt wrote:
-> 
-> > But from a handler, you could do:
-> > 
-> > 	if (in_nmi())
-> > 		return;
-> > 	local_irq_save(flags);
-> > 	/* Now you are safe from being re-entrant. */  
-> 
-> But that's an utter crap thing to do. That's like saying I don't care
-> about my events, at which point you might as well not bother at all.
-> 
-> And you can still do that, you just get less coverage today than you
-> used to. You used to throw things under the bus, now you throw more
-> under the bus. If you didn't care, I can't seem to find myself caring
-> either.
+xsk_packet_drop: netdev: ve3213 qid 0 reason: invalid fill addr: \
+  addr 262144 len 0 options 0
 
-NMIs are special, and they always have been. They shouldn't be doing much
-anyway. If they are, then that's a problem.
+The test validates that these traces were successfully generated.
 
-But if you want to make the stack tracer work on all contexts, I'm happy to
-take patches. I don't have time to work on it today.
+Signed-off-by: Ciara Loftus <ciara.loftus@intel.com>
+---
+ tools/testing/selftests/bpf/test_xsk.sh  | 24 ++++++++++++++++++++
+ tools/testing/selftests/bpf/xdpxceiver.c | 29 ++++++++++++++++++------
+ 2 files changed, 46 insertions(+), 7 deletions(-)
 
-> 
-> > Where as there's no equivalent in a NMI handler. That's what makes
-> > kprobe/ftrace handlers different than NMI handlers.  
-> 
-> I don't see how.
-> 
-> > > Also, given how everything can nest, it had better all be lockless
-> > > anyway. You can get your regular function trace interrupted, which can
-> > > hit a #DB, which can function trace, which can #BP which can function
-> > > trace again which can get #NMI etc.. Many wonderfun nestings possible.  
-> > 
-> > I would call #DB an #BP handlers very special.  
-> 
-> They are, just like NMI is special, which is why they're classed
-> together.
-> 
-> > Question: Do #DB and #BP set "in_interrupt()"? Because the function tracer
-> > has infrastructure to prevent recursion in the same context.  
-> 
-> Sure we _could_ do that, but then we get into the 'fun' problem of
-> getting a breakpoint/int3 at random places and calling random code and
-> having deadlocks because they take the same lock.
-
-My question wasn't to have them do it, I was simply asking if they do. I
-was assuming that they do not.
-
-> 
-> There was very little that stopped that from happening.
-> 
-> > That is, a
-> > ftrace handler calls something that gets traced, the recursion protection
-> > will detect that and prevent the handler from being called again. But the
-> > recursion protection is interrupt context aware and lets the handler get
-> > called again if the recursion happens from a different context:  
-> 
-> > If #DB and #BP do not change the in_interrupt() context, then the above
-> > still will protect the ftrace handlers from recursion due to them.  
-> 
-> But it doesn't help with:
-> 
-> 	spin_lock_irq(&foo); // task context
-> 	#DB
-> 	  spin_lock_irq(&foo); // interrupt context per your above
-
-The statement above said:
-
- "If #DB and #BP do not change the in_interrupt() context"
-
-Which would make the above be in the same context and the handler would
-not be called for the #DB case.
-
-> 
-> All you need to do is put a breakpoint on a piece of code that holds a
-> spinlock and a handler that takes the same spinlock.
-> 
-> There was very little from stopping that.
-> 
-> > That would require refactoring all the code that's been around since 2008.  
-> 
-> Because I couldn't tell why/if any of that was correct at all. #DB/#BP
-> don't play by the normal rules. They're _far_ more NMI-like than they're
-> IRQ-like due to ignoring IF.
-
-I'm fine with #DB and #BP being a "in_nmi()", as they are probably even
-more special than NMIs.
-
--- Steve
+diff --git a/tools/testing/selftests/bpf/test_xsk.sh b/tools/testing/selftests/bpf/test_xsk.sh
+index 5b4e42ac8c20..bc026da25d54 100755
+--- a/tools/testing/selftests/bpf/test_xsk.sh
++++ b/tools/testing/selftests/bpf/test_xsk.sh
+@@ -271,6 +271,30 @@ retval=$?
+ test_status $retval "${TEST_NAME}"
+ statusList+=($retval)
+ 
++### TEST 12
++TEST_NAME="SKB TRACE INVALID_FILLADDR"
++
++vethXDPgeneric ${VETH0} ${VETH1} ${NS1}
++
++params=("-S" "-t" "1" "-C" "${TRACEPKTS}")
++execxdpxceiver params
++
++retval=$?
++test_status $retval "${TEST_NAME}"
++statusList+=($retval)
++
++### TEST 13
++TEST_NAME="DRV TRACE INVALID_FILLADDR"
++
++vethXDPnative ${VETH0} ${VETH1} ${NS1}
++
++params=("-N" "-t" "1" "-C" "${TRACEPKTS}")
++execxdpxceiver params
++
++retval=$?
++test_status $retval "${TEST_NAME}"
++statusList+=($retval)
++
+ ## END TESTS
+ 
+ cleanup_exit ${VETH0} ${VETH1} ${NS1}
+diff --git a/tools/testing/selftests/bpf/xdpxceiver.c b/tools/testing/selftests/bpf/xdpxceiver.c
+index dda965c3d9ec..e63dc1c228ed 100644
+--- a/tools/testing/selftests/bpf/xdpxceiver.c
++++ b/tools/testing/selftests/bpf/xdpxceiver.c
+@@ -35,6 +35,8 @@
+  *       mode is used
+  *    e. Tracing - XSK_TRACE_DROP_PKT_TOO_BIG
+  *       Increase the headroom size and send packets. Validate traces.
++ *    f. Tracing - XSK_TRACE_DROP_INVALID_FILLADDR
++ *       Populate the fill queue with invalid addresses. Validate traces.
+  *
+  * 2. AF_XDP DRV/Native mode
+  *    Works on any netdevice with XDP_REDIRECT support, driver dependent. Processes
+@@ -47,8 +49,9 @@
+  *    - Only copy mode is supported because veth does not currently support
+  *      zero-copy mode
+  *    e. Tracing - XSK_TRACE_DROP_PKT_TOO_BIG
++ *    f. Tracing - XSK_TRACE_DROP_INVALID_FILLADDR
+  *
+- * Total tests: 10
++ * Total tests: 12
+  *
+  * Flow:
+  * -----
+@@ -276,7 +279,8 @@ static void xsk_configure_umem(struct ifobject *data, void *buffer, u64 size)
+ {
+ 	int ret;
+ 	struct xsk_umem_config cfg = {
+-		.fill_size = XSK_RING_PROD__DEFAULT_NUM_DESCS,
++		.fill_size = opt_trace_code == XSK_TRACE_DROP_INVALID_FILLADDR ? opt_pkt_count :
++						XSK_RING_PROD__DEFAULT_NUM_DESCS,
+ 		.comp_size = XSK_RING_CONS__DEFAULT_NUM_DESCS,
+ 		.frame_size = XSK_UMEM__DEFAULT_FRAME_SIZE,
+ 		.frame_headroom = XSK_UMEM__DEFAULT_FRAME_HEADROOM,
+@@ -302,13 +306,21 @@ static void xsk_populate_fill_ring(struct xsk_umem_info *umem)
+ {
+ 	int ret, i;
+ 	u32 idx;
++	u32 num_addrs = XSK_RING_PROD__DEFAULT_NUM_DESCS;
++	u32 invalid = 0;
+ 
+-	ret = xsk_ring_prod__reserve(&umem->fq, XSK_RING_PROD__DEFAULT_NUM_DESCS, &idx);
+-	if (ret != XSK_RING_PROD__DEFAULT_NUM_DESCS)
++	if (opt_trace_code == XSK_TRACE_DROP_INVALID_FILLADDR) {
++		num_addrs = opt_pkt_count;
++		invalid = num_frames * XSK_UMEM__DEFAULT_FRAME_SIZE;
++	}
++
++	ret = xsk_ring_prod__reserve(&umem->fq, num_addrs, &idx);
++	if (ret != num_addrs)
+ 		exit_with_error(ret);
+-	for (i = 0; i < XSK_RING_PROD__DEFAULT_NUM_DESCS; i++)
+-		*xsk_ring_prod__fill_addr(&umem->fq, idx++) = i * XSK_UMEM__DEFAULT_FRAME_SIZE;
+-	xsk_ring_prod__submit(&umem->fq, XSK_RING_PROD__DEFAULT_NUM_DESCS);
++	for (i = 0; i < num_addrs; i++)
++		*xsk_ring_prod__fill_addr(&umem->fq, idx++) =
++			(i * XSK_UMEM__DEFAULT_FRAME_SIZE) + invalid;
++	xsk_ring_prod__submit(&umem->fq, num_addrs);
+ }
+ 
+ static int xsk_configure_socket(struct ifobject *ifobject)
+@@ -1172,6 +1184,9 @@ int main(int argc, char **argv)
+ 		case XSK_TRACE_DROP_PKT_TOO_BIG:
+ 			reason_str = "packet too big";
+ 			break;
++		case XSK_TRACE_DROP_INVALID_FILLADDR:
++			reason_str = "invalid fill addr";
++			break;
+ 		default:
+ 			ksft_test_result_fail("ERROR: unsupported trace %i\n",
+ 						opt_trace_code);
+-- 
+2.17.1
 
