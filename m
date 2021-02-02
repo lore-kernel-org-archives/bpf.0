@@ -2,90 +2,121 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BD624C433DB
-	for <bpf@archiver.kernel.org>; Tue,  2 Feb 2021 15:26:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B454DC433DB
+	for <bpf@archiver.kernel.org>; Tue,  2 Feb 2021 16:19:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7E05B64F63
-	for <bpf@archiver.kernel.org>; Tue,  2 Feb 2021 15:26:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 908B964F55
+	for <bpf@archiver.kernel.org>; Tue,  2 Feb 2021 16:19:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235227AbhBBP01 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Feb 2021 10:26:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39418 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235456AbhBBPZZ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 2 Feb 2021 10:25:25 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48CBAC061788
-        for <bpf@vger.kernel.org>; Tue,  2 Feb 2021 07:24:44 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id lg21so3241525ejb.3
-        for <bpf@vger.kernel.org>; Tue, 02 Feb 2021 07:24:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rIRz/qmNHPd2tbUMQo4AtdAVZoeVdYva2t3igHKGKl4=;
-        b=QVE5tE4LsL8ixPkCNOFxPaOzvtW5s8i0EZto0/S+SwvmJhGUjdl+pHx3TB+EzdzQFK
-         7SZwBMgQlBy3k+t/+PMIZJa0EOfXzUVUeg+8D+6hVFKnG70fSlU8XmI5l7j5cPoPuoHa
-         /cPWzR3KXGkd7rdhSNaevjvanFh2tL4/r/EGrKv2S3bG56fv8G5+EoDJV+qlDeVUtbTA
-         Cz03wW4XCJqmHOffBNQsSVmDXRYFuHgP7IIaDo100ilx4s3eG5KxPP8J4ZyFUVe0KHLG
-         ExwDF82E+HSc4vaO39alCNFnfe6tkEUX2vZFkIj6Dmhj685XmQhy97nPE0lwufV2DjCE
-         JAGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rIRz/qmNHPd2tbUMQo4AtdAVZoeVdYva2t3igHKGKl4=;
-        b=MX9PNdzDxcuujp2BTpqRFsMyADtQkL44S2Q08gOVD1zODV95GoMJ86DhL5ppy9zSjG
-         3E9bHzO+K9WkUAzBX//7UIO9THybl3aHf0z6oRCc+nzrVKgMwEqSUlhsdaZo7n2479H6
-         eyYMtaKEerb5rWmBB/1slYji35ZSeRZF5Y4mEK2TcKyD5Fefi1nUoTYsmT4Q2azunOxM
-         WPuROwYqijXtq4vEGrkWI/bqrziG30UN4GxUzHuMJStvlvhJyJYa4ERnKbvcsBtw96x1
-         jqNRcPPVd+YWcWtH0S3GpKAsgRxkj0H4HGSPo8bh1ii4LS59FglMv0QySXAeNFG17I+1
-         G+Lg==
-X-Gm-Message-State: AOAM530pEi5/GMS+MvAOpqGeyoQ+MZxCTvHcEJKokpoNe4aCegMYSu4u
-        7kbZ/xF5jDl7ENYCN+YxqjRgStKfkE71hxhinnIUWJ2HJSb5
-X-Google-Smtp-Source: ABdhPJxfceIpUpL9QOzPJiBALgYaPapZrEcVE0SyYa1sSnHb4evF65MHt1+2ZDcMxurEeQsaMP+EC8nkrHixjzn/xOg=
-X-Received: by 2002:a17:906:ff43:: with SMTP id zo3mr22845900ejb.542.1612279482885;
- Tue, 02 Feb 2021 07:24:42 -0800 (PST)
+        id S235014AbhBBQTJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Feb 2021 11:19:09 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:24174 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234282AbhBBOPw (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 2 Feb 2021 09:15:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1612275265;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KunqakVn1xJ0m1dnFKxNWc2BsmU6toTjQEsO1J2kZn0=;
+        b=dvXX87s46ErATuYVv6yMSIKiTkIC4ajh8wJEzaNydNXyObOdKUOxiGYNYBCl46s6qaLTzU
+        NLP0jMYtKWrMDpzrMLFtaKc1fOF54RRiPMDQZ6aoQF5x8/kBcdYnMPqJqKW83SIumqM5zm
+        31O/6IMn8ubc8XTBIfGNWrrFosiZAuU=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-505-B9QHKUKmMfmP75dYQNcZFA-1; Tue, 02 Feb 2021 09:14:22 -0500
+X-MC-Unique: B9QHKUKmMfmP75dYQNcZFA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7F8F281620;
+        Tue,  2 Feb 2021 14:14:20 +0000 (UTC)
+Received: from carbon.lan (unknown [10.36.110.20])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4BD4F4D;
+        Tue,  2 Feb 2021 14:14:03 +0000 (UTC)
+Date:   Tue, 2 Feb 2021 15:14:00 +0100
+From:   Jesper Dangaard Brouer <brouer@redhat.com>
+To:     Lorenzo Bianconi <lorenzo@kernel.org>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, davem@davemloft.net,
+        kuba@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        toshiaki.makita1@gmail.com, lorenzo.bianconi@redhat.com,
+        toke@redhat.com, brouer@redhat.com
+Subject: Re: [PATCH v3 bpf-next] net: veth: alloc skb in bulk for
+ ndo_xdp_xmit
+Message-ID: <20210202151400.00e36ff7@carbon.lan>
+In-Reply-To: <a14a30d3c06fff24e13f836c733d80efc0bd6eb5.1611957532.git.lorenzo@kernel.org>
+References: <a14a30d3c06fff24e13f836c733d80efc0bd6eb5.1611957532.git.lorenzo@kernel.org>
 MIME-Version: 1.0
-References: <CAHC9VhQgy959hkpU8fwZnrTqGphVSA+ONF99Yy4ZQFyjQ_030A@mail.gmail.com>
- <CAADnVQJaJ0i2L2k-dM+neeT61q+pwEd+F6ASGh4Xbi-ogj0hfQ@mail.gmail.com>
- <CAHC9VhSTJ=009hsXm=8jtQ_ZL-n=+tzKPbWj2Cnoa5w3iVNuew@mail.gmail.com>
- <CAADnVQKbku+Mv++h2TKYZfFN7NjPgaeLHJsw0oFNUhjUZ6ehSQ@mail.gmail.com>
- <YBXGChWt/E2UDgZc@krava> <YBci6Y8bNZd6KRdw@krava> <20210201122532.GE794568@kernel.org>
- <YBgVLqNxL++zVkdK@krava> <YBhjOaoV2NqW3jFI@krava> <CAFqZXNsjzQ-2x4-szW5pBg77bzSK-RmwPvQSN+UaxJXqqZ_2qA@mail.gmail.com>
- <20210202124306.GA849267@kernel.org>
-In-Reply-To: <20210202124306.GA849267@kernel.org>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 2 Feb 2021 10:24:31 -0500
-Message-ID: <CAHC9VhT2_3D1MDFEOiStHS_X6=Opop=xmj5Zpv9bEKTQDM6gDA@mail.gmail.com>
-Subject: Re: selftest/bpf/test_verifier_log fails on v5.11-rc5
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Ondrej Mosnacek <omosnace@redhat.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Feb 2, 2021 at 7:43 AM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
-> I've updated a f33 system to rawhide to test all this, fixed up some
-> extra warnings wrt mallinfo(), strndup() error path handling/potential
-> buffer overflow issue and will add a conditional define for
-> DW_FORM_implicit_const found in the libbpf CI tests that Andrii pointed
-> out to me, then go and tag 1.20 and do the rawhide/fedora package update
-> dance.
+On Fri, 29 Jan 2021 23:04:08 +0100
+Lorenzo Bianconi <lorenzo@kernel.org> wrote:
 
-Thanks for taking care of this.  FWIW, it looks like both my x86_64
-and aarch64 test runs with your Rawhide scratch build went through
-without a problem last night.
+> Split ndo_xdp_xmit and ndo_start_xmit use cases in veth_xdp_rcv routine
+> in order to alloc skbs in bulk for XDP_PASS verdict.
+> Introduce xdp_alloc_skb_bulk utility routine to alloc skb bulk list.
+> The proposed approach has been tested in the following scenario:
+> 
+> eth (ixgbe) --> XDP_REDIRECT --> veth0 --> (remote-ns) veth1 --> XDP_PASS
+> 
+> XDP_REDIRECT: xdp_redirect_map bpf sample
+> XDP_PASS: xdp_rxq_info bpf sample
+> 
+> traffic generator: pkt_gen sending udp traffic on a remote device
+> 
+> bpf-next master: ~3.64Mpps
+> bpf-next + skb bulking allocation: ~3.79Mpps
+> 
+> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+> ---
+
+I wanted Lorenzo to test 8 vs 16 bulking, but after much testing and
+IRC dialog, we cannot find and measure any difference with enough
+accuracy. Thus:
+
+Acked-by: Jesper Dangaard Brouer <brouer@redhat.com>
+
+> Changes since v2:
+> - use __GFP_ZERO flag instead of memset
+> - move some veth_xdp_rcv_batch() logic in veth_xdp_rcv_skb()
+> 
+> Changes since v1:
+> - drop patch 2/3, squash patch 1/3 and 3/3
+> - set VETH_XDP_BATCH to 16
+> - rework veth_xdp_rcv to use __ptr_ring_consume
+> ---
+>  drivers/net/veth.c | 78 ++++++++++++++++++++++++++++++++++------------
+>  include/net/xdp.h  |  1 +
+>  net/core/xdp.c     | 11 +++++++
+>  3 files changed, 70 insertions(+), 20 deletions(-)
+> 
+> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+> index 6e03b619c93c..aa1a66ad2ce5 100644
+> --- a/drivers/net/veth.c
+> +++ b/drivers/net/veth.c
+> @@ -35,6 +35,7 @@
+>  #define VETH_XDP_HEADROOM	(XDP_PACKET_HEADROOM + NET_IP_ALIGN)
+>  
+>  #define VETH_XDP_TX_BULK_SIZE	16
+> +#define VETH_XDP_BATCH		16
+>  
+
 
 -- 
-paul moore
-www.paul-moore.com
+Best regards,
+  Jesper Dangaard Brouer
+  MSc.CS, Principal Kernel Engineer at Red Hat
+  LinkedIn: http://www.linkedin.com/in/brouer
+
