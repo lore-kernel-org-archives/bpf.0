@@ -2,102 +2,122 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0CDD7C433DB
-	for <bpf@archiver.kernel.org>; Wed,  3 Feb 2021 07:12:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F930C433DB
+	for <bpf@archiver.kernel.org>; Wed,  3 Feb 2021 08:12:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AC2B764F5F
-	for <bpf@archiver.kernel.org>; Wed,  3 Feb 2021 07:12:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DFA7764F67
+	for <bpf@archiver.kernel.org>; Wed,  3 Feb 2021 08:12:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbhBCHMP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 3 Feb 2021 02:12:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45524 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232199AbhBCHL7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 3 Feb 2021 02:11:59 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49EC3C06174A
-        for <bpf@vger.kernel.org>; Tue,  2 Feb 2021 23:11:19 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id e15so11642810lft.13
-        for <bpf@vger.kernel.org>; Tue, 02 Feb 2021 23:11:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=xTvYzJWV70mLxuetyfqxqpEczxvMfqQITcuSh6FmUBU=;
-        b=QzUyd2LinSAlUDJa25vo5/l8eDbZKcSl58f9H57XD0DzDoT99Nz/UVf0p1hOa/LKBT
-         rmdubPam5Q7Exb7X0fctnSKSvEezmxNdWVOLOyYajxqyj9zISQSlcUneZD3Xjyp6zpvr
-         LXCz8WwioIm8DKDtiUGBq+oEpcj1ei3zVgjn1zh5DSWwv4c2uAKuGeqfGiQ/rtdI3PQT
-         7FupJRl5zfnXjixQdnwocfW60cNb9Ix9I7RptK9YWVU8sUI9dzM6B+V/l5gfKphZQbHe
-         i59wORp2wz9TzZ/+pterYXBSXxmh/5Jr3UzeY4MiwOvtfIEx9id7gdAEGYnWi42MGtGz
-         q8mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=xTvYzJWV70mLxuetyfqxqpEczxvMfqQITcuSh6FmUBU=;
-        b=ozDYZwU5/e8DkwxhPfMBvGAaVWUUh+aPdcCaGgai9Vey3BCnjaSGStijNn/jKXCDo0
-         KuZSVM4nAxbzQ4zJU27Hmobx1JN5RIXRVrYgbmYxi/6xsh3pxAt4q4HXFRzgeetvawd5
-         MB9hRSKmEqEV6tjARl37Lawbq/0cVVPGnUpSCtF6bREEf07Q7iSW+DWw3kU6/CbKfCQ2
-         V9d9gQm6cum/7v24RRhxVyHTddKpQyyWhiXCjqnAcXtcn5z52wQRtCbLA8DOLJmLAYnx
-         6XDex8Z8uazqVsCrkbpPGl/i9yXNr1WZiXX5zhk081QShrh6LDkuNpqlvc3RsXcYt3AM
-         9BcQ==
-X-Gm-Message-State: AOAM531HmkkZHppxZ8yPKn+aphGOr2IMi6zHY3odR07uGqgv/LHT8Qjj
-        rr2IutUNLx5xG+qkwNGdhx0sHzWHnoCG7QpNwPE=
-X-Google-Smtp-Source: ABdhPJzs8bn9Aj4cM2u2dIighGiYJbmPKpsxL1az4uUviPLrD7CEQSP7ln84xF6vLRpcjZxxEpMRrbUWQCVRoPgCXSs=
-X-Received: by 2002:a19:7911:: with SMTP id u17mr1043793lfc.214.1612336277808;
- Tue, 02 Feb 2021 23:11:17 -0800 (PST)
+        id S232491AbhBCIMJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 3 Feb 2021 03:12:09 -0500
+Received: from mga12.intel.com ([192.55.52.136]:59616 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232489AbhBCIMI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 3 Feb 2021 03:12:08 -0500
+IronPort-SDR: 9bO0n6TLp89VDD10bqojq10VwHanBF48j85ic78Qmf1dffWfXdimuSJtN86BB7NgodJLBTXGvO
+ Q+iqHi7Fu8+w==
+X-IronPort-AV: E=McAfee;i="6000,8403,9883"; a="160170049"
+X-IronPort-AV: E=Sophos;i="5.79,397,1602572400"; 
+   d="scan'208";a="160170049"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2021 00:11:27 -0800
+IronPort-SDR: A0QXg9CiX/FJIS+CQulNVZ0ISnBbaqpK/ZbGinREWMYnp50UIAdP4SWgqCxznyNdBIbj0TvQPs
+ XPPxRU0h1Kxg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.79,397,1602572400"; 
+   d="scan'208";a="413932433"
+Received: from silpixa00399839.ir.intel.com (HELO localhost.localdomain) ([10.237.222.142])
+  by fmsmga002.fm.intel.com with ESMTP; 03 Feb 2021 00:11:25 -0800
+From:   Ciara Loftus <ciara.loftus@intel.com>
+To:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        magnus.karlsson@intel.com, bjorn@kernel.org,
+        weqaar.a.janjua@intel.com
+Cc:     daniel@iogearbox.net, Ciara Loftus <ciara.loftus@intel.com>
+Subject: [PATCH bpf-next v4 0/6] AF_XDP Packet Drop Tracing
+Date:   Wed,  3 Feb 2021 07:41:21 +0000
+Message-Id: <20210203074127.8616-1-ciara.loftus@intel.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20210203070636.70926-1-alexei.starovoitov@gmail.com> <baf2f6f5-9e0d-e09d-1030-f20288618e20@suse.com>
-In-Reply-To: <baf2f6f5-9e0d-e09d-1030-f20288618e20@suse.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 2 Feb 2021 23:11:06 -0800
-Message-ID: <CAADnVQ+mDa+m=qnbHAT2v_rknESrrc5GL8Z3i6TOK0BwhzydyA@mail.gmail.com>
-Subject: Re: [PATCH bpf] bpf: Unbreak BPF_PROG_TYPE_KPROBE when kprobe is
- called via do_int3
-To:     Nikolay Borisov <nborisov@suse.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        bpf <bpf@vger.kernel.org>, Kernel Team <kernel-team@fb.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Feb 2, 2021 at 11:09 PM Nikolay Borisov <nborisov@suse.com> wrote:
->
->
->
-> On 3.02.21 =D0=B3. 9:06 =D1=87., Alexei Starovoitov wrote:
-> > From: Alexei Starovoitov <ast@kernel.org>
-> >
-> > The commit 0d00449c7a28 ("x86: Replace ist_enter() with nmi_enter()")
-> > converted do_int3 handler to be "NMI-like".
-> > That made old if (in_nmi()) check abort execution of bpf programs
-> > attached to kprobe when kprobe is firing via int3
-> > (For example when kprobe is placed in the middle of the function).
-> > Remove the check to restore user visible behavior.
-> >
-> > Fixes: 0d00449c7a28 ("x86: Replace ist_enter() with nmi_enter()")
-> > Reported-by: Nikolay Borisov <nborisov@suse.com>
-> > Signed-off-by: Alexei Starovoitov <ast@kernel.org>
->
-> Tested-by: Nikolay Borisov <nborisov@suse.com>
->
->
-> So I take it you have verified the callpaths and deemed that it's safe
-> to remove this check?
+This series introduces tracing infrastructure for AF_XDP sockets (xsk).
+A trace event 'xsk_packet_drop' is created which can be enabled by toggling
 
-I stared a lot into different places. It's not pretty. I will follow up wit=
-h
-tightening patches for bpf-next, but I couldn't come up with anything
-better for bpf tree.
+/sys/kernel/debug/tracing/events/xsk/xsk_packet_drop/enable
+
+When enabled and packets or empty packet buffers are dropped in the kernel,
+traces are generated which describe the reason for the packet drop, the netdev
+and qid information of the xsk which encountered the drop, and some more
+information depending on what type of drop was encountered that will tell
+the user why the packet was dropped.  This information should help a user
+troubleshoot packet drops by providing an extra level of detail which is not
+available through use of simple counters
+
+Example traces:
+xsk_packet_drop: netdev: ve3213 qid 0 reason: packet too big: len 3000 max 2048 not_used 0
+xsk_packet_drop: netdev: ve3213 qid 0 reason: invalid fill addr: addr 520192 not_used 0 not_used 0
+xsk_packet_drop: netdev: ve9266 qid 0 reason: invalid tx desc: addr 0 len 4097 options 0
+
+It was decided to use a single event 'xsk_packet_drop' to capture these three
+drop types. This means that for some of them, there is some redundant information
+in the trace marked as 'not_used'. An alternative to this would be to introduce 3
+separate event types under xsk, each with their own appropriate trace format.
+Suggestions are welcome on which approach would be better to take.
+
+The event can be monitored using perf:
+perf stat -a -e xsk:xsk_packet_drop
+
+A selftest is added for each drop type. These tests provide the conditions to
+trigger the traces and ensure that the appropriate traces are generated.
+
+v4->v3:
+* Fixed selftest commits with correct logs
+* Fixed warnings reported by W=1 build: trace argument types and print formatting
+
+v2->v3:
+* Removed some traces which traced events which were not technically drops eg.
+when the rxq is full.
+* Introduced traces for descriptor validation on RX and TX and selftests for both
+
+v1->v2:
+* Rebase on top of Björn's cleanup series.
+* Fixed packet count for trace tests which don't need EOT frame.
+
+This series applies on commit 1132b9987a3f6c7c396633d5a675075911f1ce32
+
+Ciara Loftus (6):
+  xsk: add tracepoints for packet drops
+  selftests/bpf: restructure setting the packet count
+  selftests/bpf: add framework for xsk selftests
+  selftests/bpf: XSK_TRACE_DROP_PKT_TOO_BIG test
+  selftests/bpf: XSK_TRACE_INVALID_FILLADDR test
+  selftests/bpf: XSK_TRACE_INVALID_DESC_TX test
+
+ MAINTAINERS                                |   1 +
+ include/linux/bpf_trace.h                  |   1 +
+ include/trace/events/xsk.h                 |  73 ++++++++
+ include/uapi/linux/if_xdp.h                |   6 +
+ kernel/bpf/core.c                          |   1 +
+ net/xdp/xsk.c                              |   7 +-
+ net/xdp/xsk_buff_pool.c                    |   3 +
+ net/xdp/xsk_queue.h                        |   4 +
+ tools/include/uapi/linux/if_xdp.h          |   6 +
+ tools/testing/selftests/bpf/test_xsk.sh    |  90 ++++++++-
+ tools/testing/selftests/bpf/xdpxceiver.c   | 206 +++++++++++++++++++--
+ tools/testing/selftests/bpf/xdpxceiver.h   |   9 +
+ tools/testing/selftests/bpf/xsk_prereqs.sh |   3 +-
+ 13 files changed, 381 insertions(+), 29 deletions(-)
+ create mode 100644 include/trace/events/xsk.h
+
+-- 
+2.17.1
+
