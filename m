@@ -2,34 +2,34 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=BAYES_00,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EBD6BC433DB
-	for <bpf@archiver.kernel.org>; Thu,  4 Feb 2021 21:19:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EBED9C43331
+	for <bpf@archiver.kernel.org>; Thu,  4 Feb 2021 21:19:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A046C64FAA
-	for <bpf@archiver.kernel.org>; Thu,  4 Feb 2021 21:19:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B564064FA4
+	for <bpf@archiver.kernel.org>; Thu,  4 Feb 2021 21:19:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229529AbhBDVT1 convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 4 Feb 2021 16:19:27 -0500
-Received: from us-smtp-delivery-44.mimecast.com ([205.139.111.44]:24096 "EHLO
+        id S229972AbhBDVTg convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 4 Feb 2021 16:19:36 -0500
+Received: from us-smtp-delivery-44.mimecast.com ([207.211.30.44]:23108 "EHLO
         us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229511AbhBDVT0 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 4 Feb 2021 16:19:26 -0500
+        by vger.kernel.org with ESMTP id S229823AbhBDVTf (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 4 Feb 2021 16:19:35 -0500
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-534-1IYQS6XkO4G7LpkQ6OwGVA-1; Thu, 04 Feb 2021 16:18:31 -0500
-X-MC-Unique: 1IYQS6XkO4G7LpkQ6OwGVA-1
+ us-mta-403-XdWrGnxIPauF11nYIZe4XA-1; Thu, 04 Feb 2021 16:18:40 -0500
+X-MC-Unique: XdWrGnxIPauF11nYIZe4XA-1
 Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7232680364B;
-        Thu,  4 Feb 2021 21:18:29 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A7AB9107ACC7;
+        Thu,  4 Feb 2021 21:18:38 +0000 (UTC)
 Received: from krava.redhat.com (unknown [10.40.192.128])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5CC965B695;
-        Thu,  4 Feb 2021 21:18:26 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id CFBA85B695;
+        Thu,  4 Feb 2021 21:18:35 +0000 (UTC)
 From:   Jiri Olsa <jolsa@kernel.org>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -42,11 +42,12 @@ Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         Masahiro Yamada <masahiroy@kernel.org>,
         Michal Marek <michal.lkml@markovi.net>,
         linux-kbuild@vger.kernel.org
-Subject: [PATCH bpf-next 0/4] kbuild/resolve_btfids: Invoke resolve_btfids clean in root Makefile
-Date:   Thu,  4 Feb 2021 22:18:21 +0100
-Message-Id: <20210204211825.588160-1-jolsa@kernel.org>
-In-Reply-To: <20210129134855.195810-1-jolsa@redhat.com>
+Subject: [PATCH bpf-next 3/4] tools/resolve_btfids: Set srctree variable unconditionally
+Date:   Thu,  4 Feb 2021 22:18:24 +0100
+Message-Id: <20210204211825.588160-4-jolsa@kernel.org>
+In-Reply-To: <20210204211825.588160-1-jolsa@kernel.org>
 References: <20210129134855.195810-1-jolsa@redhat.com>
+ <20210204211825.588160-1-jolsa@kernel.org>
 MIME-Version: 1.0
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Authentication-Results: relay.mimecast.com;
@@ -59,23 +60,46 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-hi,
-resolve_btfids tool is used during the kernel build,
-so we should clean it on kernel's make clean.
-    
-thanks,
-jirka
+We want this clean to be called from tree's root Makefile,
+which defines same srctree variable and that will screw
+the make setup.
 
+We actually do not use srctree being passed from outside,
+so we can solve this by setting current srctree value
+directly.
 
+Also root Makefile does not define the implicit RM variable,
+so adding RM initialization.
+
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
-Jiri Olsa (4):
-      tools/resolve_btfids: Build libbpf and libsubcmd in separate directories
-      tools/resolve_btfids: Check objects before removing
-      tools/resolve_btfids: Set srctree variable unconditionally
-      kbuild: Add resolve_btfids clean to root clean target
+ tools/bpf/resolve_btfids/Makefile | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
- Makefile                            |  7 ++++++-
- tools/bpf/resolve_btfids/.gitignore |  2 --
- tools/bpf/resolve_btfids/Makefile   | 38 ++++++++++++++++++++------------------
- 3 files changed, 26 insertions(+), 21 deletions(-)
+diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
+index 3007cfabf5e6..b41fc9a81e83 100644
+--- a/tools/bpf/resolve_btfids/Makefile
++++ b/tools/bpf/resolve_btfids/Makefile
+@@ -2,11 +2,9 @@
+ include ../../scripts/Makefile.include
+ include ../../scripts/Makefile.arch
+ 
+-ifeq ($(srctree),)
+ srctree := $(patsubst %/,%,$(dir $(CURDIR)))
+ srctree := $(patsubst %/,%,$(dir $(srctree)))
+ srctree := $(patsubst %/,%,$(dir $(srctree)))
+-endif
+ 
+ ifeq ($(V),1)
+   Q =
+@@ -22,6 +20,7 @@ AR       = $(HOSTAR)
+ CC       = $(HOSTCC)
+ LD       = $(HOSTLD)
+ ARCH     = $(HOSTARCH)
++RM      ?= rm
+ 
+ OUTPUT ?= $(srctree)/tools/bpf/resolve_btfids/
+ 
+-- 
+2.26.2
 
