@@ -2,76 +2,74 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.4 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9011CC433E0
-	for <bpf@archiver.kernel.org>; Thu,  4 Feb 2021 15:44:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86580C433E0
+	for <bpf@archiver.kernel.org>; Thu,  4 Feb 2021 16:11:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3D4B564F4A
-	for <bpf@archiver.kernel.org>; Thu,  4 Feb 2021 15:44:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 58AE064F4D
+	for <bpf@archiver.kernel.org>; Thu,  4 Feb 2021 16:11:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237595AbhBDPo0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 4 Feb 2021 10:44:26 -0500
-Received: from www62.your-server.de ([213.133.104.62]:59092 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237498AbhBDPoD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 4 Feb 2021 10:44:03 -0500
-Received: from sslproxy03.your-server.de ([88.198.220.132])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1l7gml-000BBP-5T; Thu, 04 Feb 2021 16:43:11 +0100
-Received: from [85.7.101.30] (helo=pc-9.home)
-        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1l7gmk-000NpS-Tq; Thu, 04 Feb 2021 16:43:10 +0100
-Subject: Re: [PATCH v3 bpf-next] net: veth: alloc skb in bulk for ndo_xdp_xmit
-To:     Jesper Dangaard Brouer <brouer@redhat.com>
-Cc:     Lorenzo Bianconi <lorenzo@kernel.org>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        ast@kernel.org, toshiaki.makita1@gmail.com,
-        lorenzo.bianconi@redhat.com, toke@redhat.com,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <a14a30d3c06fff24e13f836c733d80efc0bd6eb5.1611957532.git.lorenzo@kernel.org>
- <e2ae0d97-376a-07db-94fb-14f1220acca5@iogearbox.net>
- <20210204100556.59459549@carbon.lan>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <65a218bc-3ebf-001e-174d-b67817c83b45@iogearbox.net>
-Date:   Thu, 4 Feb 2021 16:43:10 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S237845AbhBDQLP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 4 Feb 2021 11:11:15 -0500
+Received: from mail.kernel.org ([198.145.29.99]:41792 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237687AbhBDQKr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 4 Feb 2021 11:10:47 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id 0915D64F6A;
+        Thu,  4 Feb 2021 16:10:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612455007;
+        bh=swyBGTcsJBrat/oEJNcKSg17JKJwWj1HmDi3Z4jelJw=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=RDEqR/C103+FBZcNr88BS6Yt7pBqdwEzFe+5CTECorvhs7ARjSccKX1JjD9P2Qxaa
+         azCvoScFRl+z6z4EYzClwehTxZm2PqS4LLjyP7kzSnPr9yWTSo+OiuVoYQMbjKs7iL
+         kTcE7+8amvpL+Io1t5/z2hP5pWFnowjA8YlsqCjG/uOACIS7FhJMk+ws7FFc0ib0Dd
+         j9n3+CnHI5gwaxj+UD/zKL8rnX2/ezxLn3eCKT8mOaWZ3bd4hfpKaP7/AqS5ZjUEVN
+         u7+SsTx34EbuWIrIPXFFaAoxu8yo08YABd5/1Jm4jQ7/4YF2OZfZ9OrjVn9ecCv7F8
+         yvHtWVhIcAjlA==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <20210204100556.59459549@carbon.lan>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.102.4/26070/Thu Feb  4 13:22:39 2021)
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] bpf: Emit explicit NULL pointer checks for PROBE_LDX
+ instructions.
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <161245500698.23366.9347266254041745601.git-patchwork-notify@kernel.org>
+Date:   Thu, 04 Feb 2021 16:10:06 +0000
+References: <20210202053837.95909-1-alexei.starovoitov@gmail.com>
+In-Reply-To: <20210202053837.95909-1-alexei.starovoitov@gmail.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     davem@davemloft.net, daniel@iogearbox.net, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, kernel-team@fb.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 2/4/21 10:05 AM, Jesper Dangaard Brouer wrote:
-[...]
-> It was Andrew (AKPM) that wanted the API to either return the requested
-> number of objects or fail. I respected the MM-maintainers request at
-> that point, even-though I wanted the other API as there is a small
-> performance advantage (not crossing page boundary in SLUB).
+Hello:
+
+This patch was applied to bpf/bpf-next.git (refs/heads/master):
+
+On Mon,  1 Feb 2021 21:38:37 -0800 you wrote:
+> From: Alexei Starovoitov <ast@kernel.org>
 > 
-> At that time we discussed it on MM-list, and I see his/the point:
-> If API can allocate less objs than requested, then think about how this
-> complicated the surrounding code. E.g. in this specific code we already
-> have VETH_XDP_BATCH(16) xdp_frame objects, which we need to get 16 SKB
-> objects for.  What should the code do if it cannot get 16 SKBs(?).
+> PTR_TO_BTF_ID registers contain either kernel pointer or NULL.
+> Emit the NULL check explicitly by JIT instead of going into
+> do_user_addr_fault() on NULL deference.
+> 
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+> 
+> [...]
 
-Right, I mentioned the error handling complications above wrt < n_skb case. I think iff this
-ever gets implemented and there's a need, it would probably be best to add a new flag like
-__GFP_BULK_BEST_EFFORT to indicate that it would be okay to return x elements with x being
-in (0, size], so that only those callers need to deal with this, and all others can expect
-[as today] that != 0 means all #size elements were bulk alloc'ed.
+Here is the summary with links:
+  - [bpf-next] bpf: Emit explicit NULL pointer checks for PROBE_LDX instructions.
+    https://git.kernel.org/bpf/bpf-next/c/4c5de127598e
 
-Thanks,
-Daniel
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
