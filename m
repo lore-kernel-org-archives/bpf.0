@@ -2,98 +2,150 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 82C91C433DB
-	for <bpf@archiver.kernel.org>; Thu,  4 Feb 2021 20:58:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 007DEC433E0
+	for <bpf@archiver.kernel.org>; Thu,  4 Feb 2021 21:19:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 519FA64FA4
-	for <bpf@archiver.kernel.org>; Thu,  4 Feb 2021 20:58:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C445964FA9
+	for <bpf@archiver.kernel.org>; Thu,  4 Feb 2021 21:19:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229841AbhBDU6B (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 4 Feb 2021 15:58:01 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43524 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229728AbhBDU6B (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 4 Feb 2021 15:58:01 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 34F6364FA5
-        for <bpf@vger.kernel.org>; Thu,  4 Feb 2021 20:57:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612472240;
-        bh=wd+dZFxrefmDBfAsm7xbh0uT6Li4j5Pqr6G3+nUAz9Q=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=fuMqx7cQgzVtXILVLwv2Ja5NXxeX3+JWpBl4TsKPRDBF6yLLBLt0TVo/X5Qw1XgtO
-         zE+7HTW/cGT0zs198l5nMA5LV1FLRSCZLl9WEaN+Tg430WSSY+ewcmvmUW6QC6GHRB
-         peKg4o0QSWeAbN5PAD7IQs35rJYo1zS5imqOf5V1VdaEaG0Vzb4mwHwLl+F2UfmpY2
-         I9xmvYJDoA6wdZRtPDnt26uOH5hhRVhwZqitISJlaA30VuGGmprS7cY2GiMsyiVII1
-         6SjqvOnybl2Ezdv82dyv7stDHTapNxJSzMv2F2+g9t9/vD6RK/u98B87j87uQduSqr
-         M2RARQpU4DrmQ==
-Received: by mail-lj1-f169.google.com with SMTP id s18so5111256ljg.7
-        for <bpf@vger.kernel.org>; Thu, 04 Feb 2021 12:57:20 -0800 (PST)
-X-Gm-Message-State: AOAM530eNqiUnmA8VUanaDPPgDNvWgtxtAWZolAChNYbf/aBHLbK51/j
-        tOwqtGRgj02X61HlW3K8nDpXkDS4O0TpjfrFWjc=
-X-Google-Smtp-Source: ABdhPJwYECWE66cd2kzODOMkYpSozFqR+2ScaYDR1q3SGofibCBVgq23f+jy0DcMDDL1GO5iVSXs556l/dmaRAA2BSI=
-X-Received: by 2002:a2e:9898:: with SMTP id b24mr700260ljj.344.1612472238348;
- Thu, 04 Feb 2021 12:57:18 -0800 (PST)
-MIME-Version: 1.0
-References: <20210204193622.3367275-1-kpsingh@kernel.org> <20210204193622.3367275-2-kpsingh@kernel.org>
-In-Reply-To: <20210204193622.3367275-2-kpsingh@kernel.org>
-From:   Song Liu <song@kernel.org>
-Date:   Thu, 4 Feb 2021 12:57:06 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW7faA0t+VjrzDcxv0mmvB7FVDVeKyfgU+P7N5Uz+S=98A@mail.gmail.com>
-Message-ID: <CAPhsuW7faA0t+VjrzDcxv0mmvB7FVDVeKyfgU+P7N5Uz+S=98A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/2] bpf: Allow usage of BPF ringbuffer in
- sleepable programs
-To:     KP Singh <kpsingh@kernel.org>
-Cc:     bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+        id S229566AbhBDVT2 convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 4 Feb 2021 16:19:28 -0500
+Received: from us-smtp-delivery-44.mimecast.com ([207.211.30.44]:44675 "EHLO
+        us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229518AbhBDVT2 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 4 Feb 2021 16:19:28 -0500
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-265-C8ToOAWhNu-dZ2YDN91Qsw-1; Thu, 04 Feb 2021 16:18:34 -0500
+X-MC-Unique: C8ToOAWhNu-dZ2YDN91Qsw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 663664236C;
+        Thu,  4 Feb 2021 21:18:32 +0000 (UTC)
+Received: from krava.redhat.com (unknown [10.40.192.128])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A29185B695;
+        Thu,  4 Feb 2021 21:18:29 +0000 (UTC)
+From:   Jiri Olsa <jolsa@kernel.org>
+To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Florent Revest <revest@chromium.org>,
-        Brendan Jackman <jackmanb@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+        Andrii Nakryiko <andriin@fb.com>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        linux-kbuild@vger.kernel.org
+Subject: [PATCH bpf-next 1/4] tools/resolve_btfids: Build libbpf and libsubcmd in separate directories
+Date:   Thu,  4 Feb 2021 22:18:22 +0100
+Message-Id: <20210204211825.588160-2-jolsa@kernel.org>
+In-Reply-To: <20210204211825.588160-1-jolsa@kernel.org>
+References: <20210129134855.195810-1-jolsa@redhat.com>
+ <20210204211825.588160-1-jolsa@kernel.org>
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jolsa@kernel.org
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: kernel.org
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=WINDOWS-1252
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Feb 4, 2021 at 11:39 AM KP Singh <kpsingh@kernel.org> wrote:
->
-> The BPF ringbuffer map is pre-allocated and the implementation logic
-> does not rely on disabling preemption or per-cpu data structures. Using
-> the BPF ringbuffer sleepable LSM and tracing programs does not trigger
-> any warnings with DEBUG_ATOMIC_SLEEP, DEBUG_PREEMPT,
-> PROVE_RCU and PROVE_LOCKING and LOCKDEP enabled.
->
-> This allows helpers like bpf_copy_from_user and bpf_ima_inode_hash to
-> write to the BPF ring buffer from sleepable BPF programs.
->
-> Acked-by: Andrii Nakryiko <andrii@kernel.org>
-> Signed-off-by: KP Singh <kpsingh@kernel.org>
-> ---
->  kernel/bpf/verifier.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 5e09632efddb..4c33b4840438 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -10024,6 +10024,8 @@ static int check_map_prog_compatibility(struct bpf_verifier_env *env,
->                                 return -EINVAL;
->                         }
->                         break;
-> +               case BPF_MAP_TYPE_RINGBUF:
-> +                       break;
->                 default:
->                         verbose(env,
->                                 "Sleepable programs can only use array and hash maps\n");
+Setting up separate build directories for libbpf and libpsubcmd,
+so it's separated from other objects and we don't get them mixed
+in the future.
 
-Shall we update this message?
+It also simplifies cleaning, which is now simple rm -rf.
 
-Thanks,
-Song
+Also there's no need for FEATURE-DUMP.libbpf and bpf_helper_defs.h
+files in .gitignore anymore.
 
-> --
-> 2.30.0.365.g02bc693789-goog
->
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+---
+ tools/bpf/resolve_btfids/.gitignore |  2 --
+ tools/bpf/resolve_btfids/Makefile   | 26 +++++++++++---------------
+ 2 files changed, 11 insertions(+), 17 deletions(-)
+
+diff --git a/tools/bpf/resolve_btfids/.gitignore b/tools/bpf/resolve_btfids/.gitignore
+index a026df7dc280..25f308c933cc 100644
+--- a/tools/bpf/resolve_btfids/.gitignore
++++ b/tools/bpf/resolve_btfids/.gitignore
+@@ -1,4 +1,2 @@
+-/FEATURE-DUMP.libbpf
+-/bpf_helper_defs.h
+ /fixdep
+ /resolve_btfids
+diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
+index bf656432ad73..b780b3a9fb07 100644
+--- a/tools/bpf/resolve_btfids/Makefile
++++ b/tools/bpf/resolve_btfids/Makefile
+@@ -28,22 +28,22 @@ OUTPUT ?= $(srctree)/tools/bpf/resolve_btfids/
+ LIBBPF_SRC := $(srctree)/tools/lib/bpf/
+ SUBCMD_SRC := $(srctree)/tools/lib/subcmd/
+ 
+-BPFOBJ     := $(OUTPUT)/libbpf.a
+-SUBCMDOBJ  := $(OUTPUT)/libsubcmd.a
++BPFOBJ     := $(OUTPUT)/libbpf/libbpf.a
++SUBCMDOBJ  := $(OUTPUT)/libsubcmd/libsubcmd.a
+ 
+ BINARY     := $(OUTPUT)/resolve_btfids
+ BINARY_IN  := $(BINARY)-in.o
+ 
+ all: $(BINARY)
+ 
+-$(OUTPUT):
++$(OUTPUT) $(OUTPUT)/libbpf $(OUTPUT)/libsubcmd:
+ 	$(call msg,MKDIR,,$@)
+-	$(Q)mkdir -p $(OUTPUT)
++	$(Q)mkdir -p $(@)
+ 
+-$(SUBCMDOBJ): fixdep FORCE
+-	$(Q)$(MAKE) -C $(SUBCMD_SRC) OUTPUT=$(OUTPUT)
++$(SUBCMDOBJ): fixdep FORCE | $(OUTPUT)/libsubcmd
++	$(Q)$(MAKE) -C $(SUBCMD_SRC) OUTPUT=$(abspath $(dir $@))/ $(abspath $@)
+ 
+-$(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(OUTPUT)
++$(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(OUTPUT)/libbpf
+ 	$(Q)$(MAKE) $(submake_extras) -C $(LIBBPF_SRC)  OUTPUT=$(abspath $(dir $@))/ $(abspath $@)
+ 
+ CFLAGS := -g \
+@@ -57,23 +57,19 @@ LIBS = -lelf -lz
+ export srctree OUTPUT CFLAGS Q
+ include $(srctree)/tools/build/Makefile.include
+ 
+-$(BINARY_IN): fixdep FORCE
++$(BINARY_IN): fixdep FORCE | $(OUTPUT)
+ 	$(Q)$(MAKE) $(build)=resolve_btfids
+ 
+ $(BINARY): $(BPFOBJ) $(SUBCMDOBJ) $(BINARY_IN)
+ 	$(call msg,LINK,$@)
+ 	$(Q)$(CC) $(BINARY_IN) $(LDFLAGS) -o $@ $(BPFOBJ) $(SUBCMDOBJ) $(LIBS)
+ 
+-libsubcmd-clean:
+-	$(Q)$(MAKE) -C $(SUBCMD_SRC) OUTPUT=$(OUTPUT) clean
+-
+-libbpf-clean:
+-	$(Q)$(MAKE) -C $(LIBBPF_SRC) OUTPUT=$(OUTPUT) clean
+-
+-clean: libsubcmd-clean libbpf-clean fixdep-clean
++clean: fixdep-clean
+ 	$(call msg,CLEAN,$(BINARY))
+ 	$(Q)$(RM) -f $(BINARY); \
+ 	$(RM) -rf $(if $(OUTPUT),$(OUTPUT),.)/feature; \
++	$(RM) -rf $(OUTPUT)libbpf; \
++	$(RM) -rf $(OUTPUT)libsubcmd; \
+ 	find $(if $(OUTPUT),$(OUTPUT),.) -name \*.o -or -name \*.o.cmd -or -name \*.o.d | xargs $(RM)
+ 
+ tags:
+-- 
+2.26.2
+
