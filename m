@@ -2,115 +2,240 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14A57C433E0
-	for <bpf@archiver.kernel.org>; Thu,  4 Feb 2021 23:49:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AED99C433E9
+	for <bpf@archiver.kernel.org>; Thu,  4 Feb 2021 23:55:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D87A264FA9
-	for <bpf@archiver.kernel.org>; Thu,  4 Feb 2021 23:49:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7E8F964FB3
+	for <bpf@archiver.kernel.org>; Thu,  4 Feb 2021 23:55:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231254AbhBDXtW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 4 Feb 2021 18:49:22 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:11074 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231205AbhBDXtW (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 4 Feb 2021 18:49:22 -0500
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 114NjwSq032498
-        for <bpf@vger.kernel.org>; Thu, 4 Feb 2021 15:48:40 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=FhcjDNa2+UGICGGSj2HcBKepT75MGhedNjBXXjWo/xI=;
- b=IPejY37GU1T9diOmdVBufzy/2/llG6ZFEyHMMdlGOU9MWjX0sls3gO2a6fxlJfOknNvu
- 8cEC9viGYxNFG8W9GaxjMF2iIMPnrq2Zsw4/zXFzKsEfXKrPvkFBRHiTSx/WsW/Adofx
- QLgiYM2zndfxt7XGeOxCaX7C13nh885fZcM= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 36gqfkh5me-5
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 04 Feb 2021 15:48:40 -0800
-Received: from intmgw001.38.frc1.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 4 Feb 2021 15:48:39 -0800
-Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 581743704E75; Thu,  4 Feb 2021 15:48:34 -0800 (PST)
-From:   Yonghong Song <yhs@fb.com>
-To:     <bpf@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 6/8] bpftool: print local function pointer properly
-Date:   Thu, 4 Feb 2021 15:48:34 -0800
-Message-ID: <20210204234834.1629568-1-yhs@fb.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20210204234827.1628857-1-yhs@fb.com>
-References: <20210204234827.1628857-1-yhs@fb.com>
+        id S231390AbhBDXzj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 4 Feb 2021 18:55:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35168 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231230AbhBDXzg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 4 Feb 2021 18:55:36 -0500
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50BC5C0613D6;
+        Thu,  4 Feb 2021 15:54:56 -0800 (PST)
+Received: by mail-yb1-xb32.google.com with SMTP id i71so4995937ybg.7;
+        Thu, 04 Feb 2021 15:54:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0xnEJ/+ZJd9DS4gn/VKHMcY13sD+e64WV8SaUBqyM+Q=;
+        b=NR+kNaW75Gc9+EK1uh9dftkfLDfV+YvqXgIvhoHZmGicuA9LK699TeDhfyes4kQ1Qr
+         OCL9yl/snMTRVLLCWAS6IZ8cWecATlOW2cUPpQdFCZiULn1PtV9JNPp3syg1K1acyboi
+         E2edy9MOO7y7dabVtyyO0VhlpSY6JdCXvTz+BwiaugDZPhcPoJgSv/PeOsGYF1Wi6y4l
+         7u/ku0ucOaXLWlc6U6sxaoea5Nhk5LiAIGxL3RLzFyubUYBetwfAz34rPOvdGXP16Wso
+         u27a8eZ1EGTXpoHeLpEikKGUO5ZON34tMQQqqbm4H1bFerJdgxgttOrZowO9y5L33oa5
+         /8Zw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0xnEJ/+ZJd9DS4gn/VKHMcY13sD+e64WV8SaUBqyM+Q=;
+        b=HwzLFjH3ifhrAHNBU9Wyu8kltUirWeu03RLK5EBjjKsBOn/uy0rOdTD1JmTkEewv3J
+         0XHKJpwnHZWhbIjV0/+dJaup+MRYWXLvn7ZkL3EtwhFt3SWqapPcfMSDEXrkmE98UaxD
+         wv33YZ3M6XvgHBkJXNbxoWqoXzh7ftmIQlC2VM4HbbEt4GQ1D7D9hxLU3sbIrKU9eOCm
+         V/VXgEZps7I0lhIalAZLZvgyU06OaE0IyDKEaj+wSnUH/Gcw1ce64giNqDyw0ovFAeB+
+         lMHz1q3R8gB5xxoHx1W0RHdhIu6dGmGRt/5Qjp06Z8Jl1HWpQeue7t1YNohJCU62NIaL
+         ebRw==
+X-Gm-Message-State: AOAM531kBI5QfrR92mS0XA6kQ8RPC4J3rpttraaYS8B4Mz7w7t0cxUXD
+        +sOu2dQzNPMla4P8kDMaeZfOzJmlXIey2CKx24c=
+X-Google-Smtp-Source: ABdhPJwZkorXQciQmxG8kAGRnxd+dJyiZqSxfwFGy3+jHMtVM6kpqVVxCaP6GwQlyk9Fbn/dRLJkHEAzs/p0weyG4vg=
+X-Received: by 2002:a25:9882:: with SMTP id l2mr2328044ybo.425.1612482895541;
+ Thu, 04 Feb 2021 15:54:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.737
- definitions=2021-02-04_13:2021-02-04,2021-02-04 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
- lowpriorityscore=0 malwarescore=0 bulkscore=0 phishscore=0 spamscore=0
- clxscore=1015 mlxscore=0 mlxlogscore=593 adultscore=0 priorityscore=1501
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2102040144
-X-FB-Internal: deliver
+References: <20210115210616.404156-1-ndesaulniers@google.com>
+ <CA+icZUVp+JNq89uc_DyWC6zh5=kLtUr7eOxHizfFggnEVGJpqw@mail.gmail.com>
+ <7354583d-de40-b6b9-6534-a4f4c038230f@fb.com> <CAKwvOd=5iR0JONwDb6ypD7dzzjOS3Uj0CjcyYqPF48eK4Pi90Q@mail.gmail.com>
+ <12b6c2ca-4cf7-4edd-faf2-72e3cb59c00e@fb.com> <20210117201500.GO457607@kernel.org>
+ <CAKwvOdmniAMZD0LiFdr5N8eOwHqNFED2Pd=pwOFF2Y8eSRXUHA@mail.gmail.com>
+ <CAEf4Bzbn1app3LZ1oah5ARn81j5RMNxRRHPVAkeY3h_0q7+7fg@mail.gmail.com> <CAKwvOdmrVdxbEHdOFA8x+Q2yDWOfChZzBc6nR3rdaM8R3LsxfQ@mail.gmail.com>
+In-Reply-To: <CAKwvOdmrVdxbEHdOFA8x+Q2yDWOfChZzBc6nR3rdaM8R3LsxfQ@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 4 Feb 2021 15:54:44 -0800
+Message-ID: <CAEf4Bzbs5sDTB6w1D4LpKLGjY5sCCUnRUsU84Ccn8DoL352j1g@mail.gmail.com>
+Subject: Re: [PATCH v5 0/3] Kbuild: DWARF v5 support
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Clang-Built-Linux ML <clang-built-linux@googlegroups.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Jakub Jelinek <jakub@redhat.com>,
+        Fangrui Song <maskray@google.com>,
+        Caroline Tice <cmtice@google.com>,
+        Nick Clifton <nickc@redhat.com>, dwarves@vger.kernel.org,
+        bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-With later hashmap example, using bpftool xlated output may
-look like:
-  int dump_task(struct bpf_iter__task * ctx):
-  ; struct task_struct *task =3D ctx->task;
-     0: (79) r2 =3D *(u64 *)(r1 +8)
-  ; if (task =3D=3D (void *)0 || called > 0)
-  ...
-    19: (18) r2 =3D subprog[+18]
-    30: (18) r2 =3D subprog[+26]
-  ...
-  36: (95) exit
-  __u64 check_hash_elem(struct bpf_map * map, __u32 * key, __u64 * val,
-                        struct callback_ctx * data):
-  ; struct bpf_iter__task *ctx =3D data->ctx;
-    37: (79) r5 =3D *(u64 *)(r4 +0)
-  ...
-    55: (95) exit
-  __u64 check_percpu_elem(struct bpf_map * map, __u32 * key,
-                          __u64 * val, void * unused):
-  ; check_percpu_elem(struct bpf_map *map, __u32 *key, __u64 *val, void *=
-unused)
-    56: (bf) r6 =3D r3
-  ...
-    83: (18) r2 =3D subprog[+-46]
+On Wed, Feb 3, 2021 at 7:13 PM Nick Desaulniers <ndesaulniers@google.com> wrote:
+>
+> On Wed, Feb 3, 2021 at 6:58 PM Andrii Nakryiko
+> <andrii.nakryiko@gmail.com> wrote:
+> >
+> > On Wed, Feb 3, 2021 at 5:31 PM Nick Desaulniers <ndesaulniers@google.com> wrote:
+> > >
+> > > On Sun, Jan 17, 2021 at 12:14 PM Arnaldo Carvalho de Melo
+> > > <acme@kernel.org> wrote:
+> > > >
+> > > > Em Fri, Jan 15, 2021 at 03:43:06PM -0800, Yonghong Song escreveu:
+> > > > >
+> > > > >
+> > > > > On 1/15/21 3:34 PM, Nick Desaulniers wrote:
+> > > > > > On Fri, Jan 15, 2021 at 3:24 PM Yonghong Song <yhs@fb.com> wrote:
+> > > > > > >
+> > > > > > >
+> > > > > > >
+> > > > > > > On 1/15/21 1:53 PM, Sedat Dilek wrote:
+> > > > > > > > En plus, I encountered breakage with GCC v10.2.1 and LLVM=1 and
+> > > > > > > > CONFIG_DEBUG_INFO_DWARF4.
+> > > > > > > > So might be good to add a "depends on !DEBUG_INFO_BTF" in this combination.
+> > > > > >
+> > > > > > Can you privately send me your configs that repro? Maybe I can isolate
+> > > > > > it to a set of configs?
+> > > > > >
+> > > > > > >
+> > > > > > > I suggested not to add !DEBUG_INFO_BTF to CONFIG_DEBUG_INFO_DWARF4.
+> > > > > > > It is not there before and adding this may suddenly break some users.
+> > > > > > >
+> > > > > > > If certain combination of gcc/llvm does not work for
+> > > > > > > CONFIG_DEBUG_INFO_DWARF4 with pahole, this is a bug bpf community
+> > > > > > > should fix.
+> > > > > >
+> > > > > > Is there a place I should report bugs?
+> > > > >
+> > > > > You can send bug report to Arnaldo Carvalho de Melo <acme@kernel.org>,
+> > > > > dwarves@vger.kernel.org and bpf@vger.kernel.org.
+> > > >
+> > > > I'm coming back from vacation, will try to read the messages and see if
+> > > > I can fix this.
+> > >
+> > > IDK about DWARF v4; that seems to work for me.  I was previously observing
+> > > https://bugzilla.redhat.com/show_bug.cgi?id=1922698
+> > > with DWARF v5.  I just re-pulled the latest pahole, rebuilt, and no
+> > > longer see that warning.
+> > >
+> > > I now observe a different set.  I plan on attending "BPF office hours
+> > > tomorrow morning," but if anyone wants a sneak peak of the errors and
+> > > how to reproduce:
+> > > https://gist.github.com/nickdesaulniers/ae8c9efbe4da69b1cf0dce138c1d2781
+> > >
+> >
+> > Is there another (easy) way to get your patch set without the b4 tool?
+> > Is your patch set present in some patchworks instance, so that I can
+> > download it in mbox format, for example?
+>
+> $ wget https://lore.kernel.org/lkml/20210130004401.2528717-2-ndesaulniers@google.com/raw
+> -O - | git am
+> $ wget https://lore.kernel.org/lkml/20210130004401.2528717-3-ndesaulniers@google.com/raw
+> -O - | git am
+>
+> If you haven't tried b4 yet, it's quite nice.  Hard to go back.  Lore
+> also has mbox.gz links.  Not sure about patchwork.
+>
 
-Signed-off-by: Yonghong Song <yhs@fb.com>
----
- tools/bpf/bpftool/xlated_dumper.c | 3 +++
- 1 file changed, 3 insertions(+)
+Ok, I managed to apply that on linux-next, but I can't get past this:
 
-diff --git a/tools/bpf/bpftool/xlated_dumper.c b/tools/bpf/bpftool/xlated=
-_dumper.c
-index 8608cd68cdd0..7bdd90503727 100644
---- a/tools/bpf/bpftool/xlated_dumper.c
-+++ b/tools/bpf/bpftool/xlated_dumper.c
-@@ -196,6 +196,9 @@ static const char *print_imm(void *private_data,
- 	else if (insn->src_reg =3D=3D BPF_PSEUDO_MAP_VALUE)
- 		snprintf(dd->scratch_buff, sizeof(dd->scratch_buff),
- 			 "map[id:%u][0]+%u", insn->imm, (insn + 1)->imm);
-+	else if (insn->src_reg =3D=3D BPF_PSEUDO_FUNC)
-+		snprintf(dd->scratch_buff, sizeof(dd->scratch_buff),
-+			 "subprog[+%d]", insn->imm + 1);
- 	else
- 		snprintf(dd->scratch_buff, sizeof(dd->scratch_buff),
- 			 "0x%llx", (unsigned long long)full_imm);
---=20
-2.24.1
+ld.lld: error: undefined symbol: pa_trampoline_start
+>>> referenced by arch/x86/realmode/rm/header.o:(real_mode_header)
 
+ld.lld: error: undefined symbol: pa_trampoline_header
+>>> referenced by arch/x86/realmode/rm/header.o:(real_mode_header)
+
+ld.lld: error: undefined symbol: pa_trampoline_pgd
+>>> referenced by arch/x86/realmode/rm/header.o:(real_mode_header)
+>>> referenced by trampoline_64.S:142 (/data/users/andriin/linux/arch/x86/realmode/rm/trampoline_64.S:142)
+>>>               arch/x86/realmode/rm/trampoline_64.o:(startup_32)
+
+ld.lld: error: undefined symbol: pa_wakeup_start
+>>> referenced by arch/x86/realmode/rm/header.o:(real_mode_header)
+
+ld.lld: error: undefined symbol: pa_wakeup_header
+>>> referenced by arch/x86/realmode/rm/header.o:(real_mode_header)
+
+ld.lld: error: undefined symbol: pa_machine_real_restart_asm
+>>> referenced by arch/x86/realmode/rm/header.o:(real_mode_header)
+
+ld.lld: error: undefined symbol: pa_startup_32
+>>> referenced by trampoline_64.S:77 (/data/users/andriin/linux/arch/x86/realmode/rm/trampoline_64.S:77)
+>>>               arch/x86/realmode/rm/trampoline_64.o:(trampoline_start)
+
+ld.lld: error: undefined symbol: pa_tr_flags
+>>> referenced by trampoline_64.S:124 (/data/users/andriin/linux/arch/x86/realmode/rm/trampoline_64.S:124)
+>>>               arch/x86/realmode/rm/trampoline_64.o:(startup_32)
+
+ld.lld: error: undefined symbol: pa_tr_cr4
+>>> referenced by trampoline_64.S:138 (/data/users/andriin/linux/arch/x86/realmode/rm/trampoline_64.S:138)
+>>>               arch/x86/realmode/rm/trampoline_64.o:(startup_32)
+
+ld.lld: error: undefined symbol: pa_tr_efer
+>>> referenced by trampoline_64.S:146 (/data/users/andriin/linux/arch/x86/realmode/rm/trampoline_64.S:146)
+>>>               arch/x86/realmode/rm/trampoline_64.o:(startup_32)
+>>> referenced by trampoline_64.S:147 (/data/users/andriin/linux/arch/x86/realmode/rm/trampoline_64.S:147)
+>>>               arch/x86/realmode/rm/trampoline_64.o:(startup_32)
+
+ld.lld: error: undefined symbol: pa_startup_64
+>>> referenced by trampoline_64.S:161 (/data/users/andriin/linux/arch/x86/realmode/rm/trampoline_64.S:161)
+>>>               arch/x86/realmode/rm/trampoline_64.o:(startup_32)
+
+ld.lld: error: undefined symbol: pa_tr_gdt
+>>> referenced by arch/x86/realmode/rm/trampoline_64.o:(tr_gdt)
+>>> referenced by reboot.S:28 (/data/users/andriin/linux/arch/x86/realmode/rm/reboot.S:28)
+>>>               arch/x86/realmode/rm/reboot.o:(machine_real_restart_asm)
+
+ld.lld: error: undefined symbol: pa_machine_real_restart_paging_off
+>>> referenced by reboot.S:34 (/data/users/andriin/linux/arch/x86/realmode/rm/reboot.S:34)
+>>>               arch/x86/realmode/rm/reboot.o:(machine_real_restart_asm)
+
+ld.lld: error: undefined symbol: pa_machine_real_restart_idt
+>>> referenced by reboot.S:47 (/data/users/andriin/linux/arch/x86/realmode/rm/reboot.S:47)
+>>>               arch/x86/realmode/rm/reboot.o:(machine_real_restart_asm)
+
+ld.lld: error: undefined symbol: pa_machine_real_restart_gdt
+>>> referenced by reboot.S:54 (/data/users/andriin/linux/arch/x86/realmode/rm/reboot.S:54)
+>>>               arch/x86/realmode/rm/reboot.o:(machine_real_restart_asm)
+>>> referenced by arch/x86/realmode/rm/reboot.o:(machine_real_restart_gdt)
+
+ld.lld: error: undefined symbol: pa_wakeup_gdt
+>>> referenced by arch/x86/realmode/rm/wakeup_asm.o:(wakeup_gdt)
+  CC      arch/x86/mm/numa_64.o
+  CC      arch/x86/mm/amdtopology.o
+  HOSTCC  arch/x86/entry/vdso/vdso2c
+make[4]: *** [arch/x86/realmode/rm/realmode.elf] Error 1
+make[3]: *** [arch/x86/realmode/rm/realmode.bin] Error 2
+make[2]: *** [arch/x86/realmode] Error 2
+make[2]: *** Waiting for unfinished jobs....
+
+
+Hopefully Arnaldo will have better luck.
+
+
+
+> >
+> > >
+> > > (FWIW: some other folks are hitting issues now with kernel's lack of
+> > > DWARF v5 support: https://bugzilla.redhat.com/show_bug.cgi?id=1922707)
+>
+>
+> --
+> Thanks,
+> ~Nick Desaulniers
