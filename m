@@ -2,120 +2,168 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-23.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BD40C433E6
-	for <bpf@archiver.kernel.org>; Thu,  4 Feb 2021 19:21:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CF65C433DB
+	for <bpf@archiver.kernel.org>; Thu,  4 Feb 2021 19:23:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CDC9364E7B
-	for <bpf@archiver.kernel.org>; Thu,  4 Feb 2021 19:21:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0B2D564F10
+	for <bpf@archiver.kernel.org>; Thu,  4 Feb 2021 19:23:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239499AbhBDTVW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 4 Feb 2021 14:21:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50682 "EHLO
+        id S239809AbhBDTXh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 4 Feb 2021 14:23:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239188AbhBDSf3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 4 Feb 2021 13:35:29 -0500
-Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EEB2C06178B
-        for <bpf@vger.kernel.org>; Thu,  4 Feb 2021 10:34:48 -0800 (PST)
-Received: by mail-ua1-x935.google.com with SMTP id a16so1264868uad.9
-        for <bpf@vger.kernel.org>; Thu, 04 Feb 2021 10:34:48 -0800 (PST)
+        with ESMTP id S239806AbhBDTXa (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 4 Feb 2021 14:23:30 -0500
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A89FFC061786
+        for <bpf@vger.kernel.org>; Thu,  4 Feb 2021 11:22:49 -0800 (PST)
+Received: by mail-yb1-xb29.google.com with SMTP id v123so4265474yba.13
+        for <bpf@vger.kernel.org>; Thu, 04 Feb 2021 11:22:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=eihxO5r/t34DbPHv1BAApe+ovuE0Dvbi7s4289fXd6g=;
-        b=OctQePZZd+NwZFyoBBtGSzDhOZGgU8kUT3Hs98MiL/unuiolbTutE9oFVWAwkNx7c9
-         Q1LTbSMjigJthSLN+YtX02kXrnk5R1NiPGsNUr0eJN3oRS0dx/YBZcVrUUnPaloTrYKX
-         p8Fmi40IUvq9F39USoH7HGcaWJCUx4lRFsaiD9BjAvfX0vvbcGbO1dukQRg8UvvpgV5A
-         wiuEBN4JxbeRN9sNKVPIZ5QUfMIoygQMJtypxnvS/VPRlutT+eS27cbSnAbvYPvSVk8B
-         +ipG8cvvEKI9Cnna5P3WwLyckjt2W7WW73PEpHulFdeThqFhVMofxSgrGlJcqd3c/0+0
-         tfPw==
+        bh=mky/RPygIdDHW340hqn5JFU7/zA4sgHipNd4rb4i7OQ=;
+        b=KAibljmRlbCcRb6SnIuI1f9yBT48XHQiHsB507mucODQk5vEghych6hIICY8DWikQo
+         98uPRAouS5e7QpmqqdeVF3sZcxm5qS2ApaiPIkiopjBIYD1o0hKZKfzfpXsA6QaRbCn1
+         dmGBygvoIwh5q8UA0WZtLlZH8WVCjLMRlqZVKXZtDryrwjlTlL8soa0mwH7oTsrmTbR/
+         lyQ3hbYJ+LKP1LmT8LlpLtGA5LnVC6pBNPrRMJouMM61M+Qm7U+1rv2QX1G84U4TMXnb
+         lt505NekHPTqvuqMioaJsigaz7IoZyrR7N7DkERajLpvXg2DwraCKpKU/w+gSMXwKH1n
+         YcuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=eihxO5r/t34DbPHv1BAApe+ovuE0Dvbi7s4289fXd6g=;
-        b=VO3TNDjXK/Jt9JyUlFDkDb1WHRhVlZPSaYiZgMFs0s8oobqpQngzyk6f1AM+7BkiCl
-         rjCf5dKm7oSRncoeHA42tSZSTrl8D0OAKKxOepjiFKhJRr6blYWp9ZtbQg85wV5zieiC
-         pbAmH5st4C8OWRDESI2C0CYxkMK6yFRmY1fqkrgaMOXNUEYGgXjuSLJ0hERrmGytb57e
-         nz/r1hqAT0dBKQoL3LbwA7e1r5WoQij1/O3vRGvd+WXxmMRU/ZLwrSqRuwEUifkl9Dai
-         KNe6vpYtXOulaXbmdYPXOikqm1M2FOFPwxODExPc/suykCB3zKv0JQKI5CyrODuV+Jvp
-         Z+VQ==
-X-Gm-Message-State: AOAM533ejQdDj5KHMuIsDXbgdRxd/uwyUFLo00hSJiFDjt4yViUIgY56
-        zg0Uzrk51RmyerGFj4bvQb9X+I8AbFIpjS4ZSsM7Sw==
-X-Google-Smtp-Source: ABdhPJwhIwSb8JQXRdT899QtxY5y0uunhas7rYQuzYOsol4WwQjeL3eBJaT8N21+STAZ94zPsHAFp9MVpQGajTymUYc=
-X-Received: by 2002:a9f:248b:: with SMTP id 11mr528653uar.133.1612463687332;
- Thu, 04 Feb 2021 10:34:47 -0800 (PST)
+        bh=mky/RPygIdDHW340hqn5JFU7/zA4sgHipNd4rb4i7OQ=;
+        b=kpljPRpJyIMuCu5E/FxVCaJ0y0W5yfEO4Vm9h/lYEZ8XUmcGdZKvou6muE1QLiPXIt
+         ZpErpZWa01fVvrjXqmkgwvTr+o02uYu1jegAd2hQG0bLvcTMKeeqk5JuFIrUCTSnK/u4
+         1Aq04FA0P6V8F2ymueD6BtmDtRXYDGv2oyPraeSWcLCgBjHNLxMpcbaSphiXDd+1uw0o
+         l6oAD8EOv14jMCx+PTTIpcmQkC1EaTr2j/69XDXlL0JqKDVc9p1ibvFRhK0wcGnLp0SY
+         ZwQKJahFWyHVCE9CLgv9jd3KVhcBleKvZPxK93gasGhaSsC14xxS+PlR2fiItjpI1/UP
+         MMDA==
+X-Gm-Message-State: AOAM5337TQWnq3mIM3RXVHPNKKlV8pd09eLUIosO16IjTUhD+0sATxIx
+        CWbtdMdM2VbspAjyHYTuKk/A6p8RrxwaWOJiMg0=
+X-Google-Smtp-Source: ABdhPJzdnRmWBgZOV/PWyg+GeUYaAH7j2R0eJIPkKx21Ka+B4iLVw0K/qDGkoYvh4qxz9c5zqXrz7BkrOVHt5bcW0/U=
+X-Received: by 2002:a25:f40e:: with SMTP id q14mr1158993ybd.230.1612466568956;
+ Thu, 04 Feb 2021 11:22:48 -0800 (PST)
 MIME-Version: 1.0
-References: <20210201172530.1141087-1-gprocida@google.com> <20210201172530.1141087-3-gprocida@google.com>
- <CAEf4BzY_xk2H1Eh9h_WiXbqP3O-afiZnmpWf=MtCrqdJeNW+ag@mail.gmail.com>
-In-Reply-To: <CAEf4BzY_xk2H1Eh9h_WiXbqP3O-afiZnmpWf=MtCrqdJeNW+ag@mail.gmail.com>
-From:   Giuliano Procida <gprocida@google.com>
-Date:   Thu, 4 Feb 2021 18:34:10 +0000
-Message-ID: <CAGvU0HmHR0AXKT2=LyD6HWdr79JM9kWjLTZhajjUJx+p2QB0tA@mail.gmail.com>
-Subject: Re: [PATCH dwarves v2 2/4] btf_encoder: Manually lay out updated ELF sections
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     dwarves@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
+References: <20210202221557.2039173-1-kpsingh@kernel.org> <20210202221557.2039173-2-kpsingh@kernel.org>
+ <CAEf4BzZtG2WtVcjXP24J9TRJ4=gQE02Tb2fXQ4Tiaf9=bADJBA@mail.gmail.com> <CACYkzJ7F8ZdpyAbMrkPX5Y6g+MXVo4FY1s-AizThYcuHuZWhdg@mail.gmail.com>
+In-Reply-To: <CACYkzJ7F8ZdpyAbMrkPX5Y6g+MXVo4FY1s-AizThYcuHuZWhdg@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 4 Feb 2021 11:22:37 -0800
+Message-ID: <CAEf4BzZEB2sEcLM04AocfBRp_fdaAbjZyJO9gnj+bgrxxTwyCg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 1/2] bpf: Helper script for running BPF
+ presubmit tests
+To:     KP Singh <kpsingh@kernel.org>
+Cc:     bpf <bpf@vger.kernel.org>, Jiri Olsa <jolsa@redhat.com>,
         Alexei Starovoitov <ast@kernel.org>,
-        =?UTF-8?Q?Matthias_M=C3=A4nnich?= <maennich@google.com>,
-        kernel-team@android.com, Kernel Team <kernel-team@fb.com>,
-        bpf <bpf@vger.kernel.org>
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Florent Revest <revest@chromium.org>,
+        Brendan Jackman <jackmanb@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi.
-
-On Thu, 4 Feb 2021 at 04:13, Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+On Thu, Feb 4, 2021 at 10:59 AM KP Singh <kpsingh@kernel.org> wrote:
 >
-> On Mon, Feb 1, 2021 at 9:26 AM Giuliano Procida <gprocida@google.com> wrote:
+> On Thu, Feb 4, 2021 at 5:52 AM Andrii Nakryiko
+> <andrii.nakryiko@gmail.com> wrote:
 > >
-> > pahole -J needs to do the following to an ELF file:
+> > On Tue, Feb 2, 2021 at 2:16 PM KP Singh <kpsingh@kernel.org> wrote:
+> > >
+> > > The script runs the BPF selftests locally on the same kernel image
+> > > as they would run post submit in the BPF continuous integration
+> > > framework.
+> > >
+> > > The goal of the script is to allow contributors to run selftests locally
+> > > in the same environment to check if their changes would end up breaking
+> > > the BPF CI and reduce the back-and-forth between the maintainers and the
+> > > developers.
+> > >
+> > > Tested-by: Jiri Olsa <jolsa@redhat.com>
+> > > Signed-off-by: KP Singh <kpsingh@kernel.org>
+> > > ---
 > >
-> > * add or update the ".BTF" section
-> > * maybe update the section name string table
-> > * update the Section Header Table (SHT)
+> > I almost applied it :) But found two problems still, which ruins
+> > experience in my environment, see below.
 > >
-> > libelf either takes full control of layout or requires the user to
-> > specify offset, size and alignment of all new and updated sections and
-> > headers.
-> >
-> > To avoid libelf moving program segments in particular, we position the
+> > Also, do you mind renaming the script (and updating the doc in patch
+> > #2)to vmtest.sh for a shorter name without underscores?
 >
-> It's not clear to me what's wrong with libelf handling all the layout.
-> Even if libelf will move program segments around, what's the harm?
-> Does it break anything if we just let libelf do this?
+> Sure, I like vmtest.sh better too.
+>
+> >
+> > First problem is that it still doesn't propagate exit codes properly.
+> > Try ./run_in_vm.sh -- false, followed by echo $? It should print 1,
+> > but currently it prints zero.
+>
+> So propagating the error from the script that ran in the VM would I
+> think be a little
+> tricky. This is just the error from the wrapper script.
+>
+> I can take a stab at it in a later patch (hope that's okay for now) as it's
+> not trivial [at least in my head] as we might have to save the status in a file,
+> copy the file back to the host and then use that status code instead or
+> do something socket / SSH.
 >
 
-It doesn't hurt the userspace case I care about. I've no idea what it
-means in terms of vmlinux.
+Yeah, follow up is ok. Storing in file and returning that seems ok,
+similar to what you do with logs.
 
-However, I wrote that text before I discovered that pahole -J isn't
-actually used to modify kernel images.
-
-One thing I haven't tried is to try to make .BTF loadable but leave
-placement to libelf.
-
-> > ".BTF" and section name string table (typically named ".shstrtab")
-> > sections after all others. The SHT always lives at the end of the file.
 > >
-> > Note that the last section in an ELF file is normally the section name
-> > string table and any ".BTF" section will normally be second last.
-> > However, if these sections appear earlier, then we'll waste some space
-> > in the ELF file when we rewrite them.
+> > >  tools/testing/selftests/bpf/run_in_vm.sh | 368 +++++++++++++++++++++++
+> > >  1 file changed, 368 insertions(+)
+> > >  create mode 100755 tools/testing/selftests/bpf/run_in_vm.sh
+> > >
 > >
-> > Signed-off-by: Giuliano Procida <gprocida@google.com>
-> > ---
-> >  libbtf.c | 64 ++++++++++++++++++++++++++++++++++++++++++++++++++++++--
-> >  1 file changed, 62 insertions(+), 2 deletions(-)
+> > [...]
 > >
+> > > +
+> > > +update_kconfig()
+> > > +{
+> > > +       local kconfig_file="$1"
+> > > +       local update_command="curl -sLf ${KCONFIG_URL} -o ${kconfig_file}"
+> > > +       # Github does not return the "last-modified" header when retrieving the
+> > > +       # raw contents of the file. Use the API call to get the last-modified
+> > > +       # time of the kernel config and only update the config if it has been
+> > > +       # updated after the previously cached config was created. This avoids
+> > > +       # unnecessarily compiling the kernel and selftests.
+> > > +       if [[ -f "${kconfig_file}" ]]; then
+> > > +               local last_modified_date="$(curl -sL -D - "${KCONFIG_API_URL}" -o /dev/null | \
+> > > +                       grep "last-modified" | awk -F ': ' '{print $2}')"
+> > > +               local remote_modified_timestamp="$(date -d "${last_modified_date}" +"%s")"
+> > > +               local local_creation_timestamp="$(-c %W "${kconfig_file}")"
+> > > +
+> >
+> > %W breaks the entire experience for me. stat -c %W returns 0 in my
+> > environment, don't know why. But it's also not clear why %W (file
+> > creation time) was used instead of %Y (file modification time)? When
+> > we overwrite latest.config, it will get updated modification time, but
+> > old creation time, so this whole idea with %W seems wrong?
+> >
+> > So, do you mind switching to local_modification_timestamp with %Y? I
+> > checked locally, it finally allowed to skip rebuilding both the kernel
+> > and selftests.
 >
-> [...]
+> Sure, I can switch to %Y. Both seem to work for me.
+>
+> >
+> > > +               if [[ "${remote_modified_timestamp}" -gt "${local_creation_timestamp}" ]]; then
+> > > +                       ${update_command}
+> > > +               fi
+> > > +       else
+> > > +               ${update_command}
+> > > +       fi
+> > > +}
+> > > +
+> >
+> > [...]
