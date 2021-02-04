@@ -2,138 +2,149 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-16.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 655D5C433E0
-	for <bpf@archiver.kernel.org>; Thu,  4 Feb 2021 18:58:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D81A7C433E0
+	for <bpf@archiver.kernel.org>; Thu,  4 Feb 2021 19:00:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0B46964F59
-	for <bpf@archiver.kernel.org>; Thu,  4 Feb 2021 18:57:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8FAD764F67
+	for <bpf@archiver.kernel.org>; Thu,  4 Feb 2021 19:00:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239305AbhBDS5t (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 4 Feb 2021 13:57:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52154 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239291AbhBDSmR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 4 Feb 2021 13:42:17 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31A7EC06178B
-        for <bpf@vger.kernel.org>; Thu,  4 Feb 2021 10:41:32 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id r23so2754885ljh.1
-        for <bpf@vger.kernel.org>; Thu, 04 Feb 2021 10:41:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QilnL1GiLc35zL0JKgGqLLH0jCvxrl7AURnizvwxOrk=;
-        b=wwOS3lN7TXu7QWeoGhYz2RQIaOHUMrxwlkR7ONEgKZc8tcuOjeXZTXB1WKjKgAsbTt
-         yBmSE3VnOWAKWOMUea3DJjb2qXnmzvGek24oz8Rn6MMVgsK6wQrdn+irVG6eFfiwAFAq
-         /d6esWbvjJAsIQ26Ihjbz7XJe2at9o+eKRRE8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QilnL1GiLc35zL0JKgGqLLH0jCvxrl7AURnizvwxOrk=;
-        b=f6n66EfwfOwXZWKNHGPkDjm5tp/UOFjv/2OR8CJXebwALX5j3UpOmSnM6QVsgE9oyt
-         EEwav74hSXHgd1F/FxX3LQ1wSKdMf1sboF0k5/FbyLPD8BLN/sAVPWLWRjCC56uY8zAM
-         AQKAP9duDFCfDs2Cv996eoyHenDh7fDf6s4J8J0ZRN2SQ4YHKpuQJHkBmOLWFOU+zriU
-         iHaB2ylPvRme/6xrB0gfEQSnUhrh7VSdeyiJiNdi5Z5zmkZXfmTQI5DvWOEuwFVqdFqh
-         D8gdxQMR0hBH8sQjqQjM1TbQSn08ENp3gne2vLDaemMXRP3vTfC0tBU/cnhfqS5nlxLG
-         wfQA==
-X-Gm-Message-State: AOAM533QPSFdCksGWqRDStXIiuiQ+OD1sVJMhL7jtKj4ftKG7F38ibnc
-        oghrYjwVyJGlVP0zUAmbf3cDgQfUvQEs/J+SdEMNMg==
-X-Google-Smtp-Source: ABdhPJwJtrhYEdPaQdR6fHW3cU2NP6bOoOiL2TtDHuAX1Y9bu5c2RTiAw480hYJajzznm79yfeZHPAMVBc9ok0h1jMo=
-X-Received: by 2002:a2e:9b57:: with SMTP id o23mr427754ljj.314.1612464090601;
- Thu, 04 Feb 2021 10:41:30 -0800 (PST)
+        id S239260AbhBDTAx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 4 Feb 2021 14:00:53 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50498 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239136AbhBDTAV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 4 Feb 2021 14:00:21 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 909D964F67
+        for <bpf@vger.kernel.org>; Thu,  4 Feb 2021 18:59:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612465177;
+        bh=p5id1kIp90hhhoHPGcH4tBouTfB6wXu4z627JlaKfXM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=d9JLEnPDFO2dOPbXDVUGC1vWhKCj2eZIcQAxGtWaTCrzODjbN3LXLltCPOV78DFUL
+         c23DUiFWK36i4hYMMzsPuRX90INupaJGiqA7b/T1yAnhwlXEqmvyuug2WHWr6g0l0S
+         8MN6WtpErz+Zjz7GGGLgSkZuwVTVurArqquFJsGalAe8GXWad6Rwlx9uJjHmYkMyud
+         O47K09wC1plkDXBcfr45sHSpTFEYrBu68fnDO2t5HtwDozQN9LndqB6YhagQWDVffI
+         N1/QxmF8/pmXHS3MMTdhivehnZwe8hlk3ALT0jG7T6qCqnz/41yYwOwoAj1OaB56GY
+         WxuNevFMhybRA==
+Received: by mail-lj1-f169.google.com with SMTP id v15so4652801ljk.13
+        for <bpf@vger.kernel.org>; Thu, 04 Feb 2021 10:59:37 -0800 (PST)
+X-Gm-Message-State: AOAM530oSYwaeDIkux3Zxa7QnLrFjisPl8vvFAM4HYWZ8eOT+rd/sHuz
+        2z3WB8O3I36Jrez1zIqkxophR7BhKKZiVkZAMi5c1w==
+X-Google-Smtp-Source: ABdhPJz9La+uMa7VpXZ2+Dg5dYDyCtTnGiCm+9UhHhJwy9kN2TOwTuL/YloSPshIyJFXU+eZAE44YB5Vrs1pxy+aEBA=
+X-Received: by 2002:a2e:b5b8:: with SMTP id f24mr451113ljn.136.1612465175794;
+ Thu, 04 Feb 2021 10:59:35 -0800 (PST)
 MIME-Version: 1.0
-References: <CABWYdi3HjduhY-nQXzy2ezGbiMB1Vk9cnhW2pMypUa+P1OjtzQ@mail.gmail.com>
- <CABWYdi27baYc3ShHcZExmmXVmxOQXo9sGO+iFhfZLq78k8iaAg@mail.gmail.com>
- <20210203214448.2703930e@oasis.local.home> <20210204030948.dmsmwyw6fu5kzgey@treble>
-In-Reply-To: <20210204030948.dmsmwyw6fu5kzgey@treble>
-From:   Ivan Babrou <ivan@cloudflare.com>
-Date:   Thu, 4 Feb 2021 10:41:18 -0800
-Message-ID: <CABWYdi15x=-2qenWSdX_ONSha_Pz7GFJrx8axN6CJS5cWxTTSg@mail.gmail.com>
-Subject: Re: BUG: KASAN: stack-out-of-bounds in unwind_next_frame+0x1df5/0x2650
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        kernel-team <kernel-team@cloudflare.com>,
-        Ignat Korchagin <ignat@cloudflare.com>,
-        Hailong liu <liu.hailong6@zte.com.cn>,
-        Andrey Ryabinin <aryabinin@virtuozzo.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Julien Thierry <jthierry@redhat.com>,
-        Jiri Slaby <jirislaby@kernel.org>, kasan-dev@googlegroups.com,
-        linux-mm@kvack.org, linux-kernel <linux-kernel@vger.kernel.org>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@redhat.com>, dm-devel@redhat.com,
+References: <20210202221557.2039173-1-kpsingh@kernel.org> <20210202221557.2039173-2-kpsingh@kernel.org>
+ <CAEf4BzZtG2WtVcjXP24J9TRJ4=gQE02Tb2fXQ4Tiaf9=bADJBA@mail.gmail.com>
+In-Reply-To: <CAEf4BzZtG2WtVcjXP24J9TRJ4=gQE02Tb2fXQ4Tiaf9=bADJBA@mail.gmail.com>
+From:   KP Singh <kpsingh@kernel.org>
+Date:   Thu, 4 Feb 2021 19:59:25 +0100
+X-Gmail-Original-Message-ID: <CACYkzJ7F8ZdpyAbMrkPX5Y6g+MXVo4FY1s-AizThYcuHuZWhdg@mail.gmail.com>
+Message-ID: <CACYkzJ7F8ZdpyAbMrkPX5Y6g+MXVo4FY1s-AizThYcuHuZWhdg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 1/2] bpf: Helper script for running BPF
+ presubmit tests
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Jiri Olsa <jolsa@redhat.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Robert Richter <rric@kernel.org>,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Linux Kernel Network Developers <netdev@vger.kernel.org>,
-        bpf@vger.kernel.org
+        Andrii Nakryiko <andrii@kernel.org>,
+        Florent Revest <revest@chromium.org>,
+        Brendan Jackman <jackmanb@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Feb 3, 2021 at 7:10 PM Josh Poimboeuf <jpoimboe@redhat.com> wrote:
+On Thu, Feb 4, 2021 at 5:52 AM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Tue, Feb 2, 2021 at 2:16 PM KP Singh <kpsingh@kernel.org> wrote:
+> >
+> > The script runs the BPF selftests locally on the same kernel image
+> > as they would run post submit in the BPF continuous integration
+> > framework.
+> >
+> > The goal of the script is to allow contributors to run selftests locally
+> > in the same environment to check if their changes would end up breaking
+> > the BPF CI and reduce the back-and-forth between the maintainers and the
+> > developers.
+> >
+> > Tested-by: Jiri Olsa <jolsa@redhat.com>
+> > Signed-off-by: KP Singh <kpsingh@kernel.org>
+> > ---
+>
+> I almost applied it :) But found two problems still, which ruins
+> experience in my environment, see below.
+>
+> Also, do you mind renaming the script (and updating the doc in patch
+> #2)to vmtest.sh for a shorter name without underscores?
 
-> This line gives a big clue:
->
->   [160676.608966][    C4] RIP: 0010:0xffffffffc17d814c
->
-> That address, without a function name, most likely means that it was
-> running in some generated code (mostly likely BPF) when it got
-> interrupted.
+Sure, I like vmtest.sh better too.
 
-We do have eBPF/XDP in our environment.
+>
+> First problem is that it still doesn't propagate exit codes properly.
+> Try ./run_in_vm.sh -- false, followed by echo $? It should print 1,
+> but currently it prints zero.
 
-> Right now, the ORC unwinder tries to fall back to frame pointers when it
-> encounters generated code:
->
->         orc = orc_find(state->signal ? state->ip : state->ip - 1);
->         if (!orc)
->                 /*
->                  * As a fallback, try to assume this code uses a frame pointer.
->                  * This is useful for generated code, like BPF, which ORC
->                  * doesn't know about.  This is just a guess, so the rest of
->                  * the unwind is no longer considered reliable.
->                  */
->                 orc = &orc_fp_entry;
->                 state->error = true;
->         }
->
-> Because the ORC unwinder is guessing from that point onward, it's
-> possible for it to read the KASAN stack redzone, if the generated code
-> hasn't set up frame pointers.  So the best fix may be for the unwinder
-> to just always bypass KASAN when reading the stack.
->
-> The unwinder has a mechanism for detecting and warning about
-> out-of-bounds, and KASAN is short-circuiting that.
->
-> This should hopefully get rid of *all* the KASAN unwinder warnings, both
-> crypto and networking.
+So propagating the error from the script that ran in the VM would I
+think be a little
+tricky. This is just the error from the wrapper script.
 
-It definitely worked on my dm-crypt case, and I've tried it without
-your previous AVX related patch. I will apply it to our tree and
-deploy to the staging KASAN environment to see how it fares with
-respect to networking stacks. Feel free to ping me if I don't get back
-to you with the results on Monday.
+I can take a stab at it in a later patch (hope that's okay for now) as it's
+not trivial [at least in my head] as we might have to save the status in a file,
+copy the file back to the host and then use that status code instead or
+do something socket / SSH.
 
-Thanks for looking into this!
+>
+> >  tools/testing/selftests/bpf/run_in_vm.sh | 368 +++++++++++++++++++++++
+> >  1 file changed, 368 insertions(+)
+> >  create mode 100755 tools/testing/selftests/bpf/run_in_vm.sh
+> >
+>
+> [...]
+>
+> > +
+> > +update_kconfig()
+> > +{
+> > +       local kconfig_file="$1"
+> > +       local update_command="curl -sLf ${KCONFIG_URL} -o ${kconfig_file}"
+> > +       # Github does not return the "last-modified" header when retrieving the
+> > +       # raw contents of the file. Use the API call to get the last-modified
+> > +       # time of the kernel config and only update the config if it has been
+> > +       # updated after the previously cached config was created. This avoids
+> > +       # unnecessarily compiling the kernel and selftests.
+> > +       if [[ -f "${kconfig_file}" ]]; then
+> > +               local last_modified_date="$(curl -sL -D - "${KCONFIG_API_URL}" -o /dev/null | \
+> > +                       grep "last-modified" | awk -F ': ' '{print $2}')"
+> > +               local remote_modified_timestamp="$(date -d "${last_modified_date}" +"%s")"
+> > +               local local_creation_timestamp="$(-c %W "${kconfig_file}")"
+> > +
+>
+> %W breaks the entire experience for me. stat -c %W returns 0 in my
+> environment, don't know why. But it's also not clear why %W (file
+> creation time) was used instead of %Y (file modification time)? When
+> we overwrite latest.config, it will get updated modification time, but
+> old creation time, so this whole idea with %W seems wrong?
+>
+> So, do you mind switching to local_modification_timestamp with %Y? I
+> checked locally, it finally allowed to skip rebuilding both the kernel
+> and selftests.
+
+Sure, I can switch to %Y. Both seem to work for me.
+
+>
+> > +               if [[ "${remote_modified_timestamp}" -gt "${local_creation_timestamp}" ]]; then
+> > +                       ${update_command}
+> > +               fi
+> > +       else
+> > +               ${update_command}
+> > +       fi
+> > +}
+> > +
+>
+> [...]
