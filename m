@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A206C433E6
-	for <bpf@archiver.kernel.org>; Thu,  4 Feb 2021 23:49:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 111D7C433DB
+	for <bpf@archiver.kernel.org>; Thu,  4 Feb 2021 23:49:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 42A0E64FB0
+	by mail.kernel.org (Postfix) with ESMTP id CAB4564FB1
 	for <bpf@archiver.kernel.org>; Thu,  4 Feb 2021 23:49:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231231AbhBDXtV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S231213AbhBDXtV (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Thu, 4 Feb 2021 18:49:21 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:35870 "EHLO
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:16700 "EHLO
         mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231213AbhBDXtU (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 4 Feb 2021 18:49:20 -0500
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 114NjwSm032498
-        for <bpf@vger.kernel.org>; Thu, 4 Feb 2021 15:48:39 -0800
+        by vger.kernel.org with ESMTP id S231254AbhBDXtV (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 4 Feb 2021 18:49:21 -0500
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 114NkcrM017987
+        for <bpf@vger.kernel.org>; Thu, 4 Feb 2021 15:48:40 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=DlcxHxCSY+yMmXFPuzhHpZQ76SorlJCUd/oaO9ZoDb8=;
- b=QypkuC3AANYPbBb37I5tdP1xQl0eun+8Q5ANeW6hKUjP0+gYrnoJx7SOiRD65Y2QYIaX
- FRAIfpSOB/9Dvmm5f9Fs1yt9fx2+lU7cpwjv/dop4D7xATc85mxf23/Ix5gItVfp+8fa
- eSP9Ij545B+q8oGAgYG4L/i+nmanTYTqBOU= 
+ bh=QCXkLSG8z5I0Tomm56d8WLLIY1UmhzvgbAfaeyBYBxo=;
+ b=c3j081RlbgOQZiII8vEEOYpgunmSvcCtByqN1IcfQZCZapve/cs5DxnzA5PXaAtAUnw1
+ 0s6f34Rkd5k1qKX8q7eU6+YeSgMvSocV3OT2gCJ6r+dGy6Nuu+LwLwzoRXMregL+TWvB
+ PmcomagkIsCwOA+NfGNtNFyjtCjtr1RmKbs= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 36gqfkh5me-1
+        by mx0a-00082601.pphosted.com with ESMTP id 36fcrbe2ny-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 04 Feb 2021 15:48:39 -0800
-Received: from intmgw001.05.ash9.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 04 Feb 2021 15:48:40 -0800
+Received: from intmgw001.38.frc1.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 4 Feb 2021 15:48:38 -0800
+ 15.1.1979.3; Thu, 4 Feb 2021 15:48:39 -0800
 Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id CC5D83704E75; Thu,  4 Feb 2021 15:48:36 -0800 (PST)
+        id 20C233704E75; Thu,  4 Feb 2021 15:48:32 -0800 (PST)
 From:   Yonghong Song <yhs@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
         Cong Wang <xiyou.wangcong@gmail.com>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 8/8] selftests/bpf: add arraymap test for bpf_for_each_map_elem() helper
-Date:   Thu, 4 Feb 2021 15:48:36 -0800
-Message-ID: <20210204234836.1629791-1-yhs@fb.com>
+Subject: [PATCH bpf-next 5/8] libbpf: support local function pointer relocation
+Date:   Thu, 4 Feb 2021 15:48:32 -0800
+Message-ID: <20210204234832.1629393-1-yhs@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20210204234827.1628857-1-yhs@fb.com>
 References: <20210204234827.1628857-1-yhs@fb.com>
@@ -56,187 +56,118 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.737
  definitions=2021-02-04_13:2021-02-04,2021-02-04 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
- lowpriorityscore=0 malwarescore=0 bulkscore=0 phishscore=0 spamscore=0
- clxscore=1015 mlxscore=0 mlxlogscore=919 adultscore=0 priorityscore=1501
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ impostorscore=0 malwarescore=0 phishscore=0 mlxlogscore=994 clxscore=1015
+ bulkscore=0 suspectscore=0 priorityscore=1501 spamscore=0 mlxscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2102040144
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-A test is added for arraymap and percpu arraymap. The test also
-exercises the early return for the helper which does not
-traverse all elements.
-    $ ./test_progs -n 44
-    #44/1 hash_map:OK
-    #44/2 array_map:OK
-    #44 for_each:OK
-    Summary: 1/2 PASSED, 0 SKIPPED, 0 FAILED
+A new relocation RELO_LOCAL_FUNC is added to capture
+local (static) function pointers loaded with ld_imm64
+insns. Such ld_imm64 insns are marked with
+BPF_PSEUDO_FUNC and will be passed to kernel so
+kernel can replace them with proper actual jited
+func addresses.
 
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- .../selftests/bpf/prog_tests/for_each.c       | 54 ++++++++++++++
- .../bpf/progs/for_each_array_map_elem.c       | 71 +++++++++++++++++++
- 2 files changed, 125 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/for_each_array_map_=
-elem.c
+ tools/lib/bpf/libbpf.c | 33 ++++++++++++++++++++++++++++++---
+ 1 file changed, 30 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/for_each.c b/tools/te=
-sting/selftests/bpf/prog_tests/for_each.c
-index 7a399fbc89a4..58074212875b 100644
---- a/tools/testing/selftests/bpf/prog_tests/for_each.c
-+++ b/tools/testing/selftests/bpf/prog_tests/for_each.c
-@@ -2,6 +2,7 @@
- /* Copyright (c) 2021 Facebook */
- #include <test_progs.h>
- #include "for_each_hash_map_elem.skel.h"
-+#include "for_each_array_map_elem.skel.h"
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 2abbc3800568..a5146c9e3e06 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -188,6 +188,7 @@ enum reloc_type {
+ 	RELO_CALL,
+ 	RELO_DATA,
+ 	RELO_EXTERN,
++	RELO_LOCAL_FUNC,
+ };
 =20
- static int duration;
-=20
-@@ -84,8 +85,61 @@ static void test_hash_map(void)
- 	for_each_hash_map_elem__destroy(skel);
+ struct reloc_desc {
+@@ -574,6 +575,12 @@ static bool insn_is_subprog_call(const struct bpf_in=
+sn *insn)
+ 	       insn->off =3D=3D 0;
  }
 =20
-+static void test_array_map(void)
++static bool insn_is_pseudo_func(const struct bpf_insn *insn)
 +{
-+	int i, arraymap_fd, percpu_map_fd, err;
-+	struct for_each_array_map_elem *skel;
-+	__u32 key, num_cpus, max_entries;
-+	__u64 *percpu_valbuf =3D NULL;
-+	__u64 val, expected_total;
++	return insn->code =3D=3D (BPF_LD | BPF_IMM | BPF_DW) &&
++	       insn->src_reg =3D=3D BPF_PSEUDO_FUNC;
++}
 +
-+	skel =3D for_each_array_map_elem__open_and_load();
-+	if (CHECK(!skel, "for_each_array_map_elem__open_and_load",
-+		  "skeleton open_and_load failed\n"))
-+		return;
-+
-+	arraymap_fd =3D bpf_map__fd(skel->maps.arraymap);
-+	expected_total =3D 0;
-+	max_entries =3D bpf_map__max_entries(skel->maps.arraymap);
-+	for (i =3D 0; i < max_entries; i++) {
-+		key =3D i;
-+		val =3D i + 1;
-+		/* skip the last iteration for expected total */
-+		if (i !=3D max_entries - 1)
-+			expected_total +=3D val;
-+		err =3D bpf_map_update_elem(arraymap_fd, &key, &val, BPF_ANY);
-+		if (CHECK(err, "map_update", "map_update failed\n"))
-+			goto out;
+ static int
+ bpf_object__init_prog(struct bpf_object *obj, struct bpf_program *prog,
+ 		      const char *name, size_t sec_idx, const char *sec_name,
+@@ -3395,6 +3402,16 @@ static int bpf_program__record_reloc(struct bpf_pr=
+ogram *prog,
+ 		return 0;
+ 	}
+=20
++	if (insn->code =3D=3D (BPF_LD | BPF_IMM | BPF_DW) &&
++	    GELF_ST_BIND(sym->st_info) =3D=3D STB_LOCAL &&
++	    GELF_ST_TYPE(sym->st_info) =3D=3D STT_SECTION &&
++	    shdr_idx =3D=3D obj->efile.text_shndx) {
++		reloc_desc->type =3D RELO_LOCAL_FUNC;
++		reloc_desc->insn_idx =3D insn_idx;
++		reloc_desc->sym_off =3D sym->st_value;
++		return 0;
 +	}
 +
-+	num_cpus =3D bpf_num_possible_cpus();
-+        percpu_map_fd =3D bpf_map__fd(skel->maps.percpu_map);
-+        percpu_valbuf =3D malloc(sizeof(__u64) * num_cpus);
-+        if (CHECK_FAIL(!percpu_valbuf))
-+                goto out;
-+
-+	key =3D 0;
-+        for (i =3D 0; i < num_cpus; i++)
-+                percpu_valbuf[i] =3D i + 1;
-+	err =3D bpf_map_update_elem(percpu_map_fd, &key, percpu_valbuf, BPF_ANY=
-);
-+	if (CHECK(err, "percpu_map_update", "map_update failed\n"))
-+		goto out;
-+
-+	do_dummy_read(skel->progs.dump_task);
-+
-+	ASSERT_EQ(skel->bss->called, 1, "called");
-+	ASSERT_EQ(skel->bss->arraymap_output, expected_total, "array_output");
-+	ASSERT_EQ(skel->bss->cpu + 1, skel->bss->percpu_val, "percpu_val");
-+
-+out:
-+	free(percpu_valbuf);
-+	for_each_array_map_elem__destroy(skel);
-+}
-+
- void test_for_each(void)
- {
- 	if (test__start_subtest("hash_map"))
- 		test_hash_map();
-+	if (test__start_subtest("array_map"))
-+		test_array_map();
- }
-diff --git a/tools/testing/selftests/bpf/progs/for_each_array_map_elem.c =
-b/tools/testing/selftests/bpf/progs/for_each_array_map_elem.c
-new file mode 100644
-index 000000000000..f1f14dcd6e68
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/for_each_array_map_elem.c
-@@ -0,0 +1,71 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2021 Facebook */
-+#include "bpf_iter.h"
-+#include <bpf/bpf_helpers.h>
-+
-+char _license[] SEC("license") =3D "GPL";
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 3);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} arraymap SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} percpu_map SEC(".maps");
-+
-+struct callback_ctx {
-+	int output;
-+};
-+
-+static __u64
-+check_array_elem(struct bpf_map *map, __u32 *key, __u64 *val,
-+		 struct callback_ctx *data)
-+{
-+	data->output +=3D *val;
-+	if (*key =3D=3D 1)
-+		return 1; /* stop the iteration */
-+	return 0;
-+}
-+
-+__u32 cpu =3D 0;
-+__u64 percpu_val =3D 0;
-+
-+static __u64
-+check_percpu_elem(struct bpf_map *map, __u32 *key, __u64 *val,
-+		  struct callback_ctx *data)
-+{
-+	cpu =3D bpf_get_smp_processor_id();
-+	percpu_val =3D *val;
-+	return 0;
-+}
-+
-+u32 called =3D 0;
-+u32 arraymap_output =3D 0;
-+
-+SEC("iter/task")
-+int dump_task(struct bpf_iter__task *ctx)
-+{
-+	struct seq_file *seq =3D  ctx->meta->seq;
-+	struct task_struct *task =3D ctx->task;
-+	struct callback_ctx data;
-+
-+	/* only call once */
-+	if (called > 0)
-+		return 0;
-+
-+	called++;
-+
-+	data.output =3D 0;
-+	bpf_for_each_map_elem(&arraymap, check_array_elem, &data, 0);
-+	arraymap_output =3D data.output;
-+
-+	bpf_for_each_map_elem(&percpu_map, check_percpu_elem, 0, 0);
-+
-+	return 0;
-+}
+ 	if (insn->code !=3D (BPF_LD | BPF_IMM | BPF_DW)) {
+ 		pr_warn("prog '%s': invalid relo against '%s' for insns[%d].code 0x%x\=
+n",
+ 			prog->name, sym_name, insn_idx, insn->code);
+@@ -6172,6 +6189,9 @@ bpf_object__relocate_data(struct bpf_object *obj, s=
+truct bpf_program *prog)
+ 			}
+ 			relo->processed =3D true;
+ 			break;
++		case RELO_LOCAL_FUNC:
++			insn[0].src_reg =3D BPF_PSEUDO_FUNC;
++			/* fallthrough */
+ 		case RELO_CALL:
+ 			/* will be handled as a follow up pass */
+ 			break;
+@@ -6358,11 +6378,11 @@ bpf_object__reloc_code(struct bpf_object *obj, st=
+ruct bpf_program *main_prog,
+=20
+ 	for (insn_idx =3D 0; insn_idx < prog->sec_insn_cnt; insn_idx++) {
+ 		insn =3D &main_prog->insns[prog->sub_insn_off + insn_idx];
+-		if (!insn_is_subprog_call(insn))
++		if (!insn_is_subprog_call(insn) && !insn_is_pseudo_func(insn))
+ 			continue;
+=20
+ 		relo =3D find_prog_insn_relo(prog, insn_idx);
+-		if (relo && relo->type !=3D RELO_CALL) {
++		if (relo && relo->type !=3D RELO_CALL && relo->type !=3D RELO_LOCAL_FU=
+NC) {
+ 			pr_warn("prog '%s': unexpected relo for insn #%zu, type %d\n",
+ 				prog->name, insn_idx, relo->type);
+ 			return -LIBBPF_ERRNO__RELOC;
+@@ -6374,8 +6394,15 @@ bpf_object__reloc_code(struct bpf_object *obj, str=
+uct bpf_program *main_prog,
+ 			 * call always has imm =3D -1, but for static functions
+ 			 * relocation is against STT_SECTION and insn->imm
+ 			 * points to a start of a static function
++			 *
++			 * for local func relocation, the imm field encodes
++			 * the byte offset in the corresponding section.
+ 			 */
+-			sub_insn_idx =3D relo->sym_off / BPF_INSN_SZ + insn->imm + 1;
++			if (relo->type =3D=3D RELO_CALL)
++				sub_insn_idx =3D relo->sym_off / BPF_INSN_SZ + insn->imm + 1;
++			else
++				sub_insn_idx =3D relo->sym_off / BPF_INSN_SZ +
++					       insn->imm / BPF_INSN_SZ + 1;
+ 		} else {
+ 			/* if subprogram call is to a static function within
+ 			 * the same ELF section, there won't be any relocation
 --=20
 2.24.1
 
