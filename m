@@ -2,95 +2,159 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7673BC433DB
-	for <bpf@archiver.kernel.org>; Fri,  5 Feb 2021 01:48:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A968EC433DB
+	for <bpf@archiver.kernel.org>; Fri,  5 Feb 2021 02:51:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 322C964FB1
-	for <bpf@archiver.kernel.org>; Fri,  5 Feb 2021 01:48:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7080664FB5
+	for <bpf@archiver.kernel.org>; Fri,  5 Feb 2021 02:51:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232693AbhBEBrw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 4 Feb 2021 20:47:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59290 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232678AbhBEBrt (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 4 Feb 2021 20:47:49 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE79C0613D6;
-        Thu,  4 Feb 2021 17:47:08 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id q12so7520226lfo.12;
-        Thu, 04 Feb 2021 17:47:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HFUlgfa0yv/MLmEQsXGfPFb3G6FL4A5NprSd5CvPpMk=;
-        b=r0yzv6pS19Vm35q0pMRBx8aAia/+6IDUR1k5NL6AYrf79UDYfw6vMbNRN5ecjSlKmx
-         B6eo54PGuK7/ON0tEVH3reuY0J7Cr5FpKy46tt8coqUGsldoRWyUb4ReUJJjVmJsocPR
-         zkDlzn5a/0VknhuBCwp/GGgkzGNaRoSlzXfLCHFQ+PNs7QdNhGp8iN7JgiP6myAZxJ/9
-         kf8gvqmM3KqpYnAsAUmRPWviV/eaOgNinIsseJtJbmx6ucxLiu8TDWdYX++yoh7KyCvN
-         I4l0yiOJfnll0dJMyRNN9OZpDtXqVm6NjvzBfMy+fkoKnlIuIwxKZ23wmg6z05CvAf3h
-         rc6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HFUlgfa0yv/MLmEQsXGfPFb3G6FL4A5NprSd5CvPpMk=;
-        b=AOcw7Dcqq3TaVRoXwuUFyDE7TcmZ1GMPils3GQrRu0RcSPYrz0WOg8xO5qU/Ggky4p
-         8TRe6p+AGktWgS93pLHoEiFFQk+atTIY+44D7QRX9gKVtNh0RtsK1+wU56sHVDGqQ44o
-         UQtaozZfRDMn3Iyp0CJfta9ue/3plu4C13yyzjPlkBOSt6QbzfBBPa81mQagxOktUn1z
-         UaoJ/DF9lKCr0iY8tQvXUDxCBo7fkM1AAdZoIYcTwllLe0E8PtrcT97FmShQT3fQ4E48
-         QCPGMOOBYOCWEIMmai01ipCGxmXmLZFAVVFN26LSPnR/TeFVhgZZ8k1WTvaBx/PNZcU6
-         KPMw==
-X-Gm-Message-State: AOAM53331V6JTF6KgeVVzfdwcypkRxeT/dIVTdreAH14zwCV/JRlPZy8
-        pNcdnsId7pAKiGk6+YoZ6oZdnhNR1aS+7WIm9Kw=
-X-Google-Smtp-Source: ABdhPJzN6nDTfTI5N6Ze/d63acaPTf5IvURc4EmTRMRKa0cicEA0x9aDrF8Vv70X+2ElBIPK216DaYBJuex8iam1x9A=
-X-Received: by 2002:a19:787:: with SMTP id 129mr1276232lfh.540.1612489627417;
- Thu, 04 Feb 2021 17:47:07 -0800 (PST)
+        id S229562AbhBECui (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 4 Feb 2021 21:50:38 -0500
+Received: from szxga04-in.huawei.com ([45.249.212.190]:12129 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229508AbhBECui (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 4 Feb 2021 21:50:38 -0500
+Received: from DGGEMS401-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4DX0Gq0ZSZz164Hm;
+        Fri,  5 Feb 2021 10:48:35 +0800 (CST)
+Received: from huawei.com (10.175.124.27) by DGGEMS401-HUB.china.huawei.com
+ (10.3.19.201) with Microsoft SMTP Server id 14.3.498.0; Fri, 5 Feb 2021
+ 10:49:45 +0800
+From:   wanghongzhe <wanghongzhe@huawei.com>
+To:     <keescook@chromium.org>, <luto@amacapital.net>
+CC:     <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
+        <daniel@iogearbox.net>, <john.fastabend@gmail.com>, <kafai@fb.com>,
+        <kpsingh@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <songliubraving@fb.com>,
+        <wad@chromium.org>, <wanghongzhe@huawei.com>, <yhs@fb.com>
+Subject: [PATCH v2] seccomp: Improve performace by optimizing rmb()
+Date:   Fri, 5 Feb 2021 11:34:09 +0800
+Message-ID: <1612496049-32507-1-git-send-email-wanghongzhe@huawei.com>
+X-Mailer: git-send-email 1.7.12.4
 MIME-Version: 1.0
-References: <20210205015219.2939361-1-xujia39@huawei.com>
-In-Reply-To: <20210205015219.2939361-1-xujia39@huawei.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 4 Feb 2021 17:46:55 -0800
-Message-ID: <CAADnVQL5NBY2E2iGCYZAeGN5gtcK0uyM1UpDNaZ28Ukrrb8tGA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: clean up for 'const static' in bpf_lsm.c
-To:     Xu Jia <xujia39@huawei.com>
-Cc:     bpf <bpf@vger.kernel.org>, KP Singh <kpsingh@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Florent Revest <revest@chromium.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Originating-IP: [10.175.124.27]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Feb 4, 2021 at 5:40 PM Xu Jia <xujia39@huawei.com> wrote:
->
-> Prefer 'static const' over 'const static' here
->
-> Signed-off-by: Xu Jia <xujia39@huawei.com>
-> ---
->  kernel/bpf/bpf_lsm.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
-> index 1622a44d1617..75b1c678d558 100644
-> --- a/kernel/bpf/bpf_lsm.c
-> +++ b/kernel/bpf/bpf_lsm.c
-> @@ -67,7 +67,7 @@ BPF_CALL_2(bpf_bprm_opts_set, struct linux_binprm *, bprm, u64, flags)
->
->  BTF_ID_LIST_SINGLE(bpf_bprm_opts_set_btf_ids, struct, linux_binprm)
->
-> -const static struct bpf_func_proto bpf_bprm_opts_set_proto = {
-> +static const struct bpf_func_proto bpf_bprm_opts_set_proto = {
+According to kees's suggest, we started with the patch that just replaces
+rmb() with smp_rmb() and did a performace test with UnixBench. The results 
+showed the overhead about 2.53% in rmb() test compared to the smp_rmb() 
+one, in a x86-64 kernel with CONFIG_SMP enabled running inside a qemu-kvm 
+vm. The test is a "syscall" testcase in UnixBench, which executes 5 
+syscalls in a loop during a certain timeout (100 second in our test) and 
+counts the total number of executions of this 5-syscall sequence. We set a 
+seccomp filter with all allow rule for all used syscalls in this test 
+(which will go bitmap path) to make sure the rmb() will be executed. The 
+details for the test:
 
-I totally agree that it's more canonical this way, but I don't think
-such git history noise
-is worth it.
+with rmb():
+/txm # ./syscall_allow_min 100
+COUNT|35861159|1|lps
+/txm # ./syscall_allow_min 100
+COUNT|35545501|1|lps
+/txm # ./syscall_allow_min 100
+COUNT|35664495|1|lps
+
+with smp_rmb():
+/txm # ./syscall_allow_min 100
+COUNT|36552771|1|lps
+/txm # ./syscall_allow_min 100
+COUNT|36491247|1|lps
+/txm # ./syscall_allow_min 100
+COUNT|36504746|1|lps
+
+For a x86-64 kernel with CONFIG_SMP enabled, the smp_rmb() is just a 
+compiler barrier() which have no impact in runtime, while rmb() is a 
+lfence which will prevent all memory access operations (not just load 
+according the recently claim by Intel) behind itself. We can also figure 
+it out in disassembly:
+
+with rmb():
+0000000000001430 <__seccomp_filter>:
+    1430:   41 57                   push   %r15
+    1432:   41 56                   push   %r14
+    1434:   41 55                   push   %r13
+    1436:   41 54                   push   %r12
+    1438:   55                      push   %rbp
+    1439:   53                      push   %rbx
+    143a:   48 81 ec 90 00 00 00    sub    $0x90,%rsp
+    1441:   89 7c 24 10             mov    %edi,0x10(%rsp)
+    1445:   89 54 24 14             mov    %edx,0x14(%rsp)
+    1449:   65 48 8b 04 25 28 00    mov    %gs:0x28,%rax
+    1450:   00 00
+    1452:   48 89 84 24 88 00 00    mov    %rax,0x88(%rsp)
+    1459:   00
+    145a:   31 c0                   xor    %eax,%eax
+*   145c:   0f ae e8                lfence
+    145f:   48 85 f6                test   %rsi,%rsi
+    1462:   49 89 f4                mov    %rsi,%r12
+    1465:   0f 84 42 03 00 00       je     17ad <__seccomp_filter+0x37d>
+    146b:   65 48 8b 04 25 00 00    mov    %gs:0x0,%rax
+    1472:   00 00
+    1474:   48 8b 98 80 07 00 00    mov    0x780(%rax),%rbx
+    147b:   48 85 db                test   %rbx,%rbx
+
+with smp_rmb();
+0000000000001430 <__seccomp_filter>:
+    1430:   41 57                   push   %r15
+    1432:   41 56                   push   %r14
+    1434:   41 55                   push   %r13
+    1436:   41 54                   push   %r12
+    1438:   55                      push   %rbp
+    1439:   53                      push   %rbx
+    143a:   48 81 ec 90 00 00 00    sub    $0x90,%rsp
+    1441:   89 7c 24 10             mov    %edi,0x10(%rsp)
+    1445:   89 54 24 14             mov    %edx,0x14(%rsp)
+    1449:   65 48 8b 04 25 28 00    mov    %gs:0x28,%rax
+    1450:   00 00
+    1452:   48 89 84 24 88 00 00    mov    %rax,0x88(%rsp)
+    1459:   00
+    145a:   31 c0                   xor    %eax,%eax
+    145c:   48 85 f6                test   %rsi,%rsi
+    145f:   49 89 f4                mov    %rsi,%r12
+    1462:   0f 84 42 03 00 00       je     17aa <__seccomp_filter+0x37a>
+    1468:   65 48 8b 04 25 00 00    mov    %gs:0x0,%rax
+    146f:   00 00
+    1471:   48 8b 98 80 07 00 00    mov    0x780(%rax),%rbx
+    1478:   48 85 db                test   %rbx,%rbx
+
+We will go further for the next optimize patch, if you guys thinks this
+smp_rmb() refactor is appropriate.
+
+v1 -> v2:
+ - only replace rmb() with smp_rmb()
+ - provide the performance test number
+
+RFC -> v1:
+ - replace rmb() with smp_rmb()
+ - move the smp_rmb() logic to the middle between TIF_SECCOMP and mode
+
+Signed-off-by: wanghongzhe <wanghongzhe@huawei.com>
+---
+ kernel/seccomp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/seccomp.c b/kernel/seccomp.c
+index 952dc1c90229..8505b438a590 100644
+--- a/kernel/seccomp.c
++++ b/kernel/seccomp.c
+@@ -1164,7 +1164,7 @@ static int __seccomp_filter(int this_syscall, const struct seccomp_data *sd,
+ 	 * Make sure that any changes to mode from another thread have
+ 	 * been seen after SYSCALL_WORK_SECCOMP was seen.
+ 	 */
+-	rmb();
++	smp_rmb();
+ 
+ 	if (!sd) {
+ 		populate_seccomp_data(&sd_local);
+-- 
+2.19.1
+
