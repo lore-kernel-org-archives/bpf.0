@@ -2,48 +2,65 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 17353C433E0
-	for <bpf@archiver.kernel.org>; Sat,  6 Feb 2021 03:02:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 754CFC433DB
+	for <bpf@archiver.kernel.org>; Sat,  6 Feb 2021 03:02:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DDAE464F92
-	for <bpf@archiver.kernel.org>; Sat,  6 Feb 2021 03:02:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 34D3964F95
+	for <bpf@archiver.kernel.org>; Sat,  6 Feb 2021 03:02:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbhBFDBn (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 5 Feb 2021 22:01:43 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:53261 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231433AbhBFCr5 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 5 Feb 2021 21:47:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1612579591;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AYGGDA96ECWqQKM+EqU3BIR3anY2ge6JyymK2JmAKVg=;
-        b=gTlLe4wxsef9J5ZsO4tfhM62MCoSiwIJ5cxeFk0Rg6SQi8nNbEfWvsrMXZBgJ+5dzC1dqr
-        gBiSboR6iR39VCQoI8PgwMwYpX++2C5LuTcp0a4ohr4TgTn76C7klLXBDk/mKt7lhkKDC/
-        a1aWxmaQmVYCTx8AmFCNCAAjOtQmpbI=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-309-b4VtmItPNTCb09moGMDoJA-1; Fri, 05 Feb 2021 17:33:00 -0500
-X-MC-Unique: b4VtmItPNTCb09moGMDoJA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id AE7F08030B7;
-        Fri,  5 Feb 2021 22:32:57 +0000 (UTC)
-Received: from krava (unknown [10.40.195.59])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 6E42560C9C;
-        Fri,  5 Feb 2021 22:32:54 +0000 (UTC)
-Date:   Fri, 5 Feb 2021 23:32:53 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        id S230319AbhBFDB5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 5 Feb 2021 22:01:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41532 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232060AbhBFCuv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 5 Feb 2021 21:50:51 -0500
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E2BC0698C6;
+        Fri,  5 Feb 2021 14:25:16 -0800 (PST)
+Received: by mail-yb1-xb2c.google.com with SMTP id c3so8291979ybi.3;
+        Fri, 05 Feb 2021 14:25:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hYUg3hUYLhRgtIvFTbD2VmRbiO8E/oS3HEcH+2mdLys=;
+        b=D/3Szo3U0J1VcnkFYVHbqwjGp20STlNB4R1cBtjGpJ3Pe/kU/JgKGkAYcdQFg1oyeH
+         EFwqKYd0FfjGc/aJEK7kezMmBkJOQFoyMbP1X4O7qqFBnTnJB/pv6oWNiehS1ycSK8ZS
+         fO77QvpCHiX42uE03qFBinL40qgQPWhz+r//HGZaSOesmEM3z4UKLJWxQk+Uw9Ow1wLf
+         IOPeAdTfZZi0ohvdCHS4Wo0m9YKvAtkxhytEDe0ZOguQh4S2Lol9v3YgrbyFbTu9Zca0
+         zHwsn7Rmhm660asec3AV/x5tBA56CSt/j/w5FdmBjOYpqQhXf8JLfYG5zgNxnx/DYAMf
+         1PmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hYUg3hUYLhRgtIvFTbD2VmRbiO8E/oS3HEcH+2mdLys=;
+        b=fbT7IFOTyBDNwxFvNYNEqawfSpazV4xkWGP6WrCCnlxadMPOFP5SVPP+ZPRyG/NLI1
+         E2viHDSDXeDapZwgIjrTteeIiJIcDoyzsmsE/TPnwghvJu2Jc/TnpwzGSIq2pqDo44v9
+         KGZq7/2lGZSRG6dzVERnrFFJO4yGg0ZYEsEwvehCNcemDFUPnf7YqBZ8c2u0mJTQLh6d
+         DmAJeFeQ3PwZUO5BHqCsdWrni6r3t2rQF+LFUIbn099g/l4EvCEj+pz+APjhVD4c+Q1c
+         19ZEGQxiX8ZwyMofvFexkuy/8MU7KsNbpSLeqDrzPnvDX+jItmbfcvODTAI1tk9DgDZe
+         stIA==
+X-Gm-Message-State: AOAM533m3bSw3vMkPWRBU/i+yzHiEBxTItDEwDjlXOJy1useiMtmJHCI
+        QAi1OwKCh8LMYZX3RXCHUptxgsTtN9y/6OyFczk=
+X-Google-Smtp-Source: ABdhPJxPvMF+GPOj/8IjoyGkasonxz/I6RMZw8DMRUyvUJ14OqNyfV/+HbUj0a2/lwXZGicPrAZWNrbkKKSo7ekzHN0=
+X-Received: by 2002:a5b:3c4:: with SMTP id t4mr8617231ybp.510.1612563915723;
+ Fri, 05 Feb 2021 14:25:15 -0800 (PST)
+MIME-Version: 1.0
+References: <20210205124020.683286-1-jolsa@kernel.org> <20210205124020.683286-4-jolsa@kernel.org>
+In-Reply-To: <20210205124020.683286-4-jolsa@kernel.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 5 Feb 2021 14:25:04 -0800
+Message-ID: <CAEf4BzYPOmS9=cuF9BkUcWv1MNZ0OEyi-bT6KUwm60PxXivS2Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 3/4] tools/resolve_btfids: Set srctree variable unconditionally
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andriin@fb.com>,
         Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
@@ -54,63 +71,60 @@ Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Masahiro Yamada <masahiroy@kernel.org>,
         Michal Marek <michal.lkml@markovi.net>,
         Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Subject: Re: [PATCHv2 bpf-next 0/4] kbuild/resolve_btfids: Invoke
- resolve_btfids clean in root Makefile
-Message-ID: <YB3HlQRKBWKqlYZG@krava>
-References: <20210205124020.683286-1-jolsa@kernel.org>
- <CAEf4Bzao-9wNdHxGu1mMhSie78FyWno-RYJM6_Jay8s=hyUWJg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4Bzao-9wNdHxGu1mMhSie78FyWno-RYJM6_Jay8s=hyUWJg@mail.gmail.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Feb 05, 2021 at 02:27:08PM -0800, Andrii Nakryiko wrote:
-> On Fri, Feb 5, 2021 at 4:45 AM Jiri Olsa <jolsa@kernel.org> wrote:
-> >
-> > hi,
-> > resolve_btfids tool is used during the kernel build,
-> > so we should clean it on kernel's make clean.
-> >
-> > v2 changes:
-> >   - add Song's acks on patches 1 and 4 (others changed) [Song]
-> >   - add missing / [Andrii]
-> >   - change srctree variable initialization [Andrii]
-> >   - shifted ifdef for clean target [Andrii]
-> >
-> > thanks,
-> > jirka
-> >
-> >
-> 
-> FYI, your patch #2 didn't make it into the mailing list (see [0]). So
-> maybe wait for a bit and if it doesn't arrive, re-submit?
-> 
->   [0] https://patchwork.kernel.org/user/todo/netdevbpf/?series=428711&delegate=121173&state=*
+On Fri, Feb 5, 2021 at 4:46 AM Jiri Olsa <jolsa@kernel.org> wrote:
+>
+> We want this clean to be called from tree's root Makefile,
+> which defines same srctree variable and that will screw
+> the make setup.
+>
+> We actually do not use srctree being passed from outside,
+> so we can solve this by setting current srctree value
+> directly.
+>
+> Also changing the way how srctree is initialized as suggested
+> by Andrri.
+>
+> Also root Makefile does not define the implicit RM variable,
+> so adding RM initialization.
+>
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> ---
 
-hum and lore shows just 1 and 4
-  https://lore.kernel.org/bpf/20210205124020.683286-1-jolsa@kernel.org/
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
 
-I'll check and resent later 
-
-thanks,
-jirka
-
-> 
-> > ---
-> > Jiri Olsa (4):
-> >       tools/resolve_btfids: Build libbpf and libsubcmd in separate directories
-> >       tools/resolve_btfids: Check objects before removing
-> >       tools/resolve_btfids: Set srctree variable unconditionally
-> >       kbuild: Add resolve_btfids clean to root clean target
-> >
-> >  Makefile                            |  7 ++++++-
-> >  tools/bpf/resolve_btfids/.gitignore |  2 --
-> >  tools/bpf/resolve_btfids/Makefile   | 44 ++++++++++++++++++++++----------------------
-> >  3 files changed, 28 insertions(+), 25 deletions(-)
-> >
-> 
-
+>  tools/bpf/resolve_btfids/Makefile | 7 ++-----
+>  1 file changed, 2 insertions(+), 5 deletions(-)
+>
+> diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
+> index be09ec4f03ff..bb9fa8de7e62 100644
+> --- a/tools/bpf/resolve_btfids/Makefile
+> +++ b/tools/bpf/resolve_btfids/Makefile
+> @@ -2,11 +2,7 @@
+>  include ../../scripts/Makefile.include
+>  include ../../scripts/Makefile.arch
+>
+> -ifeq ($(srctree),)
+> -srctree := $(patsubst %/,%,$(dir $(CURDIR)))
+> -srctree := $(patsubst %/,%,$(dir $(srctree)))
+> -srctree := $(patsubst %/,%,$(dir $(srctree)))
+> -endif
+> +srctree := $(abspath $(CURDIR)/../../../)
+>
+>  ifeq ($(V),1)
+>    Q =
+> @@ -22,6 +18,7 @@ AR       = $(HOSTAR)
+>  CC       = $(HOSTCC)
+>  LD       = $(HOSTLD)
+>  ARCH     = $(HOSTARCH)
+> +RM      ?= rm
+>
+>  OUTPUT ?= $(srctree)/tools/bpf/resolve_btfids/
+>
+> --
+> 2.26.2
+>
