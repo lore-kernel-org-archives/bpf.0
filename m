@@ -2,124 +2,111 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CD0F3C433E0
-	for <bpf@archiver.kernel.org>; Sat,  6 Feb 2021 02:49:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75C1EC433E0
+	for <bpf@archiver.kernel.org>; Sat,  6 Feb 2021 03:01:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9F35764F91
-	for <bpf@archiver.kernel.org>; Sat,  6 Feb 2021 02:49:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 41C7B64E3D
+	for <bpf@archiver.kernel.org>; Sat,  6 Feb 2021 03:01:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231557AbhBFCsN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 5 Feb 2021 21:48:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39814 "EHLO
+        id S229777AbhBFDBh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 5 Feb 2021 22:01:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231378AbhBFCm6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 5 Feb 2021 21:42:58 -0500
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A724C08EE23;
-        Fri,  5 Feb 2021 16:36:21 -0800 (PST)
-Received: by mail-qk1-x735.google.com with SMTP id d85so8822627qkg.5;
-        Fri, 05 Feb 2021 16:36:21 -0800 (PST)
+        with ESMTP id S230258AbhBFCrf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 5 Feb 2021 21:47:35 -0500
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A694DC0698D1;
+        Fri,  5 Feb 2021 14:27:19 -0800 (PST)
+Received: by mail-yb1-xb2c.google.com with SMTP id y4so8236892ybk.12;
+        Fri, 05 Feb 2021 14:27:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=soHf/mVkpp4EzKMqVWUbreRz7Dg6N9YiICzzPMnFLgM=;
-        b=Y9A7DrF+GRyVSqLlIWAqpZjRpK1BnR9AU2oy9l86xnICu0C06khdlyvebXTfsufVp3
-         qFSv0lMNhC1k5+7lThnQodAGRE763h5hO88FyePg4nrSXHNeiEfBumRk6AWZPimWkqkx
-         qpucA2uG8pS3xPePjOBfBdzdAh2BRp2r9/sjSEL4yFkSyvjsn8e1T9bGXEaW4RqBpFgW
-         6cak4g6ZOB0CZkxYIVnu68wmId3mTHWLJlx/4HDFfrhCcR4NwZDykcxtCAgmmHgWOix+
-         YTvstD48fvj7uMBiYjruR3sYmtxebP5PUMajHbfyZ8bhIIxnGmXnwwnxKYbXqNrCGHbg
-         YQnA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZF+kVH13+yhFtpWltQEZs61WOnOm+RDU6OENTzqgftM=;
+        b=FX3/yhSYZu2WlKBs037VWu5o38fnwMmwmslev82RnmoXC/UZqo9ACDdvZUW97Gtnvl
+         0B5V4D17NLpQk2wMrYcikSomF4TMY8UpJ2nNtAoqxFavUqUhA/6XBH4Frgg7gUngspo6
+         vvyVoMVsgU6Ei3gs40AlpaBeHMUnHphJ8rJRHAN2O+uj2dNQlkRbdNRNxjQ4S8DaOQ5E
+         gVQl8mNta+J0vxwWCbyuM4Hifbjqo4k4X3NILuewRsOdVKRhaggmTZzLxgLrKMgI8CJW
+         d1L/r7LX5RsH2t71y1Rz+XzqwBOiMN4C+wWAjCvSCFjauAkWYSyelIvu9kxaMAUN/tiE
+         CJ5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=soHf/mVkpp4EzKMqVWUbreRz7Dg6N9YiICzzPMnFLgM=;
-        b=jgczVR/sUodzDmuXZOWRE/ugDdYr3d6hc/IA7Rzp3BxksOOuYIWFmZ5K0G7D9zpYR+
-         nrUFIyqrlO7cz34+DKy9p9d3bv4JQG45UKjq/+X6DBok0QQQwWvxFhhEweIHqsFjzc7S
-         ymJ4YJqKaJsrlxSQmghrESG0rhemIiPSUtt2f8K7Qwp7tc39Ua6zIlQFwM+qVzcs6xuR
-         5lUDF4ZfebKMSP3a5EqfRqzS09zc4IGGbavsPQgTfjwoD3SBx5xYKGHABw2dw4VGd8E3
-         LR57T9JoNztEHVEUXEKSIZu9JIyjawEw2eO4bAeJKMovNx2NTTW1Zzjpg2N9z1scSDRZ
-         28GA==
-X-Gm-Message-State: AOAM530AJ7gADb9+udc1dqiZvHNxzCzd/rAf47bwdU++gr8lcgpFAdpa
-        MslHOq4YmNV1C9urm6v8Dis=
-X-Google-Smtp-Source: ABdhPJwGuyt+FQ9iasR9NXAGsXzScwo1mYEEWKSB1Fesweuwl/pT6uyUcJFKwh24uzoUC4vYfVxNxw==
-X-Received: by 2002:ae9:ed04:: with SMTP id c4mr6833524qkg.289.1612571780538;
-        Fri, 05 Feb 2021 16:36:20 -0800 (PST)
-Received: from Gentoo ([156.146.58.50])
-        by smtp.gmail.com with ESMTPSA id z23sm6931551qkb.13.2021.02.05.16.36.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Feb 2021 16:36:19 -0800 (PST)
-Date:   Sat, 6 Feb 2021 06:06:46 +0530
-From:   Bhaskar Chowdhury <unixbhaskar@gmail.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     pmladek@suse.com, sergey.senozhatsky@gmail.com,
-        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, rdunlap@infradead.org
-Subject: Re: [PATCH] lib:  Replace obscene word with a better one :)
-Message-ID: <YB3knt9yx4CQ5Q+g@Gentoo>
-Mail-Followup-To: Bhaskar Chowdhury <unixbhaskar@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>, pmladek@suse.com,
-        sergey.senozhatsky@gmail.com, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, rdunlap@infradead.org
-References: <20210205121543.1315285-1-unixbhaskar@gmail.com>
- <20210205145109.24498541@gandalf.local.home>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZF+kVH13+yhFtpWltQEZs61WOnOm+RDU6OENTzqgftM=;
+        b=b6SZwVGwtB/7LDM/aKntBlr/Fk0OQE3mdTSSqCdjxBZ6j9BCX9xQ4D/atdlt/vZ0Uc
+         uDCMicj9JMUtBpoE7QJX9oE3KfAE8ZfEJqem2bmerZpc5/cLYgEb+AAuR6hYVJkg5gYD
+         aJcOtEMyEKc5mNnneDZCfESJllqfzG4vRpy8iA4ilnownDzkcJWEizIMFqe7xcNt4tOw
+         7Gsf/dDPmltBIiK/yFlO/LAXuS6WpC+Uo8Niau2jqk58PoaFU2rX55u2AzcX1cVHe52D
+         vjtzyDLThI52nyOPfJYQiM4mSUipRsgC5PWlaOGj2Lb0GU2/S0u5PalBhbCUaVxTCZmQ
+         ibtQ==
+X-Gm-Message-State: AOAM532K4s+uFgEh56JD9givHOVFbyXGfGnUam4/5Fwn1dHsCYxNx/z7
+        K0xOvxrndABMSKELK/qOBBRZXyGYgvcbiIystE8=
+X-Google-Smtp-Source: ABdhPJzUq31FJeNv9UnC/OaU7XfN5zJ4gnklBIWPCabLBw0WdzDZ5wjzOiAS8Xcv2r5S/iv+s/2buOiAdnlYtfo59mI=
+X-Received: by 2002:a25:da4d:: with SMTP id n74mr9798106ybf.347.1612564039083;
+ Fri, 05 Feb 2021 14:27:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="UxWCXiFroMay8coY"
-Content-Disposition: inline
-In-Reply-To: <20210205145109.24498541@gandalf.local.home>
+References: <20210205124020.683286-1-jolsa@kernel.org>
+In-Reply-To: <20210205124020.683286-1-jolsa@kernel.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 5 Feb 2021 14:27:08 -0800
+Message-ID: <CAEf4Bzao-9wNdHxGu1mMhSie78FyWno-RYJM6_Jay8s=hyUWJg@mail.gmail.com>
+Subject: Re: [PATCHv2 bpf-next 0/4] kbuild/resolve_btfids: Invoke
+ resolve_btfids clean in root Makefile
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-
---UxWCXiFroMay8coY
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-
-On 14:51 Fri 05 Feb 2021, Steven Rostedt wrote:
->On Fri,  5 Feb 2021 17:45:43 +0530
->Bhaskar Chowdhury <unixbhaskar@gmail.com> wrote:
+On Fri, Feb 5, 2021 at 4:45 AM Jiri Olsa <jolsa@kernel.org> wrote:
 >
->> s/fucked/messed/
+> hi,
+> resolve_btfids tool is used during the kernel build,
+> so we should clean it on kernel's make clean.
 >
->Rules about obscene language is about new code coming into the kernel. We
->don't want to encourage people to do sweeping changes of existing code. It
->just causes unwanted churn, and adds noise to the git logs.
+> v2 changes:
+>   - add Song's acks on patches 1 and 4 (others changed) [Song]
+>   - add missing / [Andrii]
+>   - change srctree variable initialization [Andrii]
+>   - shifted ifdef for clean target [Andrii]
 >
->Sorry, NAK.
+> thanks,
+> jirka
 >
-You are spot on Steven.Thanks, man!
->-- Steve
+>
 
---UxWCXiFroMay8coY
-Content-Type: application/pgp-signature; name="signature.asc"
+FYI, your patch #2 didn't make it into the mailing list (see [0]). So
+maybe wait for a bit and if it doesn't arrive, re-submit?
 
------BEGIN PGP SIGNATURE-----
+  [0] https://patchwork.kernel.org/user/todo/netdevbpf/?series=428711&delegate=121173&state=*
 
-iQEzBAABCAAdFiEEnwF+nWawchZUPOuwsjqdtxFLKRUFAmAd5JoACgkQsjqdtxFL
-KRVJjwf9HiNq6piH7OOkVeCIFZ612OrZ09mEwQcxP8AN0TtxgI7eNH0k73SM4zMx
-8OsmrJRLv1+2dD5Uuzv825rUldYu7+TBYxdy7/RsLd8diK5y2f7fl5SbfytzkWIG
-DxzPBvwCJAFv1To3AkzA1v4DIPuUhHpYcesaZPgyOr8XVm+R8IlOQ/fkihN4IDxh
-HLhlNCyP0FA/dMjS58ZJ9ZP/pyr7ivf1ufsou5bHTDcswmnsH40/D09wiLxBuQTt
-+n8vON8abYdMtQK2bsvy6EMMZOBQUD7NA/yeszv7A/5za7QrSoj2TEaqx5+uSVod
-pS00qbw3qijXtJlgJwsbloLxM2jyRQ==
-=lyJS
------END PGP SIGNATURE-----
-
---UxWCXiFroMay8coY--
+> ---
+> Jiri Olsa (4):
+>       tools/resolve_btfids: Build libbpf and libsubcmd in separate directories
+>       tools/resolve_btfids: Check objects before removing
+>       tools/resolve_btfids: Set srctree variable unconditionally
+>       kbuild: Add resolve_btfids clean to root clean target
+>
+>  Makefile                            |  7 ++++++-
+>  tools/bpf/resolve_btfids/.gitignore |  2 --
+>  tools/bpf/resolve_btfids/Makefile   | 44 ++++++++++++++++++++++----------------------
+>  3 files changed, 28 insertions(+), 25 deletions(-)
+>
