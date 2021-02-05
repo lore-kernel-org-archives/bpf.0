@@ -2,89 +2,318 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AB982C43381
-	for <bpf@archiver.kernel.org>; Fri,  5 Feb 2021 19:21:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F1D4C433DB
+	for <bpf@archiver.kernel.org>; Fri,  5 Feb 2021 19:24:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 603C964F2E
-	for <bpf@archiver.kernel.org>; Fri,  5 Feb 2021 19:21:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A93FA64DDD
+	for <bpf@archiver.kernel.org>; Fri,  5 Feb 2021 19:24:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231449AbhBERhi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 5 Feb 2021 12:37:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34846 "EHLO
+        id S233591AbhBERl1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 5 Feb 2021 12:41:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233055AbhBEP5j (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 5 Feb 2021 10:57:39 -0500
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18AACC0613D6;
-        Fri,  5 Feb 2021 09:39:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=K9RAcQUU8wl+QmrBr2wtAwlL0UcIu0I2afA4jOYwzNw=; b=1qmVu5Mv3ZaHZyVBwQY1aUmjNx
-        zSB3NH20gVNyuBC+1FCnETTO1ot3gEVpbEFIUUyjXAB9IX83ysqQpvt1yAlfVegNfdA1MituRl0H/
-        V4yF9EVDPL2CZgGrlGtXWRM3NQPIWzFx66ZW1svN6imAL6biwrbKG6r8Z9FBTBA+FCyPvjaxY2j+6
-        lnnaP89tHFFOtQrQ7yru/uYBmOsQfGpOBBzKjjq7n6LqSBM71MH4Tu3EqxCo/drb94e08JZyRUxJv
-        ZRH7WafNyuxdE+Myo1yZUAR7kJYJum8R9rLbgSZnjqvC/LQMZ2ZR4AWcJae2gMfVgRPJRWCOHZNeX
-        gKZgw4Yw==;
-Received: from [2601:1c0:6280:3f0::aec2]
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1l854e-0006xb-O6; Fri, 05 Feb 2021 17:39:17 +0000
-Subject: Re: [PATCH bpf] selftests/bpf: use bash instead of sh in
- test_xdp_redirect.sh
-To:     William Tu <u9012063@gmail.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Linux Kernel Network Developers <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>
-References: <20210205170950.145042-1-bjorn.topel@gmail.com>
- <CALDO+SZhgSr5haWT=c1b-+WMpeaPGkDYoxCoWtTaX2+L85WEJA@mail.gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <b186bc7e-2b0b-58b8-065e-c77255b6aecb@infradead.org>
-Date:   Fri, 5 Feb 2021 09:39:12 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+        with ESMTP id S233446AbhBERjr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 5 Feb 2021 12:39:47 -0500
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18FCBC06174A;
+        Fri,  5 Feb 2021 11:21:30 -0800 (PST)
+Received: by mail-io1-xd35.google.com with SMTP id e133so8262282iof.8;
+        Fri, 05 Feb 2021 11:21:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=7zwM6AFEM1ZwlZuakpCJfAhsW39/fsUR7lAvfs6ogR8=;
+        b=VByDAfMOPzY8M99CL0/hTXT2oGoQYqBsc/Dh2Gr50hZ+HricKakijoYArRRt7eB6OP
+         pg1e1+iZTod8XQwsbOWK6GKZZEIIjcaGPaLgQM++M8yAXMRNeEta8isgPFuBgiV1G6rZ
+         fkPKoOyBv/LpqXvS/X2ZSGNMKSWIHaEBkR5kBuCa/T0m6M+Qw+hjzqrJUkt0RM2dG45L
+         c8JqDl1aGmBdq0tDKleP3Pqpmncjl+5T5ZvdZ7KtEbpzXgbJciBegCEPYMvUsZnYUlRM
+         Npj0XT/nq2mddRZ51csVjKql5J+M8G3I30VSnSp2Eo4Ec6dfzLeo/hNayj+rRcmEvwHO
+         R3/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=7zwM6AFEM1ZwlZuakpCJfAhsW39/fsUR7lAvfs6ogR8=;
+        b=kUmNshb0UoR1hMfyXM82KSTMWZszrBD6+Epu6/U+fzp3Tx0OJVY6/LYIqbbomDVlTP
+         or1fGcfsMSqOd/YkeOddhXnZPx1WnzDBoCs57G3n3RK5af8UsCona0oZzqEhyMLpbnp9
+         UiM70bdM7q1gXygz8s1Iw7C7dCxEsZS4rx/a2cjGGTE+lnmbjKrxMYInHi1NUZpEWGG4
+         eZQtMmxh1h544YTGWt+8k6+ZnmELYTtwqbomEID7GgVnPMHYs6WHo2dAcHvqO9EWwx+F
+         dswOQ1PmSPWvlKzU/dxcfQoE5NA+N9QzHHBv+ggkZ3jVzD5DQR4HQBf1n8gLi2YtdziC
+         TzuQ==
+X-Gm-Message-State: AOAM533AVoxs0t0lFQiHxjQS9jX77LIEC2rt0S1SQqUKaYMS54jOBfSU
+        qugYlJL8T8dYb1L3HLEs06MqTsyiDnPIdjRY1QY=
+X-Google-Smtp-Source: ABdhPJxAe1QMFAbECHgRxLYYLfH7f7qCwK33kAHRdMfn3ZyL+FSkCt2Xb9IQrfSWqKGOZbz3/dV+APyLgNihHLRahlM=
+X-Received: by 2002:a05:6638:2694:: with SMTP id o20mr6506628jat.132.1612552889488;
+ Fri, 05 Feb 2021 11:21:29 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <CALDO+SZhgSr5haWT=c1b-+WMpeaPGkDYoxCoWtTaX2+L85WEJA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20210204220741.GA920417@kernel.org> <CA+icZUVQSojGgnis8Ds5GW-7-PVMZ2w4X5nQKSSkBPf-29NS6Q@mail.gmail.com>
+ <CA+icZUU2xmZ=mhVYLRk7nZBRW0+v+YqBzq18ysnd7xN+S7JHyg@mail.gmail.com>
+ <CA+icZUVyB3qaqq3pwOyJY_F4V6KU9hdF=AJM_D7iEW4QK4Eo6w@mail.gmail.com>
+ <20210205152823.GD920417@kernel.org> <CA+icZUWzMdhuHDkcKMHAd39iMEijk65v2ADcz0=FdODr38sJ4w@mail.gmail.com>
+ <CA+icZUXb1j-DrjvFEeeOGuR_pKmD_7_RusxpGQy+Pyhaoa==gA@mail.gmail.com>
+ <CA+icZUVZA97V5C3kORqeSiaxRbfGbmzEaxgYf9RUMko4F76=7w@mail.gmail.com>
+ <baa7c017-b2cf-b2cd-fbe8-2e021642f2e3@fb.com> <CA+icZUWESAQxWb6fvhOY0CxngLY3z4kOiZS2vPtSD5tDaSve-g@mail.gmail.com>
+In-Reply-To: <CA+icZUWESAQxWb6fvhOY0CxngLY3z4kOiZS2vPtSD5tDaSve-g@mail.gmail.com>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Fri, 5 Feb 2021 20:21:18 +0100
+Message-ID: <CA+icZUVGXxEGy7KYqHvw-iSb1HqDNzjXwAn=VEJaAbTjLCKDFQ@mail.gmail.com>
+Subject: Re: ERROR: INT DW_ATE_unsigned_1 Error emitting BTF type
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        dwarves@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        bpf@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
+        Jan Engelhardt <jengelh@inai.de>,
+        Domenico Andreoli <cavok@debian.org>,
+        Matthias Schwarzott <zzam@gentoo.org>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Mark Wieelard <mjw@redhat.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Ondrej Mosnacek <omosnace@redhat.com>,
+        =?UTF-8?Q?Daniel_P=2E_Berrang=C3=A9?= <berrange@redhat.com>,
+        Tom Stellard <tstellar@redhat.com>,
+        Fangrui Song <maskray@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 2/5/21 9:30 AM, William Tu wrote:
-> On Fri, Feb 5, 2021 at 9:09 AM Björn Töpel <bjorn.topel@gmail.com> wrote:
->>
->> From: Björn Töpel <bjorn.topel@intel.com>
->>
->> The test_xdp_redirect.sh script uses some bash-features, such as
->> '&>'. On systems that use dash as the sh implementation this will not
->> work as intended. Change the shebang to use bash instead.
+On Fri, Feb 5, 2021 at 8:15 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+>
+> On Fri, Feb 5, 2021 at 8:10 PM Yonghong Song <yhs@fb.com> wrote:
+> >
+> >
+> >
+> > On 2/5/21 11:06 AM, Sedat Dilek wrote:
+> > > On Fri, Feb 5, 2021 at 7:53 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+> > >>
+> > >> On Fri, Feb 5, 2021 at 6:48 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+> > >>>
+> > >>> On Fri, Feb 5, 2021 at 4:28 PM Arnaldo Carvalho de Melo
+> > >>> <arnaldo.melo@gmail.com> wrote:
+> > >>>>
+> > >>>> Em Fri, Feb 05, 2021 at 04:23:59PM +0100, Sedat Dilek escreveu:
+> > >>>>> On Fri, Feb 5, 2021 at 3:41 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+> > >>>>>>
+> > >>>>>> On Fri, Feb 5, 2021 at 3:37 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+> > >>>>>>>
+> > >>>>>>> Hi,
+> > >>>>>>>
+> > >>>>>>> when building with pahole v1.20 and binutils v2.35.2 plus Clang
+> > >>>>>>> v12.0.0-rc1 and DWARF-v5 I see:
+> > >>>>>>> ...
+> > >>>>>>> + info BTF .btf.vmlinux.bin.o
+> > >>>>>>> + [  != silent_ ]
+> > >>>>>>> + printf   %-7s %s\n BTF .btf.vmlinux.bin.o
+> > >>>>>>>   BTF     .btf.vmlinux.bin.o
+> > >>>>>>> + LLVM_OBJCOPY=/opt/binutils/bin/objcopy /opt/pahole/bin/pahole -J
+> > >>>>>>> .tmp_vmlinux.btf
+> > >>>>>>> [115] INT DW_ATE_unsigned_1 Error emitting BTF type
+> > >>>>>>> Encountered error while encoding BTF.
+> > >>>>>>
+> > >>>>>> Grepping the pahole sources:
+> > >>>>>>
+> > >>>>>> $ git grep DW_ATE
+> > >>>>>> dwarf_loader.c:         bt->is_bool = encoding == DW_ATE_boolean;
+> > >>>>>> dwarf_loader.c:         bt->is_signed = encoding == DW_ATE_signed;
+> > >>>>>>
+> > >>>>>> Missing DW_ATE_unsigned encoding?
+> > >>>>>>
+> > >>>>>
+> > >>>>> Checked the LLVM sources:
+> > >>>>>
+> > >>>>> clang/lib/CodeGen/CGDebugInfo.cpp:    Encoding =
+> > >>>>> llvm::dwarf::DW_ATE_unsigned_char;
+> > >>>>> clang/lib/CodeGen/CGDebugInfo.cpp:    Encoding = llvm::dwarf::DW_ATE_unsigned;
+> > >>>>> clang/lib/CodeGen/CGDebugInfo.cpp:    Encoding =
+> > >>>>> llvm::dwarf::DW_ATE_unsigned_fixed;
+> > >>>>> clang/lib/CodeGen/CGDebugInfo.cpp:
+> > >>>>>    ? llvm::dwarf::DW_ATE_unsigned
+> > >>>>> ...
+> > >>>>> lld/test/wasm/debuginfo.test:CHECK-NEXT:                DW_AT_encoding
+> > >>>>>   (DW_ATE_unsigned)
+> > >>>>>
+> > >>>>> So, I will switch from GNU ld.bfd v2.35.2 to LLD-12.
+> > >>>>
+> > >>>> Thanks for the research, probably your conclusion is correct, can you go
+> > >>>> the next step and add that part and check if the end result is the
+> > >>>> expected one?
+> > >>>>
+> > >>>
+> > >>> Still building...
+> > >>>
+> > >>> Can you give me a hand on what has to be changed in dwarves/pahole?
+> > >>>
+> > >>> I guess switching from ld.bfd to ld.lld will show the same ERROR.
+> > >>>
+> > >>
+> > >> This builds successfully - untested:
+> > >>
+> > >> $ git diff
+> > >> diff --git a/btf_loader.c b/btf_loader.c
+> > >> index ec286f413f36..a39edd3362db 100644
+> > >> --- a/btf_loader.c
+> > >> +++ b/btf_loader.c
+> > >> @@ -107,6 +107,7 @@ static struct base_type *base_type__new(strings_t
+> > >> name, uint32_t attrs,
+> > >>                 bt->bit_size = size;
+> > >>                 bt->is_signed = attrs & BTF_INT_SIGNED;
+> > >>                 bt->is_bool = attrs & BTF_INT_BOOL;
+> > >> +               bt->is_unsigned = attrs & BTF_INT_UNSIGNED;
+> > >>                 bt->name_has_encoding = false;
+> > >>                 bt->float_type = float_type;
+> > >>         }
+> > >> diff --git a/ctf.h b/ctf.h
+> > >> index 25b79892bde3..9e47c3c74677 100644
+> > >> --- a/ctf.h
+> > >> +++ b/ctf.h
+> > >> @@ -100,6 +100,7 @@ struct ctf_full_type {
+> > >> #define CTF_TYPE_INT_CHAR      0x2
+> > >> #define CTF_TYPE_INT_BOOL      0x4
+> > >> #define CTF_TYPE_INT_VARARGS   0x8
+> > >> +#define CTF_TYPE_INT_UNSIGNED  0x16
+> > >>
+> > >> #define CTF_TYPE_FP_ATTRS(VAL)         ((VAL) >> 24)
+> > >> #define CTF_TYPE_FP_OFFSET(VAL)                (((VAL) >> 16) & 0xff)
+> > >> diff --git a/dwarf_loader.c b/dwarf_loader.c
+> > >> index b73d7867e1e6..79d40f183c24 100644
+> > >> --- a/dwarf_loader.c
+> > >> +++ b/dwarf_loader.c
+> > >> @@ -473,6 +473,7 @@ static struct base_type *base_type__new(Dwarf_Die
+> > >> *die, struct cu *cu)
+> > >>                 bt->is_bool = encoding == DW_ATE_boolean;
+> > >>                 bt->is_signed = encoding == DW_ATE_signed;
+> > >>                 bt->is_varargs = false;
+> > >> +               bt->is_unsigned = encoding == DW_ATE_unsigned;
+> > >>                 bt->name_has_encoding = true;
+> > >>         }
+> > >>
+> > >> diff --git a/dwarves.h b/dwarves.h
+> > >> index 98caf1abc54d..edf32d2e6f80 100644
+> > >> --- a/dwarves.h
+> > >> +++ b/dwarves.h
+> > >> @@ -1261,6 +1261,7 @@ struct base_type {
+> > >>         uint8_t         is_signed:1;
+> > >>         uint8_t         is_bool:1;
+> > >>         uint8_t         is_varargs:1;
+> > >> +       uint8_t         is_unsigned:1;
+> > >>         uint8_t         float_type:4;
+> > >> };
+> > >>
+> > >> diff --git a/lib/bpf b/lib/bpf
+> > >> --- a/lib/bpf
+> > >> +++ b/lib/bpf
+> > >> @@ -1 +1 @@
+> > >> -Subproject commit 5af3d86b5a2c5fecdc3ab83822d083edd32b4396
+> > >> +Subproject commit 5af3d86b5a2c5fecdc3ab83822d083edd32b4396-dirty
+> > >> diff --git a/libbtf.c b/libbtf.c
+> > >> index 9f7628304495..a0661a7bbed9 100644
+> > >> --- a/libbtf.c
+> > >> +++ b/libbtf.c
+> > >> @@ -247,6 +247,8 @@ static const char *
+> > >> btf_elf__int_encoding_str(uint8_t encoding)
+> > >>                 return "CHAR";
+> > >>         else if (encoding == BTF_INT_BOOL)
+> > >>                 return "BOOL";
+> > >> +       else if (encoding == BTF_INT_UNSIGNED)
+> > >> +               return "UNSIGNED";
+> > >>         else
+> > >>                 return "UNKN";
+> > >> }
+> > >> @@ -379,6 +381,8 @@ int32_t btf_elf__add_base_type(struct btf_elf
+> > >> *btfe, const struct base_type *bt,
+> > >>                 encoding = BTF_INT_SIGNED;
+> > >>         } else if (bt->is_bool) {
+> > >>                 encoding = BTF_INT_BOOL;
+> > >> +       } else if (bt->is_unsigned) {
+> > >> +               encoding = BTF_INT_UNSIGNED;
+> > >>         } else if (bt->float_type) {
+> > >>                 fprintf(stderr, "float_type is not supported\n");
+> > >>                 return -1;
+> > >>
+> > >> Additionally - I cannot see it with `git diff`:
+> > >>
+> > >> [ lib/bpf/include/uapi/linux/btf.h ]
+> > >>
+> > >> /* Attributes stored in the BTF_INT_ENCODING */
+> > >> #define BTF_INT_SIGNED (1 << 0)
+> > >> #define BTF_INT_CHAR (1 << 1)
+> > >> #define BTF_INT_BOOL (1 << 2)
+> > >> #define BTF_INT_UNSIGNED (1 << 3)
+> > >>
+> > >> Comments?
+> > >>
+> > >
+> > > Hmmm...
+> > >
+> > > + info BTF .btf.vmlinux.bin.o
+> > > + [  != silent_ ]
+> > > + printf   %-7s %s\n BTF .btf.vmlinux.bin.o
+> > >   BTF     .btf.vmlinux.bin.o
+> > > + LLVM_OBJCOPY=llvm-objcopy /opt/pahole/bin/pahole -J .tmp_vmlinux.btf
+> > > [2] INT long unsigned int Error emitting BTF type
+> > > Encountered error while encoding BTF.
+> > > + llvm-objcopy --only-section=.BTF --set-section-flags
+> > > .BTF=alloc,readonly --strip-all .tmp_vmlinux.btf .btf.vmlinux.bin.o
+> > > ...
+> > > + info BTFIDS vmlinux
+> > > + [  != silent_ ]
+> > > + printf   %-7s %s\n BTFIDS vmlinux
+> > >   BTFIDS  vmlinux
+> > > + ./tools/bpf/resolve_btfids/resolve_btfids vmlinux
+> > > FAILED: load BTF from vmlinux: Invalid argument
+> > > + on_exit
+> > > + [ 255 -ne 0 ]
+> > > + cleanup
+> > > + rm -f .btf.vmlinux.bin.o
+> > > + rm -f .tmp_System.map
+> > > + rm -f .tmp_vmlinux.btf .tmp_vmlinux.kallsyms1
+> > > .tmp_vmlinux.kallsyms1.S .tmp_vmlinux.kallsyms1.o
+> > > .tmp_vmlinux.kallsyms2 .tmp_vmlinux.kallsyms2.S .tmp_vmlinux.kallsyms
+> > > 2.o
+> > > + rm -f System.map
+> > > + rm -f vmlinux
+> > > + rm -f vmlinux.o
+> > > make[3]: *** [Makefile:1166: vmlinux] Error 255
+> > >
+> > > Grepping through linux.git/tools I guess some BTF tools/libs need to
+> > > know what BTF_INT_UNSIGNED is?
+> >
+> > BTF_INT_UNSIGNED needs kernel support. Maybe to teach pahole to
+> > ignore this for now until kernel infrastructure is ready.
+> > Not sure whether this information will be useful or not
+> > for BTF. This needs to be discussed separately.
+> >
+>
+> [ CC Fangrui ]
+>
+> How can I teach pahole to ignore BTF_INT_UNSIGNED?
+>
+> Another tryout might be to use "-fbinutils-version=..." which is
+> available for LLVM-12 according to Fangrui?
+> Fangrui, which binutils versions can I pass and how?
+>
 
-Hi,
-In general we (kernel, maybe not bpf) try to move away from bash to a more
-"standard" sh shell, so things like "&>" would be converted to ">file 2>&1"
-or whatever is needed.
+OK, I checked LLVM-12 sources:
 
->> Also remove the 'set -e' since the script actually relies on that the
->> return value can be used to determine pass/fail of the test.
->>
->> Fixes: 996139e801fd ("selftests: bpf: add a test for XDP redirect")
->> Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
->> ---
-> LGTM, thanks.
-> Acked-by: William Tu <u9012063@gmail.com>
-> 
+clang/docs/ReleaseNotes.rst:101:- New option ``-fbinutils-version=``
+specifies the targeted binutils version.
+clang/docs/ReleaseNotes.rst:102:  For example,
+``-fbinutils-version=2.35`` means compatibility with GNU as/ld
+clang/docs/ReleaseNotes.rst-103-  before 2.35 is not needed: new
+features can be used and there is no need to
+clang/docs/ReleaseNotes.rst-104-  work around old GNU as/ld bugs.
 
+Can I pass (also patchlevel) like 2.35.2?
+Here I have Debian's v2.35.1 and a selfmade v2.35.2?
 
--- 
-~Randy
+- Sedat -
 
+- Sedat -
