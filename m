@@ -2,64 +2,66 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 330A5C43332
-	for <bpf@archiver.kernel.org>; Fri,  5 Feb 2021 22:44:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 868E5C433E0
+	for <bpf@archiver.kernel.org>; Fri,  5 Feb 2021 22:44:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0AC3264FF5
-	for <bpf@archiver.kernel.org>; Fri,  5 Feb 2021 22:44:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5BCCD64FF5
+	for <bpf@archiver.kernel.org>; Fri,  5 Feb 2021 22:44:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231336AbhBEWno (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 5 Feb 2021 17:43:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43332 "EHLO
+        id S232498AbhBEWoI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 5 Feb 2021 17:44:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230058AbhBENnS (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 5 Feb 2021 08:43:18 -0500
-Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87DAEC0613D6
-        for <bpf@vger.kernel.org>; Fri,  5 Feb 2021 05:42:37 -0800 (PST)
-Received: by mail-qv1-xf49.google.com with SMTP id l3so4956652qvz.12
-        for <bpf@vger.kernel.org>; Fri, 05 Feb 2021 05:42:37 -0800 (PST)
+        with ESMTP id S231352AbhBENnX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 5 Feb 2021 08:43:23 -0500
+Received: from mail-qk1-x74a.google.com (mail-qk1-x74a.google.com [IPv6:2607:f8b0:4864:20::74a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9827BC06121C
+        for <bpf@vger.kernel.org>; Fri,  5 Feb 2021 05:42:41 -0800 (PST)
+Received: by mail-qk1-x74a.google.com with SMTP id v130so5800020qkb.14
+        for <bpf@vger.kernel.org>; Fri, 05 Feb 2021 05:42:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=sender:date:in-reply-to:message-id:mime-version:references:subject
          :from:to:cc;
-        bh=IGpyT50ZsOIciQFmCAO819uoUHUYFH7dURB+H5TNyyo=;
-        b=pGzIiS8uenAMefZwcV8gF0t6bCdBalkQ81lc00JAvU2AulD5fdy5sUr8R0VU/UZVmw
-         IFXl2T/NFDgq10ByBMKuOgTnKaEXXRQdVbZi0LNFYQEkrTOFfN0yTM7X2pWvofXYIAFT
-         emDSQt9ruT2GairKINejmb4r5En1+QGTry5mvlLXRnmBt3MHE686H2iZNPkDjXo3+oYV
-         tQmaeeVlnk8LZjWqp7m5UqRH6IOGkXCrmJ3WD9TeX6Jsti/c8nmEjcqKMQ57m6Uxplxg
-         CrItrPnCx0npjJUDSzj8Jt/TkOH84SNpZlJ4NRXDqjMLtaETKh60RzboyMiRteZvAbHx
-         8GdA==
+        bh=Jm9Rl/O23yAE3HZ62rmeV5YrYLNhsE5EvtDbKOWTIow=;
+        b=ITUIwpQ8q9tGG4CIbJ0ci2ur/ZJSsEfgdPWAsLObON4aNaUKWMRH5VuROapZFGrYus
+         5fa4bI8iLDZEm6l3nYLFzlHxdrDFx1EUQaNjXPKHot4OYnaoGLNYA1h6JiSpo7jIlsRk
+         9kGukaEg//ID1Nn1O0irdtWgsIy+PqYgGTCvcp4DYU/jZ0z6ALvjbt6mBliklwtDJrP9
+         2bdtZhULisqdwWNw2HrnTW6zNKNpRYi/LKfkYQ2eH5/6iRYGGXS+nw4oYVROKHHzq8+u
+         GBJ+Wo6dJDdLsur/AV9T2DNq+iNqolHUVKv3hNLa9huQZxg88b2FUgzoTsihgXyKgR04
+         HXrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=IGpyT50ZsOIciQFmCAO819uoUHUYFH7dURB+H5TNyyo=;
-        b=b4iSKQKLvs9MAWgjlABly10YF8J/gZRhBhpMa2wNIXMF+HdDmzp3bg5FJuDbVJi5lM
-         3NX/bZ/6FdpnNEepTtCsURDqrAfICs4dMYJax3eEOAPsh7R06k8pg/UyMvH9q8PPUMU7
-         klelgcpF9X6DiflEFt4IUpVvH3hziPQMxSdsQeJ4Po0iJtMYtxyEDr64YVUQouz481PY
-         KdrJdH7i+0dveLuso1uBoe3gb0m892fspV2bmLyl6/L2kqVxfit37GM9O8i9Tu4hMWVT
-         Dj5bgvoO6tDdhTEPXNtZ9HjTEe2oLpNetWjbliD6To5aEY/gmlGOYAP/Son6jBHsYg0b
-         IyZg==
-X-Gm-Message-State: AOAM530reIQGUoDHV2x70FRuOsCHZTYU0DaRMy9zNdUzzOZi4zf1+N4c
-        11aupBY3dbOg3QvyKUY88zJXX9NUdRXe1Q==
-X-Google-Smtp-Source: ABdhPJzwa3on+DeHXWNowl5sLCJ519ChsSKMFvY0uqYRHnRWpKpD+sjjqxEOI6xvfwCcu7IrSpamvDlytHmgBw==
+        bh=Jm9Rl/O23yAE3HZ62rmeV5YrYLNhsE5EvtDbKOWTIow=;
+        b=P7vpKllDSqca/i3nOjYEHh0jTDjCyMkT1bkb9OcLijpE4nUbEDgv1UUdEol26+Ehra
+         Wlr0ZO8lbxOewSwprUYtHO9fBvXUVybxHATUycNxdUHxs4e5gx6RQN3xtfZQ1jxhHikS
+         8c04al6v7gZDwCQzTtAx7a9TtDdrQybGiK8y/tPvfX8TbWDisx2phR644SSzSz0PpzGS
+         lDhn4SBeTb4LCxRCcxhffhjrH3/FbckfcC5CFru9OdG9XZuqWVJ74937B2EBy67ZAwkT
+         hA1K7Vy/lFVIWRpaCS1OXKgN1yTXBlvTcmEMb+F1lN0QHb+pvJvd2szMwgxTii3Dw7SL
+         o7Ng==
+X-Gm-Message-State: AOAM531MQ03pqDg5S5nZgFqNXR3Edo4pTzlEGh2uxiRRzPX9n8R7JO+C
+        E8dBSzHRyB7/P+CCtvmhOgrEUxj9gpANHQ==
+X-Google-Smtp-Source: ABdhPJzIz42Mwp/Z6N9/StY2UCNjQr9VPyc9b4cxNS9Y9mkf9ti9vhjfcwqC/1Op+ISWE/P5kp6cce7rWt8WIw==
 Sender: "gprocida via sendgmr" <gprocida@tef.lon.corp.google.com>
 X-Received: from tef.lon.corp.google.com ([2a00:79e0:d:110:656b:9716:1ea:3de6])
- (user=gprocida job=sendgmr) by 2002:ad4:58b2:: with SMTP id
- ea18mr4480346qvb.52.1612532556716; Fri, 05 Feb 2021 05:42:36 -0800 (PST)
-Date:   Fri,  5 Feb 2021 13:42:16 +0000
-In-Reply-To: <20210201172530.1141087-1-gprocida@google.com>
-Message-Id: <20210205134221.2953163-1-gprocida@google.com>
+ (user=gprocida job=sendgmr) by 2002:a05:6214:906:: with SMTP id
+ dj6mr4375856qvb.28.1612532560829; Fri, 05 Feb 2021 05:42:40 -0800 (PST)
+Date:   Fri,  5 Feb 2021 13:42:18 +0000
+In-Reply-To: <20210205134221.2953163-1-gprocida@google.com>
+Message-Id: <20210205134221.2953163-3-gprocida@google.com>
 Mime-Version: 1.0
-References: <20210201172530.1141087-1-gprocida@google.com>
+References: <20210201172530.1141087-1-gprocida@google.com> <20210205134221.2953163-1-gprocida@google.com>
 X-Mailer: git-send-email 2.30.0.478.g8a0d178c01-goog
-Subject: [PATCH dwarves v3 0/5] ELF writing changes
+Subject: [PATCH dwarves v3 2/5] btf_encoder: Do not use both structs and
+ pointers for the same data
 From:   Giuliano Procida <gprocida@google.com>
 To:     dwarves@vger.kernel.org
 Cc:     acme@kernel.org, andrii@kernel.org, ast@kernel.org,
@@ -70,36 +72,65 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-These v3 patches address comments by Andrii and Arnaldo.
+Many operations in the libelf API return a pointer to a user-provided
+struct (on success) or NULL (on failure).
 
-1. This uses a variadic macro and relies on a GNU extension. It can
-probably be reworked to not use this, with some effort.
+There are a couple of places in btf_elf__write where both structs and
+pointers to the same structs are used. Holding on to the pointers
+raises ownership and lifetime issues unncessarily and the code is
+cleaner with only a single access path for these data.
 
-2. I was following the original code that had aliases structs and
-pointers for the same data. I adjusted my code not to do this (later
-commits) and changed the existing occurrences in the same function
-(this commit). The net effect is clearer lifetime and ownership.
+The code now treats the returned pointers as booleans.
 
-3. In a similar vein, the variable scn really only needed to be a
-loop-local iterator.
+Signed-off-by: Giuliano Procida <gprocida@google.com>
+---
+ libbtf.c | 14 ++++++--------
+ 1 file changed, 6 insertions(+), 8 deletions(-)
 
-4. This removes the dependency on llvm-objcopy.
-
-5. And we set the alignment on the seciton.
-
-I'm not posting the later patches that perform explicit ELF section
-layout and which (attempt) to also do things with ELF segments.
-
-Giuliano Procida (5):
-  btf_encoder: Funnel ELF error reporting through a macro
-  btf_encoder: Do not use both structs and pointers for the same data
-  btf_encoder: Traverse sections using a for-loop
-  btf_encoder: Add .BTF section using libelf
-  btf_encoder: Align .BTF section to 8 bytes
-
- libbtf.c | 183 ++++++++++++++++++++++++++++++++++---------------------
- 1 file changed, 114 insertions(+), 69 deletions(-)
-
+diff --git a/libbtf.c b/libbtf.c
+index 7bc49ba..ace8896 100644
+--- a/libbtf.c
++++ b/libbtf.c
+@@ -698,8 +698,7 @@ int32_t btf_elf__add_datasec_type(struct btf_elf *btfe, const char *section_name
+ 
+ static int btf_elf__write(const char *filename, struct btf *btf)
+ {
+-	GElf_Shdr shdr_mem, *shdr;
+-	GElf_Ehdr ehdr_mem, *ehdr;
++	GElf_Ehdr ehdr;
+ 	Elf_Data *btf_data = NULL;
+ 	Elf_Scn *scn = NULL;
+ 	Elf *elf = NULL;
+@@ -727,13 +726,12 @@ static int btf_elf__write(const char *filename, struct btf *btf)
+ 
+ 	elf_flagelf(elf, ELF_C_SET, ELF_F_DIRTY);
+ 
+-	ehdr = gelf_getehdr(elf, &ehdr_mem);
+-	if (ehdr == NULL) {
++	if (!gelf_getehdr(elf, &ehdr)) {
+ 		elf_error("elf_getehdr failed");
+ 		goto out;
+ 	}
+ 
+-	switch (ehdr_mem.e_ident[EI_DATA]) {
++	switch (ehdr.e_ident[EI_DATA]) {
+ 	case ELFDATA2LSB:
+ 		btf__set_endianness(btf, BTF_LITTLE_ENDIAN);
+ 		break;
+@@ -751,10 +749,10 @@ static int btf_elf__write(const char *filename, struct btf *btf)
+ 
+ 	elf_getshdrstrndx(elf, &strndx);
+ 	while ((scn = elf_nextscn(elf, scn)) != NULL) {
+-		shdr = gelf_getshdr(scn, &shdr_mem);
+-		if (shdr == NULL)
++		GElf_Shdr shdr;
++		if (!gelf_getshdr(scn, &shdr))
+ 			continue;
+-		char *secname = elf_strptr(elf, strndx, shdr->sh_name);
++		char *secname = elf_strptr(elf, strndx, shdr.sh_name);
+ 		if (strcmp(secname, ".BTF") == 0) {
+ 			btf_data = elf_getdata(scn, btf_data);
+ 			break;
 -- 
 2.30.0.478.g8a0d178c01-goog
 
