@@ -2,122 +2,127 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 744DAC433E9
-	for <bpf@archiver.kernel.org>; Fri,  5 Feb 2021 22:22:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB536C433DB
+	for <bpf@archiver.kernel.org>; Fri,  5 Feb 2021 22:28:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4112264F9F
-	for <bpf@archiver.kernel.org>; Fri,  5 Feb 2021 22:22:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6DACB64FF1
+	for <bpf@archiver.kernel.org>; Fri,  5 Feb 2021 22:28:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230307AbhBEWW2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 5 Feb 2021 17:22:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42008 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232607AbhBEOZQ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 5 Feb 2021 09:25:16 -0500
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEA74C061A2A;
-        Fri,  5 Feb 2021 07:50:49 -0800 (PST)
-Received: by mail-il1-x131.google.com with SMTP id p15so6191118ilq.8;
-        Fri, 05 Feb 2021 07:50:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=kiM8WMFjST9dsy9zDah68/XyOF2KBPOv5W+GYkbdeSU=;
-        b=ZhDvtHxZgtHTeY5fyZvbph2aXejeBONUjk0laSyWHs/QDFG5LJ9yIUTaOXQcYVmy1/
-         WS2CJ0uUMJMdBwp2t4lWN2kSj7CHRJYMY0sCM23/kj5OZH6cDxo7YmwkWXjiK02SLu0Z
-         JVwInYdwgJmkye65iGmTfoKn4kplizy4wl5YdYgk0LAsSJbI2La/jY2qjYlo8UZcKqVl
-         Xz2SWjCKHDly+bUkdmUAx7IrxoQw4Yf1lMf1tRarksR+aM9oWtJFFNMumodtfZXEWP2S
-         JUKXCicBRJQOYYWT0+MBQ7+X1QkKoZihCQ3tRVs212ww4K5xzs+SsxWedJpwe70fOl2q
-         smQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=kiM8WMFjST9dsy9zDah68/XyOF2KBPOv5W+GYkbdeSU=;
-        b=dR2SwLukGrJS3jjm7A3niy3higIPOv5dRpigFJTzRqWylgLjjZU2awnX0SaP2jlD1I
-         FhznNpVeHuYn4xKafYKbC85LzLDQjUqcHzT8BVRPEHkP33XAYb+ut+vO+Ep7uM1zjNPI
-         j/dfCixLQygnXDvAlUUw4OdqzOfMKD2OOQXvxsFJ1YDHS+3qmjaG0zBr3G/vx/HAav3P
-         dpET5wRoULyaMcBKfP4QAwffJBq23DitHMzLR54tbvEvRNH0nbHif5GuQ37zEp/pj8zN
-         t+Hb/wP+l4KSKCAw46GgHfyaWuCJ2QVYDW6X5WlSz44SX+Omn6q96EQ8w/LG98QROFig
-         2AdA==
-X-Gm-Message-State: AOAM5322IBGtzyH++M+Ag16BaMe5pTjIX1GUJSUr3MrSOo/ZLlDMlup8
-        6QvcF5FZziLZBWhHg+jNH8wpMY+KLLZOI429YA+VJHYCfHTXGYcS
-X-Google-Smtp-Source: ABdhPJw1QvaGYTrK47b0MkpUdbTRZaKI08TYAO8wf7udS7POZDrIiJ5UECvfvMWbmJe7zrApyTMXW7qOfbFwoG8G4Qw=
-X-Received: by 2002:a92:ce46:: with SMTP id a6mr4531229ilr.10.1612538650788;
- Fri, 05 Feb 2021 07:24:10 -0800 (PST)
+        id S231909AbhBEW1u (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 5 Feb 2021 17:27:50 -0500
+Received: from mail.efficios.com ([167.114.26.124]:35742 "EHLO
+        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232530AbhBEOUL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 5 Feb 2021 09:20:11 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 741BA2F5596;
+        Fri,  5 Feb 2021 10:47:24 -0500 (EST)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id 3ZcViJeHTbM7; Fri,  5 Feb 2021 10:47:24 -0500 (EST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 2F9D82F525A;
+        Fri,  5 Feb 2021 10:47:24 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 2F9D82F525A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1612540044;
+        bh=ZXtGfhUUpSW4u0bX1WooGA5Q3gzcpG1PUwkvcXyaLTU=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=p+4bYaWCdwfak1HNYVCsqSpeNWi5ovhrvVkrlQteUQRPMq/26Q77BnCjX2vOcLX7r
+         tg35CZviuorDXS+TgFx54FbO1+81gltqXsoEx9sRLGKX1xbxdXBU+cixGHtu1/ZGGk
+         YyKuANv10Eye4N4yHttkG0eMvF9zBOk+abfMwMQNoXUB4Oi03+A1+vuSt/Ki+e72JF
+         zNd0KAxwHStPXfP1FEfE2b1OVnL//uE9wjOERQOHVM4dyHqDzBgJ2LeFHBQ473hpeI
+         SBRRAslWj1gF/0TpKnv1uPTKoHWQp7J3W92SW279rzxUHu84HicwEV8b1sf/XfQDsJ
+         rPu0YtPdhaS7A==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id kfv6S17tFsoc; Fri,  5 Feb 2021 10:47:24 -0500 (EST)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id 1B1DD2F5252;
+        Fri,  5 Feb 2021 10:47:24 -0500 (EST)
+Date:   Fri, 5 Feb 2021 10:47:23 -0500 (EST)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Brendan Jackman <jackmanb@chromium.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        Paul Renauld <renauld@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        James Morris <jmorris@namei.org>, Paul Turner <pjt@google.com>,
+        Jann Horn <jannh@google.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Kees Cook <keescook@chromium.org>, thgarnie@chromium.org,
+        kpsingh@google.com,
+        paul renauld epfl <paul.renauld.epfl@gmail.com>,
+        Brendan Jackman <jackmanb@google.com>,
+        rostedt <rostedt@goodmis.org>
+Message-ID: <47845502.8614.1612540043986.JavaMail.zimbra@efficios.com>
+In-Reply-To: <YB1m2i6bUM0LO5wS@hirez.programming.kicks-ass.net>
+References: <20200820164753.3256899-1-jackmanb@chromium.org> <20210205150926.GA12608@localhost> <YB1m2i6bUM0LO5wS@hirez.programming.kicks-ass.net>
+Subject: Re: [RFC] security: replace indirect calls with static calls
 MIME-Version: 1.0
-References: <20210204220741.GA920417@kernel.org> <CA+icZUVQSojGgnis8Ds5GW-7-PVMZ2w4X5nQKSSkBPf-29NS6Q@mail.gmail.com>
- <CA+icZUU2xmZ=mhVYLRk7nZBRW0+v+YqBzq18ysnd7xN+S7JHyg@mail.gmail.com>
-In-Reply-To: <CA+icZUU2xmZ=mhVYLRk7nZBRW0+v+YqBzq18ysnd7xN+S7JHyg@mail.gmail.com>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Fri, 5 Feb 2021 16:23:59 +0100
-Message-ID: <CA+icZUVyB3qaqq3pwOyJY_F4V6KU9hdF=AJM_D7iEW4QK4Eo6w@mail.gmail.com>
-Subject: Re: ERROR: INT DW_ATE_unsigned_1 Error emitting BTF type
-To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Cc:     dwarves@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        bpf@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
-        Jan Engelhardt <jengelh@inai.de>,
-        Domenico Andreoli <cavok@debian.org>,
-        Matthias Schwarzott <zzam@gentoo.org>,
-        Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
-        Mark Wieelard <mjw@redhat.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Ondrej Mosnacek <omosnace@redhat.com>,
-        =?UTF-8?Q?Daniel_P=2E_Berrang=C3=A9?= <berrange@redhat.com>,
-        Tom Stellard <tstellar@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_3996 (ZimbraWebClient - FF84 (Linux)/8.8.15_GA_3996)
+Thread-Topic: security: replace indirect calls with static calls
+Thread-Index: RuVbmUup0iOFmIVlAbpninCycfmfRw==
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Feb 5, 2021 at 3:41 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
->
-> On Fri, Feb 5, 2021 at 3:37 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> >
-> > Hi,
-> >
-> > when building with pahole v1.20 and binutils v2.35.2 plus Clang
-> > v12.0.0-rc1 and DWARF-v5 I see:
-> > ...
-> > + info BTF .btf.vmlinux.bin.o
-> > + [  != silent_ ]
-> > + printf   %-7s %s\n BTF .btf.vmlinux.bin.o
-> >  BTF     .btf.vmlinux.bin.o
-> > + LLVM_OBJCOPY=/opt/binutils/bin/objcopy /opt/pahole/bin/pahole -J
-> > .tmp_vmlinux.btf
-> > [115] INT DW_ATE_unsigned_1 Error emitting BTF type
-> > Encountered error while encoding BTF.
->
-> Grepping the pahole sources:
->
-> $ git grep DW_ATE
-> dwarf_loader.c:         bt->is_bool = encoding == DW_ATE_boolean;
-> dwarf_loader.c:         bt->is_signed = encoding == DW_ATE_signed;
->
-> Missing DW_ATE_unsigned encoding?
->
+----- On Feb 5, 2021, at 10:40 AM, Peter Zijlstra peterz@infradead.org wrote:
 
-Checked the LLVM sources:
+> On Fri, Feb 05, 2021 at 10:09:26AM -0500, Mathieu Desnoyers wrote:
+>> Then we should be able to generate the following using static keys as a
+>> jump table and N static calls:
+>> 
+>>   jump <static key label target>
+>> label_N:
+>>   stack setup
+>>   call
+>> label_N-1:
+>>   stack setup
+>>   call
+>> label_N-2:
+>>   stack setup
+>>   call
+>>   ...
+>> label_0:
+>>   jump end
+>> label_fallback:
+>>   <iteration and indirect calls>
+>> end:
+>> 
+>> So the static keys would be used to jump to the appropriate label (using
+>> a static branch, which has pretty much 0 overhead). Static calls would
+>> be used to implement each of the calls.
+>> 
+>> Thoughts ?
+> 
+> At some point I tried to extend the static_branch infra to do multiple
+> targets and while the low level plumbing is trivial, I ran into trouble
+> trying to get a sane C level API for it.
 
-clang/lib/CodeGen/CGDebugInfo.cpp:    Encoding =
-llvm::dwarf::DW_ATE_unsigned_char;
-clang/lib/CodeGen/CGDebugInfo.cpp:    Encoding = llvm::dwarf::DW_ATE_unsigned;
-clang/lib/CodeGen/CGDebugInfo.cpp:    Encoding =
-llvm::dwarf::DW_ATE_unsigned_fixed;
-clang/lib/CodeGen/CGDebugInfo.cpp:
-  ? llvm::dwarf::DW_ATE_unsigned
-...
-lld/test/wasm/debuginfo.test:CHECK-NEXT:                DW_AT_encoding
- (DW_ATE_unsigned)
+Did you try doing an API for a variable number of targets, or was it for
+a specific number of targets ? It might be easier to just duplicate some
+of the API code for number of targets between 2 and 12, and let the
+users code choose the maximum number of targets they want to accelerate.
 
-So, I will switch from GNU ld.bfd v2.35.2 to LLD-12.
+Thanks,
 
-- Sedat -
+Mathieu
+
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
