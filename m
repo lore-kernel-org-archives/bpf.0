@@ -2,126 +2,143 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 69C0CC433E0
-	for <bpf@archiver.kernel.org>; Sat,  6 Feb 2021 02:32:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35DF7C433E0
+	for <bpf@archiver.kernel.org>; Sat,  6 Feb 2021 02:38:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 352D265024
-	for <bpf@archiver.kernel.org>; Sat,  6 Feb 2021 02:32:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0736A65011
+	for <bpf@archiver.kernel.org>; Sat,  6 Feb 2021 02:38:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229703AbhBFCb3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 5 Feb 2021 21:31:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37192 "EHLO
+        id S230510AbhBFCiI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 5 Feb 2021 21:38:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbhBFCa6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 5 Feb 2021 21:30:58 -0500
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF95CC08ED35;
-        Fri,  5 Feb 2021 15:19:25 -0800 (PST)
-Received: by mail-yb1-xb35.google.com with SMTP id y128so8336936ybf.10;
-        Fri, 05 Feb 2021 15:19:25 -0800 (PST)
+        with ESMTP id S231250AbhBFCf5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 5 Feb 2021 21:35:57 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D87B9C061356
+        for <bpf@vger.kernel.org>; Fri,  5 Feb 2021 14:09:59 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id a12so12106689lfb.1
+        for <bpf@vger.kernel.org>; Fri, 05 Feb 2021 14:09:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=eaySnepDzbdWK06t4HWZqmtay2gND6FqJB5mQU1GyNk=;
-        b=A+eCqkjlgp/p4pwaEXRy99LxJWrvSUp2lG8jE+/nw8IYa7DCCx2brl+75YXwf4V1cH
-         GFAMb/Z0ZTwIS+jALWtv6JAOtd5wFxWsmhGZ3T+W7bNhACZo/3f0zmTvYZg2tBWnVH5Y
-         L7WZA3tzmn8iGAfBpejM7y37UgVhHc2hv110IssNLoILQ/xuOB+TOZjVDHvzldnGBLpN
-         Zrd+2FbNsvTUpXhaTNewl9Gofb8jmbx1xN0VgbaQfJ5OChdFnUxlvVukMIW/1iTLXA7L
-         eKLfkqiDvvFwKNHX4ehx5i3BN7IZWr9ezLEwSDOiwLvkUWmW3rdQmNxgq9nDlzBCOmOU
-         vzdQ==
+        d=cloudflare.com; s=google;
+        h=references:user-agent:from:to:cc:subject:in-reply-to:date
+         :message-id:mime-version;
+        bh=jmGXHQUmQpAWVkJNjCjHIBvNfS+bVsNdamwSZyWJ9hQ=;
+        b=UYNp5O2uhSo8+t5FUschnhV7fdDEnITHjDKEU0qx5toTh1batiQEbthkcmsfQoRdWG
+         lpTcFXWdfBXYZOuc7HdorpWfNVrAbz1+oTgy/uiGCmPmlwkM1yPgBLCXM9RuWVvmcWoA
+         0HKR6D3fz6wqKE6F3vsdKwBaGLQyVh3IV1LLQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eaySnepDzbdWK06t4HWZqmtay2gND6FqJB5mQU1GyNk=;
-        b=BBNGXepVC50yDuSMYfNidNNJMW5+vAF29Rj4dGTcMsWvP2hK18A4KYXiYpxE5EeJDN
-         fYPoUt5AtzfVur2V1wZOgTpf7zM5ZJdsY9qE+45Qgmdw1YDyb1VvRjmOkssnz3gQzHwZ
-         Oq7Em4SDxCX8ibSXkUyvZ0boqQ6qDlanq6IPtvJQdakeTR/a0ZZjZ8KdJ1vkK2+H+Pfg
-         uBi4rrVWhmDoYc5qY4W856a+ASSsR1w6Yo8OWrwlidPgrcX6VkJvCYg75uSAP+gVU7qT
-         Q/pQFBbRxe0UhZfskofdGdjV3iY6W06goHuFXMhSRNAESnshJbdVo4tn9NktzTgoGGvw
-         7PUg==
-X-Gm-Message-State: AOAM530ugLJ7+4ymPJjStHiNVVtSfRLRnKPGXPxI7Aaz5rrhBMPpY1Vm
-        AWgnnXp2mfsES4zAsThrl2v3xi2CJLw+EXy08AfU+hFv0QFnu3Tf
-X-Google-Smtp-Source: ABdhPJwt7koiechQx56/EbEreAyk9y0MSngpulAsJbBPdaM7f/1PsGrvmYXWqGApF2lrJzzC7RycR83mu192C39uepk=
-X-Received: by 2002:a25:da4d:: with SMTP id n74mr10053150ybf.347.1612567165234;
- Fri, 05 Feb 2021 15:19:25 -0800 (PST)
-MIME-Version: 1.0
-References: <20210205124020.683286-1-jolsa@kernel.org> <20210205124020.683286-3-jolsa@kernel.org>
-In-Reply-To: <20210205124020.683286-3-jolsa@kernel.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 5 Feb 2021 15:19:14 -0800
-Message-ID: <CAEf4BzY6aJ5YfErvbY8AwuDztvgs4xrd5dC8y3vkxTZbiMppMA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/4] tools/resolve_btfids: Check objects before removing
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject
+         :in-reply-to:date:message-id:mime-version;
+        bh=jmGXHQUmQpAWVkJNjCjHIBvNfS+bVsNdamwSZyWJ9hQ=;
+        b=NbIATBJ7e27qErzMgeR11k84mjMGNJ8OiVJ6n2Jz38KKq6P1J/9IuwDw8mNnO/y6xy
+         rOjDNm8Eejp0KRKvbK7CMqizXROOGPy40lbIJo9etHa2ttU6bP8yS5UwSe7jYS+HPs96
+         4jnxQbHkpOTo5ubkhhzHzz30bhNokH9gCQes1iynRC/10Acowwh1IhXd8d3EI7/VBNef
+         p36Zgae60MqBACxf42JK9A3UpYQ3d78oelPjbLXnyZbjpCBGmNfW14g/oQPSDAmeLlYA
+         9yK6L2GqZJraCzwRS+wk/XzQX053qX6ZEY71HVndIVJ+KtFSV3hWmhoWIaxhymtL7pGB
+         E+yA==
+X-Gm-Message-State: AOAM532iUdm/8c9k5MOmtxqduEJTJqTOIOVyyxnjMxKeQ6daUh3dMx2B
+        cPRj3NVwLxepWdMe16N7MGVXAw==
+X-Google-Smtp-Source: ABdhPJyvlv2XAUi5Zf5ph+86/M4hTEfki19S/ShaItnk7uD+cnn23Pcy3syVC70j86UecKAgi2BFSg==
+X-Received: by 2002:ac2:4ade:: with SMTP id m30mr3838822lfp.231.1612562998326;
+        Fri, 05 Feb 2021 14:09:58 -0800 (PST)
+Received: from cloudflare.com (83.24.202.200.ipv4.supernova.orange.pl. [83.24.202.200])
+        by smtp.gmail.com with ESMTPSA id k19sm1109424lfm.204.2021.02.05.14.09.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Feb 2021 14:09:57 -0800 (PST)
+References: <20210203041636.38555-1-xiyou.wangcong@gmail.com>
+ <20210203041636.38555-4-xiyou.wangcong@gmail.com>
+User-agent: mu4e 1.1.0; emacs 27.1
+From:   Jakub Sitnicki <jakub@cloudflare.com>
+To:     Cong Wang <xiyou.wangcong@gmail.com>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        duanxiongchun@bytedance.com, wangdongdong.6@bytedance.com,
+        jiang.wang@bytedance.com, Cong Wang <cong.wang@bytedance.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Lorenz Bauer <lmb@cloudflare.com>
+Subject: Re: [Patch bpf-next 03/19] skmsg: use skb ext instead of TCP_SKB_CB
+In-reply-to: <20210203041636.38555-4-xiyou.wangcong@gmail.com>
+Date:   Fri, 05 Feb 2021 23:09:56 +0100
+Message-ID: <87eehu4157.fsf@cloudflare.com>
+MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Feb 5, 2021 at 2:59 PM Jiri Olsa <jolsa@kernel.org> wrote:
+On Wed, Feb 03, 2021 at 05:16 AM CET, Cong Wang wrote:
+> From: Cong Wang <cong.wang@bytedance.com>
 >
-> We want this clean to be called from tree's root clean
-> and that one is silent if there's nothing to clean.
+> Currently TCP_SKB_CB() is hard-coded in skmsg code, it certainly
+> won't work for any other non-TCP protocols. We can move them to
+> skb ext instead of playing with skb cb, which is harder to make
+> correct.
 >
-> Adding check for all object to clean and display CLEAN
-> messages only if there are objects to remove.
+> Of course, except ->data_end, which is used by
+> sk_skb_convert_ctx_access() to adjust compile-time constant offset.
+> Fortunately, we can reuse the anonymous union where the field
+> 'tcp_tsorted_anchor' is and save/restore the overwritten part
+> before/after a brief use.
 >
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> Cc: John Fastabend <john.fastabend@gmail.com>
+> Cc: Daniel Borkmann <daniel@iogearbox.net>
+> Cc: Jakub Sitnicki <jakub@cloudflare.com>
+> Cc: Lorenz Bauer <lmb@cloudflare.com>
+> Signed-off-by: Cong Wang <cong.wang@bytedance.com>
 > ---
+>  include/linux/skbuff.h |  4 ++++
+>  include/linux/skmsg.h  | 45 ++++++++++++++++++++++++++++++++++++++++++
+>  include/net/tcp.h      | 25 -----------------------
+>  net/Kconfig            |  1 +
+>  net/core/filter.c      |  3 +--
+>  net/core/skbuff.c      |  7 +++++++
+>  net/core/skmsg.c       | 44 ++++++++++++++++++++++++++++-------------
+>  net/core/sock_map.c    | 12 +++++------
+>  8 files changed, 94 insertions(+), 47 deletions(-)
+>
+> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+> index 46f901adf1a8..12a28268233a 100644
+> --- a/include/linux/skbuff.h
+> +++ b/include/linux/skbuff.h
+> @@ -755,6 +755,7 @@ struct sk_buff {
+>  			void		(*destructor)(struct sk_buff *skb);
+>  		};
+>  		struct list_head	tcp_tsorted_anchor;
+> +		void			*data_end;
+>  	};
 
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
+I think we can avoid `data_end` by computing it in BPF with the help of
+a scratch register. Similar to how we compute skb_shinfo(skb) in
+bpf_convert_shinfo_access(). Something like:
 
->  tools/bpf/resolve_btfids/Makefile | 17 ++++++++++++-----
->  1 file changed, 12 insertions(+), 5 deletions(-)
->
-> diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
-> index 1d46a247ec95..be09ec4f03ff 100644
-> --- a/tools/bpf/resolve_btfids/Makefile
-> +++ b/tools/bpf/resolve_btfids/Makefile
-> @@ -64,13 +64,20 @@ $(BINARY): $(BPFOBJ) $(SUBCMDOBJ) $(BINARY_IN)
->         $(call msg,LINK,$@)
->         $(Q)$(CC) $(BINARY_IN) $(LDFLAGS) -o $@ $(BPFOBJ) $(SUBCMDOBJ) $(LIBS)
->
-> +clean_objects := $(wildcard $(OUTPUT)/*.o                \
-> +                            $(OUTPUT)/.*.o.cmd           \
-> +                            $(OUTPUT)/.*.o.d             \
-> +                            $(OUTPUT)/libbpf             \
-> +                            $(OUTPUT)/libsubcmd          \
-> +                            $(OUTPUT)/resolve_btfids)
-> +
-> +ifneq ($(clean_objects),)
->  clean: fixdep-clean
->         $(call msg,CLEAN,$(BINARY))
-> -       $(Q)$(RM) -f $(BINARY); \
-> -       $(RM) -rf $(if $(OUTPUT),$(OUTPUT),.)/feature; \
-> -       $(RM) -rf $(OUTPUT)/libbpf; \
-> -       $(RM) -rf $(OUTPUT)/libsubcmd; \
-> -       find $(if $(OUTPUT),$(OUTPUT),.) -name \*.o -or -name \*.o.cmd -or -name \*.o.d | xargs $(RM)
-> +       $(Q)$(RM) -rf $(clean_objects)
-> +else
-> +clean:
-> +endif
->
->  tags:
->         $(call msg,GEN,,tags)
-> --
-> 2.26.2
->
+static struct bpf_insn *bpf_convert_data_end_access(const struct bpf_insn *si,
+						    struct bpf_insn *insn)
+{
+	/* dst_reg = skb->data */
+	*insn++ = BPF_LDX_MEM(BPF_FIELD_SIZEOF(struct sk_buff, data),
+			      si->dst_reg, si->src_reg,
+			      offsetof(struct sk_buff, data));
+	/* AX = skb->len */
+	*insn++ = BPF_LDX_MEM(BPF_FIELD_SIZEOF(struct sk_buff, len),
+			      BPF_REG_AX, si->src_reg,
+			      offsetof(struct sk_buff, len));
+	/* dst_reg = skb->data + skb->len */
+	*insn++ = BPF_ALU64_REG(BPF_ADD, si->dst_reg, BPF_REG_AX);
+	/* AX = skb->data_len */
+	*insn++ = BPF_LDX_MEM(BPF_FIELD_SIZEOF(struct sk_buff, data_len),
+			      BPF_REG_AX, si->src_reg,
+			      offsetof(struct sk_buff, data_len));
+	/* dst_reg = skb->data + skb->len - skb->data_len */
+	*insn++ = BPF_ALU64_REG(BPF_SUB, si->dst_reg, BPF_REG_AX);
+
+	return insn;
+}
+
+[...]
