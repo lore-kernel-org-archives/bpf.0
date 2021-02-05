@@ -2,141 +2,159 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62865C433E0
-	for <bpf@archiver.kernel.org>; Fri,  5 Feb 2021 21:45:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 70220C433E0
+	for <bpf@archiver.kernel.org>; Fri,  5 Feb 2021 21:52:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2347364E33
-	for <bpf@archiver.kernel.org>; Fri,  5 Feb 2021 21:45:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3AE4364F92
+	for <bpf@archiver.kernel.org>; Fri,  5 Feb 2021 21:52:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbhBEVo3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 5 Feb 2021 16:44:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58980 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231245AbhBEVna (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 5 Feb 2021 16:43:30 -0500
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26BD1C06174A;
-        Fri,  5 Feb 2021 13:42:50 -0800 (PST)
-Received: by mail-io1-xd32.google.com with SMTP id q7so8753608iob.0;
-        Fri, 05 Feb 2021 13:42:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=cUYenjmJ9cKKN2NVNXP7Wjbj+RthPpuIhOcVKNsaAsc=;
-        b=po1CWeaX2J8Q7cmzBZN6be5J1NGa6VHuMeofwIS+bVjA+aArYN7tQ++rvgDFolsY6M
-         NaYHfG2ztt4gAhMWOoCCubTO6aMKbkPdNzWDlEUGZ0/jtw7t8SwetWIUWhHVZN6PW/TU
-         3tAxoUBdoS6RF+QvN143bFKaz+ygTLvXLzFQwKIDANERJzZw3H15hAOBQ0d8xTaRXPyg
-         fqRei3Z6PgCJ4DGLi8Sq0+Qg8g5RCOmEhyV3wspZzDZb/osBwjp2z6MMXu7ug6KaZVWB
-         JRbW44knp76BueshzLdP7YrxCfDVmiATCyPJ7vHIEpQwUqhTXxCFU56OeKbNNdyHdm0z
-         3KTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=cUYenjmJ9cKKN2NVNXP7Wjbj+RthPpuIhOcVKNsaAsc=;
-        b=lL0dDOBkn0PNkqL44ooTkC+HmApwJKP7Cgw9kpVA58HvrIQLfAGHPinBeA8ohtvhYk
-         ndzxEcRnVI72Iuym1T3rVKp8xqZvPoPE1eFEgod3oG3kRRjtEXsEZLplTeJSOtnTkOwB
-         8BTr+uYXPOWsIFefiUaK+/1sCuin3SuFA2smsVBTR6u1ZCNSA9+5i59roWRHAv8mhfJt
-         O02KsCImlS9aQOO2/fkQbNjJm0hVNGLyrIkr0e3+YqOK1accz4kRQNhWqZoDSPLeX3nD
-         Dn1pNb7/VsG4LllvgWOtlW0gli+q8SsQ3t7s9fq11Z8eyWId1sOZvwXDE1OX3QWlXWTW
-         yxZA==
-X-Gm-Message-State: AOAM532O12sFcLkzy3mF869otD14u28wqL13WITFKGIoJ3aObhMHZiJl
-        AgoGv3PFuG+raGb51T/VKWn9qryotiH5MByHydQ=
-X-Google-Smtp-Source: ABdhPJxCGJ/umotF2zQhyVzj6yEIvX7MF8RZJ9N/au9I2J5bQE/cuIHcl5T/yIg1NEN6ea3X+uX015q69ZcvkZybWwc=
-X-Received: by 2002:a05:6638:2694:: with SMTP id o20mr7051927jat.132.1612561369540;
- Fri, 05 Feb 2021 13:42:49 -0800 (PST)
+        id S229683AbhBEVnQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 5 Feb 2021 16:43:16 -0500
+Received: from mail.efficios.com ([167.114.26.124]:47352 "EHLO
+        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232887AbhBEO74 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 5 Feb 2021 09:59:56 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 474922F508D;
+        Fri,  5 Feb 2021 10:09:28 -0500 (EST)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id I1BKq0K46zNG; Fri,  5 Feb 2021 10:09:27 -0500 (EST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id C7ACB2F47DC;
+        Fri,  5 Feb 2021 10:09:27 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com C7ACB2F47DC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1612537767;
+        bh=Ck2u+dtqWB3vlWMCLhAAtvbRHCvY9B7KyJIHvTSoVLw=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=Dg9QxwlDor6mV+Sd/7v2A2FNlCVCqONKIDCfJ5pPW985k1yaeewq+nbNNTD4pUp3t
+         TC9ObNTj2NTsybUWlMO64/79q8pQwpJq9P6KTE2v7wCFIrSAEnFP5NZoQc1APdG91g
+         W+tVqCDNKPbwPKtnKwaP0hUpyVkSPGArjzUSVmTDYroEfSK5CdkcxT9gjOS4o/VEaD
+         rg+PKRjalZaZaWG+vQo8R/hQ0erCl879OYg4AcBoljX7FI4dhA9VV6S786L7HNgWy5
+         Im3dWaO3fFMZMMcra/wSdT3T4n0A4cKocH3EU/qkXPf06nJT4EWycVnYG2hsflgS1C
+         d1kALGNJXTP0A==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 9R2Zsrk1ft6s; Fri,  5 Feb 2021 10:09:27 -0500 (EST)
+Received: from localhost (unknown [192.222.236.144])
+        by mail.efficios.com (Postfix) with ESMTPSA id 6ECB52F4D5A;
+        Fri,  5 Feb 2021 10:09:27 -0500 (EST)
+Date:   Fri, 5 Feb 2021 10:09:26 -0500
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Brendan Jackman <jackmanb@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Paul Renauld <renauld@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        James Morris <jmorris@namei.org>, pjt@google.com,
+        jannh@google.com, peterz@infradead.org, rafael.j.wysocki@intel.com,
+        keescook@chromium.org, thgarnie@chromium.org, kpsingh@google.com,
+        paul.renauld.epfl@gmail.com, Brendan Jackman <jackmanb@google.com>,
+        mathieu.desnoyers@efficios.com, rostedt@goodmis.org
+Subject: Re: [RFC] security: replace indirect calls with static calls
+Message-ID: <20210205150926.GA12608@localhost>
+References: <20200820164753.3256899-1-jackmanb@chromium.org>
 MIME-Version: 1.0
-References: <CA+icZUVQSojGgnis8Ds5GW-7-PVMZ2w4X5nQKSSkBPf-29NS6Q@mail.gmail.com>
- <20210205211010.2764627-1-ndesaulniers@google.com> <CA+icZUXkCC9U3PsYzqhzu7BZa-eE2kd53SfX2ODrr+N=QO6VvQ@mail.gmail.com>
- <CAKwvOd=ktdttx5E=_k7B-WuJsic3imOecTUDyaQA9VUpLF45Jw@mail.gmail.com>
-In-Reply-To: <CAKwvOd=ktdttx5E=_k7B-WuJsic3imOecTUDyaQA9VUpLF45Jw@mail.gmail.com>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Fri, 5 Feb 2021 22:42:36 +0100
-Message-ID: <CA+icZUU=BJKOfgCbt4bGhy-rG=Yahv1GkOqWLriaYptGqnHWzA@mail.gmail.com>
-Subject: Re: ERROR: INT DW_ATE_unsigned_1 Error emitting BTF type
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Andrii Nakryiko <andriin@fb.com>, arnaldo.melo@gmail.com,
-        berrange@redhat.com, bpf <bpf@vger.kernel.org>, cavok@debian.org,
-        dwarves@vger.kernel.org, jengelh@inai.de,
-        Jiri Olsa <jolsa@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Mark Wielaard <mjw@redhat.com>,
-        Ondrej Mosnacek <omosnace@redhat.com>, paul@paul-moore.com,
-        Tom Stellard <tstellar@redhat.com>, Yonghong Song <yhs@fb.com>,
-        zzam@gentoo.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200820164753.3256899-1-jackmanb@chromium.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Feb 5, 2021 at 10:40 PM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> On Fri, Feb 5, 2021 at 1:17 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> >
-> > On Fri, Feb 5, 2021 at 10:10 PM Nick Desaulniers
-> > <ndesaulniers@google.com> wrote:
-> > >
-> > > > Hi,
-> > > >
-> > > > when building with pahole v1.20 and binutils v2.35.2 plus Clang
-> > > > v12.0.0-rc1 and DWARF-v5 I see:
-> > > > ...
-> > > > + info BTF .btf.vmlinux.bin.o
-> > > > + [  != silent_ ]
-> > > > + printf   %-7s %s\n BTF .btf.vmlinux.bin.o
-> > > >  BTF     .btf.vmlinux.bin.o
-> > > > + LLVM_OBJCOPY=/opt/binutils/bin/objcopy /opt/pahole/bin/pahole -J
-> > > > .tmp_vmlinux.btf
-> > > > [115] INT DW_ATE_unsigned_1 Error emitting BTF type
-> > > > Encountered error while encoding BTF.
-> > >
-> > > Yes, I observe this error, too.
-> > >
-> > > https://gist.github.com/nickdesaulniers/ae8c9efbe4da69b1cf0dce138c1d2781
-> > >
-> > > via v9 of my DWARF v5 series, which should help make this easier to
-> > > reproduce:
-> > > https://lore.kernel.org/lkml/CA+icZUW3sg_PkbmKSFMs6EqwQV7=hvKuAgZSsbg=Qr6gTs7RbQ@mail.gmail.com/T/#m45ec7e6df4c4b5e9da034b95d7dfc8e2a0c81dac
-> >
-> > Thanks Nick for confirming the error.
-> >
-> > Ah, I see you passed:
-> >
-> > make LLVM=1 LLVM_IAS=1 ...
-> >
-> > Can you by chance try with KCFLAGS="-fbinutils-version=2.35"?
->
-> $ PATH=/path/to/tot/pahole/build:$PATH make LLVM=1 LLVM_IAS=1 -j72
-> KCFLAGS="-fbinutils-version=2.35"
-> ...
->   BTF     .btf.vmlinux.bin.o
-> [12919] INT DW_ATE_unsigned_1 Error emitting BTF type
-> Encountered error while encoding BTF.
-> ...
->   LD      vmlinux
->   BTFIDS  vmlinux
-> FAILED: load BTF from vmlinux: Invalid argument
->
+On 20-Aug-2020 06:47:53 PM, Brendan Jackman wrote:
+> From: Paul Renauld <renauld@google.com>
+> 
+> LSMs have high overhead due to indirect function calls through
+> retpolines. This RPC proposes to replace these with static calls [1]
+> instead.
+> 
+> This overhead is especially significant for the "bpf" LSM which supports
+> the implementation of LSM hooks with eBPF programs (security/bpf)[2]. In
+> order to facilitate this, the "bpf" LSM provides a default nop callback for
+> all LSM hooks. When enabled, the "bpf", LSM incurs an unnecessary /
+> avoidable indirect call to this nop callback.
+> 
+> The performance impact on a simple syscall eventfd_write (which triggers
+> the file_permission hook) was measured with and without "bpf" LSM
+> enabled. Activating the LSM resulted in an overhead of 4% [3].
+> 
+> This overhead prevents the adoption of bpf LSM on performance critical
+> systems, and also, in general, slows down all LSMs.
+> 
+> Currently, the LSM hook callbacks are stored in a linked list and
+> dispatched as indirect calls. Using static calls can remove this overhead
+> by replacing all indirect calls with direct calls.
+> 
+> During the discussion of the "bpf" LSM patch-set it was proposed to special
+> case BPF LSM to avoid the overhead by using static keys. This was however
+> not accepted and it was decided to [4]:
+> 
+> - Not special-case the "bpf" LSM.
+> - Implement a general solution benefitting the whole LSM framework.
+> 
+> This is based on the static call branch [5].
 
-OK, thanks.
+Hi!
 
-I stopped my build:
+So I reviewed this quickly, and hopefully my understanding is correct.
+AFAIU, your approach is limited to scenarios where the callbacks are
+known at compile-time. It also appears to add the overhead of a
+switch/case for every function call on the fast-path.
 
-/usr/bin/perf_5.10 stat make V=1 -j4 LLVM=1 LLVM_IAS=1
-PAHOLE=/opt/pahole/bin/pahole KCFLAGS=-fbinutils-version=2.3
-5 LOCALVERSION=-13-amd64-clang12-llvm KBUILD_VERBOSE=1
-KBUILD_BUILD_HOST=iniza KBUILD_BUILD_USER=sedat.dilek@gmail.com
-KBUILD_BUILD_TIMESTAMP=2021-02-05 bindeb-pkg KDE
-B_PKGVERSION=5.11.0~rc6-13~bullseye+dileks1
+I am the original author of the tracepoint infrastructure in the Linux
+kernel, which also needs to iterate on an array of callbacks. Recently,
+Steven Rostedt pushed a change which accelerates the single-callback
+case using static calls to reduce retpoline mitigation overhead, but I
+would prefer if we could accelerate the multiple-callback case as well.
+Note that for tracepoints, the callbacks are not known at compile-time.
 
-Enjoy weekend.
+This is where I think we could come up with a generic solution that
+would fit both LSM and tracepoint use-cases.
 
-- Sedat -
+Here is what I have in mind. Let's say we generate code to accelerate up
+to N calls, and after that we have a fallback using indirect calls.
+
+Then we should be able to generate the following using static keys as a
+jump table and N static calls:
+
+  jump <static key label target>
+label_N:
+  stack setup
+  call
+label_N-1:
+  stack setup
+  call
+label_N-2:
+  stack setup
+  call
+  ...
+label_0:
+  jump end
+label_fallback:
+  <iteration and indirect calls>
+end:
+
+So the static keys would be used to jump to the appropriate label (using
+a static branch, which has pretty much 0 overhead). Static calls would
+be used to implement each of the calls.
+
+Thoughts ?
+
+Thanks,
+
+Mathieu
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
