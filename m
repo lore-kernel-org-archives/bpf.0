@@ -2,104 +2,126 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A7DDC433DB
-	for <bpf@archiver.kernel.org>; Fri,  5 Feb 2021 23:02:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69C0CC433E0
+	for <bpf@archiver.kernel.org>; Sat,  6 Feb 2021 02:32:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0C68664E43
-	for <bpf@archiver.kernel.org>; Fri,  5 Feb 2021 23:02:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 352D265024
+	for <bpf@archiver.kernel.org>; Sat,  6 Feb 2021 02:32:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230296AbhBEXCE convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 5 Feb 2021 18:02:04 -0500
-Received: from us-smtp-delivery-44.mimecast.com ([205.139.111.44]:57540 "EHLO
-        us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232222AbhBEMle (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 5 Feb 2021 07:41:34 -0500
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-188-jcChwwVFP-GA3zUkZXIv9w-1; Fri, 05 Feb 2021 07:40:32 -0500
-X-MC-Unique: jcChwwVFP-GA3zUkZXIv9w-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 88011100CCC2;
-        Fri,  5 Feb 2021 12:40:30 +0000 (UTC)
-Received: from krava.cust.in.nbox.cz (unknown [10.40.195.59])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C655660936;
-        Fri,  5 Feb 2021 12:40:27 +0000 (UTC)
-From:   Jiri Olsa <jolsa@kernel.org>
-To:     Alexei Starovoitov <ast@kernel.org>,
+        id S229703AbhBFCb3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 5 Feb 2021 21:31:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37192 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229537AbhBFCa6 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 5 Feb 2021 21:30:58 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF95CC08ED35;
+        Fri,  5 Feb 2021 15:19:25 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id y128so8336936ybf.10;
+        Fri, 05 Feb 2021 15:19:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=eaySnepDzbdWK06t4HWZqmtay2gND6FqJB5mQU1GyNk=;
+        b=A+eCqkjlgp/p4pwaEXRy99LxJWrvSUp2lG8jE+/nw8IYa7DCCx2brl+75YXwf4V1cH
+         GFAMb/Z0ZTwIS+jALWtv6JAOtd5wFxWsmhGZ3T+W7bNhACZo/3f0zmTvYZg2tBWnVH5Y
+         L7WZA3tzmn8iGAfBpejM7y37UgVhHc2hv110IssNLoILQ/xuOB+TOZjVDHvzldnGBLpN
+         Zrd+2FbNsvTUpXhaTNewl9Gofb8jmbx1xN0VgbaQfJ5OChdFnUxlvVukMIW/1iTLXA7L
+         eKLfkqiDvvFwKNHX4ehx5i3BN7IZWr9ezLEwSDOiwLvkUWmW3rdQmNxgq9nDlzBCOmOU
+         vzdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eaySnepDzbdWK06t4HWZqmtay2gND6FqJB5mQU1GyNk=;
+        b=BBNGXepVC50yDuSMYfNidNNJMW5+vAF29Rj4dGTcMsWvP2hK18A4KYXiYpxE5EeJDN
+         fYPoUt5AtzfVur2V1wZOgTpf7zM5ZJdsY9qE+45Qgmdw1YDyb1VvRjmOkssnz3gQzHwZ
+         Oq7Em4SDxCX8ibSXkUyvZ0boqQ6qDlanq6IPtvJQdakeTR/a0ZZjZ8KdJ1vkK2+H+Pfg
+         uBi4rrVWhmDoYc5qY4W856a+ASSsR1w6Yo8OWrwlidPgrcX6VkJvCYg75uSAP+gVU7qT
+         Q/pQFBbRxe0UhZfskofdGdjV3iY6W06goHuFXMhSRNAESnshJbdVo4tn9NktzTgoGGvw
+         7PUg==
+X-Gm-Message-State: AOAM530ugLJ7+4ymPJjStHiNVVtSfRLRnKPGXPxI7Aaz5rrhBMPpY1Vm
+        AWgnnXp2mfsES4zAsThrl2v3xi2CJLw+EXy08AfU+hFv0QFnu3Tf
+X-Google-Smtp-Source: ABdhPJwt7koiechQx56/EbEreAyk9y0MSngpulAsJbBPdaM7f/1PsGrvmYXWqGApF2lrJzzC7RycR83mu192C39uepk=
+X-Received: by 2002:a25:da4d:: with SMTP id n74mr10053150ybf.347.1612567165234;
+ Fri, 05 Feb 2021 15:19:25 -0800 (PST)
+MIME-Version: 1.0
+References: <20210205124020.683286-1-jolsa@kernel.org> <20210205124020.683286-3-jolsa@kernel.org>
+In-Reply-To: <20210205124020.683286-3-jolsa@kernel.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 5 Feb 2021 15:19:14 -0800
+Message-ID: <CAEf4BzY6aJ5YfErvbY8AwuDztvgs4xrd5dC8y3vkxTZbiMppMA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/4] tools/resolve_btfids: Check objects before removing
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Andrii Nakryiko <andriin@fb.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@chromium.org>,
         Masahiro Yamada <masahiroy@kernel.org>,
         Michal Marek <michal.lkml@markovi.net>,
-        linux-kbuild@vger.kernel.org
-Subject: [PATCH bpf-next 2/4] tools/resolve_btfids: Check objects before removing
-Date:   Fri,  5 Feb 2021 13:40:18 +0100
-Message-Id: <20210205124020.683286-3-jolsa@kernel.org>
-In-Reply-To: <20210205124020.683286-1-jolsa@kernel.org>
-References: <20210205124020.683286-1-jolsa@kernel.org>
-MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jolsa@kernel.org
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: kernel.org
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset=WINDOWS-1252
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-We want this clean to be called from tree's root clean
-and that one is silent if there's nothing to clean.
+On Fri, Feb 5, 2021 at 2:59 PM Jiri Olsa <jolsa@kernel.org> wrote:
+>
+> We want this clean to be called from tree's root clean
+> and that one is silent if there's nothing to clean.
+>
+> Adding check for all object to clean and display CLEAN
+> messages only if there are objects to remove.
+>
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> ---
 
-Adding check for all object to clean and display CLEAN
-messages only if there are objects to remove.
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
 
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
----
- tools/bpf/resolve_btfids/Makefile | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
-
-diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
-index 1d46a247ec95..be09ec4f03ff 100644
---- a/tools/bpf/resolve_btfids/Makefile
-+++ b/tools/bpf/resolve_btfids/Makefile
-@@ -64,13 +64,20 @@ $(BINARY): $(BPFOBJ) $(SUBCMDOBJ) $(BINARY_IN)
- 	$(call msg,LINK,$@)
- 	$(Q)$(CC) $(BINARY_IN) $(LDFLAGS) -o $@ $(BPFOBJ) $(SUBCMDOBJ) $(LIBS)
- 
-+clean_objects := $(wildcard $(OUTPUT)/*.o                \
-+                            $(OUTPUT)/.*.o.cmd           \
-+                            $(OUTPUT)/.*.o.d             \
-+                            $(OUTPUT)/libbpf             \
-+                            $(OUTPUT)/libsubcmd          \
-+                            $(OUTPUT)/resolve_btfids)
-+
-+ifneq ($(clean_objects),)
- clean: fixdep-clean
- 	$(call msg,CLEAN,$(BINARY))
--	$(Q)$(RM) -f $(BINARY); \
--	$(RM) -rf $(if $(OUTPUT),$(OUTPUT),.)/feature; \
--	$(RM) -rf $(OUTPUT)/libbpf; \
--	$(RM) -rf $(OUTPUT)/libsubcmd; \
--	find $(if $(OUTPUT),$(OUTPUT),.) -name \*.o -or -name \*.o.cmd -or -name \*.o.d | xargs $(RM)
-+	$(Q)$(RM) -rf $(clean_objects)
-+else
-+clean:
-+endif
- 
- tags:
- 	$(call msg,GEN,,tags)
--- 
-2.26.2
-
+>  tools/bpf/resolve_btfids/Makefile | 17 ++++++++++++-----
+>  1 file changed, 12 insertions(+), 5 deletions(-)
+>
+> diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
+> index 1d46a247ec95..be09ec4f03ff 100644
+> --- a/tools/bpf/resolve_btfids/Makefile
+> +++ b/tools/bpf/resolve_btfids/Makefile
+> @@ -64,13 +64,20 @@ $(BINARY): $(BPFOBJ) $(SUBCMDOBJ) $(BINARY_IN)
+>         $(call msg,LINK,$@)
+>         $(Q)$(CC) $(BINARY_IN) $(LDFLAGS) -o $@ $(BPFOBJ) $(SUBCMDOBJ) $(LIBS)
+>
+> +clean_objects := $(wildcard $(OUTPUT)/*.o                \
+> +                            $(OUTPUT)/.*.o.cmd           \
+> +                            $(OUTPUT)/.*.o.d             \
+> +                            $(OUTPUT)/libbpf             \
+> +                            $(OUTPUT)/libsubcmd          \
+> +                            $(OUTPUT)/resolve_btfids)
+> +
+> +ifneq ($(clean_objects),)
+>  clean: fixdep-clean
+>         $(call msg,CLEAN,$(BINARY))
+> -       $(Q)$(RM) -f $(BINARY); \
+> -       $(RM) -rf $(if $(OUTPUT),$(OUTPUT),.)/feature; \
+> -       $(RM) -rf $(OUTPUT)/libbpf; \
+> -       $(RM) -rf $(OUTPUT)/libsubcmd; \
+> -       find $(if $(OUTPUT),$(OUTPUT),.) -name \*.o -or -name \*.o.cmd -or -name \*.o.d | xargs $(RM)
+> +       $(Q)$(RM) -rf $(clean_objects)
+> +else
+> +clean:
+> +endif
+>
+>  tags:
+>         $(call msg,GEN,,tags)
+> --
+> 2.26.2
+>
