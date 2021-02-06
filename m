@@ -2,132 +2,234 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BCECC433E0
-	for <bpf@archiver.kernel.org>; Sat,  6 Feb 2021 16:27:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DFD4C433DB
+	for <bpf@archiver.kernel.org>; Sat,  6 Feb 2021 17:04:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E6D0064DD8
-	for <bpf@archiver.kernel.org>; Sat,  6 Feb 2021 16:27:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3B85864E80
+	for <bpf@archiver.kernel.org>; Sat,  6 Feb 2021 17:04:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230120AbhBFQ0k (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 6 Feb 2021 11:26:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46592 "EHLO
+        id S229590AbhBFREa (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 6 Feb 2021 12:04:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbhBFQ0f (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 6 Feb 2021 11:26:35 -0500
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C05C061786;
-        Sat,  6 Feb 2021 08:25:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=qn9SKsuN29e/1ymaZOP8h+DprUmvijIyVh8PkwYRC0Q=; b=UsQINfoXzDgjQebAy+d8plz63j
-        FXVUoznhYMHmU/3fKXJ130rA6GWCCgwqwX7txvnrBWJkmpARul0/I8l2Z5vEJa5db4U0mcmtAA+b7
-        BzXCNLqUlE1dN2OOUTDdAgAkaK7L0A2/0Es5lzNrLLcmNUhg7HzvBvEFEairqnL7XUtl4WJt+n8BB
-        w5IQeUjKrfWaw8X9kO5C/ASif3CNdxkR2oyncqP+dB9rkzWYSVDZLO0g5rtKswFHCyygEyoOZXlzd
-        YrROyD+bf12K+I2qIQ1rWOamaSzottXEHFGPLYysdT7nMQwRvNk5DUleMcFhhh1xIC3f9IT+B/rYf
-        7bfKaOvw==;
-Received: from [2601:1c0:6280:3f0::b879]
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1l8QP6-0005uE-NW; Sat, 06 Feb 2021 16:25:49 +0000
-Subject: Re: [PATCH bpf v2] selftests/bpf: remove bash feature in
- test_xdp_redirect.sh
-To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
-        ast@kernel.org, daniel@iogearbox.net, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        u9012063@gmail.com
-References: <20210206092654.155239-1-bjorn.topel@gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <4cf38817-15bb-da36-68eb-4e268294b611@infradead.org>
-Date:   Sat, 6 Feb 2021 08:25:43 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.0
-MIME-Version: 1.0
-In-Reply-To: <20210206092654.155239-1-bjorn.topel@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        with ESMTP id S229506AbhBFRE3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 6 Feb 2021 12:04:29 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1ED2C061756
+        for <bpf@vger.kernel.org>; Sat,  6 Feb 2021 09:03:48 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id o7so6847187pgl.1
+        for <bpf@vger.kernel.org>; Sat, 06 Feb 2021 09:03:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=ff2zsTna5n4xNk9qjKCjYgZuYcKCEND5UpUV8fKCYfw=;
+        b=qRJPNqUMPhiifFasiMrpjEHjpkuIQiHkQtiGijxfv8Tn+KlsZld26crhXuxiqMO/q+
+         +16WzzhtDGFg176OX3PSzdP4yyxT9q+AS1N235iQnT0W9jiPZqtU08MUhKqBxKSGyHs/
+         fqbyrLaF/5vTHjQXRFVK/yv7owmsoBQT0mU5++LJ2XFhQxigWAYz5khxkl+tBfwPSq9T
+         5vOo+hZFCOU89aPN8F5cXSdELyz6NVe4qsNRX5v7de8Q2IBGhQWDaqHmO+lSIHHsVKHK
+         GXTL4Q5WcyGgZYGQFsVk5/l62DVCbVOWZ75pM5ybjGkCqS+8OD3Kiy6MEOUycA7gU72T
+         soFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=ff2zsTna5n4xNk9qjKCjYgZuYcKCEND5UpUV8fKCYfw=;
+        b=XddvkUfDeolizOoocKQJ0gau9ZiQyajfiideUU9hVOa+ROPfrtZG3JeOlbqflEcOGo
+         k1moOHEtgDwjLUOXE7r16eglB6kXmJDN0Mt0Rd7J291skHG8wvnEzzTv9hULyuf3mcJh
+         YJHpqRA9CxuWu+eufAWmnlH0yEkk4d6xCdqPvJhB5UspwSByseUBvU6yTD4a+uDlApfd
+         uHpAluYu0EX2ECqssuHLXkUONNKxNGexPn8RTCTYSZjGbUOT5oDoJU1iyLQtbkZbA0fR
+         jqZ87NX/l97Na4n1hvEa+X5pabLO2Jf/NicohskSMIifenIxo74FrC9i6sK6t0maM9Wb
+         +dnw==
+X-Gm-Message-State: AOAM531v5WwLwSZAb1vDRrndSI94/jw27+DoOv5dP1eqEA836aGF3nQp
+        BBxM53AQNozn4ILWy/SvjqImylIkmn0=
+X-Google-Smtp-Source: ABdhPJyd1YcYKF5vlE0mCpLInszgslIrYLe5l3sz4gIRgA9IxOmkTbLmtXAuv12TxTOPfG4uUjHUag==
+X-Received: by 2002:a62:1c84:0:b029:1c4:f959:7b29 with SMTP id c126-20020a621c840000b02901c4f9597b29mr10094059pfc.34.1612631028280;
+        Sat, 06 Feb 2021 09:03:48 -0800 (PST)
+Received: from ast-mbp.thefacebook.com ([163.114.132.7])
+        by smtp.gmail.com with ESMTPSA id j14sm11149964pjl.35.2021.02.06.09.03.47
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 06 Feb 2021 09:03:47 -0800 (PST)
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     davem@davemloft.net
+Cc:     daniel@iogearbox.net, bpf@vger.kernel.org, kernel-team@fb.com
+Subject: [PATCH v2 bpf-next 1/7] bpf: Optimize program stats
+Date:   Sat,  6 Feb 2021 09:03:38 -0800
+Message-Id: <20210206170344.78399-2-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.13.5
+In-Reply-To: <20210206170344.78399-1-alexei.starovoitov@gmail.com>
+References: <20210206170344.78399-1-alexei.starovoitov@gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 2/6/21 1:26 AM, Björn Töpel wrote:
-> From: Björn Töpel <bjorn.topel@intel.com>
-> 
-> The test_xdp_redirect.sh script uses a bash redirect feature,
-> '&>/dev/null'. Use '>/dev/null 2>&1' instead.
-> 
-> Also remove the 'set -e' since the script actually relies on that the
-> return value can be used to determine pass/fail of the test.
-> 
-> Acked-by: William Tu <u9012063@gmail.com>
-> Fixes: 996139e801fd ("selftests: bpf: add a test for XDP redirect")
-> Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
+From: Alexei Starovoitov <ast@kernel.org>
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
+Move bpf_prog_stats from prog->aux into prog to avoid one extra load
+in critical path of program execution.
 
-Thanks.
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+---
+ include/linux/bpf.h     |  8 --------
+ include/linux/filter.h  | 10 +++++++++-
+ kernel/bpf/core.c       |  8 ++++----
+ kernel/bpf/syscall.c    |  2 +-
+ kernel/bpf/trampoline.c |  2 +-
+ kernel/bpf/verifier.c   |  2 +-
+ 6 files changed, 16 insertions(+), 16 deletions(-)
 
-> ---
-> William, I kept your Acked-by.
-> 
-> v2: Kept /bin/sh and removed bashisms. (Randy)
-> ---
->  tools/testing/selftests/bpf/test_xdp_redirect.sh | 15 +++++++--------
->  1 file changed, 7 insertions(+), 8 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/test_xdp_redirect.sh b/tools/testing/selftests/bpf/test_xdp_redirect.sh
-> index dd80f0c84afb..4d4887da175c 100755
-> --- a/tools/testing/selftests/bpf/test_xdp_redirect.sh
-> +++ b/tools/testing/selftests/bpf/test_xdp_redirect.sh
-> @@ -46,20 +46,20 @@ test_xdp_redirect()
->  
->  	setup
->  
-> -	ip link set dev veth1 $xdpmode off &> /dev/null
-> +	ip link set dev veth1 $xdpmode off >/dev/null 2>&1
->  	if [ $? -ne 0 ];then
->  		echo "selftests: test_xdp_redirect $xdpmode [SKIP]"
->  		return 0
->  	fi
->  
-> -	ip -n ns1 link set veth11 $xdpmode obj xdp_dummy.o sec xdp_dummy &> /dev/null
-> -	ip -n ns2 link set veth22 $xdpmode obj xdp_dummy.o sec xdp_dummy &> /dev/null
-> -	ip link set dev veth1 $xdpmode obj test_xdp_redirect.o sec redirect_to_222 &> /dev/null
-> -	ip link set dev veth2 $xdpmode obj test_xdp_redirect.o sec redirect_to_111 &> /dev/null
-> +	ip -n ns1 link set veth11 $xdpmode obj xdp_dummy.o sec xdp_dummy >/dev/null 2>&1
-> +	ip -n ns2 link set veth22 $xdpmode obj xdp_dummy.o sec xdp_dummy >/dev/null 2>&1
-> +	ip link set dev veth1 $xdpmode obj test_xdp_redirect.o sec redirect_to_222 >/dev/null 2>&1
-> +	ip link set dev veth2 $xdpmode obj test_xdp_redirect.o sec redirect_to_111 >/dev/null 2>&1
->  
-> -	ip netns exec ns1 ping -c 1 10.1.1.22 &> /dev/null
-> +	ip netns exec ns1 ping -c 1 10.1.1.22 >/dev/null 2>&1
->  	local ret1=$?
-> -	ip netns exec ns2 ping -c 1 10.1.1.11 &> /dev/null
-> +	ip netns exec ns2 ping -c 1 10.1.1.11 >/dev/null 2>&1
->  	local ret2=$?
->  
->  	if [ $ret1 -eq 0 -a $ret2 -eq 0 ]; then
-> @@ -72,7 +72,6 @@ test_xdp_redirect()
->  	cleanup
->  }
->  
-> -set -e
->  trap cleanup 2 3 6 9
->  
->  test_xdp_redirect xdpgeneric
-> 
-> base-commit: 6183f4d3a0a2ad230511987c6c362ca43ec0055f
-> 
-
-
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 321966fc35db..026fa8873c5d 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -14,7 +14,6 @@
+ #include <linux/numa.h>
+ #include <linux/mm_types.h>
+ #include <linux/wait.h>
+-#include <linux/u64_stats_sync.h>
+ #include <linux/refcount.h>
+ #include <linux/mutex.h>
+ #include <linux/module.h>
+@@ -507,12 +506,6 @@ enum bpf_cgroup_storage_type {
+  */
+ #define MAX_BPF_FUNC_ARGS 12
+ 
+-struct bpf_prog_stats {
+-	u64 cnt;
+-	u64 nsecs;
+-	struct u64_stats_sync syncp;
+-} __aligned(2 * sizeof(u64));
+-
+ struct btf_func_model {
+ 	u8 ret_size;
+ 	u8 nr_args;
+@@ -845,7 +838,6 @@ struct bpf_prog_aux {
+ 	u32 linfo_idx;
+ 	u32 num_exentries;
+ 	struct exception_table_entry *extable;
+-	struct bpf_prog_stats __percpu *stats;
+ 	union {
+ 		struct work_struct work;
+ 		struct rcu_head	rcu;
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 5b3137d7b690..c6592590a0b7 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -22,6 +22,7 @@
+ #include <linux/vmalloc.h>
+ #include <linux/sockptr.h>
+ #include <crypto/sha1.h>
++#include <linux/u64_stats_sync.h>
+ 
+ #include <net/sch_generic.h>
+ 
+@@ -539,6 +540,12 @@ struct bpf_binary_header {
+ 	u8 image[] __aligned(BPF_IMAGE_ALIGNMENT);
+ };
+ 
++struct bpf_prog_stats {
++	u64 cnt;
++	u64 nsecs;
++	struct u64_stats_sync syncp;
++} __aligned(2 * sizeof(u64));
++
+ struct bpf_prog {
+ 	u16			pages;		/* Number of allocated pages */
+ 	u16			jited:1,	/* Is our filter JIT'ed? */
+@@ -559,6 +566,7 @@ struct bpf_prog {
+ 	u8			tag[BPF_TAG_SIZE];
+ 	struct bpf_prog_aux	*aux;		/* Auxiliary fields */
+ 	struct sock_fprog_kern	*orig_prog;	/* Original BPF program */
++	struct bpf_prog_stats __percpu *stats;
+ 	unsigned int		(*bpf_func)(const void *ctx,
+ 					    const struct bpf_insn *insn);
+ 	/* Instructions for interpreter */
+@@ -581,7 +589,7 @@ DECLARE_STATIC_KEY_FALSE(bpf_stats_enabled_key);
+ 		struct bpf_prog_stats *__stats;				\
+ 		u64 __start = sched_clock();				\
+ 		__ret = dfunc(ctx, (prog)->insnsi, (prog)->bpf_func);	\
+-		__stats = this_cpu_ptr(prog->aux->stats);		\
++		__stats = this_cpu_ptr(prog->stats);			\
+ 		u64_stats_update_begin(&__stats->syncp);		\
+ 		__stats->cnt++;						\
+ 		__stats->nsecs += sched_clock() - __start;		\
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 5bbd4884ff7a..fa3da4cda476 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -114,8 +114,8 @@ struct bpf_prog *bpf_prog_alloc(unsigned int size, gfp_t gfp_extra_flags)
+ 	if (!prog)
+ 		return NULL;
+ 
+-	prog->aux->stats = alloc_percpu_gfp(struct bpf_prog_stats, gfp_flags);
+-	if (!prog->aux->stats) {
++	prog->stats = alloc_percpu_gfp(struct bpf_prog_stats, gfp_flags);
++	if (!prog->stats) {
+ 		kfree(prog->aux);
+ 		vfree(prog);
+ 		return NULL;
+@@ -124,7 +124,7 @@ struct bpf_prog *bpf_prog_alloc(unsigned int size, gfp_t gfp_extra_flags)
+ 	for_each_possible_cpu(cpu) {
+ 		struct bpf_prog_stats *pstats;
+ 
+-		pstats = per_cpu_ptr(prog->aux->stats, cpu);
++		pstats = per_cpu_ptr(prog->stats, cpu);
+ 		u64_stats_init(&pstats->syncp);
+ 	}
+ 	return prog;
+@@ -249,7 +249,7 @@ void __bpf_prog_free(struct bpf_prog *fp)
+ 	if (fp->aux) {
+ 		mutex_destroy(&fp->aux->used_maps_mutex);
+ 		mutex_destroy(&fp->aux->dst_mutex);
+-		free_percpu(fp->aux->stats);
++		free_percpu(fp->stats);
+ 		kfree(fp->aux->poke_tab);
+ 		kfree(fp->aux);
+ 	}
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index e5999d86c76e..f7df56a704de 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -1739,7 +1739,7 @@ static void bpf_prog_get_stats(const struct bpf_prog *prog,
+ 		unsigned int start;
+ 		u64 tnsecs, tcnt;
+ 
+-		st = per_cpu_ptr(prog->aux->stats, cpu);
++		st = per_cpu_ptr(prog->stats, cpu);
+ 		do {
+ 			start = u64_stats_fetch_begin_irq(&st->syncp);
+ 			tnsecs = st->nsecs;
+diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+index 35c5887d82ff..5be3beeedd74 100644
+--- a/kernel/bpf/trampoline.c
++++ b/kernel/bpf/trampoline.c
+@@ -412,7 +412,7 @@ void notrace __bpf_prog_exit(struct bpf_prog *prog, u64 start)
+ 	     * Hence check that 'start' is not zero.
+ 	     */
+ 	    start) {
+-		stats = this_cpu_ptr(prog->aux->stats);
++		stats = this_cpu_ptr(prog->stats);
+ 		u64_stats_update_begin(&stats->syncp);
+ 		stats->cnt++;
+ 		stats->nsecs += sched_clock() - start;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 15694246f854..4189edb41b73 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -10889,7 +10889,7 @@ static int jit_subprogs(struct bpf_verifier_env *env)
+ 		/* BPF_PROG_RUN doesn't call subprogs directly,
+ 		 * hence main prog stats include the runtime of subprogs.
+ 		 * subprogs don't have IDs and not reachable via prog_get_next_id
+-		 * func[i]->aux->stats will never be accessed and stays NULL
++		 * func[i]->stats will never be accessed and stays NULL
+ 		 */
+ 		func[i] = bpf_prog_alloc_no_stats(bpf_prog_size(len), GFP_USER);
+ 		if (!func[i])
 -- 
-~Randy
+2.24.1
 
