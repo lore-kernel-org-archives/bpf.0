@@ -2,331 +2,464 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47EF3C433E0
-	for <bpf@archiver.kernel.org>; Sat,  6 Feb 2021 20:47:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 43DC9C433E0
+	for <bpf@archiver.kernel.org>; Sun,  7 Feb 2021 01:12:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 15A6564E58
-	for <bpf@archiver.kernel.org>; Sat,  6 Feb 2021 20:47:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0E1F664E8C
+	for <bpf@archiver.kernel.org>; Sun,  7 Feb 2021 01:12:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbhBFUrE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 6 Feb 2021 15:47:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45512 "EHLO
+        id S229506AbhBGBLz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 6 Feb 2021 20:11:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbhBFUrC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 6 Feb 2021 15:47:02 -0500
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 968A4C06174A;
-        Sat,  6 Feb 2021 12:46:22 -0800 (PST)
-Received: by mail-il1-x12e.google.com with SMTP id y5so9196609ilg.4;
-        Sat, 06 Feb 2021 12:46:22 -0800 (PST)
+        with ESMTP id S229529AbhBGBLx (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 6 Feb 2021 20:11:53 -0500
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9107AC061786
+        for <bpf@vger.kernel.org>; Sat,  6 Feb 2021 17:11:13 -0800 (PST)
+Received: by mail-qt1-x82c.google.com with SMTP id z22so7964785qto.7
+        for <bpf@vger.kernel.org>; Sat, 06 Feb 2021 17:11:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=wblMFryEfE03I8+svoYntwq6BTYoS+a2cimbwYQJhT0=;
-        b=skDU450bdBV23wbanIhwI2wQmzmWmPlmbcaSIkgYVwsjb8ksnnsqHqn+e28Nz9Vnb2
-         6jVIiLc16GnYpT741gOiOz/wAOaBwBju4uegD9aSzzvhhCkXJRyI9tFuGzD1fhFt2UMv
-         j2XcQdtXInLh/4XtLgRfGGytJfR2O//p+eZlvP0QqgkHsbHO2GMV0Ni3u+HC9gPyiczE
-         Owq/Riruq+pA2Z6ndpTMX1MRfr05d47V2H7zdCCqk9E9qCuLCJuYJrWb10/uzmqiI1NB
-         i3/lAmc6Gm33BvTBtJiL75ZF/SGJjyuXcRtCS5j6RxcMZO4j57337XYyqfC0Elu+kK7M
-         /nLA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=otgOeoYCDQUQhuP2LtXmMhwn3dnl+sJWTV8ebcGXgmI=;
+        b=Z0CdyQq1fhroPaKw6ygez8WWAkQxli4tgMBqN29WPCMYX/ldDyJ6ZHb0E7gSNzL887
+         +L9gkBV0nu22vOQxmFgAW/6bc7/42LE/eevBp4nTRmOES0rEB70aSBuEg5E3sKzZR6ON
+         sKBXqL1zhcoJfCI3i8scSzwHMQTfj1fYewKBTQHSsxLWP8nZhSf1lHbsLVRxLMpyhoqT
+         qb1cg4niRDEDDpZOHAA9Eh8uAsp/8uLFNEP+4APPznUMgSyHAcMEQh0VPITKK8Ss0J3e
+         SLSoF6giUDAx8aJh1CLi0uvlQJn+Yy2mzSOhltc3J4E5h+2FrZK0ZAhNId4YqKdmnesr
+         weOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=wblMFryEfE03I8+svoYntwq6BTYoS+a2cimbwYQJhT0=;
-        b=EZlX9I3lvtoZbLaXADftMkofCMHRcjXt/fgG7xMZb2XzOENjnRwY1zzQ/Fw5ZQJWTp
-         CefwtSFGKP050mhTrZd9Z1V5ZXd0jMqtRkifHapZLR2LN/lWVB7lgqWDBULl398CsLaq
-         lYhgBZsETPwsHTtnl7Y9SDx7BwRruXdY+vhTz78szX8OiBbclDrsnTPgpE3Pnk4XoROs
-         ngK7iYibGOiCV6sIT0JBSTeBrcW32UVcDic+uNqNf56LVBGpGldYCYPALncKw52fI/cm
-         EZkDGELi8CUSNK8kilea6YChlkI+rOnKM5Jixrp6WCLwA8kWorbh4JbHDrP/khIPgoXa
-         V4Ng==
-X-Gm-Message-State: AOAM533l2MdvNImmt0ImYx6oFXiP4ovMiWraMakhLs0NsGscFzLILRno
-        l444hYFhRi8F9v3yvJP5qgP6+HCHNcJsAZiA0Hs=
-X-Google-Smtp-Source: ABdhPJxg7P2qmy5kv7AuaOobkLPQNB1SW4PTuTVwi47B8Kj3OhXa90+5meJpJ8DM3PzewA5aGJJf5ua69XaUdJl3xmk=
-X-Received: by 2002:a92:ce46:: with SMTP id a6mr9748959ilr.10.1612644381687;
- Sat, 06 Feb 2021 12:46:21 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=otgOeoYCDQUQhuP2LtXmMhwn3dnl+sJWTV8ebcGXgmI=;
+        b=GT8pABL8zrSd9DBlzLfrpHRH2tP5BL58xx+z+UQUvjamG1483x9JWNBDR8LJ0sSjDN
+         qqZ3ajVp22VdtoMCHvcAwajtRHVQS8hEaQjv7nBMUW/MzH45RhI6Y+oIq+MKtfNU2qhJ
+         4xhyLZEGcwFpAmiaS56dt4+QAc4TwIxehTJ0gODrd4o6cqd0UcWJmxcGSQuNhCPA43a1
+         dJTgQQDQyj2r7nLThW1nJb0P7Yhg6wbLejvaJi7lXuiQkikmV15glwQKuf4PrLIjeYwm
+         mOWZ7+DmGAW3o4ph/8QP1hM31cXksFroXqauLkiNM0lvXzWkZIkeRu8mcUFki12v6ryb
+         qzYg==
+X-Gm-Message-State: AOAM530f8noH/qsCrftXnGc4kZAHFPWcV6Cnvw+GXVrvRYJlcVHoP/Qg
+        NNLApYsbzp969cGVw68mz/EisbLSaIKl3w==
+X-Google-Smtp-Source: ABdhPJxAiwh90uL8AXdH3LKTbnmWTGVLEedNmTptLcSAW+ebb23a4Y2oPoX0rAiYZ04kVm2fleF3Vw==
+X-Received: by 2002:ac8:3a65:: with SMTP id w92mr10431946qte.267.1612660272200;
+        Sat, 06 Feb 2021 17:11:12 -0800 (PST)
+Received: from localhost (pool-100-33-73-206.nycmny.fios.verizon.net. [100.33.73.206])
+        by smtp.gmail.com with ESMTPSA id e15sm9401878qtq.43.2021.02.06.17.11.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 06 Feb 2021 17:11:11 -0800 (PST)
+From:   Andrei Matei <andreimatei1@gmail.com>
+To:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org
+Cc:     Andrei Matei <andreimatei1@gmail.com>
+Subject: [PATCH bpf-next v3 2/4] selftest/bpf: adjust expected verifier errors
+Date:   Sat,  6 Feb 2021 20:10:25 -0500
+Message-Id: <20210207011027.676572-3-andreimatei1@gmail.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20210207011027.676572-1-andreimatei1@gmail.com>
+References: <20210207011027.676572-1-andreimatei1@gmail.com>
 MIME-Version: 1.0
-References: <20210205192446.GH920417@kernel.org> <d59c2a53-976c-c304-f208-67110bdd728a@fb.com>
- <CA+icZUVhgnJ9j7dnXxLQi3DcmLrqpZgcAo2wmHJ_OxSQyS6DQg@mail.gmail.com>
- <CA+icZUWFx47jWJsV6tyoS5f18joPLyE8TOeeyVgsk65k9sP2WQ@mail.gmail.com>
- <CA+icZUUj1P_PAj=E8iF=C4m6gYm9zqb+WWbOdoTqemTeGnZbww@mail.gmail.com>
- <CA+icZUWY0zkOb36gxMOuT5-m=vC5_e815gkSEyM45sO+jgcCZg@mail.gmail.com>
- <CA+icZUW+4=WUexA3-qwXSdEY2L4DOhF1pQfw9=Bf2invYF1J2Q@mail.gmail.com>
- <8ff11fa8-46cd-5f20-b988-20e65e122507@fb.com> <20210206162419.GC2851@wildebeest.org>
- <3f5a00ef-1c71-d0da-e9fd-c7f707760f5c@fb.com> <CA+icZUVfTH=yONintyJ+T8kvTrR4Q0gumJYNUCs6Ybraff5Kpg@mail.gmail.com>
- <64206fbc-656a-5ffd-6e9d-739c8c6f7410@fb.com> <CA+icZUUZVYN97wKiR9-LOwhQmxMSxggvm4MS4z9nLCvZOB8FLQ@mail.gmail.com>
- <CA+icZUV=-NmFtF9RQTRnbwBUiaPnroiSwyv-9RxA-3-nrgQ_rQ@mail.gmail.com>
- <89f15151-6843-b260-c8f4-88deefd7d569@fb.com> <CA+icZUVHtbOuXWh=9XMqVr6=Lo_YMPLhZa6XRN3pLTt=btRmpg@mail.gmail.com>
- <8b8e31bc-3deb-dcc4-8c51-4bd820855af6@fb.com>
-In-Reply-To: <8b8e31bc-3deb-dcc4-8c51-4bd820855af6@fb.com>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Sat, 6 Feb 2021 21:46:10 +0100
-Message-ID: <CA+icZUVDVchAbxxnpYK3Qcg4aLk_diF=wgrqj5xXuKOp95Zv-w@mail.gmail.com>
-Subject: Re: ERROR: INT DW_ATE_unsigned_1 Error emitting BTF type
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Mark Wieelard <mark@klomp.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        dwarves@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        bpf@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
-        Jan Engelhardt <jengelh@inai.de>,
-        Domenico Andreoli <cavok@debian.org>,
-        Matthias Schwarzott <zzam@gentoo.org>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Ondrej Mosnacek <omosnace@redhat.com>,
-        =?UTF-8?Q?Daniel_P=2E_Berrang=C3=A9?= <berrange@redhat.com>,
-        Tom Stellard <tstellar@redhat.com>,
-        Fangrui Song <maskray@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sat, Feb 6, 2021 at 9:13 PM Yonghong Song <yhs@fb.com> wrote:
->
->
->
-> On 2/6/21 11:44 AM, Sedat Dilek wrote:
-> > On Sat, Feb 6, 2021 at 8:33 PM Yonghong Song <yhs@fb.com> wrote:
-> >>
-> >>
-> >>
-> >> On 2/6/21 11:28 AM, Sedat Dilek wrote:
-> >>> On Sat, Feb 6, 2021 at 8:22 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
-> >>>>
-> >>>> On Sat, Feb 6, 2021 at 8:17 PM Yonghong Song <yhs@fb.com> wrote:
-> >>>>>
-> >>>>>
-> >>>>>
-> >>>>> On 2/6/21 10:10 AM, Sedat Dilek wrote:
-> >>>>>> On Sat, Feb 6, 2021 at 6:53 PM Yonghong Song <yhs@fb.com> wrote:
-> >>>>>>>
-> >>>>>>>
-> >>>>>>>
-> >>>>>>> On 2/6/21 8:24 AM, Mark Wieelard wrote:
-> >>>>>>>> Hi,
-> >>>>>>>>
-> >>>>>>>> On Sat, Feb 06, 2021 at 12:26:44AM -0800, Yonghong Song wrote:
-> >>>>>>>>> With the above vmlinux, the issue appears to be handling
-> >>>>>>>>> DW_ATE_signed_1, DW_ATE_unsigned_{1,24,40}.
-> >>>>>>>>>
-> >>>>>>>>> The following patch should fix the issue:
-> >>>>>>>>
-> >>>>>>>> That doesn't really make sense to me. Why is the compiler emitting a
-> >>>>>>>> DW_TAG_base_type that needs to be interpreted according to the
-> >>>>>>>> DW_AT_name attribute?
-> >>>>>>>>
-> >>>>>>>> If the issue is that the size of the base type cannot be expressed in
-> >>>>>>>> bytes then the DWARF spec provides the following option:
-> >>>>>>>>
-> >>>>>>>>         If the value of an object of the given type does not fully occupy
-> >>>>>>>>         the storage described by a byte size attribute, the base type
-> >>>>>>>>         entry may also have a DW_AT_bit_size and a DW_AT_data_bit_offset
-> >>>>>>>>         attribute, both of whose values are integer constant values (see
-> >>>>>>>>         Section 2.19 on page 55). The bit size attribute describes the
-> >>>>>>>>         actual size in bits used to represent values of the given
-> >>>>>>>>         type. The data bit offset attribute is the offset in bits from the
-> >>>>>>>>         beginning of the containing storage to the beginning of the
-> >>>>>>>>         value. Bits that are part of the offset are padding.  If this
-> >>>>>>>>         attribute is omitted a default data bit offset of zero is assumed.
-> >>>>>>>>
-> >>>>>>>> Would it be possible to use that encoding of those special types?  If
-> >>>>>>>
-> >>>>>>> I agree with you. I do not like comparing me as well. Unfortunately,
-> >>>>>>> there is no enough information in dwarf to find out actual information.
-> >>>>>>> The following is the dwarf dump with vmlinux (Sedat provided) for
-> >>>>>>> DW_ATE_unsigned_1.
-> >>>>>>>
-> >>>>>>> 0x000e97e9:   DW_TAG_base_type
-> >>>>>>>                     DW_AT_name      ("DW_ATE_unsigned_1")
-> >>>>>>>                     DW_AT_encoding  (DW_ATE_unsigned)
-> >>>>>>>                     DW_AT_byte_size (0x00)
-> >>>>>>>
-> >>>>>>> There is no DW_AT_bit_size and DW_AT_bit_offset for base type.
-> >>>>>>> AFAIK, these two attributes typically appear in struct/union members
-> >>>>>>> together with DW_AT_byte_size.
-> >>>>>>>
-> >>>>>>> Maybe compilers (clang in this case) can emit DW_AT_bit_size = 1
-> >>>>>>> and DW_AT_bit_offset = 0/7 (depending on big/little endian) and
-> >>>>>>> this case, we just test and get DW_AT_bit_size and it should work.
-> >>>>>>>
-> >>>>>>> But I think BTF does not need this (DW_ATE_unsigned_1) for now.
-> >>>>>>> I checked dwarf dump and it is mostly used for some arith operation
-> >>>>>>> encoded in dump (in this case, e.g., shift by 1 bit)
-> >>>>>>>
-> >>>>>>> 0x000015cf:   DW_TAG_base_type
-> >>>>>>>                     DW_AT_name      ("DW_ATE_unsigned_1")
-> >>>>>>>                     DW_AT_encoding  (DW_ATE_unsigned)
-> >>>>>>>                     DW_AT_byte_size (0x00)
-> >>>>>>>
-> >>>>>>> 0x00010ed9:         DW_TAG_formal_parameter
-> >>>>>>>                           DW_AT_location    (DW_OP_lit0, DW_OP_not,
-> >>>>>>> DW_OP_convert (0x000015cf) "DW_ATE_unsigned_1", DW_OP_convert
-> >>>>>>> (0x000015d4) "DW_ATE_unsigned_8", DW_OP_stack_value)
-> >>>>>>>                           DW_AT_abstract_origin     (0x00013984 "branch")
-> >>>>>>>
-> >>>>>>> Look at clang frontend, only the following types are encoded with
-> >>>>>>> unsigned dwarf type.
-> >>>>>>>
-> >>>>>>>       case BuiltinType::UShort:
-> >>>>>>>       case BuiltinType::UInt:
-> >>>>>>>       case BuiltinType::UInt128:
-> >>>>>>>       case BuiltinType::ULong:
-> >>>>>>>       case BuiltinType::WChar_U:
-> >>>>>>>       case BuiltinType::ULongLong:
-> >>>>>>>         Encoding = llvm::dwarf::DW_ATE_unsigned;
-> >>>>>>>         break;
-> >>>>>>>
-> >>>>>>>
-> >>>>>>>> not, can we try to come up with some extension that doesn't require
-> >>>>>>>> consumers to match magic names?
-> >>>>>>>>
-> >>>>>>
-> >>>>>> You want me to upload mlx5_core.ko?
-> >>>>>
-> >>>>> I just sent out a patch. You are cc'ed. I also attached in this email.
-> >>>>> Yes, it would be great if you can upload mlx5_core.ko so I can
-> >>>>> double check with this DW_ATE_unsigned_160 which is really usual.
-> >>>>>
-> >>>>
-> >>>> Yupp, just built a new pahole :-).
-> >>>> Re-building linux-kernel...
-> >>>>
-> >>>> Will upload mlx5_core.ko - need zstd-ed it before.
-> >>>>
-> >>>
-> >>> Hmm, I guess you want a mlx5_core.ko with your patch applied-to-pahole-1.20 :-)?
-> >>
-> >> this should work too. I want to check dwarf data. My patch won't impact
-> >> dwarf generation.
-> >>
-> >
-> > Usual Dropbox-Link:
-> >
-> > https://www.dropbox.com/sh/kvyh8ps7na0r1h5/AABfyNfDZ2bESse_bo4h05fFa?dl=0
-> >
-> > See "for-yhs" directory:
-> >
-> > 1. mlx5-module_yhs-v1 ("[PATCH dwarves] btf_encoder: sanitize
-> > non-regular int base type")
-> > 2. mlx5-module_yhs-dileks-v4 (with the last diff-v4 I tried successfully)
->
-> Thanks, with llvm-dwarfdump, I can see
->
-> 0x00d65616:   DW_TAG_base_type
->                  DW_AT_name      ("DW_ATE_unsigned_160")
->                  DW_AT_encoding  (DW_ATE_unsigned)
->                  DW_AT_byte_size (0x14)
->
-> 0x00d88e81:         DW_TAG_variable
->                        DW_AT_location    (indexed (0xad) loclist =
-> 0x0005df42:
->                           [0x0000000000088c8e, 0x0000000000088c97):
-> DW_OP_breg9 R9+0, DW_OP_convert (0x00d65616) "DW_ATE_unsigned_160",
-> DW_OP_convert (0x00d65607) "DW_ATE_unsigned_32", DW_OP_stack_value,
-> DW_OP_piece 0x4)
->                        DW_AT_abstract_origin     (0x00d88d37 "_v")
->
->
-> 0x00d88d37:       DW_TAG_variable
->                      DW_AT_name  ("_v")
->                      DW_AT_decl_file
-> ("/home/dileks/src/linux-kernel/git/drivers/net/ethernet/mellanox/mlx5/core/steering/dr_ste.c")
->                      DW_AT_decl_line     (1198)
->                      DW_AT_type  (0x00d68835 "u32")
->
-> The source code at line 1198.
-> 1198         DR_STE_SET_MASK_V(eth_l3_ipv4_5_tuple, bit_mask,
-> 1199                           source_port, mask, udp_sport);
->
-> This is for struct mlx5dr_match_spec.
->
-> struct mlx5dr_match_spec {
->          u32 smac_47_16;         /* Source MAC address of incoming packet */
->          /* Incoming packet Ethertype - this is the Ethertype
->           * following the last VLAN tag of the packet
->           */
->          u32 ethertype:16;
->          u32 smac_15_0:16;
-> ...
->          u32 tcp_dport:16;
->          /* TCP source port.;tcp and udp sport/dport are mutually
-> exclusive */
->          u32 tcp_sport:16;
->          u32 ttl_hoplimit:8;
->          u32 reserved:24;
->          /* UDP destination port.;tcp and udp sport/dport are mutually
-> exclusive */
->          u32 udp_dport:16;
->          /* UDP source port.;tcp and udp sport/dport are mutually
-> exclusive */
->          u32 udp_sport:16;
->          /* IPv6 source address of incoming packets
->           * For IPv4 address use bits 31:0 (rest of the bits are reserved)
->           * This field should be qualified by an appropriate ethertype
->           */
->          u32 src_ip_127_96;
-> ...
-> }
->
-> which includes a bunch of bit fields and non-bit fields.
->
-> I have no idea why clang will generate
->     DW_OP_convert (0x00d65616) "DW_ATE_unsigned_160"
-> and possibly try to capture more semantic information?
-> But BTF should be able to safely ignore this as described
-> in my patch.
->
-> Thanks.
->
+The verifier errors around stack accesses have changed slightly in the
+previous commit (generally for the better).
 
-[ CC Fangrui - the only guy I know who might comment on this ]
+Signed-off-by: Andrei Matei <andreimatei1@gmail.com>
+---
+ .../selftests/bpf/verifier/basic_stack.c      |  2 +-
+ tools/testing/selftests/bpf/verifier/calls.c  |  4 ++--
+ .../testing/selftests/bpf/verifier/const_or.c |  4 ++--
+ .../bpf/verifier/helper_access_var_len.c      | 12 +++++-----
+ .../testing/selftests/bpf/verifier/int_ptr.c  |  6 ++---
+ .../selftests/bpf/verifier/raw_stack.c        | 10 ++++-----
+ .../selftests/bpf/verifier/stack_ptr.c        | 22 +++++++++++--------
+ tools/testing/selftests/bpf/verifier/unpriv.c |  2 +-
+ .../testing/selftests/bpf/verifier/var_off.c  | 16 +++++++-------
+ 9 files changed, 41 insertions(+), 37 deletions(-)
 
-Fangrui, feel free to comment?
+diff --git a/tools/testing/selftests/bpf/verifier/basic_stack.c b/tools/testing/selftests/bpf/verifier/basic_stack.c
+index b56f8117c09d..f995777dddb3 100644
+--- a/tools/testing/selftests/bpf/verifier/basic_stack.c
++++ b/tools/testing/selftests/bpf/verifier/basic_stack.c
+@@ -4,7 +4,7 @@
+ 	BPF_ST_MEM(BPF_DW, BPF_REG_10, 8, 0),
+ 	BPF_EXIT_INSN(),
+ 	},
+-	.errstr = "invalid stack",
++	.errstr = "invalid write to stack",
+ 	.result = REJECT,
+ },
+ {
+diff --git a/tools/testing/selftests/bpf/verifier/calls.c b/tools/testing/selftests/bpf/verifier/calls.c
+index c4f5d909e58a..eb888c8479c3 100644
+--- a/tools/testing/selftests/bpf/verifier/calls.c
++++ b/tools/testing/selftests/bpf/verifier/calls.c
+@@ -1228,7 +1228,7 @@
+ 	.prog_type = BPF_PROG_TYPE_XDP,
+ 	.fixup_map_hash_8b = { 23 },
+ 	.result = REJECT,
+-	.errstr = "invalid read from stack off -16+0 size 8",
++	.errstr = "invalid read from stack R7 off=-16 size=8",
+ },
+ {
+ 	"calls: two calls that receive map_value via arg=ptr_stack_of_caller. test1",
+@@ -1958,7 +1958,7 @@
+ 	BPF_EXIT_INSN(),
+ 	},
+ 	.fixup_map_hash_48b = { 6 },
+-	.errstr = "invalid indirect read from stack off -8+0 size 8",
++	.errstr = "invalid indirect read from stack R2 off -8+0 size 8",
+ 	.result = REJECT,
+ 	.prog_type = BPF_PROG_TYPE_XDP,
+ },
+diff --git a/tools/testing/selftests/bpf/verifier/const_or.c b/tools/testing/selftests/bpf/verifier/const_or.c
+index 6c214c58e8d4..0719b0ddec04 100644
+--- a/tools/testing/selftests/bpf/verifier/const_or.c
++++ b/tools/testing/selftests/bpf/verifier/const_or.c
+@@ -23,7 +23,7 @@
+ 	BPF_EMIT_CALL(BPF_FUNC_probe_read_kernel),
+ 	BPF_EXIT_INSN(),
+ 	},
+-	.errstr = "invalid stack type R1 off=-48 access_size=58",
++	.errstr = "invalid indirect access to stack R1 off=-48 size=58",
+ 	.result = REJECT,
+ 	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
+ },
+@@ -54,7 +54,7 @@
+ 	BPF_EMIT_CALL(BPF_FUNC_probe_read_kernel),
+ 	BPF_EXIT_INSN(),
+ 	},
+-	.errstr = "invalid stack type R1 off=-48 access_size=58",
++	.errstr = "invalid indirect access to stack R1 off=-48 size=58",
+ 	.result = REJECT,
+ 	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
+ },
+diff --git a/tools/testing/selftests/bpf/verifier/helper_access_var_len.c b/tools/testing/selftests/bpf/verifier/helper_access_var_len.c
+index 87c4e7900083..0ab7f1dfc97a 100644
+--- a/tools/testing/selftests/bpf/verifier/helper_access_var_len.c
++++ b/tools/testing/selftests/bpf/verifier/helper_access_var_len.c
+@@ -39,7 +39,7 @@
+ 	BPF_EMIT_CALL(BPF_FUNC_probe_read_kernel),
+ 	BPF_EXIT_INSN(),
+ 	},
+-	.errstr = "invalid indirect read from stack off -64+0 size 64",
++	.errstr = "invalid indirect read from stack R1 off -64+0 size 64",
+ 	.result = REJECT,
+ 	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
+ },
+@@ -59,7 +59,7 @@
+ 	BPF_MOV64_IMM(BPF_REG_0, 0),
+ 	BPF_EXIT_INSN(),
+ 	},
+-	.errstr = "invalid stack type R1 off=-64 access_size=65",
++	.errstr = "invalid indirect access to stack R1 off=-64 size=65",
+ 	.result = REJECT,
+ 	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
+ },
+@@ -136,7 +136,7 @@
+ 	BPF_MOV64_IMM(BPF_REG_0, 0),
+ 	BPF_EXIT_INSN(),
+ 	},
+-	.errstr = "invalid stack type R1 off=-64 access_size=65",
++	.errstr = "invalid indirect access to stack R1 off=-64 size=65",
+ 	.result = REJECT,
+ 	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
+ },
+@@ -156,7 +156,7 @@
+ 	BPF_MOV64_IMM(BPF_REG_0, 0),
+ 	BPF_EXIT_INSN(),
+ 	},
+-	.errstr = "invalid stack type R1 off=-64 access_size=65",
++	.errstr = "invalid indirect access to stack R1 off=-64 size=65",
+ 	.result = REJECT,
+ 	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
+ },
+@@ -194,7 +194,7 @@
+ 	BPF_MOV64_IMM(BPF_REG_0, 0),
+ 	BPF_EXIT_INSN(),
+ 	},
+-	.errstr = "invalid indirect read from stack off -64+0 size 64",
++	.errstr = "invalid indirect read from stack R1 off -64+0 size 64",
+ 	.result = REJECT,
+ 	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
+ },
+@@ -584,7 +584,7 @@
+ 	BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_10, -16),
+ 	BPF_EXIT_INSN(),
+ 	},
+-	.errstr = "invalid indirect read from stack off -64+32 size 64",
++	.errstr = "invalid indirect read from stack R1 off -64+32 size 64",
+ 	.result = REJECT,
+ 	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
+ },
+diff --git a/tools/testing/selftests/bpf/verifier/int_ptr.c b/tools/testing/selftests/bpf/verifier/int_ptr.c
+index ca3b4729df66..070893fb2900 100644
+--- a/tools/testing/selftests/bpf/verifier/int_ptr.c
++++ b/tools/testing/selftests/bpf/verifier/int_ptr.c
+@@ -27,7 +27,7 @@
+ 	},
+ 	.result = REJECT,
+ 	.prog_type = BPF_PROG_TYPE_CGROUP_SYSCTL,
+-	.errstr = "invalid indirect read from stack off -16+0 size 8",
++	.errstr = "invalid indirect read from stack R4 off -16+0 size 8",
+ },
+ {
+ 	"ARG_PTR_TO_LONG half-uninitialized",
+@@ -59,7 +59,7 @@
+ 	},
+ 	.result = REJECT,
+ 	.prog_type = BPF_PROG_TYPE_CGROUP_SYSCTL,
+-	.errstr = "invalid indirect read from stack off -16+4 size 8",
++	.errstr = "invalid indirect read from stack R4 off -16+4 size 8",
+ },
+ {
+ 	"ARG_PTR_TO_LONG misaligned",
+@@ -125,7 +125,7 @@
+ 	},
+ 	.result = REJECT,
+ 	.prog_type = BPF_PROG_TYPE_CGROUP_SYSCTL,
+-	.errstr = "invalid stack type R4 off=-4 access_size=8",
++	.errstr = "invalid indirect access to stack R4 off=-4 size=8",
+ },
+ {
+ 	"ARG_PTR_TO_LONG initialized",
+diff --git a/tools/testing/selftests/bpf/verifier/raw_stack.c b/tools/testing/selftests/bpf/verifier/raw_stack.c
+index 193d9e87d5a9..cc8e8c3cdc03 100644
+--- a/tools/testing/selftests/bpf/verifier/raw_stack.c
++++ b/tools/testing/selftests/bpf/verifier/raw_stack.c
+@@ -11,7 +11,7 @@
+ 	BPF_EXIT_INSN(),
+ 	},
+ 	.result = REJECT,
+-	.errstr = "invalid read from stack off -8+0 size 8",
++	.errstr = "invalid read from stack R6 off=-8 size=8",
+ 	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
+ },
+ {
+@@ -59,7 +59,7 @@
+ 	BPF_EXIT_INSN(),
+ 	},
+ 	.result = REJECT,
+-	.errstr = "invalid stack type R3",
++	.errstr = "invalid zero-sized read",
+ 	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
+ },
+ {
+@@ -205,7 +205,7 @@
+ 	BPF_EXIT_INSN(),
+ 	},
+ 	.result = REJECT,
+-	.errstr = "invalid stack type R3 off=-513 access_size=8",
++	.errstr = "invalid indirect access to stack R3 off=-513 size=8",
+ 	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
+ },
+ {
+@@ -221,7 +221,7 @@
+ 	BPF_EXIT_INSN(),
+ 	},
+ 	.result = REJECT,
+-	.errstr = "invalid stack type R3 off=-1 access_size=8",
++	.errstr = "invalid indirect access to stack R3 off=-1 size=8",
+ 	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
+ },
+ {
+@@ -285,7 +285,7 @@
+ 	BPF_EXIT_INSN(),
+ 	},
+ 	.result = REJECT,
+-	.errstr = "invalid stack type R3 off=-512 access_size=0",
++	.errstr = "invalid zero-sized read",
+ 	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
+ },
+ {
+diff --git a/tools/testing/selftests/bpf/verifier/stack_ptr.c b/tools/testing/selftests/bpf/verifier/stack_ptr.c
+index 8bfeb77c60bd..07eaa04412ae 100644
+--- a/tools/testing/selftests/bpf/verifier/stack_ptr.c
++++ b/tools/testing/selftests/bpf/verifier/stack_ptr.c
+@@ -44,7 +44,7 @@
+ 	BPF_EXIT_INSN(),
+ 	},
+ 	.result = REJECT,
+-	.errstr = "invalid stack off=-79992 size=8",
++	.errstr = "invalid write to stack R1 off=-79992 size=8",
+ 	.errstr_unpriv = "R1 stack pointer arithmetic goes out of range",
+ },
+ {
+@@ -57,7 +57,7 @@
+ 	BPF_EXIT_INSN(),
+ 	},
+ 	.result = REJECT,
+-	.errstr = "invalid stack off=0 size=8",
++	.errstr = "invalid write to stack R1 off=0 size=8",
+ },
+ {
+ 	"PTR_TO_STACK check high 1",
+@@ -106,7 +106,7 @@
+ 	BPF_EXIT_INSN(),
+ 	},
+ 	.errstr_unpriv = "R1 stack pointer arithmetic goes out of range",
+-	.errstr = "invalid stack off=0 size=1",
++	.errstr = "invalid write to stack R1 off=0 size=1",
+ 	.result = REJECT,
+ },
+ {
+@@ -119,7 +119,8 @@
+ 	BPF_EXIT_INSN(),
+ 	},
+ 	.result = REJECT,
+-	.errstr = "invalid stack off",
++	.errstr_unpriv = "R1 stack pointer arithmetic goes out of range",
++	.errstr = "invalid write to stack R1",
+ },
+ {
+ 	"PTR_TO_STACK check high 6",
+@@ -131,7 +132,8 @@
+ 	BPF_EXIT_INSN(),
+ 	},
+ 	.result = REJECT,
+-	.errstr = "invalid stack off",
++	.errstr_unpriv = "R1 stack pointer arithmetic goes out of range",
++	.errstr = "invalid write to stack",
+ },
+ {
+ 	"PTR_TO_STACK check high 7",
+@@ -183,7 +185,7 @@
+ 	BPF_EXIT_INSN(),
+ 	},
+ 	.errstr_unpriv = "R1 stack pointer arithmetic goes out of range",
+-	.errstr = "invalid stack off=-513 size=1",
++	.errstr = "invalid write to stack R1 off=-513 size=1",
+ 	.result = REJECT,
+ },
+ {
+@@ -208,7 +210,8 @@
+ 	BPF_EXIT_INSN(),
+ 	},
+ 	.result = REJECT,
+-	.errstr = "invalid stack off",
++	.errstr_unpriv = "R1 stack pointer arithmetic goes out of range",
++	.errstr = "invalid write to stack",
+ },
+ {
+ 	"PTR_TO_STACK check low 6",
+@@ -220,7 +223,8 @@
+ 	BPF_EXIT_INSN(),
+ 	},
+ 	.result = REJECT,
+-	.errstr = "invalid stack off",
++	.errstr = "invalid write to stack",
++	.errstr_unpriv = "R1 stack pointer arithmetic goes out of range",
+ },
+ {
+ 	"PTR_TO_STACK check low 7",
+@@ -292,7 +296,7 @@
+ 	BPF_EXIT_INSN(),
+ 	},
+ 	.result_unpriv = REJECT,
+-	.errstr_unpriv = "invalid stack off=0 size=1",
++	.errstr_unpriv = "invalid write to stack R1 off=0 size=1",
+ 	.result = ACCEPT,
+ 	.retval = 42,
+ },
+diff --git a/tools/testing/selftests/bpf/verifier/unpriv.c b/tools/testing/selftests/bpf/verifier/unpriv.c
+index ee298627abae..b018ad71e0a8 100644
+--- a/tools/testing/selftests/bpf/verifier/unpriv.c
++++ b/tools/testing/selftests/bpf/verifier/unpriv.c
+@@ -108,7 +108,7 @@
+ 	BPF_EXIT_INSN(),
+ 	},
+ 	.fixup_map_hash_8b = { 3 },
+-	.errstr_unpriv = "invalid indirect read from stack off -8+0 size 8",
++	.errstr_unpriv = "invalid indirect read from stack R2 off -8+0 size 8",
+ 	.result_unpriv = REJECT,
+ 	.result = ACCEPT,
+ },
+diff --git a/tools/testing/selftests/bpf/verifier/var_off.c b/tools/testing/selftests/bpf/verifier/var_off.c
+index 8504ac937809..49b78a1a261b 100644
+--- a/tools/testing/selftests/bpf/verifier/var_off.c
++++ b/tools/testing/selftests/bpf/verifier/var_off.c
+@@ -18,7 +18,7 @@
+ 	.prog_type = BPF_PROG_TYPE_LWT_IN,
+ },
+ {
+-	"variable-offset stack access",
++	"variable-offset stack read, priv vs unpriv",
+ 	.insns = {
+ 	/* Fill the top 8 bytes of the stack */
+ 	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
+@@ -63,7 +63,7 @@
+ 	BPF_MOV64_IMM(BPF_REG_0, 0),
+ 	BPF_EXIT_INSN(),
+ 	},
+-	.errstr = "R4 unbounded indirect variable offset stack access",
++	.errstr = "invalid unbounded variable-offset indirect access to stack R4",
+ 	.result = REJECT,
+ 	.prog_type = BPF_PROG_TYPE_SOCK_OPS,
+ },
+@@ -88,7 +88,7 @@
+ 	BPF_EXIT_INSN(),
+ 	},
+ 	.fixup_map_hash_8b = { 5 },
+-	.errstr = "R2 max value is outside of stack bound",
++	.errstr = "invalid variable-offset indirect access to stack R2",
+ 	.result = REJECT,
+ 	.prog_type = BPF_PROG_TYPE_LWT_IN,
+ },
+@@ -113,7 +113,7 @@
+ 	BPF_EXIT_INSN(),
+ 	},
+ 	.fixup_map_hash_8b = { 5 },
+-	.errstr = "R2 min value is outside of stack bound",
++	.errstr = "invalid variable-offset indirect access to stack R2",
+ 	.result = REJECT,
+ 	.prog_type = BPF_PROG_TYPE_LWT_IN,
+ },
+@@ -138,7 +138,7 @@
+ 	BPF_EXIT_INSN(),
+ 	},
+ 	.fixup_map_hash_8b = { 5 },
+-	.errstr = "invalid indirect read from stack var_off",
++	.errstr = "invalid indirect read from stack R2 var_off",
+ 	.result = REJECT,
+ 	.prog_type = BPF_PROG_TYPE_LWT_IN,
+ },
+@@ -163,7 +163,7 @@
+ 	BPF_EXIT_INSN(),
+ 	},
+ 	.fixup_map_hash_8b = { 5 },
+-	.errstr = "invalid indirect read from stack var_off",
++	.errstr = "invalid indirect read from stack R2 var_off",
+ 	.result = REJECT,
+ 	.prog_type = BPF_PROG_TYPE_LWT_IN,
+ },
+@@ -189,7 +189,7 @@
+ 	BPF_EXIT_INSN(),
+ 	},
+ 	.fixup_map_hash_8b = { 6 },
+-	.errstr_unpriv = "R2 stack pointer arithmetic goes out of range, prohibited for !root",
++	.errstr_unpriv = "R2 variable stack access prohibited for !root",
+ 	.result_unpriv = REJECT,
+ 	.result = ACCEPT,
+ 	.prog_type = BPF_PROG_TYPE_CGROUP_SKB,
+@@ -217,7 +217,7 @@
+ 	BPF_MOV64_IMM(BPF_REG_0, 0),
+ 	BPF_EXIT_INSN(),
+ 	},
+-	.errstr = "invalid indirect read from stack var_off",
++	.errstr = "invalid indirect read from stack R4 var_off",
+ 	.result = REJECT,
+ 	.prog_type = BPF_PROG_TYPE_SOCK_OPS,
+ },
+-- 
+2.27.0
 
-Get the patch "[PATCH dwarves] btf_encoder: sanitize non-regular int
-base type" from Yonghong Son:
-
-link="https://lore.kernel.org/r/20210206191350.830616-1-yhs@fb.com"
-b4 -d am $link
-
-I commented the success in the other thread.
-Sorry for cross-posting.
-
-Big Thank-You Yonghong!
-
-- Sedat -
-
-
-- Sedat -
-
-> >
-> > - Sedat -
-> >
-> >>>
-> >>>> - Sedat -
-> >>>>
-> >>>>>>
-> >>>>>> When looking with llvm-dwarf for DW_ATE_unsigned_160:
-> >>>>>>
-> >>>>>> 0x00d65616:   DW_TAG_base_type
-> >>>>>>                   DW_AT_name      ("DW_ATE_unsigned_160")
-> >>>>>>                   DW_AT_encoding  (DW_ATE_unsigned)
-> >>>>>>                   DW_AT_byte_size (0x14)
-> >>>>>>
-> >>>>>> If you need further information, please let me know.
-> >>>>>>
-> >>>>>> Thanks.
-> >>>>>>
-> >>>>>> - Sedat -
-> >>>>>>
