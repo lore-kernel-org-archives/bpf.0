@@ -2,199 +2,133 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C7878C433E0
-	for <bpf@archiver.kernel.org>; Sun,  7 Feb 2021 01:12:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 37E5CC433DB
+	for <bpf@archiver.kernel.org>; Sun,  7 Feb 2021 01:12:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9730164E54
-	for <bpf@archiver.kernel.org>; Sun,  7 Feb 2021 01:12:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0ABDE64E8B
+	for <bpf@archiver.kernel.org>; Sun,  7 Feb 2021 01:12:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229548AbhBGBL4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 6 Feb 2021 20:11:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45424 "EHLO
+        id S229562AbhBGBM3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 6 Feb 2021 20:12:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbhBGBLz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 6 Feb 2021 20:11:55 -0500
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2372C061788
-        for <bpf@vger.kernel.org>; Sat,  6 Feb 2021 17:11:14 -0800 (PST)
-Received: by mail-qv1-xf30.google.com with SMTP id ew18so5406629qvb.4
-        for <bpf@vger.kernel.org>; Sat, 06 Feb 2021 17:11:14 -0800 (PST)
+        with ESMTP id S229561AbhBGBM2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 6 Feb 2021 20:12:28 -0500
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DB36C06178B
+        for <bpf@vger.kernel.org>; Sat,  6 Feb 2021 17:11:40 -0800 (PST)
+Received: by mail-io1-xd33.google.com with SMTP id m17so802228ioy.4
+        for <bpf@vger.kernel.org>; Sat, 06 Feb 2021 17:11:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=YkjvP0DdMns7yyDccaUP9qx46lk4M3AAq20jcDjy1Ns=;
-        b=SA8H2KMr4RD3BbafeFVeuanYAImbKNt3S4RpJhid/OUs15iIOnfMFSZeBajwvstpL2
-         NEEOp3X68FTOWtLjN6oKJLXmGtXI72h+K60Irt3OSLKzjMKrxVFGhnx8lfW6uIFjnPpy
-         z9ru71GZswHMn7yJkj39T4taqpRxsmzvNA8S3rYxjhBF2UpNMIpVn1rY44NyNKW0e5YS
-         N3ts69FAATsa08hPQ6s17k1jPbfY4RtkCbQpNG4JS4Q/fh6o6Ltwu4Vy8ucoDB+tCCi9
-         JCGXF1h5a5AmA68JQ1SX5n8Rw/wRWom4Q+NvcUx9aQAzIlUfAhLNyCYSK30H1nQ9N7LK
-         Y4Rw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8eDywPtQ9z5anwNWiV+B3uY068Ow5G+xsxVns8UWZrs=;
+        b=hBXvgzrDJJv1IdPjD/mkuoIAswnBPccXXWKsj7iM5oDAcxsMFMua6JF2m/oLFF0maF
+         yfhAXuXcTBQo432kkQDzbhromuxanCdcCs6k5a9NRaE3ebXFz5ymDnun7vMeRoVobn6y
+         Jef7IF6L6oHPhlvhnyZA2VcMYLxRpopNBWclTJ5v77pEiz4cW9Y11AbiUvIznVAhBwjq
+         Nmuz0Eaqai6nWq1XxZzkJWxaNtFVMT72t6k7SOR6Yhe45EhoBKtXMNXVJi2TOI8erQVa
+         TweDCCQDwdBp7uDXP13B1qVXH4M8yIICypdjzYnBf8VLEWY+y1yaLvOpPvcFn2RgHu7M
+         zVcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=YkjvP0DdMns7yyDccaUP9qx46lk4M3AAq20jcDjy1Ns=;
-        b=XmORG68lvFHtaG/6+NBzkUrM/7OxWpU28HvPllLZeHD9SpxcYDW0g3zOJJo93bxg+0
-         p9TSuMxywTQUZmWASe1WI1iZYpHv4j8wYT363FeVsc19l/xhHTSyJi+qH3bHPrbyFdnY
-         xFi+tXFAvcb1A6YqZTq1dKmXiPK5/svQijjsBi3xEuYRk032wfpDgjMUvnqHIYfwhXhb
-         YmP8ufXHeS3A7zbnFGrytyw1pkKWVNA+fxRrY61S047YxYwxd80rw/mazZT2dSHZ4DdG
-         MTyDdbHJzVeOML8xv3+J8rhZhfArSDMyjXeXa4CJeLSBsmFE3GWTC/z7+iN4blKWCnZM
-         NIUg==
-X-Gm-Message-State: AOAM532M9BtlJFKeONlW60tVV8Ci6aY9N6UGdwYkxBXvg/CwcO2PYvVE
-        dZK2ralLHj1mA4YjSv9e1+waExXLjdPifg==
-X-Google-Smtp-Source: ABdhPJzkNcUXxdeRj5oN1cQ2AiFz3YAem5ew+II7yh52rrBs1teaMsSFnTLyAwcEz+PLP+Z0NMtUiQ==
-X-Received: by 2002:a0c:e48b:: with SMTP id n11mr10909332qvl.10.1612660273535;
-        Sat, 06 Feb 2021 17:11:13 -0800 (PST)
-Received: from localhost (pool-100-33-73-206.nycmny.fios.verizon.net. [100.33.73.206])
-        by smtp.gmail.com with ESMTPSA id z6sm5788628qtu.8.2021.02.06.17.11.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 06 Feb 2021 17:11:13 -0800 (PST)
-From:   Andrei Matei <andreimatei1@gmail.com>
-To:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org
-Cc:     Andrei Matei <andreimatei1@gmail.com>
-Subject: [PATCH bpf-next v3 3/4] selftest/bpf: verifier tests for var-off access
-Date:   Sat,  6 Feb 2021 20:10:26 -0500
-Message-Id: <20210207011027.676572-4-andreimatei1@gmail.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210207011027.676572-1-andreimatei1@gmail.com>
-References: <20210207011027.676572-1-andreimatei1@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8eDywPtQ9z5anwNWiV+B3uY068Ow5G+xsxVns8UWZrs=;
+        b=AtQV0e3YIw+GA+prjeQg+8NcFmj1Kw12wuKpIbGEH72UkufYF4Y+Z9MWQLsoUugxab
+         tpdgGIznPVkM74sc3Q+KBU97cSr2OfqaHGNej3FZQffnxrC5oxcnpyneFUxnAa15vYh7
+         FLLa9yMColJKAa8Ap6CRRGOI5DVFvakfVuFVy/m7Vo8E5a0ES2Ex6hCgpaRpfXNWQKUR
+         StpE5QX2ocCCk3pf5yEjbeLZ9NQ7OHHN1+q6GOZmMMBnVr1fXI47ZU/lx9o4TE2kZfz5
+         qUGNOa7WCeNM6iNO1xtfxce4iYdtGnMHWHAQ1ZQjJ87G1byDOXKy/XxrjxwPGmSR+Kc5
+         NWbQ==
+X-Gm-Message-State: AOAM531PEoJz9IgNF2S7wXeaye0uPJ7ymtWsJsg/GbeTaUYGd1kGuPsN
+        ozilYiwa8QEmD8Klov3+C6XMEwrpxv8uN4zsE3zGf8pn1SXfUA==
+X-Google-Smtp-Source: ABdhPJxkR4qCClciGtiuImAjy8rm8VOfAx6lHQCfzUcxzcVMj1XOqoWZOuBQ2VI+kizjYtABL4X9YwGOkxugitqdd6A=
+X-Received: by 2002:a6b:5801:: with SMTP id m1mr10420630iob.140.1612660299744;
+ Sat, 06 Feb 2021 17:11:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210124194909.453844-1-andreimatei1@gmail.com>
+ <20210124194909.453844-2-andreimatei1@gmail.com> <20210127225818.3uzw3tehbu3qlyd6@ast-mbp.dhcp.thefacebook.com>
+In-Reply-To: <20210127225818.3uzw3tehbu3qlyd6@ast-mbp.dhcp.thefacebook.com>
+From:   Andrei Matei <andreimatei1@gmail.com>
+Date:   Sat, 6 Feb 2021 20:11:28 -0500
+Message-ID: <CABWLseue7vA6P61oGS9i7b6F8AT_MkYZwdxhR4Z+2cok+7J33Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/5] bpf: allow variable-offset stack access
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add tests for the new functionality - reading and writing to the stack
-through a variable-offset pointer.
+> > +/* Check that the stack access at 'regno + off' falls within the maximum stack
+> > + * bounds.
+> > + *
+> > + * 'off' includes `regno->offset`, but not its dynamic part (if any).
+> > + */
+> > +static int check_stack_access_within_bounds(
+> > +             struct bpf_verifier_env *env,
+> > +             int regno, int off, int access_size,
+> > +             enum stack_access_src src, enum bpf_access_type type)
+> > +{
+> > +     struct bpf_reg_state *regs = cur_regs(env);
+> > +     struct bpf_reg_state *reg = regs + regno;
+> > +     struct bpf_func_state *state = func(env, reg);
+> > +     int min_off, max_off;
+> > +     int err;
+> > +     char *err_extra;
+> > +
+> > +     if (src == ACCESS_HELPER)
+>
+> the ACCESS_HELPER|DIRECT enum should probably be moved right before this function.
+> It's not used earlier, I think, and it made the reviewing a bit harder than could have been.
 
-Signed-off-by: Andrei Matei <andreimatei1@gmail.com>
----
- .../testing/selftests/bpf/verifier/var_off.c  | 99 ++++++++++++++++++-
- 1 file changed, 97 insertions(+), 2 deletions(-)
+It is, unfortunately. ACCESS_DIRECT is used close to where it is
+defined, in check_stack_read_var_off().
 
-diff --git a/tools/testing/selftests/bpf/verifier/var_off.c b/tools/testing/selftests/bpf/verifier/var_off.c
-index 49b78a1a261b..eab1f7f56e2f 100644
---- a/tools/testing/selftests/bpf/verifier/var_off.c
-+++ b/tools/testing/selftests/bpf/verifier/var_off.c
-@@ -31,14 +31,109 @@
- 	 * we don't know which
- 	 */
- 	BPF_ALU64_REG(BPF_ADD, BPF_REG_2, BPF_REG_10),
--	/* dereference it */
-+	/* dereference it for a stack read */
-+	BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_2, 0),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+	.result_unpriv = REJECT,
-+	.errstr_unpriv = "R2 variable stack access prohibited for !root",
-+	.prog_type = BPF_PROG_TYPE_CGROUP_SKB,
-+},
-+{
-+	"variable-offset stack read, uninitialized",
-+	.insns = {
-+	/* Get an unknown value */
-+	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, 0),
-+	/* Make it small and 4-byte aligned */
-+	BPF_ALU64_IMM(BPF_AND, BPF_REG_2, 4),
-+	BPF_ALU64_IMM(BPF_SUB, BPF_REG_2, 8),
-+	/* add it to fp.  We now have either fp-4 or fp-8, but
-+	 * we don't know which
-+	 */
-+	BPF_ALU64_REG(BPF_ADD, BPF_REG_2, BPF_REG_10),
-+	/* dereference it for a stack read */
- 	BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_2, 0),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
- 	BPF_EXIT_INSN(),
- 	},
--	.errstr = "variable stack access var_off=(0xfffffffffffffff8; 0x4)",
- 	.result = REJECT,
-+	.errstr = "invalid variable-offset read from stack R2",
- 	.prog_type = BPF_PROG_TYPE_LWT_IN,
- },
-+{
-+	"variable-offset stack write, priv vs unpriv",
-+	.insns = {
-+	/* Get an unknown value */
-+	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, 0),
-+	/* Make it small and 8-byte aligned */
-+	BPF_ALU64_IMM(BPF_AND, BPF_REG_2, 8),
-+	BPF_ALU64_IMM(BPF_SUB, BPF_REG_2, 16),
-+	/* Add it to fp.  We now have either fp-8 or fp-16, but
-+	 * we don't know which
-+	 */
-+	BPF_ALU64_REG(BPF_ADD, BPF_REG_2, BPF_REG_10),
-+	/* Dereference it for a stack write */
-+	BPF_ST_MEM(BPF_DW, BPF_REG_2, 0, 0),
-+	/* Now read from the address we just wrote. This shows
-+	 * that, after a variable-offset write, a priviledged
-+	 * program can read the slots that were in the range of
-+	 * that write (even if the verifier doesn't actually know
-+	 * if the slot being read was really written to or not.
-+	 */
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_3, BPF_REG_2, 0),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	/* Variable stack access is rejected for unprivileged.
-+	 */
-+	.errstr_unpriv = "R2 variable stack access prohibited for !root",
-+	.result_unpriv = REJECT,
-+	.result = ACCEPT,
-+},
-+{
-+	"variable-offset stack write clobbers spilled regs",
-+	.insns = {
-+	/* Dummy instruction; needed because we need to patch the next one
-+	 * and we can't patch the first instruction.
-+	 */
-+	BPF_MOV64_IMM(BPF_REG_6, 0),
-+	/* Make R0 a map ptr */
-+	BPF_LD_MAP_FD(BPF_REG_0, 0),
-+	/* Get an unknown value */
-+	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1, 0),
-+	/* Make it small and 8-byte aligned */
-+	BPF_ALU64_IMM(BPF_AND, BPF_REG_2, 8),
-+	BPF_ALU64_IMM(BPF_SUB, BPF_REG_2, 16),
-+	/* Add it to fp. We now have either fp-8 or fp-16, but
-+	 * we don't know which.
-+	 */
-+	BPF_ALU64_REG(BPF_ADD, BPF_REG_2, BPF_REG_10),
-+	/* Spill R0(map ptr) into stack */
-+	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -8),
-+	/* Dereference the unknown value for a stack write */
-+	BPF_ST_MEM(BPF_DW, BPF_REG_2, 0, 0),
-+	/* Fill the register back into R2 */
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_10, -8),
-+	/* Try to dereference R2 for a memory load */
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_2, 8),
-+	BPF_EXIT_INSN(),
-+	},
-+	.fixup_map_hash_8b = { 1 },
-+	/* The unpriviledged case is not too interesting; variable
-+	 * stack access is rejected.
-+	 */
-+	.errstr_unpriv = "R2 variable stack access prohibited for !root",
-+	.result_unpriv = REJECT,
-+	/* In the priviledged case, dereferencing a spilled-and-then-filled
-+	 * register is rejected because the previous variable offset stack
-+	 * write might have overwritten the spilled pointer (i.e. we lose track
-+	 * of the spilled register when we analyze the write).
-+	 */
-+	.errstr = "R2 invalid mem access 'inv'",
-+	.result = REJECT,
-+},
- {
- 	"indirect variable-offset stack access, unbounded",
- 	.insns = {
--- 
-2.27.0
+>
+> > +             /* We don't know if helpers are reading or writing (or both). */
+> > +             err_extra = " indirect access to";
+> > +     else if (type == BPF_READ)
+> > +             err_extra = " read from";
+> > +     else
+> > +             err_extra = " write to";
+>
+> Thanks for improving verifier errors.
+>
+> > +
+> > +     if (tnum_is_const(reg->var_off)) {
+> > +             min_off = reg->var_off.value + off;
+> > +             if (access_size > 0)
+> > +                     max_off = min_off + access_size - 1;
+> > +             else
+> > +                     max_off = min_off;
+> > +     } else {
+> > +             if (reg->smax_value >= BPF_MAX_VAR_OFF ||
+> > +                 reg->smax_value <= -BPF_MAX_VAR_OFF) {
+>
+> hmm. are you sure about smax in both conditions? looks like typo?
 
+This is how it used to be before this patch btw, but I think you're
+right. It looks like the second one should have been smin_value.
+Fixing here.
+Existing code: https://github.com/torvalds/linux/blob/1e0d27fce010b0a4a9e595506b6ede75934c31be/kernel/bpf/verifier.c#L3721
+
+>
+> > +                     verbose(env, "invalid unbounded variable-offset%s stack R%d\n",
+> > +                             err_extra, regno);
+> > +                     return -EACCES;
+> > +             }
+> > +             min_off = reg->smin_value + off;
+> > +             if (access_size > 0)
+> > +                     max_off = reg->smax_value + off + access_size - 1;
+> > +             else
+> > +                     max_off = min_off;
+> > +     }
+>
+> The rest looks good.
