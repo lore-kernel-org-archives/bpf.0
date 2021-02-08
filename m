@@ -2,172 +2,66 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 69449C433E0
-	for <bpf@archiver.kernel.org>; Mon,  8 Feb 2021 10:04:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CB0CEC433DB
+	for <bpf@archiver.kernel.org>; Mon,  8 Feb 2021 10:33:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1888964E87
-	for <bpf@archiver.kernel.org>; Mon,  8 Feb 2021 10:04:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8E37B64E88
+	for <bpf@archiver.kernel.org>; Mon,  8 Feb 2021 10:33:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231956AbhBHKCF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 8 Feb 2021 05:02:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40094 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232085AbhBHJ5y (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 8 Feb 2021 04:57:54 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC19C0617AA
-        for <bpf@vger.kernel.org>; Mon,  8 Feb 2021 01:48:42 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id r23so14275719ljh.1
-        for <bpf@vger.kernel.org>; Mon, 08 Feb 2021 01:48:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4vg5AOKdz4OrMu6Jjrf3UUawv7FBwCs33NORYyzFGLg=;
-        b=Hs4vNpGB9J6X/ZJiBuja8dPoX7H/A1S4RbqkgG5fdRGV8MOL3+uKfrC0VCTsbKkNE3
-         A2PWQUZ7X63ldND2RnR3k1m7KG2vSPKe4bSdqij54xqdvQdxa21Ay1PS9MtvWSp//7pV
-         BMPdyZpLgo6wt7ditzrr5vwl30+ai3gX3WZ2I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4vg5AOKdz4OrMu6Jjrf3UUawv7FBwCs33NORYyzFGLg=;
-        b=Gf/PrJYbNfOCVmXHGCZHAUfT5+R/d2mgLeouJ/skBxY6azbxgsS6kzcIBu8FkyEHrk
-         y1dEcSO1VCQOmhu5R1o4f0qXPNCZArHBR4kt2q9FAWmmiwacJDboBlJUHhwOsrlWOYMQ
-         IdgPazNDjZ/3MuirBQd0btyyUbXhtGZ4/j/qW2MeigYil2o0fOwtwQLG2CwcoHK+FSU5
-         z6elVpVHpJLT6erxWakbpzQ+syIIIm8fZD4FVywkyB1GW2f9YjxeLyOLdBCuZG1iNtOH
-         2ZQs/0TYKKawWqBf6GXNeuksrKy+TlJVQ/M/8O+h+aZi+DR4Ok7+68G0Mgzz+FkuK+rm
-         wBSw==
-X-Gm-Message-State: AOAM530jUdV/mria8PDmqjS6zFtgAAIl1Rdp1kmtTXOKXSUte0x41UbW
-        Ott37lGMYVNwRNUfGDwHm6zJ7Ozjwt7JqBOixF/ITw==
-X-Google-Smtp-Source: ABdhPJyOph8kLVOxZWvTLh8pnsjRTenz89i0HdOYSTuR190pzH7whxCLCRUKXufuNb1iA2R6AwJokbcGx0geailvO+g=
-X-Received: by 2002:a2e:9c8e:: with SMTP id x14mr8920566lji.83.1612777721168;
- Mon, 08 Feb 2021 01:48:41 -0800 (PST)
-MIME-Version: 1.0
-References: <20210203041636.38555-1-xiyou.wangcong@gmail.com> <20210203041636.38555-9-xiyou.wangcong@gmail.com>
-In-Reply-To: <20210203041636.38555-9-xiyou.wangcong@gmail.com>
-From:   Lorenz Bauer <lmb@cloudflare.com>
-Date:   Mon, 8 Feb 2021 09:48:30 +0000
-Message-ID: <CACAyw9-is-sTBUyJnNsQBKga9eyKA8m6+qfS-hWBNipwqgaafg@mail.gmail.com>
-Subject: Re: [Patch bpf-next 08/19] udp: implement ->read_sock() for sockmap
-To:     Cong Wang <xiyou.wangcong@gmail.com>
-Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        duanxiongchun@bytedance.com, wangdongdong.6@bytedance.com,
-        jiang.wang@bytedance.com, Cong Wang <cong.wang@bytedance.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Sitnicki <jakub@cloudflare.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S229720AbhBHKdX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 8 Feb 2021 05:33:23 -0500
+Received: from out30-45.freemail.mail.aliyun.com ([115.124.30.45]:33639 "EHLO
+        out30-45.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232197AbhBHKbC (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 8 Feb 2021 05:31:02 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=alimailimapcm10staff010182156082;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0UOBSG.C_1612780215;
+Received: from j63c13417.sqa.eu95.tbsite.net(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0UOBSG.C_1612780215)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Mon, 08 Feb 2021 18:30:15 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     shuah@kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yang Li <yang.lee@linux.alibaba.com>
+Subject: [PATCH] selftests: bpf: remove unneeded semicolon
+Date:   Mon,  8 Feb 2021 18:30:13 +0800
+Message-Id: <1612780213-84583-1-git-send-email-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, 3 Feb 2021 at 04:17, Cong Wang <xiyou.wangcong@gmail.com> wrote:
->
-> From: Cong Wang <cong.wang@bytedance.com>
->
-> Cc: John Fastabend <john.fastabend@gmail.com>
-> Cc: Daniel Borkmann <daniel@iogearbox.net>
-> Cc: Jakub Sitnicki <jakub@cloudflare.com>
-> Cc: Lorenz Bauer <lmb@cloudflare.com>
-> Signed-off-by: Cong Wang <cong.wang@bytedance.com>
-> ---
->  include/net/udp.h  |  2 ++
->  net/ipv4/af_inet.c |  1 +
->  net/ipv4/udp.c     | 34 ++++++++++++++++++++++++++++++++++
->  3 files changed, 37 insertions(+)
->
-> diff --git a/include/net/udp.h b/include/net/udp.h
-> index 13f9354dbd3e..b6b75cabf4e4 100644
-> --- a/include/net/udp.h
-> +++ b/include/net/udp.h
-> @@ -327,6 +327,8 @@ struct sock *__udp6_lib_lookup(struct net *net,
->                                struct sk_buff *skb);
->  struct sock *udp6_lib_lookup_skb(const struct sk_buff *skb,
->                                  __be16 sport, __be16 dport);
-> +int udp_read_sock(struct sock *sk, read_descriptor_t *desc,
-> +                 sk_read_actor_t recv_actor);
->
->  /* UDP uses skb->dev_scratch to cache as much information as possible and avoid
->   * possibly multiple cache miss on dequeue()
-> diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
-> index d184d9379a92..4a4c6d3d2786 100644
-> --- a/net/ipv4/af_inet.c
-> +++ b/net/ipv4/af_inet.c
-> @@ -1072,6 +1072,7 @@ const struct proto_ops inet_dgram_ops = {
->         .getsockopt        = sock_common_getsockopt,
->         .sendmsg           = inet_sendmsg,
->         .sendmsg_locked    = udp_sendmsg_locked,
-> +       .read_sock         = udp_read_sock,
->         .recvmsg           = inet_recvmsg,
->         .mmap              = sock_no_mmap,
->         .sendpage          = inet_sendpage,
-> diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
-> index 635e1e8b2968..6dffbcec0b51 100644
-> --- a/net/ipv4/udp.c
-> +++ b/net/ipv4/udp.c
-> @@ -1792,6 +1792,40 @@ struct sk_buff *__skb_recv_udp(struct sock *sk, unsigned int flags,
->  }
->  EXPORT_SYMBOL(__skb_recv_udp);
->
-> +int udp_read_sock(struct sock *sk, read_descriptor_t *desc,
-> +                 sk_read_actor_t recv_actor)
-> +{
-> +       struct sk_buff *skb;
-> +       int copied = 0, err;
-> +
-> +       while (1) {
-> +               int offset = 0;
-> +
-> +               skb = __skb_recv_udp(sk, 0, 1, &offset, &err);
+Eliminate the following coccicheck warning:
+./tools/testing/selftests/bpf/test_flow_dissector.c:506:2-3: Unneeded
+semicolon
 
-Seems like err isn't used outside of the loop, is that on purpose? If
-yes, how about moving the declaration of err to be with offset. Maybe
-rename to ignored?
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ tools/testing/selftests/bpf/test_flow_dissector.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> +               if (!skb)
-> +                       break;
-> +               if (offset < skb->len) {
-> +                       int used;
-> +                       size_t len;
-> +
-> +                       len = skb->len - offset;
-> +                       used = recv_actor(desc, skb, offset, len);
-> +                       if (used <= 0) {
-> +                               if (!copied)
-> +                                       copied = used;
-> +                               break;
-> +                       } else if (used <= len) {
+diff --git a/tools/testing/selftests/bpf/test_flow_dissector.c b/tools/testing/selftests/bpf/test_flow_dissector.c
+index 01f0c63..571cc07 100644
+--- a/tools/testing/selftests/bpf/test_flow_dissector.c
++++ b/tools/testing/selftests/bpf/test_flow_dissector.c
+@@ -503,7 +503,7 @@ static int do_rx(int fd)
+ 		if (rbuf != cfg_payload_char)
+ 			error(1, 0, "recv: payload mismatch");
+ 		num++;
+-	};
++	}
+ 
+ 	return num;
+ }
+-- 
+1.8.3.1
 
-In which case can used be > len?
-
-
-> +                               copied += used;
-> +                               offset += used;
-> +                       }
-> +               }
-> +               if (!desc->count)
-> +                       break;
-> +       }
-> +
-> +       return copied;
-> +}
-> +
->  /*
->   *     This should be easy, if there is something there we
->   *     return it, otherwise we block.
-> --
-> 2.25.1
->
-
-
---
-Lorenz Bauer  |  Systems Engineer
-6th Floor, County Hall/The Riverside Building, SE1 7PB, UK
-
-www.cloudflare.com
