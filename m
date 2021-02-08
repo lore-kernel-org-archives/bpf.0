@@ -2,92 +2,130 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-13.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B2FBC433E9
-	for <bpf@archiver.kernel.org>; Mon,  8 Feb 2021 18:59:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07150C4332D
+	for <bpf@archiver.kernel.org>; Mon,  8 Feb 2021 19:18:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 29D3A64E8C
-	for <bpf@archiver.kernel.org>; Mon,  8 Feb 2021 18:59:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BA9E264E74
+	for <bpf@archiver.kernel.org>; Mon,  8 Feb 2021 19:18:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235695AbhBHS7m (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 8 Feb 2021 13:59:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44234 "EHLO
+        id S233954AbhBHTSB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 8 Feb 2021 14:18:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235672AbhBHS6W (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 8 Feb 2021 13:58:22 -0500
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6E0DC06178A
-        for <bpf@vger.kernel.org>; Mon,  8 Feb 2021 10:57:41 -0800 (PST)
-Received: by mail-yb1-xb34.google.com with SMTP id b187so15609928ybg.9
-        for <bpf@vger.kernel.org>; Mon, 08 Feb 2021 10:57:41 -0800 (PST)
+        with ESMTP id S236155AbhBHTRu (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 8 Feb 2021 14:17:50 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EEE0C061788
+        for <bpf@vger.kernel.org>; Mon,  8 Feb 2021 11:17:09 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id u4so18603060ljh.6
+        for <bpf@vger.kernel.org>; Mon, 08 Feb 2021 11:17:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=KERZYToexTihT1cjL2s5aXZz1xA/L6flPfDbhWN201I=;
-        b=FoSEjTJj/Dqj6arRxv3osJSU4tEItU8ZCq2I/qN77PiauAK7RCShm3yI3zyXGcBOx6
-         dKaUyQqRNGIW9OS4HIUoZpS3d+sQ+NWiRZQ1AfNCBqMLUcpfd6MAQ0IHhfqvpPKwHB6I
-         cZiRC+Oeo7TogCKz25/cbjeDn5NnY+nVwGBf2Va76jkugMEmRu71et3wuYSGwIVRv4ym
-         e55elyCdjmPmb0RkxBbOlbC3Ook0KG2VS7ThUyKTLevj88ECwUFPlB0DmeKIiFClmlH9
-         hK6q8Plvvbs3Em0XoEoc2fWgYI4gvWgHuOJIUs5G0uxUso2Jy+a1O+jgiClDLKe9X0u1
-         xcDQ==
+        bh=9qRRFwTuqO+Aiajdff+1iriDFNvAEXC3WkSMPqPFbz0=;
+        b=hXC3e+Os0Tjxx46Zo9mCNNZBdKdyJk28UTJa01dWh9Vczs6hqc9irq9PguyC3Tk7rS
+         4JO4AIqc98dIxw9C6vE1E6P2o9KEHlrCidHqPG9ftYsA8S3jw+iwKdRfYhaPsDIWuEGZ
+         bV/smCTeJBHCgUSp6ji4efSBf3w4AqruXNbGdlNyl7BUthz/vOtL3g26UfN9i9CTeij9
+         UhGf+MeN7gYNjlzDuHyt+KyPpqZ0lY+EaUhxGVccUxobDECzYXBFtCwup/Q2CWMGAYQo
+         keK2FJxRIH/8A14eTiNZomVijmQEehdQ0h0jVwjTBTt37tfBGJG93xbC+BIq/SrdSx62
+         y/fA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=KERZYToexTihT1cjL2s5aXZz1xA/L6flPfDbhWN201I=;
-        b=OAVUKBR7eshkPCpGVN00n85cbxbsTXvjC68aR6Ngagu/natiwXmgKsSU/zqxGJqvBL
-         /VZWt4B8tZUkZ3WbiroJgzDdXVk6DOiZP4RDnZ3DpmJZLuSrcDl7dE1zpmw92Bq9Oqtr
-         6H6uTyf05WcZw/tyEXA0yguJAUlZWHyKHiOn/oopbKcA8F7cIZTfHYEAFmsa/mCDgUS9
-         M/PybkFSbpfOrWcsZWDz51FXcX6uv3b/cydx6mbOifn2+ZdxSUir0FTpJ0HZr6iUKAoo
-         /x6lcusJrPIPareebuNtIfpgx5QOwhpdFHTxYgyUzafI4y/ygrOS3pbjEUzHBpScI+Kw
-         kUHQ==
-X-Gm-Message-State: AOAM532CMYKPl+Spc+RQTle26NM4ponMQZxsexB8DXfhNyU4HJnvVwd/
-        Lim1qBJrNJvDl5jUrK+0Cw89c9fmA84XOorHo/U=
-X-Google-Smtp-Source: ABdhPJz6wJAiJZshuS5UpKtsX5D6RCp5uYmN5pL7Rq0O+rXyOxv5SY93BVXyKOz57kSbZ32ss8A2J71A/Mp5LNEBM+c=
-X-Received: by 2002:a25:37c4:: with SMTP id e187mr4898564yba.347.1612810661097;
- Mon, 08 Feb 2021 10:57:41 -0800 (PST)
+        bh=9qRRFwTuqO+Aiajdff+1iriDFNvAEXC3WkSMPqPFbz0=;
+        b=ao/rGbI7sXi/JvxaKWV8GQjPr3CoyyXu6N3DNacGFdoUWBIeXr9KVucKaY27odA87j
+         063J+OxvnyabvDGQfcCWAGvJLEoasnYlZDs3Ex8/DdFfKW8yxxlpBvWF+LoMtW4WEgfv
+         Bdo0SdaRVRz2i0xGkiC149zUBoWgKkOG3WFPD+c57QznXqAeaT/1lOdxlk2bvfzXuKZR
+         G+LR8qXPsf8U9tLDJABzTn2V0aDjDAzgj8SEN4O9i6CsZzKq34Rm9BtKFnEwSPPLz6g/
+         oDmSTcOFVTlXOi7gBhFp5Gg0TDy0/MVySJsIbBnxhsTZBJsvHEPIeh2uaCzZHvO5PJRl
+         IfBw==
+X-Gm-Message-State: AOAM533ujuBPmIfHt+pFAejsC4k75j6s5jn3yUYA1Fma7buHzZ6HcB5f
+        OQ0q0xfzFkBR+q0YIzSW5WnkghmLMY0YzCqHC/EDxA==
+X-Google-Smtp-Source: ABdhPJyBX2gPwejaHESl1FKAyFitddRy5yirbdvVLuQLaVidZ8uswiOJGDhE6a1mUqOrAXgLaCC7FbCEl4C4e9FACv8=
+X-Received: by 2002:a2e:8541:: with SMTP id u1mr12328144ljj.0.1612811827604;
+ Mon, 08 Feb 2021 11:17:07 -0800 (PST)
 MIME-Version: 1.0
-References: <20210206170344.78399-1-alexei.starovoitov@gmail.com> <20210206170344.78399-2-alexei.starovoitov@gmail.com>
-In-Reply-To: <20210206170344.78399-2-alexei.starovoitov@gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 8 Feb 2021 10:57:30 -0800
-Message-ID: <CAEf4Bza72Vbi1bdTum=drQms3UFdqK+cjO5kthRRAK-sAxzyhg@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next 1/7] bpf: Optimize program stats
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        bpf <bpf@vger.kernel.org>, Kernel Team <kernel-team@fb.com>
+References: <20210207071726.3969978-1-yhs@fb.com> <a02164334d0e991820eefa45e2df1a8b49f5537e.camel@klomp.org>
+In-Reply-To: <a02164334d0e991820eefa45e2df1a8b49f5537e.camel@klomp.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 8 Feb 2021 11:16:56 -0800
+Message-ID: <CAKwvOdmMPjn-_opboZkVhRpYCUuKFv8G9GtKFAj=wqYRjr-jkA@mail.gmail.com>
+Subject: Re: [PATCH dwarves v2] btf_encoder: sanitize non-regular int base type
+To:     Mark Wielaard <mark@klomp.org>, David Blaikie <blaikie@google.com>
+Cc:     Yonghong Song <yhs@fb.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        dwarves@vger.kernel.org, bpf <bpf@vger.kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sat, Feb 6, 2021 at 9:05 AM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
+On Sun, Feb 7, 2021 at 6:18 AM Mark Wielaard <mark@klomp.org> wrote:
 >
-> From: Alexei Starovoitov <ast@kernel.org>
+> Hi,
 >
-> Move bpf_prog_stats from prog->aux into prog to avoid one extra load
-> in critical path of program execution.
+> On Sat, 2021-02-06 at 23:17 -0800, Yonghong Song wrote:
+> > clang with dwarf5 may generate non-regular int base type,
+> > i.e., not a signed/unsigned char/short/int/longlong/__int128.
+> > Such base types are often used to describe
+> > how an actual parameter or variable is generated. For example,
+> >
+> > 0x000015cf:   DW_TAG_base_type
+> >                 DW_AT_name      ("DW_ATE_unsigned_1")
+> >                 DW_AT_encoding  (DW_ATE_unsigned)
+> >                 DW_AT_byte_size (0x00)
+> >
+> > 0x00010ed9:         DW_TAG_formal_parameter
+> >                       DW_AT_location    (DW_OP_lit0,
+> >                                          DW_OP_not,
+> >                                          DW_OP_convert (0x000015cf) "DW_ATE_unsigned_1",
+> >                                          DW_OP_convert (0x000015d4) "DW_ATE_unsigned_8",
+> >                                          DW_OP_stack_value)
+> >                       DW_AT_abstract_origin     (0x00013984 "branch")
+> >
+> > What it does is with a literal "0", did a "not" operation, and the converted to
+> > one-bit unsigned int and then 8-bit unsigned int.
 >
-> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-> ---
+> Thanks for tracking this down. Do you have any idea why the clang
+> compiler emits this? You might be right that it is intended to do what
+> you describe it does (but then it would simply encode an unsigned
+> constant 1 char in a very inefficient way). But as implemented it
+> doesn't seem to make any sense. What would DW_OP_convert of an zero
+> sized base type even mean (if it is intended as a 1 bit sized typed,
+> then why is there no DW_AT_bit_size)?
 
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
+David,
+Any thoughts on the above sequence of DW_OP_ entries?  This is a part
+of DWARF I'm unfamiliar with.
 
->  include/linux/bpf.h     |  8 --------
->  include/linux/filter.h  | 10 +++++++++-
->  kernel/bpf/core.c       |  8 ++++----
->  kernel/bpf/syscall.c    |  2 +-
->  kernel/bpf/trampoline.c |  2 +-
->  kernel/bpf/verifier.c   |  2 +-
->  6 files changed, 16 insertions(+), 16 deletions(-)
 >
+> So I do think your patch makes sense. clang clearly is emitting
+> something bogus. And so some fixup is needed. But maybe we should at
+> least give a warning about it, otherwise it might never get fixed.
+>
+> BTW. If these bogus base types are only emitted as part of a location
+> expression and not as part of an actual function or variable type
+> description, then why are we even trying to encode it as a BTF type? It
+> might be cheaper to just skip/drop it. But maybe the code setup makes
+> it hard to know whether or not such a (bogus) type is actually
+> referenced from a function or variable description?
+>
+> Cheers,
+>
+> Mark
 
-[...]
+
+
+-- 
+Thanks,
+~Nick Desaulniers
