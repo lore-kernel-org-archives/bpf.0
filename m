@@ -2,111 +2,134 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DD8A0C433E0
-	for <bpf@archiver.kernel.org>; Tue,  9 Feb 2021 20:57:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44870C433E0
+	for <bpf@archiver.kernel.org>; Tue,  9 Feb 2021 20:57:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8B29264E6B
-	for <bpf@archiver.kernel.org>; Tue,  9 Feb 2021 20:57:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DB3C064E5A
+	for <bpf@archiver.kernel.org>; Tue,  9 Feb 2021 20:57:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234195AbhBIU4i (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 9 Feb 2021 15:56:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38348 "EHLO
+        id S233984AbhBIU4z (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 9 Feb 2021 15:56:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233984AbhBIUq7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S233983AbhBIUq7 (ORCPT <rfc822;bpf@vger.kernel.org>);
         Tue, 9 Feb 2021 15:46:59 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44319C061793
-        for <bpf@vger.kernel.org>; Tue,  9 Feb 2021 11:48:59 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id j11so10345445plt.11
-        for <bpf@vger.kernel.org>; Tue, 09 Feb 2021 11:48:59 -0800 (PST)
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00E8EC061A32
+        for <bpf@vger.kernel.org>; Tue,  9 Feb 2021 11:49:09 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id q20so12557515pfu.8
+        for <bpf@vger.kernel.org>; Tue, 09 Feb 2021 11:49:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=65E9QWlOxnsFpuJu25gLN+MB82p4NIaj7h47IO0OcuA=;
-        b=R585lJ1hF46WpwHmF3aKEwzXLrhqbMMFgw+YRcmA6ZR45aG75kWq4aBHYQ8dyHorMq
-         5FmrcHYwpx5bm63M56TpUk9TYCRD0TzQ8GusVOCpJKrY//GkfEVBpf+9BYhEfl6jRk46
-         0buKZTbBZ0/PYqx3RfnlhAdbkIZ0y06yKKGAk3qrFe5lZ7Yix2kKozSuvorJywflS28i
-         pw+6iiDV1G206y+PvfilAf7iswMI4aeuRGdPEsOF2/nk/bvb9nBqEhIt+c7oygS8ymoP
-         CZdnzFwcem1W0cJMOnvZof/fFFSI870PR+X9RHV1yEbCdq8oh35Ue50vEjavibKDNsKj
-         UThQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=zkWaqcUrYtyYpGOIw2vG0Hnf7hqG1IVD40aD0CVo6cc=;
+        b=fhqMkx3ta0c3o3lAA/C63FnOXhSTrT1hdhmkEXikeGDiwLDML2SFbvTamXmIUbN2ds
+         jUmjYXmBtIyHCqgZp/TM5vokvg3qbKoVYn+L3aSJi5WblAo5Q7BFx7oPRuQw7vfABGiv
+         tJUe8vEXxsilSTM+qndilMv7t4NkIur2E1wLNiJMsQk8J/LcUHz2BmuLxbkCYNOtgAEw
+         JLJ0R1I8I/9ycUfAzmdWSTRgo5U+qWbqrp6nXzcg6AT94e1mdEhrv87Oyh7SecZWs4on
+         ZCjb4e/L+RZRBneBLxgq0s0Tl/6CvCrK8IaijrlCO9FYwHOx7mrZxeCrZPrNke0BbyPm
+         7Cqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=65E9QWlOxnsFpuJu25gLN+MB82p4NIaj7h47IO0OcuA=;
-        b=KOm46wXsKIPX0e9L2FVADnmUQCIHJdXxrbVM4rFSH3OZuQ9iTWOV2euvELy3XTrmJC
-         qo9ALCS3huWUvXeh0ei1V+TonexDejras4qCAgcdg/AmFlrm3sRAbpdN1grLc13Um+KR
-         wzCzZeyxLz6zrQsMds5Z0KhWMW/LBjbvoEA4uqtTb/t4OUy6/OcytDHve//z9JtAJaNj
-         QJ9WVrzOZlbewoqs22UeXIX+ls5MluBlk+qilyE7gheIU2z4S4jCDoJu1/eBBK3donOn
-         g8zPgpo/5MJ/HlElY0pjkcevgCbgYgC3aPX2Xk8n5LQHy5bT6HD37XcPJqnDBkcEvjvU
-         RQXQ==
-X-Gm-Message-State: AOAM532JgnhDqQLAa/jRPFZ4Xl4UGpnGK8Kk5+U2VxYCbtVVqVLYsH+t
-        4r3ZVMCMwr7sFDmDC0PAQ7o=
-X-Google-Smtp-Source: ABdhPJx/3T1DsI71X/qtrivWl59uQY9A9+LpUGx48nM44RusD1M6AZVTYBRsn2exMu/9mHYb/TpdHA==
-X-Received: by 2002:a17:902:7c06:b029:e2:cce9:faaf with SMTP id x6-20020a1709027c06b02900e2cce9faafmr14396991pll.83.1612900138870;
-        Tue, 09 Feb 2021 11:48:58 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=zkWaqcUrYtyYpGOIw2vG0Hnf7hqG1IVD40aD0CVo6cc=;
+        b=QqO5tz3mmTeFBjMlAw6+ApFbuf3bbfjyEtjaQtb7RrytaTJOeG/i42E4ihHU4fOYs2
+         uHNDsN/8AqoqF6qfUW4P8r5hXjQ28MMJwfMSi0vSeq7CiUu4Bt+ff0YiD+mjBoHE+sig
+         G3fZzta2MBsFC9YfalPNa/siqR0O1DCOncyTt/tGnB+a/jv5ygFrqbN4aZhTJFVMACmH
+         Wm+dTpDjXdD2dnH6YuvzvQ3QueAwtgFoPxZKnJkJb81IBAgMYBGxedacg0bzkRO8Codu
+         GsruCRoS3p96OxM4r44D63g30wf1g3maHTT0fD3f7WosfShiDpULwqWfyKKh/AyV0pQX
+         TRog==
+X-Gm-Message-State: AOAM531wgEcC6SmJigeI8INSNEiteIx2DlsjzXfAI4hCXf85pJ02jJwz
+        wETuqRnNVU0Fl1GjShvEazZZmPAhwzo=
+X-Google-Smtp-Source: ABdhPJyrmvr2zzBLygHLpvF5/IInTRzEIf/3gHNIzjYnCwOT26x43frWq/6tMOIBMtDpItKsGK4awA==
+X-Received: by 2002:aa7:8815:0:b029:1bc:93cc:d6fa with SMTP id c21-20020aa788150000b02901bc93ccd6famr23974653pfo.26.1612900148601;
+        Tue, 09 Feb 2021 11:49:08 -0800 (PST)
 Received: from ast-mbp.thefacebook.com ([163.114.132.7])
-        by smtp.gmail.com with ESMTPSA id j22sm139123pff.57.2021.02.09.11.48.57
+        by smtp.gmail.com with ESMTPSA id j22sm139123pff.57.2021.02.09.11.49.07
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 09 Feb 2021 11:48:58 -0800 (PST)
+        Tue, 09 Feb 2021 11:49:08 -0800 (PST)
 From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To:     davem@davemloft.net
 Cc:     daniel@iogearbox.net, bpf@vger.kernel.org, kernel-team@fb.com
-Subject: [PATCH v3 bpf-next 0/8] bpf: Misc improvements
-Date:   Tue,  9 Feb 2021 11:48:48 -0800
-Message-Id: <20210209194856.24269-1-alexei.starovoitov@gmail.com>
+Subject: [PATCH v3 bpf-next 7/8] bpf: Allows per-cpu maps and map-in-map in sleepable programs
+Date:   Tue,  9 Feb 2021 11:48:55 -0800
+Message-Id: <20210209194856.24269-8-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.13.5
+In-Reply-To: <20210209194856.24269-1-alexei.starovoitov@gmail.com>
+References: <20210209194856.24269-1-alexei.starovoitov@gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-v3:
-- address review comments
-- improve recursion selftest
+Since sleepable programs are now executing under migrate_disable
+the per-cpu maps are safe to use.
+The map-in-map were ok to use in sleepable from the time sleepable
+progs were introduced.
 
-Several bpf improvements:
-- optimize prog stats
-- compute stats for sleepable progs
-- prevent recursion fentry/fexit and sleepable progs
-- allow map-in-map and per-cpu maps in sleepable progs
+Note that non-preallocated maps are still not safe, since there is
+no rcu_read_lock yet in sleepable programs and dynamically allocated
+map elements are relying on rcu protection. The sleepable programs
+have rcu_read_lock_trace instead. That limitation will be addresses
+in the future.
 
-Alexei Starovoitov (8):
-  bpf: Optimize program stats
-  bpf: Compute program stats for sleepable programs
-  bpf: Add per-program recursion prevention mechanism
-  selftest/bpf: Add a recursion test
-  bpf: Count the number of times recursion was prevented
-  selftests/bpf: Improve recursion selftest
-  bpf: Allows per-cpu maps and map-in-map in sleepable programs
-  selftests/bpf: Add a test for map-in-map and per-cpu maps in sleepable
-    progs
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ kernel/bpf/hashtab.c  | 4 ++--
+ kernel/bpf/verifier.c | 7 ++++++-
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
- arch/x86/net/bpf_jit_comp.c                   | 46 ++++++-----
- include/linux/bpf.h                           | 16 +---
- include/linux/filter.h                        | 16 +++-
- include/uapi/linux/bpf.h                      |  1 +
- kernel/bpf/core.c                             | 16 +++-
- kernel/bpf/hashtab.c                          |  4 +-
- kernel/bpf/syscall.c                          | 16 ++--
- kernel/bpf/trampoline.c                       | 77 +++++++++++++++----
- kernel/bpf/verifier.c                         |  9 ++-
- tools/bpf/bpftool/prog.c                      |  4 +
- tools/include/uapi/linux/bpf.h                |  1 +
- .../selftests/bpf/prog_tests/fexit_stress.c   |  4 +-
- .../selftests/bpf/prog_tests/recursion.c      | 41 ++++++++++
- .../bpf/prog_tests/trampoline_count.c         |  4 +-
- tools/testing/selftests/bpf/progs/lsm.c       | 69 +++++++++++++++++
- tools/testing/selftests/bpf/progs/recursion.c | 46 +++++++++++
- 16 files changed, 303 insertions(+), 67 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/recursion.c
- create mode 100644 tools/testing/selftests/bpf/progs/recursion.c
-
+diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+index c1ac7f964bc9..d63912e73ad9 100644
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+@@ -1148,7 +1148,7 @@ static int __htab_percpu_map_update_elem(struct bpf_map *map, void *key,
+ 		/* unknown flags */
+ 		return -EINVAL;
+ 
+-	WARN_ON_ONCE(!rcu_read_lock_held());
++	WARN_ON_ONCE(!rcu_read_lock_held() && !rcu_read_lock_trace_held());
+ 
+ 	key_size = map->key_size;
+ 
+@@ -1202,7 +1202,7 @@ static int __htab_lru_percpu_map_update_elem(struct bpf_map *map, void *key,
+ 		/* unknown flags */
+ 		return -EINVAL;
+ 
+-	WARN_ON_ONCE(!rcu_read_lock_held());
++	WARN_ON_ONCE(!rcu_read_lock_held() && !rcu_read_lock_trace_held());
+ 
+ 	key_size = map->key_size;
+ 
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 4189edb41b73..9561f2af7710 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -10020,9 +10020,14 @@ static int check_map_prog_compatibility(struct bpf_verifier_env *env,
+ 		case BPF_MAP_TYPE_HASH:
+ 		case BPF_MAP_TYPE_LRU_HASH:
+ 		case BPF_MAP_TYPE_ARRAY:
++		case BPF_MAP_TYPE_PERCPU_HASH:
++		case BPF_MAP_TYPE_PERCPU_ARRAY:
++		case BPF_MAP_TYPE_LRU_PERCPU_HASH:
++		case BPF_MAP_TYPE_ARRAY_OF_MAPS:
++		case BPF_MAP_TYPE_HASH_OF_MAPS:
+ 			if (!is_preallocated_map(map)) {
+ 				verbose(env,
+-					"Sleepable programs can only use preallocated hash maps\n");
++					"Sleepable programs can only use preallocated maps\n");
+ 				return -EINVAL;
+ 			}
+ 			break;
 -- 
 2.24.1
 
