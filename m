@@ -2,159 +2,244 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D57BC433DB
-	for <bpf@archiver.kernel.org>; Tue,  9 Feb 2021 20:56:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 23B51C433DB
+	for <bpf@archiver.kernel.org>; Tue,  9 Feb 2021 20:56:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D53AB64EC0
-	for <bpf@archiver.kernel.org>; Tue,  9 Feb 2021 20:56:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D52C164EC6
+	for <bpf@archiver.kernel.org>; Tue,  9 Feb 2021 20:56:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233764AbhBIUz7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 9 Feb 2021 15:55:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36690 "EHLO
+        id S234190AbhBIU4S (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 9 Feb 2021 15:56:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233774AbhBIUlm (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 9 Feb 2021 15:41:42 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4294C061A29
-        for <bpf@vger.kernel.org>; Tue,  9 Feb 2021 12:09:44 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id d3so30252104lfg.10
-        for <bpf@vger.kernel.org>; Tue, 09 Feb 2021 12:09:44 -0800 (PST)
+        with ESMTP id S233981AbhBIUq6 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 9 Feb 2021 15:46:58 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87D86C06121F
+        for <bpf@vger.kernel.org>; Tue,  9 Feb 2021 11:49:00 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id x136so6000726pfc.2
+        for <bpf@vger.kernel.org>; Tue, 09 Feb 2021 11:49:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5yicjJeOjogJ0GBzkbyijZntdK7Ju5RCDDq26xojPak=;
-        b=AkqLjJVS69L2BZ803u4AcRr1NMKONSj0dEor9TQGaeLPX2QfLX3TfQm2A3e6PDMiFh
-         gE76mBeqSSkEVK8VkeRss/fAAYiOlhhPG9rN2B+2STSeXhI1XhGsj/NRZ2rXM+tSyzii
-         5vguStpjNGtnYE/4r/LrKioveAQAUhup7ASHhj/yJ/hDNWJL3SO+TLckcK3lxkQnMtnv
-         t8rdvH0HCMe3vQKfzZJwWeo671QAdpbL6yh84TqkIG7Nuq43Xp1V+XflGGHpNw4P5iBG
-         LbXhEVuJevVFSnvaqDK5cn9jSnT+K/S//9QfqVBz38ACB904w2YFUtLvZPuyAYZn5V27
-         jNkw==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=9CtEo0PQ7nFntVkjl+Lb8BnJier51eSyW865jIVLumc=;
+        b=tcXm6dxrsqQSzQHy3Ydaa2U50hIR9GTYadFNDs4wN9qgBjp2xcFNsXwvWQiLicnNyz
+         3fulSiQTnzalekxNw3Bo6riFl2et0qznVXk6oGBgEPGBk+zwqK6wkzy3r91ALZJW5j0Q
+         JW6b+GK0I1W0fpSftK7kVB3GPp1ZhKmdY8ckc+HUH7HVydi5lvB/mFUUXd6hybCH0KNb
+         DCRXI7S5/R6FDGENJjngBzbK+eN9HHa1kNPQ7Dvkp7JTilIRYqtBHdD1taivkxcX77Fy
+         r0vQ4Ic4xreIdFQ6SRjSen2VgSQCRYBLXULxWF+pEpXPdc5U3QeuE0JGJ0bsnzO8ZwQM
+         1hXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5yicjJeOjogJ0GBzkbyijZntdK7Ju5RCDDq26xojPak=;
-        b=NKHW6xM1EU5GVMo16Md6eYs5NNGWhcdKQpX5gzzAtMHqTZXG6FGX4MZoSsXssN+DSe
-         0cYWizrkanndLE5GHK50sKxf2BsQKOh9O50IcvkBdKU38FgVliKCMdby01Dv0KLF7wYh
-         IDqgQFJ44KXO2LiE8DwUXR1mXR/B4wPq1Sr1FsK9WmSCiamt7X/hRe53dQtOqqhORsa1
-         IjVo4FNZu1MDYG2mWGT1bU+JT9jgFThfeKpxMHQf/rb5uzhbhpGrqigFLs2uQ3PMbjUz
-         N307DZFYY9snlsicsydH5Lnb2TFzTkbqh+UzmqBkxV/N+IgkUfAr0wXAqfK9usYyct91
-         4oUQ==
-X-Gm-Message-State: AOAM531axl78aBrK70f6Gryxkl5YJkwTpYRojGWmPq4e3CttrAIxjm6x
-        ky9PL7K40EsOG0TUpKyj62aR6EbnTED1JFFdXppgug==
-X-Google-Smtp-Source: ABdhPJx4JWlNZAnonhNS1++AdmiMVMLNX1/AZ6G2Miq/JtdC0hC8kv56kaHXCKdVVUmbLdMIkkOumTDOx1PybRcljzM=
-X-Received: by 2002:a05:6512:12c1:: with SMTP id p1mr15136130lfg.374.1612901382990;
- Tue, 09 Feb 2021 12:09:42 -0800 (PST)
-MIME-Version: 1.0
-References: <20210209034416.GA1669105@ubuntu-m3-large-x86> <CAEf4BzYnT-eoKRL9_Pu_DEuqXVa+edN5F-s+k2RxBSzcsSTJ1g@mail.gmail.com>
- <20210209052311.GA125918@ubuntu-m3-large-x86> <CAEf4BzZV0-zx6YKUUKmecs=icnQNXJjTokdkSAoexm36za+wdA@mail.gmail.com>
- <CAEf4BzYvri7wzRnGH_qQbavXOx5TfBA0qx4nYVnn=YNGv+vNVw@mail.gmail.com>
- <CAEf4Bzax90hn_5axpnCpW+E6gVc1mtUgCXWqmxV0tJ4Ud7bsaA@mail.gmail.com>
- <20210209074904.GA286822@ubuntu-m3-large-x86> <YCKB1TF5wz93EIBK@krava>
- <YCKlrLkTQXc4Cyx7@krava> <YCKwxNDkS9rdr43W@krava> <YCLdJPPC+6QjUsR4@krava>
-In-Reply-To: <YCLdJPPC+6QjUsR4@krava>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 9 Feb 2021 12:09:31 -0800
-Message-ID: <CAKwvOdnqx5-SsicRf01yhxKOq8mAkYRd+zBScSOmEQ0XJe2mAg@mail.gmail.com>
-Subject: Re: FAILED unresolved symbol vfs_truncate on arm64 with LLVM
-To:     Jiri Olsa <jolsa@redhat.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Veronika Kabatova <vkabatov@redhat.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Daniel Kiss <daniel.kiss@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=9CtEo0PQ7nFntVkjl+Lb8BnJier51eSyW865jIVLumc=;
+        b=srI9mZYKQX+rAo92Lcuw2MyCqojgbJF6rO6OIkhoAsW0rgkFtIo550b3x0pkYCHL06
+         FMKE0yWGo05VEdP4JVMOKHwkh66dPUD4lw7UN7fX7QAwZPW0N3DGtd55hQ/IJx9sZRWv
+         12FDrkxXJ7pevdQP/n9oKb5Vda5z0BhpV3P9G4GUY94Zz1Ai3JuJXTYv8dnfXFL2O8Zq
+         9Q3pYWfadEEg1iboKCKkNG7PwZPKksww8Xh6Sw7snh8RvylFpau21aBj8w222VSdbsdI
+         /JtBFc++N6ZuUKBedEOVLsTLxV0ywLSsZ0w/PSpc9Jqxjjxm12wZkgIy/e4itJOaj6NQ
+         zcFg==
+X-Gm-Message-State: AOAM531u685xBmoHCGEQmFR2t3T+XRiAYZ8/DLLWu5+cv0krsGWd8wc9
+        vJGc7CUSJT5eMeJuRfO1QLC2rmNnZws=
+X-Google-Smtp-Source: ABdhPJyuGlHaf7DgmTuGKjTXjoaGrR7QsUFzAEtpEf4kbVi51t1vRmt0+fkwFrIs6igQ0W05f6NbyA==
+X-Received: by 2002:a63:844:: with SMTP id 65mr23191097pgi.371.1612900140175;
+        Tue, 09 Feb 2021 11:49:00 -0800 (PST)
+Received: from ast-mbp.thefacebook.com ([163.114.132.7])
+        by smtp.gmail.com with ESMTPSA id j22sm139123pff.57.2021.02.09.11.48.59
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 09 Feb 2021 11:48:59 -0800 (PST)
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     davem@davemloft.net
+Cc:     daniel@iogearbox.net, bpf@vger.kernel.org, kernel-team@fb.com
+Subject: [PATCH v3 bpf-next 1/8] bpf: Optimize program stats
+Date:   Tue,  9 Feb 2021 11:48:49 -0800
+Message-Id: <20210209194856.24269-2-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.13.5
+In-Reply-To: <20210209194856.24269-1-alexei.starovoitov@gmail.com>
+References: <20210209194856.24269-1-alexei.starovoitov@gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Feb 9, 2021 at 11:06 AM Jiri Olsa <jolsa@redhat.com> wrote:
->
-> On Tue, Feb 09, 2021 at 05:13:42PM +0100, Jiri Olsa wrote:
-> > On Tue, Feb 09, 2021 at 04:09:36PM +0100, Jiri Olsa wrote:
-> >
-> > SNIP
-> >
-> > > > > > >                 DW_AT_prototyped        (true)
-> > > > > > >                 DW_AT_type      (0x01cfdfe4 "long int")
-> > > > > > >                 DW_AT_external  (true)
-> > > > > > >
-> > > > > >
-> > > > > > Ok, the problem appears to be not in DWARF, but in mcount_loc data.
-> > > > > > vfs_truncate's address is not recorded as ftrace-attachable, and thus
-> > > > > > pahole ignores it. I don't know why this happens and it's quite
-> > > > > > strange, given vfs_truncate is just a normal global function.
-> > > >
-> > > > right, I can't see it in mcount adresses.. but it begins with instructions
-> > > > that appears to be nops, which would suggest it's traceable
-> > > >
-> > > >   ffff80001031f430 <vfs_truncate>:
-> > > >   ffff80001031f430: 5f 24 03 d5   hint    #34
-> > > >   ffff80001031f434: 1f 20 03 d5   nop
-> > > >   ffff80001031f438: 1f 20 03 d5   nop
-> > > >   ffff80001031f43c: 3f 23 03 d5   hint    #25
-> > > >
-> > > > > >
-> > > > > > I'd like to understand this issue before we try to fix it, but there
-> > > > > > is at least one improvement we can make: pahole should check ftrace
-> > > > > > addresses only for static functions, not the global ones (global ones
-> > > > > > should be always attachable, unless they are special, e.g., notrace
-> > > > > > and stuff). We can easily check that by looking at the corresponding
-> > > > > > symbol. But I'd like to verify that vfs_truncate is ftrace-attachable
-> > >
-> > > I'm still trying to build the kernel.. however ;-)
-> >
-> > I finally reproduced.. however arm's not using mcount_loc
-> > but some other special section.. so it's new mess for me
->
-> so ftrace data actualy has vfs_truncate address but with extra 4 bytes:
->
->         ffff80001031f434
->
-> real vfs_truncate address:
->
->         ffff80001031f430 g     F .text  0000000000000168 vfs_truncate
->
-> vfs_truncate disasm:
->
->         ffff80001031f430 <vfs_truncate>:
->         ffff80001031f430: 5f 24 03 d5   hint    #34
->         ffff80001031f434: 1f 20 03 d5   nop
->         ffff80001031f438: 1f 20 03 d5   nop
->         ffff80001031f43c: 3f 23 03 d5   hint    #25
->
-> thats why we don't match it in pahole.. I checked few other functions
-> and some have the same problem and some match the function boundary
->
-> those that match don't have that first hint instrucion, like:
->
->         ffff800010321e40 <do_faccessat>:
->         ffff800010321e40: 1f 20 03 d5   nop
->         ffff800010321e44: 1f 20 03 d5   nop
->         ffff800010321e48: 3f 23 03 d5   hint    #25
->
-> any hints about hint instructions? ;-)
+From: Alexei Starovoitov <ast@kernel.org>
 
-aarch64 makes *some* newer instructions reuse the "hint" ie "nop"
-encoding space to make software backwards compatible on older hardware
-that doesn't support such instructions.  Is this BTI, perhaps? (The
-function is perhaps the destination of an indirect call?)
+Move bpf_prog_stats from prog->aux into prog to avoid one extra load
+in critical path of program execution.
+
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ include/linux/bpf.h     |  8 --------
+ include/linux/filter.h  | 14 +++++++++++---
+ kernel/bpf/core.c       |  8 ++++----
+ kernel/bpf/syscall.c    |  2 +-
+ kernel/bpf/trampoline.c |  2 +-
+ kernel/bpf/verifier.c   |  2 +-
+ 6 files changed, 18 insertions(+), 18 deletions(-)
+
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 321966fc35db..026fa8873c5d 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -14,7 +14,6 @@
+ #include <linux/numa.h>
+ #include <linux/mm_types.h>
+ #include <linux/wait.h>
+-#include <linux/u64_stats_sync.h>
+ #include <linux/refcount.h>
+ #include <linux/mutex.h>
+ #include <linux/module.h>
+@@ -507,12 +506,6 @@ enum bpf_cgroup_storage_type {
+  */
+ #define MAX_BPF_FUNC_ARGS 12
+ 
+-struct bpf_prog_stats {
+-	u64 cnt;
+-	u64 nsecs;
+-	struct u64_stats_sync syncp;
+-} __aligned(2 * sizeof(u64));
+-
+ struct btf_func_model {
+ 	u8 ret_size;
+ 	u8 nr_args;
+@@ -845,7 +838,6 @@ struct bpf_prog_aux {
+ 	u32 linfo_idx;
+ 	u32 num_exentries;
+ 	struct exception_table_entry *extable;
+-	struct bpf_prog_stats __percpu *stats;
+ 	union {
+ 		struct work_struct work;
+ 		struct rcu_head	rcu;
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 5b3137d7b690..cecb03c9d251 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -22,6 +22,7 @@
+ #include <linux/vmalloc.h>
+ #include <linux/sockptr.h>
+ #include <crypto/sha1.h>
++#include <linux/u64_stats_sync.h>
+ 
+ #include <net/sch_generic.h>
+ 
+@@ -539,6 +540,12 @@ struct bpf_binary_header {
+ 	u8 image[] __aligned(BPF_IMAGE_ALIGNMENT);
+ };
+ 
++struct bpf_prog_stats {
++	u64 cnt;
++	u64 nsecs;
++	struct u64_stats_sync syncp;
++} __aligned(2 * sizeof(u64));
++
+ struct bpf_prog {
+ 	u16			pages;		/* Number of allocated pages */
+ 	u16			jited:1,	/* Is our filter JIT'ed? */
+@@ -557,10 +564,11 @@ struct bpf_prog {
+ 	u32			len;		/* Number of filter blocks */
+ 	u32			jited_len;	/* Size of jited insns in bytes */
+ 	u8			tag[BPF_TAG_SIZE];
+-	struct bpf_prog_aux	*aux;		/* Auxiliary fields */
+-	struct sock_fprog_kern	*orig_prog;	/* Original BPF program */
++	struct bpf_prog_stats __percpu *stats;
+ 	unsigned int		(*bpf_func)(const void *ctx,
+ 					    const struct bpf_insn *insn);
++	struct bpf_prog_aux	*aux;		/* Auxiliary fields */
++	struct sock_fprog_kern	*orig_prog;	/* Original BPF program */
+ 	/* Instructions for interpreter */
+ 	struct sock_filter	insns[0];
+ 	struct bpf_insn		insnsi[];
+@@ -581,7 +589,7 @@ DECLARE_STATIC_KEY_FALSE(bpf_stats_enabled_key);
+ 		struct bpf_prog_stats *__stats;				\
+ 		u64 __start = sched_clock();				\
+ 		__ret = dfunc(ctx, (prog)->insnsi, (prog)->bpf_func);	\
+-		__stats = this_cpu_ptr(prog->aux->stats);		\
++		__stats = this_cpu_ptr(prog->stats);			\
+ 		u64_stats_update_begin(&__stats->syncp);		\
+ 		__stats->cnt++;						\
+ 		__stats->nsecs += sched_clock() - __start;		\
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 5bbd4884ff7a..2cf71fd39c22 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -114,8 +114,8 @@ struct bpf_prog *bpf_prog_alloc(unsigned int size, gfp_t gfp_extra_flags)
+ 	if (!prog)
+ 		return NULL;
+ 
+-	prog->aux->stats = alloc_percpu_gfp(struct bpf_prog_stats, gfp_flags);
+-	if (!prog->aux->stats) {
++	prog->stats = alloc_percpu_gfp(struct bpf_prog_stats, gfp_flags);
++	if (!prog->stats) {
+ 		kfree(prog->aux);
+ 		vfree(prog);
+ 		return NULL;
+@@ -124,7 +124,7 @@ struct bpf_prog *bpf_prog_alloc(unsigned int size, gfp_t gfp_extra_flags)
+ 	for_each_possible_cpu(cpu) {
+ 		struct bpf_prog_stats *pstats;
+ 
+-		pstats = per_cpu_ptr(prog->aux->stats, cpu);
++		pstats = per_cpu_ptr(prog->stats, cpu);
+ 		u64_stats_init(&pstats->syncp);
+ 	}
+ 	return prog;
+@@ -249,10 +249,10 @@ void __bpf_prog_free(struct bpf_prog *fp)
+ 	if (fp->aux) {
+ 		mutex_destroy(&fp->aux->used_maps_mutex);
+ 		mutex_destroy(&fp->aux->dst_mutex);
+-		free_percpu(fp->aux->stats);
+ 		kfree(fp->aux->poke_tab);
+ 		kfree(fp->aux);
+ 	}
++	free_percpu(fp->stats);
+ 	vfree(fp);
+ }
+ 
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index e5999d86c76e..f7df56a704de 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -1739,7 +1739,7 @@ static void bpf_prog_get_stats(const struct bpf_prog *prog,
+ 		unsigned int start;
+ 		u64 tnsecs, tcnt;
+ 
+-		st = per_cpu_ptr(prog->aux->stats, cpu);
++		st = per_cpu_ptr(prog->stats, cpu);
+ 		do {
+ 			start = u64_stats_fetch_begin_irq(&st->syncp);
+ 			tnsecs = st->nsecs;
+diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+index 35c5887d82ff..5be3beeedd74 100644
+--- a/kernel/bpf/trampoline.c
++++ b/kernel/bpf/trampoline.c
+@@ -412,7 +412,7 @@ void notrace __bpf_prog_exit(struct bpf_prog *prog, u64 start)
+ 	     * Hence check that 'start' is not zero.
+ 	     */
+ 	    start) {
+-		stats = this_cpu_ptr(prog->aux->stats);
++		stats = this_cpu_ptr(prog->stats);
+ 		u64_stats_update_begin(&stats->syncp);
+ 		stats->cnt++;
+ 		stats->nsecs += sched_clock() - start;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 15694246f854..4189edb41b73 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -10889,7 +10889,7 @@ static int jit_subprogs(struct bpf_verifier_env *env)
+ 		/* BPF_PROG_RUN doesn't call subprogs directly,
+ 		 * hence main prog stats include the runtime of subprogs.
+ 		 * subprogs don't have IDs and not reachable via prog_get_next_id
+-		 * func[i]->aux->stats will never be accessed and stays NULL
++		 * func[i]->stats will never be accessed and stays NULL
+ 		 */
+ 		func[i] = bpf_prog_alloc_no_stats(bpf_prog_size(len), GFP_USER);
+ 		if (!func[i])
 -- 
-Thanks,
-~Nick Desaulniers
+2.24.1
+
