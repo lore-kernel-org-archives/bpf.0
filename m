@@ -2,74 +2,108 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D428DC433DB
-	for <bpf@archiver.kernel.org>; Tue,  9 Feb 2021 02:01:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BEFBCC433DB
+	for <bpf@archiver.kernel.org>; Tue,  9 Feb 2021 02:06:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9C82D64EA1
-	for <bpf@archiver.kernel.org>; Tue,  9 Feb 2021 02:01:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8670164EBA
+	for <bpf@archiver.kernel.org>; Tue,  9 Feb 2021 02:06:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230302AbhBICAt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 8 Feb 2021 21:00:49 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57422 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229975AbhBICAr (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 8 Feb 2021 21:00:47 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id 8052064EA1;
-        Tue,  9 Feb 2021 02:00:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612836007;
-        bh=0ES5u6nt4FzG4JbFR8B1V+2/AsLpStrMtudS1wgbnWQ=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=K8LjBVmQHRImZOHew1ura6hjW2siM2b1iS+k6yKtqjFywYjw8dCSRDYjL2Q8flFl9
-         Is+SPzoVQqjuiftMq57bfOB2Evcl3czQyzvM2VXWbHGw1lM0rcapIXjaYWjgBbuei3
-         bfcfkF5DybjdKH8RqL+nqAgu4tLFUfO0tvbsXi4mH6zpPDiHAHfCj6bkjXMuXuQOL2
-         2ynesvVmzmzPJ+5ZF72ADt4bOfxJcDm9R6m+E8WPCCr6MJoSzfhGC6aH4sJZqWVinh
-         22xSdDNJF53a/xQ3pwoVSSljBBlJgP6YuElwUv3MAoYuvhGquqV7xQLx9VfanWYUtA
-         /LhiX8YYTSxNg==
-Content-Type: text/plain; charset="utf-8"
+        id S229706AbhBICGA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 8 Feb 2021 21:06:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51316 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229587AbhBICF7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 8 Feb 2021 21:05:59 -0500
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3794C061786;
+        Mon,  8 Feb 2021 18:05:19 -0800 (PST)
+Received: by mail-yb1-xb2d.google.com with SMTP id r2so16617480ybk.11;
+        Mon, 08 Feb 2021 18:05:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JO5qLiF+a+hB9CUaJSVEMzuCKkUN/wHWCBTXp26fOdU=;
+        b=utKJib+zv1hs1MYwf7oH+/3ONJyPZXj1bdWxHKMZLEwUIqA29FNsCybFJ9o2RzgJmA
+         peZ/XXhWFbXRhkApUez+wcwoSx485s0FqQ1RWI0xf1lBQT3B6pRbLWVVph+sHjy1rDLC
+         uqY4dZ4urFYBtGQ764SAnYfTcuTuEBdIlvaPIHoigPYGn3WFEgY8BdOI6yjBVnAIHW76
+         aAteUKPPP0zWhBG+J91lvyN+Q3795aTLWHB+ngITpW2M2gIk7eBjSY6HjCEQGANdaeM/
+         zeg8nsswihteJUNyIasdWVYwcr0Dvv49OhuX7/XfIJjM9pe4o4on7ZLJeppqFPWiSKxF
+         NSBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JO5qLiF+a+hB9CUaJSVEMzuCKkUN/wHWCBTXp26fOdU=;
+        b=BmlHj1Wh/ssoXN+39DMuTf0vb9VB+yJPQiISnn7T6dH1dbYUnQwezYiQTgySZsMT4W
+         xynVDeuhmLlmP44E/39JwhaFU7863YjEW0Q8vdAnu6sV0kEPT+nad08McEAvnJ6CamI7
+         RWCcw7C19n4eqZB37tGvxICi99S/DvhpKndZ92/hZQsPL+vPVrd6A8iSpyS30IpAUVX/
+         bFFos2ctuktetfdABre2GY3m6in5xqe595EEN/Gw+KJU444z9+gvq4fzKjLMTEdnMBz0
+         Gu9gVy1r0QBJxMETYRhyJL4FdZokk7kQ6qL1gvj/yYJPYtpfPS3iMS3s9VzA+RpB431V
+         a9Gg==
+X-Gm-Message-State: AOAM533dsANc/mjVbdnV8TaxKmidpXkzRtO/CsoYsnPHlWQwH+x+N4IB
+        qLCO7vId7ViJ7SgZxCbUBJDwlX/EAdYcrQFWghU=
+X-Google-Smtp-Source: ABdhPJzS8LI/HnORR5Fnz81XjOCMXBAfgvuWJ4Szw+qFQjPrBM35hOyYaLOz+T8bDTPUdV3frgxbvesSokgDED+RMNU=
+X-Received: by 2002:a25:4b86:: with SMTP id y128mr29262047yba.403.1612836318942;
+ Mon, 08 Feb 2021 18:05:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 bpf-next] selftests/bpf: Add missing cleanup in
- atomic_bounds test
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <161283600748.4994.7610155285282056810.git-patchwork-notify@kernel.org>
-Date:   Tue, 09 Feb 2021 02:00:07 +0000
-References: <20210208123737.963172-1-jackmanb@google.com>
-In-Reply-To: <20210208123737.963172-1-jackmanb@google.com>
-To:     Brendan Jackman <jackmanb@google.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii.nakryiko@gmail.com, kpsingh@chromium.org,
-        revest@chromium.org, yhs@fb.com, linux-kernel@vger.kernel.org
+References: <1612780213-84583-1-git-send-email-yang.lee@linux.alibaba.com>
+In-Reply-To: <1612780213-84583-1-git-send-email-yang.lee@linux.alibaba.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 8 Feb 2021 18:05:08 -0800
+Message-ID: <CAEf4Bzaugcu=fYrZxkkA+fssZPJooWbwQH4hGJTJReGR63Vkdw@mail.gmail.com>
+Subject: Re: [PATCH] selftests: bpf: remove unneeded semicolon
+To:     Yang Li <yang.lee@linux.alibaba.com>
+Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        john fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
-
-This patch was applied to bpf/bpf-next.git (refs/heads/master):
-
-On Mon,  8 Feb 2021 12:37:37 +0000 you wrote:
-> Add missing skeleton destroy call.
-> 
-> Reported-by: Yonghong Song <yhs@fb.com>
-> Fixes: 37086bfdc737 ("bpf: Propagate stack bounds to registers in atomics w/ BPF_FETCH")
-> Signed-off-by: Brendan Jackman <jackmanb@google.com>
+On Mon, Feb 8, 2021 at 2:30 AM Yang Li <yang.lee@linux.alibaba.com> wrote:
+>
+> Eliminate the following coccicheck warning:
+> ./tools/testing/selftests/bpf/test_flow_dissector.c:506:2-3: Unneeded
+> semicolon
+>
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 > ---
-> 
-> [...]
 
-Here is the summary with links:
-  - [v2,bpf-next] selftests/bpf: Add missing cleanup in atomic_bounds test
-    https://git.kernel.org/bpf/bpf-next/c/1589a1fa4e38
+Applied to bpf-next, changing subject to have more canonical
+"selftests/bpf: " prefix. Thanks.
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+>  tools/testing/selftests/bpf/test_flow_dissector.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/bpf/test_flow_dissector.c b/tools/testing/selftests/bpf/test_flow_dissector.c
+> index 01f0c63..571cc07 100644
+> --- a/tools/testing/selftests/bpf/test_flow_dissector.c
+> +++ b/tools/testing/selftests/bpf/test_flow_dissector.c
+> @@ -503,7 +503,7 @@ static int do_rx(int fd)
+>                 if (rbuf != cfg_payload_char)
+>                         error(1, 0, "recv: payload mismatch");
+>                 num++;
+> -       };
+> +       }
+>
+>         return num;
+>  }
+> --
+> 1.8.3.1
+>
