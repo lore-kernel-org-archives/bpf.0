@@ -2,79 +2,104 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 48A64C433DB
-	for <bpf@archiver.kernel.org>; Tue,  9 Feb 2021 21:47:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EF5FC433DB
+	for <bpf@archiver.kernel.org>; Tue,  9 Feb 2021 21:50:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F1D7364EE0
-	for <bpf@archiver.kernel.org>; Tue,  9 Feb 2021 21:47:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 395BC64EE0
+	for <bpf@archiver.kernel.org>; Tue,  9 Feb 2021 21:50:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234007AbhBIVqS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 9 Feb 2021 16:46:18 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46994 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234368AbhBIVNo (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 9 Feb 2021 16:13:44 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 08CAD64E8A
-        for <bpf@vger.kernel.org>; Tue,  9 Feb 2021 21:12:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612905179;
-        bh=8Obx/ZT2EBOSGYSGVrqBCq2ie48lyEZue3Himib/Aj8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=HswacXMe3Js4ACauhpCQwTOq+4UxwAFw6e2N76d3E2cDXX6KJWFU7yETWPXZCo+xn
-         4KPY2kfgq4h9TqhZM9qD3X5XIC7uT4MF3mLuyNfnpapc4jqumvHLfFTIbZJ3OpT3Ca
-         K+fFbGHzr/LwDoSbq6CR28CUyw8oO8YPTLZdUdiDEx2JGJGxdWtplIwOcYGE1qd5PO
-         3yoL3Z7KHA536UtyTOdzs5VMYO2/8U+J1zRsFYpy0T7mtGLadKdL5NeieW8exCjxBr
-         nz7m2N2tRHfGiAMXJKBckIOf7WDKoy8YWBbYKo8k4UmMtPLCDqYTs7E2yV70Hr4jJr
-         JUBS7he3JrLUg==
-Received: by mail-lf1-f47.google.com with SMTP id f1so30594576lfu.3
-        for <bpf@vger.kernel.org>; Tue, 09 Feb 2021 13:12:58 -0800 (PST)
-X-Gm-Message-State: AOAM5330PtDYqiwHur72l/pOPz9mXToVeXR1I6/rF1ir0Za5OMeFXaMU
-        4NCtia078CzkC9+bZz5WPEk2Swagye/OtDk+V22ZbA==
-X-Google-Smtp-Source: ABdhPJxX9lZ+gOwnRf8zFWDikODfFB4olcUDVhk2KthrddCPAqYs3aXvqVGm24Gs7nErgcSMbytnRJuN0Ii8V5koN2w=
-X-Received: by 2002:a05:6512:711:: with SMTP id b17mr14037005lfs.424.1612905177142;
- Tue, 09 Feb 2021 13:12:57 -0800 (PST)
+        id S234109AbhBIVqj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 9 Feb 2021 16:46:39 -0500
+Received: from smtprelay0161.hostedemail.com ([216.40.44.161]:40710 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S234337AbhBIVNo (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 9 Feb 2021 16:13:44 -0500
+Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
+        by smtpgrave08.hostedemail.com (Postfix) with ESMTP id 306B8182D512B;
+        Tue,  9 Feb 2021 19:02:15 +0000 (UTC)
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay08.hostedemail.com (Postfix) with ESMTP id D26D7182CCCB9;
+        Tue,  9 Feb 2021 18:59:32 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-HE-Tag: road65_270c81827609
+X-Filterd-Recvd-Size: 2565
+Received: from [192.168.1.159] (unknown [47.151.137.21])
+        (Authenticated sender: joe@perches.com)
+        by omf11.hostedemail.com (Postfix) with ESMTPA;
+        Tue,  9 Feb 2021 18:59:31 +0000 (UTC)
+Message-ID: <2b41e46fcf909bd67a578524107214fe4b1eeede.camel@perches.com>
+Subject: Re: [PATCH v3] checkpatch: do not apply "initialise globals to 0"
+ check to BPF progs
+From:   Joe Perches <joe@perches.com>
+To:     Song Liu <songliubraving@fb.com>, linux-kernel@vger.kernel.org
+Cc:     bpf@vger.kernel.org, Andy Whitcroft <apw@canonical.com>
+Date:   Tue, 09 Feb 2021 10:59:30 -0800
+In-Reply-To: <20210209183343.3929160-1-songliubraving@fb.com>
+References: <20210209183343.3929160-1-songliubraving@fb.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.38.1-1 
 MIME-Version: 1.0
-References: <20210209194856.24269-1-alexei.starovoitov@gmail.com> <20210209194856.24269-8-alexei.starovoitov@gmail.com>
-In-Reply-To: <20210209194856.24269-8-alexei.starovoitov@gmail.com>
-From:   KP Singh <kpsingh@kernel.org>
-Date:   Tue, 9 Feb 2021 22:12:46 +0100
-X-Gmail-Original-Message-ID: <CACYkzJ66POr0opxbrvRTTTc-T4CsyirHpDPvWRaM3R1bmNvm8w@mail.gmail.com>
-Message-ID: <CACYkzJ66POr0opxbrvRTTTc-T4CsyirHpDPvWRaM3R1bmNvm8w@mail.gmail.com>
-Subject: Re: [PATCH v3 bpf-next 7/8] bpf: Allows per-cpu maps and map-in-map
- in sleepable programs
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        bpf <bpf@vger.kernel.org>, Kernel Team <kernel-team@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Feb 9, 2021 at 9:57 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> From: Alexei Starovoitov <ast@kernel.org>
->
-> Since sleepable programs are now executing under migrate_disable
-> the per-cpu maps are safe to use.
-> The map-in-map were ok to use in sleepable from the time sleepable
-> progs were introduced.
->
-> Note that non-preallocated maps are still not safe, since there is
-> no rcu_read_lock yet in sleepable programs and dynamically allocated
-> map elements are relying on rcu protection. The sleepable programs
-> have rcu_read_lock_trace instead. That limitation will be addresses
-> in the future.
->
-> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-> Acked-by: Andrii Nakryiko <andrii@kernel.org>
+On Tue, 2021-02-09 at 10:33 -0800, Song Liu wrote:
+> BPF programs explicitly initialise global variables to 0 to make sure
+> clang (v10 or older) do not put the variables in the common section.
+> Skip "initialise globals to 0" check for BPF programs to elimiate error
+> messages like:
+> 
+>     ERROR: do not initialise globals to 0
+>     #19: FILE: samples/bpf/tracex1_kern.c:21:
+> 
+> Cc: Andy Whitcroft <apw@canonical.com>
+> Cc: Joe Perches <joe@perches.com>
+> Signed-off-by: Song Liu <songliubraving@fb.com>
+> 
+> ---
+> Changes v2 => v3:
+>   1. Fix regex.
 
-Acked-by: KP Singh <kpsingh@kernel.org>
+Unfortunately, this has broken regexes...
 
-Thanks! I actually tested out some of our logic which uses per-cpu maps by
-switching the programs to their sleepable counterparts
+> Changes v1 => v2:
+>   1. Add function exclude_global_initialisers() to keep the code clean.
+> ---
+>  scripts/checkpatch.pl | 12 +++++++++++-
+>  1 file changed, 11 insertions(+), 1 deletion(-)
+> 
+> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+[]
+> @@ -2428,6 +2428,15 @@ sub get_raw_comment {
+>  	return $comment;
+>  }
+>  
+> +sub exclude_global_initialisers {
+> +	my ($realfile) = @_;
+> +
+> +	# Do not check for BPF programs (tools/testing/selftests/bpf/progs/*.c, samples/bpf/*_kern.c, *.bpf.c).
+> +	return $realfile =~ m@/^tools\/testing\/selftests\/bpf\/progs\/.*\.c@ ||
+
+You don't need to escape the / when using m@@, and this doesn't work
+given the leading / after @, and it should use a trailing $
+
+	return $realfile =~ m@^tools/testing/selftests/bpf/progs/.*\.c$@ ||
+
+> +		$realfile =~ m@^samples\/bpf\/.*_kern.c@ ||
+
+This is still missing an escape on the . before c@, and there's no
+trailing $ between c and @
+
+		$realfile =~ m@^samples/bpf/.*_kern\.c$@ ||
+
+> +		$realfile =~ m@/bpf/.*\.bpf\.c$@;
+
+I believe I showed the correct regexes in my earlier reply.
+
+
