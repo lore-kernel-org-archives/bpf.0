@@ -2,108 +2,162 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7796FC4332D
-	for <bpf@archiver.kernel.org>; Tue,  9 Feb 2021 21:01:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0307C433DB
+	for <bpf@archiver.kernel.org>; Tue,  9 Feb 2021 21:02:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 497ED64E6B
-	for <bpf@archiver.kernel.org>; Tue,  9 Feb 2021 21:01:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 74EBC64E76
+	for <bpf@archiver.kernel.org>; Tue,  9 Feb 2021 21:02:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234263AbhBIU7S (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 9 Feb 2021 15:59:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39434 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234080AbhBIUwC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 9 Feb 2021 15:52:02 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD41DC061A30
-        for <bpf@vger.kernel.org>; Tue,  9 Feb 2021 11:49:07 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id z7so457413plk.7
-        for <bpf@vger.kernel.org>; Tue, 09 Feb 2021 11:49:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=01Exh/2ObMelGUhb994VG5lHlejeefEcqeiEWbL0Xvk=;
-        b=UxhvylfgPnufXTlD7GqANuUGS0I4Qg2pzLWiVIO2pNWMxMaRVjWLtoM8I7MLiVQjHK
-         YNAXxvMmMY7UmnNena8fCv5qphEk2wtA4Vg42kpbJs9iQfHalrkMTvnLtleJfnlhYnaz
-         ZD4gNe3O0YH0/IrZc9zY6M/e0XVO4HYR3DWH1autenmGM3YEbuNcJkbx7/LLxf1Y+hJs
-         1a9JNWwUBoIsnnUXgXHcLMS6mnQtBaQ0SlO3So/d0rh9k3UJ9MQw4kXC4t5JQOpvW2An
-         50hMPmQJyVUnlatm313emfQ8jLSPEgGfGXbkHicZ6f6ZJNraUnbRvmHN3yrb88QzFevX
-         FEUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=01Exh/2ObMelGUhb994VG5lHlejeefEcqeiEWbL0Xvk=;
-        b=sqBll/bJOeGoj3tfXh9XozZiQzmDhAvHJ7acwyKrFenWH6x9kwHadYvEhDi4/rIOZa
-         HS69jD3uLXo2aJCiaZn9ujFASa6xWXcwid5Lqu9m6h869PhqKXkmXsN3NuWWYDjgldek
-         G9NmLDTitFLAeRSiglMsnAV8WbT/2iQLFPZ23Zp0rgLZLMH+YMVxp5Kjj7HkQjh0o83u
-         ZHkKyFctutxPPW+tQxnJKcsJS0dR4nYtgMv8Wo66scWN1amk1BWrg8b0VhdIAf6VHE2l
-         xckCvPLft2cekNCCNgni7sgMEB4CWLoAvUugaBfDoL0twtsG5VybkV8noZ+qsGAMVCHx
-         UoXA==
-X-Gm-Message-State: AOAM530PgEoBxs0Gt7r9GdJIljaJWSuWnYmNMNm4JI5mIAAi4N/Qsa/r
-        kPcykUYi+aQ0ep90eV7tys0=
-X-Google-Smtp-Source: ABdhPJzZvL3eXYtwG1Zv/yaV8Wa4HEFlz1iGwdyzw610HCZNB1k6P6LxXPgB/r34EnUmo88aVla7IQ==
-X-Received: by 2002:a17:902:b94b:b029:e0:1e:da58 with SMTP id h11-20020a170902b94bb02900e0001eda58mr22665440pls.55.1612900147335;
-        Tue, 09 Feb 2021 11:49:07 -0800 (PST)
-Received: from ast-mbp.thefacebook.com ([163.114.132.7])
-        by smtp.gmail.com with ESMTPSA id j22sm139123pff.57.2021.02.09.11.49.06
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 09 Feb 2021 11:49:06 -0800 (PST)
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     davem@davemloft.net
-Cc:     daniel@iogearbox.net, bpf@vger.kernel.org, kernel-team@fb.com
-Subject: [PATCH v3 bpf-next 6/8] selftests/bpf: Improve recursion selftest
-Date:   Tue,  9 Feb 2021 11:48:54 -0800
-Message-Id: <20210209194856.24269-7-alexei.starovoitov@gmail.com>
-X-Mailer: git-send-email 2.13.5
-In-Reply-To: <20210209194856.24269-1-alexei.starovoitov@gmail.com>
-References: <20210209194856.24269-1-alexei.starovoitov@gmail.com>
+        id S233460AbhBIVBG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 9 Feb 2021 16:01:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:23188 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234085AbhBIUwy (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 9 Feb 2021 15:52:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1612903857;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ffZWl0zAkeShUXi5oSKZSyfqba08rmdzeXxgPDXidzE=;
+        b=APlwNHMvnWXznsu/EbkFCslES7KBhFZwWfJuJovmtGrPieq3rBwcqpLJPKkTyI5XsQ0VfY
+        quK0JYLWZ6qIrNOaOsp8K7+uK92iVYaA+9VGu5tr0Jg2RIZtUwTXe4EOOw2LQm6NrhTGCc
+        2Tw79QYkbpjNegxdqMCcwq7fanlYbTk=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-327-TPMk_TRPPyyGwYD-JA5hEQ-1; Tue, 09 Feb 2021 15:50:55 -0500
+X-MC-Unique: TPMk_TRPPyyGwYD-JA5hEQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id F28809126F;
+        Tue,  9 Feb 2021 20:50:52 +0000 (UTC)
+Received: from krava (unknown [10.40.192.77])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 7D6C86062F;
+        Tue,  9 Feb 2021 20:50:49 +0000 (UTC)
+Date:   Tue, 9 Feb 2021 21:50:48 +0100
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Veronika Kabatova <vkabatov@redhat.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Daniel Kiss <daniel.kiss@arm.com>
+Subject: Re: FAILED unresolved symbol vfs_truncate on arm64 with LLVM
+Message-ID: <YCL1qLzuATlvM8Dh@krava>
+References: <20210209052311.GA125918@ubuntu-m3-large-x86>
+ <CAEf4BzZV0-zx6YKUUKmecs=icnQNXJjTokdkSAoexm36za+wdA@mail.gmail.com>
+ <CAEf4BzYvri7wzRnGH_qQbavXOx5TfBA0qx4nYVnn=YNGv+vNVw@mail.gmail.com>
+ <CAEf4Bzax90hn_5axpnCpW+E6gVc1mtUgCXWqmxV0tJ4Ud7bsaA@mail.gmail.com>
+ <20210209074904.GA286822@ubuntu-m3-large-x86>
+ <YCKB1TF5wz93EIBK@krava>
+ <YCKlrLkTQXc4Cyx7@krava>
+ <YCKwxNDkS9rdr43W@krava>
+ <YCLdJPPC+6QjUsR4@krava>
+ <CAKwvOdnqx5-SsicRf01yhxKOq8mAkYRd+zBScSOmEQ0XJe2mAg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKwvOdnqx5-SsicRf01yhxKOq8mAkYRd+zBScSOmEQ0XJe2mAg@mail.gmail.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Alexei Starovoitov <ast@kernel.org>
+On Tue, Feb 09, 2021 at 12:09:31PM -0800, Nick Desaulniers wrote:
+> On Tue, Feb 9, 2021 at 11:06 AM Jiri Olsa <jolsa@redhat.com> wrote:
+> >
+> > On Tue, Feb 09, 2021 at 05:13:42PM +0100, Jiri Olsa wrote:
+> > > On Tue, Feb 09, 2021 at 04:09:36PM +0100, Jiri Olsa wrote:
+> > >
+> > > SNIP
+> > >
+> > > > > > > >                 DW_AT_prototyped        (true)
+> > > > > > > >                 DW_AT_type      (0x01cfdfe4 "long int")
+> > > > > > > >                 DW_AT_external  (true)
+> > > > > > > >
+> > > > > > >
+> > > > > > > Ok, the problem appears to be not in DWARF, but in mcount_loc data.
+> > > > > > > vfs_truncate's address is not recorded as ftrace-attachable, and thus
+> > > > > > > pahole ignores it. I don't know why this happens and it's quite
+> > > > > > > strange, given vfs_truncate is just a normal global function.
+> > > > >
+> > > > > right, I can't see it in mcount adresses.. but it begins with instructions
+> > > > > that appears to be nops, which would suggest it's traceable
+> > > > >
+> > > > >   ffff80001031f430 <vfs_truncate>:
+> > > > >   ffff80001031f430: 5f 24 03 d5   hint    #34
+> > > > >   ffff80001031f434: 1f 20 03 d5   nop
+> > > > >   ffff80001031f438: 1f 20 03 d5   nop
+> > > > >   ffff80001031f43c: 3f 23 03 d5   hint    #25
+> > > > >
+> > > > > > >
+> > > > > > > I'd like to understand this issue before we try to fix it, but there
+> > > > > > > is at least one improvement we can make: pahole should check ftrace
+> > > > > > > addresses only for static functions, not the global ones (global ones
+> > > > > > > should be always attachable, unless they are special, e.g., notrace
+> > > > > > > and stuff). We can easily check that by looking at the corresponding
+> > > > > > > symbol. But I'd like to verify that vfs_truncate is ftrace-attachable
+> > > >
+> > > > I'm still trying to build the kernel.. however ;-)
+> > >
+> > > I finally reproduced.. however arm's not using mcount_loc
+> > > but some other special section.. so it's new mess for me
+> >
+> > so ftrace data actualy has vfs_truncate address but with extra 4 bytes:
+> >
+> >         ffff80001031f434
+> >
+> > real vfs_truncate address:
+> >
+> >         ffff80001031f430 g     F .text  0000000000000168 vfs_truncate
+> >
+> > vfs_truncate disasm:
+> >
+> >         ffff80001031f430 <vfs_truncate>:
+> >         ffff80001031f430: 5f 24 03 d5   hint    #34
+> >         ffff80001031f434: 1f 20 03 d5   nop
+> >         ffff80001031f438: 1f 20 03 d5   nop
+> >         ffff80001031f43c: 3f 23 03 d5   hint    #25
+> >
+> > thats why we don't match it in pahole.. I checked few other functions
+> > and some have the same problem and some match the function boundary
+> >
+> > those that match don't have that first hint instrucion, like:
+> >
+> >         ffff800010321e40 <do_faccessat>:
+> >         ffff800010321e40: 1f 20 03 d5   nop
+> >         ffff800010321e44: 1f 20 03 d5   nop
+> >         ffff800010321e48: 3f 23 03 d5   hint    #25
+> >
+> > any hints about hint instructions? ;-)
+> 
+> aarch64 makes *some* newer instructions reuse the "hint" ie "nop"
+> encoding space to make software backwards compatible on older hardware
+> that doesn't support such instructions.  Is this BTI, perhaps? (The
+> function is perhaps the destination of an indirect call?)
 
-Since recursion_misses counter is available in bpf_prog_info
-improve the selftest to make sure it's counting correctly.
+I see, I think we can't take ftrace addresses as start of the function
+because there could be extra instruction(s) related to the call before
+it like here
 
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
----
- tools/testing/selftests/bpf/prog_tests/recursion.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+we need to check ftrace address be within the function/symbol,
+not exact start
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/recursion.c b/tools/testing/selftests/bpf/prog_tests/recursion.c
-index 863757461e3f..0e378d63fe18 100644
---- a/tools/testing/selftests/bpf/prog_tests/recursion.c
-+++ b/tools/testing/selftests/bpf/prog_tests/recursion.c
-@@ -5,6 +5,8 @@
- 
- void test_recursion(void)
- {
-+	struct bpf_prog_info prog_info = {};
-+	__u32 prog_info_len = sizeof(prog_info);
- 	struct recursion *skel;
- 	int key = 0;
- 	int err;
-@@ -28,6 +30,12 @@ void test_recursion(void)
- 	ASSERT_EQ(skel->bss->pass2, 1, "pass2 == 1");
- 	bpf_map_lookup_elem(bpf_map__fd(skel->maps.hash2), &key, 0);
- 	ASSERT_EQ(skel->bss->pass2, 2, "pass2 == 2");
-+
-+	err = bpf_obj_get_info_by_fd(bpf_program__fd(skel->progs.on_lookup),
-+				     &prog_info, &prog_info_len);
-+	if (!ASSERT_OK(err, "get_prog_info"))
-+		goto out;
-+	ASSERT_EQ(prog_info.recursion_misses, 2, "recursion_misses");
- out:
- 	recursion__destroy(skel);
- }
--- 
-2.24.1
+jirka
 
