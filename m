@@ -2,184 +2,368 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.5 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F5E4C433DB
-	for <bpf@archiver.kernel.org>; Tue,  9 Feb 2021 22:50:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 31EBFC433DB
+	for <bpf@archiver.kernel.org>; Tue,  9 Feb 2021 22:50:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0A01C64DCF
-	for <bpf@archiver.kernel.org>; Tue,  9 Feb 2021 22:50:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0452D64E35
+	for <bpf@archiver.kernel.org>; Tue,  9 Feb 2021 22:50:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234505AbhBIWtc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 9 Feb 2021 17:49:32 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:56336 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234566AbhBIWdd (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 9 Feb 2021 17:33:33 -0500
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 119MNOGo027161;
-        Tue, 9 Feb 2021 14:32:06 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : to : cc :
- references : from : message-id : date : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=facebook;
- bh=sQR14Uu675ieYp8xY/PMLOTSmD8auuC8aUx0zKQ+iw8=;
- b=Ei4IGNdd2ONsvutyaKbFr33czLx6TV0QZlUr47RA6ziDJVIBCTgOZ4qyRahJkOph1ZPo
- j4eEbaftVhP3ZDmsSUvrO5KclRtfpjr+GurzYsDIwhDJBpO8DNOH/KKukYF6zKpvc7De
- gg+XjO60rGD4MvXQgI3q0Ou/bn7vFAV8tCQ= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 36jy96u98p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Tue, 09 Feb 2021 14:32:05 -0800
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (100.104.98.9) by
- o365-in.thefacebook.com (100.104.94.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 9 Feb 2021 14:32:05 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hflffJ/jt8zzKKdcqQCBeAFPxD4VrxNVxAqVhVDXtSXew/xH329zGFzYj6Rf3LISXEmvJrnyllD9HJJlOe+skDKZ2xoTMJHTncpAAhhQ5b7KutVoJNtws0m3pka3MZK6bsU1VW+KnEn8YfYR8SzqRbGsSG7plhZiwjXduriTweDthW0+clEddFuFBytKk86YIU5qsct0bRhfcUgDqj4QHhqJNGtuQXicnrNcU4vCYC1TOIEj7g4CBl4uTHLCOVQc+ZRKCgvri2J4F72HQvBWOqiwqXe4wBDNSXTDdbDoncsQjhBgzcqkPvxvB6evguOaTXwqqe/lXjTfRejC51aQXQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sQR14Uu675ieYp8xY/PMLOTSmD8auuC8aUx0zKQ+iw8=;
- b=byIiM7y1/KLw/V8exLZGJbQ99Lomu6YohimdMk+jurQFA+aolwVdPjWUwMZY7cLVP7+0UTg0cW8MAWeilLYr4AB4Qj7HCiiSoBQlAMsgnEp3PpvAETQJdkTVu7EC4iHa71zwH3drCYun7eUryKexTDvBhgpm4yWVcAt2OCmBiRT5dKPZ074VsKWWcOLNMWCX0Ib69giDJSSYLI8RfxcFmkCt/WORH5Ej//BpfSlDnEljKOIMJG/AOMH7Sab5KnLntvnt4COm11Xfc51AlHoceNl+0jmHCG/VKMGMRghouGI58TqFBc1blqEShQ93qFxDl/GqTWagFRTeb80+ovkhiQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
- s=selector2-fb-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sQR14Uu675ieYp8xY/PMLOTSmD8auuC8aUx0zKQ+iw8=;
- b=Xqdo3rkw+4td1aeYfLqQDkGVB8WgG0TWrzzcmFCwlwXYkq4xti4AartFicFSu0qpOs53h3c50mRMA0FkcYJ6FDLaw6/C+G/95EBB0X8QFqGDeovClALhp1gxWZkMt0Ml3JKEkGcLyemWmLi3nv6Z4bCV8mWwQP/OHq9oNe4o4B0=
-Received: from BN8PR15MB3282.namprd15.prod.outlook.com (2603:10b6:408:a8::32)
- by BN6PR15MB1474.namprd15.prod.outlook.com (2603:10b6:404:c7::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3825.30; Tue, 9 Feb
- 2021 22:32:02 +0000
-Received: from BN8PR15MB3282.namprd15.prod.outlook.com
- ([fe80::81bf:9924:c4f1:75cd]) by BN8PR15MB3282.namprd15.prod.outlook.com
- ([fe80::81bf:9924:c4f1:75cd%6]) with mapi id 15.20.3763.019; Tue, 9 Feb 2021
- 22:32:01 +0000
-Subject: Re: [PATCH v3 bpf-next 7/8] bpf: Allows per-cpu maps and map-in-map
- in sleepable programs
-To:     KP Singh <kpsingh@kernel.org>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>
-CC:     "David S. Miller" <davem@davemloft.net>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        bpf <bpf@vger.kernel.org>, Kernel Team <kernel-team@fb.com>
-References: <20210209194856.24269-1-alexei.starovoitov@gmail.com>
- <20210209194856.24269-8-alexei.starovoitov@gmail.com>
- <CACYkzJ66POr0opxbrvRTTTc-T4CsyirHpDPvWRaM3R1bmNvm8w@mail.gmail.com>
-From:   Alexei Starovoitov <ast@fb.com>
-Message-ID: <9a45e856-c464-c6e0-6c26-baf364b6bbe8@fb.com>
-Date:   Tue, 9 Feb 2021 14:31:57 -0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.7.0
-In-Reply-To: <CACYkzJ66POr0opxbrvRTTTc-T4CsyirHpDPvWRaM3R1bmNvm8w@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [2620:10d:c090:400::5:c01f]
-X-ClientProxiedBy: CO2PR04CA0168.namprd04.prod.outlook.com
- (2603:10b6:104:4::22) To BN8PR15MB3282.namprd15.prod.outlook.com
- (2603:10b6:408:a8::32)
+        id S234527AbhBIWt5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 9 Feb 2021 17:49:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33148 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234579AbhBIWdn (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 9 Feb 2021 17:33:43 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8BE6C0698CC;
+        Tue,  9 Feb 2021 13:30:34 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id d26so11501557pfn.5;
+        Tue, 09 Feb 2021 13:30:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=r2epxJOwWQ7OTRzZ6i1rMgc7T6GcVx34zs5FRLJt7HQ=;
+        b=vhWCdcYJR9oUeHfdlZvegm5eHrPDufrpv0DKf1H7WRRLaskwVVCLxzLiAAmm2lE1Q+
+         F8A+Mx5P9v0VgZ/MvMNZm84bQtxskLY53hH8mXiUeUylc/zBPEnQ+UWCS/bH+CfX/lKe
+         Ca8LwKHhQyTGwSeORKmH+t62z6SFmToGGpTJ/HdJxKQKwm0qwVI+btfrDRW209j/ryt7
+         6OAsPagECqiG39IvCuKRrCz4+rzLwnYechySC+3xNQyJJjxjSqiB0CpbMOmvHFIrRoyZ
+         789OeBUcVambntsPbJDLwXfluoCmtAVmXz3n6Gw3wI7Pcx5qgOQc7UlLthFHxP0uXeR2
+         Aulw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=r2epxJOwWQ7OTRzZ6i1rMgc7T6GcVx34zs5FRLJt7HQ=;
+        b=IaaM+S2bo20Og2eLw/8qT7gxaiZKwuUDy8FXelGFiKrkFkGdmRsgVqEHC14/3Bzrd9
+         fMIqsANOVhsS0dwsdOkdCS8d4TWtt0QZDwHBg5qTHL1rjHUQGERkoNvfAuXhl8vh7tKZ
+         g0h27/lfLAQa8Y3UACP248NbNBCuAWfABaWZc187eKtu2gbPH2nO3SMUZAnDieugNXvC
+         IYpXFAb4nj1vf4oIi+V6SBcVJw0i5TlyYnVuNUlQa7RHgo9DflxYEBrm76IxhKHlQLuv
+         A31uGwFhzUfanaNV6CK6ml6l8kNNoo4Ki8sVOE37P33auMJhJx0PqzQwjpIih/ljqzaX
+         0OPw==
+X-Gm-Message-State: AOAM530KXhJN2sC15mKCnNWLSmFJgSUpEmzCmdg+/CL6CPdmsIhirUAQ
+        17L9PWK7OZyJJiE9JoFonME=
+X-Google-Smtp-Source: ABdhPJx1yNSGCP3O9PElNc6OHlzjBYkY/lOvEnjoU/DJ1dizd3X0Jttcb070oKHBERDshf351Lo0fQ==
+X-Received: by 2002:a62:33c3:0:b029:1e3:cf7f:f1a5 with SMTP id z186-20020a6233c30000b02901e3cf7ff1a5mr3257220pfz.39.1612906234258;
+        Tue, 09 Feb 2021 13:30:34 -0800 (PST)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::5:c01f])
+        by smtp.gmail.com with ESMTPSA id 30sm23858075pgl.77.2021.02.09.13.30.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Feb 2021 13:30:33 -0800 (PST)
+Date:   Tue, 9 Feb 2021 13:30:31 -0800
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Song Liu <songliubraving@fb.com>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, linux-mm@kvack.org,
+        ast@kernel.org, daniel@iogearbox.net, kernel-team@fb.com,
+        akpm@linux-foundation.org
+Subject: Re: [PATCH v5 bpf-next 1/4] bpf: introduce task_vma bpf_iter
+Message-ID: <20210209213031.v4wzzka7nth7xzq5@ast-mbp.dhcp.thefacebook.com>
+References: <20210208225255.3089073-1-songliubraving@fb.com>
+ <20210208225255.3089073-2-songliubraving@fb.com>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [IPv6:2620:10d:c085:2103:c99:e09d:8a8f:94f0] (2620:10d:c090:400::5:c01f) by CO2PR04CA0168.namprd04.prod.outlook.com (2603:10b6:104:4::22) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3846.25 via Frontend Transport; Tue, 9 Feb 2021 22:32:00 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 55ec49bc-ab20-44f7-bede-08d8cd4a84fb
-X-MS-TrafficTypeDiagnostic: BN6PR15MB1474:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BN6PR15MB14740C5B095B944C84E631A0D78E9@BN6PR15MB1474.namprd15.prod.outlook.com>
-X-FB-Source: Internal
-X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: oBHj6YXVxiuDZ+aCuUnbbMzFXteh8H8Wxh7Uai/1f+DpQQeS78Ts/2cZ5gYjwwc7qoLVlKQH1qc6Q8OhZAPOOU0DEzs3Z9zAY6zNOOmx423gmzcnAQWj16afPh0gmcTZwYHsvICsug7/3B3eH/ey6YY7j5w0nnkS3SGkNNXCRtNlNZh9LD+ZFSGRQDrrjUfDrLa+ATvQ8uBrx7B4XSpsFVY3ZQpKA+mHJDJnx3TpeZfRJIgA9CZ7iccWRnnNvCWBR65cXULY/OCzENuERPskYNHvOLAoh7wT5oqztJf/7SjB/WQu6Q5Y6ft7o6BULsKce0Ws3TE/VCNFRWj9nyXh+P0zEYzjVbGJEuw0YIkhUIvnkchzENVWXQNSwvtkbG5jJe0QSgnwnW8+BUqQhrXjXnorNEy9/78dbXymeP+cy4FUwrLzAMue/paV4Hrdw28Q9cDS0v8QQao877dLcEsH8KhjmXrFNjgvEt3BJqDZurG+gJM3jYJPkei6kaJW1dt+rz/7tCa9i9clW9hy4fRwi6s9U+DQa6uEFGxxmqLny/i1adZP5Sv8VkI8wRnFPh44tVhnvJ+xNBurIEpE3QgpZtLz0wuKsvw4yELf6nmsyf8=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR15MB3282.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(39860400002)(376002)(346002)(136003)(396003)(316002)(66476007)(8936002)(6666004)(86362001)(54906003)(66556008)(66946007)(31686004)(110136005)(2906002)(52116002)(8676002)(5660300002)(36756003)(478600001)(2616005)(6486002)(53546011)(4326008)(186003)(16526019)(31696002)(83380400001)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?ODltbkRzZkVsVkdjYUc1QlVxanYrWHZ4QVNnNTQ0amRTNXVzOG9WUHZkT1V5?=
- =?utf-8?B?ZG5tREJqSFVFejlEUHQwbUJONU43eTRtaXZ6TXZWV2drek9UTnlvRFVHR2hG?=
- =?utf-8?B?SXltWFF6dklGaHdhWU5Jc05VVzVsZ0hRcFBtTkhiV2pJVXQ2WGQ4eTZVamxI?=
- =?utf-8?B?L0VSNXhlejZmNTFxNTY4Y05DaEFwYmswQlpxOHN5QzliNWNPZXk0MGZBRHY3?=
- =?utf-8?B?MFRZb2ZhL3hoUGtaYnd2VlBSVThMU2tlN1JVazhzdFhTV2VjdG0xTFl3RzVq?=
- =?utf-8?B?ejI4TUtqcnhBbit6eGV2R2M0QU1pVkhWdWl0a2I1M0s1djk2bFlZN1BKay9N?=
- =?utf-8?B?Y09HNFhoVGdYdVNSbEE0ekcyYUo5ZzFNT25RdDdHOE93bTkwSEQ2Qkw2azAr?=
- =?utf-8?B?TFFMR2VxYW9zSnRRQWpIL2FDSkdxUWs0dnl6bmxOYzdtV29aVHVFcFl1MHN5?=
- =?utf-8?B?M3YvdVZOQmJ3b3RaOEplcWQvWU5iTUlSQ3dkR216K2dZUW5PM1RzSGF6M2tO?=
- =?utf-8?B?YmxUbVFNNyt5ODZuWXZoU2U3bWp2WVY4MkoyeGN2K1dtNXBzUE9CY1BpZGJP?=
- =?utf-8?B?V2hMcEcwUVY4NTRySEFKM0t6dzUzVUQydGJ5dnFFVWZkeXlZbHFBM0M3eGlC?=
- =?utf-8?B?WjdydEZwNkVTSGl6QW5ZOVBUeVdCYzVqYTJVa2lMcWNCR2VFYU1hYnB4VEJF?=
- =?utf-8?B?a1dZQlU2UVB0ZXFsTGUzRFJLZ29XU3hVSWQyNWNLWEVnbFdqQWZBRUJxcm9Z?=
- =?utf-8?B?ajgyQUwvNVdQbyt4c2FFSitLUmxGRm5mdkFXWFdGc0hkK05yZVN0cnU5UjBR?=
- =?utf-8?B?d3BJNzJoQURVRjZDejBEdXgrZGpjbjAwczR2eUdNSjZRTVVCUDAwTXJwMzlN?=
- =?utf-8?B?eFZldXBrV1RtbTJja09sNTRNdlZqS1laVys1eVBwd0RKbVNHVlZ2ZFJHV2xi?=
- =?utf-8?B?WlRpUXlSZVRvbndCOFM4SjJlZnVTSWFDWWUzdVJSZmNLTXBVWllUb3RDQmhn?=
- =?utf-8?B?ZmpFV01TYjdyeGtSd0tUbm9PcmRzRnV3bUNkb0FUNlZjL2RSUkx1bG5YMi9r?=
- =?utf-8?B?YXBwckdOQ3hMQjBvWTB4aVYrVGdMOURhYWdwcXhUQmlEeGxnb2RDSWpnQUN6?=
- =?utf-8?B?QUgvanFReDFCNEoyZDJ5bGsyWTNRWlBkaitQVFVYL09xdklJTnY4YmxjMkFo?=
- =?utf-8?B?NUVzblpRZmIvQTF0a3Z2UW84ZkR0WHNVdE40cTk2SlZXUlpTOGszOEZhQmdr?=
- =?utf-8?B?ZGJqQTZnNGRwaXhDMXdsV3l4cSs0d2lyRk9PZ1AwTkczWEsybWNvazF5T1d3?=
- =?utf-8?B?dWhTcHhOcGNUOFdkWlhvQmUxZFoyMVdRNFRpMHJ3R1FWR0ovV09HdTVaWUQy?=
- =?utf-8?B?R0E0WENoNFNSKzJJZW10aE9wMHR6b1BYYXVIc1BPZU90OUkyMThxMmc4d3h6?=
- =?utf-8?B?WTlMUStNbWtSTy80Uk0vei9iSW4zVDBaaTRFZzM3QVBtSEFnOGt6bW5McnBL?=
- =?utf-8?B?WHlPVU1TOStHSW52REVDc0NqVDZXWE9TREZPbjg0Y0V1YWpvWXRHRUV4dzdo?=
- =?utf-8?B?Zlg2aWV3Q3ZlQlpjTkw3NW1wRXhuWWRXdGh5VWpJelNMSzEyeXFwUVhLOHV4?=
- =?utf-8?B?RnpLK25jYkNIM1VZdzd3UGcxSlhWNDJ2RTV6YkVHWlhLZFRCSkVXcFR4eUx1?=
- =?utf-8?B?ckg1NTAyMW85aDhkVjB0QjZHT09FKzdIVUhmZysyeVIrOTRjVHJBeis3czRv?=
- =?utf-8?B?Nkl1L1FENXhvT2RJSXUxN0M2YWZPRnBteW9vakxiaGRGVXF6WTE3by9WVEZn?=
- =?utf-8?Q?VmAeHTMEAE7D3Hi83gFdkJuPSCX6JsiglYl84=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 55ec49bc-ab20-44f7-bede-08d8cd4a84fb
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR15MB3282.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2021 22:32:01.7748
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /kpywQN4Qkle9Mng5GEJvWi+p37v5frKG0U8no4bulp/OYJErlCoIkM50GUuzLmP
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR15MB1474
-X-OriginatorOrg: fb.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.737
- definitions=2021-02-09_08:2021-02-09,2021-02-09 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- malwarescore=0 mlxscore=0 phishscore=0 mlxlogscore=999 clxscore=1011
- impostorscore=0 lowpriorityscore=0 suspectscore=0 spamscore=0 bulkscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2102090115
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210208225255.3089073-2-songliubraving@fb.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 2/9/21 1:12 PM, KP Singh wrote:
-> On Tue, Feb 9, 2021 at 9:57 PM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
->>
->> From: Alexei Starovoitov <ast@kernel.org>
->>
->> Since sleepable programs are now executing under migrate_disable
->> the per-cpu maps are safe to use.
->> The map-in-map were ok to use in sleepable from the time sleepable
->> progs were introduced.
->>
->> Note that non-preallocated maps are still not safe, since there is
->> no rcu_read_lock yet in sleepable programs and dynamically allocated
->> map elements are relying on rcu protection. The sleepable programs
->> have rcu_read_lock_trace instead. That limitation will be addresses
->> in the future.
->>
->> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
->> Acked-by: Andrii Nakryiko <andrii@kernel.org>
+On Mon, Feb 08, 2021 at 02:52:52PM -0800, Song Liu wrote:
+> Introduce task_vma bpf_iter to print memory information of a process. It
+> can be used to print customized information similar to /proc/<pid>/maps.
 > 
-> Acked-by: KP Singh <kpsingh@kernel.org>
->
-> Thanks! I actually tested out some of our logic which uses per-cpu maps by
-> switching the programs to their sleepable counterparts
+> Current /proc/<pid>/maps and /proc/<pid>/smaps provide information of
+> vma's of a process. However, these information are not flexible enough to
+> cover all use cases. For example, if a vma cover mixed 2MB pages and 4kB
+> pages (x86_64), there is no easy way to tell which address ranges are
+> backed by 2MB pages. task_vma solves the problem by enabling the user to
+> generate customize information based on the vma (and vma->vm_mm,
+> vma->vm_file, etc.).
+> 
+> To access the vma safely in the BPF program, task_vma iterator holds
+> target mmap_lock while calling the BPF program. If the mmap_lock is
+> contended, task_vma unlocks mmap_lock between iterations to unblock the
+> writer(s). This lock contention avoidance mechanism is similar to the one
+> used in show_smaps_rollup().
+> 
+> Signed-off-by: Song Liu <songliubraving@fb.com>
+> ---
+>  kernel/bpf/task_iter.c | 217 ++++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 216 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
+> index 175b7b42bfc46..a0d469f0f481c 100644
+> --- a/kernel/bpf/task_iter.c
+> +++ b/kernel/bpf/task_iter.c
+> @@ -286,9 +286,198 @@ static const struct seq_operations task_file_seq_ops = {
+>  	.show	= task_file_seq_show,
+>  };
+>  
+> +struct bpf_iter_seq_task_vma_info {
+> +	/* The first field must be struct bpf_iter_seq_task_common.
+> +	 * this is assumed by {init, fini}_seq_pidns() callback functions.
+> +	 */
+> +	struct bpf_iter_seq_task_common common;
+> +	struct task_struct *task;
+> +	struct vm_area_struct *vma;
+> +	u32 tid;
+> +	unsigned long prev_vm_start;
+> +	unsigned long prev_vm_end;
+> +};
+> +
+> +enum bpf_task_vma_iter_find_op {
+> +	task_vma_iter_first_vma,   /* use mm->mmap */
+> +	task_vma_iter_next_vma,    /* use curr_vma->vm_next */
+> +	task_vma_iter_find_vma,    /* use find_vma() to find next vma */
+> +};
+> +
+> +static struct vm_area_struct *
+> +task_vma_seq_get_next(struct bpf_iter_seq_task_vma_info *info)
+> +{
+> +	struct pid_namespace *ns = info->common.ns;
+> +	enum bpf_task_vma_iter_find_op op;
+> +	struct vm_area_struct *curr_vma;
+> +	struct task_struct *curr_task;
+> +	u32 curr_tid = info->tid;
+> +
+> +	/* If this function returns a non-NULL vma, it holds a reference to
+> +	 * the task_struct, and holds read lock on vma->mm->mmap_lock.
+> +	 * If this function returns NULL, it does not hold any reference or
+> +	 * lock.
+> +	 */
+> +	if (info->task) {
+> +		curr_task = info->task;
+> +		curr_vma = info->vma;
+> +		/* In case of lock contention, drop mmap_lock to unblock
+> +		 * the writer.
+> +		 */
+> +		if (mmap_lock_is_contended(curr_task->mm)) {
+> +			info->prev_vm_start = curr_vma->vm_start;
+> +			info->prev_vm_end = curr_vma->vm_end;
+> +			op = task_vma_iter_find_vma;
+> +			mmap_read_unlock(curr_task->mm);
+> +			if (mmap_read_lock_killable(curr_task->mm))
+> +				goto finish;
 
-You mean after applying this set, right?
-migrate_disable is the key.
-It will be difficult to backport to your kernels though.
-The bpf change to enable per-cpu is easy, but backporting
-sched support is a different game.
+in case of contention the vma will be seen by bpf prog again?
+It looks like the 4 cases of overlaping vmas (after newly acquired lock)
+that show_smaps_rollup() is dealing with are not handled here?
 
+> +		} else {
+> +			op = task_vma_iter_next_vma;
+> +		}
+> +	} else {
+> +again:
+> +		curr_task = task_seq_get_next(ns, &curr_tid, true);
+> +		if (!curr_task) {
+> +			info->tid = curr_tid + 1;
+> +			goto finish;
+> +		}
+> +
+> +		if (curr_tid != info->tid) {
+> +			info->tid = curr_tid;
+> +			op = task_vma_iter_first_vma;
+> +		} else {
+> +			op = task_vma_iter_find_vma;
+
+what will happen if there was no contetion on the lock and no seq_stop
+when this line was hit and set op = find_vma; ?
+If I'm reading this correctly prev_vm_start/end could still
+belong to some previous task.
+My understanding that if read buffer is big the bpf_seq_read()
+will keep doing while(space in buffer) {seq->op->show(), seq->op->next();}
+and task_vma_seq_get_next() will iterate over all vmas of one task and
+will proceed into the next task, but if there was no contention and no stop
+then prev_vm_end will either be still zero (so find_vma(mm, 0 - 1) will be lucky
+and will go into first vma of the new task) or perf_vm_end is some address
+of some previous task's vma. In this case find_vma may return wrong vma
+for the new task.
+It seems to me prev_vm_end/start should be set by this task_vma_seq_get_next()
+function instead of relying on stop callback.
+
+> +		}
+> +
+> +		if (!curr_task->mm)
+> +			goto next_task;
+> +
+> +		if (mmap_read_lock_killable(curr_task->mm))
+> +			goto finish;
+> +	}
+> +
+> +	switch (op) {
+> +	case task_vma_iter_first_vma:
+> +		curr_vma = curr_task->mm->mmap;
+> +		break;
+> +	case task_vma_iter_next_vma:
+> +		curr_vma = curr_vma->vm_next;
+> +		break;
+> +	case task_vma_iter_find_vma:
+> +		/* We dropped mmap_lock so it is necessary to use find_vma
+> +		 * to find the next vma. This is similar to the  mechanism
+> +		 * in show_smaps_rollup().
+> +		 */
+> +		curr_vma = find_vma(curr_task->mm, info->prev_vm_end - 1);
+> +
+> +		if (curr_vma && (curr_vma->vm_start == info->prev_vm_start))
+> +			curr_vma = curr_vma->vm_next;
+> +		break;
+> +	}
+> +	if (!curr_vma) {
+> +		mmap_read_unlock(curr_task->mm);
+> +		goto next_task;
+> +	}
+> +	info->task = curr_task;
+> +	info->vma = curr_vma;
+> +	return curr_vma;
+> +
+> +next_task:
+> +	put_task_struct(curr_task);
+> +	info->task = NULL;
+> +	curr_tid++;
+> +	goto again;
+> +
+> +finish:
+> +	if (curr_task)
+> +		put_task_struct(curr_task);
+> +	info->task = NULL;
+> +	info->vma = NULL;
+> +	return NULL;
+> +}
+> +
+> +static void *task_vma_seq_start(struct seq_file *seq, loff_t *pos)
+> +{
+> +	struct bpf_iter_seq_task_vma_info *info = seq->private;
+> +	struct vm_area_struct *vma;
+> +
+> +	vma = task_vma_seq_get_next(info);
+> +	if (vma && *pos == 0)
+> +		++*pos;
+> +
+> +	return vma;
+> +}
+> +
+> +static void *task_vma_seq_next(struct seq_file *seq, void *v, loff_t *pos)
+> +{
+> +	struct bpf_iter_seq_task_vma_info *info = seq->private;
+> +
+> +	++*pos;
+> +	return task_vma_seq_get_next(info);
+> +}
+> +
+> +struct bpf_iter__task_vma {
+> +	__bpf_md_ptr(struct bpf_iter_meta *, meta);
+> +	__bpf_md_ptr(struct task_struct *, task);
+> +	__bpf_md_ptr(struct vm_area_struct *, vma);
+> +};
+> +
+> +DEFINE_BPF_ITER_FUNC(task_vma, struct bpf_iter_meta *meta,
+> +		     struct task_struct *task, struct vm_area_struct *vma)
+> +
+> +static int __task_vma_seq_show(struct seq_file *seq, bool in_stop)
+> +{
+> +	struct bpf_iter_seq_task_vma_info *info = seq->private;
+> +	struct bpf_iter__task_vma ctx;
+> +	struct bpf_iter_meta meta;
+> +	struct bpf_prog *prog;
+> +
+> +	meta.seq = seq;
+> +	prog = bpf_iter_get_info(&meta, in_stop);
+> +	if (!prog)
+> +		return 0;
+> +
+> +	ctx.meta = &meta;
+> +	ctx.task = info->task;
+> +	ctx.vma = info->vma;
+> +	return bpf_iter_run_prog(prog, &ctx);
+> +}
+> +
+> +static int task_vma_seq_show(struct seq_file *seq, void *v)
+> +{
+> +	return __task_vma_seq_show(seq, false);
+> +}
+> +
+> +static void task_vma_seq_stop(struct seq_file *seq, void *v)
+> +{
+> +	struct bpf_iter_seq_task_vma_info *info = seq->private;
+> +
+> +	if (!v) {
+> +		(void)__task_vma_seq_show(seq, true);
+> +	} else {
+> +		/* Set prev_vm_start to ~0UL, so that we don't skip the
+> +		 * vma returned by the next find_vma(). Please refer to
+> +		 * case task_vma_iter_find_vma in task_vma_seq_get_next().
+> +		 */
+> +		info->prev_vm_start = ~0UL;
+> +		info->prev_vm_end = info->vma->vm_end;
+> +		mmap_read_unlock(info->task->mm);
+> +		put_task_struct(info->task);
+> +		info->task = NULL;
+> +	}
+> +}
+> +
+> +static const struct seq_operations task_vma_seq_ops = {
+> +	.start	= task_vma_seq_start,
+> +	.next	= task_vma_seq_next,
+> +	.stop	= task_vma_seq_stop,
+> +	.show	= task_vma_seq_show,
+> +};
+> +
+>  BTF_ID_LIST(btf_task_file_ids)
+>  BTF_ID(struct, task_struct)
+>  BTF_ID(struct, file)
+> +BTF_ID(struct, vm_area_struct)
+>  
+>  static const struct bpf_iter_seq_info task_seq_info = {
+>  	.seq_ops		= &task_seq_ops,
+> @@ -328,6 +517,26 @@ static struct bpf_iter_reg task_file_reg_info = {
+>  	.seq_info		= &task_file_seq_info,
+>  };
+>  
+> +static const struct bpf_iter_seq_info task_vma_seq_info = {
+> +	.seq_ops		= &task_vma_seq_ops,
+> +	.init_seq_private	= init_seq_pidns,
+> +	.fini_seq_private	= fini_seq_pidns,
+> +	.seq_priv_size		= sizeof(struct bpf_iter_seq_task_vma_info),
+> +};
+> +
+> +static struct bpf_iter_reg task_vma_reg_info = {
+> +	.target			= "task_vma",
+> +	.feature		= BPF_ITER_RESCHED,
+> +	.ctx_arg_info_size	= 2,
+> +	.ctx_arg_info		= {
+> +		{ offsetof(struct bpf_iter__task_vma, task),
+> +		  PTR_TO_BTF_ID_OR_NULL },
+> +		{ offsetof(struct bpf_iter__task_vma, vma),
+> +		  PTR_TO_BTF_ID_OR_NULL },
+> +	},
+> +	.seq_info		= &task_vma_seq_info,
+> +};
+> +
+>  static int __init task_iter_init(void)
+>  {
+>  	int ret;
+> @@ -339,6 +548,12 @@ static int __init task_iter_init(void)
+>  
+>  	task_file_reg_info.ctx_arg_info[0].btf_id = btf_task_file_ids[0];
+>  	task_file_reg_info.ctx_arg_info[1].btf_id = btf_task_file_ids[1];
+> -	return bpf_iter_reg_target(&task_file_reg_info);
+> +	ret =  bpf_iter_reg_target(&task_file_reg_info);
+> +	if (ret)
+> +		return ret;
+> +
+> +	task_vma_reg_info.ctx_arg_info[0].btf_id = btf_task_file_ids[0];
+> +	task_vma_reg_info.ctx_arg_info[1].btf_id = btf_task_file_ids[2];
+> +	return bpf_iter_reg_target(&task_vma_reg_info);
+>  }
+>  late_initcall(task_iter_init);
+> -- 
+> 2.24.1
+> 
+
+-- 
