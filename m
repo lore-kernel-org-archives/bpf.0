@@ -2,84 +2,94 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.5 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DFCEC433DB
-	for <bpf@archiver.kernel.org>; Tue,  9 Feb 2021 06:41:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 391D3C433E0
+	for <bpf@archiver.kernel.org>; Tue,  9 Feb 2021 06:42:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2F26164EB6
-	for <bpf@archiver.kernel.org>; Tue,  9 Feb 2021 06:41:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 02CD064E10
+	for <bpf@archiver.kernel.org>; Tue,  9 Feb 2021 06:42:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbhBIGlj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 9 Feb 2021 01:41:39 -0500
-Received: from smtprelay0079.hostedemail.com ([216.40.44.79]:36514 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S229636AbhBIGlh (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 9 Feb 2021 01:41:37 -0500
-Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
-        by smtpgrave06.hostedemail.com (Postfix) with ESMTP id EA68D81238E4
-        for <bpf@vger.kernel.org>; Tue,  9 Feb 2021 06:30:54 +0000 (UTC)
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay03.hostedemail.com (Postfix) with ESMTP id 748EE837F24A;
-        Tue,  9 Feb 2021 06:29:52 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-HE-Tag: cord02_37123a627605
-X-Filterd-Recvd-Size: 2169
-Received: from [192.168.1.159] (unknown [47.151.137.21])
-        (Authenticated sender: joe@perches.com)
-        by omf07.hostedemail.com (Postfix) with ESMTPA;
-        Tue,  9 Feb 2021 06:29:51 +0000 (UTC)
-Message-ID: <87ec5ac2e1a41000da9a7158491a22f83295c1a6.camel@perches.com>
-Subject: Re: [PATCH] checkpatch: do not apply "initialise globals to 0"
- check to BPF progs
-From:   Joe Perches <joe@perches.com>
-To:     Song Liu <songliubraving@fb.com>, linux-kernel@vger.kernel.org
-Cc:     bpf@vger.kernel.org, Andy Whitcroft <apw@canonical.com>
-Date:   Mon, 08 Feb 2021 22:29:50 -0800
-In-Reply-To: <20210208234002.3294265-1-songliubraving@fb.com>
-References: <20210208234002.3294265-1-songliubraving@fb.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.38.1-1 
+        id S229753AbhBIGmT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 9 Feb 2021 01:42:19 -0500
+Received: from mga05.intel.com ([192.55.52.43]:32488 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229521AbhBIGmT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 9 Feb 2021 01:42:19 -0500
+IronPort-SDR: bUynXjoAkDgwLiy5wwhJuCE7yqnuTHfRXjQcQmf47E2LN9z8j+qyaOYPzZifFV55Af0AVfoZoJ
+ C6Jau+fam5RA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9889"; a="266670678"
+X-IronPort-AV: E=Sophos;i="5.81,164,1610438400"; 
+   d="scan'208";a="266670678"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2021 22:41:38 -0800
+IronPort-SDR: N4CjeIMs8sr1M1kRZLtyhmAv1Nwro6Q/3NPEpl9ZUNTqm+y9vz749RvpKjzTvJipkTfIVevbx5
+ 748fziOCg/7w==
+X-IronPort-AV: E=Sophos;i="5.81,164,1610438400"; 
+   d="scan'208";a="395976473"
+Received: from ebirent-mobl1.ccr.corp.intel.com (HELO btopel-mobl.ger.intel.com) ([10.249.47.82])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2021 22:41:32 -0800
+Subject: Re: [PATCH bpf v2] selftests/bpf: remove bash feature in
+ test_xdp_redirect.sh
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        u9012063@gmail.com, Randy Dunlap <rdunlap@infradead.org>
+References: <20210206092654.155239-1-bjorn.topel@gmail.com>
+ <CAEf4BzZ4aU26HGxYsOg4ma52bq9ghLDMJD03O1oQaRd8q0=ofA@mail.gmail.com>
+From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>
+Message-ID: <f2970774-02a0-dd88-242c-d1fb9c7b3ce6@intel.com>
+Date:   Tue, 9 Feb 2021 07:41:28 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
+In-Reply-To: <CAEf4BzZ4aU26HGxYsOg4ma52bq9ghLDMJD03O1oQaRd8q0=ofA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, 2021-02-08 at 15:40 -0800, Song Liu wrote:
-> BPF programs explicitly initialise global variables to 0 to make sure
-> clang (v10 or older) do not put the variables in the common section.
-> Skip "initialise globals to 0" check for BPF programs to elimiate error
-> messages like:
+On 2021-02-09 06:52, Andrii Nakryiko wrote:
+> On Sat, Feb 6, 2021 at 1:29 AM Bj√∂rn T√∂pel <bjorn.topel@gmail.com> wrote:
+>>
+>> From: Bj√∂rn T√∂pel <bjorn.topel@intel.com>
+>>
+>> The test_xdp_redirect.sh script uses a bash redirect feature,
+>> '&>/dev/null'. Use '>/dev/null 2>&1' instead.
 > 
-> ††††ERROR: do not initialise globals to 0
-> ††††#19: FILE: samples/bpf/tracex1_kern.c:21:
-[]
-> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-[]
-> @@ -4323,7 +4323,11 @@ sub process {
-> †		}
-> †
+> We have plenty of explicit bash uses in selftest scripts, I'm not sure
+> it's a good idea to make scripts more verbose.
+>
+
+$ cd tools/testing/selftests
+$ git grep '\#!/bin/bash'|wc -l
+282
+$ git grep '\#!/bin/sh'|wc -l
+164
+
+Andrii/Randy, I'm fine with whatever. I just want to be able to run the
+test on Debian-derived systems. ;-)
+
+
+>>
+>> Also remove the 'set -e' since the script actually relies on that the
+>> return value can be used to determine pass/fail of the test.
 > 
-> †# check for global initialisers.
-> -		if ($line =~ /^\+$Type\s*$Ident(?:\s+$Modifier)*\s*=\s*($zero_initializer)\s*;/) {
-> +# Do not apply to BPF programs (tools/testing/selftests/bpf/progs/*.c, samples/bpf/*_kern.c, *.bpf.c).
-> +		if ($line =~ /^\+$Type\s*$Ident(?:\s+$Modifier)*\s*=\s*($zero_initializer)\s*;/ &&
-> +		    $realfile !~ /^tools\/testing\/selftests\/bpf\/progs\/.*\.c/ &&
-> +		    $realfile !~ /^samples\/bpf\/.*_kern.c/ &&
-> +		    $realfile !~ /.bpf.c$/) {
+> This sounds like a dubious decision. The script checks return results
+> only of last two commands, for which it's better to write and if
+> [<first command>] && [<second command>] check and leave set -e intact.
+>
 
-probably better to make this a function so when additional files are
-added it'd be easier to update this and it will not look as complex.
+Ok!
 
-		if ($line =~ /.../ &&
-		    !exclude_global_initialisers($realfile))
+Please decide on the shell flavor, and I'll respin a v3.
 
 
-> †			if (ERROR("GLOBAL_INITIALISERS",
-> †				  "do not initialise globals to $1\n" . $herecurr) &&
-> †			    $fix) {
-
-
+Bj√∂rn
