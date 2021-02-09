@@ -7,45 +7,44 @@ X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E72B8C433E0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D428DC433DB
 	for <bpf@archiver.kernel.org>; Tue,  9 Feb 2021 02:01:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B8C0364E75
+	by mail.kernel.org (Postfix) with ESMTP id 9C82D64EA1
 	for <bpf@archiver.kernel.org>; Tue,  9 Feb 2021 02:01:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230389AbhBICAu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 8 Feb 2021 21:00:50 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57426 "EHLO mail.kernel.org"
+        id S230302AbhBICAt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 8 Feb 2021 21:00:49 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57422 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229763AbhBICAr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        id S229975AbhBICAr (ORCPT <rfc822;bpf@vger.kernel.org>);
         Mon, 8 Feb 2021 21:00:47 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id 91C5D64E24;
+Received: by mail.kernel.org (Postfix) with ESMTPS id 8052064EA1;
         Tue,  9 Feb 2021 02:00:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1612836007;
-        bh=BPGhUQRXb/0RGpMifnHqX1LPN3I9kuVyGNbc2ek4NkA=;
+        bh=0ES5u6nt4FzG4JbFR8B1V+2/AsLpStrMtudS1wgbnWQ=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=EbQwLf7MSguqvei+ykc4T+ksBbJSu2ekG+NpWX2XpSGvCUm8aCpFUCZnJ+Sls7eh8
-         ytE0dxtwykTwRqUy2Ux+pmpEqtT5hCGiv6Yekwjt2wocOfYnR8TzDV9BAT/MpfHFbU
-         y5JScd8II6wnZcoZMyS4Sflzlt0EANylyMsddzNH3V2xaPYd6QPucDH605Ab2y+xSa
-         qY6EMeBqYH83KLUxx+SnCtBSHhTtThIwLKbugzTn3l9iucmW+1/D7S7ot7qckxDdIq
-         sw0FMwqnpR8e+udglhny4YReBrWFAZhMKcdDOqwSUUBkgFhx8B393C0PlHmIB3yy/H
-         dxo8LogQWal8Q==
+        b=K8LjBVmQHRImZOHew1ura6hjW2siM2b1iS+k6yKtqjFywYjw8dCSRDYjL2Q8flFl9
+         Is+SPzoVQqjuiftMq57bfOB2Evcl3czQyzvM2VXWbHGw1lM0rcapIXjaYWjgBbuei3
+         bfcfkF5DybjdKH8RqL+nqAgu4tLFUfO0tvbsXi4mH6zpPDiHAHfCj6bkjXMuXuQOL2
+         2ynesvVmzmzPJ+5ZF72ADt4bOfxJcDm9R6m+E8WPCCr6MJoSzfhGC6aH4sJZqWVinh
+         22xSdDNJF53a/xQ3pwoVSSljBBlJgP6YuElwUv3MAoYuvhGquqV7xQLx9VfanWYUtA
+         /LhiX8YYTSxNg==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] bpf: Simplify bool comparison
+Subject: Re: [PATCH v2 bpf-next] selftests/bpf: Add missing cleanup in
+ atomic_bounds test
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <161283600752.4994.17562431502969131989.git-patchwork-notify@kernel.org>
+Message-Id: <161283600748.4994.7610155285282056810.git-patchwork-notify@kernel.org>
 Date:   Tue, 09 Feb 2021 02:00:07 +0000
-References: <1612777416-34339-1-git-send-email-jiapeng.chong@linux.alibaba.com>
-In-Reply-To: <1612777416-34339-1-git-send-email-jiapeng.chong@linux.alibaba.com>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20210208123737.963172-1-jackmanb@google.com>
+In-Reply-To: <20210208123737.963172-1-jackmanb@google.com>
+To:     Brendan Jackman <jackmanb@google.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii.nakryiko@gmail.com, kpsingh@chromium.org,
+        revest@chromium.org, yhs@fb.com, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
@@ -54,19 +53,19 @@ Hello:
 
 This patch was applied to bpf/bpf-next.git (refs/heads/master):
 
-On Mon,  8 Feb 2021 17:43:36 +0800 you wrote:
-> Fix the following coccicheck warning:
+On Mon,  8 Feb 2021 12:37:37 +0000 you wrote:
+> Add missing skeleton destroy call.
 > 
-> ./tools/bpf/bpf_dbg.c:893:32-36: WARNING: Comparison to bool.
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> Reported-by: Yonghong Song <yhs@fb.com>
+> Fixes: 37086bfdc737 ("bpf: Propagate stack bounds to registers in atomics w/ BPF_FETCH")
+> Signed-off-by: Brendan Jackman <jackmanb@google.com>
+> ---
 > 
 > [...]
 
 Here is the summary with links:
-  - bpf: Simplify bool comparison
-    https://git.kernel.org/bpf/bpf-next/c/0a1b0fd929a8
+  - [v2,bpf-next] selftests/bpf: Add missing cleanup in atomic_bounds test
+    https://git.kernel.org/bpf/bpf-next/c/1589a1fa4e38
 
 You are awesome, thank you!
 --
