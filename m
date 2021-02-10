@@ -2,125 +2,154 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27A0AC433DB
-	for <bpf@archiver.kernel.org>; Wed, 10 Feb 2021 20:05:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02ECCC433DB
+	for <bpf@archiver.kernel.org>; Wed, 10 Feb 2021 20:14:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C2B9E64E35
-	for <bpf@archiver.kernel.org>; Wed, 10 Feb 2021 20:05:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BA74864EDA
+	for <bpf@archiver.kernel.org>; Wed, 10 Feb 2021 20:14:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232012AbhBJUFH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 10 Feb 2021 15:05:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57382 "EHLO
+        id S232072AbhBJUOq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 10 Feb 2021 15:14:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230229AbhBJUFG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 10 Feb 2021 15:05:06 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9799DC061574
-        for <bpf@vger.kernel.org>; Wed, 10 Feb 2021 12:04:25 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id m188so2725976yba.13
-        for <bpf@vger.kernel.org>; Wed, 10 Feb 2021 12:04:25 -0800 (PST)
+        with ESMTP id S230005AbhBJUOq (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 10 Feb 2021 15:14:46 -0500
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1945CC061574;
+        Wed, 10 Feb 2021 12:14:06 -0800 (PST)
+Received: by mail-yb1-xb2a.google.com with SMTP id k4so3302078ybp.6;
+        Wed, 10 Feb 2021 12:14:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=TDWnbrleUQS+wR5aLHELhNJGINUQVHkwoOgbN/FROfw=;
-        b=I6t6LcJdIE9jSIovjvjAaFu/5mZqdPNpfmWdYBGFrMQAKvGz04UBk7MG0zKE48Ic+c
-         GYkO0k99HTBuRS4CrF9g2pVtZr45alFvbOrDyZLKFBeqKRGCzNwiX1XuB988x9jZNa0e
-         JGLorsFQj2LU7dpyZOGGX8IF5XzaxSrhPaTxhslDslHrK5k3u4T0wzWHnyRkMsB/PUDd
-         c7V/I3I2dFdSCJeLPNQDSkUsQVKJsKett+OKGai4KX+Oony0omO2bJK5STcGwlwdzVZj
-         TeMKzpBhS7T4aiURuMdEd2iD12PJtC3a1mUIt92GdfURLc3NWAqwEcVwl4MsiG8aue6g
-         Ls3w==
+        bh=2gKnQEd4HhiRL2RshJ9tRa37DqmZChxhAvo3d0G1OA0=;
+        b=jSUfH62mg/cqznsAOKxv5K7LDIr7701cR+zNM/esjovn9VDmyT9sKoSIUMRe/hi9TQ
+         kyuUFfUOJP1mv4hZrvEPh4KgrEnyGM0t0LWPTRdvrkJxL7DTEYCQF0uhDi36kvHKlfVu
+         0fFtQLB69dCmcSI/KzgxZ/oH5V4Mxz+iENfsm635n6NNpwj5zP1SuNbL0I9I5u2IcRRP
+         94BxNIv+TA6avXpoTlQVtXsy/WJM81GdLIz7BWlcw6hkHawkp952mQTm5IFd4ZQ2AQ8l
+         YdQ8aH+pcLH8T+C9DAyiGHZ2C2vLNgkRCwrZPFGOBsM4k+hQlVhU4H7a84/YDHYBvlh0
+         zy7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=TDWnbrleUQS+wR5aLHELhNJGINUQVHkwoOgbN/FROfw=;
-        b=uaVIZ4TDVhEBajhUP6QjqggGT9BBvlX0jjNQRzu8dJCs2/0S+FUnTvvHjDGydPi4DC
-         YQ5EfzmBuALIt4RTfPhPQC66WH6fxHnYYGQyKffZdTNY66eWFKJsvbNjXb0asjU/JgN6
-         QKJwMKVPKJRGO22Bzc5clULaMPVfn9093wjbCoLaOyTY+54ALPXxoWUf5+W8oviguT3D
-         RlTPjJHIBN2zRF839t2olIYELyVgvHq6qrNPYaJOMcAz1gMIoKtGu4HJqSViOKQYLKHX
-         fDTCi5F97MO0jvKInVQh1C+hdyVH+46nmq49HYdHttbYUpMgprtj28t7R12MHqb5sgWv
-         hQ+g==
-X-Gm-Message-State: AOAM531QKNi39Zo7N+AAMCcmhlnPUM4FgT9tBrLuuIv9I0LoSgdFm8Y1
-        dgWxunrq/IY0uFLYWlSzJjxlR+4MspUgU1z4VNU=
-X-Google-Smtp-Source: ABdhPJwAmnEAuYN0rYmx+qN+svVMgbbGWQUZ7V6Mnyjq3BOq0ZWTMxCbyK206KLhqblWdzimddfBHSvzb4Xbey6bItc=
-X-Received: by 2002:a25:f40e:: with SMTP id q14mr6271176ybd.230.1612987464944;
- Wed, 10 Feb 2021 12:04:24 -0800 (PST)
+        bh=2gKnQEd4HhiRL2RshJ9tRa37DqmZChxhAvo3d0G1OA0=;
+        b=pftF0rr0v4kjJFa9lpC6xA4qrCjeXiTj9A5wQ2bov0NDIANlkeBWGdWPpcYagqeXi/
+         ZhiOAoILzWMpu9UIr7a+vodNqtr7JIe1scYVZf4nDcO88gVx0vUU6Rl7D7ey9luXRKLK
+         GlKLBzEK4IGCpZDuCyUL49NFotMpgQ2nxe0qIsHLZpM1UMqcE5U7vqV3/l8goyDcm+oT
+         EqYu9669VXX40n8Wjtdr8MR4P3Waa+XypZ6h8uwbYGxSfIE/FDDWLvhMVyXBrKsPUW8P
+         M4mqRCqqTxNzBSoz6uI18RnJ++f9vpzjlM0gHOgluolvFtOQ7nsWyCSy4XdgXNe/Nye9
+         zqww==
+X-Gm-Message-State: AOAM532hUbio6Cn1YFc6FRUQKyaV61GB5fYVFJvr02endbpFiAqQk81e
+        h1MU11ca09wZVlA5Fntjkw0VhEvWueZ3DLwy7g0=
+X-Google-Smtp-Source: ABdhPJwbS35LJ3n1W2/tgtjiwIMm3bcACJio1nc822N7BiBd+X1pNsKFFOiTWV3lklZV0pRUS2QSMijxYVQMvmg8TCE=
+X-Received: by 2002:a25:37c4:: with SMTP id e187mr6772002yba.347.1612988045433;
+ Wed, 10 Feb 2021 12:14:05 -0800 (PST)
 MIME-Version: 1.0
-References: <CANaYP3G4zZu=d2Y_d+=418f6X9+5b-JFhk0h9VZoQmFFLhu3Ag@mail.gmail.com>
- <CANaYP3GgBDPBUjrkg0j-NOEzf3WJEOqcqoGU0uVxQ3LsAzz8ow@mail.gmail.com>
- <87v9b2u6pa.fsf@toke.dk> <CANaYP3GxKrjuUUTGaAjYGqwPCNzPJBNPQGMMCNaoHT4rfsYUfA@mail.gmail.com>
- <87mtwetz04.fsf@toke.dk> <CANaYP3G4sBrBy3Xsrku4LjW4sFhAb-9HreZUo_aBNe6gCab1Eg@mail.gmail.com>
- <87blcutx3v.fsf@toke.dk> <CANaYP3FEheoxSp86sFair0CAQz1-fkdmGp0_zvgGqQr_3P+qdg@mail.gmail.com>
- <875z32tpel.fsf@toke.dk> <CANaYP3EUOLf=8+ZuKFr4ozPueqgjvzxkEK+O8WEamwY01yATaA@mail.gmail.com>
- <87zh0es73x.fsf@toke.dk> <CANaYP3G+rtJuMAaTvdxSZCEtA9tSqh00OCkJ0LoeL7L030w0VQ@mail.gmail.com>
- <87tuqlsdtu.fsf@toke.dk>
-In-Reply-To: <87tuqlsdtu.fsf@toke.dk>
+References: <20210209074518.849999-1-bjorn.topel@gmail.com>
+In-Reply-To: <20210209074518.849999-1-bjorn.topel@gmail.com>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 10 Feb 2021 12:04:14 -0800
-Message-ID: <CAEf4BzaUkcnVaGJkMxuc+atqUimxJJQOrZHDkK1Yprysy79hyg@mail.gmail.com>
-Subject: Re: libbpf: pinning multiple progs from the same section
-To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
-Cc:     Gilad Reti <gilad.reti@gmail.com>, bpf <bpf@vger.kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>
+Date:   Wed, 10 Feb 2021 12:13:54 -0800
+Message-ID: <CAEf4Bza7aJTnquXhJXiQR=rtNGVug-Sc_bsiBm9Op9QUOszkdw@mail.gmail.com>
+Subject: Re: [PATCH bpf v3] selftests/bpf: convert test_xdp_redirect.sh to bash
+To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        u9012063@gmail.com, Randy Dunlap <rdunlap@infradead.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Feb 9, 2021 at 3:03 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@redha=
-t.com> wrote:
+On Mon, Feb 8, 2021 at 11:45 PM Bj=C3=B6rn T=C3=B6pel <bjorn.topel@gmail.co=
+m> wrote:
 >
-> Gilad Reti <gilad.reti@gmail.com> writes:
+> From: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>
 >
-> >> > I didn't get this last comment. What I meant is that I want somethin=
-g
-> >> > like the bpf_object__pin_maps but that doesn't pin the maps, just
-> >> > exposing its naming part.
-> >>
-> >> Right, OK. Why, though? I can kinda see how it could be convenient to
-> >> (basically )make libbpf behave as if all maps has the 'pinning'
-> >> attribute set, for map reuse. But I'm not sure I can think any concret=
-e
-> >> use cases where this would be needed. What's yours?
-> >>
-> >
-> > I am using the same bpf objects (more specifically, the new skeleton
-> > feature) in two different processes that need access to the same
-> > maps/programs (for example, they both need access to shared maps).
-> > Thus, I want to reuse the entire object in both. Since we already have
-> > a way to pin an entire bpf object, I thought it would be convenient to
-> > have a way of reusing it entirely (though I am fine with pinning and
-> > reusing each one manually).
-> > (I cannot set the __uint(pinning, LIBBPF_PIN_BY_NAME) on each since I
-> > want to share the bss map too)
+> The test_xdp_redirect.sh script uses a bash feature, '&>'. On systems,
+> e.g. Debian, where '/bin/sh' is dash, this will not work as
+> expected. Use bash in the shebang to get the expected behavior.
 >
-> Ah, see, now *this* could go under the "missing API" header: having a
-> way to make libbpf pin (and reuse) the auto-generated maps, like you can
-> do with the 'pinning' attribute.
+> Further, using 'set -e' means that the error of a command cannot be
+> captured without the command being executed with '&&' or '||'. Let us
+> use '||' to capture the return value of a failed command.
 >
-> Andrii, WDYT?
+> v3: Reintroduced /bin/bash, and kept 'set -e'. (Andrii)
+> v2: Kept /bin/sh and removed bashisms. (Randy)
+>
+> Acked-by: William Tu <u9012063@gmail.com>
+> Signed-off-by: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>
+> ---
 
-I think that the whole pinning handling in libbpf feels a bit ad-hoc.
-It would be good for someone to sit and think through this end-to-end.
-Unfortunately I never had a need for pinning, so I'm not the best
-person to do this.
+Not exactly what I had in mind (see below), but it's ok like this as well, =
+so:
 
-In this case, you can still do bpf_map__set_pin_path() on internal
-maps (.bss, .data, etc), but you'll need to specify pin path
-explicitly, which is different from what you get with
-LIBBPF_PIN_BY_NAME.
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
 
-So I think pinning support is not complete, but I'd also like to avoid
-adding new APIs in an ad-hoc manner without a holistic view of how
-pinning should work with libbpf.
+Does it have to go through the bpf tree or bpf-next is fine? And what
+about Fixes: tag?
+
+
+>  tools/testing/selftests/bpf/test_xdp_redirect.sh | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/test_xdp_redirect.sh b/tools/tes=
+ting/selftests/bpf/test_xdp_redirect.sh
+> index dd80f0c84afb..3f85a82f1c89 100755
+> --- a/tools/testing/selftests/bpf/test_xdp_redirect.sh
+> +++ b/tools/testing/selftests/bpf/test_xdp_redirect.sh
+> @@ -1,4 +1,4 @@
+> -#!/bin/sh
+> +#!/bin/bash
+>  # Create 2 namespaces with two veth peers, and
+>  # forward packets in-between using generic XDP
+>  #
+> @@ -43,6 +43,8 @@ cleanup()
+>  test_xdp_redirect()
+>  {
+>         local xdpmode=3D$1
+> +       local ret1=3D0
+> +       local ret2=3D0
+>
+>         setup
+>
+> @@ -57,10 +59,8 @@ test_xdp_redirect()
+>         ip link set dev veth1 $xdpmode obj test_xdp_redirect.o sec redire=
+ct_to_222 &> /dev/null
+>         ip link set dev veth2 $xdpmode obj test_xdp_redirect.o sec redire=
+ct_to_111 &> /dev/null
+>
+> -       ip netns exec ns1 ping -c 1 10.1.1.22 &> /dev/null
+> -       local ret1=3D$?
+> -       ip netns exec ns2 ping -c 1 10.1.1.11 &> /dev/null
+> -       local ret2=3D$?
+> +       ip netns exec ns1 ping -c 1 10.1.1.22 &> /dev/null || ret1=3D$?
+> +       ip netns exec ns2 ping -c 1 10.1.1.11 &> /dev/null || ret2=3D$?
+
+You didn't like
+
+if ip netns exec ns1 ping -c 1 10.1.1.22 &> /dev/null &&
+   ip netns exec ns2 ping -c 1 10.1.1.11 &> /dev/null; then
+        echo "selftests: test_xdp_redirect $xdpmode [PASS]"
+...
+
+?
 
 >
-> -Toke
+>         if [ $ret1 -eq 0 -a $ret2 -eq 0 ]; then
+>                 echo "selftests: test_xdp_redirect $xdpmode [PASS]";
+>
+> base-commit: 6183f4d3a0a2ad230511987c6c362ca43ec0055f
+> --
+> 2.27.0
 >
