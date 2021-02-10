@@ -4,67 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 29CD1C433DB
-	for <bpf@archiver.kernel.org>; Wed, 10 Feb 2021 02:25:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD07EC433E0
+	for <bpf@archiver.kernel.org>; Wed, 10 Feb 2021 02:25:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E622664E4B
-	for <bpf@archiver.kernel.org>; Wed, 10 Feb 2021 02:25:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7F18A64E4B
+	for <bpf@archiver.kernel.org>; Wed, 10 Feb 2021 02:25:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234412AbhBJCY5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 9 Feb 2021 21:24:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54984 "EHLO
+        id S235283AbhBJCZF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 9 Feb 2021 21:25:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234612AbhBJCWo (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 9 Feb 2021 21:22:44 -0500
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F4DC061574;
-        Tue,  9 Feb 2021 18:21:56 -0800 (PST)
-Received: by mail-oi1-x22b.google.com with SMTP id 18so405202oiz.7;
-        Tue, 09 Feb 2021 18:21:56 -0800 (PST)
+        with ESMTP id S235260AbhBJCWp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 9 Feb 2021 21:22:45 -0500
+Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4651EC061786;
+        Tue,  9 Feb 2021 18:22:00 -0800 (PST)
+Received: by mail-oo1-xc2a.google.com with SMTP id t196so183650oot.2;
+        Tue, 09 Feb 2021 18:22:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=AADBsxCjQTEzuZlF5SRkW1qSAc0//NAD9pZiQfkqUg4=;
-        b=SVUPCuc7R16vCK/wpC+Ftop0Is3tTWMa1PP8dHP5lDgYNSquR6Jf+7XSDOSfjgYFhW
-         2dMuQJo3fUjg3Hd1NgA74geKZMi0HovVgkyh3KE/UEHhBckLePl8lJXF8cGGbHHVABtG
-         i8XnmYsvtZ6DbysDyhaAVGq3sMm+8qU58KB5kZbeUsGXafpKeOIQLkhm3R3gYy9Q0K56
-         TVjYnXKsAMAXg15qYFYdCjI/LarTRCD4Kqpo2S56pzIgFej95f5Z9Ngq6nolDYZUF1U3
-         ZGgjwQMHh8gr6zMzE0EWnR3BADN9vwLwm5jpmUo2H9q+gy0vewUque0ryaau87qzTi11
-         juxQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=zS7mIkk0dXqTDW1+AEKDgpXLzBn50aKAef0N3oNxsSQ=;
+        b=M0/HRrpKkFrl300kmYzhTnPsFbVsBDKJi+6BT//Y/9bh1fvj/tGDMwQQZOLkv47CC0
+         JWjAfv6TFkyRdOZ2qTVJBf8ostiQycvsXGWwGjkQygo2dK1DHP87VQgOhxV8VBvMJ116
+         h5VNjyD97oh2iVgnPURp1iyhb77qVSlGqhhv/7YxFVc5xBW5FZ1lSdpvbL1nxbE2R99z
+         0U6op5FG5MDyA018CGPOIxJch5NptuZkBdwqCoVdODUgYOWLogVRBVhnN5A8ZotxXc3x
+         ZiHkyBB+36q+8U+0Rf36GKeaCQ2EEJZPnOBzOIfRZ+0DSBp44IWtHj/wcE2Re79CMG0b
+         dSDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=AADBsxCjQTEzuZlF5SRkW1qSAc0//NAD9pZiQfkqUg4=;
-        b=QeE2SAGg+nCCm8dbzBWYXIPiZY1GCYdoxsMm9KqqVLXm6gLRtO5WyNXBeqYTRhWJ12
-         2FOiOjcdy/O3BjpPa/V1C96UAiSiiYwQmNM2bkmgN5CKXCUamdathD0ZoK26hBzk8+T2
-         LcaomKsh7rI2tACrRmGcx3jxbNE3sbMRqKfAtdzrVG4G5GGbftIpTGXpVCqyNnzAiPFM
-         d0481+zGsldiGHV2IzkuFxHXB26ncGgB/BsG1Vvbgu/iWtHSiYm3GqME9MEW9qIpx63w
-         +bxt7bqDr7A02B8hp4YYUITBOig5L94ZQGCkWTBW4dYjncglESHNeht8aHtWsD1zP7/g
-         o+Tw==
-X-Gm-Message-State: AOAM533eyBvJuWkiIhOC6tl5tb9SLj/6ws924IVlaYdPYBn6Hu08rJNz
-        BvogtvdDbAq67e4taCjncJ1rNzY0tN4g6w==
-X-Google-Smtp-Source: ABdhPJxzyQfy0VzD8pOu3f9wcTueInn9qZ2HmQIR3SmzEdLAvs0eudDM8g3jutj44ZpfpXDRw1vAqQ==
-X-Received: by 2002:a05:6808:1315:: with SMTP id y21mr585199oiv.112.1612923715907;
-        Tue, 09 Feb 2021 18:21:55 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=zS7mIkk0dXqTDW1+AEKDgpXLzBn50aKAef0N3oNxsSQ=;
+        b=I7peysebwSDRKnxlMh00Hk4psF2Ui77u1pAxqOaqVtqGFYIhIs7/dZEuNMOG0zoSHT
+         lotDsAQW1/yBF4uALGKtDV+YdfxyiDnytahh63QQwyt0cM309UGNF8VqEw1boPsK//K3
+         RBqPpcDzsoWzWor89m37A0AfYRzoCFEz0i7PKILtVrqjiLuwCobuAQEv8PzR4uIO21wY
+         vp2Zfj5tUrofeWZ8vXcJI+/FIB8Vt7uc0DKxCIyvn8N3AC10DiwKSzit6WlB9JqfN8ID
+         iPZNXejk2mCoXd4pgBZIA/q4EEFmF3xXUXSu/nYKq2UeRD9xLvWDmn9WE/3xDuewr2j0
+         4Rvw==
+X-Gm-Message-State: AOAM5331hCh58k+/g+1G+RNIUCDca/YJCzSbtFfMY1NWLHZrcC7YNBsM
+        2hYk6CyLyGhpaHgE+U4si6mWvND99AvSLA==
+X-Google-Smtp-Source: ABdhPJwAfYG6drbL3Br0tRnJKnjFPDXRLjfhJB3iSTjpsHJXGriBB/4n4dNpX4GGKKUVNUolVSng0Q==
+X-Received: by 2002:a4a:dc51:: with SMTP id q17mr654913oov.76.1612923719561;
+        Tue, 09 Feb 2021 18:21:59 -0800 (PST)
 Received: from unknown.attlocal.net ([2600:1700:65a0:ab60:58b0:eb39:33aa:5355])
-        by smtp.gmail.com with ESMTPSA id z20sm101051oth.55.2021.02.09.18.21.54
+        by smtp.gmail.com with ESMTPSA id z20sm101051oth.55.2021.02.09.18.21.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Feb 2021 18:21:55 -0800 (PST)
+        Tue, 09 Feb 2021 18:21:59 -0800 (PST)
 From:   Cong Wang <xiyou.wangcong@gmail.com>
 To:     netdev@vger.kernel.org
 Cc:     bpf@vger.kernel.org, duanxiongchun@bytedance.com,
         wangdongdong.6@bytedance.com, jiang.wang@bytedance.com,
-        Cong Wang <cong.wang@bytedance.com>
-Subject: [Patch bpf-next v2 0/5] sock_map: clean up and refactor code for BPF_SK_SKB_VERDICT
-Date:   Tue,  9 Feb 2021 18:21:31 -0800
-Message-Id: <20210210022136.146528-1-xiyou.wangcong@gmail.com>
+        Cong Wang <cong.wang@bytedance.com>,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Lorenz Bauer <lmb@cloudflare.com>
+Subject: [Patch bpf-next v2 3/5] bpf: compute data_end dynamically with JIT code
+Date:   Tue,  9 Feb 2021 18:21:34 -0800
+Message-Id: <20210210022136.146528-4-xiyou.wangcong@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210210022136.146528-1-xiyou.wangcong@gmail.com>
+References: <20210210022136.146528-1-xiyou.wangcong@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -73,51 +79,150 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Cong Wang <cong.wang@bytedance.com>
 
-This patchset is the first series of patches separated out from
-the original large patchset, to make reviews easier. This patchset
-does not add any new feature but merely cleans up the existing
-sockmap and skmsg code and refactors it, to prepare for the patches
-followed up. This passed all BPF selftests.
+Currently, we compute ->data_end with a compile-time constant
+offset of skb. But as Jakub pointed out, we can actually compute
+it in eBPF JIT code at run-time, so that we can competely get
+rid of ->data_end. This is similar to skb_shinfo(skb) computation
+in bpf_convert_shinfo_access().
 
-The original whole patchset is available on github:
-https://github.com/congwang/linux/tree/sockmap
-
-and this patchset is also available on github:
-https://github.com/congwang/linux/tree/sockmap1
-
+Suggested-by: Jakub Sitnicki <jakub@cloudflare.com>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Lorenz Bauer <lmb@cloudflare.com>
+Signed-off-by: Cong Wang <cong.wang@bytedance.com>
 ---
-v2: split the original patchset
-    compute data_end with bpf_convert_data_end_access()
-    get rid of psock->bpf_running
-    reduce the scope of CONFIG_BPF_STREAM_PARSER
-    do not add CONFIG_BPF_SOCK_MAP
+ include/net/tcp.h |  6 ------
+ net/core/filter.c | 46 +++++++++++++++++++++++++++-------------------
+ net/core/skmsg.c  |  1 -
+ 3 files changed, 27 insertions(+), 26 deletions(-)
 
-Cong Wang (5):
-  bpf: clean up sockmap related Kconfigs
-  skmsg: get rid of struct sk_psock_parser
-  bpf: compute data_end dynamically with JIT code
-  skmsg: use skb ext instead of TCP_SKB_CB
-  sock_map: rename skb_parser and skb_verdict
-
- include/linux/bpf.h                           |  20 +-
- include/linux/bpf_types.h                     |   2 -
- include/linux/skbuff.h                        |   3 +
- include/linux/skmsg.h                         |  78 ++++++--
- include/net/tcp.h                             |  29 +--
- include/net/udp.h                             |   4 +-
- init/Kconfig                                  |   1 +
- net/Kconfig                                   |   7 +-
- net/core/Makefile                             |   2 +-
- net/core/filter.c                             |  46 +++--
- net/core/skbuff.c                             |   7 +
- net/core/skmsg.c                              | 187 +++++++++---------
- net/core/sock_map.c                           |  74 +++----
- net/ipv4/Makefile                             |   2 +-
- net/ipv4/tcp_bpf.c                            |   2 -
- .../selftests/bpf/prog_tests/sockmap_listen.c |   8 +-
- .../selftests/bpf/progs/test_sockmap_listen.c |   4 +-
- 17 files changed, 252 insertions(+), 224 deletions(-)
-
+diff --git a/include/net/tcp.h b/include/net/tcp.h
+index dfb20d51bf3d..808d5292cf13 100644
+--- a/include/net/tcp.h
++++ b/include/net/tcp.h
+@@ -885,18 +885,12 @@ struct tcp_skb_cb {
+ 		struct {
+ 			__u32 flags;
+ 			struct sock *sk_redir;
+-			void *data_end;
+ 		} bpf;
+ 	};
+ };
+ 
+ #define TCP_SKB_CB(__skb)	((struct tcp_skb_cb *)&((__skb)->cb[0]))
+ 
+-static inline void bpf_compute_data_end_sk_skb(struct sk_buff *skb)
+-{
+-	TCP_SKB_CB(skb)->bpf.data_end = skb->data + skb_headlen(skb);
+-}
+-
+ static inline bool tcp_skb_bpf_ingress(const struct sk_buff *skb)
+ {
+ 	return TCP_SKB_CB(skb)->bpf.flags & BPF_F_INGRESS;
+diff --git a/net/core/filter.c b/net/core/filter.c
+index e15d4741719a..b2b18426d280 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -1863,10 +1863,7 @@ static const struct bpf_func_proto bpf_sk_fullsock_proto = {
+ static inline int sk_skb_try_make_writable(struct sk_buff *skb,
+ 					   unsigned int write_len)
+ {
+-	int err = __bpf_try_make_writable(skb, write_len);
+-
+-	bpf_compute_data_end_sk_skb(skb);
+-	return err;
++	return __bpf_try_make_writable(skb, write_len);
+ }
+ 
+ BPF_CALL_2(sk_skb_pull_data, struct sk_buff *, skb, u32, len)
+@@ -3581,7 +3578,6 @@ BPF_CALL_4(sk_skb_adjust_room, struct sk_buff *, skb, s32, len_diff,
+ 			return -ENOMEM;
+ 		__skb_pull(skb, len_diff_abs);
+ 	}
+-	bpf_compute_data_end_sk_skb(skb);
+ 	if (tls_sw_has_ctx_rx(skb->sk)) {
+ 		struct strp_msg *rxm = strp_msg(skb);
+ 
+@@ -3746,10 +3742,7 @@ static const struct bpf_func_proto bpf_skb_change_tail_proto = {
+ BPF_CALL_3(sk_skb_change_tail, struct sk_buff *, skb, u32, new_len,
+ 	   u64, flags)
+ {
+-	int ret = __bpf_skb_change_tail(skb, new_len, flags);
+-
+-	bpf_compute_data_end_sk_skb(skb);
+-	return ret;
++	return __bpf_skb_change_tail(skb, new_len, flags);
+ }
+ 
+ static const struct bpf_func_proto sk_skb_change_tail_proto = {
+@@ -3812,10 +3805,7 @@ static const struct bpf_func_proto bpf_skb_change_head_proto = {
+ BPF_CALL_3(sk_skb_change_head, struct sk_buff *, skb, u32, head_room,
+ 	   u64, flags)
+ {
+-	int ret = __bpf_skb_change_head(skb, head_room, flags);
+-
+-	bpf_compute_data_end_sk_skb(skb);
+-	return ret;
++	return __bpf_skb_change_head(skb, head_room, flags);
+ }
+ 
+ static const struct bpf_func_proto sk_skb_change_head_proto = {
+@@ -9520,6 +9510,29 @@ static u32 sock_ops_convert_ctx_access(enum bpf_access_type type,
+ 	return insn - insn_buf;
+ }
+ 
++static struct bpf_insn *bpf_convert_data_end_access(const struct bpf_insn *si,
++						    struct bpf_insn *insn)
++{
++	/* si->dst_reg = skb->data */
++	*insn++ = BPF_LDX_MEM(BPF_FIELD_SIZEOF(struct sk_buff, data),
++			      si->dst_reg, si->src_reg,
++			      offsetof(struct sk_buff, data));
++	/* AX = skb->len */
++	*insn++ = BPF_LDX_MEM(BPF_FIELD_SIZEOF(struct sk_buff, len),
++			      BPF_REG_AX, si->src_reg,
++			      offsetof(struct sk_buff, len));
++	/* si->dst_reg = skb->data + skb->len */
++	*insn++ = BPF_ALU64_REG(BPF_ADD, si->dst_reg, BPF_REG_AX);
++	/* AX = skb->data_len */
++	*insn++ = BPF_LDX_MEM(BPF_FIELD_SIZEOF(struct sk_buff, data_len),
++			      BPF_REG_AX, si->src_reg,
++			      offsetof(struct sk_buff, data_len));
++	/* si->dst_reg = skb->data + skb->len - skb->data_len */
++	*insn++ = BPF_ALU64_REG(BPF_SUB, si->dst_reg, BPF_REG_AX);
++
++	return insn;
++}
++
+ static u32 sk_skb_convert_ctx_access(enum bpf_access_type type,
+ 				     const struct bpf_insn *si,
+ 				     struct bpf_insn *insn_buf,
+@@ -9530,12 +9543,7 @@ static u32 sk_skb_convert_ctx_access(enum bpf_access_type type,
+ 
+ 	switch (si->off) {
+ 	case offsetof(struct __sk_buff, data_end):
+-		off  = si->off;
+-		off -= offsetof(struct __sk_buff, data_end);
+-		off += offsetof(struct sk_buff, cb);
+-		off += offsetof(struct tcp_skb_cb, bpf.data_end);
+-		*insn++ = BPF_LDX_MEM(BPF_SIZEOF(void *), si->dst_reg,
+-				      si->src_reg, off);
++		insn = bpf_convert_data_end_access(si, insn);
+ 		break;
+ 	default:
+ 		return bpf_convert_ctx_access(type, si, insn_buf, prog,
+diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+index 9d673179e886..64166e48999c 100644
+--- a/net/core/skmsg.c
++++ b/net/core/skmsg.c
+@@ -746,7 +746,6 @@ EXPORT_SYMBOL_GPL(sk_psock_msg_verdict);
+ static int sk_psock_bpf_run(struct sk_psock *psock, struct bpf_prog *prog,
+ 			    struct sk_buff *skb)
+ {
+-	bpf_compute_data_end_sk_skb(skb);
+ 	return bpf_prog_run_pin_on_cpu(prog, skb);
+ }
+ 
 -- 
 2.25.1
 
