@@ -8,59 +8,59 @@ X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A149EC433DB
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B8563C433E0
 	for <bpf@archiver.kernel.org>; Wed, 10 Feb 2021 03:38:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6A22664DEE
+	by mail.kernel.org (Postfix) with ESMTP id 7EF1664E56
 	for <bpf@archiver.kernel.org>; Wed, 10 Feb 2021 03:38:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230513AbhBJDh7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 9 Feb 2021 22:37:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42850 "EHLO
+        id S230283AbhBJDiA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 9 Feb 2021 22:38:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbhBJDh6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 9 Feb 2021 22:37:58 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACBF1C061788
-        for <bpf@vger.kernel.org>; Tue,  9 Feb 2021 19:36:44 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id my11so2275446pjb.1
-        for <bpf@vger.kernel.org>; Tue, 09 Feb 2021 19:36:44 -0800 (PST)
+        with ESMTP id S229843AbhBJDh7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 9 Feb 2021 22:37:59 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69338C06178B
+        for <bpf@vger.kernel.org>; Tue,  9 Feb 2021 19:36:47 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id m6so401753pfk.1
+        for <bpf@vger.kernel.org>; Tue, 09 Feb 2021 19:36:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=n17y02GKzFtVkS+sQassrbdWRE9LRSsncjj+HgJBEPU=;
-        b=YfxJQRrwYnL7bGFDZtaVp5NAkuzdt4xqeP3VHTQmhfFruKgIv/18DncP5+R9UxDm1N
-         bAQvN4G+moWYQUKl9ElNzGca+VOLnS84y5k81KeCbIN4UC2v4S894Z8ouTNDKqyYxd/E
-         dViHYpW2GpsiqwmG0uZtllBZH4ZGhnmg2JxUeDj7FzQcW+CkfPCERI49NhCsMbpa8iMR
-         fOXZKr3xCQs8o56w3MHqNa1VonufOCYHugB+d4FePVZarLQ8i/DSLtYlyA7szxK1iMc7
-         vl4ZHpz0RTND6wvf7UIjdRldXIaPYyFOZwBTiXccorM0UXaIULA1RvBBMaa57XN963vM
-         zj3Q==
+        bh=01Exh/2ObMelGUhb994VG5lHlejeefEcqeiEWbL0Xvk=;
+        b=KP8poCIX/DRk2rr8R33udeZ6Fw+VTS20ntjyxl49gkxHj2/wIRQXzLpgGuJJBYs/Rz
+         2foMTibGuJNmaU97XExr9/Xbz9FblARt23DB9kUPsuomD5hYcWHPLnLo1G34hSIslwVb
+         98wUE7ABPRKiXoQpv0QMBBtpADK8agZDx5b4qoytYAe/sU72RV3eXAqu8w2mEptGMoPo
+         wrik0oNfaVkgFIS/JSeJyg6JgmTLcVdQdfl8wfXjBmRMrEKMcXGgqHUxBBmTzbyEWRe1
+         2GMyGg2KG7U/ZicaviiPB6/HsuFzwKNZ4jcbPQ4zgqEUcWK72EILpwWCmx1Y+NzjraK1
+         HBrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=n17y02GKzFtVkS+sQassrbdWRE9LRSsncjj+HgJBEPU=;
-        b=DBY0AQ9yogNar3uJOVXYYqZt/gGV3q446Pkv0wX0+dbpIcKRE/MnvkqGYrfm9kH8YQ
-         VJOlhPABCLih0Y+klOhrcKsLayeH8D/0v5u3LLq8LngYUzjIM16y/AFUv7j6jBfQ/Erd
-         wrV8AsEQLMCCdQxxDIcec5tvO9sHEZYefEWZqj4pBFO7B3kk2vpDDRqJczQLNyz60xMe
-         CFYFINLbjKmZthAbTL08PeDhMuzKzk1TajEonXUXZAs9/DFsss6d6CLKxfWSCCvTjFus
-         cJ3YSGEPnQ5QZxDuzvwUaS2NsUTC8O42pxNz1yw6YLsuKmI2N7m6NwIv+bXRftiCd8Zk
-         VNyg==
-X-Gm-Message-State: AOAM5329+cvKFxJYqcKvuZoJ/qDsJzslqisj/KcJMNsQ/0SL0uY0vfVu
-        tTwZeK6ZiwTPS5ZWwfcMBpY=
-X-Google-Smtp-Source: ABdhPJwmOwqZsbA158CWWZ+pnt+n+UIEXTi4tPMBrn7Cb7/RiNboSuFKyVEozeCVBRtPVDAC909cgw==
-X-Received: by 2002:a17:902:8b89:b029:e0:6c0:dea8 with SMTP id ay9-20020a1709028b89b02900e006c0dea8mr1014316plb.28.1612928204296;
-        Tue, 09 Feb 2021 19:36:44 -0800 (PST)
+        bh=01Exh/2ObMelGUhb994VG5lHlejeefEcqeiEWbL0Xvk=;
+        b=gMLtwEVdNmpt+ZTEDs+mw753UA9ERiGwQKHf+FitHI4sABYu+OTe7UxWZ2ULCcK64m
+         xyZlm7WizqB8MzwkJM39qBgmtu68pv1DcJznkVNqiSBnYFpV5GDgvF2DLL4TiiNXcbGn
+         lSlgC0jwS2A1h8AP10HGbRtoEqQuTjItpwPGiaj/6tP326w+OFVbp3yAm67nvj0YSsdv
+         rt+iDRKXTA+cgc1hHskVh/fj5vugeqFfHxzdKkxgfDQwCnf/d+aiPtjHNZzP/tZOpRWH
+         St3BFI/FcTOMm7qyE/oPzrw9yGfhsGB5AGKWd0YL5RuB8D8nELAWzLsQM7VsE+rjmijP
+         iplQ==
+X-Gm-Message-State: AOAM5313jqDyIK5gbIuyeyLw5eDp/5m/sQCnUyCAIy9+h2NCBYUd8emw
+        0VIWZF+yNJ6iHTies5JLRp5Fn2PHlak=
+X-Google-Smtp-Source: ABdhPJy1s6TgtIoOJZ6K3fSvKzndgpseLjjitpsaxshqxEkfLqJ/fihabtTr2bPcsq2BnxJ2B3Jz5Q==
+X-Received: by 2002:a05:6a00:80e:b029:1b6:39dd:8b2a with SMTP id m14-20020a056a00080eb02901b639dd8b2amr1022299pfk.23.1612928207015;
+        Tue, 09 Feb 2021 19:36:47 -0800 (PST)
 Received: from ast-mbp.thefacebook.com ([163.114.132.7])
-        by smtp.gmail.com with ESMTPSA id f7sm391099pjh.45.2021.02.09.19.36.43
+        by smtp.gmail.com with ESMTPSA id f7sm391099pjh.45.2021.02.09.19.36.45
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 09 Feb 2021 19:36:43 -0800 (PST)
+        Tue, 09 Feb 2021 19:36:46 -0800 (PST)
 From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To:     davem@davemloft.net
 Cc:     daniel@iogearbox.net, bpf@vger.kernel.org, kernel-team@fb.com
-Subject: [PATCH v4 bpf-next 5/9] selftest/bpf: Add a recursion test
-Date:   Tue,  9 Feb 2021 19:36:30 -0800
-Message-Id: <20210210033634.62081-6-alexei.starovoitov@gmail.com>
+Subject: [PATCH v4 bpf-next 7/9] selftests/bpf: Improve recursion selftest
+Date:   Tue,  9 Feb 2021 19:36:32 -0800
+Message-Id: <20210210033634.62081-8-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.13.5
 In-Reply-To: <20210210033634.62081-1-alexei.starovoitov@gmail.com>
 References: <20210210033634.62081-1-alexei.starovoitov@gmail.com>
@@ -70,110 +70,40 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Add recursive non-sleepable fentry program as a test.
-All attach points where sleepable progs can execute are non recursive so far.
-The recursion protection mechanism for sleepable cannot be activated yet.
+Since recursion_misses counter is available in bpf_prog_info
+improve the selftest to make sure it's counting correctly.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- .../selftests/bpf/prog_tests/recursion.c      | 33 +++++++++++++
- tools/testing/selftests/bpf/progs/recursion.c | 46 +++++++++++++++++++
- 2 files changed, 79 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/recursion.c
- create mode 100644 tools/testing/selftests/bpf/progs/recursion.c
+ tools/testing/selftests/bpf/prog_tests/recursion.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/recursion.c b/tools/testing/selftests/bpf/prog_tests/recursion.c
-new file mode 100644
-index 000000000000..863757461e3f
---- /dev/null
+index 863757461e3f..0e378d63fe18 100644
+--- a/tools/testing/selftests/bpf/prog_tests/recursion.c
 +++ b/tools/testing/selftests/bpf/prog_tests/recursion.c
-@@ -0,0 +1,33 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2021 Facebook */
-+#include <test_progs.h>
-+#include "recursion.skel.h"
+@@ -5,6 +5,8 @@
+ 
+ void test_recursion(void)
+ {
++	struct bpf_prog_info prog_info = {};
++	__u32 prog_info_len = sizeof(prog_info);
+ 	struct recursion *skel;
+ 	int key = 0;
+ 	int err;
+@@ -28,6 +30,12 @@ void test_recursion(void)
+ 	ASSERT_EQ(skel->bss->pass2, 1, "pass2 == 1");
+ 	bpf_map_lookup_elem(bpf_map__fd(skel->maps.hash2), &key, 0);
+ 	ASSERT_EQ(skel->bss->pass2, 2, "pass2 == 2");
 +
-+void test_recursion(void)
-+{
-+	struct recursion *skel;
-+	int key = 0;
-+	int err;
-+
-+	skel = recursion__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
-+		return;
-+
-+	err = recursion__attach(skel);
-+	if (!ASSERT_OK(err, "skel_attach"))
++	err = bpf_obj_get_info_by_fd(bpf_program__fd(skel->progs.on_lookup),
++				     &prog_info, &prog_info_len);
++	if (!ASSERT_OK(err, "get_prog_info"))
 +		goto out;
-+
-+	ASSERT_EQ(skel->bss->pass1, 0, "pass1 == 0");
-+	bpf_map_lookup_elem(bpf_map__fd(skel->maps.hash1), &key, 0);
-+	ASSERT_EQ(skel->bss->pass1, 1, "pass1 == 1");
-+	bpf_map_lookup_elem(bpf_map__fd(skel->maps.hash1), &key, 0);
-+	ASSERT_EQ(skel->bss->pass1, 2, "pass1 == 2");
-+
-+	ASSERT_EQ(skel->bss->pass2, 0, "pass2 == 0");
-+	bpf_map_lookup_elem(bpf_map__fd(skel->maps.hash2), &key, 0);
-+	ASSERT_EQ(skel->bss->pass2, 1, "pass2 == 1");
-+	bpf_map_lookup_elem(bpf_map__fd(skel->maps.hash2), &key, 0);
-+	ASSERT_EQ(skel->bss->pass2, 2, "pass2 == 2");
-+out:
-+	recursion__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/recursion.c b/tools/testing/selftests/bpf/progs/recursion.c
-new file mode 100644
-index 000000000000..49f679375b9d
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/recursion.c
-@@ -0,0 +1,46 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2021 Facebook */
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(max_entries, 1);
-+	__type(key, int);
-+	__type(value, long);
-+} hash1 SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(max_entries, 1);
-+	__type(key, int);
-+	__type(value, long);
-+} hash2 SEC(".maps");
-+
-+int pass1 = 0;
-+int pass2 = 0;
-+
-+SEC("fentry/__htab_map_lookup_elem")
-+int BPF_PROG(on_lookup, struct bpf_map *map)
-+{
-+	int key = 0;
-+
-+	if (map == (void *)&hash1) {
-+		pass1++;
-+		return 0;
-+	}
-+	if (map == (void *)&hash2) {
-+		pass2++;
-+		/* htab_map_gen_lookup() will inline below call
-+		 * into direct call to __htab_map_lookup_elem()
-+		 */
-+		bpf_map_lookup_elem(&hash2, &key);
-+		return 0;
-+	}
-+
-+	return 0;
-+}
++	ASSERT_EQ(prog_info.recursion_misses, 2, "recursion_misses");
+ out:
+ 	recursion__destroy(skel);
+ }
 -- 
 2.24.1
 
