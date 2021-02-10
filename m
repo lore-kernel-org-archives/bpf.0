@@ -2,147 +2,104 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B07EC433E0
-	for <bpf@archiver.kernel.org>; Wed, 10 Feb 2021 03:06:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A163C433E9
+	for <bpf@archiver.kernel.org>; Wed, 10 Feb 2021 03:37:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 57DFA64E30
-	for <bpf@archiver.kernel.org>; Wed, 10 Feb 2021 03:06:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 71D5464DDF
+	for <bpf@archiver.kernel.org>; Wed, 10 Feb 2021 03:37:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231463AbhBJDGm (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 9 Feb 2021 22:06:42 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:39872 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S230420AbhBJDGk (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 9 Feb 2021 22:06:40 -0500
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 11A33GvM107194;
-        Tue, 9 Feb 2021 22:05:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=VUUUID4jinb8YxHa9ULGgHx/wMq8Yn4W3OE/J3/UjtQ=;
- b=QIvj9Wzb/QHfnXhv0uVGJQhiplFj/6cz96gcmYTAe1xqSI3UdOtQMXMUMqS1nAt/AH9o
- qgznSYrU69CnT9qPsPv50BQrouR5UTQY3VCW9PdPOIRonFMgbDSm0ALCyaVbyfAMHrph
- dSyvkjXoDyzDze9s45htL2Re71O3+cTru/cwI1ysX53lXkbUejPLtaT4rymN6R3DIoJD
- Zese1dmrMKP6JpuH7D3MUamOY6PQ0hj4o86vsJw9yQ3N2ASehv2juwUXfneEvhX8LhYn
- oAEoqKha2xOv0W4DY9Mc4YnKGWfzUHH/lkDSHfLuE7RKV3txzLDvXUQ8LKUDtanu98ki hw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 36m72x8a3a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 09 Feb 2021 22:05:44 -0500
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 11A33NFN108026;
-        Tue, 9 Feb 2021 22:04:41 -0500
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 36m72x884f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 09 Feb 2021 22:04:41 -0500
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 11A349uX005542;
-        Wed, 10 Feb 2021 03:04:10 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma05fra.de.ibm.com with ESMTP id 36hjr7t5vj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 Feb 2021 03:04:10 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 11A33vrI33948008
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 10 Feb 2021 03:03:58 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DD6FCA4040;
-        Wed, 10 Feb 2021 03:04:07 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 72A13A404D;
-        Wed, 10 Feb 2021 03:04:07 +0000 (GMT)
-Received: from vm.lan (unknown [9.171.67.27])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 10 Feb 2021 03:04:07 +0000 (GMT)
-From:   Ilya Leoshkevich <iii@linux.ibm.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Yonghong Song <yhs@fb.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>
-Cc:     bpf@vger.kernel.org, Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: [PATCH RFC 6/6] bpf: Document BTF_KIND_FLOAT in btf.rst
-Date:   Wed, 10 Feb 2021 04:03:17 +0100
-Message-Id: <20210210030317.78820-7-iii@linux.ibm.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210210030317.78820-1-iii@linux.ibm.com>
-References: <20210210030317.78820-1-iii@linux.ibm.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.737
- definitions=2021-02-09_08:2021-02-09,2021-02-09 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- impostorscore=0 priorityscore=1501 clxscore=1015 mlxscore=0 spamscore=0
- phishscore=0 adultscore=0 mlxlogscore=999 suspectscore=0 bulkscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2102100031
+        id S230195AbhBJDhV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 9 Feb 2021 22:37:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42706 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229544AbhBJDhU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 9 Feb 2021 22:37:20 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B4C1C061756
+        for <bpf@vger.kernel.org>; Tue,  9 Feb 2021 19:36:40 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id g3so464067plp.2
+        for <bpf@vger.kernel.org>; Tue, 09 Feb 2021 19:36:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=aPVbXdT0/D0quWw/01RSc/SwOGlQJ9NewoSBOvhSa90=;
+        b=KbyMyuLioAKuxEYgfXoZt1vslHnpdKhpJ7b2pfH+Y7n/acTrnMk8QTgX3/0gCVFVTg
+         lhCtotgby7DlsEmDaRHI45sQ1OrU5emF13294cUK5ZTs4REuUEUVIr1KvhDPIiBH4rNZ
+         4gUsVdRiLMlpOlXcv6moYEfYNNj63t6ttSJt+2r9uxCN6xIjti22QdLiTZ7EFkIYqodo
+         2bT4qwO4TXNozhirPLNrPE8MdD9lNggQnMLPQtyZ4wCeL7CyPsIuDU8ll/qPJBi2ljA/
+         UGFhCW0L5DNme5qiI6wD9Ow332Y8esC915bv5RAzWfyJorUmt51Sb2MZlAqmEizHs+W8
+         cQyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=aPVbXdT0/D0quWw/01RSc/SwOGlQJ9NewoSBOvhSa90=;
+        b=Vwmgxqqa/v5npJKpFQcvFnKDUBljmfYP5nboTNFYlpfka++BwzWdrZWjLfodUTY99T
+         LxKsX5blzUtutFAf4X/KxgkNymBbLNsEi+sTHC85xHIc6jGq3I3gbEZOaX72f6rMz0C1
+         m8mbeqrT1W7YizPLjYtYsRtQzaN+3JJZBS8HqRKAzFH6t1Y0E73ImUljfTQqkRNYUuyb
+         ch7TDG/p6+mCjeX76iZm7F/0qlQLH/jSKwFjYkPEhm0tWW0v6U+dKO5bJUY2uS1Q6oO5
+         reUO8ySOpQkXM72dYnrYgL9zn57X51oI/msSOchh5T+6C87UZItIZ/+wHhEdv2NS9X4F
+         FnoA==
+X-Gm-Message-State: AOAM53154ZASP2Z3KMqYzYmZxgJowApKJBlaEcOEKMXxhEjk1CEcZ+Ko
+        jQp7Cwdqk46aQLuJWm1f0RA=
+X-Google-Smtp-Source: ABdhPJwVv6iaMoWysiUwJU9aNl+KovzoJisEDa+Mu0Q0DY/DPpNMD6/P1PL8VFVL8lEZEBUKKJa4+w==
+X-Received: by 2002:a17:90a:e392:: with SMTP id b18mr1141768pjz.33.1612928200082;
+        Tue, 09 Feb 2021 19:36:40 -0800 (PST)
+Received: from ast-mbp.thefacebook.com ([163.114.132.7])
+        by smtp.gmail.com with ESMTPSA id f7sm391099pjh.45.2021.02.09.19.36.38
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 09 Feb 2021 19:36:39 -0800 (PST)
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     davem@davemloft.net
+Cc:     daniel@iogearbox.net, bpf@vger.kernel.org, kernel-team@fb.com
+Subject: [PATCH v4 bpf-next 2/9] bpf: Run sleepable programs with migration disabled
+Date:   Tue,  9 Feb 2021 19:36:27 -0800
+Message-Id: <20210210033634.62081-3-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.13.5
+In-Reply-To: <20210210033634.62081-1-alexei.starovoitov@gmail.com>
+References: <20210210033634.62081-1-alexei.starovoitov@gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The description is based on BTF_KIND_INT. Also document the expansion
-of the kind bitfield.
+From: Alexei Starovoitov <ast@kernel.org>
 
-Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
+In older non-RT kernels migrate_disable() was the same as preempt_disable().
+Since commit 74d862b682f5 ("sched: Make migrate_disable/enable() independent of RT")
+migrate_disable() is real and doesn't prevent sleeping.
+Running sleepable programs with migration disabled allows to add support for
+program stats and per-cpu maps later.
+
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Acked-by: KP Singh <kpsingh@kernel.org>
 ---
- Documentation/bpf/btf.rst | 19 +++++++++++++++++--
- 1 file changed, 17 insertions(+), 2 deletions(-)
+ kernel/bpf/trampoline.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/bpf/btf.rst b/Documentation/bpf/btf.rst
-index 44dc789de2b4..d1d88d3a5d3f 100644
---- a/Documentation/bpf/btf.rst
-+++ b/Documentation/bpf/btf.rst
-@@ -84,6 +84,7 @@ sequentially and type id is assigned to each recognized type starting from id
-     #define BTF_KIND_FUNC_PROTO     13      /* Function Proto       */
-     #define BTF_KIND_VAR            14      /* Variable     */
-     #define BTF_KIND_DATASEC        15      /* Section      */
-+    #define BTF_KIND_FLOAT          16      /* Floating point       */
+diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+index 5be3beeedd74..89fc849ba271 100644
+--- a/kernel/bpf/trampoline.c
++++ b/kernel/bpf/trampoline.c
+@@ -425,11 +425,13 @@ void notrace __bpf_prog_exit(struct bpf_prog *prog, u64 start)
+ void notrace __bpf_prog_enter_sleepable(void)
+ {
+ 	rcu_read_lock_trace();
++	migrate_disable();
+ 	might_fault();
+ }
  
- Note that the type section encodes debug info, not just pure types.
- ``BTF_KIND_FUNC`` is not a type, and it represents a defined subprogram.
-@@ -95,8 +96,8 @@ Each type contains the following common data::
-         /* "info" bits arrangement
-          * bits  0-15: vlen (e.g. # of struct's members)
-          * bits 16-23: unused
--         * bits 24-27: kind (e.g. int, ptr, array...etc)
--         * bits 28-30: unused
-+         * bits 24-28: kind (e.g. int, ptr, array...etc)
-+         * bits 29-30: unused
-          * bit     31: kind_flag, currently used by
-          *             struct, union and fwd
-          */
-@@ -452,6 +453,20 @@ map definition.
-   * ``offset``: the in-section offset of the variable
-   * ``size``: the size of the variable in bytes
- 
-+2.2.16 BTF_KIND_FLOAT
-+~~~~~~~~~~~~~~~~~~~~~
-+
-+``struct btf_type`` encoding requirement:
-+ * ``name_off``: any valid offset
-+ * ``info.kind_flag``: 0
-+ * ``info.kind``: BTF_KIND_FLOAT
-+ * ``info.vlen``: 0
-+ * ``size``: the size of the float type in bytes.
-+
-+``btf_type`` is followed by a ``u32`` with the following bits arrangement::
-+
-+  #define BTF_FLOAT_BITS(VAL)     ((VAL)  & 0x000000ff)
-+
- 3. BTF Kernel API
- *****************
+ void notrace __bpf_prog_exit_sleepable(void)
+ {
++	migrate_enable();
+ 	rcu_read_unlock_trace();
+ }
  
 -- 
-2.29.2
+2.24.1
 
