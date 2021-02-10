@@ -2,84 +2,175 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-21.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no
-	autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C7484C4332B
-	for <bpf@archiver.kernel.org>; Wed, 10 Feb 2021 18:30:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BF98C433DB
+	for <bpf@archiver.kernel.org>; Wed, 10 Feb 2021 18:35:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 98A5B64E7C
-	for <bpf@archiver.kernel.org>; Wed, 10 Feb 2021 18:30:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 041B864DD4
+	for <bpf@archiver.kernel.org>; Wed, 10 Feb 2021 18:35:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234143AbhBJSa3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 10 Feb 2021 13:30:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36738 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234122AbhBJS3W (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 10 Feb 2021 13:29:22 -0500
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4288BC06174A
-        for <bpf@vger.kernel.org>; Wed, 10 Feb 2021 10:28:42 -0800 (PST)
-Received: by mail-il1-x12d.google.com with SMTP id p15so2759754ilq.8
-        for <bpf@vger.kernel.org>; Wed, 10 Feb 2021 10:28:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XJYZFGhrBiou1Eqm8bd6lz808exSgkSBgBkBF0GK28w=;
-        b=ojprnOV6IXbl4zKe/t3ktzzv/tvyOsXC+wdYoV6szHfexRyQN+Je2QfofyeAko7vE9
-         LCoYMkD34VRnUq9BvFgDOqYfvmwhMjeLITQ3aKTkFP+rnPYZS9eLK0sOEXRek8X47ucU
-         5MNeVyGoB6LO/vv8S8iy1S6QNOqX/CrZIrUKG1+rxmY7rDj9ta5Ci9cFz4L2IJmy5cu1
-         a/twhpPYK3DFjMLa5ABZboL2UuGiR5ChIWMb0TN8M2YtmyOmE1r/iEflVoW4xwqA4lwL
-         2PVo4GmRayeqS0eP0iH/WdzW8QUt/B/uYIhw4kthFmEioCwH1J5A0730QkEQyb6ZVpU1
-         EyBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XJYZFGhrBiou1Eqm8bd6lz808exSgkSBgBkBF0GK28w=;
-        b=noMhLsD60ygRwHHpj9CUhSYEco14s0qFkGleZT9+stommCI1n4EXERPeRLdz5i+0mn
-         bOXw1paQvK8aqsm7eBTCWYSYPLjEQFArLNhQRdX1nIhV41iLJRMed1RYMcx5gaNtA4x7
-         +Gg243nAtadauHgYTF5HJsJ6KRxWNrWAJxVvxFG+c65biKiGx0FXIMs77ZQ197b+2gO6
-         W8Em4jHg3Klak/6oFzj//tz/teaaJc853hVVdCj5uxK2ocuMesf6jSXh3mHR9xysltmB
-         AhGVOG2IGwYh9BnPrjcXw130dLF07jNnGTSOzq/jZH7X//pF60koPRHWR33rnfAoeRdr
-         jKGA==
-X-Gm-Message-State: AOAM533y0IUR43E3DeQimCAx0YDS6gwQWb0ov8z35JmT7YKR4HwQbwsA
-        +6NjG+khrVBDpi4b2/qyznqYKatNwXzjaOKa0JJ2eQ==
-X-Google-Smtp-Source: ABdhPJzInfFQHXgxK/mWD8rTMuDdnlOOh1s8zCpmEHyogH+TAKHuPk0WJlWsK4vZWw1giRnIBnTmp0aUDLiRvp4JyNw=
-X-Received: by 2002:a05:6e02:13a5:: with SMTP id h5mr2235782ilo.263.1612981721460;
- Wed, 10 Feb 2021 10:28:41 -0800 (PST)
-MIME-Version: 1.0
-References: <b1792bb3c51eb3e94b9d27e67665d3f2209bba7e.camel@linux.ibm.com>
- <CAADnVQJFcFwxEz=wnV=hkie-EDwa8s5JGbBQeFt1TGux1OihJw@mail.gmail.com>
- <5c6501bea0f7ae9dcb9d5f2071441942d5d3dc0f.camel@linux.ibm.com> <CAADnVQ+gnQED7WYAw7Vmm5=omngCKYXnmgU_NqPUfESBerH8gQ@mail.gmail.com>
-In-Reply-To: <CAADnVQ+gnQED7WYAw7Vmm5=omngCKYXnmgU_NqPUfESBerH8gQ@mail.gmail.com>
-From:   Brendan Jackman <jackmanb@google.com>
-Date:   Wed, 10 Feb 2021 19:28:29 +0100
-Message-ID: <CA+i-1C0xbm_+oz2ZyAWvwjLxeD5niAObN0Ya3y2RvHKrC31Mmw@mail.gmail.com>
-Subject: Re: What should BPF_CMPXCHG do when the values match?
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Ilya Leoshkevich <iii@linux.ibm.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
+        id S231939AbhBJSe7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 10 Feb 2021 13:34:59 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:52861 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234275AbhBJSbO (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 10 Feb 2021 13:31:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1612981783;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=r7Y1DVfWb4o7Hpsmpvc7aELdC5QDqIQH5+nQpBg6HlI=;
+        b=Hc0Jgxpxo4WxfqEg8GFEqvzY6XpmGIdlOscgfZypJJLfZt/Uy8dY6kUkbTVESH1eqG+CkY
+        iCYfok6x9E3ph6TgWSN3ney6yneWOl+r53364r+yV0yZ3QCeXMqx2aVC+7hFSXixbDsj8P
+        iO1iBwFv4sBmNkM2/xRYs6E41hL8bgQ=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-371-tvMyJIsaNdSIIiCZTSfkow-1; Wed, 10 Feb 2021 13:29:38 -0500
+X-MC-Unique: tvMyJIsaNdSIIiCZTSfkow-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id BD672192CC40;
+        Wed, 10 Feb 2021 18:29:35 +0000 (UTC)
+Received: from krava (unknown [10.40.195.206])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 5301261F47;
+        Wed, 10 Feb 2021 18:29:32 +0000 (UTC)
+Date:   Wed, 10 Feb 2021 19:29:31 +0100
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@fb.com>, bpf <bpf@vger.kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        KP Singh <kpsingh@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Andrii Nakryiko <andriin@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Subject: Re: [PATCH bpf-next 4/4] kbuild: Add resolve_btfids clean to root
+ clean target
+Message-ID: <YCQmCwBSQuj+bi4q@krava>
+References: <20210205124020.683286-1-jolsa@kernel.org>
+ <20210205124020.683286-5-jolsa@kernel.org>
+ <20210210174451.GA1943051@ubuntu-m3-large-x86>
+ <CAEf4BzZvz4-STv3OQxyNDiFKkrFM-+GOM-yXURzoDtXiRiuT_g@mail.gmail.com>
+ <20210210180215.GA2374611@ubuntu-m3-large-x86>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210210180215.GA2374611@ubuntu-m3-large-x86>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Thanks a lot for bringing this up Ilya!
+On Wed, Feb 10, 2021 at 11:02:15AM -0700, Nathan Chancellor wrote:
+> On Wed, Feb 10, 2021 at 09:52:42AM -0800, Andrii Nakryiko wrote:
+> > On Wed, Feb 10, 2021 at 9:47 AM Nathan Chancellor <nathan@kernel.org> wrote:
+> > >
+> > > On Fri, Feb 05, 2021 at 01:40:20PM +0100, Jiri Olsa wrote:
+> > > > The resolve_btfids tool is used during the kernel build,
+> > > > so we should clean it on kernel's make clean.
+> > > >
+> > > > Invoking the the resolve_btfids clean as part of root
+> > > > 'make clean'.
+> > > >
+> > > > Acked-by: Song Liu <songliubraving@fb.com>
+> > > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > > > ---
+> > > >  Makefile | 7 ++++++-
+> > > >  1 file changed, 6 insertions(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/Makefile b/Makefile
+> > > > index b0e4767735dc..159d9592b587 100644
+> > > > --- a/Makefile
+> > > > +++ b/Makefile
+> > > > @@ -1086,6 +1086,11 @@ ifdef CONFIG_STACK_VALIDATION
+> > > >    endif
+> > > >  endif
+> > > >
+> > > > +PHONY += resolve_btfids_clean
+> > > > +
+> > > > +resolve_btfids_clean:
+> > > > +     $(Q)$(MAKE) -sC $(srctree)/tools/bpf/resolve_btfids O=$(abspath $(objtree))/tools/bpf/resolve_btfids clean
+> > > > +
+> > > >  ifdef CONFIG_BPF
+> > > >  ifdef CONFIG_DEBUG_INFO_BTF
+> > > >    ifeq ($(has_libelf),1)
+> > > > @@ -1495,7 +1500,7 @@ vmlinuxclean:
+> > > >       $(Q)$(CONFIG_SHELL) $(srctree)/scripts/link-vmlinux.sh clean
+> > > >       $(Q)$(if $(ARCH_POSTLINK), $(MAKE) -f $(ARCH_POSTLINK) clean)
+> > > >
+> > > > -clean: archclean vmlinuxclean
+> > > > +clean: archclean vmlinuxclean resolve_btfids_clean
+> > > >
+> > > >  # mrproper - Delete all generated files, including .config
+> > > >  #
+> > > > --
+> > > > 2.26.2
+> > > >
+> > >
+> > > This breaks running distclean on a clean tree (my script just
+> > > unconditionally runs distclean regardless of the tree state):
+> > >
+> > > $ make -s O=build distclean
+> > > ../../scripts/Makefile.include:4: *** O=/home/nathan/cbl/src/linux-next/build/tools/bpf/resolve_btfids does not exist.  Stop.
+> > >
+> > 
+> > Can't reproduce it. It works in all kinds of variants (relative and
+> > absolute O=, clean and not clean trees, etc). Jiri, please check as
+> > well.
+> > 
+> 
+> Odd, this reproduces for me on a completely clean checkout of bpf-next:
+> 
+> $ git clone --depth=1 https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/
+> 
+> $ cd bpf-next
+> 
+> $ make -s O=build distclean
+> ../../scripts/Makefile.include:4: *** O=/tmp/bpf-next/build/tools/bpf/resolve_btfids does not exist.  Stop.
+> 
+> I do not really see how this could be environment related. It seems like
+> this comes from tools/scripts/Makefile.include, where there is no
+> guarantee that $(O) is created before being used like in the main
+> Makefile?
 
-On Wed, 10 Feb 2021 at 19:08, Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
-[...]
-> Brendan,
-> could you please follow up with x64 jit fix to add 'mov eax,eax'  for
-> u32-sized cmpxchg  ?
+right, we need to handle the case where tools/bpf/resolve_btfids
+does not exist, patch below fixes it for me
 
-Ack, will do.
+jirka
+
+
+---
+diff --git a/Makefile b/Makefile
+index 159d9592b587..ce9685961abe 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1088,8 +1088,14 @@ endif
+ 
+ PHONY += resolve_btfids_clean
+ 
++resolve_btfids_O = $(abspath $(objtree))/tools/bpf/resolve_btfids
++
++# tools/bpf/resolve_btfids directory might not exist
++# in output directory, skip its clean in that case
+ resolve_btfids_clean:
+-	$(Q)$(MAKE) -sC $(srctree)/tools/bpf/resolve_btfids O=$(abspath $(objtree))/tools/bpf/resolve_btfids clean
++ifneq (,$(wildcard $(resolve_btfids_O)))
++	$(Q)$(MAKE) -sC $(srctree)/tools/bpf/resolve_btfids O=$(resolve_btfids_O) clean
++endif
+ 
+ ifdef CONFIG_BPF
+ ifdef CONFIG_DEBUG_INFO_BTF
+
