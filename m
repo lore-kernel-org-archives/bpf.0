@@ -2,193 +2,107 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 510F3C433DB
-	for <bpf@archiver.kernel.org>; Wed, 10 Feb 2021 19:27:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B901C433DB
+	for <bpf@archiver.kernel.org>; Wed, 10 Feb 2021 19:53:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1266964D87
-	for <bpf@archiver.kernel.org>; Wed, 10 Feb 2021 19:27:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1099164EDF
+	for <bpf@archiver.kernel.org>; Wed, 10 Feb 2021 19:53:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234649AbhBJT1a (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 10 Feb 2021 14:27:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49200 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231543AbhBJT1U (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 10 Feb 2021 14:27:20 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61874C061574;
-        Wed, 10 Feb 2021 11:26:40 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id k4so3158906ybp.6;
-        Wed, 10 Feb 2021 11:26:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4VzO1bqpMJImT5RV7mr89RUBHcVHZ35uVed+4sC5IZ4=;
-        b=aQcijUs+fTXzrXWQa4JWSb+1a1Ms0K4LCKg+xsXXpFww6vDv6mPLRMuuDBTd6zGW26
-         QAL4rncqbvjSWqbgjCFtW8vu4ve7X2vzRC7Jow0LqgyY3/L0b/LLlN/Jh9AYdlqmuL3X
-         Bj3W0eELRxOaUV/RlE+9+OVP6V3geu6Q3rP8QpAYiFBzV5VNIG/WkFcVh/zXCt/V/mGk
-         xBg2ikBz6O2ylLZWIYsx/L8fnYbNkvTL4AlbdA+UicnH+GbRR7s03kff9pGKTyvjH00p
-         OulRtgucxGzYwo+uPHIAY4uIoHNQmrxlH8TAL59tjPSlBLrpmDIVQ8o7I/7K/fvD1u8V
-         +YUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4VzO1bqpMJImT5RV7mr89RUBHcVHZ35uVed+4sC5IZ4=;
-        b=WNLYlsI5Y/LQCcHGaz6BaozahinQBEz7Ckan64i5kpzXS9jiHIvVqSqdfKPsVuU48C
-         sOnQ7lvwMgodzTN9zw79EIDVIpQBmINd8VSZ6zrKtUqsw41Zb8NLo7dNy4bPKZvzqm1i
-         49+xucVw13j6ShsW94RRh5Wh9A0Ns6jlJIjzlkqQfb/NPxAbvjzmxagXmwW+rlGqkHi4
-         LTZSoTgZm4Q6519gAw2ZA5W+VcUwBlaOR+6MnptMriYESFXO4Ycavv2T6CdEvZhF0IPk
-         Aa9pZd2brOQCedxNlT2KI6s7mzqYZe0YxySdizXNOB6MR36zhU8rJKQ+GKXa44wsG/wd
-         HIMg==
-X-Gm-Message-State: AOAM5332ySih/tOnvwrShc3T0aMNB1AncSFs8rkWGv4Yh/vLJE2bGeMx
-        jUd1QbDG6A1XlUKTWR/YssEs2gPAHqx6tqi5mQ4=
-X-Google-Smtp-Source: ABdhPJyrF+s2ZhWmNsgbn5N3OGtEFd/y5SUnTrGjDxHYjiKoYBbidC5C3JxmWqLCVoecf4/ute1bLV2QtQWYDoCA5es=
-X-Received: by 2002:a25:4b86:: with SMTP id y128mr6127943yba.403.1612985199531;
- Wed, 10 Feb 2021 11:26:39 -0800 (PST)
-MIME-Version: 1.0
-References: <20210205124020.683286-1-jolsa@kernel.org> <20210205124020.683286-5-jolsa@kernel.org>
- <20210210174451.GA1943051@ubuntu-m3-large-x86> <CAEf4BzZvz4-STv3OQxyNDiFKkrFM-+GOM-yXURzoDtXiRiuT_g@mail.gmail.com>
- <20210210180215.GA2374611@ubuntu-m3-large-x86> <YCQmCwBSQuj+bi4q@krava>
-In-Reply-To: <YCQmCwBSQuj+bi4q@krava>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 10 Feb 2021 11:26:28 -0800
-Message-ID: <CAEf4BzbwwtqerxRrNZ75WLd2aHLdnr7wUrKahfT7_6bjBgJ0xQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 4/4] kbuild: Add resolve_btfids clean to root
- clean target
-To:     Jiri Olsa <jolsa@redhat.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+        id S232868AbhBJTw6 convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 10 Feb 2021 14:52:58 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40196 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232715AbhBJTww (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 10 Feb 2021 14:52:52 -0500
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id BCAD464EDA;
+        Wed, 10 Feb 2021 19:52:08 +0000 (UTC)
+Date:   Wed, 10 Feb 2021 14:52:07 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Eric Dumazet <eric.dumazet@gmail.com>
+Cc:     Yonghong Song <yhs@fb.com>, Dmitry Vyukov <dvyukov@google.com>,
+        syzbot <syzbot+d29e58bb557324e55e5e@syzkaller.appspotmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>, andrii@kernel.org,
+        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>, Yonghong Song <yhs@fb.com>,
+        David Miller <davem@davemloft.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
+        Martin KaFai Lau <kafai@fb.com>,
         KP Singh <kpsingh@chromium.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Jakub Kicinski <kuba@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, Ingo Molnar <mingo@elte.hu>,
+        Ingo Molnar <mingo@redhat.com>, mmullins@fb.com,
+        netdev <netdev@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Song Liu <songliubraving@fb.com>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Subject: Re: KASAN: vmalloc-out-of-bounds Read in bpf_trace_run3
+Message-ID: <20210210145207.77798d6c@gandalf.local.home>
+In-Reply-To: <7b0fe079-bcd3-484d-fda6-12d962f584f8@gmail.com>
+References: <00000000000004500b05b31e68ce@google.com>
+        <CACT4Y+aBVQ6LKYf9wCV=AUx23xpWmb_6-mBqwkQgeyfXA3SS2A@mail.gmail.com>
+        <20201113053722.7i4xkiyrlymcwebg@hydra.tuxags.com>
+        <c63f89b2-0627-91d8-a609-3f2a3b5b5a2d@fb.com>
+        <7b0fe079-bcd3-484d-fda6-12d962f584f8@gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Feb 10, 2021 at 10:29 AM Jiri Olsa <jolsa@redhat.com> wrote:
->
-> On Wed, Feb 10, 2021 at 11:02:15AM -0700, Nathan Chancellor wrote:
-> > On Wed, Feb 10, 2021 at 09:52:42AM -0800, Andrii Nakryiko wrote:
-> > > On Wed, Feb 10, 2021 at 9:47 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> > > >
-> > > > On Fri, Feb 05, 2021 at 01:40:20PM +0100, Jiri Olsa wrote:
-> > > > > The resolve_btfids tool is used during the kernel build,
-> > > > > so we should clean it on kernel's make clean.
-> > > > >
-> > > > > Invoking the the resolve_btfids clean as part of root
-> > > > > 'make clean'.
-> > > > >
-> > > > > Acked-by: Song Liu <songliubraving@fb.com>
-> > > > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > > > > ---
-> > > > >  Makefile | 7 ++++++-
-> > > > >  1 file changed, 6 insertions(+), 1 deletion(-)
-> > > > >
-> > > > > diff --git a/Makefile b/Makefile
-> > > > > index b0e4767735dc..159d9592b587 100644
-> > > > > --- a/Makefile
-> > > > > +++ b/Makefile
-> > > > > @@ -1086,6 +1086,11 @@ ifdef CONFIG_STACK_VALIDATION
-> > > > >    endif
-> > > > >  endif
-> > > > >
-> > > > > +PHONY += resolve_btfids_clean
-> > > > > +
-> > > > > +resolve_btfids_clean:
-> > > > > +     $(Q)$(MAKE) -sC $(srctree)/tools/bpf/resolve_btfids O=$(abspath $(objtree))/tools/bpf/resolve_btfids clean
-> > > > > +
-> > > > >  ifdef CONFIG_BPF
-> > > > >  ifdef CONFIG_DEBUG_INFO_BTF
-> > > > >    ifeq ($(has_libelf),1)
-> > > > > @@ -1495,7 +1500,7 @@ vmlinuxclean:
-> > > > >       $(Q)$(CONFIG_SHELL) $(srctree)/scripts/link-vmlinux.sh clean
-> > > > >       $(Q)$(if $(ARCH_POSTLINK), $(MAKE) -f $(ARCH_POSTLINK) clean)
-> > > > >
-> > > > > -clean: archclean vmlinuxclean
-> > > > > +clean: archclean vmlinuxclean resolve_btfids_clean
-> > > > >
-> > > > >  # mrproper - Delete all generated files, including .config
-> > > > >  #
-> > > > > --
-> > > > > 2.26.2
-> > > > >
-> > > >
-> > > > This breaks running distclean on a clean tree (my script just
-> > > > unconditionally runs distclean regardless of the tree state):
-> > > >
-> > > > $ make -s O=build distclean
-> > > > ../../scripts/Makefile.include:4: *** O=/home/nathan/cbl/src/linux-next/build/tools/bpf/resolve_btfids does not exist.  Stop.
-> > > >
-> > >
-> > > Can't reproduce it. It works in all kinds of variants (relative and
-> > > absolute O=, clean and not clean trees, etc). Jiri, please check as
-> > > well.
-> > >
-> >
-> > Odd, this reproduces for me on a completely clean checkout of bpf-next:
-> >
-> > $ git clone --depth=1 https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/
-> >
-> > $ cd bpf-next
-> >
-> > $ make -s O=build distclean
-> > ../../scripts/Makefile.include:4: *** O=/tmp/bpf-next/build/tools/bpf/resolve_btfids does not exist.  Stop.
-> >
-> > I do not really see how this could be environment related. It seems like
-> > this comes from tools/scripts/Makefile.include, where there is no
-> > guarantee that $(O) is created before being used like in the main
-> > Makefile?
->
-> right, we need to handle the case where tools/bpf/resolve_btfids
-> does not exist, patch below fixes it for me
->
-> jirka
->
+On Wed, 10 Feb 2021 19:23:38 +0100
+Eric Dumazet <eric.dumazet@gmail.com> wrote:
 
-Looks good to me, please send it as a proper patch to bpf-next.
+> >> The problem here is a kmalloc failure injection into
+> >> tracepoint_probe_unregister, but the error is ignored -- so the bpf
+> >> program is freed even though the tracepoint is never unregistered.
+> >>
+> >> I have a first pass at a patch to pipe through the error code, but it's
+> >> pretty ugly.  It's also called from the file_operations ->release(), for  
+> > 
+> > Maybe you can still post the patch, so people can review and make suggestions which may lead to a *better* solution.  
+> 
+> 
+> ping
+> 
+> This bug is still there.
 
-But I'm curious, why is objtool not doing something like that? Is it
-not doing clean at all? Or does it do it in some different way?
+Is this a bug via syzkaller?
 
->
-> ---
-> diff --git a/Makefile b/Makefile
-> index 159d9592b587..ce9685961abe 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -1088,8 +1088,14 @@ endif
->
->  PHONY += resolve_btfids_clean
->
-> +resolve_btfids_O = $(abspath $(objtree))/tools/bpf/resolve_btfids
-> +
-> +# tools/bpf/resolve_btfids directory might not exist
-> +# in output directory, skip its clean in that case
->  resolve_btfids_clean:
-> -       $(Q)$(MAKE) -sC $(srctree)/tools/bpf/resolve_btfids O=$(abspath $(objtree))/tools/bpf/resolve_btfids clean
-> +ifneq (,$(wildcard $(resolve_btfids_O)))
+I have this fix in linux-next:
 
-nit: kind of backwards, usually it's in a `ifneq($var,)` form
+  befe6d946551 ("tracepoint: Do not fail unregistering a probe due to memory failure")
 
-> +       $(Q)$(MAKE) -sC $(srctree)/tools/bpf/resolve_btfids O=$(resolve_btfids_O) clean
-> +endif
->
->  ifdef CONFIG_BPF
->  ifdef CONFIG_DEBUG_INFO_BTF
->
+But because it is using undefined behavior (calling a sub return from a
+call that has parameters, but Peter Zijlstra says is OK), I'm hesitant to
+send it to Linus now or label it as stable.
+
+Now this can only happen if kmalloc fails from here (called by func_remove).
+
+static inline void *allocate_probes(int count)
+{
+	struct tp_probes *p  = kmalloc(struct_size(p, probes, count),
+				       GFP_KERNEL);
+	return p == NULL ? NULL : p->probes;
+}
+
+As probes and count together is typically much less than a page (unless you
+are doing fuzz testing and adding a ton of callbacks to a single
+tracepoint), that kmalloc should always succeed.
+
+The failure above can only happen if allocate_probes returns NULL, which is
+extremely unlikely.
+
+My question is, how is this triggered? And this should only be triggered by
+root doing stupid crap. Is it that critical to have fixed?
+
+-- Steve
