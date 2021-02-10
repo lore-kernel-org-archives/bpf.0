@@ -8,59 +8,59 @@ X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C63B0C433E9
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E93C9C43381
 	for <bpf@archiver.kernel.org>; Wed, 10 Feb 2021 03:38:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9402864E5A
+	by mail.kernel.org (Postfix) with ESMTP id CD57264DEE
 	for <bpf@archiver.kernel.org>; Wed, 10 Feb 2021 03:38:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbhBJDiA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 9 Feb 2021 22:38:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42856 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbhBJDh7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        id S231250AbhBJDh7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Tue, 9 Feb 2021 22:37:59 -0500
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D46B6C06178C
-        for <bpf@vger.kernel.org>; Tue,  9 Feb 2021 19:36:48 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id m2so341410pgq.5
-        for <bpf@vger.kernel.org>; Tue, 09 Feb 2021 19:36:48 -0800 (PST)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42852 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230283AbhBJDh6 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 9 Feb 2021 22:37:58 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00B3AC06178A
+        for <bpf@vger.kernel.org>; Tue,  9 Feb 2021 19:36:46 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id gx20so372659pjb.1
+        for <bpf@vger.kernel.org>; Tue, 09 Feb 2021 19:36:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=flxXAiAxW4pgrrJIUJj/B3flDOSlOcbNsPL/TPSLgzA=;
-        b=Q7qEhRffRoz1A5weJUi19Cp+BId61Y6b93uY96XbtVtHJ2oSiJU80Sdzn8AF6tm4R5
-         kAVdDoqJnlyZyxQalf+AYdbdevOFtjSFbvfhSwIGNmU6qpmuJ8vYLcEQxjREIlKOz4SD
-         SdRpQoc1mkTLLI2ggJuL0IesWVmMLCyiLTofwI3AL0NUd/LjjZxOWzlhG5gEx8ttdcH9
-         fz/09jHg1XTigwEzMiMTVqn+Ku5m77ytGnQwjnV82XP71Dg03AdmFUpefhMFvY2syLWr
-         rUSaTnFTWNSclE+bGwF8vs6MnbPmH9ye6Fle/0VAm6tXrm0/3Bq9Gr/jtcKJNTrMBNBq
-         nx9g==
+        bh=IKtlYY7iR2yjt3dZ8Xi+Wen7V2BC8t7LgAPTs1+bl/g=;
+        b=bURZyIgdNoHm66fC7WxyW7e04asQ1ggIw7Lo2/GA8ufTmheVySmFldDCrquHowPvun
+         hXS/FxIWe9sdnDg79C+jKmbgyP/M/Gn34GpZx12qFQpjScOdnb9lCxRR95j/zd3Z00Ds
+         huunRSLAdIlAJEUPLCBhMpIF5+DkvG3NRmEZKU0wmbKdbXbVaxIoc4rIufPUsS4CG18B
+         XqD1Cp7Sd1aOzE2lpsEr2DfZvcaAr0jag0x7yqQg55kyJ4eVMySJSqXOIbravNb/pUDe
+         FfZhjnxXBiF/QUh/Tucjh/skYSIdo4GLt1fQRCkGCWSwpfiSDXefWOQvfUGDmSUYFSQZ
+         qa5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=flxXAiAxW4pgrrJIUJj/B3flDOSlOcbNsPL/TPSLgzA=;
-        b=fVOGpVszbbO+wW/d7xbs+dYOUCjWUrWgEePxWLdb3pYbToiOpIv4omlyK2S2lLgnae
-         0H/rmhZkxdxhSMM4XaC0dcQZfu02xhlupvByvl9et8CqW1zVRDpQzoZlqDMMjcxFmVyJ
-         EsHWYmMSUU+P7AJree2lYRzmkajoPeEDxHf8ZwNIEBOlIgezqW9Ws1zXh3p5qPimZjBs
-         EsG+6dsCirku6bwrAyAEyzdnEUuKH1FBh4RC1dZ1YlnUZQnFHTa6lcRhyGmeP7etQJqQ
-         xChXcw6FPglg4op2EI/P6i141XRoY/RHylLwNAJ7kyVImI5oW3gWIQJcaSmoHhcdECBL
-         Pr/A==
-X-Gm-Message-State: AOAM531o50Wr3laDOlyHN1C1DILZwzHB5qjbmKxNo8RGG8hPrmA8Hr8R
-        a0nX1e9hvI473CD0WMZ2LB8=
-X-Google-Smtp-Source: ABdhPJzbrt4ASzg5BqiRU/ACRAIqFQ02QTvChqVHjJm37XDK/t2uqRokgBkoOZbR3QlZOTANeTAgqQ==
-X-Received: by 2002:a05:6a00:847:b029:1b3:b9c3:11fb with SMTP id q7-20020a056a000847b02901b3b9c311fbmr1321941pfk.44.1612928208331;
-        Tue, 09 Feb 2021 19:36:48 -0800 (PST)
+        bh=IKtlYY7iR2yjt3dZ8Xi+Wen7V2BC8t7LgAPTs1+bl/g=;
+        b=EAcX9R7PF4sWizc/p2pDi7126EARBrHs95bpdfw8XdzuXHucbHYG55fkpih9Fvn/Zo
+         EqNRWejRGLD3H0OWbVpgoXAgon8touoStL9LGwk2/aEvhG5nWPdd55QmVhNcru600Ix9
+         LLfoD9TzOHkXsf6Mn6leemtGtPKgyv2dbj8qp+QU3waj0E0CycIAcLNDQTirRrsQm4X1
+         aBpNA3FudX/NkdTLdzycY3/DRPI4gjVX5Hn2rCDeEPULdIQNUSEYa3c5YTg9EVm2tpbf
+         J6bFoJzB997j3NEVhjG/klEIEKSPq7FzkrSabZKsv7yESjgX4/tQUxS/Fusa1NbKKyTq
+         Zgtw==
+X-Gm-Message-State: AOAM531+uB+oG0CCOeLnRndkcwEoHBPIjHEcJHxV8FeWuHUZhytyR9Mw
+        /5a943XdpI+bdDH/G1brMvk=
+X-Google-Smtp-Source: ABdhPJzhdAhTmOud1DQILZcSw0vepFEIOCi8PpSLwSjguBZ9W0QPh3C1HlYn9uH4NoEjvNhjVOnNKg==
+X-Received: by 2002:a17:902:ea93:b029:e2:b3fb:ca9f with SMTP id x19-20020a170902ea93b02900e2b3fbca9fmr1091713plb.4.1612928205587;
+        Tue, 09 Feb 2021 19:36:45 -0800 (PST)
 Received: from ast-mbp.thefacebook.com ([163.114.132.7])
-        by smtp.gmail.com with ESMTPSA id f7sm391099pjh.45.2021.02.09.19.36.47
+        by smtp.gmail.com with ESMTPSA id f7sm391099pjh.45.2021.02.09.19.36.44
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 09 Feb 2021 19:36:47 -0800 (PST)
+        Tue, 09 Feb 2021 19:36:45 -0800 (PST)
 From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To:     davem@davemloft.net
 Cc:     daniel@iogearbox.net, bpf@vger.kernel.org, kernel-team@fb.com
-Subject: [PATCH v4 bpf-next 8/9] bpf: Allows per-cpu maps and map-in-map in sleepable programs
-Date:   Tue,  9 Feb 2021 19:36:33 -0800
-Message-Id: <20210210033634.62081-9-alexei.starovoitov@gmail.com>
+Subject: [PATCH v4 bpf-next 6/9] bpf: Count the number of times recursion was prevented
+Date:   Tue,  9 Feb 2021 19:36:31 -0800
+Message-Id: <20210210033634.62081-7-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.13.5
 In-Reply-To: <20210210033634.62081-1-alexei.starovoitov@gmail.com>
 References: <20210210033634.62081-1-alexei.starovoitov@gmail.com>
@@ -70,67 +70,186 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Since sleepable programs are now executing under migrate_disable
-the per-cpu maps are safe to use.
-The map-in-map were ok to use in sleepable from the time sleepable
-progs were introduced.
-
-Note that non-preallocated maps are still not safe, since there is
-no rcu_read_lock yet in sleepable programs and dynamically allocated
-map elements are relying on rcu protection. The sleepable programs
-have rcu_read_lock_trace instead. That limitation will be addresses
-in the future.
+Add per-program counter for number of times recursion prevention mechanism
+was triggered and expose it via show_fdinfo and bpf_prog_info.
+Teach bpftool to print it.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Acked-by: Andrii Nakryiko <andrii@kernel.org>
-Acked-by: KP Singh <kpsingh@kernel.org>
 ---
- kernel/bpf/hashtab.c  | 4 ++--
- kernel/bpf/verifier.c | 7 ++++++-
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ include/linux/filter.h         |  1 +
+ include/uapi/linux/bpf.h       |  1 +
+ kernel/bpf/syscall.c           | 14 ++++++++++----
+ kernel/bpf/trampoline.c        | 18 ++++++++++++++++--
+ tools/bpf/bpftool/prog.c       |  4 ++++
+ tools/include/uapi/linux/bpf.h |  1 +
+ 6 files changed, 33 insertions(+), 6 deletions(-)
 
-diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-index c1ac7f964bc9..d63912e73ad9 100644
---- a/kernel/bpf/hashtab.c
-+++ b/kernel/bpf/hashtab.c
-@@ -1148,7 +1148,7 @@ static int __htab_percpu_map_update_elem(struct bpf_map *map, void *key,
- 		/* unknown flags */
- 		return -EINVAL;
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 6a06f3c69f4e..3b00fc906ccd 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -543,6 +543,7 @@ struct bpf_binary_header {
+ struct bpf_prog_stats {
+ 	u64 cnt;
+ 	u64 nsecs;
++	u64 misses;
+ 	struct u64_stats_sync syncp;
+ } __aligned(2 * sizeof(u64));
  
--	WARN_ON_ONCE(!rcu_read_lock_held());
-+	WARN_ON_ONCE(!rcu_read_lock_held() && !rcu_read_lock_trace_held());
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index c001766adcbc..c547ad1ffe43 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -4501,6 +4501,7 @@ struct bpf_prog_info {
+ 	__aligned_u64 prog_tags;
+ 	__u64 run_time_ns;
+ 	__u64 run_cnt;
++	__u64 recursion_misses;
+ } __attribute__((aligned(8)));
  
- 	key_size = map->key_size;
+ struct bpf_map_info {
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index f7df56a704de..c859bc46d06c 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -1731,25 +1731,28 @@ static int bpf_prog_release(struct inode *inode, struct file *filp)
+ static void bpf_prog_get_stats(const struct bpf_prog *prog,
+ 			       struct bpf_prog_stats *stats)
+ {
+-	u64 nsecs = 0, cnt = 0;
++	u64 nsecs = 0, cnt = 0, misses = 0;
+ 	int cpu;
  
-@@ -1202,7 +1202,7 @@ static int __htab_lru_percpu_map_update_elem(struct bpf_map *map, void *key,
- 		/* unknown flags */
- 		return -EINVAL;
+ 	for_each_possible_cpu(cpu) {
+ 		const struct bpf_prog_stats *st;
+ 		unsigned int start;
+-		u64 tnsecs, tcnt;
++		u64 tnsecs, tcnt, tmisses;
  
--	WARN_ON_ONCE(!rcu_read_lock_held());
-+	WARN_ON_ONCE(!rcu_read_lock_held() && !rcu_read_lock_trace_held());
+ 		st = per_cpu_ptr(prog->stats, cpu);
+ 		do {
+ 			start = u64_stats_fetch_begin_irq(&st->syncp);
+ 			tnsecs = st->nsecs;
+ 			tcnt = st->cnt;
++			tmisses = st->misses;
+ 		} while (u64_stats_fetch_retry_irq(&st->syncp, start));
+ 		nsecs += tnsecs;
+ 		cnt += tcnt;
++		misses += tmisses;
+ 	}
+ 	stats->nsecs = nsecs;
+ 	stats->cnt = cnt;
++	stats->misses = misses;
+ }
  
- 	key_size = map->key_size;
+ #ifdef CONFIG_PROC_FS
+@@ -1768,14 +1771,16 @@ static void bpf_prog_show_fdinfo(struct seq_file *m, struct file *filp)
+ 		   "memlock:\t%llu\n"
+ 		   "prog_id:\t%u\n"
+ 		   "run_time_ns:\t%llu\n"
+-		   "run_cnt:\t%llu\n",
++		   "run_cnt:\t%llu\n"
++		   "recursion_misses:\t%llu\n",
+ 		   prog->type,
+ 		   prog->jited,
+ 		   prog_tag,
+ 		   prog->pages * 1ULL << PAGE_SHIFT,
+ 		   prog->aux->id,
+ 		   stats.nsecs,
+-		   stats.cnt);
++		   stats.cnt,
++		   stats.misses);
+ }
+ #endif
  
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 4189edb41b73..9561f2af7710 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -10020,9 +10020,14 @@ static int check_map_prog_compatibility(struct bpf_verifier_env *env,
- 		case BPF_MAP_TYPE_HASH:
- 		case BPF_MAP_TYPE_LRU_HASH:
- 		case BPF_MAP_TYPE_ARRAY:
-+		case BPF_MAP_TYPE_PERCPU_HASH:
-+		case BPF_MAP_TYPE_PERCPU_ARRAY:
-+		case BPF_MAP_TYPE_LRU_PERCPU_HASH:
-+		case BPF_MAP_TYPE_ARRAY_OF_MAPS:
-+		case BPF_MAP_TYPE_HASH_OF_MAPS:
- 			if (!is_preallocated_map(map)) {
- 				verbose(env,
--					"Sleepable programs can only use preallocated hash maps\n");
-+					"Sleepable programs can only use preallocated maps\n");
- 				return -EINVAL;
- 			}
- 			break;
+@@ -3438,6 +3443,7 @@ static int bpf_prog_get_info_by_fd(struct file *file,
+ 	bpf_prog_get_stats(prog, &stats);
+ 	info.run_time_ns = stats.nsecs;
+ 	info.run_cnt = stats.cnt;
++	info.recursion_misses = stats.misses;
+ 
+ 	if (!bpf_capable()) {
+ 		info.jited_prog_len = 0;
+diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+index 89ef6320d19b..7bc3b3209224 100644
+--- a/kernel/bpf/trampoline.c
++++ b/kernel/bpf/trampoline.c
+@@ -394,6 +394,16 @@ static u64 notrace bpf_prog_start_time(void)
+ 	return start;
+ }
+ 
++static void notrace inc_misses_counter(struct bpf_prog *prog)
++{
++	struct bpf_prog_stats *stats;
++
++	stats = this_cpu_ptr(prog->stats);
++	u64_stats_update_begin(&stats->syncp);
++	stats->misses++;
++	u64_stats_update_end(&stats->syncp);
++}
++
+ /* The logic is similar to BPF_PROG_RUN, but with an explicit
+  * rcu_read_lock() and migrate_disable() which are required
+  * for the trampoline. The macro is split into
+@@ -412,8 +422,10 @@ u64 notrace __bpf_prog_enter(struct bpf_prog *prog)
+ {
+ 	rcu_read_lock();
+ 	migrate_disable();
+-	if (unlikely(__this_cpu_inc_return(*(prog->active)) != 1))
++	if (unlikely(__this_cpu_inc_return(*(prog->active)) != 1)) {
++		inc_misses_counter(prog);
+ 		return 0;
++	}
+ 	return bpf_prog_start_time();
+ }
+ 
+@@ -451,8 +463,10 @@ u64 notrace __bpf_prog_enter_sleepable(struct bpf_prog *prog)
+ 	rcu_read_lock_trace();
+ 	migrate_disable();
+ 	might_fault();
+-	if (unlikely(__this_cpu_inc_return(*(prog->active)) != 1))
++	if (unlikely(__this_cpu_inc_return(*(prog->active)) != 1)) {
++		inc_misses_counter(prog);
+ 		return 0;
++	}
+ 	return bpf_prog_start_time();
+ }
+ 
+diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+index 1fe3ba255bad..f2b915b20546 100644
+--- a/tools/bpf/bpftool/prog.c
++++ b/tools/bpf/bpftool/prog.c
+@@ -368,6 +368,8 @@ static void print_prog_header_json(struct bpf_prog_info *info)
+ 		jsonw_uint_field(json_wtr, "run_time_ns", info->run_time_ns);
+ 		jsonw_uint_field(json_wtr, "run_cnt", info->run_cnt);
+ 	}
++	if (info->recursion_misses)
++		jsonw_uint_field(json_wtr, "recursion_misses", info->recursion_misses);
+ }
+ 
+ static void print_prog_json(struct bpf_prog_info *info, int fd)
+@@ -446,6 +448,8 @@ static void print_prog_header_plain(struct bpf_prog_info *info)
+ 	if (info->run_time_ns)
+ 		printf(" run_time_ns %lld run_cnt %lld",
+ 		       info->run_time_ns, info->run_cnt);
++	if (info->recursion_misses)
++		printf(" recursion_misses %lld", info->recursion_misses);
+ 	printf("\n");
+ }
+ 
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index c001766adcbc..c547ad1ffe43 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -4501,6 +4501,7 @@ struct bpf_prog_info {
+ 	__aligned_u64 prog_tags;
+ 	__u64 run_time_ns;
+ 	__u64 run_cnt;
++	__u64 recursion_misses;
+ } __attribute__((aligned(8)));
+ 
+ struct bpf_map_info {
 -- 
 2.24.1
 
