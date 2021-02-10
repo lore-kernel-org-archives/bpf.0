@@ -2,370 +2,140 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+X-Spam-Status: No, score=-6.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
 	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53931C433E6
-	for <bpf@archiver.kernel.org>; Wed, 10 Feb 2021 18:35:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D422C433E6
+	for <bpf@archiver.kernel.org>; Wed, 10 Feb 2021 18:36:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1CFC164E0B
-	for <bpf@archiver.kernel.org>; Wed, 10 Feb 2021 18:35:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 17CFA64DEC
+	for <bpf@archiver.kernel.org>; Wed, 10 Feb 2021 18:36:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233807AbhBJSfD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 10 Feb 2021 13:35:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37358 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232813AbhBJScM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 10 Feb 2021 13:32:12 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53AF7C0613D6;
-        Wed, 10 Feb 2021 10:20:32 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id q12so809543ybm.8;
-        Wed, 10 Feb 2021 10:20:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XUbrz/8xxXdqtk8DEEenUBbYYKqni3z7WGyd8h4oZBY=;
-        b=J9eWa3RpkQaebDbcQKNXKnSBZqx9C75YjbJL8V6IyuhI5IBc4sTEyLvG+Nj2s2h1QI
-         jhSEzgvIgVKtaIT4ag2tUySMoC4aVWxS74EsSqS32UDeowmR9ZQEhGxvnfv7QJG6mige
-         RY25Kww5WvRQPeKxDoL20fTVYAAEJTq30YXM+OdQnflpknrIAObdQSWoFn+flzdyrUlg
-         s4H11eYWGl5GQ0L9Cq8kGhJ+3H7t2MJtcbY353U/H38Zg6UvHhwVQeoT+kqAT3EftkrG
-         B/71zNBuxzjdUeqpCYrtFxZ8APFory4XbdMdJRayFbDKGHqodnc/5JAnY5ErdqZUQdzP
-         zPCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XUbrz/8xxXdqtk8DEEenUBbYYKqni3z7WGyd8h4oZBY=;
-        b=f2kvlMi9zca9fAY0iM5uT2hAa3cq/CJ786hhvxb8j9OTwRzWGCi7Yxnog3JQB5whgW
-         lw1bDZQc9/no2kZ55hA+X7nAreeUx9oN3cP6jbjvPDv/qaMep8qTBg9y2/JHQtGE/hk+
-         Dzkfl2EbWgbC822I4SDkHBwGYrNnFIl/CVub8uHk+vRhmJxiYNoAQ/+afeF9M8ZuQJhJ
-         V6DtHf42RXOeyMJ9SCqIayx21knz5nbl6namVCs7SzooGM9TikafDN7AwjxnnFd/UG4d
-         p6h8w+ApTyTYTzN6SwRJojJj7yHj6sSOwQoUAgXXE8wtO7b5MLqrSm3pfnrhTU7dLfCG
-         bKYA==
-X-Gm-Message-State: AOAM531p2yzc0BzOBrKh9EzVS4F8X4uxSfRQKYzdZCH17ipB2m0MECmM
-        e5gdbZkWCsdQZuF41TcHKqDO4klRNJf8API0NGoLkBCHNUTqaw==
-X-Google-Smtp-Source: ABdhPJzXyCnLbaMkBV2vpG2T7RtKv6hUcKpEzK48FT2v3pKmRsOpbI15DIMcznlQz8LOFKHrvlh+XtO4P2b/cknanIc=
-X-Received: by 2002:a25:c905:: with SMTP id z5mr5909207ybf.260.1612981231520;
- Wed, 10 Feb 2021 10:20:31 -0800 (PST)
-MIME-Version: 1.0
-References: <20210209052311.GA125918@ubuntu-m3-large-x86> <CAEf4BzZV0-zx6YKUUKmecs=icnQNXJjTokdkSAoexm36za+wdA@mail.gmail.com>
- <CAEf4BzYvri7wzRnGH_qQbavXOx5TfBA0qx4nYVnn=YNGv+vNVw@mail.gmail.com>
- <CAEf4Bzax90hn_5axpnCpW+E6gVc1mtUgCXWqmxV0tJ4Ud7bsaA@mail.gmail.com>
- <20210209074904.GA286822@ubuntu-m3-large-x86> <YCKB1TF5wz93EIBK@krava>
- <YCKlrLkTQXc4Cyx7@krava> <CAEf4BzaL=qsSyDc8OxeN4pr7+Lvv+de4f+hM5a56LY8EABAk3w@mail.gmail.com>
- <YCMEucGZVPPQuxWw@krava> <CAEf4BzacQrkSMnmeO3sunOs7sfhX1ZoD_Hnk4-cFUK-TpLNqUA@mail.gmail.com>
- <YCPfEzp3ogCBTBaS@krava>
-In-Reply-To: <YCPfEzp3ogCBTBaS@krava>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 10 Feb 2021 10:20:20 -0800
-Message-ID: <CAEf4BzbzquqsA5=_UqDukScuoGLfDhZiiXs_sgYBuNUvTBuV6w@mail.gmail.com>
-Subject: Re: FAILED unresolved symbol vfs_truncate on arm64 with LLVM
-To:     Jiri Olsa <jolsa@redhat.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        id S234234AbhBJSfw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 10 Feb 2021 13:35:52 -0500
+Received: from mail.kernel.org ([198.145.29.99]:43254 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234387AbhBJSdY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 10 Feb 2021 13:33:24 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D002064DE0;
+        Wed, 10 Feb 2021 18:31:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612981897;
+        bh=gYL7BBry8rkU7z7MEWHcDU6eN+kvdSAYABlPSp3KfXU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=UpS9cPxHtExw3QuFkTrbnT7c9U8Eo/DsYNner4QBtzugnojgObCwT5dQ9693Yrbca
+         0yEQYRRU1JO68w1zxtZy1sZKY99wZSd630YZNVv6UI7nWqycUmoDR7ZjUlf8uyCvXK
+         Ll3VEGIupaYfN5OBai6mTyQwt7/t7BdfTg8bF8e/bvwgJG4BfMHqoazdNlJGJ1vcu5
+         Szn4J84FElTBg67Gw8oVt6zRaeI7oZZJJXNmqRfBcb+TimYtGoJ4TmhrygUtGG28bR
+         o5ELIY1jvQbCmXYNnoeLKGNQDFas7QpGhUtisobILuBiUKX8+vLtv81BLFI/qpOR/h
+         WerMv9e8kPhVQ==
+Date:   Wed, 10 Feb 2021 10:31:35 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdlbnNlbg==?= <toke@redhat.com>
+Cc:     Marek Majtyka <alardam@gmail.com>,
+        Saeed Mahameed <saeed@kernel.org>,
+        David Ahern <dsahern@gmail.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Veronika Kabatova <vkabatov@redhat.com>,
-        Jiri Olsa <jolsa@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Jesper Dangaard Brouer <jbrouer@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Maciej Fijalkowski <maciejromanfijalkowski@gmail.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>, hawk@kernel.org,
+        bpf <bpf@vger.kernel.org>,
+        intel-wired-lan <intel-wired-lan@lists.osuosl.org>,
+        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
+        jeffrey.t.kirsher@intel.com
+Subject: Re: [PATCH v2 bpf 1/5] net: ethtool: add xdp properties flag set
+Message-ID: <20210210103135.38921f85@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <874kikry66.fsf@toke.dk>
+References: <20201204102901.109709-1-marekx.majtyka@intel.com>
+        <5fd068c75b92d_50ce20814@john-XPS-13-9370.notmuch>
+        <20201209095454.GA36812@ranger.igk.intel.com>
+        <20201209125223.49096d50@carbon>
+        <e1573338-17c0-48f4-b4cd-28eeb7ce699a@gmail.com>
+        <1e5e044c8382a68a8a547a1892b48fb21d53dbb9.camel@kernel.org>
+        <cb6b6f50-7cf1-6519-a87a-6b0750c24029@gmail.com>
+        <f4eb614ac91ee7623d13ea77ff3c005f678c512b.camel@kernel.org>
+        <d5be0627-6a11-9c1f-8507-cc1a1421dade@gmail.com>
+        <6f8c23d4ac60525830399754b4891c12943b63ac.camel@kernel.org>
+        <CAAOQfrHN1-oHmbOksDv-BKWv4gDF2zHZ5dTew6R_QTh6s_1abg@mail.gmail.com>
+        <87h7mvsr0e.fsf@toke.dk>
+        <CAAOQfrHA+-BsikeQzXYcK_32BZMbm54x5p5YhAiBj==uaZvG1w@mail.gmail.com>
+        <87bld2smi9.fsf@toke.dk>
+        <20210202113456.30cfe21e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <CAAOQfrGqcsn3wu5oxzHYxtE8iK3=gFdTka5HSh5Fe9Hc6HWRWA@mail.gmail.com>
+        <20210203090232.4a259958@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <874kikry66.fsf@toke.dk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Feb 10, 2021 at 5:26 AM Jiri Olsa <jolsa@redhat.com> wrote:
->
-> On Tue, Feb 09, 2021 at 02:00:29PM -0800, Andrii Nakryiko wrote:
->
-> SNIP
->
-> > > > > I'm still trying to build the kernel.. however ;-)
-> > > > >
-> > > > > patch below adds the ftrace check only for static functions
-> > > > > and lets the externa go through.. but as you said, in this
-> > > > > case we'll need to figure out the 'notrace' and other checks
-> > > > > ftrace is doing
-> > > > >
-> > > > > jirka
-> > > > >
-> > > > >
-> > > > > ---
-> > > > > diff --git a/btf_encoder.c b/btf_encoder.c
-> > > > > index b124ec20a689..4d147406cfa5 100644
-> > > > > --- a/btf_encoder.c
-> > > > > +++ b/btf_encoder.c
-> > > > > @@ -734,7 +734,7 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
-> > > > >                         continue;
-> > > > >                 if (!has_arg_names(cu, &fn->proto))
-> > > > >                         continue;
-> > > > > -               if (functions_cnt) {
-> > > > > +               if (!fn->external && functions_cnt) {
-> > > >
-> > > > I wouldn't trust DWARF, honestly. Wouldn't checking GLOBAL vs LOCAL
-> > > > FUNC ELF symbol be more reliable?
-> > >
-> > > that'd mean extra bsearch on each processed function,
-> > > on the ther hand, we'are already slow ;-) I'll check
-> > > how big the slowdown would be
-> > >
+On Wed, 10 Feb 2021 11:53:53 +0100 Toke H=C3=B8iland-J=C3=B8rgensen wrote:
+> >> I am a bit confused now. Did you mean validation tests of those XDP
+> >> flags, which I am working on or some other validation tests?
+> >> What should these tests verify? Can you please elaborate more on the
+> >> topic, please - just a few sentences how are you see it? =20
 > >
-> > We currently record addresses and do binary search. Now we need to
-> > record address + size and still do binary search with a slightly
-> > different semantics (find closest entry >= addr). Then just check that
-> > it overlaps, taking into account the length of the function code. It
-> > shouldn't result in a noticeable slowdown. Might be actually faster,
-> > because we might avoid callback function call costs.
->
-> I'm still not sure how to handle the external check for function via elf,
+> > Conformance tests can be written for all features, whether they have=20
+> > an explicit capability in the uAPI or not. But for those that do IMO
+> > the tests should be required.
+> >
+> > Let me give you an example. This set adds a bit that says Intel NICs=20
+> > can do XDP_TX and XDP_REDIRECT, yet we both know of the Tx queue
+> > shenanigans. So can i40e do XDP_REDIRECT or can it not?
+> >
+> > If we have exhaustive conformance tests we can confidently answer that
+> > question. And the answer may not be "yes" or "no", it may actually be
+> > "we need more options because many implementations fall in between".
+> >
+> > I think readable (IOW not written in some insane DSL) tests can also=20
+> > be useful for users who want to check which features their program /
+> > deployment will require. =20
+>=20
+> While I do agree that that kind of conformance test would be great, I
+> don't think it has to hold up this series (the perfect being the enemy
+> of the good, and all that). We have a real problem today that userspace
+> can't tell if a given driver implements, say, XDP_REDIRECT, and so
+> people try to use it and spend days wondering which black hole their
+> packets disappear into. And for things like container migration we need
+> to be able to predict whether a given host supports a feature *before*
+> we start the migration and try to use it.
 
-I might be missing something, but don't all functions have
-corresponding ELF symbols? And then symbol can have LOCAL or GLOBAL
-type. LOCALs are supposed to be not visible outside respective CUs (so
-correspond to static functions), while GLOBALs are extern-able funcs.
-So if func's symbol is GLOBAL, it should be ok to assume it's
-attachable (not inlined, at least).
+Unless you have a strong definition of what XDP_REDIRECT means the flag
+itself is not worth much. We're not talking about normal ethtool feature
+flags which are primarily stack-driven, XDP is implemented mostly by
+the driver, each vendor can do their own thing. Maybe I've seen one
+vendor incompatibility too many at my day job to hope for the best...
 
-> but below is change for checking that ftrace addrs are within elf functions
->
-> seems to work in my tests, I'll run some more tests and send full patch
+> I view the feature flags as a list of features *implemented* by the
+> driver. Which should be pretty static in a given kernel, but may be
+> different than the features currently *enabled* on a given system (due
+> to, e.g., the TX queue stuff).
 
-It seems unnecessarily convoluted. I was thinking about something like
-this (the diff will totally be screwed up by gmail, and I haven't even
-compiled it):
+Hm, maybe I'm not being clear enough. The way XDP_REDIRECT (your
+example) is implemented across drivers differs in a meaningful ways.=20
+Hence the need for conformance testing. We don't have a golden SW
+standard to fall back on, like we do with HW offloads.
 
-diff --git a/btf_encoder.c b/btf_encoder.c
-index b124ec20a689..8162b238bd43 100644
---- a/btf_encoder.c
-+++ b/btf_encoder.c
-@@ -236,6 +236,23 @@ get_kmod_addrs(struct btf_elf *btfe, __u64
-**paddrs, __u64 *pcount)
-        return 0;
- }
+Also IDK why those tests are considered such a huge ask. As I said most
+vendors probably already have them, and so I'd guess do good distros.
+So let's work together.
 
-+struct func_seg { __u64 start; __u64 end; };
-+
-+static int func_exists(struct func_seg *segs, size_t len, __u64 addr)
-+{
-+       size_t l = 0, r = len - 1, m;
-+
-+       while (l < r) {
-+               m = l + (r - l + 1) / 2;
-+               if (segs[m].start <= addr)
-+                       l = m;
-+               else
-+                       r = m - 1;
-+       }
-+
-+       return segs[l].start <= addr && addr < segs[l].end;
-+}
-+
- static int setup_functions(struct btf_elf *btfe, struct funcs_layout *fl)
- {
-        __u64 *addrs, count, i;
-@@ -286,7 +303,7 @@ static int setup_functions(struct btf_elf *btfe,
-struct funcs_layout *fl)
-                __u64 addr = kmod ? func->addr + func->sh_addr : func->addr;
-
-                /* Make sure function is within ftrace addresses. */
--               if (bsearch(&addr, addrs, count, sizeof(addrs[0]), addrs_cmp)) {
-+               if (func_exists(addrs, count, addr))
-                        /*
-                         * We iterate over sorted array, so we can easily skip
-                         * not valid item and move following valid field into
-
-
-So the idea is to use address segments and check whether there is a
-segment that overlaps with a given address by first binary searching
-for a segment with the largest starting address that is <= addr. And
-then just confirming that segment does overlap with the requested
-address.
-
-WDYT?
-
->
-> jirka
->
->
-> ---
-> diff --git a/btf_encoder.c b/btf_encoder.c
-> index b124ec20a689..548a12847f99 100644
-> --- a/btf_encoder.c
-> +++ b/btf_encoder.c
-> @@ -36,6 +36,7 @@ struct funcs_layout {
->  struct elf_function {
->         const char      *name;
->         unsigned long    addr;
-> +       unsigned long    end;
->         unsigned long    sh_addr;
->         bool             generated;
->  };
-> @@ -44,7 +45,7 @@ static struct elf_function *functions;
->  static int functions_alloc;
->  static int functions_cnt;
->
-> -static int functions_cmp(const void *_a, const void *_b)
-> +static int functions_cmp_name(const void *_a, const void *_b)
->  {
->         const struct elf_function *a = _a;
->         const struct elf_function *b = _b;
-> @@ -52,6 +53,16 @@ static int functions_cmp(const void *_a, const void *_b)
->         return strcmp(a->name, b->name);
->  }
->
-> +static int functions_cmp_addr(const void *_a, const void *_b)
-> +{
-> +       const struct elf_function *a = _a;
-> +       const struct elf_function *b = _b;
-> +
-> +       if (a->addr == b->addr)
-> +               return 0;
-> +       return a->addr < b->addr ? -1 : 1;
-> +}
-> +
->  static void delete_functions(void)
->  {
->         free(functions);
-> @@ -98,6 +109,7 @@ static int collect_function(struct btf_elf *btfe, GElf_Sym *sym,
->
->         functions[functions_cnt].name = name;
->         functions[functions_cnt].addr = elf_sym__value(sym);
-> +       functions[functions_cnt].end = (__u64) -1;
->         functions[functions_cnt].sh_addr = sh.sh_addr;
->         functions[functions_cnt].generated = false;
->         functions_cnt++;
-> @@ -236,9 +248,25 @@ get_kmod_addrs(struct btf_elf *btfe, __u64 **paddrs, __u64 *pcount)
->         return 0;
->  }
->
-> +static bool is_addr_in_func(__u64 addr, struct elf_function *func, bool kmod)
-> +{
-> +       /*
-> +        * For vmlinux image both addrs[x] and functions[x]::addr
-> +        * values are final address and are comparable.
-> +        *
-> +        * For kernel module addrs[x] is final address, but
-> +        * functions[x]::addr is relative address within section
-> +        * and needs to be relocated by adding sh_addr.
-> +        */
-> +       __u64 start = kmod ? func->addr + func->sh_addr : func->addr;
-> +       __u64 end = kmod ? func->end+ func->sh_addr : func->end;
-> +
-> +       return start <= addr && addr < end;
-> +}
-> +
->  static int setup_functions(struct btf_elf *btfe, struct funcs_layout *fl)
->  {
-> -       __u64 *addrs, count, i;
-> +       __u64 *addrs, count, i_func, i_addr;
->         int functions_valid = 0;
->         bool kmod = false;
->
-> @@ -266,43 +294,62 @@ static int setup_functions(struct btf_elf *btfe, struct funcs_layout *fl)
->                 return 0;
->         }
->
-> -       qsort(addrs, count, sizeof(addrs[0]), addrs_cmp);
-> -       qsort(functions, functions_cnt, sizeof(functions[0]), functions_cmp);
-> -
->         /*
-> -        * Let's got through all collected functions and filter
-> -        * out those that are not in ftrace.
-> +        * Sort both functions and addrs so we can iterate
-> +        * both of them simultaneously and found matching
-> +        * func/addr pairs.
->          */
-> -       for (i = 0; i < functions_cnt; i++) {
-> -               struct elf_function *func = &functions[i];
-> -               /*
-> -                * For vmlinux image both addrs[x] and functions[x]::addr
-> -                * values are final address and are comparable.
-> -                *
-> -                * For kernel module addrs[x] is final address, but
-> -                * functions[x]::addr is relative address within section
-> -                * and needs to be relocated by adding sh_addr.
-> -                */
-> -               __u64 addr = kmod ? func->addr + func->sh_addr : func->addr;
-> +       qsort(addrs, count, sizeof(addrs[0]), addrs_cmp);
-> +       qsort(functions, functions_cnt, sizeof(functions[0]), functions_cmp_addr);
-> +
-> +       for (i_func = 0, i_addr = 0; i_func < functions_cnt; i_func++) {
-> +               struct elf_function *func = &functions[i_func];
-> +
-> +               if (i_func + 1 < functions_cnt)
-> +                       func->end = functions[i_func + 1].addr;
-> +
-> +               for (; i_addr < count; i_addr++) {
-> +                       __u64 addr = addrs[i_addr];
-> +
-> +                       /* Functions are  ahead, catch up with addrs. */
-> +                       if (addr < func->addr)
-> +                               continue;
-> +
-> +                       /* Addr is within function - mark function as valid. */
-> +                       if (is_addr_in_func(addr, func, kmod)) {
-> +                               /*
-> +                                * We iterate over sorted array, so we can easily skip
-> +                                * not valid item and move following valid field into
-> +                                * its place, and still keep the 'new' array sorted.
-> +                                */
-> +                               if (i_func != functions_valid)
-> +                                       functions[functions_valid] = functions[i_func];
-> +                               functions_valid++;
-> +                               i_addr++;
-> +                       }
->
-> -               /* Make sure function is within ftrace addresses. */
-> -               if (bsearch(&addr, addrs, count, sizeof(addrs[0]), addrs_cmp)) {
->                         /*
-> -                        * We iterate over sorted array, so we can easily skip
-> -                        * not valid item and move following valid field into
-> -                        * its place, and still keep the 'new' array sorted.
-> +                        * Addrs are ahead, catch up with functions, or we just
-> +                        * found valid function and want to move to another.
->                          */
-> -                       if (i != functions_valid)
-> -                               functions[functions_valid] = functions[i];
-> -                       functions_valid++;
-> +                       break;
->                 }
->         }
->
-> +       if (btf_elf__verbose) {
-> +               printf("Found %d functions out of %d symbols and %llu ftrace addresses.\n",
-> +                       functions_valid, functions_cnt, count);
-> +       }
-> +
->         functions_cnt = functions_valid;
->         free(addrs);
->
-> -       if (btf_elf__verbose)
-> -               printf("Found %d functions!\n", functions_cnt);
-> +       /*
-> +        * And finaly sort 'valid' functions by name,
-> +        * so find_function can be used.
-> +        */
-> +       qsort(functions, functions_cnt, sizeof(functions[0]), functions_cmp_name);
-> +
->         return 0;
->  }
->
-> @@ -312,7 +359,7 @@ static struct elf_function *find_function(const struct btf_elf *btfe,
->         struct elf_function key = { .name = name };
->
->         return bsearch(&key, functions, functions_cnt, sizeof(functions[0]),
-> -                      functions_cmp);
-> +                      functions_cmp_name);
->  }
->
->  static bool btf_name_char_ok(char c, bool first)
->
+> The simple way to expose the latter would be to just have a second set
+> of flags indicating the current configured state; and for that I guess
+> we should at least agree what "enabled" means; and a conformance test
+> would be a way to do this, of course.
+>=20
+> I don't see why we can't do this in stages, though; start with the first
+> set of flags ('implemented'), move on to the second one ('enabled'), and
+> then to things like making the kernel react to the flags by rejecting
+> insertion into devmaps for invalid interfaces...
