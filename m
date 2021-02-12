@@ -2,275 +2,391 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-19.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E1CD9C433DB
-	for <bpf@archiver.kernel.org>; Fri, 12 Feb 2021 16:42:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BF25C433DB
+	for <bpf@archiver.kernel.org>; Fri, 12 Feb 2021 18:32:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A70BB64E7A
-	for <bpf@archiver.kernel.org>; Fri, 12 Feb 2021 16:42:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 376EE64E99
+	for <bpf@archiver.kernel.org>; Fri, 12 Feb 2021 18:32:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230495AbhBLQl5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 12 Feb 2021 11:41:57 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:52311 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229679AbhBLQkp (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 12 Feb 2021 11:40:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1613147948;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=U4WyzaFVGJo5ke7IZuHExhC34PtdB0ost6FmcFZqD6o=;
-        b=BVASB99RGk3v/tPwYzi88MudWw2zyShB+HFZjAJzGTokaQWrFx8eA0FNZLAUkwtYSuSYI1
-        /+VeNWHTRTJJ0Ek6Zr1GYxST2IXpUp+iStZIGkTPQrQZYYxcJXNIEn9CkEmyNLnA/EkPnE
-        fvjezeOd00iI8/P3jBA388/reCQ8DNM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-20-c3Hmb8OLMNuFqTJzA6W-PQ-1; Fri, 12 Feb 2021 11:39:04 -0500
-X-MC-Unique: c3Hmb8OLMNuFqTJzA6W-PQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 74D39AFA81;
-        Fri, 12 Feb 2021 16:39:02 +0000 (UTC)
-Received: from krava (unknown [10.40.193.141])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 2D2D819D6C;
-        Fri, 12 Feb 2021 16:38:59 +0000 (UTC)
-Date:   Fri, 12 Feb 2021 17:38:58 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Veronika Kabatova <vkabatov@redhat.com>,
-        Jiri Olsa <jolsa@kernel.org>
-Subject: Re: FAILED unresolved symbol vfs_truncate on arm64 with LLVM
-Message-ID: <YCavItKm0mKxcVQD@krava>
-References: <YCKB1TF5wz93EIBK@krava>
- <YCKlrLkTQXc4Cyx7@krava>
- <CAEf4BzaL=qsSyDc8OxeN4pr7+Lvv+de4f+hM5a56LY8EABAk3w@mail.gmail.com>
- <YCMEucGZVPPQuxWw@krava>
- <CAEf4BzacQrkSMnmeO3sunOs7sfhX1ZoD_Hnk4-cFUK-TpLNqUA@mail.gmail.com>
- <YCPfEzp3ogCBTBaS@krava>
- <CAEf4BzbzquqsA5=_UqDukScuoGLfDhZiiXs_sgYBuNUvTBuV6w@mail.gmail.com>
- <YCQ+d0CVgIclDwng@krava>
- <YCVIWzq0quDQm6bn@krava>
- <CAEf4Bzbt2-Mn4+y0c+sSZWUSrP705c_e3SxedjV_xYGPQL79=w@mail.gmail.com>
+        id S231401AbhBLScD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 12 Feb 2021 13:32:03 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:54034 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230053AbhBLScC (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 12 Feb 2021 13:32:02 -0500
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 11CIFFi1010207
+        for <bpf@vger.kernel.org>; Fri, 12 Feb 2021 10:31:22 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=wMrsqJYwN420bFfUvGfPI7mw+h4y4B8OX7GZP160nik=;
+ b=AOK0ebpBsUq/f+plKqii+gp2J07MpGTXwh2Mc8TVBZQoGFCMcqZny0mpDE0FrLc9Lph+
+ tMNoeOW1SB5fMyOxCvdtr1B22CdPBIjPw41OboDVkgg1iH38LMUPbH9oMpU9bJnVVWfW
+ yhPiri4z4ewVp8aowOaenhPVWImuf8JLkWc= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 36n62t8355-6
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Fri, 12 Feb 2021 10:31:21 -0800
+Received: from intmgw001.05.ash7.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Fri, 12 Feb 2021 10:31:18 -0800
+Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
+        id 864BF62E0BAC; Fri, 12 Feb 2021 10:31:17 -0800 (PST)
+From:   Song Liu <songliubraving@fb.com>
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-mm@kvack.org>
+CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <kernel-team@fb.com>,
+        <akpm@linux-foundation.org>, Song Liu <songliubraving@fb.com>,
+        Yonghong Song <yhs@fb.com>
+Subject: [PATCH v7 bpf-next 1/3] bpf: introduce task_vma bpf_iter
+Date:   Fri, 12 Feb 2021 10:31:05 -0800
+Message-ID: <20210212183107.50963-2-songliubraving@fb.com>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20210212183107.50963-1-songliubraving@fb.com>
+References: <20210212183107.50963-1-songliubraving@fb.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4Bzbt2-Mn4+y0c+sSZWUSrP705c_e3SxedjV_xYGPQL79=w@mail.gmail.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.737
+ definitions=2021-02-12_07:2021-02-12,2021-02-12 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
+ mlxlogscore=999 malwarescore=0 adultscore=0 phishscore=0
+ priorityscore=1501 clxscore=1015 bulkscore=0 lowpriorityscore=0
+ suspectscore=0 mlxscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2009150000 definitions=main-2102120135
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Feb 11, 2021 at 11:59:02AM -0800, Andrii Nakryiko wrote:
+Introduce task_vma bpf_iter to print memory information of a process. It
+can be used to print customized information similar to /proc/<pid>/maps.
 
-SNIP
+Current /proc/<pid>/maps and /proc/<pid>/smaps provide information of
+vma's of a process. However, these information are not flexible enough to
+cover all use cases. For example, if a vma cover mixed 2MB pages and 4kB
+pages (x86_64), there is no easy way to tell which address ranges are
+backed by 2MB pages. task_vma solves the problem by enabling the user to
+generate customize information based on the vma (and vma->vm_mm,
+vma->vm_file, etc.).
 
-> 
-> So in my previous example I assumed we have address ranges for ftrace
-> section, which is exactly the opposite from what we have. So this
-> binary search should be a bit different. start <= addr seems wrong
-> here as well.
-> 
-> The invariant here should be that addr[r] is the smallest address that
-> is >= than function start addr, right? Except the corner case where
-> there is no such r, but for that we have a final check in the return
-> below. If you wanted to use index l, you'd need to change the
-> invariant to find the largest addr, such that it is < end, but that
-> seems a bit convoluted.
-> 
-> So, with that, I think it should be like this:
-> 
-> size_t l = 0, r = count - 1, m;
-> 
-> /* make sure we don't use invalid r */
-> if (count == 0) return false;
-> 
-> while (l < r) {
->     /* note no +1 in this case, it's so that at the end, when you
->      * have, say, l = 0, and r = 1, you try l first, not r.
->      * Otherwise you might end in in the infinite loop when r never == l.
->      */
->     m = l + (r - l) / 2;
->     addr = addrs[m];
-> 
->     if (addr >= start)
->         /* we satisfy invariant, so tighten r */
->         r = m;
->     else
->         /* m is not good enough as l, maybe m + 1 will be */
->         l = m + 1;
-> }
-> 
-> return start <= addrs[r] && addrs[r] < end;
-> 
-> 
-> So, basically, r is maintained as a valid index always, while we
-> constantly try to tighten the l.
-> 
-> Does this make sense?
+To access the vma safely in the BPF program, task_vma iterator holds
+target mmap_lock while calling the BPF program. If the mmap_lock is
+contended, task_vma unlocks mmap_lock between iterations to unblock the
+writer(s). This lock contention avoidance mechanism is similar to the one
+used in show_smaps_rollup().
 
-another take ;-)
-
-jirka
-
-
+Acked-by: Yonghong Song <yhs@fb.com>
+Signed-off-by: Song Liu <songliubraving@fb.com>
 ---
-diff --git a/btf_encoder.c b/btf_encoder.c
-index b124ec20a689..20a93ed60e52 100644
---- a/btf_encoder.c
-+++ b/btf_encoder.c
-@@ -36,6 +36,7 @@ struct funcs_layout {
- struct elf_function {
- 	const char	*name;
- 	unsigned long	 addr;
-+	unsigned long	 size;
- 	unsigned long	 sh_addr;
- 	bool		 generated;
+ kernel/bpf/task_iter.c | 267 ++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 266 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
+index 175b7b42bfc46..b68cb5d6d6ebc 100644
+--- a/kernel/bpf/task_iter.c
++++ b/kernel/bpf/task_iter.c
+@@ -286,9 +286,248 @@ static const struct seq_operations task_file_seq_op=
+s =3D {
+ 	.show	=3D task_file_seq_show,
  };
-@@ -44,7 +45,7 @@ static struct elf_function *functions;
- static int functions_alloc;
- static int functions_cnt;
- 
--static int functions_cmp(const void *_a, const void *_b)
-+static int functions_cmp_name(const void *_a, const void *_b)
- {
- 	const struct elf_function *a = _a;
- 	const struct elf_function *b = _b;
-@@ -52,6 +53,16 @@ static int functions_cmp(const void *_a, const void *_b)
- 	return strcmp(a->name, b->name);
- }
- 
-+static int functions_cmp_addr(const void *_a, const void *_b)
-+{
-+	const struct elf_function *a = _a;
-+	const struct elf_function *b = _b;
-+
-+	if (a->addr == b->addr)
-+		return 0;
-+	return a->addr < b->addr ? -1 : 1;
-+}
-+
- static void delete_functions(void)
- {
- 	free(functions);
-@@ -98,6 +109,7 @@ static int collect_function(struct btf_elf *btfe, GElf_Sym *sym,
- 
- 	functions[functions_cnt].name = name;
- 	functions[functions_cnt].addr = elf_sym__value(sym);
-+	functions[functions_cnt].size = elf_sym__size(sym);
- 	functions[functions_cnt].sh_addr = sh.sh_addr;
- 	functions[functions_cnt].generated = false;
- 	functions_cnt++;
-@@ -236,6 +248,48 @@ get_kmod_addrs(struct btf_elf *btfe, __u64 **paddrs, __u64 *pcount)
- 	return 0;
- }
- 
-+static int is_ftrace_func(struct elf_function *func, __u64 *addrs,
-+			  __u64 count, bool kmod)
-+{
-+	/*
-+	 * For vmlinux image both addrs[x] and functions[x]::addr
-+	 * values are final address and are comparable.
-+	 *
-+	 * For kernel module addrs[x] is final address, but
-+	 * functions[x]::addr is relative address within section
-+	 * and needs to be relocated by adding sh_addr.
+=20
++struct bpf_iter_seq_task_vma_info {
++	/* The first field must be struct bpf_iter_seq_task_common.
++	 * this is assumed by {init, fini}_seq_pidns() callback functions.
 +	 */
-+	__u64 start = kmod ? func->addr + func->sh_addr : func->addr;
-+	__u64 addr, end = func->addr + func->size;
++	struct bpf_iter_seq_task_common common;
++	struct task_struct *task;
++	struct vm_area_struct *vma;
++	u32 tid;
++	unsigned long prev_vm_start;
++	unsigned long prev_vm_end;
++};
 +
-+	/*
-+	 * The invariant here is addr[r] that is the smallest address
-+	 * that is >= than function start addr. Except the corner case
-+	 * where there is no such r, but for that we have a final check
-+	 * in the return.
++enum bpf_task_vma_iter_find_op {
++	task_vma_iter_first_vma,   /* use mm->mmap */
++	task_vma_iter_next_vma,    /* use curr_vma->vm_next */
++	task_vma_iter_find_vma,    /* use find_vma() to find next vma */
++};
++
++static struct vm_area_struct *
++task_vma_seq_get_next(struct bpf_iter_seq_task_vma_info *info)
++{
++	struct pid_namespace *ns =3D info->common.ns;
++	enum bpf_task_vma_iter_find_op op;
++	struct vm_area_struct *curr_vma;
++	struct task_struct *curr_task;
++	u32 curr_tid =3D info->tid;
++
++	/* If this function returns a non-NULL vma, it holds a reference to
++	 * the task_struct, and holds read lock on vma->mm->mmap_lock.
++	 * If this function returns NULL, it does not hold any reference or
++	 * lock.
 +	 */
-+	size_t l = 0, r = count - 1, m;
-+
-+	/* make sure we don't use invalid r */
-+	if (count == 0)
-+		return false;
-+
-+	while (l < r) {
-+		m = l + (r - l) / 2;
-+		addr = addrs[m];
-+
-+		if (addr >= start) {
-+			/* we satisfy invariant, so tighten r */
-+			r = m;
++	if (info->task) {
++		curr_task =3D info->task;
++		curr_vma =3D info->vma;
++		/* In case of lock contention, drop mmap_lock to unblock
++		 * the writer.
++		 *
++		 * After relock, call find(mm, prev_vm_end - 1) to find
++		 * new vma to process.
++		 *
++		 *   +------+------+-----------+
++		 *   | VMA1 | VMA2 | VMA3      |
++		 *   +------+------+-----------+
++		 *   |      |      |           |
++		 *  4k     8k     16k         400k
++		 *
++		 * For example, curr_vma =3D=3D VMA2. Before unlock, we set
++		 *
++		 *    prev_vm_start =3D 8k
++		 *    prev_vm_end   =3D 16k
++		 *
++		 * There are a few cases:
++		 *
++		 * 1) VMA2 is freed, but VMA3 exists.
++		 *
++		 *    find_vma() will return VMA3, just process VMA3.
++		 *
++		 * 2) VMA2 still exists.
++		 *
++		 *    find_vma() will return VMA2, process VMA2->next.
++		 *
++		 * 3) no more vma in this mm.
++		 *
++		 *    Process the next task.
++		 *
++		 * 4) find_vma() returns a different vma, VMA2'.
++		 *
++		 *    4.1) If VMA2 covers same range as VMA2', skip VMA2',
++		 *         because we already covered the range;
++		 *    4.2) VMA2 and VMA2' covers different ranges, process
++		 *         VMA2'.
++		 */
++		if (mmap_lock_is_contended(curr_task->mm)) {
++			info->prev_vm_start =3D curr_vma->vm_start;
++			info->prev_vm_end =3D curr_vma->vm_end;
++			op =3D task_vma_iter_find_vma;
++			mmap_read_unlock(curr_task->mm);
++			if (mmap_read_lock_killable(curr_task->mm))
++				goto finish;
 +		} else {
-+			/* m is not good enough as l, maybe m + 1 will be */
-+			l = m + 1;
++			op =3D task_vma_iter_next_vma;
 +		}
++	} else {
++again:
++		curr_task =3D task_seq_get_next(ns, &curr_tid, true);
++		if (!curr_task) {
++			info->tid =3D curr_tid + 1;
++			goto finish;
++		}
++
++		if (curr_tid !=3D info->tid) {
++			info->tid =3D curr_tid;
++			/* new task, process the first vma */
++			op =3D task_vma_iter_first_vma;
++		} else {
++			/* Found the same tid, which means the user space
++			 * finished data in previous buffer and read more.
++			 * We dropped mmap_lock before returning to user
++			 * space, so it is necessary to use find_vma() to
++			 * find the next vma to process.
++			 */
++			op =3D task_vma_iter_find_vma;
++		}
++
++		if (!curr_task->mm)
++			goto next_task;
++
++		if (mmap_read_lock_killable(curr_task->mm))
++			goto finish;
 +	}
 +
-+	return start <= addrs[r] && addrs[r] < end;
++	switch (op) {
++	case task_vma_iter_first_vma:
++		curr_vma =3D curr_task->mm->mmap;
++		break;
++	case task_vma_iter_next_vma:
++		curr_vma =3D curr_vma->vm_next;
++		break;
++	case task_vma_iter_find_vma:
++		/* We dropped mmap_lock so it is necessary to use find_vma
++		 * to find the next vma. This is similar to the  mechanism
++		 * in show_smaps_rollup().
++		 */
++		curr_vma =3D find_vma(curr_task->mm, info->prev_vm_end - 1);
++		/* case 1) and 4.2) above just use curr_vma */
++
++		/* check for case 2) or case 4.1) above */
++		if (curr_vma &&
++		    curr_vma->vm_start =3D=3D info->prev_vm_start &&
++		    curr_vma->vm_end =3D=3D info->prev_vm_end)
++			curr_vma =3D curr_vma->vm_next;
++		break;
++	}
++	if (!curr_vma) {
++		/* case 3) above, or case 2) 4.1) with vma->next =3D=3D NULL */
++		mmap_read_unlock(curr_task->mm);
++		goto next_task;
++	}
++	info->task =3D curr_task;
++	info->vma =3D curr_vma;
++	return curr_vma;
++
++next_task:
++	put_task_struct(curr_task);
++	info->task =3D NULL;
++	curr_tid++;
++	goto again;
++
++finish:
++	if (curr_task)
++		put_task_struct(curr_task);
++	info->task =3D NULL;
++	info->vma =3D NULL;
++	return NULL;
 +}
 +
- static int setup_functions(struct btf_elf *btfe, struct funcs_layout *fl)
- {
- 	__u64 *addrs, count, i;
-@@ -267,7 +321,7 @@ static int setup_functions(struct btf_elf *btfe, struct funcs_layout *fl)
- 	}
- 
- 	qsort(addrs, count, sizeof(addrs[0]), addrs_cmp);
--	qsort(functions, functions_cnt, sizeof(functions[0]), functions_cmp);
-+	qsort(functions, functions_cnt, sizeof(functions[0]), functions_cmp_addr);
- 
- 	/*
- 	 * Let's got through all collected functions and filter
-@@ -275,18 +329,9 @@ static int setup_functions(struct btf_elf *btfe, struct funcs_layout *fl)
- 	 */
- 	for (i = 0; i < functions_cnt; i++) {
- 		struct elf_function *func = &functions[i];
--		/*
--		 * For vmlinux image both addrs[x] and functions[x]::addr
--		 * values are final address and are comparable.
--		 *
--		 * For kernel module addrs[x] is final address, but
--		 * functions[x]::addr is relative address within section
--		 * and needs to be relocated by adding sh_addr.
--		 */
--		__u64 addr = kmod ? func->addr + func->sh_addr : func->addr;
- 
- 		/* Make sure function is within ftrace addresses. */
--		if (bsearch(&addr, addrs, count, sizeof(addrs[0]), addrs_cmp)) {
-+		if (is_ftrace_func(func, addrs, count, kmod)) {
- 			/*
- 			 * We iterate over sorted array, so we can easily skip
- 			 * not valid item and move following valid field into
-@@ -303,6 +348,8 @@ static int setup_functions(struct btf_elf *btfe, struct funcs_layout *fl)
- 
- 	if (btf_elf__verbose)
- 		printf("Found %d functions!\n", functions_cnt);
++static void *task_vma_seq_start(struct seq_file *seq, loff_t *pos)
++{
++	struct bpf_iter_seq_task_vma_info *info =3D seq->private;
++	struct vm_area_struct *vma;
 +
-+	qsort(functions, functions_cnt, sizeof(functions[0]), functions_cmp_name);
- 	return 0;
++	vma =3D task_vma_seq_get_next(info);
++	if (vma && *pos =3D=3D 0)
++		++*pos;
++
++	return vma;
++}
++
++static void *task_vma_seq_next(struct seq_file *seq, void *v, loff_t *po=
+s)
++{
++	struct bpf_iter_seq_task_vma_info *info =3D seq->private;
++
++	++*pos;
++	return task_vma_seq_get_next(info);
++}
++
++struct bpf_iter__task_vma {
++	__bpf_md_ptr(struct bpf_iter_meta *, meta);
++	__bpf_md_ptr(struct task_struct *, task);
++	__bpf_md_ptr(struct vm_area_struct *, vma);
++};
++
++DEFINE_BPF_ITER_FUNC(task_vma, struct bpf_iter_meta *meta,
++		     struct task_struct *task, struct vm_area_struct *vma)
++
++static int __task_vma_seq_show(struct seq_file *seq, bool in_stop)
++{
++	struct bpf_iter_seq_task_vma_info *info =3D seq->private;
++	struct bpf_iter__task_vma ctx;
++	struct bpf_iter_meta meta;
++	struct bpf_prog *prog;
++
++	meta.seq =3D seq;
++	prog =3D bpf_iter_get_info(&meta, in_stop);
++	if (!prog)
++		return 0;
++
++	ctx.meta =3D &meta;
++	ctx.task =3D info->task;
++	ctx.vma =3D info->vma;
++	return bpf_iter_run_prog(prog, &ctx);
++}
++
++static int task_vma_seq_show(struct seq_file *seq, void *v)
++{
++	return __task_vma_seq_show(seq, false);
++}
++
++static void task_vma_seq_stop(struct seq_file *seq, void *v)
++{
++	struct bpf_iter_seq_task_vma_info *info =3D seq->private;
++
++	if (!v) {
++		(void)__task_vma_seq_show(seq, true);
++	} else {
++		/* info->vma has not been seen by the BPF program. If the
++		 * user space reads more, task_vma_seq_get_next should
++		 * return this vma again. Set prev_vm_start to ~0UL,
++		 * so that we don't skip the vma returned by the next
++		 * find_vma() (case task_vma_iter_find_vma in
++		 * task_vma_seq_get_next()).
++		 */
++		info->prev_vm_start =3D ~0UL;
++		info->prev_vm_end =3D info->vma->vm_end;
++		mmap_read_unlock(info->task->mm);
++		put_task_struct(info->task);
++		info->task =3D NULL;
++	}
++}
++
++static const struct seq_operations task_vma_seq_ops =3D {
++	.start	=3D task_vma_seq_start,
++	.next	=3D task_vma_seq_next,
++	.stop	=3D task_vma_seq_stop,
++	.show	=3D task_vma_seq_show,
++};
++
+ BTF_ID_LIST(btf_task_file_ids)
+ BTF_ID(struct, task_struct)
+ BTF_ID(struct, file)
++BTF_ID(struct, vm_area_struct)
+=20
+ static const struct bpf_iter_seq_info task_seq_info =3D {
+ 	.seq_ops		=3D &task_seq_ops,
+@@ -328,6 +567,26 @@ static struct bpf_iter_reg task_file_reg_info =3D {
+ 	.seq_info		=3D &task_file_seq_info,
+ };
+=20
++static const struct bpf_iter_seq_info task_vma_seq_info =3D {
++	.seq_ops		=3D &task_vma_seq_ops,
++	.init_seq_private	=3D init_seq_pidns,
++	.fini_seq_private	=3D fini_seq_pidns,
++	.seq_priv_size		=3D sizeof(struct bpf_iter_seq_task_vma_info),
++};
++
++static struct bpf_iter_reg task_vma_reg_info =3D {
++	.target			=3D "task_vma",
++	.feature		=3D BPF_ITER_RESCHED,
++	.ctx_arg_info_size	=3D 2,
++	.ctx_arg_info		=3D {
++		{ offsetof(struct bpf_iter__task_vma, task),
++		  PTR_TO_BTF_ID_OR_NULL },
++		{ offsetof(struct bpf_iter__task_vma, vma),
++		  PTR_TO_BTF_ID_OR_NULL },
++	},
++	.seq_info		=3D &task_vma_seq_info,
++};
++
+ static int __init task_iter_init(void)
+ {
+ 	int ret;
+@@ -339,6 +598,12 @@ static int __init task_iter_init(void)
+=20
+ 	task_file_reg_info.ctx_arg_info[0].btf_id =3D btf_task_file_ids[0];
+ 	task_file_reg_info.ctx_arg_info[1].btf_id =3D btf_task_file_ids[1];
+-	return bpf_iter_reg_target(&task_file_reg_info);
++	ret =3D  bpf_iter_reg_target(&task_file_reg_info);
++	if (ret)
++		return ret;
++
++	task_vma_reg_info.ctx_arg_info[0].btf_id =3D btf_task_file_ids[0];
++	task_vma_reg_info.ctx_arg_info[1].btf_id =3D btf_task_file_ids[2];
++	return bpf_iter_reg_target(&task_vma_reg_info);
  }
- 
-@@ -312,7 +359,7 @@ static struct elf_function *find_function(const struct btf_elf *btfe,
- 	struct elf_function key = { .name = name };
- 
- 	return bsearch(&key, functions, functions_cnt, sizeof(functions[0]),
--		       functions_cmp);
-+		       functions_cmp_name);
- }
- 
- static bool btf_name_char_ok(char c, bool first)
+ late_initcall(task_iter_init);
+--=20
+2.24.1
 
