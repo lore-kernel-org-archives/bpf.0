@@ -2,56 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-14.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 00472C433E0
-	for <bpf@archiver.kernel.org>; Fri, 12 Feb 2021 18:32:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5DDFC433E6
+	for <bpf@archiver.kernel.org>; Fri, 12 Feb 2021 18:32:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C36B264E8E
-	for <bpf@archiver.kernel.org>; Fri, 12 Feb 2021 18:32:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A03D064E8E
+	for <bpf@archiver.kernel.org>; Fri, 12 Feb 2021 18:32:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231508AbhBLScF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 12 Feb 2021 13:32:05 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:12680 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231348AbhBLScE (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 12 Feb 2021 13:32:04 -0500
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 11CIEQW3031006
-        for <bpf@vger.kernel.org>; Fri, 12 Feb 2021 10:31:23 -0800
+        id S231304AbhBLScC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 12 Feb 2021 13:32:02 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:55162 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231290AbhBLScC (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 12 Feb 2021 13:32:02 -0500
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 11CIHvDG001574
+        for <bpf@vger.kernel.org>; Fri, 12 Feb 2021 10:31:22 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=issmkfIXld1T6oHUwy9rP+uOZsfHss4Hs+gwNgCtoHo=;
- b=TuS3px1zaSVxzndIwB+DRXGE9koQPlQsBt9s+b1XuMXGgMcElKmbqrRhZW1hJpJEwFJ+
- o8YFB80lYvXBmquMD/TVCwk3tTPi4zA9n34b7JZxlR1jde7w5azNJYJ6z+0HpdlTMXrm
- c26hmM5c2wYv4tLTWLoTCVsCtMte8tj8GVU= 
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=facebook; bh=7JFSIGUJhHMizMDcRYz8h2Seo9CVxarDUUmp5pCFxUs=;
+ b=VaNXSBLEfvSvZc8h7kUx53PHoFGV/av5VTvQQcRemp27/7f5N6AoiAQvjNnTLYAq97VW
+ KkDEP4LiBHITTXlYPvIauVrbOYAnMoKMy6+DR02X0U+1i23Be1FTTiUwSIMg18Nf0a0D
+ 6cUKi5sppQT5SEmXBmBDz1h0COhi5OIrpmg= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 36nv0m950y-2
+        by mx0a-00082601.pphosted.com with ESMTP id 36mr6jbrbn-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 12 Feb 2021 10:31:23 -0800
-Received: from intmgw006.03.ash8.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 12 Feb 2021 10:31:22 -0800
+Received: from intmgw001.37.frc1.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Fri, 12 Feb 2021 10:31:22 -0800
+ 15.1.1979.3; Fri, 12 Feb 2021 10:31:21 -0800
 Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id 2A15662E0BAC; Fri, 12 Feb 2021 10:31:21 -0800 (PST)
+        id 7780662E0BAC; Fri, 12 Feb 2021 10:31:14 -0800 (PST)
 From:   Song Liu <songliubraving@fb.com>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
         <linux-mm@kvack.org>
 CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <kernel-team@fb.com>,
-        <akpm@linux-foundation.org>, Song Liu <songliubraving@fb.com>,
-        Yonghong Song <yhs@fb.com>
-Subject: [PATCH v7 bpf-next 2/3] bpf: allow bpf_d_path in bpf_iter program
-Date:   Fri, 12 Feb 2021 10:31:06 -0800
-Message-ID: <20210212183107.50963-3-songliubraving@fb.com>
+        <akpm@linux-foundation.org>, Song Liu <songliubraving@fb.com>
+Subject: [PATCH v7 bpf-next 0/3] introduce bpf_iter for task_vma
+Date:   Fri, 12 Feb 2021 10:31:04 -0800
+Message-ID: <20210212183107.50963-1-songliubraving@fb.com>
 X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20210212183107.50963-1-songliubraving@fb.com>
-References: <20210212183107.50963-1-songliubraving@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
@@ -59,39 +54,71 @@ Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.737
  definitions=2021-02-12_07:2021-02-12,2021-02-12 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0
- priorityscore=1501 malwarescore=0 clxscore=1015 impostorscore=0
- lowpriorityscore=0 adultscore=0 suspectscore=0 spamscore=0 mlxscore=0
- mlxlogscore=640 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ mlxlogscore=853 impostorscore=0 lowpriorityscore=0 adultscore=0
+ clxscore=1015 spamscore=0 mlxscore=0 bulkscore=0 suspectscore=0
+ priorityscore=1501 malwarescore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.12.0-2009150000 definitions=main-2102120135
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-task_file and task_vma iter programs have access to file->f_path. Enable
-bpf_d_path to print paths of these file.
+This set introduces bpf_iter for task_vma, which can be used to generate
+information similar to /proc/pid/maps. Patch 4/4 adds an example that
+mimics /proc/pid/maps.
 
-Acked-by: Yonghong Song <yhs@fb.com>
-Signed-off-by: Song Liu <songliubraving@fb.com>
----
- kernel/trace/bpf_trace.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Current /proc/<pid>/maps and /proc/<pid>/smaps provide information of
+vma's of a process. However, these information are not flexible enough to
+cover all use cases. For example, if a vma cover mixed 2MB pages and 4kB
+pages (x86_64), there is no easy way to tell which address ranges are
+backed by 2MB pages. task_vma solves the problem by enabling the user to
+generate customize information based on the vma (and vma->vm_mm,
+vma->vm_file, etc.).
 
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 6c0018abe68a0..4959da1a33d2e 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -1191,6 +1191,10 @@ BTF_SET_END(btf_allowlist_d_path)
-=20
- static bool bpf_d_path_allowed(const struct bpf_prog *prog)
- {
-+	if (prog->type =3D=3D BPF_PROG_TYPE_TRACING &&
-+	    prog->expected_attach_type =3D=3D BPF_TRACE_ITER)
-+		return true;
-+
- 	if (prog->type =3D=3D BPF_PROG_TYPE_LSM)
- 		return bpf_lsm_is_sleepable_hook(prog->aux->attach_btf_id);
-=20
---=20
+Changes v6 =3D> v7:
+  1. Let BPF iter program use bpf_d_path without specifying sleepable.
+     (Alexei)
+
+Changes v5 =3D> v6:
+  1. Add more comments for task_vma_seq_get_next() to explain the logic
+     of find_vma() calls. (Alexei)
+  2. Skip vma found by find_vma() when both vm_start and vm_end matches
+     prev_vm_[start|end]. Previous versions only compares vm_start.
+     IOW, if vma of [4k, 8k] is replaced by [4k, 12k] after relocking
+     mmap_lock, v5 will skip the new vma, while v6 will process it.
+
+Changes v4 =3D> v5:
+  1. Fix a refcount leak on task_struct. (Yonghong)
+  2. Fix the selftest. (Yonghong)
+
+Changes v3 =3D> v4:
+  1. Avoid skipping vma by assigning invalid prev_vm_start in
+     task_vma_seq_stop(). (Yonghong)
+  2. Move "again" label in task_vma_seq_get_next() save a check. (Yonghon=
+g)
+
+Changes v2 =3D> v3:
+  1. Rewrite 1/4 so that we hold mmap_lock while calling BPF program. Thi=
+s
+     enables the BPF program to access the real vma with BTF. (Alexei)
+  2. Fix the logic when the control is returned to user space. (Yonghong)
+  3. Revise commit log and cover letter. (Yonghong)
+
+Changes v1 =3D> v2:
+  1. Small fixes in task_iter.c and the selftests. (Yonghong)
+
+Song Liu (3):
+  bpf: introduce task_vma bpf_iter
+  bpf: allow bpf_d_path in bpf_iter program
+  selftests/bpf: add test for bpf_iter_task_vma
+
+ kernel/bpf/task_iter.c                        | 267 +++++++++++++++++-
+ kernel/trace/bpf_trace.c                      |   4 +
+ .../selftests/bpf/prog_tests/bpf_iter.c       | 118 +++++++-
+ tools/testing/selftests/bpf/progs/bpf_iter.h  |   8 +
+ .../selftests/bpf/progs/bpf_iter_task_vma.c   |  58 ++++
+ 5 files changed, 444 insertions(+), 11 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_task_vma.c
+
+--
 2.24.1
-
