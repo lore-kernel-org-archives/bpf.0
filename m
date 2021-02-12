@@ -5,56 +5,56 @@ X-Spam-Level:
 X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD293C433DB
-	for <bpf@archiver.kernel.org>; Fri, 12 Feb 2021 10:59:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00A3AC433DB
+	for <bpf@archiver.kernel.org>; Fri, 12 Feb 2021 11:03:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 716E164E6C
-	for <bpf@archiver.kernel.org>; Fri, 12 Feb 2021 10:59:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BED9664E6C
+	for <bpf@archiver.kernel.org>; Fri, 12 Feb 2021 11:03:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229650AbhBLK7n (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 12 Feb 2021 05:59:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49364 "EHLO
+        id S230477AbhBLLC0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 12 Feb 2021 06:02:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230280AbhBLK7k (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 12 Feb 2021 05:59:40 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BADCCC061756
-        for <bpf@vger.kernel.org>; Fri, 12 Feb 2021 02:58:54 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id v24so12473683lfr.7
-        for <bpf@vger.kernel.org>; Fri, 12 Feb 2021 02:58:54 -0800 (PST)
+        with ESMTP id S230399AbhBLLAm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 12 Feb 2021 06:00:42 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D20DFC061756
+        for <bpf@vger.kernel.org>; Fri, 12 Feb 2021 02:59:51 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id j19so12446420lfr.12
+        for <bpf@vger.kernel.org>; Fri, 12 Feb 2021 02:59:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=aCdl6xS/yVJp5Nl7mhEYBP6S5Y+b/9q9qCwgCmlGQQE=;
-        b=Nd7D08C6QZXWVMkUKkcBrBPmPLJ8Y9A5p66s4YYeO/KTmwpLyUnfNViVHreZxOYt8f
-         16Mwfe20mTpDdjMeNttWSo95sPFFGTsu9b9YKUUnTuClYDXEGativjGB7D82W7oyfQ8u
-         wRt7xbuzJWyziuaaUSSvE1BQNaHaLzMCGGNVk=
+        bh=4iJ7UrLQLN4No3RYgCtbCpWKKsSe1h3yHMmFC+swKUY=;
+        b=d1eZenfKTiRbgQJJ6zdV5C0OSq6GTfsNg01uQagm4lF4SB1Be6ClhSNUvePhX/+9FK
+         vBc54GcHwiWzTGhHo+lCLs+BP5M3+LWAV1NClScLT9xrvJgRMzWRn77CL0M1+haPLkCq
+         N4GHs2fZ1pyFWb3ftgNOyJ4VsDmzT7WXgerH8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=aCdl6xS/yVJp5Nl7mhEYBP6S5Y+b/9q9qCwgCmlGQQE=;
-        b=Gtz0/TCc+c3P9ZC45bIjVlLdFbyubuZOru3k71+T3XnMz/JVajCpMYppQTowgIu/os
-         3LYYcFq4weCjiwvfCg/v7Q60ISHCMUWcM9s+2rUg91UYUvg+1aBODzXN9x+FC1RQoA7P
-         I5Nfyk3D/fDewq1aYaj5NcaCyRREUrIMWqSrLVHErdrR33xcRfmBBFFTOzfW9ImivS9W
-         dPHBirhFyOiopQ5vKwuwBzgQxxvEEWMmovLO+VFcGF/KdE5K6NwWDEK6wIKtNOpDVssB
-         ZLAUSCgftGRrjmcRpPLWbJ4veLc7lK4ebvUp4Xefg4ZZgBCaxd7I16d1e3Ntbec5bM4o
-         keRQ==
-X-Gm-Message-State: AOAM530Rrgqigf7Zi3XAKlTqt43flcm65M4BcHud0yYN4fOVhHomDgm7
-        l5VomA7iAdsMg1KnEfpf68FrxpB5hqPIvzw+bfjx8g==
-X-Google-Smtp-Source: ABdhPJyjtQBACFtEed271bZN/M1Ef3JGWDwWO+HQflqG73mqOtcxmBfewpTme7AHwhpdOwDFK/MzF8btczQdpqj2TUA=
-X-Received: by 2002:ac2:58f8:: with SMTP id v24mr1318891lfo.56.1613127533108;
- Fri, 12 Feb 2021 02:58:53 -0800 (PST)
+        bh=4iJ7UrLQLN4No3RYgCtbCpWKKsSe1h3yHMmFC+swKUY=;
+        b=X7DYpBEDUHmp/P6MBWwQLYfn9XD3Ofs2V3rQ38tO7l6q470TmA13M+07RdzVRVk54S
+         gg2//3f6iucWAyFeMD6dxiJ6gjsdHKR3TC4iOcY/uNSwTRtGHW/VXHQLZV225ycmtvwF
+         EP3P6fg53eazyi2051xLmmEwecHlCjpuG3gmXHCocmeGalyFo9upcrJ6rAG9TEbbtlJX
+         gKDsnNOKlaqwRIafnd4UQNVWd1VfO9LngUElDndhtBN/WF/FEK8rOzs+Uq7mO4XWSYgS
+         HGaDXf5S6voty/kFtH7Cq0geWzJpSGWgMNX0c0y5AO6B02FFjhk1UxCqoFWIvxsraSyF
+         KD1g==
+X-Gm-Message-State: AOAM532EAZrzZWT+FTfWSYPfxk+JstZ8dexDKP5DsCrZGo1odQmID8GA
+        FItkwYAvh/ycvfIKkuN8Un3Dqcr4g7mPZ8LFDLUh5A==
+X-Google-Smtp-Source: ABdhPJw+Vc1F+sEGJXji5FNptM/paaFzp2SCzk7duc02x9ddP8qenZ6D2heqx+V8E1nXKWtjb9X2DDvWcI80rzHFmrg=
+X-Received: by 2002:ac2:52bc:: with SMTP id r28mr573853lfm.451.1613127590398;
+ Fri, 12 Feb 2021 02:59:50 -0800 (PST)
 MIME-Version: 1.0
-References: <20210210022136.146528-1-xiyou.wangcong@gmail.com> <20210210022136.146528-5-xiyou.wangcong@gmail.com>
-In-Reply-To: <20210210022136.146528-5-xiyou.wangcong@gmail.com>
+References: <20210210022136.146528-1-xiyou.wangcong@gmail.com> <20210210022136.146528-6-xiyou.wangcong@gmail.com>
+In-Reply-To: <20210210022136.146528-6-xiyou.wangcong@gmail.com>
 From:   Lorenz Bauer <lmb@cloudflare.com>
-Date:   Fri, 12 Feb 2021 10:58:42 +0000
-Message-ID: <CACAyw99ErxrTShKNeP+6kr9oj3Bw9BBZ8pe34pSGEueJmWOb5Q@mail.gmail.com>
-Subject: Re: [Patch bpf-next v2 4/5] skmsg: use skb ext instead of TCP_SKB_CB
+Date:   Fri, 12 Feb 2021 10:59:39 +0000
+Message-ID: <CACAyw9_1ETC_-JUb6Z6hjRQGMBDedGDbKRR0jo_Qa+JuJM0uNQ@mail.gmail.com>
+Subject: Re: [Patch bpf-next v2 5/5] sock_map: rename skb_parser and skb_verdict
 To:     Cong Wang <xiyou.wangcong@gmail.com>
 Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
         duanxiongchun@bytedance.com, wangdongdong.6@bytedance.com,
@@ -71,10 +71,10 @@ On Wed, 10 Feb 2021 at 02:22, Cong Wang <xiyou.wangcong@gmail.com> wrote:
 >
 > From: Cong Wang <cong.wang@bytedance.com>
 >
-> Currently TCP_SKB_CB() is hard-coded in skmsg code, it certainly
-> does not work for any other non-TCP protocols. We can move them to
-> skb ext instead of playing with skb cb, which is harder to make
-> correct.
+> These two eBPF programs are tied to BPF_SK_SKB_STREAM_PARSER
+> and BPF_SK_SKB_STREAM_VERDICT, rename them to reflect the fact
+> they are only used for TCP. And save the name 'skb_verdict' for
+> general use later.
 
 Reviewed-by: Lorenz Bauer <lmb@cloudflare.com>
 
