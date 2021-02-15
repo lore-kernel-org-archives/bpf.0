@@ -2,223 +2,85 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 347B2C4332D
-	for <bpf@archiver.kernel.org>; Mon, 15 Feb 2021 12:50:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B637C433E9
+	for <bpf@archiver.kernel.org>; Mon, 15 Feb 2021 16:08:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 08A8264DDA
-	for <bpf@archiver.kernel.org>; Mon, 15 Feb 2021 12:50:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0124364E37
+	for <bpf@archiver.kernel.org>; Mon, 15 Feb 2021 16:08:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbhBOMuf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 15 Feb 2021 07:50:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:44845 "EHLO
+        id S232062AbhBOQH3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 15 Feb 2021 11:07:29 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:39648 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230468AbhBOMsw (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 15 Feb 2021 07:48:52 -0500
+        by vger.kernel.org with ESMTP id S231245AbhBOPyt (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 15 Feb 2021 10:54:49 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1613393243;
+        s=mimecast20190719; t=1613404366;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Zz2erX1cT6SUrhvwxtsGIayGjyD8f6dcyEWxk76xw6I=;
-        b=hiyN6J/6s/0ljkFekfu/Bnnwv1ebf/L2oUIO91HUvaNqqWN38xtaI+JU7kwUOc/n8jr8Tc
-        LD11ES0YT/d1IvjTD8ZraUM+KlJOM8/FpAjoqf/I6JtPodjuUdOyVVAHXHhLmT2p8sA7vX
-        GgEzCv1pThS3U8IOL1WP8s5T+v8gsPo=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-192-KWCDCoMxPhahRXryqwkG1A-1; Mon, 15 Feb 2021 07:47:22 -0500
-X-MC-Unique: KWCDCoMxPhahRXryqwkG1A-1
-Received: by mail-ed1-f69.google.com with SMTP id j10so4799742edv.5
-        for <bpf@vger.kernel.org>; Mon, 15 Feb 2021 04:47:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version:content-transfer-encoding;
-        bh=Zz2erX1cT6SUrhvwxtsGIayGjyD8f6dcyEWxk76xw6I=;
-        b=nHfehPedob22sD8MJtQldxTAa8b0D2VoWMHhyWzcdMMKD9UCs+CRNH54i1sSDPAhce
-         fSuFSaeVaBK7oss59sX1ZnDTulUtqmtzpCXPF0eAZzMy/wapvK/LgJKRbfCFMuQTKt6G
-         exgkhWVZqt8cIGwSIIsgeemYWrWEOkUE8EpljlaTm7oyr5cHGVe/08XOPEUPY9LQDogE
-         CscQQ/7N+5FtEPVXB1Z/vY90mN4tfF8QP9QjUjlK8OdRaJYM45ICf7XmPs9rWqSuAq2k
-         TkieizfqoLphOrXW+MpNqcW+69SOKmuT8iMmv8BVU5QpRHcNlMsf9BD4BfoEIddeVGxK
-         24uw==
-X-Gm-Message-State: AOAM532BA5k6i64x5QvYJS3zfo3FdEMJiwdCWHUyZqJmOWwnLwxWt9+v
-        zD9e1JNhuG+JgDZ0QkTd6dc8s9ugrTKzl7XpJDlcnnWNauN/N23DZynplyXzN6joGR1NcAFOZKi
-        7pMKkNxQiiqLV
-X-Received: by 2002:a17:906:798:: with SMTP id l24mr15479588ejc.92.1613393240940;
-        Mon, 15 Feb 2021 04:47:20 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzhoU42Y/PJAT2UIKsEvncZCW+fY7inE+t4/ovyOcxgVdB3IvronPhYMskL4IeBrhJVHimwgQ==
-X-Received: by 2002:a17:906:798:: with SMTP id l24mr15479564ejc.92.1613393240633;
-        Mon, 15 Feb 2021 04:47:20 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id ga5sm10627293ejb.114.2021.02.15.04.47.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Feb 2021 04:47:19 -0800 (PST)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 773B71805FB; Mon, 15 Feb 2021 13:47:18 +0100 (CET)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     "Brian G. Merrell" <brian.g.merrell@gmail.com>
-Cc:     xdp-newbies@vger.kernel.org,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Maciej =?utf-8?Q?=C5=BBenczykowski?= <maze@google.com>,
-        Lorenz Bauer <lmb@cloudflare.com>,
-        Andrey Ignatov <rdna@fb.com>, bpf@vger.kernel.org
-Subject: Re: How to orchestrate multiple XDP programs
-In-Reply-To: <20210212065148.ajtbx2xos6yomrzc@snout.localdomain>
-References: <20201201091203.ouqtpdmvvl2m2pga@snout.localdomain>
- <878sah3f0n.fsf@toke.dk>
- <20201216072920.hh42kxb5voom4aau@snout.localdomain>
- <873605din6.fsf@toke.dk> <87tur0x874.fsf@toke.dk>
- <20210210222710.7xl56xffdohvsko4@snout.localdomain>
- <874kiirgx3.fsf@toke.dk>
- <20210212065148.ajtbx2xos6yomrzc@snout.localdomain>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Mon, 15 Feb 2021 13:47:18 +0100
-Message-ID: <87h7mdcxbd.fsf@toke.dk>
+         content-transfer-encoding:content-transfer-encoding;
+        bh=8W8oyOtoFedTd8/MN5RpicRNGAenQQvPM4O0fxYaAF8=;
+        b=YpnioPa8cqSbHsPqlrjamrTuWIQ0XyIZQyn0lHU3Xfx2lHvkdoHMc5KfI7EzUN60gEruXR
+        rxDg4PjPSk7sqFLppvGgel5uSmxUnOtBAl6nzDvgZQHN73PI94DwK3lXYhBWP+iV/0Dp3c
+        HsEc+6OQ+oj+UnTX1rqGvz7acdgv7g4=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-548-nhGW2NJXPzqgAZ568KL1-A-1; Mon, 15 Feb 2021 10:52:44 -0500
+X-MC-Unique: nhGW2NJXPzqgAZ568KL1-A-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 78598107ACE6;
+        Mon, 15 Feb 2021 15:52:43 +0000 (UTC)
+Received: from firesoul.localdomain (unknown [10.40.208.19])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D680A60C0F;
+        Mon, 15 Feb 2021 15:52:38 +0000 (UTC)
+Received: from [192.168.42.3] (localhost [IPv6:::1])
+        by firesoul.localdomain (Postfix) with ESMTP id B6C1530736C73;
+        Mon, 15 Feb 2021 16:52:37 +0100 (CET)
+Subject: [PATCH bpf-next V1 0/2] bpf: Updates for BPF-helper bpf_check_mtu
+From:   Jesper Dangaard Brouer <brouer@redhat.com>
+To:     bpf@vger.kernel.org
+Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
+        Daniel Borkmann <borkmann@iogearbox.net>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Mon, 15 Feb 2021 16:52:37 +0100
+Message-ID: <161340431558.1234345.9778968378565582031.stgit@firesoul>
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-"Brian G. Merrell" <brian.g.merrell@gmail.com> writes:
+The FIB lookup example[1] show how the IP-header field tot_len
+(iph->tot_len) is used as input to perform the MTU check. The recently
+added MTU check helper bpf_check_mtu() should also support this type
+of MTU check.
 
-> On 21/02/11 12:18PM, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
->> "Brian G. Merrell" <brian.g.merrell@gmail.com> writes:
->>=20
->> > One thing I have been a little concerned about is the XDP_RUN_CONFIG in
->> > the xdp program function. For our case--with multiple teams writing
->> > independent, composable xdp programs--we don't want the XDP_RUN_CONFIG
->> > policy to be in the xdp program. Instead, we want the Go orchestration
->> > tool to have that policy as part of its configuration data (e.g., what
->> > order to run the xdp program functions in). From what I can tell, it's
->> > possible to omit the XDP_RUN_CONFIG from the xdp program function, and
->> > instead set the values when loading the xdp dispatcher. That's great, =
-and
->> > thanks for the foresight there. I just want to confirm that I'm
->> > understanding that correctly, because it's very important for us.
->>=20
->> Yes. The values embedded into the program BTF are defaults, and can be
->> overridden on load. The idea is that an application will set a default
->> value (e.g., "I'm a firewall, so I want to run early" or "I want to
->> monitor traffic to the stack so I'll run late"), but if the sysadmin
->> wants to do things differently they can override the order. The
->> important bit being that ultimate control of run order is up to the
->> *user*, not the application developer.
->
-> Great. In our case, it would be ideal if the application developer
-> doesn't even need to be aware of the XDP_RUN_CONFIG and can just omit
-> it. I guess for our implementation that would mean that we don't error
-> out if the BTF section doesn't exist, and instead we look to our
-> configuration data (more on that below) for the relevant information.
+Lets add this feature before merge window, please. This is a followup
+to 34b2021cc616 ("bpf: Add BPF-helper for MTU checking").
 
-That's also what libxdp does; if no XDP_RUN_CONFIG is found, it just
-uses the defaults (run prio 50 + chain call on XDP_PASS).
+[1] samples/bpf/xdp_fwd_kern.c
+---
 
->> The policy override stuff is not implemented yet, but I am planning to
->> implement it by having libxdp read a config file with priority overrides
->> (similar to how libc will read /etc/nsswitch.conf or /etc/hosts which
->> makes them work in all applications).
->>=20
->> And of course, if you're writing an orchestration tool, then you *are*
->> the user, so having the tool override priorities is definitely in scope
->> (it'll just be an alternative way to set policy instead of a config
->> file). How are you planning to specify the effective run order? I am
->> also quite open to working on a compatible way that can work for both
->> your tool and libxdp :)
->
-> As part of our control plane we have a whole process for a sysadmin to
-> get config data to to our BPF orchestration tool, which is running on
-> multiple nodes. It very abstractly looks like this:
->
->
->                                      +---- Node 1
->                                      |
-> UI -> API -> DATABASE -> CONFIG DATA +---- Node 2
->                                      |
-> 		                     +---- Node N
->
-> So, the sysadmin using the UI or API would dictate which xdp programs
-> run *and* what their priority is (plus anything else that would
-> otherwise go into XDP_RUN_CONFIG, plus a bunch of other config data for
-> various other needs). Then--and hopefully I'm getting this right--when
-> our (Go) orchestration tool uses (Go) libxdp, the tool needs a way to
-> set the run order for the XDP programs before the dispatcher loads.
+Jesper Dangaard Brouer (2):
+      bpf: BPF-helper for MTU checking add length input
+      selftests/bpf: Tests using bpf_check_mtu BPF-helper input mtu_len param
 
-Yeah, and what I was interested in was how the orchestration tool gets
-this data (and the BPF programs themselves)? Is there a daemon running
-on the nodes that exposes an API? Are you pushing this via SSH/Ansible?
-Infinite monkeys with typewriters inputting data? Something else? :)
 
-> I was planning to set the run order programatically on the XDP program
-> objects via libxdp calls. It looks like your libxdp implementation
-> already has ways to do this in the form of xdp_program__set_run_prio()
-> and xdp_program__chain_call_enabled().
->
-> Does that make sense? This is still all very theoretical for me at this
-> point!
+ include/uapi/linux/bpf.h                           |   17 ++--
+ net/core/filter.c                                  |   12 ++-
+ tools/testing/selftests/bpf/prog_tests/check_mtu.c |    4 +
+ tools/testing/selftests/bpf/progs/test_check_mtu.c |   92 ++++++++++++++++++++
+ 4 files changed, 117 insertions(+), 8 deletions(-)
 
-Yup, totally possible to set this programmatically with libxdp as well
-today. However, before doing so you still need to communicate the list
-of BPF programs and their run configuration to each node. And I'm
-thinking it may be worthwhile to specify how to do this as part of the
-"protocol" and also teach libxdp about the format, so others won't have
-to reinvent the same thing later.
-
-The reason I went with the embedded BTF is that this gets compiled into
-the ELF file, and so we can be pretty sure that it doesn't get lost,
-without having to keep track of separate configuration files. So this
-makes it a good fit for BPF program authors specifying a default: they
-can be pretty sure that this will stay with the object code no matter
-how it's moved around.
-
-The downside of using BTF is of course the same: it's tightly coupled to
-the compiled binary, and it's a bit awkward to parse (and modify). So I
-always anticipated that a secondary format that was *decoupled* from the
-binary byte code format would be needed, just as you're describing. So
-I'm just looking for input on what such a format might reasonably look
-like :)
-
->> > Also, I do hope that the existing Go BTF libraries are good enough to =
-do
->> > what's needed here, because if I'm understand correctly, that's how I'=
-ll
->> > need to approach setting the XDP_RUN_CONFIG values for our use case.
->>=20
->> You'll need to *parse* BTF to *read* the XDP_RUN_CONFIG. Which is pretty
->> basic, really, you just need to walk the BTF reference tree. Feel free
->> to reuse the parsing code in libxdp; that is, in turn, adapted from the
->> .maps section parsing code in libbpf :)
->
-> OK, that makes sense. Since I want to keep our implementation purely
-> in Go (if possible), what I trying to say what that I hope there's an
-> existing Go library that can parse and read BTF (Cillium's Go eBPF
-> library looks promising). After thinking more about our orchestration
-> config data use case I was describing above, though, I don't think
-> reading XDP_RUN_CONFIG from BTF is strictly necessary for our use
-> case.
-
-See above re: my reasons for picking the BTF format. Not sure how you're
-developing the BPF programs, but it may turn out to be useful to have
-program authors specify defaults as well. E.g., you could have whatever
-process *inserts* programs into your database (assuming that's where you
-store the available programs) read default values from the BTF and
-pre-populate the admin UI with those when someone wants to load
-programs?
-
-> That said, it obviously would be preferable to conform to the
-> specification, plus it does look necessary to read the program IDs
-> from BTF anyway :)
-
-The program IDs are allocated by the kernel on load, so those have
-nothing to do with BTF. But you'll likely want to support BTF-defined
-maps, and the freplace functionality itself relies on BTF being present;
-so you'll need to handle it somehow... :)
-
--Toke
+--
 
