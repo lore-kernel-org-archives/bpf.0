@@ -2,161 +2,316 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44074C43381
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 571FDC4332B
 	for <bpf@archiver.kernel.org>; Mon, 15 Feb 2021 16:08:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 22F0364DFF
+	by mail.kernel.org (Postfix) with ESMTP id 37AFA64DEE
 	for <bpf@archiver.kernel.org>; Mon, 15 Feb 2021 16:08:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232095AbhBOQHl (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 15 Feb 2021 11:07:41 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:27806 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231250AbhBOPyu (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 15 Feb 2021 10:54:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1613404367;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UyMFozp+kU3xyoeKS9rZ5GnNoJk4MSzx2Be/eDvc9JQ=;
-        b=Fb8v7HehjTFg3Il3lAPQ0wWiaQJcz+wk29olHcdlikdPkmW4f4CblfA2B5hVIxHsofDjvl
-        XN9Yqn5cie2hjK9br8kP/cVwd2I9KH/uSCoQYdxZwuD8PZK1lZz5PAxZwycQPetdQ7Sboq
-        E2nSbA1q8EeQ0UMtayu7xBycwPvoYho=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-552-nze8doPOPUOXtwiY8vmz1Q-1; Mon, 15 Feb 2021 10:52:45 -0500
-X-MC-Unique: nze8doPOPUOXtwiY8vmz1Q-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 33ADB192CC4D;
-        Mon, 15 Feb 2021 15:52:44 +0000 (UTC)
-Received: from firesoul.localdomain (unknown [10.40.208.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BA56360C0F;
-        Mon, 15 Feb 2021 15:52:43 +0000 (UTC)
-Received: from [192.168.42.3] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id C91AE30736C74;
-        Mon, 15 Feb 2021 16:52:42 +0100 (CET)
-Subject: [PATCH bpf-next V1 1/2] bpf: BPF-helper for MTU checking add length
- input
-From:   Jesper Dangaard Brouer <brouer@redhat.com>
-To:     bpf@vger.kernel.org
-Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
-        Daniel Borkmann <borkmann@iogearbox.net>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Mon, 15 Feb 2021 16:52:42 +0100
-Message-ID: <161340436275.1234345.10317671988851040002.stgit@firesoul>
-In-Reply-To: <161340431558.1234345.9778968378565582031.stgit@firesoul>
-References: <161340431558.1234345.9778968378565582031.stgit@firesoul>
-User-Agent: StGit/0.19
+        id S232149AbhBOQHr (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 15 Feb 2021 11:07:47 -0500
+Received: from mga06.intel.com ([134.134.136.31]:36147 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232207AbhBOP5T (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 15 Feb 2021 10:57:19 -0500
+IronPort-SDR: jMYrtocYHzzyvMPcWAPTP8oFazyXOi056q4diCrUASmcj0scZgB83Yydit24NNSfiXJKoQMRmf
+ ZiuwMgUt+kzQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9896"; a="244189537"
+X-IronPort-AV: E=Sophos;i="5.81,181,1610438400"; 
+   d="scan'208";a="244189537"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2021 07:56:37 -0800
+IronPort-SDR: cgi3/3GZli2gLB9/kiwpCge3Y0NwZv9CjppYyNKiDNRPTcr8u493RZycmKwvv9JudAxbV9Ua1g
+ Q6v8CFMdSxFQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,181,1610438400"; 
+   d="scan'208";a="383413527"
+Received: from ranger.igk.intel.com ([10.102.21.164])
+  by fmsmga008.fm.intel.com with ESMTP; 15 Feb 2021 07:56:35 -0800
+From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To:     daniel@iogearbox.net, ast@kernel.org, bpf@vger.kernel.org,
+        netdev@vger.kernel.org
+Cc:     andrii@kernel.org, toke@redhat.com, bjorn.topel@intel.com,
+        magnus.karlsson@intel.com, ciara.loftus@intel.com,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Subject: [PATCH bpf-next 1/3] libbpf: xsk: use bpf_link
+Date:   Mon, 15 Feb 2021 16:46:36 +0100
+Message-Id: <20210215154638.4627-2-maciej.fijalkowski@intel.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210215154638.4627-1-maciej.fijalkowski@intel.com>
+References: <20210215154638.4627-1-maciej.fijalkowski@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The FIB lookup example[1] show how the IP-header field tot_len
-(iph->tot_len) is used as input to perform the MTU check.
+Currently, if there are multiple xdpsock instances running on a single
+interface and in case one of the instances is terminated, the rest of
+them are left in an inoperable state due to the fact of unloaded XDP
+prog from interface.
 
-This patch extend the BPF-helper bpf_check_mtu() with the same ability
-to provide the length as user parameter input, via mtu_len parameter.
+To address that, step away from setting bpf prog in favour of bpf_link.
+This means that refcounting of BPF resources will be done automatically
+by bpf_link itself.
 
-[1] samples/bpf/xdp_fwd_kern.c
+When setting up BPF resources during xsk socket creation, check whether
+bpf_link for a given ifindex already exists via set of calls to
+bpf_link_get_next_id -> bpf_link_get_fd_by_id -> bpf_obj_get_info_by_fd
+and comparing the ifindexes from bpf_link and xsk socket.
 
-Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
+If there's no bpf_link yet, create one for a given XDP prog and unload
+explicitly existing prog if XDP_FLAGS_UPDATE_IF_NOEXIST is not set.
+
+If bpf_link is already at a given ifindex and underlying program is not
+AF-XDP one, bail out or update the bpf_link's prog given the presence of
+XDP_FLAGS_UPDATE_IF_NOEXIST.
+
+Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 ---
- include/uapi/linux/bpf.h |   17 +++++++++++------
- net/core/filter.c        |   12 ++++++++++--
- 2 files changed, 21 insertions(+), 8 deletions(-)
+ tools/lib/bpf/xsk.c | 143 +++++++++++++++++++++++++++++++++++++-------
+ 1 file changed, 122 insertions(+), 21 deletions(-)
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 4c24daa43bac..9c8aa50dc8a5 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -3850,8 +3850,7 @@ union bpf_attr {
-  *
-  * long bpf_check_mtu(void *ctx, u32 ifindex, u32 *mtu_len, s32 len_diff, u64 flags)
-  *	Description
--
-- *		Check ctx packet size against exceeding MTU of net device (based
-+ *		Check packet size against exceeding MTU of net device (based
-  *		on *ifindex*).  This helper will likely be used in combination
-  *		with helpers that adjust/change the packet size.
-  *
-@@ -3868,6 +3867,14 @@ union bpf_attr {
-  *		against the current net device.  This is practical if this isn't
-  *		used prior to redirect.
-  *
-+ *		On input *mtu_len* must be a valid pointer, else verifier will
-+ *		reject BPF program.  If the value *mtu_len* is initialized to
-+ *		zero then the ctx packet size is use.  When value *mtu_len* is
-+ *		provided as input this specify the L3 length that the MTU check
-+ *		is done against. Remeber XDP and TC length operate at L2, but
-+ *		this value is L3 as this correlate to MTU and IP-header tot_len
-+ *		values which are L3 (similar behavior as bpf_fib_lookup).
-+ *
-  *		The Linux kernel route table can configure MTUs on a more
-  *		specific per route level, which is not provided by this helper.
-  *		For route level MTU checks use the **bpf_fib_lookup**\ ()
-@@ -3892,11 +3899,9 @@ union bpf_attr {
-  *
-  *		On return *mtu_len* pointer contains the MTU value of the net
-  *		device.  Remember the net device configured MTU is the L3 size,
-- *		which is returned here and XDP and TX length operate at L2.
-+ *		which is returned here and XDP and TC length operate at L2.
-  *		Helper take this into account for you, but remember when using
-- *		MTU value in your BPF-code.  On input *mtu_len* must be a valid
-- *		pointer and be initialized (to zero), else verifier will reject
-- *		BPF program.
-+ *		MTU value in your BPF-code.
-  *
-  *	Return
-  *		* 0 on success, and populate MTU value in *mtu_len* pointer.
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 7059cf604d94..fcc3bda85960 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -5660,7 +5660,7 @@ BPF_CALL_5(bpf_skb_check_mtu, struct sk_buff *, skb,
- 	if (unlikely(flags & ~(BPF_MTU_CHK_SEGS)))
- 		return -EINVAL;
+diff --git a/tools/lib/bpf/xsk.c b/tools/lib/bpf/xsk.c
+index 20500fb1f17e..5911868efa43 100644
+--- a/tools/lib/bpf/xsk.c
++++ b/tools/lib/bpf/xsk.c
+@@ -28,6 +28,7 @@
+ #include <sys/mman.h>
+ #include <sys/socket.h>
+ #include <sys/types.h>
++#include <linux/if_link.h>
  
--	if (unlikely(flags & BPF_MTU_CHK_SEGS && len_diff))
-+	if (unlikely(flags & BPF_MTU_CHK_SEGS && (len_diff || *mtu_len)))
- 		return -EINVAL;
+ #include "bpf.h"
+ #include "libbpf.h"
+@@ -70,6 +71,7 @@ struct xsk_ctx {
+ 	int ifindex;
+ 	struct list_head list;
+ 	int prog_fd;
++	int link_fd;
+ 	int xsks_map_fd;
+ 	char ifname[IFNAMSIZ];
+ };
+@@ -409,7 +411,7 @@ static int xsk_load_xdp_prog(struct xsk_socket *xsk)
+ 	static const int log_buf_size = 16 * 1024;
+ 	struct xsk_ctx *ctx = xsk->ctx;
+ 	char log_buf[log_buf_size];
+-	int err, prog_fd;
++	int prog_fd;
  
- 	dev = __dev_via_ifindex(dev, ifindex);
-@@ -5670,7 +5670,11 @@ BPF_CALL_5(bpf_skb_check_mtu, struct sk_buff *, skb,
- 	mtu = READ_ONCE(dev->mtu);
+ 	/* This is the fallback C-program:
+ 	 * SEC("xdp_sock") int xdp_sock_prog(struct xdp_md *ctx)
+@@ -499,14 +501,47 @@ static int xsk_load_xdp_prog(struct xsk_socket *xsk)
+ 		return prog_fd;
+ 	}
  
- 	dev_len = mtu + dev->hard_header_len;
--	skb_len = skb->len + len_diff; /* minus result pass check */
+-	err = bpf_set_link_xdp_fd(xsk->ctx->ifindex, prog_fd,
+-				  xsk->config.xdp_flags);
+-	if (err) {
+-		close(prog_fd);
+-		return err;
++	ctx->prog_fd = prog_fd;
++	return 0;
++}
 +
-+	/* If set use *mtu_len as input, L3 as iph->tot_len (like fib_lookup) */
-+	skb_len = *mtu_len ? *mtu_len + dev->hard_header_len : skb->len;
++static int xsk_create_bpf_link(struct xsk_socket *xsk)
++{
++	/* bpf_link only accepts XDP_FLAGS_MODES, but xsk->config.xdp_flags
++	 * might have set XDP_FLAGS_UPDATE_IF_NOEXIST
++	 */
++	DECLARE_LIBBPF_OPTS(bpf_link_create_opts, opts,
++			    .flags = (xsk->config.xdp_flags & XDP_FLAGS_MODES));
++	struct xsk_ctx *ctx = xsk->ctx;
++	__u32 prog_id;
++	int link_fd;
++	int err;
 +
-+	skb_len += len_diff; /* minus result pass check */
- 	if (skb_len <= dev_len) {
- 		ret = BPF_MTU_CHK_RET_SUCCESS;
- 		goto out;
-@@ -5715,6 +5719,10 @@ BPF_CALL_5(bpf_xdp_check_mtu, struct xdp_buff *, xdp,
- 	/* Add L2-header as dev MTU is L3 size */
- 	dev_len = mtu + dev->hard_header_len;
++	/* for !XDP_FLAGS_UPDATE_IF_NOEXIST, unload the program first, if any,
++	 * so that bpf_link can be attached
++	 */
++	if (!(xsk->config.xdp_flags & XDP_FLAGS_UPDATE_IF_NOEXIST)) {
++		err = bpf_get_link_xdp_id(ctx->ifindex, &prog_id, xsk->config.xdp_flags);
++		if (err) {
++			pr_warn("getting XDP prog id failed\n");
++			return err;
++		}
++		if (prog_id) {
++			err = bpf_set_link_xdp_fd(ctx->ifindex, -1, 0);
++			if (err < 0) {
++				pr_warn("detaching XDP prog failed\n");
++				return err;
++			}
++		}
+ 	}
  
-+	/* Use *mtu_len as input, L3 as iph->tot_len (like fib_lookup) */
-+	if (*mtu_len)
-+		xdp_len = *mtu_len + dev->hard_header_len;
+-	ctx->prog_fd = prog_fd;
++	link_fd = bpf_link_create(ctx->prog_fd, xsk->ctx->ifindex, BPF_XDP, &opts);
++	if (link_fd < 0) {
++		pr_warn("bpf_link_create failed: %s\n", strerror(errno));
++		return link_fd;
++	}
 +
- 	xdp_len += len_diff; /* minus result pass check */
- 	if (xdp_len > dev_len)
- 		ret = BPF_MTU_CHK_RET_FRAG_NEEDED;
-
++	ctx->link_fd = link_fd;
+ 	return 0;
+ }
+ 
+@@ -625,8 +660,32 @@ static int xsk_lookup_bpf_maps(struct xsk_socket *xsk)
+ 	}
+ 
+ 	err = 0;
+-	if (ctx->xsks_map_fd == -1)
++	if (ctx->xsks_map_fd != -1)
++		goto out_map_ids;
++
++	/* if prog load is forced and we found bpf_link on a given ifindex BUT
++	 * the underlying XDP prog is not an AF-XDP one, close old prog's fd,
++	 * load AF-XDP and update existing bpf_link
++	 */
++	if (!(xsk->config.xdp_flags & XDP_FLAGS_UPDATE_IF_NOEXIST)) {
++		close(ctx->prog_fd);
++		err = xsk_create_bpf_maps(xsk);
++		if (err)
++			goto out_map_ids;
++
++		err = xsk_load_xdp_prog(xsk);
++		if (err) {
++			xsk_delete_bpf_maps(xsk);
++			goto out_map_ids;
++		}
++
++		/* if update failed, caller will close fds */
++		err = bpf_link_update(ctx->link_fd, ctx->prog_fd, 0);
++		if (err)
++			pr_warn("bpf_link_update failed: %s\n", strerror(errno));
++	} else {
+ 		err = -ENOENT;
++	}
+ 
+ out_map_ids:
+ 	free(map_ids);
+@@ -666,6 +725,49 @@ static int xsk_create_xsk_struct(int ifindex, struct xsk_socket *xsk)
+ 	return 0;
+ }
+ 
++static int xsk_link_lookup(struct xsk_ctx *ctx, __u32 *prog_id)
++{
++	__u32 link_len = sizeof(struct bpf_link_info);
++	struct bpf_link_info link_info;
++	__u32 id = 0;
++	int err;
++	int fd;
++
++	while (true) {
++		err = bpf_link_get_next_id(id, &id);
++		if (err) {
++			if (errno == ENOENT)
++				break;
++			pr_warn("can't get next link: %s\n", strerror(errno));
++			break;
++		}
++
++		fd = bpf_link_get_fd_by_id(id);
++		if (fd < 0) {
++			if (errno == ENOENT)
++				continue;
++			pr_warn("can't get link by id (%u): %s\n", id, strerror(errno));
++			break;
++		}
++
++		memset(&link_info, 0, link_len);
++		err = bpf_obj_get_info_by_fd(fd, &link_info, &link_len);
++		if (err) {
++			pr_warn("can't get link info: %s\n", strerror(errno));
++			close(fd);
++			break;
++		}
++		if (link_info.xdp.ifindex == ctx->ifindex) {
++			ctx->link_fd = fd;
++			*prog_id = link_info.prog_id;
++			break;
++		}
++		close(fd);
++	}
++
++	return errno == ENOENT ? 0 : err;
++}
++
+ static int __xsk_setup_xdp_prog(struct xsk_socket *_xdp,
+ 				int *xsks_map_fd)
+ {
+@@ -674,8 +776,7 @@ static int __xsk_setup_xdp_prog(struct xsk_socket *_xdp,
+ 	__u32 prog_id = 0;
+ 	int err;
+ 
+-	err = bpf_get_link_xdp_id(ctx->ifindex, &prog_id,
+-				  xsk->config.xdp_flags);
++	err = xsk_link_lookup(ctx, &prog_id);
+ 	if (err)
+ 		return err;
+ 
+@@ -685,9 +786,12 @@ static int __xsk_setup_xdp_prog(struct xsk_socket *_xdp,
+ 			return err;
+ 
+ 		err = xsk_load_xdp_prog(xsk);
+-		if (err) {
++		if (err)
+ 			goto err_load_xdp_prog;
+-		}
++
++		err = xsk_create_bpf_link(xsk);
++		if (err)
++			goto err_create_bpf_link;
+ 	} else {
+ 		ctx->prog_fd = bpf_prog_get_fd_by_id(prog_id);
+ 		if (ctx->prog_fd < 0)
+@@ -695,20 +799,15 @@ static int __xsk_setup_xdp_prog(struct xsk_socket *_xdp,
+ 		err = xsk_lookup_bpf_maps(xsk);
+ 		if (err) {
+ 			close(ctx->prog_fd);
++			close(ctx->link_fd);
+ 			return err;
+ 		}
+ 	}
+ 
+ 	if (xsk->rx) {
+ 		err = xsk_set_bpf_maps(xsk);
+-		if (err) {
+-			if (!prog_id) {
+-				goto err_set_bpf_maps;
+-			} else {
+-				close(ctx->prog_fd);
+-				return err;
+-			}
+-		}
++		if (err)
++			goto err_set_bpf_maps;
+ 	}
+ 	if (xsks_map_fd)
+ 		*xsks_map_fd = ctx->xsks_map_fd;
+@@ -716,8 +815,9 @@ static int __xsk_setup_xdp_prog(struct xsk_socket *_xdp,
+ 	return 0;
+ 
+ err_set_bpf_maps:
++	close(ctx->link_fd);
++err_create_bpf_link:
+ 	close(ctx->prog_fd);
+-	bpf_set_link_xdp_fd(ctx->ifindex, -1, 0);
+ err_load_xdp_prog:
+ 	xsk_delete_bpf_maps(xsk);
+ 
+@@ -1053,6 +1153,7 @@ void xsk_socket__delete(struct xsk_socket *xsk)
+ 	if (ctx->prog_fd != -1) {
+ 		xsk_delete_bpf_maps(xsk);
+ 		close(ctx->prog_fd);
++		close(ctx->link_fd);
+ 	}
+ 
+ 	err = xsk_get_mmap_offsets(xsk->fd, &off);
+-- 
+2.20.1
 
