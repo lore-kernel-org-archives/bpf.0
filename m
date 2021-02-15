@@ -2,207 +2,128 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 962A1C433E6
-	for <bpf@archiver.kernel.org>; Mon, 15 Feb 2021 22:26:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ACA01C433E0
+	for <bpf@archiver.kernel.org>; Mon, 15 Feb 2021 22:36:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6A74364DF4
-	for <bpf@archiver.kernel.org>; Mon, 15 Feb 2021 22:26:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 84DBE64DE0
+	for <bpf@archiver.kernel.org>; Mon, 15 Feb 2021 22:36:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229784AbhBOW01 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 15 Feb 2021 17:26:27 -0500
-Received: from mail-pl1-f179.google.com ([209.85.214.179]:41341 "EHLO
-        mail-pl1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbhBOW0X (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 15 Feb 2021 17:26:23 -0500
-Received: by mail-pl1-f179.google.com with SMTP id a9so2325103plh.8;
-        Mon, 15 Feb 2021 14:26:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4x4wk/MBWrGeQ2PmR10uKthvK2Y8pOz+y6BP6rAOGKU=;
-        b=kgjYel/WjPXF83sB7MIvfWOmDC5crV/gmNVO6tIBoVRZesJFEQcV2qe1NUyTIMX0ml
-         Mo78XZ8tTBrK0Le5AAm0N3bvaPDfdzdsUdlYLxnMCnCtumzjGlMQpCL3uKhVJFZNHDsb
-         1Np+MmTIrpK8Z+qj2DbuxJMpGplD7fJ/oQu9kR7jUv0AEy5Pfy/11bArUXtpswKWG/qC
-         7skhAP0IgnOT3d94MJ9uH3AuijM1P1gVjudaqu4pnRyjFDmj3CXVpYKc2MggCLk+B5py
-         9AYkpvbEtIel6/v/YNi+rcl0VsthDL5fp0Fn9kTf6Uug/1Xf+V2bX5KPs/LSHtepiecZ
-         Gshg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4x4wk/MBWrGeQ2PmR10uKthvK2Y8pOz+y6BP6rAOGKU=;
-        b=ZhRY58A4bLfR/2dkBSIbJZJDYhqxkfKxJKZgJMB1dCl6CuOeMMpakQjZ5qrS/Imfq9
-         565NESg8oo5lIed0JxZzK3C2DbkcHLukeFQCZn00BWHwalypipTSuQ1fuydk6pw792zp
-         NEY7LZriwwkEa4EHrQQMXJAjnbmS6c60iPr8aiP2TlRmJwvwaiiW6UgIJ52/9SjtWrma
-         FsR8/xyktdGpdBuFnj/d/tC9uBGbIPrtC3I4gaV6SgHIravaMmvKP2UeX3OjYjkyXBKV
-         qxpARPocm1kzaDGYZ87D1lynoAtGT25HII5wEs/zr7G6dQJnXECN4b7whkows8T3LRCK
-         x95A==
-X-Gm-Message-State: AOAM533NXJvXSsdZe/+PxM9Ke9TkNM13nP8K6fd5b0dEvoIGXi5iUmKz
-        2oL/5Xb8rsajXM37spR1w6Nd85s8SF8R9sj7z5c=
-X-Google-Smtp-Source: ABdhPJyiWJX/n25kE5t0xfm9mtAmN4FiBfJUFrhNPaF/uAFS06T2/wk9naBy/RM5r6RZfSbbdXpJB496WsMvvCzlWBA=
-X-Received: by 2002:a17:902:c155:b029:e3:7396:ec41 with SMTP id
- 21-20020a170902c155b02900e37396ec41mr478540plj.10.1613427882492; Mon, 15 Feb
- 2021 14:24:42 -0800 (PST)
+        id S229702AbhBOWf7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 15 Feb 2021 17:35:59 -0500
+Received: from www62.your-server.de ([213.133.104.62]:42778 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229615AbhBOWf7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 15 Feb 2021 17:35:59 -0500
+Received: from sslproxy06.your-server.de ([78.46.172.3])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1lBmSa-000Bdv-Iu; Mon, 15 Feb 2021 23:35:16 +0100
+Received: from [85.7.101.30] (helo=pc-9.home)
+        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1lBmSa-000S1b-CM; Mon, 15 Feb 2021 23:35:16 +0100
+Subject: Re: [PATCH bpf-next] bpf: x86: Explicitly zero-extend rax after
+ 32-bit cmpxchg
+To:     Ilya Leoshkevich <iii@linux.ibm.com>,
+        Brendan Jackman <jackmanb@google.com>, bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Florent Revest <revest@chromium.org>
+References: <20210215171208.1181305-1-jackmanb@google.com>
+ <44912664-5c0b-8d95-de01-c87b1e8a846c@iogearbox.net>
+ <b4b116fd53ac14a3006d81ed90069600b3abae4f.camel@linux.ibm.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <725b73b5-be08-f253-165d-e027ec568691@iogearbox.net>
+Date:   Mon, 15 Feb 2021 23:35:15 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-References: <20210213214421.226357-1-xiyou.wangcong@gmail.com>
- <20210213214421.226357-5-xiyou.wangcong@gmail.com> <602ac96f9e30f_3ed41208b6@john-XPS-13-9370.notmuch>
-In-Reply-To: <602ac96f9e30f_3ed41208b6@john-XPS-13-9370.notmuch>
-From:   Cong Wang <xiyou.wangcong@gmail.com>
-Date:   Mon, 15 Feb 2021 14:24:30 -0800
-Message-ID: <CAM_iQpWufy-YnQnBf_kk_otLaTikK8YxkhgjHh_eiu8MA=0Raw@mail.gmail.com>
-Subject: Re: [Patch bpf-next v3 4/5] skmsg: use skb ext instead of TCP_SKB_CB
-To:     John Fastabend <john.fastabend@gmail.com>
-Cc:     Linux Kernel Network Developers <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, duanxiongchun@bytedance.com,
-        Dongdong Wang <wangdongdong.6@bytedance.com>,
-        jiang.wang@bytedance.com, Cong Wang <cong.wang@bytedance.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        Lorenz Bauer <lmb@cloudflare.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <b4b116fd53ac14a3006d81ed90069600b3abae4f.camel@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.102.4/26081/Mon Feb 15 13:19:24 2021)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Feb 15, 2021 at 11:20 AM John Fastabend
-<john.fastabend@gmail.com> wrote:
->
-> Cong Wang wrote:
-> > From: Cong Wang <cong.wang@bytedance.com>
-> >
-> > Currently TCP_SKB_CB() is hard-coded in skmsg code, it certainly
-> > does not work for any other non-TCP protocols. We can move them to
-> > skb ext instead of playing with skb cb, which is harder to make
-> > correct.
-> >
-> > Cc: John Fastabend <john.fastabend@gmail.com>
-> > Cc: Daniel Borkmann <daniel@iogearbox.net>
-> > Cc: Jakub Sitnicki <jakub@cloudflare.com>
-> > Reviewed-by: Lorenz Bauer <lmb@cloudflare.com>
-> > Signed-off-by: Cong Wang <cong.wang@bytedance.com>
-> > ---
->
-> I'm not seeing the advantage of doing this at the moment. We can
-> continue to use cb[] here, which is simpler IMO and use the ext
-> if needed for the other use cases. This is adding a per packet
-> alloc cost that we don't have at the moment as I understand it.
+On 2/15/21 11:24 PM, Ilya Leoshkevich wrote:
+> On Mon, 2021-02-15 at 23:20 +0100, Daniel Borkmann wrote:
+>> On 2/15/21 6:12 PM, Brendan Jackman wrote:
+>>> As pointed out by Ilya and explained in the new comment, there's a
+>>> discrepancy between x86 and BPF CMPXCHG semantics: BPF always loads
+>>> the value from memory into r0, while x86 only does so when r0 and
+>>> the
+>>> value in memory are different.
+>>>
+>>> At first this might sound like pure semantics, but it makes a real
+>>> difference when the comparison is 32-bit, since the load will
+>>> zero-extend r0/rax.
+>>>
+>>> The fix is to explicitly zero-extend rax after doing such a
+>>> CMPXCHG.
+>>>
+>>> Note that this doesn't generate totally optimal code: at one of
+>>> emit_atomic's callsites (where BPF_{AND,OR,XOR} | BPF_FETCH are
+>>> implemented), the new mov is superfluous because there's already a
+>>> mov generated afterwards that will zero-extend r0. We could avoid
+>>> this unnecessary mov by just moving the new logic outside of
+>>> emit_atomic. But I think it's simpler to keep emit_atomic as a unit
+>>> of correctness (it generates the correct x86 code for a certain set
+>>> of BPF instructions, no further knowledge is needed to use it
+>>> correctly).
+>>>
+>>> Reported-by: Ilya Leoshkevich <iii@linux.ibm.com>
+>>> Fixes: 5ffa25502b5a ("bpf: Add instructions for atomic_[cmp]xchg")
+>>> Signed-off-by: Brendan Jackman <jackmanb@google.com>
+>>> ---
+>>>    arch/x86/net/bpf_jit_comp.c                   | 10 +++++++
+>>>    .../selftests/bpf/verifier/atomic_cmpxchg.c   | 25
+>>> ++++++++++++++++++
+>>>    .../selftests/bpf/verifier/atomic_or.c        | 26
+>>> +++++++++++++++++++
+>>>    3 files changed, 61 insertions(+)
+>>>
+>>> diff --git a/arch/x86/net/bpf_jit_comp.c
+>>> b/arch/x86/net/bpf_jit_comp.c
+>>> index 79e7a0ec1da5..7919d5c54164 100644
+>>> --- a/arch/x86/net/bpf_jit_comp.c
+>>> +++ b/arch/x86/net/bpf_jit_comp.c
+>>> @@ -834,6 +834,16 @@ static int emit_atomic(u8 **pprog, u8
+>>> atomic_op,
+>>>    
+>>>          emit_insn_suffix(&prog, dst_reg, src_reg, off);
+>>>    
+>>> +       if (atomic_op == BPF_CMPXCHG && bpf_size == BPF_W) {
+>>> +               /*
+>>> +                * BPF_CMPXCHG unconditionally loads into R0, which
+>>> means it
+>>> +                * zero-extends 32-bit values. However x86 CMPXCHG
+>>> doesn't do a
+>>> +                * load if the comparison is successful. Therefore
+>>> zero-extend
+>>> +                * explicitly.
+>>> +                */
+>>> +               emit_mov_reg(&prog, false, BPF_REG_0, BPF_REG_0);
+>>
+>> How does the situation look on other archs when they need to
+>> implement this in future?
+>> Mainly asking whether it would be better to instead to move this
+>> logic into the verifier
+>> instead, so it'll be consistent across all archs.
+> 
+> I have exactly the same check in my s390 wip patch.
+> So having a common solution would be great.
 
-Hmm? How can we continue using TCP_SKB_CB() for UDP or
-AF_UNIX?
-
-I am not sure I get your "at the moment" correctly, do you mean
-I should move this patch to a later patchset, maybe the UDP
-patchset? At least this patch is needed, no matter by which patchset,
-so it should not be dropped.
-
-
->
-> [...]
->
-> > diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
-> > index e3bb712af257..d5c711ef6d4b 100644
-> > --- a/include/linux/skmsg.h
-> > +++ b/include/linux/skmsg.h
-> > @@ -459,4 +459,44 @@ static inline bool sk_psock_strp_enabled(struct sk_psock *psock)
-> >               return false;
-> >       return !!psock->saved_data_ready;
-> >  }
-> > +
-> > +struct skb_bpf_ext {
-> > +     __u32 flags;
-> > +     struct sock *sk_redir;
-> > +};
-> > +
-> > +#if IS_ENABLED(CONFIG_NET_SOCK_MSG)
-> > +static inline
-> > +bool skb_bpf_ext_ingress(const struct sk_buff *skb)
-> > +{
-> > +     struct skb_bpf_ext *ext = skb_ext_find(skb, SKB_EXT_BPF);
-> > +
-> > +     return ext->flags & BPF_F_INGRESS;
-> > +}
-> > +
-> > +static inline
-> > +void skb_bpf_ext_set_ingress(const struct sk_buff *skb)
-> > +{
-> > +     struct skb_bpf_ext *ext = skb_ext_find(skb, SKB_EXT_BPF);
-> > +
-> > +     ext->flags |= BPF_F_INGRESS;
-> > +}
-> > +
-> > +static inline
-> > +struct sock *skb_bpf_ext_redirect_fetch(struct sk_buff *skb)
-> > +{
-> > +     struct skb_bpf_ext *ext = skb_ext_find(skb, SKB_EXT_BPF);
-> > +
-> > +     return ext->sk_redir;
-> > +}
-> > +
-> > +static inline
-> > +void skb_bpf_ext_redirect_clear(struct sk_buff *skb)
-> > +{
-> > +     struct skb_bpf_ext *ext = skb_ext_find(skb, SKB_EXT_BPF);
-> > +
-> > +     ext->flags = 0;
-> > +     ext->sk_redir = NULL;
-> > +}
-> > +#endif /* CONFIG_NET_SOCK_MSG */
->
-> So we will have some slight duplication for cb[] variant and ext
-> variant above. I'm OK with that to avoid an allocation.
-
-Not sure what you mean by "duplication", these are removed from
-TCP_SKB_CB(), so there is clearly no duplication.
-
->
-> [...]
->
-> > @@ -1003,11 +1008,17 @@ static int sk_psock_verdict_recv(read_descriptor_t *desc, struct sk_buff *skb,
-> >               goto out;
-> >       }
-> >       skb_set_owner_r(skb, sk);
-> > +     if (!skb_ext_add(skb, SKB_EXT_BPF)) {
-> > +             len = 0;
-> > +             kfree_skb(skb);
-> > +             goto out;
-> > +     }
-> > +
->
-> per packet cost here. Perhaps you can argue small alloc will usually not be
-> noticable in such a large stack, but once we convert over it will be very
-> hard to go back. And I'm looking at optimizing this path now.
-
-This is a price we need to pay to avoid CB, and skb_ext_add() has been
-used on other fast paths too, for example, tcf_classify_ingress() and
-mptcp_incoming_options(). So, it is definitely acceptable.
-
->
-> >       prog = READ_ONCE(psock->progs.skb_verdict);
-> >       if (likely(prog)) {
-> > -             tcp_skb_bpf_redirect_clear(skb);
-> > +             skb_bpf_ext_redirect_clear(skb);
-> >               ret = sk_psock_bpf_run(psock, prog, skb);
-> > -             ret = sk_psock_map_verd(ret, tcp_skb_bpf_redirect_fetch(skb));
-> > +             ret = sk_psock_map_verd(ret, skb_bpf_ext_redirect_fetch(skb));
-> >       }
-> >       sk_psock_verdict_apply(psock, skb, ret);
->
-> Thanks for the series Cong. Drop this patch and resubmit carry ACKs forward
-> and then lets revisit this later.
-
-I still believe it is best to stay in this patchset, as it does not change
-any functionality and is a preparation too. And the next patchset will be
-UDP/AF_UNIX changes as you suggested, it is very awkward to put this
-patch into either UDP or AF_UNIX changes.
-
-So, let's keep it in this patchset, and I am happy to address any concerns
-and open to other ideas than using skb ext.
-
-Thanks.
+We do rewrites for various cases like div/mod handling, perhaps would be
+best to emit an explicit BPF_MOV32_REG(insn->dst_reg, insn->dst_reg) there,
+see the fixup_bpf_calls().
