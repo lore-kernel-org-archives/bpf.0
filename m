@@ -2,100 +2,103 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F3749C433E6
-	for <bpf@archiver.kernel.org>; Mon, 15 Feb 2021 16:14:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73C71C433E0
+	for <bpf@archiver.kernel.org>; Mon, 15 Feb 2021 16:17:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C613864DEB
-	for <bpf@archiver.kernel.org>; Mon, 15 Feb 2021 16:14:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3B81664DEE
+	for <bpf@archiver.kernel.org>; Mon, 15 Feb 2021 16:17:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231613AbhBOQMQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 15 Feb 2021 11:12:16 -0500
-Received: from mga01.intel.com ([192.55.52.88]:48700 "EHLO mga01.intel.com"
+        id S232248AbhBOQRK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 15 Feb 2021 11:17:10 -0500
+Received: from mga06.intel.com ([134.134.136.31]:36008 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232512AbhBOQIm (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 15 Feb 2021 11:08:42 -0500
-IronPort-SDR: ZtTs3yYrOlrlZgG/i7nMbvKMubmIVtUANt7jCyJVnecb5Lz7/7NnVyJgv34kmmykJRtBmk6j2v
- t75fjT+Rdmyg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9896"; a="201889627"
+        id S232528AbhBOP6c (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 15 Feb 2021 10:58:32 -0500
+IronPort-SDR: caZ85ASrofYgF81HEI+Vplfykc+MtWSBtZBUSuGsB1q3pTqxYr0KIWKv2OXrM/4CUfHkV+IIlF
+ HX5M9/BnDjMQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9896"; a="244189540"
 X-IronPort-AV: E=Sophos;i="5.81,181,1610438400"; 
-   d="scan'208";a="201889627"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2021 08:08:01 -0800
-IronPort-SDR: Y5W9vSJkAEp2u3X2x4TzcJh3aaw8ur1VxdtABIAheOyl6FvYV26EmyAWfC7KVtv3QGJvsW4NUc
- kn4mdCvHuoGA==
+   d="scan'208";a="244189540"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2021 07:56:40 -0800
+IronPort-SDR: HBCudpXa5BnVTHiL71rtWFrl9xJNVJZ2FQy/NFTtDY+ggRMDGN3WHBVdbq91HsAzU7HV4STST+
+ fPpHjcZt5/aA==
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.81,181,1610438400"; 
-   d="scan'208";a="399129104"
-Received: from wwantka-mobl2.ger.corp.intel.com (HELO btopel-mobl.ger.intel.com) ([10.252.54.83])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2021 08:07:58 -0800
-Subject: Re: [PATCH bpf-next 0/3] Introduce bpf_link in libbpf's xsk
-To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        daniel@iogearbox.net, ast@kernel.org, bpf@vger.kernel.org,
+   d="scan'208";a="383413536"
+Received: from ranger.igk.intel.com ([10.102.21.164])
+  by fmsmga008.fm.intel.com with ESMTP; 15 Feb 2021 07:56:38 -0800
+From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To:     daniel@iogearbox.net, ast@kernel.org, bpf@vger.kernel.org,
         netdev@vger.kernel.org
-Cc:     andrii@kernel.org, toke@redhat.com, magnus.karlsson@intel.com,
-        ciara.loftus@intel.com
-References: <20210215154638.4627-1-maciej.fijalkowski@intel.com>
-From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>
-Message-ID: <3a625c8b-6dc0-3933-25e5-f747197ae1f4@intel.com>
-Date:   Mon, 15 Feb 2021 17:07:53 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
-MIME-Version: 1.0
+Cc:     andrii@kernel.org, toke@redhat.com, bjorn.topel@intel.com,
+        magnus.karlsson@intel.com, ciara.loftus@intel.com,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Subject: [PATCH bpf-next 2/3] libbpf: clear map_info before each bpf_obj_get_info_by_fd
+Date:   Mon, 15 Feb 2021 16:46:37 +0100
+Message-Id: <20210215154638.4627-3-maciej.fijalkowski@intel.com>
+X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20210215154638.4627-1-maciej.fijalkowski@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+References: <20210215154638.4627-1-maciej.fijalkowski@intel.com>
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 2021-02-15 16:46, Maciej Fijalkowski wrote:
-> Hi,
-> 
-> This set is another approach towards addressing the below issue:
-> 
-> // load xdp prog and xskmap and add entry to xskmap at idx 10
-> $ sudo ./xdpsock -i ens801f0 -t -q 10
-> 
-> // add entry to xskmap at idx 11
-> $ sudo ./xdpsock -i ens801f0 -t -q 11
-> 
-> terminate one of the processes and another one is unable to work due to
-> the fact that the XDP prog was unloaded from interface.
-> 
-> Previous attempt was, to put it mildly, a bit broken, as there was no
-> synchronization between updates to additional map, as Bjorn pointed out.
-> See https://lore.kernel.org/netdev/20190603131907.13395-5-maciej.fijalkowski@intel.com/
-> 
-> In the meantime bpf_link was introduced and it seems that it can address
-> the issue of refcounting the XDP prog on interface. More info on commit
-> messages.
->
+xsk_lookup_bpf_maps, based on prog_fd, looks whether current prog has a
+reference to XSKMAP. BPF prog can include insns that work on various BPF
+maps and this is covered by iterating through map_ids.
 
-For the series:
+The bpf_map_info that is passed to bpf_obj_get_info_by_fd for filling
+needs to be cleared at each iteration, so that it doesn't any outdated
+fields and that is currently missing in the function of interest.
 
-Reviewed-by: Björn Töpel <bjorn.topel@intel.com>
-Acked-by: Björn Töpel <bjorn.topel@intel.com>
+To fix that, zero-init map_info via memset before each
+bpf_obj_get_info_by_fd call.
 
-Finally, bpf_link/scoped XDP support! Thanks a lot!
+Also, since the area of this code is touched, in general strcmp is
+considered harmful, so let's convert it to strncmp and provide the
+length of the array name that we're looking for.
 
+Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+---
+ tools/lib/bpf/xsk.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Björn
+diff --git a/tools/lib/bpf/xsk.c b/tools/lib/bpf/xsk.c
+index 5911868efa43..fb259c0bba93 100644
+--- a/tools/lib/bpf/xsk.c
++++ b/tools/lib/bpf/xsk.c
+@@ -616,6 +616,7 @@ static int xsk_lookup_bpf_maps(struct xsk_socket *xsk)
+ 	__u32 i, *map_ids, num_maps, prog_len = sizeof(struct bpf_prog_info);
+ 	__u32 map_len = sizeof(struct bpf_map_info);
+ 	struct bpf_prog_info prog_info = {};
++	const char *map_name = "xsks_map";
+ 	struct xsk_ctx *ctx = xsk->ctx;
+ 	struct bpf_map_info map_info;
+ 	int fd, err;
+@@ -645,13 +646,14 @@ static int xsk_lookup_bpf_maps(struct xsk_socket *xsk)
+ 		if (fd < 0)
+ 			continue;
+ 
++		memset(&map_info, 0, map_len);
+ 		err = bpf_obj_get_info_by_fd(fd, &map_info, &map_len);
+ 		if (err) {
+ 			close(fd);
+ 			continue;
+ 		}
+ 
+-		if (!strcmp(map_info.name, "xsks_map")) {
++		if (!strncmp(map_info.name, map_name, strlen(map_name))) {
+ 			ctx->xsks_map_fd = fd;
+ 			continue;
+ 		}
+-- 
+2.20.1
 
-
-
-> Thanks.
-> 
-> Maciej Fijalkowski (3):
->    libbpf: xsk: use bpf_link
->    libbpf: clear map_info before each bpf_obj_get_info_by_fd
->    samples: bpf: do not unload prog within xdpsock
-> 
->   samples/bpf/xdpsock_user.c |  55 ++++----------
->   tools/lib/bpf/xsk.c        | 147 +++++++++++++++++++++++++++++++------
->   2 files changed, 139 insertions(+), 63 deletions(-)
-> 
