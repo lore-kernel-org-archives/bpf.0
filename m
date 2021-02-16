@@ -2,298 +2,230 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 07E31C433DB
-	for <bpf@archiver.kernel.org>; Tue, 16 Feb 2021 14:16:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1285EC433E0
+	for <bpf@archiver.kernel.org>; Tue, 16 Feb 2021 14:20:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B6FAA64DE0
-	for <bpf@archiver.kernel.org>; Tue, 16 Feb 2021 14:16:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CBDB164DFF
+	for <bpf@archiver.kernel.org>; Tue, 16 Feb 2021 14:20:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229784AbhBPOQV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 16 Feb 2021 09:16:21 -0500
-Received: from mail-40133.protonmail.ch ([185.70.40.133]:41456 "EHLO
-        mail-40133.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbhBPOQV (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 16 Feb 2021 09:16:21 -0500
-Date:   Tue, 16 Feb 2021 14:15:32 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
-        t=1613484936; bh=jwQMQJwMWvjuZZcVe2rhp855u4r5rgmcy7veIiiilfo=;
-        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=iAAK1XqcN5/Z/C7QBWrbabG3FAOsle6D8RUpocNr8GDzPuXnwEsdRsx3ltvbzMUvm
-         JmWzP/IuPJhxF5iMwSRdXO/ZvGFeFrno6nlV67B8KrXAZp1uriQKSpiK6XJ9AMV2ag
-         VtLL8ajT+mKtlT8H4gQ2wYi0skrLXygb1RfprizR10PrpgswX6qsdnFJfHwQojfa60
-         oipM7D+5C/NArok+8HgUb8IXS3X1X807r1qak0Csw9OV5g0o7erFI7WCgKACL6pm0e
-         79X3nZftJdc0tMSPJjL12JxLkDYJwzwXJclbLceSVm7Ig7BQZjWekOpydqPeRY+HYH
-         V6NXKsm7WrHXQ==
-To:     Magnus Karlsson <magnus.karlsson@gmail.com>
-From:   Alexander Lobakin <alobakin@pm.me>
-Cc:     Alexander Lobakin <alobakin@pm.me>,
-        =?utf-8?Q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+        id S229983AbhBPOUW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 16 Feb 2021 09:20:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49716 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230196AbhBPOUM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 16 Feb 2021 09:20:12 -0500
+Received: from mail-qt1-x849.google.com (mail-qt1-x849.google.com [IPv6:2607:f8b0:4864:20::849])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48F72C061574
+        for <bpf@vger.kernel.org>; Tue, 16 Feb 2021 06:19:32 -0800 (PST)
+Received: by mail-qt1-x849.google.com with SMTP id n4so7826371qte.11
+        for <bpf@vger.kernel.org>; Tue, 16 Feb 2021 06:19:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=C+z2l1Z8SEwFSvAfHkg3uXhxtmTk3DKZDz4dc2bKtl4=;
+        b=CT8p/H0hPNVOkrHpP24jyvc3W3A8cPyxSFTTSFNf3AhNybMMTc6RNlLYhURB8W9CT8
+         O1GmBHiF07E5BDeOCIkuWUj+vSF6juA9inSU0vrh5A2EE/wLbIF7x5DyByibtMjqj66b
+         s8viy4kuodaGzFb5fab82zAOy62qo95KANgpwWdVsKx6u8EZKUO1jGDjmI1Neo9KCPKL
+         ACy1ViHOHMHlcYQW/QUs7LZYT6whnb0r8yXkSWrfQGfiHeqz+av7QDdxfUiwpKB3MBC9
+         /mWipfyNIMYCyCEszmUX+mdPWlDGdOo/CBQqq5GZzSHKZQ1XnO/LmxuTI7DxlVzm6bEj
+         3lfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=C+z2l1Z8SEwFSvAfHkg3uXhxtmTk3DKZDz4dc2bKtl4=;
+        b=GW49gkS6u+UVr63JuM8e7ZbXF4lx0iWdiTZKUL1F9t/+z69wiZ2Dp1jz2mLrIYUX7T
+         nP2aAtZ3xk6JF08G+DBU9j7u2trYbA6dd67T9eTOmmscbtWKs/ReIGAYWw92w2dYWwXY
+         WAaBd+UlOPY9gzYTArjQPURzkIekSC9LIxA4kJPeSMUXv51uKu65MSoKtP9Gh9gWAeas
+         5Dje7Px9mCidjP6ruMDfwFRRwviWLlkVgoPzbWVJNaVvSCNS7hRpPKxkeie5qAwwM8o1
+         5MJJ/X3LbtvzrCI8FOXMOcuMLAFxpQ0sVb0KLJ0ykrZO+XgnIxlBnoemmHhmESIsevZr
+         EUcg==
+X-Gm-Message-State: AOAM532spSi9/MYJzDHwYQsEXZSWyZgv+Jr20NEqg1V1HeszVoBFA6hS
+        hADN6OjInKpWB1ZuA6N6evVc+pqAiX3Kvv2QQOXtDMG9fFZ5y8bjzBayw3DLcx8MeO3GG/NmkzG
+        k6RvOxov+F7NVaI6Kv8hSTyOGkU/SKq/g77oAf2/IWHAUqrFMKXdFul018O2+6fk=
+X-Google-Smtp-Source: ABdhPJyJVA1QK2v5nil6qrTYbcNyWjsTUGhB0HFeGwV7NJTuuTuzDvvnx85v4QOZ3xcE9GN/1zw3wsItqkHRhw==
+Sender: "jackmanb via sendgmr" <jackmanb@beeg.c.googlers.com>
+X-Received: from beeg.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:11db])
+ (user=jackmanb job=sendgmr) by 2002:a05:6214:2022:: with SMTP id
+ 2mr10214189qvf.39.1613485171364; Tue, 16 Feb 2021 06:19:31 -0800 (PST)
+Date:   Tue, 16 Feb 2021 14:19:25 +0000
+Message-Id: <20210216141925.1549405-1-jackmanb@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.30.0.478.g8a0d178c01-goog
+Subject: [PATCH v2 bpf-next] bpf: Explicitly zero-extend R0 after 32-bit cmpxchg
+From:   Brendan Jackman <jackmanb@google.com>
+To:     bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Dust Li <dust.li@linux.alibaba.com>,
-        virtualization@lists.linux-foundation.org,
-        Network Development <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>
-Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: Re: [PATCH v4 bpf-next 6/6] xsk: build skb by page (aka generic zerocopy xmit)
-Message-ID: <20210216141507.3263-1-alobakin@pm.me>
-In-Reply-To: <CAJ8uoz0-ge=_jC8EbR371DMKxYSP8USni5OqVf0yk1-4Z=vnOg@mail.gmail.com>
-References: <20210216113740.62041-1-alobakin@pm.me> <20210216113740.62041-7-alobakin@pm.me> <CAJ8uoz0-ge=_jC8EbR371DMKxYSP8USni5OqVf0yk1-4Z=vnOg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Florent Revest <revest@chromium.org>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Brendan Jackman <jackmanb@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Magnus Karlsson <magnus.karlsson@gmail.com>
-Date: Tue, 16 Feb 2021 15:08:26 +0100
+As pointed out by Ilya and explained in the new comment, there's a
+discrepancy between x86 and BPF CMPXCHG semantics: BPF always loads
+the value from memory into r0, while x86 only does so when r0 and the
+value in memory are different. The same issue affects s390.
 
-> On Tue, Feb 16, 2021 at 12:44 PM Alexander Lobakin <alobakin@pm.me> wrote=
-:
-> >
-> > From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-> >
-> > This patch is used to construct skb based on page to save memory copy
-> > overhead.
-> >
-> > This function is implemented based on IFF_TX_SKB_NO_LINEAR. Only the
-> > network card priv_flags supports IFF_TX_SKB_NO_LINEAR will use page to
-> > directly construct skb. If this feature is not supported, it is still
-> > necessary to copy data to construct skb.
-> >
-> > ---------------- Performance Testing ------------
-> >
-> > The test environment is Aliyun ECS server.
-> > Test cmd:
-> > ```
-> > xdpsock -i eth0 -t  -S -s <msg size>
-> > ```
-> >
-> > Test result data:
-> >
-> > size    64      512     1024    1500
-> > copy    1916747 1775988 1600203 1440054
-> > page    1974058 1953655 1945463 1904478
-> > percent 3.0%    10.0%   21.58%  32.3%
-> >
-> > Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-> > Reviewed-by: Dust Li <dust.li@linux.alibaba.com>
-> > [ alobakin:
-> >  - expand subject to make it clearer;
-> >  - improve skb->truesize calculation;
-> >  - reserve some headroom in skb for drivers;
-> >  - tailroom is not needed as skb is non-linear ]
-> > Signed-off-by: Alexander Lobakin <alobakin@pm.me>
->=20
-> Thank you Alexander!
->=20
-> Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
+At first this might sound like pure semantics, but it makes a real
+difference when the comparison is 32-bit, since the load will
+zero-extend r0/rax.
 
-Thanks!
+The fix is to explicitly zero-extend rax after doing such a
+CMPXCHG. Since this problem affects multiple archs, this is done in
+the verifier by patching in a BPF_ZEXT_REG instruction after every
+32-bit cmpxchg. Any archs that don't need such manual zero-extension
+can do a look-ahead with insn_is_zext to skip the unnecessary mov.
 
-I have one more generic zerocopy to offer (inspired by this series)
-that wouldn't require IFF_TX_SKB_NO_LINEAR, only a capability to xmit
-S/G packets that almost every NIC has. I'll publish an RFC once this
-and your upcoming changes get merged.
+Reported-by: Ilya Leoshkevich <iii@linux.ibm.com>
+Fixes: 5ffa25502b5a ("bpf: Add instructions for atomic_[cmp]xchg")
+Signed-off-by: Brendan Jackman <jackmanb@google.com>
+---
 
-> > ---
-> >  net/xdp/xsk.c | 119 ++++++++++++++++++++++++++++++++++++++++----------
-> >  1 file changed, 95 insertions(+), 24 deletions(-)
-> >
-> > diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> > index 143979ea4165..ff7bd06e1241 100644
-> > --- a/net/xdp/xsk.c
-> > +++ b/net/xdp/xsk.c
-> > @@ -445,6 +445,96 @@ static void xsk_destruct_skb(struct sk_buff *skb)
-> >         sock_wfree(skb);
-> >  }
-> >
-> > +static struct sk_buff *xsk_build_skb_zerocopy(struct xdp_sock *xs,
-> > +                                             struct xdp_desc *desc)
-> > +{
-> > +       struct xsk_buff_pool *pool =3D xs->pool;
-> > +       u32 hr, len, offset, copy, copied;
-> > +       struct sk_buff *skb;
-> > +       struct page *page;
-> > +       void *buffer;
-> > +       int err, i;
-> > +       u64 addr;
-> > +
-> > +       hr =3D max(NET_SKB_PAD, L1_CACHE_ALIGN(xs->dev->needed_headroom=
-));
-> > +
-> > +       skb =3D sock_alloc_send_skb(&xs->sk, hr, 1, &err);
-> > +       if (unlikely(!skb))
-> > +               return ERR_PTR(err);
-> > +
-> > +       skb_reserve(skb, hr);
-> > +
-> > +       addr =3D desc->addr;
-> > +       len =3D desc->len;
-> > +
-> > +       buffer =3D xsk_buff_raw_get_data(pool, addr);
-> > +       offset =3D offset_in_page(buffer);
-> > +       addr =3D buffer - pool->addrs;
-> > +
-> > +       for (copied =3D 0, i =3D 0; copied < len; i++) {
-> > +               page =3D pool->umem->pgs[addr >> PAGE_SHIFT];
-> > +               get_page(page);
-> > +
-> > +               copy =3D min_t(u32, PAGE_SIZE - offset, len - copied);
-> > +               skb_fill_page_desc(skb, i, page, offset, copy);
-> > +
-> > +               copied +=3D copy;
-> > +               addr +=3D copy;
-> > +               offset =3D 0;
-> > +       }
-> > +
-> > +       skb->len +=3D len;
-> > +       skb->data_len +=3D len;
-> > +       skb->truesize +=3D pool->unaligned ? len : pool->chunk_size;
-> > +
-> > +       refcount_add(skb->truesize, &xs->sk.sk_wmem_alloc);
-> > +
-> > +       return skb;
-> > +}
-> > +
-> > +static struct sk_buff *xsk_build_skb(struct xdp_sock *xs,
-> > +                                    struct xdp_desc *desc)
-> > +{
-> > +       struct net_device *dev =3D xs->dev;
-> > +       struct sk_buff *skb;
-> > +
-> > +       if (dev->priv_flags & IFF_TX_SKB_NO_LINEAR) {
-> > +               skb =3D xsk_build_skb_zerocopy(xs, desc);
-> > +               if (IS_ERR(skb))
-> > +                       return skb;
-> > +       } else {
-> > +               u32 hr, tr, len;
-> > +               void *buffer;
-> > +               int err;
-> > +
-> > +               hr =3D max(NET_SKB_PAD, L1_CACHE_ALIGN(dev->needed_head=
-room));
-> > +               tr =3D dev->needed_tailroom;
-> > +               len =3D desc->len;
-> > +
-> > +               skb =3D sock_alloc_send_skb(&xs->sk, hr + len + tr, 1, =
-&err);
-> > +               if (unlikely(!skb))
-> > +                       return ERR_PTR(err);
-> > +
-> > +               skb_reserve(skb, hr);
-> > +               skb_put(skb, len);
-> > +
-> > +               buffer =3D xsk_buff_raw_get_data(xs->pool, desc->addr);
-> > +               err =3D skb_store_bits(skb, 0, buffer, len);
-> > +               if (unlikely(err)) {
-> > +                       kfree_skb(skb);
-> > +                       return ERR_PTR(err);
-> > +               }
-> > +       }
-> > +
-> > +       skb->dev =3D dev;
-> > +       skb->priority =3D xs->sk.sk_priority;
-> > +       skb->mark =3D xs->sk.sk_mark;
-> > +       skb_shinfo(skb)->destructor_arg =3D (void *)(long)desc->addr;
-> > +       skb->destructor =3D xsk_destruct_skb;
-> > +
-> > +       return skb;
-> > +}
-> > +
-> >  static int xsk_generic_xmit(struct sock *sk)
-> >  {
-> >         struct xdp_sock *xs =3D xdp_sk(sk);
-> > @@ -454,56 +544,37 @@ static int xsk_generic_xmit(struct sock *sk)
-> >         struct sk_buff *skb;
-> >         unsigned long flags;
-> >         int err =3D 0;
-> > -       u32 hr, tr;
-> >
-> >         mutex_lock(&xs->mutex);
-> >
-> >         if (xs->queue_id >=3D xs->dev->real_num_tx_queues)
-> >                 goto out;
-> >
-> > -       hr =3D max(NET_SKB_PAD, L1_CACHE_ALIGN(xs->dev->needed_headroom=
-));
-> > -       tr =3D xs->dev->needed_tailroom;
-> > -
-> >         while (xskq_cons_peek_desc(xs->tx, &desc, xs->pool)) {
-> > -               char *buffer;
-> > -               u64 addr;
-> > -               u32 len;
-> > -
-> >                 if (max_batch-- =3D=3D 0) {
-> >                         err =3D -EAGAIN;
-> >                         goto out;
-> >                 }
-> >
-> > -               len =3D desc.len;
-> > -               skb =3D sock_alloc_send_skb(sk, hr + len + tr, 1, &err)=
-;
-> > -               if (unlikely(!skb))
-> > +               skb =3D xsk_build_skb(xs, &desc);
-> > +               if (IS_ERR(skb)) {
-> > +                       err =3D PTR_ERR(skb);
-> >                         goto out;
-> > +               }
-> >
-> > -               skb_reserve(skb, hr);
-> > -               skb_put(skb, len);
-> > -
-> > -               addr =3D desc.addr;
-> > -               buffer =3D xsk_buff_raw_get_data(xs->pool, addr);
-> > -               err =3D skb_store_bits(skb, 0, buffer, len);
-> >                 /* This is the backpressure mechanism for the Tx path.
-> >                  * Reserve space in the completion queue and only proce=
-ed
-> >                  * if there is space in it. This avoids having to imple=
-ment
-> >                  * any buffering in the Tx path.
-> >                  */
-> >                 spin_lock_irqsave(&xs->pool->cq_lock, flags);
-> > -               if (unlikely(err) || xskq_prod_reserve(xs->pool->cq)) {
-> > +               if (xskq_prod_reserve(xs->pool->cq)) {
-> >                         spin_unlock_irqrestore(&xs->pool->cq_lock, flag=
-s);
-> >                         kfree_skb(skb);
-> >                         goto out;
-> >                 }
-> >                 spin_unlock_irqrestore(&xs->pool->cq_lock, flags);
-> >
-> > -               skb->dev =3D xs->dev;
-> > -               skb->priority =3D sk->sk_priority;
-> > -               skb->mark =3D sk->sk_mark;
-> > -               skb_shinfo(skb)->destructor_arg =3D (void *)(long)desc.=
-addr;
-> > -               skb->destructor =3D xsk_destruct_skb;
-> > -
-> >                 err =3D __dev_direct_xmit(skb, xs->queue_id);
-> >                 if  (err =3D=3D NETDEV_TX_BUSY) {
-> >                         /* Tell user-space to retry the send */
-> > --
-> > 2.30.1
+Difference from v1[1]: Now solved centrally in the verifier instead of
+  specifically for the x86 JIT. Thanks to Ilya and Daniel for the suggestions!
 
-Al
+[1] https://lore.kernel.org/bpf/d7ebaefb-bfd6-a441-3ff2-2fdfe699b1d2@iogearbox.net/T/#t
+
+ kernel/bpf/verifier.c                         | 36 +++++++++++++++++++
+ .../selftests/bpf/verifier/atomic_cmpxchg.c   | 25 +++++++++++++
+ .../selftests/bpf/verifier/atomic_or.c        | 26 ++++++++++++++
+ 3 files changed, 87 insertions(+)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 16ba43352a5f..7f4a83d62acc 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -11889,6 +11889,39 @@ static int fixup_bpf_calls(struct bpf_verifier_env *env)
+ 	return 0;
+ }
+
++/* BPF_CMPXCHG always loads a value into R0, therefore always zero-extends.
++ * However some archs' equivalent instruction only does this load when the
++ * comparison is successful. So here we add a BPF_ZEXT_REG after every 32-bit
++ * CMPXCHG, so that such archs' JITs don't need to deal with the issue. Archs
++ * that don't face this issue may use insn_is_zext to detect and skip the added
++ * instruction.
++ */
++static int add_zext_after_cmpxchg(struct bpf_verifier_env *env)
++{
++	struct bpf_insn zext_patch[2] = { [1] = BPF_ZEXT_REG(BPF_REG_0) };
++	struct bpf_insn *insn = env->prog->insnsi;
++	int insn_cnt = env->prog->len;
++	struct bpf_prog *new_prog;
++	int delta = 0; /* Number of instructions added */
++	int i;
++
++	for (i = 0; i < insn_cnt; i++, insn++) {
++		if (insn->code != (BPF_STX | BPF_W | BPF_ATOMIC) || insn->imm != BPF_CMPXCHG)
++			continue;
++
++		zext_patch[0] = *insn;
++		new_prog = bpf_patch_insn_data(env, i + delta, zext_patch, 2);
++		if (!new_prog)
++			return -ENOMEM;
++
++		delta++;
++		env->prog = new_prog;
++		insn = new_prog->insnsi + i + delta;
++	}
++
++	return 0;
++}
++
+ static void free_states(struct bpf_verifier_env *env)
+ {
+ 	struct bpf_verifier_state_list *sl, *sln;
+@@ -12655,6 +12688,9 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr,
+ 	if (ret == 0)
+ 		ret = fixup_call_args(env);
+
++	if (ret == 0)
++		ret = add_zext_after_cmpxchg(env);
++
+ 	env->verification_time = ktime_get_ns() - start_time;
+ 	print_verification_stats(env);
+
+diff --git a/tools/testing/selftests/bpf/verifier/atomic_cmpxchg.c b/tools/testing/selftests/bpf/verifier/atomic_cmpxchg.c
+index 2efd8bcf57a1..6e52dfc64415 100644
+--- a/tools/testing/selftests/bpf/verifier/atomic_cmpxchg.c
++++ b/tools/testing/selftests/bpf/verifier/atomic_cmpxchg.c
+@@ -94,3 +94,28 @@
+ 	.result = REJECT,
+ 	.errstr = "invalid read from stack",
+ },
++{
++	"BPF_W cmpxchg should zero top 32 bits",
++	.insns = {
++		/* r0 = U64_MAX; */
++		BPF_MOV64_IMM(BPF_REG_0, 0),
++		BPF_ALU64_IMM(BPF_SUB, BPF_REG_0, 1),
++		/* u64 val = r0; */
++		BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -8),
++		/* r0 = (u32)atomic_cmpxchg((u32 *)&val, r0, 1); */
++		BPF_MOV32_IMM(BPF_REG_1, 1),
++		BPF_ATOMIC_OP(BPF_W, BPF_CMPXCHG, BPF_REG_10, BPF_REG_1, -8),
++		/* r1 = 0x00000000FFFFFFFFull; */
++		BPF_MOV64_IMM(BPF_REG_1, 1),
++		BPF_ALU64_IMM(BPF_LSH, BPF_REG_1, 32),
++		BPF_ALU64_IMM(BPF_SUB, BPF_REG_1, 1),
++		/* if (r0 != r1) exit(1); */
++		BPF_JMP_REG(BPF_JEQ, BPF_REG_0, BPF_REG_1, 2),
++		BPF_MOV32_IMM(BPF_REG_0, 1),
++		BPF_EXIT_INSN(),
++		/* exit(0); */
++		BPF_MOV32_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++},
+diff --git a/tools/testing/selftests/bpf/verifier/atomic_or.c b/tools/testing/selftests/bpf/verifier/atomic_or.c
+index 70f982e1f9f0..0a08b99e6ddd 100644
+--- a/tools/testing/selftests/bpf/verifier/atomic_or.c
++++ b/tools/testing/selftests/bpf/verifier/atomic_or.c
+@@ -75,3 +75,29 @@
+ 	},
+ 	.result = ACCEPT,
+ },
++{
++	"BPF_W atomic_fetch_or should zero top 32 bits",
++	.insns = {
++		/* r1 = U64_MAX; */
++		BPF_MOV64_IMM(BPF_REG_1, 0),
++		BPF_ALU64_IMM(BPF_SUB, BPF_REG_1, 1),
++		/* u64 val = r0; */
++		BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_1, -8),
++		/* r1 = (u32)atomic_sub((u32 *)&val, 1); */
++		BPF_MOV32_IMM(BPF_REG_1, 2),
++		BPF_ATOMIC_OP(BPF_W, BPF_OR | BPF_FETCH, BPF_REG_10, BPF_REG_1, -8),
++		/* r2 = 0x00000000FFFFFFFF; */
++		BPF_MOV64_IMM(BPF_REG_2, 1),
++		BPF_ALU64_IMM(BPF_LSH, BPF_REG_2, 32),
++		BPF_ALU64_IMM(BPF_SUB, BPF_REG_2, 1),
++		/* if (r2 != r1) exit(1); */
++		BPF_JMP_REG(BPF_JEQ, BPF_REG_2, BPF_REG_1, 2),
++		/* BPF_MOV32_IMM(BPF_REG_0, 1), */
++		BPF_MOV64_REG(BPF_REG_0, BPF_REG_1),
++		BPF_EXIT_INSN(),
++		/* exit(0); */
++		BPF_MOV32_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++},
+
+base-commit: 45159b27637b0fef6d5ddb86fc7c46b13c77960f
+--
+2.30.0.478.g8a0d178c01-goog
 
