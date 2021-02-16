@@ -2,85 +2,166 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3794AC433E0
-	for <bpf@archiver.kernel.org>; Tue, 16 Feb 2021 14:26:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96AF8C433E0
+	for <bpf@archiver.kernel.org>; Tue, 16 Feb 2021 14:32:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E877064E04
-	for <bpf@archiver.kernel.org>; Tue, 16 Feb 2021 14:26:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 683C964E04
+	for <bpf@archiver.kernel.org>; Tue, 16 Feb 2021 14:32:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230197AbhBPO0P (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 16 Feb 2021 09:26:15 -0500
-Received: from mga18.intel.com ([134.134.136.126]:63131 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230190AbhBPO0M (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 16 Feb 2021 09:26:12 -0500
-IronPort-SDR: cM+xPrJUHPXHAZ2GoppKml4sbF6V3KSFCvnrmhTM1Iwte8GZVCxRKcQyNRQMApAwXr9ARp2KUl
- nJhZJRnpP2bg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9896"; a="170560091"
-X-IronPort-AV: E=Sophos;i="5.81,183,1610438400"; 
-   d="scan'208";a="170560091"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2021 06:25:28 -0800
-IronPort-SDR: uoPq3kaWWEgMuJUQNOSfy+dcO2DD6L8GDDjIdJpu/wvsaa3qiNFdFv7FwA+5swkhRJhd/NxQBO
- DqJ6rq93eW2g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,183,1610438400"; 
-   d="scan'208";a="384408460"
-Received: from ranger.igk.intel.com ([10.102.21.164])
-  by fmsmga008.fm.intel.com with ESMTP; 16 Feb 2021 06:25:26 -0800
-Date:   Tue, 16 Feb 2021 15:15:34 +0100
-From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@intel.com>
-Cc:     John Fastabend <john.fastabend@gmail.com>, daniel@iogearbox.net,
-        ast@kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
-        andrii@kernel.org, toke@redhat.com, magnus.karlsson@intel.com,
-        ciara.loftus@intel.com
-Subject: Re: [PATCH bpf-next 3/3] samples: bpf: do not unload prog within
- xdpsock
-Message-ID: <20210216141534.GB14725@ranger.igk.intel.com>
-References: <20210215154638.4627-1-maciej.fijalkowski@intel.com>
- <20210215154638.4627-4-maciej.fijalkowski@intel.com>
- <602ad895e1810_3ed41208b6@john-XPS-13-9370.notmuch>
- <2e9b5266-047c-95d0-f056-03457e485862@intel.com>
+        id S230119AbhBPObn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 16 Feb 2021 09:31:43 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:39072 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230060AbhBPObj (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 16 Feb 2021 09:31:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1613485812;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nb9Kqw3jYRHWptfCeEgA2EWrWzfESD8aGU2YzYJvKpI=;
+        b=Lt/1a0HvacWHd6Sd+l26Foei9TTYF58A4XF51/2Y8FX295idSsEVb4L7ZhIdY9D3KuBLxQ
+        u8vyXzhJkWmhy9eSkTmU4U238uLlaZ5TEL47jGiVfVu+pwHSfFRehqW0GTxPCNVUWcsAyw
+        6JQldxLkoGraHvNPR2PwpbP/neGfReY=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-218-TM5hh0wDM5K_LtfBKnURkA-1; Tue, 16 Feb 2021 09:30:10 -0500
+X-MC-Unique: TM5hh0wDM5K_LtfBKnURkA-1
+Received: by mail-ej1-f70.google.com with SMTP id yc4so6304187ejb.2
+        for <bpf@vger.kernel.org>; Tue, 16 Feb 2021 06:30:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=nb9Kqw3jYRHWptfCeEgA2EWrWzfESD8aGU2YzYJvKpI=;
+        b=PZHk08jtVig05TCME3K6V5lvlSIh1bIEAsfZTP4CXz9+ZcrM4TRS8bHYwkPSSohEKV
+         EHB9L4Gg8Vzd8ZlDlk5Cp9+ICK9dD7Yu7VrI4miKHh8DElnDCph/giJedqQGutEKdb1U
+         brFN7xJZp3aD3Pn6sUFIbfXJn6ouoecswD0asHMNyDXL+KI2PcqGwLlGAE3SfDxVJmUp
+         BSnbY0/6wsZtJ+kUnzeOmvfbRBcDIN9voQr04HM4iOVlLiQ6RSjBk8y0BfLf1HkUuFOa
+         KAxwRpExspKZgMzSPRchKy8PsOExguSV+9BVdpu0UrpFF7PZlHC6TDtPb+2bePb51+x7
+         jczA==
+X-Gm-Message-State: AOAM530oY81BDx0l22M812unI8lmZ5B9P4N75rguKWwzjzoQ/EOIoACA
+        g9vFbd45xHfisg2HF9c5ckvLl+cC3i5CCNyLKlodS1GInhsRHROL6YbunoSCoOPj8wskt81mYDS
+        g1VXOI3dAsHjA
+X-Received: by 2002:aa7:cd8d:: with SMTP id x13mr20747698edv.286.1613485809054;
+        Tue, 16 Feb 2021 06:30:09 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzPnIbI5zNEUJMUQGdvUemv2Bdqe23PVRQQVPIj0wJyHJ00fcgoDHNUcRSpuNnhIw8rtDHhkg==
+X-Received: by 2002:aa7:cd8d:: with SMTP id x13mr20747652edv.286.1613485808745;
+        Tue, 16 Feb 2021 06:30:08 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id hr3sm12875181ejc.41.2021.02.16.06.30.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Feb 2021 06:30:08 -0800 (PST)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id BDCAE1805FA; Tue, 16 Feb 2021 15:30:07 +0100 (CET)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Marek Majtyka <alardam@gmail.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Saeed Mahameed <saeed@kernel.org>,
+        David Ahern <dsahern@gmail.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jesper Dangaard Brouer <jbrouer@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Maciej Fijalkowski <maciejromanfijalkowski@gmail.com>,
+        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        intel-wired-lan <intel-wired-lan@lists.osuosl.org>,
+        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
+        Jeff Kirsher <jeffrey.t.kirsher@intel.com>
+Subject: Re: [PATCH v2 bpf 1/5] net: ethtool: add xdp properties flag set
+In-Reply-To: <CAAOQfrHeqKMhZbJoHrdtOtekucuO7K4ASMwT=fS3WTx1XyhjTA@mail.gmail.com>
+References: <20201204102901.109709-1-marekx.majtyka@intel.com>
+ <20201209125223.49096d50@carbon>
+ <e1573338-17c0-48f4-b4cd-28eeb7ce699a@gmail.com>
+ <1e5e044c8382a68a8a547a1892b48fb21d53dbb9.camel@kernel.org>
+ <cb6b6f50-7cf1-6519-a87a-6b0750c24029@gmail.com>
+ <f4eb614ac91ee7623d13ea77ff3c005f678c512b.camel@kernel.org>
+ <d5be0627-6a11-9c1f-8507-cc1a1421dade@gmail.com>
+ <6f8c23d4ac60525830399754b4891c12943b63ac.camel@kernel.org>
+ <CAAOQfrHN1-oHmbOksDv-BKWv4gDF2zHZ5dTew6R_QTh6s_1abg@mail.gmail.com>
+ <87h7mvsr0e.fsf@toke.dk>
+ <CAAOQfrHA+-BsikeQzXYcK_32BZMbm54x5p5YhAiBj==uaZvG1w@mail.gmail.com>
+ <87bld2smi9.fsf@toke.dk>
+ <20210202113456.30cfe21e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <CAAOQfrGqcsn3wu5oxzHYxtE8iK3=gFdTka5HSh5Fe9Hc6HWRWA@mail.gmail.com>
+ <20210203090232.4a259958@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <874kikry66.fsf@toke.dk>
+ <20210210103135.38921f85@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <87czx7r0w8.fsf@toke.dk>
+ <20210211172603.17d6a8f6@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <CAADnVQJ_juVMxSKUvHBEsLNQoJ4mvkqyAV8XF4mmz-dO8saUzQ@mail.gmail.com>
+ <CAAOQfrHeqKMhZbJoHrdtOtekucuO7K4ASMwT=fS3WTx1XyhjTA@mail.gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Tue, 16 Feb 2021 15:30:07 +0100
+Message-ID: <8735xwaxw0.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2e9b5266-047c-95d0-f056-03457e485862@intel.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Feb 16, 2021 at 10:22:15AM +0100, Björn Töpel wrote:
-> On 2021-02-15 21:24, John Fastabend wrote:
-> > Maciej Fijalkowski wrote:
-> > > With the introduction of bpf_link in xsk's libbpf part, there's no
-> > > further need for explicit unload of prog on xdpsock's termination. When
-> > > process dies, the bpf_link's refcount will be decremented and resources
-> > > will be unloaded/freed under the hood in case when there are no more
-> > > active users.
-> > > 
-> > > While at it, don't dump stats on error path.
-> > > 
-> > > Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-> > > ---
-> > 
-> > Can we also use it from selftests prog so we have a test that is run there
-> > using this? Looks like xdpxceiver.c could do the link step as well?
-> > 
-> 
-> Yes! Good point!
+Marek Majtyka <alardam@gmail.com> writes:
 
-Somehow John's mail didn't end up in my inbox.
-xdpxceiver is using libbpf API for socket handling (create/delete), so
-with that set included it is working on bpf_link.
+> On Fri, Feb 12, 2021 at 3:05 AM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+>>
+>> On Thu, Feb 11, 2021 at 5:26 PM Jakub Kicinski <kuba@kernel.org> wrote:
+>> >
+>> > Perhaps I had seen one too many vendor incompatibility to trust that
+>> > adding a driver API without a validation suite will result in something
+>> > usable in production settings.
+>>
+>> I agree with Jakub. I don't see how extra ethtool reporting will help.
+>> Anyone who wants to know whether eth0 supports XDP_REDIRECT can already do so:
+>> ethtool -S eth0 | grep xdp_redirect
+>
+> Doing things right can never be treated as an addition. It is the
+> other way around. Option -S is for statistics and additionally it can
+> show something (AFAIR there wasn't such counter xdp_redirect, it must
+> be something new, thanks for the info). But  nevertheless it cannot
+> cover all needs IMO.
+>
+> Some questions worth to consider:
+> Is this extra reporting function of statistics clearly documented in
+> ethtool? Is this going to be clearly documented? Would it be easier
+> for users/admins to find it?
+> What about zero copy? Can it be available via statistics, too?
+> What about drivers XDP transmit locking flag (latest request from Jesper)?
 
-> 
-> 
-> Björn
+
+There is no way the statistics is enough. And saying "just grep for
+xdp_redirect in ethtool -S" is bordering on active hostility towards
+users.
+
+We need drivers to export explicit features so we can do things like:
+
+- Explicitly reject attaching a program that tries to do xdp_redirect on
+  an interface that doesn't support it.
+
+- Prevent devices that don't implement ndo_xdp_xmit() from being
+  inserted into a devmap (oh, and this is on thing you can't know at all
+  from the statistics, BTW).
+
+- Expose the features in a machine-readable format (like the ethtool
+  flags in your patch) so applications can discover in a reliable way
+  what is available and do proper fallback if features are missing.
+
+I can accept that we need some kind of conformance test to define what
+each flag means (which would be kinda like a selftest for the feature
+flags), but we definitely need the feature flags themselves!
+
+-Toke
+
