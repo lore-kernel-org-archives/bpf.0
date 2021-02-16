@@ -2,33 +2,33 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22DDEC433DB
-	for <bpf@archiver.kernel.org>; Tue, 16 Feb 2021 14:35:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 52286C433DB
+	for <bpf@archiver.kernel.org>; Tue, 16 Feb 2021 14:35:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E889F64E07
-	for <bpf@archiver.kernel.org>; Tue, 16 Feb 2021 14:35:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 220A564E04
+	for <bpf@archiver.kernel.org>; Tue, 16 Feb 2021 14:35:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230318AbhBPOeu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 16 Feb 2021 09:34:50 -0500
-Received: from mail-40134.protonmail.ch ([185.70.40.134]:24223 "EHLO
+        id S230227AbhBPOfN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 16 Feb 2021 09:35:13 -0500
+Received: from mail-40134.protonmail.ch ([185.70.40.134]:34050 "EHLO
         mail-40134.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230120AbhBPOej (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 16 Feb 2021 09:34:39 -0500
-Date:   Tue, 16 Feb 2021 14:33:49 +0000
+        with ESMTP id S230362AbhBPOfF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 16 Feb 2021 09:35:05 -0500
+Date:   Tue, 16 Feb 2021 14:34:16 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
-        t=1613486034; bh=pa/HIRdVekskrI+yiR4JSN6JX+/jAqm2kRAxdkvQIPE=;
-        h=Date:To:From:Cc:Reply-To:Subject:From;
-        b=Dwz3CXbhJIOAaQm8x4mvkXElCpP8X+8casX/i7eCeIsalvy0OmO04vPaVtLcUeaw7
-         qFQUfEd9oV8ps1Diphox+DNzy4vRR+mUsVncOE1I7QopYkOhY1HtUZ9EB6oMoYfd0f
-         NWaJJm6MaCNDs04PhuFTiARiRAMFDEYntq3eKE5eP6aGa2raz1jBUiiNMWacmjSIuw
-         lwPmuPzrQBXDAPVALXPk+UcPk314PV9jIElCJgF4lj7j++k1qxmxPxZGl+a15YoZ3R
-         xFZ7nGFNdW6+SWHFsS/vmabKIfR3MwTqWcttJTXQUXhJQYezGWvO98O1RsqeDNLwop
-         3QbLtKe+HtOew==
+        t=1613486061; bh=F79GxxLFgGar0uDA252Y0utA5OPZJ+zP9u/t7cIgBJg=;
+        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
+        b=eEMOhQ21Ih63jKmwgdrqH1NtMqjuglv/W9LhnJEinSZ0dPZFYSG/ovDV5+oLVPLmP
+         IG9j65SkR2g28LhuC/+9EL/ydrPau2j9cKzAWGCblPK6nObfu53yJxFSSf7i/7cmbZ
+         EBgINC+pO7KgOrqE9scTOz6xK5hflJfklQ/Btcm4qhn/nGQxtRwdMj9ZW3jYlLjF2X
+         0nzQAFeXtDHBC02GgAO/knfwCo5v+e4WceiB6S45p2/gBXC2CSCiX0IP1qlSKYbpOr
+         R6fLaE3A/x1HZsrk/yqfhnoBVjHbUgBGRIfB6sDeFKIRxDZt0KH/Dm0zMv4VbLlf6X
+         NGxRtnLIZDddw==
 To:     Magnus Karlsson <magnus.karlsson@intel.com>,
         =?utf-8?Q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>
 From:   Alexander Lobakin <alobakin@pm.me>
@@ -50,10 +50,13 @@ Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
         Dust Li <dust.li@linux.alibaba.com>,
         Alexander Lobakin <alobakin@pm.me>,
         virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
 Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: [PATCH v5 bpf-next 0/6] xsk: build skb by page (aka generic zerocopy xmit)
-Message-ID: <20210216143333.5861-1-alobakin@pm.me>
+Subject: [PATCH v5 bpf-next 2/6] netdevice: check for net_device::priv_flags bitfield overflow
+Message-ID: <20210216143333.5861-3-alobakin@pm.me>
+In-Reply-To: <20210216143333.5861-1-alobakin@pm.me>
+References: <20210216143333.5861-1-alobakin@pm.me>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
@@ -61,124 +64,172 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This series introduces XSK generic zerocopy xmit by adding XSK umem
-pages as skb frags instead of copying data to linear space.
-The only requirement for this for drivers is to be able to xmit skbs
-with skb_headlen(skb) =3D=3D 0, i.e. all data including hard headers
-starts from frag 0.
-To indicate whether a particular driver supports this, a new netdev
-priv flag, IFF_TX_SKB_NO_LINEAR, is added (and declared in virtio_net
-as it's already capable of doing it). So consider implementing this
-in your drivers to greatly speed-up generic XSK xmit.
+We almost ran out of unsigned int bitwidth. Define priv flags and
+check for potential overflow in the fashion of netdev_features_t.
+Defined this way, priv_flags can be easily expanded later with
+just changing its typedef.
 
-The first two bits refactor netdev_priv_flags a bit to harden them
-in terms of bitfield overflow, as IFF_TX_SKB_NO_LINEAR is the last
-one that fits into unsigned int.
-The fifth patch adds headroom and tailroom reservations for the
-allocated skbs on XSK generic xmit path. This ensures there won't
-be any unwanted skb reallocations on fast-path due to headroom and/or
-tailroom driver/device requirements (own headers/descriptors etc.).
-The other three add a new private flag, declare it in virtio_net
-driver and introduce generic XSK zerocopy xmit itself.
+Signed-off-by: Alexander Lobakin <alobakin@pm.me>
+Reported-by: kernel test robot <lkp@intel.com> # Inverted assert condition
+---
+ include/linux/netdevice.h | 135 ++++++++++++++++++++------------------
+ 1 file changed, 72 insertions(+), 63 deletions(-)
 
-The main body of work is created and done by Xuan Zhuo. His original
-cover letter:
-
-v3:
-    Optimized code
-
-v2:
-    1. add priv_flags IFF_TX_SKB_NO_LINEAR instead of netdev_feature
-    2. split the patch to three:
-        a. add priv_flags IFF_TX_SKB_NO_LINEAR
-        b. virtio net add priv_flags IFF_TX_SKB_NO_LINEAR
-        c. When there is support this flag, construct skb without linear
-           space
-    3. use ERR_PTR() and PTR_ERR() to handle the err
-
-v1 message log:
----------------
-
-This patch is used to construct skb based on page to save memory copy
-overhead.
-
-This has one problem:
-
-We construct the skb by fill the data page as a frag into the skb. In
-this way, the linear space is empty, and the header information is also
-in the frag, not in the linear space, which is not allowed for some
-network cards. For example, Mellanox Technologies MT27710 Family
-[ConnectX-4 Lx] will get the following error message:
-
-    mlx5_core 0000:3b:00.1 eth1: Error cqe on cqn 0x817, ci 0x8,
-    qn 0x1dbb, opcode 0xd, syndrome 0x1, vendor syndrome 0x68
-    00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-    00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-    00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-    00000030: 00 00 00 00 60 10 68 01 0a 00 1d bb 00 0f 9f d2
-    WQE DUMP: WQ size 1024 WQ cur size 0, WQE index 0xf, len: 64
-    00000000: 00 00 0f 0a 00 1d bb 03 00 00 00 08 00 00 00 00
-    00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-    00000020: 00 00 00 2b 00 08 00 00 00 00 00 05 9e e3 08 00
-    00000030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-    mlx5_core 0000:3b:00.1 eth1: ERR CQE on SQ: 0x1dbb
-
-I also tried to use build_skb to construct skb, but because of the
-existence of skb_shinfo, it must be behind the linear space, so this
-method is not working. We can't put skb_shinfo on desc->addr, it will be
-exposed to users, this is not safe.
-
-Finally, I added a feature NETIF_F_SKB_NO_LINEAR to identify whether the
-network card supports the header information of the packet in the frag
-and not in the linear space.
-
----------------- Performance Testing ------------
-
-The test environment is Aliyun ECS server.
-Test cmd:
-```
-xdpsock -i eth0 -t  -S -s <msg size>
-```
-
-Test result data:
-
-size    64      512     1024    1500
-copy    1916747 1775988 1600203 1440054
-page    1974058 1953655 1945463 1904478
-percent 3.0%    10.0%   21.58%  32.3%
-
-From v4 [1]:
- - fix 0002 build error due to inverted static_assert() condition
-   (0day bot);
- - collect two Acked-bys (Magnus).
-
-From v3 [0]:
- - refactor netdev_priv_flags to make it easier to add new ones and
-   prevent bitwidth overflow;
- - add headroom (both standard and zerocopy) and tailroom (standard)
-   reservation in skb for drivers to avoid potential reallocations;
- - fix skb->truesize accounting;
- - misc comment rewords.
-
-[0] https://lore.kernel.org/netdev/cover.1611236588.git.xuanzhuo@linux.alib=
-aba.com
-[1] https://lore.kernel.org/netdev/20210216113740.62041-1-alobakin@pm.me
-
-Alexander Lobakin (3):
-  netdev_priv_flags: add missing IFF_PHONY_HEADROOM self-definition
-  netdevice: check for net_device::priv_flags bitfield overflow
-  xsk: respect device's headroom and tailroom on generic xmit path
-
-Xuan Zhuo (3):
-  net: add priv_flags for allow tx skb without linear
-  virtio-net: support IFF_TX_SKB_NO_LINEAR
-  xsk: build skb by page (aka generic zerocopy xmit)
-
- drivers/net/virtio_net.c  |   3 +-
- include/linux/netdevice.h | 138 +++++++++++++++++++++-----------------
- net/xdp/xsk.c             | 113 ++++++++++++++++++++++++++-----
- 3 files changed, 173 insertions(+), 81 deletions(-)
-
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index b895973390ee..0a9b2b31f411 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -1527,70 +1527,79 @@ struct net_device_ops {
+  * @IFF_LIVE_RENAME_OK: rename is allowed while device is up and running
+  */
+ enum netdev_priv_flags {
+-=09IFF_802_1Q_VLAN=09=09=09=3D 1<<0,
+-=09IFF_EBRIDGE=09=09=09=3D 1<<1,
+-=09IFF_BONDING=09=09=09=3D 1<<2,
+-=09IFF_ISATAP=09=09=09=3D 1<<3,
+-=09IFF_WAN_HDLC=09=09=09=3D 1<<4,
+-=09IFF_XMIT_DST_RELEASE=09=09=3D 1<<5,
+-=09IFF_DONT_BRIDGE=09=09=09=3D 1<<6,
+-=09IFF_DISABLE_NETPOLL=09=09=3D 1<<7,
+-=09IFF_MACVLAN_PORT=09=09=3D 1<<8,
+-=09IFF_BRIDGE_PORT=09=09=09=3D 1<<9,
+-=09IFF_OVS_DATAPATH=09=09=3D 1<<10,
+-=09IFF_TX_SKB_SHARING=09=09=3D 1<<11,
+-=09IFF_UNICAST_FLT=09=09=09=3D 1<<12,
+-=09IFF_TEAM_PORT=09=09=09=3D 1<<13,
+-=09IFF_SUPP_NOFCS=09=09=09=3D 1<<14,
+-=09IFF_LIVE_ADDR_CHANGE=09=09=3D 1<<15,
+-=09IFF_MACVLAN=09=09=09=3D 1<<16,
+-=09IFF_XMIT_DST_RELEASE_PERM=09=3D 1<<17,
+-=09IFF_L3MDEV_MASTER=09=09=3D 1<<18,
+-=09IFF_NO_QUEUE=09=09=09=3D 1<<19,
+-=09IFF_OPENVSWITCH=09=09=09=3D 1<<20,
+-=09IFF_L3MDEV_SLAVE=09=09=3D 1<<21,
+-=09IFF_TEAM=09=09=09=3D 1<<22,
+-=09IFF_RXFH_CONFIGURED=09=09=3D 1<<23,
+-=09IFF_PHONY_HEADROOM=09=09=3D 1<<24,
+-=09IFF_MACSEC=09=09=09=3D 1<<25,
+-=09IFF_NO_RX_HANDLER=09=09=3D 1<<26,
+-=09IFF_FAILOVER=09=09=09=3D 1<<27,
+-=09IFF_FAILOVER_SLAVE=09=09=3D 1<<28,
+-=09IFF_L3MDEV_RX_HANDLER=09=09=3D 1<<29,
+-=09IFF_LIVE_RENAME_OK=09=09=3D 1<<30,
++=09IFF_802_1Q_VLAN_BIT,
++=09IFF_EBRIDGE_BIT,
++=09IFF_BONDING_BIT,
++=09IFF_ISATAP_BIT,
++=09IFF_WAN_HDLC_BIT,
++=09IFF_XMIT_DST_RELEASE_BIT,
++=09IFF_DONT_BRIDGE_BIT,
++=09IFF_DISABLE_NETPOLL_BIT,
++=09IFF_MACVLAN_PORT_BIT,
++=09IFF_BRIDGE_PORT_BIT,
++=09IFF_OVS_DATAPATH_BIT,
++=09IFF_TX_SKB_SHARING_BIT,
++=09IFF_UNICAST_FLT_BIT,
++=09IFF_TEAM_PORT_BIT,
++=09IFF_SUPP_NOFCS_BIT,
++=09IFF_LIVE_ADDR_CHANGE_BIT,
++=09IFF_MACVLAN_BIT,
++=09IFF_XMIT_DST_RELEASE_PERM_BIT,
++=09IFF_L3MDEV_MASTER_BIT,
++=09IFF_NO_QUEUE_BIT,
++=09IFF_OPENVSWITCH_BIT,
++=09IFF_L3MDEV_SLAVE_BIT,
++=09IFF_TEAM_BIT,
++=09IFF_RXFH_CONFIGURED_BIT,
++=09IFF_PHONY_HEADROOM_BIT,
++=09IFF_MACSEC_BIT,
++=09IFF_NO_RX_HANDLER_BIT,
++=09IFF_FAILOVER_BIT,
++=09IFF_FAILOVER_SLAVE_BIT,
++=09IFF_L3MDEV_RX_HANDLER_BIT,
++=09IFF_LIVE_RENAME_OK_BIT,
++
++=09NETDEV_PRIV_FLAG_COUNT,
+ };
+=20
+-#define IFF_802_1Q_VLAN=09=09=09IFF_802_1Q_VLAN
+-#define IFF_EBRIDGE=09=09=09IFF_EBRIDGE
+-#define IFF_BONDING=09=09=09IFF_BONDING
+-#define IFF_ISATAP=09=09=09IFF_ISATAP
+-#define IFF_WAN_HDLC=09=09=09IFF_WAN_HDLC
+-#define IFF_XMIT_DST_RELEASE=09=09IFF_XMIT_DST_RELEASE
+-#define IFF_DONT_BRIDGE=09=09=09IFF_DONT_BRIDGE
+-#define IFF_DISABLE_NETPOLL=09=09IFF_DISABLE_NETPOLL
+-#define IFF_MACVLAN_PORT=09=09IFF_MACVLAN_PORT
+-#define IFF_BRIDGE_PORT=09=09=09IFF_BRIDGE_PORT
+-#define IFF_OVS_DATAPATH=09=09IFF_OVS_DATAPATH
+-#define IFF_TX_SKB_SHARING=09=09IFF_TX_SKB_SHARING
+-#define IFF_UNICAST_FLT=09=09=09IFF_UNICAST_FLT
+-#define IFF_TEAM_PORT=09=09=09IFF_TEAM_PORT
+-#define IFF_SUPP_NOFCS=09=09=09IFF_SUPP_NOFCS
+-#define IFF_LIVE_ADDR_CHANGE=09=09IFF_LIVE_ADDR_CHANGE
+-#define IFF_MACVLAN=09=09=09IFF_MACVLAN
+-#define IFF_XMIT_DST_RELEASE_PERM=09IFF_XMIT_DST_RELEASE_PERM
+-#define IFF_L3MDEV_MASTER=09=09IFF_L3MDEV_MASTER
+-#define IFF_NO_QUEUE=09=09=09IFF_NO_QUEUE
+-#define IFF_OPENVSWITCH=09=09=09IFF_OPENVSWITCH
+-#define IFF_L3MDEV_SLAVE=09=09IFF_L3MDEV_SLAVE
+-#define IFF_TEAM=09=09=09IFF_TEAM
+-#define IFF_RXFH_CONFIGURED=09=09IFF_RXFH_CONFIGURED
+-#define IFF_PHONY_HEADROOM=09=09IFF_PHONY_HEADROOM
+-#define IFF_MACSEC=09=09=09IFF_MACSEC
+-#define IFF_NO_RX_HANDLER=09=09IFF_NO_RX_HANDLER
+-#define IFF_FAILOVER=09=09=09IFF_FAILOVER
+-#define IFF_FAILOVER_SLAVE=09=09IFF_FAILOVER_SLAVE
+-#define IFF_L3MDEV_RX_HANDLER=09=09IFF_L3MDEV_RX_HANDLER
+-#define IFF_LIVE_RENAME_OK=09=09IFF_LIVE_RENAME_OK
++typedef u32 netdev_priv_flags_t;
++static_assert(sizeof(netdev_priv_flags_t) * BITS_PER_BYTE >=3D
++=09      NETDEV_PRIV_FLAG_COUNT);
++
++#define __IFF_BIT(bit)=09=09=09((netdev_priv_flags_t)1 << (bit))
++#define __IFF(name)=09=09=09__IFF_BIT(IFF_##name##_BIT)
++
++#define IFF_802_1Q_VLAN=09=09=09__IFF(802_1Q_VLAN)
++#define IFF_EBRIDGE=09=09=09__IFF(EBRIDGE)
++#define IFF_BONDING=09=09=09__IFF(BONDING)
++#define IFF_ISATAP=09=09=09__IFF(ISATAP)
++#define IFF_WAN_HDLC=09=09=09__IFF(WAN_HDLC)
++#define IFF_XMIT_DST_RELEASE=09=09__IFF(XMIT_DST_RELEASE)
++#define IFF_DONT_BRIDGE=09=09=09__IFF(DONT_BRIDGE)
++#define IFF_DISABLE_NETPOLL=09=09__IFF(DISABLE_NETPOLL)
++#define IFF_MACVLAN_PORT=09=09__IFF(MACVLAN_PORT)
++#define IFF_BRIDGE_PORT=09=09=09__IFF(BRIDGE_PORT)
++#define IFF_OVS_DATAPATH=09=09__IFF(OVS_DATAPATH)
++#define IFF_TX_SKB_SHARING=09=09__IFF(TX_SKB_SHARING)
++#define IFF_UNICAST_FLT=09=09=09__IFF(UNICAST_FLT)
++#define IFF_TEAM_PORT=09=09=09__IFF(TEAM_PORT)
++#define IFF_SUPP_NOFCS=09=09=09__IFF(SUPP_NOFCS)
++#define IFF_LIVE_ADDR_CHANGE=09=09__IFF(LIVE_ADDR_CHANGE)
++#define IFF_MACVLAN=09=09=09__IFF(MACVLAN)
++#define IFF_XMIT_DST_RELEASE_PERM=09__IFF(XMIT_DST_RELEASE_PERM)
++#define IFF_L3MDEV_MASTER=09=09__IFF(L3MDEV_MASTER)
++#define IFF_NO_QUEUE=09=09=09__IFF(NO_QUEUE)
++#define IFF_OPENVSWITCH=09=09=09__IFF(OPENVSWITCH)
++#define IFF_L3MDEV_SLAVE=09=09__IFF(L3MDEV_SLAVE)
++#define IFF_TEAM=09=09=09__IFF(TEAM)
++#define IFF_RXFH_CONFIGURED=09=09__IFF(RXFH_CONFIGURED)
++#define IFF_PHONY_HEADROOM=09=09__IFF(PHONY_HEADROOM)
++#define IFF_MACSEC=09=09=09__IFF(MACSEC)
++#define IFF_NO_RX_HANDLER=09=09__IFF(NO_RX_HANDLER)
++#define IFF_FAILOVER=09=09=09__IFF(FAILOVER)
++#define IFF_FAILOVER_SLAVE=09=09__IFF(FAILOVER_SLAVE)
++#define IFF_L3MDEV_RX_HANDLER=09=09__IFF(L3MDEV_RX_HANDLER)
++#define IFF_LIVE_RENAME_OK=09=09__IFF(LIVE_RENAME_OK)
+=20
+ /**
+  *=09struct net_device - The DEVICE structure.
+@@ -1925,7 +1934,7 @@ struct net_device {
+ =09const struct header_ops *header_ops;
+=20
+ =09unsigned int=09=09flags;
+-=09unsigned int=09=09priv_flags;
++=09netdev_priv_flags_t=09priv_flags;
+=20
+ =09unsigned short=09=09gflags;
+ =09unsigned short=09=09padded;
 --=20
 2.30.1
 
