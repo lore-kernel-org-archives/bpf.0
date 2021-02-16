@@ -7,59 +7,59 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BCC8C433DB
-	for <bpf@archiver.kernel.org>; Tue, 16 Feb 2021 11:02:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7156C433E0
+	for <bpf@archiver.kernel.org>; Tue, 16 Feb 2021 11:03:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 00CC164DFF
-	for <bpf@archiver.kernel.org>; Tue, 16 Feb 2021 11:02:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9523E64DF0
+	for <bpf@archiver.kernel.org>; Tue, 16 Feb 2021 11:03:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230001AbhBPLCl (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 16 Feb 2021 06:02:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35096 "EHLO
+        id S230223AbhBPLCp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 16 Feb 2021 06:02:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbhBPLAh (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 16 Feb 2021 06:00:37 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C59C0617A7
-        for <bpf@vger.kernel.org>; Tue, 16 Feb 2021 02:58:21 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id o82so1431590wme.1
-        for <bpf@vger.kernel.org>; Tue, 16 Feb 2021 02:58:21 -0800 (PST)
+        with ESMTP id S230139AbhBPLAk (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 16 Feb 2021 06:00:40 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B26E8C06121C
+        for <bpf@vger.kernel.org>; Tue, 16 Feb 2021 02:58:23 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id l12so12412023wry.2
+        for <bpf@vger.kernel.org>; Tue, 16 Feb 2021 02:58:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=0vsKJ/qcSYRSovInQOksHAVnokYKEDDhJ+tl+RlMl7A=;
-        b=ppRZdQAZe+N7aXM4BQ96wdgVafPGAko/k1BkXbTOFiAwragBIfHpFPlamW0cSyi4kw
-         4GbnT155B8ysgjVoIXtG++3iJtlz14sdzI2l39T0hQdHCW5++MwctT6kcNLMv/aDknt0
-         BM3vT2gJwqkc9YmtZF8xV63kDPDuUh/e9/fvc=
+        bh=0cxlavmTIp/zACJRiVyk8HpP0iu1cIzGXAbVh/+DaW8=;
+        b=psWWGXhZG0sX29DCrH5g7znf9h/J9mzSMMEUHll4znSBD2SIgJQg5dnfGiy5AubW15
+         o8x5arIpflHOq2dOaIZoKMUJITZucX0rPHpJ4IXAyiEuVtPnyqUCfPZs4THHNVCe1aga
+         ci3YzzLJXC+o3XwovwZ5iL9Pla+em8PzguanY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=0vsKJ/qcSYRSovInQOksHAVnokYKEDDhJ+tl+RlMl7A=;
-        b=Ck0baSCzTEbwR9mgfd7ECoLWEyvZYXqj0sCDxRaUX44zHdfpf+AiDNkhBnQb02/1ar
-         wC5xVi6Cd2gqK7RehS2y8Cy//LekWkabrfUAM7NOIBsYJL82gPyhVNJ437Y4I/Fo9Kp3
-         geY+y+sf02XO3rNCBXUM0vqJPb+t6Qqi9hdry1dLkTBYvZKxAG1GwE/W/QZ8ePN2Ql3P
-         3Z/+1dqZrf0Pt34IlvT9qKkAu9EJgrfKTSTNUVQzsZgL8dBIMxsoQ2cxc7Fzr6oAdUuJ
-         +o4Ed1/9X4r+rV+Eo5XS0M2UZZuEYZQH4E8hS35LNtcyZiQcCzuNTknNI5mdqJYhmtQ2
-         GXhg==
-X-Gm-Message-State: AOAM5315YSlF4F3oDKIsGuIvqdCoSI+//JTATedQzrtB55mnSxUk1bj+
-        GwgISLOc9Lh9cWw3imzJcSrsJQ==
-X-Google-Smtp-Source: ABdhPJyK8cymYaPqJEbDId1h7FaAFsC/dWT2XFzvvLWTKTulJa1fHBKGxmJFxSNFGR/Hc6+IcqeLTA==
-X-Received: by 2002:a1c:81d4:: with SMTP id c203mr2763553wmd.76.1613473100686;
-        Tue, 16 Feb 2021 02:58:20 -0800 (PST)
+        bh=0cxlavmTIp/zACJRiVyk8HpP0iu1cIzGXAbVh/+DaW8=;
+        b=JIVav+XlodlIGCpWU9MNcX3z6jBEJ3Jy2Ceb+3CYBM4ut0qYddGUuOLwP8t331ppX7
+         jmsBdJN1/LkfPRjbMo8m32ADQcLseiBoHcCcb8Wh/yQKegaJ0zq1zHjEue0bUEq/U0JM
+         tcM3oYjwxDDpBl0Hph/7JuTj2gc52nuEtmatMqo/FiJRKaYjS9lu3y4RGyIMgriMDnzr
+         jqdDipBK2sHIkNSgHaUvhDe5icO1NS8OZ9Ibv/7WdGjz4bG4lHia1covuhv/5vOrvdzR
+         +bVnv9rFSu2wun5p9REocaC7PksA8lavw/QuXcDseTvzUuoYX0AwGAAqeO+P299wxHuD
+         vURw==
+X-Gm-Message-State: AOAM530xUugCVGRMox5S7Wvp3LHNCOfj9d2qa6ytxDDUn7V3x1UnSsw4
+        Tf5bqNELUmed5T8TThgMYmwgjg==
+X-Google-Smtp-Source: ABdhPJwuZq/E2OsTx9xBGvIw9iUNdaB4ReccTUzvSxX4rEcvZuFONO/HooyK552+zygq5WnUiBCqng==
+X-Received: by 2002:adf:bb54:: with SMTP id x20mr23823050wrg.112.1613473102467;
+        Tue, 16 Feb 2021 02:58:22 -0800 (PST)
 Received: from antares.lan (111.253.187.81.in-addr.arpa. [81.187.253.111])
-        by smtp.gmail.com with ESMTPSA id l1sm2820238wmi.48.2021.02.16.02.58.20
+        by smtp.gmail.com with ESMTPSA id l1sm2820238wmi.48.2021.02.16.02.58.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Feb 2021 02:58:20 -0800 (PST)
+        Tue, 16 Feb 2021 02:58:22 -0800 (PST)
 From:   Lorenz Bauer <lmb@cloudflare.com>
 To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
         jakub@cloudflare.com
 Cc:     kernel-team@cloudflare.com, bpf@vger.kernel.org,
         netdev@vger.kernel.org, Lorenz Bauer <lmb@cloudflare.com>
-Subject: [PATCH bpf-next 6/8] selftests: bpf: convert sk_lookup multi prog tests to PROG_TEST_RUN
-Date:   Tue, 16 Feb 2021 10:57:11 +0000
-Message-Id: <20210216105713.45052-7-lmb@cloudflare.com>
+Subject: [PATCH bpf-next 8/8] selftests: bpf: check that PROG_TEST_RUN repeats as requested
+Date:   Tue, 16 Feb 2021 10:57:13 +0000
+Message-Id: <20210216105713.45052-9-lmb@cloudflare.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210216105713.45052-1-lmb@cloudflare.com>
 References: <20210216105713.45052-1-lmb@cloudflare.com>
@@ -69,215 +69,101 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Make the tests for multi program sk_lookup semantics use bpf_prog_run_array.
-This simplifies the test a bit and adds coverage to the new libbpf function.
+Extend a simple prog_run test to check that PROG_TEST_RUN adheres
+to the requested repetitions. Convert it to use BPF skeleton.
 
 Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
 ---
- .../selftests/bpf/prog_tests/sk_lookup.c      | 100 ++++++++++++------
- 1 file changed, 65 insertions(+), 35 deletions(-)
+ .../selftests/bpf/prog_tests/prog_run_xattr.c | 51 +++++++++++++++----
+ 1 file changed, 42 insertions(+), 9 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sk_lookup.c b/tools/testing/selftests/bpf/prog_tests/sk_lookup.c
-index 9ff0412e1fd3..a8e4a2044170 100644
---- a/tools/testing/selftests/bpf/prog_tests/sk_lookup.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sk_lookup.c
-@@ -267,6 +267,17 @@ static int recv_byte(int fd)
- 	return 0;
- }
+diff --git a/tools/testing/selftests/bpf/prog_tests/prog_run_xattr.c b/tools/testing/selftests/bpf/prog_tests/prog_run_xattr.c
+index 935a294f049a..131d7f7eeb42 100644
+--- a/tools/testing/selftests/bpf/prog_tests/prog_run_xattr.c
++++ b/tools/testing/selftests/bpf/prog_tests/prog_run_xattr.c
+@@ -2,12 +2,31 @@
+ #include <test_progs.h>
+ #include <network_helpers.h>
  
-+static __u64 socket_cookie(int fd)
-+{
-+	__u64 cookie;
-+	socklen_t cookie_len = sizeof(cookie);
+-void test_prog_run_xattr(void)
++#include "test_pkt_access.skel.h"
 +
-+	if (CHECK(getsockopt(fd, SOL_SOCKET, SO_COOKIE, &cookie, &cookie_len) < 0,
-+		  "getsockopt(SO_COOKIE)", "%s\n", strerror(errno)))
-+		return 0;
-+	return cookie;
++static const __u32 duration;
++
++static void check_run_cnt(int prog_fd, __u64 run_cnt)
+ {
+-	const char *file = "./test_pkt_access.o";
+-	struct bpf_object *obj;
+-	char buf[10];
++	struct bpf_prog_info info = {};
++	__u32 info_len = sizeof(info);
+ 	int err;
++
++	err = bpf_obj_get_info_by_fd(prog_fd, &info, &info_len);
++	if (CHECK(err, "get_prog_info", "failed to get bpf_prog_info for fd %d\n", prog_fd))
++		return;
++
++	CHECK(run_cnt != info.run_cnt, "run_cnt",
++	      "incorrect number of repetitions, want %llu have %llu\n", run_cnt, info.run_cnt);
 +}
 +
- static int tcp_recv_send(int server_fd)
- {
- 	char buf[1];
-@@ -1128,17 +1139,27 @@ struct test_multi_prog {
- 	struct bpf_program *prog2;
- 	struct bpf_map *redir_map;
- 	struct bpf_map *run_map;
--	int expect_errno;
-+	enum sk_action result;
- 	struct inet_addr listen_at;
-+	bool redirect;
- };
- 
- static void run_multi_prog_lookup(const struct test_multi_prog *t)
- {
--	struct sockaddr_storage dst = {};
--	int map_fd, server_fd, client_fd;
--	struct bpf_link *link1, *link2;
-+	int map_fd, server_fd;
-+	struct bpf_sk_lookup ctx = {};
- 	int prog_idx, done, err;
-+	__u32 prog_fds[2];
- 
-+	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, opts,
-+		.ctx_in = &ctx,
-+		.ctx_size_in = sizeof(ctx),
-+		.ctx_out = &ctx,
-+		.ctx_size_out = sizeof(ctx),
-+	);
++void test_prog_run_xattr(void)
++{
++	struct test_pkt_access *skel;
++	int err, stats_fd = -1;
++	char buf[10] = {};
++	__u64 run_cnt = 0;
 +
-+	prog_fds[0] = bpf_program__fd(t->prog1);
-+	prog_fds[1] = bpf_program__fd(t->prog2);
- 	map_fd = bpf_map__fd(t->run_map);
+ 	struct bpf_prog_test_run_attr tattr = {
+ 		.repeat = 1,
+ 		.data_in = &pkt_v4,
+@@ -16,12 +35,15 @@ void test_prog_run_xattr(void)
+ 		.data_size_out = 5,
+ 	};
  
- 	done = 0;
-@@ -1151,33 +1172,37 @@ static void run_multi_prog_lookup(const struct test_multi_prog *t)
- 	if (CHECK(err, "bpf_map_update_elem", "failed\n"))
+-	err = bpf_prog_load(file, BPF_PROG_TYPE_SCHED_CLS, &obj,
+-			    &tattr.prog_fd);
+-	if (CHECK_ATTR(err, "load", "err %d errno %d\n", err, errno))
++	stats_fd = bpf_enable_stats(BPF_STATS_RUN_TIME);
++	if (CHECK_ATTR(stats_fd < 0, "enable_stats", "failed %d\n", errno))
  		return;
  
--	link1 = attach_lookup_prog(t->prog1);
--	if (!link1)
--		return;
--	link2 = attach_lookup_prog(t->prog2);
--	if (!link2)
--		goto out_unlink1;
--
- 	server_fd = make_server(SOCK_STREAM, t->listen_at.ip,
- 				t->listen_at.port, NULL);
- 	if (server_fd < 0)
--		goto out_unlink2;
-+		return;
+-	memset(buf, 0, sizeof(buf));
++	skel = test_pkt_access__open_and_load();
++	if (CHECK_ATTR(!skel, "open_and_load", "failed\n"))
++		goto cleanup;
++
++	tattr.prog_fd = bpf_program__fd(skel->progs.test_pkt_access);
  
- 	err = update_lookup_map(t->redir_map, SERVER_A, server_fd);
- 	if (err)
--		goto out_close_server;
--
--	client_fd = make_socket(SOCK_STREAM, EXT_IP4, EXT_PORT, &dst);
--	if (client_fd < 0)
--		goto out_close_server;
--
--	err = connect(client_fd, (void *)&dst, inetaddr_len(&dst));
--	if (CHECK(err && !t->expect_errno, "connect",
--		  "unexpected error %d\n", errno))
--		goto out_close_client;
--	if (CHECK(err && t->expect_errno && errno != t->expect_errno,
--		  "connect", "unexpected error %d\n", errno))
--		goto out_close_client;
-+		goto out;
-+
-+	ctx.family = AF_INET;
-+	ctx.protocol = IPPROTO_TCP;
-+
-+	err = bpf_prog_test_run_array(prog_fds, ARRAY_SIZE(prog_fds), &opts);
-+	if (CHECK(err, "test_run_array", "failed with error %d\n", errno))
-+		goto out;
-+
-+	if (CHECK(opts.retval != t->result, "test_run", "unexpected result %d\n", opts.retval))
-+		goto out;
-+
-+	if (t->redirect) {
-+		__u64 cookie = socket_cookie(server_fd);
-+
-+		if (!cookie)
-+			goto out;
-+
-+		if (CHECK(ctx.cookie != cookie, "redirect",
-+			  "selected sk:%llu instead of sk:%llu\n", ctx.cookie, cookie))
-+			goto out;
-+	} else if (CHECK(ctx.cookie, "redirect", "selected unexpected sk:%llu\n", ctx.cookie)) {
-+		goto out;
-+	}
+ 	err = bpf_prog_test_run_xattr(&tattr);
+ 	CHECK_ATTR(err != -1 || errno != ENOSPC || tattr.retval, "run",
+@@ -34,8 +56,12 @@ void test_prog_run_xattr(void)
+ 	CHECK_ATTR(buf[5] != 0, "overflow",
+ 	      "BPF_PROG_TEST_RUN ignored size hint\n");
  
- 	done = 0;
- 	prog_idx = PROG1;
-@@ -1191,14 +1216,8 @@ static void run_multi_prog_lookup(const struct test_multi_prog *t)
- 	CHECK(err, "bpf_map_lookup_elem", "failed\n");
- 	CHECK(!done, "bpf_map_lookup_elem", "PROG2 !done\n");
++	run_cnt += tattr.repeat;
++	check_run_cnt(tattr.prog_fd, run_cnt);
++
+ 	tattr.data_out = NULL;
+ 	tattr.data_size_out = 0;
++	tattr.repeat = 2;
+ 	errno = 0;
  
--out_close_client:
--	close(client_fd);
--out_close_server:
-+out:
- 	close(server_fd);
--out_unlink2:
--	bpf_link__destroy(link2);
--out_unlink1:
--	bpf_link__destroy(link1);
+ 	err = bpf_prog_test_run_xattr(&tattr);
+@@ -46,5 +72,12 @@ void test_prog_run_xattr(void)
+ 	err = bpf_prog_test_run_xattr(&tattr);
+ 	CHECK_ATTR(err != -EINVAL, "run_wrong_size_out", "err %d\n", err);
+ 
+-	bpf_object__close(obj);
++	run_cnt += tattr.repeat;
++	check_run_cnt(tattr.prog_fd, run_cnt);
++
++cleanup:
++	if (skel)
++		test_pkt_access__destroy(skel);
++	if (stats_fd != -1)
++		close(stats_fd);
  }
- 
- static void test_multi_prog_lookup(struct test_sk_lookup *skel)
-@@ -1209,57 +1228,68 @@ static void test_multi_prog_lookup(struct test_sk_lookup *skel)
- 			.prog1		= skel->progs.multi_prog_pass1,
- 			.prog2		= skel->progs.multi_prog_pass2,
- 			.listen_at	= { EXT_IP4, EXT_PORT },
-+			.result		= SK_PASS,
- 		},
- 		{
- 			.desc		= "multi prog - drop, drop",
- 			.prog1		= skel->progs.multi_prog_drop1,
- 			.prog2		= skel->progs.multi_prog_drop2,
- 			.listen_at	= { EXT_IP4, EXT_PORT },
--			.expect_errno	= ECONNREFUSED,
-+			.result		= SK_DROP,
- 		},
- 		{
- 			.desc		= "multi prog - pass, drop",
- 			.prog1		= skel->progs.multi_prog_pass1,
- 			.prog2		= skel->progs.multi_prog_drop2,
- 			.listen_at	= { EXT_IP4, EXT_PORT },
--			.expect_errno	= ECONNREFUSED,
-+			.result		= SK_DROP,
- 		},
- 		{
- 			.desc		= "multi prog - drop, pass",
- 			.prog1		= skel->progs.multi_prog_drop1,
- 			.prog2		= skel->progs.multi_prog_pass2,
- 			.listen_at	= { EXT_IP4, EXT_PORT },
--			.expect_errno	= ECONNREFUSED,
-+			.result		= SK_DROP,
- 		},
- 		{
- 			.desc		= "multi prog - pass, redir",
- 			.prog1		= skel->progs.multi_prog_pass1,
- 			.prog2		= skel->progs.multi_prog_redir2,
- 			.listen_at	= { INT_IP4, INT_PORT },
-+			.result		= SK_PASS,
-+			.redirect	= true,
- 		},
- 		{
- 			.desc		= "multi prog - redir, pass",
- 			.prog1		= skel->progs.multi_prog_redir1,
- 			.prog2		= skel->progs.multi_prog_pass2,
- 			.listen_at	= { INT_IP4, INT_PORT },
-+			.result		= SK_PASS,
-+			.redirect	= true,
- 		},
- 		{
- 			.desc		= "multi prog - drop, redir",
- 			.prog1		= skel->progs.multi_prog_drop1,
- 			.prog2		= skel->progs.multi_prog_redir2,
- 			.listen_at	= { INT_IP4, INT_PORT },
-+			.result		= SK_PASS,
-+			.redirect	= true,
- 		},
- 		{
- 			.desc		= "multi prog - redir, drop",
- 			.prog1		= skel->progs.multi_prog_redir1,
- 			.prog2		= skel->progs.multi_prog_drop2,
- 			.listen_at	= { INT_IP4, INT_PORT },
-+			.result		= SK_PASS,
-+			.redirect	= true,
- 		},
- 		{
- 			.desc		= "multi prog - redir, redir",
- 			.prog1		= skel->progs.multi_prog_redir1,
- 			.prog2		= skel->progs.multi_prog_redir2,
- 			.listen_at	= { INT_IP4, INT_PORT },
-+			.result		= SK_PASS,
-+			.redirect	= true,
- 		},
- 	};
- 	struct test_multi_prog *t;
 -- 
 2.27.0
 
