@@ -5,63 +5,62 @@ X-Spam-Level:
 X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B1C09C433E0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EE360C43381
 	for <bpf@archiver.kernel.org>; Wed, 17 Feb 2021 11:10:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8738264E24
+	by mail.kernel.org (Postfix) with ESMTP id C80DC64EAE
 	for <bpf@archiver.kernel.org>; Wed, 17 Feb 2021 11:10:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230416AbhBQLJ2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 17 Feb 2021 06:09:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33682 "EHLO
+        id S231181AbhBQLJe (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 17 Feb 2021 06:09:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230486AbhBQLI5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 17 Feb 2021 06:08:57 -0500
-Received: from mail-qt1-x84a.google.com (mail-qt1-x84a.google.com [IPv6:2607:f8b0:4864:20::84a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF4BC0613D6
-        for <bpf@vger.kernel.org>; Wed, 17 Feb 2021 03:08:17 -0800 (PST)
-Received: by mail-qt1-x84a.google.com with SMTP id l1so9864189qtv.2
-        for <bpf@vger.kernel.org>; Wed, 17 Feb 2021 03:08:17 -0800 (PST)
+        with ESMTP id S231466AbhBQLJC (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 17 Feb 2021 06:09:02 -0500
+Received: from mail-qv1-xf4a.google.com (mail-qv1-xf4a.google.com [IPv6:2607:f8b0:4864:20::f4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E59F7C06178C
+        for <bpf@vger.kernel.org>; Wed, 17 Feb 2021 03:08:21 -0800 (PST)
+Received: by mail-qv1-xf4a.google.com with SMTP id y16so9715396qvs.12
+        for <bpf@vger.kernel.org>; Wed, 17 Feb 2021 03:08:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=sender:date:in-reply-to:message-id:mime-version:references:subject
          :from:to:cc;
-        bh=ajZkQUpdD91YaKxYZS+6hb11vUCM5tx8VfmWTzbq5CE=;
-        b=tPeKGEJsRm7bag5ChoB4+RYn4gD3GJjqyfimARLITA5CzqOfCuAQ1uSrwW9cWm9JyQ
-         KTLMAIamnPujMoVKCoD9UoCkdnUV0wJY5Ujdx+XejD65wKFo86/uNJdwvztoewwxx5QJ
-         RWJF6Fa6yuH7Efa3ZZEQgULYaI4zvgDt7/aB/IYv2CJ7Dn1Y1TLJ3oxFCL8JdS026WV4
-         swjU4QXn1xcduIkxzQtSphug/aarIqdg3uppjYi5xOr26nzLzIhWUNWh4wO8SOh/+Epy
-         JvMCM3b2DAdTI3F2tRonQCb4o8f91mWrdgERX2wDHRcTv2urtI4URqiQZR9KOfP2YJzx
-         Ob2w==
+        bh=IfrsKiM9qTPCm/mu8IvDda9E8qIyarKKAm3lIwYPM20=;
+        b=inbroXb8rNUuFuFw3kMiTs2hMpy6Pj1G6RKGaHjP7A9qVkb/BIEEMVUBll3DeGv+oL
+         65IavyDeNsBiWjbjbiZGi3BdHZEs38HEaVioWRqUM93C00FL7UcCeQvgtoLo4yGtH+AB
+         Gk+9l7rwQ1ZazlNx3ElOaBHn8hD6idoHjb+Ew5NcsfMIC53Fe3kgXP7swcrvBfw76jEQ
+         +ybbbNnNjvxkYXvHUFxA5ypZt3YP4hPH+YFSMhv0HTO+l/JGwQPHeaAx8jkGGPHw+tY9
+         UUSGcKK1MaUEAgfAiDddInmT0BBFGvSGvQyUfOYOj9J/cG0963g9pGCkOHU09h8GAmpY
+         26OQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=ajZkQUpdD91YaKxYZS+6hb11vUCM5tx8VfmWTzbq5CE=;
-        b=uDkDD/TMvJ75ZgzO0RNwpfHMvlqHQkIyhE+l+GZzpMsfAnaQTkEqNIOgiJxoZrukRU
-         NUpQDRJz8SEYvHhb6l5dT00676/o0cYGi5QNHU2xa03yfZiPwat13KPLDh3XuIVZyjzH
-         CbEGXiboBakBRZwKRBs0EnEzsTgL+EYRHBC/lyl/tk/QFksTglv61yRcn91zSQGS/WVw
-         PziNZ68TZzQKIRwEVBk6JPb8FoIHrJUYQBWb8SHX/07xxdQkPWzn+J8f5i9UTzp1G+1u
-         onRCMG3wMo9SryKMaEdQHNFThc1QOGnNQ3dagHjuuFWx1s7YrjhRFG/D9v6J3KpR7zN0
-         yxwQ==
-X-Gm-Message-State: AOAM530V4JCfYOU+8zk+INV8PmYYU0GjarU2d2ChbQeP+6YY0TrktllH
-        u4I4HRJh1Ov7Ecw8WYm90Ym/8WU/JLGaSw==
-X-Google-Smtp-Source: ABdhPJzg1aMAb13eTxUh3bqLKkQVWxGXNaAaDk1GlCH9Rd+XiSyWwrc3ipEuNbzCtt3z/liffkc0HhKA31nxXA==
+        bh=IfrsKiM9qTPCm/mu8IvDda9E8qIyarKKAm3lIwYPM20=;
+        b=KejZMJXV9zhEFirphNW3bItp9FuyqAsRcccNLBXFcOql0MgmGj4RtZAvyH7WOAlDmv
+         4WFRp//D9zeaoPIq4dRHqIWeYEhrbjtV1YFkYh7Tw+EKffmcYDaBJq8VufHqV3Y97pLi
+         /2PYRAvv/irodw2kDKkSuegtxvHHaEAC5SAgm43oyrMlXKfgJsfFDok+c01OjL4yoIlQ
+         GXJG0QroPBJHO8uQ8/nOSPQI2wmgfT5ZdwDCgAgI56gnT6UQkzK+r4bk/D0heby8skst
+         YX2cqbujVsKym5j/QLbrtP/Nlp/S46AIqy5t+VuU2NY68GZT3OAYQsj14Gok/BnM3poG
+         LE8Q==
+X-Gm-Message-State: AOAM531A/9aRqt89eHZY6u1xgcY90QSIyfJsoTPc/M+gMCdQYcC0LyTB
+        /COR0MZ9X7y84DGxvHaWcHWpd5yGjbHjGw==
+X-Google-Smtp-Source: ABdhPJxZIxtFwhvPKVtmI3xcKyLpDdQKBhyOFBS5FG4Qyf3pD4m41kvSNZBEpagTy5xgzrfoQaCwblzdYBSHPA==
 Sender: "gprocida via sendgmr" <gprocida@tef.lon.corp.google.com>
 X-Received: from tef.lon.corp.google.com ([2a00:79e0:d:110:61b3:1cb2:c180:c3f])
- (user=gprocida job=sendgmr) by 2002:a0c:fc44:: with SMTP id
- w4mr22445659qvp.55.1613560096470; Wed, 17 Feb 2021 03:08:16 -0800 (PST)
-Date:   Wed, 17 Feb 2021 11:08:00 +0000
+ (user=gprocida job=sendgmr) by 2002:ad4:4e14:: with SMTP id
+ dl20mr1895136qvb.51.1613560101098; Wed, 17 Feb 2021 03:08:21 -0800 (PST)
+Date:   Wed, 17 Feb 2021 11:08:02 +0000
 In-Reply-To: <20210217110804.75923-1-gprocida@google.com>
-Message-Id: <20210217110804.75923-2-gprocida@google.com>
+Message-Id: <20210217110804.75923-4-gprocida@google.com>
 Mime-Version: 1.0
 References: <20210205134221.2953163-1-gprocida@google.com> <20210217110804.75923-1-gprocida@google.com>
 X-Mailer: git-send-email 2.30.0.478.g8a0d178c01-goog
-Subject: [PATCH dwarves v4 1/5] btf_encoder: Funnel ELF error reporting
- through a macro
+Subject: [PATCH dwarves v4 3/5] btf_encoder: Traverse sections using a for-loop
 From:   Giuliano Procida <gprocida@google.com>
 To:     dwarves@vger.kernel.org, acme@kernel.org
 Cc:     andrii@kernel.org, ast@kernel.org, gprocida@google.com,
@@ -72,121 +71,35 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This adds elf_error which prepends error messages with the function
-and appends a readable ELF error status.
+The pointer (iterator) scn can be made local to the loop and a more
+general while-loop is not needed.
 
-Also capitalise ELF consistently in error messages.
-
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
 Signed-off-by: Giuliano Procida <gprocida@google.com>
 ---
- libbtf.c | 34 +++++++++++++++++++---------------
- 1 file changed, 19 insertions(+), 15 deletions(-)
+ libbtf.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/libbtf.c b/libbtf.c
-index 9f76283..7bc49ba 100644
+index ace8896..4ae7150 100644
 --- a/libbtf.c
 +++ b/libbtf.c
-@@ -27,6 +27,16 @@
- #include "dwarves.h"
- #include "elf_symtab.h"
+@@ -700,7 +700,6 @@ static int btf_elf__write(const char *filename, struct btf *btf)
+ {
+ 	GElf_Ehdr ehdr;
+ 	Elf_Data *btf_data = NULL;
+-	Elf_Scn *scn = NULL;
+ 	Elf *elf = NULL;
+ 	const void *raw_btf_data;
+ 	uint32_t raw_btf_size;
+@@ -748,7 +747,7 @@ static int btf_elf__write(const char *filename, struct btf *btf)
+ 	 */
  
-+/*
-+ * This depends on the GNU extension to eliminate the stray comma in the zero
-+ * arguments case.
-+ *
-+ * The difference between elf_errmsg(-1) and elf_errmsg(elf_errno()) is that the
-+ * latter clears the current error.
-+ */
-+#define elf_error(fmt, ...) \
-+	fprintf(stderr, "%s: " fmt ": %s.\n", __func__, ##__VA_ARGS__, elf_errmsg(-1))
-+
- struct btf *base_btf;
- uint8_t btf_elf__verbose;
- uint8_t btf_elf__force;
-@@ -103,15 +113,13 @@ try_as_raw_btf:
- 			goto errout;
- 
- 		if (elf_version(EV_CURRENT) == EV_NONE) {
--			fprintf(stderr, "%s: cannot set libelf version.\n",
--				__func__);
-+			elf_error("cannot set libelf version");
- 			goto errout;
- 		}
- 
- 		btfe->elf = elf_begin(btfe->in_fd, ELF_C_READ_MMAP, NULL);
- 		if (!btfe->elf) {
--			fprintf(stderr, "%s: cannot read %s ELF file: %s.\n",
--				__func__, filename, elf_errmsg(elf_errno()));
-+			elf_error("cannot read %s ELF file", filename);
- 			goto errout;
- 		}
- 	}
-@@ -127,7 +135,7 @@ try_as_raw_btf:
- 			goto try_as_raw_btf;
- 		}
- 		if (btf_elf__verbose)
--			fprintf(stderr, "%s: cannot get elf header.\n", __func__);
-+			elf_error("cannot get ELF header");
- 		goto errout;
- 	}
- 
-@@ -141,7 +149,7 @@ try_as_raw_btf:
- 		btf__set_endianness(btfe->btf, BTF_BIG_ENDIAN);
- 		break;
- 	default:
--		fprintf(stderr, "%s: unknown elf endianness.\n", __func__);
-+		fprintf(stderr, "%s: unknown ELF endianness.\n", __func__);
- 		goto errout;
- 	}
- 
-@@ -707,15 +715,13 @@ static int btf_elf__write(const char *filename, struct btf *btf)
- 	}
- 
- 	if (elf_version(EV_CURRENT) == EV_NONE) {
--		fprintf(stderr, "Cannot set libelf version: %s.\n",
--			elf_errmsg(elf_errno()));
-+		elf_error("Cannot set libelf version");
- 		goto out;
- 	}
- 
- 	elf = elf_begin(fd, ELF_C_RDWR, NULL);
- 	if (elf == NULL) {
--		fprintf(stderr, "Cannot update ELF file: %s.\n",
--			elf_errmsg(elf_errno()));
-+		elf_error("Cannot update ELF file");
- 		goto out;
- 	}
- 
-@@ -723,8 +729,7 @@ static int btf_elf__write(const char *filename, struct btf *btf)
- 
- 	ehdr = gelf_getehdr(elf, &ehdr_mem);
- 	if (ehdr == NULL) {
--		fprintf(stderr, "%s: elf_getehdr failed: %s.\n", __func__,
--			elf_errmsg(elf_errno()));
-+		elf_error("elf_getehdr failed");
- 		goto out;
- 	}
- 
-@@ -736,7 +741,7 @@ static int btf_elf__write(const char *filename, struct btf *btf)
- 		btf__set_endianness(btf, BTF_BIG_ENDIAN);
- 		break;
- 	default:
--		fprintf(stderr, "%s: unknown elf endianness.\n", __func__);
-+		fprintf(stderr, "%s: unknown ELF endianness.\n", __func__);
- 		goto out;
- 	}
- 
-@@ -768,8 +773,7 @@ static int btf_elf__write(const char *filename, struct btf *btf)
- 		    elf_update(elf, ELF_C_WRITE) >= 0)
- 			err = 0;
- 		else
--			fprintf(stderr, "%s: elf_update failed: %s.\n",
--				__func__, elf_errmsg(elf_errno()));
-+			elf_error("elf_update failed");
- 	} else {
- 		const char *llvm_objcopy;
- 		char tmp_fn[PATH_MAX];
+ 	elf_getshdrstrndx(elf, &strndx);
+-	while ((scn = elf_nextscn(elf, scn)) != NULL) {
++	for (Elf_Scn *scn = elf_nextscn(elf, NULL); scn; scn = elf_nextscn(elf, scn)) {
+ 		GElf_Shdr shdr;
+ 		if (!gelf_getshdr(scn, &shdr))
+ 			continue;
 -- 
 2.30.0.478.g8a0d178c01-goog
 
