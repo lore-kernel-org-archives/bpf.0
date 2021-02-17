@@ -7,63 +7,63 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44B6EC433E0
-	for <bpf@archiver.kernel.org>; Wed, 17 Feb 2021 01:10:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9940C433E6
+	for <bpf@archiver.kernel.org>; Wed, 17 Feb 2021 01:10:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 174A064E6B
-	for <bpf@archiver.kernel.org>; Wed, 17 Feb 2021 01:10:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8EF8864E57
+	for <bpf@archiver.kernel.org>; Wed, 17 Feb 2021 01:10:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230201AbhBQBKD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 16 Feb 2021 20:10:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47430 "EHLO
+        id S230382AbhBQBKE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 16 Feb 2021 20:10:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231411AbhBQBJ0 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 16 Feb 2021 20:09:26 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31C6C061794;
-        Tue, 16 Feb 2021 17:08:52 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id b145so7355790pfb.4;
-        Tue, 16 Feb 2021 17:08:52 -0800 (PST)
+        with ESMTP id S231423AbhBQBJa (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 16 Feb 2021 20:09:30 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47AA9C0617A7;
+        Tue, 16 Feb 2021 17:08:55 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id y25so4065333pfp.5;
+        Tue, 16 Feb 2021 17:08:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=dv8MkLcOtY2EeZNXcDWE1hLwVEjep3x1oeuEfehCxV8=;
-        b=QJk/AXrEZD0nnTG+SBuG0PXQqRRTtcvl/el5ihhrL+Vp+k27B1cYx+izpy/t6TxRrY
-         /0UftaLwyjUqsf0yNOG0GKzewUroeBxE7G4SezmXsCwNTqCdX9HMjdQaEtLTUyCsZKQT
-         FAgLsujgCMbu+7Y8KEefMzpiskvsixQKbsuk9JDgy4o2Uk5AUeGcBlJl+IWiqrdq9dZi
-         wCgWOj9u4Jk1tsEsrOceJBp0KIGRI7Wl+i3uTkZ86XwlhalyMRxzTtilL2hWCYg3/ixF
-         atbN84cmfiYM3kvy1/GOqNQethwhRFrxs89gAh87B3zOc3IBxZApnw+ddvU1fKyts09Z
-         x9lA==
+        bh=MiVaeokbQ1fWDcSWZ7ac5Jz6/tMfL2yhVQN5dJlBHbk=;
+        b=QZncIX05i8DnwM1dMWrk2srvmO5i43J4JKbAIY6IdcppAilMWI34QmXeGt0Ut4yPRI
+         MDpV3qEXH0FBTHJfRHl516QbhHcShsh+e5OT/n34IsMI8UHneyqa4hC5uBS+c1c31yQ3
+         LAb8RZD+jUOPn/ab0vbYRYSWrkMsA9CEiXFmKP9AkTQmZZsx4ui4xkjDwWejQp0jjPjf
+         uaJ8qjt+yH4FSnhbXxkepxEb38GrvCP5++qNzWryau8UP/G9YvFMRMnbEG2D5xPOO8/i
+         E55CiLVjUn/v/KqR52BGrQVztAtjSJN4nOP4dY7m5jUtjQMGbaZoHVkezCDOr04Go9Oh
+         IEiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=dv8MkLcOtY2EeZNXcDWE1hLwVEjep3x1oeuEfehCxV8=;
-        b=lttzFdTDvUTmiYC1/vssI280TQwNHZUNSLU5jB/AxMWGgVUNNUZU3ArUCMpRGmpy4g
-         ++bN6Jdnmh9/zwFM9NacBaXxR6sU9A/aflqtRrOnW/UQ0eYui8HULd7pvKip1/DRT/vE
-         JzJKcL5JD0CuHmtQGaE6l1W2FsoBrykjxW5Nu5npfcPSDThhuyg6hDtRVUuFpCfCAWHg
-         ZhdzC7C3YedW0SwuIRWUBAoY3b3xUWtm+BMNPhobxoyiu3GhSBr/KM/VZVfaWhLRtRto
-         6Zs/c8usIv0nq1AEXPo34rpq0jJauouOAMCs4iDFZXCU+YTzj77sdf/oowty5W8v3NlL
-         EFvQ==
-X-Gm-Message-State: AOAM530ULATPpZKj2MO43KBYKxYrRSZZ7B1Q5bouZbhGlnvLyxw8MdRv
-        RlJggX+lkWJ2Ch71FmFqu6Psc/eDrATtXw==
-X-Google-Smtp-Source: ABdhPJwyTPjZaCWLnMiC3snH3GqI4Sb2IRUhCLx4Iu4/+x0u9NejvQ1GU78eSglp9EA0KPbKmCHCMQ==
-X-Received: by 2002:a05:6a00:8f:b029:1e8:6975:395e with SMTP id c15-20020a056a00008fb02901e86975395emr22066650pfj.55.1613524123354;
-        Tue, 16 Feb 2021 17:08:43 -0800 (PST)
+        bh=MiVaeokbQ1fWDcSWZ7ac5Jz6/tMfL2yhVQN5dJlBHbk=;
+        b=LW1OZ6fEOnJ+huV7AHQecaQSSdqJGLjqJK0biycOQR/GGpzWYBoySEBVBxnbbn4d6E
+         VJUHvmVneOZCDVLwgo88Hyyt6kvhq9s4nt2eKUmUu6U+JDU1ofvFIpc/g36kFu6i0/7W
+         qYjJLcZH4zjXDdNy+0qZCKyPt+1AhOPCO7VeBTr0P2C4ZF5Q8hd8XpWBRo0hpgi0tVr1
+         1wu6BiM2uvHG4iOT53eB68ruHouOxTcNrWOEXIJQDqs/m9KWf91OX4V+GX5DUZVVtNmC
+         UxwKDKWYipKlonCPPgtWCsyePmbOpJfkgzgb4i6SNaIBg1CWUS+66n1JBO1FkVW1N7+I
+         g8Ww==
+X-Gm-Message-State: AOAM530Jyk7/W2j8lnn2MUoxot5frg2xN5hKYPXyec3FMJhSyr8esSC6
+        hU1Y++wethFvfCp0KPdsOzYhByrb55gN+w==
+X-Google-Smtp-Source: ABdhPJxRyb2Ya6+5bqzpp6vf+uDq2zJoR2cCeXRkTc01HAVwai4MkGBGq+faEb+I6CSzGjokjJ2+Ew==
+X-Received: by 2002:a65:6418:: with SMTP id a24mr21847515pgv.33.1613524134543;
+        Tue, 16 Feb 2021 17:08:54 -0800 (PST)
 Received: from localhost.localdomain (c-73-93-5-123.hsd1.ca.comcast.net. [73.93.5.123])
-        by smtp.gmail.com with ESMTPSA id c22sm175770pfc.12.2021.02.16.17.08.41
+        by smtp.gmail.com with ESMTPSA id c22sm175770pfc.12.2021.02.16.17.08.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Feb 2021 17:08:42 -0800 (PST)
+        Tue, 16 Feb 2021 17:08:53 -0800 (PST)
 Sender: Joe Stringer <joestringernz@gmail.com>
 From:   Joe Stringer <joe@wand.net.nz>
 To:     bpf@vger.kernel.org
 Cc:     Joe Stringer <joe@cilium.io>, netdev@vger.kernel.org,
         daniel@iogearbox.net, ast@kernel.org, mtk.manpages@gmail.com,
         Quentin Monnet <quentin@isovalent.com>
-Subject: [PATCH bpf-next 10/17] scripts/bpf: Abstract eBPF API target parameter
-Date:   Tue, 16 Feb 2021 17:08:14 -0800
-Message-Id: <20210217010821.1810741-11-joe@wand.net.nz>
+Subject: [PATCH bpf-next 12/17] tools/bpf: Rename Makefile.{helpers,docs}
+Date:   Tue, 16 Feb 2021 17:08:16 -0800
+Message-Id: <20210217010821.1810741-13-joe@wand.net.nz>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210217010821.1810741-1-joe@wand.net.nz>
 References: <20210217010821.1810741-1-joe@wand.net.nz>
@@ -75,186 +75,48 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Joe Stringer <joe@cilium.io>
 
-Abstract out the target parameter so that upcoming commits, more than
-just the existing "helpers" target can be called to generate specific
-portions of docs from the eBPF UAPI headers.
+In anticipation of including make targets for other manual pages in this
+makefile, rename it to something a bit more generic.
 
 Reviewed-by: Quentin Monnet <quentin@isovalent.com>
 Signed-off-by: Joe Stringer <joe@cilium.io>
 ---
- scripts/bpf_doc.py | 87 ++++++++++++++++++++++++++++++++--------------
- 1 file changed, 61 insertions(+), 26 deletions(-)
+ tools/bpf/{Makefile.helpers => Makefile.docs} | 2 +-
+ tools/bpf/bpftool/Documentation/Makefile      | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+ rename tools/bpf/{Makefile.helpers => Makefile.docs} (95%)
 
-diff --git a/scripts/bpf_doc.py b/scripts/bpf_doc.py
-index ca6e7559d696..5a4f68aab335 100755
---- a/scripts/bpf_doc.py
-+++ b/scripts/bpf_doc.py
-@@ -2,6 +2,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
- #
- # Copyright (C) 2018-2019 Netronome Systems, Inc.
-+# Copyright (C) 2021 Isovalent, Inc.
+diff --git a/tools/bpf/Makefile.helpers b/tools/bpf/Makefile.docs
+similarity index 95%
+rename from tools/bpf/Makefile.helpers
+rename to tools/bpf/Makefile.docs
+index a26599022fd6..dc4ce82ada33 100644
+--- a/tools/bpf/Makefile.helpers
++++ b/tools/bpf/Makefile.docs
+@@ -3,7 +3,7 @@ ifndef allow-override
+   include ../scripts/Makefile.include
+   include ../scripts/utilities.mak
+ else
+-  # Assume Makefile.helpers is being run from bpftool/Documentation
++  # Assume Makefile.docs is being run from bpftool/Documentation
+   # subdirectory. Go up two more directories to fetch bpf.h header and
+   # associated script.
+   UP2DIR := ../../
+diff --git a/tools/bpf/bpftool/Documentation/Makefile b/tools/bpf/bpftool/Documentation/Makefile
+index f33cb02de95c..bb7842efffd6 100644
+--- a/tools/bpf/bpftool/Documentation/Makefile
++++ b/tools/bpf/bpftool/Documentation/Makefile
+@@ -16,8 +16,8 @@ prefix ?= /usr/local
+ mandir ?= $(prefix)/man
+ man8dir = $(mandir)/man8
  
- # In case user attempts to run with Python 2.
- from __future__ import print_function
-@@ -165,10 +166,11 @@ class Printer(object):
-     """
-     A generic class for printers. Printers should be created with an array of
-     Helper objects, and implement a way to print them in the desired fashion.
--    @helpers: array of Helper objects to print to standard output
-+    @parser: A HeaderParser with objects to print to standard output
-     """
--    def __init__(self, helpers):
--        self.helpers = helpers
-+    def __init__(self, parser):
-+        self.parser = parser
-+        self.elements = []
+-# Load targets for building eBPF helpers man page.
+-include ../../Makefile.helpers
++# Load targets for building eBPF man page.
++include ../../Makefile.docs
  
-     def print_header(self):
-         pass
-@@ -181,19 +183,23 @@ class Printer(object):
+ MAN8_RST = $(wildcard bpftool*.rst)
  
-     def print_all(self):
-         self.print_header()
--        for helper in self.helpers:
--            self.print_one(helper)
-+        for elem in self.elements:
-+            self.print_one(elem)
-         self.print_footer()
- 
-+
- class PrinterRST(Printer):
-     """
--    A printer for dumping collected information about helpers as a ReStructured
--    Text page compatible with the rst2man program, which can be used to
--    generate a manual page for the helpers.
--    @helpers: array of Helper objects to print to standard output
-+    A generic class for printers that print ReStructured Text. Printers should
-+    be created with a HeaderParser object, and implement a way to print API
-+    elements in the desired fashion.
-+    @parser: A HeaderParser with objects to print to standard output
-     """
--    def print_header(self):
--        header = '''\
-+    def __init__(self, parser):
-+        self.parser = parser
-+
-+    def print_license(self):
-+        license = '''\
- .. Copyright (C) All BPF authors and contributors from 2014 to present.
- .. See git log include/uapi/linux/bpf.h in kernel tree for details.
- .. 
-@@ -223,7 +229,37 @@ class PrinterRST(Printer):
- .. located in file include/uapi/linux/bpf.h of the Linux kernel sources
- .. (helpers description), and from scripts/bpf_doc.py in the same
- .. repository (header and footer).
-+'''
-+        print(license)
-+
-+    def print_elem(self, elem):
-+        if (elem.desc):
-+            print('\tDescription')
-+            # Do not strip all newline characters: formatted code at the end of
-+            # a section must be followed by a blank line.
-+            for line in re.sub('\n$', '', elem.desc, count=1).split('\n'):
-+                print('{}{}'.format('\t\t' if line else '', line))
-+
-+        if (elem.ret):
-+            print('\tReturn')
-+            for line in elem.ret.rstrip().split('\n'):
-+                print('{}{}'.format('\t\t' if line else '', line))
-+
-+        print('')
- 
-+
-+class PrinterHelpersRST(PrinterRST):
-+    """
-+    A printer for dumping collected information about helpers as a ReStructured
-+    Text page compatible with the rst2man program, which can be used to
-+    generate a manual page for the helpers.
-+    @parser: A HeaderParser with Helper objects to print to standard output
-+    """
-+    def __init__(self, parser):
-+        self.elements = parser.helpers
-+
-+    def print_header(self):
-+        header = '''\
- ===========
- BPF-HELPERS
- ===========
-@@ -264,6 +300,7 @@ kernel at the top).
- HELPERS
- =======
- '''
-+        PrinterRST.print_license(self)
-         print(header)
- 
-     def print_footer(self):
-@@ -380,27 +417,19 @@ SEE ALSO
- 
-     def print_one(self, helper):
-         self.print_proto(helper)
-+        self.print_elem(helper)
- 
--        if (helper.desc):
--            print('\tDescription')
--            # Do not strip all newline characters: formatted code at the end of
--            # a section must be followed by a blank line.
--            for line in re.sub('\n$', '', helper.desc, count=1).split('\n'):
--                print('{}{}'.format('\t\t' if line else '', line))
- 
--        if (helper.ret):
--            print('\tReturn')
--            for line in helper.ret.rstrip().split('\n'):
--                print('{}{}'.format('\t\t' if line else '', line))
- 
--        print('')
- 
- class PrinterHelpers(Printer):
-     """
-     A printer for dumping collected information about helpers as C header to
-     be included from BPF program.
--    @helpers: array of Helper objects to print to standard output
-+    @parser: A HeaderParser with Helper objects to print to standard output
-     """
-+    def __init__(self, parser):
-+        self.elements = parser.helpers
- 
-     type_fwds = [
-             'struct bpf_fib_lookup',
-@@ -589,8 +618,12 @@ script = os.path.abspath(sys.argv[0])
- linuxRoot = os.path.dirname(os.path.dirname(script))
- bpfh = os.path.join(linuxRoot, 'include/uapi/linux/bpf.h')
- 
-+printers = {
-+        'helpers': PrinterHelpersRST,
-+}
-+
- argParser = argparse.ArgumentParser(description="""
--Parse eBPF header file and generate documentation for eBPF helper functions.
-+Parse eBPF header file and generate documentation for the eBPF API.
- The RST-formatted output produced can be turned into a manual page with the
- rst2man utility.
- """)
-@@ -601,6 +634,8 @@ if (os.path.isfile(bpfh)):
-                            default=bpfh)
- else:
-     argParser.add_argument('--filename', help='path to include/uapi/linux/bpf.h')
-+argParser.add_argument('target', nargs='?', default='helpers',
-+                       choices=printers.keys(), help='eBPF API target')
- args = argParser.parse_args()
- 
- # Parse file.
-@@ -609,7 +644,7 @@ headerParser.run()
- 
- # Print formatted output to standard output.
- if args.header:
--    printer = PrinterHelpers(headerParser.helpers)
-+    printer = PrinterHelpers(headerParser)
- else:
--    printer = PrinterRST(headerParser.helpers)
-+    printer = printers[args.target](headerParser)
- printer.print_all()
 -- 
 2.27.0
 
