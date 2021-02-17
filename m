@@ -5,48 +5,48 @@ X-Spam-Level:
 X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4653AC433DB
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A8D6C43331
 	for <bpf@archiver.kernel.org>; Wed, 17 Feb 2021 18:19:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 028A664E5F
-	for <bpf@archiver.kernel.org>; Wed, 17 Feb 2021 18:19:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 37E9B64DFF
+	for <bpf@archiver.kernel.org>; Wed, 17 Feb 2021 18:19:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234781AbhBQSS4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 17 Feb 2021 13:18:56 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:45110 "EHLO
+        id S234786AbhBQSS7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 17 Feb 2021 13:18:59 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:18992 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234782AbhBQSSy (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 17 Feb 2021 13:18:54 -0500
+        by vger.kernel.org with ESMTP id S234783AbhBQSS6 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 17 Feb 2021 13:18:58 -0500
 Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 11HIAZxG030123
-        for <bpf@vger.kernel.org>; Wed, 17 Feb 2021 10:18:14 -0800
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 11HIAa0G030133
+        for <bpf@vger.kernel.org>; Wed, 17 Feb 2021 10:18:17 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=31XmVbYT0l4MUTf7wzpZ0w8b+lx8KFvnmkxOUhkqGXo=;
- b=gPFMMe/xbOk0RzO5yg6V8zFBCYSb7bEFEtmD3cVHg0Emmv44vfDdSZjMQagc1cURTtaB
- WnOP0hL9jfInXC5eAtnoBowweD1ul9A6R/TexHY05YAD+YNSzYxdYZUe3Nnf92gFnq6+
- gdSjCrxtCY7FSB2v1DdfhT43UqzI79a+QG8= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 36s10tase3-2
+ bh=W3wcLjS92pw8nNiawlCo3vudShJj3SFlPkjWA0uBe58=;
+ b=m1iaEsXpPMi1Ouz4UjxBWf0FJwXsgvZSm7pIsDvIsPmmKY0MPy0cGVUGlahIHJ6Pas0W
+ FqAv/6Sp/aL6D4YH6e+dYYkfLSrcL4v3/CQ+13PPBbTKhtSJ+pQX8q4ZkhgokI4+Omrk
+ wxmlW0es4D5btuErVFdFS1PNXKQ+zO/HX+Y= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 36s10tasdv-8
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 17 Feb 2021 10:18:14 -0800
-Received: from intmgw001.38.frc1.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 17 Feb 2021 10:18:17 -0800
+Received: from intmgw002.25.frc3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 17 Feb 2021 10:18:13 -0800
+ 15.1.1979.3; Wed, 17 Feb 2021 10:18:12 -0800
 Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 8A9723704F7A; Wed, 17 Feb 2021 10:18:12 -0800 (PST)
+        id C77813704F7A; Wed, 17 Feb 2021 10:18:08 -0800 (PST)
 From:   Yonghong Song <yhs@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
         Cong Wang <xiyou.wangcong@gmail.com>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next v2 08/11] libbpf: support local function pointer relocation
-Date:   Wed, 17 Feb 2021 10:18:12 -0800
-Message-ID: <20210217181812.3191397-1-yhs@fb.com>
+Subject: [PATCH bpf-next v2 05/11] bpf: add hashtab support for bpf_for_each_map_elem() helper
+Date:   Wed, 17 Feb 2021 10:18:08 -0800
+Message-ID: <20210217181808.3190262-1-yhs@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20210217181803.3189437-1-yhs@fb.com>
 References: <20210217181803.3189437-1-yhs@fb.com>
@@ -58,7 +58,7 @@ X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
  definitions=2021-02-17_13:2021-02-16,2021-02-17 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 clxscore=1015
  phishscore=0 suspectscore=0 impostorscore=0 lowpriorityscore=0
- mlxlogscore=860 bulkscore=0 malwarescore=0 spamscore=0 priorityscore=1501
+ mlxlogscore=300 bulkscore=0 malwarescore=0 spamscore=0 priorityscore=1501
  adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2102170133
 X-FB-Internal: deliver
@@ -66,114 +66,176 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-A new relocation RELO_SUBPROG_ADDR is added to capture
-local (static) function pointers loaded with ld_imm64
-insns. Such ld_imm64 insns are marked with
-BPF_PSEUDO_FUNC and will be passed to kernel so
-kernel can replace them with proper actual jited
-func addresses.
+This patch added support for hashmap, percpu hashmap,
+lru hashmap and percpu lru hashmap.
 
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- tools/lib/bpf/libbpf.c | 40 +++++++++++++++++++++++++++++++++++++---
- 1 file changed, 37 insertions(+), 3 deletions(-)
+ include/linux/bpf.h   |  4 +++
+ kernel/bpf/hashtab.c  | 63 +++++++++++++++++++++++++++++++++++++++++++
+ kernel/bpf/verifier.c | 27 +++++++++++++++++++
+ 3 files changed, 94 insertions(+)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 21a3eedf070d..772c7455f1a2 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -188,6 +188,7 @@ enum reloc_type {
- 	RELO_CALL,
- 	RELO_DATA,
- 	RELO_EXTERN,
-+	RELO_SUBPROG_ADDR,
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 40f41a9b40f9..34277ab1eda5 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1392,6 +1392,10 @@ void bpf_iter_map_show_fdinfo(const struct bpf_ite=
+r_aux_info *aux,
+ int bpf_iter_map_fill_link_info(const struct bpf_iter_aux_info *aux,
+ 				struct bpf_link_info *info);
+=20
++int map_set_for_each_callback_args(struct bpf_verifier_env *env,
++				   struct bpf_func_state *caller,
++				   struct bpf_func_state *callee);
++
+ int bpf_percpu_hash_copy(struct bpf_map *map, void *key, void *value);
+ int bpf_percpu_array_copy(struct bpf_map *map, void *key, void *value);
+ int bpf_percpu_hash_update(struct bpf_map *map, void *key, void *value,
+diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+index d63912e73ad9..f652b92ca79f 100644
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+@@ -1869,6 +1869,61 @@ static const struct bpf_iter_seq_info iter_seq_inf=
+o =3D {
+ 	.seq_priv_size		=3D sizeof(struct bpf_iter_seq_hash_map_info),
  };
 =20
- struct reloc_desc {
-@@ -579,6 +580,11 @@ static bool is_ldimm64(struct bpf_insn *insn)
- 	return insn->code =3D=3D (BPF_LD | BPF_IMM | BPF_DW);
- }
-=20
-+static bool insn_is_pseudo_func(struct bpf_insn *insn)
++static int bpf_for_each_hash_elem(struct bpf_map *map, void *callback_fn=
+,
++				  void *callback_ctx, u64 flags)
 +{
-+	return is_ldimm64(insn) && insn->src_reg =3D=3D BPF_PSEUDO_FUNC;
++	struct bpf_htab *htab =3D container_of(map, struct bpf_htab, map);
++	struct hlist_nulls_head *head;
++	long ret =3D 0, num_calls =3D 0;
++	struct hlist_nulls_node *n;
++	struct htab_elem *elem;
++	u32 roundup_key_size;
++	void __percpu *pptr;
++	struct bucket *b;
++	void *key, *val;
++	bool is_percpu;
++	int i;
++
++	if (flags !=3D 0)
++		return -EINVAL;
++
++	is_percpu =3D htab_is_percpu(htab);
++
++	roundup_key_size =3D round_up(map->key_size, 8);
++	/* disable migration so percpu value prepared here will be the
++	 * same as the one seen by the bpf program with bpf_map_lookup_elem().
++	 */
++	migrate_disable();
++	for (i =3D 0; i < htab->n_buckets; i++) {
++		b =3D &htab->buckets[i];
++		rcu_read_lock();
++		head =3D &b->head;
++		hlist_nulls_for_each_entry_rcu(elem, n, head, hash_node) {
++			key =3D elem->key;
++			if (!is_percpu) {
++				val =3D elem->key + roundup_key_size;
++			} else {
++				/* current cpu value for percpu map */
++				pptr =3D htab_elem_get_ptr(elem, map->key_size);
++				val =3D this_cpu_ptr(pptr);
++			}
++			num_calls++;
++			ret =3D BPF_CAST_CALL(callback_fn)((u64)(long)map,
++					(u64)(long)key, (u64)(long)val,
++					(u64)(long)callback_ctx, 0);
++			if (ret) {
++				rcu_read_unlock();
++				ret =3D (ret =3D=3D 1) ? 0 : -EINVAL;
++				goto out;
++			}
++		}
++		rcu_read_unlock();
++	}
++out:
++	migrate_enable();
++	return ret ?: num_calls;
 +}
 +
- static int
- bpf_object__init_prog(struct bpf_object *obj, struct bpf_program *prog,
- 		      const char *name, size_t sec_idx, const char *sec_name,
-@@ -3406,6 +3412,16 @@ static int bpf_program__record_reloc(struct bpf_pr=
-ogram *prog,
- 		return -LIBBPF_ERRNO__RELOC;
- 	}
+ static int htab_map_btf_id;
+ const struct bpf_map_ops htab_map_ops =3D {
+ 	.map_meta_equal =3D bpf_map_meta_equal,
+@@ -1881,6 +1936,8 @@ const struct bpf_map_ops htab_map_ops =3D {
+ 	.map_delete_elem =3D htab_map_delete_elem,
+ 	.map_gen_lookup =3D htab_map_gen_lookup,
+ 	.map_seq_show_elem =3D htab_map_seq_show_elem,
++	.map_set_for_each_callback_args =3D map_set_for_each_callback_args,
++	.map_for_each_callback =3D bpf_for_each_hash_elem,
+ 	BATCH_OPS(htab),
+ 	.map_btf_name =3D "bpf_htab",
+ 	.map_btf_id =3D &htab_map_btf_id,
+@@ -1900,6 +1957,8 @@ const struct bpf_map_ops htab_lru_map_ops =3D {
+ 	.map_delete_elem =3D htab_lru_map_delete_elem,
+ 	.map_gen_lookup =3D htab_lru_map_gen_lookup,
+ 	.map_seq_show_elem =3D htab_map_seq_show_elem,
++	.map_set_for_each_callback_args =3D map_set_for_each_callback_args,
++	.map_for_each_callback =3D bpf_for_each_hash_elem,
+ 	BATCH_OPS(htab_lru),
+ 	.map_btf_name =3D "bpf_htab",
+ 	.map_btf_id =3D &htab_lru_map_btf_id,
+@@ -2019,6 +2078,8 @@ const struct bpf_map_ops htab_percpu_map_ops =3D {
+ 	.map_update_elem =3D htab_percpu_map_update_elem,
+ 	.map_delete_elem =3D htab_map_delete_elem,
+ 	.map_seq_show_elem =3D htab_percpu_map_seq_show_elem,
++	.map_set_for_each_callback_args =3D map_set_for_each_callback_args,
++	.map_for_each_callback =3D bpf_for_each_hash_elem,
+ 	BATCH_OPS(htab_percpu),
+ 	.map_btf_name =3D "bpf_htab",
+ 	.map_btf_id =3D &htab_percpu_map_btf_id,
+@@ -2036,6 +2097,8 @@ const struct bpf_map_ops htab_lru_percpu_map_ops =3D=
+ {
+ 	.map_update_elem =3D htab_lru_percpu_map_update_elem,
+ 	.map_delete_elem =3D htab_lru_map_delete_elem,
+ 	.map_seq_show_elem =3D htab_percpu_map_seq_show_elem,
++	.map_set_for_each_callback_args =3D map_set_for_each_callback_args,
++	.map_for_each_callback =3D bpf_for_each_hash_elem,
+ 	BATCH_OPS(htab_lru_percpu),
+ 	.map_btf_name =3D "bpf_htab",
+ 	.map_btf_id =3D &htab_lru_percpu_map_btf_id,
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index f80386d094b7..2ce8ed8aca70 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -5415,6 +5415,33 @@ static int __check_func_call(struct bpf_verifier_e=
+nv *env, struct bpf_insn *insn
+ 	return 0;
+ }
 =20
-+	if (GELF_ST_BIND(sym->st_info) =3D=3D STB_LOCAL &&
-+	    GELF_ST_TYPE(sym->st_info) =3D=3D STT_SECTION &&
-+	    (!shdr_idx || shdr_idx =3D=3D obj->efile.text_shndx) &&
-+	    !(sym->st_value % BPF_INSN_SZ)) {
-+		reloc_desc->type =3D RELO_SUBPROG_ADDR;
-+		reloc_desc->insn_idx =3D insn_idx;
-+		reloc_desc->sym_off =3D sym->st_value;
-+		return 0;
-+	}
++int map_set_for_each_callback_args(struct bpf_verifier_env *env,
++				   struct bpf_func_state *caller,
++				   struct bpf_func_state *callee)
++{
++	/* bpf_for_each_map_elem(struct bpf_map *map, void *callback_fn,
++	 *      void *callback_ctx, u64 flags);
++	 * callback_fn(struct bpf_map *map, void *key, void *value,
++	 *      void *callback_ctx);
++	 */
++	callee->regs[BPF_REG_1] =3D caller->regs[BPF_REG_1];
 +
- 	if (sym_is_extern(sym)) {
- 		int sym_idx =3D GELF_R_SYM(rel->r_info);
- 		int i, n =3D obj->nr_extern;
-@@ -6172,6 +6188,10 @@ bpf_object__relocate_data(struct bpf_object *obj, =
-struct bpf_program *prog)
- 			}
- 			relo->processed =3D true;
- 			break;
-+		case RELO_SUBPROG_ADDR:
-+			insn[0].src_reg =3D BPF_PSEUDO_FUNC;
-+			/* will be handled as a follow up pass */
-+			break;
- 		case RELO_CALL:
- 			/* will be handled as a follow up pass */
- 			break;
-@@ -6358,11 +6378,11 @@ bpf_object__reloc_code(struct bpf_object *obj, st=
-ruct bpf_program *main_prog,
-=20
- 	for (insn_idx =3D 0; insn_idx < prog->sec_insn_cnt; insn_idx++) {
- 		insn =3D &main_prog->insns[prog->sub_insn_off + insn_idx];
--		if (!insn_is_subprog_call(insn))
-+		if (!insn_is_subprog_call(insn) && !insn_is_pseudo_func(insn))
- 			continue;
-=20
- 		relo =3D find_prog_insn_relo(prog, insn_idx);
--		if (relo && relo->type !=3D RELO_CALL) {
-+		if (relo && relo->type !=3D RELO_CALL && relo->type !=3D RELO_SUBPROG_=
-ADDR) {
- 			pr_warn("prog '%s': unexpected relo for insn #%zu, type %d\n",
- 				prog->name, insn_idx, relo->type);
- 			return -LIBBPF_ERRNO__RELOC;
-@@ -6374,8 +6394,22 @@ bpf_object__reloc_code(struct bpf_object *obj, str=
-uct bpf_program *main_prog,
- 			 * call always has imm =3D -1, but for static functions
- 			 * relocation is against STT_SECTION and insn->imm
- 			 * points to a start of a static function
-+			 *
-+			 * for local func relocation, the imm field encodes
-+			 * the byte offset in the corresponding section.
-+			 */
-+			if (relo->type =3D=3D RELO_CALL)
-+				sub_insn_idx =3D relo->sym_off / BPF_INSN_SZ + insn->imm + 1;
-+			else
-+				sub_insn_idx =3D relo->sym_off / BPF_INSN_SZ + insn->imm / BPF_INSN_=
-SZ + 1;
-+		} else if (insn_is_pseudo_func(insn)) {
-+			/*
-+			 * RELO_SUBPROG_ADDR relo is always emitted even if both
-+			 * functions are in the same section, so it shouldn't reach here.
- 			 */
--			sub_insn_idx =3D relo->sym_off / BPF_INSN_SZ + insn->imm + 1;
-+			pr_warn("prog '%s': missing relo for insn #%zu, type %d\n",
-+				prog->name, insn_idx, relo->type);
-+			return -LIBBPF_ERRNO__RELOC;
- 		} else {
- 			/* if subprogram call is to a static function within
- 			 * the same ELF section, there won't be any relocation
++	callee->regs[BPF_REG_2].type =3D PTR_TO_MAP_KEY;
++	__mark_reg_known_zero(&callee->regs[BPF_REG_2]);
++	callee->regs[BPF_REG_2].map_ptr =3D caller->regs[BPF_REG_1].map_ptr;
++
++	callee->regs[BPF_REG_3].type =3D PTR_TO_MAP_VALUE;
++	__mark_reg_known_zero(&callee->regs[BPF_REG_3]);
++	callee->regs[BPF_REG_3].map_ptr =3D caller->regs[BPF_REG_1].map_ptr;
++
++	/* pointer to stack or null */
++	callee->regs[BPF_REG_4] =3D caller->regs[BPF_REG_3];
++
++	/* unused */
++	__mark_reg_not_init(env, &callee->regs[BPF_REG_5]);
++	return 0;
++}
++
+ static int set_callee_state(struct bpf_verifier_env *env,
+ 			    struct bpf_func_state *caller,
+ 			    struct bpf_func_state *callee, int insn_idx)
 --=20
 2.24.1
 
