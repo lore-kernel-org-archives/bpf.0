@@ -5,63 +5,62 @@ X-Spam-Level:
 X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB847C433E6
-	for <bpf@archiver.kernel.org>; Wed, 17 Feb 2021 11:10:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 18E5DC433E9
+	for <bpf@archiver.kernel.org>; Wed, 17 Feb 2021 11:10:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B354264E79
+	by mail.kernel.org (Postfix) with ESMTP id 0143564DEC
 	for <bpf@archiver.kernel.org>; Wed, 17 Feb 2021 11:10:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230470AbhBQLJa (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 17 Feb 2021 06:09:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33698 "EHLO
+        id S231491AbhBQLJo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 17 Feb 2021 06:09:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231181AbhBQLJA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 17 Feb 2021 06:09:00 -0500
-Received: from mail-wm1-x34a.google.com (mail-wm1-x34a.google.com [IPv6:2a00:1450:4864:20::34a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BD9EC06178A
-        for <bpf@vger.kernel.org>; Wed, 17 Feb 2021 03:08:20 -0800 (PST)
-Received: by mail-wm1-x34a.google.com with SMTP id b201so2064689wmb.9
-        for <bpf@vger.kernel.org>; Wed, 17 Feb 2021 03:08:20 -0800 (PST)
+        with ESMTP id S231496AbhBQLJS (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 17 Feb 2021 06:09:18 -0500
+Received: from mail-wr1-x44a.google.com (mail-wr1-x44a.google.com [IPv6:2a00:1450:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55481C061794
+        for <bpf@vger.kernel.org>; Wed, 17 Feb 2021 03:08:24 -0800 (PST)
+Received: by mail-wr1-x44a.google.com with SMTP id d10so16821598wrq.17
+        for <bpf@vger.kernel.org>; Wed, 17 Feb 2021 03:08:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=sender:date:in-reply-to:message-id:mime-version:references:subject
          :from:to:cc;
-        bh=CtyPUVbXhc5CDRZLtdHVem+8lAgiUhAKNAjbcL0rPXE=;
-        b=PoCIn0uyIl6lXycffqtFFJqz/msRd6zXJMEsOtAkL16xrfSuU9+ZDpyV+ggWH0OtgA
-         XTAw5Ji/YiGGohzvGFcypyRxBytlHzM+oNqHyJsoN9WVPa3JH7nNQIaxy5UJBJczU+Pa
-         xg2qksgjRVQIKqxEGacDNN1IyL9/T+xeb424GKaD9Ff8VcL4BW75zZl1GrGxKT7QM4EJ
-         fjdrPXG10sqbEwHfvM6cG9XVX1dub0A71yBb5aD/rRKkI4bGaPRJwHxFUaKH0fE7rEgp
-         vJf1vNlWSNiKRLN9vIxN9bwU+RPxjt2o5j9zBoLQyctVpwpzFMhsylEINxnR+NQw1NSP
-         5nxQ==
+        bh=/jlrrw//5EBw0HxItehu19/zul9u1dKvK5phINfjwEk=;
+        b=s13SxwqbF6VEmAgB0MOMVRv/Qo0IFrsZCbK/vRUoK1110OmI0lfLOl87udU+/ECgHi
+         2TZTX9Y1VzOMZJRXiCuo503jWsCvZvfeZ94iYkfNIwVW5giC5/V2Uos5NFneM+FjJfn2
+         yUfzuTvs1/wAyUQ8FIedv1v4Q4uJyLz+u5j2eHAnPIdsLJF436zqRHE/T0QAWNgZbypU
+         G22K9d++X/SUaMT8ghhdxRBvtGjQuCerHzB3Sg/kNR0WNubRXUxpKSL1sEvAxpufW8Jl
+         oPq234NoTsmcjUBzmcMmvxiT0EaF2odqXzGzh8pJ6fMy8IUL61MVZtgmK7UCVa+Sr2s+
+         0elw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=CtyPUVbXhc5CDRZLtdHVem+8lAgiUhAKNAjbcL0rPXE=;
-        b=FBZyBe3r6YpXcjElctyNASspQiVfa2dg55HmCK3OX3roYmhfmm06KfiFw2p9wfmM+R
-         aRc3IJaDxnkE3mqmqv31UvZEYsUPIElhLPWunh598SwIBMflkrV1ScZ0TJmt2NP1VlxT
-         QyWaKUGaPC5ScOZnLkiO1dj5+YA9UkSyyHdBxw5Ebk5ASyoZF6EilLEq7JQPal8ETiYe
-         zZKcqZomLofDQ+b9UqeJubxqG27wKsDxL10GDvihDOVmfLhAZ4V7xANuq5IAEjlpdy7H
-         qKxiE8Qt2et1I8jUm62BTPPZc+PU0lm357NSX1RygaqVxIYUZjfjcmtvqEvIdaKQdHUx
-         /tow==
-X-Gm-Message-State: AOAM533o2ckLNIQew1u1PPn+ymxbIJI67zmNmIjv2WSjl9EqguFKs2JK
-        W5d38SU+jqqymV9SVyAvDtyFQ5KUUY+5BA==
-X-Google-Smtp-Source: ABdhPJym3p+zIhDoQ+3jBbV+a0GOC2AQpwjftZY+ZDQpPFM7fGDhIg3x/c2hdrCQkQttCGyodvElvcISkRuMUA==
+        bh=/jlrrw//5EBw0HxItehu19/zul9u1dKvK5phINfjwEk=;
+        b=t+Tlz2L94D1zq+wjk0aaU/FUoUX/P2RJJ6OVIK9tp4lbnC6wPwAve/+DeBuu6yu2b9
+         ePxqOR8NH05WCPQviOb0kYPseyzaXSZ+UsH6rV3IaOCyQ4M/JZLlxH6YC90/gm1flLZ0
+         vZOP2hx1XW/e3YdytEvk68Eb2JRtjt8ijU1jteE9U8Bm0e6NYzM27MM6qlfydKX6mgU4
+         VsgO9tbpCTaKAHV3MJeNI9AYFu56FBejktOMOieZxDwTZd0AAf5NU4hBNgzPnPT7JMgj
+         SQkcIjLKOt2ENmpYgs14Fy34QM5Ie38JHQrg+vRpuNcf0Op/GJP7FG+1VVDdRENvnd17
+         QcKg==
+X-Gm-Message-State: AOAM530NSE2kqUgseMOMUp2tqJu9tpZoKkweZfFv24YGsU/Ag2kanAvc
+        oDRDst3vNPktD8L75HCrC19S9TPnFNn3gg==
+X-Google-Smtp-Source: ABdhPJx1JLkbNWtWhwyTxH9S+q24GjVOq5lYO+EjG/IBH4jQH5Xb+2PfqDArpk3BaNPsDuZHEEXnCfAdmtcMYQ==
 Sender: "gprocida via sendgmr" <gprocida@tef.lon.corp.google.com>
 X-Received: from tef.lon.corp.google.com ([2a00:79e0:d:110:61b3:1cb2:c180:c3f])
- (user=gprocida job=sendgmr) by 2002:a05:600c:2d44:: with SMTP id
- a4mr6563054wmg.95.1613560098890; Wed, 17 Feb 2021 03:08:18 -0800 (PST)
-Date:   Wed, 17 Feb 2021 11:08:01 +0000
+ (user=gprocida job=sendgmr) by 2002:a7b:ce12:: with SMTP id
+ m18mr6895587wmc.148.1613560103057; Wed, 17 Feb 2021 03:08:23 -0800 (PST)
+Date:   Wed, 17 Feb 2021 11:08:03 +0000
 In-Reply-To: <20210217110804.75923-1-gprocida@google.com>
-Message-Id: <20210217110804.75923-3-gprocida@google.com>
+Message-Id: <20210217110804.75923-5-gprocida@google.com>
 Mime-Version: 1.0
 References: <20210205134221.2953163-1-gprocida@google.com> <20210217110804.75923-1-gprocida@google.com>
 X-Mailer: git-send-email 2.30.0.478.g8a0d178c01-goog
-Subject: [PATCH dwarves v4 2/5] btf_encoder: Do not use both structs and
- pointers for the same data
+Subject: [PATCH dwarves v4 4/5] btf_encoder: Add .BTF section using libelf
 From:   Giuliano Procida <gprocida@google.com>
 To:     dwarves@vger.kernel.org, acme@kernel.org
 Cc:     andrii@kernel.org, ast@kernel.org, gprocida@google.com,
@@ -72,66 +71,198 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Many operations in the libelf API return a pointer to a user-provided
-struct (on success) or NULL (on failure).
+pahole -J uses libelf directly when updating a .BTF section. However,
+it uses llvm-objcopy to add .BTF sections. This commit switches to
+using libelf for both cases.
 
-There are a couple of places in btf_elf__write where both structs and
-pointers to the same structs are used. Holding on to the pointers
-raises ownership and lifetime issues unnecessarily and the code is
-cleaner with only a single access path for these data.
+This eliminates pahole's dependency on llvm-objcopy. One unfortunate
+side-effect is that vmlinux actually increases in size. It seems that
+llvm-objcopy modifies the .strtab section, discarding many strings. I
+speculate that is it discarding strings not referenced from .symtab
+and updating the references therein.
 
-The code now treats the returned pointers as booleans.
+Layout is left completely up to libelf and existing section offsets
+are likely to change.
 
 Acked-by: Andrii Nakryiko <andrii@kernel.org>
 Signed-off-by: Giuliano Procida <gprocida@google.com>
 ---
- libbtf.c | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
+ libbtf.c | 127 +++++++++++++++++++++++++++++++++++--------------------
+ 1 file changed, 81 insertions(+), 46 deletions(-)
 
 diff --git a/libbtf.c b/libbtf.c
-index 7bc49ba..ace8896 100644
+index 4ae7150..9ff03ca 100644
 --- a/libbtf.c
 +++ b/libbtf.c
-@@ -698,8 +698,7 @@ int32_t btf_elf__add_datasec_type(struct btf_elf *btfe, const char *section_name
+@@ -698,6 +698,7 @@ int32_t btf_elf__add_datasec_type(struct btf_elf *btfe, const char *section_name
  
  static int btf_elf__write(const char *filename, struct btf *btf)
  {
--	GElf_Shdr shdr_mem, *shdr;
--	GElf_Ehdr ehdr_mem, *ehdr;
-+	GElf_Ehdr ehdr;
++	const char BTF_SEC_NAME[] = ".BTF";
+ 	GElf_Ehdr ehdr;
  	Elf_Data *btf_data = NULL;
- 	Elf_Scn *scn = NULL;
  	Elf *elf = NULL;
-@@ -727,13 +726,12 @@ static int btf_elf__write(const char *filename, struct btf *btf)
+@@ -705,6 +706,7 @@ static int btf_elf__write(const char *filename, struct btf *btf)
+ 	uint32_t raw_btf_size;
+ 	int fd, err = -1;
+ 	size_t strndx;
++	void *str_table = NULL;
  
- 	elf_flagelf(elf, ELF_C_SET, ELF_F_DIRTY);
- 
--	ehdr = gelf_getehdr(elf, &ehdr_mem);
--	if (ehdr == NULL) {
-+	if (!gelf_getehdr(elf, &ehdr)) {
- 		elf_error("elf_getehdr failed");
- 		goto out;
+ 	fd = open(filename, O_RDWR);
+ 	if (fd < 0) {
+@@ -743,73 +745,106 @@ static int btf_elf__write(const char *filename, struct btf *btf)
  	}
  
--	switch (ehdr_mem.e_ident[EI_DATA]) {
-+	switch (ehdr.e_ident[EI_DATA]) {
- 	case ELFDATA2LSB:
- 		btf__set_endianness(btf, BTF_LITTLE_ENDIAN);
- 		break;
-@@ -751,10 +749,10 @@ static int btf_elf__write(const char *filename, struct btf *btf)
- 
+ 	/*
+-	 * First we look if there was already a .BTF section to overwrite.
++	 * First we check if there is already a .BTF section present.
+ 	 */
+-
  	elf_getshdrstrndx(elf, &strndx);
- 	while ((scn = elf_nextscn(elf, scn)) != NULL) {
--		shdr = gelf_getshdr(scn, &shdr_mem);
--		if (shdr == NULL)
-+		GElf_Shdr shdr;
-+		if (!gelf_getshdr(scn, &shdr))
++	Elf_Scn *btf_scn = NULL;
+ 	for (Elf_Scn *scn = elf_nextscn(elf, NULL); scn; scn = elf_nextscn(elf, scn)) {
+ 		GElf_Shdr shdr;
+ 		if (!gelf_getshdr(scn, &shdr))
  			continue;
--		char *secname = elf_strptr(elf, strndx, shdr->sh_name);
-+		char *secname = elf_strptr(elf, strndx, shdr.sh_name);
- 		if (strcmp(secname, ".BTF") == 0) {
- 			btf_data = elf_getdata(scn, btf_data);
+ 		char *secname = elf_strptr(elf, strndx, shdr.sh_name);
+-		if (strcmp(secname, ".BTF") == 0) {
+-			btf_data = elf_getdata(scn, btf_data);
++		if (strcmp(secname, BTF_SEC_NAME) == 0) {
++			btf_scn = scn;
  			break;
+ 		}
+ 	}
+ 
+-	raw_btf_data = btf__get_raw_data(btf, &raw_btf_size);
+-
+-	if (btf_data) {
+-		/* Exisiting .BTF section found */
+-		btf_data->d_buf = (void *)raw_btf_data;
+-		btf_data->d_size = raw_btf_size;
+-		elf_flagdata(btf_data, ELF_C_SET, ELF_F_DIRTY);
++	Elf_Scn *str_scn = elf_getscn(elf, strndx);
++	if (!str_scn) {
++		elf_error("elf_getscn(strndx) failed");
++		goto out;
++	}
+ 
+-		if (elf_update(elf, ELF_C_NULL) >= 0 &&
+-		    elf_update(elf, ELF_C_WRITE) >= 0)
+-			err = 0;
+-		else
+-			elf_error("elf_update failed");
++	size_t dot_btf_offset = 0;
++	if (btf_scn) {
++		/* Existing .BTF section found */
++		btf_data = elf_getdata(btf_scn, NULL);
++		if (!btf_data) {
++			elf_error("elf_getdata failed");
++			goto out;
++		}
+ 	} else {
+-		const char *llvm_objcopy;
+-		char tmp_fn[PATH_MAX];
+-		char cmd[PATH_MAX * 2];
+-
+-		llvm_objcopy = getenv("LLVM_OBJCOPY");
+-		if (!llvm_objcopy)
+-			llvm_objcopy = "llvm-objcopy";
+-
+-		/* Use objcopy to add a .BTF section */
+-		snprintf(tmp_fn, sizeof(tmp_fn), "%s.btf", filename);
+-		close(fd);
+-		fd = creat(tmp_fn, S_IRUSR | S_IWUSR);
+-		if (fd == -1) {
+-			fprintf(stderr, "%s: open(%s) failed!\n", __func__,
+-				tmp_fn);
++		/* Add ".BTF" to the section name string table */
++		Elf_Data *str_data = elf_getdata(str_scn, NULL);
++		if (!str_data) {
++			elf_error("elf_getdata(str_scn) failed");
+ 			goto out;
+ 		}
+-
+-		if (write(fd, raw_btf_data, raw_btf_size) != raw_btf_size) {
+-			fprintf(stderr, "%s: write of %d bytes to '%s' failed: %d!\n",
+-				__func__, raw_btf_size, tmp_fn, errno);
+-			goto unlink;
++		dot_btf_offset = str_data->d_size;
++		size_t new_str_size = dot_btf_offset + sizeof(BTF_SEC_NAME);
++		str_table = malloc(new_str_size);
++		if (!str_table) {
++			fprintf(stderr, "%s: malloc (strtab) failed\n", __func__);
++			goto out;
+ 		}
+-
+-		snprintf(cmd, sizeof(cmd), "%s --add-section .BTF=%s %s",
+-			 llvm_objcopy, tmp_fn, filename);
+-		if (system(cmd)) {
+-			fprintf(stderr, "%s: failed to add .BTF section to '%s': %d!\n",
+-				__func__, filename, errno);
+-			goto unlink;
++		memcpy(str_table, str_data->d_buf, dot_btf_offset);
++		memcpy(str_table + dot_btf_offset, BTF_SEC_NAME, sizeof(BTF_SEC_NAME));
++		str_data->d_buf = str_table;
++		str_data->d_size = new_str_size;
++		elf_flagdata(str_data, ELF_C_SET, ELF_F_DIRTY);
++
++		/* Create a new section */
++		btf_scn = elf_newscn(elf);
++		if (!btf_scn) {
++			elf_error("elf_newscn failed");
++			goto out;
++		}
++		btf_data = elf_newdata(btf_scn);
++		if (!btf_data) {
++			elf_error("elf_newdata failed");
++			goto out;
+ 		}
++	}
++
++	/* (Re)populate the BTF section data */
++	raw_btf_data = btf__get_raw_data(btf, &raw_btf_size);
++	btf_data->d_buf = (void *)raw_btf_data;
++	btf_data->d_size = raw_btf_size;
++	btf_data->d_type = ELF_T_BYTE;
++	btf_data->d_version = EV_CURRENT;
++	elf_flagdata(btf_data, ELF_C_SET, ELF_F_DIRTY);
++
++	/* Update .BTF section in the SHT */
++	GElf_Shdr btf_shdr;
++	if (!gelf_getshdr(btf_scn, &btf_shdr)) {
++		elf_error("elf_getshdr(btf_scn) failed");
++		goto out;
++	}
++	btf_shdr.sh_entsize = 0;
++	btf_shdr.sh_flags = 0;
++	if (dot_btf_offset)
++		btf_shdr.sh_name = dot_btf_offset;
++	btf_shdr.sh_type = SHT_PROGBITS;
++	if (!gelf_update_shdr(btf_scn, &btf_shdr)) {
++		elf_error("gelf_update_shdr failed");
++		goto out;
++	}
+ 
+-		err = 0;
+-	unlink:
+-		unlink(tmp_fn);
++	if (elf_update(elf, ELF_C_NULL) < 0) {
++		elf_error("elf_update (layout) failed");
++		goto out;
++	}
++
++	if (elf_update(elf, ELF_C_WRITE) < 0) {
++		elf_error("elf_update (write) failed");
++		goto out;
+ 	}
++	err = 0;
+ 
+ out:
++	if (str_table)
++		free(str_table);
+ 	if (fd != -1)
+ 		close(fd);
+ 	if (elf)
 -- 
 2.30.0.478.g8a0d178c01-goog
 
