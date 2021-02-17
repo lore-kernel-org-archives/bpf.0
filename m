@@ -2,33 +2,33 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B806BC433E9
-	for <bpf@archiver.kernel.org>; Wed, 17 Feb 2021 12:03:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F50EC433DB
+	for <bpf@archiver.kernel.org>; Wed, 17 Feb 2021 12:03:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8148A64E57
-	for <bpf@archiver.kernel.org>; Wed, 17 Feb 2021 12:03:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F050664E5F
+	for <bpf@archiver.kernel.org>; Wed, 17 Feb 2021 12:03:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232110AbhBQMDP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 17 Feb 2021 07:03:15 -0500
-Received: from mail-40134.protonmail.ch ([185.70.40.134]:30456 "EHLO
-        mail-40134.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232546AbhBQMCZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        id S232496AbhBQMDX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 17 Feb 2021 07:03:23 -0500
+Received: from mail2.protonmail.ch ([185.70.40.22]:40051 "EHLO
+        mail2.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232563AbhBQMCZ (ORCPT <rfc822;bpf@vger.kernel.org>);
         Wed, 17 Feb 2021 07:02:25 -0500
-Date:   Wed, 17 Feb 2021 12:01:35 +0000
+Date:   Wed, 17 Feb 2021 12:01:21 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
-        t=1613563299; bh=lgg1wNkMT8XQOATCoVN+lIKDRAuSPLux4jRMr6UVN+I=;
+        t=1613563282; bh=uvsje6kXLionjEyqOvW16bSJRxCvIh50mtSZCtnJSvo=;
         h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=mKH57b/z3ygQp6bN9b2bkh7Wr+ip9/4vHvJE7HLfSm5hNvA4WyKWgIPnVTnoMqpXM
-         vtyKe6sDEJ1uflLtcYfameo5ZiDops+pvjmpkoBomfRiDeDDQIUG84i6lzxK90JH8U
-         EGltuSEVQV/LI6GwACuVarzi7128Mmdzq6aN8Kb3X/7mW7XvZy3LpVNEfR+DB9jRzT
-         YoBw9CuWg+G5vb7AA085gATPcVd80A/qV9SeKxgmsQf5Qgwd+CBDP/9YbS37GmD74Y
-         BB2sIh9gO69YfGbcchQAOcj4TmO3Hk1NkvToTI6kTsh4srZKrE7CQtPBIKeONemobO
-         YbGxCnHQyUO3g==
+        b=kl/0zkCDlZIHzDLdP/5tOn1YP0vKzpfihguDgaZk8EWz3aLwjyIeJUELieMqjCIGM
+         StSJiu1OwQS4YKpoRsdNqv3A02k+fmOl2mKE2Q5FWECgR87zDRWXTVugtSju+qTHtZ
+         3aM1A9OJtge0ioCnQpDpKLx4KO5e9R/ArpWICScYzx6905sMBXVyLUsyBhp9aupr+r
+         YZny4I8Ix59HJ3rWh22kboNLIMswzbjb/2C85/kUPt0rk083qhgQFOwBcaq9VmFxaE
+         NxE0xFKVZXz+rWoEnfT719F74HayUYByBxGwKug0dFRB4baEuZxykwOKdPyyK8rxGx
+         IBOSJ5UkptpFA==
 To:     Daniel Borkmann <daniel@iogearbox.net>,
         Magnus Karlsson <magnus.karlsson@intel.com>
 From:   Alexander Lobakin <alobakin@pm.me>
@@ -52,8 +52,8 @@ Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
         virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org, bpf@vger.kernel.org
 Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: [PATCH v7 bpf-next 4/6] virtio-net: support IFF_TX_SKB_NO_LINEAR
-Message-ID: <20210217120003.7938-5-alobakin@pm.me>
+Subject: [PATCH v7 bpf-next 3/6] net: add priv_flags for allow tx skb without linear
+Message-ID: <20210217120003.7938-4-alobakin@pm.me>
 In-Reply-To: <20210217120003.7938-1-alobakin@pm.me>
 References: <20210217120003.7938-1-alobakin@pm.me>
 MIME-Version: 1.0
@@ -65,30 +65,71 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 
-Virtio net supports the case where the skb linear space is empty, so add
-priv_flags.
+In some cases, we hope to construct skb directly based on the existing
+memory without copying data. In this case, the page will be placed
+directly in the skb, and the linear space of skb is empty. But
+unfortunately, many the network card does not support this operation.
+For example Mellanox Technologies MT27710 Family [ConnectX-4 Lx] will
+get the following error message:
+
+    mlx5_core 0000:3b:00.1 eth1: Error cqe on cqn 0x817, ci 0x8,
+    qn 0x1dbb, opcode 0xd, syndrome 0x1, vendor syndrome 0x68
+    00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+    00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+    00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+    00000030: 00 00 00 00 60 10 68 01 0a 00 1d bb 00 0f 9f d2
+    WQE DUMP: WQ size 1024 WQ cur size 0, WQE index 0xf, len: 64
+    00000000: 00 00 0f 0a 00 1d bb 03 00 00 00 08 00 00 00 00
+    00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+    00000020: 00 00 00 2b 00 08 00 00 00 00 00 05 9e e3 08 00
+    00000030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+    mlx5_core 0000:3b:00.1 eth1: ERR CQE on SQ: 0x1dbb
+
+So a priv_flag is added here to indicate whether the network card
+supports this feature.
 
 Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Acked-by: Michael S. Tsirkin <mst@redhat.com>
+Suggested-by: Alexander Lobakin <alobakin@pm.me>
+[ alobakin: give a new flag more detailed description ]
 Signed-off-by: Alexander Lobakin <alobakin@pm.me>
 ---
- drivers/net/virtio_net.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ include/linux/netdevice.h | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index ba8e63792549..f2ff6c3906c1 100644
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -2972,7 +2972,8 @@ static int virtnet_probe(struct virtio_device *vdev)
- =09=09return -ENOMEM;
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index 2c1a642ecdc0..1186ba901ad3 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -1518,6 +1518,8 @@ struct net_device_ops {
+  * @IFF_FAILOVER_SLAVE_BIT: device is lower dev of a failover master devic=
+e
+  * @IFF_L3MDEV_RX_HANDLER_BIT: only invoke the rx handler of L3 master dev=
+ice
+  * @IFF_LIVE_RENAME_OK_BIT: rename is allowed while device is up and runni=
+ng
++ * @IFF_TX_SKB_NO_LINEAR_BIT: device/driver is capable of xmitting frames =
+with
++ *=09skb_headlen(skb) =3D=3D 0 (data starts from frag0)
+  *
+  * @NETDEV_PRIV_FLAG_COUNT: total priv flags count
+  */
+@@ -1553,6 +1555,7 @@ enum netdev_priv_flags {
+ =09IFF_FAILOVER_SLAVE_BIT,
+ =09IFF_L3MDEV_RX_HANDLER_BIT,
+ =09IFF_LIVE_RENAME_OK_BIT,
++=09IFF_TX_SKB_NO_LINEAR_BIT,
 =20
- =09/* Set up network device as normal. */
--=09dev->priv_flags |=3D IFF_UNICAST_FLT | IFF_LIVE_ADDR_CHANGE;
-+=09dev->priv_flags |=3D IFF_UNICAST_FLT | IFF_LIVE_ADDR_CHANGE |
-+=09=09=09   IFF_TX_SKB_NO_LINEAR;
- =09dev->netdev_ops =3D &virtnet_netdev;
- =09dev->features =3D NETIF_F_HIGHDMA;
+ =09NETDEV_PRIV_FLAG_COUNT,
+ };
+@@ -1595,6 +1598,7 @@ static_assert(sizeof(netdev_priv_flags_t) * BITS_PER_=
+BYTE >=3D
+ #define IFF_FAILOVER_SLAVE=09=09__IFF(FAILOVER_SLAVE)
+ #define IFF_L3MDEV_RX_HANDLER=09=09__IFF(L3MDEV_RX_HANDLER)
+ #define IFF_LIVE_RENAME_OK=09=09__IFF(LIVE_RENAME_OK)
++#define IFF_TX_SKB_NO_LINEAR=09=09__IFF(TX_SKB_NO_LINEAR)
 =20
+ /**
+  *=09struct net_device - The DEVICE structure.
 --=20
 2.30.1
 
