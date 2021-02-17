@@ -2,33 +2,33 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F50EC433DB
-	for <bpf@archiver.kernel.org>; Wed, 17 Feb 2021 12:03:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 39D77C433E6
+	for <bpf@archiver.kernel.org>; Wed, 17 Feb 2021 12:03:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F050664E5F
-	for <bpf@archiver.kernel.org>; Wed, 17 Feb 2021 12:03:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0E6E764E57
+	for <bpf@archiver.kernel.org>; Wed, 17 Feb 2021 12:03:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232496AbhBQMDX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 17 Feb 2021 07:03:23 -0500
-Received: from mail2.protonmail.ch ([185.70.40.22]:40051 "EHLO
-        mail2.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232563AbhBQMCZ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 17 Feb 2021 07:02:25 -0500
-Date:   Wed, 17 Feb 2021 12:01:21 +0000
+        id S232553AbhBQMDb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 17 Feb 2021 07:03:31 -0500
+Received: from mail-40136.protonmail.ch ([185.70.40.136]:28215 "EHLO
+        mail-40136.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232574AbhBQMCe (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 17 Feb 2021 07:02:34 -0500
+Date:   Wed, 17 Feb 2021 12:01:46 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
-        t=1613563282; bh=uvsje6kXLionjEyqOvW16bSJRxCvIh50mtSZCtnJSvo=;
+        t=1613563312; bh=rD+msxxQv7QdHAN2CCbl57zhJ/ALAb4aGQXqzumABFM=;
         h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=kl/0zkCDlZIHzDLdP/5tOn1YP0vKzpfihguDgaZk8EWz3aLwjyIeJUELieMqjCIGM
-         StSJiu1OwQS4YKpoRsdNqv3A02k+fmOl2mKE2Q5FWECgR87zDRWXTVugtSju+qTHtZ
-         3aM1A9OJtge0ioCnQpDpKLx4KO5e9R/ArpWICScYzx6905sMBXVyLUsyBhp9aupr+r
-         YZny4I8Ix59HJ3rWh22kboNLIMswzbjb/2C85/kUPt0rk083qhgQFOwBcaq9VmFxaE
-         NxE0xFKVZXz+rWoEnfT719F74HayUYByBxGwKug0dFRB4baEuZxykwOKdPyyK8rxGx
-         IBOSJ5UkptpFA==
+        b=PT3LFaRlDYIV38fZI3I77r0E6FRjWTnolRzDMij8v+KHiOlF1PrjH6OD/eTLWIG/r
+         vRO5YwIToJaBCQfuG3D8h85eevr57gs7i+gJp8O7wHlSUu4al7QRs91SMIn077+2EP
+         4kYtYfHvMHVtcaW4f5bWsWWJ9vPRwjAoSx2Bhkh9/QRN45SuYmKeujZIcUIcvP0bc6
+         BwMwNEc7+xBMyTU7alJelqBMMVLlanUgXbNCTImULuUCu5gDwKZsHSAH8+Z8/w0PbH
+         RK6FzU95XwQ1b6MFWnLms29T1f6zGNv+w5d0Qr0PbX27GRFMFxtAhAmH3gqAOA6NBc
+         Srtl/5xLIkMfg==
 To:     Daniel Borkmann <daniel@iogearbox.net>,
         Magnus Karlsson <magnus.karlsson@intel.com>
 From:   Alexander Lobakin <alobakin@pm.me>
@@ -52,8 +52,8 @@ Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
         virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org, bpf@vger.kernel.org
 Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: [PATCH v7 bpf-next 3/6] net: add priv_flags for allow tx skb without linear
-Message-ID: <20210217120003.7938-4-alobakin@pm.me>
+Subject: [PATCH v7 bpf-next 5/6] xsk: respect device's headroom and tailroom on generic xmit path
+Message-ID: <20210217120003.7938-6-alobakin@pm.me>
 In-Reply-To: <20210217120003.7938-1-alobakin@pm.me>
 References: <20210217120003.7938-1-alobakin@pm.me>
 MIME-Version: 1.0
@@ -63,73 +63,72 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+xsk_generic_xmit() allocates a new skb and then queues it for
+xmitting. The size of new skb's headroom is desc->len, so it comes
+to the driver/device with no reserved headroom and/or tailroom.
+Lots of drivers need some headroom (and sometimes tailroom) to
+prepend (and/or append) some headers or data, e.g. CPU tags,
+device-specific headers/descriptors (LSO, TLS etc.), and if case
+of no available space skb_cow_head() will reallocate the skb.
+Reallocations are unwanted on fast-path, especially when it comes
+to XDP, so generic XSK xmit should reserve the spaces declared in
+dev->needed_headroom and dev->needed tailroom to avoid them.
 
-In some cases, we hope to construct skb directly based on the existing
-memory without copying data. In this case, the page will be placed
-directly in the skb, and the linear space of skb is empty. But
-unfortunately, many the network card does not support this operation.
-For example Mellanox Technologies MT27710 Family [ConnectX-4 Lx] will
-get the following error message:
+Note on max(NET_SKB_PAD, L1_CACHE_ALIGN(dev->needed_headroom)):
 
-    mlx5_core 0000:3b:00.1 eth1: Error cqe on cqn 0x817, ci 0x8,
-    qn 0x1dbb, opcode 0xd, syndrome 0x1, vendor syndrome 0x68
-    00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-    00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-    00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-    00000030: 00 00 00 00 60 10 68 01 0a 00 1d bb 00 0f 9f d2
-    WQE DUMP: WQ size 1024 WQ cur size 0, WQE index 0xf, len: 64
-    00000000: 00 00 0f 0a 00 1d bb 03 00 00 00 08 00 00 00 00
-    00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-    00000020: 00 00 00 2b 00 08 00 00 00 00 00 05 9e e3 08 00
-    00000030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-    mlx5_core 0000:3b:00.1 eth1: ERR CQE on SQ: 0x1dbb
+Usually, output functions reserve LL_RESERVED_SPACE(dev), which
+consists of dev->hard_header_len + dev->needed_headroom, aligned
+by 16.
+However, on XSK xmit hard header is already here in the chunk, so
+hard_header_len is not needed. But it'd still be better to align
+data up to cacheline, while reserving no less than driver requests
+for headroom. NET_SKB_PAD here is to double-insure there will be
+no reallocations even when the driver advertises no needed_headroom,
+but in fact need it (not so rare case).
 
-So a priv_flag is added here to indicate whether the network card
-supports this feature.
-
-Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Suggested-by: Alexander Lobakin <alobakin@pm.me>
-[ alobakin: give a new flag more detailed description ]
+Fixes: 35fcde7f8deb ("xsk: support for Tx")
 Signed-off-by: Alexander Lobakin <alobakin@pm.me>
+Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
 ---
- include/linux/netdevice.h | 4 ++++
- 1 file changed, 4 insertions(+)
+ net/xdp/xsk.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index 2c1a642ecdc0..1186ba901ad3 100644
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -1518,6 +1518,8 @@ struct net_device_ops {
-  * @IFF_FAILOVER_SLAVE_BIT: device is lower dev of a failover master devic=
-e
-  * @IFF_L3MDEV_RX_HANDLER_BIT: only invoke the rx handler of L3 master dev=
-ice
-  * @IFF_LIVE_RENAME_OK_BIT: rename is allowed while device is up and runni=
-ng
-+ * @IFF_TX_SKB_NO_LINEAR_BIT: device/driver is capable of xmitting frames =
-with
-+ *=09skb_headlen(skb) =3D=3D 0 (data starts from frag0)
-  *
-  * @NETDEV_PRIV_FLAG_COUNT: total priv flags count
-  */
-@@ -1553,6 +1555,7 @@ enum netdev_priv_flags {
- =09IFF_FAILOVER_SLAVE_BIT,
- =09IFF_L3MDEV_RX_HANDLER_BIT,
- =09IFF_LIVE_RENAME_OK_BIT,
-+=09IFF_TX_SKB_NO_LINEAR_BIT,
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index 4faabd1ecfd1..143979ea4165 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -454,12 +454,16 @@ static int xsk_generic_xmit(struct sock *sk)
+ =09struct sk_buff *skb;
+ =09unsigned long flags;
+ =09int err =3D 0;
++=09u32 hr, tr;
 =20
- =09NETDEV_PRIV_FLAG_COUNT,
- };
-@@ -1595,6 +1598,7 @@ static_assert(sizeof(netdev_priv_flags_t) * BITS_PER_=
-BYTE >=3D
- #define IFF_FAILOVER_SLAVE=09=09__IFF(FAILOVER_SLAVE)
- #define IFF_L3MDEV_RX_HANDLER=09=09__IFF(L3MDEV_RX_HANDLER)
- #define IFF_LIVE_RENAME_OK=09=09__IFF(LIVE_RENAME_OK)
-+#define IFF_TX_SKB_NO_LINEAR=09=09__IFF(TX_SKB_NO_LINEAR)
+ =09mutex_lock(&xs->mutex);
 =20
- /**
-  *=09struct net_device - The DEVICE structure.
+ =09if (xs->queue_id >=3D xs->dev->real_num_tx_queues)
+ =09=09goto out;
+=20
++=09hr =3D max(NET_SKB_PAD, L1_CACHE_ALIGN(xs->dev->needed_headroom));
++=09tr =3D xs->dev->needed_tailroom;
++
+ =09while (xskq_cons_peek_desc(xs->tx, &desc, xs->pool)) {
+ =09=09char *buffer;
+ =09=09u64 addr;
+@@ -471,11 +475,13 @@ static int xsk_generic_xmit(struct sock *sk)
+ =09=09}
+=20
+ =09=09len =3D desc.len;
+-=09=09skb =3D sock_alloc_send_skb(sk, len, 1, &err);
++=09=09skb =3D sock_alloc_send_skb(sk, hr + len + tr, 1, &err);
+ =09=09if (unlikely(!skb))
+ =09=09=09goto out;
+=20
++=09=09skb_reserve(skb, hr);
+ =09=09skb_put(skb, len);
++
+ =09=09addr =3D desc.addr;
+ =09=09buffer =3D xsk_buff_raw_get_data(xs->pool, addr);
+ =09=09err =3D skb_store_bits(skb, 0, buffer, len);
 --=20
 2.30.1
 
