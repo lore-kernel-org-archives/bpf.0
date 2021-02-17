@@ -7,63 +7,64 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6125AC433DB
-	for <bpf@archiver.kernel.org>; Wed, 17 Feb 2021 01:10:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B31F0C433E0
+	for <bpf@archiver.kernel.org>; Wed, 17 Feb 2021 01:10:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2882F64E57
-	for <bpf@archiver.kernel.org>; Wed, 17 Feb 2021 01:10:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7337964E57
+	for <bpf@archiver.kernel.org>; Wed, 17 Feb 2021 01:10:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231508AbhBQBKH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 16 Feb 2021 20:10:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47458 "EHLO
+        id S231510AbhBQBKK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 16 Feb 2021 20:10:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231452AbhBQBJq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 16 Feb 2021 20:09:46 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AA48C061356;
-        Tue, 16 Feb 2021 17:09:01 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id a24so6482605plm.11;
-        Tue, 16 Feb 2021 17:09:01 -0800 (PST)
+        with ESMTP id S231458AbhBQBJs (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 16 Feb 2021 20:09:48 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A09FC06178C;
+        Tue, 16 Feb 2021 17:08:41 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id y25so4064976pfp.5;
+        Tue, 16 Feb 2021 17:08:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=MNhCRc2GDeasyRbwo0O5IIW2sQmDlpog5LT65h+9PRk=;
-        b=JpCYdxlyW95RjiZUbReMdnBgSVsTjSPc6zv/iVoYOlyEwC+66tXG4BHVep1YcmzR5w
-         8DzTWwMgqt/Wg7XuBxjyckL1UUX+nZcQver2h/Qo3syG3sa7PMp4AnfqPlnrrO+2wzu3
-         7oryBVvplwAotyQpNJRqsrQvc6hEIn+Sr0C22awd/9o7MvRgTEtaNyCD+VW2GrRo4OgS
-         Upoki3j/vVvxNRkRNflFmGf/gMb7FjjriymFJZPzbZPi1WG70010h/fNPA1UOOBjK7mw
-         tdZ06WjNmW+xrBsDuzrhq9C9OjTsDhSsdZXNi4Yxa/9mIv2ZUV00yD3Kr2UnJkdTVclt
-         D93g==
+        bh=8woX65qt/qStfvzx9YUb2TtgE8YzDYd/O7zmfhWhqxM=;
+        b=hng6jOIfb+MwTjYrFJ1EmYdly9YDMgRt+ebBbmz00ZTM+LBn9sXtvr2Co9Qdgk4o+f
+         cFsTZy/5P9XViQrHvG7aevHM6vUIAnvNTh1Rqf4p1/dETWaC60sVd97OoKcichxLq3DC
+         FrcNv4q5IosMPI7I18gFi87LVglVeRZQSm5F8XRszYft6k50TGT8bsc8g/Kb+eTdjq77
+         IdW8hzeXqmFR0vG+fjAorFPTjFteS0gahYH8X6PCM0CbEwq5DanZzde5oL05OMrBA/1v
+         DXnrKlMIZa8CS7c3iw1pdeIzRLBydzJjDWg2OhYOiSE/wHwfk8DCYNmY5mh/gw8mIDfz
+         rqqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=MNhCRc2GDeasyRbwo0O5IIW2sQmDlpog5LT65h+9PRk=;
-        b=jmJXtATQrxCHlWiYW8U6wnhEQ0Ch7bUFDzZYx/rbHcYXqCU8uiV6Xjk1HkI/rJ/wYb
-         khNA00F2PpVzlA2NusxyaasyoM1vDc7VbIAS9+2KyI45X8clMXq1ORbVjdafmmuK4UeG
-         b435Ev87LgGCgY90ZTGKMmcndmdlgzsvIAvprz2kJrBXYkBPbeTpxUT0Vv0rDEyPpXEo
-         dKBD4v0rH1Z7OHtANo1P3+W2/RtOpfkz+QWOfjONan3kywLr7FtgE9IngigSVl2ACBmE
-         waZ+9bdi9KO4aLHAOKhhx8JQOLrAgqVhuU6xIh7MAVlh3zkYCTQYGcAycK2WeMP10zZF
-         AhQg==
-X-Gm-Message-State: AOAM533ZHhJi/9tou3zLRCck0+pkhlv4LjXq4Ho3ISRk23mCyFa0Dsgg
-        hu/vc3p0leZbMasW48Vheb3MXMD8eVvvrA==
-X-Google-Smtp-Source: ABdhPJza3X35TyluBMjnuRZ4jXxdo+/2hoN/6FY/wDYY5xRQeCsZ5jevNQi6N2RQ/oY6k3aGYLvxLA==
-X-Received: by 2002:a17:902:d694:b029:e3:906a:61f8 with SMTP id v20-20020a170902d694b02900e3906a61f8mr848456ply.36.1613524140665;
-        Tue, 16 Feb 2021 17:09:00 -0800 (PST)
+        bh=8woX65qt/qStfvzx9YUb2TtgE8YzDYd/O7zmfhWhqxM=;
+        b=li3QeH5/tkUkwHYnXRItYM6UUGkP31BjEttYt9AWoEePqIfn0+e9rrno+xG6KWMwMD
+         KVGNCFN/24W3N5a/h0cCAQLa5chDr+P4ia9R+HRAbY5vJsa/pCElEAmGtkTfSQfPWULO
+         SkcMYcrUATV1lo+z82lLKdM0twmUck5Wpf8pzNy7gCpvDyOdxjaFPl09lUB/DgUoXQWx
+         ugkIgFua2ulhGWFwr3DQlX1x577ZuJUZpgMb7N8YaEWgelMEKHeY7yzgAk1xeUQ0Em1v
+         RU3ptVhHf5tyTQJgZR73Ke8C4Rl6UKz/lePeh7+9l1loltWW5HvUEmGo8wSKvkk3vqdl
+         pwiw==
+X-Gm-Message-State: AOAM533uUfmCTa80j5RI68QyiG1uv/bfD4J6L4eqMqXLtQ5Xg0BsszXI
+        X4r/q0H0gA++i9BoH7/RTmTaLbfWy1oVuw==
+X-Google-Smtp-Source: ABdhPJxkiO/5qP/ws/49azU5oHCJl39GjUlKXbqu4BQ8szhhVumUXXWyCsWtiJQU/UqLQl44jVM9GQ==
+X-Received: by 2002:a63:1c1d:: with SMTP id c29mr22255658pgc.94.1613524120277;
+        Tue, 16 Feb 2021 17:08:40 -0800 (PST)
 Received: from localhost.localdomain (c-73-93-5-123.hsd1.ca.comcast.net. [73.93.5.123])
-        by smtp.gmail.com with ESMTPSA id c22sm175770pfc.12.2021.02.16.17.08.59
+        by smtp.gmail.com with ESMTPSA id c22sm175770pfc.12.2021.02.16.17.08.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Feb 2021 17:09:00 -0800 (PST)
+        Tue, 16 Feb 2021 17:08:39 -0800 (PST)
 Sender: Joe Stringer <joestringernz@gmail.com>
 From:   Joe Stringer <joe@wand.net.nz>
 To:     bpf@vger.kernel.org
 Cc:     Joe Stringer <joe@cilium.io>, netdev@vger.kernel.org,
         daniel@iogearbox.net, ast@kernel.org, mtk.manpages@gmail.com,
-        Quentin Monnet <quentin@isovalent.com>
-Subject: [PATCH bpf-next 16/17] docs/bpf: Add bpf() syscall command reference
-Date:   Tue, 16 Feb 2021 17:08:20 -0800
-Message-Id: <20210217010821.1810741-17-joe@wand.net.nz>
+        Quentin Monnet <quentin@isovalent.com>,
+        Brian Vazquez <brianvv@google.com>, Yonghong Song <yhs@fb.com>
+Subject: [PATCH bpf-next 08/17] bpf: Document BPF_MAP_*_BATCH syscall commands
+Date:   Tue, 16 Feb 2021 17:08:12 -0800
+Message-Id: <20210217010821.1810741-9-joe@wand.net.nz>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210217010821.1810741-1-joe@wand.net.nz>
 References: <20210217010821.1810741-1-joe@wand.net.nz>
@@ -75,117 +76,169 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Joe Stringer <joe@cilium.io>
 
-Generate the syscall command reference from the UAPI header file and
-include it in the main bpf docs page.
+Based roughly on the following commits:
+* Commit cb4d03ab499d ("bpf: Add generic support for lookup batch op")
+* Commit 057996380a42 ("bpf: Add batch ops to all htab bpf map")
+* Commit aa2e93b8e58e ("bpf: Add generic support for update and delete
+  batch ops")
 
 Reviewed-by: Quentin Monnet <quentin@isovalent.com>
 Signed-off-by: Joe Stringer <joe@cilium.io>
 ---
- Documentation/Makefile             |  2 ++
- Documentation/bpf/Makefile         | 28 ++++++++++++++++++++++++++++
- Documentation/bpf/bpf_commands.rst |  5 +++++
- Documentation/bpf/index.rst        | 14 +++++++++++---
- 4 files changed, 46 insertions(+), 3 deletions(-)
- create mode 100644 Documentation/bpf/Makefile
- create mode 100644 Documentation/bpf/bpf_commands.rst
+CC: Brian Vazquez <brianvv@google.com>
+CC: Yonghong Song <yhs@fb.com>
 
-diff --git a/Documentation/Makefile b/Documentation/Makefile
-index 9c42dde97671..408542825cc2 100644
---- a/Documentation/Makefile
-+++ b/Documentation/Makefile
-@@ -73,6 +73,7 @@ loop_cmd = $(echo-cmd) $(cmd_$(1)) || exit;
- 
- quiet_cmd_sphinx = SPHINX  $@ --> file://$(abspath $(BUILDDIR)/$3/$4)
-       cmd_sphinx = $(MAKE) BUILDDIR=$(abspath $(BUILDDIR)) $(build)=Documentation/userspace-api/media $2 && \
-+	$(MAKE) BUILDDIR=$(abspath $(BUILDDIR)) $(build)=Documentation/bpf $2 && \
- 	PYTHONDONTWRITEBYTECODE=1 \
- 	BUILDDIR=$(abspath $(BUILDDIR)) SPHINX_CONF=$(abspath $(srctree)/$(src)/$5/$(SPHINX_CONF)) \
- 	$(PYTHON3) $(srctree)/scripts/jobserver-exec \
-@@ -133,6 +134,7 @@ refcheckdocs:
- 
- cleandocs:
- 	$(Q)rm -rf $(BUILDDIR)
-+	$(Q)$(MAKE) BUILDDIR=$(abspath $(BUILDDIR)) $(build)=Documentation/bpf clean
- 	$(Q)$(MAKE) BUILDDIR=$(abspath $(BUILDDIR)) $(build)=Documentation/userspace-api/media clean
- 
- dochelp:
-diff --git a/Documentation/bpf/Makefile b/Documentation/bpf/Makefile
-new file mode 100644
-index 000000000000..4f14db0891cc
---- /dev/null
-+++ b/Documentation/bpf/Makefile
-@@ -0,0 +1,28 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+# Rules to convert a .h file to inline RST documentation
-+
-+SRC_DIR = $(srctree)/Documentation/bpf
-+PARSER = $(srctree)/scripts/bpf_doc.py
-+UAPI = $(srctree)/include/uapi/linux
-+
-+TARGETS = $(BUILDDIR)/bpf/bpf_syscall.rst
-+
-+$(BUILDDIR)/bpf/bpf_syscall.rst: $(UAPI)/bpf.h
-+	$(PARSER) syscall > $@
-+
-+.PHONY: all html epub xml latex linkcheck clean
-+
-+all: $(IMGDOT) $(BUILDDIR)/bpf $(TARGETS)
-+
-+html: all
-+epub: all
-+xml: all
-+latex: $(IMGPDF) all
-+linkcheck:
-+
-+clean:
-+	-rm -f -- $(TARGETS) 2>/dev/null
-+
-+$(BUILDDIR)/bpf:
-+	$(Q)mkdir -p $@
-diff --git a/Documentation/bpf/bpf_commands.rst b/Documentation/bpf/bpf_commands.rst
-new file mode 100644
-index 000000000000..da388ffac85b
---- /dev/null
-+++ b/Documentation/bpf/bpf_commands.rst
-@@ -0,0 +1,5 @@
-+**************************
-+bpf() subcommand reference
-+**************************
-+
-+.. kernel-include:: $BUILDDIR/bpf/bpf_syscall.rst
-diff --git a/Documentation/bpf/index.rst b/Documentation/bpf/index.rst
-index 4f2874b729c3..631d02d4dc49 100644
---- a/Documentation/bpf/index.rst
-+++ b/Documentation/bpf/index.rst
-@@ -12,9 +12,6 @@ BPF instruction-set.
- The Cilium project also maintains a `BPF and XDP Reference Guide`_
- that goes into great technical depth about the BPF Architecture.
- 
--The primary info for the bpf syscall is available in the `man-pages`_
--for `bpf(2)`_.
--
- BPF Type Format (BTF)
- =====================
- 
-@@ -35,6 +32,17 @@ Two sets of Questions and Answers (Q&A) are maintained.
-    bpf_design_QA
-    bpf_devel_QA
- 
-+Syscall API
-+===========
-+
-+The primary info for the bpf syscall is available in the `man-pages`_
-+for `bpf(2)`_.
-+
-+.. toctree::
-+   :maxdepth: 1
-+
-+   bpf_commands
-+
- 
- Helper functions
- ================
+@Yonghong, would you mind double-checking whether the text is accurate for the
+case where BPF_MAP_LOOKUP_AND_DELETE_BATCH returns -EFAULT?
+---
+ include/uapi/linux/bpf.h | 114 +++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 111 insertions(+), 3 deletions(-)
+
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index a07cecfd2148..893803f69a64 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -550,13 +550,55 @@ union bpf_iter_link_info {
+  *	Description
+  *		Iterate and fetch multiple elements in a map.
+  *
++ *		Two opaque values are used to manage batch operations,
++ *		*in_batch* and *out_batch*. Initially, *in_batch* must be set
++ *		to NULL to begin the batched operation. After each subsequent
++ *		**BPF_MAP_LOOKUP_BATCH**, the caller should pass the resultant
++ *		*out_batch* as the *in_batch* for the next operation to
++ *		continue iteration from the current point.
++ *
++ *		The *keys* and *values* are output parameters which must point
++ *		to memory large enough to hold *count* items based on the key
++ *		and value size of the map *map_fd*. The *keys* buffer must be
++ *		of *key_size* * *count*. The *values* buffer must be of
++ *		*value_size* * *count*.
++ *
++ *		The *elem_flags* argument may be specified as one of the
++ *		following:
++ *
++ *		**BPF_F_LOCK**
++ *			Look up the value of a spin-locked map without
++ *			returning the lock. This must be specified if the
++ *			elements contain a spinlock.
++ *
++ *		On success, *count* elements from the map are copied into the
++ *		user buffer, with the keys copied into *keys* and the values
++ *		copied into the corresponding indices in *values*.
++ *
++ *		If an error is returned and *errno* is not **EFAULT**, *count*
++ *		is set to the number of successfully processed elements.
++ *
+  *	Return
+  *		Returns zero on success. On error, -1 is returned and *errno*
+  *		is set appropriately.
+  *
++ *		May set *errno* to **ENOSPC** to indicate that *keys* or
++ *		*values* is too small to dump an entire bucket during
++ *		iteration of a hash-based map type.
++ *
+  * BPF_MAP_LOOKUP_AND_DELETE_BATCH
+  *	Description
+- *		Iterate and delete multiple elements in a map.
++ *		Iterate and delete all elements in a map.
++ *
++ *		This operation has the same behavior as
++ *		**BPF_MAP_LOOKUP_BATCH** with two exceptions:
++ *
++ *		* Every element that is successfully returned is also deleted
++ *		  from the map. This is at least *count* elements. Note that
++ *		  *count* is both an input and an output parameter.
++ *		* Upon returning with *errno* set to **EFAULT**, up to
++ *		  *count* elements may be deleted without returning the keys
++ *		  and values of the deleted elements.
+  *
+  *	Return
+  *		Returns zero on success. On error, -1 is returned and *errno*
+@@ -564,15 +606,81 @@ union bpf_iter_link_info {
+  *
+  * BPF_MAP_UPDATE_BATCH
+  *	Description
+- *		Iterate and update multiple elements in a map.
++ *		Update multiple elements in a map by *key*.
++ *
++ *		The *keys* and *values* are input parameters which must point
++ *		to memory large enough to hold *count* items based on the key
++ *		and value size of the map *map_fd*. The *keys* buffer must be
++ *		of *key_size* * *count*. The *values* buffer must be of
++ *		*value_size* * *count*.
++ *
++ *		Each element specified in *keys* is sequentially updated to the
++ *		value in the corresponding index in *values*. The *in_batch*
++ *		and *out_batch* parameters are ignored and should be zeroed.
++ *
++ *		The *elem_flags* argument should be specified as one of the
++ *		following:
++ *
++ *		**BPF_ANY**
++ *			Create new elements or update a existing elements.
++ *		**BPF_NOEXIST**
++ *			Create new elements only if they do not exist.
++ *		**BPF_EXIST**
++ *			Update existing elements.
++ *		**BPF_F_LOCK**
++ *			Update spin_lock-ed map elements. This must be
++ *			specified if the map value contains a spinlock.
++ *
++ *		On success, *count* elements from the map are updated.
++ *
++ *		If an error is returned and *errno* is not **EFAULT**, *count*
++ *		is set to the number of successfully processed elements.
+  *
+  *	Return
+  *		Returns zero on success. On error, -1 is returned and *errno*
+  *		is set appropriately.
+  *
++ *		May set *errno* to **EINVAL**, **EPERM**, **ENOMEM**, or
++ *		**E2BIG**. **E2BIG** indicates that the number of elements in
++ *		the map reached the *max_entries* limit specified at map
++ *		creation time.
++ *
++ *		May set *errno* to one of the following error codes under
++ *		specific circumstances:
++ *
++ *		**EEXIST**
++ *			If *flags* specifies **BPF_NOEXIST** and the element
++ *			with *key* already exists in the map.
++ *		**ENOENT**
++ *			If *flags* specifies **BPF_EXIST** and the element with
++ *			*key* does not exist in the map.
++ *
+  * BPF_MAP_DELETE_BATCH
+  *	Description
+- *		Iterate and delete multiple elements in a map.
++ *		Delete multiple elements in a map by *key*.
++ *
++ *		The *keys* parameter is an input parameter which must point
++ *		to memory large enough to hold *count* items based on the key
++ *		size of the map *map_fd*, that is, *key_size* * *count*.
++ *
++ *		Each element specified in *keys* is sequentially deleted. The
++ *		*in_batch*, *out_batch*, and *values* parameters are ignored
++ *		and should be zeroed.
++ *
++ *		The *elem_flags* argument may be specified as one of the
++ *		following:
++ *
++ *		**BPF_F_LOCK**
++ *			Look up the value of a spin-locked map without
++ *			returning the lock. This must be specified if the
++ *			elements contain a spinlock.
++ *
++ *		On success, *count* elements from the map are updated.
++ *
++ *		If an error is returned and *errno* is not **EFAULT**, *count*
++ *		is set to the number of successfully processed elements. If
++ *		*errno* is **EFAULT**, up to *count* elements may be been
++ *		deleted.
+  *
+  *	Return
+  *		Returns zero on success. On error, -1 is returned and *errno*
 -- 
 2.27.0
 
