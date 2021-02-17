@@ -7,63 +7,63 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AC4FAC433DB
-	for <bpf@archiver.kernel.org>; Wed, 17 Feb 2021 01:10:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E52DBC433DB
+	for <bpf@archiver.kernel.org>; Wed, 17 Feb 2021 01:10:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7B6AB64E2E
-	for <bpf@archiver.kernel.org>; Wed, 17 Feb 2021 01:10:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9FC9F64E57
+	for <bpf@archiver.kernel.org>; Wed, 17 Feb 2021 01:10:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231516AbhBQBKR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 16 Feb 2021 20:10:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47590 "EHLO
+        id S231519AbhBQBKV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 16 Feb 2021 20:10:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231462AbhBQBJv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 16 Feb 2021 20:09:51 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5583C061797;
-        Tue, 16 Feb 2021 17:08:53 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id x136so7366519pfc.2;
-        Tue, 16 Feb 2021 17:08:53 -0800 (PST)
+        with ESMTP id S231466AbhBQBJz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 16 Feb 2021 20:09:55 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D535EC0617A9;
+        Tue, 16 Feb 2021 17:08:56 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id j12so7328580pfj.12;
+        Tue, 16 Feb 2021 17:08:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=sHn1TcXA40LLznUdfZ0EnywfCC8GI0Od3igBD7EM/qA=;
-        b=inLrmew4Cded46OMVXm440//MhXtGm/AFsHnPkZUJZ0Si7ZBGly2nyrIYt4eVXqxcT
-         PMpocNArusisJd0qlkPyA3DTH1dMjPlc23YjUa59l22XmiX8bb++C+G9mUAB7/Y31a3i
-         7tF1TNy/soSno0eOqnG9ONKxyK1t+ZnYoeJ5JD+asBwyi+8nZyAfVvSsgF8iDcMlxFgF
-         HYwyuDVU1n4fV+WPPd2J69Hd5bzAA4Z/gM5k8ibY7+sCJKopV8UlUlObq/GRXNutCuyl
-         KM2QCoLQcV3hiZyzV1b7pmIryruBGrWvM5b0WqO1nVw+JmREvaQMKM8CEcv/rd1vR4QQ
-         JiqA==
+        bh=HqCUBkziu5GrtC8jZXdR5IquLRlLWRFSCrlmdHa2zM8=;
+        b=e/Lf/Y8VvOmA9hBvUmlL2KNcHxnrvfyKgst0Gj/Le7NuZDA66BiSJ3YxuNtW1TXjdc
+         cj1IpJ9XgLG5242mrRj/uxmpWqTLbJA59n3vweAT1PJ2dUFudEi4n6Yp+T0zkUW9uzQd
+         qRgDj+J+v15vDZTDrVpret8RRLeq92R0dxfO39KptAFwZ/Z1djqzC9wFiOFpRnMtAv0R
+         cMpH7jhXu9lfnLBkG+EECIBbC6SM/hAHnqlA5sOXRPdZpmtRy+VunmUmn9NOSRykAkSi
+         HI5n+ktVYd3VXj4ZiNelHQ0/2dCAB0DJwQxUBeQ3AYasaWYqkLyECR9DT/n73zyGpMmJ
+         gnug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=sHn1TcXA40LLznUdfZ0EnywfCC8GI0Od3igBD7EM/qA=;
-        b=N61xoY9htilY5c24HLVrFUqB+YiTZ+p12u5UwUyc59EQx94ZY8CcTHBwQfYHPeDuvC
-         EEXzWehBWXKXe6Ua3Kz23XZAljZPuPH+tMPJTMhbROfuhlJQOkxS6YGbq7tDzxoTGgke
-         0+4LUgczSybcrIuGBBSWdHsaTXkLSHao/IviMZYlZM0yy5gGlxBdFepgT+Gzf+Hi5smQ
-         XobsvgiJaW/qUaTEiQmkO700TOyavshZ7BruZvXln3D/Ls5wor/jOurP/v0qdN5W1+4R
-         OMnI48P6Sqz4pOKe+9TP5onpqOt4CPOxTzY5DG8umGOLipzEdsUq83+yhJ0OWJcK8GJE
-         9e0A==
-X-Gm-Message-State: AOAM531J5inh5hrxGyRKyy64etzkuawxG100MWwTflcyTeyG1s8pCKZB
-        mXqDoeK2or0akqIaHD0w7UaZHquE5OtROA==
-X-Google-Smtp-Source: ABdhPJys71FeVg+7o5aVJCeZX3Mu9fkvHyCeuAc359Q8UbtC07NsulXwihDGuXTSL8QRccUrb/aD7A==
-X-Received: by 2002:a63:4507:: with SMTP id s7mr21678588pga.390.1613524132973;
-        Tue, 16 Feb 2021 17:08:52 -0800 (PST)
+        bh=HqCUBkziu5GrtC8jZXdR5IquLRlLWRFSCrlmdHa2zM8=;
+        b=hNTSscJz4n5AGNqvQ+0ESPRQg2r9T+8XIw7HaXr9X2PdFqyroVSnLokUiwx+x/nkTJ
+         M1RaRk4iq7NQBT6/4W+EeMHNBnrZ33Ti2ER9D6msgMc5F2YSwdrK4Bs3iHu4u4BdI4lN
+         8dkYQBT/tvXfCtx0wkU5wHGJX4uLobWChhQammtADzWS/R1lh9oDlK1oBnYPYP3bUStr
+         WW3bfp/lkA9SCIB3SY9r0l717XYdTmlqQU0gsFfXF+zkACZFD13jEP2nb/5OGTSQ276B
+         snHsnKplSpcLvfNo+AEExrP5gDsTo9GczWQfibShO2lQ2lIB5xvvTIkUbnRlxolo1Mpn
+         w8Wg==
+X-Gm-Message-State: AOAM531CgRsK5thwXfcGiML3csxj2C1Rs/TzlSB2W64yiZSWU0krhUW9
+        2D9HdlnhHYYpdR/4VZly8R2KJ0bs2AUfvw==
+X-Google-Smtp-Source: ABdhPJyRs/QG3d+RPhMepnPwN5nz/ZgJ8UF30iiN1EUg2ZwfW0UHFxR3x6JzhjysP4KBrFimdO516w==
+X-Received: by 2002:a63:e442:: with SMTP id i2mr20972838pgk.12.1613524136052;
+        Tue, 16 Feb 2021 17:08:56 -0800 (PST)
 Received: from localhost.localdomain (c-73-93-5-123.hsd1.ca.comcast.net. [73.93.5.123])
-        by smtp.gmail.com with ESMTPSA id c22sm175770pfc.12.2021.02.16.17.08.51
+        by smtp.gmail.com with ESMTPSA id c22sm175770pfc.12.2021.02.16.17.08.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Feb 2021 17:08:52 -0800 (PST)
+        Tue, 16 Feb 2021 17:08:55 -0800 (PST)
 Sender: Joe Stringer <joestringernz@gmail.com>
 From:   Joe Stringer <joe@wand.net.nz>
 To:     bpf@vger.kernel.org
 Cc:     Joe Stringer <joe@cilium.io>, netdev@vger.kernel.org,
         daniel@iogearbox.net, ast@kernel.org, mtk.manpages@gmail.com,
         Quentin Monnet <quentin@isovalent.com>
-Subject: [PATCH bpf-next 11/17] scripts/bpf: Add syscall commands printer
-Date:   Tue, 16 Feb 2021 17:08:15 -0800
-Message-Id: <20210217010821.1810741-12-joe@wand.net.nz>
+Subject: [PATCH bpf-next 13/17] tools/bpf: Templatize man page generation
+Date:   Tue, 16 Feb 2021 17:08:17 -0800
+Message-Id: <20210217010821.1810741-14-joe@wand.net.nz>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210217010821.1810741-1-joe@wand.net.nz>
 References: <20210217010821.1810741-1-joe@wand.net.nz>
@@ -75,197 +75,127 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Joe Stringer <joe@cilium.io>
 
-Add a new target to bpf_doc.py to support generating the list of syscall
-commands directly from the UAPI headers. Assuming that developer
-submissions keep the main header up to date, this should allow the man
-pages to be automatically generated based on the latest API changes
-rather than requiring someone to separately go back through the API and
-describe each command.
+Previously, the Makefile here was only targeting a single manual page so
+it just hardcoded a bunch of individual rules to specifically handle
+build, clean, install, uninstall for that particular page.
+
+Upcoming commits will generate manual pages for an additional section,
+so this commit prepares the makefile first by converting the existing
+targets into an evaluated set of targets based on the manual page name
+and section.
 
 Reviewed-by: Quentin Monnet <quentin@isovalent.com>
 Signed-off-by: Joe Stringer <joe@cilium.io>
 ---
- scripts/bpf_doc.py | 98 +++++++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 89 insertions(+), 9 deletions(-)
+ tools/bpf/Makefile.docs                  | 52 ++++++++++++++++--------
+ tools/bpf/bpftool/Documentation/Makefile |  8 ++--
+ 2 files changed, 39 insertions(+), 21 deletions(-)
 
-diff --git a/scripts/bpf_doc.py b/scripts/bpf_doc.py
-index 5a4f68aab335..72a2ba323692 100755
---- a/scripts/bpf_doc.py
-+++ b/scripts/bpf_doc.py
-@@ -14,6 +14,9 @@ import sys, os
- class NoHelperFound(BaseException):
-     pass
+diff --git a/tools/bpf/Makefile.docs b/tools/bpf/Makefile.docs
+index dc4ce82ada33..7111888ca5d8 100644
+--- a/tools/bpf/Makefile.docs
++++ b/tools/bpf/Makefile.docs
+@@ -29,32 +29,50 @@ MAN7_RST = $(HELPERS_RST)
+ _DOC_MAN7 = $(patsubst %.rst,%.7,$(MAN7_RST))
+ DOC_MAN7 = $(addprefix $(OUTPUT),$(_DOC_MAN7))
  
-+class NoSyscallCommandFound(BaseException):
-+    pass
++DOCTARGETS := helpers
 +
- class ParsingError(BaseException):
-     def __init__(self, line='<line not provided>', reader=None):
-         if reader:
-@@ -23,18 +26,27 @@ class ParsingError(BaseException):
-         else:
-             BaseException.__init__(self, 'Error parsing line: %s' % line)
++docs: $(DOCTARGETS)
+ helpers: man7
+ man7: $(DOC_MAN7)
  
--class Helper(object):
+ RST2MAN_DEP := $(shell command -v rst2man 2>/dev/null)
+ 
+-$(OUTPUT)$(HELPERS_RST): $(UP2DIR)../../include/uapi/linux/bpf.h
+-	$(QUIET_GEN)$(UP2DIR)../../scripts/bpf_doc.py --filename $< > $@
++# Configure make rules for the man page bpf-$1.$2.
++# $1 - target for scripts/bpf_doc.py
++# $2 - man page section to generate the troff file
++define DOCS_RULES =
++$(OUTPUT)bpf-$1.rst: $(UP2DIR)../../include/uapi/linux/bpf.h
++	$$(QUIET_GEN)$(UP2DIR)../../scripts/bpf_doc.py $1 \
++		--filename $$< > $$@
+ 
+-$(OUTPUT)%.7: $(OUTPUT)%.rst
++$(OUTPUT)%.$2: $(OUTPUT)%.rst
+ ifndef RST2MAN_DEP
+-	$(error "rst2man not found, but required to generate man pages")
++	$$(error "rst2man not found, but required to generate man pages")
+ endif
+-	$(QUIET_GEN)rst2man $< > $@
++	$$(QUIET_GEN)rst2man $$< > $$@
 +
-+class APIElement(object):
-     """
--    An object representing the description of an eBPF helper function.
--    @proto: function prototype of the helper function
--    @desc: textual description of the helper function
--    @ret: description of the return value of the helper function
-+    An object representing the description of an aspect of the eBPF API.
-+    @proto: prototype of the API symbol
-+    @desc: textual description of the symbol
-+    @ret: (optional) description of any associated return value
-     """
-     def __init__(self, proto='', desc='', ret=''):
-         self.proto = proto
-         self.desc = desc
-         self.ret = ret
- 
++docs-clean-$1:
++	$$(call QUIET_CLEAN, eBPF_$1-manpage)
++	$(Q)$(RM) $$(DOC_MAN$2) $(OUTPUT)bpf-$1.rst
 +
-+class Helper(APIElement):
-+    """
-+    An object representing the description of an eBPF helper function.
-+    @proto: function prototype of the helper function
-+    @desc: textual description of the helper function
-+    @ret: description of the return value of the helper function
-+    """
-     def proto_break_down(self):
-         """
-         Break down helper function protocol into smaller chunks: return type,
-@@ -61,6 +73,7 @@ class Helper(object):
- 
-         return res
- 
++docs-install-$1: docs
++	$$(call QUIET_INSTALL, eBPF_$1-manpage)
++	$(Q)$(INSTALL) -d -m 755 $(DESTDIR)$$(man$2dir)
++	$(Q)$(INSTALL) -m 644 $$(DOC_MAN$2) $(DESTDIR)$$(man$2dir)
 +
- class HeaderParser(object):
-     """
-     An object used to parse a file in order to extract the documentation of a
-@@ -73,6 +86,13 @@ class HeaderParser(object):
-         self.reader = open(filename, 'r')
-         self.line = ''
-         self.helpers = []
-+        self.commands = []
-+
-+    def parse_element(self):
-+        proto    = self.parse_symbol()
-+        desc     = self.parse_desc()
-+        ret      = self.parse_ret()
-+        return APIElement(proto=proto, desc=desc, ret=ret)
++docs-uninstall-$1:
++	$$(call QUIET_UNINST, eBPF_$1-manpage)
++	$(Q)$(RM) $$(addprefix $(DESTDIR)$$(man$2dir)/,$$(_DOC_MAN$2))
++	$(Q)$(RMDIR) $(DESTDIR)$$(man$2dir)
  
-     def parse_helper(self):
-         proto    = self.parse_proto()
-@@ -80,6 +100,18 @@ class HeaderParser(object):
-         ret      = self.parse_ret()
-         return Helper(proto=proto, desc=desc, ret=ret)
+-helpers-clean:
+-	$(call QUIET_CLEAN, eBPF_helpers-manpage)
+-	$(Q)$(RM) $(DOC_MAN7) $(OUTPUT)$(HELPERS_RST)
++.PHONY: $1 docs-clean-$1 docs-install-$1 docs-uninstall-$1
++endef
  
-+    def parse_symbol(self):
-+        p = re.compile(' \* ?(.+)$')
-+        capture = p.match(self.line)
-+        if not capture:
-+            raise NoSyscallCommandFound
-+        end_re = re.compile(' \* ?NOTES$')
-+        end = end_re.match(self.line)
-+        if end:
-+            raise NoSyscallCommandFound
-+        self.line = self.reader.readline()
-+        return capture.group(1)
-+
-     def parse_proto(self):
-         # Argument can be of shape:
-         #   - "void"
-@@ -141,16 +173,29 @@ class HeaderParser(object):
-                     break
-         return ret
+-helpers-install: helpers
+-	$(call QUIET_INSTALL, eBPF_helpers-manpage)
+-	$(Q)$(INSTALL) -d -m 755 $(DESTDIR)$(man7dir)
+-	$(Q)$(INSTALL) -m 644 $(DOC_MAN7) $(DESTDIR)$(man7dir)
++# Create the make targets to generate manual pages by name and section
++$(eval $(call DOCS_RULES,helpers,7))
  
--    def run(self):
--        # Advance to start of helper function descriptions.
--        offset = self.reader.read().find('* Start of BPF helper function descriptions:')
-+    def seek_to(self, target, help_message):
-+        self.reader.seek(0)
-+        offset = self.reader.read().find(target)
-         if offset == -1:
--            raise Exception('Could not find start of eBPF helper descriptions list')
-+            raise Exception(help_message)
-         self.reader.seek(offset)
-         self.reader.readline()
-         self.reader.readline()
-         self.line = self.reader.readline()
+-helpers-uninstall:
+-	$(call QUIET_UNINST, eBPF_helpers-manpage)
+-	$(Q)$(RM) $(addprefix $(DESTDIR)$(man7dir)/,$(_DOC_MAN7))
+-	$(Q)$(RMDIR) $(DESTDIR)$(man7dir)
++docs-clean: $(foreach doctarget,$(DOCTARGETS), docs-clean-$(doctarget))
++docs-install: $(foreach doctarget,$(DOCTARGETS), docs-install-$(doctarget))
++docs-uninstall: $(foreach doctarget,$(DOCTARGETS), docs-uninstall-$(doctarget))
  
-+    def parse_syscall(self):
-+        self.seek_to('* Start of BPF syscall commands:',
-+                     'Could not find start of eBPF syscall descriptions list')
-+        while True:
-+            try:
-+                command = self.parse_element()
-+                self.commands.append(command)
-+            except NoSyscallCommandFound:
-+                break
-+
-+    def parse_helpers(self):
-+        self.seek_to('* Start of BPF helper function descriptions:',
-+                     'Could not find start of eBPF helper descriptions list')
-         while True:
-             try:
-                 helper = self.parse_helper()
-@@ -158,6 +203,9 @@ class HeaderParser(object):
-             except NoHelperFound:
-                 break
+-.PHONY: helpers helpers-clean helpers-install helpers-uninstall
++.PHONY: docs docs-clean docs-install docs-uninstall man7
+diff --git a/tools/bpf/bpftool/Documentation/Makefile b/tools/bpf/bpftool/Documentation/Makefile
+index bb7842efffd6..f60b800584a5 100644
+--- a/tools/bpf/bpftool/Documentation/Makefile
++++ b/tools/bpf/bpftool/Documentation/Makefile
+@@ -24,7 +24,7 @@ MAN8_RST = $(wildcard bpftool*.rst)
+ _DOC_MAN8 = $(patsubst %.rst,%.8,$(MAN8_RST))
+ DOC_MAN8 = $(addprefix $(OUTPUT),$(_DOC_MAN8))
  
-+    def run(self):
-+        self.parse_syscall()
-+        self.parse_helpers()
-         self.reader.close()
+-man: man8 helpers
++man: man8 docs
+ man8: $(DOC_MAN8)
  
- ###############################################################################
-@@ -420,6 +468,37 @@ SEE ALSO
-         self.print_elem(helper)
+ RST2MAN_DEP := $(shell command -v rst2man 2>/dev/null)
+@@ -46,16 +46,16 @@ ifndef RST2MAN_DEP
+ endif
+ 	$(QUIET_GEN)( cat $< ; printf "%b" $(call see_also,$<) ) | rst2man $(RST2MAN_OPTS) > $@
  
+-clean: helpers-clean
++clean: docs-clean
+ 	$(call QUIET_CLEAN, Documentation)
+ 	$(Q)$(RM) $(DOC_MAN8)
  
-+class PrinterSyscallRST(PrinterRST):
-+    """
-+    A printer for dumping collected information about the syscall API as a
-+    ReStructured Text page compatible with the rst2man program, which can be
-+    used to generate a manual page for the syscall.
-+    @parser: A HeaderParser with APIElement objects to print to standard
-+             output
-+    """
-+    def __init__(self, parser):
-+        self.elements = parser.commands
-+
-+    def print_header(self):
-+        header = '''\
-+===
-+bpf
-+===
-+-------------------------------------------------------------------------------
-+Perform a command on an extended BPF object
-+-------------------------------------------------------------------------------
-+
-+:Manual section: 2
-+
-+COMMANDS
-+========
-+'''
-+        PrinterRST.print_license(self)
-+        print(header)
-+
-+    def print_one(self, command):
-+        print('**%s**' % (command.proto))
-+        self.print_elem(command)
+-install: man helpers-install
++install: man docs-install
+ 	$(call QUIET_INSTALL, Documentation-man)
+ 	$(Q)$(INSTALL) -d -m 755 $(DESTDIR)$(man8dir)
+ 	$(Q)$(INSTALL) -m 644 $(DOC_MAN8) $(DESTDIR)$(man8dir)
  
- 
- class PrinterHelpers(Printer):
-@@ -620,6 +699,7 @@ bpfh = os.path.join(linuxRoot, 'include/uapi/linux/bpf.h')
- 
- printers = {
-         'helpers': PrinterHelpersRST,
-+        'syscall': PrinterSyscallRST,
- }
- 
- argParser = argparse.ArgumentParser(description="""
+-uninstall: helpers-uninstall
++uninstall: docs-uninstall
+ 	$(call QUIET_UNINST, Documentation-man)
+ 	$(Q)$(RM) $(addprefix $(DESTDIR)$(man8dir)/,$(_DOC_MAN8))
+ 	$(Q)$(RMDIR) $(DESTDIR)$(man8dir)
 -- 
 2.27.0
 
