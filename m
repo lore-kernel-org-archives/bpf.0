@@ -2,178 +2,125 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,FROM_LOCAL_HEX,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C761BC433E6
-	for <bpf@archiver.kernel.org>; Thu, 18 Feb 2021 16:52:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11497C433E0
+	for <bpf@archiver.kernel.org>; Thu, 18 Feb 2021 18:49:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7A4F264EB9
-	for <bpf@archiver.kernel.org>; Thu, 18 Feb 2021 16:52:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B4BF364EB4
+	for <bpf@archiver.kernel.org>; Thu, 18 Feb 2021 18:49:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231971AbhBRQv1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 18 Feb 2021 11:51:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45660 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230283AbhBRQkN (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 18 Feb 2021 11:40:13 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E8B1C061574;
-        Thu, 18 Feb 2021 08:39:28 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id e9so1828768pjj.0;
-        Thu, 18 Feb 2021 08:39:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XCS1qy8ob7XsXX9kc+oSLC6Sq4kYNTiKKYp1XNnNPYo=;
-        b=tjcsSKlqihVsOaiJCi0Dm5mUG1XxbSeCOuVxJev77g+zYHXf7oeiG93b/J67bVMZa7
-         hBT7A0zdYGkdiuHmE8rIZoRC9wFfFAAqz5tqBGY3KfnEx9r9Bk8+/3Ro5E727CwDQ310
-         mq+6eu5ow3z9AWCz3AYU9MeEuiNZNIXmjzdQE28nX+TsI4bP55s7i+A/USexGPBIIa1O
-         Sow3bx/n9b4/NNdeFUs09TJUwuyYx6jJ2ABMMDflV/jN6VwwdAToLtSvgb8VPWjhHPbQ
-         EgJBC2qgJsg8ltY7Lp2MI6p50teIHF/RiuIumuI43Zdguo5USJyOny1hbria6JP4+qaJ
-         erIg==
+        id S230488AbhBRSsp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 18 Feb 2021 13:48:45 -0500
+Received: from mail-io1-f71.google.com ([209.85.166.71]:55497 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232412AbhBRRWZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 18 Feb 2021 12:22:25 -0500
+Received: by mail-io1-f71.google.com with SMTP id e9so1806274iok.22
+        for <bpf@vger.kernel.org>; Thu, 18 Feb 2021 09:21:51 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XCS1qy8ob7XsXX9kc+oSLC6Sq4kYNTiKKYp1XNnNPYo=;
-        b=OBh8FfHI2I8sVdy9RobVoLgDDqaUWkCmJZK/+KyxW8svw+sDN1EGyHYGmkXPdIlZrp
-         nfz2MK7v3aYAAuyqjhtXM5PCMX88Fx0QOfTWecim8rg1maozHOGdw7X3APPQwdyAHHTZ
-         OO6yUlFlrLkbdhz6nmRxh/VwU7HsrN8jBnqX/J7d1qwh3JfBOFYrLasSt006dciKCurL
-         bjbqF2DucBrcZJvtf7f2rCUToZpOSqnl04OLZOTPofrmia/y15xDGjrY9sXLXypoP788
-         /lapXRCvgibHneCPz8sH1BePcfbu5BQ/i1MfrMVmeowvzFM6E+uFeaiTyks468JORJbr
-         WSmw==
-X-Gm-Message-State: AOAM531enpZC0DcfbsaA2GaA2DQGRxUCXhDrCbBQ0KVlkEbn8wTgi6bq
-        PaivQ+zCjRQjLInM4E2C8xkirFJCfhy+oo85
-X-Google-Smtp-Source: ABdhPJy3oyXwsGciCKxueasMwiTAkxzoT3YfWDqrGEQlgBcELCgh3GwtHyYZs20osF6Ai6kEql52Xw==
-X-Received: by 2002:a17:90a:8b83:: with SMTP id z3mr4841731pjn.75.1613666367831;
-        Thu, 18 Feb 2021 08:39:27 -0800 (PST)
-Received: from localhost.localdomain ([122.10.101.135])
-        by smtp.gmail.com with ESMTPSA id s1sm6282938pfe.151.2021.02.18.08.39.16
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 18 Feb 2021 08:39:21 -0800 (PST)
-From:   Xuesen Huang <hxseverything@gmail.com>
-To:     willemdebruijn.kernel@gmail.com
-Cc:     davem@davemloft.net, bpf@vger.kernel.org, daniel@iogearbox.net,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuesen Huang <huangxuesen@kuaishou.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Zhiyong Cheng <chengzhiyong@kuaishou.com>,
-        Li Wang <wangli09@kuaishou.com>
-Subject: [PATCH/v2] bpf: add bpf_skb_adjust_room flag BPF_F_ADJ_ROOM_ENCAP_L2_ETH
-Date:   Fri, 19 Feb 2021 00:39:03 +0800
-Message-Id: <20210218163903.60992-1-hxseverything@gmail.com>
-X-Mailer: git-send-email 2.24.3 (Apple Git-128)
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=70mWA/syeYNv54oaeIaoq9XXAMB6CP00uHj11qVXy7M=;
+        b=ZcQZdubQFVmyUiVNV1tVma0fGqETYAOZ5uxTczuD/dcO6e4Km8oeEs6Cg8GQPmkJe9
+         rz8u5oYRxr/IyerhJHlNz1ZMxfeH3U1ClM8Zc7f6Afzs7Wz81QGE5mADCqW0UCP6h26a
+         GiBCqELR519LvCkqKCqtV9qpN2ylBFtDcZAdzTEWTMOEJpZRPlJ0XADYhs4UxTh8ydan
+         KryOlfPyw5Xpel8Da/gKFW2vLheS6KMJpayg9mvvdVt/VNY/dAAxpLB299p2ZfsX2aPw
+         SMuFExXMb0cuCqMT5RfbIpdz2D133QRkSKSyo4xjjO6vVbpEvS9K1YG5kvkdI0KJ7qGi
+         BBfA==
+X-Gm-Message-State: AOAM531WkQRodyrlwuHPZby8n182Cz66KIRbuQRwsm+gLSHywKuNuSrV
+        WJP0uISTQtA9mqSIzp/1nfQG5jN4Pg1vBn7p2ky5ivbXqyMn
+X-Google-Smtp-Source: ABdhPJxlnJ7bZYFsn6UaWciRai5QfxcxAnaFxuVeRtkniCIVTkrAQCl49fqOUvAWa+AoBgbmIj32udtDOaQSEPHidAs54dGew3wF
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a05:6e02:11af:: with SMTP id 15mr156835ilj.302.1613668886307;
+ Thu, 18 Feb 2021 09:21:26 -0800 (PST)
+Date:   Thu, 18 Feb 2021 09:21:26 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c0ea2805bb9f9056@google.com>
+Subject: UBSAN: shift-out-of-bounds in netlink_recvmsg
+From:   syzbot <syzbot+cdb35bcbfac5f493e2af@syzkaller.appspotmail.com>
+To:     0x7f454c46@gmail.com, andrii@kernel.org, ast@kernel.org,
+        bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
+        fw@strlen.de, john.fastabend@gmail.com, kafai@fb.com,
+        kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        mathew.j.martineau@linux.intel.com, matthieu.baerts@tessares.net,
+        mkubecek@suse.cz, netdev@vger.kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Xuesen Huang <huangxuesen@kuaishou.com>
+Hello,
 
-bpf_skb_adjust_room sets the inner_protocol as skb->protocol for packets
-encapsulation. But that is not appropriate when pushing Ethernet header.
+syzbot found the following issue on:
 
-Add an option to further specify encap L2 type and set the inner_protocol
-as ETH_P_TEB.
+HEAD commit:    b646acd5 net: re-solve some conflicts after net -> net-nex..
+git tree:       net-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=129fbe04d00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=dbc1ca9e55dc1f9f
+dashboard link: https://syzkaller.appspot.com/bug?extid=cdb35bcbfac5f493e2af
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12bd2e5ad00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12c388f2d00000
 
-Suggested-by: Willem de Bruijn <willemb@google.com>
-Signed-off-by: Xuesen Huang <huangxuesen@kuaishou.com>
-Signed-off-by: Zhiyong Cheng <chengzhiyong@kuaishou.com>
-Signed-off-by: Li Wang <wangli09@kuaishou.com>
+The issue was bisected to:
+
+commit b911c97c7dc771633c68ea9b8f15070f8af3d323
+Author: Florian Westphal <fw@strlen.de>
+Date:   Sat Feb 13 00:00:01 2021 +0000
+
+    mptcp: add netlink event support
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=163d5724d00000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=153d5724d00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=113d5724d00000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+cdb35bcbfac5f493e2af@syzkaller.appspotmail.com
+Fixes: b911c97c7dc7 ("mptcp: add netlink event support")
+
+================================================================================
+UBSAN: shift-out-of-bounds in net/netlink/af_netlink.c:160:19
+shift exponent 32 is too large for 32-bit type 'int'
+CPU: 1 PID: 8437 Comm: syz-executor324 Not tainted 5.11.0-rc7-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ __dump_stack lib/dump_stack.c:79 [inline]
+ dump_stack+0x107/0x163 lib/dump_stack.c:120
+ ubsan_epilogue+0xb/0x5a lib/ubsan.c:148
+ __ubsan_handle_shift_out_of_bounds.cold+0xb1/0x181 lib/ubsan.c:395
+ netlink_group_mask net/netlink/af_netlink.c:160 [inline]
+ netlink_group_mask net/netlink/af_netlink.c:158 [inline]
+ netlink_recvmsg.cold+0x1a/0x1f net/netlink/af_netlink.c:1992
+ sock_recvmsg_nosec net/socket.c:886 [inline]
+ sock_recvmsg net/socket.c:904 [inline]
+ sock_recvmsg net/socket.c:900 [inline]
+ ____sys_recvmsg+0x2c4/0x600 net/socket.c:2571
+ ___sys_recvmsg+0x127/0x200 net/socket.c:2613
+ __sys_recvmsg+0xe2/0x1a0 net/socket.c:2649
+ do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+RIP: 0033:0x444bf9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 81 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f68a1130318 EFLAGS: 00000246 ORIG_RAX: 000000000000002f
+RAX: ffffffffffffffda RBX: 00000000004ca408 RCX: 0000000000444bf9
+RDX: 0000000000000002 RSI: 0000000020000440 RDI: 0000000000000003
+RBP: 00000000004ca400 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 8001000a373e1537
+R13: 00007ffc4d11dcaf R14: 00007f68a1130400 R15: 0000000000022000
+================================================================================
+
+
 ---
- include/uapi/linux/bpf.h       |  5 +++++
- net/core/filter.c              | 11 ++++++++++-
- tools/include/uapi/linux/bpf.h |  5 +++++
- 3 files changed, 20 insertions(+), 1 deletion(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 77d7c1b..d791596 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -1751,6 +1751,10 @@ struct bpf_stack_build_id {
-  *		  Use with ENCAP_L3/L4 flags to further specify the tunnel
-  *		  type; *len* is the length of the inner MAC header.
-  *
-+ *		* **BPF_F_ADJ_ROOM_ENCAP_L2_ETH**:
-+ *		  Use with BPF_F_ADJ_ROOM_ENCAP_L2 flag to further specify the
-+ *		  L2 type as Ethernet.
-+ *
-  * 		A call to this helper is susceptible to change the underlying
-  * 		packet buffer. Therefore, at load time, all checks on pointers
-  * 		previously done by the verifier are invalidated and must be
-@@ -4088,6 +4092,7 @@ enum {
- 	BPF_F_ADJ_ROOM_ENCAP_L4_GRE	= (1ULL << 3),
- 	BPF_F_ADJ_ROOM_ENCAP_L4_UDP	= (1ULL << 4),
- 	BPF_F_ADJ_ROOM_NO_CSUM_RESET	= (1ULL << 5),
-+	BPF_F_ADJ_ROOM_ENCAP_L2_ETH	= (1ULL << 6),
- };
- 
- enum {
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 255aeee..8d1fb61 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -3412,6 +3412,7 @@ static u32 bpf_skb_net_base_len(const struct sk_buff *skb)
- 					 BPF_F_ADJ_ROOM_ENCAP_L3_MASK | \
- 					 BPF_F_ADJ_ROOM_ENCAP_L4_GRE | \
- 					 BPF_F_ADJ_ROOM_ENCAP_L4_UDP | \
-+					 BPF_F_ADJ_ROOM_ENCAP_L2_ETH | \
- 					 BPF_F_ADJ_ROOM_ENCAP_L2( \
- 					  BPF_ADJ_ROOM_ENCAP_L2_MASK))
- 
-@@ -3448,6 +3449,10 @@ static int bpf_skb_net_grow(struct sk_buff *skb, u32 off, u32 len_diff,
- 		    flags & BPF_F_ADJ_ROOM_ENCAP_L4_UDP)
- 			return -EINVAL;
- 
-+		if (flags & BPF_F_ADJ_ROOM_ENCAP_L2_ETH &&
-+		    inner_mac_len < ETH_HLEN)
-+			return -EINVAL;
-+
- 		if (skb->encapsulation)
- 			return -EALREADY;
- 
-@@ -3466,7 +3471,11 @@ static int bpf_skb_net_grow(struct sk_buff *skb, u32 off, u32 len_diff,
- 		skb->inner_mac_header = inner_net - inner_mac_len;
- 		skb->inner_network_header = inner_net;
- 		skb->inner_transport_header = inner_trans;
--		skb_set_inner_protocol(skb, skb->protocol);
-+
-+		if (flags & BPF_F_ADJ_ROOM_ENCAP_L2_ETH)
-+			skb_set_inner_protocol(skb, htons(ETH_P_TEB));
-+		else
-+			skb_set_inner_protocol(skb, skb->protocol);
- 
- 		skb->encapsulation = 1;
- 		skb_set_network_header(skb, mac_len);
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 77d7c1b..d791596 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -1751,6 +1751,10 @@ struct bpf_stack_build_id {
-  *		  Use with ENCAP_L3/L4 flags to further specify the tunnel
-  *		  type; *len* is the length of the inner MAC header.
-  *
-+ *		* **BPF_F_ADJ_ROOM_ENCAP_L2_ETH**:
-+ *		  Use with BPF_F_ADJ_ROOM_ENCAP_L2 flag to further specify the
-+ *		  L2 type as Ethernet.
-+ *
-  * 		A call to this helper is susceptible to change the underlying
-  * 		packet buffer. Therefore, at load time, all checks on pointers
-  * 		previously done by the verifier are invalidated and must be
-@@ -4088,6 +4092,7 @@ enum {
- 	BPF_F_ADJ_ROOM_ENCAP_L4_GRE	= (1ULL << 3),
- 	BPF_F_ADJ_ROOM_ENCAP_L4_UDP	= (1ULL << 4),
- 	BPF_F_ADJ_ROOM_NO_CSUM_RESET	= (1ULL << 5),
-+	BPF_F_ADJ_ROOM_ENCAP_L2_ETH	= (1ULL << 6),
- };
- 
- enum {
--- 
-1.8.3.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
