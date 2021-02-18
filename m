@@ -2,71 +2,121 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5808C433DB
-	for <bpf@archiver.kernel.org>; Thu, 18 Feb 2021 10:52:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60A0FC433E0
+	for <bpf@archiver.kernel.org>; Thu, 18 Feb 2021 10:55:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5834764E79
-	for <bpf@archiver.kernel.org>; Thu, 18 Feb 2021 10:52:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0FEB464EAF
+	for <bpf@archiver.kernel.org>; Thu, 18 Feb 2021 10:55:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbhBRKtp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 18 Feb 2021 05:49:45 -0500
-Received: from out30-54.freemail.mail.aliyun.com ([115.124.30.54]:55475 "EHLO
-        out30-54.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231331AbhBRJZp (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 18 Feb 2021 04:25:45 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R921e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0UOtQgUB_1613640280;
-Received: from j63c13417.sqa.eu95.tbsite.net(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0UOtQgUB_1613640280)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 18 Feb 2021 17:24:44 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     peterz@infradead.org
-Cc:     mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@redhat.com,
-        namhyung@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Subject: [PATCH] perf machine: Use true and false for bool variable
-Date:   Thu, 18 Feb 2021 17:24:39 +0800
-Message-Id: <1613640279-56480-1-git-send-email-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
+        id S230195AbhBRKwG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 18 Feb 2021 05:52:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48568 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232685AbhBRKRT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 18 Feb 2021 05:17:19 -0500
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 682BFC061793;
+        Thu, 18 Feb 2021 02:16:39 -0800 (PST)
+Received: by mail-qt1-x835.google.com with SMTP id c1so993386qtc.1;
+        Thu, 18 Feb 2021 02:16:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=2HiCruRN9Pgq0gqCN/tSAqWLIGJxcDpmovRVeDmHiW0=;
+        b=PL1sFj2SIJD3/csd4zK7GN48tQ2Qn5xedd8D8or8JAoWxccoFBj4DOirJd0Yp8zxGR
+         UCsu5eA8RTsP37bFtCFmC5d86upMYgGXQUUOQYPB7dvQ6K0BVJLW3JzJB3tQB8vuuvmO
+         I7QBJhcXBVsc6+NqjZN7U5zCG2gSOoqUYWPtaRVcFNQzZVYBk5U154lb0L+DyFJ+G+Wq
+         Gg30Nquzs6M9nvAbM2f3QOEqKmIuqj4UrJ7jxQHDaO9YX5jT6wT3OWWY1gz2GGiHX6+6
+         HOEgAqWzjVIHR7RWdr9HSflwvdaY0XTDhKIHG/UFBQR4QAFh4LczjvqDR35GJSxpFucR
+         Iz1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=2HiCruRN9Pgq0gqCN/tSAqWLIGJxcDpmovRVeDmHiW0=;
+        b=MdwnVDN3taJvS3lev4Lmc+2oyx0F12LUKea179n0nCAPRe1STeyityBdmDWzNZKKM7
+         rduo1dlv0M9opKS316e8Aowmnt9JIQ9B/m1cAJD2N2/+DKcdGV8eeUBsBcFi5iZ9iQeI
+         5g2AsAJyTK87vNpWY/vswWHbofmrTi+Nllq0BypVtoNM6XgZMqoojEfZTdfABo6ZPZbx
+         LQXbPtRLqUJ2dwgpvtUNG/BRSfgTyozZiF5Gb/SxrFk5fKZgk5RHFhatBPctlyb72nE1
+         ApGl7JsNz5aP34Lr6ischkRAO5QDhdBKPvWSP3th2ce1q4GG0++kHSeyZBvhBmNHw9RG
+         CDNQ==
+X-Gm-Message-State: AOAM532rq74PN0aQ1Y8PyWXnB3UqPL4RdNsb0KbysL0UOgvp/h6qzyRq
+        HU+sjUJc7QQFpiTbOohA5W8=
+X-Google-Smtp-Source: ABdhPJyHASRk2KdOR1HGAj1WFn/3gD2Eg1+o/bKGW8gv0UZ7Nspn9/6sKwAjrjqwFEAbRXNSaK1FoQ==
+X-Received: by 2002:ac8:5783:: with SMTP id v3mr3371694qta.133.1613643398694;
+        Thu, 18 Feb 2021 02:16:38 -0800 (PST)
+Received: from localhost ([216.207.42.140])
+        by smtp.gmail.com with ESMTPSA id i5sm3055010qtw.3.2021.02.18.02.16.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Feb 2021 02:16:38 -0800 (PST)
+Date:   Thu, 18 Feb 2021 03:16:34 -0700
+From:   "Brian G. Merrell" <brian.g.merrell@gmail.com>
+To:     Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+Cc:     xdp-newbies@vger.kernel.org,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Maciej =?utf-8?Q?=C5=BBenczykowski?= <maze@google.com>,
+        Lorenz Bauer <lmb@cloudflare.com>,
+        Andrey Ignatov <rdna@fb.com>, bpf@vger.kernel.org
+Subject: Re: How to orchestrate multiple XDP programs
+Message-ID: <20210218101634.qn4lq2zvdwafpyvv@snout.localdomain>
+References: <20201201091203.ouqtpdmvvl2m2pga@snout.localdomain>
+ <878sah3f0n.fsf@toke.dk>
+ <20201216072920.hh42kxb5voom4aau@snout.localdomain>
+ <873605din6.fsf@toke.dk>
+ <87tur0x874.fsf@toke.dk>
+ <20210210222710.7xl56xffdohvsko4@snout.localdomain>
+ <874kiirgx3.fsf@toke.dk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <874kiirgx3.fsf@toke.dk>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Fix the following coccicheck warnings:
+On 21/02/11 12:18PM, Toke Høiland-Jørgensen wrote:
+> "Brian G. Merrell" <brian.g.merrell@gmail.com> writes:
+> 
+> > On 21/01/29 01:02PM, Toke Høiland-Jørgensen wrote:
+> >> Hi Brian
+> >> 
+> >> I've posted a first draft of this protocol description here:
+> >> https://github.com/xdp-project/xdp-tools/blob/master/lib/libxdp/protocol.org
+> >> 
+> >> Please take a look and let me know what you think. And do feel free to
+> >> point out any places that are unclear, as I said this is a first draft,
+> >> and I'm expecting it to evolve as I get feedback from you and others :)
+> >> 
+> >> -Toke
+> >> 
+> >
+> > Thanks so much for doing this Toke. There's a lot of great information.
+> > I did one read-through, and didn't notice any surprises compared to the
+> > code that I've read so far.
+> 
+> Awesome! :)
 
-./tools/perf/util/machine.c:2000:9-10: WARNING: return of 0/1 in
-function 'symbol__match_regex' with return type bool.
+A question for anyone (sorry if it's a silly one)...
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
- tools/perf/util/machine.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I did a second read-through of the protocol this evening. I wanted to
+take a deeper look at the function calls that are referenced. Some of
+them are BPF syscalls, which should be relatively straightforward to
+interface with from Go. However, some functions like
+bpf_get_link_xdp_info() appear to reside deep in the bowels of libbpf.
+I'd really like to avoid needing cgo bindings, so my question is if
+there some way to 1) interface with these functions that I'm just not
+seeing, or 2) achieve what's necessary for implementing libxdp by only
+utilizing syscalls.
 
-diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
-index 1e9d3f9..f7ee29b 100644
---- a/tools/perf/util/machine.c
-+++ b/tools/perf/util/machine.c
-@@ -1997,8 +1997,8 @@ int machine__process_event(struct machine *machine, union perf_event *event,
- static bool symbol__match_regex(struct symbol *sym, regex_t *regex)
- {
- 	if (!regexec(regex, sym->name, 0, NULL, 0))
--		return 1;
--	return 0;
-+		return true;
-+	return false;
- }
- 
- static void ip__resolve_ams(struct thread *thread,
--- 
-1.8.3.1
+I'm definitely open to insight from anyone with experience in this area.
 
+Thanks,
+Brian
