@@ -2,175 +2,139 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 15AD3C433DB
-	for <bpf@archiver.kernel.org>; Thu, 18 Feb 2021 10:55:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6500CC433E6
+	for <bpf@archiver.kernel.org>; Thu, 18 Feb 2021 13:16:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AA83E64E6F
-	for <bpf@archiver.kernel.org>; Thu, 18 Feb 2021 10:55:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0F7B964EAE
+	for <bpf@archiver.kernel.org>; Thu, 18 Feb 2021 13:16:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231391AbhBRKuu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 18 Feb 2021 05:50:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39436 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232146AbhBRJej (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 18 Feb 2021 04:34:39 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CD78C061793;
-        Thu, 18 Feb 2021 01:33:37 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id x4so2348455wmi.3;
-        Thu, 18 Feb 2021 01:33:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=yxsqVCKZzlNeKGOz6m5cqTJ3ultAlLxUv7Rsxme6dLQ=;
-        b=HThvDt8hD0LPFSy/aMw5yLv9AjNDjxEQ18fW5iIbKLuZhF/H9oXPCWUcA63ZYyNV3e
-         /qKJWqlurs/oPX5EJRpgS8Gnl5ZN4ASm6tglzZB3J60zhmrU6tsgZxWk+PkRMTUrRI6d
-         QFD0riy76/9IYOXlMz/hdmpDFXiWKhLv3HpweQX9DA3yqKfbtfTR1/FrZQjmQX+zLkqk
-         ky52FjCwprHR5sYFfGoq/taMJkFc6OUa20OuxwlliFITA3KjnLhXn+ATFWB212surQOD
-         UMW9DiBxa8MyvW63h9Gg4Skqt4r0PhEy5O8ItT4zh0v12HOtQgsohPbFovj/Nqf2S2iy
-         ua7A==
+        id S231945AbhBRNQY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 18 Feb 2021 08:16:24 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:26982 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232200AbhBRLFj (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 18 Feb 2021 06:05:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1613646247;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WVGvS4WtBOitWgg3cGAIoGlh1baXvecO5zsS83DdOKw=;
+        b=GxWS8nR+qgRiCipABTpAbVjWQjnwcBwuxrNqRJota9JJObVpfEZG6Xi2xucAyo3h2grMMZ
+        5nXISnrhW8N7z2iM28hirSi1QTCm4OVB2l39rZAALFMSGx0LEz2qPxjn0wTkY7R4Xrkmbm
+        9DHoQ0RT6uNi/bpNklcBqf+TSVEyv0g=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-246-MFfIyHWxN4KdmBEn-aMNeQ-1; Thu, 18 Feb 2021 06:00:34 -0500
+X-MC-Unique: MFfIyHWxN4KdmBEn-aMNeQ-1
+Received: by mail-ed1-f70.google.com with SMTP id bd22so725853edb.4
+        for <bpf@vger.kernel.org>; Thu, 18 Feb 2021 03:00:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=yxsqVCKZzlNeKGOz6m5cqTJ3ultAlLxUv7Rsxme6dLQ=;
-        b=nYtjmvRwM1CzZk65Vy5CEbJeShxWh72gCkHzyl6IUkdEsRUENefsegglS/kK+TAuuP
-         sREiS05ubSDoCk+ZXb3ae6EmLhRqYh+TtF3uMhy/6smVxlH97BERAUD7b5GfrHSylYsX
-         34RjoWdZo2zOHemdf6UAKa2LvR0ej3FeaODNcehkWBOU7J3c1u8MxtFnAJs00UW6NxE7
-         2BeM5LD5anHZGmIIEbuPij5wu4tCg8fbwxm8a2fdfv7CC74oIxD/l4qwSfS8kWsGt7bj
-         vOZI5aU86K3cxZy4kWgzDFSlRbF164bmHkavhA+vOjZ2PRDAJdeZiMO/nFeFeNblTPW0
-         36jg==
-X-Gm-Message-State: AOAM533bLyb+7daYRFlwdFU1z0Z5HshhvwT34qN74zfevIrxLTuzlcYt
-        mf+Z+l+KL8kq8FDR7+63SNdNaRVsf30M0GeWwgQ=
-X-Google-Smtp-Source: ABdhPJwn68NmAO6UD1aH3SkBpFtHkAgyHre4Ya8vz8AFT+oGvsyw2uferkdCDsuN4k+tjjRBtfLkUiNWnCYkY4hH3yM=
-X-Received: by 2002:a05:600c:4ec7:: with SMTP id g7mr2682582wmq.56.1613640815739;
- Thu, 18 Feb 2021 01:33:35 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=WVGvS4WtBOitWgg3cGAIoGlh1baXvecO5zsS83DdOKw=;
+        b=g91+TA/K6kZ7hZwuzmNjdTNLByDhi5AInBC3pKUPlXAHcXXS9wLGPL+O3c1kFzPUxP
+         TtBHl/DmcPvhT9AR6Y/SXsNtZoInJQKZuWO14EELQUHFZMTslTQCN4ocz1sxYU+tJqG/
+         GKka92TpwBIgw3yq0l401B0CLsBVuaSGj9DqahSUcM3x3BLDAF+CEZcSMqFh9j/sLlxk
+         w33aaNZal7n9pXWOxZ/DM3IAatcqAtpg9nVSdykwlU5ZE6/4ycO0jSKCVtAhR7Fypnjz
+         Y5OnhLhGUjVxMDffZP+DMJ6YyFuUhNbhVS6CujQElO0Z/o5oigO5s0BmCtp8lyIwgN4a
+         emmQ==
+X-Gm-Message-State: AOAM530a7wMok5X9qSjTx3gA71/6b9yWD+QHsSML2lVkIOt31oi8Rimf
+        8m0PzFdf6sN3QXI4xEeHUs5WjeePQJEH/fgb7wGbYyYFl1F5qs5ApHVcFp5OiSZJJ+WTapwl0bh
+        tAm9Qhvwa6rcr
+X-Received: by 2002:a17:906:f8c5:: with SMTP id lh5mr3457290ejb.294.1613646032883;
+        Thu, 18 Feb 2021 03:00:32 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJycz01GTcue7TtaljG4q00iJbq9gaP3pdGP/0eZ1TZipqblG79I7PuDralQesyYQcWUWgI0Cg==
+X-Received: by 2002:a17:906:f8c5:: with SMTP id lh5mr3457276ejb.294.1613646032719;
+        Thu, 18 Feb 2021 03:00:32 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id q14sm2490218edw.52.2021.02.18.03.00.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Feb 2021 03:00:32 -0800 (PST)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 0C46C1805FA; Thu, 18 Feb 2021 12:00:32 +0100 (CET)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     "Brian G. Merrell" <brian.g.merrell@gmail.com>
+Cc:     xdp-newbies@vger.kernel.org,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Maciej =?utf-8?Q?=C5=BBenczykowski?= <maze@google.com>,
+        Lorenz Bauer <lmb@cloudflare.com>,
+        Andrey Ignatov <rdna@fb.com>, bpf@vger.kernel.org
+Subject: Re: How to orchestrate multiple XDP programs
+In-Reply-To: <20210218101634.qn4lq2zvdwafpyvv@snout.localdomain>
+References: <20201201091203.ouqtpdmvvl2m2pga@snout.localdomain>
+ <878sah3f0n.fsf@toke.dk>
+ <20201216072920.hh42kxb5voom4aau@snout.localdomain>
+ <873605din6.fsf@toke.dk> <87tur0x874.fsf@toke.dk>
+ <20210210222710.7xl56xffdohvsko4@snout.localdomain>
+ <874kiirgx3.fsf@toke.dk>
+ <20210218101634.qn4lq2zvdwafpyvv@snout.localdomain>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Thu, 18 Feb 2021 12:00:31 +0100
+Message-ID: <87v9apljxs.fsf@toke.dk>
 MIME-Version: 1.0
-References: <20210217160214.7869-1-ciara.loftus@intel.com> <20210217160214.7869-4-ciara.loftus@intel.com>
-In-Reply-To: <20210217160214.7869-4-ciara.loftus@intel.com>
-From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
-Date:   Thu, 18 Feb 2021 10:33:24 +0100
-Message-ID: <CAJ+HfNjUttwjKU0cKcHp46aD670TjrzBLDFmrVNkg4uaNcPaYw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 3/4] selftests/bpf: restructure xsk selftests
-To:     Ciara Loftus <ciara.loftus@intel.com>
-Cc:     Netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
-        Weqaar Janjua <weqaar.a.janjua@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, 17 Feb 2021 at 17:33, Ciara Loftus <ciara.loftus@intel.com> wrote:
+"Brian G. Merrell" <brian.g.merrell@gmail.com> writes:
+
+> On 21/02/11 12:18PM, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
+>> "Brian G. Merrell" <brian.g.merrell@gmail.com> writes:
+>>=20
+>> > On 21/01/29 01:02PM, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
+>> >> Hi Brian
+>> >>=20
+>> >> I've posted a first draft of this protocol description here:
+>> >> https://github.com/xdp-project/xdp-tools/blob/master/lib/libxdp/proto=
+col.org
+>> >>=20
+>> >> Please take a look and let me know what you think. And do feel free to
+>> >> point out any places that are unclear, as I said this is a first draf=
+t,
+>> >> and I'm expecting it to evolve as I get feedback from you and others =
+:)
+>> >>=20
+>> >> -Toke
+>> >>=20
+>> >
+>> > Thanks so much for doing this Toke. There's a lot of great information.
+>> > I did one read-through, and didn't notice any surprises compared to the
+>> > code that I've read so far.
+>>=20
+>> Awesome! :)
 >
-> Prior to this commit individual xsk tests were launched from the
-> shell script 'test_xsk.sh'. When adding a new test type, two new test
-> configurations had to be added to this file - one for each of the
-> supported XDP 'modes' (skb or drv). Should zero copy support be added to
-> the xsk selftest framework in the future, three new test configurations
-> would need to be added for each new test type. Each new test type also
-> typically requires new CLI arguments for the xdpxceiver program.
+> A question for anyone (sorry if it's a silly one)...
 >
-> This commit aims to reduce the overhead of adding new tests, by launching
-> the test configurations from within the xdpxceiver program itself, using
-> simple loops. Every test is run every time the C program is executed. Man=
-y
-> of the CLI arguments can be removed as a result.
->
-> Signed-off-by: Ciara Loftus <ciara.loftus@intel.com>
-> ---
->  tools/testing/selftests/bpf/test_xsk.sh    | 112 +-----------
->  tools/testing/selftests/bpf/xdpxceiver.c   | 199 ++++++++++++---------
->  tools/testing/selftests/bpf/xdpxceiver.h   |  27 ++-
->  tools/testing/selftests/bpf/xsk_prereqs.sh |  24 +--
->  4 files changed, 139 insertions(+), 223 deletions(-)
->
+> I did a second read-through of the protocol this evening. I wanted to
+> take a deeper look at the function calls that are referenced. Some of
+> them are BPF syscalls, which should be relatively straightforward to
+> interface with from Go. However, some functions like
+> bpf_get_link_xdp_info() appear to reside deep in the bowels of libbpf.
+> I'd really like to avoid needing cgo bindings, so my question is if
+> there some way to 1) interface with these functions that I'm just not
+> seeing, or 2) achieve what's necessary for implementing libxdp by only
+> utilizing syscalls.
 
-I like where this is going! Nice!
+bpf_get_link_xdp_info() is a wrapper around the kernel rt_netlink
+interface. It issues an RTM_GETLINK with flags NLM_F_DUMP |
+NLM_F_REQUEST and parses the IFLA_XDP attribute on the return value to
+extract the program ID of the currently attached XDP program. I'm pretty
+sure you can find an existing netlink library for Go, so this should be
+pretty straight-forward to implement.
 
-[...]
+But point well taken that a document such as the protocol doc should
+refer to the kernel interface and not the libbpf internals - I'll fix
+that :)
 
-> diff --git a/tools/testing/selftests/bpf/xdpxceiver.c b/tools/testing/sel=
-ftests/bpf/xdpxceiver.c
-> index 8af746c9a6b6..7cb4a13597d0 100644
-> --- a/tools/testing/selftests/bpf/xdpxceiver.c
-> +++ b/tools/testing/selftests/bpf/xdpxceiver.c
+-Toke
 
-[...]
-
->
-> +static int configure_skb(void)
-> +{
-> +
-> +       char cmd[80];
-> +
-> +       snprintf(cmd, sizeof(cmd), "ip link set dev %s xdpdrv off", ifdic=
-t[0]->ifname);
-> +       if (system(cmd)) {
-> +               ksft_test_result_fail("Failed to configure native mode on=
- iface %s\n",
-> +                                               ifdict[0]->ifname);
-> +               return -1;
-> +       }
-> +       snprintf(cmd, sizeof(cmd), "ip netns exec %s ip link set dev %s x=
-dpdrv off",
-> +                                       ifdict[1]->nsname, ifdict[1]->ifn=
-ame);
-> +       if (system(cmd)) {
-> +               ksft_test_result_fail("Failed to configure native mode on=
- iface/ns %s\n",
-> +                                               ifdict[1]->ifname, ifdict=
-[1]->nsname);
-> +               return -1;
-> +       }
-> +
-> +       cur_mode =3D TEST_MODE_SKB;
-> +
-> +       return 0;
-> +
-> +}
-> +
-> +static int configure_drv(void)
-> +{
-> +       char cmd[80];
-> +
-> +       snprintf(cmd, sizeof(cmd), "ip link set dev %s xdpgeneric off", i=
-fdict[0]->ifname);
-> +       if (system(cmd)) {
-> +               ksft_test_result_fail("Failed to configure native mode on=
- iface %s\n",
-> +                                               ifdict[0]->ifname);
-> +               return -1;
-> +       }
-> +       snprintf(cmd, sizeof(cmd), "ip netns exec %s ip link set dev %s x=
-dpgeneric off",
-> +                                       ifdict[1]->nsname, ifdict[1]->ifn=
-ame);
-> +       if (system(cmd)) {
-> +               ksft_test_result_fail("Failed to configure native mode on=
- iface/ns %s\n",
-> +                                               ifdict[1]->ifname, ifdict=
-[1]->nsname);
-> +               return -1;
-> +       }
-> +
-> +       cur_mode =3D TEST_MODE_DRV;
-> +
-> +       return 0;
-> +}
-> +
-
-We're already using libbpf, so please use the libbpf APIs instead of
-calling iproute2.
-
-Bj=C3=B6rn
-
-[...]
