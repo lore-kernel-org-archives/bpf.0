@@ -2,65 +2,64 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.0 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8681BC433DB
-	for <bpf@archiver.kernel.org>; Fri, 19 Feb 2021 15:46:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DB2DC433E0
+	for <bpf@archiver.kernel.org>; Fri, 19 Feb 2021 15:46:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5A31164EAF
-	for <bpf@archiver.kernel.org>; Fri, 19 Feb 2021 15:46:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3700B64E46
+	for <bpf@archiver.kernel.org>; Fri, 19 Feb 2021 15:46:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbhBSPqb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 19 Feb 2021 10:46:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59792 "EHLO
+        id S230026AbhBSPqh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 19 Feb 2021 10:46:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbhBSPqZ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 19 Feb 2021 10:46:25 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11A7EC06178C
-        for <bpf@vger.kernel.org>; Fri, 19 Feb 2021 07:44:13 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id h98so4345242wrh.11
-        for <bpf@vger.kernel.org>; Fri, 19 Feb 2021 07:44:12 -0800 (PST)
+        with ESMTP id S229871AbhBSPq2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 19 Feb 2021 10:46:28 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF5F0C061797
+        for <bpf@vger.kernel.org>; Fri, 19 Feb 2021 07:44:14 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id o15so7437060wmq.5
+        for <bpf@vger.kernel.org>; Fri, 19 Feb 2021 07:44:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=fLUar0GBv1kl/h4dDDbdQCty3Ws8vM15aVP5+B7vwqk=;
-        b=HBZXBmP7OrpfTB9ZNXcqmBKzijoOPzo9briR/UJQVJ2pitulYDW0PtDkDJpaRrO/po
-         jj7cv0B3AeI7kgXm5S5TDG/Ql4BviiFs3T4np20lgzc4zjOwM56CmKlU8IbNrhTjiVFr
-         x0/UFW3alRkHtozTBzLCLE3KMkM1MAgXQgtow=
+        bh=+r5nIbn7SC0nctyFfGqm8+YsIS188S6/wSNE2V/0k+8=;
+        b=EzTsXuQ/kssa4Z+WC9pz8o8hG3Kt5SiMRRxE7a5Uh7P7+/u/NSn4fh4lT/qDHKmqnG
+         QL6hHC7t9gstDI2sfBubtH42AQBQFFV+S6BPJBJxP6zcTxmaUKnZViyD8I8B2gNf13SE
+         5VghQ+dCaf6phYpIm/8DhpjEFkadFYsQ/01vE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=fLUar0GBv1kl/h4dDDbdQCty3Ws8vM15aVP5+B7vwqk=;
-        b=Kvaeqy+tyvdamVgyYetr72gjaPNlq1u3Km+nf6UqP0jQfK3nGHg9vaoHauks/q1U4t
-         pzH0HE20iI3o/vDr/ZvnATwqmJ0nhjzojKki3siqS7N4FOQ8+mw8rJBtpBvau7Lm1N/Z
-         a7nsDMhotEs8FI5bRko+HKfpEPUZayzRQ8m99spCBKjlls86JdfSXuXOoItmCsclyYLi
-         YT1dhB6XdZ9YKPZtGqAZJFq7SCARcVXiQIAhoOT298n1xuHatw1KYuyIspGbU8QuKsoC
-         XFD2x6INwA0eQcM709c/AgbApfmXrdx9ZEU487ddSnVkKjiWgm+t+1KQQISZ9Iruq5e8
-         IKgA==
-X-Gm-Message-State: AOAM530Q9THVzj7uTH5eUDnbNBPuLSObipGpJ9ZEsgeACfzcFh40FSUJ
-        Q9tZCU0aqf8QFl9uZ5GGXuxNMA==
-X-Google-Smtp-Source: ABdhPJzrUPEIMi3Vc8+hHDyl9Aix09NjQEgKESGp4zNTvEDE4IFQRXBEe8yZk2MNrjhErMCsWPVh9A==
-X-Received: by 2002:adf:f6c3:: with SMTP id y3mr9828784wrp.24.1613749451858;
-        Fri, 19 Feb 2021 07:44:11 -0800 (PST)
+        bh=+r5nIbn7SC0nctyFfGqm8+YsIS188S6/wSNE2V/0k+8=;
+        b=DnQXL/g+D4SWJS2Al11k/6zaED0OrJudVfVvP+UIcr381x3J9CKhXQ2TjVgQ+eXiOB
+         DQkZc+pdHIbZzviEQjcSgJV3bXAkJ4vozXPU0gKeQG0emE5CPoz6d0xCGqIzdaTvGcZO
+         3p5Nl+57lR2yfur8za8mZr99y1zd+uPR4NOWs9/sZMcwjzBYUQy7INePOWIWvGqANH3g
+         gx9pKewIRoQbVeI4WPv0+czLB8azCDaK5b7WeQjOXfRdzBjagc6NRRpcvQDd8EvrbpIh
+         H6108CdsDAeZlTlw+eGhtzJCQIZ58igcUBJ4lgWXem5CNmgjMpV4x30vLMzebHyTk90I
+         DNiQ==
+X-Gm-Message-State: AOAM532jzZHGfFC+8I3Y68kK+UMtWPUrHPOe7d0NTTnsXmQzhlEaO3ga
+        3H5QKxOZB5sJkRDY7kAm4dia/A==
+X-Google-Smtp-Source: ABdhPJzQ/QrN3V5Vk2Nl5jQxhyGxMg3wBwHQEh7q/65C4emdWvqhqkeQJLDlOz3/jUQUwBOFnoq2yg==
+X-Received: by 2002:a1c:2d87:: with SMTP id t129mr8720098wmt.121.1613749453431;
+        Fri, 19 Feb 2021 07:44:13 -0800 (PST)
 Received: from antares.lan (b.3.5.8.9.a.e.c.e.a.6.2.c.1.9.b.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:b91c:26ae:cea9:853b])
-        by smtp.gmail.com with ESMTPSA id v204sm12321929wmg.38.2021.02.19.07.44.10
+        by smtp.gmail.com with ESMTPSA id v204sm12321929wmg.38.2021.02.19.07.44.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Feb 2021 07:44:11 -0800 (PST)
+        Fri, 19 Feb 2021 07:44:13 -0800 (PST)
 From:   Lorenz Bauer <lmb@cloudflare.com>
 To:     eric.dumazet@gmail.com, daniel@iogearbox.net, ast@kernel.org,
         andrii@kernel.org
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
         kernel-team@cloudflare.com, Lorenz Bauer <lmb@cloudflare.com>
-Subject: [PATCH bpf-next v3 2/4] nsfs: add an ioctl to discover the network namespace cookie
-Date:   Fri, 19 Feb 2021 15:43:28 +0000
-Message-Id: <20210219154330.93615-3-lmb@cloudflare.com>
+Subject: [PATCH bpf-next v3 4/4] tools/testing: add a selftest for SO_NETNS_COOKIE
+Date:   Fri, 19 Feb 2021 15:43:30 +0000
+Message-Id: <20210219154330.93615-5-lmb@cloudflare.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210219154330.93615-1-lmb@cloudflare.com>
 References: <20210219154330.93615-1-lmb@cloudflare.com>
@@ -70,60 +69,118 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Network namespaces have a globally unique non-zero identifier aka a
-cookie, in line with socket cookies. Add an ioctl to retrieve the
-cookie from user space without going via BPF.
+Make sure that SO_NETNS_COOKIE returns a non-zero value, and
+that sockets from different namespaces have a distinct cookie
+value.
 
 Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
 ---
- fs/nsfs.c                 | 7 +++++++
- include/uapi/linux/nsfs.h | 2 ++
- 2 files changed, 9 insertions(+)
+ tools/testing/selftests/net/.gitignore        |  1 +
+ tools/testing/selftests/net/Makefile          |  2 +-
+ tools/testing/selftests/net/config            |  1 +
+ tools/testing/selftests/net/so_netns_cookie.c | 61 +++++++++++++++++++
+ 4 files changed, 64 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/net/so_netns_cookie.c
 
-diff --git a/fs/nsfs.c b/fs/nsfs.c
-index 800c1d0eb0d0..48198a1b1685 100644
---- a/fs/nsfs.c
-+++ b/fs/nsfs.c
-@@ -11,6 +11,7 @@
- #include <linux/user_namespace.h>
- #include <linux/nsfs.h>
- #include <linux/uaccess.h>
-+#include <net/net_namespace.h>
- 
- #include "internal.h"
- 
-@@ -191,6 +192,7 @@ static long ns_ioctl(struct file *filp, unsigned int ioctl,
- 	struct user_namespace *user_ns;
- 	struct ns_common *ns = get_proc_ns(file_inode(filp));
- 	uid_t __user *argp;
-+	struct net *net_ns;
- 	uid_t uid;
- 
- 	switch (ioctl) {
-@@ -209,6 +211,11 @@ static long ns_ioctl(struct file *filp, unsigned int ioctl,
- 		argp = (uid_t __user *) arg;
- 		uid = from_kuid_munged(current_user_ns(), user_ns->owner);
- 		return put_user(uid, argp);
-+	case NS_GET_COOKIE:
-+		if (ns->ops->type != CLONE_NEWNET)
-+			return -EINVAL;
-+		net_ns = container_of(ns, struct net, ns);
-+		return put_user(net_ns->net_cookie, (u64 __user *)arg);
- 	default:
- 		return -ENOTTY;
- 	}
-diff --git a/include/uapi/linux/nsfs.h b/include/uapi/linux/nsfs.h
-index a0c8552b64ee..86611c2cf908 100644
---- a/include/uapi/linux/nsfs.h
-+++ b/include/uapi/linux/nsfs.h
-@@ -15,5 +15,7 @@
- #define NS_GET_NSTYPE		_IO(NSIO, 0x3)
- /* Get owner UID (in the caller's user namespace) for a user namespace */
- #define NS_GET_OWNER_UID	_IO(NSIO, 0x4)
-+/* Returns a unique non-zero identifier for a network namespace */
-+#define NS_GET_COOKIE		_IO(NSIO, 0x5)
- 
- #endif /* __LINUX_NSFS_H */
+diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
+index 61ae899cfc17..19deb9cdf72f 100644
+--- a/tools/testing/selftests/net/.gitignore
++++ b/tools/testing/selftests/net/.gitignore
+@@ -30,3 +30,4 @@ hwtstamp_config
+ rxtimestamp
+ timestamping
+ txtimestamp
++so_netns_cookie
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index 25f198bec0b2..91bb372f5ba5 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -28,7 +28,7 @@ TEST_GEN_FILES =  socket nettest
+ TEST_GEN_FILES += psock_fanout psock_tpacket msg_zerocopy reuseport_addr_any
+ TEST_GEN_FILES += tcp_mmap tcp_inq psock_snd txring_overwrite
+ TEST_GEN_FILES += udpgso udpgso_bench_tx udpgso_bench_rx ip_defrag
+-TEST_GEN_FILES += so_txtime ipv6_flowlabel ipv6_flowlabel_mgr
++TEST_GEN_FILES += so_txtime ipv6_flowlabel ipv6_flowlabel_mgr so_netns_cookie
+ TEST_GEN_FILES += tcp_fastopen_backup_key
+ TEST_GEN_FILES += fin_ack_lat
+ TEST_GEN_FILES += reuseaddr_ports_exhausted
+diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
+index 614d5477365a..6f905b53904f 100644
+--- a/tools/testing/selftests/net/config
++++ b/tools/testing/selftests/net/config
+@@ -1,4 +1,5 @@
+ CONFIG_USER_NS=y
++CONFIG_NET_NS=y
+ CONFIG_BPF_SYSCALL=y
+ CONFIG_TEST_BPF=m
+ CONFIG_NUMA=y
+diff --git a/tools/testing/selftests/net/so_netns_cookie.c b/tools/testing/selftests/net/so_netns_cookie.c
+new file mode 100644
+index 000000000000..b39e87e967cd
+--- /dev/null
++++ b/tools/testing/selftests/net/so_netns_cookie.c
+@@ -0,0 +1,61 @@
++// SPDX-License-Identifier: GPL-2.0
++#define _GNU_SOURCE
++#include <sched.h>
++#include <unistd.h>
++#include <stdio.h>
++#include <errno.h>
++#include <string.h>
++#include <stdlib.h>
++#include <stdint.h>
++#include <sys/types.h>
++#include <sys/socket.h>
++
++#ifndef SO_NETNS_COOKIE
++#define SO_NETNS_COOKIE 71
++#endif
++
++#define pr_err(fmt, ...) \
++	({ \
++		fprintf(stderr, "%s:%d:" fmt ": %m\n", \
++			__func__, __LINE__, ##__VA_ARGS__); \
++		1; \
++	})
++
++int main(int argc, char *argvp[])
++{
++	uint64_t cookie1, cookie2;
++	socklen_t vallen;
++	int sock1, sock2;
++
++	sock1 = socket(AF_INET, SOCK_STREAM, 0);
++	if (sock1 < 0)
++		return pr_err("Unable to create TCP socket");
++
++	vallen = sizeof(cookie1);
++	if (getsockopt(sock1, SOL_SOCKET, SO_NETNS_COOKIE, &cookie1, &vallen) != 0)
++		return pr_err("getsockopt(SOL_SOCKET, SO_NETNS_COOKIE)");
++
++	if (!cookie1)
++		return pr_err("SO_NETNS_COOKIE returned zero cookie");
++
++	if (unshare(CLONE_NEWNET))
++		return pr_err("unshare");
++
++	sock2 = socket(AF_INET, SOCK_STREAM, 0);
++	if (sock2 < 0)
++		return pr_err("Unable to create TCP socket");
++
++	vallen = sizeof(cookie2);
++	if (getsockopt(sock2, SOL_SOCKET, SO_NETNS_COOKIE, &cookie2, &vallen) != 0)
++		return pr_err("getsockopt(SOL_SOCKET, SO_NETNS_COOKIE)");
++
++	if (!cookie2)
++		return pr_err("SO_NETNS_COOKIE returned zero cookie");
++
++	if (cookie1 == cookie2)
++		return pr_err("SO_NETNS_COOKIE returned identical cookies for distinct ns");
++
++	close(sock1);
++	close(sock2);
++	return 0;
++}
 -- 
 2.27.0
 
