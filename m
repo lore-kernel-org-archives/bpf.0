@@ -8,54 +8,54 @@ X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D9BEC433E6
-	for <bpf@archiver.kernel.org>; Fri, 19 Feb 2021 23:59:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A1B3C43381
+	for <bpf@archiver.kernel.org>; Fri, 19 Feb 2021 23:59:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E7C2764EDB
-	for <bpf@archiver.kernel.org>; Fri, 19 Feb 2021 23:59:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1AE2264ED9
+	for <bpf@archiver.kernel.org>; Fri, 19 Feb 2021 23:59:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbhBSX7Z (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 19 Feb 2021 18:59:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52070 "EHLO
+        id S229806AbhBSX7a (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 19 Feb 2021 18:59:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbhBSX7X (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 19 Feb 2021 18:59:23 -0500
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71299C061786;
-        Fri, 19 Feb 2021 15:58:43 -0800 (PST)
-Received: by mail-ot1-x336.google.com with SMTP id d7so6692261otq.6;
-        Fri, 19 Feb 2021 15:58:43 -0800 (PST)
+        with ESMTP id S229771AbhBSX71 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 19 Feb 2021 18:59:27 -0500
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03386C06178C;
+        Fri, 19 Feb 2021 15:58:47 -0800 (PST)
+Received: by mail-oi1-x235.google.com with SMTP id v193so7687493oie.8;
+        Fri, 19 Feb 2021 15:58:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=CceRQwjD8vK9x1Xaq5GIxx/ijuB7t6Frx1I/Pw8/mNg=;
-        b=vEh65qkKXzCFPPL1iq5lVhC5asH+QPanyTEUIfl9PIfTvuW9TZi6xSAo0BDou+CfXm
-         rkWsGzgELMBSr+9U5ic5fJIyo7Gk5KboYSixOk0w9E0gPUaxckYzPCDsUlnl6Xb/wvVi
-         WiNe8qMBX87i2pFarcae2HkK5nVa2C5ZtREtPXdk7HEpggCSXh6KfyDOV+dEZsZvqK7c
-         Ltd654CAxXeBrfPCHTya0lM/+7ObEnREMH4AZwwQrp0u9WA8E6JryX3czs3UOFsqKE34
-         74WqLxKJUZUTt2pzQavLJmvOjAFbHgUaOglIaSxDXxgYfD7T3ye64jytc474lqX69SkH
-         qXEg==
+        bh=gZxRzmATGkrPpYiGxL52mxfgMW0SHjgvSF1BoeB4Dmw=;
+        b=R0k9HxSZXToN3FEasqxSnJs7PF3ehF3+GRSkIAZAwUm2PSOFL2UAdG2gBebExcRiCX
+         jBj/jesHLVdvDgxlpJKStjTVB48ZupIxV/rxiSHm7JJOy4AhfdAIDFtnVKC7SOemBY0l
+         vhgx5LABLFh85jaYf+tl2rcJ7mWMyTV8BLmyjv4NCKEsWXCd9RqPeH2f+R4kd/sP88kx
+         BAs4uo24eaLlLGWem9Lorsjk7V2AabhjjmzNui9k+F73JQzd3/scLJSMoRJXIc6auSf+
+         z49l10bPpiCP+xWYMpWJlC+rtnL8aOPOnwI/Wrw6anmOMfuKf0OLBsYvfN24G8VjS+ho
+         XMbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=CceRQwjD8vK9x1Xaq5GIxx/ijuB7t6Frx1I/Pw8/mNg=;
-        b=R3ppEZ1NolsLpcJv/fpAlkiMiNmat3x9Z9aYcM8dpCGoitIS185BdBoQ3/YndeqGsZ
-         OO8g3iii0JQcP2XLiHFfh6vbajqbby4ltk3mc3TmMWBs05FUZ/25aG3lIKmynqcfathR
-         P8m5FJeKCzhFZuQeIqongAp1XbqYpVeEiuoQZnf3698eoSkey5xrrH8pywxnpZLARprN
-         kQlR8UCF42Jx3p1h1Ifre6Jz/9rF6/WsdXmtcV7bKP/74A0EItyVpOH4WyouFY3kEtNp
-         5z7foy3d7Jr5bUbjwOcDe31t0JkMt1CWw1+q2zbBoEOrZEm/rV513IM48PklsaRu2pkp
-         r5yA==
-X-Gm-Message-State: AOAM530a2Fh8SN1cJ3e0OB1oKvY6rqAMUT1FxJn22DQTHbpkEaJGhr6k
-        P7IqiEC27PJTm/ksyCZU0ggSVzQh6PizJQ==
-X-Google-Smtp-Source: ABdhPJzcs9gNENWkjNcXgLhdX9cikQiKo0hMGb66UNmltoQ2zqQKdHTPnNsktxjfXRajfC8bgoGbmQ==
-X-Received: by 2002:a05:6830:1d61:: with SMTP id l1mr2181154oti.167.1613779122542;
-        Fri, 19 Feb 2021 15:58:42 -0800 (PST)
+        bh=gZxRzmATGkrPpYiGxL52mxfgMW0SHjgvSF1BoeB4Dmw=;
+        b=kePdyYkJrhLr0kX1jCB8MthtBwDQpG+kIUEfrheRLpkltLQG08mJRWV9ekpe1V/Qdl
+         SE1XCGDezx1YfueFcmE9JlBgg0aYky3jnrvJQwPFrb9APJML11FR+NHdt0zKVFFiyWHy
+         oE3ZrAFO9b7yeOs/MgHJwRBXoA/L5Oxd28ZDidE/W/UdCtikERmocciOluBdcLPLbhtD
+         oePUw6dSqLawixURz+rlPSVrmOZFoAK5GuxZxxmaqmZaxCAnnT8IwdZNC8omkGwB3D7L
+         TS9XQ/ikROxAeZJ9mEJrsFzbF6LSYaaw87zwCcqQIlq3ivQZMtCz0KJJSAPp14LvznOC
+         ycBQ==
+X-Gm-Message-State: AOAM533POZ7AQA3NBh8d/IlcpDOdK53FpgdYK2XCFpLeKZSW7wEE7k01
+        bPFRFBDWciIP7yYIgwU25Mumo3a/w+UGXg==
+X-Google-Smtp-Source: ABdhPJyFWQt27W0/PggZ5HCEngdFlrwBGTuBDGXw05WZn0TCi20TlMteuIsZK2IzXJ+M+Rt/rEIEbg==
+X-Received: by 2002:aca:f388:: with SMTP id r130mr8766556oih.55.1613779126259;
+        Fri, 19 Feb 2021 15:58:46 -0800 (PST)
 Received: from unknown.attlocal.net ([2600:1700:65a0:ab60:1d72:18:7c76:92e4])
-        by smtp.gmail.com with ESMTPSA id h11sm2064186ooj.36.2021.02.19.15.58.41
+        by smtp.gmail.com with ESMTPSA id h11sm2064186ooj.36.2021.02.19.15.58.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Feb 2021 15:58:42 -0800 (PST)
+        Fri, 19 Feb 2021 15:58:45 -0800 (PST)
 From:   Cong Wang <xiyou.wangcong@gmail.com>
 To:     netdev@vger.kernel.org
 Cc:     bpf@vger.kernel.org, duanxiongchun@bytedance.com,
@@ -65,9 +65,9 @@ Cc:     bpf@vger.kernel.org, duanxiongchun@bytedance.com,
         Jakub Sitnicki <jakub@cloudflare.com>,
         Lorenz Bauer <lmb@cloudflare.com>,
         John Fastabend <john.fastabend@gmail.com>
-Subject: [Patch bpf-next v5 1/8] bpf: clean up sockmap related Kconfigs
-Date:   Fri, 19 Feb 2021 15:58:29 -0800
-Message-Id: <20210219235836.100416-2-xiyou.wangcong@gmail.com>
+Subject: [Patch bpf-next v5 4/8] skmsg: move sk_redir from TCP_SKB_CB to skb
+Date:   Fri, 19 Feb 2021 15:58:32 -0800
+Message-Id: <20210219235836.100416-5-xiyou.wangcong@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210219235836.100416-1-xiyou.wangcong@gmail.com>
 References: <20210219235836.100416-1-xiyou.wangcong@gmail.com>
@@ -79,482 +79,266 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Cong Wang <cong.wang@bytedance.com>
 
-As suggested by John, clean up sockmap related Kconfigs:
+Currently TCP_SKB_CB() is hard-coded in skmsg code, it certainly
+does not work for any other non-TCP protocols. We can move them to
+skb ext, but it introduces a memory allocation on fast path.
 
-Reduce the scope of CONFIG_BPF_STREAM_PARSER down to TCP stream
-parser, to reflect its name.
+Fortunately, we only need to a word-size to store all the information,
+because the flags actually only contains 1 bit so can be just packed
+into the lowest bit of the "pointer", which is stored as unsigned
+long.
 
-Make the rest sockmap code simply depend on CONFIG_BPF_SYSCALL.
-And leave CONFIG_NET_SOCK_MSG untouched, as it is used by
-non-sockmap cases.
+Inside struct sk_buff, '_skb_refdst' can be reused because skb dst is
+no longer needed after ->sk_data_ready() so we can just drop it.
 
 Cc: Daniel Borkmann <daniel@iogearbox.net>
 Cc: Jakub Sitnicki <jakub@cloudflare.com>
-Reviewed-by: Lorenz Bauer <lmb@cloudflare.com>
+Cc: Lorenz Bauer <lmb@cloudflare.com>
 Acked-by: John Fastabend <john.fastabend@gmail.com>
 Signed-off-by: Cong Wang <cong.wang@bytedance.com>
 ---
- include/linux/bpf.h       |  20 +++---
- include/linux/bpf_types.h |   2 -
- include/linux/skmsg.h     |  22 ++++++
- include/net/tcp.h         |  16 +++--
- include/net/udp.h         |   4 +-
- init/Kconfig              |   1 +
- net/Kconfig               |   6 +-
- net/core/Makefile         |   2 +-
- net/core/skmsg.c          | 139 ++++++++++++++++++++------------------
- net/core/sock_map.c       |   2 +
- net/ipv4/Makefile         |   2 +-
- net/ipv4/tcp_bpf.c        |   4 +-
- 12 files changed, 123 insertions(+), 97 deletions(-)
+ include/linux/skbuff.h |  3 +++
+ include/linux/skmsg.h  | 35 +++++++++++++++++++++++++++++++++++
+ include/net/tcp.h      | 19 -------------------
+ net/core/skmsg.c       | 32 ++++++++++++++++++++------------
+ net/core/sock_map.c    |  8 ++------
+ 5 files changed, 60 insertions(+), 37 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index cccaef1088ea..e29600f01585 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1741,6 +1741,14 @@ static inline bool bpf_map_is_dev_bound(struct bpf_map *map)
+diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+index 6d0a33d1c0db..bd84f799c952 100644
+--- a/include/linux/skbuff.h
++++ b/include/linux/skbuff.h
+@@ -755,6 +755,9 @@ struct sk_buff {
+ 			void		(*destructor)(struct sk_buff *skb);
+ 		};
+ 		struct list_head	tcp_tsorted_anchor;
++#ifdef CONFIG_NET_SOCK_MSG
++		unsigned long		_sk_redir;
++#endif
+ 	};
  
- struct bpf_map *bpf_map_offload_map_alloc(union bpf_attr *attr);
- void bpf_map_offload_map_free(struct bpf_map *map);
-+
-+int sock_map_prog_update(struct bpf_map *map, struct bpf_prog *prog,
-+			 struct bpf_prog *old, u32 which);
-+int sock_map_get_from_fd(const union bpf_attr *attr, struct bpf_prog *prog);
-+int sock_map_prog_detach(const union bpf_attr *attr, enum bpf_prog_type ptype);
-+int sock_map_update_elem_sys(struct bpf_map *map, void *key, void *value, u64 flags);
-+void sock_map_unhash(struct sock *sk);
-+void sock_map_close(struct sock *sk, long timeout);
- #else
- static inline int bpf_prog_offload_init(struct bpf_prog *prog,
- 					union bpf_attr *attr)
-@@ -1766,17 +1774,7 @@ static inline struct bpf_map *bpf_map_offload_map_alloc(union bpf_attr *attr)
- static inline void bpf_map_offload_map_free(struct bpf_map *map)
- {
- }
--#endif /* CONFIG_NET && CONFIG_BPF_SYSCALL */
- 
--#if defined(CONFIG_BPF_STREAM_PARSER)
--int sock_map_prog_update(struct bpf_map *map, struct bpf_prog *prog,
--			 struct bpf_prog *old, u32 which);
--int sock_map_get_from_fd(const union bpf_attr *attr, struct bpf_prog *prog);
--int sock_map_prog_detach(const union bpf_attr *attr, enum bpf_prog_type ptype);
--int sock_map_update_elem_sys(struct bpf_map *map, void *key, void *value, u64 flags);
--void sock_map_unhash(struct sock *sk);
--void sock_map_close(struct sock *sk, long timeout);
--#else
- static inline int sock_map_prog_update(struct bpf_map *map,
- 				       struct bpf_prog *prog,
- 				       struct bpf_prog *old, u32 which)
-@@ -1801,7 +1799,7 @@ static inline int sock_map_update_elem_sys(struct bpf_map *map, void *key, void
- {
- 	return -EOPNOTSUPP;
- }
--#endif /* CONFIG_BPF_STREAM_PARSER */
-+#endif /* CONFIG_NET && CONFIG_BPF_SYSCALL */
- 
- #if defined(CONFIG_INET) && defined(CONFIG_BPF_SYSCALL)
- void bpf_sk_reuseport_detach(struct sock *sk);
-diff --git a/include/linux/bpf_types.h b/include/linux/bpf_types.h
-index 99f7fd657d87..d6b4a657c885 100644
---- a/include/linux/bpf_types.h
-+++ b/include/linux/bpf_types.h
-@@ -103,10 +103,8 @@ BPF_MAP_TYPE(BPF_MAP_TYPE_HASH_OF_MAPS, htab_of_maps_map_ops)
- BPF_MAP_TYPE(BPF_MAP_TYPE_DEVMAP, dev_map_ops)
- BPF_MAP_TYPE(BPF_MAP_TYPE_DEVMAP_HASH, dev_map_hash_ops)
- BPF_MAP_TYPE(BPF_MAP_TYPE_SK_STORAGE, sk_storage_map_ops)
--#if defined(CONFIG_BPF_STREAM_PARSER)
- BPF_MAP_TYPE(BPF_MAP_TYPE_SOCKMAP, sock_map_ops)
- BPF_MAP_TYPE(BPF_MAP_TYPE_SOCKHASH, sock_hash_ops)
--#endif
- #ifdef CONFIG_BPF_LSM
- BPF_MAP_TYPE(BPF_MAP_TYPE_INODE_STORAGE, inode_storage_map_ops)
- BPF_MAP_TYPE(BPF_MAP_TYPE_TASK_STORAGE, task_storage_map_ops)
+ #if defined(CONFIG_NF_CONNTRACK) || defined(CONFIG_NF_CONNTRACK_MODULE)
 diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
-index 8edbbf5f2f93..041faef00937 100644
+index e3bb712af257..fc234d507fd7 100644
 --- a/include/linux/skmsg.h
 +++ b/include/linux/skmsg.h
-@@ -71,7 +71,9 @@ struct sk_psock_link {
- };
- 
- struct sk_psock_parser {
-+#if IS_ENABLED(CONFIG_BPF_STREAM_PARSER)
- 	struct strparser		strp;
-+#endif
- 	bool				enabled;
- 	void (*saved_data_ready)(struct sock *sk);
- };
-@@ -305,9 +307,29 @@ static inline void sk_psock_report_error(struct sk_psock *psock, int err)
- 
- struct sk_psock *sk_psock_init(struct sock *sk, int node);
- 
-+#if IS_ENABLED(CONFIG_BPF_STREAM_PARSER)
- int sk_psock_init_strp(struct sock *sk, struct sk_psock *psock);
- void sk_psock_start_strp(struct sock *sk, struct sk_psock *psock);
- void sk_psock_stop_strp(struct sock *sk, struct sk_psock *psock);
-+void sk_psock_done_strp(struct sk_psock *psock);
-+#else
-+static inline int sk_psock_init_strp(struct sock *sk, struct sk_psock *psock)
+@@ -459,4 +459,39 @@ static inline bool sk_psock_strp_enabled(struct sk_psock *psock)
+ 		return false;
+ 	return !!psock->saved_data_ready;
+ }
++
++#if IS_ENABLED(CONFIG_NET_SOCK_MSG)
++static inline bool skb_bpf_ingress(const struct sk_buff *skb)
 +{
-+	return -EOPNOTSUPP;
++	unsigned long sk_redir = skb->_sk_redir;
++
++	return sk_redir & BPF_F_INGRESS;
 +}
 +
-+static inline void sk_psock_start_strp(struct sock *sk, struct sk_psock *psock)
++static inline void skb_bpf_set_ingress(struct sk_buff *skb)
 +{
++	skb->_sk_redir |= BPF_F_INGRESS;
 +}
 +
-+static inline void sk_psock_stop_strp(struct sock *sk, struct sk_psock *psock)
++static inline void skb_bpf_set_redir(struct sk_buff *skb, struct sock *sk_redir,
++				     bool ingress)
 +{
++	skb->_sk_redir = (unsigned long)sk_redir;
++	if (ingress)
++		skb->_sk_redir |= BPF_F_INGRESS;
 +}
 +
-+static inline void sk_psock_done_strp(struct sk_psock *psock)
++static inline struct sock *skb_bpf_redirect_fetch(const struct sk_buff *skb)
 +{
++	unsigned long sk_redir = skb->_sk_redir;
++
++	sk_redir &= ~0x1UL;
++	return (struct sock *)sk_redir;
 +}
-+#endif
- void sk_psock_start_verdict(struct sock *sk, struct sk_psock *psock);
- void sk_psock_stop_verdict(struct sock *sk, struct sk_psock *psock);
- 
++
++static inline void skb_bpf_redirect_clear(struct sk_buff *skb)
++{
++	skb->_sk_redir = 0;
++}
++#endif /* CONFIG_NET_SOCK_MSG */
+ #endif /* _LINUX_SKMSG_H */
 diff --git a/include/net/tcp.h b/include/net/tcp.h
-index 963cd86d12dd..c00e125dcfb9 100644
+index 947ef5da6867..075de26f449d 100644
 --- a/include/net/tcp.h
 +++ b/include/net/tcp.h
-@@ -2222,25 +2222,27 @@ void tcp_update_ulp(struct sock *sk, struct proto *p,
- 	__MODULE_INFO(alias, alias_userspace, name);		\
- 	__MODULE_INFO(alias, alias_tcp_ulp, "tcp-ulp-" name)
+@@ -883,30 +883,11 @@ struct tcp_skb_cb {
+ 			struct inet6_skb_parm	h6;
+ #endif
+ 		} header;	/* For incoming skbs */
+-		struct {
+-			__u32 flags;
+-			struct sock *sk_redir;
+-		} bpf;
+ 	};
+ };
  
-+#ifdef CONFIG_NET_SOCK_MSG
- struct sk_msg;
- struct sk_psock;
+ #define TCP_SKB_CB(__skb)	((struct tcp_skb_cb *)&((__skb)->cb[0]))
  
--#ifdef CONFIG_BPF_STREAM_PARSER
-+#ifdef CONFIG_BPF_SYSCALL
- struct proto *tcp_bpf_get_proto(struct sock *sk, struct sk_psock *psock);
- void tcp_bpf_clone(const struct sock *sk, struct sock *newsk);
--#else
--static inline void tcp_bpf_clone(const struct sock *sk, struct sock *newsk)
+-static inline bool tcp_skb_bpf_ingress(const struct sk_buff *skb)
 -{
+-	return TCP_SKB_CB(skb)->bpf.flags & BPF_F_INGRESS;
 -}
--#endif /* CONFIG_BPF_STREAM_PARSER */
-+#endif /* CONFIG_BPF_SYSCALL */
- 
--#ifdef CONFIG_NET_SOCK_MSG
- int tcp_bpf_sendmsg_redir(struct sock *sk, struct sk_msg *msg, u32 bytes,
- 			  int flags);
- int __tcp_bpf_recvmsg(struct sock *sk, struct sk_psock *psock,
- 		      struct msghdr *msg, int len, int flags);
- #endif /* CONFIG_NET_SOCK_MSG */
- 
-+#if !defined(CONFIG_BPF_SYSCALL) || !defined(CONFIG_NET_SOCK_MSG)
-+static inline void tcp_bpf_clone(const struct sock *sk, struct sock *newsk)
-+{
-+}
-+#endif
-+
- #ifdef CONFIG_CGROUP_BPF
- static inline void bpf_skops_init_skb(struct bpf_sock_ops_kern *skops,
- 				      struct sk_buff *skb,
-diff --git a/include/net/udp.h b/include/net/udp.h
-index a132a02b2f2c..60fa0bd4d27d 100644
---- a/include/net/udp.h
-+++ b/include/net/udp.h
-@@ -515,9 +515,9 @@ static inline struct sk_buff *udp_rcv_segment(struct sock *sk,
- 	return segs;
- }
- 
--#ifdef CONFIG_BPF_STREAM_PARSER
-+#ifdef CONFIG_NET_SOCK_MSG
- struct sk_psock;
- struct proto *udp_bpf_get_proto(struct sock *sk, struct sk_psock *psock);
--#endif /* BPF_STREAM_PARSER */
-+#endif /* CONFIG_NET_SOCK_MSG */
- 
- #endif	/* _UDP_H */
-diff --git a/init/Kconfig b/init/Kconfig
-index 29ad68325028..b83a060564a3 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -1702,6 +1702,7 @@ config BPF_SYSCALL
- 	select BPF
- 	select IRQ_WORK
- 	select TASKS_TRACE_RCU
-+	select NET_SOCK_MSG if NET
- 	default n
- 	help
- 	  Enable the bpf() system call that allows to manipulate eBPF
-diff --git a/net/Kconfig b/net/Kconfig
-index 8cea808ad9e8..0ead7ec0d2bd 100644
---- a/net/Kconfig
-+++ b/net/Kconfig
-@@ -317,13 +317,9 @@ config BPF_STREAM_PARSER
- 	select STREAM_PARSER
- 	select NET_SOCK_MSG
- 	help
--	  Enabling this allows a stream parser to be used with
-+	  Enabling this allows a TCP stream parser to be used with
- 	  BPF_MAP_TYPE_SOCKMAP.
- 
--	  BPF_MAP_TYPE_SOCKMAP provides a map type to use with network sockets.
--	  It can be used to enforce socket policy, implement socket redirects,
--	  etc.
 -
- config NET_FLOW_LIMIT
- 	bool
- 	depends on RPS
-diff --git a/net/core/Makefile b/net/core/Makefile
-index 3e2c378e5f31..05733689d050 100644
---- a/net/core/Makefile
-+++ b/net/core/Makefile
-@@ -28,10 +28,10 @@ obj-$(CONFIG_CGROUP_NET_PRIO) += netprio_cgroup.o
- obj-$(CONFIG_CGROUP_NET_CLASSID) += netclassid_cgroup.o
- obj-$(CONFIG_LWTUNNEL) += lwtunnel.o
- obj-$(CONFIG_LWTUNNEL_BPF) += lwt_bpf.o
--obj-$(CONFIG_BPF_STREAM_PARSER) += sock_map.o
- obj-$(CONFIG_DST_CACHE) += dst_cache.o
- obj-$(CONFIG_HWBM) += hwbm.o
- obj-$(CONFIG_NET_DEVLINK) += devlink.o
- obj-$(CONFIG_GRO_CELLS) += gro_cells.o
- obj-$(CONFIG_FAILOVER) += failover.o
-+obj-$(CONFIG_BPF_SYSCALL) += sock_map.o
- obj-$(CONFIG_BPF_SYSCALL) += bpf_sk_storage.o
+-static inline struct sock *tcp_skb_bpf_redirect_fetch(struct sk_buff *skb)
+-{
+-	return TCP_SKB_CB(skb)->bpf.sk_redir;
+-}
+-
+-static inline void tcp_skb_bpf_redirect_clear(struct sk_buff *skb)
+-{
+-	TCP_SKB_CB(skb)->bpf.sk_redir = NULL;
+-}
+-
+ extern const struct inet_connection_sock_af_ops ipv4_specific;
+ 
+ #if IS_ENABLED(CONFIG_IPV6)
 diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index 1261512d6807..6cb5ff6f8f9c 100644
+index 2d8bbb3fd87c..05b5af09ff42 100644
 --- a/net/core/skmsg.c
 +++ b/net/core/skmsg.c
-@@ -651,9 +651,7 @@ static void sk_psock_destroy_deferred(struct work_struct *gc)
- 
- 	/* No sk_callback_lock since already detached. */
- 
--	/* Parser has been stopped */
--	if (psock->progs.skb_parser)
--		strp_done(&psock->parser.strp);
-+	sk_psock_done_strp(psock);
- 
- 	cancel_work_sync(&psock->work);
- 
-@@ -750,14 +748,6 @@ static int sk_psock_bpf_run(struct sk_psock *psock, struct bpf_prog *prog,
- 	return bpf_prog_run_pin_on_cpu(prog, skb);
- }
- 
--static struct sk_psock *sk_psock_from_strp(struct strparser *strp)
--{
--	struct sk_psock_parser *parser;
--
--	parser = container_of(strp, struct sk_psock_parser, strp);
--	return container_of(parser, struct sk_psock, parser);
--}
--
- static void sk_psock_skb_redirect(struct sk_buff *skb)
+@@ -494,6 +494,8 @@ static int sk_psock_skb_ingress_self(struct sk_psock *psock, struct sk_buff *skb
+ static int sk_psock_handle_skb(struct sk_psock *psock, struct sk_buff *skb,
+ 			       u32 off, u32 len, bool ingress)
  {
- 	struct sk_psock *psock_other;
-@@ -866,6 +856,24 @@ static void sk_psock_verdict_apply(struct sk_psock *psock,
- 	}
- }
- 
-+static void sk_psock_write_space(struct sock *sk)
-+{
-+	struct sk_psock *psock;
-+	void (*write_space)(struct sock *sk) = NULL;
++	skb_bpf_redirect_clear(skb);
 +
-+	rcu_read_lock();
-+	psock = sk_psock(sk);
-+	if (likely(psock)) {
-+		if (sk_psock_test_state(psock, SK_PSOCK_TX_ENABLED))
-+			schedule_work(&psock->work);
-+		write_space = psock->saved_write_space;
+ 	if (!ingress) {
+ 		if (!sock_writeable(psock->sk))
+ 			return -EAGAIN;
+@@ -525,7 +527,7 @@ static void sk_psock_backlog(struct work_struct *work)
+ 		len = skb->len;
+ 		off = 0;
+ start:
+-		ingress = tcp_skb_bpf_ingress(skb);
++		ingress = skb_bpf_ingress(skb);
+ 		do {
+ 			ret = -EIO;
+ 			if (likely(psock->sk->sk_socket))
+@@ -631,7 +633,12 @@ void __sk_psock_purge_ingress_msg(struct sk_psock *psock)
+ 
+ static void sk_psock_zap_ingress(struct sk_psock *psock)
+ {
+-	__skb_queue_purge(&psock->ingress_skb);
++	struct sk_buff *skb;
++
++	while ((skb = __skb_dequeue(&psock->ingress_skb)) != NULL) {
++		skb_bpf_redirect_clear(skb);
++		kfree_skb(skb);
 +	}
-+	rcu_read_unlock();
-+	if (write_space)
-+		write_space(sk);
-+}
-+
-+#if IS_ENABLED(CONFIG_BPF_STREAM_PARSER)
- static void sk_psock_strp_read(struct strparser *strp, struct sk_buff *skb)
- {
- 	struct sk_psock *psock;
-@@ -897,6 +905,14 @@ static int sk_psock_strp_read_done(struct strparser *strp, int err)
- 	return err;
+ 	__sk_psock_purge_ingress_msg(psock);
  }
  
-+static struct sk_psock *sk_psock_from_strp(struct strparser *strp)
-+{
-+	struct sk_psock_parser *parser;
-+
-+	parser = container_of(strp, struct sk_psock_parser, strp);
-+	return container_of(parser, struct sk_psock, parser);
-+}
-+
- static int sk_psock_strp_parse(struct strparser *strp, struct sk_buff *skb)
- {
- 	struct sk_psock *psock = sk_psock_from_strp(strp);
-@@ -933,6 +949,52 @@ static void sk_psock_strp_data_ready(struct sock *sk)
- 	rcu_read_unlock();
- }
+@@ -752,7 +759,7 @@ static void sk_psock_skb_redirect(struct sk_buff *skb)
+ 	struct sk_psock *psock_other;
+ 	struct sock *sk_other;
  
-+int sk_psock_init_strp(struct sock *sk, struct sk_psock *psock)
-+{
-+	static const struct strp_callbacks cb = {
-+		.rcv_msg	= sk_psock_strp_read,
-+		.read_sock_done	= sk_psock_strp_read_done,
-+		.parse_msg	= sk_psock_strp_parse,
-+	};
-+
-+	psock->parser.enabled = false;
-+	return strp_init(&psock->parser.strp, sk, &cb);
-+}
-+
-+void sk_psock_start_strp(struct sock *sk, struct sk_psock *psock)
-+{
-+	struct sk_psock_parser *parser = &psock->parser;
-+
-+	if (parser->enabled)
-+		return;
-+
-+	parser->saved_data_ready = sk->sk_data_ready;
-+	sk->sk_data_ready = sk_psock_strp_data_ready;
-+	sk->sk_write_space = sk_psock_write_space;
-+	parser->enabled = true;
-+}
-+
-+void sk_psock_stop_strp(struct sock *sk, struct sk_psock *psock)
-+{
-+	struct sk_psock_parser *parser = &psock->parser;
-+
-+	if (!parser->enabled)
-+		return;
-+
-+	sk->sk_data_ready = parser->saved_data_ready;
-+	parser->saved_data_ready = NULL;
-+	strp_stop(&parser->strp);
-+	parser->enabled = false;
-+}
-+
-+void sk_psock_done_strp(struct sk_psock *psock)
-+{
-+	/* Parser has been stopped */
-+	if (psock->progs.skb_parser)
-+		strp_done(&psock->parser.strp);
-+}
-+#endif
-+
- static int sk_psock_verdict_recv(read_descriptor_t *desc, struct sk_buff *skb,
- 				 unsigned int offset, size_t orig_len)
+-	sk_other = tcp_skb_bpf_redirect_fetch(skb);
++	sk_other = skb_bpf_redirect_fetch(skb);
+ 	/* This error is a buggy BPF program, it returned a redirect
+ 	 * return code, but then didn't set a redirect interface.
+ 	 */
+@@ -802,9 +809,10 @@ int sk_psock_tls_strp_read(struct sk_psock *psock, struct sk_buff *skb)
+ 		 * TLS context.
+ 		 */
+ 		skb->sk = psock->sk;
+-		tcp_skb_bpf_redirect_clear(skb);
++		skb_dst_drop(skb);
++		skb_bpf_redirect_clear(skb);
+ 		ret = sk_psock_bpf_run(psock, prog, skb);
+-		ret = sk_psock_map_verd(ret, tcp_skb_bpf_redirect_fetch(skb));
++		ret = sk_psock_map_verd(ret, skb_bpf_redirect_fetch(skb));
+ 		skb->sk = NULL;
+ 	}
+ 	sk_psock_tls_verdict_apply(skb, psock->sk, ret);
+@@ -816,7 +824,6 @@ EXPORT_SYMBOL_GPL(sk_psock_tls_strp_read);
+ static void sk_psock_verdict_apply(struct sk_psock *psock,
+ 				   struct sk_buff *skb, int verdict)
  {
-@@ -984,35 +1046,6 @@ static void sk_psock_verdict_data_ready(struct sock *sk)
- 	sock->ops->read_sock(sk, &desc, sk_psock_verdict_recv);
- }
+-	struct tcp_skb_cb *tcp;
+ 	struct sock *sk_other;
+ 	int err = -EIO;
  
--static void sk_psock_write_space(struct sock *sk)
--{
--	struct sk_psock *psock;
--	void (*write_space)(struct sock *sk) = NULL;
--
--	rcu_read_lock();
--	psock = sk_psock(sk);
--	if (likely(psock)) {
--		if (sk_psock_test_state(psock, SK_PSOCK_TX_ENABLED))
--			schedule_work(&psock->work);
--		write_space = psock->saved_write_space;
--	}
--	rcu_read_unlock();
--	if (write_space)
--		write_space(sk);
--}
--
--int sk_psock_init_strp(struct sock *sk, struct sk_psock *psock)
--{
--	static const struct strp_callbacks cb = {
--		.rcv_msg	= sk_psock_strp_read,
--		.read_sock_done	= sk_psock_strp_read_done,
--		.parse_msg	= sk_psock_strp_parse,
--	};
--
--	psock->parser.enabled = false;
--	return strp_init(&psock->parser.strp, sk, &cb);
--}
--
- void sk_psock_start_verdict(struct sock *sk, struct sk_psock *psock)
- {
- 	struct sk_psock_parser *parser = &psock->parser;
-@@ -1026,32 +1059,6 @@ void sk_psock_start_verdict(struct sock *sk, struct sk_psock *psock)
- 	parser->enabled = true;
- }
+@@ -828,8 +835,7 @@ static void sk_psock_verdict_apply(struct sk_psock *psock,
+ 			goto out_free;
+ 		}
  
--void sk_psock_start_strp(struct sock *sk, struct sk_psock *psock)
--{
--	struct sk_psock_parser *parser = &psock->parser;
--
--	if (parser->enabled)
--		return;
--
--	parser->saved_data_ready = sk->sk_data_ready;
--	sk->sk_data_ready = sk_psock_strp_data_ready;
--	sk->sk_write_space = sk_psock_write_space;
--	parser->enabled = true;
--}
--
--void sk_psock_stop_strp(struct sock *sk, struct sk_psock *psock)
--{
--	struct sk_psock_parser *parser = &psock->parser;
--
--	if (!parser->enabled)
--		return;
--
--	sk->sk_data_ready = parser->saved_data_ready;
--	parser->saved_data_ready = NULL;
--	strp_stop(&parser->strp);
--	parser->enabled = false;
--}
--
- void sk_psock_stop_verdict(struct sock *sk, struct sk_psock *psock)
- {
- 	struct sk_psock_parser *parser = &psock->parser;
+-		tcp = TCP_SKB_CB(skb);
+-		tcp->bpf.flags |= BPF_F_INGRESS;
++		skb_bpf_set_ingress(skb);
+ 
+ 		/* If the queue is empty then we can submit directly
+ 		 * into the msg queue. If its not empty we have to
+@@ -890,9 +896,10 @@ static void sk_psock_strp_read(struct strparser *strp, struct sk_buff *skb)
+ 	skb_set_owner_r(skb, sk);
+ 	prog = READ_ONCE(psock->progs.skb_verdict);
+ 	if (likely(prog)) {
+-		tcp_skb_bpf_redirect_clear(skb);
++		skb_dst_drop(skb);
++		skb_bpf_redirect_clear(skb);
+ 		ret = sk_psock_bpf_run(psock, prog, skb);
+-		ret = sk_psock_map_verd(ret, tcp_skb_bpf_redirect_fetch(skb));
++		ret = sk_psock_map_verd(ret, skb_bpf_redirect_fetch(skb));
+ 	}
+ 	sk_psock_verdict_apply(psock, skb, ret);
+ out:
+@@ -1005,9 +1012,10 @@ static int sk_psock_verdict_recv(read_descriptor_t *desc, struct sk_buff *skb,
+ 	skb_set_owner_r(skb, sk);
+ 	prog = READ_ONCE(psock->progs.skb_verdict);
+ 	if (likely(prog)) {
+-		tcp_skb_bpf_redirect_clear(skb);
++		skb_dst_drop(skb);
++		skb_bpf_redirect_clear(skb);
+ 		ret = sk_psock_bpf_run(psock, prog, skb);
+-		ret = sk_psock_map_verd(ret, tcp_skb_bpf_redirect_fetch(skb));
++		ret = sk_psock_map_verd(ret, skb_bpf_redirect_fetch(skb));
+ 	}
+ 	sk_psock_verdict_apply(psock, skb, ret);
+ out:
 diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index d758fb83c884..ee3334dd3a38 100644
+index 1a28a5c2c61e..dbfcd7006338 100644
 --- a/net/core/sock_map.c
 +++ b/net/core/sock_map.c
-@@ -1461,9 +1461,11 @@ int sock_map_prog_update(struct bpf_map *map, struct bpf_prog *prog,
- 	case BPF_SK_MSG_VERDICT:
- 		pprog = &progs->msg_parser;
- 		break;
-+#if IS_ENABLED(CONFIG_BPF_STREAM_PARSER)
- 	case BPF_SK_SKB_STREAM_PARSER:
- 		pprog = &progs->skb_parser;
- 		break;
-+#endif
- 	case BPF_SK_SKB_STREAM_VERDICT:
- 		pprog = &progs->skb_verdict;
- 		break;
-diff --git a/net/ipv4/Makefile b/net/ipv4/Makefile
-index 5b77a46885b9..bbdd9c44f14e 100644
---- a/net/ipv4/Makefile
-+++ b/net/ipv4/Makefile
-@@ -62,7 +62,7 @@ obj-$(CONFIG_TCP_CONG_LP) += tcp_lp.o
- obj-$(CONFIG_TCP_CONG_YEAH) += tcp_yeah.o
- obj-$(CONFIG_TCP_CONG_ILLINOIS) += tcp_illinois.o
- obj-$(CONFIG_NET_SOCK_MSG) += tcp_bpf.o
--obj-$(CONFIG_BPF_STREAM_PARSER) += udp_bpf.o
-+obj-$(CONFIG_BPF_SYSCALL) += udp_bpf.o
- obj-$(CONFIG_NETLABEL) += cipso_ipv4.o
- 
- obj-$(CONFIG_XFRM) += xfrm4_policy.o xfrm4_state.o xfrm4_input.o \
-diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-index bc7d2a586e18..17c322b875fd 100644
---- a/net/ipv4/tcp_bpf.c
-+++ b/net/ipv4/tcp_bpf.c
-@@ -229,7 +229,7 @@ int tcp_bpf_sendmsg_redir(struct sock *sk, struct sk_msg *msg,
- }
- EXPORT_SYMBOL_GPL(tcp_bpf_sendmsg_redir);
- 
--#ifdef CONFIG_BPF_STREAM_PARSER
-+#ifdef CONFIG_BPF_SYSCALL
- static bool tcp_bpf_stream_read(const struct sock *sk)
+@@ -657,7 +657,6 @@ const struct bpf_func_proto bpf_sock_map_update_proto = {
+ BPF_CALL_4(bpf_sk_redirect_map, struct sk_buff *, skb,
+ 	   struct bpf_map *, map, u32, key, u64, flags)
  {
- 	struct sk_psock *psock;
-@@ -629,4 +629,4 @@ void tcp_bpf_clone(const struct sock *sk, struct sock *newsk)
- 	if (prot == &tcp_bpf_prots[family][TCP_BPF_BASE])
- 		newsk->sk_prot = sk->sk_prot_creator;
+-	struct tcp_skb_cb *tcb = TCP_SKB_CB(skb);
+ 	struct sock *sk;
+ 
+ 	if (unlikely(flags & ~(BPF_F_INGRESS)))
+@@ -667,8 +666,7 @@ BPF_CALL_4(bpf_sk_redirect_map, struct sk_buff *, skb,
+ 	if (unlikely(!sk || !sock_map_redirect_allowed(sk)))
+ 		return SK_DROP;
+ 
+-	tcb->bpf.flags = flags;
+-	tcb->bpf.sk_redir = sk;
++	skb_bpf_set_redir(skb, sk, flags & BPF_F_INGRESS);
+ 	return SK_PASS;
  }
--#endif /* CONFIG_BPF_STREAM_PARSER */
-+#endif /* CONFIG_BPF_SYSCALL */
+ 
+@@ -1250,7 +1248,6 @@ const struct bpf_func_proto bpf_sock_hash_update_proto = {
+ BPF_CALL_4(bpf_sk_redirect_hash, struct sk_buff *, skb,
+ 	   struct bpf_map *, map, void *, key, u64, flags)
+ {
+-	struct tcp_skb_cb *tcb = TCP_SKB_CB(skb);
+ 	struct sock *sk;
+ 
+ 	if (unlikely(flags & ~(BPF_F_INGRESS)))
+@@ -1260,8 +1257,7 @@ BPF_CALL_4(bpf_sk_redirect_hash, struct sk_buff *, skb,
+ 	if (unlikely(!sk || !sock_map_redirect_allowed(sk)))
+ 		return SK_DROP;
+ 
+-	tcb->bpf.flags = flags;
+-	tcb->bpf.sk_redir = sk;
++	skb_bpf_set_redir(skb, sk, flags & BPF_F_INGRESS);
+ 	return SK_PASS;
+ }
+ 
 -- 
 2.25.1
 
