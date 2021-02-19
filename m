@@ -6,56 +6,56 @@ X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7236DC4332D
-	for <bpf@archiver.kernel.org>; Fri, 19 Feb 2021 23:59:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E648C433DB
+	for <bpf@archiver.kernel.org>; Sat, 20 Feb 2021 00:00:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4C40964ED5
-	for <bpf@archiver.kernel.org>; Fri, 19 Feb 2021 23:59:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4C7D064ED2
+	for <bpf@archiver.kernel.org>; Sat, 20 Feb 2021 00:00:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229800AbhBSX73 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 19 Feb 2021 18:59:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52082 "EHLO
+        id S229842AbhBTAAF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 19 Feb 2021 19:00:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbhBSX70 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 19 Feb 2021 18:59:26 -0500
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF38DC06178B;
-        Fri, 19 Feb 2021 15:58:45 -0800 (PST)
-Received: by mail-ot1-x329.google.com with SMTP id s107so6684553otb.8;
-        Fri, 19 Feb 2021 15:58:45 -0800 (PST)
+        with ESMTP id S229826AbhBTAAC (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 19 Feb 2021 19:00:02 -0500
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DC0CC061794;
+        Fri, 19 Feb 2021 15:58:49 -0800 (PST)
+Received: by mail-ot1-x32d.google.com with SMTP id d7so6692421otq.6;
+        Fri, 19 Feb 2021 15:58:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Cn214jZGzgjFbft7eNgUOtSG+SxXEwz3c8kvQYZqNKs=;
-        b=AuGqKE0jfE9wj48kupEajlfnSeqYyQtq11DssZg8pvGWHtw0v/vL86vwSJpZ7vBYwK
-         WO66jy8yN+alDJxNXLQCYd6XaYqXMpqw1LDW7zqVO+8Akyf9fWT6lOk0YSFl/+1yBsbV
-         igMVowixAToxRpcv2Sh6rCDGtZ/Ga75/sIptYm1YYq2aaDSplBx7E4EItDJM91lstdvy
-         KvUv1FVpwPq/cxuEn4EXmTi3oCEhq1KvW+q3lXD1dw9NQIDeENwxWGmMII9nWyJR7yH4
-         ykBiJ6+9J9qUCdH+xpUXZisOfrus15klIZ0ITc10YkZdLvrkbFU6w91W5G/o4PMURI98
-         /raw==
+        bh=jAJa42OPzb/qV3fNsR+S2DkBgQytqm4smQJoFdDwVEE=;
+        b=veyLlrSLv6FrB3BUkPWMgXS5MihvwCqyEixsP15BgdsB1Zn6DlvDQMrfXtPrJaQ4v2
+         EYY/inmoRxiWm24fcABlyV1tKmkK9NPX2nS3RsYRKLAZDWqvV8BnE3EV1vAskwDz3ZqH
+         BuvarCqvNDsV9r/DRRc6nSJ0/n6sPsdjxa6ZK2RboEuOkrYFJ1qg/u+ojlKHbMUu4mMb
+         AeXZXymdMSDM5Av2s/sM/X2yp7MMR9UuwNK7UBKUAb0wqUHopIprzO0+6fr60XIIYShc
+         urIMKRmC3SxeMtTvIid/7eBEyd8i5Ckz6d1Kr9bW1FH0YMOYmq8rlVTBg+PgnwibxX3R
+         vBTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Cn214jZGzgjFbft7eNgUOtSG+SxXEwz3c8kvQYZqNKs=;
-        b=Sg21elZqzXxpTzUQx7+aEz9Xk9i/0tfbVZtuTKOboYy4laXQoUN7An4PgDcmpYuDNe
-         QP6LoDdW4/XY8R0nqkH/A+4mqM7W/axmoug6B/7Z3r+ZXT/hRi5ApC9aDqkz4lbsiHoh
-         FXee5Unh3+MZnkgndh7YfdU1puyHjDzchrXY6IkFQx7GpMJkwvnqDXMy8q4NwzWuvcUh
-         NqrFislOdxzKqk6cEZa3ylnj1H8qUb3cUeJ+7z/pqRSVCGiz85aGEJskpRFs/FCcdO0m
-         PM20ejgq1RCU8BQ7q0ZepZAbw9qZhu2fvvSb851Ru+B0f3Furv1JetCyUDXhHYJbwO69
-         t8/A==
-X-Gm-Message-State: AOAM530HFBOt1dwVAWpwK05Rn4OTXlbbxnDxwIG/NQZ6XQTVX2ju7FHP
-        jzTu07GqWLHqpcgymg+pe0oSNWleISQ/Pw==
-X-Google-Smtp-Source: ABdhPJyFGXOesZUPKVW24/UgaTAY2kArOrIsSXv3cCel1b6RKeMZvRtoIkGV+4Uxlrqob6C5rB2bYQ==
-X-Received: by 2002:a9d:4595:: with SMTP id x21mr8865986ote.32.1613779125064;
-        Fri, 19 Feb 2021 15:58:45 -0800 (PST)
+        bh=jAJa42OPzb/qV3fNsR+S2DkBgQytqm4smQJoFdDwVEE=;
+        b=Fnu/o3Nx2Uh1MVIBMmRvZAdL3Ju7i8Sjkb7EhmHHAvW2dSDKUARE+IVAekhiSzl8P0
+         cJo4Pg1Gsc+NBBePa0msfK8dW9KDPWMdGcWAq6BvTe/tdN86gUTK20nHVz81HshnbVvY
+         cWH/sbP942c3LYzdgapv+HgTY8/5swiPG2LGOKoiLwU6tH+oiyxemT4XNQ9W5daiNrT7
+         GtBbk13b3zCztGs5cGKtVe+XJNFrQjq8riLkgLdtR2KJBcnFTtOJu+81uSitBV2+ZCf3
+         KY6BYDFZwZ5XnrIH9xRL4vE9WH4StVlejGIfBib86V9W/Z5AZooea8Gmfa3Eq4Z9ZgPU
+         LuBw==
+X-Gm-Message-State: AOAM533EaEhlAVFuFtXqyFWDdEG8QyBcXewg7RAHRPWQHbAy+at2/Rze
+        ZaXlnVF2FFC+JFKawF9n36nj16An+oL32Q==
+X-Google-Smtp-Source: ABdhPJx2/3pzIcQGB7wTxvwI1j+EiHM5grAkMP6T6ba6v1mHLHm0Rax0NRozQb1wbYj1iZ3F4+FFWA==
+X-Received: by 2002:a9d:7e87:: with SMTP id m7mr9175166otp.128.1613779128684;
+        Fri, 19 Feb 2021 15:58:48 -0800 (PST)
 Received: from unknown.attlocal.net ([2600:1700:65a0:ab60:1d72:18:7c76:92e4])
-        by smtp.gmail.com with ESMTPSA id h11sm2064186ooj.36.2021.02.19.15.58.43
+        by smtp.gmail.com with ESMTPSA id h11sm2064186ooj.36.2021.02.19.15.58.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Feb 2021 15:58:44 -0800 (PST)
+        Fri, 19 Feb 2021 15:58:48 -0800 (PST)
 From:   Cong Wang <xiyou.wangcong@gmail.com>
 To:     netdev@vger.kernel.org
 Cc:     bpf@vger.kernel.org, duanxiongchun@bytedance.com,
@@ -65,9 +65,9 @@ Cc:     bpf@vger.kernel.org, duanxiongchun@bytedance.com,
         Daniel Borkmann <daniel@iogearbox.net>,
         Lorenz Bauer <lmb@cloudflare.com>,
         John Fastabend <john.fastabend@gmail.com>
-Subject: [Patch bpf-next v5 3/8] bpf: compute data_end dynamically with JIT code
-Date:   Fri, 19 Feb 2021 15:58:31 -0800
-Message-Id: <20210219235836.100416-4-xiyou.wangcong@gmail.com>
+Subject: [Patch bpf-next v5 6/8] sock_map: make sock_map_prog_update() static
+Date:   Fri, 19 Feb 2021 15:58:34 -0800
+Message-Id: <20210219235836.100416-7-xiyou.wangcong@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210219235836.100416-1-xiyou.wangcong@gmail.com>
 References: <20210219235836.100416-1-xiyou.wangcong@gmail.com>
@@ -79,155 +79,70 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Cong Wang <cong.wang@bytedance.com>
 
-Currently, we compute ->data_end with a compile-time constant
-offset of skb. But as Jakub pointed out, we can actually compute
-it in eBPF JIT code at run-time, so that we can competely get
-rid of ->data_end. This is similar to skb_shinfo(skb) computation
-in bpf_convert_shinfo_access().
+It is only used within sock_map.c so can become static.
 
 Suggested-by: Jakub Sitnicki <jakub@cloudflare.com>
 Cc: Daniel Borkmann <daniel@iogearbox.net>
 Cc: Lorenz Bauer <lmb@cloudflare.com>
-Acked-by: John Fastabend <john.fastabend@gmail.com>
-Acked-by: Jakub Sitnicki <jakub@cloudflare.com>
+Cc: John Fastabend <john.fastabend@gmail.com>
 Signed-off-by: Cong Wang <cong.wang@bytedance.com>
 ---
- include/net/tcp.h |  6 ------
- net/core/filter.c | 48 +++++++++++++++++++++++++++--------------------
- net/core/skmsg.c  |  1 -
- 3 files changed, 28 insertions(+), 27 deletions(-)
+ include/linux/bpf.h | 9 ---------
+ net/core/sock_map.c | 7 +++++--
+ 2 files changed, 5 insertions(+), 11 deletions(-)
 
-diff --git a/include/net/tcp.h b/include/net/tcp.h
-index c00e125dcfb9..947ef5da6867 100644
---- a/include/net/tcp.h
-+++ b/include/net/tcp.h
-@@ -886,18 +886,12 @@ struct tcp_skb_cb {
- 		struct {
- 			__u32 flags;
- 			struct sock *sk_redir;
--			void *data_end;
- 		} bpf;
- 	};
- };
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index e29600f01585..9b31893f1b32 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1742,8 +1742,6 @@ static inline bool bpf_map_is_dev_bound(struct bpf_map *map)
+ struct bpf_map *bpf_map_offload_map_alloc(union bpf_attr *attr);
+ void bpf_map_offload_map_free(struct bpf_map *map);
  
- #define TCP_SKB_CB(__skb)	((struct tcp_skb_cb *)&((__skb)->cb[0]))
+-int sock_map_prog_update(struct bpf_map *map, struct bpf_prog *prog,
+-			 struct bpf_prog *old, u32 which);
+ int sock_map_get_from_fd(const union bpf_attr *attr, struct bpf_prog *prog);
+ int sock_map_prog_detach(const union bpf_attr *attr, enum bpf_prog_type ptype);
+ int sock_map_update_elem_sys(struct bpf_map *map, void *key, void *value, u64 flags);
+@@ -1775,13 +1773,6 @@ static inline void bpf_map_offload_map_free(struct bpf_map *map)
+ {
+ }
  
--static inline void bpf_compute_data_end_sk_skb(struct sk_buff *skb)
+-static inline int sock_map_prog_update(struct bpf_map *map,
+-				       struct bpf_prog *prog,
+-				       struct bpf_prog *old, u32 which)
 -{
--	TCP_SKB_CB(skb)->bpf.data_end = skb->data + skb_headlen(skb);
+-	return -EOPNOTSUPP;
 -}
 -
- static inline bool tcp_skb_bpf_ingress(const struct sk_buff *skb)
+ static inline int sock_map_get_from_fd(const union bpf_attr *attr,
+ 				       struct bpf_prog *prog)
  {
- 	return TCP_SKB_CB(skb)->bpf.flags & BPF_F_INGRESS;
-diff --git a/net/core/filter.c b/net/core/filter.c
-index adfdad234674..13bcf248ee7b 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -1863,10 +1863,7 @@ static const struct bpf_func_proto bpf_sk_fullsock_proto = {
- static inline int sk_skb_try_make_writable(struct sk_buff *skb,
- 					   unsigned int write_len)
- {
--	int err = __bpf_try_make_writable(skb, write_len);
--
--	bpf_compute_data_end_sk_skb(skb);
--	return err;
-+	return __bpf_try_make_writable(skb, write_len);
- }
+diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+index 69785070f02d..dd53a7771d7e 100644
+--- a/net/core/sock_map.c
++++ b/net/core/sock_map.c
+@@ -24,6 +24,9 @@ struct bpf_stab {
+ #define SOCK_CREATE_FLAG_MASK				\
+ 	(BPF_F_NUMA_NODE | BPF_F_RDONLY | BPF_F_WRONLY)
  
- BPF_CALL_2(sk_skb_pull_data, struct sk_buff *, skb, u32, len)
-@@ -3577,7 +3574,6 @@ BPF_CALL_4(sk_skb_adjust_room, struct sk_buff *, skb, s32, len_diff,
- 			return -ENOMEM;
- 		__skb_pull(skb, len_diff_abs);
- 	}
--	bpf_compute_data_end_sk_skb(skb);
- 	if (tls_sw_has_ctx_rx(skb->sk)) {
- 		struct strp_msg *rxm = strp_msg(skb);
- 
-@@ -3742,10 +3738,7 @@ static const struct bpf_func_proto bpf_skb_change_tail_proto = {
- BPF_CALL_3(sk_skb_change_tail, struct sk_buff *, skb, u32, new_len,
- 	   u64, flags)
- {
--	int ret = __bpf_skb_change_tail(skb, new_len, flags);
--
--	bpf_compute_data_end_sk_skb(skb);
--	return ret;
-+	return __bpf_skb_change_tail(skb, new_len, flags);
- }
- 
- static const struct bpf_func_proto sk_skb_change_tail_proto = {
-@@ -3808,10 +3801,7 @@ static const struct bpf_func_proto bpf_skb_change_head_proto = {
- BPF_CALL_3(sk_skb_change_head, struct sk_buff *, skb, u32, head_room,
- 	   u64, flags)
- {
--	int ret = __bpf_skb_change_head(skb, head_room, flags);
--
--	bpf_compute_data_end_sk_skb(skb);
--	return ret;
-+	return __bpf_skb_change_head(skb, head_room, flags);
- }
- 
- static const struct bpf_func_proto sk_skb_change_head_proto = {
-@@ -9655,22 +9645,40 @@ static u32 sock_ops_convert_ctx_access(enum bpf_access_type type,
- 	return insn - insn_buf;
- }
- 
-+/* data_end = skb->data + skb_headlen() */
-+static struct bpf_insn *bpf_convert_data_end_access(const struct bpf_insn *si,
-+						    struct bpf_insn *insn)
-+{
-+	/* si->dst_reg = skb->data */
-+	*insn++ = BPF_LDX_MEM(BPF_FIELD_SIZEOF(struct sk_buff, data),
-+			      si->dst_reg, si->src_reg,
-+			      offsetof(struct sk_buff, data));
-+	/* AX = skb->len */
-+	*insn++ = BPF_LDX_MEM(BPF_FIELD_SIZEOF(struct sk_buff, len),
-+			      BPF_REG_AX, si->src_reg,
-+			      offsetof(struct sk_buff, len));
-+	/* si->dst_reg = skb->data + skb->len */
-+	*insn++ = BPF_ALU64_REG(BPF_ADD, si->dst_reg, BPF_REG_AX);
-+	/* AX = skb->data_len */
-+	*insn++ = BPF_LDX_MEM(BPF_FIELD_SIZEOF(struct sk_buff, data_len),
-+			      BPF_REG_AX, si->src_reg,
-+			      offsetof(struct sk_buff, data_len));
-+	/* si->dst_reg = skb->data + skb->len - skb->data_len */
-+	*insn++ = BPF_ALU64_REG(BPF_SUB, si->dst_reg, BPF_REG_AX);
++static int sock_map_prog_update(struct bpf_map *map, struct bpf_prog *prog,
++				struct bpf_prog *old, u32 which);
 +
-+	return insn;
-+}
-+
- static u32 sk_skb_convert_ctx_access(enum bpf_access_type type,
- 				     const struct bpf_insn *si,
- 				     struct bpf_insn *insn_buf,
- 				     struct bpf_prog *prog, u32 *target_size)
+ static struct bpf_map *sock_map_alloc(union bpf_attr *attr)
  {
- 	struct bpf_insn *insn = insn_buf;
--	int off;
- 
- 	switch (si->off) {
- 	case offsetof(struct __sk_buff, data_end):
--		off  = si->off;
--		off -= offsetof(struct __sk_buff, data_end);
--		off += offsetof(struct sk_buff, cb);
--		off += offsetof(struct tcp_skb_cb, bpf.data_end);
--		*insn++ = BPF_LDX_MEM(BPF_SIZEOF(void *), si->dst_reg,
--				      si->src_reg, off);
-+		insn = bpf_convert_data_end_access(si, insn);
- 		break;
- 	default:
- 		return bpf_convert_ctx_access(type, si, insn_buf, prog,
-diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index 7f400d044cda..2d8bbb3fd87c 100644
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -744,7 +744,6 @@ EXPORT_SYMBOL_GPL(sk_psock_msg_verdict);
- static int sk_psock_bpf_run(struct sk_psock *psock, struct bpf_prog *prog,
- 			    struct sk_buff *skb)
- {
--	bpf_compute_data_end_sk_skb(skb);
- 	return bpf_prog_run_pin_on_cpu(prog, skb);
+ 	struct bpf_stab *stab;
+@@ -1444,8 +1447,8 @@ static struct sk_psock_progs *sock_map_progs(struct bpf_map *map)
+ 	return NULL;
  }
  
+-int sock_map_prog_update(struct bpf_map *map, struct bpf_prog *prog,
+-			 struct bpf_prog *old, u32 which)
++static int sock_map_prog_update(struct bpf_map *map, struct bpf_prog *prog,
++				struct bpf_prog *old, u32 which)
+ {
+ 	struct sk_psock_progs *progs = sock_map_progs(map);
+ 	struct bpf_prog **pprog;
 -- 
 2.25.1
 
