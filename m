@@ -2,398 +2,150 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 98D41C433E6
-	for <bpf@archiver.kernel.org>; Thu, 18 Feb 2021 22:23:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D543BC433E0
+	for <bpf@archiver.kernel.org>; Fri, 19 Feb 2021 02:26:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4605664EBD
-	for <bpf@archiver.kernel.org>; Thu, 18 Feb 2021 22:23:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8050C64ED9
+	for <bpf@archiver.kernel.org>; Fri, 19 Feb 2021 02:26:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230218AbhBRWXX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 18 Feb 2021 17:23:23 -0500
-Received: from mail.efficios.com ([167.114.26.124]:43956 "EHLO
-        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230186AbhBRWXE (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 18 Feb 2021 17:23:04 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id C51FD29EE94;
-        Thu, 18 Feb 2021 17:21:44 -0500 (EST)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id ngh7VIrYHSQT; Thu, 18 Feb 2021 17:21:44 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 2F69029EBE6;
-        Thu, 18 Feb 2021 17:21:44 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 2F69029EBE6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1613686904;
-        bh=jSJ+dbRp3dxNG29UdSxpjbejLYT/egi7+9YCbVCSAjg=;
-        h=From:To:Date:Message-Id:MIME-Version;
-        b=f+DpBLsGAQCjAAhwRNvqUMJFiKSLcJZMDkl08WF5w+gNXmec5toJ1G3S7fVXTo4Kx
-         asV5Nm9wTQzGEyLJNn7FTeBw8bw+gS7rHSeOmO8hyWTdkAlAqvrXXO6T4FVooYnBpl
-         gNYGya1DSQKP0rOVn9EddnOjKX2p60G8pCScSXcbUqUV4QRpjqLppcTAjoEPM9HlnH
-         RXAxUYKwYNfA0NiXLe6SPCofSfso/qH6wDhfTr8qUj5/Z/wv8H3/qie7Q8lvi6kIQj
-         cerD85gG69TpJjM64Pda0ynTYJZ4GqRbIxek553jWyynA++VVfIDpv78Ij0uzjnBj1
-         OpZJBf8S7AeaQ==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 8FDw49Ju-c19; Thu, 18 Feb 2021 17:21:44 -0500 (EST)
-Received: from localhost.localdomain (96-127-212-112.qc.cable.ebox.net [96.127.212.112])
-        by mail.efficios.com (Postfix) with ESMTPSA id E03C629EBE4;
-        Thu, 18 Feb 2021 17:21:43 -0500 (EST)
-From:   Michael Jeanson <mjeanson@efficios.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Michael Jeanson <mjeanson@efficios.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+        id S229474AbhBSC0u (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 18 Feb 2021 21:26:50 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:30526 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229468AbhBSC0t (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 18 Feb 2021 21:26:49 -0500
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 11J21AuK160534;
+        Thu, 18 Feb 2021 21:25:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=KgyAyBOcYFwaiUbqX79haC7255x2675kRkkr0NTa73w=;
+ b=XzkuuC4pqGdJJFtCkuHLTfwtdqaaXelmR6VfDckzR47Nv3H08JpvTl1lyQCYkrK8b5Tr
+ mmH0eDiOY3yVwdAYScmDA3RXAQMy5Duf0p8L5fp9HuzXmBvZo773ZFH72bBC3j1Ac6xX
+ rtHVfgTCdml3Pb6wgts6k4QW5Ml30MlCUba5M98ZHRX4tMAF5okoSNQMGf3oFY1OTcTe
+ D8B5t3DHZogK7NaGssYa7YMC8sfWdEImBBHWd/HQxBJQregFtKj/E8MSsWZ+VyvWEvMf
+ Ct0xFwGxWCupR15TuTr17hsoqquRr/1Xyrz7R/DLNBvuCdEDNqvk+A5nsTmSwfg2HYn0 Cg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 36t3vx0sqr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 18 Feb 2021 21:25:54 -0500
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 11J2PsQu063885;
+        Thu, 18 Feb 2021 21:25:54 -0500
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 36t3vx0sqb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 18 Feb 2021 21:25:54 -0500
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 11J2MpFO025472;
+        Fri, 19 Feb 2021 02:25:52 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma04fra.de.ibm.com with ESMTP id 36p6d8apvk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 Feb 2021 02:25:52 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 11J2PbYp28967296
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 19 Feb 2021 02:25:37 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3F0ECA4040;
+        Fri, 19 Feb 2021 02:25:49 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AEB8AA404D;
+        Fri, 19 Feb 2021 02:25:48 +0000 (GMT)
+Received: from vm.lan (unknown [9.145.178.56])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 19 Feb 2021 02:25:48 +0000 (GMT)
+From:   Ilya Leoshkevich <iii@linux.ibm.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
         Yonghong Song <yhs@fb.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>, bpf@vger.kernel.org,
-        Joel Fernandes <joel@joelfernandes.org>
-Subject: [RFC PATCH 5/6] tracing: convert sys_enter/exit to faultable tracepoints
-Date:   Thu, 18 Feb 2021 17:21:24 -0500
-Message-Id: <20210218222125.46565-6-mjeanson@efficios.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210218222125.46565-1-mjeanson@efficios.com>
-References: <20210218222125.46565-1-mjeanson@efficios.com>
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Cc:     John Fastabend <john.fastabend@gmail.com>, bpf@vger.kernel.org,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>
+Subject: [PATCH v2 bpf-next 0/6] Add BTF_KIND_FLOAT support
+Date:   Fri, 19 Feb 2021 03:25:37 +0100
+Message-Id: <20210219022543.20893-1-iii@linux.ibm.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
+ definitions=2021-02-18_14:2021-02-18,2021-02-18 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
+ mlxlogscore=999 phishscore=0 bulkscore=0 malwarescore=0 impostorscore=0
+ adultscore=0 spamscore=0 clxscore=1015 suspectscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2102190007
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Convert the definition of the system call enter/exit tracepoints to
-faultable tracepoints now that all upstream tracers handle it.
+Some BPF programs compiled on s390 fail to load, because s390
+arch-specific linux headers contain float and double types.
+    
+Introduce support for such types by representing them using the new
+BTF_KIND_FLOAT. This series deals with libbpf, bpftool, in-kernel BTF
+parser as well as selftests and documentation.
 
-Co-developed-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
-Cc: Steven Rostedt (VMware) <rostedt@goodmis.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Yonghong Song <yhs@fb.com>
-Cc: Paul E. McKenney <paulmck@kernel.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Jiri Olsa <jolsa@redhat.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: bpf@vger.kernel.org
-Cc: Joel Fernandes <joel@joelfernandes.org>
+There are also pahole and LLVM parts:
+
+* https://github.com/iii-i/dwarves/commit/btf-kind-float-v2
+* https://reviews.llvm.org/D83289
+
+but they should go in after the libbpf part is integrated.
+
 ---
- include/trace/events/syscalls.h |  4 +-
- kernel/trace/trace_syscalls.c   | 84 +++++++++++++++++++++++----------
- 2 files changed, 60 insertions(+), 28 deletions(-)
 
-diff --git a/include/trace/events/syscalls.h b/include/trace/events/sysca=
-lls.h
-index b6e0cbc2c71f..2bd2d94563a2 100644
---- a/include/trace/events/syscalls.h
-+++ b/include/trace/events/syscalls.h
-@@ -15,7 +15,7 @@
-=20
- #ifdef CONFIG_HAVE_SYSCALL_TRACEPOINTS
-=20
--TRACE_EVENT_FN(sys_enter,
-+TRACE_EVENT_FN_MAYFAULT(sys_enter,
-=20
- 	TP_PROTO(struct pt_regs *regs, long id),
-=20
-@@ -41,7 +41,7 @@ TRACE_EVENT_FN(sys_enter,
-=20
- TRACE_EVENT_FLAGS(sys_enter, TRACE_EVENT_FL_CAP_ANY)
-=20
--TRACE_EVENT_FN(sys_exit,
-+TRACE_EVENT_FN_MAYFAULT(sys_exit,
-=20
- 	TP_PROTO(struct pt_regs *regs, long ret),
-=20
-diff --git a/kernel/trace/trace_syscalls.c b/kernel/trace/trace_syscalls.=
-c
-index d85a2f0f316b..4ca9190e26b2 100644
---- a/kernel/trace/trace_syscalls.c
-+++ b/kernel/trace/trace_syscalls.c
-@@ -304,21 +304,27 @@ static void ftrace_syscall_enter(void *data, struct=
- pt_regs *regs, long id)
- 	int syscall_nr;
- 	int size;
-=20
-+	/*
-+	 * Probe called with preemption enabled (mayfault), but ring buffer and
-+	 * per-cpu data require preemption to be disabled.
-+	 */
-+	preempt_disable_notrace();
-+
- 	syscall_nr =3D trace_get_syscall_nr(current, regs);
- 	if (syscall_nr < 0 || syscall_nr >=3D NR_syscalls)
--		return;
-+		goto end;
-=20
- 	/* Here we're inside tp handler's rcu_read_lock_sched (__DO_TRACE) */
- 	trace_file =3D rcu_dereference_sched(tr->enter_syscall_files[syscall_nr=
-]);
- 	if (!trace_file)
--		return;
-+		goto end;
-=20
- 	if (trace_trigger_soft_disabled(trace_file))
--		return;
-+		goto end;
-=20
- 	sys_data =3D syscall_nr_to_meta(syscall_nr);
- 	if (!sys_data)
--		return;
-+		goto end;
-=20
- 	size =3D sizeof(*entry) + sizeof(unsigned long) * sys_data->nb_args;
-=20
-@@ -329,7 +335,7 @@ static void ftrace_syscall_enter(void *data, struct p=
-t_regs *regs, long id)
- 	event =3D trace_buffer_lock_reserve(buffer,
- 			sys_data->enter_event->event.type, size, irq_flags, pc);
- 	if (!event)
--		return;
-+		goto end;
-=20
- 	entry =3D ring_buffer_event_data(event);
- 	entry->nr =3D syscall_nr;
-@@ -338,6 +344,8 @@ static void ftrace_syscall_enter(void *data, struct p=
-t_regs *regs, long id)
-=20
- 	event_trigger_unlock_commit(trace_file, buffer, event, entry,
- 				    irq_flags, pc);
-+end:
-+	preempt_enable_notrace();
- }
-=20
- static void ftrace_syscall_exit(void *data, struct pt_regs *regs, long r=
-et)
-@@ -352,21 +360,27 @@ static void ftrace_syscall_exit(void *data, struct =
-pt_regs *regs, long ret)
- 	int pc;
- 	int syscall_nr;
-=20
-+	/*
-+	 * Probe called with preemption enabled (mayfault), but ring buffer and
-+	 * per-cpu data require preemption to be disabled.
-+	 */
-+	preempt_disable_notrace();
-+
- 	syscall_nr =3D trace_get_syscall_nr(current, regs);
- 	if (syscall_nr < 0 || syscall_nr >=3D NR_syscalls)
--		return;
-+		goto end;
-=20
- 	/* Here we're inside tp handler's rcu_read_lock_sched (__DO_TRACE()) */
- 	trace_file =3D rcu_dereference_sched(tr->exit_syscall_files[syscall_nr]=
-);
- 	if (!trace_file)
--		return;
-+		goto end;
-=20
- 	if (trace_trigger_soft_disabled(trace_file))
--		return;
-+		goto end;
-=20
- 	sys_data =3D syscall_nr_to_meta(syscall_nr);
- 	if (!sys_data)
--		return;
-+		goto end;
-=20
- 	local_save_flags(irq_flags);
- 	pc =3D preempt_count();
-@@ -376,7 +390,7 @@ static void ftrace_syscall_exit(void *data, struct pt=
-_regs *regs, long ret)
- 			sys_data->exit_event->event.type, sizeof(*entry),
- 			irq_flags, pc);
- 	if (!event)
--		return;
-+		goto end;
-=20
- 	entry =3D ring_buffer_event_data(event);
- 	entry->nr =3D syscall_nr;
-@@ -384,6 +398,8 @@ static void ftrace_syscall_exit(void *data, struct pt=
-_regs *regs, long ret)
-=20
- 	event_trigger_unlock_commit(trace_file, buffer, event, entry,
- 				    irq_flags, pc);
-+end:
-+	preempt_enable_notrace();
- }
-=20
- static int reg_event_syscall_enter(struct trace_event_file *file,
-@@ -398,7 +414,7 @@ static int reg_event_syscall_enter(struct trace_event=
-_file *file,
- 		return -ENOSYS;
- 	mutex_lock(&syscall_trace_lock);
- 	if (!tr->sys_refcount_enter)
--		ret =3D register_trace_sys_enter(ftrace_syscall_enter, tr);
-+		ret =3D register_trace_mayfault_sys_enter(ftrace_syscall_enter, tr);
- 	if (!ret) {
- 		rcu_assign_pointer(tr->enter_syscall_files[num], file);
- 		tr->sys_refcount_enter++;
-@@ -436,7 +452,7 @@ static int reg_event_syscall_exit(struct trace_event_=
-file *file,
- 		return -ENOSYS;
- 	mutex_lock(&syscall_trace_lock);
- 	if (!tr->sys_refcount_exit)
--		ret =3D register_trace_sys_exit(ftrace_syscall_exit, tr);
-+		ret =3D register_trace_mayfault_sys_exit(ftrace_syscall_exit, tr);
- 	if (!ret) {
- 		rcu_assign_pointer(tr->exit_syscall_files[num], file);
- 		tr->sys_refcount_exit++;
-@@ -600,20 +616,26 @@ static void perf_syscall_enter(void *ignore, struct=
- pt_regs *regs, long id)
- 	int rctx;
- 	int size;
-=20
-+	/*
-+	 * Probe called with preemption enabled (mayfault), but ring buffer and
-+	 * per-cpu data require preemption to be disabled.
-+	 */
-+	preempt_disable_notrace();
-+
- 	syscall_nr =3D trace_get_syscall_nr(current, regs);
- 	if (syscall_nr < 0 || syscall_nr >=3D NR_syscalls)
--		return;
-+		goto end;
- 	if (!test_bit(syscall_nr, enabled_perf_enter_syscalls))
--		return;
-+		goto end;
-=20
- 	sys_data =3D syscall_nr_to_meta(syscall_nr);
- 	if (!sys_data)
--		return;
-+		goto end;
-=20
- 	head =3D this_cpu_ptr(sys_data->enter_event->perf_events);
- 	valid_prog_array =3D bpf_prog_array_valid(sys_data->enter_event);
- 	if (!valid_prog_array && hlist_empty(head))
--		return;
-+		goto end;
-=20
- 	/* get the size after alignment with the u32 buffer size field */
- 	size =3D sizeof(unsigned long) * sys_data->nb_args + sizeof(*rec);
-@@ -622,7 +644,7 @@ static void perf_syscall_enter(void *ignore, struct p=
-t_regs *regs, long id)
-=20
- 	rec =3D perf_trace_buf_alloc(size, NULL, &rctx);
- 	if (!rec)
--		return;
-+		goto end;
-=20
- 	rec->nr =3D syscall_nr;
- 	syscall_get_arguments(current, regs, args);
-@@ -632,12 +654,14 @@ static void perf_syscall_enter(void *ignore, struct=
- pt_regs *regs, long id)
- 	     !perf_call_bpf_enter(sys_data->enter_event, regs, sys_data, rec)) =
-||
- 	    hlist_empty(head)) {
- 		perf_swevent_put_recursion_context(rctx);
--		return;
-+		goto end;
- 	}
-=20
- 	perf_trace_buf_submit(rec, size, rctx,
- 			      sys_data->enter_event->event.type, 1, regs,
- 			      head, NULL);
-+end:
-+	preempt_enable_notrace();
- }
-=20
- static int perf_sysenter_enable(struct trace_event_call *call)
-@@ -649,7 +673,7 @@ static int perf_sysenter_enable(struct trace_event_ca=
-ll *call)
-=20
- 	mutex_lock(&syscall_trace_lock);
- 	if (!sys_perf_refcount_enter)
--		ret =3D register_trace_sys_enter(perf_syscall_enter, NULL);
-+		ret =3D register_trace_mayfault_sys_enter(perf_syscall_enter, NULL);
- 	if (ret) {
- 		pr_info("event trace: Could not activate syscall entry trace point");
- 	} else {
-@@ -699,20 +723,26 @@ static void perf_syscall_exit(void *ignore, struct =
-pt_regs *regs, long ret)
- 	int rctx;
- 	int size;
-=20
-+	/*
-+	 * Probe called with preemption enabled (mayfault), but ring buffer and
-+	 * per-cpu data require preemption to be disabled.
-+	 */
-+	preempt_disable_notrace();
-+
- 	syscall_nr =3D trace_get_syscall_nr(current, regs);
- 	if (syscall_nr < 0 || syscall_nr >=3D NR_syscalls)
--		return;
-+		goto end;
- 	if (!test_bit(syscall_nr, enabled_perf_exit_syscalls))
--		return;
-+		goto end;
-=20
- 	sys_data =3D syscall_nr_to_meta(syscall_nr);
- 	if (!sys_data)
--		return;
-+		goto end;
-=20
- 	head =3D this_cpu_ptr(sys_data->exit_event->perf_events);
- 	valid_prog_array =3D bpf_prog_array_valid(sys_data->exit_event);
- 	if (!valid_prog_array && hlist_empty(head))
--		return;
-+		goto end;
-=20
- 	/* We can probably do that at build time */
- 	size =3D ALIGN(sizeof(*rec) + sizeof(u32), sizeof(u64));
-@@ -720,7 +750,7 @@ static void perf_syscall_exit(void *ignore, struct pt=
-_regs *regs, long ret)
-=20
- 	rec =3D perf_trace_buf_alloc(size, NULL, &rctx);
- 	if (!rec)
--		return;
-+		goto end;
-=20
- 	rec->nr =3D syscall_nr;
- 	rec->ret =3D syscall_get_return_value(current, regs);
-@@ -729,11 +759,13 @@ static void perf_syscall_exit(void *ignore, struct =
-pt_regs *regs, long ret)
- 	     !perf_call_bpf_exit(sys_data->exit_event, regs, rec)) ||
- 	    hlist_empty(head)) {
- 		perf_swevent_put_recursion_context(rctx);
--		return;
-+		goto end;
- 	}
-=20
- 	perf_trace_buf_submit(rec, size, rctx, sys_data->exit_event->event.type=
-,
- 			      1, regs, head, NULL);
-+end:
-+	preempt_enable_notrace();
- }
-=20
- static int perf_sysexit_enable(struct trace_event_call *call)
-@@ -745,7 +777,7 @@ static int perf_sysexit_enable(struct trace_event_cal=
-l *call)
-=20
- 	mutex_lock(&syscall_trace_lock);
- 	if (!sys_perf_refcount_exit)
--		ret =3D register_trace_sys_exit(perf_syscall_exit, NULL);
-+		ret =3D register_trace_mayfault_sys_exit(perf_syscall_exit, NULL);
- 	if (ret) {
- 		pr_info("event trace: Could not activate syscall exit trace point");
- 	} else {
---=20
-2.25.1
+v0: https://lore.kernel.org/bpf/20210210030317.78820-1-iii@linux.ibm.com/
+v0 -> v1: Per Andrii's suggestion, remove the unnecessary trailing u32.
+
+v1: https://lore.kernel.org/bpf/20210216011216.3168-1-iii@linux.ibm.com/
+v1 -> v2: John noticed that sanitization corrupts BTF, because new and
+          old sizes don't match. Per Yonghong's suggestion, use a
+          modifier type (which has the same size as the float type) as
+          a replacement.
+          Per Yonghong's suggestion, add size and alignment checks to
+          the kernel BTF parser.
+
+Based on Alexei's feedback [1] I'm proceeding with the BTF_KIND_FLOAT
+approach.
+
+[1] https://lore.kernel.org/bpf/CAADnVQKWPODWZ2RSJ5FJhfYpxkuV0cvSAL1O+FSr9oP1ercoBg@mail.gmail.com/
+
+Ilya Leoshkevich (6):
+  bpf: Add BTF_KIND_FLOAT to uapi
+  libbpf: Add BTF_KIND_FLOAT support
+  tools/bpftool: Add BTF_KIND_FLOAT support
+  bpf: Add BTF_KIND_FLOAT support
+  selftest/bpf: Add BTF_KIND_FLOAT tests
+  bpf: Document BTF_KIND_FLOAT in btf.rst
+
+ Documentation/bpf/btf.rst                    |  17 ++-
+ include/uapi/linux/btf.h                     |   5 +-
+ kernel/bpf/btf.c                             |  76 +++++++++++-
+ tools/bpf/bpftool/btf.c                      |   8 ++
+ tools/bpf/bpftool/btf_dumper.c               |   1 +
+ tools/include/uapi/linux/btf.h               |   5 +-
+ tools/lib/bpf/btf.c                          |  44 +++++++
+ tools/lib/bpf/btf.h                          |   8 ++
+ tools/lib/bpf/btf_dump.c                     |   4 +
+ tools/lib/bpf/libbpf.c                       |  45 ++++++-
+ tools/lib/bpf/libbpf.map                     |   5 +
+ tools/lib/bpf/libbpf_internal.h              |   2 +
+ tools/testing/selftests/bpf/btf_helpers.c    |   4 +
+ tools/testing/selftests/bpf/prog_tests/btf.c | 122 +++++++++++++++++++
+ tools/testing/selftests/bpf/test_btf.h       |   3 +
+ 15 files changed, 340 insertions(+), 9 deletions(-)
+
+-- 
+2.29.2
 
