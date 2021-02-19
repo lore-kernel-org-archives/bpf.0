@@ -2,228 +2,175 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,FROM_LOCAL_HEX,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D7B9AC433DB
-	for <bpf@archiver.kernel.org>; Fri, 19 Feb 2021 09:35:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 18174C433E0
+	for <bpf@archiver.kernel.org>; Fri, 19 Feb 2021 09:53:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8FE2164ED5
-	for <bpf@archiver.kernel.org>; Fri, 19 Feb 2021 09:35:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B495164E4B
+	for <bpf@archiver.kernel.org>; Fri, 19 Feb 2021 09:53:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbhBSJfe (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 19 Feb 2021 04:35:34 -0500
-Received: from mail-io1-f69.google.com ([209.85.166.69]:35557 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbhBSJfD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 19 Feb 2021 04:35:03 -0500
-Received: by mail-io1-f69.google.com with SMTP id a1so3349762ios.2
-        for <bpf@vger.kernel.org>; Fri, 19 Feb 2021 01:34:46 -0800 (PST)
+        id S229720AbhBSJxD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 19 Feb 2021 04:53:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40392 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229947AbhBSJxA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 19 Feb 2021 04:53:00 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D003C061788
+        for <bpf@vger.kernel.org>; Fri, 19 Feb 2021 01:52:15 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id h98so2486229wrh.11
+        for <bpf@vger.kernel.org>; Fri, 19 Feb 2021 01:52:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=7GJI5hJf7kClUGYltrQmcJtEGXTgG/I5Sto2S8X228I=;
+        b=wEphN6x4pP0T0M0aunICcoa1NJ2lyNjVwrrLEsac1MPXRd3Rw6B6AsdDvRBqYuGH97
+         /591AJdoA0OQYdedSNxjLtoh5HTg5C+GZGu8b37sqQWZoWnq6CoypBpvs+P+fCfEVEj2
+         kqRCTUq3ftgbbHr3QkjzlXSGbp0WKShDNHgz4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=JBkhTOlgg4bgMUFvQex3digvJ1qylRjH8RKIX1kE3zE=;
-        b=IfEWpnmhmDEETcHtg3jI4+H9lwSmBOceFJh6e3m6OgsA7ZHKPHsbmO17VT9cIR/eU/
-         cn2F9KqQ9xCGbPRFDa5vOGl5WgU2gLMPiHfQhQked6vPiYHoCDjfanYvoxnwVJ8UVN1i
-         Hbw2GPw7HEuvTbVsPEYo0IFulHG4rtAznIWvzopRGlIUAq2XOFUL62mjTbWpXM8vX5qJ
-         cvO26pebDG+qvecxoHWEQqo4cQddmZdtYjw9Sfuk3vn+iuJDbDcz7PvoeU+nAY6MRlZX
-         XItCYHe2vdGjcEXtvPcoxlplaBgEZG39AwDb9tfZ/rvEY9Qy5XOvZcz1t4LMT8Bc4g6C
-         8R8g==
-X-Gm-Message-State: AOAM532ZRhKb17Y49WxSeLoIfFErZtLccEQrihw6Qjx3JSkC5QxYS64V
-        PCzRA9JR6BXS/R/SbU9diIV4rU1wcCRDS06ZacRtQDLSra7m
-X-Google-Smtp-Source: ABdhPJzhg+gGkda6+yWcxuxaOqXS7Suxl1Hl03p1o31Q9Mq7NvAluP+hsUCKQkjT2czuYSAVE4iCL57IPYWYVWWKnXyUxC84KNDK
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=7GJI5hJf7kClUGYltrQmcJtEGXTgG/I5Sto2S8X228I=;
+        b=mJitMOyFNOY11J5xw1Kb0aUV0dK/VBQHOQmeWhFQ7Ak6SoPLA5h64lkOFMhkr25fgI
+         Oav5fZl+aoN7CnfaFO7bpuhRF0YxHAe802RbcSJ4ZQjK5ES4sXJlmX0r85II84q/8IW6
+         BAInhKWO1031g+mbMClQJjaR1AZwwqPqX0w0+uPeg9YyJDt3RxiPYq3k8z/YcoQq3Ysj
+         XzS5PebnYEEb3siO4DVPcvIkYnl7FAyAvYv/nwKTAvoT8iRZYkO8ndu+h9RGkiP4+kR2
+         4dAuRLRZh57m2rYvUOzH1j6VvdCTBmagjz9gxhA7aCrR53uQiQP4wSuxYGs3mi7n5WAk
+         /n6A==
+X-Gm-Message-State: AOAM531FQjUNvvn/k1awF6PQMd0sWQXgOxRYKZOTd6NYgUzoFT9COsR5
+        XlhFK3uomEXDqB6lwg6T7DsO4A==
+X-Google-Smtp-Source: ABdhPJyCttIQw2Whak4S1eQFBwJwesciW5s24GgbIAH99N2WPmw62T4SYecu5R2KDth5F9034ZAYag==
+X-Received: by 2002:adf:fc48:: with SMTP id e8mr8479338wrs.154.1613728333570;
+        Fri, 19 Feb 2021 01:52:13 -0800 (PST)
+Received: from antares.lan (b.3.5.8.9.a.e.c.e.a.6.2.c.1.9.b.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:b91c:26ae:cea9:853b])
+        by smtp.gmail.com with ESMTPSA id a21sm13174910wmb.5.2021.02.19.01.52.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Feb 2021 01:52:13 -0800 (PST)
+From:   Lorenz Bauer <lmb@cloudflare.com>
+To:     daniel@iogearbox.net, ast@kernel.org, andrii@kernel.org
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        kernel-team@cloudflare.com, Lorenz Bauer <lmb@cloudflare.com>
+Subject: [PATCH bpf-next v2 1/4] net: add SO_NETNS_COOKIE socket option
+Date:   Fri, 19 Feb 2021 09:51:46 +0000
+Message-Id: <20210219095149.50346-2-lmb@cloudflare.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20210219095149.50346-1-lmb@cloudflare.com>
+References: <20210219095149.50346-1-lmb@cloudflare.com>
 MIME-Version: 1.0
-X-Received: by 2002:a92:c54e:: with SMTP id a14mr3209750ilj.285.1613727261512;
- Fri, 19 Feb 2021 01:34:21 -0800 (PST)
-Date:   Fri, 19 Feb 2021 01:34:21 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000002fdd6805bbad28bf@google.com>
-Subject: KASAN: use-after-free Read in ip6_pol_route (2)
-From:   syzbot <syzbot+eeda6c04066577b6a84c@syzkaller.appspotmail.com>
-To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net, dsahern@kernel.org,
-        fw@strlen.de, john.fastabend@gmail.com, kafai@fb.com,
-        kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        mathew.j.martineau@linux.intel.com, netdev@vger.kernel.org,
-        songliubraving@fb.com, syzkaller-bugs@googlegroups.com, yhs@fb.com,
-        yoshfuji@linux-ipv6.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello,
+We need to distinguish which network namespace a socket belongs to.
+BPF has the useful bpf_get_netns_cookie helper for this, but accessing
+it from user space isn't possible. Add a read-only socket option that
+returns the netns cookie, similar to SO_COOKIE. If network namespaces
+are disabled, SO_NETNS_COOKIE returns the cookie of init_net.
 
-syzbot found the following issue on:
-
-HEAD commit:    c4762993 Merge branch 'skbuff-introduce-skbuff_heads-bulki..
-git tree:       net-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=151e6df4d00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=dbc1ca9e55dc1f9f
-dashboard link: https://syzkaller.appspot.com/bug?extid=eeda6c04066577b6a84c
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1008eed2d00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=113cb614d00000
-
-The issue was bisected to:
-
-commit 40947e13997a1cba4e875893ca6e5d5e61a0689d
-Author: Florian Westphal <fw@strlen.de>
-Date:   Fri Feb 12 23:59:56 2021 +0000
-
-    mptcp: schedule worker when subflow is closed
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=17d2e7d2d00000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=1432e7d2d00000
-console output: https://syzkaller.appspot.com/x/log.txt?x=1032e7d2d00000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+eeda6c04066577b6a84c@syzkaller.appspotmail.com
-Fixes: 40947e13997a ("mptcp: schedule worker when subflow is closed")
-
-==================================================================
-BUG: KASAN: use-after-free in rt6_get_pcpu_route net/ipv6/route.c:1413 [inline]
-BUG: KASAN: use-after-free in ip6_pol_route+0x1087/0x11c0 net/ipv6/route.c:2265
-Read of size 4 at addr ffff8880130c3bb8 by task syz-executor292/8981
-
-CPU: 1 PID: 8981 Comm: syz-executor292 Not tainted 5.11.0-rc7-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- __dump_stack lib/dump_stack.c:79 [inline]
- dump_stack+0x107/0x163 lib/dump_stack.c:120
- print_address_description.constprop.0.cold+0x5b/0x2f8 mm/kasan/report.c:230
- __kasan_report mm/kasan/report.c:396 [inline]
- kasan_report.cold+0x79/0xd5 mm/kasan/report.c:413
- rt6_get_pcpu_route net/ipv6/route.c:1413 [inline]
- ip6_pol_route+0x1087/0x11c0 net/ipv6/route.c:2265
- pol_lookup_func include/net/ip6_fib.h:579 [inline]
- fib6_rule_lookup+0x52a/0x6f0 net/ipv6/fib6_rules.c:120
- ip6_route_output_flags_noref+0x2e2/0x380 net/ipv6/route.c:2512
- ip6_route_output_flags+0x8b/0x310 net/ipv6/route.c:2525
- ip6_route_output include/net/ip6_route.h:98 [inline]
- ip6_dst_lookup_tail+0xb6e/0x1740 net/ipv6/ip6_output.c:1064
- ip6_dst_lookup_flow+0x8c/0x1d0 net/ipv6/ip6_output.c:1194
- tcp_v6_connect+0xdb3/0x1df0 net/ipv6/tcp_ipv6.c:283
- __inet_stream_connect+0x8c5/0xee0 net/ipv4/af_inet.c:661
- inet_stream_connect+0x53/0xa0 net/ipv4/af_inet.c:725
- mptcp_stream_connect+0x156/0x800 net/mptcp/protocol.c:3200
- __sys_connect_file+0x155/0x1a0 net/socket.c:1835
- __sys_connect+0x161/0x190 net/socket.c:1852
- __do_sys_connect net/socket.c:1862 [inline]
- __se_sys_connect net/socket.c:1859 [inline]
- __x64_sys_connect+0x6f/0xb0 net/socket.c:1859
- do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-RIP: 0033:0x449b09
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 a1 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f791eff4318 EFLAGS: 00000246
- ORIG_RAX: 000000000000002a
-RAX: ffffffffffffffda RBX: 00000000004cf4c8 RCX: 0000000000449b09
-RDX: 000000000000001c RSI: 0000000020000040 RDI: 0000000000000003
-RBP: 00000000004cf4c0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00000000004cf4cc
-R13: 00007ffeaa51511f R14: 00007f791eff4400 R15: 0000000000022000
-
-Allocated by task 8626:
- kasan_save_stack+0x1b/0x40 mm/kasan/common.c:38
- kasan_set_track mm/kasan/common.c:46 [inline]
- set_alloc_info mm/kasan/common.c:401 [inline]
- ____kasan_kmalloc.constprop.0+0x82/0xa0 mm/kasan/common.c:429
- kasan_slab_alloc include/linux/kasan.h:209 [inline]
- slab_post_alloc_hook mm/slab.h:512 [inline]
- slab_alloc_node mm/slub.c:2892 [inline]
- slab_alloc mm/slub.c:2900 [inline]
- kmem_cache_alloc+0x1c6/0x440 mm/slub.c:2905
- dst_alloc+0x9e/0x650 net/core/dst.c:93
- ip6_dst_alloc+0x2e/0x100 net/ipv6/route.c:358
- ip6_rt_pcpu_alloc net/ipv6/route.c:1386 [inline]
- rt6_make_pcpu_route net/ipv6/route.c:1434 [inline]
- ip6_pol_route+0x910/0x11c0 net/ipv6/route.c:2268
- pol_lookup_func include/net/ip6_fib.h:579 [inline]
- fib6_rule_lookup+0x52a/0x6f0 net/ipv6/fib6_rules.c:120
- ip6_route_output_flags_noref+0x2e2/0x380 net/ipv6/route.c:2512
- ip6_route_output_flags+0x8b/0x310 net/ipv6/route.c:2525
- ip6_route_output include/net/ip6_route.h:98 [inline]
- ip6_dst_lookup_tail+0xb6e/0x1740 net/ipv6/ip6_output.c:1064
- ip6_dst_lookup_flow+0x8c/0x1d0 net/ipv6/ip6_output.c:1194
- tcp_v6_connect+0xdb3/0x1df0 net/ipv6/tcp_ipv6.c:283
- __inet_stream_connect+0x8c5/0xee0 net/ipv4/af_inet.c:661
- inet_stream_connect+0x53/0xa0 net/ipv4/af_inet.c:725
- mptcp_stream_connect+0x156/0x800 net/mptcp/protocol.c:3200
- __sys_connect_file+0x155/0x1a0 net/socket.c:1835
- __sys_connect+0x161/0x190 net/socket.c:1852
- __do_sys_connect net/socket.c:1862 [inline]
- __se_sys_connect net/socket.c:1859 [inline]
- __x64_sys_connect+0x6f/0xb0 net/socket.c:1859
- do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-
-Freed by task 18:
- kasan_save_stack+0x1b/0x40 mm/kasan/common.c:38
- kasan_set_track+0x1c/0x30 mm/kasan/common.c:46
- kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:356
- ____kasan_slab_free+0xe1/0x110 mm/kasan/common.c:362
- kasan_slab_free include/linux/kasan.h:192 [inline]
- slab_free_hook mm/slub.c:1547 [inline]
- slab_free_freelist_hook+0x5d/0x150 mm/slub.c:1580
- slab_free mm/slub.c:3143 [inline]
- kmem_cache_free+0x82/0x350 mm/slub.c:3159
- dst_destroy+0x2bc/0x3c0 net/core/dst.c:129
- rcu_do_batch kernel/rcu/tree.c:2489 [inline]
- rcu_core+0x5eb/0xf00 kernel/rcu/tree.c:2723
- __do_softirq+0x29b/0x9f6 kernel/softirq.c:343
-
-Last potentially related work creation:
- kasan_save_stack+0x1b/0x40 mm/kasan/common.c:38
- kasan_record_aux_stack+0xc5/0xf0 mm/kasan/generic.c:344
- __call_rcu kernel/rcu/tree.c:2965 [inline]
- call_rcu+0xbb/0x700 kernel/rcu/tree.c:3038
- dst_release net/core/dst.c:179 [inline]
- dst_release+0x79/0xe0 net/core/dst.c:169
- sk_dst_set include/net/sock.h:1999 [inline]
- sk_dst_reset include/net/sock.h:2011 [inline]
- ipv6_update_options+0x18c/0x3e0 net/ipv6/ipv6_sockglue.c:114
- ipv6_set_opt_hdr net/ipv6/ipv6_sockglue.c:383 [inline]
- do_ipv6_setsockopt.constprop.0+0x940/0x41f0 net/ipv6/ipv6_sockglue.c:657
- ipv6_setsockopt+0xd6/0x180 net/ipv6/ipv6_sockglue.c:1003
- tcp_setsockopt+0x136/0x2440 net/ipv4/tcp.c:3636
- mptcp_setsockopt+0x612/0x780 net/mptcp/protocol.c:2862
- __sys_setsockopt+0x2db/0x610 net/socket.c:2115
- __do_sys_setsockopt net/socket.c:2126 [inline]
- __se_sys_setsockopt net/socket.c:2123 [inline]
- __x64_sys_setsockopt+0xba/0x150 net/socket.c:2123
- do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-
-The buggy address belongs to the object at ffff8880130c3b40
- which belongs to the cache ip6_dst_cache of size 232
-The buggy address is located 120 bytes inside of
- 232-byte region [ffff8880130c3b40, ffff8880130c3c28)
-The buggy address belongs to the page:
-page:000000007c3a5b1c refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x130c3
-flags: 0xfff00000000200(slab)
-raw: 00fff00000000200 dead000000000100 dead000000000122 ffff888020ff5500
-raw: 0000000000000000 00000000000c000c 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-
-Memory state around the buggy address:
- ffff8880130c3a80: fb fb fb fb fb fb fb fb fb fb fb fb fb fc fc fc
- ffff8880130c3b00: fc fc fc fc fc fc fc fc fa fb fb fb fb fb fb fb
->ffff8880130c3b80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                                        ^
- ffff8880130c3c00: fb fb fb fb fb fc fc fc fc fc fc fc fc fc fc fc
- ffff8880130c3c80: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
-
-
+Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ arch/alpha/include/uapi/asm/socket.h  |  2 ++
+ arch/mips/include/uapi/asm/socket.h   |  2 ++
+ arch/parisc/include/uapi/asm/socket.h |  2 ++
+ arch/sparc/include/uapi/asm/socket.h  |  2 ++
+ include/uapi/asm-generic/socket.h     |  2 ++
+ net/core/sock.c                       | 11 +++++++++++
+ 6 files changed, 21 insertions(+)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+diff --git a/arch/alpha/include/uapi/asm/socket.h b/arch/alpha/include/uapi/asm/socket.h
+index 57420356ce4c..6b3daba60987 100644
+--- a/arch/alpha/include/uapi/asm/socket.h
++++ b/arch/alpha/include/uapi/asm/socket.h
+@@ -127,6 +127,8 @@
+ #define SO_PREFER_BUSY_POLL	69
+ #define SO_BUSY_POLL_BUDGET	70
+ 
++#define SO_NETNS_COOKIE		71
++
+ #if !defined(__KERNEL__)
+ 
+ #if __BITS_PER_LONG == 64
+diff --git a/arch/mips/include/uapi/asm/socket.h b/arch/mips/include/uapi/asm/socket.h
+index 2d949969313b..cdf404a831b2 100644
+--- a/arch/mips/include/uapi/asm/socket.h
++++ b/arch/mips/include/uapi/asm/socket.h
+@@ -138,6 +138,8 @@
+ #define SO_PREFER_BUSY_POLL	69
+ #define SO_BUSY_POLL_BUDGET	70
+ 
++#define SO_NETNS_COOKIE		71
++
+ #if !defined(__KERNEL__)
+ 
+ #if __BITS_PER_LONG == 64
+diff --git a/arch/parisc/include/uapi/asm/socket.h b/arch/parisc/include/uapi/asm/socket.h
+index f60904329bbc..5b5351cdcb33 100644
+--- a/arch/parisc/include/uapi/asm/socket.h
++++ b/arch/parisc/include/uapi/asm/socket.h
+@@ -119,6 +119,8 @@
+ #define SO_PREFER_BUSY_POLL	0x4043
+ #define SO_BUSY_POLL_BUDGET	0x4044
+ 
++#define SO_NETNS_COOKIE		0x4045
++
+ #if !defined(__KERNEL__)
+ 
+ #if __BITS_PER_LONG == 64
+diff --git a/arch/sparc/include/uapi/asm/socket.h b/arch/sparc/include/uapi/asm/socket.h
+index 848a22fbac20..ff79db753dce 100644
+--- a/arch/sparc/include/uapi/asm/socket.h
++++ b/arch/sparc/include/uapi/asm/socket.h
+@@ -120,6 +120,8 @@
+ #define SO_PREFER_BUSY_POLL	 0x0048
+ #define SO_BUSY_POLL_BUDGET	 0x0049
+ 
++#define SO_NETNS_COOKIE		 0x004a
++
+ #if !defined(__KERNEL__)
+ 
+ 
+diff --git a/include/uapi/asm-generic/socket.h b/include/uapi/asm-generic/socket.h
+index 4dcd13d097a9..d588c244ec2f 100644
+--- a/include/uapi/asm-generic/socket.h
++++ b/include/uapi/asm-generic/socket.h
+@@ -122,6 +122,8 @@
+ #define SO_PREFER_BUSY_POLL	69
+ #define SO_BUSY_POLL_BUDGET	70
+ 
++#define SO_NETNS_COOKIE		71
++
+ #if !defined(__KERNEL__)
+ 
+ #if __BITS_PER_LONG == 64 || (defined(__x86_64__) && defined(__ILP32__))
+diff --git a/net/core/sock.c b/net/core/sock.c
+index 0ed98f20448a..de4644aeb58d 100644
+--- a/net/core/sock.c
++++ b/net/core/sock.c
+@@ -1614,6 +1614,17 @@ int sock_getsockopt(struct socket *sock, int level, int optname,
+ 		v.val = sk->sk_bound_dev_if;
+ 		break;
+ 
++	case SO_NETNS_COOKIE:
++		lv = sizeof(u64);
++		if (len < lv)
++			return -EINVAL;
++#ifdef CONFIG_NET_NS
++		v.val64 = sock_net(sk)->net_cookie;
++#else
++		v.val64 = init_net.net_cookie;
++#endif
++		break;
++
+ 	default:
+ 		/* We implement the SO_SNDLOWAT etc to not be settable
+ 		 * (1003.1g 7).
+-- 
+2.27.0
+
