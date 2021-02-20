@@ -8,54 +8,54 @@ X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B8451C433E6
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7644C433E9
 	for <bpf@archiver.kernel.org>; Sat, 20 Feb 2021 05:31:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8AA8564D9C
+	by mail.kernel.org (Postfix) with ESMTP id ABD7A64EB3
 	for <bpf@archiver.kernel.org>; Sat, 20 Feb 2021 05:31:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230060AbhBTFbC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 20 Feb 2021 00:31:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37918 "EHLO
+        id S230063AbhBTFbD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 20 Feb 2021 00:31:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230016AbhBTFav (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 20 Feb 2021 00:30:51 -0500
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45860C061794;
-        Fri, 19 Feb 2021 21:29:37 -0800 (PST)
-Received: by mail-ot1-x334.google.com with SMTP id b8so7130721oti.7;
-        Fri, 19 Feb 2021 21:29:37 -0800 (PST)
+        with ESMTP id S230019AbhBTFay (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 20 Feb 2021 00:30:54 -0500
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91C56C0617A7;
+        Fri, 19 Feb 2021 21:29:39 -0800 (PST)
+Received: by mail-ot1-x32b.google.com with SMTP id 105so734158otd.3;
+        Fri, 19 Feb 2021 21:29:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ZIvtSmlziE+/XNUkzlDmjZl9RoZpZH0rqhWzogWDKek=;
-        b=ELG5e6k8Ob91V8HZWsfNvKH9vceOWnJoU8ofv+az3dd1unsVx5pL9i+HDHGtAr1Huu
-         Gj+GG2J26nd8kjMEebF9fcnIsmfygrQ9BbzmECXhx6Qz8lXPX1Dvfz76j7QvnZAn9G4i
-         bBltzCeq9nbjjPVeRqjC4BWiyH4y+JXe0p1pKrL5ahlCnoJov6KKFPUOtOA7xhe1pJct
-         b5nVnk4gdsoo1h67r/IUYvpzDgsFrNZ6vS/ushZGQ1+QRfhVXDFGX9Nis0VzZ4LRr7nR
-         5UhNfuaeHAoQJeohmQhCjyISciI8ivYWVexG0aArBQRI4nyDMtdwrAjvpvQ+Hj3AySWD
-         I19w==
+        bh=6qLL1pD8eAIF22astLsGTIt6XsSRTHADcChvDI82gwA=;
+        b=gIYzanohDRE8gMwXQrZE14ePq0SQeXVPvj5vB+XO9a2sIR7nfZ2qjXT6ph6KHgwf+N
+         eeExVLsFQgaKYcomBfTcLh7qz3rtPKSZe7nln/3HaK8bllvKCpqBAPhzNQ1UnkmxN4cd
+         CqCoUwAxuRXb5HIwGFy5PCkYqk2zMSEXbUBgezZNDRIDmUd0qtzjY/dnBXD8yuZLJ1vi
+         OTZ4deVS5LJBRIVj57o05ZcqE1TqAr4h7kIfbobTQnI8ATo3lNyaFSIAfXpC2MoJqO3P
+         7C4JwNwDJnjV5UDWM8ce188tcx35vge6vON2sdfzSeUrU2Jcr5WSXlkLDie7IThmp3yu
+         pelA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ZIvtSmlziE+/XNUkzlDmjZl9RoZpZH0rqhWzogWDKek=;
-        b=PSGwZTigNvTYd4HMwqNF6wS5kLGoQS62umt2KlLu9x1+L5RMQaP2evEBm/By2uFqHm
-         Sr+3G9JlR+irv5YUqjp0tDAxd1hPIQyEyfcjFaphqjSeH7Y90OnPWq/BwMbBJY+u+hhf
-         QhNIgoiRpf8LFtdy7DIPkxzz+L8xebhiRT0ZSvZvgiA/uiZdELXE4XUT+/7ky72iuXNn
-         oAIQsNJUuYKzZRuAE4ao4mEnu/UpxU6ajWQnThD6sJoTWUQd8vkjMIo+OMXCxUTz9xmj
-         +UoAb224BAY5gDTWkoCX6ktMkYbya8eIUf5yGW8KK9IyImopt+yGI+A+1ImJIx/rN9Qs
-         b5Hg==
-X-Gm-Message-State: AOAM533/CvQDVW1vaNKPlA5LOmodkeIHhrOCC34hf1Vit7OnRINrfHH0
-        tkblmwSlzjGJxFeayrSUIA5yy5I/+Jayxw==
-X-Google-Smtp-Source: ABdhPJwpZV4mHQD/XLs/9itft+Y9ZgvDswnNLkk3aFekgfVm4vJMpFBARPM3+cmKE/G/EMn7btX93A==
-X-Received: by 2002:a05:6830:138c:: with SMTP id d12mr9231518otq.291.1613798976587;
-        Fri, 19 Feb 2021 21:29:36 -0800 (PST)
+        bh=6qLL1pD8eAIF22astLsGTIt6XsSRTHADcChvDI82gwA=;
+        b=EP6cKorEgnuUAzhYUeKag7ecbH058Fv0QR3pU9GheEZHahXglSRgCEeYPJ5rlRp6jS
+         jGjxAX9WbZ+nJPXZkgCWWdADlRBIry3Q4kMzGzSqe0De0sg9Lmc2dSdhP12A9Aq9Ds6m
+         0RZYWwoFJo+TC4Lb1rDs9WyR5Yz6Q7UWq95382/WrEmhR/MPg5hExrgpTDBBHxTKTPXb
+         lYlvRrB42FhKYNmx8zX+IDYYTDmdxKxEL53vY2vuzDMgRtUxpUzU2SZD1gh8Wl9oKlcW
+         PK1hLlGsPTa04sqNZtp6FglWHzRWZbJzUKJVr56vEEW87xWAbFMKbwAUSdCy4URGOmIM
+         QlVw==
+X-Gm-Message-State: AOAM533tp2uU6YiOvcjJf6ztleXCJ+C2DX0frA0gFGvp+zz2g3yImjaT
+        xCm6enM1sjK7uo2WR6Uifi6QVrc5zRbB1A==
+X-Google-Smtp-Source: ABdhPJxPYAJoJQxRcl87iM2fg/uvkuCQyruZ4RUORQY3muV3Wr7+pCURehEG5SjmYDfuUcIHvhIOsg==
+X-Received: by 2002:a9d:7699:: with SMTP id j25mr9554279otl.202.1613798978884;
+        Fri, 19 Feb 2021 21:29:38 -0800 (PST)
 Received: from unknown.attlocal.net ([2600:1700:65a0:ab60:1d72:18:7c76:92e4])
-        by smtp.gmail.com with ESMTPSA id v20sm945955oie.2.2021.02.19.21.29.35
+        by smtp.gmail.com with ESMTPSA id v20sm945955oie.2.2021.02.19.21.29.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Feb 2021 21:29:36 -0800 (PST)
+        Fri, 19 Feb 2021 21:29:38 -0800 (PST)
 From:   Cong Wang <xiyou.wangcong@gmail.com>
 To:     netdev@vger.kernel.org
 Cc:     bpf@vger.kernel.org, duanxiongchun@bytedance.com,
@@ -65,9 +65,9 @@ Cc:     bpf@vger.kernel.org, duanxiongchun@bytedance.com,
         Daniel Borkmann <daniel@iogearbox.net>,
         Lorenz Bauer <lmb@cloudflare.com>,
         John Fastabend <john.fastabend@gmail.com>
-Subject: [Patch bpf-next v6 6/8] sock_map: make sock_map_prog_update() static
-Date:   Fri, 19 Feb 2021 21:29:22 -0800
-Message-Id: <20210220052924.106599-7-xiyou.wangcong@gmail.com>
+Subject: [Patch bpf-next v6 8/8] skmsg: get rid of sk_psock_bpf_run()
+Date:   Fri, 19 Feb 2021 21:29:24 -0800
+Message-Id: <20210220052924.106599-9-xiyou.wangcong@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210220052924.106599-1-xiyou.wangcong@gmail.com>
 References: <20210220052924.106599-1-xiyou.wangcong@gmail.com>
@@ -79,70 +79,72 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Cong Wang <cong.wang@bytedance.com>
 
-It is only used within sock_map.c so can become static.
+It is now nearly identical to bpf_prog_run_pin_on_cpu() and
+it has an unused parameter 'psock', so we can just get rid
+of it and call bpf_prog_run_pin_on_cpu() directly.
 
-Suggested-by: Jakub Sitnicki <jakub@cloudflare.com>
+Cc: Jakub Sitnicki <jakub@cloudflare.com>
 Cc: Daniel Borkmann <daniel@iogearbox.net>
 Cc: Lorenz Bauer <lmb@cloudflare.com>
 Cc: John Fastabend <john.fastabend@gmail.com>
 Signed-off-by: Cong Wang <cong.wang@bytedance.com>
 ---
- include/linux/bpf.h | 9 ---------
- net/core/sock_map.c | 7 +++++--
- 2 files changed, 5 insertions(+), 11 deletions(-)
+ net/core/skmsg.c | 14 ++++----------
+ 1 file changed, 4 insertions(+), 10 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 813f30ef44ff..521b75a81aa6 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1769,8 +1769,6 @@ static inline void bpf_map_offload_map_free(struct bpf_map *map)
- #endif /* CONFIG_NET && CONFIG_BPF_SYSCALL */
- 
- #if defined(CONFIG_INET) && defined(CONFIG_BPF_SYSCALL)
--int sock_map_prog_update(struct bpf_map *map, struct bpf_prog *prog,
--			 struct bpf_prog *old, u32 which);
- int sock_map_get_from_fd(const union bpf_attr *attr, struct bpf_prog *prog);
- int sock_map_prog_detach(const union bpf_attr *attr, enum bpf_prog_type ptype);
- int sock_map_update_elem_sys(struct bpf_map *map, void *key, void *value, u64 flags);
-@@ -1788,13 +1786,6 @@ static inline void bpf_sk_reuseport_detach(struct sock *sk)
+diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+index 286a95304e03..b240be71f21f 100644
+--- a/net/core/skmsg.c
++++ b/net/core/skmsg.c
+@@ -748,12 +748,6 @@ int sk_psock_msg_verdict(struct sock *sk, struct sk_psock *psock,
  }
+ EXPORT_SYMBOL_GPL(sk_psock_msg_verdict);
  
- #ifdef CONFIG_BPF_SYSCALL
--static inline int sock_map_prog_update(struct bpf_map *map,
--				       struct bpf_prog *prog,
--				       struct bpf_prog *old, u32 which)
+-static int sk_psock_bpf_run(struct sk_psock *psock, struct bpf_prog *prog,
+-			    struct sk_buff *skb)
 -{
--	return -EOPNOTSUPP;
+-	return bpf_prog_run_pin_on_cpu(prog, skb);
 -}
 -
- static inline int sock_map_get_from_fd(const union bpf_attr *attr,
- 				       struct bpf_prog *prog)
+ static void sk_psock_skb_redirect(struct sk_buff *skb)
  {
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index 69785070f02d..dd53a7771d7e 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -24,6 +24,9 @@ struct bpf_stab {
- #define SOCK_CREATE_FLAG_MASK				\
- 	(BPF_F_NUMA_NODE | BPF_F_RDONLY | BPF_F_WRONLY)
- 
-+static int sock_map_prog_update(struct bpf_map *map, struct bpf_prog *prog,
-+				struct bpf_prog *old, u32 which);
-+
- static struct bpf_map *sock_map_alloc(union bpf_attr *attr)
- {
- 	struct bpf_stab *stab;
-@@ -1444,8 +1447,8 @@ static struct sk_psock_progs *sock_map_progs(struct bpf_map *map)
- 	return NULL;
- }
- 
--int sock_map_prog_update(struct bpf_map *map, struct bpf_prog *prog,
--			 struct bpf_prog *old, u32 which)
-+static int sock_map_prog_update(struct bpf_map *map, struct bpf_prog *prog,
-+				struct bpf_prog *old, u32 which)
- {
- 	struct sk_psock_progs *progs = sock_map_progs(map);
- 	struct bpf_prog **pprog;
+ 	struct sk_psock *psock_other;
+@@ -811,7 +805,7 @@ int sk_psock_tls_strp_read(struct sk_psock *psock, struct sk_buff *skb)
+ 		skb->sk = psock->sk;
+ 		skb_dst_drop(skb);
+ 		skb_bpf_redirect_clear(skb);
+-		ret = sk_psock_bpf_run(psock, prog, skb);
++		ret = bpf_prog_run_pin_on_cpu(prog, skb);
+ 		ret = sk_psock_map_verd(ret, skb_bpf_redirect_fetch(skb));
+ 		skb->sk = NULL;
+ 	}
+@@ -898,7 +892,7 @@ static void sk_psock_strp_read(struct strparser *strp, struct sk_buff *skb)
+ 	if (likely(prog)) {
+ 		skb_dst_drop(skb);
+ 		skb_bpf_redirect_clear(skb);
+-		ret = sk_psock_bpf_run(psock, prog, skb);
++		ret = bpf_prog_run_pin_on_cpu(prog, skb);
+ 		ret = sk_psock_map_verd(ret, skb_bpf_redirect_fetch(skb));
+ 	}
+ 	sk_psock_verdict_apply(psock, skb, ret);
+@@ -921,7 +915,7 @@ static int sk_psock_strp_parse(struct strparser *strp, struct sk_buff *skb)
+ 	prog = READ_ONCE(psock->progs.stream_parser);
+ 	if (likely(prog)) {
+ 		skb->sk = psock->sk;
+-		ret = sk_psock_bpf_run(psock, prog, skb);
++		ret = bpf_prog_run_pin_on_cpu(prog, skb);
+ 		skb->sk = NULL;
+ 	}
+ 	rcu_read_unlock();
+@@ -1014,7 +1008,7 @@ static int sk_psock_verdict_recv(read_descriptor_t *desc, struct sk_buff *skb,
+ 	if (likely(prog)) {
+ 		skb_dst_drop(skb);
+ 		skb_bpf_redirect_clear(skb);
+-		ret = sk_psock_bpf_run(psock, prog, skb);
++		ret = bpf_prog_run_pin_on_cpu(prog, skb);
+ 		ret = sk_psock_map_verd(ret, skb_bpf_redirect_fetch(skb));
+ 	}
+ 	sk_psock_verdict_apply(psock, skb, ret);
 -- 
 2.25.1
 
