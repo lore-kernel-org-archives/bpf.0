@@ -2,68 +2,365 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 71CC1C433E0
-	for <bpf@archiver.kernel.org>; Mon, 22 Feb 2021 12:09:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FFDDC433E0
+	for <bpf@archiver.kernel.org>; Mon, 22 Feb 2021 12:23:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 289ED64E2F
-	for <bpf@archiver.kernel.org>; Mon, 22 Feb 2021 12:09:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 020B664EEC
+	for <bpf@archiver.kernel.org>; Mon, 22 Feb 2021 12:23:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbhBVMJa (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 22 Feb 2021 07:09:30 -0500
-Received: from mga09.intel.com ([134.134.136.24]:25241 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230099AbhBVMJY (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 22 Feb 2021 07:09:24 -0500
-IronPort-SDR: ET5Jc9My+rCKr2lb7wLa7KUl6VmAWgHnaY0qqfQUFb3vekR6dhV4vtV8E3/NMF5ycH43ecHUPF
- 4fPbJSsiEnMA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9902"; a="184530528"
-X-IronPort-AV: E=Sophos;i="5.81,197,1610438400"; 
-   d="scan'208";a="184530528"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2021 04:08:42 -0800
-IronPort-SDR: T3SdDulAUIcrV38Y+LvEAPxnMsphwFEguk9iMUEFGJac0oZflj5pxUwaKvLeM76J2SjSG2mQuN
- uydO1HWS7dTA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,197,1610438400"; 
-   d="scan'208";a="432050189"
-Received: from ranger.igk.intel.com ([10.102.21.164])
-  by fmsmga002.fm.intel.com with ESMTP; 22 Feb 2021 04:08:40 -0800
-Date:   Mon, 22 Feb 2021 12:58:03 +0100
-From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     Ciara Loftus <ciara.loftus@intel.com>
+        id S231237AbhBVMXj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 22 Feb 2021 07:23:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59636 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230008AbhBVMVt (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 22 Feb 2021 07:21:49 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75357C061574
+        for <bpf@vger.kernel.org>; Mon, 22 Feb 2021 04:20:59 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id q14so57306062ljp.4
+        for <bpf@vger.kernel.org>; Mon, 22 Feb 2021 04:20:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=references:user-agent:from:to:cc:subject:in-reply-to:date
+         :message-id:mime-version;
+        bh=S2HRl6kWLiHEpLJz8DrkAM6i5BlciyuiCLhwZBvcjJQ=;
+        b=y8aSwvHzBase4bicsgJECna1IfpP/+maap4QflXA9+MEv5E1Nr9sDcnwjQqyQJm32I
+         0izUgWmDRGc5VhUlI8+cPBsjVAYX9X6papusHcBJvb+Ag9YTluiJdG5RiTIhyYwb8oCw
+         vyEK/+J5maxEGn5SjpY4K8rlNRz+tPzXJhiKM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject
+         :in-reply-to:date:message-id:mime-version;
+        bh=S2HRl6kWLiHEpLJz8DrkAM6i5BlciyuiCLhwZBvcjJQ=;
+        b=tEP9ZCyaSVZBsze+4YJD/OODBW4rL4qIsDx/6fD0lhvruEuPDGSqPoyWoDLKRsVK77
+         BFs5s4EGeWWG+yVduqwBEvG39RCrB/o5BinMpfZupi1RZqaHQIBG+ZTmDv+FYZ3bQGeW
+         u3SANtzKIr2Wc4BRsYGcoT4fpQH+IwVSKnmZJe9mHW4pEdGQZMOCbEA7mrNkJ/YT46Kz
+         guHPMF5pIl6FCNk9CI1ZbD10m4f3t35JvP1jB/cwm+3ywS7g+0917eKuvwSWmf8U0J6H
+         JHb169E8pAFncblwGgIe3wUiN3KCnCdolIRdhRwUyEHLeW5sqDVTMHLkWWfkoFNLmySR
+         x16Q==
+X-Gm-Message-State: AOAM533STiaxgY/Y1e5AW39Vv3OvcCYkWFHxNO16EH1mZnsOHUio9C20
+        eIpauKPH1A6gajdjcHK8lMUjSqYEHrO8ZWDx
+X-Google-Smtp-Source: ABdhPJw/cVVlsdapYK6tS55Ac+E1O3Jbtuiy2VYQTEYtFCG2zzEYgJX/X79UQJZUSqn531SpqioXLg==
+X-Received: by 2002:a05:6512:287:: with SMTP id j7mr13174210lfp.304.1613996457949;
+        Mon, 22 Feb 2021 04:20:57 -0800 (PST)
+Received: from cloudflare.com (79.184.34.53.ipv4.supernova.orange.pl. [79.184.34.53])
+        by smtp.gmail.com with ESMTPSA id g2sm2120033ljk.15.2021.02.22.04.20.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Feb 2021 04:20:57 -0800 (PST)
+References: <20210220052924.106599-1-xiyou.wangcong@gmail.com>
+ <20210220052924.106599-5-xiyou.wangcong@gmail.com>
+User-agent: mu4e 1.1.0; emacs 27.1
+From:   Jakub Sitnicki <jakub@cloudflare.com>
+To:     Cong Wang <xiyou.wangcong@gmail.com>
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        magnus.karlsson@intel.com, bjorn@kernel.org,
-        weqaar.a.janjua@intel.com
-Subject: Re: [PATCH bpf-next 1/4] selftest/bpf: make xsk tests less verbose
-Message-ID: <20210222115803.GC29106@ranger.igk.intel.com>
-References: <20210217160214.7869-1-ciara.loftus@intel.com>
- <20210217160214.7869-2-ciara.loftus@intel.com>
+        duanxiongchun@bytedance.com, wangdongdong.6@bytedance.com,
+        jiang.wang@bytedance.com, Cong Wang <cong.wang@bytedance.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Lorenz Bauer <lmb@cloudflare.com>,
+        John Fastabend <john.fastabend@gmail.com>
+Subject: Re: [Patch bpf-next v6 4/8] skmsg: move sk_redir from TCP_SKB_CB to
+ skb
+In-reply-to: <20210220052924.106599-5-xiyou.wangcong@gmail.com>
+Date:   Mon, 22 Feb 2021 13:20:55 +0100
+Message-ID: <87eeh847ko.fsf@cloudflare.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210217160214.7869-2-ciara.loftus@intel.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Feb 17, 2021 at 04:02:11PM +0000, Ciara Loftus wrote:
-> From: Magnus Karlsson <magnus.karlsson@intel.com>
-> 
-> Make the xsk tests less verbose by only printing the
-> essentials. Currently, it is hard to see if the tests passed or not
-> due to all the printouts. Move the extra printouts to a verbose
-> option, if further debugging is needed when a problem arises.
-> 
-> To run the xsk tests with verbose output:
-> ./test_xsk.sh -v
-> 
-> Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
-> Signed-off-by: Ciara Loftus <ciara.loftus@intel.com>
+On Sat, Feb 20, 2021 at 06:29 AM CET, Cong Wang wrote:
+> From: Cong Wang <cong.wang@bytedance.com>
+>
+> Currently TCP_SKB_CB() is hard-coded in skmsg code, it certainly
+> does not work for any other non-TCP protocols. We can move them to
+> skb ext, but it introduces a memory allocation on fast path.
+>
+> Fortunately, we only need to a word-size to store all the information,
+> because the flags actually only contains 1 bit so can be just packed
+> into the lowest bit of the "pointer", which is stored as unsigned
+> long.
+>
+> Inside struct sk_buff, '_skb_refdst' can be reused because skb dst is
+> no longer needed after ->sk_data_ready() so we can just drop it.
+>
+> Cc: Daniel Borkmann <daniel@iogearbox.net>
+> Cc: Jakub Sitnicki <jakub@cloudflare.com>
+> Cc: Lorenz Bauer <lmb@cloudflare.com>
+> Acked-by: John Fastabend <john.fastabend@gmail.com>
+> Signed-off-by: Cong Wang <cong.wang@bytedance.com>
+> ---
 
-Acked-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+LGTM. I have some questions (below) that would help me confirm if I
+understand the changes, and what could be improved, if anything.
+
+Acked-by: Jakub Sitnicki <jakub@cloudflare.com>
+
+>  include/linux/skbuff.h |  3 +++
+>  include/linux/skmsg.h  | 35 +++++++++++++++++++++++++++++++++++
+>  include/net/tcp.h      | 19 -------------------
+>  net/core/skmsg.c       | 32 ++++++++++++++++++++------------
+>  net/core/sock_map.c    |  8 ++------
+>  5 files changed, 60 insertions(+), 37 deletions(-)
+>
+> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+> index 6d0a33d1c0db..bd84f799c952 100644
+> --- a/include/linux/skbuff.h
+> +++ b/include/linux/skbuff.h
+> @@ -755,6 +755,9 @@ struct sk_buff {
+>  			void		(*destructor)(struct sk_buff *skb);
+>  		};
+>  		struct list_head	tcp_tsorted_anchor;
+> +#ifdef CONFIG_NET_SOCK_MSG
+> +		unsigned long		_sk_redir;
+> +#endif
+>  	};
+>
+>  #if defined(CONFIG_NF_CONNTRACK) || defined(CONFIG_NF_CONNTRACK_MODULE)
+> diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
+> index e3bb712af257..fc234d507fd7 100644
+> --- a/include/linux/skmsg.h
+> +++ b/include/linux/skmsg.h
+> @@ -459,4 +459,39 @@ static inline bool sk_psock_strp_enabled(struct sk_psock *psock)
+>  		return false;
+>  	return !!psock->saved_data_ready;
+>  }
+> +
+> +#if IS_ENABLED(CONFIG_NET_SOCK_MSG)
+> +static inline bool skb_bpf_ingress(const struct sk_buff *skb)
+> +{
+> +	unsigned long sk_redir = skb->_sk_redir;
+> +
+> +	return sk_redir & BPF_F_INGRESS;
+> +}
+> +
+> +static inline void skb_bpf_set_ingress(struct sk_buff *skb)
+> +{
+> +	skb->_sk_redir |= BPF_F_INGRESS;
+> +}
+> +
+> +static inline void skb_bpf_set_redir(struct sk_buff *skb, struct sock *sk_redir,
+> +				     bool ingress)
+> +{
+> +	skb->_sk_redir = (unsigned long)sk_redir;
+> +	if (ingress)
+> +		skb->_sk_redir |= BPF_F_INGRESS;
+> +}
+> +
+> +static inline struct sock *skb_bpf_redirect_fetch(const struct sk_buff *skb)
+> +{
+> +	unsigned long sk_redir = skb->_sk_redir;
+> +
+> +	sk_redir &= ~0x1UL;
+
+We're using the enum when setting the bit flag, but a hardcoded constant
+when masking it. ~BPF_F_INGRESS would be more consistent here.
+
+> +	return (struct sock *)sk_redir;
+> +}
+> +
+> +static inline void skb_bpf_redirect_clear(struct sk_buff *skb)
+> +{
+> +	skb->_sk_redir = 0;
+> +}
+> +#endif /* CONFIG_NET_SOCK_MSG */
+>  #endif /* _LINUX_SKMSG_H */
+> diff --git a/include/net/tcp.h b/include/net/tcp.h
+> index 947ef5da6867..075de26f449d 100644
+> --- a/include/net/tcp.h
+> +++ b/include/net/tcp.h
+> @@ -883,30 +883,11 @@ struct tcp_skb_cb {
+>  			struct inet6_skb_parm	h6;
+>  #endif
+>  		} header;	/* For incoming skbs */
+> -		struct {
+> -			__u32 flags;
+> -			struct sock *sk_redir;
+> -		} bpf;
+>  	};
+>  };
+>
+>  #define TCP_SKB_CB(__skb)	((struct tcp_skb_cb *)&((__skb)->cb[0]))
+>
+> -static inline bool tcp_skb_bpf_ingress(const struct sk_buff *skb)
+> -{
+> -	return TCP_SKB_CB(skb)->bpf.flags & BPF_F_INGRESS;
+> -}
+> -
+> -static inline struct sock *tcp_skb_bpf_redirect_fetch(struct sk_buff *skb)
+> -{
+> -	return TCP_SKB_CB(skb)->bpf.sk_redir;
+> -}
+> -
+> -static inline void tcp_skb_bpf_redirect_clear(struct sk_buff *skb)
+> -{
+> -	TCP_SKB_CB(skb)->bpf.sk_redir = NULL;
+> -}
+> -
+>  extern const struct inet_connection_sock_af_ops ipv4_specific;
+>
+>  #if IS_ENABLED(CONFIG_IPV6)
+> diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+> index 2d8bbb3fd87c..05b5af09ff42 100644
+> --- a/net/core/skmsg.c
+> +++ b/net/core/skmsg.c
+> @@ -494,6 +494,8 @@ static int sk_psock_skb_ingress_self(struct sk_psock *psock, struct sk_buff *skb
+>  static int sk_psock_handle_skb(struct sk_psock *psock, struct sk_buff *skb,
+>  			       u32 off, u32 len, bool ingress)
+>  {
+> +	skb_bpf_redirect_clear(skb);
+
+This is called to avoid leaking state in skb->_skb_refdst. Correct?
+
+I'm wondering why we're doing it every time sk_psock_handle_skb() gets
+invoked from the do/while loop in sk_psock_backlog(), instead of doing
+it once after reading ingress flag with skb_bpf_ingress()?
+
+> +
+>  	if (!ingress) {
+>  		if (!sock_writeable(psock->sk))
+>  			return -EAGAIN;
+> @@ -525,7 +527,7 @@ static void sk_psock_backlog(struct work_struct *work)
+>  		len = skb->len;
+>  		off = 0;
+>  start:
+> -		ingress = tcp_skb_bpf_ingress(skb);
+> +		ingress = skb_bpf_ingress(skb);
+>  		do {
+>  			ret = -EIO;
+>  			if (likely(psock->sk->sk_socket))
+> @@ -631,7 +633,12 @@ void __sk_psock_purge_ingress_msg(struct sk_psock *psock)
+>
+>  static void sk_psock_zap_ingress(struct sk_psock *psock)
+>  {
+> -	__skb_queue_purge(&psock->ingress_skb);
+> +	struct sk_buff *skb;
+> +
+> +	while ((skb = __skb_dequeue(&psock->ingress_skb)) != NULL) {
+> +		skb_bpf_redirect_clear(skb);
+
+I believe we clone the skb before enqueuing it psock->ingress_skb.
+Clone happens either in sk_psock_verdict_recv() or in __strp_recv().
+There are not other users holding a ref, so clearing the redirect seems
+unneeded. Unless I'm missing something?
+
+> +		kfree_skb(skb);
+> +	}
+>  	__sk_psock_purge_ingress_msg(psock);
+>  }
+>
+> @@ -752,7 +759,7 @@ static void sk_psock_skb_redirect(struct sk_buff *skb)
+>  	struct sk_psock *psock_other;
+>  	struct sock *sk_other;
+>
+> -	sk_other = tcp_skb_bpf_redirect_fetch(skb);
+> +	sk_other = skb_bpf_redirect_fetch(skb);
+>  	/* This error is a buggy BPF program, it returned a redirect
+>  	 * return code, but then didn't set a redirect interface.
+>  	 */
+> @@ -802,9 +809,10 @@ int sk_psock_tls_strp_read(struct sk_psock *psock, struct sk_buff *skb)
+>  		 * TLS context.
+>  		 */
+>  		skb->sk = psock->sk;
+> -		tcp_skb_bpf_redirect_clear(skb);
+> +		skb_dst_drop(skb);
+> +		skb_bpf_redirect_clear(skb);
+
+After skb_dst_drop(), skb->_skb_refdst is clear. So it seems the
+redirect_clear() is not needed. But I'm guessing it is being invoked
+to communicate the intention?
+
+>  		ret = sk_psock_bpf_run(psock, prog, skb);
+> -		ret = sk_psock_map_verd(ret, tcp_skb_bpf_redirect_fetch(skb));
+> +		ret = sk_psock_map_verd(ret, skb_bpf_redirect_fetch(skb));
+>  		skb->sk = NULL;
+>  	}
+>  	sk_psock_tls_verdict_apply(skb, psock->sk, ret);
+> @@ -816,7 +824,6 @@ EXPORT_SYMBOL_GPL(sk_psock_tls_strp_read);
+>  static void sk_psock_verdict_apply(struct sk_psock *psock,
+>  				   struct sk_buff *skb, int verdict)
+>  {
+> -	struct tcp_skb_cb *tcp;
+>  	struct sock *sk_other;
+>  	int err = -EIO;
+>
+> @@ -828,8 +835,7 @@ static void sk_psock_verdict_apply(struct sk_psock *psock,
+>  			goto out_free;
+>  		}
+>
+> -		tcp = TCP_SKB_CB(skb);
+> -		tcp->bpf.flags |= BPF_F_INGRESS;
+> +		skb_bpf_set_ingress(skb);
+>
+>  		/* If the queue is empty then we can submit directly
+>  		 * into the msg queue. If its not empty we have to
+> @@ -890,9 +896,10 @@ static void sk_psock_strp_read(struct strparser *strp, struct sk_buff *skb)
+>  	skb_set_owner_r(skb, sk);
+>  	prog = READ_ONCE(psock->progs.skb_verdict);
+>  	if (likely(prog)) {
+> -		tcp_skb_bpf_redirect_clear(skb);
+> +		skb_dst_drop(skb);
+> +		skb_bpf_redirect_clear(skb);
+>  		ret = sk_psock_bpf_run(psock, prog, skb);
+> -		ret = sk_psock_map_verd(ret, tcp_skb_bpf_redirect_fetch(skb));
+> +		ret = sk_psock_map_verd(ret, skb_bpf_redirect_fetch(skb));
+>  	}
+>  	sk_psock_verdict_apply(psock, skb, ret);
+>  out:
+> @@ -1005,9 +1012,10 @@ static int sk_psock_verdict_recv(read_descriptor_t *desc, struct sk_buff *skb,
+>  	skb_set_owner_r(skb, sk);
+>  	prog = READ_ONCE(psock->progs.skb_verdict);
+>  	if (likely(prog)) {
+> -		tcp_skb_bpf_redirect_clear(skb);
+> +		skb_dst_drop(skb);
+> +		skb_bpf_redirect_clear(skb);
+>  		ret = sk_psock_bpf_run(psock, prog, skb);
+> -		ret = sk_psock_map_verd(ret, tcp_skb_bpf_redirect_fetch(skb));
+> +		ret = sk_psock_map_verd(ret, skb_bpf_redirect_fetch(skb));
+>  	}
+>  	sk_psock_verdict_apply(psock, skb, ret);
+>  out:
+> diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+> index 1a28a5c2c61e..dbfcd7006338 100644
+> --- a/net/core/sock_map.c
+> +++ b/net/core/sock_map.c
+> @@ -657,7 +657,6 @@ const struct bpf_func_proto bpf_sock_map_update_proto = {
+>  BPF_CALL_4(bpf_sk_redirect_map, struct sk_buff *, skb,
+>  	   struct bpf_map *, map, u32, key, u64, flags)
+>  {
+> -	struct tcp_skb_cb *tcb = TCP_SKB_CB(skb);
+>  	struct sock *sk;
+>
+>  	if (unlikely(flags & ~(BPF_F_INGRESS)))
+> @@ -667,8 +666,7 @@ BPF_CALL_4(bpf_sk_redirect_map, struct sk_buff *, skb,
+>  	if (unlikely(!sk || !sock_map_redirect_allowed(sk)))
+>  		return SK_DROP;
+>
+> -	tcb->bpf.flags = flags;
+> -	tcb->bpf.sk_redir = sk;
+> +	skb_bpf_set_redir(skb, sk, flags & BPF_F_INGRESS);
+>  	return SK_PASS;
+>  }
+>
+> @@ -1250,7 +1248,6 @@ const struct bpf_func_proto bpf_sock_hash_update_proto = {
+>  BPF_CALL_4(bpf_sk_redirect_hash, struct sk_buff *, skb,
+>  	   struct bpf_map *, map, void *, key, u64, flags)
+>  {
+> -	struct tcp_skb_cb *tcb = TCP_SKB_CB(skb);
+>  	struct sock *sk;
+>
+>  	if (unlikely(flags & ~(BPF_F_INGRESS)))
+> @@ -1260,8 +1257,7 @@ BPF_CALL_4(bpf_sk_redirect_hash, struct sk_buff *, skb,
+>  	if (unlikely(!sk || !sock_map_redirect_allowed(sk)))
+>  		return SK_DROP;
+>
+> -	tcb->bpf.flags = flags;
+> -	tcb->bpf.sk_redir = sk;
+> +	skb_bpf_set_redir(skb, sk, flags & BPF_F_INGRESS);
+>  	return SK_PASS;
+>  }
