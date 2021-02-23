@@ -4,67 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C3D4C433DB
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 704CBC433E6
 	for <bpf@archiver.kernel.org>; Tue, 23 Feb 2021 18:50:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2923764E22
+	by mail.kernel.org (Postfix) with ESMTP id 417D164E20
 	for <bpf@archiver.kernel.org>; Tue, 23 Feb 2021 18:50:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232986AbhBWSu0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 23 Feb 2021 13:50:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57018 "EHLO
+        id S233900AbhBWSud (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 23 Feb 2021 13:50:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232878AbhBWSu0 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 23 Feb 2021 13:50:26 -0500
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12196C061574;
-        Tue, 23 Feb 2021 10:49:46 -0800 (PST)
-Received: by mail-ot1-x333.google.com with SMTP id d9so2500663ote.12;
-        Tue, 23 Feb 2021 10:49:46 -0800 (PST)
+        with ESMTP id S232878AbhBWSu2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 23 Feb 2021 13:50:28 -0500
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A671C061786;
+        Tue, 23 Feb 2021 10:49:48 -0800 (PST)
+Received: by mail-oi1-x233.google.com with SMTP id d20so18664152oiw.10;
+        Tue, 23 Feb 2021 10:49:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=tJJOVqiH8oFiFcj51eGI+ZGNONfv+VxYW4vpDszjadw=;
-        b=tk0bzpqpLHe5JJvuiWiojM6lnnHAPac4cz4yCgCJ6sNj1dua3O/Gu1+GcxVsDYJFAq
-         cTwQ+kCmWs9Ng/+pq8GireAWJGdwKMzlmtuILt25NLyVu/neU7x3apB20MdSvuhL/5cv
-         EbTOE+ZPhTBkJX+2iuRhVURB8rfOXJ77emtRMiCgiGW/gzJgksmrVBHlduYFTXJWtkie
-         /kzUogRRsS3ohJkkNApOCG0OG3+y/0SVYo1nJc0CoAYvefrJoobtekuh6EzqfEUbJpAm
-         v4jGNtMquXIRWC8zuL4DFNcB/UpSqgiZXjQlAUapab5NTGWIkqb6jnYxrQyOg7zhJMcO
-         oiWQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=8xG4MgsWTvMwJ4RIPplsvHskmOfodtsub4T53KxSjlw=;
+        b=GnTkppO4VLlD0lrAsfB3LB66rajadw0K+b9MXpyBEgLdPgHqtgU2zp4fX9TPWi9Si3
+         1DI/4TKN+vtcVwEkfIZf11pUws1x26ic4T1KQmsPjWHIR8yTYD/1HC3bBr4qcFHSj9IP
+         Lem5mHUrRZpD7PGAc1I6WK8uzwJLKbh51BZ2RFfQrlOUbNojRktHu2ByaOZpLYt5Tq18
+         aKuOlALEB6Tve0+DbJF/Wdc12BstXBUm8xCV1GPjWGWwmAIazOEOeQfAViTFWvn0wci1
+         Xd+21U2KCCHsFebxUW23RB4DmR2+oz21kaWZnMmSMxFn0R+B/3Mqam+GIKmQTi6xCGUQ
+         i8yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=tJJOVqiH8oFiFcj51eGI+ZGNONfv+VxYW4vpDszjadw=;
-        b=XZdRA/PertfL5zBv1xAO7IYlnOIehUeXW6mNUKY3yFSgVMjQzLmXR0FeXhSQqMhrGa
-         jUpfqg7HqOONM72z/2Dy4dHfFGiXp81/P+IJb3Z2JKOF4r1dpTCG0dueD4llU/B1MBCO
-         SST3i0va4zV02bHm4EwYyJY/BX9VDUTy18djfrErajbnYd2S9fvvhIxjhmgblBfeA1Ao
-         t0oSUEg/wzBlcWGfnJGydJdnI/BHtVZCRQmB5sQIWYwDcT17b/3EbHsK+I+HG9Q3NPiy
-         u+zg0ZH+XA6wHVP6LI6mRZLhyl8ybEhX5nOt49Qiwqo939oDF/AuhjFMLuPJlQ+CWtDg
-         hEIQ==
-X-Gm-Message-State: AOAM530YdATWTqFuIFHUhGJ8wLddLsVY3GGlSo9rRQryOzwe+y1HV88/
-        +mm3DotVFe/GjeS2K86qtNTwF57eWMLPUQ==
-X-Google-Smtp-Source: ABdhPJym1xi8lVOGxgkV6rpiayBLmGErMxeS0xppRr9qlklSQBdV4JjyaiXN43kGyWQZ9P9z0lVsHQ==
-X-Received: by 2002:a9d:7385:: with SMTP id j5mr10849736otk.148.1614106184846;
-        Tue, 23 Feb 2021 10:49:44 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=8xG4MgsWTvMwJ4RIPplsvHskmOfodtsub4T53KxSjlw=;
+        b=KBOWNsLWYHdzwN+9gFCn0wpv2UU0+tHtzwzk/hsIJ7c2SNX0s6FCdRFXEcK8wQujse
+         DOItfqeY7Si76jXn1O124Y6A8GjxxEmEP/gM70v1A178oeqLNU0Nas88c9AGcqIwDNFW
+         ortMLGJZr281w8gC+q5+VH3N9vK1IMCeYmRH3bY17XmdU+64a2jTpFVA3guhNoScMdtI
+         xV8/GEIs6Rk1kBr2pl9rYFyhBu2sC9wXM7sWTSlJ1+mBjqGpihuhjNH+xVUXPf2JwDJK
+         5MMxwbP9qBRHAdDgDyRlnOdaxFdnxrEFNbptVkExD8OPm7qQ5uri6qfjmdAy+TPmHgCk
+         OAHA==
+X-Gm-Message-State: AOAM530O/hnJfZJflZ+RICb9+woGszy8wsB+4uQF443J9WzARofPG5hT
+        /IQh5pqr/pCDQ+jKaFLaxbFXU8OaMgqqHg==
+X-Google-Smtp-Source: ABdhPJzbH9ZJN6RlgVuf0ZKT95Fbge9qkVgSnM6subVE/wOqz01Lh7MvGHIFQtuIguGKaAQzXicacg==
+X-Received: by 2002:aca:b506:: with SMTP id e6mr152862oif.6.1614106187537;
+        Tue, 23 Feb 2021 10:49:47 -0800 (PST)
 Received: from unknown.attlocal.net ([2600:1700:65a0:ab60:4543:ab2:3bf6:ce41])
-        by smtp.gmail.com with ESMTPSA id p12sm4387094oon.12.2021.02.23.10.49.43
+        by smtp.gmail.com with ESMTPSA id p12sm4387094oon.12.2021.02.23.10.49.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Feb 2021 10:49:44 -0800 (PST)
+        Tue, 23 Feb 2021 10:49:47 -0800 (PST)
 From:   Cong Wang <xiyou.wangcong@gmail.com>
 To:     netdev@vger.kernel.org
 Cc:     bpf@vger.kernel.org, duanxiongchun@bytedance.com,
         wangdongdong.6@bytedance.com, jiang.wang@bytedance.com,
-        Cong Wang <cong.wang@bytedance.com>
-Subject: [Patch bpf-next v7 0/9] sock_map: clean up and refactor code for BPF_SK_SKB_VERDICT
-Date:   Tue, 23 Feb 2021 10:49:25 -0800
-Message-Id: <20210223184934.6054-1-xiyou.wangcong@gmail.com>
+        Cong Wang <cong.wang@bytedance.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Lorenz Bauer <lmb@cloudflare.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jakub Sitnicki <jakub@cloudflare.com>
+Subject: [Patch bpf-next v7 2/9] skmsg: get rid of struct sk_psock_parser
+Date:   Tue, 23 Feb 2021 10:49:27 -0800
+Message-Id: <20210223184934.6054-3-xiyou.wangcong@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210223184934.6054-1-xiyou.wangcong@gmail.com>
+References: <20210223184934.6054-1-xiyou.wangcong@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -73,72 +79,229 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Cong Wang <cong.wang@bytedance.com>
 
-This patchset is the first series of patches separated out from
-the original large patchset, to make reviews easier. This patchset
-does not add any new feature or change any functionality but merely
-cleans up the existing sockmap and skmsg code and refactors it, to
-prepare for the patches followed up. This passed all BPF selftests.
+struct sk_psock_parser is embedded in sk_psock, it is
+unnecessary as skb verdict also uses ->saved_data_ready.
+We can simply fold these fields into sk_psock, and get rid
+of ->enabled.
 
-To see the big picture, the original whole patchset is available
-on github: https://github.com/congwang/linux/tree/sockmap
-
-and this patchset is also available on github:
-https://github.com/congwang/linux/tree/sockmap1
-
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Lorenz Bauer <lmb@cloudflare.com>
+Acked-by: John Fastabend <john.fastabend@gmail.com>
+Acked-by: Jakub Sitnicki <jakub@cloudflare.com>
+Signed-off-by: Cong Wang <cong.wang@bytedance.com>
 ---
-v7: add 1 trivial cleanup patch
-    define a mask for sk_redir
-    fix CONFIG_BPF_SYSCALL in include/net/udp.h
-    make sk_psock_done_strp() static
-    move skb_bpf_redirect_clear() to sk_psock_backlog()
+ include/linux/skmsg.h | 19 ++++++----------
+ net/core/skmsg.c      | 53 +++++++++++++------------------------------
+ net/core/sock_map.c   |  8 +++----
+ 3 files changed, 27 insertions(+), 53 deletions(-)
 
-v6: fix !CONFIG_INET case
-
-v5: improve CONFIG_BPF_SYSCALL dependency
-    add 3 trivial cleanup patches
-
-v4: reuse skb dst instead of skb ext
-    fix another Kconfig error
-
-v3: fix a few Kconfig compile errors
-    remove an unused variable
-    add a comment for bpf_convert_data_end_access()
-
-v2: split the original patchset
-    compute data_end with bpf_convert_data_end_access()
-    get rid of psock->bpf_running
-    reduce the scope of CONFIG_BPF_STREAM_PARSER
-    do not add CONFIG_BPF_SOCK_MAP
-
-Cong Wang (9):
-  bpf: clean up sockmap related Kconfigs
-  skmsg: get rid of struct sk_psock_parser
-  bpf: compute data_end dynamically with JIT code
-  skmsg: move sk_redir from TCP_SKB_CB to skb
-  sock_map: rename skb_parser and skb_verdict
-  sock_map: make sock_map_prog_update() static
-  skmsg: make __sk_psock_purge_ingress_msg() static
-  skmsg: get rid of sk_psock_bpf_run()
-  skmsg: remove unused sk_psock_stop() declaration
-
- include/linux/bpf.h                           |  29 +--
- include/linux/bpf_types.h                     |   6 +-
- include/linux/skbuff.h                        |   3 +
- include/linux/skmsg.h                         |  82 +++++--
- include/net/tcp.h                             |  41 +---
- include/net/udp.h                             |   4 +-
- init/Kconfig                                  |   1 +
- net/Kconfig                                   |   6 +-
- net/core/Makefile                             |   6 +-
- net/core/filter.c                             |  48 ++--
- net/core/skmsg.c                              | 212 +++++++++---------
- net/core/sock_map.c                           |  77 +++----
- net/ipv4/Makefile                             |   2 +-
- net/ipv4/tcp_bpf.c                            |   4 +-
- .../selftests/bpf/prog_tests/sockmap_listen.c |   8 +-
- .../selftests/bpf/progs/test_sockmap_listen.c |   4 +-
- 16 files changed, 274 insertions(+), 259 deletions(-)
-
+diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
+index db7a08be4725..22e26f82de33 100644
+--- a/include/linux/skmsg.h
++++ b/include/linux/skmsg.h
+@@ -70,14 +70,6 @@ struct sk_psock_link {
+ 	void				*link_raw;
+ };
+ 
+-struct sk_psock_parser {
+-#if IS_ENABLED(CONFIG_BPF_STREAM_PARSER)
+-	struct strparser		strp;
+-#endif
+-	bool				enabled;
+-	void (*saved_data_ready)(struct sock *sk);
+-};
+-
+ struct sk_psock_work_state {
+ 	struct sk_buff			*skb;
+ 	u32				len;
+@@ -92,7 +84,9 @@ struct sk_psock {
+ 	u32				eval;
+ 	struct sk_msg			*cork;
+ 	struct sk_psock_progs		progs;
+-	struct sk_psock_parser		parser;
++#if IS_ENABLED(CONFIG_BPF_STREAM_PARSER)
++	struct strparser		strp;
++#endif
+ 	struct sk_buff_head		ingress_skb;
+ 	struct list_head		ingress_msg;
+ 	unsigned long			state;
+@@ -102,6 +96,7 @@ struct sk_psock {
+ 	void (*saved_unhash)(struct sock *sk);
+ 	void (*saved_close)(struct sock *sk, long timeout);
+ 	void (*saved_write_space)(struct sock *sk);
++	void (*saved_data_ready)(struct sock *sk);
+ 	struct proto			*sk_proto;
+ 	struct sk_psock_work_state	work_state;
+ 	struct work_struct		work;
+@@ -418,8 +413,8 @@ static inline void sk_psock_put(struct sock *sk, struct sk_psock *psock)
+ 
+ static inline void sk_psock_data_ready(struct sock *sk, struct sk_psock *psock)
+ {
+-	if (psock->parser.enabled)
+-		psock->parser.saved_data_ready(sk);
++	if (psock->saved_data_ready)
++		psock->saved_data_ready(sk);
+ 	else
+ 		sk->sk_data_ready(sk);
+ }
+@@ -458,6 +453,6 @@ static inline bool sk_psock_strp_enabled(struct sk_psock *psock)
+ {
+ 	if (!psock)
+ 		return false;
+-	return psock->parser.enabled;
++	return !!psock->saved_data_ready;
+ }
+ #endif /* _LINUX_SKMSG_H */
+diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+index e017744111e1..d00c9a4b47e7 100644
+--- a/net/core/skmsg.c
++++ b/net/core/skmsg.c
+@@ -907,17 +907,9 @@ static int sk_psock_strp_read_done(struct strparser *strp, int err)
+ 	return err;
+ }
+ 
+-static struct sk_psock *sk_psock_from_strp(struct strparser *strp)
+-{
+-	struct sk_psock_parser *parser;
+-
+-	parser = container_of(strp, struct sk_psock_parser, strp);
+-	return container_of(parser, struct sk_psock, parser);
+-}
+-
+ static int sk_psock_strp_parse(struct strparser *strp, struct sk_buff *skb)
+ {
+-	struct sk_psock *psock = sk_psock_from_strp(strp);
++	struct sk_psock *psock = container_of(strp, struct sk_psock, strp);
+ 	struct bpf_prog *prog;
+ 	int ret = skb->len;
+ 
+@@ -941,10 +933,10 @@ static void sk_psock_strp_data_ready(struct sock *sk)
+ 	psock = sk_psock(sk);
+ 	if (likely(psock)) {
+ 		if (tls_sw_has_ctx_rx(sk)) {
+-			psock->parser.saved_data_ready(sk);
++			psock->saved_data_ready(sk);
+ 		} else {
+ 			write_lock_bh(&sk->sk_callback_lock);
+-			strp_data_ready(&psock->parser.strp);
++			strp_data_ready(&psock->strp);
+ 			write_unlock_bh(&sk->sk_callback_lock);
+ 		}
+ 	}
+@@ -959,41 +951,34 @@ int sk_psock_init_strp(struct sock *sk, struct sk_psock *psock)
+ 		.parse_msg	= sk_psock_strp_parse,
+ 	};
+ 
+-	psock->parser.enabled = false;
+-	return strp_init(&psock->parser.strp, sk, &cb);
++	return strp_init(&psock->strp, sk, &cb);
+ }
+ 
+ void sk_psock_start_strp(struct sock *sk, struct sk_psock *psock)
+ {
+-	struct sk_psock_parser *parser = &psock->parser;
+-
+-	if (parser->enabled)
++	if (psock->saved_data_ready)
+ 		return;
+ 
+-	parser->saved_data_ready = sk->sk_data_ready;
++	psock->saved_data_ready = sk->sk_data_ready;
+ 	sk->sk_data_ready = sk_psock_strp_data_ready;
+ 	sk->sk_write_space = sk_psock_write_space;
+-	parser->enabled = true;
+ }
+ 
+ void sk_psock_stop_strp(struct sock *sk, struct sk_psock *psock)
+ {
+-	struct sk_psock_parser *parser = &psock->parser;
+-
+-	if (!parser->enabled)
++	if (!psock->saved_data_ready)
+ 		return;
+ 
+-	sk->sk_data_ready = parser->saved_data_ready;
+-	parser->saved_data_ready = NULL;
+-	strp_stop(&parser->strp);
+-	parser->enabled = false;
++	sk->sk_data_ready = psock->saved_data_ready;
++	psock->saved_data_ready = NULL;
++	strp_stop(&psock->strp);
+ }
+ 
+ static void sk_psock_done_strp(struct sk_psock *psock)
+ {
+ 	/* Parser has been stopped */
+ 	if (psock->progs.skb_parser)
+-		strp_done(&psock->parser.strp);
++		strp_done(&psock->strp);
+ }
+ #else
+ static void sk_psock_done_strp(struct sk_psock *psock)
+@@ -1054,25 +1039,19 @@ static void sk_psock_verdict_data_ready(struct sock *sk)
+ 
+ void sk_psock_start_verdict(struct sock *sk, struct sk_psock *psock)
+ {
+-	struct sk_psock_parser *parser = &psock->parser;
+-
+-	if (parser->enabled)
++	if (psock->saved_data_ready)
+ 		return;
+ 
+-	parser->saved_data_ready = sk->sk_data_ready;
++	psock->saved_data_ready = sk->sk_data_ready;
+ 	sk->sk_data_ready = sk_psock_verdict_data_ready;
+ 	sk->sk_write_space = sk_psock_write_space;
+-	parser->enabled = true;
+ }
+ 
+ void sk_psock_stop_verdict(struct sock *sk, struct sk_psock *psock)
+ {
+-	struct sk_psock_parser *parser = &psock->parser;
+-
+-	if (!parser->enabled)
++	if (!psock->saved_data_ready)
+ 		return;
+ 
+-	sk->sk_data_ready = parser->saved_data_ready;
+-	parser->saved_data_ready = NULL;
+-	parser->enabled = false;
++	sk->sk_data_ready = psock->saved_data_ready;
++	psock->saved_data_ready = NULL;
+ }
+diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+index ee3334dd3a38..1a28a5c2c61e 100644
+--- a/net/core/sock_map.c
++++ b/net/core/sock_map.c
+@@ -148,9 +148,9 @@ static void sock_map_del_link(struct sock *sk,
+ 			struct bpf_map *map = link->map;
+ 			struct bpf_stab *stab = container_of(map, struct bpf_stab,
+ 							     map);
+-			if (psock->parser.enabled && stab->progs.skb_parser)
++			if (psock->saved_data_ready && stab->progs.skb_parser)
+ 				strp_stop = true;
+-			if (psock->parser.enabled && stab->progs.skb_verdict)
++			if (psock->saved_data_ready && stab->progs.skb_verdict)
+ 				verdict_stop = true;
+ 			list_del(&link->list);
+ 			sk_psock_free_link(link);
+@@ -283,14 +283,14 @@ static int sock_map_link(struct bpf_map *map, struct sk_psock_progs *progs,
+ 		goto out_drop;
+ 
+ 	write_lock_bh(&sk->sk_callback_lock);
+-	if (skb_parser && skb_verdict && !psock->parser.enabled) {
++	if (skb_parser && skb_verdict && !psock->saved_data_ready) {
+ 		ret = sk_psock_init_strp(sk, psock);
+ 		if (ret)
+ 			goto out_unlock_drop;
+ 		psock_set_prog(&psock->progs.skb_verdict, skb_verdict);
+ 		psock_set_prog(&psock->progs.skb_parser, skb_parser);
+ 		sk_psock_start_strp(sk, psock);
+-	} else if (!skb_parser && skb_verdict && !psock->parser.enabled) {
++	} else if (!skb_parser && skb_verdict && !psock->saved_data_ready) {
+ 		psock_set_prog(&psock->progs.skb_verdict, skb_verdict);
+ 		sk_psock_start_verdict(sk,psock);
+ 	}
 -- 
 2.25.1
 
