@@ -2,121 +2,183 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A6C51C433E0
-	for <bpf@archiver.kernel.org>; Tue, 23 Feb 2021 14:47:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A04D3C433E0
+	for <bpf@archiver.kernel.org>; Tue, 23 Feb 2021 14:51:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7142664E20
-	for <bpf@archiver.kernel.org>; Tue, 23 Feb 2021 14:47:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 69B3564E12
+	for <bpf@archiver.kernel.org>; Tue, 23 Feb 2021 14:51:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232895AbhBWOrq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 23 Feb 2021 09:47:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:40726 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232480AbhBWOrk (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 23 Feb 2021 09:47:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1614091574;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kp43ReK6Bbto6WMF4BKD7QH88weYYK7A/bjDK0aUHLg=;
-        b=Ph6zf+xAa3HgZOfRKyVPDjFfZ8alhYSVBDaXdIAIktv4VsQDx+RniWZnZawfvdXMF0m5Tf
-        fwXxu+xJSLhYOG2KXWvDiyP4wwKJBRlEr/Q9PnnOTmOUsQYfn6UUSf1Is7DD0jvJiA5GIl
-        mnj35gW5qF2+do+F8eS0HHBjmKTsBYE=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-359-APiljNKtMo6l-K6sN8vfXA-1; Tue, 23 Feb 2021 09:45:46 -0500
-X-MC-Unique: APiljNKtMo6l-K6sN8vfXA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3BDB09A3CA;
-        Tue, 23 Feb 2021 14:43:58 +0000 (UTC)
-Received: from carbon (unknown [10.36.110.50])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 16B3970476;
-        Tue, 23 Feb 2021 14:43:28 +0000 (UTC)
-Date:   Tue, 23 Feb 2021 15:43:27 +0100
-From:   Jesper Dangaard Brouer <brouer@redhat.com>
-To:     Hangbin Liu <liuhangbin@gmail.com>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        Daniel Borkmann <daniel@iogearbox.net>, brouer@redhat.com
-Subject: Re: [PATCH bpf-next] bpf: fix missing * in bpf.h
-Message-ID: <20210223154327.6011b5ee@carbon>
-In-Reply-To: <20210223124554.1375051-1-liuhangbin@gmail.com>
-References: <20210223124554.1375051-1-liuhangbin@gmail.com>
+        id S232813AbhBWOv5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 23 Feb 2021 09:51:57 -0500
+Received: from mga07.intel.com ([134.134.136.100]:9507 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232933AbhBWOvx (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 23 Feb 2021 09:51:53 -0500
+IronPort-SDR: +iAW+qkX1LRip02T75/NJUpzNWDmOBtCa2oNSLbsddolJu+zk7oXfrHl8cQYae7Dk063F8K7us
+ Y9PPnUxVyPvw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9903"; a="248875017"
+X-IronPort-AV: E=Sophos;i="5.81,200,1610438400"; 
+   d="scan'208";a="248875017"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2021 06:50:27 -0800
+IronPort-SDR: M5PIPlicTeK8PfvWeC1B+/1pS5oTEDZCw6KWrZDCc/C+S+/rvvzixB9siS5hMiY8yVKkDLxrdX
+ Uce/aK0t2vUQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,200,1610438400"; 
+   d="scan'208";a="380511748"
+Received: from ranger.igk.intel.com ([10.102.21.164])
+  by orsmga002.jf.intel.com with ESMTP; 23 Feb 2021 06:50:25 -0800
+Date:   Tue, 23 Feb 2021 15:39:39 +0100
+From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To:     Ciara Loftus <ciara.loftus@intel.com>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        magnus.karlsson@intel.com, bjorn@kernel.org,
+        weqaar.a.janjua@intel.com
+Subject: Re: [PATCH bpf-next v2 2/4] selftests/bpf: expose and rename debug
+ argument
+Message-ID: <20210223143939.GA51139@ranger.igk.intel.com>
+References: <20210223103507.10465-1-ciara.loftus@intel.com>
+ <20210223103507.10465-3-ciara.loftus@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210223103507.10465-3-ciara.loftus@intel.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, 23 Feb 2021 20:45:54 +0800
-Hangbin Liu <liuhangbin@gmail.com> wrote:
-
-> Commit 34b2021cc616 ("bpf: Add BPF-helper for MTU checking") lost a *
-> in bpf.h. This will make bpf_helpers_doc.py stop building
-> bpf_helper_defs.h immediately after bpf_check_mtu, which will affect
-> future add functions.
+On Tue, Feb 23, 2021 at 10:35:05AM +0000, Ciara Loftus wrote:
+> Launching xdpxceiver with -D enables what was formerly know as 'debug'
+> mode. Rename this mode to 'dump-pkts' as it better describes the
+> behavior enabled by the option. New usage:
 > 
-> Fixes: 34b2021cc616 ("bpf: Add BPF-helper for MTU checking")
-> Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+> ./xdpxceiver .. -D
+> or
+> ./xdpxceiver .. --dump-pkts
+> 
+> Also make it possible to pass this flag to the app via the test_xsk.sh
+> shell script like so:
+> 
+> ./test_xsk.sh -D
+
+This doesn't work for me. Not a shell programming expert, but seems like
+my shell doesn't understand that dump-pkts is a variable.
+
+$ sudo ./test_xsk.sh -D
+./test_xsk.sh: line 82: dump-pkts=1: command not found
+
+If I do:
+
+diff --git a/tools/testing/selftests/bpf/test_xsk.sh b/tools/testing/selftests/bpf/test_xsk.sh
+index cb8a9e5c34ff..378720e22877 100755
+--- a/tools/testing/selftests/bpf/test_xsk.sh
++++ b/tools/testing/selftests/bpf/test_xsk.sh
+@@ -79,7 +79,7 @@ do
+        case "${flag}" in
+                c) colorconsole=1;;
+                v) verbose=1;;
+-               D) dump-pkts=1;;
++               D) dump_pkts=1;;
+        esac
+ done
+
+@@ -136,7 +136,7 @@ if [[ $verbose -eq 1 ]]; then
+        VERBOSE_ARG="-v"
+ fi
+
+-if [[ $dump-pkts -eq 1 ]]; then
++if [[ $dump_pkts -eq 1 ]]; then
+        DUMP_PKTS_ARG="-D"
+ fi
+
+Then it's fine.
+
+> 
+> Signed-off-by: Ciara Loftus <ciara.loftus@intel.com>
 > ---
->  include/uapi/linux/bpf.h       | 2 +-
->  tools/include/uapi/linux/bpf.h | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-
-Thanks for fixing that!
-
-Acked-by: Jesper Dangaard Brouer <brouer@redhat.com>
-
-I though I had already fix that, but I must have missed or reintroduced
-this, when I rolling back broken ideas in V13.
-
-I usually run this command to check the man-page (before submitting):
-
- ./scripts/bpf_helpers_doc.py | rst2man | man -l -
-
-
-> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> index 4c24daa43bac..46248f8e024b 100644
-> --- a/include/uapi/linux/bpf.h
-> +++ b/include/uapi/linux/bpf.h
-> @@ -3850,7 +3850,7 @@ union bpf_attr {
+>  tools/testing/selftests/bpf/test_xsk.sh    | 7 ++++++-
+>  tools/testing/selftests/bpf/xdpxceiver.c   | 6 +++---
+>  tools/testing/selftests/bpf/xsk_prereqs.sh | 3 ++-
+>  3 files changed, 11 insertions(+), 5 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/test_xsk.sh b/tools/testing/selftests/bpf/test_xsk.sh
+> index 91127a5be90d..870ae3f38818 100755
+> --- a/tools/testing/selftests/bpf/test_xsk.sh
+> +++ b/tools/testing/selftests/bpf/test_xsk.sh
+> @@ -74,11 +74,12 @@
+>  
+>  . xsk_prereqs.sh
+>  
+> -while getopts "cv" flag
+> +while getopts "cvD" flag
+>  do
+>  	case "${flag}" in
+>  		c) colorconsole=1;;
+>  		v) verbose=1;;
+> +		D) dump-pkts=1;;
+>  	esac
+>  done
+>  
+> @@ -135,6 +136,10 @@ if [[ $verbose -eq 1 ]]; then
+>  	VERBOSE_ARG="-v"
+>  fi
+>  
+> +if [[ $dump-pkts -eq 1 ]]; then
+> +	DUMP_PKTS_ARG="-D"
+> +fi
+> +
+>  test_status $retval "${TEST_NAME}"
+>  
+>  ## START TESTS
+> diff --git a/tools/testing/selftests/bpf/xdpxceiver.c b/tools/testing/selftests/bpf/xdpxceiver.c
+> index 8af746c9a6b6..506423201197 100644
+> --- a/tools/testing/selftests/bpf/xdpxceiver.c
+> +++ b/tools/testing/selftests/bpf/xdpxceiver.c
+> @@ -58,7 +58,7 @@
+>   * - Rx thread verifies if all 10k packets were received and delivered in-order,
+>   *   and have the right content
 >   *
->   * long bpf_check_mtu(void *ctx, u32 ifindex, u32 *mtu_len, s32 len_diff, u64 flags)
->   *	Description
-> -
-> + *
->   *		Check ctx packet size against exceeding MTU of net device (based
->   *		on *ifindex*).  This helper will likely be used in combination
->   *		with helpers that adjust/change the packet size.
-> diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-> index 4c24daa43bac..46248f8e024b 100644
-> --- a/tools/include/uapi/linux/bpf.h
-> +++ b/tools/include/uapi/linux/bpf.h
-> @@ -3850,7 +3850,7 @@ union bpf_attr {
->   *
->   * long bpf_check_mtu(void *ctx, u32 ifindex, u32 *mtu_len, s32 len_diff, u64 flags)
->   *	Description
-> -
-> + *
->   *		Check ctx packet size against exceeding MTU of net device (based
->   *		on *ifindex*).  This helper will likely be used in combination
->   *		with helpers that adjust/change the packet size.
-
-
-
--- 
-Best regards,
-  Jesper Dangaard Brouer
-  MSc.CS, Principal Kernel Engineer at Red Hat
-  LinkedIn: http://www.linkedin.com/in/brouer
-
+> - * Enable/disable debug mode:
+> + * Enable/disable packet dump mode:
+>   * --------------------------
+>   * To enable L2 - L4 headers and payload dump of each packet on STDOUT, add
+>   * parameter -D to params array in test_xsk.sh, i.e. params=("-S" "-D")
+> @@ -340,7 +340,7 @@ static struct option long_options[] = {
+>  	{"copy", no_argument, 0, 'c'},
+>  	{"tear-down", no_argument, 0, 'T'},
+>  	{"bidi", optional_argument, 0, 'B'},
+> -	{"debug", optional_argument, 0, 'D'},
+> +	{"dump-pkts", optional_argument, 0, 'D'},
+>  	{"verbose", no_argument, 0, 'v'},
+>  	{"tx-pkt-count", optional_argument, 0, 'C'},
+>  	{0, 0, 0, 0}
+> @@ -359,7 +359,7 @@ static void usage(const char *prog)
+>  	    "  -c, --copy           Force copy mode\n"
+>  	    "  -T, --tear-down      Tear down sockets by repeatedly recreating them\n"
+>  	    "  -B, --bidi           Bi-directional sockets test\n"
+> -	    "  -D, --debug          Debug mode - dump packets L2 - L5\n"
+> +	    "  -D, --dump-pkts      Dump packets L2 - L5\n"
+>  	    "  -v, --verbose        Verbose output\n"
+>  	    "  -C, --tx-pkt-count=n Number of packets to send\n";
+>  	ksft_print_msg(str, prog);
+> diff --git a/tools/testing/selftests/bpf/xsk_prereqs.sh b/tools/testing/selftests/bpf/xsk_prereqs.sh
+> index ef8c5b31f4b6..da93575d757a 100755
+> --- a/tools/testing/selftests/bpf/xsk_prereqs.sh
+> +++ b/tools/testing/selftests/bpf/xsk_prereqs.sh
+> @@ -128,5 +128,6 @@ execxdpxceiver()
+>  			copy[$index]=${!current}
+>  		done
+>  
+> -	./${XSKOBJ} -i ${VETH0} -i ${VETH1},${NS1} ${copy[*]} -C ${NUMPKTS} ${VERBOSE_ARG}
+> +	./${XSKOBJ} -i ${VETH0} -i ${VETH1},${NS1} ${copy[*]} -C ${NUMPKTS} ${VERBOSE_ARG} \
+> +		${DUMP_PKTS_ARG}
+>  }
+> -- 
+> 2.17.1
+> 
