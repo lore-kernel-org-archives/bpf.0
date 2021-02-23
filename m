@@ -2,185 +2,239 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BABAFC433DB
-	for <bpf@archiver.kernel.org>; Tue, 23 Feb 2021 22:33:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 26755C433E6
+	for <bpf@archiver.kernel.org>; Tue, 23 Feb 2021 23:25:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8AE2E64E3F
-	for <bpf@archiver.kernel.org>; Tue, 23 Feb 2021 22:33:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EBAD464E77
+	for <bpf@archiver.kernel.org>; Tue, 23 Feb 2021 23:25:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232196AbhBWWc2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 23 Feb 2021 17:32:28 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:62322 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232380AbhBWW34 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 23 Feb 2021 17:29:56 -0500
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 11NMPZU3025809
-        for <bpf@vger.kernel.org>; Tue, 23 Feb 2021 14:29:15 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+        id S233659AbhBWXZA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 23 Feb 2021 18:25:00 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:45540 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234074AbhBWXQw (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 23 Feb 2021 18:16:52 -0500
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 11NN3OIv034286;
+        Tue, 23 Feb 2021 18:15:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=9MXKxqv+SncBnz5OqxIZYK7jmff9BGIDVI3Ly/9d+n0=;
- b=YAf1/UwhhkYVTLaabyMoOyVAOteljXxr6GLPokZffR52vmsKy7aAN4yGnLUfWDTqUDyj
- 9TtPHs3lNq9Thse/tAn/9UFs8jwQwEVdw0afuFFtbjGZKO44osoxB2lkFL+jepilo6b0
- HEH/CG2VwI/qCwKHy1mjTRTgATqijBBj9QE= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 36ujy7p31g-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 23 Feb 2021 14:29:15 -0800
-Received: from intmgw001.38.frc1.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 23 Feb 2021 14:29:14 -0800
-Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id 7ABA062E093E; Tue, 23 Feb 2021 14:29:10 -0800 (PST)
-From:   Song Liu <songliubraving@fb.com>
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <kernel-team@fb.com>,
-        <peterz@infradead.org>, Song Liu <songliubraving@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>
-Subject: [PATCH v5 bpf-next 6/6] bpf: runqslower: use task local storage
-Date:   Tue, 23 Feb 2021 14:28:45 -0800
-Message-ID: <20210223222845.2866124-7-songliubraving@fb.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20210223222845.2866124-1-songliubraving@fb.com>
-References: <20210223222845.2866124-1-songliubraving@fb.com>
+ content-transfer-encoding; s=pp1;
+ bh=xd5U8Y3nbSgGCZ7mjdGtiLnkQmMyp3Ag4juS+awAr6k=;
+ b=p4ByEf2XCM4iJbq+0pTn1YAz9k5jFgBWWRXi33sVumJp88tFkvxBOOEemymq7xwqnX1v
+ 5IskQmZeIc21fjL7683hGhJZbgh1RdGdhzc7EU1tOVIbe3YcdmvoeF6XIJ0wfg+vzDE0
+ 3PsXWsrDSBgCbQWIT75k3PGPpdwWbFjImZCa7xYHcs/MWoFhxFI7xQSo8UP+QtuQkYbB
+ sJtFrVR6CA/EYK7cfJw+rAsTYxW63jtycbWeSCEIoahFwct3QdYIuuBlIfMFYEw0aKcu
+ wnVKoiX5QQDtoYpnz4IQD9oy45AqsVWinkS9jKUGq8INCa3skfexcksyQ1qd3Y8EVSQW PA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 36vkg3jy2y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 Feb 2021 18:15:23 -0500
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 11NN3dDh035745;
+        Tue, 23 Feb 2021 18:15:23 -0500
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 36vkg3jy24-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 Feb 2021 18:15:23 -0500
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 11NNDLAt007967;
+        Tue, 23 Feb 2021 23:15:21 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma04ams.nl.ibm.com with ESMTP id 36tt28b1mu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 Feb 2021 23:15:20 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 11NNFIeL52953472
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 23 Feb 2021 23:15:18 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1E28FA4051;
+        Tue, 23 Feb 2021 23:15:18 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8D94DA4053;
+        Tue, 23 Feb 2021 23:15:17 +0000 (GMT)
+Received: from vm.lan (unknown [9.145.151.190])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 23 Feb 2021 23:15:17 +0000 (GMT)
+From:   Ilya Leoshkevich <iii@linux.ibm.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Yonghong Song <yhs@fb.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>
+Cc:     bpf@vger.kernel.org, Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>
+Subject: [PATCH v5 bpf-next 7/8] selftests/bpf: Add BTF_KIND_FLOAT to the existing deduplication tests
+Date:   Wed, 24 Feb 2021 00:14:58 +0100
+Message-Id: <20210223231459.99664-8-iii@linux.ibm.com>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210223231459.99664-1-iii@linux.ibm.com>
+References: <20210223231459.99664-1-iii@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
  definitions=2021-02-23_11:2021-02-23,2021-02-23 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0 spamscore=0
- priorityscore=1501 phishscore=0 adultscore=0 mlxscore=0 malwarescore=0
- lowpriorityscore=0 mlxlogscore=999 suspectscore=0 impostorscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2102230189
-X-FB-Internal: deliver
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ clxscore=1015 adultscore=0 priorityscore=1501 malwarescore=0
+ mlxlogscore=999 mlxscore=0 impostorscore=0 bulkscore=0 spamscore=0
+ phishscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2009150000 definitions=main-2102230190
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Replace hashtab with task local storage in runqslower. This improves the
-performance of these BPF programs. The following table summarizes average
-runtime of these programs, in nanoseconds:
+Check that floats don't interfere with struct deduplication, that they
+are not merged with another kinds and that floats of different sizes are
+not merged with each other.
 
-                          task-local   hash-prealloc   hash-no-prealloc
-handle__sched_wakeup             125             340               3124
-handle__sched_wakeup_new        2812            1510               2998
-handle__sched_switch             151             208                991
-
-Note that, task local storage gives better performance than hashtab for
-handle__sched_wakeup and handle__sched_switch. On the other hand, for
-handle__sched_wakeup_new, task local storage is slower than hashtab with
-prealloc. This is because handle__sched_wakeup_new accesses the data for
-the first time, so it has to allocate the data for task local storage.
-Once the initial allocation is done, subsequent accesses, as those in
-handle__sched_wakeup, are much faster with task local storage. If we
-disable hashtab prealloc, task local storage is much faster for all 3
-functions.
-
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
-Signed-off-by: Song Liu <songliubraving@fb.com>
+Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
 ---
- tools/bpf/runqslower/runqslower.bpf.c | 33 +++++++++++++++++----------
- 1 file changed, 21 insertions(+), 12 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/btf.c | 43 ++++++++++++++------
+ 1 file changed, 31 insertions(+), 12 deletions(-)
 
-diff --git a/tools/bpf/runqslower/runqslower.bpf.c b/tools/bpf/runqslower=
-/runqslower.bpf.c
-index 1f18a409f0443..645530ca7e985 100644
---- a/tools/bpf/runqslower/runqslower.bpf.c
-+++ b/tools/bpf/runqslower/runqslower.bpf.c
-@@ -11,9 +11,9 @@ const volatile __u64 min_us =3D 0;
- const volatile pid_t targ_pid =3D 0;
-=20
- struct {
--	__uint(type, BPF_MAP_TYPE_HASH);
--	__uint(max_entries, 10240);
--	__type(key, u32);
-+	__uint(type, BPF_MAP_TYPE_TASK_STORAGE);
-+	__uint(map_flags, BPF_F_NO_PREALLOC);
-+	__type(key, int);
- 	__type(value, u64);
- } start SEC(".maps");
-=20
-@@ -25,15 +25,20 @@ struct {
-=20
- /* record enqueue timestamp */
- __always_inline
--static int trace_enqueue(u32 tgid, u32 pid)
-+static int trace_enqueue(struct task_struct *t)
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing/selftests/bpf/prog_tests/btf.c
+index 3a8ceb8db20f..f28268b033ec 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf.c
+@@ -6409,11 +6409,12 @@ const struct btf_dedup_test dedup_tests[] = {
+ 			/* int[16] */
+ 			BTF_TYPE_ARRAY_ENC(1, 1, 16),					/* [2] */
+ 			/* struct s { */
+-			BTF_STRUCT_ENC(NAME_NTH(2), 4, 84),				/* [3] */
++			BTF_STRUCT_ENC(NAME_NTH(2), 5, 88),				/* [3] */
+ 				BTF_MEMBER_ENC(NAME_NTH(3), 4, 0),	/* struct s *next;	*/
+ 				BTF_MEMBER_ENC(NAME_NTH(4), 5, 64),	/* const int *a;	*/
+ 				BTF_MEMBER_ENC(NAME_NTH(5), 2, 128),	/* int b[16];		*/
+ 				BTF_MEMBER_ENC(NAME_NTH(6), 1, 640),	/* int c;		*/
++				BTF_MEMBER_ENC(NAME_NTH(8), 13, 672),	/* float d;		*/
+ 			/* ptr -> [3] struct s */
+ 			BTF_PTR_ENC(3),							/* [4] */
+ 			/* ptr -> [6] const int */
+@@ -6424,39 +6425,43 @@ const struct btf_dedup_test dedup_tests[] = {
+ 			/* full copy of the above */
+ 			BTF_TYPE_INT_ENC(NAME_NTH(1), BTF_INT_SIGNED, 0, 32, 4),	/* [7] */
+ 			BTF_TYPE_ARRAY_ENC(7, 7, 16),					/* [8] */
+-			BTF_STRUCT_ENC(NAME_NTH(2), 4, 84),				/* [9] */
++			BTF_STRUCT_ENC(NAME_NTH(2), 5, 88),				/* [9] */
+ 				BTF_MEMBER_ENC(NAME_NTH(3), 10, 0),
+ 				BTF_MEMBER_ENC(NAME_NTH(4), 11, 64),
+ 				BTF_MEMBER_ENC(NAME_NTH(5), 8, 128),
+ 				BTF_MEMBER_ENC(NAME_NTH(6), 7, 640),
++				BTF_MEMBER_ENC(NAME_NTH(8), 13, 672),
+ 			BTF_PTR_ENC(9),							/* [10] */
+ 			BTF_PTR_ENC(12),						/* [11] */
+ 			BTF_CONST_ENC(7),						/* [12] */
++			BTF_TYPE_FLOAT_ENC(NAME_NTH(7), 4),				/* [13] */
+ 			BTF_END_RAW,
+ 		},
+-		BTF_STR_SEC("\0int\0s\0next\0a\0b\0c\0"),
++		BTF_STR_SEC("\0int\0s\0next\0a\0b\0c\0float\0d"),
+ 	},
+ 	.expect = {
+ 		.raw_types = {
+ 			/* int */
+-			BTF_TYPE_INT_ENC(NAME_NTH(4), BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
++			BTF_TYPE_INT_ENC(NAME_NTH(5), BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
+ 			/* int[16] */
+ 			BTF_TYPE_ARRAY_ENC(1, 1, 16),					/* [2] */
+ 			/* struct s { */
+-			BTF_STRUCT_ENC(NAME_NTH(6), 4, 84),				/* [3] */
+-				BTF_MEMBER_ENC(NAME_NTH(5), 4, 0),	/* struct s *next;	*/
++			BTF_STRUCT_ENC(NAME_NTH(8), 5, 88),				/* [3] */
++				BTF_MEMBER_ENC(NAME_NTH(7), 4, 0),	/* struct s *next;	*/
+ 				BTF_MEMBER_ENC(NAME_NTH(1), 5, 64),	/* const int *a;	*/
+ 				BTF_MEMBER_ENC(NAME_NTH(2), 2, 128),	/* int b[16];		*/
+ 				BTF_MEMBER_ENC(NAME_NTH(3), 1, 640),	/* int c;		*/
++				BTF_MEMBER_ENC(NAME_NTH(4), 7, 672),	/* float d;		*/
+ 			/* ptr -> [3] struct s */
+ 			BTF_PTR_ENC(3),							/* [4] */
+ 			/* ptr -> [6] const int */
+ 			BTF_PTR_ENC(6),							/* [5] */
+ 			/* const -> [1] int */
+ 			BTF_CONST_ENC(1),						/* [6] */
++			BTF_TYPE_FLOAT_ENC(NAME_NTH(7), 4),				/* [7] */
+ 			BTF_END_RAW,
+ 		},
+-		BTF_STR_SEC("\0a\0b\0c\0int\0next\0s"),
++		BTF_STR_SEC("\0a\0b\0c\0d\0int\0float\0next\0s"),
+ 	},
+ 	.opts = {
+ 		.dont_resolve_fwds = false,
+@@ -6577,9 +6582,10 @@ const struct btf_dedup_test dedup_tests[] = {
+ 				BTF_FUNC_PROTO_ARG_ENC(NAME_TBD, 1),
+ 				BTF_FUNC_PROTO_ARG_ENC(NAME_TBD, 8),
+ 			BTF_FUNC_ENC(NAME_TBD, 12),					/* [13] func */
++			BTF_TYPE_FLOAT_ENC(NAME_TBD, 2),				/* [14] float */
+ 			BTF_END_RAW,
+ 		},
+-		BTF_STR_SEC("\0A\0B\0C\0D\0E\0F\0G\0H\0I\0J\0K\0L\0M"),
++		BTF_STR_SEC("\0A\0B\0C\0D\0E\0F\0G\0H\0I\0J\0K\0L\0M\0N"),
+ 	},
+ 	.expect = {
+ 		.raw_types = {
+@@ -6602,16 +6608,17 @@ const struct btf_dedup_test dedup_tests[] = {
+ 				BTF_FUNC_PROTO_ARG_ENC(NAME_TBD, 1),
+ 				BTF_FUNC_PROTO_ARG_ENC(NAME_TBD, 8),
+ 			BTF_FUNC_ENC(NAME_TBD, 12),					/* [13] func */
++			BTF_TYPE_FLOAT_ENC(NAME_TBD, 2),				/* [14] float */
+ 			BTF_END_RAW,
+ 		},
+-		BTF_STR_SEC("\0A\0B\0C\0D\0E\0F\0G\0H\0I\0J\0K\0L\0M"),
++		BTF_STR_SEC("\0A\0B\0C\0D\0E\0F\0G\0H\0I\0J\0K\0L\0M\0N"),
+ 	},
+ 	.opts = {
+ 		.dont_resolve_fwds = false,
+ 	},
+ },
  {
--	u64 ts;
-+	u32 pid =3D t->pid;
-+	u64 *ptr;
-=20
- 	if (!pid || (targ_pid && targ_pid !=3D pid))
- 		return 0;
-=20
--	ts =3D bpf_ktime_get_ns();
--	bpf_map_update_elem(&start, &pid, &ts, 0);
-+	ptr =3D bpf_task_storage_get(&start, t, 0,
-+				   BPF_LOCAL_STORAGE_GET_F_CREATE);
-+	if (!ptr)
-+		return 0;
-+
-+	*ptr =3D bpf_ktime_get_ns();
- 	return 0;
- }
-=20
-@@ -43,7 +48,7 @@ int handle__sched_wakeup(u64 *ctx)
- 	/* TP_PROTO(struct task_struct *p) */
- 	struct task_struct *p =3D (void *)ctx[0];
-=20
--	return trace_enqueue(p->tgid, p->pid);
-+	return trace_enqueue(p);
- }
-=20
- SEC("tp_btf/sched_wakeup_new")
-@@ -52,7 +57,7 @@ int handle__sched_wakeup_new(u64 *ctx)
- 	/* TP_PROTO(struct task_struct *p) */
- 	struct task_struct *p =3D (void *)ctx[0];
-=20
--	return trace_enqueue(p->tgid, p->pid);
-+	return trace_enqueue(p);
- }
-=20
- SEC("tp_btf/sched_switch")
-@@ -70,12 +75,16 @@ int handle__sched_switch(u64 *ctx)
-=20
- 	/* ivcsw: treat like an enqueue event and store timestamp */
- 	if (prev->state =3D=3D TASK_RUNNING)
--		trace_enqueue(prev->tgid, prev->pid);
-+		trace_enqueue(prev);
-=20
- 	pid =3D next->pid;
-=20
-+	/* For pid mismatch, save a bpf_task_storage_get */
-+	if (!pid || (targ_pid && targ_pid !=3D pid))
-+		return 0;
-+
- 	/* fetch timestamp and calculate delta */
--	tsp =3D bpf_map_lookup_elem(&start, &pid);
-+	tsp =3D bpf_task_storage_get(&start, next, 0, 0);
- 	if (!tsp)
- 		return 0;   /* missed enqueue */
-=20
-@@ -91,7 +100,7 @@ int handle__sched_switch(u64 *ctx)
- 	bpf_perf_event_output(ctx, &events, BPF_F_CURRENT_CPU,
- 			      &event, sizeof(event));
-=20
--	bpf_map_delete_elem(&start, &pid);
-+	bpf_task_storage_delete(&start, next);
- 	return 0;
- }
-=20
---=20
-2.24.1
+-	.descr = "dedup: no int duplicates",
++	.descr = "dedup: no int/float duplicates",
+ 	.input = {
+ 		.raw_types = {
+ 			BTF_TYPE_INT_ENC(NAME_NTH(1), BTF_INT_SIGNED, 0, 32, 8),
+@@ -6626,9 +6633,15 @@ const struct btf_dedup_test dedup_tests[] = {
+ 			BTF_TYPE_INT_ENC(NAME_NTH(1), BTF_INT_SIGNED, 0, 27, 8),
+ 			/* different byte size */
+ 			BTF_TYPE_INT_ENC(NAME_NTH(1), BTF_INT_SIGNED, 0, 32, 4),
++			/* all allowed sizes */
++			BTF_TYPE_FLOAT_ENC(NAME_NTH(3), 2),
++			BTF_TYPE_FLOAT_ENC(NAME_NTH(3), 4),
++			BTF_TYPE_FLOAT_ENC(NAME_NTH(3), 8),
++			BTF_TYPE_FLOAT_ENC(NAME_NTH(3), 12),
++			BTF_TYPE_FLOAT_ENC(NAME_NTH(3), 16),
+ 			BTF_END_RAW,
+ 		},
+-		BTF_STR_SEC("\0int\0some other int"),
++		BTF_STR_SEC("\0int\0some other int\0float"),
+ 	},
+ 	.expect = {
+ 		.raw_types = {
+@@ -6644,9 +6657,15 @@ const struct btf_dedup_test dedup_tests[] = {
+ 			BTF_TYPE_INT_ENC(NAME_NTH(1), BTF_INT_SIGNED, 0, 27, 8),
+ 			/* different byte size */
+ 			BTF_TYPE_INT_ENC(NAME_NTH(1), BTF_INT_SIGNED, 0, 32, 4),
++			/* all allowed sizes */
++			BTF_TYPE_FLOAT_ENC(NAME_NTH(3), 2),
++			BTF_TYPE_FLOAT_ENC(NAME_NTH(3), 4),
++			BTF_TYPE_FLOAT_ENC(NAME_NTH(3), 8),
++			BTF_TYPE_FLOAT_ENC(NAME_NTH(3), 12),
++			BTF_TYPE_FLOAT_ENC(NAME_NTH(3), 16),
+ 			BTF_END_RAW,
+ 		},
+-		BTF_STR_SEC("\0int\0some other int"),
++		BTF_STR_SEC("\0int\0some other int\0float"),
+ 	},
+ 	.opts = {
+ 		.dont_resolve_fwds = false,
+-- 
+2.29.2
 
