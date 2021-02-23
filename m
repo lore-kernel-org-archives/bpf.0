@@ -2,371 +2,113 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B1E2C433DB
-	for <bpf@archiver.kernel.org>; Tue, 23 Feb 2021 11:10:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AD49C433DB
+	for <bpf@archiver.kernel.org>; Tue, 23 Feb 2021 12:47:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A0ABF64E32
-	for <bpf@archiver.kernel.org>; Tue, 23 Feb 2021 11:10:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 24D8964D8F
+	for <bpf@archiver.kernel.org>; Tue, 23 Feb 2021 12:47:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232359AbhBWLJk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 23 Feb 2021 06:09:40 -0500
-Received: from mga02.intel.com ([134.134.136.20]:61753 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232339AbhBWLJh (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 23 Feb 2021 06:09:37 -0500
-IronPort-SDR: aY/pnQcgEZ/AXWClQTPBKdwT7fRG6Kks3tsyUxc07ZTp9wVnSuKWXw0PRX9EvH87QVm4CX+m3V
- W7OSS4eNbLcg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9903"; a="171901107"
-X-IronPort-AV: E=Sophos;i="5.81,199,1610438400"; 
-   d="scan'208";a="171901107"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2021 03:08:08 -0800
-IronPort-SDR: IRpqY7gj57v4ZZjXYx3XVG7IBxZfzq6OjuRAaLH4vur9Kf1e3auYjDWlYOvGFRe/a9pIUn/Udq
- ra6OTmvGUoGQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,199,1610438400"; 
-   d="scan'208";a="441704046"
-Received: from silpixa00399839.ir.intel.com (HELO localhost.localdomain) ([10.237.222.142])
-  by orsmga001.jf.intel.com with ESMTP; 23 Feb 2021 03:07:38 -0800
-From:   Ciara Loftus <ciara.loftus@intel.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        magnus.karlsson@intel.com, bjorn@kernel.org,
-        weqaar.a.janjua@intel.com, maciej.fijalkowski@intel.com
-Cc:     Ciara Loftus <ciara.loftus@intel.com>
-Subject: [PATCH bpf-next v2 4/4] selftests/bpf: introduce xsk statistics tests
-Date:   Tue, 23 Feb 2021 10:35:07 +0000
-Message-Id: <20210223103507.10465-5-ciara.loftus@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210223103507.10465-1-ciara.loftus@intel.com>
-References: <20210223103507.10465-1-ciara.loftus@intel.com>
+        id S232529AbhBWMq7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 23 Feb 2021 07:46:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35176 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232441AbhBWMqz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 23 Feb 2021 07:46:55 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE01FC061574;
+        Tue, 23 Feb 2021 04:46:14 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id w18so6608539plc.12;
+        Tue, 23 Feb 2021 04:46:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bIU5Fb9CxcQy/ZGariRVhSdvuTdO+nuRkFkp18uwJBs=;
+        b=B1TL3YgRM4AieV0pTV2f6PHBNvfCcK4vvJVY4eI2LgiIVQ+r1xwJKzNErI6sSCENdD
+         8jRL1uC0/ESEkvUDCdgncXzffsH1TaeWUTCVrF37BIkkGN/w1F0QV7QlikC3Rq8DeuMY
+         MKnAl2mgF8PPCCB5U1V/6ulpK7qONGEV9esZQf7UJirRFqUT3cHmrRI94Ced0w6vptRz
+         0xmMOyFRKncLo2gNQSOcunMghVBj6E3LxQgAkL/zCWB/7CeMqzgbrAz0m2na2LH1vt3d
+         D+bZ4uxpMbbTwuz0rVrqnJqLGdUhvfvaUdkT4vGsRSajdNLS5Jc1KXJgZZK0SFSg+KTL
+         Auzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bIU5Fb9CxcQy/ZGariRVhSdvuTdO+nuRkFkp18uwJBs=;
+        b=HqtnjmnotGkfK2bYD5qdWRR9ufDAW73vYE12oscQGba2F8y5Vo8KT4rWrIQXD4T3qU
+         jqrTg8dxzcEE498hILluf2BWefuQlkPKu+NLrllfi6kDHJD0WlwFqqP+yr2HuKCoWVfS
+         leYdb5mcROqsBHSqIaKBt3GAgzDfOVQZBHxsmz6HxHJhQpgAYKwqem5yAbqq8X7arVCx
+         ldTZYjC1HtjAu1V++TT8dbd2OvORsu9Pda4SOAxMZG62PvDKC379pejyrqw4vCiqKhuZ
+         /Bfolfs+6N4v3yWlNK7LFkL0jG/x62sEkC5qRE7fjV7AnykASGeNjndFdtgfkrjmxZy/
+         PQxg==
+X-Gm-Message-State: AOAM530/jiLPqNn/xMG3x/GLqgng3fEZzC0FMIjoYqXYc3qZ9xfcDHWF
+        03AtgRMkvOzQ6MvI9uxJWlIHYg7kSdK5RIeb
+X-Google-Smtp-Source: ABdhPJzuiztf+imXFA8ScPGf2iG7NxgiSM0lUFy2XCFgw01X7q6zZfhtuMy3HimMm7guLmNjtgdTgQ==
+X-Received: by 2002:a17:902:c1c5:b029:e3:eec2:98e6 with SMTP id c5-20020a170902c1c5b02900e3eec298e6mr2322035plc.22.1614084374114;
+        Tue, 23 Feb 2021 04:46:14 -0800 (PST)
+Received: from Leo-laptop-t470s.redhat.com ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id f28sm24971475pfk.182.2021.02.23.04.46.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Feb 2021 04:46:13 -0800 (PST)
+From:   Hangbin Liu <liuhangbin@gmail.com>
+To:     bpf@vger.kernel.org
+Cc:     netdev@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Hangbin Liu <liuhangbin@gmail.com>
+Subject: [PATCH bpf-next] bpf: fix missing * in bpf.h
+Date:   Tue, 23 Feb 2021 20:45:54 +0800
+Message-Id: <20210223124554.1375051-1-liuhangbin@gmail.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This commit introduces a range of tests to the xsk testsuite
-for validating xsk statistics.
+Commit 34b2021cc616 ("bpf: Add BPF-helper for MTU checking") lost a *
+in bpf.h. This will make bpf_helpers_doc.py stop building
+bpf_helper_defs.h immediately after bpf_check_mtu, which will affect
+future add functions.
 
-A new test type called 'stats' is added. Within it there are
-four sub-tests. Each test configures a scenario which should
-trigger the given error statistic. The test passes if the statistic
-is successfully incremented.
-
-The four statistics for which tests have been created are:
-1. rx dropped
-Increase the UMEM frame headroom to a value which results in
-insufficient space in the rx buffer for both the packet and the headroom.
-2. tx invalid
-Set the 'len' field of tx descriptors to an invalid value (umem frame
-size + 1).
-3. rx ring full
-Reduce the size of the RX ring to a fraction of the fill ring size.
-4. fill queue empty
-Do not populate the fill queue and then try to receive pkts.
-
-Signed-off-by: Ciara Loftus <ciara.loftus@intel.com>
+Fixes: 34b2021cc616 ("bpf: Add BPF-helper for MTU checking")
+Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
 ---
- tools/testing/selftests/bpf/xdpxceiver.c | 137 ++++++++++++++++++++---
- tools/testing/selftests/bpf/xdpxceiver.h |  13 +++
- 2 files changed, 136 insertions(+), 14 deletions(-)
+ include/uapi/linux/bpf.h       | 2 +-
+ tools/include/uapi/linux/bpf.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/xdpxceiver.c b/tools/testing/selftests/bpf/xdpxceiver.c
-index e7913444518d..8b0f7fdd9003 100644
---- a/tools/testing/selftests/bpf/xdpxceiver.c
-+++ b/tools/testing/selftests/bpf/xdpxceiver.c
-@@ -28,8 +28,21 @@
-  *       Configure sockets as bi-directional tx/rx sockets, sets up fill and
-  *       completion rings on each socket, tx/rx in both directions. Only nopoll
-  *       mode is used
-+ *    e. Statistics
-+ *       Trigger some error conditions and ensure that the appropriate statistics
-+ *       are incremented. Within this test, the following statistics are tested:
-+ *       i.   rx dropped
-+ *            Increase the UMEM frame headroom to a value which results in
-+ *            insufficient space in the rx buffer for both the packet and the headroom.
-+ *       ii.  tx invalid
-+ *            Set the 'len' field of tx descriptors to an invalid value (umem frame
-+ *            size + 1).
-+ *       iii. rx ring full
-+ *            Reduce the size of the RX ring to a fraction of the fill ring size.
-+ *       iv.  fill queue empty
-+ *            Do not populate the fill queue and then try to receive pkts.
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 4c24daa43bac..46248f8e024b 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -3850,7 +3850,7 @@ union bpf_attr {
   *
-- * Total tests: 8
-+ * Total tests: 10
+  * long bpf_check_mtu(void *ctx, u32 ifindex, u32 *mtu_len, s32 len_diff, u64 flags)
+  *	Description
+-
++ *
+  *		Check ctx packet size against exceeding MTU of net device (based
+  *		on *ifindex*).  This helper will likely be used in combination
+  *		with helpers that adjust/change the packet size.
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 4c24daa43bac..46248f8e024b 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -3850,7 +3850,7 @@ union bpf_attr {
   *
-  * Flow:
-  * -----
-@@ -95,10 +108,11 @@ static void __exit_with_error(int error, const char *file, const char *func, int
- #define exit_with_error(error) __exit_with_error(error, __FILE__, __func__, __LINE__)
- 
- #define print_ksft_result(void)\
--	(ksft_test_result_pass("PASS: %s %s %s%s\n", configured_mode ? "DRV" : "SKB",\
-+	(ksft_test_result_pass("PASS: %s %s %s%s%s\n", configured_mode ? "DRV" : "SKB",\
- 			       test_type == TEST_TYPE_POLL ? "POLL" : "NOPOLL",\
- 			       test_type == TEST_TYPE_TEARDOWN ? "Socket Teardown" : "",\
--			       test_type == TEST_TYPE_BIDI ? "Bi-directional Sockets" : ""))
-+			       test_type == TEST_TYPE_BIDI ? "Bi-directional Sockets" : "",\
-+			       test_type == TEST_TYPE_STATS ? "Stats" : ""))
- 
- static void pthread_init_mutex(void)
- {
-@@ -260,13 +274,20 @@ static void gen_eth_frame(struct xsk_umem_info *umem, u64 addr)
- static void xsk_configure_umem(struct ifobject *data, void *buffer, u64 size)
- {
- 	int ret;
-+	struct xsk_umem_config cfg = {
-+		.fill_size = XSK_RING_PROD__DEFAULT_NUM_DESCS,
-+		.comp_size = XSK_RING_CONS__DEFAULT_NUM_DESCS,
-+		.frame_size = XSK_UMEM__DEFAULT_FRAME_SIZE,
-+		.frame_headroom = frame_headroom,
-+		.flags = XSK_UMEM__DEFAULT_FLAGS
-+	};
- 
- 	data->umem = calloc(1, sizeof(struct xsk_umem_info));
- 	if (!data->umem)
- 		exit_with_error(errno);
- 
- 	ret = xsk_umem__create(&data->umem->umem, buffer, size,
--			       &data->umem->fq, &data->umem->cq, NULL);
-+			       &data->umem->fq, &data->umem->cq, &cfg);
- 	if (ret)
- 		exit_with_error(ret);
- 
-@@ -298,7 +319,7 @@ static int xsk_configure_socket(struct ifobject *ifobject)
- 		exit_with_error(errno);
- 
- 	ifobject->xsk->umem = ifobject->umem;
--	cfg.rx_size = XSK_RING_CONS__DEFAULT_NUM_DESCS;
-+	cfg.rx_size = rxqsize;
- 	cfg.tx_size = XSK_RING_PROD__DEFAULT_NUM_DESCS;
- 	cfg.libbpf_flags = 0;
- 	cfg.xdp_flags = xdp_flags;
-@@ -565,6 +586,8 @@ static void tx_only(struct xsk_socket_info *xsk, u32 *frameptr, int batch_size)
- {
- 	u32 idx;
- 	unsigned int i;
-+	bool tx_invalid_test = stat_test_type == STAT_TEST_TX_INVALID;
-+	u32 len = tx_invalid_test ? XSK_UMEM__DEFAULT_FRAME_SIZE + 1 : PKT_SIZE;
- 
- 	while (xsk_ring_prod__reserve(&xsk->tx, batch_size, &idx) < batch_size)
- 		complete_tx_only(xsk, batch_size);
-@@ -573,11 +596,16 @@ static void tx_only(struct xsk_socket_info *xsk, u32 *frameptr, int batch_size)
- 		struct xdp_desc *tx_desc = xsk_ring_prod__tx_desc(&xsk->tx, idx + i);
- 
- 		tx_desc->addr = (*frameptr + i) << XSK_UMEM__DEFAULT_FRAME_SHIFT;
--		tx_desc->len = PKT_SIZE;
-+		tx_desc->len = len;
- 	}
- 
- 	xsk_ring_prod__submit(&xsk->tx, batch_size);
--	xsk->outstanding_tx += batch_size;
-+	if (!tx_invalid_test) {
-+		xsk->outstanding_tx += batch_size;
-+	} else {
-+		if (!NEED_WAKEUP || xsk_ring_prod__needs_wakeup(&xsk->tx))
-+			kick_tx(xsk);
-+	}
- 	*frameptr += batch_size;
- 	*frameptr %= num_frames;
- 	complete_tx_only(xsk, batch_size);
-@@ -689,6 +717,48 @@ static void worker_pkt_dump(void)
- 	}
- }
- 
-+static void worker_stats_validate(struct ifobject *ifobject)
-+{
-+	struct xdp_statistics stats;
-+	socklen_t optlen;
-+	int err;
-+	struct xsk_socket *xsk = stat_test_type == STAT_TEST_TX_INVALID ?
-+							ifdict[!ifobject->ifdict_index]->xsk->xsk :
-+							ifobject->xsk->xsk;
-+	int fd = xsk_socket__fd(xsk);
-+	unsigned long xsk_stat = 0, expected_stat = opt_pkt_count;
-+
-+	sigvar = 0;
-+
-+	optlen = sizeof(stats);
-+	err = getsockopt(fd, SOL_XDP, XDP_STATISTICS, &stats, &optlen);
-+	if (err)
-+		return;
-+
-+	if (optlen == sizeof(struct xdp_statistics)) {
-+		switch (stat_test_type) {
-+		case STAT_TEST_RX_DROPPED:
-+			xsk_stat = stats.rx_dropped;
-+			break;
-+		case STAT_TEST_TX_INVALID:
-+			xsk_stat = stats.tx_invalid_descs;
-+			break;
-+		case STAT_TEST_RX_FULL:
-+			xsk_stat = stats.rx_ring_full;
-+			expected_stat -= RX_FULL_RXQSIZE;
-+			break;
-+		case STAT_TEST_RX_FILL_EMPTY:
-+			xsk_stat = stats.rx_fill_ring_empty_descs;
-+			break;
-+		default:
-+			break;
-+		}
-+
-+		if (xsk_stat == expected_stat)
-+			sigvar = 1;
-+	}
-+}
-+
- static void worker_pkt_validate(void)
- {
- 	u32 payloadseqnum = -2;
-@@ -827,7 +897,8 @@ static void *worker_testapp_validate(void *arg)
- 			thread_common_ops(ifobject, bufs, &sync_mutex_tx, &spinning_rx);
- 
- 		print_verbose("Interface [%s] vector [Rx]\n", ifobject->ifname);
--		xsk_populate_fill_ring(ifobject->umem);
-+		if (stat_test_type != STAT_TEST_RX_FILL_EMPTY)
-+			xsk_populate_fill_ring(ifobject->umem);
- 
- 		TAILQ_INIT(&head);
- 		if (debug_pkt_dump) {
-@@ -849,15 +920,21 @@ static void *worker_testapp_validate(void *arg)
- 				if (ret <= 0)
- 					continue;
- 			}
--			rx_pkt(ifobject->xsk, fds);
--			worker_pkt_validate();
-+
-+			if (test_type != TEST_TYPE_STATS) {
-+				rx_pkt(ifobject->xsk, fds);
-+				worker_pkt_validate();
-+			} else {
-+				worker_stats_validate(ifobject);
-+			}
- 
- 			if (sigvar)
- 				break;
- 		}
- 
--		print_verbose("Received %d packets on interface %s\n",
--			       pkt_counter, ifobject->ifname);
-+		if (test_type != TEST_TYPE_STATS)
-+			print_verbose("Received %d packets on interface %s\n",
-+				pkt_counter, ifobject->ifname);
- 
- 		if (test_type == TEST_TYPE_TEARDOWN)
- 			print_verbose("Destroying socket\n");
-@@ -931,7 +1008,7 @@ static void testapp_validate(void)
- 		free(pkt_buf);
- 	}
- 
--	if (!(test_type == TEST_TYPE_TEARDOWN) && !bidi)
-+	if (!(test_type == TEST_TYPE_TEARDOWN) && !bidi && !(test_type == TEST_TYPE_STATS))
- 		print_ksft_result();
- }
- 
-@@ -950,6 +1027,32 @@ static void testapp_sockets(void)
- 	print_ksft_result();
- }
- 
-+static void testapp_stats(void)
-+{
-+	for (int i = 0; i < STAT_TEST_TYPE_MAX; i++) {
-+		stat_test_type = i;
-+
-+		/* reset defaults */
-+		rxqsize = XSK_RING_CONS__DEFAULT_NUM_DESCS;
-+		frame_headroom = XSK_UMEM__DEFAULT_FRAME_HEADROOM;
-+
-+		switch (stat_test_type) {
-+		case STAT_TEST_RX_DROPPED:
-+			frame_headroom = XSK_UMEM__DEFAULT_FRAME_SIZE -
-+						XDP_PACKET_HEADROOM - 1;
-+			break;
-+		case STAT_TEST_RX_FULL:
-+			rxqsize = RX_FULL_RXQSIZE;
-+			break;
-+		default:
-+			break;
-+		}
-+		testapp_validate();
-+	}
-+
-+	print_ksft_result();
-+}
-+
- static void init_iface_config(struct ifaceconfigobj *ifaceconfig)
- {
- 	/*Init interface0 */
-@@ -1037,6 +1140,10 @@ static void run_pkt_test(int mode, int type)
- 	prev_pkt = -1;
- 	ifdict[0]->fv.vector = tx;
- 	ifdict[1]->fv.vector = rx;
-+	sigvar = 0;
-+	stat_test_type = -1;
-+	rxqsize = XSK_RING_CONS__DEFAULT_NUM_DESCS;
-+	frame_headroom = XSK_UMEM__DEFAULT_FRAME_HEADROOM;
- 
- 	switch (mode) {
- 	case (TEST_MODE_SKB):
-@@ -1055,7 +1162,9 @@ static void run_pkt_test(int mode, int type)
- 
- 	pthread_init_mutex();
- 
--	if ((test_type != TEST_TYPE_TEARDOWN) && (test_type != TEST_TYPE_BIDI))
-+	if (test_type == TEST_TYPE_STATS)
-+		testapp_stats();
-+	else if ((test_type != TEST_TYPE_TEARDOWN) && (test_type != TEST_TYPE_BIDI))
- 		testapp_validate();
- 	else
- 		testapp_sockets();
-diff --git a/tools/testing/selftests/bpf/xdpxceiver.h b/tools/testing/selftests/bpf/xdpxceiver.h
-index e05703f661f8..30314ef305c2 100644
---- a/tools/testing/selftests/bpf/xdpxceiver.h
-+++ b/tools/testing/selftests/bpf/xdpxceiver.h
-@@ -42,6 +42,7 @@
- #define POLL_TMOUT 1000
- #define NEED_WAKEUP true
- #define DEFAULT_PKT_CNT 10000
-+#define RX_FULL_RXQSIZE 32
- 
- #define print_verbose(x...) do { if (opt_verbose) ksft_print_msg(x); } while (0)
- 
-@@ -61,9 +62,18 @@ enum TEST_TYPES {
- 	TEST_TYPE_POLL,
- 	TEST_TYPE_TEARDOWN,
- 	TEST_TYPE_BIDI,
-+	TEST_TYPE_STATS,
- 	TEST_TYPE_MAX
- };
- 
-+enum STAT_TEST_TYPES {
-+	STAT_TEST_RX_DROPPED,
-+	STAT_TEST_TX_INVALID,
-+	STAT_TEST_RX_FULL,
-+	STAT_TEST_RX_FILL_EMPTY,
-+	STAT_TEST_TYPE_MAX
-+};
-+
- static int configured_mode = TEST_MODE_UNCONFIGURED;
- static u8 debug_pkt_dump;
- static u32 num_frames;
-@@ -81,6 +91,9 @@ static u8 pkt_data[XSK_UMEM__DEFAULT_FRAME_SIZE];
- static u32 pkt_counter;
- static long prev_pkt = -1;
- static int sigvar;
-+static int stat_test_type;
-+static u32 rxqsize;
-+static u32 frame_headroom;
- 
- struct xsk_umem_info {
- 	struct xsk_ring_prod fq;
+  * long bpf_check_mtu(void *ctx, u32 ifindex, u32 *mtu_len, s32 len_diff, u64 flags)
+  *	Description
+-
++ *
+  *		Check ctx packet size against exceeding MTU of net device (based
+  *		on *ifindex*).  This helper will likely be used in combination
+  *		with helpers that adjust/change the packet size.
 -- 
-2.17.1
+2.26.2
 
