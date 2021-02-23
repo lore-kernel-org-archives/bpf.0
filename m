@@ -2,259 +2,175 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CFFCC433E0
-	for <bpf@archiver.kernel.org>; Tue, 23 Feb 2021 15:09:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B6173C433E0
+	for <bpf@archiver.kernel.org>; Tue, 23 Feb 2021 16:46:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2A56064E61
-	for <bpf@archiver.kernel.org>; Tue, 23 Feb 2021 15:09:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6A67A64E6C
+	for <bpf@archiver.kernel.org>; Tue, 23 Feb 2021 16:46:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232775AbhBWPJa (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 23 Feb 2021 10:09:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37620 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231983AbhBWPJa (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 23 Feb 2021 10:09:30 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB33C06174A
-        for <bpf@vger.kernel.org>; Tue, 23 Feb 2021 07:08:49 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id v196so20757357ybv.3
-        for <bpf@vger.kernel.org>; Tue, 23 Feb 2021 07:08:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:message-id:mime-version:subject:from:to:cc;
-        bh=IcvKgRWgaPnM+uCFX8OhEgFA/fRNp3jDY+qhXpGIDY0=;
-        b=sbhlEaYNViFxtngnd1qCfmtGZOQpdqMMNaYQWji9Iv1EA9oI2/psmR5qwpTVvKuxmB
-         yA6RaUTo6qJLUaPiYRXFKNOd3JJUTZaAeokajDxzpPMJWC7VC3aC1asejqPPKNJYO0ki
-         YL/mmUgH5wEFgRLnnniQ8043zBBkobP6sGT17tEYaAV0+GIuGTW6Hs+aiSGozR0nVLsH
-         rMH1gstN+/83OMD5eI3tCUUey1zQTW5n7vFNZeiU207RjxsRmQfl4U3iD79saV8o0GsB
-         ejZjDy8ENoJdYirCUWGLYaW1vV34YqrygIPcXIOOGBQlVRHI2NheM6sTOyQDEcDWszrU
-         Ni4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
-         :to:cc;
-        bh=IcvKgRWgaPnM+uCFX8OhEgFA/fRNp3jDY+qhXpGIDY0=;
-        b=KhHHfJCeUg1mHzP4TzBO40p18bG4uenoZa6g5sI4RrSs9/1bbJeXOzl/1hhuKacSHA
-         m6KSiMSkdXPscumfDwGXKgdwz2rzpJzRMPhICCylRo5QlM6Gdsti4IJGhxUQeBLRCjL4
-         N3MIK3+WKQEj0YzIHXXjFqD5BP/KrH2aygqEp3ZGA67GGh3vdBCFV5XDkxVA3kLtblPJ
-         9YGjO3yYYGfxrWhOH8DBDWZx0JZ2NQg8TjYC3pYDbWstf/nQIXTRM5sJnjlieNP60RGu
-         RWo7P8eXtXRLwoW6i7HN7Kjw2jETCjlzd1BzsAIn/ZIHeWWfdoT9O/ef8atDx8r9KNNk
-         wFHw==
-X-Gm-Message-State: AOAM533zAX2Zk1VPArMgomdNBKFH1ojf9t97kYv4RfkxBaKVSIVysw2v
-        gfgvGGv8K10iwvA9mVECqFEWcjbwRXKXvBGQWAAQ2krv39VpNwZyXHJ1hocO4UHqqeAASMUh0qs
-        X8VrXYIbJa7OBwGCs2iHx1IBww0Td4U62HGw1zvGapIjD2hcxxZ6QMbQrNDUrSsQ=
-X-Google-Smtp-Source: ABdhPJyA0hvwqYyvMUbKRorRz3TkYE34iT1SK0Y2sX6448dJeHvL3xOFJz/e2FlLXvgsV90H7C956HpPRzwRvg==
-Sender: "jackmanb via sendgmr" <jackmanb@beeg.c.googlers.com>
-X-Received: from beeg.c.googlers.com ([fda3:e722:ac3:10:28:9cb1:c0a8:11db])
- (user=jackmanb job=sendgmr) by 2002:a25:5289:: with SMTP id
- g131mr16482848ybb.178.1614092928477; Tue, 23 Feb 2021 07:08:48 -0800 (PST)
-Date:   Tue, 23 Feb 2021 15:08:45 +0000
-Message-Id: <20210223150845.1857620-1-jackmanb@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.30.0.617.g56c4b15f3c-goog
-Subject: [PATCH v4 bpf-next] bpf: Explicitly zero-extend R0 after 32-bit cmpxchg
-From:   Brendan Jackman <jackmanb@google.com>
-To:     bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
+        id S233553AbhBWQqB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 23 Feb 2021 11:46:01 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:61962 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233468AbhBWQp6 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 23 Feb 2021 11:45:58 -0500
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 11NGiMq3018722;
+        Tue, 23 Feb 2021 08:44:59 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : to : cc :
+ references : from : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=JqeeHIjGZ+nzXU62aO+50qyzRH53EjgdCL9KGWr+If0=;
+ b=CSP0N0pxOsWbw7SwIyX2A8mlyVmiZVe5HKmh+5/CwUGXdQYgSwtHpaPSWOn2sfdihhLh
+ qALmUy0z3G330WO669HZ4s5n685tL4EGwTtoRy6UfDc4+6Niu0a5SQ8DfJZnVTTv6l6/
+ 8bxIrsigMVCGfL1vJxD9bikWJlQ0ozB/Ou0= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 36v9gn8bqu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 23 Feb 2021 08:44:58 -0800
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.35.174) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Tue, 23 Feb 2021 08:44:58 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BqtctfpQvu/UFVlex0EGDYPz5Xycs8afQwHJET1WjOItKaFvXJPWhlMGb4jmjOCm0tMldFSLEU/VQ/Vj14it1V1eqwpREKSUOsRxLBtYMZa2T6Rzm8bR1V8g5SJiAotEmDb65TbpQq5BDm04M0O/PLlmr4suzWsQ+oFZTG4T1nzMARUmLYDPuQ2gp37e59zeCDFGEls6Q8zZQBBOR9aprcF5P8hBJRfj8WPSgoF5EcX+yCGx/ilDZvNcrjLf/T3lOC4vA1CU/+bUJlEpZ2oH+D/y/wHMqzO1c5hqPY2TH2mhWa5l5xNiKNe6mqSZ9ojJ/yZ0IURLCDHkzboUOx+Ydg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JqeeHIjGZ+nzXU62aO+50qyzRH53EjgdCL9KGWr+If0=;
+ b=SSOXhDhVw1Yy00TFoI5kO/Md/DQJ8pymFUKyPG9dglG5MfpZFDiUv/mzgZgMZukYJzkEhEsiUUzetsl+cn6z2ceoQbXK97HUt6HMaO8dt+i25p9RMBAebWbC1Zd7sxj4U0I7s2HnRqvEbA632zzViSdiAhoD8gDQi74L4POYAJZKYo+10eKXg//ZcTWXxUvGjmlNMGH2V42hYsM6dW3+FqOmpwFxdXsD/PMRuoexiiFX+bjopuvnQOCxCzACxlnb5Kt/iDTizBBlgGasoVLdnECia2Ya/aM7jklH9MNSvvQyH8ECgMhH1LgmtM63yCVcbW/JbCNpBurQvEGVpZ586w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Authentication-Results: infradead.org; dkim=none (message not signed)
+ header.d=none;infradead.org; dmarc=none action=none header.from=fb.com;
+Received: from BN8PR15MB3282.namprd15.prod.outlook.com (2603:10b6:408:a8::32)
+ by BN7PR15MB2292.namprd15.prod.outlook.com (2603:10b6:406:8b::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3868.33; Tue, 23 Feb
+ 2021 16:44:55 +0000
+Received: from BN8PR15MB3282.namprd15.prod.outlook.com
+ ([fe80::81bf:9924:c4f1:75cd]) by BN8PR15MB3282.namprd15.prod.outlook.com
+ ([fe80::81bf:9924:c4f1:75cd%6]) with mapi id 15.20.3763.019; Tue, 23 Feb 2021
+ 16:44:54 +0000
+Subject: Re: [PATCH v4 bpf-next 2/6] bpf: prevent deadlock from recursive
+ bpf_task_storage_[get|delete]
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Song Liu <songliubraving@fb.com>
+CC:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Florent Revest <revest@chromium.org>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Brendan Jackman <jackmanb@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Kernel Team <Kernel-team@fb.com>,
+        Peter Ziljstra <peterz@infradead.org>
+References: <20210223012014.2087583-1-songliubraving@fb.com>
+ <20210223012014.2087583-3-songliubraving@fb.com>
+ <CAEf4BzaZ0ATbJsLoQu_SRUYgzkak9zv61N+T=gijOQ+X=57ErA@mail.gmail.com>
+ <6A4F1927-AF73-4AC8-AE44-5878ACEDF944@fb.com>
+ <CAEf4Bzak3Ye4xoAAva2WLc=-e+xEQFbSyk9gs50ASoSn-Gn5_A@mail.gmail.com>
+From:   Alexei Starovoitov <ast@fb.com>
+Message-ID: <a3eaaeb5-f14a-ef55-10c2-884dc9365f57@fb.com>
+Date:   Tue, 23 Feb 2021 08:44:49 -0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.7.0
+In-Reply-To: <CAEf4Bzak3Ye4xoAAva2WLc=-e+xEQFbSyk9gs50ASoSn-Gn5_A@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [2620:10d:c090:400::5:5e03]
+X-ClientProxiedBy: CO2PR05CA0097.namprd05.prod.outlook.com
+ (2603:10b6:104:1::23) To BN8PR15MB3282.namprd15.prod.outlook.com
+ (2603:10b6:408:a8::32)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [IPv6:2620:10d:c085:2103:c99:e09d:8a8f:94f0] (2620:10d:c090:400::5:5e03) by CO2PR05CA0097.namprd05.prod.outlook.com (2603:10b6:104:1::23) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3890.9 via Frontend Transport; Tue, 23 Feb 2021 16:44:52 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 761d585c-168b-4514-4a06-08d8d81a58bb
+X-MS-TrafficTypeDiagnostic: BN7PR15MB2292:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <BN7PR15MB22923C1D368274FFF20A7860D7809@BN7PR15MB2292.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SlB4Na/f9i9vNK4i1MIXrRPh4FWilRg09gusHy9ktGqbnQuItL376Aaez/pmJgvgI2psTt093EE5Q9KnZqSwt+j4xm/FF7PF3bGtxKpaXf7U9j9mwKLiU4vwBtYHSWxIX2JAflnZVl10vt9cT0aa6oaEidWfMT+iQC9PYUQO9VfIO9A5KfA3B047B+WFK5RlVwnCln278CY+K3PHI/VndM6cijZfvb1IeQW+Ysgk2A1L9BlnEALnwFMjOhcwR9fwUaIdp0738l0Uw+VFUTTRYXoQSDSLotSw9DfkOB+kkoGFn7Xg/FH/Ev0yXKnKOljgPa9wBitJSu0YYT3LvrKUlUUil6DlMf9oT6JzoFT/zQ5O+ByamH+jog9Lg11cl4NCafDuQplcWXvacn6MbQYkdhS5TcudnScxvcTY2MHV0mGxaqmwaCBzyb5cJMKm64U8l7bX+9tAy3pxJ5sGaZ8yAn59epOjNeQILGU1LwdFmtWWyF7rrFz4OuHYgpnSaBETJUwp33Ia3vffaeq+NnBl3/h7T3sD9D24UJFEdfhDXBt3+7AcNs2LxBAzvBl9IKCPz6+1Cb9aaI7wA+G6UwEDMACnLZd+EUDGGQhG6T7NewM=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR15MB3282.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(376002)(346002)(136003)(39860400002)(366004)(396003)(86362001)(83380400001)(5660300002)(36756003)(2906002)(8676002)(31696002)(6636002)(316002)(8936002)(2616005)(110136005)(66556008)(66476007)(186003)(53546011)(478600001)(6486002)(16526019)(66946007)(4326008)(4744005)(54906003)(6666004)(52116002)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?aTZKZk9uV1NZSVY2V21IRDdjK2pwOCszZFVOQmZGTVJseVYzbUt6Wk0vZlVT?=
+ =?utf-8?B?WmNCbDhjN083d3hFY0ZFa1VQdTRxT3NpbXZDZm5SL2RtNFpTV2c0aDJ0MGdQ?=
+ =?utf-8?B?RzJMVDR2bDh6Zll6aUpReGdEdGMrWTI1U1lNb2xnRmJDS3hCZFU3UFVBN2Y0?=
+ =?utf-8?B?R0ZEVVBzbENPQjQxcE9SZENzOTZzZGordUs4SFRvdllMM1B1UjRzdmtpQUxB?=
+ =?utf-8?B?Ny82bWJYSyszUVlsK0ZHVUxDbmdZc211MVZtejRzdW9uMVl5M2RDcU9sVzM0?=
+ =?utf-8?B?VEZkS3dlNjhnd25qcVFjUVdoZ2lrZWZXekg4YVJYS1BibmxsWVREdXUzNnpt?=
+ =?utf-8?B?NHZQcEd6TUFhbzdaTEpIS1FTVzgzeVN1UjZLZ3lBT0YwMUhwYlJ1a2VRcFZJ?=
+ =?utf-8?B?WDc1NHlsWllGeWlOZWF5LzlYZkdKekpDd3RIcWpjdmRaRFl3WEVaZnRYc1Nw?=
+ =?utf-8?B?enVkNzRhYjhBL1FHOGVJRjZrSHdxWndUendib2Z1c3JzSTZtT0krNExMSkp6?=
+ =?utf-8?B?R2F2c3QxYU0zbUtJczREYnp2QnErUUZCQTNMejhiZEthWVRZb2FSeGdqMURi?=
+ =?utf-8?B?M0RzQ1BoOHpOQmJBcGZqaXZqdWpwNGlxbExxd1ozTEk3UElWR3FMMmsyMGMz?=
+ =?utf-8?B?RGxLeWVIZ0pFRVdRbjNIbHY0cVNvVGNpU3RCTmxuWFRwMlhUUm1zMndwSGM3?=
+ =?utf-8?B?N0ZQU3FhZ3hPdVhWWExLczNiVDVwMDFPYm1JVTFoR1E0MnU0OS9QVGJOemNS?=
+ =?utf-8?B?UHRnRkU2OGsxa052MFByaDFHSnlCSXJuSUlHYkpHYlZwWXVYMlBGMm9RUEJF?=
+ =?utf-8?B?RWVLdEVYQ2tqaDFXV3pRb3g1MGVTN2ZYd3J0MER1NDhqdmxsbFJkSmFMbERj?=
+ =?utf-8?B?aHZITVcxdk84MlRnTVErMlpjbTBaN3h2TElSdGxiS3ZNbjNyT0tpRlhmZTQw?=
+ =?utf-8?B?THdpbVovTk85cldnYkFjVWVHSWZudDM2SDRBdE40d1ExSFRYUk4vWFhwS2JP?=
+ =?utf-8?B?dlZBMldlTnNYM2RpdXZHOVBIamgxL0pGYUJ3R29WdzFBYU1yQ2VSUFlIQ3pW?=
+ =?utf-8?B?ZnFjOTUreit4NHFuNUYwKzVNWklpVGxIY2U0L0NHR1RsZWwxV0VJZWRoa0Q5?=
+ =?utf-8?B?QldORjdvbFBKYUxHTzVpSUNDRkxON3NzN3JFbUEzUmJ1T2FESFRsbzVPWUMr?=
+ =?utf-8?B?UTlWWjZndnIxOFJENGFQU0ZqOXl1d1UwVGczcFFudGsycXN5Tk5EOEJuUjdw?=
+ =?utf-8?B?aE41NUw2ZHpnbFdsMVE4cDc4RkZZQWZydlpsWFZEMDJhOCtqRE9LNWs1bU4w?=
+ =?utf-8?B?c3lqc050cCtIU2ZteW9ZQmhVTnNwL0pEUUE4N3ZkVFVQbDVOZWhNMHZ6M09N?=
+ =?utf-8?B?ZHRhcHdJV0VOU3BkQkFRZlVTMjhZTGNKTTdhQTRlYlNQaCtGRnl1UWlVM0x6?=
+ =?utf-8?B?UkhJSzBjQ3VlcmlMS3NFV1ljS2dzRytEMFJhWmVIMlVRb3JOUnQ0V2t6Vm1Z?=
+ =?utf-8?B?bXZDZ1JiZDJ1SFRoS1VKY29hQ2ozeTUxVXdoYUdJWEtFMkZ4dFpNVnZla1cw?=
+ =?utf-8?B?TzVua1A1aENOTUxSQ3FBYTh5RnJBZ2ZSRW5yajB1dGFMckVHb3I1bnpYWUN1?=
+ =?utf-8?B?QTFPZ3FFQXc0dUJhTFF4VnlmY2RGVEsyT0FkMFJ5bnpDRHVBZHlIYmlkRlBE?=
+ =?utf-8?B?czVwRm9LQVNtY29ETEU0bTNrdCtjVFgwZnVxcnNHR3VNajYwa1hVS0cwbVVp?=
+ =?utf-8?B?aUpzL3FVczFiWDhwNTZCQzExbThCLzNoQTdUamFnK1VDZVhZWFcyOEt4MWVL?=
+ =?utf-8?B?YWVNMm9adVZPaythR1RZUT09?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 761d585c-168b-4514-4a06-08d8d81a58bb
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR15MB3282.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Feb 2021 16:44:54.8530
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: a4sh3W4ddntAWymQxsRNSdPBu8i/9WnhNpWgb3Nk7cOOOVqqD6OoUJRhnHJn+7iK
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR15MB2292
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
+ definitions=2021-02-23_08:2021-02-23,2021-02-23 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ phishscore=0 spamscore=0 clxscore=1011 adultscore=0 priorityscore=1501
+ impostorscore=0 bulkscore=0 malwarescore=0 mlxscore=0 mlxlogscore=999
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2102230139
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-As pointed out by Ilya and explained in the new comment, there's a
-discrepancy between x86 and BPF CMPXCHG semantics: BPF always loads
-the value from memory into r0, while x86 only does so when r0 and the
-value in memory are different. The same issue affects s390.
+On 2/22/21 11:19 PM, Andrii Nakryiko wrote:
+>>>> +       bpf_task_storage_lock();
+>>>>         sdata = bpf_local_storage_update(
+>>>>                 task, (struct bpf_local_storage_map *)map, value, map_flags);
+>>> this should probably be container_of() instead of casting
+>> bpf_task_storage.c uses casting in multiple places. How about we fix it in a
+>> separate patch?
+>>
+> Sure, let's fix all uses in a separate patch. My point is that this
+> makes an assumption (that struct bpf_map map field is always the very
+> first one) which is not enforced and not documented in struct
+> bpf_local_storage_map.
+> 
 
-At first this might sound like pure semantics, but it makes a real
-difference when the comparison is 32-bit, since the load will
-zero-extend r0/rax.
-
-The fix is to explicitly zero-extend rax after doing such a
-CMPXCHG. Since this problem affects multiple archs, this is done in
-the verifier by patching in a BPF_ZEXT_REG instruction after every
-32-bit cmpxchg. Any archs that don't need such manual zero-extension
-can do a look-ahead with insn_is_zext to skip the unnecessary mov.
-
-There was actually already logic to patch in zero-extension insns
-after 32-bit cmpxchgs, in opt_subreg_zext_lo32_rnd_hi32. To avoid
-bloating the prog with unnecessary movs, we now explicitly check and
-skip that logic for this case.
-
-Reported-by: Ilya Leoshkevich <iii@linux.ibm.com>
-Fixes: 5ffa25502b5a ("bpf: Add instructions for atomic_[cmp]xchg")
-Signed-off-by: Brendan Jackman <jackmanb@google.com>
----
-
-Differences v3->v4[1]:
- - Moved the optimization against pointless zext into the correct place:
-   opt_subreg_zext_lo32_rnd_hi32 is called _after_ fixup_bpf_calls.
-
-Differences v2->v3[1]:
- - Moved patching into fixup_bpf_calls (patch incoming to rename this function)
- - Added extra commentary on bpf_jit_needs_zext
- - Added check to avoid adding a pointless zext(r0) if there's already one there.
-
-Difference v1->v2[1]: Now solved centrally in the verifier instead of
-  specifically for the x86 JIT. Thanks to Ilya and Daniel for the suggestions!
-
-[1] v3: https://lore.kernel.org/bpf/08669818-c99d-0d30-e1db-53160c063611@iogearbox.net/T/#t
-    v2: https://lore.kernel.org/bpf/08669818-c99d-0d30-e1db-53160c063611@iogearbox.net/T/#t
-    v1: https://lore.kernel.org/bpf/d7ebaefb-bfd6-a441-3ff2-2fdfe699b1d2@iogearbox.net/T/#t
-
- kernel/bpf/core.c                             |  4 +++
- kernel/bpf/verifier.c                         | 33 +++++++++++++++++--
- .../selftests/bpf/verifier/atomic_cmpxchg.c   | 25 ++++++++++++++
- .../selftests/bpf/verifier/atomic_or.c        | 26 +++++++++++++++
- 4 files changed, 86 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 0ae015ad1e05..dcf18612841b 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2342,6 +2342,10 @@ bool __weak bpf_helper_changes_pkt_data(void *func)
- /* Return TRUE if the JIT backend wants verifier to enable sub-register usage
-  * analysis code and wants explicit zero extension inserted by verifier.
-  * Otherwise, return FALSE.
-+ *
-+ * The verifier inserts an explicit zero extension after BPF_CMPXCHGs even if
-+ * you don't override this. JITs that don't want these extra insns can detect
-+ * them using insn_is_zext.
-  */
- bool __weak bpf_jit_needs_zext(void)
- {
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 3d34ba492d46..ec1cbd565140 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -11061,8 +11061,16 @@ static int opt_subreg_zext_lo32_rnd_hi32(struct bpf_verifier_env *env,
- 			 */
- 			if (WARN_ON(!(insn.imm & BPF_FETCH)))
- 				return -EINVAL;
--			load_reg = insn.imm == BPF_CMPXCHG ? BPF_REG_0
--							   : insn.src_reg;
-+			/* There should already be a zero-extension inserted after BPF_CMPXCHG. */
-+			if (insn.imm == BPF_CMPXCHG) {
-+				struct bpf_insn *next = &insns[adj_idx + 1];
-+
-+				if (WARN_ON(!insn_is_zext(next) || next->dst_reg != insn.src_reg))
-+					return -EINVAL;
-+				continue;
-+			}
-+
-+			load_reg = insn.src_reg;
- 		} else {
- 			load_reg = insn.dst_reg;
- 		}
-@@ -11666,6 +11674,27 @@ static int fixup_bpf_calls(struct bpf_verifier_env *env)
- 			continue;
- 		}
-
-+		/* BPF_CMPXCHG always loads a value into R0, therefore always
-+		 * zero-extends. However some archs' equivalent instruction only
-+		 * does this load when the comparison is successful. So here we
-+		 * add a BPF_ZEXT_REG after every 32-bit CMPXCHG, so that such
-+		 * archs' JITs don't need to deal with the issue. Archs that
-+		 * don't face this issue may use insn_is_zext to detect and skip
-+		 * the added instruction.
-+		 */
-+		if (insn->code == (BPF_STX | BPF_W | BPF_ATOMIC) && insn->imm == BPF_CMPXCHG) {
-+			struct bpf_insn zext_patch[2] = { *insn, BPF_ZEXT_REG(BPF_REG_0) };
-+
-+			new_prog = bpf_patch_insn_data(env, i + delta, zext_patch, 2);
-+			if (!new_prog)
-+				return -ENOMEM;
-+
-+			delta    += 1;
-+			env->prog = prog = new_prog;
-+			insn      = new_prog->insnsi + i + delta;
-+			continue;
-+		}
-+
- 		if (insn->code != (BPF_JMP | BPF_CALL))
- 			continue;
- 		if (insn->src_reg == BPF_PSEUDO_CALL)
-diff --git a/tools/testing/selftests/bpf/verifier/atomic_cmpxchg.c b/tools/testing/selftests/bpf/verifier/atomic_cmpxchg.c
-index 2efd8bcf57a1..6e52dfc64415 100644
---- a/tools/testing/selftests/bpf/verifier/atomic_cmpxchg.c
-+++ b/tools/testing/selftests/bpf/verifier/atomic_cmpxchg.c
-@@ -94,3 +94,28 @@
- 	.result = REJECT,
- 	.errstr = "invalid read from stack",
- },
-+{
-+	"BPF_W cmpxchg should zero top 32 bits",
-+	.insns = {
-+		/* r0 = U64_MAX; */
-+		BPF_MOV64_IMM(BPF_REG_0, 0),
-+		BPF_ALU64_IMM(BPF_SUB, BPF_REG_0, 1),
-+		/* u64 val = r0; */
-+		BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -8),
-+		/* r0 = (u32)atomic_cmpxchg((u32 *)&val, r0, 1); */
-+		BPF_MOV32_IMM(BPF_REG_1, 1),
-+		BPF_ATOMIC_OP(BPF_W, BPF_CMPXCHG, BPF_REG_10, BPF_REG_1, -8),
-+		/* r1 = 0x00000000FFFFFFFFull; */
-+		BPF_MOV64_IMM(BPF_REG_1, 1),
-+		BPF_ALU64_IMM(BPF_LSH, BPF_REG_1, 32),
-+		BPF_ALU64_IMM(BPF_SUB, BPF_REG_1, 1),
-+		/* if (r0 != r1) exit(1); */
-+		BPF_JMP_REG(BPF_JEQ, BPF_REG_0, BPF_REG_1, 2),
-+		BPF_MOV32_IMM(BPF_REG_0, 1),
-+		BPF_EXIT_INSN(),
-+		/* exit(0); */
-+		BPF_MOV32_IMM(BPF_REG_0, 0),
-+		BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+},
-diff --git a/tools/testing/selftests/bpf/verifier/atomic_or.c b/tools/testing/selftests/bpf/verifier/atomic_or.c
-index 70f982e1f9f0..0a08b99e6ddd 100644
---- a/tools/testing/selftests/bpf/verifier/atomic_or.c
-+++ b/tools/testing/selftests/bpf/verifier/atomic_or.c
-@@ -75,3 +75,29 @@
- 	},
- 	.result = ACCEPT,
- },
-+{
-+	"BPF_W atomic_fetch_or should zero top 32 bits",
-+	.insns = {
-+		/* r1 = U64_MAX; */
-+		BPF_MOV64_IMM(BPF_REG_1, 0),
-+		BPF_ALU64_IMM(BPF_SUB, BPF_REG_1, 1),
-+		/* u64 val = r0; */
-+		BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_1, -8),
-+		/* r1 = (u32)atomic_sub((u32 *)&val, 1); */
-+		BPF_MOV32_IMM(BPF_REG_1, 2),
-+		BPF_ATOMIC_OP(BPF_W, BPF_OR | BPF_FETCH, BPF_REG_10, BPF_REG_1, -8),
-+		/* r2 = 0x00000000FFFFFFFF; */
-+		BPF_MOV64_IMM(BPF_REG_2, 1),
-+		BPF_ALU64_IMM(BPF_LSH, BPF_REG_2, 32),
-+		BPF_ALU64_IMM(BPF_SUB, BPF_REG_2, 1),
-+		/* if (r2 != r1) exit(1); */
-+		BPF_JMP_REG(BPF_JEQ, BPF_REG_2, BPF_REG_1, 2),
-+		/* BPF_MOV32_IMM(BPF_REG_0, 1), */
-+		BPF_MOV64_REG(BPF_REG_0, BPF_REG_1),
-+		BPF_EXIT_INSN(),
-+		/* exit(0); */
-+		BPF_MOV32_IMM(BPF_REG_0, 0),
-+		BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+},
-
-base-commit: 7b1e385c9a488de9291eaaa412146d3972e9dec5
---
-2.30.0.617.g56c4b15f3c-goog
-
+I'd rather document it in separate patch.
+Just doing container_of here and there will lead to wrong assumption
+that it can be in a different place, but it's much more involved.
+Consider what happens with all map_alloc callbacks... how that pointer
+is hard coded into bpf prog.. then passed back into helpers...
+then the logic that can read inner fields of bpf_map from the prog...
