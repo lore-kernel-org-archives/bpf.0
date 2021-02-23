@@ -8,119 +8,108 @@ X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0915CC433DB
-	for <bpf@archiver.kernel.org>; Tue, 23 Feb 2021 06:32:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C11EC433DB
+	for <bpf@archiver.kernel.org>; Tue, 23 Feb 2021 06:38:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B570064E2E
-	for <bpf@archiver.kernel.org>; Tue, 23 Feb 2021 06:32:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D598664E58
+	for <bpf@archiver.kernel.org>; Tue, 23 Feb 2021 06:38:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231747AbhBWGcx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 23 Feb 2021 01:32:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39872 "EHLO
+        id S231411AbhBWGig (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 23 Feb 2021 01:38:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231582AbhBWGcr (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 23 Feb 2021 01:32:47 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 316B1C061574;
-        Mon, 22 Feb 2021 22:32:07 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id m188so15370219yba.13;
-        Mon, 22 Feb 2021 22:32:07 -0800 (PST)
+        with ESMTP id S230105AbhBWGib (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 23 Feb 2021 01:38:31 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D1BC06174A;
+        Mon, 22 Feb 2021 22:37:51 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id b10so15447060ybn.3;
+        Mon, 22 Feb 2021 22:37:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=DPPscTRk33SoDLbqxxX5n926bhjPDJW+amwIenmHvyA=;
-        b=K/Wu4dqAMv7OubSmBWaPVPpEuDqYmqHJxLChgnVAjNpm2x7Ms8kdYTQfTbz5OG1W0n
-         lRilE+wdSaGYP4lEL3fXl8FXgZLF25UAT2+lhynrohfX1YwhG6BtP7iod550Pha4Lr/e
-         AqkS7wB92WJ26CSwn1JNTx6BIvbMODIcdAt7cFlUGf3QWIlrLZaUfkLqK8U9Toh6Cyv7
-         /OPqCkauf1rsMpe3eVcZWfGFq/oEgm30t5Z/cjRNY+ys0zcklPgw9+Q4Sbx7CNNS7zkT
-         qcouQY4U3fUeaTb9TCh62gejrzAfqfJuauZ3TmQHwhSsviA6kK9Fih6wXXdjL/ZdPC0A
-         I/OQ==
+        bh=ov6pN940m3vFTgSSoEhokTMKR3Ljp8jXpLWrzhZXX+I=;
+        b=JYR8cnZZ+t3qRrST5Tx7nCSwAMhxgXgsf9kEoAXgY49b70+VDsdIi59cVkdg2SqtZa
+         cCNiny8Br7GpZ6qR8nWwk3rJCQlpPv4JnJBehzYFxSD4dAoTMVqSlMCI95SjAChJXULS
+         iC7xCuy+RvBJxWHKPuaxB62Oo80dOKQhcJot+SAh4jvHwysAK7TWWqPHNuh8178xX1/b
+         TAiCvfGNQ4wiLykdxSuIhNQmVf6clEKRyfbEhUTB4flJ3SRIr/oITeDm+1Ve+QzBIZAn
+         dt+TGhYT8HvE8+NMyp+Oj362DNJpdNT0OZtONqISeAXIv/+3c85c9X5Rq3I3r0DeC6no
+         DYqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=DPPscTRk33SoDLbqxxX5n926bhjPDJW+amwIenmHvyA=;
-        b=RWqJfBK91MGQdCCcYfQpd6EECmwGjbU572uKTXRIM4zkphVfoamFvUQKIN/aWMBjOf
-         JhDTTrGbjV9spU6+wA6DcpgWxNfnL9Tz+kYJ+kHAtQcCXL02r3n/gJQm2gsxEPZ/Cefz
-         VX9+JyWmCuJRclynF2KozDn4WNUMMOTakS7xzxCF2kBQZ8WTm9eLdhlQwDE6xgXpoqhi
-         qi5dtGk2aigeqch3DRGVhOaQVrjTyQ0LPo3AVjzOgcRz5mmDwtPSim7fsVkCKkPixI4k
-         wZjfv8+fM9RqOOnRudez+vc8DIAQ6iFTqZy0E3spzUvErvQWRW6nZkyLrQXbNtp0b6ql
-         vTGA==
-X-Gm-Message-State: AOAM531n4xkajFEXXdykZ5ZBAQxd2kPUhlKX7DnkNyLD2wLUOvErb6jD
-        b3hwxmo1GLnS54vLiX08NHPbeziMGuk4mDxD1Yt0TUsnims=
-X-Google-Smtp-Source: ABdhPJxI7yg/dvu5J2zWZclsj5rUafi3AkfCZSlub/B+OgDLZ9zXTLvBEwpONYIlTzFzNJMR8k36cGKzO2Ddt1RRocQ=
-X-Received: by 2002:a25:abb2:: with SMTP id v47mr37404236ybi.425.1614061926389;
- Mon, 22 Feb 2021 22:32:06 -0800 (PST)
+        bh=ov6pN940m3vFTgSSoEhokTMKR3Ljp8jXpLWrzhZXX+I=;
+        b=j71vjmshs3QMsYfj8mxP1Oq28T0D647SepVY8MPR/blIO7iw9ch4/ukyoWpFgNPM4P
+         aa4J9XZksEV0oUiX4qXqqvO0Ntfo27qopUuQD8s0dTkO+4tS7r9gt0yv5OfplgCfVv7g
+         d0q4WN9r6sBBagYGjk4LLmvG/WmZKqqKtzZm4GrfyxqLofso15i54yV2axJxmwYj+kX2
+         4gD6uRLNL8wbJ9iiqbWDsD+B70yBEaK93Hw/UwcTF74AJKVOvic3Bkw7uyZF5xKqP6gv
+         E8iGX1QJFQTJk/06/iZZwKOS6KMf/OYEUqqN2WkWMDNrRKJT/dH230DPFXdTSmVOwILR
+         VlTw==
+X-Gm-Message-State: AOAM532M9R+szqTqzNgvNn43kMyvEH7o7zFZ3aCjWGUjKtbKA2AM7zB0
+        SdB8v8NNIkIrrP56dq4AnyXTYTAH8/gkIV5PEzc=
+X-Google-Smtp-Source: ABdhPJzaC7UdIGhKbXiOOeoBLWcfUoFrSyTlj2hf4V/6UpvLhtSkx0WfogjF49K71nqsmIj5Cq1EjsokUmUeIZfvtRU=
+X-Received: by 2002:a25:3d46:: with SMTP id k67mr6588877yba.510.1614062270662;
+ Mon, 22 Feb 2021 22:37:50 -0800 (PST)
 MIME-Version: 1.0
-References: <20210223012001.1452676-1-jetswayss@gmail.com>
-In-Reply-To: <20210223012001.1452676-1-jetswayss@gmail.com>
+References: <20210222195846.155483-1-grantseltzer@gmail.com>
+In-Reply-To: <20210222195846.155483-1-grantseltzer@gmail.com>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 22 Feb 2021 22:31:55 -0800
-Message-ID: <CAEf4BzZ_UkGGjRCa6js9J8kDgXkK+Fi91rRQ7U4Hy0t01aovOA@mail.gmail.com>
-Subject: Re: [PATCH] tools/resolve_btfids: Fix build error with older host toolchains
-To:     Kun-Chuan Hsieh <jetswayss@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        linux- stable <stable@vger.kernel.org>
+Date:   Mon, 22 Feb 2021 22:37:39 -0800
+Message-ID: <CAEf4BzaO6GOnkhnr_2dxgn5WXw+jboLFK7mTx9g8S7W4Eh7jhw@mail.gmail.com>
+Subject: Re: [PATCH v4 bpf-next] Add CONFIG_DEBUG_INFO_BTF and
+ CONFIG_DEBUG_INFO_BTF_MODULES check to bpftool feature command
+To:     grantseltzer <grantseltzer@gmail.com>
+Cc:     Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+        john fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Ian Rogers <irogers@google.com>,
+        Yonghong Song <yhs@fb.com>,
+        Tobias Klauser <tklauser@distanz.ch>,
+        Networking <netdev@vger.kernel.org>,
+        Michal Rostecki <mrostecki@opensuse.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Quentin Monnet <quentin@isovalent.com>,
+        bpf <bpf@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Feb 22, 2021 at 5:20 PM Kun-Chuan Hsieh <jetswayss@gmail.com> wrote:
+On Mon, Feb 22, 2021 at 11:59 AM grantseltzer <grantseltzer@gmail.com> wrote:
 >
-> Older versions of libelf cannot recognize the compressed section.
-> However, it's only required to fix the compressed section info when
-> compiling with CONFIG_DEBUG_INFO_COMPRESSED flag is set.
-
-Is it possible to detect (at compilation time or at run time) if
-libelf supports compressed ELF sections instead?
-
+> This adds both the CONFIG_DEBUG_INFO_BTF and CONFIG_DEBUG_INFO_BTF_MODULES
+> kernel compile option to output of the bpftool feature command.
+> This is relevant for developers that want to account for data structure
+> definition differences between kernels.
 >
-> Only compile the compressed_section_fix function when necessary will make
-> it easier to enable the BTF function. Since the tool resolve_btfids is
-> compiled with host toolchain. The host toolchain might be older than the
-> cross compile toolchain.
->
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Kun-Chuan Hsieh <jetswayss@gmail.com>
+> Signed-off-by: Grant Seltzer <grantseltzer@gmail.com>
 > ---
->  tools/bpf/resolve_btfids/main.c | 4 ++++
+
+Applied to bpf-next, but adjusted subject to shorter:
+
+"Add kernel/modules BTF presence checks to bpftool feature command"
+
+>  tools/bpf/bpftool/feature.c | 4 ++++
 >  1 file changed, 4 insertions(+)
 >
-> diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
-> index 7409d7860aa6..ad40346c6631 100644
-> --- a/tools/bpf/resolve_btfids/main.c
-> +++ b/tools/bpf/resolve_btfids/main.c
-> @@ -260,6 +260,7 @@ static struct btf_id *add_symbol(struct rb_root *root, char *name, size_t size)
->         return btf_id__add(root, id, false);
->  }
+> diff --git a/tools/bpf/bpftool/feature.c b/tools/bpf/bpftool/feature.c
+> index 359960a8f..40a88df27 100644
+> --- a/tools/bpf/bpftool/feature.c
+> +++ b/tools/bpf/bpftool/feature.c
+> @@ -336,6 +336,10 @@ static void probe_kernel_image_config(const char *define_prefix)
+>                 { "CONFIG_BPF_JIT", },
+>                 /* Avoid compiling eBPF interpreter (use JIT only) */
+>                 { "CONFIG_BPF_JIT_ALWAYS_ON", },
+> +               /* Kernel BTF debug information available */
+> +               { "CONFIG_DEBUG_INFO_BTF", },
+> +               /* Kernel module BTF debug information available */
+> +               { "CONFIG_DEBUG_INFO_BTF_MODULES", },
 >
-> +#ifdef CONFIG_DEBUG_INFO_COMPRESSED
->  /*
->   * The data of compressed section should be aligned to 4
->   * (for 32bit) or 8 (for 64 bit) bytes. The binutils ld
-> @@ -292,6 +293,7 @@ static int compressed_section_fix(Elf *elf, Elf_Scn *scn, GElf_Shdr *sh)
->         }
->         return 0;
->  }
-> +#endif
->
->  static int elf_collect(struct object *obj)
->  {
-> @@ -370,8 +372,10 @@ static int elf_collect(struct object *obj)
->                         obj->efile.idlist_addr  = sh.sh_addr;
->                 }
->
-> +#ifdef CONFIG_DEBUG_INFO_COMPRESSED
->                 if (compressed_section_fix(elf, scn, &sh))
->                         return -1;
-> +#endif
->         }
->
->         return 0;
+>                 /* cgroups */
+>                 { "CONFIG_CGROUPS", },
 > --
-> 2.25.1
+> 2.29.2
 >
