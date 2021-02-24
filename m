@@ -2,70 +2,94 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81EF9C433E0
-	for <bpf@archiver.kernel.org>; Wed, 24 Feb 2021 02:17:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C88D5C433E6
+	for <bpf@archiver.kernel.org>; Wed, 24 Feb 2021 02:43:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2880864EBB
-	for <bpf@archiver.kernel.org>; Wed, 24 Feb 2021 02:17:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7C95064EC8
+	for <bpf@archiver.kernel.org>; Wed, 24 Feb 2021 02:43:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230429AbhBXCRX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 23 Feb 2021 21:17:23 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55888 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229961AbhBXCRX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 23 Feb 2021 21:17:23 -0500
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 465A564E7A;
-        Wed, 24 Feb 2021 02:16:41 +0000 (UTC)
-Date:   Tue, 23 Feb 2021 21:16:39 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Michael Jeanson <mjeanson@efficios.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Yonghong Song <yhs@fb.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>, bpf@vger.kernel.org
-Subject: Re: [RFC PATCH 0/6] [RFC] Faultable tracepoints (v2)
-Message-ID: <20210223211639.670db85c@gandalf.local.home>
-In-Reply-To: <20210218222125.46565-1-mjeanson@efficios.com>
-References: <20210218222125.46565-1-mjeanson@efficios.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S232349AbhBXCnA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 23 Feb 2021 21:43:00 -0500
+Received: from out4-smtp.messagingengine.com ([66.111.4.28]:34581 "EHLO
+        out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229961AbhBXCm6 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 23 Feb 2021 21:42:58 -0500
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 179405C0085;
+        Tue, 23 Feb 2021 21:42:10 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Tue, 23 Feb 2021 21:42:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zenhack.net; h=
+        message-id:from:date:subject:to; s=fm2; bh=Vtx7UlgIGFX9Sn2RG8HGj
+        RbRgEj2WGN5X1HPKlnVvXA=; b=BrV1JIhmVaRgKkDNJeX5NtbcVdpAsN5pUNczZ
+        6fRwu5YLMPBMBDwPEDpoXyDTbJr1lSbGjNokyESKJeg2uDPBv2RORWG0qTxheIs+
+        X0+qCUToSk+u9uYe1LI+pwFvm1XD1JVAam1rHAUWERLlMvHYT2yRQcDK0JIgu5Ho
+        aSTO+zB0wkzaeHAsCRRD5ohIa2ajKV93tIoagkTi+3CPd+FRAcmJrnuO9cQYY4ng
+        knlyayWz4GW91X2ZkDBz5KZ920OwNa4HhjJjdsV/Wc/+g+kMQgx5PvvBswmKJzKz
+        TyuBQJdeieoiMHgDvvdCsqqFft5sF7Vr377Gunt3crC8dOhXQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=date:from:message-id:subject:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; bh=Vtx7UlgIGFX9Sn2RG8HGjRbRgEj2WGN5X1HPKlnVvXA=; b=ROwr3Fxn
+        cL3DPOOL2RXvyNlV43RMbfDW6xMUpjPndATIfNoii6T0Y4gtW5PIal2tbThsLtKH
+        avpkNp9Jd2dkHXO+dK82AU07e9/eqOMLBVVLVVPvDSHuowHCWvsfobe04iNqJhd3
+        zmp6gtnKEADbXotuXD724IFxmkaG7E+4u5VTAwXpZepVLXtHSJGjG7TdN1JRJHkF
+        K840qP1wVCmm9nhziyM/3fU08Bt54dE4jILQMHv7sUj4/KHM9QyNswwvxV1zlwcz
+        fMlCy1CWE9NCnPyth2+iYtbCgkqQFoH8w23AWy/YQQbwHXnkZzXVyMUSPb8+he9Q
+        JR8/5FVEwhRqxg==
+X-ME-Sender: <xms:Ab01YJ6nWmZWaRtIIbFgnMml1er2qaBf53kuwUkplSSodCVxObN-nw>
+    <xme:Ab01YG5uz9ize0Xg9mcRsZgI_wfRT2WBuzf0VmuuvLdbnovNPa8msiLPhw9dqVp38
+    wJypx4TIeajjlyh2is>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrkeeigdegiecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecunecujfgurhepkffhfffuvfestddtredttddttdenuc
+    fhrhhomhepkfgrnhcuffgvnhhhrghrughtuceoihgrnhesiigvnhhhrggtkhdrnhgvtheq
+    necuggftrfgrthhtvghrnhepudetgeehgfevtdffleeggfehkeekkeffffdvledvtefgge
+    ffgffgleejuddtffeunecuffhomhgrihhnpegvrhhrohhrshdrthhoohhlshenucfkphep
+    uddttddrtddrfeejrddvvddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomhepihgrnhesiigvnhhhrggtkhdrnhgvth
+X-ME-Proxy: <xmx:Ab01YAcxUdb04wkKBgXGL3ZlEFUjzV6wATDkC34viTo_BZsYFfnJeQ>
+    <xmx:Ab01YCKW9bul8CVQh0lQ4Y2F0zLyBgjdnf06o6vWSqYRP9Zz6SI6lw>
+    <xmx:Ab01YNI8D8xlwY7tWGfZa--04NBJsTcAzVLFVa3Aw-aSC8oDRNLFLQ>
+    <xmx:Ar01YLiDKK_gXP-h42tWqbhh7LEWVadyRwz0b5Et-z9R3kRu5loppA>
+Received: from localhost (pool-100-0-37-221.bstnma.fios.verizon.net [100.0.37.221])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 9184A24005B;
+        Tue, 23 Feb 2021 21:42:09 -0500 (EST)
+X-Mailbox-Line: From edb7c1985e446f6dd4ad875f39605bb2968d9920 Mon Sep 17 00:00:00 2001
+Message-Id: <cover.1614134213.git.ian@zenhack.net>
+From:   Ian Denhardt <ian@zenhack.net>
+Date:   Tue, 23 Feb 2021 21:36:53 -0500
+Subject: [PATCH 0/2] More strict error checking in bpf_asm.
+To:     ast@kernel.org, daniel@iogearbox.net, bpf@vger.kernel.org,
+        netdev@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, 18 Feb 2021 17:21:19 -0500
-Michael Jeanson <mjeanson@efficios.com> wrote:
+Hi,
 
-> This series only implements the tracepoint infrastructure required to
-> allow tracers to handle page faults. Modifying each tracer to handle
-> those page faults would be a next step after we all agree on this piece
-> of instrumentation infrastructure.
+Enclosed are two patches related to my earlier message, which make the
+error checking in the bpf_asm tool more strict, the first by upgrading a
+warning to an error, the second by using non-zero exit codes when
+aborting.
 
-I started taking a quick look at this, and came up with the question: how
-do you allow preemption when dealing with per-cpu buffers or storage to
-record the data?
+These could be conceptually separated, but it seemed sensible to submit
+them together.
 
-That is, perf, bpf and ftrace are all using some kind of per-cpu data, and
-this is the reason for the need to disable preemption. What's the solution
-that LTTng is using for this? I know it has a per cpu buffers too, but does
-it have some kind of "per task" buffer that is being used to extract the
-data that can fault?
+-Ian
 
--- Steve
+Ian Denhardt (2):
+  tools, bpf_asm: Hard error on out of range jumps.
+  tools, bpf_asm: exit non-zero on errors.
+
+ tools/bpf/bpf_exp.y | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
+
+--
+2.30.1
+
