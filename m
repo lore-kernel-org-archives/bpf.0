@@ -2,71 +2,110 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.7 required=3.0 tests=BAYES_00,DATE_IN_PAST_12_24,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2E2CC433E0
-	for <bpf@archiver.kernel.org>; Wed, 24 Feb 2021 21:02:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4607C433E0
+	for <bpf@archiver.kernel.org>; Wed, 24 Feb 2021 21:23:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C283D64E60
-	for <bpf@archiver.kernel.org>; Wed, 24 Feb 2021 21:02:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8B14264F08
+	for <bpf@archiver.kernel.org>; Wed, 24 Feb 2021 21:23:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235781AbhBXVCb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 24 Feb 2021 16:02:31 -0500
-Received: from www62.your-server.de ([213.133.104.62]:48360 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232623AbhBXVCa (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 24 Feb 2021 16:02:30 -0500
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1lF1I1-000DNv-OW; Wed, 24 Feb 2021 22:01:45 +0100
-Received: from [85.7.101.30] (helo=pc-9.home)
-        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1lF1I1-000Bhl-J1; Wed, 24 Feb 2021 22:01:45 +0100
-Subject: Re: arch_prepare_bpf_trampoline() for arm ?
-To:     Luigi Rizzo <rizzo@iet.unipi.it>
-References: <CA+hQ2+hhDG2JprNLaUdX4xgcihvchEda1aJuQN3jtJ3hYucDcQ@mail.gmail.com>
-Cc:     bpf@vger.kernel.org, kpsingh@chromium.org, will@kernel.org
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <6af0ab27-48f1-e389-d2f4-41b3c1db4a18@iogearbox.net>
-Date:   Wed, 24 Feb 2021 22:01:45 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
-MIME-Version: 1.0
-In-Reply-To: <CA+hQ2+hhDG2JprNLaUdX4xgcihvchEda1aJuQN3jtJ3hYucDcQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.102.4/26090/Wed Feb 24 13:09:42 2021)
+        id S234141AbhBXVXd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 24 Feb 2021 16:23:33 -0500
+Received: from out5-smtp.messagingengine.com ([66.111.4.29]:45367 "EHLO
+        out5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231160AbhBXVXd (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 24 Feb 2021 16:23:33 -0500
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 5C7D15C0184;
+        Wed, 24 Feb 2021 16:22:47 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Wed, 24 Feb 2021 16:22:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zenhack.net; h=
+        message-id:in-reply-to:references:from:date:subject:to; s=fm2;
+         bh=FCF8aonc9ebZcZPHGE96nk/DwPt6Xq8FPGjmmFdgfeU=; b=r4eVqGoNIZa1
+        ncJwen/uBLeAl5gI3m0KT0vfj/CEfWoiY+jkItrtxho5o0y5njpAq9m4nWQFg2MO
+        Y1xitlXpZYuzeqbJ4dIHCVnQ2kXHrE4xUWBKTVE5qOKQFR+4Wzxc5NB4HOPQwIl2
+        WKUnSHueBh+rsfJxX1vZowihA3Bff7P5wDquHc1Ro+c7aPgK4u08hia3TPRqLR7r
+        SvGEPp4lLyZYgHRV+MbDIz6pkHeIkIuNy7QsW44zgrogNKaIsB1jEIl5CpehChJz
+        nm4If67mk2N0I/dZABqXLeu5MXPHD2NlAf50ltWy1uUMVal22g8Wct2kp7PBl04L
+        ZOtTEMkfTg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=date:from:in-reply-to:message-id
+        :references:subject:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm2; bh=FCF8aonc9ebZcZPHGE96nk/DwPt6X
+        q8FPGjmmFdgfeU=; b=LElZT34yWUplxZyP4RFHnCnHfoJSa9nB1x6JTJFql9X53
+        MIDz8rMfainJ8gVHAcxOBqV8aXVaOvtnGkoevpFqIDq7TLBk/xj9CvPRRzIUDcaY
+        2gLwzratazOFC9TLTGYuQ/LiQbi8pKaooqHHBWEtWoGQmsqsj317Zf6v3yuNj0F8
+        YnpEHe2o5/puP2mOR8XKVbdKpIh4Y8xL7KLFfGJd52FHwvOXZTHx89fAtgdLmMSm
+        0mYpWDvymnc17A+qQW6Xyi2al8IzTJ19OHywn7pgre/Ql4l5MGcdpSwMwHIRyVOs
+        YZgik21i49Yj1lV5WI61Bs7z7EQzTM8V4WDZ6HgaQ==
+X-ME-Sender: <xms:p8M2YFbUReJg8M5DXclpDC5BcBZpajSqBEafe6krMakpuNmekdXtBw>
+    <xme:p8M2YMbIvq-iYPcnQAg1XfZWjncUvtHCdEjUK5Gbcm954UNNTAjPB3x4ccywwGZF0
+    22svETfhgIGhrhzALI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrkeejgddugeeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefkjghfhfffuffvsedttdertddttd
+    dtnecuhfhrohhmpefkrghnucffvghnhhgrrhguthcuoehirghnseiivghnhhgrtghkrdhn
+    vghtqeenucggtffrrghtthgvrhhnpeegleekvdehjefhudehhfefgfdtvdduveetveekhf
+    ekueefhffhudegvdffgfduleenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhp
+    pedutddtrddtrdefjedrvddvudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpehirghnseiivghnhhgrtghkrdhnvght
+X-ME-Proxy: <xmx:p8M2YH-4hf6fj51zJIt4GzfSTZJoAeVs-PO5fMJl3aSgT2vhQU5hKw>
+    <xmx:p8M2YDoUqf6AUR3GS14UeUIQdwzEbc4vnEBMQhPjeUQi_TAHH-cN9A>
+    <xmx:p8M2YAp95YOe4UQ_yUEnlRQkF-G0DPCSTEjKgu5_sWLxJSJmGC4ZOA>
+    <xmx:p8M2YNCsFOXHUgsZ0GJTGpldInX3pJ9iIoS-4ruXBiQrrzwQEb7reQ>
+Received: from localhost (pool-100-0-37-221.bstnma.fios.verizon.net [100.0.37.221])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 15DE41080057;
+        Wed, 24 Feb 2021 16:22:47 -0500 (EST)
+X-Mailbox-Line: From f4c6670a6348231d3d6f307a1313c6c1fb85fbe5 Mon Sep 17 00:00:00 2001
+Message-Id: <f4c6670a6348231d3d6f307a1313c6c1fb85fbe5.1614201304.git.ian@zenhack.net>
+In-Reply-To: <cover.1614201303.git.ian@zenhack.net>
+References: <cover.1614201303.git.ian@zenhack.net>
+From:   Ian Denhardt <ian@zenhack.net>
+Date:   Tue, 23 Feb 2021 21:15:31 -0500
+Subject: [PATCH 1/2] tools, bpf_asm: Hard error on out of range jumps.
+To:     ast@kernel.org, daniel@iogearbox.net, bpf@vger.kernel.org,
+        netdev@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 2/24/21 8:54 PM, Luigi Rizzo wrote:
-> I prepared a BPF version of kstats[1]
-> https://github.com/luigirizzo/lr-cstats
-> that uses fentry/fexit hooks to monitor the execution time
-> of a kernel function.
-> 
-> I hoped to have it working on ARM64 too, but it looks like
-> arch_prepare_bpf_trampoline() only exists for x86.
-> 
-> Is there any outstanding patch for this function on ARM64,
-> or any similar function I could look at to implement it myself ?
+Per discussion at:
 
-Not that I'm currently aware of, arm64 support would definitely be great
-to have. From x86 side, the underlying arch dependency was basically on
-text_poke_bp() to patch instructions on a live kernel. Haven't checked
-recently whether an equivalent exists on arm64 yet, but perhaps Will
-might know.
+https://lore.kernel.org/bpf/c964892195a6b91d20a67691448567ef528ffa6d.camel@linux.ibm.com/T/#t
 
-> [1] kstats is an in-kernel also in the above repo and previously
-> discussed at https://lwn.net/Articles/813303/
+...this was originally introduced as a warning due to concerns about
+breaking existing code, but a hard error probably makes more sense,
+especially given that concerns about breakage were only speculation.
+
+Acked-by: Ilya Leoshkevich <iii@linux.ibm.com>
+Signed-off-by: Ian Denhradt <ian@zenhack.net>
+---
+ tools/bpf/bpf_exp.y | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/tools/bpf/bpf_exp.y b/tools/bpf/bpf_exp.y
+index 8d48e896be50..8d03e5245da5 100644
+--- a/tools/bpf/bpf_exp.y
++++ b/tools/bpf/bpf_exp.y
+@@ -549,9 +549,11 @@ static uint8_t bpf_encode_jt_jf_offset(int off, int i)
+ {
+ 	int delta = off - i - 1;
+ 
+-	if (delta < 0 || delta > 255)
+-		fprintf(stderr, "warning: insn #%d jumps to insn #%d, "
++	if (delta < 0 || delta > 255) {
++		fprintf(stderr, "error: insn #%d jumps to insn #%d, "
+ 				"which is out of range\n", i, off);
++		exit(1);
++	}
+ 	return (uint8_t) delta;
+ }
+ 
+-- 
+2.30.1
 
