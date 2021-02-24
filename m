@@ -2,123 +2,112 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53563C433E0
-	for <bpf@archiver.kernel.org>; Wed, 24 Feb 2021 08:12:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 30FC5C433E0
+	for <bpf@archiver.kernel.org>; Wed, 24 Feb 2021 08:16:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0F32F64EE8
-	for <bpf@archiver.kernel.org>; Wed, 24 Feb 2021 08:12:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E0A3A64ED6
+	for <bpf@archiver.kernel.org>; Wed, 24 Feb 2021 08:16:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234158AbhBXIL6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 24 Feb 2021 03:11:58 -0500
-Received: from szxga04-in.huawei.com ([45.249.212.190]:12201 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234091AbhBXILz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 24 Feb 2021 03:11:55 -0500
-Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4DlpTs0c4tzlNZ3;
-        Wed, 24 Feb 2021 16:09:05 +0800 (CST)
-Received: from huawei.com (10.175.124.27) by DGGEMS403-HUB.china.huawei.com
- (10.3.19.203) with Microsoft SMTP Server id 14.3.498.0; Wed, 24 Feb 2021
- 16:10:56 +0800
-From:   wanghongzhe <wanghongzhe@huawei.com>
-To:     <keescook@chromium.org>, <luto@amacapital.net>
-CC:     <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
-        <daniel@iogearbox.net>, <john.fastabend@gmail.com>, <kafai@fb.com>,
-        <kpsingh@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <songliubraving@fb.com>,
-        <wad@chromium.org>, <wanghongzhe@huawei.com>, <yhs@fb.com>
-Subject: [PATCH v3] seccomp: Improve performace by optimizing rmb()
-Date:   Wed, 24 Feb 2021 16:58:05 +0800
-Message-ID: <1614157085-18952-1-git-send-email-wanghongzhe@huawei.com>
-X-Mailer: git-send-email 1.7.12.4
+        id S233871AbhBXIPr (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 24 Feb 2021 03:15:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59778 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234163AbhBXIO5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 24 Feb 2021 03:14:57 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33144C061574;
+        Wed, 24 Feb 2021 00:14:17 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id q20so838211pfu.8;
+        Wed, 24 Feb 2021 00:14:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PCpJcby1iBAS1fFesYulGCT2pYjsVJfuxNnCp/y0Gcs=;
+        b=LLaNXdmb+8VIW5Cpuh/9m9ZJyj0VMPMh1G6ZE1tRU33JzA4kv49x8/XaArI+zFBviM
+         4C33a3BIr3J0Vve0AfpH8SJtCy6VcR1g4ZyplTmf7J6SfHr/3UNPwFvif6DqaE4Qiyn/
+         Y5cDRR42Eef9hFEuzL+tr8TvAN/oIppR1QMiFNIdTuomOayJMm68z7mtw+6MnIdH5C4H
+         GJ/Fo2pBao8naqd5Iu7K5Rc0wAW0mH8CQOWb7N9/ibx0hQiYBxtV8Igj8BKMppkbXwky
+         FMHtX1D90Uipq/0jp6xKt0rwsuqsC5Jao3XAEhk0W4G5Wt+zCfbYcEpZF2c5JQzkyD0X
+         xxLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PCpJcby1iBAS1fFesYulGCT2pYjsVJfuxNnCp/y0Gcs=;
+        b=qyVApzp0Q5pcAKPTOnuNGyaDoEFeNgHAaGr66lPZKYa+YjYRGXIi+btC4tZLBGCe1j
+         9lpxoVLrQt3Um/7PwikP5Qot7jmzG8+XyX27VZ693zObyTY3GinDXCtseHet8jLu343/
+         JTcVNipBuIGSjJ+1CNNiWBUqoM6nX8DrFaLoJJneiFbXUBbzhu0KTVg2ofWxaUPtRTeA
+         XiuTwfy77XUVI2Rek4trtXHEKcPxz3Kb1JeJdKTBaMFrK1L16hj5lNQiUMzMq/5uSfNt
+         l5T+hFCXnqP4kW5XWFosoWT6GTyRwDf4MsMOxUEiO4P9YAmwuuDi0fVUWRp306puwgjj
+         gTgQ==
+X-Gm-Message-State: AOAM530KNcZPnmdlwFDcRcVWpf4t1YXE/2vEtNqPY/WKPz5Hx+BEBqiH
+        XGHx4FEuf/+H/xPDW+gQ5zvTB9uBoQ27cw==
+X-Google-Smtp-Source: ABdhPJynSHQ2Y7yri15aTLahqVdbRdDPlUeT4EpNsldp2LP1zSRww5bSdoyCKQ+XlLqnVecYkHKCjg==
+X-Received: by 2002:a63:4b0a:: with SMTP id y10mr12427648pga.144.1614154456585;
+        Wed, 24 Feb 2021 00:14:16 -0800 (PST)
+Received: from Leo-laptop-t470s.redhat.com ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id y68sm1622029pgy.5.2021.02.24.00.14.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Feb 2021 00:14:16 -0800 (PST)
+From:   Hangbin Liu <liuhangbin@gmail.com>
+To:     netdev@vger.kernel.org
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yi-Hung Wei <yihung.wei@gmail.com>,
+        David Miller <davem@davemloft.net>, bpf@vger.kernel.org,
+        Jiong Wang <jiong.wang@netronome.com>,
+        Hangbin Liu <liuhangbin@gmail.com>
+Subject: [PATCH net] selftest/bpf: no need to drop the packet when there is no geneve opt
+Date:   Wed, 24 Feb 2021 16:14:03 +0800
+Message-Id: <20210224081403.1425474-1-liuhangbin@gmail.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.124.27]
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-As Kees haved accepted the v2 patch at a381b70a1 which just
-replaced rmb() with smp_rmb(), this patch will base on that and just adjust
-the smp_rmb() to the correct position.
+In bpf geneve tunnel test we set geneve option on tx side. On rx side we
+only call bpf_skb_get_tunnel_opt(). Since commit 9c2e14b48119 ("ip_tunnels:
+Set tunnel option flag when tunnel metadata is present") geneve_rx() will
+not add TUNNEL_GENEVE_OPT flag if there is no geneve option, which cause
+bpf_skb_get_tunnel_opt() return ENOENT and _geneve_get_tunnel() in
+test_tunnel_kern.c drop the packet.
 
-As the original comment shown (and indeed it should be):
-   /*
-    * Make sure that any changes to mode from another thread have
-    * been seen after SYSCALL_WORK_SECCOMP was seen.
-    */
-the smp_rmb() should be put between reading SYSCALL_WORK_SECCOMP and reading
-seccomp.mode to make sure that any changes to mode from another thread have
-been seen after SYSCALL_WORK_SECCOMP was seen, for TSYNC situation. However,
-it is misplaced between reading seccomp.mode and seccomp->filter. This issue
-seems to be misintroduced at 13aa72f0fd0a9f98a41cefb662487269e2f1ad65 which
-aims to refactor the filter callback and the API. So let's just adjust the
-smp_rmb() to the correct position.
+As it should be valid that bpf_skb_get_tunnel_opt() return error when
+there is not tunnel option, there is no need to drop the packet and
+break all geneve rx traffic. Just set opt_class to 0 in this test and
+keep returning TC_ACT_OK.
 
-A next optimization patch will be provided if this ajustment is appropriate.
-
-v2 -> v3:
- - move the smp_rmb() to the correct position
-
-v1 -> v2:
- - only replace rmb() with smp_rmb()
- - provide the performance test number
-
-RFC -> v1:
- - replace rmb() with smp_rmb()
- - move the smp_rmb() logic to the middle between TIF_SECCOMP and mode
-
-Signed-off-by: wanghongzhe <wanghongzhe@huawei.com>
+Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
 ---
- kernel/seccomp.c | 15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
+ tools/testing/selftests/bpf/progs/test_tunnel_kern.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/kernel/seccomp.c b/kernel/seccomp.c
-index 1d60fc2c9987..64b236cb8a7f 100644
---- a/kernel/seccomp.c
-+++ b/kernel/seccomp.c
-@@ -1160,12 +1160,6 @@ static int __seccomp_filter(int this_syscall, const struct seccomp_data *sd,
- 	int data;
- 	struct seccomp_data sd_local;
+diff --git a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
+index a621b58ab079..9afe947cfae9 100644
+--- a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
++++ b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
+@@ -446,10 +446,8 @@ int _geneve_get_tunnel(struct __sk_buff *skb)
+ 	}
  
--	/*
--	 * Make sure that any changes to mode from another thread have
--	 * been seen after SYSCALL_WORK_SECCOMP was seen.
--	 */
--	smp_rmb();
--
- 	if (!sd) {
- 		populate_seccomp_data(&sd_local);
- 		sd = &sd_local;
-@@ -1291,7 +1285,6 @@ static int __seccomp_filter(int this_syscall, const struct seccomp_data *sd,
+ 	ret = bpf_skb_get_tunnel_opt(skb, &gopt, sizeof(gopt));
+-	if (ret < 0) {
+-		ERROR(ret);
+-		return TC_ACT_SHOT;
+-	}
++	if (ret < 0)
++		gopt.opt_class = 0;
  
- int __secure_computing(const struct seccomp_data *sd)
- {
--	int mode = current->seccomp.mode;
- 	int this_syscall;
- 
- 	if (IS_ENABLED(CONFIG_CHECKPOINT_RESTORE) &&
-@@ -1301,7 +1294,13 @@ int __secure_computing(const struct seccomp_data *sd)
- 	this_syscall = sd ? sd->nr :
- 		syscall_get_nr(current, current_pt_regs());
- 
--	switch (mode) {
-+	/* 
-+	 * Make sure that any changes to mode from another thread have
-+	 * been seen after SYSCALL_WORK_SECCOMP was seen.
-+	 */
-+	smp_rmb();
-+
-+	switch (current->seccomp.mode) {
- 	case SECCOMP_MODE_STRICT:
- 		__secure_computing_strict(this_syscall);  /* may call do_exit */
- 		return 0;
+ 	bpf_trace_printk(fmt, sizeof(fmt),
+ 			key.tunnel_id, key.remote_ipv4, gopt.opt_class);
 -- 
-2.19.1
+2.26.2
 
