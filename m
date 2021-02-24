@@ -2,91 +2,123 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.2 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_2 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 92345C433E0
-	for <bpf@archiver.kernel.org>; Wed, 24 Feb 2021 08:10:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53563C433E0
+	for <bpf@archiver.kernel.org>; Wed, 24 Feb 2021 08:12:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4CFEE64E85
-	for <bpf@archiver.kernel.org>; Wed, 24 Feb 2021 08:10:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0F32F64EE8
+	for <bpf@archiver.kernel.org>; Wed, 24 Feb 2021 08:12:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233817AbhBXIKS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 24 Feb 2021 03:10:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58730 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232144AbhBXIKR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 24 Feb 2021 03:10:17 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C016C061574
-        for <bpf@vger.kernel.org>; Wed, 24 Feb 2021 00:09:22 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id g5so1515644ejt.2
-        for <bpf@vger.kernel.org>; Wed, 24 Feb 2021 00:09:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=4hXopz/XWSSH0QBUDbuWuPX2XcafKxOnD39fxX8+oe0=;
-        b=DwsOIjDOmi8nKDZFszozTfmjsY50FEYCU8ib9Lt3Kx7M48MYhKEI1sJmq9DNvT60U0
-         /dEXOQkfiAuoVLmHUNp6VeEzx62rXRMrGyN1ostqhKjGKYL/8z2KcmedKN9w/s1Sxn/3
-         Qj8lBzq4tdl8nsX1/PjeULpHrqvrQ3HRyqIcU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=4hXopz/XWSSH0QBUDbuWuPX2XcafKxOnD39fxX8+oe0=;
-        b=VIWWNCDlNOG1g76lD+MFKwnUfg+N4YuUETkbplJhXqm15aK24JKI/SniwcYpLdwSIl
-         vXAULF2wyFwPWtq5oBGpoD+SAgKUR9531L8zIkac06+BQL17eND7hqPLCuNoMfRChKD6
-         LtlPkrIhxb+kq1ZIfMhIo0aKMFCXnqjbbE6tMVEB/Yk7b0lzIwqYwRj9gRTSzJVm6NLm
-         ssWrosPW13z53B4qOxMQtdoyhltJF4KWKNMIEBj0xPQJKhTXuMtl/0iXWzpTs5BQ2ypY
-         rg/6ov8bZNGkOqqHsADvKpSqjfVtMQLoFesfM3xWd/KbQTKsdkY5pn+gOU+R+pT+FIWO
-         tfkQ==
-X-Gm-Message-State: AOAM533vQB+vaL6PK+JY4LGYexjjtWOnR5Qqejy33NBNfJmnMTxP4Y0m
-        IrYfQYch1abinLg2XWkYNT8kTg==
-X-Google-Smtp-Source: ABdhPJxZEY7qzmfMH7xYdxlxTvQdmAU3JLHzK0xyoshe55PvYKLy1v7HK27rwqWOh/OLELd1hoP47A==
-X-Received: by 2002:a17:906:934f:: with SMTP id p15mr25483543ejw.473.1614154160886;
-        Wed, 24 Feb 2021 00:09:20 -0800 (PST)
-Received: from toad (79.184.34.53.ipv4.supernova.orange.pl. [79.184.34.53])
-        by smtp.gmail.com with ESMTPSA id y20sm859782edc.84.2021.02.24.00.09.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Feb 2021 00:09:20 -0800 (PST)
-Date:   Wed, 24 Feb 2021 09:08:55 +0100
-From:   Jakub Sitnicki <jakub@cloudflare.com>
-To:     Cong Wang <xiyou.wangcong@gmail.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        duanxiongchun@bytedance.com, wangdongdong.6@bytedance.com,
-        jiang.wang@bytedance.com, Cong Wang <cong.wang@bytedance.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Lorenz Bauer <lmb@cloudflare.com>,
-        John Fastabend <john.fastabend@gmail.com>
-Subject: Re: [Patch bpf-next v7 9/9] skmsg: remove unused sk_psock_stop()
- declaration
-Message-ID: <20210224090855.718e8ad6@toad>
-In-Reply-To: <20210223184934.6054-10-xiyou.wangcong@gmail.com>
-References: <20210223184934.6054-1-xiyou.wangcong@gmail.com>
-        <20210223184934.6054-10-xiyou.wangcong@gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+        id S234158AbhBXIL6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 24 Feb 2021 03:11:58 -0500
+Received: from szxga04-in.huawei.com ([45.249.212.190]:12201 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234091AbhBXILz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 24 Feb 2021 03:11:55 -0500
+Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4DlpTs0c4tzlNZ3;
+        Wed, 24 Feb 2021 16:09:05 +0800 (CST)
+Received: from huawei.com (10.175.124.27) by DGGEMS403-HUB.china.huawei.com
+ (10.3.19.203) with Microsoft SMTP Server id 14.3.498.0; Wed, 24 Feb 2021
+ 16:10:56 +0800
+From:   wanghongzhe <wanghongzhe@huawei.com>
+To:     <keescook@chromium.org>, <luto@amacapital.net>
+CC:     <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
+        <daniel@iogearbox.net>, <john.fastabend@gmail.com>, <kafai@fb.com>,
+        <kpsingh@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <songliubraving@fb.com>,
+        <wad@chromium.org>, <wanghongzhe@huawei.com>, <yhs@fb.com>
+Subject: [PATCH v3] seccomp: Improve performace by optimizing rmb()
+Date:   Wed, 24 Feb 2021 16:58:05 +0800
+Message-ID: <1614157085-18952-1-git-send-email-wanghongzhe@huawei.com>
+X-Mailer: git-send-email 1.7.12.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.175.124.27]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, 23 Feb 2021 10:49:34 -0800
-Cong Wang <xiyou.wangcong@gmail.com> wrote:
+As Kees haved accepted the v2 patch at a381b70a1 which just
+replaced rmb() with smp_rmb(), this patch will base on that and just adjust
+the smp_rmb() to the correct position.
 
-> From: Cong Wang <cong.wang@bytedance.com>
-> 
-> It is not defined or used anywhere.
-> 
-> Cc: Daniel Borkmann <daniel@iogearbox.net>
-> Cc: Lorenz Bauer <lmb@cloudflare.com>
-> Cc: John Fastabend <john.fastabend@gmail.com>
-> Cc: Jakub Sitnicki <jakub@cloudflare.com>
-> Signed-off-by: Cong Wang <cong.wang@bytedance.com>
-> ---
+As the original comment shown (and indeed it should be):
+   /*
+    * Make sure that any changes to mode from another thread have
+    * been seen after SYSCALL_WORK_SECCOMP was seen.
+    */
+the smp_rmb() should be put between reading SYSCALL_WORK_SECCOMP and reading
+seccomp.mode to make sure that any changes to mode from another thread have
+been seen after SYSCALL_WORK_SECCOMP was seen, for TSYNC situation. However,
+it is misplaced between reading seccomp.mode and seccomp->filter. This issue
+seems to be misintroduced at 13aa72f0fd0a9f98a41cefb662487269e2f1ad65 which
+aims to refactor the filter callback and the API. So let's just adjust the
+smp_rmb() to the correct position.
 
-Acked-by: Jakub Sitnicki <jakub@cloudflare.com>
+A next optimization patch will be provided if this ajustment is appropriate.
+
+v2 -> v3:
+ - move the smp_rmb() to the correct position
+
+v1 -> v2:
+ - only replace rmb() with smp_rmb()
+ - provide the performance test number
+
+RFC -> v1:
+ - replace rmb() with smp_rmb()
+ - move the smp_rmb() logic to the middle between TIF_SECCOMP and mode
+
+Signed-off-by: wanghongzhe <wanghongzhe@huawei.com>
+---
+ kernel/seccomp.c | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
+
+diff --git a/kernel/seccomp.c b/kernel/seccomp.c
+index 1d60fc2c9987..64b236cb8a7f 100644
+--- a/kernel/seccomp.c
++++ b/kernel/seccomp.c
+@@ -1160,12 +1160,6 @@ static int __seccomp_filter(int this_syscall, const struct seccomp_data *sd,
+ 	int data;
+ 	struct seccomp_data sd_local;
+ 
+-	/*
+-	 * Make sure that any changes to mode from another thread have
+-	 * been seen after SYSCALL_WORK_SECCOMP was seen.
+-	 */
+-	smp_rmb();
+-
+ 	if (!sd) {
+ 		populate_seccomp_data(&sd_local);
+ 		sd = &sd_local;
+@@ -1291,7 +1285,6 @@ static int __seccomp_filter(int this_syscall, const struct seccomp_data *sd,
+ 
+ int __secure_computing(const struct seccomp_data *sd)
+ {
+-	int mode = current->seccomp.mode;
+ 	int this_syscall;
+ 
+ 	if (IS_ENABLED(CONFIG_CHECKPOINT_RESTORE) &&
+@@ -1301,7 +1294,13 @@ int __secure_computing(const struct seccomp_data *sd)
+ 	this_syscall = sd ? sd->nr :
+ 		syscall_get_nr(current, current_pt_regs());
+ 
+-	switch (mode) {
++	/* 
++	 * Make sure that any changes to mode from another thread have
++	 * been seen after SYSCALL_WORK_SECCOMP was seen.
++	 */
++	smp_rmb();
++
++	switch (current->seccomp.mode) {
+ 	case SECCOMP_MODE_STRICT:
+ 		__secure_computing_strict(this_syscall);  /* may call do_exit */
+ 		return 0;
+-- 
+2.19.1
+
