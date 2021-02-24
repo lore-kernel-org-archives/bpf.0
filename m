@@ -5,107 +5,120 @@ X-Spam-Level:
 X-Spam-Status: No, score=-14.7 required=3.0 tests=BAYES_00,DATE_IN_PAST_12_24,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3047C433E0
-	for <bpf@archiver.kernel.org>; Wed, 24 Feb 2021 21:26:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7614C433E0
+	for <bpf@archiver.kernel.org>; Wed, 24 Feb 2021 21:26:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8668564F0C
-	for <bpf@archiver.kernel.org>; Wed, 24 Feb 2021 21:26:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 95CC464F0C
+	for <bpf@archiver.kernel.org>; Wed, 24 Feb 2021 21:26:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235291AbhBXV0m (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S235422AbhBXV0m (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Wed, 24 Feb 2021 16:26:42 -0500
-Received: from out5-smtp.messagingengine.com ([66.111.4.29]:54289 "EHLO
+Received: from out5-smtp.messagingengine.com ([66.111.4.29]:53825 "EHLO
         out5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234055AbhBXV0k (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 24 Feb 2021 16:26:40 -0500
+        by vger.kernel.org with ESMTP id S234354AbhBXV0l (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 24 Feb 2021 16:26:41 -0500
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 7213A5C01A0;
-        Wed, 24 Feb 2021 16:25:34 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Wed, 24 Feb 2021 16:25:34 -0500
+        by mailout.nyi.internal (Postfix) with ESMTP id 9365A5C0183;
+        Wed, 24 Feb 2021 16:25:35 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Wed, 24 Feb 2021 16:25:35 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zenhack.net; h=
         message-id:in-reply-to:references:from:date:subject:to; s=fm2;
-         bh=tnJKexTzKw0qVsJnjOY0FhPyQOVWwb55paZsLwXZnsI=; b=Sj8UOTKx5czL
-        IwTyyi25XRQ1fpsEoEdt69hNcpSLmbG/QbiSlL0/HK69k1mVskwmHnCOttWf+Dvk
-        QibSqVMPA8nEOgskaUxtYcaoa7fEpzF0h0zGFrdu1GHvUUoafKYl5mIoGR+K1hqW
-        zr0w+Fzr03IhurgNyo3Xr3TvQwWVTOt8np8cp4Mpa9CaVnkdYQCe0uGG2asjFrCe
-        u6Im8nTtvCJ2Fg4bycHQhUDG5pqQ01F9MKOR7mmXyNLUPloXGG77IGIg4rMI0lj3
-        CNtwXrOtEOFUzGLuasmMyrtF0k4mRcyh8yLBXYmr5w/I4jGHvelAGTIh35d1Mp4I
-        Dh9I2vRUFQ==
+         bh=jTVg3G4cu/UsP/usEY8GDOyu2foXdL73CsN7V9uXu7U=; b=g3eGJxbZGB5k
+        PAC9HmqtMDv2zy0QseRDpt2ZXY9UpeDyPIGFiTyhSsInnRiO/+cPP9NSVNDCK8E7
+        1jXsLYdz4505S5+cQh8DHvm+mOLUCRJrI9PNV2882JvJv/YBWUnFcaIVkzDl6e+j
+        MX1nMTTkC27bdoVyx/DAgfFV+Su6ugZsKzKz6eVHBIki0MlTZKgsbRhMYRdbV8lJ
+        BcQTUgRKQxETQMOkg7tbMmhP7BWCvPF+9AlaNKBbk1Ul09SW8nzdK5EYzfeApiMA
+        BwS4WNfiQRQzPmtt8Trk8ylrP1QmOlEbm0PAy7LzzAh05IGa7VbMflkukGOdjDnb
+        20nz8FO7Vw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=date:from:in-reply-to:message-id
         :references:subject:to:x-me-proxy:x-me-proxy:x-me-sender
-        :x-me-sender:x-sasl-enc; s=fm2; bh=tnJKexTzKw0qVsJnjOY0FhPyQOVWw
-        b55paZsLwXZnsI=; b=nC0XO5GxxbRygeckJ0aBZN9ghZJgwPi5QD35Fw4YzYaqp
-        6B9z/urOeL6gVN6D7hSCEYbcdv4SPx7hgx1+d4qyXw0rdy7olXKYIgWa7p/G+/FP
-        A5HntTww0mhIj1lmPo/MM33WwkHZdgajDR1L7Cl6Izx/1rBlZO5IwnK+VA2nkE5z
-        VrcydoUhAum0XRK9yDstMH8x8BPiOWVu4rp6tRgaggwE52Lourg3ZSAVWtNznGBQ
-        FR/+tfRLn5obn/14jLPkeMzzFq6O492uMX/Cqs47svoWwaFKj1ZT75IjtBB3gYnm
-        qD0hSPbJPFNsAkwhPeeKoLRS9PV/bkzKdjcZ+DfYA==
-X-ME-Sender: <xms:TsQ2YHWJjSI-B3AksG_Y59F2si8Alj4XtzFL-FezwEpQhnpZDQ2xaA>
-    <xme:TsQ2YPnAlFUcQLvwVRf52YnqEK0r0z17QQAwnIWe8TvBwW9JWzmehD2uj1puSG0pl
-    4GbZKWf9eIuvAaVvpw>
+        :x-me-sender:x-sasl-enc; s=fm2; bh=jTVg3G4cu/UsP/usEY8GDOyu2foXd
+        L73CsN7V9uXu7U=; b=P0wY4hrNNUxLhORlzpolsDeU4C3pkb/1mCt35lTmCnL9v
+        wt74huLdaOj/WuGB7AtaI1jHeozLU7pe6oYg3+m1bv8aSusehTv33X0yuJVlaHgv
+        20qipK9Br1yV+w2Pie0BhkBVBXWQSG4SPZxUHcM1wV9PznoA0/fMND/5gwtPV925
+        5h7MqxurYoCFxouR8OyCpgN6D3ZzHVjmSzYH/F++5WfJHfar0EXhhAD/7MuwB5xY
+        d2wX06UyV14ShXopYyt+QjUWl6phM52zgSQYLYxw1xucMUzBtyTQhASmzO8fROMw
+        qbNUIfKPqIApDsgtqRq+4/TwMCjTrCCoE5ZkZQAbg==
+X-ME-Sender: <xms:T8Q2YBcCdHUBhY3S587MzkxgZN__4DSRVRK1JGGoxbWFYQGW_JS67Q>
+    <xme:T8Q2YPOpb2OgEvB9W8Yp3KREoY8WG7diWhtWQt3fWiDewemDD4oUw6bYMzR36cYWO
+    TXJnUIgSGmTXZr5qeo>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrkeejgddugeejucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucenucfjughrpefkjghfhfffuffvsedttdertddttd
     dtnecuhfhrohhmpefkrghnucffvghnhhgrrhguthcuoehirghnseiivghnhhgrtghkrdhn
-    vghtqeenucggtffrrghtthgvrhhnpeegleekvdehjefhudehhfefgfdtvdduveetveekhf
-    ekueefhffhudegvdffgfduleenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhp
-    pedutddtrddtrdefjedrvddvudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehirghnseiivghnhhgrtghkrdhnvght
-X-ME-Proxy: <xmx:TsQ2YDY4ouDOysv3C6m7qF9rOrKPie977eWmsVs-gnBxQGHhDYPGAw>
-    <xmx:TsQ2YCXfPU5jPyHNZGMUrC4sAMUF1T9it_5uI1RPbr2LupQerk0vbg>
-    <xmx:TsQ2YBkFM-_1JlyAwiVC2S-G5wQBsfo6GGtAMlD1uc01k7BlxB93rg>
-    <xmx:TsQ2YBvKQdouou9M7R_z0kHf3MiSwP_XlbrjiWMdpoP_GiGePkvWiA>
+    vghtqeenucggtffrrghtthgvrhhnpeelleeggffguedvgfelgeffleduudeltdetgfegie
+    dvkeegfeefieffuddvjeejffenucfkphepuddttddrtddrfeejrddvvddunecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepihgrnhesiigvnhhhrg
+    gtkhdrnhgvth
+X-ME-Proxy: <xmx:T8Q2YKgGoAa1htxFCAB8uyiGamo-8bJcFqr0S3QBbisJBRGFhuNR_A>
+    <xmx:T8Q2YK8x4a81vRuEUkMVuZ1QnfLUMeuK-8ZA-hSklq3-hGYLD3ydMQ>
+    <xmx:T8Q2YNslHQGL9Jui-AuI5BzrUG8LkI9WWxLDnMtOVne6lFV4zXIlOw>
+    <xmx:T8Q2YOUjhYTQbHW0PqE-4hsU8n75kHWlA-AYWbg8mleT39Sb8wh4JA>
 Received: from localhost (pool-100-0-37-221.bstnma.fios.verizon.net [100.0.37.221])
-        by mail.messagingengine.com (Postfix) with ESMTPA id EB217108005C;
-        Wed, 24 Feb 2021 16:25:33 -0500 (EST)
-X-Mailbox-Line: From a6b6c7516f5d559049d669968e953b4a8d7adea3 Mon Sep 17 00:00:00 2001
-Message-Id: <a6b6c7516f5d559049d669968e953b4a8d7adea3.1614201868.git.ian@zenhack.net>
+        by mail.messagingengine.com (Postfix) with ESMTPA id 4D69124005B;
+        Wed, 24 Feb 2021 16:25:35 -0500 (EST)
+X-Mailbox-Line: From b0bea780bc292f29e7b389dd062f20adc2a2d634 Mon Sep 17 00:00:00 2001
+Message-Id: <b0bea780bc292f29e7b389dd062f20adc2a2d634.1614201868.git.ian@zenhack.net>
 In-Reply-To: <cover.1614201868.git.ian@zenhack.net>
 References: <cover.1614201868.git.ian@zenhack.net>
 From:   Ian Denhardt <ian@zenhack.net>
-Date:   Tue, 23 Feb 2021 21:15:31 -0500
-Subject: [PATCH 1/2] tools, bpf_asm: Hard error on out of range jumps.
+Date:   Tue, 23 Feb 2021 21:24:00 -0500
+Subject: [PATCH 2/2] tools, bpf_asm: exit non-zero on errors.
 To:     ast@kernel.org, daniel@iogearbox.net, bpf@vger.kernel.org,
         netdev@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Per discussion at:
-
-https://lore.kernel.org/bpf/c964892195a6b91d20a67691448567ef528ffa6d.camel@linux.ibm.com/T/#t
-
-...this was originally introduced as a warning due to concerns about
-breaking existing code, but a hard error probably makes more sense,
-especially given that concerns about breakage were only speculation.
+...so callers can correctly detect failure.
 
 Signed-off-by: Ian Denhardt <ian@zenhack.net>
-Acked-by: Ilya Leoshkevich <iii@linux.ibm.com>
 ---
- tools/bpf/bpf_exp.y | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ tools/bpf/bpf_exp.y | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/tools/bpf/bpf_exp.y b/tools/bpf/bpf_exp.y
-index 8d48e896be50..8d03e5245da5 100644
+index 8d03e5245da5..dfb7254a24e8 100644
 --- a/tools/bpf/bpf_exp.y
 +++ b/tools/bpf/bpf_exp.y
-@@ -549,9 +549,11 @@ static uint8_t bpf_encode_jt_jf_offset(int off, int i)
+@@ -185,13 +185,13 @@ ldx
+ 	| OP_LDXB number '*' '(' '[' number ']' '&' number ')' {
+ 		if ($2 != 4 || $9 != 0xf) {
+ 			fprintf(stderr, "ldxb offset not supported!\n");
+-			exit(0);
++			exit(1);
+ 		} else {
+ 			bpf_set_curr_instr(BPF_LDX | BPF_MSH | BPF_B, 0, 0, $6); } }
+ 	| OP_LDX number '*' '(' '[' number ']' '&' number ')' {
+ 		if ($2 != 4 || $9 != 0xf) {
+ 			fprintf(stderr, "ldxb offset not supported!\n");
+-			exit(0);
++			exit(1);
+ 		} else {
+ 			bpf_set_curr_instr(BPF_LDX | BPF_MSH | BPF_B, 0, 0, $6); } }
+ 	;
+@@ -472,7 +472,7 @@ static void bpf_assert_max(void)
  {
- 	int delta = off - i - 1;
- 
--	if (delta < 0 || delta > 255)
--		fprintf(stderr, "warning: insn #%d jumps to insn #%d, "
-+	if (delta < 0 || delta > 255) {
-+		fprintf(stderr, "error: insn #%d jumps to insn #%d, "
- 				"which is out of range\n", i, off);
+ 	if (curr_instr >= BPF_MAXINSNS) {
+ 		fprintf(stderr, "only max %u insns allowed!\n", BPF_MAXINSNS);
+-		exit(0);
 +		exit(1);
-+	}
- 	return (uint8_t) delta;
+ 	}
  }
  
+@@ -522,7 +522,7 @@ static int bpf_find_insns_offset(const char *label)
+ 
+ 	if (ret == -ENOENT) {
+ 		fprintf(stderr, "no such label \'%s\'!\n", label);
+-		exit(0);
++		exit(1);
+ 	}
+ 
+ 	return ret;
 -- 
 2.30.1
 
