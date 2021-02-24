@@ -7,89 +7,102 @@ X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C88D5C433E6
-	for <bpf@archiver.kernel.org>; Wed, 24 Feb 2021 02:43:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A17A5C433DB
+	for <bpf@archiver.kernel.org>; Wed, 24 Feb 2021 02:43:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7C95064EC8
-	for <bpf@archiver.kernel.org>; Wed, 24 Feb 2021 02:43:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 55D0864E83
+	for <bpf@archiver.kernel.org>; Wed, 24 Feb 2021 02:43:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232349AbhBXCnA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 23 Feb 2021 21:43:00 -0500
-Received: from out4-smtp.messagingengine.com ([66.111.4.28]:34581 "EHLO
+        id S232715AbhBXCn0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 23 Feb 2021 21:43:26 -0500
+Received: from out4-smtp.messagingengine.com ([66.111.4.28]:54331 "EHLO
         out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229961AbhBXCm6 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 23 Feb 2021 21:42:58 -0500
+        by vger.kernel.org with ESMTP id S232069AbhBXCnT (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 23 Feb 2021 21:43:19 -0500
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 179405C0085;
-        Tue, 23 Feb 2021 21:42:10 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Tue, 23 Feb 2021 21:42:10 -0500
+        by mailout.nyi.internal (Postfix) with ESMTP id 1C00F5C00F2;
+        Tue, 23 Feb 2021 21:42:14 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Tue, 23 Feb 2021 21:42:14 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zenhack.net; h=
-        message-id:from:date:subject:to; s=fm2; bh=Vtx7UlgIGFX9Sn2RG8HGj
-        RbRgEj2WGN5X1HPKlnVvXA=; b=BrV1JIhmVaRgKkDNJeX5NtbcVdpAsN5pUNczZ
-        6fRwu5YLMPBMBDwPEDpoXyDTbJr1lSbGjNokyESKJeg2uDPBv2RORWG0qTxheIs+
-        X0+qCUToSk+u9uYe1LI+pwFvm1XD1JVAam1rHAUWERLlMvHYT2yRQcDK0JIgu5Ho
-        aSTO+zB0wkzaeHAsCRRD5ohIa2ajKV93tIoagkTi+3CPd+FRAcmJrnuO9cQYY4ng
-        knlyayWz4GW91X2ZkDBz5KZ920OwNa4HhjJjdsV/Wc/+g+kMQgx5PvvBswmKJzKz
-        TyuBQJdeieoiMHgDvvdCsqqFft5sF7Vr377Gunt3crC8dOhXQ==
+        message-id:in-reply-to:references:from:date:subject:to; s=fm2;
+         bh=HjlAt4q1I57gcSh+6fE9t+TZP+zh66/1nuPwmJTGjfA=; b=YGmTgec/Bo4t
+        Aoa035nUXoPMv1AwqNPT3X+f5Rygm+xIeSXV0TgBx1ZDbIPbj9n2fDxTTOV34jwm
+        oseEUGc7ak3gcakN6OYuvbPgJH4BBAyR9OZnGFGsD0z+YXXWgF4fMmQGlAxwb6GF
+        GuqugMwjiHYsGSMaEhCNM2cT5PTLhwB3X23oMeJN12umntbCzt6JIsoOPHmmNoOl
+        xj1UTMyNu8yTXU/bTEClR0dGojgstOKzfkeKUYsHAljMFMejWdpkOzclRodvQleU
+        0pFJwVZM4YcdLAVqQuYAdw/YsZ8+D7rCkKjqnfSEchysgZwMiLGgcJH0FqLB2qKh
+        dxYNp+ZGcQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=date:from:message-id:subject:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; bh=Vtx7UlgIGFX9Sn2RG8HGjRbRgEj2WGN5X1HPKlnVvXA=; b=ROwr3Fxn
-        cL3DPOOL2RXvyNlV43RMbfDW6xMUpjPndATIfNoii6T0Y4gtW5PIal2tbThsLtKH
-        avpkNp9Jd2dkHXO+dK82AU07e9/eqOMLBVVLVVPvDSHuowHCWvsfobe04iNqJhd3
-        zmp6gtnKEADbXotuXD724IFxmkaG7E+4u5VTAwXpZepVLXtHSJGjG7TdN1JRJHkF
-        K840qP1wVCmm9nhziyM/3fU08Bt54dE4jILQMHv7sUj4/KHM9QyNswwvxV1zlwcz
-        fMlCy1CWE9NCnPyth2+iYtbCgkqQFoH8w23AWy/YQQbwHXnkZzXVyMUSPb8+he9Q
-        JR8/5FVEwhRqxg==
-X-ME-Sender: <xms:Ab01YJ6nWmZWaRtIIbFgnMml1er2qaBf53kuwUkplSSodCVxObN-nw>
-    <xme:Ab01YG5uz9ize0Xg9mcRsZgI_wfRT2WBuzf0VmuuvLdbnovNPa8msiLPhw9dqVp38
-    wJypx4TIeajjlyh2is>
+        messagingengine.com; h=date:from:in-reply-to:message-id
+        :references:subject:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm2; bh=HjlAt4q1I57gcSh+6fE9t+TZP+zh6
+        6/1nuPwmJTGjfA=; b=cmBbvmnHrfZv3dgdR+su34Sr4sDFFGJWpOiSWurjTmvQj
+        2yHoBSTMGbpjzWBgQGkwKpsHLyjzXPh7wgiNbF3zIwKneIsuf0v77y3eVpCiyr/q
+        W84qsjR3gBCKa9NXZMEvEVAGp0KLDgMOL3HxS1xgC2zjVY2PvGJme9UM+k2vLfWo
+        kyIkzuNp2tvI7WkFgZq1OuNl7yawrBTjhR0vdtOYnCeetygty3Y+RSubgTxal3/1
+        rYN8nbiK3EKjwd8M6TDPIODVAvYLXgRiyNtPz+VguoGZ0Iq8+me+rAUz9VPxqMfy
+        NX9JIQ4AIihRBxMzNyegb9n4qb3TpGWczVxVeGhqg==
+X-ME-Sender: <xms:Bb01YGjY8EwfziObWEby7LwHqHPtxDliJHaY-hgQWYNpclAe0H5CEg>
+    <xme:Bb01YHCwzxy5AUUmTFpPbHTnGQApi-Zd_xO-wPhy4M-IcJZiLwYvDa3NHVWvfhY7G
+    Y7YkKwAFG-5QM959p8>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrkeeigdegiecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecunecujfgurhepkffhfffuvfestddtredttddttdenuc
-    fhrhhomhepkfgrnhcuffgvnhhhrghrughtuceoihgrnhesiigvnhhhrggtkhdrnhgvtheq
-    necuggftrfgrthhtvghrnhepudetgeehgfevtdffleeggfehkeekkeffffdvledvtefgge
-    ffgffgleejuddtffeunecuffhomhgrihhnpegvrhhrohhrshdrthhoohhlshenucfkphep
+    uegrihhlohhuthemuceftddtnecunecujfgurhepkfgjfhfhfffuvfestddtredttddttd
+    enucfhrhhomhepkfgrnhcuffgvnhhhrghrughtuceoihgrnhesiigvnhhhrggtkhdrnhgv
+    theqnecuggftrfgrthhtvghrnhepgeelkedvheejhfduhefhfefgtddvudevteevkefhke
+    eufefhhfdugedvfffgudelnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphep
     uddttddrtddrfeejrddvvddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
     hmrghilhhfrhhomhepihgrnhesiigvnhhhrggtkhdrnhgvth
-X-ME-Proxy: <xmx:Ab01YAcxUdb04wkKBgXGL3ZlEFUjzV6wATDkC34viTo_BZsYFfnJeQ>
-    <xmx:Ab01YCKW9bul8CVQh0lQ4Y2F0zLyBgjdnf06o6vWSqYRP9Zz6SI6lw>
-    <xmx:Ab01YNI8D8xlwY7tWGfZa--04NBJsTcAzVLFVa3Aw-aSC8oDRNLFLQ>
-    <xmx:Ar01YLiDKK_gXP-h42tWqbhh7LEWVadyRwz0b5Et-z9R3kRu5loppA>
+X-ME-Proxy: <xmx:Bb01YOEXk5tkzWEMNTC22gjJz9_UzmZpoqurr7fQ2zu3eR906HzSxg>
+    <xmx:Bb01YPS8ZMsF_0zrIZAmuNoWBdptiIjtFxvGz-le41SItQDrCL8yHA>
+    <xmx:Bb01YDxw2yDNMcAQFkjipPtkEgIQEid_-nLolfz4AWIcFWSj9MOQgg>
+    <xmx:Br01YMry8r-Od4znNmTNZRFoz4sTDEAM5_b3Z6qXpKyF8hsHOwUhzA>
 Received: from localhost (pool-100-0-37-221.bstnma.fios.verizon.net [100.0.37.221])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 9184A24005B;
-        Tue, 23 Feb 2021 21:42:09 -0500 (EST)
-X-Mailbox-Line: From edb7c1985e446f6dd4ad875f39605bb2968d9920 Mon Sep 17 00:00:00 2001
-Message-Id: <cover.1614134213.git.ian@zenhack.net>
+        by mail.messagingengine.com (Postfix) with ESMTPA id CACF91080063;
+        Tue, 23 Feb 2021 21:42:13 -0500 (EST)
+X-Mailbox-Line: From af571eef0bc5d33180879c0c81a7d1b26431b915 Mon Sep 17 00:00:00 2001
+Message-Id: <af571eef0bc5d33180879c0c81a7d1b26431b915.1614134213.git.ian@zenhack.net>
+In-Reply-To: <cover.1614134213.git.ian@zenhack.net>
+References: <cover.1614134213.git.ian@zenhack.net>
 From:   Ian Denhardt <ian@zenhack.net>
-Date:   Tue, 23 Feb 2021 21:36:53 -0500
-Subject: [PATCH 0/2] More strict error checking in bpf_asm.
+Date:   Tue, 23 Feb 2021 21:15:31 -0500
+Subject: [PATCH 1/2] tools, bpf_asm: Hard error on out of range jumps.
 To:     ast@kernel.org, daniel@iogearbox.net, bpf@vger.kernel.org,
         netdev@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi,
+Per discussion at:
 
-Enclosed are two patches related to my earlier message, which make the
-error checking in the bpf_asm tool more strict, the first by upgrading a
-warning to an error, the second by using non-zero exit codes when
-aborting.
+https://lore.kernel.org/bpf/c964892195a6b91d20a67691448567ef528ffa6d.camel@linux.ibm.com/T/#t
 
-These could be conceptually separated, but it seemed sensible to submit
-them together.
+...this was originally introduced as a warning due to concerns about
+breaking existing code, but a hard error probably makes more sense,
+especially given that concerns about breakage were only speculation.
+---
+ tools/bpf/bpf_exp.y | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
--Ian
-
-Ian Denhardt (2):
-  tools, bpf_asm: Hard error on out of range jumps.
-  tools, bpf_asm: exit non-zero on errors.
-
- tools/bpf/bpf_exp.y | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
-
---
+diff --git a/tools/bpf/bpf_exp.y b/tools/bpf/bpf_exp.y
+index 8d48e896be50..8d03e5245da5 100644
+--- a/tools/bpf/bpf_exp.y
++++ b/tools/bpf/bpf_exp.y
+@@ -549,9 +549,11 @@ static uint8_t bpf_encode_jt_jf_offset(int off, int i)
+ {
+ 	int delta = off - i - 1;
+ 
+-	if (delta < 0 || delta > 255)
+-		fprintf(stderr, "warning: insn #%d jumps to insn #%d, "
++	if (delta < 0 || delta > 255) {
++		fprintf(stderr, "error: insn #%d jumps to insn #%d, "
+ 				"which is out of range\n", i, off);
++		exit(1);
++	}
+ 	return (uint8_t) delta;
+ }
+ 
+-- 
 2.30.1
 
