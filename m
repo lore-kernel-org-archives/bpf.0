@@ -2,150 +2,133 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D6D6EC433E0
-	for <bpf@archiver.kernel.org>; Wed, 24 Feb 2021 06:12:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 054FAC433DB
+	for <bpf@archiver.kernel.org>; Wed, 24 Feb 2021 07:19:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 757B764EC8
-	for <bpf@archiver.kernel.org>; Wed, 24 Feb 2021 06:12:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C0C6A64EC9
+	for <bpf@archiver.kernel.org>; Wed, 24 Feb 2021 07:19:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230095AbhBXGMS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 24 Feb 2021 01:12:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33610 "EHLO
+        id S233162AbhBXHTa (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 24 Feb 2021 02:19:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbhBXGMR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 24 Feb 2021 01:12:17 -0500
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86902C061574;
-        Tue, 23 Feb 2021 22:11:37 -0800 (PST)
-Received: by mail-pf1-x430.google.com with SMTP id q20so650045pfu.8;
-        Tue, 23 Feb 2021 22:11:37 -0800 (PST)
+        with ESMTP id S233204AbhBXHT1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 24 Feb 2021 02:19:27 -0500
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80666C061786
+        for <bpf@vger.kernel.org>; Tue, 23 Feb 2021 23:18:47 -0800 (PST)
+Received: by mail-yb1-xb33.google.com with SMTP id f4so881855ybk.11
+        for <bpf@vger.kernel.org>; Tue, 23 Feb 2021 23:18:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Zj6+s1mx4qT4hXPh+NVhs6pnLcrPSvpQ67tRttpHvuE=;
-        b=YVXAxRJHtvuM3L+8WKDEVsUFCtWHPk4D8PH0fZ8I0jm/nVJDg9m7sNTKMiclG+1l/d
-         rTwMefnFpSb8tXzbsB9FP2YdiTyyorEYnwGWkjI5iVlfn4nHSxmUstfbXC5YOFTrYqNy
-         6KI5fdpfStniAtWa4KGwEsubmbGiPsUNJfbI9R/4QE4PvS+G5EIAh6xfM1hIMNPCyJ/Q
-         J0vKoJEX56mp/9Lds+B+P3aNTpcddqwuc4+AanL/T1gcQSvu1U0AY/H55lJRf4tCe7kI
-         KSUlUj6cmJxHMY9oXRe+xuKNve13f4mZ1OysKLfG8MOMWQIoEru38uwutmJmXZ8/ziZi
-         GRnQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NxbyaKrGpu4tvvyrlIAf54x18SWwOhRwOQTWlKA06co=;
+        b=aec9VmSs+lS6RKRWkie6ZHwfS2xWu6FYLwScNzscHYUk21trXrbtlu8Hxma1+SGhX9
+         91EBqroD4p3XAYOPCyTIA4T6IeYqpUwCa+N4815Zx/V8gJbqX5K4orIjoCt16TOSqH1D
+         RARBieDSwY3C7ZGyRl+7ifnHkCnNGg/99y2uTC4dEWIgx9qrMMNwCVcJBKWyaA+oqNlS
+         WSusy7PFadPiz7WVxLY27mqEbzZjfZVVCiE7K0FtWHQ9TgNVriomMYbMytVzQKR6J6Rq
+         yhtkEgU7i965PRz84nVtSLPZvnCNuAnnUd9XuxTx3nUIi9t6RD8dId45Kls2wQLAcyzW
+         HtdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Zj6+s1mx4qT4hXPh+NVhs6pnLcrPSvpQ67tRttpHvuE=;
-        b=tE/T+lK7Ddcjnw1G3SmXvn184/nPMCxrZudRS6BjznXHSpwzdXeueCzTK5p93VUdpJ
-         /Ic+8ykf0WvYnsjDq79+ljWLzxNK3AR+6Zcd+tUZhcrl+XfEZEbHXpb6p0YCtC2/2Ylp
-         eBKo2juOZwtcSJSCOKuNLBO8zw7btmcj3TjU/sU+YsK1s+xze4YWzxjWfwT7qEaFX37y
-         T7KnLM7lw6uswsc370hxYlVmHWpAbSR0UPdI+KIUv4xJ+FmKObGnftAteo017m1oPhem
-         Wnzwm/VuG78vhxiBFdKTkhwuvsASd7P6liTiZxma6acRUbtd7uvDUG6kDtS5Dij+cp19
-         TKXg==
-X-Gm-Message-State: AOAM53345kPsFsRF2Q2NUU5hofbsezOwrZhnqhH6TeA/0IsCfJIHHqHT
-        jWtoufbyGIvG3YYQOOyz/co=
-X-Google-Smtp-Source: ABdhPJy2uhG4S1YTka5Y9czANAmaTrDuIei2RSe07gQaRQOPfyi4T3I+X55oMWDMJQQW5pSq/knFEg==
-X-Received: by 2002:a62:5a45:0:b029:1e5:4c81:c59 with SMTP id o66-20020a625a450000b02901e54c810c59mr30553661pfb.51.1614147096964;
-        Tue, 23 Feb 2021 22:11:36 -0800 (PST)
-Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::5:69bf])
-        by smtp.gmail.com with ESMTPSA id p8sm1180634pff.79.2021.02.23.22.11.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Feb 2021 22:11:36 -0800 (PST)
-Date:   Tue, 23 Feb 2021 22:11:33 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Lorenz Bauer <lmb@cloudflare.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NxbyaKrGpu4tvvyrlIAf54x18SWwOhRwOQTWlKA06co=;
+        b=q7asB4RrNc1xjj1b+wjkHdRWmARmXK5xsW/Zx52X22l9AIq8b5kLkF4lhjY5hQRs+k
+         86NmJFcTUYLLPXXn98tSa99cSG0tbU9NmJWjgyw2uqq6vMJMo6yyM15ltEZbWq4GayS1
+         hiT8IG2nl38z4vnFnKaT97Uko1nOwQHAtr9fN4JccrNSTn0PcUr/wSpgZG3aLUaqhnIG
+         tNYmhYPGJNQHTyJBoiJC48hu7DmidFiUIxkT89zs2/m3MWV6myfVF2pekm1d9foYvj0D
+         Z/Os8gsFZIyerhn8LyZLOpF2eInr128TnCqCj5J26Zufr0k5OFtVA3eK4gb7MgFNhfIq
+         6vcg==
+X-Gm-Message-State: AOAM533nxled2YCYy4+LjiOiu95I1rVT4IKBCTl5mHp65L2QMahUfpvR
+        /e2GgN51tRhkV6lEjnfLsW/HkIxGepTJo17IV1M=
+X-Google-Smtp-Source: ABdhPJz1F9ZotKmU+EmEn/DzISuMvuHqGHG7RR7M74uwBX4p0v/+eaySZsmTBhqWRlKTWjbW/A8NJspLCBeJm1eF9eg=
+X-Received: by 2002:a25:37c4:: with SMTP id e187mr47377505yba.347.1614151126701;
+ Tue, 23 Feb 2021 23:18:46 -0800 (PST)
+MIME-Version: 1.0
+References: <20210222232451.84574-1-iii@linux.ibm.com>
+In-Reply-To: <20210222232451.84574-1-iii@linux.ibm.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 23 Feb 2021 23:18:35 -0800
+Message-ID: <CAEf4BzZ97LryiKX2K8vZhdbhW_SFUMDwkXpJyz89QVhLrYk+7A@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Copy extra resources in the
+ non-flavored build too
+To:     Ilya Leoshkevich <iii@linux.ibm.com>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        kernel-team <kernel-team@cloudflare.com>,
-        bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>
-Subject: Re: [PATCH bpf-next 4/8] bpf: add PROG_TEST_RUN support for
- sk_lookup programs
-Message-ID: <20210224061133.t4aewwgpzlbhchux@ast-mbp.dhcp.thefacebook.com>
-References: <20210216105713.45052-1-lmb@cloudflare.com>
- <20210216105713.45052-5-lmb@cloudflare.com>
- <20210223011153.4cvzpvxqn7arbcej@ast-mbp.dhcp.thefacebook.com>
- <CACAyw99hQgG+=WvUVmDU-E6nGsPvosSuSOWgw9uWDDZ-vFfsqw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACAyw99hQgG+=WvUVmDU-E6nGsPvosSuSOWgw9uWDDZ-vFfsqw@mail.gmail.com>
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Feb 23, 2021 at 10:10:44AM +0000, Lorenz Bauer wrote:
-> On Tue, 23 Feb 2021 at 01:11, Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > I'm struggling to come up with the case where running N sk_lookup progs
-> > like this cannot be done with running them one by one.
-> > It looks to me that this N prog_fds api is not really about running and
-> > testing the progs, but about testing BPF_PROG_SK_LOOKUP_RUN_ARRAY()
-> > SK_PASS vs SK_DROP logic.
-> 
-> In a way that is true, yes. TBH I figured that my patch set would be
-> rejected if I just
-> implemented single program test run, since it doesn't allow exercising the full
-> sk_lookup test run semantics.
-> 
-> > So it's more of the kernel infra testing than program testing.
-> > Are you suggesting that the sequence of sk_lookup progs are so delicate
-> > that they are aware of each other and _has_ to be tested together
-> > with gluing logic that the macro provides?
-> 
-> We currently don't have a case like that.
-> 
-> > But if it is so then testing the progs one by one would be better,
-> > because test_run will be able to check each individual prog return code
-> > instead of implicit BPF_PROG_SK_LOOKUP_RUN_ARRAY logic.
-> 
-> That means emulating the kind of subtle BPF_PROG_SK_LOOKUP_RUN_ARRAY
-> in user space, which isn't trivial and a source of bugs.
+On Mon, Feb 22, 2021 at 3:25 PM Ilya Leoshkevich <iii@linux.ibm.com> wrote:
+>
+> Building selftests in a separate directory like this:
+>
+>     make O=... -C tools/testing/selftests/bpf
+>
+> and then running:
+>
+>     ./test_progs -t btf
+>
+> causes all the non-flavored btf_dump_test_case_*.c tests to fail,
+> because these files are not copied to where test_progs expects to find
+> them.
+>
+> Fix by removing the flavored build check and using rsync instead of cp:
+> cp fails because e.g. urandom_read is being copied into itself, and
+> rsync simply skips such cases. rsync is used by kselftests elsewhere
+> and therefore is not a new dependency.
 
-I'm not at all suggesting to emulate it in user space.
+So this leaves a bunch of non-ignored files in selftests/bpf directory:
 
-> For example we rely on having multiple programs attached when
-> "upgrading" from old to new BPF. Here we care mostly that we don't drop
-> lookups on the floor, and the behaviour is tightly coupled to the in-kernel
-> implementation. It's not much use to cobble up my own implementation of
-> SK_LOOKUP_RUN_ARRAY here, I would rather use multi progs to test this.
-> Of course we can also already spawn a netns and test it that way, so not
-> much is lost if there is no multi prog test run.
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        btf_dump_test_case_bitfields.c
+        btf_dump_test_case_multidim.c
+        btf_dump_test_case_namespacing.c
+        btf_dump_test_case_ordering.c
+        btf_dump_test_case_packing.c
+        btf_dump_test_case_padding.c
+        btf_dump_test_case_syntax.c
 
-I mean that to test the whole setup close to production the netns is
-probably needed because sockets would mess with init_netns.
-But to test each individual bpf prog there is no need for RUN_ARRAY.
-Each prog can be more accurately tested in isolation.
-RUN_ARRAY adds, as you said, subtle details of RUN_ARRAY macro.
+We can add them to .gitignore, but that feels wrong, to be honest. Any
+ideas how to fix this in some better way?
 
-> > It feels less of the unit test and more as a full stack test,
-> > but if so then lack of cookie on input is questionable.
-> 
-> I'm not sure what you mean with "the lack of cookie on input is
-> questionable", can you rephrase?
-> 
-> > In other words I'm struggling with in-between state of the api.
-> > test_run with N fds is not really a full test, but not a unit test either.
-> 
-> If I understand you correctly, a "full" API would expose the
-> intermediate results from
-> individual programs as well as the final selection? Sounds quite
-> complicated, and as
-> you point out most of the benefits can be had from running single programs.
-
-I'm not suggesting to return intermediate results either.
-I'm looking at test_run as a facility to test one individual program
-at a time. Like in tc, cgroups, tracing we can have multiple progs
-attached to one place and the final verdict will depend on what
-each prog is returning. But there is no need to test them all together
-through BPF_PROG_CGROUP_INET_EGRESS_RUN_ARRAY.
-Each prog is more accurately validated independently.
-Hence I'm puzzled why sk_lookup's RUN_ARRAY is special.
-Its drop/pass/selected sk is more or less the same complexity
-as CGROUP_INET_EGRESS_RUN_ARRAY.
+>
+> Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
+> ---
+>  tools/testing/selftests/bpf/Makefile | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> index 044bfdcf5b74..192119f6aeb7 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -382,12 +382,9 @@ $(TRUNNER_EXTRA_OBJS): $(TRUNNER_OUTPUT)/%.o:                              \
+>         $$(call msg,EXT-OBJ,$(TRUNNER_BINARY),$$@)
+>         $(Q)$$(CC) $$(CFLAGS) -c $$< $$(LDLIBS) -o $$@
+>
+> -# only copy extra resources if in flavored build
+>  $(TRUNNER_BINARY)-extras: $(TRUNNER_EXTRA_FILES) | $(TRUNNER_OUTPUT)
+> -ifneq ($2,)
+>         $$(call msg,EXT-COPY,$(TRUNNER_BINARY),$(TRUNNER_EXTRA_FILES))
+> -       $(Q)cp -a $$^ $(TRUNNER_OUTPUT)/
+> -endif
+> +       $(Q)rsync -aq $$^ $(TRUNNER_OUTPUT)/
+>
+>  $(OUTPUT)/$(TRUNNER_BINARY): $(TRUNNER_TEST_OBJS)                      \
+>                              $(TRUNNER_EXTRA_OBJS) $$(BPFOBJ)           \
+> --
+> 2.29.2
+>
