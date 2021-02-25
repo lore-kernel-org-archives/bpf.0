@@ -2,170 +2,212 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CC62C433E0
-	for <bpf@archiver.kernel.org>; Thu, 25 Feb 2021 07:34:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BC75FC433DB
+	for <bpf@archiver.kernel.org>; Thu, 25 Feb 2021 07:34:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 607F664E90
-	for <bpf@archiver.kernel.org>; Thu, 25 Feb 2021 07:34:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6400164E85
+	for <bpf@archiver.kernel.org>; Thu, 25 Feb 2021 07:34:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233253AbhBYHdz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 25 Feb 2021 02:33:55 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:64302 "EHLO
+        id S233961AbhBYHeM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 25 Feb 2021 02:34:12 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:37638 "EHLO
         mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230165AbhBYHdz (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 25 Feb 2021 02:33:55 -0500
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 11P7Tqr5016966
-        for <bpf@vger.kernel.org>; Wed, 24 Feb 2021 23:33:13 -0800
+        by vger.kernel.org with ESMTP id S233498AbhBYHeC (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 25 Feb 2021 02:34:02 -0500
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 11P7UaQN000540
+        for <bpf@vger.kernel.org>; Wed, 24 Feb 2021 23:33:21 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : content-type : content-transfer-encoding :
- mime-version; s=facebook; bh=vqqYcfsDnJ6elrUpTzMnPtNn51xOMREYEB4gjWREmY8=;
- b=NUPUykavLxMOl11VgqcMmPtHpG3wk0iWw4hYcWzHyoTWRgyZz6swYuDLeY6G6dYGwwir
- cPhFSai4H+nWgjm5YUlr+ONqgqEW2rgi8FPkUKADRQVT7zRV8ZXGj1Tk23Tr6chT+Euq
- vMHsIPFHobyHWlePEH3CUU+rn9SicuGdWIo= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 36wkf2pe3e-1
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=SrLuE/ipeJX6GLUXErV97FyjA1GjUkdedRlMZDUklR0=;
+ b=Im3NK2jLLxC+zSoymkiCD9ss+eOdg1lLXWkDmcqvAHyqiKn73JZB5r7fhuL3ArXDjP0N
+ 46lKugCfJ999n3Nk168+zE6MwepJyfKQIG6mWVrJ+u/s0wC4LTSUO1mKm6jNdkrRtywV
+ dGa0lyfOnDjOb59HaGxbI5Uz2ExruNBBGN0= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 36wvqdbeu9-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 24 Feb 2021 23:33:13 -0800
-Received: from intmgw001.05.ash7.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 24 Feb 2021 23:33:21 -0800
+Received: from intmgw001.06.ash9.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 24 Feb 2021 23:33:12 -0800
+ 15.1.1979.3; Wed, 24 Feb 2021 23:33:19 -0800
 Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 4E8623705D0E; Wed, 24 Feb 2021 23:33:09 -0800 (PST)
+        id 491313705D0E; Wed, 24 Feb 2021 23:33:18 -0800 (PST)
 From:   Yonghong Song <yhs@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
         Cong Wang <xiyou.wangcong@gmail.com>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next v3 00/11] bpf: add bpf_for_each_map_elem() helper
-Date:   Wed, 24 Feb 2021 23:33:09 -0800
-Message-ID: <20210225073309.4119708-1-yhs@fb.com>
+Subject: [PATCH bpf-next v3 08/11] libbpf: support subprog address relocation
+Date:   Wed, 24 Feb 2021 23:33:18 -0800
+Message-ID: <20210225073318.4121448-1-yhs@fb.com>
 X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20210225073309.4119708-1-yhs@fb.com>
+References: <20210225073309.4119708-1-yhs@fb.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
  definitions=2021-02-25_04:2021-02-24,2021-02-25 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
- suspectscore=0 bulkscore=0 mlxlogscore=353 mlxscore=0 priorityscore=1501
- impostorscore=0 phishscore=0 adultscore=0 spamscore=0 lowpriorityscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ priorityscore=1501 suspectscore=0 clxscore=1015 mlxscore=0 mlxlogscore=999
+ impostorscore=0 bulkscore=0 adultscore=0 lowpriorityscore=0 phishscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2102250062
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch set introduced bpf_for_each_map_elem() helper.
-The helper permits bpf program iterates through all elements
-for a particular map.
+A new relocation RELO_SUBPROG_ADDR is added to capture
+subprog addresses loaded with ld_imm64 insns. Such ld_imm64
+insns are marked with BPF_PSEUDO_FUNC and will be passed to
+kernel. For bpf_for_each_map_elem() case, kernel will
+check that the to-be-used subprog address must be a static
+function and replace it with proper actual jited func address.
 
-The work originally inspired by an internal discussion where
-firewall rules are kept in a map and bpf prog wants to
-check packet 5 tuples against all rules in the map.
-A bounded loop can be used but it has a few drawbacks.
-As the loop iteration goes up, verification time goes up too.
-For really large maps, verification may fail.
-A helper which abstracts out the loop itself will not have
-verification time issue.
+Signed-off-by: Yonghong Song <yhs@fb.com>
+---
+ tools/lib/bpf/libbpf.c | 64 ++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 61 insertions(+), 3 deletions(-)
 
-A recent discussion in [1] involves to iterate all hash map
-elements in bpf program. Currently iterating all hashmap elements
-in bpf program is not easy if key space is really big.
-Having a helper to abstract out the loop itself is even more
-meaningful.
-
-The proposed helper signature looks like:
-  long bpf_for_each_map_elem(map, callback_fn, callback_ctx, flags)
-where callback_fn is a static function and callback_ctx is
-a piece of data allocated on the caller stack which can be
-accessed by the callback_fn. The callback_fn signature might be
-different for different maps. For example, for hash/array maps,
-the signature is
-  long callback_fn(map, key, val, callback_ctx)
-
-In the rest of series, Patches 1/2/3 did some refactoring. Patch 4
-implemented core kernel support for the helper. Patches 5 and 6
-added hashmap and arraymap support. Patches 7/8 added libbpf
-support. Patch 9 added bpftool support. Patches 10 and 11 added
-selftests for hashmap and arraymap.
-
-[1]: https://lore.kernel.org/bpf/20210122205415.113822-1-xiyou.wangcong@gma=
-il.com/
-
-Changelogs:
-  v2 -> v3:
-    - add comments in retrieve_ptr_limit(), which is in sanitize_ptr_alu(),
-      to clarify the code is not executed for PTR_TO_MAP_KEY handling,
-      but code is manually tested. (Alexei)
-    - require BTF for callback function. (Alexei)
-    - simplify hashmap/arraymap callback return handling as return value
-      [0, 1] has been enforced by the verifier. (Alexei)
-    - also mark global subprog (if used in ld_imm64) as RELO_SUBPROG_ADDR. =
-(Andrii)
-    - handle the condition to mark RELO_SUBPROG_ADDR properly. (Andrii)
-    - make bpftool subprog insn offset dumping consist with pcrel calls. (A=
-ndrii)
-  v1 -> v2:
-    - setup callee frame in check_helper_call() and then proceed to verify
-      helper return value as normal (Alexei)
-    - use meta data to keep track of map/func pointer to avoid hard coding
-      the register number (Alexei)
-    - verify callback_fn return value range [0, 1]. (Alexei)
-    - add migrate_{disable, enable} to ensure percpu value is the one
-      bpf program expects to see. (Alexei)
-    - change bpf_for_each_map_elem() return value to the number of iterated
-      elements. (Andrii)
-    - Change libbpf pseudo_func relo name to RELO_SUBPROG_ADDR and use
-      more rigid checking for the relocation. (Andrii)
-    - Better format to print out subprog address with bpftool. (Andrii)
-    - Use bpf_prog_test_run to trigger bpf run, instead of bpf_iter. (Andri=
-i)
-    - Other misc changes.
-
-Yonghong Song (11):
-  bpf: factor out visit_func_call_insn() in check_cfg()
-  bpf: factor out verbose_invalid_scalar()
-  bpf: refactor check_func_call() to allow callback function
-  bpf: add bpf_for_each_map_elem() helper
-  bpf: add hashtab support for bpf_for_each_map_elem() helper
-  bpf: add arraymap support for bpf_for_each_map_elem() helper
-  libbpf: move function is_ldimm64() earlier in libbpf.c
-  libbpf: support subprog address relocation
-  bpftool: print subprog address properly
-  selftests/bpf: add hashmap test for bpf_for_each_map_elem() helper
-  selftests/bpf: add arraymap test for bpf_for_each_map_elem() helper
-
- include/linux/bpf.h                           |  17 +
- include/linux/bpf_verifier.h                  |   3 +
- include/uapi/linux/bpf.h                      |  29 +-
- kernel/bpf/arraymap.c                         |  40 ++
- kernel/bpf/bpf_iter.c                         |  16 +
- kernel/bpf/hashtab.c                          |  65 ++++
- kernel/bpf/helpers.c                          |   2 +
- kernel/bpf/verifier.c                         | 355 +++++++++++++++---
- kernel/trace/bpf_trace.c                      |   2 +
- tools/bpf/bpftool/xlated_dumper.c             |   3 +
- tools/include/uapi/linux/bpf.h                |  29 +-
- tools/lib/bpf/libbpf.c                        |  76 +++-
- .../selftests/bpf/prog_tests/for_each.c       | 132 +++++++
- .../bpf/progs/for_each_array_map_elem.c       |  61 +++
- .../bpf/progs/for_each_hash_map_elem.c        |  95 +++++
- 15 files changed, 865 insertions(+), 60 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/for_each.c
- create mode 100644 tools/testing/selftests/bpf/progs/for_each_array_map_el=
-em.c
- create mode 100644 tools/testing/selftests/bpf/progs/for_each_hash_map_ele=
-m.c
-
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 21a3eedf070d..62d9ed56b081 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -188,6 +188,7 @@ enum reloc_type {
+ 	RELO_CALL,
+ 	RELO_DATA,
+ 	RELO_EXTERN,
++	RELO_SUBPROG_ADDR,
+ };
+=20
+ struct reloc_desc {
+@@ -579,6 +580,11 @@ static bool is_ldimm64(struct bpf_insn *insn)
+ 	return insn->code =3D=3D (BPF_LD | BPF_IMM | BPF_DW);
+ }
+=20
++static bool insn_is_pseudo_func(struct bpf_insn *insn)
++{
++	return is_ldimm64(insn) && insn->src_reg =3D=3D BPF_PSEUDO_FUNC;
++}
++
+ static int
+ bpf_object__init_prog(struct bpf_object *obj, struct bpf_program *prog,
+ 		      const char *name, size_t sec_idx, const char *sec_name,
+@@ -2979,6 +2985,23 @@ static bool sym_is_extern(const GElf_Sym *sym)
+ 	       GELF_ST_TYPE(sym->st_info) =3D=3D STT_NOTYPE;
+ }
+=20
++static bool sym_is_subprog(const GElf_Sym *sym, int text_shndx)
++{
++	int bind =3D GELF_ST_BIND(sym->st_info);
++	int type =3D GELF_ST_TYPE(sym->st_info);
++
++	/* in .text section */
++	if (sym->st_shndx !=3D text_shndx)
++		return false;
++
++	/* local function */
++	if (bind =3D=3D STB_LOCAL && type =3D=3D STT_SECTION)
++		return true;
++
++	/* global function */
++	return bind =3D=3D STB_GLOBAL && type =3D=3D STT_FUNC;
++}
++
+ static int find_extern_btf_id(const struct btf *btf, const char *ext_nam=
+e)
+ {
+ 	const struct btf_type *t;
+@@ -3435,6 +3458,23 @@ static int bpf_program__record_reloc(struct bpf_pr=
+ogram *prog,
+ 		return -LIBBPF_ERRNO__RELOC;
+ 	}
+=20
++	/* loading subprog addresses */
++	if (sym_is_subprog(sym, obj->efile.text_shndx)) {
++		/* global_func: sym->st_value =3D offset in the section, insn->imm =3D=
+ 0.
++		 * local_func: sym->st_value =3D 0, insn->imm =3D offset in the sectio=
+n.
++		 */
++		if ((sym->st_value % BPF_INSN_SZ) || (insn->imm % BPF_INSN_SZ)) {
++			pr_warn("prog '%s': bad subprog addr relo against '%s' at offset %zu+=
+%d\n",
++				prog->name, sym_name, (size_t)sym->st_value, insn->imm);
++			return -LIBBPF_ERRNO__RELOC;
++		}
++
++		reloc_desc->type =3D RELO_SUBPROG_ADDR;
++		reloc_desc->insn_idx =3D insn_idx;
++		reloc_desc->sym_off =3D sym->st_value;
++		return 0;
++	}
++
+ 	type =3D bpf_object__section_to_libbpf_map_type(obj, shdr_idx);
+ 	sym_sec_name =3D elf_sec_name(obj, elf_sec_by_idx(obj, shdr_idx));
+=20
+@@ -6172,6 +6212,10 @@ bpf_object__relocate_data(struct bpf_object *obj, =
+struct bpf_program *prog)
+ 			}
+ 			relo->processed =3D true;
+ 			break;
++		case RELO_SUBPROG_ADDR:
++			insn[0].src_reg =3D BPF_PSEUDO_FUNC;
++			/* will be handled as a follow up pass */
++			break;
+ 		case RELO_CALL:
+ 			/* will be handled as a follow up pass */
+ 			break;
+@@ -6358,11 +6402,11 @@ bpf_object__reloc_code(struct bpf_object *obj, st=
+ruct bpf_program *main_prog,
+=20
+ 	for (insn_idx =3D 0; insn_idx < prog->sec_insn_cnt; insn_idx++) {
+ 		insn =3D &main_prog->insns[prog->sub_insn_off + insn_idx];
+-		if (!insn_is_subprog_call(insn))
++		if (!insn_is_subprog_call(insn) && !insn_is_pseudo_func(insn))
+ 			continue;
+=20
+ 		relo =3D find_prog_insn_relo(prog, insn_idx);
+-		if (relo && relo->type !=3D RELO_CALL) {
++		if (relo && relo->type !=3D RELO_CALL && relo->type !=3D RELO_SUBPROG_=
+ADDR) {
+ 			pr_warn("prog '%s': unexpected relo for insn #%zu, type %d\n",
+ 				prog->name, insn_idx, relo->type);
+ 			return -LIBBPF_ERRNO__RELOC;
+@@ -6374,8 +6418,22 @@ bpf_object__reloc_code(struct bpf_object *obj, str=
+uct bpf_program *main_prog,
+ 			 * call always has imm =3D -1, but for static functions
+ 			 * relocation is against STT_SECTION and insn->imm
+ 			 * points to a start of a static function
++			 *
++			 * for subprog addr relocation, the relo->sym_off + insn->imm is
++			 * the byte offset in the corresponding section.
+ 			 */
+-			sub_insn_idx =3D relo->sym_off / BPF_INSN_SZ + insn->imm + 1;
++			if (relo->type =3D=3D RELO_CALL)
++				sub_insn_idx =3D relo->sym_off / BPF_INSN_SZ + insn->imm + 1;
++			else
++				sub_insn_idx =3D (relo->sym_off + insn->imm) / BPF_INSN_SZ;
++		} else if (insn_is_pseudo_func(insn)) {
++			/*
++			 * RELO_SUBPROG_ADDR relo is always emitted even if both
++			 * functions are in the same section, so it shouldn't reach here.
++			 */
++			pr_warn("prog '%s': missing subprog addr relo for insn #%zu\n",
++				prog->name, insn_idx);
++			return -LIBBPF_ERRNO__RELOC;
+ 		} else {
+ 			/* if subprogram call is to a static function within
+ 			 * the same ELF section, there won't be any relocation
 --=20
 2.24.1
 
