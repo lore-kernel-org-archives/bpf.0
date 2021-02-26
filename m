@@ -7,47 +7,47 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74DDAC433E6
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6EC6EC433E0
 	for <bpf@archiver.kernel.org>; Fri, 26 Feb 2021 20:50:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 43F8064F13
+	by mail.kernel.org (Postfix) with ESMTP id 2FC3B64F14
 	for <bpf@archiver.kernel.org>; Fri, 26 Feb 2021 20:50:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbhBZUuL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 26 Feb 2021 15:50:11 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:3834 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229698AbhBZUuL (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 26 Feb 2021 15:50:11 -0500
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 11QKkCWP016778
-        for <bpf@vger.kernel.org>; Fri, 26 Feb 2021 12:49:30 -0800
+        id S229912AbhBZUuI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 26 Feb 2021 15:50:08 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:1842 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229698AbhBZUuH (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 26 Feb 2021 15:50:07 -0500
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 11QKhnu2004004
+        for <bpf@vger.kernel.org>; Fri, 26 Feb 2021 12:49:26 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=IYG0y1Ajr5xYU38DBRneRvFH499OhJnmJcM7SW60Ors=;
- b=PKi84BdM9NYnfEwRIrmFr3Nt+/c1SCbay2t6iM90LsyWo+T7vXqOxc2FqlozoinZ5R3I
- WpKgPkH6YNmJG2WTLGuaQIKC7V5fZ3mlMj/tWKu8/CP0/38cqo9a1U6njou/pjIVXLgL
- nONh7o9eabAgdfI/hHOboG123UWnzPMwJH4= 
+ bh=YARBWkmalLhpidatjrTdCpE16SfRZNXGBsbwf9oer4A=;
+ b=O8ILVI+tI7hhbIeRZZ87clnmkGQ3m9dot/ZbvnEJA9pFbzK/AljwVlH1Ym5VKzEGZNCl
+ dZdtnGUc06dR/fInYMqVNdrxsx4/dEpeYY7tb8aJpyfGPkgynkullD2uY2itjkBzTJkQ
+ YXL2rFqYMY/AJ2PxaVMHQcheR0Q0MLbQyA0= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 36xjxqpf3k-1
+        by mx0a-00082601.pphosted.com with ESMTP id 36x96c20vt-5
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 26 Feb 2021 12:49:30 -0800
-Received: from intmgw001.05.ash9.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 26 Feb 2021 12:49:26 -0800
+Received: from intmgw002.25.frc3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Fri, 26 Feb 2021 12:49:28 -0800
+ 15.1.1979.3; Fri, 26 Feb 2021 12:49:24 -0800
 Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 4BBAB3705324; Fri, 26 Feb 2021 12:49:28 -0800 (PST)
+        id 5CA0D3705324; Fri, 26 Feb 2021 12:49:23 -0800 (PST)
 From:   Yonghong Song <yhs@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
         Cong Wang <xiyou.wangcong@gmail.com>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
         Andrii Nakryiko <andrii@kernel.org>
-Subject: [PATCH bpf-next v5 07/12] bpf: add arraymap support for bpf_for_each_map_elem() helper
-Date:   Fri, 26 Feb 2021 12:49:28 -0800
-Message-ID: <20210226204928.3885192-1-yhs@fb.com>
+Subject: [PATCH bpf-next v5 03/12] bpf: refactor check_func_call() to allow callback function
+Date:   Fri, 26 Feb 2021 12:49:23 -0800
+Message-ID: <20210226204923.3884627-1-yhs@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20210226204920.3884074-1-yhs@fb.com>
 References: <20210226204920.3884074-1-yhs@fb.com>
@@ -57,91 +57,142 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
  definitions=2021-02-26_09:2021-02-26,2021-02-26 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0 clxscore=1015
- malwarescore=0 priorityscore=1501 mlxlogscore=480 mlxscore=0 spamscore=0
- adultscore=0 impostorscore=0 lowpriorityscore=0 phishscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2102260155
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0
+ lowpriorityscore=0 suspectscore=0 bulkscore=0 phishscore=0 mlxscore=0
+ adultscore=0 malwarescore=0 impostorscore=0 priorityscore=1501
+ mlxlogscore=689 clxscore=1015 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2009150000 definitions=main-2102260155
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch added support for arraymap and percpu arraymap.
+Later proposed bpf_for_each_map_elem() helper has callback
+function as one of its arguments. This patch refactored
+check_func_call() to permit callback function which sets
+callee state. Different callback functions may have
+different callee states.
+There is no functionality change for this patch.
 
 Acked-by: Andrii Nakryiko <andrii@kernel.org>
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- kernel/bpf/arraymap.c | 40 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+ kernel/bpf/verifier.c | 60 +++++++++++++++++++++++++++++++------------
+ 1 file changed, 43 insertions(+), 17 deletions(-)
 
-diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-index 1f8453343bf2..463d25e1e67e 100644
---- a/kernel/bpf/arraymap.c
-+++ b/kernel/bpf/arraymap.c
-@@ -625,6 +625,42 @@ static const struct bpf_iter_seq_info iter_seq_info =
-=3D {
- 	.seq_priv_size		=3D sizeof(struct bpf_iter_seq_array_map_info),
- };
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 7194980c3ca4..97e772f44cd7 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -5249,13 +5249,19 @@ static void clear_caller_saved_regs(struct bpf_ve=
+rifier_env *env,
+ 	}
+ }
 =20
-+static int bpf_for_each_array_elem(struct bpf_map *map, void *callback_f=
-n,
-+				   void *callback_ctx, u64 flags)
+-static int check_func_call(struct bpf_verifier_env *env, struct bpf_insn=
+ *insn,
+-			   int *insn_idx)
++typedef int (*set_callee_state_fn)(struct bpf_verifier_env *env,
++				   struct bpf_func_state *caller,
++				   struct bpf_func_state *callee,
++				   int insn_idx);
++
++static int __check_func_call(struct bpf_verifier_env *env, struct bpf_in=
+sn *insn,
++			     int *insn_idx, int subprog,
++			     set_callee_state_fn set_callee_state_cb)
+ {
+ 	struct bpf_verifier_state *state =3D env->cur_state;
+ 	struct bpf_func_info_aux *func_info_aux;
+ 	struct bpf_func_state *caller, *callee;
+-	int i, err, subprog, target_insn;
++	int err;
+ 	bool is_global =3D false;
+=20
+ 	if (state->curframe + 1 >=3D MAX_CALL_FRAMES) {
+@@ -5264,14 +5270,6 @@ static int check_func_call(struct bpf_verifier_env=
+ *env, struct bpf_insn *insn,
+ 		return -E2BIG;
+ 	}
+=20
+-	target_insn =3D *insn_idx + insn->imm;
+-	subprog =3D find_subprog(env, target_insn + 1);
+-	if (subprog < 0) {
+-		verbose(env, "verifier bug. No program starts at insn %d\n",
+-			target_insn + 1);
+-		return -EFAULT;
+-	}
+-
+ 	caller =3D state->frame[state->curframe];
+ 	if (state->frame[state->curframe + 1]) {
+ 		verbose(env, "verifier bug. Frame %d already allocated\n",
+@@ -5326,11 +5324,9 @@ static int check_func_call(struct bpf_verifier_env=
+ *env, struct bpf_insn *insn,
+ 	if (err)
+ 		return err;
+=20
+-	/* copy r1 - r5 args that callee can access.  The copy includes parent
+-	 * pointers, which connects us up to the liveness chain
+-	 */
+-	for (i =3D BPF_REG_1; i <=3D BPF_REG_5; i++)
+-		callee->regs[i] =3D caller->regs[i];
++	err =3D set_callee_state_cb(env, caller, callee, *insn_idx);
++	if (err)
++		return err;
+=20
+ 	clear_caller_saved_regs(env, caller->regs);
+=20
+@@ -5338,7 +5334,7 @@ static int check_func_call(struct bpf_verifier_env =
+*env, struct bpf_insn *insn,
+ 	state->curframe++;
+=20
+ 	/* and go analyze first insn of the callee */
+-	*insn_idx =3D target_insn;
++	*insn_idx =3D env->subprog_info[subprog].start - 1;
+=20
+ 	if (env->log.level & BPF_LOG_LEVEL) {
+ 		verbose(env, "caller:\n");
+@@ -5349,6 +5345,36 @@ static int check_func_call(struct bpf_verifier_env=
+ *env, struct bpf_insn *insn,
+ 	return 0;
+ }
+=20
++static int set_callee_state(struct bpf_verifier_env *env,
++			    struct bpf_func_state *caller,
++			    struct bpf_func_state *callee, int insn_idx)
 +{
-+	u32 i, key, num_elems =3D 0;
-+	struct bpf_array *array;
-+	bool is_percpu;
-+	u64 ret =3D 0;
-+	void *val;
++	int i;
 +
-+	if (flags !=3D 0)
-+		return -EINVAL;
-+
-+	is_percpu =3D map->map_type =3D=3D BPF_MAP_TYPE_PERCPU_ARRAY;
-+	array =3D container_of(map, struct bpf_array, map);
-+	if (is_percpu)
-+		migrate_disable();
-+	for (i =3D 0; i < map->max_entries; i++) {
-+		if (is_percpu)
-+			val =3D this_cpu_ptr(array->pptrs[i]);
-+		else
-+			val =3D array->value + array->elem_size * i;
-+		num_elems++;
-+		key =3D i;
-+		ret =3D BPF_CAST_CALL(callback_fn)((u64)(long)map,
-+					(u64)(long)&key, (u64)(long)val,
-+					(u64)(long)callback_ctx, 0);
-+		/* return value: 0 - continue, 1 - stop and return */
-+		if (ret)
-+			break;
-+	}
-+
-+	if (is_percpu)
-+		migrate_enable();
-+	return num_elems;
++	/* copy r1 - r5 args that callee can access.  The copy includes parent
++	 * pointers, which connects us up to the liveness chain
++	 */
++	for (i =3D BPF_REG_1; i <=3D BPF_REG_5; i++)
++		callee->regs[i] =3D caller->regs[i];
++	return 0;
 +}
 +
- static int array_map_btf_id;
- const struct bpf_map_ops array_map_ops =3D {
- 	.map_meta_equal =3D array_map_meta_equal,
-@@ -643,6 +679,8 @@ const struct bpf_map_ops array_map_ops =3D {
- 	.map_check_btf =3D array_map_check_btf,
- 	.map_lookup_batch =3D generic_map_lookup_batch,
- 	.map_update_batch =3D generic_map_update_batch,
-+	.map_set_for_each_callback_args =3D map_set_for_each_callback_args,
-+	.map_for_each_callback =3D bpf_for_each_array_elem,
- 	.map_btf_name =3D "bpf_array",
- 	.map_btf_id =3D &array_map_btf_id,
- 	.iter_seq_info =3D &iter_seq_info,
-@@ -660,6 +698,8 @@ const struct bpf_map_ops percpu_array_map_ops =3D {
- 	.map_delete_elem =3D array_map_delete_elem,
- 	.map_seq_show_elem =3D percpu_array_map_seq_show_elem,
- 	.map_check_btf =3D array_map_check_btf,
-+	.map_set_for_each_callback_args =3D map_set_for_each_callback_args,
-+	.map_for_each_callback =3D bpf_for_each_array_elem,
- 	.map_btf_name =3D "bpf_array",
- 	.map_btf_id =3D &percpu_array_map_btf_id,
- 	.iter_seq_info =3D &iter_seq_info,
++static int check_func_call(struct bpf_verifier_env *env, struct bpf_insn=
+ *insn,
++			   int *insn_idx)
++{
++	int subprog, target_insn;
++
++	target_insn =3D *insn_idx + insn->imm + 1;
++	subprog =3D find_subprog(env, target_insn);
++	if (subprog < 0) {
++		verbose(env, "verifier bug. No program starts at insn %d\n",
++			target_insn);
++		return -EFAULT;
++	}
++
++	return __check_func_call(env, insn, insn_idx, subprog, set_callee_state=
+);
++}
++
+ static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx=
+)
+ {
+ 	struct bpf_verifier_state *state =3D env->cur_state;
 --=20
 2.24.1
 
