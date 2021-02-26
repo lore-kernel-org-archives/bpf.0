@@ -2,73 +2,85 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BC623C433E0
-	for <bpf@archiver.kernel.org>; Fri, 26 Feb 2021 21:20:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 930FBC433E0
+	for <bpf@archiver.kernel.org>; Fri, 26 Feb 2021 21:30:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 746DE64F0E
-	for <bpf@archiver.kernel.org>; Fri, 26 Feb 2021 21:20:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6402F64F33
+	for <bpf@archiver.kernel.org>; Fri, 26 Feb 2021 21:30:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229622AbhBZVUt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 26 Feb 2021 16:20:49 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36942 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229586AbhBZVUs (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 26 Feb 2021 16:20:48 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id DB63B64F13;
-        Fri, 26 Feb 2021 21:20:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614374407;
-        bh=dh0Te//gzE+Y13L2iee6uh6dEQPOp5QdXSt31Wl0YLo=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=JMwcwYoVBoC7Usa7HyzKUx10gfuS95LpCxKvbeFBd25Dl0Ms2jEL8TJvlj34h4km5
-         qpUkFG87MdsFCJE/+DyzHJXNOi8abfI507r5972wt1jY80wERY6ytFazGNNjarosf8
-         HrzLztUL/RpY7dNHSjaJM2/UgunB+LchNGZjolqrIeEuIR45B3TyPajztrozKLI+Ar
-         Ui4kevNa3WvtWH3dO6QUEX7wv+x8/7L1PmUCU2Y0ZFLpX43RUnujzdxLkk3Ky2ch1A
-         MsM5v3cph+XeFLORuJT+Giz1wC0WVHlkMqvQX/8yqiPQ1kAkWqrj7sXsnvVcSACk8u
-         S9rW8yq2sR2Ow==
-Content-Type: text/plain; charset="utf-8"
+        id S230018AbhBZVag (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 26 Feb 2021 16:30:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57150 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229990AbhBZVad (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 26 Feb 2021 16:30:33 -0500
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6F23C06174A
+        for <bpf@vger.kernel.org>; Fri, 26 Feb 2021 13:29:52 -0800 (PST)
+Received: by mail-lj1-x230.google.com with SMTP id e2so5052737ljo.7
+        for <bpf@vger.kernel.org>; Fri, 26 Feb 2021 13:29:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5WySLb0xHZAtS0rVSIBns7cIKZeKtQYVj2GY7nDu7AU=;
+        b=fStmHG1O2rbmCMZELSKbQDs5qAXGkMDnYmJRfXHsFTNJ8JomNURin1HlfPC8QI9g2f
+         amt9dW70PaFLx+kfM/AdOjm8/DlJ5aq/G69tGQhu7/M7JY8A3iIi+yKxwsbLA2tOisa1
+         0xfylvPu7VFtqu1HlZrNII6iN0+mtXNMiXsNonL+tT0gs01Z6zAIbXUwxgcBm38rZmTk
+         fY5XATjzhHh8Yo9Q3B+smrjbyJCwfU1Jk6/3WLF/dCs5JNZz4z0T9KJqJSSxP8fgJSf7
+         k+ziBJIlKtgE9B5kQVE2He/DXMkVMw7YZO/Y2ERb3KdW7iMsdl6tOxNksdCuHbakEpVS
+         1kJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5WySLb0xHZAtS0rVSIBns7cIKZeKtQYVj2GY7nDu7AU=;
+        b=T6dIewpPvAnblnkX6yLRrYNK33cziHN0T9oPK3ZpT03EgBriuf7Sn7sK/eqdEtSLNs
+         wPsCzHR1ceS9mbOHij2rGDWyCh/l6dZD2+aOa2Wi13BheQbXLeO4mWGv0/AWqL7XIpC4
+         NJExjdWEbzlObjTO1opfdoksvoRHEnGxbrTE42hLK3EB/1zUIEIri+UX4e9BJSYZq3Ag
+         VG1nUtAMGrhWwn7WHvA4wdfXR+MrVzlpm8AP8BYY6Hjbt+CsZcznSyKLrKVse1bm+lzs
+         7H6Qj2REy/aJdObR6QVP7IJiTxcA+cP0w6HmeivVemNvDIxUBE1Z4uGSelw0lae+tQPi
+         EUMg==
+X-Gm-Message-State: AOAM531K346gq2l0g6fGOOADK11q2CBLtHBEdZtD0bFTV8FJp8UsI8yZ
+        WQGh5aNSpY9SW+GMN3mP+4enDZflpEa4BOQbx+I=
+X-Google-Smtp-Source: ABdhPJzTzLmdt/+bvUpU/rIZqjyUM4k3BNTYY7c6xCe58EWaHiMmXpQq9x/UFVq6r2dDAkHfFK56AiLiwefFVpFRjFM=
+X-Received: by 2002:a2e:964e:: with SMTP id z14mr2792131ljh.204.1614374991345;
+ Fri, 26 Feb 2021 13:29:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] selftests/bpf: Propagate error code of the command
- to vmtest.sh
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <161437440784.26505.14457726843836860385.git-patchwork-notify@kernel.org>
-Date:   Fri, 26 Feb 2021 21:20:07 +0000
-References: <20210225161947.1778590-1-kpsingh@kernel.org>
-In-Reply-To: <20210225161947.1778590-1-kpsingh@kernel.org>
-To:     KP Singh <kpsingh@kernel.org>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, revest@chromium.org, jackmanb@chromium.org
+References: <20210226204920.3884074-1-yhs@fb.com> <20210226204925.3884923-1-yhs@fb.com>
+In-Reply-To: <20210226204925.3884923-1-yhs@fb.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Fri, 26 Feb 2021 13:29:40 -0800
+Message-ID: <CAADnVQ+WuEpDBeZw48uiDbJS26hZGaaoQ9wRM-0tpNeohP6Vpw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 05/12] bpf: add bpf_for_each_map_elem() helper
+To:     Yonghong Song <yhs@fb.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
+On Fri, Feb 26, 2021 at 12:49 PM Yonghong Song <yhs@fb.com> wrote:
+> + *
+> + *             The following are a list of supported map types and their
+> + *             respective expected callback signatures:
+> + *
+> + *             BPF_MAP_TYPE_HASH, BPF_MAP_TYPE_PERCPU_HASH,
+> + *             BPF_MAP_TYPE_LRU_HASH, BPF_MAP_TYPE_LRU_PERCPU_HASH,
+> + *             BPF_MAP_TYPE_ARRAY, BPF_MAP_TYPE_PERCPU_ARRAY:
+> + *                 long (*callback_fn)(struct bpf_map *map, const void *key,
+> + *                                     void *value, void *ctx);
 
-This patch was applied to bpf/bpf-next.git (refs/heads/master):
+This part was causing errors and warnings in bpf-helpers.rst.
+I fixed it up while applying.
 
-On Thu, 25 Feb 2021 16:19:47 +0000 you wrote:
-> From: KP Singh <kpsingh@google.com>
-> 
-> When vmtest.sh ran a command in a VM, it did not record or propagate the
-> error code of the command. This made the script less "script-able". The
-> script now saves the error code of the said command in a file in the VM,
-> copies the file back to the host and (when available) uses this error
-> code instead of its own.
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf-next] selftests/bpf: Propagate error code of the command to vmtest.sh
-    https://git.kernel.org/bpf/bpf-next/c/2854436612c4
-
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Thanks a lot for the great work! Really exciting feature!
