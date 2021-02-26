@@ -2,290 +2,94 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB407C433E6
-	for <bpf@archiver.kernel.org>; Fri, 26 Feb 2021 20:26:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 83657C433DB
+	for <bpf@archiver.kernel.org>; Fri, 26 Feb 2021 20:36:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6FA9A64F03
-	for <bpf@archiver.kernel.org>; Fri, 26 Feb 2021 20:26:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3AF4964F0D
+	for <bpf@archiver.kernel.org>; Fri, 26 Feb 2021 20:36:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230525AbhBZU0N (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 26 Feb 2021 15:26:13 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:21582 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S230527AbhBZUYJ (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 26 Feb 2021 15:24:09 -0500
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 11QK2sm8061719;
-        Fri, 26 Feb 2021 15:23:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=CTiyK+kn3m4IxgFmgzjNrNgc4bmLzQe6wuzcKN9G4pw=;
- b=SXFYS8jLpiLHsRs3CFgtkEl4TT8LuUkrvc8aPw2MalB5pYMwtvofGYqDpsowY5PzCCgT
- GZpbpQ6JydnJStg8y42PJKx35OtwyLGRQdKd+LEan8wwnb+KhBP+2FVxwxBIxnyXODwm
- xU5lkGKu3ac29Fwijh0VhEoLJqm+GUmezABhXiLhV/oX5RC+WAD+pXbBNovtuB/fLljm
- IFXKgaQZf5c3M4RCYFHMBNijMKxl226wqjfdAcl271fRodS23KHLa5yQ9XBVlW9Rn2dt
- f/MSXncqts7EjjDDbKIizaDsps057m1FR45I8Onn7QHAVbPolnbFBAgxKQBglioN0fNk ig== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 36y10sx8yp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 26 Feb 2021 15:23:12 -0500
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 11QK58be071527;
-        Fri, 26 Feb 2021 15:23:12 -0500
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 36y10sx8y1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 26 Feb 2021 15:23:12 -0500
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 11QKMua5024220;
-        Fri, 26 Feb 2021 20:23:10 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma04ams.nl.ibm.com with ESMTP id 36tt28dknq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 26 Feb 2021 20:23:10 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 11QKMsZe36504050
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 26 Feb 2021 20:22:54 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4C7E811C04A;
-        Fri, 26 Feb 2021 20:23:07 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9FEE111C054;
-        Fri, 26 Feb 2021 20:23:06 +0000 (GMT)
-Received: from vm.lan (unknown [9.145.151.190])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 26 Feb 2021 20:23:06 +0000 (GMT)
-From:   Ilya Leoshkevich <iii@linux.ibm.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Yonghong Song <yhs@fb.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        John Fastabend <john.fastabend@gmail.com>
-Cc:     bpf@vger.kernel.org, Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: [PATCH v7 bpf-next 07/10] selftest/bpf: Add BTF_KIND_FLOAT tests
-Date:   Fri, 26 Feb 2021 21:22:53 +0100
-Message-Id: <20210226202256.116518-8-iii@linux.ibm.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210226202256.116518-1-iii@linux.ibm.com>
-References: <20210226202256.116518-1-iii@linux.ibm.com>
+        id S229849AbhBZUgx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 26 Feb 2021 15:36:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45572 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229618AbhBZUgv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 26 Feb 2021 15:36:51 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55E61C061574;
+        Fri, 26 Feb 2021 12:36:11 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id p21so15704865lfu.11;
+        Fri, 26 Feb 2021 12:36:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pUC6qb3vrmNiHlYSVZaGrWbey6JUDPkidxsRxXOIl5E=;
+        b=jrr+vb9/J3B89XaALlUTgPbyxd7K7VrqzsTFbGs7ccadOmcq2sOODnJ6toCEAUp5dC
+         XRTz+rN3tSHm4/hcSNjKjtK/h7eHWUzY6Sbt4anJ3c6bYnpEoMdk8xmwJUhJonYmTRa/
+         hlGq61Gy5nmc20K45D30TsGX/5AiHBx2sGiHa6aS3yJ/B3ll00CDsuSo8Bh3jClgU60F
+         6hYeW6inEUbYaymW8rY3m5z3Ve00o8QlaIp6x3yh8za3L5lRjgRo3PbCWIZXhEY+LqX6
+         e5KZ69eqSM4UsgwD5zZWvU778G40mjUouKhOzBex90NtW6p4y487I20r7MrodrkwylDX
+         pWnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pUC6qb3vrmNiHlYSVZaGrWbey6JUDPkidxsRxXOIl5E=;
+        b=cfYvRuwKyRlDHd3gtY3ATrG7TtJ5gb89oQGijWRFfW75dycLbz2h+RRyOC4nckBWQt
+         0Hued05/VCI9VvUxluB6cGoGITn74uYxQIowcRX/KBifKZ5p1DK1I1hVh4qQjF4SY9S1
+         jbF7k6ymkw7bpfPr25cPdIc+Stnbei7eOnrZ2mr8l8ONZL1MtzfTe3uhcn0Je0JyCsya
+         EnwSwJkKlI2FuNK+UUmZzsEN7U5wpB941NFS4t//eNoDXUgcHeMmdgHDAc//ranA2pkj
+         rcieO6tp4hQY3C3YsWAhgm1P9St8Sv/v0fsqne5srE/Y1SjJbhcVHmtNWrY0vmVd4FVG
+         c14g==
+X-Gm-Message-State: AOAM53301RyNBBl4n7gBiGoIJgjY4J8sILH/iPiiou0czWCzFK4EX5vJ
+        yYZMqgbwD0oEoOX4AYzRfzVNMphiLm8IZQDp1lU=
+X-Google-Smtp-Source: ABdhPJx0xNN1M4zDVR+EouRLdYAqBdfijJUjpfCo+zB+rkG/bAU6Z58nuG648fjYH8+DpfjHUBzleoRA15kqixAeNhM=
+X-Received: by 2002:ac2:5ec2:: with SMTP id d2mr2828590lfq.214.1614371769779;
+ Fri, 26 Feb 2021 12:36:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-02-26_09:2021-02-26,2021-02-26 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
- adultscore=0 mlxlogscore=999 phishscore=0 malwarescore=0 suspectscore=0
- lowpriorityscore=0 priorityscore=1501 spamscore=0 bulkscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2102260148
+References: <20210223184934.6054-1-xiyou.wangcong@gmail.com>
+In-Reply-To: <20210223184934.6054-1-xiyou.wangcong@gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Fri, 26 Feb 2021 12:35:58 -0800
+Message-ID: <CAADnVQKh2QDRE4F1Ac160P=csMjFmobnS4f5DrgG=MRxpPe7mA@mail.gmail.com>
+Subject: Re: [Patch bpf-next v7 0/9] sock_map: clean up and refactor code for BPF_SK_SKB_VERDICT
+To:     Cong Wang <xiyou.wangcong@gmail.com>
+Cc:     Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, duanxiongchun@bytedance.com,
+        Dongdong Wang <wangdongdong.6@bytedance.com>,
+        jiang.wang@bytedance.com, Cong Wang <cong.wang@bytedance.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Test the good variants as well as the potential malformed ones.
+On Tue, Feb 23, 2021 at 10:51 AM Cong Wang <xiyou.wangcong@gmail.com> wrote:
+>
+> From: Cong Wang <cong.wang@bytedance.com>
+>
+> This patchset is the first series of patches separated out from
+> the original large patchset, to make reviews easier. This patchset
+> does not add any new feature or change any functionality but merely
+> cleans up the existing sockmap and skmsg code and refactors it, to
+> prepare for the patches followed up. This passed all BPF selftests.
+>
+> To see the big picture, the original whole patchset is available
+> on github: https://github.com/congwang/linux/tree/sockmap
+>
+> and this patchset is also available on github:
+> https://github.com/congwang/linux/tree/sockmap1
+>
+> ---
+> v7: add 1 trivial cleanup patch
+>     define a mask for sk_redir
+>     fix CONFIG_BPF_SYSCALL in include/net/udp.h
+>     make sk_psock_done_strp() static
+>     move skb_bpf_redirect_clear() to sk_psock_backlog()
 
-Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
-Acked-by: Yonghong Song <yhs@fb.com>
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
----
- tools/testing/selftests/bpf/btf_helpers.c    |   4 +
- tools/testing/selftests/bpf/prog_tests/btf.c | 131 +++++++++++++++++++
- tools/testing/selftests/bpf/test_btf.h       |   3 +
- 3 files changed, 138 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/btf_helpers.c b/tools/testing/selftests/bpf/btf_helpers.c
-index 48f90490f922..b692e6ead9b5 100644
---- a/tools/testing/selftests/bpf/btf_helpers.c
-+++ b/tools/testing/selftests/bpf/btf_helpers.c
-@@ -23,6 +23,7 @@ static const char * const btf_kind_str_mapping[] = {
- 	[BTF_KIND_FUNC_PROTO]	= "FUNC_PROTO",
- 	[BTF_KIND_VAR]		= "VAR",
- 	[BTF_KIND_DATASEC]	= "DATASEC",
-+	[BTF_KIND_FLOAT]	= "FLOAT",
- };
- 
- static const char *btf_kind_str(__u16 kind)
-@@ -173,6 +174,9 @@ int fprintf_btf_type_raw(FILE *out, const struct btf *btf, __u32 id)
- 		}
- 		break;
- 	}
-+	case BTF_KIND_FLOAT:
-+		fprintf(out, " size=%u", t->size);
-+		break;
- 	default:
- 		break;
- 	}
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing/selftests/bpf/prog_tests/btf.c
-index c29406736138..11d98d3cf949 100644
---- a/tools/testing/selftests/bpf/prog_tests/btf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/btf.c
-@@ -3531,6 +3531,136 @@ static struct btf_raw_test raw_tests[] = {
- 	.max_entries = 1,
- },
- 
-+{
-+	.descr = "float test #1, well-formed",
-+	.raw_types = {
-+		BTF_TYPE_INT_ENC(NAME_TBD, BTF_INT_SIGNED, 0, 32, 4),
-+								/* [1] */
-+		BTF_TYPE_FLOAT_ENC(NAME_TBD, 2),		/* [2] */
-+		BTF_TYPE_FLOAT_ENC(NAME_TBD, 4),		/* [3] */
-+		BTF_TYPE_FLOAT_ENC(NAME_TBD, 8),		/* [4] */
-+		BTF_TYPE_FLOAT_ENC(NAME_TBD, 12),		/* [5] */
-+		BTF_TYPE_FLOAT_ENC(NAME_TBD, 16),		/* [6] */
-+		BTF_STRUCT_ENC(NAME_TBD, 5, 48),		/* [7] */
-+		BTF_MEMBER_ENC(NAME_TBD, 2, 0),
-+		BTF_MEMBER_ENC(NAME_TBD, 3, 32),
-+		BTF_MEMBER_ENC(NAME_TBD, 4, 64),
-+		BTF_MEMBER_ENC(NAME_TBD, 5, 128),
-+		BTF_MEMBER_ENC(NAME_TBD, 6, 256),
-+		BTF_END_RAW,
-+	},
-+	BTF_STR_SEC("\0int\0_Float16\0float\0double\0_Float80\0long_double"
-+		    "\0floats\0a\0b\0c\0d\0e"),
-+	.map_type = BPF_MAP_TYPE_ARRAY,
-+	.map_name = "float_type_check_btf",
-+	.key_size = sizeof(int),
-+	.value_size = 48,
-+	.key_type_id = 1,
-+	.value_type_id = 7,
-+	.max_entries = 1,
-+},
-+{
-+	.descr = "float test #2, invalid vlen",
-+	.raw_types = {
-+		BTF_TYPE_INT_ENC(NAME_TBD, BTF_INT_SIGNED, 0, 32, 4),
-+								/* [1] */
-+		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_FLOAT, 0, 1), 4),
-+								/* [2] */
-+		BTF_END_RAW,
-+	},
-+	BTF_STR_SEC("\0int\0float"),
-+	.map_type = BPF_MAP_TYPE_ARRAY,
-+	.map_name = "float_type_check_btf",
-+	.key_size = sizeof(int),
-+	.value_size = 4,
-+	.key_type_id = 1,
-+	.value_type_id = 2,
-+	.max_entries = 1,
-+	.btf_load_err = true,
-+	.err_str = "vlen != 0",
-+},
-+{
-+	.descr = "float test #3, invalid kind_flag",
-+	.raw_types = {
-+		BTF_TYPE_INT_ENC(NAME_TBD, BTF_INT_SIGNED, 0, 32, 4),
-+								/* [1] */
-+		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_FLOAT, 1, 0), 4),
-+								/* [2] */
-+		BTF_END_RAW,
-+	},
-+	BTF_STR_SEC("\0int\0float"),
-+	.map_type = BPF_MAP_TYPE_ARRAY,
-+	.map_name = "float_type_check_btf",
-+	.key_size = sizeof(int),
-+	.value_size = 4,
-+	.key_type_id = 1,
-+	.value_type_id = 2,
-+	.max_entries = 1,
-+	.btf_load_err = true,
-+	.err_str = "Invalid btf_info kind_flag",
-+},
-+{
-+	.descr = "float test #4, member does not fit",
-+	.raw_types = {
-+		BTF_TYPE_INT_ENC(NAME_TBD, BTF_INT_SIGNED, 0, 32, 4),
-+								/* [1] */
-+		BTF_TYPE_FLOAT_ENC(NAME_TBD, 4),		/* [2] */
-+		BTF_STRUCT_ENC(NAME_TBD, 1, 2),			/* [3] */
-+		BTF_MEMBER_ENC(NAME_TBD, 2, 0),
-+		BTF_END_RAW,
-+	},
-+	BTF_STR_SEC("\0int\0float\0floats\0x"),
-+	.map_type = BPF_MAP_TYPE_ARRAY,
-+	.map_name = "float_type_check_btf",
-+	.key_size = sizeof(int),
-+	.value_size = 4,
-+	.key_type_id = 1,
-+	.value_type_id = 3,
-+	.max_entries = 1,
-+	.btf_load_err = true,
-+	.err_str = "Member exceeds struct_size",
-+},
-+{
-+	.descr = "float test #5, member is not properly aligned",
-+	.raw_types = {
-+		BTF_TYPE_INT_ENC(NAME_TBD, BTF_INT_SIGNED, 0, 32, 4),
-+								/* [1] */
-+		BTF_TYPE_FLOAT_ENC(NAME_TBD, 4),		/* [2] */
-+		BTF_STRUCT_ENC(NAME_TBD, 1, 8),			/* [3] */
-+		BTF_MEMBER_ENC(NAME_TBD, 2, 8),
-+		BTF_END_RAW,
-+	},
-+	BTF_STR_SEC("\0int\0float\0floats\0x"),
-+	.map_type = BPF_MAP_TYPE_ARRAY,
-+	.map_name = "float_type_check_btf",
-+	.key_size = sizeof(int),
-+	.value_size = 4,
-+	.key_type_id = 1,
-+	.value_type_id = 3,
-+	.max_entries = 1,
-+	.btf_load_err = true,
-+	.err_str = "Member is not properly aligned",
-+},
-+{
-+	.descr = "float test #6, invalid size",
-+	.raw_types = {
-+		BTF_TYPE_INT_ENC(NAME_TBD, BTF_INT_SIGNED, 0, 32, 4),
-+								/* [1] */
-+		BTF_TYPE_FLOAT_ENC(NAME_TBD, 6),		/* [2] */
-+		BTF_END_RAW,
-+	},
-+	BTF_STR_SEC("\0int\0float"),
-+	.map_type = BPF_MAP_TYPE_ARRAY,
-+	.map_name = "float_type_check_btf",
-+	.key_size = sizeof(int),
-+	.value_size = 6,
-+	.key_type_id = 1,
-+	.value_type_id = 2,
-+	.max_entries = 1,
-+	.btf_load_err = true,
-+	.err_str = "Invalid type_size",
-+},
-+
- }; /* struct btf_raw_test raw_tests[] */
- 
- static const char *get_next_str(const char *start, const char *end)
-@@ -6630,6 +6760,7 @@ static int btf_type_size(const struct btf_type *t)
- 	case BTF_KIND_PTR:
- 	case BTF_KIND_TYPEDEF:
- 	case BTF_KIND_FUNC:
-+	case BTF_KIND_FLOAT:
- 		return base_size;
- 	case BTF_KIND_INT:
- 		return base_size + sizeof(__u32);
-diff --git a/tools/testing/selftests/bpf/test_btf.h b/tools/testing/selftests/bpf/test_btf.h
-index 2023725f1962..e2394eea4b7f 100644
---- a/tools/testing/selftests/bpf/test_btf.h
-+++ b/tools/testing/selftests/bpf/test_btf.h
-@@ -66,4 +66,7 @@
- #define BTF_FUNC_ENC(name, func_proto) \
- 	BTF_TYPE_ENC(name, BTF_INFO_ENC(BTF_KIND_FUNC, 0, 0), func_proto)
- 
-+#define BTF_TYPE_FLOAT_ENC(name, sz) \
-+	BTF_TYPE_ENC(name, BTF_INFO_ENC(BTF_KIND_FLOAT, 0, 0), sz)
-+
- #endif /* _TEST_BTF_H */
--- 
-2.29.2
-
+Applied. Thanks
