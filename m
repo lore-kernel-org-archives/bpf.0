@@ -7,54 +7,54 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 90FC6C433E0
-	for <bpf@archiver.kernel.org>; Mon,  1 Mar 2021 06:26:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BBB3C433DB
+	for <bpf@archiver.kernel.org>; Mon,  1 Mar 2021 06:28:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3E17F64E40
-	for <bpf@archiver.kernel.org>; Mon,  1 Mar 2021 06:26:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D202861494
+	for <bpf@archiver.kernel.org>; Mon,  1 Mar 2021 06:28:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231954AbhCAG0I (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 1 Mar 2021 01:26:08 -0500
+        id S232008AbhCAG2L (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 1 Mar 2021 01:28:11 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231959AbhCAGZx (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 1 Mar 2021 01:25:53 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40506C0617A7
-        for <bpf@vger.kernel.org>; Sun, 28 Feb 2021 22:25:05 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id o6so11033916pjf.5
-        for <bpf@vger.kernel.org>; Sun, 28 Feb 2021 22:25:05 -0800 (PST)
+        with ESMTP id S232004AbhCAG0T (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 1 Mar 2021 01:26:19 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78A6CC061221
+        for <bpf@vger.kernel.org>; Sun, 28 Feb 2021 22:25:36 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id b15so10394214pjb.0
+        for <bpf@vger.kernel.org>; Sun, 28 Feb 2021 22:25:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ScywHubPCL6mfstg+EZNBBsmr5n/XLhbKlBOnoSWD+4=;
-        b=UvFK2RYFvMGJVieWRz6EEiAEkFFy1AuuU+HfcqWKDo+F6EiwDPNX+770wZRay8HF2w
-         2lGPh1WGEsUC3TyiVsBDqFFXbIUktipAYtsUx0ZTj4MapTihLiryU3bDNQmzXl3ArW2G
-         7j2f10KmaRnl/I1zahSdLOswaH40DSKTjOYWYT+6G7fEHXdGfnKUSF62wAYMTc5Jiy2Y
-         2wcW4cv3U8VRbUpLmQukb2zk6Jg/hwXE8GN+Y78qjbuP86wLz18jHBXtV9qVyYBUhi+7
-         QmZodSw52kDaeZ8NGtVZBjn5x6VxbKX64g4xjlsdD5PI1ppKS3ot+9uA2/o+Bm77Ja3C
-         wh5w==
+        bh=cilHKXrKoJZLqevMF5os7tc8I3h7Pgl0p1o36mO7uUg=;
+        b=zssOM8W3NPBUtqhS102B5C1SbgE+Bno0K/TPpFBgYelvNPEhaNlsO+yd+VVxFNtaaK
+         o5pFwnjOR4aO86xW3/lnvTINF6Iirdi/psRZIigw8T0h2n1QNlYJg/wxUwnXY9zMqEBZ
+         lTh3rQTJtcd+uUKvKFBk0sJK13wJGcNmvDqCYFIp9VywEzeCUUALceII5oYAR8aoC7Zv
+         3k30ytpmiItqUAZdHqYleUAlLuU0TbWtMh/DZXVKi8EfGvffWzK9kToWwTUlfXgLampg
+         9OsLywpEh8Y34TOjPoOpb45nqB2oCuFssRLKkeoB9Bq7xuMXkTnpdadyJ4sufQmmEyUt
+         GqCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ScywHubPCL6mfstg+EZNBBsmr5n/XLhbKlBOnoSWD+4=;
-        b=bZtJlCgOdWy7mjnL5Pj3WjBjHWiAIRKHWVES6weO1IMSeGDldUUswwbALF0eDa0834
-         3zd9bdoipbUQASjyAg/X486+SX8evfxaB7ypndaWYj0ArK5q8YddnonTLFfXXjKruJqy
-         /KNzJ5taudv59q5TxECSeHUdTf2xm3LQvn+aja32KI9S8wPhC/VkhOZ9IIWRey5+dG+L
-         aq8cYJlnXSwwBaln7Cru5FiYjyD23U55Vfsv1vEFSrAW0d91kYlv0U10O+zc/wsYnohQ
-         U60fL3tkkhnYnlo+LgxxlGnI5zokawouL8MUnSpiKFi6GqNG1mpXF46LaTukTeVTI9LM
-         oMLw==
-X-Gm-Message-State: AOAM532d4LGq62KOo7Lp/XKyvQNyfQcN76Ua6/JIF5V8nBHVX8IMj5Il
-        MGaXS8si2VXRDu6uKqgBjAssSg==
-X-Google-Smtp-Source: ABdhPJzl0qMjxF8cjfvOsSElT8t+wiNNqf2AIAekXqR7esLsVA1FS5nXOo9w3dsZVIA37VchS9oTtA==
-X-Received: by 2002:a17:902:c94f:b029:e4:59a3:2915 with SMTP id i15-20020a170902c94fb02900e459a32915mr14080565pla.9.1614579904758;
-        Sun, 28 Feb 2021 22:25:04 -0800 (PST)
+        bh=cilHKXrKoJZLqevMF5os7tc8I3h7Pgl0p1o36mO7uUg=;
+        b=i/v+201z9JYzemeGc0yj5QDS91J9L07EmfWozLY8wRhjMPNFB/K2o9wVbAphyhTnyh
+         eOl/ODWnHZ9lCE5gXlVRQw9auQxKgEMEp/0PV3UbbLAsguxggBPPpY/3grxFlEfIYD16
+         a2NipnXf49RdXiDExyR+G9gmEFk2GE8pSKta9/pDHpshHQeysyD452HaxB3Xmp1ZPPy9
+         necSRnguNELmFNo9j+sKeDLUCH7dVynzdq8DrDUZMS958CRrwURMXclhvdUP9W4AAIYH
+         R7lG6/J09j/TqaTdvDck4G1uOaWv7/2YnGXCGpVYo5Pyy3swDqObMj/4KL0vzAmIjaC6
+         GP5w==
+X-Gm-Message-State: AOAM530R29iFBNvKJ4CAaDVA07WVVYJy5in4LeMj9h/oO9Gl3DK5ragx
+        ZIQM0PSpe9s7diHxQJOe+MkrWA==
+X-Google-Smtp-Source: ABdhPJwKcQq6Yrke/Tm5Uu3pCbA2fYBARwyQ1sJ8bIr8LOsrVilkNDd2hPKgZi+Qgq+FIgomMOS4GQ==
+X-Received: by 2002:a17:90b:3890:: with SMTP id mu16mr16002179pjb.9.1614579936050;
+        Sun, 28 Feb 2021 22:25:36 -0800 (PST)
 Received: from localhost.localdomain ([139.177.225.227])
-        by smtp.gmail.com with ESMTPSA id x6sm14304626pfd.12.2021.02.28.22.24.47
+        by smtp.gmail.com with ESMTPSA id x6sm14304626pfd.12.2021.02.28.22.25.20
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 28 Feb 2021 22:25:04 -0800 (PST)
+        Sun, 28 Feb 2021 22:25:35 -0800 (PST)
 From:   Muchun Song <songmuchun@bytedance.com>
 To:     viro@zeniv.linux.org.uk, jack@suse.cz, amir73il@gmail.com,
         ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
@@ -78,9 +78,9 @@ Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         cgroups@vger.kernel.org, linux-mm@kvack.org,
         duanxiongchun@bytedance.com
-Subject: [PATCH 2/5] mm: memcontrol: make page_memcg{_rcu} only applicable for non-kmem page
-Date:   Mon,  1 Mar 2021 14:22:24 +0800
-Message-Id: <20210301062227.59292-3-songmuchun@bytedance.com>
+Subject: [PATCH 4/5] mm: memcontrol: move remote memcg charging APIs to CONFIG_MEMCG_KMEM
+Date:   Mon,  1 Mar 2021 14:22:26 +0800
+Message-Id: <20210301062227.59292-5-songmuchun@bytedance.com>
 X-Mailer: git-send-email 2.21.0 (Apple Git-122)
 In-Reply-To: <20210301062227.59292-1-songmuchun@bytedance.com>
 References: <20210301062227.59292-1-songmuchun@bytedance.com>
@@ -90,265 +90,92 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-We want to reuse the obj_cgroup APIs to reparent the kmem pages when
-the memcg offlined. If we do this, we should store an object cgroup
-pointer to page->memcg_data for the kmem pages.
+The remote memcg charing APIs is a mechanism to charge kernel memory
+to a given memcg. So we can move the infrastructure to the scope of
+the CONFIG_MEMCG_KMEM.
 
-Finally, page->memcg_data can have 3 different meanings.
-
-  1) For the slab pages, page->memcg_data points to an object cgroups
-     vector.
-
-  2) For the kmem pages (exclude the slab pages), page->memcg_data
-     points to an object cgroup.
-
-  3) For the user pages (e.g. the LRU pages), page->memcg_data points
-     to a memory cgroup.
-
-Currently we always get the memcg associated with a page via page_memcg
-or page_memcg_rcu. page_memcg_check is special, it has to be used in
-cases when it's not known if a page has an associated memory cgroup
-pointer or an object cgroups vector. Because the page->memcg_data of
-the kmem page is not pointing to a memory cgroup in the later patch,
-the page_memcg and page_memcg_rcu cannot be applicable for the kmem
-pages. In this patch, we introduce page_memcg_kmem to get the memcg
-associated with the kmem pages. And make page_memcg and page_memcg_rcu
-no longer apply to the kmem pages.
-
-In the end, there are 4 helpers to get the memcg associated with a
-page. The usage is as follows.
-
-  1) Get the memory cgroup associated with a non-kmem page (e.g. the LRU
-     pages).
-
-     - page_memcg()
-     - page_memcg_rcu()
-
-  2) Get the memory cgroup associated with a kmem page (exclude the slab
-     pages).
-
-     - page_memcg_kmem()
-
-  3) Get the memory cgroup associated with a page. It has to be used in
-     cases when it's not known if a page has an associated memory cgroup
-     pointer or an object cgroups vector. Returns NULL for slab pages or
-     uncharged pages, otherwise, returns memory cgroup for charged pages
-     (e.g. kmem pages, LRU pages).
-
-     - page_memcg_check()
-
-In some place, we use page_memcg to check whether the page is charged.
-Now we introduce page_memcg_charged helper to do this.
-
-This is a preparation for reparenting the kmem pages. To support reparent
-kmem pages, we just need to adjust page_memcg_kmem and page_memcg_check in
-the later patch.
+As a bonus, on !CONFIG_MEMCG_KMEM build some functions and variables
+can be compiled out.
 
 Signed-off-by: Muchun Song <songmuchun@bytedance.com>
 ---
- include/linux/memcontrol.h | 56 +++++++++++++++++++++++++++++++++++++++-------
- mm/memcontrol.c            | 23 ++++++++++---------
- mm/page_alloc.c            |  4 ++--
- 3 files changed, 63 insertions(+), 20 deletions(-)
+ include/linux/sched.h    | 2 ++
+ include/linux/sched/mm.h | 2 +-
+ kernel/fork.c            | 2 +-
+ mm/memcontrol.c          | 4 ++++
+ 4 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-index e6dc793d587d..1d2c82464c8c 100644
---- a/include/linux/memcontrol.h
-+++ b/include/linux/memcontrol.h
-@@ -358,14 +358,46 @@ enum page_memcg_data_flags {
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index ee46f5cab95b..c2d488eddf85 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -1314,7 +1314,9 @@ struct task_struct {
  
- #define MEMCG_DATA_FLAGS_MASK (__NR_MEMCG_DATA_FLAGS - 1)
+ 	/* Number of pages to reclaim on returning to userland: */
+ 	unsigned int			memcg_nr_pages_over_high;
++#endif
  
-+/* Return true for charged page, otherwise false. */
-+static inline bool page_memcg_charged(struct page *page)
-+{
-+	unsigned long memcg_data = page->memcg_data;
-+
-+	VM_BUG_ON_PAGE(PageSlab(page), page);
-+	VM_BUG_ON_PAGE(memcg_data & MEMCG_DATA_OBJCGS, page);
-+
-+	return !!memcg_data;
-+}
-+
- /*
-- * page_memcg - get the memory cgroup associated with a page
-+ * page_memcg_kmem - get the memory cgroup associated with a kmem page.
-+ * @page: a pointer to the page struct
-+ *
-+ * Returns a pointer to the memory cgroup associated with the kmem page,
-+ * or NULL. This function assumes that the page is known to have a proper
-+ * memory cgroup pointer. It is only suitable for kmem pages which means
-+ * PageMemcgKmem() returns true for this page.
-+ */
-+static inline struct mem_cgroup *page_memcg_kmem(struct page *page)
-+{
-+	unsigned long memcg_data = page->memcg_data;
-+
-+	VM_BUG_ON_PAGE(PageSlab(page), page);
-+	VM_BUG_ON_PAGE(memcg_data & MEMCG_DATA_OBJCGS, page);
-+	VM_BUG_ON_PAGE(!(memcg_data & MEMCG_DATA_KMEM), page);
-+
-+	return (struct mem_cgroup *)(memcg_data & ~MEMCG_DATA_FLAGS_MASK);
-+}
-+
-+/*
-+ * page_memcg - get the memory cgroup associated with a non-kmem page
-  * @page: a pointer to the page struct
-  *
-  * Returns a pointer to the memory cgroup associated with the page,
-  * or NULL. This function assumes that the page is known to have a
-  * proper memory cgroup pointer. It's not safe to call this function
-- * against some type of pages, e.g. slab pages or ex-slab pages.
-+ * against some type of pages, e.g. slab pages, kmem pages or ex-slab
-+ * pages.
-  *
-  * Any of the following ensures page and memcg binding stability:
-  * - the page lock
-@@ -378,27 +410,30 @@ static inline struct mem_cgroup *page_memcg(struct page *page)
- 	unsigned long memcg_data = page->memcg_data;
- 
- 	VM_BUG_ON_PAGE(PageSlab(page), page);
--	VM_BUG_ON_PAGE(memcg_data & MEMCG_DATA_OBJCGS, page);
-+	VM_BUG_ON_PAGE(memcg_data & MEMCG_DATA_FLAGS_MASK, page);
- 
--	return (struct mem_cgroup *)(memcg_data & ~MEMCG_DATA_FLAGS_MASK);
-+	return (struct mem_cgroup *)memcg_data;
++#ifdef CONFIG_MEMCG_KMEM
+ 	/* Used by memcontrol for targeted memcg charge: */
+ 	struct mem_cgroup		*active_memcg;
+ #endif
+diff --git a/include/linux/sched/mm.h b/include/linux/sched/mm.h
+index 1ae08b8462a4..64a72975270e 100644
+--- a/include/linux/sched/mm.h
++++ b/include/linux/sched/mm.h
+@@ -294,7 +294,7 @@ static inline void memalloc_nocma_restore(unsigned int flags)
  }
+ #endif
  
- /*
-- * page_memcg_rcu - locklessly get the memory cgroup associated with a page
-+ * page_memcg_rcu - locklessly get the memory cgroup associated with a non-kmem page
-  * @page: a pointer to the page struct
-  *
-  * Returns a pointer to the memory cgroup associated with the page,
-  * or NULL. This function assumes that the page is known to have a
-  * proper memory cgroup pointer. It's not safe to call this function
-- * against some type of pages, e.g. slab pages or ex-slab pages.
-+ * against some type of pages, e.g. slab pages, kmem pages or ex-slab
-+ * pages.
-  */
- static inline struct mem_cgroup *page_memcg_rcu(struct page *page)
- {
-+	unsigned long memcg_data = READ_ONCE(page->memcg_data);
-+
- 	VM_BUG_ON_PAGE(PageSlab(page), page);
-+	VM_BUG_ON_PAGE(memcg_data & MEMCG_DATA_FLAGS_MASK, page);
- 	WARN_ON_ONCE(!rcu_read_lock_held());
+-#ifdef CONFIG_MEMCG
++#ifdef CONFIG_MEMCG_KMEM
+ DECLARE_PER_CPU(struct mem_cgroup *, int_active_memcg);
+ /**
+  * set_active_memcg - Starts the remote memcg charging scope.
+diff --git a/kernel/fork.c b/kernel/fork.c
+index d66cd1014211..d66718bc82d5 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -942,7 +942,7 @@ static struct task_struct *dup_task_struct(struct task_struct *orig, int node)
+ 	tsk->use_memdelay = 0;
+ #endif
  
--	return (struct mem_cgroup *)(READ_ONCE(page->memcg_data) &
--				     ~MEMCG_DATA_FLAGS_MASK);
-+	return (struct mem_cgroup *)memcg_data;
- }
- 
- /*
-@@ -1072,6 +1107,11 @@ void mem_cgroup_split_huge_fixup(struct page *head);
- 
- struct mem_cgroup;
- 
-+static inline bool page_memcg_charged(struct page *page)
-+{
-+	return false;
-+}
-+
- static inline struct mem_cgroup *page_memcg(struct page *page)
- {
- 	return NULL;
+-#ifdef CONFIG_MEMCG
++#ifdef CONFIG_MEMCG_KMEM
+ 	tsk->active_memcg = NULL;
+ #endif
+ 	return tsk;
 diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 2eafbae504ac..bfd6efe1e196 100644
+index 39cb8c5bf8b2..092dc4588b43 100644
 --- a/mm/memcontrol.c
 +++ b/mm/memcontrol.c
-@@ -855,10 +855,11 @@ void __mod_lruvec_page_state(struct page *page, enum node_stat_item idx,
- 			     int val)
+@@ -76,8 +76,10 @@ EXPORT_SYMBOL(memory_cgrp_subsys);
+ 
+ struct mem_cgroup *root_mem_cgroup __read_mostly;
+ 
++#ifdef CONFIG_MEMCG_KMEM
+ /* Active memory cgroup to use from an interrupt context */
+ DEFINE_PER_CPU(struct mem_cgroup *, int_active_memcg);
++#endif
+ 
+ /* Socket memory accounting disabled? */
+ static bool cgroup_memory_nosocket;
+@@ -1054,6 +1056,7 @@ struct mem_cgroup *get_mem_cgroup_from_mm(struct mm_struct *mm)
+ }
+ EXPORT_SYMBOL(get_mem_cgroup_from_mm);
+ 
++#ifdef CONFIG_MEMCG_KMEM
+ static __always_inline struct mem_cgroup *active_memcg(void)
  {
- 	struct page *head = compound_head(page); /* rmap on tail pages */
--	struct mem_cgroup *memcg = page_memcg(head);
-+	struct mem_cgroup *memcg;
- 	pg_data_t *pgdat = page_pgdat(page);
- 	struct lruvec *lruvec;
+ 	if (in_interrupt())
+@@ -1074,6 +1077,7 @@ static __always_inline bool memcg_kmem_bypass(void)
  
-+	memcg = PageMemcgKmem(head) ? page_memcg_kmem(head) : page_memcg(head);
- 	/* Untracked pages have no memcg, no lruvec. Update only the node */
- 	if (!memcg) {
- 		__mod_node_page_state(pgdat, idx, val);
-@@ -3170,12 +3171,13 @@ int __memcg_kmem_charge_page(struct page *page, gfp_t gfp, int order)
-  */
- void __memcg_kmem_uncharge_page(struct page *page, int order)
- {
--	struct mem_cgroup *memcg = page_memcg(page);
-+	struct mem_cgroup *memcg;
- 	unsigned int nr_pages = 1 << order;
+ 	return false;
+ }
++#endif
  
--	if (!memcg)
-+	if (!page_memcg_charged(page))
- 		return;
- 
-+	memcg = page_memcg_kmem(page);
- 	VM_BUG_ON_PAGE(mem_cgroup_is_root(memcg), page);
- 	__memcg_kmem_uncharge(memcg, nr_pages);
- 	page->memcg_data = 0;
-@@ -6831,24 +6833,25 @@ static void uncharge_batch(const struct uncharge_gather *ug)
- static void uncharge_page(struct page *page, struct uncharge_gather *ug)
- {
- 	unsigned long nr_pages;
-+	struct mem_cgroup *memcg;
- 
- 	VM_BUG_ON_PAGE(PageLRU(page), page);
- 
--	if (!page_memcg(page))
-+	if (!page_memcg_charged(page))
- 		return;
- 
- 	/*
- 	 * Nobody should be changing or seriously looking at
--	 * page_memcg(page) at this point, we have fully
--	 * exclusive access to the page.
-+	 * page memcg at this point, we have fully exclusive
-+	 * access to the page.
- 	 */
--
--	if (ug->memcg != page_memcg(page)) {
-+	memcg = PageMemcgKmem(page) ? page_memcg_kmem(page) : page_memcg(page);
-+	if (ug->memcg != memcg) {
- 		if (ug->memcg) {
- 			uncharge_batch(ug);
- 			uncharge_gather_clear(ug);
- 		}
--		ug->memcg = page_memcg(page);
-+		ug->memcg = memcg;
- 
- 		/* pairs with css_put in uncharge_batch */
- 		css_get(&ug->memcg->css);
-@@ -6881,7 +6884,7 @@ void mem_cgroup_uncharge(struct page *page)
- 		return;
- 
- 	/* Don't touch page->lru of any random page, pre-check: */
--	if (!page_memcg(page))
-+	if (!page_memcg_charged(page))
- 		return;
- 
- 	uncharge_gather_clear(&ug);
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index f10966e3b4a5..bcb58ae15e24 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -1124,7 +1124,7 @@ static inline bool page_expected_state(struct page *page,
- 	if (unlikely((unsigned long)page->mapping |
- 			page_ref_count(page) |
- #ifdef CONFIG_MEMCG
--			(unsigned long)page_memcg(page) |
-+			page_memcg_charged(page) |
- #endif
- 			(page->flags & check_flags)))
- 		return false;
-@@ -1149,7 +1149,7 @@ static const char *page_bad_reason(struct page *page, unsigned long flags)
- 			bad_reason = "PAGE_FLAGS_CHECK_AT_FREE flag(s) set";
- 	}
- #ifdef CONFIG_MEMCG
--	if (unlikely(page_memcg(page)))
-+	if (unlikely(page_memcg_charged(page)))
- 		bad_reason = "page still charged to cgroup";
- #endif
- 	return bad_reason;
+ /**
+  * mem_cgroup_iter - iterate over memory cgroup hierarchy
 -- 
 2.11.0
 
