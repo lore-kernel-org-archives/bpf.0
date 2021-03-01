@@ -2,167 +2,108 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 32BC6C43331
-	for <bpf@archiver.kernel.org>; Mon,  1 Mar 2021 10:23:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BEC79C433DB
+	for <bpf@archiver.kernel.org>; Mon,  1 Mar 2021 10:44:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EE47964E38
-	for <bpf@archiver.kernel.org>; Mon,  1 Mar 2021 10:23:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 86D5464E13
+	for <bpf@archiver.kernel.org>; Mon,  1 Mar 2021 10:44:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233393AbhCAKXQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 1 Mar 2021 05:23:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42396 "EHLO
+        id S234680AbhCAKoX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 1 Mar 2021 05:44:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233710AbhCAKVv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 1 Mar 2021 05:21:51 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBFEEC061794
-        for <bpf@vger.kernel.org>; Mon,  1 Mar 2021 02:19:29 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id e10so15258407wro.12
-        for <bpf@vger.kernel.org>; Mon, 01 Mar 2021 02:19:29 -0800 (PST)
+        with ESMTP id S234693AbhCAKoE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 1 Mar 2021 05:44:04 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CBD1C061756;
+        Mon,  1 Mar 2021 02:43:24 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id b1so13898900lfb.7;
+        Mon, 01 Mar 2021 02:43:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=0cxlavmTIp/zACJRiVyk8HpP0iu1cIzGXAbVh/+DaW8=;
-        b=cxdmnu8AkMrWe5Q7sfpX+33HEIPlQVJyzYl0Uxe7KifBNMeNmS5+6TzuP5G/JPrtE2
-         x1PFTYgxVMXoT+WxEyfbXekqvXPTnw3T/0NXBtjuYi4oUB+psEdZ4sEazDq59HlDXd6i
-         LfM4dGk9gocZ5uypbwToTIksnoCFy36ddfctc=
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5SVbUaLO6lyScQDOQdWN71umvS+bxt/giAzNcvq8axE=;
+        b=dC0D2Qul5BLKjzBn6hsZ8pz2x+qXplgxvAJpqhzLLHD3SpEtHiEqDIVd9Tydu+0pnC
+         y5M5f1dDvW3m1o5MEo2BTJfCorreBBPCPV0zJQUHQcqIMfGVxTloU66d6KXwqvLOSMYQ
+         PMKdsC0xteMVN5DPxvPWZjiH4/H+3YTBOHq8ky1/+uuvnCWzEy5FsHrYK/3VKwgvWj7k
+         UOE8GguOZ212nvXxRgQmr281OCoL6n/qh7fUv6G4FHdbNsxeqjNqf8HOCIsj8RVGCH4n
+         UusccyN2MpaspKyXqMFbNHE5DNmLLNxdM1NbBsYREfyFoQC3XnkhoXOD8jkGzYO+iOmT
+         CyEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=0cxlavmTIp/zACJRiVyk8HpP0iu1cIzGXAbVh/+DaW8=;
-        b=ESNd4RW0kUlwP0hHwp7W9PkqcUlDwP0EQ43AMdRCc9g+QEUImG5GTnOF7afEjgAbMk
-         h+7b1apx2wOAUYUYcWQv5TyvtBJ6vRXx+vYynDsahTuEosXvZSpXt70BkI7MttQI5A/H
-         9lX3M8UM9Sy1vAA/JAvis+sUToqi0Fgk/X0z92TLWZ2d0DUk73pbhI1tF6VRfbU2dDW/
-         tGj9Omi6iUsbFVFaj4EMX69xWVVcIceE2JkigllVaNAq0Z/DJVlGMUaQg+0D82JP9Aqr
-         cOwaiuGFttRn2g9qow5LglTTVwT3QxoLQL6zNjSkp502pWkOetw3cIKuTFVZw2avVq3/
-         5x9A==
-X-Gm-Message-State: AOAM533j791dj44HoVXWQAhm4Oog3Zel8O3xL1AA9tDQW+DH+MCn1GH0
-        pnvZOs0+XKcJnXkxvfQjWiaHwA==
-X-Google-Smtp-Source: ABdhPJxHUEsygIiKUxI/P+qUs2Hq37votbQ3u1YVyjHlNeSjFG7zoUZAr0VjT3SzB8dmmDYhd+LkCw==
-X-Received: by 2002:a5d:638a:: with SMTP id p10mr16486501wru.286.1614593968707;
-        Mon, 01 Mar 2021 02:19:28 -0800 (PST)
-Received: from localhost.localdomain (2.b.a.d.8.4.b.a.9.e.4.2.1.8.0.5.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:5081:24e9:ab48:dab2])
-        by smtp.gmail.com with ESMTPSA id a198sm14134600wmd.11.2021.03.01.02.19.28
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5SVbUaLO6lyScQDOQdWN71umvS+bxt/giAzNcvq8axE=;
+        b=PnBFhhuccixUM3zj6ps7lcEFrND3Mq869z8I55MFbJQ4Uo+jK89kfFHsAfu5XZ5hxb
+         H7iXlvJ+Pxgz1C88VEAJUEGvIISXddoHfOuEqa+CfjAan6fmqZej11tqn8Iw6DHWMECi
+         jwO6uBbAkYiIQk4bb0ZCBVEqf/xAld5pHx/QRywxjYBLn8SP3bDSHqbpk9q6JFSnuoBn
+         XOBNvx9worEoAENE0+j/aSW2YZ0QI44D2WhOvucrB6IGiZFoUAjD66j18cWpRlJk/6Yk
+         kLi0H9yE/9HBspepR7Y8yLM7WU1zQRZJEWH6//gjKf/0FoYOHG5dwQCn8Swpw7k4tvvd
+         lcFA==
+X-Gm-Message-State: AOAM530H5LMIGeTk0CeTFh8S50DgrSimv/u9PTTmctPtFYqaw7QOl0tE
+        Ly0FWW0IHf1O3dJVRAfewSM=
+X-Google-Smtp-Source: ABdhPJyVZmJvCtcGvLGRsZkFhYXzj9FoGR5YCrl08IEy3vI71tw3H/Z9H7X7qcATB8rEpMWLVCMnHw==
+X-Received: by 2002:a19:3f93:: with SMTP id m141mr9070158lfa.423.1614595402936;
+        Mon, 01 Mar 2021 02:43:22 -0800 (PST)
+Received: from btopel-mobl.ger.intel.com (c213-102-90-208.bredband.comhem.se. [213.102.90.208])
+        by smtp.gmail.com with ESMTPSA id w26sm2247492lfr.186.2021.03.01.02.43.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Mar 2021 02:19:28 -0800 (PST)
-From:   Lorenz Bauer <lmb@cloudflare.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
-Cc:     kernel-team@cloudflare.com, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, Lorenz Bauer <lmb@cloudflare.com>
-Subject: [PATCH bpf-next v3 4/5] selftests: bpf: check that PROG_TEST_RUN repeats as requested
-Date:   Mon,  1 Mar 2021 10:18:58 +0000
-Message-Id: <20210301101859.46045-5-lmb@cloudflare.com>
+        Mon, 01 Mar 2021 02:43:22 -0800 (PST)
+From:   =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@gmail.com>
+To:     ast@kernel.org, daniel@iogearbox.net, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@gmail.com>,
+        bjorn.topel@intel.com, magnus.karlsson@intel.com,
+        jonathan.lemon@gmail.com, maximmi@nvidia.com, andrii@kernel.org
+Subject: [PATCH bpf-next 0/2] load-acquire/store-release semantics for AF_XDP rings
+Date:   Mon,  1 Mar 2021 11:43:16 +0100
+Message-Id: <20210301104318.263262-1-bjorn.topel@gmail.com>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210301101859.46045-1-lmb@cloudflare.com>
-References: <20210301101859.46045-1-lmb@cloudflare.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Extend a simple prog_run test to check that PROG_TEST_RUN adheres
-to the requested repetitions. Convert it to use BPF skeleton.
+This two-patch series introduces load-acquire/store-release semantics
+for the AF_XDP rings.
 
-Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
----
- .../selftests/bpf/prog_tests/prog_run_xattr.c | 51 +++++++++++++++----
- 1 file changed, 42 insertions(+), 9 deletions(-)
+For most contemporary architectures, this is more effective than a
+SPSC ring based on smp_{r,w,}mb() barriers. More importantly,
+load-acquire/store-release semantics make the ring code easier to
+follow.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/prog_run_xattr.c b/tools/testing/selftests/bpf/prog_tests/prog_run_xattr.c
-index 935a294f049a..131d7f7eeb42 100644
---- a/tools/testing/selftests/bpf/prog_tests/prog_run_xattr.c
-+++ b/tools/testing/selftests/bpf/prog_tests/prog_run_xattr.c
-@@ -2,12 +2,31 @@
- #include <test_progs.h>
- #include <network_helpers.h>
- 
--void test_prog_run_xattr(void)
-+#include "test_pkt_access.skel.h"
-+
-+static const __u32 duration;
-+
-+static void check_run_cnt(int prog_fd, __u64 run_cnt)
- {
--	const char *file = "./test_pkt_access.o";
--	struct bpf_object *obj;
--	char buf[10];
-+	struct bpf_prog_info info = {};
-+	__u32 info_len = sizeof(info);
- 	int err;
-+
-+	err = bpf_obj_get_info_by_fd(prog_fd, &info, &info_len);
-+	if (CHECK(err, "get_prog_info", "failed to get bpf_prog_info for fd %d\n", prog_fd))
-+		return;
-+
-+	CHECK(run_cnt != info.run_cnt, "run_cnt",
-+	      "incorrect number of repetitions, want %llu have %llu\n", run_cnt, info.run_cnt);
-+}
-+
-+void test_prog_run_xattr(void)
-+{
-+	struct test_pkt_access *skel;
-+	int err, stats_fd = -1;
-+	char buf[10] = {};
-+	__u64 run_cnt = 0;
-+
- 	struct bpf_prog_test_run_attr tattr = {
- 		.repeat = 1,
- 		.data_in = &pkt_v4,
-@@ -16,12 +35,15 @@ void test_prog_run_xattr(void)
- 		.data_size_out = 5,
- 	};
- 
--	err = bpf_prog_load(file, BPF_PROG_TYPE_SCHED_CLS, &obj,
--			    &tattr.prog_fd);
--	if (CHECK_ATTR(err, "load", "err %d errno %d\n", err, errno))
-+	stats_fd = bpf_enable_stats(BPF_STATS_RUN_TIME);
-+	if (CHECK_ATTR(stats_fd < 0, "enable_stats", "failed %d\n", errno))
- 		return;
- 
--	memset(buf, 0, sizeof(buf));
-+	skel = test_pkt_access__open_and_load();
-+	if (CHECK_ATTR(!skel, "open_and_load", "failed\n"))
-+		goto cleanup;
-+
-+	tattr.prog_fd = bpf_program__fd(skel->progs.test_pkt_access);
- 
- 	err = bpf_prog_test_run_xattr(&tattr);
- 	CHECK_ATTR(err != -1 || errno != ENOSPC || tattr.retval, "run",
-@@ -34,8 +56,12 @@ void test_prog_run_xattr(void)
- 	CHECK_ATTR(buf[5] != 0, "overflow",
- 	      "BPF_PROG_TEST_RUN ignored size hint\n");
- 
-+	run_cnt += tattr.repeat;
-+	check_run_cnt(tattr.prog_fd, run_cnt);
-+
- 	tattr.data_out = NULL;
- 	tattr.data_size_out = 0;
-+	tattr.repeat = 2;
- 	errno = 0;
- 
- 	err = bpf_prog_test_run_xattr(&tattr);
-@@ -46,5 +72,12 @@ void test_prog_run_xattr(void)
- 	err = bpf_prog_test_run_xattr(&tattr);
- 	CHECK_ATTR(err != -EINVAL, "run_wrong_size_out", "err %d\n", err);
- 
--	bpf_object__close(obj);
-+	run_cnt += tattr.repeat;
-+	check_run_cnt(tattr.prog_fd, run_cnt);
-+
-+cleanup:
-+	if (skel)
-+		test_pkt_access__destroy(skel);
-+	if (stats_fd != -1)
-+		close(stats_fd);
- }
+This is effectively the change done in commit 6c43c091bdc5
+("documentation: Update circular buffer for
+load-acquire/store-release"), but for the AF_XDP rings.
+
+Both libbpf and the kernel-side are updated.
+
+More details in each commit.
+
+
+Thanks,
+Björn
+
+
+Björn Töpel (2):
+  xsk: update rings for load-acquire/store-release semantics
+  libbpf, xsk: add libbpf_smp_store_release libbpf_smp_load_acquire
+
+ net/xdp/xsk_queue.h         | 27 ++++++--------
+ tools/lib/bpf/libbpf_util.h | 72 +++++++++++++++++++++++++------------
+ tools/lib/bpf/xsk.h         | 17 +++------
+ 3 files changed, 66 insertions(+), 50 deletions(-)
+
+
+base-commit: 85e142cb42a1e7b33971bf035dae432d8670c46b
 -- 
 2.27.0
 
