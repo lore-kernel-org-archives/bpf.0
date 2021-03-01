@@ -2,105 +2,303 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE882C433E0
-	for <bpf@archiver.kernel.org>; Mon,  1 Mar 2021 10:21:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6BE3C433E6
+	for <bpf@archiver.kernel.org>; Mon,  1 Mar 2021 10:23:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A34B7601FE
-	for <bpf@archiver.kernel.org>; Mon,  1 Mar 2021 10:21:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 78B4964E13
+	for <bpf@archiver.kernel.org>; Mon,  1 Mar 2021 10:23:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233471AbhCAKVJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 1 Mar 2021 05:21:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42068 "EHLO
+        id S231129AbhCAKXP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 1 Mar 2021 05:23:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233998AbhCAKUW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 1 Mar 2021 05:20:22 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AD7CC061756
-        for <bpf@vger.kernel.org>; Mon,  1 Mar 2021 02:19:26 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id w7so12995012wmb.5
-        for <bpf@vger.kernel.org>; Mon, 01 Mar 2021 02:19:26 -0800 (PST)
+        with ESMTP id S233984AbhCAKVt (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 1 Mar 2021 05:21:49 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31F8EC06178C
+        for <bpf@vger.kernel.org>; Mon,  1 Mar 2021 02:19:29 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id w7so12995156wmb.5
+        for <bpf@vger.kernel.org>; Mon, 01 Mar 2021 02:19:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=huw0E5JgfJJ5Mr24mx+mu5o+pU+1rG0sWMzXMDebmr8=;
-        b=TYElbNBuCbPG1SWGVRM5PERfDcisbcAF3dnhNm9hRzk8LPNthZ/sALbCLOdoe0Mrai
-         BuBGR4GskhW4yPRtwz/+ymE1rnIpHS7R/lSnXTaIwPZCViBQfx7FDqPG8SrAqOGin7fN
-         eyscB1Ev6N62AUbbkzSa+AHLjao0kH0lEEF3A=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=RNT0BrgEQwgpk+nE5OFlRQqSY1z2sQW181Q6sU6WNZA=;
+        b=AwYSq4ofP643jfQqMGnCZVJ/Wo0zBSisF8BOKol1v2z+aa/HUGb/uMtsIOsZAaen6H
+         qRf+YVxywHv83v3LiAmSXGrLyma43AbCDkM8FXK02BP3QSavFyWzyIwcotAbKM3bA/Ay
+         pjGLIgMsZIBM3geNQxvAkVCRtm9cET97rEsYA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=huw0E5JgfJJ5Mr24mx+mu5o+pU+1rG0sWMzXMDebmr8=;
-        b=o9PJFOgmecfMGlF5Rc8XhXN8iMxvyRiEIeFktuCqEhtYuxrqcSK4M77AUEK221UAhE
-         5A8Cms8VSUdf+6x74y0UOuQmcvop1Nl0JFGOBlFhSnJ/8onkQmget6BCqyPCps48uVPA
-         e0//8zFI3CZkMMMsuE+fLgzDbBm7lFqpMx3avK3AfGrx9FqVhBdmVR+wqDDfesYHB/YM
-         InZFhukZ+pip2I0GKiuu4OsSHRa1yurt+G12GZTwCych/8ycFfzwF0lEKH3Yv4oXskWi
-         8JoHWhdzzX9MC7HDDw47O0g/vGO9GdONK5yhJSbGkyl6tY4bZ3t+onsJZXx6Fgc+ytUl
-         vsJA==
-X-Gm-Message-State: AOAM531XNTIEJ6wuXleCm4oNgQ3KbjejuvyPW6BZFZbYPc8RkRlEYvhr
-        4fjYBh8h62/wGLzi5AmSpMKR3g==
-X-Google-Smtp-Source: ABdhPJzAZ31GRbwyNt3T+djmZx2Ldu7tSKt2CNzVymzPhy2n2PfJdtBoDDPNKOw4OIvCcVn9hekX5g==
-X-Received: by 2002:a1c:7905:: with SMTP id l5mr3555456wme.181.1614593965369;
-        Mon, 01 Mar 2021 02:19:25 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=RNT0BrgEQwgpk+nE5OFlRQqSY1z2sQW181Q6sU6WNZA=;
+        b=NMyny6DXcWLCr76hnWSP93dT2wOL7P53sM6urRtlt9gowNdeylzvs3iSkvtYTOvJnk
+         sL8naJ7SH4KPCPhYCLvjCTvXPBF9cfHmT4fV7tYr7OF3rq0M4LfWp/eSS4x3GqB6b97B
+         w5fKzET9EG59+WqXG0/DE2eabFWS38qfOK7MyszpMxDBflwbwiPZbRMlDcQI7NfcyyHo
+         6IoXbvRQIS3CWbfGAZVhpCafNO6/IIufymbaQHqfbwLe9rDLxUQZIDDYzJ7Tk9yau8pX
+         VikcHRUrbrZ4P2TmhwVcOjGE1U4oNCStYUwP8+23UPaS82AcVjC8qRkPCy9tGiyoDacO
+         rVOA==
+X-Gm-Message-State: AOAM531VGgF1rvnw84R+DLWLb1FFYSpjWiQI30YiZMzJ+rs++4c1H9Gn
+        5+I+LPTyb3fZl0awPkIw3FehDw==
+X-Google-Smtp-Source: ABdhPJx8FclFAiw6t487bTc/joUWW0bP7WnnaFWU/o/9kdAtNlo3AqR6sni7tN7g3him1eeveE+3rg==
+X-Received: by 2002:a05:600c:2947:: with SMTP id n7mr4576415wmd.61.1614593967898;
+        Mon, 01 Mar 2021 02:19:27 -0800 (PST)
 Received: from localhost.localdomain (2.b.a.d.8.4.b.a.9.e.4.2.1.8.0.5.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:5081:24e9:ab48:dab2])
-        by smtp.gmail.com with ESMTPSA id a198sm14134600wmd.11.2021.03.01.02.19.24
+        by smtp.gmail.com with ESMTPSA id a198sm14134600wmd.11.2021.03.01.02.19.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Mar 2021 02:19:24 -0800 (PST)
+        Mon, 01 Mar 2021 02:19:27 -0800 (PST)
 From:   Lorenz Bauer <lmb@cloudflare.com>
 To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
 Cc:     kernel-team@cloudflare.com, netdev@vger.kernel.org,
         bpf@vger.kernel.org, Lorenz Bauer <lmb@cloudflare.com>
-Subject: [PATCH bpf-next v3 0/5] PROG_TEST_RUN support for sk_lookup programs
-Date:   Mon,  1 Mar 2021 10:18:54 +0000
-Message-Id: <20210301101859.46045-1-lmb@cloudflare.com>
+Subject: [PATCH bpf-next v3 3/5] selftests: bpf: convert sk_lookup ctx access tests to PROG_TEST_RUN
+Date:   Mon,  1 Mar 2021 10:18:57 +0000
+Message-Id: <20210301101859.46045-4-lmb@cloudflare.com>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20210301101859.46045-1-lmb@cloudflare.com>
+References: <20210301101859.46045-1-lmb@cloudflare.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-We don't have PROG_TEST_RUN support for sk_lookup programs at the
-moment. So far this hasn't been a problem, since we can run our
-tests in a separate network namespace. For benchmarking it's nice
-to have PROG_TEST_RUN, so I've gone and implemented it.
+Convert the selftests for sk_lookup narrow context access to use
+PROG_TEST_RUN instead of creating actual sockets. This ensures that
+ctx is populated correctly when using PROG_TEST_RUN.
 
-Based on discussion on the v1 I've dropped support for testing multiple
-programs at once.
+Assert concrete values since we now control remote_ip and remote_port.
 
-Changes since v2:
-- Fix test_verifier failure (Alexei)
+Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
+---
+ .../selftests/bpf/prog_tests/sk_lookup.c      | 83 +++++++++++++++----
+ .../selftests/bpf/progs/test_sk_lookup.c      | 62 +++++++++-----
+ 2 files changed, 109 insertions(+), 36 deletions(-)
 
-Changes since v1:
-- Add sparse annotations to the t_* functions
-- Add appropriate type casts in bpf_prog_test_run_sk_lookup
-- Drop running multiple programs
-
-Lorenz Bauer (5):
-  bpf: consolidate shared test timing code
-  bpf: add PROG_TEST_RUN support for sk_lookup programs
-  selftests: bpf: convert sk_lookup ctx access tests to PROG_TEST_RUN
-  selftests: bpf: check that PROG_TEST_RUN repeats as requested
-  selftests: bpf: don't run sk_lookup in verifier tests
-
- include/linux/bpf.h                           |  10 +
- include/uapi/linux/bpf.h                      |   5 +-
- net/bpf/test_run.c                            | 246 +++++++++++++-----
- net/core/filter.c                             |   1 +
- tools/include/uapi/linux/bpf.h                |   5 +-
- .../selftests/bpf/prog_tests/prog_run_xattr.c |  51 +++-
- .../selftests/bpf/prog_tests/sk_lookup.c      |  83 ++++--
- .../selftests/bpf/progs/test_sk_lookup.c      |  62 +++--
- tools/testing/selftests/bpf/test_verifier.c   |   4 +-
- .../selftests/bpf/verifier/ctx_sk_lookup.c    |   1 +
- 10 files changed, 356 insertions(+), 112 deletions(-)
-
+diff --git a/tools/testing/selftests/bpf/prog_tests/sk_lookup.c b/tools/testing/selftests/bpf/prog_tests/sk_lookup.c
+index 9ff0412e1fd3..45c82db3c58c 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sk_lookup.c
++++ b/tools/testing/selftests/bpf/prog_tests/sk_lookup.c
+@@ -241,6 +241,48 @@ static int make_client(int sotype, const char *ip, int port)
+ 	return -1;
+ }
+ 
++static __u64 socket_cookie(int fd)
++{
++	__u64 cookie;
++	socklen_t cookie_len = sizeof(cookie);
++
++	if (CHECK(getsockopt(fd, SOL_SOCKET, SO_COOKIE, &cookie, &cookie_len) < 0,
++		  "getsockopt(SO_COOKIE)", "%s\n", strerror(errno)))
++		return 0;
++	return cookie;
++}
++
++static int fill_sk_lookup_ctx(struct bpf_sk_lookup *ctx, const char *local_ip, __u16 local_port,
++			      const char *remote_ip, __u16 remote_port)
++{
++	void *local, *remote;
++	int err;
++
++	memset(ctx, 0, sizeof(*ctx));
++	ctx->local_port = local_port;
++	ctx->remote_port = htons(remote_port);
++
++	if (is_ipv6(local_ip)) {
++		ctx->family = AF_INET6;
++		local = &ctx->local_ip6[0];
++		remote = &ctx->remote_ip6[0];
++	} else {
++		ctx->family = AF_INET;
++		local = &ctx->local_ip4;
++		remote = &ctx->remote_ip4;
++	}
++
++	err = inet_pton(ctx->family, local_ip, local);
++	if (CHECK(err != 1, "inet_pton", "local_ip failed\n"))
++		return 1;
++
++	err = inet_pton(ctx->family, remote_ip, remote);
++	if (CHECK(err != 1, "inet_pton", "remote_ip failed\n"))
++		return 1;
++
++	return 0;
++}
++
+ static int send_byte(int fd)
+ {
+ 	ssize_t n;
+@@ -1009,18 +1051,27 @@ static void test_drop_on_reuseport(struct test_sk_lookup *skel)
+ 
+ static void run_sk_assign(struct test_sk_lookup *skel,
+ 			  struct bpf_program *lookup_prog,
+-			  const char *listen_ip, const char *connect_ip)
++			  const char *remote_ip, const char *local_ip)
+ {
+-	int client_fd, peer_fd, server_fds[MAX_SERVERS] = { -1 };
+-	struct bpf_link *lookup_link;
++	int server_fds[MAX_SERVERS] = { -1 };
++	struct bpf_sk_lookup ctx;
++	__u64 server_cookie;
+ 	int i, err;
+ 
+-	lookup_link = attach_lookup_prog(lookup_prog);
+-	if (!lookup_link)
++	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, opts,
++		.ctx_in = &ctx,
++		.ctx_size_in = sizeof(ctx),
++		.ctx_out = &ctx,
++		.ctx_size_out = sizeof(ctx),
++	);
++
++	if (fill_sk_lookup_ctx(&ctx, local_ip, EXT_PORT, remote_ip, INT_PORT))
+ 		return;
+ 
++	ctx.protocol = IPPROTO_TCP;
++
+ 	for (i = 0; i < ARRAY_SIZE(server_fds); i++) {
+-		server_fds[i] = make_server(SOCK_STREAM, listen_ip, 0, NULL);
++		server_fds[i] = make_server(SOCK_STREAM, local_ip, 0, NULL);
+ 		if (server_fds[i] < 0)
+ 			goto close_servers;
+ 
+@@ -1030,23 +1081,25 @@ static void run_sk_assign(struct test_sk_lookup *skel,
+ 			goto close_servers;
+ 	}
+ 
+-	client_fd = make_client(SOCK_STREAM, connect_ip, EXT_PORT);
+-	if (client_fd < 0)
++	server_cookie = socket_cookie(server_fds[SERVER_B]);
++	if (!server_cookie)
++		return;
++
++	err = bpf_prog_test_run_opts(bpf_program__fd(lookup_prog), &opts);
++	if (CHECK(err, "test_run", "failed with error %d\n", errno))
++		goto close_servers;
++
++	if (CHECK(ctx.cookie == 0, "ctx.cookie", "no socket selected\n"))
+ 		goto close_servers;
+ 
+-	peer_fd = accept(server_fds[SERVER_B], NULL, NULL);
+-	if (CHECK(peer_fd < 0, "accept", "failed\n"))
+-		goto close_client;
++	CHECK(ctx.cookie != server_cookie, "ctx.cookie",
++	      "selected sk %llu instead of %llu\n", ctx.cookie, server_cookie);
+ 
+-	close(peer_fd);
+-close_client:
+-	close(client_fd);
+ close_servers:
+ 	for (i = 0; i < ARRAY_SIZE(server_fds); i++) {
+ 		if (server_fds[i] != -1)
+ 			close(server_fds[i]);
+ 	}
+-	bpf_link__destroy(lookup_link);
+ }
+ 
+ static void run_sk_assign_v4(struct test_sk_lookup *skel,
+diff --git a/tools/testing/selftests/bpf/progs/test_sk_lookup.c b/tools/testing/selftests/bpf/progs/test_sk_lookup.c
+index 1032b292af5b..ac6f7f205e25 100644
+--- a/tools/testing/selftests/bpf/progs/test_sk_lookup.c
++++ b/tools/testing/selftests/bpf/progs/test_sk_lookup.c
+@@ -64,6 +64,10 @@ static const int PROG_DONE = 1;
+ static const __u32 KEY_SERVER_A = SERVER_A;
+ static const __u32 KEY_SERVER_B = SERVER_B;
+ 
++static const __u16 SRC_PORT = bpf_htons(8008);
++static const __u32 SRC_IP4 = IP4(127, 0, 0, 2);
++static const __u32 SRC_IP6[] = IP6(0xfd000000, 0x0, 0x0, 0x00000002);
++
+ static const __u16 DST_PORT = 7007; /* Host byte order */
+ static const __u32 DST_IP4 = IP4(127, 0, 0, 1);
+ static const __u32 DST_IP6[] = IP6(0xfd000000, 0x0, 0x0, 0x00000001);
+@@ -398,11 +402,12 @@ int ctx_narrow_access(struct bpf_sk_lookup *ctx)
+ 	if (LSW(ctx->protocol, 0) != IPPROTO_TCP)
+ 		return SK_DROP;
+ 
+-	/* Narrow loads from remote_port field. Expect non-0 value. */
+-	if (LSB(ctx->remote_port, 0) == 0 && LSB(ctx->remote_port, 1) == 0 &&
+-	    LSB(ctx->remote_port, 2) == 0 && LSB(ctx->remote_port, 3) == 0)
++	/* Narrow loads from remote_port field. Expect SRC_PORT. */
++	if (LSB(ctx->remote_port, 0) != ((SRC_PORT >> 0) & 0xff) ||
++	    LSB(ctx->remote_port, 1) != ((SRC_PORT >> 8) & 0xff) ||
++	    LSB(ctx->remote_port, 2) != 0 || LSB(ctx->remote_port, 3) != 0)
+ 		return SK_DROP;
+-	if (LSW(ctx->remote_port, 0) == 0)
++	if (LSW(ctx->remote_port, 0) != SRC_PORT)
+ 		return SK_DROP;
+ 
+ 	/* Narrow loads from local_port field. Expect DST_PORT. */
+@@ -415,11 +420,14 @@ int ctx_narrow_access(struct bpf_sk_lookup *ctx)
+ 
+ 	/* Narrow loads from IPv4 fields */
+ 	if (v4) {
+-		/* Expect non-0.0.0.0 in remote_ip4 */
+-		if (LSB(ctx->remote_ip4, 0) == 0 && LSB(ctx->remote_ip4, 1) == 0 &&
+-		    LSB(ctx->remote_ip4, 2) == 0 && LSB(ctx->remote_ip4, 3) == 0)
++		/* Expect SRC_IP4 in remote_ip4 */
++		if (LSB(ctx->remote_ip4, 0) != ((SRC_IP4 >> 0) & 0xff) ||
++		    LSB(ctx->remote_ip4, 1) != ((SRC_IP4 >> 8) & 0xff) ||
++		    LSB(ctx->remote_ip4, 2) != ((SRC_IP4 >> 16) & 0xff) ||
++		    LSB(ctx->remote_ip4, 3) != ((SRC_IP4 >> 24) & 0xff))
+ 			return SK_DROP;
+-		if (LSW(ctx->remote_ip4, 0) == 0 && LSW(ctx->remote_ip4, 1) == 0)
++		if (LSW(ctx->remote_ip4, 0) != ((SRC_IP4 >> 0) & 0xffff) ||
++		    LSW(ctx->remote_ip4, 1) != ((SRC_IP4 >> 16) & 0xffff))
+ 			return SK_DROP;
+ 
+ 		/* Expect DST_IP4 in local_ip4 */
+@@ -448,20 +456,32 @@ int ctx_narrow_access(struct bpf_sk_lookup *ctx)
+ 
+ 	/* Narrow loads from IPv6 fields */
+ 	if (!v4) {
+-		/* Expect non-:: IP in remote_ip6 */
+-		if (LSB(ctx->remote_ip6[0], 0) == 0 && LSB(ctx->remote_ip6[0], 1) == 0 &&
+-		    LSB(ctx->remote_ip6[0], 2) == 0 && LSB(ctx->remote_ip6[0], 3) == 0 &&
+-		    LSB(ctx->remote_ip6[1], 0) == 0 && LSB(ctx->remote_ip6[1], 1) == 0 &&
+-		    LSB(ctx->remote_ip6[1], 2) == 0 && LSB(ctx->remote_ip6[1], 3) == 0 &&
+-		    LSB(ctx->remote_ip6[2], 0) == 0 && LSB(ctx->remote_ip6[2], 1) == 0 &&
+-		    LSB(ctx->remote_ip6[2], 2) == 0 && LSB(ctx->remote_ip6[2], 3) == 0 &&
+-		    LSB(ctx->remote_ip6[3], 0) == 0 && LSB(ctx->remote_ip6[3], 1) == 0 &&
+-		    LSB(ctx->remote_ip6[3], 2) == 0 && LSB(ctx->remote_ip6[3], 3) == 0)
++		/* Expect SRC_IP6 in remote_ip6 */
++		if (LSB(ctx->remote_ip6[0], 0) != ((SRC_IP6[0] >> 0) & 0xff) ||
++		    LSB(ctx->remote_ip6[0], 1) != ((SRC_IP6[0] >> 8) & 0xff) ||
++		    LSB(ctx->remote_ip6[0], 2) != ((SRC_IP6[0] >> 16) & 0xff) ||
++		    LSB(ctx->remote_ip6[0], 3) != ((SRC_IP6[0] >> 24) & 0xff) ||
++		    LSB(ctx->remote_ip6[1], 0) != ((SRC_IP6[1] >> 0) & 0xff) ||
++		    LSB(ctx->remote_ip6[1], 1) != ((SRC_IP6[1] >> 8) & 0xff) ||
++		    LSB(ctx->remote_ip6[1], 2) != ((SRC_IP6[1] >> 16) & 0xff) ||
++		    LSB(ctx->remote_ip6[1], 3) != ((SRC_IP6[1] >> 24) & 0xff) ||
++		    LSB(ctx->remote_ip6[2], 0) != ((SRC_IP6[2] >> 0) & 0xff) ||
++		    LSB(ctx->remote_ip6[2], 1) != ((SRC_IP6[2] >> 8) & 0xff) ||
++		    LSB(ctx->remote_ip6[2], 2) != ((SRC_IP6[2] >> 16) & 0xff) ||
++		    LSB(ctx->remote_ip6[2], 3) != ((SRC_IP6[2] >> 24) & 0xff) ||
++		    LSB(ctx->remote_ip6[3], 0) != ((SRC_IP6[3] >> 0) & 0xff) ||
++		    LSB(ctx->remote_ip6[3], 1) != ((SRC_IP6[3] >> 8) & 0xff) ||
++		    LSB(ctx->remote_ip6[3], 2) != ((SRC_IP6[3] >> 16) & 0xff) ||
++		    LSB(ctx->remote_ip6[3], 3) != ((SRC_IP6[3] >> 24) & 0xff))
+ 			return SK_DROP;
+-		if (LSW(ctx->remote_ip6[0], 0) == 0 && LSW(ctx->remote_ip6[0], 1) == 0 &&
+-		    LSW(ctx->remote_ip6[1], 0) == 0 && LSW(ctx->remote_ip6[1], 1) == 0 &&
+-		    LSW(ctx->remote_ip6[2], 0) == 0 && LSW(ctx->remote_ip6[2], 1) == 0 &&
+-		    LSW(ctx->remote_ip6[3], 0) == 0 && LSW(ctx->remote_ip6[3], 1) == 0)
++		if (LSW(ctx->remote_ip6[0], 0) != ((SRC_IP6[0] >> 0) & 0xffff) ||
++		    LSW(ctx->remote_ip6[0], 1) != ((SRC_IP6[0] >> 16) & 0xffff) ||
++		    LSW(ctx->remote_ip6[1], 0) != ((SRC_IP6[1] >> 0) & 0xffff) ||
++		    LSW(ctx->remote_ip6[1], 1) != ((SRC_IP6[1] >> 16) & 0xffff) ||
++		    LSW(ctx->remote_ip6[2], 0) != ((SRC_IP6[2] >> 0) & 0xffff) ||
++		    LSW(ctx->remote_ip6[2], 1) != ((SRC_IP6[2] >> 16) & 0xffff) ||
++		    LSW(ctx->remote_ip6[3], 0) != ((SRC_IP6[3] >> 0) & 0xffff) ||
++		    LSW(ctx->remote_ip6[3], 1) != ((SRC_IP6[3] >> 16) & 0xffff))
+ 			return SK_DROP;
+ 		/* Expect DST_IP6 in local_ip6 */
+ 		if (LSB(ctx->local_ip6[0], 0) != ((DST_IP6[0] >> 0) & 0xff) ||
 -- 
 2.27.0
 
