@@ -5,60 +5,60 @@ X-Spam-Level:
 X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F023C433E0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B051FC43381
 	for <bpf@archiver.kernel.org>; Mon,  1 Mar 2021 10:23:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0CF8E64E38
-	for <bpf@archiver.kernel.org>; Mon,  1 Mar 2021 10:23:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6FDC064E5C
+	for <bpf@archiver.kernel.org>; Mon,  1 Mar 2021 10:23:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233244AbhCAKW7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 1 Mar 2021 05:22:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42384 "EHLO
+        id S232038AbhCAKXI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 1 Mar 2021 05:23:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232575AbhCAKVj (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 1 Mar 2021 05:21:39 -0500
+        with ESMTP id S231129AbhCAKVo (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 1 Mar 2021 05:21:44 -0500
 Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 750CAC06178B
-        for <bpf@vger.kernel.org>; Mon,  1 Mar 2021 02:19:28 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id b18so9007991wrn.6
-        for <bpf@vger.kernel.org>; Mon, 01 Mar 2021 02:19:28 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E847C0617A7
+        for <bpf@vger.kernel.org>; Mon,  1 Mar 2021 02:19:30 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id d11so15482104wrj.7
+        for <bpf@vger.kernel.org>; Mon, 01 Mar 2021 02:19:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=OnsCq72NIqxbQo7TReAl86Zu/9YUEW7JMMbum4NscOE=;
-        b=mjxnKXBBO1XFPAlVuDfxGyBtb3BInnRlYp8ytY10qggxzzouMFFV2rKWRWaGvylP0x
-         oI7iw6KJiKQzXPruu/EWzhJHehgpH6LUupxGlzHafKKbKKDsdaqHCfAGsTP/vwqbwHCQ
-         5macAMnaStOske7A78Y3pbaeH3lzrM6pyq9X0=
+        bh=m7RqUGlAZKFc49U41qGqNoOsHvlpZbIedEeyhnhCTbI=;
+        b=oonpr2B3rHnYHupaHPShB/68/ySpZhsnym3v+SNUtmhwaRRl+ebfMYlGZJepX2qulG
+         9cbrc6OOaR8fnjJU0XjBJiOhQvEFKeYlDJCkCm3uSGitqaz0tsBUynXX8v3UT1Urgh8C
+         HpPB4txSmK4g50EGTw+LoucZuZaxS1O+CJBis=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=OnsCq72NIqxbQo7TReAl86Zu/9YUEW7JMMbum4NscOE=;
-        b=EwSzFWcsIxNFGr75wK5pZcIcNWHOusPkSfYJOQwtZaLiGR7FbILlR4Hix7Hec/uJtX
-         WW8NCDemLsiGNJxPkkK03ES7+tQfa/xoqb/JLes0J4cXMtzDd8EOGgKG7v1J9/YFrSw4
-         cqox5PVi13O1kh2+e7c5keVqgfEpjcNVf41SHxtchmlf0sY4qw2vDsrkLI3Qo5UR6xOP
-         PujHacSrOYtl7K/NHK/KD3/hWktylxlnRbxLD2fsC8APDxA2F9ILNFfgqB91mUvGQg2T
-         /q2jUPj3hpdHdLggaZQ8YaTNKhYvidFRzW+OJZR3HZYVXTmuJu2uWczpZ++0i+5Ndwsw
-         JgSg==
-X-Gm-Message-State: AOAM531/SMPboUF4dGygyQGntLQmIxB694iqwbsmdQrT/Y3XV1dTnvpo
-        8ghgzV2cpSNij99EMdN5jHF1ow==
-X-Google-Smtp-Source: ABdhPJxh9kXQCKrP11qiDG/0TFc1wu5U2rxKydjfwo/D7jVSTgionMBTeGSAsdyd5LlT09DykPZWjA==
-X-Received: by 2002:a5d:6809:: with SMTP id w9mr15141228wru.376.1614593967182;
-        Mon, 01 Mar 2021 02:19:27 -0800 (PST)
+        bh=m7RqUGlAZKFc49U41qGqNoOsHvlpZbIedEeyhnhCTbI=;
+        b=YXN99w6k46u925nCH4ffWRAz6Pce9L4q1ZlmyGC7dZuhOoL6o9yCa8/v5CJDIykhZw
+         bqErSlu0QGm60CMQbj+BZWyDsps69GLuXuMIVXafhB6Sb7AqHLg0++zPV4qVN4GQPrHr
+         4DpTLSDAIkrjS/yhzf6R2PrZgTLe8wDRH126sEMHxvXCBiv1F5fMc9fO+Xkk+V162UMM
+         FUBi+ViphhnSb8x03E/H/uw3TkUTEjKHcswmbs0/ui5RjeRh0FEa6g7pN9d4P2Fvu+h9
+         IClgz5uRvuPFOKVQLs2apGtjk/H422v2pZOFcaQUQzm6gf7EYzls1jytdctWspSmHvQp
+         OVXw==
+X-Gm-Message-State: AOAM530MX/e2+SzgqsnLsNz8S1r5gilJ+kC8gS2HnX2NrNmnm/gpTIeD
+        5ZB36yMkL7BPP5eks9tnN92fEg==
+X-Google-Smtp-Source: ABdhPJxgNFJm+3dLBERmicTkvuFnp/OHYctVVHJxCxBBK52+5gRrGS4TXSb4/Tq6ikZiw2R9Ht38Dw==
+X-Received: by 2002:adf:d851:: with SMTP id k17mr10256340wrl.254.1614593969442;
+        Mon, 01 Mar 2021 02:19:29 -0800 (PST)
 Received: from localhost.localdomain (2.b.a.d.8.4.b.a.9.e.4.2.1.8.0.5.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:5081:24e9:ab48:dab2])
-        by smtp.gmail.com with ESMTPSA id a198sm14134600wmd.11.2021.03.01.02.19.26
+        by smtp.gmail.com with ESMTPSA id a198sm14134600wmd.11.2021.03.01.02.19.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Mar 2021 02:19:26 -0800 (PST)
+        Mon, 01 Mar 2021 02:19:29 -0800 (PST)
 From:   Lorenz Bauer <lmb@cloudflare.com>
 To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
 Cc:     kernel-team@cloudflare.com, netdev@vger.kernel.org,
         bpf@vger.kernel.org, Lorenz Bauer <lmb@cloudflare.com>
-Subject: [PATCH bpf-next v3 2/5] bpf: add PROG_TEST_RUN support for sk_lookup programs
-Date:   Mon,  1 Mar 2021 10:18:56 +0000
-Message-Id: <20210301101859.46045-3-lmb@cloudflare.com>
+Subject: [PATCH bpf-next v3 5/5] selftests: bpf: don't run sk_lookup in verifier tests
+Date:   Mon,  1 Mar 2021 10:18:59 +0000
+Message-Id: <20210301101859.46045-6-lmb@cloudflare.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210301101859.46045-1-lmb@cloudflare.com>
 References: <20210301101859.46045-1-lmb@cloudflare.com>
@@ -68,219 +68,53 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Allow to pass sk_lookup programs to PROG_TEST_RUN. User space
-provides the full bpf_sk_lookup struct as context. Since the
-context includes a socket pointer that can't be exposed
-to user space we define that PROG_TEST_RUN returns the cookie
-of the selected socket or zero in place of the socket pointer.
-
-We don't support testing programs that select a reuseport socket,
-since this would mean running another (unrelated) BPF program
-from the sk_lookup test handler.
+sk_lookup doesn't allow setting data_in for bpf_prog_run. This doesn't
+play well with the verifier tests, since they always set a 64 byte
+input buffer. Allow not running verifier tests by setting
+bpf_test.runs to a negative value and don't run the ctx access case
+for sk_lookup. We have dedicated ctx access tests so skipping here
+doesn't reduce coverage.
 
 Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
 ---
- include/linux/bpf.h            |  10 ++++
- include/uapi/linux/bpf.h       |   5 +-
- net/bpf/test_run.c             | 105 +++++++++++++++++++++++++++++++++
- net/core/filter.c              |   1 +
- tools/include/uapi/linux/bpf.h |   5 +-
- 5 files changed, 124 insertions(+), 2 deletions(-)
+ tools/testing/selftests/bpf/test_verifier.c          | 4 ++--
+ tools/testing/selftests/bpf/verifier/ctx_sk_lookup.c | 1 +
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 4c730863fa77..c931bc97019d 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1491,6 +1491,9 @@ int bpf_prog_test_run_flow_dissector(struct bpf_prog *prog,
- int bpf_prog_test_run_raw_tp(struct bpf_prog *prog,
- 			     const union bpf_attr *kattr,
- 			     union bpf_attr __user *uattr);
-+int bpf_prog_test_run_sk_lookup(struct bpf_prog *prog,
-+				const union bpf_attr *kattr,
-+				union bpf_attr __user *uattr);
- bool btf_ctx_access(int off, int size, enum bpf_access_type type,
- 		    const struct bpf_prog *prog,
- 		    struct bpf_insn_access_aux *info);
-@@ -1692,6 +1695,13 @@ static inline int bpf_prog_test_run_flow_dissector(struct bpf_prog *prog,
- 	return -ENOTSUPP;
- }
+diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
+index 58b5a349d3ba..1512092e1e68 100644
+--- a/tools/testing/selftests/bpf/test_verifier.c
++++ b/tools/testing/selftests/bpf/test_verifier.c
+@@ -105,7 +105,7 @@ struct bpf_test {
+ 	enum bpf_prog_type prog_type;
+ 	uint8_t flags;
+ 	void (*fill_helper)(struct bpf_test *self);
+-	uint8_t runs;
++	int runs;
+ #define bpf_testdata_struct_t					\
+ 	struct {						\
+ 		uint32_t retval, retval_unpriv;			\
+@@ -1165,7 +1165,7 @@ static void do_test_single(struct bpf_test *test, bool unpriv,
  
-+static inline int bpf_prog_test_run_sk_lookup(struct bpf_prog *prog,
-+					      const union bpf_attr *kattr,
-+					      union bpf_attr __user *uattr)
-+{
-+	return -ENOTSUPP;
-+}
-+
- static inline void bpf_map_put(struct bpf_map *map)
+ 	run_errs = 0;
+ 	run_successes = 0;
+-	if (!alignment_prevented_execution && fd_prog >= 0) {
++	if (!alignment_prevented_execution && fd_prog >= 0 && test->runs >= 0) {
+ 		uint32_t expected_val;
+ 		int i;
+ 
+diff --git a/tools/testing/selftests/bpf/verifier/ctx_sk_lookup.c b/tools/testing/selftests/bpf/verifier/ctx_sk_lookup.c
+index fb13ca2d5606..d78627be060f 100644
+--- a/tools/testing/selftests/bpf/verifier/ctx_sk_lookup.c
++++ b/tools/testing/selftests/bpf/verifier/ctx_sk_lookup.c
+@@ -239,6 +239,7 @@
+ 	.result = ACCEPT,
+ 	.prog_type = BPF_PROG_TYPE_SK_LOOKUP,
+ 	.expected_attach_type = BPF_SK_LOOKUP,
++	.runs = -1,
+ },
+ /* invalid 8-byte reads from a 4-byte fields in bpf_sk_lookup */
  {
- }
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index b89af20cfa19..99b39ec5ad44 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -5243,7 +5243,10 @@ struct bpf_pidns_info {
- 
- /* User accessible data for SK_LOOKUP programs. Add new fields at the end. */
- struct bpf_sk_lookup {
--	__bpf_md_ptr(struct bpf_sock *, sk); /* Selected socket */
-+	union {
-+		__bpf_md_ptr(struct bpf_sock *, sk); /* Selected socket */
-+		__u64 cookie; /* Non-zero if socket was selected in PROG_TEST_RUN */
-+	};
- 
- 	__u32 family;		/* Protocol family (AF_INET, AF_INET6) */
- 	__u32 protocol;		/* IP protocol (IPPROTO_TCP, IPPROTO_UDP) */
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index ac8ee36d60cc..0ec6b920484a 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -10,8 +10,10 @@
- #include <net/bpf_sk_storage.h>
- #include <net/sock.h>
- #include <net/tcp.h>
-+#include <net/net_namespace.h>
- #include <linux/error-injection.h>
- #include <linux/smp.h>
-+#include <linux/sock_diag.h>
- 
- #define CREATE_TRACE_POINTS
- #include <trace/events/bpf_test_run.h>
-@@ -781,3 +783,106 @@ int bpf_prog_test_run_flow_dissector(struct bpf_prog *prog,
- 	kfree(data);
- 	return ret;
- }
-+
-+int bpf_prog_test_run_sk_lookup(struct bpf_prog *prog, const union bpf_attr *kattr,
-+				union bpf_attr __user *uattr)
-+{
-+	struct test_timer t = { NO_PREEMPT };
-+	struct bpf_prog_array *progs = NULL;
-+	struct bpf_sk_lookup_kern ctx = {};
-+	u32 repeat = kattr->test.repeat;
-+	struct bpf_sk_lookup *user_ctx;
-+	u32 retval, duration;
-+	int ret = -EINVAL;
-+
-+	if (prog->type != BPF_PROG_TYPE_SK_LOOKUP)
-+		return -EINVAL;
-+
-+	if (kattr->test.flags || kattr->test.cpu)
-+		return -EINVAL;
-+
-+	if (kattr->test.data_in || kattr->test.data_size_in || kattr->test.data_out ||
-+	    kattr->test.data_size_out)
-+		return -EINVAL;
-+
-+	if (!repeat)
-+		repeat = 1;
-+
-+	user_ctx = bpf_ctx_init(kattr, sizeof(*user_ctx));
-+	if (IS_ERR(user_ctx))
-+		return PTR_ERR(user_ctx);
-+
-+	if (!user_ctx)
-+		return -EINVAL;
-+
-+	if (user_ctx->sk)
-+		goto out;
-+
-+	if (!range_is_zero(user_ctx, offsetofend(typeof(*user_ctx), local_port), sizeof(*user_ctx)))
-+		goto out;
-+
-+	if (user_ctx->local_port > U16_MAX || user_ctx->remote_port > U16_MAX) {
-+		ret = -ERANGE;
-+		goto out;
-+	}
-+
-+	ctx.family = (u16)user_ctx->family;
-+	ctx.protocol = (u16)user_ctx->protocol;
-+	ctx.dport = (u16)user_ctx->local_port;
-+	ctx.sport = (__force __be16)user_ctx->remote_port;
-+
-+	switch (ctx.family) {
-+	case AF_INET:
-+		ctx.v4.daddr = (__force __be32)user_ctx->local_ip4;
-+		ctx.v4.saddr = (__force __be32)user_ctx->remote_ip4;
-+		break;
-+
-+#if IS_ENABLED(CONFIG_IPV6)
-+	case AF_INET6:
-+		ctx.v6.daddr = (struct in6_addr *)user_ctx->local_ip6;
-+		ctx.v6.saddr = (struct in6_addr *)user_ctx->remote_ip6;
-+		break;
-+#endif
-+
-+	default:
-+		ret = -EAFNOSUPPORT;
-+		goto out;
-+	}
-+
-+	progs = bpf_prog_array_alloc(1, GFP_KERNEL);
-+	if (!progs) {
-+		ret = -ENOMEM;
-+		goto out;
-+	}
-+
-+	progs->items[0].prog = prog;
-+
-+	t_enter(&t);
-+	do {
-+		ctx.selected_sk = NULL;
-+		retval = BPF_PROG_SK_LOOKUP_RUN_ARRAY(progs, ctx, BPF_PROG_RUN);
-+	} while (t_continue(&t, repeat, &ret, &duration));
-+	t_leave(&t);
-+
-+	if (ret < 0)
-+		goto out;
-+
-+	user_ctx->cookie = 0;
-+	if (ctx.selected_sk) {
-+		if (ctx.selected_sk->sk_reuseport && !ctx.no_reuseport) {
-+			ret = -EOPNOTSUPP;
-+			goto out;
-+		}
-+
-+		user_ctx->cookie = sock_gen_cookie(ctx.selected_sk);
-+	}
-+
-+	ret = bpf_test_finish(kattr, uattr, NULL, 0, retval, duration);
-+	if (!ret)
-+		ret = bpf_ctx_finish(kattr, uattr, user_ctx, sizeof(*user_ctx));
-+
-+out:
-+	bpf_prog_array_free(progs);
-+	kfree(user_ctx);
-+	return ret;
-+}
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 13bcf248ee7b..a526db494c62 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -10457,6 +10457,7 @@ static u32 sk_lookup_convert_ctx_access(enum bpf_access_type type,
- }
- 
- const struct bpf_prog_ops sk_lookup_prog_ops = {
-+	.test_run = bpf_prog_test_run_sk_lookup,
- };
- 
- const struct bpf_verifier_ops sk_lookup_verifier_ops = {
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index b89af20cfa19..99b39ec5ad44 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -5243,7 +5243,10 @@ struct bpf_pidns_info {
- 
- /* User accessible data for SK_LOOKUP programs. Add new fields at the end. */
- struct bpf_sk_lookup {
--	__bpf_md_ptr(struct bpf_sock *, sk); /* Selected socket */
-+	union {
-+		__bpf_md_ptr(struct bpf_sock *, sk); /* Selected socket */
-+		__u64 cookie; /* Non-zero if socket was selected in PROG_TEST_RUN */
-+	};
- 
- 	__u32 family;		/* Protocol family (AF_INET, AF_INET6) */
- 	__u32 protocol;		/* IP protocol (IPPROTO_TCP, IPPROTO_UDP) */
 -- 
 2.27.0
 
