@@ -2,69 +2,72 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BEC79C433DB
-	for <bpf@archiver.kernel.org>; Mon,  1 Mar 2021 10:44:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0CEF0C433E9
+	for <bpf@archiver.kernel.org>; Mon,  1 Mar 2021 10:44:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 86D5464E13
+	by mail.kernel.org (Postfix) with ESMTP id BF38D64E10
 	for <bpf@archiver.kernel.org>; Mon,  1 Mar 2021 10:44:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234680AbhCAKoX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 1 Mar 2021 05:44:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47224 "EHLO
+        id S234684AbhCAKo1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 1 Mar 2021 05:44:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234693AbhCAKoE (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 1 Mar 2021 05:44:04 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CBD1C061756;
-        Mon,  1 Mar 2021 02:43:24 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id b1so13898900lfb.7;
-        Mon, 01 Mar 2021 02:43:24 -0800 (PST)
+        with ESMTP id S234694AbhCAKoH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 1 Mar 2021 05:44:07 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F12C061788;
+        Mon,  1 Mar 2021 02:43:27 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id e2so11653027ljo.7;
+        Mon, 01 Mar 2021 02:43:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5SVbUaLO6lyScQDOQdWN71umvS+bxt/giAzNcvq8axE=;
-        b=dC0D2Qul5BLKjzBn6hsZ8pz2x+qXplgxvAJpqhzLLHD3SpEtHiEqDIVd9Tydu+0pnC
-         y5M5f1dDvW3m1o5MEo2BTJfCorreBBPCPV0zJQUHQcqIMfGVxTloU66d6KXwqvLOSMYQ
-         PMKdsC0xteMVN5DPxvPWZjiH4/H+3YTBOHq8ky1/+uuvnCWzEy5FsHrYK/3VKwgvWj7k
-         UOE8GguOZ212nvXxRgQmr281OCoL6n/qh7fUv6G4FHdbNsxeqjNqf8HOCIsj8RVGCH4n
-         UusccyN2MpaspKyXqMFbNHE5DNmLLNxdM1NbBsYREfyFoQC3XnkhoXOD8jkGzYO+iOmT
-         CyEw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=jrR8mvyeezm9YVlR4aY3Pdm07zd5OUjsWfQdM4GMkIE=;
+        b=EiN5yrdgNq5YGG4uBLMUOX219WwxH5kcLwiAPLi4+r3LGyQYWCVl+kIVXW3HoDKfN5
+         4eU4IwLRB3dUlWhcyGG99+8ySx5zyOaHM9FEjaUOBUHz1l0LBTytIJ8at2mSexWLVPXP
+         K4ZfDgRbrYb8DF9I3MpnZo/o5LDbOrc8tQc1OqxA4saPZ5E5r4bP0xs64u4Pe8QByRTU
+         /eXAqBD/sFLPCrSXQI/XB25UL/JrRbZNLwCqkakTpbPX1bc0iNfuiaO9c9KidajI99Ql
+         XCKNQSPIuhxt8nJpSuVah2u1uWvXnJ33ELlEv+x8Nt/lX4QhxVI0LCxt9ehgyYxarZYM
+         wLTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5SVbUaLO6lyScQDOQdWN71umvS+bxt/giAzNcvq8axE=;
-        b=PnBFhhuccixUM3zj6ps7lcEFrND3Mq869z8I55MFbJQ4Uo+jK89kfFHsAfu5XZ5hxb
-         H7iXlvJ+Pxgz1C88VEAJUEGvIISXddoHfOuEqa+CfjAan6fmqZej11tqn8Iw6DHWMECi
-         jwO6uBbAkYiIQk4bb0ZCBVEqf/xAld5pHx/QRywxjYBLn8SP3bDSHqbpk9q6JFSnuoBn
-         XOBNvx9worEoAENE0+j/aSW2YZ0QI44D2WhOvucrB6IGiZFoUAjD66j18cWpRlJk/6Yk
-         kLi0H9yE/9HBspepR7Y8yLM7WU1zQRZJEWH6//gjKf/0FoYOHG5dwQCn8Swpw7k4tvvd
-         lcFA==
-X-Gm-Message-State: AOAM530H5LMIGeTk0CeTFh8S50DgrSimv/u9PTTmctPtFYqaw7QOl0tE
-        Ly0FWW0IHf1O3dJVRAfewSM=
-X-Google-Smtp-Source: ABdhPJyVZmJvCtcGvLGRsZkFhYXzj9FoGR5YCrl08IEy3vI71tw3H/Z9H7X7qcATB8rEpMWLVCMnHw==
-X-Received: by 2002:a19:3f93:: with SMTP id m141mr9070158lfa.423.1614595402936;
-        Mon, 01 Mar 2021 02:43:22 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=jrR8mvyeezm9YVlR4aY3Pdm07zd5OUjsWfQdM4GMkIE=;
+        b=k2et3OvCL1W5tNp28Iv+v7AFMLJS8tnKINiIsDnzpN+yYMBCvZbxyeJFR8FyVXXVso
+         SeYk95PdcgQ4vxDhCLmKYHq77YuCWN2MR3E5DR/pd6UuCoTP0noP05BvHZykCdXGyHFD
+         gg0JrG3hQumV9L9dLErTIf2I9Lsw9bSKdMFgyF1Vh4M6mdZNipfShMH9vLA6nmB/XZCo
+         XygaQEovinkB0fahYHLOK8D1rn3gZy3edqx/+PVy2Ka9DCe3f2D3pFzwxGkb++d9gbCv
+         9fR1uumTr/TvbpPxn/2QlDKiylNZNliW+24K7jsUi+cQwXWfppKyXPXyNp4iWi6ca9kf
+         y7Lg==
+X-Gm-Message-State: AOAM531vCPxpubsu2JnxOUHJ6VyaqilWvUCrL/ptKP3i2NfnjTkxSNdV
+        B0ZlqMkTJwFRJcAilR8pO2I=
+X-Google-Smtp-Source: ABdhPJyt1Er2THZ4KtoMfRS5teT3b5MB184Ed2+VHmhl0wbAXTIe8dl7WL4AlSyb+lFFiULYoJ1A8w==
+X-Received: by 2002:a05:651c:2113:: with SMTP id a19mr8892070ljq.147.1614595405635;
+        Mon, 01 Mar 2021 02:43:25 -0800 (PST)
 Received: from btopel-mobl.ger.intel.com (c213-102-90-208.bredband.comhem.se. [213.102.90.208])
-        by smtp.gmail.com with ESMTPSA id w26sm2247492lfr.186.2021.03.01.02.43.21
+        by smtp.gmail.com with ESMTPSA id w26sm2247492lfr.186.2021.03.01.02.43.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Mar 2021 02:43:22 -0800 (PST)
+        Mon, 01 Mar 2021 02:43:25 -0800 (PST)
 From:   =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@gmail.com>
 To:     ast@kernel.org, daniel@iogearbox.net, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@gmail.com>,
-        bjorn.topel@intel.com, magnus.karlsson@intel.com,
-        jonathan.lemon@gmail.com, maximmi@nvidia.com, andrii@kernel.org
-Subject: [PATCH bpf-next 0/2] load-acquire/store-release semantics for AF_XDP rings
-Date:   Mon,  1 Mar 2021 11:43:16 +0100
-Message-Id: <20210301104318.263262-1-bjorn.topel@gmail.com>
+Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
+        magnus.karlsson@intel.com, jonathan.lemon@gmail.com,
+        maximmi@nvidia.com, andrii@kernel.org
+Subject: [PATCH bpf-next 2/2] libbpf, xsk: add libbpf_smp_store_release libbpf_smp_load_acquire
+Date:   Mon,  1 Mar 2021 11:43:18 +0100
+Message-Id: <20210301104318.263262-3-bjorn.topel@gmail.com>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20210301104318.263262-1-bjorn.topel@gmail.com>
+References: <20210301104318.263262-1-bjorn.topel@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -72,38 +75,170 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This two-patch series introduces load-acquire/store-release semantics
-for the AF_XDP rings.
+From: Björn Töpel <bjorn.topel@intel.com>
 
-For most contemporary architectures, this is more effective than a
-SPSC ring based on smp_{r,w,}mb() barriers. More importantly,
-load-acquire/store-release semantics make the ring code easier to
-follow.
+Now that the AF_XDP rings have load-acquire/store-release semantics,
+move libbpf to that as well.
 
-This is effectively the change done in commit 6c43c091bdc5
-("documentation: Update circular buffer for
-load-acquire/store-release"), but for the AF_XDP rings.
+The library-internal libbpf_smp_{load_acquire,store_release} are only
+valid for 32-bit words on ARM64.
 
-Both libbpf and the kernel-side are updated.
+Also, remove the barriers that are no longer in use.
 
-More details in each commit.
-
-
-Thanks,
-Björn
-
-
-Björn Töpel (2):
-  xsk: update rings for load-acquire/store-release semantics
-  libbpf, xsk: add libbpf_smp_store_release libbpf_smp_load_acquire
-
- net/xdp/xsk_queue.h         | 27 ++++++--------
+Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
+---
  tools/lib/bpf/libbpf_util.h | 72 +++++++++++++++++++++++++------------
  tools/lib/bpf/xsk.h         | 17 +++------
- 3 files changed, 66 insertions(+), 50 deletions(-)
+ 2 files changed, 55 insertions(+), 34 deletions(-)
 
-
-base-commit: 85e142cb42a1e7b33971bf035dae432d8670c46b
+diff --git a/tools/lib/bpf/libbpf_util.h b/tools/lib/bpf/libbpf_util.h
+index 59c779c5790c..94a0d7bb6f3c 100644
+--- a/tools/lib/bpf/libbpf_util.h
++++ b/tools/lib/bpf/libbpf_util.h
+@@ -5,6 +5,7 @@
+ #define __LIBBPF_LIBBPF_UTIL_H
+ 
+ #include <stdbool.h>
++#include <linux/compiler.h>
+ 
+ #ifdef __cplusplus
+ extern "C" {
+@@ -15,29 +16,56 @@ extern "C" {
+  * application that uses libbpf.
+  */
+ #if defined(__i386__) || defined(__x86_64__)
+-# define libbpf_smp_rmb() asm volatile("" : : : "memory")
+-# define libbpf_smp_wmb() asm volatile("" : : : "memory")
+-# define libbpf_smp_mb() \
+-	asm volatile("lock; addl $0,-4(%%rsp)" : : : "memory", "cc")
+-/* Hinders stores to be observed before older loads. */
+-# define libbpf_smp_rwmb() asm volatile("" : : : "memory")
++# define libbpf_smp_store_release(p, v)					\
++	do {								\
++		asm volatile("" : : : "memory");			\
++		WRITE_ONCE(*p, v);					\
++	} while (0)
++# define libbpf_smp_load_acquire(p)					\
++	({								\
++		typeof(*p) ___p1 = READ_ONCE(*p);			\
++		asm volatile("" : : : "memory");			\
++		___p1;							\
++	})
+ #elif defined(__aarch64__)
+-# define libbpf_smp_rmb() asm volatile("dmb ishld" : : : "memory")
+-# define libbpf_smp_wmb() asm volatile("dmb ishst" : : : "memory")
+-# define libbpf_smp_mb() asm volatile("dmb ish" : : : "memory")
+-# define libbpf_smp_rwmb() libbpf_smp_mb()
+-#elif defined(__arm__)
+-/* These are only valid for armv7 and above */
+-# define libbpf_smp_rmb() asm volatile("dmb ish" : : : "memory")
+-# define libbpf_smp_wmb() asm volatile("dmb ishst" : : : "memory")
+-# define libbpf_smp_mb() asm volatile("dmb ish" : : : "memory")
+-# define libbpf_smp_rwmb() libbpf_smp_mb()
+-#else
+-/* Architecture missing native barrier functions. */
+-# define libbpf_smp_rmb() __sync_synchronize()
+-# define libbpf_smp_wmb() __sync_synchronize()
+-# define libbpf_smp_mb() __sync_synchronize()
+-# define libbpf_smp_rwmb() __sync_synchronize()
++# define libbpf_smp_store_release(p, v)					\
++		asm volatile ("stlr %w1, %0" : "=Q" (*p) : "r" (v) : "memory")
++# define libbpf_smp_load_acquire(p)					\
++	({								\
++		typeof(*p) ___p1;					\
++		asm volatile ("ldar %w0, %1"				\
++			      : "=r" (___p1) : "Q" (*p) : "memory");	\
++		__p1;							\
++	})
++#elif defined(__riscv)
++# define libbpf_smp_store_release(p, v)					\
++	do {								\
++		asm volatile ("fence rw,w" : : : "memory");		\
++		WRITE_ONCE(*p, v);					\
++	} while (0)
++# define libbpf_smp_load_acquire(p)					\
++	({								\
++		typeof(*p) ___p1 = READ_ONCE(*p);			\
++		asm volatile ("fence r,rw" : : : "memory");		\
++		___p1;							\
++	})
++#endif
++
++#ifndef libbpf_smp_store_release
++#define libbpf_smp_store_release(p, v)					\
++	do {								\
++		__sync_synchronize();					\
++		WRITE_ONCE(*p, v);					\
++	} while (0)
++#endif
++
++#ifndef libbpf_smp_load_acquire
++#define libbpf_smp_load_acquire(p)					\
++	({								\
++		typeof(*p) ___p1 = READ_ONCE(*p);			\
++		__sync_synchronize();					\
++		___p1;							\
++	})
+ #endif
+ 
+ #ifdef __cplusplus
+diff --git a/tools/lib/bpf/xsk.h b/tools/lib/bpf/xsk.h
+index e9f121f5d129..a9fdea87b5cd 100644
+--- a/tools/lib/bpf/xsk.h
++++ b/tools/lib/bpf/xsk.h
+@@ -96,7 +96,8 @@ static inline __u32 xsk_prod_nb_free(struct xsk_ring_prod *r, __u32 nb)
+ 	 * this function. Without this optimization it whould have been
+ 	 * free_entries = r->cached_prod - r->cached_cons + r->size.
+ 	 */
+-	r->cached_cons = *r->consumer + r->size;
++	r->cached_cons = libbpf_smp_load_acquire(r->consumer);
++	r->cached_cons += r->size;
+ 
+ 	return r->cached_cons - r->cached_prod;
+ }
+@@ -106,7 +107,7 @@ static inline __u32 xsk_cons_nb_avail(struct xsk_ring_cons *r, __u32 nb)
+ 	__u32 entries = r->cached_prod - r->cached_cons;
+ 
+ 	if (entries == 0) {
+-		r->cached_prod = *r->producer;
++		r->cached_prod = libbpf_smp_load_acquire(r->producer);
+ 		entries = r->cached_prod - r->cached_cons;
+ 	}
+ 
+@@ -129,9 +130,7 @@ static inline void xsk_ring_prod__submit(struct xsk_ring_prod *prod, __u32 nb)
+ 	/* Make sure everything has been written to the ring before indicating
+ 	 * this to the kernel by writing the producer pointer.
+ 	 */
+-	libbpf_smp_wmb();
+-
+-	*prod->producer += nb;
++	libbpf_smp_store_release(prod->producer, *prod->producer + nb);
+ }
+ 
+ static inline __u32 xsk_ring_cons__peek(struct xsk_ring_cons *cons, __u32 nb, __u32 *idx)
+@@ -139,11 +138,6 @@ static inline __u32 xsk_ring_cons__peek(struct xsk_ring_cons *cons, __u32 nb, __
+ 	__u32 entries = xsk_cons_nb_avail(cons, nb);
+ 
+ 	if (entries > 0) {
+-		/* Make sure we do not speculatively read the data before
+-		 * we have received the packet buffers from the ring.
+-		 */
+-		libbpf_smp_rmb();
+-
+ 		*idx = cons->cached_cons;
+ 		cons->cached_cons += entries;
+ 	}
+@@ -161,9 +155,8 @@ static inline void xsk_ring_cons__release(struct xsk_ring_cons *cons, __u32 nb)
+ 	/* Make sure data has been read before indicating we are done
+ 	 * with the entries by updating the consumer pointer.
+ 	 */
+-	libbpf_smp_rwmb();
++	libbpf_smp_store_release(cons->consumer, *cons->consumer + nb);
+ 
+-	*cons->consumer += nb;
+ }
+ 
+ static inline void *xsk_umem__get_data(void *umem_area, __u64 addr)
 -- 
 2.27.0
 
