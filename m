@@ -2,121 +2,96 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93DFFC28CC4
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:56:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1FF2BC28CFA
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:56:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 46EBD64E6F
+	by mail.kernel.org (Postfix) with ESMTP id E8D2064E12
 	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:56:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352479AbhCCDvG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Mar 2021 22:51:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60200 "EHLO
+        id S1352464AbhCCDvN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Mar 2021 22:51:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1837072AbhCBUiX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 2 Mar 2021 15:38:23 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AB02C06178B;
-        Tue,  2 Mar 2021 12:38:08 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id o16so4068012wmh.0;
-        Tue, 02 Mar 2021 12:38:08 -0800 (PST)
+        with ESMTP id S1381489AbhCBVKm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 2 Mar 2021 16:10:42 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1AF3C0698DE
+        for <bpf@vger.kernel.org>; Tue,  2 Mar 2021 13:02:59 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id g4so14747842pgj.0
+        for <bpf@vger.kernel.org>; Tue, 02 Mar 2021 13:02:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=fVORHvbe3xDrZDTWpaGFZMUL2U3hQMYf826QqnYl9l8=;
-        b=mVH4lIA/ydhx0e37ftXquLx/LtSpEvJvTGdKUgzqQC3cR00TEeQ/IL4f2DAMaRqbJp
-         GpwUL/GLzxeA9vTYYP922fZDkw7wWNrzADMDXtVEURSjppA4WfjG0ujig9FaAsSxKeGe
-         71u+7y9F61lFvYSzl8T1m6cmSZd9w3crWgP07aeDTIKQLQsr0eck8BhrDBX00yRMa7vE
-         y0aXEK3r1BjL4CJqRjdx+ZumzUjmoG9T8dtGdQJEd3aLHt+NOes0XJQOaHMxZmkXFufl
-         FILayTdobcB4YmNEL9Aa9oXkMmkrbJrNv+rjQUTY/0av3ruaLhfv+172xLF1BC+yipid
-         NwxA==
+        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
+        h=content-transfer-encoding:from:mime-version:subject:date:message-id
+         :references:cc:in-reply-to:to;
+        bh=CB9dY4Lo/FVVsXfU2ohXWUZuVD42ULjyGl9o+tMY6Y8=;
+        b=kEn/jTaFtVpFmfCrT7bL4yxMKEL+7/DDc3lsEo5QR+j1n1aCc8f0qujpo0FciT082V
+         cmrgOfKTnFLcR9EFh9f0nrroavyJTTeufrRwJidYhJRhmEpKuV78c4BdGQPbXBSC5eK4
+         Y5RDspp1l2iVsMqFgSUW7tjeTU0ldBS1jRmNgi1e/PfVqXmMqr+gxEjIGYwukVqTkwEX
+         C+2R6FhS9KFt4p/FRw1GL2lgjAdauN/ww9vSNVVgN6/MReGuo0HKLQMeYSyVm6upjzw1
+         RiLpJxexbc3CbRSRTU9sAjYah8W3YHb9iheXKfYij/OUvu887kndLu+gFVqv8ljjM/WR
+         R07g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=fVORHvbe3xDrZDTWpaGFZMUL2U3hQMYf826QqnYl9l8=;
-        b=QTjX0MVu6FWCZL4LtIVcarL3y1O5k5W//Zv7RclawMc7JJSkj7Zdkssmj0lwbA64+5
-         NfyNcAXJ8wMm8OBL3C0NJM47rrrX/nqsxCMduiIYUj2RjTJHSDfoS0vPWPBJUMM/rxIA
-         mZOzqF7aS3HcZ0xax3IG4ODCKBsCtgOmKzTpPuGzfH6x7WesS5rq0A04Jc+4amdR0KCN
-         +tehbyU1z5IQHrHd26Kmoi6CdDqO4XnnAOeAidDcNoUbte4WAw0cq7kF10eRCjRJ59QF
-         7dke/RkUxo+RyB0pA8l0pTS0Zyci6KKYwme7jaP1e2dA0OrfsVqAmUCuXRL5KBnoDcgn
-         XGUg==
-X-Gm-Message-State: AOAM532PL/OHH0B4Q1BzQnQEwwsLgzNfWOsj5doYRmNz+batLXZPykCB
-        e9ZZWVrM+sjp3kMC+tk0JCtR2qVWPEPqdL4CspU=
-X-Google-Smtp-Source: ABdhPJyy5pmikjf79y1/GvNaKd4OnksdSm7C5u8BXo2lPqzmEzL2T7Zb6agEX3ppixMKdKvwBNk1Tdpx6f69uoOSWaM=
-X-Received: by 2002:a1c:7312:: with SMTP id d18mr5680637wmb.155.1614717487210;
- Tue, 02 Mar 2021 12:38:07 -0800 (PST)
-MIME-Version: 1.0
-References: <CAJ+HfNhxWFeKnn1aZw-YJmzpBuCaoeGkXXKn058GhY-6ZBDtZA@mail.gmail.com>
- <20210302195758.GQ2696@paulmck-ThinkPad-P72> <20210302200441.GA3729@paulmck-ThinkPad-P72>
-In-Reply-To: <20210302200441.GA3729@paulmck-ThinkPad-P72>
-From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
-Date:   Tue, 2 Mar 2021 21:37:55 +0100
-Message-ID: <CAJ+HfNi1Y16ftJb-Ct3gCUvu71GW6VnEcvibvwyY9nxZMu5nfw@mail.gmail.com>
-Subject: Re: XDP socket rings, and LKMM litmus tests
-To:     paulmck@kernel.org
-Cc:     bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        stern@rowland.harvard.edu, parri.andrea@gmail.com,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, boqun.feng@gmail.com,
-        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
-        luc.maranget@inria.fr, akiyks@gmail.com, dlustig@nvidia.com,
-        joel@joelfernandes.org,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
-        "Karlsson, Magnus" <magnus.karlsson@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:content-transfer-encoding:from:mime-version
+         :subject:date:message-id:references:cc:in-reply-to:to;
+        bh=CB9dY4Lo/FVVsXfU2ohXWUZuVD42ULjyGl9o+tMY6Y8=;
+        b=a49Ny9h6FN7nZmyX/gQNnbkrgAhiSBKxNMi2it8LtWG6poK7sNzMZ14oaU8WkvGoTH
+         +5Es2eQBAfsxWWffSSyKXzGlDvfw7LkO9xthH8E0xpYrVo8OcmkPT50hx9+z6HZwaiP5
+         t3A4HDd5q2MLP1NWIjAklm1trF867q/KwcI976Wj1R2SPKC56mbbYZmGEiqL+oxNS+pH
+         ZHzwdYd4EDP7jj1N8nE/8EWEj2d0HJDgqvoMDuUzIPush+mf9gngzcRsUaBt68J353q6
+         EyA7i8xS0BzklITWIVa3RhSLAKfx5cXBRZiJpvXu59NMCTxXv9brv9HmpXUxgqo7/3Wx
+         29yg==
+X-Gm-Message-State: AOAM530Jx7+wm4wYmW0gfk6Xjk74zsLUfFqHAlFw7s6tePSPcOXdEcGZ
+        JZ4fyG8Vou2tCO3AM81LbgcsDA==
+X-Google-Smtp-Source: ABdhPJygZuY9KaqkU4K9gLXIZ9wSlUe7qlBkMj13Bu2eXTZp5/3vDnvFlNMTXcuIUbq2VLW6J4hP5w==
+X-Received: by 2002:a63:fb11:: with SMTP id o17mr19763253pgh.282.1614718979407;
+        Tue, 02 Mar 2021 13:02:59 -0800 (PST)
+Received: from ?IPv6:2600:1010:b02b:fd90:e1d3:88b3:9a99:4873? ([2600:1010:b02b:fd90:e1d3:88b3:9a99:4873])
+        by smtp.gmail.com with ESMTPSA id c29sm20427129pgb.58.2021.03.02.13.02.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Mar 2021 13:02:58 -0800 (PST)
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
+From:   Andy Lutomirski <luto@amacapital.net>
+Mime-Version: 1.0 (1.0)
+Subject: Re: Why do kprobes and uprobes singlestep?
+Date:   Tue, 2 Mar 2021 13:02:57 -0800
+Message-Id: <EECBE373-7CA1-4ED8-9F03-406BBED607FD@amacapital.net>
+References: <CAADnVQ+czV6u4CM-A+o5U+WhApkocunZXiCMJBB_Zbs0mvNSwQ@mail.gmail.com>
+Cc:     Andy Lutomirski <luto@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S. Miller" <davem@davemloft.net>, X86 ML <x86@kernel.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>
+In-Reply-To: <CAADnVQ+czV6u4CM-A+o5U+WhApkocunZXiCMJBB_Zbs0mvNSwQ@mail.gmail.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+X-Mailer: iPhone Mail (18D52)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, 2 Mar 2021 at 21:04, Paul E. McKenney <paulmck@kernel.org> wrote:
->
 
-[...]
+> On Mar 2, 2021, at 12:24 PM, Alexei Starovoitov <alexei.starovoitov@gmail.=
+com> wrote:
+>=20
+> =EF=BB=BFOn Tue, Mar 2, 2021 at 10:38 AM Andy Lutomirski <luto@kernel.org>=
+ wrote:
+>>=20
+>> Is there something like a uprobe test suite?  How maintained /
+>> actively used is uprobe?
+>=20
+> uprobe+bpf is heavily used in production.
+> selftests/bpf has only one test for it though.
+>=20
+> Why are you asking?
 
->
-> And if the answer is "yes", how about this one?
->
-
-With the =3D=3D to !=3D change in P1, this is OK!
-
-> P0(int *prod, int *cons, int *data)
-> {
->     int p;
->
->     p =3D READ_ONCE(*prod);
->     if (p =3D=3D READ_ONCE(*cons)) {
-
-...and now d=3D=3D1 is not a valid state anymore according to herd. If
-think I need some input here! :-D
-
->         WRITE_ONCE(*data, 1);
->         smp_wmb();
->         WRITE_ONCE(*prod, p ^ 1);
->     }
-> }
->
-> P1(int *prod, int *cons, int *data)
-> {
->     int c;
->     int d =3D -1;
->
->     c =3D READ_ONCE(*cons);
->     if (READ_ONCE(*prod) =3D=3D c) {
->         smp_rmb();
->         d =3D READ_ONCE(*data);
->         smp_mb();
->         WRITE_ONCE(*cons, c ^ 1);
->     }
-> }
->
-
-[...]
-
-Bj=C3=B6rn
+Because the integration with the x86 entry code is a mess, and I want to kno=
+w whether to mark it BROKEN or how to make sure the any cleanups actually wo=
+rk.=
