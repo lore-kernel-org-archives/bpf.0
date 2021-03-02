@@ -2,142 +2,202 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 407D7C433E9
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1E28C43331
 	for <bpf@archiver.kernel.org>; Tue,  2 Mar 2021 10:38:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 07D0A64F07
-	for <bpf@archiver.kernel.org>; Tue,  2 Mar 2021 10:38:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8B40664F0D
+	for <bpf@archiver.kernel.org>; Tue,  2 Mar 2021 10:38:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379541AbhCBK3z (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Mar 2021 05:29:55 -0500
-Received: from mail-wm1-f52.google.com ([209.85.128.52]:54087 "EHLO
-        mail-wm1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379836AbhCBBcJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 1 Mar 2021 20:32:09 -0500
-Received: by mail-wm1-f52.google.com with SMTP id e23so844654wmh.3;
-        Mon, 01 Mar 2021 17:31:52 -0800 (PST)
+        id S1383012AbhCBKbf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Mar 2021 05:31:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54804 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1443988AbhCBCil (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 1 Mar 2021 21:38:41 -0500
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA85C061793;
+        Mon,  1 Mar 2021 18:37:58 -0800 (PST)
+Received: by mail-oi1-x22a.google.com with SMTP id o3so20440864oic.8;
+        Mon, 01 Mar 2021 18:37:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=1+nWbH2X4eUskfN7h2bAJQ0jwGDRaEfpm7mVkpF/v2w=;
+        b=ROtSuaqMLfI54kztrhx/vsjFPBVqHWxu/JRtbSOqxVPOL2vSfNQ1tF5wrclB3nYran
+         qgtGrmHIeMIKuwctWgN3e4e5BZOsT6J79dLp75zY/3QZb7gWhhDPhV8Bs9WGMfJtZeoz
+         HoBhRstYP5lkW8nOVRchom9uagH0cOE2CXbZpwPS6aFkCBeUqu3S9uxRtoWCGsa1MJiu
+         jia5Or8GlJvhT+C1/FNgA08i0rdtawCfq//mtrA0Mz1C/Dpji2XIxmaZqFE1rib8K1q6
+         UQFPupACZ+B2iFt8zXk0gXCfAPm7CpQj5lRQglC5f3j32/g7bV+yM8Zk0tzVSs2j5N0j
+         4jOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HZ2hCyBVrm0WxssHI6NWJB7Y69JCeL0DnQlIlq8D1Hg=;
-        b=oszh1FTmjcsL6LHsYV2rwrgHeAE/G/toR4wnieh+w8KdrDtjTXygsWcd0ax3OHdzlK
-         Or564gZ8AUDDB7mjN90bnJJ3uaM0RlAo/wuCfUI/DSZWeE63I8zwOaNUSRznC92aKWHQ
-         68FSx42wL8KIEhRZO02NS0u53xFZ6qgTZVmNEnd/rSmhupQCnI9ybYwy/jsb7FPjqJpB
-         oawDi/uu6HgCWR6+MkLHwkfrfJF6zK7nICYrs96lmleMWgdCWbuS5lsR1RidmxwBJjuJ
-         sKOwrhkUNFbS68FUOmtMsCUrjPRiddn1dQmvk8Sxa5O/I4RrdrsqqMALe89eaYUSZn37
-         Z6zg==
-X-Gm-Message-State: AOAM531hYIrtPuUQpdEomllRgzOADHMXZUuGVMCslYv/rli3t6Ehg+DA
-        ZGKTwC20e+zmwY93Uo+ytrPYz3sSbfwkU/KVWP8=
-X-Google-Smtp-Source: ABdhPJwiy+pSdCpqtHFSPxg84vqmpWtyS8T+zOiUa45ftB6XmtCRAvzwCI9hMYTc27zlgzzGc2kh2M4l9AFpNvWUbBE=
-X-Received: by 2002:a7b:ce19:: with SMTP id m25mr1422250wmc.74.1614648686579;
- Mon, 01 Mar 2021 17:31:26 -0800 (PST)
-MIME-Version: 1.0
-References: <20210223124554.1375051-1-liuhangbin@gmail.com>
- <20210223154327.6011b5ee@carbon> <2b917326-3a63-035e-39e9-f63fe3315432@iogearbox.net>
- <CAEf4BzaqsyhJvav-GsJkxP7zHvxZQWvEbrcjc0FH2eXXmidKDw@mail.gmail.com> <b64fa932-5902-f13f-b3b9-f476e389db1b@isovalent.com>
-In-Reply-To: <b64fa932-5902-f13f-b3b9-f476e389db1b@isovalent.com>
-From:   Joe Stringer <joe@wand.net.nz>
-Date:   Mon, 1 Mar 2021 17:31:13 -0800
-Message-ID: <CAOftzPhhJmvk=XrzsvLGie7gS5yTS+MyRv8jMuyLxh520mD0Aw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: fix missing * in bpf.h
-To:     Quentin Monnet <quentin@isovalent.com>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=1+nWbH2X4eUskfN7h2bAJQ0jwGDRaEfpm7mVkpF/v2w=;
+        b=dXT7m3X1IlTEXabW/GbXLzQFLTXk4egL7bVXoeBD+AnmZ7tgvV4Ay7hLLTqP+gm8Z0
+         bflFswIAVgKo2ShK9h+rmWmHSZD6pcg8aNRNIw6VqnPhiJ/r1wpCZqSAAF99PvNvtF6X
+         iAwK37zrqbE9igTYTxlyhAWMcUoU+5jqBDx3d2szxik22sr5ChkDs+8MqLrevcwN13kV
+         zp90Z0vhuwHJNgA0CeFGgy0ppyQyPoQjX3VUevYUGIfIqFa1TrdGfV8vlSemTKcX/CNV
+         M+98DgQjySr8CwW6Te0pAkZT6QmryakXMJM0cacd2Ildn0+ychhJZsvQhOiyx3DKOhce
+         se0A==
+X-Gm-Message-State: AOAM530jyX1q1bDcNAwnWz/cz1ZiS7+fH21QCKG3qUO5qxoXxYG2ehX1
+        YQO+B+KUbniJ/4AopPpfNFer8QMcxojqDQ==
+X-Google-Smtp-Source: ABdhPJzn+qeD0x3rs4Bf3/YXKrzZA893z5z/hfPUZCLTaRdr3pYNehgeCVFLYzm+EoUGsQ6Vzqf5tA==
+X-Received: by 2002:aca:d644:: with SMTP id n65mr1718463oig.118.1614652677938;
+        Mon, 01 Mar 2021 18:37:57 -0800 (PST)
+Received: from unknown.attlocal.net ([2600:1700:65a0:ab60:1bb:8d29:39ef:5fe5])
+        by smtp.gmail.com with ESMTPSA id a30sm100058oiy.42.2021.03.01.18.37.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Mar 2021 18:37:57 -0800 (PST)
+From:   Cong Wang <xiyou.wangcong@gmail.com>
+To:     netdev@vger.kernel.org
+Cc:     bpf@vger.kernel.org, duanxiongchun@bytedance.com,
+        wangdongdong.6@bytedance.com, jiang.wang@bytedance.com,
+        Cong Wang <cong.wang@bytedance.com>,
+        John Fastabend <john.fastabend@gmail.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Hangbin Liu <liuhangbin@gmail.com>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Joe Stringer <joe@wand.net.nz>
-Content-Type: text/plain; charset="UTF-8"
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        Lorenz Bauer <lmb@cloudflare.com>
+Subject: [Patch bpf-next v2 3/9] udp: implement ->sendmsg_locked()
+Date:   Mon,  1 Mar 2021 18:37:37 -0800
+Message-Id: <20210302023743.24123-4-xiyou.wangcong@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210302023743.24123-1-xiyou.wangcong@gmail.com>
+References: <20210302023743.24123-1-xiyou.wangcong@gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Feb 26, 2021 at 8:51 AM Quentin Monnet <quentin@isovalent.com> wrote:
->
-> 2021-02-24 10:59 UTC-0800 ~ Andrii Nakryiko <andrii.nakryiko@gmail.com>
-> > On Wed, Feb 24, 2021 at 7:55 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
-> >>
-> >> On 2/23/21 3:43 PM, Jesper Dangaard Brouer wrote:
-> >>> On Tue, 23 Feb 2021 20:45:54 +0800
-> >>> Hangbin Liu <liuhangbin@gmail.com> wrote:
-> >>>
-> >>>> Commit 34b2021cc616 ("bpf: Add BPF-helper for MTU checking") lost a *
-> >>>> in bpf.h. This will make bpf_helpers_doc.py stop building
-> >>>> bpf_helper_defs.h immediately after bpf_check_mtu, which will affect
-> >>>> future add functions.
-> >>>>
-> >>>> Fixes: 34b2021cc616 ("bpf: Add BPF-helper for MTU checking")
-> >>>> Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
-> >>>> ---
-> >>>>   include/uapi/linux/bpf.h       | 2 +-
-> >>>>   tools/include/uapi/linux/bpf.h | 2 +-
-> >>>>   2 files changed, 2 insertions(+), 2 deletions(-)
-> >>>
-> >>> Thanks for fixing that!
-> >>>
-> >>> Acked-by: Jesper Dangaard Brouer <brouer@redhat.com>
-> >>
-> >> Thanks guys, applied!
-> >>
-> >>> I though I had already fix that, but I must have missed or reintroduced
-> >>> this, when I rolling back broken ideas in V13.
-> >>>
-> >>> I usually run this command to check the man-page (before submitting):
-> >>>
-> >>>   ./scripts/bpf_helpers_doc.py | rst2man | man -l -
-> >>
-> >> [+ Andrii] maybe this could be included to run as part of CI to catch such
-> >> things in advance?
-> >
-> > We do something like that as part of bpftool build, so there is no
-> > reason we can't add this to selftests/bpf/Makefile as well.
->
-> Hi, pretty sure this is the case already? [0]
->
-> This helps catching RST formatting issues, for example if a description
-> is using invalid markup, and reported by rst2man. My understanding is
-> that in the current case, the missing star simply ends the block for the
-> helpers documentation from the parser point of view, it's not considered
-> an error.
->
-> I see two possible workarounds:
->
-> 1) Check that the number of helpers found ("len(self.helpers)") is equal
-> to the number of helpers in the file, but that requires knowing how many
-> helpers we have in the first place (e.g. parsing "__BPF_FUNC_MAPPER(FN)").
+From: Cong Wang <cong.wang@bytedance.com>
 
-This is not so difficult as long as we stick to one symbol per line:
+UDP already has udp_sendmsg() which takes lock_sock() inside.
+We have to build ->sendmsg_locked() on top of it, by adding
+a new parameter for whether the sock has been locked.
 
-diff --git a/scripts/bpf_doc.py b/scripts/bpf_doc.py
-index e2ffac2b7695..74cdcc2bbf18 100755
---- a/scripts/bpf_doc.py
-+++ b/scripts/bpf_doc.py
-@@ -183,25 +183,51 @@ class HeaderParser(object):
-         self.reader.readline()
-         self.line = self.reader.readline()
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Jakub Sitnicki <jakub@cloudflare.com>
+Cc: Lorenz Bauer <lmb@cloudflare.com>
+Signed-off-by: Cong Wang <cong.wang@bytedance.com>
+---
+ include/net/udp.h  |  1 +
+ net/ipv4/af_inet.c |  1 +
+ net/ipv4/udp.c     | 30 +++++++++++++++++++++++-------
+ 3 files changed, 25 insertions(+), 7 deletions(-)
 
-+    def get_elem_count(self, target):
-+        self.seek_to(target, 'Could not find symbol "%s"' % target)
-+        end_re = re.compile('^$')
-+        count = 0
-+        while True:
-+            capture = end_re.match(self.line)
-+            if capture:
-+                break
-+            self.line = self.reader.readline()
-+            count += 1
+diff --git a/include/net/udp.h b/include/net/udp.h
+index df7cc1edc200..5264ba1439f9 100644
+--- a/include/net/udp.h
++++ b/include/net/udp.h
+@@ -292,6 +292,7 @@ int udp_get_port(struct sock *sk, unsigned short snum,
+ int udp_err(struct sk_buff *, u32);
+ int udp_abort(struct sock *sk, int err);
+ int udp_sendmsg(struct sock *sk, struct msghdr *msg, size_t len);
++int udp_sendmsg_locked(struct sock *sk, struct msghdr *msg, size_t len);
+ int udp_push_pending_frames(struct sock *sk);
+ void udp_flush_pending_frames(struct sock *sk);
+ int udp_cmsg_send(struct sock *sk, struct msghdr *msg, u16 *gso_size);
+diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
+index a02ce89b56b5..d8c73a848c53 100644
+--- a/net/ipv4/af_inet.c
++++ b/net/ipv4/af_inet.c
+@@ -1071,6 +1071,7 @@ const struct proto_ops inet_dgram_ops = {
+ 	.setsockopt	   = sock_common_setsockopt,
+ 	.getsockopt	   = sock_common_getsockopt,
+ 	.sendmsg	   = inet_sendmsg,
++	.sendmsg_locked    = udp_sendmsg_locked,
+ 	.recvmsg	   = inet_recvmsg,
+ 	.mmap		   = sock_no_mmap,
+ 	.sendpage	   = inet_sendpage,
+diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
+index dbd25b59ce0e..93db853601d7 100644
+--- a/net/ipv4/udp.c
++++ b/net/ipv4/udp.c
+@@ -1024,7 +1024,7 @@ int udp_cmsg_send(struct sock *sk, struct msghdr *msg, u16 *gso_size)
+ }
+ EXPORT_SYMBOL_GPL(udp_cmsg_send);
+ 
+-int udp_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
++static int __udp_sendmsg(struct sock *sk, struct msghdr *msg, size_t len, bool locked)
+ {
+ 	struct inet_sock *inet = inet_sk(sk);
+ 	struct udp_sock *up = udp_sk(sk);
+@@ -1063,15 +1063,18 @@ int udp_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
+ 		 * There are pending frames.
+ 		 * The socket lock must be held while it's corked.
+ 		 */
+-		lock_sock(sk);
++		if (!locked)
++			lock_sock(sk);
+ 		if (likely(up->pending)) {
+ 			if (unlikely(up->pending != AF_INET)) {
+-				release_sock(sk);
++				if (!locked)
++					release_sock(sk);
+ 				return -EINVAL;
+ 			}
+ 			goto do_append_data;
+ 		}
+-		release_sock(sk);
++		if (!locked)
++			release_sock(sk);
+ 	}
+ 	ulen += sizeof(struct udphdr);
+ 
+@@ -1241,11 +1244,13 @@ int udp_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
+ 		goto out;
+ 	}
+ 
+-	lock_sock(sk);
++	if (!locked)
++		lock_sock(sk);
+ 	if (unlikely(up->pending)) {
+ 		/* The socket is already corked while preparing it. */
+ 		/* ... which is an evident application bug. --ANK */
+-		release_sock(sk);
++		if (!locked)
++			release_sock(sk);
+ 
+ 		net_dbg_ratelimited("socket already corked\n");
+ 		err = -EINVAL;
+@@ -1272,7 +1277,8 @@ int udp_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
+ 		err = udp_push_pending_frames(sk);
+ 	else if (unlikely(skb_queue_empty(&sk->sk_write_queue)))
+ 		up->pending = 0;
+-	release_sock(sk);
++	if (!locked)
++		release_sock(sk);
+ 
+ out:
+ 	ip_rt_put(rt);
+@@ -1302,8 +1308,18 @@ int udp_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
+ 	err = 0;
+ 	goto out;
+ }
 +
-+        # The last line (either '};' or '/* */' doesn't count.
-+        return count
++int udp_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
++{
++	return __udp_sendmsg(sk, msg, len, false);
++}
+ EXPORT_SYMBOL(udp_sendmsg);
+ 
++int udp_sendmsg_locked(struct sock *sk, struct msghdr *msg, size_t len)
++{
++	return __udp_sendmsg(sk, msg, len, true);
++}
 +
+ int udp_sendpage(struct sock *sk, struct page *page, int offset,
+ 		 size_t size, int flags)
+ {
+-- 
+2.25.1
 
-I can either roll this into my docs update v2, or hold onto it for
-another dedicated patch fixup. Either way I'm trialing this out
-locally to regression-test my own docs update PR and make sure I'm not
-breaking one of the various output formats.
