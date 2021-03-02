@@ -8,54 +8,54 @@ X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0BFDC4360C
-	for <bpf@archiver.kernel.org>; Tue,  2 Mar 2021 10:38:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24880C4361A
+	for <bpf@archiver.kernel.org>; Tue,  2 Mar 2021 10:38:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 906CF64F0A
+	by mail.kernel.org (Postfix) with ESMTP id E40B364F0A
 	for <bpf@archiver.kernel.org>; Tue,  2 Mar 2021 10:38:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383030AbhCBKdV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Mar 2021 05:33:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54810 "EHLO
+        id S1578028AbhCBKen (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Mar 2021 05:34:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443989AbhCBCim (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 1 Mar 2021 21:38:42 -0500
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AD8FC061794;
-        Mon,  1 Mar 2021 18:38:00 -0800 (PST)
-Received: by mail-ot1-x332.google.com with SMTP id v12so17502035ott.10;
-        Mon, 01 Mar 2021 18:38:00 -0800 (PST)
+        with ESMTP id S1444135AbhCBCjp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 1 Mar 2021 21:39:45 -0500
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D555C0617AA;
+        Mon,  1 Mar 2021 18:38:05 -0800 (PST)
+Received: by mail-ot1-x329.google.com with SMTP id v12so17502191ott.10;
+        Mon, 01 Mar 2021 18:38:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=GiB0NEAUfxf9GywTLDDCuaFjXeli5Cn9ox8fpeP4HHI=;
-        b=WblbCjmTRubjTckCQ7GDNDx90zL0hklQRWqJhEtl1TlQe4ESx831lDFHR701MC1wBy
-         Ii7Uzq2Rq+6MQbYC65UJsVzRp9nr9ogf9TtkShKZrK1KxjpSXP6dPQ9nJMrIDKWJQxR8
-         NQo2s5AgcEVBP0mqD6ESBG6S4bjqdCQLsn0HY81LVcv3YXnhwZr6uHbmw2xUjFbRSLB6
-         PgsnwMJMG/BqXojWEKH+FKlMf4eLU266gFgTf3/y1W+KRccaXaUPBkAAAsREPMbWEtdI
-         7u5aAGVf6UXK7RWUUXiBPktbqT9Ssau/t/BtJNYFq2e2HbM5YcmQDsSwRfCKlTRe11ZU
-         3lbA==
+        bh=tCjVfOBpsxyYlXVTXml2C2itPEUYXHFIwvXt6TaQXvU=;
+        b=vQlmYwLFDUKxl8+LJSykwCdcFPOBtdcAz1uBaqpMn0bzEfGN6NOLoCIyUDMRHMvAfM
+         1nGUrAg1bv+OO2ALNVCObNE5ak3cDdlCKRC5a9nPXA436404CahNQUcnzSx3i91nBPHR
+         Hp6MEdtTGJezKLbcqzmuioe4CvQOHEoUXlVihRxWs0Y5Ddz1jvM365W6FlIKLfhiAlCK
+         6GTSq4OCKR0Sb+Po5ED2ifeUM21CgGShXqVJKhOuqcEjIuog3UfLsE08HLHC21J9fWa6
+         pUNLCgdbnBrvR/oZMvqIOr4hOirREC4JqcVvphOgK0voW8ukCT4TGrhBp0uZ8JartGmi
+         2Z0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=GiB0NEAUfxf9GywTLDDCuaFjXeli5Cn9ox8fpeP4HHI=;
-        b=kM3zw2lLb/Jqmt6e4cPw6ytcwJYSUVGDDgoxg3oCPbAHmZXbUINXhp+SIPG2X0WJrE
-         2oPmgj0VyewE+6IoT0l+GZuEADoATk7Hj0lpy6qF9hx5hVz/Ujs9CZEX0fQ1KPOZpUGs
-         ebKsXN+JECb8zZsn7TFZDqWg+iATC77A+EgUvTSoOAXISJUi18jUYo/PJyEkX12OFmaG
-         +lJphcfMl1JBKYam9by/dTwewj2D/idDZPx/xLRTvCgCJhMaJzZxj2ZewvCZUNeTMtjr
-         Nm80a5E0b7y3zPOj/XKy6VaTnEZLB4MOlx4/hNhGbYdhT87zmbrBUeOASBpclMGHbjee
-         5fpg==
-X-Gm-Message-State: AOAM533GyGvQsQAt5o5Qc2qaDrFi1ygNl2QT53UjvrGDCFcXlIsCHkzV
-        BWktRPaZHoOmmL7ermvhNVJUzCe26Twrrg==
-X-Google-Smtp-Source: ABdhPJxtpkUitb0hkxcYiK7vaF8MpDkNE11YfGGPXUZwMGLLjg6JsbMhop2W7PTssiu8mNRXS5BnAQ==
-X-Received: by 2002:a9d:340b:: with SMTP id v11mr14334996otb.284.1614652679217;
-        Mon, 01 Mar 2021 18:37:59 -0800 (PST)
+        bh=tCjVfOBpsxyYlXVTXml2C2itPEUYXHFIwvXt6TaQXvU=;
+        b=STGR4rLbkD0yA9QNB/lhYET5QsYTd8jCu9NKmYYxfRAbGaUztNfcRzxtx0wjETAbUZ
+         xfjkAjtLCDcVspzWc/tiZgBowG7WLHDMaMPY/ftYpIv2af+4umKimCxaWVAuWaF1f5Q7
+         eFZWG5ayPm4MGUMUOFNBRaqxL1dlQrkrL0s+qN/YjERqWgFPCstHyhzatSNMR2zII6/3
+         au9UdwIqZaz5nBuQGPi7/pkZC4X6TY1ne2KZDzkZ4O6nA6WuwF4NbDDCpggNRylfch0k
+         3ymcAIFWicaM3Kkr+O4qM7/yza2iwbeWtHYh9ffAQR6fIm7YipsaNhn5SdBB0ERmVQrw
+         pTRQ==
+X-Gm-Message-State: AOAM530cwbLVAzZbyrt9O1GaqLvijAdWxie/ZuHTWhyARjHzz44NCRp0
+        GhVGofskoe5K7ArA18JYiQtOV4kwzdO0sw==
+X-Google-Smtp-Source: ABdhPJyvxw9GreDsJcpj3JFfgeWqyCP/h0GXPqD+SvFLoTXh0nN65wp3IlR9PrFiNuxaNxliaTjfug==
+X-Received: by 2002:a9d:2e4:: with SMTP id 91mr16357634otl.60.1614652684830;
+        Mon, 01 Mar 2021 18:38:04 -0800 (PST)
 Received: from unknown.attlocal.net ([2600:1700:65a0:ab60:1bb:8d29:39ef:5fe5])
-        by smtp.gmail.com with ESMTPSA id a30sm100058oiy.42.2021.03.01.18.37.58
+        by smtp.gmail.com with ESMTPSA id a30sm100058oiy.42.2021.03.01.18.38.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Mar 2021 18:37:58 -0800 (PST)
+        Mon, 01 Mar 2021 18:38:04 -0800 (PST)
 From:   Cong Wang <xiyou.wangcong@gmail.com>
 To:     netdev@vger.kernel.org
 Cc:     bpf@vger.kernel.org, duanxiongchun@bytedance.com,
@@ -65,9 +65,9 @@ Cc:     bpf@vger.kernel.org, duanxiongchun@bytedance.com,
         Daniel Borkmann <daniel@iogearbox.net>,
         Jakub Sitnicki <jakub@cloudflare.com>,
         Lorenz Bauer <lmb@cloudflare.com>
-Subject: [Patch bpf-next v2 4/9] udp: implement ->read_sock() for sockmap
-Date:   Mon,  1 Mar 2021 18:37:38 -0800
-Message-Id: <20210302023743.24123-5-xiyou.wangcong@gmail.com>
+Subject: [Patch bpf-next v2 8/9] sock_map: update sock type checks for UDP
+Date:   Mon,  1 Mar 2021 18:37:42 -0800
+Message-Id: <20210302023743.24123-9-xiyou.wangcong@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210302023743.24123-1-xiyou.wangcong@gmail.com>
 References: <20210302023743.24123-1-xiyou.wangcong@gmail.com>
@@ -79,87 +79,34 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Cong Wang <cong.wang@bytedance.com>
 
+Now UDP supports sockmap and redirection, we can safely update
+the sock type checks for it accordingly.
+
 Cc: John Fastabend <john.fastabend@gmail.com>
 Cc: Daniel Borkmann <daniel@iogearbox.net>
 Cc: Jakub Sitnicki <jakub@cloudflare.com>
 Cc: Lorenz Bauer <lmb@cloudflare.com>
 Signed-off-by: Cong Wang <cong.wang@bytedance.com>
 ---
- include/net/udp.h  |  2 ++
- net/ipv4/af_inet.c |  1 +
- net/ipv4/udp.c     | 34 ++++++++++++++++++++++++++++++++++
- 3 files changed, 37 insertions(+)
+ net/core/sock_map.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/include/net/udp.h b/include/net/udp.h
-index 5264ba1439f9..44a94cfc63b5 100644
---- a/include/net/udp.h
-+++ b/include/net/udp.h
-@@ -330,6 +330,8 @@ struct sock *__udp6_lib_lookup(struct net *net,
- 			       struct sk_buff *skb);
- struct sock *udp6_lib_lookup_skb(const struct sk_buff *skb,
- 				 __be16 sport, __be16 dport);
-+int udp_read_sock(struct sock *sk, read_descriptor_t *desc,
-+		  sk_read_actor_t recv_actor);
+diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+index 13d2af5bb81c..f7eee4b7b994 100644
+--- a/net/core/sock_map.c
++++ b/net/core/sock_map.c
+@@ -549,7 +549,10 @@ static bool sk_is_udp(const struct sock *sk)
  
- /* UDP uses skb->dev_scratch to cache as much information as possible and avoid
-  * possibly multiple cache miss on dequeue()
-diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
-index d8c73a848c53..df8e8e238756 100644
---- a/net/ipv4/af_inet.c
-+++ b/net/ipv4/af_inet.c
-@@ -1072,6 +1072,7 @@ const struct proto_ops inet_dgram_ops = {
- 	.getsockopt	   = sock_common_getsockopt,
- 	.sendmsg	   = inet_sendmsg,
- 	.sendmsg_locked    = udp_sendmsg_locked,
-+	.read_sock	   = udp_read_sock,
- 	.recvmsg	   = inet_recvmsg,
- 	.mmap		   = sock_no_mmap,
- 	.sendpage	   = inet_sendpage,
-diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
-index 93db853601d7..54f24b1d4f65 100644
---- a/net/ipv4/udp.c
-+++ b/net/ipv4/udp.c
-@@ -1798,6 +1798,40 @@ struct sk_buff *__skb_recv_udp(struct sock *sk, unsigned int flags,
+ static bool sock_map_redirect_allowed(const struct sock *sk)
+ {
+-	return sk_is_tcp(sk) && sk->sk_state != TCP_LISTEN;
++	if (sk_is_tcp(sk))
++		return sk->sk_state != TCP_LISTEN;
++	else
++		return sk->sk_state == TCP_ESTABLISHED;
  }
- EXPORT_SYMBOL(__skb_recv_udp);
  
-+int udp_read_sock(struct sock *sk, read_descriptor_t *desc,
-+		  sk_read_actor_t recv_actor)
-+{
-+	int copied = 0;
-+
-+	while (1) {
-+		int offset = 0, err;
-+		struct sk_buff *skb;
-+
-+		skb = __skb_recv_udp(sk, 0, 1, &offset, &err);
-+		if (!skb)
-+			break;
-+		if (offset < skb->len) {
-+			int used;
-+			size_t len;
-+
-+			len = skb->len - offset;
-+			used = recv_actor(desc, skb, offset, len);
-+			if (used <= 0) {
-+				if (!copied)
-+					copied = used;
-+				break;
-+			} else if (used <= len) {
-+				copied += used;
-+				offset += used;
-+			}
-+		}
-+		if (!desc->count)
-+			break;
-+	}
-+
-+	return copied;
-+}
-+
- /*
-  * 	This should be easy, if there is something there we
-  * 	return it, otherwise we block.
+ static bool sock_map_sk_is_suitable(const struct sock *sk)
 -- 
 2.25.1
 
