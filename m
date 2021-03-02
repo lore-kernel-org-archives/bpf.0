@@ -2,244 +2,160 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F222C43331
-	for <bpf@archiver.kernel.org>; Tue,  2 Mar 2021 10:39:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B78B9C43381
+	for <bpf@archiver.kernel.org>; Tue,  2 Mar 2021 10:39:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1945764F04
-	for <bpf@archiver.kernel.org>; Tue,  2 Mar 2021 10:39:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7749964F07
+	for <bpf@archiver.kernel.org>; Tue,  2 Mar 2021 10:39:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1578063AbhCBKfV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Mar 2021 05:35:21 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:57134 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1381079AbhCBEUi (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 1 Mar 2021 23:20:38 -0500
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 1224EWKa011177;
-        Mon, 1 Mar 2021 20:19:44 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : from : to : cc
- : references : message-id : date : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=facebook;
- bh=21N4NXJ8pskilGAujn/B3XovaFKsghW6QK/J3/7crEQ=;
- b=c+kSO0mbPPUrW+oBF4/7vsCJ4b0+Du++a9BQkbtPIuOpLkiAjcbLSqnqTABZvmLjPvE5
- Oe6FiN0epRgfTkmWzKAYMR1YHIoyeTRUUzK9XvFgtXmf5jiHK0ERrHnHN8HMIqrjYlRv
- SgHj1tYTxAFlkac0gXA0bRZqtA2C1vQ6noc= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 36ymfx4328-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 01 Mar 2021 20:19:44 -0800
-Received: from NAM02-BL2-obe.outbound.protection.outlook.com (100.104.31.183)
- by o365-in.thefacebook.com (100.104.36.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Mon, 1 Mar 2021 20:19:43 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MMyMl6t5xDrL0g5HfgfIoTfslUK2RhGwXc91ZokkNQMILnmLNj9Rjul3qyXDKnnjv5bOekdn1ZpmU3zyDYQKgTHkWkfuBiQ4v5iOWQbu8dx34NQOq9yVvqqY+raWQHmRi0RRaTn1w5HaBf5e/C+9aUf6pwvcVsZXDXmlUJVd8sFUupQHxxF01uWYsgJ3TG4GvexAp7EDVOXOVFu8/y3k8T3F1rWT9/kxZHL4Emr7qQwJpox53M7xn0nYj/8RT0oVDPFMvKxN5OJu3q0uvByKNFdwXr05FIEQx9aa98WYqUac9Qlf+sLVUaDOgrDsMyCmh2NwOoHHbwFaerQNdGgo7Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=21N4NXJ8pskilGAujn/B3XovaFKsghW6QK/J3/7crEQ=;
- b=ZAtk85PHRVb4bHW+O8ddGZN6q7nPDCXJKPxKKCmtWc6fcjUvbXvA7p1NrezTWQgpf7ymh+A8idxAZ9VlISR8Ojom5qqwzyrVGhtEekIZh/szb/SLNrFoAK0EVaLUzJGGj0uzehjSvkdPg9znK7PBRabvNmxJYJQe2UQEtDrcEbV3QIjublNX3U90+hSo2WXBno/95vYUr1HXR7Nk/JOOuI20lIJRgPniS72TpglG7QoO08nwJmPjoJJjpL8lUVZzvJZgWY+qSM8qmqefa99Y2GWskl6WpjfPYMs5YWNaM1+StHD5O4fNtcwgKycpjqbQNczf7RR4H71HeDzprJYX2g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Authentication-Results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=fb.com;
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by SA0PR15MB4062.namprd15.prod.outlook.com (2603:10b6:806:82::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3890.25; Tue, 2 Mar
- 2021 04:19:42 +0000
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::f433:fd99:f905:8912]) by SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::f433:fd99:f905:8912%3]) with mapi id 15.20.3890.028; Tue, 2 Mar 2021
- 04:19:42 +0000
-Subject: Re: Enum relocations against zero values
-From:   Yonghong Song <yhs@fb.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-CC:     Lorenz Bauer <lmb@cloudflare.com>, bpf <bpf@vger.kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>
-References: <CACAyw9-XZ4XqNP1MZxC1i7+zntVAivopkgRgc4yXaNtD8QcADw@mail.gmail.com>
- <05c0e4ff-3d93-00c8-b81b-9758c90deca8@fb.com>
- <CAEf4BzZVXtVnV9aSQLaQ=7qz-3E44gvMf-abHeHKLS3S4xjChg@mail.gmail.com>
- <3a6d2ee3-4ce0-0f8b-2ab4-dad77e6da42e@fb.com>
-Message-ID: <ffbd1904-ac22-7922-201d-a971c685d761@fb.com>
-Date:   Mon, 1 Mar 2021 20:19:40 -0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.8.0
-In-Reply-To: <3a6d2ee3-4ce0-0f8b-2ab4-dad77e6da42e@fb.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-X-Originating-IP: [2620:10d:c090:400::5:4652]
-X-ClientProxiedBy: BYAPR02CA0044.namprd02.prod.outlook.com
- (2603:10b6:a03:54::21) To SN6PR1501MB2064.namprd15.prod.outlook.com
- (2603:10b6:805:d::27)
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [IPv6:2620:10d:c085:21e1::1a32] (2620:10d:c090:400::5:4652) by BYAPR02CA0044.namprd02.prod.outlook.com (2603:10b6:a03:54::21) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3890.19 via Frontend Transport; Tue, 2 Mar 2021 04:19:42 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2682045f-1774-428b-5ee8-08d8dd32676c
-X-MS-TrafficTypeDiagnostic: SA0PR15MB4062:
-X-MS-Exchange-MinimumUrlDomainAge: llvm.org#6198
-X-Microsoft-Antispam-PRVS: <SA0PR15MB4062E815459915C5B7EE68C8D3999@SA0PR15MB4062.namprd15.prod.outlook.com>
-X-FB-Source: Internal
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: SfLAoFRtseO+zgml3uUIphPUnoRAsonpROnNiDelA9Vy0YOggCPxTXhSbtjr95lVD3JEY0qIdYHip7I/DPzRxHxWTZqUBV6aNVxb/pYAnDMm6b07vrzY0pC6+w0o7z7bjEdfxJ2qT1fjGccnt1ugsbsVHeUquDjofk1qkrAMqi6ZPSRd9SFKkIPZC2lz//StSHEksDs0RGnHJWx7lMCdofyVY8VgyAeQOUuff2cPA9Ox3G2ED4aY0SKbj0qXcn9oovRWK/1k/RuCBU7BvvVvwR2Egbdo2NDZY4wVb4/Qg0gRRN4rpRF5fdKpJaxYqo4ByqH1sf5E/9BULtFaMmq5/CqXEizfxuAcfmf/xNiUQnO+3fAdR23eFQYTfaVr4aadpROkKj3lpC8H3IfMAVLvBss/c6YnG21Aodn7+6oKkC2jSzUSEFvnpopRtgoTPMDixxNEg+3Vcf2J68Au42+uotxXBVDhzS4YPGYMD3dmbopJuoxv8zqRcuqHvwjjEvrURFV13knlDRKp1GTDp0rYUcBlFxI6iDehi/APP2rBjV0s6eoj49aVu+SSD73xB0ckKqJmx68awDNAqrecx5x/ecssOokDj7cJjGHZzr6SYv4q51siVfSs9do8/RJTPJbUtYNkoL2QzvFx5wvvIpHgn4KNgGjxAPwObip3t5bQwzw2H0/Vw7CXV9B9Bvq3CwEjbpyx78GKA2XOjqH8PPgndQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(396003)(366004)(346002)(376002)(39860400002)(136003)(52116002)(16526019)(36756003)(4326008)(6486002)(53546011)(186003)(83380400001)(31686004)(5660300002)(8676002)(8936002)(478600001)(2906002)(86362001)(31696002)(2616005)(54906003)(6916009)(316002)(66946007)(66476007)(66556008)(21314003)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?RFUwNnJzQ1dIZ3hrWVpBYXhGVzVrSUpvYzB5eTBKOUJJaHNLTVBiOHFnNkNJ?=
- =?utf-8?B?NWladVoxSkd3VW10VWFoZVgvdUYvNk05UE5GY053c0tyMi9YNWtQUkxSQm1p?=
- =?utf-8?B?QUs2dHQyRVUyS2VibUk4ZHhNQ0lHelBBcEhwTGFONzhFb2U5VnhTMVptOXRy?=
- =?utf-8?B?VzJXd0NRMHE5R2hPamtoNWx1S0IzaWtGKzhWdWJBcXRkM3duRWIybWdzS3B4?=
- =?utf-8?B?SGsrMVl3d3YvdDNhcEphL3pqdEwwU3BQczBkZUdXWWc3Tk1NVmpyUUtBR0d2?=
- =?utf-8?B?Y0EzZC8valdaRmZlN3JDT3YyUGk4M0dWQ2ljWmVYRjFXdW9PeUI5VVBSSThL?=
- =?utf-8?B?ZjRUckJjWUhQZEJtbDZXVFpIWFAvN1J3KzQ5Vk9YeWNVc1pGY0FhcG13bDc4?=
- =?utf-8?B?a1puWFZMVTd5emIwa3VUTk1GaVJsTG55K2dvRTJlcHBaQVR2ZitxWkJ4blFX?=
- =?utf-8?B?cndpR1QreEpKZ2xtVHZQa3cxOWxuT1JOTzN6Y0ZxZzFnZ1cwdXRiS1ZCbVJz?=
- =?utf-8?B?dkhEQitHM3hZb1ZDeW0yMStLTHRpaHNXU294SG5kaWxWM3hxVk5Cc1M3ZTZ6?=
- =?utf-8?B?OERoMk5kU3IxUC85aCt4NU5pcERVTm1MSG45MWpYOElyS3EzdS9YY1gzZE5n?=
- =?utf-8?B?Y2pSVjU1R0I2aVM1UW0wTmFHamt1M09mSXdHd3JneVJRejRGRkRnaWVCTUhy?=
- =?utf-8?B?RUJReTJHUlIxWmpxVGNPTDJOMXh3WDB5NTZ2MU95U2ZGT2pkampISCtNSEhV?=
- =?utf-8?B?aHVveDczL2kyR2FBMlN4ekJ2ODMyMUhtZUJnQ05KUnZma1ViblVKelV1Mnho?=
- =?utf-8?B?Q3pYS0xvVGxkMFV6dkFoU2c0UnV1eVZtYVNSNWYvQ2Q4WVhpd0U0YWluV1pD?=
- =?utf-8?B?MHRHTnRjQ3lMRGEvVjN6MEJ2TVZCcjk5YkowVnVGSnUwUmFNbFBhM0tZNmVW?=
- =?utf-8?B?dW13UDlrTnFFZDZEZm1GKzMvMlp3b2xtZ0Iwb1FiQ29KSDBERFFzUU9WdFpK?=
- =?utf-8?B?dnNvNGZ1SktaYWkreVFTaVV4dVd2MVZZQU51c0VQejdqWWY4SnJUYU4xQ3NM?=
- =?utf-8?B?NGdIYkdINU9scU1GNUdMeEZ3Tkl6dk1pZmRFN202QUxqdEJYUzRSam5lNitr?=
- =?utf-8?B?UnlkbzNtOEhjS0RlT3NLNVZVdXg4dVJYSjRrTnBwcmEwb3BZTGRXZmU0bkVL?=
- =?utf-8?B?U3V3akd4QlVZRHJ0d1M2YVlqdXlKbjRQd3Nwc2I3WDZKLzJ5SzZndE1PbTZJ?=
- =?utf-8?B?Rm1SNDBZbkhUVzNabDFULzNxZ1FpdjdJcXhKczdraHBXT0hIQStLLzlXa3NH?=
- =?utf-8?B?NU1lMTRMdjVSdHkrRHRmYUNxbnZDN2I4N1pHU3piYkpIL0dvcWY0emgwVkt0?=
- =?utf-8?B?VFladElqMFZGdXYzVjI2RFcyZnd5M2N5Rlp2Rlg3NXcrcDJ6T3ZLUVQwZXNM?=
- =?utf-8?B?WitTQXMvNjZyRkQ0ejAycEpYNG5mUlJraFpYRENCSkFkeHdia21LdVVzVnlP?=
- =?utf-8?B?aEwyS1RBcFVjUVNrQ0ZhMjBoMk1XYk5XcEN2ZExaY0ZOTGdrWkMxVW5PL2k1?=
- =?utf-8?B?NXBNeW1pd2tIYUU3SVZGU0NZR1dSZXlIdU9IaHVHeVhwVjJuTng5UVJ4dElE?=
- =?utf-8?B?MnNtaEViMnB0Y1N0YWIxbWdHNjMrTmVlVkVHNVl1eWxRMllLejRZSGxQMVVL?=
- =?utf-8?B?dGRYcW05RnpZYzM0UXRJQWNCUk1MeTZWUDQ0VzJlVkZVZGd3VDl1VmRRLzI5?=
- =?utf-8?B?dWdiOWc3Snp5MGJrY0FMQlc1dHRaNU12YWFZOGJ3VDFSY1VieGQ0S1lNVkhy?=
- =?utf-8?Q?qbLC6V81Fnisjy5ppauZfwbutqSB+DaKKveUo=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2682045f-1774-428b-5ee8-08d8dd32676c
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2021 04:19:42.8272
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: d/zg55agHogdRiuVPBPkghLansac7g+Vg9aI5VkJ7gx0Rv5X5ja41Ydk2bzbLyZ3
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR15MB4062
-X-OriginatorOrg: fb.com
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        id S1578020AbhCBKfN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Mar 2021 05:35:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42424 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1575084AbhCBDwz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 1 Mar 2021 22:52:55 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CDE0C061788
+        for <bpf@vger.kernel.org>; Mon,  1 Mar 2021 19:52:14 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id t29so12948828pfg.11
+        for <bpf@vger.kernel.org>; Mon, 01 Mar 2021 19:52:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=57oy+i2wyCGM30/m8sTFwn3B8L9Scmi9y+74jBQL4vs=;
+        b=eDNo6T5R9U/hOaETJQW7tHVGPRRrxSUybhcdsh8luN7bLlUhFb4Hoycj+OMDnhBnql
+         65FHpbOfmlHmgyxtM3JVmc2mQcitwZGb8tPB8LJAR0V04VWVQ0yl2fA9n8X/H2RiZ5o8
+         JGhQpb6kj7Bn2HCSfEfmHnkSuyEJgV8VA36qB/Ai+2icthxmSKekehKAFBdJyduJorSy
+         JXHanj6IjXxeePGyeLl7WILWzYWblG6hddeH7BOK/Eb1M1g+BU3MDjIDdKBxOMGWBDr5
+         bma2ZRCT0zWPmAzH8UPm3dquhCdPzxobKiz8h8rReCBscZrY7bHEITUNeFORv60B6zj0
+         Zfqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=57oy+i2wyCGM30/m8sTFwn3B8L9Scmi9y+74jBQL4vs=;
+        b=OB8Bcqe18/5MChkKoF/gjjo9ucVsORZXGNPG2h6KjO3wPKbJqh6xbYFuT7F4scn1mz
+         HqFvlKWAjjEocAuL6qPxtpWWBSWXiEvT9jV06tECpeFY+qffxrHvJtTEi12ugXJjeYEk
+         B7DjB0Nhncg921eaINQrFtSGrNJRmwTPy7fu+ZbhsqIdBC78g+z7X/U3E596jF491XtD
+         F37j/wVRw8EfwSHlD/Hn4qkKkSUKfttm/LPIl0vJZElaE0IMTey0cQd+LpEWgdK3o+rx
+         0F3fQsf9QB3h+RMaxhty8KWp5ZRao7hbuTu69eHkVqcKk95jRv34lxPsy7omnlyNmNBw
+         3Rbg==
+X-Gm-Message-State: AOAM532OQLeQKFoXxyL2tIbYiUvx0kK+BbXgavf7h25S02GBdNirGFNR
+        gpYkYCUZRh10jClRVNHZsXtvWB4RVE2LfV06/EqAeQ==
+X-Google-Smtp-Source: ABdhPJzcaUfOFHNGcSwihHOwcKhocr1mJt3SRQ35DB3BbiQ0eJJN8kETf2XLREn+v+AQ4squnM1FDAmvmjrcrb0kGao=
+X-Received: by 2002:aa7:9342:0:b029:1ee:8893:8554 with SMTP id
+ 2-20020aa793420000b02901ee88938554mr9846451pfn.2.1614657133983; Mon, 01 Mar
+ 2021 19:52:13 -0800 (PST)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-03-02_01:2021-03-01,2021-03-02 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0 spamscore=0
- suspectscore=0 mlxlogscore=999 priorityscore=1501 impostorscore=0
- mlxscore=0 adultscore=0 clxscore=1015 lowpriorityscore=0 malwarescore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2103020031
-X-FB-Internal: deliver
+References: <20210301062227.59292-1-songmuchun@bytedance.com>
+ <20210301062227.59292-3-songmuchun@bytedance.com> <CALvZod7sysj0+wrzLTXnwn7s_Gf-V2eFPJ6cLcoRmR0LdAFk0Q@mail.gmail.com>
+ <CAMZfGtVhgPzGXrLp12Z=r_FYuyqOoza9tOkPZ0N1=cHR+ataQA@mail.gmail.com> <CALvZod6TmaG7QnxeM65sCzVJBTGfb34q50=0no391Ciww4ZzCQ@mail.gmail.com>
+In-Reply-To: <CALvZod6TmaG7QnxeM65sCzVJBTGfb34q50=0no391Ciww4ZzCQ@mail.gmail.com>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Tue, 2 Mar 2021 11:51:37 +0800
+Message-ID: <CAMZfGtX=WqMuGw2DOZroF1oKTdfV0fRUc4cp6mMBH218vJDnkQ@mail.gmail.com>
+Subject: Re: [External] Re: [PATCH 2/5] mm: memcontrol: make page_memcg{_rcu}
+ only applicable for non-kmem page
+To:     Shakeel Butt <shakeelb@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+        Amir Goldstein <amir73il@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>, kpsingh@kernel.org,
+        Ingo Molnar <mingo@redhat.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        dietmar.eggemann@arm.com, Steven Rostedt <rostedt@goodmis.org>,
+        Benjamin Segall <bsegall@google.com>,
+        Mel Gorman <mgorman@suse.de>, bristot@redhat.com,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>,
+        Alex Shi <alex.shi@linux.alibaba.com>,
+        Chris Down <chris@chrisdown.name>,
+        Wei Yang <richard.weiyang@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Peter Oskolkov <posk@google.com>, Jann Horn <jannh@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Waiman Long <longman@redhat.com>,
+        Michel Lespinasse <walken@google.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>, krisman@collabora.com,
+        esyr@redhat.com, Suren Baghdasaryan <surenb@google.com>,
+        Marco Elver <elver@google.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Cgroups <cgroups@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
+        Xiongchun duan <duanxiongchun@bytedance.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+On Tue, Mar 2, 2021 at 11:36 AM Shakeel Butt <shakeelb@google.com> wrote:
+>
+> On Mon, Mar 1, 2021 at 7:03 PM Muchun Song <songmuchun@bytedance.com> wrote:
+> >
+> > On Tue, Mar 2, 2021 at 2:11 AM Shakeel Butt <shakeelb@google.com> wrote:
+> > >
+> > > On Sun, Feb 28, 2021 at 10:25 PM Muchun Song <songmuchun@bytedance.com> wrote:
+> > > >
+> > > > We want to reuse the obj_cgroup APIs to reparent the kmem pages when
+> > > > the memcg offlined. If we do this, we should store an object cgroup
+> > > > pointer to page->memcg_data for the kmem pages.
+> > > >
+> > > > Finally, page->memcg_data can have 3 different meanings.
+> > > >
+> > > >   1) For the slab pages, page->memcg_data points to an object cgroups
+> > > >      vector.
+> > > >
+> > > >   2) For the kmem pages (exclude the slab pages), page->memcg_data
+> > > >      points to an object cgroup.
+> > > >
+> > > >   3) For the user pages (e.g. the LRU pages), page->memcg_data points
+> > > >      to a memory cgroup.
+> > > >
+> > > > Currently we always get the memcg associated with a page via page_memcg
+> > > > or page_memcg_rcu. page_memcg_check is special, it has to be used in
+> > > > cases when it's not known if a page has an associated memory cgroup
+> > > > pointer or an object cgroups vector. Because the page->memcg_data of
+> > > > the kmem page is not pointing to a memory cgroup in the later patch,
+> > > > the page_memcg and page_memcg_rcu cannot be applicable for the kmem
+> > > > pages. In this patch, we introduce page_memcg_kmem to get the memcg
+> > > > associated with the kmem pages. And make page_memcg and page_memcg_rcu
+> > > > no longer apply to the kmem pages.
+> > > >
+> > > > In the end, there are 4 helpers to get the memcg associated with a
+> > > > page. The usage is as follows.
+> > > >
+> > > >   1) Get the memory cgroup associated with a non-kmem page (e.g. the LRU
+> > > >      pages).
+> > > >
+> > > >      - page_memcg()
+> > > >      - page_memcg_rcu()
+> > >
+> > > Can you rename these to page_memcg_lru[_rcu] to make them explicitly
+> > > for LRU pages?
+> >
+> > Yes. Will do. Thanks.
+> >
+>
+> Please follow Johannes' suggestion regarding page_memcg_kmem() and
+> then no need to rename these.
 
-
-On 2/26/21 7:31 PM, Yonghong Song wrote:
-> 
-> 
-> On 2/26/21 12:43 PM, Andrii Nakryiko wrote:
->> On Fri, Feb 26, 2021 at 10:08 AM Yonghong Song <yhs@fb.com> wrote:
->>>
->>>
->>>
->>> On 2/26/21 9:47 AM, Lorenz Bauer wrote:
->>>> Hi Andrii and Yonghong,
->>>>
->>>> I'm playing around with enum CO-RE relocations, and hit the 
->>>> following snag:
->>>>
->>>>       enum e { TWO };
->>>>       bpf_core_enum_value_exists(enum e, TWO);
->>>>
->>>> Compiling this with clang-12
->>>> (12.0.0-++20210225092616+e0e6b1e39e7e-1~exp1~20210225083321.50) gives
->>>> me the following:
->>>>
->>>> internal/btf/testdata/relocs.c:66:2: error:
->>>> __builtin_preserve_enum_value argument 1 invalid
->>>>           enum_value_exists(enum e, TWO);
->>>>           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>>> internal/btf/testdata/relocs.c:53:8: note: expanded from macro
->>>> 'enum_value_exists'
->>>>                   if (!bpf_core_enum_value_exists(t, v)) { \
->>>>                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>>> internal/btf/testdata/bpf_core_read.h:168:32: note: expanded from
->>>> macro 'bpf_core_enum_value_exists'
->>>>           __builtin_preserve_enum_value(*(typeof(enum_type)
->>>> *)enum_value, BPF_ENUMVAL_EXISTS)
->>>>                                         
->>>> ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>>
->>> Andrii can comment on MACRO failures.
->>
->> Yeah, I ran into this a long time ago as well...
->>
->> I don't actually know why this doesn't work for zeroes. I've tried to
->> write that macro in a bit different way, but Clang rejects it:
->>
->> __builtin_preserve_enum_value(({typeof(enum_type) ___xxx =
->> (enum_value); *(typeof(enum_type)*)&___xxx;}), BPF_ENUMVAL_EXISTS)
->>
->> And something as straightforward as
->>
->> __builtin_preserve_enum_value((typeof(enum_type))(enum_value),
->> BPF_ENUMVAL_EXISTS)
->>
->> doesn't work as well.
->>
->> Yonghong, any idea how to write such a macro to work in all cases? Or
->> why those alternatives don't work? I only get " error:
->> __builtin_preserve_enum_value argument 1 invalid" with no more
->> details, so hard to do anything about this.
-> 
-> This is a clang BPF bug. In certain number classification system,
-> clang considers 0 as NULL and non-0 as INTEGER. I only checked
-> INTEGER and hence only non-0 works. All my tests has non-zero
-> enum values :-(
-> 
-> Will fix the issue soon. Thanks for reporting!
-
-Just pushed the fix (https://reviews.llvm.org/D97659) to llvm trunk
-this morning. Also filed a request 
-(https://bugs.llvm.org/show_bug.cgi?id=49391) to backport the fix to 
-12.0.1 release.
-it is too late to be included in 12.0.0 release.
-Thanks!
-
-> 
->>
->>
->>>
->>>>
->>>> Changing the definition of the enum to
->>>>
->>>>       enum e { TWO = 1 }
->>>>
->>>> compiles successfully. I get the same result for any enum value that
->>>> is zero. Is this expected?
->>>
->>> IIRC, libbpf will try to do relocation against vmlinux BTF.
->>> So here, "enum e" probably does not exist in vmlinux BTF, so
->>> the builtin will return 0. You can try some enum type
->>> existing in vmlinux BTF to see what happens.
->>>
->>>>
->>>> Best
->>>> Lorenz
->>>>
+OK.
