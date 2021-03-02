@@ -2,114 +2,111 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-18.2 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DCBAC4360C
-	for <bpf@archiver.kernel.org>; Tue,  2 Mar 2021 10:39:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A965BC28CC5
+	for <bpf@archiver.kernel.org>; Tue,  2 Mar 2021 10:39:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 261F264F07
-	for <bpf@archiver.kernel.org>; Tue,  2 Mar 2021 10:39:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7AE3164F04
+	for <bpf@archiver.kernel.org>; Tue,  2 Mar 2021 10:39:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1578088AbhCBKfd (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Mar 2021 05:35:33 -0500
-Received: from mga11.intel.com ([192.55.52.93]:14012 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1838018AbhCBJRo (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 2 Mar 2021 04:17:44 -0500
-IronPort-SDR: SWskgWMvj+YmA8TGkKwtfmd4krQsmTwrPtCn3hMaDjaf44hawMFFBYNSO/P1QDvl0s02xXL0ou
- bzQbj+UwKGNg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9910"; a="183356978"
-X-IronPort-AV: E=Sophos;i="5.81,216,1610438400"; 
-   d="scan'208";a="183356978"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2021 01:17:01 -0800
-IronPort-SDR: Bum09qkuPQg5WMxKjkqJJe/pqHMRPVGGG1Q17o2HOQU/Hwk239QOxFocuX+fIh4G/4Y+MFzQqV
- 5WmlFArNDznA==
-X-IronPort-AV: E=Sophos;i="5.81,216,1610438400"; 
-   d="scan'208";a="398777931"
-Received: from ilick-mobl1.ger.corp.intel.com (HELO btopel-mobl.ger.intel.com) ([10.249.41.237])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2021 01:16:57 -0800
-Subject: Re: [PATCH bpf-next 2/2] libbpf, xsk: add libbpf_smp_store_release
- libbpf_smp_load_acquire
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
-        ast@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     magnus.karlsson@intel.com, jonathan.lemon@gmail.com,
-        maximmi@nvidia.com, andrii@kernel.org, will@kernel.org
-References: <20210301104318.263262-1-bjorn.topel@gmail.com>
- <20210301104318.263262-3-bjorn.topel@gmail.com> <87k0qqx3be.fsf@toke.dk>
- <e052a22a-4b7b-fe38-06ad-2ad04c83dda7@intel.com>
- <12f8969b-6780-f35f-62cd-ed67b1d8181a@iogearbox.net>
-From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>
-Message-ID: <0121ca03-d806-8e50-aaac-0f97795d0fbe@intel.com>
-Date:   Tue, 2 Mar 2021 10:16:52 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        id S1578118AbhCBKfo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Mar 2021 05:35:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41710 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1380006AbhCBKZW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 2 Mar 2021 05:25:22 -0500
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1FABC06178A
+        for <bpf@vger.kernel.org>; Tue,  2 Mar 2021 02:24:40 -0800 (PST)
+Received: by mail-io1-xd2c.google.com with SMTP id a7so21084150iok.12
+        for <bpf@vger.kernel.org>; Tue, 02 Mar 2021 02:24:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OTOWiCKDVAyEcgQihoMEGgYpip7NJz+xqKkvweThjKQ=;
+        b=uFFduu+2wJZtqtrECdMcTkSZ+FEzCztf/kOrtrfz5wH257uSKVL0zUcW78oZTpvJxl
+         Yc6ew/LQBwwboPdWGoMSUyiFXw9CZ2qVJ1Uc5YFWk7J0M4uTsxnTRGM+pAWNs9w2ZoRZ
+         8LkVa9B3lifxqenRX0WLNEZv5ctWbvC+1D4XvA6fxptndDiT9DvJmtwasZPZgmild1/s
+         gSOn7mYaKWhbR9LoMmaOGn24SiCZoYrrqTF9FiuJ50FJssbZ9VYXU2BatAHGsomo4PE3
+         lnO0Bos3TxCYiIayt7jitP//4rf2hI3mPkG+B0BVDKe4G1jHlm+5cOk5bTC7Uh4l40ap
+         IZHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OTOWiCKDVAyEcgQihoMEGgYpip7NJz+xqKkvweThjKQ=;
+        b=SVd9R/SMohMV0SA4HyxZYhzalkLlvkul2hmrFO0BhMU2A0z80iHizJN+vhfYkt2MQU
+         IYZu3bUz7a76FTTLSW3PWSMyMEXilr2tDBCD9485j9yIRcAaZIKp1cBvGg3i9pH3L7US
+         dhHmxcQJBXz6Nuc9fITKvAC1I72BWTBRGqLz3azXeHyskOasF+AVbV4MlbtssHXKeK/C
+         /2X7ECZGf4V+dDlXqvn2CUyZd9PAsY9onkMC0rORcGBY1z6rLzcrvGpGXEdFAcPHpF8V
+         nI7SgHgeCcymgfvZMzhtODq0XrR7HNGsuKkFv53a2X1kQmL+AND5SPNz4QhSyxnA6l5L
+         6stg==
+X-Gm-Message-State: AOAM532sJC3gQy4Eq8KoiyBFt8KOgy40HNv1EcbjZtPe20/QOlGUUO8r
+        McEH7FxuVB6Ppot8yxbAki84fOggxYMPogVfhoGqwl3E/Cw=
+X-Google-Smtp-Source: ABdhPJyY07Y5amB8Bqy7tSevwtWrEU1j+ddLrJdPUoixiNEEo78YhISXiqgDUPY9m81FzPx77s/TDusvSMRxYRj3OmU=
+X-Received: by 2002:a6b:ea08:: with SMTP id m8mr17001589ioc.194.1614680679983;
+ Tue, 02 Mar 2021 02:24:39 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <12f8969b-6780-f35f-62cd-ed67b1d8181a@iogearbox.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20210301154019.129110-1-iii@linux.ibm.com>
+In-Reply-To: <20210301154019.129110-1-iii@linux.ibm.com>
+From:   Brendan Jackman <jackmanb@google.com>
+Date:   Tue, 2 Mar 2021 11:24:28 +0100
+Message-ID: <CA+i-1C1TgJMsFSMJEHyqhUTXy8HE38ePuVXGEDsPvmKv0kJmFg@mail.gmail.com>
+Subject: Re: [PATCH v3 bpf] bpf: Account for BPF_FETCH in insn_has_def32()
+To:     Ilya Leoshkevich <iii@linux.ibm.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>, bpf <bpf@vger.kernel.org>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 2021-03-02 10:13, Daniel Borkmann wrote:
-> On 3/2/21 9:05 AM, Björn Töpel wrote:
->> On 2021-03-01 17:10, Toke Høiland-Jørgensen wrote:
->>> Björn Töpel <bjorn.topel@gmail.com> writes:
->>>> From: Björn Töpel <bjorn.topel@intel.com>
->>>>
->>>> Now that the AF_XDP rings have load-acquire/store-release semantics,
->>>> move libbpf to that as well.
->>>>
->>>> The library-internal libbpf_smp_{load_acquire,store_release} are only
->>>> valid for 32-bit words on ARM64.
->>>>
->>>> Also, remove the barriers that are no longer in use.
->>>
->>> So what happens if an updated libbpf is paired with an older kernel (or
->>> vice versa)?
->>
->> "This is fine." ;-) This was briefly discussed in [1], outlined by the
->> previous commit!
->>
->> ...even on POWER.
-> 
-> Could you put a summary or quote of that discussion on 'why it is okay 
-> and does not
-> cause /forward or backward/ compat issues with user space' directly into 
-> patch 1's
-> commit message?
-> 
-> I feel just referring to a link is probably less suitable in this case 
-> as it should
-> rather be part of the commit message that contains the justification on 
-> why it is
-> waterproof - at least it feels that specific area may be a bit 
-> under-documented, so
-> having it as direct part certainly doesn't hurt.
+Thanks!
+
+On Mon, 1 Mar 2021 at 16:40, Ilya Leoshkevich <iii@linux.ibm.com> wrote:
 >
-
-I agree; It's enough in the weed as it is already.
-
-I wonder if it's possible to cook a LKMM litmus test for this...?
-
-
-> Would also be great to get Will's ACK on that when you have a v2. :)
+> insn_has_def32() returns false for 32-bit BPF_FETCH insns. This makes
+> adjust_insn_aux_data() incorrectly set zext_dst, as can be seen in [1].
+> This happens because insn_no_def() does not know about the BPF_FETCH
+> variants of BPF_STX.
 >
+> Fix in two steps.
+>
+> First, replace insn_no_def() with insn_def_regno(), which returns the
+> register an insn defines. Normally insn_no_def() calls are followed by
+> insn->dst_reg uses; replace those with the insn_def_regno() return
+> value.
+>
+> Second, adjust the BPF_STX special case in is_reg64() to deal with
+> queries made from opt_subreg_zext_lo32_rnd_hi32(), where the state
+> information is no longer available. Add a comment, since the purpose
+> of this special case is not clear at first glance.
+>
+> [1] https://lore.kernel.org/bpf/20210223150845.1857620-1-jackmanb@google.com/
+>
+> Fixes: 5ffa25502b5a ("bpf: Add instructions for atomic_[cmp]xchg")
+> Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
+> Acked-by: Martin KaFai Lau <kafai@fb.com>
+> ---
+>
+> v1: https://lore.kernel.org/bpf/20210224141837.104654-1-iii@linux.ibm.com/
+> v1 -> v2: Per Martin's comments: rebase against the bpf branch, fix the
+>           Fixes: tag, fix the comment style, replace ?: with the more
+>           readable if-else, handle the internal verifier error using
+>           WARN_ON_ONCE(), verbose() and -EFAULT.
+>
+> v2: https://lore.kernel.org/bpf/20210226213131.118173-1-iii@linux.ibm.com/
+> v2 -> v3: Per Brendan's comment, add "verifier bug." to the error
+>           message. Unfortunately, the load_reg assignment cannot be
+>           moved, because this would also require moving the insn
+>           assignment, and this would ruin the reverse xmas tree.
 
-Yup! :-)
-
-
-Björn
-
-
-> Thanks,
-> Daniel
-> 
->> [1] https://lore.kernel.org/bpf/20200316184423.GA14143@willie-the-truck/
+Acked-by: Brendan Jackman <jackmanb@google.com>
