@@ -2,169 +2,117 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FC41C43332
-	for <bpf@archiver.kernel.org>; Tue,  2 Mar 2021 10:39:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C819C433DB
+	for <bpf@archiver.kernel.org>; Tue,  2 Mar 2021 10:39:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5651664F04
-	for <bpf@archiver.kernel.org>; Tue,  2 Mar 2021 10:39:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 46D3E64F04
+	for <bpf@archiver.kernel.org>; Tue,  2 Mar 2021 10:39:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1578070AbhCBKfY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Mar 2021 05:35:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33008 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381336AbhCBFVD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 2 Mar 2021 00:21:03 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA41DC061793
-        for <bpf@vger.kernel.org>; Mon,  1 Mar 2021 21:08:57 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id p186so19463676ybg.2
-        for <bpf@vger.kernel.org>; Mon, 01 Mar 2021 21:08:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tiqa2uk1rCVC87NmlpDfcyohmBIepsgQBQTP19VRNuE=;
-        b=mA2UuqyBPww7uEpqmeeoZ1akFVWxdfAWlSTgo7pnwSIyZzpLM7HhD45HH+7UhiuJcM
-         QSpTyU5zZAgB+uio69SLiT1kk4HUtpn6Ce4hNwmSbl9QP2AhKc+pOVTT0gaZwGWd4Gr/
-         dCqWRFB6te/xQJB4/aXl6OWTofDEfDpi0hHsaed/U+NDkjhUjSFUWey9U2fVkAWSy8iE
-         DEv8HkD/+ZOLD50qjd6Bf2NagARfccGy8iQfJvDv4RCMVaHpRUjK92wLuqbSoQEbWa5x
-         pWtymXpDnrA47QqWPJtvv3oUx55RQV3x5uO+OpKorihS0bSfJ1e7rkGz7uHtahJHNyIn
-         0Qiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tiqa2uk1rCVC87NmlpDfcyohmBIepsgQBQTP19VRNuE=;
-        b=UXOpXDQ/TFjMqq+/N749s3zLK7h1khN4cYiLZz+vdvh/5cvQ4O4Jyg1H28znyJZXfM
-         CFoFp4hb3+wAdyolo0dsd3pbNuwQQHF2CTi5OzwmAdqByeC2LgufVs/ZiBCCkl7y8nZ8
-         wXNxSvmdskJvnWXLfXQy3HcyJ9NFCC+S1X4Z4AyKIUdA2mOD9793l53cVTUzEHxjnweC
-         Tjn4MZ5y5phlzV+c56qExSrdDxp16Q2E4gLVoAt1XRFo8AuoZpU+hTjmGUZ0sHH/hQ+K
-         DxmntUmxPt9AYrzGNBV4MsZWWNuG8SCBjmShoRnHyHhMbf+Cmos49ct6Z7YxIIRryLpz
-         gyVw==
-X-Gm-Message-State: AOAM532SrGbVlOrXBYkghf/MTHh6Doo5OFVirV/firgJ40kicEyrm4Dh
-        vKyJERPOs010Hnk3CQhQ5nj/xHt53YWeBYyuRWzpdg4cR6M=
-X-Google-Smtp-Source: ABdhPJyuejvvH4huvo1vqdiLRsb3w1Jxn3IhJ8W5N0Pss1HRXuxD6Ha+J3MhH/Cav4sECBRuYElevwYg0KaD//CIVbY=
-X-Received: by 2002:a25:cc13:: with SMTP id l19mr28399746ybf.260.1614661736454;
- Mon, 01 Mar 2021 21:08:56 -0800 (PST)
+        id S1578092AbhCBKfe (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Mar 2021 05:35:34 -0500
+Received: from www62.your-server.de ([213.133.104.62]:60536 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1382421AbhCBJ0I (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 2 Mar 2021 04:26:08 -0500
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1lH1HN-000DrF-S1; Tue, 02 Mar 2021 10:25:22 +0100
+Received: from [85.7.101.30] (helo=pc-9.home)
+        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1lH1HN-000BUt-JV; Tue, 02 Mar 2021 10:25:21 +0100
+Subject: Re: [PATCH bpf-next 2/2] libbpf, xsk: add libbpf_smp_store_release
+ libbpf_smp_load_acquire
+To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
+        ast@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org
+Cc:     magnus.karlsson@intel.com, jonathan.lemon@gmail.com,
+        maximmi@nvidia.com, andrii@kernel.org, will@kernel.org,
+        paulmck@kernel.org
+References: <20210301104318.263262-1-bjorn.topel@gmail.com>
+ <20210301104318.263262-3-bjorn.topel@gmail.com> <87k0qqx3be.fsf@toke.dk>
+ <e052a22a-4b7b-fe38-06ad-2ad04c83dda7@intel.com>
+ <12f8969b-6780-f35f-62cd-ed67b1d8181a@iogearbox.net>
+ <0121ca03-d806-8e50-aaac-0f97795d0fbe@intel.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <cb975a27-ade5-a638-af6e-2e4e1024649c@iogearbox.net>
+Date:   Tue, 2 Mar 2021 10:25:20 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-References: <CACAyw9-XZ4XqNP1MZxC1i7+zntVAivopkgRgc4yXaNtD8QcADw@mail.gmail.com>
- <05c0e4ff-3d93-00c8-b81b-9758c90deca8@fb.com> <CAEf4BzZVXtVnV9aSQLaQ=7qz-3E44gvMf-abHeHKLS3S4xjChg@mail.gmail.com>
- <3a6d2ee3-4ce0-0f8b-2ab4-dad77e6da42e@fb.com> <ffbd1904-ac22-7922-201d-a971c685d761@fb.com>
-In-Reply-To: <ffbd1904-ac22-7922-201d-a971c685d761@fb.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 1 Mar 2021 21:08:45 -0800
-Message-ID: <CAEf4BzZ2LXc=5zT45VKgwbvc6VQ0XUU+J7_hKmqPaURKtYeJBQ@mail.gmail.com>
-Subject: Re: Enum relocations against zero values
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Lorenz Bauer <lmb@cloudflare.com>, bpf <bpf@vger.kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <0121ca03-d806-8e50-aaac-0f97795d0fbe@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.102.4/26095/Mon Mar  1 13:10:16 2021)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Mar 1, 2021 at 8:19 PM Yonghong Song <yhs@fb.com> wrote:
->
->
->
-> On 2/26/21 7:31 PM, Yonghong Song wrote:
-> >
-> >
-> > On 2/26/21 12:43 PM, Andrii Nakryiko wrote:
-> >> On Fri, Feb 26, 2021 at 10:08 AM Yonghong Song <yhs@fb.com> wrote:
-> >>>
-> >>>
-> >>>
-> >>> On 2/26/21 9:47 AM, Lorenz Bauer wrote:
-> >>>> Hi Andrii and Yonghong,
-> >>>>
-> >>>> I'm playing around with enum CO-RE relocations, and hit the
-> >>>> following snag:
-> >>>>
-> >>>>       enum e { TWO };
-> >>>>       bpf_core_enum_value_exists(enum e, TWO);
-> >>>>
-> >>>> Compiling this with clang-12
-> >>>> (12.0.0-++20210225092616+e0e6b1e39e7e-1~exp1~20210225083321.50) gives
-> >>>> me the following:
-> >>>>
-> >>>> internal/btf/testdata/relocs.c:66:2: error:
-> >>>> __builtin_preserve_enum_value argument 1 invalid
-> >>>>           enum_value_exists(enum e, TWO);
-> >>>>           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >>>> internal/btf/testdata/relocs.c:53:8: note: expanded from macro
-> >>>> 'enum_value_exists'
-> >>>>                   if (!bpf_core_enum_value_exists(t, v)) { \
-> >>>>                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >>>> internal/btf/testdata/bpf_core_read.h:168:32: note: expanded from
-> >>>> macro 'bpf_core_enum_value_exists'
-> >>>>           __builtin_preserve_enum_value(*(typeof(enum_type)
-> >>>> *)enum_value, BPF_ENUMVAL_EXISTS)
-> >>>>
-> >>>> ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >>>
-> >>> Andrii can comment on MACRO failures.
-> >>
-> >> Yeah, I ran into this a long time ago as well...
-> >>
-> >> I don't actually know why this doesn't work for zeroes. I've tried to
-> >> write that macro in a bit different way, but Clang rejects it:
-> >>
-> >> __builtin_preserve_enum_value(({typeof(enum_type) ___xxx =
-> >> (enum_value); *(typeof(enum_type)*)&___xxx;}), BPF_ENUMVAL_EXISTS)
-> >>
-> >> And something as straightforward as
-> >>
-> >> __builtin_preserve_enum_value((typeof(enum_type))(enum_value),
-> >> BPF_ENUMVAL_EXISTS)
-> >>
-> >> doesn't work as well.
-> >>
-> >> Yonghong, any idea how to write such a macro to work in all cases? Or
-> >> why those alternatives don't work? I only get " error:
-> >> __builtin_preserve_enum_value argument 1 invalid" with no more
-> >> details, so hard to do anything about this.
-> >
-> > This is a clang BPF bug. In certain number classification system,
-> > clang considers 0 as NULL and non-0 as INTEGER. I only checked
-> > INTEGER and hence only non-0 works. All my tests has non-zero
-> > enum values :-(
-> >
-> > Will fix the issue soon. Thanks for reporting!
->
-> Just pushed the fix (https://reviews.llvm.org/D97659) to llvm trunk
-> this morning. Also filed a request
-> (https://bugs.llvm.org/show_bug.cgi?id=49391) to backport the fix to
-> 12.0.1 release.
-> it is too late to be included in 12.0.0 release.
-> Thanks!
->
+On 3/2/21 10:16 AM, Björn Töpel wrote:
+> On 2021-03-02 10:13, Daniel Borkmann wrote:
+>> On 3/2/21 9:05 AM, Björn Töpel wrote:
+>>> On 2021-03-01 17:10, Toke Høiland-Jørgensen wrote:
+>>>> Björn Töpel <bjorn.topel@gmail.com> writes:
+>>>>> From: Björn Töpel <bjorn.topel@intel.com>
+>>>>>
+>>>>> Now that the AF_XDP rings have load-acquire/store-release semantics,
+>>>>> move libbpf to that as well.
+>>>>>
+>>>>> The library-internal libbpf_smp_{load_acquire,store_release} are only
+>>>>> valid for 32-bit words on ARM64.
+>>>>>
+>>>>> Also, remove the barriers that are no longer in use.
+>>>>
+>>>> So what happens if an updated libbpf is paired with an older kernel (or
+>>>> vice versa)?
+>>>
+>>> "This is fine." ;-) This was briefly discussed in [1], outlined by the
+>>> previous commit!
+>>>
+>>> ...even on POWER.
+>>
+>> Could you put a summary or quote of that discussion on 'why it is okay and does not
+>> cause /forward or backward/ compat issues with user space' directly into patch 1's
+>> commit message?
+>>
+>> I feel just referring to a link is probably less suitable in this case as it should
+>> rather be part of the commit message that contains the justification on why it is
+>> waterproof - at least it feels that specific area may be a bit under-documented, so
+>> having it as direct part certainly doesn't hurt.
+> 
+> I agree; It's enough in the weed as it is already.
+> 
+> I wonder if it's possible to cook a LKMM litmus test for this...?
 
-Thanks, Yonghong!
+That would be amazing! :-)
 
-> >
-> >>
-> >>
-> >>>
-> >>>>
-> >>>> Changing the definition of the enum to
-> >>>>
-> >>>>       enum e { TWO = 1 }
-> >>>>
-> >>>> compiles successfully. I get the same result for any enum value that
-> >>>> is zero. Is this expected?
-> >>>
-> >>> IIRC, libbpf will try to do relocation against vmlinux BTF.
-> >>> So here, "enum e" probably does not exist in vmlinux BTF, so
-> >>> the builtin will return 0. You can try some enum type
-> >>> existing in vmlinux BTF to see what happens.
-> >>>
-> >>>>
-> >>>> Best
-> >>>> Lorenz
-> >>>>
+(Another option which can be done independently could be to update [0] with outlining a
+  pairing scenario as we have here describing the forward/backward compatibility on the
+  barriers used, I think that would be quite useful as well.)
+
+   [0] Documentation/memory-barriers.txt
+
+>> Would also be great to get Will's ACK on that when you have a v2. :)
+> 
+> Yup! :-)
+> 
+> 
+> Björn
+> 
+> 
+>> Thanks,
+>> Daniel
+>>
+>>> [1] https://lore.kernel.org/bpf/20200316184423.GA14143@willie-the-truck/
+
