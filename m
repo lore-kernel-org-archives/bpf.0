@@ -2,82 +2,114 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 048F8C28CBC
-	for <bpf@archiver.kernel.org>; Tue,  2 Mar 2021 10:39:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DCBAC4360C
+	for <bpf@archiver.kernel.org>; Tue,  2 Mar 2021 10:39:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C6E7D64F0A
+	by mail.kernel.org (Postfix) with ESMTP id 261F264F07
 	for <bpf@archiver.kernel.org>; Tue,  2 Mar 2021 10:39:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1578103AbhCBKfj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Mar 2021 05:35:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34534 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1577744AbhCBJw3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 2 Mar 2021 04:52:29 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 601C4C061788
-        for <bpf@vger.kernel.org>; Tue,  2 Mar 2021 01:51:38 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id d3so30283532lfg.10
-        for <bpf@vger.kernel.org>; Tue, 02 Mar 2021 01:51:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wYdb2+PyqZjJWB/Odwn2t4em7UhRTCH4QwkBcfh2xqs=;
-        b=wHROcZk1UaCsezQOjC/gspMphant6RbdPIEHM+BrDTBOMA9x2eqX2meqwxOeea5KsT
-         nBSGgTXTz5Vw/QoBxhqm3PeJ3ad9+OafMVORg49xPxA3cpd0BbscCO4AnHHufbQPAlmq
-         egj8l39KL4KiOOWVrMDoJ+Y+hcz0JDgADR+y4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wYdb2+PyqZjJWB/Odwn2t4em7UhRTCH4QwkBcfh2xqs=;
-        b=YacMYBTyIx5I2NhzP0ifslYndwMdLEzaTH+q1BL0HBqCRB4LGivV42N2HOJ8xF5sl0
-         CGbt81ox/nsUN+BgCjnoovLRo94KyBAQniUlwkDiKZb7XF0VcrjIEDmZESNZ0j0fI4gb
-         UXmRnVJ5DvG54O1auSfy+8DL9lKwdni22R/EFnwGTuW69UfJ0n8HPeiRi+Z6jRfS2GBQ
-         9inPPe/KsH2TOSMoYz/c3U9nxMM5dhXDXnQnga5HJIQpvovxBsIlN5CLU2GClpHY/mpH
-         0vLwE3KW+Jur8DGjKj8udWJiVihWCo8MgWY+ZDBlcfp0raAnPbs/bIWrie/pJCOnU6jv
-         oC+Q==
-X-Gm-Message-State: AOAM530gNdiG2kvsGx4OuXZS4EPvdKHLdrrYpfW4Dds4sqBZ1DWi4msc
-        jXvFxWriqDf5ztfNUU/ttGa9N++RF3go6Fkot+kBFw==
-X-Google-Smtp-Source: ABdhPJyKpskuOcLTCTgG/7K0BnUUFuomZzHoFOHMYSzd9OgJj+qzVUPoM8bFejDoIT9WI7E1DLB5ymWc+t1ub6zSCbo=
-X-Received: by 2002:a05:6512:12c3:: with SMTP id p3mr6306191lfg.97.1614678696886;
- Tue, 02 Mar 2021 01:51:36 -0800 (PST)
+        id S1578088AbhCBKfd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Mar 2021 05:35:33 -0500
+Received: from mga11.intel.com ([192.55.52.93]:14012 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1838018AbhCBJRo (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 2 Mar 2021 04:17:44 -0500
+IronPort-SDR: SWskgWMvj+YmA8TGkKwtfmd4krQsmTwrPtCn3hMaDjaf44hawMFFBYNSO/P1QDvl0s02xXL0ou
+ bzQbj+UwKGNg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9910"; a="183356978"
+X-IronPort-AV: E=Sophos;i="5.81,216,1610438400"; 
+   d="scan'208";a="183356978"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2021 01:17:01 -0800
+IronPort-SDR: Bum09qkuPQg5WMxKjkqJJe/pqHMRPVGGG1Q17o2HOQU/Hwk239QOxFocuX+fIh4G/4Y+MFzQqV
+ 5WmlFArNDznA==
+X-IronPort-AV: E=Sophos;i="5.81,216,1610438400"; 
+   d="scan'208";a="398777931"
+Received: from ilick-mobl1.ger.corp.intel.com (HELO btopel-mobl.ger.intel.com) ([10.249.41.237])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2021 01:16:57 -0800
+Subject: Re: [PATCH bpf-next 2/2] libbpf, xsk: add libbpf_smp_store_release
+ libbpf_smp_load_acquire
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
+        ast@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org
+Cc:     magnus.karlsson@intel.com, jonathan.lemon@gmail.com,
+        maximmi@nvidia.com, andrii@kernel.org, will@kernel.org
+References: <20210301104318.263262-1-bjorn.topel@gmail.com>
+ <20210301104318.263262-3-bjorn.topel@gmail.com> <87k0qqx3be.fsf@toke.dk>
+ <e052a22a-4b7b-fe38-06ad-2ad04c83dda7@intel.com>
+ <12f8969b-6780-f35f-62cd-ed67b1d8181a@iogearbox.net>
+From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>
+Message-ID: <0121ca03-d806-8e50-aaac-0f97795d0fbe@intel.com>
+Date:   Tue, 2 Mar 2021 10:16:52 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-References: <CACAyw9-XZ4XqNP1MZxC1i7+zntVAivopkgRgc4yXaNtD8QcADw@mail.gmail.com>
- <05c0e4ff-3d93-00c8-b81b-9758c90deca8@fb.com> <CAEf4BzZVXtVnV9aSQLaQ=7qz-3E44gvMf-abHeHKLS3S4xjChg@mail.gmail.com>
- <3a6d2ee3-4ce0-0f8b-2ab4-dad77e6da42e@fb.com> <ffbd1904-ac22-7922-201d-a971c685d761@fb.com>
-In-Reply-To: <ffbd1904-ac22-7922-201d-a971c685d761@fb.com>
-From:   Lorenz Bauer <lmb@cloudflare.com>
-Date:   Tue, 2 Mar 2021 09:51:26 +0000
-Message-ID: <CACAyw9_=xxpHFZcczyKV19S5Q1Agw4gaU8X6cnfb0P3Oqn1iLw@mail.gmail.com>
-Subject: Re: Enum relocations against zero values
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <12f8969b-6780-f35f-62cd-ed67b1d8181a@iogearbox.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, 2 Mar 2021 at 04:19, Yonghong Song <yhs@fb.com> wrote:
+On 2021-03-02 10:13, Daniel Borkmann wrote:
+> On 3/2/21 9:05 AM, Björn Töpel wrote:
+>> On 2021-03-01 17:10, Toke Høiland-Jørgensen wrote:
+>>> Björn Töpel <bjorn.topel@gmail.com> writes:
+>>>> From: Björn Töpel <bjorn.topel@intel.com>
+>>>>
+>>>> Now that the AF_XDP rings have load-acquire/store-release semantics,
+>>>> move libbpf to that as well.
+>>>>
+>>>> The library-internal libbpf_smp_{load_acquire,store_release} are only
+>>>> valid for 32-bit words on ARM64.
+>>>>
+>>>> Also, remove the barriers that are no longer in use.
+>>>
+>>> So what happens if an updated libbpf is paired with an older kernel (or
+>>> vice versa)?
+>>
+>> "This is fine." ;-) This was briefly discussed in [1], outlined by the
+>> previous commit!
+>>
+>> ...even on POWER.
+> 
+> Could you put a summary or quote of that discussion on 'why it is okay 
+> and does not
+> cause /forward or backward/ compat issues with user space' directly into 
+> patch 1's
+> commit message?
+> 
+> I feel just referring to a link is probably less suitable in this case 
+> as it should
+> rather be part of the commit message that contains the justification on 
+> why it is
+> waterproof - at least it feels that specific area may be a bit 
+> under-documented, so
+> having it as direct part certainly doesn't hurt.
 >
-> Just pushed the fix (https://reviews.llvm.org/D97659) to llvm trunk
-> this morning. Also filed a request
-> (https://bugs.llvm.org/show_bug.cgi?id=49391) to backport the fix to
-> 12.0.1 release.
-> it is too late to be included in 12.0.0 release.
-> Thanks!
 
-Thank you for the quick fix :)
+I agree; It's enough in the weed as it is already.
 
--- 
-Lorenz Bauer  |  Systems Engineer
-6th Floor, County Hall/The Riverside Building, SE1 7PB, UK
+I wonder if it's possible to cook a LKMM litmus test for this...?
 
-www.cloudflare.com
+
+> Would also be great to get Will's ACK on that when you have a v2. :)
+>
+
+Yup! :-)
+
+
+Björn
+
+
+> Thanks,
+> Daniel
+> 
+>> [1] https://lore.kernel.org/bpf/20200316184423.GA14143@willie-the-truck/
