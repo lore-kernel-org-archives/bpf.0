@@ -2,199 +2,240 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93261C433E0
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:56:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6ECBFC43331
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:56:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3F45564E6F
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:56:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4216364E75
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:56:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352531AbhCCDuv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Mar 2021 22:50:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60586 "EHLO
+        id S1352520AbhCCDum (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Mar 2021 22:50:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236964AbhCBSYr (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 2 Mar 2021 13:24:47 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72925C0617A7;
-        Tue,  2 Mar 2021 10:23:40 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id o6so2572619pjf.5;
-        Tue, 02 Mar 2021 10:23:40 -0800 (PST)
+        with ESMTP id S1344085AbhCBRlc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 2 Mar 2021 12:41:32 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC9FC0698C4
+        for <bpf@vger.kernel.org>; Tue,  2 Mar 2021 09:20:43 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id j12so14221227pfj.12
+        for <bpf@vger.kernel.org>; Tue, 02 Mar 2021 09:20:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bnxJ87u4sbrwdk1LAB30YLXwHUgFDPCGUB44sFI7n1s=;
-        b=uI/i8gcpuYmFguZTeZ92j+H6EHouSCIOf1vxo0rFq4INLXiAhldffcUPKE31UyGoXb
-         rUieOrPz71RSIdEtfeXFKBHEcSdz3udJzOCuMb9SWQB7nPSl2Opu2gZWX2gWI2Csg43n
-         wOiPKKMTmOXkvx8UdE3ZwRVJ++bHYmNN8T7N+ZWZPPDhRkB5EwrJqAko4zd+BNnENLWZ
-         8eBPRcoP73a3SZ9es+bzRk6h1UfNzCN2riPte6TT8Pz/+GdHiUqBxmkxkL8ZGtVjkP8Y
-         iHUlCcs9AYc86qMy8pGiuCVjvGmoOXJJRnkRVcb/8xSYgBulx4082bpZUzN124KM+Cpr
-         nLjA==
+        d=cilium-io.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=AThU4ci48FKxy/EX8TQpAEHDA9i5ZmNT/rLJMEkkHrM=;
+        b=TRm4JPuM3dS20NhEZWk7JIzebqcxaxAjsqGFS5zL6ZusSg7H37Xa9iJXZUODP5okvA
+         6EmC7Quu6NbpvlZkJaKrXaJ6/2CjePLiQ0qMKsn8zWq3Q8tJHswz6F27RSKKdXbkzzTO
+         Ep4Y7DkVGYZMmgeSu0Td4gmz0LOW47iLVUEjQm+k1Gc/T9Copy63Uypd9NGe+yRaM/bp
+         In/0+dZQluaotcyb3QizHyPqAxNGb7zCYx+BpVIxaU60BL2Ti1HzaiAHeXbrgZAIjScu
+         4NhIu9uS709nR1F2IUkI3AJd75vakacFjFq9BXXSDE7PjlXLBe4WynJBe6jgxcKZcee4
+         FW1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bnxJ87u4sbrwdk1LAB30YLXwHUgFDPCGUB44sFI7n1s=;
-        b=sLUOM0roNXK3MespzFIUJ3mHYz4H11cOjoo01SYqZGuFHxIoI4p0Xb6RAOysJ5tyIp
-         bgZraxAzvvZt4NZGr4coJcZzcodfI32qQKWcGzLnjKAipFn+kjRiGh+/3CnNv/MGispY
-         ydOWtiwb/4sqkHyYTKCxsoBr3J2YzsxtoxGFdppOaaOq+mpc4KRQ5FJVCOZxAuUEho1M
-         fNfrVsxQEU78d6dDSi6QDvIyBHnBHcxMVPY+FZv7gHca3/P9+2pbUTWcJepE9WXfQt7D
-         N4WeUR4Xke6Z2f620YQP5dYuAqf1ZlQo13zrh0z+xfSs5oqbyDHjFGE1llBeuCWnsc70
-         0dOA==
-X-Gm-Message-State: AOAM5317/mq4lhozH+GGkQ+PBhca7CpaEUNA9yDhooQZ/+tNgAoSTEfH
-        u2W9hPX/j5aABlM/pqmEumn7L7BgFSjfTpJzwHiAhm+bE1rWtw==
-X-Google-Smtp-Source: ABdhPJwKMmxE8PKMms10iLp+avFpm/jVT/64xFRltVsfI+uuHTglt6Su1krBT5kTb5KSxtJNLi3qMTCxgNaFQhOHS08=
-X-Received: by 2002:a17:90a:ce92:: with SMTP id g18mr5839612pju.52.1614709419796;
- Tue, 02 Mar 2021 10:23:39 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=AThU4ci48FKxy/EX8TQpAEHDA9i5ZmNT/rLJMEkkHrM=;
+        b=thxMLvAzzVF5S5AHmHbORt4OfGBaOP/0505batR3jjzvLjsrPugB8x6i0c8c9d/Rof
+         HjViJXcWC0YQFEk4XamRqLeKkUJGCYUQgXafx0gVFw16KVbqQQ5BKhRjsPIXnuBN6/X8
+         5XLBm1jaurcZEBVw/00jOqe1bz1ZXh2sUyzyDnPZiblufetq+Ai0ohniMmwgxJNWC0Ha
+         8Osz1Q3sB4HqFHqPyW4B6lr6E5nyjbvwCjnAzUpGmIJMcSJ4jzOK/VYf2jLaezCa8K0q
+         YJQrJA4+6ikGyyLBQLw7vOE6CZ01LZOdxLT3c0ihexD9Qup8i+jj/LM9lkbNueTWnBO2
+         ktCQ==
+X-Gm-Message-State: AOAM531+Ibwh9wJVZvRMRNqO7lHp38wSEpAL8UYmo+RQw9yFIoV/J8I/
+        fBLj/m070xYS2Sbds8qvGG7mwe/vEZDLjpPv
+X-Google-Smtp-Source: ABdhPJzzVSbAzyjYnnbzdMLtBDQGJaOL0r5I5Nr5cA2wEk7ykjzOznxcSdJydzJkbN2d2iEG3ly2ng==
+X-Received: by 2002:a62:4e92:0:b029:1ee:251d:50a1 with SMTP id c140-20020a624e920000b02901ee251d50a1mr4010269pfb.53.1614705642736;
+        Tue, 02 Mar 2021 09:20:42 -0800 (PST)
+Received: from localhost.localdomain (c-73-93-5-123.hsd1.ca.comcast.net. [73.93.5.123])
+        by smtp.gmail.com with ESMTPSA id b15sm20073923pgg.85.2021.03.02.09.20.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Mar 2021 09:20:42 -0800 (PST)
+From:   Joe Stringer <joe@cilium.io>
+To:     bpf@vger.kernel.org
+Cc:     daniel@iogearbox.net, ast@kernel.org, linux-doc@vger.kernel.org,
+        linux-man@vger.kernel.org,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Brian Vazquez <brianvv@google.com>, Yonghong Song <yhs@fb.com>
+Subject: [PATCHv2 bpf-next 08/15] bpf: Document BPF_MAP_*_BATCH syscall commands
+Date:   Tue,  2 Mar 2021 09:19:40 -0800
+Message-Id: <20210302171947.2268128-9-joe@cilium.io>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20210302171947.2268128-1-joe@cilium.io>
+References: <20210302171947.2268128-1-joe@cilium.io>
 MIME-Version: 1.0
-References: <20210302023743.24123-1-xiyou.wangcong@gmail.com>
- <20210302023743.24123-3-xiyou.wangcong@gmail.com> <CACAyw9-SjsNn4_J1KDXuFh1nd9Hr-Mo+=7S-kVtooJwdi1fodQ@mail.gmail.com>
-In-Reply-To: <CACAyw9-SjsNn4_J1KDXuFh1nd9Hr-Mo+=7S-kVtooJwdi1fodQ@mail.gmail.com>
-From:   Cong Wang <xiyou.wangcong@gmail.com>
-Date:   Tue, 2 Mar 2021 10:23:28 -0800
-Message-ID: <CAM_iQpXqE9qJ=+zKA6H1Rq=KKgm8LZ=p=ZtvrrH+hfSrTg+zxw@mail.gmail.com>
-Subject: Re: [Patch bpf-next v2 2/9] sock: introduce sk_prot->update_proto()
-To:     Lorenz Bauer <lmb@cloudflare.com>
-Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        duanxiongchun@bytedance.com,
-        Dongdong Wang <wangdongdong.6@bytedance.com>,
-        Jiang Wang <jiang.wang@bytedance.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Sitnicki <jakub@cloudflare.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Mar 2, 2021 at 8:22 AM Lorenz Bauer <lmb@cloudflare.com> wrote:
->
-> On Tue, 2 Mar 2021 at 02:37, Cong Wang <xiyou.wangcong@gmail.com> wrote:
->
-> ...
-> >  static inline void sk_psock_restore_proto(struct sock *sk,
-> >                                           struct sk_psock *psock)
-> >  {
-> >         sk->sk_prot->unhash = psock->saved_unhash;
->
-> Not related to your patch set, but why do an extra restore of
-> sk_prot->unhash here? At this point sk->sk_prot is one of our tcp_bpf
-> / udp_bpf protos, so overwriting that seems wrong?
+Based roughly on the following commits:
+* Commit cb4d03ab499d ("bpf: Add generic support for lookup batch op")
+* Commit 057996380a42 ("bpf: Add batch ops to all htab bpf map")
+* Commit aa2e93b8e58e ("bpf: Add generic support for update and delete
+  batch ops")
 
-Good catch. It seems you are right, but I need a double check. And
-yes, it is completely unrelated to my patch, as the current code has
-the same problem.
+Acked-by: Toke Høiland-Jørgensen <toke@redhat.com>
+Reviewed-by: Quentin Monnet <quentin@isovalent.com>
+Signed-off-by: Joe Stringer <joe@cilium.io>
+---
+CC: Brian Vazquez <brianvv@google.com>
+CC: Yonghong Song <yhs@fb.com>
+---
+ include/uapi/linux/bpf.h | 114 +++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 111 insertions(+), 3 deletions(-)
 
->
-> > -       if (inet_csk_has_ulp(sk)) {
-> > -               tcp_update_ulp(sk, psock->sk_proto, psock->saved_write_space);
-> > -       } else {
-> > -               sk->sk_write_space = psock->saved_write_space;
-> > -               /* Pairs with lockless read in sk_clone_lock() */
-> > -               WRITE_ONCE(sk->sk_prot, psock->sk_proto);
-> > -       }
-> > +       if (psock->saved_update_proto)
-> > +               psock->saved_update_proto(sk, true);
-> >  }
-> >
-> >  static inline void sk_psock_set_state(struct sk_psock *psock,
-> > diff --git a/include/net/sock.h b/include/net/sock.h
-> > index 636810ddcd9b..0e8577c917e8 100644
-> > --- a/include/net/sock.h
-> > +++ b/include/net/sock.h
-> > @@ -1184,6 +1184,9 @@ struct proto {
-> >         void                    (*unhash)(struct sock *sk);
-> >         void                    (*rehash)(struct sock *sk);
-> >         int                     (*get_port)(struct sock *sk, unsigned short snum);
-> > +#ifdef CONFIG_BPF_SYSCALL
-> > +       int                     (*update_proto)(struct sock *sk, bool restore);
->
-> Kind of a nit, but this name suggests that the callback is a lot more
-> generic than it really is. The only thing you can use it for is to
-> prep the socket to be sockmap ready since we hardwire sockmap_unhash,
-> etc. It's also not at all clear that this only works if sk has an
-> sk_psock associated with it. Calling it without one would crash the
-> kernel since the update_proto functions don't check for !sk_psock.
->
-> Might as well call it install_sockmap_hooks or something and have a
-> valid sk_psock be passed in to the callback. Additionally, I'd prefer
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 0cf92ef011f1..c8b9d19fce22 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -553,13 +553,55 @@ union bpf_iter_link_info {
+  *	Description
+  *		Iterate and fetch multiple elements in a map.
+  *
++ *		Two opaque values are used to manage batch operations,
++ *		*in_batch* and *out_batch*. Initially, *in_batch* must be set
++ *		to NULL to begin the batched operation. After each subsequent
++ *		**BPF_MAP_LOOKUP_BATCH**, the caller should pass the resultant
++ *		*out_batch* as the *in_batch* for the next operation to
++ *		continue iteration from the current point.
++ *
++ *		The *keys* and *values* are output parameters which must point
++ *		to memory large enough to hold *count* items based on the key
++ *		and value size of the map *map_fd*. The *keys* buffer must be
++ *		of *key_size* * *count*. The *values* buffer must be of
++ *		*value_size* * *count*.
++ *
++ *		The *elem_flags* argument may be specified as one of the
++ *		following:
++ *
++ *		**BPF_F_LOCK**
++ *			Look up the value of a spin-locked map without
++ *			returning the lock. This must be specified if the
++ *			elements contain a spinlock.
++ *
++ *		On success, *count* elements from the map are copied into the
++ *		user buffer, with the keys copied into *keys* and the values
++ *		copied into the corresponding indices in *values*.
++ *
++ *		If an error is returned and *errno* is not **EFAULT**, *count*
++ *		is set to the number of successfully processed elements.
++ *
+  *	Return
+  *		Returns zero on success. On error, -1 is returned and *errno*
+  *		is set appropriately.
+  *
++ *		May set *errno* to **ENOSPC** to indicate that *keys* or
++ *		*values* is too small to dump an entire bucket during
++ *		iteration of a hash-based map type.
++ *
+  * BPF_MAP_LOOKUP_AND_DELETE_BATCH
+  *	Description
+- *		Iterate and delete multiple elements in a map.
++ *		Iterate and delete all elements in a map.
++ *
++ *		This operation has the same behavior as
++ *		**BPF_MAP_LOOKUP_BATCH** with two exceptions:
++ *
++ *		* Every element that is successfully returned is also deleted
++ *		  from the map. This is at least *count* elements. Note that
++ *		  *count* is both an input and an output parameter.
++ *		* Upon returning with *errno* set to **EFAULT**, up to
++ *		  *count* elements may be deleted without returning the keys
++ *		  and values of the deleted elements.
+  *
+  *	Return
+  *		Returns zero on success. On error, -1 is returned and *errno*
+@@ -567,15 +609,81 @@ union bpf_iter_link_info {
+  *
+  * BPF_MAP_UPDATE_BATCH
+  *	Description
+- *		Iterate and update multiple elements in a map.
++ *		Update multiple elements in a map by *key*.
++ *
++ *		The *keys* and *values* are input parameters which must point
++ *		to memory large enough to hold *count* items based on the key
++ *		and value size of the map *map_fd*. The *keys* buffer must be
++ *		of *key_size* * *count*. The *values* buffer must be of
++ *		*value_size* * *count*.
++ *
++ *		Each element specified in *keys* is sequentially updated to the
++ *		value in the corresponding index in *values*. The *in_batch*
++ *		and *out_batch* parameters are ignored and should be zeroed.
++ *
++ *		The *elem_flags* argument should be specified as one of the
++ *		following:
++ *
++ *		**BPF_ANY**
++ *			Create new elements or update a existing elements.
++ *		**BPF_NOEXIST**
++ *			Create new elements only if they do not exist.
++ *		**BPF_EXIST**
++ *			Update existing elements.
++ *		**BPF_F_LOCK**
++ *			Update spin_lock-ed map elements. This must be
++ *			specified if the map value contains a spinlock.
++ *
++ *		On success, *count* elements from the map are updated.
++ *
++ *		If an error is returned and *errno* is not **EFAULT**, *count*
++ *		is set to the number of successfully processed elements.
+  *
+  *	Return
+  *		Returns zero on success. On error, -1 is returned and *errno*
+  *		is set appropriately.
+  *
++ *		May set *errno* to **EINVAL**, **EPERM**, **ENOMEM**, or
++ *		**E2BIG**. **E2BIG** indicates that the number of elements in
++ *		the map reached the *max_entries* limit specified at map
++ *		creation time.
++ *
++ *		May set *errno* to one of the following error codes under
++ *		specific circumstances:
++ *
++ *		**EEXIST**
++ *			If *flags* specifies **BPF_NOEXIST** and the element
++ *			with *key* already exists in the map.
++ *		**ENOENT**
++ *			If *flags* specifies **BPF_EXIST** and the element with
++ *			*key* does not exist in the map.
++ *
+  * BPF_MAP_DELETE_BATCH
+  *	Description
+- *		Iterate and delete multiple elements in a map.
++ *		Delete multiple elements in a map by *key*.
++ *
++ *		The *keys* parameter is an input parameter which must point
++ *		to memory large enough to hold *count* items based on the key
++ *		size of the map *map_fd*, that is, *key_size* * *count*.
++ *
++ *		Each element specified in *keys* is sequentially deleted. The
++ *		*in_batch*, *out_batch*, and *values* parameters are ignored
++ *		and should be zeroed.
++ *
++ *		The *elem_flags* argument may be specified as one of the
++ *		following:
++ *
++ *		**BPF_F_LOCK**
++ *			Look up the value of a spin-locked map without
++ *			returning the lock. This must be specified if the
++ *			elements contain a spinlock.
++ *
++ *		On success, *count* elements from the map are updated.
++ *
++ *		If an error is returned and *errno* is not **EFAULT**, *count*
++ *		is set to the number of successfully processed elements. If
++ *		*errno* is **EFAULT**, up to *count* elements may be been
++ *		deleted.
+  *
+  *	Return
+  *		Returns zero on success. On error, -1 is returned and *errno*
+-- 
+2.27.0
 
-For the name, sure, I am always open to better names. Not sure if
-'install_sockmap_hooks' is a good name, I also want to express we
-are overriding sk_prot. How about 'psock_update_sk_prot'?
-
-
-> if the function returned a struct proto * like it does at the moment.
-> That way we keep sk->sk_prot manipulation confined to the sockmap code
-> and don't have to copy paste it into every proto.
-
-Well, TCP seems too special to do this, as it could call tcp_update_ulp()
-to update the proto.
-
->
-> > diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-> > index 3bddd9dd2da2..13d2af5bb81c 100644
-> > --- a/net/core/sock_map.c
-> > +++ b/net/core/sock_map.c
-> > @@ -184,26 +184,10 @@ static void sock_map_unref(struct sock *sk, void *link_raw)
-> >
-> >  static int sock_map_init_proto(struct sock *sk, struct sk_psock *psock)
-> >  {
-> > -       struct proto *prot;
-> > -
-> > -       switch (sk->sk_type) {
-> > -       case SOCK_STREAM:
-> > -               prot = tcp_bpf_get_proto(sk, psock);
-> > -               break;
-> > -
-> > -       case SOCK_DGRAM:
-> > -               prot = udp_bpf_get_proto(sk, psock);
-> > -               break;
-> > -
-> > -       default:
-> > +       if (!sk->sk_prot->update_proto)
-> >                 return -EINVAL;
-> > -       }
-> > -
-> > -       if (IS_ERR(prot))
-> > -               return PTR_ERR(prot);
-> > -
-> > -       sk_psock_update_proto(sk, psock, prot);
-> > -       return 0;
-> > +       psock->saved_update_proto = sk->sk_prot->update_proto;
-> > +       return sk->sk_prot->update_proto(sk, false);
->
-> I think reads / writes from sk_prot need READ_ONCE / WRITE_ONCE. We've
-> not been diligent about this so far, but I think it makes sense to be
-> careful in new code.
-
-Hmm, there are many places not using READ_ONCE/WRITE_ONCE,
-for a quick example:
-
-void sock_map_unhash(struct sock *sk)
-{
-        void (*saved_unhash)(struct sock *sk);
-        struct sk_psock *psock;
-
-        rcu_read_lock();
-        psock = sk_psock(sk);
-        if (unlikely(!psock)) {
-                rcu_read_unlock();
-                if (sk->sk_prot->unhash)
-                        sk->sk_prot->unhash(sk);
-                return;
-        }
-
-        saved_unhash = psock->saved_unhash;
-        sock_map_remove_links(sk, psock);
-        rcu_read_unlock();
-        saved_unhash(sk);
-}
-
-Thanks.
