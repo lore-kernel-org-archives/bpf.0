@@ -2,149 +2,79 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-11.5 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,PDS_TONAME_EQ_TOLOCAL_SHORT,SPF_HELO_NONE,SPF_PASS,
+	USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C75FFC4360C
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:55:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D6229C43332
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:55:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8E96B64E75
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:55:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9633C64E6B
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:55:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352450AbhCCDtO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Mar 2021 22:49:14 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:29195 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1383213AbhCBLPw (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 2 Mar 2021 06:15:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1614683652;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZjwZOlNFnMgEc5U9Vx9A266uXH2z9pjdV5QAx0QGYm4=;
-        b=CUg0Nz543gf06F58oZzINDxk3U5ILtJP8qsaEcY2HCPg2qBwCWEBWBi6lFCH3wuUMzhcS8
-        QmBplBkY6nhblokux/u8hLzO7MkFBxX/K964B7PZxg/J3CagPO0lc3Y1w1Ps30EafbTIzd
-        UoVxseZqBRg8PEwiP9ScL5By509AVt8=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-188-pVWwIBewOAiSfhMSawriMA-1; Tue, 02 Mar 2021 06:14:10 -0500
-X-MC-Unique: pVWwIBewOAiSfhMSawriMA-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1D0DFDF8A4;
-        Tue,  2 Mar 2021 11:14:09 +0000 (UTC)
-Received: from krava (unknown [10.40.195.211])
-        by smtp.corp.redhat.com (Postfix) with SMTP id DABAF5C8AB;
-        Tue,  2 Mar 2021 11:14:02 +0000 (UTC)
-Date:   Tue, 2 Mar 2021 12:14:01 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
-        Yauheni Kaliuta <ykaliuta@redhat.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix test_attach_probe for
- powerpc uprobes
-Message-ID: <YD4d+dmay+oKyiot@krava>
-References: <20210301190416.90694-1-jolsa@kernel.org>
- <CAEf4BzbBnR3M60HepC_CFDsdMQDBYoEWiWtREUaLxrrxyBce0Q@mail.gmail.com>
+        id S1352458AbhCCDsA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Mar 2021 22:48:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48590 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1838595AbhCBK5T (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 2 Mar 2021 05:57:19 -0500
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A49BC061756
+        for <bpf@vger.kernel.org>; Tue,  2 Mar 2021 02:56:39 -0800 (PST)
+Received: by mail-io1-xd2e.google.com with SMTP id n132so9358485iod.0
+        for <bpf@vger.kernel.org>; Tue, 02 Mar 2021 02:56:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6rLqwZB5xbSUAV3WyeFBF0fUQcYgz+j/K6pjLnieVK0=;
+        b=cBjmGlJjC10wyXN/0DSZpNYCUKd3C9me9zxAssvVNPHZemGumg4fsdgXnbEjzmrNZ3
+         sUJS6PzkkeUtFH8Rxw9ApwGdBaisv0At9dinrJmMgzSulVg49nWXiext9GJeWa8Z3hRR
+         2h1Ve/i6mFpohW3L+EzwTG8LXoyc8BEiSXnqHV/GJOfSIflvWNpM/z5R9PMrv0ozQSfh
+         YULLn7LtTNuHEyEXVMfm5XJmWb3FgC6PjfNMoqoeKGDzcD5TjCvEsZiKy0ZIqboBLWFS
+         VgKSSUKShrp6vkWgcM0NPUQ7iOsSUuSnW/atwc1793XZ+x2yEadUiR2TZ2WluNWOd0k6
+         W/sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6rLqwZB5xbSUAV3WyeFBF0fUQcYgz+j/K6pjLnieVK0=;
+        b=FJ5nCyLvdOx4cxWd0Y8wFjxXxE7xSDxXH+VSZiP2VkTSDx1IAUQCeW9LcJqcryzzIx
+         jptE7N6FwoAFoQesnZJv/uLcvy/ryVbN7xNYOaHdRPjTluipFD7TcGDhdtusqV1MMkjI
+         lsbxaAno/4l+eNE4+FpixNoyLBfG1s3/K6jz5Wiu01h8xBJ27RzCQdYe9R/DmDMSK4D1
+         WS72s6jF8EL+G2Ze4jkN5myNV9bF47ZFCrCVdr2Mb6VJo2GolrwydurT79NmUm//EVau
+         O76N8Jp7mIu2csjAqAW/GawMIV72oD15ZHTaNUIElulxAuHDfCOfNtspXoy8yY55BWBf
+         Vgfg==
+X-Gm-Message-State: AOAM530huF73EiRWynsm7WMaX4w4fRM7sAJhy2Gdqd/v4vpi67vwLoLg
+        gvcG+WnPE7tDukO5FsmqwmfVeZpI0nIaR15t5ujG/rIVlOJ9vg==
+X-Google-Smtp-Source: ABdhPJyZT1B2v+Pw3N5owmkt610mkpu2OCoPpZoiL1hp0N/H6TxTOBDYGn7f1SU5u+SFKFgEN1JWW5yQqMhSmFqtAx0=
+X-Received: by 2002:a02:c894:: with SMTP id m20mr8910081jao.80.1614682598163;
+ Tue, 02 Mar 2021 02:56:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzbBnR3M60HepC_CFDsdMQDBYoEWiWtREUaLxrrxyBce0Q@mail.gmail.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+References: <20210302105400.3112940-1-jackmanb@google.com>
+In-Reply-To: <20210302105400.3112940-1-jackmanb@google.com>
+From:   Brendan Jackman <jackmanb@google.com>
+Date:   Tue, 2 Mar 2021 11:56:26 +0100
+Message-ID: <CA+i-1C3C7di0uEtMQHTbes_+BF8g8ZCN-bykkJLFHM1dk1ShTQ@mail.gmail.com>
+Subject: Re: [PATCH v5 bpf-next] bpf: Explicitly zero-extend R0 after 32-bit cmpxchg
+To:     bpf <bpf@vger.kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Florent Revest <revest@chromium.org>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Martin KaFai Lau <kafai@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Mar 01, 2021 at 04:34:24PM -0800, Andrii Nakryiko wrote:
-> On Mon, Mar 1, 2021 at 11:11 AM Jiri Olsa <jolsa@kernel.org> wrote:
-> >
-> > When testing uprobes we the test gets GEP (Global Entry Point)
-> > address from kallsyms, but then the function is called locally
-> > so the uprobe is not triggered.
-> >
-> > Fixing this by adjusting the address to LEP (Local Entry Point)
-> > for powerpc arch.
-> >
-> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > ---
-> >  .../selftests/bpf/prog_tests/attach_probe.c    | 18 +++++++++++++++++-
-> >  1 file changed, 17 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/attach_probe.c b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-> > index a0ee87c8e1ea..c3cfb48d3ed0 100644
-> > --- a/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-> > +++ b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-> > @@ -2,6 +2,22 @@
-> >  #include <test_progs.h>
-> >  #include "test_attach_probe.skel.h"
-> >
-> > +#if defined(__powerpc64__)
-> > +/*
-> > + * We get the GEP (Global Entry Point) address from kallsyms,
-> > + * but then the function is called locally, so we need to adjust
-> > + * the address to get LEP (Local Entry Point).
-> > + */
-> > +#define LEP_OFFSET 8
-> > +
-> > +static ssize_t get_offset(ssize_t offset)
-> 
-> if we mark this function __weak global, would it work as is? Would it
-> get an address of a global entry point? I know nothing about this GEP
-> vs LEP stuff, interesting :)
+On Tue, 2 Mar 2021 at 11:54, Brendan Jackman <jackmanb@google.com> wrote:
+> base-commit: f2cfe32e8a965a86e512dcb2e6251371d4a60c63
 
-you mean get_base_addr? it's already global
+Oh yeah, this is based on Ilya's patch [1]. Is that OK or should I
+just resend it once that one is merged?
 
-all the calls to get_base_addr within the object are made
-to get_base_addr+0x8
-
-00000000100350c0 <test_attach_probe>:
-    ...
-    100350e0:   59 fd ff 4b     bl      10034e38 <get_base_addr+0x8>
-    ...
-    100358a8:   91 f5 ff 4b     bl      10034e38 <get_base_addr+0x8>
-
-
-I'm following perf fix we had for similar issue:
-  7b6ff0bdbf4f perf probe ppc64le: Fixup function entry if using kallsyms lookup
-
-I'll get more info on that
-
-jirka
-
-> 
-> > +{
-> > +       return offset + LEP_OFFSET;
-> > +}
-> > +#else
-> > +#define get_offset(offset) (offset)
-> > +#endif
-> > +
-> >  ssize_t get_base_addr() {
-> >         size_t start, offset;
-> >         char buf[256];
-> > @@ -36,7 +52,7 @@ void test_attach_probe(void)
-> >         if (CHECK(base_addr < 0, "get_base_addr",
-> >                   "failed to find base addr: %zd", base_addr))
-> >                 return;
-> > -       uprobe_offset = (size_t)&get_base_addr - base_addr;
-> > +       uprobe_offset = get_offset((size_t)&get_base_addr - base_addr);
-> >
-> >         skel = test_attach_probe__open_and_load();
-> >         if (CHECK(!skel, "skel_open", "failed to open skeleton\n"))
-> > --
-> > 2.29.2
-> >
-> 
-
+[1] https://lore.kernel.org/bpf/20210301154019.129110-1-iii@linux.ibm.com/T/#u
