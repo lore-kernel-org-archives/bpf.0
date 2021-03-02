@@ -2,150 +2,199 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B35AC432C3
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:56:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93261C433E0
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:56:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DA37C64E75
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:56:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3F45564E6F
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:56:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236290AbhCCDus (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Mar 2021 22:50:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51330 "EHLO
+        id S1352531AbhCCDuv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Mar 2021 22:50:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344228AbhCBRlq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 2 Mar 2021 12:41:46 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 660A5C0698D3
-        for <bpf@vger.kernel.org>; Tue,  2 Mar 2021 09:20:49 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id q204so13193904pfq.10
-        for <bpf@vger.kernel.org>; Tue, 02 Mar 2021 09:20:49 -0800 (PST)
+        with ESMTP id S236964AbhCBSYr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 2 Mar 2021 13:24:47 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72925C0617A7;
+        Tue,  2 Mar 2021 10:23:40 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id o6so2572619pjf.5;
+        Tue, 02 Mar 2021 10:23:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cilium-io.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=sdfyObE0E1JspOvROEYz/USdJ0MsLAvmGmtxjKiuziw=;
-        b=hX1Bi349HGCRg4XxhEuiHPv8IhO8nCMLe1NF8WCH6A8WDN//ph/h8lvaH5r2lczDV1
-         wrB0kZ8auZwVQ++e7AnrEtrDanbuws/DC5Namddhl3/vNLA8kGdngV51GGXhpZV1xade
-         TZHIOt6Agm3XH6WZL1D2jgzJRHFQgj6lzRyCmk+k7+FRzXF2j1SyAnxREGC2vfgVjdwt
-         /o6FcUOFQigEC9sLMr9LX8X3mUyiIJM0BhlCghAY1B24xST7eaMJ1m84cV3lH3les6Rf
-         iaiokLMplzD2gO1jSgVAxEPR7CMzIv0B7+wYO2hZpo1g9G62jJjOdh0engpN8omOwBZu
-         yS3A==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bnxJ87u4sbrwdk1LAB30YLXwHUgFDPCGUB44sFI7n1s=;
+        b=uI/i8gcpuYmFguZTeZ92j+H6EHouSCIOf1vxo0rFq4INLXiAhldffcUPKE31UyGoXb
+         rUieOrPz71RSIdEtfeXFKBHEcSdz3udJzOCuMb9SWQB7nPSl2Opu2gZWX2gWI2Csg43n
+         wOiPKKMTmOXkvx8UdE3ZwRVJ++bHYmNN8T7N+ZWZPPDhRkB5EwrJqAko4zd+BNnENLWZ
+         8eBPRcoP73a3SZ9es+bzRk6h1UfNzCN2riPte6TT8Pz/+GdHiUqBxmkxkL8ZGtVjkP8Y
+         iHUlCcs9AYc86qMy8pGiuCVjvGmoOXJJRnkRVcb/8xSYgBulx4082bpZUzN124KM+Cpr
+         nLjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=sdfyObE0E1JspOvROEYz/USdJ0MsLAvmGmtxjKiuziw=;
-        b=GChdgHXQMm6Rc8BsY+uu2nX3xN6KxI5smIeDI80rSJK3JCF3MJ6uxLR/RYE2Cpk6HU
-         QzLQH1Cy54YbO1a3TeqV4Lohak2O1ZVDVI/9wkxQm9ic88S1OUlR67ObmKNZEYWTsENq
-         Xe1LpVMqqnAJZyYQEMxdPmEMpYkBzjjBHAi7iOhyJd5o4FwLTE8Rmt6j+pS3ZHeDICfo
-         p6vGeZ0CwKaNguPm2JV0f1KZnXEuhiUk4iyyrEeaJulWNvFZp5TfO6UCpF7OOuUH/juJ
-         FoMCY8qkj5hIx89wwmVJB93Sx2vB3lLGEYBLzNfu9Ro1RCV4Z15E3oJf7XT45Etmb8BS
-         O05w==
-X-Gm-Message-State: AOAM533rzgk0yq2VnZPV17ZgMO7b//hYSd/ntI9fAyOgcd5MFmhCBxgi
-        31oOAc9DGYhKMsrvfCmwnYc/khD+V+hwEwo4
-X-Google-Smtp-Source: ABdhPJxu2ccLPZxQduQGZaDo7/+I565sDXZiuNJfYVTL+2FXqWypan6o8vAXbJYeQe0VhYMkd+Z72Q==
-X-Received: by 2002:a62:6304:0:b029:1c0:d62d:d213 with SMTP id x4-20020a6263040000b02901c0d62dd213mr4045441pfb.79.1614705648725;
-        Tue, 02 Mar 2021 09:20:48 -0800 (PST)
-Received: from localhost.localdomain (c-73-93-5-123.hsd1.ca.comcast.net. [73.93.5.123])
-        by smtp.gmail.com with ESMTPSA id b15sm20073923pgg.85.2021.03.02.09.20.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Mar 2021 09:20:48 -0800 (PST)
-From:   Joe Stringer <joe@cilium.io>
-To:     bpf@vger.kernel.org
-Cc:     daniel@iogearbox.net, ast@kernel.org, linux-doc@vger.kernel.org,
-        linux-man@vger.kernel.org,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Quentin Monnet <quentin@isovalent.com>
-Subject: [PATCHv2 bpf-next 13/15] selftests/bpf: Test syscall command parsing
-Date:   Tue,  2 Mar 2021 09:19:45 -0800
-Message-Id: <20210302171947.2268128-14-joe@cilium.io>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210302171947.2268128-1-joe@cilium.io>
-References: <20210302171947.2268128-1-joe@cilium.io>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bnxJ87u4sbrwdk1LAB30YLXwHUgFDPCGUB44sFI7n1s=;
+        b=sLUOM0roNXK3MespzFIUJ3mHYz4H11cOjoo01SYqZGuFHxIoI4p0Xb6RAOysJ5tyIp
+         bgZraxAzvvZt4NZGr4coJcZzcodfI32qQKWcGzLnjKAipFn+kjRiGh+/3CnNv/MGispY
+         ydOWtiwb/4sqkHyYTKCxsoBr3J2YzsxtoxGFdppOaaOq+mpc4KRQ5FJVCOZxAuUEho1M
+         fNfrVsxQEU78d6dDSi6QDvIyBHnBHcxMVPY+FZv7gHca3/P9+2pbUTWcJepE9WXfQt7D
+         N4WeUR4Xke6Z2f620YQP5dYuAqf1ZlQo13zrh0z+xfSs5oqbyDHjFGE1llBeuCWnsc70
+         0dOA==
+X-Gm-Message-State: AOAM5317/mq4lhozH+GGkQ+PBhca7CpaEUNA9yDhooQZ/+tNgAoSTEfH
+        u2W9hPX/j5aABlM/pqmEumn7L7BgFSjfTpJzwHiAhm+bE1rWtw==
+X-Google-Smtp-Source: ABdhPJwKMmxE8PKMms10iLp+avFpm/jVT/64xFRltVsfI+uuHTglt6Su1krBT5kTb5KSxtJNLi3qMTCxgNaFQhOHS08=
+X-Received: by 2002:a17:90a:ce92:: with SMTP id g18mr5839612pju.52.1614709419796;
+ Tue, 02 Mar 2021 10:23:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20210302023743.24123-1-xiyou.wangcong@gmail.com>
+ <20210302023743.24123-3-xiyou.wangcong@gmail.com> <CACAyw9-SjsNn4_J1KDXuFh1nd9Hr-Mo+=7S-kVtooJwdi1fodQ@mail.gmail.com>
+In-Reply-To: <CACAyw9-SjsNn4_J1KDXuFh1nd9Hr-Mo+=7S-kVtooJwdi1fodQ@mail.gmail.com>
+From:   Cong Wang <xiyou.wangcong@gmail.com>
+Date:   Tue, 2 Mar 2021 10:23:28 -0800
+Message-ID: <CAM_iQpXqE9qJ=+zKA6H1Rq=KKgm8LZ=p=ZtvrrH+hfSrTg+zxw@mail.gmail.com>
+Subject: Re: [Patch bpf-next v2 2/9] sock: introduce sk_prot->update_proto()
+To:     Lorenz Bauer <lmb@cloudflare.com>
+Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        duanxiongchun@bytedance.com,
+        Dongdong Wang <wangdongdong.6@bytedance.com>,
+        Jiang Wang <jiang.wang@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jakub Sitnicki <jakub@cloudflare.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add building of the bpf(2) syscall commands documentation as part of the
-docs building step in the build. This allows us to pick up on potential
-parse errors from the docs generator script as part of selftests.
+On Tue, Mar 2, 2021 at 8:22 AM Lorenz Bauer <lmb@cloudflare.com> wrote:
+>
+> On Tue, 2 Mar 2021 at 02:37, Cong Wang <xiyou.wangcong@gmail.com> wrote:
+>
+> ...
+> >  static inline void sk_psock_restore_proto(struct sock *sk,
+> >                                           struct sk_psock *psock)
+> >  {
+> >         sk->sk_prot->unhash = psock->saved_unhash;
+>
+> Not related to your patch set, but why do an extra restore of
+> sk_prot->unhash here? At this point sk->sk_prot is one of our tcp_bpf
+> / udp_bpf protos, so overwriting that seems wrong?
 
-The generated manual pages here are not intended for distribution, they
-are just a fragment that can be integrated into the other static text of
-bpf(2) to form the full manual page.
+Good catch. It seems you are right, but I need a double check. And
+yes, it is completely unrelated to my patch, as the current code has
+the same problem.
 
-Acked-by: Toke Høiland-Jørgensen <toke@redhat.com>
-Reviewed-by: Quentin Monnet <quentin@isovalent.com>
-Signed-off-by: Joe Stringer <joe@cilium.io>
----
- tools/testing/selftests/bpf/.gitignore    |  1 +
- tools/testing/selftests/bpf/Makefile.docs | 14 ++++++++++++--
- 2 files changed, 13 insertions(+), 2 deletions(-)
+>
+> > -       if (inet_csk_has_ulp(sk)) {
+> > -               tcp_update_ulp(sk, psock->sk_proto, psock->saved_write_space);
+> > -       } else {
+> > -               sk->sk_write_space = psock->saved_write_space;
+> > -               /* Pairs with lockless read in sk_clone_lock() */
+> > -               WRITE_ONCE(sk->sk_prot, psock->sk_proto);
+> > -       }
+> > +       if (psock->saved_update_proto)
+> > +               psock->saved_update_proto(sk, true);
+> >  }
+> >
+> >  static inline void sk_psock_set_state(struct sk_psock *psock,
+> > diff --git a/include/net/sock.h b/include/net/sock.h
+> > index 636810ddcd9b..0e8577c917e8 100644
+> > --- a/include/net/sock.h
+> > +++ b/include/net/sock.h
+> > @@ -1184,6 +1184,9 @@ struct proto {
+> >         void                    (*unhash)(struct sock *sk);
+> >         void                    (*rehash)(struct sock *sk);
+> >         int                     (*get_port)(struct sock *sk, unsigned short snum);
+> > +#ifdef CONFIG_BPF_SYSCALL
+> > +       int                     (*update_proto)(struct sock *sk, bool restore);
+>
+> Kind of a nit, but this name suggests that the callback is a lot more
+> generic than it really is. The only thing you can use it for is to
+> prep the socket to be sockmap ready since we hardwire sockmap_unhash,
+> etc. It's also not at all clear that this only works if sk has an
+> sk_psock associated with it. Calling it without one would crash the
+> kernel since the update_proto functions don't check for !sk_psock.
+>
+> Might as well call it install_sockmap_hooks or something and have a
+> valid sk_psock be passed in to the callback. Additionally, I'd prefer
 
-diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
-index a0d5ec3cfc24..4866f6a21901 100644
---- a/tools/testing/selftests/bpf/.gitignore
-+++ b/tools/testing/selftests/bpf/.gitignore
-@@ -1,5 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0-only
- bpf-helpers*
-+bpf-syscall*
- test_verifier
- test_maps
- test_lru_map
-diff --git a/tools/testing/selftests/bpf/Makefile.docs b/tools/testing/selftests/bpf/Makefile.docs
-index f39ad19317c8..ccf260021e83 100644
---- a/tools/testing/selftests/bpf/Makefile.docs
-+++ b/tools/testing/selftests/bpf/Makefile.docs
-@@ -15,18 +15,27 @@ endif
- 
- prefix ?= /usr/local
- mandir ?= $(prefix)/man
-+man2dir = $(mandir)/man2
- man7dir = $(mandir)/man7
- 
-+SYSCALL_RST = bpf-syscall.rst
-+MAN2_RST = $(SYSCALL_RST)
-+
- HELPERS_RST = bpf-helpers.rst
- MAN7_RST = $(HELPERS_RST)
- 
-+_DOC_MAN2 = $(patsubst %.rst,%.2,$(MAN2_RST))
-+DOC_MAN2 = $(addprefix $(OUTPUT),$(_DOC_MAN2))
-+
- _DOC_MAN7 = $(patsubst %.rst,%.7,$(MAN7_RST))
- DOC_MAN7 = $(addprefix $(OUTPUT),$(_DOC_MAN7))
- 
--DOCTARGETS := helpers
-+DOCTARGETS := helpers syscall
- 
- docs: $(DOCTARGETS)
-+syscall: man2
- helpers: man7
-+man2: $(DOC_MAN2)
- man7: $(DOC_MAN7)
- 
- RST2MAN_DEP := $(shell command -v rst2man 2>/dev/null)
-@@ -64,9 +73,10 @@ endef
- 
- # Create the make targets to generate manual pages by name and section
- $(eval $(call DOCS_RULES,helpers,7))
-+$(eval $(call DOCS_RULES,syscall,2))
- 
- docs-clean: $(foreach doctarget,$(DOCTARGETS), docs-clean-$(doctarget))
- docs-install: $(foreach doctarget,$(DOCTARGETS), docs-install-$(doctarget))
- docs-uninstall: $(foreach doctarget,$(DOCTARGETS), docs-uninstall-$(doctarget))
- 
--.PHONY: docs docs-clean docs-install docs-uninstall man7
-+.PHONY: docs docs-clean docs-install docs-uninstall man2 man7
--- 
-2.27.0
+For the name, sure, I am always open to better names. Not sure if
+'install_sockmap_hooks' is a good name, I also want to express we
+are overriding sk_prot. How about 'psock_update_sk_prot'?
 
+
+> if the function returned a struct proto * like it does at the moment.
+> That way we keep sk->sk_prot manipulation confined to the sockmap code
+> and don't have to copy paste it into every proto.
+
+Well, TCP seems too special to do this, as it could call tcp_update_ulp()
+to update the proto.
+
+>
+> > diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+> > index 3bddd9dd2da2..13d2af5bb81c 100644
+> > --- a/net/core/sock_map.c
+> > +++ b/net/core/sock_map.c
+> > @@ -184,26 +184,10 @@ static void sock_map_unref(struct sock *sk, void *link_raw)
+> >
+> >  static int sock_map_init_proto(struct sock *sk, struct sk_psock *psock)
+> >  {
+> > -       struct proto *prot;
+> > -
+> > -       switch (sk->sk_type) {
+> > -       case SOCK_STREAM:
+> > -               prot = tcp_bpf_get_proto(sk, psock);
+> > -               break;
+> > -
+> > -       case SOCK_DGRAM:
+> > -               prot = udp_bpf_get_proto(sk, psock);
+> > -               break;
+> > -
+> > -       default:
+> > +       if (!sk->sk_prot->update_proto)
+> >                 return -EINVAL;
+> > -       }
+> > -
+> > -       if (IS_ERR(prot))
+> > -               return PTR_ERR(prot);
+> > -
+> > -       sk_psock_update_proto(sk, psock, prot);
+> > -       return 0;
+> > +       psock->saved_update_proto = sk->sk_prot->update_proto;
+> > +       return sk->sk_prot->update_proto(sk, false);
+>
+> I think reads / writes from sk_prot need READ_ONCE / WRITE_ONCE. We've
+> not been diligent about this so far, but I think it makes sense to be
+> careful in new code.
+
+Hmm, there are many places not using READ_ONCE/WRITE_ONCE,
+for a quick example:
+
+void sock_map_unhash(struct sock *sk)
+{
+        void (*saved_unhash)(struct sock *sk);
+        struct sk_psock *psock;
+
+        rcu_read_lock();
+        psock = sk_psock(sk);
+        if (unlikely(!psock)) {
+                rcu_read_unlock();
+                if (sk->sk_prot->unhash)
+                        sk->sk_prot->unhash(sk);
+                return;
+        }
+
+        saved_unhash = psock->saved_unhash;
+        sock_map_remove_links(sk, psock);
+        rcu_read_unlock();
+        saved_unhash(sk);
+}
+
+Thanks.
