@@ -2,122 +2,103 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F1F07C28CC5
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E524C43142
 	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:56:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BC3A264E6F
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:56:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F191E64E74
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:56:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352482AbhCCDvO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Mar 2021 22:51:14 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:53941 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1383578AbhCBVQ2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 2 Mar 2021 16:16:28 -0500
-Received: (qmail 1545136 invoked by uid 1000); 2 Mar 2021 16:14:46 -0500
-Date:   Tue, 2 Mar 2021 16:14:46 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@gmail.com>
+        id S1352545AbhCCDvF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Mar 2021 22:51:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58180 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350729AbhCBUZj (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 2 Mar 2021 15:25:39 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBE2BC061788;
+        Tue,  2 Mar 2021 12:24:17 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id d15so6021567wrv.5;
+        Tue, 02 Mar 2021 12:24:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=6T3fGD+86/8fYUQZQLE14YUohAPbWb01LybRdaeaGkI=;
+        b=QiO5JRff59hxNMm+ostLWqwaISk3Hg89pQpkhWn803Os0dD+R7ON+nBo3q/3zoX5Fr
+         jdtWKbgDAzIbOBh3/5KVMTX0KvAciD8m5vid+oj0ZSdYYHz0lfr5ZyC8DwHYvL5gq78z
+         XEZ6sN+zURqLnflikkTWNoKwBbSOFnLxdX9apH2KxoQL84sMq18xZIFahCJOkFRmjPD/
+         WCmJzzXGbVQNJJzdY02pDMs5pWeMeygZGOlXizJ3OkT9k7aD38c1o9kKEtJrbuvGpfta
+         JQGjox3OJ4ToxDDE5c+W9XPEvxKRa1lNlwYfNjVG7/FjhD9o5mOK+i+CNEtzcMOHb2/Q
+         PDNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=6T3fGD+86/8fYUQZQLE14YUohAPbWb01LybRdaeaGkI=;
+        b=oViqaiGIQouQsRlQ2vOelzeVDrqfYblo5Y3eHVohMoPkj6HgAtr+23Vv9I2HoISZzQ
+         l2+y9LEunpJzkz9K1Kd+amn2YpzbpTxgjrnzkxf5rgWsD7L+d1Bs2MibbnOpGG2kzejt
+         rE5T176GsX6tZjO6nUgUwmsPu+S7lWMyYO/C/AIJ+6o/NdS/PYQaMTNZ3/CmP4f1ni61
+         0vgiYLbuGamLyvkZ0zu1mX2tCGYYbKytlI/8inexvolpgRv2kWKPzp/+ZdhEU6bI3f1H
+         Ic2jGaLDO4mxy03UXIYSH0skgbcDfDsv1e//a1SVL4TOzAHyUVu+TwDWwh6whTOPn/E3
+         QiDA==
+X-Gm-Message-State: AOAM533XQrWx8hYP3FjMx3mnFpEeGx/BovV4y8YQ8CZlRqfS76pbOe0b
+        6AzOm3SAxZqKTN2TGzMh3i8O0oHMsyeNbREquzw=
+X-Google-Smtp-Source: ABdhPJyaxWBvb6OJ+IkFKFOq/kLbbCFFfOmZI9SG21yQGo5iV8ox5Rhb1Slnq4/HltrHp4A4ljfge08S0iDzfJkAxXY=
+X-Received: by 2002:a5d:4141:: with SMTP id c1mr24661300wrq.248.1614716656517;
+ Tue, 02 Mar 2021 12:24:16 -0800 (PST)
+MIME-Version: 1.0
+References: <CAJ+HfNhxWFeKnn1aZw-YJmzpBuCaoeGkXXKn058GhY-6ZBDtZA@mail.gmail.com>
+ <20210302195758.GQ2696@paulmck-ThinkPad-P72>
+In-Reply-To: <20210302195758.GQ2696@paulmck-ThinkPad-P72>
+From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
+Date:   Tue, 2 Mar 2021 21:24:04 +0100
+Message-ID: <CAJ+HfNj-_P=LpkrUjxcOR73ffMXwsJ+o+zMTfmkiuH2zZ5XCLQ@mail.gmail.com>
+Subject: Re: XDP socket rings, and LKMM litmus tests
+To:     paulmck@kernel.org
 Cc:     bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        parri.andrea@gmail.com, Will Deacon <will@kernel.org>,
+        stern@rowland.harvard.edu, parri.andrea@gmail.com,
+        Will Deacon <will@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>, boqun.feng@gmail.com,
         npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
-        luc.maranget@inria.fr, paulmck@kernel.org, akiyks@gmail.com,
-        dlustig@nvidia.com, joel@joelfernandes.org,
-        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
+        luc.maranget@inria.fr, akiyks@gmail.com, dlustig@nvidia.com,
+        joel@joelfernandes.org,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
         "Karlsson, Magnus" <magnus.karlsson@intel.com>
-Subject: Re: XDP socket rings, and LKMM litmus tests
-Message-ID: <20210302211446.GA1541641@rowland.harvard.edu>
-References: <CAJ+HfNhxWFeKnn1aZw-YJmzpBuCaoeGkXXKn058GhY-6ZBDtZA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJ+HfNhxWFeKnn1aZw-YJmzpBuCaoeGkXXKn058GhY-6ZBDtZA@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Mar 02, 2021 at 07:46:27PM +0100, Björn Töpel wrote:
-> Hi!
-> 
-> Firstly; The long Cc-list is to reach the LKMM-folks.
-> 
-> Some background; the XDP sockets use a ring-buffer to communicate
-> between the kernel and userland. It's a
-> single-consumer/single-producer ring, and described in
-> net/xdp/xsk_queue.h.
-> 
-> --8<---
-> /* The structure of the shared state of the rings are the same as the
->  * ring buffer in kernel/events/ring_buffer.c. For the Rx and completion
->  * ring, the kernel is the producer and user space is the consumer. For
->  * the Tx and fill rings, the kernel is the consumer and user space is
->  * the producer.
->  *
->  * producer                         consumer
->  *
->  * if (LOAD ->consumer) {           LOAD ->producer
->  *                    (A)           smp_rmb()       (C)
->  *    STORE $data                   LOAD $data
->  *    smp_wmb()       (B)           smp_mb()        (D)
->  *    STORE ->producer              STORE ->consumer
->  * }
->  *
->  * (A) pairs with (D), and (B) pairs with (C).
-> ...
-> -->8---
-> 
-> I'd like to replace the smp_{r,w,}mb() barriers with acquire-release
-> semantics [1], without breaking existing userspace applications.
-> 
-> So, I figured I'd use herd7 and the LKMM model to build a litmus test
-> for the barrier version, then for the acquire-release version, and
-> finally permutations of both.
-> 
-> The idea is to use a one element ring, with a state machine outlined
-> in the litmus test.
-> 
-> The basic test for the existing smp_{r,w,}mb() barriers looks like:
-> 
-> $ cat spsc-rb+1p1c.litmus
-> C spsc-rb+1p1c
-> 
-> // Stupid one entry ring:
-> // prod cons     allowed action       prod cons
-> //    0    0 =>       prod          =>   1    0
-> //    0    1 =>       cons          =>   0    0
-> //    1    0 =>       cons          =>   1    1
-> //    1    1 =>       prod          =>   0    1
-> 
-> { prod = 1; }
-> 
-> // Here, we start at prod==1,cons==0, data==0, i.e. producer has
-> // written data=0, so from here only the consumer can start, and should
-> // consume data==0. Afterwards, producer can continue and write 1 to
-> // data. Can we enter state prod==0, cons==1, but consumer observerd
-> // the write of 1?
-> 
+On Tue, 2 Mar 2021 at 20:57, Paul E. McKenney <paulmck@kernel.org> wrote:
+>
+> On Tue, Mar 02, 2021 at 07:46:27PM +0100, Bj=C3=B6rn T=C3=B6pel wrote:
+
+[...]
+
+>
+> Before digging in too deeply, does the following simplification
+> still capture your intent?
+>
+
+Thanks for having a look, Paul!
+
 > P0(int *prod, int *cons, int *data)
 > {
 >     int p;
->     int c;
->     int cond = 0;
-> 
->     p = READ_ONCE(*prod);
->     c = READ_ONCE(*cons);
->     if (p == 0)
->         if (c == 0)
->             cond = 1;
->     if (p == 1)
->         if (c == 1)
->             cond = 1;
-> 
+>     int cond =3D 0;
+>
+>     p =3D READ_ONCE(*prod);
+>     if (p =3D=3D READ_ONCE(*cons))
+>             cond =3D 1;
+
+With this, yes!
+
 >     if (cond) {
 >         smp_mb();
 >         WRITE_ONCE(*data, 1);
@@ -125,89 +106,38 @@ On Tue, Mar 02, 2021 at 07:46:27PM +0100, Björn Töpel wrote:
 >         WRITE_ONCE(*prod, p ^ 1);
 >     }
 > }
-> 
+>
 > P1(int *prod, int *cons, int *data)
 > {
->     int p;
 >     int c;
->     int d = -1;
->     int cond = 0;
-> 
->     p = READ_ONCE(*prod);
->     c = READ_ONCE(*cons);
->     if (p == 1)
->         if (c == 0)
->             cond = 1;
->     if (p == 0)
->         if (c == 1)
->             cond = 1;
-> 
->     if (cond == 1) {
+>     int d =3D -1;
+>     int cond =3D 0;
+>
+>     c =3D READ_ONCE(*cons);
+>     if (READ_ONCE(*prod) =3D=3D c)
+>             cond =3D 1;
+
+Hmm, this would not be the correct state transition.
+
+c=3D=3D1 && p=3D=3D1 would set cond to 1, right?
+
+I would agree with:
+  c =3D READ_ONCE(*cons);
+  if (READ_ONCE(*prod) !=3D c)
+
+
+>
+>     if (cond =3D=3D 1) {
 >         smp_rmb();
->         d = READ_ONCE(*data);
+>         d =3D READ_ONCE(*data);
 >         smp_mb();
 >         WRITE_ONCE(*cons, c ^ 1);
 >     }
 > }
-> 
-> exists( 1:d=1 /\ prod=0 /\ cons=1 );
-> 
-> --
-> 
-> The weird state changing if-statements is because that I didn't get
-> '&&' and '||' to work with herd.
-> 
-> When this is run:
-> 
-> $ herd7 -conf linux-kernel.cfg litmus-tests/spsc-rb+1p1c.litmus
-> Test spsc-rb+1p1c Allowed
-> States 2
-> 1:d=0; cons=1; prod=0;
-> 1:d=0; cons=1; prod=1;
-> No
-> Witnesses
-> Positive: 0 Negative: 2
-> Condition exists (1:d=1 /\ prod=0 /\ cons=1)
-> Observation spsc-rb+1p1c Never 0 2
-> Time spsc-rb+1p1c 0.04
-> Hash=b399756d6a1301ca5bda042f32130791
-> 
-> Now to my question; In P0 there's an smp_mb(). Without that, the d==1
-> can be observed from P1 (consumer):
-> 
-> $ herd7 -conf linux-kernel.cfg litmus-tests/spsc-rb+1p1c.litmus
-> Test spsc-rb+1p1c Allowed
-> States 3
-> 1:d=0; cons=1; prod=0;
-> 1:d=0; cons=1; prod=1;
-> 1:d=1; cons=1; prod=0;
-> Ok
-> Witnesses
-> Positive: 1 Negative: 2
-> Condition exists (1:d=1 /\ prod=0 /\ cons=1)
-> Observation spsc-rb+1p1c Sometimes 1 2
-> Time spsc-rb+1p1c 0.04
-> Hash=0047fc21fa77da9a9aee15e35ec367ef
+>
+>                                                         Thanx, Paul
+>
 
-This result is wrong, apparently because of a bug in herd7.  There 
-should be control dependencies from each of the two loads in P0 to each 
-of the two stores, but herd7 doesn't detect them.
+[...]
 
-Maybe Luc can find some time to check whether this really is a bug and 
-if it is, fix it.
-
-> In commit c7f2e3cd6c1f ("perf: Optimize ring-buffer write by depending
-> on control dependencies") removes the corresponding smp_mb(), and also
-> the circular buffer in circular-buffers.txt (pre commit 6c43c091bdc5
-> ("documentation: Update circular buffer for
-> load-acquire/store-release")) is missing the smp_mb() at the
-> producer-side.
-> 
-> I'm trying to wrap my head around why it's OK to remove the smp_mb()
-> in the cases above? I'm worried that the current XDP socket ring
-> implementation (which is missing smp_mb()) might be broken.
-
-Because of the control dependencies, the smp_mb isn't needed.  The 
-dependencies will order both of the stores after both of the loads.
-
-Alan Stern
+Bj=C3=B6rn
