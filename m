@@ -2,237 +2,355 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 17982C433E9
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:56:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B6C39C43333
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:56:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BAC2864E6F
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:56:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8944564E75
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:56:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352533AbhCCDuz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Mar 2021 22:50:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37128 "EHLO
+        id S1352523AbhCCDuo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Mar 2021 22:50:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1577326AbhCBSug (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 2 Mar 2021 13:50:36 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0A3EC061B3F;
-        Tue,  2 Mar 2021 10:46:40 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id d11so20985760wrj.7;
-        Tue, 02 Mar 2021 10:46:40 -0800 (PST)
+        with ESMTP id S1344082AbhCBRlc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 2 Mar 2021 12:41:32 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B67C0698C7
+        for <bpf@vger.kernel.org>; Tue,  2 Mar 2021 09:20:44 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id e9so2474351pjj.0
+        for <bpf@vger.kernel.org>; Tue, 02 Mar 2021 09:20:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=ThaGPSpZZau2nMCUkolf5Z7vGgepqzdKOwfuY68ukvQ=;
-        b=t1GqZbcXhaj1YT+Garr+1EhoLnjxkgM+JUHpcyERacTSaMQMZjGLWIJooA/iAiDnun
-         ZGFoh0xbGMNxojP3GxvBw8XyYn6uQoRbwDbl8gmE/F2EyFGbeW5u4A1Fdu9lms+G1i26
-         RQVleTZyC7Yx4uS1vXbiot3RC/etO/OKtd6zHpyZar3AyKIncyAJeD4GRQvp67rI781n
-         7DGtVA7ZO2EvndAY430ZY9aGF4bj8BRAaOUJYR6fS6C2lqKgUVpEbUsAbaUA80k2sDLQ
-         TMUl9eHfyAWbEaTmkAWvoSw0rav2roc8zy7UWlWrvJWI6fdMQ5KWgXBHQFR1/nXlfc5y
-         Jv3w==
+        d=cilium-io.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=fRChbTS8wm3//f2BALQqTT/xFw+Hx0cBe+aJeD7Uh84=;
+        b=qXgIqqi4ObJ6UdZYB5w747BTk9f9amHZx1zbj15a59wo3j1hcw5u6sHcTuAHT7onMU
+         BVZhfAmy/WK0q4aWiIfTI0e2WJP0ljZ8OXEi94p851QdY9+kjbHFzIkPJzYc3N6H9HpC
+         QA6az0JLL/E1Uz4uXm4IWqA+fpAXqH7/bqtqVXbqsu7s+03/evhsa8YrntRGCoEFaVrf
+         pk+0N1LYEdjDe1Wsc61K+L9khdbNArLuIPw9DFHfl6jaC+FiU1kIOEWmHWBCIc3f0w6W
+         cvgObljR+dTW9RFKKxXL8P0NZfTYviXe/ONvH8RXfRzCgVvQ+HaKR6S60RFkF1Pgct+o
+         kKRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=ThaGPSpZZau2nMCUkolf5Z7vGgepqzdKOwfuY68ukvQ=;
-        b=YkYx/JA1wmjAb16knQzRfTVdQbkljsh5KkjyweGd71lfU1AmK5xluUJSADUJRCZV2P
-         O0EMTFBTaaUL73N2SoPmrZxPctESTJEEu6RIMgJZt2rhjy6HjK/Ve1kpMvEUx4906s7Y
-         S2eKSXLx+s86mdCD3sImXiFJX0v4bQbNRTGF1mL5kzN48mh5eJZbKMbJ4R50owkeMGcn
-         +TZSylS5hoFRPOn2kI+lH8uT3o7gmwk9gZQJmCS16uWGF9Q7MEScQJm7N4l9sUTd2nuq
-         cFzWDvZsNlw5+WV/V9S0bcIxEbTgEhJVEepTjoBL8tSGqYkBKO8P+zzBT812lGW+sUPB
-         4KiA==
-X-Gm-Message-State: AOAM533+V9V7TH/ZDaSukc/78axJtUhNYWPQ42ZchbKQdY4E8IpyK7cN
-        4O+Cx+/LHrOHfEiWiwRNo9hte0WDSfqIhEuvufleVKICZHbfGw==
-X-Google-Smtp-Source: ABdhPJxgfzFOSuV6fv4WQpW4rUzbYiF+W3o8crUDzd0upfW81o73O5QiQsqUQjnO5tR4YK/Le4vOU3Zi3r5T1Zc8Fxk=
-X-Received: by 2002:a5d:4ac6:: with SMTP id y6mr20718463wrs.160.1614710798680;
- Tue, 02 Mar 2021 10:46:38 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=fRChbTS8wm3//f2BALQqTT/xFw+Hx0cBe+aJeD7Uh84=;
+        b=s9HZZKlMWR5VCYGgmXKlgkMVka7/blBPtWYe9gMKDbKVW9jj5j9LhmBBp5jeGAM+UE
+         P7AbU/zx5ynkR0qWCHddv5T2onMdMOFRWAKTwV3G88c4RktzuEiT+ZYiOyv7ND1M5G6l
+         Uozl2DsZLseLKxy8zgpjUtqgAjtwhDiXfJoQRtcv6B+9MR72kmKK4XgOcRjF5wdDo+cL
+         xPeJS/KZmFezHtfWO1LrGLGZWOpWydj66mltlHlTWLESL9yePnWH1WLz53A1sLXhTNRG
+         jLMJqlfrBUYXEtn8fj6/pM+i877atm/32Jn+JXRpdXGeuckjpZj6wV33xXxNpUKNvXeI
+         8EsA==
+X-Gm-Message-State: AOAM533RCliiJ7ogLVnv9iT6fOmB2K1cMkJphpizv/ZYRwMgt/KXUU98
+        ugqlpkJrua+OLAO6Dn3yDfD4TilivwCwxCUa
+X-Google-Smtp-Source: ABdhPJy+RrBwQTGcQzFWXHdEQ7YNuC9XacWs/v2BYwcrWyiLn3qvoyC6OROFYlLSPxV0G/BLWTnZNA==
+X-Received: by 2002:a17:90a:39c9:: with SMTP id k9mr5395908pjf.121.1614705643910;
+        Tue, 02 Mar 2021 09:20:43 -0800 (PST)
+Received: from localhost.localdomain (c-73-93-5-123.hsd1.ca.comcast.net. [73.93.5.123])
+        by smtp.gmail.com with ESMTPSA id b15sm20073923pgg.85.2021.03.02.09.20.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Mar 2021 09:20:43 -0800 (PST)
+From:   Joe Stringer <joe@cilium.io>
+To:     bpf@vger.kernel.org
+Cc:     daniel@iogearbox.net, ast@kernel.org, linux-doc@vger.kernel.org,
+        linux-man@vger.kernel.org,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        Quentin Monnet <quentin@isovalent.com>
+Subject: [PATCHv2 bpf-next 09/15] scripts/bpf: Abstract eBPF API target parameter
+Date:   Tue,  2 Mar 2021 09:19:41 -0800
+Message-Id: <20210302171947.2268128-10-joe@cilium.io>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20210302171947.2268128-1-joe@cilium.io>
+References: <20210302171947.2268128-1-joe@cilium.io>
 MIME-Version: 1.0
-From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
-Date:   Tue, 2 Mar 2021 19:46:27 +0100
-Message-ID: <CAJ+HfNhxWFeKnn1aZw-YJmzpBuCaoeGkXXKn058GhY-6ZBDtZA@mail.gmail.com>
-Subject: XDP socket rings, and LKMM litmus tests
-To:     bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Cc:     stern@rowland.harvard.edu, parri.andrea@gmail.com,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, boqun.feng@gmail.com,
-        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
-        luc.maranget@inria.fr, paulmck@kernel.org, akiyks@gmail.com,
-        dlustig@nvidia.com, joel@joelfernandes.org,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
-        "Karlsson, Magnus" <magnus.karlsson@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi!
+Abstract out the target parameter so that upcoming commits, more than
+just the existing "helpers" target can be called to generate specific
+portions of docs from the eBPF UAPI headers.
 
-Firstly; The long Cc-list is to reach the LKMM-folks.
+Acked-by: Toke Høiland-Jørgensen <toke@redhat.com>
+Reviewed-by: Quentin Monnet <quentin@isovalent.com>
+Signed-off-by: Joe Stringer <joe@cilium.io>
+---
+ MAINTAINERS                                |  1 +
+ include/uapi/linux/bpf.h                   |  2 +-
+ scripts/{bpf_helpers_doc.py => bpf_doc.py} | 91 +++++++++++++++-------
+ tools/bpf/Makefile.helpers                 |  2 +-
+ tools/include/uapi/linux/bpf.h             |  2 +-
+ tools/lib/bpf/Makefile                     |  2 +-
+ tools/perf/MANIFEST                        |  2 +-
+ 7 files changed, 69 insertions(+), 33 deletions(-)
+ rename scripts/{bpf_helpers_doc.py => bpf_doc.py} (92%)
 
-Some background; the XDP sockets use a ring-buffer to communicate
-between the kernel and userland. It's a
-single-consumer/single-producer ring, and described in
-net/xdp/xsk_queue.h.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index a50a543e3c81..8d56c7044067 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -3223,6 +3223,7 @@ F:	net/core/filter.c
+ F:	net/sched/act_bpf.c
+ F:	net/sched/cls_bpf.c
+ F:	samples/bpf/
++F:	scripts/bpf_doc.py
+ F:	tools/bpf/
+ F:	tools/lib/bpf/
+ F:	tools/testing/selftests/bpf/
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index c8b9d19fce22..63a56ed6a785 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -1439,7 +1439,7 @@ union bpf_attr {
+  * parsed and used to produce a manual page. The workflow is the following,
+  * and requires the rst2man utility:
+  *
+- *     $ ./scripts/bpf_helpers_doc.py \
++ *     $ ./scripts/bpf_doc.py \
+  *             --filename include/uapi/linux/bpf.h > /tmp/bpf-helpers.rst
+  *     $ rst2man /tmp/bpf-helpers.rst > /tmp/bpf-helpers.7
+  *     $ man /tmp/bpf-helpers.7
+diff --git a/scripts/bpf_helpers_doc.py b/scripts/bpf_doc.py
+similarity index 92%
+rename from scripts/bpf_helpers_doc.py
+rename to scripts/bpf_doc.py
+index 867ada23281c..5a4f68aab335 100755
+--- a/scripts/bpf_helpers_doc.py
++++ b/scripts/bpf_doc.py
+@@ -2,6 +2,7 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ #
+ # Copyright (C) 2018-2019 Netronome Systems, Inc.
++# Copyright (C) 2021 Isovalent, Inc.
+ 
+ # In case user attempts to run with Python 2.
+ from __future__ import print_function
+@@ -165,10 +166,11 @@ class Printer(object):
+     """
+     A generic class for printers. Printers should be created with an array of
+     Helper objects, and implement a way to print them in the desired fashion.
+-    @helpers: array of Helper objects to print to standard output
++    @parser: A HeaderParser with objects to print to standard output
+     """
+-    def __init__(self, helpers):
+-        self.helpers = helpers
++    def __init__(self, parser):
++        self.parser = parser
++        self.elements = []
+ 
+     def print_header(self):
+         pass
+@@ -181,19 +183,23 @@ class Printer(object):
+ 
+     def print_all(self):
+         self.print_header()
+-        for helper in self.helpers:
+-            self.print_one(helper)
++        for elem in self.elements:
++            self.print_one(elem)
+         self.print_footer()
+ 
++
+ class PrinterRST(Printer):
+     """
+-    A printer for dumping collected information about helpers as a ReStructured
+-    Text page compatible with the rst2man program, which can be used to
+-    generate a manual page for the helpers.
+-    @helpers: array of Helper objects to print to standard output
++    A generic class for printers that print ReStructured Text. Printers should
++    be created with a HeaderParser object, and implement a way to print API
++    elements in the desired fashion.
++    @parser: A HeaderParser with objects to print to standard output
+     """
+-    def print_header(self):
+-        header = '''\
++    def __init__(self, parser):
++        self.parser = parser
++
++    def print_license(self):
++        license = '''\
+ .. Copyright (C) All BPF authors and contributors from 2014 to present.
+ .. See git log include/uapi/linux/bpf.h in kernel tree for details.
+ .. 
+@@ -221,9 +227,39 @@ class PrinterRST(Printer):
+ .. 
+ .. Please do not edit this file. It was generated from the documentation
+ .. located in file include/uapi/linux/bpf.h of the Linux kernel sources
+-.. (helpers description), and from scripts/bpf_helpers_doc.py in the same
++.. (helpers description), and from scripts/bpf_doc.py in the same
+ .. repository (header and footer).
++'''
++        print(license)
++
++    def print_elem(self, elem):
++        if (elem.desc):
++            print('\tDescription')
++            # Do not strip all newline characters: formatted code at the end of
++            # a section must be followed by a blank line.
++            for line in re.sub('\n$', '', elem.desc, count=1).split('\n'):
++                print('{}{}'.format('\t\t' if line else '', line))
++
++        if (elem.ret):
++            print('\tReturn')
++            for line in elem.ret.rstrip().split('\n'):
++                print('{}{}'.format('\t\t' if line else '', line))
++
++        print('')
+ 
++
++class PrinterHelpersRST(PrinterRST):
++    """
++    A printer for dumping collected information about helpers as a ReStructured
++    Text page compatible with the rst2man program, which can be used to
++    generate a manual page for the helpers.
++    @parser: A HeaderParser with Helper objects to print to standard output
++    """
++    def __init__(self, parser):
++        self.elements = parser.helpers
++
++    def print_header(self):
++        header = '''\
+ ===========
+ BPF-HELPERS
+ ===========
+@@ -264,6 +300,7 @@ kernel at the top).
+ HELPERS
+ =======
+ '''
++        PrinterRST.print_license(self)
+         print(header)
+ 
+     def print_footer(self):
+@@ -380,27 +417,19 @@ SEE ALSO
+ 
+     def print_one(self, helper):
+         self.print_proto(helper)
++        self.print_elem(helper)
+ 
+-        if (helper.desc):
+-            print('\tDescription')
+-            # Do not strip all newline characters: formatted code at the end of
+-            # a section must be followed by a blank line.
+-            for line in re.sub('\n$', '', helper.desc, count=1).split('\n'):
+-                print('{}{}'.format('\t\t' if line else '', line))
+ 
+-        if (helper.ret):
+-            print('\tReturn')
+-            for line in helper.ret.rstrip().split('\n'):
+-                print('{}{}'.format('\t\t' if line else '', line))
+ 
+-        print('')
+ 
+ class PrinterHelpers(Printer):
+     """
+     A printer for dumping collected information about helpers as C header to
+     be included from BPF program.
+-    @helpers: array of Helper objects to print to standard output
++    @parser: A HeaderParser with Helper objects to print to standard output
+     """
++    def __init__(self, parser):
++        self.elements = parser.helpers
+ 
+     type_fwds = [
+             'struct bpf_fib_lookup',
+@@ -511,7 +540,7 @@ class PrinterHelpers(Printer):
+ 
+     def print_header(self):
+         header = '''\
+-/* This is auto-generated file. See bpf_helpers_doc.py for details. */
++/* This is auto-generated file. See bpf_doc.py for details. */
+ 
+ /* Forward declarations of BPF structs */'''
+ 
+@@ -589,8 +618,12 @@ script = os.path.abspath(sys.argv[0])
+ linuxRoot = os.path.dirname(os.path.dirname(script))
+ bpfh = os.path.join(linuxRoot, 'include/uapi/linux/bpf.h')
+ 
++printers = {
++        'helpers': PrinterHelpersRST,
++}
++
+ argParser = argparse.ArgumentParser(description="""
+-Parse eBPF header file and generate documentation for eBPF helper functions.
++Parse eBPF header file and generate documentation for the eBPF API.
+ The RST-formatted output produced can be turned into a manual page with the
+ rst2man utility.
+ """)
+@@ -601,6 +634,8 @@ if (os.path.isfile(bpfh)):
+                            default=bpfh)
+ else:
+     argParser.add_argument('--filename', help='path to include/uapi/linux/bpf.h')
++argParser.add_argument('target', nargs='?', default='helpers',
++                       choices=printers.keys(), help='eBPF API target')
+ args = argParser.parse_args()
+ 
+ # Parse file.
+@@ -609,7 +644,7 @@ headerParser.run()
+ 
+ # Print formatted output to standard output.
+ if args.header:
+-    printer = PrinterHelpers(headerParser.helpers)
++    printer = PrinterHelpers(headerParser)
+ else:
+-    printer = PrinterRST(headerParser.helpers)
++    printer = printers[args.target](headerParser)
+ printer.print_all()
+diff --git a/tools/bpf/Makefile.helpers b/tools/bpf/Makefile.helpers
+index 854d084026dd..a26599022fd6 100644
+--- a/tools/bpf/Makefile.helpers
++++ b/tools/bpf/Makefile.helpers
+@@ -35,7 +35,7 @@ man7: $(DOC_MAN7)
+ RST2MAN_DEP := $(shell command -v rst2man 2>/dev/null)
+ 
+ $(OUTPUT)$(HELPERS_RST): $(UP2DIR)../../include/uapi/linux/bpf.h
+-	$(QUIET_GEN)$(UP2DIR)../../scripts/bpf_helpers_doc.py --filename $< > $@
++	$(QUIET_GEN)$(UP2DIR)../../scripts/bpf_doc.py --filename $< > $@
+ 
+ $(OUTPUT)%.7: $(OUTPUT)%.rst
+ ifndef RST2MAN_DEP
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index b89af20cfa19..b4c5c529ad17 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -729,7 +729,7 @@ union bpf_attr {
+  * parsed and used to produce a manual page. The workflow is the following,
+  * and requires the rst2man utility:
+  *
+- *     $ ./scripts/bpf_helpers_doc.py \
++ *     $ ./scripts/bpf_doc.py \
+  *             --filename include/uapi/linux/bpf.h > /tmp/bpf-helpers.rst
+  *     $ rst2man /tmp/bpf-helpers.rst > /tmp/bpf-helpers.7
+  *     $ man /tmp/bpf-helpers.7
+diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
+index 887a494ad5fc..8170f88e8ea6 100644
+--- a/tools/lib/bpf/Makefile
++++ b/tools/lib/bpf/Makefile
+@@ -158,7 +158,7 @@ $(BPF_IN_STATIC): force $(BPF_HELPER_DEFS)
+ 	$(Q)$(MAKE) $(build)=libbpf OUTPUT=$(STATIC_OBJDIR)
+ 
+ $(BPF_HELPER_DEFS): $(srctree)/tools/include/uapi/linux/bpf.h
+-	$(QUIET_GEN)$(srctree)/scripts/bpf_helpers_doc.py --header \
++	$(QUIET_GEN)$(srctree)/scripts/bpf_doc.py --header \
+ 		--file $(srctree)/tools/include/uapi/linux/bpf.h > $(BPF_HELPER_DEFS)
+ 
+ $(OUTPUT)libbpf.so: $(OUTPUT)libbpf.so.$(LIBBPF_VERSION)
+diff --git a/tools/perf/MANIFEST b/tools/perf/MANIFEST
+index 5d7b947320fb..f05c4d48fd7e 100644
+--- a/tools/perf/MANIFEST
++++ b/tools/perf/MANIFEST
+@@ -20,4 +20,4 @@ tools/lib/bitmap.c
+ tools/lib/str_error_r.c
+ tools/lib/vsprintf.c
+ tools/lib/zalloc.c
+-scripts/bpf_helpers_doc.py
++scripts/bpf_doc.py
+-- 
+2.27.0
 
---8<---
-/* The structure of the shared state of the rings are the same as the
- * ring buffer in kernel/events/ring_buffer.c. For the Rx and completion
- * ring, the kernel is the producer and user space is the consumer. For
- * the Tx and fill rings, the kernel is the consumer and user space is
- * the producer.
- *
- * producer                         consumer
- *
- * if (LOAD ->consumer) {           LOAD ->producer
- *                    (A)           smp_rmb()       (C)
- *    STORE $data                   LOAD $data
- *    smp_wmb()       (B)           smp_mb()        (D)
- *    STORE ->producer              STORE ->consumer
- * }
- *
- * (A) pairs with (D), and (B) pairs with (C).
-...
--->8---
-
-I'd like to replace the smp_{r,w,}mb() barriers with acquire-release
-semantics [1], without breaking existing userspace applications.
-
-So, I figured I'd use herd7 and the LKMM model to build a litmus test
-for the barrier version, then for the acquire-release version, and
-finally permutations of both.
-
-The idea is to use a one element ring, with a state machine outlined
-in the litmus test.
-
-The basic test for the existing smp_{r,w,}mb() barriers looks like:
-
-$ cat spsc-rb+1p1c.litmus
-C spsc-rb+1p1c
-
-// Stupid one entry ring:
-// prod cons     allowed action       prod cons
-//    0    0 =3D>       prod          =3D>   1    0
-//    0    1 =3D>       cons          =3D>   0    0
-//    1    0 =3D>       cons          =3D>   1    1
-//    1    1 =3D>       prod          =3D>   0    1
-
-{ prod =3D 1; }
-
-// Here, we start at prod=3D=3D1,cons=3D=3D0, data=3D=3D0, i.e. producer ha=
-s
-// written data=3D0, so from here only the consumer can start, and should
-// consume data=3D=3D0. Afterwards, producer can continue and write 1 to
-// data. Can we enter state prod=3D=3D0, cons=3D=3D1, but consumer observer=
-d
-// the write of 1?
-
-P0(int *prod, int *cons, int *data)
-{
-    int p;
-    int c;
-    int cond =3D 0;
-
-    p =3D READ_ONCE(*prod);
-    c =3D READ_ONCE(*cons);
-    if (p =3D=3D 0)
-        if (c =3D=3D 0)
-            cond =3D 1;
-    if (p =3D=3D 1)
-        if (c =3D=3D 1)
-            cond =3D 1;
-
-    if (cond) {
-        smp_mb();
-        WRITE_ONCE(*data, 1);
-        smp_wmb();
-        WRITE_ONCE(*prod, p ^ 1);
-    }
-}
-
-P1(int *prod, int *cons, int *data)
-{
-    int p;
-    int c;
-    int d =3D -1;
-    int cond =3D 0;
-
-    p =3D READ_ONCE(*prod);
-    c =3D READ_ONCE(*cons);
-    if (p =3D=3D 1)
-        if (c =3D=3D 0)
-            cond =3D 1;
-    if (p =3D=3D 0)
-        if (c =3D=3D 1)
-            cond =3D 1;
-
-    if (cond =3D=3D 1) {
-        smp_rmb();
-        d =3D READ_ONCE(*data);
-        smp_mb();
-        WRITE_ONCE(*cons, c ^ 1);
-    }
-}
-
-exists( 1:d=3D1 /\ prod=3D0 /\ cons=3D1 );
-
---
-
-The weird state changing if-statements is because that I didn't get
-'&&' and '||' to work with herd.
-
-When this is run:
-
-$ herd7 -conf linux-kernel.cfg litmus-tests/spsc-rb+1p1c.litmus
-Test spsc-rb+1p1c Allowed
-States 2
-1:d=3D0; cons=3D1; prod=3D0;
-1:d=3D0; cons=3D1; prod=3D1;
-No
-Witnesses
-Positive: 0 Negative: 2
-Condition exists (1:d=3D1 /\ prod=3D0 /\ cons=3D1)
-Observation spsc-rb+1p1c Never 0 2
-Time spsc-rb+1p1c 0.04
-Hash=3Db399756d6a1301ca5bda042f32130791
-
-Now to my question; In P0 there's an smp_mb(). Without that, the d=3D=3D1
-can be observed from P1 (consumer):
-
-$ herd7 -conf linux-kernel.cfg litmus-tests/spsc-rb+1p1c.litmus
-Test spsc-rb+1p1c Allowed
-States 3
-1:d=3D0; cons=3D1; prod=3D0;
-1:d=3D0; cons=3D1; prod=3D1;
-1:d=3D1; cons=3D1; prod=3D0;
-Ok
-Witnesses
-Positive: 1 Negative: 2
-Condition exists (1:d=3D1 /\ prod=3D0 /\ cons=3D1)
-Observation spsc-rb+1p1c Sometimes 1 2
-Time spsc-rb+1p1c 0.04
-Hash=3D0047fc21fa77da9a9aee15e35ec367ef
-
-In commit c7f2e3cd6c1f ("perf: Optimize ring-buffer write by depending
-on control dependencies") removes the corresponding smp_mb(), and also
-the circular buffer in circular-buffers.txt (pre commit 6c43c091bdc5
-("documentation: Update circular buffer for
-load-acquire/store-release")) is missing the smp_mb() at the
-producer-side.
-
-I'm trying to wrap my head around why it's OK to remove the smp_mb()
-in the cases above? I'm worried that the current XDP socket ring
-implementation (which is missing smp_mb()) might be broken.
-
-
-If you read this far, thanks! :-)
-Bj=C3=B6rn
-
-
-[1] https://lore.kernel.org/bpf/20210301104318.263262-2-bjorn.topel@gmail.c=
-om/
