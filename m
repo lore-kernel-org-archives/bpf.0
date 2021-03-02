@@ -8,54 +8,54 @@ X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1E28C43331
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ED3B6C4332D
 	for <bpf@archiver.kernel.org>; Tue,  2 Mar 2021 10:38:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8B40664F0D
+	by mail.kernel.org (Postfix) with ESMTP id B4E4A64F07
 	for <bpf@archiver.kernel.org>; Tue,  2 Mar 2021 10:38:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383012AbhCBKbf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Mar 2021 05:31:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54804 "EHLO
+        id S1383021AbhCBKcB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Mar 2021 05:32:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443988AbhCBCil (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1443986AbhCBCil (ORCPT <rfc822;bpf@vger.kernel.org>);
         Mon, 1 Mar 2021 21:38:41 -0500
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA85C061793;
-        Mon,  1 Mar 2021 18:37:58 -0800 (PST)
-Received: by mail-oi1-x22a.google.com with SMTP id o3so20440864oic.8;
-        Mon, 01 Mar 2021 18:37:58 -0800 (PST)
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20EA5C06178B;
+        Mon,  1 Mar 2021 18:37:55 -0800 (PST)
+Received: by mail-oi1-x234.google.com with SMTP id w69so20485861oif.1;
+        Mon, 01 Mar 2021 18:37:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=1+nWbH2X4eUskfN7h2bAJQ0jwGDRaEfpm7mVkpF/v2w=;
-        b=ROtSuaqMLfI54kztrhx/vsjFPBVqHWxu/JRtbSOqxVPOL2vSfNQ1tF5wrclB3nYran
-         qgtGrmHIeMIKuwctWgN3e4e5BZOsT6J79dLp75zY/3QZb7gWhhDPhV8Bs9WGMfJtZeoz
-         HoBhRstYP5lkW8nOVRchom9uagH0cOE2CXbZpwPS6aFkCBeUqu3S9uxRtoWCGsa1MJiu
-         jia5Or8GlJvhT+C1/FNgA08i0rdtawCfq//mtrA0Mz1C/Dpji2XIxmaZqFE1rib8K1q6
-         UQFPupACZ+B2iFt8zXk0gXCfAPm7CpQj5lRQglC5f3j32/g7bV+yM8Zk0tzVSs2j5N0j
-         4jOg==
+        bh=R0Ojmw0D2lDoqGY2EK1tsZimcNKC42bH4E+kY1K6FpI=;
+        b=AGcNBf4f7BqYj1puJ/t6NxUMt092Y/xARajCd9ETb+LFdXy0G5huHB+eASxwaheo5H
+         irNR3fcNHyNhyyK5U+84LNEtf3s4E6HywMzhdx+/lZgOdGgUzXIlJprtzTuylJSUuvbH
+         gWpchAGP16Y5yM5wICwQGxAk8npOeHsHp+5Qr/uunR5cg1E3VTewZJiTmwQgIRAeFDTS
+         Ia1XPN/NFZ9qLlJ0C8hFIalXmis2N6Ehr/cLIC635KqrNzRuyJfRdbM9wrtB6g3g1JSl
+         pZ7F2ISpYlP2bVttSw+W1XqYuyMZTScIP7mDhhCMmcI1bpjjuavuhNFfXn1S9mr8wATz
+         v+gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=1+nWbH2X4eUskfN7h2bAJQ0jwGDRaEfpm7mVkpF/v2w=;
-        b=dXT7m3X1IlTEXabW/GbXLzQFLTXk4egL7bVXoeBD+AnmZ7tgvV4Ay7hLLTqP+gm8Z0
-         bflFswIAVgKo2ShK9h+rmWmHSZD6pcg8aNRNIw6VqnPhiJ/r1wpCZqSAAF99PvNvtF6X
-         iAwK37zrqbE9igTYTxlyhAWMcUoU+5jqBDx3d2szxik22sr5ChkDs+8MqLrevcwN13kV
-         zp90Z0vhuwHJNgA0CeFGgy0ppyQyPoQjX3VUevYUGIfIqFa1TrdGfV8vlSemTKcX/CNV
-         M+98DgQjySr8CwW6Te0pAkZT6QmryakXMJM0cacd2Ildn0+ychhJZsvQhOiyx3DKOhce
-         se0A==
-X-Gm-Message-State: AOAM530jyX1q1bDcNAwnWz/cz1ZiS7+fH21QCKG3qUO5qxoXxYG2ehX1
-        YQO+B+KUbniJ/4AopPpfNFer8QMcxojqDQ==
-X-Google-Smtp-Source: ABdhPJzn+qeD0x3rs4Bf3/YXKrzZA893z5z/hfPUZCLTaRdr3pYNehgeCVFLYzm+EoUGsQ6Vzqf5tA==
-X-Received: by 2002:aca:d644:: with SMTP id n65mr1718463oig.118.1614652677938;
-        Mon, 01 Mar 2021 18:37:57 -0800 (PST)
+        bh=R0Ojmw0D2lDoqGY2EK1tsZimcNKC42bH4E+kY1K6FpI=;
+        b=dDue01tc8gL5E8q5zooLeFru3loH75rtpTeTOA2EskRjRaotCjWVUdjKZ0gAhtdqfb
+         4QQcHCVa2QCEajhKzhZKXw3lA/8K+cI1nM61hDykCR9gll+uBTDiX3WXAVuXpuWOBqU+
+         GxOOzXx2LXV7Mhntuljm56lx8roxFi9FEU77KzTbysDfeZ8/GiJewsgWpKxgmSblqC7Z
+         1fuiPE19hWrpgzUTBqRn+v/gL+7urVBrleuE2WCelxik4yDXJ5/l6qzjgl5HvNFHcaCm
+         nKRATuvUtrWOveTsWNrKowChJzUBHcjOblnKJoEyv7H4cKJTRTnjaieG7Lu8ms9dwpim
+         uKwQ==
+X-Gm-Message-State: AOAM530LSW5YYyX+lbeanHMHGxP2qOrGWj/PSpfiyxPHZbO9Fb1vh/OA
+        nRMvwtCHyAKgSKLV3GAf1/YW4tc4a9+dDg==
+X-Google-Smtp-Source: ABdhPJwftY1RbFknra67NrwF8kDg5/YZztQimQK3jVrm8gdPFvLIKdRiMGIaeGXG21fhnFemFlfvwg==
+X-Received: by 2002:aca:2406:: with SMTP id n6mr1674534oic.56.1614652674393;
+        Mon, 01 Mar 2021 18:37:54 -0800 (PST)
 Received: from unknown.attlocal.net ([2600:1700:65a0:ab60:1bb:8d29:39ef:5fe5])
-        by smtp.gmail.com with ESMTPSA id a30sm100058oiy.42.2021.03.01.18.37.56
+        by smtp.gmail.com with ESMTPSA id a30sm100058oiy.42.2021.03.01.18.37.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Mar 2021 18:37:57 -0800 (PST)
+        Mon, 01 Mar 2021 18:37:53 -0800 (PST)
 From:   Cong Wang <xiyou.wangcong@gmail.com>
 To:     netdev@vger.kernel.org
 Cc:     bpf@vger.kernel.org, duanxiongchun@bytedance.com,
@@ -65,9 +65,9 @@ Cc:     bpf@vger.kernel.org, duanxiongchun@bytedance.com,
         Daniel Borkmann <daniel@iogearbox.net>,
         Jakub Sitnicki <jakub@cloudflare.com>,
         Lorenz Bauer <lmb@cloudflare.com>
-Subject: [Patch bpf-next v2 3/9] udp: implement ->sendmsg_locked()
-Date:   Mon,  1 Mar 2021 18:37:37 -0800
-Message-Id: <20210302023743.24123-4-xiyou.wangcong@gmail.com>
+Subject: [Patch bpf-next v2 1/9] sock_map: introduce BPF_SK_SKB_VERDICT
+Date:   Mon,  1 Mar 2021 18:37:35 -0800
+Message-Id: <20210302023743.24123-2-xiyou.wangcong@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210302023743.24123-1-xiyou.wangcong@gmail.com>
 References: <20210302023743.24123-1-xiyou.wangcong@gmail.com>
@@ -79,9 +79,11 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Cong Wang <cong.wang@bytedance.com>
 
-UDP already has udp_sendmsg() which takes lock_sock() inside.
-We have to build ->sendmsg_locked() on top of it, by adding
-a new parameter for whether the sock has been locked.
+Reusing BPF_SK_SKB_STREAM_VERDICT is possible but its name is
+confusing and more importantly we still want to distinguish them
+from user-space. So we can just reuse the stream verdict code but
+introduce a new type of eBPF program, skb_verdict. Users are not
+allowed to set stream_verdict and skb_verdict at the same time.
 
 Cc: John Fastabend <john.fastabend@gmail.com>
 Cc: Daniel Borkmann <daniel@iogearbox.net>
@@ -89,115 +91,201 @@ Cc: Jakub Sitnicki <jakub@cloudflare.com>
 Cc: Lorenz Bauer <lmb@cloudflare.com>
 Signed-off-by: Cong Wang <cong.wang@bytedance.com>
 ---
- include/net/udp.h  |  1 +
- net/ipv4/af_inet.c |  1 +
- net/ipv4/udp.c     | 30 +++++++++++++++++++++++-------
- 3 files changed, 25 insertions(+), 7 deletions(-)
+ include/linux/skmsg.h          |  3 +++
+ include/uapi/linux/bpf.h       |  1 +
+ kernel/bpf/syscall.c           |  1 +
+ net/core/skmsg.c               |  4 +++-
+ net/core/sock_map.c            | 23 ++++++++++++++++++++++-
+ tools/bpf/bpftool/common.c     |  1 +
+ tools/bpf/bpftool/prog.c       |  1 +
+ tools/include/uapi/linux/bpf.h |  1 +
+ 8 files changed, 33 insertions(+), 2 deletions(-)
 
-diff --git a/include/net/udp.h b/include/net/udp.h
-index df7cc1edc200..5264ba1439f9 100644
---- a/include/net/udp.h
-+++ b/include/net/udp.h
-@@ -292,6 +292,7 @@ int udp_get_port(struct sock *sk, unsigned short snum,
- int udp_err(struct sk_buff *, u32);
- int udp_abort(struct sock *sk, int err);
- int udp_sendmsg(struct sock *sk, struct msghdr *msg, size_t len);
-+int udp_sendmsg_locked(struct sock *sk, struct msghdr *msg, size_t len);
- int udp_push_pending_frames(struct sock *sk);
- void udp_flush_pending_frames(struct sock *sk);
- int udp_cmsg_send(struct sock *sk, struct msghdr *msg, u16 *gso_size);
-diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
-index a02ce89b56b5..d8c73a848c53 100644
---- a/net/ipv4/af_inet.c
-+++ b/net/ipv4/af_inet.c
-@@ -1071,6 +1071,7 @@ const struct proto_ops inet_dgram_ops = {
- 	.setsockopt	   = sock_common_setsockopt,
- 	.getsockopt	   = sock_common_getsockopt,
- 	.sendmsg	   = inet_sendmsg,
-+	.sendmsg_locked    = udp_sendmsg_locked,
- 	.recvmsg	   = inet_recvmsg,
- 	.mmap		   = sock_no_mmap,
- 	.sendpage	   = inet_sendpage,
-diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
-index dbd25b59ce0e..93db853601d7 100644
---- a/net/ipv4/udp.c
-+++ b/net/ipv4/udp.c
-@@ -1024,7 +1024,7 @@ int udp_cmsg_send(struct sock *sk, struct msghdr *msg, u16 *gso_size)
- }
- EXPORT_SYMBOL_GPL(udp_cmsg_send);
+diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
+index 6c09d94be2e9..451530d41af7 100644
+--- a/include/linux/skmsg.h
++++ b/include/linux/skmsg.h
+@@ -58,6 +58,7 @@ struct sk_psock_progs {
+ 	struct bpf_prog			*msg_parser;
+ 	struct bpf_prog			*stream_parser;
+ 	struct bpf_prog			*stream_verdict;
++	struct bpf_prog			*skb_verdict;
+ };
  
--int udp_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
-+static int __udp_sendmsg(struct sock *sk, struct msghdr *msg, size_t len, bool locked)
+ enum sk_psock_state_bits {
+@@ -442,6 +443,7 @@ static inline void psock_progs_drop(struct sk_psock_progs *progs)
+ 	psock_set_prog(&progs->msg_parser, NULL);
+ 	psock_set_prog(&progs->stream_parser, NULL);
+ 	psock_set_prog(&progs->stream_verdict, NULL);
++	psock_set_prog(&progs->skb_verdict, NULL);
+ }
+ 
+ int sk_psock_tls_strp_read(struct sk_psock *psock, struct sk_buff *skb);
+@@ -489,5 +491,6 @@ static inline void skb_bpf_redirect_clear(struct sk_buff *skb)
  {
- 	struct inet_sock *inet = inet_sk(sk);
- 	struct udp_sock *up = udp_sk(sk);
-@@ -1063,15 +1063,18 @@ int udp_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
- 		 * There are pending frames.
- 		 * The socket lock must be held while it's corked.
- 		 */
--		lock_sock(sk);
-+		if (!locked)
-+			lock_sock(sk);
- 		if (likely(up->pending)) {
- 			if (unlikely(up->pending != AF_INET)) {
--				release_sock(sk);
-+				if (!locked)
-+					release_sock(sk);
- 				return -EINVAL;
- 			}
- 			goto do_append_data;
+ 	skb->_sk_redir = 0;
+ }
++
+ #endif /* CONFIG_NET_SOCK_MSG */
+ #endif /* _LINUX_SKMSG_H */
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index b89af20cfa19..1a08ab00a45e 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -247,6 +247,7 @@ enum bpf_attach_type {
+ 	BPF_XDP_CPUMAP,
+ 	BPF_SK_LOOKUP,
+ 	BPF_XDP,
++	BPF_SK_SKB_VERDICT,
+ 	__MAX_BPF_ATTACH_TYPE
+ };
+ 
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index c859bc46d06c..afa803a1553e 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -2941,6 +2941,7 @@ attach_type_to_prog_type(enum bpf_attach_type attach_type)
+ 		return BPF_PROG_TYPE_SK_MSG;
+ 	case BPF_SK_SKB_STREAM_PARSER:
+ 	case BPF_SK_SKB_STREAM_VERDICT:
++	case BPF_SK_SKB_VERDICT:
+ 		return BPF_PROG_TYPE_SK_SKB;
+ 	case BPF_LIRC_MODE2:
+ 		return BPF_PROG_TYPE_LIRC_MODE2;
+diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+index 07f54015238a..5efd790f1b47 100644
+--- a/net/core/skmsg.c
++++ b/net/core/skmsg.c
+@@ -693,7 +693,7 @@ void sk_psock_drop(struct sock *sk, struct sk_psock *psock)
+ 	rcu_assign_sk_user_data(sk, NULL);
+ 	if (psock->progs.stream_parser)
+ 		sk_psock_stop_strp(sk, psock);
+-	else if (psock->progs.stream_verdict)
++	else if (psock->progs.stream_verdict || psock->progs.skb_verdict)
+ 		sk_psock_stop_verdict(sk, psock);
+ 	write_unlock_bh(&sk->sk_callback_lock);
+ 	sk_psock_clear_state(psock, SK_PSOCK_TX_ENABLED);
+@@ -1010,6 +1010,8 @@ static int sk_psock_verdict_recv(read_descriptor_t *desc, struct sk_buff *skb,
+ 	}
+ 	skb_set_owner_r(skb, sk);
+ 	prog = READ_ONCE(psock->progs.stream_verdict);
++	if (!prog)
++		prog = READ_ONCE(psock->progs.skb_verdict);
+ 	if (likely(prog)) {
+ 		skb_dst_drop(skb);
+ 		skb_bpf_redirect_clear(skb);
+diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+index dd53a7771d7e..3bddd9dd2da2 100644
+--- a/net/core/sock_map.c
++++ b/net/core/sock_map.c
+@@ -155,6 +155,8 @@ static void sock_map_del_link(struct sock *sk,
+ 				strp_stop = true;
+ 			if (psock->saved_data_ready && stab->progs.stream_verdict)
+ 				verdict_stop = true;
++			if (psock->saved_data_ready && stab->progs.skb_verdict)
++				verdict_stop = true;
+ 			list_del(&link->list);
+ 			sk_psock_free_link(link);
  		}
--		release_sock(sk);
-+		if (!locked)
-+			release_sock(sk);
- 	}
- 	ulen += sizeof(struct udphdr);
- 
-@@ -1241,11 +1244,13 @@ int udp_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
- 		goto out;
- 	}
- 
--	lock_sock(sk);
-+	if (!locked)
-+		lock_sock(sk);
- 	if (unlikely(up->pending)) {
- 		/* The socket is already corked while preparing it. */
- 		/* ... which is an evident application bug. --ANK */
--		release_sock(sk);
-+		if (!locked)
-+			release_sock(sk);
- 
- 		net_dbg_ratelimited("socket already corked\n");
- 		err = -EINVAL;
-@@ -1272,7 +1277,8 @@ int udp_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
- 		err = udp_push_pending_frames(sk);
- 	else if (unlikely(skb_queue_empty(&sk->sk_write_queue)))
- 		up->pending = 0;
--	release_sock(sk);
-+	if (!locked)
-+		release_sock(sk);
- 
- out:
- 	ip_rt_put(rt);
-@@ -1302,8 +1308,18 @@ int udp_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
- 	err = 0;
- 	goto out;
- }
-+
-+int udp_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
-+{
-+	return __udp_sendmsg(sk, msg, len, false);
-+}
- EXPORT_SYMBOL(udp_sendmsg);
- 
-+int udp_sendmsg_locked(struct sock *sk, struct msghdr *msg, size_t len)
-+{
-+	return __udp_sendmsg(sk, msg, len, true);
-+}
-+
- int udp_sendpage(struct sock *sk, struct page *page, int offset,
- 		 size_t size, int flags)
+@@ -227,7 +229,7 @@ static struct sk_psock *sock_map_psock_get_checked(struct sock *sk)
+ static int sock_map_link(struct bpf_map *map, struct sk_psock_progs *progs,
+ 			 struct sock *sk)
  {
+-	struct bpf_prog *msg_parser, *stream_parser, *stream_verdict;
++	struct bpf_prog *msg_parser, *stream_parser, *stream_verdict, *skb_verdict;
+ 	struct sk_psock *psock;
+ 	int ret;
+ 
+@@ -256,6 +258,15 @@ static int sock_map_link(struct bpf_map *map, struct sk_psock_progs *progs,
+ 		}
+ 	}
+ 
++	skb_verdict = READ_ONCE(progs->skb_verdict);
++	if (skb_verdict) {
++		skb_verdict = bpf_prog_inc_not_zero(skb_verdict);
++		if (IS_ERR(skb_verdict)) {
++			ret = PTR_ERR(skb_verdict);
++			goto out_put_msg_parser;
++		}
++	}
++
+ 	psock = sock_map_psock_get_checked(sk);
+ 	if (IS_ERR(psock)) {
+ 		ret = PTR_ERR(psock);
+@@ -265,6 +276,7 @@ static int sock_map_link(struct bpf_map *map, struct sk_psock_progs *progs,
+ 	if (psock) {
+ 		if ((msg_parser && READ_ONCE(psock->progs.msg_parser)) ||
+ 		    (stream_parser  && READ_ONCE(psock->progs.stream_parser)) ||
++		    (skb_verdict && READ_ONCE(psock->progs.skb_verdict)) ||
+ 		    (stream_verdict && READ_ONCE(psock->progs.stream_verdict))) {
+ 			sk_psock_put(sk, psock);
+ 			ret = -EBUSY;
+@@ -296,6 +308,9 @@ static int sock_map_link(struct bpf_map *map, struct sk_psock_progs *progs,
+ 	} else if (!stream_parser && stream_verdict && !psock->saved_data_ready) {
+ 		psock_set_prog(&psock->progs.stream_verdict, stream_verdict);
+ 		sk_psock_start_verdict(sk,psock);
++	} else if (!stream_verdict && skb_verdict && !psock->saved_data_ready) {
++		psock_set_prog(&psock->progs.skb_verdict, skb_verdict);
++		sk_psock_start_verdict(sk, psock);
+ 	}
+ 	write_unlock_bh(&sk->sk_callback_lock);
+ 	return 0;
+@@ -304,6 +319,9 @@ static int sock_map_link(struct bpf_map *map, struct sk_psock_progs *progs,
+ out_drop:
+ 	sk_psock_put(sk, psock);
+ out_progs:
++	if (skb_verdict)
++		bpf_prog_put(skb_verdict);
++out_put_msg_parser:
+ 	if (msg_parser)
+ 		bpf_prog_put(msg_parser);
+ out_put_stream_parser:
+@@ -1468,6 +1486,9 @@ static int sock_map_prog_update(struct bpf_map *map, struct bpf_prog *prog,
+ 	case BPF_SK_SKB_STREAM_VERDICT:
+ 		pprog = &progs->stream_verdict;
+ 		break;
++	case BPF_SK_SKB_VERDICT:
++		pprog = &progs->skb_verdict;
++		break;
+ 	default:
+ 		return -EOPNOTSUPP;
+ 	}
+diff --git a/tools/bpf/bpftool/common.c b/tools/bpf/bpftool/common.c
+index 65303664417e..1828bba19020 100644
+--- a/tools/bpf/bpftool/common.c
++++ b/tools/bpf/bpftool/common.c
+@@ -57,6 +57,7 @@ const char * const attach_type_name[__MAX_BPF_ATTACH_TYPE] = {
+ 
+ 	[BPF_SK_SKB_STREAM_PARSER]	= "sk_skb_stream_parser",
+ 	[BPF_SK_SKB_STREAM_VERDICT]	= "sk_skb_stream_verdict",
++	[BPF_SK_SKB_VERDICT]		= "sk_skb_verdict",
+ 	[BPF_SK_MSG_VERDICT]		= "sk_msg_verdict",
+ 	[BPF_LIRC_MODE2]		= "lirc_mode2",
+ 	[BPF_FLOW_DISSECTOR]		= "flow_dissector",
+diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+index f2b915b20546..3f067d2d7584 100644
+--- a/tools/bpf/bpftool/prog.c
++++ b/tools/bpf/bpftool/prog.c
+@@ -76,6 +76,7 @@ enum dump_mode {
+ static const char * const attach_type_strings[] = {
+ 	[BPF_SK_SKB_STREAM_PARSER] = "stream_parser",
+ 	[BPF_SK_SKB_STREAM_VERDICT] = "stream_verdict",
++	[BPF_SK_SKB_VERDICT] = "skb_verdict",
+ 	[BPF_SK_MSG_VERDICT] = "msg_verdict",
+ 	[BPF_FLOW_DISSECTOR] = "flow_dissector",
+ 	[__MAX_BPF_ATTACH_TYPE] = NULL,
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index b89af20cfa19..1a08ab00a45e 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -247,6 +247,7 @@ enum bpf_attach_type {
+ 	BPF_XDP_CPUMAP,
+ 	BPF_SK_LOOKUP,
+ 	BPF_XDP,
++	BPF_SK_SKB_VERDICT,
+ 	__MAX_BPF_ATTACH_TYPE
+ };
+ 
 -- 
 2.25.1
 
