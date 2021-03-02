@@ -2,105 +2,167 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 48053C43603
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:56:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9A35C433DB
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:56:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 12B6464E6F
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:56:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 90A5264E12
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:56:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352528AbhCCDus (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Mar 2021 22:50:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56696 "EHLO
+        id S1352532AbhCCDuy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Mar 2021 22:50:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237733AbhCBSGO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 2 Mar 2021 13:06:14 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF77FC061797;
-        Tue,  2 Mar 2021 10:05:29 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id t9so2441718pjl.5;
-        Tue, 02 Mar 2021 10:05:29 -0800 (PST)
+        with ESMTP id S1580980AbhCBScd (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 2 Mar 2021 13:32:33 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F7DC061788;
+        Tue,  2 Mar 2021 10:31:53 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id h82so7935504ybc.13;
+        Tue, 02 Mar 2021 10:31:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=N+zqWtCPFGAO5H3z7d1fgYW+zfhgXhVyeYtUOypIpX8=;
-        b=vEffHnQxFLC9erto9H62zINfAr4JuwSHmnoS04Fwtbjb0KeT9W7tBQQsTVF4aSF0O0
-         k+MeIyA6xAkb6LpC0rMaruMzzdqWXgjhq1/SR2Rsf0lDZo7tgKLR5x5gnmkGelnB9N8x
-         imaj/I6vdi8qSSP50Pkbn+/7TIOiZp9Iczeo3PWszsVim88vLSObpE15vN2d+MeO+MY/
-         j39+UTLjnfMhMdwtQY9zxFYXfwsgm+5b6R0xxnIjc5emTwyfWkDrBmdJkmSP1U+M/bup
-         80RRvNZKgizAZj9aE32bHgsC9ONBmYufTkLfqzQ0A45jzGS0RsfzaJ0qlKZbbyJTQ9/L
-         K0eA==
+        bh=p5mQjzoE3xnTJG7PmrlFzhti+trlvTo1ic3oTokLMMc=;
+        b=Y0Ubm2IqkOgR4zN9cLivDAIzbZ8wOHHcMayKC/hM/QadVWehA+GemhY0JUtHmknVRP
+         P5qxmjvvlFInrnpkvhgz5nblA+JxhGj08gDDAAEf+lIJdyxnqGuU/uIP4S5VRAwtrDUT
+         kfTSKtx7Xd8w80NX+fKfmMYXr8kIIa3wM2eO0YkNLc2pvzO9EZiqO3gj4nRju61xDhfn
+         JlWE7hhdAhqMOmCIPKProsDfA5CBuY1/Ld7N6i02FJht5O164WylrME3yBVecxR6KlCm
+         UYltiOjb6YrG968ul1LANwtnfL9Yojbk+2/slh5LuIrFcr7nKGkyGLFwGGR02ceZou8x
+         Xnsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=N+zqWtCPFGAO5H3z7d1fgYW+zfhgXhVyeYtUOypIpX8=;
-        b=sl8dJiLrVQym5aTrhGvoMmPAEME0I0b07le/KoGhX8jtGJduEAezLzhVP0lKN3qG1G
-         yYXQQ0DcI/GiZrfUihHqDNspflAnCasbE8jSW/gnqRVlmA211s0QwvHNKjt8Omjy0K9V
-         81ZvVMmzngH4jI2CTOKIVp7+uvqNQuuVpQ6wf1Ymba9mGpo94QMxZ6VXnd6CsWTnCb8F
-         lUre7sdFSunTG6r1kE5ygTBAuHsrwXFGuC+f4QXzuuh1E20rwEwvSDUf2rf81LI3Q0Lf
-         B6UlMVlgyXqKNSv1cpyodwROHyjP93CK2klYwcD2qv6RPD9Yk97FDnFwtSjU0G2GYx9X
-         w20A==
-X-Gm-Message-State: AOAM533rU/bNyDQbGTSBOdOFRAL5QHWzG6ATj5pclwxkXXRy/v8Yce+9
-        YRCuem//zRQun9OCx4PVDpj2578a6SZou+2qVOk=
-X-Google-Smtp-Source: ABdhPJzt0iBqz5zNdr37OxXwHW60npSQ2y4M6w30ZJj8DrQuoWadMv0AQa4K3JDp/uXcyerLS7Ghz8e09p7Fv8QiPNQ=
-X-Received: by 2002:a17:90a:ce92:: with SMTP id g18mr5766718pju.52.1614708329428;
- Tue, 02 Mar 2021 10:05:29 -0800 (PST)
+        bh=p5mQjzoE3xnTJG7PmrlFzhti+trlvTo1ic3oTokLMMc=;
+        b=c0qkr8ozzeogxHlqxr0XeAGKh+cq4W5cgkgxET3SCUUJ8bOFlo+K+0rvQUrNaqg42+
+         omU68XF+S1riTKk+WxZVWOFkNTgdiEaicB4oAmc+p5T6XpDf4d89+BVwqaKEtvHDuzx/
+         cJWQxMMVQwH3a3/lpqRSLed4s4zFS6OUlUBJE4RlO3lXgQkF3qsrAMd6eykY8jHU5/GO
+         XI2HsSxGUaVFRxrKmQtrbKecNJXI5is0yZtRU3TnsxCz3j9s028qx/SIIkk/2wr+cg+F
+         5+mFbmjyCkt9fhVF9CEcUd8qj49oFsucZfqHkd86u1/h1fiqLdGt8K1zHo2THGlscHty
+         hs6A==
+X-Gm-Message-State: AOAM533697R9JPyMLBLIIcpb1a5mGLI2Q3euXU+iCHZcEC56564AVCS9
+        AKhq6ZjIi4rD3+XVYPGD18MJ0th1+UkzhamB+M/DfBmYA84=
+X-Google-Smtp-Source: ABdhPJyQwwgASrpAqh0D+gy2eaMl5TSk+tWWgM0z9Yq8pKwMSkIRx55hvjrAWYBTJUmIDgK1d+EgiI9R2qZlD4PSn2Y=
+X-Received: by 2002:a25:c6cb:: with SMTP id k194mr32076441ybf.27.1614709912374;
+ Tue, 02 Mar 2021 10:31:52 -0800 (PST)
 MIME-Version: 1.0
-References: <20210302023743.24123-1-xiyou.wangcong@gmail.com>
- <20210302023743.24123-10-xiyou.wangcong@gmail.com> <CACAyw9-wmN-pGYPkk4Ey_bazoycWAn+1-ewccTKeo-ebpHqyPA@mail.gmail.com>
-In-Reply-To: <CACAyw9-wmN-pGYPkk4Ey_bazoycWAn+1-ewccTKeo-ebpHqyPA@mail.gmail.com>
-From:   Cong Wang <xiyou.wangcong@gmail.com>
-Date:   Tue, 2 Mar 2021 10:05:18 -0800
-Message-ID: <CAM_iQpX3qqpKyOW2ohYo0e-5GO_wpoBBqv1BnrLLRsufMwO2rg@mail.gmail.com>
-Subject: Re: [Patch bpf-next v2 9/9] selftests/bpf: add a test case for udp sockmap
-To:     Lorenz Bauer <lmb@cloudflare.com>
-Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        duanxiongchun@bytedance.com,
-        Dongdong Wang <wangdongdong.6@bytedance.com>,
-        Jiang Wang <jiang.wang@bytedance.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        John Fastabend <john.fastabend@gmail.com>,
+References: <20210301190416.90694-1-jolsa@kernel.org> <CAEf4BzbBnR3M60HepC_CFDsdMQDBYoEWiWtREUaLxrrxyBce0Q@mail.gmail.com>
+ <YD4d+dmay+oKyiot@krava>
+In-Reply-To: <YD4d+dmay+oKyiot@krava>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 2 Mar 2021 10:31:41 -0800
+Message-ID: <CAEf4Bzah8Au01NvtwSogpkr3etwQ3_bObj3GObG8Lb3N0DqZwA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Fix test_attach_probe for powerpc uprobes
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Sitnicki <jakub@cloudflare.com>
+        Andrii Nakryiko <andriin@fb.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        Yauheni Kaliuta <ykaliuta@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Mar 2, 2021 at 8:32 AM Lorenz Bauer <lmb@cloudflare.com> wrote:
+On Tue, Mar 2, 2021 at 3:14 AM Jiri Olsa <jolsa@redhat.com> wrote:
 >
-> On Tue, 2 Mar 2021 at 02:38, Cong Wang <xiyou.wangcong@gmail.com> wrote:
+> On Mon, Mar 01, 2021 at 04:34:24PM -0800, Andrii Nakryiko wrote:
+> > On Mon, Mar 1, 2021 at 11:11 AM Jiri Olsa <jolsa@kernel.org> wrote:
+> > >
+> > > When testing uprobes we the test gets GEP (Global Entry Point)
+> > > address from kallsyms, but then the function is called locally
+> > > so the uprobe is not triggered.
+> > >
+> > > Fixing this by adjusting the address to LEP (Local Entry Point)
+> > > for powerpc arch.
+> > >
+> > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > > ---
+> > >  .../selftests/bpf/prog_tests/attach_probe.c    | 18 +++++++++++++++++-
+> > >  1 file changed, 17 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/tools/testing/selftests/bpf/prog_tests/attach_probe.c b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
+> > > index a0ee87c8e1ea..c3cfb48d3ed0 100644
+> > > --- a/tools/testing/selftests/bpf/prog_tests/attach_probe.c
+> > > +++ b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
+> > > @@ -2,6 +2,22 @@
+> > >  #include <test_progs.h>
+> > >  #include "test_attach_probe.skel.h"
+> > >
+> > > +#if defined(__powerpc64__)
+> > > +/*
+> > > + * We get the GEP (Global Entry Point) address from kallsyms,
+> > > + * but then the function is called locally, so we need to adjust
+> > > + * the address to get LEP (Local Entry Point).
+> > > + */
+> > > +#define LEP_OFFSET 8
+> > > +
+> > > +static ssize_t get_offset(ssize_t offset)
 > >
-> > From: Cong Wang <cong.wang@bytedance.com>
+> > if we mark this function __weak global, would it work as is? Would it
+> > get an address of a global entry point? I know nothing about this GEP
+> > vs LEP stuff, interesting :)
+>
+> you mean get_base_addr? it's already global
+>
+> all the calls to get_base_addr within the object are made
+> to get_base_addr+0x8
+>
+> 00000000100350c0 <test_attach_probe>:
+>     ...
+>     100350e0:   59 fd ff 4b     bl      10034e38 <get_base_addr+0x8>
+>     ...
+>     100358a8:   91 f5 ff 4b     bl      10034e38 <get_base_addr+0x8>
+>
+>
+> I'm following perf fix we had for similar issue:
+>   7b6ff0bdbf4f perf probe ppc64le: Fixup function entry if using kallsyms lookup
+>
+> I'll get more info on that
+
+My thinking was that if you mark the function as __weak, then the
+compiler is not allowed to assume that the actual implementation of
+that function will come from the same object (because it might be
+replaced by the linker later), so it has to be pessimistic and use
+global entry, no? Totally theoritizing here, of course.
+
+>
+> jirka
+>
 > >
-> > Add a test case to ensure redirection between two UDP sockets work.
+> > > +{
+> > > +       return offset + LEP_OFFSET;
+> > > +}
+> > > +#else
+> > > +#define get_offset(offset) (offset)
+> > > +#endif
+> > > +
+> > >  ssize_t get_base_addr() {
+> > >         size_t start, offset;
+> > >         char buf[256];
+> > > @@ -36,7 +52,7 @@ void test_attach_probe(void)
+> > >         if (CHECK(base_addr < 0, "get_base_addr",
+> > >                   "failed to find base addr: %zd", base_addr))
+> > >                 return;
+> > > -       uprobe_offset = (size_t)&get_base_addr - base_addr;
+> > > +       uprobe_offset = get_offset((size_t)&get_base_addr - base_addr);
+> > >
+> > >         skel = test_attach_probe__open_and_load();
+> > >         if (CHECK(!skel, "skel_open", "failed to open skeleton\n"))
+> > > --
+> > > 2.29.2
+> > >
+> >
 >
-> I basically don't understand how splicing works, but watching from the
-> sidelines makes me think it'd be good to have more thorough tests.
-> tools/testing/selftests/bpf/test_sockmap.c has quite elaborate tests
-> for the TCP part, it'd be nice to get similar tests going for UDP. For
-
-Sure, TCP supports more than just BPF_SK_SKB_VERDICT, hence
-why it must have more tests than UDP. ;)
-
-> example:
->
-> * sendfile?
-> * sendmmsg
-
-Does UDP support any of these? I don't think so, at least not in my
-patchset.
-
-> * Something Jakub mentioned: what happens when a connected, spliced
-> socket is disconnected via connect(AF_UNSPEC)? Seems like we don't
-> hook sk_prot->disconnect anywhere.
-
-But we hook ->unhash(), right?
-
-Thanks.
