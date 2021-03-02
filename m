@@ -2,167 +2,195 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D9A35C433DB
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:56:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 43461C28D13
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:56:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 90A5264E12
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:56:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1B2D964E6F
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:56:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352532AbhCCDuy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Mar 2021 22:50:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34122 "EHLO
+        id S1352453AbhCCDvL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Mar 2021 22:51:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1580980AbhCBScd (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 2 Mar 2021 13:32:33 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F7DC061788;
-        Tue,  2 Mar 2021 10:31:53 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id h82so7935504ybc.13;
-        Tue, 02 Mar 2021 10:31:53 -0800 (PST)
+        with ESMTP id S1381284AbhCBUwc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 2 Mar 2021 15:52:32 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B170C061788;
+        Tue,  2 Mar 2021 12:51:42 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id l22so3364324wme.1;
+        Tue, 02 Mar 2021 12:51:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=p5mQjzoE3xnTJG7PmrlFzhti+trlvTo1ic3oTokLMMc=;
-        b=Y0Ubm2IqkOgR4zN9cLivDAIzbZ8wOHHcMayKC/hM/QadVWehA+GemhY0JUtHmknVRP
-         P5qxmjvvlFInrnpkvhgz5nblA+JxhGj08gDDAAEf+lIJdyxnqGuU/uIP4S5VRAwtrDUT
-         kfTSKtx7Xd8w80NX+fKfmMYXr8kIIa3wM2eO0YkNLc2pvzO9EZiqO3gj4nRju61xDhfn
-         JlWE7hhdAhqMOmCIPKProsDfA5CBuY1/Ld7N6i02FJht5O164WylrME3yBVecxR6KlCm
-         UYltiOjb6YrG968ul1LANwtnfL9Yojbk+2/slh5LuIrFcr7nKGkyGLFwGGR02ceZou8x
-         Xnsw==
+         :cc:content-transfer-encoding;
+        bh=kIc2w7mujz9voVpN9IahMRlS32F3lOVKY+UoybD2UvI=;
+        b=eIAjkt4jHEWC8FH4kXMbpC7gl9BJawjb04aSeyj4ImQ8n3/6Os4Bri9R7+JG0t6uIr
+         q+zlATJwN9dbY1Wg5R3o8llP8cfaTu2Y89wOG028zy6jug9p+Z4KAezDAjfjRl0EnvBk
+         oIqp/4gTVQ7oiDLs/szViB6FAf5hWaxY2FeAptgjNoVoFoYbMEvX17T41d3ut2/qh8g8
+         RskyQtSculplpZOc1ytNHrxG44WF4FZDjBKrHiv26ZQ//TaLUOXM86QALcugbZzocTdV
+         9kC8C5msx0Rz/m2tzvFEEsvxiVMliGfwUzPh33LVVO3W/NIWQeAWDdB00NiBCVFizEtZ
+         BgKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=p5mQjzoE3xnTJG7PmrlFzhti+trlvTo1ic3oTokLMMc=;
-        b=c0qkr8ozzeogxHlqxr0XeAGKh+cq4W5cgkgxET3SCUUJ8bOFlo+K+0rvQUrNaqg42+
-         omU68XF+S1riTKk+WxZVWOFkNTgdiEaicB4oAmc+p5T6XpDf4d89+BVwqaKEtvHDuzx/
-         cJWQxMMVQwH3a3/lpqRSLed4s4zFS6OUlUBJE4RlO3lXgQkF3qsrAMd6eykY8jHU5/GO
-         XI2HsSxGUaVFRxrKmQtrbKecNJXI5is0yZtRU3TnsxCz3j9s028qx/SIIkk/2wr+cg+F
-         5+mFbmjyCkt9fhVF9CEcUd8qj49oFsucZfqHkd86u1/h1fiqLdGt8K1zHo2THGlscHty
-         hs6A==
-X-Gm-Message-State: AOAM533697R9JPyMLBLIIcpb1a5mGLI2Q3euXU+iCHZcEC56564AVCS9
-        AKhq6ZjIi4rD3+XVYPGD18MJ0th1+UkzhamB+M/DfBmYA84=
-X-Google-Smtp-Source: ABdhPJyQwwgASrpAqh0D+gy2eaMl5TSk+tWWgM0z9Yq8pKwMSkIRx55hvjrAWYBTJUmIDgK1d+EgiI9R2qZlD4PSn2Y=
-X-Received: by 2002:a25:c6cb:: with SMTP id k194mr32076441ybf.27.1614709912374;
- Tue, 02 Mar 2021 10:31:52 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=kIc2w7mujz9voVpN9IahMRlS32F3lOVKY+UoybD2UvI=;
+        b=Pez7EN0h02sChFXRCt9AK57niuUWoTzEXGgvx9j0+u4hcru78UD5XDS5zvo4qdUH+f
+         dBg3InLam9ohcW9GAOkacapCQyBxqn+bx+TVtSSdB35TL1doFDIuN6wFRHND3plz48/J
+         ZxrslF7wNwx3XDRy8sGimYcdC9yKXRm72bPj4jia+8ZKUMs1ev9EVg2oOPx570VGO4J2
+         4rBpeu136liPq/Gx3MKzGnZ7EK0FSxsDrTkcb2X2qy9kwbh78eeNo/7Peb3nkQh7UR5P
+         GqsJIcaE/1d21fVhscXFBLA2/kDqp5405iaMNYbboZ6P6M/aCwwyiS+Ueieq9wefmsCD
+         pBjw==
+X-Gm-Message-State: AOAM533BNkeu6hNO6wnFuLqAqt5f4zgmorKihDbI8WO6Tc2+sSLgpDMD
+        nMnZkVOwNnPick3NBAFHyPKlPZlC3eytJn+t+mc=
+X-Google-Smtp-Source: ABdhPJwhCovvtZEQ/NjASG5VlLZs1XjkrAW5mZ8zj5yVbNcjcMEboTKboyYECTgE4/Yd0mDNhi7dQgW/VwHVQfL5Xkg=
+X-Received: by 2002:a1c:7714:: with SMTP id t20mr2751077wmi.107.1614718301146;
+ Tue, 02 Mar 2021 12:51:41 -0800 (PST)
 MIME-Version: 1.0
-References: <20210301190416.90694-1-jolsa@kernel.org> <CAEf4BzbBnR3M60HepC_CFDsdMQDBYoEWiWtREUaLxrrxyBce0Q@mail.gmail.com>
- <YD4d+dmay+oKyiot@krava>
-In-Reply-To: <YD4d+dmay+oKyiot@krava>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 2 Mar 2021 10:31:41 -0800
-Message-ID: <CAEf4Bzah8Au01NvtwSogpkr3etwQ3_bObj3GObG8Lb3N0DqZwA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix test_attach_probe for powerpc uprobes
-To:     Jiri Olsa <jolsa@redhat.com>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
+References: <CAJ+HfNhxWFeKnn1aZw-YJmzpBuCaoeGkXXKn058GhY-6ZBDtZA@mail.gmail.com>
+ <20210302195758.GQ2696@paulmck-ThinkPad-P72> <CAJ+HfNj-_P=LpkrUjxcOR73ffMXwsJ+o+zMTfmkiuH2zZ5XCLQ@mail.gmail.com>
+ <20210302204157.GR2696@paulmck-ThinkPad-P72>
+In-Reply-To: <20210302204157.GR2696@paulmck-ThinkPad-P72>
+From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
+Date:   Tue, 2 Mar 2021 21:51:29 +0100
+Message-ID: <CAJ+HfNhdgMTyfbeMsTsbhB_Pk6LW+2oB8=T0qWLgmM2q9_nkvQ@mail.gmail.com>
+Subject: Re: XDP socket rings, and LKMM litmus tests
+To:     paulmck@kernel.org
+Cc:     bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        stern@rowland.harvard.edu, parri.andrea@gmail.com,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, boqun.feng@gmail.com,
+        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
+        luc.maranget@inria.fr, akiyks@gmail.com, dlustig@nvidia.com,
+        joel@joelfernandes.org,
         =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
-        Yauheni Kaliuta <ykaliuta@redhat.com>
+        "Karlsson, Magnus" <magnus.karlsson@intel.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Mar 2, 2021 at 3:14 AM Jiri Olsa <jolsa@redhat.com> wrote:
+On Tue, 2 Mar 2021 at 21:41, Paul E. McKenney <paulmck@kernel.org> wrote:
 >
-> On Mon, Mar 01, 2021 at 04:34:24PM -0800, Andrii Nakryiko wrote:
-> > On Mon, Mar 1, 2021 at 11:11 AM Jiri Olsa <jolsa@kernel.org> wrote:
+> On Tue, Mar 02, 2021 at 09:24:04PM +0100, Bj=C3=B6rn T=C3=B6pel wrote:
+> > On Tue, 2 Mar 2021 at 20:57, Paul E. McKenney <paulmck@kernel.org> wrot=
+e:
 > > >
-> > > When testing uprobes we the test gets GEP (Global Entry Point)
-> > > address from kallsyms, but then the function is called locally
-> > > so the uprobe is not triggered.
-> > >
-> > > Fixing this by adjusting the address to LEP (Local Entry Point)
-> > > for powerpc arch.
-> > >
-> > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > > ---
-> > >  .../selftests/bpf/prog_tests/attach_probe.c    | 18 +++++++++++++++++-
-> > >  1 file changed, 17 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/tools/testing/selftests/bpf/prog_tests/attach_probe.c b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-> > > index a0ee87c8e1ea..c3cfb48d3ed0 100644
-> > > --- a/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-> > > +++ b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-> > > @@ -2,6 +2,22 @@
-> > >  #include <test_progs.h>
-> > >  #include "test_attach_probe.skel.h"
-> > >
-> > > +#if defined(__powerpc64__)
-> > > +/*
-> > > + * We get the GEP (Global Entry Point) address from kallsyms,
-> > > + * but then the function is called locally, so we need to adjust
-> > > + * the address to get LEP (Local Entry Point).
-> > > + */
-> > > +#define LEP_OFFSET 8
-> > > +
-> > > +static ssize_t get_offset(ssize_t offset)
+> > > On Tue, Mar 02, 2021 at 07:46:27PM +0100, Bj=C3=B6rn T=C3=B6pel wrote=
+:
 > >
-> > if we mark this function __weak global, would it work as is? Would it
-> > get an address of a global entry point? I know nothing about this GEP
-> > vs LEP stuff, interesting :)
+> > [...]
+> >
+> > >
+> > > Before digging in too deeply, does the following simplification
+> > > still capture your intent?
+> > >
+> >
+> > Thanks for having a look, Paul!
+> >
+> > > P0(int *prod, int *cons, int *data)
+> > > {
+> > >     int p;
+> > >     int cond =3D 0;
+> > >
+> > >     p =3D READ_ONCE(*prod);
+> > >     if (p =3D=3D READ_ONCE(*cons))
+> > >             cond =3D 1;
+> >
+> > With this, yes!
+> >
+> > >     if (cond) {
+> > >         smp_mb();
+> > >         WRITE_ONCE(*data, 1);
+> > >         smp_wmb();
+> > >         WRITE_ONCE(*prod, p ^ 1);
+> > >     }
+> > > }
+> > >
+> > > P1(int *prod, int *cons, int *data)
+> > > {
+> > >     int c;
+> > >     int d =3D -1;
+> > >     int cond =3D 0;
+> > >
+> > >     c =3D READ_ONCE(*cons);
+> > >     if (READ_ONCE(*prod) =3D=3D c)
+> > >             cond =3D 1;
+> >
+> > Hmm, this would not be the correct state transition.
+> >
+> > c=3D=3D1 && p=3D=3D1 would set cond to 1, right?
+> >
+> > I would agree with:
+> >   c =3D READ_ONCE(*cons);
+> >   if (READ_ONCE(*prod) !=3D c)
 >
-> you mean get_base_addr? it's already global
+> Right you are!
 >
-> all the calls to get_base_addr within the object are made
-> to get_base_addr+0x8
+> With that, it looks to me like LKMM is OK with removing the smp_mb().
+> My guess is that the issue is that LKMM confines the effect of control
+> dependencies to a single "if" statement, hence my reworking of your
+> original.
 >
-> 00000000100350c0 <test_attach_probe>:
->     ...
->     100350e0:   59 fd ff 4b     bl      10034e38 <get_base_addr+0x8>
->     ...
->     100358a8:   91 f5 ff 4b     bl      10034e38 <get_base_addr+0x8>
->
->
-> I'm following perf fix we had for similar issue:
->   7b6ff0bdbf4f perf probe ppc64le: Fixup function entry if using kallsyms lookup
->
-> I'll get more info on that
 
-My thinking was that if you mark the function as __weak, then the
-compiler is not allowed to assume that the actual implementation of
-that function will come from the same object (because it might be
-replaced by the linker later), so it has to be pessimistic and use
-global entry, no? Totally theoritizing here, of course.
+Interesting!
 
+I tried the acquire/release version:
+
+P0(int *prod, int *cons, int *data)
+{
+    int p;
+    int cond =3D 0;
+
+    p =3D READ_ONCE(*prod);
+    if (p =3D=3D READ_ONCE(*cons)) {
+        WRITE_ONCE(*data, 1);
+        smp_store_release(prod, p ^ 1);
+    }
+}
+
+P1(int *prod, int *cons, int *data)
+{
+    int c;
+    int d =3D -1;
+
+    c =3D READ_ONCE(*cons);
+    if (smp_load_acquire(prod) !=3D c) {
+        d =3D READ_ONCE(*data);
+        smp_store_release(cons, c ^ 1);
+    }
+}
+
+and as with the previous example, restructuring the if-statement makes
+"if (p =3D=3D READ_ONCE(*cons)) {" sufficient, instead of "if (p =3D=3D
+smp_load_acquire(cons)) {".
+
+Yay!
+
+
+Bj=C3=B6rn
+
+
+>                                                         Thanx, Paul
 >
-> jirka
->
-> >
-> > > +{
-> > > +       return offset + LEP_OFFSET;
-> > > +}
-> > > +#else
-> > > +#define get_offset(offset) (offset)
-> > > +#endif
-> > > +
-> > >  ssize_t get_base_addr() {
-> > >         size_t start, offset;
-> > >         char buf[256];
-> > > @@ -36,7 +52,7 @@ void test_attach_probe(void)
-> > >         if (CHECK(base_addr < 0, "get_base_addr",
-> > >                   "failed to find base addr: %zd", base_addr))
-> > >                 return;
-> > > -       uprobe_offset = (size_t)&get_base_addr - base_addr;
-> > > +       uprobe_offset = get_offset((size_t)&get_base_addr - base_addr);
 > > >
-> > >         skel = test_attach_probe__open_and_load();
-> > >         if (CHECK(!skel, "skel_open", "failed to open skeleton\n"))
-> > > --
-> > > 2.29.2
+> > >     if (cond =3D=3D 1) {
+> > >         smp_rmb();
+> > >         d =3D READ_ONCE(*data);
+> > >         smp_mb();
+> > >         WRITE_ONCE(*cons, c ^ 1);
+> > >     }
+> > > }
+> > >
+> > >                                                         Thanx, Paul
 > > >
 > >
->
+> > [...]
+> >
+> > Bj=C3=B6rn
