@@ -2,160 +2,87 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B78B9C43381
-	for <bpf@archiver.kernel.org>; Tue,  2 Mar 2021 10:39:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D6716C43603
+	for <bpf@archiver.kernel.org>; Tue,  2 Mar 2021 10:39:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7749964F07
-	for <bpf@archiver.kernel.org>; Tue,  2 Mar 2021 10:39:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9A46B64F0A
+	for <bpf@archiver.kernel.org>; Tue,  2 Mar 2021 10:39:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1578020AbhCBKfN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Mar 2021 05:35:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42424 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1575084AbhCBDwz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 1 Mar 2021 22:52:55 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CDE0C061788
-        for <bpf@vger.kernel.org>; Mon,  1 Mar 2021 19:52:14 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id t29so12948828pfg.11
-        for <bpf@vger.kernel.org>; Mon, 01 Mar 2021 19:52:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=57oy+i2wyCGM30/m8sTFwn3B8L9Scmi9y+74jBQL4vs=;
-        b=eDNo6T5R9U/hOaETJQW7tHVGPRRrxSUybhcdsh8luN7bLlUhFb4Hoycj+OMDnhBnql
-         65FHpbOfmlHmgyxtM3JVmc2mQcitwZGb8tPB8LJAR0V04VWVQ0yl2fA9n8X/H2RiZ5o8
-         JGhQpb6kj7Bn2HCSfEfmHnkSuyEJgV8VA36qB/Ai+2icthxmSKekehKAFBdJyduJorSy
-         JXHanj6IjXxeePGyeLl7WILWzYWblG6hddeH7BOK/Eb1M1g+BU3MDjIDdKBxOMGWBDr5
-         bma2ZRCT0zWPmAzH8UPm3dquhCdPzxobKiz8h8rReCBscZrY7bHEITUNeFORv60B6zj0
-         Zfqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=57oy+i2wyCGM30/m8sTFwn3B8L9Scmi9y+74jBQL4vs=;
-        b=OB8Bcqe18/5MChkKoF/gjjo9ucVsORZXGNPG2h6KjO3wPKbJqh6xbYFuT7F4scn1mz
-         HqFvlKWAjjEocAuL6qPxtpWWBSWXiEvT9jV06tECpeFY+qffxrHvJtTEi12ugXJjeYEk
-         B7DjB0Nhncg921eaINQrFtSGrNJRmwTPy7fu+ZbhsqIdBC78g+z7X/U3E596jF491XtD
-         F37j/wVRw8EfwSHlD/Hn4qkKkSUKfttm/LPIl0vJZElaE0IMTey0cQd+LpEWgdK3o+rx
-         0F3fQsf9QB3h+RMaxhty8KWp5ZRao7hbuTu69eHkVqcKk95jRv34lxPsy7omnlyNmNBw
-         3Rbg==
-X-Gm-Message-State: AOAM532OQLeQKFoXxyL2tIbYiUvx0kK+BbXgavf7h25S02GBdNirGFNR
-        gpYkYCUZRh10jClRVNHZsXtvWB4RVE2LfV06/EqAeQ==
-X-Google-Smtp-Source: ABdhPJzcaUfOFHNGcSwihHOwcKhocr1mJt3SRQ35DB3BbiQ0eJJN8kETf2XLREn+v+AQ4squnM1FDAmvmjrcrb0kGao=
-X-Received: by 2002:aa7:9342:0:b029:1ee:8893:8554 with SMTP id
- 2-20020aa793420000b02901ee88938554mr9846451pfn.2.1614657133983; Mon, 01 Mar
- 2021 19:52:13 -0800 (PST)
+        id S1578076AbhCBKf3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Mar 2021 05:35:29 -0500
+Received: from mga03.intel.com ([134.134.136.65]:14921 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1381609AbhCBIGO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 2 Mar 2021 03:06:14 -0500
+IronPort-SDR: DKLZvsxwWIiBb/kHAMe1JaB0tFh7jv4UTzxqepl1R6dBlimw5kVXTht3Gk6fq0T2zyHstM7LMZ
+ cuLDvrcwbLeA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9910"; a="186785815"
+X-IronPort-AV: E=Sophos;i="5.81,216,1610438400"; 
+   d="scan'208";a="186785815"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2021 00:05:20 -0800
+IronPort-SDR: sw2rsKQqdZjtGURCfIUjJ+SdN7iPxlLGUoaT0a/bgRr/3agl4H7BR1FC+Zn1s2SW81VeV1Jqe/
+ sZiWgvwKQgfQ==
+X-IronPort-AV: E=Sophos;i="5.81,216,1610438400"; 
+   d="scan'208";a="398278563"
+Received: from ilick-mobl1.ger.corp.intel.com (HELO btopel-mobl.ger.intel.com) ([10.249.41.237])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2021 00:05:17 -0800
+Subject: Re: [PATCH bpf-next 2/2] libbpf, xsk: add libbpf_smp_store_release
+ libbpf_smp_load_acquire
+To:     =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
+        ast@kernel.org, daniel@iogearbox.net, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Cc:     magnus.karlsson@intel.com, jonathan.lemon@gmail.com,
+        maximmi@nvidia.com, andrii@kernel.org, will@kernel.org
+References: <20210301104318.263262-1-bjorn.topel@gmail.com>
+ <20210301104318.263262-3-bjorn.topel@gmail.com> <87k0qqx3be.fsf@toke.dk>
+From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>
+Message-ID: <e052a22a-4b7b-fe38-06ad-2ad04c83dda7@intel.com>
+Date:   Tue, 2 Mar 2021 09:05:15 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-References: <20210301062227.59292-1-songmuchun@bytedance.com>
- <20210301062227.59292-3-songmuchun@bytedance.com> <CALvZod7sysj0+wrzLTXnwn7s_Gf-V2eFPJ6cLcoRmR0LdAFk0Q@mail.gmail.com>
- <CAMZfGtVhgPzGXrLp12Z=r_FYuyqOoza9tOkPZ0N1=cHR+ataQA@mail.gmail.com> <CALvZod6TmaG7QnxeM65sCzVJBTGfb34q50=0no391Ciww4ZzCQ@mail.gmail.com>
-In-Reply-To: <CALvZod6TmaG7QnxeM65sCzVJBTGfb34q50=0no391Ciww4ZzCQ@mail.gmail.com>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Tue, 2 Mar 2021 11:51:37 +0800
-Message-ID: <CAMZfGtX=WqMuGw2DOZroF1oKTdfV0fRUc4cp6mMBH218vJDnkQ@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH 2/5] mm: memcontrol: make page_memcg{_rcu}
- only applicable for non-kmem page
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>, kpsingh@kernel.org,
-        Ingo Molnar <mingo@redhat.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        dietmar.eggemann@arm.com, Steven Rostedt <rostedt@goodmis.org>,
-        Benjamin Segall <bsegall@google.com>,
-        Mel Gorman <mgorman@suse.de>, bristot@redhat.com,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>,
-        Alex Shi <alex.shi@linux.alibaba.com>,
-        Chris Down <chris@chrisdown.name>,
-        Wei Yang <richard.weiyang@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Peter Oskolkov <posk@google.com>, Jann Horn <jannh@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Waiman Long <longman@redhat.com>,
-        Michel Lespinasse <walken@google.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>, krisman@collabora.com,
-        esyr@redhat.com, Suren Baghdasaryan <surenb@google.com>,
-        Marco Elver <elver@google.com>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Cgroups <cgroups@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
-        Xiongchun duan <duanxiongchun@bytedance.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <87k0qqx3be.fsf@toke.dk>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Mar 2, 2021 at 11:36 AM Shakeel Butt <shakeelb@google.com> wrote:
+On 2021-03-01 17:10, Toke Høiland-Jørgensen wrote:
+> Björn Töpel <bjorn.topel@gmail.com> writes:
+> 
+>> From: Björn Töpel <bjorn.topel@intel.com>
+>>
+>> Now that the AF_XDP rings have load-acquire/store-release semantics,
+>> move libbpf to that as well.
+>>
+>> The library-internal libbpf_smp_{load_acquire,store_release} are only
+>> valid for 32-bit words on ARM64.
+>>
+>> Also, remove the barriers that are no longer in use.
+> 
+> So what happens if an updated libbpf is paired with an older kernel (or
+> vice versa)?
 >
-> On Mon, Mar 1, 2021 at 7:03 PM Muchun Song <songmuchun@bytedance.com> wrote:
-> >
-> > On Tue, Mar 2, 2021 at 2:11 AM Shakeel Butt <shakeelb@google.com> wrote:
-> > >
-> > > On Sun, Feb 28, 2021 at 10:25 PM Muchun Song <songmuchun@bytedance.com> wrote:
-> > > >
-> > > > We want to reuse the obj_cgroup APIs to reparent the kmem pages when
-> > > > the memcg offlined. If we do this, we should store an object cgroup
-> > > > pointer to page->memcg_data for the kmem pages.
-> > > >
-> > > > Finally, page->memcg_data can have 3 different meanings.
-> > > >
-> > > >   1) For the slab pages, page->memcg_data points to an object cgroups
-> > > >      vector.
-> > > >
-> > > >   2) For the kmem pages (exclude the slab pages), page->memcg_data
-> > > >      points to an object cgroup.
-> > > >
-> > > >   3) For the user pages (e.g. the LRU pages), page->memcg_data points
-> > > >      to a memory cgroup.
-> > > >
-> > > > Currently we always get the memcg associated with a page via page_memcg
-> > > > or page_memcg_rcu. page_memcg_check is special, it has to be used in
-> > > > cases when it's not known if a page has an associated memory cgroup
-> > > > pointer or an object cgroups vector. Because the page->memcg_data of
-> > > > the kmem page is not pointing to a memory cgroup in the later patch,
-> > > > the page_memcg and page_memcg_rcu cannot be applicable for the kmem
-> > > > pages. In this patch, we introduce page_memcg_kmem to get the memcg
-> > > > associated with the kmem pages. And make page_memcg and page_memcg_rcu
-> > > > no longer apply to the kmem pages.
-> > > >
-> > > > In the end, there are 4 helpers to get the memcg associated with a
-> > > > page. The usage is as follows.
-> > > >
-> > > >   1) Get the memory cgroup associated with a non-kmem page (e.g. the LRU
-> > > >      pages).
-> > > >
-> > > >      - page_memcg()
-> > > >      - page_memcg_rcu()
-> > >
-> > > Can you rename these to page_memcg_lru[_rcu] to make them explicitly
-> > > for LRU pages?
-> >
-> > Yes. Will do. Thanks.
-> >
->
-> Please follow Johannes' suggestion regarding page_memcg_kmem() and
-> then no need to rename these.
 
-OK.
+"This is fine." ;-) This was briefly discussed in [1], outlined by the
+previous commit!
+
+...even on POWER.
+
+
+Björn
+
+[1] https://lore.kernel.org/bpf/20200316184423.GA14143@willie-the-truck/
+
+
+> -Toke
+> 
