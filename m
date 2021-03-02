@@ -2,68 +2,68 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96FD9C433E6
-	for <bpf@archiver.kernel.org>; Tue,  2 Mar 2021 10:39:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0366CC4332E
+	for <bpf@archiver.kernel.org>; Tue,  2 Mar 2021 10:39:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5239664F0A
+	by mail.kernel.org (Postfix) with ESMTP id C9A0B64F0D
 	for <bpf@archiver.kernel.org>; Tue,  2 Mar 2021 10:39:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1578022AbhCBKfM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Mar 2021 05:35:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41934 "EHLO
+        id S1578058AbhCBKfT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Mar 2021 05:35:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1574788AbhCBDuj (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 1 Mar 2021 22:50:39 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CDDEC06178B
-        for <bpf@vger.kernel.org>; Mon,  1 Mar 2021 19:49:58 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id q20so12951893pfu.8
-        for <bpf@vger.kernel.org>; Mon, 01 Mar 2021 19:49:58 -0800 (PST)
+        with ESMTP id S239176AbhCBENe (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 1 Mar 2021 23:13:34 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F02BC061794
+        for <bpf@vger.kernel.org>; Mon,  1 Mar 2021 20:12:53 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id d11so11251268plo.8
+        for <bpf@vger.kernel.org>; Mon, 01 Mar 2021 20:12:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20150623.gappssmtp.com; s=20150623;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=zR9rZ5Vo7n4Jx4LSiCHtKNBAWL0tmz/mJnFtTbDqbIU=;
-        b=v9fAqyuNhDoUw3dtU1vnpYtIU5IhN9QKuc3uYH/Oncb9JTBA0DAi9YtlWkm2stJ90r
-         +PRYhf+SGzC8j9uqnJHPm3vCzMPuzAlnRV+vZMvYST7E5TMq44Rfk3kwAWcFcB46Sq41
-         vFesKUHLPs83TWyyQCS5dXK5ciQhNVQKs4VGeOCSJchW2M9Dd07uGTBp4LJtvxYatGgm
-         sha9dr2oAKShevSBQhU6iX58QJjZVzwmCF0nNJCAcZeNG/9JX/jUobwm9Bc9XIzTh7wD
-         oMMjslfibt+eQ+1H+3/V5FkViK5z1Qxnvh3OuG/KKQ6i1oEnosdWfybQ1+34pqH7hfV2
-         +ufg==
+        bh=pJaPLF9X1F6hvOBAXTHBgh9HYMVdoLjPILjLEfD7bkc=;
+        b=YEZ1cocgpsBHNkw0q+n3c+WrJ0f5ZYMWZ5GgZymplzz/JjXP3J3GP3MQPyOD+t7hxj
+         AsK2COA53kOesfdd7nTgEuKuQJ7B+1JaLSiIWqINpSswz1f453uWWv5cf5Zy9QVnSZdd
+         X0vMaEoLsxLAVk5K6hSFHHKSylttTe535bfBlRj9YLzzI2p9d5SVShpMsGrjNw3iULbC
+         +mik6ICMk5ltsWjqpAmuGCd/qH7Pw0q8Y8kTUadbUjZeBEzXHeBTNP0c+D7LqoTso/Yu
+         kjJIpeToFr5LIiD+nTQahXyU61ghaF6X5hl9rGGDki1aC/DUcXPcY0IZd4brRdl8pXp+
+         iUug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=zR9rZ5Vo7n4Jx4LSiCHtKNBAWL0tmz/mJnFtTbDqbIU=;
-        b=SACVmcjgU02VPOY0Lsh5v0y6/GKlybo/qIfBbOOfW4bI+GtG4w8HOaghcCTQqA4SKS
-         rMGYu6S6wKHym7mIHYO3WyJZhaAWkctFg8Cf8nmlXsR93ItN8DGX295VdHqhZ6JQedrD
-         BNhE57Pw3Xzzep5dTI4RRXmQAx2bf924n0HgqSEzfnpy+F8ZVdAyi0dy9Amd3XNB9x+n
-         1tdwCgvKnzahzsKaiaMMvtDNjmb674nFwElJQDEgxQPV32iSAC/F2WrCj03XKH8WuL9G
-         mxAn9XONM7BraBIHVyFfYAnDTV86f0EGgy5MgwubWSWXqXRe6TrFlZiwXeZBu1wpMcM3
-         iepw==
-X-Gm-Message-State: AOAM5304DVSz6of/vVkWT/FiTW7gneydh/XOQ0tE71G/XQyI5ZOWWs2P
-        hveN1oLi4yKBEqAZOiSySo7E5AwrCa0D00E7U659ZA==
-X-Google-Smtp-Source: ABdhPJwJdS00GRwevcvlOVHxIsflvCdg261M0N1nQh/iDPP8PMYFMy/+PL0boqZQvRsNKQzFMclQJCc/iXcXQrgJaAk=
-X-Received: by 2002:a65:6645:: with SMTP id z5mr16134496pgv.273.1614656997583;
- Mon, 01 Mar 2021 19:49:57 -0800 (PST)
+        bh=pJaPLF9X1F6hvOBAXTHBgh9HYMVdoLjPILjLEfD7bkc=;
+        b=NZ/6XCEY7ahdUwkxCuwncZRu+resnQ1sAhJthzEuQl1YMPjL+Qm7wa+ZQIOxEHNqh2
+         mfQR8zsdg8mZRkotzoaWsIoPGXejTCFTR/keiooKPraO1miwFRBF+ra3uy6plzzC+/NI
+         DQl/c4yx6KUaLZ50LXrpAci0VNRo6QEhbX9NTyRZd/YSG4Cru+hiH7bQTUQUJGFXk1/O
+         PZBsYNBv9Ut7fDYxL80glwcuy2Bc9vDzj9P+L2rU//cIUhl+YbfZPOpj6ovbgjsguVJI
+         rHiAY9wk99+acREVRsK7M51dqQTaH68qD73sniJ0xhQbaXOgrhQv73RUnYnV4t93pWqf
+         3l3Q==
+X-Gm-Message-State: AOAM530Xw2/2gIUT+3b3zqxOyFUasLFioOq8tc4U3d77YHYfHP3tFAty
+        s8AqBmfk/LsNQTjHnLim8iK+dtxKPpcnjw2U2pSvRw==
+X-Google-Smtp-Source: ABdhPJw4yPDMdM9rw5cTzxwrZpXy5wEJz7YfOZ5x9bGXhm1fMxZCHjNMKhVkXo1trQ0xr49A64GmU+RJmU/bXtSc/g0=
+X-Received: by 2002:a17:902:d4c2:b029:e3:cb77:e51 with SMTP id
+ o2-20020a170902d4c2b02900e3cb770e51mr18426342plg.20.1614658372860; Mon, 01
+ Mar 2021 20:12:52 -0800 (PST)
 MIME-Version: 1.0
 References: <20210301062227.59292-1-songmuchun@bytedance.com>
- <20210301062227.59292-3-songmuchun@bytedance.com> <CALvZod7sysj0+wrzLTXnwn7s_Gf-V2eFPJ6cLcoRmR0LdAFk0Q@mail.gmail.com>
- <YD08A+fEp/4pw10I@cmpxchg.org>
-In-Reply-To: <YD08A+fEp/4pw10I@cmpxchg.org>
+ <20210301062227.59292-5-songmuchun@bytedance.com> <YD2RuPzikjPnI82h@carbon.dhcp.thefacebook.com>
+In-Reply-To: <YD2RuPzikjPnI82h@carbon.dhcp.thefacebook.com>
 From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Tue, 2 Mar 2021 11:49:21 +0800
-Message-ID: <CAMZfGtWJRS=Cjx5HKt02-pzw7UOn-qhwR21fmDS6fcpntprbCQ@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH 2/5] mm: memcontrol: make page_memcg{_rcu}
- only applicable for non-kmem page
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Shakeel Butt <shakeelb@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Jan Kara <jack@suse.cz>, Amir Goldstein <amir73il@gmail.com>,
+Date:   Tue, 2 Mar 2021 12:12:16 +0800
+Message-ID: <CAMZfGtXdPw41iFUjDbkkAwm+D3ut-U+GpZC3Zz9cvS2FTCCYzw@mail.gmail.com>
+Subject: Re: [External] Re: [PATCH 4/5] mm: memcontrol: move remote memcg
+ charging APIs to CONFIG_MEMCG_KMEM
+To:     Roman Gushchin <guro@fb.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+        Amir Goldstein <amir73il@gmail.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
@@ -71,17 +71,19 @@ Cc:     Shakeel Butt <shakeelb@google.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>, kpsingh@kernel.org,
         Ingo Molnar <mingo@redhat.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Peter Zijlstra <peterz@infradead.org>,
         Juri Lelli <juri.lelli@redhat.com>,
         Vincent Guittot <vincent.guittot@linaro.org>,
         dietmar.eggemann@arm.com, Steven Rostedt <rostedt@goodmis.org>,
         Benjamin Segall <bsegall@google.com>,
         Mel Gorman <mgorman@suse.de>, bristot@redhat.com,
+        Johannes Weiner <hannes@cmpxchg.org>,
         Michal Hocko <mhocko@kernel.org>,
         Vladimir Davydov <vdavydov.dev@gmail.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
         Alex Shi <alex.shi@linux.alibaba.com>,
+        alexander.h.duyck@linux.intel.com,
         Chris Down <chris@chrisdown.name>,
         Wei Yang <richard.weiyang@gmail.com>,
         Vlastimil Babka <vbabka@suse.cz>,
@@ -98,70 +100,113 @@ Cc:     Shakeel Butt <shakeelb@google.com>,
         Marco Elver <elver@google.com>,
         linux-fsdevel <linux-fsdevel@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Cgroups <cgroups@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Cgroups <cgroups@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
         Xiongchun duan <duanxiongchun@bytedance.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Mar 2, 2021 at 3:09 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
+On Tue, Mar 2, 2021 at 9:15 AM Roman Gushchin <guro@fb.com> wrote:
 >
-> Muchun, can you please reduce the CC list to mm/memcg folks only for
-> the next submission? I think probably 80% of the current recipients
-> don't care ;-)
+> On Mon, Mar 01, 2021 at 02:22:26PM +0800, Muchun Song wrote:
+> > The remote memcg charing APIs is a mechanism to charge kernel memory
+> > to a given memcg. So we can move the infrastructure to the scope of
+> > the CONFIG_MEMCG_KMEM.
+>
+> This is not a good idea, because there is nothing kmem-specific
+> in the idea of remote charging, and we definitely will see cases
+> when user memory is charged to the process different from the current.
 
-At first, I just used scripts/get_maintainer.pl to get the
-CC list. I will reduce the CC list in the next version.
-Thanks.
+Got it. Thanks for your reminder.
+
 
 >
-> On Mon, Mar 01, 2021 at 10:11:45AM -0800, Shakeel Butt wrote:
-> > On Sun, Feb 28, 2021 at 10:25 PM Muchun Song <songmuchun@bytedance.com> wrote:
-> > >
-> > > We want to reuse the obj_cgroup APIs to reparent the kmem pages when
-> > > the memcg offlined. If we do this, we should store an object cgroup
-> > > pointer to page->memcg_data for the kmem pages.
-> > >
-> > > Finally, page->memcg_data can have 3 different meanings.
-> > >
-> > >   1) For the slab pages, page->memcg_data points to an object cgroups
-> > >      vector.
-> > >
-> > >   2) For the kmem pages (exclude the slab pages), page->memcg_data
-> > >      points to an object cgroup.
-> > >
-> > >   3) For the user pages (e.g. the LRU pages), page->memcg_data points
-> > >      to a memory cgroup.
-> > >
-> > > Currently we always get the memcg associated with a page via page_memcg
-> > > or page_memcg_rcu. page_memcg_check is special, it has to be used in
-> > > cases when it's not known if a page has an associated memory cgroup
-> > > pointer or an object cgroups vector. Because the page->memcg_data of
-> > > the kmem page is not pointing to a memory cgroup in the later patch,
-> > > the page_memcg and page_memcg_rcu cannot be applicable for the kmem
-> > > pages. In this patch, we introduce page_memcg_kmem to get the memcg
-> > > associated with the kmem pages. And make page_memcg and page_memcg_rcu
-> > > no longer apply to the kmem pages.
-> > >
-> > > In the end, there are 4 helpers to get the memcg associated with a
-> > > page. The usage is as follows.
-> > >
-> > >   1) Get the memory cgroup associated with a non-kmem page (e.g. the LRU
-> > >      pages).
-> > >
-> > >      - page_memcg()
-> > >      - page_memcg_rcu()
 > >
-> > Can you rename these to page_memcg_lru[_rcu] to make them explicitly
-> > for LRU pages?
->
-> The next patch removes page_memcg_kmem() again to replace it with
-> page_objcg(). That should (luckily) remove the need for this
-> distinction and keep page_memcg() simple and obvious.
->
-> It would be better to not introduce page_memcg_kmem() in the first
-> place in this patch, IMO.
-
-OK. I will follow your suggestion. Thanks.
+> > As a bonus, on !CONFIG_MEMCG_KMEM build some functions and variables
+> > can be compiled out.
+> >
+> > Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+> > ---
+> >  include/linux/sched.h    | 2 ++
+> >  include/linux/sched/mm.h | 2 +-
+> >  kernel/fork.c            | 2 +-
+> >  mm/memcontrol.c          | 4 ++++
+> >  4 files changed, 8 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/include/linux/sched.h b/include/linux/sched.h
+> > index ee46f5cab95b..c2d488eddf85 100644
+> > --- a/include/linux/sched.h
+> > +++ b/include/linux/sched.h
+> > @@ -1314,7 +1314,9 @@ struct task_struct {
+> >
+> >       /* Number of pages to reclaim on returning to userland: */
+> >       unsigned int                    memcg_nr_pages_over_high;
+> > +#endif
+> >
+> > +#ifdef CONFIG_MEMCG_KMEM
+> >       /* Used by memcontrol for targeted memcg charge: */
+> >       struct mem_cgroup               *active_memcg;
+> >  #endif
+> > diff --git a/include/linux/sched/mm.h b/include/linux/sched/mm.h
+> > index 1ae08b8462a4..64a72975270e 100644
+> > --- a/include/linux/sched/mm.h
+> > +++ b/include/linux/sched/mm.h
+> > @@ -294,7 +294,7 @@ static inline void memalloc_nocma_restore(unsigned int flags)
+> >  }
+> >  #endif
+> >
+> > -#ifdef CONFIG_MEMCG
+> > +#ifdef CONFIG_MEMCG_KMEM
+> >  DECLARE_PER_CPU(struct mem_cgroup *, int_active_memcg);
+> >  /**
+> >   * set_active_memcg - Starts the remote memcg charging scope.
+> > diff --git a/kernel/fork.c b/kernel/fork.c
+> > index d66cd1014211..d66718bc82d5 100644
+> > --- a/kernel/fork.c
+> > +++ b/kernel/fork.c
+> > @@ -942,7 +942,7 @@ static struct task_struct *dup_task_struct(struct task_struct *orig, int node)
+> >       tsk->use_memdelay = 0;
+> >  #endif
+> >
+> > -#ifdef CONFIG_MEMCG
+> > +#ifdef CONFIG_MEMCG_KMEM
+> >       tsk->active_memcg = NULL;
+> >  #endif
+> >       return tsk;
+> > diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> > index 39cb8c5bf8b2..092dc4588b43 100644
+> > --- a/mm/memcontrol.c
+> > +++ b/mm/memcontrol.c
+> > @@ -76,8 +76,10 @@ EXPORT_SYMBOL(memory_cgrp_subsys);
+> >
+> >  struct mem_cgroup *root_mem_cgroup __read_mostly;
+> >
+> > +#ifdef CONFIG_MEMCG_KMEM
+> >  /* Active memory cgroup to use from an interrupt context */
+> >  DEFINE_PER_CPU(struct mem_cgroup *, int_active_memcg);
+> > +#endif
+> >
+> >  /* Socket memory accounting disabled? */
+> >  static bool cgroup_memory_nosocket;
+> > @@ -1054,6 +1056,7 @@ struct mem_cgroup *get_mem_cgroup_from_mm(struct mm_struct *mm)
+> >  }
+> >  EXPORT_SYMBOL(get_mem_cgroup_from_mm);
+> >
+> > +#ifdef CONFIG_MEMCG_KMEM
+> >  static __always_inline struct mem_cgroup *active_memcg(void)
+> >  {
+> >       if (in_interrupt())
+> > @@ -1074,6 +1077,7 @@ static __always_inline bool memcg_kmem_bypass(void)
+> >
+> >       return false;
+> >  }
+> > +#endif
+> >
+> >  /**
+> >   * mem_cgroup_iter - iterate over memory cgroup hierarchy
+> > --
+> > 2.11.0
+> >
