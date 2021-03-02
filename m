@@ -2,147 +2,142 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 94CB9C4332E
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 407D7C433E9
 	for <bpf@archiver.kernel.org>; Tue,  2 Mar 2021 10:38:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 650FA64F07
-	for <bpf@archiver.kernel.org>; Tue,  2 Mar 2021 10:38:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 07D0A64F07
+	for <bpf@archiver.kernel.org>; Tue,  2 Mar 2021 10:38:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383003AbhCBKbW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Mar 2021 05:31:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54782 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443985AbhCBCil (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 1 Mar 2021 21:38:41 -0500
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 309CAC06178A;
-        Mon,  1 Mar 2021 18:37:54 -0800 (PST)
-Received: by mail-oi1-x233.google.com with SMTP id i21so18170464oii.2;
-        Mon, 01 Mar 2021 18:37:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=D4V4eLWu2UkQ+c7wqrKmtOTumsn7flUm0gCXzVVvLyk=;
-        b=lDpD7anq3HjHNzZ1BFBpFFAwZ7BNj4l/GNrXGkFUnn7kmr3c1CRUFBE8Q4rOIgF0VO
-         uNkoLVlc5gNXm7IdFZZbfCIZF6GDtotmGVXXt9Z4R0whkS9I+23gUgx129W8J1HoT1st
-         BMySToEz2ATqNh6LJXLRHzTBknMELQcrj0yoItmXoZGDow2LBC1wKyigKrxJRpFFE/wc
-         dcaEKsTmIE3RJgVNdGMwquAGDhV8Qz5ZfKK5KU2Bfx7AxGSOcPVrBssHplKRyFJoMRyd
-         tNZQd1e9sxK9jBq8HUhhvpEmBUb05u6xzvsjc+qPmFfCZkJlObWdlstBNohxf0zXdgQa
-         L5qQ==
+        id S1379541AbhCBK3z (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Mar 2021 05:29:55 -0500
+Received: from mail-wm1-f52.google.com ([209.85.128.52]:54087 "EHLO
+        mail-wm1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1379836AbhCBBcJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 1 Mar 2021 20:32:09 -0500
+Received: by mail-wm1-f52.google.com with SMTP id e23so844654wmh.3;
+        Mon, 01 Mar 2021 17:31:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=D4V4eLWu2UkQ+c7wqrKmtOTumsn7flUm0gCXzVVvLyk=;
-        b=XJduF2oCgbtjPmtQc2fSTpqOmBlf88SM2ZHqbkdeJUCH8DyWu3auuC/G4mMSohPhrB
-         cALxTT3+/a0IKGR7UKUfg/i/Lz2V7bzwNHZSXjkTKU3A9FZbBtJUf8vHgeJk8geSjZFi
-         fJRbmGNhQMiaBvhK9Cj6OLwhxYAkwTm5VtRZDI65D48VZjGAD0YJp5PoDgwZ4LDQBmLO
-         1snKRCFwSNoL41INIT/d3FAAw9MeUjBYB+Gcr1L+xfz9Q5kNWZzgDh2NcS9b1EZrMUEU
-         aM2SW1MIYCzHKPo7sAnYMnLSTQewzHcndUvyDE0GtabxCschOgXLUlv8QpBoVjG/lRqO
-         HIvQ==
-X-Gm-Message-State: AOAM5310p7pyje4OHA+tSzaDKpMSSc8bMaVpO+C7jKZ/dyPbjGfqxBwt
-        M200pOxRdCZ0eaFsKGoXxiO4ld9lHS4qSQ==
-X-Google-Smtp-Source: ABdhPJzxaB5/lQEkyWdgYRirD7N8j85V9D1j3n69sshCdmQ31r6q+EOzCaqGBVVvhCPGBMmJQBFCvw==
-X-Received: by 2002:aca:4486:: with SMTP id r128mr1612055oia.171.1614652673103;
-        Mon, 01 Mar 2021 18:37:53 -0800 (PST)
-Received: from unknown.attlocal.net ([2600:1700:65a0:ab60:1bb:8d29:39ef:5fe5])
-        by smtp.gmail.com with ESMTPSA id a30sm100058oiy.42.2021.03.01.18.37.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Mar 2021 18:37:52 -0800 (PST)
-From:   Cong Wang <xiyou.wangcong@gmail.com>
-To:     netdev@vger.kernel.org
-Cc:     bpf@vger.kernel.org, duanxiongchun@bytedance.com,
-        wangdongdong.6@bytedance.com, jiang.wang@bytedance.com,
-        Cong Wang <cong.wang@bytedance.com>
-Subject: [Patch bpf-next v2 0/9] sockmap: introduce BPF_SK_SKB_VERDICT and support UDP
-Date:   Mon,  1 Mar 2021 18:37:34 -0800
-Message-Id: <20210302023743.24123-1-xiyou.wangcong@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HZ2hCyBVrm0WxssHI6NWJB7Y69JCeL0DnQlIlq8D1Hg=;
+        b=oszh1FTmjcsL6LHsYV2rwrgHeAE/G/toR4wnieh+w8KdrDtjTXygsWcd0ax3OHdzlK
+         Or564gZ8AUDDB7mjN90bnJJ3uaM0RlAo/wuCfUI/DSZWeE63I8zwOaNUSRznC92aKWHQ
+         68FSx42wL8KIEhRZO02NS0u53xFZ6qgTZVmNEnd/rSmhupQCnI9ybYwy/jsb7FPjqJpB
+         oawDi/uu6HgCWR6+MkLHwkfrfJF6zK7nICYrs96lmleMWgdCWbuS5lsR1RidmxwBJjuJ
+         sKOwrhkUNFbS68FUOmtMsCUrjPRiddn1dQmvk8Sxa5O/I4RrdrsqqMALe89eaYUSZn37
+         Z6zg==
+X-Gm-Message-State: AOAM531hYIrtPuUQpdEomllRgzOADHMXZUuGVMCslYv/rli3t6Ehg+DA
+        ZGKTwC20e+zmwY93Uo+ytrPYz3sSbfwkU/KVWP8=
+X-Google-Smtp-Source: ABdhPJwiy+pSdCpqtHFSPxg84vqmpWtyS8T+zOiUa45ftB6XmtCRAvzwCI9hMYTc27zlgzzGc2kh2M4l9AFpNvWUbBE=
+X-Received: by 2002:a7b:ce19:: with SMTP id m25mr1422250wmc.74.1614648686579;
+ Mon, 01 Mar 2021 17:31:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210223124554.1375051-1-liuhangbin@gmail.com>
+ <20210223154327.6011b5ee@carbon> <2b917326-3a63-035e-39e9-f63fe3315432@iogearbox.net>
+ <CAEf4BzaqsyhJvav-GsJkxP7zHvxZQWvEbrcjc0FH2eXXmidKDw@mail.gmail.com> <b64fa932-5902-f13f-b3b9-f476e389db1b@isovalent.com>
+In-Reply-To: <b64fa932-5902-f13f-b3b9-f476e389db1b@isovalent.com>
+From:   Joe Stringer <joe@wand.net.nz>
+Date:   Mon, 1 Mar 2021 17:31:13 -0800
+Message-ID: <CAOftzPhhJmvk=XrzsvLGie7gS5yTS+MyRv8jMuyLxh520mD0Aw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: fix missing * in bpf.h
+To:     Quentin Monnet <quentin@isovalent.com>
+Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Hangbin Liu <liuhangbin@gmail.com>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Joe Stringer <joe@wand.net.nz>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Cong Wang <cong.wang@bytedance.com>
+On Fri, Feb 26, 2021 at 8:51 AM Quentin Monnet <quentin@isovalent.com> wrote:
+>
+> 2021-02-24 10:59 UTC-0800 ~ Andrii Nakryiko <andrii.nakryiko@gmail.com>
+> > On Wed, Feb 24, 2021 at 7:55 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
+> >>
+> >> On 2/23/21 3:43 PM, Jesper Dangaard Brouer wrote:
+> >>> On Tue, 23 Feb 2021 20:45:54 +0800
+> >>> Hangbin Liu <liuhangbin@gmail.com> wrote:
+> >>>
+> >>>> Commit 34b2021cc616 ("bpf: Add BPF-helper for MTU checking") lost a *
+> >>>> in bpf.h. This will make bpf_helpers_doc.py stop building
+> >>>> bpf_helper_defs.h immediately after bpf_check_mtu, which will affect
+> >>>> future add functions.
+> >>>>
+> >>>> Fixes: 34b2021cc616 ("bpf: Add BPF-helper for MTU checking")
+> >>>> Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+> >>>> ---
+> >>>>   include/uapi/linux/bpf.h       | 2 +-
+> >>>>   tools/include/uapi/linux/bpf.h | 2 +-
+> >>>>   2 files changed, 2 insertions(+), 2 deletions(-)
+> >>>
+> >>> Thanks for fixing that!
+> >>>
+> >>> Acked-by: Jesper Dangaard Brouer <brouer@redhat.com>
+> >>
+> >> Thanks guys, applied!
+> >>
+> >>> I though I had already fix that, but I must have missed or reintroduced
+> >>> this, when I rolling back broken ideas in V13.
+> >>>
+> >>> I usually run this command to check the man-page (before submitting):
+> >>>
+> >>>   ./scripts/bpf_helpers_doc.py | rst2man | man -l -
+> >>
+> >> [+ Andrii] maybe this could be included to run as part of CI to catch such
+> >> things in advance?
+> >
+> > We do something like that as part of bpftool build, so there is no
+> > reason we can't add this to selftests/bpf/Makefile as well.
+>
+> Hi, pretty sure this is the case already? [0]
+>
+> This helps catching RST formatting issues, for example if a description
+> is using invalid markup, and reported by rst2man. My understanding is
+> that in the current case, the missing star simply ends the block for the
+> helpers documentation from the parser point of view, it's not considered
+> an error.
+>
+> I see two possible workarounds:
+>
+> 1) Check that the number of helpers found ("len(self.helpers)") is equal
+> to the number of helpers in the file, but that requires knowing how many
+> helpers we have in the first place (e.g. parsing "__BPF_FUNC_MAPPER(FN)").
 
-We have thousands of services connected to a daemon on every host
-via AF_UNIX dgram sockets, after they are moved into VM, we have to
-add a proxy to forward these communications from VM to host, because
-rewriting thousands of them is not practical. This proxy uses an
-AF_UNIX socket connected to services and a UDP socket to connect to
-the host. It is inefficient because data is copied between kernel
-space and user space twice, and we can not use splice() which only
-supports TCP. Therefore, we want to use sockmap to do the splicing
-without going to user-space at all (after the initial setup).
+This is not so difficult as long as we stick to one symbol per line:
 
-Currently sockmap only fully supports TCP, UDP is partially supported
-as it is only allowed to add into sockmap. This patchset, as the second
-part of the original large patchset, extends sockmap with:
-1) cross-protocol support with BPF_SK_SKB_VERDICT; 2) full UDP support.
+diff --git a/scripts/bpf_doc.py b/scripts/bpf_doc.py
+index e2ffac2b7695..74cdcc2bbf18 100755
+--- a/scripts/bpf_doc.py
++++ b/scripts/bpf_doc.py
+@@ -183,25 +183,51 @@ class HeaderParser(object):
+         self.reader.readline()
+         self.line = self.reader.readline()
 
-On the high level, ->sendmsg_locked() and ->read_sock() are required
-for each protocol to support sockmap redirection, and in order to do
-sock proto update, a new ops ->update_proto() is introduced, which is
-also required to implement. A BPF ->recvmsg() is also needed to replace
-the original ->recvmsg() to retrieve skmsg. Please see each patch for
-more details.
++    def get_elem_count(self, target):
++        self.seek_to(target, 'Could not find symbol "%s"' % target)
++        end_re = re.compile('^$')
++        count = 0
++        while True:
++            capture = end_re.match(self.line)
++            if capture:
++                break
++            self.line = self.reader.readline()
++            count += 1
++
++        # The last line (either '};' or '/* */' doesn't count.
++        return count
++
 
-To see the big picture, the original patchset is available here:
-https://github.com/congwang/linux/tree/sockmap
-this patchset is also available:
-https://github.com/congwang/linux/tree/sockmap2
-
----
-v2: separate from the original large patchset
-    rebase to the latest bpf-next
-    split UDP test case
-    move inet_csk_has_ulp() check to tcp_bpf.c
-    clean up udp_read_sock()
-
-Cong Wang (9):
-  sock_map: introduce BPF_SK_SKB_VERDICT
-  sock: introduce sk_prot->update_proto()
-  udp: implement ->sendmsg_locked()
-  udp: implement ->read_sock() for sockmap
-  udp: add ->read_sock() and ->sendmsg_locked() to ipv6
-  skmsg: extract __tcp_bpf_recvmsg() and tcp_bpf_wait_data()
-  udp: implement udp_bpf_recvmsg() for sockmap
-  sock_map: update sock type checks for UDP
-  selftests/bpf: add a test case for udp sockmap
-
- include/linux/skmsg.h                         |  25 ++--
- include/net/ipv6.h                            |   1 +
- include/net/sock.h                            |   3 +
- include/net/tcp.h                             |   3 +-
- include/net/udp.h                             |   4 +
- include/uapi/linux/bpf.h                      |   1 +
- kernel/bpf/syscall.c                          |   1 +
- net/core/skmsg.c                              | 113 +++++++++++++-
- net/core/sock_map.c                           |  52 ++++---
- net/ipv4/af_inet.c                            |   2 +
- net/ipv4/tcp_bpf.c                            | 129 +++-------------
- net/ipv4/tcp_ipv4.c                           |   3 +
- net/ipv4/udp.c                                |  68 ++++++++-
- net/ipv4/udp_bpf.c                            |  78 +++++++++-
- net/ipv6/af_inet6.c                           |   2 +
- net/ipv6/tcp_ipv6.c                           |   3 +
- net/ipv6/udp.c                                |  30 +++-
- net/tls/tls_sw.c                              |   4 +-
- tools/bpf/bpftool/common.c                    |   1 +
- tools/bpf/bpftool/prog.c                      |   1 +
- tools/include/uapi/linux/bpf.h                |   1 +
- .../selftests/bpf/prog_tests/sockmap_listen.c | 140 ++++++++++++++++++
- .../selftests/bpf/progs/test_sockmap_listen.c |  22 +++
- 23 files changed, 517 insertions(+), 170 deletions(-)
-
--- 
-2.25.1
-
+I can either roll this into my docs update v2, or hold onto it for
+another dedicated patch fixup. Either way I'm trialing this out
+locally to regression-test my own docs update PR and make sure I'm not
+breaking one of the various output formats.
