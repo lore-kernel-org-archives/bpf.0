@@ -7,63 +7,63 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B6C39C43333
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:56:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92660C4361B
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:56:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8944564E75
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:56:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 67BB564E6F
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:56:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352523AbhCCDuo (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Mar 2021 22:50:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50656 "EHLO
+        id S1352537AbhCCDvD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Mar 2021 22:51:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344082AbhCBRlc (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 2 Mar 2021 12:41:32 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B67C0698C7
-        for <bpf@vger.kernel.org>; Tue,  2 Mar 2021 09:20:44 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id e9so2474351pjj.0
-        for <bpf@vger.kernel.org>; Tue, 02 Mar 2021 09:20:44 -0800 (PST)
+        with ESMTP id S1346410AbhCBTLX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 2 Mar 2021 14:11:23 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EF67C0698CD
+        for <bpf@vger.kernel.org>; Tue,  2 Mar 2021 09:20:47 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id e6so14260959pgk.5
+        for <bpf@vger.kernel.org>; Tue, 02 Mar 2021 09:20:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cilium-io.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=fRChbTS8wm3//f2BALQqTT/xFw+Hx0cBe+aJeD7Uh84=;
-        b=qXgIqqi4ObJ6UdZYB5w747BTk9f9amHZx1zbj15a59wo3j1hcw5u6sHcTuAHT7onMU
-         BVZhfAmy/WK0q4aWiIfTI0e2WJP0ljZ8OXEi94p851QdY9+kjbHFzIkPJzYc3N6H9HpC
-         QA6az0JLL/E1Uz4uXm4IWqA+fpAXqH7/bqtqVXbqsu7s+03/evhsa8YrntRGCoEFaVrf
-         pk+0N1LYEdjDe1Wsc61K+L9khdbNArLuIPw9DFHfl6jaC+FiU1kIOEWmHWBCIc3f0w6W
-         cvgObljR+dTW9RFKKxXL8P0NZfTYviXe/ONvH8RXfRzCgVvQ+HaKR6S60RFkF1Pgct+o
-         kKRQ==
+        bh=hu2fl/gdmtemcdYzHoBNdDwL+TolrGxintCby5qolro=;
+        b=gUeXZS2tsNTXS18Z4VONyksNUoioo/xd+y0QiZIsR+hxzg2BxZmWY/v7YFh3MicoyF
+         Fcqm8KlHlNsXyIns2a0V9XbeqGHNqfAv/W++vmNiX9pfZM2W6JslFu/MQf823Y40U+AX
+         xNfh0wj7eTi2NxM+BFt37IssX7tV0gE4zYELLAijxoewKKLulYTDpSLosnfHOkO2Pe2m
+         WHIaJSecBWQJqWGG5sq29pl+t8gaUsOwUTrKKoVxoRaQZ2BIHBkBaTfxoGsJT3bsUXgi
+         iYBwcfsN4k4nrNeAmodfhSHVCOXooHe+4w23bmUblDg7kD67WLx0wld/EezzdsvanNHk
+         ZlBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=fRChbTS8wm3//f2BALQqTT/xFw+Hx0cBe+aJeD7Uh84=;
-        b=s9HZZKlMWR5VCYGgmXKlgkMVka7/blBPtWYe9gMKDbKVW9jj5j9LhmBBp5jeGAM+UE
-         P7AbU/zx5ynkR0qWCHddv5T2onMdMOFRWAKTwV3G88c4RktzuEiT+ZYiOyv7ND1M5G6l
-         Uozl2DsZLseLKxy8zgpjUtqgAjtwhDiXfJoQRtcv6B+9MR72kmKK4XgOcRjF5wdDo+cL
-         xPeJS/KZmFezHtfWO1LrGLGZWOpWydj66mltlHlTWLESL9yePnWH1WLz53A1sLXhTNRG
-         jLMJqlfrBUYXEtn8fj6/pM+i877atm/32Jn+JXRpdXGeuckjpZj6wV33xXxNpUKNvXeI
-         8EsA==
-X-Gm-Message-State: AOAM533RCliiJ7ogLVnv9iT6fOmB2K1cMkJphpizv/ZYRwMgt/KXUU98
-        ugqlpkJrua+OLAO6Dn3yDfD4TilivwCwxCUa
-X-Google-Smtp-Source: ABdhPJy+RrBwQTGcQzFWXHdEQ7YNuC9XacWs/v2BYwcrWyiLn3qvoyC6OROFYlLSPxV0G/BLWTnZNA==
-X-Received: by 2002:a17:90a:39c9:: with SMTP id k9mr5395908pjf.121.1614705643910;
-        Tue, 02 Mar 2021 09:20:43 -0800 (PST)
+        bh=hu2fl/gdmtemcdYzHoBNdDwL+TolrGxintCby5qolro=;
+        b=kd2ZeVVBqlib1AFhRCBPB6D6XgEd3zKbPauaFESEoLfCXQcsl1L+gbPi/kN9QZQsbr
+         pbRr7acKKeYq3Kbk4IDPsm/KgsagUvmYhYjMEUjfbmUF3xUG+RYjw4wVFx72W5rQiKjj
+         aJ7li5WVgpw2bNQadYugx8JLBLc+rM4UenA753OozcnPP8BgWpfH0M2cwPm67QVStpC7
+         4zckBWO5hIpICVU8MaMcSf+nz87+2Il9OkFpojMh0QJL9RPr5h9tB0Zu1caUss6MHZve
+         +aWerY9BsiRkCJJx9KzcfH1yHeORKBVT+ey7CeSeBOztlXPPq9Pn6BiNCP6Rt+wfCfbl
+         Z9Bg==
+X-Gm-Message-State: AOAM530lh0ZF4PTgGAU4Hsr8+8KoJGfako/MgEu3yAQ6SIP5FKybE5ge
+        gzTkU00CrkXsW7IqJi1o8GZsCnyr9JyQm+0f
+X-Google-Smtp-Source: ABdhPJzBegCXpYGBPuhfMSwsZrbAutCvoiFoc06DUlOYmxG7LD63nqFLBzLNBKT72gRfSqvMLazo0g==
+X-Received: by 2002:a62:ea19:0:b029:1ee:5911:c516 with SMTP id t25-20020a62ea190000b02901ee5911c516mr4070769pfh.67.1614705646358;
+        Tue, 02 Mar 2021 09:20:46 -0800 (PST)
 Received: from localhost.localdomain (c-73-93-5-123.hsd1.ca.comcast.net. [73.93.5.123])
-        by smtp.gmail.com with ESMTPSA id b15sm20073923pgg.85.2021.03.02.09.20.42
+        by smtp.gmail.com with ESMTPSA id b15sm20073923pgg.85.2021.03.02.09.20.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Mar 2021 09:20:43 -0800 (PST)
+        Tue, 02 Mar 2021 09:20:45 -0800 (PST)
 From:   Joe Stringer <joe@cilium.io>
 To:     bpf@vger.kernel.org
 Cc:     daniel@iogearbox.net, ast@kernel.org, linux-doc@vger.kernel.org,
         linux-man@vger.kernel.org,
         =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
         Quentin Monnet <quentin@isovalent.com>
-Subject: [PATCHv2 bpf-next 09/15] scripts/bpf: Abstract eBPF API target parameter
-Date:   Tue,  2 Mar 2021 09:19:41 -0800
-Message-Id: <20210302171947.2268128-10-joe@cilium.io>
+Subject: [PATCHv2 bpf-next 11/15] tools/bpf: Remove bpf-helpers from bpftool docs
+Date:   Tue,  2 Mar 2021 09:19:43 -0800
+Message-Id: <20210302171947.2268128-12-joe@cilium.io>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210302171947.2268128-1-joe@cilium.io>
 References: <20210302171947.2268128-1-joe@cilium.io>
@@ -74,283 +74,270 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Abstract out the target parameter so that upcoming commits, more than
-just the existing "helpers" target can be called to generate specific
-portions of docs from the eBPF UAPI headers.
+This logic is used for validating the manual pages from selftests, so
+move the infra under tools/testing/selftests/bpf/ and rely on selftests
+for validation rather than tying it into the bpftool build.
 
 Acked-by: Toke Høiland-Jørgensen <toke@redhat.com>
 Reviewed-by: Quentin Monnet <quentin@isovalent.com>
 Signed-off-by: Joe Stringer <joe@cilium.io>
 ---
- MAINTAINERS                                |  1 +
- include/uapi/linux/bpf.h                   |  2 +-
- scripts/{bpf_helpers_doc.py => bpf_doc.py} | 91 +++++++++++++++-------
- tools/bpf/Makefile.helpers                 |  2 +-
- tools/include/uapi/linux/bpf.h             |  2 +-
- tools/lib/bpf/Makefile                     |  2 +-
- tools/perf/MANIFEST                        |  2 +-
- 7 files changed, 69 insertions(+), 33 deletions(-)
- rename scripts/{bpf_helpers_doc.py => bpf_doc.py} (92%)
+ tools/bpf/bpftool/.gitignore                  |  1 -
+ tools/bpf/bpftool/Documentation/Makefile      | 11 +++----
+ tools/testing/selftests/bpf/.gitignore        |  1 +
+ tools/testing/selftests/bpf/Makefile          | 20 +++++++++---
+ .../selftests/bpf/Makefile.docs}              | 32 ++++++++++---------
+ .../selftests/bpf/test_bpftool_build.sh       | 21 ------------
+ tools/testing/selftests/bpf/test_doc_build.sh | 13 ++++++++
+ 7 files changed, 50 insertions(+), 49 deletions(-)
+ rename tools/{bpf/Makefile.helpers => testing/selftests/bpf/Makefile.docs} (64%)
+ create mode 100755 tools/testing/selftests/bpf/test_doc_build.sh
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a50a543e3c81..8d56c7044067 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3223,6 +3223,7 @@ F:	net/core/filter.c
- F:	net/sched/act_bpf.c
- F:	net/sched/cls_bpf.c
- F:	samples/bpf/
-+F:	scripts/bpf_doc.py
- F:	tools/bpf/
- F:	tools/lib/bpf/
- F:	tools/testing/selftests/bpf/
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index c8b9d19fce22..63a56ed6a785 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -1439,7 +1439,7 @@ union bpf_attr {
-  * parsed and used to produce a manual page. The workflow is the following,
-  * and requires the rst2man utility:
-  *
-- *     $ ./scripts/bpf_helpers_doc.py \
-+ *     $ ./scripts/bpf_doc.py \
-  *             --filename include/uapi/linux/bpf.h > /tmp/bpf-helpers.rst
-  *     $ rst2man /tmp/bpf-helpers.rst > /tmp/bpf-helpers.7
-  *     $ man /tmp/bpf-helpers.7
-diff --git a/scripts/bpf_helpers_doc.py b/scripts/bpf_doc.py
-similarity index 92%
-rename from scripts/bpf_helpers_doc.py
-rename to scripts/bpf_doc.py
-index 867ada23281c..5a4f68aab335 100755
---- a/scripts/bpf_helpers_doc.py
-+++ b/scripts/bpf_doc.py
-@@ -2,6 +2,7 @@
+diff --git a/tools/bpf/bpftool/.gitignore b/tools/bpf/bpftool/.gitignore
+index 944cb4b7c95d..05ce4446b780 100644
+--- a/tools/bpf/bpftool/.gitignore
++++ b/tools/bpf/bpftool/.gitignore
+@@ -3,7 +3,6 @@
+ /bootstrap/
+ /bpftool
+ bpftool*.8
+-bpf-helpers.*
+ FEATURE-DUMP.bpftool
+ feature
+ libbpf
+diff --git a/tools/bpf/bpftool/Documentation/Makefile b/tools/bpf/bpftool/Documentation/Makefile
+index f33cb02de95c..c49487905ceb 100644
+--- a/tools/bpf/bpftool/Documentation/Makefile
++++ b/tools/bpf/bpftool/Documentation/Makefile
+@@ -16,15 +16,12 @@ prefix ?= /usr/local
+ mandir ?= $(prefix)/man
+ man8dir = $(mandir)/man8
+ 
+-# Load targets for building eBPF helpers man page.
+-include ../../Makefile.helpers
+-
+ MAN8_RST = $(wildcard bpftool*.rst)
+ 
+ _DOC_MAN8 = $(patsubst %.rst,%.8,$(MAN8_RST))
+ DOC_MAN8 = $(addprefix $(OUTPUT),$(_DOC_MAN8))
+ 
+-man: man8 helpers
++man: man8
+ man8: $(DOC_MAN8)
+ 
+ RST2MAN_DEP := $(shell command -v rst2man 2>/dev/null)
+@@ -46,16 +43,16 @@ ifndef RST2MAN_DEP
+ endif
+ 	$(QUIET_GEN)( cat $< ; printf "%b" $(call see_also,$<) ) | rst2man $(RST2MAN_OPTS) > $@
+ 
+-clean: helpers-clean
++clean:
+ 	$(call QUIET_CLEAN, Documentation)
+ 	$(Q)$(RM) $(DOC_MAN8)
+ 
+-install: man helpers-install
++install: man
+ 	$(call QUIET_INSTALL, Documentation-man)
+ 	$(Q)$(INSTALL) -d -m 755 $(DESTDIR)$(man8dir)
+ 	$(Q)$(INSTALL) -m 644 $(DOC_MAN8) $(DESTDIR)$(man8dir)
+ 
+-uninstall: helpers-uninstall
++uninstall:
+ 	$(call QUIET_UNINST, Documentation-man)
+ 	$(Q)$(RM) $(addprefix $(DESTDIR)$(man8dir)/,$(_DOC_MAN8))
+ 	$(Q)$(RMDIR) $(DESTDIR)$(man8dir)
+diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
+index c0c48fdb9ac1..a0d5ec3cfc24 100644
+--- a/tools/testing/selftests/bpf/.gitignore
++++ b/tools/testing/selftests/bpf/.gitignore
+@@ -1,4 +1,5 @@
  # SPDX-License-Identifier: GPL-2.0-only
- #
- # Copyright (C) 2018-2019 Netronome Systems, Inc.
-+# Copyright (C) 2021 Isovalent, Inc.
++bpf-helpers*
+ test_verifier
+ test_maps
+ test_lru_map
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index a81af15e4ded..b5827464c6b5 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -68,6 +68,7 @@ TEST_PROGS := test_kmod.sh \
+ 	test_bpftool_build.sh \
+ 	test_bpftool.sh \
+ 	test_bpftool_metadata.sh \
++	test_docs_build.sh \
+ 	test_xsk.sh
  
- # In case user attempts to run with Python 2.
- from __future__ import print_function
-@@ -165,10 +166,11 @@ class Printer(object):
-     """
-     A generic class for printers. Printers should be created with an array of
-     Helper objects, and implement a way to print them in the desired fashion.
--    @helpers: array of Helper objects to print to standard output
-+    @parser: A HeaderParser with objects to print to standard output
-     """
--    def __init__(self, helpers):
--        self.helpers = helpers
-+    def __init__(self, parser):
-+        self.parser = parser
-+        self.elements = []
+ TEST_PROGS_EXTENDED := with_addr.sh \
+@@ -103,6 +104,7 @@ override define CLEAN
+ 	$(call msg,CLEAN)
+ 	$(Q)$(RM) -r $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES) $(EXTRA_CLEAN)
+ 	$(Q)$(MAKE) -C bpf_testmod clean
++	$(Q)$(MAKE) docs-clean
+ endef
  
-     def print_header(self):
-         pass
-@@ -181,19 +183,23 @@ class Printer(object):
+ include ../lib.mk
+@@ -180,6 +182,7 @@ $(OUTPUT)/runqslower: $(BPFOBJ) | $(DEFAULT_BPFTOOL)
+ 		    cp $(SCRATCH_DIR)/runqslower $@
  
-     def print_all(self):
-         self.print_header()
--        for helper in self.helpers:
--            self.print_one(helper)
-+        for elem in self.elements:
-+            self.print_one(elem)
-         self.print_footer()
+ $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED): $(OUTPUT)/test_stub.o $(BPFOBJ)
++$(TEST_GEN_FILES): docs
  
+ $(OUTPUT)/test_dev_cgroup: cgroup_helpers.c
+ $(OUTPUT)/test_skb_cgroup_id_user: cgroup_helpers.c
+@@ -200,11 +203,16 @@ $(DEFAULT_BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile)    \
+ 		    CC=$(HOSTCC) LD=$(HOSTLD)				       \
+ 		    OUTPUT=$(HOST_BUILD_DIR)/bpftool/			       \
+ 		    prefix= DESTDIR=$(HOST_SCRATCH_DIR)/ install
+-	$(Q)mkdir -p $(BUILD_DIR)/bpftool/Documentation
+-	$(Q)RST2MAN_OPTS="--exit-status=1" $(MAKE) $(submake_extras)	       \
+-		    -C $(BPFTOOLDIR)/Documentation			       \
+-		    OUTPUT=$(BUILD_DIR)/bpftool/Documentation/		       \
+-		    prefix= DESTDIR=$(SCRATCH_DIR)/ install
 +
- class PrinterRST(Printer):
-     """
--    A printer for dumping collected information about helpers as a ReStructured
--    Text page compatible with the rst2man program, which can be used to
--    generate a manual page for the helpers.
--    @helpers: array of Helper objects to print to standard output
-+    A generic class for printers that print ReStructured Text. Printers should
-+    be created with a HeaderParser object, and implement a way to print API
-+    elements in the desired fashion.
-+    @parser: A HeaderParser with objects to print to standard output
-     """
--    def print_header(self):
--        header = '''\
-+    def __init__(self, parser):
-+        self.parser = parser
++docs:
++	$(Q)RST2MAN_OPTS="--exit-status=1" $(MAKE) $(submake_extras)	\
++	            -f Makefile.docs					\
++	            prefix= OUTPUT=$(OUTPUT)/ DESTDIR=$(OUTPUT)/ $@
 +
-+    def print_license(self):
-+        license = '''\
- .. Copyright (C) All BPF authors and contributors from 2014 to present.
- .. See git log include/uapi/linux/bpf.h in kernel tree for details.
- .. 
-@@ -221,9 +227,39 @@ class PrinterRST(Printer):
- .. 
- .. Please do not edit this file. It was generated from the documentation
- .. located in file include/uapi/linux/bpf.h of the Linux kernel sources
--.. (helpers description), and from scripts/bpf_helpers_doc.py in the same
-+.. (helpers description), and from scripts/bpf_doc.py in the same
- .. repository (header and footer).
-+'''
-+        print(license)
++docs-clean:
++	$(Q)$(MAKE) $(submake_extras)					\
++	            -f Makefile.docs					\
++	            prefix= OUTPUT=$(OUTPUT)/ DESTDIR=$(OUTPUT)/ $@
+ 
+ $(BPFOBJ): $(wildcard $(BPFDIR)/*.[ch] $(BPFDIR)/Makefile)		       \
+ 	   ../../../include/uapi/linux/bpf.h                                   \
+@@ -477,3 +485,5 @@ EXTRA_CLEAN := $(TEST_CUSTOM_PROGS) $(SCRATCH_DIR) $(HOST_SCRATCH_DIR)	\
+ 	prog_tests/tests.h map_tests/tests.h verifier/tests.h		\
+ 	feature								\
+ 	$(addprefix $(OUTPUT)/,*.o *.skel.h no_alu32 bpf_gcc bpf_testmod.ko)
 +
-+    def print_elem(self, elem):
-+        if (elem.desc):
-+            print('\tDescription')
-+            # Do not strip all newline characters: formatted code at the end of
-+            # a section must be followed by a blank line.
-+            for line in re.sub('\n$', '', elem.desc, count=1).split('\n'):
-+                print('{}{}'.format('\t\t' if line else '', line))
-+
-+        if (elem.ret):
-+            print('\tReturn')
-+            for line in elem.ret.rstrip().split('\n'):
-+                print('{}{}'.format('\t\t' if line else '', line))
-+
-+        print('')
- 
-+
-+class PrinterHelpersRST(PrinterRST):
-+    """
-+    A printer for dumping collected information about helpers as a ReStructured
-+    Text page compatible with the rst2man program, which can be used to
-+    generate a manual page for the helpers.
-+    @parser: A HeaderParser with Helper objects to print to standard output
-+    """
-+    def __init__(self, parser):
-+        self.elements = parser.helpers
-+
-+    def print_header(self):
-+        header = '''\
- ===========
- BPF-HELPERS
- ===========
-@@ -264,6 +300,7 @@ kernel at the top).
- HELPERS
- =======
- '''
-+        PrinterRST.print_license(self)
-         print(header)
- 
-     def print_footer(self):
-@@ -380,27 +417,19 @@ SEE ALSO
- 
-     def print_one(self, helper):
-         self.print_proto(helper)
-+        self.print_elem(helper)
- 
--        if (helper.desc):
--            print('\tDescription')
--            # Do not strip all newline characters: formatted code at the end of
--            # a section must be followed by a blank line.
--            for line in re.sub('\n$', '', helper.desc, count=1).split('\n'):
--                print('{}{}'.format('\t\t' if line else '', line))
- 
--        if (helper.ret):
--            print('\tReturn')
--            for line in helper.ret.rstrip().split('\n'):
--                print('{}{}'.format('\t\t' if line else '', line))
- 
--        print('')
- 
- class PrinterHelpers(Printer):
-     """
-     A printer for dumping collected information about helpers as C header to
-     be included from BPF program.
--    @helpers: array of Helper objects to print to standard output
-+    @parser: A HeaderParser with Helper objects to print to standard output
-     """
-+    def __init__(self, parser):
-+        self.elements = parser.helpers
- 
-     type_fwds = [
-             'struct bpf_fib_lookup',
-@@ -511,7 +540,7 @@ class PrinterHelpers(Printer):
- 
-     def print_header(self):
-         header = '''\
--/* This is auto-generated file. See bpf_helpers_doc.py for details. */
-+/* This is auto-generated file. See bpf_doc.py for details. */
- 
- /* Forward declarations of BPF structs */'''
- 
-@@ -589,8 +618,12 @@ script = os.path.abspath(sys.argv[0])
- linuxRoot = os.path.dirname(os.path.dirname(script))
- bpfh = os.path.join(linuxRoot, 'include/uapi/linux/bpf.h')
- 
-+printers = {
-+        'helpers': PrinterHelpersRST,
-+}
-+
- argParser = argparse.ArgumentParser(description="""
--Parse eBPF header file and generate documentation for eBPF helper functions.
-+Parse eBPF header file and generate documentation for the eBPF API.
- The RST-formatted output produced can be turned into a manual page with the
- rst2man utility.
- """)
-@@ -601,6 +634,8 @@ if (os.path.isfile(bpfh)):
-                            default=bpfh)
- else:
-     argParser.add_argument('--filename', help='path to include/uapi/linux/bpf.h')
-+argParser.add_argument('target', nargs='?', default='helpers',
-+                       choices=printers.keys(), help='eBPF API target')
- args = argParser.parse_args()
- 
- # Parse file.
-@@ -609,7 +644,7 @@ headerParser.run()
- 
- # Print formatted output to standard output.
- if args.header:
--    printer = PrinterHelpers(headerParser.helpers)
-+    printer = PrinterHelpers(headerParser)
- else:
--    printer = PrinterRST(headerParser.helpers)
-+    printer = printers[args.target](headerParser)
- printer.print_all()
-diff --git a/tools/bpf/Makefile.helpers b/tools/bpf/Makefile.helpers
-index 854d084026dd..a26599022fd6 100644
++.PHONY: docs docs-clean
+diff --git a/tools/bpf/Makefile.helpers b/tools/testing/selftests/bpf/Makefile.docs
+similarity index 64%
+rename from tools/bpf/Makefile.helpers
+rename to tools/testing/selftests/bpf/Makefile.docs
+index a26599022fd6..546c4a763b46 100644
 --- a/tools/bpf/Makefile.helpers
-+++ b/tools/bpf/Makefile.helpers
-@@ -35,7 +35,7 @@ man7: $(DOC_MAN7)
++++ b/tools/testing/selftests/bpf/Makefile.docs
+@@ -1,13 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+-ifndef allow-override
+-  include ../scripts/Makefile.include
+-  include ../scripts/utilities.mak
+-else
+-  # Assume Makefile.helpers is being run from bpftool/Documentation
+-  # subdirectory. Go up two more directories to fetch bpf.h header and
+-  # associated script.
+-  UP2DIR := ../../
+-endif
++
++include ../../../scripts/Makefile.include
++include ../../../scripts/utilities.mak
+ 
+ INSTALL ?= install
+ RM ?= rm -f
+@@ -29,13 +23,21 @@ MAN7_RST = $(HELPERS_RST)
+ _DOC_MAN7 = $(patsubst %.rst,%.7,$(MAN7_RST))
+ DOC_MAN7 = $(addprefix $(OUTPUT),$(_DOC_MAN7))
+ 
++DOCTARGETS := helpers
++
++docs: $(DOCTARGETS)
+ helpers: man7
+ man7: $(DOC_MAN7)
+ 
  RST2MAN_DEP := $(shell command -v rst2man 2>/dev/null)
  
- $(OUTPUT)$(HELPERS_RST): $(UP2DIR)../../include/uapi/linux/bpf.h
--	$(QUIET_GEN)$(UP2DIR)../../scripts/bpf_helpers_doc.py --filename $< > $@
-+	$(QUIET_GEN)$(UP2DIR)../../scripts/bpf_doc.py --filename $< > $@
+-$(OUTPUT)$(HELPERS_RST): $(UP2DIR)../../include/uapi/linux/bpf.h
+-	$(QUIET_GEN)$(UP2DIR)../../scripts/bpf_doc.py --filename $< > $@
++# Configure make rules for the man page bpf-$1.$2.
++# $1 - target for scripts/bpf_doc.py
++# $2 - man page section to generate the troff file
++define DOCS_RULES =
++$(OUTPUT)bpf-$1.rst: ../../../../include/uapi/linux/bpf.h
++	$$(QUIET_GEN)../../../../scripts/bpf_doc.py $1 \
++		--filename $$< > $$@
  
  $(OUTPUT)%.7: $(OUTPUT)%.rst
  ifndef RST2MAN_DEP
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index b89af20cfa19..b4c5c529ad17 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -729,7 +729,7 @@ union bpf_attr {
-  * parsed and used to produce a manual page. The workflow is the following,
-  * and requires the rst2man utility:
-  *
-- *     $ ./scripts/bpf_helpers_doc.py \
-+ *     $ ./scripts/bpf_doc.py \
-  *             --filename include/uapi/linux/bpf.h > /tmp/bpf-helpers.rst
-  *     $ rst2man /tmp/bpf-helpers.rst > /tmp/bpf-helpers.7
-  *     $ man /tmp/bpf-helpers.7
-diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
-index 887a494ad5fc..8170f88e8ea6 100644
---- a/tools/lib/bpf/Makefile
-+++ b/tools/lib/bpf/Makefile
-@@ -158,7 +158,7 @@ $(BPF_IN_STATIC): force $(BPF_HELPER_DEFS)
- 	$(Q)$(MAKE) $(build)=libbpf OUTPUT=$(STATIC_OBJDIR)
+@@ -43,18 +45,18 @@ ifndef RST2MAN_DEP
+ endif
+ 	$(QUIET_GEN)rst2man $< > $@
  
- $(BPF_HELPER_DEFS): $(srctree)/tools/include/uapi/linux/bpf.h
--	$(QUIET_GEN)$(srctree)/scripts/bpf_helpers_doc.py --header \
-+	$(QUIET_GEN)$(srctree)/scripts/bpf_doc.py --header \
- 		--file $(srctree)/tools/include/uapi/linux/bpf.h > $(BPF_HELPER_DEFS)
+-helpers-clean:
++docs-clean:
+ 	$(call QUIET_CLEAN, eBPF_helpers-manpage)
+ 	$(Q)$(RM) $(DOC_MAN7) $(OUTPUT)$(HELPERS_RST)
  
- $(OUTPUT)libbpf.so: $(OUTPUT)libbpf.so.$(LIBBPF_VERSION)
-diff --git a/tools/perf/MANIFEST b/tools/perf/MANIFEST
-index 5d7b947320fb..f05c4d48fd7e 100644
---- a/tools/perf/MANIFEST
-+++ b/tools/perf/MANIFEST
-@@ -20,4 +20,4 @@ tools/lib/bitmap.c
- tools/lib/str_error_r.c
- tools/lib/vsprintf.c
- tools/lib/zalloc.c
--scripts/bpf_helpers_doc.py
-+scripts/bpf_doc.py
+-helpers-install: helpers
++docs-install: helpers
+ 	$(call QUIET_INSTALL, eBPF_helpers-manpage)
+ 	$(Q)$(INSTALL) -d -m 755 $(DESTDIR)$(man7dir)
+ 	$(Q)$(INSTALL) -m 644 $(DOC_MAN7) $(DESTDIR)$(man7dir)
+ 
+-helpers-uninstall:
++docs-uninstall:
+ 	$(call QUIET_UNINST, eBPF_helpers-manpage)
+ 	$(Q)$(RM) $(addprefix $(DESTDIR)$(man7dir)/,$(_DOC_MAN7))
+ 	$(Q)$(RMDIR) $(DESTDIR)$(man7dir)
+ 
+-.PHONY: helpers helpers-clean helpers-install helpers-uninstall
++.PHONY: docs docs-clean docs-install docs-uninstall
+diff --git a/tools/testing/selftests/bpf/test_bpftool_build.sh b/tools/testing/selftests/bpf/test_bpftool_build.sh
+index 2db3c60e1e61..ac349a5cea7e 100755
+--- a/tools/testing/selftests/bpf/test_bpftool_build.sh
++++ b/tools/testing/selftests/bpf/test_bpftool_build.sh
+@@ -85,23 +85,6 @@ make_with_tmpdir() {
+ 	echo
+ }
+ 
+-make_doc_and_clean() {
+-	echo -e "\$PWD:    $PWD"
+-	echo -e "command: make -s $* doc >/dev/null"
+-	RST2MAN_OPTS="--exit-status=1" make $J -s $* doc
+-	if [ $? -ne 0 ] ; then
+-		ERROR=1
+-		printf "FAILURE: Errors or warnings when building documentation\n"
+-	fi
+-	(
+-		if [ $# -ge 1 ] ; then
+-			cd ${@: -1}
+-		fi
+-		make -s doc-clean
+-	)
+-	echo
+-}
+-
+ echo "Trying to build bpftool"
+ echo -e "... through kbuild\n"
+ 
+@@ -162,7 +145,3 @@ make_and_clean
+ make_with_tmpdir OUTPUT
+ 
+ make_with_tmpdir O
+-
+-echo -e "Checking documentation build\n"
+-# From tools/bpf/bpftool
+-make_doc_and_clean
+diff --git a/tools/testing/selftests/bpf/test_doc_build.sh b/tools/testing/selftests/bpf/test_doc_build.sh
+new file mode 100755
+index 000000000000..7eb940a7b2eb
+--- /dev/null
++++ b/tools/testing/selftests/bpf/test_doc_build.sh
+@@ -0,0 +1,13 @@
++#!/bin/bash
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++
++# Assume script is located under tools/testing/selftests/bpf/. We want to start
++# build attempts from the top of kernel repository.
++SCRIPT_REL_PATH=$(realpath --relative-to=$PWD $0)
++SCRIPT_REL_DIR=$(dirname $SCRIPT_REL_PATH)
++KDIR_ROOT_DIR=$(realpath $PWD/$SCRIPT_REL_DIR/../../../../)
++cd $KDIR_ROOT_DIR
++
++for tgt in docs docs-clean; do
++	make -s -C $PWD/$SCRIPT_REL_DIR $tgt;
++done
 -- 
 2.27.0
 
