@@ -2,170 +2,198 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C972C282E0
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:55:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96576C28D13
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:55:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5E84964E84
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:55:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5F88064E7C
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:55:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352481AbhCCDt4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Mar 2021 22:49:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37266 "EHLO
+        id S1352496AbhCCDuQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Mar 2021 22:50:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1839595AbhCBQhc (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 2 Mar 2021 11:37:32 -0500
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62FC5C061222
-        for <bpf@vger.kernel.org>; Tue,  2 Mar 2021 08:22:30 -0800 (PST)
-Received: by mail-lj1-x229.google.com with SMTP id h4so24495960ljl.0
-        for <bpf@vger.kernel.org>; Tue, 02 Mar 2021 08:22:30 -0800 (PST)
+        with ESMTP id S1349781AbhCBRga (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 2 Mar 2021 12:36:30 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 315E2C061A27
+        for <bpf@vger.kernel.org>; Tue,  2 Mar 2021 09:20:33 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id o38so14246407pgm.9
+        for <bpf@vger.kernel.org>; Tue, 02 Mar 2021 09:20:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9F+lO983HafQm131zMNtA2M5vN7jjQ4sPO1miVVqoZQ=;
-        b=rkoJZCKrXUgso9jhDO9Ntv+yPsXPftMJkfH6Ln/fdlC3w6AAhsqvJddr6Pni8EEbHn
-         QbVxAjZqbarunY1iqfUi30tqCHf/6H3W19GSltFqHiKzrpEyJOb+CqW6LcXT8d+NZ6jR
-         2uIcIXtbl23HrnE0SKS48l+A0pZ17mOGYPU4M=
+        d=cilium-io.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZSepNuTpShhqXcTO9o/+6YyXUqnmTGJsJycIq3qFJpo=;
+        b=iCWZupQqVkBwoPxoHcF5zAleItLX18zgYEvsPvPz1QBKeW4ggt81c3gfm62l9KBLYv
+         0ZQ5/4+e7WEVeILAU1QoVQSgSF9NuPuCV/IuzL04ylKWdGrGw+isusB09Py22T/03PCg
+         c3zTrTe6IClZMKWveUal+fOHVZ39cGEYQo7Jf+UYTg4D5IV7/L2JRK+sgAx11Di3SnG8
+         kPsPQAClb108dIOkpMeBlAW++rr+4zNrMD2UKsZmFOR9CLQKh4iJBQn/jKUjCYwpBMAp
+         8GN4iFygZb1OmR3+YI+ogrlz5On/VsVJ5aNi6wDpqJPfp6sBIUyB9bx1gPBDPCciVm/M
+         6mVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9F+lO983HafQm131zMNtA2M5vN7jjQ4sPO1miVVqoZQ=;
-        b=RxFubHk1VpTT3nl52GMI+ns8RTUYwlORXATLmPy27ulRjO2Wvfb8JxWtqtekNi0ujv
-         eSaCh2X26ajKUzGWlF9VoHjaBO+zESM7d4JXMFUhM+tkL2B9Xirt2qI6fs8xOlzvs9pI
-         HI9HCVQ1u4SGkwJKjpEqcXnm8GLlLlw1oRrcReRm9TCtPWXYBxI3yg1jtEg7OaiXFn25
-         STSM6ZaXVJ0BaEk46ORP/q2TR4HMH4m0kDq+tpEJLhObMQFuM60YaFfRJkfzpX790uqZ
-         0WVACUa7ni/DptBa3y75EwG5Jjhg+c/K5LeQbYwFiKBDX+wh+rGQpkKgoI4j6ReaCf4q
-         GYOQ==
-X-Gm-Message-State: AOAM530z2ZbRlQfqMYCFjKqTAzW81Ac7k9FYdRFHExb54fumkT/YSsc1
-        qU6gVKyGFEHy0g2zNnGnuefXsTdYCtfp/rBrEwWYFw==
-X-Google-Smtp-Source: ABdhPJzvRrHUiMLHVor8XFBpxH5az13yVi5Sx+2gdr1u4tI1Nwtw0JQOP8iEFA9pA6sqBWUhl6nS0lFRyFoHz1j0aH4=
-X-Received: by 2002:a2e:9310:: with SMTP id e16mr12720926ljh.226.1614702148827;
- Tue, 02 Mar 2021 08:22:28 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZSepNuTpShhqXcTO9o/+6YyXUqnmTGJsJycIq3qFJpo=;
+        b=A25glCXqSh+l6CCNr8ZBXV5tQqmZUupidrlw6yfGseQwjqtv/BdbAnpQuos9WUnqda
+         Tai7doAhBcm2pI4/34v1W/ICp49wsYrGjlkf2rzEM57H850WqWu+Xnm9BJq3XxZQIdGa
+         dyAvCgvidcoXUWBTlj8yIaB8lgeR4nV3AKPDAsIZ5OPtOSkkex1HM7DsxEqcmbO3iQ3t
+         6u2eDSShCNzGgvwOtiib7V2d6HTEs1YDbDASLpKlBwofwC0/tCxk1JONb1Ualgnmx7lv
+         SUsQtPe3C6W4J6TZh6kyyV6LTRA+mLaoGVRhyhQKKkjJRzAszvijFxns3W1m85RAN49n
+         Y6rg==
+X-Gm-Message-State: AOAM5308A38IEPbqhshPNA3katUrO1QdCV6A9HrlfNWjSeymEslE0wFC
+        B4xh7s7oBLJRuQQ+Vrb0vhvJ0YdCzdXFzz9Q
+X-Google-Smtp-Source: ABdhPJwuIMK+ewRiaw33ZRBdLAvPTiWCttJuE4Y7QHyuLgDmoaprwrhcPx4OJfWs7oWlUXT/bYylqQ==
+X-Received: by 2002:aa7:9a86:0:b029:1ee:70dd:c44e with SMTP id w6-20020aa79a860000b02901ee70ddc44emr4136871pfi.56.1614705632486;
+        Tue, 02 Mar 2021 09:20:32 -0800 (PST)
+Received: from localhost.localdomain (c-73-93-5-123.hsd1.ca.comcast.net. [73.93.5.123])
+        by smtp.gmail.com with ESMTPSA id b15sm20073923pgg.85.2021.03.02.09.20.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Mar 2021 09:20:32 -0800 (PST)
+From:   Joe Stringer <joe@cilium.io>
+To:     bpf@vger.kernel.org
+Cc:     linux-man@vger.kernel.org, linux-doc@vger.kernel.org,
+        mtk.manpages@gmail.com, ast@kernel.org, brianvv@google.com,
+        daniel@iogearbox.net, daniel@zonque.org, john.fastabend@gmail.com,
+        ppenkov@google.com, quentin@isovalent.com, sean@mess.org,
+        yhs@fb.com
+Subject: [PATCHv2 bpf-next 00/15] Improve BPF syscall command documentation
+Date:   Tue,  2 Mar 2021 09:19:32 -0800
+Message-Id: <20210302171947.2268128-1-joe@cilium.io>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <20210302023743.24123-1-xiyou.wangcong@gmail.com> <20210302023743.24123-3-xiyou.wangcong@gmail.com>
-In-Reply-To: <20210302023743.24123-3-xiyou.wangcong@gmail.com>
-From:   Lorenz Bauer <lmb@cloudflare.com>
-Date:   Tue, 2 Mar 2021 16:22:17 +0000
-Message-ID: <CACAyw9-SjsNn4_J1KDXuFh1nd9Hr-Mo+=7S-kVtooJwdi1fodQ@mail.gmail.com>
-Subject: Re: [Patch bpf-next v2 2/9] sock: introduce sk_prot->update_proto()
-To:     Cong Wang <xiyou.wangcong@gmail.com>
-Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        duanxiongchun@bytedance.com, wangdongdong.6@bytedance.com,
-        jiang.wang@bytedance.com, Cong Wang <cong.wang@bytedance.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Sitnicki <jakub@cloudflare.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, 2 Mar 2021 at 02:37, Cong Wang <xiyou.wangcong@gmail.com> wrote:
+The state of bpf(2) manual pages today is not exactly ideal. For the
+most part, it was written several years ago and has not kept up with the
+pace of development in the kernel tree. For instance, out of a total of
+~35 commands to the BPF syscall available today, when I pull the
+kernel-man-pages tree today I find just 6 documented commands: The very
+basics of map interaction and program load.
 
-...
+In contrast, looking at bpf-helpers(7), I am able today to run one
+command[0] to fetch API documentation of the very latest eBPF helpers
+that have been added to the kernel. This documentation is up to date
+because kernel maintainers enforce documenting the APIs as part of
+the feature submission process. As far as I can tell, we rely on manual
+synchronization from the kernel tree to the kernel-man-pages tree to
+distribute these more widely, so all locations may not be completely up
+to date. That said, the documentation does in fact exist in the first
+place which is a major initial hurdle to overcome.
 
-> @@ -350,25 +351,12 @@ static inline void sk_psock_cork_free(struct sk_psock *psock)
->         }
->  }
->
-> -static inline void sk_psock_update_proto(struct sock *sk,
-> -                                        struct sk_psock *psock,
-> -                                        struct proto *ops)
-> -{
-> -       /* Pairs with lockless read in sk_clone_lock() */
-> -       WRITE_ONCE(sk->sk_prot, ops);
-> -}
-> -
->  static inline void sk_psock_restore_proto(struct sock *sk,
->                                           struct sk_psock *psock)
->  {
->         sk->sk_prot->unhash = psock->saved_unhash;
+Given the relative success of the process around bpf-helpers(7) to
+encourage developers to document their user-facing changes, in this
+patch series I explore applying this technique to bpf(2) as well.
+Unfortunately, even with bpf(2) being so out-of-date, there is still a
+lot of content to convert over. In particular, the following aspects of
+the bpf syscall could also be individually be generated from separate
+documentation in the header:
+* BPF syscall commands
+* BPF map types
+* BPF program types
+* BPF program subtypes (aka expected_attach_type)
+* BPF attachment points
 
-Not related to your patch set, but why do an extra restore of
-sk_prot->unhash here? At this point sk->sk_prot is one of our tcp_bpf
-/ udp_bpf protos, so overwriting that seems wrong?
+Rather than tackle everything at once, I have focused in this series on
+the syscall commands, "enum bpf_cmd". This series is structured to first
+import what useful descriptions there are from the kernel-man-pages
+tree, then piece-by-piece document a few of the syscalls in more detail
+in cases where I could find useful documentation from the git tree or
+from a casual read of the code. Not all documentation is comprehensive
+at this point, but a basis is provided with examples that can be further
+enhanced with subsequent follow-up patches. Note, the series in its
+current state only includes documentation around the syscall commands
+themselves, so in the short term it doesn't allow us to automate bpf(2)
+generation; Only one section of the man page could be replaced. Though
+if there is appetite for this approach, this should be trivial to
+improve on, even if just by importing the remaining static text from the
+kernel-man-pages tree.
 
-> -       if (inet_csk_has_ulp(sk)) {
-> -               tcp_update_ulp(sk, psock->sk_proto, psock->saved_write_space);
-> -       } else {
-> -               sk->sk_write_space = psock->saved_write_space;
-> -               /* Pairs with lockless read in sk_clone_lock() */
-> -               WRITE_ONCE(sk->sk_prot, psock->sk_proto);
-> -       }
-> +       if (psock->saved_update_proto)
-> +               psock->saved_update_proto(sk, true);
->  }
->
->  static inline void sk_psock_set_state(struct sk_psock *psock,
-> diff --git a/include/net/sock.h b/include/net/sock.h
-> index 636810ddcd9b..0e8577c917e8 100644
-> --- a/include/net/sock.h
-> +++ b/include/net/sock.h
-> @@ -1184,6 +1184,9 @@ struct proto {
->         void                    (*unhash)(struct sock *sk);
->         void                    (*rehash)(struct sock *sk);
->         int                     (*get_port)(struct sock *sk, unsigned short snum);
-> +#ifdef CONFIG_BPF_SYSCALL
-> +       int                     (*update_proto)(struct sock *sk, bool restore);
+Following that, the series enhances the python scripting around parsing
+the descriptions from the header files and generating dedicated
+ReStructured Text and troff output. Finally, to expose the new text and
+reduce the likelihood of having it get out of date or break the docs
+parser, it is added to the selftests and exposed through the kernel
+documentation web pages.
 
-Kind of a nit, but this name suggests that the callback is a lot more
-generic than it really is. The only thing you can use it for is to
-prep the socket to be sockmap ready since we hardwire sockmap_unhash,
-etc. It's also not at all clear that this only works if sk has an
-sk_psock associated with it. Calling it without one would crash the
-kernel since the update_proto functions don't check for !sk_psock.
+The eventual goal of this effort would be to extend the kernel UAPI
+headers such that each of the categories I had listed above (commands,
+maps, progs, hooks) have dedicated documentation in the kernel tree, and
+that developers must update the comments in the headers to document the
+APIs prior to patch acceptance, and that we could auto-generate the
+latest version of the bpf(2) manual pages based on a few static
+description sections combined with the dynamically-generated output from
+the header.
 
-Might as well call it install_sockmap_hooks or something and have a
-valid sk_psock be passed in to the callback. Additionally, I'd prefer
-if the function returned a struct proto * like it does at the moment.
-That way we keep sk->sk_prot manipulation confined to the sockmap code
-and don't have to copy paste it into every proto.
+This patch series can also be found at the following location on GitHub:
+https://github.com/joestringer/linux/tree/submit/bpf-command-docs_v2
 
-> diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-> index 3bddd9dd2da2..13d2af5bb81c 100644
-> --- a/net/core/sock_map.c
-> +++ b/net/core/sock_map.c
-> @@ -184,26 +184,10 @@ static void sock_map_unref(struct sock *sk, void *link_raw)
->
->  static int sock_map_init_proto(struct sock *sk, struct sk_psock *psock)
->  {
-> -       struct proto *prot;
-> -
-> -       switch (sk->sk_type) {
-> -       case SOCK_STREAM:
-> -               prot = tcp_bpf_get_proto(sk, psock);
-> -               break;
-> -
-> -       case SOCK_DGRAM:
-> -               prot = udp_bpf_get_proto(sk, psock);
-> -               break;
-> -
-> -       default:
-> +       if (!sk->sk_prot->update_proto)
->                 return -EINVAL;
-> -       }
-> -
-> -       if (IS_ERR(prot))
-> -               return PTR_ERR(prot);
-> -
-> -       sk_psock_update_proto(sk, psock, prot);
-> -       return 0;
-> +       psock->saved_update_proto = sk->sk_prot->update_proto;
-> +       return sk->sk_prot->update_proto(sk, false);
+Thanks also to Quentin Monnet for initial review.
 
-I think reads / writes from sk_prot need READ_ONCE / WRITE_ONCE. We've
-not been diligent about this so far, but I think it makes sense to be
-careful in new code.
+[0]: make -C tools/testing/selftests/bpf docs
+
+---
+
+v2:
+* Remove build infrastructure in favor of kernel-doc directives
+* Shift userspace-api docs under Documentation/userspace-api/ebpf
+* Fix scripts/bpf_doc.py syscall --header (throw unsupported error)
+* Improve .gitignore handling of newly autogenerated files
+
+---
+
+Joe Stringer (15):
+  bpf: Import syscall arg documentation
+  bpf: Add minimal bpf() command documentation
+  bpf: Document BPF_F_LOCK in syscall commands
+  bpf: Document BPF_PROG_PIN syscall command
+  bpf: Document BPF_PROG_ATTACH syscall command
+  bpf: Document BPF_PROG_TEST_RUN syscall command
+  bpf: Document BPF_PROG_QUERY syscall command
+  bpf: Document BPF_MAP_*_BATCH syscall commands
+  scripts/bpf: Abstract eBPF API target parameter
+  scripts/bpf: Add syscall commands printer
+  tools/bpf: Remove bpf-helpers from bpftool docs
+  selftests/bpf: Templatize man page generation
+  selftests/bpf: Test syscall command parsing
+  docs/bpf: Add bpf() syscall command reference
+  tools: Sync uapi bpf.h header with latest changes
+
+ Documentation/bpf/index.rst                   |   9 +-
+ Documentation/userspace-api/ebpf/index.rst    |  17 +
+ Documentation/userspace-api/ebpf/syscall.rst  |  24 +
+ Documentation/userspace-api/index.rst         |   1 +
+ MAINTAINERS                                   |   2 +
+ include/uapi/linux/bpf.h                      | 714 +++++++++++++++++-
+ scripts/{bpf_helpers_doc.py => bpf_doc.py}    | 191 ++++-
+ tools/bpf/Makefile.helpers                    |  60 --
+ tools/bpf/bpftool/.gitignore                  |   1 -
+ tools/bpf/bpftool/Documentation/Makefile      |  11 +-
+ tools/include/uapi/linux/bpf.h                | 714 +++++++++++++++++-
+ tools/lib/bpf/Makefile                        |   2 +-
+ tools/perf/MANIFEST                           |   2 +-
+ tools/testing/selftests/bpf/.gitignore        |   2 +
+ tools/testing/selftests/bpf/Makefile          |  20 +-
+ tools/testing/selftests/bpf/Makefile.docs     |  82 ++
+ .../selftests/bpf/test_bpftool_build.sh       |  21 -
+ tools/testing/selftests/bpf/test_doc_build.sh |  13 +
+ 18 files changed, 1746 insertions(+), 140 deletions(-)
+ create mode 100644 Documentation/userspace-api/ebpf/index.rst
+ create mode 100644 Documentation/userspace-api/ebpf/syscall.rst
+ rename scripts/{bpf_helpers_doc.py => bpf_doc.py} (82%)
+ delete mode 100644 tools/bpf/Makefile.helpers
+ create mode 100644 tools/testing/selftests/bpf/Makefile.docs
+ create mode 100755 tools/testing/selftests/bpf/test_doc_build.sh
 
 -- 
-Lorenz Bauer  |  Systems Engineer
-6th Floor, County Hall/The Riverside Building, SE1 7PB, UK
+2.27.0
 
-www.cloudflare.com
