@@ -2,71 +2,68 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 41200C28CFB
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:55:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4350C433E0
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:55:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 04A5264E7C
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:55:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9038264E76
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:55:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352494AbhCCDuP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Mar 2021 22:50:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49822 "EHLO
+        id S1352503AbhCCDuZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Mar 2021 22:50:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347086AbhCBRgT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 2 Mar 2021 12:36:19 -0500
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CA64C061D73
-        for <bpf@vger.kernel.org>; Tue,  2 Mar 2021 09:20:39 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id x29so6015853pgk.6
-        for <bpf@vger.kernel.org>; Tue, 02 Mar 2021 09:20:39 -0800 (PST)
+        with ESMTP id S1349778AbhCBRga (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 2 Mar 2021 12:36:30 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F85C061A30
+        for <bpf@vger.kernel.org>; Tue,  2 Mar 2021 09:20:35 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id jx13so2376184pjb.1
+        for <bpf@vger.kernel.org>; Tue, 02 Mar 2021 09:20:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cilium-io.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=F4TZNoz7ocIF56TKRbY3Vad3YXgKTVwOO2I7OPJ9bdI=;
-        b=Rq8g8G4z1aYt5VEo1BJL1lomrPLJDL8MogcsKXho9qnTQQsZjjcYppdO7Pgzg5rQ6p
-         Yv3KwyxgU1SCK009bDta+0kKTZ0BUumGgSC7wCyx+vUYFINpAQupYFbSL6p73A2fORuy
-         cYdiPm1jxd5z69yFQM+JbIA4fWaI47ocd3a+NlCBhfcGed8Yzs3nSMjoemCWHg4TZlgQ
-         pQQZWhm3lwDtOQy6Q3BGJWUh8vIcDK5cdD8jArYQwjhW0b4nI/wtSLAIaoKWD5p5DxbQ
-         yTOcJ6hyAuE2hLln6ldOtmK35PCndBIL7qUndNBnO7X3q22S14ihOneSfegT61NUPlrk
-         Ia6A==
+        bh=uozbbnIbmkxFj/HIjxQ8WJQUr6vi8vUHNtiv9TAUsWg=;
+        b=OxJj6Gwx86HVTrnPp9BaOKPNRaezKTLP7TX2wps4YmLsKGHZcFmQAzK8TUUHao3FPu
+         8TNG0CyaA8NPFvTxtHIcIMWp26eJNLOrfeWrR5OKukQUxM/ze+qAH001UKAJ3lRegWMy
+         vwHFYHnl5UR02YpAy5Mh5SRBNy0/uQSknjg+NbD3liUIZfD0IOa2RjQbW2kGa8eei8/2
+         vBVWE57jvS+qXRtzL07HQrtfToQNhv1r61OnrtwLuA7JUUa7Y0/VAO6+Y+VMwfOX6rnI
+         /nfHQ8bB9REmQPFtz8wE2A9N5pfXKftaGk/xkc2zitJq2VLofGcRLfGTaM3y5A32/3ib
+         Kh+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=F4TZNoz7ocIF56TKRbY3Vad3YXgKTVwOO2I7OPJ9bdI=;
-        b=euGGXEpaMfiI/fE0JMYsmjaRXG5Ich0QSgJWZbThsOOYnpTO7HkFqzWNGrzB2L+Lb1
-         IWhQHI294IjfKOhlh8loUKPf0bkwMRH9C8pQ48leqyVxRo+I+svk0Y4hWdypIsxvUxRt
-         +vMO+G1rPbH2WqIiaS0Yra19Wp7OiYKXURRPuXrRcfsZ/BNGfehn511nctMSIbMPY74H
-         /l787UrpomFbKUfvQzoweDIcBam5JGwW70lyNQtP8HeTFlTbzkoKhH5kiPNxMirEM8Ku
-         00yBINfEA/533JnBU0EwaCXfV3r8Ub8mJGy6oulc4XgNFiB0ZBnqWxhcQW4H313L++eb
-         YfiQ==
-X-Gm-Message-State: AOAM530x9L3YmHWXxLEEEV8WFtfJvtKezP1CUCnd+n/KKRsT5Yl5jFLe
-        +JQUh48oJq5dT6Ashx7g3EqQoBEBvTnendG8
-X-Google-Smtp-Source: ABdhPJzzrU4EnuhRv5vP5CvUvDAT9MZzHUjANL8z8fBWR9KhipnfIrGMov1YV2gpQAV0C3+I1u4/Ig==
-X-Received: by 2002:a05:6a00:1e:b029:1ed:b82c:bb64 with SMTP id h30-20020a056a00001eb02901edb82cbb64mr20018658pfk.78.1614705638819;
-        Tue, 02 Mar 2021 09:20:38 -0800 (PST)
+        bh=uozbbnIbmkxFj/HIjxQ8WJQUr6vi8vUHNtiv9TAUsWg=;
+        b=ec3XjDpQrm6bJ2xHNO1oO67EOtZdJQ9kWudaI8xJa4JZxLAl9ri6hHWQwKzxbTiBIE
+         i1vY4mGyoVtqP3bSSQNMo16jJBriPi2XAC6y6UJd1zj3/9E6q8rNaCZdm9tlUN/FgGvL
+         6zaoIDNTGzpuM9nJWxvvAWmWdDgPJmdK/Kjlo2F6dQ0bVnFuyILrQWBG2R+8odDA0Hlh
+         Rt09sSiBXmJXCJs/w113YOZPbPsha68EuxjnUbqMak2CvRNB6KWZIGE1e4LI0thhlKhM
+         zCyLi9mQe0JqFKS40/ns7Ydvnt2vjtz88ruRXAJod1zb1OP0jvup3vKgxziYCObTws2W
+         Z3mA==
+X-Gm-Message-State: AOAM53207StdaFZWhLbv5W1sNpj84KLOJDlUJSxJYJlGxQKYINl87qkv
+        CH4SnOR2zln8bV1WK3l8IuQocPexbaCyX2u1
+X-Google-Smtp-Source: ABdhPJx+YkvABLuhZmo1HaocVUC3PQfUgQid0eo7udB08w+vpgyft1oyH7k/T770tY5EwOpwN7oakA==
+X-Received: by 2002:a17:90a:cb0a:: with SMTP id z10mr1136091pjt.170.1614705634975;
+        Tue, 02 Mar 2021 09:20:34 -0800 (PST)
 Received: from localhost.localdomain (c-73-93-5-123.hsd1.ca.comcast.net. [73.93.5.123])
-        by smtp.gmail.com with ESMTPSA id b15sm20073923pgg.85.2021.03.02.09.20.37
+        by smtp.gmail.com with ESMTPSA id b15sm20073923pgg.85.2021.03.02.09.20.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Mar 2021 09:20:38 -0800 (PST)
+        Tue, 02 Mar 2021 09:20:34 -0800 (PST)
 From:   Joe Stringer <joe@cilium.io>
 To:     bpf@vger.kernel.org
 Cc:     daniel@iogearbox.net, ast@kernel.org, linux-doc@vger.kernel.org,
         linux-man@vger.kernel.org,
         =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Daniel Mack <daniel@zonque.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Sean Young <sean@mess.org>, Petar Penkov <ppenkov@google.com>
-Subject: [PATCHv2 bpf-next 05/15] bpf: Document BPF_PROG_ATTACH syscall command
-Date:   Tue,  2 Mar 2021 09:19:37 -0800
-Message-Id: <20210302171947.2268128-6-joe@cilium.io>
+        Quentin Monnet <quentin@isovalent.com>
+Subject: [PATCHv2 bpf-next 02/15] bpf: Add minimal bpf() command documentation
+Date:   Tue,  2 Mar 2021 09:19:34 -0800
+Message-Id: <20210302171947.2268128-3-joe@cilium.io>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210302171947.2268128-1-joe@cilium.io>
 References: <20210302171947.2268128-1-joe@cilium.io>
@@ -77,75 +74,396 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Document the prog attach command in more detail, based on git commits:
-* commit f4324551489e ("bpf: add BPF_PROG_ATTACH and BPF_PROG_DETACH
-  commands")
-* commit 4f738adba30a ("bpf: create tcp_bpf_ulp allowing BPF to monitor
-  socket TX/RX data")
-* commit f4364dcfc86d ("media: rc: introduce BPF_PROG_LIRC_MODE2")
-* commit d58e468b1112 ("flow_dissector: implements flow dissector BPF
-  hook")
+Introduce high-level descriptions of the intent and return codes of the
+bpf() syscall commands. Subsequent patches may further flesh out the
+content to provide a more useful programming reference.
 
 Acked-by: Toke Høiland-Jørgensen <toke@redhat.com>
 Reviewed-by: Quentin Monnet <quentin@isovalent.com>
 Signed-off-by: Joe Stringer <joe@cilium.io>
 ---
-CC: Daniel Mack <daniel@zonque.org>
-CC: John Fastabend <john.fastabend@gmail.com>
-CC: Sean Young <sean@mess.org>
-CC: Petar Penkov <ppenkov@google.com>
----
- include/uapi/linux/bpf.h | 37 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+ include/uapi/linux/bpf.h | 368 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 368 insertions(+)
 
 diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 6946dde90c56..a8f2964ec885 100644
+index fb16c590e6d9..052bbfe65f77 100644
 --- a/include/uapi/linux/bpf.h
 +++ b/include/uapi/linux/bpf.h
-@@ -253,6 +253,43 @@ union bpf_iter_link_info {
-  *		Attach an eBPF program to a *target_fd* at the specified
-  *		*attach_type* hook.
+@@ -204,6 +204,374 @@ union bpf_iter_link_info {
+  *		A new file descriptor (a nonnegative integer), or -1 if an
+  *		error occurred (in which case, *errno* is set appropriately).
   *
-+ *		The *attach_type* specifies the eBPF attachment point to
-+ *		attach the program to, and must be one of *bpf_attach_type*
-+ *		(see below).
++ * BPF_OBJ_PIN
++ *	Description
++ *		Pin an eBPF program or map referred by the specified *bpf_fd*
++ *		to the provided *pathname* on the filesystem.
 + *
-+ *		The *attach_bpf_fd* must be a valid file descriptor for a
-+ *		loaded eBPF program of a cgroup, flow dissector, LIRC, sockmap
-+ *		or sock_ops type corresponding to the specified *attach_type*.
++ *	Return
++ *		Returns zero on success. On error, -1 is returned and *errno*
++ *		is set appropriately.
 + *
-+ *		The *target_fd* must be a valid file descriptor for a kernel
-+ *		object which depends on the attach type of *attach_bpf_fd*:
++ * BPF_OBJ_GET
++ *	Description
++ *		Open a file descriptor for the eBPF object pinned to the
++ *		specified *pathname*.
 + *
-+ *		**BPF_PROG_TYPE_CGROUP_DEVICE**,
-+ *		**BPF_PROG_TYPE_CGROUP_SKB**,
-+ *		**BPF_PROG_TYPE_CGROUP_SOCK**,
-+ *		**BPF_PROG_TYPE_CGROUP_SOCK_ADDR**,
-+ *		**BPF_PROG_TYPE_CGROUP_SOCKOPT**,
-+ *		**BPF_PROG_TYPE_CGROUP_SYSCTL**,
-+ *		**BPF_PROG_TYPE_SOCK_OPS**
++ *	Return
++ *		A new file descriptor (a nonnegative integer), or -1 if an
++ *		error occurred (in which case, *errno* is set appropriately).
 + *
-+ *			Control Group v2 hierarchy with the eBPF controller
-+ *			enabled. Requires the kernel to be compiled with
-+ *			**CONFIG_CGROUP_BPF**.
++ * BPF_PROG_ATTACH
++ *	Description
++ *		Attach an eBPF program to a *target_fd* at the specified
++ *		*attach_type* hook.
 + *
-+ *		**BPF_PROG_TYPE_FLOW_DISSECTOR**
++ *	Return
++ *		Returns zero on success. On error, -1 is returned and *errno*
++ *		is set appropriately.
 + *
-+ *			Network namespace (eg /proc/self/ns/net).
++ * BPF_PROG_DETACH
++ *	Description
++ *		Detach the eBPF program associated with the *target_fd* at the
++ *		hook specified by *attach_type*. The program must have been
++ *		previously attached using **BPF_PROG_ATTACH**.
 + *
-+ *		**BPF_PROG_TYPE_LIRC_MODE2**
++ *	Return
++ *		Returns zero on success. On error, -1 is returned and *errno*
++ *		is set appropriately.
 + *
-+ *			LIRC device path (eg /dev/lircN). Requires the kernel
-+ *			to be compiled with **CONFIG_BPF_LIRC_MODE2**.
++ * BPF_PROG_TEST_RUN
++ *	Description
++ *		Run an eBPF program a number of times against a provided
++ *		program context and return the modified program context and
++ *		duration of the test run.
 + *
-+ *		**BPF_PROG_TYPE_SK_SKB**,
-+ *		**BPF_PROG_TYPE_SK_MSG**
++ *	Return
++ *		Returns zero on success. On error, -1 is returned and *errno*
++ *		is set appropriately.
 + *
-+ *			eBPF map of socket type (eg **BPF_MAP_TYPE_SOCKHASH**).
++ * BPF_PROG_GET_NEXT_ID
++ *	Description
++ *		Fetch the next eBPF program currently loaded into the kernel.
 + *
-  *	Return
-  *		Returns zero on success. On error, -1 is returned and *errno*
-  *		is set appropriately.
++ *		Looks for the eBPF program with an id greater than *start_id*
++ *		and updates *next_id* on success. If no other eBPF programs
++ *		remain with ids higher than *start_id*, returns -1 and sets
++ *		*errno* to **ENOENT**.
++ *
++ *	Return
++ *		Returns zero on success. On error, or when no id remains, -1
++ *		is returned and *errno* is set appropriately.
++ *
++ * BPF_MAP_GET_NEXT_ID
++ *	Description
++ *		Fetch the next eBPF map currently loaded into the kernel.
++ *
++ *		Looks for the eBPF map with an id greater than *start_id*
++ *		and updates *next_id* on success. If no other eBPF maps
++ *		remain with ids higher than *start_id*, returns -1 and sets
++ *		*errno* to **ENOENT**.
++ *
++ *	Return
++ *		Returns zero on success. On error, or when no id remains, -1
++ *		is returned and *errno* is set appropriately.
++ *
++ * BPF_PROG_GET_FD_BY_ID
++ *	Description
++ *		Open a file descriptor for the eBPF program corresponding to
++ *		*prog_id*.
++ *
++ *	Return
++ *		A new file descriptor (a nonnegative integer), or -1 if an
++ *		error occurred (in which case, *errno* is set appropriately).
++ *
++ * BPF_MAP_GET_FD_BY_ID
++ *	Description
++ *		Open a file descriptor for the eBPF map corresponding to
++ *		*map_id*.
++ *
++ *	Return
++ *		A new file descriptor (a nonnegative integer), or -1 if an
++ *		error occurred (in which case, *errno* is set appropriately).
++ *
++ * BPF_OBJ_GET_INFO_BY_FD
++ *	Description
++ *		Obtain information about the eBPF object corresponding to
++ *		*bpf_fd*.
++ *
++ *		Populates up to *info_len* bytes of *info*, which will be in
++ *		one of the following formats depending on the eBPF object type
++ *		of *bpf_fd*:
++ *
++ *		* **struct bpf_prog_info**
++ *		* **struct bpf_map_info**
++ *		* **struct bpf_btf_info**
++ *		* **struct bpf_link_info**
++ *
++ *	Return
++ *		Returns zero on success. On error, -1 is returned and *errno*
++ *		is set appropriately.
++ *
++ * BPF_PROG_QUERY
++ *	Description
++ *		Obtain information about eBPF programs associated with the
++ *		specified *attach_type* hook.
++ *
++ *	Return
++ *		Returns zero on success. On error, -1 is returned and *errno*
++ *		is set appropriately.
++ *
++ * BPF_RAW_TRACEPOINT_OPEN
++ *	Description
++ *		Attach an eBPF program to a tracepoint *name* to access kernel
++ *		internal arguments of the tracepoint in their raw form.
++ *
++ *		The *prog_fd* must be a valid file descriptor associated with
++ *		a loaded eBPF program of type **BPF_PROG_TYPE_RAW_TRACEPOINT**.
++ *
++ *		No ABI guarantees are made about the content of tracepoint
++ *		arguments exposed to the corresponding eBPF program.
++ *
++ *		Applying **close**\ (2) to the file descriptor returned by
++ *		**BPF_RAW_TRACEPOINT_OPEN** will delete the map (but see NOTES).
++ *
++ *	Return
++ *		A new file descriptor (a nonnegative integer), or -1 if an
++ *		error occurred (in which case, *errno* is set appropriately).
++ *
++ * BPF_BTF_LOAD
++ *	Description
++ *		Verify and load BPF Type Format (BTF) metadata into the kernel,
++ *		returning a new file descriptor associated with the metadata.
++ *		BTF is described in more detail at
++ *		https://www.kernel.org/doc/html/latest/bpf/btf.html.
++ *
++ *		The *btf* parameter must point to valid memory providing
++ *		*btf_size* bytes of BTF binary metadata.
++ *
++ *		The returned file descriptor can be passed to other **bpf**\ ()
++ *		subcommands such as **BPF_PROG_LOAD** or **BPF_MAP_CREATE** to
++ *		associate the BTF with those objects.
++ *
++ *		Similar to **BPF_PROG_LOAD**, **BPF_BTF_LOAD** has optional
++ *		parameters to specify a *btf_log_buf*, *btf_log_size* and
++ *		*btf_log_level* which allow the kernel to return freeform log
++ *		output regarding the BTF verification process.
++ *
++ *	Return
++ *		A new file descriptor (a nonnegative integer), or -1 if an
++ *		error occurred (in which case, *errno* is set appropriately).
++ *
++ * BPF_BTF_GET_FD_BY_ID
++ *	Description
++ *		Open a file descriptor for the BPF Type Format (BTF)
++ *		corresponding to *btf_id*.
++ *
++ *	Return
++ *		A new file descriptor (a nonnegative integer), or -1 if an
++ *		error occurred (in which case, *errno* is set appropriately).
++ *
++ * BPF_TASK_FD_QUERY
++ *	Description
++ *		Obtain information about eBPF programs associated with the
++ *		target process identified by *pid* and *fd*.
++ *
++ *		If the *pid* and *fd* are associated with a tracepoint, kprobe
++ *		or uprobe perf event, then the *prog_id* and *fd_type* will
++ *		be populated with the eBPF program id and file descriptor type
++ *		of type **bpf_task_fd_type**. If associated with a kprobe or
++ *		uprobe, the  *probe_offset* and *probe_addr* will also be
++ *		populated. Optionally, if *buf* is provided, then up to
++ *		*buf_len* bytes of *buf* will be populated with the name of
++ *		the tracepoint, kprobe or uprobe.
++ *
++ *		The resulting *prog_id* may be introspected in deeper detail
++ *		using **BPF_PROG_GET_FD_BY_ID** and **BPF_OBJ_GET_INFO_BY_FD**.
++ *
++ *	Return
++ *		Returns zero on success. On error, -1 is returned and *errno*
++ *		is set appropriately.
++ *
++ * BPF_MAP_LOOKUP_AND_DELETE_ELEM
++ *	Description
++ *		Look up an element with the given *key* in the map referred to
++ *		by the file descriptor *fd*, and if found, delete the element.
++ *
++ *		The **BPF_MAP_TYPE_QUEUE** and **BPF_MAP_TYPE_STACK** map types
++ *		implement this command as a "pop" operation, deleting the top
++ *		element rather than one corresponding to *key*.
++ *		The *key* and *key_len* parameters should be zeroed when
++ *		issuing this operation for these map types.
++ *
++ *		This command is only valid for the following map types:
++ *		* **BPF_MAP_TYPE_QUEUE**
++ *		* **BPF_MAP_TYPE_STACK**
++ *
++ *	Return
++ *		Returns zero on success. On error, -1 is returned and *errno*
++ *		is set appropriately.
++ *
++ * BPF_MAP_FREEZE
++ *	Description
++ *		Freeze the permissions of the specified map.
++ *
++ *		Write permissions may be frozen by passing zero *flags*.
++ *		Upon success, no future syscall invocations may alter the
++ *		map state of *map_fd*. Write operations from eBPF programs
++ *		are still possible for a frozen map.
++ *
++ *		Not supported for maps of type **BPF_MAP_TYPE_STRUCT_OPS**.
++ *
++ *	Return
++ *		Returns zero on success. On error, -1 is returned and *errno*
++ *		is set appropriately.
++ *
++ * BPF_BTF_GET_NEXT_ID
++ *	Description
++ *		Fetch the next BPF Type Format (BTF) object currently loaded
++ *		into the kernel.
++ *
++ *		Looks for the BTF object with an id greater than *start_id*
++ *		and updates *next_id* on success. If no other BTF objects
++ *		remain with ids higher than *start_id*, returns -1 and sets
++ *		*errno* to **ENOENT**.
++ *
++ *	Return
++ *		Returns zero on success. On error, or when no id remains, -1
++ *		is returned and *errno* is set appropriately.
++ *
++ * BPF_MAP_LOOKUP_BATCH
++ *	Description
++ *		Iterate and fetch multiple elements in a map.
++ *
++ *	Return
++ *		Returns zero on success. On error, -1 is returned and *errno*
++ *		is set appropriately.
++ *
++ * BPF_MAP_LOOKUP_AND_DELETE_BATCH
++ *	Description
++ *		Iterate and delete multiple elements in a map.
++ *
++ *	Return
++ *		Returns zero on success. On error, -1 is returned and *errno*
++ *		is set appropriately.
++ *
++ * BPF_MAP_UPDATE_BATCH
++ *	Description
++ *		Iterate and update multiple elements in a map.
++ *
++ *	Return
++ *		Returns zero on success. On error, -1 is returned and *errno*
++ *		is set appropriately.
++ *
++ * BPF_MAP_DELETE_BATCH
++ *	Description
++ *		Iterate and delete multiple elements in a map.
++ *
++ *	Return
++ *		Returns zero on success. On error, -1 is returned and *errno*
++ *		is set appropriately.
++ *
++ * BPF_LINK_CREATE
++ *	Description
++ *		Attach an eBPF program to a *target_fd* at the specified
++ *		*attach_type* hook and return a file descriptor handle for
++ *		managing the link.
++ *
++ *	Return
++ *		A new file descriptor (a nonnegative integer), or -1 if an
++ *		error occurred (in which case, *errno* is set appropriately).
++ *
++ * BPF_LINK_UPDATE
++ *	Description
++ *		Update the eBPF program in the specified *link_fd* to
++ *		*new_prog_fd*.
++ *
++ *	Return
++ *		Returns zero on success. On error, -1 is returned and *errno*
++ *		is set appropriately.
++ *
++ * BPF_LINK_GET_FD_BY_ID
++ *	Description
++ *		Open a file descriptor for the eBPF Link corresponding to
++ *		*link_id*.
++ *
++ *	Return
++ *		A new file descriptor (a nonnegative integer), or -1 if an
++ *		error occurred (in which case, *errno* is set appropriately).
++ *
++ * BPF_LINK_GET_NEXT_ID
++ *	Description
++ *		Fetch the next eBPF link currently loaded into the kernel.
++ *
++ *		Looks for the eBPF link with an id greater than *start_id*
++ *		and updates *next_id* on success. If no other eBPF links
++ *		remain with ids higher than *start_id*, returns -1 and sets
++ *		*errno* to **ENOENT**.
++ *
++ *	Return
++ *		Returns zero on success. On error, or when no id remains, -1
++ *		is returned and *errno* is set appropriately.
++ *
++ * BPF_ENABLE_STATS
++ *	Description
++ *		Enable eBPF runtime statistics gathering.
++ *
++ *		Runtime statistics gathering for the eBPF runtime is disabled
++ *		by default to minimize the corresponding performance overhead.
++ *		This command enables statistics globally.
++ *
++ *		Multiple programs may independently enable statistics.
++ *		After gathering the desired statistics, eBPF runtime statistics
++ *		may be disabled again by calling **close**\ (2) for the file
++ *		descriptor returned by this function. Statistics will only be
++ *		disabled system-wide when all outstanding file descriptors
++ *		returned by prior calls for this subcommand are closed.
++ *
++ *	Return
++ *		A new file descriptor (a nonnegative integer), or -1 if an
++ *		error occurred (in which case, *errno* is set appropriately).
++ *
++ * BPF_ITER_CREATE
++ *	Description
++ *		Create an iterator on top of the specified *link_fd* (as
++ *		previously created using **BPF_LINK_CREATE**) and return a
++ *		file descriptor that can be used to trigger the iteration.
++ *
++ *		If the resulting file descriptor is pinned to the filesystem
++ *		using  **BPF_OBJ_PIN**, then subsequent **read**\ (2) syscalls
++ *		for that path will trigger the iterator to read kernel state
++ *		using the eBPF program attached to *link_fd*.
++ *
++ *	Return
++ *		A new file descriptor (a nonnegative integer), or -1 if an
++ *		error occurred (in which case, *errno* is set appropriately).
++ *
++ * BPF_LINK_DETACH
++ *	Description
++ *		Forcefully detach the specified *link_fd* from its
++ *		corresponding attachment point.
++ *
++ *	Return
++ *		Returns zero on success. On error, -1 is returned and *errno*
++ *		is set appropriately.
++ *
++ * BPF_PROG_BIND_MAP
++ *	Description
++ *		Bind a map to the lifetime of an eBPF program.
++ *
++ *		The map identified by *map_fd* is bound to the program
++ *		identified by *prog_fd* and only released when *prog_fd* is
++ *		released. This may be used in cases where metadata should be
++ *		associated with a program which otherwise does not contain any
++ *		references to the map (for example, embedded in the eBPF
++ *		program instructions).
++ *
++ *	Return
++ *		Returns zero on success. On error, -1 is returned and *errno*
++ *		is set appropriately.
++ *
+  * NOTES
+  *	eBPF objects (maps and programs) can be shared between processes.
+  *	For example, after **fork**\ (2), the child inherits file descriptors
 -- 
 2.27.0
 
