@@ -2,111 +2,206 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24880C4361A
-	for <bpf@archiver.kernel.org>; Tue,  2 Mar 2021 10:38:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F7D0C433DB
+	for <bpf@archiver.kernel.org>; Tue,  2 Mar 2021 10:39:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E40B364F0A
-	for <bpf@archiver.kernel.org>; Tue,  2 Mar 2021 10:38:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3AAF164F04
+	for <bpf@archiver.kernel.org>; Tue,  2 Mar 2021 10:39:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1578028AbhCBKen (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Mar 2021 05:34:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55046 "EHLO
+        id S1578036AbhCBKfA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Mar 2021 05:35:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444135AbhCBCjp (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 1 Mar 2021 21:39:45 -0500
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D555C0617AA;
-        Mon,  1 Mar 2021 18:38:05 -0800 (PST)
-Received: by mail-ot1-x329.google.com with SMTP id v12so17502191ott.10;
-        Mon, 01 Mar 2021 18:38:05 -0800 (PST)
+        with ESMTP id S241088AbhCBCwW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 1 Mar 2021 21:52:22 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B789C06178A
+        for <bpf@vger.kernel.org>; Mon,  1 Mar 2021 18:50:41 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id s7so3964340plg.5
+        for <bpf@vger.kernel.org>; Mon, 01 Mar 2021 18:50:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=tCjVfOBpsxyYlXVTXml2C2itPEUYXHFIwvXt6TaQXvU=;
-        b=vQlmYwLFDUKxl8+LJSykwCdcFPOBtdcAz1uBaqpMn0bzEfGN6NOLoCIyUDMRHMvAfM
-         1nGUrAg1bv+OO2ALNVCObNE5ak3cDdlCKRC5a9nPXA436404CahNQUcnzSx3i91nBPHR
-         Hp6MEdtTGJezKLbcqzmuioe4CvQOHEoUXlVihRxWs0Y5Ddz1jvM365W6FlIKLfhiAlCK
-         6GTSq4OCKR0Sb+Po5ED2ifeUM21CgGShXqVJKhOuqcEjIuog3UfLsE08HLHC21J9fWa6
-         pUNLCgdbnBrvR/oZMvqIOr4hOirREC4JqcVvphOgK0voW8ukCT4TGrhBp0uZ8JartGmi
-         2Z0w==
+        d=bytedance-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SzsqJhnliez1tKlON8yLC5F6USIx2iyCxc12/4u/r+c=;
+        b=I4jmhul4Z5yg+xo9mAznhlNQXfF9s8TJskKTSIYrPYUwxVyIOcIlOkHWTsBaQVpGvf
+         zDfHR7YnJY4d4j+veaCOxSfnf0WdJ3ID5HmWGdqqfn4X9IRnN3/RLi+lxjq9EkL/uYJg
+         Ok1k3/niPacZp26eNMSpbDoq3GpfxW/XQqR6xZjE05+hd3yztSnH3lGoSdP8q0vzU8mV
+         ti376Ul89wmAe/aqsDWlTzuj21DVQu/MYm6lieeS66zGszHG8yOjJilhLpYNAckcid0b
+         vaMpKvLB8/KzK02Oz61Wzk23FWx6sno07D+PyBkHlLt9mXti8KpMz9jXfJ37NeirOLtu
+         9sVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=tCjVfOBpsxyYlXVTXml2C2itPEUYXHFIwvXt6TaQXvU=;
-        b=STGR4rLbkD0yA9QNB/lhYET5QsYTd8jCu9NKmYYxfRAbGaUztNfcRzxtx0wjETAbUZ
-         xfjkAjtLCDcVspzWc/tiZgBowG7WLHDMaMPY/ftYpIv2af+4umKimCxaWVAuWaF1f5Q7
-         eFZWG5ayPm4MGUMUOFNBRaqxL1dlQrkrL0s+qN/YjERqWgFPCstHyhzatSNMR2zII6/3
-         au9UdwIqZaz5nBuQGPi7/pkZC4X6TY1ne2KZDzkZ4O6nA6WuwF4NbDDCpggNRylfch0k
-         3ymcAIFWicaM3Kkr+O4qM7/yza2iwbeWtHYh9ffAQR6fIm7YipsaNhn5SdBB0ERmVQrw
-         pTRQ==
-X-Gm-Message-State: AOAM530cwbLVAzZbyrt9O1GaqLvijAdWxie/ZuHTWhyARjHzz44NCRp0
-        GhVGofskoe5K7ArA18JYiQtOV4kwzdO0sw==
-X-Google-Smtp-Source: ABdhPJyvxw9GreDsJcpj3JFfgeWqyCP/h0GXPqD+SvFLoTXh0nN65wp3IlR9PrFiNuxaNxliaTjfug==
-X-Received: by 2002:a9d:2e4:: with SMTP id 91mr16357634otl.60.1614652684830;
-        Mon, 01 Mar 2021 18:38:04 -0800 (PST)
-Received: from unknown.attlocal.net ([2600:1700:65a0:ab60:1bb:8d29:39ef:5fe5])
-        by smtp.gmail.com with ESMTPSA id a30sm100058oiy.42.2021.03.01.18.38.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Mar 2021 18:38:04 -0800 (PST)
-From:   Cong Wang <xiyou.wangcong@gmail.com>
-To:     netdev@vger.kernel.org
-Cc:     bpf@vger.kernel.org, duanxiongchun@bytedance.com,
-        wangdongdong.6@bytedance.com, jiang.wang@bytedance.com,
-        Cong Wang <cong.wang@bytedance.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        Lorenz Bauer <lmb@cloudflare.com>
-Subject: [Patch bpf-next v2 8/9] sock_map: update sock type checks for UDP
-Date:   Mon,  1 Mar 2021 18:37:42 -0800
-Message-Id: <20210302023743.24123-9-xiyou.wangcong@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210302023743.24123-1-xiyou.wangcong@gmail.com>
-References: <20210302023743.24123-1-xiyou.wangcong@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SzsqJhnliez1tKlON8yLC5F6USIx2iyCxc12/4u/r+c=;
+        b=s+b51WiZ6A5J+JibJKrYcV3+5EJCsjOpptG9XughFCDgtiqwzb465K5DAYG8mbql7W
+         KuzSmx6Nt8bZugwcn9BmDsBI1aHykq713C3riKsOAtpLaOpJO2i4XJEpSkQ+RDVAid6Z
+         mm9pROFe+plYuio9SPJ1Y2dEfUZ5U1/7etozKbykhfegR59LE6+gfOMRG45WMneTQEXg
+         XX5AusbiYywcBlrnBlIME9JOuMfnwDpMTcp3aBGprfPCCx32ca3xyKzm5AXAqNJW844z
+         nOvCivfqesVmdy+iFNrPbp4FrrwyWuWzrNGUANjdlBXx7oml5aYc//DXowbvLjC2PvHW
+         /wsg==
+X-Gm-Message-State: AOAM5323z3d28ioyYBbJXtxpLtFeOw3ybjKa464YPVJkZfiTFXMi1CSL
+        BquzVZuHq5dAQycvlbR3Dj2y3FuirLekCrWm2M1+bg==
+X-Google-Smtp-Source: ABdhPJwO4U6Vuif29dmFk6pc2ND9DlOcJXGnqC3Sy0dnPR0PpJ3LuKt8LwGDKRqjDVvzgWiY/91mipCndD5BXqlSM8E=
+X-Received: by 2002:a17:902:e54e:b029:e3:9f84:db8e with SMTP id
+ n14-20020a170902e54eb02900e39f84db8emr1508267plf.24.1614653440529; Mon, 01
+ Mar 2021 18:50:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210301062227.59292-1-songmuchun@bytedance.com> <YD2Q5q2HfKXPnDte@carbon.dhcp.thefacebook.com>
+In-Reply-To: <YD2Q5q2HfKXPnDte@carbon.dhcp.thefacebook.com>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Tue, 2 Mar 2021 10:50:04 +0800
+Message-ID: <CAMZfGtUzB1duVS+pSEHvB-g6BSQ25mQMvUjopcADx0v2go3Q0g@mail.gmail.com>
+Subject: Re: [External] Re: [PATCH 0/5] Use obj_cgroup APIs to change kmem pages
+To:     Roman Gushchin <guro@fb.com>
+Cc:     viro@zeniv.linux.org.uk, Jan Kara <jack@suse.cz>,
+        amir73il@gmail.com, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, andrii@kernel.org,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>, kpsingh@kernel.org,
+        mingo@redhat.com, Peter Zijlstra <peterz@infradead.org>,
+        juri.lelli@redhat.com,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        dietmar.eggemann@arm.com, Steven Rostedt <rostedt@goodmis.org>,
+        Benjamin Segall <bsegall@google.com>, mgorman@suse.de,
+        bristot@redhat.com, Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Alex Shi <alex.shi@linux.alibaba.com>,
+        Chris Down <chris@chrisdown.name>, richard.weiyang@gmail.com,
+        Vlastimil Babka <vbabka@suse.cz>,
+        mathieu.desnoyers@efficios.com, posk@google.com,
+        Jann Horn <jannh@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>, longman@redhat.com,
+        Michel Lespinasse <walken@google.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>, krisman@collabora.com,
+        esyr@redhat.com, Suren Baghdasaryan <surenb@google.com>,
+        Marco Elver <elver@google.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Cgroups <cgroups@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Xiongchun duan <duanxiongchun@bytedance.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Cong Wang <cong.wang@bytedance.com>
+On Tue, Mar 2, 2021 at 9:12 AM Roman Gushchin <guro@fb.com> wrote:
+>
+> Hi Muchun!
+>
+> On Mon, Mar 01, 2021 at 02:22:22PM +0800, Muchun Song wrote:
+> > Since Roman series "The new cgroup slab memory controller" applied. All
+> > slab objects are changed via the new APIs of obj_cgroup. This new APIs
+> > introduce a struct obj_cgroup instead of using struct mem_cgroup directly
+> > to charge slab objects. It prevents long-living objects from pinning the
+> > original memory cgroup in the memory. But there are still some corner
+> > objects (e.g. allocations larger than order-1 page on SLUB) which are
+> > not charged via the API of obj_cgroup. Those objects (include the pages
+> > which are allocated from buddy allocator directly) are charged as kmem
+> > pages which still hold a reference to the memory cgroup.
+>
+> Yes, this is a good idea, large kmallocs should be treated the same
+> way as small ones.
+>
+> >
+> > E.g. We know that the kernel stack is charged as kmem pages because the
+> > size of the kernel stack can be greater than 2 pages (e.g. 16KB on x86_64
+> > or arm64). If we create a thread (suppose the thread stack is charged to
+> > memory cgroup A) and then move it from memory cgroup A to memory cgroup
+> > B. Because the kernel stack of the thread hold a reference to the memory
+> > cgroup A. The thread can pin the memory cgroup A in the memory even if
+> > we remove the cgroup A. If we want to see this scenario by using the
+> > following script. We can see that the system has added 500 dying cgroups.
+> >
+> >       #!/bin/bash
+> >
+> >       cat /proc/cgroups | grep memory
+> >
+> >       cd /sys/fs/cgroup/memory
+> >       echo 1 > memory.move_charge_at_immigrate
+> >
+> >       for i in range{1..500}
+> >       do
+> >               mkdir kmem_test
+> >               echo $$ > kmem_test/cgroup.procs
+> >               sleep 3600 &
+> >               echo $$ > cgroup.procs
+> >               echo `cat kmem_test/cgroup.procs` > cgroup.procs
+> >               rmdir kmem_test
+> >       done
+> >
+> >       cat /proc/cgroups | grep memory
+>
+> Well, moving processes between cgroups always created a lot of issues
+> and corner cases and this one is definitely not the worst. So this problem
+> looks a bit artificial, unless I'm missing something. But if it doesn't
+> introduce any new performance costs and doesn't make the code more complex,
+> I have nothing against.
 
-Now UDP supports sockmap and redirection, we can safely update
-the sock type checks for it accordingly.
+OK. I just want to show that large kmallocs are charged as kmem pages.
+So I constructed this test case.
 
-Cc: John Fastabend <john.fastabend@gmail.com>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Jakub Sitnicki <jakub@cloudflare.com>
-Cc: Lorenz Bauer <lmb@cloudflare.com>
-Signed-off-by: Cong Wang <cong.wang@bytedance.com>
----
- net/core/sock_map.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+>
+> Btw, can you, please, run the spell-checker on commit logs? There are many
+> typos (starting from the title of the series, I guess), which make the patchset
+> look less appealing.
 
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index 13d2af5bb81c..f7eee4b7b994 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -549,7 +549,10 @@ static bool sk_is_udp(const struct sock *sk)
- 
- static bool sock_map_redirect_allowed(const struct sock *sk)
- {
--	return sk_is_tcp(sk) && sk->sk_state != TCP_LISTEN;
-+	if (sk_is_tcp(sk))
-+		return sk->sk_state != TCP_LISTEN;
-+	else
-+		return sk->sk_state == TCP_ESTABLISHED;
- }
- 
- static bool sock_map_sk_is_suitable(const struct sock *sk)
--- 
-2.25.1
+Sorry for my poor English. I will do that. Thanks for your suggestions.
 
+
+>
+> Thank you!
+>
+> >
+> > This patchset aims to make those kmem pages drop the reference to memory
+> > cgroup by using the APIs of obj_cgroup. Finally, we can see that the number
+> > of the dying cgroups will not increase if we run the above test script.
+> >
+> > Patch 1-3 are using obj_cgroup APIs to charge kmem pages. The remote
+> > memory cgroup charing APIs is a mechanism to charge kernel memory to a
+> > given memory cgroup. So I also make it use the APIs of obj_cgroup.
+> > Patch 4-5 are doing this.
+> >
+> > Muchun Song (5):
+> >   mm: memcontrol: introduce obj_cgroup_{un}charge_page
+> >   mm: memcontrol: make page_memcg{_rcu} only applicable for non-kmem
+> >     page
+> >   mm: memcontrol: reparent the kmem pages on cgroup removal
+> >   mm: memcontrol: move remote memcg charging APIs to CONFIG_MEMCG_KMEM
+> >   mm: memcontrol: use object cgroup for remote memory cgroup charging
+> >
+> >  fs/buffer.c                          |  10 +-
+> >  fs/notify/fanotify/fanotify.c        |   6 +-
+> >  fs/notify/fanotify/fanotify_user.c   |   2 +-
+> >  fs/notify/group.c                    |   3 +-
+> >  fs/notify/inotify/inotify_fsnotify.c |   8 +-
+> >  fs/notify/inotify/inotify_user.c     |   2 +-
+> >  include/linux/bpf.h                  |   2 +-
+> >  include/linux/fsnotify_backend.h     |   2 +-
+> >  include/linux/memcontrol.h           | 109 +++++++++++---
+> >  include/linux/sched.h                |   6 +-
+> >  include/linux/sched/mm.h             |  30 ++--
+> >  kernel/bpf/syscall.c                 |  35 ++---
+> >  kernel/fork.c                        |   4 +-
+> >  mm/memcontrol.c                      | 276 ++++++++++++++++++++++-------------
+> >  mm/page_alloc.c                      |   4 +-
+> >  15 files changed, 324 insertions(+), 175 deletions(-)
+> >
+> > --
+> > 2.11.0
+> >
