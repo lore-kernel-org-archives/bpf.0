@@ -2,65 +2,63 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A78BC4161F
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:57:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CA3BBC4360C
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:57:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5A24364F0B
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:57:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A1B1364F0B
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:57:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449649AbhCCWxH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 3 Mar 2021 17:53:07 -0500
-Received: from mga04.intel.com ([192.55.52.120]:61792 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236515AbhCCShZ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 3 Mar 2021 13:37:25 -0500
-IronPort-SDR: wPbkupIS1YdfYMQc1w4VepcQLP00ADUTpHCotIekpLHKceknZwxZCHwLbmUF7IhlOMxJE7JDP/
- n+NNN0ojotVA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9912"; a="184841172"
-X-IronPort-AV: E=Sophos;i="5.81,220,1610438400"; 
-   d="scan'208";a="184841172"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2021 10:36:26 -0800
-IronPort-SDR: Xl25tIzuIWRAEInTAxpzFP8Vi5x5AesZbiSt6fZplwDco2ojVV61tw9OIF49omVMFeB6u6Lv0v
- Gt/mu29GxdhA==
-X-IronPort-AV: E=Sophos;i="5.81,220,1610438400"; 
-   d="scan'208";a="445382297"
-Received: from jbrandeb-mobl4.amr.corp.intel.com (HELO localhost) ([10.209.143.10])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2021 10:36:25 -0800
-Date:   Wed, 3 Mar 2021 10:36:24 -0800
-From:   Jesse Brandeburg <jesse.brandeburg@intel.com>
-To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc:     <intel-wired-lan@lists.osuosl.org>, <netdev@vger.kernel.org>,
-        <brouer@redhat.com>, <kuba@kernel.org>, <bpf@vger.kernel.org>,
-        <bjorn.topel@intel.com>, <magnus.karlsson@intel.com>
-Subject: Re: [Intel-wired-lan] [PATCH intel-net 0/3] intel: Rx headroom
- fixes
-Message-ID: <20210303103624.00003aff@intel.com>
-In-Reply-To: <20210303153928.11764-1-maciej.fijalkowski@intel.com>
-References: <20210303153928.11764-1-maciej.fijalkowski@intel.com>
-X-Mailer: Claws Mail 3.12.0 (GTK+ 2.24.28; i686-w64-mingw32)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S1449582AbhCCWwn convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 3 Mar 2021 17:52:43 -0500
+Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:35460 "EHLO
+        mail2-relais-roc.national.inria.fr" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S243100AbhCCRoY (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 3 Mar 2021 12:44:24 -0500
+X-IronPort-AV: E=Sophos;i="5.81,220,1610406000"; 
+   d="scan'208";a="495963565"
+Received: from lfbn-idf1-1-708-183.w86-245.abo.wanadoo.fr (HELO mp-66156.home) ([86.245.159.183])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 03 Mar 2021 18:39:15 +0100
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.60.0.2.21\))
+Subject: Re: XDP socket rings, and LKMM litmus tests
+From:   maranget <luc.maranget@inria.fr>
+In-Reply-To: <29736B0B-9960-473C-85BB-5714F181198B@inria.fr>
+Date:   Wed, 3 Mar 2021 18:39:14 +0100
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        parri.andrea@gmail.com, Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, boqun.feng@gmail.com,
+        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
+        akiyks@gmail.com, dlustig@nvidia.com, joel@joelfernandes.org,
+        =?utf-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        "Karlsson, Magnus" <magnus.karlsson@intel.com>
+Content-Transfer-Encoding: 8BIT
+Message-Id: <F6EF0AE0-F0AA-4158-988B-C2638738B054@inria.fr>
+References: <CAJ+HfNhxWFeKnn1aZw-YJmzpBuCaoeGkXXKn058GhY-6ZBDtZA@mail.gmail.com>
+ <20210302211446.GA1541641@rowland.harvard.edu>
+ <20210302235019.GT2696@paulmck-ThinkPad-P72>
+ <20210303171221.GA1574518@rowland.harvard.edu>
+ <29736B0B-9960-473C-85BB-5714F181198B@inria.fr>
+To:     Alan Stern <stern@rowland.harvard.edu>
+X-Mailer: Apple Mail (2.3654.60.0.2.21)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Maciej Fijalkowski wrote:
 
-> Fix Rx headroom by calling *_rx_offset() after the build_skb Rx ring
-> flag is set.
+
+> On 3 Mar 2021, at 18:37, maranget <luc.maranget@inria.fr> wrote:
 > 
-> It was reported by Jesper in [0] that XDP_REDIRECT stopped working after
-> [1] patch in i40e.
+> I have made a PR to herd7 that performs the change. The commit message states the new definition.
 
-Looks good to me, thanks for the fixes Maciej, and especially to
-Jesper for the report of the issue.
+For those who are interested
+<https://github.com/herd/herdtools7/pull/183>
 
-For the series: 
-Reviewed-by: Jesse Brandeburg <jesse.brandeburg@intel.com>
+—Luc
+
