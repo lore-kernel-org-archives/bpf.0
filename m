@@ -2,270 +2,285 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-23.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A1B2C43603
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:56:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BCE51C432C3
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:56:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2965D64EFE
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:56:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8509A64EFD
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:56:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447022AbhCCWli (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 3 Mar 2021 17:41:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44144 "EHLO
+        id S1446272AbhCCWkw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 3 Mar 2021 17:40:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442919AbhCCKvS (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 3 Mar 2021 05:51:18 -0500
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FD3CC061794
-        for <bpf@vger.kernel.org>; Wed,  3 Mar 2021 02:41:40 -0800 (PST)
-Received: by mail-io1-xd33.google.com with SMTP id u20so25141285iot.9
-        for <bpf@vger.kernel.org>; Wed, 03 Mar 2021 02:41:40 -0800 (PST)
+        with ESMTP id S1843063AbhCCKZL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 3 Mar 2021 05:25:11 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FDB3C08ED8B
+        for <bpf@vger.kernel.org>; Wed,  3 Mar 2021 02:18:29 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id i9so4706364wml.0
+        for <bpf@vger.kernel.org>; Wed, 03 Mar 2021 02:18:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WTFbqq7wf2oiwXghMNZFKdevlJLnKuAoGi+RpBPGCa4=;
-        b=UJHsBYlGb8wnqy1QwPn7c1u8wADAC505uOTdONnRAvEBcyVm6BKaUY+E+ULppdviN1
-         A/Z6jXuB7eQGcQ9AjFxxVr0+pVEAljvLmu+fOttaHoQED6vFuwibNqP9MWZD/VbJydZU
-         9/8tY44E3IV12W6RMtMpHIdX5Z/CsrmKY2bWcfdWQZo1Sx12VtDSkE4I70nWjydiwCCX
-         2CcapQ8umNsweYlqCFJtKckNK/e1pQqh/6vyy3QOfLai6d46+l4nH2KJe+m0Aul6bymU
-         mfthXUfeT1jDHSY/D4MYMT8yoD7xD2nm5tYUPGyibgNCYiUfto2Lb+enPEgTw2DfQGI6
-         dSRA==
+        d=cloudflare.com; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=3L8Af0NsHi6NbZmwX1bPczjtIU1FRnqX30og/GJzPuU=;
+        b=lsB/PIqOGefbXTCakX5fRINXYvHRNLj03O20UKM8dvbetpnagjYmM2sCH+TMjckDCB
+         YvjZxmkyhHOMcR+RTAdzlPj/NWDHrsmrIosn+u8Gq/Da2owPyWFS3dG7PILZ3n795Pz8
+         9rHWFbYyAoJJDjKmQnwnRUm9Db58+/3gD4peo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WTFbqq7wf2oiwXghMNZFKdevlJLnKuAoGi+RpBPGCa4=;
-        b=SBpZNe9zfYYFTg9ZLkN10IZvzf0Pzm56hQ3ESzsQas/conJOUf6zC/uqmHEs1Uj7oh
-         Qqu1rMkHVO2QNfPQ50XcRD0CPZpzBQsAFYmyscPPQK+veCHoZC21KUiMHYJRRP+6WQEm
-         I+LILbn4107SIiPVTxP8UysXzKCF+Fs6BA/98SC/xM3NZ9ZDQU/I0SiaF5orlBtguPxN
-         F+pC+GODE1yZetyNANQ/j28d0bFmixi1cV6tqCCD3th5xWc9TiXy73i10/Z+BGz28i3O
-         kOHjHqwv/j5dcs0ogSiR/N/10ScIdvqA0cbWlm70nK0Ff3vvVY0iWFjoqmrT0bTECjE4
-         R5OA==
-X-Gm-Message-State: AOAM531ffhb14L2tqrw7tKTQ6ImzTx35n6uvYv+z3OckpHk9k8bzvE2t
-        Eoeivx/xvYe/IUjTpJriy1Co/sO8RLELGCvCVB5/hg==
-X-Google-Smtp-Source: ABdhPJwWVBIn0C+8uwgH3aQgheY35dvbEVzbLOMwZUegOTMh5jP7Wae4n3VbJx/MC5WwcepLkbHH/Wef82GbQdLT574=
-X-Received: by 2002:a6b:7302:: with SMTP id e2mr13719609ioh.106.1614768099735;
- Wed, 03 Mar 2021 02:41:39 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=3L8Af0NsHi6NbZmwX1bPczjtIU1FRnqX30og/GJzPuU=;
+        b=st63CV7mQBiBurns3hF3dPkeBncjOlna/bA5rHuz0/9mC9/ajyzPZ0oIkiq80xNOUs
+         aKLBDNTiRMyW1BercPV5uDj60hz7TMPY1Xl9eQ2vVToqxB8rnbjrJnPSRciq4i0iCUCq
+         Jtt2Hx0mCSZXXA3Y1WwvRkrN52TuN+SmQPGhExneAFw52umVBSyLPlzM9fPrIsmb2mD7
+         QKASqUfToHGKb92rUhujDs84NtHYgnD6gh+lpCSFw1yycHFNbtYp2ugQrqySstHns9gd
+         M2cp/fNsBbBOTUXZ3cXmFKf7xtRFZLn5u8LOYb59pAASikZm/A81ti9j/uhy0dwgEVl0
+         tDvg==
+X-Gm-Message-State: AOAM533py4q+I9ATpjEhCmHEPo7RaE8qSgjaEsr042V52+AMTvnozgKk
+        q77XPPaE9Pw04LinrTBPx0j8lA==
+X-Google-Smtp-Source: ABdhPJyjYzcvjZQWeYQ1SHYVETcfCGY4Pb445OMt0vS5AZwSluI471jFYqPLsIdbaKpRVC0sKEED3w==
+X-Received: by 2002:a7b:c308:: with SMTP id k8mr8317689wmj.54.1614766708116;
+        Wed, 03 Mar 2021 02:18:28 -0800 (PST)
+Received: from localhost.localdomain (c.a.8.8.c.1.2.8.8.7.0.2.6.c.a.1.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:1ac6:2078:821c:88ac])
+        by smtp.gmail.com with ESMTPSA id r26sm1710761wmn.28.2021.03.03.02.18.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Mar 2021 02:18:27 -0800 (PST)
+From:   Lorenz Bauer <lmb@cloudflare.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
+Cc:     kernel-team@cloudflare.com, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, Lorenz Bauer <lmb@cloudflare.com>
+Subject: [PATCH bpf-next v4 2/5] bpf: add PROG_TEST_RUN support for sk_lookup programs
+Date:   Wed,  3 Mar 2021 10:18:13 +0000
+Message-Id: <20210303101816.36774-3-lmb@cloudflare.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20210303101816.36774-1-lmb@cloudflare.com>
+References: <20210303101816.36774-1-lmb@cloudflare.com>
 MIME-Version: 1.0
-References: <20210302105400.3112940-1-jackmanb@google.com> <20210302184306.ishsga6xkg2glnzj@kafai-mbp.dhcp.thefacebook.com>
- <3b994f4c-2847-60be-834e-22c58c2b7470@fb.com>
-In-Reply-To: <3b994f4c-2847-60be-834e-22c58c2b7470@fb.com>
-From:   Brendan Jackman <jackmanb@google.com>
-Date:   Wed, 3 Mar 2021 11:41:28 +0100
-Message-ID: <CA+i-1C1qFapuADxzT4BUXzS6X5JBc9ZpuYfiYu-tUQrUwRsuiA@mail.gmail.com>
-Subject: Re: [PATCH v5 bpf-next] bpf: Explicitly zero-extend R0 after 32-bit cmpxchg
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Martin KaFai Lau <kafai@fb.com>, bpf <bpf@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Florent Revest <revest@chromium.org>,
-        Ilya Leoshkevich <iii@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Thanks once again for the reviews.
+Allow to pass sk_lookup programs to PROG_TEST_RUN. User space
+provides the full bpf_sk_lookup struct as context. Since the
+context includes a socket pointer that can't be exposed
+to user space we define that PROG_TEST_RUN returns the cookie
+of the selected socket or zero in place of the socket pointer.
 
-On Wed, 3 Mar 2021 at 08:29, Yonghong Song <yhs@fb.com> wrote:
->
->
->
-> On 3/2/21 10:43 AM, Martin KaFai Lau wrote:
-> > On Tue, Mar 02, 2021 at 10:54:00AM +0000, Brendan Jackman wrote:
-> >> As pointed out by Ilya and explained in the new comment, there's a
-> >> discrepancy between x86 and BPF CMPXCHG semantics: BPF always loads
-> >> the value from memory into r0, while x86 only does so when r0 and the
-> >> value in memory are different. The same issue affects s390.
-> >>
-> >> At first this might sound like pure semantics, but it makes a real
-> >> difference when the comparison is 32-bit, since the load will
-> >> zero-extend r0/rax.
-> >>
-> >> The fix is to explicitly zero-extend rax after doing such a
-> >> CMPXCHG. Since this problem affects multiple archs, this is done in
-> >> the verifier by patching in a BPF_ZEXT_REG instruction after every
-> >> 32-bit cmpxchg. Any archs that don't need such manual zero-extension
-> >> can do a look-ahead with insn_is_zext to skip the unnecessary mov.
-> >>
-> >> Reported-by: Ilya Leoshkevich <iii@linux.ibm.com>
-> >> Fixes: 5ffa25502b5a ("bpf: Add instructions for atomic_[cmp]xchg")
-> >> Signed-off-by: Brendan Jackman <jackmanb@google.com>
-> >> ---
-> >>
-> >>
-> >> Differences v4->v5[1]:
-> >>   - Moved the logic entirely into opt_subreg_zext_lo32_rnd_hi32, thanks to Martin
-> >>     for suggesting this.
-> >>
-> >> Differences v3->v4[1]:
-> >>   - Moved the optimization against pointless zext into the correct place:
-> >>     opt_subreg_zext_lo32_rnd_hi32 is called _after_ fixup_bpf_calls.
-> >>
-> >> Differences v2->v3[1]:
-> >>   - Moved patching into fixup_bpf_calls (patch incoming to rename this function)
-> >>   - Added extra commentary on bpf_jit_needs_zext
-> >>   - Added check to avoid adding a pointless zext(r0) if there's already one there.
-> >>
-> >> Difference v1->v2[1]: Now solved centrally in the verifier instead of
-> >>    specifically for the x86 JIT. Thanks to Ilya and Daniel for the suggestions!
-> >>
-> >> [1] v4: https://lore.kernel.org/bpf/CA+i-1C3ytZz6FjcPmUg5s4L51pMQDxWcZNvM86w4RHZ_o2khwg@mail.gmail.com/T/#t
-> >>      v3: https://lore.kernel.org/bpf/08669818-c99d-0d30-e1db-53160c063611@iogearbox.net/T/#t
-> >>      v2: https://lore.kernel.org/bpf/08669818-c99d-0d30-e1db-53160c063611@iogearbox.net/T/#t
-> >>      v1: https://lore.kernel.org/bpf/d7ebaefb-bfd6-a441-3ff2-2fdfe699b1d2@iogearbox.net/T/#t
-> >>
-> >>
-> >>   kernel/bpf/core.c                             |  4 +++
-> >>   kernel/bpf/verifier.c                         | 17 +++++++++++-
-> >>   .../selftests/bpf/verifier/atomic_cmpxchg.c   | 25 ++++++++++++++++++
-> >>   .../selftests/bpf/verifier/atomic_or.c        | 26 +++++++++++++++++++
-> >>   4 files changed, 71 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> >> index 0ae015ad1e05..dcf18612841b 100644
-> >> --- a/kernel/bpf/core.c
-> >> +++ b/kernel/bpf/core.c
-> >> @@ -2342,6 +2342,10 @@ bool __weak bpf_helper_changes_pkt_data(void *func)
-> >>   /* Return TRUE if the JIT backend wants verifier to enable sub-register usage
-> >>    * analysis code and wants explicit zero extension inserted by verifier.
-> >>    * Otherwise, return FALSE.
-> >> + *
-> >> + * The verifier inserts an explicit zero extension after BPF_CMPXCHGs even if
-> >> + * you don't override this. JITs that don't want these extra insns can detect
-> >> + * them using insn_is_zext.
-> >>    */
-> >>   bool __weak bpf_jit_needs_zext(void)
-> >>   {
-> >> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> >> index 4c373589273b..37076e4c6175 100644
-> >> --- a/kernel/bpf/verifier.c
-> >> +++ b/kernel/bpf/verifier.c
-> >> @@ -11237,6 +11237,11 @@ static int opt_remove_nops(struct bpf_verifier_env *env)
-> >>      return 0;
-> >>   }
-> >>
-> >> +static inline bool is_cmpxchg(struct bpf_insn *insn)
-> > nit. "const" struct bpf_insn *insn.
-> >
-> >> +{
-> >> +    return (BPF_MODE(insn->code) == BPF_ATOMIC && insn->imm == BPF_CMPXCHG);
-> > I think it is better to check BPF_CLASS(insn->code) == BPF_STX also
-> > in case in the future this helper will be reused before do_check()
-> > has a chance to verify the instructions.
->
-> If this is the case, I would suggest to move is_cmpxchg() earlier
-> in verifier.c so later on for reuse we do not need to move this
-> function. Also, in the return statement, there is no need
-> for outmost ().
+We don't support testing programs that select a reuseport socket,
+since this would mean running another (unrelated) BPF program
+from the sk_lookup test handler.
 
-Yep, all good points, thanks. Spinning v6 now.
+Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
+---
+ include/linux/bpf.h            |  10 ++++
+ include/uapi/linux/bpf.h       |   5 +-
+ net/bpf/test_run.c             | 105 +++++++++++++++++++++++++++++++++
+ net/core/filter.c              |   1 +
+ tools/include/uapi/linux/bpf.h |   5 +-
+ 5 files changed, 124 insertions(+), 2 deletions(-)
 
-> >
-> >> +}
-> >> +
-> >>   static int opt_subreg_zext_lo32_rnd_hi32(struct bpf_verifier_env *env,
-> >>                                       const union bpf_attr *attr)
-> >>   {
-> >> @@ -11296,7 +11301,17 @@ static int opt_subreg_zext_lo32_rnd_hi32(struct bpf_verifier_env *env,
-> >>                      goto apply_patch_buffer;
-> >>              }
-> >>
-> >> -            if (!bpf_jit_needs_zext())
-> >> +            /* Add in an zero-extend instruction if a) the JIT has requested
-> >> +             * it or b) it's a CMPXCHG.
-> >> +             *
-> >> +             * The latter is because: BPF_CMPXCHG always loads a value into
-> >> +             * R0, therefore always zero-extends. However some archs'
-> >> +             * equivalent instruction only does this load when the
-> >> +             * comparison is successful. This detail of CMPXCHG is
-> >> +             * orthogonal to the general zero-extension behaviour of the
-> >> +             * CPU, so it's treated independently of bpf_jit_needs_zext.
-> >> +             */
-> >> +            if (!bpf_jit_needs_zext() && !is_cmpxchg(&insn))
-> >>                      continue;
-> >>
-> >>              if (WARN_ON_ONCE(load_reg == -1)) {
-> >> diff --git a/tools/testing/selftests/bpf/verifier/atomic_cmpxchg.c b/tools/testing/selftests/bpf/verifier/atomic_cmpxchg.c
-> >> index 2efd8bcf57a1..6e52dfc64415 100644
-> >> --- a/tools/testing/selftests/bpf/verifier/atomic_cmpxchg.c
-> >> +++ b/tools/testing/selftests/bpf/verifier/atomic_cmpxchg.c
-> >> @@ -94,3 +94,28 @@
-> >>      .result = REJECT,
-> >>      .errstr = "invalid read from stack",
-> >>   },
-> >> +{
-> >> +    "BPF_W cmpxchg should zero top 32 bits",
-> >> +    .insns = {
-> >> +            /* r0 = U64_MAX; */
-> >> +            BPF_MOV64_IMM(BPF_REG_0, 0),
-> >> +            BPF_ALU64_IMM(BPF_SUB, BPF_REG_0, 1),
-> >> +            /* u64 val = r0; */
-> >> +            BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -8),
-> >> +            /* r0 = (u32)atomic_cmpxchg((u32 *)&val, r0, 1); */
-> >> +            BPF_MOV32_IMM(BPF_REG_1, 1),
-> >> +            BPF_ATOMIC_OP(BPF_W, BPF_CMPXCHG, BPF_REG_10, BPF_REG_1, -8),
-> >> +            /* r1 = 0x00000000FFFFFFFFull; */
-> >> +            BPF_MOV64_IMM(BPF_REG_1, 1),
-> >> +            BPF_ALU64_IMM(BPF_LSH, BPF_REG_1, 32),
-> >> +            BPF_ALU64_IMM(BPF_SUB, BPF_REG_1, 1),
-> >> +            /* if (r0 != r1) exit(1); */
-> >> +            BPF_JMP_REG(BPF_JEQ, BPF_REG_0, BPF_REG_1, 2),
-> >> +            BPF_MOV32_IMM(BPF_REG_0, 1),
-> >> +            BPF_EXIT_INSN(),
-> >> +            /* exit(0); */
-> >> +            BPF_MOV32_IMM(BPF_REG_0, 0),
-> >> +            BPF_EXIT_INSN(),
-> >> +    },
-> >> +    .result = ACCEPT,
-> >> +},
-> >> diff --git a/tools/testing/selftests/bpf/verifier/atomic_or.c b/tools/testing/selftests/bpf/verifier/atomic_or.c
-> >> index 70f982e1f9f0..0a08b99e6ddd 100644
-> >> --- a/tools/testing/selftests/bpf/verifier/atomic_or.c
-> >> +++ b/tools/testing/selftests/bpf/verifier/atomic_or.c
-> >> @@ -75,3 +75,29 @@
-> >>      },
-> >>      .result = ACCEPT,
-> >>   },
-> >> +{
-> >> +    "BPF_W atomic_fetch_or should zero top 32 bits",
-> >> +    .insns = {
-> >> +            /* r1 = U64_MAX; */
-> >> +            BPF_MOV64_IMM(BPF_REG_1, 0),
-> >> +            BPF_ALU64_IMM(BPF_SUB, BPF_REG_1, 1),
-> >> +            /* u64 val = r0; */
-> > s/r0/r1/
-> >
-> >> +            BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_1, -8),
-> >> +            /* r1 = (u32)atomic_sub((u32 *)&val, 1); */
-> >                  r1 = (u32)atomic_fetch_or((u32 *)&val, 2)
-> >
-> >> +            BPF_MOV32_IMM(BPF_REG_1, 2),
-> >> +            BPF_ATOMIC_OP(BPF_W, BPF_OR | BPF_FETCH, BPF_REG_10, BPF_REG_1, -8),
-> >> +            /* r2 = 0x00000000FFFFFFFF; */
-> >> +            BPF_MOV64_IMM(BPF_REG_2, 1),
-> >> +            BPF_ALU64_IMM(BPF_LSH, BPF_REG_2, 32),
-> >> +            BPF_ALU64_IMM(BPF_SUB, BPF_REG_2, 1),
-> >> +            /* if (r2 != r1) exit(1); */
-> >> +            BPF_JMP_REG(BPF_JEQ, BPF_REG_2, BPF_REG_1, 2),
-> >> +            /* BPF_MOV32_IMM(BPF_REG_0, 1), */
-> >> +            BPF_MOV64_REG(BPF_REG_0, BPF_REG_1),
-> >> +            BPF_EXIT_INSN(),
-> >> +            /* exit(0); */
-> >> +            BPF_MOV32_IMM(BPF_REG_0, 0),
-> >> +            BPF_EXIT_INSN(),
-> >> +    },
-> >> +    .result = ACCEPT,
-> >> +},
-> >>
-> >> base-commit: f2cfe32e8a965a86e512dcb2e6251371d4a60c63
-> >> --
-> >> 2.30.1.766.gb4fecdf3b7-goog
-> >>
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 4c730863fa77..c931bc97019d 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1491,6 +1491,9 @@ int bpf_prog_test_run_flow_dissector(struct bpf_prog *prog,
+ int bpf_prog_test_run_raw_tp(struct bpf_prog *prog,
+ 			     const union bpf_attr *kattr,
+ 			     union bpf_attr __user *uattr);
++int bpf_prog_test_run_sk_lookup(struct bpf_prog *prog,
++				const union bpf_attr *kattr,
++				union bpf_attr __user *uattr);
+ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
+ 		    const struct bpf_prog *prog,
+ 		    struct bpf_insn_access_aux *info);
+@@ -1692,6 +1695,13 @@ static inline int bpf_prog_test_run_flow_dissector(struct bpf_prog *prog,
+ 	return -ENOTSUPP;
+ }
+ 
++static inline int bpf_prog_test_run_sk_lookup(struct bpf_prog *prog,
++					      const union bpf_attr *kattr,
++					      union bpf_attr __user *uattr)
++{
++	return -ENOTSUPP;
++}
++
+ static inline void bpf_map_put(struct bpf_map *map)
+ {
+ }
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index b89af20cfa19..99b39ec5ad44 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -5243,7 +5243,10 @@ struct bpf_pidns_info {
+ 
+ /* User accessible data for SK_LOOKUP programs. Add new fields at the end. */
+ struct bpf_sk_lookup {
+-	__bpf_md_ptr(struct bpf_sock *, sk); /* Selected socket */
++	union {
++		__bpf_md_ptr(struct bpf_sock *, sk); /* Selected socket */
++		__u64 cookie; /* Non-zero if socket was selected in PROG_TEST_RUN */
++	};
+ 
+ 	__u32 family;		/* Protocol family (AF_INET, AF_INET6) */
+ 	__u32 protocol;		/* IP protocol (IPPROTO_TCP, IPPROTO_UDP) */
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index eb3c78cd4d7c..0abdd67f44b1 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -10,8 +10,10 @@
+ #include <net/bpf_sk_storage.h>
+ #include <net/sock.h>
+ #include <net/tcp.h>
++#include <net/net_namespace.h>
+ #include <linux/error-injection.h>
+ #include <linux/smp.h>
++#include <linux/sock_diag.h>
+ 
+ #define CREATE_TRACE_POINTS
+ #include <trace/events/bpf_test_run.h>
+@@ -781,3 +783,106 @@ int bpf_prog_test_run_flow_dissector(struct bpf_prog *prog,
+ 	kfree(data);
+ 	return ret;
+ }
++
++int bpf_prog_test_run_sk_lookup(struct bpf_prog *prog, const union bpf_attr *kattr,
++				union bpf_attr __user *uattr)
++{
++	struct bpf_test_timer t = { NO_PREEMPT };
++	struct bpf_prog_array *progs = NULL;
++	struct bpf_sk_lookup_kern ctx = {};
++	u32 repeat = kattr->test.repeat;
++	struct bpf_sk_lookup *user_ctx;
++	u32 retval, duration;
++	int ret = -EINVAL;
++
++	if (prog->type != BPF_PROG_TYPE_SK_LOOKUP)
++		return -EINVAL;
++
++	if (kattr->test.flags || kattr->test.cpu)
++		return -EINVAL;
++
++	if (kattr->test.data_in || kattr->test.data_size_in || kattr->test.data_out ||
++	    kattr->test.data_size_out)
++		return -EINVAL;
++
++	if (!repeat)
++		repeat = 1;
++
++	user_ctx = bpf_ctx_init(kattr, sizeof(*user_ctx));
++	if (IS_ERR(user_ctx))
++		return PTR_ERR(user_ctx);
++
++	if (!user_ctx)
++		return -EINVAL;
++
++	if (user_ctx->sk)
++		goto out;
++
++	if (!range_is_zero(user_ctx, offsetofend(typeof(*user_ctx), local_port), sizeof(*user_ctx)))
++		goto out;
++
++	if (user_ctx->local_port > U16_MAX || user_ctx->remote_port > U16_MAX) {
++		ret = -ERANGE;
++		goto out;
++	}
++
++	ctx.family = (u16)user_ctx->family;
++	ctx.protocol = (u16)user_ctx->protocol;
++	ctx.dport = (u16)user_ctx->local_port;
++	ctx.sport = (__force __be16)user_ctx->remote_port;
++
++	switch (ctx.family) {
++	case AF_INET:
++		ctx.v4.daddr = (__force __be32)user_ctx->local_ip4;
++		ctx.v4.saddr = (__force __be32)user_ctx->remote_ip4;
++		break;
++
++#if IS_ENABLED(CONFIG_IPV6)
++	case AF_INET6:
++		ctx.v6.daddr = (struct in6_addr *)user_ctx->local_ip6;
++		ctx.v6.saddr = (struct in6_addr *)user_ctx->remote_ip6;
++		break;
++#endif
++
++	default:
++		ret = -EAFNOSUPPORT;
++		goto out;
++	}
++
++	progs = bpf_prog_array_alloc(1, GFP_KERNEL);
++	if (!progs) {
++		ret = -ENOMEM;
++		goto out;
++	}
++
++	progs->items[0].prog = prog;
++
++	bpf_test_timer_enter(&t);
++	do {
++		ctx.selected_sk = NULL;
++		retval = BPF_PROG_SK_LOOKUP_RUN_ARRAY(progs, ctx, BPF_PROG_RUN);
++	} while (bpf_test_timer_continue(&t, repeat, &ret, &duration));
++	bpf_test_timer_leave(&t);
++
++	if (ret < 0)
++		goto out;
++
++	user_ctx->cookie = 0;
++	if (ctx.selected_sk) {
++		if (ctx.selected_sk->sk_reuseport && !ctx.no_reuseport) {
++			ret = -EOPNOTSUPP;
++			goto out;
++		}
++
++		user_ctx->cookie = sock_gen_cookie(ctx.selected_sk);
++	}
++
++	ret = bpf_test_finish(kattr, uattr, NULL, 0, retval, duration);
++	if (!ret)
++		ret = bpf_ctx_finish(kattr, uattr, user_ctx, sizeof(*user_ctx));
++
++out:
++	bpf_prog_array_free(progs);
++	kfree(user_ctx);
++	return ret;
++}
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 13bcf248ee7b..a526db494c62 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -10457,6 +10457,7 @@ static u32 sk_lookup_convert_ctx_access(enum bpf_access_type type,
+ }
+ 
+ const struct bpf_prog_ops sk_lookup_prog_ops = {
++	.test_run = bpf_prog_test_run_sk_lookup,
+ };
+ 
+ const struct bpf_verifier_ops sk_lookup_verifier_ops = {
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index b89af20cfa19..99b39ec5ad44 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -5243,7 +5243,10 @@ struct bpf_pidns_info {
+ 
+ /* User accessible data for SK_LOOKUP programs. Add new fields at the end. */
+ struct bpf_sk_lookup {
+-	__bpf_md_ptr(struct bpf_sock *, sk); /* Selected socket */
++	union {
++		__bpf_md_ptr(struct bpf_sock *, sk); /* Selected socket */
++		__u64 cookie; /* Non-zero if socket was selected in PROG_TEST_RUN */
++	};
+ 
+ 	__u32 family;		/* Protocol family (AF_INET, AF_INET6) */
+ 	__u32 protocol;		/* IP protocol (IPPROTO_TCP, IPPROTO_UDP) */
+-- 
+2.27.0
+
