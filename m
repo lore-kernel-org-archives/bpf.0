@@ -2,126 +2,126 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F1EDCC4160E
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:56:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 749B6C43332
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:56:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C2C9564E75
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:56:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 465FD64E74
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:56:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352552AbhCCDvT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Mar 2021 22:51:19 -0500
-Received: from wout3-smtp.messagingengine.com ([64.147.123.19]:43003 "EHLO
-        wout3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242893AbhCCBQq (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 2 Mar 2021 20:16:46 -0500
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id A040C10F3;
-        Tue,  2 Mar 2021 20:15:34 -0500 (EST)
-Received: from imap35 ([10.202.2.85])
-  by compute3.internal (MEProxy); Tue, 02 Mar 2021 20:15:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=
-        mime-version:message-id:date:from:to:cc:subject:content-type; s=
-        fm2; bh=9FD8F+TWKvse0buYqi4uiNdfXk0YrVryNe2+KxwJxE4=; b=gYD8pcVL
-        6TcQSIXYBfnJ61EoGimU174EVWiZy1rMp4FMx/vMfSwyy090/5AdSu9hZMAp/Zop
-        mnQJho+dwSlzjPQKxs2SkjTJDtKGE1YNo7RVb3n8QWq+Nkrb2EUk2GonUyWyZE8W
-        fHz+mh8S+1lOkNBTvDvH0y3Tg8v3INgBcyWi/wdxS1iOYHg89zCNKIR8fsBbolC/
-        RhEGFTPFO8AMqSk+G5ci7TYiqfTleYAyFtkxSd4hul41vwYogt/y4dNx06crs+82
-        LDBPiCDoycBU2YCV+dqpI7AXUC9XjQATJMHj0kQm94R4A8OjAJzTA5lxjMMSIfa4
-        wSN4Yrvy/dxV+Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:message-id
-        :mime-version:subject:to:x-me-proxy:x-me-proxy:x-me-sender
-        :x-me-sender:x-sasl-enc; s=fm2; bh=9FD8F+TWKvse0buYqi4uiNdfXk0Yr
-        VryNe2+KxwJxE4=; b=oxJR9qtnr/ARq80jMHXCFWbFYqrhra5VL5ntorj/gq22i
-        bCY8v2ZSsNnI+dol38EmwEB6kYWPr7O+4BSuogilaXlA3YuG2xO1MKDEjfvUaTx2
-        cmTCzumVZLG9DnSQ107idEhhAH9zJNJiqtCBffrgAQjhN8CgtkdL3lavFMawtEz4
-        I9lTPMXdBBf8iiGgNri4mGUFXShs9KTqdbnp/xz2UJNOxkPui9RLcXLDk/RHKvBA
-        oUndCxYQ2mu2d2UB07nMSWoySgolH3+YjUpBC3gT7dmA/K6c+GNKh1OYKknxFtRH
-        ASP9lVzKccH6XNRfsAHXiHOCKX/M+Xm+HRMDdHynA==
-X-ME-Sender: <xms:NeM-YEXoZe7DX0SAAr4mNzM3p2KjSxTGoDsM7yYSfO97tvsy9YboXQ>
-    <xme:NeM-YIn_o00Nq95ajwoNSHKIWUPuU7G3CKBNO9CQ0uYu6LRIdx513zw412d9Xu8o9
-    19s5F0Jg_AIJbNyFQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledruddtuddgvdelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdlfeehmdenucfjughrpefofg
-    ggkfffhffvufgtsehttdertderredtnecuhfhrohhmpedfffgrnhhivghlucgiuhdfuceo
-    ugiguhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhepgfefgedvvdeigfdthf
-    ettdfghedtleeuteefueetiefhledvhfelleeutedufedtnecuvehluhhsthgvrhfuihii
-    vgeptdenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdrgiihii
-X-ME-Proxy: <xmx:NuM-YIY7Fb6if0_XPGrmk9R13LPbWO3iTVKT27Fr1gixd5W0XsKOIA>
-    <xmx:NuM-YDUo8FqkYotLKhaYgRakmuDWSOQZMrenQtfN0TW1PKtqQNZwKA>
-    <xmx:NuM-YOmAgL-MC4DgK7ngcpT0qYlEiraixoSaf9jf-byxoVwDQgg4vA>
-    <xmx:NuM-YCsl7rfBUt8K524WUjp-wl-O9CNixx8eDQIxzZUJK0QN6iQehQ>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id C739015A005D; Tue,  2 Mar 2021 20:15:33 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-206-g078a48fda5-fm-20210226.001-g078a48fd
-Mime-Version: 1.0
-Message-Id: <1fed0793-391c-4c68-8d19-6dcd9017271d@www.fastmail.com>
-Date:   Tue, 02 Mar 2021 17:15:13 -0800
-From:   "Daniel Xu" <dxu@dxuuu.xyz>
-To:     mhiramat@kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>, kuba@kernel.org
-Subject: Broken kretprobe stack traces
-Content-Type: text/plain
+        id S1352555AbhCCDvX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Mar 2021 22:51:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42700 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239744AbhCCBrW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 2 Mar 2021 20:47:22 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C216C061788
+        for <bpf@vger.kernel.org>; Tue,  2 Mar 2021 17:46:34 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id b15so3174824pjb.0
+        for <bpf@vger.kernel.org>; Tue, 02 Mar 2021 17:46:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
+        h=content-transfer-encoding:from:mime-version:subject:date:message-id
+         :references:cc:in-reply-to:to;
+        bh=s3c8ka2NxmqUACAecVla9DLrhMUmoHZHgqpBk3nSwE4=;
+        b=ey6P3q0LbP8aXSAgr0U4Q4rU9RpbW5A6RQswB3UUyw0iAk3a3WCLPnOu8ZV5MrM85X
+         6Aj9ILxW0xe3pKs86YYWAVkiUE830LaKaCfRY8L2VU698rF397jifaJzmqNssqfNEzEw
+         HC/cMeh1HqWwJ1xwnJzsElT3O6o7IOFq3e4Wd2vC41CdQOtCcOmKsunjPngKlPldfeH5
+         PHrpby8xcJe91t7e1s1nhNpLOON2LXZYrplFGVyE6WEIwjyrOzsP5tag5BrAxSYtoOob
+         cXL6xngPB3D8tyk/1H1yy/L/gxq0uTMyY19QlL9oWjYdq8H2iayOnVfGdjaAY4D96sVM
+         ishQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:content-transfer-encoding:from:mime-version
+         :subject:date:message-id:references:cc:in-reply-to:to;
+        bh=s3c8ka2NxmqUACAecVla9DLrhMUmoHZHgqpBk3nSwE4=;
+        b=kQsEGOr1Dpu05Axt1jOGd/Kul686ZsSRsG5aaZFY41XKNw5/IZCYdQO54TaGtUj7P4
+         Tom2pBWymOs941pqSoZH1KXynAwqVmFZneN3+7PTtjGnEYjZOepWO7R6jAjIkpJ44aB2
+         lx8rhj0BG81QCO6Of5W9KUmcmLCAqdi3rBD7g/PzqDe7Ih/juy7XV+IEyJslPeOcbLm/
+         Qya+nboavtC/OEiTr0fUs2z+ybI2xV7C1decTiFmCKcayChvxKjFB6loexeVBQY6mC8U
+         Z90ZwFw1EDGcbNhzVgH5Hs4WdX671eZrB7xgDmgZaUxItGeLZ+OBIdN786MpS7AhhfA3
+         I/KA==
+X-Gm-Message-State: AOAM530ijXM0MO3YZ4TcupYnajebzI+Bgh51QqREx/vJRzk0TnHuio+i
+        B1z3i5bEOyq22YBwuhGOhqi3ig==
+X-Google-Smtp-Source: ABdhPJxm8vrcllcsZ42e4OgPXlUzbfB3kZOBxO/kCNMZK6f8AVdyZdbb/750Ej6UVqiyHnQPOokChQ==
+X-Received: by 2002:a17:90a:cb0a:: with SMTP id z10mr2962028pjt.170.1614735993594;
+        Tue, 02 Mar 2021 17:46:33 -0800 (PST)
+Received: from ?IPv6:2601:646:c200:1ef2:55b7:4147:bab7:e0dc? ([2601:646:c200:1ef2:55b7:4147:bab7:e0dc])
+        by smtp.gmail.com with ESMTPSA id j11sm4871155pjb.11.2021.03.02.17.46.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Mar 2021 17:46:33 -0800 (PST)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From:   Andy Lutomirski <luto@amacapital.net>
+Mime-Version: 1.0 (1.0)
+Subject: Re: Why do kprobes and uprobes singlestep?
+Date:   Tue, 2 Mar 2021 17:46:32 -0800
+Message-Id: <968E85AE-75B8-42D7-844A-0D61B32063B3@amacapital.net>
+References: <CAADnVQJtpvB8wDFv46O0GEaHkwmT1Ea70BJfgS36kDX0u4uZ-g@mail.gmail.com>
+Cc:     Andy Lutomirski <luto@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S. Miller" <davem@davemloft.net>, X86 ML <x86@kernel.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>
+In-Reply-To: <CAADnVQJtpvB8wDFv46O0GEaHkwmT1Ea70BJfgS36kDX0u4uZ-g@mail.gmail.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+X-Mailer: iPhone Mail (18D52)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi Masami,
 
-Jakub reported a bug with kretprobe stack traces -- wondering if you've gotten
-any bug reports related to stack traces being broken for kretprobes.
+> On Mar 2, 2021, at 5:22 PM, Alexei Starovoitov <alexei.starovoitov@gmail.c=
+om> wrote:
+>=20
+> =EF=BB=BFOn Tue, Mar 2, 2021 at 1:02 PM Andy Lutomirski <luto@amacapital.n=
+et> wrote:
+>>=20
+>>=20
+>>>> On Mar 2, 2021, at 12:24 PM, Alexei Starovoitov <alexei.starovoitov@gma=
+il.com> wrote:
+>>>=20
+>>> =EF=BB=BFOn Tue, Mar 2, 2021 at 10:38 AM Andy Lutomirski <luto@kernel.or=
+g> wrote:
+>>>>=20
+>>>> Is there something like a uprobe test suite?  How maintained /
+>>>> actively used is uprobe?
+>>>=20
+>>> uprobe+bpf is heavily used in production.
+>>> selftests/bpf has only one test for it though.
+>>>=20
+>>> Why are you asking?
+>>=20
+>> Because the integration with the x86 entry code is a mess, and I want to k=
+now whether to mark it BROKEN or how to make sure the any cleanups actually w=
+ork.
+>=20
+> Any test case to repro the issue you found?
+> Is it a bug or just messy code?
 
-I think (can't prove) this used to work:
+Just messy code.
 
-    # bpftrace -e 'kretprobe:__tcp_retransmit_skb { @[kstack()] = count() }'
-    Attaching 1 probe...
-    ^C
+> Nowadays a good chunk of popular applications (python, mysql, etc) has
+> USDTs in them.
+> Issues reported with bcc:
+> https://github.com/iovisor/bcc/issues?q=3Dis%3Aissue+USDT
+> Similar thing with bpftrace.
+> Both standard USDT and semaphore based are used in the wild.
+> uprobe for containers has been a long standing feature request.
+> If you can improve uprobe performance that would be awesome.
+> That's another thing that people report often. We optimized it a bit.
+> More can be done.
 
-    @[
-        kretprobe_trampoline+0
-    ]: 1
 
-fentry/fexit probes seem to work:
-
-    # bpftrace -e 'kretfunc:__tcp_retransmit_skb { @[kstack()] = count() }'
-    Attaching 1 probe...
-    ^C
-    
-    @[
-        ftrace_trampoline+10799
-        bpf_get_stackid_raw_tp+121
-        ftrace_trampoline+10799
-        __tun_chr_ioctl.isra.0.cold+33312
-        __tcp_retransmit_skb+5
-        tcp_send_loss_probe+254
-        tcp_write_timer_handler+394
-        tcp_write_timer+149
-        call_timer_fn+41
-        __run_timers+493
-        run_timer_softirq+25
-        __softirqentry_text_start+207
-        asm_call_sysvec_on_stack+18
-        do_softirq_own_stack+55
-        irq_exit_rcu+158
-        sysvec_apic_timer_interrupt+54
-        asm_sysvec_apic_timer_interrupt+18
-    ]: 1
-    @[
-        ftrace_trampoline+10799
-        bpf_get_stackid_raw_tp+121
-        ftrace_trampoline+10799
-        __tun_chr_ioctl.isra.0.cold+33312
-        __tcp_retransmit_skb+5
-  <...>
-
-which makes me suspect it's a kprobe specific issue.
-
-Thanks,
-Daniel
+Wait... USDT is much easier to implement well.  Are we talking just USDT or a=
+re we talking about general uprobes in which almost any instruction can get p=
+robed?  If the only users that care about uprobes are doing USDT, we could v=
+astly simplify the implementation and probably make it faster, too.=
