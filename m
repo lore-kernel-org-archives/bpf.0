@@ -8,66 +8,65 @@ X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3C34C433E9
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:56:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B1CBC4332B
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:56:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9CC4764F0D
+	by mail.kernel.org (Postfix) with ESMTP id EFCF464EFD
 	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:56:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442441AbhCCWjJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 3 Mar 2021 17:39:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39522 "EHLO
+        id S1445400AbhCCWju (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 3 Mar 2021 17:39:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1842513AbhCCIGQ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 3 Mar 2021 03:06:16 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B4FC061356;
-        Tue,  2 Mar 2021 23:56:17 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id m1so5291481wml.2;
-        Tue, 02 Mar 2021 23:56:17 -0800 (PST)
+        with ESMTP id S1357186AbhCCIUH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 3 Mar 2021 03:20:07 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1137FC0617A7;
+        Wed,  3 Mar 2021 00:19:26 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id d11so22628925wrj.7;
+        Wed, 03 Mar 2021 00:19:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=RBLhxuP0FB1FYDX0AaweN9vB+2psJPwvGQLdI0MwHS8=;
-        b=muD1HjbK4kM6y9RuW8+tAGEQ4Hz+bQEPJq19mcEUzqGBhKIG+a+H2syEwD/yfDxlne
-         bS7GYyr7s7oC7iHhcvL7rXDe83zcWGlP98XYeMvjmdqX7VPHMVCbp96Oarm8Mf6/9K8g
-         sb3F2J98SoxS6x2fc88kP5dKWiBpAX4oEDOF22WjNKz+CFn0Frxt3SyxYbhSq7nWmnUg
-         7mqpRbasJAIL0pXkZN+r8Hdo5NwuxTWTWmBQYTv+atMUsrGcGIv0cHWEBF0K0i4Bekze
-         xWui0OEvmXhBSe+kMQFcWT1T93PUZAQ1FkHFIpECUx/WGvsZ550um3Ta80uSUbXeP5YS
-         aCAA==
+        bh=RxKeaJE+nu2TyOO2eKwM9sn1ONl4+NYDV2sw0WpA958=;
+        b=VRh7bHU7s5bPuJy9yo8sEiqZiA2nhS0iLkcG3DCQAA5MLKMnTficy1VU58xqt0ENp+
+         Q62ToJg8ZIyPsRIAyP1ScrMXcQS31Ohl6s+r8h06xO4sajS1taVF+B6pulNMT0vbMN+V
+         XuGdRWm0rNc3hubJAJpRnsvTFF2DgmFNgopZoHYjaXrmhG2BZiYES6k9/nf5uPzXqR/K
+         59f3M3/kcf+xE2sMgJxAQqyDgVUBqidfQXRBftg3L8XaWB4a4ELTml5khhbmv0Iadpms
+         tBt0RLxBrv9kJFgV8xJD2COxU93LvBWiwfz0+H8QLCC5shUbrjFHiemOnrkhsk99vRen
+         ZvKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=RBLhxuP0FB1FYDX0AaweN9vB+2psJPwvGQLdI0MwHS8=;
-        b=tXHnnY3DTwfxmkKO+uDcekWiSkaBvgxDxbDqxCeSbwlIH1od7FNsidDy/Br3tVl4uS
-         ikgdgHHwnedUAyMxrFx0NGxl7kbo7JiN1j/1EGw+QdsIbTFIG2/EgVIABhqiBeKSqYA8
-         I75Zp4xBHURDgVbBX0ROKZNBW6rfaQlAIgp9y0ZAu74cfwmq7Anq5GhYCJlagvsAJe+M
-         SYT4tVXZ4vPt72p+i02WSlZNTAVbc8gTGs/ix03Zps5A9NPat3vedcGHhbOnasMugviW
-         C7RdO3/uZe/lHAgatN5poOu4GLr21krRb3YTKez7qJIN5DVclUA6bcQ69yUr0ZA1DbDN
-         WCJg==
-X-Gm-Message-State: AOAM53042i27uDbDVDaS5oeqqEMSMfdgWLJvWOuV5QXBHffk3GL8tPWl
-        rhIhozbz1jn8eIACDe8dhFkFgawHqHBvPAV1Gfg=
-X-Google-Smtp-Source: ABdhPJwey4QPkurKONqcpTvnGm+YzyEGsL1YeXqvKhK52hqSKst3C5TraCYlOyu4QFkcdP3fzmpSR8oT5pYprWqO6os=
-X-Received: by 2002:a1c:b687:: with SMTP id g129mr7920310wmf.165.1614758176228;
- Tue, 02 Mar 2021 23:56:16 -0800 (PST)
+        bh=RxKeaJE+nu2TyOO2eKwM9sn1ONl4+NYDV2sw0WpA958=;
+        b=rd6Xhlzp/fUiGFppCijRXw41C8UHf41/vFTZkcHlAgA1IhzCVK4ABDDRZacxMaRn6F
+         e7DsF04Vx6cPmDHgvpB7z49bhy8ve810eTDE0DqRuDJNGkV+qJNghLJAAJ8uDfbs/J2T
+         JpL2smEygIV6TekWd+9uKoPCp18nOsMNb87pi1a+nbpiVnZH472DNRP6Qi5/JZGk1OLG
+         fRurbMTOudb1o9V87pkINs25qYZm1SX+G8Hr6l4mfysEGJ+avtPnU1G0E5zbJwqNejD3
+         AU50xpFRrycm45Z667TNcRjwlg65J8CwcQqRoTVknvAktIbweebATYVdg/AxW0Ze3Goh
+         SHUA==
+X-Gm-Message-State: AOAM530DR0S8tQsSHl6Px6lsIjysIjjK0yQE+4+PdSRvRN8hpPD9/RDz
+        gBTHCewsV1dPpeqXuIHCx5bq3OI6wmwmAJ4mWJZ4JSJLpZsMJA==
+X-Google-Smtp-Source: ABdhPJySNiJOw35YC7QlRp1YSeG2rHrV1dxubFt9W0DlXcxJzzbaks61psVBOI7lW2kQyaqn6P74IyPcaxul+sduuPs=
+X-Received: by 2002:a5d:4ac6:: with SMTP id y6mr23211765wrs.160.1614759564854;
+ Wed, 03 Mar 2021 00:19:24 -0800 (PST)
 MIME-Version: 1.0
 References: <20210301104318.263262-1-bjorn.topel@gmail.com>
- <20210301104318.263262-2-bjorn.topel@gmail.com> <87mtvmx3ec.fsf@toke.dk>
- <939aefb5-8f03-fc5a-9e8b-0b634aafd0a4@intel.com> <87zgzlvoqd.fsf@toke.dk>
-In-Reply-To: <87zgzlvoqd.fsf@toke.dk>
+ <20210301104318.263262-3-bjorn.topel@gmail.com> <CAEf4BzZFDAcnaWU2JGL2GKmTTWQPDrcdgEn2NOM9cGFe16XheQ@mail.gmail.com>
+ <a65075f7-b46c-9131-f969-a6458e6001b7@intel.com>
+In-Reply-To: <a65075f7-b46c-9131-f969-a6458e6001b7@intel.com>
 From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
-Date:   Wed, 3 Mar 2021 08:56:04 +0100
-Message-ID: <CAJ+HfNgf2jxL3fGL=ksAM4O3QC2evM-g=+VPBNZ1D-4qyzb4AA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] xsk: update rings for load-acquire/store-release
- semantics
-To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
-Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+Date:   Wed, 3 Mar 2021 09:19:13 +0100
+Message-ID: <CAJ+HfNiA7Pm8A_uwZxaUhRf4YMhq_pBExNcebpEwR4t7E12ANg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/2] libbpf, xsk: add libbpf_smp_store_release libbpf_smp_load_acquire
+To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>
+Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        paulmck@kernel.org, "Karlsson, Magnus" <magnus.karlsson@intel.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
         Jonathan Lemon <jonathan.lemon@gmail.com>, maximmi@nvidia.com,
         Andrii Nakryiko <andrii@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
@@ -76,103 +75,104 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, 2 Mar 2021 at 11:23, Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.=
-com> wrote:
+On Wed, 3 Mar 2021 at 08:14, Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com> =
+wrote:
 >
-> Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com> writes:
->
-> > On 2021-03-01 17:08, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
-> >> Bj=C3=B6rn T=C3=B6pel <bjorn.topel@gmail.com> writes:
+> On 2021-03-03 05:38, Andrii Nakryiko wrote:
+> > On Mon, Mar 1, 2021 at 2:43 AM Bj=C3=B6rn T=C3=B6pel <bjorn.topel@gmail=
+.com> wrote:
 > >>
-> >>> From: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>
-> >>>
-> >>> Currently, the AF_XDP rings uses smp_{r,w,}mb() fences on the
-> >>> kernel-side. By updating the rings for load-acquire/store-release
-> >>> semantics, the full barrier on the consumer side can be replaced with
-> >>> improved performance as a nice side-effect.
-> >>>
-> >>> Note that this change does *not* require similar changes on the
-> >>> libbpf/userland side, however it is recommended [1].
-> >>>
-> >>> On x86-64 systems, by removing the smp_mb() on the Rx and Tx side, th=
-e
-> >>> l2fwd AF_XDP xdpsock sample performance increases by
-> >>> 1%. Weakly-ordered platforms, such as ARM64 might benefit even more.
-> >>>
-> >>> [1] https://lore.kernel.org/bpf/20200316184423.GA14143@willie-the-tru=
-ck/
-> >>>
-> >>> Signed-off-by: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>
-> >>> ---
-> >>>   net/xdp/xsk_queue.h | 27 +++++++++++----------------
-> >>>   1 file changed, 11 insertions(+), 16 deletions(-)
-> >>>
-> >>> diff --git a/net/xdp/xsk_queue.h b/net/xdp/xsk_queue.h
-> >>> index 2823b7c3302d..e24279d8d845 100644
-> >>> --- a/net/xdp/xsk_queue.h
-> >>> +++ b/net/xdp/xsk_queue.h
-> >>> @@ -47,19 +47,18 @@ struct xsk_queue {
-> >>>     u64 queue_empty_descs;
-> >>>   };
-> >>>
-> >>> -/* The structure of the shared state of the rings are the same as th=
-e
-> >>> - * ring buffer in kernel/events/ring_buffer.c. For the Rx and comple=
-tion
-> >>> - * ring, the kernel is the producer and user space is the consumer. =
-For
-> >>> - * the Tx and fill rings, the kernel is the consumer and user space =
-is
-> >>> - * the producer.
-> >>> +/* The structure of the shared state of the rings are a simple
-> >>> + * circular buffer, as outlined in
-> >>> + * Documentation/core-api/circular-buffers.rst. For the Rx and
-> >>> + * completion ring, the kernel is the producer and user space is the
-> >>> + * consumer. For the Tx and fill rings, the kernel is the consumer a=
-nd
-> >>> + * user space is the producer.
-> >>>    *
-> >>>    * producer                         consumer
-> >>>    *
-> >>> - * if (LOAD ->consumer) {           LOAD ->producer
-> >>> - *                    (A)           smp_rmb()       (C)
-> >>> + * if (LOAD ->consumer) {  (A)      LOAD.acq ->producer  (C)
+> >> From: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>
 > >>
-> >> Why is LOAD.acq not needed on the consumer side?
+> >> Now that the AF_XDP rings have load-acquire/store-release semantics,
+> >> move libbpf to that as well.
 > >>
+> >> The library-internal libbpf_smp_{load_acquire,store_release} are only
+> >> valid for 32-bit words on ARM64.
+> >>
+> >> Also, remove the barriers that are no longer in use.
+> >>
+> >> Signed-off-by: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>
+> >> ---
+> >>   tools/lib/bpf/libbpf_util.h | 72 +++++++++++++++++++++++++----------=
+--
+> >>   tools/lib/bpf/xsk.h         | 17 +++------
+> >>   2 files changed, 55 insertions(+), 34 deletions(-)
+> >>
+> >> diff --git a/tools/lib/bpf/libbpf_util.h b/tools/lib/bpf/libbpf_util.h
+> >> index 59c779c5790c..94a0d7bb6f3c 100644
+> >> --- a/tools/lib/bpf/libbpf_util.h
+> >> +++ b/tools/lib/bpf/libbpf_util.h
+> >> @@ -5,6 +5,7 @@
+> >>   #define __LIBBPF_LIBBPF_UTIL_H
+> >>
+> >>   #include <stdbool.h>
+> >> +#include <linux/compiler.h>
+> >>
+> >>   #ifdef __cplusplus
+> >>   extern "C" {
+> >> @@ -15,29 +16,56 @@ extern "C" {
+> >>    * application that uses libbpf.
+> >>    */
+> >>   #if defined(__i386__) || defined(__x86_64__)
+> >> -# define libbpf_smp_rmb() asm volatile("" : : : "memory")
+> >> -# define libbpf_smp_wmb() asm volatile("" : : : "memory")
+> >> -# define libbpf_smp_mb() \
+> >> -       asm volatile("lock; addl $0,-4(%%rsp)" : : : "memory", "cc")
+> >> -/* Hinders stores to be observed before older loads. */
+> >> -# define libbpf_smp_rwmb() asm volatile("" : : : "memory")
 > >
-> > You mean why LOAD.acq is not needed on the *producer* side, i.e. the
-> > ->consumer?
->
-> Yes, of course! The two words were, like, right next to each other ;)
->
-> > The ->consumer is a control dependency for the store, so there is no
-> > ordering constraint for ->consumer at producer side. If there's no
-> > space, no data is written. So, no barrier is needed there -- at least
-> > that has been my perspective.
+> > So, technically, these four are part of libbpf's API, as libbpf_util.h
+> > is actually installed on target hosts. Seems like xsk.h is the only
+> > one that is using them, though.
 > >
-> > This is very similar to the buffer in
-> > Documentation/core-api/circular-buffers.rst. Roping in Paul for some
-> > guidance.
+> > So the question is whether it's ok to remove them now?
+> >
 >
-> Yeah, I did read that, but got thrown off by this bit: "Therefore, the
-> unlock-lock pair between consecutive invocations of the consumer
-> provides the necessary ordering between the read of the index indicating
-> that the consumer has vacated a given element and the write by the
-> producer to that same element."
->
-> Since there is no lock in the XSK, what provides that guarantee here?
+> I would say that. Ideally, the barriers shouldn't be visible at all,
+> since they're only used as an implementation detail for the static
+> inline functions.
 >
 >
-> Oh, and BTW, when I re-read the rest of the comment in xsk_queue.h
-> (below the diagram you are changing in this patch), the text still talks
-> about "memory barriers" - maybe that should be updated to
-> release/acquire as well while you're changing things?
+> > And also, why wasn't this part of xsk.h in the first place?
+> >
+>
+> I guess there was a "maybe it can be useful for more than the XDP socket
+> parts of libbpf"-idea. I'll move them to xsk.h for the v2, which will
+> make the migration easier.
 >
 
-Make sense! I'll make sure to do that for the V2!
+Clarification! The reason for not having them in xsk.h, was that the
+idea was that only the APIs allowed from the application should reside
+there. IOW, libbpf_utils.h is only "implementation details". Again,
+the static-inline function messes things up. Maybe moving to an
+LTO-only world would be better, so we can get rid of the inlining all
+together.
 
-Bj=C3=B6rn
-
-> -Toke
 >
+> Bj=C3=B6rn
+>
+>
+> >> +# define libbpf_smp_store_release(p, v)                              =
+          \
+> >> +       do {                                                          =
+  \
+> >> +               asm volatile("" : : : "memory");                      =
+  \
+> >> +               WRITE_ONCE(*p, v);                                    =
+  \
+> >> +       } while (0)
+> >> +# define libbpf_smp_load_acquire(p)                                  =
+  \
+> >> +       ({                                                            =
+  \
+> >> +               typeof(*p) ___p1 =3D READ_ONCE(*p);                   =
+    \
+> >> +               asm volatile("" : : : "memory");                      =
+  \
+> >> +               ___p1;                                                =
+  \
+> >> +       })
+> >
+> > [...]
+> >
