@@ -2,186 +2,151 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.2 required=3.0 tests=BAYES_00,DATE_IN_PAST_06_12,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED227C43619
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D50B8C4361A
 	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:57:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D231964EFD
+	by mail.kernel.org (Postfix) with ESMTP id BAD1D64EFE
 	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:57:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449626AbhCCWwx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 3 Mar 2021 17:52:53 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:21094 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1835793AbhCCSEz (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 3 Mar 2021 13:04:55 -0500
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 123HsEqd136888;
-        Wed, 3 Mar 2021 13:03:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=9CISsQdf8MSiuy2ZFGtDxVRir8FLW3GgRdSNESZQ/XU=;
- b=Si0q4O7yAR7SRV86MlXXscmFpWJL14r4rN+XVIu03MHEq0KpufALgV+uS0rFUla2ujop
- UqqAE6UFoxJFaFq/McHe5CJQr9R+/PB6NJb/3pPwNPMenmRtZJqOcL+m3RT+mjB4SSzP
- U+aJ/EDHod72og1J9o6CDftkHiA9rPVE4xXJOCxoRQN+yO8Pz0pNBrs7PJ73uQRqrjmY
- HIyGGlVtdiTnqhxm+OnCg3oy1zccFgV2+PB/UT7CKwOD9vlYql2KVgIXpnPfXqj1c6XU
- Q6UMmS39XjraX5SudDcIt/qacu1NY+TT5ND9ngPX1OkYAYdBbb0hmrPDbby0ug1wR/Ld lA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 372f8w8bq6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 03 Mar 2021 13:03:43 -0500
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 123I38Fo009270;
-        Wed, 3 Mar 2021 13:03:42 -0500
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 372f8w8bjb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 03 Mar 2021 13:03:42 -0500
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 123I1qFq005464;
-        Wed, 3 Mar 2021 18:03:32 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma02fra.de.ibm.com with ESMTP id 36yj53218s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 03 Mar 2021 18:03:32 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 123I3Urf55705966
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 3 Mar 2021 18:03:30 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0B1F2A4040;
-        Wed,  3 Mar 2021 18:03:30 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 62ED6A404D;
-        Wed,  3 Mar 2021 18:03:29 +0000 (GMT)
-Received: from localhost (unknown [9.79.222.129])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  3 Mar 2021 18:03:28 +0000 (GMT)
-Date:   Wed, 3 Mar 2021 12:10:43 +0530
-From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-To:     Jiri Olsa <jolsa@redhat.com>
-Cc:     Yonghong Song <yhs@fb.com>, Jiri Olsa <jolsa@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
-        Yauheni Kaliuta <ykaliuta@redhat.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        Paul Mackerras <paulus@samba.org>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix test_attach_probe for
- powerpc uprobes
-Message-ID: <20210303064043.GB1913@DESKTOP-TDPLP67.localdomain>
-References: <20210301190416.90694-1-jolsa@kernel.org>
- <309d8d05-4bbd-56b8-6c05-12a1aa98b843@fb.com>
- <YD4U1x2SbTlJF2QU@krava>
+        id S1449612AbhCCWwp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 3 Mar 2021 17:52:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52428 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1835364AbhCCSC4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 3 Mar 2021 13:02:56 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A92C8C061761;
+        Wed,  3 Mar 2021 10:02:14 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id b15so4655955pjb.0;
+        Wed, 03 Mar 2021 10:02:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=riT8H9mkRmeNcLBWbSj2xaZmnz2sd8uAAZFerEUss6s=;
+        b=k1gnZmFqNvFY8zVbQ32Zn5q2brrM0eH8QoPKRenrLl2BH2BTZ8/1vKNyl684SUvKyg
+         YkPThbwsEuVfiYX5KPAXQPMqBTelBOICznZasCzaLPHV8kRXPL0rhEMESIG3pNhPTbJu
+         ITd7S1mppRDGjytyIwf4dPyn4m8H9Y5URMnxi5xI5NzzSkdxbNfTux8+UamyFtXskBYA
+         vD2VyK3NPkr0ohdgJjTxNtcG4IMrEGOjE8jagdf8CaDwkxrEwiD8atx5REm3QjZSqsFE
+         ANkzBvEOX6lcvYAcAJci17liTfwprAT+pW+NlyvvyDqamjPzaXlIl2186SuFw8wUTvla
+         13Hg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=riT8H9mkRmeNcLBWbSj2xaZmnz2sd8uAAZFerEUss6s=;
+        b=Q1PnQcs6+E2J/64ny0waF9nUYlqIkI/75/v6UBT5oIr9QzZg6YDbtCQnSEFdvTHlcT
+         c967P4QRH9wFsMZ5DxykEfbqMPkZ6zZHt/1dkdjMFdoutYq14xADPPwuT4zAXFktaHQv
+         osyreCuOP9QmXPlbbZ/uYSC2Gy7uupHTa54EQOR2Dd/6HBgpc2x5HuBFfdO73IDlMKw5
+         reO4X8w5I7l1A+wIVamjqdDbEAn33Xwm733yF9g9fBlDeotmnheYN8YtObkF+JoE8QBr
+         YjMEWmsccLHBoKm7DU5FNNLKvyfU38+txJSuO05aLkHq/nPSeTStjE4unZpmOGRSXspl
+         nBwQ==
+X-Gm-Message-State: AOAM533wl3s2fsHi2wofqMdEZ9HsX2F1B3t2MWB8Gctus8E50755LHLU
+        y7HCqd7/1Q19e8v9Ql/lbUqzAFyNrhGJslChXD4=
+X-Google-Smtp-Source: ABdhPJxChESi3gq2KT4ebgmcbnDgLAefshrcjnbzPI82IR+wLj0D4J+RABD8jY2B9Kz8OICufwN6k+adfr4qbtan3pQ=
+X-Received: by 2002:a17:90a:8594:: with SMTP id m20mr278590pjn.215.1614794534192;
+ Wed, 03 Mar 2021 10:02:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YD4U1x2SbTlJF2QU@krava>
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-03-03_05:2021-03-03,2021-03-03 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=38 bulkscore=0
- priorityscore=1501 adultscore=0 phishscore=0 lowpriorityscore=0
- spamscore=38 malwarescore=0 clxscore=1011 suspectscore=0 mlxscore=38
- mlxlogscore=21 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2009150000 definitions=main-2103030124
+References: <20210302023743.24123-1-xiyou.wangcong@gmail.com>
+ <20210302023743.24123-9-xiyou.wangcong@gmail.com> <258c3229-1e60-20d9-e93f-9655ae969b6e@fb.com>
+In-Reply-To: <258c3229-1e60-20d9-e93f-9655ae969b6e@fb.com>
+From:   Cong Wang <xiyou.wangcong@gmail.com>
+Date:   Wed, 3 Mar 2021 10:02:02 -0800
+Message-ID: <CAM_iQpXM+kyi=LFe0YygYuVE7kcApVGJ9f2A-D=ST2nFPusttg@mail.gmail.com>
+Subject: Re: [Patch bpf-next v2 8/9] sock_map: update sock type checks for UDP
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Linux Kernel Network Developers <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, duanxiongchun@bytedance.com,
+        Dongdong Wang <wangdongdong.6@bytedance.com>,
+        Jiang Wang <jiang.wang@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        Lorenz Bauer <lmb@cloudflare.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 2021/03/02 11:35AM, Jiri Olsa wrote:
-> On Mon, Mar 01, 2021 at 02:58:53PM -0800, Yonghong Song wrote:
-> > 
-> > 
-> > On 3/1/21 11:04 AM, Jiri Olsa wrote:
-> > > When testing uprobes we the test gets GEP (Global Entry Point)
-> > > address from kallsyms, but then the function is called locally
-> > > so the uprobe is not triggered.
-> > > 
-> > > Fixing this by adjusting the address to LEP (Local Entry Point)
-> > > for powerpc arch.
-> > > 
-> > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > > ---
-> > >   .../selftests/bpf/prog_tests/attach_probe.c    | 18 +++++++++++++++++-
-> > >   1 file changed, 17 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/tools/testing/selftests/bpf/prog_tests/attach_probe.c b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-> > > index a0ee87c8e1ea..c3cfb48d3ed0 100644
-> > > --- a/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-> > > +++ b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-> > > @@ -2,6 +2,22 @@
-> > >   #include <test_progs.h>
-> > >   #include "test_attach_probe.skel.h"
-> > > +#if defined(__powerpc64__)
+On Tue, Mar 2, 2021 at 10:37 PM Yonghong Song <yhs@fb.com> wrote:
+>
+>
+>
+> On 3/1/21 6:37 PM, Cong Wang wrote:
+> > From: Cong Wang <cong.wang@bytedance.com>
+> >
+> > Now UDP supports sockmap and redirection, we can safely update
+> > the sock type checks for it accordingly.
+> >
+> > Cc: John Fastabend <john.fastabend@gmail.com>
+> > Cc: Daniel Borkmann <daniel@iogearbox.net>
+> > Cc: Jakub Sitnicki <jakub@cloudflare.com>
+> > Cc: Lorenz Bauer <lmb@cloudflare.com>
+> > Signed-off-by: Cong Wang <cong.wang@bytedance.com>
+> > ---
+> >   net/core/sock_map.c | 5 ++++-
+> >   1 file changed, 4 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+> > index 13d2af5bb81c..f7eee4b7b994 100644
+> > --- a/net/core/sock_map.c
+> > +++ b/net/core/sock_map.c
+> > @@ -549,7 +549,10 @@ static bool sk_is_udp(const struct sock *sk)
+> >
+> >   static bool sock_map_redirect_allowed(const struct sock *sk)
+> >   {
+> > -     return sk_is_tcp(sk) && sk->sk_state != TCP_LISTEN;
+> > +     if (sk_is_tcp(sk))
+> > +             return sk->sk_state != TCP_LISTEN;
+> > +     else
+> > +             return sk->sk_state == TCP_ESTABLISHED;
+>
+> Not a networking expert, a dump question. Here we tested
+> whether sk_is_tcp(sk) or not, if not we compare
+> sk->sk_state == TCP_ESTABLISHED, could this be
+> always false? Mostly I missed something, some comments
+> here will be good.
 
-This needs to be specific to ELF v2 ABI, so you'll need to check 
-_CALL_ELF. See commit d5c2e2c17ae1d6 ("perf probe ppc64le: Prefer symbol 
-table lookup over DWARF") for an example.
+No, dgram sockets also use TCP_ESTABLISHED as a valid
+state. I know its name looks confusing, but it is already widely
+used in networking:
 
-> > > +/*
-> > > + * We get the GEP (Global Entry Point) address from kallsyms,
-> > > + * but then the function is called locally, so we need to adjust
-> > > + * the address to get LEP (Local Entry Point).
-> > 
-> > Any documentation in the kernel about this behavior? This will
-> > help to validate the change without trying with powerpc64 qemu...
+net/appletalk/ddp.c:    sk->sk_state = TCP_ESTABLISHED;
+net/appletalk/ddp.c:            if (sk->sk_state != TCP_ESTABLISHED)
+net/appletalk/ddp.c:            if (sk->sk_state != TCP_ESTABLISHED)
+net/ax25/af_ax25.c:     sk->sk_state    = TCP_ESTABLISHED;
+net/ax25/af_ax25.c:             case TCP_ESTABLISHED: /* connection
+established */
+net/ax25/af_ax25.c:     if (sk->sk_state == TCP_ESTABLISHED &&
+sk->sk_type == SOCK_SEQPACKET) {
+net/ax25/af_ax25.c:             sk->sk_state   = TCP_ESTABLISHED;
+net/ax25/af_ax25.c:     if (sk->sk_state != TCP_ESTABLISHED && (flags
+& O_NONBLOCK)) {
+net/ax25/af_ax25.c:     if (sk->sk_state != TCP_ESTABLISHED) {
+net/ax25/af_ax25.c:             if (sk->sk_state != TCP_ESTABLISHED) {
+net/ax25/af_ax25.c:             if (sk->sk_state != TCP_ESTABLISHED) {
+net/ax25/af_ax25.c:             if (sk->sk_state != TCP_ESTABLISHED) {
+net/ax25/af_ax25.c:     if (sk->sk_type == SOCK_SEQPACKET &&
+sk->sk_state != TCP_ESTABLISHED) {
+net/ax25/ax25_ds_in.c:                  ax25->sk->sk_state = TCP_ESTABLISHED;
+net/ax25/ax25_in.c:             make->sk_state = TCP_ESTABLISHED;
+net/ax25/ax25_std_in.c:                         ax25->sk->sk_state =
+TCP_ESTABLISHED;
+net/caif/caif_socket.c: CAIF_CONNECTED          = TCP_ESTABLISHED,
+net/ceph/messenger.c:   case TCP_ESTABLISHED:
+net/ceph/messenger.c:           dout("%s TCP_ESTABLISHED\n", __func__);
+net/core/datagram.c:        !(sk->sk_state == TCP_ESTABLISHED ||
+sk->sk_state == TCP_LISTEN))
+...
 
-I don't think we have documented this in the kernel anywhere, but this 
-is specific to the ELF v2 ABI and is described there:
-- 2.3.2.1.  Function Prologue: 
-  http://cdn.openpowerfoundation.org/wp-content/uploads/resources/leabi/content/dbdoclet.50655240___RefHeading___Toc377640597.html
-- 3.4.1.  Symbol Values:
-   http://cdn.openpowerfoundation.org/wp-content/uploads/resources/leabi/content/dbdoclet.50655241_95185.html
-
-> 
-> we got similar fix in perf:
-> 
-> 7b6ff0bdbf4f perf probe ppc64le: Fixup function entry if using kallsyms lookup
-> 
-> CC-ing few other folks from ppc land for more info
+Hence, I believe it is okay to use it as it is, otherwise we would need
+to comment on every use of it. ;)
 
 Thanks.
-
-> > 
-> > > + */
-> > > +#define LEP_OFFSET 8
-> > > +
-> > > +static ssize_t get_offset(ssize_t offset)
-> > > +{
-> > > +	return offset + LEP_OFFSET;
-> > > +}
-> > > +#else
-> > > +#define get_offset(offset) (offset)
-> > > +#endif
-> > > +
-> > >   ssize_t get_base_addr() {
-> > >   	size_t start, offset;
-> > >   	char buf[256];
-> > > @@ -36,7 +52,7 @@ void test_attach_probe(void)
-> > >   	if (CHECK(base_addr < 0, "get_base_addr",
-> > >   		  "failed to find base addr: %zd", base_addr))
-> > >   		return;
-> > > -	uprobe_offset = (size_t)&get_base_addr - base_addr;
-> > > +	uprobe_offset = get_offset((size_t)&get_base_addr - base_addr);
-> > >   	skel = test_attach_probe__open_and_load();
-> > >   	if (CHECK(!skel, "skel_open", "failed to open skeleton\n"))
-> > > 
-
-As documented in the links above, the right way to identify local entry 
-point (LEP) is by looking at the symbol table. Falling back to using a 
-hardcoded offset of 8 is a reasonable workaround if we don't have access 
-to the symbol table.
-
-- Naveen
-
