@@ -2,138 +2,96 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CC851C15507
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:57:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A83CC43142
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:57:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AE0D164EF9
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:57:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0D3D564EFD
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:57:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449760AbhCCWxr (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 3 Mar 2021 17:53:47 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:55505 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1343665AbhCCTmK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 3 Mar 2021 14:42:10 -0500
-Received: (qmail 1582740 invoked by uid 1000); 3 Mar 2021 14:40:54 -0500
-Date:   Wed, 3 Mar 2021 14:40:54 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     maranget <luc.maranget@inria.fr>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@gmail.com>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        parri.andrea@gmail.com, Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, boqun.feng@gmail.com,
-        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
-        akiyks@gmail.com, dlustig@nvidia.com, joel@joelfernandes.org,
-        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
-        "Karlsson, Magnus" <magnus.karlsson@intel.com>
-Subject: Re: XDP socket rings, and LKMM litmus tests
-Message-ID: <20210303194054.GB1582185@rowland.harvard.edu>
-References: <CAJ+HfNhxWFeKnn1aZw-YJmzpBuCaoeGkXXKn058GhY-6ZBDtZA@mail.gmail.com>
- <20210302211446.GA1541641@rowland.harvard.edu>
- <20210302235019.GT2696@paulmck-ThinkPad-P72>
- <20210303171221.GA1574518@rowland.harvard.edu>
- <29736B0B-9960-473C-85BB-5714F181198B@inria.fr>
+        id S1449638AbhCCWw7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 3 Mar 2021 17:52:59 -0500
+Received: from mail-qv1-f52.google.com ([209.85.219.52]:40397 "EHLO
+        mail-qv1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1386462AbhCCSPn (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 3 Mar 2021 13:15:43 -0500
+Received: by mail-qv1-f52.google.com with SMTP id x13so6230620qvj.7
+        for <bpf@vger.kernel.org>; Wed, 03 Mar 2021 10:15:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=XVI0NGqfR5lyDqvEF13m6jGa+LE885aN8fbIxk0px7w=;
+        b=BixcPMJrrk8yTSMsEL75fZzHhKtfmQROoqn4etNp6EzAh2H/50oieQbxCosl/xNN0V
+         Rn0LldHubCiO93LYYlKRvKMFLVneKly281ih44aISruQ8H77FkeqNly7SC+DNtkOKhaR
+         jfAA2o37henkRfo7W36WLD3+nVvwM2kJsLpzep4O0+GBBKiOKo8pzFPj7tPNhQORjTIT
+         gEoyufCO7suA2QiLziiA/Z4ojCnVjd9TINKfDnh5WUqIki3nnnUcCBIKPN0iiQ8HNZuq
+         CQDVhz0vzid5aclYbFkQdjY25bAhLsg8T0w7AsOCn0UvRtaYFpZUWIftvKzhd4W9n7wq
+         m5DQ==
+X-Gm-Message-State: AOAM533rQL8iWZ1dlCGHJV+M08I9mfQAtyhs12vwcjCXokVWUQ4MfUrh
+        hDHoVJ0a2VJTY9B6/Z4OWO+i5vuhNX+ayoc=
+X-Google-Smtp-Source: ABdhPJwgUh9PEvA9yn5sygKMruwkMx9Kyk8Ln8wm/hS4d2Of2RIMaU1vb88dhOi+Gg6iyUbrqEQTeg==
+X-Received: by 2002:a05:6214:18e5:: with SMTP id ep5mr453362qvb.32.1614795301301;
+        Wed, 03 Mar 2021 10:15:01 -0800 (PST)
+Received: from fujitsu.celeiro.cu ([191.96.15.91])
+        by smtp.gmail.com with ESMTPSA id z188sm14458424qke.85.2021.03.03.10.14.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Mar 2021 10:15:00 -0800 (PST)
+From:   Rafael David Tinoco <rafaeldtinoco@ubuntu.com>
+To:     vamsi@araalinetworks.com
+Cc:     andrii.nakryiko@gmail.com, rafaeldtinoco@gmail.com,
+        bpf@vger.kernel.org
+Subject: Re: [BPF CO-RE clarification] Use CO-RE on older kernel versions.
+Date:   Wed,  3 Mar 2021 15:14:57 -0300
+Message-Id: <20210303181457.172434-1-rafaeldtinoco@ubuntu.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <CADmGQ+0dDjfs6UL63m3vLAfu+GHgSFdMO+Rmz_jk+0R9Wva2Tw@mail.gmail.com>
+References: <CADmGQ+0dDjfs6UL63m3vLAfu+GHgSFdMO+Rmz_jk+0R9Wva2Tw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <29736B0B-9960-473C-85BB-5714F181198B@inria.fr>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Mar 03, 2021 at 06:37:36PM +0100, maranget wrote:
-> 
-> 
-> > On 3 Mar 2021, at 18:12, Alan Stern <stern@rowland.harvard.edu> wrote:
-> > 
-> > On Tue, Mar 02, 2021 at 03:50:19PM -0800, Paul E. McKenney wrote:
-> >> On Tue, Mar 02, 2021 at 04:14:46PM -0500, Alan Stern wrote:
-> > 
-> >>> This result is wrong, apparently because of a bug in herd7.  There 
-> >>> should be control dependencies from each of the two loads in P0 to each 
-> >>> of the two stores, but herd7 doesn't detect them.
-> >>> 
-> >>> Maybe Luc can find some time to check whether this really is a bug and 
-> >>> if it is, fix it.
-> >> 
-> >> I agree that herd7's control dependency tracking could be improved.
-> >> 
-> >> But sadly, it is currently doing exactly what I asked Luc to make it do,
-> >> which is to confine the control dependency to its "if" statement.  But as
-> >> usual I wasn't thinking globally enough.  And I am not exactly sure what
-> >> to ask for.  Here a store to a local was control-dependency ordered after
-> >> a read, and so that should propagate to a read from that local variable.
-> >> Maybe treat local variables as if they were registers, so that from
-> >> herd7's viewpoint the READ_ONCE()s are able to head control-dependency
-> >> chains in multiple "if" statements?
-> >> 
-> >> Thoughts?
-> > 
-> > Local variables absolutely should be treated just like CPU registers, if 
-> > possible.  In fact, the compiler has the option of keeping local 
-> > variables stored in registers.
-> > 
-> 
-> And indeed local variables are treated as registers by herd7.
-> 
-> 
-> > (Of course, things may get complicated if anyone writes a litmus test 
-> > that uses a pointer to a local variable,  Especially if the pointer 
-> > could hold the address of a local variable in one execution and a 
-> > shared variable in another!  Or if the pointer is itself a shared 
-> > variable and is dereferenced in another thread!)
-> > 
-> > But even if local variables are treated as non-shared storage locations, 
-> > we should still handle this correctly.  Part of the problem seems to lie 
-> > in the definition of the to-r dependency relation; the relevant portion 
-> > is:
-> 
-> In fact, I’d rather change the computation of “dep” here control-dependency “ctrl”. Notice that “ctrl” is computed by herd7 and present in the initial environment of the Cat interpreter.
-> 
-> I have made a PR to herd7 that performs the change. The commit message states the new definition.
+> > From:   Vamsi Kodavanty <vamsi@araalinetworks.com>
+> > Date:   Thu, 7 Jan 2021 17:31:11 -0800
+> > To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+> > Cc:     bpf <bpf@vger.kernel.org>
+> >
+> >
+> > Right. Libbpf only supports a newer and safer way to attach to
+> > kprobes. For your experiments, try to stick to tracepoints and you'll
+> > have a better time.
+> >
+> > But it's another thing I've been meaning to add to libbpf for
+> > supporting older kernels. I even have code written to do legacy kprobe
+> > attachment, just need to find time to send a patch to add it as a
+> > fallback for kernels that don't support new kprobe interface.
 
-Shouldn't similar reasoning apply to data and address dependencies?
+Initially I'd like to thank you *a lot* for this thread, it helped me
+creating:
 
-For example, suppose there is a control dependency from a load to a 
-register variable, and then a data dependency from the register variable 
-to a store.  This should be treated as an overall data dependency from 
-the load to the store.
+https://github.com/rafaeldtinoco/portablebpf
 
-Does your change to herd7 do this?  I couldn't tell from the description 
-in the PR.
+showing up exactly what was discussed here AND I could run the same
+binary in v4.15 and v.5.8 kernels as long as BTF was generated with:
 
-Also, do you think it's reasonable to add a restriction to herd7 against 
-taking the address of a local variable?
+https://github.com/rafaeldtinoco/portablebpf/blob/master/patches/link-vmlinux.sh.patch
 
-> > 	(dep ; [Marked] ; rfi)
-> > 
-> > Here dep is the control dependency from the READ_ONCE to the 
-> > local-variable store, and the rfi refers to the following load of the 
-> > local variable.  The problem is that the store to the local variable 
-> > doesn't go in the Marked class, because it is notated as a plain C 
-> > assignment.  (And likewise for the following load.)
-> > 
-> This is a related issue, I am not sure, but perhaps it can be formulated as
-> "should rfi and rf on registers behave the  same?”
+Specially the attach_kprobe_legacy() function:
 
-Aren't they already the same thing?  It's not possible to have an rfe 
-from a register, is it?
+https://github.com/rafaeldtinoco/portablebpf/blob/master/mine.c#L31
 
-Alan
+I wanted to reply here in case others also face this.
 
-> > Should we change the model to make loads from and stores to local 
-> > variables always count as Marked?
-> > 
-> > What should have happened if the local variable were instead a shared 
-> > variable which the other thread didn't access at all?  It seems like a 
-> > weak point of the memory model that it treats these two things 
-> > differently.
-> > 
-> > Alan
+Only bad thing was kernel v4.15 missed global data support as showed in:
+
+https://github.com/iovisor/bcc/blob/master/docs/kernel-versions.md
+
+But using perf event was good enough for an example.
+
+- rafaeldtinoco
