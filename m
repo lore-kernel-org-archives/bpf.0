@@ -5,148 +5,224 @@ X-Spam-Level:
 X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D50B8C4361A
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:57:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E91CCC433E6
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:57:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BAD1D64EFE
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:57:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C8E0F64EF9
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:57:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449612AbhCCWwp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 3 Mar 2021 17:52:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52428 "EHLO
+        id S1449654AbhCCWxR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 3 Mar 2021 17:53:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1835364AbhCCSC4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 3 Mar 2021 13:02:56 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A92C8C061761;
-        Wed,  3 Mar 2021 10:02:14 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id b15so4655955pjb.0;
-        Wed, 03 Mar 2021 10:02:14 -0800 (PST)
+        with ESMTP id S1350696AbhCCTHC (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 3 Mar 2021 14:07:02 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0DC2C061760
+        for <bpf@vger.kernel.org>; Wed,  3 Mar 2021 10:54:16 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id dx17so16701242ejb.2
+        for <bpf@vger.kernel.org>; Wed, 03 Mar 2021 10:54:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=riT8H9mkRmeNcLBWbSj2xaZmnz2sd8uAAZFerEUss6s=;
-        b=k1gnZmFqNvFY8zVbQ32Zn5q2brrM0eH8QoPKRenrLl2BH2BTZ8/1vKNyl684SUvKyg
-         YkPThbwsEuVfiYX5KPAXQPMqBTelBOICznZasCzaLPHV8kRXPL0rhEMESIG3pNhPTbJu
-         ITd7S1mppRDGjytyIwf4dPyn4m8H9Y5URMnxi5xI5NzzSkdxbNfTux8+UamyFtXskBYA
-         vD2VyK3NPkr0ohdgJjTxNtcG4IMrEGOjE8jagdf8CaDwkxrEwiD8atx5REm3QjZSqsFE
-         ANkzBvEOX6lcvYAcAJci17liTfwprAT+pW+NlyvvyDqamjPzaXlIl2186SuFw8wUTvla
-         13Hg==
+        bh=YKFQH6E0yNZuowlitL0N34JlWPD6X2Se55p2GC5RTco=;
+        b=D2z0Gn99jifSpH4aD3vxwF1HsZhUEo7ZHIWKKwlftOgsXvzJy4CR9j1e7VGpMTpkzk
+         DZjltsb8hsZ6COVcSSf54oRduRqNS7HwYj0d3+nYyJet5DRWaUAokYRbA21zGi0HMGw6
+         icJDbi7zzceq1odFUJaaCO+0k8xJW974siTZFpSLH4a30gCdEjVxdBC7UBRiZvF53oWD
+         8qHDkxX4aWd3FCScLKj6sniICzf7CXnKV+HP/9mehA0vUP+/NNIIAUGyKm8G/Mp+ESOG
+         LV/4SOlxOCrrop84PalOIbCYRgU4bZ36CRmNPa6wlNOfx8eVLEDpBdPyFo0z+3BRF3kY
+         y46A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=riT8H9mkRmeNcLBWbSj2xaZmnz2sd8uAAZFerEUss6s=;
-        b=Q1PnQcs6+E2J/64ny0waF9nUYlqIkI/75/v6UBT5oIr9QzZg6YDbtCQnSEFdvTHlcT
-         c967P4QRH9wFsMZ5DxykEfbqMPkZ6zZHt/1dkdjMFdoutYq14xADPPwuT4zAXFktaHQv
-         osyreCuOP9QmXPlbbZ/uYSC2Gy7uupHTa54EQOR2Dd/6HBgpc2x5HuBFfdO73IDlMKw5
-         reO4X8w5I7l1A+wIVamjqdDbEAn33Xwm733yF9g9fBlDeotmnheYN8YtObkF+JoE8QBr
-         YjMEWmsccLHBoKm7DU5FNNLKvyfU38+txJSuO05aLkHq/nPSeTStjE4unZpmOGRSXspl
-         nBwQ==
-X-Gm-Message-State: AOAM533wl3s2fsHi2wofqMdEZ9HsX2F1B3t2MWB8Gctus8E50755LHLU
-        y7HCqd7/1Q19e8v9Ql/lbUqzAFyNrhGJslChXD4=
-X-Google-Smtp-Source: ABdhPJxChESi3gq2KT4ebgmcbnDgLAefshrcjnbzPI82IR+wLj0D4J+RABD8jY2B9Kz8OICufwN6k+adfr4qbtan3pQ=
-X-Received: by 2002:a17:90a:8594:: with SMTP id m20mr278590pjn.215.1614794534192;
- Wed, 03 Mar 2021 10:02:14 -0800 (PST)
+        bh=YKFQH6E0yNZuowlitL0N34JlWPD6X2Se55p2GC5RTco=;
+        b=ZV2XJQR5Rm4eJ+6Mg9wrh3JYnovfAxPZzAZAI51Fble911Yy6CQT2W3ejuI3HsQBzy
+         AsCocpJj7xQNIWF38ga5INOTAbK0fbGseS2oz6c+VdB+yD/6K+z94hX0SOsermsfNyUH
+         CvyyAk+YDIxMQmOK5Q3X/wPGnielPsY+BRpguEHws3C3uIvbW/+UTKAoczHC2a40txdN
+         R5trsbLjVvHkApHDaPF790cbjU4TUANhb81nPToJ4TaHt4zzvRG1uZ3jI3znIXthyzJ+
+         CnYdkcbDb40KDI3S9YOgRKrqpe3OEbwA/LmOTJsR1+7ftcfPQZY3rGfsdb8DQcUvthWu
+         xyTQ==
+X-Gm-Message-State: AOAM530IH953mk0tEIdrjrdL40hdAea3FWJDpblDMfAXmOhHXcmHybbk
+        WmmnYSQPw6lOxyzbSHl8kQ8bXi/pdcA=
+X-Google-Smtp-Source: ABdhPJyt/LtIrwPSk1fb7MFNFKDwPfT40aJyC/eDIiIc71+bhV7FAY2rVu+4RXn52YeSBKKn/V6PsQ==
+X-Received: by 2002:a17:907:9862:: with SMTP id ko2mr266967ejc.222.1614797654404;
+        Wed, 03 Mar 2021 10:54:14 -0800 (PST)
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com. [209.85.128.48])
+        by smtp.gmail.com with ESMTPSA id bx24sm8868701ejc.88.2021.03.03.10.54.12
+        for <bpf@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Mar 2021 10:54:12 -0800 (PST)
+Received: by mail-wm1-f48.google.com with SMTP id m1so7317811wml.2
+        for <bpf@vger.kernel.org>; Wed, 03 Mar 2021 10:54:12 -0800 (PST)
+X-Received: by 2002:a05:600c:198c:: with SMTP id t12mr330047wmq.183.1614797651850;
+ Wed, 03 Mar 2021 10:54:11 -0800 (PST)
 MIME-Version: 1.0
-References: <20210302023743.24123-1-xiyou.wangcong@gmail.com>
- <20210302023743.24123-9-xiyou.wangcong@gmail.com> <258c3229-1e60-20d9-e93f-9655ae969b6e@fb.com>
-In-Reply-To: <258c3229-1e60-20d9-e93f-9655ae969b6e@fb.com>
-From:   Cong Wang <xiyou.wangcong@gmail.com>
-Date:   Wed, 3 Mar 2021 10:02:02 -0800
-Message-ID: <CAM_iQpXM+kyi=LFe0YygYuVE7kcApVGJ9f2A-D=ST2nFPusttg@mail.gmail.com>
-Subject: Re: [Patch bpf-next v2 8/9] sock_map: update sock type checks for UDP
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Linux Kernel Network Developers <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, duanxiongchun@bytedance.com,
-        Dongdong Wang <wangdongdong.6@bytedance.com>,
-        Jiang Wang <jiang.wang@bytedance.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        Lorenz Bauer <lmb@cloudflare.com>
+References: <20210303123338.99089-1-hxseverything@gmail.com>
+In-Reply-To: <20210303123338.99089-1-hxseverything@gmail.com>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Wed, 3 Mar 2021 13:53:34 -0500
+X-Gmail-Original-Message-ID: <CA+FuTSfY0y7Y2XSKO-rqPY5mX83NWgAWbQeVukFA94eJVu2B2g@mail.gmail.com>
+Message-ID: <CA+FuTSfY0y7Y2XSKO-rqPY5mX83NWgAWbQeVukFA94eJVu2B2g@mail.gmail.com>
+Subject: Re: [PATCH/v4] bpf: add bpf_skb_adjust_room flag BPF_F_ADJ_ROOM_ENCAP_L2_ETH
+To:     Xuesen Huang <hxseverything@gmail.com>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        David Miller <davem@davemloft.net>, bpf <bpf@vger.kernel.org>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Network Development <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Xuesen Huang <huangxuesen@kuaishou.com>,
+        Zhiyong Cheng <chengzhiyong@kuaishou.com>,
+        Li Wang <wangli09@kuaishou.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Mar 2, 2021 at 10:37 PM Yonghong Song <yhs@fb.com> wrote:
+On Wed, Mar 3, 2021 at 7:33 AM Xuesen Huang <hxseverything@gmail.com> wrote:
 >
+> From: Xuesen Huang <huangxuesen@kuaishou.com>
 >
+> bpf_skb_adjust_room sets the inner_protocol as skb->protocol for packets
+> encapsulation. But that is not appropriate when pushing Ethernet header.
 >
-> On 3/1/21 6:37 PM, Cong Wang wrote:
-> > From: Cong Wang <cong.wang@bytedance.com>
-> >
-> > Now UDP supports sockmap and redirection, we can safely update
-> > the sock type checks for it accordingly.
-> >
-> > Cc: John Fastabend <john.fastabend@gmail.com>
-> > Cc: Daniel Borkmann <daniel@iogearbox.net>
-> > Cc: Jakub Sitnicki <jakub@cloudflare.com>
-> > Cc: Lorenz Bauer <lmb@cloudflare.com>
-> > Signed-off-by: Cong Wang <cong.wang@bytedance.com>
-> > ---
-> >   net/core/sock_map.c | 5 ++++-
-> >   1 file changed, 4 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-> > index 13d2af5bb81c..f7eee4b7b994 100644
-> > --- a/net/core/sock_map.c
-> > +++ b/net/core/sock_map.c
-> > @@ -549,7 +549,10 @@ static bool sk_is_udp(const struct sock *sk)
-> >
-> >   static bool sock_map_redirect_allowed(const struct sock *sk)
-> >   {
-> > -     return sk_is_tcp(sk) && sk->sk_state != TCP_LISTEN;
-> > +     if (sk_is_tcp(sk))
-> > +             return sk->sk_state != TCP_LISTEN;
-> > +     else
-> > +             return sk->sk_state == TCP_ESTABLISHED;
+> Add an option to further specify encap L2 type and set the inner_protocol
+> as ETH_P_TEB.
 >
-> Not a networking expert, a dump question. Here we tested
-> whether sk_is_tcp(sk) or not, if not we compare
-> sk->sk_state == TCP_ESTABLISHED, could this be
-> always false? Mostly I missed something, some comments
-> here will be good.
+> Update test_tc_tunnel to verify adding vxlan encapsulation works with
+> this flag.
+>
+> Suggested-by: Willem de Bruijn <willemb@google.com>
+> Signed-off-by: Xuesen Huang <huangxuesen@kuaishou.com>
+> Signed-off-by: Zhiyong Cheng <chengzhiyong@kuaishou.com>
+> Signed-off-by: Li Wang <wangli09@kuaishou.com>
 
-No, dgram sockets also use TCP_ESTABLISHED as a valid
-state. I know its name looks confusing, but it is already widely
-used in networking:
+Thanks for adding the test. Perhaps that is better in a separate patch?
 
-net/appletalk/ddp.c:    sk->sk_state = TCP_ESTABLISHED;
-net/appletalk/ddp.c:            if (sk->sk_state != TCP_ESTABLISHED)
-net/appletalk/ddp.c:            if (sk->sk_state != TCP_ESTABLISHED)
-net/ax25/af_ax25.c:     sk->sk_state    = TCP_ESTABLISHED;
-net/ax25/af_ax25.c:             case TCP_ESTABLISHED: /* connection
-established */
-net/ax25/af_ax25.c:     if (sk->sk_state == TCP_ESTABLISHED &&
-sk->sk_type == SOCK_SEQPACKET) {
-net/ax25/af_ax25.c:             sk->sk_state   = TCP_ESTABLISHED;
-net/ax25/af_ax25.c:     if (sk->sk_state != TCP_ESTABLISHED && (flags
-& O_NONBLOCK)) {
-net/ax25/af_ax25.c:     if (sk->sk_state != TCP_ESTABLISHED) {
-net/ax25/af_ax25.c:             if (sk->sk_state != TCP_ESTABLISHED) {
-net/ax25/af_ax25.c:             if (sk->sk_state != TCP_ESTABLISHED) {
-net/ax25/af_ax25.c:             if (sk->sk_state != TCP_ESTABLISHED) {
-net/ax25/af_ax25.c:     if (sk->sk_type == SOCK_SEQPACKET &&
-sk->sk_state != TCP_ESTABLISHED) {
-net/ax25/ax25_ds_in.c:                  ax25->sk->sk_state = TCP_ESTABLISHED;
-net/ax25/ax25_in.c:             make->sk_state = TCP_ESTABLISHED;
-net/ax25/ax25_std_in.c:                         ax25->sk->sk_state =
-TCP_ESTABLISHED;
-net/caif/caif_socket.c: CAIF_CONNECTED          = TCP_ESTABLISHED,
-net/ceph/messenger.c:   case TCP_ESTABLISHED:
-net/ceph/messenger.c:           dout("%s TCP_ESTABLISHED\n", __func__);
-net/core/datagram.c:        !(sk->sk_state == TCP_ESTABLISHED ||
-sk->sk_state == TCP_LISTEN))
-...
+Overall looks great to me.
 
-Hence, I believe it is okay to use it as it is, otherwise we would need
-to comment on every use of it. ;)
+The patch has not (yet?) arrived on patchwork.
 
-Thanks.
+>  enum {
+> diff --git a/tools/testing/selftests/bpf/progs/test_tc_tunnel.c b/tools/testing/selftests/bpf/progs/test_tc_tunnel.c
+> index 37bce7a..6e144db 100644
+> --- a/tools/testing/selftests/bpf/progs/test_tc_tunnel.c
+> +++ b/tools/testing/selftests/bpf/progs/test_tc_tunnel.c
+> @@ -20,6 +20,14 @@
+>  #include <bpf/bpf_endian.h>
+>  #include <bpf/bpf_helpers.h>
+>
+> +#define encap_ipv4(...) __encap_ipv4(__VA_ARGS__, 0)
+> +
+> +#define encap_ipv4_with_ext_proto(...) __encap_ipv4(__VA_ARGS__)
+> +
+> +#define encap_ipv6(...) __encap_ipv6(__VA_ARGS__, 0)
+> +
+> +#define encap_ipv6_with_ext_proto(...) __encap_ipv6(__VA_ARGS__)
+> +
+
+Instead of untyped macros, I'd define encap_ipv4 as a function that
+calls __encap_ipv4.
+
+And no need for encap_ipv4_with_ext_proto equivalent to __encap_ipv4.
+
+>  static const int cfg_port = 8000;
+>
+>  static const int cfg_udp_src = 20000;
+> @@ -27,11 +35,24 @@
+>  #define        UDP_PORT                5555
+>  #define        MPLS_OVER_UDP_PORT      6635
+>  #define        ETH_OVER_UDP_PORT       7777
+> +#define        VXLAN_UDP_PORT          8472
+> +
+> +#define        EXTPROTO_VXLAN  0x1
+> +
+> +#define        VXLAN_N_VID     (1u << 24)
+> +#define        VXLAN_VNI_MASK  bpf_htonl((VXLAN_N_VID - 1) << 8)
+> +#define        VXLAN_FLAGS     0x8
+> +#define        VXLAN_VNI       1
+>
+>  /* MPLS label 1000 with S bit (last label) set and ttl of 255. */
+>  static const __u32 mpls_label = __bpf_constant_htonl(1000 << 12 |
+>                                                      MPLS_LS_S_MASK | 0xff);
+>
+> +struct vxlanhdr {
+> +       __be32 vx_flags;
+> +       __be32 vx_vni;
+> +} __attribute__((packed));
+> +
+>  struct gre_hdr {
+>         __be16 flags;
+>         __be16 protocol;
+> @@ -45,13 +66,13 @@ struct gre_hdr {
+>  struct v4hdr {
+>         struct iphdr ip;
+>         union l4hdr l4hdr;
+> -       __u8 pad[16];                   /* enough space for L2 header */
+> +       __u8 pad[24];                   /* space for L2 header / vxlan header ... */
+
+could we use something like sizeof(..) instead of a constant?
+
+> @@ -171,14 +197,26 @@ static __always_inline int encap_ipv4(struct __sk_buff *skb, __u8 encap_proto,
+>         }
+>
+>         /* add L2 encap (if specified) */
+> +       l2_hdr = (__u8 *)&h_outer + olen;
+>         switch (l2_proto) {
+>         case ETH_P_MPLS_UC:
+> -               *((__u32 *)((__u8 *)&h_outer + olen)) = mpls_label;
+> +               *(__u32 *)l2_hdr = mpls_label;
+>                 break;
+>         case ETH_P_TEB:
+> -               if (bpf_skb_load_bytes(skb, 0, (__u8 *)&h_outer + olen,
+> -                                      ETH_HLEN))
+
+This is non-standard indentation? Here and elsewhere.
+
+> @@ -249,7 +288,11 @@ static __always_inline int encap_ipv6(struct __sk_buff *skb, __u8 encap_proto,
+>                 break;
+>         case ETH_P_TEB:
+>                 l2_len = ETH_HLEN;
+> -               udp_dst = ETH_OVER_UDP_PORT;
+> +               if (ext_proto & EXTPROTO_VXLAN) {
+> +                       udp_dst = VXLAN_UDP_PORT;
+> +                       l2_len += sizeof(struct vxlanhdr);
+> +               } else
+> +                       udp_dst = ETH_OVER_UDP_PORT;
+>                 break;
+>         }
+>         flags |= BPF_F_ADJ_ROOM_ENCAP_L2(l2_len);
+> @@ -267,7 +310,7 @@ static __always_inline int encap_ipv6(struct __sk_buff *skb, __u8 encap_proto,
+>                 h_outer.l4hdr.udp.source = __bpf_constant_htons(cfg_udp_src);
+>                 h_outer.l4hdr.udp.dest = bpf_htons(udp_dst);
+>                 tot_len = bpf_ntohs(iph_inner.payload_len) + sizeof(iph_inner) +
+> -                         sizeof(h_outer.l4hdr.udp);
+> +                         sizeof(h_outer.l4hdr.udp) + l2_len;
+
+Was this a bug previously?
+
+>                 h_outer.l4hdr.udp.check = 0;
+>                 h_outer.l4hdr.udp.len = bpf_htons(tot_len);
+>                 break;
+> @@ -278,13 +321,24 @@ static __always_inline int encap_ipv6(struct __sk_buff *skb, __u8 encap_proto,
+>         }
+>
+>         /* add L2 encap (if specified) */
+> +       l2_hdr = (__u8 *)&h_outer + olen;
+>         switch (l2_proto) {
+>         case ETH_P_MPLS_UC:
+> -               *((__u32 *)((__u8 *)&h_outer + olen)) = mpls_label;
+> +               *(__u32 *)l2_hdr = mpls_label;
+>                 break;
+>         case ETH_P_TEB:
+> -               if (bpf_skb_load_bytes(skb, 0, (__u8 *)&h_outer + olen,
+> -                                      ETH_HLEN))
+> +               flags |= BPF_F_ADJ_ROOM_ENCAP_L2_ETH;
+
+This is a change also for the existing case. Correctly so, I imagine.
+But the test used to pass with the wrong protocol?
