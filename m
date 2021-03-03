@@ -2,168 +2,172 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,
-	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.2 required=3.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B1CBAC43603
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:57:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 21F00C4361B
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:57:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8273564EFE
+	by mail.kernel.org (Postfix) with ESMTP id EAD3A64EFE
 	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:57:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449572AbhCCWwk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 3 Mar 2021 17:52:40 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:34646 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237886AbhCCRkd (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 3 Mar 2021 12:40:33 -0500
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 123HYXAT030242;
-        Wed, 3 Mar 2021 09:38:26 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=facebook; bh=lE3powfXxCGNkmQKaElXuHgkFpqsjpKhtBk2N7ePnUw=;
- b=l6FHKBqW0STlOeNYXSNupBwc8613J8CDNB49VvdKNFhEc2BJU9N+WCY8eNZ8ZPUaJ453
- Oje8W/9V/xIJCkyrSMeBP+SIfUOzJOZ5Sa3wWhhp6a4qKeLNjHrNfDIxMRbEhzceJbIY
- 8xd+TYrcz3IA1xqXn5m40Ns05VLs6Fia9iU= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 371k6ps19s-5
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Wed, 03 Mar 2021 09:38:25 -0800
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (100.104.98.9) by
- o365-in.thefacebook.com (100.104.94.228) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 3 Mar 2021 09:38:23 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ey42Tm8Vwzns5m6KeYVNUipLiep3Nr8B2R+tp3Dmhk76MahDkRgfqu14g/9vqr8tWVDHhl3RSxCFAY4HYT7bjc/yRvExG2MDrRoJJ5LPHPKeO9o+pkPc3Mx4M41AguXgTg7lm/1ak3KR35dHQASJPIBPZo5DOhsQrvgYPpgM9g3x7e6YxXqQ55a6sKG6CrpQjVRDyjJyPwE/ItEPjfLByJ01B0jkraY0IpbTNCqfglyDxYT8ZnEs66GPpN9FOMew+j9WmDXKEuFUY2XeyXg1AJfC1IJ7G6B+BVoJIdFWNEaFxLya7zJo+cx7+BfAKDfTe6oZBe0/GFhEkraS0Gb5/g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lE3powfXxCGNkmQKaElXuHgkFpqsjpKhtBk2N7ePnUw=;
- b=oLUO9YtqlmAfQ7iR4HWwwlCZGEe15kCein7FjDXsHLnPGf5Thln2d9y6mLJuZBD0m9Vk2QONxj4cW98Cn1r/Mwv4/992kihMv2R7XN1Ru1O9aDDWkSkAGCNlIi08b2vtQ4sx9SwU0RQ78upYsuZeZsK09s84uX0xYk4g7r+X15p88BsyfOZ6gbhOIj8rCbMubxvJIjNtYJVu5ijV3qlqrIWaQZmOIbKXSQorEYJT9KJ2tZIjZpV/03gAyhVgIHfv3TjdALcux4zBG7IIgD6EyWKZyndoUX6NQRMM4KiassQRfvs3eHH25f0p25SUH5ABhHjoq+HqLaJ4dEdWgY+OnA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Authentication-Results: google.com; dkim=none (message not signed)
- header.d=none;google.com; dmarc=none action=none header.from=fb.com;
-Received: from BY5PR15MB3571.namprd15.prod.outlook.com (2603:10b6:a03:1f6::32)
- by SJ0PR15MB4204.namprd15.prod.outlook.com (2603:10b6:a03:2c8::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3890.20; Wed, 3 Mar
- 2021 17:38:22 +0000
-Received: from BY5PR15MB3571.namprd15.prod.outlook.com
- ([fe80::2975:c9d8:3f7f:dbd0]) by BY5PR15MB3571.namprd15.prod.outlook.com
- ([fe80::2975:c9d8:3f7f:dbd0%5]) with mapi id 15.20.3890.028; Wed, 3 Mar 2021
- 17:38:22 +0000
-Date:   Wed, 3 Mar 2021 09:38:20 -0800
-From:   Martin KaFai Lau <kafai@fb.com>
-To:     Brendan Jackman <jackmanb@google.com>
-CC:     <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+        id S1449635AbhCCWw4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 3 Mar 2021 17:52:56 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:12882 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S243486AbhCCSNL (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 3 Mar 2021 13:13:11 -0500
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 123I4hAG029853;
+        Wed, 3 Mar 2021 13:10:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=mEmRB0j8W52c3PpFWBUGKZMFICC3DxY/s7hE9M/toeg=;
+ b=QT0aLA6TRqU3KmEf5W8ysrkdBSPYWd7ulRjYnj0Jd2eeyV1tjuo/yQQQSFobXSVlsybi
+ xy92n1fTqQ2GHOIr+o0vfbhyEHyve9mV2IwKUsY76MRao/ULMse9dLmY7OryfPc5r23V
+ mbYX/+eF6GQF83tuYZEfcSWTcZ2LxvL3C/jERsVn+HyO1Whe1Y0jPgkIJ7E0s44TsFfl
+ pa144roxOWQ/CF66WrilG3FprOjfId3ewtTg1bXnxp1ShABkzV6sUpqSEp32hFs5lqDl
+ Ih9C1BEkYvH2LFENLV4fQblunDnmmftP4/yFH+sYwv1BtS2bDWxX+PxZ0QK5hfCc7gtX Jg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 372f8y0fyd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 03 Mar 2021 13:10:29 -0500
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 123I53tL031927;
+        Wed, 3 Mar 2021 13:10:29 -0500
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 372f8y0fwt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 03 Mar 2021 13:10:29 -0500
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 123I3TqV025328;
+        Wed, 3 Mar 2021 18:05:26 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma04ams.nl.ibm.com with ESMTP id 3712fmj0vy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 03 Mar 2021 18:05:26 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 123I5NFn16908574
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 3 Mar 2021 18:05:24 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DE2BFA4053;
+        Wed,  3 Mar 2021 18:05:23 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 40DD8A404D;
+        Wed,  3 Mar 2021 18:05:23 +0000 (GMT)
+Received: from localhost (unknown [9.79.222.129])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  3 Mar 2021 18:05:23 +0000 (GMT)
+Date:   Wed, 3 Mar 2021 12:12:39 +0530
+From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Jiri Olsa <jolsa@redhat.com>,
         Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@chromium.org>,
-        Florent Revest <revest@chromium.org>,
-        Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: Re: [PATCH v6 bpf-next] bpf: Explicitly zero-extend R0 after 32-bit
- cmpxchg
-Message-ID: <20210303173820.hldpcrmnrqvirbqf@kafai-mbp.dhcp.thefacebook.com>
-References: <20210303110402.3965626-1-jackmanb@google.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20210303110402.3965626-1-jackmanb@google.com>
-X-Originating-IP: [2620:10d:c090:400::5:2266]
-X-ClientProxiedBy: SJ0PR05CA0160.namprd05.prod.outlook.com
- (2603:10b6:a03:339::15) To BY5PR15MB3571.namprd15.prod.outlook.com
- (2603:10b6:a03:1f6::32)
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from kafai-mbp.dhcp.thefacebook.com (2620:10d:c090:400::5:2266) by SJ0PR05CA0160.namprd05.prod.outlook.com (2603:10b6:a03:339::15) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3912.9 via Frontend Transport; Wed, 3 Mar 2021 17:38:22 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 028ed2bd-d6fd-4f89-b1da-08d8de6b242d
-X-MS-TrafficTypeDiagnostic: SJ0PR15MB4204:
-X-Microsoft-Antispam-PRVS: <SJ0PR15MB42047A61A147CB75B429FAA8D5989@SJ0PR15MB4204.namprd15.prod.outlook.com>
-X-FB-Source: Internal
-X-MS-Oob-TLC-OOBClassifiers: OLM:4714;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: raIsWub/bjwhcvYQ6lTPY4Mr8u9r6HGMi+ccr8usO09yL6ZXlg3B+E7IWVOwUZ4FOtZDxVGTbf5/6snmi9G8UHH3P44MUfN3OEqKvkD5WpYXbkypMhqz90E6lOTKDeAdnK9ujRh3kSXhZ7/D2opV7YAHbsP2uHWwf9uD+U/jaQIP6m1lU3WfnGFLwCFIkWcelHaZ47L3TGhwA8A0dhU7wmabasCSK474cyIwIcw9k/GCYmrUf9TCOR7sSWS/fu/QoXMictCWZSwR9t6aIDinLRQQtjTCLtedRhBDOTrOU4mVDppDGu3M/5vMh1mte6nYiddJP6scwfu1xC9xHnOcTEEIacst4eZ8K0Bw+r2fkbyE61hhLHu8DQzWMcHobg72fQMiKvNFQgrkBaOVy6ZJE4kdKMx5a+HUjqfNGt0RVaa/5z+WA+Ps/B7s0RcGyO3yQ6q//p/fzJEWyoHqyRuXb7A2PK0rcG0GYJrfGOrDMkmFxH8PJjNtLRwUcSeu9A3Pi88T2lrbqKybGrNt+RrIRY5mFzawQTEhTmZchGBjeK1nt+iooDrfLrNT8LqT4xhbYTinRaZnIDjKm6gtr4oUSOyyun0lGbHqOqN/9pAZkGIqHu5ld6+fUdXHXyw9FQC8CGkOtjW/G7WVFeQaCFEb9myj8vs8PyfuLj4upuJQWXY=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR15MB3571.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(39860400002)(396003)(376002)(346002)(136003)(366004)(2906002)(16526019)(66946007)(5660300002)(55016002)(6506007)(66556008)(966005)(86362001)(8676002)(9686003)(478600001)(1076003)(3716004)(52116002)(7696005)(6916009)(186003)(4326008)(8936002)(316002)(54906003)(66476007)(17423001)(156123004);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?zi3bbn+aTqeQhBAVhr4avNM4cyn3EYbCGTTkiUIWhFO35qrb0XZxiOLlUq1o?=
- =?us-ascii?Q?HaHBQdpJ8duOh1faDpql+tEuiM39ZdZEwIslEONd46i5p1fLEObwE0uiAszZ?=
- =?us-ascii?Q?nrArhTI8VVwrSKbFlKdYxmNQ2QLlafQhbh3vHPgtraMtyC3k4kiyhrwNEH7E?=
- =?us-ascii?Q?gCLdYh+RC0IGsR9iwXi0ew2HPUn4zc8UMmnVxpxxy5maeDIBxa28j2DxNK3Q?=
- =?us-ascii?Q?h0N8q/dfxzZYbQE8aNVmnPKyIL+nlSO0HLyo+eqq2WXR/dMQMPZO1cIidSs+?=
- =?us-ascii?Q?gtgyxQlgo9TeWRE1/s+UWL2py5NIH0sogZu9Gdx4EOBxx/+e4XccnGrt6JoS?=
- =?us-ascii?Q?Wg7h9ts1JZMRM2nI0iLtHBl3tYCAvog4Pw5y0/iNsYbulTIF539k7Uu1X+2m?=
- =?us-ascii?Q?tPQqC8foQCpjALUeCjLSKNBNHCCWxum5CH8C/97gVEt2ZTL6Xiq/kfUf5wHH?=
- =?us-ascii?Q?wxYmqrSDgNL2OA3l0ub6ORdeIFVsKUbX97VraBwZrZ5hJBjWkoycwUkHHS8u?=
- =?us-ascii?Q?VKP89gkyDvH0oAeGsdJ/hZuAXlBFj11w9sbYySfsnz2XL/2EgMixK+NUc/oN?=
- =?us-ascii?Q?6hd84LqAF5QTvKmGdjdgZ8BPsjL9gcwjbUOfftEPWg4A93Nra5g14JpX/cVB?=
- =?us-ascii?Q?y3Z4DIJmvjjM8FhDSba0U2hXxu6rJbW8JEtAzY70yLWpcvhpaGpJrhU+IVzd?=
- =?us-ascii?Q?JIJenYT4okXXt9LK0z+FF0vwr6ApKkAalae19d98iOksxbfHO7ozb/Sib/jU?=
- =?us-ascii?Q?t6v6tS9wmlIsn53mL5bp73Oqw7+AdMVRFSq103GwLoBcZXFEi8W4xlf0vwkZ?=
- =?us-ascii?Q?TuAhr/lT64gHYKm3XAcJ0Zq2PrNBSzkodm7i1faY+Tg2hLKUDnHooZmMkRDt?=
- =?us-ascii?Q?x6qr5ce14awpMyRwA/oxk2c14QGPphxdt2bNXx0fFhoowXf0BHdW8aohhjhS?=
- =?us-ascii?Q?BYdKDOZQHiI/7azdehErL5oXxXjxTVjgcDV5mYFugPW+7cJJde6+d24VPTrO?=
- =?us-ascii?Q?EzRiJ33NSXkxzCOfiExOKt00/pYt0OZE0f9ooklSHpUg6AeJSKfhr9f4wz68?=
- =?us-ascii?Q?b3uvJ4V6i3jPeLY4AeruUKDb+j5yLMUzSIR6DC7mLW37zOm3uYEivIlylP4P?=
- =?us-ascii?Q?1VR6fDpf4wftB81ruZJEvsdPWWxlXTzUNH1qSWMTAwgyGWcrBbrFTM1/5CeC?=
- =?us-ascii?Q?7cDR/JKYPmmbMnTN9mto+eF25eiMi8N/7XEyjo8MJ40zBGPZvQX8ZuZZsdXF?=
- =?us-ascii?Q?qngaH1MHAgro64Bc5oz7l3udLdNc2+X2kplILdTAxgvTUnvLBzNpMz7gpXg/?=
- =?us-ascii?Q?8tAyEn0CkvlJDlLX1YzuLoVHnBjVgZ8gk3lM5jxddeRONA=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 028ed2bd-d6fd-4f89-b1da-08d8de6b242d
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR15MB3571.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2021 17:38:22.5395
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: gziNB0uFhMTdHIz5xBpFO3U+hQHk66T5w81macz0mp4Jlcsp4M0+2tz13S/k1iLN
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR15MB4204
-X-OriginatorOrg: fb.com
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
+        Yauheni Kaliuta <ykaliuta@redhat.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Fix test_attach_probe for
+ powerpc uprobes
+Message-ID: <20210303064239.GC1913@DESKTOP-TDPLP67.localdomain>
+References: <20210301190416.90694-1-jolsa@kernel.org>
+ <CAEf4BzbBnR3M60HepC_CFDsdMQDBYoEWiWtREUaLxrrxyBce0Q@mail.gmail.com>
+ <YD4d+dmay+oKyiot@krava>
+ <c18d94d3-3e5d-08f7-a8ba-f13bfa7eec05@fb.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c18d94d3-3e5d-08f7-a8ba-f13bfa7eec05@fb.com>
+X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
  definitions=2021-03-03_05:2021-03-03,2021-03-03 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 adultscore=0
- mlxlogscore=999 suspectscore=0 phishscore=0 bulkscore=0 priorityscore=1501
- clxscore=1015 lowpriorityscore=0 malwarescore=0 spamscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2103030125
-X-FB-Internal: deliver
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
+ mlxlogscore=999 lowpriorityscore=0 priorityscore=1501 impostorscore=0
+ phishscore=0 bulkscore=0 mlxscore=0 adultscore=0 spamscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2103030127
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Mar 03, 2021 at 11:04:02AM +0000, Brendan Jackman wrote:
-> As pointed out by Ilya and explained in the new comment, there's a
-> discrepancy between x86 and BPF CMPXCHG semantics: BPF always loads
-> the value from memory into r0, while x86 only does so when r0 and the
-> value in memory are different. The same issue affects s390.
+On 2021/03/02 09:19AM, Yonghong Song wrote:
 > 
-> At first this might sound like pure semantics, but it makes a real
-> difference when the comparison is 32-bit, since the load will
-> zero-extend r0/rax.
 > 
-> The fix is to explicitly zero-extend rax after doing such a
-> CMPXCHG. Since this problem affects multiple archs, this is done in
-> the verifier by patching in a BPF_ZEXT_REG instruction after every
-> 32-bit cmpxchg. Any archs that don't need such manual zero-extension
-> can do a look-ahead with insn_is_zext to skip the unnecessary mov.
+> On 3/2/21 3:14 AM, Jiri Olsa wrote:
+> > On Mon, Mar 01, 2021 at 04:34:24PM -0800, Andrii Nakryiko wrote:
+> > > On Mon, Mar 1, 2021 at 11:11 AM Jiri Olsa <jolsa@kernel.org> wrote:
+> > > > 
+> > > > When testing uprobes we the test gets GEP (Global Entry Point)
+> > > > address from kallsyms, but then the function is called locally
+> > > > so the uprobe is not triggered.
+> > > > 
+> > > > Fixing this by adjusting the address to LEP (Local Entry Point)
+> > > > for powerpc arch.
+> > > > 
+> > > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > > > ---
+> > > >   .../selftests/bpf/prog_tests/attach_probe.c    | 18 +++++++++++++++++-
+> > > >   1 file changed, 17 insertions(+), 1 deletion(-)
+> > > > 
+> > > > diff --git a/tools/testing/selftests/bpf/prog_tests/attach_probe.c b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
+> > > > index a0ee87c8e1ea..c3cfb48d3ed0 100644
+> > > > --- a/tools/testing/selftests/bpf/prog_tests/attach_probe.c
+> > > > +++ b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
+> > > > @@ -2,6 +2,22 @@
+> > > >   #include <test_progs.h>
+> > > >   #include "test_attach_probe.skel.h"
+> > > > 
+> > > > +#if defined(__powerpc64__)
+> > > > +/*
+> > > > + * We get the GEP (Global Entry Point) address from kallsyms,
+> > > > + * but then the function is called locally, so we need to adjust
+> > > > + * the address to get LEP (Local Entry Point).
+> > > > + */
+> > > > +#define LEP_OFFSET 8
+> > > > +
+> > > > +static ssize_t get_offset(ssize_t offset)
+> > > 
+> > > if we mark this function __weak global, would it work as is? Would it
+> > > get an address of a global entry point? I know nothing about this GEP
+> > > vs LEP stuff, interesting :)
+> > 
+> > you mean get_base_addr? it's already global
+> > 
+> > all the calls to get_base_addr within the object are made
+> > to get_base_addr+0x8
+> > 
+> > 00000000100350c0 <test_attach_probe>:
+> >      ...
+> >      100350e0:   59 fd ff 4b     bl      10034e38 <get_base_addr+0x8>
+> >      ...
+> >      100358a8:   91 f5 ff 4b     bl      10034e38 <get_base_addr+0x8>
+> > 
+> > 
+> > I'm following perf fix we had for similar issue:
+> >    7b6ff0bdbf4f perf probe ppc64le: Fixup function entry if using kallsyms lookup
+> > 
+> > I'll get more info on that
 > 
-> Reported-by: Ilya Leoshkevich <iii@linux.ibm.com>
-> Fixes: 5ffa25502b5a ("bpf: Add instructions for atomic_[cmp]xchg")
-> Signed-off-by: Brendan Jackman <jackmanb@google.com>
-> ---
-> 
-> Note this still goes on top of Ilya's patch:
-> 
-> https://lore.kernel.org/bpf/20210301154019.129110-1-iii@linux.ibm.com/T/#u
-> 
-> Differences v5->v6[1]:
->  - Moved is_cmpxchg_insn and ensured it can be safely re-used. Also renamed it
->    and removed 'inline' to match the style of the is_*_function helpers.
->  - Fixed up comments in verifier test (thanks for the careful review, Martin!)
-Acked-by: Martin KaFai Lau <kafai@fb.com>
+> Thanks. The patch
+>    7b6ff0bdbf4f perf probe ppc64le: Fixup function entry if using kallsyms
+> lookup
+> talked about offset + 8 for kernel symbols.
+> I guess uprobe symbol might be in the same situation if using the
+> same compilation mechanism as kernel. But it would be good
+> to get confirmation from ppc people.
+
+Yes, this is part of the ELF V2 ABI, so it applies to both kernel and 
+userspace.
+
+- Naveen
+
