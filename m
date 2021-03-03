@@ -2,291 +2,126 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED75FC4332D
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:56:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F1EDCC4160E
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:56:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B96D764E6F
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:56:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C2C9564E75
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:56:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352540AbhCCDvE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Mar 2021 22:51:04 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57526 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1350486AbhCBUGB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 2 Mar 2021 15:06:01 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 194D064F1B;
-        Tue,  2 Mar 2021 20:04:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614715482;
-        bh=1qHRyBVHOEB7rQ+dSwRc5D7fVjkexI9qBQ/9YhEBTC4=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=MKyvsAcsdWPnarCj2AG9e2LAkktgq63xe9mAP9jevTGnWKq5fRIu6+UC7nTXqd+ky
-         oeKTmygSN6taDIK5V+O0QWGkCNkNPTYSwiOdu3tYqwG6X1/qLemPPVE6D1WMotSKfF
-         r7udteQ+xmECh955d92aIACL1AGgFm7cDwCGI3G4E+3RDhdCKXE+tdqurfpexsZMSA
-         le+MQbeCg7bA/stynbUOPNLzFbOtlsNunDwxz0qocZUV/bHvJWpb/3dSfsZUa1ZjaJ
-         HlOTEkR9KIILf/LvJepJiTwhvZcMnRtTrWRnblrJRWipah3opvBB9g0FwLASX9R4Oi
-         z2DM//Nkhvvow==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id BEBFB352259C; Tue,  2 Mar 2021 12:04:41 -0800 (PST)
-Date:   Tue, 2 Mar 2021 12:04:41 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        stern@rowland.harvard.edu, parri.andrea@gmail.com,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, boqun.feng@gmail.com,
-        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
-        luc.maranget@inria.fr, akiyks@gmail.com, dlustig@nvidia.com,
-        joel@joelfernandes.org,
-        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
-        "Karlsson, Magnus" <magnus.karlsson@intel.com>
-Subject: Re: XDP socket rings, and LKMM litmus tests
-Message-ID: <20210302200441.GA3729@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
-References: <CAJ+HfNhxWFeKnn1aZw-YJmzpBuCaoeGkXXKn058GhY-6ZBDtZA@mail.gmail.com>
- <20210302195758.GQ2696@paulmck-ThinkPad-P72>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210302195758.GQ2696@paulmck-ThinkPad-P72>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        id S1352552AbhCCDvT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Mar 2021 22:51:19 -0500
+Received: from wout3-smtp.messagingengine.com ([64.147.123.19]:43003 "EHLO
+        wout3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S242893AbhCCBQq (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 2 Mar 2021 20:16:46 -0500
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id A040C10F3;
+        Tue,  2 Mar 2021 20:15:34 -0500 (EST)
+Received: from imap35 ([10.202.2.85])
+  by compute3.internal (MEProxy); Tue, 02 Mar 2021 20:15:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=
+        mime-version:message-id:date:from:to:cc:subject:content-type; s=
+        fm2; bh=9FD8F+TWKvse0buYqi4uiNdfXk0YrVryNe2+KxwJxE4=; b=gYD8pcVL
+        6TcQSIXYBfnJ61EoGimU174EVWiZy1rMp4FMx/vMfSwyy090/5AdSu9hZMAp/Zop
+        mnQJho+dwSlzjPQKxs2SkjTJDtKGE1YNo7RVb3n8QWq+Nkrb2EUk2GonUyWyZE8W
+        fHz+mh8S+1lOkNBTvDvH0y3Tg8v3INgBcyWi/wdxS1iOYHg89zCNKIR8fsBbolC/
+        RhEGFTPFO8AMqSk+G5ci7TYiqfTleYAyFtkxSd4hul41vwYogt/y4dNx06crs+82
+        LDBPiCDoycBU2YCV+dqpI7AXUC9XjQATJMHj0kQm94R4A8OjAJzTA5lxjMMSIfa4
+        wSN4Yrvy/dxV+Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:message-id
+        :mime-version:subject:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm2; bh=9FD8F+TWKvse0buYqi4uiNdfXk0Yr
+        VryNe2+KxwJxE4=; b=oxJR9qtnr/ARq80jMHXCFWbFYqrhra5VL5ntorj/gq22i
+        bCY8v2ZSsNnI+dol38EmwEB6kYWPr7O+4BSuogilaXlA3YuG2xO1MKDEjfvUaTx2
+        cmTCzumVZLG9DnSQ107idEhhAH9zJNJiqtCBffrgAQjhN8CgtkdL3lavFMawtEz4
+        I9lTPMXdBBf8iiGgNri4mGUFXShs9KTqdbnp/xz2UJNOxkPui9RLcXLDk/RHKvBA
+        oUndCxYQ2mu2d2UB07nMSWoySgolH3+YjUpBC3gT7dmA/K6c+GNKh1OYKknxFtRH
+        ASP9lVzKccH6XNRfsAHXiHOCKX/M+Xm+HRMDdHynA==
+X-ME-Sender: <xms:NeM-YEXoZe7DX0SAAr4mNzM3p2KjSxTGoDsM7yYSfO97tvsy9YboXQ>
+    <xme:NeM-YIn_o00Nq95ajwoNSHKIWUPuU7G3CKBNO9CQ0uYu6LRIdx513zw412d9Xu8o9
+    19s5F0Jg_AIJbNyFQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledruddtuddgvdelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdlfeehmdenucfjughrpefofg
+    ggkfffhffvufgtsehttdertderredtnecuhfhrohhmpedfffgrnhhivghlucgiuhdfuceo
+    ugiguhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhepgfefgedvvdeigfdthf
+    ettdfghedtleeuteefueetiefhledvhfelleeutedufedtnecuvehluhhsthgvrhfuihii
+    vgeptdenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdrgiihii
+X-ME-Proxy: <xmx:NuM-YIY7Fb6if0_XPGrmk9R13LPbWO3iTVKT27Fr1gixd5W0XsKOIA>
+    <xmx:NuM-YDUo8FqkYotLKhaYgRakmuDWSOQZMrenQtfN0TW1PKtqQNZwKA>
+    <xmx:NuM-YOmAgL-MC4DgK7ngcpT0qYlEiraixoSaf9jf-byxoVwDQgg4vA>
+    <xmx:NuM-YCsl7rfBUt8K524WUjp-wl-O9CNixx8eDQIxzZUJK0QN6iQehQ>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id C739015A005D; Tue,  2 Mar 2021 20:15:33 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-206-g078a48fda5-fm-20210226.001-g078a48fd
+Mime-Version: 1.0
+Message-Id: <1fed0793-391c-4c68-8d19-6dcd9017271d@www.fastmail.com>
+Date:   Tue, 02 Mar 2021 17:15:13 -0800
+From:   "Daniel Xu" <dxu@dxuuu.xyz>
+To:     mhiramat@kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>, kuba@kernel.org
+Subject: Broken kretprobe stack traces
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Mar 02, 2021 at 11:57:58AM -0800, Paul E. McKenney wrote:
-> On Tue, Mar 02, 2021 at 07:46:27PM +0100, Björn Töpel wrote:
-> > Hi!
-> > 
-> > Firstly; The long Cc-list is to reach the LKMM-folks.
-> > 
-> > Some background; the XDP sockets use a ring-buffer to communicate
-> > between the kernel and userland. It's a
-> > single-consumer/single-producer ring, and described in
-> > net/xdp/xsk_queue.h.
-> > 
-> > --8<---
-> > /* The structure of the shared state of the rings are the same as the
-> >  * ring buffer in kernel/events/ring_buffer.c. For the Rx and completion
-> >  * ring, the kernel is the producer and user space is the consumer. For
-> >  * the Tx and fill rings, the kernel is the consumer and user space is
-> >  * the producer.
-> >  *
-> >  * producer                         consumer
-> >  *
-> >  * if (LOAD ->consumer) {           LOAD ->producer
-> >  *                    (A)           smp_rmb()       (C)
-> >  *    STORE $data                   LOAD $data
-> >  *    smp_wmb()       (B)           smp_mb()        (D)
-> >  *    STORE ->producer              STORE ->consumer
-> >  * }
-> >  *
-> >  * (A) pairs with (D), and (B) pairs with (C).
-> > ...
-> > -->8---
-> > 
-> > I'd like to replace the smp_{r,w,}mb() barriers with acquire-release
-> > semantics [1], without breaking existing userspace applications.
-> > 
-> > So, I figured I'd use herd7 and the LKMM model to build a litmus test
-> > for the barrier version, then for the acquire-release version, and
-> > finally permutations of both.
-> > 
-> > The idea is to use a one element ring, with a state machine outlined
-> > in the litmus test.
-> > 
-> > The basic test for the existing smp_{r,w,}mb() barriers looks like:
-> > 
-> > $ cat spsc-rb+1p1c.litmus
-> > C spsc-rb+1p1c
-> > 
-> > // Stupid one entry ring:
-> > // prod cons     allowed action       prod cons
-> > //    0    0 =>       prod          =>   1    0
-> > //    0    1 =>       cons          =>   0    0
-> > //    1    0 =>       cons          =>   1    1
-> > //    1    1 =>       prod          =>   0    1
-> > 
-> > { prod = 1; }
-> > 
-> > // Here, we start at prod==1,cons==0, data==0, i.e. producer has
-> > // written data=0, so from here only the consumer can start, and should
-> > // consume data==0. Afterwards, producer can continue and write 1 to
-> > // data. Can we enter state prod==0, cons==1, but consumer observerd
-> > // the write of 1?
-> > 
-> > P0(int *prod, int *cons, int *data)
-> > {
-> >     int p;
-> >     int c;
-> >     int cond = 0;
-> > 
-> >     p = READ_ONCE(*prod);
-> >     c = READ_ONCE(*cons);
-> >     if (p == 0)
-> >         if (c == 0)
-> >             cond = 1;
-> >     if (p == 1)
-> >         if (c == 1)
-> >             cond = 1;
-> > 
-> >     if (cond) {
-> >         smp_mb();
-> >         WRITE_ONCE(*data, 1);
-> >         smp_wmb();
-> >         WRITE_ONCE(*prod, p ^ 1);
-> >     }
-> > }
-> > 
-> > P1(int *prod, int *cons, int *data)
-> > {
-> >     int p;
-> >     int c;
-> >     int d = -1;
-> >     int cond = 0;
-> > 
-> >     p = READ_ONCE(*prod);
-> >     c = READ_ONCE(*cons);
-> >     if (p == 1)
-> >         if (c == 0)
-> >             cond = 1;
-> >     if (p == 0)
-> >         if (c == 1)
-> >             cond = 1;
-> > 
-> >     if (cond == 1) {
-> >         smp_rmb();
-> >         d = READ_ONCE(*data);
-> >         smp_mb();
-> >         WRITE_ONCE(*cons, c ^ 1);
-> >     }
-> > }
-> 
-> Before digging in too deeply, does the following simplification
-> still capture your intent?
-> 
-> P0(int *prod, int *cons, int *data)
-> {
->     int p;
->     int cond = 0;
-> 
->     p = READ_ONCE(*prod);
->     if (p == READ_ONCE(*cons))
->             cond = 1;
->     if (cond) {
-> 	smp_mb();
->         WRITE_ONCE(*data, 1);
->         smp_wmb();
->         WRITE_ONCE(*prod, p ^ 1);
->     }
-> }
-> 
-> P1(int *prod, int *cons, int *data)
-> {
->     int c;
->     int d = -1;
->     int cond = 0;
-> 
->     c = READ_ONCE(*cons);
->     if (READ_ONCE(*prod) == c)
->             cond = 1;
-> 
->     if (cond == 1) {
->         smp_rmb();
->         d = READ_ONCE(*data);
->         smp_mb();
->         WRITE_ONCE(*cons, c ^ 1);
->     }
-> }
+Hi Masami,
 
-And if the answer is "yes", how about this one?
+Jakub reported a bug with kretprobe stack traces -- wondering if you've gotten
+any bug reports related to stack traces being broken for kretprobes.
 
-P0(int *prod, int *cons, int *data)
-{
-    int p;
+I think (can't prove) this used to work:
 
-    p = READ_ONCE(*prod);
-    if (p == READ_ONCE(*cons)) {
-        WRITE_ONCE(*data, 1);
-        smp_wmb();
-        WRITE_ONCE(*prod, p ^ 1);
-    }
-}
+    # bpftrace -e 'kretprobe:__tcp_retransmit_skb { @[kstack()] = count() }'
+    Attaching 1 probe...
+    ^C
 
-P1(int *prod, int *cons, int *data)
-{
-    int c;
-    int d = -1;
+    @[
+        kretprobe_trampoline+0
+    ]: 1
 
-    c = READ_ONCE(*cons);
-    if (READ_ONCE(*prod) == c) {
-        smp_rmb();
-        d = READ_ONCE(*data);
-        smp_mb();
-        WRITE_ONCE(*cons, c ^ 1);
-    }
-}
+fentry/fexit probes seem to work:
 
-							Thanx, Paul
+    # bpftrace -e 'kretfunc:__tcp_retransmit_skb { @[kstack()] = count() }'
+    Attaching 1 probe...
+    ^C
+    
+    @[
+        ftrace_trampoline+10799
+        bpf_get_stackid_raw_tp+121
+        ftrace_trampoline+10799
+        __tun_chr_ioctl.isra.0.cold+33312
+        __tcp_retransmit_skb+5
+        tcp_send_loss_probe+254
+        tcp_write_timer_handler+394
+        tcp_write_timer+149
+        call_timer_fn+41
+        __run_timers+493
+        run_timer_softirq+25
+        __softirqentry_text_start+207
+        asm_call_sysvec_on_stack+18
+        do_softirq_own_stack+55
+        irq_exit_rcu+158
+        sysvec_apic_timer_interrupt+54
+        asm_sysvec_apic_timer_interrupt+18
+    ]: 1
+    @[
+        ftrace_trampoline+10799
+        bpf_get_stackid_raw_tp+121
+        ftrace_trampoline+10799
+        __tun_chr_ioctl.isra.0.cold+33312
+        __tcp_retransmit_skb+5
+  <...>
 
-> > exists( 1:d=1 /\ prod=0 /\ cons=1 );
-> > 
-> > --
-> > 
-> > The weird state changing if-statements is because that I didn't get
-> > '&&' and '||' to work with herd.
-> > 
-> > When this is run:
-> > 
-> > $ herd7 -conf linux-kernel.cfg litmus-tests/spsc-rb+1p1c.litmus
-> > Test spsc-rb+1p1c Allowed
-> > States 2
-> > 1:d=0; cons=1; prod=0;
-> > 1:d=0; cons=1; prod=1;
-> > No
-> > Witnesses
-> > Positive: 0 Negative: 2
-> > Condition exists (1:d=1 /\ prod=0 /\ cons=1)
-> > Observation spsc-rb+1p1c Never 0 2
-> > Time spsc-rb+1p1c 0.04
-> > Hash=b399756d6a1301ca5bda042f32130791
-> > 
-> > Now to my question; In P0 there's an smp_mb(). Without that, the d==1
-> > can be observed from P1 (consumer):
-> > 
-> > $ herd7 -conf linux-kernel.cfg litmus-tests/spsc-rb+1p1c.litmus
-> > Test spsc-rb+1p1c Allowed
-> > States 3
-> > 1:d=0; cons=1; prod=0;
-> > 1:d=0; cons=1; prod=1;
-> > 1:d=1; cons=1; prod=0;
-> > Ok
-> > Witnesses
-> > Positive: 1 Negative: 2
-> > Condition exists (1:d=1 /\ prod=0 /\ cons=1)
-> > Observation spsc-rb+1p1c Sometimes 1 2
-> > Time spsc-rb+1p1c 0.04
-> > Hash=0047fc21fa77da9a9aee15e35ec367ef
-> > 
-> > In commit c7f2e3cd6c1f ("perf: Optimize ring-buffer write by depending
-> > on control dependencies") removes the corresponding smp_mb(), and also
-> > the circular buffer in circular-buffers.txt (pre commit 6c43c091bdc5
-> > ("documentation: Update circular buffer for
-> > load-acquire/store-release")) is missing the smp_mb() at the
-> > producer-side.
-> > 
-> > I'm trying to wrap my head around why it's OK to remove the smp_mb()
-> > in the cases above? I'm worried that the current XDP socket ring
-> > implementation (which is missing smp_mb()) might be broken.
-> > 
-> > 
-> > If you read this far, thanks! :-)
-> > Björn
-> > 
-> > 
-> > [1] https://lore.kernel.org/bpf/20210301104318.263262-2-bjorn.topel@gmail.com/
+which makes me suspect it's a kprobe specific issue.
+
+Thanks,
+Daniel
