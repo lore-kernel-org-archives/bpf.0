@@ -2,96 +2,176 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A83CC43142
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:57:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B697C41518
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:57:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0D3D564EFD
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:57:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5B94264EFD
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:57:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449638AbhCCWw7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 3 Mar 2021 17:52:59 -0500
-Received: from mail-qv1-f52.google.com ([209.85.219.52]:40397 "EHLO
-        mail-qv1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386462AbhCCSPn (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 3 Mar 2021 13:15:43 -0500
-Received: by mail-qv1-f52.google.com with SMTP id x13so6230620qvj.7
-        for <bpf@vger.kernel.org>; Wed, 03 Mar 2021 10:15:26 -0800 (PST)
+        id S1449689AbhCCWxi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 3 Mar 2021 17:53:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39650 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1387041AbhCCTPS (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 3 Mar 2021 14:15:18 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C07BAC061756
+        for <bpf@vger.kernel.org>; Wed,  3 Mar 2021 11:14:38 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id e9so4986065pjj.0
+        for <bpf@vger.kernel.org>; Wed, 03 Mar 2021 11:14:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
+        h=content-transfer-encoding:from:mime-version:subject:date:message-id
+         :references:cc:in-reply-to:to;
+        bh=k4jBZrFbV5z5C+8VpzHIjWbEzvPUkgb89xssp4fGpJY=;
+        b=r9/TcZaLLPtkrbWxQm5ZqCCvdnLL138WIXcHAkp4uJ44kSq892Nde99fe0Z9wuh6Fq
+         QHDhi2UmvACYcjTgvWzBojSyGD8q9nJeeRGBRN4gQehgj/Cmhwvf3iAheplKRy22l3Au
+         KpMFDOCeTxHej/CuwOS4kPtTif/ztYOORF/jb+5VptwODSNQUn59I6jduHXX4yPxZhVP
+         2ulz4KcYSFe0Wjolb9sIX30psLeoprlxFBs9lFp+ElysN3/0QIkln+jRWVZYAWtTBUXK
+         7UL7KhqWdiFx//r4rG6Ip75S5C6KQzMBYWFm6Z8nufWvT63zH1MoSTdIujV2+idqb7Es
+         MEJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=XVI0NGqfR5lyDqvEF13m6jGa+LE885aN8fbIxk0px7w=;
-        b=BixcPMJrrk8yTSMsEL75fZzHhKtfmQROoqn4etNp6EzAh2H/50oieQbxCosl/xNN0V
-         Rn0LldHubCiO93LYYlKRvKMFLVneKly281ih44aISruQ8H77FkeqNly7SC+DNtkOKhaR
-         jfAA2o37henkRfo7W36WLD3+nVvwM2kJsLpzep4O0+GBBKiOKo8pzFPj7tPNhQORjTIT
-         gEoyufCO7suA2QiLziiA/Z4ojCnVjd9TINKfDnh5WUqIki3nnnUcCBIKPN0iiQ8HNZuq
-         CQDVhz0vzid5aclYbFkQdjY25bAhLsg8T0w7AsOCn0UvRtaYFpZUWIftvKzhd4W9n7wq
-         m5DQ==
-X-Gm-Message-State: AOAM533rQL8iWZ1dlCGHJV+M08I9mfQAtyhs12vwcjCXokVWUQ4MfUrh
-        hDHoVJ0a2VJTY9B6/Z4OWO+i5vuhNX+ayoc=
-X-Google-Smtp-Source: ABdhPJwgUh9PEvA9yn5sygKMruwkMx9Kyk8Ln8wm/hS4d2Of2RIMaU1vb88dhOi+Gg6iyUbrqEQTeg==
-X-Received: by 2002:a05:6214:18e5:: with SMTP id ep5mr453362qvb.32.1614795301301;
-        Wed, 03 Mar 2021 10:15:01 -0800 (PST)
-Received: from fujitsu.celeiro.cu ([191.96.15.91])
-        by smtp.gmail.com with ESMTPSA id z188sm14458424qke.85.2021.03.03.10.14.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Mar 2021 10:15:00 -0800 (PST)
-From:   Rafael David Tinoco <rafaeldtinoco@ubuntu.com>
-To:     vamsi@araalinetworks.com
-Cc:     andrii.nakryiko@gmail.com, rafaeldtinoco@gmail.com,
-        bpf@vger.kernel.org
-Subject: Re: [BPF CO-RE clarification] Use CO-RE on older kernel versions.
-Date:   Wed,  3 Mar 2021 15:14:57 -0300
-Message-Id: <20210303181457.172434-1-rafaeldtinoco@ubuntu.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <CADmGQ+0dDjfs6UL63m3vLAfu+GHgSFdMO+Rmz_jk+0R9Wva2Tw@mail.gmail.com>
-References: <CADmGQ+0dDjfs6UL63m3vLAfu+GHgSFdMO+Rmz_jk+0R9Wva2Tw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:content-transfer-encoding:from:mime-version
+         :subject:date:message-id:references:cc:in-reply-to:to;
+        bh=k4jBZrFbV5z5C+8VpzHIjWbEzvPUkgb89xssp4fGpJY=;
+        b=fF+o/fFDDs6iLqpUTOx25vz/Sqj7WV3Sw1YwY+QFGCqRTe873cBaohm2IIu/+3zNEs
+         yMBORCO84tOSTvS20hEsBX8oCMspHKctCzzspbqIpBfV23ILRgE27SA7NwJNYoWiBSqh
+         HXYLWgzgWN2ZkdnYV18m3dWlKoSeobFAPS/IE7gTepP2W006WDvhskZR51ySxlLrhetZ
+         /VgeEv6H4PouEmebx9ns9c92QkZfF3eQTJ4FNDiym2OcbjUEgDjc6U+qf3bUI4qA1YLR
+         huykClnt9U2dx+auwLJhn1AJYCI4NougQ5CvsT8563bMsHMuuRaqAq/OGz0e75QmdA2+
+         EMyQ==
+X-Gm-Message-State: AOAM532h38gqGzCViYQOn9CP7fVB9dQQjwyiLgh1KqOMxJWnYYXCYnzP
+        MPAnHjoR9Y8RLMUMvL7tFt8ZG5OM1koKnA==
+X-Google-Smtp-Source: ABdhPJwcIrb5IbtzbgJ0PzMEfiISby6O5NvZxZfvV/2oRTzXzdv64m6kabldrocwVcHKTKFcSI3GEg==
+X-Received: by 2002:a17:902:b089:b029:e3:28:b8ee with SMTP id p9-20020a170902b089b02900e30028b8eemr615480plr.84.1614798878128;
+        Wed, 03 Mar 2021 11:14:38 -0800 (PST)
+Received: from ?IPv6:2601:646:c200:1ef2:d817:cd13:9030:8391? ([2601:646:c200:1ef2:d817:cd13:9030:8391])
+        by smtp.gmail.com with ESMTPSA id k5sm7076673pjl.50.2021.03.03.11.14.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Mar 2021 11:14:37 -0800 (PST)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From:   Andy Lutomirski <luto@amacapital.net>
+Mime-Version: 1.0 (1.0)
+Subject: Re: Why do kprobes and uprobes singlestep?
+Date:   Wed, 3 Mar 2021 11:14:36 -0800
+Message-Id: <39348848-C213-4739-B002-5BFACDA981C1@amacapital.net>
+References: <20210303181111.th5ukrfzrmyuvk5x@maharaja.localdomain>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Andy Lutomirski <luto@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S. Miller" <davem@davemloft.net>, X86 ML <x86@kernel.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>
+In-Reply-To: <20210303181111.th5ukrfzrmyuvk5x@maharaja.localdomain>
+To:     Daniel Xu <dxu@dxuuu.xyz>
+X-Mailer: iPhone Mail (18D52)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-> > From:   Vamsi Kodavanty <vamsi@araalinetworks.com>
-> > Date:   Thu, 7 Jan 2021 17:31:11 -0800
-> > To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-> > Cc:     bpf <bpf@vger.kernel.org>
-> >
-> >
-> > Right. Libbpf only supports a newer and safer way to attach to
-> > kprobes. For your experiments, try to stick to tracepoints and you'll
-> > have a better time.
-> >
-> > But it's another thing I've been meaning to add to libbpf for
-> > supporting older kernels. I even have code written to do legacy kprobe
-> > attachment, just need to find time to send a patch to add it as a
-> > fallback for kernels that don't support new kprobe interface.
 
-Initially I'd like to thank you *a lot* for this thread, it helped me
-creating:
+> On Mar 3, 2021, at 10:11 AM, Daniel Xu <dxu@dxuuu.xyz> wrote:
+>=20
+> =EF=BB=BFOn Tue, Mar 02, 2021 at 06:18:23PM -0800, Alexei Starovoitov wrot=
+e:
+>>> On Tue, Mar 2, 2021 at 5:46 PM Andy Lutomirski <luto@amacapital.net> wro=
+te:
+>>>=20
+>>>=20
+>>>> On Mar 2, 2021, at 5:22 PM, Alexei Starovoitov <alexei.starovoitov@gmai=
+l.com> wrote:
+>>>>=20
+>>>> =EF=BB=BFOn Tue, Mar 2, 2021 at 1:02 PM Andy Lutomirski <luto@amacapita=
+l.net> wrote:
+>>>>>=20
+>>>>>=20
+>>>>>>> On Mar 2, 2021, at 12:24 PM, Alexei Starovoitov <alexei.starovoitov@=
+gmail.com> wrote:
+>>>>>>=20
+>>>>>> =EF=BB=BFOn Tue, Mar 2, 2021 at 10:38 AM Andy Lutomirski <luto@kernel=
+.org> wrote:
+>>>>>>>=20
+>>>>>>> Is there something like a uprobe test suite?  How maintained /
+>>>>>>> actively used is uprobe?
+>>>>>>=20
+>>>>>> uprobe+bpf is heavily used in production.
+>>>>>> selftests/bpf has only one test for it though.
+>>>>>>=20
+>>>>>> Why are you asking?
+>>>>>=20
+>>>>> Because the integration with the x86 entry code is a mess, and I want t=
+o know whether to mark it BROKEN or how to make sure the any cleanups actual=
+ly work.
+>>>>=20
+>>>> Any test case to repro the issue you found?
+>>>> Is it a bug or just messy code?
+>>>=20
+>>> Just messy code.
+>>>=20
+>>>> Nowadays a good chunk of popular applications (python, mysql, etc) has
+>>>> USDTs in them.
+>>>> Issues reported with bcc:
+>>>> https://github.com/iovisor/bcc/issues?q=3Dis%3Aissue+USDT
+>>>> Similar thing with bpftrace.
+>>>> Both standard USDT and semaphore based are used in the wild.
+>>>> uprobe for containers has been a long standing feature request.
+>>>> If you can improve uprobe performance that would be awesome.
+>>>> That's another thing that people report often. We optimized it a bit.
+>>>> More can be done.
+>>>=20
+>>>=20
+>>> Wait... USDT is much easier to implement well.  Are we talking just USDT=
+ or are we talking about general uprobes in which almost any instruction can=
+ get probed?  If the only users that care about uprobes are doing USDT, we c=
+ould vastly simplify the implementation and probably make it faster, too.
+>>=20
+>> USDTs are driving the majority of uprobe usage.
+>=20
+> I'd say 50/50 in my experience. Larger userspace applications using bpf
+> for production monitoring tend to use USDT for stability and ABI reasons
+> (hard for bpf to read C++ classes). Bare uprobes (ie not USDT) are used
+> quite often for ad-hoc production debugging.
+>=20
+>> If they can get faster it will increase their adoption even more.
+>> There are certainly cases of normal uprobes.
+>> They are at the start of the function 99% of the time.
+>> Like the following:
+>> "uprobe:/lib64/libc.so:malloc(u64 size):size:size,_ret",
+>> "uprobe:/lib64/libc.so:free(void *ptr)::ptr",
+>> is common despite its overhead.
+>>=20
+>> Here is the most interesting and practical usage of uprobes:
+>> https://github.com/iovisor/bcc/blob/master/tools/sslsniff.py
+>> and the manpage for the tool:
+>> https://github.com/iovisor/bcc/blob/master/tools/sslsniff_example.txt
+>>=20
+>> uprobe in the middle of the function is very rare.
+>> If the kernel starts rejecting uprobes on some weird instructions
+>> I suspect no one will complain.
+>=20
+> I think it would be great if the kernel could reject mid-instruction
+> uprobes. Unlike with kprobes, you can place uprobes on immediate
+> operands which can cause silent data corruption. See
+> https://github.com/iovisor/bpftrace/pull/803#issuecomment-507693933
+> for a funny example.
 
-https://github.com/rafaeldtinoco/portablebpf
+This can=E2=80=99t be done in general on x86. One cannot look at code and fi=
+nd the instruction boundaries.
 
-showing up exactly what was discussed here AND I could run the same
-binary in v4.15 and v.5.8 kernels as long as BTF was generated with:
-
-https://github.com/rafaeldtinoco/portablebpf/blob/master/patches/link-vmlinux.sh.patch
-
-Specially the attach_kprobe_legacy() function:
-
-https://github.com/rafaeldtinoco/portablebpf/blob/master/mine.c#L31
-
-I wanted to reply here in case others also face this.
-
-Only bad thing was kernel v4.15 missed global data support as showed in:
-
-https://github.com/iovisor/bcc/blob/master/docs/kernel-versions.md
-
-But using perf event was good enough for an example.
-
-- rafaeldtinoco
+>=20
+> To prevent accidental (and silent) data corruption, bpftrace uses a
+> disassembler to ensure uprobes are placed on instruction boundaries.
+>=20
+> <...>
+>=20
+> Daniel
