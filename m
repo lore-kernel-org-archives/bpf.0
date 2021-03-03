@@ -5,60 +5,59 @@ X-Spam-Level:
 X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E679C28D15
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C3EF0C28D17
 	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:56:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 20ADD64E75
+	by mail.kernel.org (Postfix) with ESMTP id 72EFE64E6F
 	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:56:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352554AbhCCDvW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Mar 2021 22:51:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37586 "EHLO
+        id S1352556AbhCCDvX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Mar 2021 22:51:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233372AbhCCBXY (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 2 Mar 2021 20:23:24 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F17EC061794;
-        Tue,  2 Mar 2021 17:22:43 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id u4so26494759ljh.6;
-        Tue, 02 Mar 2021 17:22:43 -0800 (PST)
+        with ESMTP id S234722AbhCCCT0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 2 Mar 2021 21:19:26 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CC32C061756;
+        Tue,  2 Mar 2021 18:18:36 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id n16so17635560lfb.4;
+        Tue, 02 Mar 2021 18:18:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=7vpxjdzLC35rO+JFayl4Y64pj7Iqa9C/mCMrzz7lHgk=;
-        b=sFWqjyHdBwGvkKfUQ5i/8pSgB5aexxVlxIXA1/VUFSEnCPAOF4wk9XWWU75j0MeloQ
-         ZsYVGBCEGmKNXG2VpVFMrflK9S4IQoGklTKmrznsrrXlzEZSY0OCe5xrR7bCH1ju8tiZ
-         K80hyQJmWtroAevAgItdUVYc3ZLwPfE6NqeWcktCkJ0hOrDSGpcVZzpQxOA/ZkvRain3
-         dnRIy7r1NcDxZ4DB69NWsR4QWxSjj9nrfeADfAqcc2MQ13UDkpEuGnfmf6/y/6VV06Vd
-         NwK4uutAqeq3JmlD/H6oD06hrl33ZMj1SkogoaLC03pAz4L2B9YLM1wvy+jKN8PMOUcI
-         Hj0g==
+        bh=egtW1xEkho3A0fHJs4T8Q3wqHZlHR2dIYNNBBCYiUac=;
+        b=FUobsg7wBOcBHpapI84qYH9yKjxBf+uks2hqvfBzmbOzTNLZauAnZH8TbCmq1gahSK
+         PR813mcbuOrMZv21tKfS4H0e3eZRWIktyVMZuMDHVHRAW/3+rRK0T9eP/EKce/61IA0e
+         dMNgmW7r0PdIiKrtsooF0o2bJV6cSnI2yY4TWuMRDyQo1lyE6HMq7S48ejGkpKEujwM+
+         DugXmlfCxNwh3EtlM8479V7nY+6dkLPhcDl1kK+68SyMeuhpGn/x4X5cRQy1BJ9bACO9
+         28tknljA4Uxbc1voQ5u9M/qV6y83Fw2Ej3w4OqT6bb83ydRJoPr/Pez5PRkD0ik0LZ8R
+         8bAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=7vpxjdzLC35rO+JFayl4Y64pj7Iqa9C/mCMrzz7lHgk=;
-        b=g9xsDXSSAke0D9Hx0TS94hzqSL1MqAbBvXuvwXTSZyIPtnCgStqYVYU1QebwoOeor1
-         xwT+yf38GkxfIv4ZVhsLTe+ZF5KooZlnEPTr8N+pavrlECHcTwIIkKg04ny91qacfCY7
-         WiRazqCq4AZUYQq3BKfndVPigUnQ9M9ZjdbTwP4y8g0bqNCeus/TPOKMawv5ILxyeJad
-         rl6S4LiS/3rpbLa5w//WPDYr3/tlNWLZUOwwSdUB7IbE6rlNW1V1zdTWg/GAuPfQIdBZ
-         AJg21LSbJ8BqnxdPziYwnGDu0p7df/NdnbGPKXpQHCWVXfFzQLDt7zXVJBmJfrYaEvvz
-         HhiA==
-X-Gm-Message-State: AOAM530fMmwiassX51nKK45FlTVHUirogS+sFsKxNwsE8txdXBVOw2Lb
-        CtNAOOt50ZJ8j3xfzgGZMu141IhUhEYbz4nWJPs=
-X-Google-Smtp-Source: ABdhPJxrVUWH1j0C/T4fF8i6oqMI0C10dnbwznUUzx7+j4ufVOZ+cgRjqOKU0xGoatY6KXdfo78YHPlAe1AXdvoppT0=
-X-Received: by 2002:a2e:9704:: with SMTP id r4mr13232071lji.486.1614734561822;
- Tue, 02 Mar 2021 17:22:41 -0800 (PST)
+        bh=egtW1xEkho3A0fHJs4T8Q3wqHZlHR2dIYNNBBCYiUac=;
+        b=PAdbJ5x/zxPK7Ggk+hkytw4RxT7V/mv1gOH902ujl3Vd3S4d6YKW43OhXqIsCkik0+
+         GCIhDy0b969u/YeefjXIjJze/piKuzi2qEwGG+sJoJ4vne6+gMr+tIKpkW+NrLCwsEjV
+         qZKzzBH4QaF0rQreIsT7etyt1u4PBAywowcmwo4WxQQv8keO+SeI0Q8kGSdXwCPakIlj
+         AYJTnWh/ShCe7PhN0TDAEDPDP5rQ/61TyBiP+2pMLZO5f82Rls7V5xxHYg1Bk3Fnbl4R
+         s+5giJ2Hb3K15W8WIuXlnFsI0sJRtaKtLjqt/+rt3KOV8h39xYJusDdV2aok9OrA1d1X
+         9iJQ==
+X-Gm-Message-State: AOAM5304Q90QBNLbdnPZWtMKPqI7CNml4OX2wiDcvOzsAChO33saBc1R
+        69GP/EBiEW4wAQfwPjoo3UHWAj8fTNJMLAAZZJd/wXvOiJc=
+X-Google-Smtp-Source: ABdhPJxtav+vNkC2v0WvMCSBlXNyeV8AMCNvCZrnDeD2KXzQvYyYPY6G9FTxdfGOJRIHyuJmnoVeAIkwIAEriqYHA40=
+X-Received: by 2002:a05:6512:2254:: with SMTP id i20mr14195241lfu.534.1614737914729;
+ Tue, 02 Mar 2021 18:18:34 -0800 (PST)
 MIME-Version: 1.0
-References: <CAADnVQ+czV6u4CM-A+o5U+WhApkocunZXiCMJBB_Zbs0mvNSwQ@mail.gmail.com>
- <EECBE373-7CA1-4ED8-9F03-406BBED607FD@amacapital.net>
-In-Reply-To: <EECBE373-7CA1-4ED8-9F03-406BBED607FD@amacapital.net>
+References: <CAADnVQJtpvB8wDFv46O0GEaHkwmT1Ea70BJfgS36kDX0u4uZ-g@mail.gmail.com>
+ <968E85AE-75B8-42D7-844A-0D61B32063B3@amacapital.net>
+In-Reply-To: <968E85AE-75B8-42D7-844A-0D61B32063B3@amacapital.net>
 From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 2 Mar 2021 17:22:30 -0800
-Message-ID: <CAADnVQJtpvB8wDFv46O0GEaHkwmT1Ea70BJfgS36kDX0u4uZ-g@mail.gmail.com>
+Date:   Tue, 2 Mar 2021 18:18:23 -0800
+Message-ID: <CAADnVQJoTMqWK=kNFyTbjhoo22QD81KXnPxUjiCXhQaNhbK+8A@mail.gmail.com>
 Subject: Re: Why do kprobes and uprobes singlestep?
 To:     Andy Lutomirski <luto@amacapital.net>
 Cc:     Andy Lutomirski <luto@kernel.org>, bpf <bpf@vger.kernel.org>,
@@ -75,36 +74,74 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Mar 2, 2021 at 1:02 PM Andy Lutomirski <luto@amacapital.net> wrote:
+On Tue, Mar 2, 2021 at 5:46 PM Andy Lutomirski <luto@amacapital.net> wrote:
 >
 >
-> > On Mar 2, 2021, at 12:24 PM, Alexei Starovoitov <alexei.starovoitov@gma=
-il.com> wrote:
+> > On Mar 2, 2021, at 5:22 PM, Alexei Starovoitov <alexei.starovoitov@gmai=
+l.com> wrote:
 > >
-> > =EF=BB=BFOn Tue, Mar 2, 2021 at 10:38 AM Andy Lutomirski <luto@kernel.o=
-rg> wrote:
+> > =EF=BB=BFOn Tue, Mar 2, 2021 at 1:02 PM Andy Lutomirski <luto@amacapita=
+l.net> wrote:
 > >>
-> >> Is there something like a uprobe test suite?  How maintained /
-> >> actively used is uprobe?
+> >>
+> >>>> On Mar 2, 2021, at 12:24 PM, Alexei Starovoitov <alexei.starovoitov@=
+gmail.com> wrote:
+> >>>
+> >>> =EF=BB=BFOn Tue, Mar 2, 2021 at 10:38 AM Andy Lutomirski <luto@kernel=
+.org> wrote:
+> >>>>
+> >>>> Is there something like a uprobe test suite?  How maintained /
+> >>>> actively used is uprobe?
+> >>>
+> >>> uprobe+bpf is heavily used in production.
+> >>> selftests/bpf has only one test for it though.
+> >>>
+> >>> Why are you asking?
+> >>
+> >> Because the integration with the x86 entry code is a mess, and I want =
+to know whether to mark it BROKEN or how to make sure the any cleanups actu=
+ally work.
 > >
-> > uprobe+bpf is heavily used in production.
-> > selftests/bpf has only one test for it though.
-> >
-> > Why are you asking?
+> > Any test case to repro the issue you found?
+> > Is it a bug or just messy code?
 >
-> Because the integration with the x86 entry code is a mess, and I want to =
-know whether to mark it BROKEN or how to make sure the any cleanups actuall=
-y work.
+> Just messy code.
+>
+> > Nowadays a good chunk of popular applications (python, mysql, etc) has
+> > USDTs in them.
+> > Issues reported with bcc:
+> > https://github.com/iovisor/bcc/issues?q=3Dis%3Aissue+USDT
+> > Similar thing with bpftrace.
+> > Both standard USDT and semaphore based are used in the wild.
+> > uprobe for containers has been a long standing feature request.
+> > If you can improve uprobe performance that would be awesome.
+> > That's another thing that people report often. We optimized it a bit.
+> > More can be done.
+>
+>
+> Wait... USDT is much easier to implement well.  Are we talking just USDT =
+or are we talking about general uprobes in which almost any instruction can=
+ get probed?  If the only users that care about uprobes are doing USDT, we =
+could vastly simplify the implementation and probably make it faster, too.
 
-Any test case to repro the issue you found?
-Is it a bug or just messy code?
-Nowadays a good chunk of popular applications (python, mysql, etc) has
-USDTs in them.
-Issues reported with bcc:
-https://github.com/iovisor/bcc/issues?q=3Dis%3Aissue+USDT
-Similar thing with bpftrace.
-Both standard USDT and semaphore based are used in the wild.
-uprobe for containers has been a long standing feature request.
-If you can improve uprobe performance that would be awesome.
-That's another thing that people report often. We optimized it a bit.
-More can be done.
+USDTs are driving the majority of uprobe usage.
+If they can get faster it will increase their adoption even more.
+There are certainly cases of normal uprobes.
+They are at the start of the function 99% of the time.
+Like the following:
+"uprobe:/lib64/libc.so:malloc(u64 size):size:size,_ret",
+"uprobe:/lib64/libc.so:free(void *ptr)::ptr",
+is common despite its overhead.
+
+Here is the most interesting and practical usage of uprobes:
+https://github.com/iovisor/bcc/blob/master/tools/sslsniff.py
+and the manpage for the tool:
+https://github.com/iovisor/bcc/blob/master/tools/sslsniff_example.txt
+
+uprobe in the middle of the function is very rare.
+If the kernel starts rejecting uprobes on some weird instructions
+I suspect no one will complain.
+Especially if such tightening will come with performance boost for
+uprobe on a nop and unprobe at the start (which is typically push or
+alu on %sp).
+That would be a great step forward.
