@@ -2,139 +2,247 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B3927C4360C
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CA84C43603
 	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:55:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8BDB064EFE
+	by mail.kernel.org (Postfix) with ESMTP id 7493A64F11
 	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:55:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391450AbhCCWgl (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 3 Mar 2021 17:36:41 -0500
-Received: from mga02.intel.com ([134.134.136.20]:57261 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1377445AbhCCHRb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 3 Mar 2021 02:17:31 -0500
-IronPort-SDR: DOyiL31QVEu6GSHhfTbmDFH/3I9QtSETiXuBPiobZrCYXY8+bsJMwTi1J2K+W6ml0i/fwvOm4Y
- FHnJwVGcufGQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9911"; a="174247774"
-X-IronPort-AV: E=Sophos;i="5.81,219,1610438400"; 
-   d="scan'208";a="174247774"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2021 23:14:31 -0800
-IronPort-SDR: Ugd5v/PI7dn/AdDkmtShX8ns1liL0/mdL2a741NulTMRboT/LJdZbhFnaTC2RUJvOfhRnGdCGb
- b2XVrlyGe4XA==
-X-IronPort-AV: E=Sophos;i="5.81,219,1610438400"; 
-   d="scan'208";a="407113563"
-Received: from jdibley-mobl1.ger.corp.intel.com (HELO btopel-mobl.ger.intel.com) ([10.252.61.121])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2021 23:14:22 -0800
-Subject: Re: [PATCH bpf-next 2/2] libbpf, xsk: add libbpf_smp_store_release
- libbpf_smp_load_acquire
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>, maximmi@nvidia.com,
-        Andrii Nakryiko <andrii@kernel.org>
-References: <20210301104318.263262-1-bjorn.topel@gmail.com>
- <20210301104318.263262-3-bjorn.topel@gmail.com>
- <CAEf4BzZFDAcnaWU2JGL2GKmTTWQPDrcdgEn2NOM9cGFe16XheQ@mail.gmail.com>
-From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>
-Message-ID: <a65075f7-b46c-9131-f969-a6458e6001b7@intel.com>
-Date:   Wed, 3 Mar 2021 08:14:17 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
-MIME-Version: 1.0
-In-Reply-To: <CAEf4BzZFDAcnaWU2JGL2GKmTTWQPDrcdgEn2NOM9cGFe16XheQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        id S1391440AbhCCWgP convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 3 Mar 2021 17:36:15 -0500
+Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:20919 "EHLO
+        mail2-relais-roc.national.inria.fr" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1841822AbhCCGia (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 3 Mar 2021 01:38:30 -0500
+X-IronPort-AV: E=Sophos;i="5.81,219,1610406000"; 
+   d="scan'208";a="495810110"
+Received: from lfbn-idf1-1-708-183.w86-245.abo.wanadoo.fr (HELO mp-66156.home) ([86.245.159.183])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 03 Mar 2021 07:37:45 +0100
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.60.0.2.21\))
+Subject: Re: XDP socket rings, and LKMM litmus tests
+From:   maranget <luc.maranget@inria.fr>
+In-Reply-To: <20210302235019.GT2696@paulmck-ThinkPad-P72>
+Date:   Wed, 3 Mar 2021 07:37:42 +0100
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        parri.andrea@gmail.com, Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, boqun.feng@gmail.com,
+        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
+        akiyks@gmail.com, dlustig@nvidia.com, joel@joelfernandes.org,
+        =?utf-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        "Karlsson, Magnus" <magnus.karlsson@intel.com>
+Content-Transfer-Encoding: 8BIT
+Message-Id: <F62FB75E-3E2C-4BFF-910F-6732099C3447@inria.fr>
+References: <CAJ+HfNhxWFeKnn1aZw-YJmzpBuCaoeGkXXKn058GhY-6ZBDtZA@mail.gmail.com>
+ <20210302211446.GA1541641@rowland.harvard.edu>
+ <20210302235019.GT2696@paulmck-ThinkPad-P72>
+To:     paulmck@kernel.org
+X-Mailer: Apple Mail (2.3654.60.0.2.21)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 2021-03-03 05:38, Andrii Nakryiko wrote:
-> On Mon, Mar 1, 2021 at 2:43 AM Björn Töpel <bjorn.topel@gmail.com> wrote:
->>
->> From: Björn Töpel <bjorn.topel@intel.com>
->>
->> Now that the AF_XDP rings have load-acquire/store-release semantics,
->> move libbpf to that as well.
->>
->> The library-internal libbpf_smp_{load_acquire,store_release} are only
->> valid for 32-bit words on ARM64.
->>
->> Also, remove the barriers that are no longer in use.
->>
->> Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
->> ---
->>   tools/lib/bpf/libbpf_util.h | 72 +++++++++++++++++++++++++------------
->>   tools/lib/bpf/xsk.h         | 17 +++------
->>   2 files changed, 55 insertions(+), 34 deletions(-)
->>
->> diff --git a/tools/lib/bpf/libbpf_util.h b/tools/lib/bpf/libbpf_util.h
->> index 59c779c5790c..94a0d7bb6f3c 100644
->> --- a/tools/lib/bpf/libbpf_util.h
->> +++ b/tools/lib/bpf/libbpf_util.h
->> @@ -5,6 +5,7 @@
->>   #define __LIBBPF_LIBBPF_UTIL_H
->>
->>   #include <stdbool.h>
->> +#include <linux/compiler.h>
->>
->>   #ifdef __cplusplus
->>   extern "C" {
->> @@ -15,29 +16,56 @@ extern "C" {
->>    * application that uses libbpf.
->>    */
->>   #if defined(__i386__) || defined(__x86_64__)
->> -# define libbpf_smp_rmb() asm volatile("" : : : "memory")
->> -# define libbpf_smp_wmb() asm volatile("" : : : "memory")
->> -# define libbpf_smp_mb() \
->> -       asm volatile("lock; addl $0,-4(%%rsp)" : : : "memory", "cc")
->> -/* Hinders stores to be observed before older loads. */
->> -# define libbpf_smp_rwmb() asm volatile("" : : : "memory")
+Hi all,
+
+I agree that herd7 computation of control dependencies is problematic here.
+
+Thanks for reporting the problem. Paul kindly takes the responsibility for the problem, but frankly do not remember having followed his recommendations here.
+
+I am quite busy today and canot really work on the issue. However my intuition is that control dependencies follow from chains  of control dependencies in if (say “direct” control dependencies, roughly from "if" condition to if statement)  and data dependencies, ending in control.
+
+—Luc
+
+> On 3 Mar 2021, at 00:50, Paul E. McKenney <paulmck@kernel.org> wrote:
 > 
-> So, technically, these four are part of libbpf's API, as libbpf_util.h
-> is actually installed on target hosts. Seems like xsk.h is the only
-> one that is using them, though.
+> On Tue, Mar 02, 2021 at 04:14:46PM -0500, Alan Stern wrote:
+>> On Tue, Mar 02, 2021 at 07:46:27PM +0100, Björn Töpel wrote:
+>>> Hi!
+>>> 
+>>> Firstly; The long Cc-list is to reach the LKMM-folks.
+>>> 
+>>> Some background; the XDP sockets use a ring-buffer to communicate
+>>> between the kernel and userland. It's a
+>>> single-consumer/single-producer ring, and described in
+>>> net/xdp/xsk_queue.h.
+>>> 
+>>> --8<---
+>>> /* The structure of the shared state of the rings are the same as the
+>>> * ring buffer in kernel/events/ring_buffer.c. For the Rx and completion
+>>> * ring, the kernel is the producer and user space is the consumer. For
+>>> * the Tx and fill rings, the kernel is the consumer and user space is
+>>> * the producer.
+>>> *
+>>> * producer                         consumer
+>>> *
+>>> * if (LOAD ->consumer) {           LOAD ->producer
+>>> *                    (A)           smp_rmb()       (C)
+>>> *    STORE $data                   LOAD $data
+>>> *    smp_wmb()       (B)           smp_mb()        (D)
+>>> *    STORE ->producer              STORE ->consumer
+>>> * }
+>>> *
+>>> * (A) pairs with (D), and (B) pairs with (C).
+>>> ...
+>>> -->8---
+>>> 
+>>> I'd like to replace the smp_{r,w,}mb() barriers with acquire-release
+>>> semantics [1], without breaking existing userspace applications.
+>>> 
+>>> So, I figured I'd use herd7 and the LKMM model to build a litmus test
+>>> for the barrier version, then for the acquire-release version, and
+>>> finally permutations of both.
+>>> 
+>>> The idea is to use a one element ring, with a state machine outlined
+>>> in the litmus test.
+>>> 
+>>> The basic test for the existing smp_{r,w,}mb() barriers looks like:
+>>> 
+>>> $ cat spsc-rb+1p1c.litmus
+>>> C spsc-rb+1p1c
+>>> 
+>>> // Stupid one entry ring:
+>>> // prod cons     allowed action       prod cons
+>>> //    0    0 =>       prod          =>   1    0
+>>> //    0    1 =>       cons          =>   0    0
+>>> //    1    0 =>       cons          =>   1    1
+>>> //    1    1 =>       prod          =>   0    1
+>>> 
+>>> { prod = 1; }
+>>> 
+>>> // Here, we start at prod==1,cons==0, data==0, i.e. producer has
+>>> // written data=0, so from here only the consumer can start, and should
+>>> // consume data==0. Afterwards, producer can continue and write 1 to
+>>> // data. Can we enter state prod==0, cons==1, but consumer observerd
+>>> // the write of 1?
+>>> 
+>>> P0(int *prod, int *cons, int *data)
+>>> {
+>>>    int p;
+>>>    int c;
+>>>    int cond = 0;
+>>> 
+>>>    p = READ_ONCE(*prod);
+>>>    c = READ_ONCE(*cons);
+>>>    if (p == 0)
+>>>        if (c == 0)
+>>>            cond = 1;
+>>>    if (p == 1)
+>>>        if (c == 1)
+>>>            cond = 1;
+>>> 
+>>>    if (cond) {
+>>>        smp_mb();
+>>>        WRITE_ONCE(*data, 1);
+>>>        smp_wmb();
+>>>        WRITE_ONCE(*prod, p ^ 1);
+>>>    }
+>>> }
+>>> 
+>>> P1(int *prod, int *cons, int *data)
+>>> {
+>>>    int p;
+>>>    int c;
+>>>    int d = -1;
+>>>    int cond = 0;
+>>> 
+>>>    p = READ_ONCE(*prod);
+>>>    c = READ_ONCE(*cons);
+>>>    if (p == 1)
+>>>        if (c == 0)
+>>>            cond = 1;
+>>>    if (p == 0)
+>>>        if (c == 1)
+>>>            cond = 1;
+>>> 
+>>>    if (cond == 1) {
+>>>        smp_rmb();
+>>>        d = READ_ONCE(*data);
+>>>        smp_mb();
+>>>        WRITE_ONCE(*cons, c ^ 1);
+>>>    }
+>>> }
+>>> 
+>>> exists( 1:d=1 /\ prod=0 /\ cons=1 );
+>>> 
+>>> --
+>>> 
+>>> The weird state changing if-statements is because that I didn't get
+>>> '&&' and '||' to work with herd.
+>>> 
+>>> When this is run:
+>>> 
+>>> $ herd7 -conf linux-kernel.cfg litmus-tests/spsc-rb+1p1c.litmus
+>>> Test spsc-rb+1p1c Allowed
+>>> States 2
+>>> 1:d=0; cons=1; prod=0;
+>>> 1:d=0; cons=1; prod=1;
+>>> No
+>>> Witnesses
+>>> Positive: 0 Negative: 2
+>>> Condition exists (1:d=1 /\ prod=0 /\ cons=1)
+>>> Observation spsc-rb+1p1c Never 0 2
+>>> Time spsc-rb+1p1c 0.04
+>>> Hash=b399756d6a1301ca5bda042f32130791
+>>> 
+>>> Now to my question; In P0 there's an smp_mb(). Without that, the d==1
+>>> can be observed from P1 (consumer):
+>>> 
+>>> $ herd7 -conf linux-kernel.cfg litmus-tests/spsc-rb+1p1c.litmus
+>>> Test spsc-rb+1p1c Allowed
+>>> States 3
+>>> 1:d=0; cons=1; prod=0;
+>>> 1:d=0; cons=1; prod=1;
+>>> 1:d=1; cons=1; prod=0;
+>>> Ok
+>>> Witnesses
+>>> Positive: 1 Negative: 2
+>>> Condition exists (1:d=1 /\ prod=0 /\ cons=1)
+>>> Observation spsc-rb+1p1c Sometimes 1 2
+>>> Time spsc-rb+1p1c 0.04
+>>> Hash=0047fc21fa77da9a9aee15e35ec367ef
+>> 
+>> This result is wrong, apparently because of a bug in herd7.  There 
+>> should be control dependencies from each of the two loads in P0 to each 
+>> of the two stores, but herd7 doesn't detect them.
+>> 
+>> Maybe Luc can find some time to check whether this really is a bug and 
+>> if it is, fix it.
 > 
-> So the question is whether it's ok to remove them now?
->
-
-I would say that. Ideally, the barriers shouldn't be visible at all,
-since they're only used as an implementation detail for the static
-inline functions.
-
-
-> And also, why wasn't this part of xsk.h in the first place?
->
-
-I guess there was a "maybe it can be useful for more than the XDP socket 
-parts of libbpf"-idea. I'll move them to xsk.h for the v2, which will 
-make the migration easier.
-
-
-Björn
-
-
->> +# define libbpf_smp_store_release(p, v)                                        \
->> +       do {                                                            \
->> +               asm volatile("" : : : "memory");                        \
->> +               WRITE_ONCE(*p, v);                                      \
->> +       } while (0)
->> +# define libbpf_smp_load_acquire(p)                                    \
->> +       ({                                                              \
->> +               typeof(*p) ___p1 = READ_ONCE(*p);                       \
->> +               asm volatile("" : : : "memory");                        \
->> +               ___p1;                                                  \
->> +       })
+> I agree that herd7's control dependency tracking could be improved.
 > 
-> [...]
+> But sadly, it is currently doing exactly what I asked Luc to make it do,
+> which is to confine the control dependency to its "if" statement.  But as
+> usual I wasn't thinking globally enough.  And I am not exactly sure what
+> to ask for.  Here a store to a local was control-dependency ordered after
+> a read, and so that should propagate to a read from that local variable.
+> Maybe treat local variables as if they were registers, so that from
+> herd7's viewpoint the READ_ONCE()s are able to head control-dependency
+> chains in multiple "if" statements?
 > 
+> Thoughts?
+> 
+> 							Thanx, Paul
+> 
+>>> In commit c7f2e3cd6c1f ("perf: Optimize ring-buffer write by depending
+>>> on control dependencies") removes the corresponding smp_mb(), and also
+>>> the circular buffer in circular-buffers.txt (pre commit 6c43c091bdc5
+>>> ("documentation: Update circular buffer for
+>>> load-acquire/store-release")) is missing the smp_mb() at the
+>>> producer-side.
+>>> 
+>>> I'm trying to wrap my head around why it's OK to remove the smp_mb()
+>>> in the cases above? I'm worried that the current XDP socket ring
+>>> implementation (which is missing smp_mb()) might be broken.
+>> 
+>> Because of the control dependencies, the smp_mb isn't needed.  The 
+>> dependencies will order both of the stores after both of the loads.
+>> 
+>> Alan Stern
+
