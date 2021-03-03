@@ -2,185 +2,123 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3AF19C433E0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D04CCC433DB
 	for <bpf@archiver.kernel.org>; Thu,  4 Mar 2021 00:59:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1489764E86
+	by mail.kernel.org (Postfix) with ESMTP id A579A64E86
 	for <bpf@archiver.kernel.org>; Thu,  4 Mar 2021 00:59:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238275AbhCDA7q (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S238646AbhCDA7q (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Wed, 3 Mar 2021 19:59:46 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55516 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1352847AbhCCWEq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 3 Mar 2021 17:04:46 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 50C1464EE4;
-        Wed,  3 Mar 2021 22:03:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614809028;
-        bh=XTmcGqnKmC/DM53DiVXHz42mrqIQFrnwZkPWzPVVSrQ=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=DoNQfE2ftpXozq6+4mqDR0IClyBos758/gj77bfYnKOMRSN8UPGYdunNN5sGJHpJH
-         3iViiyK6F7AwEQja4TRib1JbrPZqsc4cHtov1PsSYR+cNBERR5E3jROMQvkdnXn6eI
-         T7+7kK8IvEfP5yOUqSUb9/BBiJrtbV82pZ7D/2cu2RPuhUvQS6np/g/WI7GgyWXwva
-         jeDBrTWxEPtP4jW/oDCe4CsQLK5cJFTgKiGj0yKwEtcczNxGopGDPY3UVsSur7pvLE
-         sWo9GaK46xzaYwPVvXC02BLzZoTDWj0frPNR6cdw8TbRyqSr/p6UWZaSio9BeJFtkY
-         ODBWph5yyZPxw==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 1C6AE3522591; Wed,  3 Mar 2021 14:03:48 -0800 (PST)
-Date:   Wed, 3 Mar 2021 14:03:48 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@gmail.com>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        parri.andrea@gmail.com, Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, boqun.feng@gmail.com,
-        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
-        luc.maranget@inria.fr, akiyks@gmail.com, dlustig@nvidia.com,
-        joel@joelfernandes.org,
-        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
-        "Karlsson, Magnus" <magnus.karlsson@intel.com>
-Subject: Re: XDP socket rings, and LKMM litmus tests
-Message-ID: <20210303220348.GL2696@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
-References: <CAJ+HfNhxWFeKnn1aZw-YJmzpBuCaoeGkXXKn058GhY-6ZBDtZA@mail.gmail.com>
- <20210302211446.GA1541641@rowland.harvard.edu>
- <20210302235019.GT2696@paulmck-ThinkPad-P72>
- <20210303171221.GA1574518@rowland.harvard.edu>
- <20210303174022.GD2696@paulmck-ThinkPad-P72>
- <20210303202246.GC1582185@rowland.harvard.edu>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44864 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352661AbhCDADc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 3 Mar 2021 19:03:32 -0500
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A22EBC0617AA
+        for <bpf@vger.kernel.org>; Wed,  3 Mar 2021 15:53:35 -0800 (PST)
+Received: by mail-oi1-x22c.google.com with SMTP id o3so28061520oic.8
+        for <bpf@vger.kernel.org>; Wed, 03 Mar 2021 15:53:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cilium-io.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=sJfUpwC5Q0AujFJkQ3bJRLWkfqFnVs4ZYKg21LJVuHE=;
+        b=BFIWZ0u0+EF/YC1mA2Nchh2NeUUfh8mRSTWelXDcFLQm2vG0MPevPcPuTWmYwx4XeL
+         1Xk+DQKrHnBz+sIjKI+ng4AK1/SgOuS6H+lXZPHBmnv0SNp8K6ZxJhG3ujg2ZeAJ2wwP
+         d7F0hjQDdtCyevlcdjFr21rzFqYI/oWOvVzQ/mcUuAwV3ELOANllu1vNL2cwfRMCILdX
+         1NKZHPNvRopqcWZD+RWrXQ9cw22ho6Mwsbg1ilG7UEz+4/MGONLMrpFxX+kz0LwJeJj2
+         kZ7gUkarr8Usb0SLVN6UGeUgC2zXh+t4KgzmJD02xc4AwN5+e/9xJfZOFU7VpPwhA/Sk
+         eJQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=sJfUpwC5Q0AujFJkQ3bJRLWkfqFnVs4ZYKg21LJVuHE=;
+        b=iMGDfehrrQUEWbn1o9uC0BNPTVj34sw07nkfWfo7cyktKo1iDkomklEFbgpZ1h1nPx
+         dq/Yi7jc/CHunKtyi5nabEA53ziQ+yq8fp+88OXnjqKAw0bSff9pCG2HFNu9zHevjlTr
+         aQpy/pawgPqznsDik5oJtg0WEmgQm90vHo1kGkRxJpFpJe4rNrcBK84Mtl+KOd4MhUx6
+         p6JuiNdhiNTZJFmlTP0kEFEWWbuocXm2xj39QAWZClT5tTz5uSHWir+VDIqc9BSrRKor
+         LE2DWI0H2bq1BugcO0lAnyNIHabrzBuFbcIP0qMaSnz3NGF1K22iuPIBd5VXEQ0yyfMU
+         zY4A==
+X-Gm-Message-State: AOAM530aQdsvg8MbKbtWtIvvJy/QJFhnQnamhQ+ZMMS8W44NgADRwqDs
+        5MeDxg87HVhwSfL2sVd59DIjfI2kaNalgLjyYQXE/A==
+X-Google-Smtp-Source: ABdhPJxVhvbmRStq/JhsuTAFe5elO14d19je73tPaRLSxCTShXmLatgreMOoyRO4L0xaC9DGZmlwi8aJuYsRDzPNKKo=
+X-Received: by 2002:aca:f50d:: with SMTP id t13mr1041539oih.89.1614815615117;
+ Wed, 03 Mar 2021 15:53:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210303202246.GC1582185@rowland.harvard.edu>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20210302171947.2268128-1-joe@cilium.io> <20210302171947.2268128-7-joe@cilium.io>
+ <79954d84-ad75-8f91-118c-0ce2150a1c96@fb.com>
+In-Reply-To: <79954d84-ad75-8f91-118c-0ce2150a1c96@fb.com>
+From:   Joe Stringer <joe@cilium.io>
+Date:   Wed, 3 Mar 2021 15:53:24 -0800
+Message-ID: <CADa=RyzgsEsRpED34Bi141216de9ecbSUw7M+349wtDDKVy2dw@mail.gmail.com>
+Subject: Re: [PATCHv2 bpf-next 06/15] bpf: Document BPF_PROG_TEST_RUN syscall command
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Joe Stringer <joe@cilium.io>, bpf <bpf@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>, linux-doc@vger.kernel.org,
+        linux-man@vger.kernel.org,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Lorenz Bauer <lmb@cloudflare.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Mar 03, 2021 at 03:22:46PM -0500, Alan Stern wrote:
-> On Wed, Mar 03, 2021 at 09:40:22AM -0800, Paul E. McKenney wrote:
-> > On Wed, Mar 03, 2021 at 12:12:21PM -0500, Alan Stern wrote:
-> 
-> > > Local variables absolutely should be treated just like CPU registers, if 
-> > > possible.  In fact, the compiler has the option of keeping local 
-> > > variables stored in registers.
-> > > 
-> > > (Of course, things may get complicated if anyone writes a litmus test 
-> > > that uses a pointer to a local variable,  Especially if the pointer 
-> > > could hold the address of a local variable in one execution and a 
-> > > shared variable in another!  Or if the pointer is itself a shared 
-> > > variable and is dereferenced in another thread!)
-> > 
-> > Good point!  I did miss this complication.  ;-)
-> 
-> I suspect it wouldn't be so bad if herd7 disallowed taking addresses of 
-> local variables.
-> 
-> > As you say, when its address is taken, the "local" variable needs to be
-> > treated as is it were shared.  There are exceptions where the pointed-to
-> > local is still used only by its process.  Are any of these exceptions
-> > problematic?
-> 
-> Easiest just to rule out the whole can of worms.
+On Wed, Mar 3, 2021 at 12:29 PM Yonghong Song <yhs@fb.com> wrote:
+>
+>
+>
+> On 3/2/21 9:19 AM, Joe Stringer wrote:
+> > Based on a brief read of the corresponding source code.
+> >
+> > Acked-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+> > Reviewed-by: Quentin Monnet <quentin@isovalent.com>
+> > Signed-off-by: Joe Stringer <joe@cilium.io>
+>
+> Acked-by: Yonghong Song <yhs@fb.com>
+>
+> > ---
+> >   include/uapi/linux/bpf.h | 14 +++++++++++---
+> >   1 file changed, 11 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> > index a8f2964ec885..a6cd6650e23d 100644
+> > --- a/include/uapi/linux/bpf.h
+> > +++ b/include/uapi/linux/bpf.h
+> > @@ -306,14 +306,22 @@ union bpf_iter_link_info {
+> >    *
+> >    * BPF_PROG_TEST_RUN
+> >    *  Description
+> > - *           Run an eBPF program a number of times against a provided
+> > - *           program context and return the modified program context a=
+nd
+> > - *           duration of the test run.
+> > + *           Run the eBPF program associated with the *prog_fd* a *rep=
+eat*
+> > + *           number of times against a provided program context *ctx_i=
+n* and
+> > + *           data *data_in*, and return the modified program context
+> > + *           *ctx_out*, *data_out* (for example, packet data), result =
+of the
+> > + *           execution *retval*, and *duration* of the test run.
+>
+> FYI, Lorenz's BPF_PROG_TEST_RUN support for sk_lookup program
+> requires data_in and data_out to be NULL. Not sure whether it is
+> worthwhile to specially mention here or not. The patch has not
+> been merged but close.
+>
+> https://lore.kernel.org/bpf/20210301101859.46045-1-lmb@cloudflare.com/
 
-Good point, given that a global can be used instead of a local for
-any case where an address must be taken.
-
-> > > But even if local variables are treated as non-shared storage locations, 
-> > > we should still handle this correctly.  Part of the problem seems to lie 
-> > > in the definition of the to-r dependency relation; the relevant portion 
-> > > is:
-> > > 
-> > > 	(dep ; [Marked] ; rfi)
-> > > 
-> > > Here dep is the control dependency from the READ_ONCE to the 
-> > > local-variable store, and the rfi refers to the following load of the 
-> > > local variable.  The problem is that the store to the local variable 
-> > > doesn't go in the Marked class, because it is notated as a plain C 
-> > > assignment.  (And likewise for the following load.)
-> > > 
-> > > Should we change the model to make loads from and stores to local 
-> > > variables always count as Marked?
-> > 
-> > As long as the initial (possibly unmarked) load would be properly
-> > complained about.
-> 
-> Sorry, I don't understand what you mean.
-
-I was thinking in terms of something like this in one of the processes:
-
-	p = gp; // Unmarked!
-	r1 = p;
-	q = r1; // Implicitly marked now?
-	if (q)
-		WRITE_ONCE(x, 1); // ctrl dep from gp???
-
-> >  And I cannot immediately think of a situation where
-> > this approach would break that would not result in a data race being
-> > flagged.  Or is this yet another failure of my imagination?
-> 
-> By definition, an access to a local variable cannot participate in a 
-> data race because all such accesses are confined to a single thread.
-
-True, but its value might have come from a load from a shared variable.
-
-> However, there are other aspects to consider, in particular, the 
-> ordering relations on local-variable accesses.  But if, as Luc says, 
-> local variables are treated just like registers then perhaps the issue 
-> doesn't arise.
-
-Here is hoping!
-
-> > > What should have happened if the local variable were instead a shared 
-> > > variable which the other thread didn't access at all?  It seems like a 
-> > > weak point of the memory model that it treats these two things 
-> > > differently.
-> > 
-> > But is this really any different than the situation where a global
-> > variable is only accessed by a single thread?
-> 
-> Indeed; it is the _same_ situation.  Which leads to some interesting 
-> questions, such as: What does READ_ONCE(r) mean when r is a local 
-> variable?  Should it be allowed at all?  In what way is it different 
-> from a plain read of r?
-> 
-> One difference is that the LKMM doesn't allow dependencies to originate 
-> from a plain load.  Of course, when you're dealing with a local 
-> variable, what matters is not the load from that variable but rather the 
-> earlier loads which determined the value that had been stored there.  
-> Which brings us back to the case of the
-> 
-> 	dep ; rfi
-> 
-> dependency relation, where the accesses in the middle are plain and 
-> non-racy.  Should the LKMM be changed to allow this?
-
-It would be nice, give or take the potential side effects.  ;-)
-As in it would be nice, but might not be worthwhile.
-
-> There are other differences to consider.  For example:
-> 
-> 	r = READ_ONCE(x);
-> 	smp_wmb();
-> 	WRITE_ONCE(y, 1);
-> 
-> If the write to r were treated as a marked store, the smp_wmb would 
-> order it (and consequently the READ_ONCE) before the WRITE_ONCE.  
-> However we don't want to do this when r is a local variable.  Indeed, a 
-> plain store wouldn't be ordered this way because the compiler might 
-> optimize the store away entirely, leaving the smp_wmb nothing to act on.
-
-Agreed, having smp_wmb() order things due to a write to a local variable
-would not be what we want.
-
-> So overall the situation is rather puzzling.  Treating local variables 
-> as registers is probably the best answer.
-
-That is sounding quite appealing at the moment.
-
-							Thanx, Paul
+Not sure how close either series is but I'm sure between Lorenz & I we
+can figure out how to fix this up. If I need to respin the series and
+Lorenz's one is in by then, I'll fix it up but it's not the end of the
+world to send an extra dedicated patch for this.
