@@ -2,142 +2,82 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D8816C4321A
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:56:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BCF2C15500
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:56:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A629064EFE
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:56:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EAE8964F0B
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:56:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446293AbhCCWlB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 3 Mar 2021 17:41:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37816 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1843076AbhCCKZT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 3 Mar 2021 05:25:19 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10914C034622
-        for <bpf@vger.kernel.org>; Wed,  3 Mar 2021 01:35:26 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id 2so23234453ljr.5
-        for <bpf@vger.kernel.org>; Wed, 03 Mar 2021 01:35:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GEKsNPFt5uW+bAYL4neLUuqC5v5C91j6xhAwFtQ4lRc=;
-        b=nPo5CmePDn0/ArVEDW37gxprx1SCAOIA8Dx8yHaCH7RtGD4/Wr26bY40lcNAvwrXdI
-         +IUMJmVCJLVMndm6zz+XB+5aDe2hLGinJdM6DIhsFovKhunXSeAcDcHOqYcoFb4vtNTV
-         vg/dAA47KCWS0r0GsKYk/53AUsAfqyuFt3KDE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GEKsNPFt5uW+bAYL4neLUuqC5v5C91j6xhAwFtQ4lRc=;
-        b=aHXUL3UWoIm+Q0zOa9puC3qEeeRd9ZVw3KMC/ftoEr+1zgp6wLbkWXyPKzyg8jxxRj
-         F5j47RnWWMBB0QpDGFsxqfpnOziVkjXF5kvf6St8467R68KlyERE25+RyU5gGLjhTGgU
-         StB+I3ei3yFxpS7QLlCs1K8OWXASECpLbyTQcu/5PXQtrPQsHfht/g9eQOuv/3UqbUvS
-         YAXSjA4Y8blRpLDjrTmIjaahkGH2NKChpkJQBfz0mRY6t7Bbm/cxr7HV2eTn9cC3k+97
-         qDsiQMLdgJmj8zzvRTgL28jmOzLoK89SQtKwxZIfIl/arKsG1n7hH3CvvIImvvQ4/I81
-         EMkw==
-X-Gm-Message-State: AOAM532HA84EcgogJqNz4C1K1kfLdGbpttCiPWouCJdIKA2VtyufVdH9
-        H2Xgv+r5L955ewYtYuGqHW69w2SqjwEDq959P7Z/TQ==
-X-Google-Smtp-Source: ABdhPJxX12DLFCNDWK1D3NDg/M9FChhkM1DPxBb4Jw2IveYs4lKzABCN01gR1vUX17clmbSsyqbaWnKIkZiyyN4h9po=
-X-Received: by 2002:a2e:8114:: with SMTP id d20mr11874975ljg.83.1614764124333;
- Wed, 03 Mar 2021 01:35:24 -0800 (PST)
+        id S1391834AbhCCWuH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 3 Mar 2021 17:50:07 -0500
+Received: from mga05.intel.com ([192.55.52.43]:12189 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1442620AbhCCPmG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 3 Mar 2021 10:42:06 -0500
+IronPort-SDR: D9OTeArAhYm1W5upTymbq7uXiNw5Xyxpp3yJ4w81IEcB5t7s7a0dhvCxAhGSbGTRhwvJBhjq0z
+ jil6U005Ceng==
+X-IronPort-AV: E=McAfee;i="6000,8403,9912"; a="272218012"
+X-IronPort-AV: E=Sophos;i="5.81,220,1610438400"; 
+   d="scan'208";a="272218012"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2021 07:39:07 -0800
+IronPort-SDR: ATfSTsxIdKPFQ0MciTSQb9mrnUq+S5W/hYZwx2CnGa8K/W/D4vfVwTYL4Ig0dgyLvbvWw4IkKu
+ 5+tsY/FLAk5g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,220,1610438400"; 
+   d="scan'208";a="367645044"
+Received: from ranger.igk.intel.com ([10.102.21.164])
+  by orsmga003.jf.intel.com with ESMTP; 03 Mar 2021 07:39:04 -0800
+From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To:     makita.toshiaki@lab.ntt.co.jp, daniel@iogearbox.net,
+        ast@kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org
+Cc:     bjorn.topel@intel.com, magnus.karlsson@intel.com,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Subject: [PATCH bpf] veth: store queue_mapping independently of XDP prog presence
+Date:   Wed,  3 Mar 2021 16:29:03 +0100
+Message-Id: <20210303152903.11172-1-maciej.fijalkowski@intel.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20210302023743.24123-1-xiyou.wangcong@gmail.com>
- <20210302023743.24123-3-xiyou.wangcong@gmail.com> <CACAyw9-SjsNn4_J1KDXuFh1nd9Hr-Mo+=7S-kVtooJwdi1fodQ@mail.gmail.com>
- <CAM_iQpXqE9qJ=+zKA6H1Rq=KKgm8LZ=p=ZtvrrH+hfSrTg+zxw@mail.gmail.com>
-In-Reply-To: <CAM_iQpXqE9qJ=+zKA6H1Rq=KKgm8LZ=p=ZtvrrH+hfSrTg+zxw@mail.gmail.com>
-From:   Lorenz Bauer <lmb@cloudflare.com>
-Date:   Wed, 3 Mar 2021 09:35:13 +0000
-Message-ID: <CACAyw99BweMk-82f270=Vb=jDuec0q0N-6E8Rr8enaOGuZEDNQ@mail.gmail.com>
-Subject: Re: [Patch bpf-next v2 2/9] sock: introduce sk_prot->update_proto()
-To:     Cong Wang <xiyou.wangcong@gmail.com>
-Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        duanxiongchun@bytedance.com,
-        Dongdong Wang <wangdongdong.6@bytedance.com>,
-        Jiang Wang <jiang.wang@bytedance.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Sitnicki <jakub@cloudflare.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, 2 Mar 2021 at 18:23, Cong Wang <xiyou.wangcong@gmail.com> wrote:
->
-> > if the function returned a struct proto * like it does at the moment.
-> > That way we keep sk->sk_prot manipulation confined to the sockmap code
-> > and don't have to copy paste it into every proto.
->
-> Well, TCP seems too special to do this, as it could call tcp_update_ulp()
-> to update the proto.
+Currently, veth_xmit() would call the skb_record_rx_queue() only when
+there is XDP program loaded on peer interface in native mode.
 
-I had a quick look, tcp_bpf_update_proto is the only caller of tcp_update_ulp,
-which in turn is the only caller of icsk_ulp_ops->update, which in turn is only
-implemented as tls_update in tls_main.c. Turns out that tls_update
-has another one of these calls:
+If peer has XDP prog in generic mode, then netif_receive_generic_xdp()
+has a call to netif_get_rxqueue(skb), so for multi-queue veth it will
+not be possible to grab a correct rxq.
 
-} else {
-    /* Pairs with lockless read in sk_clone_lock(). */
-    WRITE_ONCE(sk->sk_prot, p);
-    sk->sk_write_space = write_space;
-}
+To fix that, store queue_mapping independently of XDP prog presence on
+peer interface.
 
-Maybe it looks familiar? :o) I think it would be a worthwhile change.
+Fixes: 638264dc9022 ("veth: Support per queue XDP ring")
+Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+---
+ drivers/net/veth.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
->
-> >
-> > > diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-> > > index 3bddd9dd2da2..13d2af5bb81c 100644
-> > > --- a/net/core/sock_map.c
-> > > +++ b/net/core/sock_map.c
-> > > @@ -184,26 +184,10 @@ static void sock_map_unref(struct sock *sk, void *link_raw)
-> > >
-> > >  static int sock_map_init_proto(struct sock *sk, struct sk_psock *psock)
-> > >  {
-> > > -       struct proto *prot;
-> > > -
-> > > -       switch (sk->sk_type) {
-> > > -       case SOCK_STREAM:
-> > > -               prot = tcp_bpf_get_proto(sk, psock);
-> > > -               break;
-> > > -
-> > > -       case SOCK_DGRAM:
-> > > -               prot = udp_bpf_get_proto(sk, psock);
-> > > -               break;
-> > > -
-> > > -       default:
-> > > +       if (!sk->sk_prot->update_proto)
-> > >                 return -EINVAL;
-> > > -       }
-> > > -
-> > > -       if (IS_ERR(prot))
-> > > -               return PTR_ERR(prot);
-> > > -
-> > > -       sk_psock_update_proto(sk, psock, prot);
-> > > -       return 0;
-> > > +       psock->saved_update_proto = sk->sk_prot->update_proto;
-> > > +       return sk->sk_prot->update_proto(sk, false);
-> >
-> > I think reads / writes from sk_prot need READ_ONCE / WRITE_ONCE. We've
-> > not been diligent about this so far, but I think it makes sense to be
-> > careful in new code.
->
-> Hmm, there are many places not using READ_ONCE/WRITE_ONCE,
-> for a quick example:
-
-I know! I'll defer to John and Jakub.
-
+diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+index aa1a66ad2ce5..34e49c75db42 100644
+--- a/drivers/net/veth.c
++++ b/drivers/net/veth.c
+@@ -302,8 +302,7 @@ static netdev_tx_t veth_xmit(struct sk_buff *skb, struct net_device *dev)
+ 	if (rxq < rcv->real_num_rx_queues) {
+ 		rq = &rcv_priv->rq[rxq];
+ 		rcv_xdp = rcu_access_pointer(rq->xdp_prog);
+-		if (rcv_xdp)
+-			skb_record_rx_queue(skb, rxq);
++		skb_record_rx_queue(skb, rxq);
+ 	}
+ 
+ 	skb_tx_timestamp(skb);
 -- 
-Lorenz Bauer  |  Systems Engineer
-6th Floor, County Hall/The Riverside Building, SE1 7PB, UK
+2.20.1
 
-www.cloudflare.com
