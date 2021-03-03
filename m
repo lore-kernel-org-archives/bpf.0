@@ -2,78 +2,138 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E2B3C15503
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC851C15507
 	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:57:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0EE0A64EF9
+	by mail.kernel.org (Postfix) with ESMTP id AE0D164EF9
 	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:57:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449662AbhCCWx3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 3 Mar 2021 17:53:29 -0500
-Received: from mga07.intel.com ([134.134.136.100]:62500 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1350800AbhCCTHT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 3 Mar 2021 14:07:19 -0500
-IronPort-SDR: AEziBZrS5z174NoCWuykj0QZjcz30bRPASwri3k8aLeNl8gDnvxLKmgTWRQ7/+kkpXzdMdbNu0
- /j0RjrhAgF8Q==
-X-IronPort-AV: E=McAfee;i="6000,8403,9912"; a="251309585"
-X-IronPort-AV: E=Sophos;i="5.81,220,1610438400"; 
-   d="scan'208";a="251309585"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2021 11:06:39 -0800
-IronPort-SDR: wqW5vLNrKW+5mXU2dWDdBNxVkC1AJVEhureftlVXpcMtFBrPjVY55jtEU7XHq3MT+t4ViMe+d2
- k2vtatxOV0Gw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,220,1610438400"; 
-   d="scan'208";a="506992640"
-Received: from ranger.igk.intel.com ([10.102.21.164])
-  by fmsmga001.fm.intel.com with ESMTP; 03 Mar 2021 11:06:37 -0800
-From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     daniel@iogearbox.net, ast@kernel.org, bpf@vger.kernel.org
-Cc:     bjorn.topel@intel.com, magnus.karlsson@intel.com,
-        john.fastabend@gmail.com,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH bpf v2 1/3] xsk: remove dangling function declaration from header file
-Date:   Wed,  3 Mar 2021 19:56:34 +0100
-Message-Id: <20210303185636.18070-2-maciej.fijalkowski@intel.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210303185636.18070-1-maciej.fijalkowski@intel.com>
-References: <20210303185636.18070-1-maciej.fijalkowski@intel.com>
+        id S1449760AbhCCWxr (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 3 Mar 2021 17:53:47 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:55505 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1343665AbhCCTmK (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 3 Mar 2021 14:42:10 -0500
+Received: (qmail 1582740 invoked by uid 1000); 3 Mar 2021 14:40:54 -0500
+Date:   Wed, 3 Mar 2021 14:40:54 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     maranget <luc.maranget@inria.fr>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@gmail.com>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        parri.andrea@gmail.com, Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, boqun.feng@gmail.com,
+        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
+        akiyks@gmail.com, dlustig@nvidia.com, joel@joelfernandes.org,
+        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
+        "Karlsson, Magnus" <magnus.karlsson@intel.com>
+Subject: Re: XDP socket rings, and LKMM litmus tests
+Message-ID: <20210303194054.GB1582185@rowland.harvard.edu>
+References: <CAJ+HfNhxWFeKnn1aZw-YJmzpBuCaoeGkXXKn058GhY-6ZBDtZA@mail.gmail.com>
+ <20210302211446.GA1541641@rowland.harvard.edu>
+ <20210302235019.GT2696@paulmck-ThinkPad-P72>
+ <20210303171221.GA1574518@rowland.harvard.edu>
+ <29736B0B-9960-473C-85BB-5714F181198B@inria.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <29736B0B-9960-473C-85BB-5714F181198B@inria.fr>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-xdp_umem_query() is dead for a long time, drop the declaration from
-include/linux/netdevice.h
+On Wed, Mar 03, 2021 at 06:37:36PM +0100, maranget wrote:
+> 
+> 
+> > On 3 Mar 2021, at 18:12, Alan Stern <stern@rowland.harvard.edu> wrote:
+> > 
+> > On Tue, Mar 02, 2021 at 03:50:19PM -0800, Paul E. McKenney wrote:
+> >> On Tue, Mar 02, 2021 at 04:14:46PM -0500, Alan Stern wrote:
+> > 
+> >>> This result is wrong, apparently because of a bug in herd7.  There 
+> >>> should be control dependencies from each of the two loads in P0 to each 
+> >>> of the two stores, but herd7 doesn't detect them.
+> >>> 
+> >>> Maybe Luc can find some time to check whether this really is a bug and 
+> >>> if it is, fix it.
+> >> 
+> >> I agree that herd7's control dependency tracking could be improved.
+> >> 
+> >> But sadly, it is currently doing exactly what I asked Luc to make it do,
+> >> which is to confine the control dependency to its "if" statement.  But as
+> >> usual I wasn't thinking globally enough.  And I am not exactly sure what
+> >> to ask for.  Here a store to a local was control-dependency ordered after
+> >> a read, and so that should propagate to a read from that local variable.
+> >> Maybe treat local variables as if they were registers, so that from
+> >> herd7's viewpoint the READ_ONCE()s are able to head control-dependency
+> >> chains in multiple "if" statements?
+> >> 
+> >> Thoughts?
+> > 
+> > Local variables absolutely should be treated just like CPU registers, if 
+> > possible.  In fact, the compiler has the option of keeping local 
+> > variables stored in registers.
+> > 
+> 
+> And indeed local variables are treated as registers by herd7.
+> 
+> 
+> > (Of course, things may get complicated if anyone writes a litmus test 
+> > that uses a pointer to a local variable,  Especially if the pointer 
+> > could hold the address of a local variable in one execution and a 
+> > shared variable in another!  Or if the pointer is itself a shared 
+> > variable and is dereferenced in another thread!)
+> > 
+> > But even if local variables are treated as non-shared storage locations, 
+> > we should still handle this correctly.  Part of the problem seems to lie 
+> > in the definition of the to-r dependency relation; the relevant portion 
+> > is:
+> 
+> In fact, I’d rather change the computation of “dep” here control-dependency “ctrl”. Notice that “ctrl” is computed by herd7 and present in the initial environment of the Cat interpreter.
+> 
+> I have made a PR to herd7 that performs the change. The commit message states the new definition.
 
-Fixes: c9b47cc1fabc ("xsk: fix bug when trying to use both copy and zero-copy on one queue id")
-Acked-by: Björn Töpel <bjorn.topel@intel.com>
-Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
----
- include/linux/netdevice.h | 2 --
- 1 file changed, 2 deletions(-)
+Shouldn't similar reasoning apply to data and address dependencies?
 
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index 6cef47b76cc6..226303976310 100644
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -3932,8 +3932,6 @@ int dev_change_xdp_fd(struct net_device *dev, struct netlink_ext_ack *extack,
- int bpf_xdp_link_attach(const union bpf_attr *attr, struct bpf_prog *prog);
- u32 dev_xdp_prog_id(struct net_device *dev, enum bpf_xdp_mode mode);
- 
--int xdp_umem_query(struct net_device *dev, u16 queue_id);
--
- int __dev_forward_skb(struct net_device *dev, struct sk_buff *skb);
- int dev_forward_skb(struct net_device *dev, struct sk_buff *skb);
- int dev_forward_skb_nomtu(struct net_device *dev, struct sk_buff *skb);
--- 
-2.20.1
+For example, suppose there is a control dependency from a load to a 
+register variable, and then a data dependency from the register variable 
+to a store.  This should be treated as an overall data dependency from 
+the load to the store.
 
+Does your change to herd7 do this?  I couldn't tell from the description 
+in the PR.
+
+Also, do you think it's reasonable to add a restriction to herd7 against 
+taking the address of a local variable?
+
+> > 	(dep ; [Marked] ; rfi)
+> > 
+> > Here dep is the control dependency from the READ_ONCE to the 
+> > local-variable store, and the rfi refers to the following load of the 
+> > local variable.  The problem is that the store to the local variable 
+> > doesn't go in the Marked class, because it is notated as a plain C 
+> > assignment.  (And likewise for the following load.)
+> > 
+> This is a related issue, I am not sure, but perhaps it can be formulated as
+> "should rfi and rf on registers behave the  same?”
+
+Aren't they already the same thing?  It's not possible to have an rfe 
+from a register, is it?
+
+Alan
+
+> > Should we change the model to make loads from and stores to local 
+> > variables always count as Marked?
+> > 
+> > What should have happened if the local variable were instead a shared 
+> > variable which the other thread didn't access at all?  It seems like a 
+> > weak point of the memory model that it treats these two things 
+> > differently.
+> > 
+> > Alan
