@@ -2,261 +2,157 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 695CDC4361A
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:56:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C6ED3C28D14
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:56:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 44AA464E12
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:56:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 91D2864E74
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 03:56:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352538AbhCCDvD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Mar 2021 22:51:03 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51916 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1444954AbhCBT6j (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 2 Mar 2021 14:58:39 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 707A864F16;
-        Tue,  2 Mar 2021 19:57:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614715078;
-        bh=hyDREYjkyRLda93XeYqtSaRIRtjT4SlJIyzUDf9DXiE=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=j5KfiQ2gq5PFDBXaE3tuzlqSV7rffOGyxdTNHmJQ6r6qoG25shheU0jBIg6uL+6yg
-         x2Plbz/7YohB2NgM0VFNIcnnxUfk1Z+JzXyiITV3DhcHWH7JLlo9tz0j/1s3olVNfw
-         icXYWbFSGjR8cdMIMGZwONSSwd4eQvhmPuWWwZ4wYjeqvEdQhUD0owTACHMgu1JTi/
-         ZBIKyTupHlTkJJAZ9mQRgiO7eF2CbWaaSUztBKHghQf7zDqOdsaKermByLbLrtOaXJ
-         zLYC3hc0/QlDvFTT+PmK6A+gXSqU4LXJHPCG40XZZrK6x6bKEUabHbZzoEqkvn+HCs
-         L1Nj1g3qcSYCA==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 215B0352259C; Tue,  2 Mar 2021 11:57:58 -0800 (PST)
-Date:   Tue, 2 Mar 2021 11:57:58 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        stern@rowland.harvard.edu, parri.andrea@gmail.com,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, boqun.feng@gmail.com,
-        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
-        luc.maranget@inria.fr, akiyks@gmail.com, dlustig@nvidia.com,
-        joel@joelfernandes.org,
-        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
-        "Karlsson, Magnus" <magnus.karlsson@intel.com>
-Subject: Re: XDP socket rings, and LKMM litmus tests
-Message-ID: <20210302195758.GQ2696@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
-References: <CAJ+HfNhxWFeKnn1aZw-YJmzpBuCaoeGkXXKn058GhY-6ZBDtZA@mail.gmail.com>
+        id S1352551AbhCCDvR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Mar 2021 22:51:17 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:3134 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239160AbhCCAq2 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 2 Mar 2021 19:46:28 -0500
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 1230UR5f021106;
+        Tue, 2 Mar 2021 16:45:28 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : to : cc :
+ references : from : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=GIATf0dy1Gu3DjiiEQ5vhfmvEzfycs+khfaTdGQ0zGw=;
+ b=orVXD4idv2+LARwwvhX5J7b1pM/qQTd9baLEBYZTZBQ4j99RxBuTNfbK7Wftq++3ygUg
+ jTGTf19RFDlLrsfJRkS0kfRvjN/RuWGVfc02ICJ3MpIalxNwnOE8VflAKxKloqubxOv6
+ LJ0O4YAJS7ud5o+quiHJMzIatiXzDrz2ljc= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 3706m7y6v4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 02 Mar 2021 16:45:28 -0800
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (100.104.98.9) by
+ o365-in.thefacebook.com (100.104.94.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Tue, 2 Mar 2021 16:45:27 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UFqpYPfUS/nGCL/aiuGpjZOfykbhenIcPoP7qBFwJNdx8YoiRcOPW26GWk+xzjsTYjzDLR4r2+oRQRFGB86vy8t6vNzZkNwZFN/Akx3zI9KNVErifcluWPpvJpB/jjEs6u/xt8Ft8EkzntHJTQDy0219LbZ5IuHUEW722onwm5wqWs06wCGrGKJ9sQEjften6PXDd494idbp3Q6DwM2kC1bgJ/4bU/joitWFGyE/HZIKuYJS5xqWCtU9eKaz/QEDP7Zt0CZlvr5knizrxD3M/pssBH5dJoC1EsO9rKNZo5HyS7GwmfR3IXXnicIYYuihL0K/nx/4ho3UBNzXIXolqw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GIATf0dy1Gu3DjiiEQ5vhfmvEzfycs+khfaTdGQ0zGw=;
+ b=SlsWb+rfp5S+lHm2UuTa1rvrmo//qYAW15R7682HlRsB47g3PhA8rjlJ30MaRt/YJLEzwza9vBSjb/YWoVrnde3bs6pOPiA5bXkAy1aTYJEBdmivaL4U4ymWG1/7DIOZ/jCdN3qij2SJ7nhFqTtTeeQgFdv4dss8IneamqyGTdZVf3RyRb3f+wvANxVjcm64tFHcYyBMsFvV/OaK4NmiOpyYobGWaFMtPQHrROB/JQwxyPf7tThfyiAfyA1+kqWItIZtx8Pp7AtuZJen9qX2fa4OeuVWXFvdaResXa5f7QY26mmoav5Kur1xuS0k09i8tJSmnIvstauz/p/lepvgyg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
+ by SA1PR15MB4435.namprd15.prod.outlook.com (2603:10b6:806:196::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3912.17; Wed, 3 Mar
+ 2021 00:45:26 +0000
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::f433:fd99:f905:8912]) by SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::f433:fd99:f905:8912%3]) with mapi id 15.20.3890.030; Wed, 3 Mar 2021
+ 00:45:26 +0000
+Subject: Re: [PATCH bpf-next] tools/runqslower: allow substituting custom
+ vmlinux.h for the build
+To:     Andrii Nakryiko <andrii@kernel.org>, <bpf@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <ast@fb.com>, <daniel@iogearbox.net>
+CC:     <kernel-team@fb.com>, Martin Lau <kafai@fb.com>
+References: <20210303004010.653954-1-andrii@kernel.org>
+From:   Yonghong Song <yhs@fb.com>
+Message-ID: <a51cb264-c22b-e0a5-7352-3452c7bf3bf6@fb.com>
+Date:   Tue, 2 Mar 2021 16:45:23 -0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.8.0
+In-Reply-To: <20210303004010.653954-1-andrii@kernel.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [2620:10d:c090:400::5:1b00]
+X-ClientProxiedBy: MWHPR04CA0026.namprd04.prod.outlook.com
+ (2603:10b6:300:ee::12) To SN6PR1501MB2064.namprd15.prod.outlook.com
+ (2603:10b6:805:d::27)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJ+HfNhxWFeKnn1aZw-YJmzpBuCaoeGkXXKn058GhY-6ZBDtZA@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [IPv6:2620:10d:c085:21e1::1a32] (2620:10d:c090:400::5:1b00) by MWHPR04CA0026.namprd04.prod.outlook.com (2603:10b6:300:ee::12) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3912.17 via Frontend Transport; Wed, 3 Mar 2021 00:45:25 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 55712728-5771-45a5-8f6d-08d8dddda2e2
+X-MS-TrafficTypeDiagnostic: SA1PR15MB4435:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <SA1PR15MB443564189ED201CD10253EE0D3989@SA1PR15MB4435.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:3826;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: rGXxOWaf6QAJPbayjaRQj0uuAY5V/P8PYJVgiFFz3mKX61RlzKA4/X+itSNh9YNn+e3AKEokY+zZEp83yUwL9rsG61pt6SBgsx/na+AU2DprDoWad7DyVgU8QeGrGKqsvqvs5e8n/Whj0sCirGOgHBnKwjb5vmsEjkl4avr/XoYNakxDPvjd2oi3tsObcBSAqobI1Q5PtsrLP7h08F2ROy7oikmIB97K1oj+sK3IZYHdKsWJlsOJ9zzYU6OqIeItllBGBvLhRFQ/DjD0E7XgoFnZrLQ/aONCdEdtSaQo7+TZ+JCUaNu9jcQWbAtUqnNiIfwOUUfiEnNhRYQ4jBVMv2aanml6/9aDpcaxt8cp09jxy1+l0kEPXnmxcpyzDvRM/ekCCGBIlwK2Ja0Dr+YhpjRauTA4FcJmOGq+dAbStm1OMr/J7DcGzl3ERc0EDbsRbX8clupDUK8s/KAN/grTV+idOYZ7uyu6n2TKZj8X9bGh0qlWossVX8CDEeRKG+xqA/tomvLYcp3YQN2mNT6fM3QtSuN91kRed9jHkbf/Zaf4ok1PYifdV78oTyywQHN9wlAhzryHg9k5DGFAXvVIoGytssVZK8ryAQ9eIkDm1Yw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(376002)(366004)(346002)(396003)(39860400002)(136003)(36756003)(6486002)(53546011)(4744005)(86362001)(31686004)(8936002)(186003)(16526019)(316002)(478600001)(52116002)(2616005)(31696002)(66556008)(66476007)(66946007)(2906002)(8676002)(4326008)(5660300002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?MHZCZWVtdG5JNW5IVTZGN3JsN1BmYi9NdlgxTTBQTU1lRXpKT0hHUllGOC93?=
+ =?utf-8?B?dExkcGFWc283NEZrUUpDWjIwTjFVQ2wvckx5OFZTaUZuWmJqMjNtTWNqTDZ1?=
+ =?utf-8?B?czlCVHkzaTdQTm1wZk1SSGV5MlJNN1k2S3I4Z1U1QkcxSlJ1amk3N1NROFli?=
+ =?utf-8?B?d05JcGdpa011Wk9uVm5HWEtRSlRYWGJsRWk2TWtzUmRuTDFOTXNtbGhPV2FS?=
+ =?utf-8?B?ZmVVdXFKdzdVWXFUY1h3b2pGNWZ1NXM1SllGTzltRSs3RFgwaHppbUJ3SGtP?=
+ =?utf-8?B?bERDcFhlMEcvQjY1Zm5BQkpSWnlSbzZ0M0JZUkU3QXo2Z1U1S2pnMTFIRDlC?=
+ =?utf-8?B?RGtDVG11R1dhckJXUll2VTBBUVhkc01yWlg4dUNCRHlvc3d6N1VJaXZGK1VQ?=
+ =?utf-8?B?cVlvSjUybXhUV3Vsd3VyUTJDNDZ1L09Nd21NcHE2UkIvelFhZjN5MHo1Wmc3?=
+ =?utf-8?B?UW1rQy9ZVUVMejVuQzZ0QVJ4UC9tdjdLMmcvM0VFeE01SEN6enBLb2g2QzRG?=
+ =?utf-8?B?dnorWkozTFdZa0lKZkpEN1hDVnRjemVkL2psY21KcmVVUFRMaTVYaDRqTDFo?=
+ =?utf-8?B?V0srb2p4dTNxMndvYVdGVVp4ZkoxbVVpK0kwOWRPb3JZNW5sR3c0OXlDNXpI?=
+ =?utf-8?B?V3RmdlFpOWtTMlp3bnR1RTVoV0JjUTh4cXAvRlViamlJdHNlalFhTzZWeGx3?=
+ =?utf-8?B?bVRETEdDWDN6STJ5OVpva09IYXkrWlhuZ1RFalJ6eUtGRVlHZUN1M1E2Wnl3?=
+ =?utf-8?B?bVdYaXZvRjQvVzRuUmh5VnI5SU5NVm1KdUZhOUZ2eHZwWnlhaURzQ1M1Rm1v?=
+ =?utf-8?B?VHhlM045TnUrTlRyQUFlVEJzTU9rSncwSGRyZzRjUEl2aS9sbEV0NnpEZGky?=
+ =?utf-8?B?MXBhd1g0QUFyWTIzUjJIVmVxYnROREtiMVBuNThWYUpwVU4xUGh2TUtuMDQ5?=
+ =?utf-8?B?eEdRVTdmMWV2YkNnMzlaNXBTVnhOMlMzOThxSTlwd3l0TXNES3FySXZHYlo4?=
+ =?utf-8?B?VDRKMVRPUGE0bnRlZVJNWnptOUdWQnI4dkFuQVhJS3BscDBORUVyR24vUjk2?=
+ =?utf-8?B?S2l3emxvSkNKTXl4TGJ2U0poZjhFZEV5SEMzZXd6OTBHNFYvbWsxb1ZoWkZQ?=
+ =?utf-8?B?YmhHY3loMjFRaXc4TnNqNnFpaWRMOGVOV1ZEUWIzRVNrNFoyRVJieXQ5MVVO?=
+ =?utf-8?B?aThnMEJXMUt5NXFVYzRMNFd4MVl6Sk1LbjRpVVNNeEZiUjA4UEFHRUY4dktH?=
+ =?utf-8?B?TTJzTWhwQndFN1c0aWZmU2tqaG5Ub0ZJTzliYmJXckJFU2hhNkRaTWpjSWZS?=
+ =?utf-8?B?VGlKazdSVndlbGVOd3pGWGI4bXRuQnQzdGp1MGtscjNBWFovdHZGZEd5UXdU?=
+ =?utf-8?B?citpMXdld1R1OG9HSXVpNWtLaGU3cS9UZjE1TWRoWWJic2ZCTCs1K3Vzd2No?=
+ =?utf-8?B?cWROMHdxaXNBT3JMd1dwMDdLS3JreDVSbUdLNnYvaVNUZWtvMlJCQ2lrVTJj?=
+ =?utf-8?B?R1ZYMXhCSVBpd1F3QlU2RU1ud0tMT1dKOEUvOW5yV3FTemp4L3RIZFFOaXF4?=
+ =?utf-8?B?ZmxiaDRidUV5cVMzUUVURUkwRGw1SjEwYzFmcGVZL09aMjVLYi92NDFHZjl5?=
+ =?utf-8?B?WmRjcmJSL0FxNVN5VmM2YjFJZWtGRmxwUzV5ODQ5emtPUFhYUjY2Y25XSXRi?=
+ =?utf-8?B?RmxjVGlHL2d3NnQ0T3ZudndnRGovWmQ0SWpsNDVlZlMxUk9mS25LOGVjcVNF?=
+ =?utf-8?B?M0VzWkRoMklJQWxJSVpJWDQrT3g0bXhPcGxqMFBFamRUbFhCVWxkSHhuNkd4?=
+ =?utf-8?B?YUtHQUJxbEhLWnVWTDRMZz09?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 55712728-5771-45a5-8f6d-08d8dddda2e2
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2021 00:45:26.5821
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ZbR5nSJOcHIhjokcI5VyOAk6kePw2JfZ8UdaUlPyp5VL2XACazbAuCvgWIyWHY3d
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR15MB4435
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
+ definitions=2021-03-02_08:2021-03-01,2021-03-02 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
+ impostorscore=0 mlxscore=0 spamscore=0 bulkscore=0 priorityscore=1501
+ lowpriorityscore=0 suspectscore=0 adultscore=0 phishscore=0
+ mlxlogscore=854 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2009150000 definitions=main-2103030001
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Mar 02, 2021 at 07:46:27PM +0100, Björn Töpel wrote:
-> Hi!
-> 
-> Firstly; The long Cc-list is to reach the LKMM-folks.
-> 
-> Some background; the XDP sockets use a ring-buffer to communicate
-> between the kernel and userland. It's a
-> single-consumer/single-producer ring, and described in
-> net/xdp/xsk_queue.h.
-> 
-> --8<---
-> /* The structure of the shared state of the rings are the same as the
->  * ring buffer in kernel/events/ring_buffer.c. For the Rx and completion
->  * ring, the kernel is the producer and user space is the consumer. For
->  * the Tx and fill rings, the kernel is the consumer and user space is
->  * the producer.
->  *
->  * producer                         consumer
->  *
->  * if (LOAD ->consumer) {           LOAD ->producer
->  *                    (A)           smp_rmb()       (C)
->  *    STORE $data                   LOAD $data
->  *    smp_wmb()       (B)           smp_mb()        (D)
->  *    STORE ->producer              STORE ->consumer
->  * }
->  *
->  * (A) pairs with (D), and (B) pairs with (C).
-> ...
-> -->8---
-> 
-> I'd like to replace the smp_{r,w,}mb() barriers with acquire-release
-> semantics [1], without breaking existing userspace applications.
-> 
-> So, I figured I'd use herd7 and the LKMM model to build a litmus test
-> for the barrier version, then for the acquire-release version, and
-> finally permutations of both.
-> 
-> The idea is to use a one element ring, with a state machine outlined
-> in the litmus test.
-> 
-> The basic test for the existing smp_{r,w,}mb() barriers looks like:
-> 
-> $ cat spsc-rb+1p1c.litmus
-> C spsc-rb+1p1c
-> 
-> // Stupid one entry ring:
-> // prod cons     allowed action       prod cons
-> //    0    0 =>       prod          =>   1    0
-> //    0    1 =>       cons          =>   0    0
-> //    1    0 =>       cons          =>   1    1
-> //    1    1 =>       prod          =>   0    1
-> 
-> { prod = 1; }
-> 
-> // Here, we start at prod==1,cons==0, data==0, i.e. producer has
-> // written data=0, so from here only the consumer can start, and should
-> // consume data==0. Afterwards, producer can continue and write 1 to
-> // data. Can we enter state prod==0, cons==1, but consumer observerd
-> // the write of 1?
-> 
-> P0(int *prod, int *cons, int *data)
-> {
->     int p;
->     int c;
->     int cond = 0;
-> 
->     p = READ_ONCE(*prod);
->     c = READ_ONCE(*cons);
->     if (p == 0)
->         if (c == 0)
->             cond = 1;
->     if (p == 1)
->         if (c == 1)
->             cond = 1;
-> 
->     if (cond) {
->         smp_mb();
->         WRITE_ONCE(*data, 1);
->         smp_wmb();
->         WRITE_ONCE(*prod, p ^ 1);
->     }
-> }
-> 
-> P1(int *prod, int *cons, int *data)
-> {
->     int p;
->     int c;
->     int d = -1;
->     int cond = 0;
-> 
->     p = READ_ONCE(*prod);
->     c = READ_ONCE(*cons);
->     if (p == 1)
->         if (c == 0)
->             cond = 1;
->     if (p == 0)
->         if (c == 1)
->             cond = 1;
-> 
->     if (cond == 1) {
->         smp_rmb();
->         d = READ_ONCE(*data);
->         smp_mb();
->         WRITE_ONCE(*cons, c ^ 1);
->     }
-> }
 
-Before digging in too deeply, does the following simplification
-still capture your intent?
 
-P0(int *prod, int *cons, int *data)
-{
-    int p;
-    int cond = 0;
+On 3/2/21 4:40 PM, Andrii Nakryiko wrote:
+> Just like was done for bpftool and selftests in ec23eb705620 ("tools/bpftool:
+> Allow substituting custom vmlinux.h for the build") and ca4db6389d61
+> ("selftests/bpf: Allow substituting custom vmlinux.h for selftests build"),
+> allow to provide pre-generated vmlinux.h for runqslower build.
+> 
+> Cc: Martin Lau <kafai@fb.com>
+> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 
-    p = READ_ONCE(*prod);
-    if (p == READ_ONCE(*cons))
-            cond = 1;
-    if (cond) {
-	smp_mb();
-        WRITE_ONCE(*data, 1);
-        smp_wmb();
-        WRITE_ONCE(*prod, p ^ 1);
-    }
-}
-
-P1(int *prod, int *cons, int *data)
-{
-    int c;
-    int d = -1;
-    int cond = 0;
-
-    c = READ_ONCE(*cons);
-    if (READ_ONCE(*prod) == c)
-            cond = 1;
-
-    if (cond == 1) {
-        smp_rmb();
-        d = READ_ONCE(*data);
-        smp_mb();
-        WRITE_ONCE(*cons, c ^ 1);
-    }
-}
-
-							Thanx, Paul
-
-> exists( 1:d=1 /\ prod=0 /\ cons=1 );
-> 
-> --
-> 
-> The weird state changing if-statements is because that I didn't get
-> '&&' and '||' to work with herd.
-> 
-> When this is run:
-> 
-> $ herd7 -conf linux-kernel.cfg litmus-tests/spsc-rb+1p1c.litmus
-> Test spsc-rb+1p1c Allowed
-> States 2
-> 1:d=0; cons=1; prod=0;
-> 1:d=0; cons=1; prod=1;
-> No
-> Witnesses
-> Positive: 0 Negative: 2
-> Condition exists (1:d=1 /\ prod=0 /\ cons=1)
-> Observation spsc-rb+1p1c Never 0 2
-> Time spsc-rb+1p1c 0.04
-> Hash=b399756d6a1301ca5bda042f32130791
-> 
-> Now to my question; In P0 there's an smp_mb(). Without that, the d==1
-> can be observed from P1 (consumer):
-> 
-> $ herd7 -conf linux-kernel.cfg litmus-tests/spsc-rb+1p1c.litmus
-> Test spsc-rb+1p1c Allowed
-> States 3
-> 1:d=0; cons=1; prod=0;
-> 1:d=0; cons=1; prod=1;
-> 1:d=1; cons=1; prod=0;
-> Ok
-> Witnesses
-> Positive: 1 Negative: 2
-> Condition exists (1:d=1 /\ prod=0 /\ cons=1)
-> Observation spsc-rb+1p1c Sometimes 1 2
-> Time spsc-rb+1p1c 0.04
-> Hash=0047fc21fa77da9a9aee15e35ec367ef
-> 
-> In commit c7f2e3cd6c1f ("perf: Optimize ring-buffer write by depending
-> on control dependencies") removes the corresponding smp_mb(), and also
-> the circular buffer in circular-buffers.txt (pre commit 6c43c091bdc5
-> ("documentation: Update circular buffer for
-> load-acquire/store-release")) is missing the smp_mb() at the
-> producer-side.
-> 
-> I'm trying to wrap my head around why it's OK to remove the smp_mb()
-> in the cases above? I'm worried that the current XDP socket ring
-> implementation (which is missing smp_mb()) might be broken.
-> 
-> 
-> If you read this far, thanks! :-)
-> Björn
-> 
-> 
-> [1] https://lore.kernel.org/bpf/20210301104318.263262-2-bjorn.topel@gmail.com/
+Acked-by: Yonghong Song <yhs@fb.com>
