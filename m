@@ -2,126 +2,79 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7326CC43333
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D14CC43331
 	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:57:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 47D3364F0B
+	by mail.kernel.org (Postfix) with ESMTP id 11EF864EFE
 	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:57:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449565AbhCCWwh convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 3 Mar 2021 17:52:37 -0500
-Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:35025 "EHLO
-        mail2-relais-roc.national.inria.fr" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236532AbhCCRjp (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 3 Mar 2021 12:39:45 -0500
-X-IronPort-AV: E=Sophos;i="5.81,220,1610406000"; 
-   d="scan'208";a="495963342"
-Received: from lfbn-idf1-1-708-183.w86-245.abo.wanadoo.fr (HELO mp-66156.home) ([86.245.159.183])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 03 Mar 2021 18:37:38 +0100
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.60.0.2.21\))
-Subject: Re: XDP socket rings, and LKMM litmus tests
-From:   maranget <luc.maranget@inria.fr>
-In-Reply-To: <20210303171221.GA1574518@rowland.harvard.edu>
-Date:   Wed, 3 Mar 2021 18:37:36 +0100
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        parri.andrea@gmail.com, Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, boqun.feng@gmail.com,
-        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
-        akiyks@gmail.com, dlustig@nvidia.com, joel@joelfernandes.org,
-        =?utf-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        "Karlsson, Magnus" <magnus.karlsson@intel.com>
-Content-Transfer-Encoding: 8BIT
-Message-Id: <29736B0B-9960-473C-85BB-5714F181198B@inria.fr>
-References: <CAJ+HfNhxWFeKnn1aZw-YJmzpBuCaoeGkXXKn058GhY-6ZBDtZA@mail.gmail.com>
- <20210302211446.GA1541641@rowland.harvard.edu>
- <20210302235019.GT2696@paulmck-ThinkPad-P72>
- <20210303171221.GA1574518@rowland.harvard.edu>
-To:     Alan Stern <stern@rowland.harvard.edu>
-X-Mailer: Apple Mail (2.3654.60.0.2.21)
+        id S1449559AbhCCWwf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 3 Mar 2021 17:52:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45298 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241168AbhCCR3q (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 3 Mar 2021 12:29:46 -0500
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49A11C061756;
+        Wed,  3 Mar 2021 09:29:05 -0800 (PST)
+Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id B41E52CD;
+        Wed,  3 Mar 2021 17:25:16 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net B41E52CD
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1614792316; bh=stUJ13VskkGN0mdPm02DMITNl2re2BbdECPeoNTlQuY=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=dGirZviqdmXr1dYOksWyVIUnGlTy7Q9EP66d1x2lzljJOX6QSDiyUXGFXsRSUz3gi
+         BYTJTXvzfM2h9KK6F35HbwnzkizIk2gW3FLoO/MExhy9m+5rbdR/4c5lkE3Dz5XRDN
+         M5p8aDonI1ykkZVI6usnCGOTdLDuf+kCOBt3scdSg9Pdy6HhIoA0XHVlPO1M7fpj6m
+         g/0RKoaFCO3y49b3kjiqDRnslxn/iUpnCgvyDVV/qVXyyD5rClGofGJIn30AQ8DSmB
+         WvLFkh2pRo2ejN0ANSBvvZffq6tFMRPjeRqYGica/yNRJjCKrO92F8n7+8s77ikZZ6
+         0BQkZgi2FHMVw==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Joe Stringer <joe@cilium.io>
+Cc:     bpf@vger.kernel.org, linux-man@vger.kernel.org,
+        linux-doc@vger.kernel.org, mtk.manpages@gmail.com, ast@kernel.org,
+        brianvv@google.com, daniel@iogearbox.net, daniel@zonque.org,
+        john.fastabend@gmail.com, ppenkov@google.com,
+        quentin@isovalent.com, sean@mess.org, yhs@fb.com
+Subject: Re: [PATCHv2 bpf-next 00/15] Improve BPF syscall command documentation
+References: <20210302171947.2268128-1-joe@cilium.io>
+Date:   Wed, 03 Mar 2021 10:25:16 -0700
+In-Reply-To: <20210302171947.2268128-1-joe@cilium.io> (Joe Stringer's message
+        of "Tue, 2 Mar 2021 09:19:32 -0800")
+Message-ID: <87y2f4up37.fsf@meer.lwn.net>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+Joe Stringer <joe@cilium.io> writes:
 
+> Following that, the series enhances the python scripting around parsing
+> the descriptions from the header files and generating dedicated
+> ReStructured Text and troff output. Finally, to expose the new text and
+> reduce the likelihood of having it get out of date or break the docs
+> parser, it is added to the selftests and exposed through the kernel
+> documentation web pages.
 
-> On 3 Mar 2021, at 18:12, Alan Stern <stern@rowland.harvard.edu> wrote:
-> 
-> On Tue, Mar 02, 2021 at 03:50:19PM -0800, Paul E. McKenney wrote:
->> On Tue, Mar 02, 2021 at 04:14:46PM -0500, Alan Stern wrote:
-> 
->>> This result is wrong, apparently because of a bug in herd7.  There 
->>> should be control dependencies from each of the two loads in P0 to each 
->>> of the two stores, but herd7 doesn't detect them.
->>> 
->>> Maybe Luc can find some time to check whether this really is a bug and 
->>> if it is, fix it.
->> 
->> I agree that herd7's control dependency tracking could be improved.
->> 
->> But sadly, it is currently doing exactly what I asked Luc to make it do,
->> which is to confine the control dependency to its "if" statement.  But as
->> usual I wasn't thinking globally enough.  And I am not exactly sure what
->> to ask for.  Here a store to a local was control-dependency ordered after
->> a read, and so that should propagate to a read from that local variable.
->> Maybe treat local variables as if they were registers, so that from
->> herd7's viewpoint the READ_ONCE()s are able to head control-dependency
->> chains in multiple "if" statements?
->> 
->> Thoughts?
-> 
-> Local variables absolutely should be treated just like CPU registers, if 
-> possible.  In fact, the compiler has the option of keeping local 
-> variables stored in registers.
-> 
+You can leave me off CC, but I have eyes everywhere :)
 
-And indeed local variables are treated as registers by herd7.
+Anyway, I like this version much better, thanks for making the
+adjustments.  Feel free to stick an
 
+Acked-by: Jonathan Corbet <corbet@lwn.net>
 
-> (Of course, things may get complicated if anyone writes a litmus test 
-> that uses a pointer to a local variable,  Especially if the pointer 
-> could hold the address of a local variable in one execution and a 
-> shared variable in another!  Or if the pointer is itself a shared 
-> variable and is dereferenced in another thread!)
-> 
-> But even if local variables are treated as non-shared storage locations, 
-> we should still handle this correctly.  Part of the problem seems to lie 
-> in the definition of the to-r dependency relation; the relevant portion 
-> is:
+on it if you feel so inclined.
 
-In fact, I’d rather change the computation of “dep” here control-dependency “ctrl”. Notice that “ctrl” is computed by herd7 and present in the initial environment of the Cat interpreter.
+Thanks,
 
-I have made a PR to herd7 that performs the change. The commit message states the new definition.
-
-
-> 
-> 	(dep ; [Marked] ; rfi)
-> 
-> Here dep is the control dependency from the READ_ONCE to the 
-> local-variable store, and the rfi refers to the following load of the 
-> local variable.  The problem is that the store to the local variable 
-> doesn't go in the Marked class, because it is notated as a plain C 
-> assignment.  (And likewise for the following load.)
-> 
-This is a related issue, I am not sure, but perhaps it can be formulated as
-"should rfi and rf on registers behave the  same?”
-
-
-
-> Should we change the model to make loads from and stores to local 
-> variables always count as Marked?
-> 
-> What should have happened if the local variable were instead a shared 
-> variable which the other thread didn't access at all?  It seems like a 
-> weak point of the memory model that it treats these two things 
-> differently.
-> 
-> Alan
-
+jon
