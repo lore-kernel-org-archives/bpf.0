@@ -4,92 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B2F44C433DB
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:57:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B4BD5C433E0
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:57:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7C7ED64F0D
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:57:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7C00C64EFE
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:57:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391872AbhCCWvN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 3 Mar 2021 17:51:13 -0500
-Received: from mga01.intel.com ([192.55.52.88]:22650 "EHLO mga01.intel.com"
+        id S1391873AbhCCWvQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 3 Mar 2021 17:51:16 -0500
+Received: from mga14.intel.com ([192.55.52.115]:41913 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1343679AbhCCPw7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 3 Mar 2021 10:52:59 -0500
-IronPort-SDR: rV2AFt2wjLAQe7UTU0ft/GR7zE0WuoYWXuTT8kp57iw+jU7PTlTQPHbqMjJmsDxXm9s11aY0Rm
- xTEwMzM0WSwg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9912"; a="206909556"
+        id S235533AbhCCQFh (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 3 Mar 2021 11:05:37 -0500
+IronPort-SDR: CI+b+4koub3UurnUUIycbVFsFEt56aUMfDXmbeQlHn6I0e3r0IMjY9qrDqZ4SGk52UN6Deu6HW
+ IVFEcXgyKLKA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9912"; a="186571032"
 X-IronPort-AV: E=Sophos;i="5.81,220,1610438400"; 
-   d="scan'208";a="206909556"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2021 07:49:42 -0800
-IronPort-SDR: 86gi0OMIkXjt6dCztDa0gMgb5OY4fgXTJXIx3DrWTM36X54P+jtgQPq5b/AIKFmUeu51wQsJzo
- wqLvcj9GTgYw==
+   d="scan'208";a="186571032"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2021 08:01:53 -0800
+IronPort-SDR: iedCUswGS6augWsSStBe8ZUY+YKLc8Sa+wgoN5VT7SWepg12E6ReoWFy1gtmf0y1lPcpru2Kib
+ KYYjQ1EZM7jA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.81,220,1610438400"; 
-   d="scan'208";a="518322023"
+   d="scan'208";a="445323940"
 Received: from ranger.igk.intel.com ([10.102.21.164])
-  by orsmga004.jf.intel.com with ESMTP; 03 Mar 2021 07:49:39 -0800
+  by orsmga001.jf.intel.com with ESMTP; 03 Mar 2021 08:01:51 -0800
 From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     intel-wired-lan@lists.osuosl.org
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org, brouer@redhat.com,
-        anthony.l.nguyen@intel.com, kuba@kernel.org, bjorn.topel@intel.com,
-        magnus.karlsson@intel.com,
+To:     daniel@iogearbox.net, ast@kernel.org, bpf@vger.kernel.org
+Cc:     bjorn.topel@intel.com, magnus.karlsson@intel.com,
+        john.fastabend@gmail.com,
         Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH intel-net 3/3] ixgbe: move headroom initialization to ixgbe_configure_rx_ring
-Date:   Wed,  3 Mar 2021 16:39:28 +0100
-Message-Id: <20210303153928.11764-4-maciej.fijalkowski@intel.com>
+Subject: [PATCH bpf 1/3] xsk: remove dangling function declaration from header file
+Date:   Wed,  3 Mar 2021 16:51:55 +0100
+Message-Id: <20210303155158.15953-2-maciej.fijalkowski@intel.com>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210303153928.11764-1-maciej.fijalkowski@intel.com>
-References: <20210303153928.11764-1-maciej.fijalkowski@intel.com>
+In-Reply-To: <20210303155158.15953-1-maciej.fijalkowski@intel.com>
+References: <20210303155158.15953-1-maciej.fijalkowski@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-ixgbe_rx_offset(), that is supposed to initialize the Rx buffer headroom,
-relies on __IXGBE_RX_BUILD_SKB_ENABLED flag.
+xdp_umem_query() is dead for a long time, drop the declaration from
+include/linux/netdevice.h
 
-Currently, the callsite of mentioned function is placed incorrectly
-within ixgbe_setup_rx_resources() where Rx ring's build skb flag is not
-set yet. This causes the XDP_REDIRECT to be partially broken due to
-inability to create xdp_frame in the headroom space, as the headroom is
-0.
-
-Fix this by moving ixgbe_rx_offset() to ixgbe_configure_rx_ring() after
-the flag setting, which happens to be set in ixgbe_set_rx_buffer_len.
-
-Fixes: c0d4e9d223c5 ("ixgbe: store the result of ixgbe_rx_offset() onto ixgbe_ring")
+Fixes: c9b47cc1fabc ("xsk: fix bug when trying to use both copy and zero-copy on one queue id")
 Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 ---
- drivers/net/ethernet/intel/ixgbe/ixgbe_main.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ include/linux/netdevice.h | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-index fae84202d870..ac0d7a80de0d 100644
---- a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-+++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-@@ -4118,6 +4118,8 @@ void ixgbe_configure_rx_ring(struct ixgbe_adapter *adapter,
- #endif
- 	}
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index 6cef47b76cc6..226303976310 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -3932,8 +3932,6 @@ int dev_change_xdp_fd(struct net_device *dev, struct netlink_ext_ack *extack,
+ int bpf_xdp_link_attach(const union bpf_attr *attr, struct bpf_prog *prog);
+ u32 dev_xdp_prog_id(struct net_device *dev, enum bpf_xdp_mode mode);
  
-+	ring->rx_offset = ixgbe_rx_offset(ring);
-+
- 	if (ring->xsk_pool && hw->mac.type != ixgbe_mac_82599EB) {
- 		u32 xsk_buf_len = xsk_pool_get_rx_frame_size(ring->xsk_pool);
- 
-@@ -6578,7 +6580,6 @@ int ixgbe_setup_rx_resources(struct ixgbe_adapter *adapter,
- 
- 	rx_ring->next_to_clean = 0;
- 	rx_ring->next_to_use = 0;
--	rx_ring->rx_offset = ixgbe_rx_offset(rx_ring);
- 
- 	/* XDP RX-queue info */
- 	if (xdp_rxq_info_reg(&rx_ring->xdp_rxq, adapter->netdev,
+-int xdp_umem_query(struct net_device *dev, u16 queue_id);
+-
+ int __dev_forward_skb(struct net_device *dev, struct sk_buff *skb);
+ int dev_forward_skb(struct net_device *dev, struct sk_buff *skb);
+ int dev_forward_skb_nomtu(struct net_device *dev, struct sk_buff *skb);
 -- 
 2.20.1
 
