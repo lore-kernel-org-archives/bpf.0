@@ -2,150 +2,270 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-23.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1628EC4332D
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:56:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A1B2C43603
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:56:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D719764EF9
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:56:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2965D64EFE
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:56:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443475AbhCCWjf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 3 Mar 2021 17:39:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40310 "EHLO
+        id S1447022AbhCCWli (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 3 Mar 2021 17:41:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1842689AbhCCIJw (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 3 Mar 2021 03:09:52 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D5A8C061793;
-        Wed,  3 Mar 2021 00:09:11 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id l12so22603398wry.2;
-        Wed, 03 Mar 2021 00:09:11 -0800 (PST)
+        with ESMTP id S1442919AbhCCKvS (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 3 Mar 2021 05:51:18 -0500
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FD3CC061794
+        for <bpf@vger.kernel.org>; Wed,  3 Mar 2021 02:41:40 -0800 (PST)
+Received: by mail-io1-xd33.google.com with SMTP id u20so25141285iot.9
+        for <bpf@vger.kernel.org>; Wed, 03 Mar 2021 02:41:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=DnIVLFqu+VwqwHPGnlO5sV/RQqOYO/AWeTL793zqEr8=;
-        b=PjEgRQ1mu8v8tCdEAFoMIBr/IlExGxq/VPkEhFFJd6l40hQijsPbFKU3J/VfDpg6xI
-         bxUiCKwbouagbp14RQnpIuIedmAtyiYvvS2eRqMlfkvwG65xVVCOqBQZyVL4wfpbBXWm
-         8fD4uoZY6a8y+EPfEyuylPNVFb1nOZPTRIAODeMWG2hyVwDZSj/NzS0P4ZfiW7rCcbQZ
-         vAvsIGsS45lpXCt84BgAxkMcj8PuYsgyJUZvjZNOVAX4pW6iHxagZQ9PNmFkk/HS18bz
-         G800XXGim5C6FdIg0orf1CnygWAG8C2PKuNzG30QN0mtXl2gZd8Sfqpu6W2k134NwLn+
-         QgBg==
+         :cc;
+        bh=WTFbqq7wf2oiwXghMNZFKdevlJLnKuAoGi+RpBPGCa4=;
+        b=UJHsBYlGb8wnqy1QwPn7c1u8wADAC505uOTdONnRAvEBcyVm6BKaUY+E+ULppdviN1
+         A/Z6jXuB7eQGcQ9AjFxxVr0+pVEAljvLmu+fOttaHoQED6vFuwibNqP9MWZD/VbJydZU
+         9/8tY44E3IV12W6RMtMpHIdX5Z/CsrmKY2bWcfdWQZo1Sx12VtDSkE4I70nWjydiwCCX
+         2CcapQ8umNsweYlqCFJtKckNK/e1pQqh/6vyy3QOfLai6d46+l4nH2KJe+m0Aul6bymU
+         mfthXUfeT1jDHSY/D4MYMT8yoD7xD2nm5tYUPGyibgNCYiUfto2Lb+enPEgTw2DfQGI6
+         dSRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=DnIVLFqu+VwqwHPGnlO5sV/RQqOYO/AWeTL793zqEr8=;
-        b=Sp4va+hfgj3LbwQQvob3j3U4WJySXiGazXZGTzxH3ts7esNEogSXop75HMQxWgtX32
-         eT7oFv8XLeapAiet2Cufs2slfW/XsyTQPKakJcqPkxy+BuwKtep+AgGwpMrjq2IiFw91
-         pTPfX5QxFZJkGaUQU3nf8evcj+b9EkZeoYJfPBENgjhex9dgEnW7gDvm0q1UUC5wzMJN
-         YWeNQwNDv193TzAkWSAALyelvkcLN/t3KAygj5EwEVuJpvRExtVUoPsy/4WlJuquw22B
-         Z59MXGmorwosVCUItASkiLE+l/PsmrYnzObUMbl2O0hGGMr7jlcth6UQpRJOm3TY4mV0
-         VAkA==
-X-Gm-Message-State: AOAM531xY6x/1Hq4WEDdf4nhhLpqfjdfArzg5Yyuj3P42nJyrGTciEwg
-        eDe3zwlbhp3JJ1M/Rq/B+AKypHYVDgotwkKuxJI=
-X-Google-Smtp-Source: ABdhPJykMQ94hRqiqc/JZgBD0wAY4bA21nkxhhZaZm6J0r0akz6WCIJCcGAoRrcR4Aphgnfg4vODwIe2AZOS4e6DQtE=
-X-Received: by 2002:a5d:4141:: with SMTP id c1mr26897224wrq.248.1614758950368;
- Wed, 03 Mar 2021 00:09:10 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=WTFbqq7wf2oiwXghMNZFKdevlJLnKuAoGi+RpBPGCa4=;
+        b=SBpZNe9zfYYFTg9ZLkN10IZvzf0Pzm56hQ3ESzsQas/conJOUf6zC/uqmHEs1Uj7oh
+         Qqu1rMkHVO2QNfPQ50XcRD0CPZpzBQsAFYmyscPPQK+veCHoZC21KUiMHYJRRP+6WQEm
+         I+LILbn4107SIiPVTxP8UysXzKCF+Fs6BA/98SC/xM3NZ9ZDQU/I0SiaF5orlBtguPxN
+         F+pC+GODE1yZetyNANQ/j28d0bFmixi1cV6tqCCD3th5xWc9TiXy73i10/Z+BGz28i3O
+         kOHjHqwv/j5dcs0ogSiR/N/10ScIdvqA0cbWlm70nK0Ff3vvVY0iWFjoqmrT0bTECjE4
+         R5OA==
+X-Gm-Message-State: AOAM531ffhb14L2tqrw7tKTQ6ImzTx35n6uvYv+z3OckpHk9k8bzvE2t
+        Eoeivx/xvYe/IUjTpJriy1Co/sO8RLELGCvCVB5/hg==
+X-Google-Smtp-Source: ABdhPJwWVBIn0C+8uwgH3aQgheY35dvbEVzbLOMwZUegOTMh5jP7Wae4n3VbJx/MC5WwcepLkbHH/Wef82GbQdLT574=
+X-Received: by 2002:a6b:7302:: with SMTP id e2mr13719609ioh.106.1614768099735;
+ Wed, 03 Mar 2021 02:41:39 -0800 (PST)
 MIME-Version: 1.0
-References: <20210301104318.263262-1-bjorn.topel@gmail.com>
- <20210301104318.263262-3-bjorn.topel@gmail.com> <87k0qqx3be.fsf@toke.dk>
- <e052a22a-4b7b-fe38-06ad-2ad04c83dda7@intel.com> <12f8969b-6780-f35f-62cd-ed67b1d8181a@iogearbox.net>
- <0121ca03-d806-8e50-aaac-0f97795d0fbe@intel.com> <cb975a27-ade5-a638-af6e-2e4e1024649c@iogearbox.net>
-In-Reply-To: <cb975a27-ade5-a638-af6e-2e4e1024649c@iogearbox.net>
-From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
-Date:   Wed, 3 Mar 2021 09:08:58 +0100
-Message-ID: <CAJ+HfNjTFOB1JB9gcHfe9r5xkjoSFCqdLZvFBrfkh4GGH322iQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/2] libbpf, xsk: add libbpf_smp_store_release libbpf_smp_load_acquire
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+References: <20210302105400.3112940-1-jackmanb@google.com> <20210302184306.ishsga6xkg2glnzj@kafai-mbp.dhcp.thefacebook.com>
+ <3b994f4c-2847-60be-834e-22c58c2b7470@fb.com>
+In-Reply-To: <3b994f4c-2847-60be-834e-22c58c2b7470@fb.com>
+From:   Brendan Jackman <jackmanb@google.com>
+Date:   Wed, 3 Mar 2021 11:41:28 +0100
+Message-ID: <CA+i-1C1qFapuADxzT4BUXzS6X5JBc9ZpuYfiYu-tUQrUwRsuiA@mail.gmail.com>
+Subject: Re: [PATCH v5 bpf-next] bpf: Explicitly zero-extend R0 after 32-bit cmpxchg
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Martin KaFai Lau <kafai@fb.com>, bpf <bpf@vger.kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
-        Netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>, maximmi@nvidia.com,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Will Deacon <will@kernel.org>, paulmck@kernel.org
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Florent Revest <revest@chromium.org>,
+        Ilya Leoshkevich <iii@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, 2 Mar 2021 at 10:25, Daniel Borkmann <daniel@iogearbox.net> wrote:
+Thanks once again for the reviews.
+
+On Wed, 3 Mar 2021 at 08:29, Yonghong Song <yhs@fb.com> wrote:
 >
-
-[...]
-
-> > I wonder if it's possible to cook a LKMM litmus test for this...?
 >
-> That would be amazing! :-)
 >
-
-With the help of Paul and Alan [1] (Thanks!) I've cooked 8 litmus
-tests for this [2].
-
-The litmus tests is based on a one entry ring-buffer, and there are
-two scenarios. The ring is full, i.e. the producer has written an
-entry, so the consumer has to go first. The ring is empty, i.e. the
-producer has to go first. There is one test for each permutation:
-barrier only, acqrel only, acqrel+barrier, barrier+acqrel.
-
-According to these tests the code in this series is correct. Now, for
-the v2 some more wording/explanations are needed. Do you think I
-should include the litmus tests in the patch, or just refer to them?
-Paste parts of them into the cover?
-
-> (Another option which can be done independently could be to update [0] wi=
-th outlining a
->   pairing scenario as we have here describing the forward/backward compat=
-ibility on the
->   barriers used, I think that would be quite useful as well.)
->
->    [0] Documentation/memory-barriers.txt
->
-
-Yeah, I agree. There is some information on it though in the "SMP
-BARRIER PAIRING" section:
---8<--
-General barriers pair with each other, though they also pair with most
-other types of barriers, albeit without multicopy atomicity.  An acquire
-barrier pairs with a release barrier, but both may also pair with other
-barriers, including of course general barriers.  A write barrier pairs
-with a data dependency barrier, a control dependency, an acquire barrier,
-a release barrier, a read barrier, or a general barrier.  Similarly a
-read barrier, control dependency, or a data dependency barrier pairs
-with a write barrier, an acquire barrier, a release barrier, or a
-general barrier:
--->8--
-
-And there's the tools/memory-model/Documentation/cheatsheet.txt.
-
-That being said; In this case more is more. :-D
-
-
-Bj=C3=B6rn
-
-[1] https://lore.kernel.org/lkml/CAJ+HfNhxWFeKnn1aZw-YJmzpBuCaoeGkXXKn058Gh=
-Y-6ZBDtZA@mail.gmail.com/
-[2] https://github.com/bjoto/litmus-xsk/commit/0db0dc426a7e1248f83e21f10f9e=
-840f970f4cb7
-
-> >> Would also be great to get Will's ACK on that when you have a v2. :)
-> >
-> > Yup! :-)
-> >
-> >
-> > Bj=C3=B6rn
-> >
-> >
-> >> Thanks,
-> >> Daniel
+> On 3/2/21 10:43 AM, Martin KaFai Lau wrote:
+> > On Tue, Mar 02, 2021 at 10:54:00AM +0000, Brendan Jackman wrote:
+> >> As pointed out by Ilya and explained in the new comment, there's a
+> >> discrepancy between x86 and BPF CMPXCHG semantics: BPF always loads
+> >> the value from memory into r0, while x86 only does so when r0 and the
+> >> value in memory are different. The same issue affects s390.
 > >>
-> >>> [1] https://lore.kernel.org/bpf/20200316184423.GA14143@willie-the-tru=
-ck/
+> >> At first this might sound like pure semantics, but it makes a real
+> >> difference when the comparison is 32-bit, since the load will
+> >> zero-extend r0/rax.
+> >>
+> >> The fix is to explicitly zero-extend rax after doing such a
+> >> CMPXCHG. Since this problem affects multiple archs, this is done in
+> >> the verifier by patching in a BPF_ZEXT_REG instruction after every
+> >> 32-bit cmpxchg. Any archs that don't need such manual zero-extension
+> >> can do a look-ahead with insn_is_zext to skip the unnecessary mov.
+> >>
+> >> Reported-by: Ilya Leoshkevich <iii@linux.ibm.com>
+> >> Fixes: 5ffa25502b5a ("bpf: Add instructions for atomic_[cmp]xchg")
+> >> Signed-off-by: Brendan Jackman <jackmanb@google.com>
+> >> ---
+> >>
+> >>
+> >> Differences v4->v5[1]:
+> >>   - Moved the logic entirely into opt_subreg_zext_lo32_rnd_hi32, thanks to Martin
+> >>     for suggesting this.
+> >>
+> >> Differences v3->v4[1]:
+> >>   - Moved the optimization against pointless zext into the correct place:
+> >>     opt_subreg_zext_lo32_rnd_hi32 is called _after_ fixup_bpf_calls.
+> >>
+> >> Differences v2->v3[1]:
+> >>   - Moved patching into fixup_bpf_calls (patch incoming to rename this function)
+> >>   - Added extra commentary on bpf_jit_needs_zext
+> >>   - Added check to avoid adding a pointless zext(r0) if there's already one there.
+> >>
+> >> Difference v1->v2[1]: Now solved centrally in the verifier instead of
+> >>    specifically for the x86 JIT. Thanks to Ilya and Daniel for the suggestions!
+> >>
+> >> [1] v4: https://lore.kernel.org/bpf/CA+i-1C3ytZz6FjcPmUg5s4L51pMQDxWcZNvM86w4RHZ_o2khwg@mail.gmail.com/T/#t
+> >>      v3: https://lore.kernel.org/bpf/08669818-c99d-0d30-e1db-53160c063611@iogearbox.net/T/#t
+> >>      v2: https://lore.kernel.org/bpf/08669818-c99d-0d30-e1db-53160c063611@iogearbox.net/T/#t
+> >>      v1: https://lore.kernel.org/bpf/d7ebaefb-bfd6-a441-3ff2-2fdfe699b1d2@iogearbox.net/T/#t
+> >>
+> >>
+> >>   kernel/bpf/core.c                             |  4 +++
+> >>   kernel/bpf/verifier.c                         | 17 +++++++++++-
+> >>   .../selftests/bpf/verifier/atomic_cmpxchg.c   | 25 ++++++++++++++++++
+> >>   .../selftests/bpf/verifier/atomic_or.c        | 26 +++++++++++++++++++
+> >>   4 files changed, 71 insertions(+), 1 deletion(-)
+> >>
+> >> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> >> index 0ae015ad1e05..dcf18612841b 100644
+> >> --- a/kernel/bpf/core.c
+> >> +++ b/kernel/bpf/core.c
+> >> @@ -2342,6 +2342,10 @@ bool __weak bpf_helper_changes_pkt_data(void *func)
+> >>   /* Return TRUE if the JIT backend wants verifier to enable sub-register usage
+> >>    * analysis code and wants explicit zero extension inserted by verifier.
+> >>    * Otherwise, return FALSE.
+> >> + *
+> >> + * The verifier inserts an explicit zero extension after BPF_CMPXCHGs even if
+> >> + * you don't override this. JITs that don't want these extra insns can detect
+> >> + * them using insn_is_zext.
+> >>    */
+> >>   bool __weak bpf_jit_needs_zext(void)
+> >>   {
+> >> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> >> index 4c373589273b..37076e4c6175 100644
+> >> --- a/kernel/bpf/verifier.c
+> >> +++ b/kernel/bpf/verifier.c
+> >> @@ -11237,6 +11237,11 @@ static int opt_remove_nops(struct bpf_verifier_env *env)
+> >>      return 0;
+> >>   }
+> >>
+> >> +static inline bool is_cmpxchg(struct bpf_insn *insn)
+> > nit. "const" struct bpf_insn *insn.
+> >
+> >> +{
+> >> +    return (BPF_MODE(insn->code) == BPF_ATOMIC && insn->imm == BPF_CMPXCHG);
+> > I think it is better to check BPF_CLASS(insn->code) == BPF_STX also
+> > in case in the future this helper will be reused before do_check()
+> > has a chance to verify the instructions.
 >
+> If this is the case, I would suggest to move is_cmpxchg() earlier
+> in verifier.c so later on for reuse we do not need to move this
+> function. Also, in the return statement, there is no need
+> for outmost ().
+
+Yep, all good points, thanks. Spinning v6 now.
+
+> >
+> >> +}
+> >> +
+> >>   static int opt_subreg_zext_lo32_rnd_hi32(struct bpf_verifier_env *env,
+> >>                                       const union bpf_attr *attr)
+> >>   {
+> >> @@ -11296,7 +11301,17 @@ static int opt_subreg_zext_lo32_rnd_hi32(struct bpf_verifier_env *env,
+> >>                      goto apply_patch_buffer;
+> >>              }
+> >>
+> >> -            if (!bpf_jit_needs_zext())
+> >> +            /* Add in an zero-extend instruction if a) the JIT has requested
+> >> +             * it or b) it's a CMPXCHG.
+> >> +             *
+> >> +             * The latter is because: BPF_CMPXCHG always loads a value into
+> >> +             * R0, therefore always zero-extends. However some archs'
+> >> +             * equivalent instruction only does this load when the
+> >> +             * comparison is successful. This detail of CMPXCHG is
+> >> +             * orthogonal to the general zero-extension behaviour of the
+> >> +             * CPU, so it's treated independently of bpf_jit_needs_zext.
+> >> +             */
+> >> +            if (!bpf_jit_needs_zext() && !is_cmpxchg(&insn))
+> >>                      continue;
+> >>
+> >>              if (WARN_ON_ONCE(load_reg == -1)) {
+> >> diff --git a/tools/testing/selftests/bpf/verifier/atomic_cmpxchg.c b/tools/testing/selftests/bpf/verifier/atomic_cmpxchg.c
+> >> index 2efd8bcf57a1..6e52dfc64415 100644
+> >> --- a/tools/testing/selftests/bpf/verifier/atomic_cmpxchg.c
+> >> +++ b/tools/testing/selftests/bpf/verifier/atomic_cmpxchg.c
+> >> @@ -94,3 +94,28 @@
+> >>      .result = REJECT,
+> >>      .errstr = "invalid read from stack",
+> >>   },
+> >> +{
+> >> +    "BPF_W cmpxchg should zero top 32 bits",
+> >> +    .insns = {
+> >> +            /* r0 = U64_MAX; */
+> >> +            BPF_MOV64_IMM(BPF_REG_0, 0),
+> >> +            BPF_ALU64_IMM(BPF_SUB, BPF_REG_0, 1),
+> >> +            /* u64 val = r0; */
+> >> +            BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -8),
+> >> +            /* r0 = (u32)atomic_cmpxchg((u32 *)&val, r0, 1); */
+> >> +            BPF_MOV32_IMM(BPF_REG_1, 1),
+> >> +            BPF_ATOMIC_OP(BPF_W, BPF_CMPXCHG, BPF_REG_10, BPF_REG_1, -8),
+> >> +            /* r1 = 0x00000000FFFFFFFFull; */
+> >> +            BPF_MOV64_IMM(BPF_REG_1, 1),
+> >> +            BPF_ALU64_IMM(BPF_LSH, BPF_REG_1, 32),
+> >> +            BPF_ALU64_IMM(BPF_SUB, BPF_REG_1, 1),
+> >> +            /* if (r0 != r1) exit(1); */
+> >> +            BPF_JMP_REG(BPF_JEQ, BPF_REG_0, BPF_REG_1, 2),
+> >> +            BPF_MOV32_IMM(BPF_REG_0, 1),
+> >> +            BPF_EXIT_INSN(),
+> >> +            /* exit(0); */
+> >> +            BPF_MOV32_IMM(BPF_REG_0, 0),
+> >> +            BPF_EXIT_INSN(),
+> >> +    },
+> >> +    .result = ACCEPT,
+> >> +},
+> >> diff --git a/tools/testing/selftests/bpf/verifier/atomic_or.c b/tools/testing/selftests/bpf/verifier/atomic_or.c
+> >> index 70f982e1f9f0..0a08b99e6ddd 100644
+> >> --- a/tools/testing/selftests/bpf/verifier/atomic_or.c
+> >> +++ b/tools/testing/selftests/bpf/verifier/atomic_or.c
+> >> @@ -75,3 +75,29 @@
+> >>      },
+> >>      .result = ACCEPT,
+> >>   },
+> >> +{
+> >> +    "BPF_W atomic_fetch_or should zero top 32 bits",
+> >> +    .insns = {
+> >> +            /* r1 = U64_MAX; */
+> >> +            BPF_MOV64_IMM(BPF_REG_1, 0),
+> >> +            BPF_ALU64_IMM(BPF_SUB, BPF_REG_1, 1),
+> >> +            /* u64 val = r0; */
+> > s/r0/r1/
+> >
+> >> +            BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_1, -8),
+> >> +            /* r1 = (u32)atomic_sub((u32 *)&val, 1); */
+> >                  r1 = (u32)atomic_fetch_or((u32 *)&val, 2)
+> >
+> >> +            BPF_MOV32_IMM(BPF_REG_1, 2),
+> >> +            BPF_ATOMIC_OP(BPF_W, BPF_OR | BPF_FETCH, BPF_REG_10, BPF_REG_1, -8),
+> >> +            /* r2 = 0x00000000FFFFFFFF; */
+> >> +            BPF_MOV64_IMM(BPF_REG_2, 1),
+> >> +            BPF_ALU64_IMM(BPF_LSH, BPF_REG_2, 32),
+> >> +            BPF_ALU64_IMM(BPF_SUB, BPF_REG_2, 1),
+> >> +            /* if (r2 != r1) exit(1); */
+> >> +            BPF_JMP_REG(BPF_JEQ, BPF_REG_2, BPF_REG_1, 2),
+> >> +            /* BPF_MOV32_IMM(BPF_REG_0, 1), */
+> >> +            BPF_MOV64_REG(BPF_REG_0, BPF_REG_1),
+> >> +            BPF_EXIT_INSN(),
+> >> +            /* exit(0); */
+> >> +            BPF_MOV32_IMM(BPF_REG_0, 0),
+> >> +            BPF_EXIT_INSN(),
+> >> +    },
+> >> +    .result = ACCEPT,
+> >> +},
+> >>
+> >> base-commit: f2cfe32e8a965a86e512dcb2e6251371d4a60c63
+> >> --
+> >> 2.30.1.766.gb4fecdf3b7-goog
+> >>
