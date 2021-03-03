@@ -2,102 +2,101 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D97AC433E9
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:57:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 146D5C43332
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:57:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4F93464F0B
+	by mail.kernel.org (Postfix) with ESMTP id EF69464F0B
 	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 22:57:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449535AbhCCWwB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 3 Mar 2021 17:52:01 -0500
-Received: from mga14.intel.com ([192.55.52.115]:41913 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1384426AbhCCQIB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 3 Mar 2021 11:08:01 -0500
-IronPort-SDR: dmCBhNOpLnYFj4huJwDYDBXOzXxm5k79lvLLV2WR2vIyqjaIepJDHxx3JidxOAYIjVBXxVR138
- nCIcINm0iHiQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9912"; a="186571055"
-X-IronPort-AV: E=Sophos;i="5.81,220,1610438400"; 
-   d="scan'208";a="186571055"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2021 08:01:57 -0800
-IronPort-SDR: QJ+2Vak3ixVm919wKu4HuWEhsXh7ahLoEGrVV/1Yf75Dk9UA4Su0Ci7ZQvdi3/tonEjY295JoT
- dHny2koXIzVA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,220,1610438400"; 
-   d="scan'208";a="445323977"
-Received: from ranger.igk.intel.com ([10.102.21.164])
-  by orsmga001.jf.intel.com with ESMTP; 03 Mar 2021 08:01:55 -0800
-From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     daniel@iogearbox.net, ast@kernel.org, bpf@vger.kernel.org
-Cc:     bjorn.topel@intel.com, magnus.karlsson@intel.com,
-        john.fastabend@gmail.com,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH bpf 3/3] libbpf: clear map_info before each bpf_obj_get_info_by_fd
-Date:   Wed,  3 Mar 2021 16:51:57 +0100
-Message-Id: <20210303155158.15953-4-maciej.fijalkowski@intel.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210303155158.15953-1-maciej.fijalkowski@intel.com>
-References: <20210303155158.15953-1-maciej.fijalkowski@intel.com>
+        id S1449554AbhCCWwa (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 3 Mar 2021 17:52:30 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:46101 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S237861AbhCCRN4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 3 Mar 2021 12:13:56 -0500
+Received: (qmail 1576769 invoked by uid 1000); 3 Mar 2021 12:12:21 -0500
+Date:   Wed, 3 Mar 2021 12:12:21 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@gmail.com>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        parri.andrea@gmail.com, Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, boqun.feng@gmail.com,
+        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
+        luc.maranget@inria.fr, akiyks@gmail.com, dlustig@nvidia.com,
+        joel@joelfernandes.org,
+        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
+        "Karlsson, Magnus" <magnus.karlsson@intel.com>
+Subject: Re: XDP socket rings, and LKMM litmus tests
+Message-ID: <20210303171221.GA1574518@rowland.harvard.edu>
+References: <CAJ+HfNhxWFeKnn1aZw-YJmzpBuCaoeGkXXKn058GhY-6ZBDtZA@mail.gmail.com>
+ <20210302211446.GA1541641@rowland.harvard.edu>
+ <20210302235019.GT2696@paulmck-ThinkPad-P72>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210302235019.GT2696@paulmck-ThinkPad-P72>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-xsk_lookup_bpf_maps, based on prog_fd, looks whether current prog has a
-reference to XSKMAP. BPF prog can include insns that work on various BPF
-maps and this is covered by iterating through map_ids.
+On Tue, Mar 02, 2021 at 03:50:19PM -0800, Paul E. McKenney wrote:
+> On Tue, Mar 02, 2021 at 04:14:46PM -0500, Alan Stern wrote:
 
-The bpf_map_info that is passed to bpf_obj_get_info_by_fd for filling
-needs to be cleared at each iteration, so that it doesn't contain any
-outdated fields and that is currently missing in the function of
-interest.
+> > This result is wrong, apparently because of a bug in herd7.  There 
+> > should be control dependencies from each of the two loads in P0 to each 
+> > of the two stores, but herd7 doesn't detect them.
+> > 
+> > Maybe Luc can find some time to check whether this really is a bug and 
+> > if it is, fix it.
+> 
+> I agree that herd7's control dependency tracking could be improved.
+> 
+> But sadly, it is currently doing exactly what I asked Luc to make it do,
+> which is to confine the control dependency to its "if" statement.  But as
+> usual I wasn't thinking globally enough.  And I am not exactly sure what
+> to ask for.  Here a store to a local was control-dependency ordered after
+> a read, and so that should propagate to a read from that local variable.
+> Maybe treat local variables as if they were registers, so that from
+> herd7's viewpoint the READ_ONCE()s are able to head control-dependency
+> chains in multiple "if" statements?
+> 
+> Thoughts?
 
-To fix that, zero-init map_info via memset before each
-bpf_obj_get_info_by_fd call.
+Local variables absolutely should be treated just like CPU registers, if 
+possible.  In fact, the compiler has the option of keeping local 
+variables stored in registers.
 
-Also, since the area of this code is touched, in general strcmp is
-considered harmful, so let's convert it to strncmp and provide the
-length of the array name from current map_info.
+(Of course, things may get complicated if anyone writes a litmus test 
+that uses a pointer to a local variable,  Especially if the pointer 
+could hold the address of a local variable in one execution and a 
+shared variable in another!  Or if the pointer is itself a shared 
+variable and is dereferenced in another thread!)
 
-Last but not least, do s/continue/break/ once we have found the xsks_map
-to terminate the search.
+But even if local variables are treated as non-shared storage locations, 
+we should still handle this correctly.  Part of the problem seems to lie 
+in the definition of the to-r dependency relation; the relevant portion 
+is:
 
-Fixes: 5750902a6e9b ("libbpf: proper XSKMAP cleanup")
-Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
----
- tools/lib/bpf/xsk.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+	(dep ; [Marked] ; rfi)
 
-diff --git a/tools/lib/bpf/xsk.c b/tools/lib/bpf/xsk.c
-index ffbb588724d8..e56b2d76efc2 100644
---- a/tools/lib/bpf/xsk.c
-+++ b/tools/lib/bpf/xsk.c
-@@ -610,15 +610,16 @@ static int xsk_lookup_bpf_maps(struct xsk_socket *xsk)
- 		if (fd < 0)
- 			continue;
- 
-+		memset(&map_info, 0, map_len);
- 		err = bpf_obj_get_info_by_fd(fd, &map_info, &map_len);
- 		if (err) {
- 			close(fd);
- 			continue;
- 		}
- 
--		if (!strcmp(map_info.name, "xsks_map")) {
-+		if (!strncmp(map_info.name, "xsks_map", strlen(map_info.name))) {
- 			ctx->xsks_map_fd = fd;
--			continue;
-+			break;
- 		}
- 
- 		close(fd);
--- 
-2.20.1
+Here dep is the control dependency from the READ_ONCE to the 
+local-variable store, and the rfi refers to the following load of the 
+local variable.  The problem is that the store to the local variable 
+doesn't go in the Marked class, because it is notated as a plain C 
+assignment.  (And likewise for the following load.)
 
+Should we change the model to make loads from and stores to local 
+variables always count as Marked?
+
+What should have happened if the local variable were instead a shared 
+variable which the other thread didn't access at all?  It seems like a 
+weak point of the memory model that it treats these two things 
+differently.
+
+Alan
