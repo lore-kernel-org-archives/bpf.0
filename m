@@ -2,68 +2,96 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 55556C4332D
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 23:06:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC0CBC433E0
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 23:07:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3B5D264F10
-	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 23:06:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AFBFB64F0D
+	for <bpf@archiver.kernel.org>; Wed,  3 Mar 2021 23:07:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391952AbhCCW66 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 3 Mar 2021 17:58:58 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47920 "EHLO mail.kernel.org"
+        id S1391983AbhCCW7x (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 3 Mar 2021 17:59:53 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58026 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1388047AbhCCUiX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 3 Mar 2021 15:38:23 -0500
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8217564E90;
-        Wed,  3 Mar 2021 20:37:42 +0000 (UTC)
-Date:   Wed, 3 Mar 2021 15:37:40 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Daniel Xu" <dxu@dxuuu.xyz>
-Cc:     "Masami Hiramatsu" <mhiramat@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>, kuba@kernel.org
-Subject: Re: Broken kretprobe stack traces
-Message-ID: <20210303153740.4c0cc0c5@gandalf.local.home>
-In-Reply-To: <4d68e8d9-38b0-4f32-90b6-1639558fce51@www.fastmail.com>
-References: <1fed0793-391c-4c68-8d19-6dcd9017271d@www.fastmail.com>
-        <20210303134828.39922eb167524bc7206c7880@kernel.org>
-        <20210303092604.59aea82c@gandalf.local.home>
-        <20210303195812.scqvwddmi4vhgii5@maharaja.localdomain>
-        <4d68e8d9-38b0-4f32-90b6-1639558fce51@www.fastmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        id S1390402AbhCCWH3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 3 Mar 2021 17:07:29 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 431BE64E41;
+        Wed,  3 Mar 2021 21:56:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1614808580;
+        bh=nvrsaAh1K0woYB6MB0qOBTsrWHC2pRAqyUQ7YOcgOmE=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=jxMo3UHRY983ulV04oVNJRGmaQbNneITowiQtIrOMKMkyCKk5/vViO569UHoFZmiP
+         0X5Ef/TU4LNLgvJhF7YO9xzL3D/aewmELC/3NAfAQjoYPweC+c6kr8bQdQtRHRd0WL
+         ZQPzWzK1PF/gyS7WwVwddhgzP1JfV3DJcIdeQ5Xu5bdoT4Pd33fi4Q7DTrqkzpBxo0
+         c/G9K75AKFQZnVSRIQZ9x+snWeQVFyig37aY1QPail9jPubQ22Wt0KfyYpMipmend9
+         kjumS5ZxwfkaH4hHPde0N2Zs/B/Ufb62V+11OFMbjNslODlDMH0kqEKrLwqeOW86oR
+         Cyg4bOUSk+X0g==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 083183522591; Wed,  3 Mar 2021 13:56:20 -0800 (PST)
+Date:   Wed, 3 Mar 2021 13:56:20 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     maranget <luc.maranget@inria.fr>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@gmail.com>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        parri.andrea@gmail.com, Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, boqun.feng@gmail.com,
+        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
+        akiyks@gmail.com, dlustig@nvidia.com, joel@joelfernandes.org,
+        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
+        "Karlsson, Magnus" <magnus.karlsson@intel.com>
+Subject: Re: XDP socket rings, and LKMM litmus tests
+Message-ID: <20210303215619.GK2696@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <CAJ+HfNhxWFeKnn1aZw-YJmzpBuCaoeGkXXKn058GhY-6ZBDtZA@mail.gmail.com>
+ <20210302211446.GA1541641@rowland.harvard.edu>
+ <20210302235019.GT2696@paulmck-ThinkPad-P72>
+ <20210303171221.GA1574518@rowland.harvard.edu>
+ <29736B0B-9960-473C-85BB-5714F181198B@inria.fr>
+ <F6EF0AE0-F0AA-4158-988B-C2638738B054@inria.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <F6EF0AE0-F0AA-4158-988B-C2638738B054@inria.fr>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, 03 Mar 2021 12:13:08 -0800
-"Daniel Xu" <dxu@dxuuu.xyz> wrote:
-
-> On Wed, Mar 3, 2021, at 11:58 AM, Daniel Xu wrote:
-> > On Wed, Mar 03, 2021 at 09:26:04AM -0500, Steven Rostedt wrote:  
-> > > On Wed, 3 Mar 2021 13:48:28 +0900
-> > > Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> > >   
-> > > >   
-> > > > > 
-> > > > > I think (can't prove) this used to work:    
-> > > 
-> > > Would be good to find out if it did.  
-> > 
-> > I'm installing some older kernels now to check. Will report back.  
+On Wed, Mar 03, 2021 at 06:39:14PM +0100, maranget wrote:
 > 
-> Yep, works in 4.11. So there was a regression somewhere.
+> 
+> > On 3 Mar 2021, at 18:37, maranget <luc.maranget@inria.fr> wrote:
+> > 
+> > I have made a PR to herd7 that performs the change. The commit message states the new definition.
+> 
+> For those who are interested
+> <https://github.com/herd/herdtools7/pull/183>
 
-Care to bisect? ;-)
+And I just confirmed that with this change, Björn's original litmus
+test behaves as desired.  Merci beaucoup, Luc!
 
--- Steve
+The new herd7 also passes the in-kernel regression test, and also all
+of the github "litmus" archive's tests up to six processes that are
+flagged with expected outcomes except for these five tests, which
+are expected failures:
 
+	litmus/manual/deps/LB-addr-equals.litmus
+	litmus/manual/deps/LB-ctls-bothvals-a.litmus
+	litmus/manual/deps/LB-ctls-diffvals-det.litmus
+	litmus/manual/deps/LB-ctls-sameval-barrier.litmus
+	litmus/manual/deps/LB-ctls-sameval.litmus
+
+This situation is a bit silly, so I changed the "Results" clause
+and added a comment noting that LKMM does not yet know about these
+corner cases.
+
+I just started a longer regression test, but this will take some time.
+
+							Thanx, Paul
