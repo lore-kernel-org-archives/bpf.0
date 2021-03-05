@@ -2,206 +2,264 @@ Return-Path: <SRS0=0fUH=ID=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E01C4C4332B
-	for <bpf@archiver.kernel.org>; Fri,  5 Mar 2021 17:10:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A3CCC433E0
+	for <bpf@archiver.kernel.org>; Fri,  5 Mar 2021 17:12:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BA4D46509A
-	for <bpf@archiver.kernel.org>; Fri,  5 Mar 2021 17:10:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 652FC650A5
+	for <bpf@archiver.kernel.org>; Fri,  5 Mar 2021 17:12:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231137AbhCERJc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 5 Mar 2021 12:09:32 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:64276 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231467AbhCERJJ (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 5 Mar 2021 12:09:09 -0500
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 125H2ghV190164;
-        Fri, 5 Mar 2021 12:08:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=vOU9wInKEXYMRbalB+XrithlvgRCge9dPiVboM/TXjE=;
- b=cCj1aKJvSeXRwEaO5qZZf2XgKFNwuh06dkWYb/n6LOKjtMIyke/J8xSwxHSQBZZ6tdAf
- AjUcPd0dVE4DYR4ZooWlIixxGTdeGVdXgzBjTfYaGCgeLGvz+2uHHpPKnqol0hUV0uR8
- ymeAVp3R7NlAwzSKQ+7iWUEVAG7atK2akBg2xWNZaFuOAbO2/4JQqH0hIM7dX/ZJ0fwM
- 3vfS44BOr+KMuTNHPFn1nt72XS0bZKXyPI41yWQkZNCZyHDfyu/pnh3MRXaQI2SeAUSQ
- UAJJPXrgmn447pnL8xDY7gvVDrMydlR8Nvhq4FfghoouK9JtQ37NAOUqhaszixNkh4ch Iw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 373rds0r7d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 05 Mar 2021 12:08:58 -0500
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 125H57Kt008787;
-        Fri, 5 Mar 2021 12:08:57 -0500
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 373rds0r6n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 05 Mar 2021 12:08:57 -0500
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 125H7FsR013397;
-        Fri, 5 Mar 2021 17:08:55 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma04fra.de.ibm.com with ESMTP id 37150ct09d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 05 Mar 2021 17:08:55 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 125H8bLY16187690
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 5 Mar 2021 17:08:37 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 48A99A4055;
-        Fri,  5 Mar 2021 17:08:52 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D1F4FA404D;
-        Fri,  5 Mar 2021 17:08:51 +0000 (GMT)
-Received: from vm.lan (unknown [9.145.31.74])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri,  5 Mar 2021 17:08:51 +0000 (GMT)
-From:   Ilya Leoshkevich <iii@linux.ibm.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     bpf@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        John Fastabend <john.fastabend@gmail.com>
-Subject: [PATCH bpf-next 1/2] selftests/bpf: Add BTF_KIND_FLOAT to test_core_reloc_size
-Date:   Fri,  5 Mar 2021 18:08:43 +0100
-Message-Id: <20210305170844.151594-2-iii@linux.ibm.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210305170844.151594-1-iii@linux.ibm.com>
-References: <20210305170844.151594-1-iii@linux.ibm.com>
+        id S230084AbhCERMN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 5 Mar 2021 12:12:13 -0500
+Received: from mga05.intel.com ([192.55.52.43]:29771 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231451AbhCERLs (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 5 Mar 2021 12:11:48 -0500
+IronPort-SDR: OIjJhhbhVzcchnAkmNCsxfHC3KCjHFpvobqWfaSvXtWx9/B80xsRWmPNzH9LsT3onLgMLu8Vj5
+ 6TPKQSKsKerQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9914"; a="272693124"
+X-IronPort-AV: E=Sophos;i="5.81,225,1610438400"; 
+   d="scan'208";a="272693124"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2021 09:11:42 -0800
+IronPort-SDR: iWIg0qjRRI3xD5hU2oPlL7eVQXm22GKwvvYyM19UDoz3MuE4viJVQHXnwx9+Yg7QB/+WF9+8Ez
+ q3mwdppp4yGQ==
+X-IronPort-AV: E=Sophos;i="5.81,225,1610438400"; 
+   d="scan'208";a="408399464"
+Received: from luetzenk-mobl.ger.corp.intel.com (HELO btopel-mobl.ger.intel.com) ([10.249.43.131])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2021 09:11:37 -0800
+Subject: Re: [PATCH bpf-next v5 1/2] bpf, xdp: make bpf_redirect_map() a map
+ operation
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
+        ast@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org
+Cc:     maciej.fijalkowski@intel.com, hawk@kernel.org, toke@redhat.com,
+        magnus.karlsson@intel.com, john.fastabend@gmail.com,
+        kuba@kernel.org, davem@davemloft.net,
+        Jesper Dangaard Brouer <brouer@redhat.com>
+References: <20210227122139.183284-1-bjorn.topel@gmail.com>
+ <20210227122139.183284-2-bjorn.topel@gmail.com>
+ <eb40aa9a-ffd4-539a-8a4e-420160962500@iogearbox.net>
+From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>
+Message-ID: <d7b7354d-a802-c711-f66f-118986652a8e@intel.com>
+Date:   Fri, 5 Mar 2021 18:11:33 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
+In-Reply-To: <eb40aa9a-ffd4-539a-8a4e-420160962500@iogearbox.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-03-05_10:2021-03-03,2021-03-05 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=999
- lowpriorityscore=0 clxscore=1015 impostorscore=0 priorityscore=1501
- adultscore=0 suspectscore=0 spamscore=0 mlxscore=0 phishscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2103050086
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Verify that bpf_core_field_size() is working correctly with floats.
-Also document the required clang version.
+On 2021-03-05 16:55, Daniel Borkmann wrote:
+> On 2/27/21 1:21 PM, Björn Töpel wrote:
+> [...]
+> 
+> Look good. Small nits inline I had originally fixed up locally before 
+> glancing at 2/2:
+> 
+>> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+>> index 4c730863fa77..3d3e89a37e62 100644
+>> --- a/include/linux/bpf.h
+>> +++ b/include/linux/bpf.h
+>> @@ -118,6 +118,9 @@ struct bpf_map_ops {
+>>                          void *owner, u32 size);
+>>       struct bpf_local_storage __rcu ** (*map_owner_storage_ptr)(void 
+>> *owner);
+>> +    /* XDP helpers.*/
+> 
+> If this really needs a comment, I'd say 'Misc helpers' since we might 
+> later also
+> add implementations for tc and everything can be inferred from the code 
+> anyway.
+>
 
-Suggested-by: John Fastabend <john.fastabend@gmail.com>
-Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
----
- tools/testing/selftests/bpf/README.rst                   | 9 +++++++++
- tools/testing/selftests/bpf/prog_tests/core_reloc.c      | 1 +
- tools/testing/selftests/bpf/progs/core_reloc_types.h     | 5 +++++
- tools/testing/selftests/bpf/progs/test_core_reloc_size.c | 3 +++
- 4 files changed, 18 insertions(+)
+ACK!
 
-diff --git a/tools/testing/selftests/bpf/README.rst b/tools/testing/selftests/bpf/README.rst
-index dbc8f6cc5c67..3464161c8eea 100644
---- a/tools/testing/selftests/bpf/README.rst
-+++ b/tools/testing/selftests/bpf/README.rst
-@@ -170,3 +170,12 @@ failures:
- .. _2: https://reviews.llvm.org/D85174
- .. _3: https://reviews.llvm.org/D83878
- .. _4: https://reviews.llvm.org/D83242
-+
-+Floating-point tests and Clang version
-+======================================
-+
-+Certain selftests, e.g. core_reloc, require support for the floating-point
-+types, which was introduced in `Clang 13`__. The older Clang versions will
-+either crash when compiling these tests, or generate an incorrect BTF.
-+
-+__  https://reviews.llvm.org/D83289
-diff --git a/tools/testing/selftests/bpf/prog_tests/core_reloc.c b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
-index 06eb956ff7bb..d94dcead72e6 100644
---- a/tools/testing/selftests/bpf/prog_tests/core_reloc.c
-+++ b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
-@@ -266,6 +266,7 @@ static int duration = 0;
- 		.arr_elem_sz = sizeof(((type *)0)->arr_field[0]),	\
- 		.ptr_sz = 8, /* always 8-byte pointer for BPF */	\
- 		.enum_sz = sizeof(((type *)0)->enum_field),		\
-+		.float_sz = sizeof(((type *)0)->float_field),		\
- 	}
- 
- #define SIZE_CASE(name) {						\
-diff --git a/tools/testing/selftests/bpf/progs/core_reloc_types.h b/tools/testing/selftests/bpf/progs/core_reloc_types.h
-index 9a2850850121..3a2149c5863c 100644
---- a/tools/testing/selftests/bpf/progs/core_reloc_types.h
-+++ b/tools/testing/selftests/bpf/progs/core_reloc_types.h
-@@ -807,6 +807,7 @@ struct core_reloc_size_output {
- 	int arr_elem_sz;
- 	int ptr_sz;
- 	int enum_sz;
-+	int float_sz;
- };
- 
- struct core_reloc_size {
-@@ -816,6 +817,7 @@ struct core_reloc_size {
- 	int arr_field[4];
- 	void *ptr_field;
- 	enum { VALUE = 123 } enum_field;
-+	float float_field;
- };
- 
- struct core_reloc_size___diff_sz {
-@@ -825,6 +827,7 @@ struct core_reloc_size___diff_sz {
- 	char arr_field[10];
- 	void *ptr_field;
- 	enum { OTHER_VALUE = 0xFFFFFFFFFFFFFFFF } enum_field;
-+	float float_field;
- };
- 
- /* Error case of two candidates with the fields (int_field) at the same
-@@ -839,6 +842,7 @@ struct core_reloc_size___err_ambiguous1 {
- 	int arr_field[4];
- 	void *ptr_field;
- 	enum { VALUE___1 = 123 } enum_field;
-+	float float_field;
- };
- 
- struct core_reloc_size___err_ambiguous2 {
-@@ -850,6 +854,7 @@ struct core_reloc_size___err_ambiguous2 {
- 	int arr_field[4];
- 	void *ptr_field;
- 	enum { VALUE___2 = 123 } enum_field;
-+	float float_field;
- };
- 
- /*
-diff --git a/tools/testing/selftests/bpf/progs/test_core_reloc_size.c b/tools/testing/selftests/bpf/progs/test_core_reloc_size.c
-index d7fb6cfc7891..7b2d576aeea1 100644
---- a/tools/testing/selftests/bpf/progs/test_core_reloc_size.c
-+++ b/tools/testing/selftests/bpf/progs/test_core_reloc_size.c
-@@ -21,6 +21,7 @@ struct core_reloc_size_output {
- 	int arr_elem_sz;
- 	int ptr_sz;
- 	int enum_sz;
-+	int float_sz;
- };
- 
- struct core_reloc_size {
-@@ -30,6 +31,7 @@ struct core_reloc_size {
- 	int arr_field[4];
- 	void *ptr_field;
- 	enum { VALUE = 123 } enum_field;
-+	float float_field;
- };
- 
- SEC("raw_tracepoint/sys_enter")
-@@ -45,6 +47,7 @@ int test_core_size(void *ctx)
- 	out->arr_elem_sz = bpf_core_field_size(in->arr_field[0]);
- 	out->ptr_sz = bpf_core_field_size(in->ptr_field);
- 	out->enum_sz = bpf_core_field_size(in->enum_field);
-+	out->float_sz = bpf_core_field_size(in->float_field);
- 
- 	return 0;
- }
--- 
-2.29.2
 
+>> +    int (*map_redirect)(struct bpf_map *map, u32 ifindex, u64 flags);
+>> +
+> [...]
+>>   static void dev_map_hash_remove_netdev(struct bpf_dtab *dtab,
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index 9fe90ce52a65..b6c44b85e960 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -5582,7 +5582,8 @@ record_func_map(struct bpf_verifier_env *env, 
+>> struct bpf_call_arg_meta *meta,
+>>           func_id != BPF_FUNC_map_push_elem &&
+>>           func_id != BPF_FUNC_map_pop_elem &&
+>>           func_id != BPF_FUNC_map_peek_elem &&
+>> -        func_id != BPF_FUNC_for_each_map_elem)
+>> +        func_id != BPF_FUNC_for_each_map_elem &&
+>> +        func_id != BPF_FUNC_redirect_map)
+>>           return 0;
+>>       if (map == NULL) {
+>> @@ -12017,7 +12018,8 @@ static int do_misc_fixups(struct 
+>> bpf_verifier_env *env)
+>>                insn->imm == BPF_FUNC_map_delete_elem ||
+>>                insn->imm == BPF_FUNC_map_push_elem   ||
+>>                insn->imm == BPF_FUNC_map_pop_elem    ||
+>> -             insn->imm == BPF_FUNC_map_peek_elem)) {
+>> +             insn->imm == BPF_FUNC_map_peek_elem   ||
+>> +             insn->imm == BPF_FUNC_redirect_map)) {
+>>               aux = &env->insn_aux_data[i + delta];
+>>               if (bpf_map_ptr_poisoned(aux))
+>>                   goto patch_call_imm;
+>> @@ -12059,6 +12061,8 @@ static int do_misc_fixups(struct 
+>> bpf_verifier_env *env)
+>>                        (int (*)(struct bpf_map *map, void *value))NULL));
+>>               BUILD_BUG_ON(!__same_type(ops->map_peek_elem,
+>>                        (int (*)(struct bpf_map *map, void *value))NULL));
+>> +            BUILD_BUG_ON(!__same_type(ops->map_redirect,
+>> +                     (int (*)(struct bpf_map *map, u32 ifindex, u64 
+>> flags))NULL));
+> 
+> I added a linebreak here.
+>
+
+Ok!
+
+>>   patch_map_ops_generic:
+>>               switch (insn->imm) {
+>>               case BPF_FUNC_map_lookup_elem:
+>> @@ -12085,6 +12089,9 @@ static int do_misc_fixups(struct 
+>> bpf_verifier_env *env)
+>>                   insn->imm = BPF_CAST_CALL(ops->map_peek_elem) -
+>>                           __bpf_call_base;
+>>                   continue;
+>> +            case BPF_FUNC_redirect_map:
+>> +                insn->imm = BPF_CAST_CALL(ops->map_redirect) - 
+>> __bpf_call_base;
+> 
+> Ditto so it matches the rest.
+>
+
+Fair enough; I guess my love for the 100 chars lines is bigger than 
+conformity. :-P
+
+
+>> +                continue;
+>>               }
+>>               goto patch_call_imm;
+>> diff --git a/net/core/filter.c b/net/core/filter.c
+>> index 13bcf248ee7b..960299a3744f 100644
+>> --- a/net/core/filter.c
+>> +++ b/net/core/filter.c
+>> @@ -3934,22 +3934,6 @@ void xdp_do_flush(void)
+>>   }
+>>   EXPORT_SYMBOL_GPL(xdp_do_flush);
+>> -static inline void *__xdp_map_lookup_elem(struct bpf_map *map, u32 
+>> index)
+>> -{
+>> -    switch (map->map_type) {
+>> -    case BPF_MAP_TYPE_DEVMAP:
+>> -        return __dev_map_lookup_elem(map, index);
+>> -    case BPF_MAP_TYPE_DEVMAP_HASH:
+>> -        return __dev_map_hash_lookup_elem(map, index);
+>> -    case BPF_MAP_TYPE_CPUMAP:
+>> -        return __cpu_map_lookup_elem(map, index);
+>> -    case BPF_MAP_TYPE_XSKMAP:
+>> -        return __xsk_map_lookup_elem(map, index);
+>> -    default:
+>> -        return NULL;
+>> -    }
+>> -}
+>> -
+>>   void bpf_clear_redirect_map(struct bpf_map *map)
+>>   {
+>>       struct bpf_redirect_info *ri;
+>> @@ -4103,28 +4087,7 @@ static const struct bpf_func_proto 
+>> bpf_xdp_redirect_proto = {
+>>   BPF_CALL_3(bpf_xdp_redirect_map, struct bpf_map *, map, u32, ifindex,
+>>          u64, flags)
+>>   {
+>> -    struct bpf_redirect_info *ri = this_cpu_ptr(&bpf_redirect_info);
+>> -
+>> -    /* Lower bits of the flags are used as return code on lookup 
+>> failure */
+>> -    if (unlikely(flags > XDP_TX))
+>> -        return XDP_ABORTED;
+>> -
+>> -    ri->tgt_value = __xdp_map_lookup_elem(map, ifindex);
+>> -    if (unlikely(!ri->tgt_value)) {
+>> -        /* If the lookup fails we want to clear out the state in the
+>> -         * redirect_info struct completely, so that if an eBPF program
+>> -         * performs multiple lookups, the last one always takes
+>> -         * precedence.
+>> -         */
+>> -        WRITE_ONCE(ri->map, NULL);
+>> -        return flags;
+>> -    }
+>> -
+>> -    ri->flags = flags;
+>> -    ri->tgt_index = ifindex;
+>> -    WRITE_ONCE(ri->map, map);
+>> -
+>> -    return XDP_REDIRECT;
+>> +    return map->ops->map_redirect(map, ifindex, flags);
+>>   }
+>>   static const struct bpf_func_proto bpf_xdp_redirect_map_proto = {
+>> diff --git a/net/xdp/xskmap.c b/net/xdp/xskmap.c
+>> index 113fd9017203..711acb3636b3 100644
+>> --- a/net/xdp/xskmap.c
+>> +++ b/net/xdp/xskmap.c
+>> @@ -125,6 +125,18 @@ static int xsk_map_gen_lookup(struct bpf_map 
+>> *map, struct bpf_insn *insn_buf)
+>>       return insn - insn_buf;
+>>   }
+>> +static void *__xsk_map_lookup_elem(struct bpf_map *map, u32 key)
+>> +{
+>> +    struct xsk_map *m = container_of(map, struct xsk_map, map);
+>> +    struct xdp_sock *xs;
+>> +
+>> +    if (key >= map->max_entries)
+>> +        return NULL;
+>> +
+>> +    xs = READ_ONCE(m->xsk_map[key]);
+> 
+> Just 'return READ_ONCE(m->xsk_map[key]);'
+>
+
+Indeed.
+
+I'll make sure to include the fixups in v6.
+
+
+Björn
+
+
+>> +    return xs;
+>> +}
+>> +
+>>   static void *xsk_map_lookup_elem(struct bpf_map *map, void *key)
+>>   {
+>>       WARN_ON_ONCE(!rcu_read_lock_held());
+>> @@ -215,6 +227,11 @@ static int xsk_map_delete_elem(struct bpf_map 
+>> *map, void *key)
+>>       return 0;
+>>   }
+>> +static int xsk_map_redirect(struct bpf_map *map, u32 ifindex, u64 flags)
+>> +{
+>> +    return __bpf_xdp_redirect_map(map, ifindex, flags, 
+>> __xsk_map_lookup_elem);
+>> +}
+>> +
+>>   void xsk_map_try_sock_delete(struct xsk_map *map, struct xdp_sock *xs,
+>>                    struct xdp_sock **map_entry)
+>>   {
+>> @@ -247,4 +264,5 @@ const struct bpf_map_ops xsk_map_ops = {
+>>       .map_check_btf = map_check_no_btf,
+>>       .map_btf_name = "xsk_map",
+>>       .map_btf_id = &xsk_map_btf_id,
+>> +    .map_redirect = xsk_map_redirect,
+>>   };
+>>
+> 
