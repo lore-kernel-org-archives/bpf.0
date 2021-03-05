@@ -2,105 +2,120 @@ Return-Path: <SRS0=0fUH=ID=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A97DFC433DB
-	for <bpf@archiver.kernel.org>; Fri,  5 Mar 2021 16:16:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D71DC433E6
+	for <bpf@archiver.kernel.org>; Fri,  5 Mar 2021 17:10:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 738986509A
-	for <bpf@archiver.kernel.org>; Fri,  5 Mar 2021 16:16:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6A54764FEB
+	for <bpf@archiver.kernel.org>; Fri,  5 Mar 2021 17:10:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230287AbhCEQQC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 5 Mar 2021 11:16:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57272 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231263AbhCEQPz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 5 Mar 2021 11:15:55 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06888C061574
-        for <bpf@vger.kernel.org>; Fri,  5 Mar 2021 08:15:55 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id w9so3327867edc.11
-        for <bpf@vger.kernel.org>; Fri, 05 Mar 2021 08:15:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4Xb9UOY2Gv704gb88GvqIXJCorlDWMU6wr0g3R4KLys=;
-        b=iYvuQ4Os3tabOH7OdwSRvUwYplKP8jS7hGpza4luZLaNFt2WLB96jzDnKG+OG46WtD
-         RTUQT4Qhjb0fe11zcPjkcF1TPwYMW+N+cvlLRDEKqtIue0Mm231x8Bd1gLXp+xbUtIPG
-         ckfuflB0QndyFZyKtw95cWRkmfF38x6/ztGnLfOdFghW1Q1WagxYr/qvQslf6XBRuQsM
-         TJS6hNzQh/PEZzI4+L+dbw1KxSF/i+T1TZ84TlbYDwohcdmpB0kRP4n5oYsqv13eZQmC
-         phONRhT5uOWG6GF5AGWo8oyef5U7epYq8xjhS7q5462MlK1+FAeQOeRraVUoqKZyWYfv
-         Tnww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4Xb9UOY2Gv704gb88GvqIXJCorlDWMU6wr0g3R4KLys=;
-        b=h04tIrOFb+x/uyEXA8etW+JEUh6h5icRmT367y/32jGMq3ERZlPp91uz3eKv82Ea60
-         QGojhP7IcvZLB3xmacpMa5c+U8Zzdm+xh9MXCJwG+ZXIvKKhFXWZQxW0Olwh0QQSNuo3
-         eHY9rWmo7UijiMgiIpkuTYLfEW+SGp9/Ej2fhm0daW3bGTRFaNtkt7CgMw4ykN/DgDug
-         xXzbuj1NfjFyL7QyA5Bz8hZbegYapxjuvwLCtKqd1kWwWBLkUwcWgOQIwwmRCB9//+Vg
-         UQrorkGqu0akVbKcj9l78W0qf+mC9O3wHjnJo4HeUCWZ44Zu4roZGbeGtp+SpGayd9LV
-         Tc5A==
-X-Gm-Message-State: AOAM530I3XHQUsRock3EpyAHw6F5linkcUMWLeWxzBdXQKEWThZW0L1k
-        dTISQrG1sf8T9LJoep6JajkdHw53QQM=
-X-Google-Smtp-Source: ABdhPJwetRHPQxIAriUGfL00QHsNM/kJjhfhpeXxcX0HxJHLPDGS62twlqm+s07jh9tv9m4soetNqw==
-X-Received: by 2002:a05:6402:3550:: with SMTP id f16mr9604060edd.134.1614960953240;
-        Fri, 05 Mar 2021 08:15:53 -0800 (PST)
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com. [209.85.221.48])
-        by smtp.gmail.com with ESMTPSA id q11sm1746655ejr.36.2021.03.05.08.15.52
-        for <bpf@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Mar 2021 08:15:52 -0800 (PST)
-Received: by mail-wr1-f48.google.com with SMTP id e10so2661216wro.12
-        for <bpf@vger.kernel.org>; Fri, 05 Mar 2021 08:15:52 -0800 (PST)
-X-Received: by 2002:a05:6000:1803:: with SMTP id m3mr9809122wrh.50.1614960952213;
- Fri, 05 Mar 2021 08:15:52 -0800 (PST)
+        id S230027AbhCERJb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 5 Mar 2021 12:09:31 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:46120 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231414AbhCERJJ (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 5 Mar 2021 12:09:09 -0500
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 125H8VTc083639;
+        Fri, 5 Mar 2021 12:08:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=7pTcNla1k4RzwyJh+1dV7FR+0hi73hfEFLyIFh8VVVU=;
+ b=RcSV6aOUnXOx+Wa6uEtczYHC1+40Zowga7S/+VhobHbxhY5V5ZX1+bj9vAghsg9NJRXE
+ /aJXHFeV/SWDitTUO83+eFzEnm7Ur2XY74WDlaITj+cCpu2eNYF7mAtM1eH5u8aWAR/H
+ zV8khq8GzxeKbz0jMZNVxb17vlpEbDEWRZ6xGrGdZO0uLF4xRQSLczUt8OGueWSW7U+m
+ 4i4+IsssO4VomsfonMeUdynZfgxzgaKsZzeWiSGZquekv5YP7A3o+Gv5P37wSqa7yVzY
+ JbxnT/X6XEbJXE75Z8IUfHTiXg9yCIFdKzTGOKygQE2X1Je0xuewgO/aiLTEwSJ3LPZA 9Q== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 373nykn1yb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 05 Mar 2021 12:08:57 -0500
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 125H7k1G017921;
+        Fri, 5 Mar 2021 17:08:56 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma06ams.nl.ibm.com with ESMTP id 37293ft6mr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 05 Mar 2021 17:08:56 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 125H8c8F34341260
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 5 Mar 2021 17:08:38 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 35386A4059;
+        Fri,  5 Mar 2021 17:08:53 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C4271A404D;
+        Fri,  5 Mar 2021 17:08:52 +0000 (GMT)
+Received: from vm.lan (unknown [9.145.31.74])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri,  5 Mar 2021 17:08:52 +0000 (GMT)
+From:   Ilya Leoshkevich <iii@linux.ibm.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     bpf@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Andrii Nakryiko <andrii@kernel.org>
+Subject: [PATCH bpf-next 2/2] selftests/bpf: Add BTF_KIND_FLOAT to btf_dump_test_case_syntax
+Date:   Fri,  5 Mar 2021 18:08:44 +0100
+Message-Id: <20210305170844.151594-3-iii@linux.ibm.com>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210305170844.151594-1-iii@linux.ibm.com>
+References: <20210305170844.151594-1-iii@linux.ibm.com>
 MIME-Version: 1.0
-References: <20210305123347.15311-1-hxseverything@gmail.com>
- <CA+FuTSc_RDHb8dmMzfwatt89pXsX2AA1--X98pEGkmmfpVs-Vg@mail.gmail.com> <dfde1c9f-cd2d-6e7d-ea3e-58b486a1388b@iogearbox.net>
-In-Reply-To: <dfde1c9f-cd2d-6e7d-ea3e-58b486a1388b@iogearbox.net>
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Fri, 5 Mar 2021 11:15:15 -0500
-X-Gmail-Original-Message-ID: <CA+FuTSfk2HOupSwUfOjsNQBA4Z8HKUgfkQmyTViY5icbt4ujHg@mail.gmail.com>
-Message-ID: <CA+FuTSfk2HOupSwUfOjsNQBA4Z8HKUgfkQmyTViY5icbt4ujHg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] selftests_bpf: extend test_tc_tunnel test with vxlan
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        Xuesen Huang <hxseverything@gmail.com>,
-        David Miller <davem@davemloft.net>, bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Xuesen Huang <huangxuesen@kuaishou.com>,
-        Li Wang <wangli09@kuaishou.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
+ definitions=2021-03-05_10:2021-03-03,2021-03-05 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ lowpriorityscore=0 spamscore=0 adultscore=0 mlxlogscore=999
+ priorityscore=1501 suspectscore=0 bulkscore=0 mlxscore=0 phishscore=0
+ clxscore=1015 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2009150000 definitions=main-2103050086
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Mar 5, 2021 at 11:10 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
->
-> On 3/5/21 4:08 PM, Willem de Bruijn wrote:
-> > On Fri, Mar 5, 2021 at 7:34 AM Xuesen Huang <hxseverything@gmail.com> wrote:
-> >>
-> >> From: Xuesen Huang <huangxuesen@kuaishou.com>
-> >>
-> >> Add BPF_F_ADJ_ROOM_ENCAP_L2_ETH flag to the existing tests which
-> >> encapsulates the ethernet as the inner l2 header.
-> >>
-> >> Update a vxlan encapsulation test case.
-> >>
-> >> Signed-off-by: Xuesen Huang <huangxuesen@kuaishou.com>
-> >> Signed-off-by: Li Wang <wangli09@kuaishou.com>
-> >> Signed-off-by: Willem de Bruijn <willemb@google.com>
-> >
-> > Please don't add my signed off by without asking.
->
-> Agree, I can remove it if you prefer while applying and only keep the
-> ack instead.
+Check that dumping various floating-point types produces a valid C
+code.
 
-That would be great. Thanks, Daniel!
+Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
+---
+ .../selftests/bpf/progs/btf_dump_test_case_syntax.c        | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c b/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
+index 31975c96e2c9..09d8d1e01ed6 100644
+--- a/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
++++ b/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
+@@ -205,6 +205,12 @@ struct struct_with_embedded_stuff {
+ 	int t[11];
+ };
+ 
++struct float_struct {
++	float *f;
++	const double *d;
++	volatile long double *ld;
++};
++
+ struct root_struct {
+ 	enum e1 _1;
+ 	enum e2 _2;
+@@ -219,6 +225,7 @@ struct root_struct {
+ 	union_fwd_t *_12;
+ 	union_fwd_ptr_t _13;
+ 	struct struct_with_embedded_stuff _14;
++	struct float_struct _15;
+ };
+ 
+ /* ------ END-EXPECTED-OUTPUT ------ */
+-- 
+2.29.2
+
