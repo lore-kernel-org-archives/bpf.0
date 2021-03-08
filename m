@@ -2,75 +2,86 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A568C4332D
-	for <bpf@archiver.kernel.org>; Mon,  8 Mar 2021 18:50:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E238C433DB
+	for <bpf@archiver.kernel.org>; Mon,  8 Mar 2021 21:21:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 558DC652B2
-	for <bpf@archiver.kernel.org>; Mon,  8 Mar 2021 18:50:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1311B64FA8
+	for <bpf@archiver.kernel.org>; Mon,  8 Mar 2021 21:21:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230342AbhCHSuZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 8 Mar 2021 13:50:25 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58932 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230490AbhCHSuX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 8 Mar 2021 13:50:23 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id 9BA2265194;
-        Mon,  8 Mar 2021 18:50:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615229422;
-        bh=rssix3XvXO4um6kczgo793VcQ3UozKJZ4MpeHy6RRAI=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=gg5CE6r51AqzRMjnTPPllENj6ehAe+zf6rh6V7o800VytPtQe3ec3hmG9ozxWBlY8
-         fsIU5U4R5TMqEy5an44T7vi4DD/FKDPkROBpt3WCV5dv/jCWKYOZVXI4duZs/g6E52
-         Otq3jX/T7/iHr4ChrP8ymNcmfgH6uonSx2w2JLJiEi83rrXRF+V053zhyI1FxHh4xP
-         IYdaru3WmpVkUsSlgQN73UwkDJE2p+y7SvIloRfPd1n8aub+XT79T95wZjWiAm+lqD
-         FJcFB/SqK18XlwsezpvhC3lRS0bw2RXlDzx5kEueQG5VUuh+kuNySa9qNqQwSrAneF
-         k6eUzRLgRjksw==
-Content-Type: text/plain; charset="utf-8"
+        id S229775AbhCHVU1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 8 Mar 2021 16:20:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33718 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229650AbhCHVUG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 8 Mar 2021 16:20:06 -0500
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02F17C06175F
+        for <bpf@vger.kernel.org>; Mon,  8 Mar 2021 13:20:05 -0800 (PST)
+Received: by mail-ot1-x329.google.com with SMTP id f33so10657186otf.11
+        for <bpf@vger.kernel.org>; Mon, 08 Mar 2021 13:20:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cilium-io.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FqhqeZr2mP2g3hEZS37A37xiT1GPHwZWQBfQupiXH30=;
+        b=ahF8ZpY5aS9BUJuXYF4jVKVBTNDL690Cx7GLbfjBpTt5c9gZ8q/QcXzIvw8kJ8zi8z
+         YL++V2vWR93vH4UgccdaCP3yDW3JGrZ+bFHZNSCxCmsm0S9HWwANlEkfTZz6KjSiKr80
+         dYExmlGIIYwsnwCOXbxyJyeRoEz2Zmkn9ilUDFqz6+2BSQUQYwUf68XtIGfOlDTTQjzx
+         t7FRiEgwsk5MkeMsrD3L4TT7GecF4qRSB70Q14PL5lnp+AbvJ4bfbCFLV2GZcb6Qb7Ha
+         hn8s4xD1pG8cOvtS40YJ91aKGDcEk5+BDmrRde2vhgUTRtVn1+ce0fEA+jxKeAdpE8Nw
+         E9sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FqhqeZr2mP2g3hEZS37A37xiT1GPHwZWQBfQupiXH30=;
+        b=PjGDaXgdd4ghDJGi6Us9lbbJhnzwKru7CFxRmI5bvW8tSDvzInN717FdrydvcYbAT4
+         ZrekK3kIbAdLrlyxFUd9cTV8hl1PjBPURd/QvCSKpH+KorGHG3OgK+MEoGMOjiPFbXuY
+         VERsYHKS7IJmG2moqXWGP+nMxLedF1J8nmqDE0ZtwDjXDk9kwTDtIuzBCiMiIi3WPCl3
+         QJ15fRSH+qjYt2JCqtgLwH87peyk8ezjQUEmaIJoYcnw6pInEJN7hHZt4yXrob4dxQoq
+         PbU+hROtMzcPnsbRNLh+CKF/gYDnMOc4iVCWgIhxSp/VgBQxTLMJpN4g75a1QKA2h/yC
+         Segg==
+X-Gm-Message-State: AOAM531D0zH3GsVL5mwflAwtVPH0nHHrvpaxMz/NEaeKuqhtjxEBmHf2
+        nJ3yV1kaJx6Uud+UGbb4wXPWbTO4HvYa9I02sP9gIg==
+X-Google-Smtp-Source: ABdhPJwMChhvW0J5qVGiKwmT8+qXpOHEaHOaMDplKmxkeUv65+4bqIlOdB8cHzBqXGJrGRNTSBLug2GL0kvnBXGolaY=
+X-Received: by 2002:a05:6830:15d2:: with SMTP id j18mr2640239otr.75.1615238405176;
+ Mon, 08 Mar 2021 13:20:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] libbpf: fix INSTALL flag order
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <161522942261.22364.5755505303228120302.git-patchwork-notify@kernel.org>
-Date:   Mon, 08 Mar 2021 18:50:22 +0000
-References: <20210306014127.850411-1-andrii@kernel.org>
-In-Reply-To: <20210306014127.850411-1-andrii@kernel.org>
-To:     Andrii Nakryiko <andrii@kernel.org>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, ast@fb.com,
-        daniel@iogearbox.net, kernel-team@fb.com, gvalkov@abv.bg
+References: <20210308182830.155784-1-jean-philippe@linaro.org>
+In-Reply-To: <20210308182830.155784-1-jean-philippe@linaro.org>
+From:   Joe Stringer <joe@cilium.io>
+Date:   Mon, 8 Mar 2021 13:19:31 -0800
+Message-ID: <CADa=Ryz__dmwK7J--Tjt73_WvFrta=uJWcqt9GXsUqH_4zj1Zw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Fix typo in Makefile
+To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
+Cc:     shuah@kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, andrii@kernel.org,
+        linux-kselftest@vger.kernel.org, bpf <bpf@vger.kernel.org>,
+        Joe Stringer <joe@cilium.io>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        Quentin Monnet <quentin@isovalent.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
+On Mon, Mar 8, 2021 at 10:29 AM Jean-Philippe Brucker
+<jean-philippe@linaro.org> wrote:
+>
+> The selftest build fails when trying to install the scripts:
+>
+> rsync: [sender] link_stat "tools/testing/selftests/bpf/test_docs_build.sh" failed: No such file or directory (2)
+>
+> Fix the filename.
+>
+> Fixes: a01d935b2e09 ("tools/bpf: Remove bpf-helpers from bpftool docs")
+> Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
 
-This patch was applied to bpf/bpf.git (refs/heads/master):
+Thanks for the fix.
 
-On Fri, 5 Mar 2021 17:41:26 -0800 you wrote:
-> It was reported ([0]) that having optional -m flag between source and
-> destination arguments in install command breaks bpftools cross-build on MacOS.
-> Move -m to the front to fix this issue.
-> 
->   [0] https://github.com/openwrt/openwrt/pull/3959
-> 
-> Fixes: 7110d80d53f4 ("libbpf: Makefile set specified permission mode")
-> Reported-by: Georgi Valkov <gvalkov@abv.bg>
-> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf-next] libbpf: fix INSTALL flag order
-    https://git.kernel.org/bpf/bpf/c/e7fb6465d4c8
-
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Acked-by: Joe Stringer <joe@cilium.io>
