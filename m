@@ -2,157 +2,125 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F180C433E9
-	for <bpf@archiver.kernel.org>; Tue,  9 Mar 2021 01:58:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BD86C433DB
+	for <bpf@archiver.kernel.org>; Tue,  9 Mar 2021 02:17:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D81B26527E
-	for <bpf@archiver.kernel.org>; Tue,  9 Mar 2021 01:58:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2556165299
+	for <bpf@archiver.kernel.org>; Tue,  9 Mar 2021 02:17:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229718AbhCIB5V (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 8 Mar 2021 20:57:21 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:37196 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229793AbhCIB4z (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 8 Mar 2021 20:56:55 -0500
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 1291rEg0030166
-        for <bpf@vger.kernel.org>; Mon, 8 Mar 2021 17:56:55 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=a0EAI5NhjvAvksfas9J7OEmKgoE0p49p3KBAOfmDLbY=;
- b=O32DFlpTf2Ptkw8tzW3+NwS84oyzzLvnbQOrafW5ejAfiic1vP21tXgKBTCxPlqgIy4H
- EMqPNC2llzmxb+xK6MBgsgM8VvtrYwFBTIFJZ6a2EtlTNi3tF7uwc6WatWJ/ZBXou0AE
- tYBVoJczveXNfZM7mSXIRBKwlERwvdPpsoY= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 374tamr94v-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 08 Mar 2021 17:56:55 -0800
-Received: from intmgw001.05.ash7.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Mon, 8 Mar 2021 17:56:54 -0800
-Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 8AF511E5BD4; Mon,  8 Mar 2021 17:56:47 -0800 (PST)
-From:   Yonghong Song <yhs@fb.com>
-To:     <ast@kernel.org>, <daniel@iogearbox.net>, <bpf@vger.kernel.org>
-CC:     <kernel-team@fb.com>
-Subject: [PATCH bpf-next] bpf: x86: use kvmalloc_array instead kmalloc_array in bpf_jit_comp
-Date:   Mon, 8 Mar 2021 17:56:47 -0800
-Message-ID: <20210309015647.3657852-1-yhs@fb.com>
-X-Mailer: git-send-email 2.24.1
+        id S229688AbhCICQd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 8 Mar 2021 21:16:33 -0500
+Received: from szxga04-in.huawei.com ([45.249.212.190]:12704 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229599AbhCICQT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 8 Mar 2021 21:16:19 -0500
+Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4Dvf0C0TwJzlVXx;
+        Tue,  9 Mar 2021 10:14:03 +0800 (CST)
+Received: from huawei.com (10.175.124.27) by DGGEMS407-HUB.china.huawei.com
+ (10.3.19.207) with Microsoft SMTP Server id 14.3.498.0; Tue, 9 Mar 2021
+ 10:16:06 +0800
+From:   wanghongzhe <wanghongzhe@huawei.com>
+To:     <keescook@chromium.org>, <luto@amacapital.net>
+CC:     <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
+        <daniel@iogearbox.net>, <john.fastabend@gmail.com>, <kafai@fb.com>,
+        <kpsingh@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <songliubraving@fb.com>,
+        <wad@chromium.org>, <wanghongzhe@huawei.com>, <yhs@fb.com>
+Subject: [RESEND PATCH v3] seccomp: Improve performance by optimizing rmb()
+Date:   Tue, 9 Mar 2021 11:03:20 +0800
+Message-ID: <1615259000-29104-1-git-send-email-wanghongzhe@huawei.com>
+X-Mailer: git-send-email 1.7.12.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-03-08_22:2021-03-08,2021-03-08 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=0
- priorityscore=1501 adultscore=0 impostorscore=0 phishscore=0 spamscore=0
- bulkscore=0 mlxscore=0 malwarescore=0 mlxlogscore=935 lowpriorityscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2103090006
-X-FB-Internal: deliver
+X-Originating-IP: [10.175.124.27]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-x86 bpf_jit_comp.c used kmalloc_array to store jited addresses
-for each bpf insn. With a large bpf program, we have see the
-following allocation failures in our production server:
-    page allocation failure: order:5, mode:0x40cc0(GFP_KERNEL|__GFP_COMP)=
-,
-                             nodemask=3D(null),cpuset=3D/,mems_allowed=3D=
-0"
-    Call Trace:
-    dump_stack+0x50/0x70
-    warn_alloc.cold.120+0x72/0xd2
-    ? __alloc_pages_direct_compact+0x157/0x160
-    __alloc_pages_slowpath+0xcdb/0xd00
-    ? get_page_from_freelist+0xe44/0x1600
-    ? vunmap_page_range+0x1ba/0x340
-    __alloc_pages_nodemask+0x2c9/0x320
-    kmalloc_order+0x18/0x80
-    kmalloc_order_trace+0x1d/0xa0
-    bpf_int_jit_compile+0x1e2/0x484
-    ? kmalloc_order_trace+0x1d/0xa0
-    bpf_prog_select_runtime+0xc3/0x150
-    bpf_prog_load+0x480/0x720
-    ? __mod_memcg_lruvec_state+0x21/0x100
-    __do_sys_bpf+0xc31/0x2040
-    ? close_pdeo+0x86/0xe0
-    do_syscall_64+0x42/0x110
-    entry_SYSCALL_64_after_hwframe+0x44/0xa9
-    RIP: 0033:0x7f2f300f7fa9
-    Code: Bad RIP value.
+As Kees haved accepted the v2 patch at a381b70a1 which just
+replaced rmb() with smp_rmb(), this patch will base on that and just adjust
+the smp_rmb() to the correct position.
 
-Dumped assembly:
-    ffffffff810b6d70 <bpf_int_jit_compile>:
-    ; {
-    ffffffff810b6d70: e8 eb a5 b4 00        callq   0xffffffff81c01360 <_=
-_fentry__>
-    ffffffff810b6d75: 41 57                 pushq   %r15
-    ...
-    ffffffff810b6f39: e9 72 fe ff ff        jmp     0xffffffff810b6db0 <b=
-pf_int_jit_compile+0x40>
-    ;       addrs =3D kmalloc_array(prog->len + 1, sizeof(*addrs), GFP_KE=
-RNEL);
-    ffffffff810b6f3e: 8b 45 0c              movl    12(%rbp), %eax
-    ;       return __kmalloc(bytes, flags);
-    ffffffff810b6f41: be c0 0c 00 00        movl    $3264, %esi
-    ;       addrs =3D kmalloc_array(prog->len + 1, sizeof(*addrs), GFP_KE=
-RNEL);
-    ffffffff810b6f46: 8d 78 01              leal    1(%rax), %edi
-    ;       if (unlikely(check_mul_overflow(n, size, &bytes)))
-    ffffffff810b6f49: 48 c1 e7 02           shlq    $2, %rdi
-    ;       return __kmalloc(bytes, flags);
-    ffffffff810b6f4d: e8 8e 0c 1d 00        callq   0xffffffff81287be0 <_=
-_kmalloc>
-    ;       if (!addrs) {
-    ffffffff810b6f52: 48 85 c0              testq   %rax, %rax
+As the original comment shown (and indeed it should be):
+   /*
+    * Make sure that any changes to mode from another thread have
+    * been seen after SYSCALL_WORK_SECCOMP was seen.
+    */
+the smp_rmb() should be put between reading SYSCALL_WORK_SECCOMP and reading
+seccomp.mode to make sure that any changes to mode from another thread have
+been seen after SYSCALL_WORK_SECCOMP was seen, for TSYNC situation. However,
+it is misplaced between reading seccomp.mode and seccomp->filter. This issue
+seems to be misintroduced at 13aa72f0fd0a9f98a41cefb662487269e2f1ad65 which
+aims to refactor the filter callback and the API. So let's just adjust the
+smp_rmb() to the correct position.
 
-Change kmalloc_array() to kvmalloc_array() to avoid potential
-allocation error for big bpf programs.
+A next optimization patch will be provided if this ajustment is appropriate.
 
-Signed-off-by: Yonghong Song <yhs@fb.com>
+ref:https://lore.kernel.org/lkml/1614157085-18952-1-git-send-email-wanghongzhe@huawei.com/
+
+v2 -> v3:
+ - move the smp_rmb() to the correct position
+
+v1 -> v2:
+ - only replace rmb() with smp_rmb()
+ - provide the performance test number
+
+RFC -> v1:
+ - replace rmb() with smp_rmb()
+ - move the smp_rmb() logic to the middle between TIF_SECCOMP and mode
+
+Signed-off-by: wanghongzhe <wanghongzhe@huawei.com>
 ---
- arch/x86/net/bpf_jit_comp.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ kernel/seccomp.c | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
 
-Note: I labelled this patch as bpf-next as I cannot find a proper
-      fix tag. The previous commit which touched the same code is
-        7c2e988f400e ("bpf: fix x64 JIT code generation for jmp to 1st in=
-sn")
-      which is not this patch intending to fix.
-
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 79e7a0ec1da5..487de2d5fdd9 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -2221,7 +2221,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_pro=
-g *prog)
- 		padding =3D true;
- 		goto skip_init_addrs;
- 	}
--	addrs =3D kmalloc_array(prog->len + 1, sizeof(*addrs), GFP_KERNEL);
-+	addrs =3D kvmalloc_array(prog->len + 1, sizeof(*addrs), GFP_KERNEL);
- 	if (!addrs) {
- 		prog =3D orig_prog;
- 		goto out_addrs;
-@@ -2313,7 +2313,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_pro=
-g *prog)
- 		if (image)
- 			bpf_prog_fill_jited_linfo(prog, addrs + 1);
- out_addrs:
--		kfree(addrs);
-+		kvfree(addrs);
- 		kfree(jit_data);
- 		prog->aux->jit_data =3D NULL;
- 	}
---=20
-2.24.1
+diff --git a/kernel/seccomp.c b/kernel/seccomp.c
+index 1d60fc2c9987..64b236cb8a7f 100644
+--- a/kernel/seccomp.c
++++ b/kernel/seccomp.c
+@@ -1160,12 +1160,6 @@ static int __seccomp_filter(int this_syscall, const struct seccomp_data *sd,
+ 	int data;
+ 	struct seccomp_data sd_local;
+ 
+-	/*
+-	 * Make sure that any changes to mode from another thread have
+-	 * been seen after SYSCALL_WORK_SECCOMP was seen.
+-	 */
+-	smp_rmb();
+-
+ 	if (!sd) {
+ 		populate_seccomp_data(&sd_local);
+ 		sd = &sd_local;
+@@ -1291,7 +1285,6 @@ static int __seccomp_filter(int this_syscall, const struct seccomp_data *sd,
+ 
+ int __secure_computing(const struct seccomp_data *sd)
+ {
+-	int mode = current->seccomp.mode;
+ 	int this_syscall;
+ 
+ 	if (IS_ENABLED(CONFIG_CHECKPOINT_RESTORE) &&
+@@ -1301,7 +1294,13 @@ int __secure_computing(const struct seccomp_data *sd)
+ 	this_syscall = sd ? sd->nr :
+ 		syscall_get_nr(current, current_pt_regs());
+ 
+-	switch (mode) {
++	/* 
++	 * Make sure that any changes to mode from another thread have
++	 * been seen after SYSCALL_WORK_SECCOMP was seen.
++	 */
++	smp_rmb();
++
++	switch (current->seccomp.mode) {
+ 	case SECCOMP_MODE_STRICT:
+ 		__secure_computing_strict(this_syscall);  /* may call do_exit */
+ 		return 0;
+-- 
+2.19.1
 
