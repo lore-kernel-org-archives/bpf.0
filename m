@@ -8,54 +8,54 @@ X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E753DC4332E
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E9791C43331
 	for <bpf@archiver.kernel.org>; Wed, 10 Mar 2021 05:33:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B0BE465005
+	by mail.kernel.org (Postfix) with ESMTP id C62AC64F59
 	for <bpf@archiver.kernel.org>; Wed, 10 Mar 2021 05:33:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231483AbhCJFdW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 10 Mar 2021 00:33:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56294 "EHLO
+        id S231431AbhCJFdV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 10 Mar 2021 00:33:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbhCJFcr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S229691AbhCJFcr (ORCPT <rfc822;bpf@vger.kernel.org>);
         Wed, 10 Mar 2021 00:32:47 -0500
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD3AC06174A;
-        Tue,  9 Mar 2021 21:32:31 -0800 (PST)
-Received: by mail-qk1-x732.google.com with SMTP id d20so15728634qkc.2;
-        Tue, 09 Mar 2021 21:32:31 -0800 (PST)
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33D8CC061761;
+        Tue,  9 Mar 2021 21:32:35 -0800 (PST)
+Received: by mail-qk1-x72d.google.com with SMTP id 130so15672061qkh.11;
+        Tue, 09 Mar 2021 21:32:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=jiBFQhb007udnKP3xSiYvQ4GEZgCLJgSEXMTlUQvTG8=;
-        b=KzeNLpBGh8RO0L9Ad8dBQEg597xPaj0AEwvxXPP/Tb2+0lDeWRmn1SujNVLQHbz5+4
-         KaYgq3xfu/yilsqyqSOOdGW3LKth333i/U2AbGIRdJlgpYDvjjrDdeppifnsDqxSnwuC
-         CQ8rx07WzlbpDz+D54FB0xVTIJbcToUNK4/Jh4Ni3NmQPS9oL6jYDdob2pb5WKmqokQc
-         uF02PuBSwAWRVv290nbPIv1a/YyGjoIRA4JY41dkHUvYfvCxV+5/BxFuqxWiZbG75T6K
-         Inpaek1a21crzHHTcGTVzhVUnUwtm0/dbfc9ES0D9gclaqBh0ZSXq1oXV4dqpMYv2Jm3
-         HNEw==
+        bh=CPLlyzobmDibvol8ZTJ80tV8ELbFVTyX9eFQXacFyC0=;
+        b=CRRQgm54vzgKwUeWrPsWyMyxMmrKoaCtwV+H7VIafn7HsryMvxq5t1WNfuUSNC96ch
+         wyO8nZYQWai+SFoE/NppSbkHZaLKdF2X+QcSZQ94kA3lh7nzhRtbBicFZQpzqpczlW8g
+         CQ4fCjuhaDz23XfKFnu5FJ+dQvfxTBYwcC6CjVpC0d5Z9Bu+lDsGSCnlTXon0nqlw+mY
+         lrsoAsJIl4dlucMXfrYosbUvQfULd3Oh/sqipLVr5MAj2bfssGLlsQuX5sfWoz1dl7wb
+         G8lpJa3H4MjAEbSFh9FVNUsbqy0G2VqRyQi0SKKO92nmgLQ6+44qP/kBqEJprpVy5erQ
+         RDjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=jiBFQhb007udnKP3xSiYvQ4GEZgCLJgSEXMTlUQvTG8=;
-        b=eKzd+LAm2UI3KP5bXZw4W5Xn5cgmLoG0q0twP7aFg34oU9Crq82JWiuACWrBxbyPun
-         ymYMl+49lv5OCOcOrp/sp3aw33mw2EsjbSEFVeie8uyUnblfYEyzuTREEJU1oN92lmSM
-         Hex2uHjVn+wSkhLeCYB/2TI0sqIq+an6oWb+voxM1D5ExN4zypamQ2iAkL3OPz2cytI0
-         UOYUr7hPUmrgts3WWZv/yFz6zhD+OIAs/P6Qm6cXoJrYY+d2t4lm4G79WOnzkFNab4oZ
-         jSyy1qZuiTKBxTqK5WvsDFnLkqCnUtNCEa609KZXicPD89+Th6oI95Lcg/2PP6NEQyia
-         c3MA==
-X-Gm-Message-State: AOAM5336sZz/huXD5j/HZdQwXaKF7GVqolJeD2FBxWiC3YBY9MwXDBf5
-        J4HmyVD0g09zbsDD++i8ZoacxFhr0p9wxg==
-X-Google-Smtp-Source: ABdhPJxANgbY8NFYDuk1Sy3Lrc1UssiQaYXJ4thtbJcoBQp2njNeUbqBVMpcwuuA68Dw+l/m4/4Qig==
-X-Received: by 2002:a37:9bd1:: with SMTP id d200mr1153637qke.328.1615354350734;
-        Tue, 09 Mar 2021 21:32:30 -0800 (PST)
+        bh=CPLlyzobmDibvol8ZTJ80tV8ELbFVTyX9eFQXacFyC0=;
+        b=WK4Dhin/+9KOPP5rxO/Zd3EPF0PvW6tbv+DF1ZK/wQZSYqRWXD9ZebbZ35ukLp7qIH
+         tVCX1Ia2tDz39Tm13zaC0Owe7NZxIG7zOMzWsFe7QTG3PASdDWrtNNoCHWrQuWQjWNJV
+         cvs1JhaZAO77nUAEj59JUriuhRLtQj0bsiPjuVsmXT42yE21es9CFRjtei69xLcfKXmP
+         VpZXPxw08lx2ZLTGm3mZgUcjjo98gTTpA1Guoltq4hoDYlCTgOltBWT5FFvqbdRSqLV+
+         Qkzx1kFORZtE/1Z7tc5MPAoiB1wMFtM1XoxZZefSNfHBqXkBMdri7hhmaafj+1hZg8Fp
+         93wA==
+X-Gm-Message-State: AOAM532uuDZ2S9zRb7qj3wW7mWIcg6B75AgU1ISJhZmroYnLcZHyVTNl
+        e2DOpimtul8+QR2gY9p810oG/y0qDuWq5g==
+X-Google-Smtp-Source: ABdhPJwwcWj+WT6fz349sZQg49UJ3VoyyrI7WF0nwSOXYej+BY6csCohT4UJ2P4QDZSc2/7bOmaiVg==
+X-Received: by 2002:a37:5b43:: with SMTP id p64mr1130955qkb.131.1615354354078;
+        Tue, 09 Mar 2021 21:32:34 -0800 (PST)
 Received: from unknown.attlocal.net ([2600:1700:65a0:ab60:91f3:e7ef:7f61:a131])
-        by smtp.gmail.com with ESMTPSA id g21sm12118739qkk.72.2021.03.09.21.32.29
+        by smtp.gmail.com with ESMTPSA id g21sm12118739qkk.72.2021.03.09.21.32.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Mar 2021 21:32:30 -0800 (PST)
+        Tue, 09 Mar 2021 21:32:33 -0800 (PST)
 From:   Cong Wang <xiyou.wangcong@gmail.com>
 To:     netdev@vger.kernel.org
 Cc:     bpf@vger.kernel.org, duanxiongchun@bytedance.com,
@@ -65,9 +65,9 @@ Cc:     bpf@vger.kernel.org, duanxiongchun@bytedance.com,
         Daniel Borkmann <daniel@iogearbox.net>,
         Jakub Sitnicki <jakub@cloudflare.com>,
         Lorenz Bauer <lmb@cloudflare.com>
-Subject: [Patch bpf-next v4 01/11] skmsg: lock ingress_skb when purging
-Date:   Tue,  9 Mar 2021 21:32:12 -0800
-Message-Id: <20210310053222.41371-2-xiyou.wangcong@gmail.com>
+Subject: [Patch bpf-next v4 03/11] skmsg: introduce skb_send_sock() for sock_map
+Date:   Tue,  9 Mar 2021 21:32:14 -0800
+Message-Id: <20210310053222.41371-4-xiyou.wangcong@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210310053222.41371-1-xiyou.wangcong@gmail.com>
 References: <20210310053222.41371-1-xiyou.wangcong@gmail.com>
@@ -79,10 +79,14 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Cong Wang <cong.wang@bytedance.com>
 
-Currently we purge the ingress_skb queue only when psock
-refcnt goes down to 0, so locking the queue is not necessary,
-but in order to be called during ->close, we have to lock it
-here.
+We only have skb_send_sock_locked() which requires callers
+to use lock_sock(). Introduce a variant skb_send_sock()
+which locks on its own, callers do not need to lock it
+any more. This will save us from adding a ->sendmsg_locked
+for each protocol.
+
+To reuse the code, pass function pointers to __skb_send_sock()
+and build skb_send_sock() and skb_send_sock_locked() on top.
 
 Cc: John Fastabend <john.fastabend@gmail.com>
 Cc: Daniel Borkmann <daniel@iogearbox.net>
@@ -90,22 +94,108 @@ Cc: Jakub Sitnicki <jakub@cloudflare.com>
 Cc: Lorenz Bauer <lmb@cloudflare.com>
 Signed-off-by: Cong Wang <cong.wang@bytedance.com>
 ---
- net/core/skmsg.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/skbuff.h |  1 +
+ net/core/skbuff.c      | 52 ++++++++++++++++++++++++++++++++++++------
+ 2 files changed, 46 insertions(+), 7 deletions(-)
 
-diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index 07f54015238a..bebf84ed4e30 100644
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -634,7 +634,7 @@ static void sk_psock_zap_ingress(struct sk_psock *psock)
- {
- 	struct sk_buff *skb;
+diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+index 0503c917d773..2fc8c3657c53 100644
+--- a/include/linux/skbuff.h
++++ b/include/linux/skbuff.h
+@@ -3626,6 +3626,7 @@ int skb_splice_bits(struct sk_buff *skb, struct sock *sk, unsigned int offset,
+ 		    unsigned int flags);
+ int skb_send_sock_locked(struct sock *sk, struct sk_buff *skb, int offset,
+ 			 int len);
++int skb_send_sock(struct sock *sk, struct sk_buff *skb, int offset, int len);
+ void skb_copy_and_csum_dev(const struct sk_buff *skb, u8 *to);
+ unsigned int skb_zerocopy_headlen(const struct sk_buff *from);
+ int skb_zerocopy(struct sk_buff *to, struct sk_buff *from,
+diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+index 545a472273a5..396586bd6ae3 100644
+--- a/net/core/skbuff.c
++++ b/net/core/skbuff.c
+@@ -2500,9 +2500,12 @@ int skb_splice_bits(struct sk_buff *skb, struct sock *sk, unsigned int offset,
+ }
+ EXPORT_SYMBOL_GPL(skb_splice_bits);
  
--	while ((skb = __skb_dequeue(&psock->ingress_skb)) != NULL) {
-+	while ((skb = skb_dequeue(&psock->ingress_skb)) != NULL) {
- 		skb_bpf_redirect_clear(skb);
- 		kfree_skb(skb);
- 	}
+-/* Send skb data on a socket. Socket must be locked. */
+-int skb_send_sock_locked(struct sock *sk, struct sk_buff *skb, int offset,
+-			 int len)
++typedef int (*sendmsg_func)(struct sock *sk, struct msghdr *msg,
++			    struct kvec *vec, size_t num, size_t size);
++typedef int (*sendpage_func)(struct sock *sk, struct page *page, int offset,
++			   size_t size, int flags);
++static int __skb_send_sock(struct sock *sk, struct sk_buff *skb, int offset,
++			   int len, sendmsg_func sendmsg, sendpage_func sendpage)
+ {
+ 	unsigned int orig_len = len;
+ 	struct sk_buff *head = skb;
+@@ -2522,7 +2525,7 @@ int skb_send_sock_locked(struct sock *sk, struct sk_buff *skb, int offset,
+ 		memset(&msg, 0, sizeof(msg));
+ 		msg.msg_flags = MSG_DONTWAIT;
+ 
+-		ret = kernel_sendmsg_locked(sk, &msg, &kv, 1, slen);
++		ret = sendmsg(sk, &msg, &kv, 1, slen);
+ 		if (ret <= 0)
+ 			goto error;
+ 
+@@ -2553,9 +2556,9 @@ int skb_send_sock_locked(struct sock *sk, struct sk_buff *skb, int offset,
+ 		slen = min_t(size_t, len, skb_frag_size(frag) - offset);
+ 
+ 		while (slen) {
+-			ret = kernel_sendpage_locked(sk, skb_frag_page(frag),
+-						     skb_frag_off(frag) + offset,
+-						     slen, MSG_DONTWAIT);
++			ret = sendpage(sk, skb_frag_page(frag),
++				       skb_frag_off(frag) + offset,
++				       slen, MSG_DONTWAIT);
+ 			if (ret <= 0)
+ 				goto error;
+ 
+@@ -2587,8 +2590,43 @@ int skb_send_sock_locked(struct sock *sk, struct sk_buff *skb, int offset,
+ error:
+ 	return orig_len == len ? ret : orig_len - len;
+ }
++
++/* Send skb data on a socket. Socket must be locked. */
++int skb_send_sock_locked(struct sock *sk, struct sk_buff *skb, int offset,
++			 int len)
++{
++	return __skb_send_sock(sk, skb, offset, len, kernel_sendmsg_locked,
++			       kernel_sendpage_locked);
++}
+ EXPORT_SYMBOL_GPL(skb_send_sock_locked);
+ 
++static int sendmsg_unlocked(struct sock *sk, struct msghdr *msg, struct kvec *vec,
++			    size_t num, size_t size)
++{
++	struct socket *sock = sk->sk_socket;
++
++	if (!sock)
++		return -EINVAL;
++	return kernel_sendmsg(sock, msg, vec, num, size);
++}
++
++static int sendpage_unlocked(struct sock *sk, struct page *page, int offset,
++			     size_t size, int flags)
++{
++	struct socket *sock = sk->sk_socket;
++
++	if (!sock)
++		return -EINVAL;
++	return kernel_sendpage(sock, page, offset, size, flags);
++}
++
++/* Send skb data on a socket. Socket must be unlocked. */
++int skb_send_sock(struct sock *sk, struct sk_buff *skb, int offset, int len)
++{
++	return __skb_send_sock(sk, skb, offset, len, sendmsg_unlocked,
++			       sendpage_unlocked);
++}
++
+ /**
+  *	skb_store_bits - store bits from kernel buffer to skb
+  *	@skb: destination buffer
 -- 
 2.25.1
 
