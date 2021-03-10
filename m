@@ -8,54 +8,54 @@ X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 28E56C432C3
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 069CDC4332D
 	for <bpf@archiver.kernel.org>; Wed, 10 Mar 2021 05:33:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 110A965006
-	for <bpf@archiver.kernel.org>; Wed, 10 Mar 2021 05:33:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E473B64F51
+	for <bpf@archiver.kernel.org>; Wed, 10 Mar 2021 05:33:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231744AbhCJFdW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 10 Mar 2021 00:33:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56420 "EHLO
+        id S229803AbhCJFdV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 10 Mar 2021 00:33:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbhCJFdD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 10 Mar 2021 00:33:03 -0500
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5730CC0613DA;
-        Tue,  9 Mar 2021 21:32:50 -0800 (PST)
-Received: by mail-qk1-x72a.google.com with SMTP id f124so15694680qkj.5;
-        Tue, 09 Mar 2021 21:32:50 -0800 (PST)
+        with ESMTP id S229732AbhCJFcr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 10 Mar 2021 00:32:47 -0500
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 881F0C061760;
+        Tue,  9 Mar 2021 21:32:33 -0800 (PST)
+Received: by mail-qk1-x732.google.com with SMTP id b130so15663939qkc.10;
+        Tue, 09 Mar 2021 21:32:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=g3nptvPrG/Rja0vDg1eqjKadpsNbfe6SjFJEHfl1sz0=;
-        b=csfo5ny9vn031XTr0QE9HHX4i5g2UGrJhAVDLHHWHJt+orut2ZnSAqyUb23H2B02Zr
-         PFz69KIbPrEAxSk08Fs9OzG94dM3NwiFP9EW1bYZgU/6QA1e4Uk/K0gklG4Z645sRhVZ
-         JXyKIJlvtCWavocboX2xG0S5mblAgQqs1TGCq8+6BGidJKhK/RIU0X3VbRFQj1FMrdwi
-         GNQ4NPTJd5qqp5N+VEEY6oroXNoMXo8oIjiZwuGfzz2olZd4+XtYY+EZsjgPQiDfQxZW
-         nZ1WRrQjYNtSUV5VH+9eVP00XYw2wOjCRKZbb3igTW/se5pCCLx0NN3VvJjZMrQtYVaZ
-         0q1w==
+        bh=oR8vNPuyYW5ybMkD1YXMVIl84QjFioYi6NOhEadLhCo=;
+        b=lyABdKQu1LDAvDr3UpWklQRKFQI6t5Ee5nELXCrlMitgKLT5zlcM8qD5k1in7ZF6gq
+         63wB1uAs9BPDl6gASoPnCaFeKbf82pvDHrgvMgDpAsztJZdo6MkqNITsvmwYKPenlRey
+         g/ylJ0i7uTCqnMvIHE006sQixrddHb3U2SmYx+VsTp3K0/AjSjSKbA613SW/3EGn3w7k
+         GagwAUGXayybeWHD7UKprZypeLu5nCV+BoMNGZ65nRvCjN+ynn/ox7IkEkDP/YJPsFKl
+         Ji34SFFeLkJB9vf2iOvZz1MpiuOvIPYr32c4LUV/WXMl/IbC0M3uZ4R+xJxmfzyM5rRk
+         yEYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=g3nptvPrG/Rja0vDg1eqjKadpsNbfe6SjFJEHfl1sz0=;
-        b=lmXi2Q/4+X2TGPEiw4F3xlJN4vC/opKM+iId/tcf0TpfKIwvnesnLW71FiXSE8+sWu
-         rXe5WekbSybHLViZu/u+KxZTOK8bUvcvVVI+ggNBw65IauhVRo/u7MPPdkSNYeZksEY2
-         CPT4a3WBVRpYw9akRSwHuX1pwhwfzga0kjw3OiRxxZIGQ7dGY6VLGNjzrr5OyB5f9oJ4
-         8WfCsGDnruPMvNhyoArybpR3byRl4XPtkuLfaCwk/HDtQe0TvwmCDn+VFVWlPgbsGQDN
-         mI/LN4U6YFxK0TpQ63SjB3IeE4hJwLAWgC637ynfxWPlBN5E4ATnVRQiHMNEc8j/W3Kc
-         pHGQ==
-X-Gm-Message-State: AOAM530nz/qI/as8QEFfhUrlmYO0DVGUuZFJ6CBzyRvzEroJW3Yt6DjL
-        ViJwMbAcvxgvOnn7d6n2CvsXphQw7S548w==
-X-Google-Smtp-Source: ABdhPJykyOB/de8QBgiE0zmwljU20PunVO/V01yp5Fp6+6Sc/jWqASB0xZdMiwrJa3GcfUl0LfUq9Q==
-X-Received: by 2002:ae9:eb57:: with SMTP id b84mr1109459qkg.271.1615354369428;
-        Tue, 09 Mar 2021 21:32:49 -0800 (PST)
+        bh=oR8vNPuyYW5ybMkD1YXMVIl84QjFioYi6NOhEadLhCo=;
+        b=OKXlI4o1/G3YjS27JQnHYZkl3FZucmMikJ01iJZYPYVYuw3GS/fACAQiaGqb2EkaWQ
+         obOOIKK6X2rntDGzRiq2v4dt4Dkdsw/H7B9TKMZj8UvASqlmvXvmP6MdZPKhnCGTjNcE
+         ucC5NLcG2oJ47GvtaCtHQkTFnmoVD7E+VQSZu/FbnIwMB3i2XnMV0njtoDZXOPcErhFM
+         napc4PsOBjf2msomT7rFWR/ZsyEcAyYt6J0gEcrKv5RMUNQUvPckXt4DUOMR+01gGTEP
+         /ZphAyjNWTez4UAOTOpEQx4lljM1nKINHRNJmZsUOH3L6vweoVss6EOOAigdYQOSif75
+         F9fg==
+X-Gm-Message-State: AOAM5338WX7rH6wOII7PSmXkYQp+VtU8UdQsaDBxi3ZhtsIktaqaY5B+
+        j7wA9yxjRdfP2J9TkqPoWv6a3DbocPQ6nw==
+X-Google-Smtp-Source: ABdhPJwvkQI32wjPgiHEftUwy7GlQS30bzD9r1cx2aHbkJy+8tfDgb/r1CGpuMHBK1yROTosD6kSFg==
+X-Received: by 2002:a37:44cc:: with SMTP id r195mr1151267qka.224.1615354352451;
+        Tue, 09 Mar 2021 21:32:32 -0800 (PST)
 Received: from unknown.attlocal.net ([2600:1700:65a0:ab60:91f3:e7ef:7f61:a131])
-        by smtp.gmail.com with ESMTPSA id g21sm12118739qkk.72.2021.03.09.21.32.46
+        by smtp.gmail.com with ESMTPSA id g21sm12118739qkk.72.2021.03.09.21.32.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Mar 2021 21:32:48 -0800 (PST)
+        Tue, 09 Mar 2021 21:32:31 -0800 (PST)
 From:   Cong Wang <xiyou.wangcong@gmail.com>
 To:     netdev@vger.kernel.org
 Cc:     bpf@vger.kernel.org, duanxiongchun@bytedance.com,
@@ -65,9 +65,9 @@ Cc:     bpf@vger.kernel.org, duanxiongchun@bytedance.com,
         Daniel Borkmann <daniel@iogearbox.net>,
         Jakub Sitnicki <jakub@cloudflare.com>,
         Lorenz Bauer <lmb@cloudflare.com>
-Subject: [Patch bpf-next v4 11/11] selftests/bpf: add a test case for udp sockmap
-Date:   Tue,  9 Mar 2021 21:32:22 -0800
-Message-Id: <20210310053222.41371-12-xiyou.wangcong@gmail.com>
+Subject: [Patch bpf-next v4 02/11] skmsg: introduce a spinlock to protect ingress_msg
+Date:   Tue,  9 Mar 2021 21:32:13 -0800
+Message-Id: <20210310053222.41371-3-xiyou.wangcong@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210310053222.41371-1-xiyou.wangcong@gmail.com>
 References: <20210310053222.41371-1-xiyou.wangcong@gmail.com>
@@ -79,7 +79,12 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Cong Wang <cong.wang@bytedance.com>
 
-Add a test case to ensure redirection between two UDP sockets work.
+Currently we rely on lock_sock to protect ingress_msg,
+it is too big for this, we can actually just use a spinlock
+to protect this list like protecting other skb queues.
+
+__tcp_bpf_recvmsg() is still special because of peeking,
+it still has to use lock_sock.
 
 Cc: John Fastabend <john.fastabend@gmail.com>
 Cc: Daniel Borkmann <daniel@iogearbox.net>
@@ -87,212 +92,152 @@ Cc: Jakub Sitnicki <jakub@cloudflare.com>
 Cc: Lorenz Bauer <lmb@cloudflare.com>
 Signed-off-by: Cong Wang <cong.wang@bytedance.com>
 ---
- .../selftests/bpf/prog_tests/sockmap_listen.c | 140 ++++++++++++++++++
- .../selftests/bpf/progs/test_sockmap_listen.c |  22 +++
- 2 files changed, 162 insertions(+)
+ include/linux/skmsg.h | 46 +++++++++++++++++++++++++++++++++++++++++++
+ net/core/skmsg.c      |  3 +++
+ net/ipv4/tcp_bpf.c    | 18 ++++++-----------
+ 3 files changed, 55 insertions(+), 12 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-index c26e6bf05e49..a549ebd3b5a6 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-@@ -1563,6 +1563,142 @@ static void test_redir(struct test_sockmap_listen *skel, struct bpf_map *map,
- 	}
- }
- 
-+static void udp_redir_to_connected(int family, int sotype, int sock_mapfd,
-+				   int verd_mapfd, enum redir_mode mode)
-+{
-+	const char *log_prefix = redir_mode_str(mode);
-+	struct sockaddr_storage addr;
-+	int c0, c1, p0, p1;
-+	unsigned int pass;
-+	socklen_t len;
-+	int err, n;
-+	u64 value;
-+	u32 key;
-+	char b;
-+
-+	zero_verdict_count(verd_mapfd);
-+
-+	p0 = socket_loopback(family, sotype | SOCK_NONBLOCK);
-+	if (p0 < 0)
-+		return;
-+	len = sizeof(addr);
-+	err = xgetsockname(p0, sockaddr(&addr), &len);
-+	if (err)
-+		goto close_peer0;
-+
-+	c0 = xsocket(family, sotype | SOCK_NONBLOCK, 0);
-+	if (c0 < 0)
-+		goto close_peer0;
-+	err = xconnect(c0, sockaddr(&addr), len);
-+	if (err)
-+		goto close_cli0;
-+	err = xgetsockname(c0, sockaddr(&addr), &len);
-+	if (err)
-+		goto close_cli0;
-+	err = xconnect(p0, sockaddr(&addr), len);
-+	if (err)
-+		goto close_cli0;
-+
-+	p1 = socket_loopback(family, sotype | SOCK_NONBLOCK);
-+	if (p1 < 0)
-+		goto close_cli0;
-+	err = xgetsockname(p1, sockaddr(&addr), &len);
-+	if (err)
-+		goto close_cli0;
-+
-+	c1 = xsocket(family, sotype | SOCK_NONBLOCK, 0);
-+	if (c1 < 0)
-+		goto close_peer1;
-+	err = xconnect(c1, sockaddr(&addr), len);
-+	if (err)
-+		goto close_cli1;
-+	err = xgetsockname(c1, sockaddr(&addr), &len);
-+	if (err)
-+		goto close_cli1;
-+	err = xconnect(p1, sockaddr(&addr), len);
-+	if (err)
-+		goto close_cli1;
-+
-+	key = 0;
-+	value = p0;
-+	err = xbpf_map_update_elem(sock_mapfd, &key, &value, BPF_NOEXIST);
-+	if (err)
-+		goto close_cli1;
-+
-+	key = 1;
-+	value = p1;
-+	err = xbpf_map_update_elem(sock_mapfd, &key, &value, BPF_NOEXIST);
-+	if (err)
-+		goto close_cli1;
-+
-+	n = write(c1, "a", 1);
-+	if (n < 0)
-+		FAIL_ERRNO("%s: write", log_prefix);
-+	if (n == 0)
-+		FAIL("%s: incomplete write", log_prefix);
-+	if (n < 1)
-+		goto close_cli1;
-+
-+	key = SK_PASS;
-+	err = xbpf_map_lookup_elem(verd_mapfd, &key, &pass);
-+	if (err)
-+		goto close_cli1;
-+	if (pass != 1)
-+		FAIL("%s: want pass count 1, have %d", log_prefix, pass);
-+
-+	n = read(mode == REDIR_INGRESS ? p0 : c0, &b, 1);
-+	if (n < 0)
-+		FAIL_ERRNO("%s: read", log_prefix);
-+	if (n == 0)
-+		FAIL("%s: incomplete read", log_prefix);
-+
-+close_cli1:
-+	xclose(c1);
-+close_peer1:
-+	xclose(p1);
-+close_cli0:
-+	xclose(c0);
-+close_peer0:
-+	xclose(p0);
-+}
-+
-+static void udp_skb_redir_to_connected(struct test_sockmap_listen *skel,
-+					   struct bpf_map *inner_map, int family,
-+					   int sotype)
-+{
-+	int verdict = bpf_program__fd(skel->progs.prog_skb_verdict);
-+	int verdict_map = bpf_map__fd(skel->maps.verdict_map);
-+	int sock_map = bpf_map__fd(inner_map);
-+	int err;
-+
-+	err = xbpf_prog_attach(verdict, sock_map, BPF_SK_SKB_VERDICT, 0);
-+	if (err)
-+		return;
-+
-+	skel->bss->test_ingress = false;
-+	udp_redir_to_connected(family, sotype, sock_map, verdict_map,
-+			       REDIR_EGRESS);
-+	skel->bss->test_ingress = true;
-+	udp_redir_to_connected(family, sotype, sock_map, verdict_map,
-+			       REDIR_INGRESS);
-+
-+	xbpf_prog_detach2(verdict, sock_map, BPF_SK_SKB_VERDICT);
-+}
-+
-+static void test_udp_redir(struct test_sockmap_listen *skel, struct bpf_map *map,
-+			   int family)
-+{
-+	const char *family_name, *map_name;
-+	char s[MAX_TEST_NAME];
-+
-+	family_name = family_str(family);
-+	map_name = map_type_str(map);
-+	snprintf(s, sizeof(s), "%s %s %s", map_name, family_name, __func__);
-+	if (!test__start_subtest(s))
-+		return;
-+	udp_skb_redir_to_connected(skel, map, family, SOCK_DGRAM);
-+}
-+
- static void test_reuseport(struct test_sockmap_listen *skel,
- 			   struct bpf_map *map, int family, int sotype)
+diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
+index 6c09d94be2e9..7333bf881b81 100644
+--- a/include/linux/skmsg.h
++++ b/include/linux/skmsg.h
+@@ -89,6 +89,7 @@ struct sk_psock {
+ #endif
+ 	struct sk_buff_head		ingress_skb;
+ 	struct list_head		ingress_msg;
++	spinlock_t			ingress_lock;
+ 	unsigned long			state;
+ 	struct list_head		link;
+ 	spinlock_t			link_lock;
+@@ -284,7 +285,45 @@ static inline struct sk_psock *sk_psock(const struct sock *sk)
+ static inline void sk_psock_queue_msg(struct sk_psock *psock,
+ 				      struct sk_msg *msg)
  {
-@@ -1626,10 +1762,14 @@ void test_sockmap_listen(void)
- 	skel->bss->test_sockmap = true;
- 	run_tests(skel, skel->maps.sock_map, AF_INET);
- 	run_tests(skel, skel->maps.sock_map, AF_INET6);
-+	test_udp_redir(skel, skel->maps.sock_map, AF_INET);
-+	test_udp_redir(skel, skel->maps.sock_map, AF_INET6);
- 
- 	skel->bss->test_sockmap = false;
- 	run_tests(skel, skel->maps.sock_hash, AF_INET);
- 	run_tests(skel, skel->maps.sock_hash, AF_INET6);
-+	test_udp_redir(skel, skel->maps.sock_hash, AF_INET);
-+	test_udp_redir(skel, skel->maps.sock_hash, AF_INET6);
- 
- 	test_sockmap_listen__destroy(skel);
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_listen.c b/tools/testing/selftests/bpf/progs/test_sockmap_listen.c
-index fa221141e9c1..a39eba9f5201 100644
---- a/tools/testing/selftests/bpf/progs/test_sockmap_listen.c
-+++ b/tools/testing/selftests/bpf/progs/test_sockmap_listen.c
-@@ -29,6 +29,7 @@ struct {
- } verdict_map SEC(".maps");
- 
- static volatile bool test_sockmap; /* toggled by user-space */
-+static volatile bool test_ingress; /* toggled by user-space */
- 
- SEC("sk_skb/stream_parser")
- int prog_stream_parser(struct __sk_buff *skb)
-@@ -55,6 +56,27 @@ int prog_stream_verdict(struct __sk_buff *skb)
- 	return verdict;
- }
- 
-+SEC("sk_skb/skb_verdict")
-+int prog_skb_verdict(struct __sk_buff *skb)
-+{
-+	unsigned int *count;
-+	__u32 zero = 0;
-+	int verdict;
++	spin_lock_bh(&psock->ingress_lock);
+ 	list_add_tail(&msg->list, &psock->ingress_msg);
++	spin_unlock_bh(&psock->ingress_lock);
++}
 +
-+	if (test_sockmap)
-+		verdict = bpf_sk_redirect_map(skb, &sock_map, zero,
-+					      test_ingress ? BPF_F_INGRESS : 0);
++static inline struct sk_msg *sk_psock_deque_msg(struct sk_psock *psock)
++{
++	struct sk_msg *msg;
++
++	spin_lock_bh(&psock->ingress_lock);
++	msg = list_first_entry_or_null(&psock->ingress_msg, struct sk_msg, list);
++	if (msg)
++		list_del(&msg->list);
++	spin_unlock_bh(&psock->ingress_lock);
++	return msg;
++}
++
++static inline struct sk_msg *sk_psock_peek_msg(struct sk_psock *psock)
++{
++	struct sk_msg *msg;
++
++	spin_lock_bh(&psock->ingress_lock);
++	msg = list_first_entry_or_null(&psock->ingress_msg, struct sk_msg, list);
++	spin_unlock_bh(&psock->ingress_lock);
++	return msg;
++}
++
++static inline struct sk_msg *sk_psock_next_msg(struct sk_psock *psock,
++					       struct sk_msg *msg)
++{
++	struct sk_msg *ret;
++
++	spin_lock_bh(&psock->ingress_lock);
++	if (list_is_last(&msg->list, &psock->ingress_msg))
++		ret = NULL;
 +	else
-+		verdict = bpf_sk_redirect_hash(skb, &sock_hash, &zero,
-+					       test_ingress ? BPF_F_INGRESS : 0);
-+
-+	count = bpf_map_lookup_elem(&verdict_map, &verdict);
-+	if (count)
-+		(*count)++;
-+
-+	return verdict;
++		ret = list_next_entry(msg, list);
++	spin_unlock_bh(&psock->ingress_lock);
++	return ret;
+ }
+ 
+ static inline bool sk_psock_queue_empty(const struct sk_psock *psock)
+@@ -292,6 +331,13 @@ static inline bool sk_psock_queue_empty(const struct sk_psock *psock)
+ 	return psock ? list_empty(&psock->ingress_msg) : true;
+ }
+ 
++static inline void kfree_sk_msg(struct sk_msg *msg)
++{
++	if (msg->skb)
++		consume_skb(msg->skb);
++	kfree(msg);
 +}
 +
- SEC("sk_msg")
- int prog_msg_verdict(struct sk_msg_md *msg)
+ static inline void sk_psock_report_error(struct sk_psock *psock, int err)
  {
+ 	struct sock *sk = psock->sk;
+diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+index bebf84ed4e30..41a5f82c53e6 100644
+--- a/net/core/skmsg.c
++++ b/net/core/skmsg.c
+@@ -592,6 +592,7 @@ struct sk_psock *sk_psock_init(struct sock *sk, int node)
+ 
+ 	INIT_WORK(&psock->work, sk_psock_backlog);
+ 	INIT_LIST_HEAD(&psock->ingress_msg);
++	spin_lock_init(&psock->ingress_lock);
+ 	skb_queue_head_init(&psock->ingress_skb);
+ 
+ 	sk_psock_set_state(psock, SK_PSOCK_TX_ENABLED);
+@@ -623,11 +624,13 @@ static void __sk_psock_purge_ingress_msg(struct sk_psock *psock)
+ {
+ 	struct sk_msg *msg, *tmp;
+ 
++	spin_lock_bh(&psock->ingress_lock);
+ 	list_for_each_entry_safe(msg, tmp, &psock->ingress_msg, list) {
+ 		list_del(&msg->list);
+ 		sk_msg_free(psock->sk, msg);
+ 		kfree(msg);
+ 	}
++	spin_unlock_bh(&psock->ingress_lock);
+ }
+ 
+ static void sk_psock_zap_ingress(struct sk_psock *psock)
+diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
+index 17c322b875fd..ad1261cdcdde 100644
+--- a/net/ipv4/tcp_bpf.c
++++ b/net/ipv4/tcp_bpf.c
+@@ -18,9 +18,7 @@ int __tcp_bpf_recvmsg(struct sock *sk, struct sk_psock *psock,
+ 	struct sk_msg *msg_rx;
+ 	int i, copied = 0;
+ 
+-	msg_rx = list_first_entry_or_null(&psock->ingress_msg,
+-					  struct sk_msg, list);
+-
++	msg_rx = sk_psock_peek_msg(psock);
+ 	while (copied != len) {
+ 		struct scatterlist *sge;
+ 
+@@ -68,22 +66,18 @@ int __tcp_bpf_recvmsg(struct sock *sk, struct sk_psock *psock,
+ 		} while (i != msg_rx->sg.end);
+ 
+ 		if (unlikely(peek)) {
+-			if (msg_rx == list_last_entry(&psock->ingress_msg,
+-						      struct sk_msg, list))
++			msg_rx = sk_psock_next_msg(psock, msg_rx);
++			if (!msg_rx)
+ 				break;
+-			msg_rx = list_next_entry(msg_rx, list);
+ 			continue;
+ 		}
+ 
+ 		msg_rx->sg.start = i;
+ 		if (!sge->length && msg_rx->sg.start == msg_rx->sg.end) {
+-			list_del(&msg_rx->list);
+-			if (msg_rx->skb)
+-				consume_skb(msg_rx->skb);
+-			kfree(msg_rx);
++			msg_rx = sk_psock_deque_msg(psock);
++			kfree_sk_msg(msg_rx);
+ 		}
+-		msg_rx = list_first_entry_or_null(&psock->ingress_msg,
+-						  struct sk_msg, list);
++		msg_rx = sk_psock_peek_msg(psock);
+ 	}
+ 
+ 	return copied;
 -- 
 2.25.1
 
