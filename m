@@ -2,87 +2,108 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 66496C433DB
-	for <bpf@archiver.kernel.org>; Wed, 10 Mar 2021 15:19:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2A40C433E0
+	for <bpf@archiver.kernel.org>; Wed, 10 Mar 2021 15:43:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3F4B364F55
-	for <bpf@archiver.kernel.org>; Wed, 10 Mar 2021 15:19:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8151364FA1
+	for <bpf@archiver.kernel.org>; Wed, 10 Mar 2021 15:43:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229755AbhCJPTL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 10 Mar 2021 10:19:11 -0500
-Received: from elvis.franken.de ([193.175.24.41]:42337 "EHLO elvis.franken.de"
+        id S231666AbhCJPm5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 10 Mar 2021 10:42:57 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52042 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232370AbhCJPS6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 10 Mar 2021 10:18:58 -0500
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1lK0bw-00088y-03; Wed, 10 Mar 2021 16:18:56 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 948BDC1D54; Wed, 10 Mar 2021 16:08:16 +0100 (CET)
-Date:   Wed, 10 Mar 2021 16:08:16 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <f4bug@amsat.org>
-Subject: Re: [PATCH 2/2] MIPS: Remove KVM_TE support
-Message-ID: <20210310150816.GD12960@alpha.franken.de>
-References: <20210301152958.3480-1-tsbogend@alpha.franken.de>
- <20210301152958.3480-2-tsbogend@alpha.franken.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210301152958.3480-2-tsbogend@alpha.franken.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S233161AbhCJPmb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 10 Mar 2021 10:42:31 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4036B64F60;
+        Wed, 10 Mar 2021 15:42:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1615390951;
+        bh=JOdkfpOFS6fkbawiuazEFw2CCzjQJ0pFxL/CxofoRsU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=g30NPMXI2QdxxB3J5nI4sNuTRLMmKcIBMwtc1w6cjCcbVNCrQaHVE/FFqSTIsV7Uw
+         PBl9u99YWK1AgetTrcBpdZXt7k7Gb7Wup0NKvQ4oyL3NRkZJsA3bioiTLR/K5YGnmV
+         OKHniCiQyibtS9p+VpgAYzqkwPlw6B3uJXfZBtPMQDWNx7CrHSDps7RHUcPp763+ZT
+         9px+SHHydWAMuQjV4EhJr3pwMsKpJ43LGqGJ1uoJhchNm0Mn8uYCMs6L8sunSUWz0v
+         LjH8rc/XkpP1w/NY2Ak8jzYeC0WSwhZudGVgIwg4uEM0grOFNpQiWeysB7fF965wHT
+         43FgiSPgD82gw==
+Date:   Thu, 11 Mar 2021 00:42:25 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Miroslav Benes <mbenes@suse.cz>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@kernel.org>, X86 ML <x86@kernel.org>,
+        Daniel Xu <dxu@dxuuu.xyz>, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, kuba@kernel.org, mingo@redhat.com,
+        ast@kernel.org, tglx@linutronix.de, kernel-team@fb.com, yhs@fb.com
+Subject: Re: [PATCH -tip 3/5] kprobes: treewide: Remove trampoline_address
+ from kretprobe_trampoline_handler()
+Message-Id: <20210311004225.77e844ff8170108bfb75b470@kernel.org>
+In-Reply-To: <alpine.LSU.2.21.2103101258070.18547@pobox.suse.cz>
+References: <161495873696.346821.10161501768906432924.stgit@devnote2>
+        <161495876994.346821.11468535974887762132.stgit@devnote2>
+        <alpine.LSU.2.21.2103101258070.18547@pobox.suse.cz>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Mar 01, 2021 at 04:29:57PM +0100, Thomas Bogendoerfer wrote:
-> After removal of the guest part of KVM TE (trap and emulate), also remove
-> the host part.
+On Wed, 10 Mar 2021 15:21:01 +0100 (CET)
+Miroslav Benes <mbenes@suse.cz> wrote:
+
+> Hi Masami,
 > 
-> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> ---
->  arch/mips/configs/loongson3_defconfig |    1 -
->  arch/mips/include/asm/kvm_host.h      |  238 ----
->  arch/mips/kvm/Kconfig                 |   34 -
->  arch/mips/kvm/Makefile                |    7 +-
->  arch/mips/kvm/commpage.c              |   32 -
->  arch/mips/kvm/commpage.h              |   24 -
->  arch/mips/kvm/dyntrans.c              |  143 ---
->  arch/mips/kvm/emulate.c               | 1688 +------------------------
->  arch/mips/kvm/entry.c                 |   33 -
->  arch/mips/kvm/interrupt.c             |  123 +-
->  arch/mips/kvm/interrupt.h             |   20 -
->  arch/mips/kvm/mips.c                  |   68 +-
->  arch/mips/kvm/mmu.c                   |  405 ------
->  arch/mips/kvm/tlb.c                   |  174 ---
->  arch/mips/kvm/trap_emul.c             | 1306 -------------------
->  arch/mips/kvm/vz.c                    |    5 +-
->  16 files changed, 31 insertions(+), 4270 deletions(-)
->  delete mode 100644 arch/mips/kvm/commpage.c
->  delete mode 100644 arch/mips/kvm/commpage.h
->  delete mode 100644 arch/mips/kvm/dyntrans.c
->  delete mode 100644 arch/mips/kvm/trap_emul.c
+> > --- a/include/linux/kprobes.h
+> > +++ b/include/linux/kprobes.h
+> > @@ -205,15 +205,23 @@ extern void arch_prepare_kretprobe(struct kretprobe_instance *ri,
+> >  				   struct pt_regs *regs);
+> >  extern int arch_trampoline_kprobe(struct kprobe *p);
+> >  
+> > +void kretprobe_trampoline(void);
+> > +/*
+> > + * Since some architecture uses structured function pointer,
+> > + * use arch_deref_entry_point() to get real function address.
+> 
+> s/arch_deref_entry_point/dereference_function_descriptor/ ?
 
-applied to mips-next.
+Ah, I missed it. Thanks!
 
-Thomas.
+> 
+> > + */
+> > +static nokprobe_inline void *kretprobe_trampoline_addr(void)
+> > +{
+> > +	return dereference_function_descriptor(kretprobe_trampoline);
+> > +}
+> > +
+> 
+> Would it make sense to use this in s390 and powerpc reliable unwinders?
+> 
+> Both
+> 
+> arch/s390/kernel/stacktrace.c:arch_stack_walk_reliable()
+> arch/powerpc/kernel/stacktrace.c:__save_stack_trace_tsk_reliable()
+> 
+> have
+> 
+> 	if (state.ip == (unsigned long)kretprobe_trampoline)
+> 		return -EINVAL;
+> 
+> which you wanted to hide previously if I am not mistaken.
+
+I think, if "ip" means "instruction pointer", it should point
+the real instruction address, which is dereferenced from function
+descriptor. So using kretprobe_trampoline_addr() is good.
+
+But of course, it depends on the architecture. I'm not familiar
+with the powerpc and s390, I need those maintainer's help...
+
+Thank you,
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Masami Hiramatsu <mhiramat@kernel.org>
