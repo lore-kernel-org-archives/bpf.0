@@ -5,43 +5,43 @@ X-Spam-Level:
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6EC75C43381
-	for <bpf@archiver.kernel.org>; Thu, 11 Mar 2021 15:42:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5872BC433E0
+	for <bpf@archiver.kernel.org>; Thu, 11 Mar 2021 15:42:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 40A7764FDD
-	for <bpf@archiver.kernel.org>; Thu, 11 Mar 2021 15:42:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1463064F99
+	for <bpf@archiver.kernel.org>; Thu, 11 Mar 2021 15:42:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234367AbhCKPl4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 11 Mar 2021 10:41:56 -0500
-Received: from mga14.intel.com ([192.55.52.115]:42361 "EHLO mga14.intel.com"
+        id S234321AbhCKPlz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 11 Mar 2021 10:41:55 -0500
+Received: from mga14.intel.com ([192.55.52.115]:42345 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234161AbhCKPlm (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 11 Mar 2021 10:41:42 -0500
-IronPort-SDR: LFqCp+m2syVlHYNrNZR8ju+cBswSJOQy6uQhSqozz7UWY74ukm0MKJai8aDLInvGiLw3Q/548g
- 5OrK+A/k0LXA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9920"; a="188050704"
+        id S234045AbhCKPlX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 11 Mar 2021 10:41:23 -0500
+IronPort-SDR: 3Va/ablBBFkMTYVdDwxhqeYJ3ETrGpxt7gQp1OD1Ya/7Iohh2Fw79HAJ0Jc0UKEzmHW/lQmpt0
+ OTPuF3BIoZRQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9920"; a="188050690"
 X-IronPort-AV: E=Sophos;i="5.81,241,1610438400"; 
-   d="scan'208";a="188050704"
+   d="scan'208";a="188050690"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2021 07:41:28 -0800
-IronPort-SDR: UyAefxnA0xA5wT/jGfFqJvF1FRIVuUWoJ2FKHGf949X39ZdWyevZ9jbakwDc9IYPIJZ9A2M40K
- PclJT/ugCNTA==
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2021 07:41:22 -0800
+IronPort-SDR: CEyIJAJCv/mVFVaBqbMoPRaGZzfczG9dI2a2O5AXLgMuG1Cc0y/9D0zXuj7ajXRSx/pjfWnxUJ
+ gJ9IGt7JEQ9A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.81,241,1610438400"; 
-   d="scan'208";a="589253538"
+   d="scan'208";a="589253494"
 Received: from ranger.igk.intel.com ([10.102.21.164])
-  by orsmga005.jf.intel.com with ESMTP; 11 Mar 2021 07:41:25 -0800
+  by orsmga005.jf.intel.com with ESMTP; 11 Mar 2021 07:41:19 -0800
 From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 To:     bpf@vger.kernel.org, netdev@vger.kernel.org, daniel@iogearbox.net,
         ast@kernel.org
 Cc:     bjorn.topel@intel.com, magnus.karlsson@intel.com,
         ciara.loftus@intel.com, john.fastabend@gmail.com, toke@redhat.com,
         Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH v2 bpf-next 08/17] selftests: xsk: remove thread for netns switch
-Date:   Thu, 11 Mar 2021 16:29:01 +0100
-Message-Id: <20210311152910.56760-9-maciej.fijalkowski@intel.com>
+Subject: [PATCH v2 bpf-next 06/17] libbpf: xsk: use bpf_link
+Date:   Thu, 11 Mar 2021 16:28:59 +0100
+Message-Id: <20210311152910.56760-7-maciej.fijalkowski@intel.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20210311152910.56760-1-maciej.fijalkowski@intel.com>
 References: <20210311152910.56760-1-maciej.fijalkowski@intel.com>
@@ -51,248 +51,277 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently, there is a dedicated thread for following remote ns operations:
-- grabbing the ifindex of the interface moved to remote netns
-- removing xdp prog from that interface
+Currently, if there are multiple xdpsock instances running on a single
+interface and in case one of the instances is terminated, the rest of
+them are left in an inoperable state due to the fact of unloaded XDP
+prog from interface.
 
-With bpf_link usage in place, this can be simply omitted, so remove
-mentioned thread, as BPF resources will be managed by bpf_link itself,
-so there's no further need for creating the thread that will switch to
-remote netns and do the cleanup.
+Consider the scenario below:
 
-Keep most of the logic for switching the ns, though, but make
-switch_namespace() return the fd so that it will be possible to close it
-at the process termination time. Get rid of logic around making sure
-that it's possible to switch ns in validate_interfaces().
+// load xdp prog and xskmap and add entry to xskmap at idx 10
+$ sudo ./xdpsock -i ens801f0 -t -q 10
+
+// add entry to xskmap at idx 11
+$ sudo ./xdpsock -i ens801f0 -t -q 11
+
+terminate one of the processes and another one is unable to work due to
+the fact that the XDP prog was unloaded from interface.
+
+To address that, step away from setting bpf prog in favour of bpf_link.
+This means that refcounting of BPF resources will be done automatically
+by bpf_link itself.
+
+When setting up BPF resources during xsk socket creation, check whether
+bpf_link for a given ifindex already exists via set of calls to
+bpf_link_get_next_id -> bpf_link_get_fd_by_id -> bpf_obj_get_info_by_fd
+and comparing the ifindexes from bpf_link and xsk socket.
+
+If there's no bpf_link yet, create one for a given XDP prog. If bpf_link
+is already at a given ifindex and underlying program is not AF-XDP one,
+bail out or update the bpf_link's prog given the presence of
+XDP_FLAGS_UPDATE_IF_NOEXIST.
+
+If there's netlink-based XDP prog running on a interface, bail out and
+ask user to do removal by himself.
 
 Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 ---
- tools/testing/selftests/bpf/xdpxceiver.c | 123 +++--------------------
- tools/testing/selftests/bpf/xdpxceiver.h |  10 +-
- 2 files changed, 14 insertions(+), 119 deletions(-)
+ tools/lib/bpf/xsk.c | 139 ++++++++++++++++++++++++++++++++++++++------
+ 1 file changed, 120 insertions(+), 19 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/xdpxceiver.c b/tools/testing/selftests/bpf/xdpxceiver.c
-index 7c373695bbcc..6fcd5ca0877d 100644
---- a/tools/testing/selftests/bpf/xdpxceiver.c
-+++ b/tools/testing/selftests/bpf/xdpxceiver.c
-@@ -355,12 +355,15 @@ static void usage(const char *prog)
- 	ksft_print_msg(str, prog);
- }
+diff --git a/tools/lib/bpf/xsk.c b/tools/lib/bpf/xsk.c
+index 526fc35c0b23..dfca423a6c5f 100644
+--- a/tools/lib/bpf/xsk.c
++++ b/tools/lib/bpf/xsk.c
+@@ -28,6 +28,7 @@
+ #include <sys/mman.h>
+ #include <sys/socket.h>
+ #include <sys/types.h>
++#include <linux/if_link.h>
  
--static bool switch_namespace(int idx)
-+static int switch_namespace(const char *nsname)
- {
- 	char fqns[26] = "/var/run/netns/";
- 	int nsfd;
+ #include "bpf.h"
+ #include "libbpf.h"
+@@ -70,6 +71,7 @@ struct xsk_ctx {
+ 	int ifindex;
+ 	struct list_head list;
+ 	int prog_fd;
++	int link_fd;
+ 	int xsks_map_fd;
+ 	char ifname[IFNAMSIZ];
+ };
+@@ -409,7 +411,7 @@ static int xsk_load_xdp_prog(struct xsk_socket *xsk)
+ 	static const int log_buf_size = 16 * 1024;
+ 	struct xsk_ctx *ctx = xsk->ctx;
+ 	char log_buf[log_buf_size];
+-	int err, prog_fd;
++	int prog_fd;
  
--	strncat(fqns, ifdict[idx]->nsname, sizeof(fqns) - strlen(fqns) - 1);
-+	if (!nsname || strlen(nsname) == 0)
-+		return -1;
+ 	/* This is the fallback C-program:
+ 	 * SEC("xdp_sock") int xdp_sock_prog(struct xdp_md *ctx)
+@@ -499,14 +501,43 @@ static int xsk_load_xdp_prog(struct xsk_socket *xsk)
+ 		return prog_fd;
+ 	}
+ 
+-	err = bpf_set_link_xdp_fd(xsk->ctx->ifindex, prog_fd,
+-				  xsk->config.xdp_flags);
++	ctx->prog_fd = prog_fd;
++	return 0;
++}
 +
-+	strncat(fqns, nsname, sizeof(fqns) - strlen(fqns) - 1);
- 	nsfd = open(fqns, O_RDONLY);
- 
- 	if (nsfd == -1)
-@@ -369,26 +372,9 @@ static bool switch_namespace(int idx)
- 	if (setns(nsfd, 0) == -1)
- 		exit_with_error(errno);
- 
--	return true;
--}
--
--static void *nsswitchthread(void *args)
--{
--	struct targs *targs = args;
-+	print_verbose("NS switched: %s\n", nsname);
- 
--	targs->retptr = false;
--
--	if (switch_namespace(targs->idx)) {
--		ifdict[targs->idx]->ifindex = if_nametoindex(ifdict[targs->idx]->ifname);
--		if (!ifdict[targs->idx]->ifindex) {
--			ksft_test_result_fail("ERROR: [%s] interface \"%s\" does not exist\n",
--					      __func__, ifdict[targs->idx]->ifname);
--		} else {
--			print_verbose("Interface found: %s\n", ifdict[targs->idx]->ifname);
--			targs->retptr = true;
--		}
--	}
--	pthread_exit(NULL);
-+	return nsfd;
- }
- 
- static int validate_interfaces(void)
-@@ -400,33 +386,6 @@ static int validate_interfaces(void)
- 			ret = false;
- 			ksft_test_result_fail("ERROR: interfaces: -i <int>,<ns> -i <int>,<ns>.");
- 		}
--		if (strcmp(ifdict[i]->nsname, "")) {
--			struct targs *targs;
--
--			targs = malloc(sizeof(*targs));
--			if (!targs)
--				exit_with_error(errno);
--
--			targs->idx = i;
--			if (pthread_create(&ns_thread, NULL, nsswitchthread, targs))
--				exit_with_error(errno);
--
--			pthread_join(ns_thread, NULL);
--
--			if (targs->retptr)
--				print_verbose("NS switched: %s\n", ifdict[i]->nsname);
--
--			free(targs);
--		} else {
--			ifdict[i]->ifindex = if_nametoindex(ifdict[i]->ifname);
--			if (!ifdict[i]->ifindex) {
--				ksft_test_result_fail
--				    ("ERROR: interface \"%s\" does not exist\n", ifdict[i]->ifname);
--				ret = false;
--			} else {
--				print_verbose("Interface found: %s\n", ifdict[i]->ifname);
--			}
--		}
- 	}
- 	return ret;
- }
-@@ -844,8 +803,7 @@ static void *worker_testapp_validate(void *arg)
- 		if (bufs == MAP_FAILED)
- 			exit_with_error(errno);
- 
--		if (strcmp(ifobject->nsname, ""))
--			switch_namespace(ifobject->ifdict_index);
-+		ifobject->ns_fd = switch_namespace(ifobject->nsname);
++static int xsk_create_bpf_link(struct xsk_socket *xsk)
++{
++	/* bpf_link only accepts XDP_FLAGS_MODES, but xsk->config.xdp_flags
++	 * might have set XDP_FLAGS_UPDATE_IF_NOEXIST
++	 */
++	DECLARE_LIBBPF_OPTS(bpf_link_create_opts, opts,
++			    .flags = (xsk->config.xdp_flags & XDP_FLAGS_MODES));
++	struct xsk_ctx *ctx = xsk->ctx;
++	__u32 prog_id = 0;
++	int link_fd;
++	int err;
++
++	err = bpf_get_link_xdp_id(ctx->ifindex, &prog_id, xsk->config.xdp_flags);
+ 	if (err) {
+-		close(prog_fd);
++		pr_warn("getting XDP prog id failed\n");
+ 		return err;
  	}
  
- 	if (ifobject->fv.vector == tx) {
-@@ -1060,60 +1018,6 @@ static void init_iface(struct ifobject *ifobj, const char *dst_mac,
- 	ifobj->src_port = src_port;
+-	ctx->prog_fd = prog_fd;
++	/* if there's a netlink-based XDP prog loaded on interface, bail out
++	 * and ask user to do the removal by himself
++	 */
++	if (prog_id) {
++		pr_warn("Netlink-based XDP prog detected, please unload it in order to launch AF_XDP prog\n");
++		return -EINVAL;
++	}
++
++	link_fd = bpf_link_create(ctx->prog_fd, ctx->ifindex, BPF_XDP, &opts);
++	if (link_fd < 0) {
++		pr_warn("bpf_link_create failed: %s\n", strerror(errno));
++		return link_fd;
++	}
++
++	ctx->link_fd = link_fd;
+ 	return 0;
  }
  
--static void *nsdisablemodethread(void *args)
--{
--	struct targs *targs = args;
--
--	targs->retptr = false;
--
--	if (switch_namespace(targs->idx)) {
--		targs->retptr = bpf_set_link_xdp_fd(ifdict[targs->idx]->ifindex, -1, targs->flags);
--	} else {
--		targs->retptr = errno;
--		print_verbose("Failed to switch namespace to %s\n", ifdict[targs->idx]->nsname);
--	}
--
--	pthread_exit(NULL);
--}
--
--static void disable_xdp_mode(int mode)
--{
--	int err = 0;
--	__u32 flags = XDP_FLAGS_UPDATE_IF_NOEXIST | mode;
--	char *mode_str = mode & XDP_FLAGS_SKB_MODE ? "skb" : "drv";
--
--	for (int i = 0; i < MAX_INTERFACES; i++) {
--		if (strcmp(ifdict[i]->nsname, "")) {
--			struct targs *targs;
--
--			targs = malloc(sizeof(*targs));
--			memset(targs, 0, sizeof(*targs));
--			if (!targs)
--				exit_with_error(errno);
--
--			targs->idx = i;
--			targs->flags = flags;
--			if (pthread_create(&ns_thread, NULL, nsdisablemodethread, targs))
--				exit_with_error(errno);
--
--			pthread_join(ns_thread, NULL);
--			err = targs->retptr;
--			free(targs);
--		} else {
--			err = bpf_set_link_xdp_fd(ifdict[i]->ifindex, -1, flags);
--		}
--
--		if (err) {
--			print_verbose("Failed to disable %s mode on interface %s\n",
--						mode_str, ifdict[i]->ifname);
--			exit_with_error(err);
--		}
--
--		print_verbose("Disabled %s mode for interface: %s\n", mode_str, ifdict[i]->ifname);
--		configured_mode = mode & XDP_FLAGS_SKB_MODE ? TEST_MODE_DRV : TEST_MODE_SKB;
--	}
--}
--
- static void run_pkt_test(int mode, int type)
- {
- 	test_type = type;
-@@ -1133,13 +1037,9 @@ static void run_pkt_test(int mode, int type)
- 
- 	switch (mode) {
- 	case (TEST_MODE_SKB):
--		if (configured_mode == TEST_MODE_DRV)
--			disable_xdp_mode(XDP_FLAGS_DRV_MODE);
- 		xdp_flags |= XDP_FLAGS_SKB_MODE;
- 		break;
- 	case (TEST_MODE_DRV):
--		if (configured_mode == TEST_MODE_SKB)
--			disable_xdp_mode(XDP_FLAGS_SKB_MODE);
- 		xdp_flags |= XDP_FLAGS_DRV_MODE;
- 		break;
- 	default:
-@@ -1186,8 +1086,6 @@ int main(int argc, char **argv)
- 	ifdict[1]->fv.vector = rx;
- 	init_iface(ifdict[1], MAC2, MAC1, IP2, IP1, UDP_PORT2, UDP_PORT1);
- 
--	disable_xdp_mode(XDP_FLAGS_DRV_MODE);
--
- 	ksft_set_plan(TEST_MODE_MAX * TEST_TYPE_MAX);
- 
- 	for (i = 0; i < TEST_MODE_MAX; i++) {
-@@ -1195,8 +1093,11 @@ int main(int argc, char **argv)
- 			run_pkt_test(i, j);
+@@ -626,8 +657,32 @@ static int xsk_lookup_bpf_maps(struct xsk_socket *xsk)
  	}
  
--	for (int i = 0; i < MAX_INTERFACES; i++)
-+	for (int i = 0; i < MAX_INTERFACES; i++) {
-+		if (ifdict[i]->ns_fd != -1)
-+			close(ifdict[i]->ns_fd);
- 		free(ifdict[i]);
+ 	err = 0;
+-	if (ctx->xsks_map_fd == -1)
++	if (ctx->xsks_map_fd != -1)
++		goto out_map_ids;
++
++	/* if prog load is forced and we found bpf_link on a given ifindex BUT
++	 * the underlying XDP prog is not an AF-XDP one, close old prog's fd,
++	 * load AF-XDP and update existing bpf_link
++	 */
++	if (!(xsk->config.xdp_flags & XDP_FLAGS_UPDATE_IF_NOEXIST)) {
++		close(ctx->prog_fd);
++		err = xsk_create_bpf_maps(xsk);
++		if (err)
++			goto out_map_ids;
++
++		err = xsk_load_xdp_prog(xsk);
++		if (err) {
++			xsk_delete_bpf_maps(xsk);
++			goto out_map_ids;
++		}
++
++		/* if update failed, caller will close fds */
++		err = bpf_link_update(ctx->link_fd, ctx->prog_fd, 0);
++		if (err)
++			pr_warn("bpf_link_update failed: %s\n", strerror(errno));
++	} else {
+ 		err = -ENOENT;
 +	}
  
- 	ksft_exit_pass();
+ out_map_ids:
+ 	free(map_ids);
+@@ -667,6 +722,53 @@ static int xsk_create_xsk_struct(int ifindex, struct xsk_socket *xsk)
+ 	return 0;
+ }
  
-diff --git a/tools/testing/selftests/bpf/xdpxceiver.h b/tools/testing/selftests/bpf/xdpxceiver.h
-index 8f9308099318..493f7498d40e 100644
---- a/tools/testing/selftests/bpf/xdpxceiver.h
-+++ b/tools/testing/selftests/bpf/xdpxceiver.h
-@@ -126,7 +126,7 @@ struct generic_data {
- };
++static int xsk_link_lookup(struct xsk_ctx *ctx, __u32 *prog_id)
++{
++	struct bpf_link_info link_info;
++	__u32 link_len;
++	__u32 id = 0;
++	int err;
++	int fd;
++
++	while (true) {
++		err = bpf_link_get_next_id(id, &id);
++		if (err) {
++			if (errno == ENOENT) {
++				err = 0;
++				break;
++			}
++			pr_warn("can't get next link: %s\n", strerror(errno));
++			break;
++		}
++
++		fd = bpf_link_get_fd_by_id(id);
++		if (fd < 0) {
++			if (errno == ENOENT)
++				continue;
++			pr_warn("can't get link by id (%u): %s\n", id, strerror(errno));
++			err = -errno;
++			break;
++		}
++
++		link_len = sizeof(struct bpf_link_info);
++		memset(&link_info, 0, link_len);
++		err = bpf_obj_get_info_by_fd(fd, &link_info, &link_len);
++		if (err) {
++			pr_warn("can't get link info: %s\n", strerror(errno));
++			close(fd);
++			break;
++		}
++		if (link_info.xdp.ifindex == ctx->ifindex) {
++			ctx->link_fd = fd;
++			*prog_id = link_info.prog_id;
++			break;
++		}
++		close(fd);
++	}
++
++	return err;
++}
++
+ static int __xsk_setup_xdp_prog(struct xsk_socket *_xdp,
+ 				int *xsks_map_fd)
+ {
+@@ -675,8 +777,7 @@ static int __xsk_setup_xdp_prog(struct xsk_socket *_xdp,
+ 	__u32 prog_id = 0;
+ 	int err;
  
- struct ifobject {
--	int ifindex;
-+	int ns_fd;
- 	int ifdict_index;
- 	char ifname[MAX_INTERFACE_NAME_CHARS];
- 	char nsname[MAX_INTERFACES_NAMESPACE_CHARS];
-@@ -150,15 +150,9 @@ pthread_mutex_t sync_mutex;
- pthread_mutex_t sync_mutex_tx;
- pthread_cond_t signal_rx_condition;
- pthread_cond_t signal_tx_condition;
--pthread_t t0, t1, ns_thread;
-+pthread_t t0, t1;
- pthread_attr_t attr;
+-	err = bpf_get_link_xdp_id(ctx->ifindex, &prog_id,
+-				  xsk->config.xdp_flags);
++	err = xsk_link_lookup(ctx, &prog_id);
+ 	if (err)
+ 		return err;
  
--struct targs {
--	u8 retptr;
--	int idx;
--	u32 flags;
--};
--
- TAILQ_HEAD(head_s, pkt) head = TAILQ_HEAD_INITIALIZER(head);
- struct head_s *head_p;
- struct pkt {
+@@ -686,9 +787,12 @@ static int __xsk_setup_xdp_prog(struct xsk_socket *_xdp,
+ 			return err;
+ 
+ 		err = xsk_load_xdp_prog(xsk);
+-		if (err) {
++		if (err)
+ 			goto err_load_xdp_prog;
+-		}
++
++		err = xsk_create_bpf_link(xsk);
++		if (err)
++			goto err_create_bpf_link;
+ 	} else {
+ 		ctx->prog_fd = bpf_prog_get_fd_by_id(prog_id);
+ 		if (ctx->prog_fd < 0)
+@@ -696,20 +800,15 @@ static int __xsk_setup_xdp_prog(struct xsk_socket *_xdp,
+ 		err = xsk_lookup_bpf_maps(xsk);
+ 		if (err) {
+ 			close(ctx->prog_fd);
++			close(ctx->link_fd);
+ 			return err;
+ 		}
+ 	}
+ 
+ 	if (xsk->rx) {
+ 		err = xsk_set_bpf_maps(xsk);
+-		if (err) {
+-			if (!prog_id) {
+-				goto err_set_bpf_maps;
+-			} else {
+-				close(ctx->prog_fd);
+-				return err;
+-			}
+-		}
++		if (err)
++			goto err_set_bpf_maps;
+ 	}
+ 	if (xsks_map_fd)
+ 		*xsks_map_fd = ctx->xsks_map_fd;
+@@ -717,8 +816,9 @@ static int __xsk_setup_xdp_prog(struct xsk_socket *_xdp,
+ 	return 0;
+ 
+ err_set_bpf_maps:
++	close(ctx->link_fd);
++err_create_bpf_link:
+ 	close(ctx->prog_fd);
+-	bpf_set_link_xdp_fd(ctx->ifindex, -1, 0);
+ err_load_xdp_prog:
+ 	xsk_delete_bpf_maps(xsk);
+ 
+@@ -1054,6 +1154,7 @@ void xsk_socket__delete(struct xsk_socket *xsk)
+ 	if (ctx->prog_fd != -1) {
+ 		xsk_delete_bpf_maps(xsk);
+ 		close(ctx->prog_fd);
++		close(ctx->link_fd);
+ 	}
+ 
+ 	err = xsk_get_mmap_offsets(xsk->fd, &off);
 -- 
 2.20.1
 
