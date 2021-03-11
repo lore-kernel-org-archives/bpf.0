@@ -2,116 +2,128 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 86514C433E0
-	for <bpf@archiver.kernel.org>; Thu, 11 Mar 2021 05:59:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CA695C433DB
+	for <bpf@archiver.kernel.org>; Thu, 11 Mar 2021 06:14:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3393F64FCE
-	for <bpf@archiver.kernel.org>; Thu, 11 Mar 2021 05:59:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8A70B64F34
+	for <bpf@archiver.kernel.org>; Thu, 11 Mar 2021 06:14:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229730AbhCKF7D (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 11 Mar 2021 00:59:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34458 "EHLO
+        id S229923AbhCKGNd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 11 Mar 2021 01:13:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbhCKF6h (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 11 Mar 2021 00:58:37 -0500
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED06BC061574;
-        Wed, 10 Mar 2021 21:58:36 -0800 (PST)
-Received: by mail-qk1-x72d.google.com with SMTP id l132so19549822qke.7;
-        Wed, 10 Mar 2021 21:58:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=W7+ryEOPr4htGHfpEZu6tu2vifH0/XuOxm+pB4VdUpQ=;
-        b=NkcNmK795IB4N2XSLz+eVmHLJW9SjsFF2XmZFRzttwyu0H+yR4U2rpBuRJhpnQD3KM
-         wYQvN4LAh/tVpyW3pDEKjnRQPdlmAhG2kza425NbfaYRpYRtYXOVD2MX7vFtdPwOMfjp
-         NxHDsz+V2b6V2lDNHLeygIEr51yXrwyio+4WLEkf8NvDBIO3Y58L7AYrBQQ+1CjYUE8W
-         hPJahm+aEURCYk9vuPmX86WIZ4nWodGOp5ogk0Q9E/+Ef4/zY5fLLEN/ndcmEzHQalpT
-         u4oMeBsUv18fJQdqJe/xyYcFCGyrPtC2M7DK/yeXvmKmRK1Lx/4CVefph0YsWntPss/9
-         LyFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=W7+ryEOPr4htGHfpEZu6tu2vifH0/XuOxm+pB4VdUpQ=;
-        b=KhN2I9VlJMfxecj25HDSmXH2MkjjK63xo9ZaJDHocWzbrMc2hhyGoK7zffDRr9zLKk
-         ivXA2gG5BU21JIvDLuLTht6jSOLNX7MNhOXmWQNiila5uq0coEtdNXYY/1MQSS335HQe
-         aFav7CvNCRCkIgMUVwqXs6plx8s9+LCgQHZX/xcHtZcZlDDJzWs2oy99vSHhDqMc2EYP
-         0ZEjqcXKlDJjGoSzwdTaoHg1Wbu6Ji2RaqC4r22IOs+8Nx+YTGRRppSvT8/x+LEeqVZP
-         1wzgyhtL8LSIYTrU6cuNgAYLbfQcfTYxxDvDa6eGwpFK7QfWTq2SB4SVA/T8bJ/SWLoB
-         QkTw==
-X-Gm-Message-State: AOAM532lGFpwuL7qUK5ycN3XbtvouRfIKyXzvyruJDId9XY39Vb2hVWQ
-        urekMlHPmG4D1UbTRwd42lE=
-X-Google-Smtp-Source: ABdhPJzer/BndQBOUTW/8WKB36XFlkEgazUxDK21lU6rPHCyR0d/6EaPzhEDBUg8+noSYTmzXVnx5A==
-X-Received: by 2002:a05:620a:144a:: with SMTP id i10mr6097746qkl.431.1615442316011;
-        Wed, 10 Mar 2021 21:58:36 -0800 (PST)
-Received: from localhost.localdomain ([156.146.55.115])
-        by smtp.gmail.com with ESMTPSA id f8sm1111492qth.6.2021.03.10.21.58.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Mar 2021 21:58:35 -0800 (PST)
-From:   Bhaskar Chowdhury <unixbhaskar@gmail.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, davem@davemloft.net,
-        kuba@kernel.org, hawk@kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     rdunlap@infradead.org, Bhaskar Chowdhury <unixbhaskar@gmail.com>
-Subject: [PATCH] net: core: Few absolutely rudimentary typo fixes throughout the file filter.c
-Date:   Thu, 11 Mar 2021 11:26:08 +0530
-Message-Id: <20210311055608.12956-1-unixbhaskar@gmail.com>
-X-Mailer: git-send-email 2.26.2
+        with ESMTP id S229895AbhCKGNJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 11 Mar 2021 01:13:09 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C78FDC061574
+        for <bpf@vger.kernel.org>; Wed, 10 Mar 2021 22:13:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:
+        Reply-To:Cc:Content-ID:Content-Description;
+        bh=h8aFuwdEQbq+Mg1pCOr++y0lRKxSpzr2i/D/1Sn40JY=; b=XtvHf0LRzm+d21Qj90F2B024Vb
+        PE7Jf6Rrh9LADsQYxEbOeizvh7+NAbJz1o4D9eUIpqq/KSfMYrlyledbXRaB0Boen42Qf5gXrHJc1
+        DbGZZ6z+lXPY50grHol99/iRG1qLWhCFnuWZnZO8+XxC+Y230F4bHV+hPH3c4OcXiVpW1fC5VhEvC
+        81VItyxnL/J9G+Dv+wedtVzhlOyF6j+wFRwa6MclD9ouVh3odlRmcRG1chVjf27rMpps+X9aqvYF3
+        Hh+OW3K/Q6YT8lATO0UTv9M2CX5rwd2uORxVUbETswTQfH5yuM3AKl2PCgwNPM5Plm61ist9ovpAF
+        CUKXFhcw==;
+Received: from merlin.infradead.org ([2001:8b0:10b:1234::107])
+        by desiato.infradead.org with esmtps (Exim 4.94 #2 (Red Hat Linux))
+        id 1lKEZH-008Rmk-8v
+        for bpf@vger.kernel.org; Thu, 11 Mar 2021 06:13:07 +0000
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:
+        Reply-To:Cc:Content-ID:Content-Description;
+        bh=h8aFuwdEQbq+Mg1pCOr++y0lRKxSpzr2i/D/1Sn40JY=; b=SQ71kkj+hQqJeaEdQu9vCbegeT
+        n1GqRDzngRCaYc9rpXClkElVhb8Zfx1hTZNIbZS/jy4AQg5o7wfBimD6oD0rDeO7OtFNKHYYleNKJ
+        OcxN+42NjXwBjzNJZm97rUHBShy443c35g+O/TuqQBazSG9s83Q7/8ZsDiiwDFeYteNX2yoB+uBpc
+        xQjihJ08mlZ2Bp75Ur27Vgc+FdopqAyXOxL4xRQzoQToRpjkSybCyFP4feDrIbXYqoCmaFd1VzRKo
+        907hCWSrMnK+YF7HEN5Fq3BH5aJzsn5M7WU0UNLuqThkZ/TESIIJ3EcN9a9+e7M4evsOkXfl/QFX9
+        v0rYPP+Q==;
+Received: from [2601:1c0:6280:3f0::3ba4]
+        by merlin.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1lKEYz-000tUv-0m; Thu, 11 Mar 2021 06:12:49 +0000
+Subject: Re: [PATCH] net: core: Few absolutely rudimentary typo fixes
+ throughout the file filter.c
+To:     Bhaskar Chowdhury <unixbhaskar@gmail.com>, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        hawk@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20210311055608.12956-1-unixbhaskar@gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <786f4801-c41f-cddd-c855-b388ec026614@infradead.org>
+Date:   Wed, 10 Mar 2021 22:12:43 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210311055608.12956-1-unixbhaskar@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+On 3/10/21 9:56 PM, Bhaskar Chowdhury wrote:
+> 
+> Trivial spelling fixes throughout the file.
+> 
+> Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
 
-Trivial spelling fixes throughout the file.
+Hi Bhaskar,
 
-Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
----
- net/core/filter.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+FYI:
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 255aeee72402..931ee5f39ae7 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -2927,7 +2927,7 @@ BPF_CALL_4(bpf_msg_pop_data, struct sk_msg *, msg, u32, start,
- 	 *
- 	 * Then if B is non-zero AND there is no space allocate space and
- 	 * compact A, B regions into page. If there is space shift ring to
--	 * the rigth free'ing the next element in ring to place B, leaving
-+	 * the right freeing the next element in ring to place B, leaving
- 	 * A untouched except to reduce length.
- 	 */
- 	if (start != offset) {
-@@ -3710,7 +3710,7 @@ static inline int __bpf_skb_change_tail(struct sk_buff *skb, u32 new_len,
- 	 * be the one responsible for writing buffers.
- 	 *
- 	 * It's really expected to be a slow path operation here for
--	 * control message replies, so we're implicitly linearizing,
-+	 * control message replies, so we're implicitly linearising,
- 	 * uncloning and drop offloads from the skb by this.
- 	 */
- 	ret = __bpf_try_make_writable(skb, skb->len);
-@@ -3778,7 +3778,7 @@ static inline int __bpf_skb_change_head(struct sk_buff *skb, u32 head_room,
- 		 * allow to expand on mac header. This means that
- 		 * skb->protocol network header, etc, stay as is.
- 		 * Compared to bpf_skb_change_tail(), we're more
--		 * flexible due to not needing to linearize or
-+		 * flexible due to not needing to linearise or
- 		 * reset GSO. Intention for this helper is to be
- 		 * used by an L3 skb that needs to push mac header
- 		 * for redirection into L2 device.
---
-2.26.2
+a. we accept British or American spellings
+b. we accept one or two spaces after a period ('.') at the end of a sentence
+c. we accept Oxford (serial) comma or not
+
+> ---
+>  net/core/filter.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 255aeee72402..931ee5f39ae7 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -2927,7 +2927,7 @@ BPF_CALL_4(bpf_msg_pop_data, struct sk_msg *, msg, u32, start,
+>  	 *
+>  	 * Then if B is non-zero AND there is no space allocate space and
+>  	 * compact A, B regions into page. If there is space shift ring to
+> -	 * the rigth free'ing the next element in ring to place B, leaving
+> +	 * the right freeing the next element in ring to place B, leaving
+>  	 * A untouched except to reduce length.
+>  	 */
+>  	if (start != offset) {
+> @@ -3710,7 +3710,7 @@ static inline int __bpf_skb_change_tail(struct sk_buff *skb, u32 new_len,
+>  	 * be the one responsible for writing buffers.
+>  	 *
+>  	 * It's really expected to be a slow path operation here for
+> -	 * control message replies, so we're implicitly linearizing,
+> +	 * control message replies, so we're implicitly linearising,
+>  	 * uncloning and drop offloads from the skb by this.
+>  	 */
+>  	ret = __bpf_try_make_writable(skb, skb->len);
+> @@ -3778,7 +3778,7 @@ static inline int __bpf_skb_change_head(struct sk_buff *skb, u32 head_room,
+>  		 * allow to expand on mac header. This means that
+>  		 * skb->protocol network header, etc, stay as is.
+>  		 * Compared to bpf_skb_change_tail(), we're more
+> -		 * flexible due to not needing to linearize or
+> +		 * flexible due to not needing to linearise or
+>  		 * reset GSO. Intention for this helper is to be
+>  		 * used by an L3 skb that needs to push mac header
+>  		 * for redirection into L2 device.
+> --
+
+
+-- 
+~Randy
 
