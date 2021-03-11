@@ -7,148 +7,118 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C715AC4332D
-	for <bpf@archiver.kernel.org>; Thu, 11 Mar 2021 15:42:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49055C4321A
+	for <bpf@archiver.kernel.org>; Thu, 11 Mar 2021 15:42:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 913BC64FDD
-	for <bpf@archiver.kernel.org>; Thu, 11 Mar 2021 15:42:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2CD9364FE0
+	for <bpf@archiver.kernel.org>; Thu, 11 Mar 2021 15:42:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234385AbhCKPl5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 11 Mar 2021 10:41:57 -0500
-Received: from mga14.intel.com ([192.55.52.115]:42364 "EHLO mga14.intel.com"
+        id S234410AbhCKPmA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 11 Mar 2021 10:42:00 -0500
+Received: from mga14.intel.com ([192.55.52.115]:42370 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234349AbhCKPlm (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 11 Mar 2021 10:41:42 -0500
-IronPort-SDR: B18HJc0qUHVKFmQIOFC9QYylCMIDq+jB4s9Yts3Hq85dqgq/4M4dUB2pOwSWTG3n02g1pEeNCo
- EdSrTWBXyx1Q==
-X-IronPort-AV: E=McAfee;i="6000,8403,9920"; a="188050715"
+        id S234358AbhCKPlt (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 11 Mar 2021 10:41:49 -0500
+IronPort-SDR: lK0T6Di6q5VCTDPgnPcgZrULpMNe7r4LeV5pms+0kTXSh3/K3lqlm7nnZywaWkbZ6hpUWCQbTn
+ //EN9m2ijZng==
+X-IronPort-AV: E=McAfee;i="6000,8403,9920"; a="188050747"
 X-IronPort-AV: E=Sophos;i="5.81,241,1610438400"; 
-   d="scan'208";a="188050715"
+   d="scan'208";a="188050747"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2021 07:41:35 -0800
-IronPort-SDR: XDtYr7c2yLBJPkcQs5PSvg4TptaFG2Jwb6VeODSGgIhMv8FpvSwQY8k/Umyn0cHZv+UBft2JAl
- SxmNx9IMyuaA==
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2021 07:41:49 -0800
+IronPort-SDR: syO3c6n8ldWsfyvDqoLDX+tgeF8JSIFxOIJPxUXEuzxJmn85xIjtQ9xIG0llqrsH5kdeeNbqk5
+ Cf+XxA3EvETA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.81,241,1610438400"; 
-   d="scan'208";a="589253586"
+   d="scan'208";a="589253645"
 Received: from ranger.igk.intel.com ([10.102.21.164])
-  by orsmga005.jf.intel.com with ESMTP; 11 Mar 2021 07:41:32 -0800
+  by orsmga005.jf.intel.com with ESMTP; 11 Mar 2021 07:41:46 -0800
 From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 To:     bpf@vger.kernel.org, netdev@vger.kernel.org, daniel@iogearbox.net,
         ast@kernel.org
 Cc:     bjorn.topel@intel.com, magnus.karlsson@intel.com,
-        ciara.loftus@intel.com, john.fastabend@gmail.com, toke@redhat.com,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH v2 bpf-next 10/17] selftests: xsk: remove Tx synchronization resources
-Date:   Thu, 11 Mar 2021 16:29:03 +0100
-Message-Id: <20210311152910.56760-11-maciej.fijalkowski@intel.com>
+        ciara.loftus@intel.com, john.fastabend@gmail.com, toke@redhat.com
+Subject: [PATCH v2 bpf-next 15/17] selftests: xsk: remove thread attribute
+Date:   Thu, 11 Mar 2021 16:29:08 +0100
+Message-Id: <20210311152910.56760-16-maciej.fijalkowski@intel.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20210311152910.56760-1-maciej.fijalkowski@intel.com>
 References: <20210311152910.56760-1-maciej.fijalkowski@intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Tx thread needs to be started after the Rx side is fully initialized so
-that packets are not xmitted until xsk Rx socket is ready to be used.
+From: Björn Töpel <bjorn.topel@intel.com>
 
-It can be observed that atomic variable spinning_tx is not checked from
-Rx side in any way, so thread_common_ops can be modified to only address
-the spinning_rx. This means that spinning_tx can be removed altogheter.
+There is really no reason to have a non-default thread stack
+size. Remove that.
 
-signal_tx_condition is never utilized, so simply remove it.
-
-Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
 ---
- tools/testing/selftests/bpf/xdpxceiver.c | 15 +++++++--------
- tools/testing/selftests/bpf/xdpxceiver.h |  2 --
- 2 files changed, 7 insertions(+), 10 deletions(-)
+ tools/testing/selftests/bpf/xdpxceiver.c | 9 ++-------
+ tools/testing/selftests/bpf/xdpxceiver.h | 2 --
+ 2 files changed, 2 insertions(+), 9 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/xdpxceiver.c b/tools/testing/selftests/bpf/xdpxceiver.c
-index 7bf5c31f2705..e461998f4b5f 100644
+index dc775ee139c5..35826d73266f 100644
 --- a/tools/testing/selftests/bpf/xdpxceiver.c
 +++ b/tools/testing/selftests/bpf/xdpxceiver.c
-@@ -126,7 +126,6 @@ static void pthread_init_mutex(void)
- 	pthread_mutex_init(&sync_mutex, NULL);
- 	pthread_mutex_init(&sync_mutex_tx, NULL);
- 	pthread_cond_init(&signal_rx_condition, NULL);
--	pthread_cond_init(&signal_tx_condition, NULL);
- }
- 
- static void pthread_destroy_mutex(void)
-@@ -134,7 +133,6 @@ static void pthread_destroy_mutex(void)
- 	pthread_mutex_destroy(&sync_mutex);
- 	pthread_mutex_destroy(&sync_mutex_tx);
- 	pthread_cond_destroy(&signal_rx_condition);
--	pthread_cond_destroy(&signal_tx_condition);
- }
- 
- static void *memset32_htonl(void *dest, u32 val, u32 size)
-@@ -755,8 +753,7 @@ static void worker_pkt_validate(void)
- 	}
- }
- 
--static void thread_common_ops(struct ifobject *ifobject, void *bufs, pthread_mutex_t *mutexptr,
--			      atomic_int *spinningptr)
-+static void thread_common_ops(struct ifobject *ifobject, void *bufs, pthread_mutex_t *mutexptr)
- {
+@@ -765,8 +765,6 @@ static void thread_common_ops(struct ifobject *ifobject, void *bufs)
  	int ctr = 0;
  	int ret;
-@@ -781,13 +778,15 @@ static void thread_common_ops(struct ifobject *ifobject, void *bufs, pthread_mut
- 	 */
- 	pthread_mutex_lock(mutexptr);
- 	while (ret && ctr < SOCK_RECONF_CTR) {
--		atomic_store(spinningptr, 1);
-+		if (ifobject->fv.vector == rx)
-+			atomic_store(&spinning_rx, 1);
- 		xsk_configure_umem(ifobject, bufs, num_frames * XSK_UMEM__DEFAULT_FRAME_SIZE);
- 		ret = xsk_configure_socket(ifobject);
- 		usleep(USLEEP_MAX);
- 		ctr++;
- 	}
--	atomic_store(spinningptr, 0);
-+	if (ifobject->fv.vector == rx)
-+		atomic_store(&spinning_rx, 0);
- 	pthread_mutex_unlock(mutexptr);
  
- 	if (ctr >= SOCK_RECONF_CTR)
-@@ -809,7 +808,7 @@ static void *worker_testapp_validate_tx(void *arg)
- 	void *bufs = NULL;
+-	pthread_attr_setstacksize(&attr, THREAD_STACK);
+-
+ 	ifobject->ns_fd = switch_namespace(ifobject->nsname);
  
- 	if (!bidi_pass)
--		thread_common_ops(ifobject, bufs, &sync_mutex_tx, &spinning_tx);
-+		thread_common_ops(ifobject, bufs, &sync_mutex_tx);
+ 	if (test_type == TEST_TYPE_BPF_RES)
+@@ -910,13 +908,10 @@ static void testapp_validate(void)
+ 	bool bidi = test_type == TEST_TYPE_BIDI;
+ 	bool bpf = test_type == TEST_TYPE_BPF_RES;
  
- 	while (atomic_load(&spinning_rx) && spinningrxctr < SOCK_RECONF_CTR) {
- 		spinningrxctr++;
-@@ -847,7 +846,7 @@ static void *worker_testapp_validate_rx(void *arg)
- 	void *bufs = NULL;
+-	pthread_attr_init(&attr);
+-	pthread_attr_setstacksize(&attr, THREAD_STACK);
+-
+ 	pthread_mutex_lock(&sync_mutex);
  
- 	if (!bidi_pass)
--		thread_common_ops(ifobject, bufs, &sync_mutex_tx, &spinning_rx);
-+		thread_common_ops(ifobject, bufs, &sync_mutex_tx);
+ 	/*Spawn RX thread */
+-	pthread_create(&t0, &attr, ifdict_rx->func_ptr, ifdict_rx);
++	pthread_create(&t0, NULL, ifdict_rx->func_ptr, ifdict_rx);
  
- 	if (stat_test_type != STAT_TEST_RX_FILL_EMPTY)
- 		xsk_populate_fill_ring(ifobject->umem);
+ 	if (clock_gettime(CLOCK_REALTIME, &max_wait))
+ 		exit_with_error(errno);
+@@ -928,7 +923,7 @@ static void testapp_validate(void)
+ 	pthread_mutex_unlock(&sync_mutex);
+ 
+ 	/*Spawn TX thread */
+-	pthread_create(&t1, &attr, ifdict_tx->func_ptr, ifdict_tx);
++	pthread_create(&t1, NULL, ifdict_tx->func_ptr, ifdict_tx);
+ 
+ 	pthread_join(t1, NULL);
+ 	pthread_join(t0, NULL);
 diff --git a/tools/testing/selftests/bpf/xdpxceiver.h b/tools/testing/selftests/bpf/xdpxceiver.h
-index 493f7498d40e..483be41229c6 100644
+index 302cb66f8c57..09b85a2925a5 100644
 --- a/tools/testing/selftests/bpf/xdpxceiver.h
 +++ b/tools/testing/selftests/bpf/xdpxceiver.h
-@@ -144,12 +144,10 @@ struct ifobject {
- static struct ifobject *ifdict[MAX_INTERFACES];
- 
- /*threads*/
--atomic_int spinning_tx;
- atomic_int spinning_rx;
+@@ -37,7 +37,6 @@
+ #define TMOUT_SEC (3)
+ #define EOT (-1)
+ #define USLEEP_MAX 200000
+-#define THREAD_STACK 60000000
+ #define SOCK_RECONF_CTR 10
+ #define BATCH_SIZE 64
+ #define POLL_TMOUT 1000
+@@ -152,7 +151,6 @@ static struct ifobject *ifdict_tx;
  pthread_mutex_t sync_mutex;
- pthread_mutex_t sync_mutex_tx;
  pthread_cond_t signal_rx_condition;
--pthread_cond_t signal_tx_condition;
  pthread_t t0, t1;
- pthread_attr_t attr;
+-pthread_attr_t attr;
  
+ TAILQ_HEAD(head_s, pkt) head = TAILQ_HEAD_INITIALIZER(head);
+ struct head_s *head_p;
 -- 
 2.20.1
 
