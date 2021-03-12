@@ -8,58 +8,58 @@ X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DCEA2C2BA14
-	for <bpf@archiver.kernel.org>; Fri, 12 Mar 2021 00:50:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4709C4646C
+	for <bpf@archiver.kernel.org>; Fri, 12 Mar 2021 00:50:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BDE2C64F90
-	for <bpf@archiver.kernel.org>; Fri, 12 Mar 2021 00:50:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B170F64F82
+	for <bpf@archiver.kernel.org>; Fri, 12 Mar 2021 00:50:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231245AbhCLAtw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 11 Mar 2021 19:49:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52114 "EHLO
+        id S231373AbhCLAts (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 11 Mar 2021 19:49:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231458AbhCLAtk (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 11 Mar 2021 19:49:40 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB5AFC061762
-        for <bpf@vger.kernel.org>; Thu, 11 Mar 2021 16:49:39 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id v6so27684306ybk.9
-        for <bpf@vger.kernel.org>; Thu, 11 Mar 2021 16:49:39 -0800 (PST)
+        with ESMTP id S231247AbhCLAt1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 11 Mar 2021 19:49:27 -0500
+Received: from mail-qt1-x849.google.com (mail-qt1-x849.google.com [IPv6:2607:f8b0:4864:20::849])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 267A4C061764
+        for <bpf@vger.kernel.org>; Thu, 11 Mar 2021 16:49:27 -0800 (PST)
+Received: by mail-qt1-x849.google.com with SMTP id k15so16854786qtx.15
+        for <bpf@vger.kernel.org>; Thu, 11 Mar 2021 16:49:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=hZWFZEGgf1oZzErhLvCwgFyCsdD04UtwuSm9OP/0yUI=;
-        b=Myro43SMeYOTa+WlzxzudU7eRPbu2ZVl8J8nRnzEoOQCBBm3PCLLf2sU0IZZ/5wdgL
-         6s09Ubalx38FLGVf/eCIGLb6Fxk2xPluM7RNfSrZrKf+QEf6uwB3e7Ls8xTHhADuegJ+
-         VaUEyy4XM4BSfLzqZRkrTc113UMZizSYNcaTtog7go6NGMN7gQJLW3mihenOtsxEfPZ5
-         aviGLWHZKCqpW+v9kwflw4luMiyATlEPkHjoQvPYiajbHGXL5cibGvRvQG4F/KjJisJK
-         9I9zahguY2brjGuGSwZC71bTjTKJ24MgzucykCVAS+x/TR9IPmmraiKlc5G5TBTtt+pN
-         eQgQ==
+        bh=CeeN3xK5WAqMYQUfCf/QpaYnEzhU3e+FKSYu/FFXY8U=;
+        b=YnzwiV3Orw5sKBr6YMDFmOYncBsKWDPtb68ypzRHMVK3VthGHiIWe4l2U/YxjypRBN
+         wsdCMJQ8zMQ4WArlh/izxsQg9B1HPq7k4+zQzGqy/xvNVcvrOCu/A8nWO7g/+YjeuX2h
+         jGDQ6MfChdyYhzfQCswFV9W0HW6D3ltx+MimGyrgUD1x+t+Bx9gPsDldUro2PNx4V8IN
+         W7Zh/Yi/mTibl7LPNJ8pYn5eEyxkejmEbIYlhqwbmdNSdCR37OXx0M/R0WNI7f5943RF
+         Jxme+nNTOcM7RlsIuIDWP8FV2CKIsNqPYMxSMUacQp9r5XEU2NLvZY8ysWVBhk0rMnGD
+         iC0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=hZWFZEGgf1oZzErhLvCwgFyCsdD04UtwuSm9OP/0yUI=;
-        b=Ib3+oP7vn6gyuJYlEfEH+FRxKVtQgyWFeZjPT/PIFMu6Q5EfrVa6z9akE2s0cChmHW
-         PPPPjJvX/05g+F3dbrnrrMKoOJ+iQg51cXOn4LPqFdyoJP0rL4MBNfIyMDx/1Rw7Lq6L
-         FzPvqc6TsPzicuSDwxAhDHrzRl20ugPr2QfAmOXxP5iXb/8371DMkihXpai+u26f+xyP
-         HfXotj8mkpsmNQ00BCvR3HwUAaQUUUN5fvOVZmnGvccwkSwi6HUT2HDMajzM8kxbRaew
-         GuLUKY/PK8fUQH+5gKyDf/kBh51ILEi+4TF7Rl91KbUqSo1yvwjuoEXjiNg+ZzHD7Rn5
-         t+Gw==
-X-Gm-Message-State: AOAM5303i0Hg1Dv33HEDKy+mjZf6AwVByzBxPGYBWgxr1H1E+8JdGR96
-        TpkMeVlovxgLGs5JxF+VUUuLzyjTPbbzdlVDHrg=
-X-Google-Smtp-Source: ABdhPJyUTzKzhlJJScc7b96k8P6UFF7tfvUlrsyiNN1iQd9CLMxgBI+ybk0/Hoqr01MMDE6QMpxcpK7+1qa3BIyQYDc=
+        bh=CeeN3xK5WAqMYQUfCf/QpaYnEzhU3e+FKSYu/FFXY8U=;
+        b=aM3BwJwtkVJ4JhlMzvqV7boqparwUCsr2F/LTHzcO417tTde25Mzhw4ltz8hg2YBSK
+         SgUef6lzlZOCzLypUML5laFR6bXKUTR9nmFaieqe/oBkX+PXL6eqdD6x6PdTxrZ9L5ZJ
+         lJIqHi6wYfP5doPkTWHZi8M4KBKh81Xeyq8tcNyWXe+yJPOTFdvRTIeEUZydLN89PRPj
+         hSEB+elGm+KWj4S9KZBV3UbQ+vUID8ztVpp1SBVLYv8Uie3svTwr3ndKFJlzEd7m2TM2
+         6QaOUNfCACQSkYTO4ufQWXoxZHBzoIV9Zmd6wICKMOld8VtEIsuoglioD3lTKeu2JRl+
+         FB0A==
+X-Gm-Message-State: AOAM5321ISOsQhLPGa8bxGRaD8KoVWzJCpX+kOoAyZCdWU4JnbTc8j0D
+        DxNFOVk7pmiw+lEqzcFgJPccZf+QsZuGwFqWJHQ=
+X-Google-Smtp-Source: ABdhPJwjquHhXc1azJY3wJx2N7E06CHn55yFR9L2LbefYUmXDDh/IrCaqT99xH2KOyCrVwPGAoCRUF+Cuh4wGPAPnqw=
 X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:c86b:8269:af92:55a])
- (user=samitolvanen job=sendgmr) by 2002:a25:880c:: with SMTP id
- c12mr15536827ybl.399.1615510179139; Thu, 11 Mar 2021 16:49:39 -0800 (PST)
-Date:   Thu, 11 Mar 2021 16:49:12 -0800
+ (user=samitolvanen job=sendgmr) by 2002:a05:6214:1144:: with SMTP id
+ b4mr10460988qvt.12.1615510166369; Thu, 11 Mar 2021 16:49:26 -0800 (PST)
+Date:   Thu, 11 Mar 2021 16:49:05 -0800
 In-Reply-To: <20210312004919.669614-1-samitolvanen@google.com>
-Message-Id: <20210312004919.669614-11-samitolvanen@google.com>
+Message-Id: <20210312004919.669614-4-samitolvanen@google.com>
 Mime-Version: 1.0
 References: <20210312004919.669614-1-samitolvanen@google.com>
 X-Mailer: git-send-email 2.31.0.rc2.261.g7f71774620-goog
-Subject: [PATCH 10/17] lkdtm: use __va_function
+Subject: [PATCH 03/17] mm: add generic __va_function and __pa_function macros
 From:   Sami Tolvanen <samitolvanen@google.com>
 To:     Kees Cook <keescook@chromium.org>
 Cc:     Nathan Chancellor <nathan@kernel.org>,
@@ -77,29 +77,43 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-To ensure we take the actual address of a function in kernel text, use
-__va_function. Otherwise, with CONFIG_CFI_CLANG, the compiler replaces
-the address with a pointer to the CFI jump table, which is actually in
-the module when compiled with CONFIG_LKDTM=m.
+With CONFIG_CFI_CLANG, the compiler replaces function addresses
+in instrumented C code with jump table addresses. This means that
+__pa_symbol(function) returns the physical address of the jump table
+entry instead of the actual function, which may not work as the jump
+table code will immediately jump to a virtual address that may not be
+mapped.
+
+To avoid this address space confusion, this change adds generic
+definitions for __va_function and __pa_function, which architectures
+that support CFI can override. The typical implementation of the
+__va_function macro would use inline assembly to take the function
+address, which avoids compiler instrumentation.
 
 Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
 ---
- drivers/misc/lkdtm/usercopy.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/mm.h | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/misc/lkdtm/usercopy.c b/drivers/misc/lkdtm/usercopy.c
-index 109e8d4302c1..d173d6175c87 100644
---- a/drivers/misc/lkdtm/usercopy.c
-+++ b/drivers/misc/lkdtm/usercopy.c
-@@ -314,7 +314,7 @@ void lkdtm_USERCOPY_KERNEL(void)
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 77e64e3eac80..1262c4c0242c 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -116,6 +116,14 @@ extern int mmap_rnd_compat_bits __read_mostly;
+ #define __pa_symbol(x)  __pa(RELOC_HIDE((unsigned long)(x), 0))
+ #endif
  
- 	pr_info("attempting bad copy_to_user from kernel text: %px\n",
- 		vm_mmap);
--	if (copy_to_user((void __user *)user_addr, vm_mmap,
-+	if (copy_to_user((void __user *)user_addr, __va_function(vm_mmap),
- 			 unconst + PAGE_SIZE)) {
- 		pr_warn("copy_to_user failed, but lacked Oops\n");
- 		goto free_user;
++#ifndef __va_function
++#define __va_function(x) (x)
++#endif
++
++#ifndef __pa_function
++#define __pa_function(x) __pa_symbol(__va_function(x))
++#endif
++
+ #ifndef page_to_virt
+ #define page_to_virt(x)	__va(PFN_PHYS(page_to_pfn(x)))
+ #endif
 -- 
 2.31.0.rc2.261.g7f71774620-goog
 
