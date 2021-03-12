@@ -4,58 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BF077C43333
-	for <bpf@archiver.kernel.org>; Fri, 12 Mar 2021 00:50:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B6D68C28E82
+	for <bpf@archiver.kernel.org>; Fri, 12 Mar 2021 00:50:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AB8A864F94
-	for <bpf@archiver.kernel.org>; Fri, 12 Mar 2021 00:50:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8FBD964FC0
+	for <bpf@archiver.kernel.org>; Fri, 12 Mar 2021 00:50:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231559AbhCLAtq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 11 Mar 2021 19:49:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51932 "EHLO
+        id S231630AbhCLAts (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 11 Mar 2021 19:49:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbhCLAtV (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 11 Mar 2021 19:49:21 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75FF6C061574
-        for <bpf@vger.kernel.org>; Thu, 11 Mar 2021 16:49:21 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id a186so27657858ybg.1
-        for <bpf@vger.kernel.org>; Thu, 11 Mar 2021 16:49:21 -0800 (PST)
+        with ESMTP id S231284AbhCLAt3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 11 Mar 2021 19:49:29 -0500
+Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBDDBC061762
+        for <bpf@vger.kernel.org>; Thu, 11 Mar 2021 16:49:28 -0800 (PST)
+Received: by mail-qv1-xf49.google.com with SMTP id jx11so16416603qvb.10
+        for <bpf@vger.kernel.org>; Thu, 11 Mar 2021 16:49:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=tdPCoglx2rEXEqBLmU0P2QxdgUDSrZlH5oMXt14Ies0=;
-        b=SAiryR+/1F4QR2Sh8/WAofpQOiQwcTfPu82zao4pCXa65lDYdqykBnXnKwFzTFtMK/
-         Q87M8HfYyHqw99Zdf118VxSCYvhYnQG+eORKppK6x+MBlf2oo3XoOt/Ohol2wSmQf/xp
-         wVB0nZ00nVc3+TPKKfTZbsjBNWzzFRvtYZXbIz4ACG5q8p5WvFqy7E2CFmi9Ajz+E04A
-         Uy8u/v8dN+bKkASP3R9AC07S2LEbbwjDZ5SaGCse/p2/gv+5lH2YYZ87b6g6SBBijhwA
-         347Gs/LWWReVAPqK6YJPcO1tmv+IQfOs/BpEy7EpcOK3zCcOayp6J+gmy+3OI53yFvzD
-         zZJA==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=H7rLHacy3F07lJtMDfRAgErCQuUrrLGxI+6W0d6WNpU=;
+        b=sUvmGnJ+rhgNMV6BMGfzMD6FhlSVemJZuz19BUK84N0z28Eoya5RelUNEB4bGszQ8g
+         h59RKb80ZeuYZloMlKF0xAboydHMpXu92lVUTi82QMs81W8kTnYA1ZDNiNx3x+misJXL
+         GM0Xkdrdn0O8zTvSRuEj345cHir/Ug/LUWrHGzcxiWWeQYb101FpAB0rLvX5F/W4gV7o
+         YylaNmKIJoPpazOXW8XD4FPKiXg1EBF1QXOtdCNVG3JMSbC9vt6JCxYbBgz4DChIKPWL
+         wQv7/tmAQxWr5y+X5O61j8AOyrVenfu0Qfcg0+4/OzYM99F4RhaIvLi87Qy1DQXYuiSQ
+         dkFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=tdPCoglx2rEXEqBLmU0P2QxdgUDSrZlH5oMXt14Ies0=;
-        b=TvT8nlwPZsd1o+qLiEEpJ8c9y63qgjsKvWmpOdGbdJgM9hEqETs090Ae6hrw9DqVb0
-         TaxveQbzZLFZOAKGxXVLM+U958Iahqzl1ZVAJVjn7zLC4kFsksz2E4VlQlV91f7sUneR
-         dTi1kpShQWvXXXS/O8cncUKv1rQVQsjHHGiV3zk7R3m6+Aw6pSsux7UypiankAIdorLC
-         Vdp/XNEr1fLmIF5hmDTpIzkzS2+sA5PyuzN68hH/EPG2sH2k9p4K3ClOestrkjlxP5ml
-         EB06vQs0p29QzTQ22mv5aRxe9foT6OdUqWrg2/EpgL2pieKJk3m3cautVKOJquQWTjIg
-         IMqA==
-X-Gm-Message-State: AOAM5334QcrNqYMjDMag+xmGli3DsMYWv3aCxNBpxCufJvWXQIzZEOyg
-        RQbRPxeAV4byMc3CHr6ft1Q34UmEalc28Rnn3NU=
-X-Google-Smtp-Source: ABdhPJzShn28s+halMR+vzT0zjcZemE7Ff5yb7+xlvVhoC/UuBoxjvMG/z2t2Y6cw7vtqzmvzKenzjBEbPWRbnPwaZo=
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=H7rLHacy3F07lJtMDfRAgErCQuUrrLGxI+6W0d6WNpU=;
+        b=XMpjLml9GPy0gxMDJh9eYtxpeG1kZV5OmsJlkKiUijwgFVcnydtOeXdCIroseSTjln
+         b15NDEStoFZfNldA1CxMG26zvX1atwIBKefMvJq0C5M3/Kx4WguDEXpTAB2f6w2RQWTQ
+         qZX7+WESAoCiTKab+f5JiuPxMIqb0X/Xdh6be7mDsaxBKrA9cMUIaGF0CWHm9Yv/2FZX
+         pEUx6nMlEY287jM3c9WGBTRzcY+sCTzskrJuVIIrw2X/DB6wjCVPamMjVunO2a5kXhLs
+         006oWCkrHryTw350Zhao4zicBMNoEJzOHXcjx6kQfzVFMHmCf7XSNX9Yk/lOa6DL9uf+
+         hAAA==
+X-Gm-Message-State: AOAM532M9yCtO5lgKuUN7Afx3L9gXGyjd57ZbxPpb0BtoTBywhO+Y7tx
+        W/K6p2faraIDrdh0qO2rkSNIqC3WKvh7Kh7RNJc=
+X-Google-Smtp-Source: ABdhPJzcwYBUkwwPBHNvKt/g3QgQMzip9UKPQANWzW+ZzALJcGM1EFSFPH1hDnIaEovkHR0Pipxp3EXxwVLjJY4HWJw=
 X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:c86b:8269:af92:55a])
- (user=samitolvanen job=sendgmr) by 2002:a25:e785:: with SMTP id
- e127mr15903182ybh.451.1615510160709; Thu, 11 Mar 2021 16:49:20 -0800 (PST)
-Date:   Thu, 11 Mar 2021 16:49:02 -0800
-Message-Id: <20210312004919.669614-1-samitolvanen@google.com>
+ (user=samitolvanen job=sendgmr) by 2002:a0c:f541:: with SMTP id
+ p1mr10332251qvm.14.1615510168097; Thu, 11 Mar 2021 16:49:28 -0800 (PST)
+Date:   Thu, 11 Mar 2021 16:49:06 -0800
+In-Reply-To: <20210312004919.669614-1-samitolvanen@google.com>
+Message-Id: <20210312004919.669614-5-samitolvanen@google.com>
 Mime-Version: 1.0
+References: <20210312004919.669614-1-samitolvanen@google.com>
 X-Mailer: git-send-email 2.31.0.rc2.261.g7f71774620-goog
-Subject: [PATCH 00/17] Add support for Clang CFI
+Subject: [PATCH 04/17] module: cfi: ensure __cfi_check alignment
 From:   Sami Tolvanen <samitolvanen@google.com>
 To:     Kees Cook <keescook@chromium.org>
 Cc:     Nathan Chancellor <nathan@kernel.org>,
@@ -73,89 +77,57 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This series adds support for Clang's Control-Flow Integrity (CFI)
-checking. With CFI, the compiler injects a runtime check before each
-indirect function call to ensure the target is a valid function with
-the correct static type. This restricts possible call targets and
-makes it more difficult for an attacker to exploit bugs that allow the
-modification of stored function pointers. For more details, see:
+CONFIG_CFI_CLANG_SHADOW assumes the __cfi_check() function is page
+aligned and at the beginning of the .text section. While Clang would
+normally align the function correctly, it fails to do so for modules
+with no executable code.
 
-  https://clang.llvm.org/docs/ControlFlowIntegrity.html
+This change ensures the correct __cfi_check() location and
+alignment. It also discards the .eh_frame section, which Clang can
+generate with certain sanitizers, such as CFI.
 
-The first patch contains build system changes and error handling,
-and implements support for cross-module indirect call checking. The
-remaining patches address issues caused by the compiler
-instrumentation. These include fixing known type mismatches, as well
-as issues with address space confusion and cross-module function
-address equality.
+Link: https://bugs.llvm.org/show_bug.cgi?id=46293
+Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+---
+ scripts/module.lds.S | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
-These patches add support only for arm64, but I'll post patches also
-for x86_64 after we address the remaining issues there, including
-objtool support.
-
-You can also pull this series from
-
-  https://github.com/samitolvanen/linux.git cfi-v1
-
-
-Sami Tolvanen (17):
-  add support for Clang CFI
-  cfi: add __cficanonical
-  mm: add generic __va_function and __pa_function macros
-  module: cfi: ensure __cfi_check alignment
-  workqueue: cfi: disable callback pointer check with modules
-  kthread: cfi: disable callback pointer check with modules
-  kallsyms: cfi: strip hashes from static functions
-  bpf: disable CFI in dispatcher functions
-  lib/list_sort: fix function type mismatches
-  lkdtm: use __va_function
-  psci: use __pa_function for cpu_resume
-  arm64: implement __va_function
-  arm64: use __pa_function
-  arm64: add __nocfi to functions that jump to a physical address
-  arm64: add __nocfi to __apply_alternatives
-  KVM: arm64: Disable CFI for nVHE
-  arm64: allow CONFIG_CFI_CLANG to be selected
-
- Makefile                                  |  17 ++
- arch/Kconfig                              |  45 +++
- arch/arm64/Kconfig                        |   1 +
- arch/arm64/include/asm/memory.h           |  15 +
- arch/arm64/include/asm/mmu_context.h      |   4 +-
- arch/arm64/kernel/acpi_parking_protocol.c |   2 +-
- arch/arm64/kernel/alternative.c           |   4 +-
- arch/arm64/kernel/cpu-reset.h             |  10 +-
- arch/arm64/kernel/cpufeature.c            |   4 +-
- arch/arm64/kernel/psci.c                  |   3 +-
- arch/arm64/kernel/smp_spin_table.c        |   2 +-
- arch/arm64/kvm/hyp/nvhe/Makefile          |   6 +-
- drivers/firmware/psci/psci.c              |   4 +-
- drivers/misc/lkdtm/usercopy.c             |   2 +-
- include/asm-generic/vmlinux.lds.h         |  20 +-
- include/linux/bpf.h                       |   4 +-
- include/linux/cfi.h                       |  41 +++
- include/linux/compiler-clang.h            |   3 +
- include/linux/compiler_types.h            |   8 +
- include/linux/init.h                      |   6 +-
- include/linux/mm.h                        |   8 +
- include/linux/module.h                    |  13 +-
- include/linux/pci.h                       |   4 +-
- init/Kconfig                              |   2 +-
- kernel/Makefile                           |   4 +
- kernel/cfi.c                              | 329 ++++++++++++++++++++++
- kernel/kallsyms.c                         |  54 +++-
- kernel/kthread.c                          |   8 +-
- kernel/module.c                           |  43 +++
- kernel/workqueue.c                        |   9 +-
- lib/list_sort.c                           |   8 +-
- scripts/Makefile.modfinal                 |   2 +-
- scripts/module.lds.S                      |  14 +-
- 33 files changed, 655 insertions(+), 44 deletions(-)
- create mode 100644 include/linux/cfi.h
- create mode 100644 kernel/cfi.c
-
-
-base-commit: 28806e4d9b97865b450d72156e9ad229f2067f0b
+diff --git a/scripts/module.lds.S b/scripts/module.lds.S
+index 168cd27e6122..552ddb084f76 100644
+--- a/scripts/module.lds.S
++++ b/scripts/module.lds.S
+@@ -3,10 +3,13 @@
+  * Archs are free to supply their own linker scripts.  ld will
+  * combine them automatically.
+  */
++#include <asm/page.h>
++
+ SECTIONS {
+ 	/DISCARD/ : {
+ 		*(.discard)
+ 		*(.discard.*)
++		*(.eh_frame)
+ 	}
+ 
+ 	__ksymtab		0 : { *(SORT(___ksymtab+*)) }
+@@ -40,7 +43,16 @@ SECTIONS {
+ 		*(.rodata..L*)
+ 	}
+ 
+-	.text : { *(.text .text.[0-9a-zA-Z_]*) }
++#ifdef CONFIG_CFI_CLANG
++	/*
++	 * With CFI_CLANG, ensure __cfi_check is at the beginning of the
++	 * .text section, and that the section is aligned to page size.
++	 */
++	.text : ALIGN(PAGE_SIZE) {
++		*(.text.__cfi_check)
++		*(.text .text.[0-9a-zA-Z_]* .text..L.cfi*)
++	}
++#endif
+ }
+ 
+ /* bring in arch-specific sections */
 -- 
 2.31.0.rc2.261.g7f71774620-goog
 
