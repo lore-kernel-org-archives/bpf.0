@@ -5,30 +5,30 @@ X-Spam-Level:
 X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB8D2C433DB
-	for <bpf@archiver.kernel.org>; Fri, 12 Mar 2021 19:47:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 64B94C433E0
+	for <bpf@archiver.kernel.org>; Fri, 12 Mar 2021 19:47:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8849964F80
-	for <bpf@archiver.kernel.org>; Fri, 12 Mar 2021 19:47:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2484E64F80
+	for <bpf@archiver.kernel.org>; Fri, 12 Mar 2021 19:47:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234328AbhCLTrK (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 12 Mar 2021 14:47:10 -0500
-Received: from mail-40133.protonmail.ch ([185.70.40.133]:21121 "EHLO
-        mail-40133.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234472AbhCLTqk (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 12 Mar 2021 14:46:40 -0500
-Date:   Fri, 12 Mar 2021 19:46:28 +0000
+        id S234478AbhCLTrM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 12 Mar 2021 14:47:12 -0500
+Received: from mail1.protonmail.ch ([185.70.40.18]:19338 "EHLO
+        mail1.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234499AbhCLTqw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 12 Mar 2021 14:46:52 -0500
+Date:   Fri, 12 Mar 2021 19:46:48 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
-        t=1615578398; bh=rmYbHL79wt4dhIbnCttbVVGP2ZT2H/KbCOCNp0UQlaM=;
+        t=1615578410; bh=X3TuYcTaZPUU1Xz+TlNF44PidtjG5KU7YmET3XhmCM4=;
         h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=NnATg0XMUItsW7CInI6e5paZ1QFL20P+ng7ZZFL/MNPwjsHBBW0hETFmUNezUKdjX
-         8KTwO3fS7w4pZpOGUXDTDi3G14R82yf0bXc0LNzsWViev3hjghwRW3ZMbLwRAhL540
-         78x8OJfu5bdmPFajVTxmQUXLC1yKnkNuIV7wotsfXfweJ4+JZH04YFE6IaaJFv52l+
-         mD0qm3liXPGkK3YDyS2FwEy8VQBfd3UVGJqMJbxedGb50nKLPhS8RIQgE3b+qxLJtO
-         2tMVA5oR713TE9sqZlVN/PQ0tY9+14Us5HnvPA9t4K2qU6NvUqimH5sd5sjVI0LMq+
-         Hs33ItmmEt5Eg==
+        b=eMm2VsMlvn6slWnURKOEXNXqAP4812HwOHfFtntPxqoBrbcEPVuaUzU2gqSpKinQJ
+         taTSblo/uuAw4Wlgry6aHr8bsNEoWYzsX+ASI+HkNVjFyCSB+vhPou858Te09LOZNL
+         tNqJ11fNReVQV5P08iMJYc8xl4+c/M0DZsqcRZ0FNS3k/qPPRfRg/0V9bif2Eki76r
+         NlUMkLDkjgO9Y5dkIMPUf+KlTDsOI0yIjlXX7UciI+BRRMzIG1gJ/t10YQRWrgVa6I
+         FO2sEZC+1tnx6ZH6cTtQyhXn4lVJeo9QUg74mVth6i/T9JOhmBS5r75nHoyLPG93QK
+         qGn2saS8EYtCQ==
 To:     "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>
 From:   Alexander Lobakin <alobakin@pm.me>
@@ -60,8 +60,8 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         bpf@vger.kernel.org
 Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: [PATCH net-next 2/6] skbuff: make __skb_header_pointer()'s data argument const
-Message-ID: <20210312194538.337504-3-alobakin@pm.me>
+Subject: [PATCH net-next 4/6] linux/etherdevice.h: misc trailing whitespace cleanup
+Message-ID: <20210312194538.337504-5-alobakin@pm.me>
 In-Reply-To: <20210312194538.337504-1-alobakin@pm.me>
 References: <20210312194538.337504-1-alobakin@pm.me>
 MIME-Version: 1.0
@@ -71,35 +71,26 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The function never modifies the input buffer, so @data argument
-can be marked as const.
-This implies one harmless cast-away.
+Caught by the text editor. Fix it separately from the actual changes.
 
 Signed-off-by: Alexander Lobakin <alobakin@pm.me>
 ---
- include/linux/skbuff.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ include/linux/etherdevice.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index 0503c917d773..d93ab74063e5 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -3678,11 +3678,11 @@ __wsum skb_checksum(const struct sk_buff *skb, int =
-offset, int len,
- =09=09    __wsum csum);
-
- static inline void * __must_check
--__skb_header_pointer(const struct sk_buff *skb, int offset,
--=09=09     int len, void *data, int hlen, void *buffer)
-+__skb_header_pointer(const struct sk_buff *skb, int offset, int len,
-+=09=09     const void *data, int hlen, void *buffer)
- {
- =09if (hlen - offset >=3D len)
--=09=09return data + offset;
-+=09=09return (void *)data + offset;
-
- =09if (!skb ||
- =09    skb_copy_bits(skb, offset, buffer, len) < 0)
+diff --git a/include/linux/etherdevice.h b/include/linux/etherdevice.h
+index 2e5debc0373c..bcb2f81baafb 100644
+--- a/include/linux/etherdevice.h
++++ b/include/linux/etherdevice.h
+@@ -11,7 +11,7 @@
+  * Authors:=09Ross Biro
+  *=09=09Fred N. van Kempen, <waltje@uWalt.NL.Mugnet.ORG>
+  *
+- *=09=09Relocated to include/linux where it belongs by Alan Cox
++ *=09=09Relocated to include/linux where it belongs by Alan Cox
+  *=09=09=09=09=09=09=09<gw4pts@gw4pts.ampr.org>
+  */
+ #ifndef _LINUX_ETHERDEVICE_H
 --
 2.30.2
 
