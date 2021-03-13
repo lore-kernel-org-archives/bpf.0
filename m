@@ -2,119 +2,133 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 87362C433E0
-	for <bpf@archiver.kernel.org>; Sat, 13 Mar 2021 13:31:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B960EC433E6
+	for <bpf@archiver.kernel.org>; Sat, 13 Mar 2021 17:33:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5617764F0F
-	for <bpf@archiver.kernel.org>; Sat, 13 Mar 2021 13:31:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8AB5464F25
+	for <bpf@archiver.kernel.org>; Sat, 13 Mar 2021 17:33:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230309AbhCMNax (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 13 Mar 2021 08:30:53 -0500
-Received: from mail-40136.protonmail.ch ([185.70.40.136]:17620 "EHLO
-        mail-40136.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233529AbhCMNaj (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 13 Mar 2021 08:30:39 -0500
-Date:   Sat, 13 Mar 2021 13:30:24 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
-        t=1615642236; bh=6r1N5OSEeyM3HNy+jVrlMhPyXWgVSnlITt0tT5FGaWU=;
-        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=CTgpkDnM5DFkOhsoutj5H+n+LLd0lnuqmRm9fsR3jKhJfiCVKfBcS0G5U3xihok23
-         PRk8Ygz0XEKq4fu+OZrbyVk8G8/di1dlGIdBUkYF2hbJN5SOjnkFgBGB6nOUsCuUgC
-         8Mr2IkI9xqrbSeISjIm93HXg6Oy3UVx39hWWPOdmYqwf2q1Zj1K384wYhIxRZVH4AX
-         IOsMfRCmlVjWbkmD81MSQzDOZGGd1CtbilKOpRTvpGZk4KcjLL2gG/pPA/BZQbCmDL
-         zJ+BNWXHd3qDYMPQ1Am1ybNWR0S3JXXgjy7wB5NICMMByVD6YDp75ioNHrHuI4FWy0
-         p9Uf3yMsS8JnA==
-To:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-From:   Alexander Lobakin <alobakin@pm.me>
-Cc:     Alexander Lobakin <alobakin@pm.me>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Kevin Hao <haokexin@gmail.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        Marco Elver <elver@google.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Ariel Levkovich <lariel@mellanox.com>,
-        Wang Qing <wangqing@vivo.com>,
-        Davide Caratti <dcaratti@redhat.com>,
-        Guillaume Nault <gnault@redhat.com>,
-        Eran Ben Elisha <eranbe@nvidia.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Kirill Tkhai <ktkhai@virtuozzo.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org
-Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: Re: [PATCH v2 net-next 0/6] skbuff: micro-optimize flow dissection
-Message-ID: <20210313132956.647745-1-alobakin@pm.me>
-In-Reply-To: <20210313113645.5949-1-alobakin@pm.me>
-References: <20210313113645.5949-1-alobakin@pm.me>
+        id S234203AbhCMRca (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 13 Mar 2021 12:32:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40212 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234140AbhCMRc3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 13 Mar 2021 12:32:29 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 099FBC061574;
+        Sat, 13 Mar 2021 09:32:29 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id e2so8114244pld.9;
+        Sat, 13 Mar 2021 09:32:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+U3v67ZcAJvdEJUggEAgpmcaOAsRI2kJ9FS0FPxtlAE=;
+        b=ps+P2/Pynal3tUPeUkjTQxrLiNycs7ufr6o02gudwuVnu8I2MOG5BihBN35HKzLmls
+         VZmgx2Dy70DfNYGmSQBzg4NM4S7XCqIqzxPwDWSQqDMo7atlNVO1ypzOuKNy1TNwwM/f
+         o4/H58+udyDaAtDHSld7AKPOw0ZknXOvKQb1ab6EKxGMrrGBNzwiVJdeVjqwsVIZkeVT
+         sLaaNx7+PAJizWxI7k65vlYGyF3uuexN4RDvdFJALdihVsEbkbh9XtyVuLfDp72w7JxJ
+         6gV7WJh1uE4KoPW5sDikYDvxfT88YJJ4hhvohctXlS1h/EH3lj3LQDP6UEfrBI29ytVA
+         c0xg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+U3v67ZcAJvdEJUggEAgpmcaOAsRI2kJ9FS0FPxtlAE=;
+        b=AEyTrC84PVMfSveQpUZHRW7b5OiNIm49UHhlKLGMwTyp7L7LLlS7fHKUGoZPi2+bYY
+         xTQP6WUuKnctnsjxglXunjuCea879KDKPZT4crFPTwCxYRmZ6qxJFRDomfj9Bxcs9aEA
+         3Gtk53soNlgyrTyUCV+sd/tvjmK4EM/g0RCeJ8buGBqicoiMeOmSy33+PG+ZDxxfFQSX
+         2FJWa9UzmWIUCyTJbcoqMRsDfwkwQBTQgr8kMtzZWiFdmYqx1OhT8aDbLCJq2Vv5AR3+
+         pPdmzzFApMHs2QN6zV9FYQYoFB8J6B/wfbw4CZ5AaBiBIsMSiNhBpZEkUwxTP9OVvh0P
+         olCg==
+X-Gm-Message-State: AOAM5330K0cNyA/JCQrVzAvfHGb9ZJe+5OpbvEYeeJfe/lyS8ZxMYAnV
+        ur2g4oMaExHCZHweENHGHgZ11JWLRjTwF27MSJRp5CpXCSDj1A==
+X-Google-Smtp-Source: ABdhPJyMRUD342QPg9Kn2MbF/oXsQ4fGcSnyoQSx5PIrAgky0lwVtNSRwd/AY47oBJKnImoBimjc/dsAPUXtuvTciBU=
+X-Received: by 2002:a17:90a:9f8c:: with SMTP id o12mr4489047pjp.215.1615656748545;
+ Sat, 13 Mar 2021 09:32:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+References: <20210310053222.41371-1-xiyou.wangcong@gmail.com>
+ <20210310053222.41371-5-xiyou.wangcong@gmail.com> <87y2es37i3.fsf@cloudflare.com>
+In-Reply-To: <87y2es37i3.fsf@cloudflare.com>
+From:   Cong Wang <xiyou.wangcong@gmail.com>
+Date:   Sat, 13 Mar 2021 09:32:17 -0800
+Message-ID: <CAM_iQpVmtHPqzGHEUPhtVroxCeWSBvahKMrbLrEq4gNNVGq2zg@mail.gmail.com>
+Subject: Re: [Patch bpf-next v4 04/11] skmsg: avoid lock_sock() in sk_psock_backlog()
+To:     Jakub Sitnicki <jakub@cloudflare.com>
+Cc:     Linux Kernel Network Developers <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, duanxiongchun@bytedance.com,
+        Dongdong Wang <wangdongdong.6@bytedance.com>,
+        Jiang Wang <jiang.wang@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Lorenz Bauer <lmb@cloudflare.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Alexander Lobakin <alobakin@pm.me>
-Date: Sat, 13 Mar 2021 11:37:03 +0000
+On Fri, Mar 12, 2021 at 4:02 AM Jakub Sitnicki <jakub@cloudflare.com> wrote:
+>
+> On Wed, Mar 10, 2021 at 06:32 AM CET, Cong Wang wrote:
+> > diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+> > index dd53a7771d7e..26ba47b099f1 100644
+> > --- a/net/core/sock_map.c
+> > +++ b/net/core/sock_map.c
+> > @@ -1540,6 +1540,7 @@ void sock_map_close(struct sock *sk, long timeout)
+> >       saved_close = psock->saved_close;
+> >       sock_map_remove_links(sk, psock);
+> >       rcu_read_unlock();
+> > +     sk_psock_purge(psock);
+> >       release_sock(sk);
+> >       saved_close(sk, timeout);
+> >  }
+>
+> Nothing stops sk_psock_backlog from running after sk_psock_purge:
+>
+>
+> CPU 1                                                   CPU 2
+>
+> sk_psock_skb_redirect()
+>   sk_psock(sk_other)
+>   sock_flag(sk_other, SOCK_DEAD)
+>   sk_psock_test_state(psock_other,
+>                       SK_PSOCK_TX_ENABLED)
+>                                                         sk_psock_purge()
+>   skb_queue_tail(&psock_other->ingress_skb, skb)
+>   schedule_work(&psock_other->work)
+>
+>
+> And sock_orphan can run while we're in sendmsg/sendpage_unlocked:
+>
+>
+> CPU 1                                                   CPU 2
+>
+> sk_psock_backlog
+>   ...
+>   sendmsg_unlocked
+>     sock = sk->sk_socket
+>                                                         tcp_close
+>                                                           __tcp_close
+>                                                             sock_orphan
+>     kernel_sendmsg(sock, msg, vec, num, size)
+>
+>
+> So, after this change, without lock_sock in sk_psock_backlog, we will
+> not block tcp_close from running.
+>
+> This makes me think that the process socket can get released from under
+> us, before kernel_sendmsg/sendpage runs.
 
-> This little number makes all of the flow dissection functions take
-> raw input data pointer as const (1-5) and shuffles the branches in
-> __skb_header_pointer() according to their hit probability.
->
-> The result is +20 Mbps per flow/core with one Flow Dissector pass
-> per packet. This affects RPS (with software hashing), drivers that
-> use eth_get_headlen() on their Rx path and so on.
->
-> Since v1 [0]:
->  - rebase on top of the latest net-next. This was super-weird, but
->    I double-checked that the series applies with no conflicts, and
->    then on Patchwork it didn't;
+I think you are right, I thought socket is orphaned in inet_release(), clearly
+I was wrong. But, I'd argue in the above scenario, the packet should not
+be even queued in the first place, as SK_PSOCK_TX_ENABLED is going
+to be cleared, so I think the right fix is probably to make clearing psock
+state and queuing the packet under a spinlock.
 
-Still failing on Patchwork. I rebased it ten thousand times, rebuilt
-the patches manually, tried previous stable Git version and the
-latest CVS snapshot, and always got the same series that successfully
-applies to next-next.
-Can you please take a look?
-
->  - no other changes.
->
-> [0] https://lore.kernel.org/netdev/20210312194538.337504-1-alobakin@pm.me
->
-> Alexander Lobakin (6):
->   flow_dissector: constify bpf_flow_dissector's data pointers
->   skbuff: make __skb_header_pointer()'s data argument const
->   flow_dissector: constify raw input @data argument
->   linux/etherdevice.h: misc trailing whitespace cleanup
->   ethernet: constify eth_get_headlen()'s @data argument
->   skbuff: micro-optimize {,__}skb_header_pointer()
->
->  include/linux/etherdevice.h  |  4 ++--
->  include/linux/skbuff.h       | 26 +++++++++++------------
->  include/net/flow_dissector.h |  6 +++---
->  net/core/flow_dissector.c    | 41 +++++++++++++++++++-----------------
->  net/ethernet/eth.c           |  2 +-
->  5 files changed, 40 insertions(+), 39 deletions(-)
->
-> --
-> 2.30.2
-
-Thanks,
-Al
-
+Thanks.
