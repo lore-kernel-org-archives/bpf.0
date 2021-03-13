@@ -2,297 +2,208 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AB39C433DB
-	for <bpf@archiver.kernel.org>; Sat, 13 Mar 2021 19:20:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F93CC433E6
+	for <bpf@archiver.kernel.org>; Sat, 13 Mar 2021 19:36:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 162D964ED1
-	for <bpf@archiver.kernel.org>; Sat, 13 Mar 2021 19:20:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6128364ED1
+	for <bpf@archiver.kernel.org>; Sat, 13 Mar 2021 19:36:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234348AbhCMTTt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 13 Mar 2021 14:19:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34724 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234332AbhCMTTV (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 13 Mar 2021 14:19:21 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79EA3C061574
-        for <bpf@vger.kernel.org>; Sat, 13 Mar 2021 11:19:21 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id gb6so6787423pjb.0
-        for <bpf@vger.kernel.org>; Sat, 13 Mar 2021 11:19:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qpM+JmTazg9ZBhyhy5nJRSKR51C2TEIS3ypGmiIDHTU=;
-        b=W1WqNOfJBiyg/qQxF9YsJOJESDfK5h0FRWBsBINYjl7nE8m962Sy1ZhzgDBHYA+ydn
-         2WKRyGqIhB2vjP4q4AZqVdIHp8qBgH0S3PL7EEuRGziY70ReFWe7nPy8uPAIExlBxTui
-         SUpbG2y9zrLFcmC+lrXzRy1iymms6XGQRsDJh/zr3rLwZjg4Sb5I0h8w4F95XjI/8p2P
-         S6msLZYhpsLLcTxGsoGc0ZV6JTm7r794Fh7uTFfJmL6oCmLnfADvzOSvQjFEflS4j/Dj
-         /zOazLyEQNZfEmikhMEOh3c5N52IKZPR8pLKn1Hx8cInkq1ceW2Xbr5YiyXOkHQ3qCiQ
-         BadQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qpM+JmTazg9ZBhyhy5nJRSKR51C2TEIS3ypGmiIDHTU=;
-        b=iQmEWFYJfhvoIPsjYfKIVl+CduWo/RmNKLUTQ28/jkf3f+hvU2reeTsWMESZBjr2T/
-         /RhYzrFLw8sE3pWPyuCl7sK5CqAuXMvtmxHsWcUW7vD6BMEmnyAqpxMGo0vIl9lGrW41
-         qaxu9q/HDc3K6KTm612LVbNv1FAJ4jHYyi+rrla8blJRPwFHKMmDmEwU5JoX6kZ1Pm+D
-         xjgM+Fe4gb7DU1CXxSdkykOgjil79QIhM4B/xC0p/TdEzRpWuZT/AmYlveF+g46KMeAY
-         +tVw+IASfWbMGy2kPAab9515+g9RPBcqPASgVeTEuGpIkPt79rh5NlkF8kvasNIhCplH
-         LZhA==
-X-Gm-Message-State: AOAM530ZpkJk+QS6cYYRE6NHQqKvjFaxOQITE/Mufm2nmV8CerK5TB50
-        y1cpVBV8/n0vGI+LPvY1K112gIVrqK/TiMZagVk=
-X-Google-Smtp-Source: ABdhPJxJHVumZBG+a+yY6ovLASuqnh+aUnHK8zkwjc+iamPNfaV0fukmBn2EcXKmnAHYZRbCg18+XCUVSQpiFjmlWi4=
-X-Received: by 2002:a17:90a:8b16:: with SMTP id y22mr4786432pjn.191.1615663160940;
- Sat, 13 Mar 2021 11:19:20 -0800 (PST)
+        id S234620AbhCMTgN convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Sat, 13 Mar 2021 14:36:13 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:56620 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234474AbhCMTfu (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sat, 13 Mar 2021 14:35:50 -0500
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12DJZmjk025704
+        for <bpf@vger.kernel.org>; Sat, 13 Mar 2021 11:35:49 -0800
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 378ustsc7t-7
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Sat, 13 Mar 2021 11:35:49 -0800
+Received: from intmgw001.38.frc1.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Sat, 13 Mar 2021 11:35:48 -0800
+Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
+        id D22442ED20BF; Sat, 13 Mar 2021 11:35:45 -0800 (PST)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
+        <daniel@iogearbox.net>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>
+Subject: [PATCH v2 bpf-next 03/11] libbpf: rename internal memory-management helpers
+Date:   Sat, 13 Mar 2021 11:35:29 -0800
+Message-ID: <20210313193537.1548766-4-andrii@kernel.org>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20210313193537.1548766-1-andrii@kernel.org>
+References: <20210313193537.1548766-1-andrii@kernel.org>
 MIME-Version: 1.0
-References: <CAM_iQpXJ4MWUhk-j+mC4ScsX12afcuUHT-64CpVj97QdQaNZZg@mail.gmail.com>
- <20210310011905.ozz4xahpkqbfkkvd@ast-mbp.dhcp.thefacebook.com>
-In-Reply-To: <20210310011905.ozz4xahpkqbfkkvd@ast-mbp.dhcp.thefacebook.com>
-From:   Cong Wang <xiyou.wangcong@gmail.com>
-Date:   Sat, 13 Mar 2021 11:19:09 -0800
-Message-ID: <CAM_iQpXP-m03auwF_Ote=oSev3ZVmJ5Pj_5-8aJOTMz+Nmhhgw@mail.gmail.com>
-Subject: Re: bpf timer design
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Dongdong Wang <wangdongdong.6@bytedance.com>,
-        duanxiongchun@bytedance.com, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
+ definitions=2021-03-13_07:2021-03-12,2021-03-13 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ mlxlogscore=999 mlxscore=0 spamscore=0 clxscore=1015 priorityscore=1501
+ adultscore=0 malwarescore=0 phishscore=0 bulkscore=0 impostorscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2103130151
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Mar 9, 2021 at 5:19 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Mon, Mar 08, 2021 at 04:11:40PM -0800, Cong Wang wrote:
-> > Hi, all
-> >
-> > I have been thinking about eBPF timer APIs, it looks harder than I thought.
-> >
-> > The API's themselves are not hard, here is what I have:
-> >
-> > int bpf_timer_setup(struct bpf_timer *timer, void *callback_fn,
-> >                     void *callback_ctx, u64 flags);
-> > int bpf_timer_mod(struct bpf_timer *timer, u64 expires);
-> > int bpf_timer_del(struct bpf_timer *timer);
-> >
-> > which is pretty much similar to the current kernel timer API's.
-> >
-> > The struct bpf_timer is a bit tricky, we still have to save the kernel timer
-> > there but we do not want eBPF programs to touch it. So I simply save a pointer
-> > to kernel timer inside:
-> >
-> > struct bpf_timer {
-> >        void *ptr;
-> > };
-> >
-> > but we obviously have to prevent eBPF programs from dereferencing it
-> > with the verifier.
-> >
-> > The hardest part is on the verifier side, we have to check:
-> >
-> > 1. Whether a timer is initialized before use. For example:
-> >
-> > struct bpf_timer t;
-> > bpf_timer_mod(&t, bpf_jiffies64() + HZ);
->
-> relatively easy. see below.
->
-> > 2. Whether a timer is still active before exiting. For example:
->
-> also easy to do, but "must do bpf_timer_del before exiting" restriction
-> is probably too limiting to be usable.
+Rename btf_add_mem() and btf_ensure_mem() helpers that abstract away details
+of dynamically resizable memory to use libbpf_ prefix, as they are not
+BTF-specific. No functional changes.
 
-Well, if the timer callback uses, for example, a pointer to a variable
-on stack, then I am afraid we have to delete it before returning.
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ tools/lib/bpf/btf.c             | 24 ++++++++++++------------
+ tools/lib/bpf/btf_dump.c        |  8 ++++----
+ tools/lib/bpf/libbpf.c          |  4 ++--
+ tools/lib/bpf/libbpf_internal.h |  6 +++---
+ 4 files changed, 21 insertions(+), 21 deletions(-)
 
+diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+index e137781f9bc6..c98d39710515 100644
+--- a/tools/lib/bpf/btf.c
++++ b/tools/lib/bpf/btf.c
+@@ -142,8 +142,8 @@ static inline __u64 ptr_to_u64(const void *ptr)
+  * On success, memory pointer to the beginning of unused memory is returned.
+  * On error, NULL is returned.
+  */
+-void *btf_add_mem(void **data, size_t *cap_cnt, size_t elem_sz,
+-		  size_t cur_cnt, size_t max_cnt, size_t add_cnt)
++void *libbpf_add_mem(void **data, size_t *cap_cnt, size_t elem_sz,
++		     size_t cur_cnt, size_t max_cnt, size_t add_cnt)
+ {
+ 	size_t new_cnt;
+ 	void *new_data;
+@@ -179,14 +179,14 @@ void *btf_add_mem(void **data, size_t *cap_cnt, size_t elem_sz,
+ /* Ensure given dynamically allocated memory region has enough allocated space
+  * to accommodate *need_cnt* elements of size *elem_sz* bytes each
+  */
+-int btf_ensure_mem(void **data, size_t *cap_cnt, size_t elem_sz, size_t need_cnt)
++int libbpf_ensure_mem(void **data, size_t *cap_cnt, size_t elem_sz, size_t need_cnt)
+ {
+ 	void *p;
+ 
+ 	if (need_cnt <= *cap_cnt)
+ 		return 0;
+ 
+-	p = btf_add_mem(data, cap_cnt, elem_sz, *cap_cnt, SIZE_MAX, need_cnt - *cap_cnt);
++	p = libbpf_add_mem(data, cap_cnt, elem_sz, *cap_cnt, SIZE_MAX, need_cnt - *cap_cnt);
+ 	if (!p)
+ 		return -ENOMEM;
+ 
+@@ -197,8 +197,8 @@ static int btf_add_type_idx_entry(struct btf *btf, __u32 type_off)
+ {
+ 	__u32 *p;
+ 
+-	p = btf_add_mem((void **)&btf->type_offs, &btf->type_offs_cap, sizeof(__u32),
+-			btf->nr_types, BTF_MAX_NR_TYPES, 1);
++	p = libbpf_add_mem((void **)&btf->type_offs, &btf->type_offs_cap, sizeof(__u32),
++			   btf->nr_types, BTF_MAX_NR_TYPES, 1);
+ 	if (!p)
+ 		return -ENOMEM;
+ 
+@@ -1586,8 +1586,8 @@ static int btf_ensure_modifiable(struct btf *btf)
+ 
+ static void *btf_add_str_mem(struct btf *btf, size_t add_sz)
+ {
+-	return btf_add_mem(&btf->strs_data, &btf->strs_data_cap, 1,
+-			   btf->hdr->str_len, BTF_MAX_STR_OFFSET, add_sz);
++	return libbpf_add_mem(&btf->strs_data, &btf->strs_data_cap, 1,
++			      btf->hdr->str_len, BTF_MAX_STR_OFFSET, add_sz);
+ }
+ 
+ /* Find an offset in BTF string section that corresponds to a given string *s*.
+@@ -1683,8 +1683,8 @@ int btf__add_str(struct btf *btf, const char *s)
+ 
+ static void *btf_add_type_mem(struct btf *btf, size_t add_sz)
+ {
+-	return btf_add_mem(&btf->types_data, &btf->types_data_cap, 1,
+-			   btf->hdr->type_len, UINT_MAX, add_sz);
++	return libbpf_add_mem(&btf->types_data, &btf->types_data_cap, 1,
++			      btf->hdr->type_len, UINT_MAX, add_sz);
+ }
+ 
+ static __u32 btf_type_info(int kind, int vlen, int kflag)
+@@ -3208,7 +3208,7 @@ static int strs_dedup_remap_str_off(__u32 *str_off_ptr, void *ctx)
+ 	len = strlen(s) + 1;
+ 
+ 	new_off = d->strs_len;
+-	p = btf_add_mem(&d->strs_data, &d->strs_cap, 1, new_off, BTF_MAX_STR_OFFSET, len);
++	p = libbpf_add_mem(&d->strs_data, &d->strs_cap, 1, new_off, BTF_MAX_STR_OFFSET, len);
+ 	if (!p)
+ 		return -ENOMEM;
+ 
+@@ -3264,7 +3264,7 @@ static int btf_dedup_strings(struct btf_dedup *d)
+ 	}
+ 
+ 	if (!d->btf->base_btf) {
+-		s = btf_add_mem(&d->strs_data, &d->strs_cap, 1, d->strs_len, BTF_MAX_STR_OFFSET, 1);
++		s = libbpf_add_mem(&d->strs_data, &d->strs_cap, 1, d->strs_len, BTF_MAX_STR_OFFSET, 1);
+ 		if (!s)
+ 			return -ENOMEM;
+ 		/* initial empty string */
+diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
+index 5e957fcceee6..b5dbd5adc0e8 100644
+--- a/tools/lib/bpf/btf_dump.c
++++ b/tools/lib/bpf/btf_dump.c
+@@ -166,11 +166,11 @@ static int btf_dump_resize(struct btf_dump *d)
+ 	if (last_id <= d->last_id)
+ 		return 0;
+ 
+-	if (btf_ensure_mem((void **)&d->type_states, &d->type_states_cap,
+-			   sizeof(*d->type_states), last_id + 1))
++	if (libbpf_ensure_mem((void **)&d->type_states, &d->type_states_cap,
++			      sizeof(*d->type_states), last_id + 1))
+ 		return -ENOMEM;
+-	if (btf_ensure_mem((void **)&d->cached_names, &d->cached_names_cap,
+-			   sizeof(*d->cached_names), last_id + 1))
++	if (libbpf_ensure_mem((void **)&d->cached_names, &d->cached_names_cap,
++			      sizeof(*d->cached_names), last_id + 1))
+ 		return -ENOMEM;
+ 
+ 	if (d->last_id == 0) {
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 2f351d3ad3e7..18ba37164e17 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -4867,8 +4867,8 @@ static int load_module_btfs(struct bpf_object *obj)
+ 			goto err_out;
+ 		}
+ 
+-		err = btf_ensure_mem((void **)&obj->btf_modules, &obj->btf_module_cap,
+-				     sizeof(*obj->btf_modules), obj->btf_module_cnt + 1);
++		err = libbpf_ensure_mem((void **)&obj->btf_modules, &obj->btf_module_cap,
++				        sizeof(*obj->btf_modules), obj->btf_module_cnt + 1);
+ 		if (err)
+ 			goto err_out;
+ 
+diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
+index 97b6b9cc9839..e0787900eeca 100644
+--- a/tools/lib/bpf/libbpf_internal.h
++++ b/tools/lib/bpf/libbpf_internal.h
+@@ -112,9 +112,9 @@ struct btf_type;
+ 
+ struct btf_type *btf_type_by_id(struct btf *btf, __u32 type_id);
+ 
+-void *btf_add_mem(void **data, size_t *cap_cnt, size_t elem_sz,
+-		  size_t cur_cnt, size_t max_cnt, size_t add_cnt);
+-int btf_ensure_mem(void **data, size_t *cap_cnt, size_t elem_sz, size_t need_cnt);
++void *libbpf_add_mem(void **data, size_t *cap_cnt, size_t elem_sz,
++		     size_t cur_cnt, size_t max_cnt, size_t add_cnt);
++int libbpf_ensure_mem(void **data, size_t *cap_cnt, size_t elem_sz, size_t need_cnt);
+ 
+ static inline bool libbpf_validate_opts(const char *opts,
+ 					size_t opts_sz, size_t user_sz,
+-- 
+2.24.1
 
->
-> > struct bpf_timer t;
-> > bpf_setup_timer(&t, ....);
-> > bpf_timer_mod(&t, bpf_jiffies64() + HZ);
-> > //end of the eBPF program
-> >
-> > I do not see any existing mechanism for checks like these, so potentially need
-> > a lot of work.
->
-> There are two ways to handle the ordering constraints:
-> - bpf_spin_lock style which is simple.
-
-This is the first I looked at, unfortunately bpf spinlock is too limited,
-it does not even allow nesting, but for timer, "nesting" should be fine:
-
-bpf_timer_setup(&t1...);
-bpf_timer_setup(&t2...);
-bpf_timer_mod(&t1...);
-bpf_timer_mod(&t2...);
-bpf_timer_del(&t1...);
-bpf_timer_del(&t2...);
-
-
-> - may_be_acquire_function/is_release_function which is more advanced.
-> but the ordering issue is a small one comparing to the issue of life time of
-> the struct bpf_timer.
-
-Yeah, this is what I have been looking at. The major difference is we
-should be able to init a timer without even using it:
-
-bpf_timer_setup(&t...);
-//end of program
-
-With acquire/release syntax, they have to be paired.
-
-> I'm assuming that it will be related one to one with struct timer_list.
-
-Yes, this is what I meant by saving a pointer to struct timer_list
-inside struct bpf_timer.
-
-> Ideally the api would be similar to kernel and struct bpf_spin_lock
-> demonstrated how it can be done. Unlike bpf_spin_lock which is
-> always unlocked by the time program ends the bpf_timer will be still
-> enqueued in the timer wheel when prog exits. So its life time should
-> be separate from the program execution life time.
-
-Right, I am sure we can take a refcnt to the program itself, however
-it looks really weird if we still let timer run after the program exits,
-because the timer could run infinitely by arming itself in the callback.
-
-
-> The only bpf concept with such properties is a bpf map.
-> Therefore one the ways would be to do each timer as a map element.
-> Both array of timers and hash of timers would be needed.
-> The map_lookup_elem would return a pointer to opaque struct bpf_timer.
-> And then bpf_timer_init/mod/del can operate on that pointer.
-> The verifier can be taught to check that timer_init() is called
-> before timer_mod(), but it's simple enough to do in run-time.
-> The timer_mod() operation is expensive. Few run-time checks
-> will be negligible. For example bpf_time_mod() can check that
-> 'function' pointer was not-NULL. Otherwise run-time EINVAL.
-> Since struct bpf_timer is in a map, it's either zero-inited
-> at element creation time or bpf_timer_init() was called on it.
-
-Interestingly, we discussed this solution at Bytedance before, our
-conclusion is using a map is not as flexible as making it independent.
-
-
-> The bpf_spin_lock has a limitation that it can only be one per map
-> element which allowed to simplify the verifier code a lot.
-> I'm suggesting to use the same restriction for bpf_timer.
-
-This limit is fine, at least for timeout hashmap, but the limitation of
-nesting mentioned above is not.
-
-> Implementation wise I hope it won't be as hard coded as process_spin_lock().
-> High level I'm proposing 'struct bpf_timer { u64 opaque; }'
-> as part of uapi/bpf.h.
-> The bpf program can place it inside normal array/hash maps.
-> The 'opaque' field will contain a pointer to dynamically allocated
-> 'struct timer_list'.
-> The prog would do:
-> struct map_elem {
->     int stuff;
->     struct bpf_timer timer;
-> };
->
-> struct {
->     __uint(type, BPF_MAP_TYPE_HASH);
->     __uint(max_entries, 1);
->     __type(key, int);
->     __type(value, struct map_elem);
-> } hmap SEC(".maps");
->
-> static int timer_cb(struct map_elem *elem)
-> {
->     if (whatever && elem->stuff)
->         bpf_timer_mod(&elem->timer, new_expire);
-> }
->
-> int bpf_timer_test(...)
-> {
->     struct map_elem *val;
->
->     val = bpf_map_lookup_elem(&hmap, &key);
->     if (val) {
->         bpf_timer_init(&val->timer, timer_cb, flags);
->         val->stuff = 123;
->         bpf_timer_mod(&val->timer, expires);
->     }
-> }
-
-I see, it looks like you use a map to limit the lifetime of the timers.
-Our internal discussion actually went further, we wanted to introduce
-a special type of map just for timers, for example, key could be callback,
-value could be expires.
-
->
-> The map and prog destruction process would need to do del_timer()
-> on all map elements that have embedded struct bpf_timer before
-> freeing prog and map. Currently we don't have such constraint
-> with bpf_spin_lock, but it shouldn't be hard to add.
-> Similarly bpf_map_delete_elem() would need to do del_timer too.
-> bpf_map_update_elem can skip touching part of the value
-> that has struct bpf_timer. Again similar to bpf_spin_lock.
-> See copy_map_value.
-
-If we have a timer map, all of these can be hidden under the map
-ops.
-
-> Too really simplify the implementation we can restrict that
-> either bpf_spin_lock or bpf_timer can be inside the element.
-> (not both at the same time).
->
-> Of course there are other ways to design bpf_timer api.
-> I think the main advantage of connecting bpf_timer with
-> a map element is the control of timer life time and
-> additional data that timer_cb() will receive.
-> The 'void *callback_ctx' in the beginning of your email has the same
-> life time issue. It's difficult to make it part of bpf_timer_init().
-> Instead bpf prog can store additional data into map element.
-> It's not as flexible as bpf_for_each_map_elem that can
-> take a pointer to stack, but with timers it's not trivial
-> to guarantee that the stack is valid at the time callback is fired.
-> I think it should be flexible enough timer api.
-
-Agreed. If we enforce a map here, users would not be able to
-use a standalone timer, but I think this is okay, we have to
-make a trade-off anyway.
-
-Please let me know what you think about introducing a timer
-map, something like below:
-
-struct {
-     __uint(type, BPF_MAP_TYPE_TIMER);
-} map SEC(".maps");
-
-struct bpf_timer t;
-
-static int timer_cb(void *arg)
-{
-  // show how to rearm a timer
-  u64 new_expires = ...;
-  bpf_map_update_elem(&map, &t, &new_expires, 0);
-}
-
-int bpf_timer_test(...)
-{
-  u64 expires;
-
-  bpf_timer_init(&t, timer_cb, arg);
-
-  // bpf_map_update_elem() rejects it if uninitialized
-  bpf_map_update_elem(&map, &t, &expires, 0);
-
-  // wait for timer deletion synchronously
-  bpf_map_delete_elem(&map, &t);
-}
-
-
-Thanks a lot!
