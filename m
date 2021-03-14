@@ -7,28 +7,28 @@ X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 304CEC433E9
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08793C433E0
 	for <bpf@archiver.kernel.org>; Sun, 14 Mar 2021 11:12:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 01C6764EB7
+	by mail.kernel.org (Postfix) with ESMTP id B87F764EC0
 	for <bpf@archiver.kernel.org>; Sun, 14 Mar 2021 11:12:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235340AbhCNLMM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 14 Mar 2021 07:12:12 -0400
-Received: from mail-40136.protonmail.ch ([185.70.40.136]:23674 "EHLO
-        mail-40136.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235296AbhCNLLy (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 14 Mar 2021 07:11:54 -0400
-Date:   Sun, 14 Mar 2021 11:11:50 +0000
+        id S235320AbhCNLMJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 14 Mar 2021 07:12:09 -0400
+Received: from mail-40133.protonmail.ch ([185.70.40.133]:34571 "EHLO
+        mail-40133.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235291AbhCNLLo (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 14 Mar 2021 07:11:44 -0400
+Date:   Sun, 14 Mar 2021 11:11:32 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
-        t=1615720313; bh=5MpWKAjO4E1TpGup0jNHoJh4fKp9mBQ4WRLVO089bHE=;
+        t=1615720303; bh=X3TuYcTaZPUU1Xz+TlNF44PidtjG5KU7YmET3XhmCM4=;
         h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=dbiUPBOmaUdweDnPve56m+Fshaf0U8bdXHkN24JVcIYUbpoizTv55lvHF/w8XNmg3
-         Qhc1V/KdtQD+jcN7EKajUKa/v4sEZsRlXnNpbm/z/1IqO24GsfeAlezRBd6QB/lfbZ
-         bAnrXo9BTu0rYUQQ0HvcuPyotUTPNVCxVZILC6nH34Xoo6hLIsRWAPcfBbTTEZmXM2
-         JWUVlFSFtpi3/hl/h4uJv7rYrRapbq5CLpQmTP52r2V1V4aXeFzINSrM03jHdS4dE5
-         89g5/EtcJjdyvnshLOwfUVQ+dCCJHtEMaPVAprXSGUJIA2y2tpe6zfSbbhuv62RYXl
-         KIsmX4XcdmAcg==
+        b=LQIkSHYL/JKjtC1hVLDGKzdivEcZL/6ARhm2BmF6IMg0R3s/R3fueTyKmQhMmx/OI
+         KLhtMmoWrWn0wyUYO2u4aC4RvB0iF2UIrpnpw0iS7HpqWViseGLJCFDUBA/yTiSxXB
+         A2RPRYRD/n6JKP6CD5cblTmg4qzie2Myax4DvEsFeipLPe+WM2IuTtVM0pSOo/AwmJ
+         GkG0Dj3CYb3dC1gmqtlj6Wpi2Pn9DyHo66EGmPizv2DAb3xZrdSRpnZsiCO/bOI0Yo
+         KppelL9b8cYHYsjA/6XuIiWc5dH2+K5Fo9ssF3HT5Uso3R9HQ8VD4tAzj353pat4Gf
+         pv0IOnFO5cNiw==
 To:     "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>
 From:   Alexander Lobakin <alobakin@pm.me>
@@ -60,8 +60,8 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         bpf@vger.kernel.org
 Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: [PATCH v3 net-next 6/6] skbuff: micro-optimize {,__}skb_header_pointer()
-Message-ID: <20210314111027.7657-7-alobakin@pm.me>
+Subject: [PATCH v3 net-next 4/6] linux/etherdevice.h: misc trailing whitespace cleanup
+Message-ID: <20210314111027.7657-5-alobakin@pm.me>
 In-Reply-To: <20210314111027.7657-1-alobakin@pm.me>
 References: <20210314111027.7657-1-alobakin@pm.me>
 MIME-Version: 1.0
@@ -71,43 +71,26 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-{,__}skb_header_pointer() helpers exist mainly for preventing
-accesses-beyond-end of the linear data.
-In the vast majorify of cases, they bail out on the first condition.
-All code going after is mostly a fallback.
-Mark the most common branch as 'likely' one to move it in-line.
-Also, skb_copy_bits() can return negative values only when the input
-arguments are invalid, e.g. offset is greater than skb->len. It can
-be safely marked as 'unlikely' branch, assuming that hotpath code
-provides sane input to not fail here.
-
-These two bump the throughput with a single Flow Dissector pass on
-every packet (e.g. with RPS or driver that uses eth_get_headlen())
-on 20 Mbps per flow/core.
+Caught by the text editor. Fix it separately from the actual changes.
 
 Signed-off-by: Alexander Lobakin <alobakin@pm.me>
 ---
- include/linux/skbuff.h | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ include/linux/etherdevice.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index 46c61e127e9f..ecc029674ae4 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -3680,11 +3680,10 @@ static inline void * __must_check
- __skb_header_pointer(const struct sk_buff *skb, int offset, int len,
- =09=09     const void *data, int hlen, void *buffer)
- {
--=09if (hlen - offset >=3D len)
-+=09if (likely(hlen - offset >=3D len))
- =09=09return (void *)data + offset;
-
--=09if (!skb ||
--=09    skb_copy_bits(skb, offset, buffer, len) < 0)
-+=09if (!skb || unlikely(skb_copy_bits(skb, offset, buffer, len) < 0))
- =09=09return NULL;
-
- =09return buffer;
+diff --git a/include/linux/etherdevice.h b/include/linux/etherdevice.h
+index 2e5debc0373c..bcb2f81baafb 100644
+--- a/include/linux/etherdevice.h
++++ b/include/linux/etherdevice.h
+@@ -11,7 +11,7 @@
+  * Authors:=09Ross Biro
+  *=09=09Fred N. van Kempen, <waltje@uWalt.NL.Mugnet.ORG>
+  *
+- *=09=09Relocated to include/linux where it belongs by Alan Cox
++ *=09=09Relocated to include/linux where it belongs by Alan Cox
+  *=09=09=09=09=09=09=09<gw4pts@gw4pts.ampr.org>
+  */
+ #ifndef _LINUX_ETHERDEVICE_H
 --
 2.30.2
 
