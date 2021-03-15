@@ -2,87 +2,121 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DCA11C433E0
-	for <bpf@archiver.kernel.org>; Mon, 15 Mar 2021 16:51:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35248C433E6
+	for <bpf@archiver.kernel.org>; Mon, 15 Mar 2021 19:01:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9BEF664F33
-	for <bpf@archiver.kernel.org>; Mon, 15 Mar 2021 16:51:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 03E5E64F4A
+	for <bpf@archiver.kernel.org>; Mon, 15 Mar 2021 19:01:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229867AbhCOQum (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 15 Mar 2021 12:50:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53746 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229914AbhCOQuP (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 15 Mar 2021 12:50:15 -0400
-Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9FB0C06174A
-        for <bpf@vger.kernel.org>; Mon, 15 Mar 2021 09:50:14 -0700 (PDT)
-Received: by mail-ua1-x931.google.com with SMTP id v11so4402104uao.0
-        for <bpf@vger.kernel.org>; Mon, 15 Mar 2021 09:50:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=1eXLTRT+GCWYDUqsHI0px35dMXxudCxB6Y29Igq2tfA=;
-        b=Zt/e7C15pUXcbtGtlERHjdsaAbsQMdyvsMcS7Bjquvvmruz1Ktk1itTQLZ4o24+LoK
-         sPBm1CbpRsE1ol3XeZnbHDqq5+maxWQZNTEz5Q0AOdBPxtF3T7yv3dobKgg3MilEKHTx
-         PCc6bw+OjSOCSekYQSg35xeKnd9P//AX3Eit2wV3gz3+d5j9T4fG181goFUX4mLvfadF
-         W+v7ZNkhCiF/9GgnuPEEl+8OdUHlgd/W/uKF+Mxs9lYlGtvtzM4t16VYEUldeZdsL0B7
-         oDd87aG5LOCjDejeykPwHy6CYYFl2Shf2rdPVl7twypbcZ1bAlEys9cmcLNcJxSpxtrV
-         Knsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=1eXLTRT+GCWYDUqsHI0px35dMXxudCxB6Y29Igq2tfA=;
-        b=HUku7KqYrbafRl30M7RxNmVf7Vk7nV7MjQpJgDejbx8yGVfWD7yHr++XVjFsSYM3B7
-         t4ijn8rjjIHOLnaAGRD7Fc1d44ZCklNxTaoldRClv8miiO4hE7Un4YT/iO2VsKtl/nmV
-         ngVSwuz4WROnQI1AU5NsxSPzYGEMGgLb4+09TCZdHoXrx/QwmltcYVDCdMBj44InWx5M
-         2eZ2PMoTPlv0QvCUQ/ysOl4jR43p7eHehKc1YoU5elGsPYVXXOemRR7pe+C4InCiA3l0
-         m+Ttax7cgaeEtUnN9UirZbQaV5jIZwX4b5/d9Av0R1yhexrLHcas7dIwFpacus8tP/C1
-         hnhQ==
-X-Gm-Message-State: AOAM531FPGFNb/ftlvu/RwUVOYQglkCuR2EJB+G0PnJYvyRGrzp8+pZY
-        Jok/g3/KRK3qVLEqhwfw76hD2wxO7I/vkUfsG7GKE8QxEdw=
-X-Google-Smtp-Source: ABdhPJziuVx7x1VhvyAucEKF96BJ0d/LqVTeLnwkPTysSr3Y6UnebOgQ+maen+SsM82Mn9PvsEO5MiHc8RA/SQm5fHg=
-X-Received: by 2002:a9f:3104:: with SMTP id m4mr5753447uab.127.1615827013381;
- Mon, 15 Mar 2021 09:50:13 -0700 (PDT)
+        id S229512AbhCOTBN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 15 Mar 2021 15:01:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58360 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229810AbhCOTAm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 15 Mar 2021 15:00:42 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 556B764E27;
+        Mon, 15 Mar 2021 19:00:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1615834841;
+        bh=7r+vqiruIi5Kcu+b02MvGQyXIGhcf3dhpbwoGVTiBjQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=NEZQQZHZl9cow/I4M+EoEchV11Go3aPWN/S2PfCSLBkAJ3utbrrehLxwD9RyAvuF5
+         p+AYq6mCH5ysBn0Xo0tJu/35qyji2VEiZNzyVozU8uJj0qNgArCoqSvWSlArll3QRW
+         Q4Xk/YcUJV646qwVsEzSoTe4U+K5bCGBaaftRBy5oO9APMxEkDMj83jJI5xi9UmOmU
+         9wqgL28sbSMTr8N7SWtf8RmLiHDCOFAFXnK4e2jcp67sLemezPbqajUrBH9V4t0gnm
+         OH2RY4Abe7PlBL0l49lYn/rks/bH2yX/tyGTcD42N27ZJY5/JP6CdQtVSc7JVOyNG+
+         Ra/Pu6I5fMBnA==
+Date:   Mon, 15 Mar 2021 12:00:39 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Alexander Lobakin <alobakin@pm.me>
+Cc:     Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Kevin Hao <haokexin@gmail.com>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        Marco Elver <elver@google.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Ariel Levkovich <lariel@mellanox.com>,
+        Wang Qing <wangqing@vivo.com>,
+        Davide Caratti <dcaratti@redhat.com>,
+        Guillaume Nault <gnault@redhat.com>,
+        Eran Ben Elisha <eranbe@nvidia.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Kirill Tkhai <ktkhai@virtuozzo.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH v3 net-next 4/6] linux/etherdevice.h: misc trailing
+ whitespace cleanup
+Message-ID: <20210315120039.36152d58@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20210315093839.6510-1-alobakin@pm.me>
+References: <20210314111027.7657-1-alobakin@pm.me>
+        <20210314111027.7657-5-alobakin@pm.me>
+        <20210314210453.o2dmnud45w7rabcw@skbuf>
+        <20210315093839.6510-1-alobakin@pm.me>
 MIME-Version: 1.0
-From:   Grant Seltzer Richman <grantseltzer@gmail.com>
-Date:   Mon, 15 Mar 2021 12:50:02 -0400
-Message-ID: <CAO658oXG4HEm0rGEW-==0kaTmqenDUC_GM-qi7CEjwSakbnJRw@mail.gmail.com>
-Subject: Generating libbpf API documentation
-To:     bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi all,
+On Mon, 15 Mar 2021 09:38:57 +0000 Alexander Lobakin wrote:
+> From: Vladimir Oltean <olteanv@gmail.com>
+> Date: Sun, 14 Mar 2021 23:04:53 +0200
+> 
+> > On Sun, Mar 14, 2021 at 11:11:32AM +0000, Alexander Lobakin wrote:  
+> > > Caught by the text editor. Fix it separately from the actual changes.
+> > >
+> > > Signed-off-by: Alexander Lobakin <alobakin@pm.me>
+> > > ---
+> > >  include/linux/etherdevice.h | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >
+> > > diff --git a/include/linux/etherdevice.h b/include/linux/etherdevice.h
+> > > index 2e5debc0373c..bcb2f81baafb 100644
+> > > --- a/include/linux/etherdevice.h
+> > > +++ b/include/linux/etherdevice.h
+> > > @@ -11,7 +11,7 @@
+> > >   * Authors:	Ross Biro
+> > >   *		Fred N. van Kempen, <waltje@uWalt.NL.Mugnet.ORG>
+> > >   *
+> > > - *		Relocated to include/linux where it belongs by Alan Cox
+> > > + *		Relocated to include/linux where it belongs by Alan Cox
+> > >   *							<gw4pts@gw4pts.ampr.org>
+> > >   */
+> > >  #ifndef _LINUX_ETHERDEVICE_H
+> > > --
+> > > 2.30.2
+> > >
+> > >  
+> >
+> > Your mailer did something weird here, it trimmed the trailing whitespace
+> > from the "-" line. The patch doesn't apply.  
+> 
+> It's git-send-email + ProtonMail Bridge... Seems like that's the
+> reason why only this series of mine was failing Patchwork
+> everytime.
 
-I have been experimenting with ways to contribute documentation to
-libbpf to make it easier for developers of bpf projects to use it.
-With the goal of making a documentation site that is easy to
-maintain/generate I found Doxygen (many of you may have experience
-with it, I did not). I set up a CI/CD workflow using github actions
-that runs doxygen on the libbpf mirror hosted there, and hosts the
-produced HTML using netlify. You can find the currently hosted version
-of it at https://libbpf-docs.netlify.app (I would gladly donate a real
-domain name for this purpose). The docs generation workflow is in my
-github repo here: https://github.com/grantseltzer/libbpf-docs
+Yup. Sorry for the lack of logs in NIPA, you can run
 
-In order to make this work all we would need is to format comments
-above functions we want to document. Doxygen requires that the comment
-just be in a block that starts with `/**`. I don't think doxygen
-specific directives should be committed to code but I think this is a
-fine convention to follow. Other doxygen directives (i.e. having
-`@file` in every file) can be faked using a step I have in the github
-actions.
+  git pw series apply $id
 
-What does everyone think? Can we agree on this convention and start
-contributing documentation in this way? Any pitfalls to doxygen I'm
-not familiar with?
-
-Thanks!
+and look at the output there. That's what I do, anyway, to double check
+that the patch doesn't apply so the logs are of limited use.
