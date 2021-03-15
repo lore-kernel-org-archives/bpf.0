@@ -2,112 +2,143 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3514C433E6
-	for <bpf@archiver.kernel.org>; Mon, 15 Mar 2021 09:40:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 77B69C433E0
+	for <bpf@archiver.kernel.org>; Mon, 15 Mar 2021 11:52:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8F9EF64EB1
-	for <bpf@archiver.kernel.org>; Mon, 15 Mar 2021 09:40:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 25C6A64E90
+	for <bpf@archiver.kernel.org>; Mon, 15 Mar 2021 11:52:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229574AbhCOJj3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 15 Mar 2021 05:39:29 -0400
-Received: from mail-40131.protonmail.ch ([185.70.40.131]:58020 "EHLO
-        mail-40131.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbhCOJjI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 15 Mar 2021 05:39:08 -0400
-Date:   Mon, 15 Mar 2021 09:38:57 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
-        t=1615801146; bh=SnqNhZ8jhCbnZf+6aCb/UARYY/AXz744p1JflVY958M=;
-        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=YLTddrgfp3S/VtQaasYCODof0lpCpeNFQPdQa2SI1JBR1V7jSR+KBggIMkU2jg3Lj
-         qfKcR5F9eA28y13jfcXt2vc5usvS0isFQmvO6aCFGnhwaqfDyHLmPav5LmM/weEUWA
-         gMMKjA0lSyztoTFmhcH+cbAOac1b2X6oe4RZbS6fW5g/v9jxLd4Ay3WChxk+EgAX03
-         bCQSqG4dO3aEOas+mqgKX9mhDK8oHz8LdS+YorQwe55aekoKPhsaTvLrvapaV0EEVI
-         1+ncNzIKWnI6Z4g/G6xLmRQNxO6rljTi35eyxuA16aU2mYsOBRFx2ynNQ95QZO8iyP
-         UCcQiWjXaKnnA==
-To:     Vladimir Oltean <olteanv@gmail.com>
-From:   Alexander Lobakin <alobakin@pm.me>
-Cc:     Alexander Lobakin <alobakin@pm.me>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Kevin Hao <haokexin@gmail.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        Marco Elver <elver@google.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Ariel Levkovich <lariel@mellanox.com>,
-        Wang Qing <wangqing@vivo.com>,
-        Davide Caratti <dcaratti@redhat.com>,
-        Guillaume Nault <gnault@redhat.com>,
-        Eran Ben Elisha <eranbe@nvidia.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Kirill Tkhai <ktkhai@virtuozzo.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org
-Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: Re: [PATCH v3 net-next 4/6] linux/etherdevice.h: misc trailing whitespace cleanup
-Message-ID: <20210315093839.6510-1-alobakin@pm.me>
-In-Reply-To: <20210314210453.o2dmnud45w7rabcw@skbuf>
-References: <20210314111027.7657-1-alobakin@pm.me> <20210314111027.7657-5-alobakin@pm.me> <20210314210453.o2dmnud45w7rabcw@skbuf>
+        id S230039AbhCOLw0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 15 Mar 2021 07:52:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45326 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230300AbhCOLwQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 15 Mar 2021 07:52:16 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20438C06175F
+        for <bpf@vger.kernel.org>; Mon, 15 Mar 2021 04:52:16 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id l132so31267125qke.7
+        for <bpf@vger.kernel.org>; Mon, 15 Mar 2021 04:52:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=32TvfxSkzYWhVmQkeQkwenaCMad2tF6b4G0jVDrs/a4=;
+        b=ALfTs7zBGQzj2IMrYgNcHtnpLmGTXDRfaQxZeu/odl7eyYeCFi0V4NJ2x+y2LuA/uz
+         ph/729wVQpd0FYg5hUL/S5JpkzzIIbXewyEbvTpYCTaOondRqIV/FlqJJHPMNzO38S0Q
+         uJIkZ/5XeFOaFuwSu0wnZUFE2kxWowkZVUzuVr6UYgHHX97qT7+D5GZ74lpqhG97Y0Iu
+         QuRRiUBPJqd3xTswAwvv0dz/KN7xZuyVta1zyH76bJzIgh6+tWMhlBeBOyQEjnQz6oGu
+         Lfa9LATToyUKerCBNO7M5foMGA1o0zbY18S+cyGiuV4dLDY5SS1PphobALB7tG2TshM+
+         ifrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=32TvfxSkzYWhVmQkeQkwenaCMad2tF6b4G0jVDrs/a4=;
+        b=IaZFEtFujkmo+JQ1xvhjzIkqW0VF5QkgdboObMYiwfcm7pZkE/mAY+JNK7MbWNCk0p
+         ep27HyiMxYDZTCLrwfPilKvyFIFmtWJN6d97OrWvgF8GlaMtTG2ZkOkVDpdiovj4cH0g
+         JK81Y62hi4NxpHPYnr71NM5OklKAwQwI3eSL6zjXDzdDzu2AiOyiDb8zytYuPNngvh6D
+         D6C9Az4F8tm9+DJE1W1t6p8ByCZF9HQIQHsfzF96vTjd5Adobkpaj6uvZgz2sLBRBs9b
+         7YT8pUNK/Bk1w/MjW2bJdKUFmyu7p8hls4P3Ix3xI3FimKPgg4eo+WoZuSGFAzx+Z9O6
+         wc2Q==
+X-Gm-Message-State: AOAM531Q7fNjsP1MpMDk0sMn9w1liIcxsUqgyH3aZvauXZnnb8NmtA0N
+        7qVFBKiParbcndKOHlbguankEfTzjD6PQs/xQeyZHw==
+X-Google-Smtp-Source: ABdhPJyTiP3VZRD2+BkeloNDqEutijd0tcaoS2gge3f4Ric1U/h+BWCA5c0B+z0nk79PDPEdKLh0VUeNxtwNGc7korU=
+X-Received: by 2002:a05:620a:981:: with SMTP id x1mr23826304qkx.501.1615809134984;
+ Mon, 15 Mar 2021 04:52:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+References: <00000000000096cdaa05bd32d46f@google.com> <CACT4Y+ZjdOaX_X530p+vPbG4mbtUuFsJ1v-gD24T4DnFUqcudA@mail.gmail.com>
+ <CACT4Y+ZjVS+nOxtEByF5-djuhbCYLSDdZ7V04qJ0edpQR0514A@mail.gmail.com>
+ <CACT4Y+YXifnCtEvLu3ps8JLCK9CBLzEuUAozfNR9v1hsGWspOg@mail.gmail.com> <ed89390a-91e1-320a-fae5-27b7f3a20424@codethink.co.uk>
+In-Reply-To: <ed89390a-91e1-320a-fae5-27b7f3a20424@codethink.co.uk>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Mon, 15 Mar 2021 12:52:03 +0100
+Message-ID: <CACT4Y+a1pQ96UWEB3pAnbxPZ+6jW2tqSzkTMqJ+XSbZsKLHgAw@mail.gmail.com>
+Subject: Re: [syzbot] BUG: unable to handle kernel access to user memory in sock_ioctl
+To:     Ben Dooks <ben.dooks@codethink.co.uk>
+Cc:     syzbot <syzbot+c23c5421600e9b454849@syzkaller.appspotmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv <linux-riscv@lists.infradead.org>, andrii@kernel.org,
+        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        David Miller <davem@davemloft.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Martin KaFai Lau <kafai@fb.com>, kpsingh@kernel.org,
+        Jakub Kicinski <kuba@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        Song Liu <songliubraving@fb.com>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Yonghong Song <yhs@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Vladimir Oltean <olteanv@gmail.com>
-Date: Sun, 14 Mar 2021 23:04:53 +0200
-
-> On Sun, Mar 14, 2021 at 11:11:32AM +0000, Alexander Lobakin wrote:
-> > Caught by the text editor. Fix it separately from the actual changes.
-> >
-> > Signed-off-by: Alexander Lobakin <alobakin@pm.me>
-> > ---
-> >  include/linux/etherdevice.h | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/include/linux/etherdevice.h b/include/linux/etherdevice.h
-> > index 2e5debc0373c..bcb2f81baafb 100644
-> > --- a/include/linux/etherdevice.h
-> > +++ b/include/linux/etherdevice.h
-> > @@ -11,7 +11,7 @@
-> >   * Authors:=09Ross Biro
-> >   *=09=09Fred N. van Kempen, <waltje@uWalt.NL.Mugnet.ORG>
-> >   *
-> > - *=09=09Relocated to include/linux where it belongs by Alan Cox
-> > + *=09=09Relocated to include/linux where it belongs by Alan Cox
-> >   *=09=09=09=09=09=09=09<gw4pts@gw4pts.ampr.org>
-> >   */
-> >  #ifndef _LINUX_ETHERDEVICE_H
-> > --
-> > 2.30.2
-> >
-> >
+On Mon, Mar 15, 2021 at 12:30 PM Ben Dooks <ben.dooks@codethink.co.uk> wrote:
 >
-> Your mailer did something weird here, it trimmed the trailing whitespace
-> from the "-" line. The patch doesn't apply.
+> On 14/03/2021 11:03, Dmitry Vyukov wrote:
+> > On Sun, Mar 14, 2021 at 11:01 AM Dmitry Vyukov <dvyukov@google.com> wrote:
+> >>> On Wed, Mar 10, 2021 at 7:28 PM syzbot
+> >>> <syzbot+c23c5421600e9b454849@syzkaller.appspotmail.com> wrote:
+> >>>>
+> >>>> Hello,
+> >>>>
+> >>>> syzbot found the following issue on:
+> >>>>
+> >>>> HEAD commit:    0d7588ab riscv: process: Fix no prototype for arch_dup_tas..
+> >>>> git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git fixes
+> >>>> console output: https://syzkaller.appspot.com/x/log.txt?x=122c343ad00000
+> >>>> kernel config:  https://syzkaller.appspot.com/x/.config?x=e3c595255fb2d136
+> >>>> dashboard link: https://syzkaller.appspot.com/bug?extid=c23c5421600e9b454849
+> >>>> userspace arch: riscv64
+> >>>>
+> >>>> Unfortunately, I don't have any reproducer for this issue yet.
+> >>>>
+> >>>> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> >>>> Reported-by: syzbot+c23c5421600e9b454849@syzkaller.appspotmail.com
+> >>>
+> >>> +riscv maintainers
+> >>>
+> >>> Another case of put_user crashing.
+> >>
+> >> There are 58 crashes in sock_ioctl already. Somehow there is a very
+> >> significant skew towards crashing with this "user memory without
+> >> uaccess routines" in schedule_tail and sock_ioctl of all places in the
+> >> kernel that use put_user... This looks very strange... Any ideas
+> >> what's special about these 2 locations?
+> >
+> > I could imagine if such a crash happens after a previous stack
+> > overflow and now task data structures are corrupted. But f_getown does
+> > not look like a function that consumes way more than other kernel
+> > syscalls...
+>
+> The last crash I looked at suggested somehow put_user got re-entered
+> with the user protection turned back on. Either there is a path through
+> one of the kernel handlers where this happens or there's something
+> weird going on with qemu.
 
-It's git-send-email + ProtonMail Bridge... Seems like that's the
-reason why only this series of mine was failing Patchwork
-everytime.
+Is there any kind of tracking/reporting that would help to localize
+it? I could re-reproduce with that code.
 
-Much thanks for finding this out!
-Al
-
+> I'll be trying to get this run up on real hardware this week, the nvme
+> with my debian install died last week so I have to go and re-install
+> the machine to get development work done on it.
+>
+> --
+> Ben Dooks                               http://www.codethink.co.uk/
+> Senior Engineer                         Codethink - Providing Genius
+>
+> https://www.codethink.co.uk/privacy.html
+>
+> --
+> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/ed89390a-91e1-320a-fae5-27b7f3a20424%40codethink.co.uk.
