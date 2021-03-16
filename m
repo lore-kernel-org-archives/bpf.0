@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB1A9C433DB
-	for <bpf@archiver.kernel.org>; Tue, 16 Mar 2021 01:15:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD525C433E0
+	for <bpf@archiver.kernel.org>; Tue, 16 Mar 2021 01:15:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 98EE964F37
-	for <bpf@archiver.kernel.org>; Tue, 16 Mar 2021 01:15:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7B3EC64F76
+	for <bpf@archiver.kernel.org>; Tue, 16 Mar 2021 01:15:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234216AbhCPBOz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 15 Mar 2021 21:14:55 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:52250 "EHLO
+        id S234185AbhCPBO7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 15 Mar 2021 21:14:59 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:13352 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S234159AbhCPBOY (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 15 Mar 2021 21:14:24 -0400
+        by vger.kernel.org with ESMTP id S234213AbhCPBOn (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 15 Mar 2021 21:14:43 -0400
 Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.43/8.16.0.43) with SMTP id 12G1D3WX021162
-        for <bpf@vger.kernel.org>; Mon, 15 Mar 2021 18:14:23 -0700
+        by m0001303.ppops.net (8.16.0.43/8.16.0.43) with SMTP id 12G1CkJM020955
+        for <bpf@vger.kernel.org>; Mon, 15 Mar 2021 18:14:43 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=0Kx5OB279JUPfG0XhqfvNUjSnBkCzSNDIwedcdzf8o4=;
- b=BZvbWejXeJlcp+IIsDI0bVN8GVXeXjCm533BWQTWOqKRYfxU5kl2oB4qGMwRx0Rja/VU
- Fk3KNf/AGWFzpxq1lGwkol8PSq09gXpDZokL9XaVpml1KwjBYnXLUxvC5PPPd+a5+1A5
- 1iI2zymdYDxtMI+ZAU2y5jHbxba6gTTW3Hs= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0001303.ppops.net with ESMTP id 378sxtv4vy-2
+ bh=2U63qfE7D12CslCQUPY59lxp/tlir6gd3bNCivSiCxQ=;
+ b=Xh7ikHpuVYtIiIgnlVUuacCrVqH7Vu/sj5SuhgpmYQGTHYYT12eUw8++4boClUHDcTMA
+ CX7zhg1ldBzueII1wtnDc8N6hjNWaZrKUv/pkchdSojho825n6eJR+DFF02Py/OA9ngK
+ p2h8M7+Si2QCTBARl+rF/Gl7IBfzxGF02jw= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0001303.ppops.net with ESMTP id 378sxtv4x8-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 15 Mar 2021 18:14:23 -0700
-Received: from intmgw002.25.frc3.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Mon, 15 Mar 2021 18:14:42 -0700
+Received: from intmgw001.37.frc1.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Mon, 15 Mar 2021 18:14:22 -0700
+ 15.1.2176.2; Mon, 15 Mar 2021 18:14:42 -0700
 Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id 1C45A2942B57; Mon, 15 Mar 2021 18:14:20 -0700 (PDT)
+        id DB7462942B57; Mon, 15 Mar 2021 18:14:38 -0700 (PDT)
 From:   Martin KaFai Lau <kafai@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
         <netdev@vger.kernel.org>
-Subject: [PATCH bpf-next 07/15] bpf: tcp: White list some tcp cong functions to be called by bpf-tcp-cc
-Date:   Mon, 15 Mar 2021 18:14:20 -0700
-Message-ID: <20210316011420.4177709-1-kafai@fb.com>
+Subject: [PATCH bpf-next 10/15] libbpf: Rename RELO_EXTERN to RELO_EXTERN_VAR
+Date:   Mon, 15 Mar 2021 18:14:38 -0700
+Message-ID: <20210316011438.4179031-1-kafai@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210316011336.4173585-1-kafai@fb.com>
 References: <20210316011336.4173585-1-kafai@fb.com>
@@ -58,7 +58,7 @@ X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
  definitions=2021-03-15_15:2021-03-15,2021-03-15 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0 clxscore=1015
  priorityscore=1501 lowpriorityscore=0 spamscore=0 impostorscore=0
- phishscore=0 malwarescore=0 adultscore=0 mlxlogscore=999 suspectscore=0
+ phishscore=0 malwarescore=0 adultscore=0 mlxlogscore=797 suspectscore=0
  mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2103160005
 X-FB-Internal: deliver
@@ -66,89 +66,48 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch white list some tcp cong helper functions, tcp_slow_start()
-and tcp_cong_avoid_ai().  They are allowed to be directly called by
-the bpf-tcp-cc program.
-
-A few tcp cc implementation functions are also white listed.
-A potential use case is the bpf-tcp-cc implementation may only
-want to override a subset of a tcp_congestion_ops.  For others,
-the bpf-tcp-cc can directly call the kernel counter parts instead of
-re-implementing (or copy-and-pasting) them to the bpf program.
-
-They will only be available to the bpf-tcp-cc typed program.
-The white listed functions are not bounded to a fixed ABI contract.
-When any of them has changed, the bpf-tcp-cc program has to be changed
-like any in-tree/out-of-tree kernel tcp-cc implementations do also.
+This patch renames RELO_EXTERN to RELO_EXTERN_VAR.
+It is to avoid the confusion with a later patch adding
+RELO_EXTERN_FUNC.
 
 Signed-off-by: Martin KaFai Lau <kafai@fb.com>
 ---
- net/ipv4/bpf_tcp_ca.c | 41 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
+ tools/lib/bpf/libbpf.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/net/ipv4/bpf_tcp_ca.c b/net/ipv4/bpf_tcp_ca.c
-index d520e61649c8..ed6e6b5b762b 100644
---- a/net/ipv4/bpf_tcp_ca.c
-+++ b/net/ipv4/bpf_tcp_ca.c
-@@ -5,6 +5,7 @@
- #include <linux/bpf_verifier.h>
- #include <linux/bpf.h>
- #include <linux/btf.h>
-+#include <linux/btf_ids.h>
- #include <linux/filter.h>
- #include <net/tcp.h>
- #include <net/bpf_sk_storage.h>
-@@ -178,10 +179,50 @@ bpf_tcp_ca_get_func_proto(enum bpf_func_id func_id,
- 	}
- }
-=20
-+BTF_SET_START(bpf_tcp_ca_kfunc_ids)
-+BTF_ID(func, tcp_reno_ssthresh)
-+BTF_ID(func, tcp_reno_cong_avoid)
-+BTF_ID(func, tcp_reno_undo_cwnd)
-+BTF_ID(func, tcp_slow_start)
-+BTF_ID(func, tcp_cong_avoid_ai)
-+#if IS_BUILTIN(CONFIG_TCP_CONG_CUBIC)
-+BTF_ID(func, cubictcp_init)
-+BTF_ID(func, cubictcp_recalc_ssthresh)
-+BTF_ID(func, cubictcp_cong_avoid)
-+BTF_ID(func, cubictcp_state)
-+BTF_ID(func, cubictcp_cwnd_event)
-+BTF_ID(func, cubictcp_acked)
-+#endif
-+#if IS_BUILTIN(CONFIG_TCP_CONG_DCTCP)
-+BTF_ID(func, dctcp_init)
-+BTF_ID(func, dctcp_update_alpha)
-+BTF_ID(func, dctcp_cwnd_event)
-+BTF_ID(func, dctcp_ssthresh)
-+BTF_ID(func, dctcp_cwnd_undo)
-+BTF_ID(func, dctcp_state)
-+#endif
-+#if IS_BUILTIN(CONFIG_TCP_CONG_BBR)
-+BTF_ID(func, bbr_init)
-+BTF_ID(func, bbr_main)
-+BTF_ID(func, bbr_sndbuf_expand)
-+BTF_ID(func, bbr_undo_cwnd)
-+BTF_ID(func, bbr_cwnd_even),
-+BTF_ID(func, bbr_ssthresh)
-+BTF_ID(func, bbr_min_tso_segs)
-+BTF_ID(func, bbr_set_state)
-+#endif
-+BTF_SET_END(bpf_tcp_ca_kfunc_ids)
-+
-+static bool bpf_tcp_ca_check_kern_func_call(u32 kfunc_btf_id)
-+{
-+	return btf_id_set_contains(&bpf_tcp_ca_kfunc_ids, kfunc_btf_id);
-+}
-+
- static const struct bpf_verifier_ops bpf_tcp_ca_verifier_ops =3D {
- 	.get_func_proto		=3D bpf_tcp_ca_get_func_proto,
- 	.is_valid_access	=3D bpf_tcp_ca_is_valid_access,
- 	.btf_struct_access	=3D bpf_tcp_ca_btf_struct_access,
-+	.check_kern_func_call	=3D bpf_tcp_ca_check_kern_func_call,
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 8355b786b3db..8f924aece736 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -189,7 +189,7 @@ enum reloc_type {
+ 	RELO_LD64,
+ 	RELO_CALL,
+ 	RELO_DATA,
+-	RELO_EXTERN,
++	RELO_EXTERN_VAR,
+ 	RELO_SUBPROG_ADDR,
  };
 =20
- static int bpf_tcp_ca_init_member(const struct btf_type *t,
+@@ -3463,7 +3463,7 @@ static int bpf_program__record_reloc(struct bpf_pro=
+gram *prog,
+ 		}
+ 		pr_debug("prog '%s': found extern #%d '%s' (sym %d) for insn #%u\n",
+ 			 prog->name, i, ext->name, ext->sym_idx, insn_idx);
+-		reloc_desc->type =3D RELO_EXTERN;
++		reloc_desc->type =3D RELO_EXTERN_VAR;
+ 		reloc_desc->insn_idx =3D insn_idx;
+ 		reloc_desc->sym_off =3D i; /* sym_off stores extern index */
+ 		return 0;
+@@ -6226,7 +6226,7 @@ bpf_object__relocate_data(struct bpf_object *obj, s=
+truct bpf_program *prog)
+ 			insn[0].imm =3D obj->maps[relo->map_idx].fd;
+ 			relo->processed =3D true;
+ 			break;
+-		case RELO_EXTERN:
++		case RELO_EXTERN_VAR:
+ 			ext =3D &obj->externs[relo->sym_off];
+ 			if (ext->type =3D=3D EXT_KCFG) {
+ 				insn[0].src_reg =3D BPF_PSEUDO_MAP_VALUE;
 --=20
 2.30.2
 
