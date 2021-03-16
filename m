@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 214FCC433E6
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84493C43381
 	for <bpf@archiver.kernel.org>; Tue, 16 Mar 2021 01:16:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EA39164F6E
-	for <bpf@archiver.kernel.org>; Tue, 16 Mar 2021 01:15:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 64A4664F8A
+	for <bpf@archiver.kernel.org>; Tue, 16 Mar 2021 01:16:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbhCPBP3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 15 Mar 2021 21:15:29 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:4362 "EHLO
+        id S232815AbhCPBPb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 15 Mar 2021 21:15:31 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:16514 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234221AbhCPBPB (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 15 Mar 2021 21:15:01 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12G19xke031472
-        for <bpf@vger.kernel.org>; Mon, 15 Mar 2021 18:15:01 -0700
+        by vger.kernel.org with ESMTP id S234266AbhCPBPN (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 15 Mar 2021 21:15:13 -0400
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12G1Dp3V032314
+        for <bpf@vger.kernel.org>; Mon, 15 Mar 2021 18:15:13 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=EzuRuZQ2asjPmqIWqIoYS058R+FHBVgE9k1Q34dQtIQ=;
- b=T6uH/Rmlu/7v6oaFqv/x/ClyF8KAICUxfBry/aTdLXgcmig8rHHH1Mi/yIvSkA1L15Br
- 7dYfAji4BE2uI0onYx1S5+U7WjPjrJRAHRPMzQFo58UGX4tVEjvFSggTC8LXRznoYzWP
- aGrLElfkOmkVlVVGRI+b0tDPFMFL618Q/aI= 
+ bh=DYrqcQQpzTMDIPeeijN+UI2y6v0Uo1s6H4h/RZofrtE=;
+ b=p1D9ZjoERtatyXmRl/M/BvyTR4gkRBS4WF+62aCawtlrco57BsTkEb0QaNux1G4CNx2+
+ 05sXfIR23CJH+uAzI6tY19fOQEnqBUO4/A377FhwqTkpugqkDrGJ32UKv/zFZHLWdLHO
+ wclCSHV9qzSNqYEIbibNKdu+aThGoUP6jFM= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 379ebu0ut3-2
+        by mx0a-00082601.pphosted.com with ESMTP id 379ee5gtg3-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 15 Mar 2021 18:15:01 -0700
-Received: from intmgw001.05.ash9.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Mon, 15 Mar 2021 18:15:13 -0700
+Received: from intmgw001.37.frc1.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Mon, 15 Mar 2021 18:14:59 -0700
+ 15.1.2176.2; Mon, 15 Mar 2021 18:15:11 -0700
 Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id A15BF2942B57; Mon, 15 Mar 2021 18:14:57 -0700 (PDT)
+        id 240CA2942B58; Mon, 15 Mar 2021 18:15:10 -0700 (PDT)
 From:   Martin KaFai Lau <kafai@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
         <netdev@vger.kernel.org>
-Subject: [PATCH bpf-next 13/15] bpf: selftests: Rename bictcp to bpf_cubic
-Date:   Mon, 15 Mar 2021 18:14:57 -0700
-Message-ID: <20210316011457.4180235-1-kafai@fb.com>
+Subject: [PATCH bpf-next 15/15] bpf: selftest: Add kfunc_call test
+Date:   Mon, 15 Mar 2021 18:15:10 -0700
+Message-ID: <20210316011510.4181765-1-kafai@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210316011336.4173585-1-kafai@fb.com>
 References: <20210316011336.4173585-1-kafai@fb.com>
@@ -56,124 +56,249 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
  definitions=2021-03-15_15:2021-03-15,2021-03-15 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0
- lowpriorityscore=0 malwarescore=0 bulkscore=0 impostorscore=0 mlxscore=0
- clxscore=1015 priorityscore=1501 mlxlogscore=657 suspectscore=0
- phishscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
+ impostorscore=0 mlxlogscore=999 mlxscore=0 phishscore=0 lowpriorityscore=0
+ suspectscore=0 bulkscore=0 priorityscore=1501 malwarescore=0 spamscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2103160005
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-As a similar chanage in the kernel, this patch gives the proper
-name to the bpf cubic.
+This patch adds two kernel function bpf_kfunc_call_test[12]() for the
+selftest's test_run purpose.  They will be allowed for tc_cls prog.
+
+The selftest calling the kernel function bpf_kfunc_call_test[12]()
+is also added in this patch.
 
 Signed-off-by: Martin KaFai Lau <kafai@fb.com>
 ---
- tools/testing/selftests/bpf/progs/bpf_cubic.c | 30 +++++++++----------
- 1 file changed, 15 insertions(+), 15 deletions(-)
+ net/bpf/test_run.c                            | 11 ++++
+ net/core/filter.c                             | 11 ++++
+ .../selftests/bpf/prog_tests/kfunc_call.c     | 61 +++++++++++++++++++
+ .../selftests/bpf/progs/kfunc_call_test.c     | 48 +++++++++++++++
+ .../bpf/progs/kfunc_call_test_subprog.c       | 31 ++++++++++
+ 5 files changed, 162 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/kfunc_call.c
+ create mode 100644 tools/testing/selftests/bpf/progs/kfunc_call_test.c
+ create mode 100644 tools/testing/selftests/bpf/progs/kfunc_call_test_sub=
+prog.c
 
-diff --git a/tools/testing/selftests/bpf/progs/bpf_cubic.c b/tools/testin=
-g/selftests/bpf/progs/bpf_cubic.c
-index 6939bfd8690f..33c4d2bded64 100644
---- a/tools/testing/selftests/bpf/progs/bpf_cubic.c
-+++ b/tools/testing/selftests/bpf/progs/bpf_cubic.c
-@@ -174,8 +174,8 @@ static __always_inline void bictcp_hystart_reset(stru=
-ct sock *sk)
-  * as long as it is used in one of the func ptr
-  * under SEC(".struct_ops").
-  */
--SEC("struct_ops/bictcp_init")
--void BPF_PROG(bictcp_init, struct sock *sk)
-+SEC("struct_ops/bpf_cubic_init")
-+void BPF_PROG(bpf_cubic_init, struct sock *sk)
- {
- 	struct bictcp *ca =3D inet_csk_ca(sk);
-=20
-@@ -192,7 +192,7 @@ void BPF_PROG(bictcp_init, struct sock *sk)
-  * The remaining tcp-cubic functions have an easier way.
-  */
- SEC("no-sec-prefix-bictcp_cwnd_event")
--void BPF_PROG(bictcp_cwnd_event, struct sock *sk, enum tcp_ca_event even=
-t)
-+void BPF_PROG(bpf_cubic_cwnd_event, struct sock *sk, enum tcp_ca_event e=
-vent)
- {
- 	if (event =3D=3D CA_EVENT_TX_START) {
- 		struct bictcp *ca =3D inet_csk_ca(sk);
-@@ -384,7 +384,7 @@ static __always_inline void bictcp_update(struct bict=
-cp *ca, __u32 cwnd,
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index 0abdd67f44b1..c1baab0c7d96 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -209,6 +209,17 @@ int noinline bpf_modify_return_test(int a, int *b)
+ 	*b +=3D 1;
+ 	return a + *b;
  }
++
++u64 noinline bpf_kfunc_call_test1(struct sock *sk, u32 a, u64 b, u32 c, =
+u64 d)
++{
++	return a + b + c + d;
++}
++
++int noinline bpf_kfunc_call_test2(struct sock *sk, u32 a, u32 b)
++{
++	return a + b;
++}
++
+ __diag_pop();
 =20
- /* Or simply use the BPF_STRUCT_OPS to avoid the SEC boiler plate. */
--void BPF_STRUCT_OPS(bictcp_cong_avoid, struct sock *sk, __u32 ack, __u32=
- acked)
-+void BPF_STRUCT_OPS(bpf_cubic_cong_avoid, struct sock *sk, __u32 ack, __=
-u32 acked)
- {
- 	struct tcp_sock *tp =3D tcp_sk(sk);
- 	struct bictcp *ca =3D inet_csk_ca(sk);
-@@ -403,7 +403,7 @@ void BPF_STRUCT_OPS(bictcp_cong_avoid, struct sock *s=
-k, __u32 ack, __u32 acked)
- 	tcp_cong_avoid_ai(tp, ca->cnt, acked);
- }
-=20
--__u32 BPF_STRUCT_OPS(bictcp_recalc_ssthresh, struct sock *sk)
-+__u32 BPF_STRUCT_OPS(bpf_cubic_recalc_ssthresh, struct sock *sk)
- {
- 	const struct tcp_sock *tp =3D tcp_sk(sk);
- 	struct bictcp *ca =3D inet_csk_ca(sk);
-@@ -420,7 +420,7 @@ __u32 BPF_STRUCT_OPS(bictcp_recalc_ssthresh, struct s=
-ock *sk)
- 	return max((tp->snd_cwnd * beta) / BICTCP_BETA_SCALE, 2U);
- }
-=20
--void BPF_STRUCT_OPS(bictcp_state, struct sock *sk, __u8 new_state)
-+void BPF_STRUCT_OPS(bpf_cubic_state, struct sock *sk, __u8 new_state)
- {
- 	if (new_state =3D=3D TCP_CA_Loss) {
- 		bictcp_reset(inet_csk_ca(sk));
-@@ -496,7 +496,7 @@ static __always_inline void hystart_update(struct soc=
-k *sk, __u32 delay)
- 	}
- }
-=20
--void BPF_STRUCT_OPS(bictcp_acked, struct sock *sk,
-+void BPF_STRUCT_OPS(bpf_cubic_acked, struct sock *sk,
- 		    const struct ack_sample *sample)
- {
- 	const struct tcp_sock *tp =3D tcp_sk(sk);
-@@ -525,7 +525,7 @@ void BPF_STRUCT_OPS(bictcp_acked, struct sock *sk,
- 		hystart_update(sk, delay);
- }
-=20
--__u32 BPF_STRUCT_OPS(tcp_reno_undo_cwnd, struct sock *sk)
-+__u32 BPF_STRUCT_OPS(bpf_cubic_undo_cwnd, struct sock *sk)
- {
- 	const struct tcp_sock *tp =3D tcp_sk(sk);
-=20
-@@ -534,12 +534,12 @@ __u32 BPF_STRUCT_OPS(tcp_reno_undo_cwnd, struct soc=
-k *sk)
-=20
- SEC(".struct_ops")
- struct tcp_congestion_ops cubic =3D {
--	.init		=3D (void *)bictcp_init,
--	.ssthresh	=3D (void *)bictcp_recalc_ssthresh,
--	.cong_avoid	=3D (void *)bictcp_cong_avoid,
--	.set_state	=3D (void *)bictcp_state,
--	.undo_cwnd	=3D (void *)tcp_reno_undo_cwnd,
--	.cwnd_event	=3D (void *)bictcp_cwnd_event,
--	.pkts_acked     =3D (void *)bictcp_acked,
-+	.init		=3D (void *)bpf_cubic_init,
-+	.ssthresh	=3D (void *)bpf_cubic_recalc_ssthresh,
-+	.cong_avoid	=3D (void *)bpf_cubic_cong_avoid,
-+	.set_state	=3D (void *)bpf_cubic_state,
-+	.undo_cwnd	=3D (void *)bpf_cubic_undo_cwnd,
-+	.cwnd_event	=3D (void *)bpf_cubic_cwnd_event,
-+	.pkts_acked     =3D (void *)bpf_cubic_acked,
- 	.name		=3D "bpf_cubic",
+ ALLOW_ERROR_INJECTION(bpf_modify_return_test, ERRNO);
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 10dac9dd5086..605fbbdd694b 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -9799,12 +9799,23 @@ const struct bpf_prog_ops sk_filter_prog_ops =3D =
+{
+ 	.test_run		=3D bpf_prog_test_run_skb,
  };
+=20
++BTF_SET_START(bpf_tc_cls_kfunc_ids)
++BTF_ID(func, bpf_kfunc_call_test1)
++BTF_ID(func, bpf_kfunc_call_test2)
++BTF_SET_END(bpf_tc_cls_kfunc_ids)
++
++static bool tc_cls_check_kern_func_call(u32 kfunc_id)
++{
++	return btf_id_set_contains(&bpf_tc_cls_kfunc_ids, kfunc_id);
++}
++
+ const struct bpf_verifier_ops tc_cls_act_verifier_ops =3D {
+ 	.get_func_proto		=3D tc_cls_act_func_proto,
+ 	.is_valid_access	=3D tc_cls_act_is_valid_access,
+ 	.convert_ctx_access	=3D tc_cls_act_convert_ctx_access,
+ 	.gen_prologue		=3D tc_cls_act_prologue,
+ 	.gen_ld_abs		=3D bpf_gen_ld_abs,
++	.check_kern_func_call	=3D tc_cls_check_kern_func_call,
+ };
+=20
+ const struct bpf_prog_ops tc_cls_act_prog_ops =3D {
+diff --git a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c b/tools/=
+testing/selftests/bpf/prog_tests/kfunc_call.c
+new file mode 100644
+index 000000000000..3850e6cc0a7d
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
+@@ -0,0 +1,61 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2021 Facebook */
++#include <test_progs.h>
++#include <network_helpers.h>
++#include "kfunc_call_test.skel.h"
++#include "kfunc_call_test_subprog.skel.h"
++
++static __u32 duration;
++
++static void test_main(void)
++{
++	struct kfunc_call_test *skel;
++	int prog_fd, retval, err;
++
++	skel =3D kfunc_call_test__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel"))
++		return;
++
++	prog_fd =3D bpf_program__fd(skel->progs.kfunc_call_test1);
++	err =3D bpf_prog_test_run(prog_fd, 1, &pkt_v4, sizeof(pkt_v4),
++				NULL, NULL, (__u32 *)&retval, &duration);
++
++	if (ASSERT_OK(err, "bpf_prog_test_run(test1)"))
++		ASSERT_EQ(retval, 12, "test1-retval");
++
++	prog_fd =3D bpf_program__fd(skel->progs.kfunc_call_test2);
++	err =3D bpf_prog_test_run(prog_fd, 1, &pkt_v4, sizeof(pkt_v4),
++				NULL, NULL, (__u32 *)&retval, &duration);
++	if (ASSERT_OK(err, "bpf_prog_test_run(test2)"))
++		ASSERT_EQ(retval, 3, "test2-retval");
++
++	kfunc_call_test__destroy(skel);
++}
++
++static void test_subprog(void)
++{
++	struct kfunc_call_test_subprog *skel;
++	int prog_fd, retval, err;
++
++	skel =3D kfunc_call_test_subprog__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel"))
++		return;
++
++	prog_fd =3D bpf_program__fd(skel->progs.kfunc_call_test1);
++	err =3D bpf_prog_test_run(prog_fd, 1, &pkt_v4, sizeof(pkt_v4),
++				NULL, NULL, (__u32 *)&retval, &duration);
++
++	if (ASSERT_OK(err, "bpf_prog_test_run(test1)"))
++		ASSERT_EQ(retval, 10, "test1-retval");
++
++	kfunc_call_test_subprog__destroy(skel);
++}
++
++void test_kfunc_call(void)
++{
++	if (test__start_subtest("main"))
++		test_main();
++
++	if (test__start_subtest("subprog"))
++		test_subprog();
++}
+diff --git a/tools/testing/selftests/bpf/progs/kfunc_call_test.c b/tools/=
+testing/selftests/bpf/progs/kfunc_call_test.c
+new file mode 100644
+index 000000000000..ea8c5266efd8
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/kfunc_call_test.c
+@@ -0,0 +1,48 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2021 Facebook */
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_tcp_helpers.h"
++
++extern __u64 bpf_kfunc_call_test1(struct sock *sk, __u32 a, __u64 b,
++				  __u32 c, __u64 d) __ksym;
++extern int bpf_kfunc_call_test2(struct sock *sk, __u32 a, __u32 b) __ksy=
+m;
++
++SEC("classifier/test2")
++int kfunc_call_test2(struct __sk_buff *skb)
++{
++	struct bpf_sock *sk =3D skb->sk;
++
++	if (!sk)
++		return -1;
++
++	sk =3D bpf_sk_fullsock(sk);
++	if (!sk)
++		return -1;
++
++	return bpf_kfunc_call_test2((struct sock *)sk, 1, 2);
++}
++
++SEC("classifier/test1")
++int kfunc_call_test1(struct __sk_buff *skb)
++{
++	struct bpf_sock *sk =3D skb->sk;
++	__u64 a =3D 1ULL << 32;
++	__u32 ret;
++
++	if (!sk)
++		return -1;
++
++	sk =3D bpf_sk_fullsock(sk);
++	if (!sk)
++		return -1;
++
++	a =3D bpf_kfunc_call_test1((struct sock *)sk, 1, a | 2, 3, a | 4);
++
++	ret =3D a >> 32;   /* ret should be 2 */
++	ret +=3D (__u32)a; /* ret should be 12 */
++
++	return ret;
++}
++
++char _license[] SEC("license") =3D "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/kfunc_call_test_subprog.c =
+b/tools/testing/selftests/bpf/progs/kfunc_call_test_subprog.c
+new file mode 100644
+index 000000000000..9bf66f8c826e
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/kfunc_call_test_subprog.c
+@@ -0,0 +1,31 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2021 Facebook */
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_tcp_helpers.h"
++
++extern __u64 bpf_kfunc_call_test1(struct sock *sk, __u32 a, __u64 b,
++				  __u32 c, __u64 d) __ksym;
++
++__attribute__ ((noinline))
++int f1(struct __sk_buff *skb)
++{
++	struct bpf_sock *sk =3D skb->sk;
++
++	if (!sk)
++		return -1;
++
++	sk =3D bpf_sk_fullsock(sk);
++	if (!sk)
++		return -1;
++
++	return (__u32)bpf_kfunc_call_test1((struct sock *)sk, 1, 2, 3, 4);
++}
++
++SEC("classifier/test1_subprog")
++int kfunc_call_test1(struct __sk_buff *skb)
++{
++	return f1(skb);
++}
++
++char _license[] SEC("license") =3D "GPL";
 --=20
 2.30.2
 
