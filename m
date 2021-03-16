@@ -7,454 +7,306 @@ X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F581C433E0
-	for <bpf@archiver.kernel.org>; Tue, 16 Mar 2021 01:14:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8AC4BC433E9
+	for <bpf@archiver.kernel.org>; Tue, 16 Mar 2021 01:14:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 671B264F6D
-	for <bpf@archiver.kernel.org>; Tue, 16 Mar 2021 01:14:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4061764F71
+	for <bpf@archiver.kernel.org>; Tue, 16 Mar 2021 01:14:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234162AbhCPBOY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 15 Mar 2021 21:14:24 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:55372 "EHLO
+        id S231983AbhCPBOZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 15 Mar 2021 21:14:25 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:9652 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234143AbhCPBN5 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 15 Mar 2021 21:13:57 -0400
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12G1AoY5016477
-        for <bpf@vger.kernel.org>; Mon, 15 Mar 2021 18:13:57 -0700
+        by vger.kernel.org with ESMTP id S234156AbhCPBOO (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 15 Mar 2021 21:14:14 -0400
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12G1E0J1032595
+        for <bpf@vger.kernel.org>; Mon, 15 Mar 2021 18:14:14 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=facebook;
- bh=xwwBwHqzy8q8MyRsfYvaHjpgtgOnPHWDwYSpwxXwFIs=;
- b=ePuyEhxnKFZgYEaytHAJ7UNJvspoyhbNEf593TiahX/1h1QqISgNi/hTenfx8CYA6I2v
- QDWUI8j1oQ79Uz/asNqPcbH9RZ5ZUmJYBTSsJp25U28tCFMhwOKATia/fiDxiehD3MsM
- SlECihwBd3rFtc/MZE5QfRZzgkd5mf7NVQI= 
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=O969AK0PTM9lmu7Aws6QAdpyJAyX3EsioEYFqBJ0jgw=;
+ b=TNhfFJPlUwMfhl93FKo1+TyxB0Isme7ccIS1AHkWTDBB0WRL5kbzJII9why9TAiPm1sR
+ lRpcsqIqmKWUth2ieO2lPSKHpHR06IPpaLu35IvEnjWuhDx3JrN25xJvb4GjroNZBWu8
+ OR+qYghgjgguizNzPvoSZKuWYboa9F7IAcU= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 379e3ursrf-1
+        by mx0a-00082601.pphosted.com with ESMTP id 379ee5gtcc-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 15 Mar 2021 18:13:57 -0700
-Received: from intmgw001.37.frc1.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Mon, 15 Mar 2021 18:14:14 -0700
+Received: from intmgw006.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Mon, 15 Mar 2021 18:13:55 -0700
+ 15.1.2176.2; Mon, 15 Mar 2021 18:14:11 -0700
 Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id D23CA2942B4F; Mon, 15 Mar 2021 18:13:48 -0700 (PDT)
+        id 951DE2942B57; Mon, 15 Mar 2021 18:14:07 -0700 (PDT)
 From:   Martin KaFai Lau <kafai@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
         <netdev@vger.kernel.org>
-Subject: [PATCH bpf-next 02/15] bpf: btf: Support parsing extern func
-Date:   Mon, 15 Mar 2021 18:13:48 -0700
-Message-ID: <20210316011348.4175708-1-kafai@fb.com>
+Subject: [PATCH bpf-next 05/15] bpf: Support kernel function call in x86-32
+Date:   Mon, 15 Mar 2021 18:14:07 -0700
+Message-ID: <20210316011407.4177113-1-kafai@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210316011336.4173585-1-kafai@fb.com>
 References: <20210316011336.4173585-1-kafai@fb.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
  definitions=2021-03-15_15:2021-03-15,2021-03-15 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
- bulkscore=0 phishscore=0 adultscore=0 suspectscore=0 impostorscore=0
- priorityscore=1501 clxscore=1015 lowpriorityscore=0 spamscore=0 mlxscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
+ impostorscore=0 mlxlogscore=971 mlxscore=0 phishscore=0 lowpriorityscore=0
+ suspectscore=0 bulkscore=0 priorityscore=1501 malwarescore=0 spamscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2103160005
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch makes BTF verifier to accept extern func. It is used for
-allowing bpf program to call a limited set of kernel functions
-in a later patch.
-
-When writing bpf prog, the extern kernel function needs
-to be declared under a ELF section (".ksyms") which is
-the same as the current extern kernel variables and that should
-keep its usage consistent without requiring to remember another
-section name.
-
-For example, in a bpf_prog.c:
-
-extern int foo(struct sock *) __attribute__((section(".ksyms")))
-
-[24] FUNC_PROTO '(anon)' ret_type_id=3D15 vlen=3D1
-	'(anon)' type_id=3D18
-[25] FUNC 'foo' type_id=3D24 linkage=3Dextern
-[ ... ]
-[33] DATASEC '.ksyms' size=3D0 vlen=3D1
-	type_id=3D25 offset=3D0 size=3D0
-
-LLVM will put the "func" type into the BTF datasec ".ksyms".
-The current "btf_datasec_check_meta()" assumes everything under
-it is a "var" and ensures it has non-zero size ("!vsi->size" test).
-The non-zero size check is not true for "func".  This patch postpones the
-"!vsi-size" test from "btf_datasec_check_meta()" to
-"btf_datasec_resolve()" which has all types collected to decide
-if a vsi is a "var" or a "func" and then enforce the "vsi->size"
-differently.
-
-If the datasec only has "func", its "t->size" could be zero.
-Thus, the current "!t->size" test is no longer valid.  The
-invalid "t->size" will still be caught by the later
-"last_vsi_end_off > t->size" check.   This patch also takes this
-chance to consolidate other "t->size" tests ("vsi->offset >=3D t->size"
-"vsi->size > t->size", and "t->size < sum") into the existing
-"last_vsi_end_off > t->size" test.
-
-The LLVM will also put those extern kernel function as an extern
-linkage func in the BTF:
-
-[24] FUNC_PROTO '(anon)' ret_type_id=3D15 vlen=3D1
-	'(anon)' type_id=3D18
-[25] FUNC 'foo' type_id=3D24 linkage=3Dextern
-
-This patch allows BTF_FUNC_EXTERN in btf_func_check_meta().
-Also extern kernel function declaration does not
-necessary have arg name. Another change in btf_func_check() is
-to allow extern function having no arg name.
-
-The btf selftest is adjusted accordingly.  New tests are also added.
-
-The required LLVM patch: https://reviews.llvm.org/D93563
+This patch adds kernel function call support to the x86-32 bpf jit.
 
 Signed-off-by: Martin KaFai Lau <kafai@fb.com>
 ---
- kernel/bpf/btf.c                             |  52 ++++---
- tools/testing/selftests/bpf/prog_tests/btf.c | 154 ++++++++++++++++++-
- 2 files changed, 178 insertions(+), 28 deletions(-)
+ arch/x86/net/bpf_jit_comp32.c | 198 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 198 insertions(+)
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 369faeddf1df..96cd24020a38 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -3439,7 +3439,7 @@ static s32 btf_func_check_meta(struct btf_verifier_en=
-v *env,
- 		return -EINVAL;
- 	}
+diff --git a/arch/x86/net/bpf_jit_comp32.c b/arch/x86/net/bpf_jit_comp32.=
+c
+index d17b67c69f89..f2ac36cf08ac 100644
+--- a/arch/x86/net/bpf_jit_comp32.c
++++ b/arch/x86/net/bpf_jit_comp32.c
+@@ -1390,6 +1390,19 @@ static inline void emit_push_r64(const u8 src[], u=
+8 **pprog)
+ 	*pprog =3D prog;
+ }
 =20
--	if (btf_type_vlen(t) > BTF_FUNC_GLOBAL) {
-+	if (btf_type_vlen(t) > BTF_FUNC_EXTERN) {
- 		btf_verifier_log_type(env, t, "Invalid func linkage");
- 		return -EINVAL;
- 	}
-@@ -3532,7 +3532,7 @@ static s32 btf_datasec_check_meta(struct btf_verifier=
-_env *env,
- 				  u32 meta_left)
- {
- 	const struct btf_var_secinfo *vsi;
--	u64 last_vsi_end_off =3D 0, sum =3D 0;
-+	u64 last_vsi_end_off =3D 0;
- 	u32 i, meta_needed;
-=20
- 	meta_needed =3D btf_type_vlen(t) * sizeof(*vsi);
-@@ -3543,11 +3543,6 @@ static s32 btf_datasec_check_meta(struct btf_verifie=
-r_env *env,
- 		return -EINVAL;
- 	}
-=20
--	if (!t->size) {
--		btf_verifier_log_type(env, t, "size =3D=3D 0");
--		return -EINVAL;
--	}
--
- 	if (btf_type_kflag(t)) {
- 		btf_verifier_log_type(env, t, "Invalid btf_info kind_flag");
- 		return -EINVAL;
-@@ -3569,19 +3564,13 @@ static s32 btf_datasec_check_meta(struct btf_verifi=
-er_env *env,
- 			return -EINVAL;
- 		}
-=20
--		if (vsi->offset < last_vsi_end_off || vsi->offset >=3D t->size) {
-+		if (vsi->offset < last_vsi_end_off) {
- 			btf_verifier_log_vsi(env, t, vsi,
- 					     "Invalid offset");
- 			return -EINVAL;
- 		}
-=20
--		if (!vsi->size || vsi->size > t->size) {
--			btf_verifier_log_vsi(env, t, vsi,
--					     "Invalid size");
--			return -EINVAL;
--		}
--
--		last_vsi_end_off =3D vsi->offset + vsi->size;
-+		last_vsi_end_off =3D (u64)vsi->offset + vsi->size;
- 		if (last_vsi_end_off > t->size) {
- 			btf_verifier_log_vsi(env, t, vsi,
- 					     "Invalid offset+size");
-@@ -3589,12 +3578,6 @@ static s32 btf_datasec_check_meta(struct btf_verifie=
-r_env *env,
- 		}
-=20
- 		btf_verifier_log_vsi(env, t, vsi, NULL);
--		sum +=3D vsi->size;
--	}
--
--	if (t->size < sum) {
--		btf_verifier_log_type(env, t, "Invalid btf_info size");
--		return -EINVAL;
- 	}
-=20
- 	return meta_needed;
-@@ -3611,9 +3594,28 @@ static int btf_datasec_resolve(struct btf_verifier_e=
-nv *env,
- 		u32 var_type_id =3D vsi->type, type_id, type_size =3D 0;
- 		const struct btf_type *var_type =3D btf_type_by_id(env->btf,
- 								 var_type_id);
--		if (!var_type || !btf_type_is_var(var_type)) {
-+		if (!var_type) {
-+			btf_verifier_log_vsi(env, v->t, vsi,
-+					     "type not found");
-+			return -EINVAL;
-+		}
++static void emit_push_r32(const u8 src[], u8 **pprog)
++{
++	u8 *prog =3D *pprog;
++	int cnt =3D 0;
 +
-+		if (btf_type_is_func(var_type)) {
-+			if (vsi->size || vsi->offset) {
-+				btf_verifier_log_vsi(env, v->t, vsi,
-+						     "Invalid size/offset");
-+				return -EINVAL;
-+			}
-+			continue;
-+		} else if (btf_type_is_var(var_type)) {
-+			if (!vsi->size) {
-+				btf_verifier_log_vsi(env, v->t, vsi,
-+						     "Invalid size");
-+				return -EINVAL;
-+			}
++	/* mov ecx,dword ptr [ebp+off] */
++	EMIT3(0x8B, add_2reg(0x40, IA32_EBP, IA32_ECX), STACK_VAR(src_lo));
++	/* push ecx */
++	EMIT1(0x51);
++
++	*pprog =3D prog;
++}
++
+ static u8 get_cond_jmp_opcode(const u8 op, bool is_cmp_lo)
+ {
+ 	u8 jmp_cond;
+@@ -1459,6 +1472,174 @@ static u8 get_cond_jmp_opcode(const u8 op, bool i=
+s_cmp_lo)
+ 	return jmp_cond;
+ }
+=20
++/* i386 kernel compiles with "-mregparm=3D3".  From gcc document:
++ *
++ * =3D=3D=3D=3D snippet =3D=3D=3D=3D
++ * regparm (number)
++ *	On x86-32 targets, the regparm attribute causes the compiler
++ *	to pass arguments number one to (number) if they are of integral
++ *	type in registers EAX, EDX, and ECX instead of on the stack.
++ *	Functions that take a variable number of arguments continue
++ *	to be passed all of their arguments on the stack.
++ * =3D=3D=3D=3D snippet =3D=3D=3D=3D
++ *
++ * The first three args of a function will be considered for
++ * putting into the 32bit register EAX, EDX, and ECX.
++ *
++ * Two 32bit registers are used to pass a 64bit arg.
++ *
++ * For example,
++ * void foo(u32 a, u32 b, u32 c, u32 d):
++ *	u32 a: EAX
++ *	u32 b: EDX
++ *	u32 c: ECX
++ *	u32 d: stack
++ *
++ * void foo(u64 a, u32 b, u32 c):
++ * 	u64 a: EAX (lo32) EDX (hi32)
++ *	u32 b: ECX
++ *	u32 c: stack
++ *
++ * void foo(u32 a, u64 b, u32 c):
++ *	u32 a: EAX
++ *	u64 b: EDX (lo32) ECX (hi32)
++ *	u32 c: stack
++ *
++ * void foo(u32 a, u32 b, u64 c):
++ *	u32 a: EAX
++ *	u32 b: EDX
++ *	u64 c: stack
++ *
++ * The return value will be stored in the EAX (and EDX for 64bit value).
++ *
++ * For example,
++ * u32 foo(u32 a, u32 b, u32 c):
++ *	return value: EAX
++ *
++ * u64 foo(u32 a, u32 b, u32 c):
++ *	return value: EAX (lo32) EDX (hi32)
++ *
++ * Notes:
++ *	The verifier only accepts function having integer and pointers
++ *	as its args and return value, so it does not have
++ *	struct-by-value.
++ *
++ * emit_kfunc_call() finds out the btf_func_model by calling
++ * bpf_jit_find_kern_func_model().  A btf_func_model
++ * has the details about the number of args, size of each arg,
++ * and the size of the return value.
++ *
++ * It first decides how many args can be passed by EAX, EDX, and ECX.
++ * That will decide what args should be pushed to the stack:
++ * [first_stack_regno, last_stack_regno] are the bpf regnos
++ * that should be pushed to the stack.
++ *
++ * It will first push all args to the stack because the push
++ * will need to use ECX.  Then, it moves
++ * [BPF_REG_1, first_stack_regno) to EAX, EDX, and ECX.
++ *
++ * When emitting a call (0xE8), it needs to figure out
++ * the jmp_offset relative to the jit-insn address immediately
++ * following the call (0xE8) instruction.  At this point, it knows
++ * the end of the jit-insn address after completely translated the
++ * current (BPF_JMP | BPF_CALL) bpf-insn.  It is passed as "end_addr"
++ * to the emit_kfunc_call().  Thus, it can learn the "immediate-follow-c=
+all"
++ * address by figuring out how many jit-insn is generated between
++ * the call (0xE8) and the end_addr:
++ *	- 0-1 jit-insn (3 bytes each) to restore the esp pointer if there
++ *	  is arg pushed to the stack.
++ *	- 0-2 jit-insns (3 bytes each) to handle the return value.
++ */
++static int emit_kfunc_call(const struct bpf_prog *bpf_prog, u8 *end_addr=
+,
++			   const struct bpf_insn *insn, u8 **pprog)
++{
++	const u8 arg_regs[] =3D { IA32_EAX, IA32_EDX, IA32_ECX };
++	int i, cnt =3D 0, first_stack_regno, last_stack_regno;
++	int free_arg_regs =3D ARRAY_SIZE(arg_regs);
++	const struct btf_func_model *fm;
++	int bytes_in_stack =3D 0;
++	const u8 *cur_arg_reg;
++	u8 *prog =3D *pprog;
++	s64 jmp_offset;
++
++	fm =3D bpf_jit_find_kern_func_model(bpf_prog, insn);
++	if (!fm)
++		return -EINVAL;
++
++	first_stack_regno =3D BPF_REG_1;
++	for (i =3D 0; i < fm->nr_args; i++) {
++		int regs_needed =3D fm->arg_size[i] > sizeof(u32) ? 2 : 1;
++
++		if (regs_needed > free_arg_regs)
++			break;
++
++		free_arg_regs -=3D regs_needed;
++		first_stack_regno++;
++	}
++
++	/* Push the args to the stack */
++	last_stack_regno =3D BPF_REG_0 + fm->nr_args;
++	for (i =3D last_stack_regno; i >=3D first_stack_regno; i--) {
++		if (fm->arg_size[i - 1] > sizeof(u32)) {
++			emit_push_r64(bpf2ia32[i], &prog);
++			bytes_in_stack +=3D 8;
 +		} else {
- 			btf_verifier_log_vsi(env, v->t, vsi,
--					     "Not a VAR kind member");
-+					     "Neither a VAR nor a FUNC");
- 			return -EINVAL;
- 		}
-=20
-@@ -3849,9 +3851,11 @@ static int btf_func_check(struct btf_verifier_env *e=
-nv,
- 	const struct btf_param *args;
- 	const struct btf *btf;
- 	u16 nr_args, i;
-+	bool is_extern;
-=20
- 	btf =3D env->btf;
- 	proto_type =3D btf_type_by_id(btf, t->type);
-+	is_extern =3D btf_type_vlen(t) =3D=3D BTF_FUNC_EXTERN;
-=20
- 	if (!proto_type || !btf_type_is_func_proto(proto_type)) {
- 		btf_verifier_log_type(env, t, "Invalid type_id");
-@@ -3861,7 +3865,7 @@ static int btf_func_check(struct btf_verifier_env *en=
-v,
- 	args =3D (const struct btf_param *)(proto_type + 1);
- 	nr_args =3D btf_type_vlen(proto_type);
- 	for (i =3D 0; i < nr_args; i++) {
--		if (!args[i].name_off && args[i].type) {
-+		if (!is_extern && !args[i].name_off && args[i].type) {
- 			btf_verifier_log_type(env, t, "Invalid arg#%u", i + 1);
- 			return -EINVAL;
- 		}
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing/s=
-elftests/bpf/prog_tests/btf.c
-index 0457ae32b270..e469482833b2 100644
---- a/tools/testing/selftests/bpf/prog_tests/btf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/btf.c
-@@ -498,7 +498,7 @@ static struct btf_raw_test raw_tests[] =3D {
- 	.value_type_id =3D 7,
- 	.max_entries =3D 1,
- 	.btf_load_err =3D true,
--	.err_str =3D "Invalid size",
-+	.err_str =3D "Invalid offset+size",
- },
++			emit_push_r32(bpf2ia32[i], &prog);
++			bytes_in_stack +=3D 4;
++		}
++	}
++
++	cur_arg_reg =3D &arg_regs[0];
++	for (i =3D BPF_REG_1; i < first_stack_regno; i++) {
++		/* mov e[adc]x,dword ptr [ebp+off] */
++		EMIT3(0x8B, add_2reg(0x40, IA32_EBP, *cur_arg_reg++),
++		      STACK_VAR(bpf2ia32[i][0]));
++		if (fm->arg_size[i - 1] > sizeof(u32))
++			/* mov e[adc]x,dword ptr [ebp+off] */
++			EMIT3(0x8B, add_2reg(0x40, IA32_EBP, *cur_arg_reg++),
++			      STACK_VAR(bpf2ia32[i][1]));
++	}
++
++	if (bytes_in_stack)
++		/* add esp,"bytes_in_stack" */
++		end_addr -=3D 3;
++
++	/* mov dword ptr [ebp+off],edx */
++	if (fm->ret_size > sizeof(u32))
++		end_addr -=3D 3;
++
++	/* mov dword ptr [ebp+off],eax */
++	if (fm->ret_size)
++		end_addr -=3D 3;
++
++	jmp_offset =3D (u8 *)__bpf_call_base + insn->imm - end_addr;
++	if (!is_simm32(jmp_offset)) {
++		pr_err("unsupported BPF kernel function jmp_offset:%lld\n",
++		       jmp_offset);
++		return -EINVAL;
++	}
++
++	EMIT1_off32(0xE8, jmp_offset);
++
++	if (fm->ret_size)
++		/* mov dword ptr [ebp+off],eax */
++		EMIT3(0x89, add_2reg(0x40, IA32_EBP, IA32_EAX),
++		      STACK_VAR(bpf2ia32[BPF_REG_0][0]));
++
++	if (fm->ret_size > sizeof(u32))
++		/* mov dword ptr [ebp+off],edx */
++		EMIT3(0x89, add_2reg(0x40, IA32_EBP, IA32_EDX),
++		      STACK_VAR(bpf2ia32[BPF_REG_0][1]));
++
++	if (bytes_in_stack)
++		/* add esp,"bytes_in_stack" */
++		EMIT3(0x83, add_1reg(0xC0, IA32_ESP), bytes_in_stack);
++
++	*pprog =3D prog;
++
++	return 0;
++}
++
+ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
+ 		  int oldproglen, struct jit_context *ctx)
  {
- 	.descr =3D "global data test #10, invalid var size",
-@@ -696,7 +696,7 @@ static struct btf_raw_test raw_tests[] =3D {
- 	.err_str =3D "Invalid offset",
- },
- {
--	.descr =3D "global data test #15, not var kind",
-+	.descr =3D "global data test #15, not var/func kind",
- 	.raw_types =3D {
- 		/* int */
- 		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
-@@ -716,7 +716,7 @@ static struct btf_raw_test raw_tests[] =3D {
- 	.value_type_id =3D 3,
- 	.max_entries =3D 1,
- 	.btf_load_err =3D true,
--	.err_str =3D "Not a VAR kind member",
-+	.err_str =3D "Neither a VAR nor a FUNC",
- },
- {
- 	.descr =3D "global data test #16, invalid var referencing sec",
-@@ -2803,7 +2803,7 @@ static struct btf_raw_test raw_tests[] =3D {
- 			BTF_FUNC_PROTO_ARG_ENC(NAME_TBD, 1),
- 			BTF_FUNC_PROTO_ARG_ENC(NAME_TBD, 2),
- 		/* void func(int a, unsigned int b) */
--		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_FUNC, 0, 2), 3), 	/* [4] */
-+		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_FUNC, 0, 3), 3), 	/* [4] */
- 		BTF_END_RAW,
- 	},
- 	.str_sec =3D "\0a\0b\0func",
-@@ -3531,6 +3531,152 @@ static struct btf_raw_test raw_tests[] =3D {
- 	.max_entries =3D 1,
- },
+@@ -1888,6 +2069,18 @@ static int do_jit(struct bpf_prog *bpf_prog, int *=
+addrs, u8 *image,
+ 			if (insn->src_reg =3D=3D BPF_PSEUDO_CALL)
+ 				goto notyet;
 =20
-+{
-+	.descr =3D "datasec: func only",
-+	.raw_types =3D {
-+		/* int */
-+		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
-+		/* void (*)(void) */
-+		BTF_FUNC_PROTO_ENC(0, 0),		/* [2] */
-+		BTF_FUNC_ENC(NAME_NTH(1), 2),		/* [3] */
-+		BTF_FUNC_ENC(NAME_NTH(2), 2),		/* [4] */
-+		/* .ksym section */
-+		BTF_TYPE_ENC(NAME_NTH(3), BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 2), 0), /* [=
-5] */
-+		BTF_VAR_SECINFO_ENC(3, 0, 0),
-+		BTF_VAR_SECINFO_ENC(4, 0, 0),
-+		BTF_END_RAW,
-+	},
-+	BTF_STR_SEC("\0foo1\0foo2\0.ksym\0"),
-+	.map_type =3D BPF_MAP_TYPE_ARRAY,
-+	.key_size =3D sizeof(int),
-+	.value_size =3D sizeof(int),
-+	.key_type_id =3D 1,
-+	.value_type_id =3D 1,
-+	.max_entries =3D 1,
-+},
++			if (insn->src_reg =3D=3D BPF_PSEUDO_KFUNC_CALL) {
++				int err;
 +
-+{
-+	.descr =3D "datasec: func and var",
-+	.raw_types =3D {
-+		/* int */
-+		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
-+		/* void (*)(void) */
-+		BTF_FUNC_PROTO_ENC(0, 0),		/* [2] */
-+		BTF_FUNC_ENC(NAME_NTH(1), 2),		/* [3] */
-+		BTF_FUNC_ENC(NAME_NTH(2), 2),		/* [4] */
-+		/* int */
-+		BTF_VAR_ENC(NAME_NTH(4), 1, 0),		/* [5] */
-+		BTF_VAR_ENC(NAME_NTH(5), 1, 0),		/* [6] */
-+		/* .ksym section */
-+		BTF_TYPE_ENC(NAME_NTH(3), BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 4), 8), /* [=
-7] */
-+		BTF_VAR_SECINFO_ENC(3, 0, 0),
-+		BTF_VAR_SECINFO_ENC(4, 0, 0),
-+		BTF_VAR_SECINFO_ENC(5, 0, 4),
-+		BTF_VAR_SECINFO_ENC(6, 4, 4),
-+		BTF_END_RAW,
-+	},
-+	BTF_STR_SEC("\0foo1\0foo2\0.ksym\0a\0b\0"),
-+	.map_type =3D BPF_MAP_TYPE_ARRAY,
-+	.key_size =3D sizeof(int),
-+	.value_size =3D sizeof(int),
-+	.key_type_id =3D 1,
-+	.value_type_id =3D 1,
-+	.max_entries =3D 1,
-+},
++				err =3D emit_kfunc_call(bpf_prog,
++						      image + addrs[i],
++						      insn, &prog);
 +
-+{
-+	.descr =3D "datasec: func and var, invalid size/offset for func",
-+	.raw_types =3D {
-+		/* int */
-+		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
-+		/* void (*)(void) */
-+		BTF_FUNC_PROTO_ENC(0, 0),		/* [2] */
-+		BTF_FUNC_ENC(NAME_NTH(1), 2),		/* [3] */
-+		BTF_FUNC_ENC(NAME_NTH(2), 2),		/* [4] */
-+		/* int */
-+		BTF_VAR_ENC(NAME_NTH(4), 1, 0),		/* [5] */
-+		BTF_VAR_ENC(NAME_NTH(5), 1, 0),		/* [6] */
-+		/* .ksym section */
-+		BTF_TYPE_ENC(NAME_NTH(3), BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 4), 8), /* [=
-7] */
-+		BTF_VAR_SECINFO_ENC(3, 0, 0),
-+		BTF_VAR_SECINFO_ENC(5, 0, 4),
-+		BTF_VAR_SECINFO_ENC(4, 4, 0),	/* func has non zero vsi->offset */
-+		BTF_VAR_SECINFO_ENC(6, 4, 4),
-+		BTF_END_RAW,
-+	},
-+	BTF_STR_SEC("\0foo1\0foo2\0.ksym\0a\0b\0"),
-+	.map_type =3D BPF_MAP_TYPE_ARRAY,
-+	.key_size =3D sizeof(int),
-+	.value_size =3D sizeof(int),
-+	.key_type_id =3D 1,
-+	.value_type_id =3D 1,
-+	.max_entries =3D 1,
-+	.btf_load_err =3D true,
-+	.err_str =3D "Invalid size/offset",
-+},
++				if (err)
++					return err;
++				break;
++			}
 +
-+{
-+	.descr =3D "datasec: func and var, datasec size 0",
-+	.raw_types =3D {
-+		/* int */
-+		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
-+		/* void (*)(void) */
-+		BTF_FUNC_PROTO_ENC(0, 0),		/* [2] */
-+		BTF_FUNC_ENC(NAME_NTH(1), 2),		/* [3] */
-+		BTF_FUNC_ENC(NAME_NTH(2), 2),		/* [4] */
-+		/* int */
-+		BTF_VAR_ENC(NAME_NTH(4), 1, 0),		/* [5] */
-+		BTF_VAR_ENC(NAME_NTH(5), 1, 0),		/* [6] */
-+		/* .ksym section */
-+		BTF_TYPE_ENC(NAME_NTH(3), BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 4), 0), /* [=
-7] */
-+		BTF_VAR_SECINFO_ENC(3, 0, 0),
-+		BTF_VAR_SECINFO_ENC(4, 0, 0),
-+		BTF_VAR_SECINFO_ENC(5, 0, 4),
-+		BTF_VAR_SECINFO_ENC(6, 4, 4),
-+		BTF_END_RAW,
-+	},
-+	BTF_STR_SEC("\0foo1\0foo2\0.ksym\0a\0b\0"),
-+	.map_type =3D BPF_MAP_TYPE_ARRAY,
-+	.key_size =3D sizeof(int),
-+	.value_size =3D sizeof(int),
-+	.key_type_id =3D 1,
-+	.value_type_id =3D 1,
-+	.max_entries =3D 1,
-+	.btf_load_err =3D true,
-+	.err_str =3D "Invalid offset+size",
-+},
+ 			func =3D (u8 *) __bpf_call_base + imm32;
+ 			jmp_offset =3D func - (image + addrs[i]);
+=20
+@@ -2393,3 +2586,8 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_pro=
+g *prog)
+ 					   tmp : orig_prog);
+ 	return prog;
+ }
 +
++bool bpf_jit_supports_kfunc_call(void)
 +{
-+	.descr =3D "datasec: func and var, zero vsi->size for var",
-+	.raw_types =3D {
-+		/* int */
-+		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
-+		/* void (*)(void) */
-+		BTF_FUNC_PROTO_ENC(0, 0),		/* [2] */
-+		BTF_FUNC_ENC(NAME_NTH(1), 2),		/* [3] */
-+		BTF_FUNC_ENC(NAME_NTH(2), 2),		/* [4] */
-+		/* int */
-+		BTF_VAR_ENC(NAME_NTH(4), 1, 0),		/* [5] */
-+		BTF_VAR_ENC(NAME_NTH(5), 1, 0),		/* [6] */
-+		/* .ksym section */
-+		BTF_TYPE_ENC(NAME_NTH(3), BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 4), 8), /* [=
-7] */
-+		BTF_VAR_SECINFO_ENC(3, 0, 0),
-+		BTF_VAR_SECINFO_ENC(4, 0, 0),
-+		BTF_VAR_SECINFO_ENC(5, 0, 0),	/* var has zero vsi->size */
-+		BTF_VAR_SECINFO_ENC(6, 0, 4),
-+		BTF_END_RAW,
-+	},
-+	BTF_STR_SEC("\0foo1\0foo2\0.ksym\0a\0b\0"),
-+	.map_type =3D BPF_MAP_TYPE_ARRAY,
-+	.key_size =3D sizeof(int),
-+	.value_size =3D sizeof(int),
-+	.key_type_id =3D 1,
-+	.value_type_id =3D 1,
-+	.max_entries =3D 1,
-+	.btf_load_err =3D true,
-+	.err_str =3D "Invalid size",
-+},
-+
- {
- 	.descr =3D "float test #1, well-formed",
- 	.raw_types =3D {
++	return true;
++}
 --=20
 2.30.2
 
