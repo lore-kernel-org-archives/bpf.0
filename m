@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BB63C433E9
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 37947C4332B
 	for <bpf@archiver.kernel.org>; Tue, 16 Mar 2021 01:15:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A5E9564F69
+	by mail.kernel.org (Postfix) with ESMTP id E73ED64F76
 	for <bpf@archiver.kernel.org>; Tue, 16 Mar 2021 01:15:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234183AbhCPBO6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 15 Mar 2021 21:14:58 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:49208 "EHLO
+        id S234204AbhCPBO7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 15 Mar 2021 21:14:59 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:26790 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234210AbhCPBOg (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 15 Mar 2021 21:14:36 -0400
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12G1E9wh027350
-        for <bpf@vger.kernel.org>; Mon, 15 Mar 2021 18:14:36 -0700
+        by vger.kernel.org with ESMTP id S233469AbhCPBOu (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 15 Mar 2021 21:14:50 -0400
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12G19dKR028854
+        for <bpf@vger.kernel.org>; Mon, 15 Mar 2021 18:14:50 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=F6CUvYk8IHbxWxopaZr46T24w8OFyqZTCCuT6Yk2rQc=;
- b=h6PhX61azdhARLt+jKxuxkuZTuRkZJIab7IEnal2W2cCHnSdfFB5mUfn6iNwAbyPceZX
- 0g/1OJEHUDvFlLvPa3M11Ea44/qYE8YxtgWoYTWd49hTlNycLaWrNNmeqf2nZJeKbeYe
- b9qi65LuVpgtMVg67vymVV7Yc8DFSsHWWuI= 
+ bh=mkCKkgL+OtSu/PPJQIqEm8bTwX4NBiLVBCZNqDtJE3A=;
+ b=F5BXqddPhH7s1WLeuFNoZg7oJgDpkhFs90/ksrXLcg/xoxw//RiGp8HfT875wLUZeZm3
+ sahtxPEgr0+bj4xEBy8bRV0xtGhJCwSp5Xz6CTXarWVrOgZ3HiBu+JPXlsKJHf7+VCF6
+ m4wsZO5oCoU4MrXvDyfhyyxmsdvOgCPWjwY= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 37a6brvneb-1
+        by mx0a-00082601.pphosted.com with ESMTP id 379dx7gujb-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 15 Mar 2021 18:14:36 -0700
-Received: from intmgw002.06.ash9.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Mon, 15 Mar 2021 18:14:50 -0700
+Received: from intmgw001.06.ash9.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Mon, 15 Mar 2021 18:14:35 -0700
+ 15.1.2176.2; Mon, 15 Mar 2021 18:14:49 -0700
 Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id 9B8852942B57; Mon, 15 Mar 2021 18:14:32 -0700 (PDT)
+        id 1FE462942B57; Mon, 15 Mar 2021 18:14:45 -0700 (PDT)
 From:   Martin KaFai Lau <kafai@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
         <netdev@vger.kernel.org>
-Subject: [PATCH bpf-next 09/15] libbpf: Refactor codes for finding btf id of a kernel symbol
-Date:   Mon, 15 Mar 2021 18:14:32 -0700
-Message-ID: <20210316011432.4178797-1-kafai@fb.com>
+Subject: [PATCH bpf-next 11/15] libbpf: Record extern sym relocation first
+Date:   Mon, 15 Mar 2021 18:14:45 -0700
+Message-ID: <20210316011445.4179633-1-kafai@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210316011336.4173585-1-kafai@fb.com>
 References: <20210316011336.4173585-1-kafai@fb.com>
@@ -56,126 +56,99 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
  definitions=2021-03-15_15:2021-03-15,2021-03-15 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
- adultscore=0 suspectscore=0 phishscore=0 mlxscore=0 mlxlogscore=999
- priorityscore=1501 lowpriorityscore=0 bulkscore=0 clxscore=1015
- spamscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2009150000 definitions=main-2103160005
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 spamscore=0
+ suspectscore=0 adultscore=0 mlxlogscore=835 clxscore=1015 impostorscore=0
+ malwarescore=0 bulkscore=0 phishscore=0 priorityscore=1501
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2103160005
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch refactors code, that finds kernel btf_id by kind
-and symbol name, to a new function find_ksym_btf_id().
-
-It also adds a new helper __btf_kind_str() to return
-a string by the numeric kind value.
+This patch records the extern sym relocs first before recording
+subprog relocs.  The later patch will have relocs for extern
+kernel function call which is also using BPF_JMP | BPF_CALL.
+It will be easier to handle the extern symbols first in
+the later patch.
 
 Signed-off-by: Martin KaFai Lau <kafai@fb.com>
 ---
- tools/lib/bpf/libbpf.c | 44 +++++++++++++++++++++++++++++++-----------
- 1 file changed, 33 insertions(+), 11 deletions(-)
+ tools/lib/bpf/libbpf.c | 50 +++++++++++++++++++++---------------------
+ 1 file changed, 25 insertions(+), 25 deletions(-)
 
 diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 7d5f9b7877bc..8355b786b3db 100644
+index 8f924aece736..0a60fcb2fba2 100644
 --- a/tools/lib/bpf/libbpf.c
 +++ b/tools/lib/bpf/libbpf.c
-@@ -1929,9 +1929,9 @@ resolve_func_ptr(const struct btf *btf, __u32 id, _=
-_u32 *res_id)
- 	return btf_is_func_proto(t) ? t : NULL;
- }
+@@ -3416,31 +3416,7 @@ static int bpf_program__record_reloc(struct bpf_pr=
+ogram *prog,
 =20
--static const char *btf_kind_str(const struct btf_type *t)
-+static const char *__btf_kind_str(__u16 kind)
- {
--	switch (btf_kind(t)) {
-+	switch (kind) {
- 	case BTF_KIND_UNKN: return "void";
- 	case BTF_KIND_INT: return "int";
- 	case BTF_KIND_PTR: return "ptr";
-@@ -1953,6 +1953,11 @@ static const char *btf_kind_str(const struct btf_t=
-ype *t)
- 	}
- }
+ 	reloc_desc->processed =3D false;
 =20
-+static const char *btf_kind_str(const struct btf_type *t)
-+{
-+	return __btf_kind_str(btf_kind(t));
-+}
-+
- /*
-  * Fetch integer attribute of BTF map definition. Such attributes are
-  * represented using a pointer to an array, in which dimensionality of a=
-rray
-@@ -7403,18 +7408,17 @@ static int bpf_object__read_kallsyms_file(struct =
-bpf_object *obj)
- 	return err;
- }
-=20
--static int bpf_object__resolve_ksym_var_btf_id(struct bpf_object *obj,
--					       struct extern_desc *ext)
-+static int find_ksym_btf_id(struct bpf_object *obj, const char *ksym_nam=
-e,
-+			    __u16 kind, struct btf **res_btf,
-+			    int *res_btf_fd)
- {
--	const struct btf_type *targ_var, *targ_type;
--	__u32 targ_type_id, local_type_id;
--	const char *targ_var_name;
- 	int i, id, btf_fd, err;
- 	struct btf *btf;
-=20
- 	btf =3D obj->btf_vmlinux;
- 	btf_fd =3D 0;
--	id =3D btf__find_by_name_kind(btf, ext->name, BTF_KIND_VAR);
-+	id =3D btf__find_by_name_kind(btf, ksym_name, kind);
-+
- 	if (id =3D=3D -ENOENT) {
- 		err =3D load_module_btfs(obj);
- 		if (err)
-@@ -7424,17 +7428,35 @@ static int bpf_object__resolve_ksym_var_btf_id(st=
-ruct bpf_object *obj,
- 			btf =3D obj->btf_modules[i].btf;
- 			/* we assume module BTF FD is always >0 */
- 			btf_fd =3D obj->btf_modules[i].fd;
--			id =3D btf__find_by_name_kind(btf, ext->name, BTF_KIND_VAR);
-+			id =3D btf__find_by_name_kind(btf, ksym_name, kind);
- 			if (id !=3D -ENOENT)
- 				break;
- 		}
- 	}
- 	if (id <=3D 0) {
--		pr_warn("extern (var ksym) '%s': failed to find BTF ID in kernel BTF(s=
-).\n",
--			ext->name);
-+		pr_warn("extern (%s ksym) '%s': failed to find BTF ID in kernel BTF(s)=
-.\n",
-+			__btf_kind_str(kind), ksym_name);
- 		return -ESRCH;
+-	/* sub-program call relocation */
+-	if (insn->code =3D=3D (BPF_JMP | BPF_CALL)) {
+-		if (insn->src_reg !=3D BPF_PSEUDO_CALL) {
+-			pr_warn("prog '%s': incorrect bpf_call opcode\n", prog->name);
+-			return -LIBBPF_ERRNO__RELOC;
+-		}
+-		/* text_shndx can be 0, if no default "main" program exists */
+-		if (!shdr_idx || shdr_idx !=3D obj->efile.text_shndx) {
+-			sym_sec_name =3D elf_sec_name(obj, elf_sec_by_idx(obj, shdr_idx));
+-			pr_warn("prog '%s': bad call relo against '%s' in section '%s'\n",
+-				prog->name, sym_name, sym_sec_name);
+-			return -LIBBPF_ERRNO__RELOC;
+-		}
+-		if (sym->st_value % BPF_INSN_SZ) {
+-			pr_warn("prog '%s': bad call relo against '%s' at offset %zu\n",
+-				prog->name, sym_name, (size_t)sym->st_value);
+-			return -LIBBPF_ERRNO__RELOC;
+-		}
+-		reloc_desc->type =3D RELO_CALL;
+-		reloc_desc->insn_idx =3D insn_idx;
+-		reloc_desc->sym_off =3D sym->st_value;
+-		return 0;
+-	}
+-
+-	if (!is_ldimm64(insn)) {
++	if (insn->code !=3D (BPF_JMP | BPF_CALL) && !is_ldimm64(insn)) {
+ 		pr_warn("prog '%s': invalid relo against '%s' for insns[%d].code 0x%x\=
+n",
+ 			prog->name, sym_name, insn_idx, insn->code);
+ 		return -LIBBPF_ERRNO__RELOC;
+@@ -3469,6 +3445,30 @@ static int bpf_program__record_reloc(struct bpf_pr=
+ogram *prog,
+ 		return 0;
  	}
 =20
-+	*res_btf =3D btf;
-+	*res_btf_fd =3D btf_fd;
-+	return id;
-+}
++	/* sub-program call relocation */
++	if (insn->code =3D=3D (BPF_JMP | BPF_CALL)) {
++		if (insn->src_reg !=3D BPF_PSEUDO_CALL) {
++			pr_warn("prog '%s': incorrect bpf_call opcode\n", prog->name);
++			return -LIBBPF_ERRNO__RELOC;
++		}
++		/* text_shndx can be 0, if no default "main" program exists */
++		if (!shdr_idx || shdr_idx !=3D obj->efile.text_shndx) {
++			sym_sec_name =3D elf_sec_name(obj, elf_sec_by_idx(obj, shdr_idx));
++			pr_warn("prog '%s': bad call relo against '%s' in section '%s'\n",
++				prog->name, sym_name, sym_sec_name);
++			return -LIBBPF_ERRNO__RELOC;
++		}
++		if (sym->st_value % BPF_INSN_SZ) {
++			pr_warn("prog '%s': bad call relo against '%s' at offset %zu\n",
++				prog->name, sym_name, (size_t)sym->st_value);
++			return -LIBBPF_ERRNO__RELOC;
++		}
++		reloc_desc->type =3D RELO_CALL;
++		reloc_desc->insn_idx =3D insn_idx;
++		reloc_desc->sym_off =3D sym->st_value;
++		return 0;
++	}
 +
-+static int bpf_object__resolve_ksym_var_btf_id(struct bpf_object *obj,
-+					       struct extern_desc *ext)
-+{
-+	const struct btf_type *targ_var, *targ_type;
-+	__u32 targ_type_id, local_type_id;
-+	const char *targ_var_name;
-+	int id, btf_fd =3D 0, err;
-+	struct btf *btf =3D NULL;
-+
-+	id =3D find_ksym_btf_id(obj, ext->name, BTF_KIND_VAR, &btf, &btf_fd);
-+	if (id < 0)
-+		return id;
-+
- 	/* find local type_id */
- 	local_type_id =3D ext->ksym.type_id;
-=20
+ 	if (!shdr_idx || shdr_idx >=3D SHN_LORESERVE) {
+ 		pr_warn("prog '%s': invalid relo against '%s' in special section 0x%x;=
+ forgot to initialize global var?..\n",
+ 			prog->name, sym_name, shdr_idx);
 --=20
 2.30.2
 
