@@ -2,83 +2,130 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.0 required=3.0 tests=BAYES_00,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DE4EC433E9
-	for <bpf@archiver.kernel.org>; Wed, 17 Mar 2021 20:06:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 042FDC433E0
+	for <bpf@archiver.kernel.org>; Wed, 17 Mar 2021 20:48:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BCC0464F30
-	for <bpf@archiver.kernel.org>; Wed, 17 Mar 2021 20:06:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A363564E98
+	for <bpf@archiver.kernel.org>; Wed, 17 Mar 2021 20:48:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233331AbhCQUFk convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 17 Mar 2021 16:05:40 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:34490 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233425AbhCQUFR (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 17 Mar 2021 16:05:17 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12HK09ob000740
-        for <bpf@vger.kernel.org>; Wed, 17 Mar 2021 13:05:16 -0700
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 37bgdhbbap-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 17 Mar 2021 13:05:16 -0700
-Received: from intmgw001.06.ash9.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Wed, 17 Mar 2021 13:05:15 -0700
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id B17092ED245B; Wed, 17 Mar 2021 13:05:11 -0700 (PDT)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH v3 bpf-next 0/2] Provide NULL and KERNEL_VERSION macros in bpf_helpers.h
-Date:   Wed, 17 Mar 2021 13:05:08 -0700
-Message-ID: <20210317200510.1354627-1-andrii@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        id S233437AbhCQUrc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 17 Mar 2021 16:47:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52160 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233410AbhCQUrX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 17 Mar 2021 16:47:23 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3EEEC06174A;
+        Wed, 17 Mar 2021 13:47:22 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id 133so333396ybd.5;
+        Wed, 17 Mar 2021 13:47:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=it8U0w3MjTXYKTU/soyaEuoZ9Qji+7MJUL+YSn8iD9E=;
+        b=gFqEFwiekclCs0S4mOFoBjZ6R8H98SEnVijubosGjv3cGL61fRXwhGWU/aHWV/2NPu
+         1jfYD6do9YnUGO51F2hukxdF0rfHwLS2+ughnVo2qBp6GVrNL2zCJobQ5vVg0tlOI5Hx
+         4FyxdcUMvYQw4uiNs6kpQVi0XSa6LKEO5Mhh7kMPV9FPEibnuVGO+vvp9CaPd7rPsmll
+         jsrHvq7LlajZ71adzcPUiiEsQMgUZgns8QZvgEvud8Sok780QlF1KNwDuaf7DrWZOxAv
+         ER05UgOgCM+tqruFnNQhT3988ZMVh07oCW/Sbwr3Acn0B/KcuUuosalwoOaKxhh1H1Yb
+         v1kA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=it8U0w3MjTXYKTU/soyaEuoZ9Qji+7MJUL+YSn8iD9E=;
+        b=kD3sGQh72691NqSxW+l8NpwfwvX3OysgZXw+QsJOf0LYqQvh1NxkP9LsHd0oSXwhjB
+         TUrlwhdV+fpSYyEVplFr4dfjTI4hu3GZtza7pHOVtbnVEZu5MilDu4VsFWp7P0CrJZtp
+         AUP8Cjumxwp53JnOH4FnnMMMBbl7uOYR9B6wh9bzjOpOrokDnvj3ph3iA5FN+f5Pigrk
+         mnoFNE8FB5m2d0/6dwMkKl1PGxesRcGGrCcb4oN67FlOe9M2KlUXiZ5rWY8u2V5TO3Mn
+         +NVa0q25ug3tx9jaobmWLzcbxKpFmPnDyo/Ckkztcqi1ZMhBxMxWSL94LXQDnCXLfEoe
+         QUiQ==
+X-Gm-Message-State: AOAM532GfExct+417klT55os7ZgOzMHABB1sdkjCqHWCdVOcTAR6AOOd
+        CU5Jvsz52A74xFIQOQBv10KAUTN2ZvY5mzeze/4=
+X-Google-Smtp-Source: ABdhPJzPB2EbyMLIungWARpJAZq47cQKM1cfsI1y9RNwEZZ5l95yKrxMLePJmUiA6CdUXl/IcW4B2cxuqSqEutlkq9g=
+X-Received: by 2002:a25:4982:: with SMTP id w124mr864240yba.27.1616014042151;
+ Wed, 17 Mar 2021 13:47:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-03-17_11:2021-03-17,2021-03-17 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=687
- clxscore=1015 phishscore=0 priorityscore=1501 malwarescore=0 mlxscore=0
- bulkscore=0 spamscore=0 impostorscore=0 lowpriorityscore=0 adultscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2103170139
-X-FB-Internal: deliver
+References: <20210313193537.1548766-1-andrii@kernel.org> <20210313193537.1548766-11-andrii@kernel.org>
+ <20210317053437.r5zsoksdqrxtt22r@ast-mbp>
+In-Reply-To: <20210317053437.r5zsoksdqrxtt22r@ast-mbp>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 17 Mar 2021 13:47:11 -0700
+Message-ID: <CAEf4BzZ2TxWqVG=VqFw18--dvC=M5ONRUAde2EB_0yBaYkHb2Q@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 10/11] selftests/bpf: pass all BPF .o's
+ through BPF static linker
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Provide NULL and KERNEL_VERSION macros in bpf_helpers.h. Patch #2 removes such
-custom NULL definition from one of the selftests.
+On Tue, Mar 16, 2021 at 10:34 PM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Sat, Mar 13, 2021 at 11:35:36AM -0800, Andrii Nakryiko wrote:
+> >
+> > -$(TRUNNER_BPF_SKELS): $(TRUNNER_OUTPUT)/%.skel.h:                    \
+> > -                   $(TRUNNER_OUTPUT)/%.o                             \
+> > -                   $(BPFTOOL)                                        \
+> > -                   | $(TRUNNER_OUTPUT)
+> > +$(TRUNNER_BPF_SKELS): %.skel.h: %.o $(BPFTOOL) | $(TRUNNER_OUTPUT)
+> >       $$(call msg,GEN-SKEL,$(TRUNNER_BINARY),$$@)
+> > -     $(Q)$$(BPFTOOL) gen skeleton $$< > $$@
+> > +     $(Q)$$(BPFTOOL) gen object $$(<:.o=.bpfo) $$<
+> > +     $(Q)$$(BPFTOOL) gen skeleton $$(<:.o=.bpfo) > $$@
+>
+> Do we really need this .bpfo extension?
 
-v2->v3:
-  - instead of vmlinux.h, do this in bpf_helpers.h;
-  - added KERNEL_VERSION, which comes up periodically as well;
-  - I dropped strict compilation patches for now, because we run into new
-    warnings (e.g., not checking read() result) in kernel-patches CI, which
-    I can't even reproduce locally. Also -Wdiscarded-qualifiers pragma for
-    jit_disasm.c is not supported by Clang, it needs to be
-    -Wincompatible-pointer-types-discards-qualifiers for Clang; we don't have
-    to deal with that in this patch set;
-v1->v2:
-  - fix few typos and wrong copy/paste;
-  - fix #pragma push -> pop.
+I thought it would be a better way to avoid user's confusion with .o's
+as produced by compiler and .bpfo as a "final" linked BPF object,
+produced by static linker. Technically, there is no requirement, of
+course. If you think it will be less confusing to stick to .o, that's
+fine.
 
-Andrii Nakryiko (2):
-  libbpf: provide NULL and KERNEL_VERSION macros in bpf_helpers.h
-  selftests/bpf: drop custom NULL #define in skb_pkt_end selftest
+> bpftool in the previous patch doesn't really care about the extension.
 
- tools/lib/bpf/bpf_helpers.h                     | 16 +++++++++++++++-
- tools/testing/selftests/bpf/progs/skb_pkt_end.c |  1 -
- 2 files changed, 15 insertions(+), 2 deletions(-)
+the only thing that cares is the logic to derive object name when
+generating skeleton (we strip .o and/or .bpfo). No loader should ever
+care about extension, it could be my_obj.whocares and it should be
+fine.
 
--- 
-2.30.2
+> It's still a valid object file with the same ELF format.
 
+Yes, with some extra niceties like fixed up BTF, stripped out DWARF,
+etc. Maybe in the future there will be more "normalization" done as
+compared to what Clang produces.
+
+> I think if we keep the same .o extension for linked .o-s it will be easier.
+> Otherwise all loaders would need to support both .o and .bpfo,
+> but the later is no different than the former in terms of contents of the file
+> and ways to parse it.
+
+So no loaders should care right now. But as I said, I can drop .bpfo as well.
+
+>
+> For testing of the linker this linked .o can be a temp file or better yet a unix pipe ?
+> bpftool gen object - one.o second.o|bpftool gen skeleton -
+
+So I tried to briefly add support for that to `gen skeleton` and `gen
+object` by using /proc/self/fd/{0,1} and that works for `gen object`,
+but only if stdout is redirected to a real file. When piping output to
+another process, libelf fails to write to such a special file for some
+reason. `gen skeleton` is also failing to read from a piped stdin
+because of use of mmap(). So there would need to be more work done to
+support piping like that.
+
+But in any case I'd like to have those intermediate object file
+results lying on disk for further inspection, if anything isn't right,
+so I'll use temp file regardless.
