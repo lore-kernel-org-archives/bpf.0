@@ -5,57 +5,57 @@ X-Spam-Level:
 X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 86409C433E9
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72167C433E6
 	for <bpf@archiver.kernel.org>; Wed, 17 Mar 2021 02:23:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5FF4D64F92
+	by mail.kernel.org (Postfix) with ESMTP id 4A29B64F3A
 	for <bpf@archiver.kernel.org>; Wed, 17 Mar 2021 02:23:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229624AbhCQCXX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 16 Mar 2021 22:23:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38234 "EHLO
+        id S229550AbhCQCXW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 16 Mar 2021 22:23:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbhCQCWz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 16 Mar 2021 22:22:55 -0400
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88112C061763;
-        Tue, 16 Mar 2021 19:22:55 -0700 (PDT)
-Received: by mail-ot1-x330.google.com with SMTP id m21-20020a9d7ad50000b02901b83efc84a0so375910otn.10;
-        Tue, 16 Mar 2021 19:22:55 -0700 (PDT)
+        with ESMTP id S229624AbhCQCWu (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 16 Mar 2021 22:22:50 -0400
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5671C06175F;
+        Tue, 16 Mar 2021 19:22:49 -0700 (PDT)
+Received: by mail-ot1-x32f.google.com with SMTP id f73-20020a9d03cf0000b02901b4d889bce0so367550otf.12;
+        Tue, 16 Mar 2021 19:22:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ShWFEmzIGvBpqu5h4JftiuL5tMP7lUpNLG+uKbPwlPc=;
-        b=U15q/lLNz4T5HTpfPTB69rRnYwCJyoIz7zIP4KuXEAG7P9EmWFOvrUmQUQBOMFndZb
-         DEycS/6OXSGrfr8DGrDBTDJvLV+MfY5s0mgTz0hfKrah3K47N+84QFiZ+uA9Tf+tBTve
-         ISGV0kFNJiM987rNBkqCoCrnKtw0BTsAhh1qq2tHBkfF5T44puAuSNAFTLz4yewIcHsS
-         YUEkh27LZ4qpDp8EXyr5ZjVspCdNuw9YHHqt4zILk3+gpgpI7EMsnGQHk3VuCHf2aKqy
-         ujIYRJQlKtsUuYNoPKRdftINZaLdhzvJ4BVdqByN/WlN9Zu+ssriPXKoE8fSPC3+P/BJ
-         R6Dg==
+        bh=8xgB3I/bbcUCfo36y9TmthKP+rXIjWuLX4Yzv+5PCxI=;
+        b=eKUsyjIgU1b3ZTJR7mzK0DIEvD23CnM1ep4l8c6DHn5DbRafpWFpImCi+t4apXEN5a
+         ilU2hRNLK5+RNYU1o3RdGnOoxJRHX1loED//r0WFxNY2pplaN+OJXpcTipfSaJY9Ky2Z
+         B9RVkUQzXM0DH+5iJeMys9oVaPTykxMw6+E6dalGAU0Yvj7WxqQcHf+n+dn3azbdFL0G
+         EYqSCwWbnRcg+JPDLlCTgTYr3CJoLkLmT2FXKpUXwRgJ5KAWMwBsl6yc5XlojzkUFs/h
+         bfvKkXsoywgufwTeMtPcoVfZ+nVqUK271P2Fl+JLjT44JaaJREQrfKP3vwwKU1r65aNL
+         koog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ShWFEmzIGvBpqu5h4JftiuL5tMP7lUpNLG+uKbPwlPc=;
-        b=Nm2PfX9oofH4xZCo9eaMMyUSKsf3Z9Oh6heBPCJ7T8vGzf7rpUzZxju7FxdXB8t5d5
-         wo2Jn87kfIG17isD27boEmr1oeaBppovbJHMshnSKj//PuvpZDlTjO7ZQuFezc2jfQDS
-         4ouMKPqifTFfsQDixnukCctrqBU9JIp2PM0KhpAkEqCuKO/UFdoVEsmKpxITULRUGBJM
-         GeooOk1eQsiq3AqgaTHfN/pMlsRr99xjSzwsOoK0Q3OZaiHf4mcbu14ufTDsleUY3dIm
-         asUeDaN2WG9j6ADig2Fcs90LZqrqE/5TXLMV9yL/ooE0p7gTKYYKvvHjhYpHxbH+l8RH
-         JUKw==
-X-Gm-Message-State: AOAM532neHUlbSUu1iwmC0cyqd9cGCZD7DTbf93kTG/+MUCeHl6Dy0MV
-        akP7AIZrQPdHmlOxaFprSqTqpvPzoHk7fg==
-X-Google-Smtp-Source: ABdhPJy6mite232lYFo66ujsTrs2F43a+9oUaDlxJ9rt1il0hAi7cR4wS7Uqf+RvbTmQ0dFIbocx1A==
-X-Received: by 2002:a9d:12b3:: with SMTP id g48mr1457567otg.277.1615947774153;
-        Tue, 16 Mar 2021 19:22:54 -0700 (PDT)
+        bh=8xgB3I/bbcUCfo36y9TmthKP+rXIjWuLX4Yzv+5PCxI=;
+        b=DNhk/zCzJlTx1oTuu30iEeHWvHVcEEyBqKHw92Kt+NEly7XAg2AQYmG2TMBc+BYN6a
+         9CqlgoCbd0lbMZs0f7MhoqlUv5BrVQsm1HHnc5PTLcVgBjBXRfTRak2TcmzBDNRO8sKt
+         T1nYnbrx+XfgaRRwBjVcQjWJ296QZxb3wnp1HV4PcT1gLsKYet0DRBp1DZe+21PIUImP
+         RhpLOsivQaWGyFx849xMpORhnhKDUmqSkihg/IMrqeefTC+tPQRyQJtQ4qPxJ4XBNqMl
+         rM/N7UJXIOiqKNEbPO5p2hJYuewcGOfOp/8MfWqefnwcogzjmqHQ3mAR66dq2FKPkvff
+         uB/A==
+X-Gm-Message-State: AOAM530IjkEIU0HU1GOTuHI2sBbs+MgLvdmeNQdOTM4/gIz/Lop6fiU/
+        bFqZDY98uEhls5KXJGUhEI4ShILQiy8oxA==
+X-Google-Smtp-Source: ABdhPJyWOJqj4ex0ou/4R65iih8uHuX4nHH+q5i1JOWuVG5W4alD+ye3iOCqwBfrMQrMVwqj2uSe7A==
+X-Received: by 2002:a9d:4c0a:: with SMTP id l10mr1450337otf.136.1615947769101;
+        Tue, 16 Mar 2021 19:22:49 -0700 (PDT)
 Received: from unknown.attlocal.net ([2600:1700:65a0:ab60:517b:5634:5d8e:ff09])
-        by smtp.gmail.com with ESMTPSA id i3sm8037858oov.2.2021.03.16.19.22.53
+        by smtp.gmail.com with ESMTPSA id i3sm8037858oov.2.2021.03.16.19.22.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Mar 2021 19:22:53 -0700 (PDT)
+        Tue, 16 Mar 2021 19:22:48 -0700 (PDT)
 From:   Cong Wang <xiyou.wangcong@gmail.com>
 To:     netdev@vger.kernel.org
 Cc:     bpf@vger.kernel.org, duanxiongchun@bytedance.com,
@@ -65,9 +65,9 @@ Cc:     bpf@vger.kernel.org, duanxiongchun@bytedance.com,
         Daniel Borkmann <daniel@iogearbox.net>,
         Jakub Sitnicki <jakub@cloudflare.com>,
         Lorenz Bauer <lmb@cloudflare.com>
-Subject: [Patch bpf-next v5 08/11] skmsg: extract __tcp_bpf_recvmsg() and tcp_bpf_wait_data()
-Date:   Tue, 16 Mar 2021 19:22:16 -0700
-Message-Id: <20210317022219.24934-9-xiyou.wangcong@gmail.com>
+Subject: [Patch bpf-next v5 04/11] skmsg: avoid lock_sock() in sk_psock_backlog()
+Date:   Tue, 16 Mar 2021 19:22:12 -0700
+Message-Id: <20210317022219.24934-5-xiyou.wangcong@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210317022219.24934-1-xiyou.wangcong@gmail.com>
 References: <20210317022219.24934-1-xiyou.wangcong@gmail.com>
@@ -79,12 +79,16 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Cong Wang <cong.wang@bytedance.com>
 
-Although these two functions are only used by TCP, they are not
-specific to TCP at all, both operate on skmsg and ingress_msg,
-so fit in net/core/skmsg.c very well.
+We do not have to lock the sock to avoid losing sk_socket,
+instead we can purge all the ingress queues when we close
+the socket. Sending or receiving packets after orphaning
+socket makes no sense.
 
-And we will need them for non-TCP, so rename and move them to
-skmsg.c and export them to modules.
+We do purge these queues when psock refcnt reaches zero but
+here we want to purge them explicitly in sock_map_close().
+There are also some nasty race conditions on testing bit
+SK_PSOCK_TX_ENABLED and queuing/canceling the psock work,
+we can expand psock->ingress_lock a bit to protect them too.
 
 Cc: John Fastabend <john.fastabend@gmail.com>
 Cc: Daniel Borkmann <daniel@iogearbox.net>
@@ -92,295 +96,171 @@ Cc: Jakub Sitnicki <jakub@cloudflare.com>
 Cc: Lorenz Bauer <lmb@cloudflare.com>
 Signed-off-by: Cong Wang <cong.wang@bytedance.com>
 ---
- include/linux/skmsg.h |   4 ++
- include/net/tcp.h     |   2 -
- net/core/skmsg.c      |  98 +++++++++++++++++++++++++++++++++++++++++
- net/ipv4/tcp_bpf.c    | 100 +-----------------------------------------
- net/tls/tls_sw.c      |   4 +-
- 5 files changed, 106 insertions(+), 102 deletions(-)
+ include/linux/skmsg.h |  1 +
+ net/core/skmsg.c      | 50 +++++++++++++++++++++++++++++++------------
+ net/core/sock_map.c   |  1 +
+ 3 files changed, 38 insertions(+), 14 deletions(-)
 
 diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
-index eb2757c0295d..105e06460a4a 100644
+index f2d45a73b2b2..0f5e663f6c7f 100644
 --- a/include/linux/skmsg.h
 +++ b/include/linux/skmsg.h
-@@ -127,6 +127,10 @@ int sk_msg_zerocopy_from_iter(struct sock *sk, struct iov_iter *from,
- 			      struct sk_msg *msg, u32 bytes);
- int sk_msg_memcopy_from_iter(struct sock *sk, struct iov_iter *from,
- 			     struct sk_msg *msg, u32 bytes);
-+int sk_msg_wait_data(struct sock *sk, struct sk_psock *psock, int flags,
-+		     long timeo, int *err);
-+int sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
-+		   int len, int flags);
+@@ -347,6 +347,7 @@ static inline void sk_psock_report_error(struct sk_psock *psock, int err)
+ }
  
- static inline void sk_msg_check_to_free(struct sk_msg *msg, u32 i, u32 bytes)
- {
-diff --git a/include/net/tcp.h b/include/net/tcp.h
-index 2efa4e5ea23d..31b1696c62ba 100644
---- a/include/net/tcp.h
-+++ b/include/net/tcp.h
-@@ -2209,8 +2209,6 @@ void tcp_bpf_clone(const struct sock *sk, struct sock *newsk);
+ struct sk_psock *sk_psock_init(struct sock *sk, int node);
++void sk_psock_stop(struct sk_psock *psock);
  
- int tcp_bpf_sendmsg_redir(struct sock *sk, struct sk_msg *msg, u32 bytes,
- 			  int flags);
--int __tcp_bpf_recvmsg(struct sock *sk, struct sk_psock *psock,
--		      struct msghdr *msg, int len, int flags);
- #endif /* CONFIG_NET_SOCK_MSG */
- 
- #if !defined(CONFIG_BPF_SYSCALL) || !defined(CONFIG_NET_SOCK_MSG)
+ #if IS_ENABLED(CONFIG_BPF_STREAM_PARSER)
+ int sk_psock_init_strp(struct sock *sk, struct sk_psock *psock);
 diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index e93683a287a0..a881cfd5c809 100644
+index 305dddc51857..d0a227b0f672 100644
 --- a/net/core/skmsg.c
 +++ b/net/core/skmsg.c
-@@ -399,6 +399,104 @@ int sk_msg_memcopy_from_iter(struct sock *sk, struct iov_iter *from,
- }
- EXPORT_SYMBOL_GPL(sk_msg_memcopy_from_iter);
- 
-+int sk_msg_wait_data(struct sock *sk, struct sk_psock *psock, int flags,
-+		     long timeo, int *err)
-+{
-+	DEFINE_WAIT_FUNC(wait, woken_wake_function);
-+	int ret = 0;
-+
-+	if (sk->sk_shutdown & RCV_SHUTDOWN)
-+		return 1;
-+
-+	if (!timeo)
-+		return ret;
-+
-+	add_wait_queue(sk_sleep(sk), &wait);
-+	sk_set_bit(SOCKWQ_ASYNC_WAITDATA, sk);
-+	ret = sk_wait_event(sk, &timeo,
-+			    !list_empty(&psock->ingress_msg) ||
-+			    !skb_queue_empty(&sk->sk_receive_queue), &wait);
-+	sk_clear_bit(SOCKWQ_ASYNC_WAITDATA, sk);
-+	remove_wait_queue(sk_sleep(sk), &wait);
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(sk_msg_wait_data);
-+
-+/* Receive sk_msg from psock->ingress_msg to @msg. */
-+int sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
-+		   int len, int flags)
-+{
-+	struct iov_iter *iter = &msg->msg_iter;
-+	int peek = flags & MSG_PEEK;
-+	struct sk_msg *msg_rx;
-+	int i, copied = 0;
-+
-+	msg_rx = sk_psock_peek_msg(psock);
-+	while (copied != len) {
-+		struct scatterlist *sge;
-+
-+		if (unlikely(!msg_rx))
-+			break;
-+
-+		i = msg_rx->sg.start;
-+		do {
-+			struct page *page;
-+			int copy;
-+
-+			sge = sk_msg_elem(msg_rx, i);
-+			copy = sge->length;
-+			page = sg_page(sge);
-+			if (copied + copy > len)
-+				copy = len - copied;
-+			copy = copy_page_to_iter(page, sge->offset, copy, iter);
-+			if (!copy)
-+				return copied ? copied : -EFAULT;
-+
-+			copied += copy;
-+			if (likely(!peek)) {
-+				sge->offset += copy;
-+				sge->length -= copy;
-+				if (!msg_rx->skb)
-+					sk_mem_uncharge(sk, copy);
-+				msg_rx->sg.size -= copy;
-+
-+				if (!sge->length) {
-+					sk_msg_iter_var_next(i);
-+					if (!msg_rx->skb)
-+						put_page(page);
-+				}
-+			} else {
-+				/* Lets not optimize peek case if copy_page_to_iter
-+				 * didn't copy the entire length lets just break.
-+				 */
-+				if (copy != sge->length)
-+					return copied;
-+				sk_msg_iter_var_next(i);
-+			}
-+
-+			if (copied == len)
-+				break;
-+		} while (i != msg_rx->sg.end);
-+
-+		if (unlikely(peek)) {
-+			msg_rx = sk_psock_next_msg(psock, msg_rx);
-+			if (!msg_rx)
-+				break;
-+			continue;
-+		}
-+
-+		msg_rx->sg.start = i;
-+		if (!sge->length && msg_rx->sg.start == msg_rx->sg.end) {
-+			msg_rx = sk_psock_dequeue_msg(psock);
-+			kfree_sk_msg(msg_rx);
-+		}
-+		msg_rx = sk_psock_peek_msg(psock);
-+	}
-+
-+	return copied;
-+}
-+EXPORT_SYMBOL_GPL(sk_msg_recvmsg);
-+
- static struct sk_msg *sk_psock_create_ingress_msg(struct sock *sk,
- 						  struct sk_buff *skb)
- {
-diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-index ac8cfbaeacd2..3d622a0d0753 100644
---- a/net/ipv4/tcp_bpf.c
-+++ b/net/ipv4/tcp_bpf.c
-@@ -10,80 +10,6 @@
- #include <net/inet_common.h>
- #include <net/tls.h>
- 
--int __tcp_bpf_recvmsg(struct sock *sk, struct sk_psock *psock,
--		      struct msghdr *msg, int len, int flags)
--{
--	struct iov_iter *iter = &msg->msg_iter;
--	int peek = flags & MSG_PEEK;
--	struct sk_msg *msg_rx;
--	int i, copied = 0;
--
--	msg_rx = sk_psock_peek_msg(psock);
--	while (copied != len) {
--		struct scatterlist *sge;
--
--		if (unlikely(!msg_rx))
--			break;
--
--		i = msg_rx->sg.start;
--		do {
--			struct page *page;
--			int copy;
--
--			sge = sk_msg_elem(msg_rx, i);
--			copy = sge->length;
--			page = sg_page(sge);
--			if (copied + copy > len)
--				copy = len - copied;
--			copy = copy_page_to_iter(page, sge->offset, copy, iter);
--			if (!copy)
--				return copied ? copied : -EFAULT;
--
--			copied += copy;
--			if (likely(!peek)) {
--				sge->offset += copy;
--				sge->length -= copy;
--				if (!msg_rx->skb)
--					sk_mem_uncharge(sk, copy);
--				msg_rx->sg.size -= copy;
--
--				if (!sge->length) {
--					sk_msg_iter_var_next(i);
--					if (!msg_rx->skb)
--						put_page(page);
--				}
--			} else {
--				/* Lets not optimize peek case if copy_page_to_iter
--				 * didn't copy the entire length lets just break.
--				 */
--				if (copy != sge->length)
--					return copied;
--				sk_msg_iter_var_next(i);
--			}
--
--			if (copied == len)
--				break;
--		} while (i != msg_rx->sg.end);
--
--		if (unlikely(peek)) {
--			msg_rx = sk_psock_next_msg(psock, msg_rx);
--			if (!msg_rx)
--				break;
--			continue;
--		}
--
--		msg_rx->sg.start = i;
--		if (!sge->length && msg_rx->sg.start == msg_rx->sg.end) {
--			msg_rx = sk_psock_dequeue_msg(psock);
--			kfree_sk_msg(msg_rx);
--		}
--		msg_rx = sk_psock_peek_msg(psock);
--	}
--
--	return copied;
--}
--EXPORT_SYMBOL_GPL(__tcp_bpf_recvmsg);
--
- static int bpf_tcp_ingress(struct sock *sk, struct sk_psock *psock,
- 			   struct sk_msg *msg, u32 apply_bytes, int flags)
- {
-@@ -237,28 +163,6 @@ static bool tcp_bpf_stream_read(const struct sock *sk)
- 	return !empty;
- }
- 
--static int tcp_bpf_wait_data(struct sock *sk, struct sk_psock *psock,
--			     int flags, long timeo, int *err)
--{
--	DEFINE_WAIT_FUNC(wait, woken_wake_function);
--	int ret = 0;
--
--	if (sk->sk_shutdown & RCV_SHUTDOWN)
--		return 1;
--
--	if (!timeo)
--		return ret;
--
--	add_wait_queue(sk_sleep(sk), &wait);
--	sk_set_bit(SOCKWQ_ASYNC_WAITDATA, sk);
--	ret = sk_wait_event(sk, &timeo,
--			    !list_empty(&psock->ingress_msg) ||
--			    !skb_queue_empty(&sk->sk_receive_queue), &wait);
--	sk_clear_bit(SOCKWQ_ASYNC_WAITDATA, sk);
--	remove_wait_queue(sk_sleep(sk), &wait);
--	return ret;
--}
--
- static int tcp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
- 		    int nonblock, int flags, int *addr_len)
- {
-@@ -278,13 +182,13 @@ static int tcp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
+@@ -497,7 +497,7 @@ static int sk_psock_handle_skb(struct sk_psock *psock, struct sk_buff *skb,
+ 	if (!ingress) {
+ 		if (!sock_writeable(psock->sk))
+ 			return -EAGAIN;
+-		return skb_send_sock_locked(psock->sk, skb, off, len);
++		return skb_send_sock(psock->sk, skb, off, len);
  	}
- 	lock_sock(sk);
- msg_bytes_ready:
--	copied = __tcp_bpf_recvmsg(sk, psock, msg, len, flags);
-+	copied = sk_msg_recvmsg(sk, psock, msg, len, flags);
- 	if (!copied) {
- 		int data, err = 0;
- 		long timeo;
+ 	return sk_psock_skb_ingress(psock, skb);
+ }
+@@ -511,8 +511,6 @@ static void sk_psock_backlog(struct work_struct *work)
+ 	u32 len, off;
+ 	int ret;
  
- 		timeo = sock_rcvtimeo(sk, nonblock);
--		data = tcp_bpf_wait_data(sk, psock, flags, timeo, &err);
-+		data = sk_msg_wait_data(sk, psock, flags, timeo, &err);
- 		if (data) {
- 			if (!sk_psock_queue_empty(psock))
- 				goto msg_bytes_ready;
-diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
-index 01d933ae5f16..1dcb34dfd56b 100644
---- a/net/tls/tls_sw.c
-+++ b/net/tls/tls_sw.c
-@@ -1789,8 +1789,8 @@ int tls_sw_recvmsg(struct sock *sk,
- 		skb = tls_wait_data(sk, psock, flags, timeo, &err);
- 		if (!skb) {
- 			if (psock) {
--				int ret = __tcp_bpf_recvmsg(sk, psock,
--							    msg, len, flags);
-+				int ret = sk_msg_recvmsg(sk, psock, msg, len,
-+							 flags);
+-	/* Lock sock to avoid losing sk_socket during loop. */
+-	lock_sock(psock->sk);
+ 	if (state->skb) {
+ 		skb = state->skb;
+ 		len = state->len;
+@@ -529,7 +527,7 @@ static void sk_psock_backlog(struct work_struct *work)
+ 		skb_bpf_redirect_clear(skb);
+ 		do {
+ 			ret = -EIO;
+-			if (likely(psock->sk->sk_socket))
++			if (!sock_flag(psock->sk, SOCK_DEAD))
+ 				ret = sk_psock_handle_skb(psock, skb, off,
+ 							  len, ingress);
+ 			if (ret <= 0) {
+@@ -537,13 +535,13 @@ static void sk_psock_backlog(struct work_struct *work)
+ 					state->skb = skb;
+ 					state->len = len;
+ 					state->off = off;
+-					goto end;
++					return;
+ 				}
+ 				/* Hard errors break pipe and stop xmit. */
+ 				sk_psock_report_error(psock, ret ? -ret : EPIPE);
+ 				sk_psock_clear_state(psock, SK_PSOCK_TX_ENABLED);
+ 				kfree_skb(skb);
+-				goto end;
++				return;
+ 			}
+ 			off += ret;
+ 			len -= ret;
+@@ -552,8 +550,6 @@ static void sk_psock_backlog(struct work_struct *work)
+ 		if (!ingress)
+ 			kfree_skb(skb);
+ 	}
+-end:
+-	release_sock(psock->sk);
+ }
  
- 				if (ret > 0) {
- 					decrypted += ret;
+ struct sk_psock *sk_psock_init(struct sock *sk, int node)
+@@ -631,7 +627,7 @@ static void __sk_psock_purge_ingress_msg(struct sk_psock *psock)
+ 	}
+ }
+ 
+-static void sk_psock_zap_ingress(struct sk_psock *psock)
++static void __sk_psock_zap_ingress(struct sk_psock *psock)
+ {
+ 	struct sk_buff *skb;
+ 
+@@ -639,8 +635,13 @@ static void sk_psock_zap_ingress(struct sk_psock *psock)
+ 		skb_bpf_redirect_clear(skb);
+ 		kfree_skb(skb);
+ 	}
+-	spin_lock_bh(&psock->ingress_lock);
+ 	__sk_psock_purge_ingress_msg(psock);
++}
++
++static void sk_psock_zap_ingress(struct sk_psock *psock)
++{
++	spin_lock_bh(&psock->ingress_lock);
++	__sk_psock_zap_ingress(psock);
+ 	spin_unlock_bh(&psock->ingress_lock);
+ }
+ 
+@@ -654,6 +655,17 @@ static void sk_psock_link_destroy(struct sk_psock *psock)
+ 	}
+ }
+ 
++void sk_psock_stop(struct sk_psock *psock)
++{
++	spin_lock_bh(&psock->ingress_lock);
++	sk_psock_clear_state(psock, SK_PSOCK_TX_ENABLED);
++	sk_psock_cork_free(psock);
++	__sk_psock_zap_ingress(psock);
++	spin_unlock_bh(&psock->ingress_lock);
++
++	cancel_work_sync(&psock->work);
++}
++
+ static void sk_psock_done_strp(struct sk_psock *psock);
+ 
+ static void sk_psock_destroy_deferred(struct work_struct *gc)
+@@ -770,14 +782,20 @@ static void sk_psock_skb_redirect(struct sk_buff *skb)
+ 	 * error that caused the pipe to break. We can't send a packet on
+ 	 * a socket that is in this state so we drop the skb.
+ 	 */
+-	if (!psock_other || sock_flag(sk_other, SOCK_DEAD) ||
+-	    !sk_psock_test_state(psock_other, SK_PSOCK_TX_ENABLED)) {
++	if (!psock_other || sock_flag(sk_other, SOCK_DEAD)) {
++		kfree_skb(skb);
++		return;
++	}
++	spin_lock_bh(&psock_other->ingress_lock);
++	if (!sk_psock_test_state(psock_other, SK_PSOCK_TX_ENABLED)) {
++		spin_unlock_bh(&psock_other->ingress_lock);
+ 		kfree_skb(skb);
+ 		return;
+ 	}
+ 
+ 	skb_queue_tail(&psock_other->ingress_skb, skb);
+ 	schedule_work(&psock_other->work);
++	spin_unlock_bh(&psock_other->ingress_lock);
+ }
+ 
+ static void sk_psock_tls_verdict_apply(struct sk_buff *skb, struct sock *sk, int verdict)
+@@ -845,8 +863,12 @@ static void sk_psock_verdict_apply(struct sk_psock *psock,
+ 			err = sk_psock_skb_ingress_self(psock, skb);
+ 		}
+ 		if (err < 0) {
+-			skb_queue_tail(&psock->ingress_skb, skb);
+-			schedule_work(&psock->work);
++			spin_lock_bh(&psock->ingress_lock);
++			if (sk_psock_test_state(psock, SK_PSOCK_TX_ENABLED)) {
++				skb_queue_tail(&psock->ingress_skb, skb);
++				schedule_work(&psock->work);
++			}
++			spin_unlock_bh(&psock->ingress_lock);
+ 		}
+ 		break;
+ 	case __SK_REDIRECT:
+diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+index dd53a7771d7e..7c3589fc13bb 100644
+--- a/net/core/sock_map.c
++++ b/net/core/sock_map.c
+@@ -1540,6 +1540,7 @@ void sock_map_close(struct sock *sk, long timeout)
+ 	saved_close = psock->saved_close;
+ 	sock_map_remove_links(sk, psock);
+ 	rcu_read_unlock();
++	sk_psock_stop(psock);
+ 	release_sock(sk);
+ 	saved_close(sk, timeout);
+ }
 -- 
 2.25.1
 
