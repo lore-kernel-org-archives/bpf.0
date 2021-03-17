@@ -6,38 +6,38 @@ X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DAE5C433E6
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7A9AC4332E
 	for <bpf@archiver.kernel.org>; Wed, 17 Mar 2021 03:04:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2A92464F9B
+	by mail.kernel.org (Postfix) with ESMTP id 8C98664F89
 	for <bpf@archiver.kernel.org>; Wed, 17 Mar 2021 03:04:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbhCQDDv convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Tue, 16 Mar 2021 23:03:51 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:45148 "EHLO
+        id S229926AbhCQDDw convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Tue, 16 Mar 2021 23:03:52 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:57830 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229559AbhCQDDV (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 16 Mar 2021 23:03:21 -0400
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12H2wAtB008529
-        for <bpf@vger.kernel.org>; Tue, 16 Mar 2021 20:03:21 -0700
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 37a6bs3jm0-2
+        by vger.kernel.org with ESMTP id S229890AbhCQDDe (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 16 Mar 2021 23:03:34 -0400
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12H30N0e031372
+        for <bpf@vger.kernel.org>; Tue, 16 Mar 2021 20:03:34 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 379ebu7qpb-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 16 Mar 2021 20:03:21 -0700
-Received: from intmgw006.03.ash8.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 16 Mar 2021 20:03:34 -0700
+Received: from intmgw002.25.frc3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Tue, 16 Mar 2021 20:03:20 -0700
+ 15.1.2176.2; Tue, 16 Mar 2021 20:03:33 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id AAC422ED23D6; Tue, 16 Mar 2021 20:03:18 -0700 (PDT)
+        id 382A92ED23D6; Tue, 16 Mar 2021 20:03:23 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
         <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 1/4] bpftool: generate NULL definition in vmlinux.h
-Date:   Tue, 16 Mar 2021 20:03:09 -0700
-Message-ID: <20210317030312.802233-2-andrii@kernel.org>
+Subject: [PATCH bpf-next 3/4] selftests/bpf: treat compilation warnings as errors
+Date:   Tue, 16 Mar 2021 20:03:11 -0700
+Message-ID: <20210317030312.802233-4-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210317030312.802233-1-andrii@kernel.org>
 References: <20210317030312.802233-1-andrii@kernel.org>
@@ -47,54 +47,48 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
  definitions=2021-03-16_09:2021-03-16,2021-03-16 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
- adultscore=0 suspectscore=0 phishscore=0 mlxscore=0 mlxlogscore=999
- priorityscore=1501 lowpriorityscore=0 bulkscore=0 clxscore=1015
- spamscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2009150000 definitions=main-2103170023
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0
+ lowpriorityscore=0 malwarescore=0 bulkscore=0 impostorscore=0 mlxscore=0
+ clxscore=1015 priorityscore=1501 mlxlogscore=702 suspectscore=0
+ phishscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2103170023
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Given that vmlinux.h is not compatible with headers like stdint.h, NULL poses
-an annoying problem: it is defined as #define, so is not captured in BTF, so
-is not emitted into vmlinux.h. This leads to users either sticking to explicit
-0, or defining their own NULL (as progs/skb_pkt_end.c does).
-
-It's pretty trivial for bpftool to generate NULL definition, though, so let's
-just do that. This might cause compilation warning for existing BPF
-applications:
-
-progs/skb_pkt_end.c:7:9: warning: 'NULL' macro redefined [-Wmacro-redefined]
-  progs/skb_pkt_end.c:7:9: error: 'NULL' macro redefined [-Werror,-Wmacro-redefined]
-  #define NULL 0
-          ^
-  /tmp/linux/tools/testing/selftests/bpf/tools/include/vmlinux.h:4:9: note: previous definition is here
-  #define NULL ((void *)0)
-	  ^
-
-It is trivial to fix, though, so long-term benefits outweight temporary
-inconveniences.
+Make selftests/bpf compilation more strict by treating warnings as errors. We
+are generally pretty good at keeping compilation clean, but it's easy to miss
+minor warnings. So let's not trust people and just employ stricter compiler
+enforcement.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/bpf/bpftool/btf.c | 2 ++
- 1 file changed, 2 insertions(+)
+ tools/testing/selftests/bpf/Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
-index 62953bbf68b4..ff6a76632873 100644
---- a/tools/bpf/bpftool/btf.c
-+++ b/tools/bpf/bpftool/btf.c
-@@ -405,6 +405,8 @@ static int dump_btf_c(const struct btf *btf,
- 	printf("#ifndef __VMLINUX_H__\n");
- 	printf("#define __VMLINUX_H__\n");
- 	printf("\n");
-+	printf("#define NULL ((void *)0)\n");
-+	printf("\n");
- 	printf("#ifndef BPF_NO_PRESERVE_ACCESS_INDEX\n");
- 	printf("#pragma clang attribute push (__attribute__((preserve_access_index)), apply_to = record)\n");
- 	printf("#endif\n\n");
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index d0db2b673c6f..7e18f3e66e61 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -21,7 +21,7 @@ endif
+ 
+ BPF_GCC		?= $(shell command -v bpf-gcc;)
+ SAN_CFLAGS	?=
+-CFLAGS += -g -Og -rdynamic -Wall $(GENFLAGS) $(SAN_CFLAGS)		\
++CFLAGS += -g -Og -rdynamic -Wall -Werror $(GENFLAGS) $(SAN_CFLAGS)	\
+ 	  -I$(CURDIR) -I$(INCLUDE_DIR) -I$(GENDIR) -I$(LIBDIR)		\
+ 	  -I$(TOOLSINCDIR) -I$(APIDIR) -I$(OUTPUT)			\
+ 	  -Dbpf_prog_load=bpf_prog_test_load				\
+@@ -270,7 +270,7 @@ IS_LITTLE_ENDIAN = $(shell $(CC) -dM -E - </dev/null | \
+ MENDIAN=$(if $(IS_LITTLE_ENDIAN),-mlittle-endian,-mbig-endian)
+ 
+ CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG))
+-BPF_CFLAGS = -g -D__TARGET_ARCH_$(SRCARCH) $(MENDIAN) 			\
++BPF_CFLAGS = -g -Werror -D__TARGET_ARCH_$(SRCARCH) $(MENDIAN) 		\
+ 	     -I$(INCLUDE_DIR) -I$(CURDIR) -I$(APIDIR)			\
+ 	     -I$(abspath $(OUTPUT)/../usr/include)
+ 
 -- 
 2.30.2
 
