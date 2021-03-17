@@ -5,57 +5,57 @@ X-Spam-Level:
 X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72167C433E6
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ADBCAC4332B
 	for <bpf@archiver.kernel.org>; Wed, 17 Mar 2021 02:23:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4A29B64F3A
+	by mail.kernel.org (Postfix) with ESMTP id 820B564F3A
 	for <bpf@archiver.kernel.org>; Wed, 17 Mar 2021 02:23:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbhCQCXW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 16 Mar 2021 22:23:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38210 "EHLO
+        id S230157AbhCQCXY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 16 Mar 2021 22:23:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbhCQCWu (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 16 Mar 2021 22:22:50 -0400
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5671C06175F;
-        Tue, 16 Mar 2021 19:22:49 -0700 (PDT)
-Received: by mail-ot1-x32f.google.com with SMTP id f73-20020a9d03cf0000b02901b4d889bce0so367550otf.12;
-        Tue, 16 Mar 2021 19:22:49 -0700 (PDT)
+        with ESMTP id S230050AbhCQCW7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 16 Mar 2021 22:22:59 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE6DFC06174A;
+        Tue, 16 Mar 2021 19:22:58 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id x78so40324067oix.1;
+        Tue, 16 Mar 2021 19:22:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=8xgB3I/bbcUCfo36y9TmthKP+rXIjWuLX4Yzv+5PCxI=;
-        b=eKUsyjIgU1b3ZTJR7mzK0DIEvD23CnM1ep4l8c6DHn5DbRafpWFpImCi+t4apXEN5a
-         ilU2hRNLK5+RNYU1o3RdGnOoxJRHX1loED//r0WFxNY2pplaN+OJXpcTipfSaJY9Ky2Z
-         B9RVkUQzXM0DH+5iJeMys9oVaPTykxMw6+E6dalGAU0Yvj7WxqQcHf+n+dn3azbdFL0G
-         EYqSCwWbnRcg+JPDLlCTgTYr3CJoLkLmT2FXKpUXwRgJ5KAWMwBsl6yc5XlojzkUFs/h
-         bfvKkXsoywgufwTeMtPcoVfZ+nVqUK271P2Fl+JLjT44JaaJREQrfKP3vwwKU1r65aNL
-         koog==
+        bh=g3nptvPrG/Rja0vDg1eqjKadpsNbfe6SjFJEHfl1sz0=;
+        b=c91NVMcRLUxtTwlYJLrWm7Pi8hGLhQ+gDROfsqzgUl5cYpDrQaBFxlZNPzpGc3L/Kw
+         gViakKjHJj0vI+aKLR0NSzay5qhH7nEg4jvzU3NgS0q5d931gQA/YcoryUKK0gmQ63f2
+         tHIBTjRLOrJkOBI+Mf+WSGA37a8eNgBEwAAodD9thrwoBUX5n3Gc+d4Wq70Be+22j/Rp
+         S3TsmPma8VEojagqCjlDyduYvQOTCGGsvW9Mx4L1YvmnjBEqaJnZYoe2D6czzO5O+mOT
+         zpOfOYRfwp/5VvZznVAhLF6D7Uj4ruFJXK15vhTqu9ZjA7gbCbeYTAYFn5WyDU6Gj9x6
+         Xh8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=8xgB3I/bbcUCfo36y9TmthKP+rXIjWuLX4Yzv+5PCxI=;
-        b=DNhk/zCzJlTx1oTuu30iEeHWvHVcEEyBqKHw92Kt+NEly7XAg2AQYmG2TMBc+BYN6a
-         9CqlgoCbd0lbMZs0f7MhoqlUv5BrVQsm1HHnc5PTLcVgBjBXRfTRak2TcmzBDNRO8sKt
-         T1nYnbrx+XfgaRRwBjVcQjWJ296QZxb3wnp1HV4PcT1gLsKYet0DRBp1DZe+21PIUImP
-         RhpLOsivQaWGyFx849xMpORhnhKDUmqSkihg/IMrqeefTC+tPQRyQJtQ4qPxJ4XBNqMl
-         rM/N7UJXIOiqKNEbPO5p2hJYuewcGOfOp/8MfWqefnwcogzjmqHQ3mAR66dq2FKPkvff
-         uB/A==
-X-Gm-Message-State: AOAM530IjkEIU0HU1GOTuHI2sBbs+MgLvdmeNQdOTM4/gIz/Lop6fiU/
-        bFqZDY98uEhls5KXJGUhEI4ShILQiy8oxA==
-X-Google-Smtp-Source: ABdhPJyWOJqj4ex0ou/4R65iih8uHuX4nHH+q5i1JOWuVG5W4alD+ye3iOCqwBfrMQrMVwqj2uSe7A==
-X-Received: by 2002:a9d:4c0a:: with SMTP id l10mr1450337otf.136.1615947769101;
-        Tue, 16 Mar 2021 19:22:49 -0700 (PDT)
+        bh=g3nptvPrG/Rja0vDg1eqjKadpsNbfe6SjFJEHfl1sz0=;
+        b=RON1X8cSv9aoCbN2WsOkf4ir8bgGGBOAxuApbPA1NnbF393o+LXHFw7fGV/NTQoQxh
+         7HrDk1s6VX0lTXX1CT4hZH/Q1Mj4dtY/lYLruWjnVjTqXY8GsNMrbL+RsAnztbfY4sDD
+         0KnPe6BBkAjfpaf8mlyvJbDNIdZ5w72sllGD/A0TvKOJ4V8yj3YMtHmNPUyttXa9B4+p
+         bwJ+imon7u2RdJSTcg776WdyBT5wL4bxU+DTOhpHiwsz20wERnWZMLl/eYgvH21n02l8
+         54YwvO2ZVpdRXzitlsS046Q3n5g4+yFJYAqvjmCUggGxeR4o0zCC6THzZoOlx6ffij2b
+         Pvag==
+X-Gm-Message-State: AOAM531HdMCruOajzt1uhrukoGfbxSL7zamrnSXDAqHvks9lI0VxIGyv
+        PFc6NGuzjYj5Lab90T7SUO1LHanGmsBKDA==
+X-Google-Smtp-Source: ABdhPJzTuTChHLxoU4he883kqIk2wMbZWe5FO+KbBlfIPWcLdTBk43LA4eRjlsxRKxdXifyE1WMXjQ==
+X-Received: by 2002:aca:fd13:: with SMTP id b19mr1221216oii.139.1615947777995;
+        Tue, 16 Mar 2021 19:22:57 -0700 (PDT)
 Received: from unknown.attlocal.net ([2600:1700:65a0:ab60:517b:5634:5d8e:ff09])
-        by smtp.gmail.com with ESMTPSA id i3sm8037858oov.2.2021.03.16.19.22.47
+        by smtp.gmail.com with ESMTPSA id i3sm8037858oov.2.2021.03.16.19.22.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Mar 2021 19:22:48 -0700 (PDT)
+        Tue, 16 Mar 2021 19:22:57 -0700 (PDT)
 From:   Cong Wang <xiyou.wangcong@gmail.com>
 To:     netdev@vger.kernel.org
 Cc:     bpf@vger.kernel.org, duanxiongchun@bytedance.com,
@@ -65,9 +65,9 @@ Cc:     bpf@vger.kernel.org, duanxiongchun@bytedance.com,
         Daniel Borkmann <daniel@iogearbox.net>,
         Jakub Sitnicki <jakub@cloudflare.com>,
         Lorenz Bauer <lmb@cloudflare.com>
-Subject: [Patch bpf-next v5 04/11] skmsg: avoid lock_sock() in sk_psock_backlog()
-Date:   Tue, 16 Mar 2021 19:22:12 -0700
-Message-Id: <20210317022219.24934-5-xiyou.wangcong@gmail.com>
+Subject: [Patch bpf-next v5 11/11] selftests/bpf: add a test case for udp sockmap
+Date:   Tue, 16 Mar 2021 19:22:19 -0700
+Message-Id: <20210317022219.24934-12-xiyou.wangcong@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210317022219.24934-1-xiyou.wangcong@gmail.com>
 References: <20210317022219.24934-1-xiyou.wangcong@gmail.com>
@@ -79,16 +79,7 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Cong Wang <cong.wang@bytedance.com>
 
-We do not have to lock the sock to avoid losing sk_socket,
-instead we can purge all the ingress queues when we close
-the socket. Sending or receiving packets after orphaning
-socket makes no sense.
-
-We do purge these queues when psock refcnt reaches zero but
-here we want to purge them explicitly in sock_map_close().
-There are also some nasty race conditions on testing bit
-SK_PSOCK_TX_ENABLED and queuing/canceling the psock work,
-we can expand psock->ingress_lock a bit to protect them too.
+Add a test case to ensure redirection between two UDP sockets work.
 
 Cc: John Fastabend <john.fastabend@gmail.com>
 Cc: Daniel Borkmann <daniel@iogearbox.net>
@@ -96,171 +87,212 @@ Cc: Jakub Sitnicki <jakub@cloudflare.com>
 Cc: Lorenz Bauer <lmb@cloudflare.com>
 Signed-off-by: Cong Wang <cong.wang@bytedance.com>
 ---
- include/linux/skmsg.h |  1 +
- net/core/skmsg.c      | 50 +++++++++++++++++++++++++++++++------------
- net/core/sock_map.c   |  1 +
- 3 files changed, 38 insertions(+), 14 deletions(-)
+ .../selftests/bpf/prog_tests/sockmap_listen.c | 140 ++++++++++++++++++
+ .../selftests/bpf/progs/test_sockmap_listen.c |  22 +++
+ 2 files changed, 162 insertions(+)
 
-diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
-index f2d45a73b2b2..0f5e663f6c7f 100644
---- a/include/linux/skmsg.h
-+++ b/include/linux/skmsg.h
-@@ -347,6 +347,7 @@ static inline void sk_psock_report_error(struct sk_psock *psock, int err)
- }
- 
- struct sk_psock *sk_psock_init(struct sock *sk, int node);
-+void sk_psock_stop(struct sk_psock *psock);
- 
- #if IS_ENABLED(CONFIG_BPF_STREAM_PARSER)
- int sk_psock_init_strp(struct sock *sk, struct sk_psock *psock);
-diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index 305dddc51857..d0a227b0f672 100644
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -497,7 +497,7 @@ static int sk_psock_handle_skb(struct sk_psock *psock, struct sk_buff *skb,
- 	if (!ingress) {
- 		if (!sock_writeable(psock->sk))
- 			return -EAGAIN;
--		return skb_send_sock_locked(psock->sk, skb, off, len);
-+		return skb_send_sock(psock->sk, skb, off, len);
- 	}
- 	return sk_psock_skb_ingress(psock, skb);
- }
-@@ -511,8 +511,6 @@ static void sk_psock_backlog(struct work_struct *work)
- 	u32 len, off;
- 	int ret;
- 
--	/* Lock sock to avoid losing sk_socket during loop. */
--	lock_sock(psock->sk);
- 	if (state->skb) {
- 		skb = state->skb;
- 		len = state->len;
-@@ -529,7 +527,7 @@ static void sk_psock_backlog(struct work_struct *work)
- 		skb_bpf_redirect_clear(skb);
- 		do {
- 			ret = -EIO;
--			if (likely(psock->sk->sk_socket))
-+			if (!sock_flag(psock->sk, SOCK_DEAD))
- 				ret = sk_psock_handle_skb(psock, skb, off,
- 							  len, ingress);
- 			if (ret <= 0) {
-@@ -537,13 +535,13 @@ static void sk_psock_backlog(struct work_struct *work)
- 					state->skb = skb;
- 					state->len = len;
- 					state->off = off;
--					goto end;
-+					return;
- 				}
- 				/* Hard errors break pipe and stop xmit. */
- 				sk_psock_report_error(psock, ret ? -ret : EPIPE);
- 				sk_psock_clear_state(psock, SK_PSOCK_TX_ENABLED);
- 				kfree_skb(skb);
--				goto end;
-+				return;
- 			}
- 			off += ret;
- 			len -= ret;
-@@ -552,8 +550,6 @@ static void sk_psock_backlog(struct work_struct *work)
- 		if (!ingress)
- 			kfree_skb(skb);
- 	}
--end:
--	release_sock(psock->sk);
- }
- 
- struct sk_psock *sk_psock_init(struct sock *sk, int node)
-@@ -631,7 +627,7 @@ static void __sk_psock_purge_ingress_msg(struct sk_psock *psock)
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+index c26e6bf05e49..a549ebd3b5a6 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+@@ -1563,6 +1563,142 @@ static void test_redir(struct test_sockmap_listen *skel, struct bpf_map *map,
  	}
  }
  
--static void sk_psock_zap_ingress(struct sk_psock *psock)
-+static void __sk_psock_zap_ingress(struct sk_psock *psock)
- {
- 	struct sk_buff *skb;
- 
-@@ -639,8 +635,13 @@ static void sk_psock_zap_ingress(struct sk_psock *psock)
- 		skb_bpf_redirect_clear(skb);
- 		kfree_skb(skb);
- 	}
--	spin_lock_bh(&psock->ingress_lock);
- 	__sk_psock_purge_ingress_msg(psock);
-+}
-+
-+static void sk_psock_zap_ingress(struct sk_psock *psock)
++static void udp_redir_to_connected(int family, int sotype, int sock_mapfd,
++				   int verd_mapfd, enum redir_mode mode)
 +{
-+	spin_lock_bh(&psock->ingress_lock);
-+	__sk_psock_zap_ingress(psock);
- 	spin_unlock_bh(&psock->ingress_lock);
- }
- 
-@@ -654,6 +655,17 @@ static void sk_psock_link_destroy(struct sk_psock *psock)
- 	}
- }
- 
-+void sk_psock_stop(struct sk_psock *psock)
-+{
-+	spin_lock_bh(&psock->ingress_lock);
-+	sk_psock_clear_state(psock, SK_PSOCK_TX_ENABLED);
-+	sk_psock_cork_free(psock);
-+	__sk_psock_zap_ingress(psock);
-+	spin_unlock_bh(&psock->ingress_lock);
++	const char *log_prefix = redir_mode_str(mode);
++	struct sockaddr_storage addr;
++	int c0, c1, p0, p1;
++	unsigned int pass;
++	socklen_t len;
++	int err, n;
++	u64 value;
++	u32 key;
++	char b;
 +
-+	cancel_work_sync(&psock->work);
-+}
++	zero_verdict_count(verd_mapfd);
 +
- static void sk_psock_done_strp(struct sk_psock *psock);
- 
- static void sk_psock_destroy_deferred(struct work_struct *gc)
-@@ -770,14 +782,20 @@ static void sk_psock_skb_redirect(struct sk_buff *skb)
- 	 * error that caused the pipe to break. We can't send a packet on
- 	 * a socket that is in this state so we drop the skb.
- 	 */
--	if (!psock_other || sock_flag(sk_other, SOCK_DEAD) ||
--	    !sk_psock_test_state(psock_other, SK_PSOCK_TX_ENABLED)) {
-+	if (!psock_other || sock_flag(sk_other, SOCK_DEAD)) {
-+		kfree_skb(skb);
++	p0 = socket_loopback(family, sotype | SOCK_NONBLOCK);
++	if (p0 < 0)
 +		return;
-+	}
-+	spin_lock_bh(&psock_other->ingress_lock);
-+	if (!sk_psock_test_state(psock_other, SK_PSOCK_TX_ENABLED)) {
-+		spin_unlock_bh(&psock_other->ingress_lock);
- 		kfree_skb(skb);
- 		return;
- 	}
++	len = sizeof(addr);
++	err = xgetsockname(p0, sockaddr(&addr), &len);
++	if (err)
++		goto close_peer0;
++
++	c0 = xsocket(family, sotype | SOCK_NONBLOCK, 0);
++	if (c0 < 0)
++		goto close_peer0;
++	err = xconnect(c0, sockaddr(&addr), len);
++	if (err)
++		goto close_cli0;
++	err = xgetsockname(c0, sockaddr(&addr), &len);
++	if (err)
++		goto close_cli0;
++	err = xconnect(p0, sockaddr(&addr), len);
++	if (err)
++		goto close_cli0;
++
++	p1 = socket_loopback(family, sotype | SOCK_NONBLOCK);
++	if (p1 < 0)
++		goto close_cli0;
++	err = xgetsockname(p1, sockaddr(&addr), &len);
++	if (err)
++		goto close_cli0;
++
++	c1 = xsocket(family, sotype | SOCK_NONBLOCK, 0);
++	if (c1 < 0)
++		goto close_peer1;
++	err = xconnect(c1, sockaddr(&addr), len);
++	if (err)
++		goto close_cli1;
++	err = xgetsockname(c1, sockaddr(&addr), &len);
++	if (err)
++		goto close_cli1;
++	err = xconnect(p1, sockaddr(&addr), len);
++	if (err)
++		goto close_cli1;
++
++	key = 0;
++	value = p0;
++	err = xbpf_map_update_elem(sock_mapfd, &key, &value, BPF_NOEXIST);
++	if (err)
++		goto close_cli1;
++
++	key = 1;
++	value = p1;
++	err = xbpf_map_update_elem(sock_mapfd, &key, &value, BPF_NOEXIST);
++	if (err)
++		goto close_cli1;
++
++	n = write(c1, "a", 1);
++	if (n < 0)
++		FAIL_ERRNO("%s: write", log_prefix);
++	if (n == 0)
++		FAIL("%s: incomplete write", log_prefix);
++	if (n < 1)
++		goto close_cli1;
++
++	key = SK_PASS;
++	err = xbpf_map_lookup_elem(verd_mapfd, &key, &pass);
++	if (err)
++		goto close_cli1;
++	if (pass != 1)
++		FAIL("%s: want pass count 1, have %d", log_prefix, pass);
++
++	n = read(mode == REDIR_INGRESS ? p0 : c0, &b, 1);
++	if (n < 0)
++		FAIL_ERRNO("%s: read", log_prefix);
++	if (n == 0)
++		FAIL("%s: incomplete read", log_prefix);
++
++close_cli1:
++	xclose(c1);
++close_peer1:
++	xclose(p1);
++close_cli0:
++	xclose(c0);
++close_peer0:
++	xclose(p0);
++}
++
++static void udp_skb_redir_to_connected(struct test_sockmap_listen *skel,
++					   struct bpf_map *inner_map, int family,
++					   int sotype)
++{
++	int verdict = bpf_program__fd(skel->progs.prog_skb_verdict);
++	int verdict_map = bpf_map__fd(skel->maps.verdict_map);
++	int sock_map = bpf_map__fd(inner_map);
++	int err;
++
++	err = xbpf_prog_attach(verdict, sock_map, BPF_SK_SKB_VERDICT, 0);
++	if (err)
++		return;
++
++	skel->bss->test_ingress = false;
++	udp_redir_to_connected(family, sotype, sock_map, verdict_map,
++			       REDIR_EGRESS);
++	skel->bss->test_ingress = true;
++	udp_redir_to_connected(family, sotype, sock_map, verdict_map,
++			       REDIR_INGRESS);
++
++	xbpf_prog_detach2(verdict, sock_map, BPF_SK_SKB_VERDICT);
++}
++
++static void test_udp_redir(struct test_sockmap_listen *skel, struct bpf_map *map,
++			   int family)
++{
++	const char *family_name, *map_name;
++	char s[MAX_TEST_NAME];
++
++	family_name = family_str(family);
++	map_name = map_type_str(map);
++	snprintf(s, sizeof(s), "%s %s %s", map_name, family_name, __func__);
++	if (!test__start_subtest(s))
++		return;
++	udp_skb_redir_to_connected(skel, map, family, SOCK_DGRAM);
++}
++
+ static void test_reuseport(struct test_sockmap_listen *skel,
+ 			   struct bpf_map *map, int family, int sotype)
+ {
+@@ -1626,10 +1762,14 @@ void test_sockmap_listen(void)
+ 	skel->bss->test_sockmap = true;
+ 	run_tests(skel, skel->maps.sock_map, AF_INET);
+ 	run_tests(skel, skel->maps.sock_map, AF_INET6);
++	test_udp_redir(skel, skel->maps.sock_map, AF_INET);
++	test_udp_redir(skel, skel->maps.sock_map, AF_INET6);
  
- 	skb_queue_tail(&psock_other->ingress_skb, skb);
- 	schedule_work(&psock_other->work);
-+	spin_unlock_bh(&psock_other->ingress_lock);
+ 	skel->bss->test_sockmap = false;
+ 	run_tests(skel, skel->maps.sock_hash, AF_INET);
+ 	run_tests(skel, skel->maps.sock_hash, AF_INET6);
++	test_udp_redir(skel, skel->maps.sock_hash, AF_INET);
++	test_udp_redir(skel, skel->maps.sock_hash, AF_INET6);
+ 
+ 	test_sockmap_listen__destroy(skel);
+ }
+diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_listen.c b/tools/testing/selftests/bpf/progs/test_sockmap_listen.c
+index fa221141e9c1..a39eba9f5201 100644
+--- a/tools/testing/selftests/bpf/progs/test_sockmap_listen.c
++++ b/tools/testing/selftests/bpf/progs/test_sockmap_listen.c
+@@ -29,6 +29,7 @@ struct {
+ } verdict_map SEC(".maps");
+ 
+ static volatile bool test_sockmap; /* toggled by user-space */
++static volatile bool test_ingress; /* toggled by user-space */
+ 
+ SEC("sk_skb/stream_parser")
+ int prog_stream_parser(struct __sk_buff *skb)
+@@ -55,6 +56,27 @@ int prog_stream_verdict(struct __sk_buff *skb)
+ 	return verdict;
  }
  
- static void sk_psock_tls_verdict_apply(struct sk_buff *skb, struct sock *sk, int verdict)
-@@ -845,8 +863,12 @@ static void sk_psock_verdict_apply(struct sk_psock *psock,
- 			err = sk_psock_skb_ingress_self(psock, skb);
- 		}
- 		if (err < 0) {
--			skb_queue_tail(&psock->ingress_skb, skb);
--			schedule_work(&psock->work);
-+			spin_lock_bh(&psock->ingress_lock);
-+			if (sk_psock_test_state(psock, SK_PSOCK_TX_ENABLED)) {
-+				skb_queue_tail(&psock->ingress_skb, skb);
-+				schedule_work(&psock->work);
-+			}
-+			spin_unlock_bh(&psock->ingress_lock);
- 		}
- 		break;
- 	case __SK_REDIRECT:
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index dd53a7771d7e..7c3589fc13bb 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -1540,6 +1540,7 @@ void sock_map_close(struct sock *sk, long timeout)
- 	saved_close = psock->saved_close;
- 	sock_map_remove_links(sk, psock);
- 	rcu_read_unlock();
-+	sk_psock_stop(psock);
- 	release_sock(sk);
- 	saved_close(sk, timeout);
- }
++SEC("sk_skb/skb_verdict")
++int prog_skb_verdict(struct __sk_buff *skb)
++{
++	unsigned int *count;
++	__u32 zero = 0;
++	int verdict;
++
++	if (test_sockmap)
++		verdict = bpf_sk_redirect_map(skb, &sock_map, zero,
++					      test_ingress ? BPF_F_INGRESS : 0);
++	else
++		verdict = bpf_sk_redirect_hash(skb, &sock_hash, &zero,
++					       test_ingress ? BPF_F_INGRESS : 0);
++
++	count = bpf_map_lookup_elem(&verdict_map, &verdict);
++	if (count)
++		(*count)++;
++
++	return verdict;
++}
++
+ SEC("sk_msg")
+ int prog_msg_verdict(struct sk_msg_md *msg)
+ {
 -- 
 2.25.1
 
