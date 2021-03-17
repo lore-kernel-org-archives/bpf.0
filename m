@@ -2,92 +2,81 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C7BCEC433E0
-	for <bpf@archiver.kernel.org>; Wed, 17 Mar 2021 19:52:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E153AC433E0
+	for <bpf@archiver.kernel.org>; Wed, 17 Mar 2021 20:06:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 73C5A64F40
-	for <bpf@archiver.kernel.org>; Wed, 17 Mar 2021 19:52:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9457C64F38
+	for <bpf@archiver.kernel.org>; Wed, 17 Mar 2021 20:06:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232592AbhCQTvw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 17 Mar 2021 15:51:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40174 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231398AbhCQTvk (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 17 Mar 2021 15:51:40 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AAE7C06174A;
-        Wed, 17 Mar 2021 12:51:40 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id 15so4781826ljj.0;
-        Wed, 17 Mar 2021 12:51:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VzQBD837Zk1zEE5Iz7CRU5SLWREGhnXHICCVYkscOfc=;
-        b=No5LWjJXssMUs0UXhpwbVW0DuHSXGjX1P2/w7D3hj4mYl3VvTG3P5VAmH0SM62x/dT
-         PqrG00moq/L7hqU6fXua3oramWcVCzElc/GzyDOJ9e7udlSeaStUw5CHq6fSGBJaza4p
-         TohikbLMye+bT7zmNfG+PVUvnKXDt/wquXD969rer5t3QB+NFex0DD64oshMyLHfAYtM
-         n1g3axMAGsi6NbsB7wc6N87VW2Pu6wjhaobYZ2puA20/0me5dy9Q6VK/86Om1cU/5hJP
-         cHHvnb/P/dkOZ6KYzIlihzhLvmT96jUg5QskD6XvOxYajvr2ZUe8mzuZgyMeHFf7fqfX
-         Ma3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VzQBD837Zk1zEE5Iz7CRU5SLWREGhnXHICCVYkscOfc=;
-        b=hrVQonJGX7KmVFuyRceNeZdisnjZJaDRzPxpvmyH3LuS1w5h7A3QzUPWl66aQ4vnYV
-         W6WvVrEm4QPSvYlf0ZSo2EKv8sJesVKVzI50CxXvCFoz0aWylvhASuCmZiwKz+KC2N1q
-         SMLXzesEeOhGetzxS9j9ijE21UoFbKxIETa6v+L9jZY/ER5sPuEal6M58jBoVKJ4a+Bi
-         ykZJ8c0RBRNLOSiPECAQqJoY8+Mj6ND9zzRvmmNgJUiCUS5nR97U3dFdwcVsFAvQT+MK
-         ttfVA8DHl/l5/FdRYmdqldWlXEquGEQ73hpbSczTp2mImuIVC+pdMT/h7OKDQfwYwzOU
-         l1hQ==
-X-Gm-Message-State: AOAM531W7Qu2scdPlQvKDchVG6jbdkhK5JWJx6GnK+jYgpK0meTe4tuj
-        q+7STHn27r8oCC9bR3nO+IJGTUoQ1ifY4CRIo5Y=
-X-Google-Smtp-Source: ABdhPJyDl038EMrMS8D0eUwFstC4lVMlO1PBhSPXP5inoBsNmAyT40HGMm8TW7qZ156bRzt7NxGocN1usLMO4lmkz7Y=
-X-Received: by 2002:a2e:900b:: with SMTP id h11mr3340022ljg.258.1616010698713;
- Wed, 17 Mar 2021 12:51:38 -0700 (PDT)
+        id S233421AbhCQUFl convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 17 Mar 2021 16:05:41 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:36866 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233280AbhCQUF1 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 17 Mar 2021 16:05:27 -0400
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12HK4tnO006407
+        for <bpf@vger.kernel.org>; Wed, 17 Mar 2021 13:05:26 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 37bek0krg5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 17 Mar 2021 13:05:26 -0700
+Received: from intmgw002.25.frc3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Wed, 17 Mar 2021 13:05:25 -0700
+Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
+        id 12C802ED245B; Wed, 17 Mar 2021 13:05:16 -0700 (PDT)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
+        <daniel@iogearbox.net>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>
+Subject: [PATCH v3 bpf-next 2/2] selftests/bpf: drop custom NULL #define in skb_pkt_end selftest
+Date:   Wed, 17 Mar 2021 13:05:10 -0700
+Message-ID: <20210317200510.1354627-3-andrii@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210317200510.1354627-1-andrii@kernel.org>
+References: <20210317200510.1354627-1-andrii@kernel.org>
 MIME-Version: 1.0
-References: <20210317125147.2159512-1-Jianlin.Lv@arm.com>
-In-Reply-To: <20210317125147.2159512-1-Jianlin.Lv@arm.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 17 Mar 2021 12:51:27 -0700
-Message-ID: <CAADnVQLB1MoqHekQa1FrjybqmA9gBHcBcaezULb=v5PgthRB6A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: Simplify expression for identify bpf mem type
-To:     Jianlin Lv <Jianlin.Lv@arm.com>
-Cc:     bpf <bpf@vger.kernel.org>, Jakub Kicinski <kuba@kernel.org>,
-        Simon Horman <simon.horman@netronome.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        OSS Drivers <oss-drivers@netronome.com>,
-        Linux API <linux-api@vger.kernel.org>, iecedge@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
+ definitions=2021-03-17_11:2021-03-17,2021-03-17 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0 bulkscore=0
+ impostorscore=0 malwarescore=0 mlxscore=0 suspectscore=0 clxscore=1015
+ lowpriorityscore=0 mlxlogscore=857 phishscore=0 adultscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2103170140
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Mar 17, 2021 at 5:52 AM Jianlin Lv <Jianlin.Lv@arm.com> wrote:
->         return BPF_CLASS(meta->insn.code);
-> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> index 2d3036e292a9..5d77675e7112 100644
-> --- a/include/uapi/linux/bpf.h
-> +++ b/include/uapi/linux/bpf.h
-> @@ -21,6 +21,7 @@
->  #define BPF_DW         0x18    /* double word (64-bit) */
->  #define BPF_ATOMIC     0xc0    /* atomic memory ops - op type in immediate */
->  #define BPF_XADD       0xc0    /* exclusive add - legacy name */
-> +#define BPF_SIZE_MASK  0x18    /* mask of size modifier */
+Now that bpftool generates NULL definition as part of vmlinux.h, drop custom
+NULL definition in skb_pkt_end.c.
 
-Pls don't add kernel internal defines to uapi.
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ tools/testing/selftests/bpf/progs/skb_pkt_end.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/tools/testing/selftests/bpf/progs/skb_pkt_end.c b/tools/testing/selftests/bpf/progs/skb_pkt_end.c
+index cf6823f42e80..7f2eaa2f89f8 100644
+--- a/tools/testing/selftests/bpf/progs/skb_pkt_end.c
++++ b/tools/testing/selftests/bpf/progs/skb_pkt_end.c
+@@ -4,7 +4,6 @@
+ #include <bpf/bpf_core_read.h>
+ #include <bpf/bpf_helpers.h>
+ 
+-#define NULL 0
+ #define INLINE __always_inline
+ 
+ #define skb_shorter(skb, len) ((void *)(long)(skb)->data + (len) > (void *)(long)skb->data_end)
+-- 
+2.30.2
+
