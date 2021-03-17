@@ -4,67 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DD6DFC433DB
-	for <bpf@archiver.kernel.org>; Wed, 17 Mar 2021 02:23:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D174C43381
+	for <bpf@archiver.kernel.org>; Wed, 17 Mar 2021 02:23:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AA15864F96
+	by mail.kernel.org (Postfix) with ESMTP id 01FCB64F96
 	for <bpf@archiver.kernel.org>; Wed, 17 Mar 2021 02:23:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbhCQCWv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S229900AbhCQCWv (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Tue, 16 Mar 2021 22:22:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38188 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbhCQCWp (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 16 Mar 2021 22:22:45 -0400
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C8CCC06174A;
-        Tue, 16 Mar 2021 19:22:45 -0700 (PDT)
-Received: by mail-oi1-x231.google.com with SMTP id v192so32718095oia.5;
-        Tue, 16 Mar 2021 19:22:45 -0700 (PDT)
+        with ESMTP id S229545AbhCQCWr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 16 Mar 2021 22:22:47 -0400
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 537C1C06175F;
+        Tue, 16 Mar 2021 19:22:47 -0700 (PDT)
+Received: by mail-ot1-x336.google.com with SMTP id m21-20020a9d7ad50000b02901b83efc84a0so375677otn.10;
+        Tue, 16 Mar 2021 19:22:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=mTmUCaOfbd5iJ7LaoWiivZKH0AsG4jw/h9U+kEn6lS0=;
-        b=Hy7q0SUbLulXy+0Btv2fwXj75v3soadwbMIXAdarvgDA6e6SaUvUKMrKxse7wxTT4u
-         qLfYyI1+GSZlKDd3EtaUkZ6aIsobFB+FTuaiJwCSrLZoVwY4i0P54cUDpo6Q483VoH6v
-         TKuPAzgOwoHauAoIs+3lM9u8sKmtfimMuIkf3NGirLET/7wtTUkyd3Ss0+tLXjD8EvpK
-         Z2LShQyHjfWHVJO+tgJ7JthEHp2G74ssil/TV6CuNFEj8xh6i/tHUWLHMqnvVR/AUktL
-         WQt3ytQ3j5HjOeR67YHJw4e3iqmxypa1p/l2zbNCxRig9S0uqN/9On5TE0nWuzsNQJrq
-         sQKw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=bkt2WplmLy1bOLMwQLt5MnCSbjUaxe7m0LNKG1XmAxE=;
+        b=tabE2+z3CHadQK542X9/arazbYy3ePTZP2LucsjUBSb+kMZw7v4Wg0MfJeQZlcU5Gi
+         5M/bGIHAvad5hNG/8U4lutDFBTufpdFMtCGyKPA49aL8UJoRsh4eN/Hl5wAqf7zIIUUC
+         MsSURdP5nrGBG9UStgyDm2MshomcVB3/Em1uXBTOpnQQONjpC5y0dg69SqpfOAtwfPTK
+         QF1HM3PE9f1NJLmSvs08/YIRhzSwnVeDjzJ0c4OybZdzq7DVU0iP5xTb5Q0Hh2isrRfX
+         Vme46sBdcSFSFyICpgKemZU71V9oxkBEl8LOXvL/MEG5k/FekPPbbu1GuRqDtz7B+jVW
+         Zz7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=mTmUCaOfbd5iJ7LaoWiivZKH0AsG4jw/h9U+kEn6lS0=;
-        b=NBZE5kKSkJdhDCxjnpvKaR0gRnTnsAddJTA2RoD4XyaQLeaGc6jZ5jJAUjiYdf+P0M
-         8VGGUU2tBX6+vimmaiXR/8aEvA7VFNmIP5SV9NlyRl+Is+Re50A8zFwmPD6lR/W+D6gl
-         /I6MxXFj31FjZXeYyK2eyxTCR5uDLHzzVDG8kwmBOuGfGDqTEcEAC8WVf90qZ+j7GM4H
-         QOEKbPj1Fc4f4dEc096cpSrxbcw09ZjOjZ3C8k82JCW/29LHuh80vvEVYmOn18POW8oQ
-         8XxpEEurG4WGpi4Vqoi1GG33Bhm+XfNscqgbMzmRKgj7/xwxPJ/U5bfpC7DMnxUZgjay
-         fmKw==
-X-Gm-Message-State: AOAM531XwaStnVL/x8hbxbtgvwSbdUs5INmMi+HBd5aqZEl20ev8Uzqd
-        0592WlZudZIvYJtHLANnZnHAqt4Hy37pfw==
-X-Google-Smtp-Source: ABdhPJzI4NCmFrqeeQPTytvBtR9jzk7ZB1Ju11eMVX0d+EDrSkUMbPS44ySe+q4mPHECl5RK6w6BJg==
-X-Received: by 2002:aca:ac8d:: with SMTP id v135mr1201381oie.2.1615947764108;
-        Tue, 16 Mar 2021 19:22:44 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=bkt2WplmLy1bOLMwQLt5MnCSbjUaxe7m0LNKG1XmAxE=;
+        b=lyQfFnIOjcVP0VrdbbS2yUXiRUhtvFGSBuve0IGnN5/ra54ft/z058POq66VpYR84x
+         CMvVbcb2od09qWuRTaeaE6F8elPmdEje2kFevcjHfObBGVkSOuf5WIKyIavDHMH531Yv
+         aVHryWXcjoh/mIDwPjTdx3XnP6hohXcv6TsS7wNRPXmUa9A40Fe+eRitfFhgoiXdH+DX
+         Zz9qLSO/zG2c3zQwTVb33KQfADKflrvxO0uILtVS5Tmo0u3qFOjSI8R/mwzXtv8i8JR/
+         jlyFaMl8I3bq4C6R3lL5EOb9WR6WCARxGzf0YgvtJ1sHNR12o9musq5uI7G3/rcGYnD1
+         l/KA==
+X-Gm-Message-State: AOAM532/DIYchXL83xBNLHtn2hEIl6GxrWqHwII90oGPUI/tMQ3J4t7Q
+        NP63Y0Avs0KFj21oqkHv51QTDfAXGEQOgA==
+X-Google-Smtp-Source: ABdhPJyFByzejsWqCD6OBsABwnGwDPTuQub7gXWUpDT+VhyXPSaT2ABotZBPlSnpcxZdN1Lhdqa+Xg==
+X-Received: by 2002:a05:6830:1de9:: with SMTP id b9mr1431743otj.137.1615947766612;
+        Tue, 16 Mar 2021 19:22:46 -0700 (PDT)
 Received: from unknown.attlocal.net ([2600:1700:65a0:ab60:517b:5634:5d8e:ff09])
-        by smtp.gmail.com with ESMTPSA id i3sm8037858oov.2.2021.03.16.19.22.43
+        by smtp.gmail.com with ESMTPSA id i3sm8037858oov.2.2021.03.16.19.22.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Mar 2021 19:22:43 -0700 (PDT)
+        Tue, 16 Mar 2021 19:22:46 -0700 (PDT)
 From:   Cong Wang <xiyou.wangcong@gmail.com>
 To:     netdev@vger.kernel.org
 Cc:     bpf@vger.kernel.org, duanxiongchun@bytedance.com,
         wangdongdong.6@bytedance.com, jiang.wang@bytedance.com,
-        Cong Wang <cong.wang@bytedance.com>
-Subject: [Patch bpf-next v5 00/11] sockmap: introduce BPF_SK_SKB_VERDICT and support UDP
-Date:   Tue, 16 Mar 2021 19:22:08 -0700
-Message-Id: <20210317022219.24934-1-xiyou.wangcong@gmail.com>
+        Cong Wang <cong.wang@bytedance.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Lorenz Bauer <lmb@cloudflare.com>,
+        Jakub Sitnicki <jakub@cloudflare.com>
+Subject: [Patch bpf-next v5 02/11] skmsg: introduce a spinlock to protect ingress_msg
+Date:   Tue, 16 Mar 2021 19:22:10 -0700
+Message-Id: <20210317022219.24934-3-xiyou.wangcong@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210317022219.24934-1-xiyou.wangcong@gmail.com>
+References: <20210317022219.24934-1-xiyou.wangcong@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -73,95 +79,161 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Cong Wang <cong.wang@bytedance.com>
 
-We have thousands of services connected to a daemon on every host
-via AF_UNIX dgram sockets, after they are moved into VM, we have to
-add a proxy to forward these communications from VM to host, because
-rewriting thousands of them is not practical. This proxy uses an
-AF_UNIX socket connected to services and a UDP socket to connect to
-the host. It is inefficient because data is copied between kernel
-space and user space twice, and we can not use splice() which only
-supports TCP. Therefore, we want to use sockmap to do the splicing
-without going to user-space at all (after the initial setup).
+Currently we rely on lock_sock to protect ingress_msg,
+it is too big for this, we can actually just use a spinlock
+to protect this list like protecting other skb queues.
 
-Currently sockmap only fully supports TCP, UDP is partially supported
-as it is only allowed to add into sockmap. This patchset, as the second
-part of the original large patchset, extends sockmap with:
-1) cross-protocol support with BPF_SK_SKB_VERDICT; 2) full UDP support.
+__tcp_bpf_recvmsg() is still special because of peeking,
+it still has to use lock_sock.
 
-On the high level, ->read_sock() is required for each protocol to support
-sockmap redirection, and in order to do sock proto update, a new ops
-->psock_update_sk_prot() is introduced, which is also required. And the
-BPF ->recvmsg() is also needed to replace the original ->recvmsg() to
-retrieve skmsg. To make life easier, we have to get rid of lock_sock()
-in sk_psock_handle_skb(), otherwise we would have to implement
-->sendmsg_locked() on top of ->sendmsg(), which is ugly.
-
-Please see each patch for more details.
-
-To see the big picture, the original patchset is available here:
-https://github.com/congwang/linux/tree/sockmap
-this patchset is also available:
-https://github.com/congwang/linux/tree/sockmap2
-
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Lorenz Bauer <lmb@cloudflare.com>
+Acked-by: Jakub Sitnicki <jakub@cloudflare.com>
+Signed-off-by: Cong Wang <cong.wang@bytedance.com>
 ---
-v5: use INDIRECT_CALL_2() for function pointers
-    use ingress_lock to close a race condition found by Jacub
-    rename two helper functions
+ include/linux/skmsg.h | 46 +++++++++++++++++++++++++++++++++++++++++++
+ net/core/skmsg.c      |  3 +++
+ net/ipv4/tcp_bpf.c    | 18 ++++++-----------
+ 3 files changed, 55 insertions(+), 12 deletions(-)
 
-v4: get rid of lock_sock() in sk_psock_handle_skb()
-    get rid of udp_sendmsg_locked()
-    remove an empty line
-    update cover letter
-
-v3: export tcp/udp_update_proto()
-    rename sk->sk_prot->psock_update_sk_prot()
-    improve changelogs
-
-v2: separate from the original large patchset
-    rebase to the latest bpf-next
-    split UDP test case
-    move inet_csk_has_ulp() check to tcp_bpf.c
-    clean up udp_read_sock()
-
-Cong Wang (11):
-  skmsg: lock ingress_skb when purging
-  skmsg: introduce a spinlock to protect ingress_msg
-  skmsg: introduce skb_send_sock() for sock_map
-  skmsg: avoid lock_sock() in sk_psock_backlog()
-  sock_map: introduce BPF_SK_SKB_VERDICT
-  sock: introduce sk->sk_prot->psock_update_sk_prot()
-  udp: implement ->read_sock() for sockmap
-  skmsg: extract __tcp_bpf_recvmsg() and tcp_bpf_wait_data()
-  udp: implement udp_bpf_recvmsg() for sockmap
-  sock_map: update sock type checks for UDP
-  selftests/bpf: add a test case for udp sockmap
-
- include/linux/skbuff.h                        |   1 +
- include/linux/skmsg.h                         |  71 ++++++--
- include/net/sock.h                            |   3 +
- include/net/tcp.h                             |   3 +-
- include/net/udp.h                             |   3 +
- include/uapi/linux/bpf.h                      |   1 +
- kernel/bpf/syscall.c                          |   1 +
- net/core/skbuff.c                             |  55 +++++-
- net/core/skmsg.c                              | 160 +++++++++++++++---
- net/core/sock_map.c                           |  53 +++---
- net/ipv4/af_inet.c                            |   1 +
- net/ipv4/tcp_bpf.c                            | 130 +++-----------
- net/ipv4/tcp_ipv4.c                           |   3 +
- net/ipv4/udp.c                                |  38 +++++
- net/ipv4/udp_bpf.c                            |  79 ++++++++-
- net/ipv6/af_inet6.c                           |   1 +
- net/ipv6/tcp_ipv6.c                           |   3 +
- net/ipv6/udp.c                                |   3 +
- net/tls/tls_sw.c                              |   4 +-
- tools/bpf/bpftool/common.c                    |   1 +
- tools/bpf/bpftool/prog.c                      |   1 +
- tools/include/uapi/linux/bpf.h                |   1 +
- .../selftests/bpf/prog_tests/sockmap_listen.c | 140 +++++++++++++++
- .../selftests/bpf/progs/test_sockmap_listen.c |  22 +++
- 24 files changed, 600 insertions(+), 178 deletions(-)
-
+diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
+index 6c09d94be2e9..f2d45a73b2b2 100644
+--- a/include/linux/skmsg.h
++++ b/include/linux/skmsg.h
+@@ -89,6 +89,7 @@ struct sk_psock {
+ #endif
+ 	struct sk_buff_head		ingress_skb;
+ 	struct list_head		ingress_msg;
++	spinlock_t			ingress_lock;
+ 	unsigned long			state;
+ 	struct list_head		link;
+ 	spinlock_t			link_lock;
+@@ -284,7 +285,45 @@ static inline struct sk_psock *sk_psock(const struct sock *sk)
+ static inline void sk_psock_queue_msg(struct sk_psock *psock,
+ 				      struct sk_msg *msg)
+ {
++	spin_lock_bh(&psock->ingress_lock);
+ 	list_add_tail(&msg->list, &psock->ingress_msg);
++	spin_unlock_bh(&psock->ingress_lock);
++}
++
++static inline struct sk_msg *sk_psock_dequeue_msg(struct sk_psock *psock)
++{
++	struct sk_msg *msg;
++
++	spin_lock_bh(&psock->ingress_lock);
++	msg = list_first_entry_or_null(&psock->ingress_msg, struct sk_msg, list);
++	if (msg)
++		list_del(&msg->list);
++	spin_unlock_bh(&psock->ingress_lock);
++	return msg;
++}
++
++static inline struct sk_msg *sk_psock_peek_msg(struct sk_psock *psock)
++{
++	struct sk_msg *msg;
++
++	spin_lock_bh(&psock->ingress_lock);
++	msg = list_first_entry_or_null(&psock->ingress_msg, struct sk_msg, list);
++	spin_unlock_bh(&psock->ingress_lock);
++	return msg;
++}
++
++static inline struct sk_msg *sk_psock_next_msg(struct sk_psock *psock,
++					       struct sk_msg *msg)
++{
++	struct sk_msg *ret;
++
++	spin_lock_bh(&psock->ingress_lock);
++	if (list_is_last(&msg->list, &psock->ingress_msg))
++		ret = NULL;
++	else
++		ret = list_next_entry(msg, list);
++	spin_unlock_bh(&psock->ingress_lock);
++	return ret;
+ }
+ 
+ static inline bool sk_psock_queue_empty(const struct sk_psock *psock)
+@@ -292,6 +331,13 @@ static inline bool sk_psock_queue_empty(const struct sk_psock *psock)
+ 	return psock ? list_empty(&psock->ingress_msg) : true;
+ }
+ 
++static inline void kfree_sk_msg(struct sk_msg *msg)
++{
++	if (msg->skb)
++		consume_skb(msg->skb);
++	kfree(msg);
++}
++
+ static inline void sk_psock_report_error(struct sk_psock *psock, int err)
+ {
+ 	struct sock *sk = psock->sk;
+diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+index bebf84ed4e30..305dddc51857 100644
+--- a/net/core/skmsg.c
++++ b/net/core/skmsg.c
+@@ -592,6 +592,7 @@ struct sk_psock *sk_psock_init(struct sock *sk, int node)
+ 
+ 	INIT_WORK(&psock->work, sk_psock_backlog);
+ 	INIT_LIST_HEAD(&psock->ingress_msg);
++	spin_lock_init(&psock->ingress_lock);
+ 	skb_queue_head_init(&psock->ingress_skb);
+ 
+ 	sk_psock_set_state(psock, SK_PSOCK_TX_ENABLED);
+@@ -638,7 +639,9 @@ static void sk_psock_zap_ingress(struct sk_psock *psock)
+ 		skb_bpf_redirect_clear(skb);
+ 		kfree_skb(skb);
+ 	}
++	spin_lock_bh(&psock->ingress_lock);
+ 	__sk_psock_purge_ingress_msg(psock);
++	spin_unlock_bh(&psock->ingress_lock);
+ }
+ 
+ static void sk_psock_link_destroy(struct sk_psock *psock)
+diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
+index 17c322b875fd..ae980716d896 100644
+--- a/net/ipv4/tcp_bpf.c
++++ b/net/ipv4/tcp_bpf.c
+@@ -18,9 +18,7 @@ int __tcp_bpf_recvmsg(struct sock *sk, struct sk_psock *psock,
+ 	struct sk_msg *msg_rx;
+ 	int i, copied = 0;
+ 
+-	msg_rx = list_first_entry_or_null(&psock->ingress_msg,
+-					  struct sk_msg, list);
+-
++	msg_rx = sk_psock_peek_msg(psock);
+ 	while (copied != len) {
+ 		struct scatterlist *sge;
+ 
+@@ -68,22 +66,18 @@ int __tcp_bpf_recvmsg(struct sock *sk, struct sk_psock *psock,
+ 		} while (i != msg_rx->sg.end);
+ 
+ 		if (unlikely(peek)) {
+-			if (msg_rx == list_last_entry(&psock->ingress_msg,
+-						      struct sk_msg, list))
++			msg_rx = sk_psock_next_msg(psock, msg_rx);
++			if (!msg_rx)
+ 				break;
+-			msg_rx = list_next_entry(msg_rx, list);
+ 			continue;
+ 		}
+ 
+ 		msg_rx->sg.start = i;
+ 		if (!sge->length && msg_rx->sg.start == msg_rx->sg.end) {
+-			list_del(&msg_rx->list);
+-			if (msg_rx->skb)
+-				consume_skb(msg_rx->skb);
+-			kfree(msg_rx);
++			msg_rx = sk_psock_dequeue_msg(psock);
++			kfree_sk_msg(msg_rx);
+ 		}
+-		msg_rx = list_first_entry_or_null(&psock->ingress_msg,
+-						  struct sk_msg, list);
++		msg_rx = sk_psock_peek_msg(psock);
+ 	}
+ 
+ 	return copied;
 -- 
 2.25.1
 
