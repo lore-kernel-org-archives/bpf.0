@@ -6,38 +6,39 @@ X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CE61C43333
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 87B1CC43619
 	for <bpf@archiver.kernel.org>; Thu, 18 Mar 2021 19:41:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B9C2C64F62
-	for <bpf@archiver.kernel.org>; Thu, 18 Mar 2021 19:41:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 71A1564F4D
+	for <bpf@archiver.kernel.org>; Thu, 18 Mar 2021 19:41:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232898AbhCRTlS convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 18 Mar 2021 15:41:18 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:62298 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S232918AbhCRTkx (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 18 Mar 2021 15:40:53 -0400
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.43/8.16.0.43) with SMTP id 12IJX7cr026816
-        for <bpf@vger.kernel.org>; Thu, 18 Mar 2021 12:40:53 -0700
+        id S232922AbhCRTlX convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 18 Mar 2021 15:41:23 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:3698 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232954AbhCRTlK (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 18 Mar 2021 15:41:10 -0400
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12IJU8JI003931
+        for <bpf@vger.kernel.org>; Thu, 18 Mar 2021 12:41:10 -0700
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0001303.ppops.net with ESMTP id 37bs26pcf3-1
+        by mx0a-00082601.pphosted.com with ESMTP id 37bs29pafb-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 18 Mar 2021 12:40:53 -0700
-Received: from intmgw001.25.frc3.facebook.com (2620:10d:c085:208::f) by
+        for <bpf@vger.kernel.org>; Thu, 18 Mar 2021 12:41:09 -0700
+Received: from intmgw002.25.frc3.facebook.com (2620:10d:c085:208::11) by
  mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Thu, 18 Mar 2021 12:40:51 -0700
+ 15.1.2176.2; Thu, 18 Mar 2021 12:41:07 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 360BC2ED2588; Thu, 18 Mar 2021 12:40:46 -0700 (PDT)
+        id 76C5C2ED2588; Thu, 18 Mar 2021 12:40:59 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
         <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH v4 bpf-next 02/12] libbpf: generalize BTF and BTF.ext type ID and strings iteration
-Date:   Thu, 18 Mar 2021 12:40:26 -0700
-Message-ID: <20210318194036.3521577-3-andrii@kernel.org>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
+        Quentin Monnet <quentin@isovalent.com>
+Subject: [PATCH v4 bpf-next 08/12] bpftool: add ability to specify custom skeleton object name
+Date:   Thu, 18 Mar 2021 12:40:32 -0700
+Message-ID: <20210318194036.3521577-9-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210318194036.3521577-1-andrii@kernel.org>
 References: <20210318194036.3521577-1-andrii@kernel.org>
@@ -47,497 +48,142 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
  definitions=2021-03-18_12:2021-03-17,2021-03-18 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
- bulkscore=0 lowpriorityscore=0 mlxscore=0 phishscore=0 suspectscore=0
- spamscore=0 priorityscore=1501 mlxlogscore=999 impostorscore=0
- clxscore=1015 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2103180139
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ bulkscore=0 spamscore=0 clxscore=1015 malwarescore=0 mlxscore=0
+ mlxlogscore=999 adultscore=0 suspectscore=0 priorityscore=1501
+ phishscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2009150000 definitions=main-2103180139
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Extract and generalize the logic to iterate BTF type ID and string offset
-fields within BTF types and .BTF.ext data. Expose this internally in libbpf
-for re-use by bpf_linker.
+Add optional name OBJECT_NAME parameter to `gen skeleton` command to override
+default object name, normally derived from input file name. This allows much
+more flexibility during build time.
 
-Additionally, complete strings deduplication handling for BTF.ext (e.g., CO-RE
-access strings), which was previously missing. There previously was no
-case of deduplicating .BTF.ext data, but bpf_linker is going to use it.
-
+Cc: Quentin Monnet <quentin@isovalent.com>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/lib/bpf/btf.c             | 393 ++++++++++++++++++--------------
- tools/lib/bpf/libbpf_internal.h |   7 +
- 2 files changed, 228 insertions(+), 172 deletions(-)
+ .../bpf/bpftool/Documentation/bpftool-gen.rst | 13 +++++----
+ tools/bpf/bpftool/bash-completion/bpftool     | 11 ++++++-
+ tools/bpf/bpftool/gen.c                       | 29 +++++++++++++++++--
+ 3 files changed, 44 insertions(+), 9 deletions(-)
 
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index e0b0a78b04fe..e137781f9bc6 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -3155,95 +3155,28 @@ static struct btf_dedup *btf_dedup_new(struct btf *btf, struct btf_ext *btf_ext,
- 	return d;
- }
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-gen.rst b/tools/bpf/bpftool/Documentation/bpftool-gen.rst
+index 84cf0639696f..d4e7338e22e7 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-gen.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-gen.rst
+@@ -19,7 +19,7 @@ SYNOPSIS
+ GEN COMMANDS
+ =============
  
--typedef int (*str_off_fn_t)(__u32 *str_off_ptr, void *ctx);
--
- /*
-  * Iterate over all possible places in .BTF and .BTF.ext that can reference
-  * string and pass pointer to it to a provided callback `fn`.
-  */
--static int btf_for_each_str_off(struct btf_dedup *d, str_off_fn_t fn, void *ctx)
-+static int btf_for_each_str_off(struct btf_dedup *d, str_off_visit_fn fn, void *ctx)
- {
--	void *line_data_cur, *line_data_end;
--	int i, j, r, rec_size;
--	struct btf_type *t;
-+	int i, r;
+-|	**bpftool** **gen skeleton** *FILE*
++|	**bpftool** **gen skeleton** *FILE* [**name** *OBJECT_NAME*]
+ |	**bpftool** **gen help**
  
- 	for (i = 0; i < d->btf->nr_types; i++) {
--		t = btf_type_by_id(d->btf, d->btf->start_id + i);
--		r = fn(&t->name_off, ctx);
-+		struct btf_type *t = btf_type_by_id(d->btf, d->btf->start_id + i);
+ DESCRIPTION
+@@ -75,10 +75,13 @@ DESCRIPTION
+ 		  specific maps, programs, etc.
+ 
+ 		  As part of skeleton, few custom functions are generated.
+-		  Each of them is prefixed with object name, derived from
+-		  object file name. I.e., if BPF object file name is
+-		  **example.o**, BPF object name will be **example**. The
+-		  following custom functions are provided in such case:
++		  Each of them is prefixed with object name. Object name can
++		  either be derived from object file name, i.e., if BPF object
++		  file name is **example.o**, BPF object name will be
++		  **example**. Object name can be also specified explicitly
++		  through **name** *OBJECT_NAME* parameter. The following
++		  custom functions are provided (assuming **example** as
++		  the object name):
+ 
+ 		  - **example__open** and **example__open_opts**.
+ 		    These functions are used to instantiate skeleton. It
+diff --git a/tools/bpf/bpftool/bash-completion/bpftool b/tools/bpf/bpftool/bash-completion/bpftool
+index fdffbc64c65c..bf7b4bdbb23a 100644
+--- a/tools/bpf/bpftool/bash-completion/bpftool
++++ b/tools/bpf/bpftool/bash-completion/bpftool
+@@ -982,7 +982,16 @@ _bpftool()
+         gen)
+             case $command in
+                 skeleton)
+-                    _filedir
++                    case $prev in
++                        $command)
++                            _filedir
++                            return 0
++                            ;;
++                        *)
++                            _bpftool_once_attr 'name'
++                            return 0
++                            ;;
++                    esac
+                     ;;
+                 *)
+                     [[ $prev == $object ]] && \
+diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
+index 4033c46d83e7..9bff89a66835 100644
+--- a/tools/bpf/bpftool/gen.c
++++ b/tools/bpf/bpftool/gen.c
+@@ -273,7 +273,7 @@ static int do_skeleton(int argc, char **argv)
+ 	char header_guard[MAX_OBJ_NAME_LEN + sizeof("__SKEL_H__")];
+ 	size_t i, map_cnt = 0, prog_cnt = 0, file_sz, mmap_sz;
+ 	DECLARE_LIBBPF_OPTS(bpf_object_open_opts, opts);
+-	char obj_name[MAX_OBJ_NAME_LEN], *obj_data;
++	char obj_name[MAX_OBJ_NAME_LEN] = "", *obj_data;
+ 	struct bpf_object *obj = NULL;
+ 	const char *file, *ident;
+ 	struct bpf_program *prog;
+@@ -288,6 +288,28 @@ static int do_skeleton(int argc, char **argv)
+ 	}
+ 	file = GET_ARG();
+ 
++	while (argc) {
++		if (!REQ_ARGS(2))
++			return -1;
 +
-+		r = btf_type_visit_str_offs(t, fn, ctx);
- 		if (r)
- 			return r;
--
--		switch (btf_kind(t)) {
--		case BTF_KIND_STRUCT:
--		case BTF_KIND_UNION: {
--			struct btf_member *m = btf_members(t);
--			__u16 vlen = btf_vlen(t);
--
--			for (j = 0; j < vlen; j++) {
--				r = fn(&m->name_off, ctx);
--				if (r)
--					return r;
--				m++;
--			}
--			break;
--		}
--		case BTF_KIND_ENUM: {
--			struct btf_enum *m = btf_enum(t);
--			__u16 vlen = btf_vlen(t);
--
--			for (j = 0; j < vlen; j++) {
--				r = fn(&m->name_off, ctx);
--				if (r)
--					return r;
--				m++;
--			}
--			break;
--		}
--		case BTF_KIND_FUNC_PROTO: {
--			struct btf_param *m = btf_params(t);
--			__u16 vlen = btf_vlen(t);
--
--			for (j = 0; j < vlen; j++) {
--				r = fn(&m->name_off, ctx);
--				if (r)
--					return r;
--				m++;
--			}
--			break;
--		}
--		default:
--			break;
--		}
++		if (is_prefix(*argv, "name")) {
++			NEXT_ARG();
++
++			if (obj_name[0] != '\0') {
++				p_err("object name already specified");
++				return -1;
++			}
++
++			strncpy(obj_name, *argv, MAX_OBJ_NAME_LEN - 1);
++			obj_name[MAX_OBJ_NAME_LEN - 1] = '\0';
++		} else {
++			p_err("unknown arg %s", *argv);
++			return -1;
++		}
++
++		NEXT_ARG();
++	}
++
+ 	if (argc) {
+ 		p_err("extra unknown arguments");
+ 		return -1;
+@@ -310,7 +332,8 @@ static int do_skeleton(int argc, char **argv)
+ 		p_err("failed to mmap() %s: %s", file, strerror(errno));
+ 		goto out;
+ 	}
+-	get_obj_name(obj_name, file);
++	if (obj_name[0] == '\0')
++		get_obj_name(obj_name, file);
+ 	opts.object_name = obj_name;
+ 	obj = bpf_object__open_mem(obj_data, file_sz, &opts);
+ 	if (IS_ERR(obj)) {
+@@ -599,7 +622,7 @@ static int do_help(int argc, char **argv)
  	}
  
- 	if (!d->btf_ext)
- 		return 0;
- 
--	line_data_cur = d->btf_ext->line_info.info;
--	line_data_end = d->btf_ext->line_info.info + d->btf_ext->line_info.len;
--	rec_size = d->btf_ext->line_info.rec_size;
--
--	while (line_data_cur < line_data_end) {
--		struct btf_ext_info_sec *sec = line_data_cur;
--		struct bpf_line_info_min *line_info;
--		__u32 num_info = sec->num_info;
--
--		r = fn(&sec->sec_name_off, ctx);
--		if (r)
--			return r;
--
--		line_data_cur += sizeof(struct btf_ext_info_sec);
--		for (i = 0; i < num_info; i++) {
--			line_info = line_data_cur;
--			r = fn(&line_info->file_name_off, ctx);
--			if (r)
--				return r;
--			r = fn(&line_info->line_off, ctx);
--			if (r)
--				return r;
--			line_data_cur += rec_size;
--		}
--	}
-+	r = btf_ext_visit_str_offs(d->btf_ext, fn, ctx);
-+	if (r)
-+		return r;
- 
- 	return 0;
- }
-@@ -4498,15 +4431,18 @@ static int btf_dedup_compact_types(struct btf_dedup *d)
-  * then mapping it to a deduplicated type ID, stored in btf_dedup->hypot_map,
-  * which is populated during compaction phase.
-  */
--static int btf_dedup_remap_type_id(struct btf_dedup *d, __u32 type_id)
-+static int btf_dedup_remap_type_id(__u32 *type_id, void *ctx)
- {
-+	struct btf_dedup *d = ctx;
- 	__u32 resolved_type_id, new_type_id;
- 
--	resolved_type_id = resolve_type_id(d, type_id);
-+	resolved_type_id = resolve_type_id(d, *type_id);
- 	new_type_id = d->hypot_map[resolved_type_id];
- 	if (new_type_id > BTF_MAX_NR_TYPES)
- 		return -EINVAL;
--	return new_type_id;
-+
-+	*type_id = new_type_id;
-+	return 0;
- }
- 
- /*
-@@ -4519,109 +4455,25 @@ static int btf_dedup_remap_type_id(struct btf_dedup *d, __u32 type_id)
-  * referenced from any BTF type (e.g., struct fields, func proto args, etc) to
-  * their final deduped type IDs.
-  */
--static int btf_dedup_remap_type(struct btf_dedup *d, __u32 type_id)
-+static int btf_dedup_remap_types(struct btf_dedup *d)
- {
--	struct btf_type *t = btf_type_by_id(d->btf, type_id);
- 	int i, r;
- 
--	switch (btf_kind(t)) {
--	case BTF_KIND_INT:
--	case BTF_KIND_ENUM:
--	case BTF_KIND_FLOAT:
--		break;
--
--	case BTF_KIND_FWD:
--	case BTF_KIND_CONST:
--	case BTF_KIND_VOLATILE:
--	case BTF_KIND_RESTRICT:
--	case BTF_KIND_PTR:
--	case BTF_KIND_TYPEDEF:
--	case BTF_KIND_FUNC:
--	case BTF_KIND_VAR:
--		r = btf_dedup_remap_type_id(d, t->type);
--		if (r < 0)
--			return r;
--		t->type = r;
--		break;
--
--	case BTF_KIND_ARRAY: {
--		struct btf_array *arr_info = btf_array(t);
--
--		r = btf_dedup_remap_type_id(d, arr_info->type);
--		if (r < 0)
--			return r;
--		arr_info->type = r;
--		r = btf_dedup_remap_type_id(d, arr_info->index_type);
--		if (r < 0)
--			return r;
--		arr_info->index_type = r;
--		break;
--	}
--
--	case BTF_KIND_STRUCT:
--	case BTF_KIND_UNION: {
--		struct btf_member *member = btf_members(t);
--		__u16 vlen = btf_vlen(t);
--
--		for (i = 0; i < vlen; i++) {
--			r = btf_dedup_remap_type_id(d, member->type);
--			if (r < 0)
--				return r;
--			member->type = r;
--			member++;
--		}
--		break;
--	}
--
--	case BTF_KIND_FUNC_PROTO: {
--		struct btf_param *param = btf_params(t);
--		__u16 vlen = btf_vlen(t);
-+	for (i = 0; i < d->btf->nr_types; i++) {
-+		struct btf_type *t = btf_type_by_id(d->btf, d->btf->start_id + i);
- 
--		r = btf_dedup_remap_type_id(d, t->type);
--		if (r < 0)
-+		r = btf_type_visit_type_ids(t, btf_dedup_remap_type_id, d);
-+		if (r)
- 			return r;
--		t->type = r;
--
--		for (i = 0; i < vlen; i++) {
--			r = btf_dedup_remap_type_id(d, param->type);
--			if (r < 0)
--				return r;
--			param->type = r;
--			param++;
--		}
--		break;
--	}
--
--	case BTF_KIND_DATASEC: {
--		struct btf_var_secinfo *var = btf_var_secinfos(t);
--		__u16 vlen = btf_vlen(t);
--
--		for (i = 0; i < vlen; i++) {
--			r = btf_dedup_remap_type_id(d, var->type);
--			if (r < 0)
--				return r;
--			var->type = r;
--			var++;
--		}
--		break;
--	}
--
--	default:
--		return -EINVAL;
- 	}
- 
--	return 0;
--}
-+	if (!d->btf_ext)
-+		return 0;
- 
--static int btf_dedup_remap_types(struct btf_dedup *d)
--{
--	int i, r;
-+	r = btf_ext_visit_type_ids(d->btf_ext, btf_dedup_remap_type_id, d);
-+	if (r)
-+		return r;
- 
--	for (i = 0; i < d->btf->nr_types; i++) {
--		r = btf_dedup_remap_type(d, d->btf->start_id + i);
--		if (r < 0)
--			return r;
--	}
- 	return 0;
- }
- 
-@@ -4675,3 +4527,200 @@ struct btf *libbpf_find_kernel_btf(void)
- 	pr_warn("failed to find valid kernel BTF\n");
- 	return ERR_PTR(-ESRCH);
- }
-+
-+int btf_type_visit_type_ids(struct btf_type *t, type_id_visit_fn visit, void *ctx)
-+{
-+	int i, n, err;
-+
-+	switch (btf_kind(t)) {
-+	case BTF_KIND_INT:
-+	case BTF_KIND_FLOAT:
-+	case BTF_KIND_ENUM:
-+		return 0;
-+
-+	case BTF_KIND_FWD:
-+	case BTF_KIND_CONST:
-+	case BTF_KIND_VOLATILE:
-+	case BTF_KIND_RESTRICT:
-+	case BTF_KIND_PTR:
-+	case BTF_KIND_TYPEDEF:
-+	case BTF_KIND_FUNC:
-+	case BTF_KIND_VAR:
-+		return visit(&t->type, ctx);
-+
-+	case BTF_KIND_ARRAY: {
-+		struct btf_array *a = btf_array(t);
-+
-+		err = visit(&a->type, ctx);
-+		err = err ?: visit(&a->index_type, ctx);
-+		return err;
-+	}
-+
-+	case BTF_KIND_STRUCT:
-+	case BTF_KIND_UNION: {
-+		struct btf_member *m = btf_members(t);
-+
-+		for (i = 0, n = btf_vlen(t); i < n; i++, m++) {
-+			err = visit(&m->type, ctx);
-+			if (err)
-+				return err;
-+		}
-+		return 0;
-+	}
-+
-+	case BTF_KIND_FUNC_PROTO: {
-+		struct btf_param *m = btf_params(t);
-+
-+		err = visit(&t->type, ctx);
-+		if (err)
-+			return err;
-+		for (i = 0, n = btf_vlen(t); i < n; i++, m++) {
-+			err = visit(&m->type, ctx);
-+			if (err)
-+				return err;
-+		}
-+		return 0;
-+	}
-+
-+	case BTF_KIND_DATASEC: {
-+		struct btf_var_secinfo *m = btf_var_secinfos(t);
-+
-+		for (i = 0, n = btf_vlen(t); i < n; i++, m++) {
-+			err = visit(&m->type, ctx);
-+			if (err)
-+				return err;
-+		}
-+		return 0;
-+	}
-+
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+int btf_type_visit_str_offs(struct btf_type *t, str_off_visit_fn visit, void *ctx)
-+{
-+	int i, n, err;
-+
-+	err = visit(&t->name_off, ctx);
-+	if (err)
-+		return err;
-+
-+	switch (btf_kind(t)) {
-+	case BTF_KIND_STRUCT:
-+	case BTF_KIND_UNION: {
-+		struct btf_member *m = btf_members(t);
-+
-+		for (i = 0, n = btf_vlen(t); i < n; i++, m++) {
-+			err = visit(&m->name_off, ctx);
-+			if (err)
-+				return err;
-+		}
-+		break;
-+	}
-+	case BTF_KIND_ENUM: {
-+		struct btf_enum *m = btf_enum(t);
-+
-+		for (i = 0, n = btf_vlen(t); i < n; i++, m++) {
-+			err = visit(&m->name_off, ctx);
-+			if (err)
-+				return err;
-+		}
-+		break;
-+	}
-+	case BTF_KIND_FUNC_PROTO: {
-+		struct btf_param *m = btf_params(t);
-+
-+		for (i = 0, n = btf_vlen(t); i < n; i++, m++) {
-+			err = visit(&m->name_off, ctx);
-+			if (err)
-+				return err;
-+		}
-+		break;
-+	}
-+	default:
-+		break;
-+	}
-+
-+	return 0;
-+}
-+
-+int btf_ext_visit_type_ids(struct btf_ext *btf_ext, type_id_visit_fn visit, void *ctx)
-+{
-+	const struct btf_ext_info *seg;
-+	struct btf_ext_info_sec *sec;
-+	int i, err;
-+
-+	seg = &btf_ext->func_info;
-+	for_each_btf_ext_sec(seg, sec) {
-+		struct bpf_func_info_min *rec;
-+
-+		for_each_btf_ext_rec(seg, sec, i, rec) {
-+			err = visit(&rec->type_id, ctx);
-+			if (err < 0)
-+				return err;
-+		}
-+	}
-+
-+	seg = &btf_ext->core_relo_info;
-+	for_each_btf_ext_sec(seg, sec) {
-+		struct bpf_core_relo *rec;
-+
-+		for_each_btf_ext_rec(seg, sec, i, rec) {
-+			err = visit(&rec->type_id, ctx);
-+			if (err < 0)
-+				return err;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+int btf_ext_visit_str_offs(struct btf_ext *btf_ext, str_off_visit_fn visit, void *ctx)
-+{
-+	const struct btf_ext_info *seg;
-+	struct btf_ext_info_sec *sec;
-+	int i, err;
-+
-+	seg = &btf_ext->func_info;
-+	for_each_btf_ext_sec(seg, sec) {
-+		err = visit(&sec->sec_name_off, ctx);
-+		if (err)
-+			return err;
-+	}
-+
-+	seg = &btf_ext->line_info;
-+	for_each_btf_ext_sec(seg, sec) {
-+		struct bpf_line_info_min *rec;
-+
-+		err = visit(&sec->sec_name_off, ctx);
-+		if (err)
-+			return err;
-+
-+		for_each_btf_ext_rec(seg, sec, i, rec) {
-+			err = visit(&rec->file_name_off, ctx);
-+			if (err)
-+				return err;
-+			err = visit(&rec->line_off, ctx);
-+			if (err)
-+				return err;
-+		}
-+	}
-+
-+	seg = &btf_ext->core_relo_info;
-+	for_each_btf_ext_sec(seg, sec) {
-+		struct bpf_core_relo *rec;
-+
-+		err = visit(&sec->sec_name_off, ctx);
-+		if (err)
-+			return err;
-+
-+		for_each_btf_ext_rec(seg, sec, i, rec) {
-+			err = visit(&rec->access_str_off, ctx);
-+			if (err)
-+				return err;
-+		}
-+	}
-+
-+	return 0;
-+}
-diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
-index d09860e435c8..97b6b9cc9839 100644
---- a/tools/lib/bpf/libbpf_internal.h
-+++ b/tools/lib/bpf/libbpf_internal.h
-@@ -356,4 +356,11 @@ struct bpf_core_relo {
- 	enum bpf_core_relo_kind kind;
- };
- 
-+typedef int (*type_id_visit_fn)(__u32 *type_id, void *ctx);
-+typedef int (*str_off_visit_fn)(__u32 *str_off, void *ctx);
-+int btf_type_visit_type_ids(struct btf_type *t, type_id_visit_fn visit, void *ctx);
-+int btf_type_visit_str_offs(struct btf_type *t, str_off_visit_fn visit, void *ctx);
-+int btf_ext_visit_type_ids(struct btf_ext *btf_ext, type_id_visit_fn visit, void *ctx);
-+int btf_ext_visit_str_offs(struct btf_ext *btf_ext, str_off_visit_fn visit, void *ctx);
-+
- #endif /* __LIBBPF_LIBBPF_INTERNAL_H */
+ 	fprintf(stderr,
+-		"Usage: %1$s %2$s skeleton FILE\n"
++		"Usage: %1$s %2$s skeleton FILE [name OBJECT_NAME]\n"
+ 		"       %1$s %2$s help\n"
+ 		"\n"
+ 		"       " HELP_SPEC_OPTIONS "\n"
 -- 
 2.30.2
 
