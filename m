@@ -8,59 +8,59 @@ X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	URIBL_BLOCKED,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E9929C4361B
-	for <bpf@archiver.kernel.org>; Thu, 18 Mar 2021 17:12:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50835C41620
+	for <bpf@archiver.kernel.org>; Thu, 18 Mar 2021 17:12:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C1C7764F53
-	for <bpf@archiver.kernel.org>; Thu, 18 Mar 2021 17:12:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3B73764F4D
+	for <bpf@archiver.kernel.org>; Thu, 18 Mar 2021 17:12:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232398AbhCRRMR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 18 Mar 2021 13:12:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33308 "EHLO
+        id S232342AbhCRRMS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 18 Mar 2021 13:12:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232342AbhCRRLi (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 18 Mar 2021 13:11:38 -0400
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2358FC061760
-        for <bpf@vger.kernel.org>; Thu, 18 Mar 2021 10:11:38 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id 128so12807004pfy.3
-        for <bpf@vger.kernel.org>; Thu, 18 Mar 2021 10:11:38 -0700 (PDT)
+        with ESMTP id S232417AbhCRRLs (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 18 Mar 2021 13:11:48 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65B1BC06175F
+        for <bpf@vger.kernel.org>; Thu, 18 Mar 2021 10:11:48 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id m4so24301787pfd.20
+        for <bpf@vger.kernel.org>; Thu, 18 Mar 2021 10:11:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=xIKsEDWi8EL1j5NSYc2uWQA3l5Y2NiXXcLT9TovNhRQ=;
-        b=uKxyyo5NDdB1QUbA3EnMvjuX1onU20iICbKJ9iP/dqRqzhm0bGPXUszw7wf3GKl1Cw
-         8b6zGQsOgdMHwwqtEMHY8K9uQWWo8Csl7Ij0z216FvJg68YI42t5LQuRc707PLWEIS0l
-         v6mINbfwZQaRHIuEtuhd/w+jw1MkLwDSlSn0PFx/6d0jgHgbFlLEe2zIRvzuxqfIFbB4
-         81s6Y5tTsyTXg3PP3MbUj5QPEwCUc2bn0HIlVMkvO4B9tOKV53UBjXaLwrQa+a/fwExd
-         ndjASAw4BiPpZ/v3XOZOyYf+t4si7VDIT+/WYNd+6rtyQwfJBQtMCpJMP/HwM/sR2oXZ
-         1fYw==
+        bh=qAbADIQAzXUoq/ElYpa9rjjQHxphEP8wPywcql//gEU=;
+        b=jf1TyFgM0qbBrh8PG+9UgOrM2tO3xTLSkbdFlAjoOHwSeKc0SfFX4Q0fQJiehD98Nx
+         V8eHEHeFH6F/2w32lpdS3m06xBAZ3vNDNaCX7x8qpFxSBm6uQOUYcLoYxxuENofMBupO
+         B6duso7Pzno7l5uVBkFz0xUe8AtQKuhaTmELX5H6eGSYwEqGS1XqRT74+g1vLez+eXeQ
+         7z+ITybX9ylbz6ZkOa1dh63eUDWtdli7pIImj6+FfB23BTBDzIAs1fv35o+sxuUwBS44
+         oltowRxFMks3nSe/2PYy3IOmtCU5Xy90zkjD6XlVuVonF/+UFPw1quOUALWqQTVSZsf8
+         4bfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=xIKsEDWi8EL1j5NSYc2uWQA3l5Y2NiXXcLT9TovNhRQ=;
-        b=VlXSUi23sPxP3uCDI1WRiitUWYSdZMNHcu89ZICipp5UhwxbiAmRi8LyA66JjXu5m/
-         USK3xVIpmfXIS/41jRe3M/bg3EV8R1SQ+AdZH10CLrYLwrG2ey8GTmqsYod+jdzGqqGr
-         9LziD1dlcwvVTf+YliuzHMqv0tvJoxqyTH9/QkQzInZLU1AIZgHV09b2/gimUPtzN4fN
-         ieS4c7zeA+5zsqzZIIvWCUU8nmz9PIdE4561trK3bXuTnrDR63Hqb/Im03VkB5Hz/HEk
-         lrmcJRn05ml8/ifB3o43Ga6Na75z34Nd5zXmdYax7ebrn0KNW8NKlQsksHFC55KkwzyG
-         hz8g==
-X-Gm-Message-State: AOAM532jA9SsSHrK8yZDAOSKDatwys8/H5jJ/zJu8+7sjKpO5/4mXvPV
-        geqQluKjUG5Mtbls/koZSu4TFnY90JYp72eWRSE=
-X-Google-Smtp-Source: ABdhPJwtUxlgXUjHfalHssJK6ozLwDkIUZpLb/yIsL/9erTHZ+0BV/50LNkOYs0FUF9Eq2xmyoDCO5T7tob2m1K9T6U=
+        bh=qAbADIQAzXUoq/ElYpa9rjjQHxphEP8wPywcql//gEU=;
+        b=RYzZxwLeZtAsmq99VtiR/5Idf4qhn3wDz88Ar0mrxcmsggvSF5ibSilPJez6Lv+xwB
+         TObeLrfhX3q0qYX0d+/9MkomcOHcWvHY+OG0j3RF1i2N1GIOD64TiBksHrpR8mUEznaV
+         n8EgFTCkihm6qCJqfqcZROFVmLF9z4HhGEPyU+V5r7sufl5x/cJ27CEDX39JMaJwB5sC
+         K+wRW4bNCSfQASFh6JdvYdohPoJoG/UQDsjNxBHC9aNUkweeTYAZTXu7S93HPxlLP6TU
+         Dpi113unT3MlZqEE/1jZrhAIg5fh9Sj0M8o9Bl2FJfloz/70+KZHo5QORb8C6XyxAjdM
+         JksQ==
+X-Gm-Message-State: AOAM531L6dyXlcgpxFCUV3g7Bym4TwVAOGWcqKrDlE1rDgQUwHEIPLl3
+        WeynCO8tV3UzI/QUZJ03XHmvMAIrKmg0KS26i3I=
+X-Google-Smtp-Source: ABdhPJwHw3Ga/ReLCOxUOvdN7Ru83Wr8fqQUCOT6GinoqE3bL2zrZGNpaekhia574g649F2KSLcKcxlK/YtI6PlZyyY=
 X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:c0d7:a7ba:fb41:a35a])
- (user=samitolvanen job=sendgmr) by 2002:a62:e90c:0:b029:203:90f:6f34 with
- SMTP id j12-20020a62e90c0000b0290203090f6f34mr5021966pfh.29.1616087497587;
- Thu, 18 Mar 2021 10:11:37 -0700 (PDT)
-Date:   Thu, 18 Mar 2021 10:11:04 -0700
+ (user=samitolvanen job=sendgmr) by 2002:aa7:9ae7:0:b029:20a:d94d:dd61 with
+ SMTP id y7-20020aa79ae70000b029020ad94ddd61mr5297194pfp.0.1616087507868; Thu,
+ 18 Mar 2021 10:11:47 -0700 (PDT)
+Date:   Thu, 18 Mar 2021 10:11:09 -0700
 In-Reply-To: <20210318171111.706303-1-samitolvanen@google.com>
-Message-Id: <20210318171111.706303-11-samitolvanen@google.com>
+Message-Id: <20210318171111.706303-16-samitolvanen@google.com>
 Mime-Version: 1.0
 References: <20210318171111.706303-1-samitolvanen@google.com>
 X-Mailer: git-send-email 2.31.0.291.g576ba9dcdaf-goog
-Subject: [PATCH v2 10/17] lkdtm: use __va_function
+Subject: [PATCH v2 15/17] arm64: add __nocfi to __apply_alternatives
 From:   Sami Tolvanen <samitolvanen@google.com>
 To:     Kees Cook <keescook@chromium.org>
 Cc:     Nathan Chancellor <nathan@kernel.org>,
@@ -79,30 +79,33 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-To ensure we take the actual address of a function in kernel text, use
-__va_function. Otherwise, with CONFIG_CFI_CLANG, the compiler replaces
-the address with a pointer to the CFI jump table, which is actually in
-the module when compiled with CONFIG_LKDTM=m.
+__apply_alternatives makes indirect calls to functions whose address
+is taken in assembly code using the alternative_cb macro. With
+non-canonical CFI, the compiler won't replace these function
+references with the jump table addresses, which trips CFI. Disable CFI
+checking in the function to work around the issue.
 
 Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-Acked-by: Kees Cook <keescook@chromium.org>
+Reviewed-by: Kees Cook <keescook@chromium.org>
 ---
- drivers/misc/lkdtm/usercopy.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/kernel/alternative.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/misc/lkdtm/usercopy.c b/drivers/misc/lkdtm/usercopy.c
-index 109e8d4302c1..d173d6175c87 100644
---- a/drivers/misc/lkdtm/usercopy.c
-+++ b/drivers/misc/lkdtm/usercopy.c
-@@ -314,7 +314,7 @@ void lkdtm_USERCOPY_KERNEL(void)
+diff --git a/arch/arm64/kernel/alternative.c b/arch/arm64/kernel/alternative.c
+index 1184c44ea2c7..abc84636af07 100644
+--- a/arch/arm64/kernel/alternative.c
++++ b/arch/arm64/kernel/alternative.c
+@@ -133,8 +133,8 @@ static void clean_dcache_range_nopatch(u64 start, u64 end)
+ 	} while (cur += d_size, cur < end);
+ }
  
- 	pr_info("attempting bad copy_to_user from kernel text: %px\n",
- 		vm_mmap);
--	if (copy_to_user((void __user *)user_addr, vm_mmap,
-+	if (copy_to_user((void __user *)user_addr, __va_function(vm_mmap),
- 			 unconst + PAGE_SIZE)) {
- 		pr_warn("copy_to_user failed, but lacked Oops\n");
- 		goto free_user;
+-static void __apply_alternatives(void *alt_region,  bool is_module,
+-				 unsigned long *feature_mask)
++static void __nocfi __apply_alternatives(void *alt_region,  bool is_module,
++					 unsigned long *feature_mask)
+ {
+ 	struct alt_instr *alt;
+ 	struct alt_region *region = alt_region;
 -- 
 2.31.0.291.g576ba9dcdaf-goog
 
