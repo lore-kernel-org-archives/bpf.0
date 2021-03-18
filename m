@@ -3,41 +3,42 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 755A6C4360C
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B986EC4361A
 	for <bpf@archiver.kernel.org>; Thu, 18 Mar 2021 19:41:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5E85D64F24
+	by mail.kernel.org (Postfix) with ESMTP id 968DE64E81
 	for <bpf@archiver.kernel.org>; Thu, 18 Mar 2021 19:41:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232954AbhCRTlX convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 18 Mar 2021 15:41:23 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:57414 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232956AbhCRTlO (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 18 Mar 2021 15:41:14 -0400
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12IJXg5N024220
-        for <bpf@vger.kernel.org>; Thu, 18 Mar 2021 12:41:13 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 37c697tt8p-4
+        id S232979AbhCRTlW convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 18 Mar 2021 15:41:22 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:59210 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S232949AbhCRTlJ (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 18 Mar 2021 15:41:09 -0400
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.0.43/8.16.0.43) with SMTP id 12IJUUWm016576
+        for <bpf@vger.kernel.org>; Thu, 18 Mar 2021 12:41:08 -0700
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by m0089730.ppops.net with ESMTP id 37bs1h6cd9-15
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 18 Mar 2021 12:41:13 -0700
-Received: from intmgw002.06.ash9.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 18 Mar 2021 12:41:08 -0700
+Received: from intmgw001.05.ash9.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Thu, 18 Mar 2021 12:41:12 -0700
+ 15.1.2176.2; Thu, 18 Mar 2021 12:41:04 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 6F8B32ED235A; Thu, 18 Mar 2021 12:41:08 -0700 (PDT)
+        id A3A382ED2588; Thu, 18 Mar 2021 12:41:01 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
         <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH v4 bpf-next 12/12] selftests/bpf: add multi-file statically linked BPF object file test
-Date:   Thu, 18 Mar 2021 12:40:36 -0700
-Message-ID: <20210318194036.3521577-13-andrii@kernel.org>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
+        Quentin Monnet <quentin@isovalent.com>
+Subject: [PATCH v4 bpf-next 09/12] bpftool: add `gen object` command to perform BPF static linking
+Date:   Thu, 18 Mar 2021 12:40:33 -0700
+Message-ID: <20210318194036.3521577-10-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210318194036.3521577-1-andrii@kernel.org>
 References: <20210318194036.3521577-1-andrii@kernel.org>
@@ -48,208 +49,260 @@ Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
  definitions=2021-03-18_12:2021-03-17,2021-03-18 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- mlxscore=0 adultscore=0 malwarescore=0 mlxlogscore=999 impostorscore=0
- clxscore=1015 phishscore=0 bulkscore=0 spamscore=0 suspectscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ mlxscore=0 mlxlogscore=999 bulkscore=0 priorityscore=1501 clxscore=1015
+ phishscore=0 impostorscore=0 adultscore=0 suspectscore=0 spamscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2103180139
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add Makefile infra to specify multi-file BPF object files (and derivative
-skeletons). Add first selftest validating BPF static linker can merge together
-successfully two independent BPF object files and resulting object and
-skeleton are correct and usable.
+Add `bpftool gen object <output-file> <input_file>...` command to statically
+link multiple BPF ELF object files into a single output BPF ELF object file.
 
-Use the same F(F(F(X))) = F(F(X)) identity test on linked object files as for
-the case of single BPF object files.
+This patch also updates bash completions and man page. Man page gets a short
+section on `gen object` command, but also updates the skeleton example to show
+off workflow for BPF application with two .bpf.c files, compiled individually
+with Clang, then resulting object files are linked together with `gen object`,
+and then final object file is used to generate usable BPF skeleton. This
+should help new users understand realistic workflow w.r.t. compiling
+mutli-file BPF application.
 
+Reviewed-by: Quentin Monnet <quentin@isovalent.com>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/testing/selftests/bpf/Makefile          | 21 ++++++++--
- .../selftests/bpf/prog_tests/static_linked.c  | 40 +++++++++++++++++++
- .../selftests/bpf/progs/test_static_linked1.c | 30 ++++++++++++++
- .../selftests/bpf/progs/test_static_linked2.c | 31 ++++++++++++++
- 4 files changed, 119 insertions(+), 3 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/static_linked.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_static_linked1.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_static_linked2.c
+ .../bpf/bpftool/Documentation/bpftool-gen.rst | 65 +++++++++++++++----
+ tools/bpf/bpftool/bash-completion/bpftool     |  6 +-
+ tools/bpf/bpftool/gen.c                       | 45 ++++++++++++-
+ 3 files changed, 100 insertions(+), 16 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 3a7c02add70c..6448c626498f 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -303,6 +303,10 @@ endef
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-gen.rst b/tools/bpf/bpftool/Documentation/bpftool-gen.rst
+index d4e7338e22e7..7cd6681137f3 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-gen.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-gen.rst
+@@ -14,16 +14,37 @@ SYNOPSIS
  
- SKEL_BLACKLIST := btf__% test_pinning_invalid.c test_sk_assign.c
+ 	*OPTIONS* := { { **-j** | **--json** } [{ **-p** | **--pretty** }] }
  
-+LINKED_SKELS := test_static_linked.skel.h
-+
-+test_static_linked.skel.h-deps := test_static_linked1.o test_static_linked2.o
-+
- # Set up extra TRUNNER_XXX "temporary" variables in the environment (relies on
- # $eval()) and pass control to DEFINE_TEST_RUNNER_RULES.
- # Parameters:
-@@ -323,6 +327,7 @@ TRUNNER_BPF_OBJS := $$(patsubst %.c,$$(TRUNNER_OUTPUT)/%.o, $$(TRUNNER_BPF_SRCS)
- TRUNNER_BPF_SKELS := $$(patsubst %.c,$$(TRUNNER_OUTPUT)/%.skel.h,	\
- 				 $$(filter-out $(SKEL_BLACKLIST),	\
- 					       $$(TRUNNER_BPF_SRCS)))
-+TRUNNER_BPF_SKELS_LINKED := $$(addprefix $$(TRUNNER_OUTPUT)/,$(LINKED_SKELS))
- TEST_GEN_FILES += $$(TRUNNER_BPF_OBJS)
+-	*COMMAND* := { **skeleton** | **help** }
++	*COMMAND* := { **object** | **skeleton** | **help** }
  
- # Evaluate rules now with extra TRUNNER_XXX variables above already defined
-@@ -357,11 +362,20 @@ $(TRUNNER_BPF_OBJS): $(TRUNNER_OUTPUT)/%.o:				\
+ GEN COMMANDS
+ =============
  
- $(TRUNNER_BPF_SKELS): %.skel.h: %.o $(BPFTOOL) | $(TRUNNER_OUTPUT)
- 	$$(call msg,GEN-SKEL,$(TRUNNER_BINARY),$$@)
--	$(Q)$$(BPFTOOL) gen object $$(<:.o=.linked.o) $$<
--	$(Q)$$(BPFTOOL) gen object $$(<:.o=.linked2.o) $$(<:.o=.linked.o)
-+	$(Q)$$(BPFTOOL) gen object $$(<:.o=.linked1.o) $$<
-+	$(Q)$$(BPFTOOL) gen object $$(<:.o=.linked2.o) $$(<:.o=.linked1.o)
- 	$(Q)$$(BPFTOOL) gen object $$(<:.o=.linked3.o) $$(<:.o=.linked2.o)
- 	$(Q)diff $$(<:.o=.linked2.o) $$(<:.o=.linked3.o)
--	$(Q)$$(BPFTOOL) gen skeleton $$(<:.o=.linked.o) name $$(notdir $$(<:.o=)) > $$@
-+	$(Q)$$(BPFTOOL) gen skeleton $$(<:.o=.linked3.o) name $$(notdir $$(<:.o=)) > $$@
-+
-+$(TRUNNER_BPF_SKELS_LINKED): $(TRUNNER_BPF_OBJS) $(BPFTOOL) | $(TRUNNER_OUTPUT)
-+	$$(call msg,LINK-BPF,$(TRUNNER_BINARY),$$(@:.skel.h=.o))
-+	$(Q)$$(BPFTOOL) gen object $$(@:.skel.h=.linked1.o) $$(addprefix $(TRUNNER_OUTPUT)/,$$($$(@F)-deps))
-+	$(Q)$$(BPFTOOL) gen object $$(@:.skel.h=.linked2.o) $$(@:.skel.h=.linked1.o)
-+	$(Q)$$(BPFTOOL) gen object $$(@:.skel.h=.linked3.o) $$(@:.skel.h=.linked2.o)
-+	$(Q)diff $$(@:.skel.h=.linked2.o) $$(@:.skel.h=.linked3.o)
-+	$$(call msg,GEN-SKEL,$(TRUNNER_BINARY),$$@)
-+	$(Q)$$(BPFTOOL) gen skeleton $$(@:.skel.h=.linked3.o) name $$(notdir $$(@:.skel.h=)) > $$@
- endif
++|	**bpftool** **gen object** *OUTPUT_FILE* *INPUT_FILE* [*INPUT_FILE*...]
+ |	**bpftool** **gen skeleton** *FILE* [**name** *OBJECT_NAME*]
+ |	**bpftool** **gen help**
  
- # ensure we set up tests.h header generation rule just once
-@@ -383,6 +397,7 @@ $(TRUNNER_TEST_OBJS): $(TRUNNER_OUTPUT)/%.test.o:			\
- 		      $(TRUNNER_EXTRA_HDRS)				\
- 		      $(TRUNNER_BPF_OBJS)				\
- 		      $(TRUNNER_BPF_SKELS)				\
-+		      $(TRUNNER_BPF_SKELS_LINKED)			\
- 		      $$(BPFOBJ) | $(TRUNNER_OUTPUT)
- 	$$(call msg,TEST-OBJ,$(TRUNNER_BINARY),$$@)
- 	$(Q)cd $$(@D) && $$(CC) -I. $$(CFLAGS) -c $(CURDIR)/$$< $$(LDLIBS) -o $$(@F)
-diff --git a/tools/testing/selftests/bpf/prog_tests/static_linked.c b/tools/testing/selftests/bpf/prog_tests/static_linked.c
-new file mode 100644
-index 000000000000..46556976dccc
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/static_linked.c
-@@ -0,0 +1,40 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2019 Facebook */
+ DESCRIPTION
+ ===========
++	**bpftool gen object** *OUTPUT_FILE* *INPUT_FILE* [*INPUT_FILE*...]
++		  Statically link (combine) together one or more *INPUT_FILE*'s
++		  into a single resulting *OUTPUT_FILE*. All the files involved
++		  are BPF ELF object files.
 +
-+#include <test_progs.h>
-+#include "test_static_linked.skel.h"
++		  The rules of BPF static linking are mostly the same as for
++		  user-space object files, but in addition to combining data
++		  and instruction sections, .BTF and .BTF.ext (if present in
++		  any of the input files) data are combined together. .BTF
++		  data is deduplicated, so all the common types across
++		  *INPUT_FILE*'s will only be represented once in the resulting
++		  BTF information.
 +
-+void test_static_linked(void)
++		  BPF static linking allows to partition BPF source code into
++		  individually compiled files that are then linked into
++		  a single resulting BPF object file, which can be used to
++		  generated BPF skeleton (with **gen skeleton** command) or
++		  passed directly into **libbpf** (using **bpf_object__open()**
++		  family of APIs).
++
+ 	**bpftool gen skeleton** *FILE*
+ 		  Generate BPF skeleton C header file for a given *FILE*.
+ 
+@@ -133,26 +154,19 @@ OPTIONS
+ 
+ EXAMPLES
+ ========
+-**$ cat example.c**
++**$ cat example1.bpf.c**
+ 
+ ::
+ 
+   #include <stdbool.h>
+   #include <linux/ptrace.h>
+   #include <linux/bpf.h>
+-  #include "bpf_helpers.h"
++  #include <bpf/bpf_helpers.h>
+ 
+   const volatile int param1 = 42;
+   bool global_flag = true;
+   struct { int x; } data = {};
+ 
+-  struct {
+-  	__uint(type, BPF_MAP_TYPE_HASH);
+-  	__uint(max_entries, 128);
+-  	__type(key, int);
+-  	__type(value, long);
+-  } my_map SEC(".maps");
+-
+   SEC("raw_tp/sys_enter")
+   int handle_sys_enter(struct pt_regs *ctx)
+   {
+@@ -164,6 +178,21 @@ EXAMPLES
+   	return 0;
+   }
+ 
++**$ cat example2.bpf.c**
++
++::
++
++  #include <linux/ptrace.h>
++  #include <linux/bpf.h>
++  #include <bpf/bpf_helpers.h>
++
++  struct {
++  	__uint(type, BPF_MAP_TYPE_HASH);
++  	__uint(max_entries, 128);
++  	__type(key, int);
++  	__type(value, long);
++  } my_map SEC(".maps");
++
+   SEC("raw_tp/sys_exit")
+   int handle_sys_exit(struct pt_regs *ctx)
+   {
+@@ -173,9 +202,17 @@ EXAMPLES
+   }
+ 
+ This is example BPF application with two BPF programs and a mix of BPF maps
+-and global variables.
++and global variables. Source code is split across two source code files.
+ 
+-**$ bpftool gen skeleton example.o**
++**$ clang -target bpf -g example1.bpf.c -o example1.bpf.o**
++**$ clang -target bpf -g example2.bpf.c -o example2.bpf.o**
++**$ bpftool gen object example.bpf.o example1.bpf.o example2.bpf.o**
++
++This set of commands compiles *example1.bpf.c* and *example2.bpf.c*
++individually and then statically links respective object files into the final
++BPF ELF object file *example.bpf.o*.
++
++**$ bpftool gen skeleton example.bpf.o name example | tee example.skel.h**
+ 
+ ::
+ 
+@@ -230,7 +267,7 @@ and global variables.
+ 
+   #endif /* __EXAMPLE_SKEL_H__ */
+ 
+-**$ cat example_user.c**
++**$ cat example.c**
+ 
+ ::
+ 
+@@ -273,7 +310,7 @@ and global variables.
+   	return err;
+   }
+ 
+-**# ./example_user**
++**# ./example**
+ 
+ ::
+ 
+diff --git a/tools/bpf/bpftool/bash-completion/bpftool b/tools/bpf/bpftool/bash-completion/bpftool
+index bf7b4bdbb23a..d67518bcbd44 100644
+--- a/tools/bpf/bpftool/bash-completion/bpftool
++++ b/tools/bpf/bpftool/bash-completion/bpftool
+@@ -981,6 +981,10 @@ _bpftool()
+             ;;
+         gen)
+             case $command in
++                object)
++                    _filedir
++                    return 0
++                    ;;
+                 skeleton)
+                     case $prev in
+                         $command)
+@@ -995,7 +999,7 @@ _bpftool()
+                     ;;
+                 *)
+                     [[ $prev == $object ]] && \
+-                        COMPREPLY=( $( compgen -W 'skeleton help' -- "$cur" ) )
++                        COMPREPLY=( $( compgen -W 'object skeleton help' -- "$cur" ) )
+                     ;;
+             esac
+             ;;
+diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
+index 9bff89a66835..31ade77f5ef8 100644
+--- a/tools/bpf/bpftool/gen.c
++++ b/tools/bpf/bpftool/gen.c
+@@ -614,6 +614,47 @@ static int do_skeleton(int argc, char **argv)
+ 	return err;
+ }
+ 
++static int do_object(int argc, char **argv)
 +{
-+	int err;
-+	struct test_static_linked* skel;
++	struct bpf_linker *linker;
++	const char *output_file, *file;
++	int err = 0;
 +
-+	skel = test_static_linked__open();
-+	if (!ASSERT_OK_PTR(skel, "skel_open"))
-+		return;
++	if (!REQ_ARGS(2)) {
++		usage();
++		return -1;
++	}
 +
-+	skel->rodata->rovar1 = 1;
-+	skel->bss->static_var1 = 2;
-+	skel->bss->static_var11 = 3;
++	output_file = GET_ARG();
 +
-+	skel->rodata->rovar2 = 4;
-+	skel->bss->static_var2 = 5;
-+	skel->bss->static_var22 = 6;
++	linker = bpf_linker__new(output_file, NULL);
++	if (!linker) {
++		p_err("failed to create BPF linker instance");
++		return -1;
++	}
 +
-+	err = test_static_linked__load(skel);
-+	if (!ASSERT_OK(err, "skel_load"))
-+		goto cleanup;
++	while (argc) {
++		file = GET_ARG();
 +
-+	err = test_static_linked__attach(skel);
-+	if (!ASSERT_OK(err, "skel_attach"))
-+		goto cleanup;
++		err = bpf_linker__add_file(linker, file);
++		if (err) {
++			p_err("failed to link '%s': %s (%d)", file, strerror(err), err);
++			goto out;
++		}
++	}
 +
-+	/* trigger */
-+	usleep(1);
++	err = bpf_linker__finalize(linker);
++	if (err) {
++		p_err("failed to finalize ELF file: %s (%d)", strerror(err), err);
++		goto out;
++	}
 +
-+	ASSERT_EQ(skel->bss->var1, 1 * 2 + 2 + 3, "var1");
-+	ASSERT_EQ(skel->bss->var2, 4 * 3 + 5 + 6, "var2");
-+
-+cleanup:
-+	test_static_linked__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_static_linked1.c b/tools/testing/selftests/bpf/progs/test_static_linked1.c
-new file mode 100644
-index 000000000000..ea1a6c4c7172
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_static_linked1.c
-@@ -0,0 +1,30 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2021 Facebook */
-+
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+
-+/* 8-byte aligned .bss */
-+static volatile long static_var1;
-+static volatile int static_var11;
-+int var1 = 0;
-+/* 4-byte aligned .rodata */
-+const volatile int rovar1;
-+
-+/* same "subprog" name in both files */
-+static __noinline int subprog(int x)
-+{
-+	/* but different formula */
-+	return x * 2;
++	err = 0;
++out:
++	bpf_linker__free(linker);
++	return err;
 +}
 +
-+SEC("raw_tp/sys_enter")
-+int handler1(const void *ctx)
-+{
-+	var1 = subprog(rovar1) + static_var1 + static_var11;
-+
-+	return 0;
-+}
-+
-+char LICENSE[] SEC("license") = "GPL";
-+int VERSION SEC("version") = 1;
-diff --git a/tools/testing/selftests/bpf/progs/test_static_linked2.c b/tools/testing/selftests/bpf/progs/test_static_linked2.c
-new file mode 100644
-index 000000000000..54d8d1ab577c
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_static_linked2.c
-@@ -0,0 +1,31 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2021 Facebook */
-+
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+
-+/* 4-byte aligned .bss */
-+static volatile int static_var2;
-+static volatile int static_var22;
-+int var2 = 0;
-+/* 8-byte aligned .rodata */
-+const volatile long rovar2;
-+
-+/* same "subprog" name in both files */
-+static __noinline int subprog(int x)
-+{
-+	/* but different formula */
-+	return x * 3;
-+}
-+
-+SEC("raw_tp/sys_enter")
-+int handler2(const void *ctx)
-+{
-+	var2 = subprog(rovar2) + static_var2 + static_var22;
-+
-+	return 0;
-+}
-+
-+/* different name and/or type of the variable doesn't matter */
-+char _license[] SEC("license") = "GPL";
-+int _version SEC("version") = 1;
+ static int do_help(int argc, char **argv)
+ {
+ 	if (json_output) {
+@@ -622,7 +663,8 @@ static int do_help(int argc, char **argv)
+ 	}
+ 
+ 	fprintf(stderr,
+-		"Usage: %1$s %2$s skeleton FILE [name OBJECT_NAME]\n"
++		"Usage: %1$s %2$s object OUTPUT_FILE INPUT_FILE [INPUT_FILE...]\n"
++		"       %1$s %2$s skeleton FILE [name OBJECT_NAME]\n"
+ 		"       %1$s %2$s help\n"
+ 		"\n"
+ 		"       " HELP_SPEC_OPTIONS "\n"
+@@ -633,6 +675,7 @@ static int do_help(int argc, char **argv)
+ }
+ 
+ static const struct cmd cmds[] = {
++	{ "object",	do_object },
+ 	{ "skeleton",	do_skeleton },
+ 	{ "help",	do_help },
+ 	{ 0 }
 -- 
 2.30.2
 
