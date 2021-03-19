@@ -7,30 +7,30 @@ X-Spam-Status: No, score=-19.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 982A6C433E0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC27DC433DB
 	for <bpf@archiver.kernel.org>; Fri, 19 Mar 2021 12:24:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6E4EF64F65
+	by mail.kernel.org (Postfix) with ESMTP id 9A0BB64F6E
 	for <bpf@archiver.kernel.org>; Fri, 19 Mar 2021 12:24:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230368AbhCSMXy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 19 Mar 2021 08:23:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34446 "EHLO mail.kernel.org"
+        id S230166AbhCSMX4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 19 Mar 2021 08:23:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34564 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230268AbhCSMX3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 19 Mar 2021 08:23:29 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3DAEE64F6E;
-        Fri, 19 Mar 2021 12:23:26 +0000 (UTC)
+        id S230169AbhCSMXu (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 19 Mar 2021 08:23:50 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 87A7864F11;
+        Fri, 19 Mar 2021 12:23:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616156609;
-        bh=nqRMt7HfWF4IDIt0k4NM1ml7U8SIpubXRyNN+jZYq1E=;
+        s=k20201202; t=1616156630;
+        bh=oFlPu06uz5j9auNWsJ3R0Ish/3if57XYi76+/Eh3Oqs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=i3CpqxgHAR2iVT5IyvMv5xg7u+IVgga3nWpzvtzarH5j4dM1ZYLcQQ2YC9AJ5IUI5
-         0F43sf1CWoE373EQyCe+7nUiExUPxXN3N11nhQqy7018N9SEvLRrlLvYqZOxmzS1yZ
-         DY5i0MLw8Y6cXztIIGd0jYwqnQNBkmcpNweZTj88LoxxeOc47BI0MmlRFD1bTTj6PF
-         0nl+p21SY5urIsYetpMpvA57uC7neZpTLtKI+hbojrCNj4IUrKgll4C2vY68YzEK9d
-         i/BjQbPJW3yU1Yf+BpFlUu1BjWPYT6Jvz3xaw0A8JyJT1lCnS5SB017IRGMb3tMNmK
-         Zx6jndGdRncJA==
+        b=kTY/Mk7Flul+ihiE8xxw+9ZtCqF9YcC8SqyaRpBLfFLhCkYrDSHucz2JaqpkH4eZ4
+         bcyyZH37nZYy9VKdq6niAnK9R2NCKBbqVY5igUa6IFcCTCCU/v+lmPtLkmw4TyaMYs
+         f3sj4oxRqSyaVs5YCKJY/jAy0QecJbBMsXUBXIHyJb/Wx1sGuhF5zNmxO99pJ0HsoW
+         3tFOMlih/clCGylf6NAtA81lNA7bBJjVwhmcBfE9Jzyovr/kw9uK/7eoBBIcLyL7sx
+         lv/9aWHqN1yF5z1eToNAuZ5yDPfpimuvYtqiOWiNwTspTkAtrxKo1/QLwIArmQrysl
+         zS0MqdxDsrmqA==
 From:   Masami Hiramatsu <mhiramat@kernel.org>
 To:     Steven Rostedt <rostedt@goodmis.org>,
         Ingo Molnar <mingo@kernel.org>
@@ -40,9 +40,9 @@ Cc:     X86 ML <x86@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>,
         ast@kernel.org, tglx@linutronix.de, kernel-team@fb.com, yhs@fb.com,
         Josh Poimboeuf <jpoimboe@redhat.com>,
         linux-ia64@vger.kernel.org
-Subject: [PATCH -tip v3 09/11] x86/kprobes: Push a fake return address at kretprobe_trampoline
-Date:   Fri, 19 Mar 2021 21:23:23 +0900
-Message-Id: <161615660310.306069.8018914961713221579.stgit@devnote2>
+Subject: [PATCH -tip v3 11/11] tracing: Show kretprobe unknown indicator only for kretprobe_trampoline
+Date:   Fri, 19 Mar 2021 21:23:45 +0900
+Message-Id: <161615662521.306069.3578204343927212072.stgit@devnote2>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <161615650355.306069.17260992641363840330.stgit@devnote2>
 References: <161615650355.306069.17260992641363840330.stgit@devnote2>
@@ -54,88 +54,59 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This changes x86/kretprobe stack frame on kretprobe_trampoline
-a bit, which now push the kretprobe_trampoline as a fake return
-address at the bottom of the stack frame. With this fix, the ORC
-unwinder will see the kretprobe_trampoline as a return address.
+ftrace shows "[unknown/kretprobe'd]" indicator all addresses in the
+kretprobe_trampoline, but the modified address by kretprobe should
+be only kretprobe_trampoline+0.
 
 Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
-Suggested-by: Josh Poimboeuf <jpoimboe@redhat.com>
 ---
- arch/x86/kernel/kprobes/core.c |   31 ++++++++++++++++++++++---------
- 1 file changed, 22 insertions(+), 9 deletions(-)
+ kernel/trace/trace_output.c |   17 ++++-------------
+ 1 file changed, 4 insertions(+), 13 deletions(-)
 
-diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
-index b31058a152b6..7e7b854e0fdf 100644
---- a/arch/x86/kernel/kprobes/core.c
-+++ b/arch/x86/kernel/kprobes/core.c
-@@ -769,28 +769,31 @@ asm(
- 	".global kretprobe_trampoline\n"
- 	".type kretprobe_trampoline, @function\n"
- 	"kretprobe_trampoline:\n"
--	/* We don't bother saving the ss register */
- #ifdef CONFIG_X86_64
--	"	pushq %rsp\n"
-+	/* Push fake return address to tell the unwinder it's a kretprobe */
-+	"	pushq $kretprobe_trampoline\n"
- 	UNWIND_HINT_FUNC
-+	/* Save the sp-8, this will be fixed later */
-+	"	pushq %rsp\n"
- 	"	pushfq\n"
- 	SAVE_REGS_STRING
- 	"	movq %rsp, %rdi\n"
- 	"	call trampoline_handler\n"
--	/* Replace saved sp with true return address. */
--	"	movq %rax, 19*8(%rsp)\n"
- 	RESTORE_REGS_STRING
-+	"	addq $8, %rsp\n"
- 	"	popfq\n"
- #else
--	"	pushl %esp\n"
-+	/* Push fake return address to tell the unwinder it's a kretprobe */
-+	"	pushl $kretprobe_trampoline\n"
- 	UNWIND_HINT_FUNC
-+	/* Save the sp-4, this will be fixed later */
-+	"	pushl %esp\n"
- 	"	pushfl\n"
- 	SAVE_REGS_STRING
- 	"	movl %esp, %eax\n"
- 	"	call trampoline_handler\n"
--	/* Replace saved sp with true return address. */
--	"	movl %eax, 15*4(%esp)\n"
- 	RESTORE_REGS_STRING
-+	"	addl $4, %esp\n"
- 	"	popfl\n"
- #endif
- 	"	ret\n"
-@@ -802,8 +805,10 @@ NOKPROBE_SYMBOL(kretprobe_trampoline);
- /*
-  * Called from kretprobe_trampoline
-  */
--__used __visible void *trampoline_handler(struct pt_regs *regs)
-+__used __visible void trampoline_handler(struct pt_regs *regs)
- {
-+	unsigned long *frame_pointer;
-+
- 	/* fixup registers */
- 	regs->cs = __KERNEL_CS;
- #ifdef CONFIG_X86_32
-@@ -811,8 +816,16 @@ __used __visible void *trampoline_handler(struct pt_regs *regs)
- #endif
- 	regs->ip = (unsigned long)&kretprobe_trampoline;
- 	regs->orig_ax = ~0UL;
-+	regs->sp += sizeof(long);
-+	frame_pointer = ((unsigned long *)&regs->sp) + 1;
+diff --git a/kernel/trace/trace_output.c b/kernel/trace/trace_output.c
+index 61255bad7e01..e12437388686 100644
+--- a/kernel/trace/trace_output.c
++++ b/kernel/trace/trace_output.c
+@@ -8,6 +8,7 @@
+ #include <linux/module.h>
+ #include <linux/mutex.h>
+ #include <linux/ftrace.h>
++#include <linux/kprobes.h>
+ #include <linux/sched/clock.h>
+ #include <linux/sched/mm.h>
  
--	return (void *)kretprobe_trampoline_handler(regs, &regs->sp);
-+	/* Replace fake return address with real one. */
-+	*frame_pointer = kretprobe_trampoline_handler(regs, frame_pointer);
-+	/*
-+	 * Move flags to sp so that kretprobe_trapmoline can return
-+	 * right after popf.
-+	 */
-+	regs->sp = regs->flags;
+@@ -346,22 +347,12 @@ int trace_output_call(struct trace_iterator *iter, char *name, char *fmt, ...)
  }
- NOKPROBE_SYMBOL(trampoline_handler);
+ EXPORT_SYMBOL_GPL(trace_output_call);
  
+-#ifdef CONFIG_KRETPROBES
+-static inline const char *kretprobed(const char *name)
++static inline const char *kretprobed(const char *name, unsigned long addr)
+ {
+-	static const char tramp_name[] = "kretprobe_trampoline";
+-	int size = sizeof(tramp_name);
+-
+-	if (strncmp(tramp_name, name, size) == 0)
++	if (is_kretprobe_trampoline(addr))
+ 		return "[unknown/kretprobe'd]";
+ 	return name;
+ }
+-#else
+-static inline const char *kretprobed(const char *name)
+-{
+-	return name;
+-}
+-#endif /* CONFIG_KRETPROBES */
+ 
+ void
+ trace_seq_print_sym(struct trace_seq *s, unsigned long address, bool offset)
+@@ -374,7 +365,7 @@ trace_seq_print_sym(struct trace_seq *s, unsigned long address, bool offset)
+ 		sprint_symbol(str, address);
+ 	else
+ 		kallsyms_lookup(address, NULL, NULL, NULL, str);
+-	name = kretprobed(str);
++	name = kretprobed(str, address);
+ 
+ 	if (name && strlen(name)) {
+ 		trace_seq_puts(s, name);
 
