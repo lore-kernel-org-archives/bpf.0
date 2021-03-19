@@ -7,30 +7,30 @@ X-Spam-Status: No, score=-19.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57C75C433EA
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 737ACC433EB
 	for <bpf@archiver.kernel.org>; Fri, 19 Mar 2021 21:49:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2D9966198F
+	by mail.kernel.org (Postfix) with ESMTP id 54C7961989
 	for <bpf@archiver.kernel.org>; Fri, 19 Mar 2021 21:49:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230518AbhCSVsq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 19 Mar 2021 17:48:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45628 "EHLO mail.kernel.org"
+        id S230145AbhCSVsr (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 19 Mar 2021 17:48:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45708 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230433AbhCSVsa (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 19 Mar 2021 17:48:30 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C626A61958;
-        Fri, 19 Mar 2021 21:48:26 +0000 (UTC)
+        id S230439AbhCSVsk (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 19 Mar 2021 17:48:40 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 00CA861983;
+        Fri, 19 Mar 2021 21:48:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616190509;
-        bh=UffDz3mjDvxHKJazLrKdQOkZimTnyea4SglojrrVotQ=;
+        s=k20201202; t=1616190520;
+        bh=wqobyhPlfuvPEi3hAtXwvFihWG8FOemveu5QOUTuJdo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jLsIRTn7nwHSw2ps3BGw++6I2gLzgWnvQECQAQgShP1MqyWTgxXJ7V4d+lkTHxGt9
-         8Y7Vo1ALIhI1Gl40yCg3iBTbzu4HV5XGi6aZJrr0vFFudRZC3d8s9J6PYs8TLKJOfk
-         sGvcG+XanyPEy5NISN/j7rkBCjXpppkDkqK2Kuweqg+Et3Kh+kPVrmerjatt6PYdVy
-         3EvRHATqHH201rehfwxQaCmY4SWOcc3utdMrTt48sbkltoc5sJhvYo3dO5As/cHc6h
-         mPsb3X3vnq/cTbkwk7XNsradyO2iFqIpKgHKp3avz27NvYO8Tgk4exKA+P3yxcUn/c
-         5MFiRlnrNqKaQ==
+        b=mhC9uSmzGt9rBtTpgftQ16xdbaxLnhqXAkWRTh2jEIkDse9iDpX3Q+/ZaMc17ds44
+         qsFcH8QlBAJ78KtuGYvAmGKP0XoAT7+RQtZpoS+S+b/fEE68EplmhrcRVIqq61nf3z
+         nP9LOl9toNxuKGAru3pwLFYPr56BMIaphmswTnoMbDYociTX39dCsiZra4bH2YXYWy
+         LkcMZPEzLNc4n2WceQ9TgNWPMlhnnEsy4bFROv/wZZRXL3RAwErvO/LBcPzBU6tRPk
+         5g1xVYlPiJreEUMSl0s6MntSoZD8IDS/6nlBe1y7Fb3au+sRU0Naytc78GrJgGzozW
+         rnvd59bO/lm5g==
 From:   Lorenzo Bianconi <lorenzo@kernel.org>
 To:     bpf@vger.kernel.org, netdev@vger.kernel.org
 Cc:     lorenzo.bianconi@redhat.com, davem@davemloft.net, kuba@kernel.org,
@@ -39,9 +39,9 @@ Cc:     lorenzo.bianconi@redhat.com, davem@davemloft.net, kuba@kernel.org,
         echaudro@redhat.com, jasowang@redhat.com,
         alexander.duyck@gmail.com, saeed@kernel.org,
         maciej.fijalkowski@intel.com, sameehj@amazon.com
-Subject: [PATCH v7 bpf-next 08/14] bpf: add multi-buff support to the bpf_xdp_adjust_tail() API
-Date:   Fri, 19 Mar 2021 22:47:22 +0100
-Message-Id: <6da4e8a314e7fbdeb0a6790a920a4ae554fb3742.1616179034.git.lorenzo@kernel.org>
+Subject: [PATCH v7 bpf-next 11/14] bpf: move user_size out of bpf_test_init
+Date:   Fri, 19 Mar 2021 22:47:25 +0100
+Message-Id: <4199200124683783456c6f94e663dae8a9d3799e.1616179034.git.lorenzo@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1616179034.git.lorenzo@kernel.org>
 References: <cover.1616179034.git.lorenzo@kernel.org>
@@ -51,112 +51,61 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Eelco Chaudron <echaudro@redhat.com>
+Rely on data_size_in in bpf_test_init routine signature. This is a
+preliminary patch to introduce xdp multi-buff selftest
 
-This change adds support for tail growing and shrinking for XDP multi-buff.
-
-Signed-off-by: Eelco Chaudron <echaudro@redhat.com>
 Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
 ---
- include/net/xdp.h |  5 ++++
- net/core/filter.c | 63 +++++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 68 insertions(+)
+ net/bpf/test_run.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/include/net/xdp.h b/include/net/xdp.h
-index 8be1b5e5a08a..19cd6642e087 100644
---- a/include/net/xdp.h
-+++ b/include/net/xdp.h
-@@ -157,6 +157,11 @@ static inline void xdp_set_frag_size(skb_frag_t *frag, u32 size)
- 	frag->bv_len = size;
- }
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index 0abdd67f44b1..6c3516555757 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -213,11 +213,10 @@ __diag_pop();
  
-+static inline unsigned int xdp_get_frag_tailroom(const skb_frag_t *frag)
-+{
-+	return PAGE_SIZE - xdp_get_frag_size(frag) - xdp_get_frag_offset(frag);
-+}
-+
- struct xdp_frame {
- 	void *data;
- 	u16 len;
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 10dac9dd5086..18b2c9bacba1 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -3855,11 +3855,74 @@ static const struct bpf_func_proto bpf_xdp_adjust_head_proto = {
- 	.arg2_type	= ARG_ANYTHING,
- };
+ ALLOW_ERROR_INJECTION(bpf_modify_return_test, ERRNO);
  
-+static int bpf_xdp_mb_adjust_tail(struct xdp_buff *xdp, int offset)
-+{
-+	struct xdp_shared_info *xdp_sinfo = xdp_get_shared_info_from_buff(xdp);
-+
-+	if (unlikely(xdp_sinfo->nr_frags == 0))
-+		return -EINVAL;
-+
-+	if (offset >= 0) {
-+		skb_frag_t *frag = &xdp_sinfo->frags[xdp_sinfo->nr_frags - 1];
-+		int size;
-+
-+		if (unlikely(offset > xdp_get_frag_tailroom(frag)))
-+			return -EINVAL;
-+
-+		size = xdp_get_frag_size(frag);
-+		memset(xdp_get_frag_address(frag) + size, 0, offset);
-+		xdp_set_frag_size(frag, size + offset);
-+		xdp_sinfo->data_length += offset;
-+	} else {
-+		int i, frags_to_free = 0;
-+
-+		offset = abs(offset);
-+
-+		if (unlikely(offset > ((int)(xdp->data_end - xdp->data) +
-+				       xdp_sinfo->data_length -
-+				       ETH_HLEN)))
-+			return -EINVAL;
-+
-+		for (i = xdp_sinfo->nr_frags - 1; i >= 0 && offset > 0; i--) {
-+			skb_frag_t *frag = &xdp_sinfo->frags[i];
-+			int size = xdp_get_frag_size(frag);
-+			int shrink = min_t(int, offset, size);
-+
-+			offset -= shrink;
-+			if (likely(size - shrink > 0)) {
-+				/* When updating the final fragment we have
-+				 * to adjust the data_length in line.
-+				 */
-+				xdp_sinfo->data_length -= shrink;
-+				xdp_set_frag_size(frag, size - shrink);
-+				break;
-+			}
-+
-+			/* When we free the fragments,
-+			 * xdp_return_frags_from_buff() will take care
-+			 * of updating the xdp share info data_length.
-+			 */
-+			frags_to_free++;
-+		}
-+
-+		if (unlikely(frags_to_free))
-+			xdp_return_num_frags_from_buff(xdp, frags_to_free);
-+
-+		if (unlikely(offset > 0))
-+			xdp->data_end -= offset;
-+	}
-+
-+	return 0;
-+}
-+
- BPF_CALL_2(bpf_xdp_adjust_tail, struct xdp_buff *, xdp, int, offset)
+-static void *bpf_test_init(const union bpf_attr *kattr, u32 size,
+-			   u32 headroom, u32 tailroom)
++static void *bpf_test_init(const union bpf_attr *kattr, u32 user_size,
++			   u32 size, u32 headroom, u32 tailroom)
  {
- 	void *data_hard_end = xdp_data_hard_end(xdp); /* use xdp->frame_sz */
- 	void *data_end = xdp->data_end + offset;
+ 	void __user *data_in = u64_to_user_ptr(kattr->test.data_in);
+-	u32 user_size = kattr->test.data_size_in;
+ 	void *data;
  
-+	if (unlikely(xdp->mb))
-+		return bpf_xdp_mb_adjust_tail(xdp, offset);
-+
- 	/* Notice that xdp_data_hard_end have reserved some tailroom */
- 	if (unlikely(data_end > data_hard_end))
+ 	if (size < ETH_HLEN || size > PAGE_SIZE - headroom - tailroom)
+@@ -538,7 +537,8 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
+ 	if (kattr->test.flags || kattr->test.cpu)
  		return -EINVAL;
+ 
+-	data = bpf_test_init(kattr, size, NET_SKB_PAD + NET_IP_ALIGN,
++	data = bpf_test_init(kattr, kattr->test.data_size_in,
++			     size, NET_SKB_PAD + NET_IP_ALIGN,
+ 			     SKB_DATA_ALIGN(sizeof(struct skb_shared_info)));
+ 	if (IS_ERR(data))
+ 		return PTR_ERR(data);
+@@ -675,7 +675,8 @@ int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
+ 	/* XDP have extra tailroom as (most) drivers use full page */
+ 	max_data_sz = 4096 - headroom - tailroom;
+ 
+-	data = bpf_test_init(kattr, max_data_sz, headroom, tailroom);
++	data = bpf_test_init(kattr, kattr->test.data_size_in,
++			     max_data_sz, headroom, tailroom);
+ 	if (IS_ERR(data))
+ 		return PTR_ERR(data);
+ 
+@@ -737,7 +738,7 @@ int bpf_prog_test_run_flow_dissector(struct bpf_prog *prog,
+ 	if (size < ETH_HLEN)
+ 		return -EINVAL;
+ 
+-	data = bpf_test_init(kattr, size, 0, 0);
++	data = bpf_test_init(kattr, kattr->test.data_size_in, size, 0, 0);
+ 	if (IS_ERR(data))
+ 		return PTR_ERR(data);
+ 
 -- 
 2.30.2
 
