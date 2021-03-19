@@ -2,122 +2,103 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL
-	autolearn=no autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B3D5BC433E0
-	for <bpf@archiver.kernel.org>; Thu, 18 Mar 2021 23:49:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 280D4C433E0
+	for <bpf@archiver.kernel.org>; Fri, 19 Mar 2021 00:19:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 701C464F33
-	for <bpf@archiver.kernel.org>; Thu, 18 Mar 2021 23:49:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B81E264F30
+	for <bpf@archiver.kernel.org>; Fri, 19 Mar 2021 00:19:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232321AbhCRXtN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 18 Mar 2021 19:49:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35326 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232096AbhCRXs4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 18 Mar 2021 19:48:56 -0400
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7FF1C061762
-        for <bpf@vger.kernel.org>; Thu, 18 Mar 2021 16:48:55 -0700 (PDT)
-Received: by mail-vs1-xe2f.google.com with SMTP id e13so2524140vsl.5
-        for <bpf@vger.kernel.org>; Thu, 18 Mar 2021 16:48:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=w4SsUNnog1rCkxnTwPGBzmgfbYVmtvLwFsZIIDtRJ+0=;
-        b=tODKum7fYlaP1p1/wInlRZv3OQMdfXJCpiBT7MtQvTeiTInxAIccKNZwbuStHykgX3
-         pRr40h9mudP1dFh48XCe0B1EMgnJcSgbjagFRqIbPF47JfIw3hqWAW02qmqzw4JIXudz
-         snxbbOtqclC4Lv3msvK7EpgiJaio9ooDeRrV7xs3WxxWoANXDrrh620DCmhwBCkpz9VV
-         DbB0XB7ayvEMnQzN/DRg2GCM/4XFWT7sKKJO07hT4K2b0cRrMSrUUreDquUusRAW5V4O
-         NMWrcZjLq44F3N7hMmnke7yr9/YdGfdRQ9JD6SCye+TXaalPNgyyWzK8ZktScxsbGGoi
-         /Mhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=w4SsUNnog1rCkxnTwPGBzmgfbYVmtvLwFsZIIDtRJ+0=;
-        b=Ou/XsWfoDGd/VK9bafX3z3ivNNmxxNiXOV5F/SPL7QlNlGtVwNJiYdvmEhVwVso19m
-         N4+YveZynOJtogR9QsX2sWdSE9aBmNY4vrmd2zif5wF9IUQctI3ByyzeKys7GWka36PP
-         H3omE82L6ysLQ4jooMpkKYZRgbqdjq4cBkZN06nZ8J/VZeERIGav4XChIp1KwRA7sWkV
-         OPh5D5AEv64GvfGmSILVuLEU+rt/khCYHK+QTlhxQzOwQJz17BcujGdMsgF62kbIcquR
-         u69pfdmpocgDikloQXXCNwUMwrUQmlK/KdmYz2zCncOZW33qUr3hsUYjC5kQ6l8iT3OP
-         6eGA==
-X-Gm-Message-State: AOAM532nRZvX+SU1gpRFiFZ8dgnCnA8TRKCRCGeofRQGScbnTjHRMegN
-        ovfkyg96BhvlCfPpZL4xJv497mtxkDU53E6yhTIQirYHibnM9g==
-X-Google-Smtp-Source: ABdhPJzbqtERqnP82xx5uHkisRqkk8CIF+77aYgiFY0OIofKP/nQ8IPXRpr1qeG2yOzhWdw89ZfJnXTYr43XinbZUe8=
-X-Received: by 2002:a05:6102:124e:: with SMTP id p14mr1245907vsg.14.1616111334467;
- Thu, 18 Mar 2021 16:48:54 -0700 (PDT)
+        id S230477AbhCSASh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 18 Mar 2021 20:18:37 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:44686 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S232549AbhCSASR (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 18 Mar 2021 20:18:17 -0400
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.0.43/8.16.0.43) with SMTP id 12J0EYHO021419
+        for <bpf@vger.kernel.org>; Thu, 18 Mar 2021 17:18:17 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=+FwlTZK1j9LgfSFuLiWA531SLG7H/kYuJRz/AkwN104=;
+ b=Cc1Vq7xtV/EhDOL2zFWQAo/NAWNZVVxAVDFCzMJ0apl4nrR0XM+UIuD3znXrq078BJRg
+ sQsQvKjJ2TuORJmguPKz9xtk7oduLMceWgs9lE8viqufSwWIiKzB9Zk6bQJUb2IthKg7
+ n+iijoT9SbGZ+7Do8pY7cCJYYArYMNV1eBY= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0089730.ppops.net with ESMTP id 37bs1h7s6y-5
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Thu, 18 Mar 2021 17:18:16 -0700
+Received: from intmgw001.38.frc1.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Thu, 18 Mar 2021 17:18:15 -0700
+Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
+        id 5FC1B790893; Thu, 18 Mar 2021 17:18:10 -0700 (PDT)
+From:   Yonghong Song <yhs@fb.com>
+To:     <bpf@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
+        Jiri Olsa <jolsa@kernel.org>, Roman Gushchin <guro@fb.com>
+Subject: [PATCH bpf-next 2/2] bpf: fix bpf_cgroup_storage_set() usage in test_run
+Date:   Thu, 18 Mar 2021 17:18:10 -0700
+Message-ID: <20210319001810.2166977-1-yhs@fb.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210319001759.2165191-1-yhs@fb.com>
+References: <20210319001759.2165191-1-yhs@fb.com>
 MIME-Version: 1.0
-References: <20210318171111.706303-1-samitolvanen@google.com>
- <20210318171111.706303-2-samitolvanen@google.com> <YFPUNlOomp173o5B@hirez.programming.kicks-ass.net>
-In-Reply-To: <YFPUNlOomp173o5B@hirez.programming.kicks-ass.net>
-From:   Sami Tolvanen <samitolvanen@google.com>
-Date:   Thu, 18 Mar 2021 16:48:43 -0700
-Message-ID: <CABCJKufkQay5Fk5mZspn4PY2+mBC0CqC5t9QGkKafX4vUQv6Lg@mail.gmail.com>
-Subject: Re: [PATCH v2 01/17] add support for Clang CFI
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Will Deacon <will@kernel.org>, Jessica Yu <jeyu@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Tejun Heo <tj@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        bpf <bpf@vger.kernel.org>, linux-hardening@vger.kernel.org,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
-        PCI <linux-pci@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
+ definitions=2021-03-18_19:2021-03-17,2021-03-18 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ mlxscore=0 mlxlogscore=711 bulkscore=0 priorityscore=1501 clxscore=1015
+ phishscore=0 impostorscore=0 adultscore=0 suspectscore=0 spamscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2103190000
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Mar 18, 2021 at 3:29 PM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Thu, Mar 18, 2021 at 10:10:55AM -0700, Sami Tolvanen wrote:
-> > +static void update_shadow(struct module *mod, unsigned long base_addr,
-> > +             update_shadow_fn fn)
-> > +{
-> > +     struct cfi_shadow *prev;
-> > +     struct cfi_shadow *next;
-> > +     unsigned long min_addr, max_addr;
-> > +
-> > +     next = vmalloc(SHADOW_SIZE);
-> > +
-> > +     mutex_lock(&shadow_update_lock);
-> > +     prev = rcu_dereference_protected(cfi_shadow,
-> > +                                      mutex_is_locked(&shadow_update_lock));
-> > +
-> > +     if (next) {
-> > +             next->base = base_addr >> PAGE_SHIFT;
-> > +             prepare_next_shadow(prev, next);
-> > +
-> > +             min_addr = (unsigned long)mod->core_layout.base;
-> > +             max_addr = min_addr + mod->core_layout.text_size;
-> > +             fn(next, mod, min_addr & PAGE_MASK, max_addr & PAGE_MASK);
-> > +
-> > +             set_memory_ro((unsigned long)next, SHADOW_PAGES);
-> > +     }
-> > +
-> > +     rcu_assign_pointer(cfi_shadow, next);
-> > +     mutex_unlock(&shadow_update_lock);
-> > +     synchronize_rcu_expedited();
->
-> expedited is BAD(tm), why is it required and why doesn't it have a
-> comment?
+In bpf_test_run(), check the return value of bpf_cgroup_storage_set()
+and do bpf_cgroup_storate_unset() properly.
 
-Ah, this uses synchronize_rcu_expedited() because we have a case where
-synchronize_rcu() hangs here with a specific SoC family after the
-vendor's cpu_pm driver powers down CPU cores. Would you say expedited
-is bad enough that we should avoid it here? The function is called
-only when kernel modules are loaded or unloaded, so not very
-frequently.
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Roman Gushchin <guro@fb.com>
+Signed-off-by: Yonghong Song <yhs@fb.com>
+---
+ net/bpf/test_run.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-Sami
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index 0abdd67f44b1..4aabf71cd95d 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -106,12 +106,16 @@ static int bpf_test_run(struct bpf_prog *prog, void=
+ *ctx, u32 repeat,
+=20
+ 	bpf_test_timer_enter(&t);
+ 	do {
+-		bpf_cgroup_storage_set(storage);
++		ret =3D bpf_cgroup_storage_set(storage);
++		if (ret)
++			break;
+=20
+ 		if (xdp)
+ 			*retval =3D bpf_prog_run_xdp(prog, ctx);
+ 		else
+ 			*retval =3D BPF_PROG_RUN(prog, ctx);
++
++		bpf_cgroup_storage_unset();
+ 	} while (bpf_test_timer_continue(&t, repeat, &ret, time));
+ 	bpf_test_timer_leave(&t);
+=20
+--=20
+2.30.2
+
