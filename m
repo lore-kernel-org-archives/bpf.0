@@ -4,33 +4,33 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-19.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1D17C433E2
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D886C433E0
 	for <bpf@archiver.kernel.org>; Fri, 19 Mar 2021 21:49:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AD87061952
+	by mail.kernel.org (Postfix) with ESMTP id 5460060232
 	for <bpf@archiver.kernel.org>; Fri, 19 Mar 2021 21:49:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230478AbhCSVsn (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 19 Mar 2021 17:48:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45512 "EHLO mail.kernel.org"
+        id S230440AbhCSVsm (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 19 Mar 2021 17:48:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45422 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230203AbhCSVsQ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 19 Mar 2021 17:48:16 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3731061958;
-        Fri, 19 Mar 2021 21:48:13 +0000 (UTC)
+        id S230218AbhCSVsJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 19 Mar 2021 17:48:09 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5B22F61956;
+        Fri, 19 Mar 2021 21:48:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616190496;
-        bh=BjM3aRfITmVs222cko1lsgwnS/HAjJqzUVnLOnTFztY=;
+        s=k20201202; t=1616190489;
+        bh=Pbf40SiyAqiH7pKTBuoCs2wC96KaU3l+C5JHrrBWdRs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pUjmdhG3jpnmOtbpK8/P6zgMqKhaKfRYrfdEbEdLxY/wtmja+eKXwwigU2t4/MXZN
-         HEv88fINvrhI3OFJomoGFlDoLHB8HtaL4LUG8MOx2GN3oyoaXzcH7L4jo96dnGHR9Y
-         STWWK/etMH74zqA9bm2SGaWmUEPQnr8RLZPwM7WZmXYF0490u78yJFhdVut7FKqw5m
-         mPZEec4cWxr8K/3VpD/leMg5dPBbjQIyz4AFYjncTOPfOkzpb6VcmdD2kLA6L5e/Z6
-         P1AcIunB7fNyLUkaIVEf8bYyLUMg3UWEPrb+aocXSf5PaLUqgO3Eq3GNXWLtEbdyPT
-         8gXkNX5KnnL1w==
+        b=LoPD+zK8DAx2IxKTRCBgNMxY21BHtw50dh2/W31gWeLsmnRfnH4hzAM4YrRp6bV9B
+         asmYs7lnFPiZK4TwTYSkmLPDF5QN3OyxT15Yhm+kpBO30zFvjoNFnr76TEc4yy+xjh
+         id59t1E8zLrdWhsssifIJwl9T15dHqfU8p5LggCuIm/140vM/INzFIz1+Z/hUjUdpQ
+         itI4Y4zneBbhZC2VTpa/O6ZRecN23PCabHKLbqDn+GA1dLU7/WOdWZ4pnnsjkyvkb8
+         s+kvGN1A7qbUiauyobQ/cvk5eL8GJbNRheKAY3nlISafs7TLYYXd8D2FzjvMUIotcn
+         QuMx0EQwebVhw==
 From:   Lorenzo Bianconi <lorenzo@kernel.org>
 To:     bpf@vger.kernel.org, netdev@vger.kernel.org
 Cc:     lorenzo.bianconi@redhat.com, davem@davemloft.net, kuba@kernel.org,
@@ -39,9 +39,9 @@ Cc:     lorenzo.bianconi@redhat.com, davem@davemloft.net, kuba@kernel.org,
         echaudro@redhat.com, jasowang@redhat.com,
         alexander.duyck@gmail.com, saeed@kernel.org,
         maciej.fijalkowski@intel.com, sameehj@amazon.com
-Subject: [PATCH v7 bpf-next 04/14] xdp: add multi-buff support to xdp_return_{buff/frame}
-Date:   Fri, 19 Mar 2021 22:47:18 +0100
-Message-Id: <e49afd6cf753db1425e31e5bdcb526f43e9cb1ad.1616179034.git.lorenzo@kernel.org>
+Subject: [PATCH v7 bpf-next 02/14] xdp: add xdp_shared_info data structure
+Date:   Fri, 19 Mar 2021 22:47:16 +0100
+Message-Id: <f96f73b55f9282d00524f7a6deb7d108fc7df471.1616179034.git.lorenzo@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1616179034.git.lorenzo@kernel.org>
 References: <cover.1616179034.git.lorenzo@kernel.org>
@@ -51,173 +51,299 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Take into account if the received xdp_buff/xdp_frame is non-linear
-recycling/returning the frame memory to the allocator or into
-xdp_frame_bulk.
-Introduce xdp_return_num_frags_from_buff to return a given number of
-fragments from a xdp multi-buff starting from the tail.
+Introduce xdp_shared_info data structure to contain info about
+"non-linear" xdp frame. xdp_shared_info will alias skb_shared_info
+allowing to keep most of the frags in the same cache-line.
+Introduce some xdp_shared_info helpers aligned to skb_frag* ones
 
 Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
 ---
- include/net/xdp.h | 19 ++++++++++--
- net/core/xdp.c    | 76 ++++++++++++++++++++++++++++++++++++++++++++++-
- 2 files changed, 92 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/marvell/mvneta.c | 62 +++++++++++++++------------
+ include/net/xdp.h                     | 55 ++++++++++++++++++++++--
+ 2 files changed, 85 insertions(+), 32 deletions(-)
 
+diff --git a/drivers/net/ethernet/marvell/mvneta.c b/drivers/net/ethernet/marvell/mvneta.c
+index 20307eec8988..b21ba3e36264 100644
+--- a/drivers/net/ethernet/marvell/mvneta.c
++++ b/drivers/net/ethernet/marvell/mvneta.c
+@@ -2036,14 +2036,17 @@ int mvneta_rx_refill_queue(struct mvneta_port *pp, struct mvneta_rx_queue *rxq)
+ 
+ static void
+ mvneta_xdp_put_buff(struct mvneta_port *pp, struct mvneta_rx_queue *rxq,
+-		    struct xdp_buff *xdp, struct skb_shared_info *sinfo,
++		    struct xdp_buff *xdp, struct xdp_shared_info *xdp_sinfo,
+ 		    int sync_len)
+ {
+ 	int i;
+ 
+-	for (i = 0; i < sinfo->nr_frags; i++)
++	for (i = 0; i < xdp_sinfo->nr_frags; i++) {
++		skb_frag_t *frag = &xdp_sinfo->frags[i];
++
+ 		page_pool_put_full_page(rxq->page_pool,
+-					skb_frag_page(&sinfo->frags[i]), true);
++					xdp_get_frag_page(frag), true);
++	}
+ 	page_pool_put_page(rxq->page_pool, virt_to_head_page(xdp->data),
+ 			   sync_len, true);
+ }
+@@ -2181,7 +2184,7 @@ mvneta_run_xdp(struct mvneta_port *pp, struct mvneta_rx_queue *rxq,
+ 	       struct bpf_prog *prog, struct xdp_buff *xdp,
+ 	       u32 frame_sz, struct mvneta_stats *stats)
+ {
+-	struct skb_shared_info *sinfo = xdp_get_shared_info_from_buff(xdp);
++	struct xdp_shared_info *xdp_sinfo = xdp_get_shared_info_from_buff(xdp);
+ 	unsigned int len, data_len, sync;
+ 	u32 ret, act;
+ 
+@@ -2202,7 +2205,7 @@ mvneta_run_xdp(struct mvneta_port *pp, struct mvneta_rx_queue *rxq,
+ 
+ 		err = xdp_do_redirect(pp->dev, xdp, prog);
+ 		if (unlikely(err)) {
+-			mvneta_xdp_put_buff(pp, rxq, xdp, sinfo, sync);
++			mvneta_xdp_put_buff(pp, rxq, xdp, xdp_sinfo, sync);
+ 			ret = MVNETA_XDP_DROPPED;
+ 		} else {
+ 			ret = MVNETA_XDP_REDIR;
+@@ -2213,7 +2216,7 @@ mvneta_run_xdp(struct mvneta_port *pp, struct mvneta_rx_queue *rxq,
+ 	case XDP_TX:
+ 		ret = mvneta_xdp_xmit_back(pp, xdp);
+ 		if (ret != MVNETA_XDP_TX)
+-			mvneta_xdp_put_buff(pp, rxq, xdp, sinfo, sync);
++			mvneta_xdp_put_buff(pp, rxq, xdp, xdp_sinfo, sync);
+ 		break;
+ 	default:
+ 		bpf_warn_invalid_xdp_action(act);
+@@ -2222,7 +2225,7 @@ mvneta_run_xdp(struct mvneta_port *pp, struct mvneta_rx_queue *rxq,
+ 		trace_xdp_exception(pp->dev, prog, act);
+ 		fallthrough;
+ 	case XDP_DROP:
+-		mvneta_xdp_put_buff(pp, rxq, xdp, sinfo, sync);
++		mvneta_xdp_put_buff(pp, rxq, xdp, xdp_sinfo, sync);
+ 		ret = MVNETA_XDP_DROPPED;
+ 		stats->xdp_drop++;
+ 		break;
+@@ -2243,9 +2246,9 @@ mvneta_swbm_rx_frame(struct mvneta_port *pp,
+ {
+ 	unsigned char *data = page_address(page);
+ 	int data_len = -MVNETA_MH_SIZE, len;
++	struct xdp_shared_info *xdp_sinfo;
+ 	struct net_device *dev = pp->dev;
+ 	enum dma_data_direction dma_dir;
+-	struct skb_shared_info *sinfo;
+ 
+ 	if (*size > MVNETA_MAX_RX_BUF_SIZE) {
+ 		len = MVNETA_MAX_RX_BUF_SIZE;
+@@ -2268,8 +2271,8 @@ mvneta_swbm_rx_frame(struct mvneta_port *pp,
+ 	xdp_prepare_buff(xdp, data, pp->rx_offset_correction + MVNETA_MH_SIZE,
+ 			 data_len, false);
+ 
+-	sinfo = xdp_get_shared_info_from_buff(xdp);
+-	sinfo->nr_frags = 0;
++	xdp_sinfo = xdp_get_shared_info_from_buff(xdp);
++	xdp_sinfo->nr_frags = 0;
+ }
+ 
+ static void
+@@ -2277,7 +2280,7 @@ mvneta_swbm_add_rx_fragment(struct mvneta_port *pp,
+ 			    struct mvneta_rx_desc *rx_desc,
+ 			    struct mvneta_rx_queue *rxq,
+ 			    struct xdp_buff *xdp, int *size,
+-			    struct skb_shared_info *xdp_sinfo,
++			    struct xdp_shared_info *xdp_sinfo,
+ 			    struct page *page)
+ {
+ 	struct net_device *dev = pp->dev;
+@@ -2300,13 +2303,13 @@ mvneta_swbm_add_rx_fragment(struct mvneta_port *pp,
+ 	if (data_len > 0 && xdp_sinfo->nr_frags < MAX_SKB_FRAGS) {
+ 		skb_frag_t *frag = &xdp_sinfo->frags[xdp_sinfo->nr_frags++];
+ 
+-		skb_frag_off_set(frag, pp->rx_offset_correction);
+-		skb_frag_size_set(frag, data_len);
+-		__skb_frag_set_page(frag, page);
++		xdp_set_frag_offset(frag, pp->rx_offset_correction);
++		xdp_set_frag_size(frag, data_len);
++		xdp_set_frag_page(frag, page);
+ 
+ 		/* last fragment */
+ 		if (len == *size) {
+-			struct skb_shared_info *sinfo;
++			struct xdp_shared_info *sinfo;
+ 
+ 			sinfo = xdp_get_shared_info_from_buff(xdp);
+ 			sinfo->nr_frags = xdp_sinfo->nr_frags;
+@@ -2323,10 +2326,13 @@ static struct sk_buff *
+ mvneta_swbm_build_skb(struct mvneta_port *pp, struct mvneta_rx_queue *rxq,
+ 		      struct xdp_buff *xdp, u32 desc_status)
+ {
+-	struct skb_shared_info *sinfo = xdp_get_shared_info_from_buff(xdp);
+-	int i, num_frags = sinfo->nr_frags;
++	struct xdp_shared_info *xdp_sinfo = xdp_get_shared_info_from_buff(xdp);
++	int i, num_frags = xdp_sinfo->nr_frags;
++	skb_frag_t frag_list[MAX_SKB_FRAGS];
+ 	struct sk_buff *skb;
+ 
++	memcpy(frag_list, xdp_sinfo->frags, sizeof(skb_frag_t) * num_frags);
++
+ 	skb = build_skb(xdp->data_hard_start, PAGE_SIZE);
+ 	if (!skb)
+ 		return ERR_PTR(-ENOMEM);
+@@ -2338,12 +2344,12 @@ mvneta_swbm_build_skb(struct mvneta_port *pp, struct mvneta_rx_queue *rxq,
+ 	mvneta_rx_csum(pp, desc_status, skb);
+ 
+ 	for (i = 0; i < num_frags; i++) {
+-		skb_frag_t *frag = &sinfo->frags[i];
++		struct page *page = xdp_get_frag_page(&frag_list[i]);
+ 
+ 		skb_add_rx_frag(skb, skb_shinfo(skb)->nr_frags,
+-				skb_frag_page(frag), skb_frag_off(frag),
+-				skb_frag_size(frag), PAGE_SIZE);
+-		page_pool_release_page(rxq->page_pool, skb_frag_page(frag));
++				page, xdp_get_frag_offset(&frag_list[i]),
++				xdp_get_frag_size(&frag_list[i]), PAGE_SIZE);
++		page_pool_release_page(rxq->page_pool, page);
+ 	}
+ 
+ 	return skb;
+@@ -2356,7 +2362,7 @@ static int mvneta_rx_swbm(struct napi_struct *napi,
+ {
+ 	int rx_proc = 0, rx_todo, refill, size = 0;
+ 	struct net_device *dev = pp->dev;
+-	struct skb_shared_info sinfo;
++	struct xdp_shared_info xdp_sinfo;
+ 	struct mvneta_stats ps = {};
+ 	struct bpf_prog *xdp_prog;
+ 	u32 desc_status, frame_sz;
+@@ -2365,7 +2371,7 @@ static int mvneta_rx_swbm(struct napi_struct *napi,
+ 	xdp_init_buff(&xdp_buf, PAGE_SIZE, &rxq->xdp_rxq);
+ 	xdp_buf.data_hard_start = NULL;
+ 
+-	sinfo.nr_frags = 0;
++	xdp_sinfo.nr_frags = 0;
+ 
+ 	/* Get number of received packets */
+ 	rx_todo = mvneta_rxq_busy_desc_num_get(pp, rxq);
+@@ -2409,7 +2415,7 @@ static int mvneta_rx_swbm(struct napi_struct *napi,
+ 			}
+ 
+ 			mvneta_swbm_add_rx_fragment(pp, rx_desc, rxq, &xdp_buf,
+-						    &size, &sinfo, page);
++						    &size, &xdp_sinfo, page);
+ 		} /* Middle or Last descriptor */
+ 
+ 		if (!(rx_status & MVNETA_RXD_LAST_DESC))
+@@ -2417,7 +2423,7 @@ static int mvneta_rx_swbm(struct napi_struct *napi,
+ 			continue;
+ 
+ 		if (size) {
+-			mvneta_xdp_put_buff(pp, rxq, &xdp_buf, &sinfo, -1);
++			mvneta_xdp_put_buff(pp, rxq, &xdp_buf, &xdp_sinfo, -1);
+ 			goto next;
+ 		}
+ 
+@@ -2429,7 +2435,7 @@ static int mvneta_rx_swbm(struct napi_struct *napi,
+ 		if (IS_ERR(skb)) {
+ 			struct mvneta_pcpu_stats *stats = this_cpu_ptr(pp->stats);
+ 
+-			mvneta_xdp_put_buff(pp, rxq, &xdp_buf, &sinfo, -1);
++			mvneta_xdp_put_buff(pp, rxq, &xdp_buf, &xdp_sinfo, -1);
+ 
+ 			u64_stats_update_begin(&stats->syncp);
+ 			stats->es.skb_alloc_error++;
+@@ -2446,12 +2452,12 @@ static int mvneta_rx_swbm(struct napi_struct *napi,
+ 		napi_gro_receive(napi, skb);
+ next:
+ 		xdp_buf.data_hard_start = NULL;
+-		sinfo.nr_frags = 0;
++		xdp_sinfo.nr_frags = 0;
+ 	}
+ 	rcu_read_unlock();
+ 
+ 	if (xdp_buf.data_hard_start)
+-		mvneta_xdp_put_buff(pp, rxq, &xdp_buf, &sinfo, -1);
++		mvneta_xdp_put_buff(pp, rxq, &xdp_buf, &xdp_sinfo, -1);
+ 
+ 	if (ps.xdp_redirect)
+ 		xdp_do_flush_map();
 diff --git a/include/net/xdp.h b/include/net/xdp.h
-index 5b3874b68f99..8be1b5e5a08a 100644
+index b57ff2c81e7c..5b3874b68f99 100644
 --- a/include/net/xdp.h
 +++ b/include/net/xdp.h
-@@ -287,6 +287,7 @@ void xdp_return_buff(struct xdp_buff *xdp);
- void xdp_flush_frame_bulk(struct xdp_frame_bulk *bq);
- void xdp_return_frame_bulk(struct xdp_frame *xdpf,
- 			   struct xdp_frame_bulk *bq);
-+void xdp_return_num_frags_from_buff(struct xdp_buff *xdp, u16 num_frags);
+@@ -107,10 +107,54 @@ xdp_prepare_buff(struct xdp_buff *xdp, unsigned char *hard_start,
+ 	((xdp)->data_hard_start + (xdp)->frame_sz -	\
+ 	 SKB_DATA_ALIGN(sizeof(struct skb_shared_info)))
  
- /* When sending xdp_frame into the network stack, then there is no
-  * return point callback, which is needed to release e.g. DMA-mapping
-@@ -297,10 +298,24 @@ void __xdp_release_frame(void *data, struct xdp_mem_info *mem);
- static inline void xdp_release_frame(struct xdp_frame *xdpf)
+-static inline struct skb_shared_info *
++struct xdp_shared_info {
++	u16 nr_frags;
++	u16 data_length; /* paged area length */
++	skb_frag_t frags[MAX_SKB_FRAGS];
++};
++
++static inline struct xdp_shared_info *
+ xdp_get_shared_info_from_buff(struct xdp_buff *xdp)
  {
- 	struct xdp_mem_info *mem = &xdpf->mem;
-+	struct xdp_shared_info *xdp_sinfo;
-+	int i;
- 
- 	/* Curr only page_pool needs this */
--	if (mem->type == MEM_TYPE_PAGE_POOL)
--		__xdp_release_frame(xdpf->data, mem);
-+	if (mem->type != MEM_TYPE_PAGE_POOL)
-+		return;
-+
-+	if (likely(!xdpf->mb))
-+		goto out;
-+
-+	xdp_sinfo = xdp_get_shared_info_from_frame(xdpf);
-+	for (i = 0; i < xdp_sinfo->nr_frags; i++) {
-+		struct page *page = xdp_get_frag_page(&xdp_sinfo->frags[i]);
-+
-+		__xdp_release_frame(page_address(page), mem);
-+	}
-+out:
-+	__xdp_release_frame(xdpf->data, mem);
- }
- 
- int xdp_rxq_info_reg(struct xdp_rxq_info *xdp_rxq,
-diff --git a/net/core/xdp.c b/net/core/xdp.c
-index 05354976c1fc..430f516259d9 100644
---- a/net/core/xdp.c
-+++ b/net/core/xdp.c
-@@ -374,12 +374,38 @@ static void __xdp_return(void *data, struct xdp_mem_info *mem, bool napi_direct,
- 
- void xdp_return_frame(struct xdp_frame *xdpf)
- {
-+	struct xdp_shared_info *xdp_sinfo;
-+	int i;
-+
-+	if (likely(!xdpf->mb))
-+		goto out;
-+
-+	xdp_sinfo = xdp_get_shared_info_from_frame(xdpf);
-+	for (i = 0; i < xdp_sinfo->nr_frags; i++) {
-+		struct page *page = xdp_get_frag_page(&xdp_sinfo->frags[i]);
-+
-+		__xdp_return(page_address(page), &xdpf->mem, false, NULL);
-+	}
-+out:
- 	__xdp_return(xdpf->data, &xdpf->mem, false, NULL);
- }
- EXPORT_SYMBOL_GPL(xdp_return_frame);
- 
- void xdp_return_frame_rx_napi(struct xdp_frame *xdpf)
- {
-+	struct xdp_shared_info *xdp_sinfo;
-+	int i;
-+
-+	if (likely(!xdpf->mb))
-+		goto out;
-+
-+	xdp_sinfo = xdp_get_shared_info_from_frame(xdpf);
-+	for (i = 0; i < xdp_sinfo->nr_frags; i++) {
-+		struct page *page = xdp_get_frag_page(&xdp_sinfo->frags[i]);
-+
-+		__xdp_return(page_address(page), &xdpf->mem, true, NULL);
-+	}
-+out:
- 	__xdp_return(xdpf->data, &xdpf->mem, true, NULL);
- }
- EXPORT_SYMBOL_GPL(xdp_return_frame_rx_napi);
-@@ -415,7 +441,7 @@ void xdp_return_frame_bulk(struct xdp_frame *xdpf,
- 	struct xdp_mem_allocator *xa;
- 
- 	if (mem->type != MEM_TYPE_PAGE_POOL) {
--		__xdp_return(xdpf->data, &xdpf->mem, false, NULL);
-+		xdp_return_frame(xdpf);
- 		return;
- 	}
- 
-@@ -434,15 +460,63 @@ void xdp_return_frame_bulk(struct xdp_frame *xdpf,
- 		bq->xa = rhashtable_lookup(mem_id_ht, &mem->id, mem_id_rht_params);
- 	}
- 
-+	if (unlikely(xdpf->mb)) {
-+		struct xdp_shared_info *xdp_sinfo;
-+		int i;
-+
-+		xdp_sinfo = xdp_get_shared_info_from_frame(xdpf);
-+		for (i = 0; i < xdp_sinfo->nr_frags; i++) {
-+			skb_frag_t *frag = &xdp_sinfo->frags[i];
-+
-+			bq->q[bq->count++] = xdp_get_frag_address(frag);
-+			if (bq->count == XDP_BULK_QUEUE_SIZE)
-+				xdp_flush_frame_bulk(bq);
-+		}
-+	}
- 	bq->q[bq->count++] = xdpf->data;
- }
- EXPORT_SYMBOL_GPL(xdp_return_frame_bulk);
- 
- void xdp_return_buff(struct xdp_buff *xdp)
- {
-+	struct xdp_shared_info *xdp_sinfo;
-+	int i;
-+
-+	if (likely(!xdp->mb))
-+		goto out;
-+
-+	xdp_sinfo = xdp_get_shared_info_from_buff(xdp);
-+	for (i = 0; i < xdp_sinfo->nr_frags; i++) {
-+		struct page *page = xdp_get_frag_page(&xdp_sinfo->frags[i]);
-+
-+		__xdp_return(page_address(page), &xdp->rxq->mem, true, xdp);
-+	}
-+out:
- 	__xdp_return(xdp->data, &xdp->rxq->mem, true, xdp);
- }
- 
-+void xdp_return_num_frags_from_buff(struct xdp_buff *xdp, u16 num_frags)
-+{
-+	struct xdp_shared_info *xdp_sinfo;
-+	int i;
-+
-+	if (unlikely(!xdp->mb))
-+		return;
-+
-+	xdp_sinfo = xdp_get_shared_info_from_buff(xdp);
-+	num_frags = min_t(u16, num_frags, xdp_sinfo->nr_frags);
-+	for (i = 1; i <= num_frags; i++) {
-+		skb_frag_t *frag = &xdp_sinfo->frags[xdp_sinfo->nr_frags - i];
-+		struct page *page = xdp_get_frag_page(frag);
-+
-+		xdp_sinfo->data_length -= xdp_get_frag_size(frag);
-+		__xdp_return(page_address(page), &xdp->rxq->mem, false, NULL);
-+	}
-+	xdp_sinfo->nr_frags -= num_frags;
-+	xdp->mb = !!xdp_sinfo->nr_frags;
+-	return (struct skb_shared_info *)xdp_data_hard_end(xdp);
++	BUILD_BUG_ON(sizeof(struct xdp_shared_info) >
++		     sizeof(struct skb_shared_info));
++	return (struct xdp_shared_info *)xdp_data_hard_end(xdp);
 +}
-+EXPORT_SYMBOL_GPL(xdp_return_num_frags_from_buff);
 +
- /* Only called for MEM_TYPE_PAGE_POOL see xdp.h */
- void __xdp_release_frame(void *data, struct xdp_mem_info *mem)
++static inline struct page *xdp_get_frag_page(const skb_frag_t *frag)
++{
++	return frag->bv_page;
++}
++
++static inline unsigned int xdp_get_frag_offset(const skb_frag_t *frag)
++{
++	return frag->bv_offset;
++}
++
++static inline unsigned int xdp_get_frag_size(const skb_frag_t *frag)
++{
++	return frag->bv_len;
++}
++
++static inline void *xdp_get_frag_address(const skb_frag_t *frag)
++{
++	return page_address(xdp_get_frag_page(frag)) +
++	       xdp_get_frag_offset(frag);
++}
++
++static inline void xdp_set_frag_page(skb_frag_t *frag, struct page *page)
++{
++	frag->bv_page = page;
++}
++
++static inline void xdp_set_frag_offset(skb_frag_t *frag, u32 offset)
++{
++	frag->bv_offset = offset;
++}
++
++static inline void xdp_set_frag_size(skb_frag_t *frag, u32 size)
++{
++	frag->bv_len = size;
+ }
+ 
+ struct xdp_frame {
+@@ -140,12 +184,15 @@ static __always_inline void xdp_frame_bulk_init(struct xdp_frame_bulk *bq)
+ 	bq->xa = NULL;
+ }
+ 
+-static inline struct skb_shared_info *
++static inline struct xdp_shared_info *
+ xdp_get_shared_info_from_frame(struct xdp_frame *frame)
  {
+ 	void *data_hard_start = frame->data - frame->headroom - sizeof(*frame);
+ 
+-	return (struct skb_shared_info *)(data_hard_start + frame->frame_sz -
++	/* xdp_shared_info struct must be aligned to skb_shared_info
++	 * area in buffer tailroom
++	 */
++	return (struct xdp_shared_info *)(data_hard_start + frame->frame_sz -
+ 				SKB_DATA_ALIGN(sizeof(struct skb_shared_info)));
+ }
+ 
 -- 
 2.30.2
 
