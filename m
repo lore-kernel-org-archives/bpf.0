@@ -2,85 +2,93 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E0489C433E1
-	for <bpf@archiver.kernel.org>; Fri, 19 Mar 2021 21:00:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11022C433C1
+	for <bpf@archiver.kernel.org>; Fri, 19 Mar 2021 21:20:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BBBAC6197B
-	for <bpf@archiver.kernel.org>; Fri, 19 Mar 2021 21:00:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BC83861986
+	for <bpf@archiver.kernel.org>; Fri, 19 Mar 2021 21:20:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230351AbhCSU7y convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 19 Mar 2021 16:59:54 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:21756 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230177AbhCSU7W (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 19 Mar 2021 16:59:22 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12JKuMRZ026758
-        for <bpf@vger.kernel.org>; Fri, 19 Mar 2021 13:59:22 -0700
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 37ca5v838e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 19 Mar 2021 13:59:22 -0700
-Received: from intmgw001.06.ash9.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Fri, 19 Mar 2021 13:59:21 -0700
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 41FA52ED268B; Fri, 19 Mar 2021 13:59:15 -0700 (PDT)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
-        Jiri Olsa <jolsa@redhat.com>
-Subject: [PATCH bpf-next 2/3] libbpf: skip BTF fixup if object file has no BTF
-Date:   Fri, 19 Mar 2021 13:59:08 -0700
-Message-ID: <20210319205909.1748642-3-andrii@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210319205909.1748642-1-andrii@kernel.org>
-References: <20210319205909.1748642-1-andrii@kernel.org>
+        id S230218AbhCSVTr (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 19 Mar 2021 17:19:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59348 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230370AbhCSVTb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 19 Mar 2021 17:19:31 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20E91C06175F
+        for <bpf@vger.kernel.org>; Fri, 19 Mar 2021 14:19:31 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id e193so2872277ybc.6
+        for <bpf@vger.kernel.org>; Fri, 19 Mar 2021 14:19:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VzDNEsJZ9vi5ZA+3LPPt2bkm+WmI5zkVuzvnJyktsTw=;
+        b=ZblVrey5cmJXAHHaIYCfI1YyXlxtRua9UdyQzA6/0OWwlqVfACC8SvayrUd+8FPt0Y
+         4bCoX3VNRvAPrJd19/xEZvyBLDX+5MTIEuDJN11vJjxtSuKINXM/fG30kH9oUYiwUrty
+         g9vHqBhFXTqSQOq09HQdE6yxLP8TypwaddX00F+nhQAEIfK9OAzxr2q+tI4YSEp6gksY
+         eEJhjJpjojO12oWL9Za/GpKL7z4TBdzJvz64x6+Q/io4IQLSQR+Xy8gYu2ebcM3jdYYI
+         HN7BKPNdec2f1HsCa7xuCqFBxk4RDNV60h+kfl1kLWDVoDSOBmi+IAADZXiUQ+aH08GE
+         xsXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VzDNEsJZ9vi5ZA+3LPPt2bkm+WmI5zkVuzvnJyktsTw=;
+        b=KJa0tnz1qHcCr5Jy5YLHUOnSnkdwm5Cc6AYIOsrXzjfKReQOWBQiqjWuHVp8Nm3dNo
+         p8BLSARZfuP/ubSxBM37+2lW1mWDn8C0fy5UujGXdrcqeouNpeh5ki0BhP0JLMkHIV+A
+         jQ5IPdDMR35B10sOt/JWXkunBrREKxXsqF711GG2BR8IJGyF4msUTnRri2u6Y9wT3E2h
+         oTz64Fqh7tQeV0N4S1O9w29itg8+RYWC4YTuUByfpHLbmSmTpC9H6vdvcXvCu4igWgAJ
+         Il9LyIa4D1gKrkuU8sKSzgsjr0VAAN4sOGFQW7BHAFFDqmitT6o/ObQSMXgNx5C6jW20
+         DB9Q==
+X-Gm-Message-State: AOAM530zKQF54bsq5iW0PZZsh9zXmxD0JilWIDKRXmXes6+lwv8HtxFV
+        c1O8MhV+cyAKrmNJG5UuQX/cefRO7t+MSw9n0x8=
+X-Google-Smtp-Source: ABdhPJxV/5p9AS5/u8RPEh0M7SxfLUVIt9y9BJWChSNed3naY9SR8oOF2qDrnKvm0wO90vQOW+EPxrnZSWlJDUFrMmo=
+X-Received: by 2002:a25:40d8:: with SMTP id n207mr8909831yba.459.1616188770385;
+ Fri, 19 Mar 2021 14:19:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-03-19_12:2021-03-19,2021-03-19 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
- phishscore=0 spamscore=0 mlxscore=0 lowpriorityscore=0 adultscore=0
- impostorscore=0 mlxlogscore=999 priorityscore=1501 malwarescore=0
- bulkscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2103190143
-X-FB-Internal: deliver
+References: <20210318122700.396574-1-jean-philippe@linaro.org>
+ <CAEf4BzZzXxYxjzH86VYh0TvpW8u2+4qgAD1wMkRncYiiJ+2-0g@mail.gmail.com> <YFR7cOIV+kyHYzgJ@myrica>
+In-Reply-To: <YFR7cOIV+kyHYzgJ@myrica>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 19 Mar 2021 14:19:19 -0700
+Message-ID: <CAEf4BzafQRMVGFkLtHzbbDvwZYjymzAkR0urzNk8y-RRon++Mw@mail.gmail.com>
+Subject: Re: [PATCH bpf] libbpf: Fix BTF dump of pointer-to-array-of-struct
+To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        john fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Skip BTF fixup step when input object file is missing BTF altogether.
+On Fri, Mar 19, 2021 at 3:22 AM Jean-Philippe Brucker
+<jean-philippe@linaro.org> wrote:
+>
+> On Thu, Mar 18, 2021 at 10:08:36AM -0700, Andrii Nakryiko wrote:
+> > Yeah, makes total sense. I missed that array forces a strong link
+> > between types. The fix looks good, but can you please add those two
+> > cases to selftests? There is progs/btf_dump_test_case_syntax.c that
+> > probably can be extended. Please think about a way to specify types
+> > such that the order of BTF types doesn't matter and the issue has to
+> > be handled always.
+>
+> Sure, I'll add those selftests. I didn't figure out a way to trigger the
+> error unconditionally, but given that the selftest is always built with
+> clang it's still a good regression test.
 
-Reported-by: Jiri Olsa <jolsa@redhat.com>
-Fixes: 8fd27bf69b86 ("libbpf: Add BPF static linker BTF and BTF.ext support")
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- tools/lib/bpf/linker.c | 3 +++
- 1 file changed, 3 insertions(+)
+Yes, that's fine. Thanks for the fix and tests, applied to the bpf tree.
 
-diff --git a/tools/lib/bpf/linker.c b/tools/lib/bpf/linker.c
-index b4fff912dce2..5e0aa2f2c0ca 100644
---- a/tools/lib/bpf/linker.c
-+++ b/tools/lib/bpf/linker.c
-@@ -1313,6 +1313,9 @@ static int linker_fixup_btf(struct src_obj *obj)
- 	struct src_sec *sec;
- 	int i, j, n, m;
- 
-+	if (!obj->btf)
-+		return 0;
-+
- 	n = btf__get_nr_types(obj->btf);
- 	for (i = 1; i <= n; i++) {
- 		struct btf_var_secinfo *vi;
--- 
-2.30.2
-
+>
+> Thanks,
+> Jean
+>
