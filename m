@@ -2,136 +2,109 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D2399C4332D
-	for <bpf@archiver.kernel.org>; Fri, 19 Mar 2021 11:28:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B371BC43381
+	for <bpf@archiver.kernel.org>; Fri, 19 Mar 2021 12:22:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B023164F74
-	for <bpf@archiver.kernel.org>; Fri, 19 Mar 2021 11:28:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8375764F65
+	for <bpf@archiver.kernel.org>; Fri, 19 Mar 2021 12:22:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229638AbhCSL2K (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 19 Mar 2021 07:28:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44372 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229942AbhCSL16 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 19 Mar 2021 07:27:58 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F7D2C06174A
-        for <bpf@vger.kernel.org>; Fri, 19 Mar 2021 04:27:58 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id k8so8731412wrc.3
-        for <bpf@vger.kernel.org>; Fri, 19 Mar 2021 04:27:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=fVEtoBjUKWgyagwIZBW4zKQyHixrgqvat+jrds6fQhg=;
-        b=SCAKR+nSIGMTx2zhqY+p+lLgdmIuWNTDLuIcqbzjbxnxEmeLyglC3umGxsNRTNGkoD
-         K/xUK0FxGRonT/9OCtAEHLYAjhO3ayqQwaef5L4HepFJGeeBTIpiVKRqu63ww0Zei6z1
-         UKVyJjqaDYNekyu2gmIc+RC8f4Ee6YrYIBW6tGrPS/GCpodIO0NDbWi3bLWJeaV0yhRm
-         +/0UxWdUk8Kw4tQqcDiTeC33yfIxvvbwury7Jpqa08ze0gUcCcQf10dU+IDzD/yrEBmM
-         T/cfudvio6dKMEgf4APSrN3zT3LuDrsu5B3jrdTUjMqRpwZ1+Vmf3Ba4KXyhmL1j6uaZ
-         zkeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=fVEtoBjUKWgyagwIZBW4zKQyHixrgqvat+jrds6fQhg=;
-        b=CMnsezZIw8Kc6s0OTHE0fWb+Nyv8AVzt14fIx+GEQo5SFt92sc5eiV7ekJIIE1ZDX7
-         KAkCSixwlzChQd38cEgv75fGIdnWPV7Vhocyrh9lDkMshJ+TVfpHgD9BTHtQY5EwB7sA
-         x9HuqqjcTC6FpCds5yrCQ3SpQw8VhiAEDlIj39mimRj5R2//pXG6kA0Q7niN0qSU8+gO
-         7IoES03HgVWyAurM1TDEkVKULuOlutqfT+8dLgP/wYJxsx9SjGHXxqeauN25sUYBkqPS
-         u9MvMCb4O4XRtSxB21uD/eB+pCbiWlmuU3QsveitgY3mDzY1XS0PXQK2LXm1Kjlz+Q+6
-         55KQ==
-X-Gm-Message-State: AOAM532PMjx5RRzO2tBUHFiwaMk1sH52k6HKcytn54zwbpRWgOwPVip1
-        fi+NBUug0dgr5N5mLl4XenlCNg==
-X-Google-Smtp-Source: ABdhPJwTCMRxB7597LoBGEliAQ/Fez2WJCK/faW6nH54X5cYJbry9yN0f895KKR1aa+C2wVwV8gkTA==
-X-Received: by 2002:a5d:570b:: with SMTP id a11mr3977583wrv.281.1616153277117;
-        Fri, 19 Mar 2021 04:27:57 -0700 (PDT)
-Received: from localhost.localdomain ([2001:1715:4e26:a7e0:116c:c27a:3e7f:5eaf])
-        by smtp.gmail.com with ESMTPSA id c2sm5969706wmr.22.2021.03.19.04.27.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Mar 2021 04:27:56 -0700 (PDT)
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
-Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, bpf@vger.kernel.org,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Subject: [PATCH bpf v2 2/2] selftests/bpf: Add selftest for pointer-to-array-of-struct BTF dump
-Date:   Fri, 19 Mar 2021 12:25:55 +0100
-Message-Id: <20210319112554.794552-3-jean-philippe@linaro.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210319112554.794552-1-jean-philippe@linaro.org>
-References: <20210319112554.794552-1-jean-philippe@linaro.org>
+        id S231549AbhCSMWW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 19 Mar 2021 08:22:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33002 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231572AbhCSMWB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 19 Mar 2021 08:22:01 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2F30064F77;
+        Fri, 19 Mar 2021 12:21:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1616156520;
+        bh=cuK8J78AbxfogMJXXKkEvrxRm/eRUIxTyi0pKFZ7yKc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=qcZC5/d6k6CI6oaOf1k5SHJ0CHrLtWOwdNmADHo7pziau9yuPr1gCmkFT8shu/G1V
+         818EU+V8a4xshg/ZYRcFFHtoJKiYoCpy0K9k6qZ+HsXlJgMNw8YkmIswSBYP2XTYSO
+         6zvSu/tVfEpLWbrkBsogCPXFk7mYHKLGjFZs2b92rGEvmBt8ymIhbchr0frApuMkRU
+         zb8AwSQj/OV7rdYRAbYAAGjbOmtYKWhQcATVvCSq3uGFF2uKcfhqvKjsyDxuj8evit
+         4mxMzAAE4weXwYD7mP2r9mhfdzH/oi714KZfHmb57YAQ+i4j4oiMhiEsXC9MCUQRJm
+         57GwdSiwEwnTQ==
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@kernel.org>
+Cc:     X86 ML <x86@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>,
+        Daniel Xu <dxu@dxuuu.xyz>, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, kuba@kernel.org, mingo@redhat.com,
+        ast@kernel.org, tglx@linutronix.de, kernel-team@fb.com, yhs@fb.com,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        linux-ia64@vger.kernel.org
+Subject: [PATCH -tip v3 01/11] ia64: kprobes: Fix to pass correct trampoline address to the handler
+Date:   Fri, 19 Mar 2021 21:21:55 +0900
+Message-Id: <161615651484.306069.13374738532116114679.stgit@devnote2>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <161615650355.306069.17260992641363840330.stgit@devnote2>
+References: <161615650355.306069.17260992641363840330.stgit@devnote2>
+User-Agent: StGit/0.19
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Bpftool used to issue forward declarations for a struct used as part of
-a pointer to array, which is invalid. Add a test to check that the
-struct is fully defined in this case:
+Commit e792ff804f49 ("ia64: kprobes: Use generic kretprobe trampoline handler")
+missed to pass the wrong trampoline address (it passes the descriptor address
+instead of function entry address).
+This fixes it to pass correct trampoline address to __kretprobe_trampoline_handler().
+This also changes to use correct symbol dereference function to get the
+function address from the kretprobe_trampoline.
 
-	@@ -134,9 +134,9 @@
-	 	};
-	 };
-
-	-struct struct_in_array {};
-	+struct struct_in_array;
-
-	-struct struct_in_array_typed {};
-	+struct struct_in_array_typed;
-
-	 typedef struct struct_in_array_typed struct_in_array_t[2];
-
-	@@ -189,3 +189,7 @@
-	 	struct struct_with_embedded_stuff _14;
-	 };
-
-	+struct struct_in_array {};
-	+
-	+struct struct_in_array_typed {};
-	+
-	...
-	#13/1 btf_dump: syntax:FAIL
-
-Suggested-by: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+Fixes: e792ff804f49 ("ia64: kprobes: Use generic kretprobe trampoline handler")
+Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
 ---
- .../selftests/bpf/progs/btf_dump_test_case_syntax.c       | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ arch/ia64/kernel/kprobes.c |    9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c b/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
-index 31975c96e2c9..3ac0c9afc35a 100644
---- a/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
-+++ b/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
-@@ -174,6 +174,12 @@ struct struct_in_struct {
- 	};
- };
+diff --git a/arch/ia64/kernel/kprobes.c b/arch/ia64/kernel/kprobes.c
+index fc1ff8a4d7de..006fbc1d7ae9 100644
+--- a/arch/ia64/kernel/kprobes.c
++++ b/arch/ia64/kernel/kprobes.c
+@@ -398,7 +398,8 @@ static void kretprobe_trampoline(void)
  
-+struct struct_in_array {};
-+
-+struct struct_in_array_typed {};
-+
-+typedef struct struct_in_array_typed struct_in_array_t[2];
-+
- struct struct_with_embedded_stuff {
- 	int a;
- 	struct {
-@@ -203,6 +209,8 @@ struct struct_with_embedded_stuff {
- 	} r[5];
- 	struct struct_in_struct s[10];
- 	int t[11];
-+	struct struct_in_array (*u)[2];
-+	struct_in_array_t *v;
- };
+ int __kprobes trampoline_probe_handler(struct kprobe *p, struct pt_regs *regs)
+ {
+-	regs->cr_iip = __kretprobe_trampoline_handler(regs, kretprobe_trampoline, NULL);
++	regs->cr_iip = __kretprobe_trampoline_handler(regs,
++		dereference_function_descriptor(kretprobe_trampoline), NULL);
+ 	/*
+ 	 * By returning a non-zero value, we are telling
+ 	 * kprobe_handler() that we don't want the post_handler
+@@ -414,7 +415,7 @@ void __kprobes arch_prepare_kretprobe(struct kretprobe_instance *ri,
+ 	ri->fp = NULL;
  
- struct root_struct {
--- 
-2.30.2
+ 	/* Replace the return addr with trampoline addr */
+-	regs->b0 = ((struct fnptr *)kretprobe_trampoline)->ip;
++	regs->b0 = (unsigned long)dereference_function_descriptor(kretprobe_trampoline);
+ }
+ 
+ /* Check the instruction in the slot is break */
+@@ -918,14 +919,14 @@ static struct kprobe trampoline_p = {
+ int __init arch_init_kprobes(void)
+ {
+ 	trampoline_p.addr =
+-		(kprobe_opcode_t *)((struct fnptr *)kretprobe_trampoline)->ip;
++		dereference_function_description(kretprobe_trampoline);
+ 	return register_kprobe(&trampoline_p);
+ }
+ 
+ int __kprobes arch_trampoline_kprobe(struct kprobe *p)
+ {
+ 	if (p->addr ==
+-		(kprobe_opcode_t *)((struct fnptr *)kretprobe_trampoline)->ip)
++		dereference_function_descriptor(kretprobe_trampoline))
+ 		return 1;
+ 
+ 	return 0;
 
