@@ -2,307 +2,218 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39B6EC433E9
-	for <bpf@archiver.kernel.org>; Fri, 19 Mar 2021 00:19:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F5C5C433E6
+	for <bpf@archiver.kernel.org>; Fri, 19 Mar 2021 01:04:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E557A64F3B
-	for <bpf@archiver.kernel.org>; Fri, 19 Mar 2021 00:19:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ED24160C3E
+	for <bpf@archiver.kernel.org>; Fri, 19 Mar 2021 01:04:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230510AbhCSASh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 18 Mar 2021 20:18:37 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:56440 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S230477AbhCSASL (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 18 Mar 2021 20:18:11 -0400
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.43/8.16.0.43) with SMTP id 12J0HanI024957
-        for <bpf@vger.kernel.org>; Thu, 18 Mar 2021 17:18:10 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=facebook;
- bh=/FUDafLeVp6wAQl7kmeSF8ZhTR3wRm+utDH/Qnu57fo=;
- b=kTwJ5c3vuHPgWwu07fwNwyEhpV9O9oaVKu4Kkmx74VCbdoN7sbWVCIZO5+gvcPbO717/
- iO7FDBW4tuquJ2rMQLoMwfYZaKfUgqw53QO8FLWx/vMVv6ud0aeyukhgMf2pSTSDoU3z
- OaCcFJ/6/8B2SXIQa6pCwgH31SNaUPab38I= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0001303.ppops.net with ESMTP id 37bs26qsf6-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 18 Mar 2021 17:18:10 -0700
-Received: from intmgw001.25.frc3.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Thu, 18 Mar 2021 17:18:09 -0700
-Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 2584D790872; Thu, 18 Mar 2021 17:18:05 -0700 (PDT)
-From:   Yonghong Song <yhs@fb.com>
-To:     <bpf@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
-        Jiri Olsa <jolsa@kernel.org>, Roman Gushchin <guro@fb.com>
-Subject: [PATCH bpf-next 1/2] bpf: fix NULL pointer dereference in bpf_get_local_storage() helper
-Date:   Thu, 18 Mar 2021 17:18:05 -0700
-Message-ID: <20210319001805.2166526-1-yhs@fb.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210319001759.2165191-1-yhs@fb.com>
-References: <20210319001759.2165191-1-yhs@fb.com>
-X-FB-Internal: Safe
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        id S230507AbhCSBEV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 18 Mar 2021 21:04:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51492 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229994AbhCSBEB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 18 Mar 2021 21:04:01 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A358C06174A;
+        Thu, 18 Mar 2021 18:04:01 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id h82so4472996ybc.13;
+        Thu, 18 Mar 2021 18:04:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZGOncK1f2mtt4j4HI6UYzil414+B32QC7q3uvm91mbo=;
+        b=bEpJKfs9tuBh9lkKR+edb6GTo7wc5sCOSB2iDDb8i4Wh/evwumdvAMOB2TQARLagM1
+         PCgJgH2bPwg3XpVKKc/iWHggUyd5UdYKNxYOnbYLn9UAJV1B3YRDKRY51C+MAlXIbflW
+         /Q5g5MmUKJAQBsc5CUWK9ov1CXOKARcxbSJ3+e5fCq4mGf+rA1pd+J1STDIuYX9OjrJf
+         TXEJuuj3MGMigwGwpRcCBnT3hsrdyR3/VP9wmZBQUD34Xfx7ypLXx/v0ZUp0HnZ1OceM
+         gyoDuZ4+XgNCBS2BwFku4BEL1kk841rVtMWZ11zCg7N449ayKLUjNgXZVioXXBzlCVCT
+         RkAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZGOncK1f2mtt4j4HI6UYzil414+B32QC7q3uvm91mbo=;
+        b=tfNHxMq4F0H8I7U4uZxC5DqTTE+EHKmGigKCmDqhLkdoB1a+YH2mYwZbJcLQGsPNO+
+         5Rn2rrxAEtPh8E1csj4a/UYv68rLRdPcibBebN+0AqKIoNTOCdl2v99dFpUPPo4OKM7d
+         B6yiCREJSflgPuGxibTbjizVWc3NmZflr0KQnSXexV4KUbNPZ5c/YFAZfofgRf6c9QEU
+         9d2I5+UU9hSIPSuJR1mgRuJnRanzf8UfhTvRVmhPYP3T42o8TGHFqTdRI+ACsct8EQvi
+         uNJExaWCHAf0ipvzyisenoZGtC53eJgtqqzfp5ctITFsBPfzcFndYJ4RoBZ2Dl3R+8mq
+         mkRQ==
+X-Gm-Message-State: AOAM531LzYcn8KDVqZFwGAq1aaMuPTZqOcTMT9xnUAbvOkuGHT1LbeL7
+        mDYCTAVywJss0etAPZwk57OAJiwPLvvL9SXZojw=
+X-Google-Smtp-Source: ABdhPJwINHrat3UHSHnwVnfbB0hX1ojCZenuLmbRWY0o3XNZHDBGASR6KYqgHHlfOgXS0bMbTi9g1dEolTXBb3FY9J4=
+X-Received: by 2002:a25:40d8:: with SMTP id n207mr2933401yba.459.1616115840390;
+ Thu, 18 Mar 2021 18:04:00 -0700 (PDT)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-03-18_19:2021-03-17,2021-03-18 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
- bulkscore=0 lowpriorityscore=0 mlxscore=0 phishscore=0 suspectscore=0
- spamscore=0 priorityscore=1501 mlxlogscore=911 impostorscore=0
- clxscore=1015 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2103190000
-X-FB-Internal: deliver
+References: <20210316011336.4173585-1-kafai@fb.com> <20210316011401.4176793-1-kafai@fb.com>
+In-Reply-To: <20210316011401.4176793-1-kafai@fb.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 18 Mar 2021 18:03:49 -0700
+Message-ID: <CAEf4Bzb-AmXvV+v-ByGH7iUUG7iLdFxWeY1CJGB7xKHxuABWUg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 04/15] bpf: Support bpf program calling kernel function
+To:     Martin KaFai Lau <kafai@fb.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>,
+        Networking <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Jiri Olsa reported a bug ([1]) in kernel where cgroup local
-storage pointer may be NULL in bpf_get_local_storage() helper.
-There are two issues uncovered by this bug:
-  (1). kprobe or tracepoint prog incorrectly sets cgroup local storage
-       before prog run,
-  (2). due to change from preempt_disable to migrate_disable,
-       preemption is possible and percpu storage might be overwritten
-       by other tasks.
+On Tue, Mar 16, 2021 at 12:01 AM Martin KaFai Lau <kafai@fb.com> wrote:
+>
+> This patch adds support to BPF verifier to allow bpf program calling
+> kernel function directly.
+>
+> The use case included in this set is to allow bpf-tcp-cc to directly
+> call some tcp-cc helper functions (e.g. "tcp_cong_avoid_ai()").  Those
+> functions have already been used by some kernel tcp-cc implementations.
+>
+> This set will also allow the bpf-tcp-cc program to directly call the
+> kernel tcp-cc implementation,  For example, a bpf_dctcp may only want to
+> implement its own dctcp_cwnd_event() and reuse other dctcp_*() directly
+> from the kernel tcp_dctcp.c instead of reimplementing (or
+> copy-and-pasting) them.
+>
+> The tcp-cc kernel functions mentioned above will be white listed
+> for the struct_ops bpf-tcp-cc programs to use in a later patch.
+> The white listed functions are not bounded to a fixed ABI contract.
+> Those functions have already been used by the existing kernel tcp-cc.
+> If any of them has changed, both in-tree and out-of-tree kernel tcp-cc
+> implementations have to be changed.  The same goes for the struct_ops
+> bpf-tcp-cc programs which have to be adjusted accordingly.
+>
+> This patch is to make the required changes in the bpf verifier.
+>
+> First change is in btf.c, it adds a case in "do_btf_check_func_arg_match()".
+> When the passed in "btf->kernel_btf == true", it means matching the
+> verifier regs' states with a kernel function.  This will handle the
+> PTR_TO_BTF_ID reg.  It also maps PTR_TO_SOCK_COMMON, PTR_TO_SOCKET,
+> and PTR_TO_TCP_SOCK to its kernel's btf_id.
+>
+> In the later libbpf patch, the insn calling a kernel function will
+> look like:
+>
+> insn->code == (BPF_JMP | BPF_CALL)
+> insn->src_reg == BPF_PSEUDO_KFUNC_CALL /* <- new in this patch */
+> insn->imm == func_btf_id /* btf_id of the running kernel */
+>
+> [ For the future calling function-in-kernel-module support, an array
+>   of module btf_fds can be passed at the load time and insn->off
+>   can be used to index into this array. ]
+>
+> At the early stage of verifier, the verifier will collect all kernel
+> function calls into "struct bpf_kern_func_descriptor".  Those
+> descriptors are stored in "prog->aux->kfunc_tab" and will
+> be available to the JIT.  Since this "add" operation is similar
+> to the current "add_subprog()" and looking for the same insn->code,
+> they are done together in the new "add_subprog_and_kern_func()".
+>
+> In the "do_check()" stage, the new "check_kern_func_call()" is added
+> to verify the kernel function call instruction:
+> 1. Ensure the kernel function can be used by a particular BPF_PROG_TYPE.
+>    A new bpf_verifier_ops "check_kern_func_call" is added to do that.
+>    The bpf-tcp-cc struct_ops program will implement this function in
+>    a later patch.
+> 2. Call "btf_check_kern_func_args_match()" to ensure the regs can be
+>    used as the args of a kernel function.
+> 3. Mark the regs' type, subreg_def, and zext_dst.
+>
+> At the later do_misc_fixups() stage, the new fixup_kern_func_call()
+> will replace the insn->imm with the function address (relative
+> to __bpf_call_base).  If needed, the jit can find the btf_func_model
+> by calling the new bpf_jit_find_kern_func_model(prog, insn->imm).
+> With the imm set to the function address, "bpftool prog dump xlated"
+> will be able to display the kernel function calls the same way as
+> it displays other bpf helper calls.
+>
+> gpl_compatible program is required to call kernel function.
+>
+> This feature currently requires JIT.
+>
+> Signed-off-by: Martin KaFai Lau <kafai@fb.com>
+> ---
 
-This issue (1) is fixed in [2]. This patch tried to address issue (2).
-The following shows how things can go wrong:
-  task 1:   bpf_cgroup_storage_set() for percpu local storage
-         preemption happens
-  task 2:   bpf_cgroup_storage_set() for percpu local storage
-         preemption happens
-  task 1:   run bpf program
+After the initial pass it all makes sense so far. I am a bit concerned
+about s32 and kernel function offset, though. See below.
 
-task 1 will effectively use the percpu local storage setting by task 2
-which will be either NULL or incorrect ones.
+Also "kern_func" and "descriptor" are quite mouthful, it seems to me
+that using kfunc consistently wouldn't hurt readability at all. You
+also already use desc in place of "descriptor" for variables, so I'd
+do that in type names as well.
 
-Instead of just one common local storage per cpu, this patch fixed
-the issue by permitting 8 local storages per cpu and each local
-storage is identified by a task_struct pointer. This way, we
-allow at most 8 nested preemption between bpf_cgroup_storage_set()
-and bpf_cgroup_storage_unset(). The percpu local storage slot
-is released (calling bpf_cgroup_storage_unset()) by the same task
-after bpf program finished running.
+>  arch/x86/net/bpf_jit_comp.c       |   5 +
+>  include/linux/bpf.h               |  24 ++
+>  include/linux/btf.h               |   1 +
+>  include/linux/filter.h            |   1 +
+>  include/uapi/linux/bpf.h          |   4 +
+>  kernel/bpf/btf.c                  |  65 +++++-
+>  kernel/bpf/core.c                 |  18 +-
+>  kernel/bpf/disasm.c               |  32 +--
+>  kernel/bpf/disasm.h               |   3 +-
+>  kernel/bpf/syscall.c              |   1 +
+>  kernel/bpf/verifier.c             | 376 ++++++++++++++++++++++++++++--
+>  tools/bpf/bpftool/xlated_dumper.c |   3 +-
+>  tools/include/uapi/linux/bpf.h    |   4 +
+>  13 files changed, 488 insertions(+), 49 deletions(-)
+>
 
-The patch is tested on top of [2] with reproducer in [1].
-Without this patch, kernel will emit error in 2-3 minutes.
-With this patch, after one hour, still no error.
+[...]
 
- [1] https://lore.kernel.org/bpf/CAKH8qBuXCfUz=3Dw8L+Fj74OaUpbosO29niYwTki7=
-e3Ag044_aww@mail.gmail.com/T
- [2] https://lore.kernel.org/bpf/CAKH8qBuXCfUz=3Dw8L+Fj74OaUpbosO29niYwTki7=
-e3Ag044_aww@mail.gmail.com/T
+> +
+> +       func_name = btf_name_by_offset(btf_vmlinux, func->name_off);
+> +       addr = kallsyms_lookup_name(func_name);
+> +       if (!addr) {
+> +               verbose(env, "cannot find address for kernel function %s\n",
+> +                       func_name);
+> +               return -EINVAL;
+> +       }
+> +
+> +       desc = &tab->descs[tab->nr_descs++];
+> +       desc->func_id = func_id;
+> +       desc->imm = BPF_CAST_CALL(addr) - __bpf_call_base;
 
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Roman Gushchin <guro@fb.com>
-Signed-off-by: Yonghong Song <yhs@fb.com>
----
- include/linux/bpf-cgroup.h | 53 +++++++++++++++++++++++++++++++++-----
- include/linux/bpf.h        | 22 +++++++++++++---
- kernel/bpf/helpers.c       | 15 ++++++++---
- kernel/bpf/local_storage.c |  3 ++-
- 4 files changed, 78 insertions(+), 15 deletions(-)
+Is this difference guaranteed to always fit within s32?
 
-diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
-index c42e02b4d84b..96fe26509489 100644
---- a/include/linux/bpf-cgroup.h
-+++ b/include/linux/bpf-cgroup.h
-@@ -20,14 +20,25 @@ struct bpf_sock_ops_kern;
- struct bpf_cgroup_storage;
- struct ctl_table;
- struct ctl_table_header;
-+struct task_struct;
-=20
- #ifdef CONFIG_CGROUP_BPF
-=20
- extern struct static_key_false cgroup_bpf_enabled_key[MAX_BPF_ATTACH_TYPE];
- #define cgroup_bpf_enabled(type) static_branch_unlikely(&cgroup_bpf_enable=
-d_key[type])
-=20
--DECLARE_PER_CPU(struct bpf_cgroup_storage*,
--		bpf_cgroup_storage[MAX_BPF_CGROUP_STORAGE_TYPE]);
-+#define BPF_CGROUP_STORAGE_NEST_MAX	8
-+
-+struct bpf_cgroup_storage_info {
-+	struct task_struct *task;
-+	struct bpf_cgroup_storage *storage[MAX_BPF_CGROUP_STORAGE_TYPE];
-+};
-+
-+/* For each cpu, permit maximum BPF_CGROUP_STORAGE_NEST_MAX number of tasks
-+ * to use bpf cgroup storage simultaneously.
-+ */
-+DECLARE_PER_CPU(struct bpf_cgroup_storage_info,
-+		bpf_cgroup_storage_info[BPF_CGROUP_STORAGE_NEST_MAX]);
-=20
- #define for_each_cgroup_storage_type(stype) \
- 	for (stype =3D 0; stype < MAX_BPF_CGROUP_STORAGE_TYPE; stype++)
-@@ -161,13 +172,43 @@ static inline enum bpf_cgroup_storage_type cgroup_sto=
-rage_type(
- 	return BPF_CGROUP_STORAGE_SHARED;
- }
-=20
--static inline void bpf_cgroup_storage_set(struct bpf_cgroup_storage
--					  *storage[MAX_BPF_CGROUP_STORAGE_TYPE])
-+static inline int bpf_cgroup_storage_set(struct bpf_cgroup_storage
-+					 *storage[MAX_BPF_CGROUP_STORAGE_TYPE])
- {
- 	enum bpf_cgroup_storage_type stype;
-+	int i;
-+
-+	preempt_disable();
-+	for (i =3D 0; i < BPF_CGROUP_STORAGE_NEST_MAX; i++) {
-+		if (unlikely(this_cpu_read(bpf_cgroup_storage_info[i].task) !=3D NULL))
-+			continue;
-+
-+		this_cpu_write(bpf_cgroup_storage_info[i].task, current);
-+		for_each_cgroup_storage_type(stype)
-+			this_cpu_write(bpf_cgroup_storage_info[i].storage[stype],
-+				       storage[stype]);
-+		break;
-+	}
-+	preempt_enable();
-+
-+	if (i =3D=3D BPF_CGROUP_STORAGE_NEST_MAX) {
-+		WARN_ON_ONCE(1);
-+		return -EBUSY;
-+	}
-+	return 0;
-+}
-+
-+static inline void bpf_cgroup_storage_unset(void)
-+{
-+	int i;
-+
-+	for (i =3D 0; i < BPF_CGROUP_STORAGE_NEST_MAX; i++) {
-+		if (unlikely(this_cpu_read(bpf_cgroup_storage_info[i].task) !=3D current=
-))
-+			continue;
-=20
--	for_each_cgroup_storage_type(stype)
--		this_cpu_write(bpf_cgroup_storage[stype], storage[stype]);
-+		this_cpu_write(bpf_cgroup_storage_info[i].task, NULL);
-+		return;
-+	}
- }
-=20
- struct bpf_cgroup_storage *
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index a47285cd39c2..3a6ae69743ff 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1090,6 +1090,13 @@ int bpf_prog_array_copy(struct bpf_prog_array *old_a=
-rray,
- /* BPF program asks to set CN on the packet. */
- #define BPF_RET_SET_CN						(1 << 0)
-=20
-+/* For BPF_PROG_RUN_ARRAY_FLAGS and __BPF_PROG_RUN_ARRAY,
-+ * if bpf_cgroup_storage_set() failed, the rest of programs
-+ * will not execute. This should be a really rare scenario
-+ * as it requires BPF_CGROUP_STORAGE_NEST_MAX number of
-+ * preemptions all between bpf_cgroup_storage_set() and
-+ * bpf_cgroup_storage_unset() on the same cpu.
-+ */
- #define BPF_PROG_RUN_ARRAY_FLAGS(array, ctx, func, ret_flags)		\
- 	({								\
- 		struct bpf_prog_array_item *_item;			\
-@@ -1102,10 +1109,12 @@ int bpf_prog_array_copy(struct bpf_prog_array *old_=
-array,
- 		_array =3D rcu_dereference(array);			\
- 		_item =3D &_array->items[0];				\
- 		while ((_prog =3D READ_ONCE(_item->prog))) {		\
--			bpf_cgroup_storage_set(_item->cgroup_storage);	\
-+			if (unlikely(bpf_cgroup_storage_set(_item->cgroup_storage)))	\
-+				break;					\
- 			func_ret =3D func(_prog, ctx);			\
- 			_ret &=3D (func_ret & 1);				\
- 			*(ret_flags) |=3D (func_ret >> 1);			\
-+			bpf_cgroup_storage_unset();			\
- 			_item++;					\
- 		}							\
- 		rcu_read_unlock();					\
-@@ -1126,9 +1135,14 @@ int bpf_prog_array_copy(struct bpf_prog_array *old_a=
-rray,
- 			goto _out;			\
- 		_item =3D &_array->items[0];		\
- 		while ((_prog =3D READ_ONCE(_item->prog))) {		\
--			if (set_cg_storage)		\
--				bpf_cgroup_storage_set(_item->cgroup_storage);	\
--			_ret &=3D func(_prog, ctx);	\
-+			if (!set_cg_storage) {			\
-+				_ret &=3D func(_prog, ctx);	\
-+			} else {				\
-+				if (unlikely(bpf_cgroup_storage_set(_item->cgroup_storage)))	\
-+					break;			\
-+				_ret &=3D func(_prog, ctx);	\
-+				bpf_cgroup_storage_unset();	\
-+			}				\
- 			_item++;			\
- 		}					\
- _out:							\
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 074800226327..f306611c4ddf 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -382,8 +382,8 @@ const struct bpf_func_proto bpf_get_current_ancestor_cg=
-roup_id_proto =3D {
- };
-=20
- #ifdef CONFIG_CGROUP_BPF
--DECLARE_PER_CPU(struct bpf_cgroup_storage*,
--		bpf_cgroup_storage[MAX_BPF_CGROUP_STORAGE_TYPE]);
-+DECLARE_PER_CPU(struct bpf_cgroup_storage_info,
-+		bpf_cgroup_storage_info[BPF_CGROUP_STORAGE_NEST_MAX]);
-=20
- BPF_CALL_2(bpf_get_local_storage, struct bpf_map *, map, u64, flags)
- {
-@@ -392,10 +392,17 @@ BPF_CALL_2(bpf_get_local_storage, struct bpf_map *, m=
-ap, u64, flags)
- 	 * verifier checks that its value is correct.
- 	 */
- 	enum bpf_cgroup_storage_type stype =3D cgroup_storage_type(map);
--	struct bpf_cgroup_storage *storage;
-+	struct bpf_cgroup_storage *storage =3D NULL;
- 	void *ptr;
-+	int i;
-=20
--	storage =3D this_cpu_read(bpf_cgroup_storage[stype]);
-+	for (i =3D 0; i < BPF_CGROUP_STORAGE_NEST_MAX; i++) {
-+		if (unlikely(this_cpu_read(bpf_cgroup_storage_info[i].task) !=3D current=
-))
-+			continue;
-+
-+		storage =3D this_cpu_read(bpf_cgroup_storage_info[i].storage[stype]);
-+		break;
-+	}
-=20
- 	if (stype =3D=3D BPF_CGROUP_STORAGE_SHARED)
- 		ptr =3D &READ_ONCE(storage->buf)->data[0];
-diff --git a/kernel/bpf/local_storage.c b/kernel/bpf/local_storage.c
-index 2d4f9ac12377..174350524577 100644
---- a/kernel/bpf/local_storage.c
-+++ b/kernel/bpf/local_storage.c
-@@ -9,7 +9,8 @@
- #include <linux/slab.h>
- #include <uapi/linux/btf.h>
-=20
--DEFINE_PER_CPU(struct bpf_cgroup_storage*, bpf_cgroup_storage[MAX_BPF_CGRO=
-UP_STORAGE_TYPE]);
-+DEFINE_PER_CPU(struct bpf_cgroup_storage_info,
-+	       bpf_cgroup_storage_info[BPF_CGROUP_STORAGE_NEST_MAX]);
-=20
- #ifdef CONFIG_CGROUP_BPF
-=20
---=20
-2.30.2
+> +       sort(tab->descs, tab->nr_descs, sizeof(tab->descs[0]),
+> +            kern_func_desc_cmp_by_id, NULL);
+> +
+> +       return btf_distill_func_proto(&env->log, btf_vmlinux,
+> +                                     func_proto, func_name,
+> +                                     &desc->func_model);
+> +}
+> +
+> +static int kern_func_desc_cmp_by_imm(const void *a, const void *b)
+> +{
+> +       const struct bpf_kern_func_descriptor *d0 = a;
+> +       const struct bpf_kern_func_descriptor *d1 = b;
+> +
+> +       return d0->imm - d1->imm;
 
+this is not safe, assuming any possible s32 values, no?
+
+> +}
+> +
+> +static void sort_kern_func_descs_by_imm(struct bpf_prog *prog)
+> +{
+> +       struct bpf_kern_func_desc_tab *tab;
+> +
+> +       tab = prog->aux->kfunc_tab;
+> +       if (!tab)
+> +               return;
+> +
+> +       sort(tab->descs, tab->nr_descs, sizeof(tab->descs[0]),
+> +            kern_func_desc_cmp_by_imm, NULL);
+> +}
+> +
+
+[...]
