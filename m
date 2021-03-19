@@ -2,35 +2,35 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-16.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D93C8C433E3
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7B80C433E4
 	for <bpf@archiver.kernel.org>; Fri, 19 Mar 2021 21:49:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C21816198E
+	by mail.kernel.org (Postfix) with ESMTP id 9A49F61976
 	for <bpf@archiver.kernel.org>; Fri, 19 Mar 2021 21:49:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230507AbhCSVsq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 19 Mar 2021 17:48:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45598 "EHLO mail.kernel.org"
+        id S230490AbhCSVso (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 19 Mar 2021 17:48:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45546 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229942AbhCSVs0 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 19 Mar 2021 17:48:26 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 62D3861986;
-        Fri, 19 Mar 2021 21:48:23 +0000 (UTC)
+        id S230409AbhCSVsT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 19 Mar 2021 17:48:19 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9480A61983;
+        Fri, 19 Mar 2021 21:48:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616190506;
-        bh=tDqB0Ey7DwyVDYXMPU2eRxTOZD4Z/gsFYf6a8/8/tlo=;
+        s=k20201202; t=1616190499;
+        bh=IkFtuVfqaFze6+r8rbNzZTCcafAIsbYs2BIwafYZLqo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ISUoFvsiX8lmD5IRJ/KxkRnnf9uaLL/P/NwOLYnwblMfS/Eeae1nMmIcmq5kn9RmQ
-         s2kb7KuBZuitm1UY4VJWUQ1PVOEIJv2hT+gSw0014rX18+sIJirI/GrW22Dn89Dcu2
-         tV2nDMZcdZbJeisDiLWMboi7xBT0ZmbIasM/8IbDjEULKRZoRy2kamp7lUMcxg9u+Z
-         QeXnEPOpBwDJS4doseIUlaWKpZzXT0PRLOI4nnAfszdCBN4aZA9PxFDYtynDUQ9rkJ
-         RqaoZnJ6MeDFIHponhXIbEmY+ODk99b2f62VdvDxyzoy2SIRXuhmCSCi+YtGoymtdg
-         c/gQk+lR0yPyw==
+        b=QrAR3mM2ObF1Q3N1w1skVbCnNabBVQpwksFBadVw/57XdQs75URuIFBcdCnUcuX0R
+         FMkmfEnzR7GBOLUJlXCU5NFCasZ/IZDTTRTYXQKbROGoK9KPMWyUV8+LiUQjCpHY0Y
+         KzjA04m+3a5t1AQozKcY6HYsSORv7PudRaJRqd0U/vZgcTBLd5aV2+u635DVet1Tik
+         kFNZqRbs1i/HtQRv6+VP6ErIqvmzFU3SqwkPTzOeJMwJSM/U0SkejZ+naaht/9mHD4
+         RiDidSX+70Mwmy6mHzAS//VWqsoi/rWwOp1vLesAC404dqEvzQPDkcm5il7NRAno7L
+         zuiIC71sQon/w==
 From:   Lorenzo Bianconi <lorenzo@kernel.org>
 To:     bpf@vger.kernel.org, netdev@vger.kernel.org
 Cc:     lorenzo.bianconi@redhat.com, davem@davemloft.net, kuba@kernel.org,
@@ -39,9 +39,9 @@ Cc:     lorenzo.bianconi@redhat.com, davem@davemloft.net, kuba@kernel.org,
         echaudro@redhat.com, jasowang@redhat.com,
         alexander.duyck@gmail.com, saeed@kernel.org,
         maciej.fijalkowski@intel.com, sameehj@amazon.com
-Subject: [PATCH v7 bpf-next 07/14] net: xdp: add multi-buff support to xdp_build_skb_from_fram
-Date:   Fri, 19 Mar 2021 22:47:21 +0100
-Message-Id: <bf0817ddcd984073c59721031b994c0b8bc1c952.1616179034.git.lorenzo@kernel.org>
+Subject: [PATCH v7 bpf-next 05/14] net: mvneta: add multi buffer support to XDP_TX
+Date:   Fri, 19 Mar 2021 22:47:19 +0100
+Message-Id: <27adb990b7e47e7b4f6fb1b590a37042f874f24d.1616179034.git.lorenzo@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1616179034.git.lorenzo@kernel.org>
 References: <cover.1616179034.git.lorenzo@kernel.org>
@@ -51,61 +51,159 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Introduce xdp multi-buff support to
-__xdp_build_skb_from_frame/xdp_build_skb_from_fram utility
-routines.
+Introduce the capability to map non-linear xdp buffer running
+mvneta_xdp_submit_frame() for XDP_TX and XDP_REDIRECT
 
 Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
 ---
- net/core/xdp.c | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+ drivers/net/ethernet/marvell/mvneta.c | 91 ++++++++++++++++-----------
+ 1 file changed, 55 insertions(+), 36 deletions(-)
 
-diff --git a/net/core/xdp.c b/net/core/xdp.c
-index 430f516259d9..7388bc6d680b 100644
---- a/net/core/xdp.c
-+++ b/net/core/xdp.c
-@@ -603,9 +603,21 @@ struct sk_buff *__xdp_build_skb_from_frame(struct xdp_frame *xdpf,
- 					   struct sk_buff *skb,
- 					   struct net_device *dev)
+diff --git a/drivers/net/ethernet/marvell/mvneta.c b/drivers/net/ethernet/marvell/mvneta.c
+index 009b2c5a90b1..226d76e7ccc8 100644
+--- a/drivers/net/ethernet/marvell/mvneta.c
++++ b/drivers/net/ethernet/marvell/mvneta.c
+@@ -1860,8 +1860,8 @@ static void mvneta_txq_bufs_free(struct mvneta_port *pp,
+ 			bytes_compl += buf->skb->len;
+ 			pkts_compl++;
+ 			dev_kfree_skb_any(buf->skb);
+-		} else if (buf->type == MVNETA_TYPE_XDP_TX ||
+-			   buf->type == MVNETA_TYPE_XDP_NDO) {
++		} else if ((buf->type == MVNETA_TYPE_XDP_TX ||
++			    buf->type == MVNETA_TYPE_XDP_NDO) && buf->xdpf) {
+ 			if (napi && buf->type == MVNETA_TYPE_XDP_TX)
+ 				xdp_return_frame_rx_napi(buf->xdpf);
+ 			else
+@@ -2057,45 +2057,64 @@ mvneta_xdp_put_buff(struct mvneta_port *pp, struct mvneta_rx_queue *rxq,
+ 
+ static int
+ mvneta_xdp_submit_frame(struct mvneta_port *pp, struct mvneta_tx_queue *txq,
+-			struct xdp_frame *xdpf, bool dma_map)
++			struct xdp_frame *xdpf, int *nxmit_byte, bool dma_map)
  {
-+	skb_frag_t frag_list[MAX_SKB_FRAGS];
- 	unsigned int headroom, frame_size;
-+	int i, num_frags = 0;
- 	void *hard_start;
+-	struct mvneta_tx_desc *tx_desc;
+-	struct mvneta_tx_buf *buf;
+-	dma_addr_t dma_addr;
++	struct xdp_shared_info *xdp_sinfo = xdp_get_shared_info_from_frame(xdpf);
++	int i, num_frames = xdpf->mb ? xdp_sinfo->nr_frags + 1 : 1;
++	struct mvneta_tx_desc *tx_desc = NULL;
++	struct page *page;
  
-+	/* XDP multi-buff frame */
-+	if (unlikely(xdpf->mb)) {
-+		struct xdp_shared_info *xdp_sinfo;
-+
-+		xdp_sinfo = xdp_get_shared_info_from_frame(xdpf);
-+		num_frags = xdp_sinfo->nr_frags;
-+		memcpy(frag_list, xdp_sinfo->frags,
-+		       sizeof(skb_frag_t) * num_frags);
-+	}
-+
- 	/* Part of headroom was reserved to xdpf */
- 	headroom = sizeof(*xdpf) + xdpf->headroom;
+-	if (txq->count >= txq->tx_stop_threshold)
++	if (txq->count + num_frames >= txq->size)
+ 		return MVNETA_XDP_DROPPED;
  
-@@ -624,6 +636,20 @@ struct sk_buff *__xdp_build_skb_from_frame(struct xdp_frame *xdpf,
- 	if (xdpf->metasize)
- 		skb_metadata_set(skb, xdpf->metasize);
+-	tx_desc = mvneta_txq_next_desc_get(txq);
++	for (i = 0; i < num_frames; i++) {
++		struct mvneta_tx_buf *buf = &txq->buf[txq->txq_put_index];
++		skb_frag_t *frag = i ? &xdp_sinfo->frags[i - 1] : NULL;
++		int len = i ? xdp_get_frag_size(frag) : xdpf->len;
++		dma_addr_t dma_addr;
  
-+	/* Single-buff XDP frame */
-+	if (likely(!num_frags))
-+		goto out;
+-	buf = &txq->buf[txq->txq_put_index];
+-	if (dma_map) {
+-		/* ndo_xdp_xmit */
+-		dma_addr = dma_map_single(pp->dev->dev.parent, xdpf->data,
+-					  xdpf->len, DMA_TO_DEVICE);
+-		if (dma_mapping_error(pp->dev->dev.parent, dma_addr)) {
+-			mvneta_txq_desc_put(txq);
+-			return MVNETA_XDP_DROPPED;
++		tx_desc = mvneta_txq_next_desc_get(txq);
++		if (dma_map) {
++			/* ndo_xdp_xmit */
++			void *data;
 +
-+	for (i = 0; i < num_frags; i++) {
-+		struct page *page = xdp_get_frag_page(&frag_list[i]);
++			data = frag ? xdp_get_frag_address(frag) : xdpf->data;
++			dma_addr = dma_map_single(pp->dev->dev.parent, data,
++						  len, DMA_TO_DEVICE);
++			if (dma_mapping_error(pp->dev->dev.parent, dma_addr)) {
++				for (; i >= 0; i--)
++					mvneta_txq_desc_put(txq);
++				return MVNETA_XDP_DROPPED;
++			}
++			buf->type = MVNETA_TYPE_XDP_NDO;
++		} else {
++			page = frag ? xdp_get_frag_page(frag)
++				    : virt_to_page(xdpf->data);
++			dma_addr = page_pool_get_dma_addr(page);
++			if (frag)
++				dma_addr += xdp_get_frag_offset(frag);
++			else
++				dma_addr += sizeof(*xdpf) + xdpf->headroom;
++			dma_sync_single_for_device(pp->dev->dev.parent,
++						   dma_addr, len,
++						   DMA_BIDIRECTIONAL);
++			buf->type = MVNETA_TYPE_XDP_TX;
+ 		}
+-		buf->type = MVNETA_TYPE_XDP_NDO;
+-	} else {
+-		struct page *page = virt_to_page(xdpf->data);
++		buf->xdpf = i ? NULL : xdpf;
 +
-+		skb_add_rx_frag(skb, skb_shinfo(skb)->nr_frags,
-+				page, xdp_get_frag_offset(&frag_list[i]),
-+				xdp_get_frag_size(&frag_list[i]),
-+				xdpf->frame_sz);
-+	}
-+
-+out:
- 	/* Essential SKB info: protocol and skb->dev */
- 	skb->protocol = eth_type_trans(skb, dev);
++		tx_desc->command = !i ? MVNETA_TXD_F_DESC : 0;
++		tx_desc->buf_phys_addr = dma_addr;
++		tx_desc->data_size = len;
++		*nxmit_byte += len;
+ 
+-		dma_addr = page_pool_get_dma_addr(page) +
+-			   sizeof(*xdpf) + xdpf->headroom;
+-		dma_sync_single_for_device(pp->dev->dev.parent, dma_addr,
+-					   xdpf->len, DMA_BIDIRECTIONAL);
+-		buf->type = MVNETA_TYPE_XDP_TX;
++		mvneta_txq_inc_put(txq);
+ 	}
+-	buf->xdpf = xdpf;
+ 
+-	tx_desc->command = MVNETA_TXD_FLZ_DESC;
+-	tx_desc->buf_phys_addr = dma_addr;
+-	tx_desc->data_size = xdpf->len;
++	/*last descriptor */
++	tx_desc->command |= MVNETA_TXD_L_DESC | MVNETA_TXD_Z_PAD;
+ 
+-	mvneta_txq_inc_put(txq);
+-	txq->pending++;
+-	txq->count++;
++	txq->pending += num_frames;
++	txq->count += num_frames;
+ 
+ 	return MVNETA_XDP_TX;
+ }
+@@ -2106,8 +2125,8 @@ mvneta_xdp_xmit_back(struct mvneta_port *pp, struct xdp_buff *xdp)
+ 	struct mvneta_pcpu_stats *stats = this_cpu_ptr(pp->stats);
+ 	struct mvneta_tx_queue *txq;
+ 	struct netdev_queue *nq;
++	int cpu, nxmit_byte = 0;
+ 	struct xdp_frame *xdpf;
+-	int cpu;
+ 	u32 ret;
+ 
+ 	xdpf = xdp_convert_buff_to_frame(xdp);
+@@ -2119,10 +2138,10 @@ mvneta_xdp_xmit_back(struct mvneta_port *pp, struct xdp_buff *xdp)
+ 	nq = netdev_get_tx_queue(pp->dev, txq->id);
+ 
+ 	__netif_tx_lock(nq, cpu);
+-	ret = mvneta_xdp_submit_frame(pp, txq, xdpf, false);
++	ret = mvneta_xdp_submit_frame(pp, txq, xdpf, &nxmit_byte, false);
+ 	if (ret == MVNETA_XDP_TX) {
+ 		u64_stats_update_begin(&stats->syncp);
+-		stats->es.ps.tx_bytes += xdpf->len;
++		stats->es.ps.tx_bytes += nxmit_byte;
+ 		stats->es.ps.tx_packets++;
+ 		stats->es.ps.xdp_tx++;
+ 		u64_stats_update_end(&stats->syncp);
+@@ -2161,11 +2180,11 @@ mvneta_xdp_xmit(struct net_device *dev, int num_frame,
+ 
+ 	__netif_tx_lock(nq, cpu);
+ 	for (i = 0; i < num_frame; i++) {
+-		ret = mvneta_xdp_submit_frame(pp, txq, frames[i], true);
++		ret = mvneta_xdp_submit_frame(pp, txq, frames[i], &nxmit_byte,
++					      true);
+ 		if (ret != MVNETA_XDP_TX)
+ 			break;
+ 
+-		nxmit_byte += frames[i]->len;
+ 		nxmit++;
+ 	}
  
 -- 
 2.30.2
