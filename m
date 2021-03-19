@@ -2,121 +2,201 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A1CB1C433C1
-	for <bpf@archiver.kernel.org>; Fri, 19 Mar 2021 20:36:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0EA14C433DB
+	for <bpf@archiver.kernel.org>; Fri, 19 Mar 2021 20:59:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6CC486197B
-	for <bpf@archiver.kernel.org>; Fri, 19 Mar 2021 20:36:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D3A6D6197E
+	for <bpf@archiver.kernel.org>; Fri, 19 Mar 2021 20:59:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230235AbhCSUgI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 19 Mar 2021 16:36:08 -0400
-Received: from www62.your-server.de ([213.133.104.62]:45492 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230285AbhCSUgG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 19 Mar 2021 16:36:06 -0400
-Received: from sslproxy06.your-server.de ([78.46.172.3])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1lNLqi-0005Kx-GZ; Fri, 19 Mar 2021 21:36:00 +0100
-Received: from [85.7.101.30] (helo=pc-9.home)
-        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1lNLqi-00088c-9y; Fri, 19 Mar 2021 21:36:00 +0100
-Subject: Re: [PATCH v3 bpf-next] bpf: add lookup_and_delete_elem support to
- hashtab
-To:     Denis Salopek <denis.salopek@sartura.hr>, bpf@vger.kernel.org
-Cc:     juraj.vijtiuk@sartura.hr, luka.oreskovic@sartura.hr,
-        luka.perkov@sartura.hr, yhs@fb.com
-References: <YFDudWFj9zydyo/P@gmail.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <2f5f29ed-354b-b88d-f5cb-535d61aaaf0e@iogearbox.net>
-Date:   Fri, 19 Mar 2021 21:35:59 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S230203AbhCSU7W convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 19 Mar 2021 16:59:22 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:34144 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230240AbhCSU7V (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 19 Mar 2021 16:59:21 -0400
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12JKwkXc004259
+        for <bpf@vger.kernel.org>; Fri, 19 Mar 2021 13:59:21 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 37bs1ew1rs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Fri, 19 Mar 2021 13:59:21 -0700
+Received: from intmgw006.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Fri, 19 Mar 2021 13:59:20 -0700
+Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
+        id 6C6AA2ED268B; Fri, 19 Mar 2021 13:59:17 -0700 (PDT)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
+        <daniel@iogearbox.net>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>
+Subject: [PATCH bpf-next 3/3] selftests/bpf: allow compiling BPF objects without BTF
+Date:   Fri, 19 Mar 2021 13:59:09 -0700
+Message-ID: <20210319205909.1748642-4-andrii@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210319205909.1748642-1-andrii@kernel.org>
+References: <20210319205909.1748642-1-andrii@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <YFDudWFj9zydyo/P@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.102.4/26113/Fri Mar 19 12:14:45 2021)
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
+ definitions=2021-03-19_12:2021-03-19,2021-03-19 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=0
+ phishscore=0 bulkscore=0 spamscore=0 clxscore=1015 lowpriorityscore=0
+ priorityscore=1501 mlxscore=0 adultscore=0 mlxlogscore=999 malwarescore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2103190144
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 3/16/21 6:44 PM, Denis Salopek wrote:
-[...]
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> index c859bc46d06c..36f65b589b82 100644
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
-> @@ -1463,7 +1463,7 @@ int generic_map_lookup_batch(struct bpf_map *map,
->   	return err;
->   }
->   
-> -#define BPF_MAP_LOOKUP_AND_DELETE_ELEM_LAST_FIELD value
-> +#define BPF_MAP_LOOKUP_AND_DELETE_ELEM_LAST_FIELD flags
->   
->   static int map_lookup_and_delete_elem(union bpf_attr *attr)
->   {
-> @@ -1479,6 +1479,9 @@ static int map_lookup_and_delete_elem(union bpf_attr *attr)
->   	if (CHECK_ATTR(BPF_MAP_LOOKUP_AND_DELETE_ELEM))
->   		return -EINVAL;
->   
-> +	if (attr->flags & ~BPF_F_LOCK)
-> +		return -EINVAL;
-> +
->   	f = fdget(ufd);
->   	map = __bpf_map_get(f);
->   	if (IS_ERR(map))
-> @@ -1489,13 +1492,19 @@ static int map_lookup_and_delete_elem(union bpf_attr *attr)
->   		goto err_put;
->   	}
->   
-> +	if ((attr->flags & BPF_F_LOCK) &&
-> +	    !map_value_has_spin_lock(map)) {
-> +		err = -EINVAL;
-> +		goto err_put;
-> +	}
-> +
->   	key = __bpf_copy_key(ukey, map->key_size);
->   	if (IS_ERR(key)) {
->   		err = PTR_ERR(key);
->   		goto err_put;
->   	}
->   
-> -	value_size = map->value_size;
-> +	value_size = bpf_map_value_size(map);
->   
->   	err = -ENOMEM;
->   	value = kmalloc(value_size, GFP_USER | __GFP_NOWARN);
-> @@ -1505,6 +1514,17 @@ static int map_lookup_and_delete_elem(union bpf_attr *attr)
->   	if (map->map_type == BPF_MAP_TYPE_QUEUE ||
->   	    map->map_type == BPF_MAP_TYPE_STACK) {
->   		err = map->ops->map_pop_elem(map, value);
-> +	} else if (map->map_type == BPF_MAP_TYPE_HASH ||
-> +		   map->map_type == BPF_MAP_TYPE_PERCPU_HASH ||
-> +		   map->map_type == BPF_MAP_TYPE_LRU_HASH ||
-> +		   map->map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH) {
-> +		if (!bpf_map_is_dev_bound(map)) {
+Add ability to skip BTF generation for some BPF object files. This is done
+through using a convention of .nobtf.c file name suffix.
 
-I think you probably rather meant to fold the above !bpf_map_is_dev_bound(map)
-condition into the higher level 'else if', right? Otherwise for dev bound maps
-you'll always end up with -ENOMEM error rather than -ENOTSUPP.
+Also add third statically linked file to static_linked selftest. This file has
+no BTF, causing resulting object file to have only some of DATASEC BTF types.
+It also is using (from BPF code) global variables. This tests both libbpf's
+static linking logic and bpftool's skeleton generation logic.
 
-> +			bpf_disable_instrumentation();
-> +			rcu_read_lock();
-> +			err = map->ops->map_lookup_and_delete_elem(map, key, value, attr->flags);
-> +			rcu_read_unlock();
-> +			bpf_enable_instrumentation();
-> +		}
->   	} else {
->   		err = -ENOTSUPP;
->   	}
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ tools/testing/selftests/bpf/Makefile          | 21 +++++++----
+ .../selftests/bpf/prog_tests/static_linked.c  |  6 +++-
+ .../bpf/progs/test_static_linked3.nobtf.c     | 36 +++++++++++++++++++
+ 3 files changed, 56 insertions(+), 7 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/test_static_linked3.nobtf.c
+
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 6448c626498f..0a481a75a416 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -270,7 +270,7 @@ IS_LITTLE_ENDIAN = $(shell $(CC) -dM -E - </dev/null | \
+ MENDIAN=$(if $(IS_LITTLE_ENDIAN),-mlittle-endian,-mbig-endian)
+ 
+ CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG))
+-BPF_CFLAGS = -g -D__TARGET_ARCH_$(SRCARCH) $(MENDIAN) 			\
++BPF_CFLAGS = -D__TARGET_ARCH_$(SRCARCH) $(MENDIAN) 			\
+ 	     -I$(INCLUDE_DIR) -I$(CURDIR) -I$(APIDIR)			\
+ 	     -I$(abspath $(OUTPUT)/../usr/include)
+ 
+@@ -282,30 +282,39 @@ $(OUTPUT)/test_xdp_noinline.o: BPF_CFLAGS += -fno-inline
+ 
+ $(OUTPUT)/flow_dissector_load.o: flow_dissector_load.h
+ 
+-# Build BPF object using Clang
++# Build BPF object using Clang.
++# Source files with .nobtf.c suffix are built without BTF
+ # $1 - input .c file
+ # $2 - output .o file
+ # $3 - CFLAGS
+ define CLANG_BPF_BUILD_RULE
+ 	$(call msg,CLNG-BPF,$(TRUNNER_BINARY),$2)
+-	$(Q)$(CLANG) $3 -O2 -target bpf -c $1 -o $2 -mcpu=v3
++	$(Q)$(CLANG) $3 -O2 -target bpf -mcpu=v3			\
++		     $(if $(filter %.nobtf.c,$1),,-g)			\
++		     -c $1 -o $2
+ endef
+ # Similar to CLANG_BPF_BUILD_RULE, but with disabled alu32
+ define CLANG_NOALU32_BPF_BUILD_RULE
+ 	$(call msg,CLNG-BPF,$(TRUNNER_BINARY),$2)
+-	$(Q)$(CLANG) $3 -O2 -target bpf -c $1 -o $2 -mcpu=v2
++	$(Q)$(CLANG) $3 -O2 -target bpf -mcpu=v2			\
++		     $(if $(filter %.nobtf.c,$1),,-g)			\
++		     -c $1 -o $2
+ endef
+ # Build BPF object using GCC
+ define GCC_BPF_BUILD_RULE
+ 	$(call msg,GCC-BPF,$(TRUNNER_BINARY),$2)
+-	$(Q)$(BPF_GCC) $3 -O2 -c $1 -o $2
++	$(Q)$(BPF_GCC) $3 -O2 						\
++		       $(if $(filter %.nobtf.c,$1),,-g)			\
++		       -c $1 -o $2
+ endef
+ 
+ SKEL_BLACKLIST := btf__% test_pinning_invalid.c test_sk_assign.c
+ 
+ LINKED_SKELS := test_static_linked.skel.h
+ 
+-test_static_linked.skel.h-deps := test_static_linked1.o test_static_linked2.o
++test_static_linked.skel.h-deps := test_static_linked1.o \
++				  test_static_linked2.o \
++				  test_static_linked3.nobtf.o
+ 
+ # Set up extra TRUNNER_XXX "temporary" variables in the environment (relies on
+ # $eval()) and pass control to DEFINE_TEST_RUNNER_RULES.
+diff --git a/tools/testing/selftests/bpf/prog_tests/static_linked.c b/tools/testing/selftests/bpf/prog_tests/static_linked.c
+index 46556976dccc..1e6701483d27 100644
+--- a/tools/testing/selftests/bpf/prog_tests/static_linked.c
++++ b/tools/testing/selftests/bpf/prog_tests/static_linked.c
+@@ -6,7 +6,7 @@
+ 
+ void test_static_linked(void)
+ {
+-	int err;
++	int err, key = 0, value = 0;
+ 	struct test_static_linked* skel;
+ 
+ 	skel = test_static_linked__open();
+@@ -35,6 +35,10 @@ void test_static_linked(void)
+ 	ASSERT_EQ(skel->bss->var1, 1 * 2 + 2 + 3, "var1");
+ 	ASSERT_EQ(skel->bss->var2, 4 * 3 + 5 + 6, "var2");
+ 
++	err = bpf_map_lookup_elem(bpf_map__fd(skel->maps.legacy_map), &key, &value);
++	ASSERT_OK(err, "legacy_map_lookup");
++	ASSERT_EQ(value, 1 * 3 + 3,  "legacy_map_value");
++
+ cleanup:
+ 	test_static_linked__destroy(skel);
+ }
+diff --git a/tools/testing/selftests/bpf/progs/test_static_linked3.nobtf.c b/tools/testing/selftests/bpf/progs/test_static_linked3.nobtf.c
+new file mode 100644
+index 000000000000..e5fbde21381c
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_static_linked3.nobtf.c
+@@ -0,0 +1,36 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2021 Facebook */
++
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++
++/* global variables don't need BTF to be used, but are extremely unconvenient
++ * to be consumed from user-space without BPF skeleton, that uses BTF
++ */
++
++static volatile int mul3 = 3;
++static volatile int add3 = 3;
++
++/* same "subprog" name in all files */
++static __noinline int subprog(int x)
++{
++	/* but different formula */
++	return x * mul3 + add3;
++}
++
++struct bpf_map_def SEC("maps") legacy_map = {
++	.type = BPF_MAP_TYPE_ARRAY,
++	.key_size = sizeof(int),
++	.value_size = sizeof(int),
++	.max_entries = 1,
++};
++
++SEC("raw_tp/sys_enter")
++int handler3(const void *ctx)
++{
++	int key = 0, value = subprog(1);
++
++	bpf_map_update_elem(&legacy_map, &key, &value, BPF_ANY);
++
++	return 0;
++}
+-- 
+2.30.2
+
