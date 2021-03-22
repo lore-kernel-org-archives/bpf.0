@@ -7,41 +7,41 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BCAB9C433E3
-	for <bpf@archiver.kernel.org>; Mon, 22 Mar 2021 21:10:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 146BFC433E8
+	for <bpf@archiver.kernel.org>; Mon, 22 Mar 2021 21:10:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8ADFD619A8
+	by mail.kernel.org (Postfix) with ESMTP id E5A82619A0
 	for <bpf@archiver.kernel.org>; Mon, 22 Mar 2021 21:10:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230159AbhCVVJo (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 22 Mar 2021 17:09:44 -0400
+        id S231426AbhCVVJq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 22 Mar 2021 17:09:46 -0400
 Received: from mga01.intel.com ([192.55.52.88]:4966 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229574AbhCVVJH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 22 Mar 2021 17:09:07 -0400
-IronPort-SDR: 3w/1cUIs/gaSHX2leEegXH7KBpsa/vh/np748RexgimKR1quAeSiVcqB7ddcgwn8raL0sLz12r
- 5PJfJ/TOw62w==
-X-IronPort-AV: E=McAfee;i="6000,8403,9931"; a="210423716"
+        id S230487AbhCVVJO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 22 Mar 2021 17:09:14 -0400
+IronPort-SDR: fNhAIXFCeX/kEs0hVwd4kGdSg7zCEuE+5+5ZYtv2Ry3r+rQwAcHLP2gGt0iOJKRDYqO+v0pZsC
+ 5I2+3FtGxwBQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9931"; a="210423731"
 X-IronPort-AV: E=Sophos;i="5.81,269,1610438400"; 
-   d="scan'208";a="210423716"
+   d="scan'208";a="210423731"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2021 14:09:07 -0700
-IronPort-SDR: x4U1mFiuie/XVIbPH+a5Iea6ICRdyjSv5BiO5neFaK6cuLnOouAC0rQQ3x0BM6CbiBKzhGMqg+
- mTrrDUBxiQBw==
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2021 14:09:14 -0700
+IronPort-SDR: AvqBgxqXaYkXhhP3kafVmbj1xWBJ5PxsVOjERg28aweY/2aT1u+jv0HMbEim6jYOWBKdcVTWb8
+ 8Z+H+1n57NPA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.81,269,1610438400"; 
-   d="scan'208";a="513448765"
+   d="scan'208";a="513448816"
 Received: from ranger.igk.intel.com ([10.102.21.164])
-  by fmsmga001.fm.intel.com with ESMTP; 22 Mar 2021 14:09:05 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 22 Mar 2021 14:09:12 -0700
 From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 To:     bpf@vger.kernel.org, netdev@vger.kernel.org, daniel@iogearbox.net,
         ast@kernel.org
 Cc:     bjorn.topel@intel.com, magnus.karlsson@intel.com,
         ciara.loftus@intel.com, john.fastabend@gmail.com, toke@redhat.com,
         Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH v3 bpf-next 04/17] selftests: xsk: remove inline keyword from source file
-Date:   Mon, 22 Mar 2021 21:58:03 +0100
-Message-Id: <20210322205816.65159-5-maciej.fijalkowski@intel.com>
+Subject: [PATCH v3 bpf-next 07/17] samples: bpf: do not unload prog within xdpsock
+Date:   Mon, 22 Mar 2021 21:58:06 +0100
+Message-Id: <20210322205816.65159-8-maciej.fijalkowski@intel.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20210322205816.65159-1-maciej.fijalkowski@intel.com>
 References: <20210322205816.65159-1-maciej.fijalkowski@intel.com>
@@ -51,85 +51,116 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Follow the kernel coding style guidelines and let compiler do the
-decision about inlining.
+With the introduction of bpf_link in xsk's libbpf part, there's no
+further need for explicit unload of prog on xdpsock's termination. When
+process dies, the bpf_link's refcount will be decremented and resources
+will be unloaded/freed under the hood in case when there are no more
+active users.
+
+While at it, don't dump stats on error path.
 
 Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 ---
- tools/testing/selftests/bpf/xdpxceiver.c | 17 +++++++----------
- 1 file changed, 7 insertions(+), 10 deletions(-)
+ samples/bpf/xdpsock_user.c | 55 ++++++++++----------------------------
+ 1 file changed, 14 insertions(+), 41 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/xdpxceiver.c b/tools/testing/selftests/bpf/xdpxceiver.c
-index 6769e9e2de17..08058a3d9aec 100644
---- a/tools/testing/selftests/bpf/xdpxceiver.c
-+++ b/tools/testing/selftests/bpf/xdpxceiver.c
-@@ -158,7 +158,7 @@ static void *memset32_htonl(void *dest, u32 val, u32 size)
-  * This function code has been taken from
-  * Linux kernel include/asm-generic/checksum.h
-  */
--static inline __u16 csum_fold(__u32 csum)
-+static __u16 csum_fold(__u32 csum)
- {
- 	u32 sum = (__force u32)csum;
+diff --git a/samples/bpf/xdpsock_user.c b/samples/bpf/xdpsock_user.c
+index 1e2a1105d0e6..aa696854be78 100644
+--- a/samples/bpf/xdpsock_user.c
++++ b/samples/bpf/xdpsock_user.c
+@@ -96,7 +96,6 @@ static int opt_xsk_frame_size = XSK_UMEM__DEFAULT_FRAME_SIZE;
+ static int opt_timeout = 1000;
+ static bool opt_need_wakeup = true;
+ static u32 opt_num_xsks = 1;
+-static u32 prog_id;
+ static bool opt_busy_poll;
+ static bool opt_reduced_cap;
  
-@@ -171,7 +171,7 @@ static inline __u16 csum_fold(__u32 csum)
-  * This function code has been taken from
-  * Linux kernel lib/checksum.c
-  */
--static inline u32 from64to32(u64 x)
-+static u32 from64to32(u64 x)
- {
- 	/* add up 32-bit and 32-bit for 32+c bit */
- 	x = (x & 0xffffffff) + (x >> 32);
-@@ -180,13 +180,11 @@ static inline u32 from64to32(u64 x)
- 	return (u32)x;
+@@ -462,59 +461,37 @@ static void *poller(void *arg)
+ 	return NULL;
  }
  
--__u32 csum_tcpudp_nofold(__be32 saddr, __be32 daddr, __u32 len, __u8 proto, __u32 sum);
+-static void remove_xdp_program(void)
++static void int_exit(int sig)
+ {
+-	u32 curr_prog_id = 0;
+-	int cmd = CLOSE_CONN;
 -
- /*
-  * This function code has been taken from
-  * Linux kernel lib/checksum.c
-  */
--__u32 csum_tcpudp_nofold(__be32 saddr, __be32 daddr, __u32 len, __u8 proto, __u32 sum)
-+static __u32 csum_tcpudp_nofold(__be32 saddr, __be32 daddr, __u32 len, __u8 proto, __u32 sum)
- {
- 	unsigned long long s = (__force u32)sum;
- 
-@@ -204,13 +202,12 @@ __u32 csum_tcpudp_nofold(__be32 saddr, __be32 daddr, __u32 len, __u8 proto, __u3
-  * This function has been taken from
-  * Linux kernel include/asm-generic/checksum.h
-  */
--static inline __u16
--csum_tcpudp_magic(__be32 saddr, __be32 daddr, __u32 len, __u8 proto, __u32 sum)
-+static __u16 csum_tcpudp_magic(__be32 saddr, __be32 daddr, __u32 len, __u8 proto, __u32 sum)
- {
- 	return csum_fold(csum_tcpudp_nofold(saddr, daddr, len, proto, sum));
+-	if (bpf_get_link_xdp_id(opt_ifindex, &curr_prog_id, opt_xdp_flags)) {
+-		printf("bpf_get_link_xdp_id failed\n");
+-		exit(EXIT_FAILURE);
+-	}
+-	if (prog_id == curr_prog_id)
+-		bpf_set_link_xdp_fd(opt_ifindex, -1, opt_xdp_flags);
+-	else if (!curr_prog_id)
+-		printf("couldn't find a prog id on a given interface\n");
+-	else
+-		printf("program on interface changed, not removing\n");
+-
+-	if (opt_reduced_cap) {
+-		if (write(sock, &cmd, sizeof(int)) < 0) {
+-			fprintf(stderr, "Error writing into stream socket: %s", strerror(errno));
+-			exit(EXIT_FAILURE);
+-		}
+-	}
++	benchmark_done = true;
  }
  
--static inline u16 udp_csum(u32 saddr, u32 daddr, u32 len, u8 proto, u16 *udp_pkt)
-+static u16 udp_csum(u32 saddr, u32 daddr, u32 len, u8 proto, u16 *udp_pkt)
+-static void int_exit(int sig)
++static void __exit_with_error(int error, const char *file, const char *func,
++			      int line)
  {
- 	u32 csum = 0;
- 	u32 cnt = 0;
-@@ -500,7 +497,7 @@ static void kick_tx(struct xsk_socket_info *xsk)
- 	exit_with_error(errno);
+-	benchmark_done = true;
++	fprintf(stderr, "%s:%s:%i: errno: %d/\"%s\"\n", file, func,
++		line, error, strerror(error));
++	exit(EXIT_FAILURE);
  }
  
--static inline void complete_tx_only(struct xsk_socket_info *xsk, int batch_size)
-+static void complete_tx_only(struct xsk_socket_info *xsk, int batch_size)
++#define exit_with_error(error) __exit_with_error(error, __FILE__, __func__, __LINE__)
++
+ static void xdpsock_cleanup(void)
  {
- 	unsigned int rcvd;
- 	u32 idx;
-@@ -605,7 +602,7 @@ static void tx_only(struct xsk_socket_info *xsk, u32 *frameptr, int batch_size)
- 	complete_tx_only(xsk, batch_size);
+ 	struct xsk_umem *umem = xsks[0]->umem->umem;
+-	int i;
++	int i, cmd = CLOSE_CONN;
+ 
+ 	dump_stats();
+ 	for (i = 0; i < num_socks; i++)
+ 		xsk_socket__delete(xsks[i]->xsk);
+ 	(void)xsk_umem__delete(umem);
+-	remove_xdp_program();
+-}
+ 
+-static void __exit_with_error(int error, const char *file, const char *func,
+-			      int line)
+-{
+-	fprintf(stderr, "%s:%s:%i: errno: %d/\"%s\"\n", file, func,
+-		line, error, strerror(error));
+-	dump_stats();
+-	remove_xdp_program();
+-	exit(EXIT_FAILURE);
++	if (opt_reduced_cap) {
++		if (write(sock, &cmd, sizeof(int)) < 0)
++			exit_with_error(errno);
++	}
  }
  
--static inline int get_batch_size(int pkt_cnt)
-+static int get_batch_size(int pkt_cnt)
+-#define exit_with_error(error) __exit_with_error(error, __FILE__, __func__, \
+-						 __LINE__)
+ static void swap_mac_addresses(void *data)
  {
- 	if (!opt_pkt_count)
- 		return BATCH_SIZE;
+ 	struct ether_header *eth = (struct ether_header *)data;
+@@ -880,10 +857,6 @@ static struct xsk_socket_info *xsk_configure_socket(struct xsk_umem_info *umem,
+ 	if (ret)
+ 		exit_with_error(-ret);
+ 
+-	ret = bpf_get_link_xdp_id(opt_ifindex, &prog_id, opt_xdp_flags);
+-	if (ret)
+-		exit_with_error(-ret);
+-
+ 	xsk->app_stats.rx_empty_polls = 0;
+ 	xsk->app_stats.fill_fail_polls = 0;
+ 	xsk->app_stats.copy_tx_sendtos = 0;
 -- 
 2.20.1
 
