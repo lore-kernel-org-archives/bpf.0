@@ -7,41 +7,41 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B6B29C433C1
-	for <bpf@archiver.kernel.org>; Mon, 22 Mar 2021 21:10:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FE63C433E1
+	for <bpf@archiver.kernel.org>; Mon, 22 Mar 2021 21:10:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7CDF761924
-	for <bpf@archiver.kernel.org>; Mon, 22 Mar 2021 21:10:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 326B3619A6
+	for <bpf@archiver.kernel.org>; Mon, 22 Mar 2021 21:10:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbhCVVJc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 22 Mar 2021 17:09:32 -0400
-Received: from mga01.intel.com ([192.55.52.88]:4961 "EHLO mga01.intel.com"
+        id S230063AbhCVVJk (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 22 Mar 2021 17:09:40 -0400
+Received: from mga01.intel.com ([192.55.52.88]:4966 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230159AbhCVVJB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 22 Mar 2021 17:09:01 -0400
-IronPort-SDR: 572vpkkPWgwO0GMnA1dPrZwZwzn4z4Aq/dUmOHTJfo6EaMIoc9OcSGKgPhmGikIRDE31MQWtyP
- fVaVfbsgFVIA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9931"; a="210423697"
+        id S229992AbhCVVJF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 22 Mar 2021 17:09:05 -0400
+IronPort-SDR: GxV2Cm0adoUPsqXxgmVqOAQoOZ7clItRLhMalLMc+BvsUI8gjTOhTjOFdE7EpODJjzbMLMkAj8
+ cAN0kpqtWGZw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9931"; a="210423710"
 X-IronPort-AV: E=Sophos;i="5.81,269,1610438400"; 
-   d="scan'208";a="210423697"
+   d="scan'208";a="210423710"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2021 14:09:01 -0700
-IronPort-SDR: QFgnW9SIyLJ4+u1F8SGaCHc82VA7dUhBfkOJLBsIN+7TZxgPdIfdyCPtrFJTTAm5vbhYwJxmrz
- VI/t/BI1B8YQ==
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2021 14:09:05 -0700
+IronPort-SDR: qjBlnl31A59doKsJjXK9kW70ZtctIF/kNkP5kY/FQW2yHV7HHV+mUCPIxqvj0jnfc4tuov51DX
+ ph2nPphM8Jtg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.81,269,1610438400"; 
-   d="scan'208";a="513448735"
+   d="scan'208";a="513448753"
 Received: from ranger.igk.intel.com ([10.102.21.164])
-  by fmsmga001.fm.intel.com with ESMTP; 22 Mar 2021 14:08:59 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 22 Mar 2021 14:09:03 -0700
 From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 To:     bpf@vger.kernel.org, netdev@vger.kernel.org, daniel@iogearbox.net,
         ast@kernel.org
 Cc:     bjorn.topel@intel.com, magnus.karlsson@intel.com,
         ciara.loftus@intel.com, john.fastabend@gmail.com, toke@redhat.com,
         Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH v3 bpf-next 01/17] selftests: xsk: don't call worker_pkt_dump() for stats test
-Date:   Mon, 22 Mar 2021 21:58:00 +0100
-Message-Id: <20210322205816.65159-2-maciej.fijalkowski@intel.com>
+Subject: [PATCH v3 bpf-next 03/17] selftests: xsk: remove unused function
+Date:   Mon, 22 Mar 2021 21:58:02 +0100
+Message-Id: <20210322205816.65159-4-maciej.fijalkowski@intel.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20210322205816.65159-1-maciej.fijalkowski@intel.com>
 References: <20210322205816.65159-1-maciej.fijalkowski@intel.com>
@@ -51,29 +51,37 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-For TEST_TYPE_STATS, worker_pkt_validate() that places frames onto
-pkt_buf is not called. Therefore, when dump mode is set, don't call
-worker_pkt_dump() for mentioned test type, so that it won't crash on
-pkt_buf() access.
+Probably it was ported from xdpsock but is not used anywhere.
 
 Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 ---
- tools/testing/selftests/bpf/xdpxceiver.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/bpf/xdpxceiver.c | 13 -------------
+ 1 file changed, 13 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/xdpxceiver.c b/tools/testing/selftests/bpf/xdpxceiver.c
-index 8b0f7fdd9003..04574c2b4f41 100644
+index 04bc007d5b08..6769e9e2de17 100644
 --- a/tools/testing/selftests/bpf/xdpxceiver.c
 +++ b/tools/testing/selftests/bpf/xdpxceiver.c
-@@ -999,7 +999,7 @@ static void testapp_validate(void)
- 	pthread_join(t1, NULL);
- 	pthread_join(t0, NULL);
+@@ -153,19 +153,6 @@ static void *memset32_htonl(void *dest, u32 val, u32 size)
+ 	return dest;
+ }
  
--	if (debug_pkt_dump) {
-+	if (debug_pkt_dump && test_type != TEST_TYPE_STATS) {
- 		worker_pkt_dump();
- 		for (int iter = 0; iter < num_frames - 1; iter++) {
- 			free(pkt_buf[iter]->payload);
+-/*
+- * This function code has been taken from
+- * Linux kernel lib/checksum.c
+- */
+-static inline unsigned short from32to16(unsigned int x)
+-{
+-	/* add up 16-bit and 16-bit for 16+c bit */
+-	x = (x & 0xffff) + (x >> 16);
+-	/* add up carry.. */
+-	x = (x & 0xffff) + (x >> 16);
+-	return x;
+-}
+-
+ /*
+  * Fold a partial checksum
+  * This function code has been taken from
 -- 
 2.20.1
 
