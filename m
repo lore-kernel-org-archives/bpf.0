@@ -7,46 +7,45 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F1CFC433E9
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98C12C433E6
 	for <bpf@archiver.kernel.org>; Mon, 22 Mar 2021 16:38:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7D1776199F
+	by mail.kernel.org (Postfix) with ESMTP id 6803861992
 	for <bpf@archiver.kernel.org>; Mon, 22 Mar 2021 16:38:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231972AbhCVQiH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 22 Mar 2021 12:38:07 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:40420 "EHLO pegase1.c-s.fr"
+        id S231954AbhCVQiG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 22 Mar 2021 12:38:06 -0400
+Received: from pegase1.c-s.fr ([93.17.236.30]:48463 "EHLO pegase1.c-s.fr"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229865AbhCVQhx (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 22 Mar 2021 12:37:53 -0400
+        id S231847AbhCVQhw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 22 Mar 2021 12:37:52 -0400
 Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 4F40Xp581Bz9txkL;
-        Mon, 22 Mar 2021 17:37:46 +0100 (CET)
+        by localhost (Postfix) with ESMTP id 4F40Xm5836z9txkR;
+        Mon, 22 Mar 2021 17:37:44 +0100 (CET)
 X-Virus-Scanned: Debian amavisd-new at c-s.fr
 Received: from pegase1.c-s.fr ([192.168.12.234])
         by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id YZ7j8Sjp_lcc; Mon, 22 Mar 2021 17:37:46 +0100 (CET)
+        with ESMTP id XQJcwwVd_B-S; Mon, 22 Mar 2021 17:37:44 +0100 (CET)
 Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4F40Xp43Txz9txkT;
-        Mon, 22 Mar 2021 17:37:46 +0100 (CET)
+        by pegase1.c-s.fr (Postfix) with ESMTP id 4F40Xm4GTkz9txkL;
+        Mon, 22 Mar 2021 17:37:44 +0100 (CET)
 Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 3273E8B7A3;
-        Mon, 22 Mar 2021 17:37:52 +0100 (CET)
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 2B39D8B7A3;
+        Mon, 22 Mar 2021 17:37:50 +0100 (CET)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from messagerie.si.c-s.fr ([127.0.0.1])
         by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id Y3k_e_OhNYem; Mon, 22 Mar 2021 17:37:52 +0100 (CET)
+        with ESMTP id pjbB3VFosaMe; Mon, 22 Mar 2021 17:37:50 +0100 (CET)
 Received: from po16121vm.idsi0.si.c-s.fr (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id D5C418B79C;
-        Mon, 22 Mar 2021 17:37:51 +0100 (CET)
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id AE1638B79C;
+        Mon, 22 Mar 2021 17:37:49 +0100 (CET)
 Received: by po16121vm.idsi0.si.c-s.fr (Postfix, from userid 0)
-        id B988F675F4; Mon, 22 Mar 2021 16:37:51 +0000 (UTC)
-Message-Id: <f7bd573a368edd78006f8a5af508c726e7ce1ed2.1616430991.git.christophe.leroy@csgroup.eu>
+        id 92396675F4; Mon, 22 Mar 2021 16:37:49 +0000 (UTC)
+Message-Id: <2c339d77fb168ef12b213ccddfee3cb6c8ce8ae1.1616430991.git.christophe.leroy@csgroup.eu>
 In-Reply-To: <cover.1616430991.git.christophe.leroy@csgroup.eu>
 References: <cover.1616430991.git.christophe.leroy@csgroup.eu>
 From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-Subject: [PATCH v2 6/8] powerpc/asm: Add some opcodes in asm/ppc-opcode.h for
- PPC32 eBPF
+Subject: [PATCH v2 4/8] powerpc/bpf: Move common functions into bpf_jit_comp.c
 To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
         Michael Ellerman <mpe@ellerman.id.au>, ast@kernel.org,
@@ -56,86 +55,631 @@ To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         sandipan@linux.ibm.com
 Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         netdev@vger.kernel.org, bpf@vger.kernel.org
-Date:   Mon, 22 Mar 2021 16:37:51 +0000 (UTC)
+Date:   Mon, 22 Mar 2021 16:37:49 +0000 (UTC)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The following opcodes will be needed for the implementation
-of eBPF for PPC32. Add them in asm/ppc-opcode.h
-
-PPC_RAW_ADDE
-PPC_RAW_ADDZE
-PPC_RAW_ADDME
-PPC_RAW_MFLR
-PPC_RAW_ADDIC
-PPC_RAW_ADDIC_DOT
-PPC_RAW_SUBFC
-PPC_RAW_SUBFE
-PPC_RAW_SUBFIC
-PPC_RAW_SUBFZE
-PPC_RAW_ANDIS
-PPC_RAW_NOR
+Move into bpf_jit_comp.c the functions that will remain common to
+PPC64 and PPC32 when we add support of EBPF for PPC32.
 
 Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 ---
- arch/powerpc/include/asm/ppc-opcode.h | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ arch/powerpc/net/Makefile         |   2 +-
+ arch/powerpc/net/bpf_jit.h        |   6 +
+ arch/powerpc/net/bpf_jit_comp.c   | 269 ++++++++++++++++++++++++++++++
+ arch/powerpc/net/bpf_jit_comp64.c | 263 +----------------------------
+ 4 files changed, 281 insertions(+), 259 deletions(-)
+ create mode 100644 arch/powerpc/net/bpf_jit_comp.c
 
-diff --git a/arch/powerpc/include/asm/ppc-opcode.h b/arch/powerpc/include/asm/ppc-opcode.h
-index ed161ef2b3ca..5b60020dc1f4 100644
---- a/arch/powerpc/include/asm/ppc-opcode.h
-+++ b/arch/powerpc/include/asm/ppc-opcode.h
-@@ -437,6 +437,9 @@
- #define PPC_RAW_STFDX(s, a, b)		(0x7c0005ae | ___PPC_RS(s) | ___PPC_RA(a) | ___PPC_RB(b))
- #define PPC_RAW_LVX(t, a, b)		(0x7c0000ce | ___PPC_RT(t) | ___PPC_RA(a) | ___PPC_RB(b))
- #define PPC_RAW_STVX(s, a, b)		(0x7c0001ce | ___PPC_RS(s) | ___PPC_RA(a) | ___PPC_RB(b))
-+#define PPC_RAW_ADDE(t, a, b)		(0x7c000114 | ___PPC_RT(t) | ___PPC_RA(a) | ___PPC_RB(b))
-+#define PPC_RAW_ADDZE(t, a)		(0x7c000194 | ___PPC_RT(t) | ___PPC_RA(a))
-+#define PPC_RAW_ADDME(t, a)		(0x7c0001d4 | ___PPC_RT(t) | ___PPC_RA(a))
- #define PPC_RAW_ADD(t, a, b)		(PPC_INST_ADD | ___PPC_RT(t) | ___PPC_RA(a) | ___PPC_RB(b))
- #define PPC_RAW_ADD_DOT(t, a, b)	(PPC_INST_ADD | ___PPC_RT(t) | ___PPC_RA(a) | ___PPC_RB(b) | 0x1)
- #define PPC_RAW_ADDC(t, a, b)		(0x7c000014 | ___PPC_RT(t) | ___PPC_RA(a) | ___PPC_RB(b))
-@@ -445,11 +448,14 @@
- #define PPC_RAW_BLR()			(PPC_INST_BLR)
- #define PPC_RAW_BLRL()			(0x4e800021)
- #define PPC_RAW_MTLR(r)			(0x7c0803a6 | ___PPC_RT(r))
-+#define PPC_RAW_MFLR(t)			(PPC_INST_MFLR | ___PPC_RT(t))
- #define PPC_RAW_BCTR()			(PPC_INST_BCTR)
- #define PPC_RAW_MTCTR(r)		(PPC_INST_MTCTR | ___PPC_RT(r))
- #define PPC_RAW_ADDI(d, a, i)		(PPC_INST_ADDI | ___PPC_RT(d) | ___PPC_RA(a) | IMM_L(i))
- #define PPC_RAW_LI(r, i)		PPC_RAW_ADDI(r, 0, i)
- #define PPC_RAW_ADDIS(d, a, i)		(PPC_INST_ADDIS | ___PPC_RT(d) | ___PPC_RA(a) | IMM_L(i))
-+#define PPC_RAW_ADDIC(d, a, i)		(0x30000000 | ___PPC_RT(d) | ___PPC_RA(a) | IMM_L(i))
-+#define PPC_RAW_ADDIC_DOT(d, a, i)	(0x34000000 | ___PPC_RT(d) | ___PPC_RA(a) | IMM_L(i))
- #define PPC_RAW_LIS(r, i)		PPC_RAW_ADDIS(r, 0, i)
- #define PPC_RAW_STDX(r, base, b)	(0x7c00012a | ___PPC_RS(r) | ___PPC_RA(base) | ___PPC_RB(b))
- #define PPC_RAW_STDU(r, base, i)	(0xf8000001 | ___PPC_RS(r) | ___PPC_RA(base) | ((i) & 0xfffc))
-@@ -472,6 +478,10 @@
- #define PPC_RAW_CMPLW(a, b)		(0x7c000040 | ___PPC_RA(a) | ___PPC_RB(b))
- #define PPC_RAW_CMPLD(a, b)		(0x7c200040 | ___PPC_RA(a) | ___PPC_RB(b))
- #define PPC_RAW_SUB(d, a, b)		(0x7c000050 | ___PPC_RT(d) | ___PPC_RB(a) | ___PPC_RA(b))
-+#define PPC_RAW_SUBFC(d, a, b)		(0x7c000010 | ___PPC_RT(d) | ___PPC_RA(a) | ___PPC_RB(b))
-+#define PPC_RAW_SUBFE(d, a, b)		(0x7c000110 | ___PPC_RT(d) | ___PPC_RA(a) | ___PPC_RB(b))
-+#define PPC_RAW_SUBFIC(d, a, i)		(0x20000000 | ___PPC_RT(d) | ___PPC_RA(a) | IMM_L(i))
-+#define PPC_RAW_SUBFZE(d, a)		(0x7c000190 | ___PPC_RT(d) | ___PPC_RA(a))
- #define PPC_RAW_MULD(d, a, b)		(0x7c0001d2 | ___PPC_RT(d) | ___PPC_RA(a) | ___PPC_RB(b))
- #define PPC_RAW_MULW(d, a, b)		(0x7c0001d6 | ___PPC_RT(d) | ___PPC_RA(a) | ___PPC_RB(b))
- #define PPC_RAW_MULHWU(d, a, b)		(0x7c000016 | ___PPC_RT(d) | ___PPC_RA(a) | ___PPC_RB(b))
-@@ -484,11 +494,13 @@
- #define PPC_RAW_DIVDEU_DOT(t, a, b)	(0x7c000312 | ___PPC_RT(t) | ___PPC_RA(a) | ___PPC_RB(b) | 0x1)
- #define PPC_RAW_AND(d, a, b)		(0x7c000038 | ___PPC_RA(d) | ___PPC_RS(a) | ___PPC_RB(b))
- #define PPC_RAW_ANDI(d, a, i)		(0x70000000 | ___PPC_RA(d) | ___PPC_RS(a) | IMM_L(i))
-+#define PPC_RAW_ANDIS(d, a, i)		(0x74000000 | ___PPC_RA(d) | ___PPC_RS(a) | IMM_L(i))
- #define PPC_RAW_AND_DOT(d, a, b)	(0x7c000039 | ___PPC_RA(d) | ___PPC_RS(a) | ___PPC_RB(b))
- #define PPC_RAW_OR(d, a, b)		(0x7c000378 | ___PPC_RA(d) | ___PPC_RS(a) | ___PPC_RB(b))
- #define PPC_RAW_MR(d, a)		PPC_RAW_OR(d, a, a)
- #define PPC_RAW_ORI(d, a, i)		(PPC_INST_ORI | ___PPC_RA(d) | ___PPC_RS(a) | IMM_L(i))
- #define PPC_RAW_ORIS(d, a, i)		(PPC_INST_ORIS | ___PPC_RA(d) | ___PPC_RS(a) | IMM_L(i))
-+#define PPC_RAW_NOR(d, a, b)		(0x7c0000f8 | ___PPC_RA(d) | ___PPC_RS(a) | ___PPC_RB(b))
- #define PPC_RAW_XOR(d, a, b)		(0x7c000278 | ___PPC_RA(d) | ___PPC_RS(a) | ___PPC_RB(b))
- #define PPC_RAW_XORI(d, a, i)		(0x68000000 | ___PPC_RA(d) | ___PPC_RS(a) | IMM_L(i))
- #define PPC_RAW_XORIS(d, a, i)		(0x6c000000 | ___PPC_RA(d) | ___PPC_RS(a) | IMM_L(i))
+diff --git a/arch/powerpc/net/Makefile b/arch/powerpc/net/Makefile
+index 52c939cef5b2..969cde177880 100644
+--- a/arch/powerpc/net/Makefile
++++ b/arch/powerpc/net/Makefile
+@@ -2,4 +2,4 @@
+ #
+ # Arch-specific network modules
+ #
+-obj-$(CONFIG_BPF_JIT) += bpf_jit_comp64.o
++obj-$(CONFIG_BPF_JIT) += bpf_jit_comp.o bpf_jit_comp64.o
+diff --git a/arch/powerpc/net/bpf_jit.h b/arch/powerpc/net/bpf_jit.h
+index b8fa6908fc5e..b34abfce15a6 100644
+--- a/arch/powerpc/net/bpf_jit.h
++++ b/arch/powerpc/net/bpf_jit.h
+@@ -143,6 +143,12 @@ static inline void bpf_set_seen_register(struct codegen_context *ctx, int i)
+ 	ctx->seen |= 1 << (31 - i);
+ }
+ 
++void bpf_jit_emit_func_call_rel(u32 *image, struct codegen_context *ctx, u64 func);
++int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, struct codegen_context *ctx,
++		       u32 *addrs, bool extra_pass);
++void bpf_jit_build_prologue(u32 *image, struct codegen_context *ctx);
++void bpf_jit_build_epilogue(u32 *image, struct codegen_context *ctx);
++
+ #endif
+ 
+ #endif
+diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
+new file mode 100644
+index 000000000000..efac89964873
+--- /dev/null
++++ b/arch/powerpc/net/bpf_jit_comp.c
+@@ -0,0 +1,269 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * eBPF JIT compiler
++ *
++ * Copyright 2016 Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
++ *		  IBM Corporation
++ *
++ * Based on the powerpc classic BPF JIT compiler by Matt Evans
++ */
++#include <linux/moduleloader.h>
++#include <asm/cacheflush.h>
++#include <asm/asm-compat.h>
++#include <linux/netdevice.h>
++#include <linux/filter.h>
++#include <linux/if_vlan.h>
++#include <asm/kprobes.h>
++#include <linux/bpf.h>
++
++#include "bpf_jit.h"
++
++static void bpf_jit_fill_ill_insns(void *area, unsigned int size)
++{
++	memset32(area, BREAKPOINT_INSTRUCTION, size / 4);
++}
++
++/* Fix the branch target addresses for subprog calls */
++static int bpf_jit_fixup_subprog_calls(struct bpf_prog *fp, u32 *image,
++				       struct codegen_context *ctx, u32 *addrs)
++{
++	const struct bpf_insn *insn = fp->insnsi;
++	bool func_addr_fixed;
++	u64 func_addr;
++	u32 tmp_idx;
++	int i, ret;
++
++	for (i = 0; i < fp->len; i++) {
++		/*
++		 * During the extra pass, only the branch target addresses for
++		 * the subprog calls need to be fixed. All other instructions
++		 * can left untouched.
++		 *
++		 * The JITed image length does not change because we already
++		 * ensure that the JITed instruction sequence for these calls
++		 * are of fixed length by padding them with NOPs.
++		 */
++		if (insn[i].code == (BPF_JMP | BPF_CALL) &&
++		    insn[i].src_reg == BPF_PSEUDO_CALL) {
++			ret = bpf_jit_get_func_addr(fp, &insn[i], true,
++						    &func_addr,
++						    &func_addr_fixed);
++			if (ret < 0)
++				return ret;
++
++			/*
++			 * Save ctx->idx as this would currently point to the
++			 * end of the JITed image and set it to the offset of
++			 * the instruction sequence corresponding to the
++			 * subprog call temporarily.
++			 */
++			tmp_idx = ctx->idx;
++			ctx->idx = addrs[i] / 4;
++			bpf_jit_emit_func_call_rel(image, ctx, func_addr);
++
++			/*
++			 * Restore ctx->idx here. This is safe as the length
++			 * of the JITed sequence remains unchanged.
++			 */
++			ctx->idx = tmp_idx;
++		}
++	}
++
++	return 0;
++}
++
++struct powerpc64_jit_data {
++	struct bpf_binary_header *header;
++	u32 *addrs;
++	u8 *image;
++	u32 proglen;
++	struct codegen_context ctx;
++};
++
++bool bpf_jit_needs_zext(void)
++{
++	return true;
++}
++
++struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
++{
++	u32 proglen;
++	u32 alloclen;
++	u8 *image = NULL;
++	u32 *code_base;
++	u32 *addrs;
++	struct powerpc64_jit_data *jit_data;
++	struct codegen_context cgctx;
++	int pass;
++	int flen;
++	struct bpf_binary_header *bpf_hdr;
++	struct bpf_prog *org_fp = fp;
++	struct bpf_prog *tmp_fp;
++	bool bpf_blinded = false;
++	bool extra_pass = false;
++
++	if (!fp->jit_requested)
++		return org_fp;
++
++	tmp_fp = bpf_jit_blind_constants(org_fp);
++	if (IS_ERR(tmp_fp))
++		return org_fp;
++
++	if (tmp_fp != org_fp) {
++		bpf_blinded = true;
++		fp = tmp_fp;
++	}
++
++	jit_data = fp->aux->jit_data;
++	if (!jit_data) {
++		jit_data = kzalloc(sizeof(*jit_data), GFP_KERNEL);
++		if (!jit_data) {
++			fp = org_fp;
++			goto out;
++		}
++		fp->aux->jit_data = jit_data;
++	}
++
++	flen = fp->len;
++	addrs = jit_data->addrs;
++	if (addrs) {
++		cgctx = jit_data->ctx;
++		image = jit_data->image;
++		bpf_hdr = jit_data->header;
++		proglen = jit_data->proglen;
++		alloclen = proglen + FUNCTION_DESCR_SIZE;
++		extra_pass = true;
++		goto skip_init_ctx;
++	}
++
++	addrs = kcalloc(flen + 1, sizeof(*addrs), GFP_KERNEL);
++	if (addrs == NULL) {
++		fp = org_fp;
++		goto out_addrs;
++	}
++
++	memset(&cgctx, 0, sizeof(struct codegen_context));
++
++	/* Make sure that the stack is quadword aligned. */
++	cgctx.stack_size = round_up(fp->aux->stack_depth, 16);
++
++	/* Scouting faux-generate pass 0 */
++	if (bpf_jit_build_body(fp, 0, &cgctx, addrs, false)) {
++		/* We hit something illegal or unsupported. */
++		fp = org_fp;
++		goto out_addrs;
++	}
++
++	/*
++	 * If we have seen a tail call, we need a second pass.
++	 * This is because bpf_jit_emit_common_epilogue() is called
++	 * from bpf_jit_emit_tail_call() with a not yet stable ctx->seen.
++	 */
++	if (cgctx.seen & SEEN_TAILCALL) {
++		cgctx.idx = 0;
++		if (bpf_jit_build_body(fp, 0, &cgctx, addrs, false)) {
++			fp = org_fp;
++			goto out_addrs;
++		}
++	}
++
++	/*
++	 * Pretend to build prologue, given the features we've seen.  This will
++	 * update ctgtx.idx as it pretends to output instructions, then we can
++	 * calculate total size from idx.
++	 */
++	bpf_jit_build_prologue(0, &cgctx);
++	bpf_jit_build_epilogue(0, &cgctx);
++
++	proglen = cgctx.idx * 4;
++	alloclen = proglen + FUNCTION_DESCR_SIZE;
++
++	bpf_hdr = bpf_jit_binary_alloc(alloclen, &image, 4, bpf_jit_fill_ill_insns);
++	if (!bpf_hdr) {
++		fp = org_fp;
++		goto out_addrs;
++	}
++
++skip_init_ctx:
++	code_base = (u32 *)(image + FUNCTION_DESCR_SIZE);
++
++	if (extra_pass) {
++		/*
++		 * Do not touch the prologue and epilogue as they will remain
++		 * unchanged. Only fix the branch target address for subprog
++		 * calls in the body.
++		 *
++		 * This does not change the offsets and lengths of the subprog
++		 * call instruction sequences and hence, the size of the JITed
++		 * image as well.
++		 */
++		bpf_jit_fixup_subprog_calls(fp, code_base, &cgctx, addrs);
++
++		/* There is no need to perform the usual passes. */
++		goto skip_codegen_passes;
++	}
++
++	/* Code generation passes 1-2 */
++	for (pass = 1; pass < 3; pass++) {
++		/* Now build the prologue, body code & epilogue for real. */
++		cgctx.idx = 0;
++		bpf_jit_build_prologue(code_base, &cgctx);
++		bpf_jit_build_body(fp, code_base, &cgctx, addrs, extra_pass);
++		bpf_jit_build_epilogue(code_base, &cgctx);
++
++		if (bpf_jit_enable > 1)
++			pr_info("Pass %d: shrink = %d, seen = 0x%x\n", pass,
++				proglen - (cgctx.idx * 4), cgctx.seen);
++	}
++
++skip_codegen_passes:
++	if (bpf_jit_enable > 1)
++		/*
++		 * Note that we output the base address of the code_base
++		 * rather than image, since opcodes are in code_base.
++		 */
++		bpf_jit_dump(flen, proglen, pass, code_base);
++
++#ifdef PPC64_ELF_ABI_v1
++	/* Function descriptor nastiness: Address + TOC */
++	((u64 *)image)[0] = (u64)code_base;
++	((u64 *)image)[1] = local_paca->kernel_toc;
++#endif
++
++	fp->bpf_func = (void *)image;
++	fp->jited = 1;
++	fp->jited_len = alloclen;
++
++	bpf_flush_icache(bpf_hdr, (u8 *)bpf_hdr + (bpf_hdr->pages * PAGE_SIZE));
++	if (!fp->is_func || extra_pass) {
++		bpf_prog_fill_jited_linfo(fp, addrs);
++out_addrs:
++		kfree(addrs);
++		kfree(jit_data);
++		fp->aux->jit_data = NULL;
++	} else {
++		jit_data->addrs = addrs;
++		jit_data->ctx = cgctx;
++		jit_data->proglen = proglen;
++		jit_data->image = image;
++		jit_data->header = bpf_hdr;
++	}
++
++out:
++	if (bpf_blinded)
++		bpf_jit_prog_release_other(fp, fp == org_fp ? tmp_fp : org_fp);
++
++	return fp;
++}
++
++/* Overriding bpf_jit_free() as we don't set images read-only. */
++void bpf_jit_free(struct bpf_prog *fp)
++{
++	unsigned long addr = (unsigned long)fp->bpf_func & PAGE_MASK;
++	struct bpf_binary_header *bpf_hdr = (void *)addr;
++
++	if (fp->jited)
++		bpf_jit_binary_free(bpf_hdr);
++
++	bpf_prog_unlock_free(fp);
++}
+diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
+index 111451bc5cc0..8a1f9fb00e78 100644
+--- a/arch/powerpc/net/bpf_jit_comp64.c
++++ b/arch/powerpc/net/bpf_jit_comp64.c
+@@ -18,11 +18,6 @@
+ 
+ #include "bpf_jit64.h"
+ 
+-static void bpf_jit_fill_ill_insns(void *area, unsigned int size)
+-{
+-	memset32(area, BREAKPOINT_INSTRUCTION, size/4);
+-}
+-
+ static inline bool bpf_has_stack_frame(struct codegen_context *ctx)
+ {
+ 	/*
+@@ -69,7 +64,7 @@ static int bpf_jit_stack_offsetof(struct codegen_context *ctx, int reg)
+ 	BUG();
+ }
+ 
+-static void bpf_jit_build_prologue(u32 *image, struct codegen_context *ctx)
++void bpf_jit_build_prologue(u32 *image, struct codegen_context *ctx)
+ {
+ 	int i;
+ 
+@@ -136,7 +131,7 @@ static void bpf_jit_emit_common_epilogue(u32 *image, struct codegen_context *ctx
+ 	}
+ }
+ 
+-static void bpf_jit_build_epilogue(u32 *image, struct codegen_context *ctx)
++void bpf_jit_build_epilogue(u32 *image, struct codegen_context *ctx)
+ {
+ 	bpf_jit_emit_common_epilogue(image, ctx);
+ 
+@@ -171,8 +166,7 @@ static void bpf_jit_emit_func_call_hlp(u32 *image, struct codegen_context *ctx,
+ 	EMIT(PPC_RAW_BLRL());
+ }
+ 
+-static void bpf_jit_emit_func_call_rel(u32 *image, struct codegen_context *ctx,
+-				       u64 func)
++void bpf_jit_emit_func_call_rel(u32 *image, struct codegen_context *ctx, u64 func)
+ {
+ 	unsigned int i, ctx_idx = ctx->idx;
+ 
+@@ -273,9 +267,8 @@ static void bpf_jit_emit_tail_call(u32 *image, struct codegen_context *ctx, u32
+ }
+ 
+ /* Assemble the body code between the prologue & epilogue */
+-static int bpf_jit_build_body(struct bpf_prog *fp, u32 *image,
+-			      struct codegen_context *ctx,
+-			      u32 *addrs, bool extra_pass)
++int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, struct codegen_context *ctx,
++		       u32 *addrs, bool extra_pass)
+ {
+ 	const struct bpf_insn *insn = fp->insnsi;
+ 	int flen = fp->len;
+@@ -1010,249 +1003,3 @@ static int bpf_jit_build_body(struct bpf_prog *fp, u32 *image,
+ 
+ 	return 0;
+ }
+-
+-/* Fix the branch target addresses for subprog calls */
+-static int bpf_jit_fixup_subprog_calls(struct bpf_prog *fp, u32 *image,
+-				       struct codegen_context *ctx, u32 *addrs)
+-{
+-	const struct bpf_insn *insn = fp->insnsi;
+-	bool func_addr_fixed;
+-	u64 func_addr;
+-	u32 tmp_idx;
+-	int i, ret;
+-
+-	for (i = 0; i < fp->len; i++) {
+-		/*
+-		 * During the extra pass, only the branch target addresses for
+-		 * the subprog calls need to be fixed. All other instructions
+-		 * can left untouched.
+-		 *
+-		 * The JITed image length does not change because we already
+-		 * ensure that the JITed instruction sequence for these calls
+-		 * are of fixed length by padding them with NOPs.
+-		 */
+-		if (insn[i].code == (BPF_JMP | BPF_CALL) &&
+-		    insn[i].src_reg == BPF_PSEUDO_CALL) {
+-			ret = bpf_jit_get_func_addr(fp, &insn[i], true,
+-						    &func_addr,
+-						    &func_addr_fixed);
+-			if (ret < 0)
+-				return ret;
+-
+-			/*
+-			 * Save ctx->idx as this would currently point to the
+-			 * end of the JITed image and set it to the offset of
+-			 * the instruction sequence corresponding to the
+-			 * subprog call temporarily.
+-			 */
+-			tmp_idx = ctx->idx;
+-			ctx->idx = addrs[i] / 4;
+-			bpf_jit_emit_func_call_rel(image, ctx, func_addr);
+-
+-			/*
+-			 * Restore ctx->idx here. This is safe as the length
+-			 * of the JITed sequence remains unchanged.
+-			 */
+-			ctx->idx = tmp_idx;
+-		}
+-	}
+-
+-	return 0;
+-}
+-
+-struct powerpc64_jit_data {
+-	struct bpf_binary_header *header;
+-	u32 *addrs;
+-	u8 *image;
+-	u32 proglen;
+-	struct codegen_context ctx;
+-};
+-
+-bool bpf_jit_needs_zext(void)
+-{
+-	return true;
+-}
+-
+-struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
+-{
+-	u32 proglen;
+-	u32 alloclen;
+-	u8 *image = NULL;
+-	u32 *code_base;
+-	u32 *addrs;
+-	struct powerpc64_jit_data *jit_data;
+-	struct codegen_context cgctx;
+-	int pass;
+-	int flen;
+-	struct bpf_binary_header *bpf_hdr;
+-	struct bpf_prog *org_fp = fp;
+-	struct bpf_prog *tmp_fp;
+-	bool bpf_blinded = false;
+-	bool extra_pass = false;
+-
+-	if (!fp->jit_requested)
+-		return org_fp;
+-
+-	tmp_fp = bpf_jit_blind_constants(org_fp);
+-	if (IS_ERR(tmp_fp))
+-		return org_fp;
+-
+-	if (tmp_fp != org_fp) {
+-		bpf_blinded = true;
+-		fp = tmp_fp;
+-	}
+-
+-	jit_data = fp->aux->jit_data;
+-	if (!jit_data) {
+-		jit_data = kzalloc(sizeof(*jit_data), GFP_KERNEL);
+-		if (!jit_data) {
+-			fp = org_fp;
+-			goto out;
+-		}
+-		fp->aux->jit_data = jit_data;
+-	}
+-
+-	flen = fp->len;
+-	addrs = jit_data->addrs;
+-	if (addrs) {
+-		cgctx = jit_data->ctx;
+-		image = jit_data->image;
+-		bpf_hdr = jit_data->header;
+-		proglen = jit_data->proglen;
+-		alloclen = proglen + FUNCTION_DESCR_SIZE;
+-		extra_pass = true;
+-		goto skip_init_ctx;
+-	}
+-
+-	addrs = kcalloc(flen + 1, sizeof(*addrs), GFP_KERNEL);
+-	if (addrs == NULL) {
+-		fp = org_fp;
+-		goto out_addrs;
+-	}
+-
+-	memset(&cgctx, 0, sizeof(struct codegen_context));
+-
+-	/* Make sure that the stack is quadword aligned. */
+-	cgctx.stack_size = round_up(fp->aux->stack_depth, 16);
+-
+-	/* Scouting faux-generate pass 0 */
+-	if (bpf_jit_build_body(fp, 0, &cgctx, addrs, false)) {
+-		/* We hit something illegal or unsupported. */
+-		fp = org_fp;
+-		goto out_addrs;
+-	}
+-
+-	/*
+-	 * If we have seen a tail call, we need a second pass.
+-	 * This is because bpf_jit_emit_common_epilogue() is called
+-	 * from bpf_jit_emit_tail_call() with a not yet stable ctx->seen.
+-	 */
+-	if (cgctx.seen & SEEN_TAILCALL) {
+-		cgctx.idx = 0;
+-		if (bpf_jit_build_body(fp, 0, &cgctx, addrs, false)) {
+-			fp = org_fp;
+-			goto out_addrs;
+-		}
+-	}
+-
+-	/*
+-	 * Pretend to build prologue, given the features we've seen.  This will
+-	 * update ctgtx.idx as it pretends to output instructions, then we can
+-	 * calculate total size from idx.
+-	 */
+-	bpf_jit_build_prologue(0, &cgctx);
+-	bpf_jit_build_epilogue(0, &cgctx);
+-
+-	proglen = cgctx.idx * 4;
+-	alloclen = proglen + FUNCTION_DESCR_SIZE;
+-
+-	bpf_hdr = bpf_jit_binary_alloc(alloclen, &image, 4,
+-			bpf_jit_fill_ill_insns);
+-	if (!bpf_hdr) {
+-		fp = org_fp;
+-		goto out_addrs;
+-	}
+-
+-skip_init_ctx:
+-	code_base = (u32 *)(image + FUNCTION_DESCR_SIZE);
+-
+-	if (extra_pass) {
+-		/*
+-		 * Do not touch the prologue and epilogue as they will remain
+-		 * unchanged. Only fix the branch target address for subprog
+-		 * calls in the body.
+-		 *
+-		 * This does not change the offsets and lengths of the subprog
+-		 * call instruction sequences and hence, the size of the JITed
+-		 * image as well.
+-		 */
+-		bpf_jit_fixup_subprog_calls(fp, code_base, &cgctx, addrs);
+-
+-		/* There is no need to perform the usual passes. */
+-		goto skip_codegen_passes;
+-	}
+-
+-	/* Code generation passes 1-2 */
+-	for (pass = 1; pass < 3; pass++) {
+-		/* Now build the prologue, body code & epilogue for real. */
+-		cgctx.idx = 0;
+-		bpf_jit_build_prologue(code_base, &cgctx);
+-		bpf_jit_build_body(fp, code_base, &cgctx, addrs, extra_pass);
+-		bpf_jit_build_epilogue(code_base, &cgctx);
+-
+-		if (bpf_jit_enable > 1)
+-			pr_info("Pass %d: shrink = %d, seen = 0x%x\n", pass,
+-				proglen - (cgctx.idx * 4), cgctx.seen);
+-	}
+-
+-skip_codegen_passes:
+-	if (bpf_jit_enable > 1)
+-		/*
+-		 * Note that we output the base address of the code_base
+-		 * rather than image, since opcodes are in code_base.
+-		 */
+-		bpf_jit_dump(flen, proglen, pass, code_base);
+-
+-#ifdef PPC64_ELF_ABI_v1
+-	/* Function descriptor nastiness: Address + TOC */
+-	((u64 *)image)[0] = (u64)code_base;
+-	((u64 *)image)[1] = local_paca->kernel_toc;
+-#endif
+-
+-	fp->bpf_func = (void *)image;
+-	fp->jited = 1;
+-	fp->jited_len = alloclen;
+-
+-	bpf_flush_icache(bpf_hdr, (u8 *)bpf_hdr + (bpf_hdr->pages * PAGE_SIZE));
+-	if (!fp->is_func || extra_pass) {
+-		bpf_prog_fill_jited_linfo(fp, addrs);
+-out_addrs:
+-		kfree(addrs);
+-		kfree(jit_data);
+-		fp->aux->jit_data = NULL;
+-	} else {
+-		jit_data->addrs = addrs;
+-		jit_data->ctx = cgctx;
+-		jit_data->proglen = proglen;
+-		jit_data->image = image;
+-		jit_data->header = bpf_hdr;
+-	}
+-
+-out:
+-	if (bpf_blinded)
+-		bpf_jit_prog_release_other(fp, fp == org_fp ? tmp_fp : org_fp);
+-
+-	return fp;
+-}
+-
+-/* Overriding bpf_jit_free() as we don't set images read-only. */
+-void bpf_jit_free(struct bpf_prog *fp)
+-{
+-	unsigned long addr = (unsigned long)fp->bpf_func & PAGE_MASK;
+-	struct bpf_binary_header *bpf_hdr = (void *)addr;
+-
+-	if (fp->jited)
+-		bpf_jit_binary_free(bpf_hdr);
+-
+-	bpf_prog_unlock_free(fp);
+-}
 -- 
 2.25.0
 
