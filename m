@@ -2,113 +2,110 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 37C0FC433C1
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 41C49C433E2
 	for <bpf@archiver.kernel.org>; Mon, 22 Mar 2021 06:40:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 094FD6197A
+	by mail.kernel.org (Postfix) with ESMTP id 1989F61980
 	for <bpf@archiver.kernel.org>; Mon, 22 Mar 2021 06:40:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229883AbhCVGkD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 22 Mar 2021 02:40:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:26714 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229613AbhCVGjy (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 22 Mar 2021 02:39:54 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1616395193;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+8IdJoevmZWZkG/xLGUFXkRYS+Hb9spepADHELKX9Y4=;
-        b=AMDxt6rl7jncpO0Z2t5j8cTg8JXGdJ6UdVyH8McHP4wi/bBi4wavi6PAjeaZIQaHk1fLxu
-        zjXejB5fe7l6Tts9pxqGOcTZy6YwWclKTBWnYKNFQCQjZONBESEqRr7En9sC9zY7ajWZWj
-        2fxRTZy2ZKA3/dK4uIFsy6kr7NZnQv0=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-548-xTgY-9tOOiS_dvN7WEO70Q-1; Mon, 22 Mar 2021 02:39:51 -0400
-X-MC-Unique: xTgY-9tOOiS_dvN7WEO70Q-1
-Received: by mail-wr1-f71.google.com with SMTP id y5so25500644wrp.2
-        for <bpf@vger.kernel.org>; Sun, 21 Mar 2021 23:39:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+8IdJoevmZWZkG/xLGUFXkRYS+Hb9spepADHELKX9Y4=;
-        b=FEXWSjE3Ge0txHdniBV9pJ+voNiKBbsj9GRlJDjMdW2ei064VdtLSbAL+yL+FMw5Uu
-         JrG1e2vPA1+TjL1eHbiMGLG7G80QNSAiatMkA1JwPPi7rLX4algrrA8qDCYRSZps8xzB
-         641B3SVtlynKdYJ90y+PT759CLFGDeqHHY6ML5R/thzXmyfQuest8B3hnJLjU4ro9++j
-         AJ344SUEAI4c5uTNbcm9oPBdZ0PCXd1yEMilXH8Y6Kw7cdkP3gS1RxYAOyOOxi2DjYzH
-         nXnFOuohmz6xczm1hGpqmjoF+zTHrF4KHdXyDpri1jceJYOzY/esFfPGi6mMnjphrNz1
-         x98Q==
-X-Gm-Message-State: AOAM532Wsu3d0lQZH8k99bIGYeW1M8X9BU+l3sb+Ed7QGlJF1nDd5b3o
-        oNpDWYBwvv7OX07KgGHhHjOUWmIFFk/kZbP20c1FTIsSlLDmPUbYZJzsqoSXiNXGL9Gdc4JR/Or
-        L5JJaEg/0rpuA9CKY9IGkYcwksAaS
-X-Received: by 2002:a5d:538d:: with SMTP id d13mr16678121wrv.92.1616395190093;
-        Sun, 21 Mar 2021 23:39:50 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJygnULs6gPuCcPzqFMrRaHkwnKJYoC4WCJjzIHHRivv+fBRfyqKdQqeRbqjfG1Slpanjds7JbTo4EdRD3Sw55o=
-X-Received: by 2002:a5d:538d:: with SMTP id d13mr16678113wrv.92.1616395189972;
- Sun, 21 Mar 2021 23:39:49 -0700 (PDT)
+        id S229952AbhCVGkF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 22 Mar 2021 02:40:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55094 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229696AbhCVGkC (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 22 Mar 2021 02:40:02 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0795661937;
+        Mon, 22 Mar 2021 06:39:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1616395201;
+        bh=cuK8J78AbxfogMJXXKkEvrxRm/eRUIxTyi0pKFZ7yKc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ljGCC+S/SckAu0vC7+pQbMcPA4wbWJ8+Ti4LlO+ombgcxWh1Iv+y4UckafviNI+hv
+         P4D61d+7L9dR5eSsoMBEDaYIjMrlDWgeLIc0eD/hH/pukbomfCGly4YekhNchlOAmK
+         ju8DTlfMSB1u4gVLLXGI4WE523WJRo99TvFOhKSR2tfR7IUakabYqQJO0Q8MgrBBrt
+         yLyrgvfN1i/eR7JxwQNbnc3d6jevgR1xKiI1YbPem2XWz0ZRLJEzbw7FGrArfLyo49
+         hDKL3nsrt74aewflcHJjCC3HR7DhJw3kDrdYmEq0+wWskh9AGtxhLL/R2QRyXLlv0P
+         0nJuF5+WZUssA==
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@kernel.org>
+Cc:     X86 ML <x86@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>,
+        Daniel Xu <dxu@dxuuu.xyz>, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, kuba@kernel.org, mingo@redhat.com,
+        ast@kernel.org, tglx@linutronix.de, kernel-team@fb.com, yhs@fb.com,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        linux-ia64@vger.kernel.org,
+        Abhishek Sagar <sagar.abhishek@gmail.com>
+Subject: [PATCH -tip v4 01/12] ia64: kprobes: Fix to pass correct trampoline address to the handler
+Date:   Mon, 22 Mar 2021 15:39:55 +0900
+Message-Id: <161639519485.895304.12333883738312999681.stgit@devnote2>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <161639518354.895304.15627519393073806809.stgit@devnote2>
+References: <161639518354.895304.15627519393073806809.stgit@devnote2>
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-References: <20210320000001.915366-1-sdf@google.com>
-In-Reply-To: <20210320000001.915366-1-sdf@google.com>
-From:   Yauheni Kaliuta <ykaliuta@redhat.com>
-Date:   Mon, 22 Mar 2021 08:39:34 +0200
-Message-ID: <CANoWswkz33qw4_QOcdbVg4=DjM9SHQwgvj5ef+UGdMUxt4MgNg@mail.gmail.com>
-Subject: Re: [PATCH bpf] bpf: use NOP_ATOMIC5 instead of emit_nops(&prog, 5)
- for BPF_TRAMP_F_CALL_ORIG
-To:     Stanislav Fomichev <sdf@google.com>
-Cc:     netdev@vger.kernel.org, bpf <bpf@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sat, Mar 20, 2021 at 2:01 AM Stanislav Fomichev <sdf@google.com> wrote:
->
-> __bpf_arch_text_poke does rewrite only for atomic nop5, emit_nops(xxx, 5)
-> emits non-atomic one which breaks fentry/fexit with k8 atomics:
->
-> P6_NOP5 == P6_NOP5_ATOMIC (0f1f440000 == 0f1f440000)
-> K8_NOP5 != K8_NOP5_ATOMIC (6666906690 != 6666666690)
->
-> Can be reproduced by doing "ideal_nops = k8_nops" in "arch_init_ideal_nops()
-> and running fexit_bpf2bpf selftest.
->
-> Fixes: e21aa341785c ("bpf: Fix fexit trampoline.")
-> Signed-off-by: Stanislav Fomichev <sdf@google.com>
+Commit e792ff804f49 ("ia64: kprobes: Use generic kretprobe trampoline handler")
+missed to pass the wrong trampoline address (it passes the descriptor address
+instead of function entry address).
+This fixes it to pass correct trampoline address to __kretprobe_trampoline_handler().
+This also changes to use correct symbol dereference function to get the
+function address from the kretprobe_trampoline.
 
-Could you mention x86 in the subject?
+Fixes: e792ff804f49 ("ia64: kprobes: Use generic kretprobe trampoline handler")
+Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+---
+ arch/ia64/kernel/kprobes.c |    9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-> ---
->  arch/x86/net/bpf_jit_comp.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-> index 72b5a57e9e31..b35fc8023884 100644
-> --- a/arch/x86/net/bpf_jit_comp.c
-> +++ b/arch/x86/net/bpf_jit_comp.c
-> @@ -2012,7 +2012,8 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image, void *i
->                 /* remember return value in a stack for bpf prog to access */
->                 emit_stx(&prog, BPF_DW, BPF_REG_FP, BPF_REG_0, -8);
->                 im->ip_after_call = prog;
-> -               emit_nops(&prog, 5);
-> +               memcpy(prog, ideal_nops[NOP_ATOMIC5], X86_PATCH_SIZE);
-> +               prog += X86_PATCH_SIZE;
->         }
->
->         if (fmod_ret->nr_progs) {
-> --
-> 2.31.0.rc2.261.g7f71774620-goog
->
-
-
--- 
-WBR, Yauheni
+diff --git a/arch/ia64/kernel/kprobes.c b/arch/ia64/kernel/kprobes.c
+index fc1ff8a4d7de..006fbc1d7ae9 100644
+--- a/arch/ia64/kernel/kprobes.c
++++ b/arch/ia64/kernel/kprobes.c
+@@ -398,7 +398,8 @@ static void kretprobe_trampoline(void)
+ 
+ int __kprobes trampoline_probe_handler(struct kprobe *p, struct pt_regs *regs)
+ {
+-	regs->cr_iip = __kretprobe_trampoline_handler(regs, kretprobe_trampoline, NULL);
++	regs->cr_iip = __kretprobe_trampoline_handler(regs,
++		dereference_function_descriptor(kretprobe_trampoline), NULL);
+ 	/*
+ 	 * By returning a non-zero value, we are telling
+ 	 * kprobe_handler() that we don't want the post_handler
+@@ -414,7 +415,7 @@ void __kprobes arch_prepare_kretprobe(struct kretprobe_instance *ri,
+ 	ri->fp = NULL;
+ 
+ 	/* Replace the return addr with trampoline addr */
+-	regs->b0 = ((struct fnptr *)kretprobe_trampoline)->ip;
++	regs->b0 = (unsigned long)dereference_function_descriptor(kretprobe_trampoline);
+ }
+ 
+ /* Check the instruction in the slot is break */
+@@ -918,14 +919,14 @@ static struct kprobe trampoline_p = {
+ int __init arch_init_kprobes(void)
+ {
+ 	trampoline_p.addr =
+-		(kprobe_opcode_t *)((struct fnptr *)kretprobe_trampoline)->ip;
++		dereference_function_description(kretprobe_trampoline);
+ 	return register_kprobe(&trampoline_p);
+ }
+ 
+ int __kprobes arch_trampoline_kprobe(struct kprobe *p)
+ {
+ 	if (p->addr ==
+-		(kprobe_opcode_t *)((struct fnptr *)kretprobe_trampoline)->ip)
++		dereference_function_descriptor(kretprobe_trampoline))
+ 		return 1;
+ 
+ 	return 0;
 
