@@ -4,33 +4,33 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-19.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5ADBFC433DB
-	for <bpf@archiver.kernel.org>; Mon, 22 Mar 2021 06:41:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 21A36C433DB
+	for <bpf@archiver.kernel.org>; Mon, 22 Mar 2021 06:41:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2B39761937
-	for <bpf@archiver.kernel.org>; Mon, 22 Mar 2021 06:41:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F10ED61973
+	for <bpf@archiver.kernel.org>; Mon, 22 Mar 2021 06:41:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230032AbhCVGkg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 22 Mar 2021 02:40:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55190 "EHLO mail.kernel.org"
+        id S230085AbhCVGlK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 22 Mar 2021 02:41:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55560 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229547AbhCVGkQ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 22 Mar 2021 02:40:16 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D86216196C;
-        Mon, 22 Mar 2021 06:40:09 +0000 (UTC)
+        id S230187AbhCVGlC (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 22 Mar 2021 02:41:02 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CC7086196F;
+        Mon, 22 Mar 2021 06:40:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616395213;
-        bh=gA6qym6a5DphTZNgwFeBr65Ji0n4GlNkaWEMJsVYqfk=;
+        s=k20201202; t=1616395262;
+        bh=KEe5WdEyJHtzuPMGzpiocUmfrX3xOnunn5dZvpKwBh8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EQmSQVVQLNaoATR1TaUewU07MZAlNETEaK539O1cJCXDc37zn5saeX0v3eu+PE/BN
-         Z/fhNXeh4DwTWrDFZ8AZmKqwaZsc8LYglPWGQpBfjZ0flC4ltDdr9ZN1q2UR/G4YVf
-         sD8S7uiiD9zCNEbc74f8mxtBiFvty6ipnfU7rabrkc3lna9l0/pJpkxiCuGzcTlx1G
-         aaQ3EP/dZCQoJ2MyveUV+XaPfxk2dcj4Q4PvZt8CIbtbnxjqE7qbWLnjybJVvVpCQq
-         AUw2Lmq875BQYREr0TSn613RWYhu0U63yR1eFWr1tpXdgR4FIiTcv39iHugK7pFT/7
-         N2AKXqZckLUrQ==
+        b=uSS1kzS++kF0uS+qbAjz0L4wI3961Clam/xUI5ICyHJ9NuA+LnYReOip/uDh3tt41
+         MTuAzBQ7cNYUqFIjOg9h/c24LelxaVfPqZv7jXGTgfE9Fsr/vv5G96P395xI+1aKGB
+         37a65IZ4iKYlngkLm5NCD5CCsg10Ym9I+Nw3IeOQBQAQLh2WKfxkktN6D/PFO2MZUk
+         NMYumkCwLxhQcW0z6wzwq4AVrlEuZx3nf2Y6a66CrtJ/sJnwgFCWrMhJ9AeEUvI6kz
+         M/LozB6iIWOZVLfdFZ+gDeerW9qeRGc4IChfdIx3uOc89D5VcKx7oqCmWd7RJ1lxFe
+         8MbG/3f773nmA==
 From:   Masami Hiramatsu <mhiramat@kernel.org>
 To:     Steven Rostedt <rostedt@goodmis.org>,
         Ingo Molnar <mingo@kernel.org>
@@ -41,9 +41,9 @@ Cc:     X86 ML <x86@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>,
         Josh Poimboeuf <jpoimboe@redhat.com>,
         linux-ia64@vger.kernel.org,
         Abhishek Sagar <sagar.abhishek@gmail.com>
-Subject: [PATCH -tip v4 02/12] kprobes: treewide: Replace arch_deref_entry_point() with dereference_function_descriptor()
-Date:   Mon, 22 Mar 2021 15:40:07 +0900
-Message-Id: <161639520703.895304.14963399769218643957.stgit@devnote2>
+Subject: [PATCH -tip v4 06/12] ARC: Add instruction_pointer_set() API
+Date:   Mon, 22 Mar 2021 15:40:51 +0900
+Message-Id: <161639525131.895304.18317148642604879905.stgit@devnote2>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <161639518354.895304.15627519393073806809.stgit@devnote2>
 References: <161639518354.895304.15627519393073806809.stgit@devnote2>
@@ -55,112 +55,27 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Replace arch_deref_entry_point() with dereference_function_descriptor()
-because those are doing same thing.
+Add instruction_pointer_set() API for arc.
 
 Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
 ---
- arch/ia64/kernel/kprobes.c    |    5 -----
- arch/powerpc/kernel/kprobes.c |   11 -----------
- include/linux/kprobes.h       |    1 -
- kernel/kprobes.c              |    7 +------
- lib/error-inject.c            |    3 ++-
- 5 files changed, 3 insertions(+), 24 deletions(-)
+ arch/arc/include/asm/ptrace.h |    5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/arch/ia64/kernel/kprobes.c b/arch/ia64/kernel/kprobes.c
-index 006fbc1d7ae9..15871eb170c0 100644
---- a/arch/ia64/kernel/kprobes.c
-+++ b/arch/ia64/kernel/kprobes.c
-@@ -907,11 +907,6 @@ int __kprobes kprobe_exceptions_notify(struct notifier_block *self,
- 	return ret;
+diff --git a/arch/arc/include/asm/ptrace.h b/arch/arc/include/asm/ptrace.h
+index 4c3c9be5bd16..cca8d6583e31 100644
+--- a/arch/arc/include/asm/ptrace.h
++++ b/arch/arc/include/asm/ptrace.h
+@@ -149,6 +149,11 @@ static inline long regs_return_value(struct pt_regs *regs)
+ 	return (long)regs->r0;
  }
  
--unsigned long arch_deref_entry_point(void *entry)
--{
--	return ((struct fnptr *)entry)->ip;
--}
--
- static struct kprobe trampoline_p = {
- 	.pre_handler = trampoline_probe_handler
- };
-diff --git a/arch/powerpc/kernel/kprobes.c b/arch/powerpc/kernel/kprobes.c
-index 01ab2163659e..eb0460949e1b 100644
---- a/arch/powerpc/kernel/kprobes.c
-+++ b/arch/powerpc/kernel/kprobes.c
-@@ -539,17 +539,6 @@ int kprobe_fault_handler(struct pt_regs *regs, int trapnr)
- }
- NOKPROBE_SYMBOL(kprobe_fault_handler);
++static inline void instruction_pointer_set(struct pt_regs *regs,
++					   unsigned long val)
++{
++	instruction_pointer(regs) = val;
++}
+ #endif /* !__ASSEMBLY__ */
  
--unsigned long arch_deref_entry_point(void *entry)
--{
--#ifdef PPC64_ELF_ABI_v1
--	if (!kernel_text_address((unsigned long)entry))
--		return ppc_global_function_entry(entry);
--	else
--#endif
--		return (unsigned long)entry;
--}
--NOKPROBE_SYMBOL(arch_deref_entry_point);
--
- static struct kprobe trampoline_p = {
- 	.addr = (kprobe_opcode_t *) &kretprobe_trampoline,
- 	.pre_handler = trampoline_probe_handler
-diff --git a/include/linux/kprobes.h b/include/linux/kprobes.h
-index 1883a4a9f16a..d65c041b5c22 100644
---- a/include/linux/kprobes.h
-+++ b/include/linux/kprobes.h
-@@ -390,7 +390,6 @@ int register_kprobe(struct kprobe *p);
- void unregister_kprobe(struct kprobe *p);
- int register_kprobes(struct kprobe **kps, int num);
- void unregister_kprobes(struct kprobe **kps, int num);
--unsigned long arch_deref_entry_point(void *);
- 
- int register_kretprobe(struct kretprobe *rp);
- void unregister_kretprobe(struct kretprobe *rp);
-diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-index 745f08fdd7a6..2913de07f4a3 100644
---- a/kernel/kprobes.c
-+++ b/kernel/kprobes.c
-@@ -1856,11 +1856,6 @@ static struct notifier_block kprobe_exceptions_nb = {
- 	.priority = 0x7fffffff /* we need to be notified first */
- };
- 
--unsigned long __weak arch_deref_entry_point(void *entry)
--{
--	return (unsigned long)entry;
--}
--
- #ifdef CONFIG_KRETPROBES
- 
- unsigned long __kretprobe_trampoline_handler(struct pt_regs *regs,
-@@ -2324,7 +2319,7 @@ static int __init populate_kprobe_blacklist(unsigned long *start,
- 	int ret;
- 
- 	for (iter = start; iter < end; iter++) {
--		entry = arch_deref_entry_point((void *)*iter);
-+		entry = (unsigned long)dereference_function_descriptor((void *)*iter);
- 		ret = kprobe_add_ksym_blacklist(entry);
- 		if (ret == -EINVAL)
- 			continue;
-diff --git a/lib/error-inject.c b/lib/error-inject.c
-index c73651b15b76..f71875ac5f9f 100644
---- a/lib/error-inject.c
-+++ b/lib/error-inject.c
-@@ -8,6 +8,7 @@
- #include <linux/mutex.h>
- #include <linux/list.h>
- #include <linux/slab.h>
-+#include <asm/sections.h>
- 
- /* Whitelist of symbols that can be overridden for error injection. */
- static LIST_HEAD(error_injection_list);
-@@ -64,7 +65,7 @@ static void populate_error_injection_list(struct error_injection_entry *start,
- 
- 	mutex_lock(&ei_mutex);
- 	for (iter = start; iter < end; iter++) {
--		entry = arch_deref_entry_point((void *)iter->addr);
-+		entry = (unsigned long)dereference_function_descriptor((void *)iter->addr);
- 
- 		if (!kernel_text_address(entry) ||
- 		    !kallsyms_lookup_size_offset(entry, &size, &offset)) {
+ #endif /* __ASM_PTRACE_H */
 
