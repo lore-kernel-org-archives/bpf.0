@@ -7,40 +7,40 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C252BC433C1
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E679CC433E1
 	for <bpf@archiver.kernel.org>; Mon, 22 Mar 2021 21:10:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 97E11619A4
+	by mail.kernel.org (Postfix) with ESMTP id BD446619AA
 	for <bpf@archiver.kernel.org>; Mon, 22 Mar 2021 21:10:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231699AbhCVVKE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 22 Mar 2021 17:10:04 -0400
-Received: from mga01.intel.com ([192.55.52.88]:4966 "EHLO mga01.intel.com"
+        id S230331AbhCVVKH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 22 Mar 2021 17:10:07 -0400
+Received: from mga01.intel.com ([192.55.52.88]:4992 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231168AbhCVVJb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 22 Mar 2021 17:09:31 -0400
-IronPort-SDR: XLDbfUrwiAbvfOhsgjDVj3KoCaSI8EX7tJZ4sG2GfsJfzIauNDSrt56Fz6jhxETJXD2Gn0Biea
- ekJj2Dr4A7yg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9931"; a="210423769"
+        id S231179AbhCVVJf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 22 Mar 2021 17:09:35 -0400
+IronPort-SDR: v3fvxF5OEMuLfyUDviOefUKwfoNZPe764NgCtEzj4Tg+uCFhz1CVPwJe3XKFJotDsWqiVlzDEE
+ OXi4j4q/o+RQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9931"; a="210423777"
 X-IronPort-AV: E=Sophos;i="5.81,269,1610438400"; 
-   d="scan'208";a="210423769"
+   d="scan'208";a="210423777"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2021 14:09:31 -0700
-IronPort-SDR: LwaEYfYU+nygQkXik9MooVGx6pVUu6CowfO8It664qwK8fE+33KrRdmd2Y8zl/1ywsgN/7pe+F
- 8oFhFPbwRV5A==
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2021 14:09:35 -0700
+IronPort-SDR: JLh01sEw3vyw4Ur3m1KiqpMWghaoL+SJTZpkkVFzsBbWvWHGx6bedf1h15FlUyxCpuR7naSHAS
+ 1adTckBPkapg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.81,269,1610438400"; 
-   d="scan'208";a="513448914"
+   d="scan'208";a="513448934"
 Received: from ranger.igk.intel.com ([10.102.21.164])
-  by fmsmga001.fm.intel.com with ESMTP; 22 Mar 2021 14:09:29 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 22 Mar 2021 14:09:33 -0700
 From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 To:     bpf@vger.kernel.org, netdev@vger.kernel.org, daniel@iogearbox.net,
         ast@kernel.org
 Cc:     bjorn.topel@intel.com, magnus.karlsson@intel.com,
         ciara.loftus@intel.com, john.fastabend@gmail.com, toke@redhat.com
-Subject: [PATCH v3 bpf-next 15/17] selftests: xsk: remove thread attribute
-Date:   Mon, 22 Mar 2021 21:58:14 +0100
-Message-Id: <20210322205816.65159-16-maciej.fijalkowski@intel.com>
+Subject: [PATCH v3 bpf-next 17/17] selftests: xsk: Remove unused defines
+Date:   Mon, 22 Mar 2021 21:58:16 +0100
+Message-Id: <20210322205816.65159-18-maciej.fijalkowski@intel.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20210322205816.65159-1-maciej.fijalkowski@intel.com>
 References: <20210322205816.65159-1-maciej.fijalkowski@intel.com>
@@ -53,72 +53,57 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Björn Töpel <bjorn.topel@intel.com>
 
-There is really no reason to have a non-default thread stack
-size. Remove that.
+Remove two unused defines.
 
 Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
 ---
- tools/testing/selftests/bpf/xdpxceiver.c | 9 ++-------
+ tools/testing/selftests/bpf/xdpxceiver.c | 7 +++----
  tools/testing/selftests/bpf/xdpxceiver.h | 2 --
- 2 files changed, 2 insertions(+), 9 deletions(-)
+ 2 files changed, 3 insertions(+), 6 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/xdpxceiver.c b/tools/testing/selftests/bpf/xdpxceiver.c
-index b57c75d6904b..95d9d35dbb93 100644
+index 084ba052fa89..0a7c5a8ca585 100644
 --- a/tools/testing/selftests/bpf/xdpxceiver.c
 +++ b/tools/testing/selftests/bpf/xdpxceiver.c
-@@ -764,8 +764,6 @@ static void thread_common_ops(struct ifobject *ifobject, void *bufs)
- 	int ctr = 0;
- 	int ret;
+@@ -456,7 +456,7 @@ static void complete_tx_only(struct xsk_socket_info *xsk, int batch_size)
+ 	if (!xsk->outstanding_tx)
+ 		return;
  
--	pthread_attr_setstacksize(&attr, THREAD_STACK);
--
- 	ifobject->ns_fd = switch_namespace(ifobject->nsname);
+-	if (!NEED_WAKEUP || xsk_ring_prod__needs_wakeup(&xsk->tx))
++	if (xsk_ring_prod__needs_wakeup(&xsk->tx))
+ 		kick_tx(xsk);
  
- 	if (test_type == TEST_TYPE_BPF_RES)
-@@ -909,13 +907,10 @@ static void testapp_validate(void)
- 	bool bidi = test_type == TEST_TYPE_BIDI;
- 	bool bpf = test_type == TEST_TYPE_BPF_RES;
- 
--	pthread_attr_init(&attr);
--	pthread_attr_setstacksize(&attr, THREAD_STACK);
--
- 	pthread_mutex_lock(&sync_mutex);
- 
- 	/*Spawn RX thread */
--	pthread_create(&t0, &attr, ifdict_rx->func_ptr, ifdict_rx);
-+	pthread_create(&t0, NULL, ifdict_rx->func_ptr, ifdict_rx);
- 
- 	if (clock_gettime(CLOCK_REALTIME, &max_wait))
- 		exit_with_error(errno);
-@@ -927,7 +922,7 @@ static void testapp_validate(void)
- 	pthread_mutex_unlock(&sync_mutex);
- 
- 	/*Spawn TX thread */
--	pthread_create(&t1, &attr, ifdict_tx->func_ptr, ifdict_tx);
-+	pthread_create(&t1, NULL, ifdict_tx->func_ptr, ifdict_tx);
- 
- 	pthread_join(t1, NULL);
- 	pthread_join(t0, NULL);
+ 	rcvd = xsk_ring_cons__peek(&xsk->umem->cq, batch_size, &idx);
+@@ -544,9 +544,8 @@ static void tx_only(struct xsk_socket_info *xsk, u32 *frameptr, int batch_size)
+ 	xsk_ring_prod__submit(&xsk->tx, batch_size);
+ 	if (!tx_invalid_test) {
+ 		xsk->outstanding_tx += batch_size;
+-	} else {
+-		if (!NEED_WAKEUP || xsk_ring_prod__needs_wakeup(&xsk->tx))
+-			kick_tx(xsk);
++	} else if (xsk_ring_prod__needs_wakeup(&xsk->tx)) {
++		kick_tx(xsk);
+ 	}
+ 	*frameptr += batch_size;
+ 	*frameptr %= num_frames;
 diff --git a/tools/testing/selftests/bpf/xdpxceiver.h b/tools/testing/selftests/bpf/xdpxceiver.h
-index e431ecb9bb95..78863820fb81 100644
+index ef219c0785eb..6c428b276ab6 100644
 --- a/tools/testing/selftests/bpf/xdpxceiver.h
 +++ b/tools/testing/selftests/bpf/xdpxceiver.h
-@@ -37,7 +37,6 @@
- #define TMOUT_SEC (3)
+@@ -34,13 +34,11 @@
+ #define IP_PKT_TOS 0x9
+ #define UDP_PKT_SIZE (IP_PKT_SIZE - sizeof(struct iphdr))
+ #define UDP_PKT_DATA_SIZE (UDP_PKT_SIZE - sizeof(struct udphdr))
+-#define TMOUT_SEC (3)
  #define EOT (-1)
  #define USLEEP_MAX 200000
--#define THREAD_STACK 60000000
  #define SOCK_RECONF_CTR 10
  #define BATCH_SIZE 64
  #define POLL_TMOUT 1000
-@@ -152,7 +151,6 @@ static struct ifobject *ifdict_tx;
- pthread_mutex_t sync_mutex;
- pthread_cond_t signal_rx_condition;
- pthread_t t0, t1;
--pthread_attr_t attr;
+-#define NEED_WAKEUP true
+ #define DEFAULT_PKT_CNT 10000
+ #define RX_FULL_RXQSIZE 32
  
- TAILQ_HEAD(head_s, pkt) head = TAILQ_HEAD_INITIALIZER(head);
- struct head_s *head_p;
 -- 
 2.20.1
 
