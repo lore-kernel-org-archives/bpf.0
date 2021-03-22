@@ -2,159 +2,114 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DA1BFC433E0
-	for <bpf@archiver.kernel.org>; Mon, 22 Mar 2021 21:10:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A54AC433C1
+	for <bpf@archiver.kernel.org>; Mon, 22 Mar 2021 21:48:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AEE00619A7
-	for <bpf@archiver.kernel.org>; Mon, 22 Mar 2021 21:10:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0D2926197F
+	for <bpf@archiver.kernel.org>; Mon, 22 Mar 2021 21:48:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229822AbhCVVKG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 22 Mar 2021 17:10:06 -0400
-Received: from mga01.intel.com ([192.55.52.88]:4989 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230022AbhCVVJe (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 22 Mar 2021 17:09:34 -0400
-IronPort-SDR: 7dgF4yKzn0rHs5fjBMTZPS+pgttHb+k1oauL8ok0GwRkzrE+0zlENtPpMysZwQGvhMVOknhpTB
- LJt7IZ9WI+zw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9931"; a="210423774"
-X-IronPort-AV: E=Sophos;i="5.81,269,1610438400"; 
-   d="scan'208";a="210423774"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2021 14:09:33 -0700
-IronPort-SDR: 8TD62jwSt9xz6nNHjmuUrEnwCgNbogXBq7eZcnuZXSZZPI59NciW0sstVv3UX7gAw21MheBqsu
- 0aSOGfH4mGDg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,269,1610438400"; 
-   d="scan'208";a="513448925"
-Received: from ranger.igk.intel.com ([10.102.21.164])
-  by fmsmga001.fm.intel.com with ESMTP; 22 Mar 2021 14:09:31 -0700
-From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     bpf@vger.kernel.org, netdev@vger.kernel.org, daniel@iogearbox.net,
+        id S229673AbhCVVry (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 22 Mar 2021 17:47:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:54648 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230063AbhCVVrR (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 22 Mar 2021 17:47:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1616449635;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=BYH+ALHHuUp2nY1Tf4LO1X9cBqJmh5q5ergCiNTIsFA=;
+        b=KDVlCIAfj0N8aEIc/y2xqgs8a/AfbZ8C1gW7ZvJwgFdk/dR1e4t6/lPauidTDsUcp1jqRj
+        XZvA7F/2q/KJz7UtCPDxQA9CvW9V5/lSXedsrz4UQ8I0iyzCHNFSWlcb7vjLq7+UZzmKms
+        6nCFfC37vQJJGSk6UCRekiKMT7gUizM=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-409-OBGOVWTePqGGeBAlHl9WzQ-1; Mon, 22 Mar 2021 17:47:12 -0400
+X-MC-Unique: OBGOVWTePqGGeBAlHl9WzQ-1
+Received: by mail-ej1-f69.google.com with SMTP id t21so59577ejf.14
+        for <bpf@vger.kernel.org>; Mon, 22 Mar 2021 14:47:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=BYH+ALHHuUp2nY1Tf4LO1X9cBqJmh5q5ergCiNTIsFA=;
+        b=bfmbcpwWJDkDp/Mvc0Du4oWSwL39SRIRqKQ/hmJH5OedVRrmethzpMfHE//CzLmE+d
+         UFFYvBPPaJTMpAgBdZWiNjaFecISM5rSX15dwnZU86QyXMpE0r767Fml4XzGFuroiZsQ
+         flyxrA4HNNnHb6ynupjdBqqq36n8EzRMe5a5RV/z6oVxx2UlZTTk/OsYEQnS3BQWEdII
+         N6YhhQnO/huyTDaud15qB5VLHhugOykEiHR5rLkXFmj1pITExO2gw8/6mvKGXCSQ1OmC
+         zE0VmR1uLRN7uGgOuSczoXRM6O9Hg1mPt9d6n5nimOcQrHIokwZfH1CU4cSlBlFXJzkP
+         ztcg==
+X-Gm-Message-State: AOAM5323xJWfzpgVJ1VaPVflp5inhUM9V/3yZtz9g5EYo06KoA8K3Iz1
+        bsE+l32H/pcgjSQiWrfVUIpCwcziFMCVq3WxtyJ7FTLS/vU5T7UJq66l+Ee4Z1/Mzpi7C1b8yT5
+        dLnq7qxT1zSGA
+X-Received: by 2002:aa7:cf95:: with SMTP id z21mr1668640edx.76.1616449631759;
+        Mon, 22 Mar 2021 14:47:11 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzGx0BGOGgfTXiKJV8s2OrCDJkou1EZOucbXM2fC8InHZfQ99sRZLaQtAxxQHygPvmUBl4/1g==
+X-Received: by 2002:aa7:cf95:: with SMTP id z21mr1668630edx.76.1616449631619;
+        Mon, 22 Mar 2021 14:47:11 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id f19sm12129383edu.12.2021.03.22.14.47.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Mar 2021 14:47:11 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 8FA5C180281; Mon, 22 Mar 2021 22:47:09 +0100 (CET)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        bpf@vger.kernel.org, netdev@vger.kernel.org, daniel@iogearbox.net,
         ast@kernel.org
 Cc:     bjorn.topel@intel.com, magnus.karlsson@intel.com,
-        ciara.loftus@intel.com, john.fastabend@gmail.com, toke@redhat.com
-Subject: [PATCH v3 bpf-next 16/17] selftest: xsk: Remove mutex and condition variable
-Date:   Mon, 22 Mar 2021 21:58:15 +0100
-Message-Id: <20210322205816.65159-17-maciej.fijalkowski@intel.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210322205816.65159-1-maciej.fijalkowski@intel.com>
+        ciara.loftus@intel.com, john.fastabend@gmail.com,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Subject: Re: [PATCH v3 bpf-next 06/17] libbpf: xsk: use bpf_link
+In-Reply-To: <20210322205816.65159-7-maciej.fijalkowski@intel.com>
 References: <20210322205816.65159-1-maciej.fijalkowski@intel.com>
+ <20210322205816.65159-7-maciej.fijalkowski@intel.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Mon, 22 Mar 2021 22:47:09 +0100
+Message-ID: <87wnty7teq.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Björn Töpel <bjorn.topel@intel.com>
+Maciej Fijalkowski <maciej.fijalkowski@intel.com> writes:
 
-The usage of the condition variable is broken, and overkill. Replace
-with a pthread barrier.
+> Currently, if there are multiple xdpsock instances running on a single
+> interface and in case one of the instances is terminated, the rest of
+> them are left in an inoperable state due to the fact of unloaded XDP
+> prog from interface.
+>
+> Consider the scenario below:
+>
+> // load xdp prog and xskmap and add entry to xskmap at idx 10
+> $ sudo ./xdpsock -i ens801f0 -t -q 10
+>
+> // add entry to xskmap at idx 11
+> $ sudo ./xdpsock -i ens801f0 -t -q 11
+>
+> terminate one of the processes and another one is unable to work due to
+> the fact that the XDP prog was unloaded from interface.
+>
+> To address that, step away from setting bpf prog in favour of bpf_link.
+> This means that refcounting of BPF resources will be done automatically
+> by bpf_link itself.
+>
+> Provide backward compatibility by checking if underlying system is
+> bpf_link capable. Do this by looking up/creating bpf_link on loopback
+> device. If it failed in any way, stick with netlink-based XDP prog.
+> Otherwise, use bpf_link-based logic.
 
-Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
----
- tools/testing/selftests/bpf/xdpxceiver.c | 33 ++++--------------------
- tools/testing/selftests/bpf/xdpxceiver.h |  3 +--
- 2 files changed, 6 insertions(+), 30 deletions(-)
+So how is the caller supposed to know which of the cases happened?
+Presumably they need to do their own cleanup in that case? AFAICT you're
+changing the code to always clobber the existing XDP program on detach
+in the fallback case, which seems like a bit of an aggressive change? :)
 
-diff --git a/tools/testing/selftests/bpf/xdpxceiver.c b/tools/testing/selftests/bpf/xdpxceiver.c
-index 95d9d35dbb93..084ba052fa89 100644
---- a/tools/testing/selftests/bpf/xdpxceiver.c
-+++ b/tools/testing/selftests/bpf/xdpxceiver.c
-@@ -126,18 +126,6 @@ static void __exit_with_error(int error, const char *file, const char *func, int
- 			       test_type == TEST_TYPE_STATS ? "Stats" : "",\
- 			       test_type == TEST_TYPE_BPF_RES ? "BPF RES" : ""))
- 
--static void init_sync_resources(void)
--{
--	pthread_mutex_init(&sync_mutex, NULL);
--	pthread_cond_init(&signal_rx_condition, NULL);
--}
--
--static void destroy_sync_resources(void)
--{
--	pthread_mutex_destroy(&sync_mutex);
--	pthread_cond_destroy(&signal_rx_condition);
--}
--
- static void *memset32_htonl(void *dest, u32 val, u32 size)
- {
- 	u32 *ptr = (u32 *)dest;
-@@ -876,9 +864,7 @@ static void *worker_testapp_validate_rx(void *arg)
- 	fds[0].fd = xsk_socket__fd(ifobject->xsk->xsk);
- 	fds[0].events = POLLIN;
- 
--	pthread_mutex_lock(&sync_mutex);
--	pthread_cond_signal(&signal_rx_condition);
--	pthread_mutex_unlock(&sync_mutex);
-+	pthread_barrier_wait(&barr);
- 
- 	while (1) {
- 		if (test_type != TEST_TYPE_STATS) {
-@@ -903,24 +889,19 @@ static void *worker_testapp_validate_rx(void *arg)
- 
- static void testapp_validate(void)
- {
--	struct timespec max_wait = { 0, 0 };
- 	bool bidi = test_type == TEST_TYPE_BIDI;
- 	bool bpf = test_type == TEST_TYPE_BPF_RES;
- 
--	pthread_mutex_lock(&sync_mutex);
-+	if (pthread_barrier_init(&barr, NULL, 2))
-+		exit_with_error(errno);
- 
- 	/*Spawn RX thread */
- 	pthread_create(&t0, NULL, ifdict_rx->func_ptr, ifdict_rx);
- 
--	if (clock_gettime(CLOCK_REALTIME, &max_wait))
--		exit_with_error(errno);
--	max_wait.tv_sec += TMOUT_SEC;
--
--	if (pthread_cond_timedwait(&signal_rx_condition, &sync_mutex, &max_wait) == ETIMEDOUT)
-+	pthread_barrier_wait(&barr);
-+	if (pthread_barrier_destroy(&barr))
- 		exit_with_error(errno);
- 
--	pthread_mutex_unlock(&sync_mutex);
--
- 	/*Spawn TX thread */
- 	pthread_create(&t1, NULL, ifdict_tx->func_ptr, ifdict_tx);
- 
-@@ -1160,15 +1141,11 @@ int main(int argc, char **argv)
- 
- 	ksft_set_plan(TEST_MODE_MAX * TEST_TYPE_MAX);
- 
--	init_sync_resources();
--
- 	for (i = 0; i < TEST_MODE_MAX; i++) {
- 		for (j = 0; j < TEST_TYPE_MAX; j++)
- 			run_pkt_test(i, j);
- 	}
- 
--	destroy_sync_resources();
--
- cleanup:
- 	for (int i = 0; i < MAX_INTERFACES; i++) {
- 		if (ifdict[i]->ns_fd != -1)
-diff --git a/tools/testing/selftests/bpf/xdpxceiver.h b/tools/testing/selftests/bpf/xdpxceiver.h
-index 78863820fb81..ef219c0785eb 100644
---- a/tools/testing/selftests/bpf/xdpxceiver.h
-+++ b/tools/testing/selftests/bpf/xdpxceiver.h
-@@ -148,8 +148,7 @@ static struct ifobject *ifdict_rx;
- static struct ifobject *ifdict_tx;
- 
- /*threads*/
--pthread_mutex_t sync_mutex;
--pthread_cond_t signal_rx_condition;
-+pthread_barrier_t barr;
- pthread_t t0, t1;
- 
- TAILQ_HEAD(head_s, pkt) head = TAILQ_HEAD_INITIALIZER(head);
--- 
-2.20.1
+-Toke
 
