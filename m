@@ -8,54 +8,54 @@ X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EBC2C433EA
-	for <bpf@archiver.kernel.org>; Tue, 23 Mar 2021 00:39:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 049F9C433EB
+	for <bpf@archiver.kernel.org>; Tue, 23 Mar 2021 00:39:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8791C619B9
+	by mail.kernel.org (Postfix) with ESMTP id B817E619C3
 	for <bpf@archiver.kernel.org>; Tue, 23 Mar 2021 00:39:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231246AbhCWAiw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 22 Mar 2021 20:38:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39340 "EHLO
+        id S231265AbhCWAi4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 22 Mar 2021 20:38:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230483AbhCWAi3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 22 Mar 2021 20:38:29 -0400
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA29DC061574;
-        Mon, 22 Mar 2021 17:38:28 -0700 (PDT)
-Received: by mail-qv1-xf2c.google.com with SMTP id cx5so9631113qvb.10;
-        Mon, 22 Mar 2021 17:38:28 -0700 (PDT)
+        with ESMTP id S230455AbhCWAi1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 22 Mar 2021 20:38:27 -0400
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60C63C061756;
+        Mon, 22 Mar 2021 17:38:24 -0700 (PDT)
+Received: by mail-qv1-xf36.google.com with SMTP id dc12so8755971qvb.4;
+        Mon, 22 Mar 2021 17:38:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=zmsF6HZla+BsIO3PjkzlLwlB0jrHAcknoqWo/eWzyt4=;
-        b=VYNiboCQhsOBPVKdBz6NnL2Hq5xSi19uZWxGqvqvdh6iKb5k9+jef8Uwo+uXhh+Vfk
-         E6tLGxYGADJdhg5A9zbkpqHkF7+UJ9uerVD7aSDNtLsWvCsf3SOdf05H/buG/nsYTMg0
-         PMAW8p2SrFbFge+0jCzJnASihl/ZN6Qkf8v+CINiUXp2SFr/e8JoTnamsfuo0H4ETOqQ
-         foLzCBAwNKO4j+GYsBbS7ZRcyo9MhT9wbwDfCwQqR01sz+gGjDN95KSu9uBdM5x8iUIO
-         IPX4Mjecc1z+3s26MJ3TKqJpGDGX/jnPxaiagSjvWYWH9PLlqkrPSCnt/6nze32p+J5O
-         VjqA==
+        bh=xTEo6ohvKEl4pyLEeJ/PD6TxOMrhoqIZ3qvxpT6J8wU=;
+        b=pHUoaoL5k6QdcZ84NSRgU8WiOMvK6XeHaGMOkUlAcQn0GYu8Tck5UPrBdDPdJRUmHP
+         TX0VWFnzKVUkNE0ji/4WvkFS+cLD25LehANrX3YljWs9D8r0ZDzCIpJWk4GZ7RNisDp4
+         gbOo/m9bnfJICGYBeA7wd06RlsiIg3qZ3DOQYCjyCPRd1QuG/rRlKyz9WBKnFD1HPgCv
+         O4vk9H7eD8IGOjQ81eunkh1OvFgNdu3fiLvnrmtnuq5mxKLfZAE6hVOql5FZcHon9OA5
+         9a4+u1Ld0bPM6njqjodhxrjrhOwe0mdAWT7oUvcEl9JT8Kz5x0GW9mBooiJ4yXChl6Xf
+         ay5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=zmsF6HZla+BsIO3PjkzlLwlB0jrHAcknoqWo/eWzyt4=;
-        b=FzUQt/6NDozrT5JWg6y3nCNAjLyXrHJymRNKbTDYcNC4SgiF7m4lLJEWwO2+4oBVH+
-         4Kyc436007tPx+5vy5bRW1BeGUwScYtOTpEn4BAMBozqAA+46zSi8wOgvzSToecDCnUJ
-         Q6RgMDzcbXzdIoJNrLsNx6fWjyULPg922DkPttlNZEI/U/Qa2kZmWutOFO9giK461nfp
-         GWATH19lkxviVS+J2c5AnZfRmvBMqbPrJWXzNBxPX9dNw11+ALOJlvi/7aP/QB9VMM6K
-         U8WuJL/DC2qFPytQZLS5NU6nRdMz/iGZIu2P9NNOkx4xfRfIcWaoYNrnKsKbN/bIbfgm
-         6O6g==
-X-Gm-Message-State: AOAM5311Ebmy/VfGbGmcLYf+qJbO0oakAP+SPNZCFHnXuw22ecaTkf01
-        OrVtdA1MryJf155uH/Q4kAz2aHPGxO9AsA==
-X-Google-Smtp-Source: ABdhPJzIeQ9nHRMtRteYhdvCnWBcK0pB4GMncQhBxK8M0GGuqzJf0JMNDpXf0Kn6LxJxeBIjLtp2Kw==
-X-Received: by 2002:ad4:4692:: with SMTP id bq18mr2864203qvb.0.1616459907952;
-        Mon, 22 Mar 2021 17:38:27 -0700 (PDT)
+        bh=xTEo6ohvKEl4pyLEeJ/PD6TxOMrhoqIZ3qvxpT6J8wU=;
+        b=KMAHrTPv+NC3EL3Ko4rnPbUVunv9JkGTSH2IRVpbf/L6hG0zX6OZPHjlzMCe8Ur6QH
+         O1hNVSm7M0PFgGn+Xp3JRkDlqRjrCLC0wlTXevsvZZb6Hfgj9kew/9W/us8riuoMy3Ua
+         HRcsfq2743EJ1QpdNaqhR/gcKVe9pXZF7GrR+L/28Oihvub+vQ9WQIGAL4Bu+TMgtLEr
+         tmWqvAAd3V0FFf2Cvpt1vCITcQhohuIkupV1U3F3o0DmlNghIcpEz/BfpvBZDdCo/beN
+         UQ0xf9tE9Pk0tWMa3s4uH2Q9Y1ecQlHXuKgBpbQYXu3ugdu6i7AY5HNdNYvRfgV0WPL0
+         uUxQ==
+X-Gm-Message-State: AOAM532VKvuCsOhwja/bBlEIoo4twMAEFXmM0VDnUHw77m0BmOJVA6mA
+        09d6s8uLRphVpofgEkx1Umrdq8axn1LvEg==
+X-Google-Smtp-Source: ABdhPJxSgO3k2FjoYu9IiX3zjTbLHao4zMTHYrH/UDkl5kZehrq4HVxgI1WIFE3iMj4cxb23Y1X2Ug==
+X-Received: by 2002:ad4:4ae9:: with SMTP id cp9mr2351336qvb.20.1616459903486;
+        Mon, 22 Mar 2021 17:38:23 -0700 (PDT)
 Received: from unknown.attlocal.net ([2600:1700:65a0:ab60:fda6:6522:f108:7bd8])
-        by smtp.gmail.com with ESMTPSA id 184sm12356403qki.97.2021.03.22.17.38.26
+        by smtp.gmail.com with ESMTPSA id 184sm12356403qki.97.2021.03.22.17.38.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Mar 2021 17:38:27 -0700 (PDT)
+        Mon, 22 Mar 2021 17:38:23 -0700 (PDT)
 From:   Cong Wang <xiyou.wangcong@gmail.com>
 To:     netdev@vger.kernel.org
 Cc:     bpf@vger.kernel.org, duanxiongchun@bytedance.com,
@@ -65,9 +65,9 @@ Cc:     bpf@vger.kernel.org, duanxiongchun@bytedance.com,
         Daniel Borkmann <daniel@iogearbox.net>,
         Jakub Sitnicki <jakub@cloudflare.com>,
         Lorenz Bauer <lmb@cloudflare.com>
-Subject: [Patch bpf-next v6 08/12] udp: implement ->read_sock() for sockmap
-Date:   Mon, 22 Mar 2021 17:38:04 -0700
-Message-Id: <20210323003808.16074-9-xiyou.wangcong@gmail.com>
+Subject: [Patch bpf-next v6 05/12] skmsg: use rcu work for destroying psock
+Date:   Mon, 22 Mar 2021 17:38:01 -0700
+Message-Id: <20210323003808.16074-6-xiyou.wangcong@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210323003808.16074-1-xiyou.wangcong@gmail.com>
 References: <20210323003808.16074-1-xiyou.wangcong@gmail.com>
@@ -79,9 +79,8 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Cong Wang <cong.wang@bytedance.com>
 
-This is similar to tcp_read_sock(), except we do not need
-to worry about connections, we just need to retrieve skb
-from UDP receive queue.
+The RCU callback sk_psock_destroy() only queues work psock->gc,
+so we can just switch to rcu work to simplify the code.
 
 Cc: John Fastabend <john.fastabend@gmail.com>
 Cc: Daniel Borkmann <daniel@iogearbox.net>
@@ -89,95 +88,69 @@ Cc: Jakub Sitnicki <jakub@cloudflare.com>
 Cc: Lorenz Bauer <lmb@cloudflare.com>
 Signed-off-by: Cong Wang <cong.wang@bytedance.com>
 ---
- include/net/udp.h   |  2 ++
- net/ipv4/af_inet.c  |  1 +
- net/ipv4/udp.c      | 35 +++++++++++++++++++++++++++++++++++
- net/ipv6/af_inet6.c |  1 +
- 4 files changed, 39 insertions(+)
+ include/linux/skmsg.h |  5 +----
+ net/core/skmsg.c      | 17 +++++------------
+ 2 files changed, 6 insertions(+), 16 deletions(-)
 
-diff --git a/include/net/udp.h b/include/net/udp.h
-index df7cc1edc200..347b62a753c3 100644
---- a/include/net/udp.h
-+++ b/include/net/udp.h
-@@ -329,6 +329,8 @@ struct sock *__udp6_lib_lookup(struct net *net,
- 			       struct sk_buff *skb);
- struct sock *udp6_lib_lookup_skb(const struct sk_buff *skb,
- 				 __be16 sport, __be16 dport);
-+int udp_read_sock(struct sock *sk, read_descriptor_t *desc,
-+		  sk_read_actor_t recv_actor);
+diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
+index cf23e6e2cf54..d75c3936ab91 100644
+--- a/include/linux/skmsg.h
++++ b/include/linux/skmsg.h
+@@ -101,10 +101,7 @@ struct sk_psock {
+ 	struct proto			*sk_proto;
+ 	struct sk_psock_work_state	work_state;
+ 	struct work_struct		work;
+-	union {
+-		struct rcu_head		rcu;
+-		struct work_struct	gc;
+-	};
++	struct rcu_work			rwork;
+ };
  
- /* UDP uses skb->dev_scratch to cache as much information as possible and avoid
-  * possibly multiple cache miss on dequeue()
-diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
-index 1355e6c0d567..f17870ee558b 100644
---- a/net/ipv4/af_inet.c
-+++ b/net/ipv4/af_inet.c
-@@ -1070,6 +1070,7 @@ const struct proto_ops inet_dgram_ops = {
- 	.setsockopt	   = sock_common_setsockopt,
- 	.getsockopt	   = sock_common_getsockopt,
- 	.sendmsg	   = inet_sendmsg,
-+	.read_sock	   = udp_read_sock,
- 	.recvmsg	   = inet_recvmsg,
- 	.mmap		   = sock_no_mmap,
- 	.sendpage	   = inet_sendpage,
-diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
-index 38952aaee3a1..a0adee3b1af4 100644
---- a/net/ipv4/udp.c
-+++ b/net/ipv4/udp.c
-@@ -1782,6 +1782,41 @@ struct sk_buff *__skb_recv_udp(struct sock *sk, unsigned int flags,
+ int sk_msg_alloc(struct sock *sk, struct sk_msg *msg, int len,
+diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+index 9176add87643..a9ee26aebfbd 100644
+--- a/net/core/skmsg.c
++++ b/net/core/skmsg.c
+@@ -662,10 +662,10 @@ void sk_psock_stop(struct sk_psock *psock, bool wait)
+ 
+ static void sk_psock_done_strp(struct sk_psock *psock);
+ 
+-static void sk_psock_destroy_deferred(struct work_struct *gc)
++static void sk_psock_destroy(struct work_struct *work)
+ {
+-	struct sk_psock *psock = container_of(gc, struct sk_psock, gc);
+-
++	struct sk_psock *psock = container_of(to_rcu_work(work),
++					      struct sk_psock, rwork);
+ 	/* No sk_callback_lock since already detached. */
+ 
+ 	sk_psock_done_strp(psock);
+@@ -683,14 +683,6 @@ static void sk_psock_destroy_deferred(struct work_struct *gc)
+ 	kfree(psock);
  }
- EXPORT_SYMBOL(__skb_recv_udp);
  
-+int udp_read_sock(struct sock *sk, read_descriptor_t *desc,
-+		  sk_read_actor_t recv_actor)
-+{
-+	int copied = 0;
-+
-+	while (1) {
-+		int offset = 0, err;
-+		struct sk_buff *skb;
-+
-+		skb = __skb_recv_udp(sk, 0, 1, &offset, &err);
-+		if (!skb)
-+			break;
-+		if (offset < skb->len) {
-+			int used;
-+			size_t len;
-+
-+			len = skb->len - offset;
-+			used = recv_actor(desc, skb, offset, len);
-+			if (used <= 0) {
-+				if (!copied)
-+					copied = used;
-+				break;
-+			} else if (used <= len) {
-+				copied += used;
-+				offset += used;
-+			}
-+		}
-+		if (!desc->count)
-+			break;
-+	}
-+
-+	return copied;
-+}
-+EXPORT_SYMBOL(udp_read_sock);
-+
- /*
-  * 	This should be easy, if there is something there we
-  * 	return it, otherwise we block.
-diff --git a/net/ipv6/af_inet6.c b/net/ipv6/af_inet6.c
-index 802f5111805a..71de739b4a9e 100644
---- a/net/ipv6/af_inet6.c
-+++ b/net/ipv6/af_inet6.c
-@@ -714,6 +714,7 @@ const struct proto_ops inet6_dgram_ops = {
- 	.getsockopt	   = sock_common_getsockopt,	/* ok		*/
- 	.sendmsg	   = inet6_sendmsg,		/* retpoline's sake */
- 	.recvmsg	   = inet6_recvmsg,		/* retpoline's sake */
-+	.read_sock	   = udp_read_sock,
- 	.mmap		   = sock_no_mmap,
- 	.sendpage	   = sock_no_sendpage,
- 	.set_peek_off	   = sk_set_peek_off,
+-static void sk_psock_destroy(struct rcu_head *rcu)
+-{
+-	struct sk_psock *psock = container_of(rcu, struct sk_psock, rcu);
+-
+-	INIT_WORK(&psock->gc, sk_psock_destroy_deferred);
+-	schedule_work(&psock->gc);
+-}
+-
+ void sk_psock_drop(struct sock *sk, struct sk_psock *psock)
+ {
+ 	sk_psock_stop(psock, false);
+@@ -704,7 +696,8 @@ void sk_psock_drop(struct sock *sk, struct sk_psock *psock)
+ 		sk_psock_stop_verdict(sk, psock);
+ 	write_unlock_bh(&sk->sk_callback_lock);
+ 
+-	call_rcu(&psock->rcu, sk_psock_destroy);
++	INIT_RCU_WORK(&psock->rwork, sk_psock_destroy);
++	queue_rcu_work(system_wq, &psock->rwork);
+ }
+ EXPORT_SYMBOL_GPL(sk_psock_drop);
+ 
 -- 
 2.25.1
 
