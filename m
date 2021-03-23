@@ -5,61 +5,61 @@ X-Spam-Level:
 X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
+	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E287C433FB
-	for <bpf@archiver.kernel.org>; Tue, 23 Mar 2021 20:41:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63557C4345F
+	for <bpf@archiver.kernel.org>; Tue, 23 Mar 2021 20:41:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3CB01619CE
-	for <bpf@archiver.kernel.org>; Tue, 23 Mar 2021 20:41:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 35B56619E0
+	for <bpf@archiver.kernel.org>; Tue, 23 Mar 2021 20:41:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233498AbhCWUki (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 23 Mar 2021 16:40:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44920 "EHLO
+        id S233652AbhCWUkk (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 23 Mar 2021 16:40:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233500AbhCWUkI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 23 Mar 2021 16:40:08 -0400
-Received: from mail-qk1-x74a.google.com (mail-qk1-x74a.google.com [IPv6:2607:f8b0:4864:20::74a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA1D3C061763
-        for <bpf@vger.kernel.org>; Tue, 23 Mar 2021 13:40:07 -0700 (PDT)
-Received: by mail-qk1-x74a.google.com with SMTP id h19so141282qkk.4
-        for <bpf@vger.kernel.org>; Tue, 23 Mar 2021 13:40:07 -0700 (PDT)
+        with ESMTP id S233530AbhCWUkM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 23 Mar 2021 16:40:12 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B62F7C0613DF
+        for <bpf@vger.kernel.org>; Tue, 23 Mar 2021 13:40:11 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 6so3848794ybq.7
+        for <bpf@vger.kernel.org>; Tue, 23 Mar 2021 13:40:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=xIKsEDWi8EL1j5NSYc2uWQA3l5Y2NiXXcLT9TovNhRQ=;
-        b=CgO/iSD/xRAdG2p+rJSIXqPZiKxGiKV2KoCvVGLUH2ZMIqkf574rj//FtCji3y0utT
-         6lKsLLQNF9ZBDCdsLOxtHp++EYzY5pP2mxldfH597xr3rQ4xUq9h8H5ZqqqHCXkA5Woj
-         AW4sxR0WuNwk6mjflnE1PSnqER0YBsuwjwXu3Ld7LoONyiCQrMHMa5vxLqAxT+oS7dew
-         573+hZHKrFPSsuuYfRH4A915CMBtXOIjkDVY3SgKsQFOEMK30MSps4h+NJvmkF2xbtOc
-         I9PZSHpWCV2Y3qKuZASiPEN0Gbhj4D7LoWjpCn9ubP4M+BIswdDkzinaS2z4pXhbM2te
-         iBHg==
+        bh=pXHCPErazdX/nDg2/nb6QksjLfEFTtrkU2uTHlahGRs=;
+        b=jFt+TBSDKrmbmcTGUS3Zh3LQfQ9h6g78j1z40AyKg7NaLPpZHn37Ldl7vtccRAf8UV
+         GppokLpY6wTAB+Sle9DrxlzNvmD7RLVB1LrLtLP+DoPSdOHThcUhWPgZsZMHr1AypqJp
+         2ausF2iw7I06q65bPHkkK5uKHVdZZ+ckMEmm7IBf/pcXpGFOQXgKf2NyXu+UF4y2zTd2
+         ycqljJ06Wbbus0bG5F1C0bgOjXenQJWv7VPFmvmSNViXRdLRYpO43wanLsM7EnyPPUa4
+         y3y0OHiuMRejUijcBoHlT618Iy/tBMRleGTHHjCIOalK/zQVBqz//LPDgG2CS2s+wtjo
+         u2Nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=xIKsEDWi8EL1j5NSYc2uWQA3l5Y2NiXXcLT9TovNhRQ=;
-        b=tLQgN5zb1MrXKwNz/JMLq/f7XRVtxhDGuiElkXMOSqRALO1j7QqsWO4JX+3Xw1+str
-         w4rQ1mGfHhoIz8FDL3KyHNO4dmhKVQx1YJ8bmWLl/u7+OF2nC2jt3YzB3rmml2/aQxPb
-         xbmFHCZ5NdwAA+msoEljkXTXDlCnOhj9E8nKeMa1UvOXD6wB0vlkmWubW5XACwAHnW1S
-         KjhUi30bIxOvU8nPncM3C+n3MGweJBB31ItxmOe+sBeGxq2KYOYMw8wB2AFeuARbgIHJ
-         KyO8bV/lFVZa1AbOCASjdxkrp2bzt5wCncqNcXKqjQOw760q3ePina/prxUuHPO8gE2C
-         7W3A==
-X-Gm-Message-State: AOAM531fxilYMb48TQNE2RomX72YAVbV5slv/rpXAP+l0aZj1YePas8J
-        2wkIKnp6mCcvwAKT2TyhVyeNF83407NEFOIC+ZQ=
-X-Google-Smtp-Source: ABdhPJxb7WUXqQY1HKNj9KDKWZ2mX+BL8U6d8oevhZ712uyBxXvQItdJYqzQ+dKFDvxGu4W+35Xr/uYgxKxus3pnNFc=
+        bh=pXHCPErazdX/nDg2/nb6QksjLfEFTtrkU2uTHlahGRs=;
+        b=VerKLfaR85MoVVb1FlicXditZU59mKiNrkL6wGJWXkHfHLGuPUMPmKgDiVusDkR5Gp
+         iueKU7fq6xrVDHBNrt/X5JpLEvzFVrBq77/zdQnDuZgIj7aPQqcKXvdWzPBgGdeWzn1G
+         IoNpR9wEEWci6jqPfSmuFN6SExL3hFk7Qh3OgJiDKB9gcsaEkrRvcSvfkGmrnaLLugBN
+         6EJ+HpcbWht52U/m/BDjklTqUqvyyhmTeqHGmJUEcflQdfSsvw09uokH59G5O44uduqn
+         b6dXGtmpX+G2VLa/toUj2/OXDWVtqb+y0G12N4yWsMbnv9K1f43X13J7qEQ/BzZ76XDh
+         Z1zA==
+X-Gm-Message-State: AOAM530yiFbNA96Qapxhxjz1H+PSksFgfdWgpdgj9gdytbYmJXy26de8
+        yJ8wdPdZbxFC7GwclXnM1OwhpvoIug7bbwKs6fA=
+X-Google-Smtp-Source: ABdhPJy23IA9Pmn2B2QQVPkwdw9dKjsA0O0LWinFUMBV4532ZUThiTX267nWH6v33xCXfAmR7YR5nPY/6Ir/NDlbC70=
 X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:e9a3:260d:763b:67dc])
- (user=samitolvanen job=sendgmr) by 2002:a0c:e9c7:: with SMTP id
- q7mr159305qvo.7.1616532007142; Tue, 23 Mar 2021 13:40:07 -0700 (PDT)
-Date:   Tue, 23 Mar 2021 13:39:39 -0700
+ (user=samitolvanen job=sendgmr) by 2002:a25:d3d3:: with SMTP id
+ e202mr58822ybf.283.1616532011040; Tue, 23 Mar 2021 13:40:11 -0700 (PDT)
+Date:   Tue, 23 Mar 2021 13:39:41 -0700
 In-Reply-To: <20210323203946.2159693-1-samitolvanen@google.com>
-Message-Id: <20210323203946.2159693-11-samitolvanen@google.com>
+Message-Id: <20210323203946.2159693-13-samitolvanen@google.com>
 Mime-Version: 1.0
 References: <20210323203946.2159693-1-samitolvanen@google.com>
 X-Mailer: git-send-email 2.31.0.291.g576ba9dcdaf-goog
-Subject: [PATCH v3 10/17] lkdtm: use __va_function
+Subject: [PATCH v3 12/17] arm64: implement __va_function
 From:   Sami Tolvanen <samitolvanen@google.com>
 To:     Kees Cook <keescook@chromium.org>
 Cc:     Nathan Chancellor <nathan@kernel.org>,
@@ -79,30 +79,43 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-To ensure we take the actual address of a function in kernel text, use
-__va_function. Otherwise, with CONFIG_CFI_CLANG, the compiler replaces
-the address with a pointer to the CFI jump table, which is actually in
-the module when compiled with CONFIG_LKDTM=m.
+With CONFIG_CFI_CLANG, the compiler replaces function addresses in
+instrumented C code with jump table addresses. This change implements
+the __va_function() macro, which returns the actual function address
+instead.
 
 Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-Acked-by: Kees Cook <keescook@chromium.org>
+Reviewed-by: Kees Cook <keescook@chromium.org>
 ---
- drivers/misc/lkdtm/usercopy.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/include/asm/memory.h | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/drivers/misc/lkdtm/usercopy.c b/drivers/misc/lkdtm/usercopy.c
-index 109e8d4302c1..d173d6175c87 100644
---- a/drivers/misc/lkdtm/usercopy.c
-+++ b/drivers/misc/lkdtm/usercopy.c
-@@ -314,7 +314,7 @@ void lkdtm_USERCOPY_KERNEL(void)
+diff --git a/arch/arm64/include/asm/memory.h b/arch/arm64/include/asm/memory.h
+index 0aabc3be9a75..9a4887808681 100644
+--- a/arch/arm64/include/asm/memory.h
++++ b/arch/arm64/include/asm/memory.h
+@@ -321,6 +321,21 @@ static inline void *phys_to_virt(phys_addr_t x)
+ #define virt_to_pfn(x)		__phys_to_pfn(__virt_to_phys((unsigned long)(x)))
+ #define sym_to_pfn(x)		__phys_to_pfn(__pa_symbol(x))
  
- 	pr_info("attempting bad copy_to_user from kernel text: %px\n",
- 		vm_mmap);
--	if (copy_to_user((void __user *)user_addr, vm_mmap,
-+	if (copy_to_user((void __user *)user_addr, __va_function(vm_mmap),
- 			 unconst + PAGE_SIZE)) {
- 		pr_warn("copy_to_user failed, but lacked Oops\n");
- 		goto free_user;
++#ifdef CONFIG_CFI_CLANG
++/*
++ * With CONFIG_CFI_CLANG, the compiler replaces function address
++ * references with the address of the function's CFI jump table
++ * entry. The __va_function macro always returns the address of the
++ * actual function instead.
++ */
++#define __va_function(x) ({						\
++	void *addr;							\
++	asm("adrp %0, " __stringify(x) "\n\t"				\
++	    "add  %0, %0, :lo12:" __stringify(x) : "=r" (addr));	\
++	addr;								\
++})
++#endif
++
+ /*
+  *  virt_to_page(x)	convert a _valid_ virtual address to struct page *
+  *  virt_addr_valid(x)	indicates whether a virtual address is valid
 -- 
 2.31.0.291.g576ba9dcdaf-goog
 
