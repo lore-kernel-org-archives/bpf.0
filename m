@@ -2,385 +2,223 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+X-Spam-Status: No, score=-17.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,
+	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D4D7C433ED
-	for <bpf@archiver.kernel.org>; Tue, 23 Mar 2021 00:39:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A7328C433DB
+	for <bpf@archiver.kernel.org>; Tue, 23 Mar 2021 00:56:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 01DFC619AC
-	for <bpf@archiver.kernel.org>; Tue, 23 Mar 2021 00:39:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7554F6199F
+	for <bpf@archiver.kernel.org>; Tue, 23 Mar 2021 00:56:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231270AbhCWAi5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 22 Mar 2021 20:38:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39348 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230511AbhCWAia (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 22 Mar 2021 20:38:30 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A2FBC061574;
-        Mon, 22 Mar 2021 17:38:30 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id o5so12692974qkb.0;
-        Mon, 22 Mar 2021 17:38:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=C0VNQTgWKivh82UbEOO87R6Dv7ivRPENK8wDVTwtxhg=;
-        b=FYJErhXTbrG69KihdZALWiQUq7y4W21A+a8wUhqyNlE4pmECNYzp7QhmZca9eLcOnf
-         HqZZ1DHqQ9II1f1qVD3y1yK5+rpAeTuok9fn/f6xJOgsiXr55FK/ffWDPxoBFp1eLzRt
-         WFm28+OGSVueeLdfsQu7S+C8gjPI0KW6AZBsfyl200js+wePkV3NU71JOUKOaQA1YPKg
-         JScxy+LZ0Co9Bj4T/nmgSZfhew4gAP87rXw3Ztlmw2wBpBGRh173hGkLh8lcIzjRnQQU
-         jnbkC+SFztNWtfXqGVppjEB2zQ7ETebkrs1SFsAzgEAVEiWqaAuGM/TPc4BYazmaHNJT
-         flRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=C0VNQTgWKivh82UbEOO87R6Dv7ivRPENK8wDVTwtxhg=;
-        b=Ie3Zg6Cgt+HAzVDyNMEHkyQd/Q2XhQl6quAwp7gOkPvPTLKrs0O2ykr0h9HleZaTnQ
-         7luaRxTgIdXMg+Bz7h2KO1jPFYhOw2/GUZ4Cg2LA10iUsbdmSI/eXVqRmwixipKLXPeo
-         WIIFH2WflMV+1q9RfVDHu1Qp38yqGaoWJaO60U/q1i6HYIv7SlTtt4jm3SdI2NHDmQcY
-         3V4fN6xuESodz+HwK6Xkn578th571gAPTzewCamqNEEF8Ulhubk4DNpv9oLfUFyfLNjy
-         9kzqtY4ElL4iu4K5/urMUqBujerRQOXlcvBXGfd6/5n2ZcrkHigDEK2ifBs1WxH0QiEJ
-         sdzQ==
-X-Gm-Message-State: AOAM533hEauHEi6aPL9tKaPT34AbBqweEL0fiAQ/bYCIRtFR1Ny96rOA
-        btCoP6/SNzbQo+DE7nh5II3zaG8qiKQ5eQ==
-X-Google-Smtp-Source: ABdhPJxBsDDr4eZNePE1b15RPNrd9MDOmLB7Ipy0IDbPJmpVaxziQJi+tQjui/fJvJC5+ktB+velFA==
-X-Received: by 2002:a05:620a:854:: with SMTP id u20mr2997387qku.106.1616459909442;
-        Mon, 22 Mar 2021 17:38:29 -0700 (PDT)
-Received: from unknown.attlocal.net ([2600:1700:65a0:ab60:fda6:6522:f108:7bd8])
-        by smtp.gmail.com with ESMTPSA id 184sm12356403qki.97.2021.03.22.17.38.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Mar 2021 17:38:29 -0700 (PDT)
-From:   Cong Wang <xiyou.wangcong@gmail.com>
-To:     netdev@vger.kernel.org
-Cc:     bpf@vger.kernel.org, duanxiongchun@bytedance.com,
-        wangdongdong.6@bytedance.com, jiang.wang@bytedance.com,
-        Cong Wang <cong.wang@bytedance.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        Lorenz Bauer <lmb@cloudflare.com>
-Subject: [Patch bpf-next v6 09/12] skmsg: extract __tcp_bpf_recvmsg() and tcp_bpf_wait_data()
-Date:   Mon, 22 Mar 2021 17:38:05 -0700
-Message-Id: <20210323003808.16074-10-xiyou.wangcong@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210323003808.16074-1-xiyou.wangcong@gmail.com>
-References: <20210323003808.16074-1-xiyou.wangcong@gmail.com>
+        id S230366AbhCWA4J (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 22 Mar 2021 20:56:09 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:14960 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S231308AbhCWAzv (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 22 Mar 2021 20:55:51 -0400
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.0.43/8.16.0.43) with SMTP id 12N0jFJU019016;
+        Mon, 22 Mar 2021 17:55:38 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : to : cc :
+ references : from : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=+fCIUbWySItWNMwIevXv1k3ECd3bLblGQq8o+MO/pgU=;
+ b=nrK97HIy27eAFWAjwHht7fED9QBm4XLwXbjvcOyDve5DsgVYCd/3CNQylHYPxUegWoeE
+ khEK97ElEgEJuSonEvPpaJzQKXjNZViNrpYT6RF1u37Dx8YpgnTPNmOZDYa/6H/SKbdM
+ R99m2eLF2VqTC8EpunTY6UEU8Mo2AxNn6Nc= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0089730.ppops.net with ESMTP id 37dcj1m3qa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Mon, 22 Mar 2021 17:55:38 -0700
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.36.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Mon, 22 Mar 2021 17:55:37 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Uz/XQY/Z9UmmV9MQx+PKrW40BBDfX0B8RTSTAe5yD/ODX08pZtkmExQax2pfe/neQ7uTRb6JZ8wxOh77RpcyNfmGLN1SXW81XdhwjRb3vqhhEYV3uLqHG8h6GQugYK2GzngJZmM6oBoqwiCXxpURxtsP4gsoNweYOKzcqWOVJEMSIbQXFOFAmWS1/HMFjYYPoF6J3Xv04KaqeaqjWBlMJSRv6zpqbWuHl1ffJbxEPblJfHh6lvsm1coClhQfn3gpBoIL/s/9PSYhGtAIdtmK0VEP/W8QSWvIxfCH6AsVPDa+0h7kpDdz/z6iiJKKDhw1C5J8lmlH+tKeyNEJUjMKpw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+fCIUbWySItWNMwIevXv1k3ECd3bLblGQq8o+MO/pgU=;
+ b=ipJOkOisB63aaTQNSHYyjPMwNACROnQenjMmlCdsT0Hfft66amXcKRNjHZqwBf97BgST9JUd5vThiU8jeWTxHYVmKvUXsTQFiKUkvPENxm517P7R8ApzLDDHQVuMr8jbOCuVSEcL3qEYZtwnl3wRa5yuoZGt/ZxBdmjlROiRMPsJSPvHuMWzpDpaVBjHxGDSX93fAOqh0jEk4nPlwy25bJ8lIFBHsOTLfgzBIxzMAdhZ5vlcQbBJJpS/uQuOvq7wm/JM8hEC50d05S5inSor72isPN8dTVwgXVeSH4bK/TSAQ0WrFGp71tgo00CY9advMttwwEkTLUasvBUnTW0S0A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Authentication-Results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=fb.com;
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
+ by SN6PR1501MB1968.namprd15.prod.outlook.com (2603:10b6:805:e::32) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3955.24; Tue, 23 Mar
+ 2021 00:55:35 +0000
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::f433:fd99:f905:8912]) by SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::f433:fd99:f905:8912%3]) with mapi id 15.20.3955.027; Tue, 23 Mar 2021
+ 00:55:35 +0000
+Subject: Re: [PATCH bpf-next v3] bpf: fix NULL pointer dereference in
+ bpf_get_local_storage() helper
+To:     Roman Gushchin <guro@fb.com>
+CC:     <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
+        Jiri Olsa <jolsa@kernel.org>
+References: <20210320170201.698472-1-yhs@fb.com>
+ <YFjkarhTFseEDn9L@carbon.dhcp.thefacebook.com>
+From:   Yonghong Song <yhs@fb.com>
+Message-ID: <64872f78-75f0-2187-d07a-4196dd2738b4@fb.com>
+Date:   Mon, 22 Mar 2021 17:55:31 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.8.1
+In-Reply-To: <YFjkarhTFseEDn9L@carbon.dhcp.thefacebook.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+X-Originating-IP: [2620:10d:c091:480::1:fbbb]
+X-ClientProxiedBy: MN2PR17CA0004.namprd17.prod.outlook.com
+ (2603:10b6:208:15e::17) To SN6PR1501MB2064.namprd15.prod.outlook.com
+ (2603:10b6:805:d::27)
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [IPv6:2620:10d:c0a8:11d9::11e9] (2620:10d:c091:480::1:fbbb) by MN2PR17CA0004.namprd17.prod.outlook.com (2603:10b6:208:15e::17) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3955.18 via Frontend Transport; Tue, 23 Mar 2021 00:55:34 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 9ac23821-1853-4309-0343-08d8ed965e0c
+X-MS-TrafficTypeDiagnostic: SN6PR1501MB1968:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <SN6PR1501MB1968991CF63D742A9F8DE25AD3649@SN6PR1501MB1968.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ArbzpgRDF3Mj344vGOI88IDlYZ6n5xSrWEoqJNo9Mab2fEc9RGSZuNhc/aHSU07oA0/iGnhy4N7G3R7ES6FkTjlTZ+ffjIkdxb+4wGvzVz8FQ4YVlnx1HQDTNtygsp2MWt1I6skrz9NYPKcyJ7kDCoDGk2U2a7tS4zJx8d9Sjo2rH2lIaEuKh1ZNSUnsc0nC8W1UVDEHAtnLAXZLL2+AdQFb+GZ8CuFcHWAaURf7LQpCpwmGE3iAXYsjNnz6JIkNM2+Kt4deSId+xtHPEvEueygOyyPFKZGYC7VZ5yCBFZ5daD4vxADoAvZ5LCvy9oKYfcQQElTnuDkCOIyUZUi5cnGAlb1OJiNUvArP1Zbrjm+8EA21PvHDwNmpl2mRX5rKfI//hrds0/20XSjp1tb3lxR1+uSQ9fEGWxzzZb1ouE9z970WviuugleM1rA2BoP5PBfxbLLqRM3eIkfDpQzMowcCBh+CoSx6cs6nlX/r4EcvoJX7ZxKfWnX8HaS1QLBR9qsBIwLi/mtrhphQRJiVpD/nDP4IPCkSBdnHvVCcVe6PvMrJktRPi4gPc7rgDwXnJF0dqEuUnw1tgnIU8n3M0+dkX7xbDPxuQdU0evLcxgAOnpUfX/CAnm8EvFYRJFKCr+qaW+cOVvMYov+JNVP0qBT+tsKMAap6feI+1xMuLqjRCvKO2gsLoEj1ZwlfRrxlIhTlEgRoOVPuH0PZ8xtl1Wf51zmZvkcX7QSWrz7AqbG8rDpyovuq/8Vjk9bk9rYsFnAFFXY8etiRcNDk9z8JhYT7LZ+XPN7EM3quvKkgMR4=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(136003)(346002)(39860400002)(366004)(376002)(396003)(8676002)(2616005)(86362001)(316002)(52116002)(6666004)(5660300002)(16526019)(8936002)(186003)(66476007)(6486002)(66946007)(54906003)(6862004)(38100700001)(66556008)(4326008)(31696002)(83380400001)(36756003)(31686004)(478600001)(2906002)(6636002)(53546011)(37006003)(966005)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?K05OaDFmMlBVWnoyQmJjQjJhRGY2N0tlNzNKNDFWRnV0TDZjMXJRUjBLM05T?=
+ =?utf-8?B?bUx2dUlIYWJkUWc5SW00cGEydjlheUN4ZDdod2x2SkNpVERaVnk0NysvY1Ja?=
+ =?utf-8?B?dDg3UGZPdUg0OFI4SHVObUtCUkprV1k2bzhaVzQ2MnZXSVdnVFdFUHcyVlIy?=
+ =?utf-8?B?c3NBV1NDRk90RE96NytOUkQyeGtsS0VIdmVrV3dKRkovaTVuNlNqTGZWSEY2?=
+ =?utf-8?B?TmRLKzZCV3QrajZocWVUaGN6dGZWcVhyTSs3ZjR4aGU1YmdjQ0xudUx3c2ZR?=
+ =?utf-8?B?UG16SUV1Sm53dzc2cE1XWGJmazdDQ2hCRk9XR0tVT0NkeEgxR05RQ3VPNU5Y?=
+ =?utf-8?B?VUxzSWJtUFJaL1VTdUo1YTVWa0RCczFMSmw4WlhYYmhPRlZlZ2FTNWFMbFMw?=
+ =?utf-8?B?TERmc041bnZjdC8zeFA0NlBab3Uwb0lRcWpuTEp1YUdXSm5NQ0NkaFVTb2dv?=
+ =?utf-8?B?SU5xYlBQbDZtN0ZURHg4OGF5YmY2SG0zN1IrWndNaEZRSG5vOXZTUEVPajJR?=
+ =?utf-8?B?L2tsS3MyVTZDWS92aHUyMGF1VUlHb3FsYVJzR2RqcGJmeVg3VGpnaVUwMUsr?=
+ =?utf-8?B?bHZ4QlJySXovdUhUMDlwR0hYMXZoNWVPdDUxMEJHWm5ySU96UUR3bGNJY3lB?=
+ =?utf-8?B?Vy9YYTVBSDJUVS9HVFZ3eFNZWVJZNUdrV1IzUklQNGtLejcrV3VoQVltK0dK?=
+ =?utf-8?B?c1haSnE1WlkvNmU2NTRxbDg3MkdFdW5xaVU4R0pOVVNxK1VDUldPU2RPWXM1?=
+ =?utf-8?B?NnY2Q0o1cHZDNWpuNmJpZ3hGQmdHVThDUDZxa1pJbmVOVjk1UXpjL3dMYnBM?=
+ =?utf-8?B?VG5LZ0tuUFp3TnJkVE5WNUxPd3RsTGNpbjZYUDkvMGZZYXNVNm9TZUFMK0Ri?=
+ =?utf-8?B?WVRZeXVDcEJyMW5xK2dWQ2lpTnkyNXdPajI2NGw2ckRSREpXQy9CbElZL0Zx?=
+ =?utf-8?B?MVd4Tm5JdlBOSWRqYTZGZDlNZ0xEYjdzVFBxZW1zWkN1Q0ZTRGNYb2c0eTB1?=
+ =?utf-8?B?TUJXOFVPNGFmQStjWXZ2T29rNUF6SmF4bldTQnR4ek92Tk0vS21SQ2dldXYx?=
+ =?utf-8?B?c1JZN1J6UWR5enZYU0I1MXptTTlkYk1JbFIwM0kyTFZrMkJJMWE4cXdXeTE4?=
+ =?utf-8?B?OUx4S1JrYXQ2MXRzdGZmaTBnSW9OUWhrMFJyeS9ZQzZ4emt5T0xqUUVuUHRn?=
+ =?utf-8?B?ZlJpNmhaVWU2YVdTclBsRGFWN056SExPS1pIUHF5MUMreE5nMGVkT1NzU0lx?=
+ =?utf-8?B?enBjTytLWVRLOXNvTTc4QzdOMXVrVHlvRnUyRU5sWlpWMmVqNmp5Y04zMXA5?=
+ =?utf-8?B?Z2JDYlpiNzNnSzY0QVBpUHRqQ0FKdXNHN0JGRnZVZWdwRW5OeWcxdWFCS3c1?=
+ =?utf-8?B?V3JvZWlNbW9RZTM3a1RzbmtaL0xNYzcxa3F5UEIvSzh0MjlaZDVRRWRpekxz?=
+ =?utf-8?B?M3RkcE1samhhdldYMXZ5VVcxZERSS0VPZFkvaVFzSWh3TUUrckwzY1haT0hE?=
+ =?utf-8?B?ZmRiaTdLdzRCQzNPeTYxWHVKWlhtRDB1WUViMEpmSmF6V1JBdUVJUzNpOGRO?=
+ =?utf-8?B?aWFpOWgrRHVJM1o5VGpmV05keUV4a2FiNnRaT053S29LZTlBUzZKWi95SDhk?=
+ =?utf-8?B?c2hrTFhXb3NJbC9Ia0NFVUczMXBFeDdLMU96OFpmUndjK3dGa1N2RnhOaG9V?=
+ =?utf-8?B?dWM3Q1d4QVJ4ekVlWnpsdE1mdXY5OEJXbFo5NHFsRUw2ZGdDRWZxejgyUHht?=
+ =?utf-8?B?YUMvUlJJSHBJWmxJajlYeXZDeFBDR0xlTksrcHNmbjBsZEJCWlh6ZEw4WWdR?=
+ =?utf-8?B?dWFwRlM4YWJpNTJiNVVQQT09?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9ac23821-1853-4309-0343-08d8ed965e0c
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2021 00:55:35.3457
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9QoxDq+mIcKKlRVYgmBZleMBe1BvlgfFhGvc+XRkt2F4bmOkK5Ky/MkQhxyVts9r
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR1501MB1968
+X-OriginatorOrg: fb.com
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
+ definitions=2021-03-22_12:2021-03-22,2021-03-22 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0 phishscore=0
+ suspectscore=0 mlxlogscore=999 malwarescore=0 impostorscore=0 mlxscore=0
+ spamscore=0 bulkscore=0 lowpriorityscore=0 priorityscore=1501
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2103230001
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Cong Wang <cong.wang@bytedance.com>
 
-Although these two functions are only used by TCP, they are not
-specific to TCP at all, both operate on skmsg and ingress_msg,
-so fit in net/core/skmsg.c very well.
 
-And we will need them for non-TCP, so rename and move them to
-skmsg.c and export them to modules.
+On 3/22/21 11:39 AM, Roman Gushchin wrote:
+> On Sat, Mar 20, 2021 at 10:02:01AM -0700, Yonghong Song wrote:
+>> Jiri Olsa reported a bug ([1]) in kernel where cgroup local
+>> storage pointer may be NULL in bpf_get_local_storage() helper.
+>> There are two issues uncovered by this bug:
+>>    (1). kprobe or tracepoint prog incorrectly sets cgroup local storage
+>>         before prog run,
+>>    (2). due to change from preempt_disable to migrate_disable,
+>>         preemption is possible and percpu storage might be overwritten
+>>         by other tasks.
+>>
+>> This issue (1) is fixed in [2]. This patch tried to address issue (2).
+>> The following shows how things can go wrong:
+>>    task 1:   bpf_cgroup_storage_set() for percpu local storage
+>>           preemption happens
+>>    task 2:   bpf_cgroup_storage_set() for percpu local storage
+>>           preemption happens
+>>    task 1:   run bpf program
+>>
+>> task 1 will effectively use the percpu local storage setting by task 2
+>> which will be either NULL or incorrect ones.
+>>
+>> Instead of just one common local storage per cpu, this patch fixed
+>> the issue by permitting 8 local storages per cpu and each local
+>> storage is identified by a task_struct pointer. This way, we
+>> allow at most 8 nested preemption between bpf_cgroup_storage_set()
+>> and bpf_cgroup_storage_unset(). The percpu local storage slot
+>> is released (calling bpf_cgroup_storage_unset()) by the same task
+>> after bpf program finished running.
+>> bpf_test_run() is also fixed to use the new bpf_cgroup_storage_set()
+>> interface.
+>>
+>> The patch is tested on top of [2] with reproducer in [1].
+>> Without this patch, kernel will emit error in 2-3 minutes.
+>> With this patch, after one hour, still no error.
+>>
+>>   [1] https://lore.kernel.org/bpf/CAKH8qBuXCfUz=w8L+Fj74OaUpbosO29niYwTki7e3Ag044_aww@mail.gmail.com/T
+>>   [2] https://lore.kernel.org/bpf/CAKH8qBuXCfUz=w8L+Fj74OaUpbosO29niYwTki7e3Ag044_aww@mail.gmail.com/T
+>>
+>> Cc: Jiri Olsa <jolsa@kernel.org>
+>> Cc: Roman Gushchin <guro@fb.com>
+>> Signed-off-by: Yonghong Song <yhs@fb.com>
+> 
+> It looks a bit artificial (8 storages to handle the nesting), but most likely
+> it will work in the real life and the code looks correct to me.
 
-Cc: John Fastabend <john.fastabend@gmail.com>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Jakub Sitnicki <jakub@cloudflare.com>
-Cc: Lorenz Bauer <lmb@cloudflare.com>
-Signed-off-by: Cong Wang <cong.wang@bytedance.com>
----
- include/linux/skmsg.h |   4 ++
- include/net/tcp.h     |   2 -
- net/core/skmsg.c      |  98 +++++++++++++++++++++++++++++++++++++++++
- net/ipv4/tcp_bpf.c    | 100 +-----------------------------------------
- net/tls/tls_sw.c      |   4 +-
- 5 files changed, 106 insertions(+), 102 deletions(-)
+Indeed. I picked 8 so it is large enough to cover "all" realistic cases.
 
-diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
-index eb53f6ce74d7..907127a4173a 100644
---- a/include/linux/skmsg.h
-+++ b/include/linux/skmsg.h
-@@ -124,6 +124,10 @@ int sk_msg_zerocopy_from_iter(struct sock *sk, struct iov_iter *from,
- 			      struct sk_msg *msg, u32 bytes);
- int sk_msg_memcopy_from_iter(struct sock *sk, struct iov_iter *from,
- 			     struct sk_msg *msg, u32 bytes);
-+int sk_msg_wait_data(struct sock *sk, struct sk_psock *psock, int flags,
-+		     long timeo, int *err);
-+int sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
-+		   int len, int flags);
- 
- static inline void sk_msg_check_to_free(struct sk_msg *msg, u32 i, u32 bytes)
- {
-diff --git a/include/net/tcp.h b/include/net/tcp.h
-index 2efa4e5ea23d..31b1696c62ba 100644
---- a/include/net/tcp.h
-+++ b/include/net/tcp.h
-@@ -2209,8 +2209,6 @@ void tcp_bpf_clone(const struct sock *sk, struct sock *newsk);
- 
- int tcp_bpf_sendmsg_redir(struct sock *sk, struct sk_msg *msg, u32 bytes,
- 			  int flags);
--int __tcp_bpf_recvmsg(struct sock *sk, struct sk_psock *psock,
--		      struct msghdr *msg, int len, int flags);
- #endif /* CONFIG_NET_SOCK_MSG */
- 
- #if !defined(CONFIG_BPF_SYSCALL) || !defined(CONFIG_NET_SOCK_MSG)
-diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index f7a512bfdb6e..d025d4585899 100644
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -399,6 +399,104 @@ int sk_msg_memcopy_from_iter(struct sock *sk, struct iov_iter *from,
- }
- EXPORT_SYMBOL_GPL(sk_msg_memcopy_from_iter);
- 
-+int sk_msg_wait_data(struct sock *sk, struct sk_psock *psock, int flags,
-+		     long timeo, int *err)
-+{
-+	DEFINE_WAIT_FUNC(wait, woken_wake_function);
-+	int ret = 0;
-+
-+	if (sk->sk_shutdown & RCV_SHUTDOWN)
-+		return 1;
-+
-+	if (!timeo)
-+		return ret;
-+
-+	add_wait_queue(sk_sleep(sk), &wait);
-+	sk_set_bit(SOCKWQ_ASYNC_WAITDATA, sk);
-+	ret = sk_wait_event(sk, &timeo,
-+			    !list_empty(&psock->ingress_msg) ||
-+			    !skb_queue_empty(&sk->sk_receive_queue), &wait);
-+	sk_clear_bit(SOCKWQ_ASYNC_WAITDATA, sk);
-+	remove_wait_queue(sk_sleep(sk), &wait);
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(sk_msg_wait_data);
-+
-+/* Receive sk_msg from psock->ingress_msg to @msg. */
-+int sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
-+		   int len, int flags)
-+{
-+	struct iov_iter *iter = &msg->msg_iter;
-+	int peek = flags & MSG_PEEK;
-+	struct sk_msg *msg_rx;
-+	int i, copied = 0;
-+
-+	msg_rx = sk_psock_peek_msg(psock);
-+	while (copied != len) {
-+		struct scatterlist *sge;
-+
-+		if (unlikely(!msg_rx))
-+			break;
-+
-+		i = msg_rx->sg.start;
-+		do {
-+			struct page *page;
-+			int copy;
-+
-+			sge = sk_msg_elem(msg_rx, i);
-+			copy = sge->length;
-+			page = sg_page(sge);
-+			if (copied + copy > len)
-+				copy = len - copied;
-+			copy = copy_page_to_iter(page, sge->offset, copy, iter);
-+			if (!copy)
-+				return copied ? copied : -EFAULT;
-+
-+			copied += copy;
-+			if (likely(!peek)) {
-+				sge->offset += copy;
-+				sge->length -= copy;
-+				if (!msg_rx->skb)
-+					sk_mem_uncharge(sk, copy);
-+				msg_rx->sg.size -= copy;
-+
-+				if (!sge->length) {
-+					sk_msg_iter_var_next(i);
-+					if (!msg_rx->skb)
-+						put_page(page);
-+				}
-+			} else {
-+				/* Lets not optimize peek case if copy_page_to_iter
-+				 * didn't copy the entire length lets just break.
-+				 */
-+				if (copy != sge->length)
-+					return copied;
-+				sk_msg_iter_var_next(i);
-+			}
-+
-+			if (copied == len)
-+				break;
-+		} while (i != msg_rx->sg.end);
-+
-+		if (unlikely(peek)) {
-+			msg_rx = sk_psock_next_msg(psock, msg_rx);
-+			if (!msg_rx)
-+				break;
-+			continue;
-+		}
-+
-+		msg_rx->sg.start = i;
-+		if (!sge->length && msg_rx->sg.start == msg_rx->sg.end) {
-+			msg_rx = sk_psock_dequeue_msg(psock);
-+			kfree_sk_msg(msg_rx);
-+		}
-+		msg_rx = sk_psock_peek_msg(psock);
-+	}
-+
-+	return copied;
-+}
-+EXPORT_SYMBOL_GPL(sk_msg_recvmsg);
-+
- static struct sk_msg *sk_psock_create_ingress_msg(struct sock *sk,
- 						  struct sk_buff *skb)
- {
-diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-index ac8cfbaeacd2..3d622a0d0753 100644
---- a/net/ipv4/tcp_bpf.c
-+++ b/net/ipv4/tcp_bpf.c
-@@ -10,80 +10,6 @@
- #include <net/inet_common.h>
- #include <net/tls.h>
- 
--int __tcp_bpf_recvmsg(struct sock *sk, struct sk_psock *psock,
--		      struct msghdr *msg, int len, int flags)
--{
--	struct iov_iter *iter = &msg->msg_iter;
--	int peek = flags & MSG_PEEK;
--	struct sk_msg *msg_rx;
--	int i, copied = 0;
--
--	msg_rx = sk_psock_peek_msg(psock);
--	while (copied != len) {
--		struct scatterlist *sge;
--
--		if (unlikely(!msg_rx))
--			break;
--
--		i = msg_rx->sg.start;
--		do {
--			struct page *page;
--			int copy;
--
--			sge = sk_msg_elem(msg_rx, i);
--			copy = sge->length;
--			page = sg_page(sge);
--			if (copied + copy > len)
--				copy = len - copied;
--			copy = copy_page_to_iter(page, sge->offset, copy, iter);
--			if (!copy)
--				return copied ? copied : -EFAULT;
--
--			copied += copy;
--			if (likely(!peek)) {
--				sge->offset += copy;
--				sge->length -= copy;
--				if (!msg_rx->skb)
--					sk_mem_uncharge(sk, copy);
--				msg_rx->sg.size -= copy;
--
--				if (!sge->length) {
--					sk_msg_iter_var_next(i);
--					if (!msg_rx->skb)
--						put_page(page);
--				}
--			} else {
--				/* Lets not optimize peek case if copy_page_to_iter
--				 * didn't copy the entire length lets just break.
--				 */
--				if (copy != sge->length)
--					return copied;
--				sk_msg_iter_var_next(i);
--			}
--
--			if (copied == len)
--				break;
--		} while (i != msg_rx->sg.end);
--
--		if (unlikely(peek)) {
--			msg_rx = sk_psock_next_msg(psock, msg_rx);
--			if (!msg_rx)
--				break;
--			continue;
--		}
--
--		msg_rx->sg.start = i;
--		if (!sge->length && msg_rx->sg.start == msg_rx->sg.end) {
--			msg_rx = sk_psock_dequeue_msg(psock);
--			kfree_sk_msg(msg_rx);
--		}
--		msg_rx = sk_psock_peek_msg(psock);
--	}
--
--	return copied;
--}
--EXPORT_SYMBOL_GPL(__tcp_bpf_recvmsg);
--
- static int bpf_tcp_ingress(struct sock *sk, struct sk_psock *psock,
- 			   struct sk_msg *msg, u32 apply_bytes, int flags)
- {
-@@ -237,28 +163,6 @@ static bool tcp_bpf_stream_read(const struct sock *sk)
- 	return !empty;
- }
- 
--static int tcp_bpf_wait_data(struct sock *sk, struct sk_psock *psock,
--			     int flags, long timeo, int *err)
--{
--	DEFINE_WAIT_FUNC(wait, woken_wake_function);
--	int ret = 0;
--
--	if (sk->sk_shutdown & RCV_SHUTDOWN)
--		return 1;
--
--	if (!timeo)
--		return ret;
--
--	add_wait_queue(sk_sleep(sk), &wait);
--	sk_set_bit(SOCKWQ_ASYNC_WAITDATA, sk);
--	ret = sk_wait_event(sk, &timeo,
--			    !list_empty(&psock->ingress_msg) ||
--			    !skb_queue_empty(&sk->sk_receive_queue), &wait);
--	sk_clear_bit(SOCKWQ_ASYNC_WAITDATA, sk);
--	remove_wait_queue(sk_sleep(sk), &wait);
--	return ret;
--}
--
- static int tcp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
- 		    int nonblock, int flags, int *addr_len)
- {
-@@ -278,13 +182,13 @@ static int tcp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
- 	}
- 	lock_sock(sk);
- msg_bytes_ready:
--	copied = __tcp_bpf_recvmsg(sk, psock, msg, len, flags);
-+	copied = sk_msg_recvmsg(sk, psock, msg, len, flags);
- 	if (!copied) {
- 		int data, err = 0;
- 		long timeo;
- 
- 		timeo = sock_rcvtimeo(sk, nonblock);
--		data = tcp_bpf_wait_data(sk, psock, flags, timeo, &err);
-+		data = sk_msg_wait_data(sk, psock, flags, timeo, &err);
- 		if (data) {
- 			if (!sk_psock_queue_empty(psock))
- 				goto msg_bytes_ready;
-diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
-index 01d933ae5f16..1dcb34dfd56b 100644
---- a/net/tls/tls_sw.c
-+++ b/net/tls/tls_sw.c
-@@ -1789,8 +1789,8 @@ int tls_sw_recvmsg(struct sock *sk,
- 		skb = tls_wait_data(sk, psock, flags, timeo, &err);
- 		if (!skb) {
- 			if (psock) {
--				int ret = __tcp_bpf_recvmsg(sk, psock,
--							    msg, len, flags);
-+				int ret = sk_msg_recvmsg(sk, psock, msg, len,
-+							 flags);
- 
- 				if (ret > 0) {
- 					decrypted += ret;
--- 
-2.25.1
+> Please, feel free to add
+> Acked-by: Roman Gushchin <guro@fb.com>
+> and thank you for fixing it!
+> 
+> Btw, is it intended for a stable backport?
 
+This patch cannbe be used for backport as is. The test_run.c in
+bpf-next has a refactoring which is quite different from bpf tree.
+If we want to backport to bpf/stable, we will need a different
+patch. We can address this later.
+
+> 
+> Thanks!
+> 
+>> ---
+>>   include/linux/bpf-cgroup.h | 57 ++++++++++++++++++++++++++++++++------
+>>   include/linux/bpf.h        | 22 ++++++++++++---
+>>   kernel/bpf/helpers.c       | 15 +++++++---
+>>   kernel/bpf/local_storage.c |  5 ++--
+>>   net/bpf/test_run.c         |  6 +++-
+>>   5 files changed, 86 insertions(+), 19 deletions(-)
+>>
+[...]
