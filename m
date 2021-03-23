@@ -4,40 +4,40 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 63B78C433DB
-	for <bpf@archiver.kernel.org>; Tue, 23 Mar 2021 18:02:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D0EEC433E0
+	for <bpf@archiver.kernel.org>; Tue, 23 Mar 2021 18:07:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2906C6191D
-	for <bpf@archiver.kernel.org>; Tue, 23 Mar 2021 18:02:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C9F37619B8
+	for <bpf@archiver.kernel.org>; Tue, 23 Mar 2021 18:07:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231217AbhCWSBe (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 23 Mar 2021 14:01:34 -0400
-Received: from outpost19.zedat.fu-berlin.de ([130.133.4.112]:45571 "EHLO
+        id S231389AbhCWSH1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 23 Mar 2021 14:07:27 -0400
+Received: from outpost19.zedat.fu-berlin.de ([130.133.4.112]:44627 "EHLO
         outpost19.zedat.fu-berlin.de" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231210AbhCWSBC (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 23 Mar 2021 14:01:02 -0400
+        by vger.kernel.org with ESMTP id S231372AbhCWSHO (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 23 Mar 2021 14:07:14 -0400
 Received: from relay1.zedat.fu-berlin.de ([130.133.4.67])
           by outpost.zedat.fu-berlin.de (Exim 4.94)
           with esmtps (TLS1.2)
           tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
           (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1lOlHZ-0021Z4-9t; Tue, 23 Mar 2021 18:57:33 +0100
+          id 1lOlQj-0024FS-LY; Tue, 23 Mar 2021 19:07:01 +0100
 Received: from mx.physik.fu-berlin.de ([160.45.64.218])
           by relay1.zedat.fu-berlin.de (Exim 4.94)
           with esmtps (TLS1.2)
           tls TLS_DHE_RSA_WITH_AES_128_CBC_SHA
           (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1lOlHZ-003uVz-71; Tue, 23 Mar 2021 18:57:33 +0100
+          id 1lOlQj-003wmA-IR; Tue, 23 Mar 2021 19:07:01 +0100
 Received: from epyc.physik.fu-berlin.de ([160.45.64.180])
         by mx.physik.fu-berlin.de with esmtps (TLS1.2:RSA_AES_256_CBC_SHA1:256)
         (Exim 4.80)
         (envelope-from <glaubitz@physik.fu-berlin.de>)
-        id 1lOlHL-0000Im-PI; Tue, 23 Mar 2021 18:57:19 +0100
+        id 1lOlQW-0000VE-3G; Tue, 23 Mar 2021 19:06:48 +0100
 Received: from glaubitz by epyc.physik.fu-berlin.de with local (Exim 4.94 #2 (Debian))
-        id 1lOlHL-003aHA-GE; Tue, 23 Mar 2021 18:57:19 +0100
+        id 1lOlQV-003aeH-QQ; Tue, 23 Mar 2021 19:06:47 +0100
 From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -50,9 +50,9 @@ To:     Alexei Starovoitov <ast@kernel.org>,
         Masahiro Yamada <yamada.masahiro@socionext.com>,
         linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH] tools: Remove ia64-specific errno.h inclusion from errno.h header
-Date:   Tue, 23 Mar 2021 18:57:08 +0100
-Message-Id: <20210323175710.854352-1-glaubitz@physik.fu-berlin.de>
+Subject: [PATCH, v2] tools: Remove inclusion of ia64-specific version of errno.h header
+Date:   Tue, 23 Mar 2021 19:04:28 +0100
+Message-Id: <20210323180428.855488-1-glaubitz@physik.fu-berlin.de>
 X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -85,6 +85,9 @@ Signed-off-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
 ---
  tools/include/uapi/asm/errno.h | 2 --
  1 file changed, 2 deletions(-)
+
+ v2:
+ - Rephrase summary
 
 diff --git a/tools/include/uapi/asm/errno.h b/tools/include/uapi/asm/errno.h
 index 637189ec1ab9..d30439b4b8ab 100644
