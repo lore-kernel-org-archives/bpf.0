@@ -8,58 +8,58 @@ X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CDDB1C433DB
-	for <bpf@archiver.kernel.org>; Tue, 23 Mar 2021 20:41:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BC06C433E2
+	for <bpf@archiver.kernel.org>; Tue, 23 Mar 2021 20:41:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A713A619CB
-	for <bpf@archiver.kernel.org>; Tue, 23 Mar 2021 20:41:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1B3C9619BA
+	for <bpf@archiver.kernel.org>; Tue, 23 Mar 2021 20:41:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233589AbhCWUkb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 23 Mar 2021 16:40:31 -0400
+        id S233599AbhCWUkd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 23 Mar 2021 16:40:33 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233471AbhCWUj6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 23 Mar 2021 16:39:58 -0400
-Received: from mail-qt1-x84a.google.com (mail-qt1-x84a.google.com [IPv6:2607:f8b0:4864:20::84a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A95C0613E1
-        for <bpf@vger.kernel.org>; Tue, 23 Mar 2021 13:39:57 -0700 (PDT)
-Received: by mail-qt1-x84a.google.com with SMTP id s14so1958604qtw.20
-        for <bpf@vger.kernel.org>; Tue, 23 Mar 2021 13:39:56 -0700 (PDT)
+        with ESMTP id S233438AbhCWUkB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 23 Mar 2021 16:40:01 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E84C0613DF
+        for <bpf@vger.kernel.org>; Tue, 23 Mar 2021 13:40:00 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id u128so3794668ybf.12
+        for <bpf@vger.kernel.org>; Tue, 23 Mar 2021 13:40:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=2eJKl2P+mphx8MXuY5eZ3j0r297zj+fSj+T5WKlAy0E=;
-        b=F7DyYoTINGuplDxZdhovljaDSjsbsbsHDaccNJNpVFG1uHl0pH2Jb8ZGxI9pRViGzn
-         P9bXGOaY4DL6wqzXTQkCjWG3FbAPFgW9yZwRM/QptFOt0nz84XtEbqR1NLBkEGidZJa3
-         CrJkw9qpHdhwZrMFRZHgVsRqmb2+bUfA3erzvVzdp42rL0vgo1/PfyIuO8eBVtII3M96
-         zF220AVy6U0HEFNIfOCZZan85P2t79rpIjJGqHqbbixIsFbkx3V9i1GVLeV4Nyw/Kyqe
-         1GNwZ/VIvbro/fYpjQY24QiS/HC8Qnb62x6xeycl0QxRVHSbtfzTj1X67bnIdj4QhdeH
-         nwSw==
+        bh=kAxWBGQQ6gb1U0MwyH2aGrnOUTzFGjVGvgXGkxVH/cc=;
+        b=obb/St0ECVpiVYPjl0tFmSeAu+nwHW6a+FyVf5Y93kL0zciJ7OpXo5pz5/5qK+sMFf
+         HVCB7lPNLLCcgrreAMPMIq89DUCTawBOwNPUPSIBya5VRwan8cbfXQx100+5xN/Qkd+t
+         DrRy/pbSThpGxZ1QzI4eyYQAJqKt5nt14oxKeAqxjwjAb66eROjyJZpq+iXVKnIt1UeO
+         qE3Het9/jgbk33l/79gSOA0M2UKmfHun8/qcQ5XwaA/WAB2nFQGlLlfTzyIcIhj7o/5V
+         IAm35WHoPPYpvmYzDW1CTc/YgvwTLIfoZ+x6jtjFf4U8j7x1w0Jt0fXDFRfY/dN/7g6Y
+         zgEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=2eJKl2P+mphx8MXuY5eZ3j0r297zj+fSj+T5WKlAy0E=;
-        b=eCE981i9w0nnIK2RUwqtkMKwFwZOmBiyi5Lit6k7wecwEdsW+MCZ+o9Py+b2CygQ1p
-         jQhWWhBSt5lYCB9H51G207Q49ujC7pmXNqE7dpRCwhZJEmLlo8Wr/einzwRMIGmRxBsu
-         ZotwqNvYX1WF28JqCUGh/HUKh3r9a4ADDFN4WGZvAi0XbYlwKKAO13IfdF0MOeoZIw/z
-         pbp489AvI7kcRlXm2+0b5pIe1D/wss92oQUX9JyEIJXgurIARI8Y7Ai6cDrRnXyze0BT
-         Fukro1zKBvoq7nj0q/886YOtRMLssvnfYUfZsjymAEG66zrpAgc4dItM9eAOUd4d/aAL
-         +tWA==
-X-Gm-Message-State: AOAM5317+GXPJMsQOGOrvKSLlNcpnApPAb9ymzLBJTxtWcJ4FUacAtng
-        UVDzLcBbAAoJ5E6ORvT3kTgW8PPDtpo/ZXpHf2g=
-X-Google-Smtp-Source: ABdhPJxkrzfmdWRBTsfApsBgU0/vtdyh9mzsMw1+qzCVhW8+YL7dn0iZkK/RRt+cwJ1LZa5E4YW9O+Nm9AJq6lZMkTQ=
+        bh=kAxWBGQQ6gb1U0MwyH2aGrnOUTzFGjVGvgXGkxVH/cc=;
+        b=hcRlyVR/yKi95OEN6qmH2+HnRrCySEOg1wIP47UZj2OtV67FaSLDdW/n9m8O2lVOLV
+         m4czLbBcx8nfc0xkGeszPb9s3aDiGxqh3zlGZQdds86tSbuNQZ6ZprlZeyVqxRTUmYuU
+         EObqjSms06hxWz/xgRCbvw15GYLzxWrFGjrHmBCLDTYy21cRGcQpz26mOv9BwrYVNySs
+         sdEh/1T1zFPA90MWRgBxIGhbJvZ31qk5zSUQTJnHEw5owXr291UDctYUnIopSZ4gZX0t
+         ZnCIGxU2oKleF9r3zWluHPV1orVDzWmKyzdipzrbGHAsUYDOPsg0VNMh79CIqQIHxI1Y
+         vopQ==
+X-Gm-Message-State: AOAM531aJpaHBHz8W0mjAJ4q1OzrraKg0tqZBuCI1gN2bicq2mB8Bf7i
+        ORBNESGbrw1RlUAR6wZz17mw+2fKNTmZZOHvlWQ=
+X-Google-Smtp-Source: ABdhPJy06lzastyLa7rjZrqrKe8Kw6vypE8VYVF9BzE0zOiJRLohmqAfcSnsVJk7XWpS4yGsr/w/V3cRXxwJCIzEtGs=
 X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:e9a3:260d:763b:67dc])
- (user=samitolvanen job=sendgmr) by 2002:a0c:ea4b:: with SMTP id
- u11mr129682qvp.43.1616531996172; Tue, 23 Mar 2021 13:39:56 -0700 (PDT)
-Date:   Tue, 23 Mar 2021 13:39:33 -0700
+ (user=samitolvanen job=sendgmr) by 2002:a25:e008:: with SMTP id
+ x8mr147121ybg.90.1616531999835; Tue, 23 Mar 2021 13:39:59 -0700 (PDT)
+Date:   Tue, 23 Mar 2021 13:39:35 -0700
 In-Reply-To: <20210323203946.2159693-1-samitolvanen@google.com>
-Message-Id: <20210323203946.2159693-5-samitolvanen@google.com>
+Message-Id: <20210323203946.2159693-7-samitolvanen@google.com>
 Mime-Version: 1.0
 References: <20210323203946.2159693-1-samitolvanen@google.com>
 X-Mailer: git-send-email 2.31.0.291.g576ba9dcdaf-goog
-Subject: [PATCH v3 04/17] module: ensure __cfi_check alignment
+Subject: [PATCH v3 06/17] kthread: use WARN_ON_FUNCTION_MISMATCH
 From:   Sami Tolvanen <samitolvanen@google.com>
 To:     Kees Cook <keescook@chromium.org>
 Cc:     Nathan Chancellor <nathan@kernel.org>,
@@ -79,63 +79,35 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-CONFIG_CFI_CLANG_SHADOW assumes the __cfi_check() function is page
-aligned and at the beginning of the .text section. While Clang would
-normally align the function correctly, it fails to do so for modules
-with no executable code.
+With CONFIG_CFI_CLANG, a callback function passed to
+__kthread_queue_delayed_work from a module points to a jump table
+entry defined in the module instead of the one used in the core
+kernel, which breaks function address equality in this check:
 
-This change ensures the correct __cfi_check() location and
-alignment. It also discards the .eh_frame section, which Clang can
-generate with certain sanitizers, such as CFI.
+  WARN_ON_ONCE(timer->function != ktead_delayed_work_timer_fn);
 
-Link: https://bugs.llvm.org/show_bug.cgi?id=46293
+Use WARN_ON_FUNCTION_MISMATCH() instead to disable the warning
+when CFI and modules are both enabled.
+
 Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
 ---
- scripts/module.lds.S | 20 +++++++++++++++++++-
- 1 file changed, 19 insertions(+), 1 deletion(-)
+ kernel/kthread.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/scripts/module.lds.S b/scripts/module.lds.S
-index 168cd27e6122..2ba9e5ce71df 100644
---- a/scripts/module.lds.S
-+++ b/scripts/module.lds.S
-@@ -3,10 +3,21 @@
-  * Archs are free to supply their own linker scripts.  ld will
-  * combine them automatically.
-  */
-+#include <asm/page.h>
-+
-+#ifdef CONFIG_CFI_CLANG
-+# define ALIGN_CFI 		ALIGN(PAGE_SIZE)
-+# define SANITIZER_DISCARDS	*(.eh_frame)
-+#else
-+# define ALIGN_CFI
-+# define SANITIZER_DISCARDS
-+#endif
-+
- SECTIONS {
- 	/DISCARD/ : {
- 		*(.discard)
- 		*(.discard.*)
-+		SANITIZER_DISCARDS
- 	}
+diff --git a/kernel/kthread.c b/kernel/kthread.c
+index 1578973c5740..a1972eba2917 100644
+--- a/kernel/kthread.c
++++ b/kernel/kthread.c
+@@ -963,7 +963,8 @@ static void __kthread_queue_delayed_work(struct kthread_worker *worker,
+ 	struct timer_list *timer = &dwork->timer;
+ 	struct kthread_work *work = &dwork->work;
  
- 	__ksymtab		0 : { *(SORT(___ksymtab+*)) }
-@@ -40,7 +51,14 @@ SECTIONS {
- 		*(.rodata..L*)
- 	}
+-	WARN_ON_ONCE(timer->function != kthread_delayed_work_timer_fn);
++	WARN_ON_FUNCTION_MISMATCH(timer->function,
++				  kthread_delayed_work_timer_fn);
  
--	.text : { *(.text .text.[0-9a-zA-Z_]*) }
-+	/*
-+	 * With CONFIG_CFI_CLANG, we assume __cfi_check is at the beginning
-+	 * of the .text section, and is aligned to PAGE_SIZE.
-+	 */
-+	.text : ALIGN_CFI {
-+		*(.text.__cfi_check)
-+		*(.text .text.[0-9a-zA-Z_]* .text..L.cfi*)
-+	}
- }
- 
- /* bring in arch-specific sections */
+ 	/*
+ 	 * If @delay is 0, queue @dwork->work immediately.  This is for
 -- 
 2.31.0.291.g576ba9dcdaf-goog
 
