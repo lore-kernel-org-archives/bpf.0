@@ -2,142 +2,152 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB1DCC43333
-	for <bpf@archiver.kernel.org>; Tue, 23 Mar 2021 20:41:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD10DC433DB
+	for <bpf@archiver.kernel.org>; Tue, 23 Mar 2021 20:55:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CC049619DD
-	for <bpf@archiver.kernel.org>; Tue, 23 Mar 2021 20:41:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 762CD619CE
+	for <bpf@archiver.kernel.org>; Tue, 23 Mar 2021 20:55:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233533AbhCWUkm (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 23 Mar 2021 16:40:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44986 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233553AbhCWUkP (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 23 Mar 2021 16:40:15 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70686C0613DB
-        for <bpf@vger.kernel.org>; Tue, 23 Mar 2021 13:40:15 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 6so3848957ybq.7
-        for <bpf@vger.kernel.org>; Tue, 23 Mar 2021 13:40:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=qy/qpaQcjeJGAGSX/SJfdvrV6+xztRS9WV/l31kV3fo=;
-        b=p9ojVOb7QdO7JLZj9S/1SqPGP8MeifFmkf1e6TNJokU+4X+mDo0s3TIOhU1rmJD0gQ
-         C3q3EV251sFO4e//IgvNjn6P29FqOur3szQsT80WVJVAgcgLC/L4gp8LF+fgzMkzOMdQ
-         qK0XZckG24gPmdHwXF6V6z62Qj29O8AjeBevFbC/8BXBEoj5BXdSL0u6CL6w5E92BGE7
-         +vtDECL4yMlxuZ35+QWL2+CnrRi7FlCo5jHCQ87YudtBBhNKSZWNcK4Kl6XHbFJXUSPL
-         qDxp8oIjW07ybSAxf6LQQ6rDchJmoirsp7IIZbdM6z6gMba2BAhKKUVuDpzy54UcfqSt
-         3+kA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=qy/qpaQcjeJGAGSX/SJfdvrV6+xztRS9WV/l31kV3fo=;
-        b=hZHXDms/lG5YycDfNsr/P9Th2j870FRvwp92hd7rz8kPBq8x+HEfwIHo4iTqULMAGH
-         tpTyNX3kvf4/k6b3onh7D3EySTOVqNCPzO0R2n4XAsnx7Cza35hsi0mcRM9Ft2mpwLDZ
-         48F4Nsq5/emMrlmn4RM8z5dLU2VAmgMqL8EDJ0vJupYcnIpy/z/FkvY40w+kzPQkZZhM
-         oAJyKPnWfUIUqm7GrdAOr4KgXmmW7aEM9NZeZyNgAbaaqXLT2485mrCJz3ZRkpXYbgbU
-         mL6xmavWObJ3AOxa5pJvFMG1LUr6ZHnzZUJBPttPlx9pTsvqoxQ/0hfhSr82ABpIbslI
-         IHVQ==
-X-Gm-Message-State: AOAM531H1wC/UEg/+pm5Ha+RfrOEch0LL8JartzMG15j2GuSks/1B3pN
-        ifweMIMDfuBke7VeNKsaqxbImPpfBY2s/silsLE=
-X-Google-Smtp-Source: ABdhPJynHOWSO11EeejwuL7BmZY2Zs5wB2dBb0RO3vU6HGkp4hd57n5miL7y+94vuamNMAUwpzA/HtJp7Bz7P8/50B8=
-X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:e9a3:260d:763b:67dc])
- (user=samitolvanen job=sendgmr) by 2002:a25:da48:: with SMTP id
- n69mr74886ybf.47.1616532014644; Tue, 23 Mar 2021 13:40:14 -0700 (PDT)
-Date:   Tue, 23 Mar 2021 13:39:43 -0700
-In-Reply-To: <20210323203946.2159693-1-samitolvanen@google.com>
-Message-Id: <20210323203946.2159693-15-samitolvanen@google.com>
-Mime-Version: 1.0
-References: <20210323203946.2159693-1-samitolvanen@google.com>
-X-Mailer: git-send-email 2.31.0.291.g576ba9dcdaf-goog
-Subject: [PATCH v3 14/17] arm64: add __nocfi to functions that jump to a
- physical address
-From:   Sami Tolvanen <samitolvanen@google.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Will Deacon <will@kernel.org>, Jessica Yu <jeyu@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Tejun Heo <tj@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Peter Zijlstra <peterz@infradead.org>, bpf@vger.kernel.org,
-        linux-hardening@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sami Tolvanen <samitolvanen@google.com>
+        id S233374AbhCWUyw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 23 Mar 2021 16:54:52 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:51232 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S232529AbhCWUyX (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 23 Mar 2021 16:54:23 -0400
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12NKXIju142178;
+        Tue, 23 Mar 2021 16:54:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=SOEqAZp+3fcJccg3kJnCN/LP4wqUy7k5JxCDZZU/hnQ=;
+ b=KdKVxxOAF3qjH81L2Qo6rn+u3PGIB7IE7762jsWQtPI1rnAADuTGeU4nr8/PcffEXf5o
+ E0brW4sl0WJ4OA6JaWnZzuTem/xhYw8+hfvm65KnffmWxhGwOMrZWesmsSoS3wQT9hEv
+ bAzN+9in6YqKBIz3yu0WNysOk9x2/WdQ0q1BuUrL2/epYWkE6BroplPBUUvnIJlhH1T6
+ mmrs7WfMSHsWoVU8oKh2o4AcieeFbQcs2FaBmz5rtk0OTZFM5VNIQZxHji1ES+zSrk1j
+ DUMipVe80JCQLQNUntDLl1ufOM8Zx5oblaqJ8L5J5Gx1fywXXcgUR7pHarpAaIHv7EUE sg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 37fpumsc2f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 Mar 2021 16:54:08 -0400
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 12NKYRFj151477;
+        Tue, 23 Mar 2021 16:54:08 -0400
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 37fpumsc1y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 Mar 2021 16:54:08 -0400
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.0.43/8.16.0.43) with SMTP id 12NKs6Ga006400;
+        Tue, 23 Mar 2021 20:54:06 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 37d9bmkpt3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 Mar 2021 20:54:06 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 12NKrjWk36962710
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 23 Mar 2021 20:53:45 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9BB1DAE051;
+        Tue, 23 Mar 2021 20:54:03 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1E475AE045;
+        Tue, 23 Mar 2021 20:54:03 +0000 (GMT)
+Received: from sig-9-145-31-74.uk.ibm.com (unknown [9.145.31.74])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 23 Mar 2021 20:54:03 +0000 (GMT)
+Message-ID: <ff65b4733191b836e9738256178434b89a526767.camel@linux.ibm.com>
+Subject: Re: [PATCH PING dwarves] btf: Add --btf_gen_all flag
+From:   Ilya Leoshkevich <iii@linux.ibm.com>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Andrii Nakryiko <andrii@kernel.org>, dwarves@vger.kernel.org,
+        bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yonghong Song <yhs@fb.com>, Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+Date:   Tue, 23 Mar 2021 21:54:02 +0100
+In-Reply-To: <YFox4XQ611jHo7Wj@kernel.org>
+References: <20210312000808.175262-1-iii@linux.ibm.com>
+         <YEtvIvODFEQHgt8m@kernel.org>
+         <41d244ba53881fa99dda3d0a65c4a8cfb557a755.camel@linux.ibm.com>
+         <YFouW2D2Y1XpcjKA@kernel.org> <YFox4XQ611jHo7Wj@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
+X-TM-AS-GCONF: 00
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
+ definitions=2021-03-23_09:2021-03-23,2021-03-23 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
+ adultscore=0 mlxscore=0 lowpriorityscore=0 priorityscore=1501
+ suspectscore=0 malwarescore=0 mlxlogscore=999 clxscore=1015 phishscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2103230152
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Disable CFI checking for functions that switch to linear mapping and
-make an indirect call to a physical address, since the compiler only
-understands virtual addresses and the CFI check for such indirect calls
-would always fail.
+On Tue, 2021-03-23 at 15:22 -0300, Arnaldo Carvalho de Melo wrote:
+> Em Tue, Mar 23, 2021 at 03:07:23PM -0300, Arnaldo Carvalho de Melo
+> escreveu:
+> > Em Tue, Mar 23, 2021 at 02:36:48PM +0100, Ilya Leoshkevich
+> > escreveu:
+> > > On Fri, 2021-03-12 at 10:39 -0300, Arnaldo Carvalho de Melo
+> > > wrote:
+> > > > Em Fri, Mar 12, 2021 at 01:08:08AM +0100, Ilya Leoshkevich
+> > > > escreveu:
+> > > > > By default, pahole makes use only of BTF features introduced
+> > > > > with
+> > > > > kernel v5.2. Features that are added later need to be turned
+> > > > > on with
+> > > > > explicit feature flags, such as --btf_gen_floats. According
+> > > > > to [1],
+> > > > > this will hinder the people who generate BTF for kernels
+> > > > > externally
+> > > > > (e.g. for old kernels to support BPF CO-RE).
+> > > > > 
+> > > > > Introduce --btf_gen_all that allows using all BTF features
+> > > > > supported
+> > > > > by pahole.
+> > > > > 
+> > > > > [1] 
+> > > > > https://lore.kernel.org/dwarves/CAEf4Bzbyugfb2RkBkRuxNGKwSk40Tbq4zAvhQT8W=fVMYWuaxA@mail.gmail.com/
+> > > > 
+> > > > Applied locally, testing ongoing.
+> > > > 
+> > > > Also added this:
+> > > > 
+> > > > Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+> > > > 
+> > > > - Arnaldo
+> > > 
+> > > [...]
+> > > 
+> > > Hi Arnaldo,
+> > > 
+> > > I'd like to ping this patch (and
+> > > https://lore.kernel.org/dwarves/20210310201550.170599-1-iii@linux.ibm.com/
+> > > too).
+> > 
+> > So I finally finished testing, pushing out now.
+> 
+> Please check what is in
+> https://git.kernel.org/pub/scm/devel/pahole/pahole.git/, I'm having
+> some
+> problems with 2FA on github, will fix soon.
+> 
+> - Arnaldo
 
-Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
----
- arch/arm64/include/asm/mmu_context.h | 2 +-
- arch/arm64/kernel/cpu-reset.h        | 8 ++++----
- arch/arm64/kernel/cpufeature.c       | 2 +-
- 3 files changed, 6 insertions(+), 6 deletions(-)
+That looks good, thanks!
 
-diff --git a/arch/arm64/include/asm/mmu_context.h b/arch/arm64/include/asm/mmu_context.h
-index 16cc9a694bb2..270ba8761a23 100644
---- a/arch/arm64/include/asm/mmu_context.h
-+++ b/arch/arm64/include/asm/mmu_context.h
-@@ -119,7 +119,7 @@ static inline void cpu_install_idmap(void)
-  * Atomically replaces the active TTBR1_EL1 PGD with a new VA-compatible PGD,
-  * avoiding the possibility of conflicting TLB entries being allocated.
-  */
--static inline void cpu_replace_ttbr1(pgd_t *pgdp)
-+static inline void __nocfi cpu_replace_ttbr1(pgd_t *pgdp)
- {
- 	typedef void (ttbr_replace_func)(phys_addr_t);
- 	extern ttbr_replace_func idmap_cpu_replace_ttbr1;
-diff --git a/arch/arm64/kernel/cpu-reset.h b/arch/arm64/kernel/cpu-reset.h
-index dfba8cf921e5..a05bda363272 100644
---- a/arch/arm64/kernel/cpu-reset.h
-+++ b/arch/arm64/kernel/cpu-reset.h
-@@ -13,10 +13,10 @@
- void __cpu_soft_restart(unsigned long el2_switch, unsigned long entry,
- 	unsigned long arg0, unsigned long arg1, unsigned long arg2);
- 
--static inline void __noreturn cpu_soft_restart(unsigned long entry,
--					       unsigned long arg0,
--					       unsigned long arg1,
--					       unsigned long arg2)
-+static inline void __noreturn __nocfi cpu_soft_restart(unsigned long entry,
-+						       unsigned long arg0,
-+						       unsigned long arg1,
-+						       unsigned long arg2)
- {
- 	typeof(__cpu_soft_restart) *restart;
- 
-diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
-index 7ec1c2ccdc0b..473212ff4d70 100644
---- a/arch/arm64/kernel/cpufeature.c
-+++ b/arch/arm64/kernel/cpufeature.c
-@@ -1443,7 +1443,7 @@ static bool unmap_kernel_at_el0(const struct arm64_cpu_capabilities *entry,
- }
- 
- #ifdef CONFIG_UNMAP_KERNEL_AT_EL0
--static void
-+static void __nocfi
- kpti_install_ng_mappings(const struct arm64_cpu_capabilities *__unused)
- {
- 	typedef void (kpti_remap_fn)(int, int, phys_addr_t);
--- 
-2.31.0.291.g576ba9dcdaf-goog
+s390 seems to run fine again with the latest bpf-next / llvm / pahole.
+Now I can finally give adding s390 to the libbpf CI another try :-)
 
