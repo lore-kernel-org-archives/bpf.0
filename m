@@ -2,146 +2,158 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E1686C433C1
-	for <bpf@archiver.kernel.org>; Wed, 24 Mar 2021 01:41:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0E34C433E0
+	for <bpf@archiver.kernel.org>; Wed, 24 Mar 2021 02:23:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B66E1619E8
-	for <bpf@archiver.kernel.org>; Wed, 24 Mar 2021 01:41:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BAF9F619ED
+	for <bpf@archiver.kernel.org>; Wed, 24 Mar 2021 02:23:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231355AbhCXBlL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 23 Mar 2021 21:41:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33502 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231533AbhCXBlE (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 23 Mar 2021 21:41:04 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6C5DB61924;
-        Wed, 24 Mar 2021 01:41:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616550064;
-        bh=7qdFAip3g0QPQnuuZWhxuGHkLs3MS3jK3ZpCgzjAhdo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ObkzGBgeRRpSZtnyjrrgUHn2yLhmWsu2MR/K8xVpcRzslS1I9FfIMfnLKJUdM3iq7
-         NihPrwLWnWQENzQYrzSD7ZPji6cMYAq5qtL9Oo/to3TQ2D93+8hgp/AseE7Ck+7k06
-         wWFfYTua5EkLtZNUcoZle6Y85B0CGhUFJAeHpGFQZd+dt1kkB7GAOc6ahY806OK9Gy
-         69CyPKwqmBMG6KNFRzZNbcHWgM5EsrjdvPuNVE+QhAeghgdtzT9D8QMFDc5EngeFTE
-         kIzlMRpSEfGhXrxmLbpNjo0OD/NJ4XPz6uhlTcz1Ve+q3cwAF5CiygK18GjodKLP/e
-         GBJOIdFCKEA0A==
-Date:   Wed, 24 Mar 2021 10:40:58 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@kernel.org>, X86 ML <x86@kernel.org>,
-        Daniel Xu <dxu@dxuuu.xyz>, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, kuba@kernel.org, mingo@redhat.com,
-        ast@kernel.org, tglx@linutronix.de, kernel-team@fb.com, yhs@fb.com,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        linux-ia64@vger.kernel.org,
-        Abhishek Sagar <sagar.abhishek@gmail.com>
-Subject: Re: [PATCH -tip v4 10/12] x86/kprobes: Push a fake return address
- at kretprobe_trampoline
-Message-Id: <20210324104058.7c06aaeb0408e24db6ba46f8@kernel.org>
-In-Reply-To: <20210323223007.GG4746@worktop.programming.kicks-ass.net>
-References: <161639518354.895304.15627519393073806809.stgit@devnote2>
-        <161639530062.895304.16962383429668412873.stgit@devnote2>
-        <20210323223007.GG4746@worktop.programming.kicks-ass.net>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S232066AbhCXCXW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 23 Mar 2021 22:23:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33984 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234866AbhCXCXI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 23 Mar 2021 22:23:08 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31DB7C0613D8
+        for <bpf@vger.kernel.org>; Tue, 23 Mar 2021 19:23:08 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id z2so22854671wrl.5
+        for <bpf@vger.kernel.org>; Tue, 23 Mar 2021 19:23:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=3lrwN5zbcO+2TddxRTzc39cDIK+QrZIGvDOM+43GgDs=;
+        b=cU4PgYGKJxnC/dVpyJquzDxdzvr7W+eqCMo/RJW7908NZKOC+sAy2Y7owcWF+nEQOp
+         9hZ+p+L1m2rcxoiBnZALagohq0UwX6pPWO8dbzrTa64e447MZ0tfuqHVLeBpy0j26dh6
+         sIy42r019xG7jGb0ownF/WRcBcDw4u3A1qhDU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=3lrwN5zbcO+2TddxRTzc39cDIK+QrZIGvDOM+43GgDs=;
+        b=RMtzuV3OjwV4VRpKQyXwAn8Q7qaaqDxRz5Mx1whVQO0jT9HCfFcZKuKM9LcaUHdnKu
+         UB6Oh+cfezMijaSRiChOziVNdUYQ96aSU35y6dJ445jesQ1iG7wFRpPI18h7JCdMEjaH
+         V/4ZMAzbYuDV7NEUzqLsPNwS1StkEDRLt3DzqPBcKPcLQd0uj06UYVXeFc0+JdmsoMyT
+         BS4Mm7KzDWhLcFjL0I0OyE8uXFgINhgtiTN6L22RJ5A6QNBG67ki45nM07wrA13HmBsG
+         E1ytZCfyfdGCn6ADf94FuEK6kn+vJAR8QicLBdTShjP60R5OcH+jRyPsrk87vayGSt+l
+         6vuA==
+X-Gm-Message-State: AOAM530L3levyp0fbRBMH8U+AIdY55XSTFeSOh5jbW5N8L0iAf+t11Pz
+        ZNdz2FTz2jjZNHGRjd+E+uBf/JEkgHMFLQ==
+X-Google-Smtp-Source: ABdhPJzdkEYVWUng8GcKTofYeqJqug0FfQv2A5TGjfbYLxWmF2rEmATFSjTZnIv+NNY3hm+p8EWOTg==
+X-Received: by 2002:a05:6000:c7:: with SMTP id q7mr864818wrx.356.1616552586705;
+        Tue, 23 Mar 2021 19:23:06 -0700 (PDT)
+Received: from revest.zrh.corp.google.com ([2a00:79e0:42:204:ccba:9601:929c:dbcb])
+        by smtp.gmail.com with ESMTPSA id n9sm74219wrx.46.2021.03.23.19.23.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Mar 2021 19:23:06 -0700 (PDT)
+From:   Florent Revest <revest@chromium.org>
+To:     bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        yhs@fb.com, kpsingh@kernel.org, jackmanb@chromium.org,
+        linux-kernel@vger.kernel.org, Florent Revest <revest@chromium.org>
+Subject: [PATCH bpf-next v2 2/6] bpf: Add a ARG_PTR_TO_CONST_STR argument type
+Date:   Wed, 24 Mar 2021 03:22:07 +0100
+Message-Id: <20210324022211.1718762-3-revest@chromium.org>
+X-Mailer: git-send-email 2.31.0.291.g576ba9dcdaf-goog
+In-Reply-To: <20210324022211.1718762-1-revest@chromium.org>
+References: <20210324022211.1718762-1-revest@chromium.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, 23 Mar 2021 23:30:07 +0100
-Peter Zijlstra <peterz@infradead.org> wrote:
+This type provides the guarantee that an argument is going to be a const
+pointer to somewhere in a read-only map value. It also checks that this
+pointer is followed by a zero character before the end of the map value.
 
-> On Mon, Mar 22, 2021 at 03:41:40PM +0900, Masami Hiramatsu wrote:
-> >  	".global kretprobe_trampoline\n"
-> >  	".type kretprobe_trampoline, @function\n"
-> >  	"kretprobe_trampoline:\n"
-> >  #ifdef CONFIG_X86_64
-> 
-> So what happens if we get an NMI here? That is, after the RET but before
-> the push? Then our IP points into the trampoline but we've not done that
-> push yet.
+Signed-off-by: Florent Revest <revest@chromium.org>
+---
+ include/linux/bpf.h   |  1 +
+ kernel/bpf/verifier.c | 38 ++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 39 insertions(+)
 
-Not only NMI, but also interrupts can happen. There is no cli/sti here.
-
-Anyway, thanks for pointing!
-I think in UNWIND_HINT_TYPE_REGS and UNWIND_HINT_TYPE_REGS_PARTIAL cases
-ORC unwinder also has to check the state->ip and if it is kretprobe_trampoline,
-it should be recovered.
-What about this?
-
-diff --git a/arch/x86/include/asm/unwind.h b/arch/x86/include/asm/unwind.h
-index 332aa6174b10..36d3971c0a2c 100644
---- a/arch/x86/include/asm/unwind.h
-+++ b/arch/x86/include/asm/unwind.h
-@@ -101,6 +101,15 @@ void unwind_module_init(struct module *mod, void *orc_ip, size_t orc_ip_size,
- 			void *orc, size_t orc_size) {}
- #endif
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index a25730eaa148..7b5319d75b3e 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -308,6 +308,7 @@ enum bpf_arg_type {
+ 	ARG_PTR_TO_PERCPU_BTF_ID,	/* pointer to in-kernel percpu type */
+ 	ARG_PTR_TO_FUNC,	/* pointer to a bpf program function */
+ 	ARG_PTR_TO_STACK_OR_NULL,	/* pointer to stack or NULL */
++	ARG_PTR_TO_CONST_STR,	/* pointer to a null terminated read-only string */
+ 	__BPF_ARG_TYPE_MAX,
+ };
  
-+static inline
-+unsigned long unwind_recover_kretprobe(struct unwind_state *state,
-+				       unsigned long addr, unsigned long *addr_p)
-+{
-+	return is_kretprobe_trampoline(addr) ?
-+		kretprobe_find_ret_addr(state->task, addr_p, &state->kr_cur) :
-+		addr;
-+}
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index e26c5170c953..9e03608725b4 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -4601,6 +4601,7 @@ static const struct bpf_reg_types spin_lock_types = { .types = { PTR_TO_MAP_VALU
+ static const struct bpf_reg_types percpu_btf_ptr_types = { .types = { PTR_TO_PERCPU_BTF_ID } };
+ static const struct bpf_reg_types func_ptr_types = { .types = { PTR_TO_FUNC } };
+ static const struct bpf_reg_types stack_ptr_types = { .types = { PTR_TO_STACK } };
++static const struct bpf_reg_types const_str_ptr_types = { .types = { PTR_TO_MAP_VALUE } };
+ 
+ static const struct bpf_reg_types *compatible_reg_types[__BPF_ARG_TYPE_MAX] = {
+ 	[ARG_PTR_TO_MAP_KEY]		= &map_key_value_types,
+@@ -4631,6 +4632,7 @@ static const struct bpf_reg_types *compatible_reg_types[__BPF_ARG_TYPE_MAX] = {
+ 	[ARG_PTR_TO_PERCPU_BTF_ID]	= &percpu_btf_ptr_types,
+ 	[ARG_PTR_TO_FUNC]		= &func_ptr_types,
+ 	[ARG_PTR_TO_STACK_OR_NULL]	= &stack_ptr_types,
++	[ARG_PTR_TO_CONST_STR]		= &const_str_ptr_types,
+ };
+ 
+ static int check_reg_type(struct bpf_verifier_env *env, u32 regno,
+@@ -4881,6 +4883,42 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+ 		if (err)
+ 			return err;
+ 		err = check_ptr_alignment(env, reg, 0, size, true);
++	} else if (arg_type == ARG_PTR_TO_CONST_STR) {
++		struct bpf_map *map = reg->map_ptr;
++		int map_off;
++		u64 map_addr;
++		char *str_ptr;
 +
- /* Recover the return address modified by instrumentation (e.g. kretprobe) */
- static inline
- unsigned long unwind_recover_ret_addr(struct unwind_state *state,
-@@ -110,10 +119,7 @@ unsigned long unwind_recover_ret_addr(struct unwind_state *state,
++		if (reg->type != PTR_TO_MAP_VALUE || !map ||
++		    !bpf_map_is_rdonly(map)) {
++			verbose(env, "R%d does not point to a readonly map'\n", regno);
++			return -EACCES;
++		}
++
++		if (!tnum_is_const(reg->var_off)) {
++			verbose(env, "R%d is not a constant address'\n", regno);
++			return -EACCES;
++		}
++
++		if (!map->ops->map_direct_value_addr) {
++			verbose(env, "no direct value access support for this map type\n");
++			return -EACCES;
++		}
++
++		err = check_map_access(env, regno, reg->off,
++				       map->value_size - reg->off, false);
++		if (err)
++			return err;
++
++		map_off = reg->off + reg->var_off.value;
++		err = map->ops->map_direct_value_addr(map, &map_addr, map_off);
++		if (err)
++			return err;
++
++		str_ptr = (char *)(long)(map_addr);
++		if (!strnchr(str_ptr + map_off,
++			     map->value_size - reg->off - map_off, 0))
++			verbose(env, "string is not zero-terminated\n");
+ 	}
  
- 	ret = ftrace_graph_ret_addr(state->task, &state->graph_idx,
- 				    addr, addr_p);
--	if (is_kretprobe_trampoline(ret))
--		ret = kretprobe_find_ret_addr(state->task, addr_p,
--					      &state->kr_cur);
--	return ret;
-+	return unwind_recover_kretprobe(state, ret, addr_p);
- }
- 
- /*
-diff --git a/arch/x86/kernel/unwind_orc.c b/arch/x86/kernel/unwind_orc.c
-index 839a0698342a..cb59aeca6a4a 100644
---- a/arch/x86/kernel/unwind_orc.c
-+++ b/arch/x86/kernel/unwind_orc.c
-@@ -549,7 +549,15 @@ bool unwind_next_frame(struct unwind_state *state)
- 					 (void *)orig_ip);
- 			goto err;
- 		}
--
-+		/*
-+		 * There is a small chance to interrupt at the entry of
-+		 * kretprobe_trampoline where the ORC info doesn't exist.
-+		 * That point is right after the RET to kretprobe_trampoline
-+		 * which was modified return address. So the @addr_p must
-+		 * be right before the regs->sp.
-+		 */
-+		state->ip = unwind_recover_kretprobe(state, state->ip,
-+					state->sp - sizeof(unsigned long));
- 		state->regs = (struct pt_regs *)sp;
- 		state->prev_regs = NULL;
- 		state->full_regs = true;
-@@ -562,6 +570,9 @@ bool unwind_next_frame(struct unwind_state *state)
- 					 (void *)orig_ip);
- 			goto err;
- 		}
-+		/* See UNWIND_HINT_TYPE_REGS case comment. */
-+		state->ip = unwind_recover_kretprobe(state, state->ip,
-+					state->sp - sizeof(unsigned long));
- 
- 		if (state->full_regs)
- 			state->prev_regs = state->regs;
-
-
+ 	return err;
 -- 
-Masami Hiramatsu <mhiramat@kernel.org>
+2.31.0.291.g576ba9dcdaf-goog
+
