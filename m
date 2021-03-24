@@ -2,143 +2,79 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3D10C433C1
-	for <bpf@archiver.kernel.org>; Wed, 24 Mar 2021 13:48:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F288C433DB
+	for <bpf@archiver.kernel.org>; Wed, 24 Mar 2021 14:45:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 687F861A01
-	for <bpf@archiver.kernel.org>; Wed, 24 Mar 2021 13:48:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E0162619F3
+	for <bpf@archiver.kernel.org>; Wed, 24 Mar 2021 14:45:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235564AbhCXNs2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 24 Mar 2021 09:48:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:47892 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235436AbhCXNsS (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 24 Mar 2021 09:48:18 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1616593698;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QHQRvsM7dTA+mGVVFFUUQLQlWpIhbOfd5Hm9ljWiRQs=;
-        b=PjSaQrtSa+EbclITbYNRbr71r/Y7VUaR1EpIMUdyanq7jDfPnZHKl1E7K/USeQI82CP7Q7
-        CzT9vspl8foTJWGBFG0slRV6peYSI8rYreZI6+lFKx/BagoxkDRXWNhgGWpxrD8mMKVIJ4
-        GEn3GOK/MySX+vuvMie075EvxWXvXJE=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-257-VvCc3_a7Mh2f1hyAmOYYAA-1; Wed, 24 Mar 2021 09:48:14 -0400
-X-MC-Unique: VvCc3_a7Mh2f1hyAmOYYAA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3C383BFF97;
-        Wed, 24 Mar 2021 13:47:44 +0000 (UTC)
-Received: from krava (unknown [10.40.196.25])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 4E1EE843E8;
-        Wed, 24 Mar 2021 13:47:41 +0000 (UTC)
-Date:   Wed, 24 Mar 2021 14:47:40 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCH bpf] bpf: Take module reference for ip in module code
-Message-ID: <YFtC/O399QhHZtpb@krava>
-References: <20210323211533.1931242-1-jolsa@kernel.org>
- <20210324012237.65pf4s52oqlicea3@ast-mbp>
- <YFsjGkIwpXm5IYdR@krava>
+        id S236201AbhCXOpM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 24 Mar 2021 10:45:12 -0400
+Received: from mga02.intel.com ([134.134.136.20]:2051 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236258AbhCXOoz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 24 Mar 2021 10:44:55 -0400
+IronPort-SDR: tCdBMkvqOrZGMPu/mlmnhgFqm7kL8eg55XvPVQvpGWMe1eSSwlYa00fRECJzXXl9tyUfjUvFV6
+ n/MR7LDVVc2Q==
+X-IronPort-AV: E=McAfee;i="6000,8403,9933"; a="177834548"
+X-IronPort-AV: E=Sophos;i="5.81,274,1610438400"; 
+   d="scan'208";a="177834548"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2021 07:44:55 -0700
+IronPort-SDR: oMW/C52YfnDFEg7f7ctONnN+d7aydsjOGW3s19sA8woRjlhhTvyHoiw3pkzDzKOUVC60D1Dhc8
+ /lVkn/rqTyxQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,274,1610438400"; 
+   d="scan'208";a="608127970"
+Received: from silpixa00399839.ir.intel.com (HELO localhost.localdomain) ([10.237.222.142])
+  by fmsmga005.fm.intel.com with ESMTP; 24 Mar 2021 07:44:53 -0700
+From:   Ciara Loftus <ciara.loftus@intel.com>
+To:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        magnus.karlsson@intel.com, bjorn@kernel.org
+Cc:     Ciara Loftus <ciara.loftus@intel.com>
+Subject: [PATCH bpf 1/3] libbpf: ensure umem pointer is non-NULL before dereferencing
+Date:   Wed, 24 Mar 2021 14:13:35 +0000
+Message-Id: <20210324141337.29269-2-ciara.loftus@intel.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210324141337.29269-1-ciara.loftus@intel.com>
+References: <20210324141337.29269-1-ciara.loftus@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YFsjGkIwpXm5IYdR@krava>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Mar 24, 2021 at 12:31:42PM +0100, Jiri Olsa wrote:
-> On Tue, Mar 23, 2021 at 06:22:37PM -0700, Alexei Starovoitov wrote:
-> > On Tue, Mar 23, 2021 at 10:15:33PM +0100, Jiri Olsa wrote:
-> > > Currently module can be unloaded even if there's a trampoline
-> > > register in it. It's easily reproduced by running in parallel:
-> > > 
-> > >   # while :; do ./test_progs -t module_attach; done
-> > >   # while :; do ./test_progs -t fentry_test; done
-> > > 
-> > > Taking the module reference in case the trampoline's ip is
-> > > within the module code. Releasing it when the trampoline's
-> > > ip is unregistered.
-> > > 
-> > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > > ---
-> > >  kernel/bpf/trampoline.c | 32 ++++++++++++++++++++++++++++++++
-> > >  1 file changed, 32 insertions(+)
-> > > 
-> > > diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-> > > index 1f3a4be4b175..f6cb179842b2 100644
-> > > --- a/kernel/bpf/trampoline.c
-> > > +++ b/kernel/bpf/trampoline.c
-> > > @@ -87,6 +87,27 @@ static struct bpf_trampoline *bpf_trampoline_lookup(u64 key)
-> > >  	return tr;
-> > >  }
-> > >  
-> > > +static struct module *ip_module_get(unsigned long ip)
-> > > +{
-> > > +	struct module *mod;
-> > > +	int err = 0;
-> > > +
-> > > +	preempt_disable();
-> > > +	mod = __module_text_address(ip);
-> > > +	if (mod && !try_module_get(mod))
-> > > +		err = -ENOENT;
-> > > +	preempt_enable();
-> > > +	return err ? ERR_PTR(err) : mod;
-> > > +}
-> > > +
-> > > +static void ip_module_put(unsigned long ip)
-> > > +{
-> > > +	struct module *mod = __module_text_address(ip);
-> > 
-> > Conceptually looks correct, but how did you test it?!
-> > Just doing your reproducer:
-> > while :; do ./test_progs -t module_attach; done & while :; do ./test_progs -t fentry_test; done
-> > 
-> > I immediately hit:
-> > [   19.461162] WARNING: CPU: 1 PID: 232 at kernel/module.c:264 module_assert_mutex_or_preempt+0x2e/0x40
-> > [   19.477126] Call Trace:
-> > [   19.477464]  __module_address+0x28/0xf0
-> > [   19.477865]  ? __bpf_trace_bpf_testmod_test_write_bare+0x10/0x10 [bpf_testmod]
-> > [   19.478711]  __module_text_address+0xe/0x60
-> > [   19.479156]  bpf_trampoline_update+0x2ff/0x470
-> 
-> I don't have lockdep enabled.. ah the module_mutex is held
-> during module init, that's why all the code I was using as
-> a reference did not take it.. sorry, will fix
+Calls to xsk_socket__create dereference the umem to access the
+fill_save and comp_save pointers. Make sure the umem is non-NULL
+before doing this.
 
-ah it's the missing preempt_disable ;-) ok
+Fixes: 2f6324a3937f ("libbpf: Support shared umems between queues and devices")
 
-jirka
+Signed-off-by: Ciara Loftus <ciara.loftus@intel.com>
+---
+ tools/lib/bpf/xsk.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-> 
-> > 
-> > Which points to an obvious bug above.
-> > 
-> > How did you debug it to this module going away issue?
-> > Why does test_progs -t fentry_test help to repro?
-> > Or does it?
-> > It doesn't touch anything in modules.
-> 
-> test_prog also loads/unloads that module, but it could be
-> just insmod/rmmod instead, will change
-> 
-> jirka
+diff --git a/tools/lib/bpf/xsk.c b/tools/lib/bpf/xsk.c
+index 526fc35c0b23..443b0cfb45e8 100644
+--- a/tools/lib/bpf/xsk.c
++++ b/tools/lib/bpf/xsk.c
+@@ -1019,6 +1019,9 @@ int xsk_socket__create(struct xsk_socket **xsk_ptr, const char *ifname,
+ 		       struct xsk_ring_cons *rx, struct xsk_ring_prod *tx,
+ 		       const struct xsk_socket_config *usr_config)
+ {
++	if (!umem)
++		return -EFAULT;
++
+ 	return xsk_socket__create_shared(xsk_ptr, ifname, queue_id, umem,
+ 					 rx, tx, umem->fill_save,
+ 					 umem->comp_save, usr_config);
+-- 
+2.17.1
 
