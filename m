@@ -2,355 +2,250 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 545F6C433E4
-	for <bpf@archiver.kernel.org>; Wed, 24 Mar 2021 02:23:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C3EEC433C1
+	for <bpf@archiver.kernel.org>; Wed, 24 Mar 2021 02:25:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 270E3619E5
-	for <bpf@archiver.kernel.org>; Wed, 24 Mar 2021 02:23:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CC00A619EC
+	for <bpf@archiver.kernel.org>; Wed, 24 Mar 2021 02:25:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232095AbhCXCXX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 23 Mar 2021 22:23:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33988 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234867AbhCXCXJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 23 Mar 2021 22:23:09 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AC2AC061765
-        for <bpf@vger.kernel.org>; Tue, 23 Mar 2021 19:23:09 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id v4so22826332wrp.13
-        for <bpf@vger.kernel.org>; Tue, 23 Mar 2021 19:23:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ZkjCrgnEgvQfqsVnqhVVOdbWMBOed7xvaT8ATkQrRYY=;
-        b=BTgNiZwOiPD/uOZfH7x1auNgMBYSYs1FXq+wbsQSXIQUj8dZL99os5UEMtRqXkR9AQ
-         mYd9Ku3uWSQL6qfo6F4eB1N/xWVeaRZAWNT1VlmjLoqqYSGh5ah6oJSnWwM6nqEKoor8
-         /1/gjSqWpuWk3tw7+GUobJKHSdP2iahet7Frw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ZkjCrgnEgvQfqsVnqhVVOdbWMBOed7xvaT8ATkQrRYY=;
-        b=oRmcNmkYhZugcpDqDrjt3cX4NKUskq88h86owfJDmshmaGeZhp362yR0MKLHIEUBRs
-         777m/GoJjPbSDreCWvDJJgUb8QElUmgiZcKbJxw/5Fn8fLig1QiU+pCRWGIQFKmV8zUv
-         UrzhdBeKB95AJ0udbG8Jn8/DILl/jl3XYK9hJsR+EcZ6rCbRaqt7WQvxOKxNhFe/gnmH
-         GKVX5VVRmatL+Wby3bLGmeOqoNe5qo+Gr9V3cGbVCDVKq/9kjFJkpu+KTL3ofVOHSiQ2
-         WnV3gHkudMixBvgnfdm2LhYbVv59HbwZZzjLy5g1AHoEzFvIONIUjkowymgWeJZt48YP
-         4s5Q==
-X-Gm-Message-State: AOAM531qdRnjxkjNbfzbwdvc6g7ZluaG5pdToVX3By3Yx8HPns/B0yxz
-        w0CoQ1ymIe1K1JgAhK4VRRykebvCIZKWiA==
-X-Google-Smtp-Source: ABdhPJwAselLrOHaNmHCWIjg7RPBCSDXnvwh1HUfbmKw2YjjdKU5EtChaDh93gMJDlioY2fGaDLwtA==
-X-Received: by 2002:adf:f851:: with SMTP id d17mr816541wrq.267.1616552587629;
-        Tue, 23 Mar 2021 19:23:07 -0700 (PDT)
-Received: from revest.zrh.corp.google.com ([2a00:79e0:42:204:ccba:9601:929c:dbcb])
-        by smtp.gmail.com with ESMTPSA id n9sm74219wrx.46.2021.03.23.19.23.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Mar 2021 19:23:07 -0700 (PDT)
-From:   Florent Revest <revest@chromium.org>
-To:     bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        yhs@fb.com, kpsingh@kernel.org, jackmanb@chromium.org,
-        linux-kernel@vger.kernel.org, Florent Revest <revest@chromium.org>
-Subject: [PATCH bpf-next v2 3/6] bpf: Add a bpf_snprintf helper
-Date:   Wed, 24 Mar 2021 03:22:08 +0100
-Message-Id: <20210324022211.1718762-4-revest@chromium.org>
-X-Mailer: git-send-email 2.31.0.291.g576ba9dcdaf-goog
-In-Reply-To: <20210324022211.1718762-1-revest@chromium.org>
-References: <20210324022211.1718762-1-revest@chromium.org>
+        id S234746AbhCXCY3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 23 Mar 2021 22:24:29 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:14857 "EHLO
+        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234920AbhCXCYL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 23 Mar 2021 22:24:11 -0400
+Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4F4sSd0Fyyz93BL;
+        Wed, 24 Mar 2021 10:22:09 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.56) by
+ DGGEMS414-HUB.china.huawei.com (10.3.19.214) with Microsoft SMTP Server id
+ 14.3.498.0; Wed, 24 Mar 2021 10:24:02 +0800
+From:   Yunsheng Lin <linyunsheng@huawei.com>
+To:     <davem@davemloft.net>, <kuba@kernel.org>
+CC:     <olteanv@gmail.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <andriin@fb.com>, <edumazet@google.com>, <weiwan@google.com>,
+        <cong.wang@bytedance.com>, <ap420073@gmail.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linuxarm@openeuler.org>, <mkl@pengutronix.de>,
+        <linux-can@vger.kernel.org>, <jhs@mojatatu.com>,
+        <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
+        <andrii@kernel.org>, <kafai@fb.com>, <songliubraving@fb.com>,
+        <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
+        <bpf@vger.kernel.org>, <jonas.bonn@netrounds.com>,
+        <pabeni@redhat.com>, <mzhivich@akamai.com>, <johunt@akamai.com>,
+        <albcamus@gmail.com>, <kehuan.feng@gmail.com>,
+        <a.fatoum@pengutronix.de>, <atenart@kernel.org>,
+        <alexander.duyck@gmail.com>
+Subject: [PATCH net v2] net: sched: fix packet stuck problem for lockless qdisc
+Date:   Wed, 24 Mar 2021 10:24:37 +0800
+Message-ID: <1616552677-39016-1-git-send-email-linyunsheng@huawei.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.56]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The implementation takes inspiration from the existing bpf_trace_printk
-helper but there are a few differences:
+Lockless qdisc has below concurrent problem:
+    cpu0                 cpu1
+     .                     .
+q->enqueue                 .
+     .                     .
+qdisc_run_begin()          .
+     .                     .
+dequeue_skb()              .
+     .                     .
+sch_direct_xmit()          .
+     .                     .
+     .                q->enqueue
+     .             qdisc_run_begin()
+     .            return and do nothing
+     .                     .
+qdisc_run_end()            .
 
-To allow for a large number of format-specifiers, parameters are
-provided in an array, like in bpf_seq_printf.
+cpu1 enqueue a skb without calling __qdisc_run() because cpu0
+has not released the lock yet and spin_trylock() return false
+for cpu1 in qdisc_run_begin(), and cpu0 do not see the skb
+enqueued by cpu1 when calling dequeue_skb() because cpu1 may
+enqueue the skb after cpu0 calling dequeue_skb() and before
+cpu0 calling qdisc_run_end().
 
-Because the output string takes two arguments and the array of
-parameters also takes two arguments, the format string needs to fit in
-one argument. But because ARG_PTR_TO_CONST_STR guarantees to point to a
-NULL-terminated read-only map, we don't need a format string length arg.
+Lockless qdisc has below another concurrent problem when
+tx_action is involved:
 
-Because the format-string is known at verification time, we also move
-most of the format string validation, currently done in formatting
-helper calls, into the verifier logic. This makes debugging easier and
-also slightly improves the runtime performance.
+cpu0(serving tx_action)     cpu1             cpu2
+          .                   .                .
+          .              q->enqueue            .
+          .            qdisc_run_begin()       .
+          .              dequeue_skb()         .
+          .                   .            q->enqueue
+          .                   .                .
+          .             sch_direct_xmit()      .
+          .                   .         qdisc_run_begin()
+          .                   .       return and do nothing
+          .                   .                .
+ clear __QDISC_STATE_SCHED    .                .
+ qdisc_run_begin()            .                .
+ return and do nothing        .                .
+          .                   .                .
+          .            qdisc_run_end()         .
 
-Signed-off-by: Florent Revest <revest@chromium.org>
+This patch fixes the above data race by:
+1. Get the flag before doing spin_trylock().
+2. If the first spin_trylock() return false and the flag is not
+   set before the first spin_trylock(), Set the flag and retry
+   another spin_trylock() in case other CPU may not see the new
+   flag after it releases the lock.
+3. reschedule if the flags is set after the lock is released
+   at the end of qdisc_run_end().
+
+For tx_action case, the flags is also set when cpu1 is at the
+end if qdisc_run_end(), so tx_action will be rescheduled
+again to dequeue the skb enqueued by cpu2.
+
+Only clear the flag before retrying a dequeuing when dequeuing
+returns NULL in order to reduce the overhead of the above double
+spin_trylock() and __netif_schedule() calling.
+
+The performance impact of this patch, tested using pktgen and
+dummy netdev with pfifo_fast qdisc attached:
+
+ threads  without+this_patch   with+this_patch      delta
+    1        2.6Mpps            2.6Mpps             +0.0%
+    2        3.9Mpps            3.8Mpps             -2.5%
+    4        5.6Mpps            5.6Mpps             -0.0%
+    8        2.7Mpps            2.8Mpps             +3.7%
+   16        2.2Mpps            2.2Mpps             +0.0%
+
+Fixes: 6b3ba9146fe6 ("net: sched: allow qdiscs to handle locking")
+Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
 ---
- include/linux/bpf.h            |  6 ++++
- include/uapi/linux/bpf.h       | 28 ++++++++++++++++++
- kernel/bpf/helpers.c           |  2 ++
- kernel/bpf/verifier.c          | 41 +++++++++++++++++++++++++++
- kernel/trace/bpf_trace.c       | 52 ++++++++++++++++++++++++++++++++++
- tools/include/uapi/linux/bpf.h | 28 ++++++++++++++++++
- 6 files changed, 157 insertions(+)
+V2: Avoid the overhead of fixing the data race as much as
+    possible.
+---
+ include/net/sch_generic.h | 48 ++++++++++++++++++++++++++++++++++++++++++++++-
+ net/sched/sch_generic.c   | 12 ++++++++++++
+ 2 files changed, 59 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 7b5319d75b3e..f3d9c8fa60b3 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1893,6 +1893,7 @@ extern const struct bpf_func_proto bpf_skc_to_tcp_request_sock_proto;
- extern const struct bpf_func_proto bpf_skc_to_udp6_sock_proto;
- extern const struct bpf_func_proto bpf_copy_from_user_proto;
- extern const struct bpf_func_proto bpf_snprintf_btf_proto;
-+extern const struct bpf_func_proto bpf_snprintf_proto;
- extern const struct bpf_func_proto bpf_per_cpu_ptr_proto;
- extern const struct bpf_func_proto bpf_this_cpu_ptr_proto;
- extern const struct bpf_func_proto bpf_ktime_get_coarse_ns_proto;
-@@ -2018,4 +2019,9 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
- struct btf_id_set;
- bool btf_id_set_contains(const struct btf_id_set *set, u32 id);
- 
-+enum bpf_printf_mod_type;
-+int bpf_printf_preamble(char *fmt, u32 fmt_size, const u64 *raw_args,
-+			u64 *final_args, enum bpf_printf_mod_type *mod,
-+			u32 num_args);
-+
- #endif /* _LINUX_BPF_H */
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 2d3036e292a9..86af61e912c6 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -4660,6 +4660,33 @@ union bpf_attr {
-  *	Return
-  *		The number of traversed map elements for success, **-EINVAL** for
-  *		invalid **flags**.
-+ *
-+ * long bpf_snprintf(char *str, u32 str_size, const char *fmt, u64 *data, u32 data_len)
-+ *	Description
-+ *		Outputs a string into the **str** buffer of size **str_size**
-+ *		based on a format string stored in a read-only map pointed by
-+ *		**fmt**.
-+ *
-+ *		Each format specifier in **fmt** corresponds to one u64 element
-+ *		in the **data** array. For strings and pointers where pointees
-+ *		are accessed, only the pointer values are stored in the *data*
-+ *		array. The *data_len* is the size of *data* in bytes.
-+ *
-+ *		Formats **%s** and **%p{i,I}{4,6}** require to read kernel
-+ *		memory. Reading kernel memory may fail due to either invalid
-+ *		address or valid address but requiring a major memory fault. If
-+ *		reading kernel memory fails, the string for **%s** will be an
-+ *		empty string, and the ip address for **%p{i,I}{4,6}** will be 0.
-+ *		Not returning error to bpf program is consistent with what
-+ *		**bpf_trace_printk**\ () does for now.
-+ *
-+ *	Return
-+ *		The strictly positive length of the formatted string, including
-+ *		the trailing zero character. If the return value is greater than
-+ *		**str_size**, **str** contains a truncated string, guaranteed to
-+ *		be zero-terminated.
-+ *
-+ *		Or **-EBUSY** if the per-CPU memory copy buffer is busy.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -4827,6 +4854,7 @@ union bpf_attr {
- 	FN(sock_from_file),		\
- 	FN(check_mtu),			\
- 	FN(for_each_map_elem),		\
-+	FN(snprintf),			\
- 	/* */
- 
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 074800226327..12f4cfb04fe7 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -750,6 +750,8 @@ bpf_base_func_proto(enum bpf_func_id func_id)
- 		return &bpf_probe_read_kernel_str_proto;
- 	case BPF_FUNC_snprintf_btf:
- 		return &bpf_snprintf_btf_proto;
-+	case BPF_FUNC_snprintf:
-+		return &bpf_snprintf_proto;
- 	default:
- 		return NULL;
- 	}
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 9e03608725b4..a89599dc51c9 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -5729,6 +5729,41 @@ static int check_reference_leak(struct bpf_verifier_env *env)
- 	return state->acquired_refs ? -EINVAL : 0;
- }
- 
-+static int check_bpf_snprintf_call(struct bpf_verifier_env *env,
-+				   struct bpf_reg_state *regs)
-+{
-+	struct bpf_reg_state *fmt_reg = &regs[BPF_REG_3];
-+	struct bpf_reg_state *data_len_reg = &regs[BPF_REG_5];
-+	struct bpf_map *fmt_map = fmt_reg->map_ptr;
-+	int err, fmt_map_off, num_args;
-+	u64 fmt_addr;
-+	char *fmt;
-+
-+	/* data must be an array of u64 so data_len must be a multiple of 8 */
-+	if (data_len_reg->var_off.value & 7)
-+		return -EINVAL;
-+	num_args = data_len_reg->var_off.value / 8;
-+
-+	/* fmt being ARG_PTR_TO_CONST_STR guarantees that var_off is const
-+	 * and map_direct_value_addr is set.
-+	 */
-+	fmt_map_off = fmt_reg->off + fmt_reg->var_off.value;
-+	err = fmt_map->ops->map_direct_value_addr(fmt_map, &fmt_addr,
-+						  fmt_map_off);
-+	if (err)
-+		return err;
-+	fmt = (char *)fmt_addr + fmt_map_off;
-+
-+	/* We are also guaranteed that fmt+fmt_map_off is NULL terminated, we
-+	 * can focus on validating the format specifiers.
-+	 */
-+	err = bpf_printf_preamble(fmt, UINT_MAX, NULL, NULL, NULL, num_args);
-+	if (err < 0)
-+		verbose(env, "Invalid format string\n");
-+
-+	return err;
-+}
-+
- static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 			     int *insn_idx_p)
- {
-@@ -5843,6 +5878,12 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
- 			return -EINVAL;
- 	}
- 
-+	if (func_id == BPF_FUNC_snprintf) {
-+		err = check_bpf_snprintf_call(env, regs);
-+		if (err < 0)
-+			return err;
-+	}
-+
- 	/* reset caller saved regs */
- 	for (i = 0; i < CALLER_SAVED_REGS; i++) {
- 		mark_reg_not_init(env, regs, caller_saved[i]);
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 0fdca94a3c9c..15cbc8b63206 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -1230,6 +1230,56 @@ const struct bpf_func_proto bpf_snprintf_btf_proto = {
- 	.arg5_type	= ARG_ANYTHING,
+diff --git a/include/net/sch_generic.h b/include/net/sch_generic.h
+index f7a6e14..09a755d 100644
+--- a/include/net/sch_generic.h
++++ b/include/net/sch_generic.h
+@@ -36,6 +36,7 @@ struct qdisc_rate_table {
+ enum qdisc_state_t {
+ 	__QDISC_STATE_SCHED,
+ 	__QDISC_STATE_DEACTIVATED,
++	__QDISC_STATE_NEED_RESCHEDULE,
  };
  
-+#define MAX_SNPRINTF_VARARGS		12
-+
-+BPF_CALL_5(bpf_snprintf, char *, str, u32, str_size, char *, fmt,
-+	   const void *, data, u32, data_len)
-+{
-+	enum bpf_printf_mod_type mod[MAX_SNPRINTF_VARARGS];
-+	u64 args[MAX_SNPRINTF_VARARGS];
-+	int err, num_args;
-+
-+	if (data_len & 7 || data_len > MAX_SNPRINTF_VARARGS * 8 ||
-+	    (data_len && !data))
-+		return -EINVAL;
-+	num_args = data_len / 8;
-+
-+	/* ARG_PTR_TO_CONST_STR guarantees that fmt is zero-terminated so we
-+	 * can safely give an unbounded size.
-+	 */
-+	err = bpf_printf_preamble(fmt, UINT_MAX, data, args, mod, num_args);
-+	if (err < 0)
-+		return err;
-+
-+	/* Maximumly we can have MAX_SNPRINTF_VARARGS parameters, just give
-+	 * all of them to snprintf().
-+	 */
-+	err = snprintf(str, str_size, fmt, BPF_CAST_FMT_ARG(0, args, mod),
-+		BPF_CAST_FMT_ARG(1, args, mod), BPF_CAST_FMT_ARG(2, args, mod),
-+		BPF_CAST_FMT_ARG(3, args, mod), BPF_CAST_FMT_ARG(4, args, mod),
-+		BPF_CAST_FMT_ARG(5, args, mod), BPF_CAST_FMT_ARG(6, args, mod),
-+		BPF_CAST_FMT_ARG(7, args, mod), BPF_CAST_FMT_ARG(8, args, mod),
-+		BPF_CAST_FMT_ARG(9, args, mod), BPF_CAST_FMT_ARG(10, args, mod),
-+		BPF_CAST_FMT_ARG(11, args, mod));
-+	if (str_size)
-+		str[str_size - 1] = '\0';
-+
-+	bpf_printf_postamble();
-+
-+	return err + 1;
-+}
-+
-+const struct bpf_func_proto bpf_snprintf_proto = {
-+	.func		= bpf_snprintf,
-+	.gpl_only	= true,
-+	.ret_type	= RET_INTEGER,
-+	.arg1_type	= ARG_PTR_TO_MEM,
-+	.arg2_type	= ARG_CONST_SIZE_OR_ZERO,
-+	.arg3_type	= ARG_PTR_TO_CONST_STR,
-+	.arg4_type	= ARG_PTR_TO_MEM,
-+	.arg5_type	= ARG_CONST_SIZE_OR_ZERO,
-+};
-+
- const struct bpf_func_proto *
- bpf_tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ struct qdisc_size_table {
+@@ -159,12 +160,42 @@ static inline bool qdisc_is_empty(const struct Qdisc *qdisc)
+ static inline bool qdisc_run_begin(struct Qdisc *qdisc)
  {
-@@ -1332,6 +1382,8 @@ bpf_tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 		return &bpf_task_storage_delete_proto;
- 	case BPF_FUNC_for_each_map_elem:
- 		return &bpf_for_each_map_elem_proto;
-+	case BPF_FUNC_snprintf:
-+		return &bpf_snprintf_proto;
- 	default:
- 		return NULL;
+ 	if (qdisc->flags & TCQ_F_NOLOCK) {
++		bool dont_retry = test_bit(__QDISC_STATE_NEED_RESCHEDULE,
++					   &qdisc->state);
++
++		if (spin_trylock(&qdisc->seqlock))
++			goto out;
++
++		/* If the flag is set before doing the spin_trylock() and
++		 * the above spin_trylock() return false, it means other cpu
++		 * holding the lock will do dequeuing for us, or it wil see
++		 * the flag set after releasing lock and reschedule the
++		 * net_tx_action() to do the dequeuing.
++		 */
++		if (dont_retry)
++			return false;
++
++		/* We could do set_bit() before the first spin_trylock(),
++		 * and avoid doing secord spin_trylock() completely, then
++		 * we could have multi cpus doing the test_bit(). Here use
++		 * dont_retry to avoiding the test_bit() and the second
++		 * spin_trylock(), which has 5% performance improvement than
++		 * doing the set_bit() before the first spin_trylock().
++		 */
++		set_bit(__QDISC_STATE_NEED_RESCHEDULE,
++			&qdisc->state);
++
++		/* Retry again in case other CPU may not see the new flag
++		 * after it releases the lock at the end of qdisc_run_end().
++		 */
+ 		if (!spin_trylock(&qdisc->seqlock))
+ 			return false;
+ 		WRITE_ONCE(qdisc->empty, false);
+ 	} else if (qdisc_is_running(qdisc)) {
+ 		return false;
  	}
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 2d3036e292a9..86af61e912c6 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -4660,6 +4660,33 @@ union bpf_attr {
-  *	Return
-  *		The number of traversed map elements for success, **-EINVAL** for
-  *		invalid **flags**.
-+ *
-+ * long bpf_snprintf(char *str, u32 str_size, const char *fmt, u64 *data, u32 data_len)
-+ *	Description
-+ *		Outputs a string into the **str** buffer of size **str_size**
-+ *		based on a format string stored in a read-only map pointed by
-+ *		**fmt**.
-+ *
-+ *		Each format specifier in **fmt** corresponds to one u64 element
-+ *		in the **data** array. For strings and pointers where pointees
-+ *		are accessed, only the pointer values are stored in the *data*
-+ *		array. The *data_len* is the size of *data* in bytes.
-+ *
-+ *		Formats **%s** and **%p{i,I}{4,6}** require to read kernel
-+ *		memory. Reading kernel memory may fail due to either invalid
-+ *		address or valid address but requiring a major memory fault. If
-+ *		reading kernel memory fails, the string for **%s** will be an
-+ *		empty string, and the ip address for **%p{i,I}{4,6}** will be 0.
-+ *		Not returning error to bpf program is consistent with what
-+ *		**bpf_trace_printk**\ () does for now.
-+ *
-+ *	Return
-+ *		The strictly positive length of the formatted string, including
-+ *		the trailing zero character. If the return value is greater than
-+ *		**str_size**, **str** contains a truncated string, guaranteed to
-+ *		be zero-terminated.
-+ *
-+ *		Or **-EBUSY** if the per-CPU memory copy buffer is busy.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -4827,6 +4854,7 @@ union bpf_attr {
- 	FN(sock_from_file),		\
- 	FN(check_mtu),			\
- 	FN(for_each_map_elem),		\
-+	FN(snprintf),			\
- 	/* */
++
++out:
+ 	/* Variant of write_seqcount_begin() telling lockdep a trylock
+ 	 * was attempted.
+ 	 */
+@@ -176,8 +207,23 @@ static inline bool qdisc_run_begin(struct Qdisc *qdisc)
+ static inline void qdisc_run_end(struct Qdisc *qdisc)
+ {
+ 	write_seqcount_end(&qdisc->running);
+-	if (qdisc->flags & TCQ_F_NOLOCK)
++	if (qdisc->flags & TCQ_F_NOLOCK) {
+ 		spin_unlock(&qdisc->seqlock);
++
++		/* qdisc_run_end() is protected by RCU lock, and
++		 * qdisc reset will do a synchronize_net() after
++		 * setting __QDISC_STATE_DEACTIVATED, so testing
++		 * the below two bits separately should be fine.
++		 * For qdisc_run() in net_tx_action() case, we
++		 * really should provide rcu protection explicitly
++		 * for document purposes or PREEMPT_RCU.
++		 */
++		if (unlikely(test_bit(__QDISC_STATE_NEED_RESCHEDULE,
++				      &qdisc->state) &&
++			     !test_bit(__QDISC_STATE_DEACTIVATED,
++				       &qdisc->state)))
++			__netif_schedule(qdisc);
++	}
+ }
  
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+ static inline bool qdisc_may_bulk(const struct Qdisc *qdisc)
+diff --git a/net/sched/sch_generic.c b/net/sched/sch_generic.c
+index 44991ea..7e3426b 100644
+--- a/net/sched/sch_generic.c
++++ b/net/sched/sch_generic.c
+@@ -640,8 +640,10 @@ static struct sk_buff *pfifo_fast_dequeue(struct Qdisc *qdisc)
+ {
+ 	struct pfifo_fast_priv *priv = qdisc_priv(qdisc);
+ 	struct sk_buff *skb = NULL;
++	bool need_retry = true;
+ 	int band;
+ 
++retry:
+ 	for (band = 0; band < PFIFO_FAST_BANDS && !skb; band++) {
+ 		struct skb_array *q = band2list(priv, band);
+ 
+@@ -652,6 +654,16 @@ static struct sk_buff *pfifo_fast_dequeue(struct Qdisc *qdisc)
+ 	}
+ 	if (likely(skb)) {
+ 		qdisc_update_stats_at_dequeue(qdisc, skb);
++	} else if (need_retry &&
++		   test_and_clear_bit(__QDISC_STATE_NEED_RESCHEDULE,
++				      &qdisc->stat)) {
++		/* do another enqueuing after clearing the flag to
++		 * avoid calling __netif_schedule().
++		 */
++		smp_mb__after_atomic();
++		need_retry = false;
++
++		goto retry;
+ 	} else {
+ 		WRITE_ONCE(qdisc->empty, true);
+ 	}
 -- 
-2.31.0.291.g576ba9dcdaf-goog
+2.7.4
 
