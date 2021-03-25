@@ -4,237 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F1100C433DB
-	for <bpf@archiver.kernel.org>; Thu, 25 Mar 2021 03:13:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B4BAC433DB
+	for <bpf@archiver.kernel.org>; Thu, 25 Mar 2021 03:16:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BF69E61A21
-	for <bpf@archiver.kernel.org>; Thu, 25 Mar 2021 03:13:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DC58461A1F
+	for <bpf@archiver.kernel.org>; Thu, 25 Mar 2021 03:16:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231272AbhCYDNI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 24 Mar 2021 23:13:08 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:13689 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229908AbhCYDMp (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 24 Mar 2021 23:12:45 -0400
-Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4F5VTY6f4jznVHq;
-        Thu, 25 Mar 2021 11:10:09 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.56) by
- DGGEMS402-HUB.china.huawei.com (10.3.19.202) with Microsoft SMTP Server id
- 14.3.498.0; Thu, 25 Mar 2021 11:12:37 +0800
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-To:     <davem@davemloft.net>, <kuba@kernel.org>
-CC:     <olteanv@gmail.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <andriin@fb.com>, <edumazet@google.com>, <weiwan@google.com>,
-        <cong.wang@bytedance.com>, <ap420073@gmail.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linuxarm@openeuler.org>, <mkl@pengutronix.de>,
-        <linux-can@vger.kernel.org>, <jhs@mojatatu.com>,
-        <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
-        <andrii@kernel.org>, <kafai@fb.com>, <songliubraving@fb.com>,
-        <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
-        <bpf@vger.kernel.org>, <jonas.bonn@netrounds.com>,
-        <pabeni@redhat.com>, <mzhivich@akamai.com>, <johunt@akamai.com>,
-        <albcamus@gmail.com>, <kehuan.feng@gmail.com>,
-        <a.fatoum@pengutronix.de>, <atenart@kernel.org>,
-        <alexander.duyck@gmail.com>
-Subject: [PATCH net v3] net: sched: fix packet stuck problem for lockless qdisc
-Date:   Thu, 25 Mar 2021 11:13:11 +0800
-Message-ID: <1616641991-14847-1-git-send-email-linyunsheng@huawei.com>
-X-Mailer: git-send-email 2.7.4
+        id S231610AbhCYDPs (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 24 Mar 2021 23:15:48 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:14889 "EHLO
+        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229908AbhCYDPr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 24 Mar 2021 23:15:47 -0400
+Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4F5VZ73ckYzkfWh;
+        Thu, 25 Mar 2021 11:14:07 +0800 (CST)
+Received: from localhost.localdomain (10.175.104.82) by
+ DGGEMS410-HUB.china.huawei.com (10.3.19.210) with Microsoft SMTP Server id
+ 14.3.498.0; Thu, 25 Mar 2021 11:15:35 +0800
+From:   'Zheng Yongjun <zhengyongjun3@huawei.com>
+To:     <zhengyongjun3@huawei.com>, Ariel Elior <aelior@marvell.com>,
+        <GR-everest-linux-l2@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        "Daniel Borkmann" <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>
+CC:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <kernel-janitors@vger.kernel.org>, Hulk Robot <hulkci@huawei.com>
+Subject: [PATCH net-next] qede: remove unused including <linux/version.h>
+Date:   Thu, 25 Mar 2021 11:29:28 +0800
+Message-ID: <20210325032928.1550157-1-zhengyongjun3@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.56]
+Content-Type:   text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7BIT
+X-Originating-IP: [10.175.104.82]
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Lockless qdisc has below concurrent problem:
-    cpu0                 cpu1
-     .                     .
-q->enqueue                 .
-     .                     .
-qdisc_run_begin()          .
-     .                     .
-dequeue_skb()              .
-     .                     .
-sch_direct_xmit()          .
-     .                     .
-     .                q->enqueue
-     .             qdisc_run_begin()
-     .            return and do nothing
-     .                     .
-qdisc_run_end()            .
+From: Zheng Yongjun <zhengyongjun3@huawei.com>
 
-cpu1 enqueue a skb without calling __qdisc_run() because cpu0
-has not released the lock yet and spin_trylock() return false
-for cpu1 in qdisc_run_begin(), and cpu0 do not see the skb
-enqueued by cpu1 when calling dequeue_skb() because cpu1 may
-enqueue the skb after cpu0 calling dequeue_skb() and before
-cpu0 calling qdisc_run_end().
+Remove including <linux/version.h> that don't need it.
 
-Lockless qdisc has below another concurrent problem when
-tx_action is involved:
-
-cpu0(serving tx_action)     cpu1             cpu2
-          .                   .                .
-          .              q->enqueue            .
-          .            qdisc_run_begin()       .
-          .              dequeue_skb()         .
-          .                   .            q->enqueue
-          .                   .                .
-          .             sch_direct_xmit()      .
-          .                   .         qdisc_run_begin()
-          .                   .       return and do nothing
-          .                   .                .
- clear __QDISC_STATE_SCHED    .                .
- qdisc_run_begin()            .                .
- return and do nothing        .                .
-          .                   .                .
-          .            qdisc_run_end()         .
-
-This patch fixes the above data race by:
-1. Get the flag before doing spin_trylock().
-2. If the first spin_trylock() return false and the flag is not
-   set before the first spin_trylock(), Set the flag and retry
-   another spin_trylock() in case other CPU may not see the new
-   flag after it releases the lock.
-3. reschedule if the flags is set after the lock is released
-   at the end of qdisc_run_end().
-
-For tx_action case, the flags is also set when cpu1 is at the
-end if qdisc_run_end(), so tx_action will be rescheduled
-again to dequeue the skb enqueued by cpu2.
-
-Only clear the flag before retrying a dequeuing when dequeuing
-returns NULL in order to reduce the overhead of the above double
-spin_trylock() and __netif_schedule() calling.
-
-The performance impact of this patch, tested using pktgen and
-dummy netdev with pfifo_fast qdisc attached:
-
- threads  without+this_patch   with+this_patch      delta
-    1        2.61Mpps            2.60Mpps           -0.3%
-    2        3.97Mpps            3.82Mpps           -3.7%
-    4        5.62Mpps            5.59Mpps           -0.5%
-    8        2.78Mpps            2.77Mpps           -0.3%
-   16        2.22Mpps            2.22Mpps           -0.0%
-
-Fixes: 6b3ba9146fe6 ("net: sched: allow qdiscs to handle locking")
-Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Zheng Yongjun <zhengyongjun3@huawei.com>
 ---
-V3: fix a compile error and a few comment typo, remove the
-    __QDISC_STATE_DEACTIVATED checking, and update the
-    performance data.
-V2: Avoid the overhead of fixing the data race as much as
-    possible.
----
- include/net/sch_generic.h | 38 +++++++++++++++++++++++++++++++++++++-
- net/sched/sch_generic.c   | 12 ++++++++++++
- 2 files changed, 49 insertions(+), 1 deletion(-)
-
-diff --git a/include/net/sch_generic.h b/include/net/sch_generic.h
-index f7a6e14..e3f46eb 100644
---- a/include/net/sch_generic.h
-+++ b/include/net/sch_generic.h
-@@ -36,6 +36,7 @@ struct qdisc_rate_table {
- enum qdisc_state_t {
- 	__QDISC_STATE_SCHED,
- 	__QDISC_STATE_DEACTIVATED,
-+	__QDISC_STATE_NEED_RESCHEDULE,
- };
- 
- struct qdisc_size_table {
-@@ -159,8 +160,38 @@ static inline bool qdisc_is_empty(const struct Qdisc *qdisc)
- static inline bool qdisc_run_begin(struct Qdisc *qdisc)
- {
- 	if (qdisc->flags & TCQ_F_NOLOCK) {
-+		bool dont_retry = test_bit(__QDISC_STATE_NEED_RESCHEDULE,
-+					   &qdisc->state);
-+
-+		if (spin_trylock(&qdisc->seqlock))
-+			goto nolock_empty;
-+
-+		/* If the flag is set before doing the spin_trylock() and
-+		 * the above spin_trylock() return false, it means other cpu
-+		 * holding the lock will do dequeuing for us, or it wil see
-+		 * the flag set after releasing lock and reschedule the
-+		 * net_tx_action() to do the dequeuing.
-+		 */
-+		if (dont_retry)
-+			return false;
-+
-+		/* We could do set_bit() before the first spin_trylock(),
-+		 * and avoid doing second spin_trylock() completely, then
-+		 * we could have multi cpus doing the set_bit(). Here use
-+		 * dont_retry to avoid doing the set_bit() and the second
-+		 * spin_trylock(), which has 5% performance improvement than
-+		 * doing the set_bit() before the first spin_trylock().
-+		 */
-+		set_bit(__QDISC_STATE_NEED_RESCHEDULE,
-+			&qdisc->state);
-+
-+		/* Retry again in case other CPU may not see the new flag
-+		 * after it releases the lock at the end of qdisc_run_end().
-+		 */
- 		if (!spin_trylock(&qdisc->seqlock))
- 			return false;
-+
-+nolock_empty:
- 		WRITE_ONCE(qdisc->empty, false);
- 	} else if (qdisc_is_running(qdisc)) {
- 		return false;
-@@ -176,8 +207,13 @@ static inline bool qdisc_run_begin(struct Qdisc *qdisc)
- static inline void qdisc_run_end(struct Qdisc *qdisc)
- {
- 	write_seqcount_end(&qdisc->running);
--	if (qdisc->flags & TCQ_F_NOLOCK)
-+	if (qdisc->flags & TCQ_F_NOLOCK) {
- 		spin_unlock(&qdisc->seqlock);
-+
-+		if (unlikely(test_bit(__QDISC_STATE_NEED_RESCHEDULE,
-+				      &qdisc->state)))
-+			__netif_schedule(qdisc);
-+	}
- }
- 
- static inline bool qdisc_may_bulk(const struct Qdisc *qdisc)
-diff --git a/net/sched/sch_generic.c b/net/sched/sch_generic.c
-index 44991ea..4953430 100644
---- a/net/sched/sch_generic.c
-+++ b/net/sched/sch_generic.c
-@@ -640,8 +640,10 @@ static struct sk_buff *pfifo_fast_dequeue(struct Qdisc *qdisc)
- {
- 	struct pfifo_fast_priv *priv = qdisc_priv(qdisc);
- 	struct sk_buff *skb = NULL;
-+	bool need_retry = true;
- 	int band;
- 
-+retry:
- 	for (band = 0; band < PFIFO_FAST_BANDS && !skb; band++) {
- 		struct skb_array *q = band2list(priv, band);
- 
-@@ -652,6 +654,16 @@ static struct sk_buff *pfifo_fast_dequeue(struct Qdisc *qdisc)
- 	}
- 	if (likely(skb)) {
- 		qdisc_update_stats_at_dequeue(qdisc, skb);
-+	} else if (need_retry &&
-+		   test_and_clear_bit(__QDISC_STATE_NEED_RESCHEDULE,
-+				      &qdisc->state)) {
-+		/* do another enqueuing after clearing the flag to
-+		 * avoid calling __netif_schedule().
-+		 */
-+		smp_mb__after_atomic();
-+		need_retry = false;
-+
-+		goto retry;
- 	} else {
- 		WRITE_ONCE(qdisc->empty, true);
- 	}
--- 
-2.7.4
+ drivers/net/ethernet/qlogic/qede/qede_main.c | 1 -
+ 1 file changed, 1 deletion(-)
+diff --git a/drivers/net/ethernet/qlogic/qede/qede_main.c b/drivers/net/ethernet/qlogic/qede/qede_main.c
+index 4d952036ba82..01ac1e93d27a 100644
+--- a/drivers/net/ethernet/qlogic/qede/qede_main.c
++++ b/drivers/net/ethernet/qlogic/qede/qede_main.c
+@@ -7,7 +7,6 @@
+ #include <linux/crash_dump.h>
+ #include <linux/module.h>
+ #include <linux/pci.h>
+-#include <linux/version.h>
+ #include <linux/device.h>
+ #include <linux/netdevice.h>
+ #include <linux/etherdevice.h>
 
