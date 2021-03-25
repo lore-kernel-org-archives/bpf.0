@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A76A7C433E2
-	for <bpf@archiver.kernel.org>; Thu, 25 Mar 2021 01:52:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 56D21C433C1
+	for <bpf@archiver.kernel.org>; Thu, 25 Mar 2021 01:52:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 71BB861A27
-	for <bpf@archiver.kernel.org>; Thu, 25 Mar 2021 01:52:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1355F61A12
+	for <bpf@archiver.kernel.org>; Thu, 25 Mar 2021 01:52:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235916AbhCYBvu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 24 Mar 2021 21:51:50 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:45438 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S235896AbhCYBvm (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 24 Mar 2021 21:51:42 -0400
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.43/8.16.0.43) with SMTP id 12P1nF1b004076
-        for <bpf@vger.kernel.org>; Wed, 24 Mar 2021 18:51:41 -0700
+        id S236048AbhCYBwX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 24 Mar 2021 21:52:23 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:59402 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236033AbhCYBwJ (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 24 Mar 2021 21:52:09 -0400
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12P1mNIF001087
+        for <bpf@vger.kernel.org>; Wed, 24 Mar 2021 18:52:08 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=vosds9lGBAgRsf4gizeam/KSIEpmpCjxiqRWzLTaLIw=;
- b=Sz5CSOv3bA1ZjganQBUxWEUGNHG7aHZahQ9KXKiT2RopcWT70lKTW1eA2o7ZcIibixvA
- HQztlvUN4fzKCqta6iO4QpE5eZEfz7EqoRkqgukgrEJBMO3p1SF2Z49SC3viuXsSWDjF
- Nyz6DPcQHhk5VgfQ8z/rWfXJGrhAAdiMJp4= 
+ bh=H2mx139/2obYNybO33ciNhdjOOBWHsiCCukqaKY5pK0=;
+ b=jSovQaxZmTb2AOdC0yiz7l5H+dmEV2kHaVp6aUuleNChEBYvKZ86pIn36u1BAYkB4ZpF
+ Ah73xaSyGYKlOB6+klPeUM2ep3g9GnYUnl9GbHI28ZlBBS/iFPG1vS5Dv/xMkjHFKN3y
+ 42shBCGHFoEZYQIVDwivQevazRPKPSsMlVw= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0089730.ppops.net with ESMTP id 37fjdma9h0-1
+        by mx0a-00082601.pphosted.com with ESMTP id 37fn33sjah-5
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 24 Mar 2021 18:51:41 -0700
-Received: from intmgw006.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 24 Mar 2021 18:52:08 -0700
+Received: from intmgw002.25.frc3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Wed, 24 Mar 2021 18:51:40 -0700
+ 15.1.2176.2; Wed, 24 Mar 2021 18:52:06 -0700
 Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id A399929429CE; Wed, 24 Mar 2021 18:51:36 -0700 (PDT)
+        id BD04A29429D7; Wed, 24 Mar 2021 18:52:01 -0700 (PDT)
 From:   Martin KaFai Lau <kafai@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
-        <netdev@vger.kernel.org>
-Subject: [PATCH v2 bpf-next 02/14] bpf: Refactor btf_check_func_arg_match
-Date:   Wed, 24 Mar 2021 18:51:36 -0700
-Message-ID: <20210325015136.1544504-1-kafai@fb.com>
+        <netdev@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>
+Subject: [PATCH v2 bpf-next 06/14] bpf: tcp: Put some tcp cong functions in allowlist for bpf-tcp-cc
+Date:   Wed, 24 Mar 2021 18:52:01 -0700
+Message-ID: <20210325015201.1546345-1-kafai@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210325015124.1543397-1-kafai@fb.com>
 References: <20210325015124.1543397-1-kafai@fb.com>
@@ -56,322 +56,100 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
  definitions=2021-03-24_14:2021-03-24,2021-03-24 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=923
- malwarescore=0 adultscore=0 priorityscore=1501 phishscore=0
- impostorscore=0 bulkscore=0 suspectscore=0 mlxscore=0 clxscore=1015
- spamscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2009150000 definitions=main-2103250011
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0 mlxscore=0
+ priorityscore=1501 mlxlogscore=999 phishscore=0 spamscore=0 suspectscore=0
+ adultscore=0 impostorscore=0 malwarescore=0 lowpriorityscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2103250011
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch moved the subprog specific logic from
-btf_check_func_arg_match() to the new btf_check_subprog_arg_match().
-The core logic is left in btf_check_func_arg_match() which
-will be reused later to check the kernel function call.
+This patch puts some tcp cong helper functions, tcp_slow_start()
+and tcp_cong_avoid_ai(), into the allowlist for the bpf-tcp-cc
+program.
 
-The "if (!btf_type_is_ptr(t))" is checked first to improve the
-indentation which will be useful for a later patch.
+A few tcp cc implementation functions are also put into the
+allowlist.  A potential use case is the bpf-tcp-cc implementation
+may only want to override a subset of a tcp_congestion_ops.  For others,
+the bpf-tcp-cc can directly call the kernel counter parts instead of
+re-implementing (or copy-and-pasting) them to the bpf program.
 
-Some of the "btf_kind_str[]" usages is replaced with the shortcut
-"btf_type_str(t)".
+They will only be available to the bpf-tcp-cc typed program.
+The allowlist functions are not bounded to a fixed ABI contract.
+When any of them has changed, the bpf-tcp-cc program has to be changed
+like any in-tree/out-of-tree kernel tcp-cc implementations do also.
 
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
 Signed-off-by: Martin KaFai Lau <kafai@fb.com>
 ---
- include/linux/bpf.h   |   4 +-
- include/linux/btf.h   |   5 ++
- kernel/bpf/btf.c      | 159 +++++++++++++++++++++++-------------------
- kernel/bpf/verifier.c |   4 +-
- 4 files changed, 95 insertions(+), 77 deletions(-)
+ net/ipv4/bpf_tcp_ca.c | 41 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index a25730eaa148..ebd044182f8d 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1514,8 +1514,8 @@ int btf_distill_func_proto(struct bpf_verifier_log =
-*log,
- 			   struct btf_func_model *m);
-=20
- struct bpf_reg_state;
--int btf_check_func_arg_match(struct bpf_verifier_env *env, int subprog,
--			     struct bpf_reg_state *regs);
-+int btf_check_subprog_arg_match(struct bpf_verifier_env *env, int subpro=
-g,
-+				struct bpf_reg_state *regs);
- int btf_prepare_func_args(struct bpf_verifier_env *env, int subprog,
- 			  struct bpf_reg_state *reg);
- int btf_check_type_match(struct bpf_verifier_log *log, const struct bpf_=
-prog *prog,
-diff --git a/include/linux/btf.h b/include/linux/btf.h
-index 9c1b52738bbe..8a05687a4ee2 100644
---- a/include/linux/btf.h
-+++ b/include/linux/btf.h
-@@ -141,6 +141,11 @@ static inline bool btf_type_is_enum(const struct btf=
-_type *t)
- 	return BTF_INFO_KIND(t->info) =3D=3D BTF_KIND_ENUM;
+diff --git a/net/ipv4/bpf_tcp_ca.c b/net/ipv4/bpf_tcp_ca.c
+index d520e61649c8..40520b77a307 100644
+--- a/net/ipv4/bpf_tcp_ca.c
++++ b/net/ipv4/bpf_tcp_ca.c
+@@ -5,6 +5,7 @@
+ #include <linux/bpf_verifier.h>
+ #include <linux/bpf.h>
+ #include <linux/btf.h>
++#include <linux/btf_ids.h>
+ #include <linux/filter.h>
+ #include <net/tcp.h>
+ #include <net/bpf_sk_storage.h>
+@@ -178,10 +179,50 @@ bpf_tcp_ca_get_func_proto(enum bpf_func_id func_id,
+ 	}
  }
 =20
-+static inline bool btf_type_is_scalar(const struct btf_type *t)
++BTF_SET_START(bpf_tcp_ca_kfunc_ids)
++BTF_ID(func, tcp_reno_ssthresh)
++BTF_ID(func, tcp_reno_cong_avoid)
++BTF_ID(func, tcp_reno_undo_cwnd)
++BTF_ID(func, tcp_slow_start)
++BTF_ID(func, tcp_cong_avoid_ai)
++#if IS_BUILTIN(CONFIG_TCP_CONG_CUBIC)
++BTF_ID(func, cubictcp_init)
++BTF_ID(func, cubictcp_recalc_ssthresh)
++BTF_ID(func, cubictcp_cong_avoid)
++BTF_ID(func, cubictcp_state)
++BTF_ID(func, cubictcp_cwnd_event)
++BTF_ID(func, cubictcp_acked)
++#endif
++#if IS_BUILTIN(CONFIG_TCP_CONG_DCTCP)
++BTF_ID(func, dctcp_init)
++BTF_ID(func, dctcp_update_alpha)
++BTF_ID(func, dctcp_cwnd_event)
++BTF_ID(func, dctcp_ssthresh)
++BTF_ID(func, dctcp_cwnd_undo)
++BTF_ID(func, dctcp_state)
++#endif
++#if IS_BUILTIN(CONFIG_TCP_CONG_BBR)
++BTF_ID(func, bbr_init)
++BTF_ID(func, bbr_main)
++BTF_ID(func, bbr_sndbuf_expand)
++BTF_ID(func, bbr_undo_cwnd)
++BTF_ID(func, bbr_cwnd_even),
++BTF_ID(func, bbr_ssthresh)
++BTF_ID(func, bbr_min_tso_segs)
++BTF_ID(func, bbr_set_state)
++#endif
++BTF_SET_END(bpf_tcp_ca_kfunc_ids)
++
++static bool bpf_tcp_ca_check_kfunc_call(u32 kfunc_btf_id)
 +{
-+	return btf_type_is_int(t) || btf_type_is_enum(t);
++	return btf_id_set_contains(&bpf_tcp_ca_kfunc_ids, kfunc_btf_id);
 +}
 +
- static inline bool btf_type_is_typedef(const struct btf_type *t)
- {
- 	return BTF_INFO_KIND(t->info) =3D=3D BTF_KIND_TYPEDEF;
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 369faeddf1df..3c489adacf3b 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -4377,7 +4377,7 @@ static u8 bpf_ctx_convert_map[] =3D {
- #undef BPF_LINK_TYPE
+ static const struct bpf_verifier_ops bpf_tcp_ca_verifier_ops =3D {
+ 	.get_func_proto		=3D bpf_tcp_ca_get_func_proto,
+ 	.is_valid_access	=3D bpf_tcp_ca_is_valid_access,
+ 	.btf_struct_access	=3D bpf_tcp_ca_btf_struct_access,
++	.check_kfunc_call	=3D bpf_tcp_ca_check_kfunc_call,
+ };
 =20
- static const struct btf_member *
--btf_get_prog_ctx_type(struct bpf_verifier_log *log, struct btf *btf,
-+btf_get_prog_ctx_type(struct bpf_verifier_log *log, const struct btf *bt=
-f,
- 		      const struct btf_type *t, enum bpf_prog_type prog_type,
- 		      int arg)
- {
-@@ -5362,122 +5362,135 @@ int btf_check_type_match(struct bpf_verifier_lo=
-g *log, const struct bpf_prog *pr
- 	return btf_check_func_type_match(log, btf1, t1, btf2, t2);
- }
-=20
--/* Compare BTF of a function with given bpf_reg_state.
-- * Returns:
-- * EFAULT - there is a verifier bug. Abort verification.
-- * EINVAL - there is a type mismatch or BTF is not available.
-- * 0 - BTF matches with what bpf_reg_state expects.
-- * Only PTR_TO_CTX and SCALAR_VALUE states are recognized.
-- */
--int btf_check_func_arg_match(struct bpf_verifier_env *env, int subprog,
--			     struct bpf_reg_state *regs)
-+static int btf_check_func_arg_match(struct bpf_verifier_env *env,
-+				    const struct btf *btf, u32 func_id,
-+				    struct bpf_reg_state *regs,
-+				    bool ptr_to_mem_ok)
- {
- 	struct bpf_verifier_log *log =3D &env->log;
--	struct bpf_prog *prog =3D env->prog;
--	struct btf *btf =3D prog->aux->btf;
--	const struct btf_param *args;
-+	const char *func_name, *ref_tname;
- 	const struct btf_type *t, *ref_t;
--	u32 i, nargs, btf_id, type_size;
--	const char *tname;
--	bool is_global;
--
--	if (!prog->aux->func_info)
--		return -EINVAL;
--
--	btf_id =3D prog->aux->func_info[subprog].type_id;
--	if (!btf_id)
--		return -EFAULT;
--
--	if (prog->aux->func_info_aux[subprog].unreliable)
--		return -EINVAL;
-+	const struct btf_param *args;
-+	u32 i, nargs;
-=20
--	t =3D btf_type_by_id(btf, btf_id);
-+	t =3D btf_type_by_id(btf, func_id);
- 	if (!t || !btf_type_is_func(t)) {
- 		/* These checks were already done by the verifier while loading
- 		 * struct bpf_func_info
- 		 */
--		bpf_log(log, "BTF of func#%d doesn't point to KIND_FUNC\n",
--			subprog);
-+		bpf_log(log, "BTF of func_id %u doesn't point to KIND_FUNC\n",
-+			func_id);
- 		return -EFAULT;
- 	}
--	tname =3D btf_name_by_offset(btf, t->name_off);
-+	func_name =3D btf_name_by_offset(btf, t->name_off);
-=20
- 	t =3D btf_type_by_id(btf, t->type);
- 	if (!t || !btf_type_is_func_proto(t)) {
--		bpf_log(log, "Invalid BTF of func %s\n", tname);
-+		bpf_log(log, "Invalid BTF of func %s\n", func_name);
- 		return -EFAULT;
- 	}
- 	args =3D (const struct btf_param *)(t + 1);
- 	nargs =3D btf_type_vlen(t);
- 	if (nargs > MAX_BPF_FUNC_REG_ARGS) {
--		bpf_log(log, "Function %s has %d > %d args\n", tname, nargs,
-+		bpf_log(log, "Function %s has %d > %d args\n", func_name, nargs,
- 			MAX_BPF_FUNC_REG_ARGS);
--		goto out;
-+		return -EINVAL;
- 	}
-=20
--	is_global =3D prog->aux->func_info_aux[subprog].linkage =3D=3D BTF_FUNC=
-_GLOBAL;
- 	/* check that BTF function arguments match actual types that the
- 	 * verifier sees.
- 	 */
- 	for (i =3D 0; i < nargs; i++) {
--		struct bpf_reg_state *reg =3D &regs[i + 1];
-+		u32 regno =3D i + 1;
-+		struct bpf_reg_state *reg =3D &regs[regno];
-=20
--		t =3D btf_type_by_id(btf, args[i].type);
--		while (btf_type_is_modifier(t))
--			t =3D btf_type_by_id(btf, t->type);
--		if (btf_type_is_int(t) || btf_type_is_enum(t)) {
-+		t =3D btf_type_skip_modifiers(btf, args[i].type, NULL);
-+		if (btf_type_is_scalar(t)) {
- 			if (reg->type =3D=3D SCALAR_VALUE)
- 				continue;
--			bpf_log(log, "R%d is not a scalar\n", i + 1);
--			goto out;
-+			bpf_log(log, "R%d is not a scalar\n", regno);
-+			return -EINVAL;
- 		}
--		if (btf_type_is_ptr(t)) {
-+
-+		if (!btf_type_is_ptr(t)) {
-+			bpf_log(log, "Unrecognized arg#%d type %s\n",
-+				i, btf_type_str(t));
-+			return -EINVAL;
-+		}
-+
-+		ref_t =3D btf_type_skip_modifiers(btf, t->type, NULL);
-+		ref_tname =3D btf_name_by_offset(btf, ref_t->name_off);
-+		if (btf_get_prog_ctx_type(log, btf, t, env->prog->type, i)) {
- 			/* If function expects ctx type in BTF check that caller
- 			 * is passing PTR_TO_CTX.
- 			 */
--			if (btf_get_prog_ctx_type(log, btf, t, prog->type, i)) {
--				if (reg->type !=3D PTR_TO_CTX) {
--					bpf_log(log,
--						"arg#%d expected pointer to ctx, but got %s\n",
--						i, btf_kind_str[BTF_INFO_KIND(t->info)]);
--					goto out;
--				}
--				if (check_ctx_reg(env, reg, i + 1))
--					goto out;
--				continue;
-+			if (reg->type !=3D PTR_TO_CTX) {
-+				bpf_log(log,
-+					"arg#%d expected pointer to ctx, but got %s\n",
-+					i, btf_type_str(t));
-+				return -EINVAL;
- 			}
-+			if (check_ctx_reg(env, reg, regno))
-+				return -EINVAL;
-+		} else if (ptr_to_mem_ok) {
-+			const struct btf_type *resolve_ret;
-+			u32 type_size;
-=20
--			if (!is_global)
--				goto out;
--
--			t =3D btf_type_skip_modifiers(btf, t->type, NULL);
--
--			ref_t =3D btf_resolve_size(btf, t, &type_size);
--			if (IS_ERR(ref_t)) {
-+			resolve_ret =3D btf_resolve_size(btf, ref_t, &type_size);
-+			if (IS_ERR(resolve_ret)) {
- 				bpf_log(log,
--				    "arg#%d reference type('%s %s') size cannot be determined: %ld\n=
-",
--				    i, btf_type_str(t), btf_name_by_offset(btf, t->name_off),
--					PTR_ERR(ref_t));
--				goto out;
-+					"arg#%d reference type('%s %s') size cannot be determined: %ld\n",
-+					i, btf_type_str(ref_t), ref_tname,
-+					PTR_ERR(resolve_ret));
-+				return -EINVAL;
- 			}
-=20
--			if (check_mem_reg(env, reg, i + 1, type_size))
--				goto out;
--
--			continue;
-+			if (check_mem_reg(env, reg, regno, type_size))
-+				return -EINVAL;
-+		} else {
-+			return -EINVAL;
- 		}
--		bpf_log(log, "Unrecognized arg#%d type %s\n",
--			i, btf_kind_str[BTF_INFO_KIND(t->info)]);
--		goto out;
- 	}
-+
- 	return 0;
--out:
-+}
-+
-+/* Compare BTF of a function with given bpf_reg_state.
-+ * Returns:
-+ * EFAULT - there is a verifier bug. Abort verification.
-+ * EINVAL - there is a type mismatch or BTF is not available.
-+ * 0 - BTF matches with what bpf_reg_state expects.
-+ * Only PTR_TO_CTX and SCALAR_VALUE states are recognized.
-+ */
-+int btf_check_subprog_arg_match(struct bpf_verifier_env *env, int subpro=
-g,
-+				struct bpf_reg_state *regs)
-+{
-+	struct bpf_prog *prog =3D env->prog;
-+	struct btf *btf =3D prog->aux->btf;
-+	bool is_global;
-+	u32 btf_id;
-+	int err;
-+
-+	if (!prog->aux->func_info)
-+		return -EINVAL;
-+
-+	btf_id =3D prog->aux->func_info[subprog].type_id;
-+	if (!btf_id)
-+		return -EFAULT;
-+
-+	if (prog->aux->func_info_aux[subprog].unreliable)
-+		return -EINVAL;
-+
-+	is_global =3D prog->aux->func_info_aux[subprog].linkage =3D=3D BTF_FUNC=
-_GLOBAL;
-+	err =3D btf_check_func_arg_match(env, btf, btf_id, regs, is_global);
-+
- 	/* Compiler optimizations can remove arguments from static functions
- 	 * or mismatched type can be passed into a global function.
- 	 * In such cases mark the function as unreliable from BTF point of view=
-.
- 	 */
--	prog->aux->func_info_aux[subprog].unreliable =3D true;
--	return -EINVAL;
-+	if (err)
-+		prog->aux->func_info_aux[subprog].unreliable =3D true;
-+	return err;
- }
-=20
- /* Convert BTF of a function into bpf_reg_state if possible
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 0cfe39023fe5..da1e53587e01 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -5365,7 +5365,7 @@ static int __check_func_call(struct bpf_verifier_en=
-v *env, struct bpf_insn *insn
- 	func_info_aux =3D env->prog->aux->func_info_aux;
- 	if (func_info_aux)
- 		is_global =3D func_info_aux[subprog].linkage =3D=3D BTF_FUNC_GLOBAL;
--	err =3D btf_check_func_arg_match(env, subprog, caller->regs);
-+	err =3D btf_check_subprog_arg_match(env, subprog, caller->regs);
- 	if (err =3D=3D -EFAULT)
- 		return err;
- 	if (is_global) {
-@@ -12289,7 +12289,7 @@ static int do_check_common(struct bpf_verifier_en=
-v *env, int subprog)
- 		/* 1st arg to a function */
- 		regs[BPF_REG_1].type =3D PTR_TO_CTX;
- 		mark_reg_known_zero(env, regs, BPF_REG_1);
--		ret =3D btf_check_func_arg_match(env, subprog, regs);
-+		ret =3D btf_check_subprog_arg_match(env, subprog, regs);
- 		if (ret =3D=3D -EFAULT)
- 			/* unlikely verifier bug. abort.
- 			 * ret =3D=3D 0 and ret < 0 are sadly acceptable for
+ static int bpf_tcp_ca_init_member(const struct btf_type *t,
 --=20
 2.30.2
 
