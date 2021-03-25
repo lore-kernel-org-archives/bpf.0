@@ -5,48 +5,48 @@ X-Spam-Level:
 X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AAA8C433E0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3C9BC433E4
 	for <bpf@archiver.kernel.org>; Thu, 25 Mar 2021 01:53:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 48A6361A1D
+	by mail.kernel.org (Postfix) with ESMTP id 71E5061A12
 	for <bpf@archiver.kernel.org>; Thu, 25 Mar 2021 01:53:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235966AbhCYBw5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 24 Mar 2021 21:52:57 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:61674 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235976AbhCYBws (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 24 Mar 2021 21:52:48 -0400
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12P1nmR3002852
-        for <bpf@vger.kernel.org>; Wed, 24 Mar 2021 18:52:48 -0700
+        id S235953AbhCYBw4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 24 Mar 2021 21:52:56 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:19026 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236066AbhCYBwa (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 24 Mar 2021 21:52:30 -0400
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12P1pUO7024133
+        for <bpf@vger.kernel.org>; Wed, 24 Mar 2021 18:52:30 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=Ekz2xQpl6hvRIpFqiImrMaWq7vxuOqL1U+6rhOy6VG4=;
- b=FbfMyK57qkBDcEr80RQcpPwDfdjOYqOMidtALSKXUgVmd9k72srIMOAWjez3cC7jAQi3
- BwtMSr4rYbqsNM1kfsxDuaO3JlDrasqkIvA5ZCPQgt7eW/g5SyGDW/nPKpw5NFXJTW6b
- msISBqIUWv9jHDb4dn6yBmX3TkhMtLKX6hY= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 37fnsxh6bs-2
+ bh=4llDdiJHTQl7CKTz4le76j0arsHsZFIWwcjFzYesytU=;
+ b=H+rd/zX1B6E5yY7m2+OEn4WJWum5lwY4rTLx5/nYrmU964uLmTM0g1EyF1+wmKOgukAM
+ oiFLw4mXL1HPuFS5/8wLxo7FWmRGn1/YBH+9pYreuxto/5zzWRPYfE7TCkWQLX/Yc5o9
+ BpuDxJUWN/V6wqHBDGABqKDovIluL9Dd+rU= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 37fpbm8wrs-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 24 Mar 2021 18:52:48 -0700
-Received: from intmgw001.25.frc3.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 24 Mar 2021 18:52:30 -0700
+Received: from intmgw001.05.ash9.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Wed, 24 Mar 2021 18:52:47 -0700
+ 15.1.2176.2; Wed, 24 Mar 2021 18:52:29 -0700
 Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id 5129229429D7; Wed, 24 Mar 2021 18:52:40 -0700 (PDT)
+        id C4F7929429D7; Wed, 24 Mar 2021 18:52:27 -0700 (PDT)
 From:   Martin KaFai Lau <kafai@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
         <netdev@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>
-Subject: [PATCH v2 bpf-next 12/14] bpf: selftests: Rename bictcp to bpf_cubic
-Date:   Wed, 24 Mar 2021 18:52:40 -0700
-Message-ID: <20210325015240.1550074-1-kafai@fb.com>
+Subject: [PATCH v2 bpf-next 10/14] libbpf: Record extern sym relocation first
+Date:   Wed, 24 Mar 2021 18:52:27 -0700
+Message-ID: <20210325015227.1548623-1-kafai@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210325015124.1543397-1-kafai@fb.com>
 References: <20210325015124.1543397-1-kafai@fb.com>
@@ -56,125 +56,146 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
  definitions=2021-03-24_14:2021-03-24,2021-03-24 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 malwarescore=0
- lowpriorityscore=0 clxscore=1015 impostorscore=0 priorityscore=1501
- spamscore=0 mlxlogscore=768 bulkscore=0 phishscore=0 adultscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2103250011
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ adultscore=0 mlxlogscore=947 priorityscore=1501 impostorscore=0
+ malwarescore=0 clxscore=1015 phishscore=0 suspectscore=0 mlxscore=0
+ bulkscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2103250012
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-As a similar chanage in the kernel, this patch gives the proper
-name to the bpf cubic.
+This patch records the extern sym relocs first before recording
+subprog relocs.  The later patch will have relocs for extern
+kernel function call which is also using BPF_JMP | BPF_CALL.
+It will be easier to handle the extern symbols first in
+the later patch.
+
+is_call_insn() helper is added.  The existing is_ldimm64() helper
+is renamed to is_ldimm64_insn() for consistency.
 
 Acked-by: Andrii Nakryiko <andrii@kernel.org>
 Signed-off-by: Martin KaFai Lau <kafai@fb.com>
 ---
- tools/testing/selftests/bpf/progs/bpf_cubic.c | 30 +++++++++----------
- 1 file changed, 15 insertions(+), 15 deletions(-)
+ tools/lib/bpf/libbpf.c | 63 +++++++++++++++++++++++-------------------
+ 1 file changed, 34 insertions(+), 29 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/bpf_cubic.c b/tools/testin=
-g/selftests/bpf/progs/bpf_cubic.c
-index 6939bfd8690f..33c4d2bded64 100644
---- a/tools/testing/selftests/bpf/progs/bpf_cubic.c
-+++ b/tools/testing/selftests/bpf/progs/bpf_cubic.c
-@@ -174,8 +174,8 @@ static __always_inline void bictcp_hystart_reset(stru=
-ct sock *sk)
-  * as long as it is used in one of the func ptr
-  * under SEC(".struct_ops").
-  */
--SEC("struct_ops/bictcp_init")
--void BPF_PROG(bictcp_init, struct sock *sk)
-+SEC("struct_ops/bpf_cubic_init")
-+void BPF_PROG(bpf_cubic_init, struct sock *sk)
- {
- 	struct bictcp *ca =3D inet_csk_ca(sk);
-=20
-@@ -192,7 +192,7 @@ void BPF_PROG(bictcp_init, struct sock *sk)
-  * The remaining tcp-cubic functions have an easier way.
-  */
- SEC("no-sec-prefix-bictcp_cwnd_event")
--void BPF_PROG(bictcp_cwnd_event, struct sock *sk, enum tcp_ca_event even=
-t)
-+void BPF_PROG(bpf_cubic_cwnd_event, struct sock *sk, enum tcp_ca_event e=
-vent)
- {
- 	if (event =3D=3D CA_EVENT_TX_START) {
- 		struct bictcp *ca =3D inet_csk_ca(sk);
-@@ -384,7 +384,7 @@ static __always_inline void bictcp_update(struct bict=
-cp *ca, __u32 cwnd,
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 1a2dbde19b7e..23148566ab3a 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -573,14 +573,19 @@ static bool insn_is_subprog_call(const struct bpf_i=
+nsn *insn)
+ 	       insn->off =3D=3D 0;
  }
 =20
- /* Or simply use the BPF_STRUCT_OPS to avoid the SEC boiler plate. */
--void BPF_STRUCT_OPS(bictcp_cong_avoid, struct sock *sk, __u32 ack, __u32=
- acked)
-+void BPF_STRUCT_OPS(bpf_cubic_cong_avoid, struct sock *sk, __u32 ack, __=
-u32 acked)
+-static bool is_ldimm64(struct bpf_insn *insn)
++static bool is_ldimm64_insn(struct bpf_insn *insn)
  {
- 	struct tcp_sock *tp =3D tcp_sk(sk);
- 	struct bictcp *ca =3D inet_csk_ca(sk);
-@@ -403,7 +403,7 @@ void BPF_STRUCT_OPS(bictcp_cong_avoid, struct sock *s=
-k, __u32 ack, __u32 acked)
- 	tcp_cong_avoid_ai(tp, ca->cnt, acked);
+ 	return insn->code =3D=3D (BPF_LD | BPF_IMM | BPF_DW);
  }
 =20
--__u32 BPF_STRUCT_OPS(bictcp_recalc_ssthresh, struct sock *sk)
-+__u32 BPF_STRUCT_OPS(bpf_cubic_recalc_ssthresh, struct sock *sk)
++static bool is_call_insn(const struct bpf_insn *insn)
++{
++	return insn->code =3D=3D (BPF_JMP | BPF_CALL);
++}
++
+ static bool insn_is_pseudo_func(struct bpf_insn *insn)
  {
- 	const struct tcp_sock *tp =3D tcp_sk(sk);
- 	struct bictcp *ca =3D inet_csk_ca(sk);
-@@ -420,7 +420,7 @@ __u32 BPF_STRUCT_OPS(bictcp_recalc_ssthresh, struct s=
-ock *sk)
- 	return max((tp->snd_cwnd * beta) / BICTCP_BETA_SCALE, 2U);
+-	return is_ldimm64(insn) && insn->src_reg =3D=3D BPF_PSEUDO_FUNC;
++	return is_ldimm64_insn(insn) && insn->src_reg =3D=3D BPF_PSEUDO_FUNC;
  }
 =20
--void BPF_STRUCT_OPS(bictcp_state, struct sock *sk, __u8 new_state)
-+void BPF_STRUCT_OPS(bpf_cubic_state, struct sock *sk, __u8 new_state)
- {
- 	if (new_state =3D=3D TCP_CA_Loss) {
- 		bictcp_reset(inet_csk_ca(sk));
-@@ -496,7 +496,7 @@ static __always_inline void hystart_update(struct soc=
-k *sk, __u32 delay)
+ static int
+@@ -3407,31 +3412,7 @@ static int bpf_program__record_reloc(struct bpf_pr=
+ogram *prog,
+=20
+ 	reloc_desc->processed =3D false;
+=20
+-	/* sub-program call relocation */
+-	if (insn->code =3D=3D (BPF_JMP | BPF_CALL)) {
+-		if (insn->src_reg !=3D BPF_PSEUDO_CALL) {
+-			pr_warn("prog '%s': incorrect bpf_call opcode\n", prog->name);
+-			return -LIBBPF_ERRNO__RELOC;
+-		}
+-		/* text_shndx can be 0, if no default "main" program exists */
+-		if (!shdr_idx || shdr_idx !=3D obj->efile.text_shndx) {
+-			sym_sec_name =3D elf_sec_name(obj, elf_sec_by_idx(obj, shdr_idx));
+-			pr_warn("prog '%s': bad call relo against '%s' in section '%s'\n",
+-				prog->name, sym_name, sym_sec_name);
+-			return -LIBBPF_ERRNO__RELOC;
+-		}
+-		if (sym->st_value % BPF_INSN_SZ) {
+-			pr_warn("prog '%s': bad call relo against '%s' at offset %zu\n",
+-				prog->name, sym_name, (size_t)sym->st_value);
+-			return -LIBBPF_ERRNO__RELOC;
+-		}
+-		reloc_desc->type =3D RELO_CALL;
+-		reloc_desc->insn_idx =3D insn_idx;
+-		reloc_desc->sym_off =3D sym->st_value;
+-		return 0;
+-	}
+-
+-	if (!is_ldimm64(insn)) {
++	if (!is_call_insn(insn) && !is_ldimm64_insn(insn)) {
+ 		pr_warn("prog '%s': invalid relo against '%s' for insns[%d].code 0x%x\=
+n",
+ 			prog->name, sym_name, insn_idx, insn->code);
+ 		return -LIBBPF_ERRNO__RELOC;
+@@ -3460,6 +3441,30 @@ static int bpf_program__record_reloc(struct bpf_pr=
+ogram *prog,
+ 		return 0;
  	}
- }
 =20
--void BPF_STRUCT_OPS(bictcp_acked, struct sock *sk,
-+void BPF_STRUCT_OPS(bpf_cubic_acked, struct sock *sk,
- 		    const struct ack_sample *sample)
- {
- 	const struct tcp_sock *tp =3D tcp_sk(sk);
-@@ -525,7 +525,7 @@ void BPF_STRUCT_OPS(bictcp_acked, struct sock *sk,
- 		hystart_update(sk, delay);
- }
++	/* sub-program call relocation */
++	if (is_call_insn(insn)) {
++		if (insn->src_reg !=3D BPF_PSEUDO_CALL) {
++			pr_warn("prog '%s': incorrect bpf_call opcode\n", prog->name);
++			return -LIBBPF_ERRNO__RELOC;
++		}
++		/* text_shndx can be 0, if no default "main" program exists */
++		if (!shdr_idx || shdr_idx !=3D obj->efile.text_shndx) {
++			sym_sec_name =3D elf_sec_name(obj, elf_sec_by_idx(obj, shdr_idx));
++			pr_warn("prog '%s': bad call relo against '%s' in section '%s'\n",
++				prog->name, sym_name, sym_sec_name);
++			return -LIBBPF_ERRNO__RELOC;
++		}
++		if (sym->st_value % BPF_INSN_SZ) {
++			pr_warn("prog '%s': bad call relo against '%s' at offset %zu\n",
++				prog->name, sym_name, (size_t)sym->st_value);
++			return -LIBBPF_ERRNO__RELOC;
++		}
++		reloc_desc->type =3D RELO_CALL;
++		reloc_desc->insn_idx =3D insn_idx;
++		reloc_desc->sym_off =3D sym->st_value;
++		return 0;
++	}
++
+ 	if (!shdr_idx || shdr_idx >=3D SHN_LORESERVE) {
+ 		pr_warn("prog '%s': invalid relo against '%s' in special section 0x%x;=
+ forgot to initialize global var?..\n",
+ 			prog->name, sym_name, shdr_idx);
+@@ -5699,7 +5704,7 @@ static int bpf_core_patch_insn(struct bpf_program *=
+prog,
+ 		/* poison second part of ldimm64 to avoid confusing error from
+ 		 * verifier about "unknown opcode 00"
+ 		 */
+-		if (is_ldimm64(insn))
++		if (is_ldimm64_insn(insn))
+ 			bpf_core_poison_insn(prog, relo_idx, insn_idx + 1, insn + 1);
+ 		bpf_core_poison_insn(prog, relo_idx, insn_idx, insn);
+ 		return 0;
+@@ -5775,7 +5780,7 @@ static int bpf_core_patch_insn(struct bpf_program *=
+prog,
+ 	case BPF_LD: {
+ 		__u64 imm;
 =20
--__u32 BPF_STRUCT_OPS(tcp_reno_undo_cwnd, struct sock *sk)
-+__u32 BPF_STRUCT_OPS(bpf_cubic_undo_cwnd, struct sock *sk)
- {
- 	const struct tcp_sock *tp =3D tcp_sk(sk);
-=20
-@@ -534,12 +534,12 @@ __u32 BPF_STRUCT_OPS(tcp_reno_undo_cwnd, struct soc=
-k *sk)
-=20
- SEC(".struct_ops")
- struct tcp_congestion_ops cubic =3D {
--	.init		=3D (void *)bictcp_init,
--	.ssthresh	=3D (void *)bictcp_recalc_ssthresh,
--	.cong_avoid	=3D (void *)bictcp_cong_avoid,
--	.set_state	=3D (void *)bictcp_state,
--	.undo_cwnd	=3D (void *)tcp_reno_undo_cwnd,
--	.cwnd_event	=3D (void *)bictcp_cwnd_event,
--	.pkts_acked     =3D (void *)bictcp_acked,
-+	.init		=3D (void *)bpf_cubic_init,
-+	.ssthresh	=3D (void *)bpf_cubic_recalc_ssthresh,
-+	.cong_avoid	=3D (void *)bpf_cubic_cong_avoid,
-+	.set_state	=3D (void *)bpf_cubic_state,
-+	.undo_cwnd	=3D (void *)bpf_cubic_undo_cwnd,
-+	.cwnd_event	=3D (void *)bpf_cubic_cwnd_event,
-+	.pkts_acked     =3D (void *)bpf_cubic_acked,
- 	.name		=3D "bpf_cubic",
- };
+-		if (!is_ldimm64(insn) ||
++		if (!is_ldimm64_insn(insn) ||
+ 		    insn[0].src_reg !=3D 0 || insn[0].off !=3D 0 ||
+ 		    insn_idx + 1 >=3D prog->insns_cnt ||
+ 		    insn[1].code !=3D 0 || insn[1].dst_reg !=3D 0 ||
 --=20
 2.30.2
 
