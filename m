@@ -5,48 +5,48 @@ X-Spam-Level:
 X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DB60C433E0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5898BC433E1
 	for <bpf@archiver.kernel.org>; Thu, 25 Mar 2021 01:52:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 017AF61A1A
-	for <bpf@archiver.kernel.org>; Thu, 25 Mar 2021 01:52:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 25ABD619E8
+	for <bpf@archiver.kernel.org>; Thu, 25 Mar 2021 01:52:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235934AbhCYBwW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 24 Mar 2021 21:52:22 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:5164 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235899AbhCYBvy (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 24 Mar 2021 21:51:54 -0400
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12P1ievH002662
-        for <bpf@vger.kernel.org>; Wed, 24 Mar 2021 18:51:54 -0700
+        id S236033AbhCYBwX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 24 Mar 2021 21:52:23 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:10846 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S236058AbhCYBwO (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 24 Mar 2021 21:52:14 -0400
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.0.43/8.16.0.43) with SMTP id 12P1qD1q031964
+        for <bpf@vger.kernel.org>; Wed, 24 Mar 2021 18:52:14 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=Jmp7QXs92GCmW8svevDcyEuQAFWPQJk6rVJNj8uIl/I=;
- b=C+inJkc6hb3qEKbofppA2uUa/Q/HvX49xt2eJqcIbZRMJM+PDWqf9bveS7PuV3atdOYx
- 4fTlwiqO/7korpgUvloQypqRZECKZAFKdlyRpIliDo+FSj4vPwH2KwSthtXF4kwamefU
- Khu7lSIwpWaw1TM4W8IHO3De9kcOUXPCBOs= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 37fp7xrxpd-1
+ bh=q+f2Y732MnulG3HJWlGblpDfAZ17tK6mJNi86rivi1Q=;
+ b=DMNDj9RGOMq4z2cw+KttUeJ9lBoIULUM4P9dyQK/ZFcl7zs/KOQp2dkct03F39/sZg+b
+ y4BrD8+Sh2QOjlhR4JgcqGvAknOsDYZn3vfMKMpcIm59bNKhLe1X5iWkFRG+4HenFAY5
+ uIB7w/1Fc0AuNezV1hYnTk5e8X9m4NHu75Y= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0001303.ppops.net with ESMTP id 37g173nu4y-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 24 Mar 2021 18:51:53 -0700
-Received: from intmgw001.05.ash9.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 24 Mar 2021 18:52:13 -0700
+Received: from intmgw001.06.ash9.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Wed, 24 Mar 2021 18:51:53 -0700
+ 15.1.2176.2; Wed, 24 Mar 2021 18:52:13 -0700
 Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id 45A7829429CE; Wed, 24 Mar 2021 18:51:49 -0700 (PDT)
+        id 099F129429D7; Wed, 24 Mar 2021 18:52:08 -0700 (PDT)
 From:   Martin KaFai Lau <kafai@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
-        <netdev@vger.kernel.org>
-Subject: [PATCH v2 bpf-next 04/14] bpf: Support kernel function call in x86-32
-Date:   Wed, 24 Mar 2021 18:51:49 -0700
-Message-ID: <20210325015149.1545267-1-kafai@fb.com>
+        <netdev@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>
+Subject: [PATCH v2 bpf-next 07/14] libbpf: Refactor bpf_object__resolve_ksyms_btf_id
+Date:   Wed, 24 Mar 2021 18:52:07 -0700
+Message-ID: <20210325015207.1546749-1-kafai@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210325015124.1543397-1-kafai@fb.com>
 References: <20210325015124.1543397-1-kafai@fb.com>
@@ -56,257 +56,183 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
  definitions=2021-03-24_14:2021-03-24,2021-03-24 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
- bulkscore=0 spamscore=0 clxscore=1015 impostorscore=0 mlxscore=0
- adultscore=0 suspectscore=0 mlxlogscore=965 lowpriorityscore=0
- phishscore=0 priorityscore=1501 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2009150000 definitions=main-2103250011
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
+ mlxscore=0 adultscore=0 mlxlogscore=999 clxscore=1015 phishscore=0
+ malwarescore=0 bulkscore=0 lowpriorityscore=0 impostorscore=0 spamscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2103250012
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch adds kernel function call support to the x86-32 bpf jit.
+This patch refactors most of the logic from
+bpf_object__resolve_ksyms_btf_id() into a new function
+bpf_object__resolve_ksym_var_btf_id().
+It is to get ready for a later patch adding
+bpf_object__resolve_ksym_func_btf_id() which resolves
+a kernel function to the running kernel btf_id.
 
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
 Signed-off-by: Martin KaFai Lau <kafai@fb.com>
 ---
- arch/x86/net/bpf_jit_comp32.c | 198 ++++++++++++++++++++++++++++++++++
- 1 file changed, 198 insertions(+)
+ tools/lib/bpf/libbpf.c | 124 ++++++++++++++++++++++-------------------
+ 1 file changed, 67 insertions(+), 57 deletions(-)
 
-diff --git a/arch/x86/net/bpf_jit_comp32.c b/arch/x86/net/bpf_jit_comp32.=
-c
-index d17b67c69f89..0a7a2870f111 100644
---- a/arch/x86/net/bpf_jit_comp32.c
-+++ b/arch/x86/net/bpf_jit_comp32.c
-@@ -1390,6 +1390,19 @@ static inline void emit_push_r64(const u8 src[], u=
-8 **pprog)
- 	*pprog =3D prog;
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 058b643cbcb1..57123a2179b4 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -7394,75 +7394,85 @@ static int bpf_object__read_kallsyms_file(struct =
+bpf_object *obj)
+ 	return err;
  }
 =20
-+static void emit_push_r32(const u8 src[], u8 **pprog)
-+{
-+	u8 *prog =3D *pprog;
-+	int cnt =3D 0;
-+
-+	/* mov ecx,dword ptr [ebp+off] */
-+	EMIT3(0x8B, add_2reg(0x40, IA32_EBP, IA32_ECX), STACK_VAR(src_lo));
-+	/* push ecx */
-+	EMIT1(0x51);
-+
-+	*pprog =3D prog;
-+}
-+
- static u8 get_cond_jmp_opcode(const u8 op, bool is_cmp_lo)
+-static int bpf_object__resolve_ksyms_btf_id(struct bpf_object *obj)
++static int bpf_object__resolve_ksym_var_btf_id(struct bpf_object *obj,
++					       struct extern_desc *ext)
  {
- 	u8 jmp_cond;
-@@ -1459,6 +1472,174 @@ static u8 get_cond_jmp_opcode(const u8 op, bool i=
-s_cmp_lo)
- 	return jmp_cond;
- }
+-	struct extern_desc *ext;
++	const struct btf_type *targ_var, *targ_type;
++	__u32 targ_type_id, local_type_id;
++	const char *targ_var_name;
++	int i, id, btf_fd, err;
+ 	struct btf *btf;
+-	int i, j, id, btf_fd, err;
 =20
-+/* i386 kernel compiles with "-mregparm=3D3".  From gcc document:
-+ *
-+ * =3D=3D=3D=3D snippet =3D=3D=3D=3D
-+ * regparm (number)
-+ *	On x86-32 targets, the regparm attribute causes the compiler
-+ *	to pass arguments number one to (number) if they are of integral
-+ *	type in registers EAX, EDX, and ECX instead of on the stack.
-+ *	Functions that take a variable number of arguments continue
-+ *	to be passed all of their arguments on the stack.
-+ * =3D=3D=3D=3D snippet =3D=3D=3D=3D
-+ *
-+ * The first three args of a function will be considered for
-+ * putting into the 32bit register EAX, EDX, and ECX.
-+ *
-+ * Two 32bit registers are used to pass a 64bit arg.
-+ *
-+ * For example,
-+ * void foo(u32 a, u32 b, u32 c, u32 d):
-+ *	u32 a: EAX
-+ *	u32 b: EDX
-+ *	u32 c: ECX
-+ *	u32 d: stack
-+ *
-+ * void foo(u64 a, u32 b, u32 c):
-+ *	u64 a: EAX (lo32) EDX (hi32)
-+ *	u32 b: ECX
-+ *	u32 c: stack
-+ *
-+ * void foo(u32 a, u64 b, u32 c):
-+ *	u32 a: EAX
-+ *	u64 b: EDX (lo32) ECX (hi32)
-+ *	u32 c: stack
-+ *
-+ * void foo(u32 a, u32 b, u64 c):
-+ *	u32 a: EAX
-+ *	u32 b: EDX
-+ *	u64 c: stack
-+ *
-+ * The return value will be stored in the EAX (and EDX for 64bit value).
-+ *
-+ * For example,
-+ * u32 foo(u32 a, u32 b, u32 c):
-+ *	return value: EAX
-+ *
-+ * u64 foo(u32 a, u32 b, u32 c):
-+ *	return value: EAX (lo32) EDX (hi32)
-+ *
-+ * Notes:
-+ *	The verifier only accepts function having integer and pointers
-+ *	as its args and return value, so it does not have
-+ *	struct-by-value.
-+ *
-+ * emit_kfunc_call() finds out the btf_func_model by calling
-+ * bpf_jit_find_kfunc_model().  A btf_func_model
-+ * has the details about the number of args, size of each arg,
-+ * and the size of the return value.
-+ *
-+ * It first decides how many args can be passed by EAX, EDX, and ECX.
-+ * That will decide what args should be pushed to the stack:
-+ * [first_stack_regno, last_stack_regno] are the bpf regnos
-+ * that should be pushed to the stack.
-+ *
-+ * It will first push all args to the stack because the push
-+ * will need to use ECX.  Then, it moves
-+ * [BPF_REG_1, first_stack_regno) to EAX, EDX, and ECX.
-+ *
-+ * When emitting a call (0xE8), it needs to figure out
-+ * the jmp_offset relative to the jit-insn address immediately
-+ * following the call (0xE8) instruction.  At this point, it knows
-+ * the end of the jit-insn address after completely translated the
-+ * current (BPF_JMP | BPF_CALL) bpf-insn.  It is passed as "end_addr"
-+ * to the emit_kfunc_call().  Thus, it can learn the "immediate-follow-c=
-all"
-+ * address by figuring out how many jit-insn is generated between
-+ * the call (0xE8) and the end_addr:
-+ *	- 0-1 jit-insn (3 bytes each) to restore the esp pointer if there
-+ *	  is arg pushed to the stack.
-+ *	- 0-2 jit-insns (3 bytes each) to handle the return value.
-+ */
-+static int emit_kfunc_call(const struct bpf_prog *bpf_prog, u8 *end_addr=
-,
-+			   const struct bpf_insn *insn, u8 **pprog)
-+{
-+	const u8 arg_regs[] =3D { IA32_EAX, IA32_EDX, IA32_ECX };
-+	int i, cnt =3D 0, first_stack_regno, last_stack_regno;
-+	int free_arg_regs =3D ARRAY_SIZE(arg_regs);
-+	const struct btf_func_model *fm;
-+	int bytes_in_stack =3D 0;
-+	const u8 *cur_arg_reg;
-+	u8 *prog =3D *pprog;
-+	s64 jmp_offset;
-+
-+	fm =3D bpf_jit_find_kfunc_model(bpf_prog, insn);
-+	if (!fm)
-+		return -EINVAL;
-+
-+	first_stack_regno =3D BPF_REG_1;
-+	for (i =3D 0; i < fm->nr_args; i++) {
-+		int regs_needed =3D fm->arg_size[i] > sizeof(u32) ? 2 : 1;
-+
-+		if (regs_needed > free_arg_regs)
-+			break;
-+
-+		free_arg_regs -=3D regs_needed;
-+		first_stack_regno++;
-+	}
-+
-+	/* Push the args to the stack */
-+	last_stack_regno =3D BPF_REG_0 + fm->nr_args;
-+	for (i =3D last_stack_regno; i >=3D first_stack_regno; i--) {
-+		if (fm->arg_size[i - 1] > sizeof(u32)) {
-+			emit_push_r64(bpf2ia32[i], &prog);
-+			bytes_in_stack +=3D 8;
-+		} else {
-+			emit_push_r32(bpf2ia32[i], &prog);
-+			bytes_in_stack +=3D 4;
+-	for (i =3D 0; i < obj->nr_extern; i++) {
+-		const struct btf_type *targ_var, *targ_type;
+-		__u32 targ_type_id, local_type_id;
+-		const char *targ_var_name;
+-		int ret;
++	btf =3D obj->btf_vmlinux;
++	btf_fd =3D 0;
++	id =3D btf__find_by_name_kind(btf, ext->name, BTF_KIND_VAR);
++	if (id =3D=3D -ENOENT) {
++		err =3D load_module_btfs(obj);
++		if (err)
++			return err;
+=20
+-		ext =3D &obj->externs[i];
+-		if (ext->type !=3D EXT_KSYM || !ext->ksym.type_id)
+-			continue;
++		for (i =3D 0; i < obj->btf_module_cnt; i++) {
++			btf =3D obj->btf_modules[i].btf;
++			/* we assume module BTF FD is always >0 */
++			btf_fd =3D obj->btf_modules[i].fd;
++			id =3D btf__find_by_name_kind(btf, ext->name, BTF_KIND_VAR);
++			if (id !=3D -ENOENT)
++				break;
 +		}
 +	}
-+
-+	cur_arg_reg =3D &arg_regs[0];
-+	for (i =3D BPF_REG_1; i < first_stack_regno; i++) {
-+		/* mov e[adc]x,dword ptr [ebp+off] */
-+		EMIT3(0x8B, add_2reg(0x40, IA32_EBP, *cur_arg_reg++),
-+		      STACK_VAR(bpf2ia32[i][0]));
-+		if (fm->arg_size[i - 1] > sizeof(u32))
-+			/* mov e[adc]x,dword ptr [ebp+off] */
-+			EMIT3(0x8B, add_2reg(0x40, IA32_EBP, *cur_arg_reg++),
-+			      STACK_VAR(bpf2ia32[i][1]));
++	if (id <=3D 0) {
++		pr_warn("extern (var ksym) '%s': failed to find BTF ID in kernel BTF(s=
+).\n",
++			ext->name);
++		return -ESRCH;
 +	}
-+
-+	if (bytes_in_stack)
-+		/* add esp,"bytes_in_stack" */
-+		end_addr -=3D 3;
-+
-+	/* mov dword ptr [ebp+off],edx */
-+	if (fm->ret_size > sizeof(u32))
-+		end_addr -=3D 3;
-+
-+	/* mov dword ptr [ebp+off],eax */
-+	if (fm->ret_size)
-+		end_addr -=3D 3;
-+
-+	jmp_offset =3D (u8 *)__bpf_call_base + insn->imm - end_addr;
-+	if (!is_simm32(jmp_offset)) {
-+		pr_err("unsupported BPF kernel function jmp_offset:%lld\n",
-+		       jmp_offset);
+=20
+-		btf =3D obj->btf_vmlinux;
+-		btf_fd =3D 0;
+-		id =3D btf__find_by_name_kind(btf, ext->name, BTF_KIND_VAR);
+-		if (id =3D=3D -ENOENT) {
+-			err =3D load_module_btfs(obj);
+-			if (err)
+-				return err;
++	/* find local type_id */
++	local_type_id =3D ext->ksym.type_id;
+=20
+-			for (j =3D 0; j < obj->btf_module_cnt; j++) {
+-				btf =3D obj->btf_modules[j].btf;
+-				/* we assume module BTF FD is always >0 */
+-				btf_fd =3D obj->btf_modules[j].fd;
+-				id =3D btf__find_by_name_kind(btf, ext->name, BTF_KIND_VAR);
+-				if (id !=3D -ENOENT)
+-					break;
+-			}
+-		}
+-		if (id <=3D 0) {
+-			pr_warn("extern (ksym) '%s': failed to find BTF ID in kernel BTF(s).\=
+n",
+-				ext->name);
+-			return -ESRCH;
+-		}
++	/* find target type_id */
++	targ_var =3D btf__type_by_id(btf, id);
++	targ_var_name =3D btf__name_by_offset(btf, targ_var->name_off);
++	targ_type =3D skip_mods_and_typedefs(btf, targ_var->type, &targ_type_id=
+);
+=20
+-		/* find local type_id */
+-		local_type_id =3D ext->ksym.type_id;
++	err =3D bpf_core_types_are_compat(obj->btf, local_type_id,
++					btf, targ_type_id);
++	if (err <=3D 0) {
++		const struct btf_type *local_type;
++		const char *targ_name, *local_name;
+=20
+-		/* find target type_id */
+-		targ_var =3D btf__type_by_id(btf, id);
+-		targ_var_name =3D btf__name_by_offset(btf, targ_var->name_off);
+-		targ_type =3D skip_mods_and_typedefs(btf, targ_var->type, &targ_type_i=
+d);
++		local_type =3D btf__type_by_id(obj->btf, local_type_id);
++		local_name =3D btf__name_by_offset(obj->btf, local_type->name_off);
++		targ_name =3D btf__name_by_offset(btf, targ_type->name_off);
+=20
+-		ret =3D bpf_core_types_are_compat(obj->btf, local_type_id,
+-						btf, targ_type_id);
+-		if (ret <=3D 0) {
+-			const struct btf_type *local_type;
+-			const char *targ_name, *local_name;
++		pr_warn("extern (var ksym) '%s': incompatible types, expected [%d] %s =
+%s, but kernel has [%d] %s %s\n",
++			ext->name, local_type_id,
++			btf_kind_str(local_type), local_name, targ_type_id,
++			btf_kind_str(targ_type), targ_name);
 +		return -EINVAL;
 +	}
-+
-+	EMIT1_off32(0xE8, jmp_offset);
-+
-+	if (fm->ret_size)
-+		/* mov dword ptr [ebp+off],eax */
-+		EMIT3(0x89, add_2reg(0x40, IA32_EBP, IA32_EAX),
-+		      STACK_VAR(bpf2ia32[BPF_REG_0][0]));
-+
-+	if (fm->ret_size > sizeof(u32))
-+		/* mov dword ptr [ebp+off],edx */
-+		EMIT3(0x89, add_2reg(0x40, IA32_EBP, IA32_EDX),
-+		      STACK_VAR(bpf2ia32[BPF_REG_0][1]));
-+
-+	if (bytes_in_stack)
-+		/* add esp,"bytes_in_stack" */
-+		EMIT3(0x83, add_1reg(0xC0, IA32_ESP), bytes_in_stack);
-+
-+	*pprog =3D prog;
-+
+=20
+-			local_type =3D btf__type_by_id(obj->btf, local_type_id);
+-			local_name =3D btf__name_by_offset(obj->btf, local_type->name_off);
+-			targ_name =3D btf__name_by_offset(btf, targ_type->name_off);
++	ext->is_set =3D true;
++	ext->ksym.kernel_btf_obj_fd =3D btf_fd;
++	ext->ksym.kernel_btf_id =3D id;
++	pr_debug("extern (var ksym) '%s': resolved to [%d] %s %s\n",
++		 ext->name, id, btf_kind_str(targ_var), targ_var_name);
+=20
+-			pr_warn("extern (ksym) '%s': incompatible types, expected [%d] %s %s,=
+ but kernel has [%d] %s %s\n",
+-				ext->name, local_type_id,
+-				btf_kind_str(local_type), local_name, targ_type_id,
+-				btf_kind_str(targ_type), targ_name);
+-			return -EINVAL;
+-		}
 +	return 0;
 +}
 +
- static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
- 		  int oldproglen, struct jit_context *ctx)
- {
-@@ -1888,6 +2069,18 @@ static int do_jit(struct bpf_prog *bpf_prog, int *=
-addrs, u8 *image,
- 			if (insn->src_reg =3D=3D BPF_PSEUDO_CALL)
- 				goto notyet;
-=20
-+			if (insn->src_reg =3D=3D BPF_PSEUDO_KFUNC_CALL) {
-+				int err;
-+
-+				err =3D emit_kfunc_call(bpf_prog,
-+						      image + addrs[i],
-+						      insn, &prog);
-+
-+				if (err)
-+					return err;
-+				break;
-+			}
-+
- 			func =3D (u8 *) __bpf_call_base + imm32;
- 			jmp_offset =3D func - (image + addrs[i]);
-=20
-@@ -2393,3 +2586,8 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_pro=
-g *prog)
- 					   tmp : orig_prog);
- 	return prog;
- }
-+
-+bool bpf_jit_supports_kfunc_call(void)
++static int bpf_object__resolve_ksyms_btf_id(struct bpf_object *obj)
 +{
-+	return true;
-+}
++	struct extern_desc *ext;
++	int i, err;
++
++	for (i =3D 0; i < obj->nr_extern; i++) {
++		ext =3D &obj->externs[i];
++		if (ext->type !=3D EXT_KSYM || !ext->ksym.type_id)
++			continue;
+=20
+-		ext->is_set =3D true;
+-		ext->ksym.kernel_btf_obj_fd =3D btf_fd;
+-		ext->ksym.kernel_btf_id =3D id;
+-		pr_debug("extern (ksym) '%s': resolved to [%d] %s %s\n",
+-			 ext->name, id, btf_kind_str(targ_var), targ_var_name);
++		err =3D bpf_object__resolve_ksym_var_btf_id(obj, ext);
++		if (err)
++			return err;
+ 	}
+ 	return 0;
+ }
 --=20
 2.30.2
 
