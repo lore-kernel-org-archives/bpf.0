@@ -2,84 +2,109 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 15BDFC433C1
-	for <bpf@archiver.kernel.org>; Thu, 25 Mar 2021 10:29:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 64D17C433DB
+	for <bpf@archiver.kernel.org>; Thu, 25 Mar 2021 10:38:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C2E0F61A2E
-	for <bpf@archiver.kernel.org>; Thu, 25 Mar 2021 10:29:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 12666619B3
+	for <bpf@archiver.kernel.org>; Thu, 25 Mar 2021 10:38:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229581AbhCYK3D (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 25 Mar 2021 06:29:03 -0400
-Received: from elvis.franken.de ([193.175.24.41]:58945 "EHLO elvis.franken.de"
+        id S229854AbhCYKiQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 25 Mar 2021 06:38:16 -0400
+Received: from foss.arm.com ([217.140.110.172]:46110 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229716AbhCYK2s (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 25 Mar 2021 06:28:48 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1lPNEM-0007Ug-00; Thu, 25 Mar 2021 11:28:46 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id CCBECC1C81; Thu, 25 Mar 2021 11:17:12 +0100 (CET)
-Date:   Thu, 25 Mar 2021 11:17:12 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        linux-mips@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH v2] MIPS/bpf: Enable bpf_probe_read{, str}() on MIPS again
-Message-ID: <20210325101712.GA6893@alpha.franken.de>
-References: <1616034557-5844-1-git-send-email-yangtiezhu@loongson.cn>
- <alpine.DEB.2.21.2103220540591.21463@angie.orcam.me.uk>
- <f36f4ca6-a3bb-8db9-01e6-65fec0916b58@loongson.cn>
+        id S229631AbhCYKiF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 25 Mar 2021 06:38:05 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 077AA1424;
+        Thu, 25 Mar 2021 03:38:05 -0700 (PDT)
+Received: from C02TD0UTHF1T.local (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 023E23F718;
+        Thu, 25 Mar 2021 03:38:00 -0700 (PDT)
+Date:   Thu, 25 Mar 2021 10:37:57 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Sami Tolvanen <samitolvanen@google.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Will Deacon <will@kernel.org>, Jessica Yu <jeyu@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Tejun Heo <tj@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Peter Zijlstra <peterz@infradead.org>, bpf@vger.kernel.org,
+        linux-hardening@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 12/17] arm64: implement __va_function
+Message-ID: <20210325103757.GD36570@C02TD0UTHF1T.local>
+References: <20210323203946.2159693-1-samitolvanen@google.com>
+ <20210323203946.2159693-13-samitolvanen@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f36f4ca6-a3bb-8db9-01e6-65fec0916b58@loongson.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20210323203946.2159693-13-samitolvanen@google.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Mar 22, 2021 at 03:12:59PM +0800, Tiezhu Yang wrote:
-> On 03/22/2021 12:46 PM, Maciej W. Rozycki wrote:
-> > On Thu, 18 Mar 2021, Tiezhu Yang wrote:
-> > 
-> > > diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-> > > index 160b3a8..4b94ec7 100644
-> > > --- a/arch/mips/Kconfig
-> > > +++ b/arch/mips/Kconfig
-> > > @@ -6,6 +6,7 @@ config MIPS
-> > >   	select ARCH_BINFMT_ELF_STATE if MIPS_FP_SUPPORT
-> > >   	select ARCH_HAS_FORTIFY_SOURCE
-> > >   	select ARCH_HAS_KCOV
-> > > +	select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
-> >   Hmm, documentation on ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE seems rather
-> > scarce, but based on my guess shouldn't this be "if !EVA"?
-> > 
-> >    Maciej
+On Tue, Mar 23, 2021 at 01:39:41PM -0700, Sami Tolvanen wrote:
+> With CONFIG_CFI_CLANG, the compiler replaces function addresses in
+> instrumented C code with jump table addresses. This change implements
+> the __va_function() macro, which returns the actual function address
+> instead.
 > 
-> I do not quite know what the effect if MIPS EVA (Enhanced Virtual
-> Addressing)
-> is set, I saw that ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE should be
-> restricted
-> to archs with non-overlapping address ranges.
+> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+
+Is there really no attribute or builtin that can be used to do this
+without assembly?
+
+IIUC from other patches the symbol tables will contain the "real"
+non-cfi entry points (unless we explciitly asked to make the jump table
+address canonical), so AFAICT here the compiler should have all the
+necessary information to generate either the CFI or non-CFI entry point
+addresses, even if it doesn't expose an interface for that today.
+
+It'd be a lot nicer if we could get the compiler to do this for us.
+
+Thanks,
+Mark.
+
+> ---
+>  arch/arm64/include/asm/memory.h | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
 > 
-> I wonder whether MIPS EVA will generate overlapping address ranges?
-
-they can overlap in EVA mode.
-
-> If yes, it is better to make ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE depend
-> on !EVA on MIPS.
-
-Could please add the change ?
-
-Thomas.
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+> diff --git a/arch/arm64/include/asm/memory.h b/arch/arm64/include/asm/memory.h
+> index 0aabc3be9a75..9a4887808681 100644
+> --- a/arch/arm64/include/asm/memory.h
+> +++ b/arch/arm64/include/asm/memory.h
+> @@ -321,6 +321,21 @@ static inline void *phys_to_virt(phys_addr_t x)
+>  #define virt_to_pfn(x)		__phys_to_pfn(__virt_to_phys((unsigned long)(x)))
+>  #define sym_to_pfn(x)		__phys_to_pfn(__pa_symbol(x))
+>  
+> +#ifdef CONFIG_CFI_CLANG
+> +/*
+> + * With CONFIG_CFI_CLANG, the compiler replaces function address
+> + * references with the address of the function's CFI jump table
+> + * entry. The __va_function macro always returns the address of the
+> + * actual function instead.
+> + */
+> +#define __va_function(x) ({						\
+> +	void *addr;							\
+> +	asm("adrp %0, " __stringify(x) "\n\t"				\
+> +	    "add  %0, %0, :lo12:" __stringify(x) : "=r" (addr));	\
+> +	addr;								\
+> +})
+> +#endif
+> +
+>  /*
+>   *  virt_to_page(x)	convert a _valid_ virtual address to struct page *
+>   *  virt_addr_valid(x)	indicates whether a virtual address is valid
+> -- 
+> 2.31.0.291.g576ba9dcdaf-goog
+> 
