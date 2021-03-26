@@ -7,41 +7,41 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 03881C433F7
-	for <bpf@archiver.kernel.org>; Fri, 26 Mar 2021 23:22:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A45AAC433E6
+	for <bpf@archiver.kernel.org>; Fri, 26 Mar 2021 23:22:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EB81461A2A
-	for <bpf@archiver.kernel.org>; Fri, 26 Mar 2021 23:22:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9D9F061A3F
+	for <bpf@archiver.kernel.org>; Fri, 26 Mar 2021 23:22:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231151AbhCZXVt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 26 Mar 2021 19:21:49 -0400
-Received: from mga14.intel.com ([192.55.52.115]:11392 "EHLO mga14.intel.com"
+        id S231634AbhCZXVq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 26 Mar 2021 19:21:46 -0400
+Received: from mga14.intel.com ([192.55.52.115]:11388 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231493AbhCZXVm (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 26 Mar 2021 19:21:42 -0400
-IronPort-SDR: d659Fo4gElRqrjaAR+6i6IaTv9YtjgS+5d2VFVX1uFj5wK7P67PwXURz4vv7fR4MbDeWht2izn
- GlUjy6+8GDGA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9935"; a="190681443"
+        id S231329AbhCZXVh (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 26 Mar 2021 19:21:37 -0400
+IronPort-SDR: M1sSeasvqkTYlieFk1CIXZslg9NcudjAFlU8UvRbXT5nOozttnhU/zvG4BdFfac2xDQHRyVJEa
+ aatW1W1o8akg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9935"; a="190681421"
 X-IronPort-AV: E=Sophos;i="5.81,281,1610438400"; 
-   d="scan'208";a="190681443"
+   d="scan'208";a="190681421"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2021 16:21:24 -0700
-IronPort-SDR: ZvcyPWiCkVLGidlktZ+qIxB9DpCvovWAdWbNqxzA87PvShqvSPEv1TsE8/1xVTtd8TCPf0ljan
- 6Ly0PhNP/X7A==
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2021 16:21:06 -0700
+IronPort-SDR: GTfc6/z4wZTSttQSKbfomruTjeR1OgLwWs+A+B67jsRlMkd6DjB8+/d5Co8g1qbnXJozmloYh6
+ BIkAa/h7wzrQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.81,281,1610438400"; 
-   d="scan'208";a="410113324"
+   d="scan'208";a="410113225"
 Received: from ranger.igk.intel.com ([10.102.21.164])
-  by fmsmga008.fm.intel.com with ESMTP; 26 Mar 2021 16:21:22 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 26 Mar 2021 16:21:04 -0700
 From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 To:     bpf@vger.kernel.org, netdev@vger.kernel.org, daniel@iogearbox.net,
         ast@kernel.org, andrii@kernel.org
 Cc:     bjorn.topel@intel.com, magnus.karlsson@intel.com,
         ciara.loftus@intel.com, john.fastabend@gmail.com, toke@redhat.com,
         Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH v4 bpf-next 10/17] selftests: xsk: remove Tx synchronization resources
-Date:   Sat, 27 Mar 2021 00:09:31 +0100
-Message-Id: <20210326230938.49998-11-maciej.fijalkowski@intel.com>
+Subject: [PATCH v4 bpf-next 03/17] selftests: xsk: remove unused function
+Date:   Sat, 27 Mar 2021 00:09:24 +0100
+Message-Id: <20210326230938.49998-4-maciej.fijalkowski@intel.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20210326230938.49998-1-maciej.fijalkowski@intel.com>
 References: <20210326230938.49998-1-maciej.fijalkowski@intel.com>
@@ -51,104 +51,37 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Tx thread needs to be started after the Rx side is fully initialized so
-that packets are not xmitted until xsk Rx socket is ready to be used.
-
-It can be observed that atomic variable spinning_tx is not checked from
-Rx side in any way, so thread_common_ops can be modified to only address
-the spinning_rx. This means that spinning_tx can be removed altogheter.
-
-signal_tx_condition is never utilized, so simply remove it.
+Probably it was ported from xdpsock but is not used anywhere.
 
 Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 ---
- tools/testing/selftests/bpf/xdpxceiver.c | 15 +++++++--------
- tools/testing/selftests/bpf/xdpxceiver.h |  2 --
- 2 files changed, 7 insertions(+), 10 deletions(-)
+ tools/testing/selftests/bpf/xdpxceiver.c | 13 -------------
+ 1 file changed, 13 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/xdpxceiver.c b/tools/testing/selftests/bpf/xdpxceiver.c
-index b6fd5eb1d620..3db221e548cc 100644
+index 04bc007d5b08..6769e9e2de17 100644
 --- a/tools/testing/selftests/bpf/xdpxceiver.c
 +++ b/tools/testing/selftests/bpf/xdpxceiver.c
-@@ -126,7 +126,6 @@ static void pthread_init_mutex(void)
- 	pthread_mutex_init(&sync_mutex, NULL);
- 	pthread_mutex_init(&sync_mutex_tx, NULL);
- 	pthread_cond_init(&signal_rx_condition, NULL);
--	pthread_cond_init(&signal_tx_condition, NULL);
+@@ -153,19 +153,6 @@ static void *memset32_htonl(void *dest, u32 val, u32 size)
+ 	return dest;
  }
  
- static void pthread_destroy_mutex(void)
-@@ -134,7 +133,6 @@ static void pthread_destroy_mutex(void)
- 	pthread_mutex_destroy(&sync_mutex);
- 	pthread_mutex_destroy(&sync_mutex_tx);
- 	pthread_cond_destroy(&signal_rx_condition);
--	pthread_cond_destroy(&signal_tx_condition);
- }
- 
- static void *memset32_htonl(void *dest, u32 val, u32 size)
-@@ -754,8 +752,7 @@ static void worker_pkt_validate(void)
- 	}
- }
- 
--static void thread_common_ops(struct ifobject *ifobject, void *bufs, pthread_mutex_t *mutexptr,
--			      atomic_int *spinningptr)
-+static void thread_common_ops(struct ifobject *ifobject, void *bufs, pthread_mutex_t *mutexptr)
- {
- 	int ctr = 0;
- 	int ret;
-@@ -780,13 +777,15 @@ static void thread_common_ops(struct ifobject *ifobject, void *bufs, pthread_mut
- 	 */
- 	pthread_mutex_lock(mutexptr);
- 	while (ret && ctr < SOCK_RECONF_CTR) {
--		atomic_store(spinningptr, 1);
-+		if (ifobject->fv.vector == rx)
-+			atomic_store(&spinning_rx, 1);
- 		xsk_configure_umem(ifobject, bufs, num_frames * XSK_UMEM__DEFAULT_FRAME_SIZE);
- 		ret = xsk_configure_socket(ifobject);
- 		usleep(USLEEP_MAX);
- 		ctr++;
- 	}
--	atomic_store(spinningptr, 0);
-+	if (ifobject->fv.vector == rx)
-+		atomic_store(&spinning_rx, 0);
- 	pthread_mutex_unlock(mutexptr);
- 
- 	if (ctr >= SOCK_RECONF_CTR)
-@@ -808,7 +807,7 @@ static void *worker_testapp_validate_tx(void *arg)
- 	void *bufs = NULL;
- 
- 	if (!bidi_pass)
--		thread_common_ops(ifobject, bufs, &sync_mutex_tx, &spinning_tx);
-+		thread_common_ops(ifobject, bufs, &sync_mutex_tx);
- 
- 	while (atomic_load(&spinning_rx) && spinningrxctr < SOCK_RECONF_CTR) {
- 		spinningrxctr++;
-@@ -846,7 +845,7 @@ static void *worker_testapp_validate_rx(void *arg)
- 	void *bufs = NULL;
- 
- 	if (!bidi_pass)
--		thread_common_ops(ifobject, bufs, &sync_mutex_tx, &spinning_rx);
-+		thread_common_ops(ifobject, bufs, &sync_mutex_tx);
- 
- 	if (stat_test_type != STAT_TEST_RX_FILL_EMPTY)
- 		xsk_populate_fill_ring(ifobject->umem);
-diff --git a/tools/testing/selftests/bpf/xdpxceiver.h b/tools/testing/selftests/bpf/xdpxceiver.h
-index 493f7498d40e..483be41229c6 100644
---- a/tools/testing/selftests/bpf/xdpxceiver.h
-+++ b/tools/testing/selftests/bpf/xdpxceiver.h
-@@ -144,12 +144,10 @@ struct ifobject {
- static struct ifobject *ifdict[MAX_INTERFACES];
- 
- /*threads*/
--atomic_int spinning_tx;
- atomic_int spinning_rx;
- pthread_mutex_t sync_mutex;
- pthread_mutex_t sync_mutex_tx;
- pthread_cond_t signal_rx_condition;
--pthread_cond_t signal_tx_condition;
- pthread_t t0, t1;
- pthread_attr_t attr;
- 
+-/*
+- * This function code has been taken from
+- * Linux kernel lib/checksum.c
+- */
+-static inline unsigned short from32to16(unsigned int x)
+-{
+-	/* add up 16-bit and 16-bit for 16+c bit */
+-	x = (x & 0xffff) + (x >> 16);
+-	/* add up carry.. */
+-	x = (x & 0xffff) + (x >> 16);
+-	return x;
+-}
+-
+ /*
+  * Fold a partial checksum
+  * This function code has been taken from
 -- 
 2.20.1
 
