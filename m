@@ -2,142 +2,186 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E057C433E0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C849C433E1
 	for <bpf@archiver.kernel.org>; Fri, 26 Mar 2021 23:22:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 22EE461A2A
+	by mail.kernel.org (Postfix) with ESMTP id 0FA7F61971
 	for <bpf@archiver.kernel.org>; Fri, 26 Mar 2021 23:22:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231199AbhCZXVo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S231620AbhCZXVo (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Fri, 26 Mar 2021 19:21:44 -0400
-Received: from mga14.intel.com ([192.55.52.115]:11388 "EHLO mga14.intel.com"
+Received: from mga14.intel.com ([192.55.52.115]:11386 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231186AbhCZXVc (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 26 Mar 2021 19:21:32 -0400
-IronPort-SDR: md6953BnPV+hFOlMoi7hZFCXh8uysa/VxEtx/IVdk+jnAWbU41+DIMRRa0jAvCCJXRT5FbeCUF
- D6xNp+b980vg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9935"; a="190681400"
+        id S231319AbhCZXVh (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 26 Mar 2021 19:21:37 -0400
+IronPort-SDR: wKoqBXMJAGGqMxL9nb6W55HUAZquBR5fK50L9NFR/Ol2vsa/nHfR5armz8X8sprkaAitdBuzE4
+ oYT44Zf2MiPg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9935"; a="190681419"
 X-IronPort-AV: E=Sophos;i="5.81,281,1610438400"; 
-   d="scan'208";a="190681400"
+   d="scan'208";a="190681419"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2021 16:20:59 -0700
-IronPort-SDR: AwWGci0zNtzr8MX2mLV9H9Q4TZFUSSybGA7ED5bsM5qmhoZGwo/nqg+yEn7nE8eGlS3Ed2W2q8
- XqyUZPja5YWw==
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2021 16:21:04 -0700
+IronPort-SDR: 6G++tP7YyNZi4wPKCc4bk9gYNXNGoMgJtvLbHueZQwMCW/OVT9KPiOvGmWJTCaSfvib0KYshGE
+ n7qLmx5r6XMw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.81,281,1610438400"; 
-   d="scan'208";a="410113137"
+   d="scan'208";a="410113200"
 Received: from ranger.igk.intel.com ([10.102.21.164])
-  by fmsmga008.fm.intel.com with ESMTP; 26 Mar 2021 16:20:57 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 26 Mar 2021 16:21:02 -0700
 From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 To:     bpf@vger.kernel.org, netdev@vger.kernel.org, daniel@iogearbox.net,
         ast@kernel.org, andrii@kernel.org
 Cc:     bjorn.topel@intel.com, magnus.karlsson@intel.com,
         ciara.loftus@intel.com, john.fastabend@gmail.com, toke@redhat.com,
         Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH v4 bpf-next 00/17] AF_XDP selftests improvements & bpf_link
-Date:   Sat, 27 Mar 2021 00:09:21 +0100
-Message-Id: <20210326230938.49998-1-maciej.fijalkowski@intel.com>
+Subject: [PATCH v4 bpf-next 02/17] selftests: xsk: remove struct ifaceconfigobj
+Date:   Sat, 27 Mar 2021 00:09:23 +0100
+Message-Id: <20210326230938.49998-3-maciej.fijalkowski@intel.com>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210326230938.49998-1-maciej.fijalkowski@intel.com>
+References: <20210326230938.49998-1-maciej.fijalkowski@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Changes since v3:
-- do not unload netlink-based XDP prog when updating map elem failed and
-  current socket was not the creator of XDP resources (Toke)
-- pull out code paths based on prog_id value within __xsk_setup_xdp_prog
-  so that teardown in case of error at any point is more clear
+ifaceconfigobj is not really useful, it is possible to keep the
+functionality and simplify the code.
 
-Changes since v2:
-- fix c&p failure in veth's get_channels implementation (Magnus)
-- provide a backward compatibilty if bpf_link is not supported (Andrii)
-- check for a link type while looking up existing bpf_links (Andrii)
+Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+---
+ tools/testing/selftests/bpf/xdpxceiver.c | 65 +++++++++++-------------
+ tools/testing/selftests/bpf/xdpxceiver.h |  9 ----
+ 2 files changed, 30 insertions(+), 44 deletions(-)
 
-Changes since v1:
-- selftests improvements and test case for bpf_link persistence itself
-- do not unload netlink-based prog when --force flag is set (John)
-- simplify return semantics in xsk_link_lookup (John)
-
-v3: https://lore.kernel.org/bpf/20210322205816.65159-1-maciej.fijalkowski@intel.com/
-v2: https://lore.kernel.org/bpf/20210311152910.56760-1-maciej.fijalkowski@intel.com/
-v1: https://lore.kernel.org/bpf/20210215154638.4627-1-maciej.fijalkowski@intel.com/
-
---------------------------------------------------
-
-This set is another approach towards addressing the below issue:
-
-// load xdp prog and xskmap and add entry to xskmap at idx 10
-$ sudo ./xdpsock -i ens801f0 -t -q 10
-
-// add entry to xskmap at idx 11
-$ sudo ./xdpsock -i ens801f0 -t -q 11
-
-terminate one of the processes and another one is unable to work due to
-the fact that the XDP prog was unloaded from interface.
-
-Previous attempt was, to put it mildly, a bit broken, as there was no
-synchronization between updates to additional map, as Bjorn pointed out.
-See https://lore.kernel.org/netdev/20190603131907.13395-5-maciej.fijalkowski@intel.com/
-
-In the meantime bpf_link was introduced and it seems that it can address
-the issue of refcounting the XDP prog on interface.
-
-Although the bpf_link is the meat of the set, selftests improvements are a
-bigger part of it. Overall, we've been able to reduce the complexity of xsk
-selftests by removing a bunch of synchronization resources and
-simplifying logic and structs.
-
-Last but not least, for multiqueue veth working with AF-XDP, ethtool's
-get_channels API needs to be implemented, so it's also included in that
-set.
-
-Note also that in order to make it work, a commit from bpf tree:
-veth: store queue_mapping independently of XDP prog presence
-https://lore.kernel.org/bpf/20210303152903.11172-1-maciej.fijalkowski@intel.com/
-
-is needed.
-
-Thanks,
-Maciej
-
-
-Björn Töpel (3):
-  selftests: xsk: remove thread attribute
-  selftests: xsk: Remove mutex and condition variable
-  selftests: xsk: Remove unused defines
-
-Maciej Fijalkowski (14):
-  selftests: xsk: don't call worker_pkt_dump() for stats test
-  selftests: xsk: remove struct ifaceconfigobj
-  selftests: xsk: remove unused function
-  selftests: xsk: remove inline keyword from source file
-  selftests: xsk: simplify frame traversal in dumping thread
-  libbpf: xsk: use bpf_link
-  samples: bpf: do not unload prog within xdpsock
-  selftests: xsk: remove thread for netns switch
-  selftests: xsk: split worker thread
-  selftests: xsk: remove Tx synchronization resources
-  selftests: xsk: refactor teardown/bidi test cases and testapp_validate
-  selftests: xsk: remove sync_mutex_tx and atomic var
-  veth: implement ethtool's get_channels() callback
-  selftests: xsk: implement bpf_link test
-
- drivers/net/veth.c                       |  12 +
- samples/bpf/xdpsock_user.c               |  55 +-
- tools/lib/bpf/xsk.c                      | 259 +++++++--
- tools/testing/selftests/bpf/test_xsk.sh  |   3 +-
- tools/testing/selftests/bpf/xdpxceiver.c | 700 ++++++++++-------------
- tools/testing/selftests/bpf/xdpxceiver.h |  49 +-
- 6 files changed, 574 insertions(+), 504 deletions(-)
-
+diff --git a/tools/testing/selftests/bpf/xdpxceiver.c b/tools/testing/selftests/bpf/xdpxceiver.c
+index 04574c2b4f41..04bc007d5b08 100644
+--- a/tools/testing/selftests/bpf/xdpxceiver.c
++++ b/tools/testing/selftests/bpf/xdpxceiver.c
+@@ -93,6 +93,13 @@ typedef __u16 __sum16;
+ #include "xdpxceiver.h"
+ #include "../kselftest.h"
+ 
++static const char *MAC1 = "\x00\x0A\x56\x9E\xEE\x62";
++static const char *MAC2 = "\x00\x0A\x56\x9E\xEE\x61";
++static const char *IP1 = "192.168.100.162";
++static const char *IP2 = "192.168.100.161";
++static const u16 UDP_PORT1 = 2020;
++static const u16 UDP_PORT2 = 2121;
++
+ static void __exit_with_error(int error, const char *file, const char *func, int line)
+ {
+ 	if (configured_mode == TEST_MODE_UNCONFIGURED) {
+@@ -1053,25 +1060,24 @@ static void testapp_stats(void)
+ 	print_ksft_result();
+ }
+ 
+-static void init_iface_config(struct ifaceconfigobj *ifaceconfig)
++static void init_iface(struct ifobject *ifobj, const char *dst_mac,
++		       const char *src_mac, const char *dst_ip,
++		       const char *src_ip, const u16 dst_port,
++		       const u16 src_port)
+ {
+-	/*Init interface0 */
+-	ifdict[0]->fv.vector = tx;
+-	memcpy(ifdict[0]->dst_mac, ifaceconfig->dst_mac, ETH_ALEN);
+-	memcpy(ifdict[0]->src_mac, ifaceconfig->src_mac, ETH_ALEN);
+-	ifdict[0]->dst_ip = ifaceconfig->dst_ip.s_addr;
+-	ifdict[0]->src_ip = ifaceconfig->src_ip.s_addr;
+-	ifdict[0]->dst_port = ifaceconfig->dst_port;
+-	ifdict[0]->src_port = ifaceconfig->src_port;
+-
+-	/*Init interface1 */
+-	ifdict[1]->fv.vector = rx;
+-	memcpy(ifdict[1]->dst_mac, ifaceconfig->src_mac, ETH_ALEN);
+-	memcpy(ifdict[1]->src_mac, ifaceconfig->dst_mac, ETH_ALEN);
+-	ifdict[1]->dst_ip = ifaceconfig->src_ip.s_addr;
+-	ifdict[1]->src_ip = ifaceconfig->dst_ip.s_addr;
+-	ifdict[1]->dst_port = ifaceconfig->src_port;
+-	ifdict[1]->src_port = ifaceconfig->dst_port;
++	struct in_addr ip;
++
++	memcpy(ifobj->dst_mac, dst_mac, ETH_ALEN);
++	memcpy(ifobj->src_mac, src_mac, ETH_ALEN);
++
++	inet_aton(dst_ip, &ip);
++	ifobj->dst_ip = ip.s_addr;
++
++	inet_aton(src_ip, &ip);
++	ifobj->src_ip = ip.s_addr;
++
++	ifobj->dst_port = dst_port;
++	ifobj->src_port = src_port;
+ }
+ 
+ static void *nsdisablemodethread(void *args)
+@@ -1175,26 +1181,11 @@ static void run_pkt_test(int mode, int type)
+ int main(int argc, char **argv)
+ {
+ 	struct rlimit _rlim = { RLIM_INFINITY, RLIM_INFINITY };
++	int i, j;
+ 
+ 	if (setrlimit(RLIMIT_MEMLOCK, &_rlim))
+ 		exit_with_error(errno);
+ 
+-	const char *MAC1 = "\x00\x0A\x56\x9E\xEE\x62";
+-	const char *MAC2 = "\x00\x0A\x56\x9E\xEE\x61";
+-	const char *IP1 = "192.168.100.162";
+-	const char *IP2 = "192.168.100.161";
+-	u16 UDP_DST_PORT = 2020;
+-	u16 UDP_SRC_PORT = 2121;
+-	int i, j;
+-
+-	ifaceconfig = malloc(sizeof(struct ifaceconfigobj));
+-	memcpy(ifaceconfig->dst_mac, MAC1, ETH_ALEN);
+-	memcpy(ifaceconfig->src_mac, MAC2, ETH_ALEN);
+-	inet_aton(IP1, &ifaceconfig->dst_ip);
+-	inet_aton(IP2, &ifaceconfig->src_ip);
+-	ifaceconfig->dst_port = UDP_DST_PORT;
+-	ifaceconfig->src_port = UDP_SRC_PORT;
+-
+ 	for (int i = 0; i < MAX_INTERFACES; i++) {
+ 		ifdict[i] = malloc(sizeof(struct ifobject));
+ 		if (!ifdict[i])
+@@ -1209,7 +1200,11 @@ int main(int argc, char **argv)
+ 
+ 	num_frames = ++opt_pkt_count;
+ 
+-	init_iface_config(ifaceconfig);
++	ifdict[0]->fv.vector = tx;
++	init_iface(ifdict[0], MAC1, MAC2, IP1, IP2, UDP_PORT1, UDP_PORT2);
++
++	ifdict[1]->fv.vector = rx;
++	init_iface(ifdict[1], MAC2, MAC1, IP2, IP1, UDP_PORT2, UDP_PORT1);
+ 
+ 	disable_xdp_mode(XDP_FLAGS_DRV_MODE);
+ 
+diff --git a/tools/testing/selftests/bpf/xdpxceiver.h b/tools/testing/selftests/bpf/xdpxceiver.h
+index 30314ef305c2..8f9308099318 100644
+--- a/tools/testing/selftests/bpf/xdpxceiver.h
++++ b/tools/testing/selftests/bpf/xdpxceiver.h
+@@ -125,15 +125,6 @@ struct generic_data {
+ 	u32 seqnum;
+ };
+ 
+-struct ifaceconfigobj {
+-	u8 dst_mac[ETH_ALEN];
+-	u8 src_mac[ETH_ALEN];
+-	struct in_addr dst_ip;
+-	struct in_addr src_ip;
+-	u16 src_port;
+-	u16 dst_port;
+-} *ifaceconfig;
+-
+ struct ifobject {
+ 	int ifindex;
+ 	int ifdict_index;
 -- 
 2.20.1
 
