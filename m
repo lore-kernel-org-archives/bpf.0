@@ -4,33 +4,33 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-19.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CABD3C433E1
-	for <bpf@archiver.kernel.org>; Fri, 26 Mar 2021 12:31:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 058E1C433DB
+	for <bpf@archiver.kernel.org>; Fri, 26 Mar 2021 12:31:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 98A1661971
-	for <bpf@archiver.kernel.org>; Fri, 26 Mar 2021 12:31:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AE94061950
+	for <bpf@archiver.kernel.org>; Fri, 26 Mar 2021 12:31:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230155AbhCZMai (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 26 Mar 2021 08:30:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53406 "EHLO mail.kernel.org"
+        id S230195AbhCZMbK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 26 Mar 2021 08:31:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53726 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230271AbhCZMaP (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 26 Mar 2021 08:30:15 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1FBD061953;
-        Fri, 26 Mar 2021 12:30:11 +0000 (UTC)
+        id S230300AbhCZMas (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 26 Mar 2021 08:30:48 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C468561949;
+        Fri, 26 Mar 2021 12:30:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616761815;
-        bh=LcrhRWJtXgb05ASQlIQZ+Hz25N0QWwcOZr1A52Hlftk=;
+        s=k20201202; t=1616761848;
+        bh=CQnx3jNZ9PtYKmb+4+Wr6KaZMg1oCyI1sHneUUD/zYw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Uk9u4wbkTU1CQCvdhhL/gPoMp/C0ZREuReNYazvLBQ789CqP/uMiQyvzzCmtF8JeN
-         jJA/ghA/enGUMlUyc+wGc2TSwhpSbtAzYdMXdYSHgD+imgGgpTCiW0aZNYdD7Ji1nP
-         icX9CZWT6FKMXrh46dNJ6ltL8ivQgYJkgpDap6HRoTORoaYozotLkcRvFSd9QjQodW
-         bidKaZREsbxc9w35jQ2GOeB4kaEd0WIJVpKy40VT6iR37a7Jb5f08RbHHZwKpzkgnE
-         fdHGn5fGdAd/t/walGea1DEcEAxiI0Yv6/mSPR+1sLXPxLg9dZNA3QDZ5/rBWY+8D3
-         ypVwkglpsKVuA==
+        b=OVAw5ApnAfP15lcOutRZM+MlmxjZ/tOdlSR2Yfq2xxG9Q2Iy6zdCXTHiaMZ+/hcfF
+         gFRIS/eAOQOBleCkvfbnWv/uKMvBWOrZPOabmrOhEYusC41JYIkjl8CytXALGg+rdN
+         lk052/ELO7LWIx41f5Jc6k6cgz0KxSPG1GM0oi/Rv6vfy+36AZ9jdbiUq+vnknTzO3
+         kNpKdG3T/tvFrvtdSipI8+rO09Gyza5aGDydNIA1S6qxRGMbcKwmq4ar3LYi4HOYEP
+         sILTtjy8P0pZwdoc0mMWONOTUKPHvUQHbDN/8x+sz5/JmYSCEtsTLg5YH/7l9WuCbd
+         WjmuNTpP6IMpQ==
 From:   Masami Hiramatsu <mhiramat@kernel.org>
 To:     Steven Rostedt <rostedt@goodmis.org>,
         Ingo Molnar <mingo@kernel.org>
@@ -41,9 +41,9 @@ Cc:     X86 ML <x86@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>,
         Josh Poimboeuf <jpoimboe@redhat.com>,
         linux-ia64@vger.kernel.org,
         Abhishek Sagar <sagar.abhishek@gmail.com>
-Subject: [PATCH -tip v5 09/12] kprobes: Setup instruction pointer in __kretprobe_trampoline_handler
-Date:   Fri, 26 Mar 2021 21:30:10 +0900
-Message-Id: <161676181007.330141.17120389939099483040.stgit@devnote2>
+Subject: [PATCH -tip v5 12/12] tracing: Show kretprobe unknown indicator only for kretprobe_trampoline
+Date:   Fri, 26 Mar 2021 21:30:42 +0900
+Message-Id: <161676184261.330141.6575911414561853358.stgit@devnote2>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <161676170650.330141.6214727134265514123.stgit@devnote2>
 References: <161676170650.330141.6214727134265514123.stgit@devnote2>
@@ -55,31 +55,60 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-To simplify the stacktrace with pt_regs from kretprobe handler,
-set the correct return address to the instruction pointer in
-the pt_regs before calling kretprobe handlers.
+ftrace shows "[unknown/kretprobe'd]" indicator all addresses in the
+kretprobe_trampoline, but the modified address by kretprobe should
+be only kretprobe_trampoline+0.
 
-Suggested-by: Josh Poimboeuf <jpoimboe@redhat.com>
 Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+Acked-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
 ---
- Changes in v3:
-  - Cast the correct_ret_addr to unsigned long.
----
- kernel/kprobes.c |    3 +++
- 1 file changed, 3 insertions(+)
+ kernel/trace/trace_output.c |   17 ++++-------------
+ 1 file changed, 4 insertions(+), 13 deletions(-)
 
-diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-index cf19edc038e4..4ce3e6f5d28d 100644
---- a/kernel/kprobes.c
-+++ b/kernel/kprobes.c
-@@ -1914,6 +1914,9 @@ unsigned long __kretprobe_trampoline_handler(struct pt_regs *regs,
- 		BUG_ON(1);
- 	}
+diff --git a/kernel/trace/trace_output.c b/kernel/trace/trace_output.c
+index 61255bad7e01..e12437388686 100644
+--- a/kernel/trace/trace_output.c
++++ b/kernel/trace/trace_output.c
+@@ -8,6 +8,7 @@
+ #include <linux/module.h>
+ #include <linux/mutex.h>
+ #include <linux/ftrace.h>
++#include <linux/kprobes.h>
+ #include <linux/sched/clock.h>
+ #include <linux/sched/mm.h>
  
-+	/* Set the instruction pointer to the correct address */
-+	instruction_pointer_set(regs, (unsigned long)correct_ret_addr);
-+
- 	/* Run them. */
- 	first = current->kretprobe_instances.first;
- 	while (first) {
+@@ -346,22 +347,12 @@ int trace_output_call(struct trace_iterator *iter, char *name, char *fmt, ...)
+ }
+ EXPORT_SYMBOL_GPL(trace_output_call);
+ 
+-#ifdef CONFIG_KRETPROBES
+-static inline const char *kretprobed(const char *name)
++static inline const char *kretprobed(const char *name, unsigned long addr)
+ {
+-	static const char tramp_name[] = "kretprobe_trampoline";
+-	int size = sizeof(tramp_name);
+-
+-	if (strncmp(tramp_name, name, size) == 0)
++	if (is_kretprobe_trampoline(addr))
+ 		return "[unknown/kretprobe'd]";
+ 	return name;
+ }
+-#else
+-static inline const char *kretprobed(const char *name)
+-{
+-	return name;
+-}
+-#endif /* CONFIG_KRETPROBES */
+ 
+ void
+ trace_seq_print_sym(struct trace_seq *s, unsigned long address, bool offset)
+@@ -374,7 +365,7 @@ trace_seq_print_sym(struct trace_seq *s, unsigned long address, bool offset)
+ 		sprint_symbol(str, address);
+ 	else
+ 		kallsyms_lookup(address, NULL, NULL, NULL, str);
+-	name = kretprobed(str);
++	name = kretprobed(str, address);
+ 
+ 	if (name && strlen(name)) {
+ 		trace_seq_puts(s, name);
 
