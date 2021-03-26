@@ -2,110 +2,132 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5371FC433E0
-	for <bpf@archiver.kernel.org>; Fri, 26 Mar 2021 14:25:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5903C433C1
+	for <bpf@archiver.kernel.org>; Fri, 26 Mar 2021 14:42:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2EC4061A18
-	for <bpf@archiver.kernel.org>; Fri, 26 Mar 2021 14:25:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9892A61A05
+	for <bpf@archiver.kernel.org>; Fri, 26 Mar 2021 14:42:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230100AbhCZOZH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 26 Mar 2021 10:25:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50394 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230104AbhCZOYr (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 26 Mar 2021 10:24:47 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 416E4C0613AA;
-        Fri, 26 Mar 2021 07:24:47 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id b14so7934241lfv.8;
-        Fri, 26 Mar 2021 07:24:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nQ6cDueETr7R6JsMSrZJLtQswKIsE5Z44q0mYxtA07E=;
-        b=c0KQ+/G7knKwgFFKEJGZkHPCPChjWm5irh8qKkb+fqsbU2Uy7ubwscqo6K8f02RMmO
-         Tq00A+6w6l97RswUB5r1hOstDxzUnkl6Ru6CypQ1RmiRuIo/eNgWyJ7FXULiZ94x5Vab
-         vjGSFPrerHA8yOi9ZwvTeivz3Q+UWvGw16cDoRLdZAb/6dOZ5+PiAII2AmsGoCsga6aK
-         0pJyzxMrV9G/DEzAzknlrRhiC7kzHwg8tsEAzl2LCFdDhqm1TJxYEhi4ryURrknN+jRp
-         cLxWYfzcWOA23TlI/cMPYxHYJV7E0zgs851HNuuhZO5UQjtkIess3sbVWbEVys8gdf1Z
-         cNOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nQ6cDueETr7R6JsMSrZJLtQswKIsE5Z44q0mYxtA07E=;
-        b=lRxFavbr2uBgmbn8uvPEnAj7ROhjnWb2RyQ8X/vehhe6x/P1mnHha3aqWdI8ebrCcj
-         3eQiy3hjPQhoqknmZUohHwuCmx3r9Umt5Tam92U5s38SKGslyWCUj7XAih/nLO+ToYLL
-         K7E6lE7Re8ocDjZQ7lBLaliDqsLXtVURbICOUSpLwo31XuGPFm68yDdJpqUcAFHTTRI4
-         0PKG9a4f0Wi48Bmm8G8tRwMTJk1P7nw+2gupUrxbVjT0yoAwjRmhh6j99y5wZRvxLNxN
-         U4TrAOFRdpZMakD3zR+Ej4ZEfNlrDHwXq0gccegbnTrAehp58ZC01yrJxJ2ZHCcHyIDR
-         EZ7Q==
-X-Gm-Message-State: AOAM5313px9e5YKRa3upoYs5HMAacwiGpSTQohSRswtIqZccQpOTvjw8
-        otIdOHKwQ9NcxCrRv/5G9/kUqrFr4M6ZCRmfHNE=
-X-Google-Smtp-Source: ABdhPJwcgpqv/t3Un/FbFhFtnv9tetg9zdfhUs6xUd/qg+/tj9XMUh5G134bNYItwQGzjO8dwP1O1b3UZ7+KNVnt+98=
-X-Received: by 2002:ac2:5ec2:: with SMTP id d2mr8621766lfq.214.1616768685772;
- Fri, 26 Mar 2021 07:24:45 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210326124030.1138964-1-Jianlin.Lv@arm.com>
-In-Reply-To: <20210326124030.1138964-1-Jianlin.Lv@arm.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Fri, 26 Mar 2021 07:24:33 -0700
-Message-ID: <CAADnVQ+W79=L=jb0hcOa4E067_PnWbnWHdxqyw-9+Nz9wKkOCA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: trace jit code when enable BPF_JIT_ALWAYS_ON
-To:     Jianlin Lv <Jianlin.Lv@arm.com>
-Cc:     bpf <bpf@vger.kernel.org>, "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+        id S230098AbhCZOlf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 26 Mar 2021 10:41:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51364 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230187AbhCZOle (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 26 Mar 2021 10:41:34 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 64C9D619F2;
+        Fri, 26 Mar 2021 14:41:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1616769694;
+        bh=RtJp82mOQfaI8F2zxBwzj2aA63wqRXjyq+vxHLWaKvk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ruZUvhMRp6cAssNoc81bTIHLX92Wtv9WaVTwEfI/TqtY37WFOJCUHM+gC9VXrv4AZ
+         sDSleT3G0eNjaiyRIs4sxpS+uVVWdexGDFX4ZkpwudohMSIEyKHVgF770STX43JSPM
+         6jEHkFq8FiEqYgB7dv69+WoAvCSOm3L5S2zop1uakhgkb+peeehxdv7YLij84n83jS
+         qcbhFClA7ZM0NupvsbTR8gjapBbn9MYd+Vfb3aMRtfM5UQcrZ1CT/o+vDnZ0O3dobn
+         yndnDRW0gfKZBeTFJ/pB2JniZHeQwVlLOuZLY1LAF3KNvz81CK06MCvyFRw++GWl2V
+         ba2DcYxYTcvPA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 53A3240647; Fri, 26 Mar 2021 11:41:32 -0300 (-03)
+Date:   Fri, 26 Mar 2021 11:41:32 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrey Ignatov <rdna@fb.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
-        Kees Cook <keescook@chromium.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Mahesh Bandewar <maheshb@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        iecedge@gmail.com, nd <nd@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+        Bill Wendling <morbo@google.com>, bpf@vger.kernel.org,
+        kernel-team@fb.com
+Subject: Re: [PATCH dwarves 3/3] dwarf_loader: add option to merge more dwarf
+ cu's into one pahole cu
+Message-ID: <YF3ynAKXDCE0kDpp@kernel.org>
+References: <20210325065316.3121287-1-yhs@fb.com>
+ <20210325065332.3122473-1-yhs@fb.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210325065332.3122473-1-yhs@fb.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Mar 26, 2021 at 5:40 AM Jianlin Lv <Jianlin.Lv@arm.com> wrote:
->
-> When CONFIG_BPF_JIT_ALWAYS_ON is enabled, the value of bpf_jit_enable in
-> /proc/sys is limited to SYSCTL_ONE. This is not convenient for debugging.
-> This patch modifies the value of extra2 (max) to 2 that support developers
-> to emit traces on kernel log.
->
-> Signed-off-by: Jianlin Lv <Jianlin.Lv@arm.com>
-> ---
->  net/core/sysctl_net_core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/net/core/sysctl_net_core.c b/net/core/sysctl_net_core.c
-> index d84c8a1b280e..aa16883ac445 100644
-> --- a/net/core/sysctl_net_core.c
-> +++ b/net/core/sysctl_net_core.c
-> @@ -386,7 +386,7 @@ static struct ctl_table net_core_table[] = {
->                 .proc_handler   = proc_dointvec_minmax_bpf_enable,
->  # ifdef CONFIG_BPF_JIT_ALWAYS_ON
->                 .extra1         = SYSCTL_ONE,
-> -               .extra2         = SYSCTL_ONE,
-> +               .extra2         = &two,
+Em Wed, Mar 24, 2021 at 11:53:32PM -0700, Yonghong Song escreveu:
+> This patch added an option "merge_cus", which will permit
+> to merge all debug info cu's into one pahole cu.
+> For vmlinux built with clang thin-lto or lto, there exist
+> cross cu type references. For example, you could have
+>   compile unit 1:
+>      tag 10:  type A
+>   compile unit 2:
+>      ...
+>        refer to type A (tag 10 in compile unit 1)
+> I only checked a few but have seen type A may be a simple type
+> like "unsigned char" or a complex type like an array of base types.
+> 
+> There are two different ways to resolve this issue:
+> (1). merge all compile units as one pahole cu so tags/types
+>      can be resolved easily, or
+> (2). try to do on-demand type traversal in other debuginfo cu's
+>      when we do die_process().
+> The method (2) is much more complicated so I picked method (1).
+> An option "merge_cus" is added to permit such an operation.
+> 
+> Merging cu's will create a single cu with lots of types, tags
+> and functions. For example with clang thin-lto built vmlinux,
+> I saw 9M entries in types table, 5.2M in tags table. The
+> below are pahole wallclock time for different hashbits:
+> command line: time pahole -J --merge_cus vmlinux
+>       # of hashbits            wallclock time in seconds
+>           15                       460
+>           16                       255
+>           17                       131
+>           18                       97
+>           19                       75
+>           20                       69
+>           21                       64
+>           22                       62
+>           23                       58
+>           24                       64
+> 
+> Note that the number of hashbits 24 makes performance worse
+> than 23. The reason could be that 23 hashbits can cover 8M
+> buckets (close to 9M for the number of entries in types table).
+> Higher number of hash bits allocates more memory and becomes
+> less cache efficient compared to 23 hashbits.
+> 
+> This patch picks # of hashbits 21 as the starting value
+> and will try to allocate memory based on that, if memory
+> allocation fails, we will go with less hashbits until
+> we reach hashbits 15 which is the default for
+> non merge-cu case.
 
-"bpftool prog dump jited" is much better way to examine JITed dumps.
-I'd rather remove bpf_jit_enable=2 altogether.
+I'll probably add a way to specify the starting max_hashbits to be able
+to use 'perf stat' to show what causes the performance difference.
+
+I'm also adding the man page patch below, now to build the kernel with
+your bpf-next patch to test it.
+
+- Arnaldo
+
+[acme@five pahole]$ git diff
+diff --git a/man-pages/pahole.1 b/man-pages/pahole.1
+index cbbefbf22556412c..1be2a293ad4bcc50 100644
+--- a/man-pages/pahole.1
++++ b/man-pages/pahole.1
+@@ -208,6 +208,12 @@ information has float types.
+ .B \-\-btf_gen_all
+ Allow using all the BTF features supported by pahole.
+
++.TP
++.B \-\-merge_cus
++Merge all cus (except possible types_cu) when loading DWARF, this is needed
++when processing files that have inter-CU references, this happens, for instance
++when building the Linux kernel with clang using thin-LTO or LTO.
++
+ .TP
+ .B \-l, \-\-show_first_biggest_size_base_type_member
+ Show first biggest size base_type member.
+[acme@five pahole]$
