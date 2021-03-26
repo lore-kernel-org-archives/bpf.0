@@ -3,34 +3,34 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-19.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 21E09C433DB
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BC101C433C1
 	for <bpf@archiver.kernel.org>; Fri, 26 Mar 2021 12:29:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C6A4F61965
-	for <bpf@archiver.kernel.org>; Fri, 26 Mar 2021 12:29:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 76AC361965
+	for <bpf@archiver.kernel.org>; Fri, 26 Mar 2021 12:29:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230100AbhCZM3C (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S230093AbhCZM3C (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Fri, 26 Mar 2021 08:29:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52410 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:52540 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230041AbhCZM2d (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 26 Mar 2021 08:28:33 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 53A8C61920;
-        Fri, 26 Mar 2021 12:28:29 +0000 (UTC)
+        id S230098AbhCZM2y (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 26 Mar 2021 08:28:54 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B108661950;
+        Fri, 26 Mar 2021 12:28:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616761712;
-        bh=wUUC8pEeP4V7UAsOofwKsFGMImJKY7E3/PEs/FpV2h0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ojJfOCUHz7uD80C+j5lfjVGrqYKAuprKLPa/4da6vh0GPZkEx0AdU3WemXIKY1SSL
-         0S/5lvdUuWk14cztcmpkditlGe1FRt7u9JaFzRzYhpupaytOirVjlrApvVmy9bsb0W
-         rx1oIHmAg339A3Noi5KuvlWPO5L20adT3bfA9BBeAzAL3KvPIKj5UfxPP+tRHeGJO/
-         tpQCe5Kyqqw+r2km7O/WsPKihKpW6VB0jr4dSfAjo9+hVjlH/1zO1Iz/l4e0TyV0GZ
-         TVx0goXA7SJ0ioLQIHA7wjdw7vC1u8nEpRKe5P2PPEN+Ngel6NQUuf2Uh/jV9nbQd3
-         +Oj0YakG/AKWg==
+        s=k20201202; t=1616761734;
+        bh=+Z4Xtu9sc4FVen4wSmXzglGhC7K6KPlLgByCfKlsjK0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=at3lW6ZKLW/4oc7M1Qt4ud/A/SD4znx3+bg9eIU1Jl3swiIFNkDn+ejhsIccfSaZy
+         +Zc3oVU5Z5F0Fg1D3K6DzuEGoYksgCf8wa3xiwi1O/N2Q3enYdbd0rpLR8EvtQ3ujm
+         6BqyzFC0ymYzIYBXC6pa/2n8u/KaF69wIfT2pxWqvZii+Jp/1vIsBeimyPzaSh6LzW
+         7naQB4yM/d0rboTBu+OkjWlZenWLHER9N3ePkNJMFI5/ArrJhAZ26cxgrPdxOe6SSj
+         D8pHUEHppijol+WnXXOl51+2kFUt3HH9wMuBVi3hwo2cBNTVHWgOd4kvFFV9isVj47
+         khsBZVMNadITg==
 From:   Masami Hiramatsu <mhiramat@kernel.org>
 To:     Steven Rostedt <rostedt@goodmis.org>,
         Ingo Molnar <mingo@kernel.org>
@@ -41,10 +41,12 @@ Cc:     X86 ML <x86@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>,
         Josh Poimboeuf <jpoimboe@redhat.com>,
         linux-ia64@vger.kernel.org,
         Abhishek Sagar <sagar.abhishek@gmail.com>
-Subject: [PATCH -tip v5 00/12] kprobes: Fix stacktrace with kretprobes on x86
-Date:   Fri, 26 Mar 2021 21:28:26 +0900
-Message-Id: <161676170650.330141.6214727134265514123.stgit@devnote2>
+Subject: [PATCH -tip v5 02/12] kprobes: treewide: Replace arch_deref_entry_point() with dereference_function_descriptor()
+Date:   Fri, 26 Mar 2021 21:28:49 +0900
+Message-Id: <161676172914.330141.2791269526647288818.stgit@devnote2>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <161676170650.330141.6214727134265514123.stgit@devnote2>
+References: <161676170650.330141.6214727134265514123.stgit@devnote2>
 User-Agent: StGit/0.19
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
@@ -53,116 +55,112 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello,
+Replace arch_deref_entry_point() with dereference_function_descriptor()
+because those are doing same thing.
 
-Here is the 5th version of the series to fix the stacktrace with kretprobe
-on x86. After merging this, I'll fix other architectures.
-
-The previous version is;
-
-https://lore.kernel.org/bpf/161639518354.895304.15627519393073806809.stgit@devnote2/
-
-This version fixes a build error from a typo in [1/12] and the
-case of interrupt happens on kretprobe_trampoline+0 in [11/12].
-
-With this series, unwinder can unwind stack correctly from ftrace as below;
-
-  # cd /sys/kernel/debug/tracing
-  # echo > trace
-  # echo r vfs_read >> kprobe_events
-  # echo r full_proxy_read >> kprobe_events
-  # echo traceoff:1 > events/kprobes/r_vfs_read_0/trigger
-  # echo stacktrace:1 > events/kprobes/r_full_proxy_read_0/trigger
-  # echo 1 > events/kprobes/enable
-  # echo 1 > options/sym-offset
-  # cat /sys/kernel/debug/kprobes/list
-ffffffff8133b740  r  full_proxy_read+0x0    [FTRACE]
-ffffffff812560b0  r  vfs_read+0x0    [FTRACE]
-  # echo 0 > events/kprobes/enable
-  # cat trace
-# tracer: nop
-#
-# entries-in-buffer/entries-written: 3/3   #P:8
-#
-#                                _-----=> irqs-off
-#                               / _----=> need-resched
-#                              | / _---=> hardirq/softirq
-#                              || / _--=> preempt-depth
-#                              ||| /     delay
-#           TASK-PID     CPU#  ||||   TIMESTAMP  FUNCTION
-#              | |         |   ||||      |         |
-           <...>-135     [005] ...1     9.422114: r_full_proxy_read_0: (vfs_read+0xab/0x1a0 <- full_proxy_read)
-           <...>-135     [005] ...1     9.422158: <stack trace>
- => kretprobe_trace_func+0x209/0x2f0
- => kretprobe_dispatcher+0x4a/0x70
- => __kretprobe_trampoline_handler+0xca/0x150
- => trampoline_handler+0x44/0x70
- => kretprobe_trampoline+0x2a/0x50
- => vfs_read+0xab/0x1a0
- => ksys_read+0x5f/0xe0
- => do_syscall_64+0x33/0x40
- => entry_SYSCALL_64_after_hwframe+0x44/0xae
- => 0
-
-This shows the double return probes (vfs_read and full_proxy_read) on the stack
-correctly unwinded. (vfs_read was called from ksys_read+0x5f and full_proxy_read
-was called from vfs_read+0xab)
-
-This actually changes the kretprobe behavisor a bit, now the instraction pointer in
-the pt_regs passed to kretprobe user handler is correctly set the real return
-address. So user handlers can get it via instruction_pointer() API.
-
-You can also get this series from 
- git://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git kprobes/kretprobe-stackfix-v5
-
-
-Thank you,
-
+Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
 ---
+ arch/ia64/kernel/kprobes.c    |    5 -----
+ arch/powerpc/kernel/kprobes.c |   11 -----------
+ include/linux/kprobes.h       |    1 -
+ kernel/kprobes.c              |    7 +------
+ lib/error-inject.c            |    3 ++-
+ 5 files changed, 3 insertions(+), 24 deletions(-)
 
-Josh Poimboeuf (1):
-      x86/kprobes: Add UNWIND_HINT_FUNC on kretprobe_trampoline code
+diff --git a/arch/ia64/kernel/kprobes.c b/arch/ia64/kernel/kprobes.c
+index ca4b4fa45aef..eaf3c734719b 100644
+--- a/arch/ia64/kernel/kprobes.c
++++ b/arch/ia64/kernel/kprobes.c
+@@ -907,11 +907,6 @@ int __kprobes kprobe_exceptions_notify(struct notifier_block *self,
+ 	return ret;
+ }
+ 
+-unsigned long arch_deref_entry_point(void *entry)
+-{
+-	return ((struct fnptr *)entry)->ip;
+-}
+-
+ static struct kprobe trampoline_p = {
+ 	.pre_handler = trampoline_probe_handler
+ };
+diff --git a/arch/powerpc/kernel/kprobes.c b/arch/powerpc/kernel/kprobes.c
+index 01ab2163659e..eb0460949e1b 100644
+--- a/arch/powerpc/kernel/kprobes.c
++++ b/arch/powerpc/kernel/kprobes.c
+@@ -539,17 +539,6 @@ int kprobe_fault_handler(struct pt_regs *regs, int trapnr)
+ }
+ NOKPROBE_SYMBOL(kprobe_fault_handler);
+ 
+-unsigned long arch_deref_entry_point(void *entry)
+-{
+-#ifdef PPC64_ELF_ABI_v1
+-	if (!kernel_text_address((unsigned long)entry))
+-		return ppc_global_function_entry(entry);
+-	else
+-#endif
+-		return (unsigned long)entry;
+-}
+-NOKPROBE_SYMBOL(arch_deref_entry_point);
+-
+ static struct kprobe trampoline_p = {
+ 	.addr = (kprobe_opcode_t *) &kretprobe_trampoline,
+ 	.pre_handler = trampoline_probe_handler
+diff --git a/include/linux/kprobes.h b/include/linux/kprobes.h
+index 1883a4a9f16a..d65c041b5c22 100644
+--- a/include/linux/kprobes.h
++++ b/include/linux/kprobes.h
+@@ -390,7 +390,6 @@ int register_kprobe(struct kprobe *p);
+ void unregister_kprobe(struct kprobe *p);
+ int register_kprobes(struct kprobe **kps, int num);
+ void unregister_kprobes(struct kprobe **kps, int num);
+-unsigned long arch_deref_entry_point(void *);
+ 
+ int register_kretprobe(struct kretprobe *rp);
+ void unregister_kretprobe(struct kretprobe *rp);
+diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+index 745f08fdd7a6..2913de07f4a3 100644
+--- a/kernel/kprobes.c
++++ b/kernel/kprobes.c
+@@ -1856,11 +1856,6 @@ static struct notifier_block kprobe_exceptions_nb = {
+ 	.priority = 0x7fffffff /* we need to be notified first */
+ };
+ 
+-unsigned long __weak arch_deref_entry_point(void *entry)
+-{
+-	return (unsigned long)entry;
+-}
+-
+ #ifdef CONFIG_KRETPROBES
+ 
+ unsigned long __kretprobe_trampoline_handler(struct pt_regs *regs,
+@@ -2324,7 +2319,7 @@ static int __init populate_kprobe_blacklist(unsigned long *start,
+ 	int ret;
+ 
+ 	for (iter = start; iter < end; iter++) {
+-		entry = arch_deref_entry_point((void *)*iter);
++		entry = (unsigned long)dereference_function_descriptor((void *)*iter);
+ 		ret = kprobe_add_ksym_blacklist(entry);
+ 		if (ret == -EINVAL)
+ 			continue;
+diff --git a/lib/error-inject.c b/lib/error-inject.c
+index c73651b15b76..f71875ac5f9f 100644
+--- a/lib/error-inject.c
++++ b/lib/error-inject.c
+@@ -8,6 +8,7 @@
+ #include <linux/mutex.h>
+ #include <linux/list.h>
+ #include <linux/slab.h>
++#include <asm/sections.h>
+ 
+ /* Whitelist of symbols that can be overridden for error injection. */
+ static LIST_HEAD(error_injection_list);
+@@ -64,7 +65,7 @@ static void populate_error_injection_list(struct error_injection_entry *start,
+ 
+ 	mutex_lock(&ei_mutex);
+ 	for (iter = start; iter < end; iter++) {
+-		entry = arch_deref_entry_point((void *)iter->addr);
++		entry = (unsigned long)dereference_function_descriptor((void *)iter->addr);
+ 
+ 		if (!kernel_text_address(entry) ||
+ 		    !kallsyms_lookup_size_offset(entry, &size, &offset)) {
 
-Masami Hiramatsu (11):
-      ia64: kprobes: Fix to pass correct trampoline address to the handler
-      kprobes: treewide: Replace arch_deref_entry_point() with dereference_function_descriptor()
-      kprobes: treewide: Remove trampoline_address from kretprobe_trampoline_handler()
-      kprobes: Add kretprobe_find_ret_addr() for searching return address
-      ARC: Add instruction_pointer_set() API
-      ia64: Add instruction_pointer_set() API
-      arm: kprobes: Make a space for regs->ARM_pc at kretprobe_trampoline
-      kprobes: Setup instruction pointer in __kretprobe_trampoline_handler
-      x86/kprobes: Push a fake return address at kretprobe_trampoline
-      x86/unwind: Recover kretprobe trampoline entry
-      tracing: Show kretprobe unknown indicator only for kretprobe_trampoline
-
-
- arch/arc/include/asm/ptrace.h       |    5 ++
- arch/arc/kernel/kprobes.c           |    2 -
- arch/arm/probes/kprobes/core.c      |    5 +-
- arch/arm64/kernel/probes/kprobes.c  |    3 -
- arch/csky/kernel/probes/kprobes.c   |    2 -
- arch/ia64/include/asm/ptrace.h      |    5 ++
- arch/ia64/kernel/kprobes.c          |   15 ++---
- arch/mips/kernel/kprobes.c          |    3 -
- arch/parisc/kernel/kprobes.c        |    4 +
- arch/powerpc/kernel/kprobes.c       |   13 -----
- arch/riscv/kernel/probes/kprobes.c  |    2 -
- arch/s390/kernel/kprobes.c          |    2 -
- arch/sh/kernel/kprobes.c            |    2 -
- arch/sparc/kernel/kprobes.c         |    2 -
- arch/x86/include/asm/kprobes.h      |    1 
- arch/x86/include/asm/unwind.h       |   23 ++++++++
- arch/x86/include/asm/unwind_hints.h |    5 ++
- arch/x86/kernel/kprobes/core.c      |   44 ++++++++++++----
- arch/x86/kernel/unwind_frame.c      |    4 +
- arch/x86/kernel/unwind_guess.c      |    3 -
- arch/x86/kernel/unwind_orc.c        |   19 +++++--
- include/linux/kprobes.h             |   41 ++++++++++++--
- kernel/kprobes.c                    |   99 ++++++++++++++++++++++++-----------
- kernel/trace/trace_output.c         |   17 +-----
- lib/error-inject.c                  |    3 +
- 25 files changed, 218 insertions(+), 106 deletions(-)
-
---
-Masami Hiramatsu (Linaro) <mhiramat@kernel.org>
