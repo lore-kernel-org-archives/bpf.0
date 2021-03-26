@@ -2,100 +2,157 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF499C433C1
-	for <bpf@archiver.kernel.org>; Fri, 26 Mar 2021 16:06:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 322CAC433DB
+	for <bpf@archiver.kernel.org>; Fri, 26 Mar 2021 16:45:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A966861A36
-	for <bpf@archiver.kernel.org>; Fri, 26 Mar 2021 16:06:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0483F61954
+	for <bpf@archiver.kernel.org>; Fri, 26 Mar 2021 16:45:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230459AbhCZQGH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 26 Mar 2021 12:06:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44434 "EHLO
+        id S230210AbhCZQoj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 26 Mar 2021 12:44:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230273AbhCZQFm (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 26 Mar 2021 12:05:42 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F0F5C0613B1
-        for <bpf@vger.kernel.org>; Fri, 26 Mar 2021 09:05:42 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id z2so6156643wrl.5
-        for <bpf@vger.kernel.org>; Fri, 26 Mar 2021 09:05:41 -0700 (PDT)
+        with ESMTP id S230197AbhCZQoV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 26 Mar 2021 12:44:21 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D94C0613AA;
+        Fri, 26 Mar 2021 09:44:20 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id 8so6429308ybc.13;
+        Fri, 26 Mar 2021 09:44:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zQoMkVCtgJGZXmdu3KME93w0y7DWMF1NiaK0WZ/Njao=;
-        b=c+9PKPHPQWy3wo5EWypLaXKArM+ciNIfHE9FYOFvc0BOz5q9EWn7yxqrFQQCXvrx7L
-         TRTWIsmNz/YnqEJpjoTDkww998W9jGgrXntAcm0BwD/WFpYONRR0yox8H0w3KCM8pkbX
-         aTDw/tcCgAq/eDw9tVYDqEp0GY1JInboUh670=
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tRN5VAE4WkJxfop58HKg1C3hfeOFy8L/8TWojLksxs0=;
+        b=USQY59x0ozK+9Brn44qlEk3R43qi7cz3rNGE36Sx3h9YA6GNDcO3n6bTuIMRrs9Nym
+         sqQ30a0IdjdMV9c/XDDh+58PkyyJWOhd6OY3FfgIwWqcrwdQyYoKrTZh0vV83Furrfzc
+         pw02zcZynajq9szaTZF/Gz2LmauDn/Ro0idLJ6ktdPVP5U6+Q9CL08WPbSfdmu8O7ihd
+         afOfjomCpUSYij2Zo0g7VJZYzMWt4DdAaT5f53kCyjLPZvzux9fAZCOCXUmjCv7AhMvZ
+         tAg1wEUkYI/aOJNoV6+YLOqFomawgM75XmZjZGUVOJSh1DFaw0+p1sajM/TFlkluNsfH
+         /+HA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zQoMkVCtgJGZXmdu3KME93w0y7DWMF1NiaK0WZ/Njao=;
-        b=p5fkom2sPQuq41/QFReY7CniRWyGenQ6m7XIAmuX2sLQFrOkgvI//2QrXtkvuGJ1lX
-         fjpJC4gGOcCp6aqwLdTIlFQuMqsN1x/9zU2WDQN177DPR/V0Tc+S3ovscSpU48Jl/w3T
-         jFsa5wsd6Yz+17WH0oFjMwgq1mUTcvond+9mhTNsnz8kgKCqsKt0ipIdGVrEgYa7iAyi
-         +tlJ46xFmE+9m/jwjQiX4yWeIIBRXb3sIByuEYjhZ1/vnMLdGlzIUFF5z32T44cPXgPq
-         knZ2+wO3+nMA+dQ0GrEKNaRZebHPbXL/IIFA0Nh0zmdSI348UdnoxAlUhxfH+XWb4ahD
-         J/hA==
-X-Gm-Message-State: AOAM532Bc9ye7JwGKkHEgyQq5WVB+0MHxsAZCDjJVCOVhnQoAnGdQPtt
-        RhxZKryywkE+8McX/NzUho+oGw==
-X-Google-Smtp-Source: ABdhPJxcmgrtuRv8romzbSyTFqTQSEJa4We5oSZ52yZtkB8W2HhNmi/u9IhtgCmLrgu5W1J+ucGIvQ==
-X-Received: by 2002:a5d:4582:: with SMTP id p2mr14928666wrq.34.1616774740745;
-        Fri, 26 Mar 2021 09:05:40 -0700 (PDT)
-Received: from localhost.localdomain (5.0.8.c.b.e.d.6.4.e.c.a.1.e.f.4.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:4fe1:ace4:6deb:c805])
-        by smtp.gmail.com with ESMTPSA id s20sm11692879wmj.36.2021.03.26.09.05.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Mar 2021 09:05:40 -0700 (PDT)
-From:   Lorenz Bauer <lmb@cloudflare.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
-Cc:     kernel-team@cloudflare.com, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, Lorenz Bauer <lmb@cloudflare.com>
-Subject: [PATCH bpf v2 1/2] bpf: link: refuse non-O_RDWR flags in BPF_OBJ_GET
-Date:   Fri, 26 Mar 2021 16:05:00 +0000
-Message-Id: <20210326160501.46234-1-lmb@cloudflare.com>
-X-Mailer: git-send-email 2.27.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tRN5VAE4WkJxfop58HKg1C3hfeOFy8L/8TWojLksxs0=;
+        b=S3UG6l3+UeGYVZyq5r82zi3Ze7qkyIV6jr9AKUwgdvu8EemVxLgvNkYyAm7bWfqehP
+         gmZ1NsCfQKCF4fbVztmIMl1qMhyIT+JsbCZyCOxBd0IiRtT0ow+PwWalyNAQzkMWQ3X4
+         iuBQJnbsPsijifS3Mce4heaw2wr70xsay5W/rlafCzr/mxlko7cjsez7AL4feihupaQB
+         HC1gIIt0qV54lShUOwajaA5384mkikI3IOMe2nOdy9RuHnrIz5vEAsD/q4s7TssamcIg
+         dfnLjpKIXWruEwb63pzd7vU7KKEcySw0G3REZdkLVA/IgaOfDWYUBM75pc5Xts8x1JXo
+         aIqg==
+X-Gm-Message-State: AOAM531Z02jGhl6Eor2rhgREi0t9S6nvkpeNW9QJw/A7OH2rM2wIJreH
+        LY8TCNjpTSAZQtgyw9R0IuS6L/RvDLSkXwPPhgs=
+X-Google-Smtp-Source: ABdhPJzvbOPD6svduyaIvb4+fOrRDEKZUWRdFRMrnkmtvT8pfOmjV5LRQ3/eElAbRYeBiLx1oMtP8QT9L47cA5T+cRI=
+X-Received: by 2002:a25:874c:: with SMTP id e12mr19726978ybn.403.1616777058610;
+ Fri, 26 Mar 2021 09:44:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210319205909.1748642-1-andrii@kernel.org> <20210319205909.1748642-4-andrii@kernel.org>
+ <20210320022156.eqtmldxpzxkh45a7@ast-mbp> <CAEf4Bzarx33ENLBRyqxDz7k9t0YmTRNs5wf_xCqL2jNXvs+0Sg@mail.gmail.com>
+ <20210322010734.tw2rigbr3dyk3iot@ast-mbp> <CAEf4BzbdgPnw81+diwcvAokv+S6osqvAAzSQYt_BoYbga9t-qQ@mail.gmail.com>
+ <20210322175443.zflwaf7dstpg4y2b@ast-mbp>
+In-Reply-To: <20210322175443.zflwaf7dstpg4y2b@ast-mbp>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 26 Mar 2021 09:44:07 -0700
+Message-ID: <CAEf4BzYHP00_iav1Y_vhMXBmAO3AnqqBz+uK-Yu=NGYUMEUyxw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 3/3] selftests/bpf: allow compiling BPF objects
+ without BTF
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Invoking BPF_OBJ_GET on a pinned bpf_link checks the path access
-permissions based on file_flags, but the returned fd ignores flags.
-This means that any user can acquire a "read-write" fd for a pinned
-link with mode 0664 by invoking BPF_OBJ_GET with BPF_F_RDONLY in
-file_flags. The fd can be used to invoke BPF_LINK_DETACH, etc.
+On Mon, Mar 22, 2021 at 10:54 AM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Mon, Mar 22, 2021 at 09:56:19AM -0700, Andrii Nakryiko wrote:
+> > On Sun, Mar 21, 2021 at 6:07 PM Alexei Starovoitov
+> > <alexei.starovoitov@gmail.com> wrote:
+> > >
+> > > On Sat, Mar 20, 2021 at 10:00:57AM -0700, Andrii Nakryiko wrote:
+> > > > On Fri, Mar 19, 2021 at 7:22 PM Alexei Starovoitov
+> > > > <alexei.starovoitov@gmail.com> wrote:
+> > > > >
+> > > > > On Fri, Mar 19, 2021 at 01:59:09PM -0700, Andrii Nakryiko wrote:
+> > > > > > Add ability to skip BTF generation for some BPF object files. This is done
+> > > > > > through using a convention of .nobtf.c file name suffix.
+> > > > > >
+> > > > > > Also add third statically linked file to static_linked selftest. This file has
+> > > > > > no BTF, causing resulting object file to have only some of DATASEC BTF types.
+> > > > > > It also is using (from BPF code) global variables. This tests both libbpf's
+> > > > > > static linking logic and bpftool's skeleton generation logic.
+> > > > >
+> > > > > I don't like the long term direction of patch 1 and 3.
+> > > > > BTF is mandatory for the most bpf kernel features added in the last couple years.
+> > > > > Making user space do quirks for object files without BTF is not something
+> > > > > we should support or maintain. If there is no BTF the linker and skeleton
+> > > > > generation shouldn't crash, of course, but they should reject such object.
+> > > >
+> > > > I don't think tools need to enforce any policies like that. They are
+> > > > tools and should be unassuming about the way they are going to be used
+> > > > to the extent possible.
+> > >
+> > > Right and bpftool/skeleton was used with BTF since day one.
+> > > Without BTF the skeleton core ideas are lost. The skeleton api
+> > > gives no benefit. So what's the point of adding support for skeleton without BTF?
+> > > Is there a user that would benefit? If so, what will they gain from
+> > > such BTF-less skeleton?
+> >
+> > The only part of skeleton API that's not available is convenient
+> > user-space access to global variables. If you don't use global
+> > variables you don't use BTF at all with skeleton. So all features but
+> > one work without BTF just fine: compile-time maps and progs (and
+> > links) references, embedding object file in .skel.h, and even
+> > automatic memory-mapping of .data/.rodata/.bss (just unknown struct
+> > layout).
+> >
+> > Compile-time maps and progs and separately object file embedding in C
+> > header are useful in their own rights, even individually. There is no
+> > single "core idea" of the BPF skeleton in my mind. What is it for you?
+> >
+> > So given none of the fixes are horrible hacks and won't incur
+> > additional maintenance costs, what's the problem with accepting them?
+>
+> Because they double the maintenance cost now and double the support forever.
+> We never needed to worry about skeleton without BTF and now it would be
+> a thing ? So all tests realistically need to be doubled: with and without BTF.
 
-Fix this by refusing non-O_RDWR flags in BPF_OBJ_GET. This works
-because OBJ_GET by default returns a read write mapping and libbpf
-doesn't expose a way to override this behaviour for programs
-and links.
+2x? Realistically?.. No, I wouldn't say so. :) Extra test or a few
+might be warranted, but doubling the amount of testing is a huge
+exaggeration.
 
-Fixes: 70ed506c3bbc ("bpf: Introduce pinnable bpf_link abstraction")
-Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
----
- kernel/bpf/inode.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Even more so for static linking. If one .o has BTF and another doesn't
+> what linker suppose to do? Keep it, but the linked BTF will sort of cover
+> both .o-s, but line info in some funcs will be missing.
+> All these weird combinations would need to be tested.
 
-diff --git a/kernel/bpf/inode.c b/kernel/bpf/inode.c
-index 1576ff331ee4..dc56237d6960 100644
---- a/kernel/bpf/inode.c
-+++ b/kernel/bpf/inode.c
-@@ -547,7 +547,7 @@ int bpf_obj_get_user(const char __user *pathname, int flags)
- 	else if (type == BPF_TYPE_MAP)
- 		ret = bpf_map_new_fd(raw, f_flags);
- 	else if (type == BPF_TYPE_LINK)
--		ret = bpf_link_new_fd(raw);
-+		ret = (f_flags != O_RDWR) ? -EINVAL : bpf_link_new_fd(raw);
- 	else
- 		return -ENOENT;
- 
--- 
-2.27.0
+BPF static linker already supports that mode, btw. And yes, it
+shouldn't crash the kernel. And you don't need a skeleton or static
+linker to do that to the kernel, so I don't know how that is a new
+mode of operation.
 
+> The sensible thing to do would be to reject skel generation without BTF
+> and reject linking without BTF. The user most likely forgot -g during
+> compilation of bpf prog. The bpftool should give the helpful message
+> in such case. Whether it's generating skel or linking. Silently proceeding
+> and generating half-featured skeleton is not what user wanted.
+
+Sure, a warning message makes sense. Outright disabling this - not so
+much. I still can't get why I can't get BPF skeleton and static
+linking without BTF, if I really want to. Both are useful without BTF.
+
+So I don't know, it's the third different argument I'm addressing
+without any conclusion on the previous two. It, sadly, feels rather
+like fighting subjective personal preferences, rather than a
+discussion.
