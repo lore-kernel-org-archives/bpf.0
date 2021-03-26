@@ -2,164 +2,125 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ACDDCC433E0
-	for <bpf@archiver.kernel.org>; Fri, 26 Mar 2021 10:59:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 25BB2C433C1
+	for <bpf@archiver.kernel.org>; Fri, 26 Mar 2021 11:48:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7C15661A48
-	for <bpf@archiver.kernel.org>; Fri, 26 Mar 2021 10:59:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0064F61A4D
+	for <bpf@archiver.kernel.org>; Fri, 26 Mar 2021 11:48:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229580AbhCZK71 convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 26 Mar 2021 06:59:27 -0400
-Received: from us-smtp-delivery-44.mimecast.com ([207.211.30.44]:44373 "EHLO
-        us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230012AbhCZK7Q (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 26 Mar 2021 06:59:16 -0400
+        id S229758AbhCZLrj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 26 Mar 2021 07:47:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:60807 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229589AbhCZLra (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 26 Mar 2021 07:47:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1616759250;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1PRjoolN/0TRpZdrtFaOMo+fWLdGM5HRHk+d2zU9yXI=;
+        b=gc1W+g7+Qqj0wdFeGGKfaKUM9cWERShWx2Lfq2g33rGahpUZRH6fvxpu7OfVsqRPBaSACs
+        siWxNCBNqVyAmznjxmJGZw027M5zBlYXUSo0jcHOrCvde9ILE8tL5UAiAhMzPzUwYe7ETX
+        cEUHD1oCs1E6vmOn5Xht5nYYd8kGzTU=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-583-pG2p-HekMX2mhPBHgeop6A-1; Fri, 26 Mar 2021 06:59:06 -0400
-X-MC-Unique: pG2p-HekMX2mhPBHgeop6A-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+ us-mta-578-IIM9zxEKNL2edDbp7N_LSg-1; Fri, 26 Mar 2021 07:47:28 -0400
+X-MC-Unique: IIM9zxEKNL2edDbp7N_LSg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4F5371906813;
-        Fri, 26 Mar 2021 10:59:04 +0000 (UTC)
-Received: from krava.redhat.com (unknown [10.40.195.133])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 70D3B1972B;
-        Fri, 26 Mar 2021 10:59:01 +0000 (UTC)
-From:   Jiri Olsa <jolsa@kernel.org>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: [PATCHv3 bpf] bpf: Take module reference for trampoline in module
-Date:   Fri, 26 Mar 2021 11:59:00 +0100
-Message-Id: <20210326105900.151466-1-jolsa@kernel.org>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id BDDD51005D4F;
+        Fri, 26 Mar 2021 11:47:27 +0000 (UTC)
+Received: from astarta.redhat.com (ovpn-114-130.ams2.redhat.com [10.36.114.130])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3DC186060F;
+        Fri, 26 Mar 2021 11:47:23 +0000 (UTC)
+From:   Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+To:     bpf@vger.kernel.org
+Cc:     andrii@kernel.org, jolsa@redhat.com,
+        Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+Subject: [PATCH 1/3] selftests/bpf: test_progs/sockopt_sk: pass page size from userspace
+Date:   Fri, 26 Mar 2021 13:47:20 +0200
+Message-Id: <20210326114722.210109-1-yauheni.kaliuta@redhat.com>
+In-Reply-To: <20210326114658.210034-1-yauheni.kaliuta@redhat.com>
+References: <20210326114658.210034-1-yauheni.kaliuta@redhat.com>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jolsa@kernel.org
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: kernel.org
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset=WINDOWS-1252
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently module can be unloaded even if there's a trampoline
-register in it. It's easily reproduced by running in parallel:
+Since there is no convenient way for bpf program to get PAGE_SIZE
+from inside of the kernel, pass the value from userspace.
 
-  # while :; do ./test_progs -t module_attach; done
-  # while :; do rmmod bpf_testmod; sleep 0.5; done
-
-Taking the module reference in case the trampoline's ip is
-within the module code. Releasing it when the trampoline's
-ip is unregistered.
-
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+Signed-off-by: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
 ---
- v3 changes:
-   - store module pointer under bpf_trampoline struct
+ tools/testing/selftests/bpf/prog_tests/sockopt_sk.c |  2 ++
+ tools/testing/selftests/bpf/progs/sockopt_sk.c      | 10 ++++------
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
- include/linux/bpf.h     |  2 ++
- kernel/bpf/trampoline.c | 30 ++++++++++++++++++++++++++++++
- 2 files changed, 32 insertions(+)
-
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 3625f019767d..fdac0534ce79 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -40,6 +40,7 @@ struct bpf_local_storage;
- struct bpf_local_storage_map;
- struct kobject;
- struct mem_cgroup;
-+struct module;
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c b/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
+index 114c1a622ffa..6a7cb5f23db2 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
+@@ -201,6 +201,8 @@ static void run_test(int cgroup_fd)
+ 	if (CHECK(!skel, "skel_load", "sockopt_sk skeleton failed\n"))
+ 		goto cleanup;
  
- extern struct idr btf_idr;
- extern spinlock_t btf_idr_lock;
-@@ -623,6 +624,7 @@ struct bpf_trampoline {
- 	/* Executable image of trampoline */
- 	struct bpf_tramp_image *cur_image;
- 	u64 selector;
-+	struct module *mod;
- };
- 
- struct bpf_attach_target_info {
-diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-index 1f3a4be4b175..4aa8b52adf25 100644
---- a/kernel/bpf/trampoline.c
-+++ b/kernel/bpf/trampoline.c
-@@ -9,6 +9,7 @@
- #include <linux/btf.h>
- #include <linux/rcupdate_trace.h>
- #include <linux/rcupdate_wait.h>
-+#include <linux/module.h>
- 
- /* dummy _ops. The verifier will operate on target program's ops. */
- const struct bpf_verifier_ops bpf_extension_verifier_ops = {
-@@ -87,6 +88,26 @@ static struct bpf_trampoline *bpf_trampoline_lookup(u64 key)
- 	return tr;
- }
- 
-+static int bpf_trampoline_module_get(struct bpf_trampoline *tr)
-+{
-+	struct module *mod;
-+	int err = 0;
++	skel->bss->page_size = getpagesize();
 +
-+	preempt_disable();
-+	mod = __module_text_address((unsigned long) tr->func.addr);
-+	if (mod && !try_module_get(mod))
-+		err = -ENOENT;
-+	preempt_enable();
-+	tr->mod = mod;
-+	return err;
-+}
-+
-+static void bpf_trampoline_module_put(struct bpf_trampoline *tr)
-+{
-+	module_put(tr->mod);
-+	tr->mod = NULL;
-+}
-+
- static int is_ftrace_location(void *ip)
- {
- 	long addr;
-@@ -108,6 +129,9 @@ static int unregister_fentry(struct bpf_trampoline *tr, void *old_addr)
- 		ret = unregister_ftrace_direct((long)ip, (long)old_addr);
- 	else
- 		ret = bpf_arch_text_poke(ip, BPF_MOD_CALL, old_addr, NULL);
-+
-+	if (!ret)
-+		bpf_trampoline_module_put(tr);
- 	return ret;
- }
+ 	skel->links._setsockopt =
+ 		bpf_program__attach_cgroup(skel->progs._setsockopt, cgroup_fd);
+ 	if (CHECK(IS_ERR(skel->links._setsockopt),
+diff --git a/tools/testing/selftests/bpf/progs/sockopt_sk.c b/tools/testing/selftests/bpf/progs/sockopt_sk.c
+index d3597f81e6e9..55dfbe53c24e 100644
+--- a/tools/testing/selftests/bpf/progs/sockopt_sk.c
++++ b/tools/testing/selftests/bpf/progs/sockopt_sk.c
+@@ -8,9 +8,7 @@
+ char _license[] SEC("license") = "GPL";
+ __u32 _version SEC("version") = 1;
  
-@@ -134,10 +158,16 @@ static int register_fentry(struct bpf_trampoline *tr, void *new_addr)
- 		return ret;
- 	tr->func.ftrace_managed = ret;
+-#ifndef PAGE_SIZE
+-#define PAGE_SIZE 4096
+-#endif
++int page_size; /* userspace should set it */
  
-+	if (bpf_trampoline_module_get(tr))
-+		return -ENOENT;
-+
- 	if (tr->func.ftrace_managed)
- 		ret = register_ftrace_direct((long)ip, (long)new_addr);
- 	else
- 		ret = bpf_arch_text_poke(ip, BPF_MOD_CALL, NULL, new_addr);
-+
-+	if (ret)
-+		bpf_trampoline_module_put(tr);
- 	return ret;
- }
+ #ifndef SOL_TCP
+ #define SOL_TCP IPPROTO_TCP
+@@ -90,7 +88,7 @@ int _getsockopt(struct bpf_sockopt *ctx)
+ 		 * program can only see the first PAGE_SIZE
+ 		 * bytes of data.
+ 		 */
+-		if (optval_end - optval != PAGE_SIZE)
++		if (optval_end - optval != page_size)
+ 			return 0; /* EPERM, unexpected data size */
  
+ 		return 1;
+@@ -161,7 +159,7 @@ int _setsockopt(struct bpf_sockopt *ctx)
+ 
+ 	if (ctx->level == SOL_IP && ctx->optname == IP_FREEBIND) {
+ 		/* Original optlen is larger than PAGE_SIZE. */
+-		if (ctx->optlen != PAGE_SIZE * 2)
++		if (ctx->optlen != page_size * 2)
+ 			return 0; /* EPERM, unexpected data size */
+ 
+ 		if (optval + 1 > optval_end)
+@@ -175,7 +173,7 @@ int _setsockopt(struct bpf_sockopt *ctx)
+ 		 * program can only see the first PAGE_SIZE
+ 		 * bytes of data.
+ 		 */
+-		if (optval_end - optval != PAGE_SIZE)
++		if (optval_end - optval != page_size)
+ 			return 0; /* EPERM, unexpected data size */
+ 
+ 		return 1;
 -- 
-2.30.2
+2.29.2
 
