@@ -2,123 +2,104 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09535C43446
-	for <bpf@archiver.kernel.org>; Fri, 26 Mar 2021 23:22:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 14FFCC433DB
+	for <bpf@archiver.kernel.org>; Fri, 26 Mar 2021 23:27:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 04E0F61A32
-	for <bpf@archiver.kernel.org>; Fri, 26 Mar 2021 23:22:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F1E6E619C9
+	for <bpf@archiver.kernel.org>; Fri, 26 Mar 2021 23:27:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231206AbhCZXVy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 26 Mar 2021 19:21:54 -0400
-Received: from mga14.intel.com ([192.55.52.115]:11392 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231537AbhCZXVm (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 26 Mar 2021 19:21:42 -0400
-IronPort-SDR: ub9AIEdfL13r6FOhU05cdJQa/q3mNPSSP41PBDPJcZANPJjRAOkrcD7zpuM2xQFcPHZVzcXb4m
- 7uXsi8eHOEcA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9935"; a="190681454"
-X-IronPort-AV: E=Sophos;i="5.81,281,1610438400"; 
-   d="scan'208";a="190681454"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2021 16:21:38 -0700
-IronPort-SDR: BzQaD0ejzKcToBMZtJjrqrjPZVmq6aSHw9nBnZk9IISCuk1vq7HEiGkLtF/yYPvGNPbIOv4ale
- 000EcVmM69SA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,281,1610438400"; 
-   d="scan'208";a="410113391"
-Received: from ranger.igk.intel.com ([10.102.21.164])
-  by fmsmga008.fm.intel.com with ESMTP; 26 Mar 2021 16:21:35 -0700
-From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     bpf@vger.kernel.org, netdev@vger.kernel.org, daniel@iogearbox.net,
-        ast@kernel.org, andrii@kernel.org
-Cc:     bjorn.topel@intel.com, magnus.karlsson@intel.com,
-        ciara.loftus@intel.com, john.fastabend@gmail.com, toke@redhat.com
-Subject: [PATCH v4 bpf-next 15/17] selftests: xsk: remove thread attribute
-Date:   Sat, 27 Mar 2021 00:09:36 +0100
-Message-Id: <20210326230938.49998-16-maciej.fijalkowski@intel.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210326230938.49998-1-maciej.fijalkowski@intel.com>
-References: <20210326230938.49998-1-maciej.fijalkowski@intel.com>
+        id S231206AbhCZX0c (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 26 Mar 2021 19:26:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54570 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231136AbhCZX0D (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 26 Mar 2021 19:26:03 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB6AC0613AA;
+        Fri, 26 Mar 2021 16:26:02 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id x189so7473033ybg.5;
+        Fri, 26 Mar 2021 16:26:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=JwoWSd3I6DQh4plH9Ches26MIkmP+U0Q2+NtTvu4upE=;
+        b=DZ7+VZzY15/Vqg7Pww2/gm1LAXEZ7S8BxcmAHsSxckMxGo5YuO9qXNb8m2Gpxzpcqo
+         gH1LLYMaDlLg0ubxTCqCX8b/1Bkl8EJSXuDx+p7cNmPikMpQUYUqJnVsD6t+HcSeT5Wt
+         AsvY9vnc/l85wWMWAYngYVWY9a0d6RIAFhBlW1kSa2E2x+d+zroyAdeiQq5Oz/dglB2B
+         B45RSeVpDOkPMxIksl73RWEe26tMh8xPnJrP+pBnxFyrdjQLOGay9nrMdsUg4rmh6Yls
+         eS825d8mSnwcXi+2aCZMQiQ3nYOZvJTNOafQ5EbPhgltXX/CTWni7rCIBgMevUckSf56
+         Inog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=JwoWSd3I6DQh4plH9Ches26MIkmP+U0Q2+NtTvu4upE=;
+        b=Fbjd4RxAt9LpUaw9Y0jJ4EmBLpTfEy/F7dAslNPP8dukui0/IUkK72/0iNlFCoGxpn
+         xCS10A8M39i/GjSLdbhPg1j9db43p78ZZGTdx3e5y4/mb/vx7VGbvwb9lNhmqldqhJdJ
+         bB0Q05uZ6pON1nHN3SiUru8QR6is+Tg316tINIwKJRi845bzD48wX1T4i2lDguo6Llj3
+         FmnH6wQITkSIQY9bnlOvP7lz+3SYXl4blFrYXuOaOBGkUzgLOWNYdNIGgnxBmovcjt3l
+         kqQIKs281RbkNduxQL78EQmO9f4Vm5Gw+bcIQTJ19gDN7U/FqKG7qwUe64ZvqdXTFkRA
+         lHdQ==
+X-Gm-Message-State: AOAM530cSRfkZ1vy9ae2Pjkv5Mi8/yT3Jvuk9Ebp0bYvKnrlhIE8rJcl
+        ydBTnlrUObzZTlUvaWcQXxm2wbEPMfeUXMS4Blg=
+X-Google-Smtp-Source: ABdhPJxEe22PD0WE6yFXdPyPzqRnjEOu5TA9aVZw5QyYMBtLwiJF06tiulZFymWsQ9iqjR8eHmmcZhv/BzQEN0YHWNQ=
+X-Received: by 2002:a25:874c:: with SMTP id e12mr21769586ybn.403.1616801161889;
+ Fri, 26 Mar 2021 16:26:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20210325120020.236504-1-memxor@gmail.com> <20210325120020.236504-2-memxor@gmail.com>
+In-Reply-To: <20210325120020.236504-2-memxor@gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 26 Mar 2021 16:25:51 -0700
+Message-ID: <CAEf4BzaVK4=vB6xaMc-VwhQagg6ghx8JAnuLsf43qZa_w_nyyw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/5] tools pkt_cls.h: sync with kernel sources
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Björn Töpel <bjorn.topel@intel.com>
+On Thu, Mar 25, 2021 at 5:01 AM Kumar Kartikeya Dwivedi
+<memxor@gmail.com> wrote:
+>
+> Update the header file so we can use the new defines in subsequent
+> patches.
+>
+> Reviewed-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> ---
+>  tools/include/uapi/linux/pkt_cls.h | 174 ++++++++++++++++++++++++++++-
 
-There is really no reason to have a non-default thread stack
-size. Remove that.
+If libbpf is going to rely on this UAPI header, we probably need to
+add this header to the list of headers that are checked for being up
+to date. See Makefile, roughly at line 140.
 
-Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
----
- tools/testing/selftests/bpf/xdpxceiver.c | 9 ++-------
- tools/testing/selftests/bpf/xdpxceiver.h | 2 --
- 2 files changed, 2 insertions(+), 9 deletions(-)
+>  1 file changed, 170 insertions(+), 4 deletions(-)
+>
 
-diff --git a/tools/testing/selftests/bpf/xdpxceiver.c b/tools/testing/selftests/bpf/xdpxceiver.c
-index b57c75d6904b..95d9d35dbb93 100644
---- a/tools/testing/selftests/bpf/xdpxceiver.c
-+++ b/tools/testing/selftests/bpf/xdpxceiver.c
-@@ -764,8 +764,6 @@ static void thread_common_ops(struct ifobject *ifobject, void *bufs)
- 	int ctr = 0;
- 	int ret;
- 
--	pthread_attr_setstacksize(&attr, THREAD_STACK);
--
- 	ifobject->ns_fd = switch_namespace(ifobject->nsname);
- 
- 	if (test_type == TEST_TYPE_BPF_RES)
-@@ -909,13 +907,10 @@ static void testapp_validate(void)
- 	bool bidi = test_type == TEST_TYPE_BIDI;
- 	bool bpf = test_type == TEST_TYPE_BPF_RES;
- 
--	pthread_attr_init(&attr);
--	pthread_attr_setstacksize(&attr, THREAD_STACK);
--
- 	pthread_mutex_lock(&sync_mutex);
- 
- 	/*Spawn RX thread */
--	pthread_create(&t0, &attr, ifdict_rx->func_ptr, ifdict_rx);
-+	pthread_create(&t0, NULL, ifdict_rx->func_ptr, ifdict_rx);
- 
- 	if (clock_gettime(CLOCK_REALTIME, &max_wait))
- 		exit_with_error(errno);
-@@ -927,7 +922,7 @@ static void testapp_validate(void)
- 	pthread_mutex_unlock(&sync_mutex);
- 
- 	/*Spawn TX thread */
--	pthread_create(&t1, &attr, ifdict_tx->func_ptr, ifdict_tx);
-+	pthread_create(&t1, NULL, ifdict_tx->func_ptr, ifdict_tx);
- 
- 	pthread_join(t1, NULL);
- 	pthread_join(t0, NULL);
-diff --git a/tools/testing/selftests/bpf/xdpxceiver.h b/tools/testing/selftests/bpf/xdpxceiver.h
-index e431ecb9bb95..78863820fb81 100644
---- a/tools/testing/selftests/bpf/xdpxceiver.h
-+++ b/tools/testing/selftests/bpf/xdpxceiver.h
-@@ -37,7 +37,6 @@
- #define TMOUT_SEC (3)
- #define EOT (-1)
- #define USLEEP_MAX 200000
--#define THREAD_STACK 60000000
- #define SOCK_RECONF_CTR 10
- #define BATCH_SIZE 64
- #define POLL_TMOUT 1000
-@@ -152,7 +151,6 @@ static struct ifobject *ifdict_tx;
- pthread_mutex_t sync_mutex;
- pthread_cond_t signal_rx_condition;
- pthread_t t0, t1;
--pthread_attr_t attr;
- 
- TAILQ_HEAD(head_s, pkt) head = TAILQ_HEAD_INITIALIZER(head);
- struct head_s *head_p;
--- 
-2.20.1
-
+[...]
