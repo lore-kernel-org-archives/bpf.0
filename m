@@ -2,127 +2,114 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-6.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4907DC433DB
-	for <bpf@archiver.kernel.org>; Fri, 26 Mar 2021 10:04:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 30A9EC433C1
+	for <bpf@archiver.kernel.org>; Fri, 26 Mar 2021 10:12:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0286661A49
-	for <bpf@archiver.kernel.org>; Fri, 26 Mar 2021 10:04:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E378861A4A
+	for <bpf@archiver.kernel.org>; Fri, 26 Mar 2021 10:12:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbhCZKDv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 26 Mar 2021 06:03:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:54858 "EHLO
+        id S230018AbhCZKL6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 26 Mar 2021 06:11:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:49054 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229573AbhCZKDc (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 26 Mar 2021 06:03:32 -0400
+        by vger.kernel.org with ESMTP id S230100AbhCZKLq (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 26 Mar 2021 06:11:46 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1616753010;
+        s=mimecast20190719; t=1616753506;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=AqbkoNQ8XoV32TJQbt2vnYtr9D9KJMnunF7xga9JKcE=;
-        b=DQBVCCcoVTdgOZBVEkGh5nU5EEjC6wagiAbAI5g230sQQSIGoogFBhugHH9kB9Xr3h9kLB
-        ZgU8p1rOEQ+YhUC/JfzffAD74mVGFLyFf39/ivXiTgpesSkvuWlLKvCWKZL5xmWGl5Ux/d
-        yQ6+kI5f9Ccrk7c0GMXshxSVJF37Avs=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-347-6X5yPobHO9m6gJb0NrTZcg-1; Fri, 26 Mar 2021 06:03:28 -0400
-X-MC-Unique: 6X5yPobHO9m6gJb0NrTZcg-1
-Received: by mail-ej1-f71.google.com with SMTP id h14so3878002ejg.7
-        for <bpf@vger.kernel.org>; Fri, 26 Mar 2021 03:03:28 -0700 (PDT)
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QRPmV37hKOtWKvN7ZDrppJeIqphV5UqLCnAOHgP7RWE=;
+        b=HozYGIA5vlx+PpGxd6oxqEWl6U3blPllYrrro5vyScaBRiTAXIxNHhmAo395ybhuWqKYYS
+        432KznYFa+Igfp8AbAseyUIFUo56+19bitjs3TMPN+LM257roZzwkJ4ZAk7o8nTYdMfCJU
+        Nwi+ERk866lDNuyNgehPH9298/rehzY=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-412-uxd1usZeOsiCfbSO4Fq91g-1; Fri, 26 Mar 2021 06:11:44 -0400
+X-MC-Unique: uxd1usZeOsiCfbSO4Fq91g-1
+Received: by mail-ed1-f71.google.com with SMTP id h5so4150405edf.17
+        for <bpf@vger.kernel.org>; Fri, 26 Mar 2021 03:11:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=AqbkoNQ8XoV32TJQbt2vnYtr9D9KJMnunF7xga9JKcE=;
-        b=iAdvc5/zfDjMyCYHK11s2c4P9rKL80IIHULw9cycKbZ8H96IEsyFqikzUU2Wc5Ncdw
-         ournA8efHK4ddK/rQfElgBSrp/4nZLdDgj89ncP0R9M6coarUaIaBsxbZ487tFTTKFP1
-         X865VoZXo7E+x3oEOYhZBp9szK4y5kT3ubcvwOW2NnUPqSPbvxHX5R74GFKWWXIkSbLi
-         2QWZ6+X1tke9M+zdcVGAx933JH0D/wespn/lI8tccWytW4VqtMKRwfpTnkl0CrJxUJ6n
-         jnwlx/0OJjAUQBBvQ/b0NIDsrv2nw/AmeRb6DV0RW7opn+awikgWEmPc5G7khyHTyOYT
-         0baw==
-X-Gm-Message-State: AOAM5336MRITTN8h8M88aE+x0bVQMC/n9+Y8ipwGm5dk1VbPT8eubJDF
-        JBRrCpcJp2XT4I8Tve1v+B3AvjFC00zWCMvU21yo7Uu18EYhq89R0y9RHwxRjfxpTQaXlINiST6
-        413zU5QbFADe4
-X-Received: by 2002:a17:906:495a:: with SMTP id f26mr14025450ejt.271.1616753007170;
-        Fri, 26 Mar 2021 03:03:27 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzJhgy8ubAo4D3bF1qJvgBXod5/y0iR6kIN45MclrY380CjRxzFYjZIQ+0veKTNTIh10Qo7tw==
-X-Received: by 2002:a17:906:495a:: with SMTP id f26mr14025408ejt.271.1616753006772;
-        Fri, 26 Mar 2021 03:03:26 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=QRPmV37hKOtWKvN7ZDrppJeIqphV5UqLCnAOHgP7RWE=;
+        b=mPBHF1GNt3cz0DCVO+X56rVlElzzMVf98Z0646qBow+YbWL2TIFKisLqINecJ2DD5W
+         fmu+k9lJjUh7Wx6qtg10i/8qS0SgSzT5GXyQyromt+WO1YItNS+ruuOAfkpkilx6UIwe
+         wIMD5UPqoGNzVfqNxImt5bYwOueYWQMqwJQZL3Nwzp0eUyHw39Pk1Al0xg0d4rdhy3N0
+         58R6TvIQ7Nll8r1CMTKAmH6QpdoOoRLRls7PmglVlSCk3rzOAfwbLmTk0VSehY9VzgiN
+         HJ4lQj53FAMtvthORHyhYIAZSiKFbwNDmjko4yXk7oNz3aKMdrMDlATVuFTY6RjSDy68
+         aUFQ==
+X-Gm-Message-State: AOAM533Csivi3dIXJwT4PASbs6NIcgUztA4WXXfzdXFqtxUjClfELapb
+        bOx60JmeLiKmxihIY1+pzaiJLbEaLqflgeQDfKJjmymz5RwWgdD3tWLbmTvFyeCvXO8bIXu2iIy
+        9XZjqXnwJ1wdn
+X-Received: by 2002:a17:907:7699:: with SMTP id jv25mr13899683ejc.363.1616753502857;
+        Fri, 26 Mar 2021 03:11:42 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyBBvYh/8qPf0D5bWSxDuRIl04pHyOhhyzPiTCbTiADUGIA3wLU9bL8fOA7aaXHlyFmiXPNMw==
+X-Received: by 2002:a17:907:7699:: with SMTP id jv25mr13899660ejc.363.1616753502430;
+        Fri, 26 Mar 2021 03:11:42 -0700 (PDT)
 Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id 90sm3943863edf.31.2021.03.26.03.03.25
+        by smtp.gmail.com with ESMTPSA id g20sm3904652edb.7.2021.03.26.03.11.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Mar 2021 03:03:26 -0700 (PDT)
+        Fri, 26 Mar 2021 03:11:41 -0700 (PDT)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 4E1221801A3; Fri, 26 Mar 2021 11:03:25 +0100 (CET)
-From:   =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Clark Williams <williams@redhat.com>, bpf@vger.kernel.org,
+        id 0F12E1801A3; Fri, 26 Mar 2021 11:11:41 +0100 (CET)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Martin KaFai Lau <kafai@fb.com>
+Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com,
         netdev@vger.kernel.org
-Subject: [PATCH bpf v3 1/2] bpf: enforce that struct_ops programs be GPL-only
-Date:   Fri, 26 Mar 2021 11:03:13 +0100
-Message-Id: <20210326100314.121853-1-toke@redhat.com>
-X-Mailer: git-send-email 2.31.0
+Subject: Re: [PATCH v2 bpf-next 03/14] bpf: Support bpf program calling
+ kernel function
+In-Reply-To: <20210325230940.2pequmyzwzv65sub@kafai-mbp.dhcp.thefacebook.com>
+References: <20210325015124.1543397-1-kafai@fb.com>
+ <20210325015142.1544736-1-kafai@fb.com> <87wntudh8w.fsf@toke.dk>
+ <20210325230940.2pequmyzwzv65sub@kafai-mbp.dhcp.thefacebook.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Fri, 26 Mar 2021 11:11:41 +0100
+Message-ID: <87ft0icjhe.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-With the introduction of the struct_ops program type, it became possible to
-implement kernel functionality in BPF, making it viable to use BPF in place
-of a regular kernel module for these particular operations.
+Martin KaFai Lau <kafai@fb.com> writes:
 
-Thus far, the only user of this mechanism is for implementing TCP
-congestion control algorithms. These are clearly marked as GPL-only when
-implemented as modules (as seen by the use of EXPORT_SYMBOL_GPL for
-tcp_register_congestion_control()), so it seems like an oversight that this
-was not carried over to BPF implementations. Since this is the only user
-of the struct_ops mechanism, just enforcing GPL-only for the struct_ops
-program type seems like the simplest way to fix this.
+> On Thu, Mar 25, 2021 at 11:02:23PM +0100, Toke H=C3=B8iland-J=C3=B8rgense=
+n wrote:
+>> Martin KaFai Lau <kafai@fb.com> writes:
+>>=20
+>> > This patch adds support to BPF verifier to allow bpf program calling
+>> > kernel function directly.
+>>=20
+>> Hi Martin
+>>=20
+>> This is exciting stuff! :)
+>>=20
+>> Just one quick question about this:
+>>=20
+>> > [ For the future calling function-in-kernel-module support, an array
+>> >   of module btf_fds can be passed at the load time and insn->off
+>> >   can be used to index into this array. ]
+>>=20
+>> Is adding the support for extending this to modules also on your radar,
+>> or is this more of an "in case someone needs it" comment? :)
+>
+> It is in my list.  I don't mind someone beats me to it though
+> if he/she has an immediate use case. ;)
 
-v3: No change
-v2: Move check to the top of check_struct_ops_btf_id().
+Noted ;)
+No promises though, and at the rate you're going you may just get there
+first. I'll be sure to ping you if I do start on this so we avoid
+duplicating effort!
 
-Fixes: 0baf26b0fcd7 ("bpf: tcp: Support tcp_congestion_ops in bpf")
-Acked-by: Martin KaFai Lau <kafai@fb.com>
-Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
----
- kernel/bpf/verifier.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 44e4ec1640f1..3a738724a380 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -12158,6 +12158,11 @@ static int check_struct_ops_btf_id(struct bpf_verifier_env *env)
- 	u32 btf_id, member_idx;
- 	const char *mname;
- 
-+	if (!prog->gpl_compatible) {
-+		verbose(env, "struct ops programs must have a GPL compatible license\n");
-+		return -EINVAL;
-+	}
-+
- 	btf_id = prog->aux->attach_btf_id;
- 	st_ops = bpf_struct_ops_find(btf_id);
- 	if (!st_ops) {
--- 
-2.31.0
+-Toke
 
