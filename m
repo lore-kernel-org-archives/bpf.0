@@ -7,154 +7,160 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8F27C43381
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1CBBC433FC
 	for <bpf@archiver.kernel.org>; Fri, 26 Mar 2021 23:22:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DEF86619C2
+	by mail.kernel.org (Postfix) with ESMTP id 9A420619C2
 	for <bpf@archiver.kernel.org>; Fri, 26 Mar 2021 23:22:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231173AbhCZXVw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 26 Mar 2021 19:21:52 -0400
-Received: from mga14.intel.com ([192.55.52.115]:11388 "EHLO mga14.intel.com"
+        id S231168AbhCZXVv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 26 Mar 2021 19:21:51 -0400
+Received: from mga14.intel.com ([192.55.52.115]:11392 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231546AbhCZXVm (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 26 Mar 2021 19:21:42 -0400
-IronPort-SDR: DULWuHzcNqVdWLzcWPHS0aaHRyyilkDjdU0HhaoTgsmchP4jloisvUtq67yp93Wo7ArLCz4W5k
- mfFiG8Ah1M7A==
-X-IronPort-AV: E=McAfee;i="6000,8403,9935"; a="190681455"
+        id S231480AbhCZXVk (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 26 Mar 2021 19:21:40 -0400
+IronPort-SDR: pkORuLQTzwbEKbKo+xlCM9NsJgH2BJzvpJ6NHoRm+LvcAlzAnoFbik7Teo6ehF/xqKip6wTkgn
+ AOUqIROPzVcw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9935"; a="190681431"
 X-IronPort-AV: E=Sophos;i="5.81,281,1610438400"; 
-   d="scan'208";a="190681455"
+   d="scan'208";a="190681431"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2021 16:21:40 -0700
-IronPort-SDR: rNSChm4qqoqJMgdqar/dUb4xiEUD+sJJnvfEkqdmxFCLt11lbTCl5oBid/fa+GBwYT/mTB8jrC
- CeDB+X3nm3Jw==
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2021 16:21:16 -0700
+IronPort-SDR: 44M1B57AZrbuEdtcy4i0wgqz9cmi8FoG0zPHLh+fUdfT7WX6qDxXg0XBYR3pnbDa3/JEhqHgbM
+ 3tRx/DwhJgsw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.81,281,1610438400"; 
-   d="scan'208";a="410113411"
+   d="scan'208";a="410113298"
 Received: from ranger.igk.intel.com ([10.102.21.164])
-  by fmsmga008.fm.intel.com with ESMTP; 26 Mar 2021 16:21:38 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 26 Mar 2021 16:21:14 -0700
 From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 To:     bpf@vger.kernel.org, netdev@vger.kernel.org, daniel@iogearbox.net,
         ast@kernel.org, andrii@kernel.org
 Cc:     bjorn.topel@intel.com, magnus.karlsson@intel.com,
-        ciara.loftus@intel.com, john.fastabend@gmail.com, toke@redhat.com
-Subject: [PATCH v4 bpf-next 16/17] selftests: xsk: Remove mutex and condition variable
-Date:   Sat, 27 Mar 2021 00:09:37 +0100
-Message-Id: <20210326230938.49998-17-maciej.fijalkowski@intel.com>
+        ciara.loftus@intel.com, john.fastabend@gmail.com, toke@redhat.com,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Subject: [PATCH v4 bpf-next 07/17] samples: bpf: do not unload prog within xdpsock
+Date:   Sat, 27 Mar 2021 00:09:28 +0100
+Message-Id: <20210326230938.49998-8-maciej.fijalkowski@intel.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20210326230938.49998-1-maciej.fijalkowski@intel.com>
 References: <20210326230938.49998-1-maciej.fijalkowski@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Björn Töpel <bjorn.topel@intel.com>
+With the introduction of bpf_link in xsk's libbpf part, there's no
+further need for explicit unload of prog on xdpsock's termination. When
+process dies, the bpf_link's refcount will be decremented and resources
+will be unloaded/freed under the hood in case when there are no more
+active users.
 
-The usage of the condition variable is broken, and overkill. Replace it
-with a pthread barrier.
+While at it, don't dump stats on error path.
 
-Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
+Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 ---
- tools/testing/selftests/bpf/xdpxceiver.c | 33 ++++--------------------
- tools/testing/selftests/bpf/xdpxceiver.h |  3 +--
- 2 files changed, 6 insertions(+), 30 deletions(-)
+ samples/bpf/xdpsock_user.c | 55 ++++++++++----------------------------
+ 1 file changed, 14 insertions(+), 41 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/xdpxceiver.c b/tools/testing/selftests/bpf/xdpxceiver.c
-index 95d9d35dbb93..084ba052fa89 100644
---- a/tools/testing/selftests/bpf/xdpxceiver.c
-+++ b/tools/testing/selftests/bpf/xdpxceiver.c
-@@ -126,18 +126,6 @@ static void __exit_with_error(int error, const char *file, const char *func, int
- 			       test_type == TEST_TYPE_STATS ? "Stats" : "",\
- 			       test_type == TEST_TYPE_BPF_RES ? "BPF RES" : ""))
+diff --git a/samples/bpf/xdpsock_user.c b/samples/bpf/xdpsock_user.c
+index 1e2a1105d0e6..aa696854be78 100644
+--- a/samples/bpf/xdpsock_user.c
++++ b/samples/bpf/xdpsock_user.c
+@@ -96,7 +96,6 @@ static int opt_xsk_frame_size = XSK_UMEM__DEFAULT_FRAME_SIZE;
+ static int opt_timeout = 1000;
+ static bool opt_need_wakeup = true;
+ static u32 opt_num_xsks = 1;
+-static u32 prog_id;
+ static bool opt_busy_poll;
+ static bool opt_reduced_cap;
  
--static void init_sync_resources(void)
--{
--	pthread_mutex_init(&sync_mutex, NULL);
--	pthread_cond_init(&signal_rx_condition, NULL);
--}
--
--static void destroy_sync_resources(void)
--{
--	pthread_mutex_destroy(&sync_mutex);
--	pthread_cond_destroy(&signal_rx_condition);
--}
--
- static void *memset32_htonl(void *dest, u32 val, u32 size)
+@@ -462,59 +461,37 @@ static void *poller(void *arg)
+ 	return NULL;
+ }
+ 
+-static void remove_xdp_program(void)
++static void int_exit(int sig)
  {
- 	u32 *ptr = (u32 *)dest;
-@@ -876,9 +864,7 @@ static void *worker_testapp_validate_rx(void *arg)
- 	fds[0].fd = xsk_socket__fd(ifobject->xsk->xsk);
- 	fds[0].events = POLLIN;
+-	u32 curr_prog_id = 0;
+-	int cmd = CLOSE_CONN;
+-
+-	if (bpf_get_link_xdp_id(opt_ifindex, &curr_prog_id, opt_xdp_flags)) {
+-		printf("bpf_get_link_xdp_id failed\n");
+-		exit(EXIT_FAILURE);
+-	}
+-	if (prog_id == curr_prog_id)
+-		bpf_set_link_xdp_fd(opt_ifindex, -1, opt_xdp_flags);
+-	else if (!curr_prog_id)
+-		printf("couldn't find a prog id on a given interface\n");
+-	else
+-		printf("program on interface changed, not removing\n");
+-
+-	if (opt_reduced_cap) {
+-		if (write(sock, &cmd, sizeof(int)) < 0) {
+-			fprintf(stderr, "Error writing into stream socket: %s", strerror(errno));
+-			exit(EXIT_FAILURE);
+-		}
+-	}
++	benchmark_done = true;
+ }
  
--	pthread_mutex_lock(&sync_mutex);
--	pthread_cond_signal(&signal_rx_condition);
--	pthread_mutex_unlock(&sync_mutex);
-+	pthread_barrier_wait(&barr);
- 
- 	while (1) {
- 		if (test_type != TEST_TYPE_STATS) {
-@@ -903,24 +889,19 @@ static void *worker_testapp_validate_rx(void *arg)
- 
- static void testapp_validate(void)
+-static void int_exit(int sig)
++static void __exit_with_error(int error, const char *file, const char *func,
++			      int line)
  {
--	struct timespec max_wait = { 0, 0 };
- 	bool bidi = test_type == TEST_TYPE_BIDI;
- 	bool bpf = test_type == TEST_TYPE_BPF_RES;
+-	benchmark_done = true;
++	fprintf(stderr, "%s:%s:%i: errno: %d/\"%s\"\n", file, func,
++		line, error, strerror(error));
++	exit(EXIT_FAILURE);
+ }
  
--	pthread_mutex_lock(&sync_mutex);
-+	if (pthread_barrier_init(&barr, NULL, 2))
-+		exit_with_error(errno);
++#define exit_with_error(error) __exit_with_error(error, __FILE__, __func__, __LINE__)
++
+ static void xdpsock_cleanup(void)
+ {
+ 	struct xsk_umem *umem = xsks[0]->umem->umem;
+-	int i;
++	int i, cmd = CLOSE_CONN;
  
- 	/*Spawn RX thread */
- 	pthread_create(&t0, NULL, ifdict_rx->func_ptr, ifdict_rx);
+ 	dump_stats();
+ 	for (i = 0; i < num_socks; i++)
+ 		xsk_socket__delete(xsks[i]->xsk);
+ 	(void)xsk_umem__delete(umem);
+-	remove_xdp_program();
+-}
  
--	if (clock_gettime(CLOCK_REALTIME, &max_wait))
--		exit_with_error(errno);
--	max_wait.tv_sec += TMOUT_SEC;
+-static void __exit_with_error(int error, const char *file, const char *func,
+-			      int line)
+-{
+-	fprintf(stderr, "%s:%s:%i: errno: %d/\"%s\"\n", file, func,
+-		line, error, strerror(error));
+-	dump_stats();
+-	remove_xdp_program();
+-	exit(EXIT_FAILURE);
++	if (opt_reduced_cap) {
++		if (write(sock, &cmd, sizeof(int)) < 0)
++			exit_with_error(errno);
++	}
+ }
+ 
+-#define exit_with_error(error) __exit_with_error(error, __FILE__, __func__, \
+-						 __LINE__)
+ static void swap_mac_addresses(void *data)
+ {
+ 	struct ether_header *eth = (struct ether_header *)data;
+@@ -880,10 +857,6 @@ static struct xsk_socket_info *xsk_configure_socket(struct xsk_umem_info *umem,
+ 	if (ret)
+ 		exit_with_error(-ret);
+ 
+-	ret = bpf_get_link_xdp_id(opt_ifindex, &prog_id, opt_xdp_flags);
+-	if (ret)
+-		exit_with_error(-ret);
 -
--	if (pthread_cond_timedwait(&signal_rx_condition, &sync_mutex, &max_wait) == ETIMEDOUT)
-+	pthread_barrier_wait(&barr);
-+	if (pthread_barrier_destroy(&barr))
- 		exit_with_error(errno);
- 
--	pthread_mutex_unlock(&sync_mutex);
--
- 	/*Spawn TX thread */
- 	pthread_create(&t1, NULL, ifdict_tx->func_ptr, ifdict_tx);
- 
-@@ -1160,15 +1141,11 @@ int main(int argc, char **argv)
- 
- 	ksft_set_plan(TEST_MODE_MAX * TEST_TYPE_MAX);
- 
--	init_sync_resources();
--
- 	for (i = 0; i < TEST_MODE_MAX; i++) {
- 		for (j = 0; j < TEST_TYPE_MAX; j++)
- 			run_pkt_test(i, j);
- 	}
- 
--	destroy_sync_resources();
--
- cleanup:
- 	for (int i = 0; i < MAX_INTERFACES; i++) {
- 		if (ifdict[i]->ns_fd != -1)
-diff --git a/tools/testing/selftests/bpf/xdpxceiver.h b/tools/testing/selftests/bpf/xdpxceiver.h
-index 78863820fb81..ef219c0785eb 100644
---- a/tools/testing/selftests/bpf/xdpxceiver.h
-+++ b/tools/testing/selftests/bpf/xdpxceiver.h
-@@ -148,8 +148,7 @@ static struct ifobject *ifdict_rx;
- static struct ifobject *ifdict_tx;
- 
- /*threads*/
--pthread_mutex_t sync_mutex;
--pthread_cond_t signal_rx_condition;
-+pthread_barrier_t barr;
- pthread_t t0, t1;
- 
- TAILQ_HEAD(head_s, pkt) head = TAILQ_HEAD_INITIALIZER(head);
+ 	xsk->app_stats.rx_empty_polls = 0;
+ 	xsk->app_stats.fill_fail_polls = 0;
+ 	xsk->app_stats.copy_tx_sendtos = 0;
 -- 
 2.20.1
 
