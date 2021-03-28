@@ -4,73 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BB6AC433DB
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 438A3C433E0
 	for <bpf@archiver.kernel.org>; Sun, 28 Mar 2021 20:21:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F3AA161951
-	for <bpf@archiver.kernel.org>; Sun, 28 Mar 2021 20:21:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1465A6195E
+	for <bpf@archiver.kernel.org>; Sun, 28 Mar 2021 20:21:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229655AbhC1UUr (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 28 Mar 2021 16:20:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35254 "EHLO
+        id S231453AbhC1UUq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 28 Mar 2021 16:20:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230294AbhC1UUW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S229595AbhC1UUW (ORCPT <rfc822;bpf@vger.kernel.org>);
         Sun, 28 Mar 2021 16:20:22 -0400
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86C2BC0613B2;
-        Sun, 28 Mar 2021 13:20:22 -0700 (PDT)
-Received: by mail-ot1-x330.google.com with SMTP id g8-20020a9d6c480000b02901b65ca2432cso10356504otq.3;
-        Sun, 28 Mar 2021 13:20:22 -0700 (PDT)
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 320A0C061756;
+        Sun, 28 Mar 2021 13:20:19 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id i81so11233542oif.6;
+        Sun, 28 Mar 2021 13:20:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=8Wh0mzicKWG1utRZNIevS3oRZH+mXn5JWIkzgtioLig=;
-        b=YTmQmlqDdXhCg7XR8SjN/0ejUzfeTFTfDMgbz4u2E5tV0DFl46Vm4JerQRt8eRm1PB
-         BnPf6vweNk00PadnV0gulF7emJDu6k0mfIzqkNfqGwNjGXGelN2eYPQE0a08pHaXvey5
-         5QgxgWETTAhc1nS3OyKI39hAUOn41X7qRVC4JeMB6g3Zhjr5dEh5tLSlCYpo9ECVIOhT
-         xadmzvttnHbLIMeagmSSzXPBNtpjUd12nkU5dx2STNauGBbFJmrMbpm1wTmbloE2/1ga
-         ZqBrSLzd0/77sKXHPL2bf//09kTge5YGEK3dtlDziJmnXc6kMM3PnHWi3X1VHNnSzSmE
-         qhQg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Lfgq2FzXpwyYqVknIeRLqJvMxrXxduAoYW347IpXSzg=;
+        b=Q2ot+RICAj43G8uIle0EV6jS9VTd0bt4Z62bGEOmq9gTcsz8N7hq4hj1tl13uIA2L2
+         JyRGyul71++gtdzzLIehkVrx7QH+SzkhqH3yT+Me9HQJcRTN9uD/LGRNvR4PXRfrnSn+
+         sa5vsKYLIzUVzpTZ+DKzcrNKFypjuSHhAIfR1hCXcxBXPRCi6GrHcbPmvc8zSe7qcYGo
+         yFycu2oM4dx/X2NOCiovs2k43ocm5kMCcLOMbafRjCrZRXsk3uKsRXWIF+qWMKdFEzjJ
+         gZFqmylfuRrmbYEbxmI0rys9X0IuY4RYMsElTKets/oRYQx0E0/mw7g10yoh8umZyOUa
+         RHiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=8Wh0mzicKWG1utRZNIevS3oRZH+mXn5JWIkzgtioLig=;
-        b=HYvflgj62eovxVnr65mzxK40nLeF4fX+vThhxtGh3Fe+GQ9BBe0NF+CWURyLG8M95E
-         snAi2Es61Mb/spKiDpOFeoM+IWpqBuzwZJKbHkuEnt9vGQQkfWmLB5qM5ZZurPRkeJkA
-         sp8McXm3rlSZXbaz6WKoQEN8R6jOrLN4cJnTeixzDn1G6sA/0esvNqIFeswrrNg4YMoL
-         zVT1tENYsAKfI/XjW5KHr8NWjvamCajgQodz9ROCS/Lnk0XwmDhPJKaqXEn+u6N4DS2k
-         iZ7SIVlcVYRG5rN9mgHzovhbv2uRa3651SsCsv6djuwUyu6iKbqvQGh3ttR/nt2EpWNc
-         q1+g==
-X-Gm-Message-State: AOAM531qghv1siLhR32bB/nam/QbvC+iQJ7To+JIxAsolwK8hgcjGoK7
-        mHrohC1gM0jCJDIT/PVitLaBenewMVmTxQ==
-X-Google-Smtp-Source: ABdhPJzVWqy3QXlyPUxFwAg1Rm21qfBLIpxjSnUz5pYJzhsnFKV8QWJAt+OrYHFtaxTqHyVttEWTXg==
-X-Received: by 2002:a05:6830:91:: with SMTP id a17mr20683798oto.309.1616962821798;
-        Sun, 28 Mar 2021 13:20:21 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Lfgq2FzXpwyYqVknIeRLqJvMxrXxduAoYW347IpXSzg=;
+        b=aIYDfzKoouglE3Rtk3+mQfQb0NrXdxls4CjW2Wq4NJxTu+B/ph6ZAvC9O5P5UNGo4H
+         LU3QfDvgnxiWTcAOVBpZdszABWxSwFlsCel6+EG8RB0ppBEFlVngZat+qJRz51EbrNY5
+         +tbxls+R5u1Net7Ooygd9dSEy+eE/iU3PKptVsegN+8jngc87Yuh2cTRApVJDVha+rLX
+         yJs4+X0AGIE7XgsE4EtauO8H5xyjicPevzrK7+0U74u+QlJlA0xeDX9OXgEgD6EwRvY2
+         j1xTUKT6N/ph4KY90P1m7+K1pzkxyIxkCODLmVmpr/SptSR6EfItoB07Wk6AgSAbbYTa
+         v+tw==
+X-Gm-Message-State: AOAM532MrZz8IrH/OnFOmYayZGPoOKKVxqea3b4lGw7sJ2YiMgHYzns4
+        oraZM3Gkk9muveaM+24WdEN84nFim3L/cg==
+X-Google-Smtp-Source: ABdhPJwLf5eqM5FIAz5sazLpIcFRM/P+2ZmXW2t/4diNEc3rhfGjBw4oid6JkHRAbHA1yuiSvmbTTQ==
+X-Received: by 2002:a54:4e08:: with SMTP id a8mr16751069oiy.135.1616962818187;
+        Sun, 28 Mar 2021 13:20:18 -0700 (PDT)
 Received: from unknown.attlocal.net ([2600:1700:65a0:ab60:bca7:4b69:be8f:21bb])
-        by smtp.gmail.com with ESMTPSA id v30sm3898240otb.23.2021.03.28.13.20.20
+        by smtp.gmail.com with ESMTPSA id v30sm3898240otb.23.2021.03.28.13.20.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Mar 2021 13:20:21 -0700 (PDT)
+        Sun, 28 Mar 2021 13:20:17 -0700 (PDT)
 From:   Cong Wang <xiyou.wangcong@gmail.com>
 To:     netdev@vger.kernel.org
 Cc:     bpf@vger.kernel.org, duanxiongchun@bytedance.com,
         wangdongdong.6@bytedance.com, jiang.wang@bytedance.com,
-        Cong Wang <cong.wang@bytedance.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        Lorenz Bauer <lmb@cloudflare.com>
-Subject: [Patch bpf-next v7 03/13] net: introduce skb_send_sock() for sock_map
-Date:   Sun, 28 Mar 2021 13:20:03 -0700
-Message-Id: <20210328202013.29223-4-xiyou.wangcong@gmail.com>
+        Cong Wang <cong.wang@bytedance.com>
+Subject: [Patch bpf-next v7 00/13] sockmap: introduce BPF_SK_SKB_VERDICT and support UDP
+Date:   Sun, 28 Mar 2021 13:20:00 -0700
+Message-Id: <20210328202013.29223-1-xiyou.wangcong@gmail.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210328202013.29223-1-xiyou.wangcong@gmail.com>
-References: <20210328202013.29223-1-xiyou.wangcong@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -79,126 +73,105 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Cong Wang <cong.wang@bytedance.com>
 
-We only have skb_send_sock_locked() which requires callers
-to use lock_sock(). Introduce a variant skb_send_sock()
-which locks on its own, callers do not need to lock it
-any more. This will save us from adding a ->sendmsg_locked
-for each protocol.
+We have thousands of services connected to a daemon on every host
+via AF_UNIX dgram sockets, after they are moved into VM, we have to
+add a proxy to forward these communications from VM to host, because
+rewriting thousands of them is not practical. This proxy uses an
+AF_UNIX socket connected to services and a UDP socket to connect to
+the host. It is inefficient because data is copied between kernel
+space and user space twice, and we can not use splice() which only
+supports TCP. Therefore, we want to use sockmap to do the splicing
+without going to user-space at all (after the initial setup).
 
-To reuse the code, pass function pointers to __skb_send_sock()
-and build skb_send_sock() and skb_send_sock_locked() on top.
+Currently sockmap only fully supports TCP, UDP is partially supported
+as it is only allowed to add into sockmap. This patchset, as the second
+part of the original large patchset, extends sockmap with:
+1) cross-protocol support with BPF_SK_SKB_VERDICT; 2) full UDP support.
 
-Cc: John Fastabend <john.fastabend@gmail.com>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Jakub Sitnicki <jakub@cloudflare.com>
-Cc: Lorenz Bauer <lmb@cloudflare.com>
-Signed-off-by: Cong Wang <cong.wang@bytedance.com>
+On the high level, ->read_sock() is required for each protocol to support
+sockmap redirection, and in order to do sock proto update, a new ops
+->psock_update_sk_prot() is introduced, which is also required. And the
+BPF ->recvmsg() is also needed to replace the original ->recvmsg() to
+retrieve skmsg. To make life easier, we have to get rid of lock_sock()
+in sk_psock_handle_skb(), otherwise we would have to implement
+->sendmsg_locked() on top of ->sendmsg(), which is ugly.
+
+Please see each patch for more details.
+
+To see the big picture, the original patchset is available here:
+https://github.com/congwang/linux/tree/sockmap
+this patchset is also available:
+https://github.com/congwang/linux/tree/sockmap2
+
 ---
- include/linux/skbuff.h |  1 +
- net/core/skbuff.c      | 55 ++++++++++++++++++++++++++++++++++++------
- 2 files changed, 49 insertions(+), 7 deletions(-)
+v7: use work_mutex to protect psock->work
+    return err in udp_read_sock()
+    add patch 6/13
+    clean up test case
 
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index c8def85fcc22..dbf820a50a39 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -3626,6 +3626,7 @@ int skb_splice_bits(struct sk_buff *skb, struct sock *sk, unsigned int offset,
- 		    unsigned int flags);
- int skb_send_sock_locked(struct sock *sk, struct sk_buff *skb, int offset,
- 			 int len);
-+int skb_send_sock(struct sock *sk, struct sk_buff *skb, int offset, int len);
- void skb_copy_and_csum_dev(const struct sk_buff *skb, u8 *to);
- unsigned int skb_zerocopy_headlen(const struct sk_buff *from);
- int skb_zerocopy(struct sk_buff *to, struct sk_buff *from,
-diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index e8320b5d651a..3ad9e8425ab2 100644
---- a/net/core/skbuff.c
-+++ b/net/core/skbuff.c
-@@ -2500,9 +2500,32 @@ int skb_splice_bits(struct sk_buff *skb, struct sock *sk, unsigned int offset,
- }
- EXPORT_SYMBOL_GPL(skb_splice_bits);
- 
--/* Send skb data on a socket. Socket must be locked. */
--int skb_send_sock_locked(struct sock *sk, struct sk_buff *skb, int offset,
--			 int len)
-+static int sendmsg_unlocked(struct sock *sk, struct msghdr *msg,
-+			    struct kvec *vec, size_t num, size_t size)
-+{
-+	struct socket *sock = sk->sk_socket;
-+
-+	if (!sock)
-+		return -EINVAL;
-+	return kernel_sendmsg(sock, msg, vec, num, size);
-+}
-+
-+static int sendpage_unlocked(struct sock *sk, struct page *page, int offset,
-+			     size_t size, int flags)
-+{
-+	struct socket *sock = sk->sk_socket;
-+
-+	if (!sock)
-+		return -EINVAL;
-+	return kernel_sendpage(sock, page, offset, size, flags);
-+}
-+
-+typedef int (*sendmsg_func)(struct sock *sk, struct msghdr *msg,
-+			    struct kvec *vec, size_t num, size_t size);
-+typedef int (*sendpage_func)(struct sock *sk, struct page *page, int offset,
-+			     size_t size, int flags);
-+static int __skb_send_sock(struct sock *sk, struct sk_buff *skb, int offset,
-+			   int len, sendmsg_func sendmsg, sendpage_func sendpage)
- {
- 	unsigned int orig_len = len;
- 	struct sk_buff *head = skb;
-@@ -2522,7 +2545,8 @@ int skb_send_sock_locked(struct sock *sk, struct sk_buff *skb, int offset,
- 		memset(&msg, 0, sizeof(msg));
- 		msg.msg_flags = MSG_DONTWAIT;
- 
--		ret = kernel_sendmsg_locked(sk, &msg, &kv, 1, slen);
-+		ret = INDIRECT_CALL_2(sendmsg, kernel_sendmsg_locked,
-+				      sendmsg_unlocked, sk, &msg, &kv, 1, slen);
- 		if (ret <= 0)
- 			goto error;
- 
-@@ -2553,9 +2577,11 @@ int skb_send_sock_locked(struct sock *sk, struct sk_buff *skb, int offset,
- 		slen = min_t(size_t, len, skb_frag_size(frag) - offset);
- 
- 		while (slen) {
--			ret = kernel_sendpage_locked(sk, skb_frag_page(frag),
--						     skb_frag_off(frag) + offset,
--						     slen, MSG_DONTWAIT);
-+			ret = INDIRECT_CALL_2(sendpage, kernel_sendpage_locked,
-+					      sendpage_unlocked, sk,
-+					      skb_frag_page(frag),
-+					      skb_frag_off(frag) + offset,
-+					      slen, MSG_DONTWAIT);
- 			if (ret <= 0)
- 				goto error;
- 
-@@ -2587,8 +2613,23 @@ int skb_send_sock_locked(struct sock *sk, struct sk_buff *skb, int offset,
- error:
- 	return orig_len == len ? ret : orig_len - len;
- }
-+
-+/* Send skb data on a socket. Socket must be locked. */
-+int skb_send_sock_locked(struct sock *sk, struct sk_buff *skb, int offset,
-+			 int len)
-+{
-+	return __skb_send_sock(sk, skb, offset, len, kernel_sendmsg_locked,
-+			       kernel_sendpage_locked);
-+}
- EXPORT_SYMBOL_GPL(skb_send_sock_locked);
- 
-+/* Send skb data on a socket. Socket must be unlocked. */
-+int skb_send_sock(struct sock *sk, struct sk_buff *skb, int offset, int len)
-+{
-+	return __skb_send_sock(sk, skb, offset, len, sendmsg_unlocked,
-+			       sendpage_unlocked);
-+}
-+
- /**
-  *	skb_store_bits - store bits from kernel buffer to skb
-  *	@skb: destination buffer
+v6: get rid of sk_psock_zap_ingress()
+    add rcu work patch
+
+v5: use INDIRECT_CALL_2() for function pointers
+    use ingress_lock to fix a race condition found by Jacub
+    rename two helper functions
+
+v4: get rid of lock_sock() in sk_psock_handle_skb()
+    get rid of udp_sendmsg_locked()
+    remove an empty line
+    update cover letter
+
+v3: export tcp/udp_update_proto()
+    rename sk->sk_prot->psock_update_sk_prot()
+    improve changelogs
+
+v2: separate from the original large patchset
+    rebase to the latest bpf-next
+    split UDP test case
+    move inet_csk_has_ulp() check to tcp_bpf.c
+    clean up udp_read_sock()
+
+Cong Wang (13):
+  skmsg: lock ingress_skb when purging
+  skmsg: introduce a spinlock to protect ingress_msg
+  net: introduce skb_send_sock() for sock_map
+  skmsg: avoid lock_sock() in sk_psock_backlog()
+  skmsg: use rcu work for destroying psock
+  skmsg: use GFP_KERNEL in sk_psock_create_ingress_msg()
+  sock_map: introduce BPF_SK_SKB_VERDICT
+  sock: introduce sk->sk_prot->psock_update_sk_prot()
+  udp: implement ->read_sock() for sockmap
+  skmsg: extract __tcp_bpf_recvmsg() and tcp_bpf_wait_data()
+  udp: implement udp_bpf_recvmsg() for sockmap
+  sock_map: update sock type checks for UDP
+  selftests/bpf: add a test case for udp sockmap
+
+ include/linux/skbuff.h                        |   1 +
+ include/linux/skmsg.h                         |  77 ++++++--
+ include/net/sock.h                            |   3 +
+ include/net/tcp.h                             |   3 +-
+ include/net/udp.h                             |   3 +
+ include/uapi/linux/bpf.h                      |   1 +
+ kernel/bpf/syscall.c                          |   1 +
+ net/core/skbuff.c                             |  55 +++++-
+ net/core/skmsg.c                              | 177 ++++++++++++++----
+ net/core/sock_map.c                           |  53 +++---
+ net/ipv4/af_inet.c                            |   1 +
+ net/ipv4/tcp_bpf.c                            | 130 +++----------
+ net/ipv4/tcp_ipv4.c                           |   3 +
+ net/ipv4/udp.c                                |  38 ++++
+ net/ipv4/udp_bpf.c                            |  79 +++++++-
+ net/ipv6/af_inet6.c                           |   1 +
+ net/ipv6/tcp_ipv6.c                           |   3 +
+ net/ipv6/udp.c                                |   3 +
+ net/tls/tls_sw.c                              |   4 +-
+ tools/bpf/bpftool/common.c                    |   1 +
+ tools/bpf/bpftool/prog.c                      |   1 +
+ tools/include/uapi/linux/bpf.h                |   1 +
+ .../selftests/bpf/prog_tests/sockmap_listen.c | 136 ++++++++++++++
+ .../selftests/bpf/progs/test_sockmap_listen.c |  22 +++
+ 24 files changed, 601 insertions(+), 196 deletions(-)
+
 -- 
 2.25.1
 
