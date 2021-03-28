@@ -2,34 +2,34 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=BAYES_00,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B8B8C433E0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 502A1C433E1
 	for <bpf@archiver.kernel.org>; Sun, 28 Mar 2021 11:27:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1076761976
+	by mail.kernel.org (Postfix) with ESMTP id 2000E619A0
 	for <bpf@archiver.kernel.org>; Sun, 28 Mar 2021 11:27:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231180AbhC1L1E convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Sun, 28 Mar 2021 07:27:04 -0400
-Received: from us-smtp-delivery-44.mimecast.com ([207.211.30.44]:58916 "EHLO
+        id S230525AbhC1L1G convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Sun, 28 Mar 2021 07:27:06 -0400
+Received: from us-smtp-delivery-44.mimecast.com ([205.139.111.44]:40904 "EHLO
         us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230509AbhC1L0o (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sun, 28 Mar 2021 07:26:44 -0400
+        by vger.kernel.org with ESMTP id S231126AbhC1L0s (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sun, 28 Mar 2021 07:26:48 -0400
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-5-6DF-BRUSNIqLEHVfnEDt0Q-1; Sun, 28 Mar 2021 07:26:39 -0400
-X-MC-Unique: 6DF-BRUSNIqLEHVfnEDt0Q-1
+ us-mta-276-Hngt3kn6OpWlaInXYWqoGw-1; Sun, 28 Mar 2021 07:26:44 -0400
+X-MC-Unique: Hngt3kn6OpWlaInXYWqoGw-1
 Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 07F2110059C1;
-        Sun, 28 Mar 2021 11:26:37 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C029D107ACCA;
+        Sun, 28 Mar 2021 11:26:42 +0000 (UTC)
 Received: from krava.redhat.com (unknown [10.40.192.12])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B560319C66;
-        Sun, 28 Mar 2021 11:26:31 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5201519C66;
+        Sun, 28 Mar 2021 11:26:40 +0000 (UTC)
 From:   Jiri Olsa <jolsa@kernel.org>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -40,9 +40,11 @@ Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@chromium.org>,
         =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-Subject: [RFC PATCH bpf-next 0/4] bpf: Tracing programs re-attach
-Date:   Sun, 28 Mar 2021 13:26:25 +0200
-Message-Id: <20210328112629.339266-1-jolsa@kernel.org>
+Subject: [RFC PATCH bpf-next 2/4] selftests/bpf: Add re-attach test to fentry_test
+Date:   Sun, 28 Mar 2021 13:26:27 +0200
+Message-Id: <20210328112629.339266-3-jolsa@kernel.org>
+In-Reply-To: <20210328112629.339266-1-jolsa@kernel.org>
+References: <20210328112629.339266-1-jolsa@kernel.org>
 MIME-Version: 1.0
 X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Authentication-Results: relay.mimecast.com;
@@ -55,34 +57,100 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-hi,
-while adding test for pinning the module while there's
-trampoline attach to it, I noticed that we don't allow
-link detach and following re-attach for trampolines.
+Adding the test to re-attach (detach/attach again) tracing
+fentry programs, plus check that already linked program can't
+be attached again.
 
-I'm not sure this was on purpose, but seems as natural
-use of the interface, although the only user is the test
-for now.
+Fixing the number of check-ed results, which should be 8.
 
-You need to have patch [1] from bpf tree for test module
-attach test to pass.
-
-thanks,
-jirka
-
-
-[1] https://lore.kernel.org/bpf/20210326105900.151466-1-jolsa@kernel.org/
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
-Jiri Olsa (4):
-      bpf: Allow trampoline re-attach
-      selftests/bpf: Add re-attach test to fentry_test
-      selftests/bpf: Add re-attach test to fexit_test
-      selftests/bpf: Test that module can't be unloaded with attached trampoline
+ .../selftests/bpf/prog_tests/fentry_test.c    | 58 ++++++++++++++-----
+ 1 file changed, 45 insertions(+), 13 deletions(-)
 
- kernel/bpf/syscall.c                                   | 25 +++++++++++++++++++------
- kernel/bpf/trampoline.c                                |  2 +-
- tools/testing/selftests/bpf/prog_tests/fentry_test.c   | 58 +++++++++++++++++++++++++++++++++++++++++++++-------------
- tools/testing/selftests/bpf/prog_tests/fexit_test.c    | 58 +++++++++++++++++++++++++++++++++++++++++++++-------------
- tools/testing/selftests/bpf/prog_tests/module_attach.c | 23 +++++++++++++++++++++++
- 5 files changed, 133 insertions(+), 33 deletions(-)
+diff --git a/tools/testing/selftests/bpf/prog_tests/fentry_test.c b/tools/testing/selftests/bpf/prog_tests/fentry_test.c
+index 04ebbf1cb390..fa7a9c719659 100644
+--- a/tools/testing/selftests/bpf/prog_tests/fentry_test.c
++++ b/tools/testing/selftests/bpf/prog_tests/fentry_test.c
+@@ -3,20 +3,13 @@
+ #include <test_progs.h>
+ #include "fentry_test.skel.h"
+ 
+-void test_fentry_test(void)
++static __u32 duration;
++
++static int fentry_test(struct fentry_test *fentry_skel)
+ {
+-	struct fentry_test *fentry_skel = NULL;
+ 	int err, prog_fd, i;
+-	__u32 duration = 0, retval;
+ 	__u64 *result;
+-
+-	fentry_skel = fentry_test__open_and_load();
+-	if (CHECK(!fentry_skel, "fentry_skel_load", "fentry skeleton failed\n"))
+-		goto cleanup;
+-
+-	err = fentry_test__attach(fentry_skel);
+-	if (CHECK(err, "fentry_attach", "fentry attach failed: %d\n", err))
+-		goto cleanup;
++	__u32 retval;
+ 
+ 	prog_fd = bpf_program__fd(fentry_skel->progs.test1);
+ 	err = bpf_prog_test_run(prog_fd, 1, NULL, 0,
+@@ -26,12 +19,51 @@ void test_fentry_test(void)
+ 	      err, errno, retval, duration);
+ 
+ 	result = (__u64 *)fentry_skel->bss;
+-	for (i = 0; i < 6; i++) {
++	for (i = 0; i < 8; i++) {
+ 		if (CHECK(result[i] != 1, "result",
+ 			  "fentry_test%d failed err %lld\n", i + 1, result[i]))
+-			goto cleanup;
++			return -1;
+ 	}
+ 
++	/* zero results for re-attach test */
++	for (i = 0; i < 8; i++)
++		result[i] = 0;
++	return 0;
++}
++
++void test_fentry_test(void)
++{
++	struct fentry_test *fentry_skel = NULL;
++	struct bpf_link *link;
++	int err;
++
++	fentry_skel = fentry_test__open_and_load();
++	if (CHECK(!fentry_skel, "fentry_skel_load", "fentry skeleton failed\n"))
++		goto cleanup;
++
++	err = fentry_test__attach(fentry_skel);
++	if (CHECK(err, "fentry_attach", "fentry attach failed: %d\n", err))
++		goto cleanup;
++
++	err = fentry_test(fentry_skel);
++	if (CHECK(err, "fentry_test", "fentry test failed: %d\n", err))
++		goto cleanup;
++
++	fentry_test__detach(fentry_skel);
++
++	/* Re-attach and test again */
++	err = fentry_test__attach(fentry_skel);
++	if (CHECK(err, "fentry_attach", "fentry re-attach failed: %d\n", err))
++		goto cleanup;
++
++	link = bpf_program__attach(fentry_skel->progs.test1);
++	if (CHECK(!IS_ERR(link), "attach_fentry re-attach without detach",
++		  "err: %ld\n", PTR_ERR(link)))
++		goto cleanup;
++
++	err = fentry_test(fentry_skel);
++	CHECK(err, "fentry_test", "fentry test failed: %d\n", err);
++
+ cleanup:
+ 	fentry_test__destroy(fentry_skel);
+ }
+-- 
+2.30.2
 
