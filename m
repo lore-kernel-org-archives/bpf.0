@@ -2,155 +2,127 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+X-Spam-Status: No, score=-11.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EAE5C433E3
-	for <bpf@archiver.kernel.org>; Sun, 28 Mar 2021 11:27:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BB01C433C1
+	for <bpf@archiver.kernel.org>; Sun, 28 Mar 2021 12:09:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 81B056197E
-	for <bpf@archiver.kernel.org>; Sun, 28 Mar 2021 11:27:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1B0AF6195F
+	for <bpf@archiver.kernel.org>; Sun, 28 Mar 2021 12:09:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231126AbhC1L1G convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Sun, 28 Mar 2021 07:27:06 -0400
-Received: from us-smtp-delivery-44.mimecast.com ([207.211.30.44]:37590 "EHLO
-        us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231142AbhC1L0v (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sun, 28 Mar 2021 07:26:51 -0400
+        id S229577AbhC1MEM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 28 Mar 2021 08:04:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:26147 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229543AbhC1MDs (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sun, 28 Mar 2021 08:03:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1616933027;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=akFbGFrCz0YDjTwrx18zH9cQEdy+ux2yWLInd1vvevw=;
+        b=RcO/CSXl/j5nRGO9vJaLsHIl0GuB2VGU3jZo+GI+CtLPMAShDKWzggnDRbAmMNKM9yyuJ/
+        8rkbC1QWh+MbxcEzKk/IeVzbed4PBWuE3/q/0UZSYpES0Dr3NaaMT7JPdZ9tdtIpWvoG84
+        KFSps39ombzoa4cG+y+CfNF0YreqB60=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-179-luRFWaqMOFGaRtWxzJ6aUQ-1; Sun, 28 Mar 2021 07:26:49 -0400
-X-MC-Unique: luRFWaqMOFGaRtWxzJ6aUQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+ us-mta-321-f-iKKB0YPCub_VLgpfHhKA-1; Sun, 28 Mar 2021 08:03:43 -0400
+X-MC-Unique: f-iKKB0YPCub_VLgpfHhKA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0F52A8030A1;
-        Sun, 28 Mar 2021 11:26:47 +0000 (UTC)
-Received: from krava.redhat.com (unknown [10.40.192.12])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1DDA019C66;
-        Sun, 28 Mar 2021 11:26:42 +0000 (UTC)
-From:   Jiri Olsa <jolsa@kernel.org>
-To:     Alexei Starovoitov <ast@kernel.org>,
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4FA011009455;
+        Sun, 28 Mar 2021 12:03:41 +0000 (UTC)
+Received: from krava (unknown [10.40.192.12])
+        by smtp.corp.redhat.com (Postfix) with SMTP id B7ED15DDAD;
+        Sun, 28 Mar 2021 12:03:39 +0000 (UTC)
+Date:   Sun, 28 Mar 2021 14:03:38 +0200
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-Subject: [RFC PATCH bpf-next 3/4] selftests/bpf: Add re-attach test to fexit_test
-Date:   Sun, 28 Mar 2021 13:26:28 +0200
-Message-Id: <20210328112629.339266-4-jolsa@kernel.org>
-In-Reply-To: <20210328112629.339266-1-jolsa@kernel.org>
-References: <20210328112629.339266-1-jolsa@kernel.org>
+        Kernel Team <kernel-team@fb.com>
+Subject: Re: [PATCH v4 bpf-next 07/12] libbpf: add BPF static linker BTF and
+ BTF.ext support
+Message-ID: <YGBwmlQTDUodxM0J@krava>
+References: <20210318194036.3521577-1-andrii@kernel.org>
+ <20210318194036.3521577-8-andrii@kernel.org>
+ <YFTQExmhNhMcmNOb@krava>
+ <CAEf4BzYKassG0AP372Q=Qsd+qqy7=YGe2XTXR4zG0c5oQ7Nkeg@mail.gmail.com>
+ <YFT0Q+mVbTEI1rem@krava>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jolsa@kernel.org
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: kernel.org
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset=WINDOWS-1252
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YFT0Q+mVbTEI1rem@krava>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Adding the test to re-attach (detach/attach again) tracing
-fexit programs, plus check that already linked program can't
-be attached again.
+On Fri, Mar 19, 2021 at 07:58:13PM +0100, Jiri Olsa wrote:
+> On Fri, Mar 19, 2021 at 11:39:01AM -0700, Andrii Nakryiko wrote:
+> > On Fri, Mar 19, 2021 at 9:23 AM Jiri Olsa <jolsa@redhat.com> wrote:
+> > >
+> > > On Thu, Mar 18, 2021 at 12:40:31PM -0700, Andrii Nakryiko wrote:
+> > >
+> > > SNIP
+> > >
+> > > > +
+> > > > +     return NULL;
+> > > > +}
+> > > > +
+> > > > +static int linker_fixup_btf(struct src_obj *obj)
+> > > > +{
+> > > > +     const char *sec_name;
+> > > > +     struct src_sec *sec;
+> > > > +     int i, j, n, m;
+> > > > +
+> > > > +     n = btf__get_nr_types(obj->btf);
+> > >
+> > > hi,
+> > > I'm getting bpftool crash when building tests,
+> > >
+> > > looks like above obj->btf can be NULL:
+> > 
+> > I lost if (!obj->btf) return 0; somewhere along the rebases. I'll send
+> > a fix shortly. But how did you end up with selftests BPF objects built
+> > without BTF?
+> 
+> no idea.. I haven't even updated llvm for almost 3 days now ;-)
 
-Fixing the number of check-ed results, which should be 8.
+sorry for late follow up on this, and it's actually forgotten empty
+object in progs directory that was causing this
 
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+I wonder we should add empty object like below to catch these cases,
+because there's another place that bpftool is crashing on with it
+
+I can send full patch for that if you think it's worth having
+
+jirka
+
+
 ---
- .../selftests/bpf/prog_tests/fexit_test.c     | 58 ++++++++++++++-----
- 1 file changed, 45 insertions(+), 13 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/fexit_test.c b/tools/testing/selftests/bpf/prog_tests/fexit_test.c
-index 78d7a2765c27..6666c5105f1e 100644
---- a/tools/testing/selftests/bpf/prog_tests/fexit_test.c
-+++ b/tools/testing/selftests/bpf/prog_tests/fexit_test.c
-@@ -3,20 +3,13 @@
- #include <test_progs.h>
- #include "fexit_test.skel.h"
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 7aad78dbb4b4..aecb6ca52bce 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -3165,6 +3165,9 @@ static int add_dummy_ksym_var(struct btf *btf)
+ 	const struct btf_var_secinfo *vs;
+ 	const struct btf_type *sec;
  
--void test_fexit_test(void)
-+static __u32 duration;
++	if (!btf)
++		return 0;
 +
-+static int fexit_test(struct fexit_test *fexit_skel)
- {
--	struct fexit_test *fexit_skel = NULL;
- 	int err, prog_fd, i;
--	__u32 duration = 0, retval;
- 	__u64 *result;
--
--	fexit_skel = fexit_test__open_and_load();
--	if (CHECK(!fexit_skel, "fexit_skel_load", "fexit skeleton failed\n"))
--		goto cleanup;
--
--	err = fexit_test__attach(fexit_skel);
--	if (CHECK(err, "fexit_attach", "fexit attach failed: %d\n", err))
--		goto cleanup;
-+	__u32 retval;
- 
- 	prog_fd = bpf_program__fd(fexit_skel->progs.test1);
- 	err = bpf_prog_test_run(prog_fd, 1, NULL, 0,
-@@ -26,12 +19,51 @@ void test_fexit_test(void)
- 	      err, errno, retval, duration);
- 
- 	result = (__u64 *)fexit_skel->bss;
--	for (i = 0; i < 6; i++) {
-+	for (i = 0; i < 8; i++) {
- 		if (CHECK(result[i] != 1, "result",
- 			  "fexit_test%d failed err %lld\n", i + 1, result[i]))
--			goto cleanup;
-+			return -1;
- 	}
- 
-+	/* zero results for re-attach test */
-+	for (i = 0; i < 8; i++)
-+		result[i] = 0;
-+	return 0;
-+}
-+
-+void test_fexit_test(void)
-+{
-+	struct fexit_test *fexit_skel = NULL;
-+	struct bpf_link *link;
-+	int err;
-+
-+	fexit_skel = fexit_test__open_and_load();
-+	if (CHECK(!fexit_skel, "fexit_skel_load", "fexit skeleton failed\n"))
-+		goto cleanup;
-+
-+	err = fexit_test__attach(fexit_skel);
-+	if (CHECK(err, "fexit_attach", "fexit attach failed: %d\n", err))
-+		goto cleanup;
-+
-+	err = fexit_test(fexit_skel);
-+	if (CHECK(err, "fexit_test", "exit test failed: %d\n", err))
-+		goto cleanup;
-+
-+	fexit_test__detach(fexit_skel);
-+
-+	/* Re-attach and test again */
-+	err = fexit_test__attach(fexit_skel);
-+	if (CHECK(err, "fexit_attach", "fexit attach failed: %d\n", err))
-+		goto cleanup;
-+
-+	link = bpf_program__attach(fexit_skel->progs.test1);
-+	if (CHECK(!IS_ERR(link), "attach_fexit re-attach without detach",
-+		"err: %ld\n", PTR_ERR(link)))
-+		goto cleanup;
-+
-+	err = fexit_test(fexit_skel);
-+	CHECK(err, "fexit_test", "fexit test failed: %d\n", err);
-+
- cleanup:
- 	fexit_test__destroy(fexit_skel);
- }
--- 
-2.30.2
+ 	sec_btf_id = btf__find_by_name_kind(btf, KSYMS_SEC,
+ 					    BTF_KIND_DATASEC);
+ 	if (sec_btf_id < 0)
+diff --git a/tools/testing/selftests/bpf/progs/empty.c b/tools/testing/selftests/bpf/progs/empty.c
+new file mode 100644
+index 000000000000..e69de29bb2d1
 
