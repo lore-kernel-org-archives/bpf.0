@@ -2,108 +2,72 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B18AC433E0
-	for <bpf@archiver.kernel.org>; Mon, 29 Mar 2021 22:56:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DB57BC433E0
+	for <bpf@archiver.kernel.org>; Mon, 29 Mar 2021 23:11:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5B75F61919
-	for <bpf@archiver.kernel.org>; Mon, 29 Mar 2021 22:56:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9CBCA6157F
+	for <bpf@archiver.kernel.org>; Mon, 29 Mar 2021 23:11:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232257AbhC2W4U (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 29 Mar 2021 18:56:20 -0400
-Received: from mga04.intel.com ([192.55.52.120]:2470 "EHLO mga04.intel.com"
+        id S230213AbhC2XKq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 29 Mar 2021 19:10:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35282 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232039AbhC2Wzu (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 29 Mar 2021 18:55:50 -0400
-IronPort-SDR: UHseqLH2RW/QRBs73HHkCdnXP2Ex5KoHF31IjQxmZpZrOFfTIX3NbkJeKdSlp46/Ct8dXL9l7k
- xcmiJAiO9JXA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9938"; a="189393053"
-X-IronPort-AV: E=Sophos;i="5.81,289,1610438400"; 
-   d="scan'208";a="189393053"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2021 15:55:50 -0700
-IronPort-SDR: aSLgjpQIMNxBDFG1bT4M7+2mk+b5XrY38ojoqQ7+xN+h69sVVl3yiXJaoZI+pb3fpJXb10UE/x
- CmMqaK+RM8xQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,289,1610438400"; 
-   d="scan'208";a="417884373"
-Received: from ranger.igk.intel.com ([10.102.21.164])
-  by orsmga008.jf.intel.com with ESMTP; 29 Mar 2021 15:55:47 -0700
-From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     bpf@vger.kernel.org, netdev@vger.kernel.org, daniel@iogearbox.net,
-        ast@kernel.org, andrii@kernel.org
-Cc:     bjorn.topel@intel.com, magnus.karlsson@intel.com,
-        ciara.loftus@intel.com, john.fastabend@gmail.com, toke@redhat.com
-Subject: [PATCH v5 bpf-next 17/17] selftests: xsk: Remove unused defines
-Date:   Tue, 30 Mar 2021 00:43:16 +0200
-Message-Id: <20210329224316.17793-18-maciej.fijalkowski@intel.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210329224316.17793-1-maciej.fijalkowski@intel.com>
-References: <20210329224316.17793-1-maciej.fijalkowski@intel.com>
+        id S229950AbhC2XKc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 29 Mar 2021 19:10:32 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3189E6192F;
+        Mon, 29 Mar 2021 23:10:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1617059432;
+        bh=0noQ+Rgq8yK9Gx9eARD7uquXfpIzRiWu3yr9VQanp7c=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=bWYAyKGx95UqZ4iE+1TgTvBY401Wu78wWgEAdYcucbm1ZMPJ96+8bKOsZ62AGd0pG
+         Xe1cGUTCwRwsMlb6qxWZfjzKSDTpHwJCWuWngGhWRLdtqTb55f22Se4xxl8lnbhWnv
+         xTnzdlXPD7G27EuchBFKHqwl+STs8BjWfn6t6AWOeAA4W963i6MMWlM2/M1LTmiH3O
+         ePe0w7T1bHS5EIA3fBDdDDtOcHTOtOLG98zXr4GS+7hgTS2WDogwRK3CU1a+FkVdLB
+         f2XpNNUB7LUbKC3EW6Pl8ryZPi+FmZBrXTTYx1RUFagRwSqIJLDHW5WSLr7C+cOEsg
+         JDYNCZ/Lbt5BQ==
+Received: by mail-lf1-f52.google.com with SMTP id 12so10509904lfq.13;
+        Mon, 29 Mar 2021 16:10:32 -0700 (PDT)
+X-Gm-Message-State: AOAM5328fafgdT505nRu2bnaPrQK3eausAOZ40DYlBUHEM4HdE5EIrDP
+        oOsNecHnxjYItiZlys3V0ynkzZkyKPMsf211iMQ=
+X-Google-Smtp-Source: ABdhPJztOqCFpWHiMjH/EQnajrCGC9IepYSu9+amrOcyv/tRtL9FrtooB7C/9pb72cCJPEi/t0YVcQzabGsVr6XEe2I=
+X-Received: by 2002:ac2:5221:: with SMTP id i1mr18054668lfl.160.1617059430543;
+ Mon, 29 Mar 2021 16:10:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20210329223143.3659983-1-sdf@google.com>
+In-Reply-To: <20210329223143.3659983-1-sdf@google.com>
+From:   Song Liu <song@kernel.org>
+Date:   Mon, 29 Mar 2021 16:10:19 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW6aNC2XbvH+_NB0oheqRQHXzXzZzVD8=WCLZx=hdX2zYQ@mail.gmail.com>
+Message-ID: <CAPhsuW6aNC2XbvH+_NB0oheqRQHXzXzZzVD8=WCLZx=hdX2zYQ@mail.gmail.com>
+Subject: Re: [PATCH v3 bpf-next] tools/resolve_btfids: Fix warnings
+To:     Stanislav Fomichev <sdf@google.com>
+Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Björn Töpel <bjorn.topel@intel.com>
+On Mon, Mar 29, 2021 at 3:35 PM Stanislav Fomichev <sdf@google.com> wrote:
+>
+> * make eprintf static, used only in main.c
+> * initialize ret in eprintf
+> * remove unused *tmp
+>
+> v3:
+> * remove another err (Song Liu)
+>
+> v2:
+> * remove unused 'int err = -1'
+>
+> Cc: Song Liu <song@kernel.org>
+> Signed-off-by: Stanislav Fomichev <sdf@google.com>
 
-Remove two unused defines.
-
-Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
----
- tools/testing/selftests/bpf/xdpxceiver.c | 7 +++----
- tools/testing/selftests/bpf/xdpxceiver.h | 2 --
- 2 files changed, 3 insertions(+), 6 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/xdpxceiver.c b/tools/testing/selftests/bpf/xdpxceiver.c
-index 084ba052fa89..0a7c5a8ca585 100644
---- a/tools/testing/selftests/bpf/xdpxceiver.c
-+++ b/tools/testing/selftests/bpf/xdpxceiver.c
-@@ -456,7 +456,7 @@ static void complete_tx_only(struct xsk_socket_info *xsk, int batch_size)
- 	if (!xsk->outstanding_tx)
- 		return;
- 
--	if (!NEED_WAKEUP || xsk_ring_prod__needs_wakeup(&xsk->tx))
-+	if (xsk_ring_prod__needs_wakeup(&xsk->tx))
- 		kick_tx(xsk);
- 
- 	rcvd = xsk_ring_cons__peek(&xsk->umem->cq, batch_size, &idx);
-@@ -544,9 +544,8 @@ static void tx_only(struct xsk_socket_info *xsk, u32 *frameptr, int batch_size)
- 	xsk_ring_prod__submit(&xsk->tx, batch_size);
- 	if (!tx_invalid_test) {
- 		xsk->outstanding_tx += batch_size;
--	} else {
--		if (!NEED_WAKEUP || xsk_ring_prod__needs_wakeup(&xsk->tx))
--			kick_tx(xsk);
-+	} else if (xsk_ring_prod__needs_wakeup(&xsk->tx)) {
-+		kick_tx(xsk);
- 	}
- 	*frameptr += batch_size;
- 	*frameptr %= num_frames;
-diff --git a/tools/testing/selftests/bpf/xdpxceiver.h b/tools/testing/selftests/bpf/xdpxceiver.h
-index ef219c0785eb..6c428b276ab6 100644
---- a/tools/testing/selftests/bpf/xdpxceiver.h
-+++ b/tools/testing/selftests/bpf/xdpxceiver.h
-@@ -34,13 +34,11 @@
- #define IP_PKT_TOS 0x9
- #define UDP_PKT_SIZE (IP_PKT_SIZE - sizeof(struct iphdr))
- #define UDP_PKT_DATA_SIZE (UDP_PKT_SIZE - sizeof(struct udphdr))
--#define TMOUT_SEC (3)
- #define EOT (-1)
- #define USLEEP_MAX 200000
- #define SOCK_RECONF_CTR 10
- #define BATCH_SIZE 64
- #define POLL_TMOUT 1000
--#define NEED_WAKEUP true
- #define DEFAULT_PKT_CNT 10000
- #define RX_FULL_RXQSIZE 32
- 
--- 
-2.20.1
-
+Acked-by: Song Liu <songliubraving@fb.com>
+[...]
