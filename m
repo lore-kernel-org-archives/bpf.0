@@ -7,131 +7,160 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A5E5C433E4
-	for <bpf@archiver.kernel.org>; Mon, 29 Mar 2021 22:55:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B1C6DC433C1
+	for <bpf@archiver.kernel.org>; Mon, 29 Mar 2021 22:56:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EDF5D619A0
-	for <bpf@archiver.kernel.org>; Mon, 29 Mar 2021 22:55:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 843CD61988
+	for <bpf@archiver.kernel.org>; Mon, 29 Mar 2021 22:56:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231910AbhC2WzS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 29 Mar 2021 18:55:18 -0400
+        id S232036AbhC2Wzu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 29 Mar 2021 18:55:50 -0400
 Received: from mga04.intel.com ([192.55.52.120]:2470 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231135AbhC2WzN (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 29 Mar 2021 18:55:13 -0400
-IronPort-SDR: IOqOlhleEfpT7gmx01PDNLslUkSo4Oi9YRily/3Gg8jLVq9Y+kWZ7nQGxL/mu1kLcDyhV+tOxs
- CS6MYGYf30xA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9938"; a="189392992"
+        id S231964AbhC2WzT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 29 Mar 2021 18:55:19 -0400
+IronPort-SDR: l7gzyyrVAeQlQ5IV7xvMeaxLM6s0w1e+MXWyT4pBcki4gTBfcp/BNxZyYJ5eie4+1ft+jTXHjK
+ im1c8muG7TxQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9938"; a="189393017"
 X-IronPort-AV: E=Sophos;i="5.81,289,1610438400"; 
-   d="scan'208";a="189392992"
+   d="scan'208";a="189393017"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2021 15:55:13 -0700
-IronPort-SDR: gctoSVdGo9Wx1ZeXdTkF/b5KjdO6neSzOtvD9U6jtmQPLQsDFhYXnRX4nOgjW/TU9193MhxzRd
- 5kIXWvdj1kfQ==
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2021 15:55:19 -0700
+IronPort-SDR: 3QVWV5DLusaj65OYOh9p8kVdUmm0IUTaGe288b3iEvN0PiXrW/QyF/khaHXps7OWd8P2NOVPpg
+ i1YPiHnYOEyg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.81,289,1610438400"; 
-   d="scan'208";a="417884194"
+   d="scan'208";a="417884232"
 Received: from ranger.igk.intel.com ([10.102.21.164])
-  by orsmga008.jf.intel.com with ESMTP; 29 Mar 2021 15:55:10 -0700
+  by orsmga008.jf.intel.com with ESMTP; 29 Mar 2021 15:55:16 -0700
 From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 To:     bpf@vger.kernel.org, netdev@vger.kernel.org, daniel@iogearbox.net,
         ast@kernel.org, andrii@kernel.org
 Cc:     bjorn.topel@intel.com, magnus.karlsson@intel.com,
         ciara.loftus@intel.com, john.fastabend@gmail.com, toke@redhat.com,
         Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH v5 bpf-next 05/17] selftests: xsk: simplify frame traversal in dumping thread
-Date:   Tue, 30 Mar 2021 00:43:04 +0200
-Message-Id: <20210329224316.17793-6-maciej.fijalkowski@intel.com>
+Subject: [PATCH v5 bpf-next 07/17] samples: bpf: do not unload prog within xdpsock
+Date:   Tue, 30 Mar 2021 00:43:06 +0200
+Message-Id: <20210329224316.17793-8-maciej.fijalkowski@intel.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20210329224316.17793-1-maciej.fijalkowski@intel.com>
 References: <20210329224316.17793-1-maciej.fijalkowski@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Store offsets to each layer in a separate variables rather than compute
-them every single time.
+With the introduction of bpf_link in xsk's libbpf part, there's no
+further need for explicit unload of prog on xdpsock's termination. When
+process dies, the bpf_link's refcount will be decremented and resources
+will be unloaded/freed under the hood in case when there are no more
+active users.
 
-Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
+While at it, don't dump stats on error path.
+
 Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 ---
- tools/testing/selftests/bpf/xdpxceiver.c | 47 +++++++++++-------------
- 1 file changed, 21 insertions(+), 26 deletions(-)
+ samples/bpf/xdpsock_user.c | 55 ++++++++++----------------------------
+ 1 file changed, 14 insertions(+), 41 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/xdpxceiver.c b/tools/testing/selftests/bpf/xdpxceiver.c
-index 08058a3d9aec..cf30c7943ac0 100644
---- a/tools/testing/selftests/bpf/xdpxceiver.c
-+++ b/tools/testing/selftests/bpf/xdpxceiver.c
-@@ -658,45 +658,40 @@ static void tx_only_all(struct ifobject *ifobject)
+diff --git a/samples/bpf/xdpsock_user.c b/samples/bpf/xdpsock_user.c
+index 1e2a1105d0e6..aa696854be78 100644
+--- a/samples/bpf/xdpsock_user.c
++++ b/samples/bpf/xdpsock_user.c
+@@ -96,7 +96,6 @@ static int opt_xsk_frame_size = XSK_UMEM__DEFAULT_FRAME_SIZE;
+ static int opt_timeout = 1000;
+ static bool opt_need_wakeup = true;
+ static u32 opt_num_xsks = 1;
+-static u32 prog_id;
+ static bool opt_busy_poll;
+ static bool opt_reduced_cap;
  
- static void worker_pkt_dump(void)
+@@ -462,59 +461,37 @@ static void *poller(void *arg)
+ 	return NULL;
+ }
+ 
+-static void remove_xdp_program(void)
++static void int_exit(int sig)
  {
--	struct in_addr ipaddr;
-+	struct ethhdr *ethhdr;
-+	struct iphdr *iphdr;
-+	struct udphdr *udphdr;
-+	char s[128];
-+	int payload;
-+	void *ptr;
+-	u32 curr_prog_id = 0;
+-	int cmd = CLOSE_CONN;
+-
+-	if (bpf_get_link_xdp_id(opt_ifindex, &curr_prog_id, opt_xdp_flags)) {
+-		printf("bpf_get_link_xdp_id failed\n");
+-		exit(EXIT_FAILURE);
+-	}
+-	if (prog_id == curr_prog_id)
+-		bpf_set_link_xdp_fd(opt_ifindex, -1, opt_xdp_flags);
+-	else if (!curr_prog_id)
+-		printf("couldn't find a prog id on a given interface\n");
+-	else
+-		printf("program on interface changed, not removing\n");
+-
+-	if (opt_reduced_cap) {
+-		if (write(sock, &cmd, sizeof(int)) < 0) {
+-			fprintf(stderr, "Error writing into stream socket: %s", strerror(errno));
+-			exit(EXIT_FAILURE);
+-		}
+-	}
++	benchmark_done = true;
+ }
  
- 	fprintf(stdout, "---------------------------------------\n");
- 	for (int iter = 0; iter < num_frames - 1; iter++) {
-+		ptr = pkt_buf[iter]->payload;
-+		ethhdr = ptr;
-+		iphdr = ptr + sizeof(*ethhdr);
-+		udphdr = ptr + sizeof(*ethhdr) + sizeof(*iphdr);
+-static void int_exit(int sig)
++static void __exit_with_error(int error, const char *file, const char *func,
++			      int line)
+ {
+-	benchmark_done = true;
++	fprintf(stderr, "%s:%s:%i: errno: %d/\"%s\"\n", file, func,
++		line, error, strerror(error));
++	exit(EXIT_FAILURE);
+ }
+ 
++#define exit_with_error(error) __exit_with_error(error, __FILE__, __func__, __LINE__)
 +
- 		/*extract L2 frame */
- 		fprintf(stdout, "DEBUG>> L2: dst mac: ");
- 		for (int i = 0; i < ETH_ALEN; i++)
--			fprintf(stdout, "%02X", ((struct ethhdr *)
--						 pkt_buf[iter]->payload)->h_dest[i]);
-+			fprintf(stdout, "%02X", ethhdr->h_dest[i]);
+ static void xdpsock_cleanup(void)
+ {
+ 	struct xsk_umem *umem = xsks[0]->umem->umem;
+-	int i;
++	int i, cmd = CLOSE_CONN;
  
- 		fprintf(stdout, "\nDEBUG>> L2: src mac: ");
- 		for (int i = 0; i < ETH_ALEN; i++)
--			fprintf(stdout, "%02X", ((struct ethhdr *)
--						 pkt_buf[iter]->payload)->h_source[i]);
-+			fprintf(stdout, "%02X", ethhdr->h_source[i]);
+ 	dump_stats();
+ 	for (i = 0; i < num_socks; i++)
+ 		xsk_socket__delete(xsks[i]->xsk);
+ 	(void)xsk_umem__delete(umem);
+-	remove_xdp_program();
+-}
  
- 		/*extract L3 frame */
--		fprintf(stdout, "\nDEBUG>> L3: ip_hdr->ihl: %02X\n",
--			((struct iphdr *)(pkt_buf[iter]->payload + sizeof(struct ethhdr)))->ihl);
--
--		ipaddr.s_addr =
--		    ((struct iphdr *)(pkt_buf[iter]->payload + sizeof(struct ethhdr)))->saddr;
--		fprintf(stdout, "DEBUG>> L3: ip_hdr->saddr: %s\n", inet_ntoa(ipaddr));
--
--		ipaddr.s_addr =
--		    ((struct iphdr *)(pkt_buf[iter]->payload + sizeof(struct ethhdr)))->daddr;
--		fprintf(stdout, "DEBUG>> L3: ip_hdr->daddr: %s\n", inet_ntoa(ipaddr));
--
-+		fprintf(stdout, "\nDEBUG>> L3: ip_hdr->ihl: %02X\n", iphdr->ihl);
-+		fprintf(stdout, "DEBUG>> L3: ip_hdr->saddr: %s\n",
-+			inet_ntop(AF_INET, &iphdr->saddr, s, sizeof(s)));
-+		fprintf(stdout, "DEBUG>> L3: ip_hdr->daddr: %s\n",
-+			inet_ntop(AF_INET, &iphdr->daddr, s, sizeof(s)));
- 		/*extract L4 frame */
--		fprintf(stdout, "DEBUG>> L4: udp_hdr->src: %d\n",
--			ntohs(((struct udphdr *)(pkt_buf[iter]->payload +
--						 sizeof(struct ethhdr) +
--						 sizeof(struct iphdr)))->source));
--
--		fprintf(stdout, "DEBUG>> L4: udp_hdr->dst: %d\n",
--			ntohs(((struct udphdr *)(pkt_buf[iter]->payload +
--						 sizeof(struct ethhdr) +
--						 sizeof(struct iphdr)))->dest));
-+		fprintf(stdout, "DEBUG>> L4: udp_hdr->src: %d\n", ntohs(udphdr->source));
-+		fprintf(stdout, "DEBUG>> L4: udp_hdr->dst: %d\n", ntohs(udphdr->dest));
- 		/*extract L5 frame */
--		int payload = *((uint32_t *)(pkt_buf[iter]->payload + PKT_HDR_SIZE));
-+		payload = *((uint32_t *)(ptr + PKT_HDR_SIZE));
+-static void __exit_with_error(int error, const char *file, const char *func,
+-			      int line)
+-{
+-	fprintf(stderr, "%s:%s:%i: errno: %d/\"%s\"\n", file, func,
+-		line, error, strerror(error));
+-	dump_stats();
+-	remove_xdp_program();
+-	exit(EXIT_FAILURE);
++	if (opt_reduced_cap) {
++		if (write(sock, &cmd, sizeof(int)) < 0)
++			exit_with_error(errno);
++	}
+ }
  
- 		if (payload == EOT) {
- 			print_verbose("End-of-transmission frame received\n");
+-#define exit_with_error(error) __exit_with_error(error, __FILE__, __func__, \
+-						 __LINE__)
+ static void swap_mac_addresses(void *data)
+ {
+ 	struct ether_header *eth = (struct ether_header *)data;
+@@ -880,10 +857,6 @@ static struct xsk_socket_info *xsk_configure_socket(struct xsk_umem_info *umem,
+ 	if (ret)
+ 		exit_with_error(-ret);
+ 
+-	ret = bpf_get_link_xdp_id(opt_ifindex, &prog_id, opt_xdp_flags);
+-	if (ret)
+-		exit_with_error(-ret);
+-
+ 	xsk->app_stats.rx_empty_polls = 0;
+ 	xsk->app_stats.fill_fail_polls = 0;
+ 	xsk->app_stats.copy_tx_sendtos = 0;
 -- 
 2.20.1
 
