@@ -2,86 +2,78 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B3F8EC433C1
-	for <bpf@archiver.kernel.org>; Mon, 29 Mar 2021 22:53:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F754C433E0
+	for <bpf@archiver.kernel.org>; Mon, 29 Mar 2021 22:55:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 87FB16198E
-	for <bpf@archiver.kernel.org>; Mon, 29 Mar 2021 22:53:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 272F261988
+	for <bpf@archiver.kernel.org>; Mon, 29 Mar 2021 22:55:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231135AbhC2WxG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 29 Mar 2021 18:53:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41128 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230161AbhC2Wwi (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 29 Mar 2021 18:52:38 -0400
-Received: from mail-qv1-xf4a.google.com (mail-qv1-xf4a.google.com [IPv6:2607:f8b0:4864:20::f4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 659B9C061762
-        for <bpf@vger.kernel.org>; Mon, 29 Mar 2021 15:52:38 -0700 (PDT)
-Received: by mail-qv1-xf4a.google.com with SMTP id da16so11943087qvb.2
-        for <bpf@vger.kernel.org>; Mon, 29 Mar 2021 15:52:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=q+pONZ+c5gzLHZlc8vklxdpHbUYpIrWC8EjxE4Qzlnc=;
-        b=i2KpWGdI/+ml8LNXX0aSU7N82qqTntdTDZjcHo8J2MMruG576SgALMQkjAX6KOXceW
-         IrOVZ+cozFtEm6yTSStYwgQWftf2uFZcl/rgv2EGbcV3zTZxg/iLBHymUt/sQAx1kMYu
-         viD7uqt2Mp4iqZsQWvx6T6WiIZHhpe6YkpdeUIPXwRZWKTcZU36ciArP6/nQp96X0QRX
-         lhSB7s6xq/ddvkbqhYHYvvAE3bkN9L5MQ6BUhWL7Q9Ys0eUDQObZlFK1jHsbRlJRcgcv
-         7F9SysQBjk9MQ9/LDhz/vAMJTZItQ/ppdSVI14TrjXvtGM9v8QyzL/Kz6Evt5CWBdB20
-         cVyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=q+pONZ+c5gzLHZlc8vklxdpHbUYpIrWC8EjxE4Qzlnc=;
-        b=m9gFqZMG+QeBeXG0657zBHRnRmmI4i27/aR8xIn3t1SN7FWJ8Nr6hiNA6R5yIbDqAk
-         0NQuoj0eiHixDB14hCdTvudacD64cSkFW8Dn2xwvF6bHdcyEoyv/YfDiV/WjrcmxpBfZ
-         vpqL/aPsvVUksUgMhEU1EjKbOkoNjQP0QRp8NPSndrwkNvBu5cgvfwpiL5blsOXz6jsq
-         1DEbTL3VU7/8H7i6uMHy8LQaE+16165PJ8PVp9LQaDzH32YCusYkOWJVpoxlGeWp1+e4
-         JwNq9ZjO/dbR+GNGhkOowhwGpBhg0pRlEId3BbQZGBW3Ql3kjka6bBXPRmYhDuDJTsBI
-         g/oQ==
-X-Gm-Message-State: AOAM530E643gXJ1zgVI46FYpoNH0+Rld/akPZATo1h3K5gP2j5sFblZL
-        kweprDtjEHc4OVbdFwFM7Hzi8pZDk9H9NgcsVyM=
-X-Google-Smtp-Source: ABdhPJz7NMMYH+EO7jPPhn+82vEbQx/l4SdUF0/BAZVldxnLPfgrSAWzVrLnKVkVhoFUEptinOdh+noYxp2C71l/FFY=
-X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:15c:211:202:c959:2751:3fb4:47b1])
- (user=ndesaulniers job=sendgmr) by 2002:ad4:4431:: with SMTP id
- e17mr27689931qvt.37.1617058357412; Mon, 29 Mar 2021 15:52:37 -0700 (PDT)
-Date:   Mon, 29 Mar 2021 15:52:35 -0700
-In-Reply-To: <20210328064121.2062927-1-yhs@fb.com>
-Message-Id: <20210329225235.1845295-1-ndesaulniers@google.com>
-Mime-Version: 1.0
-References: <20210328064121.2062927-1-yhs@fb.com>
-X-Mailer: git-send-email 2.31.0.291.g576ba9dcdaf-goog
-Subject: Re: [PATCH kbuild] kbuild: add -grecord-gcc-switches to clang build
-From:   Nick Desaulniers <ndesaulniers@google.com>
-To:     yhs@fb.com
-Cc:     arnaldo.melo@gmail.com, ast@kernel.org, bpf@vger.kernel.org,
-        kernel-team@fb.com, linux-kbuild@vger.kernel.org,
-        masahiroy@kernel.org, michal.lkml@markovi.net,
-        clang-built-linux@googlegroups.com, sedat.dilek@gmail.com,
-        morbo@google.com
-Content-Type: text/plain; charset="UTF-8"
+        id S231486AbhC2WzQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 29 Mar 2021 18:55:16 -0400
+Received: from mga04.intel.com ([192.55.52.120]:2470 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230303AbhC2WzC (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 29 Mar 2021 18:55:02 -0400
+IronPort-SDR: 6kJdSBV5FNYOHc5+WZ9MuTIRSPp5frqoHZWnh0BCTJJsKyeqn+MsuLbab3mLWTDZ7D87ydt9ca
+ s2pN8UVnqejQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9938"; a="189392983"
+X-IronPort-AV: E=Sophos;i="5.81,289,1610438400"; 
+   d="scan'208";a="189392983"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2021 15:55:01 -0700
+IronPort-SDR: wEWTfmI3zjaWpNM8oqzwDxltDVt75/GSEpLhebL0MFMMQoLssIwkadur4ehDGPq/0Hh/hfA1t3
+ Km20mJ5uv1rA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,289,1610438400"; 
+   d="scan'208";a="417884033"
+Received: from ranger.igk.intel.com ([10.102.21.164])
+  by orsmga008.jf.intel.com with ESMTP; 29 Mar 2021 15:54:59 -0700
+From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To:     bpf@vger.kernel.org, netdev@vger.kernel.org, daniel@iogearbox.net,
+        ast@kernel.org, andrii@kernel.org
+Cc:     bjorn.topel@intel.com, magnus.karlsson@intel.com,
+        ciara.loftus@intel.com, john.fastabend@gmail.com, toke@redhat.com,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Subject: [PATCH v5 bpf-next 01/17] selftests: xsk: don't call worker_pkt_dump() for stats test
+Date:   Tue, 30 Mar 2021 00:43:00 +0200
+Message-Id: <20210329224316.17793-2-maciej.fijalkowski@intel.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210329224316.17793-1-maciej.fijalkowski@intel.com>
+References: <20210329224316.17793-1-maciej.fijalkowski@intel.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-(replying to https://lore.kernel.org/bpf/20210328064121.2062927-1-yhs@fb.com/)
+For TEST_TYPE_STATS, worker_pkt_validate() that places frames onto
+pkt_buf is not called. Therefore, when dump mode is set, don't call
+worker_pkt_dump() for mentioned test type, so that it won't crash on
+pkt_buf() access.
 
-Thanks for the patch!
+Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+---
+ tools/testing/selftests/bpf/xdpxceiver.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> +# gcc emits compilation flags in dwarf DW_AT_producer by default
-> +# while clang needs explicit flag. Add this flag explicitly.
-> +ifdef CONFIG_CC_IS_CLANG
-> +DEBUG_CFLAGS	+= -grecord-gcc-switches
-> +endif
-> +
+diff --git a/tools/testing/selftests/bpf/xdpxceiver.c b/tools/testing/selftests/bpf/xdpxceiver.c
+index 8b0f7fdd9003..04574c2b4f41 100644
+--- a/tools/testing/selftests/bpf/xdpxceiver.c
++++ b/tools/testing/selftests/bpf/xdpxceiver.c
+@@ -999,7 +999,7 @@ static void testapp_validate(void)
+ 	pthread_join(t1, NULL);
+ 	pthread_join(t0, NULL);
+ 
+-	if (debug_pkt_dump) {
++	if (debug_pkt_dump && test_type != TEST_TYPE_STATS) {
+ 		worker_pkt_dump();
+ 		for (int iter = 0; iter < num_frames - 1; iter++) {
+ 			free(pkt_buf[iter]->payload);
+-- 
+2.20.1
 
-This adds ~5MB/1% to vmlinux of an x86_64 defconfig built with clang. Do we
-want to add additional guards for CONFIG_DEBUG_INFO_BTF, so that we don't have
-to pay that cost if that config is not set?
