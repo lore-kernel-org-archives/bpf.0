@@ -7,118 +7,92 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 20B17C433E5
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 551E0C433EB
 	for <bpf@archiver.kernel.org>; Mon, 29 Mar 2021 22:56:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0DAD2619B1
+	by mail.kernel.org (Postfix) with ESMTP id 438246198A
 	for <bpf@archiver.kernel.org>; Mon, 29 Mar 2021 22:56:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232068AbhC2Wzy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 29 Mar 2021 18:55:54 -0400
+        id S232057AbhC2Wzx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 29 Mar 2021 18:55:53 -0400
 Received: from mga04.intel.com ([192.55.52.120]:2470 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232018AbhC2Wzo (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 29 Mar 2021 18:55:44 -0400
-IronPort-SDR: xgVXtucNv4eU/0PVB7lq4Y3KcW6BpWW76CmwowevB9/53v/oSVrgUaZ3QMh/uN25tOIsSsCgtk
- ddY3wKrbVDTQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9938"; a="189393043"
+        id S231634AbhC2Wzi (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 29 Mar 2021 18:55:38 -0400
+IronPort-SDR: VB6VMzXVmGuyoD8wnpCIq71MmaXfLzDVqlNS0g6NUsM+Ea//ENuahiXfbbxy3luN5fQ5/GMBXl
+ k1nYYm9SKHFg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9938"; a="189393034"
 X-IronPort-AV: E=Sophos;i="5.81,289,1610438400"; 
-   d="scan'208";a="189393043"
+   d="scan'208";a="189393034"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2021 15:55:43 -0700
-IronPort-SDR: yRNWymt8jHiYyOoV/VFDvSPU4CSinFB7H8Vwi1TRCWHgbBwc4qKJfhuZXjmQoEpgmFzJKd0nFm
- UdcuHCgekCyQ==
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2021 15:55:37 -0700
+IronPort-SDR: 3s/F2k48dkoPqDwHO5TH6bnkPDVuUwMxL7u8NG2EGjxANnDohIaABmv4hVxNAq5D38ycR7DCFZ
+ 2CHBNK/Dk6Gw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.81,289,1610438400"; 
-   d="scan'208";a="417884335"
+   d="scan'208";a="417884310"
 Received: from ranger.igk.intel.com ([10.102.21.164])
-  by orsmga008.jf.intel.com with ESMTP; 29 Mar 2021 15:55:41 -0700
+  by orsmga008.jf.intel.com with ESMTP; 29 Mar 2021 15:55:35 -0700
 From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 To:     bpf@vger.kernel.org, netdev@vger.kernel.org, daniel@iogearbox.net,
         ast@kernel.org, andrii@kernel.org
 Cc:     bjorn.topel@intel.com, magnus.karlsson@intel.com,
-        ciara.loftus@intel.com, john.fastabend@gmail.com, toke@redhat.com
-Subject: [PATCH v5 bpf-next 15/17] selftests: xsk: remove thread attribute
-Date:   Tue, 30 Mar 2021 00:43:14 +0200
-Message-Id: <20210329224316.17793-16-maciej.fijalkowski@intel.com>
+        ciara.loftus@intel.com, john.fastabend@gmail.com, toke@redhat.com,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Toshiaki Makita <toshiaki.makita1@gmail.com>
+Subject: [PATCH v5 bpf-next 13/17] veth: implement ethtool's get_channels() callback
+Date:   Tue, 30 Mar 2021 00:43:12 +0200
+Message-Id: <20210329224316.17793-14-maciej.fijalkowski@intel.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20210329224316.17793-1-maciej.fijalkowski@intel.com>
 References: <20210329224316.17793-1-maciej.fijalkowski@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Björn Töpel <bjorn.topel@intel.com>
+Libbpf's xsk part calls get_channels() API to retrieve the queue count
+of the underlying driver so that XSKMAP is sized accordingly.
 
-There is really no reason to have a non-default thread stack
-size. Remove that.
+Implement that in veth so multi queue scenarios can work properly.
 
-Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
+Cc: Toshiaki Makita <toshiaki.makita1@gmail.com>
+Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 ---
- tools/testing/selftests/bpf/xdpxceiver.c | 9 ++-------
- tools/testing/selftests/bpf/xdpxceiver.h | 2 --
- 2 files changed, 2 insertions(+), 9 deletions(-)
+ drivers/net/veth.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/xdpxceiver.c b/tools/testing/selftests/bpf/xdpxceiver.c
-index b57c75d6904b..95d9d35dbb93 100644
---- a/tools/testing/selftests/bpf/xdpxceiver.c
-+++ b/tools/testing/selftests/bpf/xdpxceiver.c
-@@ -764,8 +764,6 @@ static void thread_common_ops(struct ifobject *ifobject, void *bufs)
- 	int ctr = 0;
- 	int ret;
+diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+index aa1a66ad2ce5..180aabe8a33f 100644
+--- a/drivers/net/veth.c
++++ b/drivers/net/veth.c
+@@ -218,6 +218,17 @@ static void veth_get_ethtool_stats(struct net_device *dev,
+ 	}
+ }
  
--	pthread_attr_setstacksize(&attr, THREAD_STACK);
--
- 	ifobject->ns_fd = switch_namespace(ifobject->nsname);
++static void veth_get_channels(struct net_device *dev,
++			      struct ethtool_channels *channels)
++{
++	channels->tx_count = dev->real_num_tx_queues;
++	channels->rx_count = dev->real_num_rx_queues;
++	channels->max_tx = dev->real_num_tx_queues;
++	channels->max_rx = dev->real_num_rx_queues;
++	channels->combined_count = min(dev->real_num_rx_queues, dev->real_num_tx_queues);
++	channels->max_combined = min(dev->real_num_rx_queues, dev->real_num_tx_queues);
++}
++
+ static const struct ethtool_ops veth_ethtool_ops = {
+ 	.get_drvinfo		= veth_get_drvinfo,
+ 	.get_link		= ethtool_op_get_link,
+@@ -226,6 +237,7 @@ static const struct ethtool_ops veth_ethtool_ops = {
+ 	.get_ethtool_stats	= veth_get_ethtool_stats,
+ 	.get_link_ksettings	= veth_get_link_ksettings,
+ 	.get_ts_info		= ethtool_op_get_ts_info,
++	.get_channels		= veth_get_channels,
+ };
  
- 	if (test_type == TEST_TYPE_BPF_RES)
-@@ -909,13 +907,10 @@ static void testapp_validate(void)
- 	bool bidi = test_type == TEST_TYPE_BIDI;
- 	bool bpf = test_type == TEST_TYPE_BPF_RES;
- 
--	pthread_attr_init(&attr);
--	pthread_attr_setstacksize(&attr, THREAD_STACK);
--
- 	pthread_mutex_lock(&sync_mutex);
- 
- 	/*Spawn RX thread */
--	pthread_create(&t0, &attr, ifdict_rx->func_ptr, ifdict_rx);
-+	pthread_create(&t0, NULL, ifdict_rx->func_ptr, ifdict_rx);
- 
- 	if (clock_gettime(CLOCK_REALTIME, &max_wait))
- 		exit_with_error(errno);
-@@ -927,7 +922,7 @@ static void testapp_validate(void)
- 	pthread_mutex_unlock(&sync_mutex);
- 
- 	/*Spawn TX thread */
--	pthread_create(&t1, &attr, ifdict_tx->func_ptr, ifdict_tx);
-+	pthread_create(&t1, NULL, ifdict_tx->func_ptr, ifdict_tx);
- 
- 	pthread_join(t1, NULL);
- 	pthread_join(t0, NULL);
-diff --git a/tools/testing/selftests/bpf/xdpxceiver.h b/tools/testing/selftests/bpf/xdpxceiver.h
-index e431ecb9bb95..78863820fb81 100644
---- a/tools/testing/selftests/bpf/xdpxceiver.h
-+++ b/tools/testing/selftests/bpf/xdpxceiver.h
-@@ -37,7 +37,6 @@
- #define TMOUT_SEC (3)
- #define EOT (-1)
- #define USLEEP_MAX 200000
--#define THREAD_STACK 60000000
- #define SOCK_RECONF_CTR 10
- #define BATCH_SIZE 64
- #define POLL_TMOUT 1000
-@@ -152,7 +151,6 @@ static struct ifobject *ifdict_tx;
- pthread_mutex_t sync_mutex;
- pthread_cond_t signal_rx_condition;
- pthread_t t0, t1;
--pthread_attr_t attr;
- 
- TAILQ_HEAD(head_s, pkt) head = TAILQ_HEAD_INITIALIZER(head);
- struct head_s *head_p;
+ /* general routines */
 -- 
 2.20.1
 
