@@ -7,32 +7,32 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 98FC8C433C1
-	for <bpf@archiver.kernel.org>; Mon, 29 Mar 2021 13:37:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 20A0AC433E1
+	for <bpf@archiver.kernel.org>; Mon, 29 Mar 2021 13:37:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 591AF61932
-	for <bpf@archiver.kernel.org>; Mon, 29 Mar 2021 13:37:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E44BB6195D
+	for <bpf@archiver.kernel.org>; Mon, 29 Mar 2021 13:37:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231510AbhC2Ng4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 29 Mar 2021 09:36:56 -0400
+        id S231596AbhC2Ng5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 29 Mar 2021 09:36:57 -0400
 Received: from mga03.intel.com ([134.134.136.65]:45673 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231571AbhC2Ng1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 29 Mar 2021 09:36:27 -0400
-IronPort-SDR: 9u1ZPvYnGTYfOj67oW/8BHx6bFs0SUZqqFlqQtcri3Twpu8s4WYhkI9jzNbGD9uI3XjGegIvIq
- Of4VFa3H37hA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9938"; a="191578695"
+        id S231600AbhC2Ngh (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 29 Mar 2021 09:36:37 -0400
+IronPort-SDR: C0JWxuorHCngo0eoaHQlLJbbMqMcRzbp2sP6FZkHpxg3mj8rDNy+JLFTKp/qH1VoohuC0SaNp7
+ tPX1NO5OTtkg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9938"; a="191578705"
 X-IronPort-AV: E=Sophos;i="5.81,287,1610438400"; 
-   d="scan'208";a="191578695"
+   d="scan'208";a="191578705"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2021 06:36:27 -0700
-IronPort-SDR: +l9e/G6tHjwa1KuU/ooNwJpc6WXAW1rN2dalrWNZudQesddftnUyZxNu4rbH9wawqVDBTu4sbQ
- ugaEgoWhgP0Q==
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2021 06:36:36 -0700
+IronPort-SDR: UhLrDtnYdY0u05F4GZB26iPn0U8jnOc3pmel3/2NmZwvKkWNgh4qPniH4tO9B3Z6MLANLiPcMT
+ p59xDNjDIe1g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.81,287,1610438400"; 
-   d="scan'208";a="411079330"
+   d="scan'208";a="411079379"
 Received: from glass.png.intel.com ([10.158.65.59])
-  by fmsmga008.fm.intel.com with ESMTP; 29 Mar 2021 06:36:22 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 29 Mar 2021 06:36:32 -0700
 From:   Ong Boon Leong <boon.leong.ong@intel.com>
 To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
         Alexandre Torgue <alexandre.torgue@st.com>,
@@ -51,9 +51,9 @@ Cc:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
         linux-stm32@st-md-mailman.stormreply.com,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         bpf@vger.kernel.org, Ong Boon Leong <boon.leong.ong@intel.com>
-Subject: [PATCH net-next 1/6] stmmac: intel: set IRQ affinity hint for multi MSI vectors
-Date:   Mon, 29 Mar 2021 21:40:08 +0800
-Message-Id: <20210329134013.9516-2-boon.leong.ong@intel.com>
+Subject: [PATCH net-next 3/6] net: stmmac: arrange Tx tail pointer update to stmmac_flush_tx_descriptors
+Date:   Mon, 29 Mar 2021 21:40:10 +0800
+Message-Id: <20210329134013.9516-4-boon.leong.ong@intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210329134013.9516-1-boon.leong.ong@intel.com>
 References: <20210329134013.9516-1-boon.leong.ong@intel.com>
@@ -63,46 +63,103 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Intel mGBE has independent hardware IRQ resources for TX and RX DMA
-operation. In preparation to support XDP TX, we add IRQ affinity hint
-to group both RX and TX queue of the same queue ID to the same CPU.
+This patch organizes TX tail pointer update into a new function called
+stmmac_flush_tx_descriptors() so that we can reuse it in stmmac_xmit(),
+stmmac_tso_xmit() and up-coming XDP implementation.
 
 Signed-off-by: Ong Boon Leong <boon.leong.ong@intel.com>
 ---
- drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ .../net/ethernet/stmicro/stmmac/stmmac_main.c | 52 +++++++++----------
+ 1 file changed, 24 insertions(+), 28 deletions(-)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
-index 08b4852eed4c..53a24932a192 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
-@@ -810,6 +810,7 @@ static int stmmac_config_multi_msi(struct pci_dev *pdev,
- 				   struct plat_stmmacenet_data *plat,
- 				   struct stmmac_resources *res)
- {
-+	cpumask_t cpu_mask;
- 	int ret;
- 	int i;
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+index ace3c3835a9f..18578239b438 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -3507,6 +3507,28 @@ static void stmmac_tso_allocator(struct stmmac_priv *priv, dma_addr_t des,
+ 	}
+ }
  
-@@ -832,12 +833,18 @@ static int stmmac_config_multi_msi(struct pci_dev *pdev,
- 	for (i = 0; i < plat->rx_queues_to_use; i++) {
- 		res->rx_irq[i] = pci_irq_vector(pdev,
- 						plat->msi_rx_base_vec + i * 2);
-+		cpumask_clear(&cpu_mask);
-+		cpumask_set_cpu(i % num_online_cpus(), &cpu_mask);
-+		irq_set_affinity_hint(res->rx_irq[i], &cpu_mask);
++static void stmmac_flush_tx_descriptors(struct stmmac_priv *priv, int queue)
++{
++	struct stmmac_tx_queue *tx_q = &priv->tx_queue[queue];
++	int desc_size;
++
++	if (likely(priv->extend_desc))
++		desc_size = sizeof(struct dma_extended_desc);
++	else if (tx_q->tbs & STMMAC_TBS_AVAIL)
++		desc_size = sizeof(struct dma_edesc);
++	else
++		desc_size = sizeof(struct dma_desc);
++
++	/* The own bit must be the latest setting done when prepare the
++	 * descriptor and then barrier is needed to make sure that
++	 * all is coherent before granting the DMA engine.
++	 */
++	wmb();
++
++	tx_q->tx_tail_addr = tx_q->dma_tx_phy + (tx_q->cur_tx * desc_size);
++	stmmac_set_tx_tail_ptr(priv, priv->ioaddr, tx_q->tx_tail_addr, queue);
++}
++
+ /**
+  *  stmmac_tso_xmit - Tx entry point of the driver for oversized frames (TSO)
+  *  @skb : the socket buffer
+@@ -3739,12 +3761,6 @@ static netdev_tx_t stmmac_tso_xmit(struct sk_buff *skb, struct net_device *dev)
+ 		stmmac_set_tx_owner(priv, mss_desc);
  	}
  
- 	/* For TX MSI */
- 	for (i = 0; i < plat->tx_queues_to_use; i++) {
- 		res->tx_irq[i] = pci_irq_vector(pdev,
- 						plat->msi_tx_base_vec + i * 2);
-+		cpumask_clear(&cpu_mask);
-+		cpumask_set_cpu(i % num_online_cpus(), &cpu_mask);
-+		irq_set_affinity_hint(res->tx_irq[i], &cpu_mask);
- 	}
+-	/* The own bit must be the latest setting done when prepare the
+-	 * descriptor and then barrier is needed to make sure that
+-	 * all is coherent before granting the DMA engine.
+-	 */
+-	wmb();
+-
+ 	if (netif_msg_pktdata(priv)) {
+ 		pr_info("%s: curr=%d dirty=%d f=%d, e=%d, f_p=%p, nfrags %d\n",
+ 			__func__, tx_q->cur_tx, tx_q->dirty_tx, first_entry,
+@@ -3755,13 +3771,7 @@ static netdev_tx_t stmmac_tso_xmit(struct sk_buff *skb, struct net_device *dev)
  
- 	if (plat->msi_mac_vec < STMMAC_MSI_VEC_MAX)
+ 	netdev_tx_sent_queue(netdev_get_tx_queue(dev, queue), skb->len);
+ 
+-	if (tx_q->tbs & STMMAC_TBS_AVAIL)
+-		desc_size = sizeof(struct dma_edesc);
+-	else
+-		desc_size = sizeof(struct dma_desc);
+-
+-	tx_q->tx_tail_addr = tx_q->dma_tx_phy + (tx_q->cur_tx * desc_size);
+-	stmmac_set_tx_tail_ptr(priv, priv->ioaddr, tx_q->tx_tail_addr, queue);
++	stmmac_flush_tx_descriptors(priv, queue);
+ 	stmmac_tx_timer_arm(priv, queue);
+ 
+ 	return NETDEV_TX_OK;
+@@ -3996,25 +4006,11 @@ static netdev_tx_t stmmac_xmit(struct sk_buff *skb, struct net_device *dev)
+ 
+ 	stmmac_set_tx_owner(priv, first);
+ 
+-	/* The own bit must be the latest setting done when prepare the
+-	 * descriptor and then barrier is needed to make sure that
+-	 * all is coherent before granting the DMA engine.
+-	 */
+-	wmb();
+-
+ 	netdev_tx_sent_queue(netdev_get_tx_queue(dev, queue), skb->len);
+ 
+ 	stmmac_enable_dma_transmission(priv, priv->ioaddr);
+ 
+-	if (likely(priv->extend_desc))
+-		desc_size = sizeof(struct dma_extended_desc);
+-	else if (tx_q->tbs & STMMAC_TBS_AVAIL)
+-		desc_size = sizeof(struct dma_edesc);
+-	else
+-		desc_size = sizeof(struct dma_desc);
+-
+-	tx_q->tx_tail_addr = tx_q->dma_tx_phy + (tx_q->cur_tx * desc_size);
+-	stmmac_set_tx_tail_ptr(priv, priv->ioaddr, tx_q->tx_tail_addr, queue);
++	stmmac_flush_tx_descriptors(priv, queue);
+ 	stmmac_tx_timer_arm(priv, queue);
+ 
+ 	return NETDEV_TX_OK;
 -- 
 2.25.1
 
