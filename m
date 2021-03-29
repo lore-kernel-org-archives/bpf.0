@@ -2,98 +2,181 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,FROM_LOCAL_HEX,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2E53C433C1
-	for <bpf@archiver.kernel.org>; Mon, 29 Mar 2021 19:12:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E2EF9C433C1
+	for <bpf@archiver.kernel.org>; Mon, 29 Mar 2021 19:35:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A5C4161982
-	for <bpf@archiver.kernel.org>; Mon, 29 Mar 2021 19:12:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B1C5C601FD
+	for <bpf@archiver.kernel.org>; Mon, 29 Mar 2021 19:35:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231151AbhC2TLs (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 29 Mar 2021 15:11:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50074 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231594AbhC2TLX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 29 Mar 2021 15:11:23 -0400
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13A4EC061574;
-        Mon, 29 Mar 2021 12:11:23 -0700 (PDT)
-Received: by mail-il1-x136.google.com with SMTP id d2so12107409ilm.10;
-        Mon, 29 Mar 2021 12:11:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:message-id:in-reply-to:references:subject
-         :mime-version:content-transfer-encoding;
-        bh=IkMFSnrueBedhHaH58r/hTpSZQNhWKbrqLUc7REi4TY=;
-        b=u9Dpku76OzPnq43KVDt+WKOH7m0+FwXkcntNsgLS1jKALtZpMsrd3Nn7YNQ6Jl2Bf7
-         UtvEbWWamenXHa8Y46gKKgMK0g7KpTHBOr9PoWxcLYzQ0qb9ai/VrKFcmnHuRb2wyQsz
-         ndtDGowO8mxsAh9HV4PEmCUn0km2f+XzIY5PHBh+mbPxRMawAbUsd1LqkDMuFZCp4DQ0
-         W7hZxxEiwIl7TIrQxzFygP3MndqtbCqNAbrAsqttYrUWg47RD2geBCrcjkjSM6ar2mSg
-         RGzKe5H5ANhZrPmZ3KI+yXu6w93eEpNn5QFMRCugRC1ecdUICQ2ienkfY+SoWqAnUl7v
-         ogFQ==
+        id S231810AbhC2Tex (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 29 Mar 2021 15:34:53 -0400
+Received: from mail-io1-f71.google.com ([209.85.166.71]:53376 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231770AbhC2TeX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 29 Mar 2021 15:34:23 -0400
+Received: by mail-io1-f71.google.com with SMTP id r10so11639716iod.20
+        for <bpf@vger.kernel.org>; Mon, 29 Mar 2021 12:34:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
-         :references:subject:mime-version:content-transfer-encoding;
-        bh=IkMFSnrueBedhHaH58r/hTpSZQNhWKbrqLUc7REi4TY=;
-        b=aT4f/MOXL8L/ftgjeNXlGWBxy2cMGAlNizAX5nio9C8gN9U/T7gBhoWvco7gnbROrQ
-         0Fo0AQbCt6U3wF6IxkIPsw85GDcz8eZSZWQBp4zCKsUMBDom2U4r4PQ3yMMlVyhII2rG
-         xkzY5J81U/KRup6VqajXhsrQEuSoReX9NnBrGMLV3FLjZa48VWaiho3Sd0jNzNB4uysK
-         E5doaul0jRdKEcbIYeIjIxAZKBFaVhr/yA+rL1dlSZ1c78Tl10O0q52xiq+5MZ0o62K4
-         MjpmNQJkaial1mCKC3Pmo0eu5bkfZJEwfN4saGwade/yhdJpEny2mJUNaqaV32nR/uUa
-         YHyg==
-X-Gm-Message-State: AOAM531wEqTwCFyrpNajR43fZVHmSRs594+b86zooRKMTuTSxN0bXMnc
-        fAsA1V5Cl1fL7bB7LqqX4E8=
-X-Google-Smtp-Source: ABdhPJzkJyYTxey1keHMV2hNBJ59deauU75Gr6CAkk099SwyFxvY+g7s8ZB0OdOEcdJ+JVoU3fb7tg==
-X-Received: by 2002:a05:6e02:149:: with SMTP id j9mr13684017ilr.57.1617045082530;
-        Mon, 29 Mar 2021 12:11:22 -0700 (PDT)
-Received: from localhost ([172.242.244.146])
-        by smtp.gmail.com with ESMTPSA id c5sm9958682ioi.0.2021.03.29.12.11.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Mar 2021 12:11:22 -0700 (PDT)
-Date:   Mon, 29 Mar 2021 12:11:14 -0700
-From:   John Fastabend <john.fastabend@gmail.com>
-To:     Cong Wang <xiyou.wangcong@gmail.com>, netdev@vger.kernel.org
-Cc:     bpf@vger.kernel.org, duanxiongchun@bytedance.com,
-        wangdongdong.6@bytedance.com, jiang.wang@bytedance.com,
-        Cong Wang <cong.wang@bytedance.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Lorenz Bauer <lmb@cloudflare.com>,
-        Jakub Sitnicki <jakub@cloudflare.com>
-Message-ID: <6062265295db9_401fb20861@john-XPS-13-9370.notmuch>
-In-Reply-To: <20210328202013.29223-3-xiyou.wangcong@gmail.com>
-References: <20210328202013.29223-1-xiyou.wangcong@gmail.com>
- <20210328202013.29223-3-xiyou.wangcong@gmail.com>
-Subject: RE: [Patch bpf-next v7 02/13] skmsg: introduce a spinlock to protect
- ingress_msg
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=OrPDaz0uXlDAGavWdBModoSbr4og33NB13Z6NEmvLrk=;
+        b=CU54QAHFGqotgpgyg4Dv2WmEvuZ7vtl4Q1VcmE6FluxhW6I6uF9slXd7x2LFuPbPO8
+         wFNYRwKk3jalGlWaNkXxnnVLWJ4JsRbvWBaY+T9o/m0RCtWTPxJN3HOz7nBXBvijnhYk
+         3ReiPV216mB2JI8rVbwL8mCJ5m/3DqcsGMJcoO5fzfd5TlPoTTSAYKfbBYynWq/UE9QL
+         N1J4gMmNtPm2yZRNApz8dGEtXYz4hbBAoZx+LWYYpHmYB9tfVY3nXnh6B4JHwFra6OBr
+         vSpcAGP9T7UnqSztQj8CHGklJtBorX9XkRRKdPlEfp4K8OLmgTYAD7y/X9jHdK94aUKz
+         RL9Q==
+X-Gm-Message-State: AOAM530FnjrdmaFOSuFjxp98028EOzYodVVYxAuTBCEDhqNrIYhV9fnO
+        EKuZJM43s4/by94Qaa3goF0ptUay/UU/ubdgFP2P30BsPEKi
+X-Google-Smtp-Source: ABdhPJz2YO830nGl4M6ePvLGaPzfj1rTapAn96ODgiHyJNjckK5R93z+domwZR0jK4zlRmMBByoYdUBVo5zAEZjMaqEKJvYy0zK3
+MIME-Version: 1.0
+X-Received: by 2002:a02:5184:: with SMTP id s126mr5484831jaa.107.1617046462357;
+ Mon, 29 Mar 2021 12:34:22 -0700 (PDT)
+Date:   Mon, 29 Mar 2021 12:34:22 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000f964fd05beb1f7d3@google.com>
+Subject: [syzbot] possible deadlock in ip_setsockopt
+From:   syzbot <syzbot+81bff613876f26c198d8@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, davem@davemloft.net, dsahern@kernel.org,
+        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com,
+        yoshfuji@linux-ipv6.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Cong Wang wrote:
-> From: Cong Wang <cong.wang@bytedance.com>
-> 
-> Currently we rely on lock_sock to protect ingress_msg,
-> it is too big for this, we can actually just use a spinlock
-> to protect this list like protecting other skb queues.
-> 
-> __tcp_bpf_recvmsg() is still special because of peeking,
-> it still has to use lock_sock.
-> 
-> Cc: John Fastabend <john.fastabend@gmail.com>
-> Cc: Daniel Borkmann <daniel@iogearbox.net>
-> Cc: Lorenz Bauer <lmb@cloudflare.com>
-> Acked-by: Jakub Sitnicki <jakub@cloudflare.com>
-> Signed-off-by: Cong Wang <cong.wang@bytedance.com>
-> ---
+Hello,
 
-Acked-by: John Fastabend <john.fastabend@gmail.com>
+syzbot found the following issue on:
+
+HEAD commit:    1b479fb8 drivers/net/wan/hdlc_fr: Fix a double free in pvc..
+git tree:       net
+console output: https://syzkaller.appspot.com/x/log.txt?x=1072d3d6d00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=daeff30c2474a60f
+dashboard link: https://syzkaller.appspot.com/bug?extid=81bff613876f26c198d8
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+81bff613876f26c198d8@syzkaller.appspotmail.com
+
+======================================================
+WARNING: possible circular locking dependency detected
+5.12.0-rc4-syzkaller #0 Not tainted
+------------------------------------------------------
+syz-executor.3/14381 is trying to acquire lock:
+ffff888018aa2420 (sk_lock-AF_INET){+.+.}-{0:0}, at: lock_sock include/net/sock.h:1600 [inline]
+ffff888018aa2420 (sk_lock-AF_INET){+.+.}-{0:0}, at: do_ip_setsockopt net/ipv4/ip_sockglue.c:945 [inline]
+ffff888018aa2420 (sk_lock-AF_INET){+.+.}-{0:0}, at: ip_setsockopt+0x1d2/0x3a00 net/ipv4/ip_sockglue.c:1423
+
+but task is already holding lock:
+ffffffff8d66b1a8 (rtnl_mutex){+.+.}-{3:3}, at: do_ip_setsockopt net/ipv4/ip_sockglue.c:944 [inline]
+ffffffff8d66b1a8 (rtnl_mutex){+.+.}-{3:3}, at: ip_setsockopt+0x1c8/0x3a00 net/ipv4/ip_sockglue.c:1423
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #1 (rtnl_mutex){+.+.}-{3:3}:
+       __mutex_lock_common kernel/locking/mutex.c:949 [inline]
+       __mutex_lock+0x139/0x1120 kernel/locking/mutex.c:1096
+       ip_mc_drop_socket+0x89/0x260 net/ipv4/igmp.c:2671
+       mptcp_release+0xab/0x120 net/mptcp/protocol.c:3438
+       __sock_release+0xcd/0x280 net/socket.c:599
+       sock_close+0x18/0x20 net/socket.c:1258
+       __fput+0x288/0x920 fs/file_table.c:280
+       task_work_run+0xdd/0x1a0 kernel/task_work.c:140
+       tracehook_notify_resume include/linux/tracehook.h:189 [inline]
+       exit_to_user_mode_loop kernel/entry/common.c:174 [inline]
+       exit_to_user_mode_prepare+0x249/0x250 kernel/entry/common.c:208
+       __syscall_exit_to_user_mode_work kernel/entry/common.c:290 [inline]
+       syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:301
+       entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+-> #0 (sk_lock-AF_INET){+.+.}-{0:0}:
+       check_prev_add kernel/locking/lockdep.c:2936 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3059 [inline]
+       validate_chain kernel/locking/lockdep.c:3674 [inline]
+       __lock_acquire+0x2b14/0x54c0 kernel/locking/lockdep.c:4900
+       lock_acquire kernel/locking/lockdep.c:5510 [inline]
+       lock_acquire+0x1ab/0x740 kernel/locking/lockdep.c:5475
+       lock_sock_nested+0xca/0x120 net/core/sock.c:3071
+       lock_sock include/net/sock.h:1600 [inline]
+       do_ip_setsockopt net/ipv4/ip_sockglue.c:945 [inline]
+       ip_setsockopt+0x1d2/0x3a00 net/ipv4/ip_sockglue.c:1423
+       udp_setsockopt+0x76/0xc0 net/ipv4/udp.c:2719
+       __sys_setsockopt+0x2db/0x610 net/socket.c:2117
+       __do_sys_setsockopt net/socket.c:2128 [inline]
+       __se_sys_setsockopt net/socket.c:2125 [inline]
+       __x64_sys_setsockopt+0xba/0x150 net/socket.c:2125
+       do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
+       entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+other info that might help us debug this:
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(rtnl_mutex);
+                               lock(sk_lock-AF_INET);
+                               lock(rtnl_mutex);
+  lock(sk_lock-AF_INET);
+
+ *** DEADLOCK ***
+
+1 lock held by syz-executor.3/14381:
+ #0: ffffffff8d66b1a8 (rtnl_mutex){+.+.}-{3:3}, at: do_ip_setsockopt net/ipv4/ip_sockglue.c:944 [inline]
+ #0: ffffffff8d66b1a8 (rtnl_mutex){+.+.}-{3:3}, at: ip_setsockopt+0x1c8/0x3a00 net/ipv4/ip_sockglue.c:1423
+
+stack backtrace:
+CPU: 0 PID: 14381 Comm: syz-executor.3 Not tainted 5.12.0-rc4-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ __dump_stack lib/dump_stack.c:79 [inline]
+ dump_stack+0x141/0x1d7 lib/dump_stack.c:120
+ check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2127
+ check_prev_add kernel/locking/lockdep.c:2936 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3059 [inline]
+ validate_chain kernel/locking/lockdep.c:3674 [inline]
+ __lock_acquire+0x2b14/0x54c0 kernel/locking/lockdep.c:4900
+ lock_acquire kernel/locking/lockdep.c:5510 [inline]
+ lock_acquire+0x1ab/0x740 kernel/locking/lockdep.c:5475
+ lock_sock_nested+0xca/0x120 net/core/sock.c:3071
+ lock_sock include/net/sock.h:1600 [inline]
+ do_ip_setsockopt net/ipv4/ip_sockglue.c:945 [inline]
+ ip_setsockopt+0x1d2/0x3a00 net/ipv4/ip_sockglue.c:1423
+ udp_setsockopt+0x76/0xc0 net/ipv4/udp.c:2719
+ __sys_setsockopt+0x2db/0x610 net/socket.c:2117
+ __do_sys_setsockopt net/socket.c:2128 [inline]
+ __se_sys_setsockopt net/socket.c:2125 [inline]
+ __x64_sys_setsockopt+0xba/0x150 net/socket.c:2125
+ do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x466459
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fd7716d0188 EFLAGS: 00000246 ORIG_RAX: 0000000000000036
+RAX: ffffffffffffffda RBX: 000000000056bf60 RCX: 0000000000466459
+RDX: 0000000000000029 RSI: 0000000000000000 RDI: 0000000000000003
+RBP: 00000000004bf9fb R08: 0000000000000010 R09: 0000000000000000
+R10: 0000000020000000 R11: 0000000000000246 R12: 000000000056bf60
+R13: 00007ffec9848caf R14: 00007fd7716d0300 R15: 0000000000022000
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
