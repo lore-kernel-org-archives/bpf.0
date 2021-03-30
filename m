@@ -2,33 +2,33 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 68952C433E0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8451AC433E1
 	for <bpf@archiver.kernel.org>; Tue, 30 Mar 2021 23:17:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F15AE619D0
-	for <bpf@archiver.kernel.org>; Tue, 30 Mar 2021 23:16:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 53ABC619E0
+	for <bpf@archiver.kernel.org>; Tue, 30 Mar 2021 23:17:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233152AbhC3XQX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 30 Mar 2021 19:16:23 -0400
-Received: from mail-40134.protonmail.ch ([185.70.40.134]:27087 "EHLO
-        mail-40134.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233026AbhC3XPy (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 30 Mar 2021 19:15:54 -0400
-Date:   Tue, 30 Mar 2021 23:15:45 +0000
+        id S233176AbhC3XQY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 30 Mar 2021 19:16:24 -0400
+Received: from mail1.protonmail.ch ([185.70.40.18]:61831 "EHLO
+        mail1.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233118AbhC3XQI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 30 Mar 2021 19:16:08 -0400
+Date:   Tue, 30 Mar 2021 23:15:59 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
-        t=1617146152; bh=zG9SSUw4/Ao2wQS3FMFRGbEb1lFQgDiESXkJ9lxuSsU=;
-        h=Date:To:From:Cc:Reply-To:Subject:From;
-        b=fUFFSwYfp9SbO1ukq4EIU6vyXzV7ofNWUGi1ivJdCvgJaN8MTAKk9MMt6Kbm24WR2
-         BrL50oqRFGoJ4SI2YgefkLgrkrjVIebu1GJ/zmbIUa+YyOgkAQmb1qJbeBeAxt6PBM
-         vA7O3zDYWDKIjukMWmELfDWna4c32uffjNIzGFkGiL0cBnRqExcMQrbXxDxeg1Pi2h
-         VF0FF6FbFXrFdVnBsx7gKzvo3hDiQFYP5NeqEJ8G2IHhPr4JSUAjxF0cd+WZiak5B9
-         i5GBs3zu1vkLUB2uQF8RvTi3VVKo1WOPKUCZsMD5ZLiwv8sOYCj6u2lSVfe4U7DAyl
-         HXuRCocOfxmLw==
+        t=1617146166; bh=uwv69iaWSKcMKpaWEGIM/Lw3/ltMpeHlZTENOpjcuZ8=;
+        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
+        b=l3HzsJyAAdMP6kj5/QUIZfO9SIGnSJUHzUqvPNF1VMBvZAhebd/tvW0ufIMxf0Ub/
+         v/neGwAdPEfZCDi4TW+/ec5CkoG3Zdk/39AVInLe2zRw+zbj28BdJk7qjtNVTza6gw
+         /Bj0dtqJ62d1O/iTmDFtCqLkBU9h5rOc0Qy2VHn59gBTgsx2zYNb/Nm600xWISxXun
+         XFupXZEClWhyOSaAHpppC6ztv2zFTHOMZlkm1fvagJ38PLIFv+FU+YDshIXFLsyROT
+         4S803XD2Cp1JMJPlyhK7/oHVH+dyWl5KS8sQnrL4g1krFCyGFg3maUO2MTYLwy1Twe
+         T8xQ4oNWLIISA==
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>
 From:   Alexander Lobakin <alobakin@pm.me>
@@ -47,8 +47,10 @@ Cc:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
         Alexander Lobakin <alobakin@pm.me>, netdev@vger.kernel.org,
         bpf@vger.kernel.org, linux-kernel@vger.kernel.org
 Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: [PATCH bpf-next 0/2] xsk: introduce generic almost-zerocopy xmit
-Message-ID: <20210330231528.546284-1-alobakin@pm.me>
+Subject: [PATCH bpf-next 2/2] xsk: introduce generic almost-zerocopy xmit
+Message-ID: <20210330231528.546284-3-alobakin@pm.me>
+In-Reply-To: <20210330231528.546284-1-alobakin@pm.me>
+References: <20210330231528.546284-1-alobakin@pm.me>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
@@ -56,37 +58,119 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This series is based on the exceptional generic zerocopy xmit logics
-initially introduced by Xuan Zhuo. It extends it the way that it
-could cover all the sane drivers, not only the ones that are capable
-of xmitting skbs with no linear space.
+The reasons behind IFF_TX_SKB_NO_LINEAR are:
+ - most drivers expect skb with the linear space;
+ - most drivers expect hard header in the linear space;
+ - many drivers need some headroom to insert custom headers
+   and/or pull headers from frags (pskb_may_pull() etc.).
 
-The first patch is a random while-we-are-here improvement over
-full-copy path, and the second is the main course. See the individual
-commit messages for the details.
+With some bits of overhead, we can satisfy all of this without
+inducing full buffer data copy.
 
-The original (full-zerocopy) path is still here and still generally
-faster, but for now it seems like virtio_net will remain the only
-user of it, at least for a considerable period of time.
+Now frames that are no lesser than 128 bytes (to mitigate allocation
+overhead) are also being built using zerocopy path (if the device and
+driver support S/G xmit, which is almost always true).
+We allocate 256* additional bytes for skb linear space and pull hard
+header there (aligning its end by 16 bytes for platforms with
+NET_IP_ALIGN). The rest of the buffer data is just pinned as frags.
+A room of at least 242 bytes is left for any driver needs.
 
-Alexander Lobakin (2):
-  xsk: speed-up generic full-copy xmit
-  xsk: introduce generic almost-zerocopy xmit
+We could just pass the buffer to eth_get_headlen() to minimize
+allocation overhead and be able to copy all the headers into the
+linear space, but the flow dissection procedure tends to be more
+expensive than the current approach.
 
- net/xdp/xsk.c | 33 +++++++++++++++++++++++----------
- 1 file changed, 23 insertions(+), 10 deletions(-)
+IFF_TX_SKB_NO_LINEAR path remains unchanged and is still actual and
+generally faster.
 
---
-Well, this is untested. I currently don't have an access to my setup
-and is bound by moving to another country, but as I don't know for
-sure at the moment when I'll get back to work on the kernel next time,
-I found it worthy to publish this now -- if any further changes will
-be required when I already will be out-of-sight, maybe someone could
-carry on to make a another revision and so on (I'm still here for any
-questions, comments, reviews and improvements till the end of this
-week).
-But this *should* work with all the sane drivers. If a particular
-one won't handle this, it's likely ill.
+* The value of 256 bytes is kinda "magic", it can be found in lots
+  of drivers and places of core code and it is believed that 256
+  bytes are enough to store any headers of any frame.
+
+Cc: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Signed-off-by: Alexander Lobakin <alobakin@pm.me>
+---
+ net/xdp/xsk.c | 26 ++++++++++++++++++++++----
+ 1 file changed, 22 insertions(+), 4 deletions(-)
+
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index 41f8f21b3348..090ff9c096a3 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -445,6 +445,9 @@ static void xsk_destruct_skb(struct sk_buff *skb)
+ =09sock_wfree(skb);
+ }
+
++#define XSK_SKB_HEADLEN=09=09256
++#define XSK_COPY_THRESHOLD=09(XSK_SKB_HEADLEN / 2)
++
+ static struct sk_buff *xsk_build_skb_zerocopy(struct xdp_sock *xs,
+ =09=09=09=09=09      struct xdp_desc *desc)
+ {
+@@ -452,13 +455,22 @@ static struct sk_buff *xsk_build_skb_zerocopy(struct =
+xdp_sock *xs,
+ =09u32 hr, len, ts, offset, copy, copied;
+ =09struct sk_buff *skb;
+ =09struct page *page;
++=09bool need_pull;
+ =09void *buffer;
+ =09int err, i;
+ =09u64 addr;
+
+ =09hr =3D max(NET_SKB_PAD, L1_CACHE_ALIGN(xs->dev->needed_headroom));
++=09len =3D hr;
++
++=09need_pull =3D !(xs->dev->priv_flags & IFF_TX_SKB_NO_LINEAR);
++=09if (need_pull) {
++=09=09len +=3D XSK_SKB_HEADLEN;
++=09=09len +=3D NET_IP_ALIGN;
++=09=09hr +=3D NET_IP_ALIGN;
++=09}
+
+-=09skb =3D sock_alloc_send_skb(&xs->sk, hr, 1, &err);
++=09skb =3D sock_alloc_send_skb(&xs->sk, len, 1, &err);
+ =09if (unlikely(!skb))
+ =09=09return ERR_PTR(err);
+
+@@ -488,6 +500,11 @@ static struct sk_buff *xsk_build_skb_zerocopy(struct x=
+dp_sock *xs,
+ =09skb->data_len +=3D len;
+ =09skb->truesize +=3D ts;
+
++=09if (need_pull && unlikely(!__pskb_pull_tail(skb, ETH_HLEN))) {
++=09=09kfree_skb(skb);
++=09=09return ERR_PTR(-ENOMEM);
++=09}
++
+ =09refcount_add(ts, &xs->sk.sk_wmem_alloc);
+
+ =09return skb;
+@@ -498,19 +515,20 @@ static struct sk_buff *xsk_build_skb(struct xdp_sock =
+*xs,
+ {
+ =09struct net_device *dev =3D xs->dev;
+ =09struct sk_buff *skb;
++=09u32 len =3D desc->len;
+
+-=09if (dev->priv_flags & IFF_TX_SKB_NO_LINEAR) {
++=09if ((dev->priv_flags & IFF_TX_SKB_NO_LINEAR) ||
++=09    (len >=3D XSK_COPY_THRESHOLD && likely(dev->features & NETIF_F_SG))=
+) {
+ =09=09skb =3D xsk_build_skb_zerocopy(xs, desc);
+ =09=09if (IS_ERR(skb))
+ =09=09=09return skb;
+ =09} else {
+-=09=09u32 hr, tr, len;
+ =09=09void *buffer;
++=09=09u32 hr, tr;
+ =09=09int err;
+
+ =09=09hr =3D max(NET_SKB_PAD, L1_CACHE_ALIGN(dev->needed_headroom));
+ =09=09tr =3D dev->needed_tailroom;
+-=09=09len =3D desc->len;
+
+ =09=09skb =3D sock_alloc_send_skb(&xs->sk, hr + len + tr, 1, &err);
+ =09=09if (unlikely(!skb))
 --
 2.31.1
 
