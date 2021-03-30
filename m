@@ -2,152 +2,92 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E446BC433E5
-	for <bpf@archiver.kernel.org>; Tue, 30 Mar 2021 12:06:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C3A77C433DB
+	for <bpf@archiver.kernel.org>; Tue, 30 Mar 2021 13:05:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D4180619AD
-	for <bpf@archiver.kernel.org>; Tue, 30 Mar 2021 12:06:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 80016619C9
+	for <bpf@archiver.kernel.org>; Tue, 30 Mar 2021 13:05:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231966AbhC3MGT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 30 Mar 2021 08:06:19 -0400
-Received: from mga12.intel.com ([192.55.52.136]:33814 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232079AbhC3MF5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 30 Mar 2021 08:05:57 -0400
-IronPort-SDR: azjuDTBTJnhpieVsYPP0nylJZ3DlYz8pVGOFLvVvS1h7pFF3hPyA2MqzZWvkJRs/u+F0N5OB0f
- b7kSWawD/80w==
-X-IronPort-AV: E=McAfee;i="6000,8403,9939"; a="171158236"
-X-IronPort-AV: E=Sophos;i="5.81,290,1610438400"; 
-   d="scan'208";a="171158236"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2021 05:05:57 -0700
-IronPort-SDR: bQsUHzDGDLCDSUSHCWL++pPKdC0PCD8jzRAiKSvgN/05EJKLQtDQCCbr4WD/6KREWW9trv/qxa
- DjoL986L8fLw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,290,1610438400"; 
-   d="scan'208";a="418145849"
-Received: from silpixa00399839.ir.intel.com (HELO localhost.localdomain) ([10.237.222.142])
-  by orsmga008.jf.intel.com with ESMTP; 30 Mar 2021 05:05:55 -0700
-From:   Ciara Loftus <ciara.loftus@intel.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        magnus.karlsson@intel.com, bjorn@kernel.org,
-        alexei.starovoitov@gmail.com
-Cc:     Ciara Loftus <ciara.loftus@intel.com>
-Subject: [PATCH v3 bpf 2/3] libbpf: restore umem state after socket create failure
-Date:   Tue, 30 Mar 2021 11:34:18 +0000
-Message-Id: <20210330113419.4616-3-ciara.loftus@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210330113419.4616-1-ciara.loftus@intel.com>
-References: <20210330113419.4616-1-ciara.loftus@intel.com>
+        id S231968AbhC3NFO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 30 Mar 2021 09:05:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:55409 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232163AbhC3NFF (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 30 Mar 2021 09:05:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1617109505;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zEabHD/V6iZrPn1MSypSR5kWmST9dAaEpzKcbSfdR40=;
+        b=Nz6jvRi/m6fyVpRUeAI1xAHr9HOaZS6SyTFdNZ+Ei3IDetMWxnrU1qFtts68VjiwCjbu39
+        gNZ7RS6n76co7IAP+bUNbxEiIcoI0Ifogo2kXORgNHAYIbkpH8Lal3Z+rEAwPz2JZv+7eq
+        6T4ANAXWM1j2iAHAHdIMfuSImKxPiCo=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-298-N9TsKufIOluS7OyA4Uc8OQ-1; Tue, 30 Mar 2021 09:05:00 -0400
+X-MC-Unique: N9TsKufIOluS7OyA4Uc8OQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 17E0A8030A1;
+        Tue, 30 Mar 2021 13:04:58 +0000 (UTC)
+Received: from carbon (unknown [10.36.110.5])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C8FE654272;
+        Tue, 30 Mar 2021 13:04:49 +0000 (UTC)
+Date:   Tue, 30 Mar 2021 15:04:48 +0200
+From:   Jesper Dangaard Brouer <brouer@redhat.com>
+To:     Ong Boon Leong <boon.leong.ong@intel.com>
+Cc:     brouer@redhat.com, Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH net-next v2 0/6] stmmac: Add XDP support
+Message-ID: <20210330150448.1eae9a6b@carbon>
+In-Reply-To: <20210330024949.14010-1-boon.leong.ong@intel.com>
+References: <20210330024949.14010-1-boon.leong.ong@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-If the call to xsk_socket__create fails, the user may want to retry the
-socket creation using the same umem. Ensure that the umem is in the
-same state on exit if the call fails by:
-1. ensuring the umem _save pointers are unmodified.
-2. not unmapping the set of umem rings that were set up with the umem
-during xsk_umem__create, since those maps existed before the call to
-xsk_socket__create and should remain in tact even in the event of
-failure.
+On Tue, 30 Mar 2021 10:49:43 +0800
+Ong Boon Leong <boon.leong.ong@intel.com> wrote:
 
-Fixes: 2f6324a3937f ("libbpf: Support shared umems between queues and devices")
+> It will be great if community help test out these v2 patch series on your
+> platform and provide me feedback.
 
-Signed-off-by: Ciara Loftus <ciara.loftus@intel.com>
----
- tools/lib/bpf/xsk.c | 29 ++++++++++++++++-------------
- 1 file changed, 16 insertions(+), 13 deletions(-)
+Are there any (developer) boards available that can be bought online?
+(that have HW for this Ethernet driver stmmac)
 
-diff --git a/tools/lib/bpf/xsk.c b/tools/lib/bpf/xsk.c
-index 443b0cfb45e8..d4991ddff05a 100644
---- a/tools/lib/bpf/xsk.c
-+++ b/tools/lib/bpf/xsk.c
-@@ -743,21 +743,23 @@ static struct xsk_ctx *xsk_get_ctx(struct xsk_umem *umem, int ifindex,
- 	return NULL;
- }
- 
--static void xsk_put_ctx(struct xsk_ctx *ctx)
-+static void xsk_put_ctx(struct xsk_ctx *ctx, bool unmap)
- {
- 	struct xsk_umem *umem = ctx->umem;
- 	struct xdp_mmap_offsets off;
- 	int err;
- 
- 	if (--ctx->refcount == 0) {
--		err = xsk_get_mmap_offsets(umem->fd, &off);
--		if (!err) {
--			munmap(ctx->fill->ring - off.fr.desc,
--			       off.fr.desc + umem->config.fill_size *
--			       sizeof(__u64));
--			munmap(ctx->comp->ring - off.cr.desc,
--			       off.cr.desc + umem->config.comp_size *
--			       sizeof(__u64));
-+		if (unmap) {
-+			err = xsk_get_mmap_offsets(umem->fd, &off);
-+			if (!err) {
-+				munmap(ctx->fill->ring - off.fr.desc,
-+				       off.fr.desc + umem->config.fill_size *
-+				sizeof(__u64));
-+				munmap(ctx->comp->ring - off.cr.desc,
-+				       off.cr.desc + umem->config.comp_size *
-+				sizeof(__u64));
-+			}
- 		}
- 
- 		list_del(&ctx->list);
-@@ -797,8 +799,6 @@ static struct xsk_ctx *xsk_create_ctx(struct xsk_socket *xsk,
- 	memcpy(ctx->ifname, ifname, IFNAMSIZ - 1);
- 	ctx->ifname[IFNAMSIZ - 1] = '\0';
- 
--	umem->fill_save = NULL;
--	umem->comp_save = NULL;
- 	ctx->fill = fill;
- 	ctx->comp = comp;
- 	list_add(&ctx->list, &umem->ctx_list);
-@@ -854,6 +854,7 @@ int xsk_socket__create_shared(struct xsk_socket **xsk_ptr,
- 	struct xsk_socket *xsk;
- 	struct xsk_ctx *ctx;
- 	int err, ifindex;
-+	bool unmap = umem->fill_save != fill;
- 
- 	if (!umem || !xsk_ptr || !(rx || tx))
- 		return -EFAULT;
-@@ -994,6 +995,8 @@ int xsk_socket__create_shared(struct xsk_socket **xsk_ptr,
- 	}
- 
- 	*xsk_ptr = xsk;
-+	umem->fill_save = NULL;
-+	umem->comp_save = NULL;
- 	return 0;
- 
- out_mmap_tx:
-@@ -1005,7 +1008,7 @@ int xsk_socket__create_shared(struct xsk_socket **xsk_ptr,
- 		munmap(rx_map, off.rx.desc +
- 		       xsk->config.rx_size * sizeof(struct xdp_desc));
- out_put_ctx:
--	xsk_put_ctx(ctx);
-+	xsk_put_ctx(ctx, unmap);
- out_socket:
- 	if (--umem->refcount)
- 		close(xsk->fd);
-@@ -1071,7 +1074,7 @@ void xsk_socket__delete(struct xsk_socket *xsk)
- 		}
- 	}
- 
--	xsk_put_ctx(ctx);
-+	xsk_put_ctx(ctx, true);
- 
- 	umem->refcount--;
- 	/* Do not close an fd that also has an associated umem connected
+I'm interested in playing with the hardwares Split Header (SPH)
+feature. As this was one of the use-cases for XDP multi-frame work.
+
 -- 
-2.17.1
+Best regards,
+  Jesper Dangaard Brouer
+  MSc.CS, Principal Kernel Engineer at Red Hat
+  LinkedIn: http://www.linkedin.com/in/brouer
 
