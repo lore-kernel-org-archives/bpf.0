@@ -2,33 +2,33 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38A45C433DB
-	for <bpf@archiver.kernel.org>; Tue, 30 Mar 2021 23:16:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68952C433E0
+	for <bpf@archiver.kernel.org>; Tue, 30 Mar 2021 23:17:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EDF2261996
-	for <bpf@archiver.kernel.org>; Tue, 30 Mar 2021 23:16:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F15AE619D0
+	for <bpf@archiver.kernel.org>; Tue, 30 Mar 2021 23:16:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233167AbhC3XQX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S233152AbhC3XQX (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Tue, 30 Mar 2021 19:16:23 -0400
-Received: from mail-40131.protonmail.ch ([185.70.40.131]:44226 "EHLO
-        mail-40131.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233112AbhC3XP4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 30 Mar 2021 19:15:56 -0400
-Date:   Tue, 30 Mar 2021 23:15:52 +0000
+Received: from mail-40134.protonmail.ch ([185.70.40.134]:27087 "EHLO
+        mail-40134.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233026AbhC3XPy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 30 Mar 2021 19:15:54 -0400
+Date:   Tue, 30 Mar 2021 23:15:45 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
-        t=1617146154; bh=zI3QaYD0UyhErTHzJ9xtVjlAtErv7jv4T3mrzGJ1yG8=;
-        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=hEEInPeZfS46I+eb+l/P+YSFbDIzaO/vmhqGZlKOcsx8ZXI59qVkIwcLof96mmSEE
-         Pi/OjqUIiEyOOoaVLP/qObbLVQvol/hYXquNhPoAWC0gE13BHJx/aSjzHcxy3sF5+o
-         guQh8oCRq799d3V4msfSNjPxeNO2as4vvzS/Klfl7vT74QcmUEJKSLJutw4BTLFYKo
-         0XQFvm54I970bpX3IAdhVlMJJ94xvNlFjLUtnPI938QbjO3wiJ59v+NBrxRUkDhuon
-         Nldxte0uOVBTO6WOv53ZQvOIzOHEjN2A7+6gfxwKOCaOV3zjnbNLc267XDih9j9XLu
-         LeekmPefi9jmA==
+        t=1617146152; bh=zG9SSUw4/Ao2wQS3FMFRGbEb1lFQgDiESXkJ9lxuSsU=;
+        h=Date:To:From:Cc:Reply-To:Subject:From;
+        b=fUFFSwYfp9SbO1ukq4EIU6vyXzV7ofNWUGi1ivJdCvgJaN8MTAKk9MMt6Kbm24WR2
+         BrL50oqRFGoJ4SI2YgefkLgrkrjVIebu1GJ/zmbIUa+YyOgkAQmb1qJbeBeAxt6PBM
+         vA7O3zDYWDKIjukMWmELfDWna4c32uffjNIzGFkGiL0cBnRqExcMQrbXxDxeg1Pi2h
+         VF0FF6FbFXrFdVnBsx7gKzvo3hDiQFYP5NeqEJ8G2IHhPr4JSUAjxF0cd+WZiak5B9
+         i5GBs3zu1vkLUB2uQF8RvTi3VVKo1WOPKUCZsMD5ZLiwv8sOYCj6u2lSVfe4U7DAyl
+         HXuRCocOfxmLw==
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>
 From:   Alexander Lobakin <alobakin@pm.me>
@@ -47,10 +47,8 @@ Cc:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
         Alexander Lobakin <alobakin@pm.me>, netdev@vger.kernel.org,
         bpf@vger.kernel.org, linux-kernel@vger.kernel.org
 Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: [PATCH bpf-next 1/2] xsk: speed-up generic full-copy xmit
-Message-ID: <20210330231528.546284-2-alobakin@pm.me>
-In-Reply-To: <20210330231528.546284-1-alobakin@pm.me>
-References: <20210330231528.546284-1-alobakin@pm.me>
+Subject: [PATCH bpf-next 0/2] xsk: introduce generic almost-zerocopy xmit
+Message-ID: <20210330231528.546284-1-alobakin@pm.me>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
@@ -58,42 +56,37 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-There are a few moments that are known for sure at the moment of
-copying:
- - allocated skb is fully linear;
- - its linear space is long enough to hold the full buffer data.
+This series is based on the exceptional generic zerocopy xmit logics
+initially introduced by Xuan Zhuo. It extends it the way that it
+could cover all the sane drivers, not only the ones that are capable
+of xmitting skbs with no linear space.
 
-So, the out-of-line skb_put(), skb_store_bits() and the check for
-a retcode can be replaced with plain memcpy(__skb_put()) with
-no loss.
-Also align memcpy()'s len to sizeof(long) to improve its performance.
+The first patch is a random while-we-are-here improvement over
+full-copy path, and the second is the main course. See the individual
+commit messages for the details.
 
-Signed-off-by: Alexander Lobakin <alobakin@pm.me>
----
- net/xdp/xsk.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+The original (full-zerocopy) path is still here and still generally
+faster, but for now it seems like virtio_net will remain the only
+user of it, at least for a considerable period of time.
 
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index a71ed664da0a..41f8f21b3348 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -517,14 +517,9 @@ static struct sk_buff *xsk_build_skb(struct xdp_sock *=
-xs,
- =09=09=09return ERR_PTR(err);
+Alexander Lobakin (2):
+  xsk: speed-up generic full-copy xmit
+  xsk: introduce generic almost-zerocopy xmit
 
- =09=09skb_reserve(skb, hr);
--=09=09skb_put(skb, len);
+ net/xdp/xsk.c | 33 +++++++++++++++++++++++----------
+ 1 file changed, 23 insertions(+), 10 deletions(-)
 
- =09=09buffer =3D xsk_buff_raw_get_data(xs->pool, desc->addr);
--=09=09err =3D skb_store_bits(skb, 0, buffer, len);
--=09=09if (unlikely(err)) {
--=09=09=09kfree_skb(skb);
--=09=09=09return ERR_PTR(err);
--=09=09}
-+=09=09memcpy(__skb_put(skb, len), buffer, ALIGN(len, sizeof(long)));
- =09}
-
- =09skb->dev =3D dev;
+--
+Well, this is untested. I currently don't have an access to my setup
+and is bound by moving to another country, but as I don't know for
+sure at the moment when I'll get back to work on the kernel next time,
+I found it worthy to publish this now -- if any further changes will
+be required when I already will be out-of-sight, maybe someone could
+carry on to make a another revision and so on (I'm still here for any
+questions, comments, reviews and improvements till the end of this
+week).
+But this *should* work with all the sane drivers. If a particular
+one won't handle this, it's likely ill.
 --
 2.31.1
 
