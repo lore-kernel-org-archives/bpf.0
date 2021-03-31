@@ -4,118 +4,89 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D5BAC433E4
-	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 07:12:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B384FC433C1
+	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 07:13:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 09828619EF
-	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 07:12:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7BB056190A
+	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 07:13:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234031AbhCaHMT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 31 Mar 2021 03:12:19 -0400
-Received: from out30-57.freemail.mail.aliyun.com ([115.124.30.57]:55975 "EHLO
-        out30-57.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233906AbhCaHLo (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 31 Mar 2021 03:11:44 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0UTwBY6S_1617174701;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0UTwBY6S_1617174701)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 31 Mar 2021 15:11:42 +0800
-From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To:     netdev@vger.kernel.org
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        virtualization@lists.linux-foundation.org, bpf@vger.kernel.org,
-        Dust Li <dust.li@linux.alibaba.com>
-Subject: [PATCH net-next v3 5/8] virtio-net: xsk zero copy xmit support xsk unaligned mode
-Date:   Wed, 31 Mar 2021 15:11:36 +0800
-Message-Id: <20210331071139.15473-6-xuanzhuo@linux.alibaba.com>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20210331071139.15473-1-xuanzhuo@linux.alibaba.com>
-References: <20210331071139.15473-1-xuanzhuo@linux.alibaba.com>
+        id S234020AbhCaHNX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 31 Mar 2021 03:13:23 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:15410 "EHLO
+        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234089AbhCaHNO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 31 Mar 2021 03:13:14 -0400
+Received: from DGGEMS401-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4F9HYG0R9FzlWlB;
+        Wed, 31 Mar 2021 15:11:30 +0800 (CST)
+Received: from k03.huawei.com (10.67.174.111) by
+ DGGEMS401-HUB.china.huawei.com (10.3.19.201) with Microsoft SMTP Server id
+ 14.3.498.0; Wed, 31 Mar 2021 15:13:02 +0800
+From:   He Fengqing <hefengqing@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <netdev@vger.kernel.org>
+CC:     <kpsingh@kernel.org>, <john.fastabend@gmail.com>, <yhs@fb.com>,
+        <songliubraving@fb.com>, <kafai@fb.com>, <andrii@kernel.org>,
+        <daniel@iogearbox.net>, <ast@kernel.org>
+Subject: [Patch bpf-next] bpf: remove unused parameter from ___bpf_prog_run
+Date:   Wed, 31 Mar 2021 07:51:35 +0000
+Message-ID: <20210331075135.3850782-1-hefengqing@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.111]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-In xsk unaligned mode, the frame pointed to by desc may span two
-consecutive pages, but not more than two pages.
+'stack' parameter is not used in ___bpf_prog_run,
+the base address have been set to FP reg. So consequently remove it.
 
-Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Reviewed-by: Dust Li <dust.li@linux.alibaba.com>
+Signed-off-by: He Fengqing <hefengqing@huawei.com>
 ---
- drivers/net/virtio_net.c | 30 ++++++++++++++++++++++++------
- 1 file changed, 24 insertions(+), 6 deletions(-)
+ kernel/bpf/core.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index c8a317a93ef7..259fafcf6028 100644
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -2562,24 +2562,42 @@ static void virtnet_xsk_check_space(struct send_queue *sq)
- static int virtnet_xsk_xmit(struct send_queue *sq, struct xsk_buff_pool *pool,
- 			    struct xdp_desc *desc)
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index f5423251c118..5e31ee9f7512 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -1363,11 +1363,10 @@ u64 __weak bpf_probe_read_kernel(void *dst, u32 size, const void *unsafe_ptr)
+  *	__bpf_prog_run - run eBPF program on a given context
+  *	@regs: is the array of MAX_BPF_EXT_REG eBPF pseudo-registers
+  *	@insn: is the array of eBPF instructions
+- *	@stack: is the eBPF storage stack
+  *
+  * Decode and execute eBPF instructions.
+  */
+-static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn, u64 *stack)
++static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
  {
-+	u32 offset, n, i, copy, copied;
- 	struct virtnet_info *vi;
- 	struct page *page;
- 	void *data;
--	u32 offset;
-+	int err, m;
- 	u64 addr;
--	int err;
+ #define BPF_INSN_2_LBL(x, y)    [BPF_##x | BPF_##y] = &&x##_##y
+ #define BPF_INSN_3_LBL(x, y, z) [BPF_##x | BPF_##y | BPF_##z] = &&x##_##y##_##z
+@@ -1701,7 +1700,7 @@ static unsigned int PROG_NAME(stack_size)(const void *ctx, const struct bpf_insn
+ \
+ 	FP = (u64) (unsigned long) &stack[ARRAY_SIZE(stack)]; \
+ 	ARG1 = (u64) (unsigned long) ctx; \
+-	return ___bpf_prog_run(regs, insn, stack); \
++	return ___bpf_prog_run(regs, insn); \
+ }
  
- 	vi = sq->vq->vdev->priv;
- 	addr = desc->addr;
-+
- 	data = xsk_buff_raw_get_data(pool, addr);
-+
- 	offset = offset_in_page(data);
-+	m = desc->len - (PAGE_SIZE - offset);
-+	/* xsk unaligned mode, desc will use two page */
-+	if (m > 0)
-+		n = 3;
-+	else
-+		n = 2;
+ #define PROG_NAME_ARGS(stack_size) __bpf_prog_run_args##stack_size
+@@ -1718,7 +1717,7 @@ static u64 PROG_NAME_ARGS(stack_size)(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5, \
+ 	BPF_R3 = r3; \
+ 	BPF_R4 = r4; \
+ 	BPF_R5 = r5; \
+-	return ___bpf_prog_run(regs, insn, stack); \
++	return ___bpf_prog_run(regs, insn); \
+ }
  
--	sg_init_table(sq->sg, 2);
-+	sg_init_table(sq->sg, n);
- 	sg_set_buf(sq->sg, &xsk_hdr, vi->hdr_len);
--	page = xsk_buff_xdp_get_page(pool, addr);
--	sg_set_page(sq->sg + 1, page, desc->len, offset);
- 
--	err = virtqueue_add_outbuf(sq->vq, sq->sg, 2, NULL, GFP_ATOMIC);
-+	copied = 0;
-+	for (i = 1; i < n; ++i) {
-+		copy = min_t(int, desc->len - copied, PAGE_SIZE - offset);
-+
-+		page = xsk_buff_xdp_get_page(pool, addr + copied);
-+
-+		sg_set_page(sq->sg + i, page, copy, offset);
-+		copied += copy;
-+		if (offset)
-+			offset = 0;
-+	}
-+
-+	err = virtqueue_add_outbuf(sq->vq, sq->sg, n, NULL, GFP_ATOMIC);
- 	if (unlikely(err))
- 		sq->xsk.last_desc = *desc;
- 
+ #define EVAL1(FN, X) FN(X)
 -- 
-2.31.0
+2.25.1
 
