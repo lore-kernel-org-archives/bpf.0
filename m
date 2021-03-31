@@ -7,47 +7,47 @@ X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D137C433B4
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33940C433ED
 	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 16:46:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1B1B26101E
+	by mail.kernel.org (Postfix) with ESMTP id 0680F60FEE
 	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 16:46:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232406AbhCaQpq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 31 Mar 2021 12:45:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:52234 "EHLO
+        id S232805AbhCaQpr (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 31 Mar 2021 12:45:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:59102 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232805AbhCaQpW (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 31 Mar 2021 12:45:22 -0400
+        by vger.kernel.org with ESMTP id S234003AbhCaQpZ (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 31 Mar 2021 12:45:25 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1617209121;
+        s=mimecast20190719; t=1617209125;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ue1WJN9VVLFtg4vxqXBhw+4/lkwt4siu2NvJcjrHRVw=;
-        b=SPn0nqp+/5ndQpCLGpafDRGLY3PfQSzHGe+wapNlbYGDnRt1E9Puu214DoLo8Zk1YXFI07
-        mORbArXYkGjPi6ZhLhjme9TG+AS2n0QqNCK0MNIyQf1PGPmLmpaRlv8hRHkqtoCZkL3z5k
-        1o+w6M0VROdfQ8BC5bDxn2B+k6tNW84=
+        bh=7xFKRDA7GxWzWD13Ezn+FHhuS3mF6hkJYSoOAJxBcCA=;
+        b=OuhyUJHppK/Z27Z6eIQOTob7e+aTrPm2CgP5hSim81L8whCEyv676An5C/07gNcGHBhjgM
+        BL5GGS7iBOlIxOFWg6ipsl0NzkK9OWmFSBvDMBw8WWxtR6jc1XJJuoDk3RLCiOdPY9kd6W
+        tCZ6LeFp70EjOaejQaV9PlR5XyfPYaU=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-528-724S6QzSNQi_ZK9sqV5fJQ-1; Wed, 31 Mar 2021 12:45:19 -0400
-X-MC-Unique: 724S6QzSNQi_ZK9sqV5fJQ-1
+ us-mta-100-b1x4-XifNyy8bJTHOb1ZFQ-1; Wed, 31 Mar 2021 12:45:23 -0400
+X-MC-Unique: b1x4-XifNyy8bJTHOb1ZFQ-1
 Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D1DA710082EC;
-        Wed, 31 Mar 2021 16:45:18 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 27B0A10082EA;
+        Wed, 31 Mar 2021 16:45:22 +0000 (UTC)
 Received: from astarta.redhat.com (ovpn-114-48.ams2.redhat.com [10.36.114.48])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A360516922;
-        Wed, 31 Mar 2021 16:45:17 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C67EDA8438;
+        Wed, 31 Mar 2021 16:45:20 +0000 (UTC)
 From:   Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
 To:     bpf@vger.kernel.org
 Cc:     andrii@kernel.org, jolsa@redhat.com,
         Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
-Subject: [PATCH bpf-next v3 2/8] selftests/bpf: test_progs/sockopt_sk: Convert to use BPF skeleton
-Date:   Wed, 31 Mar 2021 19:44:58 +0300
-Message-Id: <20210331164504.320614-2-yauheni.kaliuta@redhat.com>
+Subject: [PATCH bpf-next v3 4/8] selftests/bpf: pass page size from userspace in map_ptr
+Date:   Wed, 31 Mar 2021 19:45:00 +0300
+Message-Id: <20210331164504.320614-4-yauheni.kaliuta@redhat.com>
 In-Reply-To: <20210331164504.320614-1-yauheni.kaliuta@redhat.com>
 References: <20210331164433.320534-1-yauheni.kaliuta@redhat.com>
  <20210331164504.320614-1-yauheni.kaliuta@redhat.com>
@@ -58,107 +58,76 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Switch the test to use BPF skeleton to save some boilerplate and
-make it easy to access bpf program bss segment.
+Use ASSERT to check result but keep CHECK where format was used to
+report error.
 
-The latter will be used to pass PAGE_SIZE from userspace since there
-is no convenient way for bpf program to get it from inside of the
-kernel.
+Use bpf_map__set_max_entries() to set map size dynamically from
+userspace according to page size.
 
 Signed-off-by: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
 ---
- .../selftests/bpf/prog_tests/sockopt_sk.c     | 65 +++++--------------
- 1 file changed, 17 insertions(+), 48 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/map_ptr.c | 15 +++++++++++++--
+ tools/testing/selftests/bpf/progs/map_ptr_kern.c |  4 ++--
+ 2 files changed, 15 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c b/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
-index d5b44b135c00..7274b12abe17 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
-@@ -3,6 +3,7 @@
- #include "cgroup_helpers.h"
+diff --git a/tools/testing/selftests/bpf/prog_tests/map_ptr.c b/tools/testing/selftests/bpf/prog_tests/map_ptr.c
+index c230a573c373..4972f92205c7 100644
+--- a/tools/testing/selftests/bpf/prog_tests/map_ptr.c
++++ b/tools/testing/selftests/bpf/prog_tests/map_ptr.c
+@@ -12,11 +12,22 @@ void test_map_ptr(void)
+ 	__u32 duration = 0, retval;
+ 	char buf[128];
+ 	int err;
++	int page_size = getpagesize();
  
- #include <linux/tcp.h>
-+#include "sockopt_sk.skel.h"
+-	skel = map_ptr_kern__open_and_load();
+-	if (CHECK(!skel, "skel_open_load", "open_load failed\n"))
++	skel = map_ptr_kern__open();
++	if (!ASSERT_OK_PTR(skel, "skel_open"))
+ 		return;
  
- #ifndef SOL_TCP
- #define SOL_TCP IPPROTO_TCP
-@@ -191,60 +192,28 @@ static int getsetsockopt(void)
- 	return -1;
- }
- 
--static int prog_attach(struct bpf_object *obj, int cgroup_fd, const char *title)
--{
--	enum bpf_attach_type attach_type;
--	enum bpf_prog_type prog_type;
--	struct bpf_program *prog;
--	int err;
--
--	err = libbpf_prog_type_by_name(title, &prog_type, &attach_type);
--	if (err) {
--		log_err("Failed to deduct types for %s BPF program", title);
--		return -1;
--	}
--
--	prog = bpf_object__find_program_by_title(obj, title);
--	if (!prog) {
--		log_err("Failed to find %s BPF program", title);
--		return -1;
--	}
--
--	err = bpf_prog_attach(bpf_program__fd(prog), cgroup_fd,
--			      attach_type, 0);
--	if (err) {
--		log_err("Failed to attach %s BPF program", title);
--		return -1;
--	}
--
--	return 0;
--}
--
- static void run_test(int cgroup_fd)
- {
--	struct bpf_prog_load_attr attr = {
--		.file = "./sockopt_sk.o",
--	};
--	struct bpf_object *obj;
--	int ignored;
--	int err;
--
--	err = bpf_prog_load_xattr(&attr, &obj, &ignored);
--	if (CHECK_FAIL(err))
--		return;
-+	struct sockopt_sk *skel;
++	err = bpf_map__set_max_entries(skel->maps.m_ringbuf, page_size);
++	if (!ASSERT_OK(err, "bpf_map__set_max_entries"))
++		goto cleanup;
 +
-+	skel = sockopt_sk__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_load"))
++	err = map_ptr_kern__load(skel);
++	if (!ASSERT_OK(err, "skel_load"))
 +		goto cleanup;
++
++	skel->bss->page_size = page_size;
++
+ 	err = bpf_prog_test_run(bpf_program__fd(skel->progs.cg_skb), 1, &pkt_v4,
+ 				sizeof(pkt_v4), buf, NULL, &retval, NULL);
  
--	err = prog_attach(obj, cgroup_fd, "cgroup/getsockopt");
--	if (CHECK_FAIL(err))
--		goto close_bpf_object;
-+	skel->links._setsockopt =
-+		bpf_program__attach_cgroup(skel->progs._setsockopt, cgroup_fd);
-+	if (!ASSERT_OK_PTR(skel->links._setsockopt, "setsockopt_link"))
-+		goto cleanup;
+diff --git a/tools/testing/selftests/bpf/progs/map_ptr_kern.c b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
+index d8850bc6a9f1..0e06789ad4d2 100644
+--- a/tools/testing/selftests/bpf/progs/map_ptr_kern.c
++++ b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
+@@ -12,6 +12,7 @@ _Static_assert(MAX_ENTRIES < LOOP_BOUND, "MAX_ENTRIES must be < LOOP_BOUND");
  
--	err = prog_attach(obj, cgroup_fd, "cgroup/setsockopt");
--	if (CHECK_FAIL(err))
--		goto close_bpf_object;
-+	skel->links._getsockopt =
-+		bpf_program__attach_cgroup(skel->progs._getsockopt, cgroup_fd);
-+	if (!ASSERT_OK_PTR(skel->links._getsockopt, "getsockopt_link"))
-+		goto cleanup;
+ enum bpf_map_type g_map_type = BPF_MAP_TYPE_UNSPEC;
+ __u32 g_line = 0;
++int page_size; /* userspace should set it */
  
--	CHECK_FAIL(getsetsockopt());
-+	ASSERT_OK(getsetsockopt(), "getsetsockopt");
+ #define VERIFY_TYPE(type, func) ({	\
+ 	g_map_type = type;		\
+@@ -635,7 +636,6 @@ struct bpf_ringbuf_map {
  
--close_bpf_object:
--	bpf_object__close(obj);
-+cleanup:
-+	sockopt_sk__destroy(skel);
+ struct {
+ 	__uint(type, BPF_MAP_TYPE_RINGBUF);
+-	__uint(max_entries, 1 << 12);
+ } m_ringbuf SEC(".maps");
+ 
+ static inline int check_ringbuf(void)
+@@ -643,7 +643,7 @@ static inline int check_ringbuf(void)
+ 	struct bpf_ringbuf_map *ringbuf = (struct bpf_ringbuf_map *)&m_ringbuf;
+ 	struct bpf_map *map = (struct bpf_map *)&m_ringbuf;
+ 
+-	VERIFY(check(&ringbuf->map, map, 0, 0, 1 << 12));
++	VERIFY(check(&ringbuf->map, map, 0, 0, page_size));
+ 
+ 	return 1;
  }
- 
- void test_sockopt_sk(void)
 -- 
 2.31.1
 
