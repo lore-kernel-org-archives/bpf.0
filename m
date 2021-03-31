@@ -2,107 +2,97 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EDE25C433DB
-	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 07:06:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C49C3C433DB
+	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 07:12:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AA638619CF
-	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 07:06:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 91238619E2
+	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 07:12:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233940AbhCaHGW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 31 Mar 2021 03:06:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37444 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233939AbhCaHGL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 31 Mar 2021 03:06:11 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B81E7619CF;
-        Wed, 31 Mar 2021 07:06:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617174370;
-        bh=GFNu/dhI0J9kZ4WlROA/yJNcmBXvrZW9pxZC4VNia80=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=qUui+xut8hg6f9wsWSBu880h4hFEfvyPAwPVrNpwnDpW/DqkY2pRN4wBRcbRX4X3g
-         M+kO1d+Uv7mL5IxoReSjatf5bphOozwwRkFxNH8o6p6dlRCHOH303WhZGaoKk33vlH
-         suyNfxgtG1wHa2pbxsoptbHKGbQrOnckqcNvwGFZHbvxIiFPeDzurYHz1hQKqvbT8E
-         jk3+1cD5w6VswPfCCXqqSMt7Y7TbgQxj3suzTFiO3zDC2dpR6mhTc4YFhG/Lu78v6I
-         t5jZ6Jq/PibMFJWZtGic816QFMbNvjsml4AJ/vWm+GRAXAvri3fa7IH7C3ajL0O6D+
-         dfWFtrwRwvriw==
-Received: by mail-wr1-f42.google.com with SMTP id j7so18547041wrd.1;
-        Wed, 31 Mar 2021 00:06:09 -0700 (PDT)
-X-Gm-Message-State: AOAM530lDZACSD2JFOeTyGtWrmth3rbuI926yok576g2hi8sS/ksv1v2
-        y8pojzMoDynYHq6aqN7iFj6+iVZTNkSVGLwinfg=
-X-Google-Smtp-Source: ABdhPJxMjRwsTlV9yQLKdib3ebiZrPxtBCuOUuTZnmHXieRvf7BIo9N4IeeP/U55e03M1I5BLMJR9ryipEyfOgo2t3s=
-X-Received: by 2002:a5d:591a:: with SMTP id v26mr1872032wrd.172.1617174368379;
- Wed, 31 Mar 2021 00:06:08 -0700 (PDT)
+        id S233926AbhCaHLo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 31 Mar 2021 03:11:44 -0400
+Received: from out30-45.freemail.mail.aliyun.com ([115.124.30.45]:34850 "EHLO
+        out30-45.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233858AbhCaHLm (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 31 Mar 2021 03:11:42 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0UTwOnhz_1617174700;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0UTwOnhz_1617174700)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 31 Mar 2021 15:11:40 +0800
+From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+To:     netdev@vger.kernel.org
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        virtualization@lists.linux-foundation.org, bpf@vger.kernel.org,
+        Dust Li <dust.li@linux.alibaba.com>
+Subject: [PATCH net-next v3 2/8] xsk: support get page by addr
+Date:   Wed, 31 Mar 2021 15:11:33 +0800
+Message-Id: <20210331071139.15473-3-xuanzhuo@linux.alibaba.com>
+X-Mailer: git-send-email 2.31.0
+In-Reply-To: <20210331071139.15473-1-xuanzhuo@linux.alibaba.com>
+References: <20210331071139.15473-1-xuanzhuo@linux.alibaba.com>
 MIME-Version: 1.0
-References: <20210331061218.1647-1-ciara.loftus@intel.com>
-In-Reply-To: <20210331061218.1647-1-ciara.loftus@intel.com>
-From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-Date:   Wed, 31 Mar 2021 09:05:56 +0200
-X-Gmail-Original-Message-ID: <CAJ+HfNjsbAA0v48CLOgEw0bj4prsg5ZzP3=iU=QGTFWrAbOAng@mail.gmail.com>
-Message-ID: <CAJ+HfNjsbAA0v48CLOgEw0bj4prsg5ZzP3=iU=QGTFWrAbOAng@mail.gmail.com>
-Subject: Re: [PATCH v4 bpf 0/3] AF_XDP Socket Creation Fixes
-To:     Ciara Loftus <ciara.loftus@intel.com>
-Cc:     Netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, 31 Mar 2021 at 08:43, Ciara Loftus <ciara.loftus@intel.com> wrote:
->
-> This series fixes some issues around socket creation for AF_XDP.
->
-> Patch 1 fixes a potential NULL pointer dereference in
-> xsk_socket__create_shared.
->
-> Patch 2 ensures that the umem passed to xsk_socket__create(_shared)
-> remains unchanged in event of failure.
->
-> Patch 3 makes it possible for xsk_socket__create(_shared) to
-> succeed even if the rx and tx XDP rings have already been set up by
-> introducing a new fields to struct xsk_umem which represent the ring
-> setup status for the xsk which shares the fd with the umem.
->
-> v3->v4:
-> * Reduced nesting in xsk_put_ctx as suggested by Alexei.
-> * Use bools instead of a u8 and flags to represent the
->   ring setup status as suggested by Bj=C3=B6rn.
->
+xsk adds an interface and returns the page corresponding to
+data. virtio-net does not initialize dma, so it needs page to construct
+scatterlist to pass to vring.
 
-Thanks, Ciara! LGTM!
+Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Reviewed-by: Dust Li <dust.li@linux.alibaba.com>
+---
+ include/net/xdp_sock_drv.h | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-Acked-by: Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org>
+diff --git a/include/net/xdp_sock_drv.h b/include/net/xdp_sock_drv.h
+index 4e295541e396..1d08b5d8d15f 100644
+--- a/include/net/xdp_sock_drv.h
++++ b/include/net/xdp_sock_drv.h
+@@ -72,6 +72,12 @@ static inline dma_addr_t xsk_buff_xdp_get_frame_dma(struct xdp_buff *xdp)
+ 	return xp_get_frame_dma(xskb);
+ }
+ 
++static inline struct page *xsk_buff_xdp_get_page(struct xsk_buff_pool *pool, u64 addr)
++{
++	addr = pool->unaligned ? xp_unaligned_add_offset_to_addr(addr) : addr;
++	return pool->umem->pgs[addr >> PAGE_SHIFT];
++}
++
+ static inline struct xdp_buff *xsk_buff_alloc(struct xsk_buff_pool *pool)
+ {
+ 	return xp_alloc(pool);
+@@ -207,6 +213,11 @@ static inline dma_addr_t xsk_buff_xdp_get_frame_dma(struct xdp_buff *xdp)
+ 	return 0;
+ }
+ 
++static inline struct page *xsk_buff_xdp_get_page(struct xsk_buff_pool *pool, u64 addr)
++{
++	return NULL;
++}
++
+ static inline struct xdp_buff *xsk_buff_alloc(struct xsk_buff_pool *pool)
+ {
+ 	return NULL;
+-- 
+2.31.0
 
-
-> v2->v3:
-> * Instead of ignoring the return values of the setsockopt calls, introduc=
-e
->   a new flag to determine whether or not to call them based on the ring
->   setup status as suggested by Alexei.
->
-> v1->v2:
-> * Simplified restoring the _save pointers as suggested by Magnus.
-> * Fixed the condition which determines whether to unmap umem rings
->  when socket create fails.
->
-> This series applies on commit 861de02e5f3f2a104eecc5af1d248cb7bf8c5f75
->
-> Ciara Loftus (3):
->   libbpf: ensure umem pointer is non-NULL before dereferencing
->   libbpf: restore umem state after socket create failure
->   libbpf: only create rx and tx XDP rings when necessary
->
->  tools/lib/bpf/xsk.c | 57 +++++++++++++++++++++++++++++----------------
->  1 file changed, 37 insertions(+), 20 deletions(-)
->
-> --
-> 2.17.1
->
