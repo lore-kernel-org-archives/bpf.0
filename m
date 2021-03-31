@@ -5,24 +5,24 @@ X-Spam-Level:
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AB9B2C433E5
-	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 07:12:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A7B37C433C1
+	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 07:12:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7B4B4619EC
-	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 07:12:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 81487619E2
+	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 07:12:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233977AbhCaHLp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 31 Mar 2021 03:11:45 -0400
-Received: from out30-44.freemail.mail.aliyun.com ([115.124.30.44]:59394 "EHLO
-        out30-44.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233895AbhCaHLo (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 31 Mar 2021 03:11:44 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R301e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0UTwOni8_1617174701;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0UTwOni8_1617174701)
+        id S233962AbhCaHMS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 31 Mar 2021 03:12:18 -0400
+Received: from out30-42.freemail.mail.aliyun.com ([115.124.30.42]:57785 "EHLO
+        out30-42.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233912AbhCaHLp (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 31 Mar 2021 03:11:45 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0UTvslU-_1617174702;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0UTvslU-_1617174702)
           by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 31 Mar 2021 15:11:41 +0800
+          Wed, 31 Mar 2021 15:11:42 +0800
 From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To:     netdev@vger.kernel.org
 Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
@@ -42,9 +42,9 @@ Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
         KP Singh <kpsingh@kernel.org>,
         virtualization@lists.linux-foundation.org, bpf@vger.kernel.org,
         Dust Li <dust.li@linux.alibaba.com>
-Subject: [PATCH net-next v3 4/8] virtio-net: xsk zero copy xmit implement wakeup and xmit
-Date:   Wed, 31 Mar 2021 15:11:35 +0800
-Message-Id: <20210331071139.15473-5-xuanzhuo@linux.alibaba.com>
+Subject: [PATCH net-next v3 6/8] virtio-net: xsk zero copy xmit kick by threshold
+Date:   Wed, 31 Mar 2021 15:11:37 +0800
+Message-Id: <20210331071139.15473-7-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.31.0
 In-Reply-To: <20210331071139.15473-1-xuanzhuo@linux.alibaba.com>
 References: <20210331071139.15473-1-xuanzhuo@linux.alibaba.com>
@@ -54,259 +54,82 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When the user calls sendto to consume the data in the xsk tx queue,
-virtnet_xsk_wakeup will be called.
+After testing, the performance of calling kick every time is not stable.
+And if all the packets are sent and kicked again, the performance is not
+good. So add a module parameter to specify how many packets are sent to
+call a kick.
 
-In wakeup, it will try to send a part of the data directly, the quantity
-is operated by the module parameter xsk_budget. There are two purposes
-for this realization:
-
-1. Send part of the data quickly to reduce the transmission delay of the
-   first packet
-2. Trigger tx interrupt, start napi to consume xsk tx data
-
-All sent xsk packets share the virtio-net header of xsk_hdr. If xsk
-needs to support csum and other functions later, consider assigning xsk
-hdr separately for each sent packet.
+8 is a relatively stable value with the best performance.
 
 Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 Reviewed-by: Dust Li <dust.li@linux.alibaba.com>
 ---
- drivers/net/virtio_net.c | 183 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 183 insertions(+)
+ drivers/net/virtio_net.c | 23 ++++++++++++++++++++---
+ 1 file changed, 20 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index 4e25408a2b37..c8a317a93ef7 100644
+index 259fafcf6028..d7e95f55478d 100644
 --- a/drivers/net/virtio_net.c
 +++ b/drivers/net/virtio_net.c
-@@ -28,9 +28,11 @@ static int napi_weight = NAPI_POLL_WEIGHT;
- module_param(napi_weight, int, 0444);
+@@ -29,10 +29,12 @@ module_param(napi_weight, int, 0444);
  
  static bool csum = true, gso = true, napi_tx = true;
-+static int xsk_budget = 32;
+ static int xsk_budget = 32;
++static int xsk_kick_thr = 8;
  module_param(csum, bool, 0444);
  module_param(gso, bool, 0444);
  module_param(napi_tx, bool, 0644);
-+module_param(xsk_budget, int, 0644);
+ module_param(xsk_budget, int, 0644);
++module_param(xsk_kick_thr, int, 0644);
  
  /* FIXME: MTU in config. */
  #define GOOD_PACKET_LEN (ETH_HLEN + VLAN_HLEN + ETH_DATA_LEN)
-@@ -47,6 +49,8 @@ module_param(napi_tx, bool, 0644);
+@@ -2612,6 +2614,8 @@ static int virtnet_xsk_xmit_batch(struct send_queue *sq,
+ 	struct xdp_desc desc;
+ 	int err, packet = 0;
+ 	int ret = -EAGAIN;
++	int need_kick = 0;
++	int kicks = 0;
  
- #define VIRTIO_XDP_FLAG	BIT(0)
+ 	if (sq->xsk.last_desc.addr) {
+ 		err = virtnet_xsk_xmit(sq, pool, &sq->xsk.last_desc);
+@@ -2619,6 +2623,7 @@ static int virtnet_xsk_xmit_batch(struct send_queue *sq,
+ 			return -EBUSY;
  
-+static struct virtio_net_hdr_mrg_rxbuf xsk_hdr;
-+
- /* RX packet size EWMA. The average packet size is used to determine the packet
-  * buffer size when refilling RX rings. As the entire RX ring may be refilled
-  * at once, the weight is chosen so that the EWMA will be insensitive to short-
-@@ -138,6 +142,9 @@ struct send_queue {
- 	struct {
- 		/* xsk pool */
- 		struct xsk_buff_pool __rcu *pool;
-+
-+		/* save the desc for next xmit, when xmit fail. */
-+		struct xdp_desc last_desc;
- 	} xsk;
- };
+ 		++packet;
++		++need_kick;
+ 		--budget;
+ 		sq->xsk.last_desc.addr = 0;
+ 	}
+@@ -2642,13 +2647,25 @@ static int virtnet_xsk_xmit_batch(struct send_queue *sq,
+ 		}
  
-@@ -2532,6 +2539,179 @@ static int virtnet_xdp_set(struct net_device *dev, struct bpf_prog *prog,
- 	return err;
- }
- 
-+static void virtnet_xsk_check_space(struct send_queue *sq)
-+{
-+	struct virtnet_info *vi = sq->vq->vdev->priv;
-+	struct net_device *dev = vi->dev;
-+	int qnum = sq - vi->sq;
+ 		++packet;
++		++need_kick;
++		if (need_kick > xsk_kick_thr) {
++			if (virtqueue_kick_prepare(sq->vq) &&
++			    virtqueue_notify(sq->vq))
++				++kicks;
 +
-+	/* If this sq is not the exclusive queue of the current cpu,
-+	 * then it may be called by start_xmit, so check it running out
-+	 * of space.
-+	 */
-+	if (is_xdp_raw_buffer_queue(vi, qnum))
-+		return;
-+
-+	/* Stop the queue to avoid getting packets that we are
-+	 * then unable to transmit. Then wait the tx interrupt.
-+	 */
-+	if (sq->vq->num_free < 2 + MAX_SKB_FRAGS)
-+		netif_stop_subqueue(dev, qnum);
-+}
-+
-+static int virtnet_xsk_xmit(struct send_queue *sq, struct xsk_buff_pool *pool,
-+			    struct xdp_desc *desc)
-+{
-+	struct virtnet_info *vi;
-+	struct page *page;
-+	void *data;
-+	u32 offset;
-+	u64 addr;
-+	int err;
-+
-+	vi = sq->vq->vdev->priv;
-+	addr = desc->addr;
-+	data = xsk_buff_raw_get_data(pool, addr);
-+	offset = offset_in_page(data);
-+
-+	sg_init_table(sq->sg, 2);
-+	sg_set_buf(sq->sg, &xsk_hdr, vi->hdr_len);
-+	page = xsk_buff_xdp_get_page(pool, addr);
-+	sg_set_page(sq->sg + 1, page, desc->len, offset);
-+
-+	err = virtqueue_add_outbuf(sq->vq, sq->sg, 2, NULL, GFP_ATOMIC);
-+	if (unlikely(err))
-+		sq->xsk.last_desc = *desc;
-+
-+	return err;
-+}
-+
-+static int virtnet_xsk_xmit_batch(struct send_queue *sq,
-+				  struct xsk_buff_pool *pool,
-+				  unsigned int budget,
-+				  bool in_napi, int *done)
-+{
-+	struct xdp_desc desc;
-+	int err, packet = 0;
-+	int ret = -EAGAIN;
-+
-+	if (sq->xsk.last_desc.addr) {
-+		err = virtnet_xsk_xmit(sq, pool, &sq->xsk.last_desc);
-+		if (unlikely(err))
-+			return -EBUSY;
-+
-+		++packet;
-+		--budget;
-+		sq->xsk.last_desc.addr = 0;
-+	}
-+
-+	while (budget-- > 0) {
-+		if (sq->vq->num_free < 2 + MAX_SKB_FRAGS) {
-+			ret = -EBUSY;
-+			break;
++			need_kick = 0;
 +		}
-+
-+		if (!xsk_tx_peek_desc(pool, &desc)) {
-+			/* done */
-+			ret = 0;
-+			break;
-+		}
-+
-+		err = virtnet_xsk_xmit(sq, pool, &desc);
-+		if (unlikely(err)) {
-+			ret = -EBUSY;
-+			break;
-+		}
-+
-+		++packet;
-+	}
-+
-+	if (packet) {
-+		if (virtqueue_kick_prepare(sq->vq) &&
-+		    virtqueue_notify(sq->vq)) {
-+			u64_stats_update_begin(&sq->stats.syncp);
-+			sq->stats.kicks += 1;
-+			u64_stats_update_end(&sq->stats.syncp);
-+		}
-+
-+		*done = packet;
-+
-+		xsk_tx_release(pool);
-+	}
-+
-+	return ret;
-+}
-+
-+static int virtnet_xsk_run(struct send_queue *sq, struct xsk_buff_pool *pool,
-+			   int budget, bool in_napi)
-+{
-+	int done = 0;
-+	int err;
-+
-+	free_old_xmit_skbs(sq, in_napi);
-+
-+	err = virtnet_xsk_xmit_batch(sq, pool, budget, in_napi, &done);
-+	/* -EAGAIN: done == budget
-+	 * -EBUSY: done < budget
-+	 *  0    : done < budget
-+	 */
-+	if (err == -EBUSY) {
-+		free_old_xmit_skbs(sq, in_napi);
-+
-+		/* If the space is enough, let napi run again. */
-+		if (sq->vq->num_free >= 2 + MAX_SKB_FRAGS)
-+			done = budget;
-+	}
-+
-+	virtnet_xsk_check_space(sq);
-+
-+	return done;
-+}
-+
-+static int virtnet_xsk_wakeup(struct net_device *dev, u32 qid, u32 flag)
-+{
-+	struct virtnet_info *vi = netdev_priv(dev);
-+	struct xsk_buff_pool *pool;
-+	struct netdev_queue *txq;
-+	struct send_queue *sq;
-+
-+	if (!netif_running(dev))
-+		return -ENETDOWN;
-+
-+	if (qid >= vi->curr_queue_pairs)
-+		return -EINVAL;
-+
-+	sq = &vi->sq[qid];
-+
-+	rcu_read_lock();
-+
-+	pool = rcu_dereference(sq->xsk.pool);
-+	if (!pool)
-+		goto end;
-+
-+	if (napi_if_scheduled_mark_missed(&sq->napi))
-+		goto end;
-+
-+	txq = netdev_get_tx_queue(dev, qid);
-+
-+	__netif_tx_lock_bh(txq);
-+
-+	/* Send part of the packet directly to reduce the delay in sending the
-+	 * packet, and this can actively trigger the tx interrupts.
-+	 *
-+	 * If no packet is sent out, the ring of the device is full. In this
-+	 * case, we will still get a tx interrupt response. Then we will deal
-+	 * with the subsequent packet sending work.
-+	 */
-+	virtnet_xsk_run(sq, pool, xsk_budget, false);
-+
-+	__netif_tx_unlock_bh(txq);
-+
-+end:
-+	rcu_read_unlock();
-+	return 0;
-+}
-+
- static int virtnet_xsk_pool_enable(struct net_device *dev,
- 				   struct xsk_buff_pool *pool,
- 				   u16 qid)
-@@ -2553,6 +2733,8 @@ static int virtnet_xsk_pool_enable(struct net_device *dev,
- 	if (rcu_dereference(sq->xsk.pool))
- 		goto end;
+ 	}
  
-+	memset(&sq->xsk, 0, sizeof(sq->xsk));
-+
- 	/* Here is already protected by rtnl_lock, so rcu_assign_pointer is
- 	 * safe.
- 	 */
-@@ -2656,6 +2838,7 @@ static const struct net_device_ops virtnet_netdev = {
- 	.ndo_vlan_rx_kill_vid = virtnet_vlan_rx_kill_vid,
- 	.ndo_bpf		= virtnet_xdp,
- 	.ndo_xdp_xmit		= virtnet_xdp_xmit,
-+	.ndo_xsk_wakeup         = virtnet_xsk_wakeup,
- 	.ndo_features_check	= passthru_features_check,
- 	.ndo_get_phys_port_name	= virtnet_get_phys_port_name,
- 	.ndo_set_features	= virtnet_set_features,
+ 	if (packet) {
+-		if (virtqueue_kick_prepare(sq->vq) &&
+-		    virtqueue_notify(sq->vq)) {
++		if (need_kick) {
++			if (virtqueue_kick_prepare(sq->vq) &&
++			    virtqueue_notify(sq->vq))
++				++kicks;
++		}
++		if (kicks) {
+ 			u64_stats_update_begin(&sq->stats.syncp);
+-			sq->stats.kicks += 1;
++			sq->stats.kicks += kicks;
+ 			u64_stats_update_end(&sq->stats.syncp);
+ 		}
+ 
 -- 
 2.31.0
 
