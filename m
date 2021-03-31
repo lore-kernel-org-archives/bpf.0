@@ -2,123 +2,81 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 98A47C433C1
-	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 06:29:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 913B7C433C1
+	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 06:44:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6EA69619BC
-	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 06:29:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5CF87619C2
+	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 06:44:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233693AbhCaG3D (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 31 Mar 2021 02:29:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54434 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233814AbhCaG2r (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 31 Mar 2021 02:28:47 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACD24C061574
-        for <bpf@vger.kernel.org>; Tue, 30 Mar 2021 23:28:47 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id a143so20025635ybg.7
-        for <bpf@vger.kernel.org>; Tue, 30 Mar 2021 23:28:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yV2Y2VTy81kt735cbWB+njli/gTW0yXIK6Lt5crzrNw=;
-        b=ALOBwhOTrtJs/vg2jnXpQI2cyF1Pp1LBwMXQKVBAOfdxvbChg05XFQ0to7wVtCLd0u
-         OJNU0eHFu9wcCa1R6W+uegdihV6Nb4DotakQQ/JpGRoFKyQP3GKo0d+7dO6h10SoIuvC
-         Rt4754Sv0p6UVCffyVnHmnShlgGfglh2GS9m4nD6l+KOAL5zKcL1TPzo8yOX074A40K8
-         qMOUL3Ua+/fbU4HOC+etk9r6Wf3lUKCokmjylIn4oxp1ixoVxpgsxRp89F9vHMTKVoYm
-         RZOHuBqTgGEa18IV6ziiqnUwj0HAo/4Xwq90v4TJz0b6icvmEassdAhMxB0Or0EW1jU7
-         +e0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yV2Y2VTy81kt735cbWB+njli/gTW0yXIK6Lt5crzrNw=;
-        b=OtNIgPecOnpfVHDnotpMiPVwhH4l43jhNaxj463xk8Q+y1bBnGbc5WE9/bcUbgAcb1
-         rmHepmqZrd3ctr9dvBgdMcWZ0fdi0VGdDJ1If4LsUPW2EtZsJh+ZAHa594OWZxCc3oa1
-         QnAWNnU4J2dX9HRG2LQ2X2KPFGgQEAOdC9ZEdAwsfeLFzRZ20t07vE0eAZSJzU/uz8Fm
-         e+q+IqsPpn+om8iByT4bSF7es8JmDE1XgAek1O1f9BIfx29PWbSeQ0XZUANM/XEK5z90
-         a31btfwlFT0zZMK1p7+ZmDm6lIoxpwPxTs5gOjeMdwZn+kSFjjQFgBL0smbxAe6HZB8d
-         SWfg==
-X-Gm-Message-State: AOAM533XXhtuGT2Ff2yt2RvkqdTbnkCe1piTo+hve/2+rZsK16WGi5IX
-        9tjRN4DwDYdHHjSTXBx9e3fYwQJope14ZJsxKac=
-X-Google-Smtp-Source: ABdhPJxIBU28JWIvSCykc1cLggY41f++6SJ/LiDOsSO0WllstPFT3lOuJM1VBdUXaZOBYus/B5+fE6eh47SoxANDWx4=
-X-Received: by 2002:a25:5b55:: with SMTP id p82mr2383573ybb.510.1617172127011;
- Tue, 30 Mar 2021 23:28:47 -0700 (PDT)
+        id S233803AbhCaGoD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 31 Mar 2021 02:44:03 -0400
+Received: from mga05.intel.com ([192.55.52.43]:14630 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233762AbhCaGoA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 31 Mar 2021 02:44:00 -0400
+IronPort-SDR: hUWBzC0m94HsaCISq2Z3QbiXF4PwJScXUSl+1q4ua9Gzst2YFNhhccoqIn6kKNnJjc0FGqxYOU
+ E6An2xjKdbVg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9939"; a="277111329"
+X-IronPort-AV: E=Sophos;i="5.81,293,1610438400"; 
+   d="scan'208";a="277111329"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2021 23:44:00 -0700
+IronPort-SDR: bKOC44s4jhyH2chD84ZfUoIINZurrqBfSnDuwF678HXuBF6UJmdlpUTviVYfngw5UWNNgLuqkL
+ WyK+PAgqrvQg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.81,293,1610438400"; 
+   d="scan'208";a="445523153"
+Received: from silpixa00399839.ir.intel.com (HELO localhost.localdomain) ([10.237.222.142])
+  by fmsmga002.fm.intel.com with ESMTP; 30 Mar 2021 23:43:57 -0700
+From:   Ciara Loftus <ciara.loftus@intel.com>
+To:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        magnus.karlsson@intel.com, bjorn@kernel.org,
+        alexei.starovoitov@gmail.com
+Cc:     Ciara Loftus <ciara.loftus@intel.com>
+Subject: [PATCH v4 bpf 1/3] libbpf: ensure umem pointer is non-NULL before dereferencing
+Date:   Wed, 31 Mar 2021 06:12:16 +0000
+Message-Id: <20210331061218.1647-2-ciara.loftus@intel.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210331061218.1647-1-ciara.loftus@intel.com>
+References: <20210331061218.1647-1-ciara.loftus@intel.com>
 MIME-Version: 1.0
-References: <20210331014356.256212-1-iii@linux.ibm.com>
-In-Reply-To: <20210331014356.256212-1-iii@linux.ibm.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 30 Mar 2021 23:28:36 -0700
-Message-ID: <CAEf4BzaF6WMz8pM2X03p_oQo95J1e-7Owi+8Y=GAOkXrx8H-aA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: Generate BTF_KIND_FLOAT when linking vmlinux
-To:     Ilya Leoshkevich <iii@linux.ibm.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        bpf <bpf@vger.kernel.org>, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Mar 30, 2021 at 6:44 PM Ilya Leoshkevich <iii@linux.ibm.com> wrote:
->
-> pahole v1.21 will support the --btf_gen_floats flag, which makes it
-> generate the information about the floating-point types.
->
-> Adjust link-vmlinux.sh to pass this flag to pahole in case it's
-> supported. Whether or not this flag is supported is determined by
-> probing, which is chosen over version check for two reasons:
->
-> 1) at this moment --btf_gen_floats exists only in master, which
->    identifies itself as v1.20.
-> 2) distros may backport features, making the version check too
->    conservative.
->
+Calls to xsk_socket__create dereference the umem to access the
+fill_save and comp_save pointers. Make sure the umem is non-NULL
+before doing this.
 
-Does anyone really cherry-pick and backport pahole patches, though? So
-far we've been using strictly version checks for pahole (1.13, then
-1.16, then 1.19 for modules), that keeps everything simpler and more
-reliable, IMO. I'd stick with 1.21 check and just check with Arnaldo
-when he's planning to release a new version.
+Fixes: 2f6324a3937f ("libbpf: Support shared umems between queues and devices")
 
-> Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
-> ---
->  scripts/link-vmlinux.sh | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
->
-> diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-> index 3b261b0f74f0..f4c763d2661d 100755
-> --- a/scripts/link-vmlinux.sh
-> +++ b/scripts/link-vmlinux.sh
-> @@ -227,8 +227,13 @@ gen_btf()
->
->         vmlinux_link ${1}
->
-> +       local paholeopt=-J
-> +       if ${PAHOLE} --btf_gen_floats --help >/dev/null 2>&1; then
-> +               paholeopt="${paholeopt} --btf_gen_floats"
-> +       fi
-> +
->         info "BTF" ${2}
-> -       LLVM_OBJCOPY=${OBJCOPY} ${PAHOLE} -J ${1}
-> +       LLVM_OBJCOPY=${OBJCOPY} ${PAHOLE} ${paholeopt} ${1}
+Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
+Signed-off-by: Ciara Loftus <ciara.loftus@intel.com>
+---
+ tools/lib/bpf/xsk.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-we know that -J is always specified, so I'd leave it intact, and just
-have "extra pahole options", potentially empty.
+diff --git a/tools/lib/bpf/xsk.c b/tools/lib/bpf/xsk.c
+index 526fc35c0b23..443b0cfb45e8 100644
+--- a/tools/lib/bpf/xsk.c
++++ b/tools/lib/bpf/xsk.c
+@@ -1019,6 +1019,9 @@ int xsk_socket__create(struct xsk_socket **xsk_ptr, const char *ifname,
+ 		       struct xsk_ring_cons *rx, struct xsk_ring_prod *tx,
+ 		       const struct xsk_socket_config *usr_config)
+ {
++	if (!umem)
++		return -EFAULT;
++
+ 	return xsk_socket__create_shared(xsk_ptr, ifname, queue_id, umem,
+ 					 rx, tx, umem->fill_save,
+ 					 umem->comp_save, usr_config);
+-- 
+2.17.1
 
->
->         # Create ${2} which contains just .BTF section but no symbols. Add
->         # SHF_ALLOC because .BTF will be part of the vmlinux image. --strip-all
-> --
-> 2.29.2
->
