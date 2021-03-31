@@ -2,35 +2,35 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0ACC9C433DB
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DA5F1C433E0
 	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 05:45:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C4E936024A
-	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 05:45:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B1A976024A
+	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 05:45:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233683AbhCaFow (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 31 Mar 2021 01:44:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43734 "EHLO mail.kernel.org"
+        id S233690AbhCaFox (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 31 Mar 2021 01:44:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43846 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233469AbhCaFo3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 31 Mar 2021 01:44:29 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D92C161584;
-        Wed, 31 Mar 2021 05:44:26 +0000 (UTC)
+        id S233595AbhCaFov (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 31 Mar 2021 01:44:51 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2D47B6024A;
+        Wed, 31 Mar 2021 05:44:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617169469;
-        bh=CS7Gh8VB0IiwZuCqcwMMK4GpVGupLfHsBHD/GtPj8Nk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=f0kouHdRL6xTvol+aHtzraYXHbgUGQ4CkJeAQ+iOalBDFYwQlfhlc/CkRb4s8XsoJ
-         uY02Uc9PsusMJ2rmKcdUuYww7GDJgcNh4lF5aLMA2TuPRkimX8C0v6is5PZI6ia8cY
-         dUo4qygbHqj35ligO0hfSJBoYOCoNz5uriS45krVQtFjA5tU9aioxwpyD4VDRJMSZA
-         GjVifDzW5i9kbqdRzHEkcOYmz/jmcFiefsEy6n7pSR5Hx47cG0JZnfGUck365JDtLO
-         uJez54jQerQlLwpxGwkGbAWVL9O/QhrkRBzudo4gBVovwzFtGgPtGeFdK/2kYwMKXJ
-         hrFjxKneMXc2g==
+        s=k20201202; t=1617169491;
+        bh=4vzFQPDT3xus/+3X6W7v5KWyPLjj8HNd8PrsBug0278=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=bhwvMYVwVLISmNlfYLM8ndSdl5JUSW9i8j5Ne4EHW9xkHxBfje/uvU9I8haXXLNfq
+         wqsey2V/otSWShRQoo6Yl0briAr537XvMaGAbsU/5MmuesLOmZkYeQTtqUBifHRmQS
+         teERgr39hz9GfDxI/JqnfwBovVwQJQGZg/M9mp94ssIaPJ6QTHxHOKhPNoNkFTEWjP
+         wsowFV8XEHnbkP3NAz3hViqBi3VJMuTMFrDbyPBIBW3diueaMmu1p15GCEQ3K4OGyJ
+         DUQlALB6mFwOv50v/VjExOz6VwkIpa198jAKdPDQHqcSWW+9D01mw68VRGu0MKQ1T7
+         UNekaSMcaqAvA==
 From:   Masami Hiramatsu <mhiramat@kernel.org>
 To:     Josh Poimboeuf <jpoimboe@redhat.com>,
         Ingo Molnar <mingo@kernel.org>
@@ -39,10 +39,12 @@ Cc:     X86 ML <x86@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>,
         bpf@vger.kernel.org, kuba@kernel.org, mingo@redhat.com,
         ast@kernel.org, tglx@linutronix.de, kernel-team@fb.com, yhs@fb.com,
         Steven Rostedt <rostedt@goodmis.org>
-Subject: [RFC PATCH -tip 0/3] x86/kprobes,orc: Fix ORC unwinder to unwind stack with optimized probe
-Date:   Wed, 31 Mar 2021 14:44:24 +0900
-Message-Id: <161716946413.721514.4057380464113663840.stgit@devnote2>
+Subject: [RFC PATCH -tip 2/3] kprobes: Add functions to find instruction buffer entry address
+Date:   Wed, 31 Mar 2021 14:44:45 +0900
+Message-Id: <161716948533.721514.17707467357877538662.stgit@devnote2>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <161716946413.721514.4057380464113663840.stgit@devnote2>
+References: <161716946413.721514.4057380464113663840.stgit@devnote2>
 User-Agent: StGit/0.19
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
@@ -51,78 +53,89 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello,
+Add find_kprobe_{insn,optinsn}_slot_entry() functions to find
+corresponding entry address of the kprobe instrurction buffer
+which includes given address.
 
-These patches fixes the ORC unwinder to unwind optprobe trampoline
-code on the stack correctly.
-This patchset is based on the kretporbe and stacktrace fix series v5
-which I sent last week.
-
-https://lore.kernel.org/bpf/161676170650.330141.6214727134265514123.stgit@devnote2/
-
-Note that I just confirmed the it fixes the case where the 
-stacktrace called from the optprobe handler. So this should be
-carefully reviewed.
-
-
-Here is the test code;
-
-cd /sys/kernel/debug/tracing
-echo > trace
-echo p full_proxy_read+5 >> kprobe_events
-echo 1 > events/kprobes/enable
-sleep 1 # wait for optimization
-echo stacktrace:1 > events/kprobes/p_full_proxy_read_5/trigger
-echo 1 > options/sym-offset
-cat /sys/kernel/debug/kprobes/list
-
-
-Without this,
-
-             cat-138     [001] ...1     6.567662: p_full_proxy_read_5: (full_proxy_read+0x5/0x80)
-             cat-138     [001] ...1     6.567711: <stack trace>
- => kprobe_trace_func+0x1d0/0x2c0
- => kprobe_dispatcher+0x39/0x60
- => opt_pre_handler+0x4f/0x80
- => optimized_callback+0xc3/0xf0
- => 0xffffffffa0006032
- => 0
- => 0
-
-
-With this patch,
-
-             cat-137     [007] ...1    17.542848: p_full_proxy_read_5: (full_proxy_read+0x5/0x80)
-             cat-137     [007] ...1    17.542963: <stack trace>
- => kprobe_trace_func+0x1d0/0x2c0
- => kprobe_dispatcher+0x39/0x60
- => opt_pre_handler+0x4f/0x80
- => optimized_callback+0xc3/0xf0
- => full_proxy_read+0x5/0x80
- => vfs_read+0xab/0x1a0
- => ksys_read+0x5f/0xe0
- => do_syscall_64+0x33/0x40
- => entry_SYSCALL_64_after_hwframe+0x44/0xae
- => 0
- => 0
-
-
-Thank you,
-
+Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
 ---
+ include/linux/kprobes.h |    8 ++++++++
+ kernel/kprobes.c        |   25 ++++++++++++++++++-------
+ 2 files changed, 26 insertions(+), 7 deletions(-)
 
-Masami Hiramatsu (3):
-      x86/kprobes: Add ORC information to optprobe template
-      kprobes: Add functions to find instruction buffer entry address
-      x86/kprobes,orc: Unwind optprobe trampoline correctly
+diff --git a/include/linux/kprobes.h b/include/linux/kprobes.h
+index f530f82a046d..08adfd6cf562 100644
+--- a/include/linux/kprobes.h
++++ b/include/linux/kprobes.h
+@@ -305,6 +305,8 @@ extern void __free_insn_slot(struct kprobe_insn_cache *c,
+ /* sleep-less address checking routine  */
+ extern bool __is_insn_slot_addr(struct kprobe_insn_cache *c,
+ 				unsigned long addr);
++extern unsigned long
++__find_insn_slot_entry(struct kprobe_insn_cache *c, unsigned long addr);
+ 
+ #define DEFINE_INSN_CACHE_OPS(__name)					\
+ extern struct kprobe_insn_cache kprobe_##__name##_slots;		\
+@@ -322,6 +324,12 @@ static inline void free_##__name##_slot(kprobe_opcode_t *slot, int dirty)\
+ static inline bool is_kprobe_##__name##_slot(unsigned long addr)	\
+ {									\
+ 	return __is_insn_slot_addr(&kprobe_##__name##_slots, addr);	\
++}									\
++									\
++static inline unsigned long						\
++find_kprobe_##__name##_slot_entry(unsigned long addr)			\
++{									\
++	return __find_insn_slot_entry(&kprobe_##__name##_slots, addr);	\
+ }
+ #define KPROBE_INSN_PAGE_SYM		"kprobe_insn_page"
+ #define KPROBE_OPTINSN_PAGE_SYM		"kprobe_optinsn_page"
+diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+index 4ce3e6f5d28d..b62635969fa6 100644
+--- a/kernel/kprobes.c
++++ b/kernel/kprobes.c
+@@ -277,26 +277,37 @@ void __free_insn_slot(struct kprobe_insn_cache *c,
+ }
+ 
+ /*
+- * Check given address is on the page of kprobe instruction slots.
+- * This will be used for checking whether the address on a stack
+- * is on a text area or not.
++ * Find the entry address of the kprobe instruction slots where the
++ * @addr points.
+  */
+-bool __is_insn_slot_addr(struct kprobe_insn_cache *c, unsigned long addr)
++unsigned long
++__find_insn_slot_entry(struct kprobe_insn_cache *c, unsigned long addr)
+ {
+ 	struct kprobe_insn_page *kip;
+-	bool ret = false;
++	unsigned long entry = 0, index;
+ 
+ 	rcu_read_lock();
+ 	list_for_each_entry_rcu(kip, &c->pages, list) {
+ 		if (addr >= (unsigned long)kip->insns &&
+ 		    addr < (unsigned long)kip->insns + PAGE_SIZE) {
+-			ret = true;
++			index = (addr - (unsigned long)kip->insns) / c->insn_size;
++			entry = (unsigned long)kip->insns + (index * c->insn_size);
+ 			break;
+ 		}
+ 	}
+ 	rcu_read_unlock();
+ 
+-	return ret;
++	return entry;
++}
++
++/*
++ * Check given address is on the page of kprobe instruction slots.
++ * This will be used for checking whether the address on a stack
++ * is on a text area or not.
++ */
++bool __is_insn_slot_addr(struct kprobe_insn_cache *c, unsigned long addr)
++{
++	return __find_insn_slot_entry(c, addr) != 0;
+ }
+ 
+ int kprobe_cache_get_kallsym(struct kprobe_insn_cache *c, unsigned int *symnum,
 
-
- arch/x86/include/asm/kprobes.h |    6 +++
- arch/x86/kernel/kprobes/opt.c  |   72 +++++++++++++++++++++++++++++++++++++---
- arch/x86/kernel/unwind_orc.c   |   15 +++++++-
- include/linux/kprobes.h        |    8 ++++
- kernel/kprobes.c               |   25 ++++++++++----
- 5 files changed, 111 insertions(+), 15 deletions(-)
-
---
-Masami Hiramatsu (Linaro) <mhiramat@kernel.org>
