@@ -2,133 +2,115 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64BAFC433DB
-	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 06:45:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DFE67C433DB
+	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 06:45:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 411E9619BC
-	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 06:45:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A0776619BC
+	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 06:45:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233834AbhCaGog (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 31 Mar 2021 02:44:36 -0400
-Received: from mga05.intel.com ([192.55.52.43]:14630 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233817AbhCaGoE (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 31 Mar 2021 02:44:04 -0400
-IronPort-SDR: 0eZOBCSH/whwK/1qOqbWsdPsbKRA+ZmzBMudKeoeYz8WAicVBcLRRSvWTT45jvBOS0ezY6DjKv
- /ww/oxqwODSQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9939"; a="277111342"
-X-IronPort-AV: E=Sophos;i="5.81,293,1610438400"; 
-   d="scan'208";a="277111342"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2021 23:44:04 -0700
-IronPort-SDR: u4pZQBhQWR4I0uUz9+bQAnRJCZgwG1/U0GqD4iOKFkeF33i+cbik/XqY+j/TIcpIQ4BoHvuK6G
- KtflLnCv+NEg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.81,293,1610438400"; 
-   d="scan'208";a="445523209"
-Received: from silpixa00399839.ir.intel.com (HELO localhost.localdomain) ([10.237.222.142])
-  by fmsmga002.fm.intel.com with ESMTP; 30 Mar 2021 23:44:02 -0700
-From:   Ciara Loftus <ciara.loftus@intel.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        magnus.karlsson@intel.com, bjorn@kernel.org,
-        alexei.starovoitov@gmail.com
-Cc:     Ciara Loftus <ciara.loftus@intel.com>
-Subject: [PATCH v4 bpf 3/3] libbpf: only create rx and tx XDP rings when necessary
-Date:   Wed, 31 Mar 2021 06:12:18 +0000
-Message-Id: <20210331061218.1647-4-ciara.loftus@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210331061218.1647-1-ciara.loftus@intel.com>
-References: <20210331061218.1647-1-ciara.loftus@intel.com>
+        id S233848AbhCaGpI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 31 Mar 2021 02:45:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57864 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233825AbhCaGov (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 31 Mar 2021 02:44:51 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6051FC061574;
+        Tue, 30 Mar 2021 23:44:51 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id l15so20138887ybm.0;
+        Tue, 30 Mar 2021 23:44:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=w+2t2Nye8/SWHewNQ0PONbKMAheaX+6xvIxOoDicxJY=;
+        b=EHXOecWLhM3zqNL8RZ2gQLCoKS4neY+nYRBnBU5aVMtLaCGrKBOmRkfNFzY6pDhgme
+         D5GE20FGAPqodO7fhYq0if3lVVv53iDPKpeQHnNvIDDg/cqMVF1924dxfvD5ldNG3sfo
+         wvCT2jaJpYeNsfouhTtwgjd+j5A7zT2cDDbydxcRRYESwa5azP+qH+URhJ2q5ftQ32Hs
+         QE0MEQc5p7wo51sCNxaRXh01xPSr5GuyrScaL4ZJO7NGq+HGVQN4qv9rYxupXnUOBC+I
+         A26VOI7+6gz8ebxHU2lR6P6iaBSyJMXdeHP03McYI0cKNXsB4nsBHrOis+DjhOxwRBnf
+         XYVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=w+2t2Nye8/SWHewNQ0PONbKMAheaX+6xvIxOoDicxJY=;
+        b=nOo1HpgiK8+oJZ29IOW/G+z2r5LIG0cP++GaH18kdOx4C8wDtPbnfVKgrwTTaQkZu3
+         XzqDakPpPGMZY5DblTp2YS6Ame3tdY2NBQ/OO27tOwKmNim9KslVf3wGvJAELN8jgtqk
+         Se21el3VO8+l9F+lYpBGDKSBYK/U7xOBPQX0lGNLQkkpDbsC1GByH5iIzILmLoS+b/O3
+         KcM3KOWVEvFI7mc7PFQK+Rc2LMEJ7kZ1Jid3lErI9k3LwuwOyhnzYAao0BJiUToAJAjj
+         DCAHvCiwh/kn6S18oyIekOQlfl3QN1m9E00oeNYuZGi+jwV07nHbvfA4DBx6/JPPHdiZ
+         ZV5Q==
+X-Gm-Message-State: AOAM532RpoBJPey2LA/oEB6oYknCiEXGABhrnQwJhj538X3HhOWi+yAm
+        BhC+M54xAMiLYXUR09UcGTVMNzt/Od2PM+hqohXg5/Iy
+X-Google-Smtp-Source: ABdhPJxyC4hA4TMwpBV8p1/kjAVmemLM/MkqRLq3JXI8X6+5r5LdMAlXHyTNQVre9evpuf/ZDMvr2TGRbyFQIao/4DQ=
+X-Received: by 2002:a25:becd:: with SMTP id k13mr2548836ybm.459.1617173090668;
+ Tue, 30 Mar 2021 23:44:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <20210325015124.1543397-1-kafai@fb.com> <CAM_iQpWGn000YOmF2x6Cm0FqCOSq0yUjc_+Up+Ek3r6NrBW3mw@mail.gmail.com>
+ <CAADnVQKAXsEzsEkxhUG=79V+gAJbv=-Wuh_oJngjs54g1xGW7Q@mail.gmail.com>
+ <CAM_iQpU7y+YE9wbqFZK30o4A+Gmm9jMLgqPqOw6SCDP8mHibTQ@mail.gmail.com>
+ <CAADnVQJoeEqZK8eWfCi-BkHY4rSzaPuXYVEFvR75Ecdbt+oGgA@mail.gmail.com>
+ <CAM_iQpUTFs_60vkS6LTRr5VBt8yTHiSgaHoKrtt4GGDe4tCcew@mail.gmail.com>
+ <20210329012437.somtubekt2dqzz3x@kafai-mbp.dhcp.thefacebook.com>
+ <CACAyw99gXvpnCwkz4vniABV5OQ29BE2K2iJY0tB898Fd9_8h6Q@mail.gmail.com> <20210329190851.2vy4yfrbfgiypxuz@kafai-mbp.dhcp.thefacebook.com>
+In-Reply-To: <20210329190851.2vy4yfrbfgiypxuz@kafai-mbp.dhcp.thefacebook.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 30 Mar 2021 23:44:39 -0700
+Message-ID: <CAEf4BzY+6TspHiTH5Y7w5itCeHv9qe4Hg8sB-yBJK6kYXYoonA@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 00/14] bpf: Support calling kernel function
+To:     Martin KaFai Lau <kafai@fb.com>
+Cc:     Lorenz Bauer <lmb@cloudflare.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        kernel-team <kernel-team@fb.com>,
+        Linux Kernel Network Developers <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Prior to this commit xsk_socket__create(_shared) always attempted to create
-the rx and tx rings for the socket. However this causes an issue when the
-socket being setup is that which shares the fd with the UMEM. If a
-previous call to this function failed with this socket after the rings were
-set up, a subsequent call would always fail because the rings are not torn
-down after the first call and when we try to set them up again we encounter
-an error because they already exist. Solve this by remembering whether the
-rings were set up by introducing new bools to struct xsk_umem which
-represent the ring setup status and using them to determine whether or
-not to set up the rings.
+On Mon, Mar 29, 2021 at 12:11 PM Martin KaFai Lau <kafai@fb.com> wrote:
+>
+> On Mon, Mar 29, 2021 at 05:06:26PM +0100, Lorenz Bauer wrote:
+> > On Mon, 29 Mar 2021 at 02:25, Martin KaFai Lau <kafai@fb.com> wrote:
+> > >
+> > > > > >
+> > > > > > # pahole --version
+> > > > > > v1.17
+> > > > >
+> > > > > That is the most likely reason.
+> > > > > In lib/Kconfig.debug
+> > > > > we have pahole >= 1.19 requirement for BTF in modules.
+> > > > > Though your config has CUBIC=y I suspect something odd goes on.
+> > > > > Could you please try the latest pahole 1.20 ?
+> > > >
+> > > > Sure, I will give it a try tomorrow, I am not in control of the CI I ran.
+> > > Could you also check the CONFIG_DYNAMIC_FTRACE and also try 'y' if it
+> > > is not set?
+> >
+> > I hit the same problem on newer pahole:
+> >
+> > $ pahole --version
+> > v1.20
+> >
+> > CONFIG_DYNAMIC_FTRACE=y resolves the issue.
+> Thanks for checking.
+>
+> pahole only generates the btf_id for external function
+> and ftrace-able function.  Some functions in the bpf_tcp_ca_kfunc_ids list
+> are static (e.g. cubictcp_init), so it fails during resolve_btfids.
+>
+> I will post a patch to limit the bpf_tcp_ca_kfunc_ids list
+> to CONFIG_DYNAMIC_FTRACE.  I will address the pahole
+> generation in a followup and then remove this
+> CONFIG_DYNAMIC_FTRACE limitation.
 
-Fixes: 1cad07884239 ("libbpf: add support for using AF_XDP sockets")
-
-Signed-off-by: Ciara Loftus <ciara.loftus@intel.com>
----
- tools/lib/bpf/xsk.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
-
-diff --git a/tools/lib/bpf/xsk.c b/tools/lib/bpf/xsk.c
-index 5098d9e3b55a..d24b5cc720ec 100644
---- a/tools/lib/bpf/xsk.c
-+++ b/tools/lib/bpf/xsk.c
-@@ -59,6 +59,8 @@ struct xsk_umem {
- 	int fd;
- 	int refcount;
- 	struct list_head ctx_list;
-+	bool rx_ring_setup_done;
-+	bool tx_ring_setup_done;
- };
- 
- struct xsk_ctx {
-@@ -857,6 +859,7 @@ int xsk_socket__create_shared(struct xsk_socket **xsk_ptr,
- 	struct xsk_ctx *ctx;
- 	int err, ifindex;
- 	bool unmap = umem->fill_save != fill;
-+	bool rx_setup_done = false, tx_setup_done = false;
- 
- 	if (!umem || !xsk_ptr || !(rx || tx))
- 		return -EFAULT;
-@@ -884,6 +887,8 @@ int xsk_socket__create_shared(struct xsk_socket **xsk_ptr,
- 		}
- 	} else {
- 		xsk->fd = umem->fd;
-+		rx_setup_done = umem->rx_ring_setup_done;
-+		tx_setup_done = umem->tx_ring_setup_done;
- 	}
- 
- 	ctx = xsk_get_ctx(umem, ifindex, queue_id);
-@@ -902,7 +907,7 @@ int xsk_socket__create_shared(struct xsk_socket **xsk_ptr,
- 	}
- 	xsk->ctx = ctx;
- 
--	if (rx) {
-+	if (rx && !rx_setup_done) {
- 		err = setsockopt(xsk->fd, SOL_XDP, XDP_RX_RING,
- 				 &xsk->config.rx_size,
- 				 sizeof(xsk->config.rx_size));
-@@ -910,8 +915,10 @@ int xsk_socket__create_shared(struct xsk_socket **xsk_ptr,
- 			err = -errno;
- 			goto out_put_ctx;
- 		}
-+		if (xsk->fd == umem->fd)
-+			umem->rx_ring_setup_done = true;
- 	}
--	if (tx) {
-+	if (tx && !tx_setup_done) {
- 		err = setsockopt(xsk->fd, SOL_XDP, XDP_TX_RING,
- 				 &xsk->config.tx_size,
- 				 sizeof(xsk->config.tx_size));
-@@ -919,6 +926,8 @@ int xsk_socket__create_shared(struct xsk_socket **xsk_ptr,
- 			err = -errno;
- 			goto out_put_ctx;
- 		}
-+		if (xsk->fd == umem->fd)
-+			umem->rx_ring_setup_done = true;
- 	}
- 
- 	err = xsk_get_mmap_offsets(xsk->fd, &off);
--- 
-2.17.1
-
+We should still probably add CONFIG_DYNAMIC_FTRACE=y to selftests/bpf/config?
