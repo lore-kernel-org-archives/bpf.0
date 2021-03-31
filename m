@@ -8,54 +8,54 @@ X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1018C43460
-	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 20:10:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81BC1C43470
+	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 20:10:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 77D11610A2
-	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 20:10:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3F455610A7
+	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 20:10:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236458AbhCaUJw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 31 Mar 2021 16:09:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34654 "EHLO
+        id S236466AbhCaUJx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 31 Mar 2021 16:09:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236446AbhCaUJW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 31 Mar 2021 16:09:22 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E81C061574;
-        Wed, 31 Mar 2021 13:09:21 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id jy13so31954173ejc.2;
-        Wed, 31 Mar 2021 13:09:21 -0700 (PDT)
+        with ESMTP id S236391AbhCaUJ0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 31 Mar 2021 16:09:26 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5A21C061574;
+        Wed, 31 Mar 2021 13:09:25 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id w18so23823088edc.0;
+        Wed, 31 Mar 2021 13:09:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=UlZF2RiwQrVHV4FQBT2dG//zwt4SH4LuMoq2pLPHFeE=;
-        b=GCvW6t18xTyZObixFkBwYVSJBKH2cpt9FYHwsGlhVxIoYRcfdoHbDt2KP9EYOyX9AR
-         j9Hh8o3LU0RPeKho1RipyKYM7XKO9s89avFqb8Tbw9HnLo9k8t3PCWUn36WtVqAP609f
-         Y95AFm/2R8eF+utnT8frDArcKjS8O+GRZ6SMIao9r5AZss11SLX/UBPZsFeBGPwBbGFo
-         m5AP/eIJiwb0IJg+nANRAiW5TDJwWUzbZhoFbrChTg2d22kSCW2kIeZyKJ9JXJUq1Iai
-         sTz72NHpBfsCoIC8vCIkiRUL8j4WkPr5jfHzjCMH3H4rtJZoAQcDJY8jjwyyPbuDq07b
-         CSpg==
+        bh=lBsxe6QWpE3ju/Zn+T4HTFVPluupUf6fsUZQesQX3FA=;
+        b=gPpqXKjEoG8ixubkgoMm3pMWQDkQb9gsEgL+6fiz4y4HxfJaf0eX0svp9JIeCu7qQ/
+         NvXkiCDZqD2pL3BKEmaBZTLJSrokeupHs15yxYWix86vyESkgzDJfWxMcW8V0Jcoqlj6
+         g7CalbQ/V4HFY2EYYqGEK9iYZxMlgArcjkkONRSq4XBskA370gKNUbjywzQFO3pV38CD
+         UIEwBbp5RnHPyrilaISFHQPJndj6XSEGmXrJz2VumfZnGNJIDhR6R4MhOFw1gOwkDjqP
+         aeA2puyDrkeDkVHLWwNCYZucqglqGx5F6hQtsBUM7n79nZ4/JBcl02Vm1VBjdGweYB0a
+         s8mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=UlZF2RiwQrVHV4FQBT2dG//zwt4SH4LuMoq2pLPHFeE=;
-        b=gf0pwoCVlNVxvjx9FqipHjvG2zO1gXxFBDYZubj9Jcjx/fOViNQL0abV+FVw+0G7cP
-         tj2uHJH1fodptwkLjmOtNnMTsSgddcJeVcJYgNv9BQ02du1QZdZCQiWAvn2OBfz2MnwE
-         ke1iELL2tXL4fcMUGgqwhHIBaWdAHutrIivWDrFkqDeGxy1WLVGGGxQMIpRXS3t2FJZv
-         FDDMGDMIiTOWLMpHttfGKKCI8gCj0DNpf2pyuIbBdSEYpychG4zieUE4vnWtgx07SLjH
-         hZBz3QKiQQfjSfWSlKmVZi2rLKZ9iDyNmpjBaWkzvA531dicmihDgJ8j5aFy/i5eReIF
-         /vHA==
-X-Gm-Message-State: AOAM530F1Li3tyd7Sh7FnKou3nvKciCiQbg1xAwgRHm82Ne8PinERFSH
-        /vkwKFIPOIIrpijHJBaKHHM=
-X-Google-Smtp-Source: ABdhPJwQJsO0hfNLAXqNcqoJvlti0VPdPLQ2uuIRspHfgz7+qkuhAswvx0a4bF0z9lUxx5mcrp4bZg==
-X-Received: by 2002:a17:906:16ca:: with SMTP id t10mr5603486ejd.85.1617221359881;
-        Wed, 31 Mar 2021 13:09:19 -0700 (PDT)
+        bh=lBsxe6QWpE3ju/Zn+T4HTFVPluupUf6fsUZQesQX3FA=;
+        b=Sotd6VmpxAhcZ+jxA6Fs7PnZ+I/gACF//A6KIi7NDr9CkH8IdwAHJeLbwZQs5rEKy2
+         6W/wo1j/zqk5q5MjB0UWmGRnn2ansf1Qm08tZIt7OVF0bFr4MO/l/ZFz2bTF+Bxmh8dI
+         IiLqwZG8Ke2HOuWpaCi2esY2lkYEceQQV/jDV9JYyaLiVsOewy+flgK09PCPwuUtsj7Q
+         b8okHZdOomdKuw3/cHSX0rcatzYobj7Kj0kULTnCaYKLpZ9Pm6EZ6rwsolk7yNiDhzkM
+         dy5NQnz8Hk6gy6E8mrU08RAgi5JEBpXNsw7OdQpqroHiJNWxlDX84nxsw3LVot4THNsf
+         tB9Q==
+X-Gm-Message-State: AOAM533BudD//faj38X1DVe5JIXABKGDmWRFJQWlYG+t8XWz47B+Uzg2
+        DtosFCxAGyIyLB/IpilLcys=
+X-Google-Smtp-Source: ABdhPJwayMsDzUZCWlyesqf3R+VZUrXGytWQ6rJpZWdcRefSVDaiG4i4R4nm251TRiHAgVO5Glnc2Q==
+X-Received: by 2002:a05:6402:4244:: with SMTP id g4mr5893142edb.204.1617221364450;
+        Wed, 31 Mar 2021 13:09:24 -0700 (PDT)
 Received: from localhost.localdomain (5-12-16-165.residential.rdsnet.ro. [5.12.16.165])
-        by smtp.gmail.com with ESMTPSA id r19sm1691305ejr.55.2021.03.31.13.09.18
+        by smtp.gmail.com with ESMTPSA id r19sm1691305ejr.55.2021.03.31.13.09.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Mar 2021 13:09:19 -0700 (PDT)
+        Wed, 31 Mar 2021 13:09:24 -0700 (PDT)
 From:   Vladimir Oltean <olteanv@gmail.com>
 To:     Jakub Kicinski <kuba@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
@@ -74,9 +74,9 @@ Cc:     Alexander Duyck <alexander.duyck@gmail.com>,
         Claudiu Manoil <claudiu.manoil@nxp.com>,
         Ilias Apalodimas <ilias.apalodimas@linaro.org>,
         Vladimir Oltean <vladimir.oltean@nxp.com>
-Subject: [PATCH net-next 5/9] net: enetc: move up enetc_reuse_page and enetc_page_reusable
-Date:   Wed, 31 Mar 2021 23:08:53 +0300
-Message-Id: <20210331200857.3274425-6-olteanv@gmail.com>
+Subject: [PATCH net-next 8/9] net: enetc: increase RX ring default size
+Date:   Wed, 31 Mar 2021 23:08:56 +0300
+Message-Id: <20210331200857.3274425-9-olteanv@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210331200857.3274425-1-olteanv@gmail.com>
 References: <20210331200857.3274425-1-olteanv@gmail.com>
@@ -88,70 +88,35 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-For XDP_TX, we need to call enetc_reuse_page from enetc_clean_tx_ring,
-so we need to avoid a forward declaration.
+As explained in the XDP_TX patch, when receiving a burst of frames with
+the XDP_TX verdict, there is a momentary dip in the number of available
+RX buffers. The system will eventually recover as TX completions will
+start kicking in and refilling our RX BD ring again. But until that
+happens, we need to survive with as few out-of-buffer discards as
+possible.
+
+This increases the memory footprint of the driver in order to avoid
+discards at 2.5Gbps line rate 64B packet sizes, the maximum speed
+available for testing on 1 port on NXP LS1028A.
 
 Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 ---
- drivers/net/ethernet/freescale/enetc/enetc.c | 38 ++++++++++----------
- 1 file changed, 19 insertions(+), 19 deletions(-)
+ drivers/net/ethernet/freescale/enetc/enetc.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/freescale/enetc/enetc.c b/drivers/net/ethernet/freescale/enetc/enetc.c
-index ade05518b496..38301d0d7f0c 100644
---- a/drivers/net/ethernet/freescale/enetc/enetc.c
-+++ b/drivers/net/ethernet/freescale/enetc/enetc.c
-@@ -275,6 +275,25 @@ static int enetc_bd_ready_count(struct enetc_bdr *tx_ring, int ci)
- 	return pi >= ci ? pi - ci : tx_ring->bd_count - ci + pi;
- }
+diff --git a/drivers/net/ethernet/freescale/enetc/enetc.h b/drivers/net/ethernet/freescale/enetc/enetc.h
+index 864da962ae21..d0619fcbbe97 100644
+--- a/drivers/net/ethernet/freescale/enetc/enetc.h
++++ b/drivers/net/ethernet/freescale/enetc/enetc.h
+@@ -71,7 +71,7 @@ struct enetc_xdp_data {
+ 	int xdp_tx_in_flight;
+ };
  
-+static bool enetc_page_reusable(struct page *page)
-+{
-+	return (!page_is_pfmemalloc(page) && page_ref_count(page) == 1);
-+}
-+
-+static void enetc_reuse_page(struct enetc_bdr *rx_ring,
-+			     struct enetc_rx_swbd *old)
-+{
-+	struct enetc_rx_swbd *new;
-+
-+	new = &rx_ring->rx_swbd[rx_ring->next_to_alloc];
-+
-+	/* next buf that may reuse a page */
-+	enetc_bdr_idx_inc(rx_ring, &rx_ring->next_to_alloc);
-+
-+	/* copy page reference */
-+	*new = *old;
-+}
-+
- static void enetc_get_tx_tstamp(struct enetc_hw *hw, union enetc_tx_bd *txbd,
- 				u64 *tstamp)
- {
-@@ -516,25 +535,6 @@ static void enetc_get_offloads(struct enetc_bdr *rx_ring,
- #endif
- }
+-#define ENETC_RX_RING_DEFAULT_SIZE	512
++#define ENETC_RX_RING_DEFAULT_SIZE	2048
+ #define ENETC_TX_RING_DEFAULT_SIZE	256
+ #define ENETC_DEFAULT_TX_WORK		(ENETC_TX_RING_DEFAULT_SIZE / 2)
  
--static bool enetc_page_reusable(struct page *page)
--{
--	return (!page_is_pfmemalloc(page) && page_ref_count(page) == 1);
--}
--
--static void enetc_reuse_page(struct enetc_bdr *rx_ring,
--			     struct enetc_rx_swbd *old)
--{
--	struct enetc_rx_swbd *new;
--
--	new = &rx_ring->rx_swbd[rx_ring->next_to_alloc];
--
--	/* next buf that may reuse a page */
--	enetc_bdr_idx_inc(rx_ring, &rx_ring->next_to_alloc);
--
--	/* copy page reference */
--	*new = *old;
--}
--
- static struct enetc_rx_swbd *enetc_get_rx_buff(struct enetc_bdr *rx_ring,
- 					       int i, u16 size)
- {
 -- 
 2.25.1
 
