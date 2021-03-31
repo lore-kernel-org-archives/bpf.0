@@ -2,178 +2,169 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 12903C433B4
-	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 19:34:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F3BDC43460
+	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 20:09:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DDB816101E
-	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 19:34:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2A83B610A2
+	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 20:09:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235876AbhCaTeS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 31 Mar 2021 15:34:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55218 "EHLO
+        id S236431AbhCaUJT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 31 Mar 2021 16:09:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235416AbhCaTds (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 31 Mar 2021 15:33:48 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8504BC061574
-        for <bpf@vger.kernel.org>; Wed, 31 Mar 2021 12:33:48 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id i144so22390438ybg.1
-        for <bpf@vger.kernel.org>; Wed, 31 Mar 2021 12:33:48 -0700 (PDT)
+        with ESMTP id S236397AbhCaUJP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 31 Mar 2021 16:09:15 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F6C9C061574;
+        Wed, 31 Mar 2021 13:09:15 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id bx7so23721818edb.12;
+        Wed, 31 Mar 2021 13:09:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=j2V/u7CIXFhq6jKT7K2Jpc2Fda5EpohTEbl4jStlZ7w=;
-        b=PUEpDMo+oRtu2dAPLfYTtCQBPk/2RndD6/tTemaVnNVZ/DYOfwzNGgAn979TT6iw9K
-         VCGoZ7w0LjrpiEjuAqTCcZ9wj6S4AG5FSEBe7ZosdFxhM1ZQdkbR4rk2iq6mrRMwfpMB
-         gLfpC07V6eA7ctOzKxWg25+HHZQPlMvbf/55dQgDjsiHsd+y0fwcUAxeNBODa+68mCOe
-         3M+SXlzOD7kb7yC9H1B52jmUEDcvNCgXzZ1QeI2OZGZhDFWSVZJ6aCPNj2pBvHWT316A
-         T2DQtcYF7IAgt4HAPZ58ux7KS8jOj09wxteLZ0FSDeDMcgiSgv9Ynpb8VSHfW9t4hFJL
-         uW+g==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=W0697NyRfBd+2tsOVjmE+TGl5jywtMAxVJAPw/5s8KE=;
+        b=ROlM/TZAyLqZCleOCIaJOVM6L540QCkUdDobk2S9lCbtAcRj4tqcvikObkr8Ht2DJ7
+         GRKfiZyEeBHSnW3IucJJsFyEe0k/knYGTb5HCqwsEGSDsG0pAUVd0wsK+xP6sQ74ixAl
+         lEMHpYHd0G3aNdNVJeTxhUMgKmvDgRTEIEDot4hnzol9oFz3yLLVj83p+csV0/5i7P9C
+         VaLvZin228TI62l/6ruGgawTlGfe4fTBpzfYjM86r1McD9BOMiO2wApH7qktf9izAJRx
+         Oxw+UuWl3+2TTH64K2h+SOCj49k0fgTZVlk7ixwoXHg7jj+FlWJK6GgsQ6saozXcoROq
+         MENg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=j2V/u7CIXFhq6jKT7K2Jpc2Fda5EpohTEbl4jStlZ7w=;
-        b=At/ZZbbURAA23C/auZbc8uKtxdtyHkxQL3BW35VzEssSoVAG7yVy4nGA3xF8s85stG
-         +Dxw7nWNRKoUIA9CqYo9Ssdvwbqrc3gXBwF3hV07rYbJ8oB1nN6NY9O5iwAnx7TK4dkk
-         K+lehWz5Kef6QaHgzGNASHEtbA5VTPQm515xx3i0ElCSUPLu9rmspe3JNGl3tuNTIJYU
-         yV6k60zkJ1Hz58uFmm27J/WUyhtb3HYpQysKUvmgHBy88CyrQjHUtqdeu/s82JPYCT7U
-         GXEcpfxgCkQF/dZAfvL2bpOn5ZQH/3YurzKFR7hVqtlIuW+x38BFGiMwhh2WviU37XHe
-         zYJQ==
-X-Gm-Message-State: AOAM5306PHvNxwafSiTgd/1OYGDxWnDZ3KdvrpAfaQsci+tCH51L6VlE
-        +LVwXuq7zqfjnFZ/eWWKq1B2WgHHAg2NZ2hg2tw=
-X-Google-Smtp-Source: ABdhPJxPbiH/W7vEaRQS10KCP37vEgtqkbKPPhxhCHzz33E3RQkESBNzJ5Bp75xJUUSu0uUkt2KLHEQXFp+ID8L2uwI=
-X-Received: by 2002:a25:6d83:: with SMTP id i125mr6676312ybc.27.1617219227761;
- Wed, 31 Mar 2021 12:33:47 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210323014752.3198283-1-kpsingh@kernel.org> <CAEf4BzY=VR4MbYiG4fPwNPVB3hKw4MckRv2sftk160H6TapMaQ@mail.gmail.com>
- <CACYkzJ4p-vMg_3Nom-NB781J3ELsZi=N1FK5RA=3=FZQaZaknA@mail.gmail.com> <CAEf4BzaVMMYAYqKc3rt02tfS=wXbcxc-jnSKYhcfhB1qHHxjNw@mail.gmail.com>
-In-Reply-To: <CAEf4BzaVMMYAYqKc3rt02tfS=wXbcxc-jnSKYhcfhB1qHHxjNw@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 31 Mar 2021 12:33:36 -0700
-Message-ID: <CAEf4BzYAGK1uu4YT=-nxz1hVZSsLNOsGtj+cVn2rOhpK4PZSsg@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next] selftests/bpf: Add an option for a debug
- shell in vmtest.sh
-To:     KP Singh <kpsingh@kernel.org>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=W0697NyRfBd+2tsOVjmE+TGl5jywtMAxVJAPw/5s8KE=;
+        b=o3shHpoiJNP9MCS6FnzcMq0Gu7SG06h+2yoNYYqSJfI6u9fdTGxhITUkrkP1uy4JGj
+         SNi0hhRVLddgw7jhUMQ8O5D6/kE0x5hasfGMa91/sW6WTvAAuB0r/zzNV3EnsNq0f1+5
+         L4KHFfVh4vIgm8qbCPSmWKao3lciM2yJvnCEe5H9W4h6JsAG60DeZG+Z/lbK4D9F5GSu
+         cQh2rWiocycLwjd+VS+584Su9nLm4HkllgSmUQnidzI/DK0dmr7Aq5vUoB1I7gg0RfdI
+         3Mv7phoMXE+tuSVgmPHZyVIXawBloY4/DV8Sa4txGauEnmiXbeD5otLTiMe+H42Q5ks6
+         jP6w==
+X-Gm-Message-State: AOAM530b1qBo6Np1pVpoMkG9pJQ9lJ3i74vevVQb/F2ySbpYKI7LoNxi
+        M7qFiFK/17PfpUrV0eiA+LM=
+X-Google-Smtp-Source: ABdhPJzmzYHhOKjw/oLcHqKe4dt4puvqOxh5P3TJbYOCf/ha1IihJzt+Hmia024yAS/yJr0cfF6mQQ==
+X-Received: by 2002:a05:6402:b2d:: with SMTP id bo13mr5901159edb.120.1617221354245;
+        Wed, 31 Mar 2021 13:09:14 -0700 (PDT)
+Received: from localhost.localdomain (5-12-16-165.residential.rdsnet.ro. [5.12.16.165])
+        by smtp.gmail.com with ESMTPSA id r19sm1691305ejr.55.2021.03.31.13.09.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Mar 2021 13:09:13 -0700 (PDT)
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Florent Revest <revest@chromium.org>,
-        Brendan Jackman <jackmanb@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Cc:     Alexander Duyck <alexander.duyck@gmail.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        Alex Marginean <alexandru.marginean@nxp.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Subject: [PATCH net-next 1/9] net: enetc: consume the error RX buffer descriptors in a dedicated function
+Date:   Wed, 31 Mar 2021 23:08:49 +0300
+Message-Id: <20210331200857.3274425-2-olteanv@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210331200857.3274425-1-olteanv@gmail.com>
+References: <20210331200857.3274425-1-olteanv@gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Mar 30, 2021 at 10:17 PM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Mon, Mar 29, 2021 at 6:46 AM KP Singh <kpsingh@kernel.org> wrote:
-> >
-> > On Fri, Mar 26, 2021 at 5:48 AM Andrii Nakryiko
-> > <andrii.nakryiko@gmail.com> wrote:
-> > >
-> > > On Mon, Mar 22, 2021 at 6:47 PM KP Singh <kpsingh@kernel.org> wrote:
-> > > >
-> > > > The newly introduced -s command line option starts an interactive shell.
-> > > > If a command is specified, the shell is started after the command
-> > > > finishes executing. It's useful to have a shell especially when
-> > > > debugging failing tests or developing new tests.
-> > > >
-> > > > Since the user may terminate the VM forcefully, an extra "sync" is added
-> > > > after the execution of the command to persist any logs from the command
-> > > > into the log file.
-> > > >
-> > > > Signed-off-by: KP Singh <kpsingh@kernel.org>
-> > > > ---
-> > >
-> > > I run:
-> > >
-> > > ./vmtest.sh -s
-> > >
-> > > And I get test_progs executed, not bash. What do I do wrong?...
-> >
-> > It does not seem to happen for me [classic, works on my machine :P]
-> >
-> > tools/testing/selftests/bpf$ ./vmtest.sh -s
-> > [...]
-> > + /etc/rcS.d/S50-startup
-> > bash: cannot set terminal process group (84): Inappropriate ioctl for device
-> > bash: no job control in this shell
-> > [root@(none) /]#
-> >
-> > To help debug this:
-> >
-> > Can you check the contents of /etc/rcS.d/S50-startup on the image,
-> > here's what mine looks like:
-> >
-> > [root@(none) /]# cat /etc/rcS.d/S50-startup
-> > #!/bin/bash
-> > bash
->
-> Couldn't do it, because it would only run test_progs, no matter which
-> command I specified (that didn't happen before, strange). E.g.,
-> running `./vmtest.sh -- cat /etc/rcS.d/S50-startup` gives this:
->
-> starting pid 83, tty '': '/etc/init.d/rcS'
-> [    1.070838] random: fast init done
-> + for path in /etc/rcS.d/S*
-> + '[' -x /etc/rcS.d/S10-mount ']'
-> + /etc/rcS.d/S10-mount
-> + /bin/mount proc /proc -t proc
-> + /bin/mount devtmpfs /dev -t devtmpfs
-> mount: mounting devtmpfs on /dev failed: Resource busy
-> + true
-> + /bin/mount sysfs /sys -t sysfs
-> + /bin/mount bpffs /sys/fs/bpf -t bpf
-> + /bin/mount debugfs /sys/kernel/debug -t debugfs
-> + echo 'Listing currently mounted file systems'
-> Listing currently mounted file systems
-> + /bin/mount
-> /dev/root on / type ext4 (rw,relatime)
-> devtmpfs on /dev type devtmpfs
-> (rw,relatime,size=1004288k,nr_inodes=251072,mode=755)
-> proc on /proc type proc (rw,relatime)
-> sysfs on /sys type sysfs (rw,relatime)
-> none on /sys/fs/bpf type bpf (rw,relatime)
-> debugfs on /sys/kernel/debug type debugfs (rw,relatime)
-> + for path in /etc/rcS.d/S*
-> + '[' -x /etc/rcS.d/S40-network ']'
-> + /etc/rcS.d/S40-network
-> + ip link set lo up
-> + for path in /etc/rcS.d/S*
-> + '[' -x /etc/rcS.d/S50-startup ']'
-> + /etc/rcS.d/S50-startup
-> ./test_progs
->
-> And there was a bunch of messages like this before kernel started:
->
-> error: Macro %global is a built-in (%define)
-> error: Macro %global is a built-in (%define)
-> warning: file /etc/rpm/macros.perl: 2 invalid macro definitions
->
-> Don't know if related.
->
-> >
-> > 2. Also, can you delete the cache in the home directory
-> > (~/.bpf_selftests by default) and try again?
-> >
->
-> But this solved the issue. So must be something in cached data.
->
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-I've applied it to bpf-next, thanks!
+We can and should check the RX BD errors before starting to build the
+skb. The only apparent reason why things are done in this backwards
+order is to spare one call to enetc_rxbd_next.
 
-> > >
-> > > >  tools/testing/selftests/bpf/vmtest.sh | 39 +++++++++++++++++++--------
-> > > >  1 file changed, 28 insertions(+), 11 deletions(-)
-> > > >
-> > >
-> > > [...]
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+---
+ drivers/net/ethernet/freescale/enetc/enetc.c | 43 ++++++++++++--------
+ 1 file changed, 27 insertions(+), 16 deletions(-)
+
+diff --git a/drivers/net/ethernet/freescale/enetc/enetc.c b/drivers/net/ethernet/freescale/enetc/enetc.c
+index 5a54976e6a28..362cfba7ce14 100644
+--- a/drivers/net/ethernet/freescale/enetc/enetc.c
++++ b/drivers/net/ethernet/freescale/enetc/enetc.c
+@@ -605,6 +605,28 @@ static void enetc_add_rx_buff_to_skb(struct enetc_bdr *rx_ring, int i,
+ 	enetc_put_rx_buff(rx_ring, rx_swbd);
+ }
+ 
++static bool enetc_check_bd_errors_and_consume(struct enetc_bdr *rx_ring,
++					      u32 bd_status,
++					      union enetc_rx_bd **rxbd, int *i)
++{
++	if (likely(!(bd_status & ENETC_RXBD_LSTATUS(ENETC_RXBD_ERR_MASK))))
++		return false;
++
++	enetc_rxbd_next(rx_ring, rxbd, i);
++
++	while (!(bd_status & ENETC_RXBD_LSTATUS_F)) {
++		dma_rmb();
++		bd_status = le32_to_cpu((*rxbd)->r.lstatus);
++
++		enetc_rxbd_next(rx_ring, rxbd, i);
++	}
++
++	rx_ring->ndev->stats.rx_dropped++;
++	rx_ring->ndev->stats.rx_errors++;
++
++	return true;
++}
++
+ #define ENETC_RXBD_BUNDLE 16 /* # of BDs to update at once */
+ 
+ static int enetc_clean_rx_ring(struct enetc_bdr *rx_ring,
+@@ -634,6 +656,11 @@ static int enetc_clean_rx_ring(struct enetc_bdr *rx_ring,
+ 
+ 		enetc_wr_reg_hot(rx_ring->idr, BIT(rx_ring->index));
+ 		dma_rmb(); /* for reading other rxbd fields */
++
++		if (enetc_check_bd_errors_and_consume(rx_ring, bd_status,
++						      &rxbd, &i))
++			break;
++
+ 		size = le16_to_cpu(rxbd->r.buf_len);
+ 		skb = enetc_map_rx_buff_to_skb(rx_ring, i, size);
+ 		if (!skb)
+@@ -645,22 +672,6 @@ static int enetc_clean_rx_ring(struct enetc_bdr *rx_ring,
+ 
+ 		enetc_rxbd_next(rx_ring, &rxbd, &i);
+ 
+-		if (unlikely(bd_status &
+-			     ENETC_RXBD_LSTATUS(ENETC_RXBD_ERR_MASK))) {
+-			dev_kfree_skb(skb);
+-			while (!(bd_status & ENETC_RXBD_LSTATUS_F)) {
+-				dma_rmb();
+-				bd_status = le32_to_cpu(rxbd->r.lstatus);
+-
+-				enetc_rxbd_next(rx_ring, &rxbd, &i);
+-			}
+-
+-			rx_ring->ndev->stats.rx_dropped++;
+-			rx_ring->ndev->stats.rx_errors++;
+-
+-			break;
+-		}
+-
+ 		/* not last BD in frame? */
+ 		while (!(bd_status & ENETC_RXBD_LSTATUS_F)) {
+ 			bd_status = le32_to_cpu(rxbd->r.lstatus);
+-- 
+2.25.1
+
