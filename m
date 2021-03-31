@@ -8,54 +8,54 @@ X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 30470C433EB
-	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 02:33:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D6874C433E9
+	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 02:33:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E7E88619C9
+	by mail.kernel.org (Postfix) with ESMTP id BF6B4619D9
 	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 02:33:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233431AbhCaCdO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 30 Mar 2021 22:33:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60476 "EHLO
+        id S233394AbhCaCdN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 30 Mar 2021 22:33:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233411AbhCaCc5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 30 Mar 2021 22:32:57 -0400
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DD62C061574;
-        Tue, 30 Mar 2021 19:32:57 -0700 (PDT)
-Received: by mail-ot1-x332.google.com with SMTP id y19-20020a0568301d93b02901b9f88a238eso17551924oti.11;
-        Tue, 30 Mar 2021 19:32:57 -0700 (PDT)
+        with ESMTP id S233406AbhCaCcz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 30 Mar 2021 22:32:55 -0400
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047EEC061574;
+        Tue, 30 Mar 2021 19:32:55 -0700 (PDT)
+Received: by mail-ot1-x32f.google.com with SMTP id g8-20020a9d6c480000b02901b65ca2432cso17576840otq.3;
+        Tue, 30 Mar 2021 19:32:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=eV9B2QnitCddGO0nj6V/hwG740QNXO2GVWdy3iY1rK8=;
-        b=W5SqZGz5ex6DpRpip8TagcaHzh7QO5IqIITTzTAwPtW/E7mr9y0qF+SVEMmdFULAp7
-         QU0GBYwVyIQAwVdr6qFZ7vA7wQYUJ8WFnHM21M8DMsXCT/klt014840j+C2LZmvvBWkV
-         ARZtkppWc4maz2AIIa5jIgivyoI4/+GBQ7TG0gcoI4CMPyefoB3PeOV0TyIUYdvL+rHE
-         LnxIUg+a+0SQTXPjCRPPFSyO2yR0P3N35F5n/hltlt9JzKCRjs2+ReO0CyEytHl8nA/4
-         cRIDKPR27jWmdahbYU2vrGrgo8SnN1ghstNK/7NomlRgVfeUWinlgACX2687L4GQMH7b
-         UOEw==
+        bh=6NSVMjZHKmhObvQ+/EbKaviQbdzEnvypy6KLGhx7zcA=;
+        b=SDJVCpcbKLmrESZEdDuPahoBu3BihPt2aFX+sEnBgqPpTLhA1VobQ5DXeD2hVk6N4K
+         gCj9g9lhgIY5cbxZXOp186lo+HlXkiY+eU2l2yKp9q/7R+ytTvZToc4j314E65OAUzS1
+         U1r3E8VJqwRa2jJEZ1yNxXpR+EFZ+s/0FKiGwtZoVPCdZNqKW2xv3XzKweBxH7lVvM7N
+         ihv9dechoSG1oY/mtmDkIbNFFq6Db0+KdogfKAWr2KHQ9Q3042xDwgpKnJsTGxdGTaX7
+         B1+8w/CiDjFXmW91YtjbZJPgCBh8XUrlIbxFWwKYiJEi+EvSZ2qUl4y5wGApxuflrfbX
+         bwZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=eV9B2QnitCddGO0nj6V/hwG740QNXO2GVWdy3iY1rK8=;
-        b=J/Em9nEJNzyqK3kcgOznY54OrWsoEZTX5v0NsNWEzr8lEIgNI+NCIHPKj5kxzLiOQE
-         WQ0QFu91PFXx4gXZ+Id1hzfsn2RjQzLHnhjIwqBti6D0FY9B8iiJDX8Y6lnxynDqX7ef
-         M7gbDyH6uHZGVJn7UFJr2EazDMW2CPeElYf3qlhzloX5OSLeZjBtIl7byp/y+zkkSZ4j
-         0xzIwG1G2Dn4bClEQufURXSfVf628gFh0Y0fXZp9NjfjdFkXfdKTANJd3tLoQpRqkFs6
-         FCkFqE68uhHiMFnPeX1why0P4F1tCdmpoyuVKzsa20PQdw5/gTYfpkSPIrhwn+YH49fI
-         ZQEQ==
-X-Gm-Message-State: AOAM5314glak06rEN/XHSqjVR1fTjuYDqwrkCDM7QEGoa6Zc3t3UL7/Q
-        6VnFir/cBJYRq9zLGgnSEYItttXBvkfx2g==
-X-Google-Smtp-Source: ABdhPJxLLLNvq5B/Fbm+tI+py5eRYLmeL1o3zN1/MJk/VAV4FWJrR49yCDhc8LF45n9C49Ib5xIIgA==
-X-Received: by 2002:a05:6830:1c6e:: with SMTP id s14mr769987otg.17.1617157976749;
-        Tue, 30 Mar 2021 19:32:56 -0700 (PDT)
+        bh=6NSVMjZHKmhObvQ+/EbKaviQbdzEnvypy6KLGhx7zcA=;
+        b=EoFpHzEYkF1Blnp/+TxDex+72PdXwj0d0HLG5U8zLp/moQiquFPyRtQp3qwtABWHrL
+         xLYXr+JYPZYe5k/Xi9EK7Zi1Hi6+nZ+f4QUSKsLc5+aIkjBuNMKbEbw/1ngqkDOL1ahc
+         1vELNrKTrCeX5k9FmpREiLSJB4GUjBHMWnyM7Marmr52b6WX+3+xzaAPnxyUtwKl3gxl
+         N3S2LalMO1rxMhEsAj5XmCNLP5ZI+LKwvxvnA6MLc9hrhfpE3TxDpi+jFnJ0SY6Plo5Z
+         a7+cFg3H7wrWcQJZtPZMMTyOzNEWvwt7EsrcaULtPhEbTieUg46BcE8j9NLALPtnM73G
+         neOw==
+X-Gm-Message-State: AOAM5301geddFDSIFtjVAdJaFZ3qxB2V4pi2uWJPuu3HwTlMdiqV9tLb
+        1nacjH4T1Hrgm+CbaXhlTMUs1W2UsEexZw==
+X-Google-Smtp-Source: ABdhPJzeV/3sReNFHsfyt2/J2XCMEGvutIh11u3PlkjjcNITAfGkKUpwkAWssBxdNEzPZxWz9yNC/g==
+X-Received: by 2002:a9d:3e10:: with SMTP id a16mr763475otd.261.1617157974342;
+        Tue, 30 Mar 2021 19:32:54 -0700 (PDT)
 Received: from unknown.attlocal.net ([2600:1700:65a0:ab60:a099:767b:2b62:48df])
-        by smtp.gmail.com with ESMTPSA id 7sm188125ois.20.2021.03.30.19.32.55
+        by smtp.gmail.com with ESMTPSA id 7sm188125ois.20.2021.03.30.19.32.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Mar 2021 19:32:56 -0700 (PDT)
+        Tue, 30 Mar 2021 19:32:54 -0700 (PDT)
 From:   Cong Wang <xiyou.wangcong@gmail.com>
 To:     netdev@vger.kernel.org
 Cc:     bpf@vger.kernel.org, duanxiongchun@bytedance.com,
@@ -65,9 +65,9 @@ Cc:     bpf@vger.kernel.org, duanxiongchun@bytedance.com,
         Jakub Sitnicki <jakub@cloudflare.com>,
         Lorenz Bauer <lmb@cloudflare.com>,
         John Fastabend <john.fastabend@gmail.com>
-Subject: [Patch bpf-next v8 08/16] sock_map: kill sock_map_link_no_progs()
-Date:   Tue, 30 Mar 2021 19:32:29 -0700
-Message-Id: <20210331023237.41094-9-xiyou.wangcong@gmail.com>
+Subject: [Patch bpf-next v8 06/16] skmsg: use GFP_KERNEL in sk_psock_create_ingress_msg()
+Date:   Tue, 30 Mar 2021 19:32:27 -0700
+Message-Id: <20210331023237.41094-7-xiyou.wangcong@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210331023237.41094-1-xiyou.wangcong@gmail.com>
 References: <20210331023237.41094-1-xiyou.wangcong@gmail.com>
@@ -79,124 +79,29 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Cong Wang <cong.wang@bytedance.com>
 
-Now we can fold sock_map_link_no_progs() into sock_map_link()
-and get rid of sock_map_link_no_progs().
+This function is only called in process context.
 
 Cc: Daniel Borkmann <daniel@iogearbox.net>
 Cc: Jakub Sitnicki <jakub@cloudflare.com>
 Cc: Lorenz Bauer <lmb@cloudflare.com>
-Cc: John Fastabend <john.fastabend@gmail.com>
+Acked-by: John Fastabend <john.fastabend@gmail.com>
 Signed-off-by: Cong Wang <cong.wang@bytedance.com>
 ---
- net/core/sock_map.c | 55 +++++++++++++--------------------------------
- 1 file changed, 15 insertions(+), 40 deletions(-)
+ net/core/skmsg.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index d06face0f16c..42d797291d34 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -225,13 +225,24 @@ static struct sk_psock *sock_map_psock_get_checked(struct sock *sk)
- 	return psock;
- }
+diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+index d43d43905d2c..656eceab73bc 100644
+--- a/net/core/skmsg.c
++++ b/net/core/skmsg.c
+@@ -410,7 +410,7 @@ static struct sk_msg *sk_psock_create_ingress_msg(struct sock *sk,
+ 	if (!sk_rmem_schedule(sk, skb, skb->truesize))
+ 		return NULL;
  
-+static bool sock_map_redirect_allowed(const struct sock *sk);
-+
- static int sock_map_link(struct bpf_map *map, struct sock *sk)
- {
--	struct bpf_prog *msg_parser, *stream_parser, *stream_verdict;
- 	struct sk_psock_progs *progs = sock_map_progs(map);
-+	struct bpf_prog *stream_verdict = NULL;
-+	struct bpf_prog *stream_parser = NULL;
-+	struct bpf_prog *msg_parser = NULL;
- 	struct sk_psock *psock;
- 	int ret;
- 
-+	/* Only sockets we can redirect into/from in BPF need to hold
-+	 * refs to parser/verdict progs and have their sk_data_ready
-+	 * and sk_write_space callbacks overridden.
-+	 */
-+	if (!sock_map_redirect_allowed(sk))
-+		goto no_progs;
-+
- 	stream_verdict = READ_ONCE(progs->stream_verdict);
- 	if (stream_verdict) {
- 		stream_verdict = bpf_prog_inc_not_zero(stream_verdict);
-@@ -257,6 +268,7 @@ static int sock_map_link(struct bpf_map *map, struct sock *sk)
- 		}
- 	}
- 
-+no_progs:
- 	psock = sock_map_psock_get_checked(sk);
- 	if (IS_ERR(psock)) {
- 		ret = PTR_ERR(psock);
-@@ -316,27 +328,6 @@ static int sock_map_link(struct bpf_map *map, struct sock *sk)
- 	return ret;
- }
- 
--static int sock_map_link_no_progs(struct bpf_map *map, struct sock *sk)
--{
--	struct sk_psock *psock;
--	int ret;
--
--	psock = sock_map_psock_get_checked(sk);
--	if (IS_ERR(psock))
--		return PTR_ERR(psock);
--
--	if (!psock) {
--		psock = sk_psock_init(sk, map->numa_node);
--		if (IS_ERR(psock))
--			return PTR_ERR(psock);
--	}
--
--	ret = sock_map_init_proto(sk, psock);
--	if (ret < 0)
--		sk_psock_put(sk, psock);
--	return ret;
--}
--
- static void sock_map_free(struct bpf_map *map)
- {
- 	struct bpf_stab *stab = container_of(map, struct bpf_stab, map);
-@@ -467,8 +458,6 @@ static int sock_map_get_next_key(struct bpf_map *map, void *key, void *next)
- 	return 0;
- }
- 
--static bool sock_map_redirect_allowed(const struct sock *sk);
--
- static int sock_map_update_common(struct bpf_map *map, u32 idx,
- 				  struct sock *sk, u64 flags)
- {
-@@ -488,14 +477,7 @@ static int sock_map_update_common(struct bpf_map *map, u32 idx,
- 	if (!link)
- 		return -ENOMEM;
- 
--	/* Only sockets we can redirect into/from in BPF need to hold
--	 * refs to parser/verdict progs and have their sk_data_ready
--	 * and sk_write_space callbacks overridden.
--	 */
--	if (sock_map_redirect_allowed(sk))
--		ret = sock_map_link(map, sk);
--	else
--		ret = sock_map_link_no_progs(map, sk);
-+	ret = sock_map_link(map, sk);
- 	if (ret < 0)
- 		goto out_free;
- 
-@@ -1000,14 +982,7 @@ static int sock_hash_update_common(struct bpf_map *map, void *key,
- 	if (!link)
- 		return -ENOMEM;
- 
--	/* Only sockets we can redirect into/from in BPF need to hold
--	 * refs to parser/verdict progs and have their sk_data_ready
--	 * and sk_write_space callbacks overridden.
--	 */
--	if (sock_map_redirect_allowed(sk))
--		ret = sock_map_link(map, sk);
--	else
--		ret = sock_map_link_no_progs(map, sk);
-+	ret = sock_map_link(map, sk);
- 	if (ret < 0)
- 		goto out_free;
+-	msg = kzalloc(sizeof(*msg), __GFP_NOWARN | GFP_ATOMIC);
++	msg = kzalloc(sizeof(*msg), __GFP_NOWARN | GFP_KERNEL);
+ 	if (unlikely(!msg))
+ 		return NULL;
  
 -- 
 2.25.1
