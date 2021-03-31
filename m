@@ -2,27 +2,27 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F8BDC433E2
-	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 07:12:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E182EC433E0
+	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 07:12:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5450E619E2
-	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 07:12:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ABEEF619E8
+	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 07:12:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233968AbhCaHLo (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 31 Mar 2021 03:11:44 -0400
-Received: from out30-130.freemail.mail.aliyun.com ([115.124.30.130]:59568 "EHLO
-        out30-130.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233843AbhCaHLm (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 31 Mar 2021 03:11:42 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04420;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0UTvzwhh_1617174699;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0UTvzwhh_1617174699)
+        id S233973AbhCaHLp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 31 Mar 2021 03:11:45 -0400
+Received: from out30-45.freemail.mail.aliyun.com ([115.124.30.45]:60186 "EHLO
+        out30-45.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233892AbhCaHLn (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 31 Mar 2021 03:11:43 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0UTvslTi_1617174700;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0UTvslTi_1617174700)
           by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 31 Mar 2021 15:11:39 +0800
+          Wed, 31 Mar 2021 15:11:41 +0800
 From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To:     netdev@vger.kernel.org
 Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
@@ -40,65 +40,131 @@ Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         KP Singh <kpsingh@kernel.org>,
-        virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
-Subject: [PATCH net-next v3 0/8] virtio-net support xdp socket zero copy xmit
-Date:   Wed, 31 Mar 2021 15:11:31 +0800
-Message-Id: <20210331071139.15473-1-xuanzhuo@linux.alibaba.com>
+        virtualization@lists.linux-foundation.org, bpf@vger.kernel.org,
+        Dust Li <dust.li@linux.alibaba.com>
+Subject: [PATCH net-next v3 3/8] virtio-net: xsk zero copy xmit setup
+Date:   Wed, 31 Mar 2021 15:11:34 +0800
+Message-Id: <20210331071139.15473-4-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.31.0
+In-Reply-To: <20210331071139.15473-1-xuanzhuo@linux.alibaba.com>
+References: <20210331071139.15473-1-xuanzhuo@linux.alibaba.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-XDP socket is an excellent by pass kernel network transmission framework. The
-zero copy feature of xsk (XDP socket) needs to be supported by the driver. The
-performance of zero copy is very good. mlx5 and intel ixgbe already support this
-feature, This patch set allows virtio-net to support xsk's zerocopy xmit
-feature.
+xsk is a high-performance packet receiving and sending technology.
 
-And xsk's zerocopy rx has made major changes to virtio-net, and I hope to submit
-it after this patch set are received.
+This patch implements the binding and unbinding operations of xsk and
+the virtio-net queue for xsk zero copy xmit.
 
-Compared with other drivers, virtio-net does not directly obtain the dma
-address, so I first obtain the xsk page, and then pass the page to virtio.
+The xsk zero copy xmit depends on tx napi. So if tx napi is not opened,
+an error will be reported. And the entire operation is under the
+protection of rtnl_lock
 
-When recycling the sent packets, we have to distinguish between skb and xdp.
-Now we have to distinguish between skb, xdp, xsk.
+Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Reviewed-by: Dust Li <dust.li@linux.alibaba.com>
+---
+ drivers/net/virtio_net.c | 66 ++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 66 insertions(+)
 
-#0 #1 made some adjustments to xsk.
-
----------------- Performance Testing ------------
-
-The udp package tool implemented by the interface of xsk vs sockperf(kernel udp)
-for performance testing:
-
-xsk zero copy xmit in virtio-net:
-CPU        PPS         MSGSIZE    vhost-cpu
-7.9%       511804      64         100%
-13.3%%     484373      1500       100%
-
-sockperf:
-CPU        PPS         MSGSIZE    vhost-cpu
-100%       375227      64         89.1%
-100%       307322      1500       81.5%
-
-Xuan Zhuo (8):
-  xsk: XDP_SETUP_XSK_POOL support option check_dma
-  xsk: support get page by addr
-  virtio-net: xsk zero copy xmit setup
-  virtio-net: xsk zero copy xmit implement wakeup and xmit
-  virtio-net: xsk zero copy xmit support xsk unaligned mode
-  virtio-net: xsk zero copy xmit kick by threshold
-  virtio-net: poll tx call xsk zerocopy xmit
-  virtio-net: free old xmit handle xsk
-
- drivers/net/virtio_net.c   | 449 +++++++++++++++++++++++++++++++++----
- include/linux/netdevice.h  |   1 +
- include/net/xdp_sock_drv.h |  11 +
- net/xdp/xsk_buff_pool.c    |   3 +-
- 4 files changed, 415 insertions(+), 49 deletions(-)
-
---
+diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+index bb4ea9dbc16b..4e25408a2b37 100644
+--- a/drivers/net/virtio_net.c
++++ b/drivers/net/virtio_net.c
+@@ -22,6 +22,7 @@
+ #include <net/route.h>
+ #include <net/xdp.h>
+ #include <net/net_failover.h>
++#include <net/xdp_sock_drv.h>
+ 
+ static int napi_weight = NAPI_POLL_WEIGHT;
+ module_param(napi_weight, int, 0444);
+@@ -133,6 +134,11 @@ struct send_queue {
+ 	struct virtnet_sq_stats stats;
+ 
+ 	struct napi_struct napi;
++
++	struct {
++		/* xsk pool */
++		struct xsk_buff_pool __rcu *pool;
++	} xsk;
+ };
+ 
+ /* Internal representation of a receive virtqueue */
+@@ -2526,11 +2532,71 @@ static int virtnet_xdp_set(struct net_device *dev, struct bpf_prog *prog,
+ 	return err;
+ }
+ 
++static int virtnet_xsk_pool_enable(struct net_device *dev,
++				   struct xsk_buff_pool *pool,
++				   u16 qid)
++{
++	struct virtnet_info *vi = netdev_priv(dev);
++	struct send_queue *sq;
++	int ret = -EBUSY;
++
++	if (qid >= vi->curr_queue_pairs)
++		return -EINVAL;
++
++	sq = &vi->sq[qid];
++
++	/* xsk zerocopy depend on the tx napi */
++	if (!sq->napi.weight)
++		return -EPERM;
++
++	rcu_read_lock();
++	if (rcu_dereference(sq->xsk.pool))
++		goto end;
++
++	/* Here is already protected by rtnl_lock, so rcu_assign_pointer is
++	 * safe.
++	 */
++	rcu_assign_pointer(sq->xsk.pool, pool);
++	ret = 0;
++end:
++	rcu_read_unlock();
++
++	return ret;
++}
++
++static int virtnet_xsk_pool_disable(struct net_device *dev, u16 qid)
++{
++	struct virtnet_info *vi = netdev_priv(dev);
++	struct send_queue *sq;
++
++	if (qid >= vi->curr_queue_pairs)
++		return -EINVAL;
++
++	sq = &vi->sq[qid];
++
++	/* Here is already protected by rtnl_lock, so rcu_assign_pointer is
++	 * safe.
++	 */
++	rcu_assign_pointer(sq->xsk.pool, NULL);
++
++	synchronize_rcu(); /* Sync with the XSK wakeup and with NAPI. */
++
++	return 0;
++}
++
+ static int virtnet_xdp(struct net_device *dev, struct netdev_bpf *xdp)
+ {
+ 	switch (xdp->command) {
+ 	case XDP_SETUP_PROG:
+ 		return virtnet_xdp_set(dev, xdp->prog, xdp->extack);
++	case XDP_SETUP_XSK_POOL:
++		/* virtio net not use dma before call vring api */
++		xdp->xsk.check_dma = false;
++		if (xdp->xsk.pool)
++			return virtnet_xsk_pool_enable(dev, xdp->xsk.pool,
++						       xdp->xsk.queue_id);
++		else
++			return virtnet_xsk_pool_disable(dev, xdp->xsk.queue_id);
+ 	default:
+ 		return -EINVAL;
+ 	}
+-- 
 2.31.0
 
