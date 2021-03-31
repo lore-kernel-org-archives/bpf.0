@@ -8,58 +8,58 @@ X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96054C43460
-	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 21:28:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28DE0C43600
+	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 21:28:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 654016108C
-	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 21:28:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0E72361041
+	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 21:28:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232290AbhCaV2M (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 31 Mar 2021 17:28:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51760 "EHLO
+        id S232101AbhCaV2O (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 31 Mar 2021 17:28:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232419AbhCaV1d (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 31 Mar 2021 17:27:33 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86849C061763
-        for <bpf@vger.kernel.org>; Wed, 31 Mar 2021 14:27:30 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id t5so3620864ybc.18
-        for <bpf@vger.kernel.org>; Wed, 31 Mar 2021 14:27:30 -0700 (PDT)
+        with ESMTP id S232600AbhCaV1h (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 31 Mar 2021 17:27:37 -0400
+Received: from mail-qk1-x749.google.com (mail-qk1-x749.google.com [IPv6:2607:f8b0:4864:20::749])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AEDCC06175F
+        for <bpf@vger.kernel.org>; Wed, 31 Mar 2021 14:27:36 -0700 (PDT)
+Received: by mail-qk1-x749.google.com with SMTP id c131so2349422qkg.21
+        for <bpf@vger.kernel.org>; Wed, 31 Mar 2021 14:27:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=YGJePCNXceByqZDSpRB0j7cl0450LnSJo98Rt1jHcOo=;
-        b=UKPRZLEVzQZ3FHZ8QXJYCx4bJrAbgSI5gphfsVy9Eh1BZdT2ViP6pqHMKIIiVfgLu4
-         /gi1KUU5U2+ZkKwNjqjYEauBXMhyzaSePxCZZn171LdZoYhov4+U6PkkZu9CI0t9VE/g
-         EcO6T6hhaf/UW1kedb1b3JSsszfVLrEJhTCLBirrO1Sv5c7XmHwbUaDImN6AyVRm9sC5
-         J+yHAq4xdOdlx2p9fxnW5OfqPxrdOhlT6KJpdZflXru7nEv1aCTjAwHr1fD1LSJrpxDT
-         Po9hlnSXcQkFp6fw0Jac0NpPJzt8tzOpYjDqVdhCzOoPiSuJW5f5frOQhykp/SJ/gkA0
-         Eadg==
+        bh=w0Ob8x2IVOI0uzzuSsD4k6M727ovkcvMuqyZX5oqc8o=;
+        b=nI+ENEyWz/rNq3xP8nhiHUSZWps3bzcuJMrVtvPjR+rwBVB/lrPv3BQxv4E6KMlKot
+         N2LsEQni14VlVAHF8qnHU7viK/ziWMDnF+LjsDhRC5aIyL3jNfHcFkfBZOz7gp9DHK/O
+         0JRF/cYTuekKimF/7nWHkbZejho/mozDnjz14/sUDrLrCY52H9gqZiseo5bvX4tsLE3n
+         UInjiRYKcOH12CVIEai20isk8gmvkqMy8DVUqR4KnBFv6jve3oIB8g21fppaRejyMB3V
+         etjDn4nUdij5fV9SBqoW9glwdBH2VxhLNg9QBaiZB4SRwbU9iQX2g4S5jS1L/Ej7xHUS
+         tYmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=YGJePCNXceByqZDSpRB0j7cl0450LnSJo98Rt1jHcOo=;
-        b=aSn3nQKF2iRz5YSbueyjUg9XHbxudN/VEx7+kJvc2NbSj0DsxhCu3VNlYfV3l5sOhW
-         tHyGPIo9h2nsu0033AiNR8HOsmo1qVh/ivmjIJG+rEOrlNJy6WhiLwAPMUOz3ojEKVbA
-         3zad+L7qW8sr6L0sSaIvFRTABR9NY9fNvCbMwUGBt503RoUFWVJEfWstYoYzhdtGwF+Q
-         KUErwI1EhOTC7Fj4yqnCk7VkpN9CxzWAidi+w+r+9jxkE3U729/2mR4MzHndYjCO5qid
-         UE+f7XYC1arF/3CLcBxVpr5Z9m9I5KgzzIAAVYIIp2Yd9v7Cm9e8uRA0o6OrPC0UduJG
-         q7mA==
-X-Gm-Message-State: AOAM53117Ueo501ZCD0csBxrN8VI9YGQXpI7dXrtnUGR3ww5GEvWEhyi
-        LUzUwa1e9ra5OAcO5ZnLuZdcEMrUirSjcZeIZdc=
-X-Google-Smtp-Source: ABdhPJwmO9kJKbm2q20e0oNRMu00heZHbCRG+dyo78LV875MSN1mKqcPNV/crmv9eoJDAI0BL3m/hxc31xh13ueKjrs=
+        bh=w0Ob8x2IVOI0uzzuSsD4k6M727ovkcvMuqyZX5oqc8o=;
+        b=SHqU9zllXeREHndNHD3izR1AiJkC6NFjTM4xRCRJRHyZSRxcTWlpuf0mImBtZ6xZXs
+         RdPkgC/9LxtKcgMeAPE+7egj0xaWvjtf/rMy7LOZvouoNh6FZXvgtul2pM+pRW7ZwT1T
+         0sH09fZbEzU/h5XQvNEtM+KwIDaVPg7hHSOrGPCejgn5rsxY7xsO0tzepyV9TpVxOTdk
+         KTleUTRk8Q8ngbkFYKL3DFzWAPPquGWQOPEymaqzBtrg89n6sLw1OmA5UOAcl/AH+KMT
+         VNXXUU+rZLDESsb5SZvXulN/7betd9Z67NF8HJcRrQvsVoYamBxR2McKix3IrmttLVjP
+         rUtg==
+X-Gm-Message-State: AOAM530vc75ocjbrZbnFYeF+tl3tx/RPrVfuPJKonRpbH/ytaZOpnNxD
+        twc8YccmLK6aLQpXvhXMVoehtGy9Isj8LtnEJAk=
+X-Google-Smtp-Source: ABdhPJxyRXN3znqnAe5t9dUQhGAL9s70gMe95fSLJFpd13x9D/1BXHdz4usqL4E5etbu055EIK7g6ge4pYkRTaLFmpw=
 X-Received: from samitolvanen1.mtv.corp.google.com ([2620:15c:201:2:7933:7015:a5d5:3835])
- (user=samitolvanen job=sendgmr) by 2002:a25:ba87:: with SMTP id
- s7mr7123638ybg.222.1617226049790; Wed, 31 Mar 2021 14:27:29 -0700 (PDT)
-Date:   Wed, 31 Mar 2021 14:27:07 -0700
+ (user=samitolvanen job=sendgmr) by 2002:a0c:cb0c:: with SMTP id
+ o12mr5070670qvk.54.1617226055502; Wed, 31 Mar 2021 14:27:35 -0700 (PDT)
+Date:   Wed, 31 Mar 2021 14:27:10 -0700
 In-Reply-To: <20210331212722.2746212-1-samitolvanen@google.com>
-Message-Id: <20210331212722.2746212-4-samitolvanen@google.com>
+Message-Id: <20210331212722.2746212-7-samitolvanen@google.com>
 Mime-Version: 1.0
 References: <20210331212722.2746212-1-samitolvanen@google.com>
 X-Mailer: git-send-email 2.31.0.291.g576ba9dcdaf-goog
-Subject: [PATCH v4 03/17] mm: add generic function_nocfi macro
+Subject: [PATCH v4 06/17] kthread: use WARN_ON_FUNCTION_MISMATCH
 From:   Sami Tolvanen <samitolvanen@google.com>
 To:     Kees Cook <keescook@chromium.org>
 Cc:     Nathan Chancellor <nathan@kernel.org>,
@@ -81,45 +81,36 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-With CONFIG_CFI_CLANG, the compiler replaces function addresses
-in instrumented C code with jump table addresses. This means that
-__pa_symbol(function) returns the physical address of the jump table
-entry instead of the actual function, which may not work as the jump
-table code will immediately jump to a virtual address that may not be
-mapped.
+With CONFIG_CFI_CLANG, a callback function passed to
+__kthread_queue_delayed_work from a module points to a jump table
+entry defined in the module instead of the one used in the core
+kernel, which breaks function address equality in this check:
 
-To avoid this address space confusion, this change adds a generic
-definition for function_nocfi(), which architectures that support CFI
-can override. The typical implementation of would use inline assembly
-to take the function address, which avoids compiler instrumentation.
+  WARN_ON_ONCE(timer->function != ktead_delayed_work_timer_fn);
+
+Use WARN_ON_FUNCTION_MISMATCH() instead to disable the warning
+when CFI and modules are both enabled.
 
 Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
 Reviewed-by: Kees Cook <keescook@chromium.org>
 ---
- include/linux/mm.h | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ kernel/kthread.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 8ba434287387..22cce9c7dd05 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -124,6 +124,16 @@ extern int mmap_rnd_compat_bits __read_mostly;
- #define lm_alias(x)	__va(__pa_symbol(x))
- #endif
+diff --git a/kernel/kthread.c b/kernel/kthread.c
+index 1578973c5740..a1972eba2917 100644
+--- a/kernel/kthread.c
++++ b/kernel/kthread.c
+@@ -963,7 +963,8 @@ static void __kthread_queue_delayed_work(struct kthread_worker *worker,
+ 	struct timer_list *timer = &dwork->timer;
+ 	struct kthread_work *work = &dwork->work;
  
-+/*
-+ * With CONFIG_CFI_CLANG, the compiler replaces function addresses in
-+ * instrumented C code with jump table addresses. Architectures that
-+ * support CFI can define this macro to return the actual function address
-+ * when needed.
-+ */
-+#ifndef function_nocfi
-+#define function_nocfi(x) (x)
-+#endif
-+
- /*
-  * To prevent common memory management code establishing
-  * a zero page mapping on a read fault.
+-	WARN_ON_ONCE(timer->function != kthread_delayed_work_timer_fn);
++	WARN_ON_FUNCTION_MISMATCH(timer->function,
++				  kthread_delayed_work_timer_fn);
+ 
+ 	/*
+ 	 * If @delay is 0, queue @dwork->work immediately.  This is for
 -- 
 2.31.0.291.g576ba9dcdaf-goog
 
