@@ -2,115 +2,95 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-11.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AB11C43460
-	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 22:01:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D50CDC43460
+	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 22:21:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BD407601FD
-	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 22:01:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9046661077
+	for <bpf@archiver.kernel.org>; Wed, 31 Mar 2021 22:21:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232492AbhCaWAZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 31 Mar 2021 18:00:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59014 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231676AbhCaWAV (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 31 Mar 2021 18:00:21 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1701DC061574;
-        Wed, 31 Mar 2021 15:00:21 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id x16so162141iob.1;
-        Wed, 31 Mar 2021 15:00:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:message-id:in-reply-to:references:subject
-         :mime-version:content-transfer-encoding;
-        bh=OJa7aLdBWO57LWQ6v7C3AUMAfgikKe2S1MkL/HKL6YE=;
-        b=bVdZ5hw0IPXo/QBzMf2MxbBFy43vg2RajrcN0E4ZYRR5a6Bn6G0iSClyMT1OOiYXny
-         Qezv3MbdyyIarrXql2g3OEP/2wSWAj3S5d9MPVzyf41y9PdsTAJ0H/H9GfEnw2cTM0Kg
-         Y5IL0czg4jXbu1Hn0JgqV0xQXn0diXA6rOwjm6/gYHxWp7/lOGdlZ+7YjX3m69ZSdtgm
-         cPpEirT1jiFhlYPMaNP6XLwv4KVj4KiIVmdz5ut0G6evs+sapDMft7ZBbribvu65Jqvs
-         pwYSlLApZTjWkhDdVMD8wPD5+3XnHq7vM3kTHohLV1LLUAuh+wmd/9S+i/snnUe32oRo
-         IfHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
-         :references:subject:mime-version:content-transfer-encoding;
-        bh=OJa7aLdBWO57LWQ6v7C3AUMAfgikKe2S1MkL/HKL6YE=;
-        b=GzbSfNY/1DoepoKuMFIxBLBTjyEBmKy5Fi9hQ+3padOORedS5SO5yUC9Tydg/mzCBX
-         7EYmj+m+bAvBjUEeTepLVIvb3WtaeyWd24vN0bLgQNC+5eoDWoYXtWCkFNtXmu2wgvIt
-         GyJwnEpU0U1Ob0HkLuoyhyseIRpwr3AZECrPFfzjiptOjxp7u5AGCGfQ/E91/i79gYq5
-         eZO/IYDLiaT4UjTzG8Jay30mIFG1O7wey+2+mmlrBE7UjnbbYM/7ICGng2fv2tPa/lGu
-         g1ROJ1OXJqcfAECIA2rCdYzsYLjQdAWYdVIgXOx9YS3aXPXr3gR8zovA8jDtfvhaapQV
-         CKOg==
-X-Gm-Message-State: AOAM531X+JHZ9PeDGh5jwXXtalClckCx0YoaOrQQ2xZpQMRhc8UdHsyX
-        TaMFL+f6BKchwTtRRsERf0o=
-X-Google-Smtp-Source: ABdhPJxNj9MoRc0F5aSJBTglJ2+nl87+A9UaUVLaNDuQ3InP8fS/t7PhF77t7eNW41OpIh5F7LGiEQ==
-X-Received: by 2002:a02:9048:: with SMTP id y8mr4873510jaf.66.1617228020497;
-        Wed, 31 Mar 2021 15:00:20 -0700 (PDT)
-Received: from localhost ([172.242.244.146])
-        by smtp.gmail.com with ESMTPSA id c19sm1595613ile.17.2021.03.31.15.00.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Mar 2021 15:00:19 -0700 (PDT)
-Date:   Wed, 31 Mar 2021 15:00:10 -0700
-From:   John Fastabend <john.fastabend@gmail.com>
-To:     Cong Wang <xiyou.wangcong@gmail.com>, netdev@vger.kernel.org
-Cc:     bpf@vger.kernel.org, duanxiongchun@bytedance.com,
-        wangdongdong.6@bytedance.com, jiang.wang@bytedance.com,
-        Cong Wang <cong.wang@bytedance.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Lorenz Bauer <lmb@cloudflare.com>,
-        Jakub Sitnicki <jakub@cloudflare.com>
-Message-ID: <6064f0ea917f5_868622089b@john-XPS-13-9370.notmuch>
-In-Reply-To: <20210331023237.41094-2-xiyou.wangcong@gmail.com>
-References: <20210331023237.41094-1-xiyou.wangcong@gmail.com>
- <20210331023237.41094-2-xiyou.wangcong@gmail.com>
-Subject: RE: [Patch bpf-next v8 01/16] skmsg: lock ingress_skb when purging
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+        id S232686AbhCaWUp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 31 Mar 2021 18:20:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50190 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230309AbhCaWUS (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 31 Mar 2021 18:20:18 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 7E53C60FEF;
+        Wed, 31 Mar 2021 22:20:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1617229218;
+        bh=XR2GhFJDG0uscdht9bNZ0OChS0oMBvs3rgKRpgNmwjI=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=ldguJ9DKRH0UlysgAzc6tCCzef7qbCNBs/k1+72pIW9T/jdJZUhM5QJPpTkMsC67Y
+         OPL3TsiIzve4vRyD5rIBjmQMhBuFT/RbNxQWOnjnzMxxoocRQLX5qbWLC/8KoHMIt+
+         scIeFQf9ww8IVgeIgEHtb4TXM8y5FOkktOc5CwvJzUNV0vlY8txdRudG0UDOJhN2AR
+         mK/ClLLBhb8mZj+gcGQsbuYn9dQLZVlnGPmlew04VH2yM42kOzQkfrvfEiGuh07dC6
+         dYlyEWnoWpZWxC6x9eYo4bc3o6V5PakTYzz+bQ9x/xXU684Xwc/JauI0pra/924YVW
+         gE7CQ0AD/shiw==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next 0/9] XDP for NXP ENETC
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <161722921847.2890.11454275035323776176.git-patchwork-notify@kernel.org>
+Date:   Wed, 31 Mar 2021 22:20:18 +0000
+References: <20210331200857.3274425-1-olteanv@gmail.com>
+In-Reply-To: <20210331200857.3274425-1-olteanv@gmail.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     kuba@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        hawk@kernel.org, john.fastabend@gmail.com, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        kpsingh@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, alexander.duyck@gmail.com,
+        ioana.ciornei@nxp.com, alexandru.marginean@nxp.com,
+        claudiu.manoil@nxp.com, ilias.apalodimas@linaro.org,
+        vladimir.oltean@nxp.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Cong Wang wrote:
-> From: Cong Wang <cong.wang@bytedance.com>
-> 
-> Currently we purge the ingress_skb queue only when psock
-> refcnt goes down to 0, so locking the queue is not necessary,
-> but in order to be called during ->close, we have to lock it
-> here.
-> 
-> Cc: John Fastabend <john.fastabend@gmail.com>
-> Cc: Daniel Borkmann <daniel@iogearbox.net>
-> Cc: Lorenz Bauer <lmb@cloudflare.com>
-> Acked-by: Jakub Sitnicki <jakub@cloudflare.com>
-> Signed-off-by: Cong Wang <cong.wang@bytedance.com>
-> ---
->  net/core/skmsg.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-> index 07f54015238a..bebf84ed4e30 100644
-> --- a/net/core/skmsg.c
-> +++ b/net/core/skmsg.c
-> @@ -634,7 +634,7 @@ static void sk_psock_zap_ingress(struct sk_psock *psock)
->  {
->  	struct sk_buff *skb;
->  
-> -	while ((skb = __skb_dequeue(&psock->ingress_skb)) != NULL) {
-> +	while ((skb = skb_dequeue(&psock->ingress_skb)) != NULL) {
->  		skb_bpf_redirect_clear(skb);
->  		kfree_skb(skb);
->  	}
-> -- 
-> 2.25.1
-> 
+Hello:
 
-Acked-by: John Fastabend <john.fastabend@gmail.com>
+This series was applied to netdev/net-next.git (refs/heads/master):
+
+On Wed, 31 Mar 2021 23:08:48 +0300 you wrote:
+> From: Vladimir Oltean <vladimir.oltean@nxp.com>
+> 
+> This series adds support to the enetc driver for the basic XDP primitives.
+> The ENETC is a network controller found inside the NXP LS1028A SoC,
+> which is a dual-core Cortex A72 device for industrial networking,
+> with the CPUs clocked at up to 1.3 GHz. On this platform, there are 4
+> ENETC ports and a 6-port embedded DSA switch, in a topology that looks
+> like this:
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next,1/9] net: enetc: consume the error RX buffer descriptors in a dedicated function
+    https://git.kernel.org/netdev/net-next/c/2fa423f5f0c6
+  - [net-next,2/9] net: enetc: move skb creation into enetc_build_skb
+    https://git.kernel.org/netdev/net-next/c/a800abd3ecb9
+  - [net-next,3/9] net: enetc: add a dedicated is_eof bit in the TX software BD
+    https://git.kernel.org/netdev/net-next/c/d504498d2eb3
+  - [net-next,4/9] net: enetc: clean the TX software BD on the TX confirmation path
+    https://git.kernel.org/netdev/net-next/c/1ee8d6f3bebb
+  - [net-next,5/9] net: enetc: move up enetc_reuse_page and enetc_page_reusable
+    https://git.kernel.org/netdev/net-next/c/65d0cbb414ce
+  - [net-next,6/9] net: enetc: add support for XDP_DROP and XDP_PASS
+    https://git.kernel.org/netdev/net-next/c/d1b15102dd16
+  - [net-next,7/9] net: enetc: add support for XDP_TX
+    https://git.kernel.org/netdev/net-next/c/7ed2bc80074e
+  - [net-next,8/9] net: enetc: increase RX ring default size
+    https://git.kernel.org/netdev/net-next/c/d6a2829e82cf
+  - [net-next,9/9] net: enetc: add support for XDP_REDIRECT
+    https://git.kernel.org/netdev/net-next/c/9d2b68cc108d
+
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
