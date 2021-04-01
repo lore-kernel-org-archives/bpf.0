@@ -2,80 +2,98 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,FROM_LOCAL_HEX,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51445C43461
-	for <bpf@archiver.kernel.org>; Thu,  1 Apr 2021 18:08:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98775C43460
+	for <bpf@archiver.kernel.org>; Thu,  1 Apr 2021 18:08:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1D61E610C7
-	for <bpf@archiver.kernel.org>; Thu,  1 Apr 2021 18:08:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 70C4C6112E
+	for <bpf@archiver.kernel.org>; Thu,  1 Apr 2021 18:08:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237735AbhDASIq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 1 Apr 2021 14:08:46 -0400
-Received: from mail-io1-f71.google.com ([209.85.166.71]:35478 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234424AbhDASBJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 1 Apr 2021 14:01:09 -0400
-Received: by mail-io1-f71.google.com with SMTP id v24so4552427ion.2
-        for <bpf@vger.kernel.org>; Thu, 01 Apr 2021 11:01:08 -0700 (PDT)
+        id S237751AbhDASIr (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 1 Apr 2021 14:08:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34440 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235031AbhDASBg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 1 Apr 2021 14:01:36 -0400
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C781C031140;
+        Thu,  1 Apr 2021 09:36:54 -0700 (PDT)
+Received: by mail-il1-x132.google.com with SMTP id y17so2543321ila.6;
+        Thu, 01 Apr 2021 09:36:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:message-id:in-reply-to:references:subject
+         :mime-version:content-transfer-encoding;
+        bh=LFM1vSxyibAMBlB4gYVUgCuiadjpuJR3yr0/vqq0n/s=;
+        b=FLDEH36q/3/jfcM1bYqBKU/ZBxQxeDg5p0X3qvrqmsxbbxB/remef9VBTweP9aH81/
+         NnichKUQrs5nMlv/p4V7cadNm+l5V+SrK9K74A7ohhCGGc1moZELt0cZgFxPIeeaMjIW
+         JeX/SAw6Juc3YXjRrOuV+rKloJBxTi5MHKFEHV0sE0pbbDnlwc0mQWSvyRoNCcWGWcAm
+         fo5sabtriO1GkQO+uMLUDGSA1V3akoORqwKFQiwFE68SMEx1Yd6xAuq2PpP7xr8UVJfX
+         K8DOYSWDw8P9xKunFIN5GWN4oONc1R5g7ecEa80ioc3nf6/fRNUXlGJ+LAeX6j8/c9oZ
+         l7mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=t1PSBwAKPIxSsjyHhjvOvydGcJv2nwxNeNnnB0pN5z4=;
-        b=rSt7iSZd0mqZi9GuQkNacon4s1czTrHm0Kz/t0QawrtZ2jRlgh0smsRsdAFVlhL0DD
-         7U531k5PPubQxHkZkoumKC5apiwcgHzgtPSnzBfpKzmUcBcE6zJMeJ/MZXDw+FnSwKyr
-         p9GeV0CiBQrH5VnSnGNiKB+HGDNPH8Au4pya9+lrtHW4GABtI1uyezQyzRWHYXzZckVZ
-         GgjGe+UaWl1MIjvVucNFqsTHnm8RTgKPWaTawkLqBlJlmRXGnxfmAAVSYBqOZTKMvgxs
-         Be2lUO8QZ5PXhaGHG3bOfDxyMa0oXn+yQBSd0ygtE/uD0dTFI9Qgeerc5teZJFdyRnv6
-         GW8g==
-X-Gm-Message-State: AOAM531I4PPHA2kbKpHAVEoaRccU3TDEv+Qyelo10Xxl793J2InoWSkm
-        dQsosy12DkgpA1p6CshHcisBxQ6eruKax38znrZ85Kf1x7kA
-X-Google-Smtp-Source: ABdhPJyvO0s22tKhZ9WnikY25h0lMQFGQxk3fm8YQuGAfS4QejjBrmdhMtUZGFynSyNRa1nHaVnvvFGyw+hSTQlenTkj1ltd289T
-MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:170c:: with SMTP id u12mr7856308ill.100.1617300067465;
- Thu, 01 Apr 2021 11:01:07 -0700 (PDT)
-Date:   Thu, 01 Apr 2021 11:01:07 -0700
-In-Reply-To: <000000000000680f2905afd0649c@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000043f2c05beed04d8@google.com>
-Subject: Re: [syzbot] BUG: unable to handle kernel paging request in bpf_trace_run2
-From:   syzbot <syzbot+cc36fd07553c0512f5f7@syzkaller.appspotmail.com>
-To:     andrii@kernel.org, andriin@fb.com, ast@kernel.org,
-        bpf@vger.kernel.org, corbet@lwn.net, daniel@iogearbox.net,
-        davem@davemloft.net, dsahern@gmail.com, hawk@kernel.org,
-        john.fastabend@gmail.com, kafai@fb.com, kpsingh@chromium.org,
-        kpsingh@kernel.org, kuba@kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mathieu.desnoyers@efficios.com,
-        mingo@kernel.org, mingo@redhat.com, mmullins@mmlx.us,
-        netdev@vger.kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        songliubraving@fb.com, syzkaller-bugs@googlegroups.com, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
+         :references:subject:mime-version:content-transfer-encoding;
+        bh=LFM1vSxyibAMBlB4gYVUgCuiadjpuJR3yr0/vqq0n/s=;
+        b=bLbEvZ+tYuM7pAiDjcUeLiv+4WFtpjiSsZF7ISpi2fBnayiGgLFRZSY1irrzPPlDAN
+         Fo5NJ0yDTcm48ygVsBo7m5blNt8fcZx0tWXi7Da5M59sNzhuLHn3TMpmoyCK4gBH1dzS
+         Uw1S520ipcNR1vk1RnppMqwaOc1Kol7WmLon5eilvPrTF+SUeRcfMuKj6sKUAYC4KYIu
+         xq2KIcgp8F37gHwqGr72+v5r5m0NNd3Kuv+ybuMA6IL8oMlAttdZOgaQSa78lFIIKgWX
+         hmyvEmfsWCF6ZKTVRd1LdGIAwL/JKxpC0ws4IPPSVMbx43MzembXHQN6w517xYMHFuQX
+         sYhQ==
+X-Gm-Message-State: AOAM530iuzVnn1KXi8mvLfmsnL6dAaf3bPY3YoaLr/akwtbHUw1ThdFE
+        tbiv4CGr1fTucxrkheFgIWk=
+X-Google-Smtp-Source: ABdhPJw0KXikil8NrdcvBH7X5gvLNRwSE0EoIAQI0KQDmKsUYLlmb5EiMSXCVKjbeQ994DQWrQVJcA==
+X-Received: by 2002:a05:6e02:f54:: with SMTP id y20mr5655713ilj.15.1617295013891;
+        Thu, 01 Apr 2021 09:36:53 -0700 (PDT)
+Received: from localhost ([172.242.244.146])
+        by smtp.gmail.com with ESMTPSA id c17sm2791525ilh.32.2021.04.01.09.36.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Apr 2021 09:36:53 -0700 (PDT)
+Date:   Thu, 01 Apr 2021 09:36:46 -0700
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     Cong Wang <xiyou.wangcong@gmail.com>, netdev@vger.kernel.org
+Cc:     bpf@vger.kernel.org, duanxiongchun@bytedance.com,
+        wangdongdong.6@bytedance.com, jiang.wang@bytedance.com,
+        Cong Wang <cong.wang@bytedance.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        Lorenz Bauer <lmb@cloudflare.com>
+Message-ID: <6065f69e9e5d9_4ff92085f@john-XPS-13-9370.notmuch>
+In-Reply-To: <20210331023237.41094-13-xiyou.wangcong@gmail.com>
+References: <20210331023237.41094-1-xiyou.wangcong@gmail.com>
+ <20210331023237.41094-13-xiyou.wangcong@gmail.com>
+Subject: RE: [Patch bpf-next v8 12/16] skmsg: extract __tcp_bpf_recvmsg() and
+ tcp_bpf_wait_data()
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-syzbot suspects this issue was fixed by commit:
+Cong Wang wrote:
+> From: Cong Wang <cong.wang@bytedance.com>
+> 
+> Although these two functions are only used by TCP, they are not
+> specific to TCP at all, both operate on skmsg and ingress_msg,
+> so fit in net/core/skmsg.c very well.
+> 
+> And we will need them for non-TCP, so rename and move them to
+> skmsg.c and export them to modules.
+> 
+> Cc: John Fastabend <john.fastabend@gmail.com>
+> Cc: Daniel Borkmann <daniel@iogearbox.net>
+> Cc: Jakub Sitnicki <jakub@cloudflare.com>
+> Cc: Lorenz Bauer <lmb@cloudflare.com>
+> Signed-off-by: Cong Wang <cong.wang@bytedance.com>
 
-commit befe6d946551d65cddbd32b9cb0170b0249fd5ed
-Author: Steven Rostedt (VMware) <rostedt@goodmis.org>
-Date:   Wed Nov 18 14:34:05 2020 +0000
-
-    tracepoint: Do not fail unregistering a probe due to memory failure
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14f0260ed00000
-start commit:   12450081 libbpf: Fix native endian assumption when parsing..
-git tree:       bpf
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5ac0d21536db480b
-dashboard link: https://syzkaller.appspot.com/bug?extid=cc36fd07553c0512f5f7
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1365d2c3900000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16d5f08d900000
-
-If the result looks correct, please mark the issue as fixed by replying with:
-
-#syz fix: tracepoint: Do not fail unregistering a probe due to memory failure
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Acked-by: John Fastabend <john.fastabend@gmail.com>
