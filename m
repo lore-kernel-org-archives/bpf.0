@@ -2,162 +2,191 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB29BC433B4
-	for <bpf@archiver.kernel.org>; Thu,  1 Apr 2021 02:21:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE044C433ED
+	for <bpf@archiver.kernel.org>; Thu,  1 Apr 2021 02:59:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 95E4B6101E
-	for <bpf@archiver.kernel.org>; Thu,  1 Apr 2021 02:21:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B222061059
+	for <bpf@archiver.kernel.org>; Thu,  1 Apr 2021 02:59:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233129AbhDACUV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 31 Mar 2021 22:20:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55220 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232763AbhDACT4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 31 Mar 2021 22:19:56 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 581F96101E;
-        Thu,  1 Apr 2021 02:19:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617243595;
-        bh=TBc2r00bRbjoWI5OI+E4Q5iVyqcKdlKmpAtKOk03Czc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=E4MmUjjq/Jl8z0TJynah29oPYPpdc4ScpMPRJgPjgjWM+IOERYzUE7Ufup0vxx31k
-         Sqr9lCm+p07v529O1vIZgY8CeHMYnhlOZ2sU9tAtAtedzib1n9q3vtlXRAL5Y1ySS5
-         Vr8+t30g5WOEGbVxdykC9m798MnPd1Hul9joOOHoVvaajDDfLb0L4J8467FA87hA7x
-         Ju0LkPcHHKS1QmHnrZ1S6Om/HfbPRPCJ00YfDAxptIGffbFMvBLUh1FWoa1p2qt2OW
-         S0hfDYHoFCPuxAa5kqcxJILN0E0WrWMESYMAtcaEK5QPnAVlw6mjLn6edUSQIWKoWt
-         W0I5TAPNU0ziQ==
-Date:   Thu, 1 Apr 2021 11:19:50 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
-        Ingo Molnar <mingo@kernel.org>, X86 ML <x86@kernel.org>,
-        Daniel Xu <dxu@dxuuu.xyz>, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, kuba@kernel.org, mingo@redhat.com,
-        ast@kernel.org, tglx@linutronix.de, kernel-team@fb.com, yhs@fb.com,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [RFC PATCH -tip 3/3] x86/kprobes,orc: Unwind optprobe
- trampoline correctly
-Message-Id: <20210401111950.79b61063e8c87d6a39ec371e@kernel.org>
-In-Reply-To: <20210401104452.e442afd995d32afecf991301@kernel.org>
-References: <161716946413.721514.4057380464113663840.stgit@devnote2>
-        <161716949640.721514.14252504351086671126.stgit@devnote2>
-        <20210331155736.qyuph7sgabmqqmq3@treble>
-        <20210401104452.e442afd995d32afecf991301@kernel.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S233151AbhDAC6x (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 31 Mar 2021 22:58:53 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:60024 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233315AbhDAC61 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 31 Mar 2021 22:58:27 -0400
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 1312nRA2014372
+        for <bpf@vger.kernel.org>; Wed, 31 Mar 2021 19:58:25 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=QqPajUbwdg6hoJiPtv9xVNjscfEufpQOiNX8ELfngSg=;
+ b=QgY6Y9x6Aq1rX/t0knh5PtHdSIOETPvPL7MsqMkEEnmNE+n3hVoh6Uu7ve8DFifqTH41
+ XVSTnBDjDWyvK8MwC2qQR6U+/1d2Bp/cryeWIEnXBQ0Vz1T6Rnmor17tJOGJ8s/zJ7Yc
+ jYK311nRWs55XIcfJ2I0VOXb7TJ+zh9cVO8= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 37n2810vud-5
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 31 Mar 2021 19:58:25 -0700
+Received: from intmgw002.25.frc3.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Wed, 31 Mar 2021 19:58:22 -0700
+Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
+        id 4ABB3EB9B57; Wed, 31 Mar 2021 19:58:20 -0700 (PDT)
+From:   Yonghong Song <yhs@fb.com>
+To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        <dwarves@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Bill Wendling <morbo@google.com>, <bpf@vger.kernel.org>,
+        David Blaikie <dblaikie@gmail.com>,
+        =?UTF-8?q?F=C4=81ng-ru=C3=AC=20S=C3=B2ng?= <maskray@google.com>,
+        <kernel-team@fb.com>, Nick Desaulniers <ndesaulniers@google.com>
+Subject: [PATCH dwarves 1/2] dwarf_loader: check .debug_abbrev for cross-cu references
+Date:   Wed, 31 Mar 2021 19:58:20 -0700
+Message-ID: <20210401025820.2254482-1-yhs@fb.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210401025815.2254256-1-yhs@fb.com>
+References: <20210401025815.2254256-1-yhs@fb.com>
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: zx5jEzZNBHyiZDNQoECN9OWl3gvfAaRy
+X-Proofpoint-ORIG-GUID: zx5jEzZNBHyiZDNQoECN9OWl3gvfAaRy
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
+ definitions=2021-03-31_11:2021-03-31,2021-03-31 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015 bulkscore=0
+ impostorscore=0 spamscore=0 mlxlogscore=999 priorityscore=1501 mlxscore=0
+ suspectscore=0 phishscore=0 lowpriorityscore=0 adultscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2103310000
+ definitions=main-2104010019
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, 1 Apr 2021 10:44:52 +0900
-Masami Hiramatsu <mhiramat@kernel.org> wrote:
+Commit 39227909db3c checked compilation flags to see
+whether the binary is built with lto or not (-flto).
+Currently, for clang lto build, default setting
+won't put compilation flags in dwarf due to size
+concern.
 
-> On Wed, 31 Mar 2021 10:57:36 -0500
-> Josh Poimboeuf <jpoimboe@redhat.com> wrote:
-> 
-> > On Wed, Mar 31, 2021 at 02:44:56PM +0900, Masami Hiramatsu wrote:
-> > > +#ifdef CONFIG_UNWINDER_ORC
-> > > +unsigned long recover_optprobe_trampoline(unsigned long addr, unsigned long *sp)
-> > > +{
-> > > +	unsigned long offset, entry, probe_addr;
-> > > +	struct optimized_kprobe *op;
-> > > +	struct orc_entry *orc;
-> > > +
-> > > +	entry = find_kprobe_optinsn_slot_entry(addr);
-> > > +	if (!entry)
-> > > +		return addr;
-> > > +
-> > > +	offset = addr - entry;
-> > > +
-> > > +	/* Decode arg1 and get the optprobe */
-> > > +	op = (void *)extract_set_arg1((void *)(entry + TMPL_MOVE_IDX));
-> > > +	if (!op)
-> > > +		return addr;
-> > > +
-> > > +	probe_addr = (unsigned long)op->kp.addr;
-> > > +
-> > > +	if (offset < TMPL_END_IDX) {
-> > > +		orc = orc_find((unsigned long)optprobe_template_func + offset);
-> > > +		if (!orc || orc->sp_reg != ORC_REG_SP)
-> > > +			return addr;
-> > > +		/*
-> > > +		 * Since optprobe trampoline doesn't push caller on the stack,
-> > > +		 * need to decrement 1 stack entry size
-> > > +		 */
-> > > +		*sp += orc->sp_offset - sizeof(long);
-> > > +		return probe_addr;
-> > > +	} else {
-> > > +		return probe_addr + offset - TMPL_END_IDX;
-> > > +	}
-> > > +}
-> > > +#endif
-> > 
-> > Hm, I'd like to avoid intertwining kprobes and ORC like this.
-> > 
-> > ORC unwinds other generated code by assuming the generated code uses a
-> > frame pointer.  Could we do that here?
-> 
-> No, because the optprobe is not a function call. I considered to make
-> it call, but since it has to execute copied instructions directly on
-> the trampoline code (without changing stack frame) it is not possible.
-> 
-> > With CONFIG_FRAME_POINTER, unwinding works because SAVE_REGS_STRING has
-> > ENCODE_FRAME_POINTER, but that's not going to work for ORC.
-> 
-> Even in that case, the problem is that any interrupt can happen
-> before doing ENCODE_FRAME_POINTER. I think this ENCODE_FRAME_POINTER
-> in the SAVE_REGS_STRING is for probing right before the target
-> function setup a frame pointer.
-> 
-> > Instead of these patches, can we 'push %rbp; mov %rsp, %rbp' at the
-> > beginning of the template and 'pop %rbp' at the end?
-> 
-> No, since the trampoline code is not called, it is jumped into.
-> This means there is no "return address" in the stack. If we setup
-> the frame, there is no return address, thus it might stop there.
-> (Moreover, optprobe can copy multiple instructins on trampoline
-> buffer, since relative jump consumes 5bytes. where is the "return address"?)
-> 
-> > 
-> > I guess SAVE_REGS_STRING would need to be smart enough to push the
-> > original saved version of %rbp.  Of course then that breaks the
-> > kretprobe_trampoline() usage, so it may need to be a separate macro.
-> > 
-> > [ Or make the same change to kretprobe_trampoline().  Then the other
-> >   patch set wouldn't be needed either ;-) ]
-> 
-> Hmm, I don't think it is a good idea which making such change on the
-> optimized (hot) path only for the stack tracing. Moreover, that maybe
-> not transparent with the stack made by int3.
-> 
-> > Of course the downside is, when you get an interrupt during the frame
-> > pointer setup, unwinding is broken.  But I think that's acceptable for
-> > generated code.  We've lived with that limitation for all code, with
-> > CONFIG_FRAME_POINTER, for many years.
-> 
-> But above code can fix such issue too. To fix a corner case, non-generic
-> code may be required, even it is not so simple.
+David Blaikie suggested in [1] to scan through .debug_abbrev
+for DW_FORM_ref_addr which should be most faster than
+scanning through cu's. This patch implemented this
+suggestion and replaced the previous compilation flag
+matching approach. Indeed, it seems that the overhead
+for this approach is indeed managable.
 
-Hmm, I would like to confirm your policy on ORC unwinder. If it doesn't
-care the stacktrace from the interrupt handler, I think your suggestion
-is OK. But in that case, from a developer viewpoint, I need to recommend
-users to configure CONFIG_UNWIND_FRAME=y when CONFIG_KPROBES=y.
+I did some change to measure the overhead of cus_merging_cu():
+  @@ -2650,7 +2652,15 @@ static int cus__load_module(struct cus *cus, struc=
+t conf_load *conf,
+                  }
+          }
 
-> > Eventually we may want to have a way to register generated code (and the
-> > ORC for it).
+  -       if (cus__merging_cu(dw)) {
+  +       bool do_merging;
+  +       struct timeval start, end;
+  +       gettimeofday(&start, NULL);
+  +       do_merging =3D cus__merging_cu(dw);
+  +       gettimeofday(&end, NULL);
+  +       fprintf(stderr, "%ld %ld -> %ld %ld\n", start.tv_sec, start.tv_us=
+ec,
+  +                       end.tv_sec, end.tv_usec);
+  +
+  +       if (do_merging) {
+                  res =3D cus__merge_and_process_cu(cus, conf, mod, dw, elf=
+, filename,
+                                                  build_id, build_id_len,
+                                                  type_cu ? &type_dcu : NUL=
+L);
 
-I see, but the generated code usually does not have a generic way to
-handle it. E.g. bpf has a solid entry point, but kretprobe trampoline's
-entry point is any "RET", optprobe trampoline's entry point is a jump
-which is also generated (patched) ...
+For lto vmlinux, the cus__merging_cu() checking takes
+130us over total "pahole -J vmlinux" time 65sec as the function bail out
+earlier due to detecting a merging cu condition.
+For non-lto vmlinux, the cus__merging_cu() checking takes
+~171368us over total pahole time 36sec, roughly 0.5% overhead.
 
-Thank you,
+ [1] https://lore.kernel.org/bpf/20210328064121.2062927-1-yhs@fb.com/
 
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+Signed-off-by: Yonghong Song <yhs@fb.com>
+---
+ dwarf_loader.c | 43 ++++++++++++++++++++++++-------------------
+ 1 file changed, 24 insertions(+), 19 deletions(-)
+
+diff --git a/dwarf_loader.c b/dwarf_loader.c
+index c1ca1a3..bd23751 100644
+--- a/dwarf_loader.c
++++ b/dwarf_loader.c
+@@ -2503,35 +2503,40 @@ static int cus__load_debug_types(struct cus *cus, s=
+truct conf_load *conf,
+=20
+ static bool cus__merging_cu(Dwarf *dw)
+ {
+-	uint8_t pointer_size, offset_size;
+ 	Dwarf_Off off =3D 0, noff;
+ 	size_t cuhl;
+-	int cnt =3D 0;
+=20
+-	/*
+-	 * Just checking the first cu is not enough.
+-	 * In linux, some C files may have LTO is disabled, e.g.,
+-	 *   e242db40be27  x86, vdso: disable LTO only for vDSO
+-	 *   d2dcd3e37475  x86, cpu: disable LTO for cpu.c
+-	 * Fortunately, disabling LTO for a particular file in a LTO build
+-	 * is rather an exception. Iterating 5 cu's to check whether
+-	 * LTO is used or not should be enough.
+-	 */
+-	while (dwarf_nextcu(dw, off, &noff, &cuhl, NULL, &pointer_size,
+-			    &offset_size) =3D=3D 0) {
++	while (dwarf_nextcu (dw, off, &noff, &cuhl, NULL, NULL, NULL) =3D=3D 0) {
+ 		Dwarf_Die die_mem;
+ 		Dwarf_Die *cu_die =3D dwarf_offdie(dw, off + cuhl, &die_mem);
+=20
+ 		if (cu_die =3D=3D NULL)
+ 			break;
+=20
+-		if (++cnt > 5)
+-			break;
++		Dwarf_Off offset =3D 0;
++		while (true) {
++			size_t length;
++			Dwarf_Abbrev *abbrev =3D dwarf_getabbrev (cu_die, offset, &length);
++			if (abbrev =3D=3D NULL || abbrev =3D=3D DWARF_END_ABBREV)
++				break;
+=20
+-		const char *producer =3D attr_string(cu_die, DW_AT_producer);
+-		if (strstr(producer, "clang version") !=3D NULL &&
+-		    strstr(producer, "-flto") !=3D NULL)
+-			return true;
++			size_t attrcnt;
++			if (dwarf_getattrcnt (abbrev, &attrcnt) !=3D 0)
++				return false;
++
++			unsigned int attr_num, attr_form;
++			Dwarf_Off aboffset;
++			size_t j;
++			for (j =3D 0; j < attrcnt; ++j) {
++				if (dwarf_getabbrevattr (abbrev, j, &attr_num, &attr_form,
++							 &aboffset))
++					return false;
++				if (attr_form =3D=3D DW_FORM_ref_addr)
++					return true;
++			}
++
++			offset +=3D length;
++		}
+=20
+ 		off =3D noff;
+ 	}
+--=20
+2.30.2
+
