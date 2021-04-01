@@ -2,94 +2,137 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,FROM_LOCAL_HEX,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C300FC071DD
-	for <bpf@archiver.kernel.org>; Thu,  1 Apr 2021 17:46:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 42C59C43460
+	for <bpf@archiver.kernel.org>; Thu,  1 Apr 2021 17:51:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DFE63613D5
-	for <bpf@archiver.kernel.org>; Thu,  1 Apr 2021 17:46:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 19EAC60FF3
+	for <bpf@archiver.kernel.org>; Thu,  1 Apr 2021 17:51:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234665AbhDARp6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 1 Apr 2021 13:45:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58380 "EHLO
+        id S234520AbhDARtC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 1 Apr 2021 13:49:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235122AbhDARmR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 1 Apr 2021 13:42:17 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C32ACC02FEB1;
-        Thu,  1 Apr 2021 09:25:07 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id x16so2807715iob.1;
-        Thu, 01 Apr 2021 09:25:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:message-id:in-reply-to:references:subject
-         :mime-version:content-transfer-encoding;
-        bh=QZAzGw5cAuzFncKhsA5KKXaUsF0O+/nPG6lugtZwnpA=;
-        b=Ut8lxiYJjz1KZOfwAMhO+g/2mqpm5XorxQ2F8c/6rapd0RukkW5Ax7UPdC6AyIeAG8
-         RSE8ZTauPT29yMddEVsSUb3FsKHkqyvGMrPjJGQ7NWL7P+VltGOHWCs/26jeWTOs4pCQ
-         GqU0XVj4h+mYr8QPcKUMwT+Jm8m3Lt6HZhdOUQ4MRKewdX1nIcUEKxgv8FbwsyL2va0T
-         7Ch4968Wj80Nc/S7D8TVpWAOUWWzgIx4rG5iAg4QohnOEpA2EuRbak282cwbn+I9n1/H
-         N4miA1S0vmGjL8amqThicqPVaibChDBlHisX5Nb1SfFveTLAdvRU5gZQEMf831PVHrxV
-         uPcg==
+        with ESMTP id S236068AbhDARq7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 1 Apr 2021 13:46:59 -0400
+Received: from mail-il1-x148.google.com (mail-il1-x148.google.com [IPv6:2607:f8b0:4864:20::148])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4404DC08EADD
+        for <bpf@vger.kernel.org>; Thu,  1 Apr 2021 06:36:57 -0700 (PDT)
+Received: by mail-il1-x148.google.com with SMTP id s10so3840796ilo.7
+        for <bpf@vger.kernel.org>; Thu, 01 Apr 2021 06:36:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
-         :references:subject:mime-version:content-transfer-encoding;
-        bh=QZAzGw5cAuzFncKhsA5KKXaUsF0O+/nPG6lugtZwnpA=;
-        b=HhxZVyNAL3GABygBdr0q0DopEtUMtIYLAsGHqmYOS79PHxbygeAsTgE8DgaMowOslL
-         FdmkcS9UCMPY5wt2yS3xDajLALl/516S/WwlSZrHCXynEtQo0aS1HmjPelp6zUlXZMt2
-         vMjkvCJvEqN8q7tjI7bZf7MNOl7oPBY8rsDj75l1bQIPIyekBlmA8bm30d+tnXl/F+lO
-         0WDF5eQbL38XNYVhGe0nb66m3UDSg4t/yPnk87JRiv8kwvxTtKz8JoyGANVLC003UqXC
-         wA10Ydn7hex107Xl+iTC6s4XKcovzWdkdHagLVQU0AidsgfRB6HXrW+AH8ZNzSs9tMwk
-         Eokw==
-X-Gm-Message-State: AOAM530EsdM0D+qcek4JwbdFx5pRmeOvMkaBu+2RQiJD8t35JFDvTFK+
-        X+rM63ZPSYZwMzH/o6MB+Q0=
-X-Google-Smtp-Source: ABdhPJwm5qc3c1ZsCEVxdPoR9B3vWt8yT57uFcZN2VW4mTt6Oo4cJADImzmp1X1YtdqxSlyWy6BuOg==
-X-Received: by 2002:a05:6638:3399:: with SMTP id h25mr8714141jav.15.1617294307095;
-        Thu, 01 Apr 2021 09:25:07 -0700 (PDT)
-Received: from localhost ([172.242.244.146])
-        by smtp.gmail.com with ESMTPSA id l14sm2780151ilj.14.2021.04.01.09.25.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Apr 2021 09:25:05 -0700 (PDT)
-Date:   Thu, 01 Apr 2021 09:24:58 -0700
-From:   John Fastabend <john.fastabend@gmail.com>
-To:     Cong Wang <xiyou.wangcong@gmail.com>, netdev@vger.kernel.org
-Cc:     bpf@vger.kernel.org, duanxiongchun@bytedance.com,
-        wangdongdong.6@bytedance.com, jiang.wang@bytedance.com,
-        Cong Wang <cong.wang@bytedance.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        Lorenz Bauer <lmb@cloudflare.com>
-Message-ID: <6065f3da5b75e_27eb2081c@john-XPS-13-9370.notmuch>
-In-Reply-To: <20210331023237.41094-14-xiyou.wangcong@gmail.com>
-References: <20210331023237.41094-1-xiyou.wangcong@gmail.com>
- <20210331023237.41094-14-xiyou.wangcong@gmail.com>
-Subject: RE: [Patch bpf-next v8 13/16] udp: implement udp_bpf_recvmsg() for
- sockmap
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=V1YPBBmXV6Zf6ofFKc69jLxBo6I+75nDp0+ssUeEtEM=;
+        b=iV356XEIASCsSjZPvL+DyQ8GlVMpGjNq/5V5Wm/bZCZP1IaI6uvDRhmMLODSTypgND
+         RLw4JX2wg3Uc4z8vqESvGq9jQ3ahOCOUyK+QB+f66sZjwQDg54lBxffpeaMGCBCJZ1N+
+         M9KHl+cT71w636ELmaFGIJjIXuqMXn6g0C1+zntU0ZTBiJhZ6mLu/9P/nOL3drgmibIA
+         M04xaQ2B2Gg+034GmuMiCd9eU0GdvF7JCw1iD1c71vfedLWwE3t3Uopmuxl59XUdCotf
+         gSgogWqeextzFKo9rw6/x8sooe/T+yoQdQyrUP3WHvZQT0sLSsR7enH86eBjhOcgeOCS
+         9PYw==
+X-Gm-Message-State: AOAM532XQ1OSsuORdsVADaDOv1IbFpH1IozIuDN5mZLgcsmWL/38nXwS
+        y5VkmuAAd4Uxk4+/pzJ//pgD7RXcM4L9sl/dXDjQnFMQBzNN
+X-Google-Smtp-Source: ABdhPJx/5tqNGXQlJ27uFdO6oc1q+y5cAbEhG+gQ0NtMiUPsSxdE1cBf9c1xnuC34oj9gnsTFZUhqBMyOMroa7wQiaswaike9eKr
+MIME-Version: 1.0
+X-Received: by 2002:a05:6e02:20cd:: with SMTP id 13mr6179334ilq.126.1617276559816;
+ Thu, 01 Apr 2021 04:29:19 -0700 (PDT)
+Date:   Thu, 01 Apr 2021 04:29:19 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000d9fefa05bee78afd@google.com>
+Subject: [syzbot] WARNING in bpf_test_run
+From:   syzbot <syzbot+774c590240616eaa3423@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, andrii@kernel.org, ast@kernel.org,
+        bp@alien8.de, bpf@vger.kernel.org, daniel@iogearbox.net,
+        davem@davemloft.net, hawk@kernel.org, hpa@zytor.com,
+        jmattson@google.com, john.fastabend@gmail.com, joro@8bytes.org,
+        kafai@fb.com, kpsingh@kernel.org, kuba@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mark.rutland@arm.com, masahiroy@kernel.org, mingo@redhat.com,
+        netdev@vger.kernel.org, pbonzini@redhat.com, peterz@infradead.org,
+        rafael.j.wysocki@intel.com, rostedt@goodmis.org, seanjc@google.com,
+        songliubraving@fb.com, syzkaller-bugs@googlegroups.com,
+        tglx@linutronix.de, vkuznets@redhat.com, wanpengli@tencent.com,
+        will@kernel.org, x86@kernel.org, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Cong Wang wrote:
-> From: Cong Wang <cong.wang@bytedance.com>
-> 
-> We have to implement udp_bpf_recvmsg() to replace the ->recvmsg()
-> to retrieve skmsg from ingress_msg.
-> 
-> Cc: John Fastabend <john.fastabend@gmail.com>
-> Cc: Daniel Borkmann <daniel@iogearbox.net>
-> Cc: Jakub Sitnicki <jakub@cloudflare.com>
-> Cc: Lorenz Bauer <lmb@cloudflare.com>
-> Signed-off-by: Cong Wang <cong.wang@bytedance.com>
+Hello,
 
-Acked-by: John Fastabend <john.fastabend@gmail.com>
+syzbot found the following issue on:
+
+HEAD commit:    36e79851 libbpf: Preserve empty DATASEC BTFs during static..
+git tree:       bpf-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=1569bb06d00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=7eff0f22b8563a5f
+dashboard link: https://syzkaller.appspot.com/bug?extid=774c590240616eaa3423
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17556b7cd00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1772be26d00000
+
+The issue was bisected to:
+
+commit 997acaf6b4b59c6a9c259740312a69ea549cc684
+Author: Mark Rutland <mark.rutland@arm.com>
+Date:   Mon Jan 11 15:37:07 2021 +0000
+
+    lockdep: report broken irq restoration
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=10197016d00000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=12197016d00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=14197016d00000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+774c590240616eaa3423@syzkaller.appspotmail.com
+Fixes: 997acaf6b4b5 ("lockdep: report broken irq restoration")
+
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 8725 at include/linux/bpf-cgroup.h:193 bpf_cgroup_storage_set include/linux/bpf-cgroup.h:193 [inline]
+WARNING: CPU: 0 PID: 8725 at include/linux/bpf-cgroup.h:193 bpf_test_run+0x65e/0xaa0 net/bpf/test_run.c:109
+Modules linked in:
+CPU: 0 PID: 8725 Comm: syz-executor927 Not tainted 5.12.0-rc4-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:bpf_cgroup_storage_set include/linux/bpf-cgroup.h:193 [inline]
+RIP: 0010:bpf_test_run+0x65e/0xaa0 net/bpf/test_run.c:109
+Code: e9 29 fe ff ff e8 b2 9d 3a fa 41 83 c6 01 bf 08 00 00 00 44 89 f6 e8 51 a5 3a fa 41 83 fe 08 0f 85 74 fc ff ff e8 92 9d 3a fa <0f> 0b bd f0 ff ff ff e9 5c fd ff ff e8 81 9d 3a fa 83 c5 01 bf 08
+RSP: 0018:ffffc900017bfaf0 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: ffffc90000f29000 RCX: 0000000000000000
+RDX: ffff88801bc68000 RSI: ffffffff8739543e RDI: 0000000000000003
+RBP: 0000000000000007 R08: 0000000000000008 R09: 0000000000000001
+R10: ffffffff8739542f R11: 0000000000000000 R12: dffffc0000000000
+R13: ffff888021dd54c0 R14: 0000000000000008 R15: 0000000000000000
+FS:  00007f00157d7700(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f0015795718 CR3: 00000000157ae000 CR4: 00000000001506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ bpf_prog_test_run_skb+0xabc/0x1c70 net/bpf/test_run.c:628
+ bpf_prog_test_run kernel/bpf/syscall.c:3132 [inline]
+ __do_sys_bpf+0x218b/0x4f40 kernel/bpf/syscall.c:4411
+ do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x446199
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f00157d72f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+RAX: ffffffffffffffda RBX: 00000000004cb440 RCX: 0000000000446199
+RDX: 0000000000000028 RSI: 0000000020000080 RDI: 000000000000000a
+RBP: 000000000049b074 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: f9abde7200f522cd
+R13: 3952ddf3af240c07 R14: 1631e0d82d3fa99d R15: 00000000004cb448
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
