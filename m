@@ -2,108 +2,128 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A8957C43618
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E2701C47070
 	for <bpf@archiver.kernel.org>; Thu,  1 Apr 2021 17:46:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 859C3613C5
+	by mail.kernel.org (Postfix) with ESMTP id 96D226136D
 	for <bpf@archiver.kernel.org>; Thu,  1 Apr 2021 17:46:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235569AbhDARpy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 1 Apr 2021 13:45:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57160 "EHLO
+        id S235657AbhDARpz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 1 Apr 2021 13:45:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234646AbhDARiy (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 1 Apr 2021 13:38:54 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D7CBC0613A7;
-        Thu,  1 Apr 2021 04:31:37 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id u5so2355546ejn.8;
-        Thu, 01 Apr 2021 04:31:37 -0700 (PDT)
+        with ESMTP id S234665AbhDARjD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 1 Apr 2021 13:39:03 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF3BC0319D9;
+        Thu,  1 Apr 2021 10:28:24 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id lr1-20020a17090b4b81b02900ea0a3f38c1so5042066pjb.0;
+        Thu, 01 Apr 2021 10:28:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=e1k2jFYVkUvY3qWo/yAEsqj9pQAfQ8BRhGPE3QKDHv0=;
-        b=ZD433zJpfpq8cjtLjUhQxT9js3k/QQGKl5g41mZuchqReVJ+Lx1mxySZAsVFruartF
-         EJoddJcA7fSZURn3ZEOdpLEqoHjF+MfRrFGGbIYMOZUTAGx3laYJPzj1xCBbsAyf3C/H
-         n2jNpdpjR2fw/hEF+C8RlJ5oAcQrwxBrFCSxfqGb2OxoDwqAnuv4LauIyIRbQxUt7RSe
-         HcDAHaP/h1ThuRCY1jMESHKCZbWJ/moYLx0L3Id/ZKCc15ag1kcKcYclVWv7j0Jtngxo
-         i6WxQjRqAd4ymc8tUHArsHf9LpxpzuUFo2pVh7V/SP+YHTjRj3Ck/ojMFCWmf9TZcqek
-         39Mg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=DCSwYaITEXQEtOU9ZD5TxRNN3tBhbIlUXlHRNkWJ4G0=;
+        b=qQQ/vLHND0Pm7FoXvew0tIzmLeRM+qIP0Ujxammay52iRgrrFXs4C3nsXIGvEUzWmY
+         4tLBBtY7scDoqzjzIGiNmBPUYVkLvtI1Q3LtsgxlY0EUIfdwDrk8EPp4hZpUHaTNfvHE
+         bDu4M/nKDpnkgAX2yh95uFbFWp1jiAfJvxDN+5VQqMQWz8JrZdGS/LxuUoANVQse+uMQ
+         WPDXg7cpRnS5ukjn9CWkj40LCeXPqFhNFXgzGJCvagGDbaXUHq/L24T+CzU86mtCpqsH
+         XooFnu2Wl6C+h7ZaDQm1/M4QWvx8GIbmmDMe+ZjajvV+ZrSGKKVc87h81eBNVMstsVLN
+         YHpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=e1k2jFYVkUvY3qWo/yAEsqj9pQAfQ8BRhGPE3QKDHv0=;
-        b=B77nw9l/2pStZqercd5nO0zsRNHlezdtQvBFbJEEYo1HJl5rNMpJuI9im/Jsdgn0T6
-         l1i4kVLtorm22WTRIpbb/PV94ddrn5tI+K20DPSw0K6BXzODLjpH083zQEURFnSxpVo9
-         UNjZlWg91NETdgI+GPP5dWaNhSGbhbaUEU2B2JEoijG6j3UhLyycC+XAf/f9ylo9+FPN
-         gSUZHrkhb4XypqAp4kCiHmwiN2ZZoFCaKequiyGA714QwebHQ9HSPrjWu9gutvAzHZDl
-         vvYnOY098vgeolnWWTivYJDuEhPupTYa3NmjX+SIBnN3xeNkVzdeHh5QPUHHFKphks9Q
-         b+zw==
-X-Gm-Message-State: AOAM532TcNjgmoboAmLYuynot+hnE8Flwe2OR6bBaVxG3X+zaVV9hT8c
-        m5uwRoRqM515ITsP4EOtRhg=
-X-Google-Smtp-Source: ABdhPJwbi48m1/vFhq9T6E4IJ05n1xEWnSphH1wrGflu34S3LVoiLfwRvf10Y32RxuY8g9HZ7MSs+Q==
-X-Received: by 2002:a17:907:7249:: with SMTP id ds9mr8775707ejc.9.1617276696365;
-        Thu, 01 Apr 2021 04:31:36 -0700 (PDT)
-Received: from skbuf (5-12-16-165.residential.rdsnet.ro. [5.12.16.165])
-        by smtp.gmail.com with ESMTPSA id u13sm2746993ejn.59.2021.04.01.04.31.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Apr 2021 04:31:35 -0700 (PDT)
-Date:   Thu, 1 Apr 2021 14:31:33 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DCSwYaITEXQEtOU9ZD5TxRNN3tBhbIlUXlHRNkWJ4G0=;
+        b=mVqA4BjyvkY2f8ye2cy75LDRp8HQpoEMlSGJsBSkjnRy4g40iyr1xGFzVcXxYmaeb9
+         8EYnLNB3CwoQ0hrI25cJHMAud+9aBkUOzb17Jtdc2OFuAhhFFY6M8SXIaSDgN5cfJdzq
+         66FegRQ+CCuYS/ct8yT1pdEGaaTp7yXmh8koIbk6RfvAGi/oxA+iQJuq+ZY7FmF/0P0v
+         YgP+H+YGIaxLBlXNFehsb0GW7RReHe6Gx7ic1GBI4Wr37+L0dmZFMhKv8xmsZi+qJrUg
+         qpd797Nqmr9cgpAbcoMHnkr++Z7b3lJ+GldqWVkGAjEUZ2fq9Zpctg8vQxYoAXgXjdB5
+         1f8Q==
+X-Gm-Message-State: AOAM530j8YgDCUgA3vLP71F8bEd69Giso2H7SRJlFFwu2DK2vHbzzPc1
+        BROAk4M0x5pxVUZreN/Sokx1L/2bxTKLesGy7lQ=
+X-Google-Smtp-Source: ABdhPJwuRg9c87ReRDYEl/MFlZj8f+JRwd8nbe3KpkmGKzBacN9tlwCCWEr2kLZwmSTneY14fAN+W55rfS/fi5VrJlw=
+X-Received: by 2002:a17:90a:7061:: with SMTP id f88mr9971510pjk.56.1617298104093;
+ Thu, 01 Apr 2021 10:28:24 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210401042635.19768-1-xiyou.wangcong@gmail.com> <B42B247A-4D0B-4DE9-B4D3-0C452472532D@fb.com>
+In-Reply-To: <B42B247A-4D0B-4DE9-B4D3-0C452472532D@fb.com>
+From:   Cong Wang <xiyou.wangcong@gmail.com>
+Date:   Thu, 1 Apr 2021 10:28:12 -0700
+Message-ID: <CAM_iQpW-cuiYsPsu4mYZxZ1Oixffu2pV1TFg1c+eg9XT3wWwPQ@mail.gmail.com>
+Subject: Re: [RFC Patch bpf-next] bpf: introduce bpf timer
+To:     Song Liu <songliubraving@fb.com>
+Cc:     "open list:BPF (Safe dynamic programs and tools)" 
+        <netdev@vger.kernel.org>,
+        "open list:BPF (Safe dynamic programs and tools)" 
+        <bpf@vger.kernel.org>,
+        "duanxiongchun@bytedance.com" <duanxiongchun@bytedance.com>,
+        "wangdongdong.6@bytedance.com" <wangdongdong.6@bytedance.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, Alexander Duyck <alexander.duyck@gmail.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        Alex Marginean <alexandru.marginean@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-Subject: Re: [PATCH net-next 9/9] net: enetc: add support for XDP_REDIRECT
-Message-ID: <20210401113133.vzs3uxkp52k2ctla@skbuf>
-References: <20210331200857.3274425-1-olteanv@gmail.com>
- <20210331200857.3274425-10-olteanv@gmail.com>
- <87blaynt4l.fsf@toke.dk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87blaynt4l.fsf@toke.dk>
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Yonghong Song <yhs@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Apr 01, 2021 at 01:26:02PM +0200, Toke Høiland-Jørgensen wrote:
-> > +int enetc_xdp_xmit(struct net_device *ndev, int num_frames,
-> > +		   struct xdp_frame **frames, u32 flags)
-> > +{
-> > +	struct enetc_tx_swbd xdp_redirect_arr[ENETC_MAX_SKB_FRAGS] = {0};
-> > +	struct enetc_ndev_priv *priv = netdev_priv(ndev);
-> > +	struct enetc_bdr *tx_ring;
-> > +	int xdp_tx_bd_cnt, i, k;
-> > +	int xdp_tx_frm_cnt = 0;
-> > +
-> > +	tx_ring = priv->tx_ring[smp_processor_id()];
-> 
-> What mechanism guarantees that this won't overflow the array? :)
+On Wed, Mar 31, 2021 at 11:38 PM Song Liu <songliubraving@fb.com> wrote:
+>
+>
+>
+> > On Mar 31, 2021, at 9:26 PM, Cong Wang <xiyou.wangcong@gmail.com> wrote:
+> >
+> > From: Cong Wang <cong.wang@bytedance.com>
+> >
+> > (This patch is still in early stage and obviously incomplete. I am sending
+> > it out to get some high-level feedbacks. Please kindly ignore any coding
+> > details for now and focus on the design.)
+>
+> Could you please explain the use case of the timer? Is it the same as
+> earlier proposal of BPF_MAP_TYPE_TIMEOUT_HASH?
+>
+> Assuming that is the case, I guess the use case is to assign an expire
+> time for each element in a hash map; and periodically remove expired
+> element from the map.
+>
+> If this is still correct, my next question is: how does this compare
+> against a user space timer? Will the user space timer be too slow?
 
-Which array, the array of TX rings?
-You mean that it's possible to receive a TC_SETUP_QDISC_MQPRIO or
-TC_SETUP_QDISC_TAPRIO with num_tc == 1, and we have 2 CPUs?
-Well, yeah, I don't know what's the proper way to deal with that. Ideas?
+Yes, as I explained in timeout hashmap patchset, doing it in user-space
+would require a lot of syscalls (without batching) or copying (with batching).
+I will add the explanation here, in case people miss why we need a timer.
+
+>
+> >
+> > This patch introduces a bpf timer map and a syscall to create bpf timer
+> > from user-space.
+> >
+> > The reason why we have to use a map is because the lifetime of a timer,
+> > without a map, we have to delete the timer before exiting the eBPF program,
+> > this would significately limit its use cases. With a map, the timer can
+> > stay as long as the map itself and can be actually updated via map update
+> > API's too, where the key is the timer ID and the value is the timer expire
+> > timer.
+> >
+> > Timer creation is not easy either. In order to prevent users creating a
+> > timer but not adding it to a map, we have to enforce this in the API which
+> > takes a map parameter and adds the new timer into the map in one shot.
+>
+> I think we don't have to address "creating a timer but not adding it to a map"
+> problem in the kernel. If the user forgot it, the user should debug it.
+
+Good point. Initially the timer is created in kernel-space, now it is in user
+space, so it is probably fine to create it without a map. But we would have
+to provide more syscalls for users to manage the timer, so using a map
+still has an advantage of not adding more syscalls.
+
+Thanks.
