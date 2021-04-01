@@ -2,88 +2,112 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 17D10C4363C
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 29970C4363E
 	for <bpf@archiver.kernel.org>; Thu,  1 Apr 2021 17:51:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E88876112E
-	for <bpf@archiver.kernel.org>; Thu,  1 Apr 2021 17:51:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0F9D560234
+	for <bpf@archiver.kernel.org>; Thu,  1 Apr 2021 17:51:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234556AbhDARvv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 1 Apr 2021 13:51:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48902 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236330AbhDARsA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 1 Apr 2021 13:48:00 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8D6A7611CB;
-        Thu,  1 Apr 2021 12:59:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617281962;
-        bh=QFBvSxpFBe+JRLuZOO99kIhfEMTprfAcsBarAbnDeB4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AaizDmKnP+8Q4qYSu0tQ8ujlblwti05LFGjCWGhiRTuK+AYogq5z1pOMOsZJrr+tG
-         RYUKsyFsylCUs0z+9eSvZAhsrXccM8ZDaYQxgyKocKxJJj7HjB0kg24bPJMcfy2Y59
-         xjMI1ppE05HQYRetrSrBNwXMgVSI8/rDhdIbGx9yRKYzygrvIcHmf9N2aGcYPhfQkZ
-         UKxTbvPA15PzL5VoRjkBcUomSlyO7RUTKF7QspBiFMTGJOt1MU1k/1ACQ1v7R0fJNV
-         5GSSlf6tKAYcHBD3YyA7eXaX5H9FE7obzEBaxRO9gLllY5e92vj4b0L/IXOJn4Ixhv
-         C0BUUmqG4mf1g==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id DF52940647; Thu,  1 Apr 2021 09:59:19 -0300 (-03)
-Date:   Thu, 1 Apr 2021 09:59:19 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Bill Wendling <morbo@google.com>, bpf@vger.kernel.org,
-        David Blaikie <dblaikie@gmail.com>,
-        =?utf-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>,
-        kernel-team@fb.com, Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [PATCH dwarves 0/2] dwarf_loader: improve cus__merging_cu()
-Message-ID: <YGXDp/AwQapX/wDj@kernel.org>
-References: <20210401025815.2254256-1-yhs@fb.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210401025815.2254256-1-yhs@fb.com>
-X-Url:  http://acmel.wordpress.com
+        id S234607AbhDARvw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 1 Apr 2021 13:51:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59916 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235550AbhDARtI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 1 Apr 2021 13:49:08 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46960C031166;
+        Thu,  1 Apr 2021 09:51:24 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id b10so2860876iot.4;
+        Thu, 01 Apr 2021 09:51:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:message-id:in-reply-to:references:subject
+         :mime-version:content-transfer-encoding;
+        bh=DmfVJtbSnGyYd2SqAzIeEbPnridg9bZgNOGndhX3qPs=;
+        b=nZgEaFTptLG4xntpph92OU4DIpkhZJ6XmAe1YUXMbpYJ0R4A0jneE2T7jTSNLKLiWC
+         /htGo7C6DsYn4YC4TMiT7MP6ivmvVAF+AATi3XVH3OST03dofWBXbHgOi+r8W7GI/Mhr
+         mA7NxgKhpW3i7xeYQdrtqKP+siH8O00gEP3cFzQ1SMSmALPjxvRiuMMt0eGgNcEh27TK
+         cFVf4thiJReIkMW7+agfijsM7ramTyAS6D1RbKHdws0WBaiQZAUoucsaQl1U7ccnPPlP
+         GwAbrOhL34HkSh3mzctxUxrBVwDnD5zrucZSvO9wjwteAEUTczkzaVwBzRHDW16t3dJn
+         zDUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
+         :references:subject:mime-version:content-transfer-encoding;
+        bh=DmfVJtbSnGyYd2SqAzIeEbPnridg9bZgNOGndhX3qPs=;
+        b=UByAMcA3CPOATxC32TnRdVnu6D+ZI3pTY3KvWUaF1jdBvffAZpJ54jjNJPWOThRMj6
+         IJO/ZBpjrhAm8mj25QEM0Qguj/aYsKFc6m8DPFibqhAQ1v4/YpEPxwEInTfeyyGAScuB
+         RahEW3JqhUQq6/jA8WL5NCtktvu8u66FUvZCw1imBV02kTb7r9Tq5Z2YIKugUlC4tmSk
+         Jq/mQBiRpM0jZEOppZF4NBBO2eF+wW4LF9nM6nibpX10hp9SeCSGKhQ7xEkUXAf4zALw
+         IlWUSSRiyYtvMTdRTp3olIzeJhHEdF9zzNUWruAs4DfCPT6d4r8+f1UAGyQkV+NnUduh
+         KlaQ==
+X-Gm-Message-State: AOAM5331P9ybAPkeuIxdOfdssAOXjgC5/u9hgYYZk+hxbVlMOfPlA4pA
+        /2pRbrPoJOpbXZV83Ej1C8U=
+X-Google-Smtp-Source: ABdhPJx1P0qIcPLpaZ9cCCT/gaRHe5LD2VfFK4oinDcLSQrrwbdiUgrliGUW3Y3xy7hJWZxiTAUhOw==
+X-Received: by 2002:a05:6602:2596:: with SMTP id p22mr7353789ioo.186.1617295883731;
+        Thu, 01 Apr 2021 09:51:23 -0700 (PDT)
+Received: from localhost ([172.242.244.146])
+        by smtp.gmail.com with ESMTPSA id w16sm3015989iod.51.2021.04.01.09.51.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Apr 2021 09:51:23 -0700 (PDT)
+Date:   Thu, 01 Apr 2021 09:51:16 -0700
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     Cong Wang <xiyou.wangcong@gmail.com>, netdev@vger.kernel.org
+Cc:     bpf@vger.kernel.org, duanxiongchun@bytedance.com,
+        wangdongdong.6@bytedance.com, jiang.wang@bytedance.com,
+        Cong Wang <cong.wang@bytedance.com>
+Message-ID: <6065fa04de8a2_4ff9208b1@john-XPS-13-9370.notmuch>
+In-Reply-To: <20210331023237.41094-1-xiyou.wangcong@gmail.com>
+References: <20210331023237.41094-1-xiyou.wangcong@gmail.com>
+Subject: RE: [Patch bpf-next v8 00/16] sockmap: introduce BPF_SK_SKB_VERDICT
+ and support UDP
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Em Wed, Mar 31, 2021 at 07:58:15PM -0700, Yonghong Song escreveu:
-> Function cus__merging_cu() is introduced in Commit 39227909db3c
-> ("dwarf_loader: Permit merging all DWARF CU's for clang LTO built
-> binary") to test whether cross-cu references may happen.
-> The original implementation anticipates compilation flags
-> in dwarf, but later some concerns about binary size surfaced
-> and the decision is to scan .debug_abbrev as a faster way
-> to check cross-cu references. Also putting a note in vmlinux
-> to indicate whether lto is enabled for built or not can
-> provide a much faster way.
-
-Great work! Reviewing/testing right now.
-
-- Arnaldo
- 
-> This patch set implemented this two approaches, first
-> checking the note (in Patch #2), if not found, then
-> check .debug_abbrev (in Patch #1).
+Cong Wang wrote:
+> From: Cong Wang <cong.wang@bytedance.com>
 > 
-> Yonghong Song (2):
->   dwarf_loader: check .debug_abbrev for cross-cu references
->   dwarf_loader: check .notes section for lto build info
+> We have thousands of services connected to a daemon on every host
+> via AF_UNIX dgram sockets, after they are moved into VM, we have to
+> add a proxy to forward these communications from VM to host, because
+> rewriting thousands of them is not practical. This proxy uses an
+> AF_UNIX socket connected to services and a UDP socket to connect to
+> the host. It is inefficient because data is copied between kernel
+> space and user space twice, and we can not use splice() which only
+> supports TCP. Therefore, we want to use sockmap to do the splicing
+> without going to user-space at all (after the initial setup).
 > 
->  dwarf_loader.c | 76 ++++++++++++++++++++++++++++++++++++--------------
->  1 file changed, 55 insertions(+), 21 deletions(-)
+> Currently sockmap only fully supports TCP, UDP is partially supported
+> as it is only allowed to add into sockmap. This patchset, as the second
+> part of the original large patchset, extends sockmap with:
+> 1) cross-protocol support with BPF_SK_SKB_VERDICT; 2) full UDP support.
 > 
-> -- 
-> 2.30.2
+> On the high level, ->read_sock() is required for each protocol to support
+> sockmap redirection, and in order to do sock proto update, a new ops
+> ->psock_update_sk_prot() is introduced, which is also required. And the
+> BPF ->recvmsg() is also needed to replace the original ->recvmsg() to
+> retrieve skmsg. To make life easier, we have to get rid of lock_sock()
+> in sk_psock_handle_skb(), otherwise we would have to implement
+> ->sendmsg_locked() on top of ->sendmsg(), which is ugly.
 > 
+> Please see each patch for more details.
+> 
+> To see the big picture, the original patchset is available here:
+> https://github.com/congwang/linux/tree/sockmap
+> this patchset is also available:
+> https://github.com/congwang/linux/tree/sockmap2
+> 
+> ---
 
--- 
-
-- Arnaldo
+This LGTM, thanks for doing this Cong.
