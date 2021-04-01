@@ -5,69 +5,67 @@ X-Spam-Level:
 X-Spam-Status: No, score=-23.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+	URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 457A1C43460
-	for <bpf@archiver.kernel.org>; Thu,  1 Apr 2021 19:26:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51C66C433B4
+	for <bpf@archiver.kernel.org>; Thu,  1 Apr 2021 19:35:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 13A9B61001
-	for <bpf@archiver.kernel.org>; Thu,  1 Apr 2021 19:26:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 10BDC6108B
+	for <bpf@archiver.kernel.org>; Thu,  1 Apr 2021 19:35:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234646AbhDAT0t (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 1 Apr 2021 15:26:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52462 "EHLO
+        id S234103AbhDATf6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 1 Apr 2021 15:35:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234601AbhDAT0o (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 1 Apr 2021 15:26:44 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A229BC0225A0
-        for <bpf@vger.kernel.org>; Thu,  1 Apr 2021 11:50:16 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id o10so4294283lfb.9
-        for <bpf@vger.kernel.org>; Thu, 01 Apr 2021 11:50:16 -0700 (PDT)
+        with ESMTP id S234000AbhDATf5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 1 Apr 2021 15:35:57 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF8FC061788
+        for <bpf@vger.kernel.org>; Thu,  1 Apr 2021 12:35:57 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id u9so4517348ejj.7
+        for <bpf@vger.kernel.org>; Thu, 01 Apr 2021 12:35:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=1KmEagxK+rhdAhvN7uNMepKmJEX8gVa3xuxeYizT0aQ=;
-        b=LJ6w4Y2MjdRR9qq6CmzLbI/1TIGqZxQz3fw/4U4ekFeyWFUGW7JANMOSJun4pZvhZw
-         0IfgNf7PA2cHVO8cvFSNXUgTdqv9CQ9UVLyL5IRijcT9PZjLOC5Wv/+ZW847NudcwHwB
-         s9drZQTiwl72nebslb9YgbCW/5eWip06VuOdPubCKv5xQk2WwlsoC6kUAkCgzGAMLzHR
-         Uy1x8e+xn+aj5Nl703kI8nraLZKOoH9n0Sc23mU2No2drb1zIkUXOquRizeyXAPrrlvN
-         J2rKHihIJNb7dc4Gz1PodvPmohjGOFoYOmg7rEy+cGZEyjej7lTAW8g3FthGnJRfpA/n
-         T+HQ==
+        bh=jSH/WHddRbPf6STimxPVj0owKXpeyvm3Or6jIfJzeYA=;
+        b=MgqN747F60JpErfrcDBkplHYzAtEvLiQS7DOj3NDmUccASu9PkdDQgHUkBOu5Aeami
+         rYPcvUq4vPXtFazL42IgyJoVJhDUAqWLaEqXdoFL7ktQeKEVje4n0mSG6hVfS4lKCQVz
+         xr8CR21ZWFcC5wa8W4QKnTgs9rrgWz3pym6ZIbHBvIVYt3PijlbWGKSypAmkWQ4wQktP
+         eJpkJQoDP67Jirt2htgVEW1QtBUeAkjGy8qpTWsC3lvshb7w9fbAQ8SchfnBdST/kT42
+         GyWv2OkEGm4+ctrd4eQFud30gstX77swaMj9r9LVaRVzKVECGDeyyp3w4d0h8/wi08V7
+         Ituw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=1KmEagxK+rhdAhvN7uNMepKmJEX8gVa3xuxeYizT0aQ=;
-        b=UwW0/rNc9NJim0IGUZMOmj7sDzQ0JGqWRlP8s+L5X3R47qYl1arFaOHAStJYVbkNPm
-         8KLPYyTy6WEWD2/uFPbk7dkv8+Jj3yB0AxUc3s7Y8zgxhW9jDAaFJskHBncSoVVK9XgK
-         coSBihPXimOMoHWJQogvlPRq5egFtC17Ky/XltkaX4B4o0LENCsu1E1/pswliC7dB46s
-         2w4w5pZvfOY8ycOT7OLUin9LWI4rJjy16PE04wrAJ/iPgOftsTinCpiveDK/o5LSN6v2
-         lKCuob3+0qVAgYOqHyeSB/puh3f8MuwUNSQdmWnB0KbvyppgchQnvKyQI/mz3qw9i9dZ
-         Vbew==
-X-Gm-Message-State: AOAM531bd8wdo8jugw7LhGtaMFV49EpKRYxL1nh/b8/ZJPf5wCdple5j
-        SsXBiU9ot7kVxqYhOkGiKxEQWXUYv8QrngwvBdCrkA==
-X-Google-Smtp-Source: ABdhPJzvHydJMrRKLEe5lQTcugNGl+V7JelQ4joFmeW58ikkQ+BHMey+pVknxNuG9KflDH1qaMkAGKFZm/ll5ytWc2s=
-X-Received: by 2002:a19:8c19:: with SMTP id o25mr6411654lfd.547.1617303014926;
- Thu, 01 Apr 2021 11:50:14 -0700 (PDT)
+        bh=jSH/WHddRbPf6STimxPVj0owKXpeyvm3Or6jIfJzeYA=;
+        b=uT2Z5xywWrHr/z1uCfGx5Rh9aVE7svSoJRSzsfI5NrEcHX2wJcKWi2dUIILSmkyRHV
+         kTc3ysodv/ZY2W1ipkqfFCmcXjiXjblC2Dyvn+Bx6Z15vuSeacgIG8Ykq5p+OtnJqtxL
+         EsZWB3XDA36p9nNA+cdLh/jH8AYhfgIyFO7u/rUeK+7zRk60xO6QB+hPQSD+du+doZSj
+         9srCK0M5lGqTDnqalRjTdhoBmxpraZXqiX4itxZSM192OJh3BDQTNHMWaXKQn6qI7oY4
+         ZIOZqBcF83p4vICpyPRsCEz7ldFaoVuEbtYBpzF01fZDEIB2aKS6msRJYG+7Z8zfTX7q
+         NuIQ==
+X-Gm-Message-State: AOAM531BP4Tiob6usnyfXvg34GiT9Su8N2dQOpvaQrb+Y4OgzDY+TPKG
+        g0bVax2NKkBePSBWPQUOA0HXt56YcgdeSjAoH1NqZ0HUhxwN
+X-Google-Smtp-Source: ABdhPJw2FE5Kpo3Br2tp++R3AapsUztluYSGA78Fa4Kiy0rIRS2RqdWZi27nTgHVJIUlHu5RHo6CgvQ/KoNcRE2f5M8=
+X-Received: by 2002:a17:906:af97:: with SMTP id mj23mr11117694ejb.419.1617305755968;
+ Thu, 01 Apr 2021 12:35:55 -0700 (PDT)
 MIME-Version: 1.0
 References: <20210401025815.2254256-1-yhs@fb.com>
 In-Reply-To: <20210401025815.2254256-1-yhs@fb.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Thu, 1 Apr 2021 11:50:03 -0700
-Message-ID: <CAKwvOdka=a-RtLzBdEQm5s570rLSDLfRD4Xf8SxOQHWcTdUz3w@mail.gmail.com>
+From:   Bill Wendling <morbo@google.com>
+Date:   Thu, 1 Apr 2021 12:35:45 -0700
+Message-ID: <CAGG=3QWpcCG7b70oQsRTATgt10acEFS=-Tg9U=DHZ6xoS3GeMA@mail.gmail.com>
 Subject: Re: [PATCH dwarves 0/2] dwarf_loader: improve cus__merging_cu()
 To:     Yonghong Song <yhs@fb.com>
 Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
         dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Bill Wendling <morbo@google.com>, bpf <bpf@vger.kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
         David Blaikie <dblaikie@gmail.com>,
         =?UTF-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>,
-        kernel-team@fb.com,
-        clang-built-linux <clang-built-linux@googlegroups.com>
+        kernel-team@fb.com, Nick Desaulniers <ndesaulniers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
@@ -88,18 +86,6 @@ On Wed, Mar 31, 2021 at 7:58 PM Yonghong Song <yhs@fb.com> wrote:
 > This patch set implemented this two approaches, first
 > checking the note (in Patch #2), if not found, then
 > check .debug_abbrev (in Patch #1).
-
-For the series:
-
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Tested-by: Nick Desaulniers <ndesaulniers@google.com>
-
-(Noting for others on our mailing list:
-https://lore.kernel.org/linux-kbuild/20210401012406.1800957-1-yhs@fb.com/
-is a series of kernel patches required to test this. I had feedback on
-the kernel patches, but this approach in pahole LGTM since I think
-using simple notes in ELF is a good approach).
-
 >
 > Yonghong Song (2):
 >   dwarf_loader: check .debug_abbrev for cross-cu references
@@ -108,11 +94,10 @@ using simple notes in ELF is a good approach).
 >  dwarf_loader.c | 76 ++++++++++++++++++++++++++++++++++++--------------
 >  1 file changed, 55 insertions(+), 21 deletions(-)
 >
-> --
-> 2.30.2
->
+With this series of patches, the compilation passes for me with
+ThinLTO. You may add this if you like:
 
+Tested-by: Bill Wendling <morbo@google.com>
 
---
-Thanks,
-~Nick Desaulniers
+Thanks!
+-bw
