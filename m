@@ -2,204 +2,108 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C4C52C43603
-	for <bpf@archiver.kernel.org>; Thu,  1 Apr 2021 11:11:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8957C43618
+	for <bpf@archiver.kernel.org>; Thu,  1 Apr 2021 17:46:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B0F3A61104
-	for <bpf@archiver.kernel.org>; Thu,  1 Apr 2021 11:11:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 859C3613C5
+	for <bpf@archiver.kernel.org>; Thu,  1 Apr 2021 17:46:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234114AbhDALLR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 1 Apr 2021 07:11:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:52249 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234211AbhDALLH (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 1 Apr 2021 07:11:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1617275433;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EeOJX2ut1yR1JpGJMK7VkaOeY20GXea4Wy+TEDh9VU8=;
-        b=AT0fDHpAuxOErp1fT6TaJ83eW+uf8WcfMZuPUKUcmUUh/YdXkGn9xRkJUICOfNtmVIHW8C
-        SnAEqk8TidyYLl92WYD6dPna6EZkI1BQ+Xskx26/iMVMJEypAJVyAebPBm6Ow95xljRRHX
-        6OHLvF0F9k4cspVCMMG9NmEcb1p08rc=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-271-P8a7qCBHPH-ZMTfZp8weUQ-1; Thu, 01 Apr 2021 07:10:32 -0400
-X-MC-Unique: P8a7qCBHPH-ZMTfZp8weUQ-1
-Received: by mail-ed1-f72.google.com with SMTP id h5so2652315edf.17
-        for <bpf@vger.kernel.org>; Thu, 01 Apr 2021 04:10:32 -0700 (PDT)
+        id S235569AbhDARpy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 1 Apr 2021 13:45:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57160 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234646AbhDARiy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 1 Apr 2021 13:38:54 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D7CBC0613A7;
+        Thu,  1 Apr 2021 04:31:37 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id u5so2355546ejn.8;
+        Thu, 01 Apr 2021 04:31:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=e1k2jFYVkUvY3qWo/yAEsqj9pQAfQ8BRhGPE3QKDHv0=;
+        b=ZD433zJpfpq8cjtLjUhQxT9js3k/QQGKl5g41mZuchqReVJ+Lx1mxySZAsVFruartF
+         EJoddJcA7fSZURn3ZEOdpLEqoHjF+MfRrFGGbIYMOZUTAGx3laYJPzj1xCBbsAyf3C/H
+         n2jNpdpjR2fw/hEF+C8RlJ5oAcQrwxBrFCSxfqGb2OxoDwqAnuv4LauIyIRbQxUt7RSe
+         HcDAHaP/h1ThuRCY1jMESHKCZbWJ/moYLx0L3Id/ZKCc15ag1kcKcYclVWv7j0Jtngxo
+         i6WxQjRqAd4ymc8tUHArsHf9LpxpzuUFo2pVh7V/SP+YHTjRj3Ck/ojMFCWmf9TZcqek
+         39Mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version:content-transfer-encoding;
-        bh=EeOJX2ut1yR1JpGJMK7VkaOeY20GXea4Wy+TEDh9VU8=;
-        b=dSpzaNo2lmRSIvLBZdicVizm9PLqmtDt2B/aEEHyooXv5xRM0dpvu9B+IQ0aA2ZiYX
-         SRTPJXdLq3uz3vEDqNOR2XQ5c8YYlYGKa1QvDDQ2PhUi864CZUR/h7ixP24HNLyLDI7H
-         B4Ig8gTKoEhEQ6SIjmceEjFFSHgzjexwwR7bYWxYrLKmC9RnGrTFQ7HHPy4GXBP9IT1Z
-         C75Q/a5qzkHMgkFXWJhifP3feBOdpx4sfM5tsAzSq+Nl+nUVxmeHpWDs5/XGfHEUQRZC
-         fC5RwnuXK17sgJYSDanVa4gcFSm8rJOF2Mfb6zjgp9gfhhnRCU+v2WK6dmGO9h9hc3AU
-         hxWQ==
-X-Gm-Message-State: AOAM533pyjtcD6n72P1iUNpIx1yhDFUokmuyQpMfhzduRbtROM73P7/X
-        GgiQnk8VjGquEtlqYTg7HsIzD2CS9webjKZb9uQddeWlF4LuWDJZEap139bXTcp7ezezSXCCYnO
-        dj/AP3+poD+f9
-X-Received: by 2002:a17:906:ecaa:: with SMTP id qh10mr8507489ejb.425.1617275431190;
-        Thu, 01 Apr 2021 04:10:31 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyH/c17591YFQbsgmwGp7V0SjnoOBrfMHcajy8KjCCnk1H7QqgOkJGEEFnEo3CF9P6ujhIzGQ==
-X-Received: by 2002:a17:906:ecaa:: with SMTP id qh10mr8507458ejb.425.1617275430886;
-        Thu, 01 Apr 2021 04:10:30 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id gq9sm2689327ejb.62.2021.04.01.04.10.29
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=e1k2jFYVkUvY3qWo/yAEsqj9pQAfQ8BRhGPE3QKDHv0=;
+        b=B77nw9l/2pStZqercd5nO0zsRNHlezdtQvBFbJEEYo1HJl5rNMpJuI9im/Jsdgn0T6
+         l1i4kVLtorm22WTRIpbb/PV94ddrn5tI+K20DPSw0K6BXzODLjpH083zQEURFnSxpVo9
+         UNjZlWg91NETdgI+GPP5dWaNhSGbhbaUEU2B2JEoijG6j3UhLyycC+XAf/f9ylo9+FPN
+         gSUZHrkhb4XypqAp4kCiHmwiN2ZZoFCaKequiyGA714QwebHQ9HSPrjWu9gutvAzHZDl
+         vvYnOY098vgeolnWWTivYJDuEhPupTYa3NmjX+SIBnN3xeNkVzdeHh5QPUHHFKphks9Q
+         b+zw==
+X-Gm-Message-State: AOAM532TcNjgmoboAmLYuynot+hnE8Flwe2OR6bBaVxG3X+zaVV9hT8c
+        m5uwRoRqM515ITsP4EOtRhg=
+X-Google-Smtp-Source: ABdhPJwbi48m1/vFhq9T6E4IJ05n1xEWnSphH1wrGflu34S3LVoiLfwRvf10Y32RxuY8g9HZ7MSs+Q==
+X-Received: by 2002:a17:907:7249:: with SMTP id ds9mr8775707ejc.9.1617276696365;
+        Thu, 01 Apr 2021 04:31:36 -0700 (PDT)
+Received: from skbuf (5-12-16-165.residential.rdsnet.ro. [5.12.16.165])
+        by smtp.gmail.com with ESMTPSA id u13sm2746993ejn.59.2021.04.01.04.31.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Apr 2021 04:10:30 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 888D1180290; Thu,  1 Apr 2021 13:10:29 +0200 (CEST)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Hangbin Liu <liuhangbin@gmail.com>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        Jiri Benc <jbenc@redhat.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Eelco Chaudron <echaudro@redhat.com>, ast@kernel.org,
+        Thu, 01 Apr 2021 04:31:35 -0700 (PDT)
+Date:   Thu, 1 Apr 2021 14:31:33 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Lorenzo Bianconi <lorenzo.bianconi@redhat.com>,
-        David Ahern <dsahern@gmail.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        =?utf-8?B?QmrDtnJuIFQ=?= =?utf-8?B?w7ZwZWw=?= 
-        <bjorn.topel@gmail.com>
-Subject: Re: [PATCHv3 bpf-next 2/4] xdp: extend xdp_redirect_map with
- broadcast support
-In-Reply-To: <20210401043004.GE2900@Leo-laptop-t470s>
-References: <20210325092733.3058653-1-liuhangbin@gmail.com>
- <20210325092733.3058653-3-liuhangbin@gmail.com> <87lfa3phj6.fsf@toke.dk>
- <20210401043004.GE2900@Leo-laptop-t470s>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Thu, 01 Apr 2021 13:10:29 +0200
-Message-ID: <87k0pmntui.fsf@toke.dk>
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, Alexander Duyck <alexander.duyck@gmail.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        Alex Marginean <alexandru.marginean@nxp.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Subject: Re: [PATCH net-next 9/9] net: enetc: add support for XDP_REDIRECT
+Message-ID: <20210401113133.vzs3uxkp52k2ctla@skbuf>
+References: <20210331200857.3274425-1-olteanv@gmail.com>
+ <20210331200857.3274425-10-olteanv@gmail.com>
+ <87blaynt4l.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87blaynt4l.fsf@toke.dk>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hangbin Liu <liuhangbin@gmail.com> writes:
+On Thu, Apr 01, 2021 at 01:26:02PM +0200, Toke Høiland-Jørgensen wrote:
+> > +int enetc_xdp_xmit(struct net_device *ndev, int num_frames,
+> > +		   struct xdp_frame **frames, u32 flags)
+> > +{
+> > +	struct enetc_tx_swbd xdp_redirect_arr[ENETC_MAX_SKB_FRAGS] = {0};
+> > +	struct enetc_ndev_priv *priv = netdev_priv(ndev);
+> > +	struct enetc_bdr *tx_ring;
+> > +	int xdp_tx_bd_cnt, i, k;
+> > +	int xdp_tx_frm_cnt = 0;
+> > +
+> > +	tx_ring = priv->tx_ring[smp_processor_id()];
+> 
+> What mechanism guarantees that this won't overflow the array? :)
 
-> On Wed, Mar 31, 2021 at 03:41:17PM +0200, Toke H=C3=B8iland-J=C3=B8rgense=
-n wrote:
->> > @@ -1491,13 +1492,20 @@ static __always_inline int __bpf_xdp_redirect_=
-map(struct bpf_map *map, u32 ifind
->> >  		 */
->> >  		ri->map_id =3D INT_MAX; /* Valid map id idr range: [1,INT_MAX[ */
->> >  		ri->map_type =3D BPF_MAP_TYPE_UNSPEC;
->> > -		return flags;
->> > +		return flags & BPF_F_ACTION_MASK;
->> >  	}
->> >=20=20
->> >  	ri->tgt_index =3D ifindex;
->> >  	ri->map_id =3D map->id;
->> >  	ri->map_type =3D map->map_type;
->> >=20=20
->> > +	if ((map->map_type =3D=3D BPF_MAP_TYPE_DEVMAP ||
->> > +	     map->map_type =3D=3D BPF_MAP_TYPE_DEVMAP_HASH) &&
->> > +	    (flags & BPF_F_BROADCAST)) {
->> > +		ri->flags =3D flags;
->>=20
->> This, combined with this:
->>=20
->> [...]
->>=20
->> > +	if (ri->flags & BPF_F_BROADCAST) {
->> > +		map =3D READ_ONCE(ri->map);
->> > +		WRITE_ONCE(ri->map, NULL);
->> > +	}
->> > +
->> >  	switch (map_type) {
->> >  	case BPF_MAP_TYPE_DEVMAP:
->> >  		fallthrough;
->> >  	case BPF_MAP_TYPE_DEVMAP_HASH:
->> > -		err =3D dev_map_enqueue(fwd, xdp, dev);
->> > +		if (ri->flags & BPF_F_BROADCAST)
->> > +			err =3D dev_map_enqueue_multi(xdp, dev, map,
->> > +						    ri->flags & BPF_F_EXCLUDE_INGRESS);
->> > +		else
->> > +			err =3D dev_map_enqueue(fwd, xdp, dev);
->>=20
->> Means that (since the flags value is never cleared again) once someone
->> has done a broadcast redirect, that's all they'll ever get until the
->> next reboot ;)
->
-> How about just get the ri->flags first and clean it directly. e.g.
->
-> flags =3D ri->flags;
-> ri->flags =3D 0;
-
-That would fix the "until next reboot" issue, but would still render
-bpf_clear_redirect_map() useless. So you still need to check ri->map and
-if you do that you don't actually need to clear the flag field as long
-as it is set correctly whenever the map pointer is.
-
-> With this we don't need to add an extra field ri->exclude_ingress as you
-> mentioned later.
-
-The ri->exclude_ingress would be *instead* of the flags field. You could
-of course also just keep the flags field, but turning it into a bool
-makes it obvious that only one of the bits is actually used (and thus
-easier to see that it's correct to not clear it).
-
-> People may also need the flags field in future.
-
-In which case they can add it back at that time :)
-
->> Also, the bpf_clear_redirect_map() call has no effect since the call to
->> dev_map_enqueue_multi() only checks the flags and not the value of the
->> map pointer before deciding which enqueue function to call.
->>=20
->> To fix both of these, how about changing the logic so that:
->>=20
->> - __bpf_xdp_redirect_map() sets the map pointer if the broadcast flag is
->>   set (and clears it if the flag isn't set!)
->
-> OK
->>=20
->> - xdp_do_redirect() does the READ_ONCE/WRITE_ONCE on ri->map
->>   unconditionally and then dispatches to dev_map_enqueue_multi() if the
->>   read resulted in a non-NULL pointer
->>=20
->> Also, it should be invalid to set the broadcast flag with a map type
->> other than a devmap; __bpf_xdp_redirect_map() should check that.
->
-> The current code only do if (unlikely(flags > XDP_TX)) and didn't check t=
-he
-> map type. I also only set the map when there has devmap + broadcast flag.
-> Do you mean we need a more strict check? like
->
-> if (unlikely((flags & ~(BPF_F_ACTION_MASK | BPF_F_REDIR_MASK)) ||
-> 	      (map->map_type !=3D BPF_MAP_TYPE_DEVMAP &&
-> 	       map->map_type !=3D BPF_MAP_TYPE_DEVMAP_HASH &&
-> 	       flags & BPF_F_REDIR_MASK)))
-
-Yeah, that's what I meant, but when you type it out that does seem like
-a bit too many checks.
-
-However, I think we can do something different: Since Bj=C3=B6rn has
-helpfully split out the helper functions for the different map types, we
-can add another argument to __bpf_xdp_redirect_map() which is the mask
-of valid flag values. With this, dev_{hash_,}map_redirect() can include
-BPF_F_REDIR_MASK in the valid flags, and {xsk,cpu}_map_redirect() can
-leave them out. That makes the code do the right thing without actually
-adding any more checks in the fast path :)
-
-(You'd still need to AND the return value with BPF_F_ACTION_MASK when
-returning, of course).
-
--Toke
-
+Which array, the array of TX rings?
+You mean that it's possible to receive a TC_SETUP_QDISC_MQPRIO or
+TC_SETUP_QDISC_TAPRIO with num_tc == 1, and we have 2 CPUs?
+Well, yeah, I don't know what's the proper way to deal with that. Ideas?
