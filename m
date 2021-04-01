@@ -2,137 +2,198 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,FROM_LOCAL_HEX,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,PDS_BAD_THREAD_QP_64,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 42C59C43460
-	for <bpf@archiver.kernel.org>; Thu,  1 Apr 2021 17:51:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A5C63C43616
+	for <bpf@archiver.kernel.org>; Thu,  1 Apr 2021 17:51:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 19EAC60FF3
-	for <bpf@archiver.kernel.org>; Thu,  1 Apr 2021 17:51:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8729861285
+	for <bpf@archiver.kernel.org>; Thu,  1 Apr 2021 17:51:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234520AbhDARtC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 1 Apr 2021 13:49:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58360 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236068AbhDARq7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 1 Apr 2021 13:46:59 -0400
-Received: from mail-il1-x148.google.com (mail-il1-x148.google.com [IPv6:2607:f8b0:4864:20::148])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4404DC08EADD
-        for <bpf@vger.kernel.org>; Thu,  1 Apr 2021 06:36:57 -0700 (PDT)
-Received: by mail-il1-x148.google.com with SMTP id s10so3840796ilo.7
-        for <bpf@vger.kernel.org>; Thu, 01 Apr 2021 06:36:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=V1YPBBmXV6Zf6ofFKc69jLxBo6I+75nDp0+ssUeEtEM=;
-        b=iV356XEIASCsSjZPvL+DyQ8GlVMpGjNq/5V5Wm/bZCZP1IaI6uvDRhmMLODSTypgND
-         RLw4JX2wg3Uc4z8vqESvGq9jQ3ahOCOUyK+QB+f66sZjwQDg54lBxffpeaMGCBCJZ1N+
-         M9KHl+cT71w636ELmaFGIJjIXuqMXn6g0C1+zntU0ZTBiJhZ6mLu/9P/nOL3drgmibIA
-         M04xaQ2B2Gg+034GmuMiCd9eU0GdvF7JCw1iD1c71vfedLWwE3t3Uopmuxl59XUdCotf
-         gSgogWqeextzFKo9rw6/x8sooe/T+yoQdQyrUP3WHvZQT0sLSsR7enH86eBjhOcgeOCS
-         9PYw==
-X-Gm-Message-State: AOAM532XQ1OSsuORdsVADaDOv1IbFpH1IozIuDN5mZLgcsmWL/38nXwS
-        y5VkmuAAd4Uxk4+/pzJ//pgD7RXcM4L9sl/dXDjQnFMQBzNN
-X-Google-Smtp-Source: ABdhPJx/5tqNGXQlJ27uFdO6oc1q+y5cAbEhG+gQ0NtMiUPsSxdE1cBf9c1xnuC34oj9gnsTFZUhqBMyOMroa7wQiaswaike9eKr
+        id S233850AbhDARvl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 1 Apr 2021 13:51:41 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:62974 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236751AbhDARrU (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 1 Apr 2021 13:47:20 -0400
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 131HdjFo032496;
+        Thu, 1 Apr 2021 10:47:08 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=facebook;
+ bh=kCjxjZl94hUV56ZtJQpCQphv0Vp1LMGUEEzZwXOksQM=;
+ b=kr6qcdjN9xQxuswq6yI5/xe1IfH1JwvSYUeykDTN1/flu0/SSz7v3ah2hTkeHFaqmCOT
+ InKRLIPGrS40BwI6CW6mxpO45z5Cu9e/Dq4pPcBhtS/sdq4GEJaf8XRpY4J0vhMIeU2a
+ gQoVATYXNAQIABMo/ScrvcdxToM7xR8VfpU= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 37ng351k9e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 01 Apr 2021 10:47:08 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (100.104.98.9) by
+ o365-in.thefacebook.com (100.104.94.199) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Thu, 1 Apr 2021 10:47:07 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=W78tCF4PpkceWXQWA3xJFVf6r9fBWZXT2Q1IT5AUhHlqpVxZ28LkDH3wI4iiliaQmQL+B/fz+d8UwerxyLQcmjs6Taxlh2PymVXa2ZqpmyqeN++vX03+jifXyZF7ue0VLYTFX5ig4p8x7K2nuShiQkwjuse6tJmi6iYr63NbKlnBy6s3oodArccVuwXHwW6gSAu71rQRYeCLdW/fwFlnqGngy01rIG3Ujxkh/W3PEP9olk7VtabSvVcA4coa6c/sZ5CrnE5ZGIIFID5ZKGDvwDbDAWQx7uvrqgk8la2n3lW6mQNO2mVLjAOBJ0ZlfIp7zKY+oPkoMzB+rctwoslvyA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kCjxjZl94hUV56ZtJQpCQphv0Vp1LMGUEEzZwXOksQM=;
+ b=CXgT6NpxxKpIJr7FzrkyOvtT5wvwksCOwiAW7Rdsiclq1hehFfT3kVRwfqkMSlHPJXiTsdMLlr0MLEAqyMmmKNffI7saJK9wpQ4+Vm8QQEDP4vtunj75d6n6HzSNS+7wPS/1J85YfNpzfE6f7N34OGv2inj1NglpAM5vRFUC7IUNo+KBREgkV++QicqZLjr/UffU3HUHLtOnz1o1v01qwGn2o815vfVY8WzrkJeWKMflbDI3NfWnRC1tELNLXM8X1nFEt4s50pmJgRAnttcEvteu5LXuW+wvRuWrfFdGkWuFaShhSUDTiBh6RYVPe7UusWwEIh2ulLAUJ0IkPi9RxA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Received: from BYAPR15MB2999.namprd15.prod.outlook.com (2603:10b6:a03:fa::12)
+ by BYAPR15MB2584.namprd15.prod.outlook.com (2603:10b6:a03:150::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3955.18; Thu, 1 Apr
+ 2021 17:47:04 +0000
+Received: from BYAPR15MB2999.namprd15.prod.outlook.com
+ ([fe80::1ce0:8b27:f740:6b60]) by BYAPR15MB2999.namprd15.prod.outlook.com
+ ([fe80::1ce0:8b27:f740:6b60%4]) with mapi id 15.20.3933.039; Thu, 1 Apr 2021
+ 17:47:04 +0000
+From:   Song Liu <songliubraving@fb.com>
+To:     Dave Marchevsky <davemarchevsky@fb.com>
+CC:     "open list:BPF (Safe dynamic programs and tools)" 
+        <bpf@vger.kernel.org>, Kernel Team <Kernel-team@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        "Daniel Borkmann" <daniel@iogearbox.net>
+Subject: Re: [PATCH bpf] bpf: refcount task stack in bpf_get_task_stack
+Thread-Topic: [PATCH bpf] bpf: refcount task stack in bpf_get_task_stack
+Thread-Index: AQHXJosgP+JmR44UgEePF4s7EXmXo6qfON2AgAC4FwA=
+Date:   Thu, 1 Apr 2021 17:47:04 +0000
+Message-ID: <E35C73AA-806C-41F2-9E8B-DC251C45B629@fb.com>
+References: <20210401000747.3648767-1-davemarchevsky@fb.com>
+ <FF83BF2B-8CA4-4919-B8F3-B21602780F1B@fb.com>
+In-Reply-To: <FF83BF2B-8CA4-4919-B8F3-B21602780F1B@fb.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3654.60.0.2.21)
+x-originating-ip: [2620:10d:c090:400::5:c1d1]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 04855ad6-965e-469e-ff4b-08d8f536293e
+x-ms-traffictypediagnostic: BYAPR15MB2584:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <BYAPR15MB2584995DC161C04F8912D8B7B37B9@BYAPR15MB2584.namprd15.prod.outlook.com>
+x-fb-source: Internal
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: /V1Bc/xe5nybQ5Pm0UerNJv8wKh/JAdZR6IISRFt642zxk2kYSmlCguvaAXCJHGNKS9fFITeEUwmJwo07irD/Tilo0wE08RT4RWOB94FiUUvgvfUOvyJ3XWcvp0Cc9IfXgigNBnau2DdYyfaDBI117aQkcKy+MToa/lXh2ZUexrB3t8EoNG1sSHvgZ3cAEGBddrUCe06NqkuMhRSP8ebOqSBRO2TAyiKbKKonUFZPWw/mtq5BQC0bYF2o88PHia6wxQBs94qMW3os5es5wBhkGpyGOPWpWi37tdX707ovxCajCqfxHCLXlBoaQVKjrUjlM0c1Tvxzp9hI/fBGzkEw2bVC57A39rJGGdutJWvr9gBMiMP334oCSmgxzheJEzaU0GoEhJZbCvEn7E6OOQtX+gFzZPhVE9km+zPAC+GOtaDtKy1p0gIYQUKDFlMNdybLg/xayG9PkuXq+/Y1LaWM1E9nP75AJtgUDoL6dAz4FB2ESXcFE6YmxN2fIkKIeVNV8P3nwOCBRREElLFZ29W4SBRl/5ggrQbCJtpbc70fbSRUzJvbQ/9WUstpQTxk3yZOk85qrtkr3IZ0uWvq97n80fXFl65zsxeqR/Q/cu4ruaC+PdTP2mzVmXo+A8ShxKhfM3tf5k/05spW6Su9pX+O5qhMTsWVDKNbtskDsYiQtziyefjIIOg3vqxIRNVCTxm
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB2999.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(396003)(366004)(39860400002)(136003)(346002)(376002)(76116006)(66946007)(91956017)(71200400001)(316002)(66556008)(83380400001)(8676002)(5660300002)(2616005)(8936002)(66476007)(64756008)(66446008)(6862004)(38100700001)(478600001)(6512007)(4326008)(6486002)(186003)(36756003)(54906003)(6506007)(86362001)(2906002)(33656002)(6636002)(53546011)(37006003)(45980500001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: =?us-ascii?Q?MmouRnQB6lAY6M4VSyrDlhjrYuiQ+TP8EXCGhEHJByCQVJi1DAz17Qo+TAH8?=
+ =?us-ascii?Q?qZY0SuniLvneLY93t1SgRTmgD3gDfooE5BjnQiXXXpBloouklsV6/JUxGEJh?=
+ =?us-ascii?Q?uKE+FuZ9JMZUdqWKjmcT9QyriVqZsf+1/I14TYLYC6E1VOtgVCSCemTe7Rth?=
+ =?us-ascii?Q?+GEYbsxD2TESAbQ+QZGkD9d4a7gBv/iZ+5+Jb2e6k466roBkqFdiCzC3euaH?=
+ =?us-ascii?Q?jqTda4CaSZV/HJcxro6s734V9cWSPK6e/P1Lg+oxYZrIZxv/eELuctSgaOKw?=
+ =?us-ascii?Q?ybw1R6vRujDBtYOUbKfIqceJPc7ctrf94FzUddn82Sfy/EVFO7SEhz2l9aoi?=
+ =?us-ascii?Q?C7oAgQRhgZnQ04pAT2ZEpIsnLmX69+DViwv9qHe0ecncT7Kpfz5cOvNnZ4oA?=
+ =?us-ascii?Q?Vv5F+TA/BNOI9OgjKNMnJDW9j7KNHMD7PTuwV5bvzbNyiJjp5u7/R6gbMbF6?=
+ =?us-ascii?Q?b5EON05T9YooN7rWUWTO42tSADSVxmkbAsyz7D7QrMH5ottolJKw7P5OUnbK?=
+ =?us-ascii?Q?zKYPa4DaG0hywHqgNUJbLDTIF2Q/LMEh3BK6kEoHqW/uW/RV+QPYf7Rm9C69?=
+ =?us-ascii?Q?W4dUPt2sitJi/82BXYz9nEQvPkmKTVchbwBpubP7DVuW3pZ0XKZ0qgTjQEdL?=
+ =?us-ascii?Q?/zKec/BGXL5ch4bceTJ/x1ba1nHqaLMa72CMadCMYNFHf1bGWIGxTjv4sO0b?=
+ =?us-ascii?Q?Z2lkrhAXGNFrC5Mflo8ap1pcE4BOjsedzBZmDn3i2COdo3pIVNYN7rnJmwRu?=
+ =?us-ascii?Q?EkkhuUOpZ2p0MGZeuL6vdUaX3yGMxcnApzhRPhMpBpL+vjdi83rZ7A+yyP8h?=
+ =?us-ascii?Q?9tS1357uBEhLgYdpqzDZ/M0QxsUouRz16jt89Autf2fpS68ws8JBFZpWiUQL?=
+ =?us-ascii?Q?4hHJVHlbeJgIBw0JzsX0j0oprP9b/D2G9Nndnng2wrRio1lMs07ikw7AnA3y?=
+ =?us-ascii?Q?NXBCTdawwhaWdo2i6tCabrQJXeF7qzSmH9OvA1q3XS/LlnKra/XbuVXkxzU8?=
+ =?us-ascii?Q?D+AcLTxzFU0CUr54wJw9o4ceyKbnlzOd75/yMVWgpg9Vpn3ON2C3vaMkKSHd?=
+ =?us-ascii?Q?G4XFOiX4ylySji9rQNeW7o0qFEvKSTSPyLGTYiRMZHuROViFZl27e/xFNl6J?=
+ =?us-ascii?Q?qeOtwG4xYepfgURYsg0JVwO1xD5z4D/eps5/bhAFXE7lQ7DJbyF7dIkVfI9W?=
+ =?us-ascii?Q?MYFdw77HK9YTg90/3202SM8IcCUqlpdOgX0f7Kf9nBJVB0u7d0C8cV86zBmb?=
+ =?us-ascii?Q?uGCPA79bOZy/ZcUYUPValEF4WBt5JCCAnbe/pGSpIAx2nF8hmTF1fnvC2dSF?=
+ =?us-ascii?Q?6SxKHtZuGgJuYmLOPHAmRZvBWEa8HPAfS/iuJX/jUIU/VfucCaKYJMOWOfdF?=
+ =?us-ascii?Q?sDae6ZY=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <DC1E1ABB04708B428D697A2CD83CE644@namprd15.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:20cd:: with SMTP id 13mr6179334ilq.126.1617276559816;
- Thu, 01 Apr 2021 04:29:19 -0700 (PDT)
-Date:   Thu, 01 Apr 2021 04:29:19 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d9fefa05bee78afd@google.com>
-Subject: [syzbot] WARNING in bpf_test_run
-From:   syzbot <syzbot+774c590240616eaa3423@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, andrii@kernel.org, ast@kernel.org,
-        bp@alien8.de, bpf@vger.kernel.org, daniel@iogearbox.net,
-        davem@davemloft.net, hawk@kernel.org, hpa@zytor.com,
-        jmattson@google.com, john.fastabend@gmail.com, joro@8bytes.org,
-        kafai@fb.com, kpsingh@kernel.org, kuba@kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mark.rutland@arm.com, masahiroy@kernel.org, mingo@redhat.com,
-        netdev@vger.kernel.org, pbonzini@redhat.com, peterz@infradead.org,
-        rafael.j.wysocki@intel.com, rostedt@goodmis.org, seanjc@google.com,
-        songliubraving@fb.com, syzkaller-bugs@googlegroups.com,
-        tglx@linutronix.de, vkuznets@redhat.com, wanpengli@tencent.com,
-        will@kernel.org, x86@kernel.org, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB2999.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 04855ad6-965e-469e-ff4b-08d8f536293e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Apr 2021 17:47:04.0609
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: NmXzd0tsRFYTjBN474gOBY6EZ0LbVt6kgB1lqz4hIznNrtjNkdlD8+q+rh98ob+23Uz6f2Nzd5UWa48R+8OUEQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2584
+X-OriginatorOrg: fb.com
+X-Proofpoint-GUID: 6n8XbuWWM9-UUleRiwCVg5v2Z0fborJH
+X-Proofpoint-ORIG-GUID: 6n8XbuWWM9-UUleRiwCVg5v2Z0fborJH
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
+ definitions=2021-04-01_09:2021-04-01,2021-04-01 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ malwarescore=0 mlxscore=0 adultscore=0 clxscore=1015 spamscore=0
+ impostorscore=0 phishscore=0 bulkscore=0 priorityscore=1501
+ mlxlogscore=999 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2103310000 definitions=main-2104010115
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    36e79851 libbpf: Preserve empty DATASEC BTFs during static..
-git tree:       bpf-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=1569bb06d00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=7eff0f22b8563a5f
-dashboard link: https://syzkaller.appspot.com/bug?extid=774c590240616eaa3423
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17556b7cd00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1772be26d00000
-
-The issue was bisected to:
-
-commit 997acaf6b4b59c6a9c259740312a69ea549cc684
-Author: Mark Rutland <mark.rutland@arm.com>
-Date:   Mon Jan 11 15:37:07 2021 +0000
-
-    lockdep: report broken irq restoration
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=10197016d00000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=12197016d00000
-console output: https://syzkaller.appspot.com/x/log.txt?x=14197016d00000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+774c590240616eaa3423@syzkaller.appspotmail.com
-Fixes: 997acaf6b4b5 ("lockdep: report broken irq restoration")
-
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 8725 at include/linux/bpf-cgroup.h:193 bpf_cgroup_storage_set include/linux/bpf-cgroup.h:193 [inline]
-WARNING: CPU: 0 PID: 8725 at include/linux/bpf-cgroup.h:193 bpf_test_run+0x65e/0xaa0 net/bpf/test_run.c:109
-Modules linked in:
-CPU: 0 PID: 8725 Comm: syz-executor927 Not tainted 5.12.0-rc4-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:bpf_cgroup_storage_set include/linux/bpf-cgroup.h:193 [inline]
-RIP: 0010:bpf_test_run+0x65e/0xaa0 net/bpf/test_run.c:109
-Code: e9 29 fe ff ff e8 b2 9d 3a fa 41 83 c6 01 bf 08 00 00 00 44 89 f6 e8 51 a5 3a fa 41 83 fe 08 0f 85 74 fc ff ff e8 92 9d 3a fa <0f> 0b bd f0 ff ff ff e9 5c fd ff ff e8 81 9d 3a fa 83 c5 01 bf 08
-RSP: 0018:ffffc900017bfaf0 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: ffffc90000f29000 RCX: 0000000000000000
-RDX: ffff88801bc68000 RSI: ffffffff8739543e RDI: 0000000000000003
-RBP: 0000000000000007 R08: 0000000000000008 R09: 0000000000000001
-R10: ffffffff8739542f R11: 0000000000000000 R12: dffffc0000000000
-R13: ffff888021dd54c0 R14: 0000000000000008 R15: 0000000000000000
-FS:  00007f00157d7700(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f0015795718 CR3: 00000000157ae000 CR4: 00000000001506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- bpf_prog_test_run_skb+0xabc/0x1c70 net/bpf/test_run.c:628
- bpf_prog_test_run kernel/bpf/syscall.c:3132 [inline]
- __do_sys_bpf+0x218b/0x4f40 kernel/bpf/syscall.c:4411
- do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x446199
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f00157d72f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-RAX: ffffffffffffffda RBX: 00000000004cb440 RCX: 0000000000446199
-RDX: 0000000000000028 RSI: 0000000020000080 RDI: 000000000000000a
-RBP: 000000000049b074 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: f9abde7200f522cd
-R13: 3952ddf3af240c07 R14: 1631e0d82d3fa99d R15: 00000000004cb448
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+> On Mar 31, 2021, at 11:48 PM, Song Liu <songliubraving@fb.com> wrote:
+>=20
+>=20
+>=20
+>> On Mar 31, 2021, at 5:07 PM, Dave Marchevsky <davemarchevsky@fb.com> wro=
+te:
+>>=20
+>> On x86 the struct pt_regs * grabbed by task_pt_regs() points to an
+>> offset of task->stack. The pt_regs are later dereferenced in
+>> __bpf_get_stack (e.g. by user_mode() check). This can cause a fault if
+>> the task in question exits while bpf_get_task_stack is executing, as
+>> warned by task_stack_page's comment:
+>>=20
+>> * When accessing the stack of a non-current task that might exit, use
+>> * try_get_task_stack() instead.  task_stack_page will return a pointer
+>> * that could get freed out from under you.
+>>=20
+>> Taking the comment's advice and using try_get_task_stack() and
+>> put_task_stack() to hold task->stack refcount, or bail early if it's
+>> already 0. Incrementing stack_refcount will ensure the task's stack
+>> sticks around while we're using its data.
+>>=20
+>> I noticed this bug while testing a bpf task iter similar to
+>> bpf_iter_task_stack in selftests, except mine grabbed user stack, and
+>> getting intermittent crashes, which resulted in dumps like:
+>>=20
+>> BUG: unable to handle page fault for address: 0000000000003fe0
+>> \#PF: supervisor read access in kernel mode
+>> \#PF: error_code(0x0000) - not-present page
+>> RIP: 0010:__bpf_get_stack+0xd0/0x230
+>> <snip...>
+>> Call Trace:
+>> bpf_prog_0a2be35c092cb190_get_task_stacks+0x5d/0x3ec
+>> bpf_iter_run_prog+0x24/0x81
+>> __task_seq_show+0x58/0x80
+>> bpf_seq_read+0xf7/0x3d0
+>> vfs_read+0x91/0x140
+>> ksys_read+0x59/0xd0
+>> do_syscall_64+0x48/0x120
+>> entry_SYSCALL_64_after_hwframe+0x44/0xa9
+>>=20
+>> Fixes: fa28dcb82a38 ("bpf: Introduce helper bpf_get_task_stack()")
+>> Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
+>=20
+> Thanks for the fix!
+>=20
+> Acked-by: Song Liu <songliubraving@fb.com>
+>=20
+> Could you please extend bpf_iter_task_stack to also grab user stack?=20
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+I think we can extend bpf_iter_task_stack in a follow up patch. It is
+not necessary to bundle these two patches in the same set.=20
+
+Thanks,
+Song=
