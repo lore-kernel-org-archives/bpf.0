@@ -2,122 +2,108 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 41844C433B4
-	for <bpf@archiver.kernel.org>; Sat,  3 Apr 2021 13:34:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C78BFC433ED
+	for <bpf@archiver.kernel.org>; Sat,  3 Apr 2021 15:50:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1F6EC611BD
-	for <bpf@archiver.kernel.org>; Sat,  3 Apr 2021 13:34:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8985F61245
+	for <bpf@archiver.kernel.org>; Sat,  3 Apr 2021 15:50:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236815AbhDCNeW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 3 Apr 2021 09:34:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32860 "EHLO
+        id S230516AbhDCPue (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 3 Apr 2021 11:50:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230343AbhDCNeV (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 3 Apr 2021 09:34:21 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA0DCC0613E6;
-        Sat,  3 Apr 2021 06:34:17 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id t14so6681900ilu.3;
-        Sat, 03 Apr 2021 06:34:17 -0700 (PDT)
+        with ESMTP id S230266AbhDCPue (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 3 Apr 2021 11:50:34 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 173E2C0613E6
+        for <bpf@vger.kernel.org>; Sat,  3 Apr 2021 08:50:30 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id g38so7999583ybi.12
+        for <bpf@vger.kernel.org>; Sat, 03 Apr 2021 08:50:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=VJp4D6U+YVHcyZ2m4PpfXIZzUzuqJ6Sl/X10+bQZIBc=;
-        b=a3TBbUvFzns2MCsfROJI0NUhmSQTS5MUQ6OpuFtBvkq1yKPFOLcnS9qTkHdqXrWm7l
-         Ug1yBU1UkyeNkIn10LHJQpJRvQ3xrKQCpZMkvgAPrSTn08bfPg0Uj7SaFgK04gxNZTWf
-         agTafj/dY7Kv+zyZM39BVmVaVDCEhg7xXeOmyZDswqN0h87V/iuCHQ7Tq2eczAqUJkv7
-         WjrRrf2f+iQ/+sc0INQW9BMlsUASkPhTrjNjLLUvosMBpfRwMYYII/77TzGCeyqOLZaQ
-         mX+68Pt8nSY356gPO3l2lvBpta1SoT9iYHvRFR5IvWgM0AcwtOi8/B0lAh+cqkzI5f6/
-         gHSA==
+         :cc;
+        bh=cZTZ+aEe3KZLixpZNSp8J6l+yzx52sc5FFdAZqgehhA=;
+        b=er4tQaqEP/WoYZkTwOj55NeadtFShKaXnrOQJuI0BQxboHKaYMqxvHcDEshbIWovDr
+         WnvoBQ8HcktRK4VhAhqr29Jeufr/jhUwbRWDzf3UyZxTMbO5XseYz1aTZK1fs8LdixKc
+         WiiXdj7c6ecew2SOBYMIVK5SU9tGU6rKPBOmwYjx9n/CBjLU4aLeup31r2T1z+9PTkiR
+         LJ58dKWvgz5NAIe9PhGyZeocqfr4sSdSOugnzkX3DB/9b6DAYsuQzHfKy7BvW0lHGg0r
+         Fw06H9jHiBvtMrqVID0KqQludwz6PiR27+XJm4rBIenXUZ2iS7sL9R9IvO2yh+Nn1T/x
+         UpnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=VJp4D6U+YVHcyZ2m4PpfXIZzUzuqJ6Sl/X10+bQZIBc=;
-        b=iM6xeGjtLeQDohiMR9wRtTXxVB8875fNs+WyYMiVDUwjYGD54Df+vFK53+2FeZGrYV
-         sGaLJZwp/8mbwUrB71oJFf/3jXxEGMuPfB1n3rI6d8TYWN/QodvOPvPUmVM0nhuHT27Y
-         Ew+UdlFqjbNUUSxyNMP/aStWLxUaR2VJV1Z9jRdESl7JcgApcZZDuL7xmzbXGI6NJJEq
-         4uj1lk3On7wqcvkVnqwPlC1RzmhwqYLan0eaIm745xI7XzipyUgN9XwU2Dng7HfRycek
-         3Qo7cd2JC9ARZaNu9AWDU+PF96Jnp8M5HoxrNu+vSNDfNFemTb0UR84dtZM1aAlYmm0n
-         S4ew==
-X-Gm-Message-State: AOAM532NnruJZnmrQ08lYbvZVbdwg4xY1pOKcU0M+GFSbXigUT7TByRl
-        ybuUXyhd88Av1Cuer0Lru3dU+LzYd9RRvtn+GjE=
-X-Google-Smtp-Source: ABdhPJydjLs7rBGgKGAm12yIF25CeQ48+Ys+nKLxtS9Gz/hpaVxDb3wIsNYdLAqZbijKnK/eqdn6bIcMNWEb9n4MWF4=
-X-Received: by 2002:a05:6e02:e10:: with SMTP id a16mr795805ilk.118.1617456857309;
- Sat, 03 Apr 2021 06:34:17 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=cZTZ+aEe3KZLixpZNSp8J6l+yzx52sc5FFdAZqgehhA=;
+        b=Fz+O6K77wpGSg68noDdS6stA0RkCY8zS4657jQimsvi593vFv9uoaOoOhmaqhabtq6
+         kZhWsOvUAN38R4W7OHnfamspfcsXmR9bM712W9E12p3SQ34dZAAeN4Ejts0T6HvgZ3ys
+         rjB1RtsqfV3MMSEQjnrkOTGvO9s9jqzxTz5d+V/LQGmMaUbLFAukU9quo6DR+4juieZo
+         uKBFGhZ7Db3BE5h5ifrsRaQUo8tfeW2t33yt4CV3/pgywSj5NkLUrwgcOIyN/hU8Fywz
+         jyIT2I4fuzuJQqKtMgFQxFwyIUVaBEc7m4ny/H6Zbl25JhEMNKjyzhVAFbYxrELAaU/z
+         I8bg==
+X-Gm-Message-State: AOAM530xyHdmgYn7i855FMIl0i9cRh2tFXRoKTrb8UebYZKp5O7i9fXB
+        cEJRh6FjdVU6OjrpB6aIM0P7ZlAkdMBn5Q18FJUQ+FrD/Co=
+X-Google-Smtp-Source: ABdhPJxRiqsQYunSEebbXe9nL+iSQJOf0Eq1rCfH9u6qGvw7SiBTVgp70uHzWKIVRQVbkxPGMWjP/hiyUZFu/hBw7s8=
+X-Received: by 2002:a25:ab03:: with SMTP id u3mr26008123ybi.347.1617465029097;
+ Sat, 03 Apr 2021 08:50:29 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210328161055.257504-1-pctammela@mojatatu.com> <CAEf4BzZ+O3x9AksV6MGuicDQO+gObFCQQR7t6UK=RBhuSbOiZg@mail.gmail.com>
-In-Reply-To: <CAEf4BzZ+O3x9AksV6MGuicDQO+gObFCQQR7t6UK=RBhuSbOiZg@mail.gmail.com>
-From:   Pedro Tammela <pctammela@gmail.com>
-Date:   Sat, 3 Apr 2021 10:34:06 -0300
-Message-ID: <CAKY_9u0CQHmzA3YMWw24w-NbH8CK3d7Nt-jaB4EoyN7pK_fJUA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: add 'BPF_RB_MAY_WAKEUP' flag
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Pedro Tammela <pctammela@mojatatu.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Joe Stringer <joe@cilium.io>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
+References: <45cb2bbc-202b-00d6-7422-738a025be068@felix-maurer.de>
+In-Reply-To: <45cb2bbc-202b-00d6-7422-738a025be068@felix-maurer.de>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Sat, 3 Apr 2021 08:50:18 -0700
+Message-ID: <CAEf4Bza-w+nOMOJU4+rL+ZiF++vbDpXBvPWz2kgei3fcNzRSdA@mail.gmail.com>
+Subject: Re: libbpf: failed to find BTF ID for ksym
+To:     Felix Maurer <felix@felix-maurer.de>
+Cc:     bpf <bpf@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Em qua., 31 de mar. de 2021 =C3=A0s 03:54, Andrii Nakryiko
-<andrii.nakryiko@gmail.com> escreveu:
+On Fri, Apr 2, 2021 at 3:47 PM Felix Maurer <felix@felix-maurer.de> wrote:
 >
-> On Sun, Mar 28, 2021 at 9:11 AM Pedro Tammela <pctammela@gmail.com> wrote=
-:
-> >
-> > The current way to provide a no-op flag to 'bpf_ringbuf_submit()',
-> > 'bpf_ringbuf_discard()' and 'bpf_ringbuf_output()' is to provide a '0'
-> > value.
-> >
-> > A '0' value might notify the consumer if it already caught up in proces=
-sing,
-> > so let's provide a more descriptive notation for this value.
-> >
-> > Signed-off-by: Pedro Tammela <pctammela@mojatatu.com>
-> > ---
+> Hello,
 >
-> flags =3D=3D 0 means "no extra modifiers of behavior". That's default
-> adaptive notification. If you want to adjust default behavior, only
-> then you specify non-zero flags. I don't think anyone will bother
-> typing BPF_RB_MAY_WAKEUP for this, nor I think it's really needed. The
-> documentation update is nice (if no flags are specified notification
-> will be sent if needed), but the new "pseudo-flag" seems like an
-> overkill to me.
+> I am working on a tracing tool for which I need know the address of some
+> kernel data structures. The tool should be CO-RE and I am using libbpf
+> (through the libbpf-rs Rust bindings, but this is not the issue I
+> assume). However, I am having trouble to use ksyms with libbpf.
+>
+> To get the address of the data structure (in my case
+> skbuff_fclone_cache), I use an extern ksym declaration in my BPF code
+> like this:
+>
+> extern struct kmem_cache *skbuff_fclone_cache __ksym;
+>
 
-My intention here is to make '0' more descriptive.
-But if you think just the documentation update is enough, then I will
-remove the flag.
+Due to skbuff_fclone_cache being a static variable, typed __ksym
+(where you specify expected type and thus BPF verifier will expect BTF
+ID and will allow reading it directly from your BPF program) won't
+work. If you need to just have an address of the symbol, you can use
+untyped __ksym, which will use /proc/kallsyms:
+
+extern const void skbuff_fclone_cache __ksym;
+
+If you need to further read any data (e.g., follow the pointer and
+read struct kmem_cache's fields), you can use BPF_CORE_READ() macro.
+
+[...]
 
 >
-> >  include/uapi/linux/bpf.h                               | 8 ++++++++
-> >  tools/include/uapi/linux/bpf.h                         | 8 ++++++++
-> >  tools/testing/selftests/bpf/progs/ima.c                | 2 +-
-> >  tools/testing/selftests/bpf/progs/ringbuf_bench.c      | 2 +-
-> >  tools/testing/selftests/bpf/progs/test_ringbuf.c       | 2 +-
-> >  tools/testing/selftests/bpf/progs/test_ringbuf_multi.c | 2 +-
-> >  6 files changed, 20 insertions(+), 4 deletions(-)
-> >
+> Now, I am not really sure where the root cause of the issue can be
+> found. Should the ksym be present in the BTF information (i.e., the
+> issue comes from building the kernel) or is the BPF object file broken
+> (i.e., an issue with clang) or is the identification of the ksym wrong
+> (i.e., the issue is in the libbpf loading code). Or something completely
+> different? Does anyone have a hint on what goes wrong here?
 >
-> [...]
+
+As Yonghong already replied, pahole doesn't generate BTF type
+information for static variables right now, so it's expected.
+
+[...]
