@@ -2,35 +2,36 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BEA43C43462
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DCECFC43461
 	for <bpf@archiver.kernel.org>; Mon,  5 Apr 2021 20:41:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7A399613D0
+	by mail.kernel.org (Postfix) with ESMTP id 9C727613CD
 	for <bpf@archiver.kernel.org>; Mon,  5 Apr 2021 20:41:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240992AbhDEUls (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 5 Apr 2021 16:41:48 -0400
-Received: from mga02.intel.com ([134.134.136.20]:54260 "EHLO mga02.intel.com"
+        id S240609AbhDEUlt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 5 Apr 2021 16:41:49 -0400
+Received: from mga02.intel.com ([134.134.136.20]:54275 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234188AbhDEUlq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 5 Apr 2021 16:41:46 -0400
-IronPort-SDR: oQ9xwH8mW8JA+RIY8Wo9Jal6l/rGmcU1lGGQMt/A3qsN6qjvnfmxEddopEYleG1yAwISoZBdJB
- DLjWKAQjTSmw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9945"; a="180051522"
+        id S240500AbhDEUlr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 5 Apr 2021 16:41:47 -0400
+IronPort-SDR: voWszRK1kPU0fW71aDRKvntyJeSCnk2nuh//fZ3fG8zji9FeB4oeAimOm77I2MUXlSW25NOWtk
+ yexhh16/bxqA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9945"; a="180051526"
 X-IronPort-AV: E=Sophos;i="5.81,307,1610438400"; 
-   d="scan'208";a="180051522"
+   d="scan'208";a="180051526"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2021 13:41:32 -0700
-IronPort-SDR: QFEDzoWXO1ygMicp1OeYto9bUwmZvOPj374kIoHYcrRxoffFr+5T26SS/8qXoJyO1fia6fCPJc
- OgSg/xsMC1tw==
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2021 13:41:33 -0700
+IronPort-SDR: nWL2dehIuIdFpPZ4amo3hpqkP2l9cuMSirVmKkTi1KXid4RjuNI928X96mGKNQpFtU89t0LHmq
+ 2gfDbyTy7biw==
 X-IronPort-AV: E=Sophos;i="5.81,307,1610438400"; 
-   d="scan'208";a="418078025"
+   d="scan'208";a="418078038"
 Received: from rpedgeco-mobl3.amr.corp.intel.com (HELO localhost.intel.com) ([10.212.230.218])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2021 13:41:32 -0700
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2021 13:41:33 -0700
 From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
 To:     akpm@linux-foundation.org, linux-mm@kvack.org, bpf@vger.kernel.org,
         dave.hansen@linux.intel.com, peterz@infradead.org, luto@kernel.org,
@@ -38,62 +39,39 @@ To:     akpm@linux-foundation.org, linux-mm@kvack.org, bpf@vger.kernel.org,
 Cc:     linux-kernel@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
         andrii@kernel.org, hch@infradead.org, x86@kernel.org,
         Rick Edgecombe <rick.p.edgecombe@intel.com>
-Subject: [RFC 0/3] Group pages on the direct map for permissioned vmallocs
-Date:   Mon,  5 Apr 2021 13:37:08 -0700
-Message-Id: <20210405203711.1095940-1-rick.p.edgecombe@intel.com>
+Subject: [RFC 3/3] x86/module: Use VM_GROUP_PAGES flag
+Date:   Mon,  5 Apr 2021 13:37:11 -0700
+Message-Id: <20210405203711.1095940-4-rick.p.edgecombe@intel.com>
 X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210405203711.1095940-1-rick.p.edgecombe@intel.com>
+References: <20210405203711.1095940-1-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi,
+Callers of module_alloc() will set permissions on the allocation. Use
+the VM_GROUP_PAGES to reduce direct map breakage.
 
-This is a followup to the previous attempt to overhaul how vmalloc permissions
-are done:
-https://lore.kernel.org/lkml/20201120202426.18009-1-rick.p.edgecombe@intel.com/
+Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+---
+ arch/x86/kernel/module.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-In working on a next version it dawned on me that we can significantly reduce
-direct map breakage on x86 with a much less invasive change, so I thought maybe
-I would start there in the meantime.
-
-In a test of booting fedora and running the BPF unit tests, this reduced 4k
-direct map pages by 98%.
-
-It simply uses pages for x86 module_alloc() mappings from a cache created out of
-2MB pages. This results in all the later breakage clustering in 2MB blocks on
-the direct map. The trade-off is colder pages are used for these allocations.
-All module_alloc() users (modules, ebpf jit, ftrace, kprobes) get this behavior.
-
-Potentially this behavior should be enabled for eBPF byte code allocations as
-well in the case of !CONFIG_BPF_JIT_ALWAYS_ON.
-
-The new APIs and invasive changes in the callers can happen after vmalloc huge
-pages bring more benefits. Although, I can post shootdown reduction changes with
-previous comments integrated if anyone disagrees.
-
-Based on v5.11.
-
-Thanks,
-
-Rick
-
-
-Rick Edgecombe (3):
-  list: Support getting most recent element in list_lru
-  vmalloc: Support grouped page allocations
-  x86/module: Use VM_GROUP_PAGES flag
-
- arch/x86/Kconfig         |   1 +
- arch/x86/kernel/module.c |   2 +-
- include/linux/list_lru.h |  13 +++
- include/linux/vmalloc.h  |   1 +
- mm/Kconfig               |   9 ++
- mm/list_lru.c            |  28 +++++
- mm/vmalloc.c             | 215 +++++++++++++++++++++++++++++++++++++--
- 7 files changed, 257 insertions(+), 12 deletions(-)
-
+diff --git a/arch/x86/kernel/module.c b/arch/x86/kernel/module.c
+index 34b153cbd4ac..9161ce0e987f 100644
+--- a/arch/x86/kernel/module.c
++++ b/arch/x86/kernel/module.c
+@@ -75,7 +75,7 @@ void *module_alloc(unsigned long size)
+ 	p = __vmalloc_node_range(size, MODULE_ALIGN,
+ 				    MODULES_VADDR + get_module_load_offset(),
+ 				    MODULES_END, GFP_KERNEL,
+-				    PAGE_KERNEL, 0, NUMA_NO_NODE,
++				    PAGE_KERNEL, VM_GROUP_PAGES, NUMA_NO_NODE,
+ 				    __builtin_return_address(0));
+ 	if (p && (kasan_module_alloc(p, size) < 0)) {
+ 		vfree(p);
 -- 
 2.29.2
 
