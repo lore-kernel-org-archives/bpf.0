@@ -2,96 +2,70 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-21.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F9C8C43460
-	for <bpf@archiver.kernel.org>; Mon,  5 Apr 2021 14:16:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 117F0C433ED
+	for <bpf@archiver.kernel.org>; Mon,  5 Apr 2021 14:20:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6F149613B4
-	for <bpf@archiver.kernel.org>; Mon,  5 Apr 2021 14:16:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CB12A613B4
+	for <bpf@archiver.kernel.org>; Mon,  5 Apr 2021 14:20:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237562AbhDEOQI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 5 Apr 2021 10:16:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37398 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237537AbhDEOQH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 5 Apr 2021 10:16:07 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E10FC061756;
-        Mon,  5 Apr 2021 07:16:01 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id 82so2068249yby.7;
-        Mon, 05 Apr 2021 07:16:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wkzE6z3jlVm2CtBojLYq0ziEdm7E4Xl4LO0dFtmTEpw=;
-        b=WRA6gOF50mK8Yydfg22tp/JRfwty1RZLFbHXGr/ilPwlupU1ZzeB9EJVjMzypHkwds
-         AonT2GnqBrDJ7JWewO3XBYJ5Zc7OY0ITrQSkmVVNu9h45uIPQGlIBqVEolM89Q8/6YQK
-         XYhxDmh9yIs+9HBusFGjUK2UVqgBeo1bwGMaQeXAaMkpRGDdqZc67cnNmb8TZpXhs2ZY
-         4lvXFt62T6dHf3nRhpwvJN0lnS0HJXip/zVEJQYQKjmPZf8YW/Ma501lKV9IyhoFuNxM
-         8QVp4yHP1gUxABZioxikRhgo0ktE8DmEc7h7fAU5qxEgM33fH9a2j2EOKdVNpEJXVFil
-         GOyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wkzE6z3jlVm2CtBojLYq0ziEdm7E4Xl4LO0dFtmTEpw=;
-        b=VH8rrj+4VvIcApd6nFMA8blF4WgaLT3/bTGv9nWgR9H/XA+A/MLZPtiJDcMTaHPz07
-         1p042AdPfLJ88rZLslg249inTt6UvOtk+0fEW0BNKdYd5IsomvrMqJQivewNPofooZai
-         +h+gYYeq2ZeisRJAy/n5r5sVqGuYgjrAe7YwfZLD2niX06iOazIjtUW7sqzzzOFwfaPl
-         ZnbeQThFQ7ZY0E6fZMwgjG1y4cGCC6uPggu/IbvLHy6V2o37GNDpdhLBpEN7annx20zO
-         X2kp83nBbb9rZ+Dj+MHc1aDlHh73hRTMCZjAE2fxROScNP81jMT+GiBQYshBpNminvZN
-         /gYw==
-X-Gm-Message-State: AOAM530retP8O8j/ie/PH31im5OpLCTiwV7jY9Q9qg7QKYAruUJa+Haj
-        iK2njB4eADou2zIGr1uTzEN7yqEUlQBJDZEsaeU=
-X-Google-Smtp-Source: ABdhPJyU2Y+l2VCLhvR9N4qk/aIM8kE57PfiYGZCXApt3RUU/oGlxkTjEPV9ZloX1FqcfBUsq5biBqoYid5GnIKtnVg=
-X-Received: by 2002:a25:5b55:: with SMTP id p82mr34997409ybb.510.1617632160631;
- Mon, 05 Apr 2021 07:16:00 -0700 (PDT)
+        id S237496AbhDEOUP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 5 Apr 2021 10:20:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57502 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237450AbhDEOUO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 5 Apr 2021 10:20:14 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 96A6A613B1;
+        Mon,  5 Apr 2021 14:20:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1617632408;
+        bh=1yM1ydajs00nts4Yq8R6FyJMbgeKaGI1O2iM3aO8eks=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=APyn1fuXvSuXnWJ90Fq8DQ2E1Wv19Tg8UcbGiVfz4N7s9WwU8kMfbocSstAJJXztN
+         4ZpQirlGZ38cVy1Rk8usk1EJgEsj6sH0XLZXnU2gSgb5sILQ4yyox2rlNaCp6VzgAs
+         XyIUuCKc3jmC//idql7CkATnXYt2ktpz2mww8eMEDbCgtqSA4TdbjjfsYURX/wyFMM
+         C0mTz1966JyGHiepRclpnmLuRoYqpS8ac98GVUFJBp1ZeqgydsSw/8bK0/I2ikZ1O4
+         1gHs7/4iGfIxG5toKxvx4BpCvvqr+6PTdI+x6sRZgAf59/Uw9lkSkK90lP2uHTx6JF
+         b4h1wB0pcBM6w==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] libbpf: Fix KERNEL_VERSION macro
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <161763240854.530.7712695951554965162.git-patchwork-notify@kernel.org>
+Date:   Mon, 05 Apr 2021 14:20:08 +0000
 References: <20210405040119.802188-1-hengqi.chen@gmail.com>
 In-Reply-To: <20210405040119.802188-1-hengqi.chen@gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 5 Apr 2021 07:15:49 -0700
-Message-ID: <CAEf4BzYz3KYJ0xSZhJfTfNWC4J2ibyVsuy842W0w3sNs1JW12w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] libbpf: Fix KERNEL_VERSION macro
 To:     Hengqi Chen <hengqi.chen@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, Yonghong Song <yhs@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, andrii@kernel.org,
+        yhs@fb.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sun, Apr 4, 2021 at 9:01 PM Hengqi Chen <hengqi.chen@gmail.com> wrote:
->
+Hello:
+
+This patch was applied to bpf/bpf-next.git (refs/heads/master):
+
+On Mon,  5 Apr 2021 12:01:19 +0800 you wrote:
 > Add missing ')' for KERNEL_VERSION macro.
->
+> 
 > Signed-off-by: Hengqi Chen <hengqi.chen@gmail.com>
 > ---
-
-Applied to bpf-next, thanks.
-
 >  tools/lib/bpf/bpf_helpers.h | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
-> index cc2e51c64a54..b904128626c2 100644
-> --- a/tools/lib/bpf/bpf_helpers.h
-> +++ b/tools/lib/bpf/bpf_helpers.h
-> @@ -51,7 +51,7 @@
->  #endif
->
->  #ifndef KERNEL_VERSION
-> -#define KERNEL_VERSION(a,b,c) (((a) << 16) + ((b) << 8) + ((c) > 255 ? 255 : (c))
-> +#define KERNEL_VERSION(a, b, c) (((a) << 16) + ((b) << 8) + ((c) > 255 ? 255 : (c)))
->  #endif
->
->  /*
-> --
-> 2.25.1
->
+
+Here is the summary with links:
+  - [bpf-next] libbpf: Fix KERNEL_VERSION macro
+    https://git.kernel.org/bpf/bpf-next/c/1e1032b0c4af
+
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
