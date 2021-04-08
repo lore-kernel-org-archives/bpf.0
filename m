@@ -2,51 +2,55 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02B23C433ED
-	for <bpf@archiver.kernel.org>; Thu,  8 Apr 2021 06:12:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AAD6C43460
+	for <bpf@archiver.kernel.org>; Thu,  8 Apr 2021 06:14:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BE176610CB
-	for <bpf@archiver.kernel.org>; Thu,  8 Apr 2021 06:12:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4796F61155
+	for <bpf@archiver.kernel.org>; Thu,  8 Apr 2021 06:14:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229811AbhDHGM6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 8 Apr 2021 02:12:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:25523 "EHLO
+        id S229910AbhDHGO0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 8 Apr 2021 02:14:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:47056 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229691AbhDHGM6 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 8 Apr 2021 02:12:58 -0400
+        by vger.kernel.org with ESMTP id S229552AbhDHGOY (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 8 Apr 2021 02:14:24 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1617862367;
+        s=mimecast20190719; t=1617862453;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=dmf4U6SwbzWvz/DzaqK9yqzuUwBKl0ySGyn4G8V0BcM=;
-        b=Nt/qz2P3p8rqe/kIX0TPghEjFtRv8ubDxIsBE7aISp5C+ZvFtEGjZh5epfZGn/BiNXE4TZ
-        IWFcXwq4eFsRcJAIsKVYlwuPE883YfS0MnAINp/ieNlFvb7eQljutYVBfzPQzI8foGQIKW
-        2B26csRbd9hlQ06Y6zD2jyQ4Jdvs1ME=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JkYs017JkymhNMCLGKpP+Y5PL7IjOVaHvxFAECG8pow=;
+        b=YAzrn2474OtAEoSqOGbUp+mRs9s5E8iO5GxC4xFAs0U3ZRlxqRWLM0X0VIBAYvUUGoQYFH
+        B2xrUG3WjpOXE9W4WobFvlmXSK9dIAE73FuojHn01TMPoDWQ759ksR6a2C9BAo9BoXlJp2
+        +vCYUutEodP8wxC06bKKZcL/is7pSqs=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-435-3XsB5qwDO1uHgvv15i-aaw-1; Thu, 08 Apr 2021 02:12:45 -0400
-X-MC-Unique: 3XsB5qwDO1uHgvv15i-aaw-1
+ us-mta-280-FIxreC93PrGL7l60moJcqQ-1; Thu, 08 Apr 2021 02:14:12 -0400
+X-MC-Unique: FIxreC93PrGL7l60moJcqQ-1
 Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 68BD01008060;
-        Thu,  8 Apr 2021 06:12:44 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2F8E383DD22;
+        Thu,  8 Apr 2021 06:14:11 +0000 (UTC)
 Received: from astarta.redhat.com (ovpn-112-182.ams2.redhat.com [10.36.112.182])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id AF4A57A395;
-        Thu,  8 Apr 2021 06:12:39 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 41D857A39D;
+        Thu,  8 Apr 2021 06:13:24 +0000 (UTC)
 From:   Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
 To:     bpf@vger.kernel.org
 Cc:     andrii@kernel.org, jolsa@redhat.com,
         Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
-Subject: [PATCH bpf-next v4 0/9] bpf/selftests: page size fixes
-Date:   Thu,  8 Apr 2021 09:12:38 +0300
-Message-Id: <20210408061238.95803-1-yauheni.kaliuta@redhat.com>
+Subject: [PATCH bpf-next v4 6/9] selftests/bpf: ringbuf: use runtime page size
+Date:   Thu,  8 Apr 2021 09:13:07 +0300
+Message-Id: <20210408061310.95877-6-yauheni.kaliuta@redhat.com>
+In-Reply-To: <20210408061310.95877-1-yauheni.kaliuta@redhat.com>
+References: <20210408061238.95803-1-yauheni.kaliuta@redhat.com>
+ <20210408061310.95877-1-yauheni.kaliuta@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
@@ -54,57 +58,69 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-A set of fixes for selftests to make them working on systems with PAGE_SIZE > 4K
-+ cleanup (version) and ringbuf_multi extention.
+Replace hardcoded 4096 with runtime value in the userspace part of
+the test and set bpf table sizes dynamically according to the value.
 
---
-v3->v4:
-- zero initialize BPF programs' static variables;
-- add bpf_map__inner_map to libbpf.map in alphabetical order;
-- add bpf_map__set_inner_map_fd test to ringbuf_multi;
+Do not switch to ASSERT macros, keep CHECK, for consistency with the
+rest of the test. Can be a separate cleanup patch.
 
-v2->v3:
- - reorder: move version removing patch first to keep main patches in
-   one group;
- - rename "selftests/bpf: pass page size from userspace in sockopt_sk"
-   as suggested;
- - convert sockopt_sk test to use ASSERT macros;
- - set page size from userspace
- - split patches to pairs userspace/bpf. It's easier to check that
-   every conversion works as expected;
+Signed-off-by: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+---
+ .../testing/selftests/bpf/prog_tests/ringbuf.c  | 17 +++++++++++++----
+ .../testing/selftests/bpf/progs/test_ringbuf.c  |  1 -
+ 2 files changed, 13 insertions(+), 5 deletions(-)
 
-v1->v2:
-
-- add missed 'selftests/bpf: test_progs/sockopt_sk: Convert to use BPF skeleton'
-
-
-
-Yauheni Kaliuta (9):
-  selftests/bpf: test_progs/sockopt_sk: remove version
-  selftests/bpf: test_progs/sockopt_sk: Convert to use BPF skeleton
-  selftests/bpf: pass page size from userspace in sockopt_sk
-  selftests/bpf: pass page size from userspace in map_ptr
-  selftests/bpf: mmap: use runtime page size
-  selftests/bpf: ringbuf: use runtime page size
-  libbpf: add bpf_map__inner_map API
-  selftests/bpf: ringbuf_multi: use runtime page size
-  selftests/bpf: ringbuf_multi: test bpf_map__set_inner_map_fd
-
- tools/lib/bpf/libbpf.c                        | 10 +++
- tools/lib/bpf/libbpf.h                        |  1 +
- tools/lib/bpf/libbpf.map                      |  1 +
- .../selftests/bpf/prog_tests/map_ptr.c        | 15 ++++-
- tools/testing/selftests/bpf/prog_tests/mmap.c | 24 +++++--
- .../selftests/bpf/prog_tests/ringbuf.c        | 17 +++--
- .../selftests/bpf/prog_tests/ringbuf_multi.c  | 34 +++++++++-
- .../selftests/bpf/prog_tests/sockopt_sk.c     | 65 +++++--------------
- .../selftests/bpf/progs/map_ptr_kern.c        |  4 +-
- .../testing/selftests/bpf/progs/sockopt_sk.c  | 11 ++--
- tools/testing/selftests/bpf/progs/test_mmap.c |  2 -
- .../selftests/bpf/progs/test_ringbuf.c        |  1 -
- .../selftests/bpf/progs/test_ringbuf_multi.c  | 12 +++-
- 13 files changed, 123 insertions(+), 74 deletions(-)
-
+diff --git a/tools/testing/selftests/bpf/prog_tests/ringbuf.c b/tools/testing/selftests/bpf/prog_tests/ringbuf.c
+index fddbc5db5d6a..de78617f6550 100644
+--- a/tools/testing/selftests/bpf/prog_tests/ringbuf.c
++++ b/tools/testing/selftests/bpf/prog_tests/ringbuf.c
+@@ -87,11 +87,20 @@ void test_ringbuf(void)
+ 	pthread_t thread;
+ 	long bg_ret = -1;
+ 	int err, cnt;
++	int page_size = getpagesize();
+ 
+-	skel = test_ringbuf__open_and_load();
+-	if (CHECK(!skel, "skel_open_load", "skeleton open&load failed\n"))
++	skel = test_ringbuf__open();
++	if (CHECK(!skel, "skel_open", "skeleton open failed\n"))
+ 		return;
+ 
++	err = bpf_map__set_max_entries(skel->maps.ringbuf, page_size);
++	if (CHECK(err != 0, "bpf_map__set_max_entries", "bpf_map__set_max_entries failed\n"))
++		goto cleanup;
++
++	err = test_ringbuf__load(skel);
++	if (CHECK(err != 0, "skel_load", "skeleton load failed\n"))
++		goto cleanup;
++
+ 	/* only trigger BPF program for current process */
+ 	skel->bss->pid = getpid();
+ 
+@@ -110,9 +119,9 @@ void test_ringbuf(void)
+ 	CHECK(skel->bss->avail_data != 3 * rec_sz,
+ 	      "err_avail_size", "exp %ld, got %ld\n",
+ 	      3L * rec_sz, skel->bss->avail_data);
+-	CHECK(skel->bss->ring_size != 4096,
++	CHECK(skel->bss->ring_size != page_size,
+ 	      "err_ring_size", "exp %ld, got %ld\n",
+-	      4096L, skel->bss->ring_size);
++	      (long)page_size, skel->bss->ring_size);
+ 	CHECK(skel->bss->cons_pos != 0,
+ 	      "err_cons_pos", "exp %ld, got %ld\n",
+ 	      0L, skel->bss->cons_pos);
+diff --git a/tools/testing/selftests/bpf/progs/test_ringbuf.c b/tools/testing/selftests/bpf/progs/test_ringbuf.c
+index 8ba9959b036b..6b3f288b7c63 100644
+--- a/tools/testing/selftests/bpf/progs/test_ringbuf.c
++++ b/tools/testing/selftests/bpf/progs/test_ringbuf.c
+@@ -15,7 +15,6 @@ struct sample {
+ 
+ struct {
+ 	__uint(type, BPF_MAP_TYPE_RINGBUF);
+-	__uint(max_entries, 1 << 12);
+ } ringbuf SEC(".maps");
+ 
+ /* inputs */
 -- 
 2.31.1
 
