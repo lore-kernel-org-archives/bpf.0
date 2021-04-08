@@ -2,133 +2,124 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D8982C43600
-	for <bpf@archiver.kernel.org>; Thu,  8 Apr 2021 06:14:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F1BBC43603
+	for <bpf@archiver.kernel.org>; Thu,  8 Apr 2021 06:14:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AB19A61168
-	for <bpf@archiver.kernel.org>; Thu,  8 Apr 2021 06:14:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1FA58610F9
+	for <bpf@archiver.kernel.org>; Thu,  8 Apr 2021 06:14:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229936AbhDHGO3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S229998AbhDHGO3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Thu, 8 Apr 2021 02:14:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:52635 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229937AbhDHGOZ (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 8 Apr 2021 02:14:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1617862454;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=W23Y3aAsVtxogHIdhlTt5oC2n1pclPZ43lAMZ9IFIWw=;
-        b=fTY7/0VYYdXPX5Wbdj+BUiyYxf5lpWtiJmjksyFFSfx89sEqncmCYx7m7PNUyrobnR0WBs
-        XqZpXsCoEoUn/yWfwlX/CriOg5hAVqY+nrqyIg1gN5c87ZxSK89gS50J+dFGEP8FDZ+OQ6
-        7uY3udx2UaTBKown1w8pAMiNWqgCJSQ=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-481-sDa9lW8gPDCB2vrjcR37-Q-1; Thu, 08 Apr 2021 02:14:12 -0400
-X-MC-Unique: sDa9lW8gPDCB2vrjcR37-Q-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2FA61A6863;
-        Thu,  8 Apr 2021 06:14:11 +0000 (UTC)
-Received: from astarta.redhat.com (ovpn-112-182.ams2.redhat.com [10.36.112.182])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1ABF87A39E;
-        Thu,  8 Apr 2021 06:13:26 +0000 (UTC)
-From:   Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
-To:     bpf@vger.kernel.org
-Cc:     andrii@kernel.org, jolsa@redhat.com,
-        Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
-Subject: [PATCH bpf-next v4 7/9] libbpf: add bpf_map__inner_map API
-Date:   Thu,  8 Apr 2021 09:13:08 +0300
-Message-Id: <20210408061310.95877-7-yauheni.kaliuta@redhat.com>
-In-Reply-To: <20210408061310.95877-1-yauheni.kaliuta@redhat.com>
-References: <20210408061238.95803-1-yauheni.kaliuta@redhat.com>
- <20210408061310.95877-1-yauheni.kaliuta@redhat.com>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56212 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229552AbhDHGO2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 8 Apr 2021 02:14:28 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DB0AC061762;
+        Wed,  7 Apr 2021 23:14:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=0yv3MJ3oAVnJYQ+0/a4f1v89qsCDdNpeUxyalRyWzAQ=; b=PPdSlFGNFYyVM+AMh7mv3DAoY9
+        cy8zdEJ428v0rYh8BpeJN/IUVMvi49c/VnWqQHMGg9RdxW6fM9ZiPh4dtmxLAt+vb0UcAQdOZs1CZ
+        2qxwSUk6WQtsdwnZqO+Z91tQN14jogtTGkTmOmgvNRnWR5Xlhdf6K5fzdOG06tjaEYOdC2a0vjgan
+        wcRVm8chosZ8O2B5gU0H5UrZlvpI7+XVHvW0mm4fQF5l6rDnsyAgAaY/re5HHaAJ+sy4devHdJbD/
+        L+IrHDt09CyNTEMw4EGmh0XHSfQd7bKtly0bizh6DFnXqYTUi+AWaKdkXwKelOqpr2iPcNA/ExjhT
+        vNWrQu4g==;
+Received: from willy by casper.infradead.org with local (Exim 4.94 #2 (Red Hat Linux))
+        id 1lUNvV-00FfxS-L9; Thu, 08 Apr 2021 06:14:09 +0000
+Date:   Thu, 8 Apr 2021 07:14:01 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Daniel Xu <dxu@dxuuu.xyz>
+Cc:     bpf@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com, jolsa@kernel.org, hannes@cmpxchg.org,
+        yhs@fb.com
+Subject: Re: [RFC bpf-next 1/1] bpf: Introduce iter_pagecache
+Message-ID: <20210408061401.GI2531743@casper.infradead.org>
+References: <cover.1617831474.git.dxu@dxuuu.xyz>
+ <22bededbd502e0df45326a54b3056941de65a101.1617831474.git.dxu@dxuuu.xyz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <22bededbd502e0df45326a54b3056941de65a101.1617831474.git.dxu@dxuuu.xyz>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+On Wed, Apr 07, 2021 at 02:46:11PM -0700, Daniel Xu wrote:
+> +struct bpf_iter_seq_pagecache_info {
+> +	struct mnt_namespace *ns;
+> +	struct radix_tree_root superblocks;
 
-The API gives access to inner map for map in map types (array or
-hash of map). It will be used to dynamically set max_entries in it.
+Why are you adding a new radix tree?  Use an XArray instead.
 
-Signed-off-by: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
----
- tools/lib/bpf/libbpf.c   | 10 ++++++++++
- tools/lib/bpf/libbpf.h   |  1 +
- tools/lib/bpf/libbpf.map |  1 +
- 3 files changed, 12 insertions(+)
+> +static struct page *goto_next_page(struct bpf_iter_seq_pagecache_info *info)
+> +{
+> +	struct page *page, *ret = NULL;
+> +	unsigned long idx;
+> +
+> +	rcu_read_lock();
+> +retry:
+> +	BUG_ON(!info->cur_inode);
+> +	ret = NULL;
+> +	xa_for_each_start(&info->cur_inode->i_data.i_pages, idx, page,
+> +			  info->cur_page_idx) {
+> +		if (!page_cache_get_speculative(page))
+> +			continue;
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 7aad78dbb4b4..ed5586cce227 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -2194,6 +2194,7 @@ static int parse_btf_map_def(struct bpf_object *obj,
- 			map->inner_map = calloc(1, sizeof(*map->inner_map));
- 			if (!map->inner_map)
- 				return -ENOMEM;
-+			map->inner_map->fd = -1;
- 			map->inner_map->sec_idx = obj->efile.btf_maps_shndx;
- 			map->inner_map->name = malloc(strlen(map->name) +
- 						      sizeof(".inner") + 1);
-@@ -3845,6 +3846,14 @@ __u32 bpf_map__max_entries(const struct bpf_map *map)
- 	return map->def.max_entries;
- }
- 
-+struct bpf_map *bpf_map__inner_map(struct bpf_map *map)
-+{
-+	if (!bpf_map_type__is_map_in_map(map->def.type))
-+		return NULL;
-+
-+	return map->inner_map;
-+}
-+
- int bpf_map__set_max_entries(struct bpf_map *map, __u32 max_entries)
- {
- 	if (map->fd >= 0)
-@@ -9476,6 +9485,7 @@ int bpf_map__set_inner_map_fd(struct bpf_map *map, int fd)
- 		pr_warn("error: inner_map_fd already specified\n");
- 		return -EINVAL;
- 	}
-+	zfree(&map->inner_map);
- 	map->inner_map_fd = fd;
- 	return 0;
- }
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index f500621d28e5..bec4e6a6e31d 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -480,6 +480,7 @@ LIBBPF_API int bpf_map__pin(struct bpf_map *map, const char *path);
- LIBBPF_API int bpf_map__unpin(struct bpf_map *map, const char *path);
- 
- LIBBPF_API int bpf_map__set_inner_map_fd(struct bpf_map *map, int fd);
-+LIBBPF_API struct bpf_map *bpf_map__inner_map(struct bpf_map *map);
- 
- LIBBPF_API long libbpf_get_error(const void *ptr);
- 
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index f5990f7208ce..9768daa75415 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -349,6 +349,7 @@ LIBBPF_0.3.0 {
- 		ring_buffer__epoll_fd;
- 		xsk_setup_xdp_prog;
- 		xsk_socket__update_xskmap;
-+		bpf_map__inner_map;
- } LIBBPF_0.2.0;
- 
- LIBBPF_0.4.0 {
--- 
-2.31.1
+Why do you feel the need to poke around in i_pages directly?  Is there
+something wrong with find_get_entries()?
 
+> +static int __pagecache_seq_show(struct seq_file *seq, struct page *page,
+> +				bool in_stop)
+> +{
+> +	struct bpf_iter_meta meta;
+> +	struct bpf_iter__pagecache ctx;
+> +	struct bpf_prog *prog;
+> +
+> +	meta.seq = seq;
+> +	prog = bpf_iter_get_info(&meta, in_stop);
+> +	if (!prog)
+> +		return 0;
+> +
+> +	meta.seq = seq;
+> +	ctx.meta = &meta;
+> +	ctx.page = page;
+> +	return bpf_iter_run_prog(prog, &ctx);
+
+I'm not really keen on the idea of random BPF programs being able to poke
+at pages in the page cache like this.  From your initial description,
+it sounded like all you needed was a list of which pages are present.
+
+> +	INIT_RADIX_TREE(&info->superblocks, GFP_KERNEL);
+> +
+> +	spin_lock(&info->ns->ns_lock);
+> +	list_for_each_entry(mnt, &info->ns->list, mnt_list) {
+> +		sb = mnt->mnt.mnt_sb;
+> +
+> +		/* The same mount may be mounted in multiple places */
+> +		if (radix_tree_lookup(&info->superblocks, (unsigned long)sb))
+> +			continue;
+> +
+> +		err = radix_tree_insert(&info->superblocks,
+> +				        (unsigned long)sb, (void *)1);
+> +		if (err)
+> +			goto out;
+> +	}
+> +
+> +	radix_tree_for_each_slot(slot, &info->superblocks, &iter, 0) {
+> +		sb = (struct super_block *)iter.index;
+> +		atomic_inc(&sb->s_active);
+> +	}
+
+Uh.  What on earth made you think this was a good way to use the radix
+tree?  And, no, the XArray doesn't change that.
+
+If you don't understand why this is so bad, call xa_dump() on it after
+constructing it.  I'll wait.
