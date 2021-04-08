@@ -2,124 +2,163 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F1BBC43603
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD8E8C43611
 	for <bpf@archiver.kernel.org>; Thu,  8 Apr 2021 06:14:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1FA58610F9
-	for <bpf@archiver.kernel.org>; Thu,  8 Apr 2021 06:14:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A01BB61165
+	for <bpf@archiver.kernel.org>; Thu,  8 Apr 2021 06:14:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229998AbhDHGO3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 8 Apr 2021 02:14:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56212 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbhDHGO2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        id S229922AbhDHGO2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Thu, 8 Apr 2021 02:14:28 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DB0AC061762;
-        Wed,  7 Apr 2021 23:14:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=0yv3MJ3oAVnJYQ+0/a4f1v89qsCDdNpeUxyalRyWzAQ=; b=PPdSlFGNFYyVM+AMh7mv3DAoY9
-        cy8zdEJ428v0rYh8BpeJN/IUVMvi49c/VnWqQHMGg9RdxW6fM9ZiPh4dtmxLAt+vb0UcAQdOZs1CZ
-        2qxwSUk6WQtsdwnZqO+Z91tQN14jogtTGkTmOmgvNRnWR5Xlhdf6K5fzdOG06tjaEYOdC2a0vjgan
-        wcRVm8chosZ8O2B5gU0H5UrZlvpI7+XVHvW0mm4fQF5l6rDnsyAgAaY/re5HHaAJ+sy4devHdJbD/
-        L+IrHDt09CyNTEMw4EGmh0XHSfQd7bKtly0bizh6DFnXqYTUi+AWaKdkXwKelOqpr2iPcNA/ExjhT
-        vNWrQu4g==;
-Received: from willy by casper.infradead.org with local (Exim 4.94 #2 (Red Hat Linux))
-        id 1lUNvV-00FfxS-L9; Thu, 08 Apr 2021 06:14:09 +0000
-Date:   Thu, 8 Apr 2021 07:14:01 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Daniel Xu <dxu@dxuuu.xyz>
-Cc:     bpf@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        kernel-team@fb.com, jolsa@kernel.org, hannes@cmpxchg.org,
-        yhs@fb.com
-Subject: Re: [RFC bpf-next 1/1] bpf: Introduce iter_pagecache
-Message-ID: <20210408061401.GI2531743@casper.infradead.org>
-References: <cover.1617831474.git.dxu@dxuuu.xyz>
- <22bededbd502e0df45326a54b3056941de65a101.1617831474.git.dxu@dxuuu.xyz>
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:48293 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229927AbhDHGOZ (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 8 Apr 2021 02:14:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1617862454;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ue1WJN9VVLFtg4vxqXBhw+4/lkwt4siu2NvJcjrHRVw=;
+        b=GPZFhdx4xt0YjrDtvi5piq8dCUkffv/4b5gGmqfG5NC3+bqhAf4POuW5VRWAxhUnkuvoWs
+        1Kpnw4aKkIJodw6K9dqitFdlKEw+Yiw40HBgl43yq/5PO6nwM8WULySTSyxOtbyTwujoLy
+        tjOWKaaksmXratay3rmnQxfGBzwZhqg=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-136-niffexRxN4Cg581WxUPLoQ-1; Thu, 08 Apr 2021 02:14:12 -0400
+X-MC-Unique: niffexRxN4Cg581WxUPLoQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2F49283DD20;
+        Thu,  8 Apr 2021 06:14:11 +0000 (UTC)
+Received: from astarta.redhat.com (ovpn-112-182.ams2.redhat.com [10.36.112.182])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 74E3C7A395;
+        Thu,  8 Apr 2021 06:13:17 +0000 (UTC)
+From:   Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+To:     bpf@vger.kernel.org
+Cc:     andrii@kernel.org, jolsa@redhat.com,
+        Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+Subject: [PATCH bpf-next v4 2/9] selftests/bpf: test_progs/sockopt_sk: Convert to use BPF skeleton
+Date:   Thu,  8 Apr 2021 09:13:03 +0300
+Message-Id: <20210408061310.95877-2-yauheni.kaliuta@redhat.com>
+In-Reply-To: <20210408061310.95877-1-yauheni.kaliuta@redhat.com>
+References: <20210408061238.95803-1-yauheni.kaliuta@redhat.com>
+ <20210408061310.95877-1-yauheni.kaliuta@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <22bededbd502e0df45326a54b3056941de65a101.1617831474.git.dxu@dxuuu.xyz>
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Apr 07, 2021 at 02:46:11PM -0700, Daniel Xu wrote:
-> +struct bpf_iter_seq_pagecache_info {
-> +	struct mnt_namespace *ns;
-> +	struct radix_tree_root superblocks;
+Switch the test to use BPF skeleton to save some boilerplate and
+make it easy to access bpf program bss segment.
 
-Why are you adding a new radix tree?  Use an XArray instead.
+The latter will be used to pass PAGE_SIZE from userspace since there
+is no convenient way for bpf program to get it from inside of the
+kernel.
 
-> +static struct page *goto_next_page(struct bpf_iter_seq_pagecache_info *info)
-> +{
-> +	struct page *page, *ret = NULL;
-> +	unsigned long idx;
-> +
-> +	rcu_read_lock();
-> +retry:
-> +	BUG_ON(!info->cur_inode);
-> +	ret = NULL;
-> +	xa_for_each_start(&info->cur_inode->i_data.i_pages, idx, page,
-> +			  info->cur_page_idx) {
-> +		if (!page_cache_get_speculative(page))
-> +			continue;
+Signed-off-by: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+---
+ .../selftests/bpf/prog_tests/sockopt_sk.c     | 65 +++++--------------
+ 1 file changed, 17 insertions(+), 48 deletions(-)
 
-Why do you feel the need to poke around in i_pages directly?  Is there
-something wrong with find_get_entries()?
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c b/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
+index d5b44b135c00..7274b12abe17 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
+@@ -3,6 +3,7 @@
+ #include "cgroup_helpers.h"
+ 
+ #include <linux/tcp.h>
++#include "sockopt_sk.skel.h"
+ 
+ #ifndef SOL_TCP
+ #define SOL_TCP IPPROTO_TCP
+@@ -191,60 +192,28 @@ static int getsetsockopt(void)
+ 	return -1;
+ }
+ 
+-static int prog_attach(struct bpf_object *obj, int cgroup_fd, const char *title)
+-{
+-	enum bpf_attach_type attach_type;
+-	enum bpf_prog_type prog_type;
+-	struct bpf_program *prog;
+-	int err;
+-
+-	err = libbpf_prog_type_by_name(title, &prog_type, &attach_type);
+-	if (err) {
+-		log_err("Failed to deduct types for %s BPF program", title);
+-		return -1;
+-	}
+-
+-	prog = bpf_object__find_program_by_title(obj, title);
+-	if (!prog) {
+-		log_err("Failed to find %s BPF program", title);
+-		return -1;
+-	}
+-
+-	err = bpf_prog_attach(bpf_program__fd(prog), cgroup_fd,
+-			      attach_type, 0);
+-	if (err) {
+-		log_err("Failed to attach %s BPF program", title);
+-		return -1;
+-	}
+-
+-	return 0;
+-}
+-
+ static void run_test(int cgroup_fd)
+ {
+-	struct bpf_prog_load_attr attr = {
+-		.file = "./sockopt_sk.o",
+-	};
+-	struct bpf_object *obj;
+-	int ignored;
+-	int err;
+-
+-	err = bpf_prog_load_xattr(&attr, &obj, &ignored);
+-	if (CHECK_FAIL(err))
+-		return;
++	struct sockopt_sk *skel;
++
++	skel = sockopt_sk__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel_load"))
++		goto cleanup;
+ 
+-	err = prog_attach(obj, cgroup_fd, "cgroup/getsockopt");
+-	if (CHECK_FAIL(err))
+-		goto close_bpf_object;
++	skel->links._setsockopt =
++		bpf_program__attach_cgroup(skel->progs._setsockopt, cgroup_fd);
++	if (!ASSERT_OK_PTR(skel->links._setsockopt, "setsockopt_link"))
++		goto cleanup;
+ 
+-	err = prog_attach(obj, cgroup_fd, "cgroup/setsockopt");
+-	if (CHECK_FAIL(err))
+-		goto close_bpf_object;
++	skel->links._getsockopt =
++		bpf_program__attach_cgroup(skel->progs._getsockopt, cgroup_fd);
++	if (!ASSERT_OK_PTR(skel->links._getsockopt, "getsockopt_link"))
++		goto cleanup;
+ 
+-	CHECK_FAIL(getsetsockopt());
++	ASSERT_OK(getsetsockopt(), "getsetsockopt");
+ 
+-close_bpf_object:
+-	bpf_object__close(obj);
++cleanup:
++	sockopt_sk__destroy(skel);
+ }
+ 
+ void test_sockopt_sk(void)
+-- 
+2.31.1
 
-> +static int __pagecache_seq_show(struct seq_file *seq, struct page *page,
-> +				bool in_stop)
-> +{
-> +	struct bpf_iter_meta meta;
-> +	struct bpf_iter__pagecache ctx;
-> +	struct bpf_prog *prog;
-> +
-> +	meta.seq = seq;
-> +	prog = bpf_iter_get_info(&meta, in_stop);
-> +	if (!prog)
-> +		return 0;
-> +
-> +	meta.seq = seq;
-> +	ctx.meta = &meta;
-> +	ctx.page = page;
-> +	return bpf_iter_run_prog(prog, &ctx);
-
-I'm not really keen on the idea of random BPF programs being able to poke
-at pages in the page cache like this.  From your initial description,
-it sounded like all you needed was a list of which pages are present.
-
-> +	INIT_RADIX_TREE(&info->superblocks, GFP_KERNEL);
-> +
-> +	spin_lock(&info->ns->ns_lock);
-> +	list_for_each_entry(mnt, &info->ns->list, mnt_list) {
-> +		sb = mnt->mnt.mnt_sb;
-> +
-> +		/* The same mount may be mounted in multiple places */
-> +		if (radix_tree_lookup(&info->superblocks, (unsigned long)sb))
-> +			continue;
-> +
-> +		err = radix_tree_insert(&info->superblocks,
-> +				        (unsigned long)sb, (void *)1);
-> +		if (err)
-> +			goto out;
-> +	}
-> +
-> +	radix_tree_for_each_slot(slot, &info->superblocks, &iter, 0) {
-> +		sb = (struct super_block *)iter.index;
-> +		atomic_inc(&sb->s_active);
-> +	}
-
-Uh.  What on earth made you think this was a good way to use the radix
-tree?  And, no, the XArray doesn't change that.
-
-If you don't understand why this is so bad, call xa_dump() on it after
-constructing it.  I'll wait.
