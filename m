@@ -2,79 +2,163 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 76C49C43460
-	for <bpf@archiver.kernel.org>; Mon, 12 Apr 2021 15:40:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EEB1CC43460
+	for <bpf@archiver.kernel.org>; Mon, 12 Apr 2021 16:23:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4D2556136F
-	for <bpf@archiver.kernel.org>; Mon, 12 Apr 2021 15:40:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CC88C61352
+	for <bpf@archiver.kernel.org>; Mon, 12 Apr 2021 16:23:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242970AbhDLPk2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 12 Apr 2021 11:40:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48020 "EHLO mail.kernel.org"
+        id S243453AbhDLQXk (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 12 Apr 2021 12:23:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55350 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240930AbhDLPk1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 12 Apr 2021 11:40:27 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 4E85C6124C;
-        Mon, 12 Apr 2021 15:40:09 +0000 (UTC)
+        id S243288AbhDLQXg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 12 Apr 2021 12:23:36 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6F41E60FD7;
+        Mon, 12 Apr 2021 16:23:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1618242009;
-        bh=Wev5x/Wg2gcRxhBYNk5rFUic8hqw0b4ouHq/pmd6fRI=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=HCiHcNolsPFLpr0JrKEvEk5tDEZZgGNPB4iBRnKcsUQgpZ3Sm6W+XrKDarDrKBYzf
-         073rtLc8EfvPOAAueJyxXDCwhPXaCTXgrkpcc5J/cg9C0cBICAjKZYBBWg+E4W36tZ
-         CUfoLXBm8r65Ph2ElQ/oFcemNR2vlYWuBZ4mtpK7cnJMCXJGS2QuB4sP7vNsh5aHNO
-         9eWPYeaN88Y7CuXN9HfFUiG8ctvappMxFogaxd5xv9r+Aj5ozXKK4nf5b11ZVQumom
-         Y1dM+sVMaEKFhZ6CxzABbYf2i0zpOrY/o6aGidiBSG7O/Fynxk2v5NO44l2aSnM78s
-         WRoyMop3RI7MA==
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1618244598;
+        bh=U7lrLvYeZLzX0uWHc2XMXoABjhSSZOMnk8XosbBLOO4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=mcoHbbEhN1AQi77tyBt6EzJdWysBNEabNc9Yg70IAeYoY4OupuBku+5UrAS+0w6qc
+         U5/2d5ncvRE1ypt8p+/Ii2UZ272yXsFs/gq0Qg1NL+E2YTkXNPKgcvw8xueleHlnQT
+         mlf05pZ35vXY9bnk00wzNR+tcGYf6vViMNfFWOFVW45fT+fC8l5Umy6pJyOEliBODm
+         B/b4qypQ22TR8FUY02fd3XjrTC9McaMuBYVzqNd+6SjkxR4feJMI0d/CCfm1HSekmQ
+         ENOgVmoTIf1/OCaRUm09TPeYnEeo7JvcM29OEH9nVN2dM6lVtuxQsxb0G/zDk0BVGo
+         1CZgOnubebcZg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.11 17/51] bpf: Take module reference for trampoline in module
+Date:   Mon, 12 Apr 2021 12:22:22 -0400
+Message-Id: <20210412162256.313524-17-sashal@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210412162256.313524-1-sashal@kernel.org>
+References: <20210412162256.313524-1-sashal@kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-Subject: Re: [Patch bpf-next] sock_map: fix a potential use-after-free in
- sock_map_close()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <161824200925.5298.15006225388105379863.git-patchwork-notify@kernel.org>
-Date:   Mon, 12 Apr 2021 15:40:09 +0000
-References: <20210408030556.45134-1-xiyou.wangcong@gmail.com>
-In-Reply-To: <20210408030556.45134-1-xiyou.wangcong@gmail.com>
-To:     Cong Wang <xiyou.wangcong@gmail.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        cong.wang@bytedance.com,
-        syzbot+7b6548ae483d6f4c64ae@syzkaller.appspotmail.com,
-        john.fastabend@gmail.com, daniel@iogearbox.net,
-        jakub@cloudflare.com, lmb@cloudflare.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
+From: Jiri Olsa <jolsa@kernel.org>
 
-This patch was applied to bpf/bpf-next.git (refs/heads/master):
+[ Upstream commit 861de02e5f3f2a104eecc5af1d248cb7bf8c5f75 ]
 
-On Wed,  7 Apr 2021 20:05:56 -0700 you wrote:
-> From: Cong Wang <cong.wang@bytedance.com>
-> 
-> The last refcnt of the psock can be gone right after
-> sock_map_remove_links(), so sk_psock_stop() could trigger a UAF.
-> The reason why I placed sk_psock_stop() there is to avoid RCU read
-> critical section, and more importantly, some callee of
-> sock_map_remove_links() is supposed to be called with RCU read lock,
-> we can not simply get rid of RCU read lock here. Therefore, the only
-> choice we have is to grab an additional refcnt with sk_psock_get()
-> and put it back after sk_psock_stop().
-> 
-> [...]
+Currently module can be unloaded even if there's a trampoline
+register in it. It's easily reproduced by running in parallel:
 
-Here is the summary with links:
-  - [bpf-next] sock_map: fix a potential use-after-free in sock_map_close()
-    https://git.kernel.org/bpf/bpf-next/c/aadb2bb83ff7
+  # while :; do ./test_progs -t module_attach; done
+  # while :; do rmmod bpf_testmod; sleep 0.5; done
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Taking the module reference in case the trampoline's ip is
+within the module code. Releasing it when the trampoline's
+ip is unregistered.
 
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Link: https://lore.kernel.org/bpf/20210326105900.151466-1-jolsa@kernel.org
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ include/linux/bpf.h     |  2 ++
+ kernel/bpf/trampoline.c | 30 ++++++++++++++++++++++++++++++
+ 2 files changed, 32 insertions(+)
+
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 564ebf91793e..88b581b75d5b 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -41,6 +41,7 @@ struct bpf_local_storage;
+ struct bpf_local_storage_map;
+ struct kobject;
+ struct mem_cgroup;
++struct module;
+ 
+ extern struct idr btf_idr;
+ extern spinlock_t btf_idr_lock;
+@@ -630,6 +631,7 @@ struct bpf_trampoline {
+ 	/* Executable image of trampoline */
+ 	struct bpf_tramp_image *cur_image;
+ 	u64 selector;
++	struct module *mod;
+ };
+ 
+ struct bpf_attach_target_info {
+diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+index 986dabc3d11f..a431d7af884c 100644
+--- a/kernel/bpf/trampoline.c
++++ b/kernel/bpf/trampoline.c
+@@ -9,6 +9,7 @@
+ #include <linux/btf.h>
+ #include <linux/rcupdate_trace.h>
+ #include <linux/rcupdate_wait.h>
++#include <linux/module.h>
+ 
+ /* dummy _ops. The verifier will operate on target program's ops. */
+ const struct bpf_verifier_ops bpf_extension_verifier_ops = {
+@@ -87,6 +88,26 @@ static struct bpf_trampoline *bpf_trampoline_lookup(u64 key)
+ 	return tr;
+ }
+ 
++static int bpf_trampoline_module_get(struct bpf_trampoline *tr)
++{
++	struct module *mod;
++	int err = 0;
++
++	preempt_disable();
++	mod = __module_text_address((unsigned long) tr->func.addr);
++	if (mod && !try_module_get(mod))
++		err = -ENOENT;
++	preempt_enable();
++	tr->mod = mod;
++	return err;
++}
++
++static void bpf_trampoline_module_put(struct bpf_trampoline *tr)
++{
++	module_put(tr->mod);
++	tr->mod = NULL;
++}
++
+ static int is_ftrace_location(void *ip)
+ {
+ 	long addr;
+@@ -108,6 +129,9 @@ static int unregister_fentry(struct bpf_trampoline *tr, void *old_addr)
+ 		ret = unregister_ftrace_direct((long)ip, (long)old_addr);
+ 	else
+ 		ret = bpf_arch_text_poke(ip, BPF_MOD_CALL, old_addr, NULL);
++
++	if (!ret)
++		bpf_trampoline_module_put(tr);
+ 	return ret;
+ }
+ 
+@@ -134,10 +158,16 @@ static int register_fentry(struct bpf_trampoline *tr, void *new_addr)
+ 		return ret;
+ 	tr->func.ftrace_managed = ret;
+ 
++	if (bpf_trampoline_module_get(tr))
++		return -ENOENT;
++
+ 	if (tr->func.ftrace_managed)
+ 		ret = register_ftrace_direct((long)ip, (long)new_addr);
+ 	else
+ 		ret = bpf_arch_text_poke(ip, BPF_MOD_CALL, NULL, new_addr);
++
++	if (ret)
++		bpf_trampoline_module_put(tr);
+ 	return ret;
+ }
+ 
+-- 
+2.30.2
 
