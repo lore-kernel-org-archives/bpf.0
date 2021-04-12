@@ -2,159 +2,288 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A088C433ED
-	for <bpf@archiver.kernel.org>; Mon, 12 Apr 2021 15:08:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A7CCC433B4
+	for <bpf@archiver.kernel.org>; Mon, 12 Apr 2021 15:37:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D57B261287
-	for <bpf@archiver.kernel.org>; Mon, 12 Apr 2021 15:08:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DBF1661352
+	for <bpf@archiver.kernel.org>; Mon, 12 Apr 2021 15:37:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238999AbhDLPIe (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 12 Apr 2021 11:08:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38050 "EHLO mail.kernel.org"
+        id S241983AbhDLPho (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 12 Apr 2021 11:37:44 -0400
+Received: from mga05.intel.com ([192.55.52.43]:41987 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237526AbhDLPId (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 12 Apr 2021 11:08:33 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8F108611F0;
-        Mon, 12 Apr 2021 15:08:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1618240095;
-        bh=yEYZUKPaHR793ZDhmZ+P1vlAN1MGuDfGKGZ/vHIAn3Q=;
-        h=Date:From:To:Cc:Subject:From;
-        b=K3Zdpb3zv2ms3Q7FD6i2Sv3atrOd3gtXVtLnczlukv1pjpMlW+rGc0C/jBoHa0Cdb
-         KiZdEu9/2ES3dZSuydULJoVbPW0DqxdBUaQn0D6g7GubujH/gHpzUoTMrZseVKfiTJ
-         sQHgbKEtK/n+L7vDqz76Is5G0B/LzClBD+C9bnLZp1rPxq3qPLyDhPpQ8Bg0dbaFOp
-         e6w/g2vtSzTZ1AL7yg1v2YEefQTRHhVvV8CCKaO593zpFAja2i/EyxxAQDJTeHZlof
-         ubYtmxZsy+/7rPmQ4YIw9zyFN7MybZuMeW1TzuopXEKNgkDaBEtUvH9RtaTkSmDMRK
-         MstQHuloq83+g==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 0B4D040647; Mon, 12 Apr 2021 12:08:13 -0300 (-03)
-Date:   Mon, 12 Apr 2021 12:08:12 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     dwarves@vger.kernel.org
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        bpf@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
-        Jan Engelhardt <jengelh@inai.de>,
-        Domenico Andreoli <cavok@debian.org>,
-        Matthias Schwarzott <zzam@gentoo.org>,
-        Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
-        Mark Wieelard <mjw@redhat.com>,
-        =?utf-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Bill Wendling <morbo@google.com>,
-        David Blaikie <dblaikie@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>
-Subject: ANNOUNCE: pahole v1.21 (clang's LTO edition, BTF floats)
-Message-ID: <YHRiXNX1JUF2Az0A@kernel.org>
+        id S238815AbhDLPho (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 12 Apr 2021 11:37:44 -0400
+IronPort-SDR: +CLOIlWLHZ1jRutjBkm45L1l4tJSv7bwb4jWOum9xRdvYe8CSygLyXfwZ9l1rJqIMVHDqW1Ahk
+ ux5yt2NLSmIw==
+X-IronPort-AV: E=McAfee;i="6200,9189,9952"; a="279520284"
+X-IronPort-AV: E=Sophos;i="5.82,216,1613462400"; 
+   d="scan'208";a="279520284"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2021 08:37:13 -0700
+IronPort-SDR: cuw1ILpAp+18grYJ1Py8CvzrFuIfh3PdUuswheY9KGzzGGlkVDLoDpn/2iyE//8a6gJJY2sSKI
+ G+rqQGam+/4Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,216,1613462400"; 
+   d="scan'208";a="614609528"
+Received: from glass.png.intel.com ([10.158.65.59])
+  by fmsmga005.fm.intel.com with ESMTP; 12 Apr 2021 08:37:06 -0700
+From:   Ong Boon Leong <boon.leong.ong@intel.com>
+To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>
+Cc:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, Ong Boon Leong <boon.leong.ong@intel.com>
+Subject: [PATCH net-next 0/7] stmmac: add XDP ZC support
+Date:   Mon, 12 Apr 2021 23:41:23 +0800
+Message-Id: <20210412154130.20742-1-boon.leong.ong@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Url:  http://acmel.wordpress.com
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
 Hi,
- 
-	The v1.21 release of pahole and its friends is out, this time it's
-about using clang to build the kernel with LTO, some DWARF5 fixes, supporting
-floating types in the BTF encoder for s/390 sake and some misc fixes and
-improvements. Ah, it should also be faster due to switching to using libbpf's
-hashing routines.
 
-Main git repo:
+This is the v1 patch series to add XDP ZC support to stmmac driver and
+the changes are as listed in below summary:-
 
-   git://git.kernel.org/pub/scm/devel/pahole/pahole.git
+1-4/7: Refactor RX & TX buffer allocation and initialization to prepare
+       stmmac driver for XSK RX & TX pool enabling and disabling.
 
-Mirror git repo:
+5/7: Refactor stmmac_xdp_run_prog() for XDP ZC use which does not need
+     to check for XDP program loaded.
 
-   https://github.com/acmel/dwarves.git
+6-7/7: XDP ZC RX and TX enabling.
 
-tarball + gpg signature:
+The above patch series have been tested using xdpsock app in samples/bpf
+directory on Intel mGbE controller. The DUT receives burst traffic
+packets generated by using pktgen_sample03_burst_single_flow.sh in
+samples/pktgen.
 
-   https://fedorapeople.org/~acme/dwarves/dwarves-1.21.tar.xz
-   https://fedorapeople.org/~acme/dwarves/dwarves-1.21.tar.bz2
-   https://fedorapeople.org/~acme/dwarves/dwarves-1.21.tar.sign
+########################################################################
 
-	Thanks a lot to all the contributors and distro packagers, you're on the
-CC list, I appreciate a lot the work you put into these tools,
+==========
+A) RX-Only
+==========
 
-Best Regards,
- 
- - Arnaldo
+root@intel-corei7-64:~ $ ./xdpsock  -i eth0 -r -S
 
-DWARF loader:
+ sock0@eth0:0 rxdrop xdp-skb
+                   pps            pkts           1.00
+rx                 112161         12229475
+tx                 0              0
 
-- Handle DWARF5 DW_OP_addrx properly
+ sock0@eth0:0 rxdrop xdp-skb
+                   pps            pkts           1.00
+rx                 112280         12341779
+tx                 0              0
 
-  Part of the effort to support the subset of DWARF5 that is generated when building the kernel.
+ sock0@eth0:0 rxdrop xdp-skb
+                   pps            pkts           1.00
+rx                 112358         12454155
+tx                 0              0
 
-- Handle subprogram ret type with abstract_origin properly
+ ====================================================
 
-  Adds a second pass to resolve abstract origin DWARF description of functions to aid
-  the BTF encoder in getting the right return type.
+root@intel-corei7-64:~ $ ./xdpsock  -i eth0 -r -N -c
 
-- Check .notes section for LTO build info
+ sock0@eth0:0 rxdrop xdp-drv
+                   pps            pkts           1.00
+rx                 681082         2616133
+tx                 0              0
 
-  When LTO is used, currently only with clang, we need to do extra steps to handle references
-  from one object (compile unit, aka CU) to another, a way for DWARF to avoid duplicating
-  information.
+ sock0@eth0:0 rxdrop xdp-drv
+                   pps            pkts           1.00
+rx                 681205         3297415
+tx                 0              0
 
-- Check .debug_abbrev for cross-CU references
+ sock0@eth0:0 rxdrop xdp-drv
+                   pps            pkts           1.00
+rx                 681386         3978873
+tx                 0              0
 
-  When the kernel build process doesn't add an ELF note in vmlinux indicating that LTO was
-  used and thus intra-CU references are present and thus we need to use a more expensive
-  way to resolve types and (again) thus to encode BTF, we need to look at DWARF's .debug_abbrev
-  ELF section to figure out if such intra-CU references are present.
+ ====================================================
 
-- Permit merging all DWARF CU's for clang LTO built binary
+root@intel-corei7-64:~ $ ./xdpsock  -i eth0 -r -z
 
-  Allow not trowing away previously supposedly self contained compile units
-  (objects, aka CU, aka Compile Units) as they have type descriptions that will
-  be used in later CUs.
+ sock0@eth0:0 rxdrop xdp-drv
+                   pps            pkts           1.00
+rx                 703915         19579779
+tx                 0              0
 
-- Permit a flexible HASHTAGS__BITS
+ sock0@eth0:0 rxdrop xdp-drv
+                   pps            pkts           1.00
+rx                 703766         20283768
+tx                 0              0
 
-  So that we can use a more expensive algorithm when we need to keep previously processed
-  compile units that will then be referenced by later ones to resolve types.
+ sock0@eth0:0 rxdrop xdp-drv
+                   pps            pkts           1.00
+rx                 703383         20987229
+tx                 0              0
 
-- Use a better hashing function, from libbpf
+==========
+B) TX-Only
+==========
 
-  Enabling patch to combine compile units when using LTO.
+root@intel-corei7-64:~ $ ./xdpsock -i eth0 -t -S
 
-BTF encoder:
+ sock0@eth0:0 txonly xdp-skb
+                   pps            pkts           1.00
+rx                 0              0
+tx                 140269         4326720
 
-- Add --btf_gen_all flag
+ sock0@eth0:0 txonly xdp-skb
+                   pps            pkts           1.00
+rx                 0              0
+tx                 140514         4467264
 
-  A new command line to allow asking for the generation of all BTF encodings, so that we
-  can stop adding new command line options to enable new encodings in the kernel Makefile.
+ sock0@eth0:0 txonly xdp-skb
+                   pps            pkts           1.00
+rx                 0              0
+tx                 140009         4607296
 
-- Match ftrace addresses within ELF functions
+ ====================================================
 
-  To cope with differences in how DWARF and ftrace describes function boundaries.
+root@intel-corei7-64:~ $ ./xdpsock -i eth0 -t -N -c
 
-- Funnel ELF error reporting through a macro
+ sock0@eth0:0 txonly xdp-drv
+                   pps            pkts           1.00
+rx                 0              0
+tx                 138222         3108160
 
-  To use libelf's elf_error() function, improving error messages.
+ sock0@eth0:0 txonly xdp-drv
+                   pps            pkts           1.00
+rx                 0              0
+tx                 139629         3247872
 
-- Sanitize non-regular int base type
+ sock0@eth0:0 txonly xdp-drv
+                   pps            pkts           1.00
+rx                 0              0
+tx                 139821         3387712
 
-  Cope with clang with dwarf5 non-regular int base types, tricky stuff, see yhs
-  full explanation in the relevant cset.
+ ====================================================
 
-- Add support for the floating-point types
+root@intel-corei7-64:~ $ ./xdpsock -i eth0 -t -z
 
-  S/390 has floats'n'doubles in its arch specific linux headers, cope with that.
+ sock0@eth0:0 txonly xdp-drv
+                   pps            pkts           1.00
+rx                 0              0
+tx                 447382         13390848
 
-Pretty printer:
+ sock0@eth0:0 txonly xdp-drv
+                   pps            pkts           1.00
+rx                 0              0
+tx                 447384         13838272
 
-- Honour conf_fprintf.hex when printing enumerations
+ sock0@eth0:0 txonly xdp-drv
+                   pps            pkts           1.00
+rx                 0              0
+tx                 447384         14285696
 
-  If the user specifies --hex in the command line, honour it when printing enumerations.
+================
+C) L2 Forwarding
+================
 
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+root@intel-corei7-64:~ $ ./xdpsock -i eth0 -l -S
+
+ sock0@eth0:0 l2fwd xdp-skb
+                   pps            pkts           1.00
+rx                 85021          7363434
+tx                 85021          7363434
+
+ sock0@eth0:0 l2fwd xdp-skb
+                   pps            pkts           1.00
+rx                 85003          7448446
+tx                 85003          7448446
+
+ sock0@eth0:0 l2fwd xdp-skb
+                   pps            pkts           1.00
+rx                 84946          7533403
+tx                 84946          7533403
+
+ ====================================================
+
+root@intel-corei7-64:~ $ ./xdpsock -i eth0 -l -N -c
+
+ sock0@eth0:0 l2fwd xdp-drv
+                   pps            pkts           1.00
+rx                 132136         1092673
+tx                 132072         1092609
+
+ sock0@eth0:0 l2fwd xdp-drv
+                   pps            pkts           1.00
+rx                 132428         1225118
+tx                 132428         1225054
+
+ sock0@eth0:0 l2fwd xdp-drv
+                   pps            pkts           1.00
+rx                 132623         1357757
+tx                 132623         1357693
+
+ ====================================================
+
+root@intel-corei7-64:~ $ ./xdpsock -i eth0 -l -z
+
+ sock0@eth0:0 l2fwd xdp-drv
+                   pps            pkts           1.00
+rx                 468476         43619530
+tx                 468476         43619466
+
+ sock0@eth0:0 l2fwd xdp-drv
+                   pps            pkts           1.00
+rx                 468633         44088218
+tx                 468633         44088154
+
+ sock0@eth0:0 l2fwd xdp-drv
+                   pps            pkts           1.00
+rx                 468439         44556775
+tx                 468439         44556711
+
+ ########################################################################
+
+Based on the results obtained from above using xdpsock test cases, the
+result looks promising. It will be great if community can help to review
+and test the above patch series on your respective platform and provide
+me feedback for any improvement.
+
+Thank you very much,
+Boon Leong
+
+Ong Boon Leong (7):
+  net: stmmac: rearrange RX buffer allocation and free functions
+  net: stmmac: introduce dma_recycle_rx_skbufs for
+    stmmac_reinit_rx_buffers
+  net: stmmac: refactor stmmac_init_rx_buffers for
+    stmmac_reinit_rx_buffers
+  net: stmmac: rearrange RX and TX desc init into per-queue basis
+  net: stmmac: Refactor __stmmac_xdp_run_prog for XDP ZC
+  net: stmmac: Enable RX via AF_XDP zero-copy
+  net: stmmac: Add TX via XDP zero-copy socket
+
+ drivers/net/ethernet/stmicro/stmmac/stmmac.h  |   24 +-
+ .../net/ethernet/stmicro/stmmac/stmmac_main.c | 1698 +++++++++++++----
+ .../net/ethernet/stmicro/stmmac/stmmac_xdp.c  |   94 +
+ .../net/ethernet/stmicro/stmmac/stmmac_xdp.h  |    3 +
+ 4 files changed, 1396 insertions(+), 423 deletions(-)
+
+-- 
+2.25.1
+
