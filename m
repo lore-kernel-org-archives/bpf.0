@@ -3,39 +3,39 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C4F02C433ED
-	for <bpf@archiver.kernel.org>; Tue, 13 Apr 2021 12:15:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A009BC43461
+	for <bpf@archiver.kernel.org>; Tue, 13 Apr 2021 12:15:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 834BB61278
-	for <bpf@archiver.kernel.org>; Tue, 13 Apr 2021 12:15:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7299F613B8
+	for <bpf@archiver.kernel.org>; Tue, 13 Apr 2021 12:15:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239813AbhDMMQN convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Tue, 13 Apr 2021 08:16:13 -0400
-Received: from us-smtp-delivery-44.mimecast.com ([205.139.111.44]:49319 "EHLO
+        id S244053AbhDMMQQ convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Tue, 13 Apr 2021 08:16:16 -0400
+Received: from us-smtp-delivery-44.mimecast.com ([207.211.30.44]:46759 "EHLO
         us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229488AbhDMMQN (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 13 Apr 2021 08:16:13 -0400
+        by vger.kernel.org with ESMTP id S237178AbhDMMQO (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 13 Apr 2021 08:16:14 -0400
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-186-KBgnrNAFMa2TkXCKtwtB8g-1; Tue, 13 Apr 2021 08:15:49 -0400
-X-MC-Unique: KBgnrNAFMa2TkXCKtwtB8g-1
+ us-mta-541-sXv1wqZIML6AklquvXHiTw-1; Tue, 13 Apr 2021 08:15:48 -0400
+X-MC-Unique: sXv1wqZIML6AklquvXHiTw-1
 Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C27B8839A7F;
-        Tue, 13 Apr 2021 12:15:34 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 54EF81005E4C;
+        Tue, 13 Apr 2021 12:15:24 +0000 (UTC)
 Received: from krava.redhat.com (unknown [10.40.196.16])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A9FD310023B0;
-        Tue, 13 Apr 2021 12:15:31 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 140A210023B0;
+        Tue, 13 Apr 2021 12:15:20 +0000 (UTC)
 From:   Jiri Olsa <jolsa@kernel.org>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andriin@fb.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Martin KaFai Lau <kafai@fb.com>,
+Cc:     kernel test robot <lkp@intel.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@chromium.org>, Daniel Xu <dxu@dxuuu.xyz>,
@@ -43,9 +43,9 @@ Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         Jesper Brouer <jbrouer@redhat.com>,
         =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
         Viktor Malik <vmalik@redhat.com>
-Subject: [PATCHv2 RFC bpf-next 4/7] libbpf: Add btf__find_by_pattern_kind function
-Date:   Tue, 13 Apr 2021 14:15:13 +0200
-Message-Id: <20210413121516.1467989-5-jolsa@kernel.org>
+Subject: [PATCHv2 RFC bpf-next 1/7] bpf: Move bpf_prog_start/end functions to generic place
+Date:   Tue, 13 Apr 2021 14:15:10 +0200
+Message-Id: <20210413121516.1467989-2-jolsa@kernel.org>
 In-Reply-To: <20210413121516.1467989-1-jolsa@kernel.org>
 References: <20210413121516.1467989-1-jolsa@kernel.org>
 MIME-Version: 1.0
@@ -60,124 +60,230 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Adding btf__find_by_pattern_kind function that returns
-array of BTF ids for given function name pattern.
+Moving bpf_prog_start/end functions plus related static
+functions to generic place. So they can be used also when
+trampolines are disabled.
 
-Using libc's regex.h support for that.
-
+Reported-by: kernel test robot <lkp@intel.com>
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- tools/lib/bpf/btf.c | 68 +++++++++++++++++++++++++++++++++++++++++++++
- tools/lib/bpf/btf.h |  3 ++
- 2 files changed, 71 insertions(+)
+ kernel/bpf/syscall.c    | 97 +++++++++++++++++++++++++++++++++++++++++
+ kernel/bpf/trampoline.c | 97 -----------------------------------------
+ 2 files changed, 97 insertions(+), 97 deletions(-)
 
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index d30e67e7e1e5..e193713b9d56 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
- /* Copyright (c) 2018 Facebook */
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 6428634da57e..90cd58520bd4 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -4494,3 +4494,100 @@ SYSCALL_DEFINE3(bpf, int, cmd, union bpf_attr __user *, uattr, unsigned int, siz
  
-+#define _GNU_SOURCE
- #include <byteswap.h>
- #include <endian.h>
- #include <stdio.h>
-@@ -16,6 +17,7 @@
- #include <linux/err.h>
- #include <linux/btf.h>
- #include <gelf.h>
-+#include <regex.h>
- #include "btf.h"
- #include "bpf.h"
- #include "libbpf.h"
-@@ -712,6 +714,72 @@ __s32 btf__find_by_name_kind(const struct btf *btf, const char *type_name,
- 	return -ENOENT;
+ 	return err;
  }
- 
-+static bool is_wildcard(char c)
-+{
-+	static const char *wildchars = "*?[|";
 +
-+	return strchr(wildchars, c);
++#define NO_START_TIME 1
++static u64 notrace bpf_prog_start_time(void)
++{
++	u64 start = NO_START_TIME;
++
++	if (static_branch_unlikely(&bpf_stats_enabled_key)) {
++		start = sched_clock();
++		if (unlikely(!start))
++			start = NO_START_TIME;
++	}
++	return start;
 +}
 +
-+int btf__find_by_pattern_kind(const struct btf *btf,
-+			      const char *type_pattern, __u32 kind,
-+			      __s32 **__ids)
++static void notrace inc_misses_counter(struct bpf_prog *prog)
 +{
-+	__u32 i, nr_types = btf__get_nr_types(btf);
-+	__s32 *ids = NULL;
-+	int cnt = 0, alloc = 0, ret;
-+	regex_t regex;
-+	char *pattern;
++	struct bpf_prog_stats *stats;
 +
-+	if (kind == BTF_KIND_UNKN || !strcmp(type_pattern, "void"))
++	stats = this_cpu_ptr(prog->stats);
++	u64_stats_update_begin(&stats->syncp);
++	stats->misses++;
++	u64_stats_update_end(&stats->syncp);
++}
++
++/* The logic is similar to BPF_PROG_RUN, but with an explicit
++ * rcu_read_lock() and migrate_disable() which are required
++ * for the trampoline. The macro is split into
++ * call __bpf_prog_enter
++ * call prog->bpf_func
++ * call __bpf_prog_exit
++ *
++ * __bpf_prog_enter returns:
++ * 0 - skip execution of the bpf prog
++ * 1 - execute bpf prog
++ * [2..MAX_U64] - excute bpf prog and record execution time.
++ *     This is start time.
++ */
++u64 notrace __bpf_prog_enter(struct bpf_prog *prog)
++	__acquires(RCU)
++{
++	rcu_read_lock();
++	migrate_disable();
++	if (unlikely(__this_cpu_inc_return(*(prog->active)) != 1)) {
++		inc_misses_counter(prog);
 +		return 0;
-+
-+	/* When the pattern does not start with wildcard, treat it as
-+	 * if we'd want to match it from the beginning of the string.
-+	 */
-+	asprintf(&pattern, "%s%s",
-+		 is_wildcard(type_pattern[0]) ? "^" : "",
-+		 type_pattern);
-+
-+	ret = regcomp(&regex, pattern, REG_EXTENDED);
-+	if (ret) {
-+		pr_warn("failed to compile regex\n");
-+		free(pattern);
-+		return -EINVAL;
 +	}
-+
-+	free(pattern);
-+
-+	for (i = 1; i <= nr_types; i++) {
-+		const struct btf_type *t = btf__type_by_id(btf, i);
-+		const char *name;
-+		__s32 *p;
-+
-+		if (btf_kind(t) != kind)
-+			continue;
-+		name = btf__name_by_offset(btf, t->name_off);
-+		if (name && regexec(&regex, name, 0, NULL, 0))
-+			continue;
-+		if (cnt == alloc) {
-+			alloc = max(100, alloc * 3 / 2);
-+			p = realloc(ids, alloc * sizeof(__u32));
-+			if (!p) {
-+				free(ids);
-+				regfree(&regex);
-+				return -ENOMEM;
-+			}
-+			ids = p;
-+		}
-+
-+		ids[cnt] = i;
-+		cnt++;
-+	}
-+
-+	regfree(&regex);
-+	*__ids = ids;
-+	return cnt ?: -ENOENT;
++	return bpf_prog_start_time();
 +}
 +
- static bool btf_is_modifiable(const struct btf *btf)
- {
- 	return (void *)btf->hdr != btf->raw_data;
-diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
-index b54f1c3ebd57..036857aded94 100644
---- a/tools/lib/bpf/btf.h
-+++ b/tools/lib/bpf/btf.h
-@@ -371,6 +371,9 @@ btf_var_secinfos(const struct btf_type *t)
- 	return (struct btf_var_secinfo *)(t + 1);
++static void notrace update_prog_stats(struct bpf_prog *prog,
++				      u64 start)
++{
++	struct bpf_prog_stats *stats;
++
++	if (static_branch_unlikely(&bpf_stats_enabled_key) &&
++	    /* static_key could be enabled in __bpf_prog_enter*
++	     * and disabled in __bpf_prog_exit*.
++	     * And vice versa.
++	     * Hence check that 'start' is valid.
++	     */
++	    start > NO_START_TIME) {
++		stats = this_cpu_ptr(prog->stats);
++		u64_stats_update_begin(&stats->syncp);
++		stats->cnt++;
++		stats->nsecs += sched_clock() - start;
++		u64_stats_update_end(&stats->syncp);
++	}
++}
++
++void notrace __bpf_prog_exit(struct bpf_prog *prog, u64 start)
++	__releases(RCU)
++{
++	update_prog_stats(prog, start);
++	__this_cpu_dec(*(prog->active));
++	migrate_enable();
++	rcu_read_unlock();
++}
++
++u64 notrace __bpf_prog_enter_sleepable(struct bpf_prog *prog)
++{
++	rcu_read_lock_trace();
++	migrate_disable();
++	might_fault();
++	if (unlikely(__this_cpu_inc_return(*(prog->active)) != 1)) {
++		inc_misses_counter(prog);
++		return 0;
++	}
++	return bpf_prog_start_time();
++}
++
++void notrace __bpf_prog_exit_sleepable(struct bpf_prog *prog, u64 start)
++{
++	update_prog_stats(prog, start);
++	__this_cpu_dec(*(prog->active));
++	migrate_enable();
++	rcu_read_unlock_trace();
++}
+diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+index 1f3a4be4b175..951cad26c5a9 100644
+--- a/kernel/bpf/trampoline.c
++++ b/kernel/bpf/trampoline.c
+@@ -489,103 +489,6 @@ void bpf_trampoline_put(struct bpf_trampoline *tr)
+ 	mutex_unlock(&trampoline_mutex);
  }
  
-+int btf__find_by_pattern_kind(const struct btf *btf,
-+			      const char *type_pattern, __u32 kind,
-+			      __s32 **__ids);
- #ifdef __cplusplus
- } /* extern "C" */
- #endif
+-#define NO_START_TIME 1
+-static u64 notrace bpf_prog_start_time(void)
+-{
+-	u64 start = NO_START_TIME;
+-
+-	if (static_branch_unlikely(&bpf_stats_enabled_key)) {
+-		start = sched_clock();
+-		if (unlikely(!start))
+-			start = NO_START_TIME;
+-	}
+-	return start;
+-}
+-
+-static void notrace inc_misses_counter(struct bpf_prog *prog)
+-{
+-	struct bpf_prog_stats *stats;
+-
+-	stats = this_cpu_ptr(prog->stats);
+-	u64_stats_update_begin(&stats->syncp);
+-	stats->misses++;
+-	u64_stats_update_end(&stats->syncp);
+-}
+-
+-/* The logic is similar to BPF_PROG_RUN, but with an explicit
+- * rcu_read_lock() and migrate_disable() which are required
+- * for the trampoline. The macro is split into
+- * call __bpf_prog_enter
+- * call prog->bpf_func
+- * call __bpf_prog_exit
+- *
+- * __bpf_prog_enter returns:
+- * 0 - skip execution of the bpf prog
+- * 1 - execute bpf prog
+- * [2..MAX_U64] - excute bpf prog and record execution time.
+- *     This is start time.
+- */
+-u64 notrace __bpf_prog_enter(struct bpf_prog *prog)
+-	__acquires(RCU)
+-{
+-	rcu_read_lock();
+-	migrate_disable();
+-	if (unlikely(__this_cpu_inc_return(*(prog->active)) != 1)) {
+-		inc_misses_counter(prog);
+-		return 0;
+-	}
+-	return bpf_prog_start_time();
+-}
+-
+-static void notrace update_prog_stats(struct bpf_prog *prog,
+-				      u64 start)
+-{
+-	struct bpf_prog_stats *stats;
+-
+-	if (static_branch_unlikely(&bpf_stats_enabled_key) &&
+-	    /* static_key could be enabled in __bpf_prog_enter*
+-	     * and disabled in __bpf_prog_exit*.
+-	     * And vice versa.
+-	     * Hence check that 'start' is valid.
+-	     */
+-	    start > NO_START_TIME) {
+-		stats = this_cpu_ptr(prog->stats);
+-		u64_stats_update_begin(&stats->syncp);
+-		stats->cnt++;
+-		stats->nsecs += sched_clock() - start;
+-		u64_stats_update_end(&stats->syncp);
+-	}
+-}
+-
+-void notrace __bpf_prog_exit(struct bpf_prog *prog, u64 start)
+-	__releases(RCU)
+-{
+-	update_prog_stats(prog, start);
+-	__this_cpu_dec(*(prog->active));
+-	migrate_enable();
+-	rcu_read_unlock();
+-}
+-
+-u64 notrace __bpf_prog_enter_sleepable(struct bpf_prog *prog)
+-{
+-	rcu_read_lock_trace();
+-	migrate_disable();
+-	might_fault();
+-	if (unlikely(__this_cpu_inc_return(*(prog->active)) != 1)) {
+-		inc_misses_counter(prog);
+-		return 0;
+-	}
+-	return bpf_prog_start_time();
+-}
+-
+-void notrace __bpf_prog_exit_sleepable(struct bpf_prog *prog, u64 start)
+-{
+-	update_prog_stats(prog, start);
+-	__this_cpu_dec(*(prog->active));
+-	migrate_enable();
+-	rcu_read_unlock_trace();
+-}
+-
+ void notrace __bpf_tramp_enter(struct bpf_tramp_image *tr)
+ {
+ 	percpu_ref_get(&tr->pcref);
 -- 
 2.30.2
 
