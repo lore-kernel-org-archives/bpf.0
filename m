@@ -2,115 +2,115 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F69BC433B4
-	for <bpf@archiver.kernel.org>; Tue, 13 Apr 2021 16:22:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93735C433B4
+	for <bpf@archiver.kernel.org>; Tue, 13 Apr 2021 16:24:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 094656135C
-	for <bpf@archiver.kernel.org>; Tue, 13 Apr 2021 16:22:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 725EF6124B
+	for <bpf@archiver.kernel.org>; Tue, 13 Apr 2021 16:24:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243520AbhDMQWb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 13 Apr 2021 12:22:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47470 "EHLO mail.kernel.org"
+        id S232001AbhDMQY6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 13 Apr 2021 12:24:58 -0400
+Received: from mga01.intel.com ([192.55.52.88]:10663 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241597AbhDMQWb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 13 Apr 2021 12:22:31 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B5DAA61004;
-        Tue, 13 Apr 2021 16:22:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1618330931;
-        bh=rAXwyBauwU2YoFfTfHi6sbsmdGePSz+G8Q09owNXChw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=SiRDgprUW14so9XgIDAqC04bsBcBvc7K06giyfcsLGnVn6mNXo5eHRhomTSihmjZy
-         3Adlp7RRq92xSLUrjlhF47Qe1VmUidKNpN4Cfl73agNobHuuaqjl6ijL5mqD+8aaP7
-         t+dq0Vo4dZRZvmiEm60ONdBQU0PGnyOi9eG5I8SNVeMFJJTIWQCo6X1BX8IGKggTAx
-         YsvfAXjtypYdKNQ8utvUNSxzImC9S9ne8lbwxvblrCDFtnhxUwlAaSbR7BmM11kbMp
-         JhKtpszh1DDfP0D4YOb32IGlCn7e+xM4LR5SbcKxuXyuk1l6o3UmXDK5rPask8XfZG
-         K6YezKNs9j9ig==
-From:   Lorenzo Bianconi <lorenzo@kernel.org>
-To:     bpf@vger.kernel.org
-Cc:     netdev@vger.kernel.org, lorenzo.bianconi@redhat.com,
-        davem@davemloft.net, kuba@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, brouer@redhat.com, song@kernel.org
-Subject: [PATCH v2 bpf-next] cpumap: bulk skb using netif_receive_skb_list
-Date:   Tue, 13 Apr 2021 18:22:02 +0200
-Message-Id: <bb627106428ea3223610f5623142c24270f0e14e.1618330734.git.lorenzo@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        id S231969AbhDMQY5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 13 Apr 2021 12:24:57 -0400
+IronPort-SDR: RPZ/jslSmFUv/O/neq5BV1KVttHx1cgAvs7NegU9Z3YmsugUbG7aK0JenIDAy+w5X021NWrVdq
+ ZyZu5w/BC+xg==
+X-IronPort-AV: E=McAfee;i="6200,9189,9953"; a="214930983"
+X-IronPort-AV: E=Sophos;i="5.82,219,1613462400"; 
+   d="scan'208";a="214930983"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2021 09:18:14 -0700
+IronPort-SDR: Jzr+S+le5B4GUu2EQyxbXU3HDtawIzY+OyQ3xLADIAL2ivTY0OdI80xwzRmJf+X6sUAh0+Jpqv
+ lf+q961xqT/g==
+X-IronPort-AV: E=Sophos;i="5.82,219,1613462400"; 
+   d="scan'208";a="452023243"
+Received: from jbrandeb-mobl4.amr.corp.intel.com (HELO localhost) ([10.209.118.40])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2021 09:18:13 -0700
+Date:   Tue, 13 Apr 2021 09:18:12 -0700
+From:   Jesse Brandeburg <jesse.brandeburg@intel.com>
+To:     kerneljasonxing@gmail.com
+Cc:     anthony.l.nguyen@intel.com, davem@davemloft.net, kuba@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+        john.fastabend@gmail.com, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, kpsingh@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, Jason Xing <xingwanli@kuaishou.com>,
+        Shujin Li <lishujin@kuaishou.com>,
+        intel-wired-lan@lists.osuosl.org
+Subject: Re: [PATCH net v2] i40e: fix the panic when running bpf in xdpdrv
+ mode
+Message-ID: <20210413091812.0000383d@intel.com>
+In-Reply-To: <20210413025011.1251-1-kerneljasonxing@gmail.com>
+References: <20210412065759.2907-1-kerneljasonxing@gmail.com>
+        <20210413025011.1251-1-kerneljasonxing@gmail.com>
+X-Mailer: Claws Mail 3.12.0 (GTK+ 2.24.28; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Rely on netif_receive_skb_list routine to send skbs converted from
-xdp_frames in cpu_map_kthread_run in order to improve i-cache usage.
-The proposed patch has been tested running xdp_redirect_cpu bpf sample
-available in the kernel tree that is used to redirect UDP frames from
-ixgbe driver to a cpumap entry and then to the networking stack.
-UDP frames are generated using pkt_gen.
+kerneljasonxing@gmail.com wrote:
 
-$xdp_redirect_cpu  --cpu <cpu> --progname xdp_cpu_map0 --dev <eth>
+> From: Jason Xing <xingwanli@kuaishou.com>
 
-bpf-next: ~2.2Mpps
-bpf-next + cpumap skb-list: ~3.15Mpps
+Hi Jason,
 
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
----
-Changes since v1:
-- fixed comment
-- rebased on top of bpf-next tree
----
- kernel/bpf/cpumap.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+Sorry, I missed this on the first time: Added intel-wired-lan,
+please include on any future submissions for Intel drivers.
+get-maintainers script might help here?
 
-diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
-index 0cf2791d5099..d89551a508b2 100644
---- a/kernel/bpf/cpumap.c
-+++ b/kernel/bpf/cpumap.c
-@@ -27,7 +27,7 @@
- #include <linux/capability.h>
- #include <trace/events/xdp.h>
- 
--#include <linux/netdevice.h>   /* netif_receive_skb_core */
-+#include <linux/netdevice.h>   /* netif_receive_skb_list */
- #include <linux/etherdevice.h> /* eth_type_trans */
- 
- /* General idea: XDP packets getting XDP redirected to another CPU,
-@@ -257,6 +257,7 @@ static int cpu_map_kthread_run(void *data)
- 		void *frames[CPUMAP_BATCH];
- 		void *skbs[CPUMAP_BATCH];
- 		int i, n, m, nframes;
-+		LIST_HEAD(list);
- 
- 		/* Release CPU reschedule checks */
- 		if (__ptr_ring_empty(rcpu->queue)) {
-@@ -305,7 +306,6 @@ static int cpu_map_kthread_run(void *data)
- 		for (i = 0; i < nframes; i++) {
- 			struct xdp_frame *xdpf = frames[i];
- 			struct sk_buff *skb = skbs[i];
--			int ret;
- 
- 			skb = __xdp_build_skb_from_frame(xdpf, skb,
- 							 xdpf->dev_rx);
-@@ -314,11 +314,10 @@ static int cpu_map_kthread_run(void *data)
- 				continue;
- 			}
- 
--			/* Inject into network stack */
--			ret = netif_receive_skb_core(skb);
--			if (ret == NET_RX_DROP)
--				drops++;
-+			list_add_tail(&skb->list, &list);
- 		}
-+		netif_receive_skb_list(&list);
-+
- 		/* Feedback loop via tracepoint */
- 		trace_xdp_cpumap_kthread(rcpu->map_id, n, drops, sched, &stats);
- 
--- 
-2.30.2
+> 
+> Fix this panic by adding more rules to calculate the value of @rss_size_max
+> which could be used in allocating the queues when bpf is loaded, which,
+> however, could cause the failure and then trigger the NULL pointer of
+> vsi->rx_rings. Prio to this fix, the machine doesn't care about how many
+> cpus are online and then allocates 256 queues on the machine with 32 cpus
+> online actually.
+> 
+> Once the load of bpf begins, the log will go like this "failed to get
+> tracking for 256 queues for VSI 0 err -12" and this "setup of MAIN VSI
+> failed".
+> 
+> Thus, I attach the key information of the crash-log here.
+> 
+> BUG: unable to handle kernel NULL pointer dereference at
+> 0000000000000000
+> RIP: 0010:i40e_xdp+0xdd/0x1b0 [i40e]
+> Call Trace:
+> [2160294.717292]  ? i40e_reconfig_rss_queues+0x170/0x170 [i40e]
+> [2160294.717666]  dev_xdp_install+0x4f/0x70
+> [2160294.718036]  dev_change_xdp_fd+0x11f/0x230
+> [2160294.718380]  ? dev_disable_lro+0xe0/0xe0
+> [2160294.718705]  do_setlink+0xac7/0xe70
+> [2160294.719035]  ? __nla_parse+0xed/0x120
+> [2160294.719365]  rtnl_newlink+0x73b/0x860
+> 
+> Fixes: 41c445ff0f48 ("i40e: main driver core")
+> 
 
+This Fixes line should be connected to the Sign offs with
+no linefeeds between.
+
+> Signed-off-by: Jason Xing <xingwanli@kuaishou.com>
+> Signed-off-by: Shujin Li <lishujin@kuaishou.com>
+
+Did Shujin contribute to this patch? Why are they signing off? If
+they developed this patch with you, it should say:
+Co-developed-by: Shujin ....
+Signed-off-by: Shujin ...
+Signed-off-by: Jason ...
+
+Your signature should be last if you sent the patch. The sign-offs are
+like a chain of custody, please review 
+https://www.kernel.org/doc/html/latest/process/submitting-patches.html#when-to-use-acked-by-cc-and-co-developed-by
+
+Thanks,
+ Jesse
