@@ -4,57 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF8B8C43461
-	for <bpf@archiver.kernel.org>; Tue, 13 Apr 2021 15:34:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F047C433ED
+	for <bpf@archiver.kernel.org>; Tue, 13 Apr 2021 15:34:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A99BC613B6
-	for <bpf@archiver.kernel.org>; Tue, 13 Apr 2021 15:34:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 05221613C9
+	for <bpf@archiver.kernel.org>; Tue, 13 Apr 2021 15:34:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345959AbhDMPem (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 13 Apr 2021 11:34:42 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:41758 "EHLO
+        id S239255AbhDMPeo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 13 Apr 2021 11:34:44 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:63968 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1344797AbhDMPek (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 13 Apr 2021 11:34:40 -0400
+        by vger.kernel.org with ESMTP id S1345197AbhDMPen (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 13 Apr 2021 11:34:43 -0400
 Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13DFQ1Xv006409
-        for <bpf@vger.kernel.org>; Tue, 13 Apr 2021 08:34:15 -0700
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13DFQASp006505
+        for <bpf@vger.kernel.org>; Tue, 13 Apr 2021 08:34:24 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : content-type : content-transfer-encoding :
- mime-version; s=facebook; bh=f85XKa8nb30dwQWZpQtdrLtN8VggNvUjDGlhsY0ZSII=;
- b=p9KCmL/uB8y7VVKbpQLxs/xQjfRs35/otqF+EAbWK49W9uWCodGUplUAw+UWcnVjiO3C
- R7RHi3HwA0bXV68d7pym7Q2CnoF4LFu6ci0MDZd+PXt8M8LruGA89SW9zppWcuvn2WDH
- p4Nw3/fMcNi9NQFFaiwiV+/3QDs691QinrQ= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 37wbd5h137-5
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=LnSkRrEzzj9hjlPxrFdVSseq7lBuWls5Y18seJhV5Tk=;
+ b=e/7bz+/FKZ3iiApk4oUv5MiO81djSSNldqIYFGLoamQ7xmfByp2DarFykeHIseoE0e6X
+ mahehtqJIBynWLSAoPU75QaHvhB7kYOgshDbzUoo3/RbqiNwluj3/0LKq/MOr0WKKTEs
+ bkjAhE0ZdhMtcWhxDkCk+cICa3RT+RANaZw= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 37wbd5h14e-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 13 Apr 2021 08:34:14 -0700
-Received: from intmgw001.06.ash9.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 13 Apr 2021 08:34:23 -0700
+Received: from intmgw001.38.frc1.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Tue, 13 Apr 2021 08:34:14 -0700
+ 15.1.2176.2; Tue, 13 Apr 2021 08:34:23 -0700
 Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id BE09A161F37B; Tue, 13 Apr 2021 08:34:08 -0700 (PDT)
+        id 516C3161F4E4; Tue, 13 Apr 2021 08:34:19 -0700 (PDT)
 From:   Yonghong Song <yhs@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Andrii Nakryiko <andrii@kernel.org>,
         Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
         <kernel-team@fb.com>, Nick Desaulniers <ndesaulniers@google.com>,
         Sedat Dilek <sedat.dilek@gmail.com>
-Subject: [PATCH bpf-next v3 0/5] bpf: tools: support build selftests/bpf with clang
-Date:   Tue, 13 Apr 2021 08:34:08 -0700
-Message-ID: <20210413153408.3027270-1-yhs@fb.com>
+Subject: [PATCH bpf-next v3 2/5] tools: allow proper CC/CXX/... override with LLVM=1 in Makefile.include
+Date:   Tue, 13 Apr 2021 08:34:19 -0700
+Message-ID: <20210413153419.3028165-1-yhs@fb.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210413153408.3027270-1-yhs@fb.com>
+References: <20210413153408.3027270-1-yhs@fb.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: qHMRV2hFHZMQoqLfYk-zG7lKEkk-kVcF
-X-Proofpoint-ORIG-GUID: qHMRV2hFHZMQoqLfYk-zG7lKEkk-kVcF
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
+X-Proofpoint-GUID: rKcXfgK30FHvOfoBbX5oSGtU8fs1YveL
+X-Proofpoint-ORIG-GUID: rKcXfgK30FHvOfoBbX5oSGtU8fs1YveL
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
  definitions=2021-04-13_09:2021-04-13,2021-04-13 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
@@ -67,67 +69,62 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-To build kernel with clang, people typically use
-  make -j60 LLVM=3D1 LLVM_IAS=3D1
-LLVM_IAS=3D1 is not required for non-LTO build but
-is required for LTO build. In my environment,
-I am always having LLVM_IAS=3D1 regardless of
-whether LTO is enabled or not.
+selftests/bpf/Makefile includes tools/scripts/Makefile.include.
+With the following command
+  make -j60 LLVM=3D1 LLVM_IAS=3D1  <=3D=3D=3D compile kernel
+  make -j60 -C tools/testing/selftests/bpf LLVM=3D1 LLVM_IAS=3D1 V=3D1
+some files are still compiled with gcc. This patch
+fixed the case if CC/AR/LD/CXX/STRIP is allowed to be
+overridden, it will be written to clang/llvm-ar/..., instead of
+gcc binaries. The definition of CC_NO_CLANG is also relocated
+to the place after the above CC is defined.
 
-After kernel is build with clang, the following command
-can be used to build selftests with clang:
-  make -j60 -C tools/testing/selftests/bpf LLVM=3D1 LLVM_IAS=3D1
+Cc: Sedat Dilek <sedat.dilek@gmail.com>
+Signed-off-by: Yonghong Song <yhs@fb.com>
+---
+ tools/scripts/Makefile.include | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-I am using latest bpf-next kernel code base and
-latest clang built from source from
-  https://github.com/llvm/llvm-project.git
-Using earlier version of llvm may have compilation errors, see
-  tools/testing/selftests/bpf
-due to continuous development in llvm bpf features and selftests
-to use these features.
-
-To run bpf selftest properly, you need have certain necessary
-kernel configs like at:
-  bpf-next:tools/testing/selftests/bpf/config
-(not that this is not a complete .config file and some other configs
- might still be needed.)
-
-Currently, using the above command, some compilations
-still use gcc and there are also compilation errors and warnings.
-This patch set intends to fix these issues.
-Patch #1 and #2 fixed the issue so clang/clang++ is
-used instead of gcc/g++. Patch #3 fixed a compilation
-failure. Patch #4 and #5 fixed various compiler warnings.
-
-Changelog:
-  v2 -> v3:
-    . more test environment description in cover letter. (Sedat)
-    . use a different fix, but similar to other use in selftests/bpf
-      Makefile, to exclude header files from CXX compilation command
-      line. (Andrii)
-    . fix codes instead of adding -Wno-format-security. (Andrii)
-  v1 -> v2:
-    . add -Wno-unused-command-line-argument and -Wno-format-security
-      for clang only as (1). gcc does not exhibit those
-      warnings, and (2). -Wno-unused-command-line-argument is
-      only supported by clang. (Sedat)
-
-Yonghong Song (5):
-  selftests: set CC to clang in lib.mk if LLVM is set
-  tools: allow proper CC/CXX/... override with LLVM=3D1 in
-    Makefile.include
-  selftests/bpf: fix test_cpp compilation failure with clang
-  selftests/bpf: silence clang compilation warnings
-  bpftool: fix a clang compilation warning
-
- tools/bpf/bpftool/net.c                              |  2 +-
- tools/scripts/Makefile.include                       | 12 ++++++++++--
- tools/testing/selftests/bpf/Makefile                 |  7 ++++++-
- tools/testing/selftests/bpf/prog_tests/fexit_sleep.c |  4 ++--
- .../selftests/bpf/prog_tests/ns_current_pid_tgid.c   |  4 ++--
- tools/testing/selftests/lib.mk                       |  4 ++++
- 6 files changed, 25 insertions(+), 8 deletions(-)
-
+diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.incl=
+ude
+index a402f32a145c..91130648d8e6 100644
+--- a/tools/scripts/Makefile.include
++++ b/tools/scripts/Makefile.include
+@@ -39,8 +39,6 @@ EXTRA_WARNINGS +=3D -Wundef
+ EXTRA_WARNINGS +=3D -Wwrite-strings
+ EXTRA_WARNINGS +=3D -Wformat
+=20
+-CC_NO_CLANG :=3D $(shell $(CC) -dM -E -x c /dev/null | grep -Fq "__clang=
+__"; echo $$?)
+-
+ # Makefiles suck: This macro sets a default value of $(2) for the
+ # variable named by $(1), unless the variable has been set by
+ # environment or command line. This is necessary for CC and AR
+@@ -52,12 +50,22 @@ define allow-override
+     $(eval $(1) =3D $(2)))
+ endef
+=20
++ifneq ($(LLVM),)
++$(call allow-override,CC,clang)
++$(call allow-override,AR,llvm-ar)
++$(call allow-override,LD,ld.lld)
++$(call allow-override,CXX,clang++)
++$(call allow-override,STRIP,llvm-strip)
++else
+ # Allow setting various cross-compile vars or setting CROSS_COMPILE as a=
+ prefix.
+ $(call allow-override,CC,$(CROSS_COMPILE)gcc)
+ $(call allow-override,AR,$(CROSS_COMPILE)ar)
+ $(call allow-override,LD,$(CROSS_COMPILE)ld)
+ $(call allow-override,CXX,$(CROSS_COMPILE)g++)
+ $(call allow-override,STRIP,$(CROSS_COMPILE)strip)
++endif
++
++CC_NO_CLANG :=3D $(shell $(CC) -dM -E -x c /dev/null | grep -Fq "__clang=
+__"; echo $$?)
+=20
+ ifneq ($(LLVM),)
+ HOSTAR  ?=3D llvm-ar
 --=20
 2.30.2
 
