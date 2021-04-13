@@ -6,30 +6,30 @@ X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16592C43460
-	for <bpf@archiver.kernel.org>; Tue, 13 Apr 2021 12:16:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E947C433B4
+	for <bpf@archiver.kernel.org>; Tue, 13 Apr 2021 12:16:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EFDEC61026
-	for <bpf@archiver.kernel.org>; Tue, 13 Apr 2021 12:15:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 54FD0613AE
+	for <bpf@archiver.kernel.org>; Tue, 13 Apr 2021 12:16:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239901AbhDMMQS convert rfc822-to-8bit (ORCPT
+        id S1344287AbhDMMQS convert rfc822-to-8bit (ORCPT
         <rfc822;bpf@archiver.kernel.org>); Tue, 13 Apr 2021 08:16:18 -0400
-Received: from us-smtp-delivery-44.mimecast.com ([205.139.111.44]:32146 "EHLO
+Received: from us-smtp-delivery-44.mimecast.com ([205.139.111.44]:55634 "EHLO
         us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240004AbhDMMQP (ORCPT
+        by vger.kernel.org with ESMTP id S243979AbhDMMQP (ORCPT
         <rfc822;bpf@vger.kernel.org>); Tue, 13 Apr 2021 08:16:15 -0400
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-64-KGhuL3XPMLKUv4IYbETgew-1; Tue, 13 Apr 2021 08:15:51 -0400
-X-MC-Unique: KGhuL3XPMLKUv4IYbETgew-1
+ us-mta-44-DhlZXKJDM-epo_dJNf3p0Q-1; Tue, 13 Apr 2021 08:15:51 -0400
+X-MC-Unique: DhlZXKJDM-epo_dJNf3p0Q-1
 Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 81CE483DE6B;
-        Tue, 13 Apr 2021 12:15:38 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id CBFE279EF6;
+        Tue, 13 Apr 2021 12:15:27 +0000 (UTC)
 Received: from krava.redhat.com (unknown [10.40.196.16])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1C30F10023B0;
-        Tue, 13 Apr 2021 12:15:34 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A6D22104C412;
+        Tue, 13 Apr 2021 12:15:24 +0000 (UTC)
 From:   Jiri Olsa <jolsa@kernel.org>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -43,9 +43,9 @@ Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         Jesper Brouer <jbrouer@redhat.com>,
         =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
         Viktor Malik <vmalik@redhat.com>
-Subject: [PATCHv2 RFC bpf-next 5/7] libbpf: Add support to load and attach ftrace probe
-Date:   Tue, 13 Apr 2021 14:15:14 +0200
-Message-Id: <20210413121516.1467989-6-jolsa@kernel.org>
+Subject: [PATCHv2 RFC bpf-next 2/7] bpf: Add bpf_functions object
+Date:   Tue, 13 Apr 2021 14:15:11 +0200
+Message-Id: <20210413121516.1467989-3-jolsa@kernel.org>
 In-Reply-To: <20210413121516.1467989-1-jolsa@kernel.org>
 References: <20210413121516.1467989-1-jolsa@kernel.org>
 MIME-Version: 1.0
@@ -60,194 +60,234 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Adding support to load and attach ftrace probe.
+Adding bpf_functions object to gather and carry functions
+based on their BTF id. It will be used in following patch
+to attach multiple functions to bpf ftrace probe program.
 
-Adding new section type 'fentry.ftrace', that identifies
-ftrace probe and assigns BPF_TRACE_FTRACE_ENTRY to prog's
-expected_attach_type.
+With bpf_functions object we can do such attachment at one
+single moment, so it will speed up tools that need this.
 
-The attach function creates bpf_functions object and
-makes an ftrace link with the program.
+New struct is added to union bpf_attr, that is used for
+new command BPF_FUNCTIONS_ADD:
+
+  struct { /* BPF_FUNCTIONS_ADD */
+          __u32           fd;
+          __u32           btf_id;
+  } functions_add;
+
+When fd == -1 new bpf_functions object is created with one
+function (specified by btf_id) and its fd is returned.
+For fd >= 0 the function (specified by btf_id) is added
+to the existing object for the given fd.
 
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- tools/lib/bpf/bpf.c      | 12 +++++++
- tools/lib/bpf/bpf.h      |  5 ++-
- tools/lib/bpf/libbpf.c   | 74 ++++++++++++++++++++++++++++++++++++++++
- tools/lib/bpf/libbpf.map |  1 +
- 4 files changed, 91 insertions(+), 1 deletion(-)
+ include/uapi/linux/bpf.h       |   5 ++
+ kernel/bpf/syscall.c           | 137 +++++++++++++++++++++++++++++++++
+ tools/include/uapi/linux/bpf.h |   5 ++
+ 3 files changed, 147 insertions(+)
 
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index bba48ff4c5c0..b3195ac3e32e 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -643,6 +643,7 @@ int bpf_link_create(int prog_fd, int target_fd,
- 	attr.link_create.target_fd = target_fd;
- 	attr.link_create.attach_type = attach_type;
- 	attr.link_create.flags = OPTS_GET(opts, flags, 0);
-+	attr.link_create.funcs_fd = OPTS_GET(opts, funcs_fd, 0);
- 
- 	if (iter_info_len) {
- 		attr.link_create.iter_info =
-@@ -971,3 +972,14 @@ int bpf_prog_bind_map(int prog_fd, int map_fd,
- 
- 	return sys_bpf(BPF_PROG_BIND_MAP, &attr, sizeof(attr));
- }
-+
-+int bpf_functions_add(int fd, int btf_id)
-+{
-+	union bpf_attr attr;
-+
-+	memset(&attr, 0, sizeof(attr));
-+	attr.functions_add.fd = fd;
-+	attr.functions_add.btf_id = btf_id;
-+
-+	return sys_bpf(BPF_FUNCTIONS_ADD, &attr, sizeof(attr));
-+}
-diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index 875dde20d56e..f677fe06262b 100644
---- a/tools/lib/bpf/bpf.h
-+++ b/tools/lib/bpf/bpf.h
-@@ -175,8 +175,9 @@ struct bpf_link_create_opts {
- 	union bpf_iter_link_info *iter_info;
- 	__u32 iter_info_len;
- 	__u32 target_btf_id;
-+	__u32 funcs_fd;
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index e1ee1be7e49b..5d616735fe1b 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -862,6 +862,7 @@ enum bpf_cmd {
+ 	BPF_ITER_CREATE,
+ 	BPF_LINK_DETACH,
+ 	BPF_PROG_BIND_MAP,
++	BPF_FUNCTIONS_ADD,
  };
--#define bpf_link_create_opts__last_field target_btf_id
-+#define bpf_link_create_opts__last_field funcs_fd
  
- LIBBPF_API int bpf_link_create(int prog_fd, int target_fd,
- 			       enum bpf_attach_type attach_type,
-@@ -278,6 +279,8 @@ struct bpf_test_run_opts {
- LIBBPF_API int bpf_prog_test_run_opts(int prog_fd,
- 				      struct bpf_test_run_opts *opts);
+ enum bpf_map_type {
+@@ -1458,6 +1459,10 @@ union bpf_attr {
+ 		__u32		flags;		/* extra flags */
+ 	} prog_bind_map;
  
-+LIBBPF_API int bpf_functions_add(int fd, int btf_id);
-+
- #ifdef __cplusplus
- } /* extern "C" */
- #endif
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index ed5586cce227..b3cb43990524 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -8838,6 +8838,10 @@ static const struct bpf_sec_def section_defs[] = {
- 		.expected_attach_type = BPF_TRACE_ITER,
- 		.is_attach_btf = true,
- 		.attach_fn = attach_iter),
-+	SEC_DEF("fentry.ftrace/", TRACING,
-+		.expected_attach_type = BPF_TRACE_FTRACE_ENTRY,
-+		.is_attach_btf = true,
-+		.attach_fn = attach_trace),
- 	BPF_EAPROG_SEC("xdp_devmap/",		BPF_PROG_TYPE_XDP,
- 						BPF_XDP_DEVMAP),
- 	BPF_EAPROG_SEC("xdp_cpumap/",		BPF_PROG_TYPE_XDP,
-@@ -9125,6 +9129,7 @@ static int bpf_object__collect_st_ops_relos(struct bpf_object *obj,
- #define BTF_TRACE_PREFIX "btf_trace_"
- #define BTF_LSM_PREFIX "bpf_lsm_"
- #define BTF_ITER_PREFIX "bpf_iter_"
-+#define BTF_FTRACE_PROBE "bpf_ftrace_probe"
- #define BTF_MAX_NAME_SIZE 128
++	struct { /* BPF_FUNCTIONS_ADD */
++		__u32		fd;
++		__u32		btf_id;
++	} functions_add;
+ } __attribute__((aligned(8)));
  
- static int find_btf_by_prefix_kind(const struct btf *btf, const char *prefix,
-@@ -9158,6 +9163,9 @@ static inline int find_attach_btf_id(struct btf *btf, const char *name,
- 	else if (attach_type == BPF_TRACE_ITER)
- 		err = find_btf_by_prefix_kind(btf, BTF_ITER_PREFIX, name,
- 					      BTF_KIND_FUNC);
-+	else if (attach_type == BPF_TRACE_FTRACE_ENTRY)
-+		err = btf__find_by_name_kind(btf, BTF_FTRACE_PROBE,
-+					     BTF_KIND_FUNC);
- 	else
- 		err = btf__find_by_name_kind(btf, name, BTF_KIND_FUNC);
- 
-@@ -10191,8 +10199,74 @@ static struct bpf_link *bpf_program__attach_btf_id(struct bpf_program *prog)
- 	return (struct bpf_link *)link;
+ /* The description below is an attempt at providing documentation to eBPF
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 90cd58520bd4..b240a500cae5 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -2265,6 +2265,140 @@ static int bpf_prog_load(union bpf_attr *attr, union bpf_attr __user *uattr)
+ 	return err;
  }
  
-+static struct bpf_link *bpf_program__attach_ftrace(struct bpf_program *prog)
++#define BPF_FUNCTIONS_ALLOC 100
++#define BPF_FUNCTIONS_MAX   (BPF_FUNCTIONS_ALLOC*10)
++
++struct bpf_functions {
++	struct mutex mutex;
++	unsigned long *addrs;
++	int cnt;
++	int alloc;
++};
++
++static int bpf_functions_release(struct inode *inode, struct file *file)
 +{
-+	char *pattern = prog->sec_name + prog->sec_def->len;
-+	DECLARE_LIBBPF_OPTS(bpf_link_create_opts, opts);
-+	int prog_fd, link_fd, cnt, err, i;
-+	enum bpf_attach_type attach_type;
-+	struct bpf_link *link = NULL;
-+	__s32 *ids = NULL;
-+	int funcs_fd = -1;
++	struct bpf_functions *funcs = file->private_data;
 +
-+	prog_fd = bpf_program__fd(prog);
-+	if (prog_fd < 0) {
-+		pr_warn("prog '%s': can't attach before loaded\n", prog->name);
-+		return ERR_PTR(-EINVAL);
-+	}
-+
-+	err = bpf_object__load_vmlinux_btf(prog->obj, true);
-+	if (err)
-+		return ERR_PTR(err);
-+
-+	cnt = btf__find_by_pattern_kind(prog->obj->btf_vmlinux, pattern,
-+					BTF_KIND_FUNC, &ids);
-+	if (cnt <= 0)
-+		return ERR_PTR(-EINVAL);
-+
-+	for (i = 0; i < cnt; i++) {
-+		err = bpf_functions_add(funcs_fd, ids[i]);
-+		if (err < 0) {
-+			pr_warn("prog '%s': can't attach function BTF ID %d\n",
-+				prog->name, ids[i]);
-+			goto out_err;
-+		}
-+		if (funcs_fd == -1)
-+			funcs_fd = err;
-+	}
-+
-+	link = calloc(1, sizeof(*link));
-+	if (!link) {
-+		err = -ENOMEM;
-+		goto out_err;
-+	}
-+	link->detach = &bpf_link__detach_fd;
-+
-+	opts.funcs_fd = funcs_fd;
-+
-+	attach_type = bpf_program__get_expected_attach_type(prog);
-+	link_fd = bpf_link_create(prog_fd, 0, attach_type, &opts);
-+	if (link_fd < 0) {
-+		err = -errno;
-+		goto out_err;
-+	}
-+	link->fd = link_fd;
-+	free(ids);
-+	return link;
-+
-+out_err:
-+	if (funcs_fd != -1)
-+		close(funcs_fd);
-+	free(link);
-+	free(ids);
-+	return ERR_PTR(err);
++	kfree(funcs->addrs);
++	kfree(funcs);
++	return 0;
 +}
 +
- struct bpf_link *bpf_program__attach_trace(struct bpf_program *prog)
- {
-+	if (prog->expected_attach_type == BPF_TRACE_FTRACE_ENTRY)
-+		return bpf_program__attach_ftrace(prog);
++static const struct file_operations bpf_functions_fops = {
++	.release = bpf_functions_release,
++};
 +
- 	return bpf_program__attach_btf_id(prog);
- }
++static struct bpf_functions *bpf_functions_get_from_fd(u32 ufd, struct fd *p)
++{
++	struct fd f = fdget(ufd);
++
++	if (!f.file)
++		return ERR_PTR(-EBADF);
++	if (f.file->f_op != &bpf_functions_fops) {
++		fdput(f);
++		return ERR_PTR(-EINVAL);
++	}
++	*p = f;
++	return f.file->private_data;
++}
++
++static unsigned long bpf_get_kernel_func_addr(u32 btf_id, struct btf *btf)
++{
++	const struct btf_type *t;
++	const char *tname;
++
++	t = btf_type_by_id(btf, btf_id);
++	if (!t)
++		return 0;
++	tname = btf_name_by_offset(btf, t->name_off);
++	if (!tname)
++		return 0;
++	if (!btf_type_is_func(t))
++		return 0;
++	t = btf_type_by_id(btf, t->type);
++	if (!btf_type_is_func_proto(t))
++		return 0;
++
++	return kallsyms_lookup_name(tname);
++}
++
++#define BPF_FUNCTIONS_ADD_LAST_FIELD functions_add.btf_id
++
++static int bpf_functions_add(union bpf_attr *attr)
++{
++	struct bpf_functions *funcs;
++	unsigned long addr, *p;
++	struct fd orig = { };
++	int ret = 0, fd;
++	struct btf *btf;
++
++	if (CHECK_ATTR(BPF_FUNCTIONS_ADD))
++		return -EINVAL;
++
++	if (!attr->functions_add.btf_id)
++		return -EINVAL;
++
++	/* fd >=  0  use existing bpf_functions object
++	 * fd == -1  create new bpf_functions object
++	 */
++	fd = attr->functions_add.fd;
++	if (fd < -1)
++		return -EINVAL;
++
++	btf = bpf_get_btf_vmlinux();
++	if (!btf)
++		return -EINVAL;
++
++	addr = bpf_get_kernel_func_addr(attr->functions_add.btf_id, btf);
++	if (!addr)
++		return -EINVAL;
++
++	if (!ftrace_location(addr))
++		return -EINVAL;
++
++	if (fd >= 0) {
++		funcs = bpf_functions_get_from_fd(fd, &orig);
++		if (IS_ERR(funcs))
++			return PTR_ERR(funcs);
++	} else {
++		funcs = kzalloc(sizeof(*funcs), GFP_USER);
++		if (!funcs)
++			return -ENOMEM;
++
++		mutex_init(&funcs->mutex);
++		fd = anon_inode_getfd("bpf-functions", &bpf_functions_fops,
++				      funcs, O_CLOEXEC);
++		if (fd < 0) {
++			kfree(funcs);
++			return fd;
++		}
++		ret = fd;
++	}
++
++	mutex_lock(&funcs->mutex);
++
++	if (funcs->cnt == BPF_FUNCTIONS_MAX) {
++		ret = -EINVAL;
++		goto out_put;
++	}
++	if (funcs->cnt == funcs->alloc) {
++		funcs->alloc += BPF_FUNCTIONS_ALLOC;
++		p = krealloc(funcs->addrs, funcs->alloc * sizeof(p[0]), GFP_USER);
++		if (!p) {
++			ret = -ENOMEM;
++			goto out_put;
++		}
++		funcs->addrs = p;
++	}
++
++	funcs->addrs[funcs->cnt++] = addr;
++
++out_put:
++	mutex_unlock(&funcs->mutex);
++	fdput(orig);
++	return ret;
++}
++
+ #define BPF_OBJ_LAST_FIELD file_flags
  
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index b9b29baf1df8..69cbe54125e3 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -355,6 +355,7 @@ LIBBPF_0.4.0 {
- 	global:
- 		btf__add_float;
- 		btf__add_type;
-+		bpf_functions_add;
- 		bpf_linker__add_file;
- 		bpf_linker__finalize;
- 		bpf_linker__free;
+ static int bpf_obj_pin(const union bpf_attr *attr)
+@@ -4487,6 +4621,9 @@ SYSCALL_DEFINE3(bpf, int, cmd, union bpf_attr __user *, uattr, unsigned int, siz
+ 	case BPF_PROG_BIND_MAP:
+ 		err = bpf_prog_bind_map(&attr);
+ 		break;
++	case BPF_FUNCTIONS_ADD:
++		err = bpf_functions_add(&attr);
++		break;
+ 	default:
+ 		err = -EINVAL;
+ 		break;
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index e1ee1be7e49b..5d616735fe1b 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -862,6 +862,7 @@ enum bpf_cmd {
+ 	BPF_ITER_CREATE,
+ 	BPF_LINK_DETACH,
+ 	BPF_PROG_BIND_MAP,
++	BPF_FUNCTIONS_ADD,
+ };
+ 
+ enum bpf_map_type {
+@@ -1458,6 +1459,10 @@ union bpf_attr {
+ 		__u32		flags;		/* extra flags */
+ 	} prog_bind_map;
+ 
++	struct { /* BPF_FUNCTIONS_ADD */
++		__u32		fd;
++		__u32		btf_id;
++	} functions_add;
+ } __attribute__((aligned(8)));
+ 
+ /* The description below is an attempt at providing documentation to eBPF
 -- 
 2.30.2
 
