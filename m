@@ -2,173 +2,123 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F7B1C43460
-	for <bpf@archiver.kernel.org>; Tue, 13 Apr 2021 16:58:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 83C8FC433B4
+	for <bpf@archiver.kernel.org>; Tue, 13 Apr 2021 17:21:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 444C26135C
-	for <bpf@archiver.kernel.org>; Tue, 13 Apr 2021 16:58:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5B083613B1
+	for <bpf@archiver.kernel.org>; Tue, 13 Apr 2021 17:21:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345875AbhDMQ6a (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 13 Apr 2021 12:58:30 -0400
-Received: from mail-lf1-f45.google.com ([209.85.167.45]:43700 "EHLO
-        mail-lf1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345673AbhDMQ6a (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 13 Apr 2021 12:58:30 -0400
-Received: by mail-lf1-f45.google.com with SMTP id r8so28335362lfp.10;
-        Tue, 13 Apr 2021 09:58:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=v4TjHCXfhg5d3LryO0dAvVeknac0k2NZ/3RM2aA8938=;
-        b=f3UEPkvUinbjyZ+3ysqA1LgBZJfqb7CMeN8m/FHDsqK4+L/XHEHaZ9lLz2oK+ONlCS
-         HihjonPwPXsmjPs9sF1B7GXmgLb7H9+ZgiKLVKpDA4Jq0aZUu0BG24wBn0k0r9FggK65
-         13U7tx8DvcEQ9THUnUSo4RYy61bQiiVcpVlvL6SRIm+RRvlgQWacL9BfITPamvnGUTM3
-         KKMyncRsIzgx+LjrKGLZxecHzLxolt/Xovfj4Ky29b0AhKRYZc4Oqm6Yq1ze3CXorMS8
-         DoE6zWiCdVznpYeQQj+wWdwDbk4GlyEjThpGgIOWTXhbLYSvHAhVEI4pnUl6Ro0EbIAw
-         s9Kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=v4TjHCXfhg5d3LryO0dAvVeknac0k2NZ/3RM2aA8938=;
-        b=W3mqWip97jAffsfMkMgBGOJ4WfcgvqQTWSu/eRVLAM6JYkOU10aaKxVlrhyK8eyLE3
-         VqNjyFLegZC1mfu7e799II92zUib1qGuobTPhtGZbPVc8HP18o48t2RuC+x3NzlVHLPA
-         bXXFBSdq2SqW1SyPE//PE7jNafqCGBVDh761qMNgNsBFpNB+LV61S0lfwzs4yEzZQ8jP
-         4atWZ53cR60xFj4sstvrebJF+sgXzy1Va+gaAmG0F8v1Qh3MPQZB7R31p/DUQZ4/8Sgf
-         k1atsqs0ktKTgl5z0r4e3R7dax3gJy83xK1PmAVW4i+0P1tA/v3ub38wdHQdJfmvYBKa
-         tSLA==
-X-Gm-Message-State: AOAM530PapGckSdxd16NJeq84Z8Um2CQ+RqMQw5w4U2Xkf8AjJc88iW9
-        GG9XTnfztizi8k5MICvza3e5BG0R3s1HgikTigk=
-X-Google-Smtp-Source: ABdhPJz4ZYKeSz0KzfjB/w6RSk76BvVX4LTIVHLs0Vqhf8mOKgbueanMN6S743dv4qvskZUZH3vW/UCo3BRM1J/3xfM=
-X-Received: by 2002:a19:c1d4:: with SMTP id r203mr23420280lff.182.1618333028915;
- Tue, 13 Apr 2021 09:57:08 -0700 (PDT)
-MIME-Version: 1.0
-References: <1618307549-78149-1-git-send-email-yang.lee@linux.alibaba.com>
- <CAADnVQJmsipci_ou6OOFGC6O9z935jFw4+pe7YQvvh2=eCoarQ@mail.gmail.com>
- <BN7PR13MB24996213858443821CA7E400FD4F9@BN7PR13MB2499.namprd13.prod.outlook.com>
- <CAADnVQJJ03L5H11P0NYNC9kYy=YkQdWrbpytB2Jps8AuxgamFA@mail.gmail.com>
- <BN7PR13MB2499152182E86AD94A3B0E22FD4F9@BN7PR13MB2499.namprd13.prod.outlook.com>
- <CAADnVQKjVDLBCLMzXoAQhJ5a+rZ1EKqc3dyYqpeG9M2KzGREMA@mail.gmail.com> <BN7PR13MB2499EF2A7B6F043FE4E62D51FD4F9@BN7PR13MB2499.namprd13.prod.outlook.com>
-In-Reply-To: <BN7PR13MB2499EF2A7B6F043FE4E62D51FD4F9@BN7PR13MB2499.namprd13.prod.outlook.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 13 Apr 2021 09:56:57 -0700
-Message-ID: <CAADnVQJ1+EmGD3CAc4N8Jq7ACYZvbzkxZrhz8hVf4dJHGamoXw@mail.gmail.com>
-Subject: Re: [PATCH] selftests/bpf: use !E instead of comparing with NULL
-To:     "Bird, Tim" <Tim.Bird@sony.com>
-Cc:     Yang Li <yang.lee@linux.alibaba.com>,
-        Shuah Khan <shuah@kernel.org>,
+        id S1347116AbhDMRVX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 13 Apr 2021 13:21:23 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:47374 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231661AbhDMRVW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 13 Apr 2021 13:21:22 -0400
+From:   Kurt Kanzenbach <kurt@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1618334461;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/FIguiC0JpPqnEHwTEVTe/PehrMSgAq174+EKyhr82I=;
+        b=2ls2iDkJEgxLT8BBbuxpsz+mBg1wpRLaZvIiJwhFSRwgoiRMRnJzbT0sYoJa4inNSgR7n+
+        yUBE8eyjM1W4GLKVGy2FAZbaqa99UbF2JxojJdoSpuVrV+Lgu3IpVtB0uw71Bb/TdOs0lH
+        lj+1e99uaxO9VNKrRsD3NzbXge6FqqhohbcsoUHjPXr+qj7ED0Pofah6oLDFDg2JYcgqwD
+        mQDojXqvWnX1rlEtXGPBu0JZRmSWr345WSwhsX+zYTuxXSBbAzGtaeCOolXeXbgsMSo5n2
+        YoVytbBJ6VCsPsJ9spHa95w6rfgnfj40aRiyEFkhM88KW948okBz7aQPZev+Hg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1618334461;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/FIguiC0JpPqnEHwTEVTe/PehrMSgAq174+EKyhr82I=;
+        b=cvPB+KjZ1ydaw7+/5jmL7AtRi2v45vBIWXzrEbqnaXnlvGRBOeJQzWM2dzpHFR670qb0/5
+        pSegCUAMuXU7XPCg==
+To:     Alexander Duyck <alexander.duyck@gmail.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>
+Cc:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Sven Auhagen <sven.auhagen@voleatech.de>,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: Re: [PATCH RFC net] igb: Fix XDP with PTP enabled
+In-Reply-To: <CAKgT0UekqPNQxV6PzpEeis69z3e3YNcaFyot=nD7w26hLxPX2Q@mail.gmail.com>
+References: <20210412101713.15161-1-kurt@linutronix.de> <20210412162846.42706d99@carbon> <CAKgT0UekqPNQxV6PzpEeis69z3e3YNcaFyot=nD7w26hLxPX2Q@mail.gmail.com>
+Date:   Tue, 13 Apr 2021 19:21:00 +0200
+Message-ID: <87fszuyubn.fsf@kurt>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha512; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Apr 13, 2021 at 9:32 AM <Tim.Bird@sony.com> wrote:
->
-> > -----Original Message-----
-> > From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-> >
-> > On Tue, Apr 13, 2021 at 9:19 AM <Tim.Bird@sony.com> wrote:
-> > >
-> > > > -----Original Message-----
-> > > > From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-> > > >
-> > > > On Tue, Apr 13, 2021 at 9:10 AM <Tim.Bird@sony.com> wrote:
-> > > > >
-> > > > >
-> > > > >
-> > > > > > -----Original Message-----
-> > > > > > From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-> > > > > >
-> > > > > > On Tue, Apr 13, 2021 at 2:52 AM Yang Li <yang.lee@linux.alibaba.com> wrote:
-> > > > > > >
-> > > > > > > Fix the following coccicheck warnings:
-> > > > > > > ./tools/testing/selftests/bpf/progs/profiler.inc.h:189:7-11: WARNING
-> > > > > > > comparing pointer to 0, suggest !E
-> > > > > > > ./tools/testing/selftests/bpf/progs/profiler.inc.h:361:7-11: WARNING
-> > > > > > > comparing pointer to 0, suggest !E
-> > > > > > > ./tools/testing/selftests/bpf/progs/profiler.inc.h:386:14-18: WARNING
-> > > > > > > comparing pointer to 0, suggest !E
-> > > > > > > ./tools/testing/selftests/bpf/progs/profiler.inc.h:402:14-18: WARNING
-> > > > > > > comparing pointer to 0, suggest !E
-> > > > > > > ./tools/testing/selftests/bpf/progs/profiler.inc.h:433:7-11: WARNING
-> > > > > > > comparing pointer to 0, suggest !E
-> > > > > > > ./tools/testing/selftests/bpf/progs/profiler.inc.h:534:14-18: WARNING
-> > > > > > > comparing pointer to 0, suggest !E
-> > > > > > > ./tools/testing/selftests/bpf/progs/profiler.inc.h:625:7-11: WARNING
-> > > > > > > comparing pointer to 0, suggest !E
-> > > > > > > ./tools/testing/selftests/bpf/progs/profiler.inc.h:767:7-11: WARNING
-> > > > > > > comparing pointer to 0, suggest !E
-> > > > > > >
-> > > > > > > Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> > > > > > > Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-> > > > > > > ---
-> > > > > > >  tools/testing/selftests/bpf/progs/profiler.inc.h | 22 +++++++++++-----------
-> > > > > > >  1 file changed, 11 insertions(+), 11 deletions(-)
-> > > > > > >
-> > > > > > > diff --git a/tools/testing/selftests/bpf/progs/profiler.inc.h b/tools/testing/selftests/bpf/progs/profiler.inc.h
-> > > > > > > index 4896fdf8..a33066c 100644
-> > > > > > > --- a/tools/testing/selftests/bpf/progs/profiler.inc.h
-> > > > > > > +++ b/tools/testing/selftests/bpf/progs/profiler.inc.h
-> > > > > > > @@ -189,7 +189,7 @@ static INLINE void populate_ancestors(struct task_struct* task,
-> > > > > > >  #endif
-> > > > > > >         for (num_ancestors = 0; num_ancestors < MAX_ANCESTORS; num_ancestors++) {
-> > > > > > >                 parent = BPF_CORE_READ(parent, real_parent);
-> > > > > > > -               if (parent == NULL)
-> > > > > > > +               if (!parent)
-> > > > > >
-> > > > > > Sorry, but I'd like the progs to stay as close as possible to the way
-> > > > > > they were written.
-> > > > > Why?
-> > > > >
-> > > > > > They might not adhere to kernel coding style in some cases.
-> > > > > > The code could be grossly inefficient and even buggy.
-> > > > > There would have to be a really good reason to accept
-> > > > > grossly inefficient and even buggy code into the kernel.
-> > > > >
-> > > > > Can you please explain what that reason is?
-> > > >
-> > > > It's not the kernel. It's a test of bpf program.
-> > > That doesn't answer the question of why you don't want any changes.
-> > >
-> > > Why would we not use kernel coding style guidelines and quality thresholds for
-> > > testing code?  This *is* going into the kernel source tree, where it will be
-> > > maintained and used by other developers.
-> >
-> > because the way the C code is written makes llvm generate a particular
-> > code pattern that may not be seen otherwise.
-> > Like removing 'if' because it's useless to humans, but not to the compiler
-> > will change generated code which may or may not trigger the behavior
-> > the prog intends to cover.
-> > In particular this profiler.inc.h test is compiled three different ways to
-> > maximize code generation differences.
-> > It may not be checking error paths in some cases which can be considered
-> > a bug, but that's the intended behavior of the C code as it was written.
-> > So it has nothing to do with "quality of kernel code".
-> > and it should not be used by developers. It's neither sample nor example.
->
-> Ok - in this case it looks like a program, but it is essentially test data (for testing
-> the compiler).  Thanks for the explanation.
+--=-=-=
+Content-Type: text/plain
 
-yes. That's a good way of saying it.
-Of course not all tests are like this.
-Majority of bpf progs in selftests/bpf/progs/ are carefully written,
-short and designed
-as a unit test. While few are "test data" for llvm.
+On Tue Apr 13 2021, Alexander Duyck wrote:
+> On Mon, Apr 12, 2021 at 7:29 AM Jesper Dangaard Brouer
+> <brouer@redhat.com> wrote:
+>> > +ktime_t igb_ptp_rx_pktstamp(struct igb_q_vector *q_vector, void *va)
+>> >  {
+>> >       struct igb_adapter *adapter = q_vector->adapter;
+>> > +     struct skb_shared_hwtstamps ts;
+>> >       __le64 *regval = (__le64 *)va;
+>> >       int adjust = 0;
+>> >
+>> >       if (!(adapter->ptp_flags & IGB_PTP_ENABLED))
+>> > -             return IGB_RET_PTP_DISABLED;
+>> > +             return 0;
+>> >
+>> >       /* The timestamp is recorded in little endian format.
+>> >        * DWORD: 0        1        2        3
+>> > @@ -888,10 +887,9 @@ int igb_ptp_rx_pktstamp(struct igb_q_vector *q_vector, void *va,
+>> >
+>> >       /* check reserved dwords are zero, be/le doesn't matter for zero */
+>> >       if (regval[0])
+>> > -             return IGB_RET_PTP_INVALID;
+>> > +             return 0;
+>> >
+>
+> One thing that needs to be cleaned up in the patch is that if it is
+> going to drop these return values it should probably drop the defines
+> for them since I don't think they are used anywhere else.
+
+Yes, of course. I'll clean it up before sending a non RFC version.
+
+Thanks,
+Kurt
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEooWgvezyxHPhdEojeSpbgcuY8KYFAmB10vwACgkQeSpbgcuY
+8Kae6A//Y46kXPei0XtDNGOtHdy8H2HDncTe48K7rSLmFB2pYeSlsBGsh5LrXJeK
+7o5qc8ZQ5dZq1zkdJZvvfZurP7/t2S/c4+rh3w0fEUH/UF1Zpu0P4ZNEcA6zOBrb
+cPm/nLQZydrfreTcN3bJ2PM3/+80K8FLfF74M/wc47Wi7biCYx94ls2mNoihvy1z
+2TWwTY7EeoN4YElwyIXFGKIqgkuTCMt3hgBtVFnzLCnl7xRu9snHLiCFo5PiNKRT
+qpC79qUHcqtu39VQHlkvHM9tQvnaMj08okgllnvbLX+XftX+ZyEROO5O5AGjS79E
+h5ftqZ6TBqxrOGT3z1M88vlSSBClw2+ZoOXBMCg87Ir4eO5vZwCblvmzipZ5m5Io
+aVqPmUsi3gGNwdvySsBGAweJ4cTrteHyHVBDmB4pd+87IpxCPHh/vj3b1v+kjMcJ
+aUx7Ken6cu9Sx5YifWE33Ad5PbcR1dXjBIQUuf3HKTodX6swudzLSEsKdEN1Nz88
+Ekg+V/YXuV7zDYH9i02OfUTJovD4+AplgNSE/JE3VqQa9G7UrPekMpBJp2DkjwEL
+1N/d0pYPARMDC90TpGbaD1FmXjKPs45Zwe6NEJtoF2d5nHrQWa+biNgs/EnGkfOx
+9ZTEhIBgfmdjG1yetmoQmXZtlPTyKYMoaTV4HjrQ/aGnE4zOKhw=
+=HXr0
+-----END PGP SIGNATURE-----
+--=-=-=--
