@@ -2,160 +2,182 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ABA79C43460
-	for <bpf@archiver.kernel.org>; Tue, 13 Apr 2021 09:52:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4F02C433ED
+	for <bpf@archiver.kernel.org>; Tue, 13 Apr 2021 12:15:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8FD04613B7
-	for <bpf@archiver.kernel.org>; Tue, 13 Apr 2021 09:52:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 834BB61278
+	for <bpf@archiver.kernel.org>; Tue, 13 Apr 2021 12:15:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241859AbhDMJxJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 13 Apr 2021 05:53:09 -0400
-Received: from out30-44.freemail.mail.aliyun.com ([115.124.30.44]:36696 "EHLO
-        out30-44.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241803AbhDMJwx (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 13 Apr 2021 05:52:53 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R491e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0UVRaqpU_1618307550;
-Received: from j63c13417.sqa.eu95.tbsite.net(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0UVRaqpU_1618307550)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 13 Apr 2021 17:52:31 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     shuah@kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yang Li <yang.lee@linux.alibaba.com>
-Subject: [PATCH] selftests/bpf: use !E instead of comparing with NULL
-Date:   Tue, 13 Apr 2021 17:52:29 +0800
-Message-Id: <1618307549-78149-1-git-send-email-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
+        id S239813AbhDMMQN convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Tue, 13 Apr 2021 08:16:13 -0400
+Received: from us-smtp-delivery-44.mimecast.com ([205.139.111.44]:49319 "EHLO
+        us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229488AbhDMMQN (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 13 Apr 2021 08:16:13 -0400
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-186-KBgnrNAFMa2TkXCKtwtB8g-1; Tue, 13 Apr 2021 08:15:49 -0400
+X-MC-Unique: KBgnrNAFMa2TkXCKtwtB8g-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C27B8839A7F;
+        Tue, 13 Apr 2021 12:15:34 +0000 (UTC)
+Received: from krava.redhat.com (unknown [10.40.196.16])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A9FD310023B0;
+        Tue, 13 Apr 2021 12:15:31 +0000 (UTC)
+From:   Jiri Olsa <jolsa@kernel.org>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andriin@fb.com>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>, Daniel Xu <dxu@dxuuu.xyz>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Jesper Brouer <jbrouer@redhat.com>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        Viktor Malik <vmalik@redhat.com>
+Subject: [PATCHv2 RFC bpf-next 4/7] libbpf: Add btf__find_by_pattern_kind function
+Date:   Tue, 13 Apr 2021 14:15:13 +0200
+Message-Id: <20210413121516.1467989-5-jolsa@kernel.org>
+In-Reply-To: <20210413121516.1467989-1-jolsa@kernel.org>
+References: <20210413121516.1467989-1-jolsa@kernel.org>
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jolsa@kernel.org
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: kernel.org
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=WINDOWS-1252
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Fix the following coccicheck warnings:
-./tools/testing/selftests/bpf/progs/profiler.inc.h:189:7-11: WARNING
-comparing pointer to 0, suggest !E
-./tools/testing/selftests/bpf/progs/profiler.inc.h:361:7-11: WARNING
-comparing pointer to 0, suggest !E
-./tools/testing/selftests/bpf/progs/profiler.inc.h:386:14-18: WARNING
-comparing pointer to 0, suggest !E
-./tools/testing/selftests/bpf/progs/profiler.inc.h:402:14-18: WARNING
-comparing pointer to 0, suggest !E
-./tools/testing/selftests/bpf/progs/profiler.inc.h:433:7-11: WARNING
-comparing pointer to 0, suggest !E
-./tools/testing/selftests/bpf/progs/profiler.inc.h:534:14-18: WARNING
-comparing pointer to 0, suggest !E
-./tools/testing/selftests/bpf/progs/profiler.inc.h:625:7-11: WARNING
-comparing pointer to 0, suggest !E
-./tools/testing/selftests/bpf/progs/profiler.inc.h:767:7-11: WARNING
-comparing pointer to 0, suggest !E
+Adding btf__find_by_pattern_kind function that returns
+array of BTF ids for given function name pattern.
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+Using libc's regex.h support for that.
+
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- tools/testing/selftests/bpf/progs/profiler.inc.h | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+ tools/lib/bpf/btf.c | 68 +++++++++++++++++++++++++++++++++++++++++++++
+ tools/lib/bpf/btf.h |  3 ++
+ 2 files changed, 71 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/profiler.inc.h b/tools/testing/selftests/bpf/progs/profiler.inc.h
-index 4896fdf8..a33066c 100644
---- a/tools/testing/selftests/bpf/progs/profiler.inc.h
-+++ b/tools/testing/selftests/bpf/progs/profiler.inc.h
-@@ -189,7 +189,7 @@ static INLINE void populate_ancestors(struct task_struct* task,
+diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+index d30e67e7e1e5..e193713b9d56 100644
+--- a/tools/lib/bpf/btf.c
++++ b/tools/lib/bpf/btf.c
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
+ /* Copyright (c) 2018 Facebook */
+ 
++#define _GNU_SOURCE
+ #include <byteswap.h>
+ #include <endian.h>
+ #include <stdio.h>
+@@ -16,6 +17,7 @@
+ #include <linux/err.h>
+ #include <linux/btf.h>
+ #include <gelf.h>
++#include <regex.h>
+ #include "btf.h"
+ #include "bpf.h"
+ #include "libbpf.h"
+@@ -712,6 +714,72 @@ __s32 btf__find_by_name_kind(const struct btf *btf, const char *type_name,
+ 	return -ENOENT;
+ }
+ 
++static bool is_wildcard(char c)
++{
++	static const char *wildchars = "*?[|";
++
++	return strchr(wildchars, c);
++}
++
++int btf__find_by_pattern_kind(const struct btf *btf,
++			      const char *type_pattern, __u32 kind,
++			      __s32 **__ids)
++{
++	__u32 i, nr_types = btf__get_nr_types(btf);
++	__s32 *ids = NULL;
++	int cnt = 0, alloc = 0, ret;
++	regex_t regex;
++	char *pattern;
++
++	if (kind == BTF_KIND_UNKN || !strcmp(type_pattern, "void"))
++		return 0;
++
++	/* When the pattern does not start with wildcard, treat it as
++	 * if we'd want to match it from the beginning of the string.
++	 */
++	asprintf(&pattern, "%s%s",
++		 is_wildcard(type_pattern[0]) ? "^" : "",
++		 type_pattern);
++
++	ret = regcomp(&regex, pattern, REG_EXTENDED);
++	if (ret) {
++		pr_warn("failed to compile regex\n");
++		free(pattern);
++		return -EINVAL;
++	}
++
++	free(pattern);
++
++	for (i = 1; i <= nr_types; i++) {
++		const struct btf_type *t = btf__type_by_id(btf, i);
++		const char *name;
++		__s32 *p;
++
++		if (btf_kind(t) != kind)
++			continue;
++		name = btf__name_by_offset(btf, t->name_off);
++		if (name && regexec(&regex, name, 0, NULL, 0))
++			continue;
++		if (cnt == alloc) {
++			alloc = max(100, alloc * 3 / 2);
++			p = realloc(ids, alloc * sizeof(__u32));
++			if (!p) {
++				free(ids);
++				regfree(&regex);
++				return -ENOMEM;
++			}
++			ids = p;
++		}
++
++		ids[cnt] = i;
++		cnt++;
++	}
++
++	regfree(&regex);
++	*__ids = ids;
++	return cnt ?: -ENOENT;
++}
++
+ static bool btf_is_modifiable(const struct btf *btf)
+ {
+ 	return (void *)btf->hdr != btf->raw_data;
+diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
+index b54f1c3ebd57..036857aded94 100644
+--- a/tools/lib/bpf/btf.h
++++ b/tools/lib/bpf/btf.h
+@@ -371,6 +371,9 @@ btf_var_secinfos(const struct btf_type *t)
+ 	return (struct btf_var_secinfo *)(t + 1);
+ }
+ 
++int btf__find_by_pattern_kind(const struct btf *btf,
++			      const char *type_pattern, __u32 kind,
++			      __s32 **__ids);
+ #ifdef __cplusplus
+ } /* extern "C" */
  #endif
- 	for (num_ancestors = 0; num_ancestors < MAX_ANCESTORS; num_ancestors++) {
- 		parent = BPF_CORE_READ(parent, real_parent);
--		if (parent == NULL)
-+		if (!parent)
- 			break;
- 		ppid = BPF_CORE_READ(parent, tgid);
- 		if (is_init_process(ppid))
-@@ -361,7 +361,7 @@ static INLINE void* populate_var_metadata(struct var_metadata_t* metadata,
- 	int zero = 0;
- 	struct var_kill_data_t* kill_data = bpf_map_lookup_elem(&data_heap, &zero);
- 
--	if (kill_data == NULL)
-+	if (!kill_data)
- 		return NULL;
- 	struct task_struct* task = (struct task_struct*)bpf_get_current_task();
- 
-@@ -386,14 +386,14 @@ static INLINE int trace_var_sys_kill(void* ctx, int tpid, int sig)
- 	u32 spid = get_userspace_pid();
- 	struct var_kill_data_arr_t* arr_struct = bpf_map_lookup_elem(&var_tpid_to_data, &tpid);
- 
--	if (arr_struct == NULL) {
-+	if (!arr_struct) {
- 		struct var_kill_data_t* kill_data = get_var_kill_data(ctx, spid, tpid, sig);
- 		int zero = 0;
- 
--		if (kill_data == NULL)
-+		if (!kill_data)
- 			return 0;
- 		arr_struct = bpf_map_lookup_elem(&data_heap, &zero);
--		if (arr_struct == NULL)
-+		if (!arr_struct)
- 			return 0;
- 		bpf_probe_read(&arr_struct->array[0], sizeof(arr_struct->array[0]), kill_data);
- 	} else {
-@@ -402,7 +402,7 @@ static INLINE int trace_var_sys_kill(void* ctx, int tpid, int sig)
- 		if (index == -1) {
- 			struct var_kill_data_t* kill_data =
- 				get_var_kill_data(ctx, spid, tpid, sig);
--			if (kill_data == NULL)
-+			if (!kill_data)
- 				return 0;
- #ifdef UNROLL
- #pragma unroll
-@@ -433,7 +433,7 @@ static INLINE int trace_var_sys_kill(void* ctx, int tpid, int sig)
- 		} else {
- 			struct var_kill_data_t* kill_data =
- 				get_var_kill_data(ctx, spid, tpid, sig);
--			if (kill_data == NULL)
-+			if (!kill_data)
- 				return 0;
- 			bpf_probe_read(&arr_struct->array[index],
- 				       sizeof(arr_struct->array[index]),
-@@ -534,14 +534,14 @@ static INLINE bool is_dentry_allowed_for_filemod(struct dentry* file_dentry,
- 	*device_id = dev_id;
- 	bool* allowed_device = bpf_map_lookup_elem(&allowed_devices, &dev_id);
- 
--	if (allowed_device == NULL)
-+	if (!allowed_device)
- 		return false;
- 
- 	u64 ino = BPF_CORE_READ(file_dentry, d_inode, i_ino);
- 	*file_ino = ino;
- 	bool* allowed_file = bpf_map_lookup_elem(&allowed_file_inodes, &ino);
- 
--	if (allowed_file == NULL)
-+	if (!allowed_fil)
- 		if (!is_ancestor_in_allowed_inodes(BPF_CORE_READ(file_dentry, d_parent)))
- 			return false;
- 	return true;
-@@ -625,7 +625,7 @@ int raw_tracepoint__sched_process_exit(void* ctx)
- 	struct var_kill_data_arr_t* arr_struct = bpf_map_lookup_elem(&var_tpid_to_data, &tpid);
- 	struct var_kill_data_t* kill_data = bpf_map_lookup_elem(&data_heap, &zero);
- 
--	if (arr_struct == NULL || kill_data == NULL)
-+	if (!arr_struct || !kill_data)
- 		goto out;
- 
- 	struct task_struct* task = (struct task_struct*)bpf_get_current_task();
-@@ -767,7 +767,7 @@ int kprobe_ret__do_filp_open(struct pt_regs* ctx)
- 
- 	struct file* filp = (struct file*)PT_REGS_RC_CORE(ctx);
- 
--	if (filp == NULL || IS_ERR(filp))
-+	if (!filp || IS_ERR(filp))
- 		goto out;
- 	unsigned int flags = BPF_CORE_READ(filp, f_flags);
- 	if ((flags & (O_RDWR | O_WRONLY)) == 0)
 -- 
-1.8.3.1
+2.30.2
 
