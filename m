@@ -2,116 +2,106 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9840EC433B4
-	for <bpf@archiver.kernel.org>; Tue, 13 Apr 2021 12:16:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B46A0C433B4
+	for <bpf@archiver.kernel.org>; Tue, 13 Apr 2021 12:55:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7774961278
-	for <bpf@archiver.kernel.org>; Tue, 13 Apr 2021 12:16:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8819F613B6
+	for <bpf@archiver.kernel.org>; Tue, 13 Apr 2021 12:55:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345484AbhDMMQi convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Tue, 13 Apr 2021 08:16:38 -0400
-Received: from us-smtp-delivery-44.mimecast.com ([207.211.30.44]:24971 "EHLO
-        us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240004AbhDMMQX (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 13 Apr 2021 08:16:23 -0400
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-39-6hzOu45_OQ6dHaQUMcxa7w-1; Tue, 13 Apr 2021 08:15:56 -0400
-X-MC-Unique: 6hzOu45_OQ6dHaQUMcxa7w-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S231640AbhDMMzx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 13 Apr 2021 08:55:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51892 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231493AbhDMMzu (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 13 Apr 2021 08:55:50 -0400
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0B2F71856A63;
-        Tue, 13 Apr 2021 12:15:42 +0000 (UTC)
-Received: from krava.redhat.com (unknown [10.40.196.16])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D05BE10023B0;
-        Tue, 13 Apr 2021 12:15:38 +0000 (UTC)
-From:   Jiri Olsa <jolsa@kernel.org>
-To:     Alexei Starovoitov <ast@kernel.org>,
+        by mail.kernel.org (Postfix) with ESMTPSA id 5674A613B3;
+        Tue, 13 Apr 2021 12:55:24 +0000 (UTC)
+Date:   Tue, 13 Apr 2021 08:55:22 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     Yonghong Song <yhs@fb.com>,
+        syzbot <syzbot+774c590240616eaa3423@syzkaller.appspotmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>, andrii@kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Borislav Petkov <bp@alien8.de>, bpf <bpf@vger.kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        David Miller <davem@davemloft.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Jim Mattson <jmattson@google.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>, Daniel Xu <dxu@dxuuu.xyz>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Jesper Brouer <jbrouer@redhat.com>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Viktor Malik <vmalik@redhat.com>
-Subject: [PATCHv2 RFC bpf-next 6/7] selftests/bpf: Add ftrace probe to fentry test
-Date:   Tue, 13 Apr 2021 14:15:15 +0200
-Message-Id: <20210413121516.1467989-7-jolsa@kernel.org>
-In-Reply-To: <20210413121516.1467989-1-jolsa@kernel.org>
-References: <20210413121516.1467989-1-jolsa@kernel.org>
+        Joerg Roedel <joro@8bytes.org>,
+        Martin KaFai Lau <kafai@fb.com>, kpsingh@kernel.org,
+        Jakub Kicinski <kuba@kernel.org>,
+        KVM list <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, masahiroy@kernel.org,
+        Ingo Molnar <mingo@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        rafael.j.wysocki@intel.com,
+        Sean Christopherson <seanjc@google.com>,
+        Song Liu <songliubraving@fb.com>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Thomas Gleixner <tglx@linutronix.de>, vkuznets@redhat.com,
+        wanpengli@tencent.com, will@kernel.org, x86@kernel.org
+Subject: Re: [syzbot] WARNING in bpf_test_run
+Message-ID: <20210413085522.2caee809@gandalf.local.home>
+In-Reply-To: <CACT4Y+ZYEVsycyzDW9+tXYw-5feZS8otgMWGGZRUCLR=czWtqQ@mail.gmail.com>
+References: <000000000000d9fefa05bee78afd@google.com>
+        <97b5573f-9fcc-c195-f765-5b1ed84a95bd@fb.com>
+        <d947c28c-6ede-5950-87e7-f56b8403535a@fb.com>
+        <CACT4Y+ZYEVsycyzDW9+tXYw-5feZS8otgMWGGZRUCLR=czWtqQ@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: kernel.org
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset=WINDOWS-1252
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Adding 2 more tests for fentry probe test,
-to show/test ftrace probe.
+On Tue, 13 Apr 2021 09:56:40 +0200
+Dmitry Vyukov <dvyukov@google.com> wrote:
 
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
----
- .../selftests/bpf/prog_tests/fentry_test.c       |  5 ++++-
- tools/testing/selftests/bpf/progs/fentry_test.c  | 16 ++++++++++++++++
- 2 files changed, 20 insertions(+), 1 deletion(-)
+> Thanks for looking into this.
+> If this is not a kernel bug, then it must not use WARN_ON[_ONCE]. It
+> makes the kernel untestable for both automated systems and humans:
+> 
+> https://lwn.net/Articles/769365/
+> 
+> <quote>
+> Greg Kroah-Hartman raised the problem of core kernel API code that
+> will use WARN_ON_ONCE() to complain about bad usage; that will not
+> generate the desired result if WARN_ON_ONCE() is configured to crash
+> the machine. He was told that the code should just call pr_warn()
+> instead, and that the called function should return an error in such
+> situations. It was generally agreed that any WARN_ON() or
+> WARN_ON_ONCE() calls that can be triggered from user space need to be
+> fixed.
+> </quote>
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/fentry_test.c b/tools/testing/selftests/bpf/prog_tests/fentry_test.c
-index 04ebbf1cb390..70f414cb3bfd 100644
---- a/tools/testing/selftests/bpf/prog_tests/fentry_test.c
-+++ b/tools/testing/selftests/bpf/prog_tests/fentry_test.c
-@@ -26,12 +26,15 @@ void test_fentry_test(void)
- 	      err, errno, retval, duration);
- 
- 	result = (__u64 *)fentry_skel->bss;
--	for (i = 0; i < 6; i++) {
-+	for (i = 0; i < 8; i++) {
- 		if (CHECK(result[i] != 1, "result",
- 			  "fentry_test%d failed err %lld\n", i + 1, result[i]))
- 			goto cleanup;
- 	}
- 
-+	ASSERT_EQ(result[8], 8, "result");
-+	ASSERT_EQ(result[9], 2, "result");
-+
- cleanup:
- 	fentry_test__destroy(fentry_skel);
- }
-diff --git a/tools/testing/selftests/bpf/progs/fentry_test.c b/tools/testing/selftests/bpf/progs/fentry_test.c
-index 52a550d281d9..b32b589923a4 100644
---- a/tools/testing/selftests/bpf/progs/fentry_test.c
-+++ b/tools/testing/selftests/bpf/progs/fentry_test.c
-@@ -77,3 +77,19 @@ int BPF_PROG(test8, struct bpf_fentry_test_t *arg)
- 		test8_result = 1;
- 	return 0;
- }
-+
-+__u64 test9_result = 0;
-+SEC("fentry.ftrace/bpf_fentry_test*")
-+int BPF_PROG(test9)
-+{
-+	test9_result++;
-+	return 0;
-+}
-+
-+__u64 test10_result = 0;
-+SEC("fentry.ftrace/bpf_fentry_test1|bpf_fentry_test2")
-+int BPF_PROG(test10)
-+{
-+	test10_result++;
-+	return 0;
-+}
--- 
-2.30.2
+I agree. WARN_ON(_ONCE) should be reserved for anomalies that should not
+happen ever. Anything that the user could trigger, should not trigger a
+WARN_ON.
 
+A WARN_ON is perfectly fine for detecting an accounting error inside the
+kernel. I have them scattered all over my code, but they should never be
+hit, even if something in user space tries to hit it. (with an exception of
+an interface I want to deprecate, where I want to know if it's still being
+used ;-) Of course, that wouldn't help bots testing the code. And I haven't
+done that in years)
+
+Any anomaly that can be triggered by user space doing something it should
+not be doing really needs a pr_warn().
+
+Thanks,
+
+-- Steve
