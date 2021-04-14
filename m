@@ -2,187 +2,87 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 364BFC433ED
-	for <bpf@archiver.kernel.org>; Wed, 14 Apr 2021 01:04:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C763C433B4
+	for <bpf@archiver.kernel.org>; Wed, 14 Apr 2021 01:26:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 18851613BD
-	for <bpf@archiver.kernel.org>; Wed, 14 Apr 2021 01:04:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E4325613BB
+	for <bpf@archiver.kernel.org>; Wed, 14 Apr 2021 01:26:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348947AbhDNBEh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 13 Apr 2021 21:04:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56042 "EHLO
+        id S231609AbhDNB0Z (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 13 Apr 2021 21:26:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343683AbhDNBEh (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 13 Apr 2021 21:04:37 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20951C061574;
-        Tue, 13 Apr 2021 18:04:17 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id c195so20242665ybf.9;
-        Tue, 13 Apr 2021 18:04:17 -0700 (PDT)
+        with ESMTP id S231590AbhDNB0Z (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 13 Apr 2021 21:26:25 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 527D6C061574
+        for <bpf@vger.kernel.org>; Tue, 13 Apr 2021 18:26:02 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id a25so8202463ljm.11
+        for <bpf@vger.kernel.org>; Tue, 13 Apr 2021 18:26:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Jt5Bm0sT1rY+VlJDPunajUmGrJtnv9u2S8IJTi+nbHw=;
-        b=I6Jl4V97/Eck56QqES+evUSe6PYbwB3UVva6vBMfnQvPQmw7Kck24aCS5Ej40JNjVY
-         wD6HHcjilC56m6iwox2Nnow3QOdNY580bVraI2NAVAotOeWSm9htEFsus/cam3JRZ6f2
-         S1RWWPR4DYsVj9njD+iFCK8gcS2JMnaWMGCxC9XEoXRAjevKUCWconcvLp69oCQWlQ20
-         XUAhbDZpvP5UNxldp+EdFzObz8YPbLksebmvlDmGq0B92d+WUddPfXy19INFz7iyKK9d
-         d0aZtPy4IVfeL3+Y1EeZK1WQBt2zOBbXPSpg+GDqxI8gIx/a3ehmK8jjjKx5rVjwgKr7
-         qdxQ==
+         :cc:content-transfer-encoding;
+        bh=2WqMti9O3wrQJ6t+hs2Mlew2Yyan051UjCCZiEnCpB0=;
+        b=JsK87qlLroYLgFq313scqhA7T7tCtF+2xu0yCKXWvGAAB6zgSDreNKy+sOR//+W5K0
+         R6+MD4WMbUhWgyDiKxbTmyk/WNpmEGaVtIcrqHnSSYMPXMby0jt9ceseB6TH68mFKv4o
+         gbuAw6CKVgtHLlriFfJb7eXdDw82whi7sQjp2bpmBFc/KOw6rdoc+x0JrShWZnIzpjLu
+         xX87XaicNmvAx1a/GFtF5jpUYsEGt4sW54wjV50CSUYygVvX7pwUoxp4CqmKFJioWn48
+         Pj/K6atye+TIIhY9uMSwr/H+tv9aIhf5N2nktoV2EteUt0Ywiy+y0Ng9ONRQHIpJ0oNe
+         kR4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Jt5Bm0sT1rY+VlJDPunajUmGrJtnv9u2S8IJTi+nbHw=;
-        b=n8pDiotI29CVUIBetQ++bdaSZzrSy0N5iaRyikUtFpa9nk80qXaGdgqIPvgsjH+/yE
-         //0kXf3FQp+X3j7igoVwsMtS7/ZDW3rIYR2OgAGjhXE9ur9hpCWBIJuazia8bCGhlLq8
-         bj1W96UtLR7PN1LZ/iNZhDTf/0J+6MgEt4sdbDL+C3TdDmzdRkMOSRNKQ0PUObcrn+bO
-         6JT1rmmOiFt5zmbaJoUGQHXlMmoVdKeSusW2Lk5kxnw1zCR9um0qQscKClY+uV6R6afa
-         9E/2D9XmJbBmyY7jYgSopaUWK4fmLlAT+8a7NEEk9IuZlTJ61PHjUN/ev/Yx2ombRzcI
-         tE5A==
-X-Gm-Message-State: AOAM532o96DD92bxvyDsBz50lmhL1zjeOVPMrAJmFAz8XcJDHz4KCG59
-        oQ/VML6aIvLBIC1x5pPC1Ggp8xdzaJhmgNSqZU2i9Dh0teT4OA==
-X-Google-Smtp-Source: ABdhPJzm6t5dO1GlzXU8l/B4d174GTa+LXa531eKq1r4wilNradOTvfXGaEJtJ82Uoi30nSddMHiU4BpLNlK2bMJ1HE=
-X-Received: by 2002:a25:c4c5:: with SMTP id u188mr47966750ybf.425.1618362256338;
- Tue, 13 Apr 2021 18:04:16 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=2WqMti9O3wrQJ6t+hs2Mlew2Yyan051UjCCZiEnCpB0=;
+        b=r/JeJdMyn8Nfc445RNUtCvjklLu/vNZR7aItazN4WXSIcUcVQnqxuaFcqGH1Af/z0t
+         uIlcSU8Krq4Lg5hpkKqhQ3pkAypfgFvtOVf9DhCbu1IzqRsqTX47FmRccAbadc2iGuf9
+         NXqzMHYEvxwuv/CKLfzFRYTeVVQoGOiQt9HAOlAd55iF4YQ/TxPEewqHetfnppvN1uxq
+         4cc1rR1Yi/YWwlR2y45cSzJqcGRMaBut6EHm/KO8x4ci5jTw83OO44HxI188Fmxl4tM0
+         XfS/da0F0StFE5zX7+9R55R7hlkSlj6po7pOkH5jVvGfd3/9IEtbtN+Vr4eYXXBRybdS
+         q5UQ==
+X-Gm-Message-State: AOAM5334dQtJl6nOvokNbdIe0iULBJrITQpy52qql1aI86+4Bt26kRVq
+        28TG79m9BV8j5jSwAu0GDMfb2KkHpPfZYrt56dP/qkUm
+X-Google-Smtp-Source: ABdhPJyx5LdB6VfQ6/BQEuncKA2Zn3OyGYGO2959OqhBYO85w1Tvj/UZse68zQpCrj/IaYuBcjJ0TDlbfsDZ6kGPTtg=
+X-Received: by 2002:a2e:5011:: with SMTP id e17mr11891623ljb.204.1618363560870;
+ Tue, 13 Apr 2021 18:26:00 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210413121516.1467989-1-jolsa@kernel.org>
-In-Reply-To: <20210413121516.1467989-1-jolsa@kernel.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 13 Apr 2021 18:04:05 -0700
-Message-ID: <CAEf4Bzazst1rBi4=LuP6_FnPXCRYBNFEtDnK3UVBj6Eo6xFNtQ@mail.gmail.com>
-Subject: Re: [PATCHv2 RFC bpf-next 0/7] bpf: Add support for ftrace probe
-To:     Jiri Olsa <jolsa@kernel.org>
+References: <20210413091607.58945-1-toke@redhat.com>
+In-Reply-To: <20210413091607.58945-1-toke@redhat.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 13 Apr 2021 18:25:49 -0700
+Message-ID: <CAADnVQ+z8ShwG=kD+OjcGxycqTAnEvCEJ2jR13H8=5YWsx6Fzg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/2] bpf: return target info when a tracing
+ bpf_link is queried
+To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>, Daniel Xu <dxu@dxuuu.xyz>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Jesper Brouer <jbrouer@redhat.com>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
-        Viktor Malik <vmalik@redhat.com>
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>, bpf <bpf@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Apr 13, 2021 at 7:57 AM Jiri Olsa <jolsa@kernel.org> wrote:
+On Tue, Apr 13, 2021 at 2:16 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@redh=
+at.com> wrote:
 >
-> hi,
-> sending another attempt on speeding up load of multiple probes
-> for bpftrace and possibly other tools (first post in [1]).
+> There is currently no way to discover the target of a tracing program
+> attachment after the fact. Add this information to bpf_link_info and retu=
+rn
+> it when querying the bpf_link fd.
 >
-> This patchset adds support to attach bpf program directly to
-> ftrace probe as suggested by Steven and it speeds up loading
-> for bpftrace commands like:
->
->    # bpftrace -e 'kfunc:_raw_spin* { @[probe] = count(); }'
->    # bpftrace -e 'kfunc:ksys_* { @[probe] = count(); }'
->
-> Using ftrace with single bpf program for attachment to multiple
-> functions is much faster than current approach, where we need to
-> load and attach program for each probe function.
->
+> Acked-by: Andrii Nakryiko <andrii@kernel.org>
+> Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
 
-Ok, so first of all, I think it's super important to allow fast
-attachment of a single BPF program to multiple kernel functions (I
-call it mass-attachment). I've been recently prototyping a tool
-(retsnoop, [0]) that allows attaching fentry/fexit to multiple
-functions, and not having this feature turned into lots of extra code
-and slow startup/teardown speeds. So we should definitely fix that.
-
-But I think the approach you've taken is not the best one, even though
-it's a good starting point for discussion.
-
-First, you are saying function return attachment support is missing,
-but is not needed so far. I actually think that without func return
-the whole feature is extremely limiting. Not being able to measure
-function latency  by tracking enter/exit events is crippling for tons
-of useful applications. So I think this should go with both at the
-same time.
-
-But guess what, we already have a good BPF infra (BPF trampoline and
-fexit programs) that supports func exit tracing. Additionally, it
-supports the ability to read input arguments *on function exit*, which
-is something that kretprobe doesn't support and which is often a very
-limiting restriction, necessitating complicated logic to trace
-function entry just to store input arguments. It's a killer feature
-and one that makes fexit so much more useful than kretprobe.
-
-The only problem is that currently we have a 1:1:1 relationship
-between BPF trampoline, BPF program, and kernel function. I think we
-should allow to have a single BPF program, using a single BPF
-trampoline, but being able to attach to multiple kernel functions
-(1:1:N). This will allow to validate BPF program once, allocate only
-one dedicated BPF trampoline, and then (with appropriate attach API)
-attach them in a batch mode.
-
-We'll probably have to abandon direct memory read for input arguments,
-but for these mass-attachment scenarios that's rarely needed at all.
-Just allowing to read input args as u64 and providing traced function
-IP would be enough to do a lot. BPF trampoline can just
-unconditionally save the first 6 arguments, similarly how we do it
-today for a specific BTF function, just always 6.
-
-As for attachment, dedicating an entire new FD for storing functions
-seems like an overkill. I think BPF_LINK_CREATE is the right place to
-do this, providing an array of BTF IDs to identify all functions to be
-attached to. It's both simple and efficient.
-
-We'll get to libbpf APIs and those pseudo-regexp usage a bit later, I
-don't think we need to discuss that at this stage yet :)
-
-So, WDYT about BPF trampoline-based generic fentry/fexit with mass-attach API?
-
-  [0] https://github.com/anakryiko/retsnoop
-
-> Also available in
->   git://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
->   bpf/ftrace
->
-> thanks,
-> jirka
->
->
-> [1] https://lore.kernel.org/bpf/20201022082138.2322434-1-jolsa@kernel.org/
-> ---
-> Jiri Olsa (7):
->       bpf: Move bpf_prog_start/end functions to generic place
->       bpf: Add bpf_functions object
->       bpf: Add support to attach program to ftrace probe
->       libbpf: Add btf__find_by_pattern_kind function
->       libbpf: Add support to load and attach ftrace probe
->       selftests/bpf: Add ftrace probe to fentry test
->       selftests/bpf: Add ftrace probe test
->
->  include/uapi/linux/bpf.h                             |   8 ++++
->  kernel/bpf/syscall.c                                 | 381 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
->  kernel/bpf/trampoline.c                              |  97 ---------------------------------------
->  kernel/bpf/verifier.c                                |  27 +++++++++++
->  net/bpf/test_run.c                                   |   1 +
->  tools/include/uapi/linux/bpf.h                       |   8 ++++
->  tools/lib/bpf/bpf.c                                  |  12 +++++
->  tools/lib/bpf/bpf.h                                  |   5 +-
->  tools/lib/bpf/btf.c                                  |  67 +++++++++++++++++++++++++++
->  tools/lib/bpf/btf.h                                  |   3 ++
->  tools/lib/bpf/libbpf.c                               |  74 ++++++++++++++++++++++++++++++
->  tools/lib/bpf/libbpf.map                             |   1 +
->  tools/testing/selftests/bpf/prog_tests/fentry_test.c |   5 +-
->  tools/testing/selftests/bpf/prog_tests/ftrace_test.c |  48 +++++++++++++++++++
->  tools/testing/selftests/bpf/progs/fentry_test.c      |  16 +++++++
->  tools/testing/selftests/bpf/progs/ftrace_test.c      |  17 +++++++
->  16 files changed, 671 insertions(+), 99 deletions(-)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/ftrace_test.c
->  create mode 100644 tools/testing/selftests/bpf/progs/ftrace_test.c
->
+Applied. Thanks
