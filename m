@@ -2,91 +2,162 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83F76C433ED
-	for <bpf@archiver.kernel.org>; Wed, 14 Apr 2021 20:04:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BA303C433B4
+	for <bpf@archiver.kernel.org>; Wed, 14 Apr 2021 20:10:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 67DE761177
-	for <bpf@archiver.kernel.org>; Wed, 14 Apr 2021 20:04:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9B61B611AD
+	for <bpf@archiver.kernel.org>; Wed, 14 Apr 2021 20:10:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349755AbhDNUFO convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 14 Apr 2021 16:05:14 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:11600 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1349042AbhDNUFN (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 14 Apr 2021 16:05:13 -0400
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13EK33vP011007
-        for <bpf@vger.kernel.org>; Wed, 14 Apr 2021 13:04:51 -0700
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 37wv653mdd-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 14 Apr 2021 13:04:51 -0700
-Received: from intmgw002.25.frc3.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Wed, 14 Apr 2021 13:04:50 -0700
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 401CB2ECEBDF; Wed, 14 Apr 2021 13:02:15 -0700 (PDT)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 10/17] libbpf: tighten BTF type ID rewriting with error checking
-Date:   Wed, 14 Apr 2021 13:01:39 -0700
-Message-ID: <20210414200146.2663044-11-andrii@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210414200146.2663044-1-andrii@kernel.org>
-References: <20210414200146.2663044-1-andrii@kernel.org>
+        id S231963AbhDNUKa (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 14 Apr 2021 16:10:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52606 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232967AbhDNUKX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 14 Apr 2021 16:10:23 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F62AC061760
+        for <bpf@vger.kernel.org>; Wed, 14 Apr 2021 13:10:00 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id a1so24645124ljp.2
+        for <bpf@vger.kernel.org>; Wed, 14 Apr 2021 13:10:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MwY/uAWZw4+Qy6L6BtNeYzKjt04mgG0Fmf5rVKjnxzQ=;
+        b=ap3ig7KYnUhag1Gtyu8ju+wZN22X7hJAeGqlif08J6E2FDFZMStFf0J+i5MbXtUumS
+         IzvuAZFclh341ng8JxtdEr2qW9XrlIZXWpjDZb+qgeWbwxE6vWjjGEB/geNPjXxIQclW
+         dFI4IOTCs3fPKR1aHOm/iysJwoR+8kqUtA8mHyxoGySRQcfS+VCb+rZZM7/xiyt/HPID
+         YrSMrjX8rYbjzs5DbiCl29ZXCTZgvVac75YJkITMzGqfEU5saeopAsgC9TvzTPv5274g
+         cWQSom8PzYIEavCa1VDFHlyvioElMYcPnc9kDFdKK4GiYGWLDyOfnxPxwWSmPE8IQGU+
+         dUvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MwY/uAWZw4+Qy6L6BtNeYzKjt04mgG0Fmf5rVKjnxzQ=;
+        b=sQT5WI0Btf6yDFfI/ElFXdjqMpO/a7l9npukuZ9kFJZYdpPP6vXZ/VeW1BLl8ZoCpP
+         rCCH096O4b+sukfjcJjaFxTIba09VKY7XxvBhQlTJlupK7KLPkTzxu+ygRWbf0G/VwEW
+         1fhSUyviCBfT/hg0vj74PZZiqKem3nGHTdLwgUjFSDrNecyTd5oTyOcpjLSTKd+CUbzC
+         1P+tPQl57ccdhQJySw24rX6mnteEc8DodsvME6qFNZmhpn6ccoZuld1PjqHRBUNzl3EV
+         XUyiXfEAJLG29aZjvHZ1iHuJiRQVRcaNLAVHMVZtynAziByQuZfBIBRbi8k3s7hCJuG3
+         7aBg==
+X-Gm-Message-State: AOAM532u/IMt23OUnEfW2LK3ZQEs+hwv+ypCHrlGdzcBdGYy2dHj/DkD
+        joahkgP1YWsFyFY6X78axOl3flpA3ijH86U/o+qcvg==
+X-Google-Smtp-Source: ABdhPJyGzh1aNLsj+H9I9o7DUJdlV5HTtBeAeDM8vjbeZYpt4QAwg2dIXYbLUIkqdF+ZPGeN9DUBYbygk+wOkt8Am2g=
+X-Received: by 2002:a2e:8084:: with SMTP id i4mr25644098ljg.122.1618430998695;
+ Wed, 14 Apr 2021 13:09:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: tTEXrElMABl0n6CTHG9J29ff9Wxs2n8R
-X-Proofpoint-GUID: tTEXrElMABl0n6CTHG9J29ff9Wxs2n8R
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-04-14_12:2021-04-14,2021-04-14 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- phishscore=0 mlxlogscore=869 malwarescore=0 adultscore=0 bulkscore=0
- mlxscore=0 clxscore=1015 priorityscore=1501 spamscore=0 impostorscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104060000 definitions=main-2104140128
-X-FB-Internal: deliver
+References: <20210409223801.104657-1-mcroce@linux.microsoft.com>
+ <20210409223801.104657-3-mcroce@linux.microsoft.com> <20210410154824.GZ2531743@casper.infradead.org>
+ <YHHPbQm2pn2ysth0@enceladus> <CALvZod7UUxTavexGCzbKaK41LAW7mkfQrnDhFbjo-KvH9P6KsQ@mail.gmail.com>
+ <YHHuE7g73mZNrMV4@enceladus> <20210414214132.74f721dd@carbon>
+In-Reply-To: <20210414214132.74f721dd@carbon>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Wed, 14 Apr 2021 13:09:47 -0700
+Message-ID: <CALvZod4F8kCQQcK5_3YH=7keqkgY-97g+_OLoDCN7uNJdd61xA@mail.gmail.com>
+Subject: Re: [PATCH net-next v3 2/5] mm: add a signature in struct page
+To:     Jesper Dangaard Brouer <brouer@redhat.com>
+Cc:     Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Matteo Croce <mcroce@linux.microsoft.com>,
+        netdev <netdev@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
+        Ayush Sawal <ayush.sawal@chelsio.com>,
+        Vinay Kumar Yadav <vinay.yadav@chelsio.com>,
+        Rohit Maheshwari <rohitm@chelsio.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Marcin Wojtas <mw@semihalf.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Mirko Lindner <mlindner@marvell.com>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Boris Pismenny <borisp@nvidia.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Yu Zhao <yuzhao@google.com>,
+        Will Deacon <will@kernel.org>,
+        Michel Lespinasse <walken@google.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Roman Gushchin <guro@fb.com>, Hugh Dickins <hughd@google.com>,
+        Peter Xu <peterx@redhat.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Guoqing Jiang <guoqing.jiang@cloud.ionos.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Alexander Lobakin <alobakin@pm.me>,
+        Cong Wang <cong.wang@bytedance.com>, wenxu <wenxu@ucloud.cn>,
+        Kevin Hao <haokexin@gmail.com>,
+        Aleksandr Nogikh <nogikh@google.com>,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        Marco Elver <elver@google.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Yunsheng Lin <linyunsheng@huawei.com>,
+        Guillaume Nault <gnault@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>, linux-rdma@vger.kernel.org,
+        bpf <bpf@vger.kernel.org>, Eric Dumazet <edumazet@google.com>,
+        David Ahern <dsahern@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Andrew Lunn <andrew@lunn.ch>, Paolo Abeni <pabeni@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-It should never fail, but if it does, it's better to know about this rather
-than end up with nonsensical type IDs.
+On Wed, Apr 14, 2021 at 12:42 PM Jesper Dangaard Brouer
+<brouer@redhat.com> wrote:
+>
+[...]
+> > >
+> > > Can this page_pool be used for TCP RX zerocopy? If yes then PageType
+> > > can not be used.
+> >
+> > Yes it can, since it's going to be used as your default allocator for
+> > payloads, which might end up on an SKB.
+>
+> I'm not sure we want or should "allow" page_pool be used for TCP RX
+> zerocopy.
+> For several reasons.
+>
+> (1) This implies mapping these pages page to userspace, which AFAIK
+> means using page->mapping and page->index members (right?).
+>
 
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- tools/lib/bpf/linker.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+No, only page->_mapcount is used.
 
-diff --git a/tools/lib/bpf/linker.c b/tools/lib/bpf/linker.c
-index dc202a5d8235..978756889de6 100644
---- a/tools/lib/bpf/linker.c
-+++ b/tools/lib/bpf/linker.c
-@@ -1425,6 +1425,15 @@ static int linker_fixup_btf(struct src_obj *obj)
- static int remap_type_id(__u32 *type_id, void *ctx)
- {
- 	int *id_map = ctx;
-+	int new_id = id_map[*type_id];
-+
-+	if (*type_id == 0)
-+		return 0;
-+
-+	if (new_id == 0) {
-+		pr_warn("failed to find new ID mapping for original BTF type ID %u\n", *type_id);
-+		return -EINVAL;
-+	}
- 
- 	*type_id = id_map[*type_id];
- 
--- 
-2.30.2
+> (2) It feels wrong (security wise) to keep the DMA-mapping (for the
+> device) and also map this page into userspace.
+>
 
+I think this is already the case i.e pages still DMA-mapped and also
+mapped into userspace.
+
+> (3) The page_pool is optimized for refcnt==1 case, and AFAIK TCP-RX
+> zerocopy will bump the refcnt, which means the page_pool will not
+> recycle the page when it see the elevated refcnt (it will instead
+> release its DMA-mapping).
+
+Yes this is right but the userspace might have already consumed and
+unmapped the page before the driver considers to recycle the page.
+
+>
+> (4) I remember vaguely that this code path for (TCP RX zerocopy) uses
+> page->private for tricks.  And our patch [3/5] use page->private for
+> storing xdp_mem_info.
+>
+> IMHO when the SKB travel into this TCP RX zerocopy code path, we should
+> call page_pool_release_page() to release its DMA-mapping.
+>
+
+I will let TCP RX zerocopy experts respond to this but from my high
+level code inspection, I didn't see page->private usage.
