@@ -6,38 +6,38 @@ X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 06C2AC43462
-	for <bpf@archiver.kernel.org>; Wed, 14 Apr 2021 20:02:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A178FC433B4
+	for <bpf@archiver.kernel.org>; Wed, 14 Apr 2021 20:02:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DDD9F611B0
-	for <bpf@archiver.kernel.org>; Wed, 14 Apr 2021 20:02:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7EEE761154
+	for <bpf@archiver.kernel.org>; Wed, 14 Apr 2021 20:02:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353679AbhDNUDA convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 14 Apr 2021 16:03:00 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:31662 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1353683AbhDNUCu (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 14 Apr 2021 16:02:50 -0400
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13EJwppT003314
-        for <bpf@vger.kernel.org>; Wed, 14 Apr 2021 13:02:28 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 37wv653m0t-2
+        id S1353688AbhDNUDN convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 14 Apr 2021 16:03:13 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:17254 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1353690AbhDNUCx (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 14 Apr 2021 16:02:53 -0400
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.0.43/8.16.0.43) with SMTP id 13EK23lr031969
+        for <bpf@vger.kernel.org>; Wed, 14 Apr 2021 13:02:30 -0700
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by m0001303.ppops.net with ESMTP id 37wvny3hnh-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 14 Apr 2021 13:02:28 -0700
-Received: from intmgw001.25.frc3.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 14 Apr 2021 13:02:30 -0700
+Received: from intmgw001.37.frc1.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Wed, 14 Apr 2021 13:02:26 -0700
+ 15.1.2176.2; Wed, 14 Apr 2021 13:02:28 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 6AFA12ED1A84; Wed, 14 Apr 2021 13:02:23 -0700 (PDT)
+        id 7E1772ED1A84; Wed, 14 Apr 2021 13:02:27 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
         <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 14/17] selftests/bpf: omit skeleton generation for multi-linked BPF object files
-Date:   Wed, 14 Apr 2021 13:01:43 -0700
-Message-ID: <20210414200146.2663044-15-andrii@kernel.org>
+Subject: [PATCH bpf-next 16/17] selftests/bpf: add global variables linking selftest
+Date:   Wed, 14 Apr 2021 13:01:45 -0700
+Message-ID: <20210414200146.2663044-17-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210414200146.2663044-1-andrii@kernel.org>
 References: <20210414200146.2663044-1-andrii@kernel.org>
@@ -45,54 +45,237 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 6GyWamc-0ehv27BOAoj-mqHptgH3VJVE
-X-Proofpoint-GUID: 6GyWamc-0ehv27BOAoj-mqHptgH3VJVE
+X-Proofpoint-ORIG-GUID: CPs3LTVGNWtX8iY520-DuvU_wGjyiGkW
+X-Proofpoint-GUID: CPs3LTVGNWtX8iY520-DuvU_wGjyiGkW
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
  definitions=2021-04-14_12:2021-04-14,2021-04-14 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- phishscore=0 mlxlogscore=999 malwarescore=0 adultscore=0 bulkscore=0
- mlxscore=0 clxscore=1015 priorityscore=1501 spamscore=0 impostorscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104060000 definitions=main-2104140127
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
+ bulkscore=0 suspectscore=0 phishscore=0 lowpriorityscore=0 adultscore=0
+ malwarescore=0 priorityscore=1501 clxscore=1015 mlxscore=0 mlxlogscore=999
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104060000 definitions=main-2104140128
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Skip generating individual BPF skeletons for files that are supposed to be
-linked together to form the final BPF object file. Very often such files are
-"incomplete" BPF object files, which will fail libbpf bpf_object__open() step,
-if used individually, thus failing BPF skeleton generation. This is by design,
-so skip individual BPF skeletons and only validate them as part of their
-linked final BPF object file and skeleton.
+Add selftest validating various aspects of statically linking global
+variables:
+  - correct resolution of extern variables across .bss, .data, and .rodata
+    sections;
+  - correct handling of weak definitions;
+  - correct de-duplication of repeating special externs (.kconfig, .ksyms).
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/testing/selftests/bpf/Makefile | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/Makefile          |  3 +-
+ .../selftests/bpf/prog_tests/linked_vars.c    | 43 +++++++++++++
+ .../selftests/bpf/progs/linked_vars1.c        | 60 ++++++++++++++++++
+ .../selftests/bpf/progs/linked_vars2.c        | 61 +++++++++++++++++++
+ 4 files changed, 166 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/linked_vars.c
+ create mode 100644 tools/testing/selftests/bpf/progs/linked_vars1.c
+ create mode 100644 tools/testing/selftests/bpf/progs/linked_vars2.c
 
 diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 22a88580b491..cfa3e91c9a49 100644
+index c5d25aef1074..a690fd125c6d 100644
 --- a/tools/testing/selftests/bpf/Makefile
 +++ b/tools/testing/selftests/bpf/Makefile
-@@ -307,6 +307,8 @@ LINKED_SKELS := test_static_linked.skel.h
+@@ -303,10 +303,11 @@ endef
+ 
+ SKEL_BLACKLIST := btf__% test_pinning_invalid.c test_sk_assign.c
+ 
+-LINKED_SKELS := test_static_linked.skel.h linked_funcs.skel.h
++LINKED_SKELS := test_static_linked.skel.h linked_funcs.skel.h linked_vars.skel.h
  
  test_static_linked.skel.h-deps := test_static_linked1.o test_static_linked2.o
+ linked_funcs.skel.h-deps := linked_funcs1.o linked_funcs2.o
++linked_vars.skel.h-deps := linked_vars1.o linked_vars2.o
  
-+LINKED_BPF_SRCS := $(patsubst %.o,%.c,$(foreach skel,$(LINKED_SKELS),$($(skel)-deps)))
+ LINKED_BPF_SRCS := $(patsubst %.o,%.c,$(foreach skel,$(LINKED_SKELS),$($(skel)-deps)))
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/linked_vars.c b/tools/testing/selftests/bpf/prog_tests/linked_vars.c
+new file mode 100644
+index 000000000000..4122ec330039
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/linked_vars.c
+@@ -0,0 +1,43 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2021 Facebook */
 +
- # Set up extra TRUNNER_XXX "temporary" variables in the environment (relies on
- # $eval()) and pass control to DEFINE_TEST_RUNNER_RULES.
- # Parameters:
-@@ -325,7 +327,7 @@ TRUNNER_TESTS_HDR := $(TRUNNER_TESTS_DIR)/tests.h
- TRUNNER_BPF_SRCS := $$(notdir $$(wildcard $(TRUNNER_BPF_PROGS_DIR)/*.c))
- TRUNNER_BPF_OBJS := $$(patsubst %.c,$$(TRUNNER_OUTPUT)/%.o, $$(TRUNNER_BPF_SRCS))
- TRUNNER_BPF_SKELS := $$(patsubst %.c,$$(TRUNNER_OUTPUT)/%.skel.h,	\
--				 $$(filter-out $(SKEL_BLACKLIST),	\
-+				 $$(filter-out $(SKEL_BLACKLIST) $(LINKED_BPF_SRCS),\
- 					       $$(TRUNNER_BPF_SRCS)))
- TRUNNER_BPF_SKELS_LINKED := $$(addprefix $$(TRUNNER_OUTPUT)/,$(LINKED_SKELS))
- TEST_GEN_FILES += $$(TRUNNER_BPF_OBJS)
++#include <test_progs.h>
++#include <sys/syscall.h>
++#include "linked_vars.skel.h"
++
++void test_linked_vars(void)
++{
++	int err;
++	struct linked_vars* skel;
++
++	skel = linked_vars__open();
++	if (!ASSERT_OK_PTR(skel, "skel_open"))
++		return;
++
++	skel->bss->input_bss1 = 1000;
++	skel->bss->input_bss2 = 2000;
++	skel->bss->input_bss_weak = 3000;
++
++	err = linked_vars__load(skel);
++	if (!ASSERT_OK(err, "skel_load"))
++		goto cleanup;
++
++	err = linked_vars__attach(skel);
++	if (!ASSERT_OK(err, "skel_attach"))
++		goto cleanup;
++
++	/* trigger */
++	syscall(SYS_getpgid);
++
++	ASSERT_EQ(skel->bss->output_bss1, 1000 + 2000 + 3000, "output_bss1");
++	ASSERT_EQ(skel->bss->output_bss2, 1000 + 2000 + 3000, "output_bss2");
++	/* 10 comes from "winner" input_data_weak in first obj file */
++	ASSERT_EQ(skel->bss->output_data1, 1 + 2 + 10, "output_bss1");
++	ASSERT_EQ(skel->bss->output_data2, 1 + 2 + 10, "output_bss2");
++	/* 10 comes from "winner" input_rodata_weak in first obj file */
++	ASSERT_EQ(skel->bss->output_rodata1, 11 + 22 + 100 , "output_weak1");
++	ASSERT_EQ(skel->bss->output_rodata2, 11 + 22 + 100 , "output_weak2");
++
++cleanup:
++	linked_vars__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/linked_vars1.c b/tools/testing/selftests/bpf/progs/linked_vars1.c
+new file mode 100644
+index 000000000000..e3865047ed5d
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/linked_vars1.c
+@@ -0,0 +1,60 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2021 Facebook */
++
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++extern int LINUX_KERNEL_VERSION __kconfig;
++/* this weak extern will be strict due to the other file's strong extern */
++extern bool CONFIG_BPF_SYSCALL __kconfig __weak;
++extern const void bpf_link_fops __ksym __weak;
++/* make sure special extern funcs are handled as well */
++/* extern int bpf_kfunc_call_test2(struct sock *, __u32, __u32) __ksym; */
++
++/* static name conflicts are not handled by BPF skeleton well yet */
++/* static volatile int input_bss_static = 0; */
++
++int input_bss1 = 0;
++int input_data1 = 1;
++const volatile int input_rodata1 = 11;
++
++int input_bss_weak __weak = 0;
++/* these two definitions should win */
++int input_data_weak __weak = 10;
++const volatile int input_rodata_weak __weak = 100;
++
++extern int input_bss2;
++extern int input_data2;
++extern const int input_rodata2;
++
++int output_bss1 = 0;
++int output_data1 = 0;
++int output_rodata1 = 0;
++
++long output_sink1 = 0;
++
++static __noinline int get_bss_res(void)
++{
++	/* just make sure all the relocations work against .text as well */
++	return /*input_bss_static +*/ input_bss1 + input_bss2 + input_bss_weak;
++}
++
++SEC("raw_tp/sys_enter")
++int BPF_PROG(handler1)
++{
++	output_bss1 = get_bss_res();
++	output_data1 = input_data1 + input_data2 + input_data_weak;
++	output_rodata1 = input_rodata1 + input_rodata2 + input_rodata_weak;
++
++	/* make sure we actually use above special externs, otherwise compiler
++	 * will optimize them out
++	 */
++	output_sink1 = LINUX_KERNEL_VERSION
++		       + CONFIG_BPF_SYSCALL
++		       + (long)&bpf_link_fops;
++		       /* + (long)&bpf_kfunc_call_test2; */
++	return 0;
++}
++
++char LICENSE[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/linked_vars2.c b/tools/testing/selftests/bpf/progs/linked_vars2.c
+new file mode 100644
+index 000000000000..18880b54bc29
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/linked_vars2.c
+@@ -0,0 +1,61 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2021 Facebook */
++
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++extern int LINUX_KERNEL_VERSION __kconfig;
++/* when an extern is defined as both strong and weak, resulting symbol will be strong */
++extern bool CONFIG_BPF_SYSCALL __kconfig;
++extern const void __start_BTF __ksym;
++/* make sure special extern funcs are handled as well */
++/*extern int bpf_kfunc_call_test2(struct sock *, __u32, __u32) __ksym;*/
++
++/* static naming conflicts are not handled by BPF skeleton yet */
++/* static volatile int input_bss_static = 0; */
++
++int input_bss2 = 0;
++int input_data2 = 2;
++const volatile int input_rodata2 = 22;
++
++int input_bss_weak __weak = 0;
++/* these two weak variables should lose */
++int input_data_weak __weak = 20;
++const volatile int input_rodata_weak __weak = 200;
++
++extern int input_bss1;
++extern int input_data1;
++extern const int input_rodata1;
++
++int output_bss2 = 0;
++int output_data2 = 0;
++int output_rodata2 = 0;
++
++int output_sink2 = 0;
++
++static __noinline int get_data_res(void)
++{
++	/* just make sure all the relocations work against .text as well */
++	return input_data1 + input_data2 + input_data_weak;
++}
++
++SEC("raw_tp/sys_enter")
++int BPF_PROG(handler2)
++{
++	output_bss2 = /*input_bss_static +*/ input_bss1 + input_bss2 + input_bss_weak;
++	output_data2 = get_data_res();
++	output_rodata2 = input_rodata1 + input_rodata2 + input_rodata_weak;
++
++	/* make sure we actually use above special externs, otherwise compiler
++	 * will optimize them out
++	 */
++	output_sink2 = LINUX_KERNEL_VERSION
++		       + CONFIG_BPF_SYSCALL
++		       + (long)&__start_BTF;
++		       /*+ (long)&bpf_kfunc_call_test2;*/
++
++	return 0;
++}
++
++char LICENSE[] SEC("license") = "GPL";
 -- 
 2.30.2
 
