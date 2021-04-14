@@ -6,38 +6,38 @@ X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74260C43460
-	for <bpf@archiver.kernel.org>; Wed, 14 Apr 2021 20:02:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66B89C433ED
+	for <bpf@archiver.kernel.org>; Wed, 14 Apr 2021 20:02:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5934B61179
-	for <bpf@archiver.kernel.org>; Wed, 14 Apr 2021 20:02:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4E4BC61154
+	for <bpf@archiver.kernel.org>; Wed, 14 Apr 2021 20:02:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353655AbhDNUCk convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 14 Apr 2021 16:02:40 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:3902 "EHLO
+        id S1353660AbhDNUCl convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 14 Apr 2021 16:02:41 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:14470 "EHLO
         mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1353633AbhDNUCg (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 14 Apr 2021 16:02:36 -0400
+        by vger.kernel.org with ESMTP id S1353648AbhDNUCh (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 14 Apr 2021 16:02:37 -0400
 Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13EJsj5P007359
-        for <bpf@vger.kernel.org>; Wed, 14 Apr 2021 13:02:14 -0700
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13EJsgQ7007309
+        for <bpf@vger.kernel.org>; Wed, 14 Apr 2021 13:02:15 -0700
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 37wv5jbnr6-4
+        by mx0a-00082601.pphosted.com with ESMTP id 37wv5jbnrd-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 14 Apr 2021 13:02:14 -0700
-Received: from intmgw001.38.frc1.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 14 Apr 2021 13:02:15 -0700
+Received: from intmgw001.37.frc1.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Wed, 14 Apr 2021 13:02:12 -0700
+ 15.1.2176.2; Wed, 14 Apr 2021 13:02:14 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 052D72ECEBDF; Wed, 14 Apr 2021 13:02:03 -0700 (PDT)
+        id 200B82ECEBDF; Wed, 14 Apr 2021 13:02:09 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
         <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 04/17] libbpf: mark BPF subprogs with hidden visibility as static for BPF verifier
-Date:   Wed, 14 Apr 2021 13:01:33 -0700
-Message-ID: <20210414200146.2663044-5-andrii@kernel.org>
+Subject: [PATCH bpf-next 07/17] libbpf: factor out symtab and relos sanity checks
+Date:   Wed, 14 Apr 2021 13:01:36 -0700
+Message-ID: <20210414200146.2663044-8-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210414200146.2663044-1-andrii@kernel.org>
 References: <20210414200146.2663044-1-andrii@kernel.org>
@@ -45,8 +45,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: dhJ01roNyCU02As1A-tCiasuYC0R4hvJ
-X-Proofpoint-GUID: dhJ01roNyCU02As1A-tCiasuYC0R4hvJ
+X-Proofpoint-ORIG-GUID: QkIX8Md5wOAiqwf_N7QG3jcong6agVKf
+X-Proofpoint-GUID: QkIX8Md5wOAiqwf_N7QG3jcong6agVKf
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
  definitions=2021-04-14_12:2021-04-14,2021-04-14 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=999
@@ -59,163 +59,297 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Define __hidden helper macro in bpf_helpers.h, which is a short-hand for
-__attribute__((visibility("hidden"))). Add libbpf support to mark BPF
-subprograms marked with __hidden as static in BTF information to enforce BPF
-verifier's static function validation algorithm, which takes more information
-(caller's context) into account during a subprogram validation.
+Factor out logic for sanity checking SHT_SYMTAB and SHT_REL sections into
+separate sections. They are already quite extensive and are suffering from too
+deep indentation. Subsequent changes will extend SYMTAB sanity checking
+further, so it's better to factor each into a separate function.
+
+No functional changes are intended.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/lib/bpf/bpf_helpers.h     |  8 ++++++
- tools/lib/bpf/btf.c             |  5 ----
- tools/lib/bpf/libbpf.c          | 45 ++++++++++++++++++++++++++++++++-
- tools/lib/bpf/libbpf_internal.h |  6 +++++
- 4 files changed, 58 insertions(+), 6 deletions(-)
+ tools/lib/bpf/linker.c | 233 ++++++++++++++++++++++-------------------
+ 1 file changed, 127 insertions(+), 106 deletions(-)
 
-diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
-index 75c7581b304c..9720dc0b4605 100644
---- a/tools/lib/bpf/bpf_helpers.h
-+++ b/tools/lib/bpf/bpf_helpers.h
-@@ -47,6 +47,14 @@
- #define __weak __attribute__((weak))
- #endif
+diff --git a/tools/lib/bpf/linker.c b/tools/lib/bpf/linker.c
+index 4e08bc07e635..0bb927226370 100644
+--- a/tools/lib/bpf/linker.c
++++ b/tools/lib/bpf/linker.c
+@@ -131,6 +131,8 @@ static int init_output_elf(struct bpf_linker *linker, const char *file);
  
-+/*
-+ * Use __hidden attribute to mark a non-static BPF subprogram effectively
-+ * static for BPF verifier's verification algorithm purposes, allowing more
-+ * extensive and permissive BPF verification process, taking into account
-+ * subprogram's caller context.
-+ */
-+#define __hidden __attribute__((visibility("hidden")))
-+
- /* When utilizing vmlinux.h with BPF CO-RE, user BPF programs can't include
-  * any system-level headers (such as stddef.h, linux/version.h, etc), and
-  * commonly-used macros like NULL and KERNEL_VERSION aren't available through
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index d30e67e7e1e5..d57e13a13798 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -1605,11 +1605,6 @@ static void *btf_add_type_mem(struct btf *btf, size_t add_sz)
- 			      btf->hdr->type_len, UINT_MAX, add_sz);
- }
+ static int linker_load_obj_file(struct bpf_linker *linker, const char *filename, struct src_obj *obj);
+ static int linker_sanity_check_elf(struct src_obj *obj);
++static int linker_sanity_check_elf_symtab(struct src_obj *obj, struct src_sec *sec);
++static int linker_sanity_check_elf_relos(struct src_obj *obj, struct src_sec *sec);
+ static int linker_sanity_check_btf(struct src_obj *obj);
+ static int linker_sanity_check_btf_ext(struct src_obj *obj);
+ static int linker_fixup_btf(struct src_obj *obj);
+@@ -663,8 +665,8 @@ static bool is_pow_of_2(size_t x)
  
--static __u32 btf_type_info(int kind, int vlen, int kflag)
--{
--	return (kflag << 31) | (kind << 24) | vlen;
--}
+ static int linker_sanity_check_elf(struct src_obj *obj)
+ {
+-	struct src_sec *sec, *link_sec;
+-	int i, j, n;
++	struct src_sec *sec;
++	int i, err;
+ 
+ 	if (!obj->symtab_sec_idx) {
+ 		pr_warn("ELF is missing SYMTAB section in %s\n", obj->filename);
+@@ -692,43 +694,11 @@ static int linker_sanity_check_elf(struct src_obj *obj)
+ 			return -EINVAL;
+ 
+ 		switch (sec->shdr->sh_type) {
+-		case SHT_SYMTAB: {
+-			Elf64_Sym *sym;
 -
- static void btf_type_inc_vlen(struct btf_type *t)
- {
- 	t->info = btf_type_info(btf_kind(t), btf_vlen(t) + 1, btf_kflag(t));
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index ed5586cce227..b6a7f62521a6 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -71,6 +71,7 @@
- static struct bpf_map *bpf_object__add_map(struct bpf_object *obj);
- static const struct btf_type *
- skip_mods_and_typedefs(const struct btf *btf, __u32 id, __u32 *res_id);
-+static bool prog_is_subprog(const struct bpf_object *obj, const struct bpf_program *prog);
- 
- static int __base_pr(enum libbpf_print_level level, const char *format,
- 		     va_list args)
-@@ -275,6 +276,7 @@ struct bpf_program {
- 	bpf_program_clear_priv_t clear_priv;
- 
- 	bool load;
-+	bool mark_btf_static;
- 	enum bpf_prog_type type;
- 	enum bpf_attach_type expected_attach_type;
- 	int prog_ifindex;
-@@ -699,6 +701,15 @@ bpf_object__add_programs(struct bpf_object *obj, Elf_Data *sec_data,
- 		if (err)
- 			return err;
- 
-+		/* if function is a global/weak symbol, but has hidden
-+		 * visibility (or any non-default one), mark its BTF FUNC as
-+		 * static to enable more permissive BPF verification mode with
-+		 * more outside context available to BPF verifier
-+		 */
-+		if (GELF_ST_BIND(sym.st_info) != STB_LOCAL
-+		    && GELF_ST_VISIBILITY(sym.st_other) != STV_DEFAULT)
-+			prog->mark_btf_static = true;
-+
- 		nr_progs++;
- 		obj->nr_programs = nr_progs;
- 
-@@ -2619,7 +2630,7 @@ static int bpf_object__sanitize_and_load_btf(struct bpf_object *obj)
- {
- 	struct btf *kern_btf = obj->btf;
- 	bool btf_mandatory, sanitize;
--	int err = 0;
-+	int i, err = 0;
- 
- 	if (!obj->btf)
- 		return 0;
-@@ -2633,6 +2644,38 @@ static int bpf_object__sanitize_and_load_btf(struct bpf_object *obj)
- 		return 0;
- 	}
- 
-+	/* Even though some subprogs are global/weak, user might prefer more
-+	 * permissive BPF verification process that BPF verifier performs for
-+	 * static functions, taking into account more context from the caller
-+	 * functions. In such case, they need to mark such subprogs with
-+	 * __attribute__((visibility("hidden"))) and libbpf will adjust
-+	 * corresponding FUNC BTF type to be marked as static and trigger more
-+	 * involved BPF verification process.
-+	 */
-+	for (i = 0; i < obj->nr_programs; i++) {
-+		struct bpf_program *prog = &obj->programs[i];
-+		struct btf_type *t;
-+		const char *name;
-+		int j, n;
-+
-+		if (!prog->mark_btf_static || !prog_is_subprog(obj, prog))
-+			continue;
-+
-+		n = btf__get_nr_types(obj->btf);
-+		for (j = 1; j <= n; j++) {
-+			t = btf_type_by_id(obj->btf, j);
-+			if (!btf_is_func(t) || btf_func_linkage(t) != BTF_FUNC_GLOBAL)
-+				continue;
-+
-+			name = btf__str_by_offset(obj->btf, t->name_off);
-+			if (strcmp(name, prog->name) != 0)
-+				continue;
-+
-+			t->info = btf_type_info(BTF_KIND_FUNC, BTF_FUNC_STATIC, 0);
+-			if (sec->shdr->sh_entsize != sizeof(Elf64_Sym))
+-				return -EINVAL;
+-			if (sec->shdr->sh_size % sec->shdr->sh_entsize != 0)
+-				return -EINVAL;
+-
+-			if (!sec->shdr->sh_link || sec->shdr->sh_link >= obj->sec_cnt) {
+-				pr_warn("ELF SYMTAB section #%zu points to missing STRTAB section #%zu in %s\n",
+-					sec->sec_idx, (size_t)sec->shdr->sh_link, obj->filename);
+-				return -EINVAL;
+-			}
+-			link_sec = &obj->secs[sec->shdr->sh_link];
+-			if (link_sec->shdr->sh_type != SHT_STRTAB) {
+-				pr_warn("ELF SYMTAB section #%zu points to invalid STRTAB section #%zu in %s\n",
+-					sec->sec_idx, (size_t)sec->shdr->sh_link, obj->filename);
+-				return -EINVAL;
+-			}
+-
+-			n = sec->shdr->sh_size / sec->shdr->sh_entsize;
+-			sym = sec->data->d_buf;
+-			for (j = 0; j < n; j++, sym++) {
+-				if (sym->st_shndx
+-				    && sym->st_shndx < SHN_LORESERVE
+-				    && sym->st_shndx >= obj->sec_cnt) {
+-					pr_warn("ELF sym #%d in section #%zu points to missing section #%zu in %s\n",
+-						j, sec->sec_idx, (size_t)sym->st_shndx, obj->filename);
+-					return -EINVAL;
+-				}
+-				if (ELF64_ST_TYPE(sym->st_info) == STT_SECTION) {
+-					if (sym->st_value != 0)
+-						return -EINVAL;
+-				}
+-			}
++		case SHT_SYMTAB:
++			err = linker_sanity_check_elf_symtab(obj, sec);
++			if (err)
++				return err;
+ 			break;
+-		}
+ 		case SHT_STRTAB:
+ 			break;
+ 		case SHT_PROGBITS:
+@@ -739,87 +709,138 @@ static int linker_sanity_check_elf(struct src_obj *obj)
+ 			break;
+ 		case SHT_NOBITS:
+ 			break;
+-		case SHT_REL: {
+-			Elf64_Rel *relo;
+-			struct src_sec *sym_sec;
++		case SHT_REL:
++			err = linker_sanity_check_elf_relos(obj, sec);
++			if (err)
++				return err;
 +			break;
++		case SHT_LLVM_ADDRSIG:
++			break;
++		default:
++			pr_warn("ELF section #%zu (%s) has unrecognized type %zu in %s\n",
++				sec->sec_idx, sec->sec_name, (size_t)sec->shdr->sh_type, obj->filename);
++			return -EINVAL;
 +		}
 +	}
-+
- 	sanitize = btf_needs_sanitization(obj);
- 	if (sanitize) {
- 		const void *raw_data;
-diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
-index 6017902c687e..92b7eae10c6d 100644
---- a/tools/lib/bpf/libbpf_internal.h
-+++ b/tools/lib/bpf/libbpf_internal.h
-@@ -19,6 +19,7 @@
- #pragma GCC poison reallocarray
  
- #include "libbpf.h"
-+#include "btf.h"
- 
- #ifndef EM_BPF
- #define EM_BPF 247
-@@ -132,6 +133,11 @@ struct btf_type;
- 
- struct btf_type *btf_type_by_id(struct btf *btf, __u32 type_id);
- 
-+static inline __u32 btf_type_info(int kind, int vlen, int kflag)
-+{
-+	return (kflag << 31) | (kind << 24) | vlen;
+-			if (sec->shdr->sh_entsize != sizeof(Elf64_Rel))
+-				return -EINVAL;
+-			if (sec->shdr->sh_size % sec->shdr->sh_entsize != 0)
+-				return -EINVAL;
++	return 0;
 +}
+ 
+-			/* SHT_REL's sh_link should point to SYMTAB */
+-			if (sec->shdr->sh_link != obj->symtab_sec_idx) {
+-				pr_warn("ELF relo section #%zu points to invalid SYMTAB section #%zu in %s\n",
+-					sec->sec_idx, (size_t)sec->shdr->sh_link, obj->filename);
+-				return -EINVAL;
+-			}
++static int linker_sanity_check_elf_symtab(struct src_obj *obj, struct src_sec *sec)
++{
++	struct src_sec *link_sec;
++	Elf64_Sym *sym;
++	int i, n;
+ 
+-			/* SHT_REL's sh_info points to relocated section */
+-			if (!sec->shdr->sh_info || sec->shdr->sh_info >= obj->sec_cnt) {
+-				pr_warn("ELF relo section #%zu points to missing section #%zu in %s\n",
+-					sec->sec_idx, (size_t)sec->shdr->sh_info, obj->filename);
+-				return -EINVAL;
+-			}
+-			link_sec = &obj->secs[sec->shdr->sh_info];
++	if (sec->shdr->sh_entsize != sizeof(Elf64_Sym))
++		return -EINVAL;
++	if (sec->shdr->sh_size % sec->shdr->sh_entsize != 0)
++		return -EINVAL;
 +
- void *libbpf_add_mem(void **data, size_t *cap_cnt, size_t elem_sz,
- 		     size_t cur_cnt, size_t max_cnt, size_t add_cnt);
- int libbpf_ensure_mem(void **data, size_t *cap_cnt, size_t elem_sz, size_t need_cnt);
++	if (!sec->shdr->sh_link || sec->shdr->sh_link >= obj->sec_cnt) {
++		pr_warn("ELF SYMTAB section #%zu points to missing STRTAB section #%zu in %s\n",
++			sec->sec_idx, (size_t)sec->shdr->sh_link, obj->filename);
++		return -EINVAL;
++	}
++	link_sec = &obj->secs[sec->shdr->sh_link];
++	if (link_sec->shdr->sh_type != SHT_STRTAB) {
++		pr_warn("ELF SYMTAB section #%zu points to invalid STRTAB section #%zu in %s\n",
++			sec->sec_idx, (size_t)sec->shdr->sh_link, obj->filename);
++		return -EINVAL;
++	}
+ 
+-			/* .rel<secname> -> <secname> pattern is followed */
+-			if (strncmp(sec->sec_name, ".rel", sizeof(".rel") - 1) != 0
+-			    || strcmp(sec->sec_name + sizeof(".rel") - 1, link_sec->sec_name) != 0) {
+-				pr_warn("ELF relo section #%zu name has invalid name in %s\n",
+-					sec->sec_idx, obj->filename);
++	n = sec->shdr->sh_size / sec->shdr->sh_entsize;
++	sym = sec->data->d_buf;
++	for (i = 0; i < n; i++, sym++) {
++		if (sym->st_shndx
++		    && sym->st_shndx < SHN_LORESERVE
++		    && sym->st_shndx >= obj->sec_cnt) {
++			pr_warn("ELF sym #%d in section #%zu points to missing section #%zu in %s\n",
++				i, sec->sec_idx, (size_t)sym->st_shndx, obj->filename);
++			return -EINVAL;
++		}
++		if (ELF64_ST_TYPE(sym->st_info) == STT_SECTION) {
++			if (sym->st_value != 0)
+ 				return -EINVAL;
+-			}
++			continue;
++		}
++	}
+ 
+-			/* don't further validate relocations for ignored sections */
+-			if (link_sec->skipped)
+-				break;
++	return 0;
++}
+ 
+-			/* relocatable section is data or instructions */
+-			if (link_sec->shdr->sh_type != SHT_PROGBITS
+-			    && link_sec->shdr->sh_type != SHT_NOBITS) {
+-				pr_warn("ELF relo section #%zu points to invalid section #%zu in %s\n",
+-					sec->sec_idx, (size_t)sec->shdr->sh_info, obj->filename);
+-				return -EINVAL;
+-			}
++static int linker_sanity_check_elf_relos(struct src_obj *obj, struct src_sec *sec)
++{
++	struct src_sec *link_sec, *sym_sec;
++	Elf64_Rel *relo;
++	int i, n;
+ 
+-			/* check sanity of each relocation */
+-			n = sec->shdr->sh_size / sec->shdr->sh_entsize;
+-			relo = sec->data->d_buf;
+-			sym_sec = &obj->secs[obj->symtab_sec_idx];
+-			for (j = 0; j < n; j++, relo++) {
+-				size_t sym_idx = ELF64_R_SYM(relo->r_info);
+-				size_t sym_type = ELF64_R_TYPE(relo->r_info);
+-
+-				if (sym_type != R_BPF_64_64 && sym_type != R_BPF_64_32) {
+-					pr_warn("ELF relo #%d in section #%zu has unexpected type %zu in %s\n",
+-						j, sec->sec_idx, sym_type, obj->filename);
+-					return -EINVAL;
+-				}
++	if (sec->shdr->sh_entsize != sizeof(Elf64_Rel))
++		return -EINVAL;
++	if (sec->shdr->sh_size % sec->shdr->sh_entsize != 0)
++		return -EINVAL;
+ 
+-				if (!sym_idx || sym_idx * sizeof(Elf64_Sym) >= sym_sec->shdr->sh_size) {
+-					pr_warn("ELF relo #%d in section #%zu points to invalid symbol #%zu in %s\n",
+-						j, sec->sec_idx, sym_idx, obj->filename);
+-					return -EINVAL;
+-				}
++	/* SHT_REL's sh_link should point to SYMTAB */
++	if (sec->shdr->sh_link != obj->symtab_sec_idx) {
++		pr_warn("ELF relo section #%zu points to invalid SYMTAB section #%zu in %s\n",
++			sec->sec_idx, (size_t)sec->shdr->sh_link, obj->filename);
++		return -EINVAL;
++	}
+ 
+-				if (link_sec->shdr->sh_flags & SHF_EXECINSTR) {
+-					if (relo->r_offset % sizeof(struct bpf_insn) != 0) {
+-						pr_warn("ELF relo #%d in section #%zu points to missing symbol #%zu in %s\n",
+-							j, sec->sec_idx, sym_idx, obj->filename);
+-						return -EINVAL;
+-					}
+-				}
+-			}
+-			break;
++	/* SHT_REL's sh_info points to relocated section */
++	if (!sec->shdr->sh_info || sec->shdr->sh_info >= obj->sec_cnt) {
++		pr_warn("ELF relo section #%zu points to missing section #%zu in %s\n",
++			sec->sec_idx, (size_t)sec->shdr->sh_info, obj->filename);
++		return -EINVAL;
++	}
++	link_sec = &obj->secs[sec->shdr->sh_info];
++
++	/* .rel<secname> -> <secname> pattern is followed */
++	if (strncmp(sec->sec_name, ".rel", sizeof(".rel") - 1) != 0
++	    || strcmp(sec->sec_name + sizeof(".rel") - 1, link_sec->sec_name) != 0) {
++		pr_warn("ELF relo section #%zu name has invalid name in %s\n",
++			sec->sec_idx, obj->filename);
++		return -EINVAL;
++	}
++
++	/* don't further validate relocations for ignored sections */
++	if (link_sec->skipped)
++		return 0;
++
++	/* relocatable section is data or instructions */
++	if (link_sec->shdr->sh_type != SHT_PROGBITS && link_sec->shdr->sh_type != SHT_NOBITS) {
++		pr_warn("ELF relo section #%zu points to invalid section #%zu in %s\n",
++			sec->sec_idx, (size_t)sec->shdr->sh_info, obj->filename);
++		return -EINVAL;
++	}
++
++	/* check sanity of each relocation */
++	n = sec->shdr->sh_size / sec->shdr->sh_entsize;
++	relo = sec->data->d_buf;
++	sym_sec = &obj->secs[obj->symtab_sec_idx];
++	for (i = 0; i < n; i++, relo++) {
++		size_t sym_idx = ELF64_R_SYM(relo->r_info);
++		size_t sym_type = ELF64_R_TYPE(relo->r_info);
++
++		if (sym_type != R_BPF_64_64 && sym_type != R_BPF_64_32) {
++			pr_warn("ELF relo #%d in section #%zu has unexpected type %zu in %s\n",
++				i, sec->sec_idx, sym_type, obj->filename);
++			return -EINVAL;
+ 		}
+-		case SHT_LLVM_ADDRSIG:
+-			break;
+-		default:
+-			pr_warn("ELF section #%zu (%s) has unrecognized type %zu in %s\n",
+-				sec->sec_idx, sec->sec_name, (size_t)sec->shdr->sh_type, obj->filename);
++
++		if (!sym_idx || sym_idx * sizeof(Elf64_Sym) >= sym_sec->shdr->sh_size) {
++			pr_warn("ELF relo #%d in section #%zu points to invalid symbol #%zu in %s\n",
++				i, sec->sec_idx, sym_idx, obj->filename);
+ 			return -EINVAL;
+ 		}
++
++		if (link_sec->shdr->sh_flags & SHF_EXECINSTR) {
++			if (relo->r_offset % sizeof(struct bpf_insn) != 0) {
++				pr_warn("ELF relo #%d in section #%zu points to missing symbol #%zu in %s\n",
++					i, sec->sec_idx, sym_idx, obj->filename);
++				return -EINVAL;
++			}
++		}
+ 	}
+ 
+ 	return 0;
 -- 
 2.30.2
 
