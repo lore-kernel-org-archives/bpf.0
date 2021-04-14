@@ -6,38 +6,38 @@ X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 66B89C433ED
-	for <bpf@archiver.kernel.org>; Wed, 14 Apr 2021 20:02:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F227DC433ED
+	for <bpf@archiver.kernel.org>; Wed, 14 Apr 2021 20:02:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4E4BC61154
-	for <bpf@archiver.kernel.org>; Wed, 14 Apr 2021 20:02:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D784A61154
+	for <bpf@archiver.kernel.org>; Wed, 14 Apr 2021 20:02:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353660AbhDNUCl convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 14 Apr 2021 16:02:41 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:14470 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1353648AbhDNUCh (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 14 Apr 2021 16:02:37 -0400
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13EJsgQ7007309
-        for <bpf@vger.kernel.org>; Wed, 14 Apr 2021 13:02:15 -0700
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 37wv5jbnrd-1
+        id S1353669AbhDNUCp convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 14 Apr 2021 16:02:45 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:36928 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1353649AbhDNUCi (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 14 Apr 2021 16:02:38 -0400
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13EJwQpa026209
+        for <bpf@vger.kernel.org>; Wed, 14 Apr 2021 13:02:17 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 37wv93kjce-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 14 Apr 2021 13:02:15 -0700
-Received: from intmgw001.37.frc1.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 14 Apr 2021 13:02:16 -0700
+Received: from intmgw001.25.frc3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2176.2; Wed, 14 Apr 2021 13:02:14 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 200B82ECEBDF; Wed, 14 Apr 2021 13:02:09 -0700 (PDT)
+        id 365532ECEBDF; Wed, 14 Apr 2021 13:02:13 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
         <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 07/17] libbpf: factor out symtab and relos sanity checks
-Date:   Wed, 14 Apr 2021 13:01:36 -0700
-Message-ID: <20210414200146.2663044-8-andrii@kernel.org>
+Subject: [PATCH bpf-next 09/17] libbpf: extend sanity checking ELF symbols with externs validation
+Date:   Wed, 14 Apr 2021 13:01:38 -0700
+Message-ID: <20210414200146.2663044-10-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210414200146.2663044-1-andrii@kernel.org>
 References: <20210414200146.2663044-1-andrii@kernel.org>
@@ -45,311 +45,98 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: QkIX8Md5wOAiqwf_N7QG3jcong6agVKf
-X-Proofpoint-GUID: QkIX8Md5wOAiqwf_N7QG3jcong6agVKf
+X-Proofpoint-ORIG-GUID: 56J177R10jYqVA7oChUlLz2G4I1DqqHL
+X-Proofpoint-GUID: 56J177R10jYqVA7oChUlLz2G4I1DqqHL
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
  definitions=2021-04-14_12:2021-04-14,2021-04-14 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=999
- bulkscore=0 spamscore=0 adultscore=0 priorityscore=1501 lowpriorityscore=0
- malwarescore=0 mlxscore=0 clxscore=1015 phishscore=0 suspectscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0 spamscore=0
+ suspectscore=0 bulkscore=0 mlxlogscore=999 mlxscore=0 lowpriorityscore=0
+ malwarescore=0 adultscore=0 impostorscore=0 clxscore=1034
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2104060000 definitions=main-2104140127
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Factor out logic for sanity checking SHT_SYMTAB and SHT_REL sections into
-separate sections. They are already quite extensive and are suffering from too
-deep indentation. Subsequent changes will extend SYMTAB sanity checking
-further, so it's better to factor each into a separate function.
-
-No functional changes are intended.
+Add logic to validate extern symbols, plus some other minor extra checks, like
+ELF symbol #0 validation, general symbol visibility and binding validations.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/lib/bpf/linker.c | 233 ++++++++++++++++++++++-------------------
- 1 file changed, 127 insertions(+), 106 deletions(-)
+ tools/lib/bpf/linker.c | 43 +++++++++++++++++++++++++++++++++---------
+ 1 file changed, 34 insertions(+), 9 deletions(-)
 
 diff --git a/tools/lib/bpf/linker.c b/tools/lib/bpf/linker.c
-index 4e08bc07e635..0bb927226370 100644
+index b23bfa6e7e5f..dc202a5d8235 100644
 --- a/tools/lib/bpf/linker.c
 +++ b/tools/lib/bpf/linker.c
-@@ -131,6 +131,8 @@ static int init_output_elf(struct bpf_linker *linker, const char *file);
- 
- static int linker_load_obj_file(struct bpf_linker *linker, const char *filename, struct src_obj *obj);
- static int linker_sanity_check_elf(struct src_obj *obj);
-+static int linker_sanity_check_elf_symtab(struct src_obj *obj, struct src_sec *sec);
-+static int linker_sanity_check_elf_relos(struct src_obj *obj, struct src_sec *sec);
- static int linker_sanity_check_btf(struct src_obj *obj);
- static int linker_sanity_check_btf_ext(struct src_obj *obj);
- static int linker_fixup_btf(struct src_obj *obj);
-@@ -663,8 +665,8 @@ static bool is_pow_of_2(size_t x)
- 
- static int linker_sanity_check_elf(struct src_obj *obj)
- {
--	struct src_sec *sec, *link_sec;
--	int i, j, n;
-+	struct src_sec *sec;
-+	int i, err;
- 
- 	if (!obj->symtab_sec_idx) {
- 		pr_warn("ELF is missing SYMTAB section in %s\n", obj->filename);
-@@ -692,43 +694,11 @@ static int linker_sanity_check_elf(struct src_obj *obj)
- 			return -EINVAL;
- 
- 		switch (sec->shdr->sh_type) {
--		case SHT_SYMTAB: {
--			Elf64_Sym *sym;
--
--			if (sec->shdr->sh_entsize != sizeof(Elf64_Sym))
--				return -EINVAL;
--			if (sec->shdr->sh_size % sec->shdr->sh_entsize != 0)
--				return -EINVAL;
--
--			if (!sec->shdr->sh_link || sec->shdr->sh_link >= obj->sec_cnt) {
--				pr_warn("ELF SYMTAB section #%zu points to missing STRTAB section #%zu in %s\n",
--					sec->sec_idx, (size_t)sec->shdr->sh_link, obj->filename);
--				return -EINVAL;
--			}
--			link_sec = &obj->secs[sec->shdr->sh_link];
--			if (link_sec->shdr->sh_type != SHT_STRTAB) {
--				pr_warn("ELF SYMTAB section #%zu points to invalid STRTAB section #%zu in %s\n",
--					sec->sec_idx, (size_t)sec->shdr->sh_link, obj->filename);
--				return -EINVAL;
--			}
--
--			n = sec->shdr->sh_size / sec->shdr->sh_entsize;
--			sym = sec->data->d_buf;
--			for (j = 0; j < n; j++, sym++) {
--				if (sym->st_shndx
--				    && sym->st_shndx < SHN_LORESERVE
--				    && sym->st_shndx >= obj->sec_cnt) {
--					pr_warn("ELF sym #%d in section #%zu points to missing section #%zu in %s\n",
--						j, sec->sec_idx, (size_t)sym->st_shndx, obj->filename);
--					return -EINVAL;
--				}
--				if (ELF64_ST_TYPE(sym->st_info) == STT_SECTION) {
--					if (sym->st_value != 0)
--						return -EINVAL;
--				}
--			}
-+		case SHT_SYMTAB:
-+			err = linker_sanity_check_elf_symtab(obj, sec);
-+			if (err)
-+				return err;
- 			break;
--		}
- 		case SHT_STRTAB:
- 			break;
- 		case SHT_PROGBITS:
-@@ -739,87 +709,138 @@ static int linker_sanity_check_elf(struct src_obj *obj)
- 			break;
- 		case SHT_NOBITS:
- 			break;
--		case SHT_REL: {
--			Elf64_Rel *relo;
--			struct src_sec *sym_sec;
-+		case SHT_REL:
-+			err = linker_sanity_check_elf_relos(obj, sec);
-+			if (err)
-+				return err;
-+			break;
-+		case SHT_LLVM_ADDRSIG:
-+			break;
-+		default:
-+			pr_warn("ELF section #%zu (%s) has unrecognized type %zu in %s\n",
-+				sec->sec_idx, sec->sec_name, (size_t)sec->shdr->sh_type, obj->filename);
-+			return -EINVAL;
-+		}
-+	}
- 
--			if (sec->shdr->sh_entsize != sizeof(Elf64_Rel))
--				return -EINVAL;
--			if (sec->shdr->sh_size % sec->shdr->sh_entsize != 0)
--				return -EINVAL;
-+	return 0;
-+}
- 
--			/* SHT_REL's sh_link should point to SYMTAB */
--			if (sec->shdr->sh_link != obj->symtab_sec_idx) {
--				pr_warn("ELF relo section #%zu points to invalid SYMTAB section #%zu in %s\n",
--					sec->sec_idx, (size_t)sec->shdr->sh_link, obj->filename);
--				return -EINVAL;
--			}
-+static int linker_sanity_check_elf_symtab(struct src_obj *obj, struct src_sec *sec)
-+{
-+	struct src_sec *link_sec;
-+	Elf64_Sym *sym;
-+	int i, n;
- 
--			/* SHT_REL's sh_info points to relocated section */
--			if (!sec->shdr->sh_info || sec->shdr->sh_info >= obj->sec_cnt) {
--				pr_warn("ELF relo section #%zu points to missing section #%zu in %s\n",
--					sec->sec_idx, (size_t)sec->shdr->sh_info, obj->filename);
--				return -EINVAL;
--			}
--			link_sec = &obj->secs[sec->shdr->sh_info];
-+	if (sec->shdr->sh_entsize != sizeof(Elf64_Sym))
-+		return -EINVAL;
-+	if (sec->shdr->sh_size % sec->shdr->sh_entsize != 0)
-+		return -EINVAL;
+@@ -752,14 +752,39 @@ static int linker_sanity_check_elf_symtab(struct src_obj *obj, struct src_sec *s
+ 	n = sec->shdr->sh_size / sec->shdr->sh_entsize;
+ 	sym = sec->data->d_buf;
+ 	for (i = 0; i < n; i++, sym++) {
+-		if (sym->st_shndx
+-		    && sym->st_shndx < SHN_LORESERVE
+-		    && sym->st_shndx >= obj->sec_cnt) {
++		int sym_type = ELF64_ST_TYPE(sym->st_info);
++		int sym_bind = ELF64_ST_BIND(sym->st_info);
 +
-+	if (!sec->shdr->sh_link || sec->shdr->sh_link >= obj->sec_cnt) {
-+		pr_warn("ELF SYMTAB section #%zu points to missing STRTAB section #%zu in %s\n",
-+			sec->sec_idx, (size_t)sec->shdr->sh_link, obj->filename);
-+		return -EINVAL;
-+	}
-+	link_sec = &obj->secs[sec->shdr->sh_link];
-+	if (link_sec->shdr->sh_type != SHT_STRTAB) {
-+		pr_warn("ELF SYMTAB section #%zu points to invalid STRTAB section #%zu in %s\n",
-+			sec->sec_idx, (size_t)sec->shdr->sh_link, obj->filename);
-+		return -EINVAL;
-+	}
- 
--			/* .rel<secname> -> <secname> pattern is followed */
--			if (strncmp(sec->sec_name, ".rel", sizeof(".rel") - 1) != 0
--			    || strcmp(sec->sec_name + sizeof(".rel") - 1, link_sec->sec_name) != 0) {
--				pr_warn("ELF relo section #%zu name has invalid name in %s\n",
--					sec->sec_idx, obj->filename);
-+	n = sec->shdr->sh_size / sec->shdr->sh_entsize;
-+	sym = sec->data->d_buf;
-+	for (i = 0; i < n; i++, sym++) {
-+		if (sym->st_shndx
-+		    && sym->st_shndx < SHN_LORESERVE
-+		    && sym->st_shndx >= obj->sec_cnt) {
-+			pr_warn("ELF sym #%d in section #%zu points to missing section #%zu in %s\n",
-+				i, sec->sec_idx, (size_t)sym->st_shndx, obj->filename);
-+			return -EINVAL;
-+		}
-+		if (ELF64_ST_TYPE(sym->st_info) == STT_SECTION) {
-+			if (sym->st_value != 0)
- 				return -EINVAL;
--			}
-+			continue;
-+		}
-+	}
- 
--			/* don't further validate relocations for ignored sections */
--			if (link_sec->skipped)
--				break;
-+	return 0;
-+}
- 
--			/* relocatable section is data or instructions */
--			if (link_sec->shdr->sh_type != SHT_PROGBITS
--			    && link_sec->shdr->sh_type != SHT_NOBITS) {
--				pr_warn("ELF relo section #%zu points to invalid section #%zu in %s\n",
--					sec->sec_idx, (size_t)sec->shdr->sh_info, obj->filename);
--				return -EINVAL;
--			}
-+static int linker_sanity_check_elf_relos(struct src_obj *obj, struct src_sec *sec)
-+{
-+	struct src_sec *link_sec, *sym_sec;
-+	Elf64_Rel *relo;
-+	int i, n;
- 
--			/* check sanity of each relocation */
--			n = sec->shdr->sh_size / sec->shdr->sh_entsize;
--			relo = sec->data->d_buf;
--			sym_sec = &obj->secs[obj->symtab_sec_idx];
--			for (j = 0; j < n; j++, relo++) {
--				size_t sym_idx = ELF64_R_SYM(relo->r_info);
--				size_t sym_type = ELF64_R_TYPE(relo->r_info);
--
--				if (sym_type != R_BPF_64_64 && sym_type != R_BPF_64_32) {
--					pr_warn("ELF relo #%d in section #%zu has unexpected type %zu in %s\n",
--						j, sec->sec_idx, sym_type, obj->filename);
--					return -EINVAL;
--				}
-+	if (sec->shdr->sh_entsize != sizeof(Elf64_Rel))
-+		return -EINVAL;
-+	if (sec->shdr->sh_size % sec->shdr->sh_entsize != 0)
-+		return -EINVAL;
- 
--				if (!sym_idx || sym_idx * sizeof(Elf64_Sym) >= sym_sec->shdr->sh_size) {
--					pr_warn("ELF relo #%d in section #%zu points to invalid symbol #%zu in %s\n",
--						j, sec->sec_idx, sym_idx, obj->filename);
--					return -EINVAL;
--				}
-+	/* SHT_REL's sh_link should point to SYMTAB */
-+	if (sec->shdr->sh_link != obj->symtab_sec_idx) {
-+		pr_warn("ELF relo section #%zu points to invalid SYMTAB section #%zu in %s\n",
-+			sec->sec_idx, (size_t)sec->shdr->sh_link, obj->filename);
-+		return -EINVAL;
-+	}
- 
--				if (link_sec->shdr->sh_flags & SHF_EXECINSTR) {
--					if (relo->r_offset % sizeof(struct bpf_insn) != 0) {
--						pr_warn("ELF relo #%d in section #%zu points to missing symbol #%zu in %s\n",
--							j, sec->sec_idx, sym_idx, obj->filename);
--						return -EINVAL;
--					}
--				}
--			}
--			break;
-+	/* SHT_REL's sh_info points to relocated section */
-+	if (!sec->shdr->sh_info || sec->shdr->sh_info >= obj->sec_cnt) {
-+		pr_warn("ELF relo section #%zu points to missing section #%zu in %s\n",
-+			sec->sec_idx, (size_t)sec->shdr->sh_info, obj->filename);
-+		return -EINVAL;
-+	}
-+	link_sec = &obj->secs[sec->shdr->sh_info];
-+
-+	/* .rel<secname> -> <secname> pattern is followed */
-+	if (strncmp(sec->sec_name, ".rel", sizeof(".rel") - 1) != 0
-+	    || strcmp(sec->sec_name + sizeof(".rel") - 1, link_sec->sec_name) != 0) {
-+		pr_warn("ELF relo section #%zu name has invalid name in %s\n",
-+			sec->sec_idx, obj->filename);
-+		return -EINVAL;
-+	}
-+
-+	/* don't further validate relocations for ignored sections */
-+	if (link_sec->skipped)
-+		return 0;
-+
-+	/* relocatable section is data or instructions */
-+	if (link_sec->shdr->sh_type != SHT_PROGBITS && link_sec->shdr->sh_type != SHT_NOBITS) {
-+		pr_warn("ELF relo section #%zu points to invalid section #%zu in %s\n",
-+			sec->sec_idx, (size_t)sec->shdr->sh_info, obj->filename);
-+		return -EINVAL;
-+	}
-+
-+	/* check sanity of each relocation */
-+	n = sec->shdr->sh_size / sec->shdr->sh_entsize;
-+	relo = sec->data->d_buf;
-+	sym_sec = &obj->secs[obj->symtab_sec_idx];
-+	for (i = 0; i < n; i++, relo++) {
-+		size_t sym_idx = ELF64_R_SYM(relo->r_info);
-+		size_t sym_type = ELF64_R_TYPE(relo->r_info);
-+
-+		if (sym_type != R_BPF_64_64 && sym_type != R_BPF_64_32) {
-+			pr_warn("ELF relo #%d in section #%zu has unexpected type %zu in %s\n",
-+				i, sec->sec_idx, sym_type, obj->filename);
-+			return -EINVAL;
- 		}
--		case SHT_LLVM_ADDRSIG:
--			break;
--		default:
--			pr_warn("ELF section #%zu (%s) has unrecognized type %zu in %s\n",
--				sec->sec_idx, sec->sec_name, (size_t)sec->shdr->sh_type, obj->filename);
-+
-+		if (!sym_idx || sym_idx * sizeof(Elf64_Sym) >= sym_sec->shdr->sh_size) {
-+			pr_warn("ELF relo #%d in section #%zu points to invalid symbol #%zu in %s\n",
-+				i, sec->sec_idx, sym_idx, obj->filename);
- 			return -EINVAL;
- 		}
-+
-+		if (link_sec->shdr->sh_flags & SHF_EXECINSTR) {
-+			if (relo->r_offset % sizeof(struct bpf_insn) != 0) {
-+				pr_warn("ELF relo #%d in section #%zu points to missing symbol #%zu in %s\n",
-+					i, sec->sec_idx, sym_idx, obj->filename);
++		if (i == 0) {
++			if (sym->st_name != 0 || sym->st_info != 0
++			    || sym->st_other != 0 || sym->st_shndx != 0
++			    || sym->st_value != 0 || sym->st_size != 0) {
++				pr_warn("ELF sym #0 is invalid in %s\n", obj->filename);
 +				return -EINVAL;
 +			}
++			continue;
 +		}
- 	}
++		if (sym_bind != STB_LOCAL && sym_bind != STB_GLOBAL && sym_bind != STB_WEAK) {
++			pr_warn("ELF sym #%d is section #%zu has unsupported symbol binding %d\n",
++				i, sec->sec_idx, sym_bind);
++			return -EINVAL;
++		}
++		if (sym->st_shndx == 0) {
++			if (sym_type != STT_NOTYPE || sym_bind == STB_LOCAL
++			    || sym->st_value != 0 || sym->st_size != 0) {
++				pr_warn("ELF sym #%d is invalid extern symbol in %s\n",
++					i, obj->filename);
++
++				return -EINVAL;
++			}
++			continue;
++		}
++		if (sym->st_shndx < SHN_LORESERVE && sym->st_shndx >= obj->sec_cnt) {
+ 			pr_warn("ELF sym #%d in section #%zu points to missing section #%zu in %s\n",
+ 				i, sec->sec_idx, (size_t)sym->st_shndx, obj->filename);
+ 			return -EINVAL;
+ 		}
+-		if (ELF64_ST_TYPE(sym->st_info) == STT_SECTION) {
++		if (sym_type == STT_SECTION) {
+ 			if (sym->st_value != 0)
+ 				return -EINVAL;
+ 			continue;
+@@ -1137,16 +1162,16 @@ static int linker_append_elf_syms(struct bpf_linker *linker, struct src_obj *obj
+ 		size_t dst_sym_idx;
+ 		int name_off;
  
- 	return 0;
+-		/* we already have all-zero initial symbol */
+-		if (sym->st_name == 0 && sym->st_info == 0 &&
+-		    sym->st_other == 0 && sym->st_shndx == SHN_UNDEF &&
+-		    sym->st_value == 0 && sym->st_size ==0)
++		/* We already validated all-zero symbol #0 and we already
++		 * appended it preventively to the final SYMTAB, so skip it.
++		 */
++		if (i == 0)
+ 			continue;
+ 
+ 		sym_name = elf_strptr(obj->elf, str_sec_idx, sym->st_name);
+ 		if (!sym_name) {
+ 			pr_warn("can't fetch symbol name for symbol #%d in '%s'\n", i, obj->filename);
+-			return -1;
++			return -EINVAL;
+ 		}
+ 
+ 		if (sym->st_shndx && sym->st_shndx < SHN_LORESERVE) {
 -- 
 2.30.2
 
