@@ -7,59 +7,59 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0EB20C433B4
-	for <bpf@archiver.kernel.org>; Wed, 14 Apr 2021 18:54:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 99953C433ED
+	for <bpf@archiver.kernel.org>; Wed, 14 Apr 2021 18:54:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DE41B611AD
-	for <bpf@archiver.kernel.org>; Wed, 14 Apr 2021 18:54:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7AD306120E
+	for <bpf@archiver.kernel.org>; Wed, 14 Apr 2021 18:54:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347332AbhDNSyy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 14 Apr 2021 14:54:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36060 "EHLO
+        id S1353152AbhDNSzE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 14 Apr 2021 14:55:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347620AbhDNSyn (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 14 Apr 2021 14:54:43 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D29A6C06175F
-        for <bpf@vger.kernel.org>; Wed, 14 Apr 2021 11:54:20 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id o20-20020a05600c4fd4b0290114265518afso11064276wmq.4
-        for <bpf@vger.kernel.org>; Wed, 14 Apr 2021 11:54:20 -0700 (PDT)
+        with ESMTP id S1348477AbhDNSyo (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 14 Apr 2021 14:54:44 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3580AC06138E
+        for <bpf@vger.kernel.org>; Wed, 14 Apr 2021 11:54:22 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id k26so4449152wrc.8
+        for <bpf@vger.kernel.org>; Wed, 14 Apr 2021 11:54:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=irlDC7BwaWt5pY8na/M+SXAiJ/Wnr/e+GZWx5sW8jdk=;
-        b=WxSAKMPN1lYSmD8p3MuuOh3/L292fGegWmwEns59d55Om2x193E4U6Gxbx52vx6Mbq
-         77w88fFfnX6uXmPuEnwYoMytguBwcIsxqw5XFU9EXFMM5gu438jl7euptSDz278BDKhH
-         g+dy+raIUneFTbe3Ph1NPXD9GUGGWGFpjGVs0=
+        bh=ZrguiEZQBncRoBtaNZyBwb8KxAudSocLCfIdylJjreQ=;
+        b=lehCtb1Tgya4NICc9Ai4JSrUUbJ32q8UU0LBorVBDVkY76NJ/n0NaDbe7+ADhODkEA
+         K8S5+cE+hbvQISlvebNzrwgZQIKrTkApi8wVTsmurOecQITj6lKCnXKaGgjpE2C3AB5X
+         fFocM6nvYkboc9zxuN7hkWEsyrOF7lKmaILSI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=irlDC7BwaWt5pY8na/M+SXAiJ/Wnr/e+GZWx5sW8jdk=;
-        b=XkkOnvOL4WMvxbN6lc9QOtpADUYEdwpVylb0eQVL3/j5pidVHV4YcNBbTag7ZEFl/2
-         lFLOF6lgV65eJK369UKjcEjni3Upjo1v7pYRUJ3/THSE1ODJNkl/yy6hd/IBBt5WiE3v
-         b+PETHyUr4ROAZZctbRkc0CkKDF2ofnzWg2IbTgGzMar1e1qPU0D06UKKCSJ11u/nSAq
-         iYcsSlGllao6R9v/KfckgkedAfI0AVgQdfyOAr0m6o9fd2FIsnIJ7aHYiiqOgZGN8RPh
-         McGtYVBO48ObziQaDeeqaCutMCy5hti8d7BDo1IjHlmE2ReZuhrPhLSn44TXW1EhPBzb
-         VCGQ==
-X-Gm-Message-State: AOAM530YVp3CZcllvNCFJ96Pz+SZUT4Mqtrlr5bNMe2s2OIhB2Aj2QQ6
-        kN3BAXy6bca9NHO1L9ZvAx9RvvV4jueG+Q==
-X-Google-Smtp-Source: ABdhPJwsgZC1dNdCCl+Upp7K8UhiKwONgV9CkZNboIAnHD1pklEb2U8rz1wF+FPN12qTRFdxmiXYJw==
-X-Received: by 2002:a1c:a953:: with SMTP id s80mr4330993wme.176.1618426458960;
-        Wed, 14 Apr 2021 11:54:18 -0700 (PDT)
+        bh=ZrguiEZQBncRoBtaNZyBwb8KxAudSocLCfIdylJjreQ=;
+        b=Q5ug5j83pfiht4UvUeAgvpnzJEh/gPWKCYpy6hNtyPqc5x4j5C1ebN+OYNXvgHpPA1
+         9jk6uxWRRfDCLTldI9tYn8juOs7H+BrlpaKEPAShF09JZTO6GDL+GkP1Ez+RL+7k4rtO
+         +EUMORav+EcsnRmOH+eLIlXkc7OHqSXvPd/zYoD2CXkgfTU2jYG1jeTbFs5+/kYzknvb
+         OmxYc1hEpko1HtfK18PpK2bGI7zupUBtvlc2jCeqAy96hTiLGE2XADj5GZgiPLZJAPXB
+         Joa0n5hFZuhrEMIfOc/nKkvC13Fs1JUxZm/sOeC07nISIAx3gF6nKXGFFek+bcMeID1N
+         ZZ6g==
+X-Gm-Message-State: AOAM533zEWciCnGaKeef07Jakn4cpX/e0SVBprvl6T1E0pi81oIxgcqD
+        furwtOvuzz0Ga9WlW6Eg5kE2ax8tn6A42Q==
+X-Google-Smtp-Source: ABdhPJxn5FTTNvsxEwwEHR2sz43bvRkK/fxlGIQ64P4w38wlfAQioCT0ZgFzJek+ZDUgleYl0habtg==
+X-Received: by 2002:adf:da4f:: with SMTP id r15mr9985927wrl.411.1618426460600;
+        Wed, 14 Apr 2021 11:54:20 -0700 (PDT)
 Received: from revest.zrh.corp.google.com ([2a00:79e0:42:204:8b2a:41bd:9d62:10d5])
-        by smtp.gmail.com with ESMTPSA id f12sm253131wrr.61.2021.04.14.11.54.18
+        by smtp.gmail.com with ESMTPSA id f12sm253131wrr.61.2021.04.14.11.54.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Apr 2021 11:54:18 -0700 (PDT)
+        Wed, 14 Apr 2021 11:54:20 -0700 (PDT)
 From:   Florent Revest <revest@chromium.org>
 To:     bpf@vger.kernel.org
 Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
         yhs@fb.com, kpsingh@kernel.org, jackmanb@chromium.org,
         linux-kernel@vger.kernel.org, Florent Revest <revest@chromium.org>
-Subject: [PATCH bpf-next v4 4/6] libbpf: Initialize the bpf_seq_printf parameters array field by field
-Date:   Wed, 14 Apr 2021 20:54:04 +0200
-Message-Id: <20210414185406.917890-5-revest@chromium.org>
+Subject: [PATCH bpf-next v4 6/6] selftests/bpf: Add a series of tests for bpf_snprintf
+Date:   Wed, 14 Apr 2021 20:54:06 +0200
+Message-Id: <20210414185406.917890-7-revest@chromium.org>
 X-Mailer: git-send-email 2.31.1.295.g9ea45b61b8-goog
 In-Reply-To: <20210414185406.917890-1-revest@chromium.org>
 References: <20210414185406.917890-1-revest@chromium.org>
@@ -69,72 +69,256 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When initializing the __param array with a one liner, if all args are
-const, the initial array value will be placed in the rodata section but
-because libbpf does not support relocation in the rodata section, any
-pointer in this array will stay NULL.
+The "positive" part tests all format specifiers when things go well.
 
-Fixes: c09add2fbc5a ("tools/libbpf: Add bpf_iter support")
+The "negative" part makes sure that incorrect format strings fail at
+load time.
+
 Signed-off-by: Florent Revest <revest@chromium.org>
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/lib/bpf/bpf_tracing.h | 40 +++++++++++++++++++++++++++----------
- 1 file changed, 29 insertions(+), 11 deletions(-)
+ .../selftests/bpf/prog_tests/snprintf.c       | 124 ++++++++++++++++++
+ .../selftests/bpf/progs/test_snprintf.c       |  73 +++++++++++
+ .../bpf/progs/test_snprintf_single.c          |  20 +++
+ 3 files changed, 217 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/snprintf.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_snprintf.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_snprintf_single.c
 
-diff --git a/tools/lib/bpf/bpf_tracing.h b/tools/lib/bpf/bpf_tracing.h
-index f9ef37707888..1c2e91ee041d 100644
---- a/tools/lib/bpf/bpf_tracing.h
-+++ b/tools/lib/bpf/bpf_tracing.h
-@@ -413,20 +413,38 @@ typeof(name(0)) name(struct pt_regs *ctx)				    \
- }									    \
- static __always_inline typeof(name(0)) ____##name(struct pt_regs *ctx, ##args)
- 
-+#define ___bpf_fill0(arr, p, x) do {} while (0)
-+#define ___bpf_fill1(arr, p, x) arr[p] = x
-+#define ___bpf_fill2(arr, p, x, args...) arr[p] = x; ___bpf_fill1(arr, p + 1, args)
-+#define ___bpf_fill3(arr, p, x, args...) arr[p] = x; ___bpf_fill2(arr, p + 1, args)
-+#define ___bpf_fill4(arr, p, x, args...) arr[p] = x; ___bpf_fill3(arr, p + 1, args)
-+#define ___bpf_fill5(arr, p, x, args...) arr[p] = x; ___bpf_fill4(arr, p + 1, args)
-+#define ___bpf_fill6(arr, p, x, args...) arr[p] = x; ___bpf_fill5(arr, p + 1, args)
-+#define ___bpf_fill7(arr, p, x, args...) arr[p] = x; ___bpf_fill6(arr, p + 1, args)
-+#define ___bpf_fill8(arr, p, x, args...) arr[p] = x; ___bpf_fill7(arr, p + 1, args)
-+#define ___bpf_fill9(arr, p, x, args...) arr[p] = x; ___bpf_fill8(arr, p + 1, args)
-+#define ___bpf_fill10(arr, p, x, args...) arr[p] = x; ___bpf_fill9(arr, p + 1, args)
-+#define ___bpf_fill11(arr, p, x, args...) arr[p] = x; ___bpf_fill10(arr, p + 1, args)
-+#define ___bpf_fill12(arr, p, x, args...) arr[p] = x; ___bpf_fill11(arr, p + 1, args)
-+#define ___bpf_fill(arr, args...) \
-+	___bpf_apply(___bpf_fill, ___bpf_narg(args))(arr, 0, args)
+diff --git a/tools/testing/selftests/bpf/prog_tests/snprintf.c b/tools/testing/selftests/bpf/prog_tests/snprintf.c
+new file mode 100644
+index 000000000000..661ffb390b4a
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/snprintf.c
+@@ -0,0 +1,124 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2021 Google LLC. */
 +
- /*
-  * BPF_SEQ_PRINTF to wrap bpf_seq_printf to-be-printed values
-  * in a structure.
-  */
--#define BPF_SEQ_PRINTF(seq, fmt, args...)				    \
--	({								    \
--		_Pragma("GCC diagnostic push")				    \
--		_Pragma("GCC diagnostic ignored \"-Wint-conversion\"")	    \
--		static const char ___fmt[] = fmt;			    \
--		unsigned long long ___param[] = { args };		    \
--		_Pragma("GCC diagnostic pop")				    \
--		int ___ret = bpf_seq_printf(seq, ___fmt, sizeof(___fmt),    \
--					    ___param, sizeof(___param));    \
--		___ret;							    \
--	})
-+#define BPF_SEQ_PRINTF(seq, fmt, args...)			\
-+({								\
-+	static const char ___fmt[] = fmt;			\
-+	unsigned long long ___param[___bpf_narg(args)];		\
-+								\
-+	_Pragma("GCC diagnostic push")				\
-+	_Pragma("GCC diagnostic ignored \"-Wint-conversion\"")	\
-+	___bpf_fill(___param, args);				\
-+	_Pragma("GCC diagnostic pop")				\
-+								\
-+	bpf_seq_printf(seq, ___fmt, sizeof(___fmt),		\
-+		       ___param, sizeof(___param));		\
-+})
- 
- #endif
++#include <test_progs.h>
++#include "test_snprintf.skel.h"
++#include "test_snprintf_single.skel.h"
++
++#define EXP_NUM_OUT  "-8 9 96 -424242 1337 DABBAD00"
++#define EXP_NUM_RET  sizeof(EXP_NUM_OUT)
++
++#define EXP_IP_OUT   "127.000.000.001 0000:0000:0000:0000:0000:0000:0000:0001"
++#define EXP_IP_RET   sizeof(EXP_IP_OUT)
++
++/* The third specifier, %pB, depends on compiler inlining so don't check it */
++#define EXP_SYM_OUT  "schedule schedule+0x0/"
++#define MIN_SYM_RET  sizeof(EXP_SYM_OUT)
++
++/* The third specifier, %p, is a hashed pointer which changes on every reboot */
++#define EXP_ADDR_OUT "0000000000000000 ffff00000add4e55 "
++#define EXP_ADDR_RET sizeof(EXP_ADDR_OUT "unknownhashedptr")
++
++#define EXP_STR_OUT  "str1 longstr"
++#define EXP_STR_RET  sizeof(EXP_STR_OUT)
++
++#define EXP_OVER_OUT "%over"
++#define EXP_OVER_RET 10
++
++#define EXP_PAD_OUT "    4 000"
++#define EXP_PAD_RET 900007
++
++#define EXP_NO_ARG_OUT "simple case"
++#define EXP_NO_ARG_RET 12
++
++#define EXP_NO_BUF_RET 29
++
++void test_snprintf_positive(void)
++{
++	char exp_addr_out[] = EXP_ADDR_OUT;
++	char exp_sym_out[]  = EXP_SYM_OUT;
++	struct test_snprintf *skel;
++
++	skel = test_snprintf__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel_open"))
++		return;
++
++	if (!ASSERT_OK(test_snprintf__attach(skel), "skel_attach"))
++		goto cleanup;
++
++	/* trigger tracepoint */
++	usleep(1);
++
++	ASSERT_STREQ(skel->bss->num_out, EXP_NUM_OUT, "num_out");
++	ASSERT_EQ(skel->bss->num_ret, EXP_NUM_RET, "num_ret");
++
++	ASSERT_STREQ(skel->bss->ip_out, EXP_IP_OUT, "ip_out");
++	ASSERT_EQ(skel->bss->ip_ret, EXP_IP_RET, "ip_ret");
++
++	ASSERT_OK(memcmp(skel->bss->sym_out, exp_sym_out,
++			 sizeof(exp_sym_out) - 1), "sym_out");
++	ASSERT_LT(MIN_SYM_RET, skel->bss->sym_ret, "sym_ret");
++
++	ASSERT_OK(memcmp(skel->bss->addr_out, exp_addr_out,
++			 sizeof(exp_addr_out) - 1), "addr_out");
++	ASSERT_EQ(skel->bss->addr_ret, EXP_ADDR_RET, "addr_ret");
++
++	ASSERT_STREQ(skel->bss->str_out, EXP_STR_OUT, "str_out");
++	ASSERT_EQ(skel->bss->str_ret, EXP_STR_RET, "str_ret");
++
++	ASSERT_STREQ(skel->bss->over_out, EXP_OVER_OUT, "over_out");
++	ASSERT_EQ(skel->bss->over_ret, EXP_OVER_RET, "over_ret");
++
++	ASSERT_STREQ(skel->bss->pad_out, EXP_PAD_OUT, "pad_out");
++	ASSERT_EQ(skel->bss->pad_ret, EXP_PAD_RET, "pad_ret");
++
++	ASSERT_STREQ(skel->bss->noarg_out, EXP_NO_ARG_OUT, "no_arg_out");
++	ASSERT_EQ(skel->bss->noarg_ret, EXP_NO_ARG_RET, "no_arg_ret");
++
++	ASSERT_EQ(skel->bss->nobuf_ret, EXP_NO_BUF_RET, "no_buf_ret");
++
++cleanup:
++	test_snprintf__destroy(skel);
++}
++
++#define min(a, b) ((a) < (b) ? (a) : (b))
++
++/* Loads an eBPF object calling bpf_snprintf with up to 10 characters of fmt */
++static int load_single_snprintf(char *fmt)
++{
++	struct test_snprintf_single *skel;
++	int ret;
++
++	skel = test_snprintf_single__open();
++	if (!skel)
++		return -EINVAL;
++
++	memcpy(skel->rodata->fmt, fmt, min(strlen(fmt) + 1, 10));
++
++	ret = test_snprintf_single__load(skel);
++	if (!ret)
++		test_snprintf_single__destroy(skel);
++
++	return ret;
++}
++
++void test_snprintf_negative(void)
++{
++	ASSERT_OK(load_single_snprintf("valid %d"), "valid usage");
++
++	ASSERT_ERR(load_single_snprintf("0123456789"), "no terminating zero");
++	ASSERT_ERR(load_single_snprintf("%d %d"), "too many specifiers");
++	ASSERT_ERR(load_single_snprintf("%pi5"), "invalid specifier 1");
++	ASSERT_ERR(load_single_snprintf("%a"), "invalid specifier 2");
++	ASSERT_ERR(load_single_snprintf("%"), "invalid specifier 3");
++	ASSERT_ERR(load_single_snprintf("\x80"), "non ascii character");
++	ASSERT_ERR(load_single_snprintf("\x1"), "non printable character");
++}
++
++void test_snprintf(void)
++{
++	if (test__start_subtest("snprintf_positive"))
++		test_snprintf_positive();
++	if (test__start_subtest("snprintf_negative"))
++		test_snprintf_negative();
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_snprintf.c b/tools/testing/selftests/bpf/progs/test_snprintf.c
+new file mode 100644
+index 000000000000..951a0301c553
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_snprintf.c
+@@ -0,0 +1,73 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2021 Google LLC. */
++
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++char num_out[64] = {};
++long num_ret = 0;
++
++char ip_out[64] = {};
++long ip_ret = 0;
++
++char sym_out[64] = {};
++long sym_ret = 0;
++
++char addr_out[64] = {};
++long addr_ret = 0;
++
++char str_out[64] = {};
++long str_ret = 0;
++
++char over_out[6] = {};
++long over_ret = 0;
++
++char pad_out[10] = {};
++long pad_ret = 0;
++
++char noarg_out[64] = {};
++long noarg_ret = 0;
++
++long nobuf_ret = 0;
++
++extern const void schedule __ksym;
++
++SEC("raw_tp/sys_enter")
++int handler(const void *ctx)
++{
++	/* Convenient values to pretty-print */
++	const __u8 ex_ipv4[] = {127, 0, 0, 1};
++	const __u8 ex_ipv6[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1};
++	static const char str1[] = "str1";
++	static const char longstr[] = "longstr";
++
++	/* Integer types */
++	num_ret  = BPF_SNPRINTF(num_out, sizeof(num_out),
++				"%d %u %x %li %llu %lX",
++				-8, 9, 150, -424242, 1337, 0xDABBAD00);
++	/* IP addresses */
++	ip_ret   = BPF_SNPRINTF(ip_out, sizeof(ip_out), "%pi4 %pI6",
++				&ex_ipv4, &ex_ipv6);
++	/* Symbol lookup formatting */
++	sym_ret  = BPF_SNPRINTF(sym_out,  sizeof(sym_out), "%ps %pS %pB",
++				&schedule, &schedule, &schedule);
++	/* Kernel pointers */
++	addr_ret = BPF_SNPRINTF(addr_out, sizeof(addr_out), "%pK %px %p",
++				0, 0xFFFF00000ADD4E55, 0xFFFF00000ADD4E55);
++	/* Strings embedding */
++	str_ret  = BPF_SNPRINTF(str_out, sizeof(str_out), "%s %+05s",
++				str1, longstr);
++	/* Overflow */
++	over_ret = BPF_SNPRINTF(over_out, sizeof(over_out), "%%overflow");
++	/* Padding of fixed width numbers */
++	pad_ret = BPF_SNPRINTF(pad_out, sizeof(pad_out), "%5d %0900000X", 4, 4);
++	/* No args */
++	noarg_ret = BPF_SNPRINTF(noarg_out, sizeof(noarg_out), "simple case");
++	/* No buffer */
++	nobuf_ret = BPF_SNPRINTF(NULL, 0, "only interested in length %d", 60);
++
++	return 0;
++}
++
++char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/test_snprintf_single.c b/tools/testing/selftests/bpf/progs/test_snprintf_single.c
+new file mode 100644
+index 000000000000..15ccc5c43803
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_snprintf_single.c
+@@ -0,0 +1,20 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2021 Google LLC. */
++
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++
++// The format string is filled from the userspace side such that loading fails
++static const char fmt[10];
++
++SEC("raw_tp/sys_enter")
++int handler(const void *ctx)
++{
++	unsigned long long arg = 42;
++
++	bpf_snprintf(NULL, 0, fmt, &arg, sizeof(arg));
++
++	return 0;
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.31.1.295.g9ea45b61b8-goog
 
