@@ -2,143 +2,126 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B712C433B4
-	for <bpf@archiver.kernel.org>; Thu, 15 Apr 2021 21:02:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 609CDC433B4
+	for <bpf@archiver.kernel.org>; Thu, 15 Apr 2021 05:54:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D1A8F60FDC
-	for <bpf@archiver.kernel.org>; Thu, 15 Apr 2021 21:02:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4304B61431
+	for <bpf@archiver.kernel.org>; Thu, 15 Apr 2021 05:54:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234894AbhDOVDL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 15 Apr 2021 17:03:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:46031 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234879AbhDOVDK (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 15 Apr 2021 17:03:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1618520566;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oGHsaDaUpiruomI8+2Hlw2Ap8tFFUdJWgJGhYkehwNM=;
-        b=JHH5YGsC3e8QLINbMIBlPdFYtYenIKBFDO9xFwosAIRtvq6B8tTvE7pCNt4vL3xAMWsyl4
-        YUila7XgWG5mswSAXFCDp8eKtPuXMfp4NET/wamflCuIcDXOINNeDZC94feEB7AEMDvXuf
-        ZOIC/lIpSioZXIv/xjnQK1QWMugPAng=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-278-jBkJnf1aPXSSMKUKZ7sn5A-1; Thu, 15 Apr 2021 17:02:42 -0400
-X-MC-Unique: jBkJnf1aPXSSMKUKZ7sn5A-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id BEB651005582;
-        Thu, 15 Apr 2021 21:02:41 +0000 (UTC)
-Received: from sandy.ghostprotocols.net (unknown [10.3.128.11])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2903D9CA0;
-        Thu, 15 Apr 2021 21:02:41 +0000 (UTC)
-Received: by sandy.ghostprotocols.net (Postfix, from userid 1000)
-        id 8D4A6102; Thu, 15 Apr 2021 18:02:38 -0300 (-03)
-Date:   Thu, 15 Apr 2021 18:02:38 -0300
-From:   Arnaldo Carvalho de Melo <acme@redhat.com>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Subject: Re: [QUESTION] Will the pahole tar source code with corresponding
- libbpf submodule codes be released as well in the future?
-Message-ID: <20210415210238.GB21027@redhat.com>
-References: <2de4aad5-fa9e-1c39-3c92-9bb9229d0966@loongson.cn>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2de4aad5-fa9e-1c39-3c92-9bb9229d0966@loongson.cn>
-X-Url:  http://acmel.wordpress.com
-User-Agent: Mutt/1.5.20 (2009-12-10)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+        id S230005AbhDOFyt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 15 Apr 2021 01:54:49 -0400
+Received: from forward5-smtp.messagingengine.com ([66.111.4.239]:51163 "EHLO
+        forward5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231167AbhDOFxv (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 15 Apr 2021 01:53:51 -0400
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailforward.nyi.internal (Postfix) with ESMTP id 5D8CC19408AD;
+        Thu, 15 Apr 2021 01:53:27 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Thu, 15 Apr 2021 01:53:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:references
+        :resent-cc:resent-date:resent-from:resent-message-id:resent-to
+        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; bh=HvWSRkUEoTmhL8Ze11D6Nr54JSw6fmQK7oJH3XoW2
+        Fw=; b=HlbfKVN9Csnc4gHlH+Oxdi5XPx4Kwo9V+8uaJPf3imPNXTAfMEBL+J6N2
+        6su3j4vwx1B5h0haF3SvytWX1gibS8STbFkeRB7axOkDl6ouxxyYR4kYciEG5lOM
+        07wHwUtF1szp1Kglamqs+hGiaX1usOspHGzvtkAtPyVUlllbnXrNJhbqQ/Obugye
+        DQQfRETx/inZNulQq/YhcNABzLlq08da7/Yt99dN3s5x9HKn6HmZJFvCr+Ol78XN
+        GPuTkPBz/yRuAB7IPqSLWGQMJKnZsZZuEh5Y0hk3yfmhortYnBNA3ZX72m7QCE/V
+        GNzBVZ0tnL4wAflmv4OrwYSg5jc5Q==
+X-ME-Sender: <xms:19R3YKJmHn7l5Xh5wJpNLqX1vFbv-jJijCQGeEXlyoQ_IdFj2Xjahg>
+    <xme:19R3YCJbdWQvbJ6zu72KOJAtUqaYdUOHCVj-EVlmhE12mGG5MdgCUmj3iPUHgnQVu
+    ZFJNgmvaFHJ2gefVMM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrudelvddgleeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepufggtgfhjgffgffkfhfvofesthhqmhdthhdtjeenucfhrhhomheptfgrfhgr
+    vghlucffrghvihguucfvihhnohgtohcuoehrrghfrggvlhguthhinhhotghosehusghunh
+    htuhdrtghomheqnecuggftrfgrthhtvghrnhephfejvdevgffhueelheevuefhveetuedv
+    keeuleeuueekhffgffdvgedvffdtteeunecuffhomhgrihhnpehgihhthhhusgdrtghomh
+    dpuhgsuhhnthhurdgtohhmnecukfhppedutdejrdduheekrdduheehrdduudenucevlhhu
+    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehrrghfrggvlhguth
+    hinhhotghosehusghunhhtuhdrtghomh
+X-ME-Proxy: <xmx:19R3YKuxkKyKba_k_KnxpNpDkiEb8awgx9W5l9FeeYwcRxBUFEg3lw>
+    <xmx:19R3YPazwtHfb2cNrpP6Vii1q1cl2YeF5TwSujGs_fLn6SuvBXuuuA>
+    <xmx:19R3YBZoobRhWGEDeWnXBx6YAVjPCcoJGn4s5C72ERS7CulZ14diIA>
+    <xmx:19R3YKlDZCMHzYhprz5YcvJqSL3QyYfkgOceZ2LGqjUo__pTBUPm2A>
+Received: from [10.6.2.60] (unknown [107.158.155.11])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 97B6A108005F;
+        Thu, 15 Apr 2021 01:53:26 -0400 (EDT)
+Subject: Re: [PATCH v2 bpf-next][RFC] libbpf: introduce legacy kprobe events
+ support
+Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.60.0.2.21\))
+Content-Type: text/plain;
+        charset=utf-8
+From:   Rafael David Tinoco <rafaeldtinoco@ubuntu.com>
+In-Reply-To: <CAEf4BzYQcD8vrTkXSgwBVGhRKvSWM6KyNc07QthK+=60+vUf8w@mail.gmail.com>
+Date:   Thu, 15 Apr 2021 02:53:24 -0300
+X-Mao-Original-Outgoing-Id: 640158804.7646641-ef317c76875f308633db203a8a67b13d
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <9B5EDB10-0235-451C-BC12-A3123DC0D496@ubuntu.com>
+References: <CAEf4Bzap6qS9_HQZTHJsM-X2VZso+N5xMwa3HNG9ycMW4WXtQg@mail.gmail.com>
+ <20210322180441.1364511-1-rafaeldtinoco@ubuntu.com>
+ <4BB60234-7970-405C-9447-D19CA6564BC2@ubuntu.com>
+ <CAEf4BzaimrGXFrfFVHvV53ta7NwDWsN0YHcDiVJELEnbdjmKdg@mail.gmail.com>
+ <045DF0ED-10A2-4D9F-AA01-5CE7E3E95193@ubuntu.com>
+ <CAEf4BzbPdH+pV9NpCW+piROOfCme=erGQOHs8XcA_e=pYcV2=g@mail.gmail.com>
+ <4F445042-0ECC-4654-B334-E2364B5B9B8D@ubuntu.com>
+ <CAEf4BzYQcD8vrTkXSgwBVGhRKvSWM6KyNc07QthK+=60+vUf8w@mail.gmail.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+X-Mailer: Apple Mail (2.3654.60.0.2.21)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Em Thu, Apr 15, 2021 at 12:01:23PM +0800, Tiezhu Yang escreveu:
-> (1) tools/bpf/bpftool build failed due to the following reason:
-> 
-> Error: failed to load BTF from /boot/vmlinux-5.12.0-rc2: No such
-> file or directory
-> make: *** [Makefile:158: vmlinux.h] Error 2
-> 
-> (2) When set CONFIG_DEBUG_INFO_BTF=y, failed to generate BTF for vmlinux
-> due to pahole is not available
-> 
-> BTF: .tmp_vmlinux.btf: pahole (pahole) is not available
-> Failed to generate BTF for vmlinux
-> Try to disable CONFIG_DEBUG_INFO_BTF
-> make: *** [Makefile:1197: vmlinux] Error 1
-> 
-> (3) When build pahole from tar.gz source code, it still failed
-> due to no libbpf submodule.
 
+>> Yes, with a small reservation I just found out: function names might
+>> change because of GCC optimisations.. In my case I found out that:
+>>=20
+>> # cat /proc/kallsyms | grep udp_send_skb
+>> ffffffff8f9e0090 t udp_send_skb.isra.48
+>>=20
+>> udp_send_skb probe was not always working because the function name
+>> was changed. Then I saw BCC had this issue back in 2018 and is
+>> fixing it now:
+>>=20
+>> https://github.com/iovisor/bcc/issues/1754
+>> https://github.com/iovisor/bcc/pull/2930
+>>=20
+>> So I thought I could do the same: check if function name is the same
+>> in /proc/kallsyms or if it has changed and use the changed name if
+>> needed (to add to kprobe_events).
+>>=20
+>> Will include that logic and remove the =E2=80=98enables=E2=80=99.
+>=20
+> No, please stop adding arbitrary additions. Function renames, .isra
+> optimizations, etc - that's all concerns of higher level, this API
+> should not try to be smart. It should try to attach to exactly the
+> kprobe specified.
 
-You're getting the tarball from the wrong place, you should get it from:
+:\ how can this be done in a higher level if it needs to be done
+runtime at the time the event is being enabled ? skel will contain
+hardcoded kprobe names and won=E2=80=99t be able to get runtime =
+optimised
+symbol names, correct ? (unless bpftool gen generates an intermediate
+code to check kallsyms and solve those symbols before calling the lib).
 
-https://fedorapeople.org/~acme/dwarves/dwarves-1.21.tar.xz
+I see BCC has some options for regexing symbol names for the probes=E2=80=A6=
+=20
+obviously in BCC=E2=80=99s case is simpler.=20
 
-Please read the announcement:
+I made it work by checking kallsyms for the exact symbol and,
+if not found, for the variants (only for the legacy kprobe event
+probe, but it would work for the current one, passing discovered
+symbol name for the ioctl attrs. My WIP version (to clarify what I=E2=80=99=
+m
+saying):
 
-https://lore.kernel.org/bpf/YHRiXNX1JUF2Az0A@kernel.org/
-
-- Arnaldo
-
- 
-> loongson@linux:~$ wget https://git.kernel.org/pub/scm/devel/pahole/pahole.git/snapshot/pahole-1.21.tar.gz
-> loongson@linux:~$ tar xf pahole-1.21.tar.gz
-> loongson@linux:~$ cd pahole-1.21
-> loongson@linux:~/pahole-1.21$ mkdir build
-> loongson@linux:~/pahole-1.21$ cd build/
-> loongson@linux:~/pahole-1.21/build$ cmake -D__LIB=lib ..
-> -- The C compiler identification is GNU 10.2.1
-> -- Detecting C compiler ABI info
-> -- Detecting C compiler ABI info - done
-> -- Check for working C compiler: /usr/bin/cc - skipped
-> -- Detecting C compile features
-> -- Detecting C compile features - done
-> -- Checking availability of DWARF and ELF development libraries
-> -- Looking for dwfl_module_build_id in elf
-> -- Looking for dwfl_module_build_id in elf - found
-> -- Found dwarf.h header: /usr/include
-> -- Found elfutils/libdw.h header: /usr/include
-> -- Found libdw library: /usr/lib/mips64el-linux-gnuabi64/libdw.so
-> -- Found libelf library: /usr/lib/mips64el-linux-gnuabi64/libelf.so
-> -- Checking availability of DWARF and ELF development libraries - done
-> -- Found ZLIB: /usr/lib/mips64el-linux-gnuabi64/libz.so (found
-> version "1.2.11")
-> CMake Error at CMakeLists.txt:60 (message):
->   The submodules were not downloaded! GIT_SUBMODULE was turned off
-> or failed.
->   Please update submodules and try again.
-> 
-> -- Configuring incomplete, errors occurred!
-> See also "/home/loongson/pahole-1.21/build/CMakeFiles/CMakeOutput.log".
-> 
-> (4) I notice that the pahole git source code can build successful because
-> it will clone libbpf automatically:
-> 
-> -- Submodule update
-> Submodule 'lib/bpf' (https://github.com/libbpf/libbpf) registered
-> for path 'lib/bpf'
-> Cloning into '/home/loongson/pahole/lib/bpf'...
-> Submodule path 'lib/bpf': checked out
-> '986962fade5dfa89c2890f3854eb040d2a64ab38'
-> -- Submodule update - done
-> 
-> (5) So Will the pahole tar source code with corresponding libbpf
-> submodule codes
-> be released as well in the future? just like bcc:
-> https://github.com/iovisor/bcc/releases
-> https://github.com/iovisor/bcc/commit/708f786e3784dc32570a079f2ed74c35731664ea
-> 
-> Thanks,
-> Tiezhu
-
+https://paste.ubuntu.com/p/DpqDsGdVff/=
