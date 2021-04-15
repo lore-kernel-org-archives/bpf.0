@@ -2,124 +2,112 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 77D5AC43600
-	for <bpf@archiver.kernel.org>; Thu, 15 Apr 2021 09:33:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96514C433ED
+	for <bpf@archiver.kernel.org>; Thu, 15 Apr 2021 09:34:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 56BC1613B4
-	for <bpf@archiver.kernel.org>; Thu, 15 Apr 2021 09:33:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 636EE61153
+	for <bpf@archiver.kernel.org>; Thu, 15 Apr 2021 09:34:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232165AbhDOJeE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 15 Apr 2021 05:34:04 -0400
-Received: from foss.arm.com ([217.140.110.172]:41266 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231960AbhDOJeD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 15 Apr 2021 05:34:03 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 58113106F;
-        Thu, 15 Apr 2021 02:33:40 -0700 (PDT)
-Received: from net-arm-thunderx2-02.shanghai.arm.com (net-arm-thunderx2-02.shanghai.arm.com [10.169.208.215])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 225E33F694;
-        Thu, 15 Apr 2021 02:33:22 -0700 (PDT)
-From:   Jianlin Lv <Jianlin.Lv@arm.com>
-To:     bpf@vger.kernel.org
-Cc:     corbet@lwn.net, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, davem@davemloft.net,
-        kuba@kernel.org, illusionist.neo@gmail.com, linux@armlinux.org.uk,
-        zlim.lnx@gmail.com, catalin.marinas@arm.com, will@kernel.org,
-        paulburton@kernel.org, tsbogend@alpha.franken.de,
-        naveen.n.rao@linux.ibm.com, sandipan@linux.ibm.com,
-        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
-        luke.r.nels@gmail.com, xi.wang@gmail.com, bjorn@kernel.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, iii@linux.ibm.com, hca@linux.ibm.com,
-        gor@linux.ibm.com, borntraeger@de.ibm.com, yoshfuji@linux-ipv6.org,
-        dsahern@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, x86@kernel.org, hpa@zytor.com, udknight@gmail.com,
-        mchehab+huawei@kernel.org, dvyukov@google.com, maheshb@google.com,
-        horms@verge.net.au, nicolas.dichtel@6wind.com,
-        viro@zeniv.linux.org.uk, masahiroy@kernel.org,
-        keescook@chromium.org, quentin@isovalent.com, tklauser@distanz.ch,
-        grantseltzer@gmail.com, irogers@google.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, Jianlin.Lv@arm.com, iecedge@gmail.com
-Subject: [PATCH bpf-next 2/2] docs: bpf: bpf_jit_enable mode changed
-Date:   Thu, 15 Apr 2021 17:32:50 +0800
-Message-Id: <20210415093250.3391257-2-Jianlin.Lv@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210415093250.3391257-1-Jianlin.Lv@arm.com>
-References: <20210415093250.3391257-1-Jianlin.Lv@arm.com>
+        id S232030AbhDOJe6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 15 Apr 2021 05:34:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58058 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231531AbhDOJe5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 15 Apr 2021 05:34:57 -0400
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18DF6C061756
+        for <bpf@vger.kernel.org>; Thu, 15 Apr 2021 02:34:34 -0700 (PDT)
+Received: by mail-il1-x134.google.com with SMTP id 7so17964466ilz.0
+        for <bpf@vger.kernel.org>; Thu, 15 Apr 2021 02:34:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2oxhfmgq4/lBHZsTv5waxIB12jAdndxIiCGYaYJ0QbU=;
+        b=UbdMnzkMjlp4dVJzE5P6mIlHvL1lwGcw1qltoT9qncf5Oc0r2fUgB9SKUW0wR9lDVC
+         tKEZRlsxRg6hWGuydX2yQhRoWDikqmWFp5mOfPESNP0UQuEbY0Z7R5UaUJ+XT9zQ6g7R
+         /KAeiqhfw8gm2oDkm/y60F44SPj0DkvpIy+BE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2oxhfmgq4/lBHZsTv5waxIB12jAdndxIiCGYaYJ0QbU=;
+        b=o7isWD3Ulu5Lu8OamTOIwOxa2atODwSRicVZ7KvLLFF1liYYv5O2yKYZJRGgbSptVU
+         TI0OIJ9a2WCDJdgh6y4E+mEdAhvSxjclsnNgOxRGr/16rYV1T8E1Xi5ybplzlnorlM++
+         hJglWrIHls+WKunFgNBuCOw+d5bN3qbCwDWZ6i/gZNoqlEopBN4X+VbByyJ8v0Fv18zN
+         HLeDQLJyjx4+MMDek+ojKmjwHaNIN2YnaTvIbWuEXZDYsQewLfPMQ4dIaCUxsBIDjaTl
+         GYHcfXflLG9qg81kJlaUbH9Nx/n8H91jdkmRrrZNr446pUq5vscLrcSYd6fpGRXrhJvt
+         Aq2w==
+X-Gm-Message-State: AOAM530LYBc9/H0+q94f34WK2TeUdXMllCFbRBJYVUKLIbBhUnyMBuwK
+        XhsO5MFOp87zS6FlcBlirDSrckjmSiyg0i8XEma3gw==
+X-Google-Smtp-Source: ABdhPJzeShXmcoEfu+1+Ri6SonH6CoZJyCAHTZk+mfvL5aCtUdErvhGRLF2ppMLjZe5OeRF+Nqbi3GEmTsfRatK8tD4=
+X-Received: by 2002:a92:ce90:: with SMTP id r16mr2135098ilo.220.1618479273627;
+ Thu, 15 Apr 2021 02:34:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210412153754.235500-1-revest@chromium.org> <20210412153754.235500-4-revest@chromium.org>
+ <CAEf4BzZCR2JMXwNvJikfWYnZa-CyCQTQsW+Xs_5w9zOT3kbVSA@mail.gmail.com>
+ <CABRcYmJvzcFySYS=U=xtfn4eG7yKpmET_yh-bZYrkYfJMdx_pw@mail.gmail.com> <CAEf4Bza+rVCp=G5i97MuuBrTX+o1ZUBn3nzstssoS1KtE4F6vw@mail.gmail.com>
+In-Reply-To: <CAEf4Bza+rVCp=G5i97MuuBrTX+o1ZUBn3nzstssoS1KtE4F6vw@mail.gmail.com>
+From:   Florent Revest <revest@chromium.org>
+Date:   Thu, 15 Apr 2021 11:34:22 +0200
+Message-ID: <CABRcYm+XPciihdZDWSMUBLmtBCuDSV=bHvtEUqZupfC=cng6FA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 3/6] bpf: Add a bpf_snprintf helper
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Yonghong Song <yhs@fb.com>, KP Singh <kpsingh@kernel.org>,
+        Brendan Jackman <jackmanb@chromium.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Remove information about bpf_jit_enable=2 mode and added description for
-how to use the bpf_jit_disasm tool after get rid of =2 mode.
+On Thu, Apr 15, 2021 at 12:57 AM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Wed, Apr 14, 2021 at 2:46 AM Florent Revest <revest@chromium.org> wrote:
+> >
+> > On Wed, Apr 14, 2021 at 1:16 AM Andrii Nakryiko
+> > <andrii.nakryiko@gmail.com> wrote:
+> > > On Mon, Apr 12, 2021 at 8:38 AM Florent Revest <revest@chromium.org> wrote:
+> > > > +
+> > > > +       return err + 1;
+> > >
+> > > snprintf() already returns string length *including* terminating zero,
+> > > so this is wrong
+> >
+> > lib/vsprintf.c says:
+> >  * The return value is the number of characters which would be
+> >  * generated for the given input, excluding the trailing null,
+> >  * as per ISO C99.
+> >
+> > Also if I look at the "no arg" test case in the selftest patch.
+> > "simple case" is asserted to return 12 which seems correct to me
+> > (includes the terminating zero only once). Am I missing something ?
+> >
+>
+> no, you are right, but that means that bpf_trace_printk is broken, it
+> doesn't do + 1 (which threw me off here), shall we fix that?
 
-Signed-off-by: Jianlin Lv <Jianlin.Lv@arm.com>
----
- Documentation/admin-guide/sysctl/net.rst |  1 -
- Documentation/networking/filter.rst      | 25 ++++++------------------
- 2 files changed, 6 insertions(+), 20 deletions(-)
+Answered in the 1/6 thread
 
-diff --git a/Documentation/admin-guide/sysctl/net.rst b/Documentation/admin-guide/sysctl/net.rst
-index c941b214e0b7..a39f99deac38 100644
---- a/Documentation/admin-guide/sysctl/net.rst
-+++ b/Documentation/admin-guide/sysctl/net.rst
-@@ -86,7 +86,6 @@ Values:
- 
- 	- 0 - disable the JIT (default value)
- 	- 1 - enable the JIT
--	- 2 - enable the JIT and ask the compiler to emit traces on kernel log.
- 
- bpf_jit_harden
- --------------
-diff --git a/Documentation/networking/filter.rst b/Documentation/networking/filter.rst
-index 251c6bd73d15..86954f922168 100644
---- a/Documentation/networking/filter.rst
-+++ b/Documentation/networking/filter.rst
-@@ -504,25 +504,12 @@ been previously enabled by root::
- 
-   echo 1 > /proc/sys/net/core/bpf_jit_enable
- 
--For JIT developers, doing audits etc, each compile run can output the generated
--opcode image into the kernel log via::
--
--  echo 2 > /proc/sys/net/core/bpf_jit_enable
--
--Example output from dmesg::
--
--    [ 3389.935842] flen=6 proglen=70 pass=3 image=ffffffffa0069c8f
--    [ 3389.935847] JIT code: 00000000: 55 48 89 e5 48 83 ec 60 48 89 5d f8 44 8b 4f 68
--    [ 3389.935849] JIT code: 00000010: 44 2b 4f 6c 4c 8b 87 d8 00 00 00 be 0c 00 00 00
--    [ 3389.935850] JIT code: 00000020: e8 1d 94 ff e0 3d 00 08 00 00 75 16 be 17 00 00
--    [ 3389.935851] JIT code: 00000030: 00 e8 28 94 ff e0 83 f8 01 75 07 b8 ff ff 00 00
--    [ 3389.935852] JIT code: 00000040: eb 02 31 c0 c9 c3
--
--When CONFIG_BPF_JIT_ALWAYS_ON is enabled, bpf_jit_enable is permanently set to 1 and
--setting any other value than that will return in failure. This is even the case for
--setting bpf_jit_enable to 2, since dumping the final JIT image into the kernel log
--is discouraged and introspection through bpftool (under tools/bpf/bpftool/) is the
--generally recommended approach instead.
-+When CONFIG_BPF_JIT_ALWAYS_ON is enabled, bpf_jit_enable is permanently set
-+to 1 and setting any other value than that will return in failure.
-+For debugging JITs, the introspection through bpftool (tools/bpf/bpftool/)
-+is the generally recommended approach instead. For JIT developers, doing
-+audits etc, you can insert bpf_jit_dump() and recompile the kernel to
-+output the generated opcode image into the kernel log.
- 
- In the kernel source tree under tools/bpf/, there's bpf_jit_disasm for
- generating disassembly out of the kernel log's hexdump::
--- 
-2.25.1
+> > However that makes me wonder whether it would be more appropriate to
+> > return the value excluding the trailing null. On one hand it makes
+> > sense to be coherent with other BPF helpers that include the trailing
+> > zero (as discussed in patch v1), on the other hand the helper is
+> > clearly named after the standard "snprintf" function and it's likely
+> > that users will assume it works the same as the std snprintf.
+>
+>
+> Having zero included simplifies BPF code tremendously for cases like
+> bpf_probe_read_str(). So no, let's stick with including zero
+> terminator in return size.
 
+Cool :)
