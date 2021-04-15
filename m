@@ -2,117 +2,101 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A082C433B4
-	for <bpf@archiver.kernel.org>; Thu, 15 Apr 2021 05:17:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E637C433ED
+	for <bpf@archiver.kernel.org>; Thu, 15 Apr 2021 07:18:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DE41B61153
-	for <bpf@archiver.kernel.org>; Thu, 15 Apr 2021 05:17:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 09EC861103
+	for <bpf@archiver.kernel.org>; Thu, 15 Apr 2021 07:18:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229560AbhDOFRW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 15 Apr 2021 01:17:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57922 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbhDOFRV (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 15 Apr 2021 01:17:21 -0400
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5B6FC061574;
-        Wed, 14 Apr 2021 22:16:58 -0700 (PDT)
-Received: by mail-ot1-x32d.google.com with SMTP id f75-20020a9d03d10000b0290280def9ab76so16428664otf.12;
-        Wed, 14 Apr 2021 22:16:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gxcWeNrjFCcTeKjmbsNotnTpQRzTFqaqt9nFjPnqCjA=;
-        b=HljV85rUzclS3NeavfN9xrwN4+8P6rsi8WPxVPCCn/SY3DA5zrJdR8DMeDEE7ZVYXj
-         LjjHl0bchiENqHDYTxH/bLMsUvi9EArsWd7nf+M2+hvl1R8kLI5Gq0KBeFVsBfMkEv1D
-         1eSc0qUul43wNnzZGC/Wnln4xkgoFvzlmxPUqK6fUnvKLYZ3duz7eRMy4/eaMNS5fuVv
-         LZ3+mtoU/buaKhxgwgXqRjusMeRmB/b3GGtb4zGjiDpuk9JjBCBEc0+r9KIzF8s73vyh
-         MgDFUN56sRJtjh0PEYN8KcIief60O2GIffJ6zeQ1IovVj1tRHtDqr+KZwYnPimzbPE3K
-         ratw==
+        id S230487AbhDOHTA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 15 Apr 2021 03:19:00 -0400
+Received: from mail-ua1-f45.google.com ([209.85.222.45]:34567 "EHLO
+        mail-ua1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230090AbhDOHTA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 15 Apr 2021 03:19:00 -0400
+Received: by mail-ua1-f45.google.com with SMTP id s2so7220196uap.1;
+        Thu, 15 Apr 2021 00:18:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=gxcWeNrjFCcTeKjmbsNotnTpQRzTFqaqt9nFjPnqCjA=;
-        b=shp8Dpbi5wX8B7lQlDdfkyP7jvchaPW3wPFnsOVOu3cY3cQYrvdGgv0ucPtX11nV6c
-         xqsxJe07Q24uYLvXzfO08Ph+/O9Uva9ZySkDJ+a+Ma2csFokzzVp7OLCBTyf5MScfSbM
-         /6LcvMS6egA1yUc3vtS5eUehwK7pdI+UZ1BsKP/vzOScX7vLCuq2zRVUobwZ6Q8yxiLq
-         HS/pv307qt9fJ3K53/LhED78Exi7Gy4wJe56/1CK+h2WYCUxRc1dKVAeR4UqUEWEd6/8
-         5AbKpOFeNiPHwjOoxh9qrHjJKVYuhdtByqlZ25EVK6BG1zlNLmvfynWoi20hllKd+pQ1
-         Dccg==
-X-Gm-Message-State: AOAM530xvnpmfnLEyXa3mQFgrTrvf1lwmmXM/uY0iq29gXE+WJNl90JX
-        Ra2nLJntf6HJUVlHQMfq7qj3UWoRfDK1LK9+WtQcvhtd6lV+Sg==
-X-Google-Smtp-Source: ABdhPJyKx6RobEXsCC6040Be2jAITs+SqWUI/vu+hz87uwHTi9bm17mC42YqhPaktVI0VUQF/gqkIxzaWMv6XlFwDDI=
-X-Received: by 2002:a9d:1c7:: with SMTP id e65mr1304632ote.105.1618463818159;
- Wed, 14 Apr 2021 22:16:58 -0700 (PDT)
+        bh=TYpEFy4TiS8JfXQcnDIWzjJBFSrstXrUZn7dBlSbGg0=;
+        b=twCmbuKS/Jjeqc97M5GoqKHZEYetz6QQFR+i5fK7HEu2yUI1vnKx6L+Yidg/kZmndj
+         McmIEZLEYa7U8FJVtgfscbUztCA9GUmtWviyltOfdDFmuQ5RRBDLXdo/jRCJ0O3eOmwp
+         3ta+CL82FL3W4qAhTleYZG+d3gu0nyKMBzse4j3mxhjjJ4hr5+Igl6CLp923FVplcmvG
+         ci2EBwqVJu60vuoI9c0dw52+dC0gRAsTQMeqz0Eslu8EZfQrVdzBcCf2NPi71bCCoP7y
+         WgT/icfSMgPMT0Htw3LJk4Kj2R+MIcbu0AeUGOfEGAb1ePHZiJvEQkM5MOHehcP+WAUJ
+         KajA==
+X-Gm-Message-State: AOAM532DNwrNOWpV8pD4IjUmqrxblGuMIjcFyb2T26vTUymlR3Y2l8wx
+        dUz2nmD3pmUhAHe8GImwVaeJzLarp3gp3+KAFuc=
+X-Google-Smtp-Source: ABdhPJztPwJcY9Ud2yMHeeON2pYWHFlcgH92k1SmJ4Mv/fkqt/H8QcgYvYh8pCTm1dBwGoP5HEfatXBa0el+hDTFGxM=
+X-Received: by 2002:ab0:2c16:: with SMTP id l22mr856492uar.100.1618471117162;
+ Thu, 15 Apr 2021 00:18:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210412065759.2907-1-kerneljasonxing@gmail.com>
- <20210413025011.1251-1-kerneljasonxing@gmail.com> <20210413091812.0000383d@intel.com>
- <CAL+tcoBVhD1SfMYAFVn0HxZ3ig88pxtiLoha9d6Z+62yq8bWBA@mail.gmail.com> <20210414190837.0000085a@intel.com>
-In-Reply-To: <20210414190837.0000085a@intel.com>
-From:   Jason Xing <kerneljasonxing@gmail.com>
-Date:   Thu, 15 Apr 2021 13:16:22 +0800
-Message-ID: <CAL+tcoAfVCJMgeVFnyHaZhEEJRiWEYc5hm5c0GOKwg2BDiVtYA@mail.gmail.com>
-Subject: Re: [PATCH net v2] i40e: fix the panic when running bpf in xdpdrv mode
-To:     Jesse Brandeburg <jesse.brandeburg@intel.com>
-Cc:     anthony.l.nguyen@intel.com, David Miller <davem@davemloft.net>,
-        kuba@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        hawk@kernel.org, john.fastabend@gmail.com, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        kpsingh@kernel.org, netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, bpf@vger.kernel.org,
-        Jason Xing <xingwanli@kuaishou.com>,
-        Shujin Li <lishujin@kuaishou.com>,
-        intel-wired-lan@lists.osuosl.org
+References: <20210412153754.235500-1-revest@chromium.org> <20210412153754.235500-4-revest@chromium.org>
+ <CAEf4BzZCR2JMXwNvJikfWYnZa-CyCQTQsW+Xs_5w9zOT3kbVSA@mail.gmail.com>
+ <CAMuHMdUQOi8h31D_Qtnv_E1vsEu6RO8sHy-DArQ0jQt5v_JoVA@mail.gmail.com>
+ <CABRcYmK597zCNs_ay6BUjxCuxGJazKn4iujYtOUxcZC0J=xVPg@mail.gmail.com> <CAEf4BzbROOSi8PfM2c-BR31S-=aQjVgfzTAPaCqntcjjQb1W=w@mail.gmail.com>
+In-Reply-To: <CAEf4BzbROOSi8PfM2c-BR31S-=aQjVgfzTAPaCqntcjjQb1W=w@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 15 Apr 2021 09:18:25 +0200
+Message-ID: <CAMuHMdXQ2=xPSGxDsrprb_pXjkOaUi_YZ+8h65kdW+SYCseWoQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 3/6] bpf: Add a bpf_snprintf helper
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Florent Revest <revest@chromium.org>, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Yonghong Song <yhs@fb.com>, KP Singh <kpsingh@kernel.org>,
+        Brendan Jackman <jackmanb@chromium.org>,
+        open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Apr 15, 2021 at 10:08 AM Jesse Brandeburg
-<jesse.brandeburg@intel.com> wrote:
->
-> Jason Xing wrote:
->
-> > On Wed, Apr 14, 2021 at 12:27 AM Jesse Brandeburg
-> > <jesse.brandeburg@intel.com> wrote:
+Hi Andrii,
+
+On Thu, Apr 15, 2021 at 12:58 AM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+> On Wed, Apr 14, 2021 at 11:30 AM Florent Revest <revest@chromium.org> wrote:
+> > On Wed, Apr 14, 2021 at 8:02 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > > On Wed, Apr 14, 2021 at 9:41 AM Andrii Nakryiko
+> > > <andrii.nakryiko@gmail.com> wrote:
+> > > > On Mon, Apr 12, 2021 at 8:38 AM Florent Revest <revest@chromium.org> wrote:
+> > > > > +       fmt = (char *)fmt_addr + fmt_map_off;
+> > > > > +
+> > > >
+> > > > bot complained about lack of (long) cast before fmt_addr, please address
 > > >
-> > > kerneljasonxing@gmail.com wrote:
-> > >
-> > > > From: Jason Xing <xingwanli@kuaishou.com>
-> > >
-> > > Hi Jason,
-> > >
-> > > Sorry, I missed this on the first time: Added intel-wired-lan,
-> > > please include on any future submissions for Intel drivers.
-> > > get-maintainers script might help here?
-> > >
+> > > (uintptr_t), I assume?
 > >
-> > Probably I got this wrong in the last email. Did you mean that I should add
-> > intel-wired-lan in the title not the cc list? It seems I should put
-> > this together on
-> > the next submission like this:
-> >
-> > [Intel-wired-lan] [PATCH net v4]
+> > (uintptr_t) seems more correct to me as well. However, I just had a
+> > look at the rest of verifier.c and (long) casts are already used
+> > pretty much everywhere whereas uintptr_t isn't used yet.
+> > I'll send a v4 with a long cast for the sake of consistency with the
+> > rest of the verifier.
 >
-> Your v3 submittal was correct. My intent was to make sure
-> intel-wired-lan was in CC:
->
+> right, I don't care about long or uintptr_t, both are guaranteed to
+> work, I just remember seeing a lot of code with (long) cast. I have no
+> preference.
 
-Well, I get to know more about the whole thing.
+AFAIR, uintptr_t was introduced only in C99. Early Linux code predates that,
+hence uses long, and this behavior was of course copied to new code.
 
-> If Kuba or Dave wants us to take the fix in via intel-wired-lan trees,
-> then we can do that, or they can apply it directly. I'll ack it on the
-> v3.
+Please use uintptr_t in new code.
 
-Thanks, Jesse:)
+Gr{oetje,eeting}s,
 
-Jason
+                        Geert
 
->
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
