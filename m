@@ -6,38 +6,38 @@ X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43647C43462
-	for <bpf@archiver.kernel.org>; Fri, 16 Apr 2021 20:24:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 80937C433ED
+	for <bpf@archiver.kernel.org>; Fri, 16 Apr 2021 20:24:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1A0DC6124B
-	for <bpf@archiver.kernel.org>; Fri, 16 Apr 2021 20:24:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4FE34613CE
+	for <bpf@archiver.kernel.org>; Fri, 16 Apr 2021 20:24:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244549AbhDPUYi convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 16 Apr 2021 16:24:38 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:11004 "EHLO
+        id S245560AbhDPUYk convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 16 Apr 2021 16:24:40 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:35430 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S245498AbhDPUYh (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 16 Apr 2021 16:24:37 -0400
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13GKKI53022045
-        for <bpf@vger.kernel.org>; Fri, 16 Apr 2021 13:24:12 -0700
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 37yb5j2f62-2
+        by vger.kernel.org with ESMTP id S245434AbhDPUYi (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 16 Apr 2021 16:24:38 -0400
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13GKJ9vo020367
+        for <bpf@vger.kernel.org>; Fri, 16 Apr 2021 13:24:13 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 37y6tykqj6-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 16 Apr 2021 13:24:12 -0700
-Received: from intmgw001.25.frc3.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 16 Apr 2021 13:24:13 -0700
+Received: from intmgw006.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Fri, 16 Apr 2021 13:24:12 -0700
+ 15.1.2176.2; Fri, 16 Apr 2021 13:24:11 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 4B53C2ED4EE0; Fri, 16 Apr 2021 13:24:11 -0700 (PDT)
+        id 330632ED4EE0; Fri, 16 Apr 2021 13:24:07 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
         <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH v2 bpf-next 03/17] libbpf: suppress compiler warning when using SEC() macro with externs
-Date:   Fri, 16 Apr 2021 13:23:50 -0700
-Message-ID: <20210416202404.3443623-4-andrii@kernel.org>
+Subject: [PATCH v2 bpf-next 01/17] bpftool: support dumping BTF VAR's "extern" linkage
+Date:   Fri, 16 Apr 2021 13:23:48 -0700
+Message-ID: <20210416202404.3443623-2-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210416202404.3443623-1-andrii@kernel.org>
 References: <20210416202404.3443623-1-andrii@kernel.org>
@@ -45,52 +45,43 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: lnFcmY9Ysjn0MdSmH6hwRUAVpWrwzHDR
-X-Proofpoint-ORIG-GUID: lnFcmY9Ysjn0MdSmH6hwRUAVpWrwzHDR
+X-Proofpoint-ORIG-GUID: 81h59ozKE2_-7isHVaFV-xxm40efoStI
+X-Proofpoint-GUID: 81h59ozKE2_-7isHVaFV-xxm40efoStI
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
  definitions=2021-04-16_09:2021-04-16,2021-04-16 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
- phishscore=0 priorityscore=1501 mlxlogscore=999 spamscore=0 bulkscore=0
- lowpriorityscore=0 impostorscore=0 adultscore=0 suspectscore=0 mlxscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104060000 definitions=main-2104160143
+ priorityscore=1501 malwarescore=0 bulkscore=0 adultscore=0
+ lowpriorityscore=0 mlxlogscore=952 mlxscore=0 phishscore=0 suspectscore=0
+ impostorscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2104060000 definitions=main-2104160143
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When used on externs SEC() macro will trigger compilation warning about
-inapplicable `__attribute__((used))`. That's expected for extern declarations,
-so suppress it with the corresponding _Pragma.
+Add dumping of "extern" linkage for BTF VAR kind. Also shorten
+"global-allocated" to "global" to be in line with FUNC's "global".
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/lib/bpf/bpf_helpers.h | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ tools/bpf/bpftool/btf.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
-index b904128626c2..75c7581b304c 100644
---- a/tools/lib/bpf/bpf_helpers.h
-+++ b/tools/lib/bpf/bpf_helpers.h
-@@ -25,9 +25,16 @@
- /*
-  * Helper macro to place programs, maps, license in
-  * different sections in elf_bpf file. Section names
-- * are interpreted by elf_bpf loader
-+ * are interpreted by libbpf depending on the context (BPF programs, BPF maps,
-+ * extern variables, etc).
-+ * To allow use of SEC() with externs (e.g., for extern .maps declarations),
-+ * make sure __attribute__((unused)) doesn't trigger compilation warning.
-  */
--#define SEC(NAME) __attribute__((section(NAME), used))
-+#define SEC(name) \
-+	_Pragma("GCC diagnostic push")					    \
-+	_Pragma("GCC diagnostic ignored \"-Wignored-attributes\"")	    \
-+	__attribute__((section(name), used))				    \
-+	_Pragma("GCC diagnostic pop")					    \
- 
- /* Avoid 'linux/stddef.h' definition of '__always_inline'. */
- #undef __always_inline
+diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
+index 62953bbf68b4..001749a34899 100644
+--- a/tools/bpf/bpftool/btf.c
++++ b/tools/bpf/bpftool/btf.c
+@@ -71,7 +71,9 @@ static const char *btf_var_linkage_str(__u32 linkage)
+ 	case BTF_VAR_STATIC:
+ 		return "static";
+ 	case BTF_VAR_GLOBAL_ALLOCATED:
+-		return "global-alloc";
++		return "global";
++	case BTF_VAR_GLOBAL_EXTERN:
++		return "extern";
+ 	default:
+ 		return "(unknown)";
+ 	}
 -- 
 2.30.2
 
