@@ -4,40 +4,40 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 68E06C433ED
-	for <bpf@archiver.kernel.org>; Fri, 16 Apr 2021 20:24:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 842C8C43461
+	for <bpf@archiver.kernel.org>; Fri, 16 Apr 2021 20:24:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4FDFC6124B
-	for <bpf@archiver.kernel.org>; Fri, 16 Apr 2021 20:24:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6426B613D4
+	for <bpf@archiver.kernel.org>; Fri, 16 Apr 2021 20:24:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343676AbhDPUZQ convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 16 Apr 2021 16:25:16 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:26058 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1343689AbhDPUZH (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 16 Apr 2021 16:25:07 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13GKLVKO021279
-        for <bpf@vger.kernel.org>; Fri, 16 Apr 2021 13:24:42 -0700
+        id S244867AbhDPUZR convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 16 Apr 2021 16:25:17 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:64804 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1343703AbhDPUZJ (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 16 Apr 2021 16:25:09 -0400
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.0.43/8.16.0.43) with SMTP id 13GKOeDq026614
+        for <bpf@vger.kernel.org>; Fri, 16 Apr 2021 13:24:43 -0700
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 37yb9y2drc-7
+        by m0089730.ppops.net with ESMTP id 37yb39jfxw-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 16 Apr 2021 13:24:42 -0700
-Received: from intmgw001.05.ash7.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 16 Apr 2021 13:24:43 -0700
+Received: from intmgw006.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Fri, 16 Apr 2021 13:24:30 -0700
+ 15.1.2176.2; Fri, 16 Apr 2021 13:24:42 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 9F2F62ED4EE0; Fri, 16 Apr 2021 13:24:29 -0700 (PDT)
+        id CC51B2ED4EE0; Fri, 16 Apr 2021 13:24:38 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
         <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH v2 bpf-next 12/17] libbpf: support extern resolution for BTF-defined maps in .maps section
-Date:   Fri, 16 Apr 2021 13:23:59 -0700
-Message-ID: <20210416202404.3443623-13-andrii@kernel.org>
+Subject: [PATCH v2 bpf-next 16/17] selftests/bpf: add global variables linking selftest
+Date:   Fri, 16 Apr 2021 13:24:03 -0700
+Message-ID: <20210416202404.3443623-17-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210416202404.3443623-1-andrii@kernel.org>
 References: <20210416202404.3443623-1-andrii@kernel.org>
@@ -45,202 +45,225 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: Ttn5nCBxCOAWc6NftLdMKI84U9-pVwax
-X-Proofpoint-GUID: Ttn5nCBxCOAWc6NftLdMKI84U9-pVwax
+X-Proofpoint-ORIG-GUID: ybBNvfpG7s-kL_dSD4TDPDYgaZCe2pNS
+X-Proofpoint-GUID: ybBNvfpG7s-kL_dSD4TDPDYgaZCe2pNS
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
  definitions=2021-04-16_09:2021-04-16,2021-04-16 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
- spamscore=0 priorityscore=1501 phishscore=0 adultscore=0
- lowpriorityscore=0 bulkscore=0 mlxscore=0 suspectscore=0 impostorscore=0
- mlxlogscore=999 clxscore=1015 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2104060000 definitions=main-2104160143
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0
+ mlxlogscore=999 lowpriorityscore=0 suspectscore=0 malwarescore=0
+ clxscore=1015 impostorscore=0 mlxscore=0 priorityscore=1501 spamscore=0
+ bulkscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104060000 definitions=main-2104160144
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add extra logic to handle map externs (only BTF-defined maps are supported for
-linking). Re-use the map parsing logic used during bpf_object__open(). Map
-externs are currently restricted to always match complete map definition. So
-all the specified attributes will be compared (down to pining, map_flags,
-numa_node, etc). In the future this restriction might be relaxed with no
-backwards compatibility issues. If any attribute is mismatched between extern
-and actual map definition, linker will report an error, pointing out which one
-mismatches.
-
-The original intent was to allow for extern to specify attributes that matters
-(to user) to enforce. E.g., if you specify just key information and omit
-value, then any value fits. Similarly, it should have been possible to enforce
-map_flags, pinning, and any other possible map attribute. Unfortunately, that
-means that multiple externs can be only partially overlapping with each other,
-which means linker would need to combine their type definitions to end up with
-the most restrictive and fullest map definition. This requires an extra amount
-of BTF manipulation which at this time was deemed unnecessary and would
-require further extending generic BTF writer APIs. So that is left for future
-follow ups, if there will be demand for that. But the idea seems intresting
-and useful, so I want to document it here.
-
-Weak definitions are also supported, but are pretty strict as well, just
-like externs: all weak map definitions have to match exactly. In the follow up
-patches this most probably will be relaxed, with __weak map definitions being
-able to differ between each other (with non-weak definition always winning, of
-course).
+Add selftest validating various aspects of statically linking global
+variables:
+  - correct resolution of extern variables across .bss, .data, and .rodata
+    sections;
+  - correct handling of weak definitions;
+  - correct de-duplication of repeating special externs (.kconfig, .ksyms).
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/lib/bpf/linker.c | 132 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 132 insertions(+)
+ tools/testing/selftests/bpf/Makefile          |  3 +-
+ .../selftests/bpf/prog_tests/linked_vars.c    | 43 +++++++++++++++
+ .../selftests/bpf/progs/linked_vars1.c        | 54 ++++++++++++++++++
+ .../selftests/bpf/progs/linked_vars2.c        | 55 +++++++++++++++++++
+ 4 files changed, 154 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/linked_vars.c
+ create mode 100644 tools/testing/selftests/bpf/progs/linked_vars1.c
+ create mode 100644 tools/testing/selftests/bpf/progs/linked_vars2.c
 
-diff --git a/tools/lib/bpf/linker.c b/tools/lib/bpf/linker.c
-index 67d2d06e3cb6..84d444427b65 100644
---- a/tools/lib/bpf/linker.c
-+++ b/tools/lib/bpf/linker.c
-@@ -1463,6 +1463,134 @@ static bool glob_sym_btf_matches(const char *sym_name, bool exact,
- 	}
- }
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 427ccfec1a6a..d8f176b55c01 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -308,10 +308,11 @@ endef
  
-+static bool map_defs_match(const char *sym_name,
-+			   const struct btf *main_btf,
-+			   const struct btf_map_def *main_def,
-+			   const struct btf_map_def *main_inner_def,
-+			   const struct btf *extra_btf,
-+			   const struct btf_map_def *extra_def,
-+			   const struct btf_map_def *extra_inner_def)
+ SKEL_BLACKLIST := btf__% test_pinning_invalid.c test_sk_assign.c
+ 
+-LINKED_SKELS := test_static_linked.skel.h linked_funcs.skel.h
++LINKED_SKELS := test_static_linked.skel.h linked_funcs.skel.h linked_vars.skel.h
+ 
+ test_static_linked.skel.h-deps := test_static_linked1.o test_static_linked2.o
+ linked_funcs.skel.h-deps := linked_funcs1.o linked_funcs2.o
++linked_vars.skel.h-deps := linked_vars1.o linked_vars2.o
+ 
+ LINKED_BPF_SRCS := $(patsubst %.o,%.c,$(foreach skel,$(LINKED_SKELS),$($(skel)-deps)))
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/linked_vars.c b/tools/testing/selftests/bpf/prog_tests/linked_vars.c
+new file mode 100644
+index 000000000000..f3d6ba31ef99
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/linked_vars.c
+@@ -0,0 +1,43 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2021 Facebook */
++
++#include <test_progs.h>
++#include <sys/syscall.h>
++#include "linked_vars.skel.h"
++
++void test_linked_vars(void)
 +{
-+	const char *reason;
-+
-+	if (main_def->map_type != extra_def->map_type) {
-+		reason = "type";
-+		goto mismatch;
-+	}
-+
-+	/* check key type/size match */
-+	if (main_def->key_size != extra_def->key_size) {
-+		reason = "key_size";
-+		goto mismatch;
-+	}
-+	if (!!main_def->key_type_id != !!extra_def->key_type_id) {
-+		reason = "key type";
-+		goto mismatch;
-+	}
-+	if ((main_def->parts & MAP_DEF_KEY_TYPE)
-+	     && !glob_sym_btf_matches(sym_name, true /*exact*/,
-+				      main_btf, main_def->key_type_id,
-+				      extra_btf, extra_def->key_type_id)) {
-+		reason = "key type";
-+		goto mismatch;
-+	}
-+
-+	/* validate value type/size match */
-+	if (main_def->value_size != extra_def->value_size) {
-+		reason = "value_size";
-+		goto mismatch;
-+	}
-+	if (!!main_def->value_type_id != !!extra_def->value_type_id) {
-+		reason = "value type";
-+		goto mismatch;
-+	}
-+	if ((main_def->parts & MAP_DEF_VALUE_TYPE)
-+	     && !glob_sym_btf_matches(sym_name, true /*exact*/,
-+				      main_btf, main_def->value_type_id,
-+				      extra_btf, extra_def->value_type_id)) {
-+		reason = "key type";
-+		goto mismatch;
-+	}
-+
-+	if (main_def->max_entries != extra_def->max_entries) {
-+		reason = "max_entries";
-+		goto mismatch;
-+	}
-+	if (main_def->map_flags != extra_def->map_flags) {
-+		reason = "map_flags";
-+		goto mismatch;
-+	}
-+	if (main_def->numa_node != extra_def->numa_node) {
-+		reason = "numa_node";
-+		goto mismatch;
-+	}
-+	if (main_def->pinning != extra_def->pinning) {
-+		reason = "pinning";
-+		goto mismatch;
-+	}
-+
-+	if ((main_def->parts & MAP_DEF_INNER_MAP) != (extra_def->parts & MAP_DEF_INNER_MAP)) {
-+		reason = "inner map";
-+		goto mismatch;
-+	}
-+
-+	if (main_def->parts & MAP_DEF_INNER_MAP) {
-+		char inner_map_name[128];
-+
-+		snprintf(inner_map_name, sizeof(inner_map_name), "%s.inner", sym_name);
-+
-+		return map_defs_match(inner_map_name,
-+				      main_btf, main_inner_def, NULL,
-+				      extra_btf, extra_inner_def, NULL);
-+	}
-+
-+	return true;
-+
-+mismatch:
-+	pr_warn("global '%s': map %s mismatch\n", sym_name, reason);
-+	return false;
-+}
-+
-+static bool glob_map_defs_match(const char *sym_name,
-+				struct bpf_linker *linker, struct glob_sym *glob_sym,
-+				struct src_obj *obj, Elf64_Sym *sym, int btf_id)
-+{
-+	struct btf_map_def dst_def = {}, dst_inner_def = {};
-+	struct btf_map_def src_def = {}, src_inner_def = {};
-+	const struct btf_type *t;
 +	int err;
++	struct linked_vars *skel;
 +
-+	t = btf__type_by_id(obj->btf, btf_id);
-+	if (!btf_is_var(t)) {
-+		pr_warn("global '%s': invalid map definition type [%d]\n", sym_name, btf_id);
-+		return false;
-+	}
-+	t = skip_mods_and_typedefs(obj->btf, t->type, NULL);
++	skel = linked_vars__open();
++	if (!ASSERT_OK_PTR(skel, "skel_open"))
++		return;
 +
-+	err = parse_btf_map_def(sym_name, obj->btf, t, true /*strict*/, &src_def, &src_inner_def);
-+	if (err) {
-+		pr_warn("global '%s': invalid map definition\n", sym_name);
-+		return false;
-+	}
++	skel->bss->input_bss1 = 1000;
++	skel->bss->input_bss2 = 2000;
++	skel->bss->input_bss_weak = 3000;
 +
-+	/* re-parse existing map definition */
-+	t = btf__type_by_id(linker->btf, glob_sym->btf_id);
-+	t = skip_mods_and_typedefs(linker->btf, t->type, NULL);
-+	err = parse_btf_map_def(sym_name, linker->btf, t, true /*strict*/, &dst_def, &dst_inner_def);
-+	if (err) {
-+		/* this should not happen, because we already validated it */
-+		pr_warn("global '%s': invalid dst map definition\n", sym_name);
-+		return false;
-+	}
++	err = linked_vars__load(skel);
++	if (!ASSERT_OK(err, "skel_load"))
++		goto cleanup;
 +
-+	/* Currently extern map definition has to be complete and match
-+	 * concrete map definition exactly. This restriction might be lifted
-+	 * in the future.
-+	 */
-+	return map_defs_match(sym_name, linker->btf, &dst_def, &dst_inner_def,
-+			      obj->btf, &src_def, &src_inner_def);
++	err = linked_vars__attach(skel);
++	if (!ASSERT_OK(err, "skel_attach"))
++		goto cleanup;
++
++	/* trigger */
++	syscall(SYS_getpgid);
++
++	ASSERT_EQ(skel->bss->output_bss1, 1000 + 2000 + 3000, "output_bss1");
++	ASSERT_EQ(skel->bss->output_bss2, 1000 + 2000 + 3000, "output_bss2");
++	/* 10 comes from "winner" input_data_weak in first obj file */
++	ASSERT_EQ(skel->bss->output_data1, 1 + 2 + 10, "output_bss1");
++	ASSERT_EQ(skel->bss->output_data2, 1 + 2 + 10, "output_bss2");
++	/* 10 comes from "winner" input_rodata_weak in first obj file */
++	ASSERT_EQ(skel->bss->output_rodata1, 11 + 22 + 100, "output_weak1");
++	ASSERT_EQ(skel->bss->output_rodata2, 11 + 22 + 100, "output_weak2");
++
++cleanup:
++	linked_vars__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/linked_vars1.c b/tools/testing/selftests/bpf/progs/linked_vars1.c
+new file mode 100644
+index 000000000000..bc96eff9b8c1
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/linked_vars1.c
+@@ -0,0 +1,54 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2021 Facebook */
++
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++extern int LINUX_KERNEL_VERSION __kconfig;
++/* this weak extern will be strict due to the other file's strong extern */
++extern bool CONFIG_BPF_SYSCALL __kconfig __weak;
++extern const void bpf_link_fops __ksym __weak;
++
++int input_bss1 = 0;
++int input_data1 = 1;
++const volatile int input_rodata1 = 11;
++
++int input_bss_weak __weak = 0;
++/* these two definitions should win */
++int input_data_weak __weak = 10;
++const volatile int input_rodata_weak __weak = 100;
++
++extern int input_bss2;
++extern int input_data2;
++extern const int input_rodata2;
++
++int output_bss1 = 0;
++int output_data1 = 0;
++int output_rodata1 = 0;
++
++long output_sink1 = 0;
++
++static __noinline int get_bss_res(void)
++{
++	/* just make sure all the relocations work against .text as well */
++	return input_bss1 + input_bss2 + input_bss_weak;
 +}
 +
- static bool glob_syms_match(const char *sym_name,
- 			    struct bpf_linker *linker, struct glob_sym *glob_sym,
- 			    struct src_obj *obj, Elf64_Sym *sym, size_t sym_idx, int btf_id)
-@@ -1484,6 +1612,10 @@ static bool glob_syms_match(const char *sym_name,
- 		return false;
- 	}
- 
-+	/* deal with .maps definitions specially */
-+	if (glob_sym->sec_id && strcmp(linker->secs[glob_sym->sec_id].sec_name, MAPS_ELF_SEC) == 0)
-+		return glob_map_defs_match(sym_name, linker, glob_sym, obj, sym, btf_id);
++SEC("raw_tp/sys_enter")
++int BPF_PROG(handler1)
++{
++	output_bss1 = get_bss_res();
++	output_data1 = input_data1 + input_data2 + input_data_weak;
++	output_rodata1 = input_rodata1 + input_rodata2 + input_rodata_weak;
 +
- 	if (!glob_sym_btf_matches(sym_name, true /*exact*/,
- 				  linker->btf, glob_sym->btf_id, obj->btf, btf_id))
- 		return false;
++	/* make sure we actually use above special externs, otherwise compiler
++	 * will optimize them out
++	 */
++	output_sink1 = LINUX_KERNEL_VERSION
++		       + CONFIG_BPF_SYSCALL
++		       + (long)&bpf_link_fops;
++	return 0;
++}
++
++char LICENSE[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/linked_vars2.c b/tools/testing/selftests/bpf/progs/linked_vars2.c
+new file mode 100644
+index 000000000000..946c0ce4f505
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/linked_vars2.c
+@@ -0,0 +1,55 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2021 Facebook */
++
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++extern int LINUX_KERNEL_VERSION __kconfig;
++/* when an extern is defined as both strong and weak, resulting symbol will be strong */
++extern bool CONFIG_BPF_SYSCALL __kconfig;
++extern const void __start_BTF __ksym;
++
++int input_bss2 = 0;
++int input_data2 = 2;
++const volatile int input_rodata2 = 22;
++
++int input_bss_weak __weak = 0;
++/* these two weak variables should lose */
++int input_data_weak __weak = 20;
++const volatile int input_rodata_weak __weak = 200;
++
++extern int input_bss1;
++extern int input_data1;
++extern const int input_rodata1;
++
++int output_bss2 = 0;
++int output_data2 = 0;
++int output_rodata2 = 0;
++
++int output_sink2 = 0;
++
++static __noinline int get_data_res(void)
++{
++	/* just make sure all the relocations work against .text as well */
++	return input_data1 + input_data2 + input_data_weak;
++}
++
++SEC("raw_tp/sys_enter")
++int BPF_PROG(handler2)
++{
++	output_bss2 = input_bss1 + input_bss2 + input_bss_weak;
++	output_data2 = get_data_res();
++	output_rodata2 = input_rodata1 + input_rodata2 + input_rodata_weak;
++
++	/* make sure we actually use above special externs, otherwise compiler
++	 * will optimize them out
++	 */
++	output_sink2 = LINUX_KERNEL_VERSION
++		       + CONFIG_BPF_SYSCALL
++		       + (long)&__start_BTF;
++
++	return 0;
++}
++
++char LICENSE[] SEC("license") = "GPL";
 -- 
 2.30.2
 
