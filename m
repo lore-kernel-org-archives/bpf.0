@@ -8,60 +8,60 @@ X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6393FC43461
-	for <bpf@archiver.kernel.org>; Sat, 17 Apr 2021 03:33:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BF542C43460
+	for <bpf@archiver.kernel.org>; Sat, 17 Apr 2021 03:33:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 465D06115B
-	for <bpf@archiver.kernel.org>; Sat, 17 Apr 2021 03:33:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A23706115B
+	for <bpf@archiver.kernel.org>; Sat, 17 Apr 2021 03:33:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235740AbhDQDd7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 16 Apr 2021 23:33:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46580 "EHLO
+        id S235778AbhDQDeB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 16 Apr 2021 23:34:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235487AbhDQDdw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S235632AbhDQDdw (ORCPT <rfc822;bpf@vger.kernel.org>);
         Fri, 16 Apr 2021 23:33:52 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECD72C06138D;
-        Fri, 16 Apr 2021 20:32:39 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id k23-20020a17090a5917b02901043e35ad4aso17419845pji.3;
-        Fri, 16 Apr 2021 20:32:39 -0700 (PDT)
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B566C061342;
+        Fri, 16 Apr 2021 20:32:44 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id g16so6286675pfq.5;
+        Fri, 16 Apr 2021 20:32:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=6yT1ByoX159U3vaGMBYzet+3E76VUkccZqjOF7M8F8U=;
-        b=RzR1ind4b98WR9/g3MMR1yOhHojPvgMJ/1iwlEFW60L9RQR7UKB6KNOr4IU7gj+KXI
-         DdFRTU0cw2xs5eGQksFgpMAlZ0msIL64JZkhZOvAGWf/5Jyjbp5EuE4f/BHL4K3BlSz8
-         ILTj50eMUYUJS0DVlmLtJM6jN5aztwot69yBhjcjQ3GE1mznNnCDclG9Gd/0svZK/Cbr
-         cv0IJbCx3SwTS+fn0QksQKZkHJ8JpNlag8ezs+aqXAdL0UuLQ7yXmeXBlsF0so1M5pna
-         5E2mwDdnUits2Tbj5Pww9P1BmIkx1OHzZooFfjmd70vK4Qznd4vKqzrlnKr5ZbBd60/f
-         wYQg==
+        bh=KBk3bK4feaNc3+lvwrD6wznDNxRkOBFpu408+U2igpg=;
+        b=l8hCodfFOGMDW1jY9qhs3d3ehGEC/d7KeQ79KBex2W0I/gPJQtLNHTzkNtINfNv+3r
+         gaES/lz/jpzhWXMmNya0mRQafoXaUtVvwHieVZxlX75VIHCmZdA1jpZtaaseJF8qctG0
+         E7xMGcJPR2B8IvHxxGLyJgUPRxtBjqUxULc+ReTox529Sl5GpDjmv7bvsBotS9X4OvKN
+         nv1XChDadMRN2uhJl4ZsQ0danW3BZtabA9Gm04MF2bqw9OsRbUo+1BsIg/VlA99h2jd7
+         zwBAaCVS+pQWgxaG+rnv2DWZNho+CkDdmxEN5bjj5N404SvmyFbTzsoyXEfjVnl4eASr
+         oPXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=6yT1ByoX159U3vaGMBYzet+3E76VUkccZqjOF7M8F8U=;
-        b=r7PAsKRu/9fjq5QDoTSe41lopmXsf1OLeioRl7bsKP/r2mdTUO0NSOtNOPm3EK8Cnz
-         txh4FNHscFeCW/fVBKTIPgKD6NMxyPH75won8bfbbiRubEioXaxcQJJxI0JAzA+MhFs+
-         FS8iKSxOKemVlnunM12UdWl6556YpOq8TqIOADs7fFacNwYZDoO+g+5q6I/4x0MtlfHZ
-         z7/YUGm2NONzkLykId8cEkwIthtR1G09IEJkpSCfQ8ftJw/X4GGO91r9tSPxOHKRPaei
-         73vmethT+O8F5Kv2ChKmOlD5RwjGqWBkl1FTe7p8Kf5dhHPSXkPO3Ay2z8xbSl3PMz9x
-         eIJA==
-X-Gm-Message-State: AOAM5300DN11kdWZ1DnD00mVUOHrzOQUfQ9gi9Wu22vlLajMppF9cRk0
-        m43wmX9iGnIfQkekozWJ/vE=
-X-Google-Smtp-Source: ABdhPJzhnsqQ1TbsPf7/VBC4A/xiyME2BK/5YAj/c8g3TT8toLq62w/sVxm1HuDa1B712Xt2C9smNg==
-X-Received: by 2002:a17:90a:156:: with SMTP id z22mr13592794pje.181.1618630359441;
-        Fri, 16 Apr 2021 20:32:39 -0700 (PDT)
+        bh=KBk3bK4feaNc3+lvwrD6wznDNxRkOBFpu408+U2igpg=;
+        b=AF7ofsUGFEZpeCZ5DUht1YFr3wSZKc2RjY+Km0fKj2eheTkdNUSUkuFPY09o0hEFsA
+         hBz22iwmJhOMiJDAoXOy8ifhplqwwAZr5S/UG7G0WD82dGaK9p3aUTtcU1FMcJJTKhWe
+         p5V9G++TsUgWFb40dCDLKD05+FjJY40gi2kLSdPp22s2jC38loNOBehlHHuMP819HTrE
+         gvx98jIffOXJ6Hc+daR54RZkpAdXzJfkMMoQJ7+SkbDnUbX8zv77vf8P8JfpgJsRVC9T
+         yvOGp9Tp18AXpyBqEfjyDMy6SKssTAUIwJNhfCltgGK73kcofTDEimDgDDVrvFIRXntA
+         iiow==
+X-Gm-Message-State: AOAM532+h0KYCGAhFbvdFYaJ20ZzSZleuHiespLUvoU7YoMsGc4x8T3E
+        iveVQZFUsOTeAbv54Yk7Vz4=
+X-Google-Smtp-Source: ABdhPJxtMG1mATh/nmL1MzTEC2niGJF4DF7sAoEKS2wZPWSiGh81t64IO1exrtSh3BCtML8wMI14Yg==
+X-Received: by 2002:a65:590a:: with SMTP id f10mr1887791pgu.358.1618630364012;
+        Fri, 16 Apr 2021 20:32:44 -0700 (PDT)
 Received: from ast-mbp.thefacebook.com ([163.114.132.7])
-        by smtp.gmail.com with ESMTPSA id h1sm6069870pgv.88.2021.04.16.20.32.38
+        by smtp.gmail.com with ESMTPSA id h1sm6069870pgv.88.2021.04.16.20.32.42
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 16 Apr 2021 20:32:38 -0700 (PDT)
+        Fri, 16 Apr 2021 20:32:43 -0700 (PDT)
 From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To:     davem@davemloft.net
 Cc:     daniel@iogearbox.net, andrii@kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org, kernel-team@fb.com
-Subject: [PATCH bpf-next 09/15] libbpf: Support for fd_idx
-Date:   Fri, 16 Apr 2021 20:32:18 -0700
-Message-Id: <20210417033224.8063-10-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 12/15] libbpf: Change the order of data and text relocations.
+Date:   Fri, 16 Apr 2021 20:32:21 -0700
+Message-Id: <20210417033224.8063-13-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.13.5
 In-Reply-To: <20210417033224.8063-1-alexei.starovoitov@gmail.com>
 References: <20210417033224.8063-1-alexei.starovoitov@gmail.com>
@@ -71,186 +71,193 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Add support for FD_IDX make libbpf prefer that approach to loading programs.
+In order to be able to generate loader program in the later
+patches change the order of data and text relocations.
+Also improve the test to include data relos.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- tools/lib/bpf/bpf.c             |  1 +
- tools/lib/bpf/libbpf.c          | 70 +++++++++++++++++++++++++++++----
- tools/lib/bpf/libbpf_internal.h |  1 +
- 3 files changed, 65 insertions(+), 7 deletions(-)
+ tools/lib/bpf/libbpf.c                        | 82 ++++++++++++++-----
+ .../selftests/bpf/progs/test_subprogs.c       | 13 +++
+ 2 files changed, 76 insertions(+), 19 deletions(-)
 
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index bba48ff4c5c0..b96a3aba6fcc 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -252,6 +252,7 @@ int libbpf__bpf_prog_load(const struct bpf_prog_load_params *load_attr)
- 
- 	attr.prog_btf_fd = load_attr->prog_btf_fd;
- 	attr.prog_flags = load_attr->prog_flags;
-+	attr.fd_array = ptr_to_u64(load_attr->fd_array);
- 
- 	attr.func_info_rec_size = load_attr->func_info_rec_size;
- 	attr.func_info_cnt = load_attr->func_info_cnt;
 diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 254a0c9aa6cf..17cfc5b66111 100644
+index 17cfc5b66111..083e441d9c5e 100644
 --- a/tools/lib/bpf/libbpf.c
 +++ b/tools/lib/bpf/libbpf.c
-@@ -176,6 +176,8 @@ enum kern_feature_id {
- 	FEAT_MODULE_BTF,
- 	/* BTF_KIND_FLOAT support */
- 	FEAT_BTF_FLOAT,
-+	/* Kernel support for FD_IDX */
-+	FEAT_FD_IDX,
- 	__FEAT_CNT,
- };
- 
-@@ -288,6 +290,7 @@ struct bpf_program {
- 	__u32 line_info_rec_size;
- 	__u32 line_info_cnt;
- 	__u32 prog_flags;
-+	int *fd_array;
- };
- 
- struct bpf_struct_ops {
-@@ -4181,6 +4184,24 @@ static int probe_module_btf(void)
- 	return !err;
+@@ -6379,11 +6379,15 @@ bpf_object__relocate_data(struct bpf_object *obj, struct bpf_program *prog)
+ 			insn[0].imm = ext->ksym.kernel_btf_id;
+ 			break;
+ 		case RELO_SUBPROG_ADDR:
+-			insn[0].src_reg = BPF_PSEUDO_FUNC;
+-			/* will be handled as a follow up pass */
++			if (insn[0].src_reg != BPF_PSEUDO_FUNC) {
++				pr_warn("prog '%s': relo #%d: bad insn\n",
++					prog->name, i);
++				return -EINVAL;
++			}
++			/* handled already */
+ 			break;
+ 		case RELO_CALL:
+-			/* will be handled as a follow up pass */
++			/* handled already */
+ 			break;
+ 		default:
+ 			pr_warn("prog '%s': relo #%d: bad relo type %d\n",
+@@ -6552,6 +6556,31 @@ static struct reloc_desc *find_prog_insn_relo(const struct bpf_program *prog, si
+ 		       sizeof(*prog->reloc_desc), cmp_relo_by_insn_idx);
  }
  
-+static int probe_kern_fd_idx(void)
++static int append_subprog_relos(struct bpf_program *main_prog, struct bpf_program *subprog)
 +{
-+	struct bpf_load_program_attr attr;
-+	struct bpf_insn insns[] = {
-+		BPF_LD_IMM64_RAW(BPF_REG_0, BPF_PSEUDO_MAP_IDX, 0),
-+		BPF_EXIT_INSN(),
-+	};
++	int new_cnt = main_prog->nr_reloc + subprog->nr_reloc;
++	struct reloc_desc *relos;
++	size_t off = subprog->sub_insn_off;
++	int i;
 +
-+	memset(&attr, 0, sizeof(attr));
-+	attr.prog_type = BPF_PROG_TYPE_SOCKET_FILTER;
-+	attr.insns = insns;
-+	attr.insns_cnt = ARRAY_SIZE(insns);
-+	attr.license = "GPL";
++	if (main_prog == subprog)
++		return 0;
++	relos = libbpf_reallocarray(main_prog->reloc_desc, new_cnt, sizeof(*relos));
++	if (!relos)
++		return -ENOMEM;
++	memcpy(relos + main_prog->nr_reloc, subprog->reloc_desc,
++	       sizeof(*relos) * subprog->nr_reloc);
 +
-+	probe_fd(bpf_load_program_xattr(&attr, NULL, 0));
-+	return errno == EPROTO;
++	for (i = main_prog->nr_reloc; i < new_cnt; i++)
++		relos[i].insn_idx += off;
++	/* After insn_idx adjustment the 'relos' array is still sorted
++	 * by insn_idx and doesn't break bsearch.
++	 */
++	main_prog->reloc_desc = relos;
++	main_prog->nr_reloc = new_cnt;
++	return 0;
 +}
 +
- enum kern_feature_result {
- 	FEAT_UNKNOWN = 0,
- 	FEAT_SUPPORTED = 1,
-@@ -4231,6 +4252,9 @@ static struct kern_feature_desc {
- 	[FEAT_BTF_FLOAT] = {
- 		"BTF_KIND_FLOAT support", probe_kern_btf_float,
- 	},
-+	[FEAT_FD_IDX] = {
-+		"prog_load with fd_idx", probe_kern_fd_idx,
-+	},
- };
+ static int
+ bpf_object__reloc_code(struct bpf_object *obj, struct bpf_program *main_prog,
+ 		       struct bpf_program *prog)
+@@ -6560,12 +6589,21 @@ bpf_object__reloc_code(struct bpf_object *obj, struct bpf_program *main_prog,
+ 	struct bpf_program *subprog;
+ 	struct bpf_insn *insns, *insn;
+ 	struct reloc_desc *relo;
+-	int err;
++	int err, i;
  
- static bool kernel_supports(enum kern_feature_id feat_id)
-@@ -6309,19 +6333,34 @@ bpf_object__relocate_data(struct bpf_object *obj, struct bpf_program *prog)
+ 	err = reloc_prog_func_and_line_info(obj, main_prog, prog);
+ 	if (err)
+ 		return err;
  
- 		switch (relo->type) {
- 		case RELO_LD64:
--			insn[0].src_reg = BPF_PSEUDO_MAP_FD;
--			insn[0].imm = obj->maps[relo->map_idx].fd;
-+			if (kernel_supports(FEAT_FD_IDX)) {
-+				insn[0].src_reg = BPF_PSEUDO_MAP_IDX;
-+				insn[0].imm = relo->map_idx;
-+			} else {
-+				insn[0].src_reg = BPF_PSEUDO_MAP_FD;
-+				insn[0].imm = obj->maps[relo->map_idx].fd;
-+			}
- 			break;
- 		case RELO_DATA:
--			insn[0].src_reg = BPF_PSEUDO_MAP_VALUE;
- 			insn[1].imm = insn[0].imm + relo->sym_off;
--			insn[0].imm = obj->maps[relo->map_idx].fd;
-+			if (kernel_supports(FEAT_FD_IDX)) {
-+				insn[0].src_reg = BPF_PSEUDO_MAP_IDX_VALUE;
-+				insn[0].imm = relo->map_idx;
-+			} else {
-+				insn[0].src_reg = BPF_PSEUDO_MAP_VALUE;
-+				insn[0].imm = obj->maps[relo->map_idx].fd;
-+			}
- 			break;
- 		case RELO_EXTERN_VAR:
- 			ext = &obj->externs[relo->sym_off];
- 			if (ext->type == EXT_KCFG) {
--				insn[0].src_reg = BPF_PSEUDO_MAP_VALUE;
--				insn[0].imm = obj->maps[obj->kconfig_map_idx].fd;
-+				if (kernel_supports(FEAT_FD_IDX)) {
-+					insn[0].src_reg = BPF_PSEUDO_MAP_IDX_VALUE;
-+					insn[0].imm = obj->kconfig_map_idx;
-+				} else {
-+					insn[0].src_reg = BPF_PSEUDO_MAP_VALUE;
-+					insn[0].imm = obj->maps[obj->kconfig_map_idx].fd;
-+				}
- 				insn[1].imm = ext->kcfg.data_off;
- 			} else /* EXT_KSYM */ {
- 				if (ext->ksym.type_id) { /* typed ksyms */
-@@ -7047,6 +7086,7 @@ load_program(struct bpf_program *prog, struct bpf_insn *insns, int insns_cnt,
- 	load_attr.attach_btf_id = prog->attach_btf_id;
- 	load_attr.kern_version = kern_version;
- 	load_attr.prog_ifindex = prog->prog_ifindex;
-+	load_attr.fd_array = prog->fd_array;
- 
- 	/* specify func_info/line_info only if kernel supports them */
- 	btf_fd = bpf_object__btf_fd(prog->obj);
-@@ -7239,6 +7279,8 @@ bpf_object__load_progs(struct bpf_object *obj, int log_level)
- 	struct bpf_program *prog;
- 	size_t i;
- 	int err;
-+	struct bpf_map *map;
-+	int *fd_array = NULL;
- 
- 	for (i = 0; i < obj->nr_programs; i++) {
- 		prog = &obj->programs[i];
-@@ -7247,6 +7289,16 @@ bpf_object__load_progs(struct bpf_object *obj, int log_level)
- 			return err;
- 	}
- 
-+	if (kernel_supports(FEAT_FD_IDX) && obj->nr_maps) {
-+		fd_array = malloc(sizeof(int) * obj->nr_maps);
-+		if (!fd_array)
-+			return -ENOMEM;
-+		for (i = 0; i < obj->nr_maps; i++) {
-+			map = &obj->maps[i];
-+			fd_array[i] = map->fd;
-+		}
++	for (i = 0; i < prog->nr_reloc; i++) {
++		relo = &prog->reloc_desc[i];
++		insn = &main_prog->insns[prog->sub_insn_off + relo->insn_idx];
++
++		if (relo->type == RELO_SUBPROG_ADDR)
++			/* mark the insn, so it becomes insn_is_pseudo_func() */
++			insn[0].src_reg = BPF_PSEUDO_FUNC;
 +	}
 +
+ 	for (insn_idx = 0; insn_idx < prog->sec_insn_cnt; insn_idx++) {
+ 		insn = &main_prog->insns[prog->sub_insn_off + insn_idx];
+ 		if (!insn_is_subprog_call(insn) && !insn_is_pseudo_func(insn))
+@@ -6573,6 +6611,8 @@ bpf_object__reloc_code(struct bpf_object *obj, struct bpf_program *main_prog,
+ 
+ 		relo = find_prog_insn_relo(prog, insn_idx);
+ 		if (relo && relo->type != RELO_CALL && relo->type != RELO_SUBPROG_ADDR) {
++			if (relo->type == RELO_EXTERN_FUNC)
++				continue;
+ 			pr_warn("prog '%s': unexpected relo for insn #%zu, type %d\n",
+ 				prog->name, insn_idx, relo->type);
+ 			return -LIBBPF_ERRNO__RELOC;
+@@ -6646,6 +6686,10 @@ bpf_object__reloc_code(struct bpf_object *obj, struct bpf_program *main_prog,
+ 			pr_debug("prog '%s': added %zu insns from sub-prog '%s'\n",
+ 				 main_prog->name, subprog->insns_cnt, subprog->name);
+ 
++			/* The subprog insns are now appended. Append its relos too. */
++			err = append_subprog_relos(main_prog, subprog);
++			if (err)
++				return err;
+ 			err = bpf_object__reloc_code(obj, main_prog, subprog);
+ 			if (err)
+ 				return err;
+@@ -6790,23 +6834,11 @@ bpf_object__relocate(struct bpf_object *obj, const char *targ_btf_path)
+ 			return err;
+ 		}
+ 	}
+-	/* relocate data references first for all programs and sub-programs,
+-	 * as they don't change relative to code locations, so subsequent
+-	 * subprogram processing won't need to re-calculate any of them
+-	 */
+-	for (i = 0; i < obj->nr_programs; i++) {
+-		prog = &obj->programs[i];
+-		err = bpf_object__relocate_data(obj, prog);
+-		if (err) {
+-			pr_warn("prog '%s': failed to relocate data references: %d\n",
+-				prog->name, err);
+-			return err;
+-		}
+-	}
+-	/* now relocate subprogram calls and append used subprograms to main
++	/* relocate subprogram calls and append used subprograms to main
+ 	 * programs; each copy of subprogram code needs to be relocated
+ 	 * differently for each main program, because its code location might
+-	 * have changed
++	 * have changed.
++	 * Append subprog relos to main programs.
+ 	 */
  	for (i = 0; i < obj->nr_programs; i++) {
  		prog = &obj->programs[i];
- 		if (prog_is_subprog(obj, prog))
-@@ -7256,10 +7308,14 @@ bpf_object__load_progs(struct bpf_object *obj, int log_level)
- 			continue;
- 		}
- 		prog->log_level |= log_level;
-+		prog->fd_array = fd_array;
- 		err = bpf_program__load(prog, obj->license, obj->kern_version);
--		if (err)
-+		if (err) {
-+			free(fd_array);
+@@ -6823,6 +6855,18 @@ bpf_object__relocate(struct bpf_object *obj, const char *targ_btf_path)
  			return err;
-+		}
+ 		}
  	}
-+	free(fd_array);
- 	return 0;
++	/* Process data relos for main programs */
++	for (i = 0; i < obj->nr_programs; i++) {
++		prog = &obj->programs[i];
++		if (prog_is_subprog(obj, prog))
++			continue;
++		err = bpf_object__relocate_data(obj, prog);
++		if (err) {
++			pr_warn("prog '%s': failed to relocate data references: %d\n",
++				prog->name, err);
++			return err;
++		}
++	}
+ 	/* free up relocation descriptors */
+ 	for (i = 0; i < obj->nr_programs; i++) {
+ 		prog = &obj->programs[i];
+diff --git a/tools/testing/selftests/bpf/progs/test_subprogs.c b/tools/testing/selftests/bpf/progs/test_subprogs.c
+index d3c5673c0218..b7c37ca09544 100644
+--- a/tools/testing/selftests/bpf/progs/test_subprogs.c
++++ b/tools/testing/selftests/bpf/progs/test_subprogs.c
+@@ -4,8 +4,18 @@
+ 
+ const char LICENSE[] SEC("license") = "GPL";
+ 
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 1);
++	__type(key, __u32);
++	__type(value, __u64);
++} array SEC(".maps");
++
+ __noinline int sub1(int x)
+ {
++	int key = 0;
++
++	bpf_map_lookup_elem(&array, &key);
+ 	return x + 1;
  }
  
-diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
-index 6017902c687e..9114c7085f2a 100644
---- a/tools/lib/bpf/libbpf_internal.h
-+++ b/tools/lib/bpf/libbpf_internal.h
-@@ -204,6 +204,7 @@ struct bpf_prog_load_params {
- 	__u32 log_level;
- 	char *log_buf;
- 	size_t log_buf_sz;
-+	int *fd_array;
- };
+@@ -23,6 +33,9 @@ static __noinline int sub3(int z)
  
- int libbpf__bpf_prog_load(const struct bpf_prog_load_params *load_attr);
+ static __noinline int sub4(int w)
+ {
++	int key = 0;
++
++	bpf_map_lookup_elem(&array, &key);
+ 	return w + sub3(5) + sub1(6);
+ }
+ 
 -- 
 2.30.2
 
