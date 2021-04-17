@@ -8,60 +8,60 @@ X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 40C37C43470
-	for <bpf@archiver.kernel.org>; Sat, 17 Apr 2021 03:33:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 19835C43462
+	for <bpf@archiver.kernel.org>; Sat, 17 Apr 2021 03:33:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2726D6113D
+	by mail.kernel.org (Postfix) with ESMTP id EB6A2611AD
 	for <bpf@archiver.kernel.org>; Sat, 17 Apr 2021 03:33:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235671AbhDQDdx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 16 Apr 2021 23:33:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46398 "EHLO
+        id S235689AbhDQDdy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 16 Apr 2021 23:33:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235439AbhDQDdt (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 16 Apr 2021 23:33:49 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CFDFC061761;
-        Fri, 16 Apr 2021 20:32:33 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id b17so20457004pgh.7;
-        Fri, 16 Apr 2021 20:32:33 -0700 (PDT)
+        with ESMTP id S235569AbhDQDdw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 16 Apr 2021 23:33:52 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BCC7C06138B;
+        Fri, 16 Apr 2021 20:32:37 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id k23-20020a17090a5917b02901043e35ad4aso17419807pji.3;
+        Fri, 16 Apr 2021 20:32:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=uzQAZWsX9E5409TYCGMlnvV9BYjzTAVLAHg7HgwrNw4=;
-        b=AG8aTiLeZJ51iNLRHWvZCVtZbWcO2FLHwD1BUiOy4YLbs2wv1dOFRi8LfElp+MJC1t
-         V1pRuGpZoS8w9tHIGLge2eGk9QIrhjYi81S1IMWfW3srcuINWzZxuRyrfWtXjLAvoXTi
-         KPY3F6nC5Sg70kPjSWQYfHhBvTG9+cDFyhZ/rCybtWDKazD8F7K2YbwULcZ3iLsgmXVG
-         Pw0PVRELOhlOgJwLzmSYKhelo79jfOXiAAXWQjrqUjfgf4u3QkbBKHJhZb9noeahtuvD
-         h2CqnAf7MXSYN9lvNJm5INT8S6W9zFrk1tunsI+KuQsKr+W3DClSRjGnDbfJO7GTO0nR
-         DtFw==
+        bh=HMtZowpuKJ//bqS/0/So0II0C+lVTMjMU4WfA8IzfXQ=;
+        b=d9xUxsCBW7edUpglJJKfWcL/aYE92UjSpChpteTvee/6RG79nrnKI6OY75EBgENk/L
+         2RwjJHSTCee23NqFxJr7SF6HhFVQwjp5B7/qP/vzTMHzCQZsaw7gVb8PD23zSn2CnW1Z
+         c55Y6lwuGGmNLY1W7oBDyKoApg+U9h0Fgynshn95pg1yYJmz7BU6efkI4dN5r5S+f50h
+         +gJQuFlXjgp44ZxFtndKSHD3e+hKNhiOaRhFWOCPyINC5kKIEXslaMMFt56owU3oN6+l
+         Rs+AmIKOnd5Ned4TiBjKtZ6frbkFWuUMcfU767zT1fK161+984Z19zZZJR+tKnQOeHoE
+         lhbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=uzQAZWsX9E5409TYCGMlnvV9BYjzTAVLAHg7HgwrNw4=;
-        b=J4bDuW6ktFFaPErSbbqU+SSS5IyiTylGxywDYIruF0gz+P8AAfShx4D49sEdLf7HAi
-         KkvRsmIUAQyHe+sU2bUtOvxfsELIrxS67yZT3SC1Y+GJUrmMP3fYxxHnQVRnkX6x2VHz
-         b9UT0JZNsDpKu02iWBG3YVN7hPm1CxmbVo0S+wMkgGQJrJF0srFe1fsBfOQJ2NlGO3vp
-         z0foaB1qX9PBGjS4oQfpWorvixPkjMauoNfwjcW9KJV7FyKyPmmk490Tynz2XrNIqIs6
-         hFPzEq6Ruy4hD5ClpaIzgK7Y/br4OhLwsYtfqw2RDVlRV7xa1a1mQjFEyodWqZh9uEJ6
-         o0Rw==
-X-Gm-Message-State: AOAM533wu+VIcXXr6M6+ELGjPP9CkPAX7wdKrEmZx7F0ooc3ro0QiIVG
-        jOpN81lN4jEIhBnnJY/fcGw=
-X-Google-Smtp-Source: ABdhPJyX2v1+KXeD5uVBVbDSwlhOLm98D0TamBBJE9Tvo2HHFGpMvEHqbukxKm3YNU8V5Mo/6bHk6Q==
-X-Received: by 2002:a63:151e:: with SMTP id v30mr1812919pgl.366.1618630352489;
-        Fri, 16 Apr 2021 20:32:32 -0700 (PDT)
+        bh=HMtZowpuKJ//bqS/0/So0II0C+lVTMjMU4WfA8IzfXQ=;
+        b=QBFvnJKRXO6LMl+KsbOxdEgRcJuBncm83rNxv2qSSxnTr/RxbeWXdF7xd2lVJXrT+u
+         dGJCKSL/8MJkvKgfPvkuWdaMfPx/NOXBe5ZhToacQsdDF+orVVPsACVJyZvRo6KvxFlJ
+         c0HTx5rkgBzLmi+uxpcV2rg9Eo0rQ93Tn0chzMtRhBCCe717De6mjg005Ml2MByAq6VT
+         xyFeja9Q8YKPRVrJdU5zW+VZobn78ntGeIwkwO3rLPf2ZImfFVwbksJb+E+TndZj0OQ/
+         v8MdBs9kRRWPAE85gnUv0L0Qs19+UzBCR7o2KLPPMCxNOqVa3LQ/k86V0dfr1Nl3ILW2
+         YD6w==
+X-Gm-Message-State: AOAM533cCX+XZqWBNPQXG8hTslpFzQTfxB+TKjl3WD5GJ5tiS8PBVFzv
+        ftHJ+BlQ52ZeXWm+DNHaxIQ=
+X-Google-Smtp-Source: ABdhPJwFWIYsr6WfcRCKss2XirzpbVv7W5EWlBGhIYPKxLChT2EKOaOPvmy8ZpTqjysKsbgbGHKK/g==
+X-Received: by 2002:a17:90a:4381:: with SMTP id r1mr13526973pjg.214.1618630356734;
+        Fri, 16 Apr 2021 20:32:36 -0700 (PDT)
 Received: from ast-mbp.thefacebook.com ([163.114.132.7])
-        by smtp.gmail.com with ESMTPSA id h1sm6069870pgv.88.2021.04.16.20.32.31
+        by smtp.gmail.com with ESMTPSA id h1sm6069870pgv.88.2021.04.16.20.32.35
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 16 Apr 2021 20:32:31 -0700 (PDT)
+        Fri, 16 Apr 2021 20:32:36 -0700 (PDT)
 From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To:     davem@davemloft.net
 Cc:     daniel@iogearbox.net, andrii@kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org, kernel-team@fb.com
-Subject: [PATCH bpf-next 04/15] libbpf: Support for syscall program type
-Date:   Fri, 16 Apr 2021 20:32:13 -0700
-Message-Id: <20210417033224.8063-5-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 07/15] selftests/bpf: Test for btf_load command.
+Date:   Fri, 16 Apr 2021 20:32:16 -0700
+Message-Id: <20210417033224.8063-8-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.13.5
 In-Reply-To: <20210417033224.8063-1-alexei.starovoitov@gmail.com>
 References: <20210417033224.8063-1-alexei.starovoitov@gmail.com>
@@ -71,25 +71,94 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Trivial support for syscall program type.
+Improve selftest to check that btf_load is working from bpf program.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- tools/lib/bpf/libbpf.c | 1 +
- 1 file changed, 1 insertion(+)
+ tools/testing/selftests/bpf/progs/syscall.c | 48 +++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 9cc2d45b0080..254a0c9aa6cf 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -8899,6 +8899,7 @@ static const struct bpf_sec_def section_defs[] = {
- 	BPF_PROG_SEC("struct_ops",		BPF_PROG_TYPE_STRUCT_OPS),
- 	BPF_EAPROG_SEC("sk_lookup/",		BPF_PROG_TYPE_SK_LOOKUP,
- 						BPF_SK_LOOKUP),
-+	BPF_PROG_SEC("syscall",			BPF_PROG_TYPE_SYSCALL),
+diff --git a/tools/testing/selftests/bpf/progs/syscall.c b/tools/testing/selftests/bpf/progs/syscall.c
+index 01476f88e45f..b6ac10f75c37 100644
+--- a/tools/testing/selftests/bpf/progs/syscall.c
++++ b/tools/testing/selftests/bpf/progs/syscall.c
+@@ -4,6 +4,7 @@
+ #include <linux/bpf.h>
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_tracing.h>
++#include <linux/btf.h>
+ #include <../../tools/include/linux/filter.h>
+ 
+ volatile const int workaround = 1;
+@@ -18,6 +19,45 @@ struct args {
+ 	int prog_fd;
  };
  
- #undef BPF_PROG_SEC_IMPL
++#define BTF_INFO_ENC(kind, kind_flag, vlen) \
++	((!!(kind_flag) << 31) | ((kind) << 24) | ((vlen) & BTF_MAX_VLEN))
++#define BTF_TYPE_ENC(name, info, size_or_type) (name), (info), (size_or_type)
++#define BTF_INT_ENC(encoding, bits_offset, nr_bits) \
++	((encoding) << 24 | (bits_offset) << 16 | (nr_bits))
++#define BTF_TYPE_INT_ENC(name, encoding, bits_offset, bits, sz) \
++	BTF_TYPE_ENC(name, BTF_INFO_ENC(BTF_KIND_INT, 0, 0), sz), \
++	BTF_INT_ENC(encoding, bits_offset, bits)
++
++static int btf_load(void)
++{
++	struct btf_blob {
++		struct btf_header btf_hdr;
++		__u32 types[8];
++		__u32 str;
++	} raw_btf = {
++		.btf_hdr = {
++			.magic = BTF_MAGIC,
++			.version = BTF_VERSION,
++			.hdr_len = sizeof(struct btf_header),
++			.type_len = sizeof(__u32) * 8,
++			.str_off = sizeof(__u32) * 8,
++			.str_len = sizeof(__u32),
++		},
++		.types = {
++			/* long */
++			BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 64, 8),  /* [1] */
++			/* unsigned long */
++			BTF_TYPE_INT_ENC(0, 0, 0, 64, 8),  /* [2] */
++		},
++	};
++	static union bpf_attr btf_load_attr = {
++		.btf_size = sizeof(raw_btf),
++	};
++
++	btf_load_attr.btf = (long)&raw_btf;
++	return bpf_sys_bpf(BPF_BTF_LOAD, &btf_load_attr, sizeof(btf_load_attr));
++}
++
+ SEC("syscall")
+ int bpf_prog(struct args *ctx)
+ {
+@@ -35,6 +75,8 @@ int bpf_prog(struct args *ctx)
+ 		.map_type = BPF_MAP_TYPE_HASH,
+ 		.key_size = 8,
+ 		.value_size = 8,
++		.btf_key_type_id = 1,
++		.btf_value_type_id = 2,
+ 	};
+ 	static union bpf_attr map_update_attr = { .map_fd = 1, };
+ 	static __u64 key = 12;
+@@ -45,7 +87,13 @@ int bpf_prog(struct args *ctx)
+ 	};
+ 	int ret;
+ 
++	ret = btf_load();
++	if (ret < 0)
++		return ret;
++
+ 	map_create_attr.max_entries = ctx->max_entries;
++	map_create_attr.btf_fd = ret;
++
+ 	prog_load_attr.license = (long) license;
+ 	prog_load_attr.insns = (long) insns;
+ 	prog_load_attr.log_buf = ctx->log_buf;
 -- 
 2.30.2
 
