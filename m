@@ -8,60 +8,60 @@ X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A1BDDC43611
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EE09C4360C
 	for <bpf@archiver.kernel.org>; Sat, 17 Apr 2021 03:33:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 80F4E6115B
+	by mail.kernel.org (Postfix) with ESMTP id 1A26161208
 	for <bpf@archiver.kernel.org>; Sat, 17 Apr 2021 03:33:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235439AbhDQDeB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S235789AbhDQDeB (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Fri, 16 Apr 2021 23:34:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46570 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235672AbhDQDdx (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 16 Apr 2021 23:33:53 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A1DDC061345;
-        Fri, 16 Apr 2021 20:32:49 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id u7so13145192plr.6;
-        Fri, 16 Apr 2021 20:32:48 -0700 (PDT)
+        with ESMTP id S235625AbhDQDdw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 16 Apr 2021 23:33:52 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0BADC06138F;
+        Fri, 16 Apr 2021 20:32:42 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d124so19546497pfa.13;
+        Fri, 16 Apr 2021 20:32:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=Xwi8qmk85vARK+v/2qMVVBWBRVIxCX543LfuhxAUyzA=;
-        b=b7YM8WJIRO9RnQ+oNSrLXRaRP7ZmdmGbC6eJYF5sROzNoF+UL9kDu12RAmdjMo0y+P
-         LxQWZZSWaonwr1fTlqhAMt/90i4J5WtfN+RkzFOfB9lIZt9+OLHXQOuRnyTz5Qw8JTFZ
-         tuvtXcHcrq2Vn7+msOG4wVaWNDOCRkSANVatTqffF+TYZdfOugj55qRwApHU2Lf3wymX
-         hHkN76NA7kkvZ0jPg0jxdmmu74j29gXnY5gqweN5/x4gsknbuNV66qgr4tFXVyemvoyR
-         SoSEW1cLl/h/9OdX9S8SCSFjHPhMupObbhRUsfW6ellm+RZdQ6PhTictN7qwMd0BGm1w
-         kEHQ==
+        bh=wxVfwTNvoUrkxrFUgiKMIayPbwYj2MJfbAckJnsV92o=;
+        b=cPYCnoR0Iwz25EnFRmpQJfP/kStB1cWMRjKoWmYaodR6YlJXVqE65R+bTc8FdQZKHm
+         EcMkvlhE0ugu/6aM7+jZ43aEz3p+piZsgrrQP1W8UyyQopCU8Sn7mzz8N2aMcZiDjZLe
+         xRdql3s46UfYcxyvKk7l6eSkYtsVJLwBewqjb1ahnAGfQjqtzSKq30Ons14tUYqL9kQI
+         Oy9vhWDmZu/bU9BahvZCJWyuF5VLGQagML8TmB5cSrzvucAVE7g151ttkQU4F3yMMaEk
+         4saseaO5pgjXwmZGouWQb7SNaDAIqBzJVGO/Z6/gjaecOd1ClT9lMoaXaBtSv8xTDLIx
+         CK1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=Xwi8qmk85vARK+v/2qMVVBWBRVIxCX543LfuhxAUyzA=;
-        b=CKX9jBe1s9zYQBhS50I4KQAdBQei9oo0ACxcjlA4QIrAHfzbzDadghE2HDd0Fi8ueg
-         CePSUG25qFFmCbGuJ8h8pLHBtDTE6d8zgQVL0srBfHGj6Cmu2AnoQoSIeBYUHSM8/YGq
-         hIPCMUSDt6uRQABZ+odyWWMWrx4i6bl7fWMymtbMRugfSUOKNpZY1Sz0lh4Hme7JDnuh
-         rT1c7rSv0+OLwmLkUTd4NJzWUNfPKITi9Akr7DH/l4xyoQaik2sGGvrftTf0h4h6TdKM
-         l46cahMVqvJhIth9MEYON2GB2F9UTQgYRQ/1MtPiARqCnab3qFsMk8Dtlh4X6RIXJzau
-         aI8w==
-X-Gm-Message-State: AOAM531U5i5M5mu52OE8rrMdA30qumSzXBFWkV73YXR5KA3TvYstjy5l
-        N4XNlu85eTOP8P+bFagZS8YLZkPzkj0=
-X-Google-Smtp-Source: ABdhPJwGb52siwy8OZypB3cIjYpqOKA/exgcnm5FvAExJpg6yD4SvqhUydbjPEatLtGISTZj3HMbMg==
-X-Received: by 2002:a17:902:d645:b029:e8:ec90:d097 with SMTP id y5-20020a170902d645b02900e8ec90d097mr12350186plh.47.1618630368519;
-        Fri, 16 Apr 2021 20:32:48 -0700 (PDT)
+        bh=wxVfwTNvoUrkxrFUgiKMIayPbwYj2MJfbAckJnsV92o=;
+        b=XIfq3M7pIEQYaOsysCVjQ1Kaq2F8VFrgIdmweUJHLj3B7gBh1x3f8V+sL5y5pGdiqs
+         mFJChzf3PbO8tWuAs2iBd7rn0ryQqzJ/nmjAyYF+T99KBkd/YhoqOzlCwAvgdqoz/DUv
+         h+6vlTPYlWaRQp9OBtVyg0tN7Kvq/scKbyfDzD/SM1CxkgcM4o0s6cdNlWXemm0aB+xG
+         Ihgo8m9zUVaMNf0egn1hFSaBSsq2x379cJ+EBssRv4+E6gfbnI8QJisUfkgLDJTsjs2T
+         tmWP4DWFWkfgJDiUg3fQNlQdCAhwFhz7PdJwJpYLjoxBi3tO/kgxzSdT8q2GvdONrpq7
+         LmQA==
+X-Gm-Message-State: AOAM530jT/QXFuL5Ya4HPJFGkSD5mXNHnv3lbMo88hkUEQclTvQLMUB6
+        mCW8Q0+eMtHr2KvT0iuXaYvl/EYFCfw=
+X-Google-Smtp-Source: ABdhPJwYPLbTE5+pvBaXxunt3tvJCgPhwska/CjhQVWo4Q4jkhepZQmIIIFPZyswin9bVfkOqyj2Qg==
+X-Received: by 2002:a63:1a47:: with SMTP id a7mr1840553pgm.437.1618630362337;
+        Fri, 16 Apr 2021 20:32:42 -0700 (PDT)
 Received: from ast-mbp.thefacebook.com ([163.114.132.7])
-        by smtp.gmail.com with ESMTPSA id h1sm6069870pgv.88.2021.04.16.20.32.47
+        by smtp.gmail.com with ESMTPSA id h1sm6069870pgv.88.2021.04.16.20.32.40
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 16 Apr 2021 20:32:47 -0700 (PDT)
+        Fri, 16 Apr 2021 20:32:41 -0700 (PDT)
 From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To:     davem@davemloft.net
 Cc:     daniel@iogearbox.net, andrii@kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org, kernel-team@fb.com
-Subject: [PATCH bpf-next 15/15] selftests/bpf: Convert few tests to light skeleton.
-Date:   Fri, 16 Apr 2021 20:32:24 -0700
-Message-Id: <20210417033224.8063-16-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 11/15] bpf: Add bpf_sys_close() helper.
+Date:   Fri, 16 Apr 2021 20:32:20 -0700
+Message-Id: <20210417033224.8063-12-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.13.5
 In-Reply-To: <20210417033224.8063-1-alexei.starovoitov@gmail.com>
 References: <20210417033224.8063-1-alexei.starovoitov@gmail.com>
@@ -71,205 +71,98 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Convert few tests that don't use CO-RE to light skeleton.
+Add bpf_sys_close() helper to be used by the syscall/loader program to close
+intermediate FDs and other cleanup.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- tools/testing/selftests/bpf/.gitignore            |  1 +
- tools/testing/selftests/bpf/Makefile              | 15 ++++++++++++++-
- .../selftests/bpf/prog_tests/fentry_fexit.c       |  6 +++---
- .../selftests/bpf/prog_tests/fentry_test.c        |  4 ++--
- .../selftests/bpf/prog_tests/fexit_sleep.c        |  6 +++---
- .../testing/selftests/bpf/prog_tests/fexit_test.c |  4 ++--
- .../testing/selftests/bpf/prog_tests/kfunc_call.c |  6 +++---
- 7 files changed, 28 insertions(+), 14 deletions(-)
+ include/uapi/linux/bpf.h       |  7 +++++++
+ kernel/bpf/syscall.c           | 14 ++++++++++++++
+ tools/include/uapi/linux/bpf.h |  7 +++++++
+ 3 files changed, 28 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
-index 4866f6a21901..a030aa4a8a9e 100644
---- a/tools/testing/selftests/bpf/.gitignore
-+++ b/tools/testing/selftests/bpf/.gitignore
-@@ -30,6 +30,7 @@ test_sysctl
- xdping
- test_cpp
- *.skel.h
-+*.lskel.h
- /no_alu32
- /bpf_gcc
- /tools
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 5e618ff1e8fd..e3f42df0e250 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -311,6 +311,9 @@ SKEL_BLACKLIST := btf__% test_pinning_invalid.c test_sk_assign.c
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 47c4b21a51b6..2251e7894799 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -4728,6 +4728,12 @@ union bpf_attr {
+  * 		If btf_fd is zero look for the name in vmlinux BTF and kernel module BTFs.
+  * 	Return
+  * 		Return btf_id and store module's BTF FD into attach_btf_obj_fd.
++ *
++ * long bpf_sys_close(u32 fd)
++ * 	Description
++ * 		Execute close syscall for given FD.
++ * 	Return
++ * 		A syscall result.
+  */
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+@@ -4897,6 +4903,7 @@ union bpf_attr {
+ 	FN(for_each_map_elem),		\
+ 	FN(sys_bpf),			\
+ 	FN(btf_find_by_name_kind),	\
++	FN(sys_close),			\
+ 	/* */
  
- LINKED_SKELS := test_static_linked.skel.h
+ /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 6d4d9925c0ec..822b00908c58 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -4557,6 +4557,18 @@ const struct bpf_func_proto bpf_sys_bpf_proto = {
+ 	.arg3_type	= ARG_CONST_SIZE,
+ };
  
-+LSKELS := kfunc_call_test.c fentry_test.c fexit_test.c fexit_sleep.c
-+SKEL_BLACKLIST += $$(LSKELS)
++BPF_CALL_1(bpf_sys_close, u32, fd)
++{
++	return close_fd(fd);
++}
 +
- test_static_linked.skel.h-deps := test_static_linked1.o test_static_linked2.o
- 
- # Set up extra TRUNNER_XXX "temporary" variables in the environment (relies on
-@@ -333,6 +336,7 @@ TRUNNER_BPF_OBJS := $$(patsubst %.c,$$(TRUNNER_OUTPUT)/%.o, $$(TRUNNER_BPF_SRCS)
- TRUNNER_BPF_SKELS := $$(patsubst %.c,$$(TRUNNER_OUTPUT)/%.skel.h,	\
- 				 $$(filter-out $(SKEL_BLACKLIST),	\
- 					       $$(TRUNNER_BPF_SRCS)))
-+TRUNNER_BPF_LSKELS := $$(patsubst %.c,$$(TRUNNER_OUTPUT)/%.lskel.h, $$(LSKELS))
- TRUNNER_BPF_SKELS_LINKED := $$(addprefix $$(TRUNNER_OUTPUT)/,$(LINKED_SKELS))
- TEST_GEN_FILES += $$(TRUNNER_BPF_OBJS)
- 
-@@ -374,6 +378,14 @@ $(TRUNNER_BPF_SKELS): %.skel.h: %.o $(BPFTOOL) | $(TRUNNER_OUTPUT)
- 	$(Q)diff $$(<:.o=.linked2.o) $$(<:.o=.linked3.o)
- 	$(Q)$$(BPFTOOL) gen skeleton $$(<:.o=.linked3.o) name $$(notdir $$(<:.o=)) > $$@
- 
-+$(TRUNNER_BPF_LSKELS): %.lskel.h: %.o $(BPFTOOL) | $(TRUNNER_OUTPUT)
-+	$$(call msg,GEN-SKEL,$(TRUNNER_BINARY),$$@)
-+	$(Q)$$(BPFTOOL) gen object $$(<:.o=.linked1.o) $$<
-+	$(Q)$$(BPFTOOL) gen object $$(<:.o=.linked2.o) $$(<:.o=.linked1.o)
-+	$(Q)$$(BPFTOOL) gen object $$(<:.o=.linked3.o) $$(<:.o=.linked2.o)
-+	$(Q)diff $$(<:.o=.linked2.o) $$(<:.o=.linked3.o)
-+	$(Q)$$(BPFTOOL) gen skeleton -L $$(<:.o=.linked3.o) name $$(notdir $$(<:.o=)) > $$@
++const struct bpf_func_proto bpf_sys_close_proto = {
++	.func		= bpf_sys_close,
++	.gpl_only	= false,
++	.ret_type	= RET_INTEGER,
++	.arg1_type	= ARG_ANYTHING,
++};
 +
- $(TRUNNER_BPF_SKELS_LINKED): $(TRUNNER_BPF_OBJS) $(BPFTOOL) | $(TRUNNER_OUTPUT)
- 	$$(call msg,LINK-BPF,$(TRUNNER_BINARY),$$(@:.skel.h=.o))
- 	$(Q)$$(BPFTOOL) gen object $$(@:.skel.h=.linked1.o) $$(addprefix $(TRUNNER_OUTPUT)/,$$($$(@F)-deps))
-@@ -403,6 +415,7 @@ $(TRUNNER_TEST_OBJS): $(TRUNNER_OUTPUT)/%.test.o:			\
- 		      $(TRUNNER_EXTRA_HDRS)				\
- 		      $(TRUNNER_BPF_OBJS)				\
- 		      $(TRUNNER_BPF_SKELS)				\
-+		      $(TRUNNER_BPF_LSKELS)				\
- 		      $(TRUNNER_BPF_SKELS_LINKED)			\
- 		      $$(BPFOBJ) | $(TRUNNER_OUTPUT)
- 	$$(call msg,TEST-OBJ,$(TRUNNER_BINARY),$$@)
-@@ -510,6 +523,6 @@ $(OUTPUT)/bench: $(OUTPUT)/bench.o $(OUTPUT)/testing_helpers.o \
- EXTRA_CLEAN := $(TEST_CUSTOM_PROGS) $(SCRATCH_DIR) $(HOST_SCRATCH_DIR)	\
- 	prog_tests/tests.h map_tests/tests.h verifier/tests.h		\
- 	feature								\
--	$(addprefix $(OUTPUT)/,*.o *.skel.h no_alu32 bpf_gcc bpf_testmod.ko)
-+	$(addprefix $(OUTPUT)/,*.o *.skel.h *.lskel.h no_alu32 bpf_gcc bpf_testmod.ko)
- 
- .PHONY: docs docs-clean
-diff --git a/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c b/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
-index 109d0345a2be..91154c2ba256 100644
---- a/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
-+++ b/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
-@@ -1,8 +1,8 @@
- // SPDX-License-Identifier: GPL-2.0
- /* Copyright (c) 2019 Facebook */
- #include <test_progs.h>
--#include "fentry_test.skel.h"
--#include "fexit_test.skel.h"
-+#include "fentry_test.lskel.h"
-+#include "fexit_test.lskel.h"
- 
- void test_fentry_fexit(void)
+ static const struct bpf_func_proto *
+ syscall_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
  {
-@@ -26,7 +26,7 @@ void test_fentry_fexit(void)
- 	if (CHECK(err, "fexit_attach", "fexit attach failed: %d\n", err))
- 		goto close_prog;
+@@ -4565,6 +4577,8 @@ syscall_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 		return &bpf_sys_bpf_proto;
+ 	case BPF_FUNC_btf_find_by_name_kind:
+ 		return &bpf_btf_find_by_name_kind_proto;
++	case BPF_FUNC_sys_close:
++		return &bpf_sys_close_proto;
+ 	default:
+ 		return bpf_base_func_proto(func_id);
+ 	}
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 47c4b21a51b6..2251e7894799 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -4728,6 +4728,12 @@ union bpf_attr {
+  * 		If btf_fd is zero look for the name in vmlinux BTF and kernel module BTFs.
+  * 	Return
+  * 		Return btf_id and store module's BTF FD into attach_btf_obj_fd.
++ *
++ * long bpf_sys_close(u32 fd)
++ * 	Description
++ * 		Execute close syscall for given FD.
++ * 	Return
++ * 		A syscall result.
+  */
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+@@ -4897,6 +4903,7 @@ union bpf_attr {
+ 	FN(for_each_map_elem),		\
+ 	FN(sys_bpf),			\
+ 	FN(btf_find_by_name_kind),	\
++	FN(sys_close),			\
+ 	/* */
  
--	prog_fd = bpf_program__fd(fexit_skel->progs.test1);
-+	prog_fd = fexit_skel->progs.test1.prog_fd;
- 	err = bpf_prog_test_run(prog_fd, 1, NULL, 0,
- 				NULL, NULL, &retval, &duration);
- 	CHECK(err || retval, "ipv6",
-diff --git a/tools/testing/selftests/bpf/prog_tests/fentry_test.c b/tools/testing/selftests/bpf/prog_tests/fentry_test.c
-index 04ebbf1cb390..78062855b142 100644
---- a/tools/testing/selftests/bpf/prog_tests/fentry_test.c
-+++ b/tools/testing/selftests/bpf/prog_tests/fentry_test.c
-@@ -1,7 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- /* Copyright (c) 2019 Facebook */
- #include <test_progs.h>
--#include "fentry_test.skel.h"
-+#include "fentry_test.lskel.h"
- 
- void test_fentry_test(void)
- {
-@@ -18,7 +18,7 @@ void test_fentry_test(void)
- 	if (CHECK(err, "fentry_attach", "fentry attach failed: %d\n", err))
- 		goto cleanup;
- 
--	prog_fd = bpf_program__fd(fentry_skel->progs.test1);
-+	prog_fd = fentry_skel->progs.test1.prog_fd;
- 	err = bpf_prog_test_run(prog_fd, 1, NULL, 0,
- 				NULL, NULL, &retval, &duration);
- 	CHECK(err || retval, "test_run",
-diff --git a/tools/testing/selftests/bpf/prog_tests/fexit_sleep.c b/tools/testing/selftests/bpf/prog_tests/fexit_sleep.c
-index ccc7e8a34ab6..4e7f4b42ea29 100644
---- a/tools/testing/selftests/bpf/prog_tests/fexit_sleep.c
-+++ b/tools/testing/selftests/bpf/prog_tests/fexit_sleep.c
-@@ -6,7 +6,7 @@
- #include <time.h>
- #include <sys/mman.h>
- #include <sys/syscall.h>
--#include "fexit_sleep.skel.h"
-+#include "fexit_sleep.lskel.h"
- 
- static int do_sleep(void *skel)
- {
-@@ -58,8 +58,8 @@ void test_fexit_sleep(void)
- 	 * waiting for percpu_ref_kill to confirm). The other one
- 	 * will be freed quickly.
- 	 */
--	close(bpf_program__fd(fexit_skel->progs.nanosleep_fentry));
--	close(bpf_program__fd(fexit_skel->progs.nanosleep_fexit));
-+	close(fexit_skel->progs.nanosleep_fentry.prog_fd);
-+	close(fexit_skel->progs.nanosleep_fexit.prog_fd);
- 	fexit_sleep__detach(fexit_skel);
- 
- 	/* kill the thread to unwind sys_nanosleep stack through the trampoline */
-diff --git a/tools/testing/selftests/bpf/prog_tests/fexit_test.c b/tools/testing/selftests/bpf/prog_tests/fexit_test.c
-index 78d7a2765c27..be75d0c1018a 100644
---- a/tools/testing/selftests/bpf/prog_tests/fexit_test.c
-+++ b/tools/testing/selftests/bpf/prog_tests/fexit_test.c
-@@ -1,7 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- /* Copyright (c) 2019 Facebook */
- #include <test_progs.h>
--#include "fexit_test.skel.h"
-+#include "fexit_test.lskel.h"
- 
- void test_fexit_test(void)
- {
-@@ -18,7 +18,7 @@ void test_fexit_test(void)
- 	if (CHECK(err, "fexit_attach", "fexit attach failed: %d\n", err))
- 		goto cleanup;
- 
--	prog_fd = bpf_program__fd(fexit_skel->progs.test1);
-+	prog_fd = fexit_skel->progs.test1.prog_fd;
- 	err = bpf_prog_test_run(prog_fd, 1, NULL, 0,
- 				NULL, NULL, &retval, &duration);
- 	CHECK(err || retval, "test_run",
-diff --git a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-index 7fc0951ee75f..30a7b9b837bf 100644
---- a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-+++ b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
-@@ -2,7 +2,7 @@
- /* Copyright (c) 2021 Facebook */
- #include <test_progs.h>
- #include <network_helpers.h>
--#include "kfunc_call_test.skel.h"
-+#include "kfunc_call_test.lskel.h"
- #include "kfunc_call_test_subprog.skel.h"
- 
- static void test_main(void)
-@@ -14,13 +14,13 @@ static void test_main(void)
- 	if (!ASSERT_OK_PTR(skel, "skel"))
- 		return;
- 
--	prog_fd = bpf_program__fd(skel->progs.kfunc_call_test1);
-+	prog_fd = skel->progs.kfunc_call_test1.prog_fd;
- 	err = bpf_prog_test_run(prog_fd, 1, &pkt_v4, sizeof(pkt_v4),
- 				NULL, NULL, (__u32 *)&retval, NULL);
- 	ASSERT_OK(err, "bpf_prog_test_run(test1)");
- 	ASSERT_EQ(retval, 12, "test1-retval");
- 
--	prog_fd = bpf_program__fd(skel->progs.kfunc_call_test2);
-+	prog_fd = skel->progs.kfunc_call_test2.prog_fd;
- 	err = bpf_prog_test_run(prog_fd, 1, &pkt_v4, sizeof(pkt_v4),
- 				NULL, NULL, (__u32 *)&retval, NULL);
- 	ASSERT_OK(err, "bpf_prog_test_run(test2)");
+ /* integer value in 'imm' field of BPF_CALL instruction selects which helper
 -- 
 2.30.2
 
