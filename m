@@ -8,54 +8,54 @@ X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6058BC43611
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00262C43616
 	for <bpf@archiver.kernel.org>; Mon, 19 Apr 2021 17:56:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 35D8C611F2
+	by mail.kernel.org (Postfix) with ESMTP id D38B0611F2
 	for <bpf@archiver.kernel.org>; Mon, 19 Apr 2021 17:56:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240259AbhDSR5R (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 19 Apr 2021 13:57:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35914 "EHLO
+        id S240278AbhDSR5S (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 19 Apr 2021 13:57:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240241AbhDSR5P (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 19 Apr 2021 13:57:15 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1567C06138A;
-        Mon, 19 Apr 2021 10:56:44 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id c3so4909391pfo.3;
-        Mon, 19 Apr 2021 10:56:44 -0700 (PDT)
+        with ESMTP id S240345AbhDSR5Q (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 19 Apr 2021 13:57:16 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A17C06174A;
+        Mon, 19 Apr 2021 10:56:46 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id h15so6023028pfv.2;
+        Mon, 19 Apr 2021 10:56:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=3zBurI5w9nWmqgTlS8ZlPUjsf6vWN5Rp/hn9WFSBN8k=;
-        b=lu6domuYkslLddbgRhjwQ4yvhxbOGbHMj5hlBxkdT+UXBOgdBadlaFGyd8EMZxPAda
-         UZJCGdTF/j3MGGMG0kt288/MChUmnss+wenOgIcvqEZitHu0E2oCGBHrqGoNMA/yvrfS
-         FA56iL+47+EmRGfjjc8XlTEvNTrqb9uEHOxpDz93eV7aVyPeWh/qEecipCgQLSAg8+uy
-         /+w0GzHp3C5AKFxqOtEZvXZaEtiUMpNXP5DKuxyiLN1xEbX7PLpmTUEiz4sLr8ll8YOy
-         DnceXlf1ZBlifaJfmiXRjzHb4m7enxw5K0V5gVDD+mnuLTSCqAE4c46nAjMBf5n5xcEU
-         urUQ==
+        bh=GwgRYiRyslo628iscBvsP7av/19EwrhlvyUG9PJn1s0=;
+        b=V1frqc/rr1547KFdoJ60IXGgtOAt9a3BG8Mqi2jtTpVQ20y50ZpjstfztZEu3vhTXC
+         bPW9nGGlbd3HF6XfsVQTVZVMTYpeuZz/Cy5w0P4n/UFN2rt/gnH5nfWbrEOL+EgAseKz
+         v8P0OgrD5UYai7gpHIB48u93uYCLjHf1E43+s7we+rUJqW3hQq5XZ1LRTVRVuNFPp+QJ
+         /td0L9n5hpkFE1pALpUOXn5ID3+LyaicWP5hbaIBgPj9Tuj/i8Hi8bBR6dlSmgBQFLjA
+         7n/1YF/3+J1NJhpfC4prmnYEMJlpWIkwjyMWotAxcYslWpJnfVfySpvgmX0Jrpsdujnt
+         s1bQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=3zBurI5w9nWmqgTlS8ZlPUjsf6vWN5Rp/hn9WFSBN8k=;
-        b=Sy4DevW2K7sWBo9dzkojIAVrg3xF2FxsoIYRBDPWbE8mmAf5YpAnq4gns8oBAdWIOl
-         bwqPCkdd7ZG4XA8uYsKZKQH66H45djCzwRNFVicZ85YyNfIrv+JdaUf4C1kX+17B7pcN
-         m1P8ayf4twyo/gbYaEHvM5JR7xGZijzWTvpDeCddAGr217HwfHzUt1vM2CxVV9A1HnVX
-         HyHRQnG1eD52IyZ1DIsX04Vupi+ZdXXGuno7ZuvXZAiuRhckN85sYGPnJ637U3lU9Yfi
-         JndTRtNuORpZmZEOZArDzB5BG7HYp/xI4L+HlvywE/B1pOgWqVQG3jkotcw3zcaseOzE
-         ROVQ==
-X-Gm-Message-State: AOAM532yNGiCwOLLGw8MJVxdVmU4aHl4dJhz8j7WiwGp73R+mvyiULVQ
-        9OCARYzru/BP8aF4UYujlkQ/7Gi01qVuMQ==
-X-Google-Smtp-Source: ABdhPJz+9Ph77yuZoQ5/SL3jxnUvNhroqLeug089H9S6riKMWxXVyuqtu1tY/79Jxb31YvTrNSL7WA==
-X-Received: by 2002:a63:4763:: with SMTP id w35mr12979491pgk.226.1618855004418;
-        Mon, 19 Apr 2021 10:56:44 -0700 (PDT)
+        bh=GwgRYiRyslo628iscBvsP7av/19EwrhlvyUG9PJn1s0=;
+        b=cs0TAqoOrKpBKzyczKkgJoDSRNwxuf3vT131u9LiPk8jILsQwnev6xDre+ttEsw2AO
+         /VJGUUpEzP5zrzk1CZI6DxD/Dcyh4bRz8ewttYXIQfoYJFVqxZoycFuj1gOycb4dUe2C
+         2OhO2rVzqRlKNiAb82YtKsgZ7d+skg/FORBQ8A2qbo4YRkD3UHzMNig9NsR5h5q8zFmW
+         yCajMZpUNAPpnpQNlIwPyR46Vbk3jFAgTncZgXo6x1mdp0raIExmbOh8I6q4eFFzfAdN
+         n9U5K81+6m2Nyonczrjdt6f8v0ugtTPZC0EF34cM7OAPPBTBizvDCREEy4+5FvrxsRVO
+         76/g==
+X-Gm-Message-State: AOAM533YXrwSHzHSkcrXUAWBEyAWDlhxUDhbzdQ/CX2B1KYYo/F+pBYT
+        +VSuodTvtmMrHmvop9xJ6ymvTPQaSIKkRQ==
+X-Google-Smtp-Source: ABdhPJyKTVzcZVpE+DzJePyBzNwdE7fW6ZWHZgX5dSpOKAs5dTX1Kl1QbLIDwiZnB1/a3/qVjDLJ3Q==
+X-Received: by 2002:a63:5458:: with SMTP id e24mr12929781pgm.170.1618855005759;
+        Mon, 19 Apr 2021 10:56:45 -0700 (PDT)
 Received: from unknown.attlocal.net ([2600:1700:65a0:ab60:e9c9:f92c:88fa:755e])
-        by smtp.gmail.com with ESMTPSA id g2sm119660pju.18.2021.04.19.10.56.43
+        by smtp.gmail.com with ESMTPSA id g2sm119660pju.18.2021.04.19.10.56.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Apr 2021 10:56:44 -0700 (PDT)
+        Mon, 19 Apr 2021 10:56:45 -0700 (PDT)
 From:   Cong Wang <xiyou.wangcong@gmail.com>
 To:     netdev@vger.kernel.org
 Cc:     bpf@vger.kernel.org, jiang.wang@bytedance.com,
@@ -65,9 +65,9 @@ Cc:     bpf@vger.kernel.org, jiang.wang@bytedance.com,
         Daniel Borkmann <daniel@iogearbox.net>,
         Jakub Sitnicki <jakub@cloudflare.com>,
         Lorenz Bauer <lmb@cloudflare.com>
-Subject: [Patch bpf-next v2 7/9] selftests/bpf: factor out add_to_sockmap()
-Date:   Mon, 19 Apr 2021 10:56:01 -0700
-Message-Id: <20210419175603.19378-8-xiyou.wangcong@gmail.com>
+Subject: [Patch bpf-next v2 9/9] selftests/bpf: add test cases for redirection between udp and unix
+Date:   Mon, 19 Apr 2021 10:56:03 -0700
+Message-Id: <20210419175603.19378-10-xiyou.wangcong@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210419175603.19378-1-xiyou.wangcong@gmail.com>
 References: <20210419175603.19378-1-xiyou.wangcong@gmail.com>
@@ -79,8 +79,8 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Cong Wang <cong.wang@bytedance.com>
 
-Factor out a common helper add_to_sockmap() which adds two
-sockets into a sockmap.
+Add two test cases to ensure redirection between udp and unix
+work bidirectionally.
 
 Cc: John Fastabend <john.fastabend@gmail.com>
 Cc: Daniel Borkmann <daniel@iogearbox.net>
@@ -88,138 +88,192 @@ Cc: Jakub Sitnicki <jakub@cloudflare.com>
 Cc: Lorenz Bauer <lmb@cloudflare.com>
 Signed-off-by: Cong Wang <cong.wang@bytedance.com>
 ---
- .../selftests/bpf/prog_tests/sockmap_listen.c | 59 +++++++------------
- 1 file changed, 21 insertions(+), 38 deletions(-)
+ .../selftests/bpf/prog_tests/sockmap_listen.c | 165 ++++++++++++++++++
+ 1 file changed, 165 insertions(+)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-index 3d9907bcf132..ee017278fae4 100644
+index 2b1bdb8fa48d..01c052e15a83 100644
 --- a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
 +++ b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-@@ -919,6 +919,23 @@ static const char *redir_mode_str(enum redir_mode mode)
- 	}
+@@ -1813,6 +1813,170 @@ static void test_udp_redir(struct test_sockmap_listen *skel, struct bpf_map *map
+ 	udp_skb_redir_to_connected(skel, map, family);
  }
  
-+static int add_to_sockmap(int sock_mapfd, int fd1, int fd2)
++static void udp_unix_redir_to_connected(int family, int sock_mapfd,
++					int verd_mapfd, enum redir_mode mode)
 +{
-+	u64 value;
++	const char *log_prefix = redir_mode_str(mode);
++	int c0, c1, p0, p1;
++	unsigned int pass;
++	int err, n;
++	int sfd[2];
 +	u32 key;
-+	int err;
++	char b;
 +
-+	key = 0;
-+	value = fd1;
-+	err = xbpf_map_update_elem(sock_mapfd, &key, &value, BPF_NOEXIST);
++	zero_verdict_count(verd_mapfd);
++
++	if (socketpair(AF_UNIX, SOCK_DGRAM | SOCK_NONBLOCK, 0, sfd))
++		return;
++	c0 = sfd[0], p0 = sfd[1];
++
++	err = udp_socketpair(family, &p1, &c1);
 +	if (err)
-+		return err;
++		goto close;
 +
-+	key = 1;
-+	value = fd2;
-+	return xbpf_map_update_elem(sock_mapfd, &key, &value, BPF_NOEXIST);
++	err = add_to_sockmap(sock_mapfd, p0, p1);
++	if (err)
++		goto close_cli1;
++
++	n = write(c1, "a", 1);
++	if (n < 0)
++		FAIL_ERRNO("%s: write", log_prefix);
++	if (n == 0)
++		FAIL("%s: incomplete write", log_prefix);
++	if (n < 1)
++		goto close_cli1;
++
++	key = SK_PASS;
++	err = xbpf_map_lookup_elem(verd_mapfd, &key, &pass);
++	if (err)
++		goto close_cli1;
++	if (pass != 1)
++		FAIL("%s: want pass count 1, have %d", log_prefix, pass);
++
++	n = read(mode == REDIR_INGRESS ? p0 : c0, &b, 1);
++	if (n < 0)
++		FAIL_ERRNO("%s: read", log_prefix);
++	if (n == 0)
++		FAIL("%s: incomplete read", log_prefix);
++
++close_cli1:
++	xclose(c1);
++	xclose(p1);
++close:
++	xclose(c0);
++	xclose(p0);
 +}
 +
- static void redir_to_connected(int family, int sotype, int sock_mapfd,
- 			       int verd_mapfd, enum redir_mode mode)
++static void udp_unix_skb_redir_to_connected(struct test_sockmap_listen *skel,
++					    struct bpf_map *inner_map, int family)
++{
++	int verdict = bpf_program__fd(skel->progs.prog_skb_verdict);
++	int verdict_map = bpf_map__fd(skel->maps.verdict_map);
++	int sock_map = bpf_map__fd(inner_map);
++	int err;
++
++	err = xbpf_prog_attach(verdict, sock_map, BPF_SK_SKB_VERDICT, 0);
++	if (err)
++		return;
++
++	skel->bss->test_ingress = false;
++	udp_unix_redir_to_connected(family, sock_map, verdict_map, REDIR_EGRESS);
++	skel->bss->test_ingress = true;
++	udp_unix_redir_to_connected(family, sock_map, verdict_map, REDIR_INGRESS);
++
++	xbpf_prog_detach2(verdict, sock_map, BPF_SK_SKB_VERDICT);
++}
++
++static void unix_udp_redir_to_connected(int family, int sock_mapfd,
++					int verd_mapfd, enum redir_mode mode)
++{
++	const char *log_prefix = redir_mode_str(mode);
++	int c0, c1, p0, p1;
++	unsigned int pass;
++	int err, n;
++	int sfd[2];
++	u32 key;
++	char b;
++
++	zero_verdict_count(verd_mapfd);
++
++	err = udp_socketpair(family, &p0, &c0);
++	if (err)
++		return;
++
++	if (socketpair(AF_UNIX, SOCK_DGRAM | SOCK_NONBLOCK, 0, sfd))
++		goto close_cli0;
++	c1 = sfd[0], p1 = sfd[1];
++
++	err = add_to_sockmap(sock_mapfd, p0, p1);
++	if (err)
++		goto close;
++
++	n = write(c1, "a", 1);
++	if (n < 0)
++		FAIL_ERRNO("%s: write", log_prefix);
++	if (n == 0)
++		FAIL("%s: incomplete write", log_prefix);
++	if (n < 1)
++		goto close;
++
++	key = SK_PASS;
++	err = xbpf_map_lookup_elem(verd_mapfd, &key, &pass);
++	if (err)
++		goto close;
++	if (pass != 1)
++		FAIL("%s: want pass count 1, have %d", log_prefix, pass);
++
++	n = read(mode == REDIR_INGRESS ? p0 : c0, &b, 1);
++	if (n < 0)
++		FAIL_ERRNO("%s: read", log_prefix);
++	if (n == 0)
++		FAIL("%s: incomplete read", log_prefix);
++
++close:
++	xclose(c1);
++	xclose(p1);
++close_cli0:
++	xclose(c0);
++	xclose(p0);
++
++}
++
++static void unix_udp_skb_redir_to_connected(struct test_sockmap_listen *skel,
++					    struct bpf_map *inner_map, int family)
++{
++	int verdict = bpf_program__fd(skel->progs.prog_skb_verdict);
++	int verdict_map = bpf_map__fd(skel->maps.verdict_map);
++	int sock_map = bpf_map__fd(inner_map);
++	int err;
++
++	err = xbpf_prog_attach(verdict, sock_map, BPF_SK_SKB_VERDICT, 0);
++	if (err)
++		return;
++
++	skel->bss->test_ingress = false;
++	unix_udp_redir_to_connected(family, sock_map, verdict_map, REDIR_EGRESS);
++	skel->bss->test_ingress = true;
++	unix_udp_redir_to_connected(family, sock_map, verdict_map, REDIR_INGRESS);
++
++	xbpf_prog_detach2(verdict, sock_map, BPF_SK_SKB_VERDICT);
++}
++
++static void test_udp_unix_redir(struct test_sockmap_listen *skel, struct bpf_map *map,
++				int family)
++{
++	const char *family_name, *map_name;
++	char s[MAX_TEST_NAME];
++
++	family_name = family_str(family);
++	map_name = map_type_str(map);
++	snprintf(s, sizeof(s), "%s %s %s", map_name, family_name, __func__);
++	if (!test__start_subtest(s))
++		return;
++	udp_unix_skb_redir_to_connected(skel, map, family);
++	unix_udp_skb_redir_to_connected(skel, map, family);
++}
++
+ static void run_tests(struct test_sockmap_listen *skel, struct bpf_map *map,
+ 		      int family)
  {
-@@ -928,7 +945,6 @@ static void redir_to_connected(int family, int sotype, int sock_mapfd,
- 	unsigned int pass;
- 	socklen_t len;
- 	int err, n;
--	u64 value;
- 	u32 key;
- 	char b;
+@@ -1822,6 +1986,7 @@ static void run_tests(struct test_sockmap_listen *skel, struct bpf_map *map,
+ 	test_reuseport(skel, map, family, SOCK_STREAM);
+ 	test_reuseport(skel, map, family, SOCK_DGRAM);
+ 	test_udp_redir(skel, map, family);
++	test_udp_unix_redir(skel, map, family);
+ }
  
-@@ -965,15 +981,7 @@ static void redir_to_connected(int family, int sotype, int sock_mapfd,
- 	if (p1 < 0)
- 		goto close_cli1;
- 
--	key = 0;
--	value = p0;
--	err = xbpf_map_update_elem(sock_mapfd, &key, &value, BPF_NOEXIST);
--	if (err)
--		goto close_peer1;
--
--	key = 1;
--	value = p1;
--	err = xbpf_map_update_elem(sock_mapfd, &key, &value, BPF_NOEXIST);
-+	err = add_to_sockmap(sock_mapfd, p0, p1);
- 	if (err)
- 		goto close_peer1;
- 
-@@ -1061,7 +1069,6 @@ static void redir_to_listening(int family, int sotype, int sock_mapfd,
- 	int s, c, p, err, n;
- 	unsigned int drop;
- 	socklen_t len;
--	u64 value;
- 	u32 key;
- 
- 	zero_verdict_count(verd_mapfd);
-@@ -1086,15 +1093,7 @@ static void redir_to_listening(int family, int sotype, int sock_mapfd,
- 	if (p < 0)
- 		goto close_cli;
- 
--	key = 0;
--	value = s;
--	err = xbpf_map_update_elem(sock_mapfd, &key, &value, BPF_NOEXIST);
--	if (err)
--		goto close_peer;
--
--	key = 1;
--	value = p;
--	err = xbpf_map_update_elem(sock_mapfd, &key, &value, BPF_NOEXIST);
-+	err = add_to_sockmap(sock_mapfd, s, p);
- 	if (err)
- 		goto close_peer;
- 
-@@ -1346,7 +1345,6 @@ static void test_reuseport_mixed_groups(int family, int sotype, int sock_map,
- 	int s1, s2, c, err;
- 	unsigned int drop;
- 	socklen_t len;
--	u64 value;
- 	u32 key;
- 
- 	zero_verdict_count(verd_map);
-@@ -1360,16 +1358,10 @@ static void test_reuseport_mixed_groups(int family, int sotype, int sock_map,
- 	if (s2 < 0)
- 		goto close_srv1;
- 
--	key = 0;
--	value = s1;
--	err = xbpf_map_update_elem(sock_map, &key, &value, BPF_NOEXIST);
-+	err = add_to_sockmap(sock_map, s1, s2);
- 	if (err)
- 		goto close_srv2;
- 
--	key = 1;
--	value = s2;
--	err = xbpf_map_update_elem(sock_map, &key, &value, BPF_NOEXIST);
--
- 	/* Connect to s2, reuseport BPF selects s1 via sock_map[0] */
- 	len = sizeof(addr);
- 	err = xgetsockname(s2, sockaddr(&addr), &len);
-@@ -1652,7 +1644,6 @@ static void udp_redir_to_connected(int family, int sock_mapfd, int verd_mapfd,
- 	int c0, c1, p0, p1;
- 	unsigned int pass;
- 	int err, n;
--	u64 value;
- 	u32 key;
- 	char b;
- 
-@@ -1665,15 +1656,7 @@ static void udp_redir_to_connected(int family, int sock_mapfd, int verd_mapfd,
- 	if (err)
- 		goto close_cli0;
- 
--	key = 0;
--	value = p0;
--	err = xbpf_map_update_elem(sock_mapfd, &key, &value, BPF_NOEXIST);
--	if (err)
--		goto close_cli1;
--
--	key = 1;
--	value = p1;
--	err = xbpf_map_update_elem(sock_mapfd, &key, &value, BPF_NOEXIST);
-+	err = add_to_sockmap(sock_mapfd, p0, p1);
- 	if (err)
- 		goto close_cli1;
- 
+ void test_sockmap_listen(void)
 -- 
 2.25.1
 
