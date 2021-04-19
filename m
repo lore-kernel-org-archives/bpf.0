@@ -5,32 +5,32 @@ X-Spam-Level:
 X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 484D2C433B4
-	for <bpf@archiver.kernel.org>; Mon, 19 Apr 2021 20:50:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CF9AC433B4
+	for <bpf@archiver.kernel.org>; Mon, 19 Apr 2021 20:52:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0E643613BF
-	for <bpf@archiver.kernel.org>; Mon, 19 Apr 2021 20:50:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7514E60FDB
+	for <bpf@archiver.kernel.org>; Mon, 19 Apr 2021 20:52:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243387AbhDSUvC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 19 Apr 2021 16:51:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55494 "EHLO mail.kernel.org"
+        id S242787AbhDSUwa (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 19 Apr 2021 16:52:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59618 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243022AbhDSUtA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 19 Apr 2021 16:49:00 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E4124613D3;
-        Mon, 19 Apr 2021 20:46:06 +0000 (UTC)
+        id S240996AbhDSUuU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 19 Apr 2021 16:50:20 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 79124613F0;
+        Mon, 19 Apr 2021 20:46:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1618865167;
+        s=k20201202; t=1618865180;
         bh=HGKoeYccslyDMJAjKQum+MqK9xLjwCuOgVCaBy/LkXk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lSdMQ8/1RN3G6kEEL7XXmK/+dYhedTQoUm+SOwybdbJArBV6DUSMayZGgQTXaBa8z
-         UWIXPA8b07uynngeZJxjjLEUo/3wT5w2FuyYc8r5nhtJO3BwWZH+U8dJKUYrdhM583
-         ZrUvbX//sCM7HKi3JmzcCeTFMLti8DnURXUTWk6zX8dZE8PZ7Wxqc6foa6drRUhqhE
-         hEVK6cS4hayk8yXWi2jiq8OHfds+VJXxn5O6VH/W9vsgMyyak4ZQpwHRzSQiXiMJWn
-         Xgsk3zyuxw9FS95A+YACq9SmIe/TUBnKr2Vy9hi7hBDSx5aNL365WCspvX6/7+szJ2
-         PtUwHGcWLTfmw==
+        b=JHfWns41RShimJLHieBA5JN730VZFkBTzn4FslZg+xByqb/wq/HHghUq7MMoGBoAs
+         K3cHTnjyHnqBPRbxJM5jFjvcNWEeLehv6CM9CfyDyPZ4PlKDprONfOa+7BQkwj7Xko
+         so9RbAwhjgPnXtUYMsKdEQSyAoiwIcB5KAJU7bgcz2bkmqF9na9cgpx+MAmVcfuOOh
+         wUMeYaV6yaDRBoQN/dRTmF2qbQIERyXosPK/lPVs1QHEaoOHkjcziG5QJJ6ufWa5OR
+         pTxS6YJRQUFngNFIEOG+BrWg67YH61HpdRIXl1T4gTg9QC3iZLzlDoS8TxbemMTBAA
+         gYMYeqagxmJmw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
@@ -38,12 +38,12 @@ Cc:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 8/8] ia64: tools: remove duplicate definition of ia64_mf() on ia64
-Date:   Mon, 19 Apr 2021 16:45:54 -0400
-Message-Id: <20210419204554.7071-8-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 7/7] ia64: tools: remove duplicate definition of ia64_mf() on ia64
+Date:   Mon, 19 Apr 2021 16:46:08 -0400
+Message-Id: <20210419204608.7191-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210419204554.7071-1-sashal@kernel.org>
-References: <20210419204554.7071-1-sashal@kernel.org>
+In-Reply-To: <20210419204608.7191-1-sashal@kernel.org>
+References: <20210419204608.7191-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
