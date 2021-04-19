@@ -2,152 +2,162 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8654AC433B4
-	for <bpf@archiver.kernel.org>; Mon, 19 Apr 2021 15:52:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2946C43460
+	for <bpf@archiver.kernel.org>; Mon, 19 Apr 2021 15:52:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6113B61369
-	for <bpf@archiver.kernel.org>; Mon, 19 Apr 2021 15:52:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B87E76135F
+	for <bpf@archiver.kernel.org>; Mon, 19 Apr 2021 15:52:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241737AbhDSPxW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 19 Apr 2021 11:53:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36728 "EHLO
+        id S241794AbhDSPxY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 19 Apr 2021 11:53:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241683AbhDSPxW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 19 Apr 2021 11:53:22 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED3BC061761
+        with ESMTP id S241761AbhDSPxX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 19 Apr 2021 11:53:23 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9A96C061761
         for <bpf@vger.kernel.org>; Mon, 19 Apr 2021 08:52:52 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id w186so13967468wmg.3
+Received: by mail-wr1-x436.google.com with SMTP id h4so25537807wrt.12
         for <bpf@vger.kernel.org>; Mon, 19 Apr 2021 08:52:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=oGCSU0+xBTq6JECVGtsHDCoHfkG3tRLAZalWeXZdUNw=;
-        b=ogqSu3tNEv1raYEZtdWkpx1xE55xvIfvUADfA9pJI49f5N7oatUwkAnR/YVPvDqmRI
-         vsvzWx5rQP+LVS52uDPpf9CVTvf/gFPSxRL5vjtBm4yIlk6Pz4WyEIpVUr2D7i4hiCUh
-         gQQbbCbqvf5lvOBkcqZbsZG8Q87l5jVAz7+eg=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=A4prSaPXsIfocjS9vBcbwfUJs+fTkQpMJPY7QshZYnA=;
+        b=SYMBctwIixz91pOrELSI9mnSbxbZ4TGxeFeL/FuvMsJrkapdaBGB1cD/+Pg6EyjElR
+         nX86jlyD5oA+I/V9Fr8khgVoGAgl41mM29gfLN8HUktbIOxv82mYh/ulxtIicumRq0dY
+         mKkgg+jJoYK5ILMGfFutLU6r/vG1KpsUwDQHQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=oGCSU0+xBTq6JECVGtsHDCoHfkG3tRLAZalWeXZdUNw=;
-        b=HbJTK9tx7wgVaG189KExgUiXwyfwK5+vmfHeK97qhoetlm+fFt/mA4UjSQ36G0AcIY
-         X+mJzXqw+3a9WOnqaA7l41t6EsAzdNeCT9LGSVZ6j2r26Hx6m2cq0cj5gJO6ONolYgRL
-         PAbIfeNmviiuFJuKiE9KwV52YZpmCmbqKMks9NlaanGtqV9lPlFtW0e+CjNbXCgJoN3L
-         rRKMNj7bSyJIQIJwstylDhaF/ek39wxZN5aBqzb+UZNNFRhPp4G4FK2l4VgIrTplukqX
-         hiGMi8xsNB2HSlpEskNWxNL3txwvUaNbW8az19UdJQRbmSCQP+n6QdE87k2GH+eNBMWY
-         pI/g==
-X-Gm-Message-State: AOAM532wFhnW7M/2vDU66bu2/u+1HS2MTUPyd5gMWe3XPLe7P7rcy9A4
-        h5CT0aChe2hyNd8emsiAnr6HHMWgvZaMAw==
-X-Google-Smtp-Source: ABdhPJy4NneQSv/HOLqdCu6grwQWrJn8WIZag0q7UBCHweJ5DLG6sM79gcR/wDODA9jG37txfnU6DA==
-X-Received: by 2002:a05:600c:4a09:: with SMTP id c9mr16950222wmp.64.1618847569977;
-        Mon, 19 Apr 2021 08:52:49 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=A4prSaPXsIfocjS9vBcbwfUJs+fTkQpMJPY7QshZYnA=;
+        b=q+LzmqY94JxJtbT/71VmIDXFpvWxdiwbGYzt4IP52KSpF8ZFpaed70dO27gUBNtg2V
+         /We52QqfSuiOYt/S9W/Kh/nGzpaDQzcXTvK6TfDIOhAgMQPNPvulwqB/GNZ9DYpXXFv0
+         CkAwPO1PKryDe4SEVPVPd8UEOnefnvSsNuU/ssNtJTKvM3Kl2QmwhW01clEjXnECDybI
+         GP0pGmDPfs7wwk0xKlQemfACSZCdTYyRq2c+SV6gLeU3aF1gflueoxOpHDQeimTD+QEl
+         r2slzRlLlDgWN7ESOE6N1k/9hCuSVqKuRTGtZ82EuPAnPkT+5jHPbp1Rdsv9RZNiA8kn
+         dZrA==
+X-Gm-Message-State: AOAM532mgziR9821q4dRhTkDXcEw600k2kjGBfKvrDg9tv5Kii9DOr8l
+        KeKdmqgOqEFbn72tvwTPCpxnElEsEApVrQ==
+X-Google-Smtp-Source: ABdhPJzDvyL1PRYkRS8WdR7BeyPqL2oUEcQzvx5PEZ6ileHlgabFkE1AcMvilHns/QM26VAUrqqgOQ==
+X-Received: by 2002:adf:9011:: with SMTP id h17mr13740493wrh.384.1618847571492;
+        Mon, 19 Apr 2021 08:52:51 -0700 (PDT)
 Received: from revest.zrh.corp.google.com ([2a00:79e0:61:302:3bbb:3f8f:826f:7f55])
-        by smtp.gmail.com with ESMTPSA id l9sm22868669wrz.7.2021.04.19.08.52.49
+        by smtp.gmail.com with ESMTPSA id l9sm22868669wrz.7.2021.04.19.08.52.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Apr 2021 08:52:49 -0700 (PDT)
+        Mon, 19 Apr 2021 08:52:51 -0700 (PDT)
 From:   Florent Revest <revest@chromium.org>
 To:     bpf@vger.kernel.org
 Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
         yhs@fb.com, kpsingh@kernel.org, jackmanb@chromium.org,
         linux-kernel@vger.kernel.org, Florent Revest <revest@chromium.org>
-Subject: [PATCH bpf-next v5 0/6] Add a snprintf eBPF helper
-Date:   Mon, 19 Apr 2021 17:52:37 +0200
-Message-Id: <20210419155243.1632274-1-revest@chromium.org>
+Subject: [PATCH bpf-next v5 2/6] bpf: Add a ARG_PTR_TO_CONST_STR argument type
+Date:   Mon, 19 Apr 2021 17:52:39 +0200
+Message-Id: <20210419155243.1632274-3-revest@chromium.org>
 X-Mailer: git-send-email 2.31.1.368.gbe11c130af-goog
+In-Reply-To: <20210419155243.1632274-1-revest@chromium.org>
+References: <20210419155243.1632274-1-revest@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-We have a usecase where we want to audit symbol names (if available) in
-callback registration hooks. (ex: fentry/nf_register_net_hook)
+This type provides the guarantee that an argument is going to be a const
+pointer to somewhere in a read-only map value. It also checks that this
+pointer is followed by a zero character before the end of the map value.
 
-A few months back, I proposed a bpf_kallsyms_lookup series but it was
-decided in the reviews that a more generic helper, bpf_snprintf, would
-be more useful.
-
-This series implements the helper according to the feedback received in
-https://lore.kernel.org/bpf/20201126165748.1748417-1-revest@google.com/T/#u
-
-- A new arg type guarantees the NULL-termination of string arguments and
-  lets us pass format strings in only one arg
-- A new helper is implemented using that guarantee. Because the format
-  string is known at verification time, the format string validation is
-  done by the verifier
-- To implement a series of tests for bpf_snprintf, the logic for
-  marshalling variadic args in a fixed-size array is reworked as per:
-https://lore.kernel.org/bpf/20210310015455.1095207-1-revest@chromium.org/T/#u
-
+Signed-off-by: Florent Revest <revest@chromium.org>
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
 ---
-Changes in v5:
-- Fixed the bpf_printf_buf_used counter logic in try_get_fmt_tmp_buf
-- Added a couple of extra incorrect specifiers tests
-- Call test_snprintf_single__destroy unconditionally
-- Fixed a C++-style comment
+ include/linux/bpf.h   |  1 +
+ kernel/bpf/verifier.c | 41 +++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 42 insertions(+)
 
----
-Changes in v4:
-- Moved bpf_snprintf, bpf_printf_prepare and bpf_printf_cleanup to
-  kernel/bpf/helpers.c so that they get built without CONFIG_BPF_EVENTS
-- Added negative test cases (various invalid format strings)
-- Renamed put_fmt_tmp_buf() as bpf_printf_cleanup()
-- Fixed a mistake that caused temporary buffers to be unconditionally
-  freed in bpf_printf_prepare
-- Fixed a mistake that caused missing 0 character to be ignored
-- Fixed a warning about integer to pointer conversion
-- Misc cleanups
-
----
-Changes in v3:
-- Simplified temporary buffer acquisition with try_get_fmt_tmp_buf()
-- Made zero-termination check more consistent
-- Allowed NULL output_buffer
-- Simplified the BPF_CAST_FMT_ARG macro
-- Three new test cases: number padding, simple string with no arg and
-  string length extraction only with a NULL output buffer
-- Clarified helper's description for edge cases (eg: str_size == 0)
-- Lots of cosmetic changes
-
----
-Changes in v2:
-- Extracted the format validation/argument sanitization in a generic way
-  for all printf-like helpers.
-- bpf_snprintf's str_size can now be 0
-- bpf_snprintf is now exposed to all BPF program types
-- We now preempt_disable when using a per-cpu temporary buffer
-- Addressed a few cosmetic changes
-
-Florent Revest (6):
-  bpf: Factorize bpf_trace_printk and bpf_seq_printf
-  bpf: Add a ARG_PTR_TO_CONST_STR argument type
-  bpf: Add a bpf_snprintf helper
-  libbpf: Initialize the bpf_seq_printf parameters array field by field
-  libbpf: Introduce a BPF_SNPRINTF helper macro
-  selftests/bpf: Add a series of tests for bpf_snprintf
-
- include/linux/bpf.h                           |  22 ++
- include/uapi/linux/bpf.h                      |  28 ++
- kernel/bpf/helpers.c                          | 306 ++++++++++++++
- kernel/bpf/verifier.c                         |  82 ++++
- kernel/trace/bpf_trace.c                      | 373 ++----------------
- tools/include/uapi/linux/bpf.h                |  28 ++
- tools/lib/bpf/bpf_tracing.h                   |  58 ++-
- .../selftests/bpf/prog_tests/snprintf.c       | 125 ++++++
- .../selftests/bpf/progs/test_snprintf.c       |  73 ++++
- .../bpf/progs/test_snprintf_single.c          |  20 +
- 10 files changed, 770 insertions(+), 345 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/snprintf.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_snprintf.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_snprintf_single.c
-
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 77d1d8c65b81..c160526fc8bf 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -309,6 +309,7 @@ enum bpf_arg_type {
+ 	ARG_PTR_TO_PERCPU_BTF_ID,	/* pointer to in-kernel percpu type */
+ 	ARG_PTR_TO_FUNC,	/* pointer to a bpf program function */
+ 	ARG_PTR_TO_STACK_OR_NULL,	/* pointer to stack or NULL */
++	ARG_PTR_TO_CONST_STR,	/* pointer to a null terminated read-only string */
+ 	__BPF_ARG_TYPE_MAX,
+ };
+ 
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 852541a435ef..5f46dd6f3383 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -4787,6 +4787,7 @@ static const struct bpf_reg_types spin_lock_types = { .types = { PTR_TO_MAP_VALU
+ static const struct bpf_reg_types percpu_btf_ptr_types = { .types = { PTR_TO_PERCPU_BTF_ID } };
+ static const struct bpf_reg_types func_ptr_types = { .types = { PTR_TO_FUNC } };
+ static const struct bpf_reg_types stack_ptr_types = { .types = { PTR_TO_STACK } };
++static const struct bpf_reg_types const_str_ptr_types = { .types = { PTR_TO_MAP_VALUE } };
+ 
+ static const struct bpf_reg_types *compatible_reg_types[__BPF_ARG_TYPE_MAX] = {
+ 	[ARG_PTR_TO_MAP_KEY]		= &map_key_value_types,
+@@ -4817,6 +4818,7 @@ static const struct bpf_reg_types *compatible_reg_types[__BPF_ARG_TYPE_MAX] = {
+ 	[ARG_PTR_TO_PERCPU_BTF_ID]	= &percpu_btf_ptr_types,
+ 	[ARG_PTR_TO_FUNC]		= &func_ptr_types,
+ 	[ARG_PTR_TO_STACK_OR_NULL]	= &stack_ptr_types,
++	[ARG_PTR_TO_CONST_STR]		= &const_str_ptr_types,
+ };
+ 
+ static int check_reg_type(struct bpf_verifier_env *env, u32 regno,
+@@ -5067,6 +5069,45 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+ 		if (err)
+ 			return err;
+ 		err = check_ptr_alignment(env, reg, 0, size, true);
++	} else if (arg_type == ARG_PTR_TO_CONST_STR) {
++		struct bpf_map *map = reg->map_ptr;
++		int map_off;
++		u64 map_addr;
++		char *str_ptr;
++
++		if (reg->type != PTR_TO_MAP_VALUE || !map ||
++		    !bpf_map_is_rdonly(map)) {
++			verbose(env, "R%d does not point to a readonly map'\n", regno);
++			return -EACCES;
++		}
++
++		if (!tnum_is_const(reg->var_off)) {
++			verbose(env, "R%d is not a constant address'\n", regno);
++			return -EACCES;
++		}
++
++		if (!map->ops->map_direct_value_addr) {
++			verbose(env, "no direct value access support for this map type\n");
++			return -EACCES;
++		}
++
++		err = check_map_access(env, regno, reg->off,
++				       map->value_size - reg->off, false);
++		if (err)
++			return err;
++
++		map_off = reg->off + reg->var_off.value;
++		err = map->ops->map_direct_value_addr(map, &map_addr, map_off);
++		if (err) {
++			verbose(env, "direct value access on string failed\n");
++			return err;
++		}
++
++		str_ptr = (char *)(long)(map_addr);
++		if (!strnchr(str_ptr + map_off, map->value_size - map_off, 0)) {
++			verbose(env, "string is not zero-terminated\n");
++			return -EINVAL;
++		}
+ 	}
+ 
+ 	return err;
 -- 
 2.31.1.368.gbe11c130af-goog
 
