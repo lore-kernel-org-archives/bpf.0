@@ -2,60 +2,60 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F1273C43462
-	for <bpf@archiver.kernel.org>; Mon, 19 Apr 2021 17:56:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4024AC43470
+	for <bpf@archiver.kernel.org>; Mon, 19 Apr 2021 17:56:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BB331611F2
+	by mail.kernel.org (Postfix) with ESMTP id 06220611F2
 	for <bpf@archiver.kernel.org>; Mon, 19 Apr 2021 17:56:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240303AbhDSR5O (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 19 Apr 2021 13:57:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35916 "EHLO
+        id S240319AbhDSR5P (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 19 Apr 2021 13:57:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240278AbhDSR5M (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S233851AbhDSR5M (ORCPT <rfc822;bpf@vger.kernel.org>);
         Mon, 19 Apr 2021 13:57:12 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CFF7C06174A;
-        Mon, 19 Apr 2021 10:56:42 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id g16so10413557pfq.5;
-        Mon, 19 Apr 2021 10:56:42 -0700 (PDT)
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5FAEC061761;
+        Mon, 19 Apr 2021 10:56:40 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id m6-20020a17090a8586b02901507e1acf0fso3492224pjn.3;
+        Mon, 19 Apr 2021 10:56:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=wyCrkBvt3y2Wz6sLvGE/dTRK0nVA6L+NQj8plRBJmJk=;
-        b=pxoJFl656uU2tx9KRIXooUcwv4KrH5NOZmcVIQHtZzAU9ubXcXhDCm+9Jjw1ZNsiJQ
-         azR6v1ssZSQ4h/X1kRXB/463Jdz8I/9mvrjeiVMyuSq+0dlbJ8N0ct04BXQYGN1a2BfL
-         XL03/mLkY2GICYVvI+bDRbgC6bDCCw/sprdlX22/WNg7011RMfmFwANXUa2uAOS8l+/3
-         AKkUiT6MR9MF8pmNBRMMsdqr2NL3U6rwxpR0Pg2IiBjEmlpcBdsQ+mJuLq5/C8zmf9Fy
-         DwrcNGrcG8qZIqnhmaZVKEGEWor8oH6aYxo4TpDedYhvSARmZTp/ONGCJjHvzmzqir8N
-         nJ8w==
+        bh=KoooA+wJKm09yw9keUKD9QS45BXENny998i7q2qmpKg=;
+        b=Oo869W6qJhAtm8VZSiVH1nMLjI/1FlSXATRsf90ErCaqFUySsmS1rpLK8ASr0EzkVc
+         xu4jzbqJxWOc0llPz38OUPbu669Lwb+0T7BwuDNnkOUcFoZ/lE/TIqdWzyMVj+kI1g8Y
+         Q/uWPDyegd7DHk/WfILIDvjxiHn6p7tME0LjxaE3tUz60pojRaFbuN5abIZQ5HctyeOu
+         0GdZRurIFBuUINxLSq0T2WxJ2yw2XxVJXw29iMuJpa6dIAuYNhYZ31qEkJ0gcGOK8Lo6
+         ctEHJhqDynchldiecaFO1LzMxZhh67CDTTJfmpQDOEYY+Pd8kiidUiApAU4uoRaebkXB
+         wuKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=wyCrkBvt3y2Wz6sLvGE/dTRK0nVA6L+NQj8plRBJmJk=;
-        b=rbofv9Ug46xMt6wj23D9ggLSW1NIrvBpgc1pS/fhVxXzgEDLaD83HODEMS/zE9Ezpz
-         BSl8avDlf2SxUmBxC9LWX0w0ba4zeSLjZcl0BjpDPcjYNnTqe9GBitgjbwk/zmI0PHFE
-         ILllhwE8r+pRICTOa/KQwOZ0+o5UvydMlciIwbU6gRo5kBvNmMdjT0cv+5ANyrOkVSnJ
-         nOjKBuh58z3aBEbkQK0bVnIoPvT29lTFzbrR+n7QDfq5ryj92pLaHOQmF1D/uvoZL2b/
-         9c14bVr9qCjrJKm+loZ+vnO/7xPEqvGMUABiYkn5D+K8ebmfQuCZqXYXnayZFT/7zqhI
-         lF3g==
-X-Gm-Message-State: AOAM533W7SMUpM3xIyKD/Up6t0vgJoMUmZzh8l7sAarqWPvlvtmXnXs+
-        UJpygkIuJgNYHdxWyjxJxFFPmQH81ssygA==
-X-Google-Smtp-Source: ABdhPJxdjqHIv00/cm3RGDg8YRJXYzMg47xBFAinPEPh4ifEA9eeaVaJICELN15nxEe1YaIqvlaXBw==
-X-Received: by 2002:a63:e541:: with SMTP id z1mr13376489pgj.59.1618855001813;
-        Mon, 19 Apr 2021 10:56:41 -0700 (PDT)
+        bh=KoooA+wJKm09yw9keUKD9QS45BXENny998i7q2qmpKg=;
+        b=DBXf/xqj7WMEqwDabHRXdZH6CiPvsrRPXzFktzUcRUVfBFFe5r3LJLyK9IRk1jIPAv
+         2LTJymY1WEZIDxHOU+xsc+AyAsXAj/l96S3BsKK1yFGZSDh53lZs0YQZm6QVBGPPDFFJ
+         KkhnqXleJPj8VMf6gzu55vi3pi3+Bcu8SYgYrFFspu0q4PO4ieVZcDI3Jn5KTV1nF+BS
+         X1qBUwlkmj/rHvZtSXyOLNvhpzhJEUICaW/tN/pKKojeactNDq5jXMwn6QZBlCy7qsnM
+         d8WoQLebW4eHL/6MhR1M0iBXC5CVwM+Lv/M689Z6mXgmBeRJSEHVyDUwRO5hJgyxnbbl
+         p4iQ==
+X-Gm-Message-State: AOAM532iGkuon2DhDzV4gn+F8nqJVZL+C8UEIMF0woata8H5ZqtOXWuX
+        7vWoqv3PaJnKnxYS+wA+NUYtxnMqsa62uw==
+X-Google-Smtp-Source: ABdhPJxpgcAprKCSKg+A7ecFr/ita/Sjx0mp8YXtDK7as3VRTW2Q/SPD9xth/yv2fi0ghqLDaudEPw==
+X-Received: by 2002:a17:90b:188e:: with SMTP id mn14mr310886pjb.148.1618855000415;
+        Mon, 19 Apr 2021 10:56:40 -0700 (PDT)
 Received: from unknown.attlocal.net ([2600:1700:65a0:ab60:e9c9:f92c:88fa:755e])
-        by smtp.gmail.com with ESMTPSA id g2sm119660pju.18.2021.04.19.10.56.41
+        by smtp.gmail.com with ESMTPSA id g2sm119660pju.18.2021.04.19.10.56.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Apr 2021 10:56:41 -0700 (PDT)
+        Mon, 19 Apr 2021 10:56:40 -0700 (PDT)
 From:   Cong Wang <xiyou.wangcong@gmail.com>
 To:     netdev@vger.kernel.org
 Cc:     bpf@vger.kernel.org, jiang.wang@bytedance.com,
@@ -65,9 +65,9 @@ Cc:     bpf@vger.kernel.org, jiang.wang@bytedance.com,
         Daniel Borkmann <daniel@iogearbox.net>,
         Jakub Sitnicki <jakub@cloudflare.com>,
         Lorenz Bauer <lmb@cloudflare.com>
-Subject: [Patch bpf-next v2 3/9] af_unix: set TCP_ESTABLISHED for datagram sockets too
-Date:   Mon, 19 Apr 2021 10:55:57 -0700
-Message-Id: <20210419175603.19378-4-xiyou.wangcong@gmail.com>
+Subject: [Patch bpf-next v2 1/9] af_unix: implement ->read_sock() for sockmap
+Date:   Mon, 19 Apr 2021 10:55:55 -0700
+Message-Id: <20210419175603.19378-2-xiyou.wangcong@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210419175603.19378-1-xiyou.wangcong@gmail.com>
 References: <20210419175603.19378-1-xiyou.wangcong@gmail.com>
@@ -79,12 +79,8 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Cong Wang <cong.wang@bytedance.com>
 
-Currently only unix stream socket sets TCP_ESTABLISHED,
-datagram socket can set this too when they connect to its
-peer socket. At least __ip4_datagram_connect() does the same.
-
-This will be used by the next patch to determine whether an
-AF_UNIX datagram socket can be redirected in sockmap.
+Implement ->read_sock() for AF_UNIX datagram socket, it is
+pretty much similar to udp_read_sock().
 
 Cc: John Fastabend <john.fastabend@gmail.com>
 Cc: Daniel Borkmann <daniel@iogearbox.net>
@@ -92,39 +88,71 @@ Cc: Jakub Sitnicki <jakub@cloudflare.com>
 Cc: Lorenz Bauer <lmb@cloudflare.com>
 Signed-off-by: Cong Wang <cong.wang@bytedance.com>
 ---
- net/unix/af_unix.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ net/unix/af_unix.c | 37 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
 diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
-index 97dfb747e052..183d132e363a 100644
+index 5a31307ceb76..966359b64a56 100644
 --- a/net/unix/af_unix.c
 +++ b/net/unix/af_unix.c
-@@ -1205,6 +1205,8 @@ static int unix_dgram_connect(struct socket *sock, struct sockaddr *addr,
- 		unix_peer(sk) = other;
- 		unix_state_double_unlock(sk, other);
- 	}
-+
-+	sk->sk_state = other->sk_state = TCP_ESTABLISHED;
- 	return 0;
- 
- out_unlock:
-@@ -1437,12 +1439,10 @@ static int unix_socketpair(struct socket *socka, struct socket *sockb)
- 	init_peercred(ska);
- 	init_peercred(skb);
- 
--	if (ska->sk_type != SOCK_DGRAM) {
--		ska->sk_state = TCP_ESTABLISHED;
--		skb->sk_state = TCP_ESTABLISHED;
--		socka->state  = SS_CONNECTED;
--		sockb->state  = SS_CONNECTED;
--	}
-+	ska->sk_state = TCP_ESTABLISHED;
-+	skb->sk_state = TCP_ESTABLISHED;
-+	socka->state  = SS_CONNECTED;
-+	sockb->state  = SS_CONNECTED;
- 	return 0;
+@@ -661,6 +661,7 @@ static ssize_t unix_stream_splice_read(struct socket *,  loff_t *ppos,
+ 				       unsigned int flags);
+ static int unix_dgram_sendmsg(struct socket *, struct msghdr *, size_t);
+ static int unix_dgram_recvmsg(struct socket *, struct msghdr *, size_t, int);
++int unix_read_sock(struct sock *sk, read_descriptor_t *desc, sk_read_actor_t recv_actor);
+ static int unix_dgram_connect(struct socket *, struct sockaddr *,
+ 			      int, int);
+ static int unix_seqpacket_sendmsg(struct socket *, struct msghdr *, size_t);
+@@ -738,6 +739,7 @@ static const struct proto_ops unix_dgram_ops = {
+ 	.listen =	sock_no_listen,
+ 	.shutdown =	unix_shutdown,
+ 	.sendmsg =	unix_dgram_sendmsg,
++	.read_sock =	unix_read_sock,
+ 	.recvmsg =	unix_dgram_recvmsg,
+ 	.mmap =		sock_no_mmap,
+ 	.sendpage =	sock_no_sendpage,
+@@ -2183,6 +2185,41 @@ static int unix_dgram_recvmsg(struct socket *sock, struct msghdr *msg,
+ 	return err;
  }
  
++int unix_read_sock(struct sock *sk, read_descriptor_t *desc,
++		   sk_read_actor_t recv_actor)
++{
++	int copied = 0;
++
++	while (1) {
++		struct unix_sock *u = unix_sk(sk);
++		struct sk_buff *skb;
++		int used, err;
++
++		mutex_lock(&u->iolock);
++		skb = skb_recv_datagram(sk, 0, 1, &err);
++		if (!skb) {
++			mutex_unlock(&u->iolock);
++			return err;
++		}
++
++		used = recv_actor(desc, skb, 0, skb->len);
++		if (used <= 0) {
++			if (!copied)
++				copied = used;
++			mutex_unlock(&u->iolock);
++			break;
++		} else if (used <= skb->len) {
++			copied += used;
++		}
++		mutex_unlock(&u->iolock);
++
++		if (!desc->count)
++			break;
++	}
++
++	return copied;
++}
++
+ /*
+  *	Sleep until more data has arrived. But check for races..
+  */
 -- 
 2.25.1
 
