@@ -2,143 +2,276 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,PDS_BAD_THREAD_QP_64,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27146C433ED
-	for <bpf@archiver.kernel.org>; Tue, 20 Apr 2021 16:50:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DCD46C433ED
+	for <bpf@archiver.kernel.org>; Tue, 20 Apr 2021 16:50:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CBD47613D9
-	for <bpf@archiver.kernel.org>; Tue, 20 Apr 2021 16:50:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B0839613D4
+	for <bpf@archiver.kernel.org>; Tue, 20 Apr 2021 16:50:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233207AbhDTQvI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 20 Apr 2021 12:51:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54760 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233429AbhDTQvD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 20 Apr 2021 12:51:03 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83DDDC06138C
-        for <bpf@vger.kernel.org>; Tue, 20 Apr 2021 09:50:30 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id p202so136551ybg.8
-        for <bpf@vger.kernel.org>; Tue, 20 Apr 2021 09:50:30 -0700 (PDT)
+        id S233380AbhDTQvO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 20 Apr 2021 12:51:14 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:56372 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233379AbhDTQvN (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 20 Apr 2021 12:51:13 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 13KGYwGa110556;
+        Tue, 20 Apr 2021 16:50:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2020-01-29;
+ bh=vizutN4qjOVBZgUbVWBMCtJcAIxkye7j89XvrdngMNI=;
+ b=AGDUR5zimmUPVaeHznGvNZ7KYCOP08SsQgxckeXpEdRFedPD0/hqj3js2i3nj605vu1R
+ 0AQZNV1bi03WvFbyOMSjsNkgmcuwcOTz/eoZJGF5KmP8bZpgP6vdp9yaRO4BRCUN7+5H
+ kIGwYxR/tyty+X7PRhyC8TnTPkiH6Pbnwsta6Y+nF7vSFj1mvNO5+jgkWosdnT1O2jiz
+ tmOXB2qyoigl7pOosAuwt3mE11ivOz26h3wlL7SW3nEMbHosVFxBKdZc0sOnx8myRU9W
+ nWuV/8kzG4GpC6hgSmZEk8bZ+wbe9dW1AOe80tIjYjwU9Txhz36Uc0Az7P2lizAT6ik9 Xg== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by aserp2120.oracle.com with ESMTP id 37yqmnfuw2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 20 Apr 2021 16:50:16 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 13KGa7gL084073;
+        Tue, 20 Apr 2021 16:50:16 GMT
+Received: from nam04-dm6-obe.outbound.protection.outlook.com (mail-dm6nam08lp2043.outbound.protection.outlook.com [104.47.73.43])
+        by aserp3020.oracle.com with ESMTP id 3809k0n3gx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 20 Apr 2021 16:50:16 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bfpqMCYUmxgKDfDk8ZiEYmC7h1S/5YkL7MGlTr86vW1fwBchqcQi7SecJYiHTP0+GTtvoBpbgC0UoL/E/lhpZVaoGKTCIxOO3vyWaR2BHJeXs5kzWnJPZvbg+n8QlTO62M6Z5+xEO0JwT5Gud/VGVCu7xV554goex7BLZfNfQl739V4nH/Xd616fWhcVt9xtpMMg92g/lzzvA2j2kC7DFasJ8qOz2eWePwHPckjfMYqOqP4Jy4bHtKQGgmF9UJWFGBunQY50xo/orpAmZsnnZ8V/Sf0i9QHrwJvNS6nM62ZWalRPCNBiHcka55ND1Sg13tMIL+NkSGnRNTXj/nUjHQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vizutN4qjOVBZgUbVWBMCtJcAIxkye7j89XvrdngMNI=;
+ b=d+zO0Pp/AlMQwaXFBrvKZuftS6sYuoVt6pgMf/2+amMkY7D3WWvg6dMJt0JOx9/UMoh2YzuMGPYQ2iNogtejKDACJsXO3Ei8YnNSvMVFWtpWE8nveTsz5F6WWLtcQLuDQpYDhTzaZyepsXU1oOb08cVPARLTbFLAND1R13pqPra+dv3nTUUWmcVT7tKLcjdG0qgO22Jh6vqc1rM/IkcmZL8/QW1meDHqWmDNaqpHndHi9hun0yyjbDQos98pSTR3jZvKtKaFdfe7O9qq8OMQWZlQy3fW4uQ3tZ2YDasH7xhWZIQFqxVspDSHNbp5mG6ce+Ufy9xlS5WsP9Wg2CrmyA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uhlcY8FEVNGAKjQ0RJ6+4XOOKzlSCVvhyanZCd4gyB0=;
-        b=ibAy8nahcPs58CUyAxaJIYpfJ0VPwPEaNBTB2CD6ZQ3GPqsc97Nx9EvZalaCSkeFsW
-         737Yt7Q+QKNkDJ5+5Zk9Io43Km/p1hOuhH1FT/NXCrdIbDAJiin/OIY/DJkRwTBt4OzM
-         xoBMsT7e8ux1YGfTwIUt/Qy97si0TzhsPQtW0+d4uEgcHCkpNWQ2ifKpc3KBzunoipf9
-         9YxJcpUWUKaVMCOQLX/LjwM53L8enXVXDhrPS+47gPyJhNcX1tayBN9zwNkFEhIHW4wA
-         Y/HWfyAm0YPmx4f2ctuc/tIYVDTJbayIXsRJwULyOd/WU5RJ0lf6r5ZyVuwyoluqcAlw
-         kfrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uhlcY8FEVNGAKjQ0RJ6+4XOOKzlSCVvhyanZCd4gyB0=;
-        b=YWI4JEkxuZiAxvjyKhvSvBDWSIovdUd11zebMbmkRUAIhlmTdEQc4A1h7eqGxEBbRP
-         3EFDNvyz2Z2FoHoGRYN37JeaMIBkCvUoHdhO2KCSv/cC4yZE3fKAoIfz7+4bFtumtoHE
-         kQTqN/6Z0EIOxRYPxdKY7kAw+KPy37JMn+H/4tbu5BAiGvSSazMTzngE6ggXqrixp7So
-         qC+bFPawUAnK4Lo6/c9mi3braYz1UoZz9UxcO2f3vw8tcb2jAi32G1Vb0ZEg6RgJWo5a
-         b5tLSa8dkkwovdz8Gryl88kCaVGkfYrYEuBQmHYK0y0F0yt4DRiK50LYSw1aINDnmjZ4
-         JyDA==
-X-Gm-Message-State: AOAM532UqdzuI1htjsOj9bognT0dzcEamS/5hQz0Zt3LcJFIROMZ4KQt
-        2PsWwzw3bKaQaPE6srI21kIcFWB60KEk9i2BQWC3w5fG
-X-Google-Smtp-Source: ABdhPJxfEw1khGjTAMrqYzxZxRpH0rZssy80h50lhWeMQMT4BmtcGns/uHRogoBRWWIklxEGWhjbS4QQLK4VzS6cV88=
-X-Received: by 2002:a25:dc46:: with SMTP id y67mr26307040ybe.27.1618937429816;
- Tue, 20 Apr 2021 09:50:29 -0700 (PDT)
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vizutN4qjOVBZgUbVWBMCtJcAIxkye7j89XvrdngMNI=;
+ b=OAWi4CfS9FEYc9yYcJWQesdmQ2ku0v2ra4gpI/fyQ8OWb+HpBRg7CUtDkXGOU5T/FX5dfr6Glxh1sMAer1c86+WVyzLewyRAQFVcGElq4XjEdPsWy8ovLtRspg5EX0Zud3iE5TnOZb0UwSmD0lVcs5LGTQy30quDh0CXaUOB/H0=
+Received: from MWHPR10MB1582.namprd10.prod.outlook.com (2603:10b6:300:22::8)
+ by MWHPR10MB1536.namprd10.prod.outlook.com (2603:10b6:300:24::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4042.18; Tue, 20 Apr
+ 2021 16:50:13 +0000
+Received: from MWHPR10MB1582.namprd10.prod.outlook.com
+ ([fe80::353a:1802:6e91:1811]) by MWHPR10MB1582.namprd10.prod.outlook.com
+ ([fe80::353a:1802:6e91:1811%8]) with mapi id 15.20.4042.024; Tue, 20 Apr 2021
+ 16:50:13 +0000
+From:   Liam Howlett <liam.howlett@oracle.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Julien Grall <julien.grall@arm.com>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Liam Howlett <liam.howlett@oracle.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
+Subject: [PATCH 2/3] arm64: signal: sigreturn() and rt_sigreturn() sometime
+ returns the wrong signals
+Thread-Topic: [PATCH 2/3] arm64: signal: sigreturn() and rt_sigreturn()
+ sometime returns the wrong signals
+Thread-Index: AQHXNgU7cqnWwo9uSUqkb8fv6D7LrA==
+Date:   Tue, 20 Apr 2021 16:50:13 +0000
+Message-ID: <20210420165001.3790670-2-Liam.Howlett@Oracle.com>
+References: <20210420165001.3790670-1-Liam.Howlett@Oracle.com>
+In-Reply-To: <20210420165001.3790670-1-Liam.Howlett@Oracle.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: git-send-email 2.30.2
+authentication-results: arm.com; dkim=none (message not signed)
+ header.d=none;arm.com; dmarc=none action=none header.from=oracle.com;
+x-originating-ip: [23.233.25.87]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: e0744ab1-4791-486f-fa11-08d9041c5e57
+x-ms-traffictypediagnostic: MWHPR10MB1536:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <MWHPR10MB1536F93EFF9692565918ED92FD489@MWHPR10MB1536.namprd10.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6790;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: +KaajMNyKAuGoiBXyqgLhZfqqvxfUx0WZrWCN9zsXnaqQjYKXs1nlvsDjfLzRogQG9DeX7jEXv/FRzbWBG/xzJ2q+mpI//BM0Y0d+zudrmHBqIvqdWR6XN2cpRE8c7H/+wRXVbFcGqEx8YiNasYoRNRblpJPd3XRHzdUZMKCrYRPlO2kNMUGw6VSf/bPLi5Wwerwyp3IikhXdhzMns9bMpaYBB3pkCQ/H0XhtFbfjRGgGzDctG1QHQcP0XpYUYB2CAMUbu3NRpiJeD3ZGKmBWqZ4GR5rhW33+XgWgqPi7gIod5fxgSNYHjmmVqYhqxCWSmUCi4mzgL8lGDKpyBKOpIne+tYM+7C0DZBidQnKj+MrMoFv9MKt9SFF06dIDl+pMljrh8ZOWnEVuyzQfM9LN9hB3eunbwOHmQ/l8IBrf4kNR+18fmeO/mug3k+ND+VahD9auMipOVAsPE4/SD32rlHyM2cQmDFPYS6yuC8eertWkqUVIrvelFobKRLqiZfsJ6Y9//qxmAxY7zKDmpMki6/sEIuefJ+ZqxPsu9J2psPRbuNprKibXLWeJLl5c4w0gf9YkGVI5ganmjd+p6dIleM5w86mG6bhbZAKCTnMEi0=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR10MB1582.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(346002)(39860400002)(366004)(396003)(136003)(376002)(83380400001)(64756008)(2906002)(5660300002)(44832011)(6506007)(186003)(71200400001)(66476007)(66946007)(316002)(7416002)(66556008)(91956017)(54906003)(8936002)(1076003)(26005)(76116006)(8676002)(110136005)(36756003)(2616005)(122000001)(86362001)(6512007)(66446008)(478600001)(6486002)(4326008)(38100700002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: =?iso-8859-1?Q?JWO11iNKoXGZT2kEEOnHJiHjuaa5ep220k8G7xTwO+GHkYeBnmnCGoR3D/?=
+ =?iso-8859-1?Q?0NGOnKfKqmr5PFBw/M6+yqkwx4Ox72l6Pt42+4Jct5p2paqxr0QHht/ax3?=
+ =?iso-8859-1?Q?r5QDL0g3j6cdG0Hf0InlGlkLxdfD+HruvGEqrQKwKp4ogRRjLzBNGKkdxV?=
+ =?iso-8859-1?Q?zj01dKmSRpdgrevfXVxerE9ryhhKBiUwhOt2bMY9uiIh0mnU2dxXoWOI2A?=
+ =?iso-8859-1?Q?zOulCr5iieLz54cN7EFwckq5W/QcyIGXH3h1bKZRS9E9R8aR2KDDGVdjxp?=
+ =?iso-8859-1?Q?0uqI9T4S7qJXE8KlaYeZXQDEnrr8e3SJEn2etUMs4CHIVvUiFGMktN8aI+?=
+ =?iso-8859-1?Q?lKRIHR2KYjmi+Hi7QXlUZfrfRz5zkZidgIPVfJapP5pGbAirFNgPpgfXag?=
+ =?iso-8859-1?Q?EFjEoPGXWFGj2Y78JZgQemCSCepRNzvfFFimTmtaRsPMqXtoa5j20HShiG?=
+ =?iso-8859-1?Q?Ex6z3dA3LIDN6myHgypb2DtBdGEB8DoUQlhmqQ4R17CnU5A2eK3j2cNpNR?=
+ =?iso-8859-1?Q?SqaEwD9b+m5sOiLCvr6Y0P+x/BrQhU0Di5ALvXTTJTekWzSuFhOMzVH7ET?=
+ =?iso-8859-1?Q?FfL0LoXZBCkldIw5IFN3z46xfvL2ypeMNWzUYKbb0b/gh8W7i3rbXdrSpr?=
+ =?iso-8859-1?Q?RWErahtsM2lfon6Cz8q/N3oAPOeCgDiS/1bEHu+4Sgcv/aGKfercXvLyQf?=
+ =?iso-8859-1?Q?yfMv18KlAtbJ6o3tIsJXY8VQtI5P1XHTqrs9HlZFY1OEy5Jpj6kXdTioL2?=
+ =?iso-8859-1?Q?0rFw3g4F5aQMcsG+TrBUgoasMRmH2O5ctPZuBpDIqfWa1wXI3ZVe3Zndvq?=
+ =?iso-8859-1?Q?SaXDZC1hmNqFEpSB11PvCjMfzJ+126Ztx6svjByNavxQhxlG0KoKiBQPhT?=
+ =?iso-8859-1?Q?HbTUqZ5xlya/ds/glUmn1vUBGA+79N+Zd2oY/xFB5bPWomSaI3DxQCLz8W?=
+ =?iso-8859-1?Q?niFOvk1iy3XWbjsbrCSRPGkfgzjpOV7wqvn+LteSZhwJwSsXTtaddUUlag?=
+ =?iso-8859-1?Q?PNmhMwOihU7qm3f/lBVTUdLFmfl5EFJO+Ms7EYGawnC4y7V1VVjbgAU2K6?=
+ =?iso-8859-1?Q?DmcWxJLi48vN4adDu8wGiwb/EsMW0XiAN53txuVPuX7mBbUExFopHXZaGV?=
+ =?iso-8859-1?Q?246havGKsAxW9QHR++EW8Md6FMC7E/77aMj7RsIr4rIclCkn4jhaxmumf7?=
+ =?iso-8859-1?Q?7/cV+vQY6MtnGf/2RPQ6pR9XsTv0LMwbb2n9wy5wmpH0y1cqWwPLcp0pE5?=
+ =?iso-8859-1?Q?Ec9hwPP/POn9L29782+KZgS3Pq8mklSDPH6i4IlMfNBlmHaDt3ixqFwoal?=
+ =?iso-8859-1?Q?wyNa13wgzfFF1ZgI7E298qAN6GaN7cOOI07eAmoiE/8xXQQWnjQNDDmCPa?=
+ =?iso-8859-1?Q?8YqMkOSCcI?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20210420111639.155580-1-lmb@cloudflare.com>
-In-Reply-To: <20210420111639.155580-1-lmb@cloudflare.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 20 Apr 2021 09:50:19 -0700
-Message-ID: <CAEf4BzYWNahvHA+WYz13o9Wy7oAtPXo0gv9S6jT42fYnoN72eQ@mail.gmail.com>
-Subject: Re: Some CO-RE negative testcases are buggy
-To:     Lorenz Bauer <lmb@cloudflare.com>
-Cc:     Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        kernel-team <kernel-team@cloudflare.com>
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR10MB1582.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e0744ab1-4791-486f-fa11-08d9041c5e57
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Apr 2021 16:50:13.3897
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: laZ5VI74wb9uhFf2ZShI/3EYvuwIlpwp46iwZGb8YmG5AzcAF2u4s0t7e3wtW8C6iSnVcTlTYqv1JIlcPlnJvQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR10MB1536
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9960 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 bulkscore=0 malwarescore=0
+ suspectscore=0 phishscore=0 spamscore=0 mlxlogscore=999 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104060000
+ definitions=main-2104200117
+X-Proofpoint-ORIG-GUID: YcnjrERkwVhP-xy0laVrSODAkpWcIFea
+X-Proofpoint-GUID: YcnjrERkwVhP-xy0laVrSODAkpWcIFea
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9960 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxscore=0 adultscore=0
+ impostorscore=0 spamscore=0 malwarescore=0 clxscore=1015
+ lowpriorityscore=0 priorityscore=1501 suspectscore=0 mlxlogscore=999
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104060000 definitions=main-2104200117
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Apr 20, 2021 at 4:23 AM Lorenz Bauer <lmb@cloudflare.com> wrote:
->
-> Hi Andrii,
->
-> I was looking at some CORE testcases, and noticed two problems:
->
-> * The checks for negative test cases use an incorrect CHECK(false)
->   invocation. This means negative test cases don't fail when they
->   should.
+arm64_notify_segfault() was used to force a SIGSEGV in all error cases
+in sigreturn() and rt_sigreturn() to avoid writing a new sig handler.
+There is now a better sig handler to use which does not search the VMA
+address space and return a slightly incorrect error code.  Restore the
+older and correct si_code of SI_KERNEL by using arm64_notify_die().  In
+the case of !access_ok(), simply return SIGSEGV with si_code
+SEGV_ACCERR.
 
-CHECK() misuse? shocker ;) This is why I'm harping on ASSERT_xxx() vs
-CHECK() all the time lately.
+This change requires exporting arm64_notfiy_die() to the arm64 traps.h
 
-> * Some existence tests use incorrect file names, but the test harness
->   is unable to detect this. Basically, failure to load due to a failed
->   CORE relocation is not distinguished from ENOENT. I found the CHECK
->   issue when investigating this problem.
->
-> I've written the patch attached below, but there are now 12 failures.
-> I don't understand the tests well enough to fix them, maybe you can
-> take a look?
+Fixes: f71016a8a8c5 (arm64: signal: Call arm64_notify_segfault when
+failing to deliver signal)
+Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+---
+ arch/arm64/include/asm/traps.h |  2 ++
+ arch/arm64/kernel/signal.c     |  8 ++++++--
+ arch/arm64/kernel/signal32.c   | 18 ++++++++++++++----
+ 3 files changed, 22 insertions(+), 6 deletions(-)
 
-Yep, thanks for reporting, I'll take a look.
-
->
-> Best
-> Lorenz
->
-> ---
->  .../selftests/bpf/prog_tests/core_reloc.c        | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/core_reloc.c b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
-> index d94dcead72e6..bd759290347c 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/core_reloc.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
-> @@ -644,12 +644,12 @@ static struct core_reloc_test_case test_cases[] = {
->                 .output_len = sizeof(struct core_reloc_existence_output),
->         },
->
-> -       FIELD_EXISTS_ERR_CASE(existence__err_int_sz),
-> -       FIELD_EXISTS_ERR_CASE(existence__err_int_type),
-> -       FIELD_EXISTS_ERR_CASE(existence__err_int_kind),
-> -       FIELD_EXISTS_ERR_CASE(existence__err_arr_kind),
-> -       FIELD_EXISTS_ERR_CASE(existence__err_arr_value_type),
-> -       FIELD_EXISTS_ERR_CASE(existence__err_struct_type),
-> +       FIELD_EXISTS_ERR_CASE(existence___err_wrong_int_sz),
-> +       FIELD_EXISTS_ERR_CASE(existence___err_wrong_int_type),
-> +       FIELD_EXISTS_ERR_CASE(existence___err_wrong_int_kind),
-> +       FIELD_EXISTS_ERR_CASE(existence___err_wrong_arr_kind),
-> +       FIELD_EXISTS_ERR_CASE(existence___err_wrong_arr_value_type),
-> +       FIELD_EXISTS_ERR_CASE(existence___err_wrong_struct_type),
->
->         /* bitfield relocation checks */
->         BITFIELDS_CASE(bitfields, {
-> @@ -864,7 +864,7 @@ void test_core_reloc(void)
->                 err = bpf_object__load_xattr(&load_attr);
->                 if (err) {
->                         if (!test_case->fails)
-> -                               CHECK(false, "obj_load", "failed to load prog '%s': %d\n", probe_name, err);
-> +                               CHECK(true, "obj_load", "failed to load prog '%s': %d\n", probe_name, err);
->                         goto cleanup;
->                 }
->
-> @@ -904,7 +904,7 @@ void test_core_reloc(void)
->                 }
->
->                 if (test_case->fails) {
-> -                       CHECK(false, "obj_load_fail", "should fail to load prog '%s'\n", probe_name);
-> +                       CHECK(true, "obj_load_fail", "should fail to load prog '%s'\n", probe_name);
->                         goto cleanup;
->                 }
->
-> --
-> 2.27.0
->
+diff --git a/arch/arm64/include/asm/traps.h b/arch/arm64/include/asm/traps.=
+h
+index 54f32a0675df..9b76144fcba6 100644
+--- a/arch/arm64/include/asm/traps.h
++++ b/arch/arm64/include/asm/traps.h
+@@ -29,6 +29,8 @@ void arm64_notify_segfault(unsigned long addr);
+ void arm64_force_sig_fault(int signo, int code, unsigned long far, const c=
+har *str);
+ void arm64_force_sig_mceerr(int code, unsigned long far, short lsb, const =
+char *str);
+ void arm64_force_sig_ptrace_errno_trap(int errno, unsigned long far, const=
+ char *str);
++void arm64_notify_die(const char *str, struct pt_regs *regs, int signo,
++		      int sicode, unsigned long far, int err);
+=20
+ /*
+  * Move regs->pc to next instruction and do necessary setup before it
+diff --git a/arch/arm64/kernel/signal.c b/arch/arm64/kernel/signal.c
+index 6237486ff6bb..9fde6dc760c3 100644
+--- a/arch/arm64/kernel/signal.c
++++ b/arch/arm64/kernel/signal.c
+@@ -544,7 +544,7 @@ SYSCALL_DEFINE0(rt_sigreturn)
+ 	frame =3D (struct rt_sigframe __user *)regs->sp;
+=20
+ 	if (!access_ok(frame, sizeof (*frame)))
+-		goto badframe;
++		goto e_access;
+=20
+ 	if (restore_sigframe(regs, frame))
+ 		goto badframe;
+@@ -555,7 +555,11 @@ SYSCALL_DEFINE0(rt_sigreturn)
+ 	return regs->regs[0];
+=20
+ badframe:
+-	arm64_notify_segfault(regs->sp);
++	arm64_notify_die("Bad frame", regs, SIGSEGV, SI_KERNEL, regs->sp, 0);
++	return 0;
++
++e_access:
++	force_signal_inject(SIGSEGV, SEGV_ACCERR, regs->sp, 0);
+ 	return 0;
+ }
+=20
+diff --git a/arch/arm64/kernel/signal32.c b/arch/arm64/kernel/signal32.c
+index 2f507f565c48..af8b6c0eb8aa 100644
+--- a/arch/arm64/kernel/signal32.c
++++ b/arch/arm64/kernel/signal32.c
+@@ -248,7 +248,7 @@ COMPAT_SYSCALL_DEFINE0(sigreturn)
+ 	frame =3D (struct compat_sigframe __user *)regs->compat_sp;
+=20
+ 	if (!access_ok(frame, sizeof (*frame)))
+-		goto badframe;
++		goto e_access;
+=20
+ 	if (compat_restore_sigframe(regs, frame))
+ 		goto badframe;
+@@ -256,7 +256,12 @@ COMPAT_SYSCALL_DEFINE0(sigreturn)
+ 	return regs->regs[0];
+=20
+ badframe:
+-	arm64_notify_segfault(regs->compat_sp);
++	arm64_notify_die("Bad frame", regs, SIGSEGV, SI_KERNEL,
++			 regs->compat_sp, 0);
++	return 0;
++
++e_access:
++	force_signal_inject(SIGSEGV, SEGV_ACCERR, regs->compat_sp, 0);
+ 	return 0;
+ }
+=20
+@@ -279,7 +284,7 @@ COMPAT_SYSCALL_DEFINE0(rt_sigreturn)
+ 	frame =3D (struct compat_rt_sigframe __user *)regs->compat_sp;
+=20
+ 	if (!access_ok(frame, sizeof (*frame)))
+-		goto badframe;
++		goto e_access;
+=20
+ 	if (compat_restore_sigframe(regs, &frame->sig))
+ 		goto badframe;
+@@ -290,7 +295,12 @@ COMPAT_SYSCALL_DEFINE0(rt_sigreturn)
+ 	return regs->regs[0];
+=20
+ badframe:
+-	arm64_notify_segfault(regs->compat_sp);
++	arm64_notify_die("Bad frame", regs, SIGSEGV, SI_KERNEL,
++			 regs->compat_sp, 0);
++	return 0;
++
++e_access:
++	force_signal_inject(SIGSEGV, SEGV_ACCERR, regs->compat_sp, 0);
+ 	return 0;
+ }
+=20
+--=20
+2.30.2
