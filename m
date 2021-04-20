@@ -2,170 +2,142 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0EF11C433ED
-	for <bpf@archiver.kernel.org>; Tue, 20 Apr 2021 16:55:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7ABCC433B4
+	for <bpf@archiver.kernel.org>; Tue, 20 Apr 2021 17:09:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C8AB66135F
-	for <bpf@archiver.kernel.org>; Tue, 20 Apr 2021 16:55:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 97415613B2
+	for <bpf@archiver.kernel.org>; Tue, 20 Apr 2021 17:09:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232916AbhDTQ4R (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 20 Apr 2021 12:56:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:40365 "EHLO
+        id S232648AbhDTRKU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 20 Apr 2021 13:10:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:42103 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233214AbhDTQ4R (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 20 Apr 2021 12:56:17 -0400
+        by vger.kernel.org with ESMTP id S231549AbhDTRKT (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 20 Apr 2021 13:10:19 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1618937745;
+        s=mimecast20190719; t=1618938586;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=6VX5nIkOjQFrnQnPvJLFtPSaZjbDSX89pb1f05vmUZA=;
-        b=XzAHavOW10Kn28jl2OfhsiV/GISymVyL5GftiYHK4mywZ2eT/qB936h4zDu0xJrjwxZzmF
-        q4chicrJLhUahfYY2KXfXOmomhwXPlxMbrxGr+vp0qkMBsobUogq5yx0IaP6lZjp4Sb+qo
-        t+59KlCdLyPkZNsk0kj1J3ab1W6DaME=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-547-igJoo5lHPumzic6YEpVmzA-1; Tue, 20 Apr 2021 12:55:32 -0400
-X-MC-Unique: igJoo5lHPumzic6YEpVmzA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D537C80F05C;
-        Tue, 20 Apr 2021 16:54:54 +0000 (UTC)
-Received: from carbon (unknown [10.36.110.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id EDE9618A60;
-        Tue, 20 Apr 2021 16:54:41 +0000 (UTC)
-Date:   Tue, 20 Apr 2021 18:54:40 +0200
-From:   Jesper Dangaard Brouer <brouer@redhat.com>
-To:     Lorenzo Bianconi <lorenzo@kernel.org>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        lorenzo.bianconi@redhat.com, davem@davemloft.net, kuba@kernel.org,
+        bh=SRf/Tph3L3NAvNbWzjfk07FIkQyOeKwYwW/14Laa07M=;
+        b=LhbAO+DCVrf5gJ+wqxibKz5YjBIVOsOHkx5ah1oAEKcppahMIxFgtc1m8EudVfYV3aPT1s
+        DYtdU30c9Gk2wiritPNA5gsW4ArlIJCuk1QNLtpQM6FT82UGZvdCrfWxieSEtcx6tm6s9a
+        xkJYk5tK4WUN1zv6Ja6vkqeib1lkJg4=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-420-yrv673iPMyKQyR3TIxqZtA-1; Tue, 20 Apr 2021 13:09:43 -0400
+X-MC-Unique: yrv673iPMyKQyR3TIxqZtA-1
+Received: by mail-ed1-f69.google.com with SMTP id l22-20020a0564021256b0290384ebfba68cso9643208edw.2
+        for <bpf@vger.kernel.org>; Tue, 20 Apr 2021 10:09:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=SRf/Tph3L3NAvNbWzjfk07FIkQyOeKwYwW/14Laa07M=;
+        b=eW35CQ6vvMlBdSfsQjQRbDJHfwm6q6yJ9OsK/S6Z2ixnGpdttZV4RLJsnFxvkJRG5D
+         TDvDTPmf8TOTWx+ji+NcEKoS3q4MM6XrMp/FtedHiRA7/tliOPqD1nbrzP8zsdfo/pNV
+         WLmVn/XIpt6dcPxW7o2eMxNsmzq2rbTmhkNzWwyWCWO4/J9sgkjsTVqKBS/1+wcg3/Ry
+         TaqXENI7jbTVj3PjYg/bvjLVmZlgQ1Wxu4g9of9IohR2JjVkfaYlrPfUrndX03YnoS8V
+         ml5iTK67KlXqRgE0hn2oXdGyOzWWlNy/CUfHMJj0H5tvsZrw1XPipWIea3Q6l7CkpG4T
+         xJAw==
+X-Gm-Message-State: AOAM532tI/Hs79oSQxxkhcT+3LogHv/IOaxeQ4ck4pEq/BC2HPe2hxeU
+        nyvTVMJGhAzBFTxTvnBAeLNrxGKtPMHS9TQ28x7zWX3aZCfWotif8m2aRxUyek+bVx/RbyoMko6
+        cKIXjj+wuANS5
+X-Received: by 2002:a17:906:77c5:: with SMTP id m5mr27364259ejn.201.1618938582563;
+        Tue, 20 Apr 2021 10:09:42 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJw6gn2isDw3WqUDXHO63YDx5KhOxC+YyfUal3meuEXKHwTt4Ve781FuwcvJ5bPN0AapIjE8qg==
+X-Received: by 2002:a17:906:77c5:: with SMTP id m5mr27364232ejn.201.1618938582404;
+        Tue, 20 Apr 2021 10:09:42 -0700 (PDT)
+Received: from localhost ([151.66.28.185])
+        by smtp.gmail.com with ESMTPSA id r19sm12913751ejr.55.2021.04.20.10.09.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Apr 2021 10:09:41 -0700 (PDT)
+Date:   Tue, 20 Apr 2021 19:09:38 +0200
+From:   Lorenzo Bianconi <lorenzo.bianconi@redhat.com>
+To:     Jesper Dangaard Brouer <brouer@redhat.com>
+Cc:     Lorenzo Bianconi <lorenzo@kernel.org>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
         ast@kernel.org, daniel@iogearbox.net, song@kernel.org,
-        toke@redhat.com, brouer@redhat.com
-Subject: Re: [PATCH v3 bpf-next] cpumap: bulk skb using
- netif_receive_skb_list
-Message-ID: <20210420185440.1dfcf71c@carbon>
-In-Reply-To: <01cd8afa22786b2c8a4cd7250d165741e990a771.1618927173.git.lorenzo@kernel.org>
+        toke@redhat.com
+Subject: Re: [PATCH v3 bpf-next] cpumap: bulk skb using netif_receive_skb_list
+Message-ID: <YH8K0gkYoZVfq0FV@lore-desk>
 References: <01cd8afa22786b2c8a4cd7250d165741e990a771.1618927173.git.lorenzo@kernel.org>
+ <20210420185440.1dfcf71c@carbon>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="X48EGoxOSC8+66zO"
+Content-Disposition: inline
+In-Reply-To: <20210420185440.1dfcf71c@carbon>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, 20 Apr 2021 16:05:14 +0200
-Lorenzo Bianconi <lorenzo@kernel.org> wrote:
 
-> Rely on netif_receive_skb_list routine to send skbs converted from
-> xdp_frames in cpu_map_kthread_run in order to improve i-cache usage.
-> The proposed patch has been tested running xdp_redirect_cpu bpf sample
-> available in the kernel tree that is used to redirect UDP frames from
-> ixgbe driver to a cpumap entry and then to the networking stack.
-> UDP frames are generated using pkt_gen. Packets are discarded by the
-> UDP layer.
-> 
-> $xdp_redirect_cpu  --cpu <cpu> --progname xdp_cpu_map0 --dev <eth>
-> 
-> bpf-next: ~2.35Mpps
-> bpf-next + cpumap skb-list: ~2.72Mpps
-> 
-> Since netif_receive_skb_list does not return number of discarded packets,
-> remove drop counter from xdp_cpumap_kthread tracepoint and update related
-> xdp samples.
-> 
-> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-> ---
-> Changes since v2:
-> - remove drop counter and update related xdp samples
-> - rebased on top of bpf-next
-> 
-> Changes since v1:
-> - fixed comment
-> - rebased on top of bpf-next tree
-> ---
->  include/trace/events/xdp.h          | 14 +++++---------
->  kernel/bpf/cpumap.c                 | 16 +++++++---------
->  samples/bpf/xdp_monitor_kern.c      |  6 ++----
->  samples/bpf/xdp_monitor_user.c      | 14 ++++++--------
->  samples/bpf/xdp_redirect_cpu_kern.c | 12 +++++-------
->  samples/bpf/xdp_redirect_cpu_user.c | 10 ++++------
->  6 files changed, 29 insertions(+), 43 deletions(-)
-> 
-> diff --git a/include/trace/events/xdp.h b/include/trace/events/xdp.h
-> index fcad3645a70b..52ecfe9c7e25 100644
-> --- a/include/trace/events/xdp.h
-> +++ b/include/trace/events/xdp.h
-> @@ -184,16 +184,15 @@ DEFINE_EVENT(xdp_redirect_template, xdp_redirect_map_err,
->  
->  TRACE_EVENT(xdp_cpumap_kthread,
->  
-> -	TP_PROTO(int map_id, unsigned int processed,  unsigned int drops,
-> -		 int sched, struct xdp_cpumap_stats *xdp_stats),
-> +	TP_PROTO(int map_id, unsigned int processed, int sched,
-> +		 struct xdp_cpumap_stats *xdp_stats),
->  
-> -	TP_ARGS(map_id, processed, drops, sched, xdp_stats),
-> +	TP_ARGS(map_id, processed, sched, xdp_stats),
->  
->  	TP_STRUCT__entry(
->  		__field(int, map_id)
->  		__field(u32, act)
->  		__field(int, cpu)
-> -		__field(unsigned int, drops)
->  		__field(unsigned int, processed)
+--X48EGoxOSC8+66zO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-So, struct member @processed will takeover the room for @drops.
+[...]
+> > +	TP_ARGS(map_id, processed, sched, xdp_stats),
+> > =20
+> >  	TP_STRUCT__entry(
+> >  		__field(int, map_id)
+> >  		__field(u32, act)
+> >  		__field(int, cpu)
+> > -		__field(unsigned int, drops)
+> >  		__field(unsigned int, processed)
+>=20
+> So, struct member @processed will takeover the room for @drops.
+>=20
+> Can you please test how an old xdp_monitor program will react to this?
+> Will it fail, or extract and show wrong values?
 
-Can you please test how an old xdp_monitor program will react to this?
-Will it fail, or extract and show wrong values?
+Ack, right. I think we should keep the struct layout in order to maintain
+back-compatibility. I will fix it in v4.
 
-The xdp_mointor tool is in several external git repos:
+>=20
+> The xdp_mointor tool is in several external git repos:
+>=20
+>  https://github.com/netoptimizer/prototype-kernel/blob/master/kernel/samp=
+les/bpf/xdp_monitor_kern.c
+>  https://github.com/xdp-project/xdp-tutorial/tree/master/tracing02-xdp-mo=
+nitor
+>=20
+> Do you have any plans for fixing those tools?
 
- https://github.com/netoptimizer/prototype-kernel/blob/master/kernel/samples/bpf/xdp_monitor_kern.c
- https://github.com/xdp-project/xdp-tutorial/tree/master/tracing02-xdp-monitor
+I update xdp_monitor_{kern,user}.c and xdp_redirect_cpu_{kern,user}.c in the
+patch. Do you mean to post a dedicated patch for xdp-project tutorial?
 
-Do you have any plans for fixing those tools?
+Regards,
+Lorenzo
 
+>=20
+>=20
+>=20
+>=20
+> --=20
+> Best regards,
+>   Jesper Dangaard Brouer
+>   MSc.CS, Principal Kernel Engineer at Red Hat
+>   LinkedIn: http://www.linkedin.com/in/brouer
+>=20
 
->  		__field(int, sched)
->  		__field(unsigned int, xdp_pass)
-> @@ -205,7 +204,6 @@ TRACE_EVENT(xdp_cpumap_kthread,
->  		__entry->map_id		= map_id;
->  		__entry->act		= XDP_REDIRECT;
->  		__entry->cpu		= smp_processor_id();
-> -		__entry->drops		= drops;
->  		__entry->processed	= processed;
->  		__entry->sched	= sched;
->  		__entry->xdp_pass	= xdp_stats->pass;
-> @@ -215,13 +213,11 @@ TRACE_EVENT(xdp_cpumap_kthread,
->  
->  	TP_printk("kthread"
->  		  " cpu=%d map_id=%d action=%s"
-> -		  " processed=%u drops=%u"
-> -		  " sched=%d"
-> +		  " processed=%u sched=%u"
->  		  " xdp_pass=%u xdp_drop=%u xdp_redirect=%u",
->  		  __entry->cpu, __entry->map_id,
->  		  __print_symbolic(__entry->act, __XDP_ACT_SYM_TAB),
-> -		  __entry->processed, __entry->drops,
-> -		  __entry->sched,
-> +		  __entry->processed, __entry->sched,
->  		  __entry->xdp_pass, __entry->xdp_drop, __entry->xdp_redirect)
->  );
+--X48EGoxOSC8+66zO
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
+iHUEABYIAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCYH8K0AAKCRA6cBh0uS2t
+rNYJAQCb772jtidNWS9ZSDM5wbswkXCz6KJpLOFAehcLc5flGAEAhCs+jMvOs1hI
+GWt2R3oUmF1T3uv6Hx14tzIAeUmb1Qk=
+=obBe
+-----END PGP SIGNATURE-----
 
--- 
-Best regards,
-  Jesper Dangaard Brouer
-  MSc.CS, Principal Kernel Engineer at Red Hat
-  LinkedIn: http://www.linkedin.com/in/brouer
+--X48EGoxOSC8+66zO--
 
