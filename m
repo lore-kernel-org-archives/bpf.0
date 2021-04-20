@@ -2,114 +2,143 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60BE8C433B4
-	for <bpf@archiver.kernel.org>; Tue, 20 Apr 2021 16:43:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 27146C433ED
+	for <bpf@archiver.kernel.org>; Tue, 20 Apr 2021 16:50:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1F03E613D0
-	for <bpf@archiver.kernel.org>; Tue, 20 Apr 2021 16:43:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CBD47613D9
+	for <bpf@archiver.kernel.org>; Tue, 20 Apr 2021 16:50:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233149AbhDTQoP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 20 Apr 2021 12:44:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53252 "EHLO
+        id S233207AbhDTQvI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 20 Apr 2021 12:51:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232473AbhDTQoP (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 20 Apr 2021 12:44:15 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A1ECC06174A;
-        Tue, 20 Apr 2021 09:43:42 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id r7so26331854wrm.1;
-        Tue, 20 Apr 2021 09:43:41 -0700 (PDT)
+        with ESMTP id S233429AbhDTQvD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 20 Apr 2021 12:51:03 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83DDDC06138C
+        for <bpf@vger.kernel.org>; Tue, 20 Apr 2021 09:50:30 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id p202so136551ybg.8
+        for <bpf@vger.kernel.org>; Tue, 20 Apr 2021 09:50:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=LpVz5RmpwtqItSVESt1PTOxzEM6O2cxGwpOaIWTZdzU=;
-        b=NlRKRpEIay2vRk/+cunFLLCQczYArdIYpVXduxEYEXSq8GL2Lv5cZUqZShkgCrdj9Y
-         AwhvMFSYeK0wUwep5OtkM6CIURtWoNS6jfS6WIeoz4op7VOvnjr4eSlkQd0Ot/6L15Rz
-         hXOnCunkC+kbD1sQE5Gz8szSCu0wWTn0jfAJ4rQ+nz4/OdicJMVSgSC1g1Q3NWsVnMVE
-         awUyiHHXzUPz+H3S+A2yuVeAIE/6sgEDBAHbfk/qtSgYkRKAggN+Kf8Fd13xq8U5y3Fr
-         8VK+jYwiBirFFoOB1kp84M0eEDl5fOaHqsoQU6IWPA71aofE65Fi7kD3FivpXVXAlmYF
-         zHbA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uhlcY8FEVNGAKjQ0RJ6+4XOOKzlSCVvhyanZCd4gyB0=;
+        b=ibAy8nahcPs58CUyAxaJIYpfJ0VPwPEaNBTB2CD6ZQ3GPqsc97Nx9EvZalaCSkeFsW
+         737Yt7Q+QKNkDJ5+5Zk9Io43Km/p1hOuhH1FT/NXCrdIbDAJiin/OIY/DJkRwTBt4OzM
+         xoBMsT7e8ux1YGfTwIUt/Qy97si0TzhsPQtW0+d4uEgcHCkpNWQ2ifKpc3KBzunoipf9
+         9YxJcpUWUKaVMCOQLX/LjwM53L8enXVXDhrPS+47gPyJhNcX1tayBN9zwNkFEhIHW4wA
+         Y/HWfyAm0YPmx4f2ctuc/tIYVDTJbayIXsRJwULyOd/WU5RJ0lf6r5ZyVuwyoluqcAlw
+         kfrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=LpVz5RmpwtqItSVESt1PTOxzEM6O2cxGwpOaIWTZdzU=;
-        b=S2Pbz09wkZefCBmzti8poL2rNc1F+j+A6lFDP/kkD2vwkAiZznIg7h+AYZ0YtStPUH
-         knXnUUsEd8xrP2PuPXrFQtbubuJiajv31uZPY1MTWyvY5XIT7ru6v83zUVrouyBmkyQY
-         D8uQv5NWlp1EYW3t6jQ3Pm5m+KIAAiSQxPguhBcCFx1aMHvVy1i7/mJlN2lIVvtd3REY
-         l04OI809Zja02Ghno9DRYvYgVvuqgZ81fTnHN40/mVoWotekbEXaYg95ugfb4U0qzJTT
-         NnOSApoc0iATiqvfjQzbIphLfPyj6Pfx+F2vsNzSzwIQbOWsjcMBW+7NltYpFky/dArV
-         AdOg==
-X-Gm-Message-State: AOAM532C1hjgKKWjl2QM0TfN59i2dEuhRXG/+Lw+5m8XYVP+RJL9KyOu
-        GiJYKxc+wNMZA6/4pGEAeCWSGU53Qjo=
-X-Google-Smtp-Source: ABdhPJzx47XUjPjSlcDso/iy62dphANI1REQIx62gYqRtRNBWPiHHh9l/5tlWHnUUqLFNTY4IjnOWg==
-X-Received: by 2002:adf:f38e:: with SMTP id m14mr21229678wro.34.1618937020346;
-        Tue, 20 Apr 2021 09:43:40 -0700 (PDT)
-Received: from [192.168.1.102] ([37.164.106.63])
-        by smtp.gmail.com with ESMTPSA id m2sm3571453wmq.15.2021.04.20.09.43.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Apr 2021 09:43:39 -0700 (PDT)
-Subject: Re: [PATCH v3 bpf-next 00/11] Socket migration for SO_REUSEPORT.
-To:     Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>
-Cc:     Benjamin Herrenschmidt <benh@amazon.com>,
-        Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210420154140.80034-1-kuniyu@amazon.co.jp>
-From:   Eric Dumazet <eric.dumazet@gmail.com>
-Message-ID: <67fb2df2-3703-4ce9-62d0-ba15435c5a0b@gmail.com>
-Date:   Tue, 20 Apr 2021 18:43:36 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uhlcY8FEVNGAKjQ0RJ6+4XOOKzlSCVvhyanZCd4gyB0=;
+        b=YWI4JEkxuZiAxvjyKhvSvBDWSIovdUd11zebMbmkRUAIhlmTdEQc4A1h7eqGxEBbRP
+         3EFDNvyz2Z2FoHoGRYN37JeaMIBkCvUoHdhO2KCSv/cC4yZE3fKAoIfz7+4bFtumtoHE
+         kQTqN/6Z0EIOxRYPxdKY7kAw+KPy37JMn+H/4tbu5BAiGvSSazMTzngE6ggXqrixp7So
+         qC+bFPawUAnK4Lo6/c9mi3braYz1UoZz9UxcO2f3vw8tcb2jAi32G1Vb0ZEg6RgJWo5a
+         b5tLSa8dkkwovdz8Gryl88kCaVGkfYrYEuBQmHYK0y0F0yt4DRiK50LYSw1aINDnmjZ4
+         JyDA==
+X-Gm-Message-State: AOAM532UqdzuI1htjsOj9bognT0dzcEamS/5hQz0Zt3LcJFIROMZ4KQt
+        2PsWwzw3bKaQaPE6srI21kIcFWB60KEk9i2BQWC3w5fG
+X-Google-Smtp-Source: ABdhPJxfEw1khGjTAMrqYzxZxRpH0rZssy80h50lhWeMQMT4BmtcGns/uHRogoBRWWIklxEGWhjbS4QQLK4VzS6cV88=
+X-Received: by 2002:a25:dc46:: with SMTP id y67mr26307040ybe.27.1618937429816;
+ Tue, 20 Apr 2021 09:50:29 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210420154140.80034-1-kuniyu@amazon.co.jp>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20210420111639.155580-1-lmb@cloudflare.com>
+In-Reply-To: <20210420111639.155580-1-lmb@cloudflare.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 20 Apr 2021 09:50:19 -0700
+Message-ID: <CAEf4BzYWNahvHA+WYz13o9Wy7oAtPXo0gv9S6jT42fYnoN72eQ@mail.gmail.com>
+Subject: Re: Some CO-RE negative testcases are buggy
+To:     Lorenz Bauer <lmb@cloudflare.com>
+Cc:     Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        kernel-team <kernel-team@cloudflare.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+On Tue, Apr 20, 2021 at 4:23 AM Lorenz Bauer <lmb@cloudflare.com> wrote:
+>
+> Hi Andrii,
+>
+> I was looking at some CORE testcases, and noticed two problems:
+>
+> * The checks for negative test cases use an incorrect CHECK(false)
+>   invocation. This means negative test cases don't fail when they
+>   should.
 
+CHECK() misuse? shocker ;) This is why I'm harping on ASSERT_xxx() vs
+CHECK() all the time lately.
 
-On 4/20/21 5:41 PM, Kuniyuki Iwashima wrote:
-> The SO_REUSEPORT option allows sockets to listen on the same port and to
-> accept connections evenly. However, there is a defect in the current
-> implementation [1]. When a SYN packet is received, the connection is tied
-> to a listening socket. Accordingly, when the listener is closed, in-flight
-> requests during the three-way handshake and child sockets in the accept
-> queue are dropped even if other listeners on the same port could accept
-> such connections.
-> 
-> This situation can happen when various server management tools restart
-> server (such as nginx) processes. For instance, when we change nginx
-> configurations and restart it, it spins up new workers that respect the new
-> configuration and closes all listeners on the old workers, resulting in the
-> in-flight ACK of 3WHS is responded by RST.
-> 
-> The SO_REUSEPORT option is excellent to improve scalability.
+> * Some existence tests use incorrect file names, but the test harness
+>   is unable to detect this. Basically, failure to load due to a failed
+>   CORE relocation is not distinguished from ENOENT. I found the CHECK
+>   issue when investigating this problem.
+>
+> I've written the patch attached below, but there are now 12 failures.
+> I don't understand the tests well enough to fix them, maybe you can
+> take a look?
 
-This was before the SYN processing was made lockless.
+Yep, thanks for reporting, I'll take a look.
 
-I really wonder if we still need SO_REUSEPORT for TCP ?
-
-Eventually a new accept() system call where different threads
-can express how they want to choose the children sockets would
-be less invasive.
-
-Instead of having many listeners, have one listener and eventually multiple
-accept queues to improve scalability of accept() phase.
-
+>
+> Best
+> Lorenz
+>
+> ---
+>  .../selftests/bpf/prog_tests/core_reloc.c        | 16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/core_reloc.c b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
+> index d94dcead72e6..bd759290347c 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/core_reloc.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
+> @@ -644,12 +644,12 @@ static struct core_reloc_test_case test_cases[] = {
+>                 .output_len = sizeof(struct core_reloc_existence_output),
+>         },
+>
+> -       FIELD_EXISTS_ERR_CASE(existence__err_int_sz),
+> -       FIELD_EXISTS_ERR_CASE(existence__err_int_type),
+> -       FIELD_EXISTS_ERR_CASE(existence__err_int_kind),
+> -       FIELD_EXISTS_ERR_CASE(existence__err_arr_kind),
+> -       FIELD_EXISTS_ERR_CASE(existence__err_arr_value_type),
+> -       FIELD_EXISTS_ERR_CASE(existence__err_struct_type),
+> +       FIELD_EXISTS_ERR_CASE(existence___err_wrong_int_sz),
+> +       FIELD_EXISTS_ERR_CASE(existence___err_wrong_int_type),
+> +       FIELD_EXISTS_ERR_CASE(existence___err_wrong_int_kind),
+> +       FIELD_EXISTS_ERR_CASE(existence___err_wrong_arr_kind),
+> +       FIELD_EXISTS_ERR_CASE(existence___err_wrong_arr_value_type),
+> +       FIELD_EXISTS_ERR_CASE(existence___err_wrong_struct_type),
+>
+>         /* bitfield relocation checks */
+>         BITFIELDS_CASE(bitfields, {
+> @@ -864,7 +864,7 @@ void test_core_reloc(void)
+>                 err = bpf_object__load_xattr(&load_attr);
+>                 if (err) {
+>                         if (!test_case->fails)
+> -                               CHECK(false, "obj_load", "failed to load prog '%s': %d\n", probe_name, err);
+> +                               CHECK(true, "obj_load", "failed to load prog '%s': %d\n", probe_name, err);
+>                         goto cleanup;
+>                 }
+>
+> @@ -904,7 +904,7 @@ void test_core_reloc(void)
+>                 }
+>
+>                 if (test_case->fails) {
+> -                       CHECK(false, "obj_load_fail", "should fail to load prog '%s'\n", probe_name);
+> +                       CHECK(true, "obj_load_fail", "should fail to load prog '%s'\n", probe_name);
+>                         goto cleanup;
+>                 }
+>
+> --
+> 2.27.0
+>
