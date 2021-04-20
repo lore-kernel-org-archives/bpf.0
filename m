@@ -2,46 +2,46 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B29BC433B4
-	for <bpf@archiver.kernel.org>; Tue, 20 Apr 2021 15:43:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9992C433ED
+	for <bpf@archiver.kernel.org>; Tue, 20 Apr 2021 15:43:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E7341613B0
-	for <bpf@archiver.kernel.org>; Tue, 20 Apr 2021 15:43:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 649C261354
+	for <bpf@archiver.kernel.org>; Tue, 20 Apr 2021 15:43:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232994AbhDTPne (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 20 Apr 2021 11:43:34 -0400
-Received: from smtp-fw-33001.amazon.com ([207.171.190.10]:43536 "EHLO
+        id S233029AbhDTPoB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 20 Apr 2021 11:44:01 -0400
+Received: from smtp-fw-33001.amazon.com ([207.171.190.10]:44130 "EHLO
         smtp-fw-33001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232990AbhDTPne (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 20 Apr 2021 11:43:34 -0400
+        with ESMTP id S232987AbhDTPn7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 20 Apr 2021 11:43:59 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.co.jp; i=@amazon.co.jp; q=dns/txt;
-  s=amazon201209; t=1618933383; x=1650469383;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=RpeYxADRffSgep5odeFmA8XEt4AimmTWsO8drqXcMWA=;
-  b=bRSpf2wqSbzTAo5pnE99P4AUKesPdmpiNPEDcXomo1jyggXUjNwo+N6W
-   R37YqtWD406zhOcr0oh6QOtf2Uil/JYx8cVT8RlXeRxBxRIXKWlaP1A4/
-   HE8ebPquxDMBX/rTxi9zXV5hmKeUcjhGwDBRkLPxfXit5yuPkShmC62ja
-   0=;
+  s=amazon201209; t=1618933409; x=1650469409;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=StTHGdJH0e7a7hTsUp4VoJJabGCqsz7CPVVNUY3bueU=;
+  b=VTc83Jmae7HjAPq0ATs9+r93MuANiZi/5MW8AI1F+1yyPBpJv2QgclGm
+   K0scpUpzUYv192F+s/rXOS7xHqieQq49lGwBykKg3yApTzvdVYU2wO4IF
+   k8mF03aSlVsf/hFF7eMfe6bD6CjlS2NSid86WQCBjh0HcuRYrOwx/lHpT
+   I=;
 X-IronPort-AV: E=Sophos;i="5.82,237,1613433600"; 
-   d="scan'208";a="119989851"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-2c-397e131e.us-west-2.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-out-33001.sea14.amazon.com with ESMTP; 20 Apr 2021 15:43:02 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-2c-397e131e.us-west-2.amazon.com (Postfix) with ESMTPS id D5AE5A278A;
-        Tue, 20 Apr 2021 15:42:59 +0000 (UTC)
+   d="scan'208";a="119989957"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-2b-55156cd4.us-west-2.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-out-33001.sea14.amazon.com with ESMTP; 20 Apr 2021 15:43:28 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-2b-55156cd4.us-west-2.amazon.com (Postfix) with ESMTPS id 54C60A1D46;
+        Tue, 20 Apr 2021 15:43:27 +0000 (UTC)
 Received: from EX13D04ANC001.ant.amazon.com (10.43.157.89) by
  EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Tue, 20 Apr 2021 15:42:58 +0000
+ id 15.0.1497.2; Tue, 20 Apr 2021 15:43:26 +0000
 Received: from 88665a182662.ant.amazon.com (10.43.161.41) by
  EX13D04ANC001.ant.amazon.com (10.43.157.89) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Tue, 20 Apr 2021 15:42:54 +0000
+ id 15.0.1497.2; Tue, 20 Apr 2021 15:43:22 +0000
 From:   Kuniyuki Iwashima <kuniyu@amazon.co.jp>
 To:     "David S . Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
@@ -54,10 +54,12 @@ CC:     Benjamin Herrenschmidt <benh@amazon.com>,
         Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
         Kuniyuki Iwashima <kuni1840@gmail.com>, <bpf@vger.kernel.org>,
         <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3 bpf-next 00/11] Socket migration for SO_REUSEPORT.
-Date:   Wed, 21 Apr 2021 00:41:29 +0900
-Message-ID: <20210420154140.80034-1-kuniyu@amazon.co.jp>
+Subject: [PATCH v3 bpf-next 02/11] tcp: Add num_closed_socks to struct sock_reuseport.
+Date:   Wed, 21 Apr 2021 00:41:31 +0900
+Message-ID: <20210420154140.80034-3-kuniyu@amazon.co.jp>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210420154140.80034-1-kuniyu@amazon.co.jp>
+References: <20210420154140.80034-1-kuniyu@amazon.co.jp>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -68,153 +70,196 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The SO_REUSEPORT option allows sockets to listen on the same port and to
-accept connections evenly. However, there is a defect in the current
-implementation [1]. When a SYN packet is received, the connection is tied
-to a listening socket. Accordingly, when the listener is closed, in-flight
-requests during the three-way handshake and child sockets in the accept
-queue are dropped even if other listeners on the same port could accept
-such connections.
+As noted in the following commit, a closed listener has to hold the
+reference to the reuseport group for socket migration. This patch adds a
+field (num_closed_socks) to struct sock_reuseport to manage closed sockets
+within the same reuseport group. Moreover, this and the following commits
+introduce some helper functions to split socks[] into two sections and keep
+TCP_LISTEN and TCP_CLOSE sockets in each section. Like a double-ended
+queue, we will place TCP_LISTEN sockets from the front and TCP_CLOSE
+sockets from the end.
 
-This situation can happen when various server management tools restart
-server (such as nginx) processes. For instance, when we change nginx
-configurations and restart it, it spins up new workers that respect the new
-configuration and closes all listeners on the old workers, resulting in the
-in-flight ACK of 3WHS is responded by RST.
+  TCP_LISTEN---------->       <-------TCP_CLOSE
+  +---+---+  ---  +---+  ---  +---+  ---  +---+
+  | 0 | 1 |  ...  | i |  ...  | j |  ...  | k |
+  +---+---+  ---  +---+  ---  +---+  ---  +---+
 
-The SO_REUSEPORT option is excellent to improve scalability. On the other
-hand, as a trade-off, users have to know deeply how the kernel handles SYN
-packets and implement connection draining by eBPF [2]:
+  i = num_socks - 1
+  j = max_socks - num_closed_socks
+  k = max_socks - 1
 
-  1. Stop routing SYN packets to the listener by eBPF.
-  2. Wait for all timers to expire to complete requests
-  3. Accept connections until EAGAIN, then close the listener.
+This patch also extends reuseport_add_sock() and reuseport_grow() to
+support num_closed_socks.
 
-  or
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+---
+ include/net/sock_reuseport.h |  5 ++-
+ net/core/sock_reuseport.c    | 76 +++++++++++++++++++++++++++---------
+ 2 files changed, 60 insertions(+), 21 deletions(-)
 
-  1. Start counting SYN packets and accept syscalls using the eBPF map.
-  2. Stop routing SYN packets.
-  3. Accept connections up to the count, then close the listener.
-
-In either way, we cannot close a listener immediately. However, ideally,
-the application need not drain the not yet accepted sockets because 3WHS
-and tying a connection to a listener are just the kernel behaviour. The
-root cause is within the kernel, so the issue should be addressed in kernel
-space and should not be visible to user space. This patchset fixes it so
-that users need not take care of kernel implementation and connection
-draining. With this patchset, the kernel redistributes requests and
-connections from a listener to the others in the same reuseport group
-at/after close or shutdown syscalls.
-
-Although some software does connection draining, there are still merits in
-migration. For some security reasons, such as replacing TLS certificates,
-we may want to apply new settings as soon as possible and/or we may not be
-able to wait for connection draining. The sockets in the accept queue have
-not started application sessions yet. So, if we do not drain such sockets,
-they can be handled by the newer listeners and could have a longer
-lifetime. It is difficult to drain all connections in every case, but we
-can decrease such aborted connections by migration. In that sense,
-migration is always better than draining. 
-
-Moreover, auto-migration simplifies user space logic and also works well in
-a case where we cannot modify and build a server program to implement the
-workaround.
-
-Note that the source and destination listeners MUST have the same settings
-at the socket API level; otherwise, applications may face inconsistency and
-cause errors. In such a case, we have to use the eBPF program to select a
-specific listener or to cancel migration.
-
-Special thanks to Martin KaFai Lau for bouncing ideas and exchanging code
-snippets along the way.
-
-
-Link:
- [1] The SO_REUSEPORT socket option
- https://lwn.net/Articles/542629/
-
- [2] Re: [PATCH 1/1] net: Add SO_REUSEPORT_LISTEN_OFF socket option as drain mode
- https://lore.kernel.org/netdev/1458828813.10868.65.camel@edumazet-glaptop3.roam.corp.google.com/
-
-
-Changelog:
- v3:
-  * Add sysctl back for reuseport_grow()
-  * Add helper functions to manage socks[]
-  * Separate migration related logic into functions: reuseport_resurrect(),
-    reuseport_stop_listen_sock(), reuseport_migrate_sock()
-  * Clone request_sock to be migrated
-  * Migrate request one by one
-  * Pass child socket to eBPF prog
-
- v2:
- https://lore.kernel.org/netdev/20201207132456.65472-1-kuniyu@amazon.co.jp/
-  * Do not save closed sockets in socks[]
-  * Revert 607904c357c61adf20b8fd18af765e501d61a385
-  * Extract inet_csk_reqsk_queue_migrate() into a single patch
-  * Change the spin_lock order to avoid lockdep warning
-  * Add static to __reuseport_select_sock
-  * Use refcount_inc_not_zero() in reuseport_select_migrated_sock()
-  * Set the default attach type in bpf_prog_load_check_attach()
-  * Define new proto of BPF_FUNC_get_socket_cookie
-  * Fix test to be compiled successfully
-  * Update commit messages
-
- v1:
- https://lore.kernel.org/netdev/20201201144418.35045-1-kuniyu@amazon.co.jp/
-  * Remove the sysctl option
-  * Enable migration if eBPF progam is not attached
-  * Add expected_attach_type to check if eBPF program can migrate sockets
-  * Add a field to tell migration type to eBPF program
-  * Support BPF_FUNC_get_socket_cookie to get the cookie of sk
-  * Allocate an empty skb if skb is NULL
-  * Pass req_to_sk(req)->sk_hash because listener's hash is zero
-  * Update commit messages and coverletter
-
- RFC:
- https://lore.kernel.org/netdev/20201117094023.3685-1-kuniyu@amazon.co.jp/
-
-
-Kuniyuki Iwashima (11):
-  net: Introduce net.ipv4.tcp_migrate_req.
-  tcp: Add num_closed_socks to struct sock_reuseport.
-  tcp: Keep TCP_CLOSE sockets in the reuseport group.
-  tcp: Add reuseport_migrate_sock() to select a new listener.
-  tcp: Migrate TCP_ESTABLISHED/TCP_SYN_RECV sockets in accept queues.
-  tcp: Migrate TCP_NEW_SYN_RECV requests at retransmitting SYN+ACKs.
-  tcp: Migrate TCP_NEW_SYN_RECV requests at receiving the final ACK.
-  bpf: Support BPF_FUNC_get_socket_cookie() for
-    BPF_PROG_TYPE_SK_REUSEPORT.
-  bpf: Support socket migration by eBPF.
-  libbpf: Set expected_attach_type for BPF_PROG_TYPE_SK_REUSEPORT.
-  bpf: Test BPF_SK_REUSEPORT_SELECT_OR_MIGRATE.
-
- Documentation/networking/ip-sysctl.rst        |  20 +
- include/linux/bpf.h                           |   1 +
- include/linux/filter.h                        |   2 +
- include/net/netns/ipv4.h                      |   1 +
- include/net/request_sock.h                    |   2 +
- include/net/sock_reuseport.h                  |   9 +-
- include/uapi/linux/bpf.h                      |  16 +
- kernel/bpf/syscall.c                          |  13 +
- net/core/filter.c                             |  23 +-
- net/core/request_sock.c                       |  38 ++
- net/core/sock_reuseport.c                     | 337 ++++++++++--
- net/ipv4/inet_connection_sock.c               | 147 +++++-
- net/ipv4/inet_hashtables.c                    |   2 +-
- net/ipv4/sysctl_net_ipv4.c                    |   9 +
- net/ipv4/tcp_ipv4.c                           |  20 +-
- net/ipv6/tcp_ipv6.c                           |  14 +-
- tools/include/uapi/linux/bpf.h                |  16 +
- tools/lib/bpf/libbpf.c                        |   5 +-
- tools/testing/selftests/bpf/network_helpers.c |   2 +-
- tools/testing/selftests/bpf/network_helpers.h |   1 +
- .../bpf/prog_tests/migrate_reuseport.c        | 483 ++++++++++++++++++
- .../bpf/progs/test_migrate_reuseport.c        |  51 ++
- 22 files changed, 1150 insertions(+), 62 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_migrate_reuseport.c
-
+diff --git a/include/net/sock_reuseport.h b/include/net/sock_reuseport.h
+index 505f1e18e9bf..0e558ca7afbf 100644
+--- a/include/net/sock_reuseport.h
++++ b/include/net/sock_reuseport.h
+@@ -13,8 +13,9 @@ extern spinlock_t reuseport_lock;
+ struct sock_reuseport {
+ 	struct rcu_head		rcu;
+ 
+-	u16			max_socks;	/* length of socks */
+-	u16			num_socks;	/* elements in socks */
++	u16			max_socks;		/* length of socks */
++	u16			num_socks;		/* elements in socks */
++	u16			num_closed_socks;	/* closed elements in socks */
+ 	/* The last synq overflow event timestamp of this
+ 	 * reuse->socks[] group.
+ 	 */
+diff --git a/net/core/sock_reuseport.c b/net/core/sock_reuseport.c
+index b065f0a103ed..079bd1aca0e7 100644
+--- a/net/core/sock_reuseport.c
++++ b/net/core/sock_reuseport.c
+@@ -18,6 +18,49 @@ DEFINE_SPINLOCK(reuseport_lock);
+ 
+ static DEFINE_IDA(reuseport_ida);
+ 
++static int reuseport_sock_index(struct sock *sk,
++				struct sock_reuseport *reuse,
++				bool closed)
++{
++	int left, right;
++
++	if (!closed) {
++		left = 0;
++		right = reuse->num_socks;
++	} else {
++		left = reuse->max_socks - reuse->num_closed_socks;
++		right = reuse->max_socks;
++	}
++
++	for (; left < right; left++)
++		if (reuse->socks[left] == sk)
++			return left;
++	return -1;
++}
++
++static void __reuseport_add_sock(struct sock *sk,
++				 struct sock_reuseport *reuse)
++{
++	reuse->socks[reuse->num_socks] = sk;
++	/* paired with smp_rmb() in reuseport_select_sock() */
++	smp_wmb();
++	reuse->num_socks++;
++}
++
++static bool __reuseport_detach_sock(struct sock *sk,
++				    struct sock_reuseport *reuse)
++{
++	int i = reuseport_sock_index(sk, reuse, false);
++
++	if (i == -1)
++		return false;
++
++	reuse->socks[i] = reuse->socks[reuse->num_socks - 1];
++	reuse->num_socks--;
++
++	return true;
++}
++
+ static struct sock_reuseport *__reuseport_alloc(unsigned int max_socks)
+ {
+ 	unsigned int size = sizeof(struct sock_reuseport) +
+@@ -72,9 +115,8 @@ int reuseport_alloc(struct sock *sk, bool bind_inany)
+ 	}
+ 
+ 	reuse->reuseport_id = id;
+-	reuse->socks[0] = sk;
+-	reuse->num_socks = 1;
+ 	reuse->bind_inany = bind_inany;
++	__reuseport_add_sock(sk, reuse);
+ 	rcu_assign_pointer(sk->sk_reuseport_cb, reuse);
+ 
+ out:
+@@ -98,6 +140,7 @@ static struct sock_reuseport *reuseport_grow(struct sock_reuseport *reuse)
+ 		return NULL;
+ 
+ 	more_reuse->num_socks = reuse->num_socks;
++	more_reuse->num_closed_socks = reuse->num_closed_socks;
+ 	more_reuse->prog = reuse->prog;
+ 	more_reuse->reuseport_id = reuse->reuseport_id;
+ 	more_reuse->bind_inany = reuse->bind_inany;
+@@ -105,9 +148,13 @@ static struct sock_reuseport *reuseport_grow(struct sock_reuseport *reuse)
+ 
+ 	memcpy(more_reuse->socks, reuse->socks,
+ 	       reuse->num_socks * sizeof(struct sock *));
++	memcpy(more_reuse->socks +
++	       (more_reuse->max_socks - more_reuse->num_closed_socks),
++	       reuse->socks + reuse->num_socks,
++	       reuse->num_closed_socks * sizeof(struct sock *));
+ 	more_reuse->synq_overflow_ts = READ_ONCE(reuse->synq_overflow_ts);
+ 
+-	for (i = 0; i < reuse->num_socks; ++i)
++	for (i = 0; i < reuse->max_socks; ++i)
+ 		rcu_assign_pointer(reuse->socks[i]->sk_reuseport_cb,
+ 				   more_reuse);
+ 
+@@ -158,7 +205,7 @@ int reuseport_add_sock(struct sock *sk, struct sock *sk2, bool bind_inany)
+ 		return -EBUSY;
+ 	}
+ 
+-	if (reuse->num_socks == reuse->max_socks) {
++	if (reuse->num_socks + reuse->num_closed_socks == reuse->max_socks) {
+ 		reuse = reuseport_grow(reuse);
+ 		if (!reuse) {
+ 			spin_unlock_bh(&reuseport_lock);
+@@ -166,10 +213,7 @@ int reuseport_add_sock(struct sock *sk, struct sock *sk2, bool bind_inany)
+ 		}
+ 	}
+ 
+-	reuse->socks[reuse->num_socks] = sk;
+-	/* paired with smp_rmb() in reuseport_select_sock() */
+-	smp_wmb();
+-	reuse->num_socks++;
++	__reuseport_add_sock(sk, reuse);
+ 	rcu_assign_pointer(sk->sk_reuseport_cb, reuse);
+ 
+ 	spin_unlock_bh(&reuseport_lock);
+@@ -183,7 +227,6 @@ EXPORT_SYMBOL(reuseport_add_sock);
+ void reuseport_detach_sock(struct sock *sk)
+ {
+ 	struct sock_reuseport *reuse;
+-	int i;
+ 
+ 	spin_lock_bh(&reuseport_lock);
+ 	reuse = rcu_dereference_protected(sk->sk_reuseport_cb,
+@@ -200,16 +243,11 @@ void reuseport_detach_sock(struct sock *sk)
+ 	bpf_sk_reuseport_detach(sk);
+ 
+ 	rcu_assign_pointer(sk->sk_reuseport_cb, NULL);
++	__reuseport_detach_sock(sk, reuse);
++
++	if (reuse->num_socks + reuse->num_closed_socks == 0)
++		call_rcu(&reuse->rcu, reuseport_free_rcu);
+ 
+-	for (i = 0; i < reuse->num_socks; i++) {
+-		if (reuse->socks[i] == sk) {
+-			reuse->socks[i] = reuse->socks[reuse->num_socks - 1];
+-			reuse->num_socks--;
+-			if (reuse->num_socks == 0)
+-				call_rcu(&reuse->rcu, reuseport_free_rcu);
+-			break;
+-		}
+-	}
+ 	spin_unlock_bh(&reuseport_lock);
+ }
+ EXPORT_SYMBOL(reuseport_detach_sock);
+@@ -274,7 +312,7 @@ struct sock *reuseport_select_sock(struct sock *sk,
+ 	prog = rcu_dereference(reuse->prog);
+ 	socks = READ_ONCE(reuse->num_socks);
+ 	if (likely(socks)) {
+-		/* paired with smp_wmb() in reuseport_add_sock() */
++		/* paired with smp_wmb() in __reuseport_add_sock() */
+ 		smp_rmb();
+ 
+ 		if (!prog || !skb)
 -- 
 2.30.2
 
