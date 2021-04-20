@@ -2,151 +2,118 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E7E8CC433ED
-	for <bpf@archiver.kernel.org>; Tue, 20 Apr 2021 16:52:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FC4BC433B4
+	for <bpf@archiver.kernel.org>; Tue, 20 Apr 2021 16:55:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A4CA36135F
-	for <bpf@archiver.kernel.org>; Tue, 20 Apr 2021 16:52:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 05B836135F
+	for <bpf@archiver.kernel.org>; Tue, 20 Apr 2021 16:55:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233263AbhDTQxN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 20 Apr 2021 12:53:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:59693 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233245AbhDTQxM (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 20 Apr 2021 12:53:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1618937560;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=SWluZQwf/XWaF+JoqgpVc9LhHEKvzg3vw4BFLJNp6JQ=;
-        b=ReEfjKi8Ny++wTz1aHNlFyzIu3+tYr3odi5/ClytfimFndz8ZFTh8PMeXcE6jwZn3B7svF
-        fTxb9420KdJwWIrs+b+at7GTxAUIyywKCXgLrXhjYeg+ZOsQfZILRA0Wjk7B7E3RCwOJNu
-        /FGV2zRUk/EMYmvccbpetYLnykavLIg=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-523-RtM3fOicMjSko0MV24VSig-1; Tue, 20 Apr 2021 12:52:35 -0400
-X-MC-Unique: RtM3fOicMjSko0MV24VSig-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id EC34C107B467;
-        Tue, 20 Apr 2021 16:52:32 +0000 (UTC)
-Received: from krava (unknown [10.40.196.37])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 1671C5D9C0;
-        Tue, 20 Apr 2021 16:52:20 +0000 (UTC)
-Date:   Tue, 20 Apr 2021 18:52:20 +0200
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>, Daniel Xu <dxu@dxuuu.xyz>,
-        Jesper Brouer <jbrouer@redhat.com>,
-        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
-        Viktor Malik <vmalik@redhat.com>
-Subject: Re: [PATCHv2 RFC bpf-next 0/7] bpf: Add support for ftrace probe
-Message-ID: <YH8GxNi5VuYjwNmK@krava>
-References: <CAEf4Bzazst1rBi4=LuP6_FnPXCRYBNFEtDnK3UVBj6Eo6xFNtQ@mail.gmail.com>
- <YHbd2CmeoaiLJj7X@krava>
- <CAEf4BzYyVj-Tjy9ZZdAU5nOtJ8_auvVobTT6pMqg8zPb9jj-Ow@mail.gmail.com>
- <20210415111002.324b6bfa@gandalf.local.home>
- <CAEf4BzY=yBZH2Aad1hNcqCt51u0+SmNdkD6NfJRVMzF7DsvG+A@mail.gmail.com>
- <20210415170007.31420132@gandalf.local.home>
- <20210417000304.fc987dc00d706e7551b29c04@kernel.org>
- <20210416124834.05862233@gandalf.local.home>
- <YH7OXrjBIqvEZbsc@krava>
- <CAADnVQK55WzR6_JfxkMzEfUnLJnX75bRHjCkaptcVF=nQ_gWfw@mail.gmail.com>
+        id S233207AbhDTQ4M (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 20 Apr 2021 12:56:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56008 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232916AbhDTQ4M (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 20 Apr 2021 12:56:12 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AF27C06174A
+        for <bpf@vger.kernel.org>; Tue, 20 Apr 2021 09:55:41 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id 65so43812189ybc.4
+        for <bpf@vger.kernel.org>; Tue, 20 Apr 2021 09:55:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gICuAp3Pquh/lrfQ+hVpwQGGb7ciruRL5YwQXBd9yuE=;
+        b=f7pLr5I/ZAsprw3VFMITeM5qXtn2Kl862lifEKceXEa2aub70Ip50oVCZGQW6LvDug
+         bx7ARU7qCL4feSXj1oipvGgxvdIYEME5air226Rnpo9hPsxvTEEtgbak1RZA4wlSxiBg
+         gpUDcfnE6Em+hVrowPXZijRZQV6kNortlx1O745PtNf0puGOKNrL5o1wDhgj7QbW1yvh
+         8tndP6m63y/0ZDOEsrSFmtoiHqERO2LkSDCAp2tSJBQnBnDvfYreq6CGMf6wRRNeBIvk
+         /Ohz6zokN+2rOpQDdhp3UlAuf5W69MPsEFTpSeSTxesfiaTb/f3C7ZRVc4NoDOXtkQ7p
+         FEMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gICuAp3Pquh/lrfQ+hVpwQGGb7ciruRL5YwQXBd9yuE=;
+        b=KP6zwLjmYl0z8lMeInfayDUeD3FKfYNjaLfyaitQQjBhgMQNU27OpWpxkAb9PEa9RA
+         2L7UjbdNOT80VO1hEOzk7aj2yGgb0iWItHHxBpYSjJ1EXNnHTifmzHO+RMGmPrqD6S3V
+         79k0BjXcQvuWaEX4xf1mWsZD15bDFDfEMflvLfaVw+MPXBticb4wkg8/yH21MaJM/4Yt
+         a1Xjs95l71MWRA5jpqdBnrpkGDJB+GD1D/N/BywnC6ezWqSllfbjAgjdwMvuDSqCCjmr
+         OAHUYWpuqpcbgBe1msjC7RlS2mNMr2IVh7sIx8MsG9ep5/RiDLHVMJhPwWZ+pNb5kLe6
+         LUQw==
+X-Gm-Message-State: AOAM5313q10rVZBOqTUpOGhgksnYgs/fkPzRMAa9hIpowGPYyIE3uUwn
+        ynl7WuBA3groFP8AtxsBmAIq2ioSWoJGRBCAI2bVKam/W6w=
+X-Google-Smtp-Source: ABdhPJyTzIAmr5qTiXZLjkHcVpOYiJtIv8p+8cYzFlKIwLzzIMVOHcvTu7zGEbfoq33u2AndS9SSKl1mqIFCzOqq1sM=
+X-Received: by 2002:a25:3357:: with SMTP id z84mr26091572ybz.260.1618937740422;
+ Tue, 20 Apr 2021 09:55:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAADnVQK55WzR6_JfxkMzEfUnLJnX75bRHjCkaptcVF=nQ_gWfw@mail.gmail.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+References: <CACAyw9_66VctZZajdAUb0jhhn03nFkvbFLRMc=1_2zJ2_kr-aw@mail.gmail.com>
+In-Reply-To: <CACAyw9_66VctZZajdAUb0jhhn03nFkvbFLRMc=1_2zJ2_kr-aw@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 20 Apr 2021 09:55:29 -0700
+Message-ID: <CAEf4Bza1=DKHtXJ3+Ez7xXFJ1EKQqB7fUrB-fDz_dSOKcGm7FA@mail.gmail.com>
+Subject: Re: Behaviour of bpf_core_enum_value with missing value
+To:     Lorenz Bauer <lmb@cloudflare.com>
+Cc:     bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Apr 20, 2021 at 08:33:43AM -0700, Alexei Starovoitov wrote:
-> On Tue, Apr 20, 2021 at 5:51 AM Jiri Olsa <jolsa@redhat.com> wrote:
-> >
-> > On Fri, Apr 16, 2021 at 12:48:34PM -0400, Steven Rostedt wrote:
-> > > On Sat, 17 Apr 2021 00:03:04 +0900
-> > > Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> > >
-> > > > > Anyway, IIRC, Masami wasn't sure that the full regs was ever needed for the
-> > > > > return (who cares about the registers on return, except for the return
-> > > > > value?)
-> > > >
-> > > > I think kretprobe and ftrace are for a bit different usage. kretprobe can be
-> > > > used for something like debugger. In that case, accessing full regs stack
-> > > > will be more preferrable. (BTW, what the not "full regs" means? Does that
-> > > > save partial registers?)
-> > >
-> > > When the REGS flag is not set in the ftrace_ops (where kprobes uses the
-> > > REGS flags), the regs parameter is not a full set of regs, but holds just
-> > > enough to get access to the parameters. This just happened to be what was
-> > > saved in the mcount/fentry trampoline, anyway, because tracing the start of
-> > > the program, you had to save the arguments before calling the trace code,
-> > > otherwise you would corrupt the parameters of the function being traced.
-> > >
-> > > I just tweaked it so that by default, the ftrace callbacks now have access
-> > > to the saved regs (call ftrace_regs, to not let a callback get confused and
-> > > think it has full regs when it does not).
-> > >
-> > > Now for the exit of a function, what does having the full pt_regs give you?
-> > > Besides the information to get the return value, the rest of the regs are
-> > > pretty much meaningless. Is there any example that someone wants access to
-> > > the regs at the end of a function besides getting the return value?
-> >
-> > for ebpf program attached to the function exit we need the functions's
-> > arguments.. so original registers from time when the function was entered,
-> > we don't need registers state at the time function is returning
-> >
-> > as we discussed in another email, we could save input registers in
-> > fgraph_ops entry handler and load them in exit handler before calling
-> > ebpf program
-> 
-> I don't see how you can do it without BTF.
-> The mass-attach feature should prepare generic 6 or so arguments
-> from all functions it attached to.
-> On x86-64 it's trivial because 6 regs are the same.
-> On arm64 is now more challenging since return value regs overlaps with
-> first argument, so bpf trampoline (when it's ready for arm64) will look
-> a bit different than bpf trampoline on x86-64 to preserve arg0, arg1,
-> ..arg6, ret
-> 64-bit values that bpf prog expects to see.
-> On x86-32 it's even more trickier, since the same 6 args need to be copied
-> from a combination of regs and stack.
-> This is not some hypothetical case. We already use BTF in x86-32 JIT
-> and btf_func_model was introduced specifically to handle such cases.
-> So I really don't see how ftrace can do that just yet. It has to understand BTF
-> of all of the funcs it attaches to otherwise it's just saving all regs.
-> That approach was a pain to deal with.
+On Tue, Apr 20, 2021 at 6:43 AM Lorenz Bauer <lmb@cloudflare.com> wrote:
+>
+> Hi Andrii,
+>
+> The documentation for bpf_core_enum_value says that a missing
+> enum_value will make the macro return 0:
+>
+> * 64-bit value, if specified enum type and its enumerator value are
+> * present in target kernel's BTF;
+> * 0, if no matching enum and/or enum value within that enum is found.
+> */
+> #define bpf_core_enum_value(enum_type, enum_value)
+>
+> However, the enumval___err_missing test asserts that
+> bpf_core_enum_value with a missing value will poison the result if I
+> understand correctly.
+>
 
-ok, my idea was to get regs from the ftrace and have arch specific code
-to prepare 6 (or less) args for ebpf program.. that part would be
-already in bpf code
+I think comment is outdated. This was my initial approach, but after
+discussing with Alexei we decided to keep the behavior consistent with
+other types of relocation and require guarding with
+bpf_core_enum_value_exists() to handle cases where enum value is
+expected to not exist sometimes.
 
-so you'd like to see this functionality directly in ftrace, so we don't
-save unneeded regs, is that right?
+> $ sudo ./test_progs -n 31/77 -vvv
+> ...
+> libbpf: prog 'test_core_enumval': relo #9: kind <enumval_value> (11),
+> spec is [5] typedef anon_enum::ANON_ENUM_VAL2 = 32
+> libbpf: prog 'test_core_enumval': relo #9: non-matching candidate #0
+> [6] typedef anon_enum___err_missing::ANON_ENUM_VAL1___err_missing =
+> 273
+> libbpf: prog 'test_core_enumval': relo #9: no matching targets found
+> libbpf: prog 'test_core_enumval': relo #9: substituting insn #48 w/ invalid insn
+> libbpf: prog 'test_core_enumval': relo #9: substituting insn #47 w/ invalid insn
+> libbpf: load bpf program failed: Invalid argument
+>
+> What is the correct behaviour in this case?
 
-jirka
+Tests and code are right, comment is wrong. Now looking at
+progs/test_core_reloc_enumval.c, /* NAMED_ENUM_VAL3 value is optional
+*/ should be probably replaced with if (bpf_core_enum_value_exists())
+{ out->named_val3 = bpf_core_enum_value() } else { out->named_val3 =
+0xBAD } pattern or similar.
 
-> Just look at bpf code samples with ugly per architecture macros to access regs.
-> BPF trampoline solved it and I don't think going back to per-arch macros
-> is an option at this point.
-> 
-
+>
+> Lorenz
+>
+> --
+> Lorenz Bauer  |  Systems Engineer
+> 6th Floor, County Hall/The Riverside Building, SE1 7PB, UK
+>
+> www.cloudflare.com
