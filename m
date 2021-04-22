@@ -2,248 +2,339 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D9EDC433B4
-	for <bpf@archiver.kernel.org>; Thu, 22 Apr 2021 10:10:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C21BC433ED
+	for <bpf@archiver.kernel.org>; Thu, 22 Apr 2021 10:24:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 659D16145E
-	for <bpf@archiver.kernel.org>; Thu, 22 Apr 2021 10:10:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3A96B61249
+	for <bpf@archiver.kernel.org>; Thu, 22 Apr 2021 10:24:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235814AbhDVKKg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 22 Apr 2021 06:10:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35844 "EHLO
+        id S235965AbhDVKZZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 22 Apr 2021 06:25:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235809AbhDVKKf (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 22 Apr 2021 06:10:35 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 942FBC06174A
-        for <bpf@vger.kernel.org>; Thu, 22 Apr 2021 03:09:59 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id j12so27718909edy.3
-        for <bpf@vger.kernel.org>; Thu, 22 Apr 2021 03:09:59 -0700 (PDT)
+        with ESMTP id S235949AbhDVKZU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 22 Apr 2021 06:25:20 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80482C06174A;
+        Thu, 22 Apr 2021 03:24:43 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id n10so12148756plc.0;
+        Thu, 22 Apr 2021 03:24:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Dgbz+WwzJEvzXU3bA4j3zNC1nXOTIF5Yz+eNRbOGEO4=;
-        b=Qr8cI0eIu70UgXQbPY65cWFkB7yL3Y5CJlwViwiiearYgL4LKba3QYNfEUUxkOZfH6
-         ghY7aKFw4aHNwNxYfIHqYgC4DqKZGglXyns1BAamkd6XDPqVFAacjSV0iciKi8+1ZORh
-         YFB95EVwNZtZJObqKUYXxwlxAOYtDIjrAXMrI=
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1i4wA+0DkmrdGX1gV+r0TmDTowuEzj1fqhiyDNAnCj8=;
+        b=X+oL/7cdWjnHaatvSJT67WDsoQAXb4WdS5GDtEiikoZFfXdqigovUS9D1RJ1KQshg1
+         p+TG2ISMdtHNwQu58I2teGvWWGv9dmA/Og0esgeUK0Hn/bb4szWVTNFLtzjjyMoxL4Ul
+         IvbHRcB/iKj3lsCg9lMzQsRhtGGwX3FmjStCR5CiSygSX5p6xucDXZaKW1S9VAaCxv1R
+         sl4c7VMXJrSi5ylo/9FkcmUvbaQVXzW1lqyaeekt91Ivnn265RTiad1JRBVbQwR/m2JT
+         t9uAvQK3Pz9kdh2BJ224TwhngnHgzGTN//vVqYV1T7lZtEMSuqfj50EvfwRFYILtvlQ4
+         vrvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Dgbz+WwzJEvzXU3bA4j3zNC1nXOTIF5Yz+eNRbOGEO4=;
-        b=HK855rOunuMrfMbSoPsE3Wur8JCEhrHdGRN4hZaiurJcri58GQ65lPkH7mIVbjvFnP
-         abDOUq6tktCj3XoBXAGlSBbGkw5FTqTdNWL8eVrmqF9VP4xcvCHJBKm4HKh7Il8FUvYS
-         mG5stgs8uAPq7RRIChfQK4jO+MLZne4bgbZhBFRd7Ok353I7zsD8LjFB4E61GqWX2tsk
-         bS+EoVA7dhw9n1tzK7mgnSy+xkRK9TxqWn0psxXEwtx78SXLcxAQlX03nIWl5ea49xua
-         BU5i8L+VVJhC9FPvoAqDJVwOx3qUspOkGudK0x25fzqO109USR25ubk4RUtwFU1+RdJs
-         h5vA==
-X-Gm-Message-State: AOAM533SC22m//9vnfJY2IlfI8ke2oYuCkAKfrvDjI+pR7Qr1YV7+WlI
-        Sal8JFMCDCMZKk86zCQPjgyNTQ==
-X-Google-Smtp-Source: ABdhPJycnRFly2jYXEjrpKesJD8puLmkHSHDwWdyaZ8XyrIbsI0ZI8xYIg0dGaBTT8Vc9nailz3caA==
-X-Received: by 2002:aa7:c9c9:: with SMTP id i9mr2847424edt.17.1619086198187;
-        Thu, 22 Apr 2021 03:09:58 -0700 (PDT)
-Received: from [192.168.1.149] ([80.208.71.248])
-        by smtp.gmail.com with ESMTPSA id i2sm1569179ejv.99.2021.04.22.03.09.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Apr 2021 03:09:57 -0700 (PDT)
-Subject: Re: [PATCH] bpf: remove pointless code from bpf_do_trace_printk()
-To:     Florent Revest <revest@chromium.org>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>
-References: <20210421190736.1538217-1-linux@rasmusvillemoes.dk>
- <CAEf4Bza6-Unvr7QmcbvVtNDPc4BNzf8zMaU4XardNqB_GnGDHw@mail.gmail.com>
- <236995f6-30ee-8047-624c-08d0a1552dc1@rasmusvillemoes.dk>
- <CABRcYmJFfdCU_QxX+gYRWc+7BSbmTWX84o_WT=oBg_CPr8qS=g@mail.gmail.com>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Message-ID: <7e9d3337-eb7b-a2c8-a5ef-037d6a9765d7@rasmusvillemoes.dk>
-Date:   Thu, 22 Apr 2021 12:09:57 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1i4wA+0DkmrdGX1gV+r0TmDTowuEzj1fqhiyDNAnCj8=;
+        b=sbsbWX5ePlmgkDabG/YbJoIkRYak/XDNaV/O6lOnZD+GSZUKe4LptoSz5pvzmejqlT
+         Aqsb+SvVY9gVW8tDrmD8i37ySVzAyRNHEEiJL3mzdEBu4rC3PS/dYYP7lotAz0ScRNjj
+         jtGSXW3fQTavJhGnx7x1U8uedslbSaYZx4P1H+iurHtpl65L2DcZhivTVqJv+pQrYMiI
+         fkIBlH1l3yFmzuPNM4OqQQ3EpOLc5mlzSCAlvyA+JKSDeVltzGqw0lUXAd17DyHkQBcK
+         e/8EQ5FLe2emQm0y5gGO9NLV+QpubPLhAiKH7YfFobf/qMnJF1+cRbDIRtFk2g0nzJ5q
+         NkOg==
+X-Gm-Message-State: AOAM532vuAy6JmrohF6uJroiRuNkS/deUln3SoM60NBwJymfCBTSfp3c
+        aD6PSGk19rtSw8Tg9Up4QRAE5Tb2jjltabOv8itXCU7nOE1YrQ==
+X-Google-Smtp-Source: ABdhPJyMJDURnXjlQJGtjyXSVNoLE2fVAd6xEvH5e2fZU1ky7q7j+k5hinI7dIrF8I6Bc+fTMvOCd99kuGUKalPgRtg=
+X-Received: by 2002:a17:902:4d:b029:ec:94df:c9aa with SMTP id
+ 71-20020a170902004db02900ec94dfc9aamr2853732pla.7.1619087082933; Thu, 22 Apr
+ 2021 03:24:42 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CABRcYmJFfdCU_QxX+gYRWc+7BSbmTWX84o_WT=oBg_CPr8qS=g@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <cover.1617885385.git.lorenzo@kernel.org> <CAJ8uoz1MOYLzyy7xXq_fmpKDEakxSomzfM76Szjr5gWsqHc9jQ@mail.gmail.com>
+ <20210418181801.17166935@carbon> <CAJ8uoz0m8AAJFddn2LjehXtdeGS0gat7dwOLA_-_ZeOVYjBdxw@mail.gmail.com>
+ <YH0pdXXsZ7IELBn3@lore-desk> <CAJ8uoz101VZiwuvM-bs4UdW+kFT5xjgdgUwPWHZn4ABEOkyQ-w@mail.gmail.com>
+ <20210421144747.33c5f51f@carbon> <CAJ8uoz3ROiPn+-bh7OjFOjXjXK9xGhU5cxWoFPM9JoYeh=zw=g@mail.gmail.com>
+ <20210421173921.23fef6a7@carbon>
+In-Reply-To: <20210421173921.23fef6a7@carbon>
+From:   Magnus Karlsson <magnus.karlsson@gmail.com>
+Date:   Thu, 22 Apr 2021 12:24:32 +0200
+Message-ID: <CAJ8uoz2JpfdjvjJp-vjWuhw5z1=2D32jj-KktFnLN6Zd9ZVmAQ@mail.gmail.com>
+Subject: Re: [PATCH v8 bpf-next 00/14] mvneta: introduce XDP multi-buffer support
+To:     Jesper Dangaard Brouer <brouer@redhat.com>
+Cc:     Lorenzo Bianconi <lorenzo.bianconi@redhat.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, shayagr@amazon.com,
+        sameehj@amazon.com, John Fastabend <john.fastabend@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Eelco Chaudron <echaudro@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        Saeed Mahameed <saeed@kernel.org>,
+        "Fijalkowski, Maciej" <maciej.fijalkowski@intel.com>,
+        Tirthendu <tirthendu.sarkar@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 22/04/2021 11.23, Florent Revest wrote:
-> On Thu, Apr 22, 2021 at 9:13 AM Rasmus Villemoes
-> <linux@rasmusvillemoes.dk> wrote:
->>
->> On 22/04/2021 05.32, Andrii Nakryiko wrote:
->>> On Wed, Apr 21, 2021 at 6:19 PM Rasmus Villemoes
->>> <linux@rasmusvillemoes.dk> wrote:
->>>>
->>>> The comment is wrong. snprintf(buf, 16, "") and snprintf(buf, 16,
->>>> "%s", "") etc. will certainly put '\0' in buf[0]. The only case where
->>>> snprintf() does not guarantee a nul-terminated string is when it is
->>>> given a buffer size of 0 (which of course prevents it from writing
->>>> anything at all to the buffer).
->>>>
->>>> Remove it before it gets cargo-culted elsewhere.
->>>>
->>>> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
->>>> ---
->>>>  kernel/trace/bpf_trace.c | 3 ---
->>>>  1 file changed, 3 deletions(-)
->>>>
->>>
->>> The change looks good to me, but please rebase it on top of the
->>> bpf-next tree. This is not a bug, so it doesn't have to go into the
->>> bpf tree. As it is right now, it doesn't apply cleanly onto bpf-next.
-> 
-> FWIW the idea of the patch also looks good to me :)
-> 
->> Thanks for the pointer. Looking in next-20210420, it seems to me that
->>
->> commit d9c9e4db186ab4d81f84e6f22b225d333b9424e3
->> Author: Florent Revest <revest@chromium.org>
->> Date:   Mon Apr 19 17:52:38 2021 +0200
->>
->>     bpf: Factorize bpf_trace_printk and bpf_seq_printf
->>
->> is buggy. In particular, these two snippets:
->>
->> +#define BPF_CAST_FMT_ARG(arg_nb, args, mod)                            \
->> +       (mod[arg_nb] == BPF_PRINTF_LONG_LONG ||                         \
->> +        (mod[arg_nb] == BPF_PRINTF_LONG && __BITS_PER_LONG == 64)      \
->> +         ? (u64)args[arg_nb]                                           \
->> +         : (u32)args[arg_nb])
->>
->>
->> +       ret = snprintf(buf, sizeof(buf), fmt, BPF_CAST_FMT_ARG(0, args,
->> mod),
->> +               BPF_CAST_FMT_ARG(1, args, mod), BPF_CAST_FMT_ARG(2,
->> args, mod));
->>
->> Regardless of the casts done in that macro, the type of the resulting
->> expression is that resulting from C promotion rules. And (foo ? (u64)bla
->> : (u32)blib) has type u64, which is thus the type the compiler uses when
->> building the vararg list being passed into snprintf(). C simply doesn't
->> allow you to change types at run-time in this way.
->>
->> It probably works fine on x86-64, which passes the first six or so
->> argument in registers, va_start() puts those registers into the va_list
->> opaque structure, and when it comes time to do a va_arg(int), just the
->> lower 32 bits are used. It is broken on i386 and other architectures
->> where arguments are passed on the stack (and for x86-64 as well had
->> there been a few more arguments) and va_arg(ap, int) is essentially ({
->> int res = *(int *)ap; ap += 4; res; }) [or maybe it's -= 4 because stack
->> direction etc., that's not really relevant here].
->>
->> Rasmus
-> 
-> Thank you Rasmus :)
+On Wed, Apr 21, 2021 at 5:39 PM Jesper Dangaard Brouer
+<brouer@redhat.com> wrote:
+>
+> On Wed, 21 Apr 2021 16:12:32 +0200
+> Magnus Karlsson <magnus.karlsson@gmail.com> wrote:
+>
+> > On Wed, Apr 21, 2021 at 2:48 PM Jesper Dangaard Brouer
+> > <brouer@redhat.com> wrote:
+> > >
+> > > On Tue, 20 Apr 2021 15:49:44 +0200
+> > > Magnus Karlsson <magnus.karlsson@gmail.com> wrote:
+> > >
+> > > > On Mon, Apr 19, 2021 at 8:56 AM Lorenzo Bianconi
+> > > > <lorenzo.bianconi@redhat.com> wrote:
+> > > > >
+> > > > > > On Sun, Apr 18, 2021 at 6:18 PM Jesper Dangaard Brouer
+> > > > > > <brouer@redhat.com> wrote:
+> > > > > > >
+> > > > > > > On Fri, 16 Apr 2021 16:27:18 +0200
+> > > > > > > Magnus Karlsson <magnus.karlsson@gmail.com> wrote:
+> > > > > > >
+> > > > > > > > On Thu, Apr 8, 2021 at 2:51 PM Lorenzo Bianconi <lorenzo@kernel.org> wrote:
+> > > > > > > > >
+> > > > > > > > > This series introduce XDP multi-buffer support. The mvneta driver is
+> > > > > > > > > the first to support these new "non-linear" xdp_{buff,frame}. Reviewers
+> > > > > > > > > please focus on how these new types of xdp_{buff,frame} packets
+> > > > > > > > > traverse the different layers and the layout design. It is on purpose
+> > > > > > > > > that BPF-helpers are kept simple, as we don't want to expose the
+> > > > > > > > > internal layout to allow later changes.
+> > > > > > > > >
+> > > > > > > > > For now, to keep the design simple and to maintain performance, the XDP
+> > > > > > > > > BPF-prog (still) only have access to the first-buffer. It is left for
+> > > > > > > > > later (another patchset) to add payload access across multiple buffers.
+> > > > > > > > > This patchset should still allow for these future extensions. The goal
+> > > > > > > > > is to lift the XDP MTU restriction that comes with XDP, but maintain
+> > > > > > > > > same performance as before.
+> > > > > > > [...]
+> > > > > > > > >
+> > > > > > > > > [0] https://netdevconf.info/0x14/session.html?talk-the-path-to-tcp-4k-mtu-and-rx-zerocopy
+> > > > > > > > > [1] https://github.com/xdp-project/xdp-project/blob/master/areas/core/xdp-multi-buffer01-design.org
+> > > > > > > > > [2] https://netdevconf.info/0x14/session.html?tutorial-add-XDP-support-to-a-NIC-driver (XDPmulti-buffers section)
+> > > > > > > >
+> > > > > > > > Took your patches for a test run with the AF_XDP sample xdpsock on an
+> > > > > > > > i40e card and the throughput degradation is between 2 to 6% depending
+> > > > > > > > on the setup and microbenchmark within xdpsock that is executed. And
+> > > > > > > > this is without sending any multi frame packets. Just single frame
+> > > > > > > > ones. Tirtha made changes to the i40e driver to support this new
+> > > > > > > > interface so that is being included in the measurements.
+> > > > > > >
+> > > > > > > Could you please share Tirtha's i40e support patch with me?
+> > > > > >
+> > > > > > We will post them on the list as an RFC. Tirtha also added AF_XDP
+> > > > > > multi-frame support on top of Lorenzo's patches so we will send that
+> > > > > > one out as well. Will also rerun my experiments, properly document
+> > > > > > them and send out just to be sure that I did not make any mistake.
+> > > > >
+> > > > > ack, very cool, thx
+> > > >
+> > > > I have now run a new set of experiments on a Cascade Lake server at
+> > > > 2.1 GHz with turbo boost disabled. Two NICs: i40e and ice. The
+> > > > baseline is commit 5c507329000e ("libbpf: Clarify flags in ringbuf
+> > > > helpers") and Lorenzo's and Eelco's path set is their v8. First some
+> > > > runs with xdpsock (i.e. AF_XDP) in both 2-core mode (app on one core
+> > > > and the driver on another) and 1-core mode using busy_poll.
+> > > >
+> > > > xdpsock rxdrop throughput change with the multi-buffer patches without
+> > > > any driver changes:
+> > > > 1-core i40e: -0.5 to 0%   2-cores i40e: -0.5%
+> > > > 1-core ice: -2%   2-cores ice: -1 to -0.5%
+> > > >
+> > > > xdp_rxq_info -a XDP_DROP
+> > > > i40e: -4%   ice: +8%
+> > > >
+> > > > xdp_rxq_info -a XDP_TX
+> > > > i40e: -10%   ice: +9%
+> > > >
+> > > > The XDP results with xdp_rxq_info are just weird! I reran them three
+> > > > times, rebuilt and rebooted in between and I always get the same
+> > > > results. And I also checked that I am running on the correct NUMA node
+> > > > and so on. But I have a hard time believing them. Nearly +10% and -10%
+> > > > difference. Too much in my book. Jesper, could you please run the same
+> > > > and see what you get?
+> > >
+> > > We of-cause have to find the root-cause of the +-10%, but let me drill
+> > > into what the 10% represent time/cycle wise.  Using a percentage
+> > > difference is usually a really good idea as it implies a comparative
+> > > measure (something I always request people to do, as a single
+> > > performance number means nothing by itself).
+> > >
+> > > For a zoom-in-benchmarks like these where the amount of code executed
+> > > is very small, the effect of removing or adding code can effect the
+> > > measurement a lot.
+> > >
+> > > I can only do the tests for i40e, as I don't have ice hardware (but
+> > > Intel is working on fixing that ;-)).
+> > >
+> > >  xdp_rxq_info -a XDP_DROP
+> > >   i40e: 33,417,775 pps
+> >
+> > Here I only get around 21 Mpps
+> >
+> > >  CPU is 100% used, so we can calculate nanosec used per packet:
+> > >   29.92 nanosec (1/33417775*10^9)
+> > >   2.1 GHz CPU =  approx 63 CPU-cycles
+> > >
+> > >  You lost -4% performance in this case.  This correspond to:
+> > >   -1.2 nanosec (29.92*0.04) slower
+> > >   (This could be cost of single func call overhead = 1.3 ns)
+> > >
+> > > My measurement for XDP_TX:
+> > >
+> > >  xdp_rxq_info -a XDP_TX
+> > >   28,278,722 pps
+> > >   35.36 ns (1/28278722*10^9)
+> >
+> > And here, much lower at around 8 Mpps. But I do see correct packets
+> > coming back on the cable for i40e but not for ice! There is likely a
+> > bug there in the XDP_TX logic for ice. Might explain the weird results
+> > I am getting. Will investigate.
+> >
+> > But why do I get only a fraction of your performance? XDP_TX touches
+> > the packet so I would expect it to be far less than what you get, but
+> > more than I get.
+>
+> I clearly have a bug in the i40e driver.  As I wrote later, I don't see
+> any packets transmitted for XDP_TX.  Hmm, I using Mel Gorman's tree,
+> which doesn't contain the i40e/ice/ixgbe bug we fixed earlier.
+>
+> The call to xdp_convert_buff_to_frame() fails, but (see below) that
+> error is simply converted to I40E_XDP_CONSUMED.  Thus, not even the
+> 'trace_xdp_exception' will be able to troubleshoot this.  You/Intel
+> should consider making XDP_TX errors detectable (this will also happen
+> if TX ring don't have room).
 
+This is not good. Will submit a fix. Thanks for reporting Jesper.
 
-I think you were lucky (or unlucky, depending on how you look at it)
-with your test case
+>  int i40e_xmit_xdp_tx_ring(struct xdp_buff *xdp, struct i40e_ring *xdp_ring)
+>  {
+>         struct xdp_frame *xdpf = xdp_convert_buff_to_frame(xdp);
+>
+>         if (unlikely(!xdpf))
+>                 return I40E_XDP_CONSUMED;
+>
+>         return i40e_xmit_xdp_ring(xdpf, xdp_ring);
+>  }
+>
+>
+> > What CPU core do you run on?
+>
+> Intel(R) Xeon(R) CPU E5-1650 v4 @ 3.60GHz
 
-+	num_ret  = BPF_SNPRINTF(num_out, sizeof(num_out),
-+				"%d %u %x %li %llu %lX",
-+				-8, 9, 150, -424242, 1337, 0xDABBAD00);
+So significantly higher clocked than my system. Explains your high numbers.
 
-because it just so happens that the eventual snprintf() call uses three
-arguments for itself, so the first three 32-bit arguments end up being
-passed via registers, while the 64 bit arguments are passed via the
-stack. Can I get you to test what would happen if you interchanged
-these, i.e. changed the test case to do
-
-+	num_ret  = BPF_SNPRINTF(num_out, sizeof(num_out),
-+				"%li %llu %lX %d %u %x",
-+				-424242, 1337, 0xDABBAD00, -8, 9, 150);
-
-(or just add a few more expects-a-32-bit argument format specifiers and
-corresponding arguments). My guess is that up until formatting -8 it
-goes well, but when vsnprintf() is to grab the argument corresponding to
-%u, it will get the 0xffffffff from the upper half of (u64)-8.
-
-> It seems that we went offtrack in
-> https://lore.kernel.org/bpf/CAEf4BzZVEGM4esi-Rz67_xX_RTDrgxViy0gHfpeauECR5bmRNA@mail.gmail.com/
-> and we do need something like "88a5c690b6 bpf: fix bpf_trace_printk on
-> 32 bit archs". Thinking about it again, it's clearer now why the
-> __BPF_TP_EMIT macro emits 2^3=8 different __trace_printk() indeed.
-
-Isn't it 3^3 = 27, or has that been reduced in -next compared to Linus'
-master? Doesn't matter much, just curious.
-
-> In the case of bpf_trace_printk with a maximum of 3 args, it's
-> relatively cheap; but for bpf_seq_printf and bpf_snprintf which accept
-> up to 12 arguments, that would be 2^12=4096 calls.
-
-Yeah, that doesn't scale at all.
-
- Until now
-> bpf_seq_printf has just ignored this problem and just considered
-> everything as u64, I wonder if that'd be the best approach for these
-> two helpers anyway.
-> 
-
-[wild handwaving ahead]
-
-One possibility, if one is willing to get hands dirty and dig into ABI
-details on various arches, is to create a
-
-  struct fake_va_list {
-    union {
-      va_list      ap; /* opaque, compiler-provided */
-      arch_va_list _ap; /* arch-provided, must match layout of ap */
-    };
-    void *stack;
-  };
-
-Then do
-
-  struct fake_va_list fva;
-  u64 buf[24]; /* or whatever you want to support, can be different in
-different functions */
-
-  fake_va_init(&fva, buf);
-  /* various C code, parsing format string etc. */
-  if (arg[i] is really 32 bits)
-    fake_va_push(&fva, (u32)arg[i]);
-  else
-    fake_va_push(&fva, (u64)arg[i]);
-  /* etc. */
-  ...
-  vsnprintf(out, size, fmt, fva.va);
-
-On arches like x86-64, where va_list is really a typedef for a
-one-element array of
-
-struct __va_list_tag {
-        unsigned int               gp_offset;
-        unsigned int               fp_offset;
-        void *                     overflow_arg_area;
-        void *                     reg_save_area;
-};
-
-
-fake_va_init() would make the va_list look like the reg_save_area is
-already used (i.e., set gp_offset to 48), and initialize both
-->_ap.overflow_arg_area and ->stack to point at the given buffer.
-fake_va_push() would use and update stack appropriately. For 32 bit x86,
-va_list is really just a pointer, so fake_va_init would essentially just
-do "fva->_ap = fva->stack = buf", and fake_va_push() would again just
-need to manipulate ->stack.
-
-It's not pretty, but I don't think it necessarily requires too much
-arch-specific work (fake_va_push() could be common, perhaps just with a
-arch define to say whether 64 bit arguments need ->stack to first be
-up-aligned to an 8 byte boundary).
-
-Rasmus
+> > It actually looks like
+> > your packet data gets prefetched successfully. If it had not, you
+> > would have gotten an access to LLC which is much more expensive than
+> > the drop you are seeing. If I run on the wrong NUMA node, I get 4
+> > Mpps, so it is not that.
+> >
+> > One interesting thing is that I get better results using the zero-copy
+> > path in the driver. I start xdp_rxq_drop then tie an AF_XDP socket to
+> > the queue id the XDP program gets its traffic from. The AF_XDP program
+> > will get no traffic in this case, but it will force the driver to use
+> > the zero-copy path for its XDP processing. In this case I get this:
+> >
+> > -0.5% for XDP_DROP and +-0% for XDP_TX for i40e.
+> >
+> > >  You lost -10% performance in this case:
+> > >   -3.54 nanosec (35.36*0.10) slower
+> > >
+> > > In XDP context 3.54 nanosec is a lot, as you can see it is 10% in this
+> > > zoom-in benchmark.  We have to look at the details.
+> > >
+> > > One detail/issue with i40e doing XDP_TX, is that I cannot verify that
+> > > packets are actually transmitted... not via exception tracepoint, not
+> > > via netstats, not via ethtool_stats.pl.  Maybe all the packets are
+> > > getting (silently) drop in my tests...!?!
+> > >
+> > >
+> > > > The xdpsock numbers are more in the ballpark of
+> > > > what I would expect.
+> > > >
+> > > > Tirtha and I found some optimizations in the i40e
+> > > > multi-frame/multi-buffer support that we have implemented. Will test
+> > > > those next, post the results and share the code.
+> > > >
+> > > > > >
+> > > > > > Just note that I would really like for the multi-frame support to get
+> > > > > > in. I have lost count on how many people that have asked for it to be
+> > > > > > added to XDP and AF_XDP. So please check our implementation and
+> > > > > > improve it so we can get the overhead down to where we want it to be.
+> > > > >
+> > > > > sure, I will do.
+> > > > >
+> > > > > Regards,
+> > > > > Lorenzo
+> > > > >
+> > > > > >
+> > > > > > Thanks: Magnus
+> > > > > >
+> > > > > > > I would like to reproduce these results in my testlab, in-order to
+> > > > > > > figure out where the throughput degradation comes from.
+> > > > > > >
+> > > > > > > > What performance do you see with the mvneta card? How much are we
+> > > > > > > > willing to pay for this feature when it is not being used or can we in
+> > > > > > > > some way selectively turn it on only when needed?
+> > > > > > >
+> > > > > > > Well, as Daniel says performance wise we require close to /zero/
+> > > > > > > additional overhead, especially as you state this happens when sending
+> > > > > > > a single frame, which is a base case that we must not slowdown.
+> > > > > > >
+> > > > > > > --
+> > > > > > > Best regards,
+> > > > > > >   Jesper Dangaard Brouer
+> > >
+> > > --
+> > > Best regards,
+> > >   Jesper Dangaard Brouer
+> > >   MSc.CS, Principal Kernel Engineer at Red Hat
+> > >   LinkedIn: http://www.linkedin.com/in/brouer
+> > >
+> > >
+> > > Running XDP on dev:i40e2 (ifindex:6) action:XDP_DROP options:read
+> > > XDP stats       CPU     pps         issue-pps
+> > > XDP-RX CPU      2       33,417,775  0
+> > > XDP-RX CPU      total   33,417,775
+> > >
+> > > RXQ stats       RXQ:CPU pps         issue-pps
+> > > rx_queue_index    2:2   33,417,775  0
+> > > rx_queue_index    2:sum 33,417,775
+> > >
+> > >
+> > > Running XDP on dev:i40e2 (ifindex:6) action:XDP_TX options:swapmac
+> > > XDP stats       CPU     pps         issue-pps
+> > > XDP-RX CPU      2       28,278,722  0
+> > > XDP-RX CPU      total   28,278,722
+> > >
+> > > RXQ stats       RXQ:CPU pps         issue-pps
+> > > rx_queue_index    2:2   28,278,726  0
+> > > rx_queue_index    2:sum 28,278,726
+> > >
+> > >
+> > >
+> >
+>
+>
+>
+> --
+> Best regards,
+>   Jesper Dangaard Brouer
+>   MSc.CS, Principal Kernel Engineer at Red Hat
+>   LinkedIn: http://www.linkedin.com/in/brouer
+>
