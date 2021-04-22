@@ -2,75 +2,95 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A4EFC43462
-	for <bpf@archiver.kernel.org>; Thu, 22 Apr 2021 21:30:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2479FC433B4
+	for <bpf@archiver.kernel.org>; Thu, 22 Apr 2021 21:56:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4B9636144A
-	for <bpf@archiver.kernel.org>; Thu, 22 Apr 2021 21:30:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EB85E61425
+	for <bpf@archiver.kernel.org>; Thu, 22 Apr 2021 21:56:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239661AbhDVVar (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 22 Apr 2021 17:30:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52344 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237018AbhDVVap (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 22 Apr 2021 17:30:45 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 1B6DA61428;
-        Thu, 22 Apr 2021 21:30:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619127010;
-        bh=zUXfG7MLroZul7HgNtg5v28nBZ640QD3mRM1807IpZQ=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=uWqQo9RWFf71CGV7wyAXId8HBpuAk15TN1axEeHrddqiVh+MUvz9iDTBIxH0XLFVw
-         ngExMS95QCajOilk2FpHi5SbtkXuPhsjy21lK8DXYQGxHibO3DgqSyUcy3/RwUIBv3
-         JkWxk0ipNnPq4Xxn5ZIJ5Yw8i6eGZkmBv0iGxPOhs7Yun2xovy1GJ+KSAV72fQST1x
-         8ojJn/F6Eju6ZKeBAgBv0FoMRzJJwpUCBCdFgpH61KPGiSFfpkkQR9e9DwBASyxaPf
-         +h6NBVu0qC2QwH5N8nCf62bIT2gFjY62BDF4d3ZSOqBICh6HxnQqDSbcWeOwffaYoV
-         b+yMUemIXKGyA==
-Content-Type: text/plain; charset="utf-8"
+        id S236660AbhDVV4w (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 22 Apr 2021 17:56:52 -0400
+Received: from www62.your-server.de ([213.133.104.62]:39264 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232844AbhDVV4w (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 22 Apr 2021 17:56:52 -0400
+Received: from sslproxy06.your-server.de ([78.46.172.3])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1lZhIs-000DUm-AJ; Thu, 22 Apr 2021 23:56:06 +0200
+Received: from [85.7.101.30] (helo=linux.home)
+        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1lZhIs-000JP5-1R; Thu, 22 Apr 2021 23:56:06 +0200
+Subject: Re: [PATCH] selftests/bpf: fix warning comparing pointer to 0
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, shuah@kernel.org
+Cc:     ast@kernel.org, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1619085648-36826-1-git-send-email-jiapeng.chong@linux.alibaba.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <7ecb85e6-410b-65bb-a042-74045ee17c3f@iogearbox.net>
+Date:   Thu, 22 Apr 2021 23:56:05 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v3] bpf: Fix some invalid links in bpf_devel_QA.rst
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <161912701005.19496.9540083866357841252.git-patchwork-notify@kernel.org>
-Date:   Thu, 22 Apr 2021 21:30:10 +0000
-References: <1619062560-30483-1-git-send-email-yangtiezhu@loongson.cn>
-In-Reply-To: <1619062560-30483-1-git-send-email-yangtiezhu@loongson.cn>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     corbet@lwn.net, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, brouer@redhat.com,
-        linux-doc@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lixuefeng@loongson.cn
+In-Reply-To: <1619085648-36826-1-git-send-email-jiapeng.chong@linux.alibaba.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.102.4/26148/Thu Apr 22 13:06:46 2021)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
-
-This patch was applied to bpf/bpf-next.git (refs/heads/master):
-
-On Thu, 22 Apr 2021 11:36:00 +0800 you wrote:
-> There exist some errors "404 Not Found" when I click the link
-> of "MAINTAINERS" [1], "samples/bpf/" [2] and "selftests" [3]
-> in the documentation "HOWTO interact with BPF subsystem" [4].
+On 4/22/21 12:00 PM, Jiapeng Chong wrote:
+> Fix the following coccicheck warning:
 > 
-> As Alexei Starovoitov suggested, just remove "MAINTAINERS" and
-> "samples/bpf/" links and use correct link of "selftests".
+> ./tools/testing/selftests/bpf/progs/fentry_test.c:76:15-16: WARNING
+> comparing pointer to 0.
 > 
-> [...]
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 
-Here is the summary with links:
-  - [bpf-next,v3] bpf: Fix some invalid links in bpf_devel_QA.rst
-    https://git.kernel.org/bpf/bpf-next/c/64ef3ddfa95e
+How many more of those 'comparing pointer to 0' patches do you have?
+Right now we already merged the following with similar trivial pattern:
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+  - ebda107e5f222a086c83ddf6d1ab1da97dd15810
+  - a9c80b03e586fd3819089fbd33c38fb65ad5e00c
+  - 04ea63e34a2ee85cfd38578b3fc97b2d4c9dd573
 
+Given they don't really 'fix' anything, I would like to reduce such
+patch cleanup churn on the bpf tree. Please _consolidate_ all other
+such occurrences into a _single_ patch for BPF selftests, and resubmit.
+
+Thanks!
+
+> ---
+>   tools/testing/selftests/bpf/progs/fentry_test.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/progs/fentry_test.c b/tools/testing/selftests/bpf/progs/fentry_test.c
+> index 52a550d..d4247d6 100644
+> --- a/tools/testing/selftests/bpf/progs/fentry_test.c
+> +++ b/tools/testing/selftests/bpf/progs/fentry_test.c
+> @@ -73,7 +73,7 @@ int BPF_PROG(test7, struct bpf_fentry_test_t *arg)
+>   SEC("fentry/bpf_fentry_test8")
+>   int BPF_PROG(test8, struct bpf_fentry_test_t *arg)
+>   {
+> -	if (arg->a == 0)
+> +	if (!arg->a)
+>   		test8_result = 1;
+>   	return 0;
+>   }
+> 
 
