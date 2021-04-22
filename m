@@ -2,191 +2,89 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C4547C433ED
-	for <bpf@archiver.kernel.org>; Thu, 22 Apr 2021 01:17:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A95C8C433B4
+	for <bpf@archiver.kernel.org>; Thu, 22 Apr 2021 01:46:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 91CE461076
-	for <bpf@archiver.kernel.org>; Thu, 22 Apr 2021 01:17:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 82BEB61428
+	for <bpf@archiver.kernel.org>; Thu, 22 Apr 2021 01:46:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237424AbhDVBRp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 21 Apr 2021 21:17:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52542 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234970AbhDVBRp (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 21 Apr 2021 21:17:45 -0400
-Received: from oasis.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 864E5613AB;
-        Thu, 22 Apr 2021 01:17:09 +0000 (UTC)
-Date:   Wed, 21 Apr 2021 21:17:06 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Jiri Olsa <jolsa@redhat.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>, Daniel Xu <dxu@dxuuu.xyz>,
-        Jesper Brouer <jbrouer@redhat.com>,
-        Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdlbnNlbg==?= <toke@redhat.com>,
-        Viktor Malik <vmalik@redhat.com>
-Subject: Re: [PATCHv2 RFC bpf-next 0/7] bpf: Add support for ftrace probe
-Message-ID: <20210421211706.3589473e@oasis.local.home>
-In-Reply-To: <YICbK5JLqRXnjgEW@krava>
-References: <CAEf4BzY=yBZH2Aad1hNcqCt51u0+SmNdkD6NfJRVMzF7DsvG+A@mail.gmail.com>
-        <20210415170007.31420132@gandalf.local.home>
-        <20210417000304.fc987dc00d706e7551b29c04@kernel.org>
-        <20210416124834.05862233@gandalf.local.home>
-        <YH7OXrjBIqvEZbsc@krava>
-        <CAADnVQK55WzR6_JfxkMzEfUnLJnX75bRHjCkaptcVF=nQ_gWfw@mail.gmail.com>
-        <YH8GxNi5VuYjwNmK@krava>
-        <CAADnVQLh3tCWi=TiWnJVaMrYhJ=j-xSrJ72+XnZDP8CMZM+1mQ@mail.gmail.com>
-        <YIArVa6IE37vsazU@krava>
-        <20210421100541.3ea5c3bf@gandalf.local.home>
-        <YICbK5JLqRXnjgEW@krava>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        id S233989AbhDVBqj convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 21 Apr 2021 21:46:39 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:62562 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234099AbhDVBqi (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 21 Apr 2021 21:46:38 -0400
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13M1hfte019611
+        for <bpf@vger.kernel.org>; Wed, 21 Apr 2021 18:46:04 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 382ksdcwnu-4
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 21 Apr 2021 18:46:03 -0700
+Received: from intmgw006.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Wed, 21 Apr 2021 18:46:02 -0700
+Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
+        id A78362ED59F8; Wed, 21 Apr 2021 18:46:00 -0700 (PDT)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
+        <daniel@iogearbox.net>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>
+Subject: [PATCH bpf-next 1/6] selftests/bpf: document latest Clang fix expectations for linking tests
+Date:   Wed, 21 Apr 2021 18:45:51 -0700
+Message-ID: <20210422014556.3451936-2-andrii@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210422014556.3451936-1-andrii@kernel.org>
+References: <20210422014556.3451936-1-andrii@kernel.org>
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: _4tmNP3ZVSI-vNVgOO9AkmOqssUVbe3l
+X-Proofpoint-ORIG-GUID: _4tmNP3ZVSI-vNVgOO9AkmOqssUVbe3l
+Content-Transfer-Encoding: 8BIT
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-04-21_08:2021-04-21,2021-04-21 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0 phishscore=0
+ mlxlogscore=999 lowpriorityscore=0 suspectscore=0 malwarescore=0
+ bulkscore=0 priorityscore=1501 clxscore=1034 mlxscore=0 impostorscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104060000 definitions=main-2104220014
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, 21 Apr 2021 23:37:47 +0200
-Jiri Olsa <jolsa@redhat.com> wrote:
-> > 
-> > One thing that ftrace gives you is a way to have each function call its own
-> > trampoline, then depending on what is attached, each one can have multiple
-> > implementations.  
-> 
-> but that would cut off other tracers for the function, right?
+Document which fixes are required to generate correct static linking
+selftests.
 
-No, actually just the opposite. It can be updated by what is attached
-to it to provide the best trampoline for the use case.
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ tools/testing/selftests/bpf/README.rst | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-If all the callbacks are attached to a single function with a limited
-set of required args, it could jump to a trampoline that only saves the
-required args.
-
-If any of the callbacks are attached to multiple functions, and needs
-all the args, then it can jump to a trampoline to save all of them.
-
-This is similar to how it works now. One is for a trampoline that only
-cares about saving the arguments, another is for a trampoline that
-wants to save *all* the regs. And if there's a callback that wants
-both, it will use the trampoline that can handle all the callbacks to
-that function.
-
-> 
-> AFAICT it's used only when there's single ftrace_ops registered
-> for the probe and if there are more ftrace_ops, ops->trampoline
-> is replaced by the generic one and ftrace will call ops->func
-> instead, right?
-
-Somewhat, but let me explain it in more detail.
-
-There's currently two variables that determine what trampoline to call.
-
-Variable 1: number of callbacks attached. It cares about 0, 1, more than one.
-
-Variable 2: Does any callback require a full set of regs?
-
-Variable 1 determines if the trampoline that is called will call a loop
-function, that will loop through all the attached callbacks.
-
-Variable 2 determines if it should save all the regs or not.
-
-If all the callbacks attached to a function do not require saving all
-the regs, then it will only save the regs that are required for calling
-functions (which is all the arguments but not all the regs). Then it
-calls the loop function with a limited number of regs saved.
-
-If one of the functions attached requires all the regs, then it will
-save all the regs, and pass that to the loop function that calls the
-callbacks. All the callbacks will get the full set of regs, even though
-only one might care about them. But the work was already done, and the
-regs is just a pointer passed to the callbacks.
-
-
-> 
-> if we would not care about sharing function by multiple tracers,
-> we could make special 'exclusive' trampoline that would require
-> that no other tracer is (or will be) registered for the function
-> while the tracer is registered
-
-We don't want to restrict other traces. But you can switch trampolines,
-without disruption. We do that now.
-
-If a single callback that doesn't care about all regs is attached to a
-function, then a custom trampoline is created, and when the function is
-called, it calls that trampoline, which saves the required regs, and
-then does a direct call to the callback.
-
-If we add another callback to that same function, and that callback
-also doesn't care for all regs, then we switch to a new trampoline that
-instead of calling the original callback directly, it calls the loop
-function, that iterates over all the functions. The first callback sees
-no difference. We just switch the function "fentry" to point to the new
-trampoline.
-
-Then if we add a callback to that same function, but this callback
-wants all the regs, then we switch to a new trampoline that will save
-all the regs and call the loop function. The first two callbacks notice
-no change.
-
-And this can be backed out as well when callbacks are removed from a
-function. All this accounting is taken care of by
-__ftrace_hash_rec_update() in kernel/trace/ftrace. And yes, it takes a
-bit of care to get this right.
-
-The point is, you can modify the trampolines dynamically individually
-per function depending on the callback requirements that are attached
-to it.
-
-The state of each function is determined by the dyn_ftrace structure
-flags field. (see include/linux/ftrace.h)
-
-The 23 least significant bits of flags is a counter. 2^23 is much more
-than needed, because there should never be that many callbacks attached
-to a single function. Variable 1 above is determined by the count. 0,
-1 , more than one.
-
-And you'll see the flags for: REGS / REGS_EN, TRAMP / TRAMP_EN and even
-DIRECT / DIRECT_EN, for whether or not the function wants regs, if the
-function calls a trampoline directly or uses the loop, and if it has a
-direct caller or not, respectively.
-
-The "_EN" part of those flags show the state that the actual function
-is in. The __ftrace_hash_rec_update() will look at the ftrace_ops that
-is being registered or unregistered, and will update each of the functions
-it traces dyn_ftrace non "_EN" flags. Then the code that actually does
-the modifications will look at each record (that represent all
-traceable functions), and if the non "_EN" flag does not match the
-"_EN" part it knows to update that function appropriately, and then it
-updates the "_EN" flag.
-
-
-> 
-> then we could run BPF trampolines directly without 'direct' API
-> and use ftrace for mass attach
-> 
-> that is if we don't care about other tracers for the function,
-> which I guess was concern when the 'direct' API was introduced
-
-I still very much care about other traces for the function. Remember,
-kprobes and perf uses this too, and kprobes was the one that requires
-all regs being saved.
-
--- Steve
+diff --git a/tools/testing/selftests/bpf/README.rst b/tools/testing/selftests/bpf/README.rst
+index 65fe318d1e71..3353778c30f8 100644
+--- a/tools/testing/selftests/bpf/README.rst
++++ b/tools/testing/selftests/bpf/README.rst
+@@ -193,3 +193,12 @@ Without it, the error from compiling bpf selftests looks like:
+   libbpf: failed to find BTF for extern 'tcp_slow_start' [25] section: -2
+ 
+ __ https://reviews.llvm.org/D93563
++
++Clang dependencies for static linking tests
++===========================================
++
++linked_vars, linked_maps, and linked_funcs tests depend on `Clang fix`__ to
++generate valid BTF information for weak variables. Please make sure you use
++Clang that contains the fix.
++
++__ https://reviews.llvm.org/D100362
+-- 
+2.30.2
 
