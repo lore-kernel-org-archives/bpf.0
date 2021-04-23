@@ -2,122 +2,258 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D547C433B4
-	for <bpf@archiver.kernel.org>; Fri, 23 Apr 2021 23:37:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 992E5C433ED
+	for <bpf@archiver.kernel.org>; Fri, 23 Apr 2021 23:37:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2C4E2613D5
-	for <bpf@archiver.kernel.org>; Fri, 23 Apr 2021 23:37:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7C61B61476
+	for <bpf@archiver.kernel.org>; Fri, 23 Apr 2021 23:37:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244185AbhDWXhy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 23 Apr 2021 19:37:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49530 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244194AbhDWXgV (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 23 Apr 2021 19:36:21 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B137C061574;
-        Fri, 23 Apr 2021 16:35:44 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id g38so57497057ybi.12;
-        Fri, 23 Apr 2021 16:35:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0COx3mtlqNxBxeyt1n3eCr9OKs4EOcdTrHgb2uw6IF4=;
-        b=HWJE8jZvNKqcKjphmSnmAql4IBCkEvVmkLst898CWaF3OVVONQYuQzohmuD6fJwa+h
-         FMsHC21WSs0EttNm9T1CetBbsH1uZJHY9CBk59H1qN+e8jUxGe2UkzhNtvQlnh+PdyHE
-         zn+h451gvleqhU+Q7cDE9pHVZshTSjNeophshA/L8y/HCMXEsQkDrpIsOH6u6hcHJZW6
-         OxAQ0k6OJUMLA06NEPU7pCgOMbsHq2PPhQ+b0XyQWZGpQqyNNn0UCIz2qeeU515Ia0BZ
-         YkkGlBx1ARCFLOda9fFsIZDXbe9H76QK9RlOzHsgDbFB9RpTBkWw8eQ/Q1bHAm+aV9pK
-         D1Gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0COx3mtlqNxBxeyt1n3eCr9OKs4EOcdTrHgb2uw6IF4=;
-        b=QG++hF7DKRtT9qf0n97B/zrrNttnIPnbVD76YszL+T9X8yOa9qgqoMpfm0Qxnbd7kA
-         DQXe5pe+7ehXAfX6Wd83NspVaId0ZA9RQyndb2E8p5uNAcMaxOtDIGDrFw7Rpijt5mPv
-         +yojcwhU52M7MJcRohCRGw933FlGdIFzz2FI1yoEKCTwoqyIrQUQIdBp0ZIPnzjp7BLj
-         otnLEOmX+hz+BNfNVbPUCU2qY7fAIdmM+o7P/H8/MDSoODQgWqv3fOtf8UFklreBitTi
-         FX9OVKaTk08U0wOHA847IGJYxjvrD5E496YhdRGTl/u/LiH8ZqRyRhAH9ngKt2wFmoyr
-         RHoQ==
-X-Gm-Message-State: AOAM531WefdZSSKnDVLtq2lhiDEO0l5JT1jeuZzaaWHIfy/+T7xzyxlV
-        nd9hebkHXVXGu3nvtfGcW4r2ifNGEgsTrOJOvy0=
-X-Google-Smtp-Source: ABdhPJwbFCWFvfyWVyvv2VRIp+ERvF2oYAC4kmJhkcF+KemyCmzrRjMvsi0Zq7G4M2RY3IorBdvj6I9URSzKcEhpxNU=
-X-Received: by 2002:a25:9942:: with SMTP id n2mr9193584ybo.230.1619220943729;
- Fri, 23 Apr 2021 16:35:43 -0700 (PDT)
+        id S244125AbhDWXiY convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 23 Apr 2021 19:38:24 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:49284 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S244210AbhDWXgw (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 23 Apr 2021 19:36:52 -0400
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13NNUC9b009509
+        for <bpf@vger.kernel.org>; Fri, 23 Apr 2021 16:36:15 -0700
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 3845w5gqwk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Fri, 23 Apr 2021 16:36:14 -0700
+Received: from intmgw001.37.frc1.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Fri, 23 Apr 2021 16:36:13 -0700
+Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
+        id 9D37D2ED5CF6; Fri, 23 Apr 2021 16:36:11 -0700 (PDT)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
+        <daniel@iogearbox.net>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
+        Lorenz Bauer <lmb@cloudflare.com>
+Subject: [PATCH bpf-next 1/5] selftests/bpf: add remaining ASSERT_xxx() variants
+Date:   Fri, 23 Apr 2021 16:30:54 -0700
+Message-ID: <20210423233058.3386115-2-andrii@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210423233058.3386115-1-andrii@kernel.org>
+References: <20210423233058.3386115-1-andrii@kernel.org>
 MIME-Version: 1.0
-References: <20210423185357.1992756-1-andrii@kernel.org> <20210423185357.1992756-3-andrii@kernel.org>
- <2b398ad6-31be-8997-4115-851d79f2d0d2@fb.com> <CAEf4BzYDiuh+OLcRKfcZDSL6esu6dK8js8pudHKvtMvAxS1=WQ@mail.gmail.com>
- <065e8768-b066-185f-48f9-7ca8f15a2547@fb.com> <CAADnVQ+h9eS0P9Jb0QZQ374WxNSF=jhFAiBV7czqhnJxV51m6A@mail.gmail.com>
-In-Reply-To: <CAADnVQ+h9eS0P9Jb0QZQ374WxNSF=jhFAiBV7czqhnJxV51m6A@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 23 Apr 2021 16:35:32 -0700
-Message-ID: <CAEf4BzadCR+QFy4UY8NSVFjGJF4CszhjjZ48XeeqrfX3aYTnkA@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next 2/6] libbpf: rename static variables during linking
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Yonghong Song <yhs@fb.com>, Andrii Nakryiko <andrii@kernel.org>,
-        bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: m_jJk31uyw8RYZNBon2Q3TYmsbpDWtr6
+X-Proofpoint-GUID: m_jJk31uyw8RYZNBon2Q3TYmsbpDWtr6
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-04-23_14:2021-04-23,2021-04-23 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 adultscore=0
+ phishscore=0 impostorscore=0 clxscore=1015 priorityscore=1501
+ suspectscore=0 malwarescore=0 mlxlogscore=999 spamscore=0
+ lowpriorityscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2104060000 definitions=main-2104230158
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Apr 23, 2021 at 4:06 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Fri, Apr 23, 2021 at 2:56 PM Yonghong Song <yhs@fb.com> wrote:
-> > >>>
-> > >>> -static volatile const __u32 print_len;
-> > >>> -static volatile const __u32 ret1;
-> > >>> +volatile const __u32 print_len = 0;
-> > >>> +volatile const __u32 ret1 = 0;
-> > >>
-> > >> I am little bit puzzled why bpf_iter_test_kern4.c is impacted. I think
-> > >> this is not in a static link test, right? The same for a few tests below.
-> > >
-> > > All the selftests are passed through a static linker, so it will
-> > > append obj_name to each static variable. So I just minimized use of
-> > > static variables to avoid too much code churn. If this variable was
-> > > static, it would have to be accessed as
-> > > skel->rodata->bpf_iter_test_kern4__print_len, for example.
-> >
-> > Okay this should be fine. selftests/bpf specific. I just feel that
-> > some people may get confused if they write/see a single program in
-> > selftest and they have to use obj_varname format and thinking this
-> > is a new standard, but actually it is due to static linking buried
-> > in Makefile. Maybe add a note in selftests/README.rst so we
-> > can point to people if there is confusion.
->
-> I'm not sure I understand.
-> Are you saying that
-> bpftool gen object out_file.o in_file.o
-> is no longer equivalent to llvm-strip ?
-> Since during that step static vars will get their names mangled?
+Add ASSERT_TRUE/ASSERT_FALSE for conditions calculated with custom logic to
+true/false. Also add remaining arithmetical assertions:
+  - ASSERT_LE -- less than or equal;
+  - ASSERT_GT -- greater than;
+  - ASSERT_GE -- greater than or equal.
+This should cover most scenarios where people fall back to error-prone
+CHECK()s.
 
-Yes. Static vars and static maps. We don't allow (yet?) static
-entry-point BPF programs, so those don't change.
+Also extend ASSERT_ERR() to print out errno, in addition to direct error.
 
-> So a good chunk of code that uses skeleton right now should either
-> 1. don't do the linking step
-> or
-> 2. adjust their code to use global vars
-> or
-> 3. adjust the usage of skel.h in their corresponding user code
->   to accommodate mangled static names?
-> Did it get it right?
+Also convert few CHECK() instances to ensure new ASSERT_xxx() variants work as
+expected. Subsequent patch will also use ASSERT_TRUE/ASSERT_FALSE more
+extensively.
 
-Yes, you are right. But so far most cases outside of selftest that
-I've seen don't use static variables (partially because they need
-pesky volatile to be visible from user-space at all), global vars are
-much nicer in that regard. So I don't expect much changes to existing
-skeleton users. But ultimately yes, going from non-statically linked
-to statically linked might require few adjustments.
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ .../selftests/bpf/prog_tests/btf_dump.c       |  2 +-
+ .../selftests/bpf/prog_tests/btf_endian.c     |  4 +-
+ .../selftests/bpf/prog_tests/cgroup_link.c    |  2 +-
+ .../selftests/bpf/prog_tests/kfree_skb.c      |  2 +-
+ .../selftests/bpf/prog_tests/resolve_btfids.c |  7 +--
+ .../selftests/bpf/prog_tests/snprintf_btf.c   |  4 +-
+ tools/testing/selftests/bpf/test_progs.h      | 50 ++++++++++++++++++-
+ 7 files changed, 56 insertions(+), 15 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf_dump.c b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
+index c60091ee8a21..5e129dc2073c 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf_dump.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
+@@ -77,7 +77,7 @@ static int test_btf_dump_case(int n, struct btf_dump_test_case *t)
+ 
+ 	snprintf(out_file, sizeof(out_file), "/tmp/%s.output.XXXXXX", t->file);
+ 	fd = mkstemp(out_file);
+-	if (CHECK(fd < 0, "create_tmp", "failed to create file: %d\n", fd)) {
++	if (!ASSERT_GE(fd, 0, "create_tmp")) {
+ 		err = fd;
+ 		goto done;
+ 	}
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf_endian.c b/tools/testing/selftests/bpf/prog_tests/btf_endian.c
+index 8c52d72c876e..8ab5d3e358dd 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf_endian.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf_endian.c
+@@ -6,8 +6,6 @@
+ #include <test_progs.h>
+ #include <bpf/btf.h>
+ 
+-static int duration = 0;
+-
+ void test_btf_endian() {
+ #if __BYTE_ORDER == __LITTLE_ENDIAN
+ 	enum btf_endianness endian = BTF_LITTLE_ENDIAN;
+@@ -71,7 +69,7 @@ void test_btf_endian() {
+ 
+ 	/* now modify original BTF */
+ 	var_id = btf__add_var(btf, "some_var", BTF_VAR_GLOBAL_ALLOCATED, 1);
+-	CHECK(var_id <= 0, "var_id", "failed %d\n", var_id);
++	ASSERT_GT(var_id, 0, "var_id");
+ 
+ 	btf__free(swap_btf);
+ 	swap_btf = NULL;
+diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_link.c b/tools/testing/selftests/bpf/prog_tests/cgroup_link.c
+index 4d9b514b3fd9..736796e56ed1 100644
+--- a/tools/testing/selftests/bpf/prog_tests/cgroup_link.c
++++ b/tools/testing/selftests/bpf/prog_tests/cgroup_link.c
+@@ -54,7 +54,7 @@ void test_cgroup_link(void)
+ 
+ 	for (i = 0; i < cg_nr; i++) {
+ 		cgs[i].fd = create_and_get_cgroup(cgs[i].path);
+-		if (CHECK(cgs[i].fd < 0, "cg_create", "fail: %d\n", cgs[i].fd))
++		if (!ASSERT_GE(cgs[i].fd, 0, "cg_create"))
+ 			goto cleanup;
+ 	}
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/kfree_skb.c b/tools/testing/selftests/bpf/prog_tests/kfree_skb.c
+index 42c3a3103c26..d65107919998 100644
+--- a/tools/testing/selftests/bpf/prog_tests/kfree_skb.c
++++ b/tools/testing/selftests/bpf/prog_tests/kfree_skb.c
+@@ -134,7 +134,7 @@ void test_kfree_skb(void)
+ 	/* make sure kfree_skb program was triggered
+ 	 * and it sent expected skb into ring buffer
+ 	 */
+-	CHECK_FAIL(!passed);
++	ASSERT_TRUE(passed, "passed");
+ 
+ 	err = bpf_map_lookup_elem(bpf_map__fd(global_data), &zero, test_ok);
+ 	if (CHECK(err, "get_result",
+diff --git a/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c b/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
+index 6ace5e9efec1..d3c2de2c24d1 100644
+--- a/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
++++ b/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
+@@ -160,11 +160,8 @@ int test_resolve_btfids(void)
+ 			break;
+ 
+ 		if (i > 0) {
+-			ret = CHECK(test_set.ids[i - 1] > test_set.ids[i],
+-				    "sort_check",
+-				    "test_set is not sorted\n");
+-			if (ret)
+-				break;
++			if (!ASSERT_LE(test_set.ids[i - 1], test_set.ids[i], "sort_check"))
++				return -1;
+ 		}
+ 	}
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/snprintf_btf.c b/tools/testing/selftests/bpf/prog_tests/snprintf_btf.c
+index 686b40f11a45..76e1f5fe18fa 100644
+--- a/tools/testing/selftests/bpf/prog_tests/snprintf_btf.c
++++ b/tools/testing/selftests/bpf/prog_tests/snprintf_btf.c
+@@ -42,9 +42,7 @@ void test_snprintf_btf(void)
+ 	 * and it set expected return values from bpf_trace_printk()s
+ 	 * and all tests ran.
+ 	 */
+-	if (CHECK(bss->ret <= 0,
+-		  "bpf_snprintf_btf: got return value",
+-		  "ret <= 0 %ld test %d\n", bss->ret, bss->ran_subtests))
++	if (!ASSERT_GT(bss->ret, 0, "bpf_snprintf_ret"))
+ 		goto cleanup;
+ 
+ 	if (CHECK(bss->ran_subtests == 0, "check if subtests ran",
+diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/selftests/bpf/test_progs.h
+index ee7e3b45182a..dda52cb649dc 100644
+--- a/tools/testing/selftests/bpf/test_progs.h
++++ b/tools/testing/selftests/bpf/test_progs.h
+@@ -130,6 +130,20 @@ extern int test__join_cgroup(const char *path);
+ #define CHECK_ATTR(condition, tag, format...) \
+ 	_CHECK(condition, tag, tattr.duration, format)
+ 
++#define ASSERT_TRUE(actual, name) ({					\
++	static int duration = 0;					\
++	bool ___ok = (actual);						\
++	CHECK(!___ok, (name), "unexpected %s: got FALSE\n", (name));	\
++	___ok;								\
++})
++
++#define ASSERT_FALSE(actual, name) ({					\
++	static int duration = 0;					\
++	bool ___ok = !(actual);						\
++	CHECK(!___ok, (name), "unexpected %s: got TRUE\n", (name));	\
++	___ok;								\
++})
++
+ #define ASSERT_EQ(actual, expected, name) ({				\
+ 	static int duration = 0;					\
+ 	typeof(actual) ___act = (actual);				\
+@@ -163,6 +177,39 @@ extern int test__join_cgroup(const char *path);
+ 	___ok;								\
+ })
+ 
++#define ASSERT_LE(actual, expected, name) ({				\
++	static int duration = 0;					\
++	typeof(actual) ___act = (actual);				\
++	typeof(expected) ___exp = (expected);				\
++	bool ___ok = ___act <= ___exp;					\
++	CHECK(!___ok, (name),						\
++	      "unexpected %s: actual %lld > expected %lld\n",		\
++	      (name), (long long)(___act), (long long)(___exp));	\
++	___ok;								\
++})
++
++#define ASSERT_GT(actual, expected, name) ({				\
++	static int duration = 0;					\
++	typeof(actual) ___act = (actual);				\
++	typeof(expected) ___exp = (expected);				\
++	bool ___ok = ___act > ___exp;					\
++	CHECK(!___ok, (name),						\
++	      "unexpected %s: actual %lld <= expected %lld\n",		\
++	      (name), (long long)(___act), (long long)(___exp));	\
++	___ok;								\
++})
++
++#define ASSERT_GE(actual, expected, name) ({				\
++	static int duration = 0;					\
++	typeof(actual) ___act = (actual);				\
++	typeof(expected) ___exp = (expected);				\
++	bool ___ok = ___act >= ___exp;					\
++	CHECK(!___ok, (name),						\
++	      "unexpected %s: actual %lld < expected %lld\n",		\
++	      (name), (long long)(___act), (long long)(___exp));	\
++	___ok;								\
++})
++
+ #define ASSERT_STREQ(actual, expected, name) ({				\
+ 	static int duration = 0;					\
+ 	const char *___act = actual;					\
+@@ -178,7 +225,8 @@ extern int test__join_cgroup(const char *path);
+ 	static int duration = 0;					\
+ 	long long ___res = (res);					\
+ 	bool ___ok = ___res == 0;					\
+-	CHECK(!___ok, (name), "unexpected error: %lld\n", ___res);	\
++	CHECK(!___ok, (name), "unexpected error: %lld (errno %d)\n",	\
++	      ___res, errno);						\
+ 	___ok;								\
+ })
+ 
+-- 
+2.30.2
+
