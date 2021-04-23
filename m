@@ -8,60 +8,60 @@ X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F870C43470
-	for <bpf@archiver.kernel.org>; Fri, 23 Apr 2021 00:27:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 46559C433ED
+	for <bpf@archiver.kernel.org>; Fri, 23 Apr 2021 00:27:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 281B3613FB
-	for <bpf@archiver.kernel.org>; Fri, 23 Apr 2021 00:27:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2A375613F2
+	for <bpf@archiver.kernel.org>; Fri, 23 Apr 2021 00:27:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240081AbhDWA1g (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 22 Apr 2021 20:27:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55358 "EHLO
+        id S239988AbhDWA1k (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 22 Apr 2021 20:27:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239988AbhDWA1f (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 22 Apr 2021 20:27:35 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7CF6C06138F;
-        Thu, 22 Apr 2021 17:26:58 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id p67so27976399pfp.10;
-        Thu, 22 Apr 2021 17:26:58 -0700 (PDT)
+        with ESMTP id S236068AbhDWA1g (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 22 Apr 2021 20:27:36 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64FBFC06138B;
+        Thu, 22 Apr 2021 17:27:01 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id nm3-20020a17090b19c3b029014e1bbf6c60so307208pjb.4;
+        Thu, 22 Apr 2021 17:27:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=HMtZowpuKJ//bqS/0/So0II0C+lVTMjMU4WfA8IzfXQ=;
-        b=C6yT8RSJy/eslFFZpnx8+95P0A2RhZrVz462kQC5Xx3TOLNo/KM9fkRN6vXQqQk9YG
-         EJV3SompCvejgb39ZqRPURFcDZNnjn3nFKLmsaAc4barnN2xHMvP9YFHxcmouHlhGApy
-         JROwJgx6nMj4O8mqsuWB7GBFSiYCLWJrRJE2yGIhQo2/RSr8QoniS6dYHWVo0XvIZzaU
-         IqwHz/g3pmYUbh2aWN5COnfGBWV4opyb68cH0ePr+SXNlero2r4uUcLuOJrjUVItBRzz
-         U2RORVH5e8EYYdCfum6vWAqMFJrJYCrnao0/jP1tyZ4b6PSgQW9hR4QKFeoxlTYzkzqx
-         O2vw==
+        bh=6yT1ByoX159U3vaGMBYzet+3E76VUkccZqjOF7M8F8U=;
+        b=DwVqyIlY9LhTDrGvxPtEeSlfUUfVqx7o4+9XC+CVHT8ghOARzO/Jl0uAXdFl0qMpMK
+         HHFDlI8pDZltwSVUbJ1lH1+qE2GwqRciD90VEHVJhmj0SiqZnF3deUqcg9dnUfHjagBs
+         rLr3Gz+wjZ9AQVep5F6566A+NGCRwME7pyCriD4kARMJ/iDPA7QMgNtimbqjkpAXaDvM
+         C8+7X+lCIgNZLlGFQJqSWIfK+KMDR6AR+NtHJRcbN09jNfO1BNk1MlUBkRGXW5j3P32J
+         /lzWf+prspFGfBv4h8U+mzH62ZKIpZ6tmmBiWgZJFI/3HGm0OhPocqFnPyEl7MbpfXa2
+         1R7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=HMtZowpuKJ//bqS/0/So0II0C+lVTMjMU4WfA8IzfXQ=;
-        b=tkIhXGtBL6KbjWyhTxl5HBgkz5OVgoarsr3qNHtg8wwxgOAKCR8FaavPuqDXC9y89A
-         PWIakrjWbiHzCr7ODKRs1U3CYMnakZ0Zxo3d7c7lTtVHMS0x1kLmg9/oqxlLbN0K+c3M
-         BRsrI0XArHY4Yf0gFKSMlnS1p4GdNLWD8xYr2rSDFZfPemPYxUGyttDq0n4J/P/7bjrb
-         zbYFo3EnJmHlUB6ccyDs4Qx2zx1Rq1/ugRtscqKANPNq5CygtZ1iAPz/0qi0k/sWVoRo
-         bAcgl3rNjpzuq7dcyy/C5wFaOPyS+O9Ftui8WvfhK9aw5z4UDvmv8Ip38i2wL19NXYMX
-         fxEQ==
-X-Gm-Message-State: AOAM5324Dt0f5PxqKBCUXFR0xJrFClltRhy9KPRF0ycqFWd45URyXtgU
-        x8S0/ETESssVgCr/Az9c32c=
-X-Google-Smtp-Source: ABdhPJw8b0+EAHbqCAWEH1DvrgIFI4sBgDcik7/kRjFhoVz9IcJvVDU3uPtckMEsW8nLDQHjt1bVUA==
-X-Received: by 2002:a65:4986:: with SMTP id r6mr1277347pgs.392.1619137618347;
-        Thu, 22 Apr 2021 17:26:58 -0700 (PDT)
+        bh=6yT1ByoX159U3vaGMBYzet+3E76VUkccZqjOF7M8F8U=;
+        b=PJbJ8+/0JBemdQp+tXejKd4rhrb4vNrArKOF+Wl/6Pi0ZRIn1Jxs5YL/1r+nbVTTsH
+         rmI+bePsBwskOWS3HC8meWcrT5iI77yDXdtIZphIDiD2OctYkTVDou9n37rGGrbzQbra
+         7xChKBtUIJuITEQhl7jGaJcKj6SWuOgq6Fh8FA0Wvgcw2405trkcTT2lboRXsmpUCJXv
+         hV/SG/4ph/p0yU3xQtRhhZXopc2mUVrEBdyrnS5sN5K7mQlMNAEwkhLX6GRen91fpjfi
+         G6WH/ciut1GERopyZdWqXynGHKiam7bLq24vaFIw2hhzhEKW0UW2HjN3NHLwSiwnnxNE
+         FemQ==
+X-Gm-Message-State: AOAM532/LkHanQjK1aIEQXvzyfRG3Kd5ITsFOQ6pTMTFULqShJ4okfkK
+        KkSRpfTeY/KcoM2zw3gAaZIQGD89OvA=
+X-Google-Smtp-Source: ABdhPJwj+Be6xAfmHQ2LZ/5ZkqvMxLf+fA7I2YZxl/A3KfSP0AiJgjn6Q6Q4EQNwAkjLft8QVS6JCw==
+X-Received: by 2002:a17:90a:b00b:: with SMTP id x11mr2768060pjq.67.1619137621001;
+        Thu, 22 Apr 2021 17:27:01 -0700 (PDT)
 Received: from ast-mbp.thefacebook.com ([163.114.132.7])
-        by smtp.gmail.com with ESMTPSA id u12sm6390987pji.45.2021.04.22.17.26.57
+        by smtp.gmail.com with ESMTPSA id u12sm6390987pji.45.2021.04.22.17.26.59
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 22 Apr 2021 17:26:57 -0700 (PDT)
+        Thu, 22 Apr 2021 17:27:00 -0700 (PDT)
 From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To:     davem@davemloft.net
 Cc:     daniel@iogearbox.net, andrii@kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org, kernel-team@fb.com
-Subject: [PATCH v2 bpf-next 07/16] selftests/bpf: Test for btf_load command.
-Date:   Thu, 22 Apr 2021 17:26:37 -0700
-Message-Id: <20210423002646.35043-8-alexei.starovoitov@gmail.com>
+Subject: [PATCH v2 bpf-next 09/16] libbpf: Support for fd_idx
+Date:   Thu, 22 Apr 2021 17:26:39 -0700
+Message-Id: <20210423002646.35043-10-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.13.5
 In-Reply-To: <20210423002646.35043-1-alexei.starovoitov@gmail.com>
 References: <20210423002646.35043-1-alexei.starovoitov@gmail.com>
@@ -71,94 +71,186 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Improve selftest to check that btf_load is working from bpf program.
+Add support for FD_IDX make libbpf prefer that approach to loading programs.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- tools/testing/selftests/bpf/progs/syscall.c | 48 +++++++++++++++++++++
- 1 file changed, 48 insertions(+)
+ tools/lib/bpf/bpf.c             |  1 +
+ tools/lib/bpf/libbpf.c          | 70 +++++++++++++++++++++++++++++----
+ tools/lib/bpf/libbpf_internal.h |  1 +
+ 3 files changed, 65 insertions(+), 7 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/syscall.c b/tools/testing/selftests/bpf/progs/syscall.c
-index 01476f88e45f..b6ac10f75c37 100644
---- a/tools/testing/selftests/bpf/progs/syscall.c
-+++ b/tools/testing/selftests/bpf/progs/syscall.c
-@@ -4,6 +4,7 @@
- #include <linux/bpf.h>
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_tracing.h>
-+#include <linux/btf.h>
- #include <../../tools/include/linux/filter.h>
+diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+index bba48ff4c5c0..b96a3aba6fcc 100644
+--- a/tools/lib/bpf/bpf.c
++++ b/tools/lib/bpf/bpf.c
+@@ -252,6 +252,7 @@ int libbpf__bpf_prog_load(const struct bpf_prog_load_params *load_attr)
  
- volatile const int workaround = 1;
-@@ -18,6 +19,45 @@ struct args {
- 	int prog_fd;
+ 	attr.prog_btf_fd = load_attr->prog_btf_fd;
+ 	attr.prog_flags = load_attr->prog_flags;
++	attr.fd_array = ptr_to_u64(load_attr->fd_array);
+ 
+ 	attr.func_info_rec_size = load_attr->func_info_rec_size;
+ 	attr.func_info_cnt = load_attr->func_info_cnt;
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 254a0c9aa6cf..17cfc5b66111 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -176,6 +176,8 @@ enum kern_feature_id {
+ 	FEAT_MODULE_BTF,
+ 	/* BTF_KIND_FLOAT support */
+ 	FEAT_BTF_FLOAT,
++	/* Kernel support for FD_IDX */
++	FEAT_FD_IDX,
+ 	__FEAT_CNT,
  };
  
-+#define BTF_INFO_ENC(kind, kind_flag, vlen) \
-+	((!!(kind_flag) << 31) | ((kind) << 24) | ((vlen) & BTF_MAX_VLEN))
-+#define BTF_TYPE_ENC(name, info, size_or_type) (name), (info), (size_or_type)
-+#define BTF_INT_ENC(encoding, bits_offset, nr_bits) \
-+	((encoding) << 24 | (bits_offset) << 16 | (nr_bits))
-+#define BTF_TYPE_INT_ENC(name, encoding, bits_offset, bits, sz) \
-+	BTF_TYPE_ENC(name, BTF_INFO_ENC(BTF_KIND_INT, 0, 0), sz), \
-+	BTF_INT_ENC(encoding, bits_offset, bits)
-+
-+static int btf_load(void)
+@@ -288,6 +290,7 @@ struct bpf_program {
+ 	__u32 line_info_rec_size;
+ 	__u32 line_info_cnt;
+ 	__u32 prog_flags;
++	int *fd_array;
+ };
+ 
+ struct bpf_struct_ops {
+@@ -4181,6 +4184,24 @@ static int probe_module_btf(void)
+ 	return !err;
+ }
+ 
++static int probe_kern_fd_idx(void)
 +{
-+	struct btf_blob {
-+		struct btf_header btf_hdr;
-+		__u32 types[8];
-+		__u32 str;
-+	} raw_btf = {
-+		.btf_hdr = {
-+			.magic = BTF_MAGIC,
-+			.version = BTF_VERSION,
-+			.hdr_len = sizeof(struct btf_header),
-+			.type_len = sizeof(__u32) * 8,
-+			.str_off = sizeof(__u32) * 8,
-+			.str_len = sizeof(__u32),
-+		},
-+		.types = {
-+			/* long */
-+			BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 64, 8),  /* [1] */
-+			/* unsigned long */
-+			BTF_TYPE_INT_ENC(0, 0, 0, 64, 8),  /* [2] */
-+		},
-+	};
-+	static union bpf_attr btf_load_attr = {
-+		.btf_size = sizeof(raw_btf),
++	struct bpf_load_program_attr attr;
++	struct bpf_insn insns[] = {
++		BPF_LD_IMM64_RAW(BPF_REG_0, BPF_PSEUDO_MAP_IDX, 0),
++		BPF_EXIT_INSN(),
 +	};
 +
-+	btf_load_attr.btf = (long)&raw_btf;
-+	return bpf_sys_bpf(BPF_BTF_LOAD, &btf_load_attr, sizeof(btf_load_attr));
++	memset(&attr, 0, sizeof(attr));
++	attr.prog_type = BPF_PROG_TYPE_SOCKET_FILTER;
++	attr.insns = insns;
++	attr.insns_cnt = ARRAY_SIZE(insns);
++	attr.license = "GPL";
++
++	probe_fd(bpf_load_program_xattr(&attr, NULL, 0));
++	return errno == EPROTO;
 +}
 +
- SEC("syscall")
- int bpf_prog(struct args *ctx)
- {
-@@ -35,6 +75,8 @@ int bpf_prog(struct args *ctx)
- 		.map_type = BPF_MAP_TYPE_HASH,
- 		.key_size = 8,
- 		.value_size = 8,
-+		.btf_key_type_id = 1,
-+		.btf_value_type_id = 2,
- 	};
- 	static union bpf_attr map_update_attr = { .map_fd = 1, };
- 	static __u64 key = 12;
-@@ -45,7 +87,13 @@ int bpf_prog(struct args *ctx)
- 	};
- 	int ret;
+ enum kern_feature_result {
+ 	FEAT_UNKNOWN = 0,
+ 	FEAT_SUPPORTED = 1,
+@@ -4231,6 +4252,9 @@ static struct kern_feature_desc {
+ 	[FEAT_BTF_FLOAT] = {
+ 		"BTF_KIND_FLOAT support", probe_kern_btf_float,
+ 	},
++	[FEAT_FD_IDX] = {
++		"prog_load with fd_idx", probe_kern_fd_idx,
++	},
+ };
  
-+	ret = btf_load();
-+	if (ret < 0)
-+		return ret;
+ static bool kernel_supports(enum kern_feature_id feat_id)
+@@ -6309,19 +6333,34 @@ bpf_object__relocate_data(struct bpf_object *obj, struct bpf_program *prog)
+ 
+ 		switch (relo->type) {
+ 		case RELO_LD64:
+-			insn[0].src_reg = BPF_PSEUDO_MAP_FD;
+-			insn[0].imm = obj->maps[relo->map_idx].fd;
++			if (kernel_supports(FEAT_FD_IDX)) {
++				insn[0].src_reg = BPF_PSEUDO_MAP_IDX;
++				insn[0].imm = relo->map_idx;
++			} else {
++				insn[0].src_reg = BPF_PSEUDO_MAP_FD;
++				insn[0].imm = obj->maps[relo->map_idx].fd;
++			}
+ 			break;
+ 		case RELO_DATA:
+-			insn[0].src_reg = BPF_PSEUDO_MAP_VALUE;
+ 			insn[1].imm = insn[0].imm + relo->sym_off;
+-			insn[0].imm = obj->maps[relo->map_idx].fd;
++			if (kernel_supports(FEAT_FD_IDX)) {
++				insn[0].src_reg = BPF_PSEUDO_MAP_IDX_VALUE;
++				insn[0].imm = relo->map_idx;
++			} else {
++				insn[0].src_reg = BPF_PSEUDO_MAP_VALUE;
++				insn[0].imm = obj->maps[relo->map_idx].fd;
++			}
+ 			break;
+ 		case RELO_EXTERN_VAR:
+ 			ext = &obj->externs[relo->sym_off];
+ 			if (ext->type == EXT_KCFG) {
+-				insn[0].src_reg = BPF_PSEUDO_MAP_VALUE;
+-				insn[0].imm = obj->maps[obj->kconfig_map_idx].fd;
++				if (kernel_supports(FEAT_FD_IDX)) {
++					insn[0].src_reg = BPF_PSEUDO_MAP_IDX_VALUE;
++					insn[0].imm = obj->kconfig_map_idx;
++				} else {
++					insn[0].src_reg = BPF_PSEUDO_MAP_VALUE;
++					insn[0].imm = obj->maps[obj->kconfig_map_idx].fd;
++				}
+ 				insn[1].imm = ext->kcfg.data_off;
+ 			} else /* EXT_KSYM */ {
+ 				if (ext->ksym.type_id) { /* typed ksyms */
+@@ -7047,6 +7086,7 @@ load_program(struct bpf_program *prog, struct bpf_insn *insns, int insns_cnt,
+ 	load_attr.attach_btf_id = prog->attach_btf_id;
+ 	load_attr.kern_version = kern_version;
+ 	load_attr.prog_ifindex = prog->prog_ifindex;
++	load_attr.fd_array = prog->fd_array;
+ 
+ 	/* specify func_info/line_info only if kernel supports them */
+ 	btf_fd = bpf_object__btf_fd(prog->obj);
+@@ -7239,6 +7279,8 @@ bpf_object__load_progs(struct bpf_object *obj, int log_level)
+ 	struct bpf_program *prog;
+ 	size_t i;
+ 	int err;
++	struct bpf_map *map;
++	int *fd_array = NULL;
+ 
+ 	for (i = 0; i < obj->nr_programs; i++) {
+ 		prog = &obj->programs[i];
+@@ -7247,6 +7289,16 @@ bpf_object__load_progs(struct bpf_object *obj, int log_level)
+ 			return err;
+ 	}
+ 
++	if (kernel_supports(FEAT_FD_IDX) && obj->nr_maps) {
++		fd_array = malloc(sizeof(int) * obj->nr_maps);
++		if (!fd_array)
++			return -ENOMEM;
++		for (i = 0; i < obj->nr_maps; i++) {
++			map = &obj->maps[i];
++			fd_array[i] = map->fd;
++		}
++	}
 +
- 	map_create_attr.max_entries = ctx->max_entries;
-+	map_create_attr.btf_fd = ret;
-+
- 	prog_load_attr.license = (long) license;
- 	prog_load_attr.insns = (long) insns;
- 	prog_load_attr.log_buf = ctx->log_buf;
+ 	for (i = 0; i < obj->nr_programs; i++) {
+ 		prog = &obj->programs[i];
+ 		if (prog_is_subprog(obj, prog))
+@@ -7256,10 +7308,14 @@ bpf_object__load_progs(struct bpf_object *obj, int log_level)
+ 			continue;
+ 		}
+ 		prog->log_level |= log_level;
++		prog->fd_array = fd_array;
+ 		err = bpf_program__load(prog, obj->license, obj->kern_version);
+-		if (err)
++		if (err) {
++			free(fd_array);
+ 			return err;
++		}
+ 	}
++	free(fd_array);
+ 	return 0;
+ }
+ 
+diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
+index 6017902c687e..9114c7085f2a 100644
+--- a/tools/lib/bpf/libbpf_internal.h
++++ b/tools/lib/bpf/libbpf_internal.h
+@@ -204,6 +204,7 @@ struct bpf_prog_load_params {
+ 	__u32 log_level;
+ 	char *log_buf;
+ 	size_t log_buf_sz;
++	int *fd_array;
+ };
+ 
+ int libbpf__bpf_prog_load(const struct bpf_prog_load_params *load_attr);
 -- 
 2.30.2
 
