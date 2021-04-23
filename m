@@ -6,39 +6,39 @@ X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 891F7C433ED
-	for <bpf@archiver.kernel.org>; Fri, 23 Apr 2021 18:14:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2F71C433ED
+	for <bpf@archiver.kernel.org>; Fri, 23 Apr 2021 18:14:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 52971613C2
-	for <bpf@archiver.kernel.org>; Fri, 23 Apr 2021 18:14:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C695C6144D
+	for <bpf@archiver.kernel.org>; Fri, 23 Apr 2021 18:14:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243499AbhDWSOo convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 23 Apr 2021 14:14:44 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:63536 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232212AbhDWSOm (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 23 Apr 2021 14:14:42 -0400
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13NIACPg020448
+        id S243520AbhDWSOp convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 23 Apr 2021 14:14:45 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:25854 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S232244AbhDWSOn (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 23 Apr 2021 14:14:43 -0400
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.0.43/8.16.0.43) with SMTP id 13NID3QO024364
         for <bpf@vger.kernel.org>; Fri, 23 Apr 2021 11:14:05 -0700
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 3839sh8hwg-3
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0001303.ppops.net with ESMTP id 3839vur80w-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
         for <bpf@vger.kernel.org>; Fri, 23 Apr 2021 11:14:05 -0700
-Received: from intmgw001.38.frc1.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+Received: from intmgw006.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Fri, 23 Apr 2021 11:14:03 -0700
+ 15.1.2176.2; Fri, 23 Apr 2021 11:14:04 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 7357C2ED5CB8; Fri, 23 Apr 2021 11:13:54 -0700 (PDT)
+        id ED9FF2ED5CB8; Fri, 23 Apr 2021 11:14:01 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
         <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
         Yonghong Song <yhs@fb.com>
-Subject: [PATCH v3 bpf-next 02/18] bpftool: dump more info about DATASEC members
-Date:   Fri, 23 Apr 2021 11:13:32 -0700
-Message-ID: <20210423181348.1801389-3-andrii@kernel.org>
+Subject: [PATCH v3 bpf-next 05/18] libbpf: allow gaps in BPF program sections to support overriden weak functions
+Date:   Fri, 23 Apr 2021 11:13:35 -0700
+Message-ID: <20210423181348.1801389-6-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210423181348.1801389-1-andrii@kernel.org>
 References: <20210423181348.1801389-1-andrii@kernel.org>
@@ -46,122 +46,174 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: ACn1gT74X5n43Agz0Zg56mptZB_CAL5X
-X-Proofpoint-GUID: ACn1gT74X5n43Agz0Zg56mptZB_CAL5X
+X-Proofpoint-ORIG-GUID: RxdejBNLvzQi6m_VmoCcQJNA6ZrQmiUj
+X-Proofpoint-GUID: RxdejBNLvzQi6m_VmoCcQJNA6ZrQmiUj
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
  definitions=2021-04-23_07:2021-04-23,2021-04-23 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
- malwarescore=0 lowpriorityscore=0 phishscore=0 priorityscore=1501
- suspectscore=0 impostorscore=0 mlxlogscore=999 adultscore=0 mlxscore=0
- bulkscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104060000 definitions=main-2104230120
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
+ adultscore=0 suspectscore=0 clxscore=1015 mlxscore=0 lowpriorityscore=0
+ phishscore=0 mlxlogscore=999 impostorscore=0 spamscore=0
+ priorityscore=1501 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2104060000 definitions=main-2104230120
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Dump succinct information for each member of DATASEC: its kinds and name. This
-is extremely helpful to see at a quick glance what is inside each DATASEC of
-a given BTF. Without this, one has to jump around BTF data to just find out
-the name of a VAR or FUNC. DATASEC's var_secinfo member is special in that
-regard because it doesn't itself contain the name of the member, delegating
-that to the referenced VAR and FUNC kinds. Other kinds, like
-STRUCT/UNION/FUNC/ENUM, encode member names directly and thus are clearly
-identifiable in BTF dump.
+Currently libbpf is very strict about parsing BPF program instruction
+sections. No gaps are allowed between sequential BPF programs within a given
+ELF section. Libbpf enforced that by keeping track of the next section offset
+that should start a new BPF (sub)program and cross-checks that by searching
+for a corresponding STT_FUNC ELF symbol.
 
-The new output looks like this:
+But this is too restrictive once we allow to have weak BPF programs and link
+together two or more BPF object files. In such case, some weak BPF programs
+might be "overridden" by either non-weak BPF program with the same name and
+signature, or even by another weak BPF program that just happened to be linked
+first. That, in turn, leaves BPF instructions of the "lost" BPF (sub)program
+intact, but there is no corresponding ELF symbol, because no one is going to
+be referencing it.
 
-[35] DATASEC '.bss' size=0 vlen=6
-        type_id=8 offset=0 size=4 (VAR 'input_bss1')
-        type_id=13 offset=0 size=4 (VAR 'input_bss_weak')
-        type_id=16 offset=0 size=4 (VAR 'output_bss1')
-        type_id=17 offset=0 size=4 (VAR 'output_data1')
-        type_id=18 offset=0 size=4 (VAR 'output_rodata1')
-        type_id=20 offset=0 size=8 (VAR 'output_sink1')
-[36] DATASEC '.data' size=0 vlen=2
-        type_id=9 offset=0 size=4 (VAR 'input_data1')
-        type_id=14 offset=0 size=4 (VAR 'input_data_weak')
-[37] DATASEC '.kconfig' size=0 vlen=2
-        type_id=25 offset=0 size=4 (VAR 'LINUX_KERNEL_VERSION')
-        type_id=28 offset=0 size=1 (VAR 'CONFIG_BPF_SYSCALL')
-[38] DATASEC '.ksyms' size=0 vlen=1
-        type_id=30 offset=0 size=1 (VAR 'bpf_link_fops')
-[39] DATASEC '.rodata' size=0 vlen=2
-        type_id=12 offset=0 size=4 (VAR 'input_rodata1')
-        type_id=15 offset=0 size=4 (VAR 'input_rodata_weak')
-[40] DATASEC 'license' size=0 vlen=1
-        type_id=24 offset=0 size=4 (VAR 'LICENSE')
+Libbpf already correctly handles such cases in the sense that it won't append
+such dead code to actual BPF programs loaded into kernel. So the only change
+that needs to be done is to relax the logic of parsing BPF instruction
+sections. Instead of assuming next BPF (sub)program section offset, iterate
+available STT_FUNC ELF symbols to discover all available BPF subprograms and
+programs.
 
 Acked-by: Yonghong Song <yhs@fb.com>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/bpf/bpftool/btf.c | 26 ++++++++++++++++++--------
- 1 file changed, 18 insertions(+), 8 deletions(-)
+ tools/lib/bpf/libbpf.c | 58 ++++++++++++++++--------------------------
+ 1 file changed, 22 insertions(+), 36 deletions(-)
 
-diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
-index 001749a34899..385d5c955cf3 100644
---- a/tools/bpf/bpftool/btf.c
-+++ b/tools/bpf/bpftool/btf.c
-@@ -100,26 +100,28 @@ static const char *btf_str(const struct btf *btf, __u32 off)
- 	return btf__name_by_offset(btf, off) ? : "(invalid)";
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 8bac9c7627aa..198d6e149beb 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -502,8 +502,6 @@ static Elf_Scn *elf_sec_by_name(const struct bpf_object *obj, const char *name);
+ static int elf_sec_hdr(const struct bpf_object *obj, Elf_Scn *scn, GElf_Shdr *hdr);
+ static const char *elf_sec_name(const struct bpf_object *obj, Elf_Scn *scn);
+ static Elf_Data *elf_sec_data(const struct bpf_object *obj, Elf_Scn *scn);
+-static int elf_sym_by_sec_off(const struct bpf_object *obj, size_t sec_idx,
+-			      size_t off, __u32 sym_type, GElf_Sym *sym);
+ 
+ void bpf_program__unload(struct bpf_program *prog)
+ {
+@@ -644,25 +642,29 @@ static int
+ bpf_object__add_programs(struct bpf_object *obj, Elf_Data *sec_data,
+ 			 const char *sec_name, int sec_idx)
+ {
++	Elf_Data *symbols = obj->efile.symbols;
+ 	struct bpf_program *prog, *progs;
+ 	void *data = sec_data->d_buf;
+-	size_t sec_sz = sec_data->d_size, sec_off, prog_sz;
+-	int nr_progs, err;
++	size_t sec_sz = sec_data->d_size, sec_off, prog_sz, nr_syms;
++	int nr_progs, err, i;
+ 	const char *name;
+ 	GElf_Sym sym;
+ 
+ 	progs = obj->programs;
+ 	nr_progs = obj->nr_programs;
++	nr_syms = symbols->d_size / sizeof(GElf_Sym);
+ 	sec_off = 0;
+ 
+-	while (sec_off < sec_sz) {
+-		if (elf_sym_by_sec_off(obj, sec_idx, sec_off, STT_FUNC, &sym)) {
+-			pr_warn("sec '%s': failed to find program symbol at offset %zu\n",
+-				sec_name, sec_off);
+-			return -LIBBPF_ERRNO__FORMAT;
+-		}
++	for (i = 0; i < nr_syms; i++) {
++		if (!gelf_getsym(symbols, i, &sym))
++			continue;
++		if (sym.st_shndx != sec_idx)
++			continue;
++		if (GELF_ST_TYPE(sym.st_info) != STT_FUNC)
++			continue;
+ 
+ 		prog_sz = sym.st_size;
++		sec_off = sym.st_value;
+ 
+ 		name = elf_sym_str(obj, sym.st_name);
+ 		if (!name) {
+@@ -711,8 +713,6 @@ bpf_object__add_programs(struct bpf_object *obj, Elf_Data *sec_data,
+ 
+ 		nr_progs++;
+ 		obj->nr_programs = nr_progs;
+-
+-		sec_off += prog_sz;
+ 	}
+ 
+ 	return 0;
+@@ -2825,26 +2825,6 @@ static Elf_Data *elf_sec_data(const struct bpf_object *obj, Elf_Scn *scn)
+ 	return data;
  }
  
-+static int btf_kind_safe(int kind)
-+{
-+	return kind <= BTF_KIND_MAX ? kind : BTF_KIND_UNKN;
-+}
-+
- static int dump_btf_type(const struct btf *btf, __u32 id,
- 			 const struct btf_type *t)
- {
- 	json_writer_t *w = json_wtr;
--	int kind, safe_kind;
+-static int elf_sym_by_sec_off(const struct bpf_object *obj, size_t sec_idx,
+-			      size_t off, __u32 sym_type, GElf_Sym *sym)
+-{
+-	Elf_Data *symbols = obj->efile.symbols;
+-	size_t n = symbols->d_size / sizeof(GElf_Sym);
+-	int i;
 -
--	kind = BTF_INFO_KIND(t->info);
--	safe_kind = kind <= BTF_KIND_MAX ? kind : BTF_KIND_UNKN;
-+	int kind = btf_kind(t);
+-	for (i = 0; i < n; i++) {
+-		if (!gelf_getsym(symbols, i, sym))
+-			continue;
+-		if (sym->st_shndx != sec_idx || sym->st_value != off)
+-			continue;
+-		if (GELF_ST_TYPE(sym->st_info) != sym_type)
+-			continue;
+-		return 0;
+-	}
+-
+-	return -ENOENT;
+-}
+-
+ static bool is_sec_name_dwarf(const char *name)
+ {
+ 	/* approximation, but the actual list is too long */
+@@ -3723,11 +3703,16 @@ bpf_object__collect_prog_relos(struct bpf_object *obj, GElf_Shdr *shdr, Elf_Data
+ 	int err, i, nrels;
+ 	const char *sym_name;
+ 	__u32 insn_idx;
++	Elf_Scn *scn;
++	Elf_Data *scn_data;
+ 	GElf_Sym sym;
+ 	GElf_Rel rel;
  
- 	if (json_output) {
- 		jsonw_start_object(w);
- 		jsonw_uint_field(w, "id", id);
--		jsonw_string_field(w, "kind", btf_kind_str[safe_kind]);
-+		jsonw_string_field(w, "kind", btf_kind_str[btf_kind_safe(kind)]);
- 		jsonw_string_field(w, "name", btf_str(btf, t->name_off));
- 	} else {
--		printf("[%u] %s '%s'", id, btf_kind_str[safe_kind],
-+		printf("[%u] %s '%s'", id, btf_kind_str[btf_kind_safe(kind)],
- 		       btf_str(btf, t->name_off));
- 	}
- 
--	switch (BTF_INFO_KIND(t->info)) {
-+	switch (kind) {
- 	case BTF_KIND_INT: {
- 		__u32 v = *(__u32 *)(t + 1);
- 		const char *enc;
-@@ -302,7 +304,8 @@ static int dump_btf_type(const struct btf *btf, __u32 id,
- 		break;
- 	}
- 	case BTF_KIND_DATASEC: {
--		const struct btf_var_secinfo *v = (const void *)(t+1);
-+		const struct btf_var_secinfo *v = (const void *)(t + 1);
-+		const struct btf_type *vt;
- 		__u16 vlen = BTF_INFO_VLEN(t->info);
- 		int i;
- 
-@@ -324,6 +327,13 @@ static int dump_btf_type(const struct btf *btf, __u32 id,
- 			} else {
- 				printf("\n\ttype_id=%u offset=%u size=%u",
- 				       v->type, v->offset, v->size);
++	scn = elf_sec_by_idx(obj, sec_idx);
++	scn_data = elf_sec_data(obj, scn);
 +
-+				if (v->type <= btf__get_nr_types(btf)) {
-+					vt = btf__type_by_id(btf, v->type);
-+					printf(" (%s '%s')",
-+					       btf_kind_str[btf_kind_safe(btf_kind(vt))],
-+					       btf_str(btf, vt->name_off));
-+				}
- 			}
+ 	relo_sec_name = elf_sec_str(obj, shdr->sh_name);
+-	sec_name = elf_sec_name(obj, elf_sec_by_idx(obj, sec_idx));
++	sec_name = elf_sec_name(obj, scn);
+ 	if (!relo_sec_name || !sec_name)
+ 		return -EINVAL;
+ 
+@@ -3745,7 +3730,8 @@ bpf_object__collect_prog_relos(struct bpf_object *obj, GElf_Shdr *shdr, Elf_Data
+ 				relo_sec_name, (size_t)GELF_R_SYM(rel.r_info), i);
+ 			return -LIBBPF_ERRNO__FORMAT;
  		}
- 		if (json_output)
+-		if (rel.r_offset % BPF_INSN_SZ) {
++
++		if (rel.r_offset % BPF_INSN_SZ || rel.r_offset >= scn_data->d_size) {
+ 			pr_warn("sec '%s': invalid offset 0x%zx for relo #%d\n",
+ 				relo_sec_name, (size_t)GELF_R_SYM(rel.r_info), i);
+ 			return -LIBBPF_ERRNO__FORMAT;
+@@ -3769,9 +3755,9 @@ bpf_object__collect_prog_relos(struct bpf_object *obj, GElf_Shdr *shdr, Elf_Data
+ 
+ 		prog = find_prog_by_sec_insn(obj, sec_idx, insn_idx);
+ 		if (!prog) {
+-			pr_warn("sec '%s': relo #%d: program not found in section '%s' for insn #%u\n",
++			pr_debug("sec '%s': relo #%d: couldn't find program in section '%s' for insn #%u, probably overridden weak function, skipping...\n",
+ 				relo_sec_name, i, sec_name, insn_idx);
+-			return -LIBBPF_ERRNO__RELOC;
++			continue;
+ 		}
+ 
+ 		relos = libbpf_reallocarray(prog->reloc_desc,
 -- 
 2.30.2
 
