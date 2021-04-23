@@ -8,60 +8,60 @@ X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85955C43461
-	for <bpf@archiver.kernel.org>; Fri, 23 Apr 2021 00:27:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F870C43470
+	for <bpf@archiver.kernel.org>; Fri, 23 Apr 2021 00:27:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 669386143B
-	for <bpf@archiver.kernel.org>; Fri, 23 Apr 2021 00:27:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 281B3613FB
+	for <bpf@archiver.kernel.org>; Fri, 23 Apr 2021 00:27:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240059AbhDWA1f (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 22 Apr 2021 20:27:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55344 "EHLO
+        id S240081AbhDWA1g (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 22 Apr 2021 20:27:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240012AbhDWA1c (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 22 Apr 2021 20:27:32 -0400
+        with ESMTP id S239988AbhDWA1f (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 22 Apr 2021 20:27:35 -0400
 Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B462C06138C;
-        Thu, 22 Apr 2021 17:26:56 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id g16so19625175pfq.5;
-        Thu, 22 Apr 2021 17:26:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7CF6C06138F;
+        Thu, 22 Apr 2021 17:26:58 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id p67so27976399pfp.10;
+        Thu, 22 Apr 2021 17:26:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=uMTjltqajgdVrwhXaGl/162P4PUnuM1AeyInQysPzu4=;
-        b=Z8dEhU2QxZkxLjOIJokcvaFHQc6FR9H86Y5rqbidDvf8XTTZAaG77MJuqWGq7gEYMl
-         GgP2Ef+CZp2LGHj99DMar5rfKkxvYGpqqIwlD5O3LudrcaWYZ/dp43ukuwBbEEEn0rPB
-         kvysCqytlKl1aqLKkNcBpqzCGq8becdx+x9a3iRP3cy7yivbvpHRtro20/gbcfVCZnQS
-         LXKTDkp9LDwLbd7STrkTnT19/HwHVxIvu3BCngQh0o5+t8kLRuqTYJqAgEumXGZ2LUKP
-         t5mLCaJA6HGJ8fdfi8lTtQa1gQqHe7hcqVIIDhpugkWRoUAKTiT9qidM+41n/5aOqY8G
-         blqg==
+        bh=HMtZowpuKJ//bqS/0/So0II0C+lVTMjMU4WfA8IzfXQ=;
+        b=C6yT8RSJy/eslFFZpnx8+95P0A2RhZrVz462kQC5Xx3TOLNo/KM9fkRN6vXQqQk9YG
+         EJV3SompCvejgb39ZqRPURFcDZNnjn3nFKLmsaAc4barnN2xHMvP9YFHxcmouHlhGApy
+         JROwJgx6nMj4O8mqsuWB7GBFSiYCLWJrRJE2yGIhQo2/RSr8QoniS6dYHWVo0XvIZzaU
+         IqwHz/g3pmYUbh2aWN5COnfGBWV4opyb68cH0ePr+SXNlero2r4uUcLuOJrjUVItBRzz
+         U2RORVH5e8EYYdCfum6vWAqMFJrJYCrnao0/jP1tyZ4b6PSgQW9hR4QKFeoxlTYzkzqx
+         O2vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=uMTjltqajgdVrwhXaGl/162P4PUnuM1AeyInQysPzu4=;
-        b=NWmC7dNYVlLPft0L5MqCSpvZxxEKuXeAbzBTByXfnNGuO1zR6C6NUOWbjupVElbIyP
-         Z9S7Zy1v0+7OMcFniWWEgFb24MyaXFT4DGuuhJsh5CuGRNLT2wPz5Jwn5reDVApV6VvW
-         PevEC9DtxdKxOc3rVu+nKpCCjda449IynE9amasgd9Km4ZDiHdfmb4YQWNnN2qq8bire
-         hN4yrhrghTfFTJTUT4bCB/UXDxtksynROMLegTZon3BBPVgKhGbFMTi1OVTYRd6Rt9Fq
-         2O4+T4yU4Sp8oNz1rWOeARcOwuBkCt2XFz70P9XMiCnCJCyNmtHiMAbC6W38cPBde8Dy
-         H3Cw==
-X-Gm-Message-State: AOAM5320bsVCRU0jdj5YzaZVQlCuWHazsZmFThOvZvEQQpDSNU/lEv+t
-        pPustSjaUxLduRwzEdW0614=
-X-Google-Smtp-Source: ABdhPJxvB8SzG4qsH26F5RHFc+271eomR/jS5HJCRamKEBaS3Len44x8VV8fQ2VcEEVGZ20KmgK4xQ==
-X-Received: by 2002:aa7:9702:0:b029:260:dd79:5b33 with SMTP id a2-20020aa797020000b0290260dd795b33mr1214544pfg.14.1619137615520;
-        Thu, 22 Apr 2021 17:26:55 -0700 (PDT)
+        bh=HMtZowpuKJ//bqS/0/So0II0C+lVTMjMU4WfA8IzfXQ=;
+        b=tkIhXGtBL6KbjWyhTxl5HBgkz5OVgoarsr3qNHtg8wwxgOAKCR8FaavPuqDXC9y89A
+         PWIakrjWbiHzCr7ODKRs1U3CYMnakZ0Zxo3d7c7lTtVHMS0x1kLmg9/oqxlLbN0K+c3M
+         BRsrI0XArHY4Yf0gFKSMlnS1p4GdNLWD8xYr2rSDFZfPemPYxUGyttDq0n4J/P/7bjrb
+         zbYFo3EnJmHlUB6ccyDs4Qx2zx1Rq1/ugRtscqKANPNq5CygtZ1iAPz/0qi0k/sWVoRo
+         bAcgl3rNjpzuq7dcyy/C5wFaOPyS+O9Ftui8WvfhK9aw5z4UDvmv8Ip38i2wL19NXYMX
+         fxEQ==
+X-Gm-Message-State: AOAM5324Dt0f5PxqKBCUXFR0xJrFClltRhy9KPRF0ycqFWd45URyXtgU
+        x8S0/ETESssVgCr/Az9c32c=
+X-Google-Smtp-Source: ABdhPJw8b0+EAHbqCAWEH1DvrgIFI4sBgDcik7/kRjFhoVz9IcJvVDU3uPtckMEsW8nLDQHjt1bVUA==
+X-Received: by 2002:a65:4986:: with SMTP id r6mr1277347pgs.392.1619137618347;
+        Thu, 22 Apr 2021 17:26:58 -0700 (PDT)
 Received: from ast-mbp.thefacebook.com ([163.114.132.7])
-        by smtp.gmail.com with ESMTPSA id u12sm6390987pji.45.2021.04.22.17.26.54
+        by smtp.gmail.com with ESMTPSA id u12sm6390987pji.45.2021.04.22.17.26.57
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 22 Apr 2021 17:26:55 -0700 (PDT)
+        Thu, 22 Apr 2021 17:26:57 -0700 (PDT)
 From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To:     davem@davemloft.net
 Cc:     daniel@iogearbox.net, andrii@kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org, kernel-team@fb.com
-Subject: [PATCH v2 bpf-next 05/16] selftests/bpf: Test for syscall program type
-Date:   Thu, 22 Apr 2021 17:26:35 -0700
-Message-Id: <20210423002646.35043-6-alexei.starovoitov@gmail.com>
+Subject: [PATCH v2 bpf-next 07/16] selftests/bpf: Test for btf_load command.
+Date:   Thu, 22 Apr 2021 17:26:37 -0700
+Message-Id: <20210423002646.35043-8-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.13.5
 In-Reply-To: <20210423002646.35043-1-alexei.starovoitov@gmail.com>
 References: <20210423002646.35043-1-alexei.starovoitov@gmail.com>
@@ -71,168 +71,94 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-bpf_prog_type_syscall is a program that creates a bpf map,
-updates it, and loads another bpf program using bpf_sys_bpf() helper.
+Improve selftest to check that btf_load is working from bpf program.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- tools/testing/selftests/bpf/Makefile          |  1 +
- .../selftests/bpf/prog_tests/syscall.c        | 53 ++++++++++++++
- tools/testing/selftests/bpf/progs/syscall.c   | 73 +++++++++++++++++++
- 3 files changed, 127 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/syscall.c
- create mode 100644 tools/testing/selftests/bpf/progs/syscall.c
+ tools/testing/selftests/bpf/progs/syscall.c | 48 +++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index c5bcdb3d4b12..9fdfdbc61857 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -278,6 +278,7 @@ MENDIAN=$(if $(IS_LITTLE_ENDIAN),-mlittle-endian,-mbig-endian)
- CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG))
- BPF_CFLAGS = -g -D__TARGET_ARCH_$(SRCARCH) $(MENDIAN) 			\
- 	     -I$(INCLUDE_DIR) -I$(CURDIR) -I$(APIDIR)			\
-+	     -I$(TOOLSINCDIR) \
- 	     -I$(abspath $(OUTPUT)/../usr/include)
- 
- CLANG_CFLAGS = $(CLANG_SYS_INCLUDES) \
-diff --git a/tools/testing/selftests/bpf/prog_tests/syscall.c b/tools/testing/selftests/bpf/prog_tests/syscall.c
-new file mode 100644
-index 000000000000..e550e36bb5da
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/syscall.c
-@@ -0,0 +1,53 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2021 Facebook */
-+#include <test_progs.h>
-+#include "syscall.skel.h"
-+
-+struct args {
-+	__u64 log_buf;
-+	__u32 log_size;
-+	int max_entries;
-+	int map_fd;
-+	int prog_fd;
-+};
-+
-+void test_syscall(void)
-+{
-+	static char verifier_log[8192];
-+	struct args ctx = {
-+		.max_entries = 1024,
-+		.log_buf = (uintptr_t) verifier_log,
-+		.log_size = sizeof(verifier_log),
-+	};
-+	struct bpf_prog_test_run_attr tattr = {
-+		.ctx_in = &ctx,
-+		.ctx_size_in = sizeof(ctx),
-+	};
-+	struct syscall *skel = NULL;
-+	__u64 key = 12, value = 0;
-+	__u32 duration = 0;
-+	int err;
-+
-+	skel = syscall__open_and_load();
-+	if (CHECK(!skel, "skel_load", "syscall skeleton failed\n"))
-+		goto cleanup;
-+
-+	tattr.prog_fd = bpf_program__fd(skel->progs.bpf_prog);
-+	err = bpf_prog_test_run_xattr(&tattr);
-+	if (CHECK(err || tattr.retval != 1, "test_run sys_bpf",
-+		  "err %d errno %d retval %d duration %d\n",
-+		  err, errno, tattr.retval, tattr.duration))
-+		goto cleanup;
-+
-+	CHECK(ctx.map_fd <= 0, "map_fd", "fd = %d\n", ctx.map_fd);
-+	CHECK(ctx.prog_fd <= 0, "prog_fd", "fd = %d\n", ctx.prog_fd);
-+	CHECK(memcmp(verifier_log, "processed", sizeof("processed") - 1) != 0,
-+	      "verifier_log", "%s\n", verifier_log);
-+
-+	err = bpf_map_lookup_elem(ctx.map_fd, &key, &value);
-+	CHECK(err, "map_lookup", "map_lookup failed\n");
-+	CHECK(value != 34, "invalid_value",
-+	      "got value %llu expected %u\n", value, 34);
-+cleanup:
-+	syscall__destroy(skel);
-+}
 diff --git a/tools/testing/selftests/bpf/progs/syscall.c b/tools/testing/selftests/bpf/progs/syscall.c
-new file mode 100644
-index 000000000000..01476f88e45f
---- /dev/null
+index 01476f88e45f..b6ac10f75c37 100644
+--- a/tools/testing/selftests/bpf/progs/syscall.c
 +++ b/tools/testing/selftests/bpf/progs/syscall.c
-@@ -0,0 +1,73 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2021 Facebook */
-+#include <linux/stddef.h>
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include <../../tools/include/linux/filter.h>
+@@ -4,6 +4,7 @@
+ #include <linux/bpf.h>
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_tracing.h>
++#include <linux/btf.h>
+ #include <../../tools/include/linux/filter.h>
+ 
+ volatile const int workaround = 1;
+@@ -18,6 +19,45 @@ struct args {
+ 	int prog_fd;
+ };
+ 
++#define BTF_INFO_ENC(kind, kind_flag, vlen) \
++	((!!(kind_flag) << 31) | ((kind) << 24) | ((vlen) & BTF_MAX_VLEN))
++#define BTF_TYPE_ENC(name, info, size_or_type) (name), (info), (size_or_type)
++#define BTF_INT_ENC(encoding, bits_offset, nr_bits) \
++	((encoding) << 24 | (bits_offset) << 16 | (nr_bits))
++#define BTF_TYPE_INT_ENC(name, encoding, bits_offset, bits, sz) \
++	BTF_TYPE_ENC(name, BTF_INFO_ENC(BTF_KIND_INT, 0, 0), sz), \
++	BTF_INT_ENC(encoding, bits_offset, bits)
 +
-+volatile const int workaround = 1;
-+
-+char _license[] SEC("license") = "GPL";
-+
-+struct args {
-+	__u64 log_buf;
-+	__u32 log_size;
-+	int max_entries;
-+	int map_fd;
-+	int prog_fd;
-+};
-+
-+SEC("syscall")
-+int bpf_prog(struct args *ctx)
++static int btf_load(void)
 +{
-+	static char license[] = "GPL";
-+	static struct bpf_insn insns[] = {
-+		BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
-+		BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
-+		BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
-+		BPF_LD_MAP_FD(BPF_REG_1, 0),
-+		BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
-+		BPF_MOV64_IMM(BPF_REG_0, 0),
-+		BPF_EXIT_INSN(),
++	struct btf_blob {
++		struct btf_header btf_hdr;
++		__u32 types[8];
++		__u32 str;
++	} raw_btf = {
++		.btf_hdr = {
++			.magic = BTF_MAGIC,
++			.version = BTF_VERSION,
++			.hdr_len = sizeof(struct btf_header),
++			.type_len = sizeof(__u32) * 8,
++			.str_off = sizeof(__u32) * 8,
++			.str_len = sizeof(__u32),
++		},
++		.types = {
++			/* long */
++			BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 64, 8),  /* [1] */
++			/* unsigned long */
++			BTF_TYPE_INT_ENC(0, 0, 0, 64, 8),  /* [2] */
++		},
 +	};
-+	static union bpf_attr map_create_attr = {
-+		.map_type = BPF_MAP_TYPE_HASH,
-+		.key_size = 8,
-+		.value_size = 8,
++	static union bpf_attr btf_load_attr = {
++		.btf_size = sizeof(raw_btf),
 +	};
-+	static union bpf_attr map_update_attr = { .map_fd = 1, };
-+	static __u64 key = 12;
-+	static __u64 value = 34;
-+	static union bpf_attr prog_load_attr = {
-+		.prog_type = BPF_PROG_TYPE_XDP,
-+		.insn_cnt = sizeof(insns) / sizeof(insns[0]),
-+	};
-+	int ret;
 +
-+	map_create_attr.max_entries = ctx->max_entries;
-+	prog_load_attr.license = (long) license;
-+	prog_load_attr.insns = (long) insns;
-+	prog_load_attr.log_buf = ctx->log_buf;
-+	prog_load_attr.log_size = ctx->log_size;
-+	prog_load_attr.log_level = 1;
++	btf_load_attr.btf = (long)&raw_btf;
++	return bpf_sys_bpf(BPF_BTF_LOAD, &btf_load_attr, sizeof(btf_load_attr));
++}
 +
-+	ret = bpf_sys_bpf(BPF_MAP_CREATE, &map_create_attr, sizeof(map_create_attr));
-+	if (ret <= 0)
-+		return ret;
-+	ctx->map_fd = ret;
-+	insns[3].imm = ret;
-+
-+	map_update_attr.map_fd = ret;
-+	map_update_attr.key = (long) &key;
-+	map_update_attr.value = (long) &value;
-+	ret = bpf_sys_bpf(BPF_MAP_UPDATE_ELEM, &map_update_attr, sizeof(map_update_attr));
+ SEC("syscall")
+ int bpf_prog(struct args *ctx)
+ {
+@@ -35,6 +75,8 @@ int bpf_prog(struct args *ctx)
+ 		.map_type = BPF_MAP_TYPE_HASH,
+ 		.key_size = 8,
+ 		.value_size = 8,
++		.btf_key_type_id = 1,
++		.btf_value_type_id = 2,
+ 	};
+ 	static union bpf_attr map_update_attr = { .map_fd = 1, };
+ 	static __u64 key = 12;
+@@ -45,7 +87,13 @@ int bpf_prog(struct args *ctx)
+ 	};
+ 	int ret;
+ 
++	ret = btf_load();
 +	if (ret < 0)
 +		return ret;
 +
-+	ret = bpf_sys_bpf(BPF_PROG_LOAD, &prog_load_attr, sizeof(prog_load_attr));
-+	if (ret <= 0)
-+		return ret;
-+	ctx->prog_fd = ret;
-+	return 1;
-+}
+ 	map_create_attr.max_entries = ctx->max_entries;
++	map_create_attr.btf_fd = ret;
++
+ 	prog_load_attr.license = (long) license;
+ 	prog_load_attr.insns = (long) insns;
+ 	prog_load_attr.log_buf = ctx->log_buf;
 -- 
 2.30.2
 
