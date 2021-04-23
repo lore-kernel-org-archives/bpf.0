@@ -2,66 +2,66 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4870C433B4
-	for <bpf@archiver.kernel.org>; Fri, 23 Apr 2021 00:27:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C271C433B4
+	for <bpf@archiver.kernel.org>; Fri, 23 Apr 2021 00:27:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C57A2613F6
-	for <bpf@archiver.kernel.org>; Fri, 23 Apr 2021 00:27:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 21677613F0
+	for <bpf@archiver.kernel.org>; Fri, 23 Apr 2021 00:27:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240195AbhDWA1o (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 22 Apr 2021 20:27:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55342 "EHLO
+        id S240154AbhDWA1y (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 22 Apr 2021 20:27:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240131AbhDWA1l (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 22 Apr 2021 20:27:41 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50F38C061574;
-        Thu, 22 Apr 2021 17:27:04 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id nm3-20020a17090b19c3b029014e1bbf6c60so307263pjb.4;
-        Thu, 22 Apr 2021 17:27:04 -0700 (PDT)
+        with ESMTP id S240162AbhDWA1m (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 22 Apr 2021 20:27:42 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1E7DC06138C;
+        Thu, 22 Apr 2021 17:27:06 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id lr7so6070620pjb.2;
+        Thu, 22 Apr 2021 17:27:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=Lsg3ACU+mbb8IfMTZqR/n7feK/iVGwkC9cFdG9K7vRo=;
-        b=TnK/bXj/f9yjFWZRCqnRecy063JXpeavMeZUv7iShYAclzw3Bd+06LbhNXs12Gd2mG
-         +A0aeMOgE1tnX+BAs7//YrMK+kFHerbmgVxAx0W9oCxtDvyg9oCqmcN0JVCEqhHtI3m4
-         awClnFYTmhWxvXkOTL6hcdGYfNsPRVhz73cf04IMrKrgrRgUsnOR+Lm3FZQbcCVloXQZ
-         iw9OJRcLAClcIG6C7gWx5CBqZui5wTA2DWGU5pflwmxMWQuo9X7wvz5cFFIzlrZgW6Rq
-         CrOTrMjrDKsmldK7a0gBG5zgH5d36deswZbR02LBVkx2afmhqY5KYcaEsZoADbNbQzIW
-         ymhQ==
+        bh=zJ/FLQpUCf2nLMd7Q6hp42O9p8TA+6qeniT0GG9ATIE=;
+        b=tr2rMlTyoPWM04cGZtiUjpi+svP+kgXX6GvzCdobipEVl7zdkKuDZLtQhe4JC8LYg5
+         0BBW/k7z+XBAFRb8cNCbjrAiqGOxe0jc+jhRw7JB+iKPyFV3JilOtYoDnpKShfLvjiDU
+         FriCyWOimAKvacov8DXIx8KObbOfobr3J2GJeTmjEHSgWwGYMUmu8W4F0JRj5Rqzbr7S
+         NdURjhLQh44kPOCZTmFbCRr1dVdlobYP6j7sAAiF2vXwaAedjRs7/RW5QcUBm+ij9FDq
+         ROAq0EQ+KM73ohLS7nSN+FQYW0TXKfAJBhKc5krn8kXAoDL1wjdRG6oQGR5jvG9zZY33
+         CUzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=Lsg3ACU+mbb8IfMTZqR/n7feK/iVGwkC9cFdG9K7vRo=;
-        b=pKodJBLJadk1DMK0AuODpoYkwGzfFHSHL2PLVL8OAy6t+yRuK7TnY1d8p1CEzsHQ9m
-         t7twYe6KjozKnL5uV/vIUnTaeYFgVhJJZy9Wp4ZGnf2a1ouRvBbeP7brSbgF6itDIOBn
-         AoNB/YjGjQjJGQTzG8lm79kA6tWvjlyDcah+pItHb8F+9T1aKWQoQt61BT2R2g9PGbYX
-         vGuppx1OW/t2YsDWiWIjpPz/zjJghCHlobAOqDxZVhDt4mgYWXQicuJUj5asRCiexMmv
-         TTo/gChnpVcoXLaUurwDzCBpNn0aVMDcXL9+ynA4hPKja5qzgRlZwLcyz8UlUboimAWP
-         sq/w==
-X-Gm-Message-State: AOAM532eOqB28FYYqMkZCvtbjpO+z2hYkfggWOfM6ubDKXhZe+roX+35
-        VOSpcYTH2PFDC1KgAxme6hM=
-X-Google-Smtp-Source: ABdhPJw92EKwBA+sTrN5mhybeLMvXwSP55QuN8+iG0My2UjL++PSiqEuw0c7tlw4qSSkZWphmJG4Og==
-X-Received: by 2002:a17:902:8d83:b029:e6:508a:7b8d with SMTP id v3-20020a1709028d83b02900e6508a7b8dmr1492282plo.18.1619137623658;
-        Thu, 22 Apr 2021 17:27:03 -0700 (PDT)
+        bh=zJ/FLQpUCf2nLMd7Q6hp42O9p8TA+6qeniT0GG9ATIE=;
+        b=R7kNEhypGjqXgU3at+BQ5yOf9iHp+JQoeQ1Z/ZHOqX6nHJdy4vYhwy0US8KfeHmSIf
+         uF3J7WEyJFuKj71z9uWms9wxEE7vZO4NdNLa1O9ccGlPCl+ZO+cvZgn6KUnL6BlF7BUG
+         NK+FSBLt965bRP7ISf92tY97YWjHRtv9m14fJAhDYU67eFBYoo6jprQoe3+6dGnSPMao
+         SczS3xv7wXJ3KhIbcEJe+qKwQmqmsbGUbPvqhtyiuK6ylel43e4nIIVE/kJJ4rYDdogR
+         WCGeV9uORDEGiuQN7WKZNMsTI3jbEoshagaMprMNPna2y6PBuws3n/nUFUjxmgO4GMl/
+         B6Ww==
+X-Gm-Message-State: AOAM531cgENIwAaRf0tu3r9ZKnWL1OfUdVPfYiCtod9MMrp1EUnaqIyp
+        5f0WLY7OYI/4yrIpXiHxCLg=
+X-Google-Smtp-Source: ABdhPJx3lUiFx4HSvd1fhNtKihcV8rXbkUwANhMUNziIiCfE4pODDVK8ZdWYnl8UM+P7N2U3Du76QA==
+X-Received: by 2002:a17:90b:a0d:: with SMTP id gg13mr1475617pjb.124.1619137626324;
+        Thu, 22 Apr 2021 17:27:06 -0700 (PDT)
 Received: from ast-mbp.thefacebook.com ([163.114.132.7])
-        by smtp.gmail.com with ESMTPSA id u12sm6390987pji.45.2021.04.22.17.27.02
+        by smtp.gmail.com with ESMTPSA id u12sm6390987pji.45.2021.04.22.17.27.05
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 22 Apr 2021 17:27:03 -0700 (PDT)
+        Thu, 22 Apr 2021 17:27:05 -0700 (PDT)
 From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To:     davem@davemloft.net
 Cc:     daniel@iogearbox.net, andrii@kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org, kernel-team@fb.com
-Subject: [PATCH v2 bpf-next 11/16] bpf: Add bpf_sys_close() helper.
-Date:   Thu, 22 Apr 2021 17:26:41 -0700
-Message-Id: <20210423002646.35043-12-alexei.starovoitov@gmail.com>
+Subject: [PATCH v2 bpf-next 13/16] libbpf: Add bpf_object pointer to kernel_supports().
+Date:   Thu, 22 Apr 2021 17:26:43 -0700
+Message-Id: <20210423002646.35043-14-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.13.5
 In-Reply-To: <20210423002646.35043-1-alexei.starovoitov@gmail.com>
 References: <20210423002646.35043-1-alexei.starovoitov@gmail.com>
@@ -71,104 +71,200 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Add bpf_sys_close() helper to be used by the syscall/loader program to close
-intermediate FDs and other cleanup.
-Note this helper must never be allowed inside fdget/fdput bracketing.
+Add a pointer to 'struct bpf_object' to kernel_supports() helper.
+It will be used in the next patch.
+No functional changes.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/uapi/linux/bpf.h       |  7 +++++++
- kernel/bpf/syscall.c           | 19 +++++++++++++++++++
- tools/include/uapi/linux/bpf.h |  7 +++++++
- 3 files changed, 33 insertions(+)
+ tools/lib/bpf/libbpf.c | 52 +++++++++++++++++++++---------------------
+ 1 file changed, 26 insertions(+), 26 deletions(-)
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 253f5f031f08..45e55ad3c617 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -4755,6 +4755,12 @@ union bpf_attr {
-  * 		If btf_fd is zero look for the name in vmlinux BTF and in module's BTFs.
-  * 	Return
-  * 		Returns btf_id and btf_obj_fd in lower and upper 32 bits.
-+ *
-+ * long bpf_sys_close(u32 fd)
-+ * 	Description
-+ * 		Execute close syscall for given FD.
-+ * 	Return
-+ * 		A syscall result.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -4925,6 +4931,7 @@ union bpf_attr {
- 	FN(snprintf),			\
- 	FN(sys_bpf),			\
- 	FN(btf_find_by_name_kind),	\
-+	FN(sys_close),			\
- 	/* */
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index c73a85b97ca5..7f58c389ff67 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -181,7 +181,7 @@ enum kern_feature_id {
+ 	__FEAT_CNT,
+ };
  
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 638c7acad925..f5519e84b097 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -4568,6 +4568,23 @@ tracing_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 	return bpf_base_func_proto(func_id);
+-static bool kernel_supports(enum kern_feature_id feat_id);
++static bool kernel_supports(const struct bpf_object *obj, enum kern_feature_id feat_id);
+ 
+ enum reloc_type {
+ 	RELO_LD64,
+@@ -2407,20 +2407,20 @@ static bool section_have_execinstr(struct bpf_object *obj, int idx)
+ 
+ static bool btf_needs_sanitization(struct bpf_object *obj)
+ {
+-	bool has_func_global = kernel_supports(FEAT_BTF_GLOBAL_FUNC);
+-	bool has_datasec = kernel_supports(FEAT_BTF_DATASEC);
+-	bool has_float = kernel_supports(FEAT_BTF_FLOAT);
+-	bool has_func = kernel_supports(FEAT_BTF_FUNC);
++	bool has_func_global = kernel_supports(obj, FEAT_BTF_GLOBAL_FUNC);
++	bool has_datasec = kernel_supports(obj, FEAT_BTF_DATASEC);
++	bool has_float = kernel_supports(obj, FEAT_BTF_FLOAT);
++	bool has_func = kernel_supports(obj, FEAT_BTF_FUNC);
+ 
+ 	return !has_func || !has_datasec || !has_func_global || !has_float;
  }
  
-+BPF_CALL_1(bpf_sys_close, u32, fd)
-+{
-+	/* When bpf program calls this helper there should not be
-+	 * an fdget() without matching completed fdput().
-+	 * This helper is allowed in the following callchain only:
-+	 * sys_bpf->prog_test_run->bpf_prog->bpf_sys_close
-+	 */
-+	return close_fd(fd);
-+}
-+
-+const struct bpf_func_proto bpf_sys_close_proto = {
-+	.func		= bpf_sys_close,
-+	.gpl_only	= false,
-+	.ret_type	= RET_INTEGER,
-+	.arg1_type	= ARG_ANYTHING,
-+};
-+
- static const struct bpf_func_proto *
- syscall_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ static void bpf_object__sanitize_btf(struct bpf_object *obj, struct btf *btf)
  {
-@@ -4576,6 +4593,8 @@ syscall_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 		return &bpf_sys_bpf_proto;
- 	case BPF_FUNC_btf_find_by_name_kind:
- 		return &bpf_btf_find_by_name_kind_proto;
-+	case BPF_FUNC_sys_close:
-+		return &bpf_sys_close_proto;
- 	default:
- 		return tracing_prog_func_proto(func_id, prog);
- 	}
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 5841adb44de6..8dd27faa30ee 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -4755,6 +4755,12 @@ union bpf_attr {
-  * 		If btf_fd is zero look for the name in vmlinux BTF and in module's BTFs.
-  * 	Return
-  * 		Returns btf_id and btf_obj_fd in lower and upper 32 bits.
-+ *
-+ * long bpf_sys_close(u32 fd)
-+ * 	Description
-+ * 		Execute close syscall for given FD.
-+ * 	Return
-+ * 		A syscall result.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -4925,6 +4931,7 @@ union bpf_attr {
- 	FN(snprintf),			\
- 	FN(sys_bpf),			\
- 	FN(btf_find_by_name_kind),	\
-+	FN(sys_close),			\
- 	/* */
+-	bool has_func_global = kernel_supports(FEAT_BTF_GLOBAL_FUNC);
+-	bool has_datasec = kernel_supports(FEAT_BTF_DATASEC);
+-	bool has_float = kernel_supports(FEAT_BTF_FLOAT);
+-	bool has_func = kernel_supports(FEAT_BTF_FUNC);
++	bool has_func_global = kernel_supports(obj, FEAT_BTF_GLOBAL_FUNC);
++	bool has_datasec = kernel_supports(obj, FEAT_BTF_DATASEC);
++	bool has_float = kernel_supports(obj, FEAT_BTF_FLOAT);
++	bool has_func = kernel_supports(obj, FEAT_BTF_FUNC);
+ 	struct btf_type *t;
+ 	int i, j, vlen;
  
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+@@ -2626,7 +2626,7 @@ static int bpf_object__sanitize_and_load_btf(struct bpf_object *obj)
+ 	if (!obj->btf)
+ 		return 0;
+ 
+-	if (!kernel_supports(FEAT_BTF)) {
++	if (!kernel_supports(obj, FEAT_BTF)) {
+ 		if (kernel_needs_btf(obj)) {
+ 			err = -EOPNOTSUPP;
+ 			goto report;
+@@ -4257,7 +4257,7 @@ static struct kern_feature_desc {
+ 	},
+ };
+ 
+-static bool kernel_supports(enum kern_feature_id feat_id)
++static bool kernel_supports(const struct bpf_object *obj, enum kern_feature_id feat_id)
+ {
+ 	struct kern_feature_desc *feat = &feature_probes[feat_id];
+ 	int ret;
+@@ -4376,7 +4376,7 @@ static int bpf_object__create_map(struct bpf_object *obj, struct bpf_map *map)
+ 
+ 	memset(&create_attr, 0, sizeof(create_attr));
+ 
+-	if (kernel_supports(FEAT_PROG_NAME))
++	if (kernel_supports(obj, FEAT_PROG_NAME))
+ 		create_attr.name = map->name;
+ 	create_attr.map_ifindex = map->map_ifindex;
+ 	create_attr.map_type = def->type;
+@@ -4941,7 +4941,7 @@ static int load_module_btfs(struct bpf_object *obj)
+ 	obj->btf_modules_loaded = true;
+ 
+ 	/* kernel too old to support module BTFs */
+-	if (!kernel_supports(FEAT_MODULE_BTF))
++	if (!kernel_supports(obj, FEAT_MODULE_BTF))
+ 		return 0;
+ 
+ 	while (true) {
+@@ -6333,7 +6333,7 @@ bpf_object__relocate_data(struct bpf_object *obj, struct bpf_program *prog)
+ 
+ 		switch (relo->type) {
+ 		case RELO_LD64:
+-			if (kernel_supports(FEAT_FD_IDX)) {
++			if (kernel_supports(obj, FEAT_FD_IDX)) {
+ 				insn[0].src_reg = BPF_PSEUDO_MAP_IDX;
+ 				insn[0].imm = relo->map_idx;
+ 			} else {
+@@ -6343,7 +6343,7 @@ bpf_object__relocate_data(struct bpf_object *obj, struct bpf_program *prog)
+ 			break;
+ 		case RELO_DATA:
+ 			insn[1].imm = insn[0].imm + relo->sym_off;
+-			if (kernel_supports(FEAT_FD_IDX)) {
++			if (kernel_supports(obj, FEAT_FD_IDX)) {
+ 				insn[0].src_reg = BPF_PSEUDO_MAP_IDX_VALUE;
+ 				insn[0].imm = relo->map_idx;
+ 			} else {
+@@ -6354,7 +6354,7 @@ bpf_object__relocate_data(struct bpf_object *obj, struct bpf_program *prog)
+ 		case RELO_EXTERN_VAR:
+ 			ext = &obj->externs[relo->sym_off];
+ 			if (ext->type == EXT_KCFG) {
+-				if (kernel_supports(FEAT_FD_IDX)) {
++				if (kernel_supports(obj, FEAT_FD_IDX)) {
+ 					insn[0].src_reg = BPF_PSEUDO_MAP_IDX_VALUE;
+ 					insn[0].imm = obj->kconfig_map_idx;
+ 				} else {
+@@ -6478,7 +6478,7 @@ reloc_prog_func_and_line_info(const struct bpf_object *obj,
+ 	/* no .BTF.ext relocation if .BTF.ext is missing or kernel doesn't
+ 	 * supprot func/line info
+ 	 */
+-	if (!obj->btf_ext || !kernel_supports(FEAT_BTF_FUNC))
++	if (!obj->btf_ext || !kernel_supports(obj, FEAT_BTF_FUNC))
+ 		return 0;
+ 
+ 	/* only attempt func info relocation if main program's func_info
+@@ -7076,12 +7076,12 @@ static int bpf_object__sanitize_prog(struct bpf_object* obj, struct bpf_program
+ 		switch (func_id) {
+ 		case BPF_FUNC_probe_read_kernel:
+ 		case BPF_FUNC_probe_read_user:
+-			if (!kernel_supports(FEAT_PROBE_READ_KERN))
++			if (!kernel_supports(obj, FEAT_PROBE_READ_KERN))
+ 				insn->imm = BPF_FUNC_probe_read;
+ 			break;
+ 		case BPF_FUNC_probe_read_kernel_str:
+ 		case BPF_FUNC_probe_read_user_str:
+-			if (!kernel_supports(FEAT_PROBE_READ_KERN))
++			if (!kernel_supports(obj, FEAT_PROBE_READ_KERN))
+ 				insn->imm = BPF_FUNC_probe_read_str;
+ 			break;
+ 		default:
+@@ -7116,12 +7116,12 @@ load_program(struct bpf_program *prog, struct bpf_insn *insns, int insns_cnt,
+ 
+ 	load_attr.prog_type = prog->type;
+ 	/* old kernels might not support specifying expected_attach_type */
+-	if (!kernel_supports(FEAT_EXP_ATTACH_TYPE) && prog->sec_def &&
++	if (!kernel_supports(prog->obj, FEAT_EXP_ATTACH_TYPE) && prog->sec_def &&
+ 	    prog->sec_def->is_exp_attach_type_optional)
+ 		load_attr.expected_attach_type = 0;
+ 	else
+ 		load_attr.expected_attach_type = prog->expected_attach_type;
+-	if (kernel_supports(FEAT_PROG_NAME))
++	if (kernel_supports(prog->obj, FEAT_PROG_NAME))
+ 		load_attr.name = prog->name;
+ 	load_attr.insns = insns;
+ 	load_attr.insn_cnt = insns_cnt;
+@@ -7138,7 +7138,7 @@ load_program(struct bpf_program *prog, struct bpf_insn *insns, int insns_cnt,
+ 
+ 	/* specify func_info/line_info only if kernel supports them */
+ 	btf_fd = bpf_object__btf_fd(prog->obj);
+-	if (btf_fd >= 0 && kernel_supports(FEAT_BTF_FUNC)) {
++	if (btf_fd >= 0 && kernel_supports(prog->obj, FEAT_BTF_FUNC)) {
+ 		load_attr.prog_btf_fd = btf_fd;
+ 		load_attr.func_info = prog->func_info;
+ 		load_attr.func_info_rec_size = prog->func_info_rec_size;
+@@ -7168,7 +7168,7 @@ load_program(struct bpf_program *prog, struct bpf_insn *insns, int insns_cnt,
+ 			pr_debug("verifier log:\n%s", log_buf);
+ 
+ 		if (prog->obj->rodata_map_idx >= 0 &&
+-		    kernel_supports(FEAT_PROG_BIND_MAP)) {
++		    kernel_supports(prog->obj, FEAT_PROG_BIND_MAP)) {
+ 			struct bpf_map *rodata_map =
+ 				&prog->obj->maps[prog->obj->rodata_map_idx];
+ 
+@@ -7337,7 +7337,7 @@ bpf_object__load_progs(struct bpf_object *obj, int log_level)
+ 			return err;
+ 	}
+ 
+-	if (kernel_supports(FEAT_FD_IDX) && obj->nr_maps) {
++	if (kernel_supports(obj, FEAT_FD_IDX) && obj->nr_maps) {
+ 		fd_array = malloc(sizeof(int) * obj->nr_maps);
+ 		if (!fd_array)
+ 			return -ENOMEM;
+@@ -7542,11 +7542,11 @@ static int bpf_object__sanitize_maps(struct bpf_object *obj)
+ 	bpf_object__for_each_map(m, obj) {
+ 		if (!bpf_map__is_internal(m))
+ 			continue;
+-		if (!kernel_supports(FEAT_GLOBAL_DATA)) {
++		if (!kernel_supports(obj, FEAT_GLOBAL_DATA)) {
+ 			pr_warn("kernel doesn't support global data\n");
+ 			return -ENOTSUP;
+ 		}
+-		if (!kernel_supports(FEAT_ARRAY_MMAP))
++		if (!kernel_supports(obj, FEAT_ARRAY_MMAP))
+ 			m->def.map_flags ^= BPF_F_MMAPABLE;
+ 	}
+ 
 -- 
 2.30.2
 
