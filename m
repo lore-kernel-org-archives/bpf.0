@@ -3,41 +3,42 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E2EAC43460
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 891F7C433ED
 	for <bpf@archiver.kernel.org>; Fri, 23 Apr 2021 18:14:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 006BB6144E
-	for <bpf@archiver.kernel.org>; Fri, 23 Apr 2021 18:14:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 52971613C2
+	for <bpf@archiver.kernel.org>; Fri, 23 Apr 2021 18:14:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243444AbhDWSOn convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 23 Apr 2021 14:14:43 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:39290 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243465AbhDWSOl (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 23 Apr 2021 14:14:41 -0400
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13NIAgdL027547
-        for <bpf@vger.kernel.org>; Fri, 23 Apr 2021 11:14:04 -0700
+        id S243499AbhDWSOo convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 23 Apr 2021 14:14:44 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:63536 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232212AbhDWSOm (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 23 Apr 2021 14:14:42 -0400
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13NIACPg020448
+        for <bpf@vger.kernel.org>; Fri, 23 Apr 2021 11:14:05 -0700
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 383b4q8510-3
+        by mx0a-00082601.pphosted.com with ESMTP id 3839sh8hwg-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 23 Apr 2021 11:14:04 -0700
-Received: from intmgw001.25.frc3.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 23 Apr 2021 11:14:05 -0700
+Received: from intmgw001.38.frc1.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2176.2; Fri, 23 Apr 2021 11:14:03 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id A96E82ED5CB8; Fri, 23 Apr 2021 11:13:58 -0700 (PDT)
+        id 7357C2ED5CB8; Fri, 23 Apr 2021 11:13:54 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
         <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH v3 bpf-next 04/18] libbpf: mark BPF subprogs with hidden visibility as static for BPF verifier
-Date:   Fri, 23 Apr 2021 11:13:34 -0700
-Message-ID: <20210423181348.1801389-5-andrii@kernel.org>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
+        Yonghong Song <yhs@fb.com>
+Subject: [PATCH v3 bpf-next 02/18] bpftool: dump more info about DATASEC members
+Date:   Fri, 23 Apr 2021 11:13:32 -0700
+Message-ID: <20210423181348.1801389-3-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210423181348.1801389-1-andrii@kernel.org>
 References: <20210423181348.1801389-1-andrii@kernel.org>
@@ -45,177 +46,122 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: bw2rM3V0iwtSZLpDSGzf02B3m09WvNSJ
-X-Proofpoint-ORIG-GUID: bw2rM3V0iwtSZLpDSGzf02B3m09WvNSJ
+X-Proofpoint-ORIG-GUID: ACn1gT74X5n43Agz0Zg56mptZB_CAL5X
+X-Proofpoint-GUID: ACn1gT74X5n43Agz0Zg56mptZB_CAL5X
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
  definitions=2021-04-23_07:2021-04-23,2021-04-23 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
- mlxlogscore=999 phishscore=0 impostorscore=0 malwarescore=0
- priorityscore=1501 spamscore=0 mlxscore=0 adultscore=0 suspectscore=0
- bulkscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2104060000 definitions=main-2104230120
+ malwarescore=0 lowpriorityscore=0 phishscore=0 priorityscore=1501
+ suspectscore=0 impostorscore=0 mlxlogscore=999 adultscore=0 mlxscore=0
+ bulkscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104060000 definitions=main-2104230120
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Define __hidden helper macro in bpf_helpers.h, which is a short-hand for
-__attribute__((visibility("hidden"))). Add libbpf support to mark BPF
-subprograms marked with __hidden as static in BTF information to enforce BPF
-verifier's static function validation algorithm, which takes more information
-(caller's context) into account during a subprogram validation.
+Dump succinct information for each member of DATASEC: its kinds and name. This
+is extremely helpful to see at a quick glance what is inside each DATASEC of
+a given BTF. Without this, one has to jump around BTF data to just find out
+the name of a VAR or FUNC. DATASEC's var_secinfo member is special in that
+regard because it doesn't itself contain the name of the member, delegating
+that to the referenced VAR and FUNC kinds. Other kinds, like
+STRUCT/UNION/FUNC/ENUM, encode member names directly and thus are clearly
+identifiable in BTF dump.
 
+The new output looks like this:
+
+[35] DATASEC '.bss' size=0 vlen=6
+        type_id=8 offset=0 size=4 (VAR 'input_bss1')
+        type_id=13 offset=0 size=4 (VAR 'input_bss_weak')
+        type_id=16 offset=0 size=4 (VAR 'output_bss1')
+        type_id=17 offset=0 size=4 (VAR 'output_data1')
+        type_id=18 offset=0 size=4 (VAR 'output_rodata1')
+        type_id=20 offset=0 size=8 (VAR 'output_sink1')
+[36] DATASEC '.data' size=0 vlen=2
+        type_id=9 offset=0 size=4 (VAR 'input_data1')
+        type_id=14 offset=0 size=4 (VAR 'input_data_weak')
+[37] DATASEC '.kconfig' size=0 vlen=2
+        type_id=25 offset=0 size=4 (VAR 'LINUX_KERNEL_VERSION')
+        type_id=28 offset=0 size=1 (VAR 'CONFIG_BPF_SYSCALL')
+[38] DATASEC '.ksyms' size=0 vlen=1
+        type_id=30 offset=0 size=1 (VAR 'bpf_link_fops')
+[39] DATASEC '.rodata' size=0 vlen=2
+        type_id=12 offset=0 size=4 (VAR 'input_rodata1')
+        type_id=15 offset=0 size=4 (VAR 'input_rodata_weak')
+[40] DATASEC 'license' size=0 vlen=1
+        type_id=24 offset=0 size=4 (VAR 'LICENSE')
+
+Acked-by: Yonghong Song <yhs@fb.com>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/lib/bpf/bpf_helpers.h     |  8 ++++++
- tools/lib/bpf/btf.c             |  5 ----
- tools/lib/bpf/libbpf.c          | 45 ++++++++++++++++++++++++++++++++-
- tools/lib/bpf/libbpf_internal.h |  6 +++++
- 4 files changed, 58 insertions(+), 6 deletions(-)
+ tools/bpf/bpftool/btf.c | 26 ++++++++++++++++++--------
+ 1 file changed, 18 insertions(+), 8 deletions(-)
 
-diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
-index 75c7581b304c..9720dc0b4605 100644
---- a/tools/lib/bpf/bpf_helpers.h
-+++ b/tools/lib/bpf/bpf_helpers.h
-@@ -47,6 +47,14 @@
- #define __weak __attribute__((weak))
- #endif
- 
-+/*
-+ * Use __hidden attribute to mark a non-static BPF subprogram effectively
-+ * static for BPF verifier's verification algorithm purposes, allowing more
-+ * extensive and permissive BPF verification process, taking into account
-+ * subprogram's caller context.
-+ */
-+#define __hidden __attribute__((visibility("hidden")))
-+
- /* When utilizing vmlinux.h with BPF CO-RE, user BPF programs can't include
-  * any system-level headers (such as stddef.h, linux/version.h, etc), and
-  * commonly-used macros like NULL and KERNEL_VERSION aren't available through
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index d30e67e7e1e5..d57e13a13798 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -1605,11 +1605,6 @@ static void *btf_add_type_mem(struct btf *btf, size_t add_sz)
- 			      btf->hdr->type_len, UINT_MAX, add_sz);
+diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
+index 001749a34899..385d5c955cf3 100644
+--- a/tools/bpf/bpftool/btf.c
++++ b/tools/bpf/bpftool/btf.c
+@@ -100,26 +100,28 @@ static const char *btf_str(const struct btf *btf, __u32 off)
+ 	return btf__name_by_offset(btf, off) ? : "(invalid)";
  }
  
--static __u32 btf_type_info(int kind, int vlen, int kflag)
--{
--	return (kflag << 31) | (kind << 24) | vlen;
--}
--
- static void btf_type_inc_vlen(struct btf_type *t)
- {
- 	t->info = btf_type_info(btf_kind(t), btf_vlen(t) + 1, btf_kflag(t));
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 9cc2d45b0080..8bac9c7627aa 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -71,6 +71,7 @@
- static struct bpf_map *bpf_object__add_map(struct bpf_object *obj);
- static const struct btf_type *
- skip_mods_and_typedefs(const struct btf *btf, __u32 id, __u32 *res_id);
-+static bool prog_is_subprog(const struct bpf_object *obj, const struct bpf_program *prog);
- 
- static int __base_pr(enum libbpf_print_level level, const char *format,
- 		     va_list args)
-@@ -274,6 +275,7 @@ struct bpf_program {
- 	bpf_program_clear_priv_t clear_priv;
- 
- 	bool load;
-+	bool mark_btf_static;
- 	enum bpf_prog_type type;
- 	enum bpf_attach_type expected_attach_type;
- 	int prog_ifindex;
-@@ -698,6 +700,15 @@ bpf_object__add_programs(struct bpf_object *obj, Elf_Data *sec_data,
- 		if (err)
- 			return err;
- 
-+		/* if function is a global/weak symbol, but has hidden
-+		 * visibility (STV_HIDDEN), mark its BTF FUNC as static to
-+		 * enable more permissive BPF verification mode with more
-+		 * outside context available to BPF verifier
-+		 */
-+		if (GELF_ST_BIND(sym.st_info) != STB_LOCAL
-+		    && GELF_ST_VISIBILITY(sym.st_other) == STV_HIDDEN)
-+			prog->mark_btf_static = true;
-+
- 		nr_progs++;
- 		obj->nr_programs = nr_progs;
- 
-@@ -2618,7 +2629,7 @@ static int bpf_object__sanitize_and_load_btf(struct bpf_object *obj)
- {
- 	struct btf *kern_btf = obj->btf;
- 	bool btf_mandatory, sanitize;
--	int err = 0;
-+	int i, err = 0;
- 
- 	if (!obj->btf)
- 		return 0;
-@@ -2632,6 +2643,38 @@ static int bpf_object__sanitize_and_load_btf(struct bpf_object *obj)
- 		return 0;
- 	}
- 
-+	/* Even though some subprogs are global/weak, user might prefer more
-+	 * permissive BPF verification process that BPF verifier performs for
-+	 * static functions, taking into account more context from the caller
-+	 * functions. In such case, they need to mark such subprogs with
-+	 * __attribute__((visibility("hidden"))) and libbpf will adjust
-+	 * corresponding FUNC BTF type to be marked as static and trigger more
-+	 * involved BPF verification process.
-+	 */
-+	for (i = 0; i < obj->nr_programs; i++) {
-+		struct bpf_program *prog = &obj->programs[i];
-+		struct btf_type *t;
-+		const char *name;
-+		int j, n;
-+
-+		if (!prog->mark_btf_static || !prog_is_subprog(obj, prog))
-+			continue;
-+
-+		n = btf__get_nr_types(obj->btf);
-+		for (j = 1; j <= n; j++) {
-+			t = btf_type_by_id(obj->btf, j);
-+			if (!btf_is_func(t) || btf_func_linkage(t) != BTF_FUNC_GLOBAL)
-+				continue;
-+
-+			name = btf__str_by_offset(obj->btf, t->name_off);
-+			if (strcmp(name, prog->name) != 0)
-+				continue;
-+
-+			t->info = btf_type_info(BTF_KIND_FUNC, BTF_FUNC_STATIC, 0);
-+			break;
-+		}
-+	}
-+
- 	sanitize = btf_needs_sanitization(obj);
- 	if (sanitize) {
- 		const void *raw_data;
-diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
-index 6017902c687e..92b7eae10c6d 100644
---- a/tools/lib/bpf/libbpf_internal.h
-+++ b/tools/lib/bpf/libbpf_internal.h
-@@ -19,6 +19,7 @@
- #pragma GCC poison reallocarray
- 
- #include "libbpf.h"
-+#include "btf.h"
- 
- #ifndef EM_BPF
- #define EM_BPF 247
-@@ -132,6 +133,11 @@ struct btf_type;
- 
- struct btf_type *btf_type_by_id(struct btf *btf, __u32 type_id);
- 
-+static inline __u32 btf_type_info(int kind, int vlen, int kflag)
++static int btf_kind_safe(int kind)
 +{
-+	return (kflag << 31) | (kind << 24) | vlen;
++	return kind <= BTF_KIND_MAX ? kind : BTF_KIND_UNKN;
 +}
 +
- void *libbpf_add_mem(void **data, size_t *cap_cnt, size_t elem_sz,
- 		     size_t cur_cnt, size_t max_cnt, size_t add_cnt);
- int libbpf_ensure_mem(void **data, size_t *cap_cnt, size_t elem_sz, size_t need_cnt);
+ static int dump_btf_type(const struct btf *btf, __u32 id,
+ 			 const struct btf_type *t)
+ {
+ 	json_writer_t *w = json_wtr;
+-	int kind, safe_kind;
+-
+-	kind = BTF_INFO_KIND(t->info);
+-	safe_kind = kind <= BTF_KIND_MAX ? kind : BTF_KIND_UNKN;
++	int kind = btf_kind(t);
+ 
+ 	if (json_output) {
+ 		jsonw_start_object(w);
+ 		jsonw_uint_field(w, "id", id);
+-		jsonw_string_field(w, "kind", btf_kind_str[safe_kind]);
++		jsonw_string_field(w, "kind", btf_kind_str[btf_kind_safe(kind)]);
+ 		jsonw_string_field(w, "name", btf_str(btf, t->name_off));
+ 	} else {
+-		printf("[%u] %s '%s'", id, btf_kind_str[safe_kind],
++		printf("[%u] %s '%s'", id, btf_kind_str[btf_kind_safe(kind)],
+ 		       btf_str(btf, t->name_off));
+ 	}
+ 
+-	switch (BTF_INFO_KIND(t->info)) {
++	switch (kind) {
+ 	case BTF_KIND_INT: {
+ 		__u32 v = *(__u32 *)(t + 1);
+ 		const char *enc;
+@@ -302,7 +304,8 @@ static int dump_btf_type(const struct btf *btf, __u32 id,
+ 		break;
+ 	}
+ 	case BTF_KIND_DATASEC: {
+-		const struct btf_var_secinfo *v = (const void *)(t+1);
++		const struct btf_var_secinfo *v = (const void *)(t + 1);
++		const struct btf_type *vt;
+ 		__u16 vlen = BTF_INFO_VLEN(t->info);
+ 		int i;
+ 
+@@ -324,6 +327,13 @@ static int dump_btf_type(const struct btf *btf, __u32 id,
+ 			} else {
+ 				printf("\n\ttype_id=%u offset=%u size=%u",
+ 				       v->type, v->offset, v->size);
++
++				if (v->type <= btf__get_nr_types(btf)) {
++					vt = btf__type_by_id(btf, v->type);
++					printf(" (%s '%s')",
++					       btf_kind_str[btf_kind_safe(btf_kind(vt))],
++					       btf_str(btf, vt->name_off));
++				}
+ 			}
+ 		}
+ 		if (json_output)
 -- 
 2.30.2
 
