@@ -2,65 +2,66 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E6DC7C433ED
-	for <bpf@archiver.kernel.org>; Fri, 23 Apr 2021 11:05:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 74AE3C433B4
+	for <bpf@archiver.kernel.org>; Fri, 23 Apr 2021 11:05:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AF84A61461
-	for <bpf@archiver.kernel.org>; Fri, 23 Apr 2021 11:05:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3B52861468
+	for <bpf@archiver.kernel.org>; Fri, 23 Apr 2021 11:05:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229965AbhDWLF6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 23 Apr 2021 07:05:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:30088 "EHLO
+        id S242029AbhDWLF7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 23 Apr 2021 07:05:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:35540 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229928AbhDWLF5 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 23 Apr 2021 07:05:57 -0400
+        by vger.kernel.org with ESMTP id S229807AbhDWLF6 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 23 Apr 2021 07:05:58 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1619175921;
+        s=mimecast20190719; t=1619175922;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=jr7f/c656B14iZH1W7iqJ5TVJAXFbRzcz+BEzN3sEdE=;
-        b=E/spkWFwPfnlDdgUg8ECIhpnK3KJcFv/WI/Q/ldPGKyPltWclZgrJmyeuk7iKvEg4ttBM8
-        ayruBDVB7Po+Kz8Ae7zmeSz77typpWNScLGsmEJJKzN0DKTc5c0VyzK41ZGwQRHd/9l78m
-        EVta77BJsL0nQn+J0eTRN1LDghWEnY4=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-476-Sw-pdbf9Nn-mSvDNjtVhsA-1; Fri, 23 Apr 2021 07:05:18 -0400
-X-MC-Unique: Sw-pdbf9Nn-mSvDNjtVhsA-1
-Received: by mail-ed1-f71.google.com with SMTP id w15-20020a056402268fb02903828f878ec5so18407109edd.5
-        for <bpf@vger.kernel.org>; Fri, 23 Apr 2021 04:05:18 -0700 (PDT)
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tU71HJ9a16XxEOcyk9gr3EIn1rS0Q/y86aLDvKigw/U=;
+        b=RU03UsgW3fEO8PchtSMaWUmkeZ+w+3bVlfC8/vy8N+yNdXNoK4N8jWYRFznLy+grj3HOey
+        t8lJNV+ezMxwmjBPKLLMEWByD4eXMelYsZFZ52dXGAMUh8re0nXnQcRoAvW0G2gvNDhDoo
+        17TZor6t5A0VE8sn3H75EVcWtc0v4nw=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-565-bR8sCtKhNsWTi7Z3CtDxWw-1; Fri, 23 Apr 2021 07:05:20 -0400
+X-MC-Unique: bR8sCtKhNsWTi7Z3CtDxWw-1
+Received: by mail-ej1-f72.google.com with SMTP id o25-20020a1709061d59b029037c94676df5so8287287ejh.7
+        for <bpf@vger.kernel.org>; Fri, 23 Apr 2021 04:05:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:date:message-id:user-agent
-         :mime-version:content-transfer-encoding;
-        bh=jr7f/c656B14iZH1W7iqJ5TVJAXFbRzcz+BEzN3sEdE=;
-        b=Y7JZPQdS04+zZ3GpBWla7bSo77X052+wv3qGzKE/KcqxtQs+AD49G80ZqGzAploE5K
-         pwmAy4PKu9xfxjamUwyFovragbNho9TotwHxQ1JlD+GIDGje4U18l/Nxc30hWOLb7+hb
-         Dj7XRrptqzl8E/RkpxI6cCQiiyYZ6BmCMFAPd+js8/9kUe7NgabKerPAHkawCvDGHTQl
-         JLboEs54DM+cZy+7e6YFC12UzCSRsS0gMk+0Bn5Bj+dMDZsQ65CLNGsQj1cBtxwThCd2
-         Br8GUKI4s32Az2IEEE3aJSmt14G8yY935vKHXR5ylyh2cEZHkTrKl6ei9gBAmm1QMYzq
-         mJsA==
-X-Gm-Message-State: AOAM532xYO1p4pRBnHHLTXL4VNH/OV/DqcI7LNQdfS52CRSbdNCqYBFt
-        eJY46DIozERfDQzZzPAEwNF9OjgPEaBbwh6hBnBQkr5Uqrb2xzGvgDom47ZXzf0dDQkdTdakQ10
-        D8JFYEJsyoKfI
-X-Received: by 2002:a50:e848:: with SMTP id k8mr3711098edn.179.1619175917567;
-        Fri, 23 Apr 2021 04:05:17 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwXXZ2dv5SzDhemDUOV/fCE22p57ll81ceIAP/uMuiIiYIkTTmOwirVTG7v6dZRooXO3JjS4A==
-X-Received: by 2002:a50:e848:: with SMTP id k8mr3711072edn.179.1619175917300;
-        Fri, 23 Apr 2021 04:05:17 -0700 (PDT)
+        h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=tU71HJ9a16XxEOcyk9gr3EIn1rS0Q/y86aLDvKigw/U=;
+        b=aVXNGtzCO25Xrdvwi0J4cennZS1HqBOtKhxIVQFMRbdW/zJrbYB28NLMMjQk1YWT3H
+         x2eMozEkFwj9Mp3894BquLn2dk8sHpWLf3ekaUr6x8X+Wjyv3PL6c3cGD+B+TfYKP3FK
+         2+K6/OAgZf6XGr1OQpKMRd0njGh7uJi2EJmvGqX06Sq1nEX99PU+hTHu0236Hv6GCSA2
+         1U1c8SNfTmyvjur549VSWfgomUMwjeDmBbhnjKvheaAPutLHgWXvzICTMbhKuelnKndO
+         0RWul9WxrW1S1p3bdr70l/O5Jj2OwEztNYnSnsy97t6OQJPPMzg8tUeKILDze1CRAVm0
+         6FrQ==
+X-Gm-Message-State: AOAM532RlVaJPn0ZBVGeUksRLyoi201sS4DW/tOFbbLMNcZX+QsKO9Fb
+        fo4pyS9hvSZT0crMFmp7VvvIsD0gT+qT0JYQvix0iDxseWF/bvH/+EN7MT/jbTTFN6T0faLKskd
+        jGI/vv8CHYwkU
+X-Received: by 2002:a17:906:f8cd:: with SMTP id lh13mr3555273ejb.387.1619175919384;
+        Fri, 23 Apr 2021 04:05:19 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy0j5s13g+AXEBAelkMkVfD/IFdrSngCBlCH+7O5wgayqscrs4HoHrUZ0OuSAf4NtRQhjv3DQ==
+X-Received: by 2002:a17:906:f8cd:: with SMTP id lh13mr3555259ejb.387.1619175919246;
+        Fri, 23 Apr 2021 04:05:19 -0700 (PDT)
 Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id gz10sm3720420ejc.25.2021.04.23.04.05.16
+        by smtp.gmail.com with ESMTPSA id e20sm3752294ejy.66.2021.04.23.04.05.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Apr 2021 04:05:16 -0700 (PDT)
+        Fri, 23 Apr 2021 04:05:18 -0700 (PDT)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id A7A42180675; Fri, 23 Apr 2021 13:05:15 +0200 (CEST)
-Subject: [PATCH RFC bpf-next 0/4] Clean up and document RCU-based object
- protection for XDP_REDIRECT
+        id D7214180675; Fri, 23 Apr 2021 13:05:17 +0200 (CEST)
+Subject: [PATCH RFC bpf-next 2/4] dev: add rcu_read_lock_bh_held() as a valid
+ check when getting a RCU dev ref
 From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     bpf@vger.kernel.org
 Cc:     netdev@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
@@ -68,8 +69,10 @@ Cc:     netdev@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
         Jesper Dangaard Brouer <hawk@kernel.org>,
         Magnus Karlsson <magnus.karlsson@gmail.com>,
         "Paul E. McKenney" <paulmck@kernel.org>
-Date:   Fri, 23 Apr 2021 13:05:15 +0200
-Message-ID: <161917591559.102337.3558507780042453425.stgit@toke.dk>
+Date:   Fri, 23 Apr 2021 13:05:17 +0200
+Message-ID: <161917591778.102337.1084869564077259501.stgit@toke.dk>
+In-Reply-To: <161917591559.102337.3558507780042453425.stgit@toke.dk>
+References: <161917591559.102337.3558507780042453425.stgit@toke.dk>
 User-Agent: StGit/1.0
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
@@ -78,53 +81,32 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-During the discussion[0] of Hangbin's multicast patch series, Martin pointed out
-that the lifetime of the RCU-protected  map entries used by XDP_REDIRECT is by
-no means obvious. I promised to look into cleaning this up, and Paul helpfully
-provided some hints and a new unrcu_pointer() helper to aid in this.
+From: Toke Høiland-Jørgensen <toke@redhat.com>
 
-This is mostly a documentation exercise, clearing up the description of the
-lifetime expectations and adding __rcu annotations so sparse and lockdep can
-help verify it. I'm sending this as RFC since I don't have any i40e hardware to
-test on. A complete submission would also involve going through all the drivers,
-of course, but I wanted to get some feedback onthis first. I did test on mlx5,
-but that uses an rhashtable in the driver code, so we can't actually remove the
-top-level rcu_read_lock() from that without getting lockdep splats.
+Some of the XDP helpers (in particular, xdp_do_redirect()) will get a
+struct net_device reference using dev_get_by_index_rcu(). These are called
+from a NAPI poll context, which means the RCU reference liveness is ensured
+by local_bh_disable(). Add rcu_read_lock_bh_held() as a condition to the
+RCU list traversal in dev_get_by_index_rcu() so lockdep understands that
+the dereferences are safe from *both* an rcu_read_lock() *and* with
+local_bh_disable().
 
-Patches 1-2 are prepatory: Patch 1 adds Paul's unrcu_pointer() helper and patch
-2 is a small fix for dev_get_by_index_rcu() so lockdep understands _bh-disabled
-access to it. Patch 3 is the main bit that adds the __rcu annotations and
-updates documentation comments, and patch 4 is an example of driver changes,
-removing the rcu_read_lock() from i40e.
-
-Please take a look, and let me know if you think this is the right direction for
-clarifying the usage.
-
-Thanks,
--Toke
-
-[0] https://lore.kernel.org/bpf/20210415173551.7ma4slcbqeyiba2r@kafai-mbp.dhcp.thefacebook.com/
-
+Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
+ net/core/dev.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Paul E. McKenney (1):
-      rcu: Create an unrcu_pointer() to remove __rcu from a pointer
-
-Toke Høiland-Jørgensen (3):
-      dev: add rcu_read_lock_bh_held() as a valid check when getting a RCU dev ref
-      xdp: add proper __rcu annotations to redirect map entries
-      i40e: remove rcu_read_lock() around XDP program invocation
-
-
- drivers/net/ethernet/intel/i40e/i40e_txrx.c |  2 -
- drivers/net/ethernet/intel/i40e/i40e_xsk.c  |  6 +--
- include/net/xdp_sock.h                      |  2 +-
- kernel/bpf/cpumap.c                         | 14 ++++--
- kernel/bpf/devmap.c                         | 52 +++++++++------------
- net/core/dev.c                              |  2 +-
- net/core/filter.c                           | 28 +++++++++++
- net/xdp/xsk.c                               |  4 +-
- net/xdp/xsk.h                               |  4 +-
- net/xdp/xskmap.c                            | 29 +++++++-----
- 10 files changed, 85 insertions(+), 58 deletions(-)
+diff --git a/net/core/dev.c b/net/core/dev.c
+index b4c67a5be606..a7b8e3289f7c 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -1002,7 +1002,7 @@ struct net_device *dev_get_by_index_rcu(struct net *net, int ifindex)
+ 	struct net_device *dev;
+ 	struct hlist_head *head = dev_index_hash(net, ifindex);
+ 
+-	hlist_for_each_entry_rcu(dev, head, index_hlist)
++	hlist_for_each_entry_rcu(dev, head, index_hlist, rcu_read_lock_bh_held())
+ 		if (dev->ifindex == ifindex)
+ 			return dev;
+ 
 
