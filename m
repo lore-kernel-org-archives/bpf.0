@@ -2,183 +2,146 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-17.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5127CC433B4
-	for <bpf@archiver.kernel.org>; Sat, 24 Apr 2021 00:22:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C8DB8C433ED
+	for <bpf@archiver.kernel.org>; Sat, 24 Apr 2021 00:24:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2A78761209
-	for <bpf@archiver.kernel.org>; Sat, 24 Apr 2021 00:22:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A382661422
+	for <bpf@archiver.kernel.org>; Sat, 24 Apr 2021 00:24:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236899AbhDXAXU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 23 Apr 2021 20:23:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59668 "EHLO
+        id S235744AbhDXAZW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 23 Apr 2021 20:25:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233027AbhDXAXT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 23 Apr 2021 20:23:19 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8765C061574;
-        Fri, 23 Apr 2021 17:22:39 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id a25so44196337ljm.11;
-        Fri, 23 Apr 2021 17:22:39 -0700 (PDT)
+        with ESMTP id S232501AbhDXAZV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 23 Apr 2021 20:25:21 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C87E2C061756;
+        Fri, 23 Apr 2021 17:12:56 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id b38so16322013ljf.5;
+        Fri, 23 Apr 2021 17:12:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=ozXjRX7COuH6/1+kDMYDVF4Elit6ykL8LgOzFAA+UTY=;
-        b=O0uU11ynWxq0gKmlwhdHVXQZqQz6Xu/wJHmeVXc/3OzFs73wfd/Y+sUZhlftPirZmz
-         iC6Q2kB31sSMxndfMuXlfsPpWT4J5aTkfApAup5wenNMCOkgXxLsr6hqdYjq8qDnPXbI
-         R3Cg91jN2RIlmPvQJVzVC5W4+AklxDELCkTH87Ch7vGJL8NyonBTfcjpxiSxWbzgGX9S
-         acUnLrybAzlGT7VbolOdjJnAEEPlhWy8cs4+VaM1m/IY1yNu2GyW78J967DaUoIhJykQ
-         OlLlvix2pgS1A0ojzWIiYY2e8Y4XzcagumqXKTtfeE66Zyr4x0OyFZefqriOSqZ8r28u
-         orBg==
+        bh=JqEYldf8rH5nK8uqd8hXgk6MXCsNYg+ocZG7CbHu0ws=;
+        b=ICycUdOG160t2Rd4RVtyA0ux8qzqKzE7KZGpLRO64qYy1Pac7E4NkoY1dBr1TjRZQs
+         jeRUHLqt8xpQ+6BiryLnntA/hNlDQEBIMTV97fk9LNuhgYQwNMLDqYXYfPnF89wGXDod
+         KklCyDJVM4cPmx906SJbRSqLcRVQm/dAPfZtG++3266XK0DX+RqFjS6gFvguHEh4CN5y
+         cQ0/VfqTQquxwT9qASqE9Wnug6rC0TZODD1FUONxghsMVCdlTo2slsoxthQHPaZ/4tBs
+         cQuJ/2HBmFJM1jIr7MGoqcZyWV4HiCkgXy4pr5/Xw8F8dbKmVpJboNzoTnE8Rtdg4+cT
+         SUYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ozXjRX7COuH6/1+kDMYDVF4Elit6ykL8LgOzFAA+UTY=;
-        b=quzymrDb1f9mCFxrWRHXckUJwx9KAPhFfjVl5BHpVDJfuW/5DKSPbPLN4yHD4v+pL5
-         bSSyAK2hyJQjIlFqO7M9vy2gDyVK/KYiH0DbglccglXMa13F1ujBvPWa1VG19J1siHOS
-         yZFxcaybQjJ8zwpDpstmp7QKHxA52gsMdXliKBwNpyFIaMmW+j9BvvttxlEQgpQxIvwR
-         rEgqaJuRCvmnY3mf6HtVu15Ii4oHcjto2wYDvKkRGB8Q5fRJG7heIlERRSMid2Xfe3ht
-         RdTbzIBRriG2DMew9HUQvz+ChDl3ElSoeM5X5HGMkkEnx+jMv6G6p5SJi8FxiGjX69EG
-         8Icg==
-X-Gm-Message-State: AOAM5335KD18Axm0RklNu1+UDaOye8Op5YJ9jS/srO3zzse3G0lvxfc3
-        UrxM3MZFgy/Q6aGfrdBekHpOtRqEIyq4GEgodVndP4zs
-X-Google-Smtp-Source: ABdhPJx+IssCUgNFvXJASJBHQO4AVaO+lWahbB/j7241iueBB/kmJvM1vJ29JZt6vZ4m8QQa6EGDrHIogj1Hclier6U=
-X-Received: by 2002:a2e:8356:: with SMTP id l22mr4330227ljh.204.1619223758453;
- Fri, 23 Apr 2021 17:22:38 -0700 (PDT)
+        bh=JqEYldf8rH5nK8uqd8hXgk6MXCsNYg+ocZG7CbHu0ws=;
+        b=C7tuhjzNZ99oLDW9VCBhKe5U7+NUTDR2J0zpwll6SqjLubhzSA6Aqzu1CedfKUGk93
+         CBZhAzZXOXAGRnCECfZg+zpUrK+M0kcxxfQo4GuS62ZO0C1hb5igEaQGJOWW6Kp53ceH
+         Hj/i/MhErUznf/rgAZWxODC2Q+CuERzslFeUoZlSL8LsY8TnqakHpHa6cSQpM4qtefnK
+         TZ+r94lvoK1Ek0eJZqrZ+WAxezTG6wwBZ2N3gRKFlnArTirjv4Rjc5QPhcwsWxthgjjn
+         8HtTCP4JmM9Oe1Q17ngbLalfj67+6Tsjd2AgJLlKAMV3PATWOq6LONeBstZ1yPvHo+q+
+         gD9w==
+X-Gm-Message-State: AOAM530i/6lwaK1O+OEuJ/Z6LO0+orW4hzMJaf0Us80ZBqEcGMlLpklH
+        g6kS5U0Jb3I8WYbAcZyRi32xOB5BoRXerL3zV88=
+X-Google-Smtp-Source: ABdhPJySXOX+6KNS5l3nzl3RAInlHL041eEhsLf+07F5czwWIRwnCOl+BE4w1KeFQ4MS7npskiMwNXXlP1mYO7Nprng=
+X-Received: by 2002:a2e:9f49:: with SMTP id v9mr4186669ljk.44.1619223175355;
+ Fri, 23 Apr 2021 17:12:55 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210423185357.1992756-1-andrii@kernel.org> <20210423185357.1992756-3-andrii@kernel.org>
- <2b398ad6-31be-8997-4115-851d79f2d0d2@fb.com> <CAEf4BzYDiuh+OLcRKfcZDSL6esu6dK8js8pudHKvtMvAxS1=WQ@mail.gmail.com>
- <065e8768-b066-185f-48f9-7ca8f15a2547@fb.com> <CAADnVQ+h9eS0P9Jb0QZQ374WxNSF=jhFAiBV7czqhnJxV51m6A@mail.gmail.com>
- <CAEf4BzadCR+QFy4UY8NSVFjGJF4CszhjjZ48XeeqrfX3aYTnkA@mail.gmail.com>
- <CAADnVQKo+efxMvgrqYqVvUEgiz_GXgBVOt4ddPTw_mLuvr2HUw@mail.gmail.com> <CAEf4BzZifOFHr4gozUuSFTh7rTWu2cE_-L4H1shLV5OKyQ92uw@mail.gmail.com>
-In-Reply-To: <CAEf4BzZifOFHr4gozUuSFTh7rTWu2cE_-L4H1shLV5OKyQ92uw@mail.gmail.com>
+References: <1619141010-12521-1-git-send-email-yangtiezhu@loongson.cn>
+ <221ef66a-a7e4-14b7-e085-6062e8547b11@fb.com> <YIMP3flCE6uwYp69@kernel.org>
+In-Reply-To: <YIMP3flCE6uwYp69@kernel.org>
 From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Fri, 23 Apr 2021 17:22:27 -0700
-Message-ID: <CAADnVQ+h78QijAjbkNqAWn+TAFxrd6vE=mXqWRcy815hkTFvOw@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next 2/6] libbpf: rename static variables during linking
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Yonghong Song <yhs@fb.com>, Andrii Nakryiko <andrii@kernel.org>,
-        bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@fb.com>,
+Date:   Fri, 23 Apr 2021 17:12:44 -0700
+Message-ID: <CAADnVQJyX718j1FNEDVYVXv2R4Zgm3xPT1wKr-F_Kwe+Pckgqw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: Document the pahole release info related to
+ libbpf in bpf_devel_QA.rst
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Yonghong Song <yhs@fb.com>, Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Apr 23, 2021 at 5:13 PM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
+On Fri, Apr 23, 2021 at 11:20 AM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
 >
-> On Fri, Apr 23, 2021 at 4:48 PM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
+> Em Thu, Apr 22, 2021 at 09:12:19PM -0700, Yonghong Song escreveu:
 > >
-> > On Fri, Apr 23, 2021 at 4:35 PM Andrii Nakryiko
-> > <andrii.nakryiko@gmail.com> wrote:
-> > >
-> > > On Fri, Apr 23, 2021 at 4:06 PM Alexei Starovoitov
-> > > <alexei.starovoitov@gmail.com> wrote:
-> > > >
-> > > > On Fri, Apr 23, 2021 at 2:56 PM Yonghong Song <yhs@fb.com> wrote:
-> > > > > >>>
-> > > > > >>> -static volatile const __u32 print_len;
-> > > > > >>> -static volatile const __u32 ret1;
-> > > > > >>> +volatile const __u32 print_len = 0;
-> > > > > >>> +volatile const __u32 ret1 = 0;
-> > > > > >>
-> > > > > >> I am little bit puzzled why bpf_iter_test_kern4.c is impacted. I think
-> > > > > >> this is not in a static link test, right? The same for a few tests below.
-> > > > > >
-> > > > > > All the selftests are passed through a static linker, so it will
-> > > > > > append obj_name to each static variable. So I just minimized use of
-> > > > > > static variables to avoid too much code churn. If this variable was
-> > > > > > static, it would have to be accessed as
-> > > > > > skel->rodata->bpf_iter_test_kern4__print_len, for example.
-> > > > >
-> > > > > Okay this should be fine. selftests/bpf specific. I just feel that
-> > > > > some people may get confused if they write/see a single program in
-> > > > > selftest and they have to use obj_varname format and thinking this
-> > > > > is a new standard, but actually it is due to static linking buried
-> > > > > in Makefile. Maybe add a note in selftests/README.rst so we
-> > > > > can point to people if there is confusion.
-> > > >
-> > > > I'm not sure I understand.
-> > > > Are you saying that
-> > > > bpftool gen object out_file.o in_file.o
-> > > > is no longer equivalent to llvm-strip ?
-> > > > Since during that step static vars will get their names mangled?
-> > >
-> > > Yes. Static vars and static maps. We don't allow (yet?) static
-> > > entry-point BPF programs, so those don't change.
-> > >
-> > > > So a good chunk of code that uses skeleton right now should either
-> > > > 1. don't do the linking step
-> > > > or
-> > > > 2. adjust their code to use global vars
-> > > > or
-> > > > 3. adjust the usage of skel.h in their corresponding user code
-> > > >   to accommodate mangled static names?
-> > > > Did it get it right?
-> > >
-> > > Yes, you are right. But so far most cases outside of selftest that
-> > > I've seen don't use static variables (partially because they need
-> > > pesky volatile to be visible from user-space at all), global vars are
-> > > much nicer in that regard.
 > >
-> > Right.
-> > but wait...
-> > why linker is mangling them at all and why they appear in the skeleton?
-> > static vars without volatile should not be in a skeleton, since changing
-> > them from user space might have no meaning on the bpf program.
-> > The behavior of the bpf prog is unpredictable.
+> > On 4/22/21 6:23 PM, Tiezhu Yang wrote:
+> > > pahole starts to use libbpf definitions and APIs since v1.13 after the
+> > > commit 21507cd3e97b ("pahole: add libbpf as submodule under lib/bpf").
+> > > It works well with the git repository because the libbpf submodule will
+> > > use "git submodule update --init --recursive" to update.
+> > >
+> > > Unfortunately, the default github release source code does not contain
+> > > libbpf submodule source code and this will cause build issues, the tarball
+> > > from https://git.kernel.org/pub/scm/devel/pahole/pahole.git/ is same with
+> > > github, you can get the source tarball with corresponding libbpf submodule
+> > > codes from
+> > >
+> > > https://fedorapeople.org/~acme/dwarves
+> > >
+> > > This change documents the above issues to give more information so that
+> > > we can get the tarball from the right place, early discussion is here:
+> > >
+> > > https://lore.kernel.org/bpf/2de4aad5-fa9e-1c39-3c92-9bb9229d0966@loongson.cn/
+> > >
+> > > Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> > > ---
+> > >   Documentation/bpf/bpf_devel_QA.rst | 13 +++++++++++++
+> > >   1 file changed, 13 insertions(+)
+> > >
+> > > diff --git a/Documentation/bpf/bpf_devel_QA.rst b/Documentation/bpf/bpf_devel_QA.rst
+> > > index d05e67e..253496a 100644
+> > > --- a/Documentation/bpf/bpf_devel_QA.rst
+> > > +++ b/Documentation/bpf/bpf_devel_QA.rst
+> > > @@ -449,6 +449,19 @@ from source at
+> > >   https://github.com/acmel/dwarves
+> > > +pahole starts to use libbpf definitions and APIs since v1.13 after the
+> > > +commit 21507cd3e97b ("pahole: add libbpf as submodule under lib/bpf").
+> > > +It works well with the git repository because the libbpf submodule will
+> > > +use "git submodule update --init --recursive" to update.
+> > > +
+> > > +Unfortunately, the default github release source code does not contain
+> > > +libbpf submodule source code and this will cause build issues, the tarball
+> > > +from https://git.kernel.org/pub/scm/devel/pahole/pahole.git/ is same with
+> > > +github, you can get the source tarball with corresponding libbpf submodule
+> > > +codes from
+> > > +
+> > > +https://fedorapeople.org/~acme/dwarves
+> > > +
+> >
+> > Arnaldo, could you take a look at this patch? Thanks!
 >
-> It's up to the compiler. If compiler decides that it shouldn't inline
-> all the uses (or e.g. if static variable is an array accessed with
-> index known only at runtime, or many other cases where compiler can't
-> just deduce constant value), then compiler will emit ELF symbols, will
-> allocate storage, and code will use that storage. static volatile just
-> forces the compiler to not assume anything at all.
+> Sure, he documented it as I expected from a previous interaction about
+> this. Would be good to add a paragraph stating how to grab libbpf and
+> graft it even on a tarball not containing it tho.
 >
-> If the compiler does inline all the uses of static, then we won't have
-> storage allocated for it and it won't be even present in BTF. So for
-> libbpf, linker and skeleton statics are no different than globals.
+> Bonus points if the cmake files gets changed in a way that this gets
+> notified to the user in the error message.
+>
+> But these suggestions can come in another patch, for this I can give my:
+>
+> Reviewed-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 
-Not quite.
-The compiler can inline static values in some cases and still
-keep the var in global data in others places in the same C file.
-If it's a static struct the compiler is free to do any crazy optimization
-on this data it can come up with.
-So the presence of it in the elf symbols doesn't guarantee anything.
-
-> Static maps are slightly different, because we use SEC() which marks
-> them as used, so they should always be present.
-
-yes. The used attribute makes the compiler keep the data,
-but it can still inline it and lose the reference in the .text.
-
-> Sub-skeleton will present those statics to the BPF library without
-> name mangling, but for the final linked BPF object file we need to
-> handle statics. Definitely for maps, because static means that library
-> or library user shouldn't be able to just extern that definition and
-> update/lookup/corrupt its state. But I think for static variables it
-> should be the same. Both are visible to user-space, but invisible
-> between linked BPF compilation units.
-
-I agree with motivation and also agree that static map def is a clean
-way to hide such a map inside the library.
-I'm not sure yet that static + used is enough.
-More study needed.
-For maps it's only the reference inside .text that is relevant.
-If the compiler messes with it then we might have issues.
-Like two static maps might look the same to the compiler.
-They will have different field names, but their contents are zeros
-in both cases. I'm not sure that the compiler will not decide to merge them
-into one data location. In such case .text insns will be pointing
-to the same data offset. The symbol names are probably going to be different.
-So we might be ok with static+used only.
+Applied. Thanks everyone.
