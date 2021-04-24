@@ -2,159 +2,151 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CE817C43461
-	for <bpf@archiver.kernel.org>; Sat, 24 Apr 2021 00:24:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D50FC433B4
+	for <bpf@archiver.kernel.org>; Sat, 24 Apr 2021 01:09:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id ADB846141C
-	for <bpf@archiver.kernel.org>; Sat, 24 Apr 2021 00:24:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 30DCB61404
+	for <bpf@archiver.kernel.org>; Sat, 24 Apr 2021 01:09:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244084AbhDXAZX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 23 Apr 2021 20:25:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60136 "EHLO
+        id S232742AbhDXBKT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 23 Apr 2021 21:10:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232501AbhDXAZX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 23 Apr 2021 20:25:23 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A50C06175F;
-        Fri, 23 Apr 2021 17:13:22 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id g38so57577008ybi.12;
-        Fri, 23 Apr 2021 17:13:22 -0700 (PDT)
+        with ESMTP id S229957AbhDXBKT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 23 Apr 2021 21:10:19 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6BC4C061574;
+        Fri, 23 Apr 2021 18:09:39 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id d10so36304190pgf.12;
+        Fri, 23 Apr 2021 18:09:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0rMCHL6FhL0cRI7haJbi7D3hHx41tCkYnbMlZuh3+ro=;
-        b=r7mRAU0ArBON6XlMDQkBd6OKG2kot+f3LU4NAcpML+Yj8EGxjtQXxRjprsFKN+Ry1R
-         0rQHJ4ov53B7ra85g/TowademdZoN/tDBZ44s6K/QDZ3GOIZgTlEqGAkbdj9NcZ5yHJD
-         YOWT5WeTsGewZEzdjnm7JYcbVPcTeb03fg89vTDLMMuqfgHKaub3/oL5dsCACFO8k8qC
-         D/KppoB2q6met5vg/sfYsHwvWw3eoYR7RuZ+f4/C8JxT1eKA4s9fSjkhWjI5nfRj+BFt
-         0nEl6R64Hid3xcRUcpBagO7L3Oj6w5oLLHZG3njc2IJRVtvWpJwB2yGTDAvOV2wNvBGU
-         IBMg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=Yak3dR9rFGELmftcVHe45byG+0N11NxkW2kkiG+MQlI=;
+        b=obkUphGat2g/r/pUPizEP55m32qvBUjgdN3gZYQBMVOK24k23W3uT9m8btTzMmRkEZ
+         DRptObNftALpxoCVgrGUyvnttI0IWSkewC9W0N1ByPcPgLZRMJ8rwhemTF0LK3AU2+wn
+         gZHypCppb/OQy2siMR69fd3s2XqnHFxynET0WR7SgvUPiXnzJOdiciLMPhq5AM54ZtmU
+         XN8UTBzXjgeAkyM1lQKZBSNB/vTJ1UIalFWkd0qtgJA+fR99q1axhpck1mKe60dHsnaf
+         oJgNXEgbBdN5m3SHSnBZVxEcMBfd3dKoZNBF50nglgRGRDtQSalfEoLO9T2gPLuZ0sn3
+         rU6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0rMCHL6FhL0cRI7haJbi7D3hHx41tCkYnbMlZuh3+ro=;
-        b=Rii1pVAf+gnD777NfvtmJ0PDAIxe4aKsFGcoAYnyXj42VFDEUDb+dLARSFjA5xrFaL
-         77c1xoQpv1RCAoay0jkEzZeIimzS4ZhDZ3wwZ8LmgY1V2J0/fHtRqHoaTenAeGgjcDwu
-         WO7IZwbtQkoZqICWmXMEnqe5oh0lqLOiCYKrYekcK1tBFF4yVWaINemfzy5vX2vClg4G
-         rQfpzf14jEuqG+yjTI7S0v0EabE80S9KAkfLcMjGZt43Lon8TqMBX9ZSRX3gIQkZ3psY
-         eI8jwCoQyrbtk66HUPai4ImmkrC5Izd+F0CO5RdpTKkYSBhKEVs9KbueTHxo2tRyGFi2
-         eDug==
-X-Gm-Message-State: AOAM5322l7gnWcv8I9l/lxl3Nbm9FsoddXjGc5WU2vhK+YqU2G1KAfcc
-        lInm7yM8ZQWxkg2WFQhXsgoF5qc1TbZJhaZ89tznDiKy
-X-Google-Smtp-Source: ABdhPJzLNM3ps+Cq0z02sLCBNNaL89VdlkZwB39z/jHZDaNfvf0TWoBIETJpGmnUdLiYgyJ41g/AXlt4ACNUSe4lAxc=
-X-Received: by 2002:a25:c4c5:: with SMTP id u188mr9164139ybf.425.1619223201813;
- Fri, 23 Apr 2021 17:13:21 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210423185357.1992756-1-andrii@kernel.org> <20210423185357.1992756-3-andrii@kernel.org>
- <2b398ad6-31be-8997-4115-851d79f2d0d2@fb.com> <CAEf4BzYDiuh+OLcRKfcZDSL6esu6dK8js8pudHKvtMvAxS1=WQ@mail.gmail.com>
- <065e8768-b066-185f-48f9-7ca8f15a2547@fb.com> <CAADnVQ+h9eS0P9Jb0QZQ374WxNSF=jhFAiBV7czqhnJxV51m6A@mail.gmail.com>
- <CAEf4BzadCR+QFy4UY8NSVFjGJF4CszhjjZ48XeeqrfX3aYTnkA@mail.gmail.com> <CAADnVQKo+efxMvgrqYqVvUEgiz_GXgBVOt4ddPTw_mLuvr2HUw@mail.gmail.com>
-In-Reply-To: <CAADnVQKo+efxMvgrqYqVvUEgiz_GXgBVOt4ddPTw_mLuvr2HUw@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 23 Apr 2021 17:13:10 -0700
-Message-ID: <CAEf4BzZifOFHr4gozUuSFTh7rTWu2cE_-L4H1shLV5OKyQ92uw@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next 2/6] libbpf: rename static variables during linking
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Yonghong Song <yhs@fb.com>, Andrii Nakryiko <andrii@kernel.org>,
-        bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@fb.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Yak3dR9rFGELmftcVHe45byG+0N11NxkW2kkiG+MQlI=;
+        b=X7d7M9JBkNv0jPjNJoCjKjaM+wse1tnYhdu9gwyw8D+5rZz3rO+bfJIdrGQ/IjHo7l
+         3NncoaGJbzHTDaPAB12oc2UvmKuhvErz49qB5w7ISTwnSDfXpASIR8d3831OPn92Xd8m
+         6eaC3+8aNPlE0zbdWLoDw6kWCO67WrepS3Q4U7BhMYiYW2++vu9wICbyizzN66YqYqga
+         AZD1fVVR+R+8nEpmmGBFEK/G5mrc2D12P+oBovbYChXDsxVaU2umdoVGpihTMRorD73B
+         YdYtiLi17pcZhPwMKIXOAzckMDZi5RFPB3/AQ0QTJJlwqYJI18E1WW8qGWgGkLNUv57X
+         6yLw==
+X-Gm-Message-State: AOAM531LNbBTjpcCiRcSLzTMffuIGI2fs/0n47BuYdghUTot8ZIU3PW4
+        Qq6L9GuRORzp/JlHi4fW4TY=
+X-Google-Smtp-Source: ABdhPJw1jivFCGPg1o/u4uvAe4j+BNGA/xhLtZoVNr1DZDGDVBhH/UslxJCUfdwTXqtyu/U0GIhoxA==
+X-Received: by 2002:a62:52c7:0:b029:255:e78e:5069 with SMTP id g190-20020a6252c70000b0290255e78e5069mr6071901pfb.45.1619226579255;
+        Fri, 23 Apr 2021 18:09:39 -0700 (PDT)
+Received: from Leo-laptop-t470s ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id c125sm5570875pfa.74.2021.04.23.18.09.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Apr 2021 18:09:38 -0700 (PDT)
+Date:   Sat, 24 Apr 2021 09:09:25 +0800
+From:   Hangbin Liu <liuhangbin@gmail.com>
+To:     Jesper Dangaard Brouer <brouer@redhat.com>
+Cc:     Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
+        bpf@vger.kernel.org, netdev@vger.kernel.org,
+        Jiri Benc <jbenc@redhat.com>,
+        Eelco Chaudron <echaudro@redhat.com>, ast@kernel.org,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+        Lorenzo Bianconi <lorenzo.bianconi@redhat.com>,
+        David Ahern <dsahern@gmail.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@gmail.com>,
+        Martin KaFai Lau <kafai@fb.com>
+Subject: Re: [PATCHv9 bpf-next 2/4] xdp: extend xdp_redirect_map with
+ broadcast support
+Message-ID: <20210424010925.GG3465@Leo-laptop-t470s>
+References: <20210422071454.2023282-1-liuhangbin@gmail.com>
+ <20210422071454.2023282-3-liuhangbin@gmail.com>
+ <20210422185332.3199ca2e@carbon>
+ <87a6pqfb9x.fsf@toke.dk>
+ <20210423185429.126492d0@carbon>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210423185429.126492d0@carbon>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Apr 23, 2021 at 4:48 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Fri, Apr 23, 2021 at 4:35 PM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Fri, Apr 23, 2021 at 4:06 PM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
+On Fri, Apr 23, 2021 at 06:54:29PM +0200, Jesper Dangaard Brouer wrote:
+> On Thu, 22 Apr 2021 20:02:18 +0200
+> Toke Høiland-Jørgensen <toke@redhat.com> wrote:
+> 
+> > Jesper Dangaard Brouer <brouer@redhat.com> writes:
+> > 
+> > > On Thu, 22 Apr 2021 15:14:52 +0800
+> > > Hangbin Liu <liuhangbin@gmail.com> wrote:
+> > >  
+> > >> diff --git a/net/core/filter.c b/net/core/filter.c
+> > >> index cae56d08a670..afec192c3b21 100644
+> > >> --- a/net/core/filter.c
+> > >> +++ b/net/core/filter.c  
+> > > [...]  
+> > >>  int xdp_do_redirect(struct net_device *dev, struct xdp_buff *xdp,
+> > >>  		    struct bpf_prog *xdp_prog)
+> > >>  {
+> > >> @@ -3933,6 +3950,7 @@ int xdp_do_redirect(struct net_device *dev, struct xdp_buff *xdp,
+> > >>  	enum bpf_map_type map_type = ri->map_type;
+> > >>  	void *fwd = ri->tgt_value;
+> > >>  	u32 map_id = ri->map_id;
+> > >> +	struct bpf_map *map;
+> > >>  	int err;
+> > >>  
+> > >>  	ri->map_id = 0; /* Valid map id idr range: [1,INT_MAX[ */
+> > >> @@ -3942,7 +3960,12 @@ int xdp_do_redirect(struct net_device *dev, struct xdp_buff *xdp,
+> > >>  	case BPF_MAP_TYPE_DEVMAP:
+> > >>  		fallthrough;
+> > >>  	case BPF_MAP_TYPE_DEVMAP_HASH:
+> > >> -		err = dev_map_enqueue(fwd, xdp, dev);
+> > >> +		map = xchg(&ri->map, NULL);  
 > > >
-> > > On Fri, Apr 23, 2021 at 2:56 PM Yonghong Song <yhs@fb.com> wrote:
-> > > > >>>
-> > > > >>> -static volatile const __u32 print_len;
-> > > > >>> -static volatile const __u32 ret1;
-> > > > >>> +volatile const __u32 print_len = 0;
-> > > > >>> +volatile const __u32 ret1 = 0;
-> > > > >>
-> > > > >> I am little bit puzzled why bpf_iter_test_kern4.c is impacted. I think
-> > > > >> this is not in a static link test, right? The same for a few tests below.
-> > > > >
-> > > > > All the selftests are passed through a static linker, so it will
-> > > > > append obj_name to each static variable. So I just minimized use of
-> > > > > static variables to avoid too much code churn. If this variable was
-> > > > > static, it would have to be accessed as
-> > > > > skel->rodata->bpf_iter_test_kern4__print_len, for example.
-> > > >
-> > > > Okay this should be fine. selftests/bpf specific. I just feel that
-> > > > some people may get confused if they write/see a single program in
-> > > > selftest and they have to use obj_varname format and thinking this
-> > > > is a new standard, but actually it is due to static linking buried
-> > > > in Makefile. Maybe add a note in selftests/README.rst so we
-> > > > can point to people if there is confusion.
-> > >
-> > > I'm not sure I understand.
-> > > Are you saying that
-> > > bpftool gen object out_file.o in_file.o
-> > > is no longer equivalent to llvm-strip ?
-> > > Since during that step static vars will get their names mangled?
-> >
-> > Yes. Static vars and static maps. We don't allow (yet?) static
-> > entry-point BPF programs, so those don't change.
-> >
-> > > So a good chunk of code that uses skeleton right now should either
-> > > 1. don't do the linking step
-> > > or
-> > > 2. adjust their code to use global vars
-> > > or
-> > > 3. adjust the usage of skel.h in their corresponding user code
-> > >   to accommodate mangled static names?
-> > > Did it get it right?
-> >
-> > Yes, you are right. But so far most cases outside of selftest that
-> > I've seen don't use static variables (partially because they need
-> > pesky volatile to be visible from user-space at all), global vars are
-> > much nicer in that regard.
->
-> Right.
-> but wait...
-> why linker is mangling them at all and why they appear in the skeleton?
-> static vars without volatile should not be in a skeleton, since changing
-> them from user space might have no meaning on the bpf program.
-> The behavior of the bpf prog is unpredictable.
+> > > Hmm, this looks dangerous for performance to have on this fast-path.
+> > > The xchg call can be expensive, AFAIK this is an atomic operation.  
+> > 
+> > Ugh, you're right. That's my bad, I suggested replacing the
+> > READ_ONCE()/WRITE_ONCE() pair with the xchg() because an exchange is
+> > what it's doing, but I failed to consider the performance implications
+> > of the atomic operation. Sorry about that, Hangbin! I guess this should
+> > be changed to:
+> > 
+> > +		map = READ_ONCE(ri->map);
+> > +		if (map) {
+> > +			WRITE_ONCE(ri->map, NULL);
+> > +			err = dev_map_enqueue_multi(xdp, dev, map,
+> > +						    ri->flags & BPF_F_EXCLUDE_INGRESS);
+> > +		} else {
+> > +			err = dev_map_enqueue(fwd, xdp, dev);
+> > +		}
+> 
+> This is highly sensitive fast-path code, as you saw Bjørn have been
+> hunting nanosec in this area.  The above code implicitly have "map" as
+> the likely option, which I don't think it is.
 
-It's up to the compiler. If compiler decides that it shouldn't inline
-all the uses (or e.g. if static variable is an array accessed with
-index known only at runtime, or many other cases where compiler can't
-just deduce constant value), then compiler will emit ELF symbols, will
-allocate storage, and code will use that storage. static volatile just
-forces the compiler to not assume anything at all.
+Hi Jesper,
 
-If the compiler does inline all the uses of static, then we won't have
-storage allocated for it and it won't be even present in BTF. So for
-libbpf, linker and skeleton statics are no different than globals.
+From the performance data, there is only a slightly impact. Do we still need
+to block the whole patch on this? Or if you have a better solution?
 
-Static maps are slightly different, because we use SEC() which marks
-them as used, so they should always be present.
-
-Sub-skeleton will present those statics to the BPF library without
-name mangling, but for the final linked BPF object file we need to
-handle statics. Definitely for maps, because static means that library
-or library user shouldn't be able to just extern that definition and
-update/lookup/corrupt its state. But I think for static variables it
-should be the same. Both are visible to user-space, but invisible
-between linked BPF compilation units.
-
-> Only volatile static can theoretically be in the skeleton, but as you said
-> probably no one is using them yet, so we can omit them from skeleton too.
+Thanks
+Hangbin
