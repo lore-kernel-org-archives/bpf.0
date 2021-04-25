@@ -2,88 +2,106 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B80C3C433B4
-	for <bpf@archiver.kernel.org>; Sun, 25 Apr 2021 11:15:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6B19C433B4
+	for <bpf@archiver.kernel.org>; Sun, 25 Apr 2021 16:52:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8373360234
-	for <bpf@archiver.kernel.org>; Sun, 25 Apr 2021 11:15:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C369C611F0
+	for <bpf@archiver.kernel.org>; Sun, 25 Apr 2021 16:52:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229707AbhDYLQ3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 25 Apr 2021 07:16:29 -0400
-Received: from mx2.suse.de ([195.135.220.15]:34234 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229659AbhDYLQ3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 25 Apr 2021 07:16:29 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 4C1D9B1DC;
-        Sun, 25 Apr 2021 11:15:48 +0000 (UTC)
-Date:   Sun, 25 Apr 2021 13:15:45 +0200
-From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-To:     Yonghong Song <yhs@fb.com>
-Cc:     linux-kernel@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: Re: linux-next failing build due to missing cubictcp_state symbol
-Message-ID: <20210425111545.GL15381@kitsune.suse.cz>
-References: <20210423130530.GA6564@kitsune.suse.cz>
- <316e86f9-35cc-36b0-1594-00a09631c736@fb.com>
- <20210423175528.GF6564@kitsune.suse.cz>
+        id S231197AbhDYQxE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 25 Apr 2021 12:53:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44448 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230329AbhDYQxE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 25 Apr 2021 12:53:04 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47193C061756;
+        Sun, 25 Apr 2021 09:52:24 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id n138so84830298lfa.3;
+        Sun, 25 Apr 2021 09:52:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=EB1M0gWo0xUwH/H5pRRZr/jjgjnHFpq4HP5/7TLgquw=;
+        b=mKfL7XBbPUgpXuoeT+M8J5UA00y9KDHkBBlyJDTRIGF18oMS4QFwLiEW4qQrpeL7aA
+         kSuh5AQKpTcn5fkeippGQS7dy7rt5+b/QIoYBtnwZn2LsaCybLc3Pa9/m+ft6cQKnL6r
+         ioSqz0KVxR9XhsPoTqNJbYRtVIWqPfqhXN9RujBMqJpf4FOxO9ymoLQk/M9EVc8oWJFD
+         azY0/6SjJSfaEuiFxYla8gU9/yzf98eG1DDrSurrTt6bciE0gEfTerFKPaSh3B/qBYGy
+         PdaWbAK6V3oyjW+i2ia8krlH7aTwKPzr8xylNMrcEXe/6B+nicTWobw6ArD05/6A1TSR
+         uxGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EB1M0gWo0xUwH/H5pRRZr/jjgjnHFpq4HP5/7TLgquw=;
+        b=sedIqK9NhfJwuSVeP9WyWWSrqn/qLgYGUKFshTQbka1VMa9ZzKsagYmcHyre222KFR
+         1rtH/ofdO+DyXmHyCFsgv1qMb79dUcCRplnYoczxRYe1HhoBaAxc4am0laWC5/E0Wqbq
+         Bh4DL7P3F8swVvQ1fFm/7dXHMFoa8S3++YHK5+N9LA3HTMus2MuSfgjDjtCLyruZY/dJ
+         3yRVcy7Ljcr+TuC0fSw5nMfb4kLmZN5zbKhA84SqJ7oxeq/T4vhvYIOTfrOX0rgMofXN
+         uRR479U6e0kbAmJFjBtZBNi0UoFAdjlm0b0TrKO8qCIXudtSvrKWs4eY1X7OxGxdNK4R
+         2esg==
+X-Gm-Message-State: AOAM5334c634n4zVS0KZpWuL874wW4lL4bw4iXR81tSdT9PVSCGp9VVb
+        o7ySwW+D64ZFQytZMdRW+3TMmfl9nVfdbyrUriU=
+X-Google-Smtp-Source: ABdhPJxyKCSLAn2xg/0qj+PERrbhg57bibRrpgyu2+FdeamRpnAVVz+6UeBZD+v1w1V4KlK02GEyZcz75ouK5KpNtEI=
+X-Received: by 2002:ac2:510d:: with SMTP id q13mr10060117lfb.75.1619369542791;
+ Sun, 25 Apr 2021 09:52:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210423175528.GF6564@kitsune.suse.cz>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+References: <20210423230609.13519-1-alx.manpages@gmail.com>
+ <CAADnVQLf4qe3Hj7cjBUCY4wXb9t2ZjUt=Z=JuygRY0LNNHWAoA@mail.gmail.com> <56932c68-4992-c5e4-819f-a88f60b3f63a@gmail.com>
+In-Reply-To: <56932c68-4992-c5e4-819f-a88f60b3f63a@gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Sun, 25 Apr 2021 09:52:11 -0700
+Message-ID: <CAADnVQJU=r0qE-4ZHsvX4YndbFgDGvzAgNgVo7kPMGF4jCrVeg@mail.gmail.com>
+Subject: Re: [RFC] bpf.2: Use standard types and attributes
+To:     "Alejandro Colomar (man-pages)" <alx.manpages@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>,
+        "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>,
+        linux-man <linux-man@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, libc-alpha@sourceware.org,
+        gcc-patches@gcc.gnu.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Apr 23, 2021 at 07:55:28PM +0200, Michal Suchánek wrote:
-> On Fri, Apr 23, 2021 at 07:41:29AM -0700, Yonghong Song wrote:
-> > 
-> > 
-> > On 4/23/21 6:05 AM, Michal Suchánek wrote:
-> > > Hello,
-> > > 
-> > > I see this build error in linux-next (config attached).
-> > > 
-> > > [ 4939s]   LD      vmlinux
-> > > [ 4959s]   BTFIDS  vmlinux
-> > > [ 4959s] FAILED unresolved symbol cubictcp_state
-> > > [ 4960s] make[1]: ***
-> > > [/home/abuild/rpmbuild/BUILD/kernel-vanilla-5.12~rc8.next.20210422/linux-5.12-rc8-next-20210422/Makefile:1277:
-> > > vmlinux] Error 255
-> > > [ 4960s] make: *** [../Makefile:222: __sub-make] Error 2
-> > 
-> > Looks like you have DYNAMIC_FTRACE config option enabled already.
-> > Could you try a later version of pahole?
-> 
-> Is this requireent new?
-> 
-> I have pahole 1.20, and master does build without problems.
-> 
-> If newer version is needed can a check be added?
+On Sat, Apr 24, 2021 at 10:56 AM Alejandro Colomar (man-pages)
+<alx.manpages@gmail.com> wrote:
+>
+> Hello Alexei,
+>
+> On 4/24/21 1:20 AM, Alexei Starovoitov wrote:
+> > Nack.
+> > The man page should describe the kernel api the way it is in .h file.
+>
+> Why?
 
-With dwarves 1.21 some architectures are fixed and some report other
-missing symbol. Definitely an improvenent.
+Because man page must describe the linux uapi headers the way they
+are installed in the system and not invent alternative implementations.
+The users will include those .h with __u32 and will see them in their code.
+Man page saying something else is a dangerous lie.
 
-I see some new type support was added so it makes sense if that type is
-used the new dwarves are needed.
+> using uint32_t in every situation where __u32 is expected.  They're both
+> typedefs for the same basic type.
 
-Thanks
+That's irrelevant. Languages like golang have their own bpf.h equivalent
+that matches /usr/include/linux/bpf.h.
 
-Michal
+> I can understand why Linux will keep using u32 types (and their __ user
+> space variants), but that doesn't mean user space programs need to use
+> the same type.
+
+No one says that the users must use __u32. See golang example.
+But if the users do #include <linux/bpf.h> they will get them and man page
+must describe that.
+
+> If we have a standard syntax for fixed-width integral types (and for
+> anything, actually), the manual pages should probably follow it,
+> whenever possible.
+
+Absolutely not. linux man page must describe linux.
