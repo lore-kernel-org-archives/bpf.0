@@ -7,41 +7,41 @@ X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 303DBC433ED
-	for <bpf@archiver.kernel.org>; Tue, 27 Apr 2021 03:49:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 402BBC433B4
+	for <bpf@archiver.kernel.org>; Tue, 27 Apr 2021 03:49:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F3D8B610FB
-	for <bpf@archiver.kernel.org>; Tue, 27 Apr 2021 03:49:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 173C6610C9
+	for <bpf@archiver.kernel.org>; Tue, 27 Apr 2021 03:49:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234367AbhD0DuH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 26 Apr 2021 23:50:07 -0400
-Received: from smtp-fw-33001.amazon.com ([207.171.190.10]:9459 "EHLO
-        smtp-fw-33001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232157AbhD0DuF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 26 Apr 2021 23:50:05 -0400
+        id S232157AbhD0Due (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 26 Apr 2021 23:50:34 -0400
+Received: from smtp-fw-9102.amazon.com ([207.171.184.29]:26039 "EHLO
+        smtp-fw-9102.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233361AbhD0Due (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 26 Apr 2021 23:50:34 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.co.jp; i=@amazon.co.jp; q=dns/txt;
-  s=amazon201209; t=1619495364; x=1651031364;
+  s=amazon201209; t=1619495392; x=1651031392;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=mUhMBi2zOZBc0ywsk39t4LqN0D6CaIsc9vyJtALfeXE=;
-  b=jSf0JRvd0uc4zB80LYQQppPCzo0sU93Gz+0Xt3bI6/o8bHbXIzDuLRZX
-   W5esZ5otJp+OQEGCvDVL3dra7AXHZnx9pCIEtsUc1ekiCJe4BRgqdzQ51
-   3glpGkMRAYyRL/G9jScY+LPje4Cf261yHoyPT3RTOibJcz4FQwZ+UCMfW
-   Q=;
+  bh=bVjVhvt97rSgBD/srGKyKhulnrG7y8P1LKVEYemst1Y=;
+  b=He3hLDmddjxRVLEzXvkM1BAH198WOwNMDaucxEyNJVgmHrVaK+O/CB+Y
+   t2xCBOTPy66Vrsoy89qKmnRJXHEgPyEa5iVYu9OeEAyyF/bKzn63xTWUj
+   KdOV7EHvzwl6FxKEMDcE0z1BULiAuI1U3tUiTTUFRgrrGn/KZ4zAhQ7k8
+   8=;
 X-IronPort-AV: E=Sophos;i="5.82,254,1613433600"; 
-   d="scan'208";a="121779778"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-1a-821c648d.us-east-1.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-33001.sea14.amazon.com with ESMTP; 27 Apr 2021 03:49:22 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-1a-821c648d.us-east-1.amazon.com (Postfix) with ESMTPS id 49B12A1DF9;
-        Tue, 27 Apr 2021 03:49:18 +0000 (UTC)
+   d="scan'208";a="130980092"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-1e-42f764a0.us-east-1.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-9102.sea19.amazon.com with ESMTP; 27 Apr 2021 03:49:51 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-1e-42f764a0.us-east-1.amazon.com (Postfix) with ESMTPS id 3C62BC04F6;
+        Tue, 27 Apr 2021 03:49:47 +0000 (UTC)
 Received: from EX13D04ANC001.ant.amazon.com (10.43.157.89) by
  EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Tue, 27 Apr 2021 03:49:18 +0000
+ id 15.0.1497.2; Tue, 27 Apr 2021 03:49:47 +0000
 Received: from 88665a182662.ant.amazon.com (10.43.162.93) by
  EX13D04ANC001.ant.amazon.com (10.43.157.89) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Tue, 27 Apr 2021 03:49:13 +0000
+ id 15.0.1497.2; Tue, 27 Apr 2021 03:49:42 +0000
 From:   Kuniyuki Iwashima <kuniyu@amazon.co.jp>
 To:     "David S . Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
@@ -54,9 +54,9 @@ CC:     Benjamin Herrenschmidt <benh@amazon.com>,
         Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
         Kuniyuki Iwashima <kuni1840@gmail.com>, <bpf@vger.kernel.org>,
         <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4 bpf-next 09/11] bpf: Support socket migration by eBPF.
-Date:   Tue, 27 Apr 2021 12:46:21 +0900
-Message-ID: <20210427034623.46528-10-kuniyu@amazon.co.jp>
+Subject: [PATCH v4 bpf-next 11/11] bpf: Test BPF_SK_REUSEPORT_SELECT_OR_MIGRATE.
+Date:   Tue, 27 Apr 2021 12:46:23 +0900
+Message-ID: <20210427034623.46528-12-kuniyu@amazon.co.jp>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210427034623.46528-1-kuniyu@amazon.co.jp>
 References: <20210427034623.46528-1-kuniyu@amazon.co.jp>
@@ -70,314 +70,591 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch introduces a new bpf_attach_type for BPF_PROG_TYPE_SK_REUSEPORT
-to check if the attached eBPF program is capable of migrating sockets. When
-the eBPF program is attached, we run it for socket migration if the
-expected_attach_type is BPF_SK_REUSEPORT_SELECT_OR_MIGRATE or
-net.ipv4.tcp_migrate_req is enabled.
+This patch adds a test for BPF_SK_REUSEPORT_SELECT_OR_MIGRATE and
+removes 'static' from settimeo() in network_helpers.c.
 
-Ccurrently, the expected_attach_type is not enforced for the
-BPF_PROG_TYPE_SK_REUSEPORT type of program. Thus, this commit follows the
-earlier idea in the commit aac3fc320d94 ("bpf: Post-hooks for sys_bind") to
-fix up the zero expected_attach_type in bpf_prog_load_fixup_attach_type().
-
-Moreover, this patch adds a new field (migrating_sk) to sk_reuseport_md to
-select a new listener based on the child socket. migrating_sk varies
-depending on if it is migrating a request in the accept queue or during
-3WHS.
-
-  - accept_queue : sock (ESTABLISHED/SYN_RECV)
-  - 3WHS         : request_sock (NEW_SYN_RECV)
-
-In the eBPF program, we can select a new listener by
-BPF_FUNC_sk_select_reuseport(). Also, we can cancel migration by returning
-SK_DROP. This feature is useful when listeners have different settings at
-the socket API level or when we want to free resources as soon as possible.
-
-  - SK_PASS with selected_sk, select it as a new listener
-  - SK_PASS with selected_sk NULL, fallbacks to the random selection
-  - SK_DROP, cancel the migration.
-
-There is a noteworthy point. We select a listening socket in three places,
-but we do not have struct skb at closing a listener or retransmitting a
-SYN+ACK. On the other hand, some helper functions do not expect skb is NULL
-(e.g. skb_header_pointer() in BPF_FUNC_skb_load_bytes(), skb_tail_pointer()
-in BPF_FUNC_skb_load_bytes_relative()). So we allocate an empty skb
-temporarily before running the eBPF program.
-
-Link: https://lore.kernel.org/netdev/20201123003828.xjpjdtk4ygl6tg6h@kafai-mbp.dhcp.thefacebook.com/
-Link: https://lore.kernel.org/netdev/20201203042402.6cskdlit5f3mw4ru@kafai-mbp.dhcp.thefacebook.com/
-Link: https://lore.kernel.org/netdev/20201209030903.hhow5r53l6fmozjn@kafai-mbp.dhcp.thefacebook.com/
-Suggested-by: Martin KaFai Lau <kafai@fb.com>
 Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
 ---
- include/linux/bpf.h            |  1 +
- include/linux/filter.h         |  2 ++
- include/uapi/linux/bpf.h       | 15 +++++++++++++++
- kernel/bpf/syscall.c           | 13 +++++++++++++
- net/core/filter.c              | 13 ++++++++++++-
- net/core/sock_reuseport.c      | 34 ++++++++++++++++++++++++++++++----
- tools/include/uapi/linux/bpf.h | 15 +++++++++++++++
- 7 files changed, 88 insertions(+), 5 deletions(-)
+ tools/testing/selftests/bpf/network_helpers.c |   2 +-
+ tools/testing/selftests/bpf/network_helpers.h |   1 +
+ .../bpf/prog_tests/migrate_reuseport.c        | 484 ++++++++++++++++++
+ .../bpf/progs/test_migrate_reuseport.c        |  51 ++
+ 4 files changed, 537 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_migrate_reuseport.c
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index ad4bcf1cadbb..e3b6d4532866 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -2015,6 +2015,7 @@ struct sk_reuseport_kern {
- 	struct sk_buff *skb;
- 	struct sock *sk;
- 	struct sock *selected_sk;
-+	struct sock *migrating_sk;
- 	void *data_end;
- 	u32 hash;
- 	u32 reuseport_id;
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index 9a09547bc7ba..226f76c0b974 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -995,11 +995,13 @@ void bpf_warn_invalid_xdp_action(u32 act);
- #ifdef CONFIG_INET
- struct sock *bpf_run_sk_reuseport(struct sock_reuseport *reuse, struct sock *sk,
- 				  struct bpf_prog *prog, struct sk_buff *skb,
-+				  struct sock *migrating_sk,
- 				  u32 hash);
- #else
- static inline struct sock *
- bpf_run_sk_reuseport(struct sock_reuseport *reuse, struct sock *sk,
- 		     struct bpf_prog *prog, struct sk_buff *skb,
-+		     struct sock *migrating_sk,
- 		     u32 hash)
+diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
+index 12ee40284da0..2060bc122c53 100644
+--- a/tools/testing/selftests/bpf/network_helpers.c
++++ b/tools/testing/selftests/bpf/network_helpers.c
+@@ -40,7 +40,7 @@ struct ipv6_packet pkt_v6 = {
+ 	.tcp.doff = 5,
+ };
+ 
+-static int settimeo(int fd, int timeout_ms)
++int settimeo(int fd, int timeout_ms)
  {
- 	return NULL;
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index d2e6bf2d464b..ee8b5435ab1f 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -979,6 +979,8 @@ enum bpf_attach_type {
- 	BPF_SK_LOOKUP,
- 	BPF_XDP,
- 	BPF_SK_SKB_VERDICT,
-+	BPF_SK_REUSEPORT_SELECT,
-+	BPF_SK_REUSEPORT_SELECT_OR_MIGRATE,
- 	__MAX_BPF_ATTACH_TYPE
- };
+ 	struct timeval timeout = { .tv_sec = 3 };
  
-@@ -5364,7 +5366,20 @@ struct sk_reuseport_md {
- 	__u32 ip_protocol;	/* IP protocol. e.g. IPPROTO_TCP, IPPROTO_UDP */
- 	__u32 bind_inany;	/* Is sock bound to an INANY address? */
- 	__u32 hash;		/* A hash of the packet 4 tuples */
-+	/* When reuse->migrating_sk is NULL, it is selecting a sk for the
-+	 * new incoming connection request (e.g. selecting a listen sk for
-+	 * the received SYN in the TCP case).  reuse->sk is one of the sk
-+	 * in the reuseport group. The bpf prog can use reuse->sk to learn
-+	 * the local listening ip/port without looking into the skb.
-+	 *
-+	 * When reuse->migrating_sk is not NULL, reuse->sk is closed and
-+	 * reuse->migrating_sk is the socket that needs to be migrated
-+	 * to another listening socket.  migrating_sk could be a fullsock
-+	 * sk that is fully established or a reqsk that is in-the-middle
-+	 * of 3-way handshake.
-+	 */
- 	__bpf_md_ptr(struct bpf_sock *, sk);
-+	__bpf_md_ptr(struct bpf_sock *, migrating_sk);
- };
+diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
+index 7205f8afdba1..5e0d51c07b63 100644
+--- a/tools/testing/selftests/bpf/network_helpers.h
++++ b/tools/testing/selftests/bpf/network_helpers.h
+@@ -33,6 +33,7 @@ struct ipv6_packet {
+ } __packed;
+ extern struct ipv6_packet pkt_v6;
  
- #define BPF_TAG_SIZE	8
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index fd495190115e..217b5a7c01bd 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -1931,6 +1931,11 @@ static void bpf_prog_load_fixup_attach_type(union bpf_attr *attr)
- 			attr->expected_attach_type =
- 				BPF_CGROUP_INET_SOCK_CREATE;
- 		break;
-+	case BPF_PROG_TYPE_SK_REUSEPORT:
-+		if (!attr->expected_attach_type)
-+			attr->expected_attach_type =
-+				BPF_SK_REUSEPORT_SELECT;
-+		break;
- 	}
- }
- 
-@@ -2014,6 +2019,14 @@ bpf_prog_load_check_attach(enum bpf_prog_type prog_type,
- 		if (expected_attach_type == BPF_SK_LOOKUP)
- 			return 0;
- 		return -EINVAL;
-+	case BPF_PROG_TYPE_SK_REUSEPORT:
-+		switch (expected_attach_type) {
-+		case BPF_SK_REUSEPORT_SELECT:
-+		case BPF_SK_REUSEPORT_SELECT_OR_MIGRATE:
-+			return 0;
-+		default:
-+			return -EINVAL;
++int settimeo(int fd, int timeout_ms);
+ int start_server(int family, int type, const char *addr, __u16 port,
+ 		 int timeout_ms);
+ int connect_to_fd(int server_fd, int timeout_ms);
+diff --git a/tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c b/tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c
+new file mode 100644
+index 000000000000..1b33df1902fe
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c
+@@ -0,0 +1,484 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Check if we can migrate child sockets.
++ *
++ *   1. call listen() for 5 server sockets.
++ *   2. update a map to migrate all child sockets
++ *        to the last server socket (migrate_map[cookie] = 4)
++ *   3. call connect() for 25 client sockets.
++ *   4. call shutdown() for first 4 server sockets
++ *        and migrate the requests in the accept queue
++ *        to the last server socket.
++ *   5. call listen() for the second server socket.
++ *   6. call shutdown() for the last server
++ *        and migrate the requests in the accept queue
++ *        to the second server socket.
++ *   7. call listen() for the last server.
++ *   8. call shutdown() for the second server
++ *        and migrate the requests in the accept queue
++ *        to the last server socket.
++ *   9. call accept() for the last server socket.
++ *
++ * Author: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
++ */
++
++#include <bpf/bpf.h>
++#include <bpf/libbpf.h>
++
++#include "test_progs.h"
++#include "test_migrate_reuseport.skel.h"
++#include "network_helpers.h"
++
++#define NR_SERVERS 5
++#define NR_CLIENTS (NR_SERVERS * 5)
++#define MIGRATED_TO (NR_SERVERS - 1)
++
++/* fastopenq->max_qlen and sk->sk_max_ack_backlog */
++#define QLEN (NR_CLIENTS * 5)
++
++#define MSG "Hello World\0"
++#define MSGLEN 12
++
++static struct migrate_reuseport_test_case {
++	const char *name;
++	__s64 servers[NR_SERVERS];
++	__s64 clients[NR_CLIENTS];
++	struct sockaddr_storage addr;
++	socklen_t addrlen;
++	int family;
++	bool drop_ack;
++	bool expire_synack_timer;
++	bool fastopen;
++} test_cases[] = {
++	{
++		.name = "IPv4 - TCP_ESTABLISHED - inet_csk_listen_stop",
++		.family = AF_INET,
++		.drop_ack = false,
++		.expire_synack_timer = false,
++		.fastopen = false,
++	},
++	{
++		.name = "IPv4 - TCP_SYN_RECV - inet_csk_listen_stop",
++		.family = AF_INET,
++		.drop_ack = true,
++		.expire_synack_timer = false,
++		.fastopen = true,
++	},
++	{
++		.name = "IPv4 - TCP_NEW_SYN_RECV - inet_csk_complete_hashdance",
++		.family = AF_INET,
++		.drop_ack = true,
++		.expire_synack_timer = false,
++		.fastopen = false,
++	},
++	{
++		.name = "IPv4 - TCP_NEW_SYN_RECV - reqsk_timer_handler",
++		.family = AF_INET,
++		.drop_ack = true,
++		.expire_synack_timer = true,
++		.fastopen = false,
++	},
++	{
++		.name = "IPv6 - TCP_ESTABLISHED - inet_csk_listen_stop",
++		.family = AF_INET6,
++		.drop_ack = false,
++		.expire_synack_timer = false,
++		.fastopen = false,
++	},
++	{
++		.name = "IPv6 - TCP_SYN_RECV - inet_csk_listen_stop",
++		.family = AF_INET6,
++		.drop_ack = true,
++		.expire_synack_timer = false,
++		.fastopen = true,
++	},
++	{
++		.name = "IPv6 - TCP_NEW_SYN_RECV - inet_csk_complete_hashdance",
++		.family = AF_INET6,
++		.drop_ack = true,
++		.expire_synack_timer = false,
++		.fastopen = false,
++	},
++	{
++		.name = "IPv6 - TCP_NEW_SYN_RECV - reqsk_timer_handler",
++		.family = AF_INET6,
++		.drop_ack = true,
++		.expire_synack_timer = true,
++		.fastopen = false,
++	}
++};
++
++static void init_fds(__s64 fds[], int len)
++{
++	int i;
++
++	for (i = 0; i < len; i++)
++		fds[i] = -1;
++}
++
++static void close_fds(__s64 fds[], int len)
++{
++	int i;
++
++	for (i = 0; i < len; i++) {
++		if (fds[i] != -1) {
++			close(fds[i]);
++			fds[i] = -1;
 +		}
- 	case BPF_PROG_TYPE_EXT:
- 		if (expected_attach_type)
- 			return -EINVAL;
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 3d0f989f5d38..1dfe2f820950 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -10007,11 +10007,13 @@ int sk_get_filter(struct sock *sk, struct sock_filter __user *ubuf,
- static void bpf_init_reuseport_kern(struct sk_reuseport_kern *reuse_kern,
- 				    struct sock_reuseport *reuse,
- 				    struct sock *sk, struct sk_buff *skb,
-+				    struct sock *migrating_sk,
- 				    u32 hash)
- {
- 	reuse_kern->skb = skb;
- 	reuse_kern->sk = sk;
- 	reuse_kern->selected_sk = NULL;
-+	reuse_kern->migrating_sk = migrating_sk;
- 	reuse_kern->data_end = skb->data + skb_headlen(skb);
- 	reuse_kern->hash = hash;
- 	reuse_kern->reuseport_id = reuse->reuseport_id;
-@@ -10020,12 +10022,13 @@ static void bpf_init_reuseport_kern(struct sk_reuseport_kern *reuse_kern,
- 
- struct sock *bpf_run_sk_reuseport(struct sock_reuseport *reuse, struct sock *sk,
- 				  struct bpf_prog *prog, struct sk_buff *skb,
-+				  struct sock *migrating_sk,
- 				  u32 hash)
- {
- 	struct sk_reuseport_kern reuse_kern;
- 	enum sk_action action;
- 
--	bpf_init_reuseport_kern(&reuse_kern, reuse, sk, skb, hash);
-+	bpf_init_reuseport_kern(&reuse_kern, reuse, sk, skb, migrating_sk, hash);
- 	action = BPF_PROG_RUN(prog, &reuse_kern);
- 
- 	if (action == SK_PASS)
-@@ -10170,6 +10173,10 @@ sk_reuseport_is_valid_access(int off, int size,
- 		info->reg_type = ARG_PTR_TO_SOCKET;
- 		return size == sizeof(__u64);
- 
-+	case offsetof(struct sk_reuseport_md, migrating_sk):
-+		info->reg_type = PTR_TO_SOCK_COMMON_OR_NULL;
-+		return size == sizeof(__u64);
++	}
++}
 +
- 	/* Fields that allow narrowing */
- 	case bpf_ctx_range(struct sk_reuseport_md, eth_protocol):
- 		if (size < sizeof_field(struct sk_buff, protocol))
-@@ -10246,6 +10253,10 @@ static u32 sk_reuseport_convert_ctx_access(enum bpf_access_type type,
- 	case offsetof(struct sk_reuseport_md, sk):
- 		SK_REUSEPORT_LOAD_FIELD(sk);
- 		break;
++static int setup_fastopen(char *buf, int size, int *saved_len, bool restore)
++{
++	int err = 0, fd, len;
 +
-+	case offsetof(struct sk_reuseport_md, migrating_sk):
-+		SK_REUSEPORT_LOAD_FIELD(migrating_sk);
-+		break;
- 	}
- 
- 	return insn - insn_buf;
-diff --git a/net/core/sock_reuseport.c b/net/core/sock_reuseport.c
-index a2bca39ec0e3..d35c8f51ab72 100644
---- a/net/core/sock_reuseport.c
-+++ b/net/core/sock_reuseport.c
-@@ -378,13 +378,17 @@ void reuseport_stop_listen_sock(struct sock *sk)
- {
- 	if (sk->sk_protocol == IPPROTO_TCP) {
- 		struct sock_reuseport *reuse;
-+		struct bpf_prog *prog;
- 
- 		spin_lock_bh(&reuseport_lock);
- 
- 		reuse = rcu_dereference_protected(sk->sk_reuseport_cb,
- 						  lockdep_is_held(&reuseport_lock));
-+		prog = rcu_dereference_protected(reuse->prog,
-+						 lockdep_is_held(&reuseport_lock));
- 
--		if (sock_net(sk)->ipv4.sysctl_tcp_migrate_req) {
-+		if (sock_net(sk)->ipv4.sysctl_tcp_migrate_req ||
-+		    (prog && prog->expected_attach_type == BPF_SK_REUSEPORT_SELECT_OR_MIGRATE)) {
- 			/* Migration capable, move sk from the listening section
- 			 * to the closed section.
- 			 */
-@@ -489,7 +493,7 @@ struct sock *reuseport_select_sock(struct sock *sk,
- 			goto select_by_hash;
- 
- 		if (prog->type == BPF_PROG_TYPE_SK_REUSEPORT)
--			sk2 = bpf_run_sk_reuseport(reuse, sk, prog, skb, hash);
-+			sk2 = bpf_run_sk_reuseport(reuse, sk, prog, skb, NULL, hash);
- 		else
- 			sk2 = run_bpf_filter(reuse, socks, prog, skb, hdr_len);
- 
-@@ -520,6 +524,8 @@ struct sock *reuseport_migrate_sock(struct sock *sk,
- {
- 	struct sock_reuseport *reuse;
- 	struct sock *nsk = NULL;
-+	bool allocated = false;
-+	struct bpf_prog *prog;
- 	u16 socks;
- 	u32 hash;
- 
-@@ -537,10 +543,30 @@ struct sock *reuseport_migrate_sock(struct sock *sk,
- 	smp_rmb();
- 
- 	hash = migrating_sk->sk_hash;
--	if (sock_net(sk)->ipv4.sysctl_tcp_migrate_req)
-+	prog = rcu_dereference(reuse->prog);
-+	if (!prog || prog->expected_attach_type != BPF_SK_REUSEPORT_SELECT_OR_MIGRATE) {
-+		if (sock_net(sk)->ipv4.sysctl_tcp_migrate_req)
-+			goto select_by_hash;
-+		goto out;
++	fd = open("/proc/sys/net/ipv4/tcp_fastopen", O_RDWR);
++	if (!ASSERT_NEQ(fd, -1, "open"))
++		return -1;
++
++	if (restore) {
++		len = write(fd, buf, *saved_len);
++		if (!ASSERT_EQ(len, *saved_len, "write - restore"))
++			err = -1;
++	} else {
++		*saved_len = read(fd, buf, size);
++		if (!ASSERT_LT(1, *saved_len, "read")) {
++			err = -1;
++			goto close;
++		}
++
++		err = lseek(fd, 0, SEEK_SET);
++		if (!ASSERT_OK(err, "lseek"))
++			goto close;
++
++		/* (TFO_CLIENT_ENABLE | TFO_SERVER_ENABLE) */
++		len = write(fd, "3", 1);
++		if (!ASSERT_EQ(len, 1, "write - setup"))
++			err = -1;
 +	}
 +
-+	if (!skb) {
-+		skb = alloc_skb(0, GFP_ATOMIC);
-+		if (!skb)
-+			goto out;
-+		allocated = true;
++close:
++	close(fd);
++
++	return err;
++}
++
++static int run_iptables(struct migrate_reuseport_test_case *test_case,
++			bool add_rule)
++{
++	char buf[128];
++	int err;
++
++	sprintf(buf, "%s -%c OUTPUT -o lo -p tcp --dport %d --tcp-flags SYN,ACK ACK -j DROP",
++		test_case->family == AF_INET ? "iptables" : "ip6tables",
++		add_rule ? 'A' : 'D',
++		ntohs(test_case->family == AF_INET ?
++		      ((struct sockaddr_in *)&test_case->addr)->sin_port :
++		      ((struct sockaddr_in6 *)&test_case->addr)->sin6_port));
++
++	err = system(buf);
++
++	return err == -1 ? err : WEXITSTATUS(err);
++}
++
++static int start_servers(struct migrate_reuseport_test_case *test_case,
++			 struct test_migrate_reuseport *skel)
++{
++	int reuseport = 1, qlen = QLEN, migrated_to = MIGRATED_TO;
++	int i, err, prog_fd, reuseport_map_fd, migrate_map_fd;
++	__u64 value;
++
++	prog_fd = bpf_program__fd(skel->progs.prog_migrate_reuseport);
++	reuseport_map_fd = bpf_map__fd(skel->maps.reuseport_map);
++	migrate_map_fd = bpf_map__fd(skel->maps.migrate_map);
++
++	make_sockaddr(test_case->family,
++		      test_case->family == AF_INET ? "127.0.0.1" : "::1", 0,
++		      &test_case->addr, &test_case->addrlen);
++
++	for (i = 0; i < NR_SERVERS; i++) {
++		test_case->servers[i] = socket(test_case->family, SOCK_STREAM,
++					       IPPROTO_TCP);
++		if (!ASSERT_NEQ(test_case->servers[i], -1, "socket"))
++			return -1;
++
++		err = setsockopt(test_case->servers[i], SOL_SOCKET,
++				 SO_REUSEPORT, &reuseport, sizeof(reuseport));
++		if (!ASSERT_OK(err, "setsockopt - SO_REUSEPORT"))
++			return -1;
++
++		err = bind(test_case->servers[i],
++			   (struct sockaddr *)&test_case->addr,
++			   test_case->addrlen);
++		if (!ASSERT_OK(err, "bind"))
++			return -1;
++
++		if (i == 0) {
++			err = setsockopt(test_case->servers[i], SOL_SOCKET,
++					 SO_ATTACH_REUSEPORT_EBPF,
++					 &prog_fd, sizeof(prog_fd));
++			if (!ASSERT_OK(err,
++				       "setsockopt - SO_ATTACH_REUSEPORT_EBPF"))
++				return -1;
++
++			err = getsockname(test_case->servers[i],
++					  (struct sockaddr *)&test_case->addr,
++					  &test_case->addrlen);
++			if (!ASSERT_OK(err, "getsockname"))
++				return -1;
++		}
++
++		if (test_case->fastopen) {
++			err = setsockopt(test_case->servers[i],
++					 SOL_TCP, TCP_FASTOPEN,
++					 &qlen, sizeof(qlen));
++			if (!ASSERT_OK(err, "setsockopt - TCP_FASTOPEN"))
++				return -1;
++		}
++
++		err = listen(test_case->servers[i], qlen);
++		if (!ASSERT_OK(err, "listen"))
++			return -1;
++
++		value = (__u64)test_case->servers[i];
++		err = bpf_map_update_elem(reuseport_map_fd, &i, &value,
++					  BPF_NOEXIST);
++		if (!ASSERT_OK(err, "bpf_map_update_elem - reuseport_map"))
++			return -1;
++
++		err = bpf_map_lookup_elem(reuseport_map_fd, &i, &value);
++		if (!ASSERT_OK(err, "bpf_map_lookup_elem - reuseport_map"))
++			return -1;
++
++		err = bpf_map_update_elem(migrate_map_fd, &value, &migrated_to,
++					  BPF_NOEXIST);
++		if (!ASSERT_OK(err, "bpf_map_update_elem - migrate_map"))
++			return -1;
 +	}
 +
-+	nsk = bpf_run_sk_reuseport(reuse, sk, prog, skb, migrating_sk, hash);
++	return 0;
++}
 +
-+	if (allocated)
-+		kfree_skb(skb);
++static int start_clients(struct migrate_reuseport_test_case *test_case)
++{
++	char buf[MSGLEN] = MSG;
++	int i, err;
 +
-+select_by_hash:
-+	if (!nsk)
- 		nsk = reuseport_select_sock_by_hash(reuse, hash, socks);
- 
--	if (nsk && unlikely(!refcount_inc_not_zero(&nsk->sk_refcnt)))
-+	if (IS_ERR_OR_NULL(nsk) || unlikely(!refcount_inc_not_zero(&nsk->sk_refcnt)))
- 		nsk = NULL;
- 
- out:
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index d2e6bf2d464b..ee8b5435ab1f 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -979,6 +979,8 @@ enum bpf_attach_type {
- 	BPF_SK_LOOKUP,
- 	BPF_XDP,
- 	BPF_SK_SKB_VERDICT,
-+	BPF_SK_REUSEPORT_SELECT,
-+	BPF_SK_REUSEPORT_SELECT_OR_MIGRATE,
- 	__MAX_BPF_ATTACH_TYPE
- };
- 
-@@ -5364,7 +5366,20 @@ struct sk_reuseport_md {
- 	__u32 ip_protocol;	/* IP protocol. e.g. IPPROTO_TCP, IPPROTO_UDP */
- 	__u32 bind_inany;	/* Is sock bound to an INANY address? */
- 	__u32 hash;		/* A hash of the packet 4 tuples */
-+	/* When reuse->migrating_sk is NULL, it is selecting a sk for the
-+	 * new incoming connection request (e.g. selecting a listen sk for
-+	 * the received SYN in the TCP case).  reuse->sk is one of the sk
-+	 * in the reuseport group. The bpf prog can use reuse->sk to learn
-+	 * the local listening ip/port without looking into the skb.
-+	 *
-+	 * When reuse->migrating_sk is not NULL, reuse->sk is closed and
-+	 * reuse->migrating_sk is the socket that needs to be migrated
-+	 * to another listening socket.  migrating_sk could be a fullsock
-+	 * sk that is fully established or a reqsk that is in-the-middle
-+	 * of 3-way handshake.
++	for (i = 0; i < NR_CLIENTS; i++) {
++		test_case->clients[i] = socket(test_case->family, SOCK_STREAM,
++					       IPPROTO_TCP);
++		if (!ASSERT_NEQ(test_case->clients[i], -1, "socket"))
++			return -1;
++
++		/* iptables only drops the final ACK, so clients will
++		 * transition to TCP_ESTABLISHED immediately.
++		 */
++		err = settimeo(test_case->clients[i], 100);
++		if (!ASSERT_OK(err, "settimeo"))
++			return -1;
++
++		if (test_case->fastopen) {
++			int fastopen = 1;
++
++			err = setsockopt(test_case->clients[i], IPPROTO_TCP,
++					 TCP_FASTOPEN_CONNECT, &fastopen,
++					 sizeof(fastopen));
++			if (!ASSERT_OK(err,
++				       "setsockopt - TCP_FASTOPEN_CONNECT"))
++				return -1;
++		}
++
++		err = connect(test_case->clients[i],
++			      (struct sockaddr *)&test_case->addr,
++			      test_case->addrlen);
++		if (!ASSERT_OK(err, "connect"))
++			return -1;
++
++		err = write(test_case->clients[i], buf, MSGLEN);
++		if (!ASSERT_EQ(err, MSGLEN, "write"))
++			return -1;
++	}
++
++	return 0;
++}
++
++static int migrate_dance(struct migrate_reuseport_test_case *test_case)
++{
++	int i, err;
++
++	/* Migrate TCP_ESTABLISHED and TCP_SYN_RECV requests
++	 * to the last listener based on eBPF.
 +	 */
- 	__bpf_md_ptr(struct bpf_sock *, sk);
-+	__bpf_md_ptr(struct bpf_sock *, migrating_sk);
- };
- 
- #define BPF_TAG_SIZE	8
++	for (i = 0; i < MIGRATED_TO; i++) {
++		err = shutdown(test_case->servers[i], SHUT_RDWR);
++		if (!ASSERT_OK(err, "shutdown"))
++			return -1;
++	}
++
++	/* No dance for TCP_NEW_SYN_RECV to migrate based on eBPF */
++	if (!test_case->fastopen && test_case->drop_ack)
++		return 0;
++
++	/* Note that we use the second listener instead of the
++	 * first one here.
++	 *
++	 * The fist listener is bind()ed with port 0 and,
++	 * SOCK_BINDPORT_LOCK is not set to sk_userlocks, so
++	 * calling listen() again will bind() the first listener
++	 * on a new ephemeral port and detach it from the existing
++	 * reuseport group.  (See: __inet_bind(), tcp_set_state())
++	 *
++	 * OTOH, the second one is bind()ed with a specific port,
++	 * and SOCK_BINDPORT_LOCK is set. Thus, re-listen() will
++	 * resurrect the listener on the existing reuseport group.
++	 */
++	err = listen(test_case->servers[1], QLEN);
++	if (!ASSERT_OK(err, "listen"))
++		return -1;
++
++	/* Migrate from the last listener to the second one.
++	 *
++	 * All listeners were detached out of the reuseport_map,
++	 * so migration will be done by kernel random pick from here.
++	 */
++	err = shutdown(test_case->servers[MIGRATED_TO], SHUT_RDWR);
++	if (!ASSERT_OK(err, "shutdown"))
++		return -1;
++
++	/* Back to the existing reuseport group */
++	err = listen(test_case->servers[MIGRATED_TO], QLEN);
++	if (!ASSERT_OK(err, "listen"))
++		return -1;
++
++	/* Migrate back to the last one from the second one */
++	err = shutdown(test_case->servers[1], SHUT_RDWR);
++	if (!ASSERT_OK(err, "shutdown"))
++		return -1;
++
++	return 0;
++}
++
++static int count_requests(struct migrate_reuseport_test_case *test_case)
++{
++	struct sockaddr_storage addr;
++	socklen_t len = sizeof(addr);
++	char buf[MSGLEN];
++	int cnt, client;
++
++	settimeo(test_case->servers[MIGRATED_TO], 2000);
++
++	for (cnt = 0; cnt < NR_CLIENTS; cnt++) {
++		client = accept(test_case->servers[MIGRATED_TO],
++				(struct sockaddr *)&addr, &len);
++		if (!ASSERT_NEQ(client, -1, "accept"))
++			goto out;
++
++		memset(buf, 0, MSGLEN);
++
++		read(client, &buf, MSGLEN);
++		if (!ASSERT_STREQ(buf, MSG, "read")) {
++			close(client);
++			goto out;
++		}
++
++		close(client);
++	}
++
++out:
++	return cnt;
++}
++
++static void run_test(struct migrate_reuseport_test_case *test_case,
++		     struct test_migrate_reuseport *skel)
++{
++	bool added_rule = false;
++	int err, saved_len;
++	char buf[16];
++
++	init_fds(test_case->servers, NR_SERVERS);
++	init_fds(test_case->clients, NR_CLIENTS);
++
++	if (test_case->fastopen) {
++		memset(buf, 0, sizeof(buf));
++
++		err = setup_fastopen(buf, sizeof(buf), &saved_len, false);
++		if (!ASSERT_OK(err, "setup_fastopen - setup"))
++			return;
++	}
++
++	err = start_servers(test_case, skel);
++	if (!ASSERT_OK(err, "start_servers"))
++		goto close_servers;
++
++	if (test_case->drop_ack) {
++		/* Drop the final ACK of the 3-way handshake and stick the
++		 * in-flight requests on TCP_SYN_RECV or TCP_NEW_SYN_RECV.
++		 */
++		err = run_iptables(test_case, true);
++		if (!ASSERT_OK(err, "run_iptables - add rule"))
++			goto close_servers;
++
++		added_rule = true;
++	}
++
++	err = start_clients(test_case);
++	if (!ASSERT_OK(err, "start_clients"))
++		goto close_clients;
++
++	/* Migrate the requests in the accept queue only.
++	 * TCP_NEW_SYN_RECV requests are not migrated at this point.
++	 */
++	err = migrate_dance(test_case);
++	if (!ASSERT_OK(err, "migrate_dance"))
++		goto close_clients;
++
++	if (test_case->expire_synack_timer) {
++		/* Wait for SYN+ACK timer to expire so that
++		 * reqsk_timer_handler() migrates TCP_NEW_SYN_RECV requests.
++		 */
++		sleep(1);
++	}
++
++	if (test_case->drop_ack) {
++		/* Resume 3WHS and migrate TCP_NEW_SYN_RECV requests */
++		err = run_iptables(test_case, false);
++		if (!ASSERT_OK(err, "run_iptables - delete rule"))
++			goto close_clients;
++
++		added_rule = false;
++	}
++
++	err = count_requests(test_case);
++	ASSERT_EQ(err, NR_CLIENTS, test_case->name);
++
++close_clients:
++	close_fds(test_case->clients, NR_CLIENTS);
++
++	if (added_rule) {
++		err = run_iptables(test_case, false);
++		ASSERT_OK(err, "run_iptables - clean up rule");
++	}
++
++close_servers:
++	close_fds(test_case->servers, NR_SERVERS);
++
++	if (test_case->fastopen) {
++		err = setup_fastopen(buf, sizeof(buf), &saved_len, true);
++		ASSERT_OK(err, "setup_fastopen - restore");
++	}
++}
++
++void test_migrate_reuseport(void)
++{
++	struct test_migrate_reuseport *skel;
++	int i;
++
++	skel = test_migrate_reuseport__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "open_and_load"))
++		return;
++
++	for (i = 0; i < ARRAY_SIZE(test_cases); i++)
++		run_test(&test_cases[i], skel);
++
++	test_migrate_reuseport__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_migrate_reuseport.c b/tools/testing/selftests/bpf/progs/test_migrate_reuseport.c
+new file mode 100644
+index 000000000000..d7136dc29fa2
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_migrate_reuseport.c
+@@ -0,0 +1,51 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Check if we can migrate child sockets.
++ *
++ *   1. If reuse_md->migrating_sk is NULL (SYN packet),
++ *        return SK_PASS without selecting a listener.
++ *   2. If reuse_md->migrating_sk is not NULL (socket migration),
++ *        select a listener (reuseport_map[migrate_map[cookie]])
++ *
++ * Author: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
++ */
++
++#include <stddef.h>
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++
++struct {
++	__uint(type, BPF_MAP_TYPE_REUSEPORT_SOCKARRAY);
++	__uint(max_entries, 256);
++	__type(key, int);
++	__type(value, __u64);
++} reuseport_map SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_HASH);
++	__uint(max_entries, 256);
++	__type(key, __u64);
++	__type(value, int);
++} migrate_map SEC(".maps");
++
++SEC("sk_reuseport/migrate")
++int prog_migrate_reuseport(struct sk_reuseport_md *reuse_md)
++{
++	int *key, flags = 0;
++	__u64 cookie;
++
++	if (!reuse_md->migrating_sk)
++		return SK_PASS;
++
++	cookie = bpf_get_socket_cookie(reuse_md->sk);
++
++	key = bpf_map_lookup_elem(&migrate_map, &cookie);
++	if (!key)
++		return SK_DROP;
++
++	bpf_sk_select_reuseport(reuse_md, &reuseport_map, key, flags);
++
++	return SK_PASS;
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.30.2
 
