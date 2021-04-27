@@ -7,41 +7,41 @@ X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65B72C433ED
-	for <bpf@archiver.kernel.org>; Tue, 27 Apr 2021 03:48:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 31452C433ED
+	for <bpf@archiver.kernel.org>; Tue, 27 Apr 2021 03:48:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 23CD0613AB
-	for <bpf@archiver.kernel.org>; Tue, 27 Apr 2021 03:48:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0884060FD7
+	for <bpf@archiver.kernel.org>; Tue, 27 Apr 2021 03:48:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236142AbhD0DtB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 26 Apr 2021 23:49:01 -0400
-Received: from smtp-fw-9102.amazon.com ([207.171.184.29]:23739 "EHLO
+        id S230338AbhD0Dti (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 26 Apr 2021 23:49:38 -0400
+Received: from smtp-fw-9102.amazon.com ([207.171.184.29]:24563 "EHLO
         smtp-fw-9102.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234272AbhD0DtB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 26 Apr 2021 23:49:01 -0400
+        with ESMTP id S234272AbhD0Dte (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 26 Apr 2021 23:49:34 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.co.jp; i=@amazon.co.jp; q=dns/txt;
-  s=amazon201209; t=1619495299; x=1651031299;
+  s=amazon201209; t=1619495333; x=1651031333;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Ace2/yQjy3YabkwxzWoQwnwDO/gFnCB+2fW1JZYyE8g=;
-  b=lUinI6DisKGxY8jD+68Ujow18u01SwNqYpS63sws6PjxrzB/2W7h0rL7
-   v9XwcyfMI5jtk1XAbn+YXWp/GOdDVJdudQDnawPO6xXN/drbgA6PtCSr4
-   nMdpy9/PLxJ57ewRhO9LYClZwRGuDZG0hmChFnt3AqYhahHpCmljwXofU
-   4=;
+  bh=pduKHucH/KRAPULE6+kTxR9mRILoe0pCGy/ZehXy9fg=;
+  b=ELDB5/rI/4cga25lP0vqdWtAcgErWYmWL2lSIMe+QnLKYARlZmm1sSBz
+   2V6vHIYHc9MP/ozhd5muIF9AG6F0dRhBhy8sWHUDlCGHwYFyVioWyKRQL
+   bsrM7cW0RwKmHqj0RSbdJ5eFk82CYSJeHksZ9HLOvJZd2wFUL9QTO7f6e
+   0=;
 X-IronPort-AV: E=Sophos;i="5.82,254,1613433600"; 
-   d="scan'208";a="130979862"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-2b-4e24fd92.us-west-2.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-9102.sea19.amazon.com with ESMTP; 27 Apr 2021 03:48:19 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-2b-4e24fd92.us-west-2.amazon.com (Postfix) with ESMTPS id 118A8A1CA8;
-        Tue, 27 Apr 2021 03:48:18 +0000 (UTC)
+   d="scan'208";a="130979942"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-1a-821c648d.us-east-1.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-9102.sea19.amazon.com with ESMTP; 27 Apr 2021 03:48:51 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-1a-821c648d.us-east-1.amazon.com (Postfix) with ESMTPS id 84464A1DCE;
+        Tue, 27 Apr 2021 03:48:48 +0000 (UTC)
 Received: from EX13D04ANC001.ant.amazon.com (10.43.157.89) by
  EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Tue, 27 Apr 2021 03:48:17 +0000
+ id 15.0.1497.2; Tue, 27 Apr 2021 03:48:47 +0000
 Received: from 88665a182662.ant.amazon.com (10.43.162.93) by
  EX13D04ANC001.ant.amazon.com (10.43.157.89) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Tue, 27 Apr 2021 03:48:12 +0000
+ id 15.0.1497.2; Tue, 27 Apr 2021 03:48:43 +0000
 From:   Kuniyuki Iwashima <kuniyu@amazon.co.jp>
 To:     "David S . Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
@@ -54,9 +54,9 @@ CC:     Benjamin Herrenschmidt <benh@amazon.com>,
         Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
         Kuniyuki Iwashima <kuni1840@gmail.com>, <bpf@vger.kernel.org>,
         <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4 bpf-next 05/11] tcp: Migrate TCP_ESTABLISHED/TCP_SYN_RECV sockets in accept queues.
-Date:   Tue, 27 Apr 2021 12:46:17 +0900
-Message-ID: <20210427034623.46528-6-kuniyu@amazon.co.jp>
+Subject: [PATCH v4 bpf-next 07/11] tcp: Migrate TCP_NEW_SYN_RECV requests at receiving the final ACK.
+Date:   Tue, 27 Apr 2021 12:46:19 +0900
+Message-ID: <20210427034623.46528-8-kuniyu@amazon.co.jp>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210427034623.46528-1-kuniyu@amazon.co.jp>
 References: <20210427034623.46528-1-kuniyu@amazon.co.jp>
@@ -70,145 +70,145 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When we call close() or shutdown() for listening sockets, each child socket
-in the accept queue are freed at inet_csk_listen_stop(). If we can get a
-new listener by reuseport_migrate_sock() and clone the request by
-reqsk_clone(), we try to add it into the new listener's accept queue by
-inet_csk_reqsk_queue_add(). If it fails, we have to call __reqsk_free() to
-call sock_put() for its listener and free the cloned request.
+This patch also changes the code to call reuseport_migrate_sock() and
+reqsk_clone(), but unlike the other cases, we do not call reqsk_clone()
+right after reuseport_migrate_sock().
 
-After putting the full socket into ehash, tcp_v[46]_syn_recv_sock() sets
-NULL to ireq_opt/pktopts in struct inet_request_sock, but ipv6_opt can be
-non-NULL. So, we have to set NULL to ipv6_opt of the old request to avoid
-double free.
+Currently, in the receive path for TCP_NEW_SYN_RECV sockets, its listener
+has three kinds of refcnt:
 
-Note that we do not update req->rsk_listener and instead clone the req to
-migrate because another path may reference the original request. If we
-protected it by RCU, we would need to add rcu_read_lock() in many places.
+  (A) for listener itself
+  (B) carried by reuqest_sock
+  (C) sock_hold() in tcp_v[46]_rcv()
 
-Link: https://lore.kernel.org/netdev/20201209030903.hhow5r53l6fmozjn@kafai-mbp.dhcp.thefacebook.com/
-Suggested-by: Martin KaFai Lau <kafai@fb.com>
+While processing the req, (A) may disappear by close(listener). Also, (B)
+can disappear by accept(listener) once we put the req into the accept
+queue. So, we have to hold another refcnt (C) for the listener to prevent
+use-after-free.
+
+For socket migration, we call reuseport_migrate_sock() to select a listener
+with (A) and to increment the new listener's refcnt in tcp_v[46]_rcv().
+This refcnt corresponds to (C) and is cleaned up later in tcp_v[46]_rcv().
+Thus we have to take another refcnt (B) for the newly cloned request_sock.
+
+In inet_csk_complete_hashdance(), we hold the count (B), clone the req, and
+try to put the new req into the accept queue. By migrating req after
+winning the "own_req" race, we can avoid such a worst situation:
+
+  CPU 1 looks up req1
+  CPU 2 looks up req1, unhashes it, then CPU 1 loses the race
+  CPU 3 looks up req2, unhashes it, then CPU 2 loses the race
+  ...
+
 Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
 ---
- include/net/request_sock.h      |  2 ++
- net/core/request_sock.c         | 37 +++++++++++++++++++++++++++++++++
- net/ipv4/inet_connection_sock.c | 31 ++++++++++++++++++++++++++-
- 3 files changed, 69 insertions(+), 1 deletion(-)
+ net/ipv4/inet_connection_sock.c | 30 +++++++++++++++++++++++++++++-
+ net/ipv4/tcp_ipv4.c             | 20 ++++++++++++++------
+ net/ipv6/tcp_ipv6.c             | 14 +++++++++++---
+ 3 files changed, 54 insertions(+), 10 deletions(-)
 
-diff --git a/include/net/request_sock.h b/include/net/request_sock.h
-index 29e41ff3ec93..c6d6cfd3c93b 100644
---- a/include/net/request_sock.h
-+++ b/include/net/request_sock.h
-@@ -190,6 +190,8 @@ void reqsk_queue_alloc(struct request_sock_queue *queue);
- void reqsk_fastopen_remove(struct sock *sk, struct request_sock *req,
- 			   bool reset);
- 
-+struct request_sock *reqsk_clone(struct request_sock *req, struct sock *sk);
-+
- static inline bool reqsk_queue_empty(const struct request_sock_queue *queue)
- {
- 	return READ_ONCE(queue->rskq_accept_head) == NULL;
-diff --git a/net/core/request_sock.c b/net/core/request_sock.c
-index f35c2e998406..82cf9fbe2668 100644
---- a/net/core/request_sock.c
-+++ b/net/core/request_sock.c
-@@ -130,3 +130,40 @@ void reqsk_fastopen_remove(struct sock *sk, struct request_sock *req,
- out:
- 	spin_unlock_bh(&fastopenq->lock);
- }
-+
-+struct request_sock *reqsk_clone(struct request_sock *req, struct sock *sk)
-+{
-+	struct sock *req_sk, *nreq_sk;
-+	struct request_sock *nreq;
-+
-+	nreq = kmem_cache_alloc(req->rsk_ops->slab, GFP_ATOMIC | __GFP_NOWARN);
-+	if (!nreq) {
-+		/* paired with refcount_inc_not_zero() in reuseport_migrate_sock() */
-+		sock_put(sk);
-+		return NULL;
-+	}
-+
-+	req_sk = req_to_sk(req);
-+	nreq_sk = req_to_sk(nreq);
-+
-+	memcpy(nreq_sk, req_sk,
-+	       offsetof(struct sock, sk_dontcopy_begin));
-+	memcpy(&nreq_sk->sk_dontcopy_end, &req_sk->sk_dontcopy_end,
-+	       req->rsk_ops->obj_size - offsetof(struct sock, sk_dontcopy_end));
-+
-+	nreq_sk->sk_tx_queue_mapping = req_sk->sk_tx_queue_mapping;
-+#ifdef CONFIG_XPS
-+	nreq_sk->sk_rx_queue_mapping = req_sk->sk_rx_queue_mapping;
-+#endif
-+	nreq_sk->sk_incoming_cpu = req_sk->sk_incoming_cpu;
-+
-+	nreq->rsk_listener = sk;
-+
-+	/* We need not acquire fastopenq->lock
-+	 * because the child socket is locked in inet_csk_listen_stop().
-+	 */
-+	if (tcp_rsk(nreq)->tfo_listener)
-+		rcu_assign_pointer(tcp_sk(nreq->sk)->fastopen_rsk, nreq);
-+
-+	return nreq;
-+}
 diff --git a/net/ipv4/inet_connection_sock.c b/net/ipv4/inet_connection_sock.c
-index fa806e9167ec..851992405826 100644
+index dc984d1f352e..2f1e5897137b 100644
 --- a/net/ipv4/inet_connection_sock.c
 +++ b/net/ipv4/inet_connection_sock.c
-@@ -695,6 +695,13 @@ int inet_rtx_syn_ack(const struct sock *parent, struct request_sock *req)
- }
- EXPORT_SYMBOL(inet_rtx_syn_ack);
- 
-+static void reqsk_migrate_reset(struct request_sock *req)
-+{
-+#if IS_ENABLED(CONFIG_IPV6)
-+	inet_rsk(req)->ipv6_opt = NULL;
-+#endif
-+}
+@@ -1072,10 +1072,38 @@ struct sock *inet_csk_complete_hashdance(struct sock *sk, struct sock *child,
+ 	if (own_req) {
+ 		inet_csk_reqsk_queue_drop(sk, req);
+ 		reqsk_queue_removed(&inet_csk(sk)->icsk_accept_queue, req);
+-		if (inet_csk_reqsk_queue_add(sk, req, child))
 +
- /* return true if req was found in the ehash table */
- static bool reqsk_queue_unlink(struct request_sock *req)
- {
-@@ -1036,14 +1043,36 @@ void inet_csk_listen_stop(struct sock *sk)
- 	 * of the variants now.			--ANK
- 	 */
- 	while ((req = reqsk_queue_remove(queue, sk)) != NULL) {
--		struct sock *child = req->sk;
-+		struct sock *child = req->sk, *nsk;
-+		struct request_sock *nreq;
- 
- 		local_bh_disable();
- 		bh_lock_sock(child);
- 		WARN_ON(sock_owned_by_user(child));
- 		sock_hold(child);
- 
-+		nsk = reuseport_migrate_sock(sk, child, NULL);
-+		if (nsk) {
-+			nreq = reqsk_clone(req, nsk);
-+			if (nreq) {
-+				refcount_set(&nreq->rsk_refcnt, 1);
++		if (sk != req->rsk_listener) {
++			/* another listening sk has been selected,
++			 * migrate the req to it.
++			 */
++			struct request_sock *nreq;
 +
-+				if (inet_csk_reqsk_queue_add(nsk, nreq, child)) {
-+					reqsk_migrate_reset(req);
-+				} else {
-+					reqsk_migrate_reset(nreq);
-+					__reqsk_free(nreq);
-+				}
-+
-+				/* inet_csk_reqsk_queue_add() has already
-+				 * called inet_child_forget() on failure case.
-+				 */
-+				goto skip_child_forget;
++			/* hold a refcnt for the nreq->rsk_listener
++			 * which is assigned in reqsk_clone()
++			 */
++			sock_hold(sk);
++			nreq = reqsk_clone(req, sk);
++			if (!nreq) {
++				inet_child_forget(sk, req, child);
++				goto child_put;
 +			}
-+		}
 +
- 		inet_child_forget(sk, req, child);
-+skip_child_forget:
- 		reqsk_put(req);
- 		bh_unlock_sock(child);
- 		local_bh_enable();
++			refcount_set(&nreq->rsk_refcnt, 1);
++			if (inet_csk_reqsk_queue_add(sk, nreq, child)) {
++				reqsk_migrate_reset(req);
++				reqsk_put(req);
++				return child;
++			}
++
++			reqsk_migrate_reset(nreq);
++			__reqsk_free(nreq);
++		} else if (inet_csk_reqsk_queue_add(sk, req, child)) {
+ 			return child;
++		}
+ 	}
+ 	/* Too bad, another child took ownership of the request, undo. */
++child_put:
+ 	bh_unlock_sock(child);
+ 	sock_put(child);
+ 	return NULL;
+diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
+index 312184cead57..214495d02143 100644
+--- a/net/ipv4/tcp_ipv4.c
++++ b/net/ipv4/tcp_ipv4.c
+@@ -2000,13 +2000,21 @@ int tcp_v4_rcv(struct sk_buff *skb)
+ 			goto csum_error;
+ 		}
+ 		if (unlikely(sk->sk_state != TCP_LISTEN)) {
+-			inet_csk_reqsk_queue_drop_and_put(sk, req);
+-			goto lookup;
++			nsk = reuseport_migrate_sock(sk, req_to_sk(req), skb);
++			if (!nsk) {
++				inet_csk_reqsk_queue_drop_and_put(sk, req);
++				goto lookup;
++			}
++			sk = nsk;
++			/* reuseport_migrate_sock() has already held one sk_refcnt
++			 * before returning.
++			 */
++		} else {
++			/* We own a reference on the listener, increase it again
++			 * as we might lose it too soon.
++			 */
++			sock_hold(sk);
+ 		}
+-		/* We own a reference on the listener, increase it again
+-		 * as we might lose it too soon.
+-		 */
+-		sock_hold(sk);
+ 		refcounted = true;
+ 		nsk = NULL;
+ 		if (!tcp_filter(sk, skb)) {
+diff --git a/net/ipv6/tcp_ipv6.c b/net/ipv6/tcp_ipv6.c
+index 5f47c0b6e3de..aea8e75d3fed 100644
+--- a/net/ipv6/tcp_ipv6.c
++++ b/net/ipv6/tcp_ipv6.c
+@@ -1663,10 +1663,18 @@ INDIRECT_CALLABLE_SCOPE int tcp_v6_rcv(struct sk_buff *skb)
+ 			goto csum_error;
+ 		}
+ 		if (unlikely(sk->sk_state != TCP_LISTEN)) {
+-			inet_csk_reqsk_queue_drop_and_put(sk, req);
+-			goto lookup;
++			nsk = reuseport_migrate_sock(sk, req_to_sk(req), skb);
++			if (!nsk) {
++				inet_csk_reqsk_queue_drop_and_put(sk, req);
++				goto lookup;
++			}
++			sk = nsk;
++			/* reuseport_migrate_sock() has already held one sk_refcnt
++			 * before returning.
++			 */
++		} else {
++			sock_hold(sk);
+ 		}
+-		sock_hold(sk);
+ 		refcounted = true;
+ 		nsk = NULL;
+ 		if (!tcp_filter(sk, skb)) {
 -- 
 2.30.2
 
