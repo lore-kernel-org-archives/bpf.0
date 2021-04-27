@@ -2,74 +2,92 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 843A3C433B4
-	for <bpf@archiver.kernel.org>; Tue, 27 Apr 2021 15:20:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D805C433B4
+	for <bpf@archiver.kernel.org>; Tue, 27 Apr 2021 15:20:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4B539613EB
-	for <bpf@archiver.kernel.org>; Tue, 27 Apr 2021 15:20:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1B5F361077
+	for <bpf@archiver.kernel.org>; Tue, 27 Apr 2021 15:20:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236578AbhD0PUw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 27 Apr 2021 11:20:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47304 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235659AbhD0PUw (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 27 Apr 2021 11:20:52 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 18F1C613DD;
-        Tue, 27 Apr 2021 15:20:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619536809;
-        bh=1e0mPnnMjryx1f9oudkshjmALg+enVvnYure3wgpTTI=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=o9U1K1r7gI8S6KOiIC3LP5q2oi5EmFrvPz0f7oECB0SdKjHEvL/OHQuPUYHAyapr5
-         3kxIbpavuKXtwvJ5WgSxzfQeuKcyHzFMFCnXkHIGwgJrCUqq3Z8RKvoQRzb59QazFk
-         Rb1bPMJH9EN1Fc5HN4/1ypKMPuaSq7DIrBQ8jfUhzcNy/mLPWsY6SvyCGxXte3j2b0
-         yp1pBTyG1lc8HzsnalYO8DDf5cW1A/frkbazWEx0P8N5q2LWBD7jw1kWgb3iQmfCvz
-         WdTSVSujuFWNmGdtDUsgpHbouenuDaCr8KiQAabmL0fpoWlq6BEwNv4itAyMM3sPI+
-         f9MRJnrTq78XQ==
-Content-Type: text/plain; charset="utf-8"
+        id S237178AbhD0PVL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 27 Apr 2021 11:21:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38036 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235659AbhD0PVK (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 27 Apr 2021 11:21:10 -0400
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81671C061756
+        for <bpf@vger.kernel.org>; Tue, 27 Apr 2021 08:20:27 -0700 (PDT)
+Received: by mail-il1-x132.google.com with SMTP id y10so9087850ilv.0
+        for <bpf@vger.kernel.org>; Tue, 27 Apr 2021 08:20:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=y+3S/Ke4S6+BJfOGg0qG6LOy1Ai6SNSUzROT5871JP4=;
+        b=XhtEu50m4SNDxMMlj2Qgjkyisnk+vyOC+Kykp75IsezRlaqS9NzgLY00neE39leHwe
+         tXCh9VD2qY5Pz0jC2rbqhfrCfRECn1EYBv6EbeE1GtICTGqWqKZF/W5Z9XovgmfVgcIl
+         agq+QYupvX7mKWHTQhRddAP9Gq2R4mJiTIW6Q=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=y+3S/Ke4S6+BJfOGg0qG6LOy1Ai6SNSUzROT5871JP4=;
+        b=LwUHIjbbzHrakF4aUuJV3mPKjKqhNloPpOtwiUk2y5QCqc/nzLEpLuaIJ+nm9NwzmE
+         K2jLU5BzlKnvTuiJgO9KlK8mCm4YLAP9zPDwcxbJKouKPiVSp8wPmpPUDK8WXYlTmNzZ
+         N3/ybd+qVOZhuOeVrYHCq8SBJDuF6yv9KL3axtXKKllNeE5NYFxn2dZ7l+sYYpij/8CC
+         QrhU2UExQhRvSUBs+nmwGYsfWAZjGp8Mwmen+xCucZr9tVOaWAtYNi3fDzL0pSHu8xUL
+         G7JWwMWTDGxIqNkXRCTiiAl/50CKgRW+TwauGLY7UPGk19WbG79lEHWkDuOCjBcHEbky
+         IPDA==
+X-Gm-Message-State: AOAM530mI8/SbA3edDP8idQnXolEgovKxL7uKNwvZsU+z68cBWIg3Du/
+        TIILN2d76eZ9I2x+P+homAjvSW3LPp8ureVWJsOLb4NqMzw=
+X-Google-Smtp-Source: ABdhPJzUVzNRTwQW7ow2d0IynxZz565aonzrsvvp2GTwJLJ3xr0Dqt4cepa6//a3ihU0mG2057i+m6LHDOrTKb3giYw=
+X-Received: by 2002:a92:ce90:: with SMTP id r16mr19368951ilo.220.1619536826986;
+ Tue, 27 Apr 2021 08:20:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v4 bpf-next] cpumap: bulk skb using netif_receive_skb_list
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <161953680905.17663.9277373252426307991.git-patchwork-notify@kernel.org>
-Date:   Tue, 27 Apr 2021 15:20:09 +0000
-References: <c729f83e5d7482d9329e0f165bdbe5adcefd1510.1619169700.git.lorenzo@kernel.org>
-In-Reply-To: <c729f83e5d7482d9329e0f165bdbe5adcefd1510.1619169700.git.lorenzo@kernel.org>
-To:     Lorenzo Bianconi <lorenzo@kernel.org>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        lorenzo.bianconi@redhat.com, davem@davemloft.net, kuba@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, brouer@redhat.com,
-        toke@redhat.com, song@kernel.org
+References: <20210427112958.773132-1-revest@chromium.org> <CAADnVQJGMU2OAA4cRuD=LmfF3Wn5z0hqo1Uz9nx-K_KWuCA70A@mail.gmail.com>
+In-Reply-To: <CAADnVQJGMU2OAA4cRuD=LmfF3Wn5z0hqo1Uz9nx-K_KWuCA70A@mail.gmail.com>
+From:   Florent Revest <revest@chromium.org>
+Date:   Tue, 27 Apr 2021 17:20:16 +0200
+Message-ID: <CABRcYmLphttpFGdwq6YCboc_=dwkgpVAOf+Ni9NRiPioqRCokw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: Lock bpf_trace_printk's tmp buf before it
+ is written to
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        KP Singh <kpsingh@kernel.org>,
+        Brendan Jackman <jackmanb@google.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
+On Tue, Apr 27, 2021 at 5:08 PM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Tue, Apr 27, 2021 at 4:30 AM Florent Revest <revest@chromium.org> wrote:
+> >
+> > bpf_trace_printk uses a shared static buffer to hold strings before they
+> > are printed. A recent refactoring moved the locking of that buffer after
+> > it gets filled by mistake.
+> >
+> > Fixes: d9c9e4db186a ("bpf: Factorize bpf_trace_printk and bpf_seq_printf")
+> > Reported-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> > Signed-off-by: Florent Revest <revest@chromium.org>
+>
+> Applied.
 
-This patch was applied to bpf/bpf-next.git (refs/heads/master):
+Thanks!
 
-On Fri, 23 Apr 2021 11:27:27 +0200 you wrote:
-> Rely on netif_receive_skb_list routine to send skbs converted from
-> xdp_frames in cpu_map_kthread_run in order to improve i-cache usage.
-> The proposed patch has been tested running xdp_redirect_cpu bpf sample
-> available in the kernel tree that is used to redirect UDP frames from
-> ixgbe driver to a cpumap entry and then to the networking stack.
-> UDP frames are generated using pkt_gen. Packets are discarded by the
-> UDP layer.
-> 
-> [...]
+> Pls send v2 of bstr_printf series as soon as possible. Thanks!
 
-Here is the summary with links:
-  - [v4,bpf-next] cpumap: bulk skb using netif_receive_skb_list
-    https://git.kernel.org/bpf/bpf-next/c/bb0247807744
-
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Sure, I just assumed there would be more reviews on v1. The feedback
+I'll address is only about the commit description wording but I can
+send a v2 today.
