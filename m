@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5619FC433ED
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5E9EC4361A
 	for <bpf@archiver.kernel.org>; Thu, 29 Apr 2021 22:08:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3DC6761461
+	by mail.kernel.org (Postfix) with ESMTP id B380861463
 	for <bpf@archiver.kernel.org>; Thu, 29 Apr 2021 22:08:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229693AbhD2WJc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S229738AbhD2WJc (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Thu, 29 Apr 2021 18:09:32 -0400
-Received: from smtp-fw-33001.amazon.com ([207.171.190.10]:34365 "EHLO
-        smtp-fw-33001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbhD2WJ3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+Received: from smtp-fw-2101.amazon.com ([72.21.196.25]:24137 "EHLO
+        smtp-fw-2101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229709AbhD2WJ3 (ORCPT <rfc822;bpf@vger.kernel.org>);
         Thu, 29 Apr 2021 18:09:29 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
   t=1619734123; x=1651270123;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Cv+NcTnbtk7hS6fVcx4o576PhtavGEgcMBVxrp/cyo8=;
-  b=tDmtetsE2FmiPOY/gINvC+A0h4AyKLIo4elerhegkJky2d76mRCUnK1V
-   ciJ9m+5FKsAjXJOgRMgGQE6QqGey3BnSDDNZvK6EEd8bUG0Vy3+6aiBD6
-   CoWhUbD9D37y2b5cXFKAzdJGU9gYOOFoCDDms9LUcPIo4SLPsGJRJWX6x
-   g=;
+  bh=Q5Wmy2rJXqFyd0X53V31VAHlYVqY4tXEyA9m3dfYAo4=;
+  b=Uf0QC27jQT2DyGrpiUTlg0Q0zYP7+n5C7w5sg/eeDyr/pSivbL6vZVJ8
+   41dil1FeMrvYWc58J2xbfo0ffXmsqie9oW9ZhL4fXpG+oYEEIWgcYA1KM
+   BdqXcvhoVSohzfAFFxgBaf9g5RscVimhKCypOohk4Xqur+KQxoP4LIwir
+   o=;
 X-IronPort-AV: E=Sophos;i="5.82,260,1613433600"; 
-   d="scan'208";a="122750293"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-1e-42f764a0.us-east-1.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-33001.sea14.amazon.com with ESMTP; 29 Apr 2021 22:08:41 +0000
-Received: from EX13MTAUEB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
-        by email-inbound-relay-1e-42f764a0.us-east-1.amazon.com (Postfix) with ESMTPS id 2DB8DC05B8;
+   d="scan'208";a="106383182"
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-2a-69849ee2.us-west-2.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-2101.iad2.amazon.com with ESMTP; 29 Apr 2021 22:08:41 +0000
+Received: from EX13MTAUEB002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-2a-69849ee2.us-west-2.amazon.com (Postfix) with ESMTPS id DEBACA1DC1;
         Thu, 29 Apr 2021 22:08:40 +0000 (UTC)
-Received: from EX13D20UEB001.ant.amazon.com (10.43.60.122) by
- EX13MTAUEB001.ant.amazon.com (10.43.60.129) with Microsoft SMTP Server (TLS)
+Received: from EX13D25UEB001.ant.amazon.com (10.43.60.30) by
+ EX13MTAUEB002.ant.amazon.com (10.43.60.12) with Microsoft SMTP Server (TLS)
  id 15.0.1497.2; Thu, 29 Apr 2021 22:08:40 +0000
 Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
- EX13D20UEB001.ant.amazon.com (10.43.60.122) with Microsoft SMTP Server (TLS)
+ EX13D25UEB001.ant.amazon.com (10.43.60.30) with Microsoft SMTP Server (TLS)
  id 15.0.1497.2; Thu, 29 Apr 2021 22:08:40 +0000
 Received: from dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com
  (172.19.206.175) by mail-relay.amazon.com (10.43.60.234) with Microsoft SMTP
- Server id 15.0.1497.2 via Frontend Transport; Thu, 29 Apr 2021 22:08:39 +0000
+ Server id 15.0.1497.2 via Frontend Transport; Thu, 29 Apr 2021 22:08:40 +0000
 Received: by dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com (Postfix, from userid 6262777)
-        id D0D72A6; Thu, 29 Apr 2021 22:08:39 +0000 (UTC)
+        id D2CAADE; Thu, 29 Apr 2021 22:08:39 +0000 (UTC)
 From:   Frank van der Linden <fllinden@amazon.com>
 To:     <stable@vger.kernel.org>
 CC:     <bpf@vger.kernel.org>
-Subject: [PATCH 5.4 2/8] bpf: Ensure off_reg has no mixed signed bounds for all types
-Date:   Thu, 29 Apr 2021 22:08:33 +0000
-Message-ID: <20210429220839.15667-3-fllinden@amazon.com>
+Subject: [PATCH 5.4 5/8] bpf: Refactor and streamline bounds check into helper
+Date:   Thu, 29 Apr 2021 22:08:36 +0000
+Message-ID: <20210429220839.15667-6-fllinden@amazon.com>
 X-Mailer: git-send-email 2.23.4
 In-Reply-To: <20210429220839.15667-1-fllinden@amazon.com>
 References: <20210429220839.15667-1-fllinden@amazon.com>
@@ -65,17 +65,10 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Daniel Borkmann <daniel@iogearbox.net>
 
-commit 24c109bb1537c12c02aeed2d51a347b4d6a9b76e upstream.
+commit 073815b756c51ba9d8384d924c5d1c03ca3d1ae4 upstream.
 
-The mixed signed bounds check really belongs into retrieve_ptr_limit()
-instead of outside of it in adjust_ptr_min_max_vals(). The reason is
-that this check is not tied to PTR_TO_MAP_VALUE only, but to all pointer
-types that we handle in retrieve_ptr_limit() and given errors from the latter
-propagate back to adjust_ptr_min_max_vals() and lead to rejection of the
-program, it's a better place to reside to avoid anything slipping through
-for future types. The reason why we must reject such off_reg is that we
-otherwise would not be able to derive a mask, see details in 9d7eceede769
-("bpf: restrict unknown scalars of mixed signed bounds for unprivileged").
+Move the bounds check in adjust_ptr_min_max_vals() into a small helper named
+sanitize_check_bounds() in order to simplify the former a bit.
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Reviewed-by: John Fastabend <john.fastabend@gmail.com>
@@ -83,66 +76,81 @@ Acked-by: Alexei Starovoitov <ast@kernel.org>
 [fllinden@amazon.com: backport to 5.4]
 Signed-off-by: Frank van der Linden <fllinden@amazon.com>
 ---
- kernel/bpf/verifier.c | 19 +++++++++----------
- 1 file changed, 9 insertions(+), 10 deletions(-)
+ kernel/bpf/verifier.c | 54 +++++++++++++++++++++++++++++--------------
+ 1 file changed, 37 insertions(+), 17 deletions(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index b776aa0d8864..6cb1be115928 100644
+index 59718101fd04..fc33aed59333 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -4264,12 +4264,18 @@ static struct bpf_insn_aux_data *cur_aux(struct bpf_verifier_env *env)
+@@ -4448,6 +4448,41 @@ static int sanitize_err(struct bpf_verifier_env *env,
+ 	return -EACCES;
  }
  
- static int retrieve_ptr_limit(const struct bpf_reg_state *ptr_reg,
--			      u32 *ptr_limit, u8 opcode, bool off_is_neg)
-+			      const struct bpf_reg_state *off_reg,
-+			      u32 *ptr_limit, u8 opcode)
- {
-+	bool off_is_neg = off_reg->smin_value < 0;
- 	bool mask_to_left = (opcode == BPF_ADD &&  off_is_neg) ||
- 			    (opcode == BPF_SUB && !off_is_neg);
- 	u32 off, max;
- 
-+	if (!tnum_is_const(off_reg->var_off) &&
-+	    (off_reg->smin_value < 0) != (off_reg->smax_value < 0))
-+		return -EACCES;
-+
- 	switch (ptr_reg->type) {
- 	case PTR_TO_STACK:
- 		/* Offset 0 is out-of-bounds, but acceptable start for the
-@@ -4363,7 +4369,7 @@ static int sanitize_ptr_alu(struct bpf_verifier_env *env,
- 	alu_state |= ptr_is_dst_reg ?
- 		     BPF_ALU_SANITIZE_SRC : BPF_ALU_SANITIZE_DST;
- 
--	err = retrieve_ptr_limit(ptr_reg, &alu_limit, opcode, off_is_neg);
-+	err = retrieve_ptr_limit(ptr_reg, off_reg, &alu_limit, opcode);
- 	if (err < 0)
- 		return err;
- 
-@@ -4408,8 +4414,8 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
- 	    smin_ptr = ptr_reg->smin_value, smax_ptr = ptr_reg->smax_value;
- 	u64 umin_val = off_reg->umin_value, umax_val = off_reg->umax_value,
- 	    umin_ptr = ptr_reg->umin_value, umax_ptr = ptr_reg->umax_value;
--	u32 dst = insn->dst_reg, src = insn->src_reg;
- 	u8 opcode = BPF_OP(insn->code);
++static int sanitize_check_bounds(struct bpf_verifier_env *env,
++				 const struct bpf_insn *insn,
++				 const struct bpf_reg_state *dst_reg)
++{
 +	u32 dst = insn->dst_reg;
- 	int ret;
++
++	/* For unprivileged we require that resulting offset must be in bounds
++	 * in order to be able to sanitize access later on.
++	 */
++	if (env->allow_ptr_leaks)
++		return 0;
++
++	switch (dst_reg->type) {
++	case PTR_TO_STACK:
++		if (check_stack_access(env, dst_reg, dst_reg->off +
++				       dst_reg->var_off.value, 1)) {
++			verbose(env, "R%d stack pointer arithmetic goes out of range, "
++				"prohibited for !root\n", dst);
++			return -EACCES;
++		}
++		break;
++	case PTR_TO_MAP_VALUE:
++		if (check_map_access(env, dst, dst_reg->off, 1, false)) {
++			verbose(env, "R%d pointer arithmetic of map value goes out of range, "
++				"prohibited for !root\n", dst);
++			return -EACCES;
++		}
++		break;
++	default:
++		break;
++	}
++
++	return 0;
++}
++
+ /* Handles arithmetic on a pointer and a scalar: computes new min/max and var_off.
+  * Caller should also handle BPF_MOV case separately.
+  * If we return -EACCES, caller may want to try again treating pointer as a
+@@ -4664,23 +4699,8 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
+ 	__reg_deduce_bounds(dst_reg);
+ 	__reg_bound_offset(dst_reg);
  
- 	dst_reg = &regs[dst];
-@@ -4452,13 +4458,6 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
- 		verbose(env, "R%d pointer arithmetic on %s prohibited\n",
- 			dst, reg_type_str[ptr_reg->type]);
- 		return -EACCES;
--	case PTR_TO_MAP_VALUE:
--		if (!env->allow_ptr_leaks && !known && (smin_val < 0) != (smax_val < 0)) {
--			verbose(env, "R%d has unknown scalar with mixed signed bounds, pointer arithmetic with it prohibited for !root\n",
--				off_reg == dst_reg ? dst : src);
+-	/* For unprivileged we require that resulting offset must be in bounds
+-	 * in order to be able to sanitize access later on.
+-	 */
+-	if (!env->allow_ptr_leaks) {
+-		if (dst_reg->type == PTR_TO_MAP_VALUE &&
+-		    check_map_access(env, dst, dst_reg->off, 1, false)) {
+-			verbose(env, "R%d pointer arithmetic of map value goes out of range, "
+-				"prohibited for !root\n", dst);
+-			return -EACCES;
+-		} else if (dst_reg->type == PTR_TO_STACK &&
+-			   check_stack_access(env, dst_reg, dst_reg->off +
+-					      dst_reg->var_off.value, 1)) {
+-			verbose(env, "R%d stack pointer arithmetic goes out of range, "
+-				"prohibited for !root\n", dst);
 -			return -EACCES;
 -		}
--		/* fall-through */
- 	default:
- 		break;
- 	}
+-	}
++	if (sanitize_check_bounds(env, insn, dst_reg) < 0)
++		return -EACCES;
+ 
+ 	return 0;
+ }
 -- 
 2.23.3
 
