@@ -2,58 +2,61 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11369C43616
-	for <bpf@archiver.kernel.org>; Thu, 29 Apr 2021 22:08:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 541F9C43603
+	for <bpf@archiver.kernel.org>; Thu, 29 Apr 2021 22:08:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DA40C61457
+	by mail.kernel.org (Postfix) with ESMTP id 397D961457
 	for <bpf@archiver.kernel.org>; Thu, 29 Apr 2021 22:08:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229725AbhD2WJb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 29 Apr 2021 18:09:31 -0400
-Received: from smtp-fw-33001.amazon.com ([207.171.190.10]:34365 "EHLO
-        smtp-fw-33001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbhD2WJ3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        id S229721AbhD2WJa (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 29 Apr 2021 18:09:30 -0400
+Received: from smtp-fw-4101.amazon.com ([72.21.198.25]:45052 "EHLO
+        smtp-fw-4101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229701AbhD2WJ3 (ORCPT <rfc822;bpf@vger.kernel.org>);
         Thu, 29 Apr 2021 18:09:29 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1619734122; x=1651270122;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=6x0SPSCEr/f131JyzJyPkVBXVVcIa5vjOG3O9JgFU0E=;
-  b=FrT4tGyTNkg2NAwICReoIEQEExyF69xco9Bgk+QAlK9342JMmRY2aBQ0
-   p97M21AwNMXXUZ9k4g+9HKyU399FhvaJYhGhdU3Bz1+p9PTo373yJUpi7
-   KOPJtzQ7SPTi7HryhiIaw4p1dJjkkyWSaGsodEn2vgf0HolSr66xK+fnL
-   Y=;
+  t=1619734123; x=1651270123;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=gmNWx/A3o7P+Kw8wXRNXjVF41jEqA3d1gWnTLKT66Qg=;
+  b=K6NmR3vcG5MO7N38A2CrApFEd7Q+WjFEPx7mM8/V62nQcJUkjKxchOdp
+   zih5RyDjSjFnFDOII1IvtJLdbY3awUrFAPj0159Zw31S40fSLiH2p5+pu
+   xtvZuH0iBJDAWDiWPePu6SJKCdcrvCi/eLItzbWlimHRlVM0DSkW/0BVQ
+   U=;
 X-IronPort-AV: E=Sophos;i="5.82,260,1613433600"; 
-   d="scan'208";a="122750292"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-1d-74cf8b49.us-east-1.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-33001.sea14.amazon.com with ESMTP; 29 Apr 2021 22:08:41 +0000
-Received: from EX13MTAUWC001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
-        by email-inbound-relay-1d-74cf8b49.us-east-1.amazon.com (Postfix) with ESMTPS id DC7D4C01A0;
+   d="scan'208";a="104851474"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-2a-53356bf6.us-west-2.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-4101.iad4.amazon.com with ESMTP; 29 Apr 2021 22:08:41 +0000
+Received: from EX13MTAUEB002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-2a-53356bf6.us-west-2.amazon.com (Postfix) with ESMTPS id A47A5A20FC;
         Thu, 29 Apr 2021 22:08:40 +0000 (UTC)
-Received: from EX13D31UWC001.ant.amazon.com (10.43.162.152) by
- EX13MTAUWC001.ant.amazon.com (10.43.162.135) with Microsoft SMTP Server (TLS)
+Received: from EX13D20UEB003.ant.amazon.com (10.43.60.73) by
+ EX13MTAUEB002.ant.amazon.com (10.43.60.12) with Microsoft SMTP Server (TLS)
  id 15.0.1497.2; Thu, 29 Apr 2021 22:08:40 +0000
-Received: from EX13MTAUWC001.ant.amazon.com (10.43.162.135) by
- EX13D31UWC001.ant.amazon.com (10.43.162.152) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Thu, 29 Apr 2021 22:08:39 +0000
+Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
+ EX13D20UEB003.ant.amazon.com (10.43.60.73) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Thu, 29 Apr 2021 22:08:40 +0000
 Received: from dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com
- (172.19.206.175) by mail-relay.amazon.com (10.43.162.232) with Microsoft SMTP
- Server id 15.0.1497.2 via Frontend Transport; Thu, 29 Apr 2021 22:08:40 +0000
+ (172.19.206.175) by mail-relay.amazon.com (10.43.60.234) with Microsoft SMTP
+ Server id 15.0.1497.2 via Frontend Transport; Thu, 29 Apr 2021 22:08:39 +0000
 Received: by dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com (Postfix, from userid 6262777)
-        id CF67C98E; Thu, 29 Apr 2021 22:08:39 +0000 (UTC)
+        id D167AE6; Thu, 29 Apr 2021 22:08:39 +0000 (UTC)
 From:   Frank van der Linden <fllinden@amazon.com>
 To:     <stable@vger.kernel.org>
 CC:     <bpf@vger.kernel.org>
-Subject: [PATCH 5.4 0/8] BPF backports for CVE-2021-29155
-Date:   Thu, 29 Apr 2021 22:08:31 +0000
-Message-ID: <20210429220839.15667-1-fllinden@amazon.com>
+Subject: [PATCH 5.4 4/8] bpf: Improve verifier error messages for users
+Date:   Thu, 29 Apr 2021 22:08:35 +0000
+Message-ID: <20210429220839.15667-5-fllinden@amazon.com>
 X-Mailer: git-send-email 2.23.4
+In-Reply-To: <20210429220839.15667-1-fllinden@amazon.com>
+References: <20210429220839.15667-1-fllinden@amazon.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -61,88 +64,183 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This is a backport of the BPF verifier fixes for CVE-2021-29155. Original
-series was part of the pull request here: https://lore.kernel.org/bpf/20210416223700.15611-1-daniel@iogearbox.net/T/
+From: Daniel Borkmann <daniel@iogearbox.net>
 
-This wasn't a complicated backport, but copying bpf@ to see if
-there are any concerns.
+commit a6aaece00a57fa6f22575364b3903dfbccf5345d upstream.
 
-5.4 verifier selftests are clean with this backport:
-	Summary: 1566 PASSED, 0 SKIPPED, 0 FAILED
+Consolidate all error handling and provide more user-friendly error messages
+from sanitize_ptr_alu() and sanitize_val_alu().
 
-The individual commits:
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Reviewed-by: John Fastabend <john.fastabend@gmail.com>
+Acked-by: Alexei Starovoitov <ast@kernel.org>
+[fllinden@amazon.com: backport to 5.4]
+Signed-off-by: Frank van der Linden <fllinden@amazon.com>
+---
+ kernel/bpf/verifier.c | 84 +++++++++++++++++++++++++++++++------------
+ 1 file changed, 62 insertions(+), 22 deletions(-)
 
-960114839252 ("bpf: Use correct permission flag for mixed signed bounds arithmetic")
-	* Not applicable to 5.4, as 5.4 does not have
-	  2c78ee898d8f ("bpf: Implement CAP_BPF").
-
-6f55b2f2a117 ("bpf: Move off_reg into sanitize_ptr_alu")
-	* Clean cherry-pick.
-
-24c109bb1537 ("bpf: Ensure off_reg has no mixed signed bounds for all types")
-	* Conflict: allow_ptr_leaks was replaced by bypass_spec_v1 in the
-	  deleted PTR_TO_MAP_VALUE switch case by
-	  2c78ee898d8f ("bpf: Implement CAP_BPF"). Resolution is easy,
-	  the case statement gets deleted either way.
-
-b658bbb844e2 ("bpf: Rework ptr_limit into alu_limit and add common error path")
-	* Clean cherry-pick.
-
-a6aaece00a57 ("bpf: Improve verifier error messages for users")
-	* Resolved simple contextual conflict in adjust_scalar_min_max_vals().
-	  because of a var declaration that was added by this post-5.4 commit:
-	  3f50f132d840 ("bpf: Verifier, do explicit ALU32 bounds tracking").
-
-073815b756c5 ("bpf: Refactor and streamline bounds check into helper")
-	* Conflict: another allow_ptr_leaks that was replaced with
-	  bypass_spec_v1 after 2c78ee898d8f.
-	* Conflict: Post-5.4 commit
-	  01f810ace9ed ("bpf: Allow variable-offset stack access")
-	  changed the call to check_stack_access to a new function,
-	  check_stack_access_for_ptr_arithmetic(), and moved/changed an
-	  error message.
-	* Since this commit just factors out some code from
-	  adjust_ptr_min_max_vals() in to a new function, do the same
-  	  with the corresponding block in 5.4 that doesn't have the
-	  changes listed above from post-5.4 commits.
-	
-f528819334 ("bpf: Move sanitize_val_alu out of op switch")
-	* Contextual conflict from post-5.4 commit
-	  3f50f132d840 ("bpf: Verifier, do explicit ALU32 bounds tracking"),
-	  that added a comment on top of the switch referenced in the commit
-	  message.
-
-7fedb63a8307 ("bpf: Tighten speculative pointer arithmetic mask")
-	* Contextual conflict post-5.4 commit:
-	  3f50f132d840 ("bpf: Verifier, do explicit ALU32 bounds tracking")
-	  added a call to a new function just above the switch statement in
-	  adjust_ptr_min_max_vals. This doesn't affect the lines that were
-	  actually changed.
-
-d7a509135175 ("bpf: Update selftests to reflect new error states")
-	* The bounds.c tests have undergone several changes since 5.4, related
-	  to commits that were not backported (like e.g. the ALU32 changes).
-	  The error messages for those tests will remain the same on 5.4.
-
-=====
-
-Daniel Borkmann (8):
-  bpf: Move off_reg into sanitize_ptr_alu
-  bpf: Ensure off_reg has no mixed signed bounds for all types
-  bpf: Rework ptr_limit into alu_limit and add common error path
-  bpf: Improve verifier error messages for users
-  bpf: Refactor and streamline bounds check into helper
-  bpf: Move sanitize_val_alu out of op switch
-  bpf: Tighten speculative pointer arithmetic mask
-  bpf: Update selftests to reflect new error states
-
- kernel/bpf/verifier.c                         | 233 ++++++++++++------
- .../selftests/bpf/verifier/bounds_deduction.c |  21 +-
- .../bpf/verifier/bounds_mix_sign_unsign.c     |  13 -
- tools/testing/selftests/bpf/verifier/unpriv.c |   2 +-
- .../selftests/bpf/verifier/value_ptr_arith.c  |   6 +-
- 5 files changed, 173 insertions(+), 102 deletions(-)
-
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index a6ff4b26a462..59718101fd04 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -4263,6 +4263,14 @@ static struct bpf_insn_aux_data *cur_aux(struct bpf_verifier_env *env)
+ 	return &env->insn_aux_data[env->insn_idx];
+ }
+ 
++enum {
++	REASON_BOUNDS	= -1,
++	REASON_TYPE	= -2,
++	REASON_PATHS	= -3,
++	REASON_LIMIT	= -4,
++	REASON_STACK	= -5,
++};
++
+ static int retrieve_ptr_limit(const struct bpf_reg_state *ptr_reg,
+ 			      const struct bpf_reg_state *off_reg,
+ 			      u32 *alu_limit, u8 opcode)
+@@ -4274,7 +4282,7 @@ static int retrieve_ptr_limit(const struct bpf_reg_state *ptr_reg,
+ 
+ 	if (!tnum_is_const(off_reg->var_off) &&
+ 	    (off_reg->smin_value < 0) != (off_reg->smax_value < 0))
+-		return -EACCES;
++		return REASON_BOUNDS;
+ 
+ 	switch (ptr_reg->type) {
+ 	case PTR_TO_STACK:
+@@ -4301,11 +4309,11 @@ static int retrieve_ptr_limit(const struct bpf_reg_state *ptr_reg,
+ 		}
+ 		break;
+ 	default:
+-		return -EINVAL;
++		return REASON_TYPE;
+ 	}
+ 
+ 	if (ptr_limit >= max)
+-		return -ERANGE;
++		return REASON_LIMIT;
+ 	*alu_limit = ptr_limit;
+ 	return 0;
+ }
+@@ -4325,7 +4333,7 @@ static int update_alu_sanitation_state(struct bpf_insn_aux_data *aux,
+ 	if (aux->alu_state &&
+ 	    (aux->alu_state != alu_state ||
+ 	     aux->alu_limit != alu_limit))
+-		return -EACCES;
++		return REASON_PATHS;
+ 
+ 	/* Corresponding fixup done in fixup_bpf_calls(). */
+ 	aux->alu_state = alu_state;
+@@ -4398,7 +4406,46 @@ static int sanitize_ptr_alu(struct bpf_verifier_env *env,
+ 	ret = push_stack(env, env->insn_idx + 1, env->insn_idx, true);
+ 	if (!ptr_is_dst_reg && ret)
+ 		*dst_reg = tmp;
+-	return !ret ? -EFAULT : 0;
++	return !ret ? REASON_STACK : 0;
++}
++
++static int sanitize_err(struct bpf_verifier_env *env,
++			const struct bpf_insn *insn, int reason,
++			const struct bpf_reg_state *off_reg,
++			const struct bpf_reg_state *dst_reg)
++{
++	static const char *err = "pointer arithmetic with it prohibited for !root";
++	const char *op = BPF_OP(insn->code) == BPF_ADD ? "add" : "sub";
++	u32 dst = insn->dst_reg, src = insn->src_reg;
++
++	switch (reason) {
++	case REASON_BOUNDS:
++		verbose(env, "R%d has unknown scalar with mixed signed bounds, %s\n",
++			off_reg == dst_reg ? dst : src, err);
++		break;
++	case REASON_TYPE:
++		verbose(env, "R%d has pointer with unsupported alu operation, %s\n",
++			off_reg == dst_reg ? src : dst, err);
++		break;
++	case REASON_PATHS:
++		verbose(env, "R%d tried to %s from different maps, paths or scalars, %s\n",
++			dst, op, err);
++		break;
++	case REASON_LIMIT:
++		verbose(env, "R%d tried to %s beyond pointer bounds, %s\n",
++			dst, op, err);
++		break;
++	case REASON_STACK:
++		verbose(env, "R%d could not be pushed for speculative verification, %s\n",
++			dst, err);
++		break;
++	default:
++		verbose(env, "verifier internal error: unknown reason (%d)\n",
++			reason);
++		break;
++	}
++
++	return -EACCES;
+ }
+ 
+ /* Handles arithmetic on a pointer and a scalar: computes new min/max and var_off.
+@@ -4480,10 +4527,9 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
+ 	switch (opcode) {
+ 	case BPF_ADD:
+ 		ret = sanitize_ptr_alu(env, insn, ptr_reg, off_reg, dst_reg);
+-		if (ret < 0) {
+-			verbose(env, "R%d tried to add from different maps, paths, or prohibited types\n", dst);
+-			return ret;
+-		}
++		if (ret < 0)
++			return sanitize_err(env, insn, ret, off_reg, dst_reg);
++
+ 		/* We can take a fixed offset as long as it doesn't overflow
+ 		 * the s32 'off' field
+ 		 */
+@@ -4535,10 +4581,9 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
+ 		break;
+ 	case BPF_SUB:
+ 		ret = sanitize_ptr_alu(env, insn, ptr_reg, off_reg, dst_reg);
+-		if (ret < 0) {
+-			verbose(env, "R%d tried to sub from different maps, paths, or prohibited types\n", dst);
+-			return ret;
+-		}
++		if (ret < 0)
++			return sanitize_err(env, insn, ret, off_reg, dst_reg);
++
+ 		if (dst_reg == off_reg) {
+ 			/* scalar -= pointer.  Creates an unknown scalar */
+ 			verbose(env, "R%d tried to subtract pointer from scalar\n",
+@@ -4655,7 +4700,6 @@ static int adjust_scalar_min_max_vals(struct bpf_verifier_env *env,
+ 	s64 smin_val, smax_val;
+ 	u64 umin_val, umax_val;
+ 	u64 insn_bitness = (BPF_CLASS(insn->code) == BPF_ALU64) ? 64 : 32;
+-	u32 dst = insn->dst_reg;
+ 	int ret;
+ 
+ 	if (insn_bitness == 32) {
+@@ -4692,10 +4736,8 @@ static int adjust_scalar_min_max_vals(struct bpf_verifier_env *env,
+ 	switch (opcode) {
+ 	case BPF_ADD:
+ 		ret = sanitize_val_alu(env, insn);
+-		if (ret < 0) {
+-			verbose(env, "R%d tried to add from different pointers or scalars\n", dst);
+-			return ret;
+-		}
++		if (ret < 0)
++			return sanitize_err(env, insn, ret, NULL, NULL);
+ 		if (signed_add_overflows(dst_reg->smin_value, smin_val) ||
+ 		    signed_add_overflows(dst_reg->smax_value, smax_val)) {
+ 			dst_reg->smin_value = S64_MIN;
+@@ -4716,10 +4758,8 @@ static int adjust_scalar_min_max_vals(struct bpf_verifier_env *env,
+ 		break;
+ 	case BPF_SUB:
+ 		ret = sanitize_val_alu(env, insn);
+-		if (ret < 0) {
+-			verbose(env, "R%d tried to sub from different pointers or scalars\n", dst);
+-			return ret;
+-		}
++		if (ret < 0)
++			return sanitize_err(env, insn, ret, NULL, NULL);
+ 		if (signed_sub_overflows(dst_reg->smin_value, smax_val) ||
+ 		    signed_sub_overflows(dst_reg->smax_value, smin_val)) {
+ 			/* Overflow possible, we know nothing */
 -- 
 2.23.3
 
