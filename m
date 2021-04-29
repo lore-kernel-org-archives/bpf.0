@@ -2,135 +2,83 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-5.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7710C43460
-	for <bpf@archiver.kernel.org>; Thu, 29 Apr 2021 22:08:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A29BAC433ED
+	for <bpf@archiver.kernel.org>; Thu, 29 Apr 2021 22:58:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7226461462
-	for <bpf@archiver.kernel.org>; Thu, 29 Apr 2021 22:08:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 66EE561468
+	for <bpf@archiver.kernel.org>; Thu, 29 Apr 2021 22:58:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbhD2WJc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 29 Apr 2021 18:09:32 -0400
-Received: from smtp-fw-33001.amazon.com ([207.171.190.10]:34365 "EHLO
-        smtp-fw-33001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbhD2WJa (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 29 Apr 2021 18:09:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1619734124; x=1651270124;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=2n6I3zSB+64zmVXDF1Nnwqj6rtCkGTSKaoKTEqAIm1o=;
-  b=RyA7sTniywDeoZ/fyU9VTlz6Nn5f9kS60QtO5FbkqhVvEk8pFP2gZbK6
-   N5213AELmB1aSPwUKA0HZPscKi7lY/lu1ZVnBDJh39D95sa2rJKo/SVk6
-   XO26lYlUJcaswbA/ThF67cWu10ChVzbfr280U6fjGXPedeO3Cq4ozrJl4
-   4=;
-X-IronPort-AV: E=Sophos;i="5.82,260,1613433600"; 
-   d="scan'208";a="122750294"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-1a-67b371d8.us-east-1.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-33001.sea14.amazon.com with ESMTP; 29 Apr 2021 22:08:42 +0000
-Received: from EX13MTAUEE002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-1a-67b371d8.us-east-1.amazon.com (Postfix) with ESMTPS id 4F909A0112;
-        Thu, 29 Apr 2021 22:08:40 +0000 (UTC)
-Received: from EX13D23UEE001.ant.amazon.com (10.43.62.101) by
- EX13MTAUEE002.ant.amazon.com (10.43.62.24) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Thu, 29 Apr 2021 22:08:40 +0000
-Received: from EX13MTAUEE002.ant.amazon.com (10.43.62.24) by
- EX13D23UEE001.ant.amazon.com (10.43.62.101) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Thu, 29 Apr 2021 22:08:40 +0000
-Received: from dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com
- (172.19.206.175) by mail-relay.amazon.com (10.43.62.224) with Microsoft SMTP
- Server id 15.0.1497.2 via Frontend Transport; Thu, 29 Apr 2021 22:08:40 +0000
-Received: by dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com (Postfix, from userid 6262777)
-        id D45B397D; Thu, 29 Apr 2021 22:08:39 +0000 (UTC)
-From:   Frank van der Linden <fllinden@amazon.com>
-To:     <stable@vger.kernel.org>
-CC:     <bpf@vger.kernel.org>
-Subject: [PATCH 5.4 3/8] bpf: Rework ptr_limit into alu_limit and add common error path
-Date:   Thu, 29 Apr 2021 22:08:34 +0000
-Message-ID: <20210429220839.15667-4-fllinden@amazon.com>
-X-Mailer: git-send-email 2.23.4
-In-Reply-To: <20210429220839.15667-1-fllinden@amazon.com>
-References: <20210429220839.15667-1-fllinden@amazon.com>
+        id S229582AbhD2W6t (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 29 Apr 2021 18:58:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40722 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229573AbhD2W6q (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 29 Apr 2021 18:58:46 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B229C06138B
+        for <bpf@vger.kernel.org>; Thu, 29 Apr 2021 15:57:59 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id C13D12E0;
+        Thu, 29 Apr 2021 22:57:58 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net C13D12E0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1619737078; bh=NlkRT6N/zfE3WWhg32L8Mq5BNm8ddiqYpndUhYobr4A=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=TcMCyb2C0tJoev2sfyPvH9Oi3Hjf1+nUSx0v/A8t0bbSMEgF37C3mqJ+jbV8O/2O0
+         zH2bTyi3Wnz/mB59lNCGAXkI/FgSEmpxgqU/B8dbr3Y7ZuafpxkBp3aMmIXbpEJcoG
+         14yoOfn8pjUoiEeeo+HgQwGlrVmOyGkBbaHxQ7QvGZ6g+qmiKSibncuzcr4GlbJ63M
+         eKZivhLE1sCbNUg9Ey9OEvK4ZWYIb4RC2D8vfOf8Kib7La2+cY1MjVqSCq7dKA39TZ
+         MLXcsazvG5rJoAv2piVQRrmKVKVUTtX1AsHFGOb9eI5500OzKgRowrDR9D4UoGPD2S
+         HppjVEvxgctGg==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     grantseltzer <grantseltzer@gmail.com>, andrii@kernel.org,
+        daniel@iogearbox.net
+Cc:     grantseltzer@gmail.com, bpf@vger.kernel.org
+Subject: Re: [PATCH bpf-next 0/3] Autogenerating API documentation
+In-Reply-To: <20210429054734.53264-1-grantseltzer@gmail.com>
+References: <20210429054734.53264-1-grantseltzer@gmail.com>
+Date:   Thu, 29 Apr 2021 16:57:58 -0600
+Message-ID: <877dkkd7gp.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Daniel Borkmann <daniel@iogearbox.net>
+grantseltzer <grantseltzer@gmail.com> writes:
 
-commit b658bbb844e28f1862867f37e8ca11a8e2aa94a3 upstream.
+> This series of patches is meant to start the initiative to document libbpf.
+> It includes .rst files which are text documentation describing building, 
+> API naming convention, as well as an index to generated API documentation.
 
-Small refactor with no semantic changes in order to consolidate the max
-ptr_limit boundary check.
+So I'm totally in favor of documenting libbpf...
 
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Reviewed-by: John Fastabend <john.fastabend@gmail.com>
-Acked-by: Alexei Starovoitov <ast@kernel.org>
----
- kernel/bpf/verifier.c | 21 +++++++++++++--------
- 1 file changed, 13 insertions(+), 8 deletions(-)
+> The generated API documentation is enabled by Doxygen, which actually 
+> parses the code for documentation comment strings and generates XML.
+> A tool called Sphinx then reads this XML with the help of the breathe
+> plugin, as well as the above mentioned .rst files and generates beautiful
+> HTML output.
+>
+> The goal of this is for readthedocs.io to be able to pick up that generated
+> documentation which will be made possible with the help of readthedoc's 
+> github integration and libbpf's official github mirror. Minor setup 
+> is required in that mirror once this patch series is merged.
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 6cb1be115928..a6ff4b26a462 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -4265,12 +4265,12 @@ static struct bpf_insn_aux_data *cur_aux(struct bpf_verifier_env *env)
- 
- static int retrieve_ptr_limit(const struct bpf_reg_state *ptr_reg,
- 			      const struct bpf_reg_state *off_reg,
--			      u32 *ptr_limit, u8 opcode)
-+			      u32 *alu_limit, u8 opcode)
- {
- 	bool off_is_neg = off_reg->smin_value < 0;
- 	bool mask_to_left = (opcode == BPF_ADD &&  off_is_neg) ||
- 			    (opcode == BPF_SUB && !off_is_neg);
--	u32 off, max;
-+	u32 off, max = 0, ptr_limit = 0;
- 
- 	if (!tnum_is_const(off_reg->var_off) &&
- 	    (off_reg->smin_value < 0) != (off_reg->smax_value < 0))
-@@ -4287,22 +4287,27 @@ static int retrieve_ptr_limit(const struct bpf_reg_state *ptr_reg,
- 		 */
- 		off = ptr_reg->off + ptr_reg->var_off.value;
- 		if (mask_to_left)
--			*ptr_limit = MAX_BPF_STACK + off;
-+			ptr_limit = MAX_BPF_STACK + off;
- 		else
--			*ptr_limit = -off - 1;
--		return *ptr_limit >= max ? -ERANGE : 0;
-+			ptr_limit = -off - 1;
-+		break;
- 	case PTR_TO_MAP_VALUE:
- 		max = ptr_reg->map_ptr->value_size;
- 		if (mask_to_left) {
--			*ptr_limit = ptr_reg->umax_value + ptr_reg->off;
-+			ptr_limit = ptr_reg->umax_value + ptr_reg->off;
- 		} else {
- 			off = ptr_reg->smin_value + ptr_reg->off;
--			*ptr_limit = ptr_reg->map_ptr->value_size - off - 1;
-+			ptr_limit = ptr_reg->map_ptr->value_size - off - 1;
- 		}
--		return *ptr_limit >= max ? -ERANGE : 0;
-+		break;
- 	default:
- 		return -EINVAL;
- 	}
-+
-+	if (ptr_limit >= max)
-+		return -ERANGE;
-+	*alu_limit = ptr_limit;
-+	return 0;
- }
- 
- static bool can_skip_alu_sanitation(const struct bpf_verifier_env *env,
--- 
-2.23.3
+...but I do have to wonder why you are doing something outside of the
+kernel's documentation system, which just happens to be based on a tool
+called Sphinx.  It would be Really Nice to have this documentation part
+of our doc tree; it would also be good to not bring in yet another tool
+for building kernel docs.
 
+Do you really need to do your own thing here?
+
+Thanks,
+
+jon
