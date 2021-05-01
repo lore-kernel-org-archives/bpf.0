@@ -2,96 +2,118 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-	autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DC26EC43460
-	for <bpf@archiver.kernel.org>; Sat,  1 May 2021 17:54:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6038DC433ED
+	for <bpf@archiver.kernel.org>; Sat,  1 May 2021 18:05:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AEDE76157F
-	for <bpf@archiver.kernel.org>; Sat,  1 May 2021 17:54:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 30E42613C1
+	for <bpf@archiver.kernel.org>; Sat,  1 May 2021 18:05:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230522AbhEARz3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 1 May 2021 13:55:29 -0400
-Received: from smtp-fw-9103.amazon.com ([207.171.188.200]:11558 "EHLO
-        smtp-fw-9103.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230450AbhEARz3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 1 May 2021 13:55:29 -0400
+        id S231622AbhEASGA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 1 May 2021 14:06:00 -0400
+Received: from smtp-fw-33001.amazon.com ([207.171.190.10]:64919 "EHLO
+        smtp-fw-33001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230250AbhEASGA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 1 May 2021 14:06:00 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1619891679; x=1651427679;
-  h=from:to:cc:date:message-id:references:in-reply-to:
-   content-id:content-transfer-encoding:mime-version:subject;
-  bh=vYzlsLsafZsT2f+P/qHzBl3cDiuePRZPFVQIgCtULm4=;
-  b=vYX/VSbxND2avjQzP0pZ+n78bP+ZAsvCA3GhiTlWsQmShUTdtRxbx9hb
-   0SPUdU40OFePQ1zByq84hxPvAnH4zsJ/8bzIz4l9vGr44ofZVx7WIJKsu
-   HotrkrTxmZTJxaPoyJnVIZnsgS0LxT2cvl1Okvo62c+8gV/pzNkvL0R7B
-   4=;
+  t=1619892311; x=1651428311;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=t6qP31dHq7cwVWiw5AC1ZP43G5sk5RdS6EK1+Ijr4WQ=;
+  b=PJIt+3gz3AQEvkLnuNy1nOEJz1NFoHvI/QvzBcX6I7ZiEyN8Z7LXlecI
+   qaR9P7lC5jnkalGBrXPHH55dzI17DMRRzI21CO8ckba5BBo82lhaMSAK2
+   5WAWaUU+ShjNfTlXObgkNteqRFC3Z9/BozK6A9CSxy6bBRFWxWUm0pJxB
+   s=;
 X-IronPort-AV: E=Sophos;i="5.82,266,1613433600"; 
-   d="scan'208";a="930594499"
-Subject: Re: [PATCH 5.4 0/8] BPF backports for CVE-2021-29155
-Thread-Topic: [PATCH 5.4 0/8] BPF backports for CVE-2021-29155
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-2b-8cc5d68b.us-west-2.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-9103.sea19.amazon.com with ESMTP; 01 May 2021 17:54:38 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-2b-8cc5d68b.us-west-2.amazon.com (Postfix) with ESMTPS id 8901DA014B;
-        Sat,  1 May 2021 17:54:38 +0000 (UTC)
-Received: from EX13D13UWB003.ant.amazon.com (10.43.161.233) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Sat, 1 May 2021 17:54:38 +0000
-Received: from EX13D13UWB003.ant.amazon.com (10.43.161.233) by
- EX13D13UWB003.ant.amazon.com (10.43.161.233) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Sat, 1 May 2021 17:54:37 +0000
-Received: from EX13D13UWB003.ant.amazon.com ([10.43.161.233]) by
- EX13D13UWB003.ant.amazon.com ([10.43.161.233]) with mapi id 15.00.1497.015;
- Sat, 1 May 2021 17:54:37 +0000
-From:   "van der Linden, Frank" <fllinden@amazon.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
-Thread-Index: AQHXPcZG0+zluwfS4Ui0HteGWjdqGKrMzZkAgAFWsoCAAFDpgA==
-Date:   Sat, 1 May 2021 17:54:37 +0000
-Message-ID: <E91B1B83-B606-4342-B273-B0990EF54B94@amazon.com>
-References: <20210429220839.15667-1-fllinden@amazon.com>
- <YIwIX2mB/+tR0AuG@kroah.com>
- <275977B4-72C4-4B86-9B94-47054AAA8067@amazon.com>
- <YIzvjSU6xAHsNOkd@kroah.com>
-In-Reply-To: <YIzvjSU6xAHsNOkd@kroah.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.43.161.253]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <05324E7490688C4A914A40AC6C73BE93@amazon.com>
-Content-Transfer-Encoding: base64
+   d="scan'208";a="123142071"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-1e-28209b7b.us-east-1.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-33001.sea14.amazon.com with ESMTP; 01 May 2021 18:05:11 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-1e-28209b7b.us-east-1.amazon.com (Postfix) with ESMTPS id 33765EF31D;
+        Sat,  1 May 2021 18:05:08 +0000 (UTC)
+Received: from EX13D01UWA004.ant.amazon.com (10.43.160.99) by
+ EX13MTAUWA001.ant.amazon.com (10.43.160.58) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Sat, 1 May 2021 18:05:08 +0000
+Received: from EX13MTAUEA002.ant.amazon.com (10.43.61.77) by
+ EX13d01UWA004.ant.amazon.com (10.43.160.99) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Sat, 1 May 2021 18:05:08 +0000
+Received: from dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com
+ (172.19.206.175) by mail-relay.amazon.com (10.43.61.169) with Microsoft SMTP
+ Server id 15.0.1497.2 via Frontend Transport; Sat, 1 May 2021 18:05:07 +0000
+Received: by dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com (Postfix, from userid 6262777)
+        id 2793D94F; Sat,  1 May 2021 18:05:06 +0000 (UTC)
+From:   Frank van der Linden <fllinden@amazon.com>
+To:     <stable@vger.kernel.org>
+CC:     <bpf@vger.kernel.org>, <samjonas@amazon.com>
+Subject: [PATCH 4.14 1/2] bpf: Fix backport of "bpf: restrict unknown scalars of mixed signed bounds for unprivileged"
+Date:   Sat, 1 May 2021 18:05:05 +0000
+Message-ID: <20210501180506.19154-2-fllinden@amazon.com>
+X-Mailer: git-send-email 2.23.4
+In-Reply-To: <20210501180506.19154-1-fllinden@amazon.com>
+References: <20210501180506.19154-1-fllinden@amazon.com>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-T2ssIHRoYXQncyBmaW5lLiBJIGNhbid0IHJlYWxseSBkbyA0LjE5IHJpZ2h0IG5vdywgc29tZW9u
-ZSBlbHNlIHdpbGwgaGF2ZSB0byB0YWtlIGNhcmUgb2YgdGhhdCBvbmUuDQoNCkluIHRoZSBtZWFu
-dGltZSwgSSdsbCByZS1zZW5kIG15IDQuMTQgc2VyaWVzIHdpdGgganVzdCB0aGUgZmlyc3QgdHdv
-IHBhdGNoZXMsIHRoYXQgZml4IGEgNC4xNC1zcGVjaWZpYyBiYWNrcG9ydCBlcnJvci4NCg0KRnJh
-bmsNCg0K77u/T24gNC8zMC8yMSwgMTE6MDUgUE0sICJHcmVnIEtIIiA8Z3JlZ2toQGxpbnV4Zm91
-bmRhdGlvbi5vcmc+IHdyb3RlOg0KDQogICAgQ0FVVElPTjogVGhpcyBlbWFpbCBvcmlnaW5hdGVk
-IGZyb20gb3V0c2lkZSBvZiB0aGUgb3JnYW5pemF0aW9uLiBEbyBub3QgY2xpY2sgbGlua3Mgb3Ig
-b3BlbiBhdHRhY2htZW50cyB1bmxlc3MgeW91IGNhbiBjb25maXJtIHRoZSBzZW5kZXIgYW5kIGtu
-b3cgdGhlIGNvbnRlbnQgaXMgc2FmZS4NCg0KDQoNCiAgICBPbiBGcmksIEFwciAzMCwgMjAyMSBh
-dCAwNDozODoyOVBNICswMDAwLCB2YW4gZGVyIExpbmRlbiwgRnJhbmsgd3JvdGU6DQogICAgPiBT
-dXJlLiBJIGhhdmUgYSA0LjE0IG9uZSBjb21pbmcgdXAgdG9vLCBidXQgdGhhdCBvbmUgd2FzIGp1
-c3QgYSBsaXR0bGUgaGFyZGVyLCBhbmQgaXQgYWxzbyBjb3JyZWN0cyBhIHByZXZpb3VzIGJhY2tw
-b3J0IGVycm9yIHRoYXQgd2FzIG1hZGUgKGNvcnJlY3Rpb24gd2FzIGFscmVhZHkgYWNrZWQpLCBh
-bmQgcGlja3Mgc29tZSBvdGhlciBjb21taXRzIHRvIGdldCBzZWxmdGVzdHMgY2xlYW4uIFNvIEkn
-bGwgcHJvYmFibHkgc2VuZCBpdCB0byBqdXN0IGJwZkAgZmlyc3QuDQogICAgPg0KICAgID4gT3Ro
-ZXJzIHdpbGwgaGF2ZSB0byB0YWtlIGNhcmUgb2YgNC4xOSBvciBvbGRlciBrZXJuZWxzLCB0aG91
-Z2gsIGp1c3QgZmxhZ2dpbmcgdGhhdCBJIGhhdmUgZG9uZSB0aGUgNC4xNCBiYWNrcG9ydCBmb3Ig
-dGhlc2UuDQoNCiAgICBJIGNhbiBub3QgdGFrZSBmaXhlcyBmb3IgNC4xNCB0aGF0IGFyZSBub3Qg
-YWxzbyBpbiA0LjE5LCBzb3JyeSwgYXMgd2UNCiAgICBjYW4gbm90IGhhdmUgcGVvcGxlIHVwZ3Jh
-ZGluZyB0byBuZXdlciBrZXJuZWxzIGFuZCBoYXZlIHJlZ3Jlc3Npb25zLg0KDQogICAgdGhhbmtz
-LA0KDQogICAgZ3JlZyBrLWgNCg0K
+From: Samuel Mendoza-Jonas <samjonas@amazon.com>
+
+The 4.14 backport of 9d7eceede ("bpf: restrict unknown scalars of mixed
+signed bounds for unprivileged") adds the PTR_TO_MAP_VALUE check to the
+wrong location in adjust_ptr_min_max_vals(), most likely because 4.14
+doesn't include the commit that updates the if-statement to a
+switch-statement (aad2eeaf4 "bpf: Simplify ptr_min_max_vals adjustment").
+
+Move the check to the proper location in adjust_ptr_min_max_vals().
+
+Fixes: 17efa65350c5a ("bpf: restrict unknown scalars of mixed signed bounds for unprivileged")
+Signed-off-by: Samuel Mendoza-Jonas <samjonas@amazon.com>
+Reviewed-by: Frank van der Linden <fllinden@amazon.com>
+Reviewed-by: Ethan Chen <yishache@amazon.com>
+Acked-by: Yonghong Song <yhs@fb.com>
+---
+ kernel/bpf/verifier.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 0c3a9302be93..9e9b7c076bcb 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -2204,6 +2204,13 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
+ 				dst);
+ 		return -EACCES;
+ 	}
++	if (ptr_reg->type == PTR_TO_MAP_VALUE) {
++		if (!env->allow_ptr_leaks && !known && (smin_val < 0) != (smax_val < 0)) {
++			verbose("R%d has unknown scalar with mixed signed bounds, pointer arithmetic with it prohibited for !root\n",
++				off_reg == dst_reg ? dst : src);
++			return -EACCES;
++		}
++	}
+ 
+ 	/* In case of 'scalar += pointer', dst_reg inherits pointer type and id.
+ 	 * The id may be overwritten later if we create a new variable offset.
+@@ -2349,13 +2356,6 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
+ 			verbose("R%d bitwise operator %s on pointer prohibited\n",
+ 				dst, bpf_alu_string[opcode >> 4]);
+ 		return -EACCES;
+-	case PTR_TO_MAP_VALUE:
+-		if (!env->allow_ptr_leaks && !known && (smin_val < 0) != (smax_val < 0)) {
+-			verbose("R%d has unknown scalar with mixed signed bounds, pointer arithmetic with it prohibited for !root\n",
+-				off_reg == dst_reg ? dst : src);
+-			return -EACCES;
+-		}
+-		/* fall-through */
+ 	default:
+ 		/* other operators (e.g. MUL,LSH) produce non-pointer results */
+ 		if (!env->allow_ptr_leaks)
+-- 
+2.23.3
+
