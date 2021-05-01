@@ -2,178 +2,246 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2C8AC433B4
-	for <bpf@archiver.kernel.org>; Sat,  1 May 2021 00:17:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5908BC43461
+	for <bpf@archiver.kernel.org>; Sat,  1 May 2021 04:30:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CAF6961090
-	for <bpf@archiver.kernel.org>; Sat,  1 May 2021 00:17:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3252561423
+	for <bpf@archiver.kernel.org>; Sat,  1 May 2021 04:30:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230226AbhEAARy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 30 Apr 2021 20:17:54 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:48408 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229915AbhEAARx (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 30 Apr 2021 20:17:53 -0400
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 14108S0N021203;
-        Fri, 30 Apr 2021 17:16:59 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=facebook; bh=E+LHO26TfNbQfOG50LqX79g3a2wzSae90G2ZSzsZkbM=;
- b=J9+09cbvbCZEyfo6CGe+B/NrRV1xi5ezKtuZNxHnSwK9Vkrlpp7ZjieKPJQrNTEANQfU
- QRKh1a2csAjIfDRH3rwl4S8k5hT7eJAAyyb1/yg4PL8bcibNRNWsjU0Aj1mijTcqi3Se
- yzRbjLPngc03QJXOoePmbeKQPF1/+fuXG74= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 3883fqynhy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 30 Apr 2021 17:16:59 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (100.104.98.9) by
- o365-in.thefacebook.com (100.104.94.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Fri, 30 Apr 2021 17:16:58 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=g0IpdAlmnSQRUdAAopFY4SikxQ/tQWJVOwVRDRlUujjPHkUrpPMdWQ7s34PBUhwpTyAEGUG0XBcgHOUPW29mpcg6MK+PyXcCtyHjhmuTmlddVE9OfIoLUenqtiFD0S8IZh0aJK7VtbFH5g171PR4Mr688KPhH1uf7I6zc4FSGXtwZKUK9wt4ekCRP95ijfHw+Qy79fAM5zJdWE27qzrKxNaboJju3r4pp58Pok5ktEWYDW0S0TSPFycpWsR6gsDSl6CyG8UrolKpIgucLNRnywENA4i9ee4Ox/i/YxnXR+7K5rf69jpcXj1XOTv3shbrJE3fXPDALtIn/bvlAQ/DmQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=E+LHO26TfNbQfOG50LqX79g3a2wzSae90G2ZSzsZkbM=;
- b=KjPWCyRoMwWGCbcyFtXmSiEoCmoVz+kIOb59XdkUXNhHR97aLcd8WoVo3KIgLT+bVqrO327W2S6AZ9nlO9+fNL20a52CyCP3jZYa3ihSsQWGJpBOvVQ/gP6gO7sl6BnuHqxDpQrwmj81RcbGSVSMFTab1PUOeHv28D2eXks2GijoUgDL1Paf4sgOtz1DohFbx9a4o+QbqTgqv89EJe6a4NCImsJAD0rXO4kei+J2aqsgIY3uGiCogsbyn/rjy/qWF6jk+ozz/T1i9DyQHeaejQRWvufrP7PwbJMvgdiqqHeU5FwqorqjQVh4GefCbfYpOhskbEy15PI+L8e/tu2RVQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Authentication-Results: gmail.com; dkim=none (message not signed)
- header.d=none;gmail.com; dmarc=none action=none header.from=fb.com;
-Received: from BY5PR15MB3571.namprd15.prod.outlook.com (2603:10b6:a03:1f6::32)
- by SJ0PR15MB4679.namprd15.prod.outlook.com (2603:10b6:a03:37c::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4065.24; Sat, 1 May
- 2021 00:16:57 +0000
-Received: from BY5PR15MB3571.namprd15.prod.outlook.com
- ([fe80::718a:4142:4c92:732f]) by BY5PR15MB3571.namprd15.prod.outlook.com
- ([fe80::718a:4142:4c92:732f%6]) with mapi id 15.20.4087.035; Sat, 1 May 2021
- 00:16:57 +0000
-Date:   Fri, 30 Apr 2021 17:16:53 -0700
-From:   Martin KaFai Lau <kafai@fb.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Jiri Olsa <jolsa@redhat.com>
-CC:     Jiri Olsa <jolsa@kernel.org>, <dwarves@vger.kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        bpf <bpf@vger.kernel.org>, Kernel Team <kernel-team@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>
-Subject: Re: [PATCH dwarves] btf: Generate btf for functions in the .BTF_ids
- section
-Message-ID: <20210501001653.x3b4rk4vk4iqv3n7@kafai-mbp.dhcp.thefacebook.com>
-References: <20210423213728.3538141-1-kafai@fb.com>
- <CAEf4BzY16ziMkOMdNGNjQOmiACF3E5nFn2LhtUUQbo-y-AP7Tg@mail.gmail.com>
- <YIf3rHTLqW7yZxFJ@krava>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <YIf3rHTLqW7yZxFJ@krava>
-X-Originating-IP: [2620:10d:c090:400::5:a9e1]
-X-ClientProxiedBy: MW3PR06CA0006.namprd06.prod.outlook.com
- (2603:10b6:303:2a::11) To BY5PR15MB3571.namprd15.prod.outlook.com
- (2603:10b6:a03:1f6::32)
+        id S230337AbhEAEbI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 1 May 2021 00:31:08 -0400
+Received: from smtp-fw-9102.amazon.com ([207.171.184.29]:38307 "EHLO
+        smtp-fw-9102.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230117AbhEAEbH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 1 May 2021 00:31:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1619843418; x=1651379418;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=bOqMNLuPAU1m9w48WhK9GJ8lLWKtUkwrTY01KXT2FMY=;
+  b=WzePGHxvG57vmXBKipwMhZ8rMzbnvACn0SqxOcH4BHEMSs0o8zQ1ljR7
+   1JpcdKQxNgYa6wpCo5SojD27JeKCht8tXnF54hTpyU0HTizhkFmUapKm9
+   sywbekVhedb0Fh9GBt2wOK3WCWk5gs3eBVx3H/c1JG0dJ98nV0+EvTo9N
+   w=;
+X-IronPort-AV: E=Sophos;i="5.82,264,1613433600"; 
+   d="scan'208";a="132286625"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-2a-90c42d1d.us-west-2.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-9102.sea19.amazon.com with ESMTP; 01 May 2021 04:30:18 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-2a-90c42d1d.us-west-2.amazon.com (Postfix) with ESMTPS id 70CDEA04F4;
+        Sat,  1 May 2021 04:30:16 +0000 (UTC)
+Received: from EX13D01UWA003.ant.amazon.com (10.43.160.107) by
+ EX13MTAUWA001.ant.amazon.com (10.43.160.58) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Sat, 1 May 2021 04:30:16 +0000
+Received: from EX13MTAUWC001.ant.amazon.com (10.43.162.135) by
+ EX13d01UWA003.ant.amazon.com (10.43.160.107) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Sat, 1 May 2021 04:30:15 +0000
+Received: from dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com
+ (172.19.206.175) by mail-relay.amazon.com (10.43.162.232) with Microsoft SMTP
+ Server id 15.0.1497.2 via Frontend Transport; Sat, 1 May 2021 04:30:15 +0000
+Received: by dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com (Postfix, from userid 6262777)
+        id 459C3DAB; Sat,  1 May 2021 04:30:14 +0000 (UTC)
+From:   Frank van der Linden <fllinden@amazon.com>
+To:     <stable@vger.kernel.org>
+CC:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <yhs@fb.com>, <john.fastabend@gmail.com>, <samjonas@amazon.com>
+Subject: [PATCH 4.14 07/15] bpf: Improve verifier error messages for users
+Date:   Sat, 1 May 2021 04:30:06 +0000
+Message-ID: <20210501043014.33300-8-fllinden@amazon.com>
+X-Mailer: git-send-email 2.23.4
+In-Reply-To: <20210501043014.33300-1-fllinden@amazon.com>
+References: <20210501043014.33300-1-fllinden@amazon.com>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from kafai-mbp.dhcp.thefacebook.com (2620:10d:c090:400::5:a9e1) by MW3PR06CA0006.namprd06.prod.outlook.com (2603:10b6:303:2a::11) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4087.32 via Frontend Transport; Sat, 1 May 2021 00:16:56 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2123aa41-6eb9-437c-ed05-08d90c366e79
-X-MS-TrafficTypeDiagnostic: SJ0PR15MB4679:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <SJ0PR15MB4679F3B241A2F09B95CC7827D55D9@SJ0PR15MB4679.namprd15.prod.outlook.com>
-X-FB-Source: Internal
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0bnfQNBlS7c3mzZ0Y3NotMzuvsOMCj1SnBGIWSzlzrgh2M+PcjztTh0fJlX8lhJRLHeSQy9BVy+KkU0y55VYzJrtNgtaumQOmqFAxmwpqD4mZlIY7V6/u6Fk5dHFeGg97YY9qs3LBD6AiIlia/R9IZahmoy4sX1nsrZaY45teqT55RfsR9HcObg8g7Lidy5Ekl4OWVWqjepnKrbT/cn+ib14scuAg68nuNsmsBitDzF3nMNWGg1erpm0VkvwoAJn8VB9WAzwEhcWJ+wnu38nAK1Tf01UWppVss4lWyedxAi2PcBrRqjiqu/oYXbWYV4bG1WXUr7DcR97bmQNRnU0rYVtENR5tnSDEEsM+7VoqI8pTzyGT7vOJrDV2s050AYZfQ2u5QgnEiCQSYy387+fEXqxQEpqXf9J02Aq2S5bT+DrjxHtH/QCkeOASctT7sbDfSqD9Kykj5OZV9V74nhEmvF3Rg6pCwFelbX1j27SJUHGt7ssm2hbti3oZasG5v17f+TWtJgdsd3Lz3oPo1HlAXqEDcdOYYuLqbnTcFepoOmYn8jltBnxH8fv1TQluNmYAI+tOfJmbesIw/PWBS2lZT4ICU3MpwJn2jnFgzKlQK09IlxDlCUVGzPE50ICT8EGr/CqA4MLglcFHT2Rl+vzlA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR15MB3571.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(376002)(346002)(396003)(39860400002)(366004)(9686003)(186003)(1076003)(8936002)(66946007)(66476007)(55016002)(4326008)(5660300002)(8676002)(6666004)(16526019)(6506007)(52116002)(478600001)(7696005)(316002)(86362001)(66556008)(53546011)(110136005)(54906003)(38100700002)(2906002)(142923001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?9rLVRDRShu9JXgncBq0Zz3IaQeTsJ7JMy+ScjY/RzW2PtQykbRvhV5wYmRee?=
- =?us-ascii?Q?N1ZSYAyrpbZ+0VHiBM0Idplk6Sit4K+ieIidMvJ1pJVUORgfb22A17QB+AYd?=
- =?us-ascii?Q?sIgZMJrX/WjkXPLU+W4qSXjC7iKv3C1z3Dav0D11IomTeQF3jR8GKP+x2xY/?=
- =?us-ascii?Q?iUjOWl0Ec88dEekjd7G3MPUHK+1PlJFImIQCPuPixaIe0YOF8XAQ4KSSqD0f?=
- =?us-ascii?Q?YZ52vYh6rb96rxlAQdQYDMq5jSe3DU2kmaYidFFinWsc382LCxjXvkS0marM?=
- =?us-ascii?Q?Elk4XDIQWVnnfY+5d6ntkL+ZidwQeq3Vmi+059YCKqnCR+Tti3nc7MNrBDs4?=
- =?us-ascii?Q?Rc3unUGpYMd84fQvbBSHVzBC8qPFAZogWEZFmaejWcfgAPHZVaqMEzHfE0Xo?=
- =?us-ascii?Q?3UZo+l9/Jy9s6fJL5CGKjADLUG6bmW3wYkY32Vyj75OeJ4zL3hyTP3KAK/J7?=
- =?us-ascii?Q?WPCeKQYpq1IMHT8MUIqfEB7OU9i8UVRoOFHtZ9BMch+GlOG5A2sbiyxtqOtm?=
- =?us-ascii?Q?LrTnO7FTpkzGO4xNO5GNy7q3ec7qR7HzdJUOMK7O15ocXxbq3jM0/DIhOE5n?=
- =?us-ascii?Q?NDhxWh+ZCvp/SVknTh+ezk+dlIjQU1rn7emeKTXDeuTaJJjgBKqRRrgYK+cq?=
- =?us-ascii?Q?f3TLu04FDvdfpAvHxAHgyVouv068dhZM8fOxsLI3YVJUDawBBKlvJ8+Rk5sH?=
- =?us-ascii?Q?04ShNOvVs/2hIAxMwKRt0X5DexCt8mqnAaRKmZX/XmzXrtHAqtunSukT3anb?=
- =?us-ascii?Q?65HIslNWq5yY/vRhfLmf9iwGQ/cMOB2aINk8z6t19tohsGyLV6ESPUoqmud6?=
- =?us-ascii?Q?OIQhMXgkHL9oI9e/aFG0vQmZBI2hEVDRZlLAgqt4Jd9RzP0zF/H4Zg5GYuR2?=
- =?us-ascii?Q?aMYQD9JIiDForftE0U2iwN/Njb8MFaVS6O/DS8EiAHTCyVSby55v8ux3Se/Q?=
- =?us-ascii?Q?iQ8chdXM4T2IbAIqk3NNYI1y9pt8txlRS50Qaq2OBxov+ifTM3b/kfIG+C92?=
- =?us-ascii?Q?eg4F20AtdD1rAzNbdad2P71Q5YcPSVZ7kQ3kqHQKoX23EHwY+T1bgLgwI+4O?=
- =?us-ascii?Q?jhCElcX2LmVd4OC2S9rjgp1j3wZrxrz1914AzK5wgbN/rGPXVbXcL3r167A0?=
- =?us-ascii?Q?PtjkzB6JC6WGaxu4hNu4jpQsRVoyyEuo3w/Q5rrAx7dUqK+lr8eYygSuPppt?=
- =?us-ascii?Q?tpZN5DUT9CLwSGu2Z2loz+MnNgZ09FLcVdF5tBxWGLYcr2OBX4H79mBYkDd4?=
- =?us-ascii?Q?vbcuMK8Td5FzDFn/ExB+lwDJYbi7AEgec8LyaqqJojChFiZ2U22DNWmccCKb?=
- =?us-ascii?Q?h1RTpW5hO0pJETBR+ORVnFYudcvy+pNG4GS2v6YVdnaMEQ=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2123aa41-6eb9-437c-ed05-08d90c366e79
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR15MB3571.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 May 2021 00:16:57.4115
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OIrHS9m6Mehd4DX/YCWJTOA3RZ2UiyZxyS/9fpGc6DFNfSVk6LKmUy65MuUozmqo
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR15MB4679
-X-OriginatorOrg: fb.com
-X-Proofpoint-ORIG-GUID: DdB61IIT_lw7v7F9YWx4XpbOte8ur4oC
-X-Proofpoint-GUID: DdB61IIT_lw7v7F9YWx4XpbOte8ur4oC
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-04-30_15:2021-04-30,2021-04-30 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
- priorityscore=1501 suspectscore=0 clxscore=1015 spamscore=0 bulkscore=0
- lowpriorityscore=0 phishscore=0 adultscore=0 mlxlogscore=830
- impostorscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104060000 definitions=main-2105010000
-X-FB-Internal: deliver
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Apr 27, 2021 at 01:38:20PM +0200, Jiri Olsa wrote:
-> On Mon, Apr 26, 2021 at 04:26:11PM -0700, Andrii Nakryiko wrote:
-> > On Fri, Apr 23, 2021 at 2:37 PM Martin KaFai Lau <kafai@fb.com> wrote:
-> > >
-> > > BTF is currently generated for functions that are in ftrace list
-> > > or extern.
-> > >
-> > > A recent use case also needs BTF generated for functions included in
-> > > allowlist.  In particular, the kernel
-> > > commit e78aea8b2170 ("bpf: tcp: Put some tcp cong functions in allowlist for bpf-tcp-cc")
-> > > allows bpf program to directly call a few tcp cc kernel functions.  Those
-> > > functions are specified under an ELF section .BTF_ids.  The symbols
-> > > in this ELF section is like __BTF_ID__func__<kernel_func>__[digit]+.
-> > > For example, __BTF_ID__func__cubictcp_init__1.  Those kernel
-> > > functions are currently allowed only if CONFIG_DYNAMIC_FTRACE is
-> > > set to ensure they are in the ftrace list but this kconfig dependency
-> > > is unnecessary.
-> > >
-> > > pahole can generate BTF for those kernel functions if it knows they
-> > > are in the allowlist.  This patch is to capture those symbols
-> > > in the .BTF_ids section and generate BTF for them.
-> > >
-> > > Cc: Andrii Nakryiko <andrii@kernel.org>
-> > > Signed-off-by: Martin KaFai Lau <kafai@fb.com>
-> > > ---
-> > 
-> > I wonder if we just record all functions how bad that would be. Jiri,
-> > do you remember from the time you were experimenting with static
-> > functions how much more functions we'd be recording if we didn't do
-> > ftrace filtering?
-> 
-> hum, I can't find that.. but should be just matter of removing
-> that is_ftrace_func check
-In my kconfig, by ignoring is_ftrace_func(),
-number of FUNC: 40643 vs 46225
+From: Daniel Borkmann <daniel@iogearbox.net>
 
-I would say skip the ftrace filtering instead of my current patch.  Thoughts?
+Upstream commit a6aaece00a57fa6f22575364b3903dfbccf5345d
+
+Consolidate all error handling and provide more user-friendly error messages
+from sanitize_ptr_alu() and sanitize_val_alu().
+
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Reviewed-by: John Fastabend <john.fastabend@gmail.com>
+Acked-by: Alexei Starovoitov <ast@kernel.org>
+[fllinden@amazon.com: backport to 4.14]
+Signed-off-by: Frank van der Linden <fllinden@amazon.com>
+---
+ kernel/bpf/verifier.c | 84 +++++++++++++++++++++++++++++++------------
+ 1 file changed, 62 insertions(+), 22 deletions(-)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index ef1fe213cbce..97a2e4347fe2 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -2024,6 +2024,14 @@ static struct bpf_insn_aux_data *cur_aux(struct bpf_verifier_env *env)
+ 	return &env->insn_aux_data[env->insn_idx];
+ }
+ 
++enum {
++	REASON_BOUNDS	= -1,
++	REASON_TYPE	= -2,
++	REASON_PATHS	= -3,
++	REASON_LIMIT	= -4,
++	REASON_STACK	= -5,
++};
++
+ static int retrieve_ptr_limit(const struct bpf_reg_state *ptr_reg,
+ 			      const struct bpf_reg_state *off_reg,
+ 			      u32 *alu_limit, u8 opcode)
+@@ -2035,7 +2043,7 @@ static int retrieve_ptr_limit(const struct bpf_reg_state *ptr_reg,
+ 
+ 	if (!tnum_is_const(off_reg->var_off) &&
+ 	    (off_reg->smin_value < 0) != (off_reg->smax_value < 0))
+-		return -EACCES;
++		return REASON_BOUNDS;
+ 
+ 	switch (ptr_reg->type) {
+ 	case PTR_TO_STACK:
+@@ -2059,11 +2067,11 @@ static int retrieve_ptr_limit(const struct bpf_reg_state *ptr_reg,
+ 		}
+ 		break;
+ 	default:
+-		return -EINVAL;
++		return REASON_TYPE;
+ 	}
+ 
+ 	if (ptr_limit >= max)
+-		return -ERANGE;
++		return REASON_LIMIT;
+ 	*alu_limit = ptr_limit;
+ 	return 0;
+ }
+@@ -2083,7 +2091,7 @@ static int update_alu_sanitation_state(struct bpf_insn_aux_data *aux,
+ 	if (aux->alu_state &&
+ 	    (aux->alu_state != alu_state ||
+ 	     aux->alu_limit != alu_limit))
+-		return -EACCES;
++		return REASON_PATHS;
+ 
+ 	/* Corresponding fixup done in fixup_bpf_calls(). */
+ 	aux->alu_state = alu_state;
+@@ -2156,7 +2164,46 @@ static int sanitize_ptr_alu(struct bpf_verifier_env *env,
+ 	ret = push_stack(env, env->insn_idx + 1, env->insn_idx, true);
+ 	if (!ptr_is_dst_reg && ret)
+ 		*dst_reg = tmp;
+-	return !ret ? -EFAULT : 0;
++	return !ret ? REASON_STACK : 0;
++}
++
++static int sanitize_err(struct bpf_verifier_env *env,
++			const struct bpf_insn *insn, int reason,
++			const struct bpf_reg_state *off_reg,
++			const struct bpf_reg_state *dst_reg)
++{
++	static const char *err = "pointer arithmetic with it prohibited for !root";
++	const char *op = BPF_OP(insn->code) == BPF_ADD ? "add" : "sub";
++	u32 dst = insn->dst_reg, src = insn->src_reg;
++
++	switch (reason) {
++	case REASON_BOUNDS:
++		verbose("R%d has unknown scalar with mixed signed bounds, %s\n",
++			off_reg == dst_reg ? dst : src, err);
++		break;
++	case REASON_TYPE:
++		verbose("R%d has pointer with unsupported alu operation, %s\n",
++			off_reg == dst_reg ? src : dst, err);
++		break;
++	case REASON_PATHS:
++		verbose("R%d tried to %s from different maps, paths or scalars, %s\n",
++			dst, op, err);
++		break;
++	case REASON_LIMIT:
++		verbose("R%d tried to %s beyond pointer bounds, %s\n",
++			dst, op, err);
++		break;
++	case REASON_STACK:
++		verbose("R%d could not be pushed for speculative verification, %s\n",
++			dst, err);
++		break;
++	default:
++		verbose("verifier internal error: unknown reason (%d)\n",
++			reason);
++		break;
++	}
++
++	return -EACCES;
+ }
+ 
+ /* Handles arithmetic on a pointer and a scalar: computes new min/max and var_off.
+@@ -2230,10 +2277,9 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
+ 	switch (opcode) {
+ 	case BPF_ADD:
+ 		ret = sanitize_ptr_alu(env, insn, ptr_reg, off_reg, dst_reg);
+-		if (ret < 0) {
+-			verbose("R%d tried to add from different maps, paths, or prohibited types\n", dst);
+-			return ret;
+-		}
++		if (ret < 0)
++			return sanitize_err(env, insn, ret, off_reg, dst_reg);
++
+ 		/* We can take a fixed offset as long as it doesn't overflow
+ 		 * the s32 'off' field
+ 		 */
+@@ -2285,10 +2331,9 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
+ 		break;
+ 	case BPF_SUB:
+ 		ret = sanitize_ptr_alu(env, insn, ptr_reg, off_reg, dst_reg);
+-		if (ret < 0) {
+-			verbose("R%d tried to sub from different maps, paths, or prohibited types\n", dst);
+-			return ret;
+-		}
++		if (ret < 0)
++			return sanitize_err(env, insn, ret, off_reg, dst_reg);
++
+ 		if (dst_reg == off_reg) {
+ 			/* scalar -= pointer.  Creates an unknown scalar */
+ 			if (!env->allow_ptr_leaks)
+@@ -2412,7 +2457,6 @@ static int adjust_scalar_min_max_vals(struct bpf_verifier_env *env,
+ 	s64 smin_val, smax_val;
+ 	u64 umin_val, umax_val;
+ 	u64 insn_bitness = (BPF_CLASS(insn->code) == BPF_ALU64) ? 64 : 32;
+-	u32 dst = insn->dst_reg;
+ 	int ret;
+ 
+ 	if (insn_bitness == 32) {
+@@ -2449,10 +2493,8 @@ static int adjust_scalar_min_max_vals(struct bpf_verifier_env *env,
+ 	switch (opcode) {
+ 	case BPF_ADD:
+ 		ret = sanitize_val_alu(env, insn);
+-		if (ret < 0) {
+-			verbose("R%d tried to add from different pointers or scalars\n", dst);
+-			return ret;
+-		}
++		if (ret < 0)
++			return sanitize_err(env, insn, ret, NULL, NULL);
+ 		if (signed_add_overflows(dst_reg->smin_value, smin_val) ||
+ 		    signed_add_overflows(dst_reg->smax_value, smax_val)) {
+ 			dst_reg->smin_value = S64_MIN;
+@@ -2473,10 +2515,8 @@ static int adjust_scalar_min_max_vals(struct bpf_verifier_env *env,
+ 		break;
+ 	case BPF_SUB:
+ 		ret = sanitize_val_alu(env, insn);
+-		if (ret < 0) {
+-			verbose("R%d tried to sub from different pointers or scalars\n", dst);
+-			return ret;
+-		}
++		if (ret < 0)
++			return sanitize_err(env, insn, ret, NULL, NULL);
+ 		if (signed_sub_overflows(dst_reg->smin_value, smax_val) ||
+ 		    signed_sub_overflows(dst_reg->smax_value, smin_val)) {
+ 			/* Overflow possible, we know nothing */
+-- 
+2.23.3
+
