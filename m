@@ -5,56 +5,55 @@ X-Spam-Level:
 X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CF8BC43611
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B75A2C43618
 	for <bpf@archiver.kernel.org>; Sat,  1 May 2021 04:31:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 028D0611CB
-	for <bpf@archiver.kernel.org>; Sat,  1 May 2021 04:31:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 96E3D611CB
+	for <bpf@archiver.kernel.org>; Sat,  1 May 2021 04:31:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231637AbhEAEb6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 1 May 2021 00:31:58 -0400
-Received: from smtp-fw-9102.amazon.com ([207.171.184.29]:39091 "EHLO
-        smtp-fw-9102.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231652AbhEAEbz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 1 May 2021 00:31:55 -0400
+        id S231640AbhEAEb7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 1 May 2021 00:31:59 -0400
+Received: from smtp-fw-6002.amazon.com ([52.95.49.90]:65315 "EHLO
+        smtp-fw-6002.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229908AbhEAEb5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 1 May 2021 00:31:57 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1619843466; x=1651379466;
+  t=1619843468; x=1651379468;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=ERE9PEPY0LmGzlYaubF2IpmsW4FjNNrHo1XrrVAHkzc=;
-  b=bwUcf978BcDWXIkKeTiv6DbKG7/fSsd2hXiqUxpPbpddQahZKZ4880YP
-   uTSDrQDs6Y33aLCMmMzCULolT1797FzoATNUNwxgyqlQk96f/gLCEMpr6
-   3R4lntj//wpya9JsSbmVZk+xr8FcIw7iEVafUL1ec+kTsX3bzuHEGmHGC
-   k=;
+  bh=8MKTr/lyehjvhaMDltC2LTfEd1bLus4jJ+YK0dVW6nE=;
+  b=c0XQDBXSkQyOG6UjvBzqc0IA0nXrVyBD0F+jb7GOfaS76X+FTs5j59B5
+   F5pasP+ybHrBHL9atZM1gz6IdmNXF/0Cw1mAu422gMRw42Nsmn1DTafyy
+   HVL+JnaJUazQQy3oaKIF/T9N/oaMs4vMbTAoYpkVD3Bq5FmA+E22O5k+d
+   4=;
 X-IronPort-AV: E=Sophos;i="5.82,264,1613433600"; 
-   d="scan'208";a="132286681"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-1e-c7c08562.us-east-1.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-9102.sea19.amazon.com with ESMTP; 01 May 2021 04:31:05 +0000
+   d="scan'208";a="109535172"
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-1a-715bee71.us-east-1.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-6002.iad6.amazon.com with ESMTP; 01 May 2021 04:31:05 +0000
 Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
-        by email-inbound-relay-1e-c7c08562.us-east-1.amazon.com (Postfix) with ESMTPS id 354C5240BE1;
+        by email-inbound-relay-1a-715bee71.us-east-1.amazon.com (Postfix) with ESMTPS id 7978BA24EC;
         Sat,  1 May 2021 04:31:03 +0000 (UTC)
-Received: from EX13D01UWB001.ant.amazon.com (10.43.161.75) by
+Received: from EX13D01UWB004.ant.amazon.com (10.43.161.157) by
  EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Sat, 1 May 2021 04:30:16 +0000
+ id 15.0.1497.2; Sat, 1 May 2021 04:30:17 +0000
 Received: from EX13MTAUEA001.ant.amazon.com (10.43.61.82) by
- EX13d01UWB001.ant.amazon.com (10.43.161.75) with Microsoft SMTP Server (TLS)
+ EX13d01UWB004.ant.amazon.com (10.43.161.157) with Microsoft SMTP Server (TLS)
  id 15.0.1497.2; Sat, 1 May 2021 04:30:16 +0000
 Received: from dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com
  (172.19.206.175) by mail-relay.amazon.com (10.43.61.243) with Microsoft SMTP
- Server id 15.0.1497.2 via Frontend Transport; Sat, 1 May 2021 04:30:15 +0000
+ Server id 15.0.1497.2 via Frontend Transport; Sat, 1 May 2021 04:30:16 +0000
 Received: by dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com (Postfix, from userid 6262777)
-        id 3F33DB51; Sat,  1 May 2021 04:30:14 +0000 (UTC)
+        id 441B597F; Sat,  1 May 2021 04:30:14 +0000 (UTC)
 From:   Frank van der Linden <fllinden@amazon.com>
 To:     <stable@vger.kernel.org>
 CC:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <yhs@fb.com>, <john.fastabend@gmail.com>, <samjonas@amazon.com>
-Subject: [PATCH 4.14 14/15] selftests/bpf: fix test_align
-Date:   Sat, 1 May 2021 04:30:13 +0000
-Message-ID: <20210501043014.33300-15-fllinden@amazon.com>
+Subject: [PATCH 4.14 08/15] bpf: Refactor and streamline bounds check into helper
+Date:   Sat, 1 May 2021 04:30:07 +0000
+Message-ID: <20210501043014.33300-9-fllinden@amazon.com>
 X-Mailer: git-send-email 2.23.4
 In-Reply-To: <20210501043014.33300-1-fllinden@amazon.com>
 References: <20210501043014.33300-1-fllinden@amazon.com>
@@ -65,56 +64,94 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Alexei Starovoitov <ast@fb.com>
+From: Daniel Borkmann <daniel@iogearbox.net>
 
-Upstream commit 2b36047e7889b7efee22c11e17f035f721855731
+Upstream commit 073815b756c51ba9d8384d924c5d1c03ca3d1ae4
 
-since commit 82abbf8d2fc4 the verifier rejects the bit-wise
-arithmetic on pointers earlier.
-The test 'dubious pointer arithmetic' now has less output to match on.
-Adjust it.
+Move the bounds check in adjust_ptr_min_max_vals() into a small helper named
+sanitize_check_bounds() in order to simplify the former a bit.
 
-Fixes: 82abbf8d2fc4 ("bpf: do not allow root to mangle valid pointers")
-Reported-by: kernel test robot <xiaolong.ye@intel.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Reviewed-by: John Fastabend <john.fastabend@gmail.com>
+Acked-by: Alexei Starovoitov <ast@kernel.org>
+[fllinden@amazon.com: backport to 4.14]
+Signed-off-by: Frank van der Linden <fllinden@amazon.com>
 ---
- tools/testing/selftests/bpf/test_align.c | 22 +---------------------
- 1 file changed, 1 insertion(+), 21 deletions(-)
+ kernel/bpf/verifier.c | 54 +++++++++++++++++++++++++++++--------------
+ 1 file changed, 37 insertions(+), 17 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/test_align.c b/tools/testing/selftests/bpf/test_align.c
-index 8591c89c0828..471bbbdb94db 100644
---- a/tools/testing/selftests/bpf/test_align.c
-+++ b/tools/testing/selftests/bpf/test_align.c
-@@ -474,27 +474,7 @@ static struct bpf_align_test tests[] = {
- 		.result = REJECT,
- 		.matches = {
- 			{4, "R5=pkt(id=0,off=0,r=0,imm=0)"},
--			/* ptr & 0x40 == either 0 or 0x40 */
--			{5, "R5=inv(id=0,umax_value=64,var_off=(0x0; 0x40))"},
--			/* ptr << 2 == unknown, (4n) */
--			{7, "R5=inv(id=0,smax_value=9223372036854775804,umax_value=18446744073709551612,var_off=(0x0; 0xfffffffffffffffc))"},
--			/* (4n) + 14 == (4n+2).  We blow our bounds, because
--			 * the add could overflow.
--			 */
--			{8, "R5=inv(id=0,var_off=(0x2; 0xfffffffffffffffc))"},
--			/* Checked s>=0 */
--			{10, "R5=inv(id=0,umin_value=2,umax_value=9223372036854775806,var_off=(0x2; 0x7ffffffffffffffc))"},
--			/* packet pointer + nonnegative (4n+2) */
--			{12, "R6=pkt(id=1,off=0,r=0,umin_value=2,umax_value=9223372036854775806,var_off=(0x2; 0x7ffffffffffffffc))"},
--			{14, "R4=pkt(id=1,off=4,r=0,umin_value=2,umax_value=9223372036854775806,var_off=(0x2; 0x7ffffffffffffffc))"},
--			/* NET_IP_ALIGN + (4n+2) == (4n), alignment is fine.
--			 * We checked the bounds, but it might have been able
--			 * to overflow if the packet pointer started in the
--			 * upper half of the address space.
--			 * So we did not get a 'range' on R6, and the access
--			 * attempt will fail.
--			 */
--			{16, "R6=pkt(id=1,off=0,r=0,umin_value=2,umax_value=9223372036854775806,var_off=(0x2; 0x7ffffffffffffffc))"},
-+			/* R5 bitwise operator &= on pointer prohibited */
- 		}
- 	},
- 	{
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 97a2e4347fe2..55ac2ab5eabc 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -2206,6 +2206,41 @@ static int sanitize_err(struct bpf_verifier_env *env,
+ 	return -EACCES;
+ }
+ 
++static int sanitize_check_bounds(struct bpf_verifier_env *env,
++				 const struct bpf_insn *insn,
++				 const struct bpf_reg_state *dst_reg)
++{
++	u32 dst = insn->dst_reg;
++
++	/* For unprivileged we require that resulting offset must be in bounds
++	 * in order to be able to sanitize access later on.
++	 */
++	if (env->allow_ptr_leaks)
++		return 0;
++
++	switch (dst_reg->type) {
++	case PTR_TO_STACK:
++		if (check_stack_access(env, dst_reg, dst_reg->off +
++				       dst_reg->var_off.value, 1)) {
++			verbose("R%d stack pointer arithmetic goes out of range, "
++				"prohibited for !root\n", dst);
++			return -EACCES;
++		}
++		break;
++	case PTR_TO_MAP_VALUE:
++		if (check_map_access(env, dst, dst_reg->off, 1)) {
++			verbose("R%d pointer arithmetic of map value goes out of range, "
++				"prohibited for !root\n", dst);
++			return -EACCES;
++		}
++		break;
++	default:
++		break;
++	}
++
++	return 0;
++}
++
+ /* Handles arithmetic on a pointer and a scalar: computes new min/max and var_off.
+  * Caller should also handle BPF_MOV case separately.
+  * If we return -EACCES, caller may want to try again treating pointer as a
+@@ -2421,23 +2456,8 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
+ 	__reg_deduce_bounds(dst_reg);
+ 	__reg_bound_offset(dst_reg);
+ 
+-	/* For unprivileged we require that resulting offset must be in bounds
+-	 * in order to be able to sanitize access later on.
+-	 */
+-	if (!env->allow_ptr_leaks) {
+-		if (dst_reg->type == PTR_TO_MAP_VALUE &&
+-		    check_map_access(env, dst, dst_reg->off, 1)) {
+-			verbose("R%d pointer arithmetic of map value goes out of range, "
+-				"prohibited for !root\n", dst);
+-			return -EACCES;
+-		} else if (dst_reg->type == PTR_TO_STACK &&
+-			   check_stack_access(env, dst_reg, dst_reg->off +
+-					      dst_reg->var_off.value, 1)) {
+-			verbose("R%d stack pointer arithmetic goes out of range, "
+-				"prohibited for !root\n", dst);
+-			return -EACCES;
+-		}
+-	}
++	if (sanitize_check_bounds(env, insn, dst_reg) < 0)
++		return -EACCES;
+ 
+ 	return 0;
+ }
 -- 
 2.23.3
 
