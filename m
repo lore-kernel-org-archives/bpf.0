@@ -2,60 +2,58 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-9.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EBD11C43461
-	for <bpf@archiver.kernel.org>; Sat,  1 May 2021 18:05:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2AF6AC43470
+	for <bpf@archiver.kernel.org>; Sat,  1 May 2021 18:05:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C56C66157E
+	by mail.kernel.org (Postfix) with ESMTP id EED6B6161C
 	for <bpf@archiver.kernel.org>; Sat,  1 May 2021 18:05:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230250AbhEASGB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S231668AbhEASGB (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Sat, 1 May 2021 14:06:01 -0400
-Received: from smtp-fw-4101.amazon.com ([72.21.198.25]:29908 "EHLO
-        smtp-fw-4101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230522AbhEASGA (ORCPT <rfc822;bpf@vger.kernel.org>);
+Received: from smtp-fw-6001.amazon.com ([52.95.48.154]:16286 "EHLO
+        smtp-fw-6001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231603AbhEASGA (ORCPT <rfc822;bpf@vger.kernel.org>);
         Sat, 1 May 2021 14:06:00 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
   t=1619892311; x=1651428311;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=mlEVsC/MgixL1++qUxUO5VczIeZsu1kDac0ReqIV0Ek=;
-  b=A0j0Gxksa1kcz01TijNO9vFsdrFIZ4EVwEwZIhYl0QzG96P3EBJuOCSQ
-   GRtwS8sAw5CF47omMU3UH5eNKyn3Jvca5lg8LMmbWBjmPAJwN2HgflSUK
-   2ko1ycKmXyAKquFbUd87VPozmQDzD4CRRXdOlKOdGVKUhm/+t5NspN9FH
-   0=;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=zO583Op+nxsi5F+dNCQ8H2aI7hYSqo8uIwOIw2iXZhE=;
+  b=imd3eN6msLGUByohn7Xo3I8Q4AUKyBcw4yGyhhD3ji2f2DJozn+9YKCb
+   QrB8+m6pBEGsgW6eB8q1jMCCEVDNWzcf/pbB031P7GucYY2pKEjCzaPVy
+   F8/1y+KtMZyBVxhg7gAAWN8G7P7s0j83EFoUqE9zpv7LmphAgTEwZ5QHT
+   c=;
 X-IronPort-AV: E=Sophos;i="5.82,266,1613433600"; 
-   d="scan'208";a="105149223"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-1a-821c648d.us-east-1.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-4101.iad4.amazon.com with ESMTP; 01 May 2021 18:05:10 +0000
+   d="scan'208";a="111013691"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-1d-16425a8d.us-east-1.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-6001.iad6.amazon.com with ESMTP; 01 May 2021 18:05:10 +0000
 Received: from EX13MTAUWA001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-1a-821c648d.us-east-1.amazon.com (Postfix) with ESMTPS id 6489BA1C89;
+        by email-inbound-relay-1d-16425a8d.us-east-1.amazon.com (Postfix) with ESMTPS id 6B471100AB0;
         Sat,  1 May 2021 18:05:09 +0000 (UTC)
 Received: from EX13D01UWA003.ant.amazon.com (10.43.160.107) by
  EX13MTAUWA001.ant.amazon.com (10.43.160.118) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Sat, 1 May 2021 18:05:08 +0000
-Received: from EX13MTAUEE002.ant.amazon.com (10.43.62.24) by
+ id 15.0.1497.2; Sat, 1 May 2021 18:05:09 +0000
+Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
  EX13d01UWA003.ant.amazon.com (10.43.160.107) with Microsoft SMTP Server (TLS)
  id 15.0.1497.2; Sat, 1 May 2021 18:05:08 +0000
 Received: from dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com
- (172.19.206.175) by mail-relay.amazon.com (10.43.62.224) with Microsoft SMTP
+ (172.19.206.175) by mail-relay.amazon.com (10.43.60.234) with Microsoft SMTP
  Server id 15.0.1497.2 via Frontend Transport; Sat, 1 May 2021 18:05:07 +0000
 Received: by dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com (Postfix, from userid 6262777)
-        id 27144A6; Sat,  1 May 2021 18:05:06 +0000 (UTC)
+        id 25A98978; Sat,  1 May 2021 18:05:06 +0000 (UTC)
 From:   Frank van der Linden <fllinden@amazon.com>
 To:     <stable@vger.kernel.org>
 CC:     <bpf@vger.kernel.org>, <samjonas@amazon.com>
-Subject: [PATCH 4.14 2/2] bpf: fix up selftests after backports were fixed
-Date:   Sat, 1 May 2021 18:05:06 +0000
-Message-ID: <20210501180506.19154-3-fllinden@amazon.com>
+Subject: [PATCH 4.14 0/2] fix BPF backports
+Date:   Sat, 1 May 2021 18:05:04 +0000
+Message-ID: <20210501180506.19154-1-fllinden@amazon.com>
 X-Mailer: git-send-email 2.23.4
-In-Reply-To: <20210501180506.19154-1-fllinden@amazon.com>
-References: <20210501180506.19154-1-fllinden@amazon.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -63,123 +61,38 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-After the backport of the changes to fix CVE 2019-7308, the
-selftests also need to be fixed up, as was done originally
-in mainline 80c9b2fae87b ("bpf: add various test cases to selftests").
+These are the first two patches in https://lore.kernel.org/stable/20210501043014.33300-1-fllinden@amazon.com/
 
-4.14 commit 03f11a51a19 ("bpf: Fix selftests are changes for CVE 2019-7308")
-did that, but since there was an error in the backport, some
-selftests did not change output. So, add them now that this error
-has been fixed, and their output has actually changed as expected.
+I will re-send the rest of that series as soon as the other bpf backports
+hit the 4.19 branch.
 
-This adds the rest of the changed test outputs from 80c9b2fae87b.
+This fixes errors in earlier bpf 4.14 backports. The verifier fix was
+sent in earlier to bpf@ by Sam, and acked. I added the selftests
+fix.
 
-Fixes: 03f11a51a19 ("bpf: Fix selftests are changes for CVE 2019-7308")
-Signed-off-by: Frank van der Linden <fllinden@amazon.com>
----
- tools/testing/selftests/bpf/test_verifier.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+Essentially, together with the previous backports that had errors,
+this produces correct backports of:
 
-diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
-index 9babb3fef8e2..9f7fc30d247d 100644
---- a/tools/testing/selftests/bpf/test_verifier.c
-+++ b/tools/testing/selftests/bpf/test_verifier.c
-@@ -6207,6 +6207,7 @@ static struct bpf_test tests[] = {
- 		},
- 		.fixup_map1 = { 3 },
- 		.errstr = "unbounded min value",
-+		.errstr_unpriv = "R1 has unknown scalar with mixed signed bounds",
- 		.result = REJECT,
- 	},
- 	{
-@@ -6231,6 +6232,7 @@ static struct bpf_test tests[] = {
- 		},
- 		.fixup_map1 = { 3 },
- 		.errstr = "unbounded min value",
-+		.errstr_unpriv = "R1 has unknown scalar with mixed signed bounds",
- 		.result = REJECT,
- 	},
- 	{
-@@ -6257,6 +6259,7 @@ static struct bpf_test tests[] = {
- 		},
- 		.fixup_map1 = { 3 },
- 		.errstr = "unbounded min value",
-+		.errstr_unpriv = "R8 has unknown scalar with mixed signed bounds",
- 		.result = REJECT,
- 	},
- 	{
-@@ -6282,6 +6285,7 @@ static struct bpf_test tests[] = {
- 		},
- 		.fixup_map1 = { 3 },
- 		.errstr = "unbounded min value",
-+		.errstr_unpriv = "R8 has unknown scalar with mixed signed bounds",
- 		.result = REJECT,
- 	},
- 	{
-@@ -6330,6 +6334,7 @@ static struct bpf_test tests[] = {
- 		},
- 		.fixup_map1 = { 3 },
- 		.errstr = "unbounded min value",
-+		.errstr_unpriv = "R1 has unknown scalar with mixed signed bounds",
- 		.result = REJECT,
- 	},
- 	{
-@@ -6401,6 +6406,7 @@ static struct bpf_test tests[] = {
- 		},
- 		.fixup_map1 = { 3 },
- 		.errstr = "unbounded min value",
-+		.errstr_unpriv = "R1 has unknown scalar with mixed signed bounds",
- 		.result = REJECT,
- 	},
- 	{
-@@ -6452,6 +6458,7 @@ static struct bpf_test tests[] = {
- 		},
- 		.fixup_map1 = { 3 },
- 		.errstr = "unbounded min value",
-+		.errstr_unpriv = "R1 has unknown scalar with mixed signed bounds",
- 		.result = REJECT,
- 	},
- 	{
-@@ -6479,6 +6486,7 @@ static struct bpf_test tests[] = {
- 		},
- 		.fixup_map1 = { 3 },
- 		.errstr = "unbounded min value",
-+		.errstr_unpriv = "R1 has unknown scalar with mixed signed bounds",
- 		.result = REJECT,
- 	},
- 	{
-@@ -6505,6 +6513,7 @@ static struct bpf_test tests[] = {
- 		},
- 		.fixup_map1 = { 3 },
- 		.errstr = "unbounded min value",
-+		.errstr_unpriv = "R1 has unknown scalar with mixed signed bounds",
- 		.result = REJECT,
- 	},
- 	{
-@@ -6534,6 +6543,7 @@ static struct bpf_test tests[] = {
- 		},
- 		.fixup_map1 = { 3 },
- 		.errstr = "unbounded min value",
-+		.errstr_unpriv = "R7 has unknown scalar with mixed signed bounds",
- 		.result = REJECT,
- 	},
- 	{
-@@ -6592,6 +6602,7 @@ static struct bpf_test tests[] = {
- 		},
- 		.fixup_map1 = { 3 },
- 		.errstr = "unbounded min value",
-+		.errstr_unpriv = "R1 has unknown scalar with mixed signed bounds",
- 		.result = REJECT,
- 		.result_unpriv = REJECT,
- 	},
-@@ -6644,6 +6655,7 @@ static struct bpf_test tests[] = {
- 		},
- 		.fixup_map1 = { 3 },
- 		.errstr = "R0 min value is negative, either use unsigned index or do a if (index >=0) check.",
-+		.errstr_unpriv = "R1 has unknown scalar with mixed signed bounds",
- 		.result = REJECT,
- 	},
- 	{
--- 
-2.23.3
+9d7eceede76 ("bpf: restrict unknown scalars of mixed signed bounds for
+unprivileged")
+80c9b2fae87b ("bpf: add various test cases to selftests")
 
+Commits:
+
+<4.14 only> ("bpf: Fix backport of "bpf: restrict unknown scalars of mixed signed bounds for unprivileged")
+	This was sent in by Sam to bpf@ earlier, and acked by Yonghong Song,
+	https://lore.kernel.org/bpf/20210419235641.5442-1-samjonas@amazon.com/T/#u
+
+	I am including it so that it is 'formally' submitted it
+	to -stable.
+
+<4.14 only> ("bpf: fix up selftests after backports were fixed")
+	This is a follow-up to the previous by me, to fix selftests. It's
+	from 80c9b2fae87b ("bpf: add various test cases to selftests"), but
+	since that one was already partially added to the 4.14 branch
+	in 03f11a51a196 ("bpf: Fix selftests are changes for CVE 2019-7308"),
+	it's not a "backport" as such. To avoid confusion, I created a
+	separate commit for it, referencing the original commit
+	in the message. I examined each individual changed test, and
+	went through the history to see that the error message was indeed
+	as expected.
