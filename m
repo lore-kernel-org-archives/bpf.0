@@ -5,55 +5,55 @@ X-Spam-Level:
 X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64A9FC43600
-	for <bpf@archiver.kernel.org>; Sat,  1 May 2021 04:31:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FDC0C43616
+	for <bpf@archiver.kernel.org>; Sat,  1 May 2021 04:31:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4583D61407
-	for <bpf@archiver.kernel.org>; Sat,  1 May 2021 04:31:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2271261208
+	for <bpf@archiver.kernel.org>; Sat,  1 May 2021 04:31:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231679AbhEAEb6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 1 May 2021 00:31:58 -0400
-Received: from smtp-fw-9103.amazon.com ([207.171.188.200]:45226 "EHLO
-        smtp-fw-9103.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231655AbhEAEbz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 1 May 2021 00:31:55 -0400
+        id S231652AbhEAEb7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 1 May 2021 00:31:59 -0400
+Received: from smtp-fw-33001.amazon.com ([207.171.190.10]:19313 "EHLO
+        smtp-fw-33001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231640AbhEAEby (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 1 May 2021 00:31:54 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1619843466; x=1651379466;
+  t=1619843465; x=1651379465;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=mlEVsC/MgixL1++qUxUO5VczIeZsu1kDac0ReqIV0Ek=;
-  b=u1Hf7HtG+7xSIUOCVewsSHTxkUiWcst3/9v3v9X/8AII/Qd6NFW8iqY7
-   uJLY+77mm2W//HX3ZIJg2cYjtwgNpTm1qPd669RLZI6iD9ClyK4P+RJj1
-   W7U7qcUz7UN6on0nM35KL3y7UuKen4OzrNOYLuKOd1Y2Oz9uxOa5PKwhd
-   I=;
+  bh=hjaOmGp3kO1APk4SPbqe4A3++2TCYPWkaXZ9Nz2THV4=;
+  b=u2yqdWRZ3hm2ri6HQDDhaHr/PvYYAczXdrMwCjN/RDNvXjB8fjXX/YTf
+   GPpbDr+A+y2uNYamU6or9setV5Awj1DxKkG0Bi/+gC12OedEne1SeNipl
+   hILqLWJsggt6RSrqrBbUnc6+9qxfV4k+k/JnN6PNwjbp0+RQ23amWB1i+
+   o=;
 X-IronPort-AV: E=Sophos;i="5.82,264,1613433600"; 
-   d="scan'208";a="930538308"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-1e-a70de69e.us-east-1.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-9103.sea19.amazon.com with ESMTP; 01 May 2021 04:31:05 +0000
+   d="scan'208";a="123085041"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-1d-37fd6b3d.us-east-1.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-33001.sea14.amazon.com with ESMTP; 01 May 2021 04:31:04 +0000
 Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
-        by email-inbound-relay-1e-a70de69e.us-east-1.amazon.com (Postfix) with ESMTPS id 7EBB4A1FDB;
+        by email-inbound-relay-1d-37fd6b3d.us-east-1.amazon.com (Postfix) with ESMTPS id 933BA28AAAA;
         Sat,  1 May 2021 04:31:03 +0000 (UTC)
-Received: from EX13D01UWB002.ant.amazon.com (10.43.161.136) by
+Received: from EX13D01UWB003.ant.amazon.com (10.43.161.94) by
  EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
  id 15.0.1497.2; Sat, 1 May 2021 04:30:17 +0000
-Received: from EX13MTAUEA001.ant.amazon.com (10.43.61.82) by
- EX13d01UWB002.ant.amazon.com (10.43.161.136) with Microsoft SMTP Server (TLS)
+Received: from EX13MTAUEE002.ant.amazon.com (10.43.62.24) by
+ EX13d01UWB003.ant.amazon.com (10.43.161.94) with Microsoft SMTP Server (TLS)
  id 15.0.1497.2; Sat, 1 May 2021 04:30:16 +0000
 Received: from dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com
- (172.19.206.175) by mail-relay.amazon.com (10.43.61.243) with Microsoft SMTP
- Server id 15.0.1497.2 via Frontend Transport; Sat, 1 May 2021 04:30:16 +0000
+ (172.19.206.175) by mail-relay.amazon.com (10.43.62.224) with Microsoft SMTP
+ Server id 15.0.1497.2 via Frontend Transport; Sat, 1 May 2021 04:30:15 +0000
 Received: by dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com (Postfix, from userid 6262777)
-        id 42225DE1; Sat,  1 May 2021 04:30:14 +0000 (UTC)
+        id 41AA4C0A; Sat,  1 May 2021 04:30:14 +0000 (UTC)
 From:   Frank van der Linden <fllinden@amazon.com>
 To:     <stable@vger.kernel.org>
 CC:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <yhs@fb.com>, <john.fastabend@gmail.com>, <samjonas@amazon.com>
-Subject: [PATCH 4.14 02/15] bpf: fix up selftests after backports were fixed
-Date:   Sat, 1 May 2021 04:30:01 +0000
-Message-ID: <20210501043014.33300-3-fllinden@amazon.com>
+Subject: [PATCH 4.14 15/15] selftests/bpf: make 'dubious pointer arithmetic' test useful
+Date:   Sat, 1 May 2021 04:30:14 +0000
+Message-ID: <20210501043014.33300-16-fllinden@amazon.com>
 X-Mailer: git-send-email 2.23.4
 In-Reply-To: <20210501043014.33300-1-fllinden@amazon.com>
 References: <20210501043014.33300-1-fllinden@amazon.com>
@@ -64,121 +64,70 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-After the backport of the changes to fix CVE 2019-7308, the
-selftests also need to be fixed up, as was done originally
-in mainline 80c9b2fae87b ("bpf: add various test cases to selftests").
+From: Alexei Starovoitov <ast@kernel.org>
 
-4.14 commit 03f11a51a19 ("bpf: Fix selftests are changes for CVE 2019-7308")
-did that, but since there was an error in the backport, some
-selftests did not change output. So, add them now that this error
-has been fixed, and their output has actually changed as expected.
+Upstream commit 31e95b61e172144bb2b626a291db1bdc0769275b
 
-This adds the rest of the changed test outputs from 80c9b2fae87b.
+mostly revert the previous workaround and make
+'dubious pointer arithmetic' test useful again.
+Use (ptr - ptr) << const instead of ptr << const to generate large scalar.
+The rest stays as before commit 2b36047e7889.
 
-Fixes: 03f11a51a19 ("bpf: Fix selftests are changes for CVE 2019-7308")
+Fixes: 2b36047e7889 ("selftests/bpf: fix test_align")
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+[fllinden@amazon.com: adjust for 4.14 (no liveness of regs in output)]
 Signed-off-by: Frank van der Linden <fllinden@amazon.com>
 ---
- tools/testing/selftests/bpf/test_verifier.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ tools/testing/selftests/bpf/test_align.c | 30 ++++++++++++++++++------
+ 1 file changed, 23 insertions(+), 7 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
-index 9babb3fef8e2..9f7fc30d247d 100644
---- a/tools/testing/selftests/bpf/test_verifier.c
-+++ b/tools/testing/selftests/bpf/test_verifier.c
-@@ -6207,6 +6207,7 @@ static struct bpf_test tests[] = {
- 		},
- 		.fixup_map1 = { 3 },
- 		.errstr = "unbounded min value",
-+		.errstr_unpriv = "R1 has unknown scalar with mixed signed bounds",
+diff --git a/tools/testing/selftests/bpf/test_align.c b/tools/testing/selftests/bpf/test_align.c
+index 471bbbdb94db..5d530c90779e 100644
+--- a/tools/testing/selftests/bpf/test_align.c
++++ b/tools/testing/selftests/bpf/test_align.c
+@@ -446,11 +446,9 @@ static struct bpf_align_test tests[] = {
+ 		.insns = {
+ 			PREP_PKT_POINTERS,
+ 			BPF_MOV64_IMM(BPF_REG_0, 0),
+-			/* ptr & const => unknown & const */
+-			BPF_MOV64_REG(BPF_REG_5, BPF_REG_2),
+-			BPF_ALU64_IMM(BPF_AND, BPF_REG_5, 0x40),
+-			/* ptr << const => unknown << const */
+-			BPF_MOV64_REG(BPF_REG_5, BPF_REG_2),
++			/* (ptr - ptr) << 2 */
++			BPF_MOV64_REG(BPF_REG_5, BPF_REG_3),
++			BPF_ALU64_REG(BPF_SUB, BPF_REG_5, BPF_REG_2),
+ 			BPF_ALU64_IMM(BPF_LSH, BPF_REG_5, 2),
+ 			/* We have a (4n) value.  Let's make a packet offset
+ 			 * out of it.  First add 14, to make it a (4n+2)
+@@ -473,8 +471,26 @@ static struct bpf_align_test tests[] = {
+ 		.prog_type = BPF_PROG_TYPE_SCHED_CLS,
  		.result = REJECT,
- 	},
- 	{
-@@ -6231,6 +6232,7 @@ static struct bpf_test tests[] = {
- 		},
- 		.fixup_map1 = { 3 },
- 		.errstr = "unbounded min value",
-+		.errstr_unpriv = "R1 has unknown scalar with mixed signed bounds",
- 		.result = REJECT,
- 	},
- 	{
-@@ -6257,6 +6259,7 @@ static struct bpf_test tests[] = {
- 		},
- 		.fixup_map1 = { 3 },
- 		.errstr = "unbounded min value",
-+		.errstr_unpriv = "R8 has unknown scalar with mixed signed bounds",
- 		.result = REJECT,
- 	},
- 	{
-@@ -6282,6 +6285,7 @@ static struct bpf_test tests[] = {
- 		},
- 		.fixup_map1 = { 3 },
- 		.errstr = "unbounded min value",
-+		.errstr_unpriv = "R8 has unknown scalar with mixed signed bounds",
- 		.result = REJECT,
- 	},
- 	{
-@@ -6330,6 +6334,7 @@ static struct bpf_test tests[] = {
- 		},
- 		.fixup_map1 = { 3 },
- 		.errstr = "unbounded min value",
-+		.errstr_unpriv = "R1 has unknown scalar with mixed signed bounds",
- 		.result = REJECT,
- 	},
- 	{
-@@ -6401,6 +6406,7 @@ static struct bpf_test tests[] = {
- 		},
- 		.fixup_map1 = { 3 },
- 		.errstr = "unbounded min value",
-+		.errstr_unpriv = "R1 has unknown scalar with mixed signed bounds",
- 		.result = REJECT,
- 	},
- 	{
-@@ -6452,6 +6458,7 @@ static struct bpf_test tests[] = {
- 		},
- 		.fixup_map1 = { 3 },
- 		.errstr = "unbounded min value",
-+		.errstr_unpriv = "R1 has unknown scalar with mixed signed bounds",
- 		.result = REJECT,
- 	},
- 	{
-@@ -6479,6 +6486,7 @@ static struct bpf_test tests[] = {
- 		},
- 		.fixup_map1 = { 3 },
- 		.errstr = "unbounded min value",
-+		.errstr_unpriv = "R1 has unknown scalar with mixed signed bounds",
- 		.result = REJECT,
- 	},
- 	{
-@@ -6505,6 +6513,7 @@ static struct bpf_test tests[] = {
- 		},
- 		.fixup_map1 = { 3 },
- 		.errstr = "unbounded min value",
-+		.errstr_unpriv = "R1 has unknown scalar with mixed signed bounds",
- 		.result = REJECT,
- 	},
- 	{
-@@ -6534,6 +6543,7 @@ static struct bpf_test tests[] = {
- 		},
- 		.fixup_map1 = { 3 },
- 		.errstr = "unbounded min value",
-+		.errstr_unpriv = "R7 has unknown scalar with mixed signed bounds",
- 		.result = REJECT,
- 	},
- 	{
-@@ -6592,6 +6602,7 @@ static struct bpf_test tests[] = {
- 		},
- 		.fixup_map1 = { 3 },
- 		.errstr = "unbounded min value",
-+		.errstr_unpriv = "R1 has unknown scalar with mixed signed bounds",
- 		.result = REJECT,
- 		.result_unpriv = REJECT,
- 	},
-@@ -6644,6 +6655,7 @@ static struct bpf_test tests[] = {
- 		},
- 		.fixup_map1 = { 3 },
- 		.errstr = "R0 min value is negative, either use unsigned index or do a if (index >=0) check.",
-+		.errstr_unpriv = "R1 has unknown scalar with mixed signed bounds",
- 		.result = REJECT,
+ 		.matches = {
+-			{4, "R5=pkt(id=0,off=0,r=0,imm=0)"},
+-			/* R5 bitwise operator &= on pointer prohibited */
++			{4, "R5=pkt_end(id=0,off=0,imm=0)"},
++			/* (ptr - ptr) << 2 == unknown, (4n) */
++			{6, "R5=inv(id=0,smax_value=9223372036854775804,umax_value=18446744073709551612,var_off=(0x0; 0xfffffffffffffffc))"},
++			/* (4n) + 14 == (4n+2).  We blow our bounds, because
++			 * the add could overflow.
++			 */
++			{7, "R5=inv(id=0,var_off=(0x2; 0xfffffffffffffffc))"},
++			/* Checked s>=0 */
++			{9, "R5=inv(id=0,umin_value=2,umax_value=9223372036854775806,var_off=(0x2; 0x7ffffffffffffffc))"},
++			/* packet pointer + nonnegative (4n+2) */
++			{11, "R6=pkt(id=1,off=0,r=0,umin_value=2,umax_value=9223372036854775806,var_off=(0x2; 0x7ffffffffffffffc))"},
++			{13, "R4=pkt(id=1,off=4,r=0,umin_value=2,umax_value=9223372036854775806,var_off=(0x2; 0x7ffffffffffffffc))"},
++			/* NET_IP_ALIGN + (4n+2) == (4n), alignment is fine.
++			 * We checked the bounds, but it might have been able
++			 * to overflow if the packet pointer started in the
++			 * upper half of the address space.
++			 * So we did not get a 'range' on R6, and the access
++			 * attempt will fail.
++			 */
++			{15, "R6=pkt(id=1,off=0,r=0,umin_value=2,umax_value=9223372036854775806,var_off=(0x2; 0x7ffffffffffffffc))"},
+ 		}
  	},
  	{
 -- 
