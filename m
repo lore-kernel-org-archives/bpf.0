@@ -8,53 +8,53 @@ X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DB19C433B4
-	for <bpf@archiver.kernel.org>; Sat,  1 May 2021 04:30:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A3CFC433ED
+	for <bpf@archiver.kernel.org>; Sat,  1 May 2021 04:30:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5F56461209
-	for <bpf@archiver.kernel.org>; Sat,  1 May 2021 04:30:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 82DC161208
+	for <bpf@archiver.kernel.org>; Sat,  1 May 2021 04:30:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231517AbhEAEb0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 1 May 2021 00:31:26 -0400
-Received: from smtp-fw-9102.amazon.com ([207.171.184.29]:38613 "EHLO
-        smtp-fw-9102.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231455AbhEAEb0 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 1 May 2021 00:31:26 -0400
+        id S231495AbhEAEb3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 1 May 2021 00:31:29 -0400
+Received: from smtp-fw-6001.amazon.com ([52.95.48.154]:40757 "EHLO
+        smtp-fw-6001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231455AbhEAEb3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 1 May 2021 00:31:29 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1619843437; x=1651379437;
+  t=1619843441; x=1651379441;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=QuFA/QPPO23yYM1DS1S2M8tnxdppiUlVlMJ6Qw+0yQk=;
-  b=kfUvx1eqCkNJNwqyed4A7QTz9xV55i9veIwoUNClhvdG5ZzMxg8JlaFg
-   2+iuOhDewSgx4zAOd525h+P74YD9jkYc4iptRiLHF6rqxhtLu6zP02wod
-   w8M44W5h7u0gVoennhEPd2UYnnCQBf0A0dhzJdaqGqRO7Uc9IhaRBQM1t
-   k=;
+  bh=kNNJJSSd6K61oftW+z6W77QvbDWXihC7bR0XoyLjC0w=;
+  b=P9+c8/tBivbVydI/AOBIYKuHJpalg53u7UzUhrm7i+Rx0+j9e0CI3KaQ
+   EJzDN+bikeUajpj+B6Y8O+uHsG6RVWYLWGKD+lvfluE5P6/pUARavp/Dk
+   /nkcNDmp6BIEV80HDTEJHt5aeT6aUBlJlmDQNpvDfC2gkIWdY7+Wzuzu+
+   s=;
 X-IronPort-AV: E=Sophos;i="5.82,264,1613433600"; 
-   d="scan'208";a="132286640"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-2a-119b4f96.us-west-2.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-9102.sea19.amazon.com with ESMTP; 01 May 2021 04:30:37 +0000
-Received: from EX13MTAUWA001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-2a-119b4f96.us-west-2.amazon.com (Postfix) with ESMTPS id B75AA1A04A7;
-        Sat,  1 May 2021 04:30:36 +0000 (UTC)
-Received: from EX13D01UWA003.ant.amazon.com (10.43.160.107) by
+   d="scan'208";a="110970711"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-2a-41350382.us-west-2.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-6001.iad6.amazon.com with ESMTP; 01 May 2021 04:30:39 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-2a-41350382.us-west-2.amazon.com (Postfix) with ESMTPS id 473B4C0042;
+        Sat,  1 May 2021 04:30:38 +0000 (UTC)
+Received: from EX13D01UWA004.ant.amazon.com (10.43.160.99) by
  EX13MTAUWA001.ant.amazon.com (10.43.160.58) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Sat, 1 May 2021 04:30:17 +0000
-Received: from EX13MTAUEA002.ant.amazon.com (10.43.61.77) by
- EX13d01UWA003.ant.amazon.com (10.43.160.107) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Sat, 1 May 2021 04:30:16 +0000
+ id 15.0.1497.2; Sat, 1 May 2021 04:30:23 +0000
+Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
+ EX13d01UWA004.ant.amazon.com (10.43.160.99) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Sat, 1 May 2021 04:30:22 +0000
 Received: from dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com
- (172.19.206.175) by mail-relay.amazon.com (10.43.61.169) with Microsoft SMTP
- Server id 15.0.1497.2 via Frontend Transport; Sat, 1 May 2021 04:30:15 +0000
+ (172.19.206.175) by mail-relay.amazon.com (10.43.60.234) with Microsoft SMTP
+ Server id 15.0.1497.2 via Frontend Transport; Sat, 1 May 2021 04:30:14 +0000
 Received: by dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com (Postfix, from userid 6262777)
-        id 42A09107; Sat,  1 May 2021 04:30:14 +0000 (UTC)
+        id 403D0978; Sat,  1 May 2021 04:30:14 +0000 (UTC)
 From:   Frank van der Linden <fllinden@amazon.com>
 To:     <stable@vger.kernel.org>
 CC:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <yhs@fb.com>, <john.fastabend@gmail.com>, <samjonas@amazon.com>
-Subject: [PATCH 4.14 13/15] bpf/verifier: disallow pointer subtraction
-Date:   Sat, 1 May 2021 04:30:12 +0000
-Message-ID: <20210501043014.33300-14-fllinden@amazon.com>
+Subject: [PATCH 4.14 06/15] bpf: Rework ptr_limit into alu_limit and add common error path
+Date:   Sat, 1 May 2021 04:30:05 +0000
+Message-ID: <20210501043014.33300-7-fllinden@amazon.com>
 X-Mailer: git-send-email 2.23.4
 In-Reply-To: <20210501043014.33300-1-fllinden@amazon.com>
 References: <20210501043014.33300-1-fllinden@amazon.com>
@@ -65,37 +65,73 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Alexei Starovoitov <ast@kernel.org>
+From: Daniel Borkmann <daniel@iogearbox.net>
 
-Upstream commit dd066823db2ac4e22f721ec85190817b58059a54
+Upstream commit b658bbb844e28f1862867f37e8ca11a8e2aa94a3
 
-Subtraction of pointers was accidentally allowed for unpriv programs
-by commit 82abbf8d2fc4. Revert that part of commit.
+Small refactor with no semantic changes in order to consolidate the max
+ptr_limit boundary check.
 
-Fixes: 82abbf8d2fc4 ("bpf: do not allow root to mangle valid pointers")
-Reported-by: Jann Horn <jannh@google.com>
-Acked-by: Daniel Borkmann <daniel@iogearbox.net>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-[fllinden@amazon.com: backport to 4.14]
-Signed-off-by: Frank van der Linden <fllinden@amazon.com>
+Reviewed-by: John Fastabend <john.fastabend@gmail.com>
+Acked-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/verifier.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/bpf/verifier.c | 21 +++++++++++++--------
+ 1 file changed, 13 insertions(+), 8 deletions(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 8ef1c74eaa11..abf85414c8d1 100644
+index b06de3d8facf..ef1fe213cbce 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -2754,7 +2754,7 @@ static int adjust_reg_min_max_vals(struct bpf_verifier_env *env,
- 				 * an arbitrary scalar. Disallow all math except
- 				 * pointer subtraction
- 				 */
--				if (opcode == BPF_SUB){
-+				if (opcode == BPF_SUB && env->allow_ptr_leaks) {
- 					mark_reg_unknown(regs, insn->dst_reg);
- 					return 0;
- 				}
+@@ -2026,12 +2026,12 @@ static struct bpf_insn_aux_data *cur_aux(struct bpf_verifier_env *env)
+ 
+ static int retrieve_ptr_limit(const struct bpf_reg_state *ptr_reg,
+ 			      const struct bpf_reg_state *off_reg,
+-			      u32 *ptr_limit, u8 opcode)
++			      u32 *alu_limit, u8 opcode)
+ {
+ 	bool off_is_neg = off_reg->smin_value < 0;
+ 	bool mask_to_left = (opcode == BPF_ADD &&  off_is_neg) ||
+ 			    (opcode == BPF_SUB && !off_is_neg);
+-	u32 off, max;
++	u32 off, max = 0, ptr_limit = 0;
+ 
+ 	if (!tnum_is_const(off_reg->var_off) &&
+ 	    (off_reg->smin_value < 0) != (off_reg->smax_value < 0))
+@@ -2045,22 +2045,27 @@ static int retrieve_ptr_limit(const struct bpf_reg_state *ptr_reg,
+ 		max = MAX_BPF_STACK + mask_to_left;
+ 		off = ptr_reg->off + ptr_reg->var_off.value;
+ 		if (mask_to_left)
+-			*ptr_limit = MAX_BPF_STACK + off;
++			ptr_limit = MAX_BPF_STACK + off;
+ 		else
+-			*ptr_limit = -off - 1;
+-		return *ptr_limit >= max ? -ERANGE : 0;
++			ptr_limit = -off - 1;
++		break;
+ 	case PTR_TO_MAP_VALUE:
+ 		max = ptr_reg->map_ptr->value_size;
+ 		if (mask_to_left) {
+-			*ptr_limit = ptr_reg->umax_value + ptr_reg->off;
++			ptr_limit = ptr_reg->umax_value + ptr_reg->off;
+ 		} else {
+ 			off = ptr_reg->smin_value + ptr_reg->off;
+-			*ptr_limit = ptr_reg->map_ptr->value_size - off - 1;
++			ptr_limit = ptr_reg->map_ptr->value_size - off - 1;
+ 		}
+-		return *ptr_limit >= max ? -ERANGE : 0;
++		break;
+ 	default:
+ 		return -EINVAL;
+ 	}
++
++	if (ptr_limit >= max)
++		return -ERANGE;
++	*alu_limit = ptr_limit;
++	return 0;
+ }
+ 
+ static bool can_skip_alu_sanitation(const struct bpf_verifier_env *env,
 -- 
 2.23.3
 
