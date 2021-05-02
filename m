@@ -2,91 +2,124 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB05DC433ED
-	for <bpf@archiver.kernel.org>; Sun,  2 May 2021 11:07:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 176C2C433ED
+	for <bpf@archiver.kernel.org>; Sun,  2 May 2021 21:16:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 85D25613B0
-	for <bpf@archiver.kernel.org>; Sun,  2 May 2021 11:07:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F14BD61284
+	for <bpf@archiver.kernel.org>; Sun,  2 May 2021 21:16:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231468AbhEBLIk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 2 May 2021 07:08:40 -0400
-Received: from out4-smtp.messagingengine.com ([66.111.4.28]:59025 "EHLO
-        out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229676AbhEBLIk (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sun, 2 May 2021 07:08:40 -0400
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id B052C5C0139;
-        Sun,  2 May 2021 07:07:48 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Sun, 02 May 2021 07:07:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm3; bh=WskG/OD6iDGM3tGuVuHnDVnPhSz
-        HnoKfmrpeNdwCzlA=; b=dwspbK951drYhLhUPzplAdCyEBbw/GjYinHyKIT6OEO
-        FmsNpqdMJx4lttBPW3pbouapYLxhcqQ1sHhmlr+chEje+bVmeS3vHqRl8iao0ZSE
-        E6/S8+YyA/SZUQrpsTRtoY4OJATRTgjQI8QbL+UBrTuYxzMVX4aw9b4Z3r+e+HU2
-        K28x0a5Q0cQczPNMCboF4hkvnpvPN0QNncnQgwGvA1lc5SBUK53BrfcVw0VyQ5Vg
-        JEspFrODZwCOD0MDvWr9QsdzhZJCjKoelQhU3/fnSirDZoa3si4lMEjtEu1Qyi99
-        lDjpu/r383BUBhJI3q+jQv9frM9A2/2cFwN7wDxpolw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=WskG/O
-        D6iDGM3tGuVuHnDVnPhSzHnoKfmrpeNdwCzlA=; b=fB1ZpLARnxb0q/3EAa72MK
-        e4L0/boZieVzFshTlotI9tRq6JJ1ABBvBRRnftZ8qgjeAsn+qVjzTPbK79IVI2RZ
-        9k17ZK3SF6mYkeEVeKJPfzeDY7obwPxAa9DPW9Afny3ztxYbard26ViPC5HG712c
-        m7X947YKTZYbY8PA+/OCmW7l6ZWssuEKR5jxhKEvlg4Fu88NiW4C8esE2X8nqFdJ
-        gSL+kcr2VmFUdxlYCqEhsummyS3kCwl84FoOSK64ondvOxPnAJLGp/jgOmE7hILi
-        RfaxinGqlvTfjqFNjnuG0x2EZtip2GlyYUloxUkPhwH6rzaXtiCB+frBj9l3W7ww
-        ==
-X-ME-Sender: <xms:BIiOYGHBEVGUOYBB8zfVUfY34Bu-f9PCRdb4Ed7HGwxgjKCPQkEIYw>
-    <xme:BIiOYHWYriO28C0TcmL3WK6_ZgwzQaT-m_n7of50i9SQMpX1qOpDc1ZGbe264AJzv
-    XekZtqIbqKOiA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrvdefuddgkeeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeeuleeltd
-    ehkeeltefhleduuddvhfffuedvffduveegheekgeeiffevheegfeetgfenucffohhmrghi
-    nhepkhgvrhhnvghlrdhorhhgnecukfhppeekfedrkeeirdejgedrieegnecuvehluhhsth
-    gvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghh
-    rdgtohhm
-X-ME-Proxy: <xmx:BIiOYAJgjAct-T6L1dKCbOqiUwiRo-je9b5iGs1QF9vxy62lH5cfSg>
-    <xmx:BIiOYAEZwtdKj8YJREZ8zjmSWtDg28k3aDvebWFZ3OPcg6Jnua3GCg>
-    <xmx:BIiOYMVPS2cfwVaBzkCbjbiWDcGz3m4hDWODxtbgSmNEL1f4NrKjDQ>
-    <xmx:BIiOYGcKR6ragtr6ToVnryfomHEnBczOZntaorCxS_mX5EnhsRW-Wg>
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        by mail.messagingengine.com (Postfix) with ESMTPA;
-        Sun,  2 May 2021 07:07:48 -0400 (EDT)
-Date:   Sun, 2 May 2021 13:07:46 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Frank van der Linden <fllinden@amazon.com>
-Cc:     stable@vger.kernel.org, bpf@vger.kernel.org, samjonas@amazon.com
-Subject: Re: [PATCH 4.14 0/2] fix BPF backports
-Message-ID: <YI6IAifGT+uieF+g@kroah.com>
-References: <20210501180506.19154-1-fllinden@amazon.com>
+        id S232584AbhEBVRT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 2 May 2021 17:17:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:55542 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232338AbhEBVRS (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sun, 2 May 2021 17:17:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1619990184;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9vKw5hk7tIYDtjcdPoLMlQVBcmuTSreBiYjqIbG38g8=;
+        b=VZKwH3Dx4NghOOYvJyLlyauxe48Ov5cJ7pJRJ9V34cHGmH2CjZZB8nHlQzo6nnHZnB183Q
+        noJJQlV+7gL9iwtp+Yop1d38xgFZHvOa9NbYGxyZ6TxrOaEJzZupiVhcIex0en4pgSIuOB
+        pTP9eMMI+gLBjaYw61ETD443Tskgxvw=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-416-RoziS3rEM7K2iJ5mKypHqQ-1; Sun, 02 May 2021 17:16:23 -0400
+X-MC-Unique: RoziS3rEM7K2iJ5mKypHqQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 97D5F8015BA;
+        Sun,  2 May 2021 21:16:21 +0000 (UTC)
+Received: from krava (unknown [10.40.192.83])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 3F499687E4;
+        Sun,  2 May 2021 21:16:19 +0000 (UTC)
+Date:   Sun, 2 May 2021 23:16:18 +0200
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andriin@fb.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>
+Subject: Re: [PATCH RFC] bpf: Fix trampoline for functions with variable
+ arguments
+Message-ID: <YI8WokIxTkZvzVuP@krava>
+References: <20210429212834.82621-1-jolsa@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210501180506.19154-1-fllinden@amazon.com>
+In-Reply-To: <20210429212834.82621-1-jolsa@kernel.org>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sat, May 01, 2021 at 06:05:04PM +0000, Frank van der Linden wrote:
-> These are the first two patches in https://lore.kernel.org/stable/20210501043014.33300-1-fllinden@amazon.com/
+On Thu, Apr 29, 2021 at 11:28:34PM +0200, Jiri Olsa wrote:
+> For functions with variable arguments like:
 > 
-> I will re-send the rest of that series as soon as the other bpf backports
-> hit the 4.19 branch.
+>   void set_worker_desc(const char *fmt, ...)
 > 
-> This fixes errors in earlier bpf 4.14 backports. The verifier fix was
-> sent in earlier to bpf@ by Sam, and acked. I added the selftests
-> fix.
+> the BTF data contains void argument at the end:
+> 
+> [4061] FUNC_PROTO '(anon)' ret_type_id=0 vlen=2
+>         'fmt' type_id=3
+>         '(anon)' type_id=0
+> 
+> When attaching function with this void argument the btf_distill_func_proto
+> will set last btf_func_model's argument with size 0 and that
+> will cause extra loop in save_regs/restore_regs functions and
+> generate trampoline code like:
+> 
+>   55             push   %rbp
+>   48 89 e5       mov    %rsp,%rbp
+>   48 83 ec 10    sub    $0x10,%rsp
+>   53             push   %rbx
+>   48 89 7d f0    mov    %rdi,-0x10(%rbp)
+>   75 f8          jne    0xffffffffa00cf007
+>                  ^^^ extra jump
+> 
+> It's causing soft lockups/crashes probably depends on what context
+> is the attached function called, like for set_worker_desc:
+> 
+>   watchdog: BUG: soft lockup - CPU#16 stuck for 22s! [kworker/u40:4:239]
+>   CPU: 16 PID: 239 Comm: kworker/u40:4 Not tainted 5.12.0-rc4qemu+ #178
+>   Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-1.fc33 04/01/2014
+>   Workqueue: writeback wb_workfn
+>   RIP: 0010:bpf_trampoline_6442464853_0+0xa/0x1000
+>   Code: Unable to access opcode bytes at RIP 0xffffffffa3597fe0.
+>   RSP: 0018:ffffc90000687da8 EFLAGS: 00000217
+>   Call Trace:
+>    set_worker_desc+0x5/0xb0
+>    wb_workfn+0x48/0x4d0
+>    ? psi_group_change+0x41/0x210
+>    ? __bpf_prog_exit+0x15/0x20
+>    ? bpf_trampoline_6442458903_0+0x3b/0x1000
+>    ? update_pasid+0x5/0x90
+>    ? __switch_to+0x187/0x450
+>    process_one_work+0x1e7/0x380
+>    worker_thread+0x50/0x3b0
+>    ? rescuer_thread+0x380/0x380
+>    kthread+0x11b/0x140
+>    ? __kthread_bind_mask+0x60/0x60
+>    ret_from_fork+0x22/0x30
+> 
+> This patch is removing the void argument from struct btf_func_model
+> in btf_distill_func_proto, but perhaps we should also check for this
+> in JIT's save_regs/restore_regs functions.
 
-Both of these here now queued up, thanks.
+actualy looks like we need to disable functions with variable arguments
+completely, because we don't know how many arguments to save
 
-greg k-h
+I tried to disable them in pahole and it's easy fix, will post new fix
+
+jirka
+
