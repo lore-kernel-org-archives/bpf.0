@@ -2,172 +2,88 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E83DAC433ED
-	for <bpf@archiver.kernel.org>; Fri,  7 May 2021 03:23:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D78DC433B4
+	for <bpf@archiver.kernel.org>; Fri,  7 May 2021 05:41:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9D3D8613E8
-	for <bpf@archiver.kernel.org>; Fri,  7 May 2021 03:23:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1257C613DD
+	for <bpf@archiver.kernel.org>; Fri,  7 May 2021 05:41:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230007AbhEGDYc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 6 May 2021 23:24:32 -0400
-Received: from szxga01-in.huawei.com ([45.249.212.187]:5593 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229955AbhEGDYb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 6 May 2021 23:24:31 -0400
-Received: from dggeml711-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4FbwhK6HgHzYdjR;
-        Fri,  7 May 2021 11:21:05 +0800 (CST)
-Received: from dggpemm500005.china.huawei.com (7.185.36.74) by
- dggeml711-chm.china.huawei.com (10.3.17.122) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2176.2; Fri, 7 May 2021 11:23:29 +0800
-Received: from [127.0.0.1] (10.69.30.204) by dggpemm500005.china.huawei.com
- (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2176.2; Fri, 7 May 2021
- 11:23:29 +0800
-Subject: Re: [PATCH net-next v3 0/5] page_pool: recycle buffers
-To:     Ilias Apalodimas <ilias.apalodimas@linaro.org>
-CC:     Matteo Croce <mcroce@linux.microsoft.com>,
-        <netdev@vger.kernel.org>, <linux-mm@kvack.org>,
-        Ayush Sawal <ayush.sawal@chelsio.com>,
-        "Vinay Kumar Yadav" <vinay.yadav@chelsio.com>,
-        Rohit Maheshwari <rohitm@chelsio.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Mirko Lindner <mlindner@marvell.com>,
-        Stephen Hemminger <stephen@networkplumber.org>,
-        "Tariq Toukan" <tariqt@nvidia.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        "Alexei Starovoitov" <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "John Fastabend" <john.fastabend@gmail.com>,
-        Boris Pismenny <borisp@nvidia.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Yu Zhao <yuzhao@google.com>,
-        Will Deacon <will@kernel.org>,
-        Michel Lespinasse <walken@google.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Roman Gushchin <guro@fb.com>, Hugh Dickins <hughd@google.com>,
-        Peter Xu <peterx@redhat.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Guoqing Jiang <guoqing.jiang@cloud.ionos.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Alexander Lobakin <alobakin@pm.me>,
-        Cong Wang <cong.wang@bytedance.com>, wenxu <wenxu@ucloud.cn>,
-        Kevin Hao <haokexin@gmail.com>,
-        Aleksandr Nogikh <nogikh@google.com>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        Marco Elver <elver@google.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Guillaume Nault <gnault@redhat.com>,
-        <linux-kernel@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-        <bpf@vger.kernel.org>, Matthew Wilcox <willy@infradead.org>,
-        Eric Dumazet <edumazet@google.com>,
-        David Ahern <dsahern@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Andrew Lunn <andrew@lunn.ch>, Paolo Abeni <pabeni@redhat.com>
-References: <20210409223801.104657-1-mcroce@linux.microsoft.com>
- <e873c16e-8f49-6e70-1f56-21a69e2e37ce@huawei.com>
- <YIsAIzecktXXBlxn@apalos.home>
- <9bf7c5b3-c3cf-e669-051f-247aa8df5c5a@huawei.com>
- <YIwvI5/ygBvZG5sy@apalos.home>
- <33b02220-cc50-f6b2-c436-f4ec041d6bc4@huawei.com>
- <YJPn5t2mdZKC//dp@apalos.home>
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-Message-ID: <75a332fa-74e4-7b7b-553e-3a1a6cb85dff@huawei.com>
-Date:   Fri, 7 May 2021 11:23:28 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+        id S231489AbhEGFm1 convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 7 May 2021 01:42:27 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:17298 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230499AbhEGFm0 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 7 May 2021 01:42:26 -0400
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 1475Y4IJ024570
+        for <bpf@vger.kernel.org>; Thu, 6 May 2021 22:41:27 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 38css519w1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Thu, 06 May 2021 22:41:27 -0700
+Received: from intmgw001.37.frc1.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Thu, 6 May 2021 22:41:26 -0700
+Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
+        id 09A202ED7617; Thu,  6 May 2021 22:41:25 -0700 (PDT)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
+        <daniel@iogearbox.net>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
+        Yonghong Song <yhs@fb.com>
+Subject: [RFC PATCH bpf-next 1/7] bpftool: strip const/volatile/restrict modifiers from .bss and .data vars
+Date:   Thu, 6 May 2021 22:41:13 -0700
+Message-ID: <20210507054119.270888-2-andrii@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210507054119.270888-1-andrii@kernel.org>
+References: <20210507054119.270888-1-andrii@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <YJPn5t2mdZKC//dp@apalos.home>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.69.30.204]
-X-ClientProxiedBy: dggeme714-chm.china.huawei.com (10.1.199.110) To
- dggpemm500005.china.huawei.com (7.185.36.74)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: loyHPorawXLh8T6lGIoo0gXj3UgoJqnk
+X-Proofpoint-ORIG-GUID: loyHPorawXLh8T6lGIoo0gXj3UgoJqnk
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-05-07_01:2021-05-06,2021-05-07 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0 mlxscore=0
+ spamscore=0 malwarescore=0 lowpriorityscore=0 impostorscore=0
+ priorityscore=1501 mlxlogscore=746 phishscore=0 clxscore=1015
+ suspectscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2105070041
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 2021/5/6 20:58, Ilias Apalodimas wrote:
->>>>
->>>
->>> Not really, the opposite is happening here. If the pp_recycle bit is set we
->>> will always call page_pool_return_skb_page().  If the page signature matches
->>> the 'magic' set by page pool we will always call xdp_return_skb_frame() will
->>> end up calling __page_pool_put_page(). If the refcnt is 1 we'll try
->>> to recycle the page.  If it's not we'll release it from page_pool (releasing
->>> some internal references we keep) unmap the buffer and decrement the refcnt.
->>
->> Yes, I understood the above is what the page pool do now.
->>
->> But the question is who is still holding an extral reference to the page when
->> kfree_skb()? Perhaps a cloned and pskb_expand_head()'ed skb is holding an extral
->> reference to the same page? So why not just do a page_ref_dec() if the orginal skb
->> is freed first, and call __page_pool_put_page() when the cloned skb is freed later?
->> So that we can always reuse the recyclable page from a recyclable skb. This may
->> make the page_pool_destroy() process delays longer than before, I am supposed the
->> page_pool_destroy() delaying for cloned skb case does not really matters here.
->>
->> If the above works, I think the samiliar handling can be added to RX zerocopy if
->> the RX zerocopy also hold extral references to the recyclable page from a recyclable
->> skb too?
->>
-> 
-> Right, this sounds doable, but I'll have to go back code it and see if it
-> really makes sense.  However I'd still prefer the support to go in as-is
-> (including the struct xdp_mem_info in struct page, instead of a page_pool
-> pointer).
-> 
-> There's a couple of reasons for that.  If we keep the struct xdp_mem_info we
-> can in the future recycle different kind of buffers using __xdp_return().
-> And this is a non intrusive change if we choose to store the page pool address
-> directly in the future.  It just affects the internal contract between the
-> page_pool code and struct page.  So it won't affect any drivers that already
-> use the feature.
+Similarly to .rodata, strip any const/volatile/restrict modifiers when
+generating BPF skeleton. They are not helpful and actually just get in the way.
 
-This patchset has embeded a signature field in "struct page", and xdp_mem_info
-is stored in page_private(), which seems not considering the case for associating
-the page pool with "struct page" directly yet? Is the page pool also stored in
-page_private() and a different signature is used to indicate that?
+Acked-by: Yonghong Song <yhs@fb.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ tools/bpf/bpftool/gen.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-I am not saying we have to do it in this patchset, but we have to consider it
-while we are adding new signature field to "struct page", right?
-
-> Regarding the page_ref_dec(), which as I said sounds doable, I'd prefer
-> playing it safe for now and getting rid of the buffers that somehow ended up
-> holding an extra reference.  Once this gets approved we can go back and try to
-> save the extra space.  I hope I am not wrong but the changes required to
-> support a few extra refcounts should not change the current patches much.
-> 
-> Thanks for taking the time on this!
-
-Thanks all invovled in the effort improving page pool too:)
-
-> /Ilias
-> 
->>>
->>> [1] https://lore.kernel.org/netdev/154413868810.21735.572808840657728172.stgit@firesoul/
->>>
->>> Cheers
->>> /Ilias
->>>
->>> .
->>>
->>
-> 
-> .
-> 
+diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
+index 31ade77f5ef8..440a2fcb6441 100644
+--- a/tools/bpf/bpftool/gen.c
++++ b/tools/bpf/bpftool/gen.c
+@@ -106,8 +106,10 @@ static int codegen_datasec_def(struct bpf_object *obj,
+ 
+ 	if (strcmp(sec_name, ".data") == 0) {
+ 		sec_ident = "data";
++		strip_mods = true;
+ 	} else if (strcmp(sec_name, ".bss") == 0) {
+ 		sec_ident = "bss";
++		strip_mods = true;
+ 	} else if (strcmp(sec_name, ".rodata") == 0) {
+ 		sec_ident = "rodata";
+ 		strip_mods = true;
+-- 
+2.30.2
 
