@@ -2,413 +2,451 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.5 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D86ACC43462
-	for <bpf@archiver.kernel.org>; Fri,  7 May 2021 05:41:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49F77C433B4
+	for <bpf@archiver.kernel.org>; Fri,  7 May 2021 06:05:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B42A760FE9
-	for <bpf@archiver.kernel.org>; Fri,  7 May 2021 05:41:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2A1F2613EA
+	for <bpf@archiver.kernel.org>; Fri,  7 May 2021 06:05:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233763AbhEGFmk convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 7 May 2021 01:42:40 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:15034 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233977AbhEGFmi (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 7 May 2021 01:42:38 -0400
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 1475ZLeD028937
-        for <bpf@vger.kernel.org>; Thu, 6 May 2021 22:41:39 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 38cswg982v-4
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 06 May 2021 22:41:38 -0700
-Received: from intmgw001.38.frc1.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Thu, 6 May 2021 22:41:37 -0700
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 26A5F2ED7617; Thu,  6 May 2021 22:41:29 -0700 (PDT)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [RFC PATCH bpf-next 3/7] selftests/bpf: stop using static variables for passing data to/from user-space
-Date:   Thu, 6 May 2021 22:41:15 -0700
-Message-ID: <20210507054119.270888-4-andrii@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210507054119.270888-1-andrii@kernel.org>
-References: <20210507054119.270888-1-andrii@kernel.org>
+        id S233574AbhEGGGU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 7 May 2021 02:06:20 -0400
+Received: from mail-wm1-f41.google.com ([209.85.128.41]:36765 "EHLO
+        mail-wm1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229637AbhEGGGT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 7 May 2021 02:06:19 -0400
+Received: by mail-wm1-f41.google.com with SMTP id l24-20020a7bc4580000b029014ac3b80020so6466058wmi.1;
+        Thu, 06 May 2021 23:05:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=+auSOnJQ2CrA4YlqKVPbLrG0Z3GqrzFTzKF1Viv4fs0=;
+        b=prpsnLH0w/4oUvMm+zy96vWz8Egwci52KXM91GyQMaj6p7rN+sJlAt+7XYmtVGFGgE
+         0lxC1fgARyPQAglqapPFS81Y0+gS9OSuUV64fZne/EgfDLv3Vcf6/c/SOJctZ1/fxDJJ
+         pB4uQ3BVhVG/h+pnHHl35f3gTRWYYywQ2jO7hpEQDVjMGC2fUTLXR2WW0RSV+LbPP7X/
+         UCadMfZ7pv/+ZZlaWhcJSKT8MggF+WfRfQm2SIFNMm4ce5Qa02ZXN8Po/3zQs6iFtPpv
+         x9fjcEgBolfEVeHaXjZ99YzVHwVweWpYFeOBgWayqkjmOPr00bmdp90N0qMtPStHLR/z
+         w/pg==
+X-Gm-Message-State: AOAM533M4tpSWFXH22GcKCjUOuMR1q0vb47WcHJJcG9ECup1Xux59c0h
+        dbtClrG/UkibobMT0Xk84T8=
+X-Google-Smtp-Source: ABdhPJyc+LSa7+hMqsBgaZ0Am+pclhbX/PaLgoKcWTatcsZ6vrU8yqw4RPLRBvriVcf45ppQ685P4g==
+X-Received: by 2002:a05:600c:4ba3:: with SMTP id e35mr19449209wmp.16.1620367519389;
+        Thu, 06 May 2021 23:05:19 -0700 (PDT)
+Received: from ?IPv6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id u9sm6188083wmc.38.2021.05.06.23.05.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 May 2021 23:05:18 -0700 (PDT)
+Subject: Re: [PATCH v2 dwarves] btf: Remove ftrace filter
+To:     Martin KaFai Lau <kafai@fb.com>, dwarves@vger.kernel.org
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>, bpf@vger.kernel.org,
+        kernel-team@fb.com, Andrii Nakryiko <andrii@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+References: <20210506205622.3663956-1-kafai@fb.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+Message-ID: <bbf2d599-48d1-7470-2903-cbae5c14c24d@kernel.org>
+Date:   Fri, 7 May 2021 08:05:17 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: yzXF26bVyBPjlT1FtVrwGyrYAwwCvnT3
-X-Proofpoint-ORIG-GUID: yzXF26bVyBPjlT1FtVrwGyrYAwwCvnT3
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-05-07_01:2021-05-06,2021-05-07 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- malwarescore=0 mlxlogscore=999 lowpriorityscore=0 phishscore=0 mlxscore=0
- bulkscore=0 impostorscore=0 clxscore=1015 suspectscore=0 spamscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104190000 definitions=main-2105070041
-X-FB-Internal: deliver
+In-Reply-To: <20210506205622.3663956-1-kafai@fb.com>
+Content-Type: text/plain; charset=iso-8859-2; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-In preparation of skipping emitting static variables in BPF skeletons, switch
-all current selftests uses of static variables to pass data between BPF and
-user-space to use global variables.
+On 06. 05. 21, 22:56, Martin KaFai Lau wrote:
+> BTF is currently generated for functions that are in ftrace list
+> or extern.
+> 
+> A recent use case also needs BTF generated for functions included in
+> allowlist.  In particular, the kernel
+> commit e78aea8b2170 ("bpf: tcp: Put some tcp cong functions in allowlist for bpf-tcp-cc")
+> allows bpf program to directly call a few tcp cc kernel functions. Those
+> kernel functions are currently allowed only if CONFIG_DYNAMIC_FTRACE
+> is set to ensure they are in the ftrace list but this kconfig dependency
+> is unnecessary.
+> 
+> Those kernel functions are specified under an ELF section .BTF_ids.
+> There was an earlier attempt [0] to add another filter for the functions in
+> the .BTF_ids section.  That discussion concluded that the ftrace filter
+> should be removed instead.
+> 
+> This patch is to remove the ftrace filter and its related functions.
+> 
+> Number of BTF FUNC with and without is_ftrace_func():
+> My kconfig in x86: 40643 vs 46225
+> Jiri reported on arm: 25022 vs 55812
+> 
+> [0]: https://lore.kernel.org/dwarves/20210423213728.3538141-1-kafai@fb.com/
+> 
+> Cc: Andrii Nakryiko <andrii@kernel.org>
+> Cc: Jiri Olsa <jolsa@kernel.org>
+> Signed-off-by: Martin KaFai Lau <kafai@fb.com>
 
-All non-read-only `static volatile` variables become just plain global
-variables by dropping `static volatile` part.
+Today, I missed you submission :). So:
 
-Read-only `static volatile const` variables, though, still require `volatile`
-modifier, otherwise compiler will ignore whatever values are set from
-user-space.
+Acked-by: Jiri Slaby <jirislaby@kernel.org>
 
-Few static linker tests are using name-conflicting static variables to
-validate that static linker still properly handles static variables and
-doesn't trip up on name conflicts.
+> ---
+> v2: Remove sym_sec_idx, last_idx, and sh. (Jiri Olsa)
+> 
+>   btf_encoder.c | 285 ++------------------------------------------------
+>   1 file changed, 7 insertions(+), 278 deletions(-)
+> 
+> diff --git a/btf_encoder.c b/btf_encoder.c
+> index 80e896961d4e..c711f124b31e 100644
+> --- a/btf_encoder.c
+> +++ b/btf_encoder.c
+> @@ -27,17 +27,8 @@
+>    */
+>   #define KSYM_NAME_LEN 128
+>   
+> -struct funcs_layout {
+> -	unsigned long mcount_start;
+> -	unsigned long mcount_stop;
+> -	unsigned long mcount_sec_idx;
+> -};
+> -
+>   struct elf_function {
+>   	const char	*name;
+> -	unsigned long	 addr;
+> -	unsigned long	 size;
+> -	unsigned long	 sh_addr;
+>   	bool		 generated;
+>   };
+>   
+> @@ -64,12 +55,9 @@ static void delete_functions(void)
+>   #define max(x, y) ((x) < (y) ? (y) : (x))
+>   #endif
+>   
+> -static int collect_function(struct btf_elf *btfe, GElf_Sym *sym,
+> -			    size_t sym_sec_idx)
+> +static int collect_function(struct btf_elf *btfe, GElf_Sym *sym)
+>   {
+>   	struct elf_function *new;
+> -	static GElf_Shdr sh;
+> -	static size_t last_idx;
+>   	const char *name;
+>   
+>   	if (elf_sym__type(sym) != STT_FUNC)
+> @@ -91,257 +79,12 @@ static int collect_function(struct btf_elf *btfe, GElf_Sym *sym,
+>   		functions = new;
+>   	}
+>   
+> -	if (sym_sec_idx != last_idx) {
+> -		if (!elf_section_by_idx(btfe->elf, &sh, sym_sec_idx))
+> -			return 0;
+> -		last_idx = sym_sec_idx;
+> -	}
+> -
+>   	functions[functions_cnt].name = name;
+> -	functions[functions_cnt].addr = elf_sym__value(sym);
+> -	functions[functions_cnt].size = elf_sym__size(sym);
+> -	functions[functions_cnt].sh_addr = sh.sh_addr;
+>   	functions[functions_cnt].generated = false;
+>   	functions_cnt++;
+>   	return 0;
+>   }
+>   
+> -static int addrs_cmp(const void *_a, const void *_b)
+> -{
+> -	const __u64 *a = _a;
+> -	const __u64 *b = _b;
+> -
+> -	if (*a == *b)
+> -		return 0;
+> -	return *a < *b ? -1 : 1;
+> -}
+> -
+> -static int get_vmlinux_addrs(struct btf_elf *btfe, struct funcs_layout *fl,
+> -			     __u64 **paddrs, __u64 *pcount)
+> -{
+> -	__u64 *addrs, count, offset;
+> -	unsigned int addr_size, i;
+> -	Elf_Data *data;
+> -	GElf_Shdr shdr;
+> -	Elf_Scn *sec;
+> -
+> -	/* Initialize for the sake of all error paths below. */
+> -	*paddrs = NULL;
+> -	*pcount = 0;
+> -
+> -	if (!fl->mcount_start || !fl->mcount_stop)
+> -		return 0;
+> -
+> -	/*
+> -	 * Find mcount addressed marked by __start_mcount_loc
+> -	 * and __stop_mcount_loc symbols and load them into
+> -	 * sorted array.
+> -	 */
+> -	sec = elf_getscn(btfe->elf, fl->mcount_sec_idx);
+> -	if (!sec || !gelf_getshdr(sec, &shdr)) {
+> -		fprintf(stderr, "Failed to get section(%lu) header.\n",
+> -			fl->mcount_sec_idx);
+> -		return -1;
+> -	}
+> -
+> -	/* Get address size from processed file's ELF class. */
+> -	addr_size = gelf_getclass(btfe->elf) == ELFCLASS32 ? 4 : 8;
+> -
+> -	offset = fl->mcount_start - shdr.sh_addr;
+> -	count  = (fl->mcount_stop - fl->mcount_start) / addr_size;
+> -
+> -	data = elf_getdata(sec, 0);
+> -	if (!data) {
+> -		fprintf(stderr, "Failed to get section(%lu) data.\n",
+> -			fl->mcount_sec_idx);
+> -		return -1;
+> -	}
+> -
+> -	addrs = malloc(count * sizeof(addrs[0]));
+> -	if (!addrs) {
+> -		fprintf(stderr, "Failed to allocate memory for ftrace addresses.\n");
+> -		return -1;
+> -	}
+> -
+> -	if (addr_size == sizeof(__u64)) {
+> -		memcpy(addrs, data->d_buf + offset, count * addr_size);
+> -	} else {
+> -		for (i = 0; i < count; i++)
+> -			addrs[i] = (__u64) *((__u32 *) (data->d_buf + offset + i * addr_size));
+> -	}
+> -
+> -	*paddrs = addrs;
+> -	*pcount = count;
+> -	return 0;
+> -}
+> -
+> -static int
+> -get_kmod_addrs(struct btf_elf *btfe, __u64 **paddrs, __u64 *pcount)
+> -{
+> -	__u64 *addrs, count;
+> -	unsigned int addr_size, i;
+> -	GElf_Shdr shdr_mcount;
+> -	Elf_Data *data;
+> -	Elf_Scn *sec;
+> -
+> -	/* Initialize for the sake of all error paths below. */
+> -	*paddrs = NULL;
+> -	*pcount = 0;
+> -
+> -	/* get __mcount_loc */
+> -	sec = elf_section_by_name(btfe->elf, &btfe->ehdr, &shdr_mcount,
+> -				  "__mcount_loc", NULL);
+> -	if (!sec) {
+> -		if (btf_elf__verbose) {
+> -			printf("%s: '%s' doesn't have __mcount_loc section\n", __func__,
+> -			       btfe->filename);
+> -		}
+> -		return 0;
+> -	}
+> -
+> -	data = elf_getdata(sec, NULL);
+> -	if (!data) {
+> -		fprintf(stderr, "Failed to data for __mcount_loc section.\n");
+> -		return -1;
+> -	}
+> -
+> -	/* Get address size from processed file's ELF class. */
+> -	addr_size = gelf_getclass(btfe->elf) == ELFCLASS32 ? 4 : 8;
+> -
+> -	count = data->d_size / addr_size;
+> -
+> -	addrs = malloc(count * sizeof(addrs[0]));
+> -	if (!addrs) {
+> -		fprintf(stderr, "Failed to allocate memory for ftrace addresses.\n");
+> -		return -1;
+> -	}
+> -
+> -	if (addr_size == sizeof(__u64)) {
+> -		memcpy(addrs, data->d_buf, count * addr_size);
+> -	} else {
+> -		for (i = 0; i < count; i++)
+> -			addrs[i] = (__u64) *((__u32 *) (data->d_buf + i * addr_size));
+> -	}
+> -
+> -	/*
+> -	 * We get Elf object from dwfl_module_getelf function,
+> -	 * which performs all possible relocations, including
+> -	 * __mcount_loc section.
+> -	 *
+> -	 * So addrs array now contains relocated values, which
+> -	 * we need take into account when we compare them to
+> -	 * functions values, see comment in setup_functions
+> -	 * function.
+> -	 */
+> -	*paddrs = addrs;
+> -	*pcount = count;
+> -	return 0;
+> -}
+> -
+> -static int is_ftrace_func(struct elf_function *func, __u64 *addrs, __u64 count)
+> -{
+> -	__u64 start = func->addr;
+> -	__u64 addr, end = func->addr + func->size;
+> -
+> -	/*
+> -	 * The invariant here is addr[r] that is the smallest address
+> -	 * that is >= than function start addr. Except the corner case
+> -	 * where there is no such r, but for that we have a final check
+> -	 * in the return.
+> -	 */
+> -	size_t l = 0, r = count - 1, m;
+> -
+> -	/* make sure we don't use invalid r */
+> -	if (count == 0)
+> -		return false;
+> -
+> -	while (l < r) {
+> -		m = l + (r - l) / 2;
+> -		addr = addrs[m];
+> -
+> -		if (addr >= start) {
+> -			/* we satisfy invariant, so tighten r */
+> -			r = m;
+> -		} else {
+> -			/* m is not good enough as l, maybe m + 1 will be */
+> -			l = m + 1;
+> -		}
+> -	}
+> -
+> -	return start <= addrs[r] && addrs[r] < end;
+> -}
+> -
+> -static int setup_functions(struct btf_elf *btfe, struct funcs_layout *fl)
+> -{
+> -	__u64 *addrs, count, i;
+> -	int functions_valid = 0;
+> -	bool kmod = false;
+> -
+> -	/*
+> -	 * Check if we are processing vmlinux image and
+> -	 * get mcount data if it's detected.
+> -	 */
+> -	if (get_vmlinux_addrs(btfe, fl, &addrs, &count))
+> -		return -1;
+> -
+> -	/*
+> -	 * Check if we are processing kernel module and
+> -	 * get mcount data if it's detected.
+> -	 */
+> -	if (!addrs) {
+> -		if (get_kmod_addrs(btfe, &addrs, &count))
+> -			return -1;
+> -		kmod = true;
+> -	}
+> -
+> -	if (!addrs) {
+> -		if (btf_elf__verbose)
+> -			printf("ftrace symbols not detected, falling back to DWARF data\n");
+> -		delete_functions();
+> -		return 0;
+> -	}
+> -
+> -	qsort(addrs, count, sizeof(addrs[0]), addrs_cmp);
+> -	qsort(functions, functions_cnt, sizeof(functions[0]), functions_cmp);
+> -
+> -	/*
+> -	 * Let's got through all collected functions and filter
+> -	 * out those that are not in ftrace.
+> -	 */
+> -	for (i = 0; i < functions_cnt; i++) {
+> -		struct elf_function *func = &functions[i];
+> -		/*
+> -		 * For vmlinux image both addrs[x] and functions[x]::addr
+> -		 * values are final address and are comparable.
+> -		 *
+> -		 * For kernel module addrs[x] is final address, but
+> -		 * functions[x]::addr is relative address within section
+> -		 * and needs to be relocated by adding sh_addr.
+> -		 */
+> -		if (kmod)
+> -			func->addr += func->sh_addr;
+> -
+> -		/* Make sure function is within ftrace addresses. */
+> -		if (is_ftrace_func(func, addrs, count)) {
+> -			/*
+> -			 * We iterate over sorted array, so we can easily skip
+> -			 * not valid item and move following valid field into
+> -			 * its place, and still keep the 'new' array sorted.
+> -			 */
+> -			if (i != functions_valid)
+> -				functions[functions_valid] = functions[i];
+> -			functions_valid++;
+> -		}
+> -	}
+> -
+> -	functions_cnt = functions_valid;
+> -	free(addrs);
+> -
+> -	if (btf_elf__verbose)
+> -		printf("Found %d functions!\n", functions_cnt);
+> -	return 0;
+> -}
+> -
+>   static struct elf_function *find_function(const struct btf_elf *btfe,
+>   					  const char *name)
+>   {
+> @@ -620,23 +363,8 @@ static int collect_percpu_var(struct btf_elf *btfe, GElf_Sym *sym,
+>   	return 0;
+>   }
+>   
+> -static void collect_symbol(GElf_Sym *sym, struct funcs_layout *fl,
+> -			   size_t sym_sec_idx)
+> -{
+> -	if (!fl->mcount_start &&
+> -	    !strcmp("__start_mcount_loc", elf_sym__name(sym, btfe->symtab))) {
+> -		fl->mcount_start = sym->st_value;
+> -		fl->mcount_sec_idx = sym_sec_idx;
+> -	}
+> -
+> -	if (!fl->mcount_stop &&
+> -	    !strcmp("__stop_mcount_loc", elf_sym__name(sym, btfe->symtab)))
+> -		fl->mcount_stop = sym->st_value;
+> -}
+> -
+>   static int collect_symbols(struct btf_elf *btfe, bool collect_percpu_vars)
+>   {
+> -	struct funcs_layout fl = { };
+>   	Elf32_Word sym_sec_idx;
+>   	uint32_t core_id;
+>   	GElf_Sym sym;
+> @@ -648,9 +376,8 @@ static int collect_symbols(struct btf_elf *btfe, bool collect_percpu_vars)
+>   	elf_symtab__for_each_symbol_index(btfe->symtab, core_id, sym, sym_sec_idx) {
+>   		if (collect_percpu_vars && collect_percpu_var(btfe, &sym, sym_sec_idx))
+>   			return -1;
+> -		if (collect_function(btfe, &sym, sym_sec_idx))
+> +		if (collect_function(btfe, &sym))
+>   			return -1;
+> -		collect_symbol(&sym, &fl, sym_sec_idx);
+>   	}
+>   
+>   	if (collect_percpu_vars) {
+> @@ -661,9 +388,11 @@ static int collect_symbols(struct btf_elf *btfe, bool collect_percpu_vars)
+>   			printf("Found %d per-CPU variables!\n", percpu_var_cnt);
+>   	}
+>   
+> -	if (functions_cnt && setup_functions(btfe, &fl)) {
+> -		fprintf(stderr, "Failed to filter DWARF functions\n");
+> -		return -1;
+> +	if (functions_cnt) {
+> +		qsort(functions, functions_cnt, sizeof(functions[0]),
+> +		      functions_cmp);
+> +		if (btf_elf__verbose)
+> +			printf("Found %d functions!\n", functions_cnt);
+>   	}
+>   
+>   	return 0;
+> 
 
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- tools/testing/selftests/bpf/prog_tests/send_signal.c      | 2 +-
- tools/testing/selftests/bpf/prog_tests/skeleton.c         | 6 ++----
- tools/testing/selftests/bpf/prog_tests/static_linked.c    | 5 -----
- tools/testing/selftests/bpf/progs/bpf_iter_test_kern4.c   | 4 ++--
- tools/testing/selftests/bpf/progs/kfree_skb.c             | 4 ++--
- tools/testing/selftests/bpf/progs/tailcall3.c             | 2 +-
- tools/testing/selftests/bpf/progs/tailcall4.c             | 2 +-
- tools/testing/selftests/bpf/progs/tailcall5.c             | 2 +-
- tools/testing/selftests/bpf/progs/tailcall_bpf2bpf2.c     | 2 +-
- tools/testing/selftests/bpf/progs/tailcall_bpf2bpf4.c     | 2 +-
- tools/testing/selftests/bpf/progs/test_check_mtu.c        | 4 ++--
- tools/testing/selftests/bpf/progs/test_cls_redirect.c     | 4 ++--
- tools/testing/selftests/bpf/progs/test_global_func_args.c | 2 +-
- tools/testing/selftests/bpf/progs/test_rdonly_maps.c      | 6 +++---
- tools/testing/selftests/bpf/progs/test_skeleton.c         | 4 ++--
- tools/testing/selftests/bpf/progs/test_snprintf_single.c  | 2 +-
- tools/testing/selftests/bpf/progs/test_sockmap_listen.c   | 4 ++--
- tools/testing/selftests/bpf/progs/test_static_linked1.c   | 8 ++++----
- tools/testing/selftests/bpf/progs/test_static_linked2.c   | 8 ++++----
- 19 files changed, 33 insertions(+), 40 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/send_signal.c b/tools/testing/selftests/bpf/prog_tests/send_signal.c
-index 7043e6ded0e6..a1eade51d440 100644
---- a/tools/testing/selftests/bpf/prog_tests/send_signal.c
-+++ b/tools/testing/selftests/bpf/prog_tests/send_signal.c
-@@ -2,7 +2,7 @@
- #include <test_progs.h>
- #include "test_send_signal_kern.skel.h"
- 
--static volatile int sigusr1_received = 0;
-+int sigusr1_received = 0;
- 
- static void sigusr1_handler(int signum)
- {
-diff --git a/tools/testing/selftests/bpf/prog_tests/skeleton.c b/tools/testing/selftests/bpf/prog_tests/skeleton.c
-index fe87b77af459..f6f130c99b8c 100644
---- a/tools/testing/selftests/bpf/prog_tests/skeleton.c
-+++ b/tools/testing/selftests/bpf/prog_tests/skeleton.c
-@@ -82,10 +82,8 @@ void test_skeleton(void)
- 	CHECK(data->out2 != 2, "res2", "got %lld != exp %d\n", data->out2, 2);
- 	CHECK(bss->out3 != 3, "res3", "got %d != exp %d\n", (int)bss->out3, 3);
- 	CHECK(bss->out4 != 4, "res4", "got %lld != exp %d\n", bss->out4, 4);
--	CHECK(bss->handler_out5.a != 5, "res5", "got %d != exp %d\n",
--	      bss->handler_out5.a, 5);
--	CHECK(bss->handler_out5.b != 6, "res6", "got %lld != exp %d\n",
--	      bss->handler_out5.b, 6);
-+	CHECK(bss->out5.a != 5, "res5", "got %d != exp %d\n", bss->out5.a, 5);
-+	CHECK(bss->out5.b != 6, "res6", "got %lld != exp %d\n", bss->out5.b, 6);
- 	CHECK(bss->out6 != 14, "res7", "got %d != exp %d\n", bss->out6, 14);
- 
- 	CHECK(bss->bpf_syscall != kcfg->CONFIG_BPF_SYSCALL, "ext1",
-diff --git a/tools/testing/selftests/bpf/prog_tests/static_linked.c b/tools/testing/selftests/bpf/prog_tests/static_linked.c
-index 46556976dccc..ab6acbaf9d8c 100644
---- a/tools/testing/selftests/bpf/prog_tests/static_linked.c
-+++ b/tools/testing/selftests/bpf/prog_tests/static_linked.c
-@@ -14,12 +14,7 @@ void test_static_linked(void)
- 		return;
- 
- 	skel->rodata->rovar1 = 1;
--	skel->bss->static_var1 = 2;
--	skel->bss->static_var11 = 3;
--
- 	skel->rodata->rovar2 = 4;
--	skel->bss->static_var2 = 5;
--	skel->bss->static_var22 = 6;
- 
- 	err = test_static_linked__load(skel);
- 	if (!ASSERT_OK(err, "skel_load"))
-diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_test_kern4.c b/tools/testing/selftests/bpf/progs/bpf_iter_test_kern4.c
-index ee49493dc125..400fdf8d6233 100644
---- a/tools/testing/selftests/bpf/progs/bpf_iter_test_kern4.c
-+++ b/tools/testing/selftests/bpf/progs/bpf_iter_test_kern4.c
-@@ -9,8 +9,8 @@ __u32 map1_id = 0, map2_id = 0;
- __u32 map1_accessed = 0, map2_accessed = 0;
- __u64 map1_seqnum = 0, map2_seqnum1 = 0, map2_seqnum2 = 0;
- 
--static volatile const __u32 print_len;
--static volatile const __u32 ret1;
-+volatile const __u32 print_len;
-+volatile const __u32 ret1;
- 
- SEC("iter/bpf_map")
- int dump_bpf_map(struct bpf_iter__bpf_map *ctx)
-diff --git a/tools/testing/selftests/bpf/progs/kfree_skb.c b/tools/testing/selftests/bpf/progs/kfree_skb.c
-index a46a264ce24e..55e283050cab 100644
---- a/tools/testing/selftests/bpf/progs/kfree_skb.c
-+++ b/tools/testing/selftests/bpf/progs/kfree_skb.c
-@@ -109,10 +109,10 @@ int BPF_PROG(trace_kfree_skb, struct sk_buff *skb, void *location)
- 	return 0;
- }
- 
--static volatile struct {
-+struct {
- 	bool fentry_test_ok;
- 	bool fexit_test_ok;
--} result;
-+} result = {};
- 
- SEC("fentry/eth_type_trans")
- int BPF_PROG(fentry_eth_type_trans, struct sk_buff *skb, struct net_device *dev,
-diff --git a/tools/testing/selftests/bpf/progs/tailcall3.c b/tools/testing/selftests/bpf/progs/tailcall3.c
-index 739dc2a51e74..910858fe078a 100644
---- a/tools/testing/selftests/bpf/progs/tailcall3.c
-+++ b/tools/testing/selftests/bpf/progs/tailcall3.c
-@@ -10,7 +10,7 @@ struct {
- 	__uint(value_size, sizeof(__u32));
- } jmp_table SEC(".maps");
- 
--static volatile int count;
-+int count = 0;
- 
- SEC("classifier/0")
- int bpf_func_0(struct __sk_buff *skb)
-diff --git a/tools/testing/selftests/bpf/progs/tailcall4.c b/tools/testing/selftests/bpf/progs/tailcall4.c
-index f82075b47d7d..bd4be135c39d 100644
---- a/tools/testing/selftests/bpf/progs/tailcall4.c
-+++ b/tools/testing/selftests/bpf/progs/tailcall4.c
-@@ -10,7 +10,7 @@ struct {
- 	__uint(value_size, sizeof(__u32));
- } jmp_table SEC(".maps");
- 
--static volatile int selector;
-+int selector = 0;
- 
- #define TAIL_FUNC(x)				\
- 	SEC("classifier/" #x)			\
-diff --git a/tools/testing/selftests/bpf/progs/tailcall5.c b/tools/testing/selftests/bpf/progs/tailcall5.c
-index ce5450744fd4..adf30a33064e 100644
---- a/tools/testing/selftests/bpf/progs/tailcall5.c
-+++ b/tools/testing/selftests/bpf/progs/tailcall5.c
-@@ -10,7 +10,7 @@ struct {
- 	__uint(value_size, sizeof(__u32));
- } jmp_table SEC(".maps");
- 
--static volatile int selector;
-+int selector = 0;
- 
- #define TAIL_FUNC(x)				\
- 	SEC("classifier/" #x)			\
-diff --git a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf2.c b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf2.c
-index 7b1c04183824..3cc4c12817b5 100644
---- a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf2.c
-+++ b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf2.c
-@@ -20,7 +20,7 @@ int subprog_tail(struct __sk_buff *skb)
- 	return 1;
- }
- 
--static volatile int count;
-+int count = 0;
- 
- SEC("classifier/0")
- int bpf_func_0(struct __sk_buff *skb)
-diff --git a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf4.c b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf4.c
-index 9a1b166b7fbe..77df6d4db895 100644
---- a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf4.c
-+++ b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf4.c
-@@ -9,7 +9,7 @@ struct {
- 	__uint(value_size, sizeof(__u32));
- } jmp_table SEC(".maps");
- 
--static volatile int count;
-+int count = 0;
- 
- __noinline
- int subprog_tail_2(struct __sk_buff *skb)
-diff --git a/tools/testing/selftests/bpf/progs/test_check_mtu.c b/tools/testing/selftests/bpf/progs/test_check_mtu.c
-index c4a9bae96e75..71184af57749 100644
---- a/tools/testing/selftests/bpf/progs/test_check_mtu.c
-+++ b/tools/testing/selftests/bpf/progs/test_check_mtu.c
-@@ -11,8 +11,8 @@
- char _license[] SEC("license") = "GPL";
- 
- /* Userspace will update with MTU it can see on device */
--static volatile const int GLOBAL_USER_MTU;
--static volatile const __u32 GLOBAL_USER_IFINDEX;
-+volatile const int GLOBAL_USER_MTU;
-+volatile const __u32 GLOBAL_USER_IFINDEX;
- 
- /* BPF-prog will update these with MTU values it can see */
- __u32 global_bpf_mtu_xdp = 0;
-diff --git a/tools/testing/selftests/bpf/progs/test_cls_redirect.c b/tools/testing/selftests/bpf/progs/test_cls_redirect.c
-index 3c1e042962e6..e2a5acc4785c 100644
---- a/tools/testing/selftests/bpf/progs/test_cls_redirect.c
-+++ b/tools/testing/selftests/bpf/progs/test_cls_redirect.c
-@@ -39,8 +39,8 @@ char _license[] SEC("license") = "Dual BSD/GPL";
- /**
-  * Destination port and IP used for UDP encapsulation.
-  */
--static volatile const __be16 ENCAPSULATION_PORT;
--static volatile const __be32 ENCAPSULATION_IP;
-+volatile const __be16 ENCAPSULATION_PORT;
-+volatile const __be32 ENCAPSULATION_IP;
- 
- typedef struct {
- 	uint64_t processed_packets_total;
-diff --git a/tools/testing/selftests/bpf/progs/test_global_func_args.c b/tools/testing/selftests/bpf/progs/test_global_func_args.c
-index cae309538a9e..e712bf77daae 100644
---- a/tools/testing/selftests/bpf/progs/test_global_func_args.c
-+++ b/tools/testing/selftests/bpf/progs/test_global_func_args.c
-@@ -8,7 +8,7 @@ struct S {
- 	int v;
- };
- 
--static volatile struct S global_variable;
-+struct S global_variable = {};
- 
- struct {
- 	__uint(type, BPF_MAP_TYPE_ARRAY);
-diff --git a/tools/testing/selftests/bpf/progs/test_rdonly_maps.c b/tools/testing/selftests/bpf/progs/test_rdonly_maps.c
-index ecbeea2df259..fc8e8a34a3db 100644
---- a/tools/testing/selftests/bpf/progs/test_rdonly_maps.c
-+++ b/tools/testing/selftests/bpf/progs/test_rdonly_maps.c
-@@ -5,7 +5,7 @@
- #include <linux/bpf.h>
- #include <bpf/bpf_helpers.h>
- 
--static volatile const struct {
-+const struct {
- 	unsigned a[4];
- 	/*
- 	 * if the struct's size is multiple of 16, compiler will put it into
-@@ -15,11 +15,11 @@ static volatile const struct {
- 	char _y;
- } rdonly_values = { .a = {2, 3, 4, 5} };
- 
--static volatile struct {
-+struct {
- 	unsigned did_run;
- 	unsigned iters;
- 	unsigned sum;
--} res;
-+} res = {};
- 
- SEC("raw_tracepoint/sys_enter:skip_loop")
- int skip_loop(struct pt_regs *ctx)
-diff --git a/tools/testing/selftests/bpf/progs/test_skeleton.c b/tools/testing/selftests/bpf/progs/test_skeleton.c
-index 374ccef704e1..441fa1c552c8 100644
---- a/tools/testing/selftests/bpf/progs/test_skeleton.c
-+++ b/tools/testing/selftests/bpf/progs/test_skeleton.c
-@@ -38,11 +38,11 @@ extern int LINUX_KERNEL_VERSION __kconfig;
- bool bpf_syscall = 0;
- int kern_ver = 0;
- 
-+struct s out5 = {};
-+
- SEC("raw_tp/sys_enter")
- int handler(const void *ctx)
- {
--	static volatile struct s out5;
--
- 	out1 = in1;
- 	out2 = in2;
- 	out3 = in3;
-diff --git a/tools/testing/selftests/bpf/progs/test_snprintf_single.c b/tools/testing/selftests/bpf/progs/test_snprintf_single.c
-index 402adaf344f9..3095837334d3 100644
---- a/tools/testing/selftests/bpf/progs/test_snprintf_single.c
-+++ b/tools/testing/selftests/bpf/progs/test_snprintf_single.c
-@@ -5,7 +5,7 @@
- #include <bpf/bpf_helpers.h>
- 
- /* The format string is filled from the userspace such that loading fails */
--static const char fmt[10];
-+const char fmt[10];
- 
- SEC("raw_tp/sys_enter")
- int handler(const void *ctx)
-diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_listen.c b/tools/testing/selftests/bpf/progs/test_sockmap_listen.c
-index a39eba9f5201..a1cc58b10c7c 100644
---- a/tools/testing/selftests/bpf/progs/test_sockmap_listen.c
-+++ b/tools/testing/selftests/bpf/progs/test_sockmap_listen.c
-@@ -28,8 +28,8 @@ struct {
- 	__type(value, unsigned int);
- } verdict_map SEC(".maps");
- 
--static volatile bool test_sockmap; /* toggled by user-space */
--static volatile bool test_ingress; /* toggled by user-space */
-+bool test_sockmap = false; /* toggled by user-space */
-+bool test_ingress = false; /* toggled by user-space */
- 
- SEC("sk_skb/stream_parser")
- int prog_stream_parser(struct __sk_buff *skb)
-diff --git a/tools/testing/selftests/bpf/progs/test_static_linked1.c b/tools/testing/selftests/bpf/progs/test_static_linked1.c
-index ea1a6c4c7172..cae304045d9c 100644
---- a/tools/testing/selftests/bpf/progs/test_static_linked1.c
-+++ b/tools/testing/selftests/bpf/progs/test_static_linked1.c
-@@ -4,9 +4,9 @@
- #include <linux/bpf.h>
- #include <bpf/bpf_helpers.h>
- 
--/* 8-byte aligned .bss */
--static volatile long static_var1;
--static volatile int static_var11;
-+/* 8-byte aligned .data */
-+static volatile long static_var1 = 2;
-+static volatile int static_var2 = 3;
- int var1 = 0;
- /* 4-byte aligned .rodata */
- const volatile int rovar1;
-@@ -21,7 +21,7 @@ static __noinline int subprog(int x)
- SEC("raw_tp/sys_enter")
- int handler1(const void *ctx)
- {
--	var1 = subprog(rovar1) + static_var1 + static_var11;
-+	var1 = subprog(rovar1) + static_var1 + static_var2;
- 
- 	return 0;
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_static_linked2.c b/tools/testing/selftests/bpf/progs/test_static_linked2.c
-index 54d8d1ab577c..c54c4e865ed8 100644
---- a/tools/testing/selftests/bpf/progs/test_static_linked2.c
-+++ b/tools/testing/selftests/bpf/progs/test_static_linked2.c
-@@ -4,9 +4,9 @@
- #include <linux/bpf.h>
- #include <bpf/bpf_helpers.h>
- 
--/* 4-byte aligned .bss */
--static volatile int static_var2;
--static volatile int static_var22;
-+/* 4-byte aligned .data */
-+static volatile int static_var1 = 5;
-+static volatile int static_var2 = 6;
- int var2 = 0;
- /* 8-byte aligned .rodata */
- const volatile long rovar2;
-@@ -21,7 +21,7 @@ static __noinline int subprog(int x)
- SEC("raw_tp/sys_enter")
- int handler2(const void *ctx)
- {
--	var2 = subprog(rovar2) + static_var2 + static_var22;
-+	var2 = subprog(rovar2) + static_var1 + static_var2;
- 
- 	return 0;
- }
 -- 
-2.30.2
-
+js
