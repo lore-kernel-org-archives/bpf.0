@@ -2,82 +2,129 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C61CC433ED
-	for <bpf@archiver.kernel.org>; Fri,  7 May 2021 22:23:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4441FC433B4
+	for <bpf@archiver.kernel.org>; Fri,  7 May 2021 22:31:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5251661400
-	for <bpf@archiver.kernel.org>; Fri,  7 May 2021 22:23:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 13B5C6140E
+	for <bpf@archiver.kernel.org>; Fri,  7 May 2021 22:31:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbhEGWYp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 7 May 2021 18:24:45 -0400
-Received: from mga02.intel.com ([134.134.136.20]:49034 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229470AbhEGWYp (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 7 May 2021 18:24:45 -0400
-IronPort-SDR: pxGI/b5jc5C+UB/X2s9zski/IIzudOx/MWp8feNNbAG2gcMaz4XbO99DThgieXSQbc6p1CRV03
- JH8loTJyjqug==
-X-IronPort-AV: E=McAfee;i="6200,9189,9977"; a="185955807"
-X-IronPort-AV: E=Sophos;i="5.82,282,1613462400"; 
-   d="scan'208";a="185955807"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2021 15:23:43 -0700
-IronPort-SDR: wu49lprSn5yTXAGJGa/jXtNxLz73g2TkT2oI8klxsHLSzVmhpbbVNNwUFcg88TjEQZjkucXt0c
- BjWEO+1v3GSA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,282,1613462400"; 
-   d="scan'208";a="533849261"
-Received: from ranger.igk.intel.com ([10.102.21.164])
-  by fmsmga001.fm.intel.com with ESMTP; 07 May 2021 15:23:41 -0700
-Date:   Sat, 8 May 2021 00:11:35 +0200
-From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Magnus Karlsson <magnus.karlsson@gmail.com>,
-        Cristian Dumitrescu <cristian.dumitrescu@intel.com>,
-        intel-wired-lan <intel-wired-lan@lists.osuosl.org>,
-        bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@intel.com>,
-        edwin.verplanke@intel.com
-Subject: Re: [PATCH net-next 0/4] i40e: small improvements on XDP path
-Message-ID: <20210507221135.GB18159@ranger.igk.intel.com>
-References: <20210114143318.2171-1-cristian.dumitrescu@intel.com>
- <CAJ8uoz3YSuPj6F+GHkk6yXHryUEOUhVSg2pDVEVrFA6b8Hgu6g@mail.gmail.com>
- <20210118103233.49bfd205@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        id S229542AbhEGWcK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 7 May 2021 18:32:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50114 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229470AbhEGWcJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 7 May 2021 18:32:09 -0400
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB5DC061574;
+        Fri,  7 May 2021 15:31:08 -0700 (PDT)
+Received: by mail-ot1-x32d.google.com with SMTP id i23-20020a9d68d70000b02902dc19ed4c15so5234086oto.0;
+        Fri, 07 May 2021 15:31:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=I0YWXNTKMAQEd6z039aM9XkewcEru+auENvSRDSVALM=;
+        b=ZLVjAoadVZr1dEm4/yvhnrf8/J/nef7G15JbUbGrTvaphSPPg1NYoxyWbrvVrYSS1h
+         zIa96XTY8P0hpQ+yNemDEgMJuSG/c4WCmiNe6Nc+iCnLydkMAsdGrWvIm/17ma5Z4yM/
+         YzsvyYwW+WiotmISk+eiR/i8Cd7aUBrZpHgxnpBYVJ84BXnaaMaWQ2eKqxevUizYrrdW
+         YbtS/h3evHXgpLsmcR18uUbQaKsFRYpehUV3Ng/5C9YykCWFXuYzVQL41A0Sr+comc9P
+         aI9Yzg1U+9hzWSAs+VHaET9OhHIE/EcNaIBsMQFPLcf6+DcdHyLoOGNPJ3nmswEFT8wv
+         svyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=I0YWXNTKMAQEd6z039aM9XkewcEru+auENvSRDSVALM=;
+        b=Vfinu1tiKSfbT2HgkuLUh/RNaRjLZOTXwYIq9dUy+oHugPYJ/nn4t7XtwX5n6cZ0VP
+         AtT/ErTwnq+bWVZw+IAm1x2MLe3AJttM+jqk3R+Xzd5ITsR3SU9caFF1a4wfE7dVbRri
+         /Mn1vdPM0tSie4yW97HpK0dsCBxPrI2cBTnU+/ATQWc+ZVM9fuJC2PLap2hXXtKVeCLt
+         7ybj5YOpsDR2SITck9vpG6HdH9fUg1zgiaq/Ea7FbH2AcWjpFSQL3cWM48AsKi9ODrQn
+         iRCrLKR8AsY7dEaQuNQfr4/0w1PIpVnq/c7nyLj0BXp9J27G4buKDJC1eCDLrgaWBECi
+         gbcw==
+X-Gm-Message-State: AOAM531rHP/CKo+Zq5PKlXzvqN3YZkijNA8/eGWxA+N49gOfcoKS1mx+
+        TQ6oTARKtljW7QHcX3T06zfwi162wPk5YDqI6lEmUvvX
+X-Google-Smtp-Source: ABdhPJz6COeoWlO2jYoVGMFtMym8VH6Ykqhm4Rnoo8nk0d6rsnG/F5mHf4daWpwa7y0jBo0WQH9c2O2bb827AYiZUvk=
+X-Received: by 2002:a05:6830:1f12:: with SMTP id u18mr10532939otg.132.1620426667759;
+ Fri, 07 May 2021 15:31:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210118103233.49bfd205@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+References: <YJUBer3wWKSAeXe7@phenom.ffwll.local> <CAOWid-dmRsZUjF3cJ8+mx5FM9ksNQ_P9xY3jqxFiFMvN29SaLw@mail.gmail.com>
+ <YJVnO+TCRW83S6w4@phenom.ffwll.local> <CADnq5_Pvtj1vb0bak_gUkv9J3+vfsMZxVKTKYeUvwQCajAWoVQ@mail.gmail.com>
+ <YJVqL4c6SJc8wdkK@phenom.ffwll.local> <CADnq5_PHjiHy=Su_1VKr5ycdnXN-OuSXw0X_TeNqSj+TJs2MGA@mail.gmail.com>
+ <CADnq5_OjaPw5iF_82bjNPt6v-7OcRmXmXECcN+Gdg1NcucJiHA@mail.gmail.com>
+ <YJVwtS9XJlogZRqv@phenom.ffwll.local> <YJWWByISHSPqF+aN@slm.duckdns.org>
+ <CADnq5_Mwd-xHZQ4pt34=FPk2Gq3ij1FNHWsEz1LdS7_Dyo00iQ@mail.gmail.com> <YJWqIVnX9giaKMTG@slm.duckdns.org>
+In-Reply-To: <YJWqIVnX9giaKMTG@slm.duckdns.org>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Fri, 7 May 2021 18:30:56 -0400
+Message-ID: <CADnq5_PudV4ufQW=DqrDow_vvMQDCJVxjqZeXeTvM=6Xp+a_RQ@mail.gmail.com>
+Subject: Re: [RFC] Add BPF_PROG_TYPE_CGROUP_IOCTL
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Daniel Vetter <daniel@ffwll.ch>, Kenny Ho <y2kenny@gmail.com>,
+        Song Liu <songliubraving@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kenny Ho <Kenny.Ho@amd.com>,
+        "open list:CONTROL GROUP (CGROUP)" <cgroups@vger.kernel.org>,
+        Brian Welty <brian.welty@intel.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Network Development <netdev@vger.kernel.org>,
+        KP Singh <kpsingh@chromium.org>, Yonghong Song <yhs@fb.com>,
+        bpf <bpf@vger.kernel.org>, Dave Airlie <airlied@gmail.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Alex Deucher <alexander.deucher@amd.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Jan 18, 2021 at 10:32:33AM -0800, Jakub Kicinski wrote:
-> On Mon, 18 Jan 2021 08:31:23 +0100 Magnus Karlsson wrote:
-> > On Thu, Jan 14, 2021 at 3:34 PM Cristian Dumitrescu
-> > <cristian.dumitrescu@intel.com> wrote:
-> > >
-> > > This patchset introduces some small and straightforward improvements
-> > > to the Intel i40e driver XDP path. Each improvement is fully described
-> > > in its associated patch.
-> > 
-> > Thank you for these clean ups Cristian!
-> > 
-> > For the series:
-> > 
-> > Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
-> 
-> FWIW since this series is 100% driver code I'm expecting it will 
-> come downstream via Tony's tree. Please LMK if that's not the case.
+On Fri, May 7, 2021 at 4:59 PM Tejun Heo <tj@kernel.org> wrote:
+>
+> Hello,
+>
+> On Fri, May 07, 2021 at 03:55:39PM -0400, Alex Deucher wrote:
+> > The problem is temporal partitioning on GPUs is much harder to enforce
+> > unless you have a special case like SR-IOV.  Spatial partitioning, on
+> > AMD GPUs at least, is widely available and easily enforced.  What is
+> > the point of implementing temporal style cgroups if no one can enforce
+> > it effectively?
+>
+> So, if generic fine-grained partitioning can't be implemented, the right
+> thing to do is stopping pushing for full-blown cgroup interface for it. The
+> hardware simply isn't capable of being managed in a way which allows generic
+> fine-grained hierarchical scheduling and there's no point in bloating the
+> interface with half baked hardware dependent features.
+>
+> This isn't to say that there's no way to support them, but what have been
+> being proposed is way too generic and ambitious in terms of interface while
+> being poorly developed on the internal abstraction and mechanism front. If
+> the hardware can't do generic, either implement the barest minimum interface
+> (e.g. be a part of misc controller) or go driver-specific - the feature is
+> hardware specific anyway. I've repeated this multiple times in these
+> discussions now but it'd be really helpful to try to minimize the interace
+> while concentrating more on internal abstractions and actual control
+> mechanisms.
 
-I just realized that this set got somewhat abandonded. Tony, can you pick
-this? I wouldn't be surprised if it wouldn't apply cleanly anymore since
-it has been almost 4 months since the initial submission, but let's see...
-Otherwise we probably would have to ask Cristian to re-submit directly to
-IWL I guess.
+Maybe we are speaking past each other.  I'm not following.  We got
+here because a device specific cgroup didn't make sense.  With my
+Linux user hat on, that makes sense.  I don't want to write code to a
+bunch of device specific interfaces if I can avoid it.  But as for
+temporal vs spatial partitioning of the GPU, the argument seems to be
+a sort of hand-wavy one that both spatial and temporal partitioning
+make sense on CPUs, but only temporal partitioning makes sense on
+GPUs.  I'm trying to understand that assertion.  There are some GPUs
+that can more easily be temporally partitioned and some that can be
+more easily spatially partitioned.  It doesn't seem any different than
+CPUs.
+
+Alex
