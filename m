@@ -2,60 +2,60 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 790CDC43461
-	for <bpf@archiver.kernel.org>; Sat,  8 May 2021 22:09:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 604AFC43603
+	for <bpf@archiver.kernel.org>; Sat,  8 May 2021 22:09:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6BEAF61432
-	for <bpf@archiver.kernel.org>; Sat,  8 May 2021 22:09:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4805461001
+	for <bpf@archiver.kernel.org>; Sat,  8 May 2021 22:09:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229693AbhEHWKV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 8 May 2021 18:10:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46232 "EHLO
+        id S229742AbhEHWKX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 8 May 2021 18:10:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbhEHWKS (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 8 May 2021 18:10:18 -0400
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7586C061574;
-        Sat,  8 May 2021 15:09:15 -0700 (PDT)
-Received: by mail-qt1-x82a.google.com with SMTP id h21so5544927qtu.5;
-        Sat, 08 May 2021 15:09:15 -0700 (PDT)
+        with ESMTP id S229732AbhEHWKU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 8 May 2021 18:10:20 -0400
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF8EC06138C;
+        Sat,  8 May 2021 15:09:18 -0700 (PDT)
+Received: by mail-qt1-x829.google.com with SMTP id y12so9297393qtx.11;
+        Sat, 08 May 2021 15:09:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=wlJs7uKgRrKVYquQOhfr1Ax5B30l7MZiTJBcTYOyR4M=;
-        b=B0fJ50FjuwLYki5kIDudC8ABjvkFGRzwsQWQFOV7LwSJGCzedbwyWxpl4dgJeZ059e
-         0+Lm3WDTbD4V0igkjoxnW+hajxmdkGQYuAtkTMZje1yic+fbhOI5em7OGWfH/Z7CF+ze
-         Yf2GEZ6hpw4IfHEA4b+tV0C4uRLCgoMGEXe4H4YtfG6Q4gu9QR4mu4DnUXf0YzWDwmza
-         aM5aVK0deZtXaSbgtxAFFMFQ5s59SHUgb02C1HyZmZzQY6eGxEysld8Iyqtsv5U8Sy6D
-         y2gYch4m1ys3zsqrR00gvkqwuRmThryKhFgwiHTCkMCGgljxIAshReOP1yQ0DXo13wwT
-         +Uew==
+        bh=uz9J1zJKumDnC+H3DASRwpCq7TM2++iFeyTtmw6XOWA=;
+        b=bn+jhPUUWdrTp48FkzBc4xAKA9bwe9NNdvdW+QaqENeOi/yQjzspaQcz07LYAmyh1x
+         +K+CGoojiVkflvhKCRTAcDMmWARJpX3NV7f4YH4RIMxa4Jkg6I0pVVpB36rLITbvK8k0
+         gugC3nLaOegISPGdaEdcLAKqnLd210HPHyKcltE1+9Hv/miUdgP4Dqh+AT1wi7DMAZML
+         6aa3UCYAg9uMpCGUi+IQs57RrC2ykt1WtRtppko24iIm08Ad0Xk09og2zWsBKJwrBYiQ
+         PUO0HHdLt50WGwFB/8TVdHVNa2aXxzWkqXPJfVpol5n3aQHkxyNA3M/KLn87oWOHINDl
+         SgrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=wlJs7uKgRrKVYquQOhfr1Ax5B30l7MZiTJBcTYOyR4M=;
-        b=VsYERw/lntmO7Kc18wEf5evLqFuHUYAjUApqs8jPcaRC+TI4NGcdKuZxRXqSqaqxGq
-         MkDckOGy1D0D3WvIYTMuKvxqVhQX3zfkyY6pvPz12mbj1UXI08RveKFahMnBOdOhp8yr
-         3HIOzoYmpq9LVj1LOglBNzgkM8gTgFuPHDxxuXyjzwghTEw12DykCdJvPoV3/pE1bpoy
-         o8AGhVVzqBHtV9JCnPLZrcnBslaGvf9qOppm+L5kJE3sEdlhcuvKudQqj34TGWFSvaa1
-         uegvcmbSIKoBtRnXwpgQaVNBxV3XIJRTeNTJGazZ1JsFfZf2iw4mLcE7s8d2uQ+rodfv
-         1dtw==
-X-Gm-Message-State: AOAM5324YJ5Le+WDUBLqCqGehI5Za369hk4Z0hTWzjrvRYbw7A9R5SXE
-        WOJ6Y7TQKxj2vmDsLPVku9UGtkBSGPInuA==
-X-Google-Smtp-Source: ABdhPJzkkgTr3JfLkKLsORtgZDJa23gENArDIBy0nI3v+10tjkKLBTKtbivHTEaBEHT7E6TtHTen/w==
-X-Received: by 2002:ac8:502:: with SMTP id u2mr15313897qtg.218.1620511754964;
-        Sat, 08 May 2021 15:09:14 -0700 (PDT)
+        bh=uz9J1zJKumDnC+H3DASRwpCq7TM2++iFeyTtmw6XOWA=;
+        b=rIHVSQbNvYqGgMH1UhJPZM465Tj6m26q8CajXTwcIVg7rL5071obLS9LnDfieVOhNF
+         TIMhULsI/+xA8sF8vLVcRAiuLr8qxUj966CXqpvs7mR5zIBwVSizmuYc6J2HAlHW+8Hi
+         7sJFe66IvXj50UrOnNefGOvjR4RHA4un2sV9797bdeGiR68oQKi5/cFlX3Lf99LYg74v
+         DwklKqYCJgCqmLv153k+8fyxrjEwS9nOS0Cxe9OEaDLQFXBoaN5ZHk/1fKrF9v7zo5XL
+         /wC5e1AqXq9gfi6ZRBOjKOIxd7Mlez6KnV+3VPs5dCEA9XqqSIpZ+68KZIWer5Tr533A
+         urqA==
+X-Gm-Message-State: AOAM531mOE+vE7i9Go62EnemdUqzgsbzQADKvTcFGxJkSW2MA5eZDxLQ
+        FTdwe/8XWckFRuximwqZV7JuB4uJXgS4jA==
+X-Google-Smtp-Source: ABdhPJx7Vp+TcTZXrbhbNyWkMVIzvPKEtLAr68fC0VA/fNA8F4iPepvDTmREGeS0RlLP947rcfTdLA==
+X-Received: by 2002:ac8:5bc1:: with SMTP id b1mr15001360qtb.161.1620511757831;
+        Sat, 08 May 2021 15:09:17 -0700 (PDT)
 Received: from unknown.attlocal.net ([2600:1700:65a0:ab60:65fe:be14:6eed:46f])
-        by smtp.gmail.com with ESMTPSA id 189sm8080797qkd.51.2021.05.08.15.09.13
+        by smtp.gmail.com with ESMTPSA id 189sm8080797qkd.51.2021.05.08.15.09.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 May 2021 15:09:14 -0700 (PDT)
+        Sat, 08 May 2021 15:09:17 -0700 (PDT)
 From:   Cong Wang <xiyou.wangcong@gmail.com>
 To:     netdev@vger.kernel.org
 Cc:     bpf@vger.kernel.org, jiang.wang@bytedance.com,
@@ -65,9 +65,9 @@ Cc:     bpf@vger.kernel.org, jiang.wang@bytedance.com,
         Daniel Borkmann <daniel@iogearbox.net>,
         Jakub Sitnicki <jakub@cloudflare.com>,
         Lorenz Bauer <lmb@cloudflare.com>
-Subject: [Patch bpf-next v4 06/12] af_unix: implement ->psock_update_sk_prot()
-Date:   Sat,  8 May 2021 15:08:29 -0700
-Message-Id: <20210508220835.53801-7-xiyou.wangcong@gmail.com>
+Subject: [Patch bpf-next v4 08/12] sock_map: update sock type checks for AF_UNIX
+Date:   Sat,  8 May 2021 15:08:31 -0700
+Message-Id: <20210508220835.53801-9-xiyou.wangcong@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210508220835.53801-1-xiyou.wangcong@gmail.com>
 References: <20210508220835.53801-1-xiyou.wangcong@gmail.com>
@@ -79,8 +79,8 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Cong Wang <cong.wang@bytedance.com>
 
-Now we can implement unix_bpf_update_proto() to update
-sk_prot, particularly prot->close() and prot->unhash().
+Now AF_UNIX datagram supports sockmap and redirection,
+we can update the sock type checks for them accordingly.
 
 Cc: John Fastabend <john.fastabend@gmail.com>
 Cc: Daniel Borkmann <daniel@iogearbox.net>
@@ -88,140 +88,35 @@ Cc: Jakub Sitnicki <jakub@cloudflare.com>
 Cc: Lorenz Bauer <lmb@cloudflare.com>
 Signed-off-by: Cong Wang <cong.wang@bytedance.com>
 ---
- MAINTAINERS           |  1 +
- include/net/af_unix.h | 10 +++++++++
- net/unix/Makefile     |  1 +
- net/unix/af_unix.c    |  6 +++++-
- net/unix/unix_bpf.c   | 48 +++++++++++++++++++++++++++++++++++++++++++
- 5 files changed, 65 insertions(+), 1 deletion(-)
- create mode 100644 net/unix/unix_bpf.c
+ net/core/sock_map.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 4796ccf9f871..f9354cb422b1 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -10162,6 +10162,7 @@ F:	net/core/skmsg.c
- F:	net/core/sock_map.c
- F:	net/ipv4/tcp_bpf.c
- F:	net/ipv4/udp_bpf.c
-+F:	net/unix/unix_bpf.c
+diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+index 13b474d89f93..ee9a6dfcf269 100644
+--- a/net/core/sock_map.c
++++ b/net/core/sock_map.c
+@@ -533,6 +533,12 @@ static bool sk_is_udp(const struct sock *sk)
+ 	       sk->sk_protocol == IPPROTO_UDP;
+ }
  
- LANTIQ / INTEL Ethernet drivers
- M:	Hauke Mehrtens <hauke@hauke-m.de>
-diff --git a/include/net/af_unix.h b/include/net/af_unix.h
-index f42fdddecd41..cca645846af1 100644
---- a/include/net/af_unix.h
-+++ b/include/net/af_unix.h
-@@ -89,4 +89,14 @@ void unix_sysctl_unregister(struct net *net);
- static inline int unix_sysctl_register(struct net *net) { return 0; }
- static inline void unix_sysctl_unregister(struct net *net) {}
- #endif
++static bool sk_is_unix(const struct sock *sk)
++{
++	return sk->sk_type == SOCK_DGRAM &&
++	       sk->sk_family == AF_UNIX;
++}
 +
-+#ifdef CONFIG_BPF_SYSCALL
-+extern struct proto unix_proto;
-+
-+int unix_bpf_update_proto(struct sock *sk, struct sk_psock *psock, bool restore);
-+void __init unix_bpf_build_proto(void);
-+#else
-+static inline void __init unix_bpf_build_proto(void)
-+{}
-+#endif
- #endif
-diff --git a/net/unix/Makefile b/net/unix/Makefile
-index 54e58cc4f945..20491825b4d0 100644
---- a/net/unix/Makefile
-+++ b/net/unix/Makefile
-@@ -7,6 +7,7 @@ obj-$(CONFIG_UNIX)	+= unix.o
- 
- unix-y			:= af_unix.o garbage.o
- unix-$(CONFIG_SYSCTL)	+= sysctl_net_unix.o
-+unix-$(CONFIG_BPF_SYSCALL) += unix_bpf.o
- 
- obj-$(CONFIG_UNIX_DIAG)	+= unix_diag.o
- unix_diag-y		:= diag.o
-diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
-index 0f9a6dcca752..5424e8007858 100644
---- a/net/unix/af_unix.c
-+++ b/net/unix/af_unix.c
-@@ -786,12 +786,15 @@ static void unix_close(struct sock *sk, long timeout)
+ static bool sock_map_redirect_allowed(const struct sock *sk)
  {
+ 	if (sk_is_tcp(sk))
+@@ -552,6 +558,8 @@ static bool sock_map_sk_state_allowed(const struct sock *sk)
+ 		return (1 << sk->sk_state) & (TCPF_ESTABLISHED | TCPF_LISTEN);
+ 	else if (sk_is_udp(sk))
+ 		return sk_hashed(sk);
++	else if (sk_is_unix(sk))
++		return sk->sk_state == TCP_ESTABLISHED;
+ 
+ 	return false;
  }
- 
--static struct proto unix_proto = {
-+struct proto unix_proto = {
- 	.name			= "UNIX",
- 	.owner			= THIS_MODULE,
- 	.obj_size		= sizeof(struct unix_sock),
- 	.unhash			= unix_unhash,
- 	.close			= unix_close,
-+#ifdef CONFIG_BPF_SYSCALL
-+	.psock_update_sk_prot	= unix_bpf_update_proto,
-+#endif
- };
- 
- static struct sock *unix_create1(struct net *net, struct socket *sock, int kern)
-@@ -2973,6 +2976,7 @@ static int __init af_unix_init(void)
- 
- 	sock_register(&unix_family_ops);
- 	register_pernet_subsys(&unix_net_ops);
-+	unix_bpf_build_proto();
- out:
- 	return rc;
- }
-diff --git a/net/unix/unix_bpf.c b/net/unix/unix_bpf.c
-new file mode 100644
-index 000000000000..3ff71fb9aac8
---- /dev/null
-+++ b/net/unix/unix_bpf.c
-@@ -0,0 +1,48 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2021 Cong Wang <cong.wang@bytedance.com> */
-+
-+#include <linux/skmsg.h>
-+#include <linux/bpf.h>
-+#include <net/sock.h>
-+#include <net/af_unix.h>
-+
-+static struct proto *unix_prot_saved __read_mostly;
-+static DEFINE_SPINLOCK(unix_prot_lock);
-+static struct proto unix_bpf_prot;
-+
-+static void unix_bpf_rebuild_protos(struct proto *prot, const struct proto *base)
-+{
-+	*prot        = *base;
-+	prot->unhash = sock_map_unhash;
-+	prot->close  = sock_map_close;
-+}
-+
-+static void unix_bpf_check_needs_rebuild(struct proto *ops)
-+{
-+	if (unlikely(ops != smp_load_acquire(&unix_prot_saved))) {
-+		spin_lock_bh(&unix_prot_lock);
-+		if (likely(ops != unix_prot_saved)) {
-+			unix_bpf_rebuild_protos(&unix_bpf_prot, ops);
-+			smp_store_release(&unix_prot_saved, ops);
-+		}
-+		spin_unlock_bh(&unix_prot_lock);
-+	}
-+}
-+
-+int unix_bpf_update_proto(struct sock *sk, struct sk_psock *psock, bool restore)
-+{
-+	if (restore) {
-+		sk->sk_write_space = psock->saved_write_space;
-+		WRITE_ONCE(sk->sk_prot, psock->sk_proto);
-+		return 0;
-+	}
-+
-+	unix_bpf_check_needs_rebuild(psock->sk_proto);
-+	WRITE_ONCE(sk->sk_prot, &unix_bpf_prot);
-+	return 0;
-+}
-+
-+void __init unix_bpf_build_proto(void)
-+{
-+	unix_bpf_rebuild_protos(&unix_bpf_prot, &unix_proto);
-+}
 -- 
 2.25.1
 
