@@ -8,54 +8,54 @@ X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96AB5C43460
-	for <bpf@archiver.kernel.org>; Sat,  8 May 2021 22:09:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 77C48C43603
+	for <bpf@archiver.kernel.org>; Sat,  8 May 2021 22:09:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 68B8B6140E
-	for <bpf@archiver.kernel.org>; Sat,  8 May 2021 22:09:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 52F5F61001
+	for <bpf@archiver.kernel.org>; Sat,  8 May 2021 22:09:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbhEHWKL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 8 May 2021 18:10:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46188 "EHLO
+        id S229664AbhEHWKO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 8 May 2021 18:10:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbhEHWKL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 8 May 2021 18:10:11 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF9D2C06175F;
-        Sat,  8 May 2021 15:09:08 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id y12so9297230qtx.11;
-        Sat, 08 May 2021 15:09:08 -0700 (PDT)
+        with ESMTP id S229567AbhEHWKO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 8 May 2021 18:10:14 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9196DC06175F;
+        Sat,  8 May 2021 15:09:11 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id v4so504735qtp.1;
+        Sat, 08 May 2021 15:09:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=1LfAQAnVkXCYeUY7D3NvE6dhD/53ZEfmaqU4/OROOBA=;
-        b=DAeaYUanWHH9khG+lF+SCr8mTChgI+vPHkWiNvf8T/BqWSHp3mBhDA/TBT2qBrpFlA
-         Ffgs4G4HM6Zj6ow7zi2MTl2igVrqZl/CRN3UuYGyNFEI+BuQLqUNcueDfFGIJB6hwigP
-         cIyIMMjYNkVXfZaqPWcdQTIanqQ7uWtyjQNHjGjWjlUCF6QZwfIQVsAGlpIHWxBm/R0v
-         q96FIWr7aAgthww+TYgHgi9GtIpSEX3g+EWQlyYKDysT4f1R86vVrsv6JN433MB1sKxY
-         mNQA5qw0z6VIZq9t7ttZgY96JnOIku8a4uUDjPTgcn/QDTgUPp+ICde5Tc5aJzyfgAgA
-         o3QQ==
+        bh=lU6deMHw1f7T8Vy5QqfQAadD/G/Nn7rO2ZLLwGffBII=;
+        b=toHg32WaYqiKj0Elqih2fW+wjSMkpM61WLwJjzcIP0wYPvS9nQkL/XEsM5CCm0A58d
+         xBvvMlR8ZiL3k4aOHv/OZio7XHFon5db1ZcR1vI/YN2wVvWvgg5gstih7erZeUZiOBRi
+         aIcxt3+Krm2G1DWTYBbaBkks7/z7v6VHR7lHOZXT9gGudUv7a/9JRHOPRFaxPN6sUz/g
+         QvF/d/FWgKcYydYoWr4ecJ4m7e0OxC/LoS1mHj+tCVCEHS737KTK3wbnMVFwCw7wAvdc
+         DapAwvP7urcr7W5qBOOC5K7aSV8ALrp3ipjs5TTfA7RXJBlKEbIXlMHGPtHQ9lon5rOj
+         JIHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=1LfAQAnVkXCYeUY7D3NvE6dhD/53ZEfmaqU4/OROOBA=;
-        b=dceBUKHyiWsvTDyfAuz20WR8MCyItJ5Oevc6dtvFWb9alxdrP04GyJa9pqciHkNZYi
-         jSB3+gx+PDRuaCeiNd72StOH9V3I2Dz+FX7+X6kc7HWK/izqfz0VNvx7clvv3+QxRN2T
-         L53Aw5Qax3jF0tyymkcNmXH6Jg6G3FlIE3wQwtM6FSRergpqZQBXwpOxZ0KYjaKnQJdv
-         iBhEdJlsI0pd/dKx1M7dtUxJ3rlHTcmlydAh41DMkmJwbjEnb0UZe4sP6t+sBe7um+L7
-         XyjMGvTd7T/QNr8bNu32X/JWDzJw4s0i7soRG49JB1EdFmrOqQi+dO2LpNaqRyFZIH8p
-         ivIA==
-X-Gm-Message-State: AOAM530TkUwXxrWnvwI2eXKvg0IEJbrfnABChFLDOMNXH32VuANrhrz5
-        VAxGA5enUmsP0BPEtrsrvi9L0IdURGPOyA==
-X-Google-Smtp-Source: ABdhPJw2LGpQODRu9JYprHauDvbUFx26mNS1tmUUIrn3VKn8upmcu6pRiFyhK5zxb9PcgTSgJ6mdSA==
-X-Received: by 2002:ac8:5810:: with SMTP id g16mr15091483qtg.135.1620511747813;
-        Sat, 08 May 2021 15:09:07 -0700 (PDT)
+        bh=lU6deMHw1f7T8Vy5QqfQAadD/G/Nn7rO2ZLLwGffBII=;
+        b=mXzWuKuF4urO58HZ0kZt+OhqDskONFKV5PbQGjsbXktmUzVszV2pCO4gClwi6yHm4b
+         gfg+fM0r+nqDAdbESzg1ZgtjSh1lG4SLSW0Ooy8h65JwtceO2ixEhBjQLJg9cprHVoQ5
+         Jml91QrOM3wnKLJRp3DWVClC1zfOFLT1zihQXScbC5Ejmn4zU6yYAKFK8PngYHv1dYmH
+         BtxpjOxm4hDLAxHblyvxxc4u0IifeiUtdTbnq7e/8GJASkN1VfW7h+9cMHi/NwS1Phhy
+         H4ivwk9Z/avUG+Bu6ZjJKFGceyR6giZj5grDTF3KJVbjrgT3LzWlyH1JKSINATLeLips
+         u3HA==
+X-Gm-Message-State: AOAM530kgaXXi659aKg2Fu+CxK06DGm/+AgZC+zOMONpCg/J+yQh/6oE
+        ozQqbxjHT40EZkl14Uz7pkj0rO11hpWwIw==
+X-Google-Smtp-Source: ABdhPJxhbfPuz7Sx0z8Lk0C1xiMdpNGtlvGVJTqY2egkcrdV9HFwWt/g2Dpos94c34+NatASZtNgUA==
+X-Received: by 2002:ac8:7b8c:: with SMTP id p12mr15432903qtu.137.1620511750688;
+        Sat, 08 May 2021 15:09:10 -0700 (PDT)
 Received: from unknown.attlocal.net ([2600:1700:65a0:ab60:65fe:be14:6eed:46f])
-        by smtp.gmail.com with ESMTPSA id 189sm8080797qkd.51.2021.05.08.15.09.06
+        by smtp.gmail.com with ESMTPSA id 189sm8080797qkd.51.2021.05.08.15.09.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 May 2021 15:09:07 -0700 (PDT)
+        Sat, 08 May 2021 15:09:10 -0700 (PDT)
 From:   Cong Wang <xiyou.wangcong@gmail.com>
 To:     netdev@vger.kernel.org
 Cc:     bpf@vger.kernel.org, jiang.wang@bytedance.com,
@@ -65,9 +65,9 @@ Cc:     bpf@vger.kernel.org, jiang.wang@bytedance.com,
         Daniel Borkmann <daniel@iogearbox.net>,
         Jakub Sitnicki <jakub@cloudflare.com>,
         Lorenz Bauer <lmb@cloudflare.com>
-Subject: [Patch bpf-next v4 01/12] sock_map: relax config dependency to CONFIG_NET
-Date:   Sat,  8 May 2021 15:08:24 -0700
-Message-Id: <20210508220835.53801-2-xiyou.wangcong@gmail.com>
+Subject: [Patch bpf-next v4 03/12] af_unix: set TCP_ESTABLISHED for datagram sockets too
+Date:   Sat,  8 May 2021 15:08:26 -0700
+Message-Id: <20210508220835.53801-4-xiyou.wangcong@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210508220835.53801-1-xiyou.wangcong@gmail.com>
 References: <20210508220835.53801-1-xiyou.wangcong@gmail.com>
@@ -79,12 +79,12 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Cong Wang <cong.wang@bytedance.com>
 
-Currently sock_map still has hard dependency on CONFIG_INET,
-but there is no actual functional dependency on it after
-we introduce ->psock_update_sk_prot().
+Currently only unix stream socket sets TCP_ESTABLISHED,
+datagram socket can set this too when they connect to its
+peer socket. At least __ip4_datagram_connect() does the same.
 
-We have to extend it to CONFIG_NET now as we are going to
-support AF_UNIX.
+This will be used by a later patch to determine whether an
+AF_UNIX datagram socket can be redirected in sockmap.
 
 Cc: John Fastabend <john.fastabend@gmail.com>
 Cc: Daniel Borkmann <daniel@iogearbox.net>
@@ -92,101 +92,48 @@ Cc: Jakub Sitnicki <jakub@cloudflare.com>
 Cc: Lorenz Bauer <lmb@cloudflare.com>
 Signed-off-by: Cong Wang <cong.wang@bytedance.com>
 ---
- include/linux/bpf.h | 38 ++++++++++++++++++++------------------
- init/Kconfig        |  2 +-
- net/core/Makefile   |  2 --
- 3 files changed, 21 insertions(+), 21 deletions(-)
+ net/unix/af_unix.c | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 02b02cb29ce2..b818003739e8 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1826,6 +1826,12 @@ static inline bool bpf_map_is_dev_bound(struct bpf_map *map)
- 
- struct bpf_map *bpf_map_offload_map_alloc(union bpf_attr *attr);
- void bpf_map_offload_map_free(struct bpf_map *map);
-+
-+int sock_map_get_from_fd(const union bpf_attr *attr, struct bpf_prog *prog);
-+int sock_map_prog_detach(const union bpf_attr *attr, enum bpf_prog_type ptype);
-+int sock_map_update_elem_sys(struct bpf_map *map, void *key, void *value, u64 flags);
-+void sock_map_unhash(struct sock *sk);
-+void sock_map_close(struct sock *sk, long timeout);
- #else
- static inline int bpf_prog_offload_init(struct bpf_prog *prog,
- 					union bpf_attr *attr)
-@@ -1851,24 +1857,6 @@ static inline struct bpf_map *bpf_map_offload_map_alloc(union bpf_attr *attr)
- static inline void bpf_map_offload_map_free(struct bpf_map *map)
- {
+diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
+index 26d18f948737..e08918c45892 100644
+--- a/net/unix/af_unix.c
++++ b/net/unix/af_unix.c
+@@ -487,6 +487,7 @@ static void unix_dgram_disconnected(struct sock *sk, struct sock *other)
+ 			other->sk_error_report(other);
+ 		}
+ 	}
++	sk->sk_state = other->sk_state = TCP_CLOSE;
  }
--#endif /* CONFIG_NET && CONFIG_BPF_SYSCALL */
--
--#if defined(CONFIG_INET) && defined(CONFIG_BPF_SYSCALL)
--int sock_map_get_from_fd(const union bpf_attr *attr, struct bpf_prog *prog);
--int sock_map_prog_detach(const union bpf_attr *attr, enum bpf_prog_type ptype);
--int sock_map_update_elem_sys(struct bpf_map *map, void *key, void *value, u64 flags);
--void sock_map_unhash(struct sock *sk);
--void sock_map_close(struct sock *sk, long timeout);
--
--void bpf_sk_reuseport_detach(struct sock *sk);
--int bpf_fd_reuseport_array_lookup_elem(struct bpf_map *map, void *key,
--				       void *value);
--int bpf_fd_reuseport_array_update_elem(struct bpf_map *map, void *key,
--				       void *value, u64 map_flags);
--#else
--static inline void bpf_sk_reuseport_detach(struct sock *sk)
--{
--}
  
- #ifdef CONFIG_BPF_SYSCALL
- static inline int sock_map_get_from_fd(const union bpf_attr *attr,
-@@ -1888,7 +1876,21 @@ static inline int sock_map_update_elem_sys(struct bpf_map *map, void *key, void
- {
- 	return -EOPNOTSUPP;
- }
-+#endif /* CONFIG_BPF_SYSCALL */
-+#endif /* CONFIG_NET && CONFIG_BPF_SYSCALL */
- 
-+#if defined(CONFIG_INET) && defined(CONFIG_BPF_SYSCALL)
-+void bpf_sk_reuseport_detach(struct sock *sk);
-+int bpf_fd_reuseport_array_lookup_elem(struct bpf_map *map, void *key,
-+				       void *value);
-+int bpf_fd_reuseport_array_update_elem(struct bpf_map *map, void *key,
-+				       void *value, u64 map_flags);
-+#else
-+static inline void bpf_sk_reuseport_detach(struct sock *sk)
-+{
-+}
+ static void unix_sock_destructor(struct sock *sk)
+@@ -1197,6 +1198,9 @@ static int unix_dgram_connect(struct socket *sock, struct sockaddr *addr,
+ 		unix_peer(sk) = other;
+ 		unix_state_double_unlock(sk, other);
+ 	}
 +
-+#ifdef CONFIG_BPF_SYSCALL
- static inline int bpf_fd_reuseport_array_lookup_elem(struct bpf_map *map,
- 						     void *key, void *value)
- {
-diff --git a/init/Kconfig b/init/Kconfig
-index ca559ccdaa32..a8d9b0e05da1 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -1723,7 +1723,7 @@ config BPF_SYSCALL
- 	select IRQ_WORK
- 	select TASKS_TRACE_RCU
- 	select BINARY_PRINTF
--	select NET_SOCK_MSG if INET
-+	select NET_SOCK_MSG if NET
- 	default n
- 	help
- 	  Enable the bpf() system call that allows to manipulate eBPF
-diff --git a/net/core/Makefile b/net/core/Makefile
-index f7f16650fe9e..35ced6201814 100644
---- a/net/core/Makefile
-+++ b/net/core/Makefile
-@@ -33,8 +33,6 @@ obj-$(CONFIG_HWBM) += hwbm.o
- obj-$(CONFIG_NET_DEVLINK) += devlink.o
- obj-$(CONFIG_GRO_CELLS) += gro_cells.o
- obj-$(CONFIG_FAILOVER) += failover.o
--ifeq ($(CONFIG_INET),y)
- obj-$(CONFIG_NET_SOCK_MSG) += skmsg.o
- obj-$(CONFIG_BPF_SYSCALL) += sock_map.o
--endif
- obj-$(CONFIG_BPF_SYSCALL) += bpf_sk_storage.o
++	if (unix_peer(sk))
++		sk->sk_state = other->sk_state = TCP_ESTABLISHED;
+ 	return 0;
+ 
+ out_unlock:
+@@ -1429,12 +1433,10 @@ static int unix_socketpair(struct socket *socka, struct socket *sockb)
+ 	init_peercred(ska);
+ 	init_peercred(skb);
+ 
+-	if (ska->sk_type != SOCK_DGRAM) {
+-		ska->sk_state = TCP_ESTABLISHED;
+-		skb->sk_state = TCP_ESTABLISHED;
+-		socka->state  = SS_CONNECTED;
+-		sockb->state  = SS_CONNECTED;
+-	}
++	ska->sk_state = TCP_ESTABLISHED;
++	skb->sk_state = TCP_ESTABLISHED;
++	socka->state  = SS_CONNECTED;
++	sockb->state  = SS_CONNECTED;
+ 	return 0;
+ }
+ 
 -- 
 2.25.1
 
