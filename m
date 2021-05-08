@@ -2,69 +2,75 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 858CCC433ED
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B81B3C43470
 	for <bpf@archiver.kernel.org>; Sat,  8 May 2021 22:09:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4E78C61400
+	by mail.kernel.org (Postfix) with ESMTP id 8B04061410
 	for <bpf@archiver.kernel.org>; Sat,  8 May 2021 22:09:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbhEHWKL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 8 May 2021 18:10:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46186 "EHLO
+        id S229647AbhEHWKN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 8 May 2021 18:10:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbhEHWKL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 8 May 2021 18:10:11 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D75A9C061574;
-        Sat,  8 May 2021 15:09:07 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id v4so504655qtp.1;
-        Sat, 08 May 2021 15:09:07 -0700 (PDT)
+        with ESMTP id S229567AbhEHWKN (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 8 May 2021 18:10:13 -0400
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3158AC061574;
+        Sat,  8 May 2021 15:09:10 -0700 (PDT)
+Received: by mail-qk1-x736.google.com with SMTP id l129so12078036qke.8;
+        Sat, 08 May 2021 15:09:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZPbyAUxbIzN91k5DP/vjyxY8nxR3wFAzw6zVf4qaeG8=;
-        b=pmaqPKjoGfT4GAFxP1zypJtE6Vqe2TcxFrfDzkaxy22Z/i2pbBfwizjLr8NyiAt6pR
-         Q47rarkunI1pSQFLP1H8dFH9svUdlQx61ow4Kw9qiKUuCYi6CfKd1maCZcMExNWJQlwr
-         s1lODpg4P++4bxVgDuekJ69yzsjzrQEaNrc/Xglq20hj0vpZeRTXc9QAZPQuyNfBcS12
-         NkIx2Y3oMS0Kzs8mUxymi4o1uVPm/PtESPVU69ArG1qPZs5vPNZA258YmOPE72IN00cs
-         qUr5eJxH1atS8ELgA0pRbGjT51EW6t7ZK/LH+e9Rd6m4Qj7jBlJ6H1DWvBwVInuEVzsD
-         DrWA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=JM9PvYADBYWyKEwwlSvfdrhaqUsWknbhdHFklgI2YqQ=;
+        b=bZyvvHB+/aARPmvIVL3mD6EBz0wh8NFFDofXhMRXXKyTONMvdIWurCaobYlpeAA01W
+         BUl4ZPjmfWNIkoIfTvixTenRyYfSwhobSIUGxTaZn3/fgketRhnAC/abNPryyOBpzwZo
+         PpDkKzUzB3VQ2NrNQqYYTAQAaoYbEsOw2g7omz9oLvE2KPdJ52EadJaMZ1YBuP78rVak
+         js5gOAxRKODb8YV9NtO34M4OB/j/yicIdHs74KQzRj2dmxqAbyjVUNbJ32Qjxb/Fs9vN
+         OrBOPP4+1xkF6l5DVIf/wv6VWN1+kmFbvuHuK4EXVwPhJ/4SX6L3a0IXYNMFrJCJ0kRi
+         c/bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZPbyAUxbIzN91k5DP/vjyxY8nxR3wFAzw6zVf4qaeG8=;
-        b=iE28kzXECmtkoxlPlRNi0g+2hg9EIWztR48LyIKMeaofYJFodq+bi9chuQINy2LFGd
-         Gg9f10fJZNKVEuiiiL/y/GPpE3Jmqlek64llMgBpTtvcCZbTB2tcs7P1zJ/9avB1qMsB
-         8CYEwgHYr5xwZQTzJ5kWiCtlH7XCHIDXldfacTPnjMdNsC0weoNM1tYlpTZWWIDZGlu0
-         1dUyLiu589P+jU2WCwUJX9cuqFfJ6Ych37BS3nNNCSfatKBkvgZJK6h0HOPCsjwYtrZG
-         yGW6U0dMhNA9fR6DQWpTS/lNz+AbTOqd802uc1Y9sybFA+PEe4TjObEl8wegVkJM8y/w
-         lRXQ==
-X-Gm-Message-State: AOAM531z5tGJ50M6GkUZgBdVoMf0gmh3s/X7E1JVFhbKD9Q9KGqVmY5+
-        cRCornuaqiFyXzxSgPeWEtbC6UdMC8GIBA==
-X-Google-Smtp-Source: ABdhPJwpgB7ca9ZuwzhCaQIehkYBlciFvdw+zxybPt+WNwa2nAUSp39ZRTjykQevFOgOdvXhiBYCxg==
-X-Received: by 2002:ac8:7d95:: with SMTP id c21mr15242440qtd.11.1620511746386;
-        Sat, 08 May 2021 15:09:06 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=JM9PvYADBYWyKEwwlSvfdrhaqUsWknbhdHFklgI2YqQ=;
+        b=B2OYa2nsPCuV9QfeWTDC2fnFmv5w7fPkbsr5ox0MH9mlm7ya41AaSkE7eFtavegLgN
+         pOcGe71WWT7CFT6yuBq0CYMAD1QC38IvKtsFDsvlA6hTJibq7xeFdq/zlniG6IWfto7R
+         XsC8BI9AQcbRYm/PA++2zZkbLLJ+h8ccGGNQZ0eQyRMIIaEK6ChsQcYfOs94gT3NYcZy
+         +lotdO13Q74rgkqZ16kH/R21VzBX+13lf7xTT7uCGcYUcXTrBFotMERpl3MTKVQrHuFx
+         78RAzLkZWeN03vCWtnyiMMbTUQAUZWQfT4U0gclUrXLWi5RMiYAFC4h6lG3NeewaTxaU
+         WoAA==
+X-Gm-Message-State: AOAM532aPFeTQqrPBjtvCkgZPpjYJSL2CV0jRE8pB+8PsN/VziAiNgmU
+        +vYNN4z/i1sSupQEfKtM5rLccUVsj+EKHA==
+X-Google-Smtp-Source: ABdhPJxpsVRos5s5jOVIJNwraUr3rZd/7fWgZEY3TiWTzjJlcMRf3+OHR7mMeJvyLdZSto9tRYcA2A==
+X-Received: by 2002:a37:5ca:: with SMTP id 193mr15843663qkf.356.1620511749299;
+        Sat, 08 May 2021 15:09:09 -0700 (PDT)
 Received: from unknown.attlocal.net ([2600:1700:65a0:ab60:65fe:be14:6eed:46f])
-        by smtp.gmail.com with ESMTPSA id 189sm8080797qkd.51.2021.05.08.15.09.05
+        by smtp.gmail.com with ESMTPSA id 189sm8080797qkd.51.2021.05.08.15.09.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 May 2021 15:09:06 -0700 (PDT)
+        Sat, 08 May 2021 15:09:08 -0700 (PDT)
 From:   Cong Wang <xiyou.wangcong@gmail.com>
 To:     netdev@vger.kernel.org
 Cc:     bpf@vger.kernel.org, jiang.wang@bytedance.com,
         duanxiongchun@bytedance.com, wangdongdong.6@bytedance.com,
-        Cong Wang <cong.wang@bytedance.com>
-Subject: [Patch bpf-next v4 00/12] sockmap: add sockmap support for unix datagram socket
-Date:   Sat,  8 May 2021 15:08:23 -0700
-Message-Id: <20210508220835.53801-1-xiyou.wangcong@gmail.com>
+        Cong Wang <cong.wang@bytedance.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        Lorenz Bauer <lmb@cloudflare.com>
+Subject: [Patch bpf-next v4 02/12] af_unix: implement ->read_sock() for sockmap
+Date:   Sat,  8 May 2021 15:08:25 -0700
+Message-Id: <20210508220835.53801-3-xiyou.wangcong@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210508220835.53801-1-xiyou.wangcong@gmail.com>
+References: <20210508220835.53801-1-xiyou.wangcong@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -73,65 +79,78 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Cong Wang <cong.wang@bytedance.com>
 
-This is the last patchset of the original large patchset. In the
-previous patchset, a new BPF sockmap program BPF_SK_SKB_VERDICT
-was introduced and UDP began to support it too. In this patchset,
-we add BPF_SK_SKB_VERDICT support to Unix datagram socket, so that
-we can finally splice Unix datagram socket and UDP socket. Please
-check each patch description for more details.
+Implement ->read_sock() for AF_UNIX datagram socket, it is
+pretty much similar to udp_read_sock().
 
-To see the big picture, the previous patchsets are available here:
-https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/commit/?id=1e0ab70778bd86a90de438cc5e1535c115a7c396
-https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/commit/?id=89d69c5d0fbcabd8656459bc8b1a476d6f1efee4
-
-and this patchset is available here:
-https://github.com/congwang/linux/tree/sockmap3
-
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Jakub Sitnicki <jakub@cloudflare.com>
+Cc: Lorenz Bauer <lmb@cloudflare.com>
+Signed-off-by: Cong Wang <cong.wang@bytedance.com>
 ---
-v4: fix af_unix disconnect case
-    add unix_unhash()
-    split out two small patches
-    reduce u->iolock critical section
-    remove an unused parameter of __unix_dgram_recvmsg()
+ net/unix/af_unix.c | 35 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-v3: fix Kconfig dependency
-    make unix_read_sock() static
-    fix a UAF in unix_release()
-    add a missing header unix_bpf.c
-
-v2: separate out from the original large patchset
-    rebase to the latest bpf-next
-    clean up unix_read_sock()
-    export sock_map_close()
-    factor out some helpers in selftests for code reuse
-
-Cong Wang (12):
-  sock_map: relax config dependency to CONFIG_NET
-  af_unix: implement ->read_sock() for sockmap
-  af_unix: set TCP_ESTABLISHED for datagram sockets too
-  sock_map: export symbols for af_unix module
-  af_unix: prepare for sockmap support
-  af_unix: implement ->psock_update_sk_prot()
-  af_unix: implement unix_dgram_bpf_recvmsg()
-  sock_map: update sock type checks for AF_UNIX
-  selftests/bpf: factor out udp_socketpair()
-  selftests/bpf: factor out add_to_sockmap()
-  selftests/bpf: add a test case for unix sockmap
-  selftests/bpf: add test cases for redirection between udp and unix
-
- MAINTAINERS                                   |   1 +
- include/linux/bpf.h                           |  38 +-
- include/net/af_unix.h                         |  13 +
- init/Kconfig                                  |   2 +-
- net/core/Makefile                             |   2 -
- net/core/sock_map.c                           |  10 +
- net/unix/Makefile                             |   1 +
- net/unix/af_unix.c                            |  90 +++-
- net/unix/unix_bpf.c                           |  95 +++++
- .../selftests/bpf/prog_tests/sockmap_listen.c | 386 ++++++++++++++----
- 10 files changed, 535 insertions(+), 103 deletions(-)
- create mode 100644 net/unix/unix_bpf.c
-
+diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
+index 5a31307ceb76..26d18f948737 100644
+--- a/net/unix/af_unix.c
++++ b/net/unix/af_unix.c
+@@ -661,6 +661,8 @@ static ssize_t unix_stream_splice_read(struct socket *,  loff_t *ppos,
+ 				       unsigned int flags);
+ static int unix_dgram_sendmsg(struct socket *, struct msghdr *, size_t);
+ static int unix_dgram_recvmsg(struct socket *, struct msghdr *, size_t, int);
++static int unix_read_sock(struct sock *sk, read_descriptor_t *desc,
++			  sk_read_actor_t recv_actor);
+ static int unix_dgram_connect(struct socket *, struct sockaddr *,
+ 			      int, int);
+ static int unix_seqpacket_sendmsg(struct socket *, struct msghdr *, size_t);
+@@ -738,6 +740,7 @@ static const struct proto_ops unix_dgram_ops = {
+ 	.listen =	sock_no_listen,
+ 	.shutdown =	unix_shutdown,
+ 	.sendmsg =	unix_dgram_sendmsg,
++	.read_sock =	unix_read_sock,
+ 	.recvmsg =	unix_dgram_recvmsg,
+ 	.mmap =		sock_no_mmap,
+ 	.sendpage =	sock_no_sendpage,
+@@ -2183,6 +2186,38 @@ static int unix_dgram_recvmsg(struct socket *sock, struct msghdr *msg,
+ 	return err;
+ }
+ 
++static int unix_read_sock(struct sock *sk, read_descriptor_t *desc,
++			  sk_read_actor_t recv_actor)
++{
++	int copied = 0;
++
++	while (1) {
++		struct unix_sock *u = unix_sk(sk);
++		struct sk_buff *skb;
++		int used, err;
++
++		mutex_lock(&u->iolock);
++		skb = skb_recv_datagram(sk, 0, 1, &err);
++		mutex_unlock(&u->iolock);
++		if (!skb)
++			return err;
++
++		used = recv_actor(desc, skb, 0, skb->len);
++		if (used <= 0) {
++			if (!copied)
++				copied = used;
++			break;
++		} else if (used <= skb->len) {
++			copied += used;
++		}
++
++		if (!desc->count)
++			break;
++	}
++
++	return copied;
++}
++
+ /*
+  *	Sleep until more data has arrived. But check for races..
+  */
 -- 
 2.25.1
 
