@@ -2,200 +2,217 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B3636C433B4
-	for <bpf@archiver.kernel.org>; Sun,  9 May 2021 05:37:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CC38C43460
+	for <bpf@archiver.kernel.org>; Mon, 10 May 2021 01:42:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6805961430
-	for <bpf@archiver.kernel.org>; Sun,  9 May 2021 05:37:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 76587613EE
+	for <bpf@archiver.kernel.org>; Mon, 10 May 2021 01:42:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229631AbhEIFi5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 9 May 2021 01:38:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57552 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbhEIFi4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 9 May 2021 01:38:56 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8F18C061573;
-        Sat,  8 May 2021 22:37:53 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id i13so11524501pfu.2;
-        Sat, 08 May 2021 22:37:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=b+CaOKHF2wRvgJqlD3ywdIdIByKyjWji44jkH4zC5XE=;
-        b=UPUUPCpAFgxvFi8kOr9rTxVfLCS2lmGp+gF17KpKnQzKR0JWYJDALIuqMKMFZeZPS+
-         zqzhcmJwD+K8bkOILZSP5k48OJ+UXpRXCCphisSy2FG0QtIZpj1gAp4qP8KeyPBG+Nib
-         nmuXlSAv62euCy/Xvg9UGpTVkGzVXY3cYAB4ba1o3v73TfVfvqrjKJQQRfr+rffuYd7T
-         +fy4hcxCDTx+SUKJPqBteps8LUdXxbTPbFd/o8AgRCMXh4rlePvHLqSZdEGFp2t+vFnM
-         gzCU+kFWp60iKPGc2bXgzebeOuurK2V5wCtuDR0xArPpFHqbJOPkaEvP/nDkPoewHuey
-         M+uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=b+CaOKHF2wRvgJqlD3ywdIdIByKyjWji44jkH4zC5XE=;
-        b=fZcZD6HlAQrQqu7Q1zPdRVB56FYEJBlKVTEnbLb2oLR0Qlu3Xf5kR1piqDQOrUZQHi
-         GQWoVD6rp4gQmnOhluCGe7mj36NxRhbKToO7MxS5Gnq7e+SalN/WnVopIUn4MFoifGDm
-         /kZwfXEnef/MoXYrr0zXmUhAEwYsrC9NwM1TYmMxR47/GkmaBCiZ2LzdT6H3qBfKiNiE
-         oXSys5pkibgjhgCrQjizsymiv9/0PCT10P1Gq/aky+yJgLioqleCLApykUkXjrUCmSro
-         SB8AjA4hnShgS7T6qymnuTjYG/EijeVWiVuCc+LE42A1ELGDcI0CYSAxhn+bmAdNkSY+
-         7xzg==
-X-Gm-Message-State: AOAM531GFZZGlib1GHT5eKKd2ZUTyssEhiVzTymo9xocrYGAfQ+Sk7d3
-        WFFNNo2X55fTg4Eik+Aqh8gQ0Uvo59ZF8qLN6P8=
-X-Google-Smtp-Source: ABdhPJxTV4Ap2Y95o+74XVJu4vKuHmNfphPRrJx/LeMosQlF6fkWzBsT+BEK+nEznSMp7rDYeSM+TipLT2F52FmNnf8=
-X-Received: by 2002:a62:b609:0:b029:28e:af60:60f5 with SMTP id
- j9-20020a62b6090000b029028eaf6060f5mr18558879pff.43.1620538673181; Sat, 08
- May 2021 22:37:53 -0700 (PDT)
+        id S230107AbhEJBnn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 9 May 2021 21:43:43 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:2421 "EHLO
+        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230034AbhEJBnm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 9 May 2021 21:43:42 -0400
+Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4FdkJF6KyJzCr4T;
+        Mon, 10 May 2021 09:39:57 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.56) by
+ DGGEMS414-HUB.china.huawei.com (10.3.19.214) with Microsoft SMTP Server id
+ 14.3.498.0; Mon, 10 May 2021 09:42:33 +0800
+From:   Yunsheng Lin <linyunsheng@huawei.com>
+To:     <davem@davemloft.net>, <kuba@kernel.org>
+CC:     <olteanv@gmail.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <andriin@fb.com>, <edumazet@google.com>, <weiwan@google.com>,
+        <cong.wang@bytedance.com>, <ap420073@gmail.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linuxarm@openeuler.org>, <mkl@pengutronix.de>,
+        <linux-can@vger.kernel.org>, <jhs@mojatatu.com>,
+        <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
+        <andrii@kernel.org>, <kafai@fb.com>, <songliubraving@fb.com>,
+        <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
+        <bpf@vger.kernel.org>, <jonas.bonn@netrounds.com>,
+        <pabeni@redhat.com>, <mzhivich@akamai.com>, <johunt@akamai.com>,
+        <albcamus@gmail.com>, <kehuan.feng@gmail.com>,
+        <a.fatoum@pengutronix.de>, <atenart@kernel.org>,
+        <alexander.duyck@gmail.com>, <hdanton@sina.com>, <jgross@suse.com>,
+        <JKosina@suse.com>, <mkubecek@suse.cz>, <bjorn@kernel.org>,
+        <alobakin@pm.me>
+Subject: [PATCH net v6 2/3] net: sched: fix endless tx action reschedule during deactivation
+Date:   Mon, 10 May 2021 09:42:35 +0800
+Message-ID: <1620610956-56306-3-git-send-email-linyunsheng@huawei.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1620610956-56306-1-git-send-email-linyunsheng@huawei.com>
+References: <1620610956-56306-1-git-send-email-linyunsheng@huawei.com>
 MIME-Version: 1.0
-References: <20210402192823.bqwgipmky3xsucs5@ast-mbp> <CAM_iQpUfv7c19zFN1Y5-cSUiVwpk0bmtBMSxZoELgDOFCQ=qAw@mail.gmail.com>
- <20210402234500.by3wigegeluy5w7j@ast-mbp> <CAM_iQpWf2aYbY=tKejb=nx7LWBLo1woTp-n4wOLhkUuDCz8u-Q@mail.gmail.com>
- <20210412230151.763nqvaadrrg77kd@ast-mbp.dhcp.thefacebook.com>
- <CAM_iQpWePmmpr0RKqCrQ=NPiGrq2Tx9OU9y3e4CTzFjvh5t47w@mail.gmail.com>
- <CAADnVQLsmULxJYq9rHS4xyg=VAUeexJTh35vTWTVgjeqwX4D6g@mail.gmail.com>
- <CAM_iQpVtxgZNeqh4_Pqftc3D163JnRvP3AZRuFrYNeyWLgVBVA@mail.gmail.com>
- <CAADnVQLFehCeQRbwEQ9VM-=Y3V3es2Ze8gFPs6cZHwNH0Ct7vw@mail.gmail.com>
- <CAM_iQpWDhoY_msU=AowHFq3N3OuQpvxd2ADP_Z+gxBfGduhrPA@mail.gmail.com>
- <20210427020159.hhgyfkjhzjk3lxgs@ast-mbp.dhcp.thefacebook.com>
- <CAM_iQpVE4XG7SPAVBmV2UtqUANg3X-1ngY7COYC03NrT6JkZ+g@mail.gmail.com> <CAADnVQK9BgguVorziWgpMktLHuPCgEaKa4fz-KCfhcZtT46teQ@mail.gmail.com>
-In-Reply-To: <CAADnVQK9BgguVorziWgpMktLHuPCgEaKa4fz-KCfhcZtT46teQ@mail.gmail.com>
-From:   Cong Wang <xiyou.wangcong@gmail.com>
-Date:   Sat, 8 May 2021 22:37:42 -0700
-Message-ID: <CAM_iQpWBrxuT=Y3CbhxYpE5a+QSk-O=Vj4euegggXAAKTHRBqw@mail.gmail.com>
-Subject: Re: [RFC Patch bpf-next] bpf: introduce bpf timer
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Linux Kernel Network Developers <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        Xiongchun Duan <duanxiongchun@bytedance.com>,
-        Dongdong Wang <wangdongdong.6@bytedance.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Pedro Tammela <pctammela@mojatatu.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Joe Stringer <joe@cilium.io>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.56]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Apr 27, 2021 at 11:34 AM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Tue, Apr 27, 2021 at 9:36 AM Cong Wang <xiyou.wangcong@gmail.com> wrote:
-> >
-> > If we enforce this ownership, in case of conntrack the owner would be
-> > the program which sees the connection first, which is pretty much
-> > unpredictable. For example, if the ingress program sees a connection
-> > first, it installs a timer for this connection, but the traffic is
-> > bidirectional,
-> > hence egress program needs this connection and its timer too, we
-> > should not remove this timer when the ingress program is freed.
->
-> Sure. That's trivially achieved with pinning.
+Currently qdisc_run() checks the STATE_DEACTIVATED of lockless
+qdisc before calling __qdisc_run(), which ultimately clear the
+STATE_MISSED when all the skb is dequeued. If STATE_DEACTIVATED
+is set before clearing STATE_MISSED, there may be endless
+rescheduling of net_tx_action() at the end of qdisc_run_end(),
+see below:
 
-If users forget to do so, their ebpf program would crash the kernel,
-right? But ebpf programs should never crash the kernel, right?
+CPU0(net_tx_atcion)  CPU1(__dev_xmit_skb)  CPU2(dev_deactivate)
+          .                   .                     .
+          .            set STATE_MISSED             .
+          .           __netif_schedule()            .
+          .                   .           set STATE_DEACTIVATED
+          .                   .                qdisc_reset()
+          .                   .                     .
+          .<---------------   .              synchronize_net()
+clear __QDISC_STATE_SCHED  |  .                     .
+          .                |  .                     .
+          .                |  .                     .
+          .                |  .           --------->.
+          .                |  .          |          .
+  test STATE_DEACTIVATED   |  .          | some_qdisc_is_busy()
+__qdisc_run() *not* called |  .          |-----return *true*
+          .                |  .                     .
+   test STATE_MISS         |  .                     .
+ __netif_schedule()--------|  .                     .
+          .                   .                     .
+          .                   .                     .
 
-> One can have an ingress prog that tailcalls into another prog
-> that arms the timer with one of its subprogs.
-> Egress prog can tailcall into the same prog as well.
-> The ingress and egress progs can be replaced one by one
-> or removed both together and middle prog can stay alive
-> if it's pinned in bpffs or held alive by FD.
+__qdisc_run() is not called by net_tx_atcion() in CPU0 because
+CPU2 has set STATE_DEACTIVATED flag during dev_deactivate(), and
+STATE_MISSED is only cleared in __qdisc_run(), __netif_schedule
+is called endlessly at the end of qdisc_run_end(), causing endless
+tx action rescheduling problem.
 
-This looks necessarily complex. Look at the overhead of using
-a timer properly here:
+qdisc_run() called by net_tx_action() runs in the softirq context,
+which should has the same semantic as the qdisc_run() called by
+__dev_xmit_skb() protected by rcu_read_lock_bh(). And there is a
+synchronize_net() between STATE_DEACTIVATED flag being set and
+qdisc_reset()/some_qdisc_is_busy in dev_deactivate(), we can safely
+bail out for the deactived lockless qdisc in net_tx_action(), and
+qdisc_reset() will reset all skb not dequeued yet.
 
-1. pin timer callback program
-2. a program to install timer
-3. a program array contains the above program
-4. a tail call into the above program array
+So add the rcu_read_lock() explicitly to protect the qdisc_run()
+and do the STATE_DEACTIVATED checking in net_tx_action() before
+calling qdisc_run_begin(). Another option is to do the checking in
+the qdisc_run_end(), but it will add unnecessary overhead for
+non-tx_action case, because __dev_queue_xmit() will not see qdisc
+with STATE_DEACTIVATED after synchronize_net(), the qdisc with
+STATE_DEACTIVATED can only be seen by net_tx_action() because of
+__netif_schedule().
 
-Why not design a simpler solution?
+The STATE_DEACTIVATED checking in qdisc_run() is to avoid race
+between net_tx_action() and qdisc_reset(), see:
+commit d518d2ed8640 ("net/sched: fix race between deactivation
+and dequeue for NOLOCK qdisc"). As the bailout added above for
+deactived lockless qdisc in net_tx_action() provides better
+protection for the race without calling qdisc_run() at all, so
+remove the STATE_DEACTIVATED checking in qdisc_run().
 
->
-> > From another point of view: maps and programs are both first-class
-> > resources in eBPF, a timer is stored in a map and associated with a
-> > program, so it is naturally a first-class resource too.
->
-> Not really. The timer abstraction is about data. It invokes the callback.
-> That callback is a part of the program. The lifetime of the timer object
-> and lifetime of the callback can be different.
-> Obviously the timer logic need to make sure that callback text is alive
-> when the timer is armed.
+After qdisc_reset(), there is no skb in qdisc to be dequeued, so
+clear the STATE_MISSED in dev_reset_queue() too.
 
-Only if the callback could reference struct bpf_prog... And even if it
-could, how about users forgetting to do so? ebpf verifier has to reject
-such cases.
+Fixes: 6b3ba9146fe6 ("net: sched: allow qdiscs to handle locking")
+Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
+---
+ include/net/pkt_sched.h |  7 +------
+ net/core/dev.c          | 26 ++++++++++++++++++++++----
+ net/sched/sch_generic.c |  4 +++-
+ 3 files changed, 26 insertions(+), 11 deletions(-)
 
-> Combining timer and callback concepts creates a messy abstraction.
-> In the normal kernel code one can have a timer in any kernel data
-> structure and callback in the kernel text or in the kernel module.
-> The code needs to make sure that the module won't go away while
-> the timer is armed. Same thing with bpf progs. The progs are safe
-> kernel modules. The timers are independent objects.
+diff --git a/include/net/pkt_sched.h b/include/net/pkt_sched.h
+index f5c1bee..6d7b12c 100644
+--- a/include/net/pkt_sched.h
++++ b/include/net/pkt_sched.h
+@@ -128,12 +128,7 @@ void __qdisc_run(struct Qdisc *q);
+ static inline void qdisc_run(struct Qdisc *q)
+ {
+ 	if (qdisc_run_begin(q)) {
+-		/* NOLOCK qdisc must check 'state' under the qdisc seqlock
+-		 * to avoid racing with dev_qdisc_reset()
+-		 */
+-		if (!(q->flags & TCQ_F_NOLOCK) ||
+-		    likely(!test_bit(__QDISC_STATE_DEACTIVATED, &q->state)))
+-			__qdisc_run(q);
++		__qdisc_run(q);
+ 		qdisc_run_end(q);
+ 	}
+ }
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 222b1d3..d596cd7 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -5025,25 +5025,43 @@ static __latent_entropy void net_tx_action(struct softirq_action *h)
+ 		sd->output_queue_tailp = &sd->output_queue;
+ 		local_irq_enable();
+ 
++		rcu_read_lock();
++
+ 		while (head) {
+ 			struct Qdisc *q = head;
+ 			spinlock_t *root_lock = NULL;
+ 
+ 			head = head->next_sched;
+ 
+-			if (!(q->flags & TCQ_F_NOLOCK)) {
+-				root_lock = qdisc_lock(q);
+-				spin_lock(root_lock);
+-			}
+ 			/* We need to make sure head->next_sched is read
+ 			 * before clearing __QDISC_STATE_SCHED
+ 			 */
+ 			smp_mb__before_atomic();
++
++			if (!(q->flags & TCQ_F_NOLOCK)) {
++				root_lock = qdisc_lock(q);
++				spin_lock(root_lock);
++			} else if (unlikely(test_bit(__QDISC_STATE_DEACTIVATED,
++						     &q->state))) {
++				/* There is a synchronize_net() between
++				 * STATE_DEACTIVATED flag being set and
++				 * qdisc_reset()/some_qdisc_is_busy() in
++				 * dev_deactivate(), so we can safely bail out
++				 * early here to avoid data race between
++				 * qdisc_deactivate() and some_qdisc_is_busy()
++				 * for lockless qdisc.
++				 */
++				clear_bit(__QDISC_STATE_SCHED, &q->state);
++				continue;
++			}
++
+ 			clear_bit(__QDISC_STATE_SCHED, &q->state);
+ 			qdisc_run(q);
+ 			if (root_lock)
+ 				spin_unlock(root_lock);
+ 		}
++
++		rcu_read_unlock();
+ 	}
+ 
+ 	xfrm_dev_backlog(sd);
+diff --git a/net/sched/sch_generic.c b/net/sched/sch_generic.c
+index 795d986..d86c4cc 100644
+--- a/net/sched/sch_generic.c
++++ b/net/sched/sch_generic.c
+@@ -1177,8 +1177,10 @@ static void dev_reset_queue(struct net_device *dev,
+ 	qdisc_reset(qdisc);
+ 
+ 	spin_unlock_bh(qdisc_lock(qdisc));
+-	if (nolock)
++	if (nolock) {
++		clear_bit(__QDISC_STATE_MISSED, &qdisc->state);
+ 		spin_unlock_bh(&qdisc->seqlock);
++	}
+ }
+ 
+ static bool some_qdisc_is_busy(struct net_device *dev)
+-- 
+2.7.4
 
-Kernel modules can take reference count of its own module very
-easily, plus there is no verifier for kernel modules. I don't understand
-why you want to make ebpf programs as close to kernel modules as
-possible in this case.
-
->
-> > >
-> > > > >
-> > > > > Also if your colleagues have something to share they should be
-> > > > > posting to the mailing list. Right now you're acting as a broken phone
-> > > > > passing info back and forth and the knowledge gets lost.
-> > > > > Please ask your colleagues to participate online.
-> > > >
-> > > > They are already in CC from the very beginning. And our use case is
-> > > > public, it is Cilium conntrack:
-> > > > https://github.com/cilium/cilium/blob/master/bpf/lib/conntrack.h
-> > > >
-> > > > The entries of the code are:
-> > > > https://github.com/cilium/cilium/blob/master/bpf/bpf_lxc.c
-> > > >
-> > > > The maps for conntrack are:
-> > > > https://github.com/cilium/cilium/blob/master/bpf/lib/conntrack_map.h
-> > >
-> > > If that's the only goal then kernel timers are not needed.
-> > > cilium conntrack works well as-is.
-> >
-> > We don't go back to why user-space cleanup is inefficient again,
-> > do we? ;)
->
-> I remain unconvinced that cilium conntrack _needs_ timer apis.
-> It works fine in production and I don't hear any complaints
-> from cilium users. So 'user space cleanup inefficiencies' is
-> very subjective and cannot be the reason to add timer apis.
-
-I am pretty sure I showed the original report to you when I sent
-timeout hashmap patch, in case you forgot here it is again:
-https://github.com/cilium/cilium/issues/5048
-
-and let me quote the original report here:
-
-"The current implementation (as of v1.2) for managing the contents of
-the datapath connection tracking map leaves something to be desired:
-Once per minute, the userspace cilium-agent makes a series of calls to
-the bpf() syscall to fetch all of the entries in the map to determine
-whether they should be deleted. For each entry in the map, 2-3 calls
-must be made: One to fetch the next key, one to fetch the value, and
-perhaps one to delete the entry. The maximum size of the map is 1
-million entries, and if the current count approaches this size then
-the garbage collection goroutine may spend a significant number of CPU
-cycles iterating and deleting elements from the conntrack map."
-
-(Adding Joe in Cc too.)
-
-Thanks.
