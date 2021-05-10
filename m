@@ -2,152 +2,96 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 266B3C43460
-	for <bpf@archiver.kernel.org>; Mon, 10 May 2021 09:50:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B508DC43460
+	for <bpf@archiver.kernel.org>; Mon, 10 May 2021 13:40:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E616F613DC
-	for <bpf@archiver.kernel.org>; Mon, 10 May 2021 09:50:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8F0CA61430
+	for <bpf@archiver.kernel.org>; Mon, 10 May 2021 13:40:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230332AbhEJJvQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 10 May 2021 05:51:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:52388 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230145AbhEJJvP (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 10 May 2021 05:51:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1620640210;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=nTudUvpz6RoslSVcQC6MaQyMsBToVri/EUElXBnDO3o=;
-        b=C+BQ4pY9Cz82xiC3INJbIjp7uCCzemlWILR6UcTLk/JhBNJngp38bef6RwPUK7tBafQFz4
-        cMdjJJ/5fDRgmyEVUsAiYROnjsX6myH9V6kTMfRyRYK7M64gLn7/yrCpZL1aUoGKDFzSiL
-        Su++Feg6NqVsA08wry6h1F26Ka+7q/8=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-499-DXpWDaDVOR-0Am4PC7PI7g-1; Mon, 10 May 2021 05:50:07 -0400
-X-MC-Unique: DXpWDaDVOR-0Am4PC7PI7g-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 58C796D246;
-        Mon, 10 May 2021 09:50:05 +0000 (UTC)
-Received: from krava (unknown [10.40.194.219])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 72CC25E26A;
-        Mon, 10 May 2021 09:50:02 +0000 (UTC)
-Date:   Mon, 10 May 2021 11:50:01 +0200
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        id S234914AbhEJNlT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 10 May 2021 09:41:19 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:56454 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S241723AbhEJMx2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 10 May 2021 08:53:28 -0400
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxH+9wLJlguH4UAA--.15168S2;
+        Mon, 10 May 2021 20:52:00 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Martin KaFai Lau <kafai@fb.com>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>
-Subject: Re: [PATCHv2] bpf: Add deny list of btf ids check for tracing
- programs
-Message-ID: <YJkByQ4bGa7jrvWR@krava>
-References: <20210429114712.43783-1-jolsa@kernel.org>
- <CAADnVQLDwjE8KFcqbzB5op5b=fC2941tnnWOtQ+X1DYi6Yw1xA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAADnVQLDwjE8KFcqbzB5op5b=fC2941tnnWOtQ+X1DYi6Yw1xA@mail.gmail.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+        KP Singh <kpsingh@kernel.org>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next] bpf: arm64: Replace STACK_ALIGN() with round_up() to align stack size
+Date:   Mon, 10 May 2021 20:51:59 +0800
+Message-Id: <1620651119-5663-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9DxH+9wLJlguH4UAA--.15168S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Xr4UCF1UAFy3WF4rAFWfGrg_yoWkWwb_tw
+        1SkF97Gwn8CrsY9r18Ca15JryIk3ykGa4kXryagr12y343Xw4fAry09ryxur1UXr4DKFWr
+        ZFs7GFy2vw42gjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbsxYjsxI4VWDJwAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I
+        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
+        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0
+        cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z2
+        80aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAK
+        zVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx
+        8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7
+        MxkIecxEwVAFwVW5JwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s
+        026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_
+        Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20x
+        vEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2
+        jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0x
+        ZFpf9x07j7sqXUUUUU=
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, May 06, 2021 at 06:36:38PM -0700, Alexei Starovoitov wrote:
-> On Thu, Apr 29, 2021 at 4:47 AM Jiri Olsa <jolsa@kernel.org> wrote:
-> >
-> > The recursion check in __bpf_prog_enter and __bpf_prog_exit
-> > leaves some (not inlined) functions unprotected:
-> >
-> > In __bpf_prog_enter:
-> >   - migrate_disable is called before prog->active is checked
-> >
-> > In __bpf_prog_exit:
-> >   - migrate_enable,rcu_read_unlock_strict are called after
-> >     prog->active is decreased
-> >
-> > When attaching trampoline to them we get panic like:
-> >
-> >   traps: PANIC: double fault, error_code: 0x0
-> >   double fault: 0000 [#1] SMP PTI
-> >   RIP: 0010:__bpf_prog_enter+0x4/0x50
-> >   ...
-> >   Call Trace:
-> >    <IRQ>
-> >    bpf_trampoline_6442466513_0+0x18/0x1000
-> >    migrate_disable+0x5/0x50
-> >    __bpf_prog_enter+0x9/0x50
-> >    bpf_trampoline_6442466513_0+0x18/0x1000
-> >    migrate_disable+0x5/0x50
-> >    __bpf_prog_enter+0x9/0x50
-> >    bpf_trampoline_6442466513_0+0x18/0x1000
-> >    migrate_disable+0x5/0x50
-> >    __bpf_prog_enter+0x9/0x50
-> >    bpf_trampoline_6442466513_0+0x18/0x1000
-> >    migrate_disable+0x5/0x50
-> >    ...
-> >
-> > Fixing this by adding deny list of btf ids for tracing
-> > programs and checking btf id during program verification.
-> > Adding above functions to this list.
-> >
-> > Suggested-by: Alexei Starovoitov <ast@kernel.org>
-> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > ---
-> > v2 changes:
-> >   - drop check for EXT programs [Andrii]
-> >
-> >  kernel/bpf/verifier.c | 14 ++++++++++++++
-> >  1 file changed, 14 insertions(+)
-> >
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index 2579f6fbb5c3..42311e51ac71 100644
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
-> > @@ -13112,6 +13112,17 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
-> >         return 0;
-> >  }
-> >
-> > +BTF_SET_START(btf_id_deny)
-> > +BTF_ID_UNUSED
-> > +#ifdef CONFIG_SMP
-> > +BTF_ID(func, migrate_disable)
-> > +BTF_ID(func, migrate_enable)
-> > +#endif
-> > +#if !defined CONFIG_PREEMPT_RCU && !defined CONFIG_TINY_RCU
-> > +BTF_ID(func, rcu_read_unlock_strict)
-> > +#endif
-> > +BTF_SET_END(btf_id_deny)
-> 
-> I was wondering whether it makes sense to do this on pahole side instead ?
-> It can do more flexible regex matching and excluding all such functions
-> from vmlinux btf without the kernel having to do a maze of #ifdef
-> depending on config.
-> On one side we will lose BTF info about such functions, but what do we
-> need it for?
-> On the other side it will be a tiny reduction in vmlinux btf :)
-> Thoughts?
+Use the common function round_up() directly to show the align size
+explicitly, the function STACK_ALIGN() is needless, remove it.
 
-we just removed the ftrace filter so BTF will have 'all' functions
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+ arch/arm64/net/bpf_jit_comp.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-I think the filtering on pahole side could cause problems like
-the recent one with cubictcp_state.. it's just 3 functions, but
-what if they rename? this way we at least get compilation error ;-)
-
-I'd go with all functions in BTF and restrict attachment for those
-that cause problems
-
-jirka
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index f7b1948..81c380f 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -178,9 +178,6 @@ static bool is_addsub_imm(u32 imm)
+ 	return !(imm & ~0xfff) || !(imm & ~0xfff000);
+ }
+ 
+-/* Stack must be multiples of 16B */
+-#define STACK_ALIGN(sz) (((sz) + 15) & ~15)
+-
+ /* Tail call offset to jump into */
+ #if IS_ENABLED(CONFIG_ARM64_BTI_KERNEL)
+ #define PROLOGUE_OFFSET 8
+@@ -255,7 +252,7 @@ static int build_prologue(struct jit_ctx *ctx, bool ebpf_from_cbpf)
+ 			emit(A64_BTI_J, ctx);
+ 	}
+ 
+-	ctx->stack_size = STACK_ALIGN(prog->aux->stack_depth);
++	ctx->stack_size = round_up(prog->aux->stack_depth, 16);
+ 
+ 	/* Set up function call stack */
+ 	emit(A64_SUB_I(1, A64_SP, A64_SP, ctx->stack_size), ctx);
+-- 
+2.1.0
 
