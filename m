@@ -2,252 +2,131 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF8ADC433B4
-	for <bpf@archiver.kernel.org>; Mon, 10 May 2021 01:42:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BB59C433B4
+	for <bpf@archiver.kernel.org>; Mon, 10 May 2021 02:20:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CFD18613DE
-	for <bpf@archiver.kernel.org>; Mon, 10 May 2021 01:42:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1F163613D1
+	for <bpf@archiver.kernel.org>; Mon, 10 May 2021 02:20:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230152AbhEJBnn (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 9 May 2021 21:43:43 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:2422 "EHLO
-        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbhEJBnm (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 9 May 2021 21:43:42 -0400
-Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.60])
-        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4FdkJG05bpzCr4d;
-        Mon, 10 May 2021 09:39:58 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.56) by
- DGGEMS414-HUB.china.huawei.com (10.3.19.214) with Microsoft SMTP Server id
- 14.3.498.0; Mon, 10 May 2021 09:42:32 +0800
+        id S230121AbhEJCVV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 9 May 2021 22:21:21 -0400
+Received: from szxga01-in.huawei.com ([45.249.212.187]:5095 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230103AbhEJCVU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 9 May 2021 22:21:20 -0400
+Received: from dggeml755-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Fdl7s6BNxzYgMc;
+        Mon, 10 May 2021 10:17:45 +0800 (CST)
+Received: from dggpemm500005.china.huawei.com (7.185.36.74) by
+ dggeml755-chm.china.huawei.com (10.1.199.136) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2176.2; Mon, 10 May 2021 10:20:11 +0800
+Received: from [127.0.0.1] (10.69.30.204) by dggpemm500005.china.huawei.com
+ (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2176.2; Mon, 10 May
+ 2021 10:20:11 +0800
+Subject: Re: [PATCH net-next v3 0/5] page_pool: recycle buffers
+To:     Jesper Dangaard Brouer <brouer@redhat.com>
+CC:     Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Matteo Croce <mcroce@linux.microsoft.com>,
+        <netdev@vger.kernel.org>, <linux-mm@kvack.org>,
+        Ayush Sawal <ayush.sawal@chelsio.com>,
+        Vinay Kumar Yadav <vinay.yadav@chelsio.com>,
+        Rohit Maheshwari <rohitm@chelsio.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>,
+        Marcin Wojtas <mw@semihalf.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Mirko Lindner <mlindner@marvell.com>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        "Alexei Starovoitov" <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "John Fastabend" <john.fastabend@gmail.com>,
+        Boris Pismenny <borisp@nvidia.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Yu Zhao <yuzhao@google.com>,
+        Will Deacon <will@kernel.org>,
+        Michel Lespinasse <walken@google.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Roman Gushchin <guro@fb.com>, Hugh Dickins <hughd@google.com>,
+        Peter Xu <peterx@redhat.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Guoqing Jiang <guoqing.jiang@cloud.ionos.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Alexander Lobakin <alobakin@pm.me>,
+        Cong Wang <cong.wang@bytedance.com>, wenxu <wenxu@ucloud.cn>,
+        Kevin Hao <haokexin@gmail.com>,
+        Aleksandr Nogikh <nogikh@google.com>,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        Marco Elver <elver@google.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Guillaume Nault <gnault@redhat.com>,
+        <linux-kernel@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <bpf@vger.kernel.org>, Matthew Wilcox <willy@infradead.org>,
+        Eric Dumazet <edumazet@google.com>,
+        David Ahern <dsahern@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Andrew Lunn <andrew@lunn.ch>, Paolo Abeni <pabeni@redhat.com>
+References: <20210409223801.104657-1-mcroce@linux.microsoft.com>
+ <e873c16e-8f49-6e70-1f56-21a69e2e37ce@huawei.com>
+ <YIsAIzecktXXBlxn@apalos.home>
+ <9bf7c5b3-c3cf-e669-051f-247aa8df5c5a@huawei.com>
+ <YIwvI5/ygBvZG5sy@apalos.home>
+ <33b02220-cc50-f6b2-c436-f4ec041d6bc4@huawei.com>
+ <YJPn5t2mdZKC//dp@apalos.home>
+ <75a332fa-74e4-7b7b-553e-3a1a6cb85dff@huawei.com>
+ <YJTm4uhvqCy2lJH8@apalos.home>
+ <bdd97ac5-f932-beec-109e-ace9cd62f661@huawei.com>
+ <20210507121953.59e22aa8@carbon>
 From:   Yunsheng Lin <linyunsheng@huawei.com>
-To:     <davem@davemloft.net>, <kuba@kernel.org>
-CC:     <olteanv@gmail.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <andriin@fb.com>, <edumazet@google.com>, <weiwan@google.com>,
-        <cong.wang@bytedance.com>, <ap420073@gmail.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linuxarm@openeuler.org>, <mkl@pengutronix.de>,
-        <linux-can@vger.kernel.org>, <jhs@mojatatu.com>,
-        <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
-        <andrii@kernel.org>, <kafai@fb.com>, <songliubraving@fb.com>,
-        <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
-        <bpf@vger.kernel.org>, <jonas.bonn@netrounds.com>,
-        <pabeni@redhat.com>, <mzhivich@akamai.com>, <johunt@akamai.com>,
-        <albcamus@gmail.com>, <kehuan.feng@gmail.com>,
-        <a.fatoum@pengutronix.de>, <atenart@kernel.org>,
-        <alexander.duyck@gmail.com>, <hdanton@sina.com>, <jgross@suse.com>,
-        <JKosina@suse.com>, <mkubecek@suse.cz>, <bjorn@kernel.org>,
-        <alobakin@pm.me>
-Subject: [PATCH net v6 1/3] net: sched: fix packet stuck problem for lockless qdisc
-Date:   Mon, 10 May 2021 09:42:34 +0800
-Message-ID: <1620610956-56306-2-git-send-email-linyunsheng@huawei.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1620610956-56306-1-git-send-email-linyunsheng@huawei.com>
-References: <1620610956-56306-1-git-send-email-linyunsheng@huawei.com>
+Message-ID: <2a8d9195-6904-8d24-b88d-dfd6ef8f8525@huawei.com>
+Date:   Mon, 10 May 2021 10:20:10 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.56]
+In-Reply-To: <20210507121953.59e22aa8@carbon>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.69.30.204]
+X-ClientProxiedBy: dggeme720-chm.china.huawei.com (10.1.199.116) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Lockless qdisc has below concurrent problem:
-    cpu0                 cpu1
-     .                     .
-q->enqueue                 .
-     .                     .
-qdisc_run_begin()          .
-     .                     .
-dequeue_skb()              .
-     .                     .
-sch_direct_xmit()          .
-     .                     .
-     .                q->enqueue
-     .             qdisc_run_begin()
-     .            return and do nothing
-     .                     .
-qdisc_run_end()            .
+On 2021/5/7 18:19, Jesper Dangaard Brouer wrote:
+> On Fri, 7 May 2021 16:28:30 +0800
+> Yunsheng Lin <linyunsheng@huawei.com> wrote:
+> 
 
-cpu1 enqueue a skb without calling __qdisc_run() because cpu0
-has not released the lock yet and spin_trylock() return false
-for cpu1 in qdisc_run_begin(), and cpu0 do not see the skb
-enqueued by cpu1 when calling dequeue_skb() because cpu1 may
-enqueue the skb after cpu0 calling dequeue_skb() and before
-cpu0 calling qdisc_run_end().
+[...]
 
-Lockless qdisc has below another concurrent problem when
-tx_action is involved:
+> 
+> I'm actually not against storing page_pool object ptr directly in
+> struct-page.  It is a nice optimization.  Perhaps we should implement
+> this optimization outside this patchset first, and let __xdp_return()
+> for XDP-redirected packets also take advantage to this optimization?
+> 
+> Then it would feel more natural to also used this optimization in this
+> patchset, right?
 
-cpu0(serving tx_action)     cpu1             cpu2
-          .                   .                .
-          .              q->enqueue            .
-          .            qdisc_run_begin()       .
-          .              dequeue_skb()         .
-          .                   .            q->enqueue
-          .                   .                .
-          .             sch_direct_xmit()      .
-          .                   .         qdisc_run_begin()
-          .                   .       return and do nothing
-          .                   .                .
- clear __QDISC_STATE_SCHED    .                .
- qdisc_run_begin()            .                .
- return and do nothing        .                .
-          .                   .                .
-          .            qdisc_run_end()         .
+Yes, it would be good if XDP can take advantage of this optimization too.
 
-This patch fixes the above data race by:
-1. If the first spin_trylock() return false and STATE_MISSED is
-   not set, set STATE_MISSED and retry another spin_trylock() in
-   case other CPU may not see STATE_MISSED after it releases the
-   lock.
-2. reschedule if STATE_MISSED is set after the lock is released
-   at the end of qdisc_run_end().
+Then it seems we can remove the "mem_id_ht"? if we want to support different
+type of page pool in the future, the type field is in the page pool too
+when page_pool object ptr directly in struct-page.
 
-For tx_action case, STATE_MISSED is also set when cpu1 is at the
-end if qdisc_run_end(), so tx_action will be rescheduled again
-to dequeue the skb enqueued by cpu2.
-
-Clear STATE_MISSED before retrying a dequeuing when dequeuing
-returns NULL in order to reduce the overhead of the second
-spin_trylock() and __netif_schedule() calling.
-
-The performance impact of this patch, tested using pktgen and
-dummy netdev with pfifo_fast qdisc attached:
-
- threads  without+this_patch   with+this_patch      delta
-    1        2.61Mpps            2.60Mpps           -0.3%
-    2        3.97Mpps            3.82Mpps           -3.7%
-    4        5.62Mpps            5.59Mpps           -0.5%
-    8        2.78Mpps            2.77Mpps           -0.3%
-   16        2.22Mpps            2.22Mpps           -0.0%
-
-Fixes: 6b3ba9146fe6 ("net: sched: allow qdiscs to handle locking")
-Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
-Tested-by: Juergen Gross <jgross@suse.com>
----
-V6: Check MISSED after the first trylock, and remove the
-    automic test and set for performance sake as suggested
-    by Jakub.
-V4: Change STATE_NEED_RESCHEDULE to STATE_MISSED mirroring
-    NAPI's NAPIF_STATE_MISSED, and add Juergen's "Tested-by"
-    tag for there is only renaming and typo fixing between
-    V4 and V3.
-V3: Fix a compile error and a few comment typo, remove the
-    __QDISC_STATE_DEACTIVATED checking, and update the
-    performance data.
-V2: Avoid the overhead of fixing the data race as much as
-    possible.
----
- include/net/sch_generic.h | 33 ++++++++++++++++++++++++++++++++-
- net/sched/sch_generic.c   | 19 +++++++++++++++++++
- 2 files changed, 51 insertions(+), 1 deletion(-)
-
-diff --git a/include/net/sch_generic.h b/include/net/sch_generic.h
-index f7a6e14..e5df394 100644
---- a/include/net/sch_generic.h
-+++ b/include/net/sch_generic.h
-@@ -36,6 +36,7 @@ struct qdisc_rate_table {
- enum qdisc_state_t {
- 	__QDISC_STATE_SCHED,
- 	__QDISC_STATE_DEACTIVATED,
-+	__QDISC_STATE_MISSED,
- };
- 
- struct qdisc_size_table {
-@@ -159,8 +160,33 @@ static inline bool qdisc_is_empty(const struct Qdisc *qdisc)
- static inline bool qdisc_run_begin(struct Qdisc *qdisc)
- {
- 	if (qdisc->flags & TCQ_F_NOLOCK) {
-+		if (spin_trylock(&qdisc->seqlock))
-+			goto nolock_empty;
-+
-+		/* If the MISSED flag is set, it means other thread has
-+		 * set the MISSED flag before second spin_trylock(), so
-+		 * we can return false here to avoid multi cpus doing
-+		 * the set_bit() and second spin_trylock() concurrently.
-+		 */
-+		if (test_bit(__QDISC_STATE_MISSED, &qdisc->state))
-+			return false;
-+
-+		/* Set the MISSED flag before the second spin_trylock(),
-+		 * if the second spin_trylock() return false, it means
-+		 * other cpu holding the lock will do dequeuing for us
-+		 * or it will see the MISSED flag set after releasing
-+		 * lock and reschedule the net_tx_action() to do the
-+		 * dequeuing.
-+		 */
-+		set_bit(__QDISC_STATE_MISSED, &qdisc->state);
-+
-+		/* Retry again in case other CPU may not see the new flag
-+		 * after it releases the lock at the end of qdisc_run_end().
-+		 */
- 		if (!spin_trylock(&qdisc->seqlock))
- 			return false;
-+
-+nolock_empty:
- 		WRITE_ONCE(qdisc->empty, false);
- 	} else if (qdisc_is_running(qdisc)) {
- 		return false;
-@@ -176,8 +202,13 @@ static inline bool qdisc_run_begin(struct Qdisc *qdisc)
- static inline void qdisc_run_end(struct Qdisc *qdisc)
- {
- 	write_seqcount_end(&qdisc->running);
--	if (qdisc->flags & TCQ_F_NOLOCK)
-+	if (qdisc->flags & TCQ_F_NOLOCK) {
- 		spin_unlock(&qdisc->seqlock);
-+
-+		if (unlikely(test_bit(__QDISC_STATE_MISSED,
-+				      &qdisc->state)))
-+			__netif_schedule(qdisc);
-+	}
- }
- 
- static inline bool qdisc_may_bulk(const struct Qdisc *qdisc)
-diff --git a/net/sched/sch_generic.c b/net/sched/sch_generic.c
-index 44991ea..795d986 100644
---- a/net/sched/sch_generic.c
-+++ b/net/sched/sch_generic.c
-@@ -640,8 +640,10 @@ static struct sk_buff *pfifo_fast_dequeue(struct Qdisc *qdisc)
- {
- 	struct pfifo_fast_priv *priv = qdisc_priv(qdisc);
- 	struct sk_buff *skb = NULL;
-+	bool need_retry = true;
- 	int band;
- 
-+retry:
- 	for (band = 0; band < PFIFO_FAST_BANDS && !skb; band++) {
- 		struct skb_array *q = band2list(priv, band);
- 
-@@ -652,6 +654,23 @@ static struct sk_buff *pfifo_fast_dequeue(struct Qdisc *qdisc)
- 	}
- 	if (likely(skb)) {
- 		qdisc_update_stats_at_dequeue(qdisc, skb);
-+	} else if (need_retry &&
-+		   test_bit(__QDISC_STATE_MISSED, &qdisc->state)) {
-+		/* Delay clearing the STATE_MISSED here to reduce
-+		 * the overhead of the second spin_trylock() in
-+		 * qdisc_run_begin() and __netif_schedule() calling
-+		 * in qdisc_run_end().
-+		 */
-+		clear_bit(__QDISC_STATE_MISSED, &qdisc->state);
-+
-+		/* Make sure dequeuing happens after clearing
-+		 * STATE_MISSED.
-+		 */
-+		smp_mb__after_atomic();
-+
-+		need_retry = false;
-+
-+		goto retry;
- 	} else {
- 		WRITE_ONCE(qdisc->empty, true);
- 	}
--- 
-2.7.4
+> 
 
