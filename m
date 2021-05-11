@@ -2,248 +2,139 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4799EC433B4
-	for <bpf@archiver.kernel.org>; Tue, 11 May 2021 20:35:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0027C433ED
+	for <bpf@archiver.kernel.org>; Tue, 11 May 2021 21:01:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0DDE1616E8
-	for <bpf@archiver.kernel.org>; Tue, 11 May 2021 20:35:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C553C61288
+	for <bpf@archiver.kernel.org>; Tue, 11 May 2021 21:01:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229809AbhEKUgp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 11 May 2021 16:36:45 -0400
-Received: from www62.your-server.de ([213.133.104.62]:42884 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbhEKUgp (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 11 May 2021 16:36:45 -0400
-Received: from 30.101.7.85.dynamic.wline.res.cust.swisscom.ch ([85.7.101.30] helo=localhost)
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1lgZ6P-000422-ES; Tue, 11 May 2021 22:35:37 +0200
-From:   Daniel Borkmann <daniel@iogearbox.net>
-To:     alexei.starovoitov@gmail.com
-Cc:     andrii@kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
+        id S229848AbhEKVCs (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 11 May 2021 17:02:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53448 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229637AbhEKVCs (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 11 May 2021 17:02:48 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BDC7C061574
+        for <bpf@vger.kernel.org>; Tue, 11 May 2021 14:01:40 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id v5so13439328edc.8
+        for <bpf@vger.kernel.org>; Tue, 11 May 2021 14:01:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sartura-hr.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2DmwvoWnFxFsnWV8zB+SFUg55UC+pgsHUrCupFbSUPw=;
+        b=ahgPcIgM4JgGZE+ikgfs+tgOSJqrkx7jZZ8ZXorADrPvudnnruXsSnoAJcJfPEpXV6
+         yIB6nKhDMxGQy3+D0P6069J7whK5I3rF+rJwcXIeX2NZbB1s5A567dJP8sD2pBIh0kdY
+         gZCGRhI6kO4visan3/DQrrtgU8YBR8a3Hob8Xui8eWlpP+rdvTeYiuDTmUI6PZZ0yLy9
+         9UW8zPxiUZfqq84Uhsk1o/1nLRzXn3ifG33c/LEFsqA7feFQSx9mtAHbg0QDADj87v4C
+         uWCPCAj9oNO7P30iJUDpoPD3AXWTQk9H/EqdCLrmTsYJht6tOMQMnqfrDiNwP3sKn6TI
+         8mZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2DmwvoWnFxFsnWV8zB+SFUg55UC+pgsHUrCupFbSUPw=;
+        b=s2gsDbdM3i2kftc/2y7Gk7ELzTiMHz01q2HzL6XwfzUln7YEPHBLSsYipUoodot9hF
+         B0F9yRYGGSmkskx2LZL55iObuYubVDEfP0NKUknwK3IQ69IhF1CperwhdF4ibTqgZpjs
+         R6a8dPX7ifhatFEpE0qIcDpq+YnmMsjDgQndhY5vEiSeuxANDnlfVMqn3HKLBgEdVPVW
+         p+wZ/CG7qTSVnf6rU5hBxYrxfIic5YHWAl8vtvhDGXFNzJZOTp+XdL9et352qohsbiZS
+         Tlol8FVCwzcTcPCLnDZctqPXuoc3HQl2TCmGV4CylgLxQCz4aSWfu1lZIrEkKHN2zN9F
+         AZbg==
+X-Gm-Message-State: AOAM531IZLXPDXGsSFvsxtgZ4H4lsWIaOa6LQUAbZqxtQV4mcT4coEu2
+        OEfC7OTuQ6VGPp5Bm9OWkkTpqgYjec8IYOZEUELQelbio+2brXPVdG85TmyCOrgqndH6+/FJQ8H
+        Yo/k6B0QmVR1rphGhio9dEgrTAiWGJ9YGtXCIWSGDwsLI1OWCdN9ro/1L4Y+l5RCYIxQJSREV
+X-Google-Smtp-Source: ABdhPJzxpu6jmTwsF0sG06ui+etjzT7o+JdmMGb0pdcwZRd/kjHQ7P6H2QX6BK1UplsZRE+eSxD/Jg==
+X-Received: by 2002:a05:6402:4251:: with SMTP id g17mr38051043edb.205.1620766899012;
+        Tue, 11 May 2021 14:01:39 -0700 (PDT)
+Received: from localhost.localdomain ([93.140.9.82])
+        by smtp.gmail.com with ESMTPSA id k9sm13206569eje.102.2021.05.11.14.01.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 May 2021 14:01:38 -0700 (PDT)
+From:   Denis Salopek <denis.salopek@sartura.hr>
+To:     bpf@vger.kernel.org
+Cc:     Denis Salopek <denis.salopek@sartura.hr>,
+        Juraj Vijtiuk <juraj.vijtiuk@sartura.hr>,
+        Luka Oreskovic <luka.oreskovic@sartura.hr>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
         Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf 1/2] bpf, kconfig: Add consolidated menu entry for bpf with core options
-Date:   Tue, 11 May 2021 22:35:16 +0200
-Message-Id: <f23f58765a4d59244ebd8037da7b6a6b2fb58446.1620765074.git.daniel@iogearbox.net>
-X-Mailer: git-send-email 2.21.0
+Subject: [PATCH v7 bpf-next 0/3] Add lookup_and_delete_elem support to BPF hash map types
+Date:   Tue, 11 May 2021 23:00:03 +0200
+Message-Id: <cover.1620763117.git.denis.salopek@sartura.hr>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.2/26167/Tue May 11 13:12:12 2021)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Right now, all core BPF related options are scattered in different Kconfig
-locations mainly due to historic reasons. Moving forward, lets add a proper
-subsystem entry under ...
+This patch series extends the existing bpf_map_lookup_and_delete_elem()
+functionality with 4 more map types:
+ - BPF_MAP_TYPE_HASH,
+ - BPF_MAP_TYPE_PERCPU_HASH,
+ - BPF_MAP_TYPE_LRU_HASH and
+ - BPF_MAP_TYPE_LRU_PERCPU_HASH.
 
-  General setup  --->
-    BPF subsystem  --->
+Patch 1 adds most of its functionality and logic as well as
+documentation.
 
-... in order to have all knobs in a single location and thus ease BPF related
-configuration. Networking related bits such as sockmap are out of scope for
-the general setup and therefore better suited to remain in net/Kconfig.
+As it was previously limited to only stacks and queues which do not
+support the BPF_F_LOCK flag, patch 2 enables its usage by adding a new
+libbpf API bpf_map_lookup_and_delete_elem_flags() based on the existing
+bpf_map_lookup_elem_flags().
 
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
----
- init/Kconfig       | 41 +-----------------------
- kernel/bpf/Kconfig | 78 ++++++++++++++++++++++++++++++++++++++++++++++
- net/Kconfig        | 27 ----------------
- 3 files changed, 79 insertions(+), 67 deletions(-)
- create mode 100644 kernel/bpf/Kconfig
+Patch 3 adds selftests for lookup_and_delete_elem().
 
-diff --git a/init/Kconfig b/init/Kconfig
-index ca559ccdaa32..2282a6842dc6 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -439,6 +439,7 @@ config AUDITSYSCALL
- 
- source "kernel/irq/Kconfig"
- source "kernel/time/Kconfig"
-+source "kernel/bpf/Kconfig"
- source "kernel/Kconfig.preempt"
- 
- menu "CPU/Task time and stats accounting"
-@@ -1705,46 +1706,6 @@ config KALLSYMS_BASE_RELATIVE
- 
- # syscall, maps, verifier
- 
--config BPF_LSM
--	bool "LSM Instrumentation with BPF"
--	depends on BPF_EVENTS
--	depends on BPF_SYSCALL
--	depends on SECURITY
--	depends on BPF_JIT
--	help
--	  Enables instrumentation of the security hooks with eBPF programs for
--	  implementing dynamic MAC and Audit Policies.
--
--	  If you are unsure how to answer this question, answer N.
--
--config BPF_SYSCALL
--	bool "Enable bpf() system call"
--	select BPF
--	select IRQ_WORK
--	select TASKS_TRACE_RCU
--	select BINARY_PRINTF
--	select NET_SOCK_MSG if INET
--	default n
--	help
--	  Enable the bpf() system call that allows to manipulate eBPF
--	  programs and maps via file descriptors.
--
--config ARCH_WANT_DEFAULT_BPF_JIT
--	bool
--
--config BPF_JIT_ALWAYS_ON
--	bool "Permanently enable BPF JIT and remove BPF interpreter"
--	depends on BPF_SYSCALL && HAVE_EBPF_JIT && BPF_JIT
--	help
--	  Enables BPF JIT and removes BPF interpreter to avoid
--	  speculative execution of BPF instructions by the interpreter
--
--config BPF_JIT_DEFAULT_ON
--	def_bool ARCH_WANT_DEFAULT_BPF_JIT || BPF_JIT_ALWAYS_ON
--	depends on HAVE_EBPF_JIT && BPF_JIT
--
--source "kernel/bpf/preload/Kconfig"
--
- config USERFAULTFD
- 	bool "Enable userfaultfd() system call"
- 	depends on MMU
-diff --git a/kernel/bpf/Kconfig b/kernel/bpf/Kconfig
-new file mode 100644
-index 000000000000..b4edaefc6255
---- /dev/null
-+++ b/kernel/bpf/Kconfig
-@@ -0,0 +1,78 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+# BPF interpreter that, for example, classic socket filters depend on.
-+config BPF
-+	bool
-+
-+# Used by archs to tell that they support BPF JIT compiler plus which
-+# flavour. Only one of the two can be selected for a specific arch since
-+# eBPF JIT supersedes the cBPF JIT.
-+
-+# Classic BPF JIT (cBPF)
-+config HAVE_CBPF_JIT
-+	bool
-+
-+# Extended BPF JIT (eBPF)
-+config HAVE_EBPF_JIT
-+	bool
-+
-+# Used by archs to tell that they want the BPF JIT compiler enabled by
-+# default for kernels that were compiled with BPF JIT support.
-+config ARCH_WANT_DEFAULT_BPF_JIT
-+	bool
-+
-+menu "BPF subsystem"
-+
-+config BPF_SYSCALL
-+	bool "Enable bpf() system call"
-+	select BPF
-+	select IRQ_WORK
-+	select TASKS_TRACE_RCU
-+	select BINARY_PRINTF
-+	select NET_SOCK_MSG if INET
-+	default n
-+	help
-+	  Enable the bpf() system call that allows to manipulate BPF programs
-+	  and maps via file descriptors.
-+
-+config BPF_JIT
-+	bool "Enable BPF Just In Time compiler"
-+	depends on HAVE_CBPF_JIT || HAVE_EBPF_JIT
-+	depends on MODULES
-+	help
-+	  BPF programs are normally handled by a BPF interpreter. This option
-+	  allows the kernel to generate native code when a program is loaded
-+	  into the kernel. This will significantly speed-up processing of BPF
-+	  programs.
-+
-+	  Note, an admin should enable this feature changing:
-+	  /proc/sys/net/core/bpf_jit_enable
-+	  /proc/sys/net/core/bpf_jit_harden   (optional)
-+	  /proc/sys/net/core/bpf_jit_kallsyms (optional)
-+
-+config BPF_JIT_ALWAYS_ON
-+	bool "Permanently enable BPF JIT and remove BPF interpreter"
-+	depends on BPF_SYSCALL && HAVE_EBPF_JIT && BPF_JIT
-+	help
-+	  Enables BPF JIT and removes BPF interpreter to avoid speculative
-+	  execution of BPF instructions by the interpreter.
-+
-+config BPF_JIT_DEFAULT_ON
-+	def_bool ARCH_WANT_DEFAULT_BPF_JIT || BPF_JIT_ALWAYS_ON
-+	depends on HAVE_EBPF_JIT && BPF_JIT
-+
-+source "kernel/bpf/preload/Kconfig"
-+
-+config BPF_LSM
-+	bool "Enable BPF LSM Instrumentation"
-+	depends on BPF_EVENTS
-+	depends on BPF_SYSCALL
-+	depends on SECURITY
-+	depends on BPF_JIT
-+	help
-+	  Enables instrumentation of the security hooks with BPF programs for
-+	  implementing dynamic MAC and Audit Policies.
-+
-+	  If you are unsure how to answer this question, answer N.
-+
-+endmenu # "BPF subsystem"
-diff --git a/net/Kconfig b/net/Kconfig
-index f5ee7c65e6b4..c7392c449b25 100644
---- a/net/Kconfig
-+++ b/net/Kconfig
-@@ -302,21 +302,6 @@ config BQL
- 	select DQL
- 	default y
- 
--config BPF_JIT
--	bool "enable BPF Just In Time compiler"
--	depends on HAVE_CBPF_JIT || HAVE_EBPF_JIT
--	depends on MODULES
--	help
--	  Berkeley Packet Filter filtering capabilities are normally handled
--	  by an interpreter. This option allows kernel to generate a native
--	  code when filter is loaded in memory. This should speedup
--	  packet sniffing (libpcap/tcpdump).
--
--	  Note, admin should enable this feature changing:
--	  /proc/sys/net/core/bpf_jit_enable
--	  /proc/sys/net/core/bpf_jit_harden   (optional)
--	  /proc/sys/net/core/bpf_jit_kallsyms (optional)
--
- config BPF_STREAM_PARSER
- 	bool "enable BPF STREAM_PARSER"
- 	depends on INET
-@@ -470,15 +455,3 @@ config ETHTOOL_NETLINK
- 	  e.g. notification messages.
- 
- endif   # if NET
--
--# Used by archs to tell that they support BPF JIT compiler plus which flavour.
--# Only one of the two can be selected for a specific arch since eBPF JIT supersedes
--# the cBPF JIT.
--
--# Classic BPF JIT (cBPF)
--config HAVE_CBPF_JIT
--	bool
--
--# Extended BPF JIT (eBPF)
--config HAVE_EBPF_JIT
--	bool
+Changes in patch 1:
+v7: Minor formating nits, add Acked-by.
+v6: Remove unneeded flag check, minor code/format fixes.
+v5: Split patch to 3 patches. Extend BPF_MAP_LOOKUP_AND_DELETE_ELEM
+documentation with this changes.
+v4: Fix the return value for unsupported map types.
+v3: Add bpf_map_lookup_and_delete_elem_flags() and enable BPF_F_LOCK
+flag, change CHECKs to ASSERT_OKs, initialize variables to 0.
+v2: Add functionality for LRU/per-CPU, add test_progs tests.
+
+Changes in patch 2:
+v7: No change.
+v6: Add Acked-by.
+v5: Move to the newest libbpf version (0.4.0).
+
+Changes in patch 3:
+v7: Remove ASSERT_GE macro which is already added in some other commit,
+change ASSERT_OK to ASSERT_OK_PTR, add Acked-by.
+v6: Remove PERCPU macros, add ASSERT_GE macro to test_progs.h, remove
+leftover code.
+v5: Use more appropriate macros. Better check for changed value.
+
+Denis Salopek (3):
+  bpf: add lookup_and_delete_elem support to hashtab
+  bpf: extend libbpf with bpf_map_lookup_and_delete_elem_flags
+  selftests/bpf: add bpf_lookup_and_delete_elem tests
+
+ include/linux/bpf.h                           |   2 +
+ include/uapi/linux/bpf.h                      |  13 +
+ kernel/bpf/hashtab.c                          |  98 ++++++
+ kernel/bpf/syscall.c                          |  34 ++-
+ tools/include/uapi/linux/bpf.h                |  13 +
+ tools/lib/bpf/bpf.c                           |  13 +
+ tools/lib/bpf/bpf.h                           |   2 +
+ tools/lib/bpf/libbpf.map                      |   1 +
+ .../bpf/prog_tests/lookup_and_delete.c        | 288 ++++++++++++++++++
+ .../bpf/progs/test_lookup_and_delete.c        |  26 ++
+ tools/testing/selftests/bpf/test_lru_map.c    |   8 +
+ tools/testing/selftests/bpf/test_maps.c       |  17 ++
+ 12 files changed, 511 insertions(+), 4 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/lookup_and_delete.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_lookup_and_delete.c
+
 -- 
-2.21.0
+2.26.2
 
