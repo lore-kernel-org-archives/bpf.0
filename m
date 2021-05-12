@@ -8,60 +8,60 @@ X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C5D58C433B4
-	for <bpf@archiver.kernel.org>; Wed, 12 May 2021 22:58:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DDA6CC433B4
+	for <bpf@archiver.kernel.org>; Wed, 12 May 2021 22:58:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A31C3613EE
-	for <bpf@archiver.kernel.org>; Wed, 12 May 2021 22:58:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A1486613EB
+	for <bpf@archiver.kernel.org>; Wed, 12 May 2021 22:58:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236079AbhELW7e (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 12 May 2021 18:59:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45874 "EHLO
+        id S235518AbhELW7q (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 12 May 2021 18:59:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345592AbhELVnY (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 12 May 2021 17:43:24 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE811C08C5C6
-        for <bpf@vger.kernel.org>; Wed, 12 May 2021 14:33:09 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id c21so19283852pgg.3
-        for <bpf@vger.kernel.org>; Wed, 12 May 2021 14:33:09 -0700 (PDT)
+        with ESMTP id S1346479AbhELVnb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 12 May 2021 17:43:31 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D72D8C08C5C9
+        for <bpf@vger.kernel.org>; Wed, 12 May 2021 14:33:15 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id s22so19260390pgk.6
+        for <bpf@vger.kernel.org>; Wed, 12 May 2021 14:33:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=J1nCX7Cs5FfjDZ4ZcCcif+1FZpC8X4EFEefee+Csxd8=;
-        b=Wrj9MvvvC6eL982YcBuLqaX0PvxDSf/R1atv4l1orF76ykXobOTzIG/HOGfcHnJ6Vs
-         hvNyfO0m0rm9vuHxa70WPzifrMTrmCwoer7KzhYR6S9JqXGEs60n8YXN2oV+c+vLBrw9
-         pienOogqIf9tKr39d4qRNMJk3/LTRPnHJjPQVscP0+8ukyZDA8jYvjgYAZSW9I2tlTGO
-         H4hufDwYMfuTussepzJxPxZ4ez8e0S3EZv1E9r1+Us96p9Q1dluCp6yZ0m12XXd0wFdu
-         FkB6xkj/TwPSvlqVCP/lVUXj/HajJztnpfkRAS4+NKDnurjqgeudhXmRsI58WMgQxbRG
-         zfCw==
+        bh=WEvYCZOF1nX7y9m6STbMJyJmIcy4ihnjA6JW+Bg91zM=;
+        b=gqx3dHdnFINzkJgK3IZAxl/2Y68Trw50dMSFIk4wMhnNsyTdCCZRVjLv2ipjo/x/BG
+         eK08GDh9Y7gHSCunPU4HF6U/sgP9B/usBbBIOw8Fl5m3rl+/P55p8sOWPKGFVxC9HnBQ
+         wA9d5HVoZQCN3m8H9Ngt+mqJlE/uQGT2p/aWLZM/oCNgCYdT4bHNgdiofh2cGdKOPEAK
+         xkkHC0A1jotl6BYy+1dYpi9zoEg8C2uGtTdBkxNEiRX02Nrgr0g2KrwiFo32PN5K/2R7
+         tqhfWLEhDzd2NnaZjsZfUlVlJjn0tLM0m3xTtoYZyaBdvTdJMQdOwht5TMWnP556uHmE
+         0v0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=J1nCX7Cs5FfjDZ4ZcCcif+1FZpC8X4EFEefee+Csxd8=;
-        b=Yf4+FUCc7jR6+pYcLvDX2imPhMvEJYVjoMsmMw1IQHL7gruOo3bb4tBU+DVqUT+VBb
-         Syhy6Cl3xNb1I21ONCQpS/aTEn+z/nrq6wpzHiuMk+aZuTJ+J4M+rTYwkiC7CawqJi/X
-         mLQqBF3LwbFmU74Ejrhh0dPqUsAZVyFdCDdkCEfEy5bryX/UT9r6So0TTXEdH7akhKHk
-         4qRGelvC/E7Ej5ZG+dexw2xZjoBY3fDT+EHJUPWthi2pQE/j862ajwO6FRM3+0JIYZOC
-         Q4ZBwr0zyp5FqcmhB1PIpzSKg9RmhMCqh+VclTPxQknRy3bJ++jH40Zj9urf7ZkcdQit
-         /ZXA==
-X-Gm-Message-State: AOAM532Sny2YHzXmjtjZTAl5SwW42xwBouWxU4KJbwlSWYXI4KFVCrv0
-        2iy4PYUn3z+xvgUPcazsPMY=
-X-Google-Smtp-Source: ABdhPJxejQtYgk6wfvLB5EBRqj+pCARsBv+pjKTQuK79Cy9/62SJ0aYcDFaTd+DrUG0R4RJCxFbLvQ==
-X-Received: by 2002:a17:90a:4497:: with SMTP id t23mr614547pjg.168.1620855189312;
-        Wed, 12 May 2021 14:33:09 -0700 (PDT)
+        bh=WEvYCZOF1nX7y9m6STbMJyJmIcy4ihnjA6JW+Bg91zM=;
+        b=an22o9GGb3v4iIrgHSUTgow0W0AE6PjJemwWhy/3I0I+wrGfqt6IXK/kLjO8kQ/21R
+         BFOj/h+Y9IiiMpkHwgpg3FQ3p19+OpcG+SlcyDOOIponr4up2qR0IdFkmTO4KQDNc73U
+         j7FPeGzsH8S4XJNQWYbjxU383hORi/oH9PjPi2PURayfPV0sLXgKffinrRfw7Yg2UviD
+         R+mOzA9iWiYR3sBsePKooMMTQd1LBelu3t07gJBaLhCfO4EqxOO0vhelPLaccHyxI/g/
+         njXHBs5KkT8UyX6kb6xcPFSGMHgrGZOFnxrIOxwQsSwwZQA/ul4y8HS+dyEAhR6quOOn
+         2gzA==
+X-Gm-Message-State: AOAM532FETILcbsORc0c78n93BrTjqrjteXuO4cp5aVFxOtX7yWTHpYQ
+        BGcmPkY8xy/HSP/MtOUaEqs=
+X-Google-Smtp-Source: ABdhPJyhUzv0dKQxffHrZJwXbLUqLnLP/CQwgUgo+xCeS/YPc7XPJH6IGIy2WCFqqOu0V3egpBTKpQ==
+X-Received: by 2002:a17:90a:fb53:: with SMTP id iq19mr534930pjb.11.1620855195360;
+        Wed, 12 May 2021 14:33:15 -0700 (PDT)
 Received: from ast-mbp.thefacebook.com ([163.114.132.4])
-        by smtp.gmail.com with ESMTPSA id c128sm609222pfa.189.2021.05.12.14.33.07
+        by smtp.gmail.com with ESMTPSA id c128sm609222pfa.189.2021.05.12.14.33.13
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 12 May 2021 14:33:08 -0700 (PDT)
+        Wed, 12 May 2021 14:33:14 -0700 (PDT)
 From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To:     davem@davemloft.net
 Cc:     daniel@iogearbox.net, andrii@kernel.org, john.fastabend@gmail.com,
         bpf@vger.kernel.org, kernel-team@fb.com
-Subject: [PATCH v5 bpf-next 05/21] selftests/bpf: Test for syscall program type
-Date:   Wed, 12 May 2021 14:32:40 -0700
-Message-Id: <20210512213256.31203-6-alexei.starovoitov@gmail.com>
+Subject: [PATCH v5 bpf-next 08/21] bpf: Introduce fd_idx
+Date:   Wed, 12 May 2021 14:32:43 -0700
+Message-Id: <20210512213256.31203-9-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.13.5
 In-Reply-To: <20210512213256.31203-1-alexei.starovoitov@gmail.com>
 References: <20210512213256.31203-1-alexei.starovoitov@gmail.com>
@@ -71,153 +71,237 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-bpf_prog_type_syscall is a program that creates a bpf map,
-updates it, and loads another bpf program using bpf_sys_bpf() helper.
+Typical program loading sequence involves creating bpf maps and applying
+map FDs into bpf instructions in various places in the bpf program.
+This job is done by libbpf that is using compiler generated ELF relocations
+to patch certain instruction after maps are created and BTFs are loaded.
+The goal of fd_idx is to allow bpf instructions to stay immutable
+after compilation. At load time the libbpf would still create maps as usual,
+but it wouldn't need to patch instructions. It would store map_fds into
+__u32 fd_array[] and would pass that pointer to sys_bpf(BPF_PROG_LOAD).
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Acked-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- .../selftests/bpf/prog_tests/syscall.c        | 52 ++++++++++++++
- tools/testing/selftests/bpf/progs/syscall.c   | 71 +++++++++++++++++++
- 2 files changed, 123 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/syscall.c
- create mode 100644 tools/testing/selftests/bpf/progs/syscall.c
+ include/linux/bpf_verifier.h   |  1 +
+ include/uapi/linux/bpf.h       | 16 ++++++++----
+ kernel/bpf/syscall.c           |  2 +-
+ kernel/bpf/verifier.c          | 47 ++++++++++++++++++++++++++--------
+ tools/include/uapi/linux/bpf.h | 16 ++++++++----
+ 5 files changed, 61 insertions(+), 21 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/syscall.c b/tools/testing/selftests/bpf/prog_tests/syscall.c
-new file mode 100644
-index 000000000000..1badd37148a1
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/syscall.c
-@@ -0,0 +1,52 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2021 Facebook */
-+#include <test_progs.h>
-+#include "syscall.skel.h"
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index d4632aa3ca50..e774ecc1cd1f 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -450,6 +450,7 @@ struct bpf_verifier_env {
+ 	u32 peak_states;
+ 	/* longest register parentage chain walked for liveness marking */
+ 	u32 longest_mark_read_walk;
++	bpfptr_t fd_array;
+ };
+ 
+ __printf(2, 0) void bpf_verifier_vlog(struct bpf_verifier_log *log,
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index c92648f38144..de58a714ed36 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -1098,8 +1098,8 @@ enum bpf_link_type {
+ /* When BPF ldimm64's insn[0].src_reg != 0 then this can have
+  * the following extensions:
+  *
+- * insn[0].src_reg:  BPF_PSEUDO_MAP_FD
+- * insn[0].imm:      map fd
++ * insn[0].src_reg:  BPF_PSEUDO_MAP_[FD|IDX]
++ * insn[0].imm:      map fd or fd_idx
+  * insn[1].imm:      0
+  * insn[0].off:      0
+  * insn[1].off:      0
+@@ -1107,15 +1107,19 @@ enum bpf_link_type {
+  * verifier type:    CONST_PTR_TO_MAP
+  */
+ #define BPF_PSEUDO_MAP_FD	1
+-/* insn[0].src_reg:  BPF_PSEUDO_MAP_VALUE
+- * insn[0].imm:      map fd
++#define BPF_PSEUDO_MAP_IDX	5
 +
-+struct args {
-+	__u64 log_buf;
-+	__u32 log_size;
-+	int max_entries;
-+	int map_fd;
-+	int prog_fd;
-+};
++/* insn[0].src_reg:  BPF_PSEUDO_MAP_[IDX_]VALUE
++ * insn[0].imm:      map fd or fd_idx
+  * insn[1].imm:      offset into value
+  * insn[0].off:      0
+  * insn[1].off:      0
+  * ldimm64 rewrite:  address of map[0]+offset
+  * verifier type:    PTR_TO_MAP_VALUE
+  */
+-#define BPF_PSEUDO_MAP_VALUE	2
++#define BPF_PSEUDO_MAP_VALUE		2
++#define BPF_PSEUDO_MAP_IDX_VALUE	6
 +
-+void test_syscall(void)
-+{
-+	static char verifier_log[8192];
-+	struct args ctx = {
-+		.max_entries = 1024,
-+		.log_buf = (uintptr_t) verifier_log,
-+		.log_size = sizeof(verifier_log),
-+	};
-+	struct bpf_prog_test_run_attr tattr = {
-+		.ctx_in = &ctx,
-+		.ctx_size_in = sizeof(ctx),
-+	};
-+	struct syscall *skel = NULL;
-+	__u64 key = 12, value = 0;
-+	int err;
+ /* insn[0].src_reg:  BPF_PSEUDO_BTF_ID
+  * insn[0].imm:      kernel btd id of VAR
+  * insn[1].imm:      0
+@@ -1315,6 +1319,8 @@ union bpf_attr {
+ 			/* or valid module BTF object fd or 0 to attach to vmlinux */
+ 			__u32		attach_btf_obj_fd;
+ 		};
++		__u32		:32;		/* pad */
++		__aligned_u64	fd_array;	/* array of FDs */
+ 	};
+ 
+ 	struct { /* anonymous struct used by BPF_OBJ_* commands */
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 415865c49dd4..da7dc2406470 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -2089,7 +2089,7 @@ static bool is_perfmon_prog_type(enum bpf_prog_type prog_type)
+ }
+ 
+ /* last field in 'union bpf_attr' used by this command */
+-#define	BPF_PROG_LOAD_LAST_FIELD attach_prog_fd
++#define	BPF_PROG_LOAD_LAST_FIELD fd_array
+ 
+ static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr)
+ {
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index e63c7d60e00d..9189eecb26dd 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -8915,12 +8915,14 @@ static int check_ld_imm(struct bpf_verifier_env *env, struct bpf_insn *insn)
+ 	mark_reg_known_zero(env, regs, insn->dst_reg);
+ 	dst_reg->map_ptr = map;
+ 
+-	if (insn->src_reg == BPF_PSEUDO_MAP_VALUE) {
++	if (insn->src_reg == BPF_PSEUDO_MAP_VALUE ||
++	    insn->src_reg == BPF_PSEUDO_MAP_IDX_VALUE) {
+ 		dst_reg->type = PTR_TO_MAP_VALUE;
+ 		dst_reg->off = aux->map_off;
+ 		if (map_value_has_spin_lock(map))
+ 			dst_reg->id = ++env->id_gen;
+-	} else if (insn->src_reg == BPF_PSEUDO_MAP_FD) {
++	} else if (insn->src_reg == BPF_PSEUDO_MAP_FD ||
++		   insn->src_reg == BPF_PSEUDO_MAP_IDX) {
+ 		dst_reg->type = CONST_PTR_TO_MAP;
+ 	} else {
+ 		verbose(env, "bpf verifier is misconfigured\n");
+@@ -11173,6 +11175,7 @@ static int resolve_pseudo_ldimm64(struct bpf_verifier_env *env)
+ 			struct bpf_map *map;
+ 			struct fd f;
+ 			u64 addr;
++			u32 fd;
+ 
+ 			if (i == insn_cnt - 1 || insn[1].code != 0 ||
+ 			    insn[1].dst_reg != 0 || insn[1].src_reg != 0 ||
+@@ -11202,16 +11205,38 @@ static int resolve_pseudo_ldimm64(struct bpf_verifier_env *env)
+ 			/* In final convert_pseudo_ld_imm64() step, this is
+ 			 * converted into regular 64-bit imm load insn.
+ 			 */
+-			if ((insn[0].src_reg != BPF_PSEUDO_MAP_FD &&
+-			     insn[0].src_reg != BPF_PSEUDO_MAP_VALUE) ||
+-			    (insn[0].src_reg == BPF_PSEUDO_MAP_FD &&
+-			     insn[1].imm != 0)) {
+-				verbose(env,
+-					"unrecognized bpf_ld_imm64 insn\n");
++			switch (insn[0].src_reg) {
++			case BPF_PSEUDO_MAP_VALUE:
++			case BPF_PSEUDO_MAP_IDX_VALUE:
++				break;
++			case BPF_PSEUDO_MAP_FD:
++			case BPF_PSEUDO_MAP_IDX:
++				if (insn[1].imm == 0)
++					break;
++				fallthrough;
++			default:
++				verbose(env, "unrecognized bpf_ld_imm64 insn\n");
+ 				return -EINVAL;
+ 			}
+ 
+-			f = fdget(insn[0].imm);
++			switch (insn[0].src_reg) {
++			case BPF_PSEUDO_MAP_IDX_VALUE:
++			case BPF_PSEUDO_MAP_IDX:
++				if (bpfptr_is_null(env->fd_array)) {
++					verbose(env, "fd_idx without fd_array is invalid\n");
++					return -EPROTO;
++				}
++				if (copy_from_bpfptr_offset(&fd, env->fd_array,
++							    insn[0].imm * sizeof(fd),
++							    sizeof(fd)))
++					return -EFAULT;
++				break;
++			default:
++				fd = insn[0].imm;
++				break;
++			}
 +
-+	skel = syscall__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_load"))
-+		goto cleanup;
++			f = fdget(fd);
+ 			map = __bpf_map_get(f);
+ 			if (IS_ERR(map)) {
+ 				verbose(env, "fd %d is not pointing to valid bpf_map\n",
+@@ -11226,7 +11251,8 @@ static int resolve_pseudo_ldimm64(struct bpf_verifier_env *env)
+ 			}
+ 
+ 			aux = &env->insn_aux_data[i];
+-			if (insn->src_reg == BPF_PSEUDO_MAP_FD) {
++			if (insn[0].src_reg == BPF_PSEUDO_MAP_FD ||
++			    insn[0].src_reg == BPF_PSEUDO_MAP_IDX) {
+ 				addr = (unsigned long)map;
+ 			} else {
+ 				u32 off = insn[1].imm;
+@@ -13308,6 +13334,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr)
+ 		env->insn_aux_data[i].orig_idx = i;
+ 	env->prog = *prog;
+ 	env->ops = bpf_verifier_ops[env->prog->type];
++	env->fd_array = make_bpfptr(attr->fd_array, uattr.is_kernel);
+ 	is_priv = bpf_capable();
+ 
+ 	bpf_get_btf_vmlinux();
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index c92648f38144..de58a714ed36 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -1098,8 +1098,8 @@ enum bpf_link_type {
+ /* When BPF ldimm64's insn[0].src_reg != 0 then this can have
+  * the following extensions:
+  *
+- * insn[0].src_reg:  BPF_PSEUDO_MAP_FD
+- * insn[0].imm:      map fd
++ * insn[0].src_reg:  BPF_PSEUDO_MAP_[FD|IDX]
++ * insn[0].imm:      map fd or fd_idx
+  * insn[1].imm:      0
+  * insn[0].off:      0
+  * insn[1].off:      0
+@@ -1107,15 +1107,19 @@ enum bpf_link_type {
+  * verifier type:    CONST_PTR_TO_MAP
+  */
+ #define BPF_PSEUDO_MAP_FD	1
+-/* insn[0].src_reg:  BPF_PSEUDO_MAP_VALUE
+- * insn[0].imm:      map fd
++#define BPF_PSEUDO_MAP_IDX	5
 +
-+	tattr.prog_fd = bpf_program__fd(skel->progs.bpf_prog);
-+	err = bpf_prog_test_run_xattr(&tattr);
-+	ASSERT_EQ(err, 0, "err");
-+	ASSERT_EQ(tattr.retval, 1, "retval");
-+	ASSERT_GT(ctx.map_fd, 0, "ctx.map_fd");
-+	ASSERT_GT(ctx.prog_fd, 0, "ctx.prog_fd");
-+	ASSERT_OK(memcmp(verifier_log, "processed", sizeof("processed") - 1),
-+		  "verifier_log");
++/* insn[0].src_reg:  BPF_PSEUDO_MAP_[IDX_]VALUE
++ * insn[0].imm:      map fd or fd_idx
+  * insn[1].imm:      offset into value
+  * insn[0].off:      0
+  * insn[1].off:      0
+  * ldimm64 rewrite:  address of map[0]+offset
+  * verifier type:    PTR_TO_MAP_VALUE
+  */
+-#define BPF_PSEUDO_MAP_VALUE	2
++#define BPF_PSEUDO_MAP_VALUE		2
++#define BPF_PSEUDO_MAP_IDX_VALUE	6
 +
-+	err = bpf_map_lookup_elem(ctx.map_fd, &key, &value);
-+	ASSERT_EQ(err, 0, "map_lookup");
-+	ASSERT_EQ(value, 34, "map lookup value");
-+cleanup:
-+	syscall__destroy(skel);
-+	if (ctx.prog_fd > 0)
-+		close(ctx.prog_fd);
-+	if (ctx.map_fd > 0)
-+		close(ctx.map_fd);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/syscall.c b/tools/testing/selftests/bpf/progs/syscall.c
-new file mode 100644
-index 000000000000..865b5269ecbb
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/syscall.c
-@@ -0,0 +1,71 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2021 Facebook */
-+#include <linux/stddef.h>
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include <../../../tools/include/linux/filter.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+struct args {
-+	__u64 log_buf;
-+	__u32 log_size;
-+	int max_entries;
-+	int map_fd;
-+	int prog_fd;
-+};
-+
-+SEC("syscall")
-+int bpf_prog(struct args *ctx)
-+{
-+	static char license[] = "GPL";
-+	static struct bpf_insn insns[] = {
-+		BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
-+		BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
-+		BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
-+		BPF_LD_MAP_FD(BPF_REG_1, 0),
-+		BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
-+		BPF_MOV64_IMM(BPF_REG_0, 0),
-+		BPF_EXIT_INSN(),
-+	};
-+	static union bpf_attr map_create_attr = {
-+		.map_type = BPF_MAP_TYPE_HASH,
-+		.key_size = 8,
-+		.value_size = 8,
-+	};
-+	static union bpf_attr map_update_attr = { .map_fd = 1, };
-+	static __u64 key = 12;
-+	static __u64 value = 34;
-+	static union bpf_attr prog_load_attr = {
-+		.prog_type = BPF_PROG_TYPE_XDP,
-+		.insn_cnt = sizeof(insns) / sizeof(insns[0]),
-+	};
-+	int ret;
-+
-+	map_create_attr.max_entries = ctx->max_entries;
-+	prog_load_attr.license = (long) license;
-+	prog_load_attr.insns = (long) insns;
-+	prog_load_attr.log_buf = ctx->log_buf;
-+	prog_load_attr.log_size = ctx->log_size;
-+	prog_load_attr.log_level = 1;
-+
-+	ret = bpf_sys_bpf(BPF_MAP_CREATE, &map_create_attr, sizeof(map_create_attr));
-+	if (ret <= 0)
-+		return ret;
-+	ctx->map_fd = ret;
-+	insns[3].imm = ret;
-+
-+	map_update_attr.map_fd = ret;
-+	map_update_attr.key = (long) &key;
-+	map_update_attr.value = (long) &value;
-+	ret = bpf_sys_bpf(BPF_MAP_UPDATE_ELEM, &map_update_attr, sizeof(map_update_attr));
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = bpf_sys_bpf(BPF_PROG_LOAD, &prog_load_attr, sizeof(prog_load_attr));
-+	if (ret <= 0)
-+		return ret;
-+	ctx->prog_fd = ret;
-+	return 1;
-+}
+ /* insn[0].src_reg:  BPF_PSEUDO_BTF_ID
+  * insn[0].imm:      kernel btd id of VAR
+  * insn[1].imm:      0
+@@ -1315,6 +1319,8 @@ union bpf_attr {
+ 			/* or valid module BTF object fd or 0 to attach to vmlinux */
+ 			__u32		attach_btf_obj_fd;
+ 		};
++		__u32		:32;		/* pad */
++		__aligned_u64	fd_array;	/* array of FDs */
+ 	};
+ 
+ 	struct { /* anonymous struct used by BPF_OBJ_* commands */
 -- 
 2.30.2
 
