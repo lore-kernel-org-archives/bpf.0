@@ -2,184 +2,167 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C3E1C43611
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4682C43140
 	for <bpf@archiver.kernel.org>; Wed, 12 May 2021 23:10:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 11CBE61419
-	for <bpf@archiver.kernel.org>; Wed, 12 May 2021 23:10:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2BC4461425
+	for <bpf@archiver.kernel.org>; Wed, 12 May 2021 23:10:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347160AbhELXEg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 12 May 2021 19:04:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60578 "EHLO
+        id S235660AbhELXB0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 12 May 2021 19:01:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444034AbhELWxV (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 12 May 2021 18:53:21 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 033FFC0610ED
-        for <bpf@vger.kernel.org>; Wed, 12 May 2021 15:43:56 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id i67so23905891qkc.4
-        for <bpf@vger.kernel.org>; Wed, 12 May 2021 15:43:56 -0700 (PDT)
+        with ESMTP id S1346997AbhELVpP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 12 May 2021 17:45:15 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB553C08C5DB
+        for <bpf@vger.kernel.org>; Wed, 12 May 2021 14:33:28 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id y32so19270143pga.11
+        for <bpf@vger.kernel.org>; Wed, 12 May 2021 14:33:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=NbyJ52lo/KmaI1lmzIR9nAP6ZETday/C62CbdVi1cY4=;
-        b=nZ2WySbdboM/kcmqJL4SqhJI1Rym8v3DmhYoAmIIPvqQcimNJQNlPVYwB6XOCkdykT
-         OLU9Kx3G/XBshnMbUryhNJ9boStmuwIU3/h4/6KsfR8ZeKL1Rp7EoY2gmy7F/6y1QiF4
-         +VG81yKBAjfMSW38/pljaVk8hk6tHyqaZn4ZYxK+fxzW/wY3GfyTJNOkEo4jScx/56fE
-         yPHfvWqrDioe04B+djZsqiw+zVURjx5aIJ/hL061UMXIFFnnuXbWPzqOy8CdBptEX20y
-         zZR7URSrpGQO4RGpoK6ZUk4ccCa6aOHs9cvGXTJvfOdJ34vczdGMBYZKEaur//PCdLNG
-         u2YQ==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=PVM6js/8x3mcMhIaz4/jpNKgQpvWqEVdFBIwdtNedIM=;
+        b=I9lMtg1gpgSnYIB0xhcTagX1TjXYqb+uzVn+e3/VIlnJN1Cvl8quWLhhAjLxDJPsYJ
+         ql/L6obdzb6SFKaMMqhI5yF705kXATJHejtV5iM+XFmMcnHGuhuG8PiVV8AQ2uHW647M
+         erB3Q9Ykq8kgF/ionzzitP5N3M1Gue6vr6RbU7MjmxAlR9F00z1HUbZpyzyMB3yNOLAP
+         iqStLJLER9pcN9VzynFd4P2IwJjLbCnAUrmk1t3BEi57RwmCpIqB0QPZfJxrifI8ZBzl
+         Zkra/SuL0FVgnsxXkJfwG4xFlGBJ+cBiKyZz+LbzvcumezMIquLSaqH4e9Qk7XQqPb9O
+         zMdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=NbyJ52lo/KmaI1lmzIR9nAP6ZETday/C62CbdVi1cY4=;
-        b=dk6WBwwL8yP2Y7qqJrifZ4Oymbn4gYpnpzOYv6EOKRLrCcFotp/q26WOlMLVgy4Dh/
-         zNUeA+x4xgNqjXY7a25Xo4FsQAhPR6bXrRO+iBq/UzRGS+J8AwpE1eFOjUbol8529TeM
-         NigIl7QulOrRIW7d5i15MYzfawuYQ/q7eeFL9D9i4cNa2ZitIdIhzemg/9PWRt055U+J
-         20fUf6Gog3JmAm/M4m+Am5XaJCEOLgZ0adtkJxMh1FN5uwVfW6PB4plcvvU1ktkLW2EN
-         KqQwpOBixCGaQ6RcMfH8XMuDmQjTxYUNSTR9hdWKFaxRZO5xL5tdTgoEwIoco1zOieRK
-         4tbw==
-X-Gm-Message-State: AOAM530BkoZy5X0DmP43b+H9j5ttZm+5UhynecqKVCdyAij3QZZ4ttBD
-        pXt7R1Rc6k7/oZQYFIQBwstbmg==
-X-Google-Smtp-Source: ABdhPJy5vmsx5YHZHlI2wZ/cyOKopA5+3pAS/nbVCzQLLdOqqQxL6Rzh1aHKLGo61cz4ESaeMapnFA==
-X-Received: by 2002:a05:620a:70c:: with SMTP id 12mr35408930qkc.377.1620859436034;
-        Wed, 12 May 2021 15:43:56 -0700 (PDT)
-Received: from [192.168.1.79] (bras-base-kntaon1617w-grc-25-174-95-97-70.dsl.bell.ca. [174.95.97.70])
-        by smtp.googlemail.com with ESMTPSA id x28sm1181491qtm.71.2021.05.12.15.43.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 May 2021 15:43:55 -0700 (PDT)
-Subject: Re: [RFC Patch bpf-next] bpf: introduce bpf timer
-To:     Joe Stringer <joe@cilium.io>, Cong Wang <xiyou.wangcong@gmail.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Linux Kernel Network Developers <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        Xiongchun Duan <duanxiongchun@bytedance.com>,
-        Dongdong Wang <wangdongdong.6@bytedance.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Pedro Tammela <pctammela@mojatatu.com>
-References: <20210402192823.bqwgipmky3xsucs5@ast-mbp>
- <CAM_iQpUfv7c19zFN1Y5-cSUiVwpk0bmtBMSxZoELgDOFCQ=qAw@mail.gmail.com>
- <20210402234500.by3wigegeluy5w7j@ast-mbp>
- <CAM_iQpWf2aYbY=tKejb=nx7LWBLo1woTp-n4wOLhkUuDCz8u-Q@mail.gmail.com>
- <20210412230151.763nqvaadrrg77kd@ast-mbp.dhcp.thefacebook.com>
- <CAM_iQpWePmmpr0RKqCrQ=NPiGrq2Tx9OU9y3e4CTzFjvh5t47w@mail.gmail.com>
- <CAADnVQLsmULxJYq9rHS4xyg=VAUeexJTh35vTWTVgjeqwX4D6g@mail.gmail.com>
- <CAM_iQpVtxgZNeqh4_Pqftc3D163JnRvP3AZRuFrYNeyWLgVBVA@mail.gmail.com>
- <CAADnVQLFehCeQRbwEQ9VM-=Y3V3es2Ze8gFPs6cZHwNH0Ct7vw@mail.gmail.com>
- <CAM_iQpWDhoY_msU=AowHFq3N3OuQpvxd2ADP_Z+gxBfGduhrPA@mail.gmail.com>
- <20210427020159.hhgyfkjhzjk3lxgs@ast-mbp.dhcp.thefacebook.com>
- <CAM_iQpVE4XG7SPAVBmV2UtqUANg3X-1ngY7COYC03NrT6JkZ+g@mail.gmail.com>
- <CAADnVQK9BgguVorziWgpMktLHuPCgEaKa4fz-KCfhcZtT46teQ@mail.gmail.com>
- <CAM_iQpWBrxuT=Y3CbhxYpE5a+QSk-O=Vj4euegggXAAKTHRBqw@mail.gmail.com>
- <CAOftzPh0cj_XRES8mrNWnyKFZDLpRez09NAofmu1F1JAZf43Cw@mail.gmail.com>
-From:   Jamal Hadi Salim <jhs@mojatatu.com>
-Message-ID: <ac30da98-97cd-c105-def8-972a8ec573d6@mojatatu.com>
-Date:   Wed, 12 May 2021 18:43:53 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.0
-MIME-Version: 1.0
-In-Reply-To: <CAOftzPh0cj_XRES8mrNWnyKFZDLpRez09NAofmu1F1JAZf43Cw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=PVM6js/8x3mcMhIaz4/jpNKgQpvWqEVdFBIwdtNedIM=;
+        b=eFbnZDFCRwJuXaoDn5OKhsLUoDPcPXWE9syrxdnTiaKOE68ZUp6H7pkfsnCUGt5Yd3
+         DB0BH4zLv/JJcuBjQQ75o+cFCbFzati7nXFIeQo92pRjT0H5my8xsnYf9dmx5V4NJs3l
+         OtKpszz2Izec3uztq/s02SPmAqsoZhubsl7W08Gq8mLjp04Sm/U2zk13zwhlbkW6uosE
+         gIVn+N9YS2I7b923SGEElW3CAXra+j7K99OlGJnuyw902PIBGr12o1T2Yy1gQ/AsJoMF
+         sS3VSSMXBPg+T5VDAGIBAy5v8LcWaM5zegRh80TtvV/9NHlwWzJAhYj/moZ/3+0fgxpC
+         Jw7A==
+X-Gm-Message-State: AOAM530a2DDG0iGNFXePulaVpeNCVN+cWDRMbP8RhKDFf4dhrDN2V2IV
+        oepIsgBv6FSA3Q1HY7a6NMw=
+X-Google-Smtp-Source: ABdhPJxMBHqq6oZVnUMtfnCXSZQnrHLwvK2cWlzOKtC4eSYkhV07Kf9wTwZjRwmz/o57vMlL00RyFg==
+X-Received: by 2002:a17:90b:188f:: with SMTP id mn15mr2273496pjb.219.1620855208484;
+        Wed, 12 May 2021 14:33:28 -0700 (PDT)
+Received: from ast-mbp.thefacebook.com ([163.114.132.4])
+        by smtp.gmail.com with ESMTPSA id c128sm609222pfa.189.2021.05.12.14.33.26
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 12 May 2021 14:33:27 -0700 (PDT)
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     davem@davemloft.net
+Cc:     daniel@iogearbox.net, andrii@kernel.org, john.fastabend@gmail.com,
+        bpf@vger.kernel.org, kernel-team@fb.com
+Subject: [PATCH v5 bpf-next 15/21] libbpf: Cleanup temp FDs when intermediate sys_bpf fails.
+Date:   Wed, 12 May 2021 14:32:50 -0700
+Message-Id: <20210512213256.31203-16-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.13.5
+In-Reply-To: <20210512213256.31203-1-alexei.starovoitov@gmail.com>
+References: <20210512213256.31203-1-alexei.starovoitov@gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 2021-05-11 1:05 a.m., Joe Stringer wrote:
-> Hi Cong,
-> 
+From: Alexei Starovoitov <ast@kernel.org>
 
->> and let me quote the original report here:
->>
->> "The current implementation (as of v1.2) for managing the contents of
->> the datapath connection tracking map leaves something to be desired:
->> Once per minute, the userspace cilium-agent makes a series of calls to
->> the bpf() syscall to fetch all of the entries in the map to determine
->> whether they should be deleted. For each entry in the map, 2-3 calls
->> must be made: One to fetch the next key, one to fetch the value, and
->> perhaps one to delete the entry. The maximum size of the map is 1
->> million entries, and if the current count approaches this size then
->> the garbage collection goroutine may spend a significant number of CPU
->> cycles iterating and deleting elements from the conntrack map."
-> 
-> I'm also curious to hear more details as I haven't seen any recent
-> discussion in the common Cilium community channels (GitHub / Slack)
-> around deficiencies in the conntrack garbage collection since we
-> addressed the LRU issues upstream and switched back to LRU maps.
+Fix loader program to close temporary FDs when intermediate
+sys_bpf command fails.
 
-For our use case we cant use LRU. We need to account for every entry i.e
-we dont want it to be gc without our consent. i.e we want to control
-the GC. Your PR was pointing to LRU deleting some flow entries for TCP
-which were just idling for example.
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ tools/lib/bpf/bpf_gen_internal.h |  1 +
+ tools/lib/bpf/gen_loader.c       | 48 +++++++++++++++++++++++++++++---
+ 2 files changed, 45 insertions(+), 4 deletions(-)
 
+diff --git a/tools/lib/bpf/bpf_gen_internal.h b/tools/lib/bpf/bpf_gen_internal.h
+index f42a55efd559..615400391e57 100644
+--- a/tools/lib/bpf/bpf_gen_internal.h
++++ b/tools/lib/bpf/bpf_gen_internal.h
+@@ -15,6 +15,7 @@ struct bpf_gen {
+ 	void *data_cur;
+ 	void *insn_start;
+ 	void *insn_cur;
++	ssize_t cleanup_label;
+ 	__u32 nr_progs;
+ 	__u32 nr_maps;
+ 	int log_level;
+diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
+index 585c672cc53e..bf61a046bc77 100644
+--- a/tools/lib/bpf/gen_loader.c
++++ b/tools/lib/bpf/gen_loader.c
+@@ -97,8 +97,36 @@ static void bpf_gen__emit2(struct bpf_gen *gen, struct bpf_insn insn1, struct bp
+ 
+ void bpf_gen__init(struct bpf_gen *gen, int log_level)
+ {
++	size_t stack_sz = sizeof(struct loader_stack);
++	int i;
++
+ 	gen->log_level = log_level;
++	/* save ctx pointer into R6 */
+ 	bpf_gen__emit(gen, BPF_MOV64_REG(BPF_REG_6, BPF_REG_1));
++
++	/* bzero stack */
++	bpf_gen__emit(gen, BPF_MOV64_REG(BPF_REG_1, BPF_REG_10));
++	bpf_gen__emit(gen, BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -stack_sz));
++	bpf_gen__emit(gen, BPF_MOV64_IMM(BPF_REG_2, stack_sz));
++	bpf_gen__emit(gen, BPF_MOV64_IMM(BPF_REG_3, 0));
++	bpf_gen__emit(gen, BPF_EMIT_CALL(BPF_FUNC_probe_read_kernel));
++
++	/* jump over cleanup code */
++	bpf_gen__emit(gen, BPF_JMP_IMM(BPF_JA, 0, 0,
++				       /* size of cleanup code below */
++				       (stack_sz / 4) * 3 + 2));
++
++	/* remember the label where all error branches will jump to */
++	gen->cleanup_label = gen->insn_cur - gen->insn_start;
++	/* emit cleanup code: close all temp FDs */
++	for (i = 0; i < stack_sz; i += 4) {
++		bpf_gen__emit(gen, BPF_LDX_MEM(BPF_W, BPF_REG_1, BPF_REG_10, -stack_sz + i));
++		bpf_gen__emit(gen, BPF_JMP_IMM(BPF_JSLE, BPF_REG_1, 0, 1));
++		bpf_gen__emit(gen, BPF_EMIT_CALL(BPF_FUNC_sys_close));
++	}
++	/* R7 contains the error code from sys_bpf. Copy it into R0 and exit. */
++	bpf_gen__emit(gen, BPF_MOV64_REG(BPF_REG_0, BPF_REG_7));
++	bpf_gen__emit(gen, BPF_EXIT_INSN());
+ }
+ 
+ static int bpf_gen__add_data(struct bpf_gen *gen, const void *data, __u32 size)
+@@ -177,12 +205,24 @@ static void bpf_gen__emit_sys_bpf(struct bpf_gen *gen, int cmd, int attr, int at
+ 	bpf_gen__emit(gen, BPF_MOV64_REG(BPF_REG_7, BPF_REG_0));
+ }
+ 
++static bool is_simm16(__s64 value)
++{
++	return value == (__s64)(__s16)value;
++}
++
+ static void bpf_gen__emit_check_err(struct bpf_gen *gen)
+ {
+-	bpf_gen__emit(gen, BPF_JMP_IMM(BPF_JSGE, BPF_REG_7, 0, 2));
+-	bpf_gen__emit(gen, BPF_MOV64_REG(BPF_REG_0, BPF_REG_7));
+-	/* TODO: close intermediate FDs in case of error */
+-	bpf_gen__emit(gen, BPF_EXIT_INSN());
++	__s64 off = -(gen->insn_cur - gen->insn_start - gen->cleanup_label) / 8 - 1;
++
++	/* R7 contains result of last sys_bpf command.
++	 * if (R7 < 0) goto cleanup;
++	 */
++	if (is_simm16(off)) {
++		bpf_gen__emit(gen, BPF_JMP_IMM(BPF_JSLT, BPF_REG_7, 0, off));
++	} else {
++		gen->error = -ERANGE;
++		bpf_gen__emit(gen, BPF_JMP_IMM(BPF_JA, 0, 0, -1));
++	}
+ }
+ 
+ /* reg1 and reg2 should not be R1 - R5. They can be R0, R6 - R10 */
+-- 
+2.30.2
 
-> There's an update to the report quoted from the same link above:
-> 
-> "In recent releases, we've moved back to LRU for management of the CT
-> maps so the core problem is not as bad; furthermore we have
-> implemented a backoff for GC depending on the size and number of
-> entries in the conntrack table, so that in active environments the
-> userspace GC is frequent enough to prevent issues but in relatively
-> passive environments the userspace GC is only rarely run (to minimize
-> CPU impact)."
-> 
-> By "core problem is not as bad", I would have been referring to the
-> way that failing to garbage collect hashtables in a timely manner can
-> lead to rejecting new connections due to lack of available map space.
-> Switching back to LRU mitigated this concern. With a reduced frequency
-> of running the garbage collection logic, the CPU impact is lower as
-> well. I don't think we've explored batched map ops for this use case
-> yet either, which would already serve to improve the CPU usage
-> situation without extending the kernel.
-> 
-
-Will run some tests tomorrow to see the effect of batching vs nobatch
-and capture cost of syscalls and cpu.
-
-Note: even then, it is not a good general solution. Our entries can
-go as high as 16M.
-Our workflow is: 1) every 1-5 seconds you dump, 2) process for
-what needs to be deleted etc, then do updates (another 1-3 seconds
-worth of time). There is a point, depending on number of entries,
-where there your time cost of processing exceeds your polling period.
-The likelihood of entry state loss is high for even 1/2 sec loss
-of sync.
-
-> The main outstanding issue I'm aware of is that we will often have a
-> 1:1 mapping of entries in the CT map and the NAT map, and ideally we'd
-> like them to have tied fates but currently we have no mechanism to do
-> this with LRU. When LRU eviction occurs, the entries can get out of
-> sync until the next GC.
-
-Yes, this ties as well to our use case (not NAT for us, but semantically
-similar challenge). It goes the other way too, if userspace decides
-to adjust your NAT table you need to purge related entries from the
-cache.
-
-
-
-> I could imagine timers helping with this if we
-
-Yes, timers would solve this.
-
-I am not even arguing that we need timers to solve these issues. I am
-just saying it seems timers are just fundamental infra that is needed
-even outside the scope of this.
-
-cheers,
-jamal
