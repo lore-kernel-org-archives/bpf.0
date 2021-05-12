@@ -2,198 +2,148 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C325DC43460
-	for <bpf@archiver.kernel.org>; Wed, 12 May 2021 14:39:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5517AC43611
+	for <bpf@archiver.kernel.org>; Wed, 12 May 2021 17:07:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7DC4361411
-	for <bpf@archiver.kernel.org>; Wed, 12 May 2021 14:39:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1FD2261428
+	for <bpf@archiver.kernel.org>; Wed, 12 May 2021 17:07:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231173AbhELOku (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 12 May 2021 10:40:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36366 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230347AbhELOkt (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 12 May 2021 10:40:49 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E3EC06174A
-        for <bpf@vger.kernel.org>; Wed, 12 May 2021 07:39:40 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id x8so1592122wrq.9
-        for <bpf@vger.kernel.org>; Wed, 12 May 2021 07:39:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Rfei5MEg9bMEdOxZz3i9gp/4Xf63nRd6sW81/rNWaPA=;
-        b=zkeeqiVHma3XJR/YrkY21U3s61+aPn20UKjLvK2B6kIuhVHYPMLf+YCIAZYOV2cOwA
-         GCgI9Iac036xWy7Ttp1TDN5cXN2sFNjE1DBNA6/3sokb7tEXhvTjVxhfdpOH1/PUHIvs
-         iJqiIzJ7sTSwwNgkCAwMRI+pHWYdLA1e53lomjMrZPFdBg0ENDrUoo0IxnlaUWGALyeJ
-         gDCUwT0IoJ6hnLYeIs3/GdcDVteMS9mmUc0AuillQR8knPOjzmpuZiZ/kldaw1b4hjb5
-         hZoHP0FJK5G4bZ8L8afAbmJ9y6WG5t5gxL1ak3NvCE5Ts3cPtUzH+nlUKLGJ5SfS+6yZ
-         3lrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Rfei5MEg9bMEdOxZz3i9gp/4Xf63nRd6sW81/rNWaPA=;
-        b=M3MT8XQuxNop4Z5haf77Tgcy3ON3mYraD9IXEoYJ1vf0NHNTRHzCSA0dQ2pkYYKups
-         srpavHO72UAC5v5iQd97JugZMgj5X4EMI+XZdehDPKkCBDufW2V/lHg/sRmSeL49PIvS
-         ose2RfMBqEgHa9PX5a+6JFUIt8d0Hdu4hsnwFFtYCdxs3YTXgGyPYAWOpNQX+3P2DTiT
-         Ea7TBS/1J/ypqyUDBWtG244eOJPNpXk2prIoZyfqTtNdvUA7SMoKSfDrg8dTSF/K3Iut
-         08a375Wo9vrmVtKQLG7XIA3HoH3VgNsvWLXGVWGY+IwVL3dB6YozOx+zgQBrdzHbjIAy
-         o3fg==
-X-Gm-Message-State: AOAM533OE5uO3wLsPP9BHQq1XHp51rdIahtPAOaW7uBZn+rYGOkxHXXl
-        uUnehSoF+Hy2MPqbAhj5D8Z5OA==
-X-Google-Smtp-Source: ABdhPJyVfNFYYeNQ4AG+yp0IlLCFS0VkZrtKFW3E+38v4QOFOQ28Vij61Om2GuDVOc7ydR2EYbR9cA==
-X-Received: by 2002:adf:d1c6:: with SMTP id b6mr42542657wrd.110.1620830379358;
-        Wed, 12 May 2021 07:39:39 -0700 (PDT)
-Received: from apalos.home ([94.69.77.156])
-        by smtp.gmail.com with ESMTPSA id v17sm29739475wrd.89.2021.05.12.07.39.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 May 2021 07:39:38 -0700 (PDT)
-Date:   Wed, 12 May 2021 17:39:33 +0300
-From:   Ilias Apalodimas <ilias.apalodimas@linaro.org>
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     Eric Dumazet <eric.dumazet@gmail.com>,
-        Matteo Croce <mcroce@linux.microsoft.com>,
-        netdev <netdev@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
-        Ayush Sawal <ayush.sawal@chelsio.com>,
-        Vinay Kumar Yadav <vinay.yadav@chelsio.com>,
-        Rohit Maheshwari <rohitm@chelsio.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Mirko Lindner <mlindner@marvell.com>,
-        Stephen Hemminger <stephen@networkplumber.org>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Boris Pismenny <borisp@nvidia.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Yu Zhao <yuzhao@google.com>,
-        Will Deacon <will@kernel.org>,
-        Michel Lespinasse <walken@google.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Roman Gushchin <guro@fb.com>, Hugh Dickins <hughd@google.com>,
-        Peter Xu <peterx@redhat.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Alexander Lobakin <alobakin@pm.me>,
-        Cong Wang <cong.wang@bytedance.com>, wenxu <wenxu@ucloud.cn>,
-        Kevin Hao <haokexin@gmail.com>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        Marco Elver <elver@google.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Yunsheng Lin <linyunsheng@huawei.com>,
-        Guillaume Nault <gnault@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Matthew Wilcox <willy@infradead.org>,
-        David Ahern <dsahern@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Andrew Lunn <andrew@lunn.ch>, Paolo Abeni <pabeni@redhat.com>,
-        Sven Auhagen <sven.auhagen@voleatech.de>
-Subject: Re: [PATCH net-next v4 2/4] page_pool: Allow drivers to hint on SKB
- recycling
-Message-ID: <YJvopUsZHcGb7q24@apalos.home>
-References: <20210511133118.15012-1-mcroce@linux.microsoft.com>
- <20210511133118.15012-3-mcroce@linux.microsoft.com>
- <fa93976a-3460-0f7f-7af4-e78bfe55900a@gmail.com>
- <YJuk3o6CezbVrT+P@apalos.home>
- <CANn89iLkq0zcbVeRRPGfeb5ZRcnz+e7dR1BCj-RGehNYE1Hzkw@mail.gmail.com>
+        id S241446AbhELRIR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 12 May 2021 13:08:17 -0400
+Received: from sonic317-38.consmr.mail.ne1.yahoo.com ([66.163.184.49]:39068
+        "EHLO sonic317-38.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234033AbhELQTC (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 12 May 2021 12:19:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1620836274; bh=sTgvXuL0QyV3DWP7rJnz73UM1noGLdd9LQiIFFkdesM=; h=Subject:To:Cc:References:From:Date:In-Reply-To:From:Subject:Reply-To; b=ILRKGl/EIHUvQjhp8Z/kl2sjgVpMP1RDKh3CuccfjslVJQYHnqHtTNkeTHiVJkR9cQnbDdC3HL9+DLoQfJhcjCB6ocDEXTAh9l0rBArFe08jlwrZeWYEUMcEmNjI+dm2xQ4gbM0m/s2NCRJpIoWD/9pHs+CwJfc5A/ZIGE4DaAcDy/MpZtk7Eby1BT9GjOqNvpN2f/1tJ32fPyC6h2rw2Mkj8PQgGIeqJxKvP845zI4BIJVW9Vt/iHHzamwT/VM7JfVfD9BpzP2hR6s8tFf8fX7rD61FH/J0t2rwecGyZy8ZCb6ud3t0pizN0wQ4Z9KQ5m/e4gMmZ2hf+vSKFUtIFA==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1620836274; bh=9zkzFpJhpAtKSS7dp81m3gO08jVTWzIIU41o5cVd1QD=; h=X-Sonic-MF:Subject:To:From:Date:From:Subject; b=riO/9yTMWiAOR3F2VfwmHuf8wv+kL1VYCecGPju58EecHRAs9CywkyiQGXWCP4opx4XrozrDbWCNKCN8c3AvVkJed71MregD+4Plpy4564hcezqKYdS/8Dz/QRFu712Mxn+N5apkd3VW4RqY06028meNsJ930KSRAZ7QWhktNwqL/e1IpM1d8lXZn+14Ht+Fz1bgHZVn2V1+7CMWpF4O+OPmY6Nb9zSIaap3K1FL0vxRmOnZCqwZPOaLgYfzlPam4W1Ty0esh1IJxfzSYz3mEaLc8BoNwanI/3gX4hpzkaCkG+pHd62RtWaNuTa8pkrv5cPjDsRTpz1dydbyBdMirg==
+X-YMail-OSG: u3eIsq0VM1mrdWqd1ddc3yi2FSJAQ4ntlInGeECmzJrk_SDLHdW6J_k8ZCquxd7
+ OiYa2lX6SplN0e2K9uf4CqoloD2.5_D5zwfJAcWjJAmAFq_I84XSvl.77YdT9abn2hvpYoa8.ch9
+ jaiJg5aqvOFCiWKdn_.BsERkiiqL16HqSVhYX.1CXskeVX5.0Zgo.74vkVLxKHvcELAg2nOHDQDy
+ BdeexdMuHABDfG0wVOBFgTuS.VpFcMcYh70AHl2bN6vy8QfUaamWMGHjwuXY1kspO8lr_exoj0vG
+ Mp.HZRJ7gMra3c6stz.XSR6K32tQNckEFyVZDdGkBBnoSXINRnk1UhJNyqXAPnvF05f6oj1orQHA
+ NO59mWNhg1De8R3lsGqO_yQEb8GDJcrfdxnBm7QN4T_QfZ4gSUMj9sIFop84ygypmGVWLIFwiUqb
+ Orqi4pESN2KWdBAy6cTa7m._I7UPOtOVACdlM26nX3A.WsAUtWM6KSSRfI6DpKAumnDJEGBXVWAq
+ hpb4Do.gq3pBvz9Wr3D1prsZ2RSkvD2LzYCUx1PhaqDCPAQyDv8Ju15ffbuXcD9SMZtQbFZWw5Xo
+ gdHq.AtO.4IFfsKqvnG7K0Rgw.WJCNCOvg0g3bJo2Cx.h20PPgl9oEpoTxEuzG1IEumou.SYbRNR
+ Lmc3nWhEQ8SdYV049qNpogc8rW1skTTaxlMf8xQfk9_EOdFXXRKxW06F5epGkZlkk4ZTgaf3sBtp
+ 9jV.FiKz0yilKFKqtuHS.vkwKK4IGBkLUoTZeGiAVocYLhIgi6.JjYPhWMCY8XUFWkDgTzJTb13W
+ cAHOWSZHlPc_mxADVWFRpL8_6lG.0mzqEw0RdqUahWpVuQqU_cK9n.ymtf8u2hF1wmMlU3QzYM0c
+ CQkZvblKkuY2XihwwZH87P8.XFIkgRpgLZEGj_eUJlEAM30Y02f7UeB1gTbt.oR5psmaz35ApPmH
+ DfDejf6dgeIkrB1B_V.ThE2el.agVt4TP7VXg.xGRDygYAQFn1hSeH6PuwiVQECYrKQlBNgqnLY5
+ xYpZGddZzG3nL7xK._Gmm4w3FYRCPSxDsH8.qlfM7pvRGoyK2XYU_KfeMJ_M_qMe7jzU.nLxijLd
+ O3xhcZTrKcgbUCv9Kkw23O6xOCBbMshXeyoLrVEyrTlT_rRoo.0PUGGtFq0ZTY6UOufDSVlle0az
+ kZ4ZO97WgSyuUjhuCYy.vzHjkEv7aWk1hHpa_Kb.xuZ7e6BgisQFmOhtMBoVX.t4hKPvSGJv2qSI
+ 8g7n7nNgKBRbt.woahmI2bwwHmUSCi1IZg60fv0Z8BJ5vqz1Eb2EY4kYvn8mpgz4phcRVsQz582G
+ CGr_9Ik6oO2WqQxJ9MwPquC5OlFDDz3x6331kD1MmTlu0mhVeamp1vvUmRiVxukUKGoOCkCJmMxv
+ 9b1B09fYbT7fC1.JGF9GFxr1_pR06EhI7gumLwQVJuw4YZae3Ag0cm2Y5U6Hv6Y.Hw6L9wvhLY7V
+ sIl_qV2lMaJTWCw2a4vzGEDWezx2Y7bsFBRnEK0FtT9Yg9sArVPVbGlv5xp_QTu63ULo5qqaOPCI
+ JoCw3GNvYwCDX0_8aFj0bHZVcQ.sKzv98ZRCw6Q5tqdNoTURUG5BPtl7kVQMA.spaaxoxwxkPot5
+ cRGZDyBulQSULXf3L8Tw113evFWAxZs_Ms1AynP81S_dJTNG64ZRzuNf2IDvURhnmi9nTsVGPDM8
+ flIpwTscFYGSWqWr6G6GVzisfkEte1GiVj_70RydDPB38ay0hieyTwfOUzeIl5RI0nuq7Z4zR6s4
+ SMtXXnKI9oXWi7JgdKR5_w9feK3WUAQTMvPwjYohdgFgG.l4RfrbSbdVtPXKI7XIsdeamQIoqBcV
+ WlY5vmwcD0fxEGZ5H7tFR171rmBaZgBUBRL3Ug9YkP88TJ.YWPtQsfJIQ9BUYzKKKIZ5hWNiIycF
+ mlHe8CqUpycYWLCQzZf.08VQ0YdcicsvC87Ti6NBC127Eq2hVj9jQBClunBpfVxZU5MFkM5UOTbn
+ vXX9C.L92BHWxZD9XV0uRwjQo7DRuGjRIryoWtvJaO7xEavh82BDA_INEbu.aE4rhovJT_K_XBtH
+ heEZIA68O4PM1aFV6MicyFjsWR.8TadXZm03IbQ6HGf8ti5EyCNMlATI1hPy7QI9yG56uwHg4_9J
+ ygk3dF2gyRwnedbZ_TWL5yx5hHW1yj0hwP3vRRAEDzcZVjdj4x5MgQQ6UknN25w3WejJaz4Du73H
+ WjM29DUunllmfHDR0uJDZB2dMLnJnZ7VcOa4_JAwcRbjcEhslkDYRSgVc1jEfSssT4z6u8PVHJNG
+ fhxXKzWjrLTV4Nv_wnExV8l3wyT9wF5x_i6.5QGUrzGbu2Rug7KaP.iX9USns6LwPaY8l3x7dPR5
+ iRc_Py7GOzpdSNtTMEtm5PnTWu_Pvh8PGuZSovSqxaSp3O18yTT70Q4LM_Te8yFCr279_pQ643kG
+ 17LeZHGngeoCcTYaI_53Z8Z3xZ9bkKZanq8FYJN9TwmHZdjIZCrZfYawR_ClUkijR8NUsZMa1E55
+ wSndKvXCxwTRcHzD1I4yKH1gOzA24NLTtKQ.vbJMQl9vzdovn.4nlIPVDhk1N_MfcgLv9W0MBwcc
+ i47JMxCHExhPtMndnfQzIe47vbd_n7N9CjODTLhpeoyxeUXZjrdMpVB9mz4MFBrZqzdyp.zK7BFV
+ iN_zLvOD4L5oDvnYnebFDsnA.fdhh5K9yfRKmDa7KrS50TqXY4VB661xASPjXj5fDOZdjH_7flhM
+ n6tXczhGkJ6_FP2ucySIDAfxqvLxBC.2B0mbOed8ZTGYlS2FfdiEy4PHAvXw0wFSl._.0A.ybGzK
+ 9zFunST1.TFXwoPhARYYSN.Fd6KXs.U.uUuXloJbsx3M8QjAsgPgV3plULiJq_a34jAQKHzMr2G5
+ FwNNCStb4KkYO4iWxfGT7alhLjbZPZFZHypY5XXBZWodGFOYViXjxtQQQu4WErUIAbkHuDF.5yhX
+ kEBkbUk2KzXv9i6fleXOb9dEN.B4NbJOUB3fwQqg.tT8I1Sy_BuVpM53_UPxSWaUaME20WT8ycYi
+ WBrUb80dAKq6gYEId_towkkqZoOmFtdReA9SuK8A.XKPMlnn7U0DZHoDkSDQdWEupmUenOZFSvlO
+ CYW0D.pl8nsE2xeDYvtbywONuTFTbaXIO6xlfDiRyWdoiSEVJccNe7D1JnwB7qw1fpLtBx30kVma
+ XLaBND1Ym.0.zhtr4bSeVD6njYOwh0sNyzZKSCtkVqC.OKRaG73BjWZJTIcfzhMxD6162r77CnUd
+ WgDWHBUbUJ4sgDqhGyeZZy5mXtN64kDlIA7R6Nhy1r4waHr.twbsBRL1UpOgVBQhL5P5t_cgWPTq
+ OOYmB5JUP8eL0gGdXauAb1ToPk02T8WFObZHBaHeuPozUwCPOdNqvwgaQLv1eN6ThTOTOCFK3k6V
+ wZqbsvUYwokjwCxMq.WcQDMtGlC.j_n55PxgXmXfunkwsS_vq6dV0RjBfIoZAcyekEe4oGR2Nepu
+ 9JBe_dM13xK1MCoU-
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic317.consmr.mail.ne1.yahoo.com with HTTP; Wed, 12 May 2021 16:17:54 +0000
+Received: by kubenode575.mail-prod1.omega.gq1.yahoo.com (VZM Hermes SMTP Server) with ESMTPA ID aeedecbba43991c93baefb338f58092f;
+          Wed, 12 May 2021 16:17:51 +0000 (UTC)
+Subject: Re: [PATCH] lockdown,selinux: fix bogus SELinux lockdown permission
+ checks
+To:     Ondrej Mosnacek <omosnace@redhat.com>
+Cc:     Linux Security Module list 
+        <linux-security-module@vger.kernel.org>,
+        James Morris <jmorris@namei.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        SElinux list <selinux@vger.kernel.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, network dev <netdev@vger.kernel.org>,
+        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>
+References: <20210507114048.138933-1-omosnace@redhat.com>
+ <a8d138a6-1d34-1457-9266-4abeddb6fdba@schaufler-ca.com>
+ <CAFqZXNtr1YjzRg7fTm+j=0oZF+7C5xEu5J0mCZynP-dgEzvyUg@mail.gmail.com>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+Message-ID: <24a61ff1-e415-adf8-17e8-d212364d4b97@schaufler-ca.com>
+Date:   Wed, 12 May 2021 09:17:50 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANn89iLkq0zcbVeRRPGfeb5ZRcnz+e7dR1BCj-RGehNYE1Hzkw@mail.gmail.com>
+In-Reply-To: <CAFqZXNtr1YjzRg7fTm+j=0oZF+7C5xEu5J0mCZynP-dgEzvyUg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Mailer: WebService/1.1.18295 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo Apache-HttpAsyncClient/4.1.4 (Java/16)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi Eric,
+On 5/12/2021 6:21 AM, Ondrej Mosnacek wrote:
+> On Sat, May 8, 2021 at 12:17 AM Casey Schaufler <casey@schaufler-ca.com> wrote:
+>> On 5/7/2021 4:40 AM, Ondrej Mosnacek wrote:
+>>> Commit 59438b46471a ("security,lockdown,selinux: implement SELinux
+>>> lockdown") added an implementation of the locked_down LSM hook to
+>>> SELinux, with the aim to restrict which domains are allowed to perform
+>>> operations that would breach lockdown.
+>>>
+>>> However, in several places the security_locked_down() hook is called in
+>>> situations where the current task isn't doing any action that would
+>>> directly breach lockdown, leading to SELinux checks that are basically
+>>> bogus.
+>>>
+>>> Since in most of these situations converting the callers such that
+>>> security_locked_down() is called in a context where the current task
+>>> would be meaningful for SELinux is impossible or very non-trivial (and
+>>> could lead to TOCTOU issues for the classic Lockdown LSM
+>>> implementation), fix this by adding a separate hook
+>>> security_locked_down_globally()
+>> This is a poor solution to the stated problem. Rather than adding
+>> a new hook you should add the task as a parameter to the existing hook
+>> and let the security modules do as they will based on its value.
+>> If the caller does not have an appropriate task it should pass NULL.
+>> The lockdown LSM can ignore the task value and SELinux can make its
+>> own decision based on the task value passed.
+> The problem with that approach is that all callers would then need to
+> be updated and I intended to keep the patch small as I'd like it to go
+> to stable kernels as well.
+>
+> But it does seem to be a better long-term solution - would it work for
+> you (and whichever maintainer would be taking the patch(es)) if I just
+> added another patch that refactors it to use the task parameter?
 
-[...]
-> > > > +   if (skb->pp_recycle && page_pool_return_skb_page(head))
-> > >
-> > > This probably should be attempted only in the (skb->head_frag) case ?
-> >
-> > I think the extra check makes sense.
-> 
-> What do you mean here ?
-> 
+I can't figure out what you're suggesting. Are you saying that you
+want to add a new hook *and* add the task parameter?
 
-I thought you wanted an extra check in the if statement above.  So move the
-block under the existing if. Something like
-
-	if (skb->head_frag) {
-		#ifdef (CONFIG_PAGE_POOL)
-			if (skb->pp_recycle && page_pool_return_skb_page(head))
-			return;
-		#endif
-        skb_free_frag(head);
-	} else {
-	.....
-
-> >
-> > >
-> > > Also this patch misses pskb_expand_head()
-> >
-> > I am not sure I am following. Misses what? pskb_expand_head() will either
-> > call skb_release_data() or skb_free_head(), which would either recycle or
-> > unmap the buffer for us (depending on the page refcnt)
-> 
->  pskb_expand_head() allocates a new skb->head, from slab.
-> 
-> We should clear skb->pp_recycle for consistency of the skb->head_frag
-> clearing we perform there.
-
-Ah right, good catch. I was mostly worried we are not freeing/unmapping
-buffers and I completely missed that.  I think nothing bad will happen even
-if we don't, since the signature will eventually protect us, but it's
-definitely the right thing to do.
-
-> 
-> But then, I now realize you use skb->pp_recycle bit for both skb->head
-> and fragments,
-> and rely on this PP_SIGNATURE thing (I note that patch 1 changelog
-> does not describe why a random page will _not_ have this signature by
-> bad luck)
-
-Correct.  I've tried to explain in the previous posting as well, but that's
-the big difference compared to the initial RFC we sent a few years ago (the
-ability to recycle frags as well).
-
-> 
-> Please document/describe which struct page fields are aliased with
-> page->signature ?
-> 
-
-Sure, any preference on this? Right above page_pool_return_skb_page() ?
-
-Keep in mind the current [1/4] patch is wrong, since it will overlap
-pp_signature with mapping.  So we'll have interesting results if a page
-gets mapped to userspace :).
-What Matthew proposed makes sense, we can add something along the lines of: 
-
-+ unsigned long pp_magic;
-+ struct page_pool *pp;
-+ unsigned long _pp_mapping_pad;
-+ unsigned long dma_addr[2];
-
-in struct page. In this case page->mapping aliases to pa->_pp_mapping_pad
-
-The first word (that we'll now be using) is used for a pointer or a
-compound_head.  So as long as pp_magic doesn't resemble a pointer and has 
-bits 0/1 set to 0 we should be safe.
-
-Thanks!
-/Ilias
+>
+> --
+> Ondrej Mosnacek
+> Software Engineer, Linux Security - SELinux kernel
+> Red Hat, Inc.
+>
