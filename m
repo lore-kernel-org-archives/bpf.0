@@ -2,111 +2,184 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A1DD2C43619
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C3E1C43611
 	for <bpf@archiver.kernel.org>; Wed, 12 May 2021 23:10:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6A7C7613EE
-	for <bpf@archiver.kernel.org>; Wed, 12 May 2021 23:10:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 11CBE61419
+	for <bpf@archiver.kernel.org>; Wed, 12 May 2021 23:10:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346899AbhELXEL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 12 May 2021 19:04:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45850 "EHLO
+        id S1347160AbhELXEg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 12 May 2021 19:04:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347129AbhELVpY (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 12 May 2021 17:45:24 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48CBC08C5E1
-        for <bpf@vger.kernel.org>; Wed, 12 May 2021 14:33:39 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id e19so1463525pfv.3
-        for <bpf@vger.kernel.org>; Wed, 12 May 2021 14:33:39 -0700 (PDT)
+        with ESMTP id S1444034AbhELWxV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 12 May 2021 18:53:21 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 033FFC0610ED
+        for <bpf@vger.kernel.org>; Wed, 12 May 2021 15:43:56 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id i67so23905891qkc.4
+        for <bpf@vger.kernel.org>; Wed, 12 May 2021 15:43:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=ZYq8QSGd4vPZ+7dnoLxzG0qO6UiIeqyrRaawGiLioCI=;
-        b=XbOHspSD7mJLVx4TuNUIeL25SHw0jxKgOmB9p7OnM/DTgE5XMrFKrSg/BR+wBqDrqJ
-         8fDV06X+TDv3RH60B81ZWzZlz81es1MFQ5sFrKbHIr1X1OagptQvqjPaXU/t0NsW5eOa
-         gNMQN1kz79fYKIdZjv0qPOLm1NGHpymcO9iwkCMnqmFjbIjqLRuEwr0S7b0aTwoYR6Yh
-         eFAt2D5sEVmNtF20JMaCHD6rzoRWzzBZxIJWccqhfrTVTh1SWAHaP/+yaB3BEXE7jzNP
-         gIih2u0s3ggG1yd1kKzqSqB3nAVeW73nigrGuzakZQ+0TgOX5U6/YqQ5K/YT5YpWiiRi
-         9rYA==
+        d=mojatatu-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=NbyJ52lo/KmaI1lmzIR9nAP6ZETday/C62CbdVi1cY4=;
+        b=nZ2WySbdboM/kcmqJL4SqhJI1Rym8v3DmhYoAmIIPvqQcimNJQNlPVYwB6XOCkdykT
+         OLU9Kx3G/XBshnMbUryhNJ9boStmuwIU3/h4/6KsfR8ZeKL1Rp7EoY2gmy7F/6y1QiF4
+         +VG81yKBAjfMSW38/pljaVk8hk6tHyqaZn4ZYxK+fxzW/wY3GfyTJNOkEo4jScx/56fE
+         yPHfvWqrDioe04B+djZsqiw+zVURjx5aIJ/hL061UMXIFFnnuXbWPzqOy8CdBptEX20y
+         zZR7URSrpGQO4RGpoK6ZUk4ccCa6aOHs9cvGXTJvfOdJ34vczdGMBYZKEaur//PCdLNG
+         u2YQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=ZYq8QSGd4vPZ+7dnoLxzG0qO6UiIeqyrRaawGiLioCI=;
-        b=dbqdPVMZ/scr8JDIj4LhCQCVQnllmv6dB/4AoqHU3dMACBmEeAYkza9xNSiqG/HqZw
-         y794x83wBJtJX6Nj80CifD0YVoXCeVOKNlA6Oa4tWqN60WjcyLus4Ig+RlXyC9Z9Rl84
-         do/TQ+/u/1IhTAlL+ghD3qUkGwcnqm1sm5I/zEZmSlpLL9Yu1hD29OqnrM+pGyWivQ5C
-         rlKtwFN3iErJh4pLpX5JeONRAvJpd93CsuPSPg4ccTRS6CFFsvtffbuU7eVNadOJZbfZ
-         IfKiG6OT/yU9PXq28y2JePHE3gnSLVAaZNeD8MTOl/cdVaMoHTYnm9ete85qQbSxb7sG
-         DKCA==
-X-Gm-Message-State: AOAM532LXKXfB7dSHXse165sB/8NJne8cqhA7E48j1KC9hx+hN96D8OB
-        zK02s9d61ZzZolX8LtPb29E=
-X-Google-Smtp-Source: ABdhPJxtEE+pfxrGtrsmYnJAL22/oTzsPNWoijf/M0jrorAPP2k43y7mieNX4pTpk05HThMwyzOYNw==
-X-Received: by 2002:a17:90a:b945:: with SMTP id f5mr42369634pjw.233.1620855219423;
-        Wed, 12 May 2021 14:33:39 -0700 (PDT)
-Received: from ast-mbp.thefacebook.com ([163.114.132.4])
-        by smtp.gmail.com with ESMTPSA id c128sm609222pfa.189.2021.05.12.14.33.37
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 12 May 2021 14:33:38 -0700 (PDT)
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     davem@davemloft.net
-Cc:     daniel@iogearbox.net, andrii@kernel.org, john.fastabend@gmail.com,
-        bpf@vger.kernel.org, kernel-team@fb.com
-Subject: [PATCH v5 bpf-next 21/21] selftests/bpf: Convert test trace_printk to lskel.
-Date:   Wed, 12 May 2021 14:32:56 -0700
-Message-Id: <20210512213256.31203-22-alexei.starovoitov@gmail.com>
-X-Mailer: git-send-email 2.13.5
-In-Reply-To: <20210512213256.31203-1-alexei.starovoitov@gmail.com>
-References: <20210512213256.31203-1-alexei.starovoitov@gmail.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=NbyJ52lo/KmaI1lmzIR9nAP6ZETday/C62CbdVi1cY4=;
+        b=dk6WBwwL8yP2Y7qqJrifZ4Oymbn4gYpnpzOYv6EOKRLrCcFotp/q26WOlMLVgy4Dh/
+         zNUeA+x4xgNqjXY7a25Xo4FsQAhPR6bXrRO+iBq/UzRGS+J8AwpE1eFOjUbol8529TeM
+         NigIl7QulOrRIW7d5i15MYzfawuYQ/q7eeFL9D9i4cNa2ZitIdIhzemg/9PWRt055U+J
+         20fUf6Gog3JmAm/M4m+Am5XaJCEOLgZ0adtkJxMh1FN5uwVfW6PB4plcvvU1ktkLW2EN
+         KqQwpOBixCGaQ6RcMfH8XMuDmQjTxYUNSTR9hdWKFaxRZO5xL5tdTgoEwIoco1zOieRK
+         4tbw==
+X-Gm-Message-State: AOAM530BkoZy5X0DmP43b+H9j5ttZm+5UhynecqKVCdyAij3QZZ4ttBD
+        pXt7R1Rc6k7/oZQYFIQBwstbmg==
+X-Google-Smtp-Source: ABdhPJy5vmsx5YHZHlI2wZ/cyOKopA5+3pAS/nbVCzQLLdOqqQxL6Rzh1aHKLGo61cz4ESaeMapnFA==
+X-Received: by 2002:a05:620a:70c:: with SMTP id 12mr35408930qkc.377.1620859436034;
+        Wed, 12 May 2021 15:43:56 -0700 (PDT)
+Received: from [192.168.1.79] (bras-base-kntaon1617w-grc-25-174-95-97-70.dsl.bell.ca. [174.95.97.70])
+        by smtp.googlemail.com with ESMTPSA id x28sm1181491qtm.71.2021.05.12.15.43.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 May 2021 15:43:55 -0700 (PDT)
+Subject: Re: [RFC Patch bpf-next] bpf: introduce bpf timer
+To:     Joe Stringer <joe@cilium.io>, Cong Wang <xiyou.wangcong@gmail.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Linux Kernel Network Developers <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        Xiongchun Duan <duanxiongchun@bytedance.com>,
+        Dongdong Wang <wangdongdong.6@bytedance.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Pedro Tammela <pctammela@mojatatu.com>
+References: <20210402192823.bqwgipmky3xsucs5@ast-mbp>
+ <CAM_iQpUfv7c19zFN1Y5-cSUiVwpk0bmtBMSxZoELgDOFCQ=qAw@mail.gmail.com>
+ <20210402234500.by3wigegeluy5w7j@ast-mbp>
+ <CAM_iQpWf2aYbY=tKejb=nx7LWBLo1woTp-n4wOLhkUuDCz8u-Q@mail.gmail.com>
+ <20210412230151.763nqvaadrrg77kd@ast-mbp.dhcp.thefacebook.com>
+ <CAM_iQpWePmmpr0RKqCrQ=NPiGrq2Tx9OU9y3e4CTzFjvh5t47w@mail.gmail.com>
+ <CAADnVQLsmULxJYq9rHS4xyg=VAUeexJTh35vTWTVgjeqwX4D6g@mail.gmail.com>
+ <CAM_iQpVtxgZNeqh4_Pqftc3D163JnRvP3AZRuFrYNeyWLgVBVA@mail.gmail.com>
+ <CAADnVQLFehCeQRbwEQ9VM-=Y3V3es2Ze8gFPs6cZHwNH0Ct7vw@mail.gmail.com>
+ <CAM_iQpWDhoY_msU=AowHFq3N3OuQpvxd2ADP_Z+gxBfGduhrPA@mail.gmail.com>
+ <20210427020159.hhgyfkjhzjk3lxgs@ast-mbp.dhcp.thefacebook.com>
+ <CAM_iQpVE4XG7SPAVBmV2UtqUANg3X-1ngY7COYC03NrT6JkZ+g@mail.gmail.com>
+ <CAADnVQK9BgguVorziWgpMktLHuPCgEaKa4fz-KCfhcZtT46teQ@mail.gmail.com>
+ <CAM_iQpWBrxuT=Y3CbhxYpE5a+QSk-O=Vj4euegggXAAKTHRBqw@mail.gmail.com>
+ <CAOftzPh0cj_XRES8mrNWnyKFZDLpRez09NAofmu1F1JAZf43Cw@mail.gmail.com>
+From:   Jamal Hadi Salim <jhs@mojatatu.com>
+Message-ID: <ac30da98-97cd-c105-def8-972a8ec573d6@mojatatu.com>
+Date:   Wed, 12 May 2021 18:43:53 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.0
+MIME-Version: 1.0
+In-Reply-To: <CAOftzPh0cj_XRES8mrNWnyKFZDLpRez09NAofmu1F1JAZf43Cw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Alexei Starovoitov <ast@kernel.org>
+On 2021-05-11 1:05 a.m., Joe Stringer wrote:
+> Hi Cong,
+> 
 
-Convert test trace_printk to light skeleton to check
-rodata support in lskel.
+>> and let me quote the original report here:
+>>
+>> "The current implementation (as of v1.2) for managing the contents of
+>> the datapath connection tracking map leaves something to be desired:
+>> Once per minute, the userspace cilium-agent makes a series of calls to
+>> the bpf() syscall to fetch all of the entries in the map to determine
+>> whether they should be deleted. For each entry in the map, 2-3 calls
+>> must be made: One to fetch the next key, one to fetch the value, and
+>> perhaps one to delete the entry. The maximum size of the map is 1
+>> million entries, and if the current count approaches this size then
+>> the garbage collection goroutine may spend a significant number of CPU
+>> cycles iterating and deleting elements from the conntrack map."
+> 
+> I'm also curious to hear more details as I haven't seen any recent
+> discussion in the common Cilium community channels (GitHub / Slack)
+> around deficiencies in the conntrack garbage collection since we
+> addressed the LRU issues upstream and switched back to LRU maps.
 
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
----
- tools/testing/selftests/bpf/Makefile                  | 2 +-
- tools/testing/selftests/bpf/prog_tests/trace_printk.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+For our use case we cant use LRU. We need to account for every entry i.e
+we dont want it to be gc without our consent. i.e we want to control
+the GC. Your PR was pointing to LRU deleting some flow entries for TCP
+which were just idling for example.
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index b29862339222..525e4b3fb514 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -313,7 +313,7 @@ LINKED_SKELS := test_static_linked.skel.h linked_funcs.skel.h		\
- 		linked_vars.skel.h linked_maps.skel.h
- 
- LSKELS := kfunc_call_test.c fentry_test.c fexit_test.c fexit_sleep.c \
--	test_ksyms_module.c test_ringbuf.c atomics.c
-+	test_ksyms_module.c test_ringbuf.c atomics.c trace_printk.c
- SKEL_BLACKLIST += $$(LSKELS)
- 
- test_static_linked.skel.h-deps := test_static_linked1.o test_static_linked2.o
-diff --git a/tools/testing/selftests/bpf/prog_tests/trace_printk.c b/tools/testing/selftests/bpf/prog_tests/trace_printk.c
-index 2c641bdf21ca..d39bc00feb45 100644
---- a/tools/testing/selftests/bpf/prog_tests/trace_printk.c
-+++ b/tools/testing/selftests/bpf/prog_tests/trace_printk.c
-@@ -3,7 +3,7 @@
- 
- #include <test_progs.h>
- 
--#include "trace_printk.skel.h"
-+#include "trace_printk.lskel.h"
- 
- #define TRACEBUF	"/sys/kernel/debug/tracing/trace_pipe"
- #define SEARCHMSG	"testing,testing"
--- 
-2.30.2
 
+> There's an update to the report quoted from the same link above:
+> 
+> "In recent releases, we've moved back to LRU for management of the CT
+> maps so the core problem is not as bad; furthermore we have
+> implemented a backoff for GC depending on the size and number of
+> entries in the conntrack table, so that in active environments the
+> userspace GC is frequent enough to prevent issues but in relatively
+> passive environments the userspace GC is only rarely run (to minimize
+> CPU impact)."
+> 
+> By "core problem is not as bad", I would have been referring to the
+> way that failing to garbage collect hashtables in a timely manner can
+> lead to rejecting new connections due to lack of available map space.
+> Switching back to LRU mitigated this concern. With a reduced frequency
+> of running the garbage collection logic, the CPU impact is lower as
+> well. I don't think we've explored batched map ops for this use case
+> yet either, which would already serve to improve the CPU usage
+> situation without extending the kernel.
+> 
+
+Will run some tests tomorrow to see the effect of batching vs nobatch
+and capture cost of syscalls and cpu.
+
+Note: even then, it is not a good general solution. Our entries can
+go as high as 16M.
+Our workflow is: 1) every 1-5 seconds you dump, 2) process for
+what needs to be deleted etc, then do updates (another 1-3 seconds
+worth of time). There is a point, depending on number of entries,
+where there your time cost of processing exceeds your polling period.
+The likelihood of entry state loss is high for even 1/2 sec loss
+of sync.
+
+> The main outstanding issue I'm aware of is that we will often have a
+> 1:1 mapping of entries in the CT map and the NAT map, and ideally we'd
+> like them to have tied fates but currently we have no mechanism to do
+> this with LRU. When LRU eviction occurs, the entries can get out of
+> sync until the next GC.
+
+Yes, this ties as well to our use case (not NAT for us, but semantically
+similar challenge). It goes the other way too, if userspace decides
+to adjust your NAT table you need to purge related entries from the
+cache.
+
+
+
+> I could imagine timers helping with this if we
+
+Yes, timers would solve this.
+
+I am not even arguing that we need timers to solve these issues. I am
+just saying it seems timers are just fundamental infra that is needed
+even outside the scope of this.
+
+cheers,
+jamal
