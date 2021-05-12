@@ -2,134 +2,111 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7B34C4363C
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1DD2C43619
 	for <bpf@archiver.kernel.org>; Wed, 12 May 2021 23:10:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8AEB261420
-	for <bpf@archiver.kernel.org>; Wed, 12 May 2021 23:10:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6A7C7613EE
+	for <bpf@archiver.kernel.org>; Wed, 12 May 2021 23:10:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347746AbhELXE5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 12 May 2021 19:04:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34078 "EHLO
+        id S1346899AbhELXEL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 12 May 2021 19:04:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241455AbhELW6N (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 12 May 2021 18:58:13 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6D65C06138A
-        for <bpf@vger.kernel.org>; Wed, 12 May 2021 15:56:06 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id i67so23929794qkc.4
-        for <bpf@vger.kernel.org>; Wed, 12 May 2021 15:56:06 -0700 (PDT)
+        with ESMTP id S1347129AbhELVpY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 12 May 2021 17:45:24 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48CBC08C5E1
+        for <bpf@vger.kernel.org>; Wed, 12 May 2021 14:33:39 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id e19so1463525pfv.3
+        for <bpf@vger.kernel.org>; Wed, 12 May 2021 14:33:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=8IPURGtEFzuEgj+t7YYPcm0/W4cVT5eQQ0tWFffsI14=;
-        b=HvAIsfV0UlzqOabx+lDWlSq85I/ucVUl4mpIIvnw2GWbuRUnMOdj+6QmmbhFZoNsUF
-         MuO2GTrChTCxEJ2y2R2CTUqhPGI/WFnG275gsyLeJOiwPgFyMJgstAJPZf0Bpj+Hmbhn
-         CDSLVr3ga28zxAa38HgOmS6PvuaBr2N+GUeUNT8p+78vW8eFyNbhbq4bdoTvEWF5dEoI
-         7jyoqeEYudle+D29hhosWhBJzg37f4dAKUHHUQ+kG8E+oZ/w4tjc/QXeA/vQHyUGi2MK
-         X7dgevSUDFYVnL9PeOd+L/9g7cXwvMcwy4zr9g+0gbta1/iZW7aT2eJwBQAD1vSB7KZC
-         gv+g==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=ZYq8QSGd4vPZ+7dnoLxzG0qO6UiIeqyrRaawGiLioCI=;
+        b=XbOHspSD7mJLVx4TuNUIeL25SHw0jxKgOmB9p7OnM/DTgE5XMrFKrSg/BR+wBqDrqJ
+         8fDV06X+TDv3RH60B81ZWzZlz81es1MFQ5sFrKbHIr1X1OagptQvqjPaXU/t0NsW5eOa
+         gNMQN1kz79fYKIdZjv0qPOLm1NGHpymcO9iwkCMnqmFjbIjqLRuEwr0S7b0aTwoYR6Yh
+         eFAt2D5sEVmNtF20JMaCHD6rzoRWzzBZxIJWccqhfrTVTh1SWAHaP/+yaB3BEXE7jzNP
+         gIih2u0s3ggG1yd1kKzqSqB3nAVeW73nigrGuzakZQ+0TgOX5U6/YqQ5K/YT5YpWiiRi
+         9rYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=8IPURGtEFzuEgj+t7YYPcm0/W4cVT5eQQ0tWFffsI14=;
-        b=hxuOjX3ixAg9RMdJ7Af5cW0KLWS91j8suSjfOwoXnxPKVMLsYROS8sSMtkhBdaQ3HF
-         iDO6Tui88VSyJVerAn0rghp5KF+L/tXu8XEMPqVD8XZroH03hK2G2/Fvb1Tsbx/Vgejo
-         0yLc0uvQ4Q5KWwsc7hQpGxIAauVFwAYkokZljFe/XPrUUR956Ja0CdupVb0X4kLi91P1
-         h81YXU/guuoN7EqYgx078AfWLqQ8mb16b6ZWnOv7AJxQ8WuSU6vA0h0Hg3UQ093uVamx
-         Qix+nTWLb8LUGMOMsiQQJah9CrZa2C2x1u4WbdtEQ9w4djDShpLz+mnJ3unF82yoTnmn
-         DqTA==
-X-Gm-Message-State: AOAM5325Zb8byhzMTxWgvyqwlOvlH9EJQ8crgUK7xmgO+VspGWoKAlr1
-        oOytHVnyzHaezSYW+VxrNFaaWg==
-X-Google-Smtp-Source: ABdhPJwSFEe2ZpnWeLqlZVF63LuaqBvBIvDB06fVD4y4d3nkAHVrcmB+1fyGFxvUV3y4dzwBc3hpvg==
-X-Received: by 2002:a05:620a:1223:: with SMTP id v3mr35465656qkj.470.1620860166046;
-        Wed, 12 May 2021 15:56:06 -0700 (PDT)
-Received: from [192.168.1.79] (bras-base-kntaon1617w-grc-25-174-95-97-70.dsl.bell.ca. [174.95.97.70])
-        by smtp.googlemail.com with ESMTPSA id w7sm1007322qtn.91.2021.05.12.15.56.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 May 2021 15:56:05 -0700 (PDT)
-Subject: Re: [RFC Patch bpf-next] bpf: introduce bpf timer
-To:     Cong Wang <xiyou.wangcong@gmail.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Linux Kernel Network Developers <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        Xiongchun Duan <duanxiongchun@bytedance.com>,
-        Dongdong Wang <wangdongdong.6@bytedance.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Pedro Tammela <pctammela@mojatatu.com>,
-        Joe Stringer <joe@cilium.io>
-References: <20210402192823.bqwgipmky3xsucs5@ast-mbp>
- <20210402234500.by3wigegeluy5w7j@ast-mbp>
- <CAM_iQpWf2aYbY=tKejb=nx7LWBLo1woTp-n4wOLhkUuDCz8u-Q@mail.gmail.com>
- <20210412230151.763nqvaadrrg77kd@ast-mbp.dhcp.thefacebook.com>
- <CAM_iQpWePmmpr0RKqCrQ=NPiGrq2Tx9OU9y3e4CTzFjvh5t47w@mail.gmail.com>
- <CAADnVQLsmULxJYq9rHS4xyg=VAUeexJTh35vTWTVgjeqwX4D6g@mail.gmail.com>
- <CAM_iQpVtxgZNeqh4_Pqftc3D163JnRvP3AZRuFrYNeyWLgVBVA@mail.gmail.com>
- <CAADnVQLFehCeQRbwEQ9VM-=Y3V3es2Ze8gFPs6cZHwNH0Ct7vw@mail.gmail.com>
- <CAM_iQpWDhoY_msU=AowHFq3N3OuQpvxd2ADP_Z+gxBfGduhrPA@mail.gmail.com>
- <20210427020159.hhgyfkjhzjk3lxgs@ast-mbp.dhcp.thefacebook.com>
- <CAM_iQpVE4XG7SPAVBmV2UtqUANg3X-1ngY7COYC03NrT6JkZ+g@mail.gmail.com>
- <CAADnVQK9BgguVorziWgpMktLHuPCgEaKa4fz-KCfhcZtT46teQ@mail.gmail.com>
- <CAM_iQpWBrxuT=Y3CbhxYpE5a+QSk-O=Vj4euegggXAAKTHRBqw@mail.gmail.com>
- <d38c7ccf-bc66-9b71-ef96-7fe196ac5c09@mojatatu.com>
- <CAM_iQpXLcpga=DF+ateBk1jiiCx2mPJW=WHT+j3JrS8kuPS4Zw@mail.gmail.com>
-From:   Jamal Hadi Salim <jhs@mojatatu.com>
-Message-ID: <59378178-57e2-c278-02cd-d58f9973b638@mojatatu.com>
-Date:   Wed, 12 May 2021 18:56:04 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.0
-MIME-Version: 1.0
-In-Reply-To: <CAM_iQpXLcpga=DF+ateBk1jiiCx2mPJW=WHT+j3JrS8kuPS4Zw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=ZYq8QSGd4vPZ+7dnoLxzG0qO6UiIeqyrRaawGiLioCI=;
+        b=dbqdPVMZ/scr8JDIj4LhCQCVQnllmv6dB/4AoqHU3dMACBmEeAYkza9xNSiqG/HqZw
+         y794x83wBJtJX6Nj80CifD0YVoXCeVOKNlA6Oa4tWqN60WjcyLus4Ig+RlXyC9Z9Rl84
+         do/TQ+/u/1IhTAlL+ghD3qUkGwcnqm1sm5I/zEZmSlpLL9Yu1hD29OqnrM+pGyWivQ5C
+         rlKtwFN3iErJh4pLpX5JeONRAvJpd93CsuPSPg4ccTRS6CFFsvtffbuU7eVNadOJZbfZ
+         IfKiG6OT/yU9PXq28y2JePHE3gnSLVAaZNeD8MTOl/cdVaMoHTYnm9ete85qQbSxb7sG
+         DKCA==
+X-Gm-Message-State: AOAM532LXKXfB7dSHXse165sB/8NJne8cqhA7E48j1KC9hx+hN96D8OB
+        zK02s9d61ZzZolX8LtPb29E=
+X-Google-Smtp-Source: ABdhPJxtEE+pfxrGtrsmYnJAL22/oTzsPNWoijf/M0jrorAPP2k43y7mieNX4pTpk05HThMwyzOYNw==
+X-Received: by 2002:a17:90a:b945:: with SMTP id f5mr42369634pjw.233.1620855219423;
+        Wed, 12 May 2021 14:33:39 -0700 (PDT)
+Received: from ast-mbp.thefacebook.com ([163.114.132.4])
+        by smtp.gmail.com with ESMTPSA id c128sm609222pfa.189.2021.05.12.14.33.37
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 12 May 2021 14:33:38 -0700 (PDT)
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     davem@davemloft.net
+Cc:     daniel@iogearbox.net, andrii@kernel.org, john.fastabend@gmail.com,
+        bpf@vger.kernel.org, kernel-team@fb.com
+Subject: [PATCH v5 bpf-next 21/21] selftests/bpf: Convert test trace_printk to lskel.
+Date:   Wed, 12 May 2021 14:32:56 -0700
+Message-Id: <20210512213256.31203-22-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.13.5
+In-Reply-To: <20210512213256.31203-1-alexei.starovoitov@gmail.com>
+References: <20210512213256.31203-1-alexei.starovoitov@gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 2021-05-11 5:29 p.m., Cong Wang wrote:
-> On Mon, May 10, 2021 at 1:55 PM Jamal Hadi Salim <jhs@mojatatu.com> wrote:
+From: Alexei Starovoitov <ast@kernel.org>
 
->>
->> That cilium PR was a good read of the general issues.
->> Our use case involves anywhere between 4-16M cached entries.
->>
->> Like i mentioned earlier:
->> we want to periodically, if some condition is met in the
->> kernel on a map entry, to cleanup, update or send unsolicited
->> housekeeping events to user space.
->> Polling in order to achieve this for that many entries is expensive.
-> 
-> Thanks for sharing your use case. As we discussed privately, please
-> also share the performance numbers you have.
-> 
+Convert test trace_printk to light skeleton to check
+rodata support in lskel.
 
-The earlier tests i mentioned to you were in regards to LRU.
-I can share those as well - but seems for what we are discussing
-here testing cost of batch vs nobatch is more important.
-Our LRU tests indicate that it is better to use global as opposed
-to per-CPU LRU. We didnt dig deeper but it seemed gc/alloc - which was
-happening under some lock gets very expensive regardless if you
-are sending sufficient number of flows/sec (1M flows/sec in our
-case).
-We cannot use LRU (for reasons stated earlier). It has to be hash
-table with aging under our jurisdiction. I will post numbers for
-sending the entries to user space for gc.
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ tools/testing/selftests/bpf/Makefile                  | 2 +-
+ tools/testing/selftests/bpf/prog_tests/trace_printk.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-cheers,
-jamal
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index b29862339222..525e4b3fb514 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -313,7 +313,7 @@ LINKED_SKELS := test_static_linked.skel.h linked_funcs.skel.h		\
+ 		linked_vars.skel.h linked_maps.skel.h
+ 
+ LSKELS := kfunc_call_test.c fentry_test.c fexit_test.c fexit_sleep.c \
+-	test_ksyms_module.c test_ringbuf.c atomics.c
++	test_ksyms_module.c test_ringbuf.c atomics.c trace_printk.c
+ SKEL_BLACKLIST += $$(LSKELS)
+ 
+ test_static_linked.skel.h-deps := test_static_linked1.o test_static_linked2.o
+diff --git a/tools/testing/selftests/bpf/prog_tests/trace_printk.c b/tools/testing/selftests/bpf/prog_tests/trace_printk.c
+index 2c641bdf21ca..d39bc00feb45 100644
+--- a/tools/testing/selftests/bpf/prog_tests/trace_printk.c
++++ b/tools/testing/selftests/bpf/prog_tests/trace_printk.c
+@@ -3,7 +3,7 @@
+ 
+ #include <test_progs.h>
+ 
+-#include "trace_printk.skel.h"
++#include "trace_printk.lskel.h"
+ 
+ #define TRACEBUF	"/sys/kernel/debug/tracing/trace_pipe"
+ #define SEARCHMSG	"testing,testing"
+-- 
+2.30.2
 
