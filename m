@@ -8,60 +8,60 @@ X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DA80C433ED
-	for <bpf@archiver.kernel.org>; Wed, 12 May 2021 22:59:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 55C14C433B4
+	for <bpf@archiver.kernel.org>; Wed, 12 May 2021 22:59:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 528A3613F6
-	for <bpf@archiver.kernel.org>; Wed, 12 May 2021 22:59:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3379A613EB
+	for <bpf@archiver.kernel.org>; Wed, 12 May 2021 22:59:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236591AbhELXAF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 12 May 2021 19:00:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45792 "EHLO
+        id S234032AbhELXAM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 12 May 2021 19:00:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346932AbhELVpH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 12 May 2021 17:45:07 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9E2EC08C5D5
-        for <bpf@vger.kernel.org>; Wed, 12 May 2021 14:33:24 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id 33so948945pgo.5
-        for <bpf@vger.kernel.org>; Wed, 12 May 2021 14:33:24 -0700 (PDT)
+        with ESMTP id S1346984AbhELVpP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 12 May 2021 17:45:15 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3095C08C5DC
+        for <bpf@vger.kernel.org>; Wed, 12 May 2021 14:33:30 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id z18so9650677plg.8
+        for <bpf@vger.kernel.org>; Wed, 12 May 2021 14:33:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=8AcIl5md7fk2g3CMFXafxtbyBSfIRUWUdNKveJZBCOk=;
-        b=Mct98C1+Apa86lMtupHGq/qC7oclNFP6fKggR6B4P4GrgwijuVVY7zOIWmxZz5niRg
-         mQRykmKbbzCHzIQmLLZ6YhBm5ZcLybAYyzWTblUuecgIUCOtj40Xs44Unp/Av/g9Ayoc
-         0w0B9jU190TyzuMJv3Jf9IBuPFxuiHaUpcB3HR/OqLnn+/oaomUNs6YKFmBAID/pqMMb
-         GjymaZ85/PIXPBjQO+6OGhl3apLBei9x0s8uoxbAKj5dP1Or9Rtm8XgWpo9iKDsHhwvr
-         PaaeeNppADPGT+9pJsHgxgW0lCGzW8Eq/Su/oM3hoeifQtCDO+GEPw2WANC1TPbf8z/a
-         K7ZQ==
+        bh=yp+LyyA8g6ahcXFRJoFQOLwZLrnx6pHPiUCqz/iH6eA=;
+        b=Kf4wDjML+1v/gss0jXRU0eOlrUd5v/qmjrAxYS+4lz55XpXBtkouu0QZRyZKxLVCTW
+         n8AgPShYyxDlIO7fOqYzqUgfyCi/xMk7Ri/ttO1WswOqMhY8pdXHR8o7boqMULErFOqz
+         5uSzp3Iz1OYHP9eLVBo9QVEt9ctpG6731ULGOlqEnvnlZMRnp+C5/MVSa5TUGIUviFvQ
+         Mt/AIXSefGfNtDmiA0tuQUyAfuW3hf9yyNCLmLZ7ehGwShm6/Q/Cb7PcD85VA3cYgobA
+         LB3YTakHBP/KMVNaT5443sI6z2sLc9xj09BKHCgm2CRRzKCI7i4spWdo7AHHD6d4C/8h
+         slKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=8AcIl5md7fk2g3CMFXafxtbyBSfIRUWUdNKveJZBCOk=;
-        b=d2zr1rTEmCtCO3mG8S+W86uW4mcKHBkrsBtiNkTOtblBds1jWaaeF/0Q8QZ7RRgllN
-         g/DORQfgBP6MAAKXp4LxW989MZ/HEffv/8jh5id7mSJIHmyUM9p7iyi6CmKQuWSr1OOB
-         bRo1cDzuqP4eKYjMTANGYfVjA99HQumthHf5XI4Qp5bMJ5a8ME8NW3fKTUecFabzCTtA
-         hPRb8JJI5BoSrSd+o6xQEiu4kOmXVtespnn+fOUpyrNChGuiLXQCIbCorpLh2QhbLhZM
-         Xa5x9uaSvjdbtw/6ZaFWmMwyoSBq/O2Zpm+rBFYNUZGALf/yk4j3aHtZIFUEE3TTVzDr
-         bEiQ==
-X-Gm-Message-State: AOAM531cmtkB05xz7okOOR4VREi7nQuJgOqq0L+7fiWdDDAnPAB9J4xT
-        nI/MEXGpYYASTGPd/W9erQo=
-X-Google-Smtp-Source: ABdhPJzmztSdF2lUS+raUSFDA8vVNmxeabiA5MWZIHWje6E7lnI07rITSUd+amxueF26kR3hIGVjiA==
-X-Received: by 2002:a05:6a00:1742:b029:2cc:b1b0:731c with SMTP id j2-20020a056a001742b02902ccb1b0731cmr7429319pfc.15.1620855204514;
-        Wed, 12 May 2021 14:33:24 -0700 (PDT)
+        bh=yp+LyyA8g6ahcXFRJoFQOLwZLrnx6pHPiUCqz/iH6eA=;
+        b=GfNzaLzVg8/Laz9gUa5vsEGnhXrJF47gnI/6tdoMTGR5x4+K6QwPioLUipSLHOizlE
+         uL1xx+FmvRiYq57Db3Rn0Mhw0saVPlcehSpXxwtz4FybiWMFdR/rtYsr2xYp+XS61gfp
+         cWEfKD8AXly7m+ABgQ6sD6pd7j9zzFl4skdxSHj0zAASQiGt7afTBzTGkC0WoY5Pk5Rr
+         TBTznVqdo8xuw8mtDkhkPcUvtOFs+dxf6yc4QYKw6VXCTz1wVizuEw7RLEplFdI2VsM3
+         XXesuRlodEKCBIA4xpRiaE8RSO6MZeFbFeM3ZwpmX4z3t1Ib1SGiaooJtLtJaaZc0R0C
+         kSmQ==
+X-Gm-Message-State: AOAM532C9qqqFUqrhIYIyKjFXp508vmN2sFQLOOjthvnp8g5L/5uzVga
+        DZ8zDCgk5P9nAQ/VmM7DGm0=
+X-Google-Smtp-Source: ABdhPJzqJMPIbYjRA50H7jF8sb/119BOJ1yrvk0GDk5p/yCmiwi0p4mFzBcW629uWZUthOkVW7HM3Q==
+X-Received: by 2002:a17:902:d718:b029:ee:cf89:57ea with SMTP id w24-20020a170902d718b02900eecf8957eamr37458431ply.3.1620855210361;
+        Wed, 12 May 2021 14:33:30 -0700 (PDT)
 Received: from ast-mbp.thefacebook.com ([163.114.132.4])
-        by smtp.gmail.com with ESMTPSA id c128sm609222pfa.189.2021.05.12.14.33.22
+        by smtp.gmail.com with ESMTPSA id c128sm609222pfa.189.2021.05.12.14.33.28
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 12 May 2021 14:33:23 -0700 (PDT)
+        Wed, 12 May 2021 14:33:29 -0700 (PDT)
 From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To:     davem@davemloft.net
 Cc:     daniel@iogearbox.net, andrii@kernel.org, john.fastabend@gmail.com,
         bpf@vger.kernel.org, kernel-team@fb.com
-Subject: [PATCH v5 bpf-next 13/21] libbpf: Preliminary support for fd_idx
-Date:   Wed, 12 May 2021 14:32:48 -0700
-Message-Id: <20210512213256.31203-14-alexei.starovoitov@gmail.com>
+Subject: [PATCH v5 bpf-next 16/21] libbpf: Introduce bpf_map__initial_value().
+Date:   Wed, 12 May 2021 14:32:51 -0700
+Message-Id: <20210512213256.31203-17-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.13.5
 In-Reply-To: <20210512213256.31203-1-alexei.starovoitov@gmail.com>
 References: <20210512213256.31203-1-alexei.starovoitov@gmail.com>
@@ -71,76 +71,60 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Prep libbpf to use FD_IDX kernel feature when generating loader program.
+Introduce bpf_map__initial_value() to read initial contents
+of rodata/bss maps. Note only mmaped maps qualify.
+Just as bpf_map__set_initial_value() works only for mmaped kconfig.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- tools/lib/bpf/libbpf.c | 31 +++++++++++++++++++++++++------
- 1 file changed, 25 insertions(+), 6 deletions(-)
+ tools/lib/bpf/libbpf.c   | 8 ++++++++
+ tools/lib/bpf/libbpf.h   | 1 +
+ tools/lib/bpf/libbpf.map | 1 +
+ 3 files changed, 10 insertions(+)
 
 diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 8ea6120c9849..276d51527a86 100644
+index 8fd70f0592ad..8d3b136c6b29 100644
 --- a/tools/lib/bpf/libbpf.c
 +++ b/tools/lib/bpf/libbpf.c
-@@ -412,6 +412,8 @@ struct module_btf {
- 	int fd;
- };
+@@ -9736,6 +9736,14 @@ int bpf_map__set_initial_value(struct bpf_map *map,
+ 	return 0;
+ }
  
-+struct bpf_gen;
++const void *bpf_map__initial_value(struct bpf_map *map, size_t *psize)
++{
++	if (!map->mmaped)
++		return NULL;
++	*psize = map->def.value_size;
++	return map->mmaped;
++}
 +
- struct bpf_object {
- 	char name[BPF_OBJ_NAME_LEN];
- 	char license[64];
-@@ -432,6 +434,8 @@ struct bpf_object {
- 	bool loaded;
- 	bool has_subcalls;
- 
-+	struct bpf_gen *gen_loader;
-+
- 	/*
- 	 * Information when doing elf related work. Only valid if fd
- 	 * is valid.
-@@ -6369,19 +6373,34 @@ bpf_object__relocate_data(struct bpf_object *obj, struct bpf_program *prog)
- 
- 		switch (relo->type) {
- 		case RELO_LD64:
--			insn[0].src_reg = BPF_PSEUDO_MAP_FD;
--			insn[0].imm = obj->maps[relo->map_idx].fd;
-+			if (obj->gen_loader) {
-+				insn[0].src_reg = BPF_PSEUDO_MAP_IDX;
-+				insn[0].imm = relo->map_idx;
-+			} else {
-+				insn[0].src_reg = BPF_PSEUDO_MAP_FD;
-+				insn[0].imm = obj->maps[relo->map_idx].fd;
-+			}
- 			break;
- 		case RELO_DATA:
--			insn[0].src_reg = BPF_PSEUDO_MAP_VALUE;
- 			insn[1].imm = insn[0].imm + relo->sym_off;
--			insn[0].imm = obj->maps[relo->map_idx].fd;
-+			if (obj->gen_loader) {
-+				insn[0].src_reg = BPF_PSEUDO_MAP_IDX_VALUE;
-+				insn[0].imm = relo->map_idx;
-+			} else {
-+				insn[0].src_reg = BPF_PSEUDO_MAP_VALUE;
-+				insn[0].imm = obj->maps[relo->map_idx].fd;
-+			}
- 			break;
- 		case RELO_EXTERN_VAR:
- 			ext = &obj->externs[relo->sym_off];
- 			if (ext->type == EXT_KCFG) {
--				insn[0].src_reg = BPF_PSEUDO_MAP_VALUE;
--				insn[0].imm = obj->maps[obj->kconfig_map_idx].fd;
-+				if (obj->gen_loader) {
-+					insn[0].src_reg = BPF_PSEUDO_MAP_IDX_VALUE;
-+					insn[0].imm = obj->kconfig_map_idx;
-+				} else {
-+					insn[0].src_reg = BPF_PSEUDO_MAP_VALUE;
-+					insn[0].imm = obj->maps[obj->kconfig_map_idx].fd;
-+				}
- 				insn[1].imm = ext->kcfg.data_off;
- 			} else /* EXT_KSYM */ {
- 				if (ext->ksym.type_id) { /* typed ksyms */
+ bool bpf_map__is_offload_neutral(const struct bpf_map *map)
+ {
+ 	return map->def.type == BPF_MAP_TYPE_PERF_EVENT_ARRAY;
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index 8cf168f3717c..a50eab5fec0a 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -471,6 +471,7 @@ LIBBPF_API int bpf_map__set_priv(struct bpf_map *map, void *priv,
+ LIBBPF_API void *bpf_map__priv(const struct bpf_map *map);
+ LIBBPF_API int bpf_map__set_initial_value(struct bpf_map *map,
+ 					  const void *data, size_t size);
++LIBBPF_API const void *bpf_map__initial_value(struct bpf_map *map, size_t *psize);
+ LIBBPF_API bool bpf_map__is_offload_neutral(const struct bpf_map *map);
+ LIBBPF_API bool bpf_map__is_internal(const struct bpf_map *map);
+ LIBBPF_API int bpf_map__set_pin_path(struct bpf_map *map, const char *path);
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index 889ee2f3611c..dd0f24370939 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -359,6 +359,7 @@ LIBBPF_0.4.0 {
+ 		bpf_linker__finalize;
+ 		bpf_linker__free;
+ 		bpf_linker__new;
++		bpf_map__initial_value;
+ 		bpf_map__inner_map;
+ 		bpf_object__gen_loader;
+ 		bpf_object__set_kversion;
 -- 
 2.30.2
 
