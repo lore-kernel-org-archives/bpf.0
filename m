@@ -2,104 +2,126 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27B76C433B4
-	for <bpf@archiver.kernel.org>; Thu, 13 May 2021 23:30:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98FAFC433ED
+	for <bpf@archiver.kernel.org>; Thu, 13 May 2021 23:36:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E25A161433
-	for <bpf@archiver.kernel.org>; Thu, 13 May 2021 23:30:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7289F61355
+	for <bpf@archiver.kernel.org>; Thu, 13 May 2021 23:36:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229471AbhEMXbp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 13 May 2021 19:31:45 -0400
-Received: from gateway31.websitewelcome.com ([192.185.144.94]:22681 "EHLO
-        gateway31.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229460AbhEMXbo (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 13 May 2021 19:31:44 -0400
-X-Greylist: delayed 1468 seconds by postgrey-1.27 at vger.kernel.org; Thu, 13 May 2021 19:31:44 EDT
-Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
-        by gateway31.websitewelcome.com (Postfix) with ESMTP id 5B9616A5A
-        for <bpf@vger.kernel.org>; Thu, 13 May 2021 18:06:04 -0500 (CDT)
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with SMTP
-        id hKP6lg0sI8uM0hKP6lzNAi; Thu, 13 May 2021 18:06:04 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=P/DOzPKGp6J3WJCwGHyjpqer5CmLgvUAudqD0ateSBw=; b=x9c5/ZCt1KdADTYIlOge0eVWZ+
-        HX9ICIrVZTe50m/NQeax/gIV5mvFhlO0Ze6Inhq27CJFpCCEoPBlC043pQVvnt6td4TV7Bv9eajon
-        PP4ux726262s5A7khx7hsTKwvzea3bD7/VvKgz7ajvg6SvQPuNz0+Rbd48HufhUEaiyr2/LNIkJwy
-        Zq8YE1BbQtjdB0Hg1O2IGpCsLyOdx4qFVjdBCNlk4TGW8zWpG6+IL/eqczFhWNCvZJGGQhso979kF
-        aICgyBsoxdlRDfCE6SjiRyhmGRQDOA2wWRV/kDqzrB2H9CUdTaQJXa0K/hB2x4Pmm9rtcaSk9QxjL
-        6pD/Zk9w==;
-Received: from 187-162-31-110.static.axtel.net ([187.162.31.110]:35730 helo=[192.168.15.8])
-        by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1lhKOz-004AGP-CY; Thu, 13 May 2021 18:05:57 -0500
-Subject: Re: [PATCH][next] bpf: Use struct_size() in kzalloc()
-To:     patchwork-bot+netdevbpf@kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     davem@davemloft.net, kuba@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-References: <20210513215049.GA215271@embeddedor>
- <162094681128.5074.13510794749219416919.git-patchwork-notify@kernel.org>
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Message-ID: <481dc1e0-4313-7b77-2456-ebcebed296d9@embeddedor.com>
-Date:   Thu, 13 May 2021 18:06:24 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S229906AbhEMXh7 convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 13 May 2021 19:37:59 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:21250 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229460AbhEMXh7 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 13 May 2021 19:37:59 -0400
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 14DNUJ75004062
+        for <bpf@vger.kernel.org>; Thu, 13 May 2021 16:36:49 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 38gj9r19q1-4
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Thu, 13 May 2021 16:36:49 -0700
+Received: from intmgw001.06.ash9.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Thu, 13 May 2021 16:36:47 -0700
+Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
+        id 5CF122ED8CFC; Thu, 13 May 2021 16:36:45 -0700 (PDT)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
+        <daniel@iogearbox.net>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>
+Subject: [PATCH v2 bpf-next 1/2] selftests/bpf: validate skeleton gen handles skipped fields
+Date:   Thu, 13 May 2021 16:36:42 -0700
+Message-ID: <20210513233643.194711-1-andrii@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <162094681128.5074.13510794749219416919.git-patchwork-notify@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 187.162.31.110
-X-Source-L: No
-X-Exim-ID: 1lhKOz-004AGP-CY
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 187-162-31-110.static.axtel.net ([192.168.15.8]) [187.162.31.110]:35730
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 14
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: hIWdfAskXhadYJzHhVhtAGpdgmly68HF
+X-Proofpoint-ORIG-GUID: hIWdfAskXhadYJzHhVhtAGpdgmly68HF
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-05-13_16:2021-05-12,2021-05-13 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1034
+ impostorscore=0 priorityscore=1501 mlxlogscore=997 suspectscore=0
+ malwarescore=0 spamscore=0 lowpriorityscore=0 phishscore=0 mlxscore=0
+ bulkscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2105130166
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+Adjust static_linked selftests to test a mix of global and static variables
+and their handling of bpftool's skeleton generation code.
 
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ tools/testing/selftests/bpf/prog_tests/static_linked.c  | 4 ++--
+ tools/testing/selftests/bpf/progs/linked_maps1.c        | 2 +-
+ tools/testing/selftests/bpf/progs/test_static_linked1.c | 2 +-
+ tools/testing/selftests/bpf/progs/test_static_linked2.c | 2 +-
+ 4 files changed, 5 insertions(+), 5 deletions(-)
 
-On 5/13/21 18:00, patchwork-bot+netdevbpf@kernel.org wrote:
-> Hello:
-> 
-> This patch was applied to netdev/net-next.git (refs/heads/master):
+diff --git a/tools/testing/selftests/bpf/prog_tests/static_linked.c b/tools/testing/selftests/bpf/prog_tests/static_linked.c
+index ab6acbaf9d8c..5c4e3014e063 100644
+--- a/tools/testing/selftests/bpf/prog_tests/static_linked.c
++++ b/tools/testing/selftests/bpf/prog_tests/static_linked.c
+@@ -27,8 +27,8 @@ void test_static_linked(void)
+ 	/* trigger */
+ 	usleep(1);
+ 
+-	ASSERT_EQ(skel->bss->var1, 1 * 2 + 2 + 3, "var1");
+-	ASSERT_EQ(skel->bss->var2, 4 * 3 + 5 + 6, "var2");
++	ASSERT_EQ(skel->data->var1, 1 * 2 + 2 + 3, "var1");
++	ASSERT_EQ(skel->data->var2, 4 * 3 + 5 + 6, "var2");
+ 
+ cleanup:
+ 	test_static_linked__destroy(skel);
+diff --git a/tools/testing/selftests/bpf/progs/linked_maps1.c b/tools/testing/selftests/bpf/progs/linked_maps1.c
+index 52291515cc72..00bf1ca95986 100644
+--- a/tools/testing/selftests/bpf/progs/linked_maps1.c
++++ b/tools/testing/selftests/bpf/progs/linked_maps1.c
+@@ -75,7 +75,7 @@ int BPF_PROG(handler_exit1)
+ 	val = bpf_map_lookup_elem(&map_weak, &key);
+ 	if (val)
+ 		output_weak1 = *val;
+-	
++
+ 	return 0;
+ }
+ 
+diff --git a/tools/testing/selftests/bpf/progs/test_static_linked1.c b/tools/testing/selftests/bpf/progs/test_static_linked1.c
+index cae304045d9c..4f0b612e1661 100644
+--- a/tools/testing/selftests/bpf/progs/test_static_linked1.c
++++ b/tools/testing/selftests/bpf/progs/test_static_linked1.c
+@@ -7,7 +7,7 @@
+ /* 8-byte aligned .data */
+ static volatile long static_var1 = 2;
+ static volatile int static_var2 = 3;
+-int var1 = 0;
++int var1 = -1;
+ /* 4-byte aligned .rodata */
+ const volatile int rovar1;
+ 
+diff --git a/tools/testing/selftests/bpf/progs/test_static_linked2.c b/tools/testing/selftests/bpf/progs/test_static_linked2.c
+index c54c4e865ed8..766ebd502a60 100644
+--- a/tools/testing/selftests/bpf/progs/test_static_linked2.c
++++ b/tools/testing/selftests/bpf/progs/test_static_linked2.c
+@@ -7,7 +7,7 @@
+ /* 4-byte aligned .data */
+ static volatile int static_var1 = 5;
+ static volatile int static_var2 = 6;
+-int var2 = 0;
++int var2 = -1;
+ /* 8-byte aligned .rodata */
+ const volatile long rovar2;
+ 
+-- 
+2.30.2
 
-[..]
-
-> Here is the summary with links:
->   - [next] bpf: Use struct_size() in kzalloc()
->     https://git.kernel.org/netdev/net-next/c/fe0bdaec8dea
-
-Awesome. :)
-
-Thanks, Dave.
---
-Gustavo
