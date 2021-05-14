@@ -7,24 +7,24 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1329BC43461
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DF4BCC43462
 	for <bpf@archiver.kernel.org>; Fri, 14 May 2021 02:27:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DDC9F61421
-	for <bpf@archiver.kernel.org>; Fri, 14 May 2021 02:27:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C4A646143C
+	for <bpf@archiver.kernel.org>; Fri, 14 May 2021 02:27:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231348AbhENC2O (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 13 May 2021 22:28:14 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:3665 "EHLO
+        id S231368AbhENC2P (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 13 May 2021 22:28:15 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:3666 "EHLO
         szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbhENC2N (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S230129AbhENC2N (ORCPT <rfc822;bpf@vger.kernel.org>);
         Thu, 13 May 2021 22:28:13 -0400
 Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.60])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4FhC5Z6RzSz1BMNd;
-        Fri, 14 May 2021 10:24:18 +0800 (CST)
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4FhC5b0mHCz1BMNk;
+        Fri, 14 May 2021 10:24:19 +0800 (CST)
 Received: from localhost.localdomain (10.69.192.56) by
  DGGEMS414-HUB.china.huawei.com (10.3.19.214) with Microsoft SMTP Server id
- 14.3.498.0; Fri, 14 May 2021 10:26:58 +0800
+ 14.3.498.0; Fri, 14 May 2021 10:26:57 +0800
 From:   Yunsheng Lin <linyunsheng@huawei.com>
 To:     <davem@davemloft.net>, <kuba@kernel.org>
 CC:     <olteanv@gmail.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
@@ -43,9 +43,9 @@ CC:     <olteanv@gmail.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <alexander.duyck@gmail.com>, <hdanton@sina.com>, <jgross@suse.com>,
         <JKosina@suse.com>, <mkubecek@suse.cz>, <bjorn@kernel.org>,
         <alobakin@pm.me>
-Subject: [PATCH net v8 3/3] net: sched: fix tx action reschedule issue with stopped queue
-Date:   Fri, 14 May 2021 10:26:58 +0800
-Message-ID: <1620959218-17250-4-git-send-email-linyunsheng@huawei.com>
+Subject: [PATCH net v8 1/3] net: sched: fix packet stuck problem for lockless qdisc
+Date:   Fri, 14 May 2021 10:26:56 +0800
+Message-ID: <1620959218-17250-2-git-send-email-linyunsheng@huawei.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1620959218-17250-1-git-send-email-linyunsheng@huawei.com>
 References: <1620959218-17250-1-git-send-email-linyunsheng@huawei.com>
@@ -57,120 +57,206 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The netdev qeueue might be stopped when byte queue limit has
-reached or tx hw ring is full, net_tx_action() may still be
-rescheduled endlessly if STATE_MISSED is set, which consumes
-a lot of cpu without dequeuing and transmiting any skb because
-the netdev queue is stopped, see qdisc_run_end().
+Lockless qdisc has below concurrent problem:
+    cpu0                 cpu1
+     .                     .
+q->enqueue                 .
+     .                     .
+qdisc_run_begin()          .
+     .                     .
+dequeue_skb()              .
+     .                     .
+sch_direct_xmit()          .
+     .                     .
+     .                q->enqueue
+     .             qdisc_run_begin()
+     .            return and do nothing
+     .                     .
+qdisc_run_end()            .
 
-This patch fixes it by checking the netdev queue state before
-calling qdisc_run() and clearing STATE_MISSED if netdev queue is
-stopped during qdisc_run(), the net_tx_action() is recheduled
-again when netdev qeueue is restarted, see netif_tx_wake_queue().
+cpu1 enqueue a skb without calling __qdisc_run() because cpu0
+has not released the lock yet and spin_trylock() return false
+for cpu1 in qdisc_run_begin(), and cpu0 do not see the skb
+enqueued by cpu1 when calling dequeue_skb() because cpu1 may
+enqueue the skb after cpu0 calling dequeue_skb() and before
+cpu0 calling qdisc_run_end().
 
-As there is time window betewwn netif_xmit_frozen_or_stopped()
-checking and STATE_MISSED clearing, between which STATE_MISSED
-may set by net_tx_action() scheduled by netif_tx_wake_queue(),
-so set the STATE_MISSED again if netdev queue is restarted.
+Lockless qdisc has below another concurrent problem when
+tx_action is involved:
+
+cpu0(serving tx_action)     cpu1             cpu2
+          .                   .                .
+          .              q->enqueue            .
+          .            qdisc_run_begin()       .
+          .              dequeue_skb()         .
+          .                   .            q->enqueue
+          .                   .                .
+          .             sch_direct_xmit()      .
+          .                   .         qdisc_run_begin()
+          .                   .       return and do nothing
+          .                   .                .
+ clear __QDISC_STATE_SCHED    .                .
+ qdisc_run_begin()            .                .
+ return and do nothing        .                .
+          .                   .                .
+          .            qdisc_run_end()         .
+
+This patch fixes the above data race by:
+1. If the first spin_trylock() return false and STATE_MISSED is
+   not set, set STATE_MISSED and retry another spin_trylock() in
+   case other CPU may not see STATE_MISSED after it releases the
+   lock.
+2. reschedule if STATE_MISSED is set after the lock is released
+   at the end of qdisc_run_end().
+
+For tx_action case, STATE_MISSED is also set when cpu1 is at the
+end if qdisc_run_end(), so tx_action will be rescheduled again
+to dequeue the skb enqueued by cpu2.
+
+Clear STATE_MISSED before retrying a dequeuing when dequeuing
+returns NULL in order to reduce the overhead of the second
+spin_trylock() and __netif_schedule() calling.
+
+Also clear the STATE_MISSED before calling __netif_schedule()
+at the end of qdisc_run_end() to avoid doing another round of
+dequeuing in the pfifo_fast_dequeue().
+
+The performance impact of this patch, tested using pktgen and
+dummy netdev with pfifo_fast qdisc attached:
+
+ threads  without+this_patch   with+this_patch      delta
+    1        2.61Mpps            2.60Mpps           -0.3%
+    2        3.97Mpps            3.82Mpps           -3.7%
+    4        5.62Mpps            5.59Mpps           -0.5%
+    8        2.78Mpps            2.77Mpps           -0.3%
+   16        2.22Mpps            2.22Mpps           -0.0%
 
 Fixes: 6b3ba9146fe6 ("net: sched: allow qdiscs to handle locking")
-Reported-by: Michal Kubecek <mkubecek@suse.cz>
 Acked-by: Jakub Kicinski <kuba@kernel.org>
+Tested-by: Juergen Gross <jgross@suse.com>
 Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
 ---
-V8: Change qdisc_maybe_stop_tx() to qdisc_maybe_clear_missed()
+V7: Clear STATE_MISSED before calling __netif_schedule()
     as suggested by Jakub.
-V7: Fix the netif_tx_wake_queue() data race noted by Jakub.
-V6: Drop NET_XMIT_DROP checking for it is not really relevant
-    to this patch, and it may cause performance performance
-    regression with multi pktgen threads on dummy netdev with
-    pfifo_fast qdisc case.
+V6: Check MISSED after the first trylock, and remove the
+    automic test and set for performance sake as suggested
+    by Jakub.
+V4: Change STATE_NEED_RESCHEDULE to STATE_MISSED mirroring
+    NAPI's NAPIF_STATE_MISSED, and add Juergen's "Tested-by"
+    tag for there is only renaming and typo fixing between
+    V4 and V3.
+V3: Fix a compile error and a few comment typo, remove the
+    __QDISC_STATE_DEACTIVATED checking, and update the
+    performance data.
+V2: Avoid the overhead of fixing the data race as much as
+    possible.
 ---
- net/core/dev.c          |  3 ++-
- net/sched/sch_generic.c | 27 ++++++++++++++++++++++++++-
- 2 files changed, 28 insertions(+), 2 deletions(-)
+ include/net/sch_generic.h | 35 ++++++++++++++++++++++++++++++++++-
+ net/sched/sch_generic.c   | 19 +++++++++++++++++++
+ 2 files changed, 53 insertions(+), 1 deletion(-)
 
-diff --git a/net/core/dev.c b/net/core/dev.c
-index d596cd7..ef8cf76 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -3853,7 +3853,8 @@ static inline int __dev_xmit_skb(struct sk_buff *skb, struct Qdisc *q,
+diff --git a/include/net/sch_generic.h b/include/net/sch_generic.h
+index f7a6e14..1e62551 100644
+--- a/include/net/sch_generic.h
++++ b/include/net/sch_generic.h
+@@ -36,6 +36,7 @@ struct qdisc_rate_table {
+ enum qdisc_state_t {
+ 	__QDISC_STATE_SCHED,
+ 	__QDISC_STATE_DEACTIVATED,
++	__QDISC_STATE_MISSED,
+ };
  
- 	if (q->flags & TCQ_F_NOLOCK) {
- 		rc = q->enqueue(skb, q, &to_free) & NET_XMIT_MASK;
--		qdisc_run(q);
-+		if (likely(!netif_xmit_frozen_or_stopped(txq)))
-+			qdisc_run(q);
+ struct qdisc_size_table {
+@@ -159,8 +160,33 @@ static inline bool qdisc_is_empty(const struct Qdisc *qdisc)
+ static inline bool qdisc_run_begin(struct Qdisc *qdisc)
+ {
+ 	if (qdisc->flags & TCQ_F_NOLOCK) {
++		if (spin_trylock(&qdisc->seqlock))
++			goto nolock_empty;
++
++		/* If the MISSED flag is set, it means other thread has
++		 * set the MISSED flag before second spin_trylock(), so
++		 * we can return false here to avoid multi cpus doing
++		 * the set_bit() and second spin_trylock() concurrently.
++		 */
++		if (test_bit(__QDISC_STATE_MISSED, &qdisc->state))
++			return false;
++
++		/* Set the MISSED flag before the second spin_trylock(),
++		 * if the second spin_trylock() return false, it means
++		 * other cpu holding the lock will do dequeuing for us
++		 * or it will see the MISSED flag set after releasing
++		 * lock and reschedule the net_tx_action() to do the
++		 * dequeuing.
++		 */
++		set_bit(__QDISC_STATE_MISSED, &qdisc->state);
++
++		/* Retry again in case other CPU may not see the new flag
++		 * after it releases the lock at the end of qdisc_run_end().
++		 */
+ 		if (!spin_trylock(&qdisc->seqlock))
+ 			return false;
++
++nolock_empty:
+ 		WRITE_ONCE(qdisc->empty, false);
+ 	} else if (qdisc_is_running(qdisc)) {
+ 		return false;
+@@ -176,8 +202,15 @@ static inline bool qdisc_run_begin(struct Qdisc *qdisc)
+ static inline void qdisc_run_end(struct Qdisc *qdisc)
+ {
+ 	write_seqcount_end(&qdisc->running);
+-	if (qdisc->flags & TCQ_F_NOLOCK)
++	if (qdisc->flags & TCQ_F_NOLOCK) {
+ 		spin_unlock(&qdisc->seqlock);
++
++		if (unlikely(test_bit(__QDISC_STATE_MISSED,
++				      &qdisc->state))) {
++			clear_bit(__QDISC_STATE_MISSED, &qdisc->state);
++			__netif_schedule(qdisc);
++		}
++	}
+ }
  
- 		if (unlikely(to_free))
- 			kfree_skb_list(to_free);
+ static inline bool qdisc_may_bulk(const struct Qdisc *qdisc)
 diff --git a/net/sched/sch_generic.c b/net/sched/sch_generic.c
-index d86c4cc..fc8b56b 100644
+index 44991ea..795d986 100644
 --- a/net/sched/sch_generic.c
 +++ b/net/sched/sch_generic.c
-@@ -35,6 +35,25 @@
- const struct Qdisc_ops *default_qdisc_ops = &pfifo_fast_ops;
- EXPORT_SYMBOL(default_qdisc_ops);
+@@ -640,8 +640,10 @@ static struct sk_buff *pfifo_fast_dequeue(struct Qdisc *qdisc)
+ {
+ 	struct pfifo_fast_priv *priv = qdisc_priv(qdisc);
+ 	struct sk_buff *skb = NULL;
++	bool need_retry = true;
+ 	int band;
  
-+static void qdisc_maybe_clear_missed(struct Qdisc *q,
-+				     const struct netdev_queue *txq)
-+{
-+	clear_bit(__QDISC_STATE_MISSED, &q->state);
-+
-+	/* Make sure the below netif_xmit_frozen_or_stopped()
-+	 * checking happens after clearing STATE_MISSED.
-+	 */
-+	smp_mb__after_atomic();
-+
-+	/* Checking netif_xmit_frozen_or_stopped() again to
-+	 * make sure STATE_MISSED is set if the STATE_MISSED
-+	 * set by netif_tx_wake_queue()'s rescheduling of
-+	 * net_tx_action() is cleared by the above clear_bit().
-+	 */
-+	if (!netif_xmit_frozen_or_stopped(txq))
-+		set_bit(__QDISC_STATE_MISSED, &q->state);
-+}
-+
- /* Main transmission queue. */
++retry:
+ 	for (band = 0; band < PFIFO_FAST_BANDS && !skb; band++) {
+ 		struct skb_array *q = band2list(priv, band);
  
- /* Modifications to data participating in scheduling must be protected with
-@@ -74,6 +93,7 @@ static inline struct sk_buff *__skb_dequeue_bad_txq(struct Qdisc *q)
- 			}
- 		} else {
- 			skb = SKB_XOFF_MAGIC;
-+			qdisc_maybe_clear_missed(q, txq);
- 		}
+@@ -652,6 +654,23 @@ static struct sk_buff *pfifo_fast_dequeue(struct Qdisc *qdisc)
  	}
- 
-@@ -242,6 +262,7 @@ static struct sk_buff *dequeue_skb(struct Qdisc *q, bool *validate,
- 			}
- 		} else {
- 			skb = NULL;
-+			qdisc_maybe_clear_missed(q, txq);
- 		}
- 		if (lock)
- 			spin_unlock(lock);
-@@ -251,8 +272,10 @@ static struct sk_buff *dequeue_skb(struct Qdisc *q, bool *validate,
- 	*validate = true;
- 
- 	if ((q->flags & TCQ_F_ONETXQUEUE) &&
--	    netif_xmit_frozen_or_stopped(txq))
-+	    netif_xmit_frozen_or_stopped(txq)) {
-+		qdisc_maybe_clear_missed(q, txq);
- 		return skb;
-+	}
- 
- 	skb = qdisc_dequeue_skb_bad_txq(q);
- 	if (unlikely(skb)) {
-@@ -311,6 +334,8 @@ bool sch_direct_xmit(struct sk_buff *skb, struct Qdisc *q,
- 		HARD_TX_LOCK(dev, txq, smp_processor_id());
- 		if (!netif_xmit_frozen_or_stopped(txq))
- 			skb = dev_hard_start_xmit(skb, dev, txq, &ret);
-+		else
-+			qdisc_maybe_clear_missed(q, txq);
- 
- 		HARD_TX_UNLOCK(dev, txq);
+ 	if (likely(skb)) {
+ 		qdisc_update_stats_at_dequeue(qdisc, skb);
++	} else if (need_retry &&
++		   test_bit(__QDISC_STATE_MISSED, &qdisc->state)) {
++		/* Delay clearing the STATE_MISSED here to reduce
++		 * the overhead of the second spin_trylock() in
++		 * qdisc_run_begin() and __netif_schedule() calling
++		 * in qdisc_run_end().
++		 */
++		clear_bit(__QDISC_STATE_MISSED, &qdisc->state);
++
++		/* Make sure dequeuing happens after clearing
++		 * STATE_MISSED.
++		 */
++		smp_mb__after_atomic();
++
++		need_retry = false;
++
++		goto retry;
  	} else {
+ 		WRITE_ONCE(qdisc->empty, true);
+ 	}
 -- 
 2.7.4
 
