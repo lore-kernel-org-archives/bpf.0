@@ -2,88 +2,131 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7C88C433B4
-	for <bpf@archiver.kernel.org>; Fri, 14 May 2021 02:27:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B1D3C433B4
+	for <bpf@archiver.kernel.org>; Fri, 14 May 2021 02:53:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8569A6141E
-	for <bpf@archiver.kernel.org>; Fri, 14 May 2021 02:27:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 72AAE6143D
+	for <bpf@archiver.kernel.org>; Fri, 14 May 2021 02:53:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231387AbhENC2Q (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 13 May 2021 22:28:16 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:3667 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231199AbhENC2N (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 13 May 2021 22:28:13 -0400
-Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.60])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4FhC5b03L7z1BMNh;
-        Fri, 14 May 2021 10:24:19 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.56) by
- DGGEMS414-HUB.china.huawei.com (10.3.19.214) with Microsoft SMTP Server id
- 14.3.498.0; Fri, 14 May 2021 10:26:56 +0800
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-To:     <davem@davemloft.net>, <kuba@kernel.org>
-CC:     <olteanv@gmail.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <andriin@fb.com>, <edumazet@google.com>, <weiwan@google.com>,
-        <cong.wang@bytedance.com>, <ap420073@gmail.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linuxarm@openeuler.org>, <mkl@pengutronix.de>,
-        <linux-can@vger.kernel.org>, <jhs@mojatatu.com>,
-        <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
-        <andrii@kernel.org>, <kafai@fb.com>, <songliubraving@fb.com>,
-        <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
-        <bpf@vger.kernel.org>, <jonas.bonn@netrounds.com>,
-        <pabeni@redhat.com>, <mzhivich@akamai.com>, <johunt@akamai.com>,
-        <albcamus@gmail.com>, <kehuan.feng@gmail.com>,
-        <a.fatoum@pengutronix.de>, <atenart@kernel.org>,
-        <alexander.duyck@gmail.com>, <hdanton@sina.com>, <jgross@suse.com>,
-        <JKosina@suse.com>, <mkubecek@suse.cz>, <bjorn@kernel.org>,
-        <alobakin@pm.me>
-Subject: [PATCH net v8 0/3] fix packet stuck problem for lockless qdisc
-Date:   Fri, 14 May 2021 10:26:55 +0800
-Message-ID: <1620959218-17250-1-git-send-email-linyunsheng@huawei.com>
-X-Mailer: git-send-email 2.7.4
+        id S230204AbhENCyu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 13 May 2021 22:54:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38712 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229981AbhENCyu (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 13 May 2021 22:54:50 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09C5BC061574;
+        Thu, 13 May 2021 19:53:39 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id i5so18404784pgm.0;
+        Thu, 13 May 2021 19:53:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=J5IurG2LaPoI6GLjY84j9lFhYUx5eDvCmRkvT3NLakQ=;
+        b=IJPo7Fit6um8lRdzq7QCII9iH7pHFiu7X/3Bf47lTQhxumxQzb5+SM/1wHayf4t+OX
+         qp4XX7HvEG3R1jCseK0f8eXLy7uGzsRjvnUQIgm88dBg+hHQc7pFXwAH8kdpsiOaDWk1
+         ZERt6fD13BXiPLgGVM829CoxkV32clTSAjBZvmjC8od2GetoM9h3vyXReXb/U0ircXqc
+         NGxCfhuEkoL2TDagRK9b3irE3UyPhrgMYs3YO2uqblBkQqCK++Z12+kFmWs0Jb5sqhnC
+         tUdgGUR5BltyoMT6imvD4vYyuB3m4Yj+0wOB9P13kHfeDTdTkl0GMGaMDPFQIs2RxuP2
+         uV1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=J5IurG2LaPoI6GLjY84j9lFhYUx5eDvCmRkvT3NLakQ=;
+        b=tCs82l97utyCSiuYB6912ZJjqoulpDbldWXY/k+BBucMsYLIT1b/Z878+x2yRiDczG
+         QViwSKc//C43+MmJ27GjPfALqD4BcoZr2ze1t1SHqRWCRW2XyVJRGdffwkdG1RAmAgT7
+         xhRwKBLdG4w7knWpTORTCyoBIYRppoGsWbE81JrFv2FhXQD4lqJ2dhMiWf1jnjgIuIpA
+         8qGyAaGyxQoAIWwZQxZnksB2XY2lv2/Vr88uIJEtHFX1wcbB58UqxjbQgaQXiw2ggRV0
+         TMdXTLHn4V9uq25rnnMFOoKToVDM30BpQZFy9byS5DnsZ4wdU5/ATtbX2+TjcyQhML8b
+         +cGw==
+X-Gm-Message-State: AOAM533kQEzjalrUwuUamSgB/Xd1HrfJsOkGQbWYFw+Z3ViFut3Wxt8m
+        19v9u6YZgqwvkJTfSFIK+3pZKGBTnEt3wtyGyxo=
+X-Google-Smtp-Source: ABdhPJxo8AxTvMJcCnN/DXqEdcGwYlofZ4pY714CNaHCz3dtzLNg63DrCjykVhx9VN4Tb3fD+HcI1CBR6ASpi+hJOJo=
+X-Received: by 2002:a65:45c3:: with SMTP id m3mr43861900pgr.179.1620960818551;
+ Thu, 13 May 2021 19:53:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.56]
-X-CFilter-Loop: Reflected
+References: <20210402192823.bqwgipmky3xsucs5@ast-mbp> <20210402234500.by3wigegeluy5w7j@ast-mbp>
+ <CAM_iQpWf2aYbY=tKejb=nx7LWBLo1woTp-n4wOLhkUuDCz8u-Q@mail.gmail.com>
+ <20210412230151.763nqvaadrrg77kd@ast-mbp.dhcp.thefacebook.com>
+ <CAM_iQpWePmmpr0RKqCrQ=NPiGrq2Tx9OU9y3e4CTzFjvh5t47w@mail.gmail.com>
+ <CAADnVQLsmULxJYq9rHS4xyg=VAUeexJTh35vTWTVgjeqwX4D6g@mail.gmail.com>
+ <CAM_iQpVtxgZNeqh4_Pqftc3D163JnRvP3AZRuFrYNeyWLgVBVA@mail.gmail.com>
+ <CAADnVQLFehCeQRbwEQ9VM-=Y3V3es2Ze8gFPs6cZHwNH0Ct7vw@mail.gmail.com>
+ <CAM_iQpWDhoY_msU=AowHFq3N3OuQpvxd2ADP_Z+gxBfGduhrPA@mail.gmail.com>
+ <20210427020159.hhgyfkjhzjk3lxgs@ast-mbp.dhcp.thefacebook.com>
+ <CAM_iQpVE4XG7SPAVBmV2UtqUANg3X-1ngY7COYC03NrT6JkZ+g@mail.gmail.com>
+ <CAADnVQK9BgguVorziWgpMktLHuPCgEaKa4fz-KCfhcZtT46teQ@mail.gmail.com>
+ <CAM_iQpWBrxuT=Y3CbhxYpE5a+QSk-O=Vj4euegggXAAKTHRBqw@mail.gmail.com>
+ <CAOftzPh0cj_XRES8mrNWnyKFZDLpRez09NAofmu1F1JAZf43Cw@mail.gmail.com>
+ <ac30da98-97cd-c105-def8-972a8ec573d6@mojatatu.com> <e51f235e-f5b7-be64-2340-8e7575d69145@mojatatu.com>
+In-Reply-To: <e51f235e-f5b7-be64-2340-8e7575d69145@mojatatu.com>
+From:   Cong Wang <xiyou.wangcong@gmail.com>
+Date:   Thu, 13 May 2021 19:53:27 -0700
+Message-ID: <CAM_iQpX=Qk6GjxB=saTpbo4Oc1KBxK2tU5N==HO_LimiOEtoDA@mail.gmail.com>
+Subject: Re: [RFC Patch bpf-next] bpf: introduce bpf timer
+To:     Jamal Hadi Salim <jhs@mojatatu.com>
+Cc:     Joe Stringer <joe@cilium.io>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Linux Kernel Network Developers <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        Xiongchun Duan <duanxiongchun@bytedance.com>,
+        Dongdong Wang <wangdongdong.6@bytedance.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Pedro Tammela <pctammela@mojatatu.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patchset fixes the packet stuck problem mentioned in [1].
+On Thu, May 13, 2021 at 11:46 AM Jamal Hadi Salim <jhs@mojatatu.com> wrote:
+>
+> On 2021-05-12 6:43 p.m., Jamal Hadi Salim wrote:
+>
+> >
+> > Will run some tests tomorrow to see the effect of batching vs nobatch
+> > and capture cost of syscalls and cpu.
+> >
+>
+> So here are some numbers:
+> Processor: Intel(R) Xeon(R) Gold 6230R CPU @ 2.10GHz
+> This machine is very similar to where a real deployment
+> would happen.
+>
+> Hyperthreading turned off so we can dedicate the core to the
+> dumping process and Performance mode on, so no frequency scaling
+> meddling.
+> Tests were ran about 3 times each. Results eye-balled to make
+> sure deviation was reasonable.
+> 100% of the one core was used just for dumping during each run.
 
-Patch 1: Add STATE_MISSED flag to fix packet stuck problem.
-Patch 2: Fix a tx_action rescheduling problem after STATE_MISSED
-         flag is added in patch 1.
-Patch 3: Fix the significantly higher CPU consumption problem when
-         multiple threads are competing on a saturated outgoing
-         device.
+I checked with Cilium users here at Bytedance, they actually observed
+100% CPU usage too.
 
-V8: Change function name in patch 3 as suggested by Jakub, adjust
-    commit log in patch 2, and add Acked-by from Jakub.
-V7: Fix netif_tx_wake_queue() data race noted by Jakub.
-V6: Some performance optimization in patch 1 suggested by Jakub
-    and drop NET_XMIT_DROP checking in patch 3.
-V5: add patch 3 to fix the problem reported by Michal Kubecek.
-V4: Change STATE_NEED_RESCHEDULE to STATE_MISSED and add patch 2.
+>
+> bpftool does linear retrieval whereas our tool does batch dumping.
+> bpftool does print the dumped results, for our tool we just count
+> the number of entries retrieved (cost would have been higher if
+> we actually printed). In any case in the real setup there is
+> a processing cost which is much higher.
+>
+> Summary is: the dumping is problematic costwise as the number of
+> entries increase. While batching does improve things it doesnt
+> solve our problem (Like i said we have upto 16M entries and most
+> of the time we are dumping useless things)
 
-[1]. https://lkml.org/lkml/2019/10/9/42
-
-Yunsheng Lin (3):
-  net: sched: fix packet stuck problem for lockless qdisc
-  net: sched: fix tx action rescheduling issue during deactivation
-  net: sched: fix tx action reschedule issue with stopped queue
-
- include/net/pkt_sched.h   |  7 +------
- include/net/sch_generic.h | 35 ++++++++++++++++++++++++++++++++-
- net/core/dev.c            | 29 ++++++++++++++++++++++-----
- net/sched/sch_generic.c   | 50 +++++++++++++++++++++++++++++++++++++++++++++--
- 4 files changed, 107 insertions(+), 14 deletions(-)
-
--- 
-2.7.4
-
+Thank you for sharing these numbers! Hopefully they could convince
+people here to accept the bpf timer. I will include your use case and
+performance number in my next update.
