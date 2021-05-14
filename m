@@ -8,60 +8,60 @@ X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 345BFC433B4
-	for <bpf@archiver.kernel.org>; Fri, 14 May 2021 00:36:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ED3C4C433B4
+	for <bpf@archiver.kernel.org>; Fri, 14 May 2021 00:36:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 04BD561353
-	for <bpf@archiver.kernel.org>; Fri, 14 May 2021 00:36:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B6C34613BE
+	for <bpf@archiver.kernel.org>; Fri, 14 May 2021 00:36:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231745AbhENAiB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 13 May 2021 20:38:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37152 "EHLO
+        id S231752AbhENAiF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 13 May 2021 20:38:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231723AbhENAiB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 13 May 2021 20:38:01 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50548C061574
-        for <bpf@vger.kernel.org>; Thu, 13 May 2021 17:36:51 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id g6-20020a17090adac6b029015d1a9a6f1aso439323pjx.1
-        for <bpf@vger.kernel.org>; Thu, 13 May 2021 17:36:51 -0700 (PDT)
+        with ESMTP id S231723AbhENAiF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 13 May 2021 20:38:05 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A67C061574
+        for <bpf@vger.kernel.org>; Thu, 13 May 2021 17:36:54 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id k15so10058601pgb.10
+        for <bpf@vger.kernel.org>; Thu, 13 May 2021 17:36:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=qRHzW6QO90DVGbLxl8MKyd/t6ZVkIgmLqFGkua0eZnw=;
-        b=ilNSNeQO2zgEOiN7y7ZP2SysoClnJ48l23Ak4uE6wA310yHz8R3T7mXXFVDoPCiw2S
-         ZbQtLBBlAj8ZFscfWaEUlHUG9BcgBba6DmmESwVZ8fk0mIc59bPyCwaf2ZhHYdGDnU6a
-         TknvFmSPPTGl6DnmQ5473/O5pWz+pN2EhI3h8LBltRGqcboP/YRqC2bCxMTsMuH8RGoK
-         NrVEATcRvCTnLuieUFJ/QpYHzJ5UMCnv2n63KixAIKBSum4sNGmh65uK9s1uCIMDkjSs
-         hAZjKAccu9qLlCa3FmK9w75WD7qCP7DXvdD/CZOL9Y8ITjVBfylrf0ZrKG63ZZWyNxcs
-         ANfQ==
+        bh=A82fnCpRlRpNCPZoeOc9LjoJQoPv+rtdjruUrM2K2YQ=;
+        b=DW4bXQ3ms8AEI/l5onaTJR/t78M/18ROXVIFAkjMKAjFYp9QJyou7rODebY3498LVj
+         0x9MkUldKWqfpMPbQGiVFEqRS6C+IwUiR3a57KuHTx6ucrH7wfBE+moUX7teO2ueVp5L
+         GMCBp6Qh63zcN0PbZS75q5z2efsOi20smEeaSJsQpC418pmMXZg8zXSwITpejwaS7PpW
+         scsLmxWtTPbWMDsbKw6/5FXH0veRpusqwR3hG+JsGKfUS2U+QA0PE61iw6g76qEPvRpo
+         Lp/G9ziqz4rOUNOh1zwhEwHLfrNctbCqn3vbxLZxFSs45/c8jSNUV4RMDRBhDxW7wnXx
+         iflw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=qRHzW6QO90DVGbLxl8MKyd/t6ZVkIgmLqFGkua0eZnw=;
-        b=fI7TiCNN1TgXf2kK6NwW9vw6TVYn7LkY1fUS8KRk/L0Q2gL+6u9E4DOnW7ZRLuI+v3
-         NRviCoi3TPXlFqUWCuxiHS8ISbvBcljc0HG7T5epyrkDCArB99GoNuuuenvi3px+uqFJ
-         9ucCTvri0jnOwXrz8G+JssjdvlUJCoWE4k3+9FsvcGGPjvZyqvNnN0IwChihyfmbPzxt
-         lxhwLXzg5rU3sXtM3fIkpl/hSqJio/ByVac7T2a5yCXDvmlGsr8yDyV87MFz2fcZSQEt
-         3Z4WXeqHYdQyEPqvy0dIGoTFAEapbEfp/NPYNkR23wJWtOyoLKYge1aFEaUZV61kG282
-         Lacw==
-X-Gm-Message-State: AOAM533QpIBR2xHG0FP5dyOsVCTa+gZPa47FURP9dTZJJj9Kuk/ZqOmK
-        0+PAeIbLquIIlytghaRh6GA=
-X-Google-Smtp-Source: ABdhPJxIEI/3jlWhpLZAagRx37D7KSkPjK+u7M70yd7mRUBBrDuc8f5pB5C0G6t9y8GBjwn/Kac19A==
-X-Received: by 2002:a17:902:bc81:b029:ef:3f99:9f76 with SMTP id bb1-20020a170902bc81b02900ef3f999f76mr20829476plb.33.1620952610833;
-        Thu, 13 May 2021 17:36:50 -0700 (PDT)
+        bh=A82fnCpRlRpNCPZoeOc9LjoJQoPv+rtdjruUrM2K2YQ=;
+        b=tZM/oUkLho2e8qVEopiK+w+xtYOqOE1KZvscHhqdiRJy48IVuU7dgF9261QQ4ttmfZ
+         CyfcDkqFhZVIrn/wCbCe5s1dAxb7AEegBaLenB9PUs500OhKj1z2IKm8jwzz0lwH8HKP
+         Kmp0Rj2iuH5vB97ZEVYKjlsvldbaxsa2zqEDivmnjcsq7z1L2sU99hNJhnlWoDyI/fhH
+         7Cl/28SuGxiMy7lqUHsX3R/HflmmoTkuAO8jNO+ksydBYfkrw228fa2sK1hkHHCO9ZqK
+         h7pgXPGkJz//6YPrYlgfZkPaQtJfTpTdqLRA6Litj5qBPJB/yJ9CCs1zcjeUMyzwWPNz
+         296A==
+X-Gm-Message-State: AOAM531+kY6EtLTb0GlL8WGr0LgCspT2Ji1YaoscMROb6YhPVlA/19Lz
+        7Bggypv3QM41plcN3e7fow0=
+X-Google-Smtp-Source: ABdhPJxNdANeXDToSYhm4QALaXs2HUlGt1AAY25BUzVnSMBNV32VbaL07EOFMyoKeSFfiF3gpPhREw==
+X-Received: by 2002:a63:b102:: with SMTP id r2mr22486071pgf.254.1620952614331;
+        Thu, 13 May 2021 17:36:54 -0700 (PDT)
 Received: from ast-mbp.thefacebook.com ([163.114.132.4])
-        by smtp.gmail.com with ESMTPSA id b9sm302336pfo.107.2021.05.13.17.36.49
+        by smtp.gmail.com with ESMTPSA id b9sm302336pfo.107.2021.05.13.17.36.52
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 13 May 2021 17:36:50 -0700 (PDT)
+        Thu, 13 May 2021 17:36:53 -0700 (PDT)
 From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To:     davem@davemloft.net
 Cc:     daniel@iogearbox.net, andrii@kernel.org, john.fastabend@gmail.com,
         bpf@vger.kernel.org, kernel-team@fb.com
-Subject: [PATCH v6 bpf-next 13/21] libbpf: Preliminary support for fd_idx
-Date:   Thu, 13 May 2021 17:36:15 -0700
-Message-Id: <20210514003623.28033-14-alexei.starovoitov@gmail.com>
+Subject: [PATCH v6 bpf-next 15/21] libbpf: Cleanup temp FDs when intermediate sys_bpf fails.
+Date:   Thu, 13 May 2021 17:36:17 -0700
+Message-Id: <20210514003623.28033-16-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.13.5
 In-Reply-To: <20210514003623.28033-1-alexei.starovoitov@gmail.com>
 References: <20210514003623.28033-1-alexei.starovoitov@gmail.com>
@@ -71,77 +71,98 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Prep libbpf to use FD_IDX kernel feature when generating loader program.
+Fix loader program to close temporary FDs when intermediate
+sys_bpf command fails.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Acked-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/lib/bpf/libbpf.c | 31 +++++++++++++++++++++++++------
- 1 file changed, 25 insertions(+), 6 deletions(-)
+ tools/lib/bpf/bpf_gen_internal.h |  1 +
+ tools/lib/bpf/gen_loader.c       | 48 +++++++++++++++++++++++++++++---
+ 2 files changed, 45 insertions(+), 4 deletions(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 708b94ad9893..0ba0e80749f8 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -412,6 +412,8 @@ struct module_btf {
- 	int fd;
- };
+diff --git a/tools/lib/bpf/bpf_gen_internal.h b/tools/lib/bpf/bpf_gen_internal.h
+index f42a55efd559..615400391e57 100644
+--- a/tools/lib/bpf/bpf_gen_internal.h
++++ b/tools/lib/bpf/bpf_gen_internal.h
+@@ -15,6 +15,7 @@ struct bpf_gen {
+ 	void *data_cur;
+ 	void *insn_start;
+ 	void *insn_cur;
++	ssize_t cleanup_label;
+ 	__u32 nr_progs;
+ 	__u32 nr_maps;
+ 	int log_level;
+diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
+index 0fc54b1ca311..8df718a6b142 100644
+--- a/tools/lib/bpf/gen_loader.c
++++ b/tools/lib/bpf/gen_loader.c
+@@ -101,8 +101,36 @@ static void emit2(struct bpf_gen *gen, struct bpf_insn insn1, struct bpf_insn in
  
-+struct bpf_gen;
+ void bpf_gen__init(struct bpf_gen *gen, int log_level)
+ {
++	size_t stack_sz = sizeof(struct loader_stack);
++	int i;
 +
- struct bpf_object {
- 	char name[BPF_OBJ_NAME_LEN];
- 	char license[64];
-@@ -432,6 +434,8 @@ struct bpf_object {
- 	bool loaded;
- 	bool has_subcalls;
- 
-+	struct bpf_gen *gen_loader;
+ 	gen->log_level = log_level;
++	/* save ctx pointer into R6 */
+ 	emit(gen, BPF_MOV64_REG(BPF_REG_6, BPF_REG_1));
 +
- 	/*
- 	 * Information when doing elf related work. Only valid if fd
- 	 * is valid.
-@@ -6383,19 +6387,34 @@ bpf_object__relocate_data(struct bpf_object *obj, struct bpf_program *prog)
++	/* bzero stack */
++	emit(gen, BPF_MOV64_REG(BPF_REG_1, BPF_REG_10));
++	emit(gen, BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -stack_sz));
++	emit(gen, BPF_MOV64_IMM(BPF_REG_2, stack_sz));
++	emit(gen, BPF_MOV64_IMM(BPF_REG_3, 0));
++	emit(gen, BPF_EMIT_CALL(BPF_FUNC_probe_read_kernel));
++
++	/* jump over cleanup code */
++	emit(gen, BPF_JMP_IMM(BPF_JA, 0, 0,
++			      /* size of cleanup code below */
++			      (stack_sz / 4) * 3 + 2));
++
++	/* remember the label where all error branches will jump to */
++	gen->cleanup_label = gen->insn_cur - gen->insn_start;
++	/* emit cleanup code: close all temp FDs */
++	for (i = 0; i < stack_sz; i += 4) {
++		emit(gen, BPF_LDX_MEM(BPF_W, BPF_REG_1, BPF_REG_10, -stack_sz + i));
++		emit(gen, BPF_JMP_IMM(BPF_JSLE, BPF_REG_1, 0, 1));
++		emit(gen, BPF_EMIT_CALL(BPF_FUNC_sys_close));
++	}
++	/* R7 contains the error code from sys_bpf. Copy it into R0 and exit. */
++	emit(gen, BPF_MOV64_REG(BPF_REG_0, BPF_REG_7));
++	emit(gen, BPF_EXIT_INSN());
+ }
  
- 		switch (relo->type) {
- 		case RELO_LD64:
--			insn[0].src_reg = BPF_PSEUDO_MAP_FD;
--			insn[0].imm = obj->maps[relo->map_idx].fd;
-+			if (obj->gen_loader) {
-+				insn[0].src_reg = BPF_PSEUDO_MAP_IDX;
-+				insn[0].imm = relo->map_idx;
-+			} else {
-+				insn[0].src_reg = BPF_PSEUDO_MAP_FD;
-+				insn[0].imm = obj->maps[relo->map_idx].fd;
-+			}
- 			break;
- 		case RELO_DATA:
--			insn[0].src_reg = BPF_PSEUDO_MAP_VALUE;
- 			insn[1].imm = insn[0].imm + relo->sym_off;
--			insn[0].imm = obj->maps[relo->map_idx].fd;
-+			if (obj->gen_loader) {
-+				insn[0].src_reg = BPF_PSEUDO_MAP_IDX_VALUE;
-+				insn[0].imm = relo->map_idx;
-+			} else {
-+				insn[0].src_reg = BPF_PSEUDO_MAP_VALUE;
-+				insn[0].imm = obj->maps[relo->map_idx].fd;
-+			}
- 			break;
- 		case RELO_EXTERN_VAR:
- 			ext = &obj->externs[relo->sym_off];
- 			if (ext->type == EXT_KCFG) {
--				insn[0].src_reg = BPF_PSEUDO_MAP_VALUE;
--				insn[0].imm = obj->maps[obj->kconfig_map_idx].fd;
-+				if (obj->gen_loader) {
-+					insn[0].src_reg = BPF_PSEUDO_MAP_IDX_VALUE;
-+					insn[0].imm = obj->kconfig_map_idx;
-+				} else {
-+					insn[0].src_reg = BPF_PSEUDO_MAP_VALUE;
-+					insn[0].imm = obj->maps[obj->kconfig_map_idx].fd;
-+				}
- 				insn[1].imm = ext->kcfg.data_off;
- 			} else /* EXT_KSYM */ {
- 				if (ext->ksym.type_id) { /* typed ksyms */
+ static int add_data(struct bpf_gen *gen, const void *data, __u32 size)
+@@ -187,12 +215,24 @@ static void emit_sys_bpf(struct bpf_gen *gen, int cmd, int attr, int attr_size)
+ 	emit(gen, BPF_MOV64_REG(BPF_REG_7, BPF_REG_0));
+ }
+ 
++static bool is_simm16(__s64 value)
++{
++	return value == (__s64)(__s16)value;
++}
++
+ static void emit_check_err(struct bpf_gen *gen)
+ {
+-	emit(gen, BPF_JMP_IMM(BPF_JSGE, BPF_REG_7, 0, 2));
+-	emit(gen, BPF_MOV64_REG(BPF_REG_0, BPF_REG_7));
+-	/* TODO: close intermediate FDs in case of error */
+-	emit(gen, BPF_EXIT_INSN());
++	__s64 off = -(gen->insn_cur - gen->insn_start - gen->cleanup_label) / 8 - 1;
++
++	/* R7 contains result of last sys_bpf command.
++	 * if (R7 < 0) goto cleanup;
++	 */
++	if (is_simm16(off)) {
++		emit(gen, BPF_JMP_IMM(BPF_JSLT, BPF_REG_7, 0, off));
++	} else {
++		gen->error = -ERANGE;
++		emit(gen, BPF_JMP_IMM(BPF_JA, 0, 0, -1));
++	}
+ }
+ 
+ /* reg1 and reg2 should not be R1 - R5. They can be R0, R6 - R10 */
 -- 
 2.30.2
 
