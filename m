@@ -2,132 +2,220 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E1E3C433ED
-	for <bpf@archiver.kernel.org>; Fri, 14 May 2021 01:34:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B94D8C433ED
+	for <bpf@archiver.kernel.org>; Fri, 14 May 2021 02:27:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3DFAE61263
-	for <bpf@archiver.kernel.org>; Fri, 14 May 2021 01:34:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 96A2061285
+	for <bpf@archiver.kernel.org>; Fri, 14 May 2021 02:27:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231974AbhENBfu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 13 May 2021 21:35:50 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:54226 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231768AbhENBfu (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 13 May 2021 21:35:50 -0400
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 5934620B8025;
-        Thu, 13 May 2021 18:34:39 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5934620B8025
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1620956079;
-        bh=F6CQz2+nsZGJ/pzdpTT9AQzTkNqlEEh7RPiPcleWx28=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=faO6iLDAO28ixLe7L/yD0bTgdHVbHQHH50nT/E3+H29jlY0+SVN74BpEWL4SVttz+
-         wuvfaSxvKIiZcbfU+jVF8zBSuexAOEpHzli9Ff3FWUP6k0OiPAYdxjursVIaAYLIAs
-         Ni9UufA/1lWZPwE49CKBP3hzHElj5Pw7+EuFbpLg=
-Received: by mail-pj1-f48.google.com with SMTP id v11-20020a17090a6b0bb029015cba7c6bdeso552619pjj.0;
-        Thu, 13 May 2021 18:34:39 -0700 (PDT)
-X-Gm-Message-State: AOAM532otodcctuWU3lw48HRbKRSAiBIj8MZngqydIMqtH3qHU6hLtsQ
-        hGGbciP+sujzLQCILdLXc+a+Pwl9Ssw7AugyK+I=
-X-Google-Smtp-Source: ABdhPJwv/YtlK8W/E0i23QQxf4xSLtEBhJx0WbxP9KKGOfWRVCcDM1mjk/0uCIMlC94A0zbVcQof5us1WWyA5xLHK40=
-X-Received: by 2002:a17:90a:174e:: with SMTP id 14mr11885116pjm.187.1620956078745;
- Thu, 13 May 2021 18:34:38 -0700 (PDT)
+        id S231254AbhENC2N (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 13 May 2021 22:28:13 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:3664 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229956AbhENC2N (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 13 May 2021 22:28:13 -0400
+Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4FhC5Z5fnBz1BMNW;
+        Fri, 14 May 2021 10:24:18 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.56) by
+ DGGEMS414-HUB.china.huawei.com (10.3.19.214) with Microsoft SMTP Server id
+ 14.3.498.0; Fri, 14 May 2021 10:26:57 +0800
+From:   Yunsheng Lin <linyunsheng@huawei.com>
+To:     <davem@davemloft.net>, <kuba@kernel.org>
+CC:     <olteanv@gmail.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <andriin@fb.com>, <edumazet@google.com>, <weiwan@google.com>,
+        <cong.wang@bytedance.com>, <ap420073@gmail.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linuxarm@openeuler.org>, <mkl@pengutronix.de>,
+        <linux-can@vger.kernel.org>, <jhs@mojatatu.com>,
+        <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
+        <andrii@kernel.org>, <kafai@fb.com>, <songliubraving@fb.com>,
+        <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
+        <bpf@vger.kernel.org>, <jonas.bonn@netrounds.com>,
+        <pabeni@redhat.com>, <mzhivich@akamai.com>, <johunt@akamai.com>,
+        <albcamus@gmail.com>, <kehuan.feng@gmail.com>,
+        <a.fatoum@pengutronix.de>, <atenart@kernel.org>,
+        <alexander.duyck@gmail.com>, <hdanton@sina.com>, <jgross@suse.com>,
+        <JKosina@suse.com>, <mkubecek@suse.cz>, <bjorn@kernel.org>,
+        <alobakin@pm.me>
+Subject: [PATCH net v8 2/3] net: sched: fix tx action rescheduling issue during deactivation
+Date:   Fri, 14 May 2021 10:26:57 +0800
+Message-ID: <1620959218-17250-3-git-send-email-linyunsheng@huawei.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1620959218-17250-1-git-send-email-linyunsheng@huawei.com>
+References: <1620959218-17250-1-git-send-email-linyunsheng@huawei.com>
 MIME-Version: 1.0
-References: <20210513165846.23722-1-mcroce@linux.microsoft.com>
- <20210513165846.23722-2-mcroce@linux.microsoft.com> <YJ3Lrdx1oIm/MDV8@casper.infradead.org>
-In-Reply-To: <YJ3Lrdx1oIm/MDV8@casper.infradead.org>
-From:   Matteo Croce <mcroce@linux.microsoft.com>
-Date:   Fri, 14 May 2021 03:34:02 +0200
-X-Gmail-Original-Message-ID: <CAFnufp3pCrywDFXZqDSw+-2K7p9yHfYY9C5WveaXMWDJ_oViAA@mail.gmail.com>
-Message-ID: <CAFnufp3pCrywDFXZqDSw+-2K7p9yHfYY9C5WveaXMWDJ_oViAA@mail.gmail.com>
-Subject: Re: [PATCH net-next v5 1/5] mm: add a signature in struct page
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     netdev@vger.kernel.org, linux-mm@kvack.org,
-        Ayush Sawal <ayush.sawal@chelsio.com>,
-        Vinay Kumar Yadav <vinay.yadav@chelsio.com>,
-        Rohit Maheshwari <rohitm@chelsio.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Mirko Lindner <mlindner@marvell.com>,
-        Stephen Hemminger <stephen@networkplumber.org>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Boris Pismenny <borisp@nvidia.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Yu Zhao <yuzhao@google.com>,
-        Will Deacon <will@kernel.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Roman Gushchin <guro@fb.com>, Hugh Dickins <hughd@google.com>,
-        Peter Xu <peterx@redhat.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Alexander Lobakin <alobakin@pm.me>,
-        Cong Wang <cong.wang@bytedance.com>, wenxu <wenxu@ucloud.cn>,
-        Kevin Hao <haokexin@gmail.com>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        Marco Elver <elver@google.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Yunsheng Lin <linyunsheng@huawei.com>,
-        Guillaume Nault <gnault@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
-        bpf@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        David Ahern <dsahern@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Andrew Lunn <andrew@lunn.ch>, Paolo Abeni <pabeni@redhat.com>,
-        Sven Auhagen <sven.auhagen@voleatech.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.56]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, May 14, 2021 at 3:01 AM Matthew Wilcox <willy@infradead.org> wrote:
->
-> On Thu, May 13, 2021 at 06:58:42PM +0200, Matteo Croce wrote:
-> >               struct {        /* page_pool used by netstack */
-> > +                     /**
-> > +                      * @pp_magic: magic value to avoid recycling non
-> > +                      * page_pool allocated pages.
-> > +                      * It aliases with page->lru.next
->
-> I'm not really keen on documenting what aliases with what.
-> pp_magic also aliases with compound_head, 'next' (for slab),
-> and dev_pagemap.  This is an O(n^2) documentation problem ...
->
+Currently qdisc_run() checks the STATE_DEACTIVATED of lockless
+qdisc before calling __qdisc_run(), which ultimately clear the
+STATE_MISSED when all the skb is dequeued. If STATE_DEACTIVATED
+is set before clearing STATE_MISSED, there may be rescheduling
+of net_tx_action() at the end of qdisc_run_end(), see below:
 
-Eric asked to document what page->signature aliases, so I did it in
-the commit message and in a comment.
-I can drop the code comment and leave it just the commit message.
+CPU0(net_tx_atcion)  CPU1(__dev_xmit_skb)  CPU2(dev_deactivate)
+          .                   .                     .
+          .            set STATE_MISSED             .
+          .           __netif_schedule()            .
+          .                   .           set STATE_DEACTIVATED
+          .                   .                qdisc_reset()
+          .                   .                     .
+          .<---------------   .              synchronize_net()
+clear __QDISC_STATE_SCHED  |  .                     .
+          .                |  .                     .
+          .                |  .            some_qdisc_is_busy()
+          .                |  .               return *false*
+          .                |  .                     .
+  test STATE_DEACTIVATED   |  .                     .
+__qdisc_run() *not* called |  .                     .
+          .                |  .                     .
+   test STATE_MISS         |  .                     .
+ __netif_schedule()--------|  .                     .
+          .                   .                     .
+          .                   .                     .
 
-> I feel like I want to document the pfmemalloc bit in mm_types.h,
-> but I don't have a concrete suggestion yet.
->
-> > +++ b/include/net/page_pool.h
-> > @@ -63,6 +63,8 @@
-> >   */
-> >  #define PP_ALLOC_CACHE_SIZE  128
-> >  #define PP_ALLOC_CACHE_REFILL        64
-> > +#define PP_SIGNATURE         (POISON_POINTER_DELTA + 0x40)
->
-> I wonder if this wouldn't be better in linux/poison.h?
->
+__qdisc_run() is not called by net_tx_atcion() in CPU0 because
+CPU2 has set STATE_DEACTIVATED flag during dev_deactivate(), and
+STATE_MISSED is only cleared in __qdisc_run(), __netif_schedule
+is called at the end of qdisc_run_end(), causing tx action
+rescheduling problem.
 
-I was thinking the same, I'll do it in the v6.
+qdisc_run() called by net_tx_action() runs in the softirq context,
+which should has the same semantic as the qdisc_run() called by
+__dev_xmit_skb() protected by rcu_read_lock_bh(). And there is a
+synchronize_net() between STATE_DEACTIVATED flag being set and
+qdisc_reset()/some_qdisc_is_busy in dev_deactivate(), we can safely
+bail out for the deactived lockless qdisc in net_tx_action(), and
+qdisc_reset() will reset all skb not dequeued yet.
 
-Regards,
+So add the rcu_read_lock() explicitly to protect the qdisc_run()
+and do the STATE_DEACTIVATED checking in net_tx_action() before
+calling qdisc_run_begin(). Another option is to do the checking in
+the qdisc_run_end(), but it will add unnecessary overhead for
+non-tx_action case, because __dev_queue_xmit() will not see qdisc
+with STATE_DEACTIVATED after synchronize_net(), the qdisc with
+STATE_DEACTIVATED can only be seen by net_tx_action() because of
+__netif_schedule().
+
+The STATE_DEACTIVATED checking in qdisc_run() is to avoid race
+between net_tx_action() and qdisc_reset(), see:
+commit d518d2ed8640 ("net/sched: fix race between deactivation
+and dequeue for NOLOCK qdisc"). As the bailout added above for
+deactived lockless qdisc in net_tx_action() provides better
+protection for the race without calling qdisc_run() at all, so
+remove the STATE_DEACTIVATED checking in qdisc_run().
+
+After qdisc_reset(), there is no skb in qdisc to be dequeued, so
+clear the STATE_MISSED in dev_reset_queue() too.
+
+Fixes: 6b3ba9146fe6 ("net: sched: allow qdiscs to handle locking")
+Acked-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
+V7: Clearing STATE_MISSED before calling __netif_schedule() has
+    avoid the endless rescheduling problem, but there may still
+    be a unnecessary rescheduling, so adjust the commit log.
+---
+ include/net/pkt_sched.h |  7 +------
+ net/core/dev.c          | 26 ++++++++++++++++++++++----
+ net/sched/sch_generic.c |  4 +++-
+ 3 files changed, 26 insertions(+), 11 deletions(-)
+
+diff --git a/include/net/pkt_sched.h b/include/net/pkt_sched.h
+index f5c1bee..6d7b12c 100644
+--- a/include/net/pkt_sched.h
++++ b/include/net/pkt_sched.h
+@@ -128,12 +128,7 @@ void __qdisc_run(struct Qdisc *q);
+ static inline void qdisc_run(struct Qdisc *q)
+ {
+ 	if (qdisc_run_begin(q)) {
+-		/* NOLOCK qdisc must check 'state' under the qdisc seqlock
+-		 * to avoid racing with dev_qdisc_reset()
+-		 */
+-		if (!(q->flags & TCQ_F_NOLOCK) ||
+-		    likely(!test_bit(__QDISC_STATE_DEACTIVATED, &q->state)))
+-			__qdisc_run(q);
++		__qdisc_run(q);
+ 		qdisc_run_end(q);
+ 	}
+ }
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 222b1d3..d596cd7 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -5025,25 +5025,43 @@ static __latent_entropy void net_tx_action(struct softirq_action *h)
+ 		sd->output_queue_tailp = &sd->output_queue;
+ 		local_irq_enable();
+ 
++		rcu_read_lock();
++
+ 		while (head) {
+ 			struct Qdisc *q = head;
+ 			spinlock_t *root_lock = NULL;
+ 
+ 			head = head->next_sched;
+ 
+-			if (!(q->flags & TCQ_F_NOLOCK)) {
+-				root_lock = qdisc_lock(q);
+-				spin_lock(root_lock);
+-			}
+ 			/* We need to make sure head->next_sched is read
+ 			 * before clearing __QDISC_STATE_SCHED
+ 			 */
+ 			smp_mb__before_atomic();
++
++			if (!(q->flags & TCQ_F_NOLOCK)) {
++				root_lock = qdisc_lock(q);
++				spin_lock(root_lock);
++			} else if (unlikely(test_bit(__QDISC_STATE_DEACTIVATED,
++						     &q->state))) {
++				/* There is a synchronize_net() between
++				 * STATE_DEACTIVATED flag being set and
++				 * qdisc_reset()/some_qdisc_is_busy() in
++				 * dev_deactivate(), so we can safely bail out
++				 * early here to avoid data race between
++				 * qdisc_deactivate() and some_qdisc_is_busy()
++				 * for lockless qdisc.
++				 */
++				clear_bit(__QDISC_STATE_SCHED, &q->state);
++				continue;
++			}
++
+ 			clear_bit(__QDISC_STATE_SCHED, &q->state);
+ 			qdisc_run(q);
+ 			if (root_lock)
+ 				spin_unlock(root_lock);
+ 		}
++
++		rcu_read_unlock();
+ 	}
+ 
+ 	xfrm_dev_backlog(sd);
+diff --git a/net/sched/sch_generic.c b/net/sched/sch_generic.c
+index 795d986..d86c4cc 100644
+--- a/net/sched/sch_generic.c
++++ b/net/sched/sch_generic.c
+@@ -1177,8 +1177,10 @@ static void dev_reset_queue(struct net_device *dev,
+ 	qdisc_reset(qdisc);
+ 
+ 	spin_unlock_bh(qdisc_lock(qdisc));
+-	if (nolock)
++	if (nolock) {
++		clear_bit(__QDISC_STATE_MISSED, &qdisc->state);
+ 		spin_unlock_bh(&qdisc->seqlock);
++	}
+ }
+ 
+ static bool some_qdisc_is_busy(struct net_device *dev)
 -- 
-per aspera ad upstream
+2.7.4
+
