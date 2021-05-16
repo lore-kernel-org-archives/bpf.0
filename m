@@ -2,64 +2,64 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-14.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_RED,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5FC0C433ED
-	for <bpf@archiver.kernel.org>; Sat, 15 May 2021 19:15:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6BF2C433ED
+	for <bpf@archiver.kernel.org>; Sun, 16 May 2021 09:16:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BDE8B61354
-	for <bpf@archiver.kernel.org>; Sat, 15 May 2021 19:15:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B9AFA60FDB
+	for <bpf@archiver.kernel.org>; Sun, 16 May 2021 09:16:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234592AbhEOTQL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 15 May 2021 15:16:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35892 "EHLO
+        id S233731AbhEPJRq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 16 May 2021 05:17:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233752AbhEOTQK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 15 May 2021 15:16:10 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7724FC061573;
-        Sat, 15 May 2021 12:14:56 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id o6-20020a05600c4fc6b029015ec06d5269so1348491wmq.0;
-        Sat, 15 May 2021 12:14:56 -0700 (PDT)
+        with ESMTP id S231771AbhEPJRp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 16 May 2021 05:17:45 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4EB3C061573;
+        Sun, 16 May 2021 02:16:29 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id c14so1483487wrx.3;
+        Sun, 16 May 2021 02:16:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=HJn8OLt3IO4fEY1K9QKVHH3DD9itvCeE3GbuXkd/JuU=;
-        b=DKUVZAnQBsWs8Wc+t00iL+3/rzly0Y6QL4rKT8imRwcSEDVglNOFs86pWZ/IGr+dDN
-         qEhqiQdJa1s24ZDm9/UvdS8uLXUBpkoV98AFR2E2I7NdGGgQfNyRXYT8YPDtcoNA6t+s
-         H8nRLCd+qbICn3fZYEW9XbiilOTctmmQnTgMhmsxElMeixZTgNTDITGBIn3vMbbbebFE
-         G+spQBlPlDcP14tPCBGkXUkjTrHVMTeQMriZKkz71/1yoWZQXv15tHqG5YekuEVOWQ9P
-         /c+P+hmkGBVBq/tnGn2J5QshLGy+EZNHsPlAfA5HIhEozqv8lBS8S/rQi8Ys8/rC8E74
-         5JRw==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=AQkgxljzQQB7pnefvOdRST34zIuUrZPO5z5eBQxWx7Y=;
+        b=fgXWDFJR/PFQqQ9jJDaJBuG8eMUXoO77LvGoQBITVNOPqzEn9Wom8EJyOOvhEdFoL8
+         Qo0/p0zXAEH7JztUqDgEhku3RXQHS3EgU+PeNcHECop76KD6bBAD4izxo/EX7KqJKJyd
+         Q7NeHmHtz5mCwtPmGqoLMENMKCIf1d2TrghDi+YxQtHlhhEBDWiKhmvC+ghrvxJ4fsHN
+         qU1fuUikcAH/KJb8XPvEGNrWn/MbRoYlQR0U63VoXT6jnQlUO2nf6erDCxp5DC6cFUQf
+         d4D26ILvVE/2dE98W9liud0u3gH1GxWqXjXo4t40ZDnb/UzR06ijF+Z43QRaaruUduHp
+         AiXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=HJn8OLt3IO4fEY1K9QKVHH3DD9itvCeE3GbuXkd/JuU=;
-        b=j/eDEs1GRiUblMnrfPA36CZhwCdJGj8K+OGM978HK9hermbM+e6GivTVEMFpCLLHv4
-         o0Dp5Sx6oLiKLCVwQthWKdzdTJxTExuSqqnd0s7jp7YYXAqpFWsdfOa4aM+gk9bJ5tn6
-         IdqAIW43iMksZUQ74Er4bwVB9gcOMQ+7LWPDSVIMhV1RZ3pKXRRdTkLqIKAD83ig9o6C
-         xafS+i6v200qK5Cot5SzWzlnKdYhTwPpT1SE+pmQgBrxMNHX3qT16f/X+QtPU0erS31p
-         qaEKfznX/Ijm9yZjwj50IUjopuGsE9ilxc0REaj6+Z8RR1vlBJJ7dAPY01EMjADlxilD
-         cTUA==
-X-Gm-Message-State: AOAM532HZx0jIYuOqy6bAFOPEk3xLsNRaz8V6bRaSZ3jFAy+cRiEAUAl
-        GClTRC6HsRywpPf/vgozMkiE+xOFMVbuuw==
-X-Google-Smtp-Source: ABdhPJy+Xc6eEjjEFreY9VQ/eiIV1iuOBVIfxT2/z7JQwxcvifYf/rDyMdxd3s4HgQTJdKHlFwScYw==
-X-Received: by 2002:a1c:1f90:: with SMTP id f138mr3349239wmf.123.1621106095093;
-        Sat, 15 May 2021 12:14:55 -0700 (PDT)
-Received: from localhost.localdomain ([170.253.36.171])
-        by smtp.googlemail.com with ESMTPSA id y20sm3274761wmi.0.2021.05.15.12.14.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 May 2021 12:14:54 -0700 (PDT)
-From:   Alejandro Colomar <alx.manpages@gmail.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=AQkgxljzQQB7pnefvOdRST34zIuUrZPO5z5eBQxWx7Y=;
+        b=Yqp/8JvbsWzxS2f88CcfiPv1uV51KsAt76ioNrQ2oVp5lsdWHcs/8dbErDSZNPpAYe
+         o9VAtHOQ2whw5nKU5KbczNFMACrH7Rqb86GijS1iAqd6yYj92WIHQxEZ6Y+Q6hGrQn6v
+         2rHgnxPkKkqE/7wLQU0wJQ8YwI9oVAh2etuT3jr7G+XKLYtlGP9xJP775QgMjdS6J2pF
+         PUgOywQEvlLAGEyWCsNwRyV6Gc+8oAQTN55Hhu5sNAV9+u2s3lvxodXhIypRR+QMHqkj
+         0f04+OVx8HuuDiGsJykW4vO5PW1WgLJ++wL/qSycsG6POVsmDDQaU+G/DtlIqM8RI5eu
+         bbeA==
+X-Gm-Message-State: AOAM530SyTHWdjrJDgLDi5sxfi+EEYKdGe+GZtZeHA2wbjUgq+OagyMw
+        L7vgO14m1ED22aOQlLQlbtg=
+X-Google-Smtp-Source: ABdhPJwN2T387T+WgdAnQoy6wjuwA0hW17gTIuznmwnZUI2yWtfxnqPCqeIcZStFadA0n6vfY9RSiA==
+X-Received: by 2002:a5d:4385:: with SMTP id i5mr10469982wrq.192.1621156588415;
+        Sun, 16 May 2021 02:16:28 -0700 (PDT)
+Received: from [10.8.0.106] ([195.53.121.100])
+        by smtp.gmail.com with ESMTPSA id j7sm10311876wmi.21.2021.05.16.02.16.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 16 May 2021 02:16:27 -0700 (PDT)
+Subject: Re: [PATCH v3] bpf.2: Use standard types and attributes
 To:     mtk.manpages@gmail.com
-Cc:     Alejandro Colomar <alx.manpages@gmail.com>,
-        linux-man@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+Cc:     linux-man@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Zack Weinberg <zackw@panix.com>,
         LKML <linux-kernel@vger.kernel.org>,
@@ -69,143 +69,154 @@ Cc:     Alejandro Colomar <alx.manpages@gmail.com>,
         Joseph Myers <joseph@codesourcery.com>,
         Florian Weimer <fweimer@redhat.com>,
         Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH v3] bpf.2: Use standard types and attributes
-Date:   Sat, 15 May 2021 21:01:18 +0200
-Message-Id: <20210515190116.188362-1-alx.manpages@gmail.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <6740a229-842e-b368-86eb-defc786b3658@gmail.com>
 References: <6740a229-842e-b368-86eb-defc786b3658@gmail.com>
+ <20210515190116.188362-1-alx.manpages@gmail.com>
+From:   "Alejandro Colomar (man-pages)" <alx.manpages@gmail.com>
+Message-ID: <9df36138-f622-49a6-8310-85ff0470ccd6@gmail.com>
+Date:   Sun, 16 May 2021 11:16:24 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210515190116.188362-1-alx.manpages@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Some manual pages are already using C99 syntax for integral
-types 'uint32_t', but some aren't.  There are some using kernel
-syntax '__u32'.  Fix those.
+On 5/15/21 9:01 PM, Alejandro Colomar wrote:
+> Some manual pages are already using C99 syntax for integral
+> types 'uint32_t', but some aren't.  There are some using kernel
+> syntax '__u32'.  Fix those.
+> 
+> Both the kernel and the standard types are 100% binary compatible,
+> and the source code differences between them are very small, and
+> not important in a manual page:
+> 
+> - Some of them are implemented with different underlying types
+>    (e.g., s64 is always long long, while int64_t may be long long
+>    or long, depending on the arch).  This causes the following
+>    differences.
+> 
+> - length modifiers required by printf are different, resulting in
+>    a warning ('-Wformat=').
+> 
+> - pointer assignment causes a warning:
+>    ('-Wincompatible-pointer-types'), but there aren't any pointers
+>    in this page.
+> 
+> But, AFAIK, all of those warnings can be safely ignored, due to
+> the binary compatibility between the types.
+> 
+> ...
+> 
+> Some pages also document attributes, using GNU syntax
+> '__attribute__((xxx))'.  Update those to use the shorter and more
+> portable C11 keywords such as 'alignas()' when possible, and C2x
+> syntax '[[gnu::xxx]]' elsewhere, which hasn't been standardized
+> yet, but is already implemented in GCC, and available through
+> either --std=c2x or any of the --std=gnu... options.
+> 
+> The standard isn't very clear on how to use alignas() or
+> [[]]-style attributes, and the GNU documentation isn't better, so
+> the following link is a useful experiment about the different
+> alignment syntaxes:
+> __attribute__((aligned())), alignas(), and [[gnu::aligned()]]:
+> <https://stackoverflow.com/q/67271825/6872717>
+> 
+> Signed-off-by: Alejandro Colomar <alx.manpages@gmail.com>
+Discussion: 
+<https://lore.kernel.org/linux-man/6740a229-842e-b368-86eb-defc786b3658@gmail.com/T/>
+> Nacked-by: Alexei Starovoitov <ast@kernel.org>
+> Nacked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Acked-by: Zack Weinberg <zackw@panix.com>
+> Cc: LKML <linux-kernel@vger.kernel.org>
+> Cc: glibc <libc-alpha@sourceware.org>
+> Cc: GCC <gcc-patches@gcc.gnu.org>
+> Cc: bpf <bpf@vger.kernel.org>
+> Cc: David Laight <David.Laight@ACULAB.COM>
+> Cc: Joseph Myers <joseph@codesourcery.com>
+> Cc: Florian Weimer <fweimer@redhat.com>
+> Cc: Daniel Borkmann <daniel@iogearbox.net>
+> ---
+>   man2/bpf.2 | 49 ++++++++++++++++++++++++-------------------------
+>   1 file changed, 24 insertions(+), 25 deletions(-)
+> 
+> diff --git a/man2/bpf.2 b/man2/bpf.2
+> index 6e1ffa198..04b8fbcef 100644
+> --- a/man2/bpf.2
+> +++ b/man2/bpf.2
+> @@ -186,41 +186,40 @@ commands:
+>   .PP
+>   .in +4n
+>   .EX
+> -union bpf_attr {
+> +union [[gnu::aligned(8)]] bpf_attr {
+>       struct {    /* Used by BPF_MAP_CREATE */
+> -        __u32         map_type;
+> -        __u32         key_size;    /* size of key in bytes */
+> -        __u32         value_size;  /* size of value in bytes */
+> -        __u32         max_entries; /* maximum number of entries
+> -                                      in a map */
+> +        uint32_t    map_type;
+> +        uint32_t    key_size;    /* size of key in bytes */
+> +        uint32_t    value_size;  /* size of value in bytes */
+> +        uint32_t    max_entries; /* maximum number of entries
+> +                                    in a map */
+>       };
+>   
+> -    struct {    /* Used by BPF_MAP_*_ELEM and BPF_MAP_GET_NEXT_KEY
+> -                   commands */
+> -        __u32         map_fd;
+> -        __aligned_u64 key;
+> +    struct {    /* Used by BPF_MAP_*_ELEM and BPF_MAP_GET_NEXT_KEY commands */
+> +        uint32_t            map_fd;
+> +        uint64_t alignas(8) key;
+>           union {
+> -            __aligned_u64 value;
+> -            __aligned_u64 next_key;
+> +            uint64_t alignas(8) value;
+> +            uint64_t alignas(8) next_key;
+>           };
+> -        __u64         flags;
+> +        uint64_t            flags;
+>       };
+>   
+>       struct {    /* Used by BPF_PROG_LOAD */
+> -        __u32         prog_type;
+> -        __u32         insn_cnt;
+> -        __aligned_u64 insns;      /* \(aqconst struct bpf_insn *\(aq */
+> -        __aligned_u64 license;    /* \(aqconst char *\(aq */
+> -        __u32         log_level;  /* verbosity level of verifier */
+> -        __u32         log_size;   /* size of user buffer */
+> -        __aligned_u64 log_buf;    /* user supplied \(aqchar *\(aq
+> -                                     buffer */
+> -        __u32         kern_version;
+> -                                  /* checked when prog_type=kprobe
+> -                                     (since Linux 4.1) */
+> +        uint32_t            prog_type;
+> +        uint32_t            insn_cnt;
+> +        uint64_t alignas(8) insns;     /* \(aqconst struct bpf_insn *\(aq */
+> +        uint64_t alignas(8) license;   /* \(aqconst char *\(aq */
+> +        uint32_t            log_level; /* verbosity level of verifier */
+> +        uint32_t            log_size;  /* size of user buffer */
+> +        uint64_t alignas(8) log_buf;   /* user supplied \(aqchar *\(aq
+> +                                          buffer */
+> +        uint32_t            kern_version;
+> +                                       /* checked when prog_type=kprobe
+> +                                          (since Linux 4.1) */
+>   .\"                 commit 2541517c32be2531e0da59dfd7efc1ce844644f5
+>       };
+> -} __attribute__((aligned(8)));
+> +};
+>   .EE
+>   .in
+>   .\"
+> 
 
-Both the kernel and the standard types are 100% binary compatible,
-and the source code differences between them are very small, and
-not important in a manual page:
 
-- Some of them are implemented with different underlying types
-  (e.g., s64 is always long long, while int64_t may be long long
-  or long, depending on the arch).  This causes the following
-  differences.
-
-- length modifiers required by printf are different, resulting in
-  a warning ('-Wformat=').
-
-- pointer assignment causes a warning:
-  ('-Wincompatible-pointer-types'), but there aren't any pointers
-  in this page.
-
-But, AFAIK, all of those warnings can be safely ignored, due to
-the binary compatibility between the types.
-
-...
-
-Some pages also document attributes, using GNU syntax
-'__attribute__((xxx))'.  Update those to use the shorter and more
-portable C11 keywords such as 'alignas()' when possible, and C2x
-syntax '[[gnu::xxx]]' elsewhere, which hasn't been standardized
-yet, but is already implemented in GCC, and available through
-either --std=c2x or any of the --std=gnu... options.
-
-The standard isn't very clear on how to use alignas() or
-[[]]-style attributes, and the GNU documentation isn't better, so
-the following link is a useful experiment about the different
-alignment syntaxes:
-__attribute__((aligned())), alignas(), and [[gnu::aligned()]]:
-<https://stackoverflow.com/q/67271825/6872717>
-
-Signed-off-by: Alejandro Colomar <alx.manpages@gmail.com>
-Nacked-by: Alexei Starovoitov <ast@kernel.org>
-Nacked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Acked-by: Zack Weinberg <zackw@panix.com>
-Cc: LKML <linux-kernel@vger.kernel.org>
-Cc: glibc <libc-alpha@sourceware.org>
-Cc: GCC <gcc-patches@gcc.gnu.org>
-Cc: bpf <bpf@vger.kernel.org>
-Cc: David Laight <David.Laight@ACULAB.COM>
-Cc: Joseph Myers <joseph@codesourcery.com>
-Cc: Florian Weimer <fweimer@redhat.com>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
----
- man2/bpf.2 | 49 ++++++++++++++++++++++++-------------------------
- 1 file changed, 24 insertions(+), 25 deletions(-)
-
-diff --git a/man2/bpf.2 b/man2/bpf.2
-index 6e1ffa198..04b8fbcef 100644
---- a/man2/bpf.2
-+++ b/man2/bpf.2
-@@ -186,41 +186,40 @@ commands:
- .PP
- .in +4n
- .EX
--union bpf_attr {
-+union [[gnu::aligned(8)]] bpf_attr {
-     struct {    /* Used by BPF_MAP_CREATE */
--        __u32         map_type;
--        __u32         key_size;    /* size of key in bytes */
--        __u32         value_size;  /* size of value in bytes */
--        __u32         max_entries; /* maximum number of entries
--                                      in a map */
-+        uint32_t    map_type;
-+        uint32_t    key_size;    /* size of key in bytes */
-+        uint32_t    value_size;  /* size of value in bytes */
-+        uint32_t    max_entries; /* maximum number of entries
-+                                    in a map */
-     };
- 
--    struct {    /* Used by BPF_MAP_*_ELEM and BPF_MAP_GET_NEXT_KEY
--                   commands */
--        __u32         map_fd;
--        __aligned_u64 key;
-+    struct {    /* Used by BPF_MAP_*_ELEM and BPF_MAP_GET_NEXT_KEY commands */
-+        uint32_t            map_fd;
-+        uint64_t alignas(8) key;
-         union {
--            __aligned_u64 value;
--            __aligned_u64 next_key;
-+            uint64_t alignas(8) value;
-+            uint64_t alignas(8) next_key;
-         };
--        __u64         flags;
-+        uint64_t            flags;
-     };
- 
-     struct {    /* Used by BPF_PROG_LOAD */
--        __u32         prog_type;
--        __u32         insn_cnt;
--        __aligned_u64 insns;      /* \(aqconst struct bpf_insn *\(aq */
--        __aligned_u64 license;    /* \(aqconst char *\(aq */
--        __u32         log_level;  /* verbosity level of verifier */
--        __u32         log_size;   /* size of user buffer */
--        __aligned_u64 log_buf;    /* user supplied \(aqchar *\(aq
--                                     buffer */
--        __u32         kern_version;
--                                  /* checked when prog_type=kprobe
--                                     (since Linux 4.1) */
-+        uint32_t            prog_type;
-+        uint32_t            insn_cnt;
-+        uint64_t alignas(8) insns;     /* \(aqconst struct bpf_insn *\(aq */
-+        uint64_t alignas(8) license;   /* \(aqconst char *\(aq */
-+        uint32_t            log_level; /* verbosity level of verifier */
-+        uint32_t            log_size;  /* size of user buffer */
-+        uint64_t alignas(8) log_buf;   /* user supplied \(aqchar *\(aq
-+                                          buffer */
-+        uint32_t            kern_version;
-+                                       /* checked when prog_type=kprobe
-+                                          (since Linux 4.1) */
- .\"                 commit 2541517c32be2531e0da59dfd7efc1ce844644f5
-     };
--} __attribute__((aligned(8)));
-+};
- .EE
- .in
- .\"
 -- 
-2.31.1
-
+Alejandro Colomar
+Linux man-pages comaintainer; https://www.kernel.org/doc/man-pages/
+http://www.alejandro-colomar.es/
