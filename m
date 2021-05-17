@@ -7,54 +7,54 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 13177C433ED
-	for <bpf@archiver.kernel.org>; Mon, 17 May 2021 22:53:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF290C43460
+	for <bpf@archiver.kernel.org>; Mon, 17 May 2021 22:53:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E2F8C6124C
-	for <bpf@archiver.kernel.org>; Mon, 17 May 2021 22:53:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B036A61209
+	for <bpf@archiver.kernel.org>; Mon, 17 May 2021 22:53:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344151AbhEQWyz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 17 May 2021 18:54:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41692 "EHLO
+        id S1344228AbhEQWy5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 17 May 2021 18:54:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344179AbhEQWys (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 17 May 2021 18:54:48 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2400BC0613ED
-        for <bpf@vger.kernel.org>; Mon, 17 May 2021 15:53:29 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id a4so8077146wrr.2
-        for <bpf@vger.kernel.org>; Mon, 17 May 2021 15:53:29 -0700 (PDT)
+        with ESMTP id S1344208AbhEQWyy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 17 May 2021 18:54:54 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B307C06138B
+        for <bpf@vger.kernel.org>; Mon, 17 May 2021 15:53:36 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id j14so6310219wrq.5
+        for <bpf@vger.kernel.org>; Mon, 17 May 2021 15:53:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ubique-spb-ru.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=IsSJbJrrRvUOfFfyLw4/1xRvXLssRnMYFv4V+J+GoJs=;
-        b=ZKmVdbBr7I/Hvq0LeI/DOPynoHXTDV6hINIeXS5sKo2m6nTBy9+OqSPWTqK0V7hyb4
-         cT6aHm9I9AhA+CWT+hJ99tArZ1i9I2iWw4xQpGo7fZCrCc4q7xp28DChULyBD8e5JOP8
-         1scGoeen+AoLjTTrzr1RLSfrcjrDoH/fmWfgbmt3qrBNHoj54LqDa1/2KteE7DTB2nFk
-         0avchn9sRtppSck0oX61zTANro19/jWV2gjifaEw9bZJKsxs4Dp2MN97gswcKtWboCgg
-         Kik0MnOGlchZLTJRzc52Syo/hhAG2xNQHYAIBhwfC4+KrxxjoCe9zlomM9gXIeLCtLMP
-         22TA==
+        bh=LVbCOGU7gtoqVWCuLiLGdbq6lukEGJhpYIytUkCDM00=;
+        b=tv2rM1qLY1x/o/m/UhrKnsyStOn/uF9TW6YAuQmBZjgkBIOyIwFUvSpmsPQxfP1fl1
+         PeCfGs0TrwPD/XDiby1EluzziQFOnLL4TgvzwlGbY+7NZP8TwFv/NGzjWV4hbxbLftEz
+         G/eU23Fiau6QMsIF0TK79oLi6lY+hxGrrnEX/e4a6+5E5vIpp+RugyJF2puQo/Efvfvd
+         APfDR/LfIREHCGykHJbJ8nhCvagJltoOKXy7Jfs1UfjPux9EY1YueVRjKn+hJ7DjNp2o
+         IBtjHbh1zmevtkZNBfe8o2NQDhtsDYdZt9VDRBSXy5assYXGfHNe9wbXmd7OMdnRG7C4
+         2pBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=IsSJbJrrRvUOfFfyLw4/1xRvXLssRnMYFv4V+J+GoJs=;
-        b=ZfTC09BPJvX/vtwIgCHqAiD7iLIo0ihtJaixaG2cNLQ2KnBHknn5uLmVMOsleH8F4g
-         Zoore49gnP7nX19DyYadle9YjKQq4sTa5pMSyubmbJON63aEh1KJjEUoORhS3zv7NEgf
-         Zw4g1rS/h4NJruRQkRmt0/RWyg4CSD5WjP/+LMBTxJRvXjVnNacn+/OktCcyDsvrltVq
-         mte2Mdkei62jctir4GZsfDxEO4AxXrrH71yuqyarq3d+xQw0eb5tqjbXNRKG+9X8yMZk
-         5N3b9aQxpcqCSM5wQNZAYt9S47rMARR4w74TPT11MXKULloHlumjIai/Byg6hLTETJEr
-         H5CQ==
-X-Gm-Message-State: AOAM531zEkrs3C8+Z09ha6HIoiUa/fGFurPUVuCzKVjH6g/4STEY7eoO
-        2wk93PgKF8wyfbawJST1hH2SqVQq34ncTSgqtDA=
-X-Google-Smtp-Source: ABdhPJwDuvpVHaWIvI9STxcReNex/owAO7gbDE65ygBwWbsImM/w+bsXabDT8rYEWtB4l1CpsAPOMg==
-X-Received: by 2002:a05:6000:10d1:: with SMTP id b17mr2442588wrx.281.1621292007603;
-        Mon, 17 May 2021 15:53:27 -0700 (PDT)
+        bh=LVbCOGU7gtoqVWCuLiLGdbq6lukEGJhpYIytUkCDM00=;
+        b=r1XD7gTlfJFh11lb+jYI5vB8a+vsaUQNbuqhGuq2x85IlAqXho/Bn8i3nNVumF/U/D
+         T5qd7JGo7RcmZtywpEKcE51J3cUtLBqqJejHcRNPeK3CJ2GRUWHtGnadOXvbWIg6iNk/
+         JmhlGqedImkG3lQFTKhuMTAvkaLEFuLo1N2JttAHVyeCAYZtXFQS+PifG0eQVnHR6xij
+         E4KqPGai6tcPEMx/m/4cB0ucrWXdrbtM8pgKzFY1hr5I/hs/Vq9pWWYbQctoLPNUpv64
+         /H3lhX+VBqBdAPMdWeqfvh0pvpijEBSa35U9uP36tc6RTU6rkNErL5SrrkmmaBptXoKN
+         UU+g==
+X-Gm-Message-State: AOAM530vh0CdvrmNh9NUCO1SBqnlxqQwCCoyQs43tRoidkwVWPBQIajl
+        MbLPRDan5Ew3ko4z3Hvcxc6+fWjafuGtL47OR7M=
+X-Google-Smtp-Source: ABdhPJwBM3s88GCibwiJkUteHvKrfv4RM/nq187z16QzLLiZVuzNGHTCfdm2YZVdhA45AxWU9VJ8JQ==
+X-Received: by 2002:a5d:4304:: with SMTP id h4mr2572700wrq.210.1621292014616;
+        Mon, 17 May 2021 15:53:34 -0700 (PDT)
 Received: from localhost ([154.21.15.43])
-        by smtp.gmail.com with ESMTPSA id j14sm770438wmj.19.2021.05.17.15.53.26
+        by smtp.gmail.com with ESMTPSA id r1sm3347250wrt.67.2021.05.17.15.53.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 May 2021 15:53:27 -0700 (PDT)
+        Mon, 17 May 2021 15:53:34 -0700 (PDT)
 From:   Dmitrii Banshchikov <me@ubique.spb.ru>
 To:     bpf@vger.kernel.org
 Cc:     Dmitrii Banshchikov <me@ubique.spb.ru>, ast@kernel.org,
@@ -62,9 +62,9 @@ Cc:     Dmitrii Banshchikov <me@ubique.spb.ru>, ast@kernel.org,
         kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
         john.fastabend@gmail.com, kpsingh@kernel.org,
         netdev@vger.kernel.org, rdna@fb.com
-Subject: [PATCH bpf-next 02/11] bpfilter: Add logging facility
-Date:   Tue, 18 May 2021 02:52:59 +0400
-Message-Id: <20210517225308.720677-3-me@ubique.spb.ru>
+Subject: [PATCH bpf-next 04/11] tools: Add bpfilter usermode helper header
+Date:   Tue, 18 May 2021 02:53:01 +0400
+Message-Id: <20210517225308.720677-5-me@ubique.spb.ru>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210517225308.720677-1-me@ubique.spb.ru>
 References: <20210517225308.720677-1-me@ubique.spb.ru>
@@ -74,124 +74,199 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-There are three logging levels for messages: FATAL, NOTICE and DEBUG.
-When a message is logged with FATAL level it results in bpfilter
-usermode helper termination.
-
-Introduce struct context to avoid use of global objects and store there
-the logging parameters: log level and log sink.
+The header will be used in bpfilter usermode helper test infrastructure.
 
 Signed-off-by: Dmitrii Banshchikov <me@ubique.spb.ru>
 ---
- net/bpfilter/Makefile  |  2 +-
- net/bpfilter/bflog.c   | 29 +++++++++++++++++++++++++++++
- net/bpfilter/bflog.h   | 24 ++++++++++++++++++++++++
- net/bpfilter/context.h | 16 ++++++++++++++++
- 4 files changed, 70 insertions(+), 1 deletion(-)
- create mode 100644 net/bpfilter/bflog.c
- create mode 100644 net/bpfilter/bflog.h
- create mode 100644 net/bpfilter/context.h
+ tools/include/uapi/linux/bpfilter.h | 179 ++++++++++++++++++++++++++++
+ 1 file changed, 179 insertions(+)
+ create mode 100644 tools/include/uapi/linux/bpfilter.h
 
-diff --git a/net/bpfilter/Makefile b/net/bpfilter/Makefile
-index cdac82b8c53a..874d5ef6237d 100644
---- a/net/bpfilter/Makefile
-+++ b/net/bpfilter/Makefile
-@@ -4,7 +4,7 @@
- #
- 
- userprogs := bpfilter_umh
--bpfilter_umh-objs := main.o
-+bpfilter_umh-objs := main.o bflog.o
- userccflags += -I $(srctree)/tools/include/ -I $(srctree)/tools/include/uapi
- 
- ifeq ($(CONFIG_BPFILTER_UMH), y)
-diff --git a/net/bpfilter/bflog.c b/net/bpfilter/bflog.c
+diff --git a/tools/include/uapi/linux/bpfilter.h b/tools/include/uapi/linux/bpfilter.h
 new file mode 100644
-index 000000000000..2752e39060e4
+index 000000000000..8b49d81f81c8
 --- /dev/null
-+++ b/net/bpfilter/bflog.c
-@@ -0,0 +1,29 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2021 Telegram FZ-LLC
-+ */
++++ b/tools/include/uapi/linux/bpfilter.h
+@@ -0,0 +1,179 @@
++/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
++#ifndef _UAPI_LINUX_BPFILTER_H
++#define _UAPI_LINUX_BPFILTER_H
 +
-+#define _GNU_SOURCE
++#include <linux/if.h>
++#include <linux/const.h>
 +
-+#include "bflog.h"
++#define BPFILTER_FUNCTION_MAXNAMELEN    30
++#define BPFILTER_EXTENSION_MAXNAMELEN   29
 +
-+#include <stdarg.h>
-+#include <stdio.h>
-+#include <stdlib.h>
++#define BPFILTER_STANDARD_TARGET        ""
++#define BPFILTER_ERROR_TARGET           "ERROR"
 +
-+#include "context.h"
 +
-+void bflog(struct context *ctx, int level, const char *fmt, ...)
-+{
-+	if (ctx->log_file &&
-+	    (level == BFLOG_LEVEL_FATAL || (level & ctx->log_level))) {
-+		va_list va;
++#define BPFILTER_ALIGN(__X) __ALIGN_KERNEL(__X, __alignof__(__u64))
 +
-+		va_start(va, fmt);
-+		vfprintf(ctx->log_file, fmt, va);
-+		va_end(va);
-+	}
-+
-+	if (level == BFLOG_LEVEL_FATAL)
-+		exit(EXIT_FAILURE);
-+}
-diff --git a/net/bpfilter/bflog.h b/net/bpfilter/bflog.h
-new file mode 100644
-index 000000000000..4ed12791cfa1
---- /dev/null
-+++ b/net/bpfilter/bflog.h
-@@ -0,0 +1,24 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2021 Telegram FZ-LLC
-+ */
-+
-+#ifndef NET_BPFILTER_BFLOG_H
-+#define NET_BPFILTER_BFLOG_H
-+
-+struct context;
-+
-+#define BFLOG_IMPL(ctx, level, fmt, ...) bflog(ctx, level, "bpfilter: " fmt, ##__VA_ARGS__)
-+
-+#define BFLOG_LEVEL_FATAL (0)
-+#define BFLOG_LEVEL_NOTICE (1)
-+#define BFLOG_LEVEL_DEBUG (2)
-+
-+#define BFLOG_FATAL(ctx, fmt, ...)                                                                 \
-+	BFLOG_IMPL(ctx, BFLOG_LEVEL_FATAL, "fatal error: " fmt, ##__VA_ARGS__)
-+#define BFLOG_NOTICE(ctx, fmt, ...) BFLOG_IMPL(ctx, BFLOG_LEVEL_NOTICE, fmt, ##__VA_ARGS__)
-+#define BFLOG_DEBUG(ctx, fmt, ...) BFLOG_IMPL(ctx, BFLOG_LEVEL_DEBUG, fmt, ##__VA_ARGS__)
-+
-+void bflog(struct context *ctx, int level, const char *fmt, ...);
-+
-+#endif // NET_BPFILTER_BFLOG_H
-diff --git a/net/bpfilter/context.h b/net/bpfilter/context.h
-new file mode 100644
-index 000000000000..e85c97c3d010
---- /dev/null
-+++ b/net/bpfilter/context.h
-@@ -0,0 +1,16 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2021 Telegram FZ-LLC
-+ */
-+
-+#ifndef NET_BPFILTER_CONTEXT_H
-+#define NET_BPFILTER_CONTEXT_H
-+
-+#include <stdio.h>
-+
-+struct context {
-+	FILE *log_file;
-+	int log_level;
++enum {
++	BPFILTER_IPT_SO_SET_REPLACE = 64,
++	BPFILTER_IPT_SO_SET_ADD_COUNTERS = 65,
++	BPFILTER_IPT_SET_MAX,
 +};
 +
-+#endif // NET_BPFILTER_CONTEXT_H
++enum {
++	BPFILTER_IPT_SO_GET_INFO = 64,
++	BPFILTER_IPT_SO_GET_ENTRIES = 65,
++	BPFILTER_IPT_SO_GET_REVISION_MATCH = 66,
++	BPFILTER_IPT_SO_GET_REVISION_TARGET = 67,
++	BPFILTER_IPT_GET_MAX,
++};
++
++enum {
++	BPFILTER_XT_TABLE_MAXNAMELEN = 32,
++};
++
++enum {
++	BPFILTER_NF_DROP = 0,
++	BPFILTER_NF_ACCEPT = 1,
++	BPFILTER_NF_STOLEN = 2,
++	BPFILTER_NF_QUEUE = 3,
++	BPFILTER_NF_REPEAT = 4,
++	BPFILTER_NF_STOP = 5,
++	BPFILTER_NF_MAX_VERDICT = BPFILTER_NF_STOP,
++	BPFILTER_RETURN = (-BPFILTER_NF_REPEAT - 1),
++};
++
++enum {
++	BPFILTER_INET_HOOK_PRE_ROUTING = 0,
++	BPFILTER_INET_HOOK_LOCAL_IN = 1,
++	BPFILTER_INET_HOOK_FORWARD = 2,
++	BPFILTER_INET_HOOK_LOCAL_OUT = 3,
++	BPFILTER_INET_HOOK_POST_ROUTING = 4,
++	BPFILTER_INET_HOOK_MAX,
++};
++
++enum {
++	BPFILTER_IPT_F_MASK = 0x03,
++	BPFILTER_IPT_INV_MASK = 0x7f
++};
++
++struct bpfilter_ipt_match {
++	union {
++		struct {
++			__u16 match_size;
++			char name[BPFILTER_EXTENSION_MAXNAMELEN];
++			__u8 revision;
++		} user;
++		struct {
++			__u16 match_size;
++			void *match;
++		} kernel;
++		__u16 match_size;
++	} u;
++	unsigned char data[0];
++};
++
++struct bpfilter_ipt_target {
++	union {
++		struct {
++			__u16 target_size;
++			char name[BPFILTER_EXTENSION_MAXNAMELEN];
++			__u8 revision;
++		} user;
++		struct {
++			__u16 target_size;
++			void *target;
++		} kernel;
++		__u16 target_size;
++	} u;
++	unsigned char data[0];
++};
++
++struct bpfilter_ipt_standard_target {
++	struct bpfilter_ipt_target target;
++	int verdict;
++};
++
++struct bpfilter_ipt_error_target {
++	struct bpfilter_ipt_target target;
++	char error_name[BPFILTER_FUNCTION_MAXNAMELEN];
++};
++
++struct bpfilter_ipt_get_info {
++	char name[BPFILTER_XT_TABLE_MAXNAMELEN];
++	__u32 valid_hooks;
++	__u32 hook_entry[BPFILTER_INET_HOOK_MAX];
++	__u32 underflow[BPFILTER_INET_HOOK_MAX];
++	__u32 num_entries;
++	__u32 size;
++};
++
++struct bpfilter_ipt_counters {
++	__u64 packet_cnt;
++	__u64 byte_cnt;
++};
++
++struct bpfilter_ipt_counters_info {
++	char name[BPFILTER_XT_TABLE_MAXNAMELEN];
++	__u32 num_counters;
++	struct bpfilter_ipt_counters counters[0];
++};
++
++struct bpfilter_ipt_get_revision {
++	char name[BPFILTER_EXTENSION_MAXNAMELEN];
++	__u8 revision;
++};
++
++struct bpfilter_ipt_ip {
++	__u32 src;
++	__u32 dst;
++	__u32 src_mask;
++	__u32 dst_mask;
++	char in_iface[IFNAMSIZ];
++	char out_iface[IFNAMSIZ];
++	__u8 in_iface_mask[IFNAMSIZ];
++	__u8 out_iface_mask[IFNAMSIZ];
++	__u16 protocol;
++	__u8 flags;
++	__u8 invflags;
++};
++
++struct bpfilter_ipt_entry {
++	struct bpfilter_ipt_ip ip;
++	__u32 bfcache;
++	__u16 target_offset;
++	__u16 next_offset;
++	__u32 comefrom;
++	struct bpfilter_ipt_counters counters;
++	__u8 elems[0];
++};
++
++struct bpfilter_ipt_standard_entry {
++	struct bpfilter_ipt_entry entry;
++	struct bpfilter_ipt_standard_target target;
++};
++
++struct bpfilter_ipt_error_entry {
++	struct bpfilter_ipt_entry entry;
++	struct bpfilter_ipt_error_target target;
++};
++
++struct bpfilter_ipt_get_entries {
++	char name[BPFILTER_XT_TABLE_MAXNAMELEN];
++	__u32 size;
++	struct bpfilter_ipt_entry entries[0];
++};
++
++struct bpfilter_ipt_replace {
++	char name[BPFILTER_XT_TABLE_MAXNAMELEN];
++	__u32 valid_hooks;
++	__u32 num_entries;
++	__u32 size;
++	__u32 hook_entry[BPFILTER_INET_HOOK_MAX];
++	__u32 underflow[BPFILTER_INET_HOOK_MAX];
++	__u32 num_counters;
++	struct bpfilter_ipt_counters *cntrs;
++	struct bpfilter_ipt_entry entries[0];
++};
++
++#endif /* _UAPI_LINUX_BPFILTER_H */
 -- 
 2.25.1
 
