@@ -2,36 +2,39 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DBBF0C43603
-	for <bpf@archiver.kernel.org>; Thu, 20 May 2021 09:30:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B75C8C43462
+	for <bpf@archiver.kernel.org>; Thu, 20 May 2021 09:47:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BC2586140E
-	for <bpf@archiver.kernel.org>; Thu, 20 May 2021 09:30:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9C8F461477
+	for <bpf@archiver.kernel.org>; Thu, 20 May 2021 09:47:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232532AbhETJbU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 20 May 2021 05:31:20 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:3442 "EHLO
-        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232373AbhETJ3V (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 20 May 2021 05:29:21 -0400
-Received: from dggems705-chm.china.huawei.com (unknown [172.30.72.58])
-        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4Fm48P71jDz80xr;
-        Thu, 20 May 2021 17:25:09 +0800 (CST)
+        id S234156AbhETJsl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 20 May 2021 05:48:41 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:4768 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233833AbhETJqj (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 20 May 2021 05:46:39 -0400
+Received: from dggems701-chm.china.huawei.com (unknown [172.30.72.58])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4Fm4WY03tVzqVFT;
+        Thu, 20 May 2021 17:41:45 +0800 (CST)
 Received: from dggpemm500005.china.huawei.com (7.185.36.74) by
- dggems705-chm.china.huawei.com (10.3.19.182) with Microsoft SMTP Server
+ dggems701-chm.china.huawei.com (10.3.19.178) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Thu, 20 May 2021 17:27:57 +0800
-Received: from localhost.localdomain (10.69.192.56) by
- dggpemm500005.china.huawei.com (7.185.36.74) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Thu, 20 May 2021 17:27:56 +0800
+ 15.1.2176.2; Thu, 20 May 2021 17:45:15 +0800
+Received: from [127.0.0.1] (10.69.30.204) by dggpemm500005.china.huawei.com
+ (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2176.2; Thu, 20 May
+ 2021 17:45:15 +0800
+Subject: Re: [Linuxarm] [PATCH RFC v4 0/3] Some optimization for lockless
+ qdisc
 From:   Yunsheng Lin <linyunsheng@huawei.com>
-To:     <davem@davemloft.net>, <kuba@kernel.org>
+To:     <davem@davemloft.net>, <kuba@kernel.org>,
+        <a.fatoum@pengutronix.de>, <vladimir.oltean@nxp.com>
 CC:     <olteanv@gmail.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <andriin@fb.com>, <edumazet@google.com>, <weiwan@google.com>,
         <cong.wang@bytedance.com>, <ap420073@gmail.com>,
@@ -48,211 +51,61 @@ CC:     <olteanv@gmail.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <alexander.duyck@gmail.com>, <hdanton@sina.com>, <jgross@suse.com>,
         <JKosina@suse.com>, <mkubecek@suse.cz>, <bjorn@kernel.org>,
         <alobakin@pm.me>
-Subject: [PATCH RFC v4 2/3] net: sched: implement TCQ_F_CAN_BYPASS for lockless qdisc
-Date:   Thu, 20 May 2021 17:27:52 +0800
-Message-ID: <1621502873-62720-3-git-send-email-linyunsheng@huawei.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1621502873-62720-1-git-send-email-linyunsheng@huawei.com>
 References: <1621502873-62720-1-git-send-email-linyunsheng@huawei.com>
+Message-ID: <829cc4c1-46cc-c96c-47ba-438ae3534b94@huawei.com>
+Date:   Thu, 20 May 2021 17:45:14 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.56]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+In-Reply-To: <1621502873-62720-1-git-send-email-linyunsheng@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.69.30.204]
+X-ClientProxiedBy: dggeme717-chm.china.huawei.com (10.1.199.113) To
  dggpemm500005.china.huawei.com (7.185.36.74)
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently pfifo_fast has both TCQ_F_CAN_BYPASS and TCQ_F_NOLOCK
-flag set, but queue discipline by-pass does not work for lockless
-qdisc because skb is always enqueued to qdisc even when the qdisc
-is empty, see __dev_xmit_skb().
+On 2021/5/20 17:27, Yunsheng Lin wrote:
+> Patch 1: remove unnecessary seqcount operation.
+> Patch 2: implement TCQ_F_CAN_BYPASS.
+> Patch 3: remove qdisc->empty.
+> 
+> RFC v4: Use STATE_MISSED and STATE_DRAINING to indicate non-empty
+>         qdisc, and add patch 1 and 3.
 
-This patch calls sch_direct_xmit() to transmit the skb directly
-to the driver for empty lockless qdisc, which aviod enqueuing
-and dequeuing operation.
+@Vladimir, Ahmad
+It would be good to run your testcase to see if there are any
+out of order for this version, because this version has used
+STATE_MISSED and STATE_DRAINING to indicate non-empty qdisc,
+thanks.
 
-As qdisc->empty is not reliable to indicate a empty qdisc because
-there is a time window between enqueuing and setting qdisc->empty.
-So we use the MISSED state added in commit a90c57f2cedd ("net:
-sched: fix packet stuck problem for lockless qdisc"), which
-indicate there is lock contention, suggesting that it is better
-not to do the qdisc bypass in order to avoid packet out of order
-problem.
+It is based on newest net branch with qdisc stuck patchset.
 
-In order to make MISSED state reliable to indicate a empty qdisc,
-we need to ensure that testing and clearing of MISSED state is
-within the protection of qdisc->seqlock, only setting MISSED state
-can be done without the protection of qdisc->seqlock.
+Some performance data as below:
 
-There are below cases that need special handling:
-1. When MISSED state is cleared before another round of dequeuing
-in pfifo_fast_dequeue(), and __qdisc_run() might not be able to
-dequeue all skb in one round and call __netif_schedule(), which
-might result in a non-empty qdisc without MISSED set. In order
-to avoid this, the MISSED state is set for lockless qdisc and
-__netif_schedule() will be called at the end of qdisc_run_end.
+pktgen + dummy netdev:
+ threads  without+this_patch   with+this_patch      delta
+    1       2.60Mpps            3.18Mpps             +22%
+    2       3.84Mpps            5.72Mpps             +48%
+    4       5.52Mpps            5.52Mpps             +0.0%
+    8       2.77Mpps            2.81Mpps             +1.4%
+   16       2.24Mpps            2.29Mpps             +2.2%
 
-2. The MISSED state also need to be set for lockless qdisc instead
-of calling __netif_schedule() directly when requeuing a skb for
-a similar reason.
+IP forward testing: 1.05Mpps increases to 1.15Mpps
 
-3. For netdev queue stopped case, the MISSED case need clearing
-while the netdev queue is stopped, otherwise there may be
-unnecessary __netif_schedule() calling. So a new DRAINING state
-is added to indicate this case, which also indicate a non-empty
-qdisc.
-
-4. As there is already netif_xmit_frozen_or_stopped() checking in
-dequeue_skb() and sch_direct_xmit(), which are both within the
-protection of qdisc->seqlock, but the same checking in
-__dev_xmit_skb() is without the protection, which might cause
-empty indication of a lockless qdisc to be not reliable. So
-remove the checking in __dev_xmit_skb(), and the checking in
-the protection of qdisc->seqlock seems enough to avoid the
-cpu consumption problem for netdev queue stopped case.
-
-Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
----
- include/net/sch_generic.h | 11 ++++++++---
- net/core/dev.c            | 22 ++++++++++++++++++++--
- net/sched/sch_generic.c   | 20 ++++++++++++++++----
- 3 files changed, 44 insertions(+), 9 deletions(-)
-
-diff --git a/include/net/sch_generic.h b/include/net/sch_generic.h
-index 3ed6bcc..0940ad56 100644
---- a/include/net/sch_generic.h
-+++ b/include/net/sch_generic.h
-@@ -37,8 +37,15 @@ enum qdisc_state_t {
- 	__QDISC_STATE_SCHED,
- 	__QDISC_STATE_DEACTIVATED,
- 	__QDISC_STATE_MISSED,
-+	__QDISC_STATE_DRAINING,
- };
- 
-+#define QDISC_STATE_MISSED	BIT(__QDISC_STATE_MISSED)
-+#define QDISC_STATE_DRAINING	BIT(__QDISC_STATE_DRAINING)
-+
-+#define QDISC_STATE_NON_EMPTY	(QDISC_STATE_MISSED | \
-+					QDISC_STATE_DRAINING)
-+
- struct qdisc_size_table {
- 	struct rcu_head		rcu;
- 	struct list_head	list;
-@@ -206,10 +213,8 @@ static inline void qdisc_run_end(struct Qdisc *qdisc)
- 		spin_unlock(&qdisc->seqlock);
- 
- 		if (unlikely(test_bit(__QDISC_STATE_MISSED,
--				      &qdisc->state))) {
--			clear_bit(__QDISC_STATE_MISSED, &qdisc->state);
-+				      &qdisc->state)))
- 			__netif_schedule(qdisc);
--		}
- 	} else {
- 		write_seqcount_end(&qdisc->running);
- 	}
-diff --git a/net/core/dev.c b/net/core/dev.c
-index ef8cf76..7ae8d8a 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -3852,10 +3852,28 @@ static inline int __dev_xmit_skb(struct sk_buff *skb, struct Qdisc *q,
- 	qdisc_calculate_pkt_len(skb, q);
- 
- 	if (q->flags & TCQ_F_NOLOCK) {
-+		if (q->flags & TCQ_F_CAN_BYPASS && qdisc_run_begin(q)) {
-+			if (READ_ONCE(q->state) & QDISC_STATE_NON_EMPTY) {
-+				rc = q->enqueue(skb, q, &to_free) & NET_XMIT_MASK;
-+				__qdisc_run(q);
-+				qdisc_run_end(q);
-+
-+				goto no_lock_out;
-+			}
-+
-+			qdisc_bstats_cpu_update(q, skb);
-+			if (sch_direct_xmit(skb, q, dev, txq, NULL, true) &&
-+			    READ_ONCE(q->state) & QDISC_STATE_NON_EMPTY)
-+				__qdisc_run(q);
-+
-+			qdisc_run_end(q);
-+			return NET_XMIT_SUCCESS;
-+		}
-+
- 		rc = q->enqueue(skb, q, &to_free) & NET_XMIT_MASK;
--		if (likely(!netif_xmit_frozen_or_stopped(txq)))
--			qdisc_run(q);
-+		qdisc_run(q);
- 
-+no_lock_out:
- 		if (unlikely(to_free))
- 			kfree_skb_list(to_free);
- 		return rc;
-diff --git a/net/sched/sch_generic.c b/net/sched/sch_generic.c
-index fc8b56b..83d7f5f 100644
---- a/net/sched/sch_generic.c
-+++ b/net/sched/sch_generic.c
-@@ -52,6 +52,8 @@ static void qdisc_maybe_clear_missed(struct Qdisc *q,
- 	 */
- 	if (!netif_xmit_frozen_or_stopped(txq))
- 		set_bit(__QDISC_STATE_MISSED, &q->state);
-+	else
-+		set_bit(__QDISC_STATE_DRAINING, &q->state);
- }
- 
- /* Main transmission queue. */
-@@ -164,9 +166,13 @@ static inline void dev_requeue_skb(struct sk_buff *skb, struct Qdisc *q)
- 
- 		skb = next;
- 	}
--	if (lock)
-+
-+	if (lock) {
- 		spin_unlock(lock);
--	__netif_schedule(q);
-+		set_bit(__QDISC_STATE_MISSED, &q->state);
-+	} else {
-+		__netif_schedule(q);
-+	}
- }
- 
- static void try_bulk_dequeue_skb(struct Qdisc *q,
-@@ -409,7 +415,11 @@ void __qdisc_run(struct Qdisc *q)
- 	while (qdisc_restart(q, &packets)) {
- 		quota -= packets;
- 		if (quota <= 0) {
--			__netif_schedule(q);
-+			if (q->flags & TCQ_F_NOLOCK)
-+				set_bit(__QDISC_STATE_MISSED, &q->state);
-+			else
-+				__netif_schedule(q);
-+
- 			break;
- 		}
- 	}
-@@ -680,13 +690,14 @@ static struct sk_buff *pfifo_fast_dequeue(struct Qdisc *qdisc)
- 	if (likely(skb)) {
- 		qdisc_update_stats_at_dequeue(qdisc, skb);
- 	} else if (need_retry &&
--		   test_bit(__QDISC_STATE_MISSED, &qdisc->state)) {
-+		   READ_ONCE(qdisc->state) & QDISC_STATE_NON_EMPTY) {
- 		/* Delay clearing the STATE_MISSED here to reduce
- 		 * the overhead of the second spin_trylock() in
- 		 * qdisc_run_begin() and __netif_schedule() calling
- 		 * in qdisc_run_end().
- 		 */
- 		clear_bit(__QDISC_STATE_MISSED, &qdisc->state);
-+		clear_bit(__QDISC_STATE_DRAINING, &qdisc->state);
- 
- 		/* Make sure dequeuing happens after clearing
- 		 * STATE_MISSED.
-@@ -1204,6 +1215,7 @@ static void dev_reset_queue(struct net_device *dev,
- 	spin_unlock_bh(qdisc_lock(qdisc));
- 	if (nolock) {
- 		clear_bit(__QDISC_STATE_MISSED, &qdisc->state);
-+		clear_bit(__QDISC_STATE_DRAINING, &qdisc->state);
- 		spin_unlock_bh(&qdisc->seqlock);
- 	}
- }
--- 
-2.7.4
+> 
+> Yunsheng Lin (3):
+>   net: sched: avoid unnecessary seqcount operation for lockless qdisc
+>   net: sched: implement TCQ_F_CAN_BYPASS for lockless qdisc
+>   net: sched: remove qdisc->empty for lockless qdisc
+> 
+>  include/net/sch_generic.h | 26 +++++++++++++-------------
+>  net/core/dev.c            | 22 ++++++++++++++++++++--
+>  net/sched/sch_generic.c   | 23 ++++++++++++++++-------
+>  3 files changed, 49 insertions(+), 22 deletions(-)
+> 
 
