@@ -2,141 +2,205 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 75A74C4707F
-	for <bpf@archiver.kernel.org>; Sat, 22 May 2021 19:14:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A6481C4707E
+	for <bpf@archiver.kernel.org>; Sat, 22 May 2021 19:28:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5231E61177
-	for <bpf@archiver.kernel.org>; Sat, 22 May 2021 19:14:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7E4A661073
+	for <bpf@archiver.kernel.org>; Sat, 22 May 2021 19:28:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231428AbhEVTQA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 22 May 2021 15:16:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55724 "EHLO
+        id S231311AbhEVT3x (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 22 May 2021 15:29:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231402AbhEVTP6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 22 May 2021 15:15:58 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82190C06174A;
-        Sat, 22 May 2021 12:14:32 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id s4so11079212plg.12;
-        Sat, 22 May 2021 12:14:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=DcX8fhKGj8R427RducM9Ix+CQKTH1UdCiDQd5Xwx4xg=;
-        b=D+54d9ffWQpaqYrrntfrvzAGdAd1QgOlVpkhz3uQVzK6ELaM0t6NnbQgCw+5aNan0g
-         HQHQrdAwMTrpbmTaFZ8Z2+CZ53Z+TcZROpfD4Pvth2WwPAei8h/Fd6rEZV1nfxdUZcal
-         SM5jmQwTXiIP3Bvih7uyfctv9KPYw3DafdxMt4VtcX55sFIyVTq+UniIGjgSN463XOrV
-         2DivQL7UwHbteKAiS9zbjvENM5xirncUNp6hW8x/NPmOb3R+YesikdxuV61yQvIBArkl
-         TSRENdUzYENwAMJnWE7wFPKJh5gx9TbA2uG/8at9I7anQE+izehFmRbduj+Z7SkTJxb4
-         syeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=DcX8fhKGj8R427RducM9Ix+CQKTH1UdCiDQd5Xwx4xg=;
-        b=lbYsTe3BDkOiZsaxJy88E3Mdi+WVxm7ygZ4/MFpk+DnA5sshuo6ZM4i3yuSMX4Yx7p
-         8LRUZpgPfal3T7Y5cwQtLfpBPFloVyGmYN3md9uIUItM0/qGqt9q33ltCjFGvRP6PdYH
-         9pA6scoTcEHT5X25R9VqqdC/6559WRDD4xnDJvwaST5Q4OxzbB//AO3+XECPZDhFkJA/
-         8UxgaYXT0LKdHSCuzq+Mv1z6zXWlsYwwPkHin0OQ5rmmrbMaZQGVJrxb6hUfHX+tkzWb
-         nyowYklmNjwnBLioCRCO7SulKpxzQ3erqioH/uRECYGVdaW/PXka48zOnQ6PmliG4Irg
-         fLbw==
-X-Gm-Message-State: AOAM533CRR7iR3aaz+aMzN/ImgfrZmqBkuaycj68UomrrqyDrxRaAzQ0
-        6b8qRsGXyZzXWjbjyVED6zn9aYmrwW2qvQ==
-X-Google-Smtp-Source: ABdhPJx/EQ9Xv5OYmvfL0rfAfehaHbJm+Rf8GFBhJw92L0ENx+dYXSh2sfA3ZYrmxWwZ7CBgP8pYvg==
-X-Received: by 2002:a17:902:b609:b029:ec:e80d:7ebd with SMTP id b9-20020a170902b609b02900ece80d7ebdmr18484134pls.75.1621710872004;
-        Sat, 22 May 2021 12:14:32 -0700 (PDT)
-Received: from unknown.attlocal.net ([2600:1700:65a0:ab60:14cd:343f:4e27:51d7])
-        by smtp.gmail.com with ESMTPSA id 5sm6677531pfe.32.2021.05.22.12.14.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 22 May 2021 12:14:31 -0700 (PDT)
-From:   Cong Wang <xiyou.wangcong@gmail.com>
-To:     netdev@vger.kernel.org
-Cc:     bpf@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        Lorenz Bauer <lmb@cloudflare.com>
-Subject: [Patch bpf v2 6/7] skmsg: pass source psock to sk_psock_skb_redirect()
-Date:   Sat, 22 May 2021 12:14:10 -0700
-Message-Id: <20210522191411.21446-7-xiyou.wangcong@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210522191411.21446-1-xiyou.wangcong@gmail.com>
-References: <20210522191411.21446-1-xiyou.wangcong@gmail.com>
+        with ESMTP id S231310AbhEVT3w (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 22 May 2021 15:29:52 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83A4EC061574;
+        Sat, 22 May 2021 12:28:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:
+        Subject:Sender:Reply-To:Cc:Content-ID:Content-Description;
+        bh=JZZHqK8bHE0lasm4SgtHg84GIgUgf8Ii9J02KWLU8Wg=; b=xGCfJYeYXUkHaGQxE/D9AIATvJ
+        LZiYsbaeL9ZdT+ukzFpEYz8lIifOXqXvyJTUcckSY13w0K6533RBBXzBV8xu+wMPmzrfIYOmRCP18
+        W2dqJ6n6oy/lBTejeAoZeIeUu3B6hq1cOBh5HwzYL4k4peIAgvgRYIjj3IP20ptAuDBm2lU3+7eHz
+        vKftthfc5/nWQOT3zNwKMn37LRtv9gwzlOHu2AGVQEc0DHKqkBoneeTjhD6i61RKjj933b9bnWOhc
+        WVeQXuaZpe5cNb2vEOWYd/MzUzGrHOKCoVTmlMVJj8agkbiwUuaFEEAc//ccSbidE97j8vEw1TLbr
+        tJsdGPmw==;
+Received: from [2601:1c0:6280:3f0::7376]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1lkXIQ-000BY5-OD; Sat, 22 May 2021 19:28:26 +0000
+Subject: Re: Failed to start load kernel modules on 5.13.0-rc2-next-20210521
+To:     Hritik Vijay <hritikxx8@gmail.com>, linux-next@vger.kernel.org,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        bpf <bpf@vger.kernel.org>
+References: <YKlWqLh61Rxid7l9@Journey.localdomain>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <21727ead-5092-8900-74e9-ee73774b0b97@infradead.org>
+Date:   Sat, 22 May 2021 12:28:25 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <YKlWqLh61Rxid7l9@Journey.localdomain>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Cong Wang <cong.wang@bytedance.com>
+On 5/22/21 12:08 PM, Hritik Vijay wrote:
+> Hello all
+> 
+> I've been trying to compile and run 5.13.0-rc2-next-20210521 from
+> linux-next. It compiles successfully but when I boot it, I get an error
+> saying "failed to start load kernel modules". At this point, the
+> keyboard becomes unresponsive so I am unable to dig any further.
+> I used the config that comes with Archlinux kernel plus the default
+> choice to any new option. I've attached it to this mail.
+> I generated the initramfs using mkinitcpio (30-1) script, the configuration to
+> which I've attached as well.
+> My host computer has an encrypted luks volume which contains lvm which
+> in turn contains all the filesystems (including /).
+> The kernel boot options I used to boot my system is: 
+> initrd /initramfs.img
+> initrd /intel-ucode.img
+> options rd.luks.name=500ac0a9-69ab-48f4-ab29-26328b206a7f=sherlocked root=/dev/sherlock/root rootflags=discard intel_iommu=on iommu=pt vfio-pci.ids=8086:3166,8086:4210
+> 
+> The same configuration works perfectly with the stable kernel.
+> 
+> In order to investigate further, I booted the same kernel image inside a
+> virtual machine. I used the same initramfs and copied over /lib/modules/5.13.0-rc2-next-20210521
+> in the virtual machine. This time I was able to interact with the
+> initramfs shell using the serial console. 
+> Here is the dmesg from inside the virtual machine:
+> 
+> [rootfs ]# dmesg
 
-sk_psock_skb_redirect() only takes skb as a parameter, we
-will need to know where this skb is from, so just pass
-the source psock to this function as a new parameter.
-This patch prepares for the next one.
+[snip]
 
-Cc: John Fastabend <john.fastabend@gmail.com>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Jakub Sitnicki <jakub@cloudflare.com>
-Cc: Lorenz Bauer <lmb@cloudflare.com>
-Signed-off-by: Cong Wang <cong.wang@bytedance.com>
----
- net/core/skmsg.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+> [    0.703422] Run /init as init process
+> [    0.703424]   with arguments:
+> [    0.703425]     /init
+> [    0.703425]     \\vmlinuz
+> [    0.703426]   with environment:
+> [    0.703427]     HOME=/
+> [    0.703427]     TERM=linux
+> [    0.703428]     serial=tty0
+> [    0.745097] BPF:	 type_id=29677 offset=170152 size=4
+> [    0.745744] BPF: 
+> [    0.745995] BPF:Invalid offset
+> [    0.746382] BPF:
+> [    0.746382] 
+> [    0.746803] failed to validate module [jbd2] BTF: -22
+> [    0.810494] failed to validate module [crc32c_intel] BTF: -22
+> [    0.895810] failed to validate module [crc32c_generic] BTF: -22
+> [    0.975781] failed to validate module [libcrc32c] BTF: -22
+> [    1.149204] failed to validate module [serio] BTF: -22
+> [    1.165209] failed to validate module [serio] BTF: -22
+> [    1.165321] failed to validate module [xhci_pci_renesas] BTF: -22
+> [    1.168234] failed to validate module [crc32c_intel] BTF: -22
+> [   33.222665] random: fast init done
+> [   55.452163] failed to validate module [crc32c_intel] BTF: -22
+> [   55.493354] failed to validate module [crc32c_generic] BTF: -22
+> [   55.576653] failed to validate module [libcrc32c] BTF: -22
+> [   61.671703] failed to validate module [jbd2] BTF: -22
+> 
+> 
+> The status of systemd-modules-load.service was:
+> 
+> systemd-modules-load.service - Load Kernel Modules
+>      Loaded: loaded (/usr/local/lib/systemd/system/systemd-modules-load.service;
+>  static)
+>      Active: failed (Result: exit-code) since Thu 2021-05-20 01:05:41 UTC; 3min 
+> 48s ago
+>        Docs: man:systemd-modules-load.service(8)
+>              man:modules-load.d(5)
+>     Process: 93 ExecStart=/usr/lib/systemd/systemd-modules-load (code=exited, st
+> atus=1/FAILURE)
+>    Main PID: 93 (code=exited, status=1/FAILURE)
+>         CPU: 24ms
+> 
+> May 20 01:05:41 archlinux systemd-modules-load[93]: Failed to insert module 'ext
+> 4': Invalid argument
+> May 20 01:05:41 archlinux systemd-modules-load[93]: Failed to insert module 'xfs
+> ': Invalid argument
+> May 20 01:05:41 archlinux systemd[1]: systemd-modules-load.service: Main process
+>  exited, code=exited, status=1/FAILURE
+> May 20 01:05:41 archlinux systemd[1]: systemd-modules-load.service: Failed with 
+> result 'exit-code'.
+> May 20 01:05:41 archlinux systemd[1]: Failed to start Load Kernel Modules.
+> Notice: journal has been rotated since unit was started, output may be incomplet
+> e.
+> 
+> 
+> I would also like to mention that I tried both 5.13.0-rc2-next-20210520
+> and 5.13.0-rc2-next-20210521 without any change in the errors.
+> Also, I generated initramfs based systemd and busybox both. The dmesg
+> output is from the busybox version and the systemd-modules-load.service
+> output is from the systemd version.
+> 
+> Further, I took the same config and ran `make mod2yesconfig` in
+> order to eliminate the module based errors entirely. 
+> This time the kernel failed to compile (perhaps due to low memory)
+> dmesg contains the lines
+> 
+> [17742.379990] oom-kill:constraint=CONSTRAINT_NONE,nodemask=(null),cpuset=/,mems_allowed=0,global_oom,task_memcg=/user.slice/user-1000.slice/session-5.scope,task=pahole,pid=292673,uid=1000
+> [17742.380003] Out of memory: Killed process 292673 (pahole) total-vm:12034912kB, anon-rss:4269536kB, file-rss:4kB, shmem-rss:0kB, UID:1000 pgtables:23612kB oom_score_adj:0
+> [17743.802356] oom_reaper: reaped process 292673 (pahole), now anon-rss:0kB, file-rss:0kB, shmem-rss:0kB
+> 
+> and the output to `make -j16 all` is 
+>   DESCEND objtool                                                                                                              
+>   DESCEND bpf/resolve_btfids                                                                                                   
+>   CALL    scripts/atomic/check-atomics.sh                                                                                      
+>   CALL    scripts/checksyscalls.sh                                                                                             
+>   CHK     include/generated/compile.h                                                                                          
+>   CHK     kernel/kheaders_data.tar.xz                                                                                          
+>   GEN     .version                                                                                                             
+>   CHK     include/generated/compile.h                                                                                          
+>   UPD     include/generated/compile.h                          
+>   CC      init/version.o       
+>   AR      init/built-in.a      
+>   LD      vmlinux.o            
+>   MODPOST vmlinux.symvers      
+>   MODINFO modules.builtin.modinfo                              
+>   GEN     modules.builtin      
+>   LD      .tmp_vmlinux.btf     
+>   BTF     .btf.vmlinux.bin.o   
+> btf_elf__write: failed to add .BTF section to '.tmp_vmlinux.btf': 2!                                                           
+> Failed to encode BTF           
+>   LD      .tmp_vmlinux.kallsyms1                               
+>   KSYMS   .tmp_vmlinux.kallsyms1.S                             
+>   AS      .tmp_vmlinux.kallsyms1.S                             
+>   LD      .tmp_vmlinux.kallsyms2                               
+>   KSYMS   .tmp_vmlinux.kallsyms2.S                             
+>   AS      .tmp_vmlinux.kallsyms2.S                             
+>   LD      vmlinux              
+>   BTFIDS  vmlinux              
+> FAILED: load BTF from vmlinux: No such file or directory       
+> make: *** [Makefile:1275: vmlinux] Error 255              
+> make: *** Deleting file 'vmlinux'
+> 
+> I captured the above output in my 3rd attempt to compile the kernel
+> after mod2yesconfig as the previous two attempts crashed Xorg itself.
+> 
+> Can someone please let me know what's wrong here? 
+> I would happily provide more logs if it is required.
+> 
+> Hrtk
+> 
 
-diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index 335fc60f5d22..7b2c25038a48 100644
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -824,7 +824,7 @@ int sk_psock_msg_verdict(struct sock *sk, struct sk_psock *psock,
- }
- EXPORT_SYMBOL_GPL(sk_psock_msg_verdict);
- 
--static int sk_psock_skb_redirect(struct sk_buff *skb)
-+static int sk_psock_skb_redirect(struct sk_psock *from, struct sk_buff *skb)
- {
- 	struct sk_psock *psock_other;
- 	struct sock *sk_other;
-@@ -859,11 +859,12 @@ static int sk_psock_skb_redirect(struct sk_buff *skb)
- 	return 0;
- }
- 
--static void sk_psock_tls_verdict_apply(struct sk_buff *skb, struct sock *sk, int verdict)
-+static void sk_psock_tls_verdict_apply(struct sk_buff *skb,
-+				       struct sk_psock *from, int verdict)
- {
- 	switch (verdict) {
- 	case __SK_REDIRECT:
--		sk_psock_skb_redirect(skb);
-+		sk_psock_skb_redirect(from, skb);
- 		break;
- 	case __SK_PASS:
- 	case __SK_DROP:
-@@ -887,7 +888,7 @@ int sk_psock_tls_strp_read(struct sk_psock *psock, struct sk_buff *skb)
- 		ret = sk_psock_map_verd(ret, skb_bpf_redirect_fetch(skb));
- 		skb->sk = NULL;
- 	}
--	sk_psock_tls_verdict_apply(skb, psock->sk, ret);
-+	sk_psock_tls_verdict_apply(skb, psock, ret);
- 	rcu_read_unlock();
- 	return ret;
- }
-@@ -932,7 +933,7 @@ static int sk_psock_verdict_apply(struct sk_psock *psock, struct sk_buff *skb,
- 		}
- 		break;
- 	case __SK_REDIRECT:
--		err = sk_psock_skb_redirect(skb);
-+		err = sk_psock_skb_redirect(psock, skb);
- 		break;
- 	case __SK_DROP:
- 	default:
+Hi,
+Here is a reply to a similar message/problem:
+https://lore.kernel.org/lkml/CAEf4BzZuU2TYMapSy7s3=D8iYtVw_N+=hh2ZMGG9w6N0G1HvbA@mail.gmail.com/
+
+so it looks like Andrii is still debugging this problem.
+
 -- 
-2.25.1
+~Randy
 
