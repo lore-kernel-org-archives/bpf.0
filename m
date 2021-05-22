@@ -2,66 +2,73 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB9DBC4707F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB88FC47081
 	for <bpf@archiver.kernel.org>; Sat, 22 May 2021 19:14:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A93EE61183
+	by mail.kernel.org (Postfix) with ESMTP id C14A561177
 	for <bpf@archiver.kernel.org>; Sat, 22 May 2021 19:14:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231376AbhEVTPz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 22 May 2021 15:15:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55698 "EHLO
+        id S231378AbhEVTP4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 22 May 2021 15:15:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231311AbhEVTPy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S231345AbhEVTPy (ORCPT <rfc822;bpf@vger.kernel.org>);
         Sat, 22 May 2021 15:15:54 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 949CFC061574;
-        Sat, 22 May 2021 12:14:27 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id x18so13186511pfi.9;
-        Sat, 22 May 2021 12:14:27 -0700 (PDT)
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2386C0613ED;
+        Sat, 22 May 2021 12:14:29 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id e15so6009054plh.1;
+        Sat, 22 May 2021 12:14:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0OXyBjG7qnUD1D3OaIyoOtN17qx/OM0QIPESYVdnBz0=;
-        b=Ih2gDswofcH/vVBBTza0W4UKOzKPQrMQ+HF2TfP2J1LpMqei+6e9me81RstWTGDEDQ
-         6eatMyg8D7SID8px0ciY6sE2jmYNJpWoJTZCioiUi4ZBej9Napmk2VhiT8yFrpMYWJyL
-         beWQ5z0FqVkGt0w8lUaN/UKYXu0oRdC/TlI8Dc0at78SnPF2sqsu9DKvRzmTw5Ywdrqn
-         uQkW8UeVZLXbUG1SJm3on0i1TzCOZHzPKnmvO7DgO+lPmh14IbcPqvtSP8ZDR9jWGbkd
-         Jan0hzYmf1KB+9r/KKVR0QZmfiJHE9p77Bs6Itw/TwQ4iGIFayxIp/gawpq2UrqNbsXh
-         sL1w==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=DV0T/Qr/nJx8jfvW3ukFjANC4TKgQt+cqMliLspYgy0=;
+        b=ZE1N44WA4KPSr0Vi0rHkh0It84dEXbFFoW8rskLDxjORPbjDfvUT71qtgrQcQQj+5s
+         pRNDdw2EdjqajmvFexzct+5igNBSPNQC9EUZZjvlhaqi+t9WQUDcNzXz77vJRZZCn01A
+         5fnNf6UH4TVIbzjwAhMKI3uGePVbe8uiuKfAIKIsKatEuzdU8K9zC8TK+8U7fElXriSs
+         Bi4/HOIcdmv7iPDeLVh7rCE3rhYgVbdMHrtSkc9lZox4FLHmQ4GRb3pKi5Q5lUGge43g
+         m/UQIOrl0TYHHxx9vxnfuSiB0vNw9ocYA87pJ2wN7Tv+t6b2sAV7NrdVqR1XgEyusP6x
+         O+Yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0OXyBjG7qnUD1D3OaIyoOtN17qx/OM0QIPESYVdnBz0=;
-        b=XUsd2HQIHP9YMzj4ejAJK6RxlUE2mnN2lWS1LIrNDlrjImsLAi3HTj/CxJX3NmtRqK
-         cOUe6euxjnedvrVBF8h36YABZE+IGSo2nSMdorAfXyGUm6zqYsK7cjyPXx3IGQExGKrx
-         ai3nyl19Asru5b5D9q8SL2Cx1acpU1O63UCWWOqvA8LvKd2vjcX8k/uBQNMPgNZwiKn3
-         JJwuc6lDwwRNlWFQ1AkSBlWGU8HaPUr1CqdtfJ+HdC5WHRkegWTQP36QtPUiYPPvgZKm
-         TiwgDTZp4MIlE23b15zEn5AtF9zmXq0JLGu1dhvqQzrv4kSSSl2xGkFygtXQcPprhfzO
-         dfzg==
-X-Gm-Message-State: AOAM5325eg12kI6vcUIO/SuJKaVHE3MzQhxdkwwve4zx11d+fmNfz1kK
-        etNtTaT8CEIzIvYbM9m929KJsyOTyKf8iA==
-X-Google-Smtp-Source: ABdhPJzK4u4BZ7OVudaFeT/NzV+ZEMhkcXR6I+oIChPW6lredScKurF6iDOlO3dasCGHaFE0sjBXTQ==
-X-Received: by 2002:a62:1d52:0:b029:2dd:ee:1439 with SMTP id d79-20020a621d520000b02902dd00ee1439mr16257939pfd.57.1621710866378;
-        Sat, 22 May 2021 12:14:26 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=DV0T/Qr/nJx8jfvW3ukFjANC4TKgQt+cqMliLspYgy0=;
+        b=BjhCxSUGQ89pUgFsImxaPSM0/9+/SN16ztd0cNnULlmm3c3EF77GnX39/Uo4qED1iQ
+         rsWe1Dydyt44Dn0dSr5ja6uWxbq6nnLKKIp2VtjYZC8w7Oap6VAm2WvvUHO2Z5n2WITE
+         Sy70ExeWIR6I6WFfNlhy2ki8sw9l5+vGZyFeWs0GinBMFNojg8f2W0hmJt1wEfg0VkLq
+         XIyEMjjSueX0LqEJa3N8/6VQHDAjgvXM52U9AyMl1cTbuq5gDH4BL5pKJefXMk2x2Gcx
+         rfgkq8WDKWhN5K0i0k42UcMV3ZWy4ejmhg/ls9kUjWJAwSJY2DnxrVAPUDffVZDJFs77
+         RnEA==
+X-Gm-Message-State: AOAM531moFcb7th9+kmfhgGswZAWZrqa2czKNKV5wG0a/qn+KAw+eM9x
+        gpOy5zTsgVF9YAN0s5jUwXKyMYcT+xNq/g==
+X-Google-Smtp-Source: ABdhPJy7PKe6Msqh0+RN81iuU8fe0VxxYtUjCZz6JweSulFHGqMRrkIQPzViGZ6qJkNCYHsli2j+Tw==
+X-Received: by 2002:a17:90a:17a6:: with SMTP id q35mr17017410pja.118.1621710869228;
+        Sat, 22 May 2021 12:14:29 -0700 (PDT)
 Received: from unknown.attlocal.net ([2600:1700:65a0:ab60:14cd:343f:4e27:51d7])
-        by smtp.gmail.com with ESMTPSA id 5sm6677531pfe.32.2021.05.22.12.14.25
+        by smtp.gmail.com with ESMTPSA id 5sm6677531pfe.32.2021.05.22.12.14.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 22 May 2021 12:14:26 -0700 (PDT)
+        Sat, 22 May 2021 12:14:28 -0700 (PDT)
 From:   Cong Wang <xiyou.wangcong@gmail.com>
 To:     netdev@vger.kernel.org
-Cc:     bpf@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>
-Subject: [Patch bpf v2 0/7] sock_map: some bug fixes and improvements
-Date:   Sat, 22 May 2021 12:14:04 -0700
-Message-Id: <20210522191411.21446-1-xiyou.wangcong@gmail.com>
+Cc:     bpf@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        Lorenz Bauer <lmb@cloudflare.com>
+Subject: [Patch bpf v2 3/7] udp: fix a memory leak in udp_read_sock()
+Date:   Sat, 22 May 2021 12:14:07 -0700
+Message-Id: <20210522191411.21446-4-xiyou.wangcong@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210522191411.21446-1-xiyou.wangcong@gmail.com>
+References: <20210522191411.21446-1-xiyou.wangcong@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -70,35 +77,40 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Cong Wang <cong.wang@bytedance.com>
 
-This patchset contains a few bug fixes and improvements for sock_map.
+sk_psock_verdict_recv() clones the skb and uses the clone
+afterward, so udp_read_sock() should free the skb after using
+it, regardless of error or not.
 
-Patch 1 improves recvmsg() accuracy for UDP, patch 2 improves UDP
-non-blocking read() by retrying on EAGAIN. With both of them, the
-failure rate of the UDP test case goes down from 10% to 0%.
+This fixes a real kmemleak.
 
-Patch 3 is memory leak fix I posted, no change since v1. The rest
-patches address similar memory leaks or improve error handling,
-including one increases sk_drops counter in error cases. Please
-check each patch description for more details.
-
+Fixes: d7f571188ecf ("udp: Implement ->read_sock() for sockmap")
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Jakub Sitnicki <jakub@cloudflare.com>
+Cc: Lorenz Bauer <lmb@cloudflare.com>
+Signed-off-by: Cong Wang <cong.wang@bytedance.com>
 ---
-Cong Wang (7):
-  skmsg: improve udp_bpf_recvmsg() accuracy
-  selftests/bpf: Retry for EAGAIN in udp_redir_to_connected()
-  udp: fix a memory leak in udp_read_sock()
-  skmsg: fix a memory leak in sk_psock_verdict_apply()
-  skmsg: teach sk_psock_verdict_apply() to return errors
-  skmsg: pass source psock to sk_psock_skb_redirect()
-  skmsg: increase sk->sk_drops when dropping packets
+ net/ipv4/udp.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
- include/linux/skmsg.h                         |  2 -
- net/core/skmsg.c                              | 80 +++++++++----------
- net/ipv4/tcp_bpf.c                            | 24 +++++-
- net/ipv4/udp.c                                |  2 +
- net/ipv4/udp_bpf.c                            | 47 +++++++++--
- .../selftests/bpf/prog_tests/sockmap_listen.c |  7 +-
- 6 files changed, 109 insertions(+), 53 deletions(-)
-
+diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
+index 15f5504adf5b..e31d67fd5183 100644
+--- a/net/ipv4/udp.c
++++ b/net/ipv4/udp.c
+@@ -1798,11 +1798,13 @@ int udp_read_sock(struct sock *sk, read_descriptor_t *desc,
+ 		if (used <= 0) {
+ 			if (!copied)
+ 				copied = used;
++			kfree_skb(skb);
+ 			break;
+ 		} else if (used <= skb->len) {
+ 			copied += used;
+ 		}
+ 
++		kfree_skb(skb);
+ 		if (!desc->count)
+ 			break;
+ 	}
 -- 
 2.25.1
 
