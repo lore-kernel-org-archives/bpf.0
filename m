@@ -2,73 +2,106 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 13165C47088
-	for <bpf@archiver.kernel.org>; Wed, 26 May 2021 17:50:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 62C3DC47082
+	for <bpf@archiver.kernel.org>; Wed, 26 May 2021 18:13:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DB6AE613D7
-	for <bpf@archiver.kernel.org>; Wed, 26 May 2021 17:50:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3721B613C5
+	for <bpf@archiver.kernel.org>; Wed, 26 May 2021 18:13:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231556AbhEZRvl (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 26 May 2021 13:51:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56798 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229939AbhEZRvl (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 26 May 2021 13:51:41 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 7974A613D2;
-        Wed, 26 May 2021 17:50:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622051409;
-        bh=Y0LUjjNjscY5V6/0UWjL4cGelu1LSlenFBnmtBAnSEo=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=bSNUmo+T/8UisO92jWDhmAjw6tygop4/GQMRFHskjD/HA7845mhdV8Fr+zP1Ir4IS
-         IizHPQ2rszqCkHKDwZUFNu8nNqLhUTEcXiGl1a9tlWZaO2mMpcqwxvM4x/UfQPdV0v
-         IUTDHfE0i95+araH6Fuh9GYlh7gY9CfoX7fTD07BCEkKehl/Vt5MMvDv06Ya8CjFIZ
-         jW3Pehb3Pt+2pLg+/PJGhdkfiLoZ7OkWh/8TN7mZDfDCgVSY6yrMjCAOi1Fd5hkAdh
-         /dHdo52tq/O1dpbOfXvY3OeTh4nhFzhCT08Y2eC+tQtrcLJzLnG9uWzg4BO0P2Vqnj
-         CXv0ji9DtwzFw==
-Content-Type: text/plain; charset="utf-8"
+        id S234874AbhEZSOm (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 26 May 2021 14:14:42 -0400
+Received: from outbound-smtp56.blacknight.com ([46.22.136.240]:50155 "EHLO
+        outbound-smtp56.blacknight.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234857AbhEZSOl (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 26 May 2021 14:14:41 -0400
+Received: from mail.blacknight.com (pemlinmail06.blacknight.ie [81.17.255.152])
+        by outbound-smtp56.blacknight.com (Postfix) with ESMTPS id E46D5FB091
+        for <bpf@vger.kernel.org>; Wed, 26 May 2021 19:13:08 +0100 (IST)
+Received: (qmail 4224 invoked from network); 26 May 2021 18:13:08 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.23.168])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 26 May 2021 18:13:08 -0000
+Date:   Wed, 26 May 2021 19:13:07 +0100
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Michal Suchanek <msuchanek@suse.de>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Hritik Vijay <hritikxx8@gmail.com>, bpf <bpf@vger.kernel.org>,
+        Linux-Net <netdev@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>
+Subject: Re: [PATCH] mm/page_alloc: Work around a pahole limitation with
+ zero-sized struct pagesets
+Message-ID: <20210526181306.GZ30378@techsingularity.net>
+References: <20210526080741.GW30378@techsingularity.net>
+ <CAEf4BzZOQnBgYXSR71HgsqhYcaFk5M5mre+6do+hnuxgWx5aNg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v3] libbpf: Move BPF_SEQ_PRINTF and BPF_SNPRINTF to
- bpf_helpers.h
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <162205140944.32004.2498338287581777007.git-patchwork-notify@kernel.org>
-Date:   Wed, 26 May 2021 17:50:09 +0000
-References: <20210526164643.2881368-1-revest@chromium.org>
-In-Reply-To: <20210526164643.2881368-1-revest@chromium.org>
-To:     Florent Revest <revest@chromium.org>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kpsingh@kernel.org, jackmanb@google.com,
-        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzZOQnBgYXSR71HgsqhYcaFk5M5mre+6do+hnuxgWx5aNg@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
-
-This patch was applied to bpf/bpf-next.git (refs/heads/master):
-
-On Wed, 26 May 2021 18:46:43 +0200 you wrote:
-> These macros are convenient wrappers around the bpf_seq_printf and
-> bpf_snprintf helpers. They are currently provided by bpf_tracing.h which
-> targets low level tracing primitives. bpf_helpers.h is a better fit.
+On Wed, May 26, 2021 at 09:57:31AM -0700, Andrii Nakryiko wrote:
+> > This patch checks for older versions of pahole and forces struct pagesets
+> > to be non-zero sized as a workaround when CONFIG_DEBUG_INFO_BTF is set. A
+> > warning is omitted so that distributions can update pahole when 1.22
 > 
-> The __bpf_narg and __bpf_apply are needed in both files and provided
-> twice. __bpf_empty isn't used anywhere and is removed from bpf_tracing.h
+> s/omitted/emitted/ ?
 > 
-> [...]
 
-Here is the summary with links:
-  - [bpf-next,v3] libbpf: Move BPF_SEQ_PRINTF and BPF_SNPRINTF to bpf_helpers.h
-    https://git.kernel.org/bpf/bpf-next/c/d6a6a55518c1
+Yes.
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> > is released.
+> >
+> > Reported-by: Michal Suchanek <msuchanek@suse.de>
+> > Reported-by: Hritik Vijay <hritikxx8@gmail.com>
+> > Debugged-by: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+> > Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
+> > ---
+> 
+> Looks good! I verified that this does fix the issue on the latest
+> linux-next tree, thanks!
+> 
 
+Excellent
 
+> One question, should
+> 
+> Fixes: 5716a627517d ("mm/page_alloc: convert per-cpu list protection
+> to local_lock")
+> 
+> be added to facilitate backporting?
+> 
+
+The git commit is not stable because the patch "mm/page_alloc: convert
+per-cpu list protection to local_lock" is in Andrew's mmotm tree which is
+quilt based. I decided not to treat the patch as a fix because the patch is
+not wrong as such, it's a limitation of an external tool.  However, I would
+expect both the problematic patch and the BTF workaround to go in during
+the same merge window so backports to -stable should not be required.
+
+> Either way:
+> 
+> Acked-by: Andrii Nakryiko <andrii@kernel.org>
+> Tested-by: Andrii Nakryiko <andrii@kernel.org>
+> 
+
+Thanks!
+
+-- 
+Mel Gorman
+SUSE Labs
