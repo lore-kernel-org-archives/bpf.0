@@ -2,327 +2,336 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61F81C4708A
-	for <bpf@archiver.kernel.org>; Thu, 27 May 2021 17:39:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6968DC4707F
+	for <bpf@archiver.kernel.org>; Thu, 27 May 2021 17:44:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 488A2613DA
-	for <bpf@archiver.kernel.org>; Thu, 27 May 2021 17:39:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 45F81613BE
+	for <bpf@archiver.kernel.org>; Thu, 27 May 2021 17:44:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235205AbhE0Rkc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 27 May 2021 13:40:32 -0400
-Received: from mx0b-0064b401.pphosted.com ([205.220.178.238]:57152 "EHLO
-        mx0b-0064b401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235365AbhE0Rkb (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 27 May 2021 13:40:31 -0400
-Received: from pps.filterd (m0250812.ppops.net [127.0.0.1])
-        by mx0a-0064b401.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 14RHXB2T025634;
-        Thu, 27 May 2021 17:38:42 GMT
-Received: from nam02-bn1-obe.outbound.protection.outlook.com (mail-bn1nam07lp2047.outbound.protection.outlook.com [104.47.51.47])
-        by mx0a-0064b401.pphosted.com with ESMTP id 38tfbh81c1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 May 2021 17:38:42 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Gg9iiOiyZz9gqdmBwsZkV3uDWr/3AshTD6kC848bX1O9+q0QgCi3nZBHNbndVHiXcJWNM0FRjyBTAQ6B0N7ZJOJzx6GpB2mDNighAkbgfukw3qoVAQUzCoyc5DKTNZuTmsSPNK8pzY4E0OBP9buiUUSr0WtD35K/7noj/JunxolsPTKoGwiXf7J5h7z9CRhOkzP2zut7c+XA4PDvmCHEBwDsjLEYWflDJmomaqJQUwqJrG8Cpo7Hn0Qu1BQe74xLp5RfbSqfvJprqU9b4BtT8icbH+OmgEKyP/Q9pDnhujQemo2u1XlpID6whikLiOPEleEXEUDXxVx/iNovOe3Grw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FspNwqKwkyB64IQR/2ISxIO8KO+paEDJ8iCMzITFv8s=;
- b=X27UCVPN6MARxUbU8lmWrni19diLnNa+9+lgnZlBhWdxM9JsXAwXurjFe5XUdeQDeObl0IhzC9VGbDT+MQ1Kev513ww3Zxqv3pXmPv6VKo6PLT00Ig9Lp948v/VQe5U1ZGBDiERm3RzPnLHbCt9IdnZum3FUHwNsY1BH+fpde4C0oT3ef8m1+SLbIX1/xwFKWPkcCaqShB4zS3Vk6ZJjRf77PlFQr6jDQVEy9j3PnO8r26vCSTSSML52JtDZaq/F5tzaatuhZhY8NtQmB8k8A/UWHvJsFPwm6QFyyeRH0oUAcxYqTS/J7x6kBe5iLrX/ghZWCrAgBruqag8a04eDGw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=windriver.com; dmarc=pass action=none
- header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
+        id S229732AbhE0Rpr (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 27 May 2021 13:45:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36976 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229609AbhE0Rpr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 27 May 2021 13:45:47 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE362C061574
+        for <bpf@vger.kernel.org>; Thu, 27 May 2021 10:44:12 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id b13so1824886ybk.4
+        for <bpf@vger.kernel.org>; Thu, 27 May 2021 10:44:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=windriversystems.onmicrosoft.com;
- s=selector2-windriversystems-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FspNwqKwkyB64IQR/2ISxIO8KO+paEDJ8iCMzITFv8s=;
- b=FKRqJZ5JSiVBZyxU5iY8+mzgeM1FdA923vaVG6viaPbudcMEjigmW2O/TWFrnjzFeCtyNliRK0MK/y4liT7gTVadglPVch155zkTlH3d7kUHnihVj+iajWZ5J739xhgI+StCV062kfhzqJWnV88nqlEOtB+hDFdxBSwJ8PeJIhE=
-Authentication-Results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none
- header.from=windriver.com;
-Received: from BN6PR11MB1956.namprd11.prod.outlook.com (2603:10b6:404:104::19)
- by BN6PR1101MB2162.namprd11.prod.outlook.com (2603:10b6:405:50::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4150.27; Thu, 27 May
- 2021 17:38:41 +0000
-Received: from BN6PR11MB1956.namprd11.prod.outlook.com
- ([fe80::f100:256b:e0af:7d33]) by BN6PR11MB1956.namprd11.prod.outlook.com
- ([fe80::f100:256b:e0af:7d33%3]) with mapi id 15.20.4173.024; Thu, 27 May 2021
- 17:38:41 +0000
-From:   Ovidiu Panait <ovidiu.panait@windriver.com>
-To:     stable@vger.kernel.org
-Cc:     fllinden@amazon.com, bpf@vger.kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, yhs@fb.com, john.fastabend@gmail.com,
-        samjonas@amazon.com
-Subject: [PATCH 4.19 11/12] bpf: Tighten speculative pointer arithmetic mask
-Date:   Thu, 27 May 2021 20:37:31 +0300
-Message-Id: <20210527173732.20860-12-ovidiu.panait@windriver.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210527173732.20860-1-ovidiu.panait@windriver.com>
-References: <20210527173732.20860-1-ovidiu.panait@windriver.com>
-Content-Type: text/plain
-X-Originating-IP: [46.97.150.20]
-X-ClientProxiedBy: VI1P189CA0013.EURP189.PROD.OUTLOOK.COM
- (2603:10a6:802:2a::26) To BN6PR11MB1956.namprd11.prod.outlook.com
- (2603:10b6:404:104::19)
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RGQxDcEjjg+Fn2jV2zJJJtwy2BNmbQqLO01I8hjhsLs=;
+        b=pSuyJo6kOZC1h5ebYfG6bhkJFJFfzD6qYz+VHyGohV/EQoO8V9pwzHmPnYjqeGtgA2
+         WkhAqHvNEAYb3LBbGCLbZWzgPFI9DWz8lFu498YPvpFllyif6TBlw+IVXNBFO9ss791k
+         zCeg8KE5+sp39eDDa2KLW1shkkokM4k2vusXLFietf5K2VlOf5S3d6Htvdr+QgMpbfhk
+         mCvRv1fN7XHx1AGuV5JgZP33mfSPryEqPofQUk9MQRFJmqzbRhuzkxV99WO1zFPevDVk
+         iTIp+kaS4ddvZVFQRkx0dMoOau1p0U5SLQU1qJWs6ShDusXQcUbiHskiyUzNCkyUet5P
+         ++Kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RGQxDcEjjg+Fn2jV2zJJJtwy2BNmbQqLO01I8hjhsLs=;
+        b=TSXsL2ef4pzH0CiaUi/hwFm6u+C1LEBAI/aTUaaP+VO9C7y3McMgZOn29A9vZ1iaNI
+         LCRCaRL4egGI8o6w2k/d8KYtcxFiPpSy2iE+sPJxhvHGL/e8gTiaCj+fDNu0mt9ioeUA
+         i1dGz4EplRgpNuHNzUCcQnfjPdZU8UF9nP0YPc+7TkAAyNRvyQwfJaGoCH/p5btJL0aM
+         nh7czcZz2veCB0WD8ayp8hrP1bASLa+V6YmwhyQ17oVEI7Z1rrxltJ3E5JJYx7ZFH3ZJ
+         Nu/HXAA7U2BIeNUh97VTUXoOvGbp/dLNH7FD1sHAOy/e85RrZOQJlFzhNVJE35KsdtGp
+         /khg==
+X-Gm-Message-State: AOAM530iWRoEfMVQoSHfyDLggEvn0jn9znlTCt1HvlJ1ioCXui/MPqjk
+        F7ORuOhTmnl28SofzD2h9NYV3Gwuqax6AcErHt0=
+X-Google-Smtp-Source: ABdhPJwz7pAHBpniJO6Os8L3ts1VQq5YpxS6sGn8uPFsxm0u5Pm+vpE5mppuyYDLVm9lOHmYk7SQ0YDMdiq2zRJluOk=
+X-Received: by 2002:a25:7246:: with SMTP id n67mr6579177ybc.510.1622137452030;
+ Thu, 27 May 2021 10:44:12 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from otp-linux01.wrs.com (46.97.150.20) by VI1P189CA0013.EURP189.PROD.OUTLOOK.COM (2603:10a6:802:2a::26) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4173.20 via Frontend Transport; Thu, 27 May 2021 17:38:39 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: cdc742c4-dbca-46d2-4d6e-08d92136446c
-X-MS-TrafficTypeDiagnostic: BN6PR1101MB2162:
-X-Microsoft-Antispam-PRVS: <BN6PR1101MB2162EC7D2BDFCC224F82B181FE239@BN6PR1101MB2162.namprd11.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 9fGTrGlfuBC1AjklYYih+dK2rhl/ShoBck526ihl1ND2LB/4Ao/PsQQc3SgdAOPrHzj7/ieDNJ3vsHVoJs74ws+jKeDrHlJifJ1lAyeUoM7pMLnRCiMbUdIsrxUajU0jmh4vvNeF/B39n3/UC680hgyQTMBr/J59uLs8eDpttNGn/A4O7sDKxWUqx3e7wKCEylYTOzcSHmnlzUQ3wiu54EUU5AHf2Ia0yyQIG+bWWUjzDmocVK6H8kZ9wf+A1JVA0Omz6H50WBHS4qFwDi4jd/xPTm49CcQzlF0diDXsWcxYlPx2+3voX3K6ZlQnM7WDhHOtXUZqzBTls/f9QSZRbRfsME2v3dN9bsq8YHB2p12kqOKgWuHeUlb4cJ/HhpSjGUS//bvXC7Got0wuVJ2bqoT0yj5sOAZJWRjWo98lrrqKcebp0b06STHOhX1V1Twg0HrnQhsrJ3wQBhm4wMn1GS9+FwVovRFp8urH+5ay6jWqC29zHW+ixb9GdgZMx1rbe8qjYNNJj7fIP2JDWFCmTJ7hCCNSQR7mcy72JG7hdUmdnedxjH1stNPCv5RJGdgUs9p97JwSMksnwLuqk9vUJ+REYM59Ne5+mL80IWVC+CB2GpDvRf3oUerSGoos3gzRsFq4iiTArLwnZXpNwGi1+Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR11MB1956.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(376002)(39850400004)(136003)(396003)(346002)(66556008)(86362001)(8676002)(36756003)(6916009)(26005)(83380400001)(4326008)(5660300002)(316002)(8936002)(6666004)(66476007)(52116002)(6506007)(6512007)(478600001)(956004)(38350700002)(2616005)(66946007)(6486002)(186003)(44832011)(1076003)(38100700002)(16526019)(2906002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?BHW7ZU7yTw3D6EiimWolRSy5LO/BGAFOtLBp3F2nac0OdOknx9h5Ib1pLre7?=
- =?us-ascii?Q?y1t/ZjA7ZxnN6A8a2j6dRQtxGmfMapD+fCLmF868bD3LlOgOm3wxtYwdtnkw?=
- =?us-ascii?Q?qY2a/XScAjiLLzevPOi9wU1lXHOebRwp3mmrcRpSzdsqdEu7toSjhXg4Dp+p?=
- =?us-ascii?Q?b2qnVHZqovX8U6Cfx1gn7e9zuaDfzioQUGtOdFx0cWfi6sMCzpGTrtjtiq8d?=
- =?us-ascii?Q?wzxm0av9F0tU8CurjZqgTQrOPDD0PPUl6z1YhYmgwg8zZY98Yh8xVyoNwG3A?=
- =?us-ascii?Q?4fEp9amNkmriHy5BBXiCr+BPL2HZ+gHwtrVgbhxVLhS2VJ+ouhADJUTNBf9o?=
- =?us-ascii?Q?+k6t3/iJYt1R1h9FNYEb+NTXxUmu56CGJzHq62I+8Mod8mnoU2Eb4dYYMTr6?=
- =?us-ascii?Q?hC9FI+IV6u9GONdkwgTDmzYgeQ9eKm3qHzzPJtDVWZTsLretHJZw7f52HVFB?=
- =?us-ascii?Q?+hiNg/GRg5qrEN4Pz4RBe0Afc3Yiut9fIujPzXuUcmTwLMkecrChJEj/HHi6?=
- =?us-ascii?Q?KK6NmUo7p82pa5EN+5iC4gUzkld21dMRkT1nXZkwu0ejGetA806pGShIRBJ1?=
- =?us-ascii?Q?oTfRO2xDOpsbhDxe5P32jVCm6K3QgSxxg6bYbcBWSM89t2T2BoKqWF62bBwW?=
- =?us-ascii?Q?QDLc5NxkxYjgxeAgnjpJ1cP08v73fITGVih0hgT+fFzTvF99bDdiG/5BNW4k?=
- =?us-ascii?Q?NYwSXTLAsNLUmfr5+C0GpbeLkSm9kfcGk8En4xHo4+AWzwZQfKYvGRMR8oSW?=
- =?us-ascii?Q?Ja2vcAjli4ya5VszEXptALv1sqMENMZSszliHiFZbtAQwrhZGhoFSGhABvb/?=
- =?us-ascii?Q?YYmbR8mBsDtbvONrW8zLcafAChoAr59SsfsTEu4FHssprmW+TjvchPdoE9iI?=
- =?us-ascii?Q?PPxzt7YEpYpeGJsxrAGfDG6mNKjj8744B5LXkb2WxB1/XyppFlBL11HZHAT3?=
- =?us-ascii?Q?MFxLmNbbl13OPQxpb4yLZOv83Ky+kn02bENG3csPTEEnZ6FQ5M+1oeKmn672?=
- =?us-ascii?Q?t/7xJikNM6k2ZxzV5NXgPkwpyzWFj9Z+Q7M5xfXHbWgcBRY259K974ZJltuA?=
- =?us-ascii?Q?b52W35PpGtj6oPxcBmeeBxP+HtOLXjgtEKjOkzPBLYYXY9b/YjT8hKr6g3dm?=
- =?us-ascii?Q?X2vGjLldNrZgcJw0fMQ9qPL5c+zghDGUHX9zpQbQkbH1MJ5mMjpRHgMDiGXC?=
- =?us-ascii?Q?Q48d7/6Z1wbDmd4EI2ozTVQ6d4Sqmetw+3Rp8vmkMOekE7qhVghImxUFLbtR?=
- =?us-ascii?Q?eB9V/xD/nhAC0RyW0J5ERhAlyAtd8u/yO0/5iTpQR25lzfmlJPdZmyueiCuM?=
- =?us-ascii?Q?8zmyje4778gKOum0BKH8RtCG?=
-X-OriginatorOrg: windriver.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cdc742c4-dbca-46d2-4d6e-08d92136446c
-X-MS-Exchange-CrossTenant-AuthSource: BN6PR11MB1956.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 May 2021 17:38:41.1563
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: oMDmxn98dzwnn49cOr3T2T2sOZ00uK8gsS0IaX/+xwEw0+UV3Rw4zgjhBjPSicJQRYFGN2ggLYDzdME4YcZ2pv2Yfg9QEX3cF5r45ZZ8WOY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR1101MB2162
-X-Proofpoint-ORIG-GUID: spYghOng0lH20TbKmAxZTkMMuBDysYKV
-X-Proofpoint-GUID: spYghOng0lH20TbKmAxZTkMMuBDysYKV
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-05-27_09:2021-05-27,2021-05-27 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
- lowpriorityscore=0 mlxlogscore=999 malwarescore=0 adultscore=0 spamscore=0
- clxscore=1015 mlxscore=0 suspectscore=0 impostorscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104190000
- definitions=main-2105270113
+References: <20210526125848.1c7adbb0@carbon> <CAEf4BzYXUDyQaBjZmb_Q5-z3jw1-Uvdgxm+cfcQjSwb9oRoXnQ@mail.gmail.com>
+ <60aeb01ebcd10_fe49208b8@john-XPS-13-9370.notmuch> <CAEf4Bza3m5dwZ_d0=zAWR+18f5RUjzv9=1NbhTKAO1uzWg_fzQ@mail.gmail.com>
+ <60aeeb5252147_19a622085a@john-XPS-13-9370.notmuch>
+In-Reply-To: <60aeeb5252147_19a622085a@john-XPS-13-9370.notmuch>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 27 May 2021 10:44:00 -0700
+Message-ID: <CAEf4Bzb1OZHpHYagbVs7s9tMSk4wrbxzGeBCCBHQ-qCOgdu6EQ@mail.gmail.com>
+Subject: Re: XDP-hints: Howto support multiple BTF types per packet basis?
+To:     John Fastabend <john.fastabend@gmail.com>
+Cc:     Jesper Dangaard Brouer <brouer@redhat.com>,
+        BPF-dev-list <bpf@vger.kernel.org>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
+        Magnus Karlsson <magnus.karlsson@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Saeed Mahameed <saeed@kernel.org>,
+        "kurt@linutronix.de" <kurt@linutronix.de>,
+        "Raczynski, Piotr" <piotr.raczynski@intel.com>,
+        "Zhang, Jessica" <jessica.zhang@intel.com>,
+        "Maloor, Kishen" <kishen.maloor@intel.com>,
+        "Gomes, Vinicius" <vinicius.gomes@intel.com>,
+        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
+        "Swiatkowski, Michal" <michal.swiatkowski@intel.com>,
+        "Plantykow, Marta A" <marta.a.plantykow@intel.com>,
+        "Desouza, Ederson" <ederson.desouza@intel.com>,
+        "Song, Yoong Siang" <yoong.siang.song@intel.com>,
+        "Czapnik, Lukasz" <lukasz.czapnik@intel.com>,
+        "Joseph, Jithu" <jithu.joseph@intel.com>,
+        William Tu <u9012063@gmail.com>,
+        Ong Boon Leong <boon.leong.ong@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Daniel Borkmann <daniel@iogearbox.net>
+On Wed, May 26, 2021 at 5:44 PM John Fastabend <john.fastabend@gmail.com> wrote:
+>
+> [...]
+>
+> > > Best to start with the simplest possible usable thing and get more
+> > > complex over time.
+> > >
+> > > For a C definition I would expect drivers to do something like this,
+> > >
+> > >  struct mynic_rx_descriptor {
+> > >         __u64 len;
+> > >         __u64 head;
+> > >         __u64 tail;
+> > >         __u64 foobar;
+> > >  }
+> > >
+> > >  struct mynic_metadata {
+> > >         __u64 timestamp;
+> > >         __u64 hash;
+> > >         __u64 pkt_type;
+> > >         struct mynic_rx_descriptor *ptr_to_rx;
+> > >         /* other things */
+> > >  }
+> > >
+> > > It doesn't really matter how the driver folks generate their metadata
+> > > though. They might use some non-C thing that is more natural for
+> > > writing parser/action/tcam codes.
+> > >
+> > > Anyways given some C block like above we generate BTF from above
+> > > using normal method, quick hack just `pahole -J` the thing. Now we
+> > > have a BTF file.
+> > >
+> > > Next up write some XDP program to do something with it,
+> > >
+> > >  void myxdp_prog(struct xdp_md *ctx) {
+> > >         struct mynic_metadata m = (struct mynic_metadata *)ctx->data_meta;
+> > >
+> > >         // now I can get data using normal CO-RE
+> > >         // I usually have this _(&) to put CO-RE attributes in I
+> > >         // believe that is standard? Or use the other macros
+> > >         __u64 pkt_type = _(&m->pkt_type)
+> >
+> > add __attribute__((preserve_access_index)) to the struct
+> > mynic_metadata above (when compiling your BPF program) and you don't
+> > need _() ugliness:
+>
+> +1. Although sometimes I like the ugliness so I can keep track
+> of whats in CO-RE and not.
 
-commit 7fedb63a8307dda0ec3b8969a3b233a1dd7ea8e0 upstream.
+Oh, I'm just against using underscore as an identifier, I'd use
+something a bit more explicit.
 
-This work tightens the offset mask we use for unprivileged pointer arithmetic
-in order to mitigate a corner case reported by Piotr and Benedict where in
-the speculative domain it is possible to advance, for example, the map value
-pointer by up to value_size-1 out-of-bounds in order to leak kernel memory
-via side-channel to user space.
+>
+> >
+> > __u64 pkt_type = m->pkt_type; /* it's CO-RE relocatable already */
+> >
+> > we have preserve_access_index as a code block (some selftests do this)
+> > for cases when you can't annotate types
+> >
+> > >
+> > >         // we can even walk into structs if we have probe read
+> > >         // around.
+> > >         struct mynic_rx_descriptor *rxdesc = _(&m->ptr_to_rx)
+> > >
+> > >         // now do whatever I like with above metadata
+> > >  }
+> > >
+> > > Run above program through normal CO-RE pass and as long as it has
+> > > access to the BTF from above it will work. I have some logic
+> > > sitting around to stitch two BTF blocks together but we have
+> > > that now done properly for linking.
+> >
+> > "stitching BTF blocks together" sort of jumped out of nowhere, what is
+> > this needed for? And not sure what "BTF block" means exactly, it's a
+> > new terminology.
+>
+> I didn't know what the correct terminology here would be.
 
-Before this change, the computed ptr_limit for retrieve_ptr_limit() helper
-represents largest valid distance when moving pointer to the right or left
-which is then fed as aux->alu_limit to generate masking instructions against
-the offset register. After the change, the derived aux->alu_limit represents
-the largest potential value of the offset register which we mask against which
-is just a narrower subset of the former limit.
+I just wasn't sure if "BTF block" is a single BTF type or it's a
+collection of types built on top of vmlinux BTF (what we call split
+BTF). Seems like it's the latter.
 
-For minimal complexity, we call sanitize_ptr_alu() from 2 observation points
-in adjust_ptr_min_max_vals(), that is, before and after the simulated alu
-operation. In the first step, we retieve the alu_state and alu_limit before
-the operation as well as we branch-off a verifier path and push it to the
-verification stack as we did before which checks the dst_reg under truncation,
-in other words, when the speculative domain would attempt to move the pointer
-out-of-bounds.
+>
+> What I meant is I think what you have here,
+>
+> "
+>  BTW, not that I encourage such abuse, but for the experiment's sake,
+>  you can (ab)use module BTFs mechanism today to allow dynamically
+>  adding/removing split BTFs built on top of kernel (vmlinux) BTF
+> "
+>
+> So if vendor/driver writer has a BTF file for whatever the current
+> hardware is doing we can use the split BTF build mechanism to
+> include it. This can be used to get Jespers dynamic reprogram
+> hardware example. We just need someway to get the BTF of the
+> current running hardware. What I'm suggesting to get going we
+> can just take that out of band, libbpf/kernel don't have
+> to care where it comes from as long as libbpf can consume the
+> split BTFs before doing CO-RE.
+>
+> With this model I can have a single XDP program and it will
+> run on multiple hardware or the same hardware across updates
+> when I can use the normal CO-RE macros to access the metadata.
+> When I update my hardware I just need to get ahold of the
+> BTF when I do that update and my programs will continue to
+> work.
+>
+> Once we show the value of above we can talk about a driver
+> mechanism to expose the BTF over some interface, maybe in
+> /sys/fs. But that would still look like a split BTF from libbpf
+> side. The advantage is it should work today.
 
-In the second step, we retrieve the new alu_limit and calculate the absolute
-distance between both. Moreover, we commit the alu_state and final alu_limit
-via update_alu_sanitation_state() to the env's instruction aux data, and bail
-out from there if there is a mismatch due to coming from different verification
-paths with different states.
+Right, except I don't think we have libbpf APIs to specify this, but
+that's solvable.
 
-Reported-by: Piotr Krysiuk <piotras@gmail.com>
-Reported-by: Benedict Schlueter <benedict.schlueter@rub.de>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Reviewed-by: John Fastabend <john.fastabend@gmail.com>
-Acked-by: Alexei Starovoitov <ast@kernel.org>
-Tested-by: Benedict Schlueter <benedict.schlueter@rub.de>
-[fllinden@amazon.com: backported to 5.4]
-Signed-off-by: Frank van der Linden <fllinden@amazon.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-[OP: backport to 4.19]
-Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
----
- kernel/bpf/verifier.c | 70 +++++++++++++++++++++++++++----------------
- 1 file changed, 44 insertions(+), 26 deletions(-)
+>
+> I called the process of taking two BTF files, vmlinux BTF and
+> user provided NIC metadata BTF, and using those for CO-RE
+> logic "stitching BTF blocks together".
+>
+> >
+> > >
+> > > probe_read from XDP should be added regardless of above. I've
+> > > found it super handy in skmsg programs to dig out kernel info
+> > > inline. With probe_read we can also start to walk net_device
+> > > struct for more detailed info as needed. Or into sock structs
+> >
+> > yes, libbpf provides BPF_CORE_READ() macro that allows to walk across
+> > struct referenced by pointers, e.g.,:
+> >
+> > int my_data = BPF_CORE_READ(m, ptr_to_rx, rx_field);
+> >
+> > is logical equivalent of
+> >
+> > int my_data = m->ptr_to_rx->rx_field;
+>
+> The only complication here is ptr_to_rx is outside XDP data
+> so we need XDP program to support probe_read(). So depending
+> on current capabilities a BPF program might be limited to
+> just its own data block or with higher caps able to use
+> more of the features.
+>
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 1c1736851581..38866ba16035 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -2744,7 +2744,7 @@ static int retrieve_ptr_limit(const struct bpf_reg_state *ptr_reg,
- 	bool off_is_neg = off_reg->smin_value < 0;
- 	bool mask_to_left = (opcode == BPF_ADD &&  off_is_neg) ||
- 			    (opcode == BPF_SUB && !off_is_neg);
--	u32 off, max = 0, ptr_limit = 0;
-+	u32 max = 0, ptr_limit = 0;
- 
- 	if (!tnum_is_const(off_reg->var_off) &&
- 	    (off_reg->smin_value < 0) != (off_reg->smax_value < 0))
-@@ -2753,23 +2753,18 @@ static int retrieve_ptr_limit(const struct bpf_reg_state *ptr_reg,
- 	switch (ptr_reg->type) {
- 	case PTR_TO_STACK:
- 		/* Offset 0 is out-of-bounds, but acceptable start for the
--		 * left direction, see BPF_REG_FP.
-+		 * left direction, see BPF_REG_FP. Also, unknown scalar
-+		 * offset where we would need to deal with min/max bounds is
-+		 * currently prohibited for unprivileged.
- 		 */
- 		max = MAX_BPF_STACK + mask_to_left;
--		off = ptr_reg->off + ptr_reg->var_off.value;
--		if (mask_to_left)
--			ptr_limit = MAX_BPF_STACK + off;
--		else
--			ptr_limit = -off - 1;
-+		ptr_limit = -(ptr_reg->var_off.value + ptr_reg->off);
- 		break;
- 	case PTR_TO_MAP_VALUE:
- 		max = ptr_reg->map_ptr->value_size;
--		if (mask_to_left) {
--			ptr_limit = ptr_reg->umax_value + ptr_reg->off;
--		} else {
--			off = ptr_reg->smin_value + ptr_reg->off;
--			ptr_limit = ptr_reg->map_ptr->value_size - off - 1;
--		}
-+		ptr_limit = (mask_to_left ?
-+			     ptr_reg->smin_value :
-+			     ptr_reg->umax_value) + ptr_reg->off;
- 		break;
- 	default:
- 		return REASON_TYPE;
-@@ -2824,10 +2819,12 @@ static int sanitize_ptr_alu(struct bpf_verifier_env *env,
- 			    struct bpf_insn *insn,
- 			    const struct bpf_reg_state *ptr_reg,
- 			    const struct bpf_reg_state *off_reg,
--			    struct bpf_reg_state *dst_reg)
-+			    struct bpf_reg_state *dst_reg,
-+			    struct bpf_insn_aux_data *tmp_aux,
-+			    const bool commit_window)
- {
-+	struct bpf_insn_aux_data *aux = commit_window ? cur_aux(env) : tmp_aux;
- 	struct bpf_verifier_state *vstate = env->cur_state;
--	struct bpf_insn_aux_data *aux = cur_aux(env);
- 	bool off_is_neg = off_reg->smin_value < 0;
- 	bool ptr_is_dst_reg = ptr_reg == dst_reg;
- 	u8 opcode = BPF_OP(insn->code);
-@@ -2846,18 +2843,33 @@ static int sanitize_ptr_alu(struct bpf_verifier_env *env,
- 	if (vstate->speculative)
- 		goto do_sim;
- 
--	alu_state  = off_is_neg ? BPF_ALU_NEG_VALUE : 0;
--	alu_state |= ptr_is_dst_reg ?
--		     BPF_ALU_SANITIZE_SRC : BPF_ALU_SANITIZE_DST;
--
- 	err = retrieve_ptr_limit(ptr_reg, off_reg, &alu_limit, opcode);
- 	if (err < 0)
- 		return err;
- 
-+	if (commit_window) {
-+		/* In commit phase we narrow the masking window based on
-+		 * the observed pointer move after the simulated operation.
-+		 */
-+		alu_state = tmp_aux->alu_state;
-+		alu_limit = abs(tmp_aux->alu_limit - alu_limit);
-+	} else {
-+		alu_state  = off_is_neg ? BPF_ALU_NEG_VALUE : 0;
-+		alu_state |= ptr_is_dst_reg ?
-+			     BPF_ALU_SANITIZE_SRC : BPF_ALU_SANITIZE_DST;
-+	}
-+
- 	err = update_alu_sanitation_state(aux, alu_state, alu_limit);
- 	if (err < 0)
- 		return err;
- do_sim:
-+	/* If we're in commit phase, we're done here given we already
-+	 * pushed the truncated dst_reg into the speculative verification
-+	 * stack.
-+	 */
-+	if (commit_window)
-+		return 0;
-+
- 	/* Simulate and find potential out-of-bounds access under
- 	 * speculative execution from truncation as a result of
- 	 * masking when off was not within expected range. If off
-@@ -2969,6 +2981,7 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
- 	    smin_ptr = ptr_reg->smin_value, smax_ptr = ptr_reg->smax_value;
- 	u64 umin_val = off_reg->umin_value, umax_val = off_reg->umax_value,
- 	    umin_ptr = ptr_reg->umin_value, umax_ptr = ptr_reg->umax_value;
-+	struct bpf_insn_aux_data tmp_aux = {};
- 	u8 opcode = BPF_OP(insn->code);
- 	u32 dst = insn->dst_reg;
- 	int ret;
-@@ -3018,12 +3031,15 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
- 	    !check_reg_sane_offset(env, ptr_reg, ptr_reg->type))
- 		return -EINVAL;
- 
--	switch (opcode) {
--	case BPF_ADD:
--		ret = sanitize_ptr_alu(env, insn, ptr_reg, off_reg, dst_reg);
-+	if (sanitize_needed(opcode)) {
-+		ret = sanitize_ptr_alu(env, insn, ptr_reg, off_reg, dst_reg,
-+				       &tmp_aux, false);
- 		if (ret < 0)
- 			return sanitize_err(env, insn, ret, off_reg, dst_reg);
-+	}
- 
-+	switch (opcode) {
-+	case BPF_ADD:
- 		/* We can take a fixed offset as long as it doesn't overflow
- 		 * the s32 'off' field
- 		 */
-@@ -3074,10 +3090,6 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
- 		}
- 		break;
- 	case BPF_SUB:
--		ret = sanitize_ptr_alu(env, insn, ptr_reg, off_reg, dst_reg);
--		if (ret < 0)
--			return sanitize_err(env, insn, ret, off_reg, dst_reg);
--
- 		if (dst_reg == off_reg) {
- 			/* scalar -= pointer.  Creates an unknown scalar */
- 			verbose(env, "R%d tried to subtract pointer from scalar\n",
-@@ -3160,6 +3172,12 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
- 
- 	if (sanitize_check_bounds(env, insn, dst_reg) < 0)
- 		return -EACCES;
-+	if (sanitize_needed(opcode)) {
-+		ret = sanitize_ptr_alu(env, insn, dst_reg, off_reg, dst_reg,
-+				       &tmp_aux, true);
-+		if (ret < 0)
-+			return sanitize_err(env, insn, ret, off_reg, dst_reg);
-+	}
- 
- 	return 0;
- }
--- 
-2.17.1
+Right.
 
+> >
+> > > for process level conntrack (other thread). Even without
+> > > probe_read above would be useful but fields would need to fit
+> > > into the metadata where we know we can read/write data.
+> > >
+> > > Having drivers export their BTF over a /sys/fs/ interface
+> > > so that BTF can change with fimware/parser updates is possible
+> > > as well, but I would want to see above working in real world
+> > > before committing to a /sys/fs interface. Anyways the
+> > > interface is just a convienence.
+> >
+> > it's important enough to discuss because libbpf has to get it somehow
+> > (or be directly provided as an extra option or something).
+>
+> I believe to start with directly providing it is the easiest
+> approach. Then as a second step we can pull it from a /sys/fs
+> interface.
+>
+> >
+> > >
+> > > >
+> > > > As for BTF on a per-packet basis. This means that BTF itself is not
+> > > > known at the BPF program verification time, so there will be some sort
+> > > > of if/else if/else conditions to handle all recognized BTF IDs? Is
+> > > > that right? Fake but specific code would help (at least me) to
+> > > > actually join the discussion. Thanks.
+> > >
+> > > I don't think we actually want per-packet data that sounds a bit
+> > > clumsy for me. Lets use a union and define it so that we have a
+> > > single BTF.
+> >
+> > union and independent set of BTFs are two different things, I'll let
+> > you guys figure out which one you need, but I replied how it could
+> > look like in CO-RE world
+>
+> I think a union is sufficient and more aligned with how the
+> hardware would actually work.
+
+Sure. And I think those are two orthogonal concerns. You can start
+with a single struct mynic_metadata with union inside it, and later
+add the ability to swap mynic_metadata with another
+mynic_metadata___v2 that will have a similar union but with a
+different layout.
+
+>
+> >
+> > >
+> > >  struct mynic_metadata {
+> > >   __u64 pkt_type
+> > >   union {
+> > >       struct ipv6_meta meta;
+> > >       struct ipv4_meta meta;
+> > >       struct arp_meta meta;
+> >
+> > obviously fields can't be named the same, so you'll have meta_ipv6,
+>
+> Sure just typing a quick example.
+>
+> > meta_ipv4, meta_arp fields, but I get the idea. This works if BTF
+> > layout is set in stone. What Jesper proposes would allow to adds new
+> > BTF layouts at runtime and still be able to handle that (as in detect
+> > and ignore) with already running BPF programs.
+>
+> Same answer as above. As long as the BTF can be split into two
+> files I don't think libbpf should care if its always the same
+> NIC.btf + vmlinux.btf or diffent correct?
+>
+> >
+> > CO-RE is sufficiently sophisticated to handle both today, so I don't care :)
+>
+> +1
+>
+> >
+> > >   }
+> > >  };
+> > >
+> > > Then program has to swivel on pkt_type but that is most natural
+> > > C thing to do IMO.
+> > >
+> > > Honestly we have about 90% of the necessary bits to do this now.
+> > > Typed that up a bit fast hope its legible. Got a lot going on today.
+> > >
+> > > Andrii, make sense?
+> >
+> > Yes, thanks! The logistics of getting that BTF to libbpf is the most
+> > fuzzy area and not worked out completely. The low-level details of
+> > relocations are already in place if libbpf can be pointed to the right
+> > set of BTF types.
+>
+> Per above, getting that BTF to libbpf should be a user problem for
+> a bit. Once how those programs look is worked out I think drivers
+> can push them out via /sys/kernel/btf/mynic
+>
+> >
+> > BTW, not that I encourage such abuse, but for the experiment's sake,
+> > you can (ab)use module BTFs mechanism today to allow dynamically
+> > adding/removing split BTFs built on top of kernel (vmlinux) BTF. I
+> > suggest looking into how module BTFs are handled both inside the
+> > kernel and in libbpf.
+> >
+>
+> Exactly the abuse I was thinking ;)
