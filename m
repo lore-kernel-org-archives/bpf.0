@@ -7,32 +7,32 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4545C47092
-	for <bpf@archiver.kernel.org>; Thu, 27 May 2021 17:38:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0817EC4708B
+	for <bpf@archiver.kernel.org>; Thu, 27 May 2021 17:38:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BA594610A5
-	for <bpf@archiver.kernel.org>; Thu, 27 May 2021 17:38:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E0C86610A5
+	for <bpf@archiver.kernel.org>; Thu, 27 May 2021 17:38:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234993AbhE0RkW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 27 May 2021 13:40:22 -0400
-Received: from mx0b-0064b401.pphosted.com ([205.220.178.238]:44036 "EHLO
+        id S235115AbhE0RkZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 27 May 2021 13:40:25 -0400
+Received: from mx0b-0064b401.pphosted.com ([205.220.178.238]:47866 "EHLO
         mx0b-0064b401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235115AbhE0RkV (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 27 May 2021 13:40:21 -0400
-Received: from pps.filterd (m0250812.ppops.net [127.0.0.1])
-        by mx0a-0064b401.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 14RHXKjn026033;
-        Thu, 27 May 2021 17:38:33 GMT
+        by vger.kernel.org with ESMTP id S235205AbhE0RkY (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 27 May 2021 13:40:24 -0400
+Received: from pps.filterd (m0250811.ppops.net [127.0.0.1])
+        by mx0a-0064b401.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 14RHY8ni002761;
+        Thu, 27 May 2021 17:38:37 GMT
 Received: from nam02-bn1-obe.outbound.protection.outlook.com (mail-bn1nam07lp2048.outbound.protection.outlook.com [104.47.51.48])
-        by mx0a-0064b401.pphosted.com with ESMTP id 38tfbh81bx-1
+        by mx0a-0064b401.pphosted.com with ESMTP id 38ss3vs2pd-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 May 2021 17:38:33 +0000
+        Thu, 27 May 2021 17:38:36 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=f9ZUQjAb0ih1hhGUQAUlVXsB/7LHu+YYyCoiGQaTJFu4zwi0gwso3+yXa5PFA/GhKYSDAp0effnbn6APwMZevFF6wEjoO4qOz8MDKIiLBrO3+WVwdtcEGvr7VoSMNmSi37qCvjsSS5PrbMGSz8NNP5WYbRCLMHMX+DA22pZ4c34dPKsVj15lP3yV54BawVEs8vCJ4PuZueaphpTORFn1brqSiwtsxhT6YcacsxPz77yMWORBV+riEAWjvsYn8q5udKboUBLbzH3oJtAAI+z7En9SO1gXuNcx2xlWBUfDcP60KJ3vdh2d+guASUAn/VUHxvkhw0xTpgu2PT+RrEHzyA==
+ b=aUBNpwgYsmtd8o0/Wj0XPOHjAh2BKXUOUYZIiT7Im6wTl924ragRlY1HPNIAazWprA/yqVqd+kBboxsz7F3qQpcArwLgSMrTgE1rH0WqVSE6m/IP8nqs05G/gUT9aOAvgjRbJGoNEzI91aIkyCeu6eagkMlcvnkV00tGEfnmZZ+8n7GdfN1vZMysU7EkDWXDUsdNsmN+eBQP9ONUu8Wi5CgcowscAnU5W4TAYCb3NQPgN06p4q0QS1PG/UuR0eo6f6sPSYDHKmUH+MeoOCI4WgzVL9QpLAcncNXz9m+W2qMkux/7SpKn5RXj6rTMvfR5mcHtjLDv1gEvkRMtAHVXTQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YH7N7ascT3mSxquf9afBJ3d6TXAPiM8v6/dUIgma1XA=;
- b=g2M2SRPi2wJAp3SBtAZkuSU/hNFodeQtxEx9sjubpAjIgmYJIa7cZQUvli9jAX3zTXf+HiyQojMZB0IS8k/HayaLRqMe4PxctvFOTI6tjUgxR8BfPsjen5gBerYq6Dq5Kcp3/P+d5tgVzXh67dHnZuCIXyTJtIhoZsfYijzOLeZl1ubE7kLpOstviC49/UTWBIZV6fpNVfF7FD8D+u2qMiHVfvXLWlyYzXc7L/Z401tVbj6bQgKsFgwTdzeVLO6AWmXdQckoUojuGNEMHR1FVfw7TzpYa0lAobnnc4sG+XSssD+lWoYzv2cBvkIjFR1cI4nVjlsoLASidlaBI/rm0g==
+ bh=RveukoBfxcDM3x2lN7ZXhJ/4S4Np9t34jHuB27wE/ww=;
+ b=LtgpmKtldFo1VKVOxu9XG4CsdEG2PWgE+voM+MphbHWH1v3SsF58VDATGiw7y+ai14/ejl2ft69ojfEAiGermmTYpJyV33gW/Uk5ARtICi3AMUd3DCp3MxSxLkqN9YoiVv/Pi62c8eAIIgr7gQHkutMADLHLTackP97/sPf0qly76zRcOJdC/YEDNZ5NBLBDRTEHG4XAK7Us2Fal2wMRlz63lDmbEV/z9GtCQKVfuYK7OtYSd+xb6/vvHW/vV5sycfMdZvOqWBuIQk/rvJ7I+7wGvJqUP4ikjBwmEUcEeJP2m4Rqzvt+zuRfAXDvKC9Twk+3G+x18twLMmyehrI7hg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=windriver.com; dmarc=pass action=none
  header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
@@ -40,8 +40,8 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=windriversystems.onmicrosoft.com;
  s=selector2-windriversystems-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YH7N7ascT3mSxquf9afBJ3d6TXAPiM8v6/dUIgma1XA=;
- b=Q4QHiCpbULRVULJuv4oeyRhfXCVxVGvRahQHj1TQwvRIn4u+cAedce94zy/S8cSSwvHgG0jFv+Kmyib6AmWnLrviSGMYI2zNtINCZmpVNu3ivt+wT+sfXCRCMPYb4ZpBl9pJbTHtEmiYxxvk+C0dc1NcmoTSRyaw0ARpobtWu2U=
+ bh=RveukoBfxcDM3x2lN7ZXhJ/4S4Np9t34jHuB27wE/ww=;
+ b=kZRpRqK0Lof9QfF1m4c3RxVNXWNqppoedQGHjZKtSU9v0IKMkUVw+A9z3SRU+XFrVM61qrmVzQe1rkXnvI7cCJXB1XN+7e7ivJwjCfgCJyh7WWVqK44RJTKNzWwQKLwfWIiDYW1/MoATs6aEtIfKRhtN/q5Pn+EFPRaDDWW7X2M=
 Authentication-Results: vger.kernel.org; dkim=none (message not signed)
  header.d=none;vger.kernel.org; dmarc=none action=none
  header.from=windriver.com;
@@ -49,19 +49,19 @@ Received: from BN6PR11MB1956.namprd11.prod.outlook.com (2603:10b6:404:104::19)
  by BN6PR1101MB2162.namprd11.prod.outlook.com (2603:10b6:405:50::7) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4150.27; Thu, 27 May
- 2021 17:38:32 +0000
+ 2021 17:38:35 +0000
 Received: from BN6PR11MB1956.namprd11.prod.outlook.com
  ([fe80::f100:256b:e0af:7d33]) by BN6PR11MB1956.namprd11.prod.outlook.com
  ([fe80::f100:256b:e0af:7d33%3]) with mapi id 15.20.4173.024; Thu, 27 May 2021
- 17:38:32 +0000
+ 17:38:35 +0000
 From:   Ovidiu Panait <ovidiu.panait@windriver.com>
 To:     stable@vger.kernel.org
 Cc:     fllinden@amazon.com, bpf@vger.kernel.org, ast@kernel.org,
         daniel@iogearbox.net, yhs@fb.com, john.fastabend@gmail.com,
         samjonas@amazon.com
-Subject: [PATCH 4.19 06/12] bpf: Ensure off_reg has no mixed signed bounds for all types
-Date:   Thu, 27 May 2021 20:37:26 +0300
-Message-Id: <20210527173732.20860-7-ovidiu.panait@windriver.com>
+Subject: [PATCH 4.19 08/12] bpf: Improve verifier error messages for users
+Date:   Thu, 27 May 2021 20:37:28 +0300
+Message-Id: <20210527173732.20860-9-ovidiu.panait@windriver.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210527173732.20860-1-ovidiu.panait@windriver.com>
 References: <20210527173732.20860-1-ovidiu.panait@windriver.com>
@@ -72,76 +72,69 @@ X-ClientProxiedBy: VI1P189CA0013.EURP189.PROD.OUTLOOK.COM
  (2603:10b6:404:104::19)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from otp-linux01.wrs.com (46.97.150.20) by VI1P189CA0013.EURP189.PROD.OUTLOOK.COM (2603:10a6:802:2a::26) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4173.20 via Frontend Transport; Thu, 27 May 2021 17:38:30 +0000
+Received: from otp-linux01.wrs.com (46.97.150.20) by VI1P189CA0013.EURP189.PROD.OUTLOOK.COM (2603:10a6:802:2a::26) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4173.20 via Frontend Transport; Thu, 27 May 2021 17:38:34 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 71bca934-4c93-47a5-7d9f-08d921363ee0
+X-MS-Office365-Filtering-Correlation-Id: 5d570ecb-4243-4e8f-baca-08d92136411e
 X-MS-TrafficTypeDiagnostic: BN6PR1101MB2162:
-X-Microsoft-Antispam-PRVS: <BN6PR1101MB2162620B470CC784F94D3B41FE239@BN6PR1101MB2162.namprd11.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-Microsoft-Antispam-PRVS: <BN6PR1101MB216232E99D909AFCC4577BAFFE239@BN6PR1101MB2162.namprd11.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:206;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: M+5amRRD+wJAMEvwxxclOCrT90U8Zess3ib8XxUCZ7Fce4ytfEbIKo5sEjDBP7YWw0UKPp1v4CeotPouirhHnubQcq4DA3QdnK+wVqELsCop5j2uVEr8NKvobDISSawNtmuz2tVxzVrcI2g/IRLf+ejOJFoJ/uZpSKqR3suMnyeDMA6R3nPdgQSmWhoi/pWdoPQeJzeoqI8BKGWfDWIU2PHlV62Hr/o5bvny18q9h0Od7kMsljlGBNec6ZbE5prbsphLIyka1zPV3sD+PSaNPJNvlcLpINQGsJ3tIMbssSeLBO5SQzUxTloqbJeKWy/6OYv+NBcSM4fAl/BJ+/oOhJqp8//Yzkswes2VGmcdj9n3GHyMW4aUYlHiniTy9ZcOHfcZjf0aA95QT+rPvYt6eChyHupLzMrzBSO5mFcPuM54gAJ7cdBxVr24GOkL22+cwm86801LuqtqWhsoI5qJkLJGKTeTy6W0FwP/ZMrEZyyVXnVvGvsZNHbCaNar3SzGKb1wDonq0zQ21CehTH2dikNpdESdru89r3EIwDqDHPG8gS8ZMIw+PxDDaZ/rqhAdurTM4ad6MgmNm2tnE13mISBG4H6d7TkpwxccN2N+Fq9GC9S/yrwn+N9YuBlBSX6EmOQAYI4EGrDMzzCb0bNEQYLnuR7YAzoruP+kGzgShDI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR11MB1956.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(376002)(39850400004)(136003)(396003)(346002)(66556008)(86362001)(8676002)(36756003)(6916009)(26005)(83380400001)(4326008)(5660300002)(316002)(8936002)(6666004)(66476007)(52116002)(6506007)(6512007)(478600001)(956004)(38350700002)(2616005)(66946007)(6486002)(186003)(44832011)(1076003)(38100700002)(16526019)(2906002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?a/Q20X8PQJIHlJqt9ViIsI01Hs9KSXydeLBqh1BsikbiymEnWJxX+9eVgMox?=
- =?us-ascii?Q?6xKf/N46cDaB/HxmzM7Z5o9vVxEBi7y9N0H/SGR8fXJqplSv095ExLW2wSHZ?=
- =?us-ascii?Q?jgTypjCeBDNjvVxljSmMWmnOYxQ7IzaBWfb/84cokTu9pr00j58Xmsvj54XS?=
- =?us-ascii?Q?lOGeqeFN2VKunV7524127Ck/R7Qf0qi3F4B+zxE8lBippcbD4SrZy1+V8dr0?=
- =?us-ascii?Q?aq+k1MxL3UJFOni+qhwIxvKDUySaXTVWSKDMXB8rNtEdQ21r3BDoRRohpdZm?=
- =?us-ascii?Q?xoNomEf3YjrIbQ+tWrNkyHGJ3Lm/amRTp2xRpWBEaxt7tgS/1zkocz9qIytS?=
- =?us-ascii?Q?rSVhsYtMWiumSbvU3wr810VXDKjg9Bqja5mAWM1ciala9HcIfcwTOd/I0rTw?=
- =?us-ascii?Q?fr/i27SKOx9/47wT/sigsAUvGqgPBfTzhZTb9mxGJZmVeCfsUE4b34l5nh6P?=
- =?us-ascii?Q?amxDn/TanDV6Kkc/EBgZovyNDn429rc0Wdh25LhbSSpkZoRCxLOrVmyrucng?=
- =?us-ascii?Q?UviGJBntTSwflL34Aatt+QSxo+v78VWAdAT5MXWf/BOJPgKPDrCUHNunB+eN?=
- =?us-ascii?Q?/yxiK7FYuHgZcpJVOm/Be8PT9fzxe3GrzbHhv3vjZQxIWlTywHktHoU05KmG?=
- =?us-ascii?Q?xukk11L5h/AvSriGqCI5gVIquXDRsUmb+jCySrdAFkVm5i7zhFUEE5QzNBqG?=
- =?us-ascii?Q?a6UFAc9sUkSGWx2bPGv/Sae/f/R/Xa5KBIbn4i9qXvUyb4ym4ye5XdRzuh74?=
- =?us-ascii?Q?NRfurvvoNP4abZDegQ6DwVIFveUpYMxai8L9YSWYht13xThhY7GJ/wzct3J0?=
- =?us-ascii?Q?Xs48p1kCyjfUGC2q7xZ+cP9Yd4GyrRW1M2dSu+4ORxgxep6kGVjB7p+7W1uv?=
- =?us-ascii?Q?VMO1WbhyK+K2xmpcDmxDnyNq/LPJ0sAybdLnUwU5WsSREzrU2DFyjwzPThft?=
- =?us-ascii?Q?I/hKQkCixgyyvNugYjKGmEq/4c9mR2AaFetG5EXAnuVYBbuylXKemZm+A6rh?=
- =?us-ascii?Q?p4IPLI04z7/O35CBWlrtc77dQrK2TnfpvepYrARIQKUbOvKkDWlTr7N+/X7N?=
- =?us-ascii?Q?3Nf18rieGCX4IW7AaDIwWW8RmSJDXvm+7HoQXVszvyDZXpn1jdGI4H1bEs3R?=
- =?us-ascii?Q?2gpK70BM+C81/X70KvuaRVawo/rGPrHsEkSklQMcshZq54ClglosCb/BV3RQ?=
- =?us-ascii?Q?Fk6PT+Qlv4G4VkLw8IszEQIZuMfQL6UVAAVhbAqIQbNd3yAjyVsKUbPbVRlA?=
- =?us-ascii?Q?41x4yK58293+9hiRqzxXWDJe8SqSMJwOAUhFBVL4DWEG7x4HW1yrT8asmbit?=
- =?us-ascii?Q?6APQuceECGEZNM/9NUCEm9fA?=
+X-Microsoft-Antispam-Message-Info: Pm+E1EK+wQbpBGlvZI24E0BE1oGdaiylzmGJpGgFO9CCMCaJTbbEx/mcf0IIylx8n84/JBF2iX1wtER6voe6TcktJpIpqZ2jVXlhSwv93+O6nAU6vw8wGB9NND27h4/pl5EpoAvDGW06YiyNJM5g7PBo1gbqoj2Bke5BhfnJ9Cz11aswYALUOUfSHPOH7JPfHYb4j2SACkGLaSdsG3qFM9dvNlseg30SR92ARlKKPiXzquiukiRnAU5pFBcz9QtDteVZzXbGwSNsUFqnlpllvH6dKVfIhbu4M59VkSl7vuSf71yogmFIOJS2DLg+EKRhAoZnYHmMJf43QwQltsr+0jBwI3rdVwBCWh1/pZ2T99sctOo3L3wFzK2Lwc3sgtUEj5lFPRFgAStx0nL+pt3gvFfVZqlxX9uF++xYOgNaobHbF16X32fsAnRKYFVnWZKj+AL9yXu8H6hn1Z6INf+8CToxuKmF/jgP+UcVxmMAlRZ8ELTotUccIVyLaxdmKd/8qtwxo57tPECSQzZOh4GiwoxUbn5Om04A6HC3EwGrBQDJQvLZyW/jX0BQ8ZPoDl1MM78PrBVIMLOwSF31aei4x0a6NpgwKTS4x8+wjZ1HRNqzoM1jb2IyFT29pNWkJeSzUqdyuvBBLgm8PtGxj3gsluSPqC+QTfOgUWXPzQ9yYUInWv5qTD1o1+pn5swc4qxJ
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR11MB1956.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(376002)(39850400004)(136003)(396003)(346002)(66556008)(86362001)(8676002)(36756003)(6916009)(26005)(83380400001)(4326008)(5660300002)(316002)(8936002)(6666004)(66476007)(52116002)(6506007)(6512007)(478600001)(956004)(15650500001)(38350700002)(2616005)(66946007)(6486002)(186003)(44832011)(1076003)(38100700002)(16526019)(2906002)(19860200003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?Y9QCMkULEbH7w1ahzeATVk8jHOqbp1YofeI4vpFvgxzJ8NAss8TDi8Pmgwj7?=
+ =?us-ascii?Q?RW/MU+IyFq5GAYhLfp14AGQwN86YjWS72l59sDHTZ4RvJn6mUG+WeSs1rdUE?=
+ =?us-ascii?Q?O2uy/zxTYdp/mtPunfL9r5bAI6nZgCkj6fi9PfA0G26C3pdB7lyUu8aUO5SA?=
+ =?us-ascii?Q?l7IhUC4AG3XPlgokm2bF9BjE+wonFvGLngZ0cr29uKbNZTDOyQCjjm3VeWS1?=
+ =?us-ascii?Q?h33NkWne7sYYM3PMS3vU3qLGPVS5Bz2DjVQR0WFqIqU8ApDqi68Elkkxs5kj?=
+ =?us-ascii?Q?Gb9upu6UGtjQL0kOEGIKvbQFphvgmMVziH751ONQX9YkHaHaBT0uJKLyX8tz?=
+ =?us-ascii?Q?LXkJtqe2MLdI6NDhy+N6EssSgiEnLp+dEtpwes7s78ps0dqq7h/xzdFn9tGw?=
+ =?us-ascii?Q?brn5ze1SbLutI0myEAcqv8EEw6Q/yOwtm54Dik/H9OgIBB0VSej3Zv3CFRdC?=
+ =?us-ascii?Q?1amEXMpq5xFogq5xQs3vQhEkOwL6IFApHyClCExfrA8Cj7F5WnmtpK4yyPWL?=
+ =?us-ascii?Q?3r08rz+xzhL5w8lsG7kAgjwMl6ELDuNn7Pb3qplcQw+CFOzRIDiLnf5GRb/L?=
+ =?us-ascii?Q?74FJwc+/ov7W7uks5dIHtsYjfcv6n4mDCwQSvqpS2iFhT1/6KU600jXqrkSV?=
+ =?us-ascii?Q?x7SXk+YAz1AcNjZ8qm01bk7WXV0SMjjxxxOq57/4mS2FEhOud4dCQiQtM+VF?=
+ =?us-ascii?Q?PnCks/7nYm5DoY3m5/4i4A3gv049ntMiZb/t537swkwRXBmBFBqykTw33hWB?=
+ =?us-ascii?Q?MfHnwlpaBa4KILKJBJ6k0/9MqOtGuJ6Ci/myTsbcKce45TOY8cE3CL2aO31K?=
+ =?us-ascii?Q?hQQXQrdAtTfnmAdFcFNZcCIn/1vxoip+NS7DlRuac5vNeSa2KLvAgm3lQA/v?=
+ =?us-ascii?Q?ou86WY2ajsaiHARJ70RBKRsAmcaEa43JKoVZgSa9atjoD64dZh3Ww5vRhhaX?=
+ =?us-ascii?Q?9yw6UQoWxy94cXMt/A8iJ8he3gOEGrEW3r7iKS4fqXK6qi4v2eTSDrFtj0a8?=
+ =?us-ascii?Q?8fq4N7KipoBPtGJ3ww9p5dhkpyitl09BB09pp1jJmubbkb1zibR3WwWrb0qi?=
+ =?us-ascii?Q?Nztnu+q5MxQf1alWFU6uNMkQb0ZFHHxP74kuVjxfxq0wEGh8/L9Ywo0RQ3tY?=
+ =?us-ascii?Q?N84i+SaYrJhwEHqmfDTXtWOqtS6+rdUzPduDZ6W/ZePeXHvROcwHaso3pe51?=
+ =?us-ascii?Q?fpME3ylBOssnT3OHgeZZ/HNkyJwel6TEGa0LEb658SlW3F1jeYPrd6WNP2XC?=
+ =?us-ascii?Q?/kD0Jnj3/5Vn5JbD9NrVzg3tMyn/sObEsBWfq0a+ylTg6SJ1YMM4GRIWy4rF?=
+ =?us-ascii?Q?iA8n7ZDktVTZRg58PdiiOe1z?=
 X-OriginatorOrg: windriver.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 71bca934-4c93-47a5-7d9f-08d921363ee0
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5d570ecb-4243-4e8f-baca-08d92136411e
 X-MS-Exchange-CrossTenant-AuthSource: BN6PR11MB1956.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 May 2021 17:38:31.8425
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 May 2021 17:38:35.5768
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: SEh20vdv8JAVpiKneiMuvM85Y7UZEgoxclFSwMXeQrykgYVbpvbQhtFqnpyuSdK6xCn/pVwmUH4rp+q9s7H9KagpnHdpcRgUAtRa0ccBMBI=
+X-MS-Exchange-CrossTenant-UserPrincipalName: /bDpgksHdq19kVE09HkXpT8tp5PNQ/PTcQzMBmyVodtzt8bcIKVOuAhBRgx9g13ocs7WHrnh2/pMYTCGDVfrY7m1T84TGf5SFmzkz1JP+KA=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR1101MB2162
-X-Proofpoint-ORIG-GUID: S_bThrzegktHAeL9yEs_uxn7gBUnOFJy
-X-Proofpoint-GUID: S_bThrzegktHAeL9yEs_uxn7gBUnOFJy
+X-Proofpoint-GUID: p7gbY4__4dMuFavBt5XG8DMEqGGA1gp6
+X-Proofpoint-ORIG-GUID: p7gbY4__4dMuFavBt5XG8DMEqGGA1gp6
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
  definitions=2021-05-27_09:2021-05-27,2021-05-27 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
- lowpriorityscore=0 mlxlogscore=999 malwarescore=0 adultscore=0 spamscore=0
- clxscore=1015 mlxscore=0 suspectscore=0 impostorscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104190000
- definitions=main-2105270113
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 phishscore=0
+ mlxlogscore=955 spamscore=0 bulkscore=0 priorityscore=1501
+ lowpriorityscore=0 suspectscore=0 adultscore=0 impostorscore=0 mlxscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2105270113
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
 From: Daniel Borkmann <daniel@iogearbox.net>
 
-commit 24c109bb1537c12c02aeed2d51a347b4d6a9b76e upstream.
+commit a6aaece00a57fa6f22575364b3903dfbccf5345d upstream
 
-The mixed signed bounds check really belongs into retrieve_ptr_limit()
-instead of outside of it in adjust_ptr_min_max_vals(). The reason is
-that this check is not tied to PTR_TO_MAP_VALUE only, but to all pointer
-types that we handle in retrieve_ptr_limit() and given errors from the latter
-propagate back to adjust_ptr_min_max_vals() and lead to rejection of the
-program, it's a better place to reside to avoid anything slipping through
-for future types. The reason why we must reject such off_reg is that we
-otherwise would not be able to derive a mask, see details in 9d7eceede769
-("bpf: restrict unknown scalars of mixed signed bounds for unprivileged").
+Consolidate all error handling and provide more user-friendly error messages
+from sanitize_ptr_alu() and sanitize_val_alu().
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Reviewed-by: John Fastabend <john.fastabend@gmail.com>
@@ -149,68 +142,172 @@ Acked-by: Alexei Starovoitov <ast@kernel.org>
 [fllinden@amazon.com: backport to 5.4]
 Signed-off-by: Frank van der Linden <fllinden@amazon.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-[OP: backport to 4.19]
 Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
 ---
- kernel/bpf/verifier.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ kernel/bpf/verifier.c | 84 +++++++++++++++++++++++++++++++------------
+ 1 file changed, 62 insertions(+), 22 deletions(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 5e0646efac6d..b260bcc7215f 100644
+index 12db86ebede9..cb79307a3aa0 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -2730,12 +2730,18 @@ static struct bpf_insn_aux_data *cur_aux(struct bpf_verifier_env *env)
+@@ -2729,6 +2729,14 @@ static struct bpf_insn_aux_data *cur_aux(struct bpf_verifier_env *env)
+ 	return &env->insn_aux_data[env->insn_idx];
  }
  
- static int retrieve_ptr_limit(const struct bpf_reg_state *ptr_reg,
--			      u32 *ptr_limit, u8 opcode, bool off_is_neg)
-+			      const struct bpf_reg_state *off_reg,
-+			      u32 *ptr_limit, u8 opcode)
- {
-+	bool off_is_neg = off_reg->smin_value < 0;
- 	bool mask_to_left = (opcode == BPF_ADD &&  off_is_neg) ||
- 			    (opcode == BPF_SUB && !off_is_neg);
- 	u32 off, max;
- 
-+	if (!tnum_is_const(off_reg->var_off) &&
-+	    (off_reg->smin_value < 0) != (off_reg->smax_value < 0))
-+		return -EACCES;
++enum {
++	REASON_BOUNDS	= -1,
++	REASON_TYPE	= -2,
++	REASON_PATHS	= -3,
++	REASON_LIMIT	= -4,
++	REASON_STACK	= -5,
++};
 +
+ static int retrieve_ptr_limit(const struct bpf_reg_state *ptr_reg,
+ 			      const struct bpf_reg_state *off_reg,
+ 			      u32 *alu_limit, u8 opcode)
+@@ -2740,7 +2748,7 @@ static int retrieve_ptr_limit(const struct bpf_reg_state *ptr_reg,
+ 
+ 	if (!tnum_is_const(off_reg->var_off) &&
+ 	    (off_reg->smin_value < 0) != (off_reg->smax_value < 0))
+-		return -EACCES;
++		return REASON_BOUNDS;
+ 
  	switch (ptr_reg->type) {
  	case PTR_TO_STACK:
- 		/* Offset 0 is out-of-bounds, but acceptable start for the
-@@ -2826,7 +2832,7 @@ static int sanitize_ptr_alu(struct bpf_verifier_env *env,
- 	alu_state |= ptr_is_dst_reg ?
- 		     BPF_ALU_SANITIZE_SRC : BPF_ALU_SANITIZE_DST;
+@@ -2764,11 +2772,11 @@ static int retrieve_ptr_limit(const struct bpf_reg_state *ptr_reg,
+ 		}
+ 		break;
+ 	default:
+-		return -EINVAL;
++		return REASON_TYPE;
+ 	}
  
--	err = retrieve_ptr_limit(ptr_reg, &alu_limit, opcode, off_is_neg);
-+	err = retrieve_ptr_limit(ptr_reg, off_reg, &alu_limit, opcode);
- 	if (err < 0)
- 		return err;
+ 	if (ptr_limit >= max)
+-		return -ERANGE;
++		return REASON_LIMIT;
+ 	*alu_limit = ptr_limit;
+ 	return 0;
+ }
+@@ -2788,7 +2796,7 @@ static int update_alu_sanitation_state(struct bpf_insn_aux_data *aux,
+ 	if (aux->alu_state &&
+ 	    (aux->alu_state != alu_state ||
+ 	     aux->alu_limit != alu_limit))
+-		return -EACCES;
++		return REASON_PATHS;
  
-@@ -2871,8 +2877,8 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
- 	    smin_ptr = ptr_reg->smin_value, smax_ptr = ptr_reg->smax_value;
- 	u64 umin_val = off_reg->umin_value, umax_val = off_reg->umax_value,
- 	    umin_ptr = ptr_reg->umin_value, umax_ptr = ptr_reg->umax_value;
--	u32 dst = insn->dst_reg, src = insn->src_reg;
- 	u8 opcode = BPF_OP(insn->code);
-+	u32 dst = insn->dst_reg;
+ 	/* Corresponding fixup done in fixup_bpf_calls(). */
+ 	aux->alu_state = alu_state;
+@@ -2861,7 +2869,46 @@ static int sanitize_ptr_alu(struct bpf_verifier_env *env,
+ 	ret = push_stack(env, env->insn_idx + 1, env->insn_idx, true);
+ 	if (!ptr_is_dst_reg && ret)
+ 		*dst_reg = tmp;
+-	return !ret ? -EFAULT : 0;
++	return !ret ? REASON_STACK : 0;
++}
++
++static int sanitize_err(struct bpf_verifier_env *env,
++			const struct bpf_insn *insn, int reason,
++			const struct bpf_reg_state *off_reg,
++			const struct bpf_reg_state *dst_reg)
++{
++	static const char *err = "pointer arithmetic with it prohibited for !root";
++	const char *op = BPF_OP(insn->code) == BPF_ADD ? "add" : "sub";
++	u32 dst = insn->dst_reg, src = insn->src_reg;
++
++	switch (reason) {
++	case REASON_BOUNDS:
++		verbose(env, "R%d has unknown scalar with mixed signed bounds, %s\n",
++			off_reg == dst_reg ? dst : src, err);
++		break;
++	case REASON_TYPE:
++		verbose(env, "R%d has pointer with unsupported alu operation, %s\n",
++			off_reg == dst_reg ? src : dst, err);
++		break;
++	case REASON_PATHS:
++		verbose(env, "R%d tried to %s from different maps, paths or scalars, %s\n",
++			dst, op, err);
++		break;
++	case REASON_LIMIT:
++		verbose(env, "R%d tried to %s beyond pointer bounds, %s\n",
++			dst, op, err);
++		break;
++	case REASON_STACK:
++		verbose(env, "R%d could not be pushed for speculative verification, %s\n",
++			dst, err);
++		break;
++	default:
++		verbose(env, "verifier internal error: unknown reason (%d)\n",
++			reason);
++		break;
++	}
++
++	return -EACCES;
+ }
+ 
+ /* Handles arithmetic on a pointer and a scalar: computes new min/max and var_off.
+@@ -2934,10 +2981,9 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
+ 	switch (opcode) {
+ 	case BPF_ADD:
+ 		ret = sanitize_ptr_alu(env, insn, ptr_reg, off_reg, dst_reg);
+-		if (ret < 0) {
+-			verbose(env, "R%d tried to add from different maps, paths, or prohibited types\n", dst);
+-			return ret;
+-		}
++		if (ret < 0)
++			return sanitize_err(env, insn, ret, off_reg, dst_reg);
++
+ 		/* We can take a fixed offset as long as it doesn't overflow
+ 		 * the s32 'off' field
+ 		 */
+@@ -2989,10 +3035,9 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
+ 		break;
+ 	case BPF_SUB:
+ 		ret = sanitize_ptr_alu(env, insn, ptr_reg, off_reg, dst_reg);
+-		if (ret < 0) {
+-			verbose(env, "R%d tried to sub from different maps, paths, or prohibited types\n", dst);
+-			return ret;
+-		}
++		if (ret < 0)
++			return sanitize_err(env, insn, ret, off_reg, dst_reg);
++
+ 		if (dst_reg == off_reg) {
+ 			/* scalar -= pointer.  Creates an unknown scalar */
+ 			verbose(env, "R%d tried to subtract pointer from scalar\n",
+@@ -3109,7 +3154,6 @@ static int adjust_scalar_min_max_vals(struct bpf_verifier_env *env,
+ 	s64 smin_val, smax_val;
+ 	u64 umin_val, umax_val;
+ 	u64 insn_bitness = (BPF_CLASS(insn->code) == BPF_ALU64) ? 64 : 32;
+-	u32 dst = insn->dst_reg;
  	int ret;
  
- 	dst_reg = &regs[dst];
-@@ -2909,12 +2915,6 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
- 			dst);
- 		return -EACCES;
- 	}
--	if (ptr_reg->type == PTR_TO_MAP_VALUE &&
--	    !env->allow_ptr_leaks && !known && (smin_val < 0) != (smax_val < 0)) {
--		verbose(env, "R%d has unknown scalar with mixed signed bounds, pointer arithmetic with it prohibited for !root\n",
--			off_reg == dst_reg ? dst : src);
--		return -EACCES;
--	}
- 
- 	/* In case of 'scalar += pointer', dst_reg inherits pointer type and id.
- 	 * The id may be overwritten later if we create a new variable offset.
+ 	if (insn_bitness == 32) {
+@@ -3146,10 +3190,8 @@ static int adjust_scalar_min_max_vals(struct bpf_verifier_env *env,
+ 	switch (opcode) {
+ 	case BPF_ADD:
+ 		ret = sanitize_val_alu(env, insn);
+-		if (ret < 0) {
+-			verbose(env, "R%d tried to add from different pointers or scalars\n", dst);
+-			return ret;
+-		}
++		if (ret < 0)
++			return sanitize_err(env, insn, ret, NULL, NULL);
+ 		if (signed_add_overflows(dst_reg->smin_value, smin_val) ||
+ 		    signed_add_overflows(dst_reg->smax_value, smax_val)) {
+ 			dst_reg->smin_value = S64_MIN;
+@@ -3170,10 +3212,8 @@ static int adjust_scalar_min_max_vals(struct bpf_verifier_env *env,
+ 		break;
+ 	case BPF_SUB:
+ 		ret = sanitize_val_alu(env, insn);
+-		if (ret < 0) {
+-			verbose(env, "R%d tried to sub from different pointers or scalars\n", dst);
+-			return ret;
+-		}
++		if (ret < 0)
++			return sanitize_err(env, insn, ret, NULL, NULL);
+ 		if (signed_sub_overflows(dst_reg->smin_value, smax_val) ||
+ 		    signed_sub_overflows(dst_reg->smax_value, smin_val)) {
+ 			/* Overflow possible, we know nothing */
 -- 
 2.17.1
 
