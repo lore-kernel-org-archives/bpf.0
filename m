@@ -2,392 +2,284 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 750EBC47087
-	for <bpf@archiver.kernel.org>; Fri, 28 May 2021 20:01:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76543C4708E
+	for <bpf@archiver.kernel.org>; Fri, 28 May 2021 20:03:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 59CFC613AB
-	for <bpf@archiver.kernel.org>; Fri, 28 May 2021 20:01:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5B0806108E
+	for <bpf@archiver.kernel.org>; Fri, 28 May 2021 20:03:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbhE1UCq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 28 May 2021 16:02:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50834 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbhE1UCn (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 28 May 2021 16:02:43 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E910C061761;
-        Fri, 28 May 2021 13:01:07 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id c12so4063522pfl.3;
-        Fri, 28 May 2021 13:01:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=v0gErz0uqwdqBiFc655CeWUaRW+WaS1J/1ZNEDecRN8=;
-        b=YhndZvsgN/o14ThNjXRxqp9ybdOVXN9P17BYntEoue2WxPMi0hwLQodhzSRxWbDv5r
-         F6PO14zfj+0WKq4Brfzx4dI7SaEedgFbLwad5ik2qBaIKmBYNecrkeIT2Mq1xnR7NS/q
-         +1eDz9hUbsV56pw5cJxt/8xG3gLWk/6H5vvyf75joGns8QBGuAyV6i1MUkA9rpykTDab
-         PFUaLAt2ns1SVnOWROhHjOInBDafgIZxvOhIZNQSZnY6jPKy9avYLFnzwF5yV+az5TyK
-         7CpyaLiDLM8J9Lo8TPaRFgBrb/2eEvAvj6rZ9tqKk9lrg7kmCsx1nIazHIsj4Du7qP/w
-         +wCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=v0gErz0uqwdqBiFc655CeWUaRW+WaS1J/1ZNEDecRN8=;
-        b=kCp2M38gi8QXK4WP72t41SqvDDOJceHJAHq4qU8J1pc/GO5jfv+l8wxdyx/yYp+cqd
-         s8NRsBJkuKeT8DerqxeiPEj5xW1HG9ttAzVZc8TiQu14d3x+a+waAgWCRw8TMGGbmNaE
-         4BCr8bwZOAnCAlfOqWS6F80YwklmYZP9pZTq89oPeO7zMGbEo1CQA1y7+akd0Sb9sf71
-         mzW2FQbO49gugiqln8g20/MxFHQhsQOJe49EgYq9u64FZatP8om62olUBI+9OTKltd4T
-         uIMFGF+qbgzG76CCAlsi61Hk07VTfF+Sl3fl2JM8/fBdhfndlteVUvYOCEIWv7JwsvI5
-         Tx/Q==
-X-Gm-Message-State: AOAM530VMFo1EXVnr23VzMETBS8TjzdglCTzym2IOOHNM5ckmQDRkdKg
-        IN9eVtociBUvDvjd1ldbCtbSVVKJtQM=
-X-Google-Smtp-Source: ABdhPJzUIctahvW7lt6Fkjpz7VnEZarMxaVJIt0txY+v7SibTNVukt7IRBiXQlUajM4C/glEzzzm9Q==
-X-Received: by 2002:a62:3344:0:b029:28c:6f0f:cb90 with SMTP id z65-20020a6233440000b029028c6f0fcb90mr5457438pfz.58.1622232065927;
-        Fri, 28 May 2021 13:01:05 -0700 (PDT)
-Received: from localhost ([2402:3a80:11db:3aa9:ad24:a4a2:844f:6a0a])
-        by smtp.gmail.com with ESMTPSA id i3sm1348540pfk.96.2021.05.28.13.01.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 May 2021 13:01:05 -0700 (PDT)
-From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+        id S229632AbhE1UEx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 28 May 2021 16:04:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38116 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229482AbhE1UEw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 28 May 2021 16:04:52 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8AB67613B5;
+        Fri, 28 May 2021 20:03:17 +0000 (UTC)
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 9B64E4011C; Fri, 28 May 2021 17:03:14 -0300 (-03)
+Received: from imap.gmail.com [64.233.190.109]
+        by quaco with IMAP (fetchmail-6.4.16)
+        for <acme@localhost> (single-drop); Fri, 28 May 2021 16:47:07 -0300 (-03)
+Received: from quaco.ghostprotocols.net ([179.97.37.151]) by smtp.gmail.com
+ with ESMTPSA id x9sm3887986qto.33.2021.05.28.12.45.36 (version=TLS1_3
+ cipher=TLS_AES_256_GCM_SHA384 bits=256/256); Fri, 28 May 2021 12:45:36 -0700
+ (PDT)
+From:   Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+X-Google-Original-From: Arnaldo Carvalho de Melo <acme@kernel.org>
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000) id
+ D1D934011C; Fri, 28 May 2021 16:45:31 -0300 (-03)
+Date:   Fri, 28 May 2021 16:45:31 -0300
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Arnaldo <arnaldo.melo@gmail.com>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Vlad Buslov <vladbu@nvidia.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, Joe Stringer <joe@cilium.io>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        netdev@vger.kernel.org
-Subject: [PATCH RFC bpf-next 7/7] libbpf: add selftest for bpf_link based TC-BPF management API
-Date:   Sat, 29 May 2021 01:29:46 +0530
-Message-Id: <20210528195946.2375109-8-memxor@gmail.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210528195946.2375109-1-memxor@gmail.com>
-References: <20210528195946.2375109-1-memxor@gmail.com>
+        Jiri Olsa <jolsa@kernel.org>,
+        Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>,
+        dwarves@vger.kernel.org, bpf <bpf@vger.kernel.org>,
+        Kernel Team <kernel-team@fb.com>,
+        Michael Petlan <mpetlan@redhat.com>
+Subject: Re: [RFT] Testing 1.22
+Message-ID: <YLFIW9fd9ZqbR3B9@kernel.org>
+References: <YK+41f972j25Z1QQ@kernel.org>
+ <CAEf4BzaTP_jULKMN_hx6ZOqwESOmsR6_HxWW-LnrA5xwRNtSWg@mail.gmail.com>
+ <4615C288-2CFD-483E-AB98-B14A33631E2F@gmail.com>
+ <CAEf4BzaQmv1+1bPF=1aO3dcmNu2Mx0EFhK+ZU6UFsMjv3v6EZA@mail.gmail.com>
+ <4901AF88-0354-428B-9305-2EDC6F75C073@gmail.com>
+ <CAEf4BzZk8bcSZ9hmFAmgjbrQt0Yj1usCHmuQTfU-pwZkYQgztA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzZk8bcSZ9hmFAmgjbrQt0Yj1usCHmuQTfU-pwZkYQgztA@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This covers basic attach/detach/update, and tests interaction with the
-netlink API. It also exercises the bpf_link_info and fdinfo codepaths.
+Em Thu, May 27, 2021 at 01:41:13PM -0700, Andrii Nakryiko escreveu:
+> On Thu, May 27, 2021 at 12:57 PM Arnaldo <arnaldo.melo@gmail.com> wrote:
+> > On May 27, 2021 4:14:17 PM GMT-03:00, Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+> > >If we make 1.22 mandatory there will be no good reason to make 1.23
+> > >mandatory again. So I will have absolutely no inclination to work on
+> > >this, for example. So we are just wasting a chance to clean up the
+> > >Kbuild story w.r.t. pahole. And we are talking about just a few days
+> > >at most, while we do have a reasonable work around on the kernel side.
 
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
----
- .../selftests/bpf/prog_tests/tc_bpf_link.c    | 285 ++++++++++++++++++
- 1 file changed, 285 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/tc_bpf_link.c
+> > So there were patches for stop using objcopy, which we thought could
+> > uncover some can of worms, were there patches for the detached BTF
+> > file?
+ 
+> No, there weren't, if I remember correctly. What's the concern,
+> though? That detached BTF file isn't even an ELF, so it's
+> btf__get_raw_data() and write it to the file. Done.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/tc_bpf_link.c b/tools/testing/selftests/bpf/prog_tests/tc_bpf_link.c
-new file mode 100644
-index 000000000000..beaf06e0557c
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/tc_bpf_link.c
-@@ -0,0 +1,285 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <test_progs.h>
-+#include <linux/pkt_cls.h>
-+
-+#include "test_tc_bpf.skel.h"
-+
-+#define LO_IFINDEX 1
-+
-+static int test_tc_bpf_link_basic(struct bpf_tc_hook *hook,
-+				  struct bpf_program *prog)
-+{
-+	DECLARE_LIBBPF_OPTS(bpf_tc_link_opts, opts, .handle = 1, .priority = 1);
-+	DECLARE_LIBBPF_OPTS(bpf_tc_opts, qopts, .handle = 1, .priority = 1);
-+	struct bpf_prog_info info = {};
-+	__u32 info_len = sizeof(info);
-+	struct bpf_link *link, *invl;
-+	int ret;
-+
-+	link = bpf_program__attach_tc(prog, hook, &opts);
-+	if (!ASSERT_OK_PTR(link, "bpf_program__attach_tc"))
-+		return PTR_ERR(link);
-+
-+	ret = bpf_obj_get_info_by_fd(bpf_program__fd(prog), &info, &info_len);
-+	if (!ASSERT_OK(ret, "bpf_obj_get_info_by_fd"))
-+		goto end;
-+
-+	ret = bpf_tc_query(hook, &qopts);
-+	if (!ASSERT_OK(ret, "bpf_tc_query"))
-+		goto end;
-+
-+	if (!ASSERT_EQ(qopts.prog_id, info.id, "prog_id match"))
-+		goto end;
-+
-+	opts.gen_flags = ~0u;
-+	invl = bpf_program__attach_tc(prog, hook, &opts);
-+	if (!ASSERT_ERR_PTR(invl, "bpf_program__attach_tc with invalid flags")) {
-+		bpf_link__destroy(invl);
-+		ret = -EINVAL;
-+	}
-+
-+end:
-+	bpf_link__destroy(link);
-+	return ret;
-+}
-+
-+static int test_tc_bpf_link_netlink_interaction(struct bpf_tc_hook *hook,
-+						struct bpf_program *prog)
-+{
-+	DECLARE_LIBBPF_OPTS(bpf_link_update_opts, lopts,
-+			    .old_prog_fd = bpf_program__fd(prog));
-+	DECLARE_LIBBPF_OPTS(bpf_tc_link_opts, opts, .handle = 1, .priority = 1);
-+	DECLARE_LIBBPF_OPTS(bpf_tc_opts, nopts, .handle = 1, .priority = 1);
-+	DECLARE_LIBBPF_OPTS(bpf_tc_opts, dopts, .handle = 1, .priority = 1);
-+	struct bpf_link *link;
-+	int ret;
-+
-+	/* We need to test the following cases:
-+	 *	1. BPF link owned filter cannot be replaced by netlink
-+	 *	2. Netlink owned filter cannot be replaced by BPF link
-+	 *	3. Netlink cannot do targeted delete of BPF link owned filter
-+	 *	4. Filter is actually deleted (with chain cleanup)
-+	 *	   We actually (ab)use the kernel behavior of returning EINVAL when
-+	 *	   target chain doesn't exist on tc_get_tfilter (which maps to
-+	 *	   bpf_tc_query) here, to know if the chain was really cleaned
-+	 *	   up on tcf_proto destruction. Our setup is so that there is
-+	 *	   only one reference to the chain.
-+	 *
-+	 *	   So on query, chain ? (filter ?: ENOENT) : EINVAL
-+	 */
-+
-+	link = bpf_program__attach_tc(prog, hook, &opts);
-+	if (!ASSERT_OK_PTR(link, "bpf_program__attach_tc"))
-+		return PTR_ERR(link);
-+
-+	nopts.prog_fd = bpf_program__fd(prog);
-+	ret = bpf_tc_attach(hook, &nopts);
-+	if (!ASSERT_EQ(ret, -EEXIST, "bpf_tc_attach without replace"))
-+		goto end;
-+
-+	nopts.flags = BPF_TC_F_REPLACE;
-+	ret = bpf_tc_attach(hook, &nopts);
-+	if (!ASSERT_EQ(ret, -EPERM, "bpf_tc_attach with replace"))
-+		goto end;
-+
-+	ret = bpf_tc_detach(hook, &dopts);
-+	if (!ASSERT_EQ(ret, -EPERM, "bpf_tc_detach"))
-+		goto end;
-+
-+	lopts.flags = BPF_F_REPLACE;
-+	ret = bpf_link_update(bpf_link__fd(link), bpf_program__fd(prog),
-+			      &lopts);
-+	ASSERT_OK(ret, "bpf_link_update");
-+	ret = ret < 0 ? -errno : ret;
-+
-+end:
-+	bpf_link__destroy(link);
-+	if (!ret && !ASSERT_EQ(bpf_tc_query(hook, &dopts), -EINVAL,
-+			       "chain empty delete"))
-+		ret = -EINVAL;
-+	return ret;
-+}
-+
-+static int test_tc_bpf_link_update_ways(struct bpf_tc_hook *hook,
-+					struct bpf_program *prog)
-+{
-+	DECLARE_LIBBPF_OPTS(bpf_tc_link_opts, opts, .handle = 1, .priority = 1);
-+	DECLARE_LIBBPF_OPTS(bpf_link_update_opts, uopts, 0);
-+	struct test_tc_bpf *skel;
-+	struct bpf_link *link;
-+	int ret;
-+
-+	skel = test_tc_bpf__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "test_tc_bpf__open_and_load"))
-+		return PTR_ERR(skel);
-+
-+	link = bpf_program__attach_tc(prog, hook, &opts);
-+	if (!ASSERT_OK_PTR(link, "bpf_program__attach_tc")) {
-+		ret = PTR_ERR(link);
-+		goto end;
-+	}
-+
-+	ret = bpf_link_update(bpf_link__fd(link), bpf_program__fd(prog),
-+			      &uopts);
-+	if (!ASSERT_OK(ret, "bpf_link_update no old prog"))
-+		goto end;
-+
-+	uopts.old_prog_fd = bpf_program__fd(prog);
-+	ret = bpf_link_update(bpf_link__fd(link), bpf_program__fd(prog),
-+			      &uopts);
-+	if (!ASSERT_TRUE(ret < 0 && errno == EINVAL,
-+			 "bpf_link_update with old prog without BPF_F_REPLACE")) {
-+		ret = -EINVAL;
-+		goto end;
-+	}
-+
-+	uopts.flags = BPF_F_REPLACE;
-+	ret = bpf_link_update(bpf_link__fd(link), bpf_program__fd(prog),
-+			      &uopts);
-+	if (!ASSERT_OK(ret, "bpf_link_update with old prog with BPF_F_REPLACE"))
-+		goto end;
-+
-+	uopts.old_prog_fd = bpf_program__fd(skel->progs.cls);
-+	ret = bpf_link_update(bpf_link__fd(link), bpf_program__fd(prog),
-+			      &uopts);
-+	if (!ASSERT_TRUE(ret < 0 && errno == EINVAL,
-+			 "bpf_link_update with wrong old prog")) {
-+		ret = -EINVAL;
-+		goto end;
-+	}
-+	ret = 0;
-+
-+end:
-+	test_tc_bpf__destroy(skel);
-+	return ret;
-+}
-+
-+static int test_tc_bpf_link_info_api(struct bpf_tc_hook *hook,
-+				     struct bpf_program *prog)
-+{
-+	DECLARE_LIBBPF_OPTS(bpf_tc_link_opts, opts, .handle = 1, .priority = 1);
-+	__u32 ifindex, parent, handle, gen_flags, priority;
-+	char buf[4096], path[256], *begin;
-+	struct bpf_link_info info = {};
-+	__u32 info_len = sizeof(info);
-+	struct bpf_link *link;
-+	int ret, fdinfo;
-+
-+	link = bpf_program__attach_tc(prog, hook, &opts);
-+	if (!ASSERT_OK_PTR(link, "bpf_program__attach_tc"))
-+		return PTR_ERR(link);
-+
-+	ret = bpf_obj_get_info_by_fd(bpf_link__fd(link), &info, &info_len);
-+	if (!ASSERT_OK(ret, "bpf_obj_get_info_by_fd"))
-+		goto end;
-+
-+	ret = snprintf(path, sizeof(path), "/proc/self/fdinfo/%d",
-+		       bpf_link__fd(link));
-+	if (!ASSERT_TRUE(!ret || ret < sizeof(path), "snprintf pathname"))
-+		goto end;
-+
-+	fdinfo = open(path, O_RDONLY);
-+	if (!ASSERT_GT(fdinfo, -1, "open fdinfo"))
-+		goto end;
-+
-+	ret = read(fdinfo, buf, sizeof(buf));
-+	if (!ASSERT_GT(ret, 0, "read fdinfo")) {
-+		ret = -EINVAL;
-+		goto end_file;
-+	}
-+
-+	begin = strstr(buf, "ifindex");
-+	if (!ASSERT_OK_PTR(begin, "find beginning of fdinfo info")) {
-+		ret = -EINVAL;
-+		goto end_file;
-+	}
-+
-+	ret = sscanf(begin, "ifindex:\t%u\n"
-+			    "parent:\t%u\n"
-+			    "handle:\t%u\n"
-+			    "priority:\t%u\n"
-+			    "gen_flags:\t%u\n",
-+			    &ifindex, &parent, &handle, &priority, &gen_flags);
-+	if (!ASSERT_EQ(ret, 5, "sscanf fdinfo")) {
-+		ret = -EINVAL;
-+		goto end_file;
-+	}
-+
-+	ret = -EINVAL;
-+
-+#define X(a, b, c) (!ASSERT_EQ(a, b, #a " == " #b) || !ASSERT_EQ(b, c, #b " == " #c))
-+	if (X(info.tc.ifindex, ifindex, 1) ||
-+	    X(info.tc.parent, parent,
-+	      TC_H_MAKE(TC_H_CLSACT, TC_H_MIN_EGRESS)) ||
-+	    X(info.tc.handle, handle, 1) ||
-+	    X(info.tc.gen_flags, gen_flags, TCA_CLS_FLAGS_NOT_IN_HW) ||
-+	    X(info.tc.priority, priority, 1))
-+#undef X
-+		goto end_file;
-+
-+	ret = 0;
-+
-+end_file:
-+	close(fdinfo);
-+end:
-+	bpf_link__destroy(link);
-+	return ret;
-+}
-+
-+void test_tc_bpf_link(void)
-+{
-+	DECLARE_LIBBPF_OPTS(bpf_tc_hook, hook, .ifindex = LO_IFINDEX,
-+			    .attach_point = BPF_TC_INGRESS);
-+	struct test_tc_bpf *skel = NULL;
-+	bool hook_created = false;
-+	int ret;
-+
-+	skel = test_tc_bpf__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "test_tc_bpf__open_and_load"))
-+		return;
-+
-+	ret = bpf_tc_hook_create(&hook);
-+	if (ret == 0)
-+		hook_created = true;
-+
-+	ret = ret == -EEXIST ? 0 : ret;
-+	if (!ASSERT_OK(ret, "bpf_tc_hook_create(BPF_TC_INGRESS)"))
-+		goto end;
-+
-+	ret = test_tc_bpf_link_basic(&hook, skel->progs.cls);
-+	if (!ASSERT_OK(ret, "test_tc_bpf_link_basic"))
-+		goto end;
-+
-+	bpf_tc_hook_destroy(&hook);
-+
-+	hook.attach_point = BPF_TC_EGRESS;
-+	ret = test_tc_bpf_link_basic(&hook, skel->progs.cls);
-+	if (!ASSERT_OK(ret, "test_tc_bpf_link_basic"))
-+		goto end;
-+
-+	bpf_tc_hook_destroy(&hook);
-+
-+	ret = test_tc_bpf_link_netlink_interaction(&hook, skel->progs.cls);
-+	if (!ASSERT_OK(ret, "test_tc_bpf_link_netlink_interaction"))
-+		goto end;
-+
-+	bpf_tc_hook_destroy(&hook);
-+
-+	ret = test_tc_bpf_link_update_ways(&hook, skel->progs.cls);
-+	if (!ASSERT_OK(ret, "test_tc_bpf_link_update_ways"))
-+		goto end;
-+
-+	bpf_tc_hook_destroy(&hook);
-+
-+	ret = test_tc_bpf_link_info_api(&hook, skel->progs.cls);
-+	if (!ASSERT_OK(ret, "test_tc_bpf_link_info_api"))
-+		goto end;
-+
-+end:
-+	if (hook_created) {
-+		hook.attach_point = BPF_TC_INGRESS | BPF_TC_EGRESS;
-+		bpf_tc_hook_destroy(&hook);
-+	}
-+	test_tc_bpf__destroy(skel);
-+}
--- 
-2.31.1
+See patch below, lightly tested, now working on making pahole accept raw
+BTF files out of /sys/kernel/btf/
 
+Please test, and if works as expected, try to bolt this into the kbuild
+process, as intended.
+
+- Arnaldo
+
+commit b579a18a1ea0ee84b90b5302f597dda2edf2f61b
+Author: Arnaldo Carvalho de Melo <acme@redhat.com>
+Date:   Fri May 28 16:41:30 2021 -0300
+
+    pahole: Allow encoding BTF into a detached file
+    
+    Previously the newly encoded BTF info was stored into a ELF section in
+    the file where the DWARF info was obtained, but it is useful to just
+    dump it into a separate file, do it.
+    
+    Requested-by: Andrii Nakryiko <andrii@kernel.org>
+    Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+
+diff --git a/btf_encoder.c b/btf_encoder.c
+index 033c927b537dad1e..bc3ac72968cea826 100644
+--- a/btf_encoder.c
++++ b/btf_encoder.c
+@@ -21,6 +21,14 @@
+ #include <stdlib.h> /* for qsort() and bsearch() */
+ #include <inttypes.h>
+ 
++#include <sys/types.h>
++#include <sys/stat.h>
++#include <fcntl.h>
++
++#include <unistd.h>
++
++#include <errno.h>
++
+ /*
+  * This corresponds to the same macro defined in
+  * include/linux/kallsyms.h
+@@ -267,14 +275,62 @@ static struct btf_elf *btfe;
+ static uint32_t array_index_id;
+ static bool has_index_type;
+ 
+-int btf_encoder__encode()
++static int btf_encoder__dump(struct btf *btf, const char *filename)
++{
++	uint32_t raw_btf_size;
++	const void *raw_btf_data;
++	int fd, err;
++
++	/* Empty file, nothing to do, so... done! */
++	if (btf__get_nr_types(btf) == 0)
++		return 0;
++
++	if (btf__dedup(btf, NULL, NULL)) {
++		fprintf(stderr, "%s: btf__dedup failed!\n", __func__);
++		return -1;
++	}
++
++	raw_btf_data = btf__get_raw_data(btf, &raw_btf_size);
++	if (raw_btf_data == NULL) {
++                fprintf(stderr, "%s: btf__get_raw_data failed!\n", __func__);
++		return -1;
++	}
++
++	fd = open(filename, O_WRONLY | O_CREAT);
++	if (fd < 0) {
++                fprintf(stderr, "%s: Couldn't open %s for writing the raw BTF info: %s\n", __func__, filename, strerror(errno));
++		return -1;
++	}
++	err = write(fd, raw_btf_data, raw_btf_size);
++	if (err < 0)
++                fprintf(stderr, "%s: Couldn't open %s for writing the raw BTF info: %s\n", __func__, filename, strerror(errno));
++
++	close(fd);
++
++	if (err != raw_btf_size) {
++                fprintf(stderr, "%s: Could only write %d bytes to %s of raw BTF info out of %d, aborting\n", __func__, err, filename, raw_btf_size);
++		unlink(filename);
++		err = -1;
++	} else {
++		/* go from bytes written == raw_btf_size to an indication that all went fine */
++		err = 0;
++	}
++
++	return err;
++}
++
++int btf_encoder__encode(const char *filename)
+ {
+ 	int err;
+ 
+ 	if (gobuffer__size(&btfe->percpu_secinfo) != 0)
+ 		btf_elf__add_datasec_type(btfe, PERCPU_SECTION, &btfe->percpu_secinfo);
+ 
+-	err = btf_elf__encode(btfe, 0);
++	if (filename == NULL)
++		err = btf_elf__encode(btfe, 0);
++	else
++		err = btf_encoder__dump(btfe->btf, filename);
++
+ 	delete_functions();
+ 	btf_elf__delete(btfe);
+ 	btfe = NULL;
+@@ -412,7 +468,7 @@ static bool has_arg_names(struct cu *cu, struct ftype *ftype)
+ }
+ 
+ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+-		   bool skip_encoding_vars)
++		   bool skip_encoding_vars, const char *detached_btf_filename)
+ {
+ 	uint32_t type_id_off;
+ 	uint32_t core_id;
+@@ -425,7 +481,7 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+ 	btf_elf__force = force;
+ 
+ 	if (btfe && strcmp(btfe->filename, cu->filename)) {
+-		err = btf_encoder__encode();
++		err = btf_encoder__encode(detached_btf_filename);
+ 		if (err)
+ 			goto out;
+ 
+diff --git a/btf_encoder.h b/btf_encoder.h
+index 46fb2312fc0eea9b..bfc6085092028adc 100644
+--- a/btf_encoder.h
++++ b/btf_encoder.h
+@@ -11,9 +11,9 @@
+ 
+ struct cu;
+ 
+-int btf_encoder__encode();
++int btf_encoder__encode(const char *filename);
+ 
+ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+-		   bool skip_encoding_vars);
++		   bool skip_encoding_vars, const char *detached_btf_filename);
+ 
+ #endif /* _BTF_ENCODER_H_ */
+diff --git a/man-pages/pahole.1 b/man-pages/pahole.1
+index 2659fe6f231405d8..6e7ded59595f5ea7 100644
+--- a/man-pages/pahole.1
++++ b/man-pages/pahole.1
+@@ -189,6 +189,10 @@ features such as BPF CO-RE (Compile Once - Run Everywhere).
+ 
+ See \fIhttps://nakryiko.com/posts/bpf-portability-and-co-re/\fR.
+ 
++.TP
++.B \-j, \-\-btf_encode_detached=FILENAME
++Same thing as -J/--btf_encode, but storing the raw BTF info into a separate file.
++
+ .TP
+ .B \-\-btf_encode_force
+ Ignore those symbols found invalid when encoding BTF.
+diff --git a/pahole.c b/pahole.c
+index 24659e2969c8fb85..1cbff6175b60af51 100644
+--- a/pahole.c
++++ b/pahole.c
+@@ -26,6 +26,7 @@
+ #include "lib/bpf/src/libbpf.h"
+ #include "pahole_strings.h"
+ 
++static char *detached_btf_filename;
+ static bool btf_encode;
+ static bool ctf_encode;
+ static bool first_obj_only;
+@@ -1152,6 +1153,12 @@ static const struct argp_option pahole__options[] = {
+ 		.key  = 'J',
+ 		.doc  = "Encode as BTF",
+ 	},
++	{
++		.name = "btf_encode_detached",
++		.key  = 'j',
++		.arg  = "FILENAME",
++		.doc  = "Encode as BTF in a detached file",
++	},
+ 	{
+ 		.name = "skip_encoding_btf_vars",
+ 		.key  = ARGP_skip_encoding_btf_vars,
+@@ -1223,6 +1230,7 @@ static error_t pahole__options_parser(int key, char *arg,
+ 		  conf_load.extra_dbg_info = 1;		break;
+ 	case 'i': find_containers = 1;
+ 		  class_name = arg;			break;
++	case 'j': detached_btf_filename = arg; // fallthru
+ 	case 'J': btf_encode = 1;
+ 		  conf_load.get_addr_info = true;
+ 		  no_bitfield_type_recode = true;	break;
+@@ -2458,7 +2466,7 @@ static enum load_steal_kind pahole_stealer(struct cu *cu,
+ 
+ 	if (btf_encode) {
+ 		if (cu__encode_btf(cu, global_verbose, btf_encode_force,
+-				   skip_encoding_btf_vars)) {
++				   skip_encoding_btf_vars, detached_btf_filename)) {
+ 			fprintf(stderr, "Encountered error while encoding BTF.\n");
+ 			exit(1);
+ 		}
+@@ -2872,7 +2880,7 @@ try_sole_arg_as_class_names:
+ 	header = NULL;
+ 
+ 	if (btf_encode) {
+-		err = btf_encoder__encode();
++		err = btf_encoder__encode(detached_btf_filename);
+ 		if (err) {
+ 			fputs("Failed to encode BTF\n", stderr);
+ 			goto out_cus_delete;
