@@ -2,138 +2,94 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B11DC4708C
-	for <bpf@archiver.kernel.org>; Fri, 28 May 2021 08:30:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24D74C47087
+	for <bpf@archiver.kernel.org>; Fri, 28 May 2021 08:34:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2FF05613E6
-	for <bpf@archiver.kernel.org>; Fri, 28 May 2021 08:30:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 033B7613DA
+	for <bpf@archiver.kernel.org>; Fri, 28 May 2021 08:34:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234364AbhE1Ibm (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 28 May 2021 04:31:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36992 "EHLO
+        id S233627AbhE1IgY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 28 May 2021 04:36:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234405AbhE1Ibl (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 28 May 2021 04:31:41 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99143C061763
-        for <bpf@vger.kernel.org>; Fri, 28 May 2021 01:30:06 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id e17so4188030lfb.2
-        for <bpf@vger.kernel.org>; Fri, 28 May 2021 01:30:06 -0700 (PDT)
+        with ESMTP id S229774AbhE1IgX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 28 May 2021 04:36:23 -0400
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E9B8C061574;
+        Fri, 28 May 2021 01:34:48 -0700 (PDT)
+Received: by mail-qk1-x731.google.com with SMTP id o27so3336250qkj.9;
+        Fri, 28 May 2021 01:34:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uzDEL9Ib7npAFRzAe/yrT1XBR64hleNChurzA0bFiO8=;
-        b=bupGHdhsoxKB1MV+ccYjEvRu5MBKqkqU/2/A85Uj/HNMdDPucit+4pxaIvYKxDfKP7
-         39gaHqsCw3vmduKiPNVsuVCJYOzsYw5wRSIyFji4drGQRwtGXwdS3sgcfniRUWdRmuHI
-         1vNmNVWxSE7O9wzPIIsh03/Z/eEKJ3+rH6K4s=
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=n3Y5rFOY8ng6rR4eh1BMeunvKaj0igaUH7MDrp3oilc=;
+        b=f/ZJsRF5hw88ZRTfvA1+FLom/3aGv09nXjj+qwvw1e6vplaVKiSmsGM1WhiUj0/4fD
+         +bpnAIWxbyiGYHsu+LxeAMGgYVuqtvkigo8rbYNAlesaBf3c5vB/1DudHnahX/e42j7v
+         oIxq+VElOF2bzN3BZKuHMmQF1axyS/Vxt7Np+vJL+WhS7WmkISq8QmO84pV5kxGnu168
+         C/vd6Hq2dQ8qpVJNt/IZjj7QS4v7iNm2Y+dkUmXN7LQqyDDOrTUkVLCW5DMVKkrMX65O
+         diE7pyj5omGcpHCcn6Bkv1+TMViWH8kW4fyuKEP8CC3XU9NvdKu77EURsba8aFTGXLJe
+         QE2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uzDEL9Ib7npAFRzAe/yrT1XBR64hleNChurzA0bFiO8=;
-        b=tax9YYtvekh3yJiQO7HRsRIK98D3dBIq0PiUkOtOr+xjy6t2vUvxcBcfeEOGSV22+7
-         6Sddm6W1/EWSlDnE+2yn0EQWQIaA87+EhuH7BiesthkD1bJy4N7wR4nfWOnNgrEtgFZk
-         54F62w/ytTPMzupl3Z44wqbGylHJYijVNN01S2aFn1Z0QJGeVXE1pX1IPONJVNX/3mBx
-         ncIkuYHep1xIxaHeXSC2mp/BguatAmtHdh/T6IEUv/3S+ccvXeBXyxVzAd3yhkwHxjxz
-         m4/4MAG+/1I9ebE8uMtTwPJFS9t7B8xS3ZNUN5gM7aJg+SR5A/oMVtDi6X1rcQyuuSMe
-         vA2g==
-X-Gm-Message-State: AOAM5320q3+tmEO4Oz1jP26QboxiviHZU8RAc5HL2lXnsKMj3s9LJ6kS
-        Sf1DJSz5o6hBOq7j0jlrUWtHSirZ83se56XcTH3Gtw==
-X-Google-Smtp-Source: ABdhPJwbwoHHIQP4rDgoXEBw+SXbTMOOzI8/d0bWM/xUAeXrZeKtzLwMUVCv2eJbEPfuZ996Omv+jmx+vxpD+Rd4pes=
-X-Received: by 2002:ac2:5327:: with SMTP id f7mr658889lfh.171.1622190604829;
- Fri, 28 May 2021 01:30:04 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=n3Y5rFOY8ng6rR4eh1BMeunvKaj0igaUH7MDrp3oilc=;
+        b=L5ZB/7BPIqfES6tCYP285ENn60oAg5yCbC9cyG4l9SfA4SdJBs0VYRQJQtnJ99jq3c
+         aBsdwq29p7qrZgjJ6j7oOSrAmZ6leq/nqy72bCCHPw6QUAXcJrV/MawPQZtfQUPaLeVC
+         Fi8BqFUsXjAN47f0O5xyjghoKlKezF+WZo3pp+aNrGFydQ3xJNFolaCnWPDZRnfX0iC7
+         F8dw+5kzMxpu4bkIRY7pO/7h7MNGTXlYQRbRfXFX0R9Dy4miH/5ZAvkE3JnYZwt7sNv0
+         xeEvOP75qOaU90h1QTa6Nhgk8e5uAJnPY89ijpmLgT+uul99EkQpOMcmXgNPXiitDcJp
+         W4Xg==
+X-Gm-Message-State: AOAM531I3wPsZi2Dp/cf6CvZOyv6p0wMZzCGL5RkLNtlKNzFo+K91jmg
+        LfLKkpVX7vTyMYR37uJT+tKtMWyueI8fzD+IjTH4rOisxVLz
+X-Google-Smtp-Source: ABdhPJy1sgepE6y6npW74EZRB/c8OoUq10EoDRIx+J11VZOrYgj0HUAf9EnrDBE1VWiTedJwCYjWXohIIfD720bpVrQ=
+X-Received: by 2002:a05:620a:1126:: with SMTP id p6mr2894546qkk.120.1622190886995;
+ Fri, 28 May 2021 01:34:46 -0700 (PDT)
 MIME-Version: 1.0
-References: <CACAyw9-GQasDdE9m_f3qXCO1UrR49YuF_6K1tjGxyk+ZZGhM-Q@mail.gmail.com>
- <CAEf4BzYd4GLOQTJOeK_=yAs7+DPC+R7cxynOmd7ZMvcRFG+8SQ@mail.gmail.com>
- <CACAyw99QydcWBeE3T_4g5QzuDyfb_MEpR1V0EzEwbY=R-s202w@mail.gmail.com> <CAEf4BzZftL2q9qAoeXsO87-Wx9AbF8A1mLnBAtBrGo=XSx996g@mail.gmail.com>
-In-Reply-To: <CAEf4BzZftL2q9qAoeXsO87-Wx9AbF8A1mLnBAtBrGo=XSx996g@mail.gmail.com>
-From:   Lorenz Bauer <lmb@cloudflare.com>
-Date:   Fri, 28 May 2021 09:29:53 +0100
-Message-ID: <CACAyw9-mHGrvrWozqngJ8X4qzqxB8Yku+AaL_Rv8RZhLXPRwJQ@mail.gmail.com>
-Subject: Re: Portability of bpf_tracing.h
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
-        Florent Revest <revest@chromium.org>
+From:   Jussi Maki <joamaki@gmail.com>
+Date:   Fri, 28 May 2021 10:34:36 +0200
+Message-ID: <CAHn8xckNXci+X_Eb2WMv4uVYjO2331UWB2JLtXr_58z0Av8+8A@mail.gmail.com>
+Subject: Regression 5.12.0-rc4 net: ice: significant throughput drop
+To:     netdev@vger.kernel.org, robin.murphy@arm.com, jroedel@suse.de
+Cc:     bpf <bpf@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+        intel-wired-lan@lists.osuosl.org, davem@davemloft.net,
+        anthony.l.nguyen@intel.com, jesse.brandeburg@intel.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, 26 May 2021 at 19:34, Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
->
-> So I did a bit of investigation and gathered struct pt_regs
-> definitions from all the "supported" architectures in bpf_tracing.h.
-> I'll leave it here for further reference.
->
-> static unsigned long bpf_pt_regs_parm1(const void *regs)
-> {
->     if (___arch_is_x86)
->         return ((struct pt_regs___x86 *)regs)->di;
->     else if (___arch_is_s390)
->         return ((struct pt_regs___s390 *)regs)->gprs[2];
->     else if (___arch_is_powerpc)
->         return ((struct pt_regs___powerpc *)regs)->gpr[3];
->     else
->         while(1); /* need some better way to force BPF verification failure */
-> }
->
-> And so on for other architectures and other helpers, you should get
-> the idea from the above.
+Hi all,
 
-The idea of basing this on unique fields in types is neat, the
-downside I see is that we encode the logic in the BPF bitstream. If in
-the future struct pt_regs is changed, code breaks and we can't do much
-about it. What if instead we replace ___arch_is_x86, etc. with a
-.kconfig style constant load? The platform detection logic can then
-live in libbpf or cilium/ebpf and can be evolved if needed. Instead of
-while(1) we could use an illegal function call, like we do for
-poisoned CORE relocations.
+While measuring the impact of a kernel patch on our lab machines I stumbled upon
+a performance regression affecting the 100Gbit ICE nic and bisected it
+from range v5.11.1..v5.13-rc3 to the commit:
+a250c23f15c2 iommu: remove DOMAIN_ATTR_DMA_USE_FLUSH_QUEUE
 
->
-> As a shameless plug, if you'd like to see some more examples of using
-> CO-RE for detecting kernel features, see [0]
->
->   [0] https://nakryiko.com/posts/bpf-tips-printk/
->
-> > > Well, obviously I'm not a fan of even more magic #defines. But I think
-> > > we can achieve a similar effect with a more "lazy" approach. I.e., if
-> > > user tries to use PT_REGS_xxx macros but doesn't specify the platform
-> > > -- only then it gets compilation errors. There is stuff in
-> > > bpf_tracing.h that doesn't need pt_regs, so we can't just outright do
-> > > #error unconditinally. But we can do something like this:
-> > >
-> > > #else /* !bpf_target_defined */
-> > >
-> > > #define PT_REGS_PARM1(x) _Pragma("GCC error \"blah blah something
-> > > user-facing\"")
-> > >
-> > > ... and so on for all macros
-> > >
-> > > #endif
-> > >
-> > > Thoughts?
-> >
-> > That would work for me, but it would change the behaviour for current
-> > users of the header, no? That's why I added the magic define in the
-> > first place.
->
-> How so? If someone is using PT_REGS_PARM1 without setting target arch
-> they should get compilation error about undefined macro. Here it will
-> be the same thing, only if someone tries to use PT_REGS_PARM1() will
-> they reach that _Pragma.
->
-> Or am I missing something?
+Both recent bpf-next (d6a6a55518) and linux-stable (c4681547bc) are
+affected by the issue.
 
-Right! Doing this makes sense regardless of the outcome of our discussion above.
+The regression shows as a significant drop in throughput as measured
+with "super_netperf" [0],
+with measured bandwidth of ~95Gbps before and ~35Gbps after:
 
--- 
-Lorenz Bauer  |  Systems Engineer
-6th Floor, County Hall/The Riverside Building, SE1 7PB, UK
+commit 3189713a1b84 (a250c23^):
+$ ./super_netperf 32 -H 172.18.0.2 -l 10
+97379.8
 
-www.cloudflare.com
+commit a250c23f15c2:
+$ ./super_netperf 32 -H 172.18.0.2 -l 10
+34097.5
+
+The pair of test machines have this hardware:
+CPU: AMD Ryzen 9 3950X 16-Core Processor
+MB: X570 AORUS MASTER
+0a:00.0 Ethernet controller [0200]: Intel Corporation Ethernet
+Controller E810-C for QSFP [8086:1592] (rev 02)
+Kernel config: https://gist.github.com/joamaki/9ee11294c78a8dd2776041f67e5620e7
+
+[0] https://github.com/borkmann/stuff/blob/master/super_netperf
