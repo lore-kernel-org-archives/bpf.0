@@ -7,32 +7,32 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F6FEC47097
-	for <bpf@archiver.kernel.org>; Fri, 28 May 2021 10:39:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB881C4708E
+	for <bpf@archiver.kernel.org>; Fri, 28 May 2021 10:39:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 744C3613C9
-	for <bpf@archiver.kernel.org>; Fri, 28 May 2021 10:39:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D873F613E6
+	for <bpf@archiver.kernel.org>; Fri, 28 May 2021 10:39:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236602AbhE1Kkh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 28 May 2021 06:40:37 -0400
-Received: from mx0b-0064b401.pphosted.com ([205.220.178.238]:37580 "EHLO
+        id S236631AbhE1Kkl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 28 May 2021 06:40:41 -0400
+Received: from mx0b-0064b401.pphosted.com ([205.220.178.238]:42516 "EHLO
         mx0b-0064b401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236590AbhE1KkZ (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 28 May 2021 06:40:25 -0400
+        by vger.kernel.org with ESMTP id S236564AbhE1Kk2 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 28 May 2021 06:40:28 -0400
 Received: from pps.filterd (m0250812.ppops.net [127.0.0.1])
-        by mx0a-0064b401.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 14SAcXlT011402;
-        Fri, 28 May 2021 10:38:33 GMT
+        by mx0a-0064b401.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 14SAcfUf011416;
+        Fri, 28 May 2021 10:38:41 GMT
 Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2105.outbound.protection.outlook.com [104.47.58.105])
-        by mx0a-0064b401.pphosted.com with ESMTP id 38tfbh8nsn-1
+        by mx0a-0064b401.pphosted.com with ESMTP id 38tfbh8nsq-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 May 2021 10:38:33 +0000
+        Fri, 28 May 2021 10:38:40 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JtIUCNdvEHEyaJgR9gltVCwyvdBt5fLXkgxKjteL+iGbzu+OOdsckzDTOUy9dVV5OsyFZZvwFuzcH10AasRNOwvgIAPiUWzjE02o4Hs4NLLCGDZSR6pHcgfX6LnF3qGq+ODtQ875/ZsHBtC/PZoxAc5QM5/EihQw5TsEldyeCk6evan/j5Yd3ye2IW04PSrZS/J7Bd1SivEG4TSKsNIlhEMo1gjNzE49AlUvhtqa1szFrQG3gefIfXXRJ21C1eAaQ3+YxmdPOv+gFt8YMiIbSi7MSVb81KCuM9RcVuBDMurJWsI24Exwlkv0VCiq5rFnGrXDicI9XjlT+qCFYbfDqQ==
+ b=JxBH5w8y5h/CsFhrhojehuAVhfkfYs6rk2KwkbFnQg3Uel/4UWpe/K4azBcFdrSTOVH3mPca2ajOhBxgnJMNrLayKYEym4gA93yU9fkM31dGxhVPAirSJTqMza/R71KM/46+ZXDp1IDoc1gOo1+26i3nUqjx510bFfW2q1bPS21w1KkE9U9F3CTnUFK+OryGQ95qozXaOgSibD4vktbA3UT2UBSz6w+OgKZXSuaTnr2AiOk8SMhVASD+1M7Wd5ecWhCTvHsRUHuHYWRJPsCRUYAonw3pmVr5Yf9laD0zy5HuWz5/4ttF7bZE24pChnjJxtVord1b72/9jF2uNUAhXA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UZFtFZQ19dtiGu0q4A91o88mfw7+X77N4k1AxGl1Uog=;
- b=mWa8oXkWbLcQuadmbdAr7t1EvOrOEDyQogAcPynml78iEFg2qIiLdr9x3adRZ2rRgpSsmxsvyjLN58EkR3OVgdGau9JCvo6rT7PuaHEuG6xG4wGYStD02Sj7FAQ485wPeuU6HWhEuqQKKxCoPqhGlcXjQMA2y7wdlXsd91l3FsYyBsMo79Y4CpuXtOAT7sPXEh427VaAl1flPOQCH9awAbCbyBdCDBwlCOwbn53LMBJVqzCVag7veK7IgtCMBhxGZUdRBxJcj1wJ9MUb5MhqJXvj2Su+7p8x01ge1JTvl3uuCjQ5oRks8pjrJzD+fzYgOQ2Fr8W+gtFbji4eBhUb5g==
+ bh=pgOr4zXICQXz1wkrbSV1bW6ZLKPkDuxtqFMx5UmhsTA=;
+ b=EY5hGXVd/qxgp0ZVMEaqEOLoO77Y0kihLE6oNVfSHkADTzE0cH3VjYK86CJmrdETvUSZBfuGz9TSCkXqqqYhY87gXNom9lm2W5MowgspW/iA665QytZicHIZ3tCzfoA3D4agvWuiFKaE4aRJZYLkploU36c11fC+GK24X7bPfJNyTWufb0jBMN07FqYnYwJqPSihQXlJSdpFfYoGrqRFIYWcuMk+/pxSl3/Yi4B6+TvjP3Hzpi2Z0yk3vFZxvOvzdbNhBvmi/x6v/sCiYadD19F0sewoVYFUvGkEGryhagjwtxWGa/2b4bHJjJBHkLd3ZOeA80WuoQ8OLUaMjCQbRA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=windriver.com; dmarc=pass action=none
  header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
@@ -40,8 +40,8 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=windriversystems.onmicrosoft.com;
  s=selector2-windriversystems-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UZFtFZQ19dtiGu0q4A91o88mfw7+X77N4k1AxGl1Uog=;
- b=GmjUMDFm5kK7uyJXcZQs9122CE5r2QvI9hBfYMp1+cc26JUxr6E2aOnxSXLze2FHJFKzDNZz8R9QW/I7us/ZaZyRwIuTiz0GejKjsdWzwVN1i5PbWE7zglFBMzEUMgKdyL7cnzKBe6e7+b1Rq1t5uOymjab57LHYU18fzgIzKoc=
+ bh=pgOr4zXICQXz1wkrbSV1bW6ZLKPkDuxtqFMx5UmhsTA=;
+ b=kwF+Gkj/ixeW/9nhvVSTbqh6rWi+36EtmLeJpxeKCydD/kE6iRU7ykMKV0eZbL6Appy6Doa+O6v3QsI6TLJscQswgg890/5YdUBtnJBUuUSeFhivWfDynletoKaSVVyjtcvLsrIX6qPXL1+Dtd/T+b6HoU6IHfXn6Jdehz6+N+0=
 Authentication-Results: vger.kernel.org; dkim=none (message not signed)
  header.d=none;vger.kernel.org; dmarc=none action=none
  header.from=windriver.com;
@@ -49,19 +49,19 @@ Received: from BN6PR11MB1956.namprd11.prod.outlook.com (2603:10b6:404:104::19)
  by BN6PR1101MB2097.namprd11.prod.outlook.com (2603:10b6:405:50::15) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4173.24; Fri, 28 May
- 2021 10:38:31 +0000
+ 2021 10:38:39 +0000
 Received: from BN6PR11MB1956.namprd11.prod.outlook.com
  ([fe80::f100:256b:e0af:7d33]) by BN6PR11MB1956.namprd11.prod.outlook.com
  ([fe80::f100:256b:e0af:7d33%3]) with mapi id 15.20.4173.024; Fri, 28 May 2021
- 10:38:31 +0000
+ 10:38:39 +0000
 From:   Ovidiu Panait <ovidiu.panait@windriver.com>
 To:     stable@vger.kernel.org
 Cc:     fllinden@amazon.com, bpf@vger.kernel.org, ast@kernel.org,
         daniel@iogearbox.net, yhs@fb.com, john.fastabend@gmail.com,
         samjonas@amazon.com
-Subject: [PATCH v2 4.19 02/19] bpf, selftests: Fix up some test_verifier cases for unprivileged
-Date:   Fri, 28 May 2021 13:37:53 +0300
-Message-Id: <20210528103810.22025-3-ovidiu.panait@windriver.com>
+Subject: [PATCH v2 4.19 06/19] bpf: Test_verifier, bpf_get_stack return value add <0
+Date:   Fri, 28 May 2021 13:37:57 +0300
+Message-Id: <20210528103810.22025-7-ovidiu.panait@windriver.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210528103810.22025-1-ovidiu.panait@windriver.com>
 References: <20210528103810.22025-1-ovidiu.panait@windriver.com>
@@ -72,52 +72,52 @@ X-ClientProxiedBy: VI1PR0102CA0083.eurprd01.prod.exchangelabs.com
  (2603:10b6:404:104::19)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from otp-linux01.wrs.com (46.97.150.20) by VI1PR0102CA0083.eurprd01.prod.exchangelabs.com (2603:10a6:803:15::24) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4173.20 via Frontend Transport; Fri, 28 May 2021 10:38:30 +0000
+Received: from otp-linux01.wrs.com (46.97.150.20) by VI1PR0102CA0083.eurprd01.prod.exchangelabs.com (2603:10a6:803:15::24) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4173.20 via Frontend Transport; Fri, 28 May 2021 10:38:37 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 546c8293-68b2-4128-af4a-08d921c4bcd6
+X-MS-Office365-Filtering-Correlation-Id: 8591658c-f637-46af-edf1-08d921c4c12f
 X-MS-TrafficTypeDiagnostic: BN6PR1101MB2097:
-X-Microsoft-Antispam-PRVS: <BN6PR1101MB20970B04D37D280C70D46CEDFE229@BN6PR1101MB2097.namprd11.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1060;
+X-Microsoft-Antispam-PRVS: <BN6PR1101MB20974CD33B4F93DD6989BF17FE229@BN6PR1101MB2097.namprd11.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:655;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: VzcCnIYGAzzEOvSHMhJyY+YDUj2hsZT1rh/hUGK78iVT3qek7vuapsZOCuFYSGDIoQBVqAQaIuqINrgqKzaD8+gfjlpnncgiTV6EQ5PbwB4Iv6zNt2+xz2KCxawuvP2r6G3OnQuBX4gRB7farYPgZ7dY6XjYFcVqlWU72Tb9KfbsZdTzuB/UYOl4ABF20MiuJPtZnCqQP647wkXZNH9KnQd4fYuphE+ELv9cyimt81MYq1LJmK08dCi+nm1gPGlsGHOhCibVe3jZ3ExbBlJWYVFYFJ4BtxxTRe2fMZDPZSXAXYdmdWIUeS50mrMyTNz91Wnbg0jT/5VXtVBSWP+jpmefptM8BtBO7URta/XAuNPwF5VQm/njC79wM8er0cVx0HLhXOVY1SbKCCKAr25vNcBAqPZS0qsLOjJi2dNguCN6TPioVdwRtuPYxIVztGor0BedvYNc3qdmMh1dRtxGswiMuWA+WPZ0VHdXsGxVOAqmH+Tw8ePfuKxGi2K9tvP8trCbHMlvPm/nNNS+VB7bLYE04h74i9ggFvv9MMe/ggsdUE7qQJReUdG6zZUvag1lY3fR7ht93eLwXsN0BXMKvFzf0haa3xqE0XrHVJQZJwsYlfXyMV/+R5VNDNVox1bQlmH9yGJ7BPd4lMjBR/4X6w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR11MB1956.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(136003)(376002)(39840400004)(366004)(346002)(86362001)(478600001)(2906002)(6666004)(38350700002)(38100700002)(4326008)(6512007)(66946007)(66476007)(66556008)(316002)(8936002)(6486002)(52116002)(1076003)(5660300002)(956004)(26005)(2616005)(8676002)(16526019)(186003)(6506007)(44832011)(6916009)(36756003)(83380400001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?RFyr/usDKseozWR94zD/dJLUq6aZ4sNICi1UFDvilSze4wz3Asg3efXSYnmq?=
- =?us-ascii?Q?r0VbcRC6w+k2WVQqyCWv6u5F1ORJap9vQw47LboMRT9Bo0eAFvYY6MGi4yHr?=
- =?us-ascii?Q?4nfwtM5V+fy/iG93C/hPx8yZWmDBmYm6TWOjsbiaH1ppfV/TaJ5IERtqjrIn?=
- =?us-ascii?Q?UJW/ITWqLFA7tjHx0D2ZcSAhibHaqD935rW/WN3Wl2uxHpQXcOW2O6mAMAXd?=
- =?us-ascii?Q?wv7p3PAPVA2UxVo6PCIQfQHMv+tuCHUdduPp4EL5hXZP/209MOv4265bPnah?=
- =?us-ascii?Q?FbEkRxWdcFuQuzSyRxRIIAKxP7QqF7TsjTmKczlswchVvviOwrgFFonV/cdb?=
- =?us-ascii?Q?0X9Rrz25IUghhFvCSKNDfaqAMlbxaahkWg3z12QMGFLoIATlZSYt/aLmM8O+?=
- =?us-ascii?Q?fdfvEj2CGNqo5sHNzXliQ1KW1pl4FG8g354I3aj+VjBS4g10mrZ7Zu/hJBWt?=
- =?us-ascii?Q?clwFEhdwfS98c0TWhCe3KznJSPBTShUJyhBp0ZgZ24QiYBHEFbbZK9mkOXDr?=
- =?us-ascii?Q?wvn4sxENQqHpSii4JW4eg7DLxKfg5RH6/7eTwXPSBW1QCDvIT+m9uG1IAJC8?=
- =?us-ascii?Q?Bp5rgiHZa3EFeVgcvJb4h1AvRTYhcUrsT6ReMeU3hWNq4GHzaWIUs53vpjpu?=
- =?us-ascii?Q?l+/GNvddXzk5Y4ZdhVQiQ+6PSGvkT0p+7Q97HMJAFeVpgJ2lF5Mi+lY7g/n2?=
- =?us-ascii?Q?RqMsnRqSdxpiYbhzjDA7u3bDHlERIOmHvbQjLOWAevr8r22/Xu8VqlM9QUSu?=
- =?us-ascii?Q?mkxYNgw3dVJKrA+Y53w0mcykfjnm2g3URij+JhlR/dV7Rxph52lUwQ/NKYQM?=
- =?us-ascii?Q?L1rjAPmHjMi79TQOtliT8PwRVUc22tJMDWnpjZC/Kqvf+/TWwRd3niTO4wEX?=
- =?us-ascii?Q?mvDt6uUq385jwDHAmdpHcR6E1IccbEV05KNwOWL06PEYcTq39wBwj51D9tyN?=
- =?us-ascii?Q?PA7N8CsnjkRRAuCRK8Av9T92Cp1UyIc8CIRerckq8zq4UWnqaJMm/2w1TroD?=
- =?us-ascii?Q?x8/HMkEhfjSz6xyY7CiK42XwDV0XYOA7JReYW55zQzntpwY3rqIpfRulmmZ1?=
- =?us-ascii?Q?ccRAV+q3anXAwBP8SazlK9glpq7AiKjQypB03YRVMqpU6iVT8ICo5ZYMS+/X?=
- =?us-ascii?Q?wNzKwdntYW4FNaMerKuNZ4xgLEgxVDs7Ro1fChwWQjP/6e5iZnvYizkZyXUa?=
- =?us-ascii?Q?3pS9ZIv35hoXH7ZPqzqnSSwM8ePZ9r/uFsAbZFvyIxO/UBO8pccJXfqfzGiK?=
- =?us-ascii?Q?oUS/QWyY4S/f6iBp0u8guyFw0KCzYAOBVK4sJHyu4vzmKAP7aKBR70kMPOd/?=
- =?us-ascii?Q?xi6oEnFTEwAT5uHQ0S7PFpBY?=
+X-Microsoft-Antispam-Message-Info: E8O1Rwn5vqJnRtkF2b12I6uqVVx6Q+X3hxQlPo7qvexqURnMbgm3d8zyVBrn4IeVgSjqaHVoLULeS69Y5atdU+hIJGjyosh2pcS4vEoM6AYxKzBBnxfkVz6egvKSsFe8gzKS+SDc+DK8ATvsj4X1zftiTyogt5Tla4OTuk3EyPIcZLIFN2rlQwMZZBeIHHNH8nf7quGkiMFF7gLo2DPs9wyfx0Pua4owXoh5TEzqnHD0+XDv3/DyimLeLy6xX/9yLebevyvggB53P35fmLgbWAZPZVhv0Z9TdYMcnFP0DcRybXQjOeIN1XVn6iR8fqTBjYYgOafk48Gf49OGyKBjGSYeUXRwYBLFX75Wg7SpgkO4faiQ7j6PJLop1RqcRYP05q+KCk9GtfnZ6nY1iwX36k16ijvPsS5MpVS59TsGmHq9pWeCu8cP7yg0ksHSCrYhRHwm8v0T6+OhJMSP0930Bh9P0CtNrisfKXfVmDIaQMuEJ/maW7NtW4eLdKDGmvVGfBRGF/vM/G2wSb7+ZlLgqvYQ3Ua/q9H+r7di8dMPRALelF3qlwf2o8yUyIuRT/TsyIrdc0s2fNWR8osymxuqGemeqxWDiQfkooosJpBybj9R+CfAVMbs6hADKHtAB43ZzyGrQc02G6KuW8smfR3UUbEEgMC4RYioz6kdcjOyvyBh1lV7sXtsx9SJrWOuTx3o/tvGyQwYDdoBu7n2YyFxNVbpkPf4pyZex976pA04zeooAPjdn97jM0kXSHooulbZ4vlh4de2r8kKI1jyg2a0Eg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR11MB1956.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(136003)(376002)(39840400004)(366004)(346002)(966005)(86362001)(478600001)(2906002)(6666004)(38350700002)(38100700002)(4326008)(6512007)(66946007)(66476007)(66556008)(316002)(8936002)(6486002)(52116002)(1076003)(5660300002)(956004)(26005)(2616005)(8676002)(16526019)(186003)(6506007)(44832011)(6916009)(36756003)(83380400001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?/IwwyIM9jnHBlTXMosrsmKB4xcwlmga3PYvaWJJcm6Xk/gENpwvliHIWCTG1?=
+ =?us-ascii?Q?OPLm8Rg4+EmEDpPIBP8O4YDpN6BoBuboiC8i6Bu5/Hnb6U0QVuVNmUdFz1Vv?=
+ =?us-ascii?Q?776wwDJ4W/md2BsG3H8J39/EEqQDjbSmjhPoqI3zrWhF/OrxsU8t4gZdFuCD?=
+ =?us-ascii?Q?4edF+fRyqU1N4H9nZHw5UiARTz4I0A0XvtpDkRj94M47hDej67S4W33cHIVP?=
+ =?us-ascii?Q?20lg66aYXZ07ittwdbd4gIPq6h+k+GMxD8PDsT+DJxL6DKWGHH9hIvPKpYis?=
+ =?us-ascii?Q?2JR1ebXn6D781SGFC7MXDQc5OfcyvEJILZFOUHtsHhlDcvYshLNN/Ibw0YWI?=
+ =?us-ascii?Q?FDzWGhLx21uR+0TsYLhRgk5pfLCS5Eai0ww8XhWTqhScN3OaPJZIbo5QqkZ7?=
+ =?us-ascii?Q?NURTzIIXBdNYvUI/xEdZRJMsYO/6Yi97LvpSEAuDsHXC6+ZuvvpebyY6DMNv?=
+ =?us-ascii?Q?/fsOx0EKVLAgIxlW6JrAGiHaOvJOwgwhRrQLDZvDQOEyQPEAVvKmqmwOeSee?=
+ =?us-ascii?Q?tbey8htIilmdp9zrpGFyJVJ+Abfs9DW3nUs2TBKD3eH6hVwvyru26BDFIt63?=
+ =?us-ascii?Q?7Bb1uuDwqAyWZ1MI+iNMDXdl+3U8e1xfVCKChy8wMB6AfFvIJ9FSaSg9W0Vj?=
+ =?us-ascii?Q?L9xY02rXvgbRa+MjfCrZDKt8rsCIpipdQqGHh/z5OQ/Bt8qqh9ZhS/dJH2UW?=
+ =?us-ascii?Q?4Pvg7weSE2A0apcZQm3f9dm2HFVfetu4Cw2JKWwVtgcNtLG8Xd4Wf58zlc8M?=
+ =?us-ascii?Q?YdsVPNcZwgjLJ/9FWeZH5wzNqpyC3K7kYhLnyQIoBeQgb08aFOK2VVUe+X0f?=
+ =?us-ascii?Q?Zbuyfq6+y6Uas6FtcsEQaQMyhaJAzlU6GYobD5eHomuH3PCyVr5yj01CxwoV?=
+ =?us-ascii?Q?pNjRNYeNjdzQoJPuCOq7qkHKlAq6Qo10oYe7kHhOtyqpEAmk0XcScbL7LZnQ?=
+ =?us-ascii?Q?ulIG/K8L506sh/H3wivmr7FtPbaqp85wtGrffIhd0WyUxYJfZ9u9zmdQM/CE?=
+ =?us-ascii?Q?WySHw7WNIEjhOTLRcKcBOp2o009NQ2SBMHGaG0d0kLM009stKn6Bnj/vKb6B?=
+ =?us-ascii?Q?EbdyrunS+4sh+3SVZ5GcM7HBH4m5yyoUyjAxVhwIbVcznaiI0ydPcFcBXzjz?=
+ =?us-ascii?Q?Zzwx/fDeja0NJCw6MLip7knpJ5vDr8wXxqclHGVSeLS5h8y4snMCjyReLNEq?=
+ =?us-ascii?Q?LZyiKIn2VKlsML1Pt5JRZnthVEctFE7Rdp4Acc4G7Zb/NdOpWfISsV5Bgubg?=
+ =?us-ascii?Q?IEO3wzAkYriBvhiZwSuIdmffrSmYMtyExMiPeou045t7oqPmFh+bpncakNzt?=
+ =?us-ascii?Q?pwMeMnZZZnp69IDH1yp/Prb9?=
 X-OriginatorOrg: windriver.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 546c8293-68b2-4128-af4a-08d921c4bcd6
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8591658c-f637-46af-edf1-08d921c4c12f
 X-MS-Exchange-CrossTenant-AuthSource: BN6PR11MB1956.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 May 2021 10:38:31.6707
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 May 2021 10:38:38.9715
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1wWCnGkkBcCjFjmWQIq3M2ZomXxpPqREKAbFawaqADSLiWiFWdTrD6+ofFjD4lf07T9WL9O/kTQ58+0S3ihVQPaK42iq4TBM1ay4Br1mMpg=
+X-MS-Exchange-CrossTenant-UserPrincipalName: nh+JYmHzx72ssKGEIvaPO7roMarJ8P1OLfGdemtwYTCdGN4DoDPM87dMbE7rBL1vA74N1dI9Z3H9GhKoQOmXpgpV0jU22fAi2lZP8h2gz1A=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR1101MB2097
-X-Proofpoint-ORIG-GUID: rcu0JJm-mhB2CxpfCTdztvKB-X-Bsz7Z
-X-Proofpoint-GUID: rcu0JJm-mhB2CxpfCTdztvKB-X-Bsz7Z
+X-Proofpoint-ORIG-GUID: 5rh8cE6EknC3_xtlQ6C4d2SzAOTYfn6W
+X-Proofpoint-GUID: 5rh8cE6EknC3_xtlQ6C4d2SzAOTYfn6W
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
  definitions=2021-05-28_04:2021-05-27,2021-05-28 signatures=0
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
@@ -129,166 +129,137 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Piotr Krysiuk <piotras@gmail.com>
+From: John Fastabend <john.fastabend@gmail.com>
 
-commit 0a13e3537ea67452d549a6a80da3776d6b7dedb3 upstream
+commit 9ac26e9973bac5716a2a542e32f380c84db2b88c upstream.
 
-Fix up test_verifier error messages for the case where the original error
-message changed, or for the case where pointer alu errors differ between
-privileged and unprivileged tests. Also, add alternative tests for keeping
-coverage of the original verifier rejection error message (fp alu), and
-newly reject map_ptr += rX where rX == 0 given we now forbid alu on these
-types for unprivileged. All test_verifier cases pass after the change. The
-test case fixups were kept separate to ease backporting of core changes.
+With current ALU32 subreg handling and retval refine fix from last
+patches we see an expected failure in test_verifier. With verbose
+verifier state being printed at each step for clarity we have the
+following relavent lines [I omit register states that are not
+necessarily useful to see failure cause],
 
-Signed-off-by: Piotr Krysiuk <piotras@gmail.com>
-Co-developed-by: Daniel Borkmann <daniel@iogearbox.net>
+#101/p bpf_get_stack return R0 within range FAIL
+Failed to load prog 'Success'!
+[..]
+14: (85) call bpf_get_stack#67
+ R0_w=map_value(id=0,off=0,ks=8,vs=48,imm=0)
+ R3_w=inv48
+15:
+ R0=inv(id=0,smax_value=48,var32_off=(0x0; 0xffffffff))
+15: (b7) r1 = 0
+16:
+ R0=inv(id=0,smax_value=48,var32_off=(0x0; 0xffffffff))
+ R1_w=inv0
+16: (bf) r8 = r0
+17:
+ R0=inv(id=0,smax_value=48,var32_off=(0x0; 0xffffffff))
+ R1_w=inv0
+ R8_w=inv(id=0,smax_value=48,var32_off=(0x0; 0xffffffff))
+17: (67) r8 <<= 32
+18:
+ R0=inv(id=0,smax_value=48,var32_off=(0x0; 0xffffffff))
+ R1_w=inv0
+ R8_w=inv(id=0,smax_value=9223372032559808512,
+               umax_value=18446744069414584320,
+               var_off=(0x0; 0xffffffff00000000),
+               s32_min_value=0,
+               s32_max_value=0,
+               u32_max_value=0,
+               var32_off=(0x0; 0x0))
+18: (c7) r8 s>>= 32
+19
+ R0=inv(id=0,smax_value=48,var32_off=(0x0; 0xffffffff))
+ R1_w=inv0
+ R8_w=inv(id=0,smin_value=-2147483648,
+               smax_value=2147483647,
+               var32_off=(0x0; 0xffffffff))
+19: (cd) if r1 s< r8 goto pc+16
+ R0=inv(id=0,smax_value=48,var32_off=(0x0; 0xffffffff))
+ R1_w=inv0
+ R8_w=inv(id=0,smin_value=-2147483648,
+               smax_value=0,
+               var32_off=(0x0; 0xffffffff))
+20:
+ R0=inv(id=0,smax_value=48,var32_off=(0x0; 0xffffffff))
+ R1_w=inv0
+ R8_w=inv(id=0,smin_value=-2147483648,
+               smax_value=0,
+ R9=inv48
+20: (1f) r9 -= r8
+21: (bf) r2 = r7
+22:
+ R2_w=map_value(id=0,off=0,ks=8,vs=48,imm=0)
+22: (0f) r2 += r8
+value -2147483648 makes map_value pointer be out of bounds
+
+After call bpf_get_stack() on line 14 and some moves we have at line 16
+an r8 bound with max_value 48 but an unknown min value. This is to be
+expected bpf_get_stack call can only return a max of the input size but
+is free to return any negative error in the 32-bit register space. The
+C helper is returning an int so will use lower 32-bits.
+
+Lines 17 and 18 clear the top 32 bits with a left/right shift but use
+ARSH so we still have worst case min bound before line 19 of -2147483648.
+At this point the signed check 'r1 s< r8' meant to protect the addition
+on line 22 where dst reg is a map_value pointer may very well return
+true with a large negative number. Then the final line 22 will detect
+this as an invalid operation and fail the program. What we want to do
+is proceed only if r8 is positive non-error. So change 'r1 s< r8' to
+'r1 s> r8' so that we jump if r8 is negative.
+
+Next we will throw an error because we access past the end of the map
+value. The map value size is 48 and sizeof(struct test_val) is 48 so
+we walk off the end of the map value on the second call to
+get bpf_get_stack(). Fix this by changing sizeof(struct test_val) to
+24 by using 'sizeof(struct test_val) / 2'. After this everything passes
+as expected.
+
+Signed-off-by: John Fastabend <john.fastabend@gmail.com>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Alexei Starovoitov <ast@kernel.org>
-[OP: backport to 4.19, skipping non-existent tests]
+Link: https://lore.kernel.org/bpf/158560426019.10843.3285429543232025187.stgit@john-Precision-5820-Tower
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+[OP: backport to 4.19]
 Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
 ---
- tools/testing/selftests/bpf/test_verifier.c | 42 ++++++++++++++++-----
- 1 file changed, 33 insertions(+), 9 deletions(-)
+ tools/testing/selftests/bpf/test_verifier.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
-index fef1c9e3c4b8..29d42f7796d9 100644
+index a34552aadc12..da985a5e7cc5 100644
 --- a/tools/testing/selftests/bpf/test_verifier.c
 +++ b/tools/testing/selftests/bpf/test_verifier.c
-@@ -2837,7 +2837,7 @@ static struct bpf_test tests[] = {
- 		.result = ACCEPT,
- 	},
- 	{
--		"unpriv: adding of fp",
-+		"unpriv: adding of fp, reg",
- 		.insns = {
- 			BPF_MOV64_IMM(BPF_REG_0, 0),
+@@ -12253,17 +12253,17 @@ static struct bpf_test tests[] = {
+ 				     BPF_FUNC_map_lookup_elem),
+ 			BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 28),
+ 			BPF_MOV64_REG(BPF_REG_7, BPF_REG_0),
+-			BPF_MOV64_IMM(BPF_REG_9, sizeof(struct test_val)),
++			BPF_MOV64_IMM(BPF_REG_9, sizeof(struct test_val)/2),
+ 			BPF_MOV64_REG(BPF_REG_1, BPF_REG_6),
+ 			BPF_MOV64_REG(BPF_REG_2, BPF_REG_7),
+-			BPF_MOV64_IMM(BPF_REG_3, sizeof(struct test_val)),
++			BPF_MOV64_IMM(BPF_REG_3, sizeof(struct test_val)/2),
+ 			BPF_MOV64_IMM(BPF_REG_4, 256),
+ 			BPF_EMIT_CALL(BPF_FUNC_get_stack),
  			BPF_MOV64_IMM(BPF_REG_1, 0),
-@@ -2845,6 +2845,19 @@ static struct bpf_test tests[] = {
- 			BPF_STX_MEM(BPF_DW, BPF_REG_1, BPF_REG_0, -8),
- 			BPF_EXIT_INSN(),
- 		},
-+		.errstr_unpriv = "R1 tried to add from different maps, paths, or prohibited types",
-+		.result_unpriv = REJECT,
-+		.result = ACCEPT,
-+	},
-+	{
-+		"unpriv: adding of fp, imm",
-+		.insns = {
-+		BPF_MOV64_IMM(BPF_REG_0, 0),
-+		BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),
-+		BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 0),
-+		BPF_STX_MEM(BPF_DW, BPF_REG_1, BPF_REG_0, -8),
-+		BPF_EXIT_INSN(),
-+		},
- 		.errstr_unpriv = "R1 stack pointer arithmetic goes out of range",
- 		.result_unpriv = REJECT,
- 		.result = ACCEPT,
-@@ -9758,8 +9771,9 @@ static struct bpf_test tests[] = {
- 			BPF_ALU64_REG(BPF_SUB, BPF_REG_0, BPF_REG_1),
- 			BPF_EXIT_INSN(),
- 		},
--		.result = REJECT,
-+		.errstr_unpriv = "R0 tried to sub from different maps, paths, or prohibited types",
- 		.errstr = "R0 tried to subtract pointer from scalar",
-+		.result = REJECT,
- 	},
- 	{
- 		"check deducing bounds from const, 2",
-@@ -9772,6 +9786,8 @@ static struct bpf_test tests[] = {
- 			BPF_ALU64_REG(BPF_SUB, BPF_REG_1, BPF_REG_0),
- 			BPF_EXIT_INSN(),
- 		},
-+		.errstr_unpriv = "R1 tried to sub from different maps, paths, or prohibited types",
-+		.result_unpriv = REJECT,
- 		.result = ACCEPT,
- 		.retval = 1,
- 	},
-@@ -9783,8 +9799,9 @@ static struct bpf_test tests[] = {
- 			BPF_ALU64_REG(BPF_SUB, BPF_REG_0, BPF_REG_1),
- 			BPF_EXIT_INSN(),
- 		},
--		.result = REJECT,
-+		.errstr_unpriv = "R0 tried to sub from different maps, paths, or prohibited types",
- 		.errstr = "R0 tried to subtract pointer from scalar",
-+		.result = REJECT,
- 	},
- 	{
- 		"check deducing bounds from const, 4",
-@@ -9797,6 +9814,8 @@ static struct bpf_test tests[] = {
- 			BPF_ALU64_REG(BPF_SUB, BPF_REG_1, BPF_REG_0),
- 			BPF_EXIT_INSN(),
- 		},
-+		.errstr_unpriv = "R1 tried to sub from different maps, paths, or prohibited types",
-+		.result_unpriv = REJECT,
- 		.result = ACCEPT,
- 	},
- 	{
-@@ -9807,8 +9826,9 @@ static struct bpf_test tests[] = {
- 			BPF_ALU64_REG(BPF_SUB, BPF_REG_0, BPF_REG_1),
- 			BPF_EXIT_INSN(),
- 		},
--		.result = REJECT,
-+		.errstr_unpriv = "R0 tried to sub from different maps, paths, or prohibited types",
- 		.errstr = "R0 tried to subtract pointer from scalar",
-+		.result = REJECT,
- 	},
- 	{
- 		"check deducing bounds from const, 6",
-@@ -9819,8 +9839,9 @@ static struct bpf_test tests[] = {
- 			BPF_ALU64_REG(BPF_SUB, BPF_REG_0, BPF_REG_1),
- 			BPF_EXIT_INSN(),
- 		},
--		.result = REJECT,
-+		.errstr_unpriv = "R0 tried to sub from different maps, paths, or prohibited types",
- 		.errstr = "R0 tried to subtract pointer from scalar",
-+		.result = REJECT,
- 	},
- 	{
- 		"check deducing bounds from const, 7",
-@@ -9832,8 +9853,9 @@ static struct bpf_test tests[] = {
- 				    offsetof(struct __sk_buff, mark)),
- 			BPF_EXIT_INSN(),
- 		},
--		.result = REJECT,
-+		.errstr_unpriv = "R1 tried to sub from different maps, paths, or prohibited types",
- 		.errstr = "dereference of modified ctx ptr",
-+		.result = REJECT,
- 	},
- 	{
- 		"check deducing bounds from const, 8",
-@@ -9845,8 +9867,9 @@ static struct bpf_test tests[] = {
- 				    offsetof(struct __sk_buff, mark)),
- 			BPF_EXIT_INSN(),
- 		},
--		.result = REJECT,
-+		.errstr_unpriv = "R1 tried to add from different maps, paths, or prohibited types",
- 		.errstr = "dereference of modified ctx ptr",
-+		.result = REJECT,
- 	},
- 	{
- 		"check deducing bounds from const, 9",
-@@ -9856,8 +9879,9 @@ static struct bpf_test tests[] = {
- 			BPF_ALU64_REG(BPF_SUB, BPF_REG_0, BPF_REG_1),
- 			BPF_EXIT_INSN(),
- 		},
--		.result = REJECT,
-+		.errstr_unpriv = "R0 tried to sub from different maps, paths, or prohibited types",
- 		.errstr = "R0 tried to subtract pointer from scalar",
-+		.result = REJECT,
- 	},
- 	{
- 		"check deducing bounds from const, 10",
-@@ -9869,8 +9893,8 @@ static struct bpf_test tests[] = {
- 			BPF_ALU64_REG(BPF_SUB, BPF_REG_0, BPF_REG_1),
- 			BPF_EXIT_INSN(),
- 		},
--		.result = REJECT,
- 		.errstr = "math between ctx pointer and register with unbounded min value is not allowed",
-+		.result = REJECT,
- 	},
- 	{
- 		"bpf_exit with invalid return code. test1",
+ 			BPF_MOV64_REG(BPF_REG_8, BPF_REG_0),
+ 			BPF_ALU64_IMM(BPF_LSH, BPF_REG_8, 32),
+ 			BPF_ALU64_IMM(BPF_ARSH, BPF_REG_8, 32),
+-			BPF_JMP_REG(BPF_JSLT, BPF_REG_1, BPF_REG_8, 16),
++			BPF_JMP_REG(BPF_JSGT, BPF_REG_1, BPF_REG_8, 16),
+ 			BPF_ALU64_REG(BPF_SUB, BPF_REG_9, BPF_REG_8),
+ 			BPF_MOV64_REG(BPF_REG_2, BPF_REG_7),
+ 			BPF_ALU64_REG(BPF_ADD, BPF_REG_2, BPF_REG_8),
+@@ -12273,7 +12273,7 @@ static struct bpf_test tests[] = {
+ 			BPF_MOV64_REG(BPF_REG_3, BPF_REG_2),
+ 			BPF_ALU64_REG(BPF_ADD, BPF_REG_3, BPF_REG_1),
+ 			BPF_MOV64_REG(BPF_REG_1, BPF_REG_7),
+-			BPF_MOV64_IMM(BPF_REG_5, sizeof(struct test_val)),
++			BPF_MOV64_IMM(BPF_REG_5, sizeof(struct test_val)/2),
+ 			BPF_ALU64_REG(BPF_ADD, BPF_REG_1, BPF_REG_5),
+ 			BPF_JMP_REG(BPF_JGE, BPF_REG_3, BPF_REG_1, 4),
+ 			BPF_MOV64_REG(BPF_REG_1, BPF_REG_6),
 -- 
 2.17.1
 
