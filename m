@@ -2,175 +2,206 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-4.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 94B30C47082
-	for <bpf@archiver.kernel.org>; Sun, 30 May 2021 03:10:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B19BC47089
+	for <bpf@archiver.kernel.org>; Sun, 30 May 2021 03:22:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6FC2F61131
-	for <bpf@archiver.kernel.org>; Sun, 30 May 2021 03:10:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3F51161131
+	for <bpf@archiver.kernel.org>; Sun, 30 May 2021 03:22:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbhE3DM1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 29 May 2021 23:12:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60128 "EHLO
+        id S229583AbhE3DXh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 29 May 2021 23:23:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbhE3DM1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 29 May 2021 23:12:27 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA183C061574;
-        Sat, 29 May 2021 20:10:48 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id f84so11501922ybg.0;
-        Sat, 29 May 2021 20:10:48 -0700 (PDT)
+        with ESMTP id S229579AbhE3DXg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 29 May 2021 23:23:36 -0400
+Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73C8EC061574;
+        Sat, 29 May 2021 20:21:59 -0700 (PDT)
+Received: by mail-il1-x144.google.com with SMTP id h11so6939502ili.9;
+        Sat, 29 May 2021 20:21:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FcKoFZ0P38MLC340jJCPwKlfNKBvKK6zzlbSELrWy48=;
-        b=Tlf2hLmn/ijTjgjwMRyay3uRY5vr1QwsrIeFBVjrDVRcIXHt4FojGz2BCfsCKWAnuO
-         +Vee/xlQf7nALXbvV8gW/0KLzSRSYvJp+h6F+QhQ/JaaEQk5zPc8r81Tcz+2nhiQLl21
-         zP3rBnX+icd8x+cFVHtdJccv1A8BXq5InvJfxYPGmAbTL5epQAvEfBcqZhIUIQpgSVSA
-         Su4JttvANueSnMZZjFomcyi2SGkpbtJRZepcG/XdWonHLkcs45J/gvtZu1MzGr6Jlwf3
-         pSq2sWnUOwnry2uxXrhG7vBZM027BdbheW+uDoS5WWVx2q4Nm4RY6VT2j/A7lTpcyEa5
-         GAzg==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=9AEjPwmoanhxhl/4ZSEBznbLBkCR/LXMU3xQfCQv0BM=;
+        b=WpU7DU6vYzkH/Oc5oaix4Wn3/z8Icwol6KjkUB/qogxd57gK19KzULE9PoAi8LmiJ6
+         WauSelVJGVsSddCluLyzcBS83MOZ7ZHndDahIuGAYbwB7oqYjtu3CrXf/g49H6NZx1Jq
+         pb1Rs6cAyI9S6Tz9XFaQmy592rv8AeWdQPF0Kips2yDjhZQLhjMFDlSQUiD9t5GjOqsU
+         TbzQMcgmChfhJUK56OuPuxBKz/alr3QPf9vtwyGpd+i7FB3/KAQ7PZEaEFvASie1nV8w
+         DrGt3M016oE8Nzc3w5PM3vNE+9is+X6kbXVfrf6UIzCshr16fu87ZtbWWWaXMVX8zz5i
+         rqPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FcKoFZ0P38MLC340jJCPwKlfNKBvKK6zzlbSELrWy48=;
-        b=ZTpbNajz4kS9Gy0v7MlzrTyXK5A7ZJ4WoGIpe80UxaFiVRhgY7l0PuYsVTEfQeef81
-         Fz8nSO16h58E8bNz/xgPULExLZutU9ZTwlEZewcxFvcaBkQp1IUvH/5j6QzguZQpKvMM
-         sdvUC8iQ9wuc+By+jmBi0JWUWQ7D7ydniEUZjYH74yLhtThUAUjZn9c8riOfqhHqlN55
-         NioJWh00Hj0dhakCqv8tkRkWGYr1wGZLv9P6h6i917tzPY2DoBKNfiYxSCzPsbsMmW4S
-         mQyC1A2r695FHv7VmgUxeCGI90/60zwiHDKSRlKRbD8+mqBE/oWia3oQlb3EZ5mKd7Lm
-         AlJw==
-X-Gm-Message-State: AOAM53009ZisIvJ1KQDHDAMuc3mgIJy7O1lPpUnk6dnfxUoIPnCroqFL
-        7jyVIRDaCrjqYSoAmZRRfbKayvdzE/Lw7ZNGYlg=
-X-Google-Smtp-Source: ABdhPJxurv9vJ+f7Y6dgU2PL7HfRo6NQNymmA7TdAAmPf0Gbu5SH4MZOBeyUH96IwVmWirO8dVVokzMrXYqoJxdxXpk=
-X-Received: by 2002:a5b:f05:: with SMTP id x5mr22521804ybr.425.1622344247180;
- Sat, 29 May 2021 20:10:47 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=9AEjPwmoanhxhl/4ZSEBznbLBkCR/LXMU3xQfCQv0BM=;
+        b=FoGYiJEJuFVnyVR7e8EBaNHTR6LkKX6Ouc/j+ej7dbWeVNnBrEFWISQpBfQ7jf4Ps1
+         f9SR/Xs18vhnmhILnEoPhjWRGv906b1KEt9wyKKQSUcKUzR/jJhzaaov6YJS+yUVl1M0
+         CF+H3vDRE7hTjQgoztIYETUcOv79KYoTeMqBDJCOpjsU9wPC4hI35Hm368xMnIYCIwu1
+         QWPAZ8iqSN64aGum3xjCdmH8ZDRBbWqvsQ72EWAF1yc0A1R17jXY0EiJIbUcuTSc2g7j
+         vYb48UBv4pc2zhKWYiR7ev1qtT9oNsjGI9nPMcuzGPWL3OFO2rYXO3/5hkHnZ/x8t1JD
+         DWow==
+X-Gm-Message-State: AOAM532AQYbJpbP+LFhXTXtfbQhC6cSBfcUBnvVzckBXNjYV1L56O/un
+        QYNW4AX0jfFazhIJCaNIzwDe3ywAgw+Lh2rLMko=
+X-Google-Smtp-Source: ABdhPJwcQuaDcE2zy4B/pEdJ2JsfOmiUFawznd72jKAbDd3GYSIM3y3FTCzNvtbd3/SEolbWD7XHMQ==
+X-Received: by 2002:a63:1d61:: with SMTP id d33mr15973946pgm.331.1622338643906;
+        Sat, 29 May 2021 18:37:23 -0700 (PDT)
+Received: from [192.168.1.16] ([120.229.69.188])
+        by smtp.gmail.com with ESMTPSA id x15sm211010pfp.79.2021.05.29.18.37.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 29 May 2021 18:37:23 -0700 (PDT)
+Subject: Re: [PATCH net-next 2/3] net: sched: implement TCQ_F_CAN_BYPASS for
+ lockless qdisc
+To:     Jakub Kicinski <kuba@kernel.org>,
+        Yunsheng Lin <linyunsheng@huawei.com>
+Cc:     davem@davemloft.net, olteanv@gmail.com, ast@kernel.org,
+        daniel@iogearbox.net, andriin@fb.com, edumazet@google.com,
+        weiwan@google.com, cong.wang@bytedance.com, ap420073@gmail.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxarm@openeuler.org, mkl@pengutronix.de,
+        linux-can@vger.kernel.org, jhs@mojatatu.com,
+        xiyou.wangcong@gmail.com, jiri@resnulli.us, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, bpf@vger.kernel.org,
+        jonas.bonn@netrounds.com, pabeni@redhat.com, mzhivich@akamai.com,
+        johunt@akamai.com, albcamus@gmail.com, kehuan.feng@gmail.com,
+        a.fatoum@pengutronix.de, atenart@kernel.org,
+        alexander.duyck@gmail.com, hdanton@sina.com, jgross@suse.com,
+        JKosina@suse.com, mkubecek@suse.cz, bjorn@kernel.org,
+        alobakin@pm.me
+References: <1622170197-27370-1-git-send-email-linyunsheng@huawei.com>
+ <1622170197-27370-3-git-send-email-linyunsheng@huawei.com>
+ <20210528180012.676797d6@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+ <a6a965ee-7368-d37b-9c70-bba50c67eec9@huawei.com>
+ <20210528213218.2b90864c@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+ <ee1a62da-9758-70db-abd3-c5ca2e8e0ce0@huawei.com>
+ <20210529114919.4f8b1980@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+From:   Yunsheng Lin <yunshenglin0825@gmail.com>
+Message-ID: <9cc9f513-7655-07df-3c74-5abe07ae8321@gmail.com>
+Date:   Sun, 30 May 2021 09:37:09 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.2
 MIME-Version: 1.0
-References: <20210527171923.GG30378@techsingularity.net> <CAEf4BzZB7Z3fGyVH1+a9SvTtm1LBBG2T++pYiTjRVxbrodzzZA@mail.gmail.com>
- <20210528074248.GI30378@techsingularity.net>
-In-Reply-To: <20210528074248.GI30378@techsingularity.net>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Sat, 29 May 2021 20:10:36 -0700
-Message-ID: <CAEf4BzYrfKtecSEbf3yZs5v6aeSkNRJuHfed3kKz-6Vy1eeKuA@mail.gmail.com>
-Subject: Re: [PATCH v3] mm/page_alloc: Require pahole v1.22 to cope with
- zero-sized struct pagesets
-To:     Mel Gorman <mgorman@techsingularity.net>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Michal Suchanek <msuchanek@suse.de>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Hritik Vijay <hritikxx8@gmail.com>,
-        Linux-BPF <bpf@vger.kernel.org>,
-        Linux-Net <netdev@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>, clm@fb.com
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210529114919.4f8b1980@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, May 28, 2021 at 12:42 AM Mel Gorman <mgorman@techsingularity.net> wrote:
->
-> On Thu, May 27, 2021 at 03:17:48PM -0700, Andrii Nakryiko wrote:
-> > > Andrii Nakryiko bisected the problem to the commit "mm/page_alloc: convert
-> > > per-cpu list protection to local_lock" currently staged in mmotm. In his
-> > > own words
-> > >
-> > >   The immediate problem is two different definitions of numa_node per-cpu
-> > >   variable. They both are at the same offset within .data..percpu ELF
-> > >   section, they both have the same name, but one of them is marked as
-> > >   static and another as global. And one is int variable, while another
-> > >   is struct pagesets. I'll look some more tomorrow, but adding Jiri and
-> > >   Arnaldo for visibility.
-> > >
-> > >   [110907] DATASEC '.data..percpu' size=178904 vlen=303
-> > >   ...
-> > >         type_id=27753 offset=163976 size=4 (VAR 'numa_node')
-> > >         type_id=27754 offset=163976 size=4 (VAR 'numa_node')
-> > >
-> > >   [27753] VAR 'numa_node' type_id=27556, linkage=static
-> > >   [27754] VAR 'numa_node' type_id=20, linkage=global
-> > >
-> > >   [20] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED
-> > >
-> > >   [27556] STRUCT 'pagesets' size=0 vlen=1
-> > >         'lock' type_id=507 bits_offset=0
-> > >
-> > >   [506] STRUCT '(anon)' size=0 vlen=0
-> > >   [507] TYPEDEF 'local_lock_t' type_id=506
-> > >
-> > > The patch in question introduces a zero-sized per-cpu struct and while
-> > > this is not wrong, versions of pahole prior to 1.22 get confused during
-> > > BTF generation with two separate variables occupying the same address.
-> > >
-> > > This patch adds a requirement for pahole 1.22 before setting
-> > > DEBUG_INFO_BTF.  While pahole 1.22 does not exist yet, a fix is in the
-> > > pahole git tree as ("btf_encoder: fix and complete filtering out zero-sized
-> > > per-CPU variables").
-> > >
-> > > Reported-by: Michal Suchanek <msuchanek@suse.de>
-> > > Reported-by: Hritik Vijay <hritikxx8@gmail.com>
-> > > Debugged-by: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-> > > Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
-> > > ---
-> >
-> > I still think that v1 ([0]) is a more appropriate temporary solution
-> > until pahole 1.22 is released and widely packaged. Suddenly raising
-> > the minimum version to 1.22, which is not even released even, is a
-> > pretty big compatibility concern for all the users that rely on
-> > CONFIG_DEBUG_INFO_BTF.
->
-> On the flip side, we have a situation where a build tool (pahole) has a
-> problem whereby correct code does not result in a working kernel. It's
-> not that dissimilar to preventing the kernel being built on an old
-> compiler. While I accept it's unfortunate, Christoph had a point where
-> introducing workarounds in the kernel could lead to a prolification of
-> workarounds for pahole or other reasons that are potentially tricky to
-> revert as long as distributions exist that do not ship with a sufficiently
-> reason package.
->
-> > Just a few days ago pahole 1.16 worked fine and
-> > here we suddenly (and silently due to how Kconfig functions) raise
-> > that to a version that doesn't exist. That's going to break workflows
-> > for a lot of people.
-> >
->
-> People do have a workaround though. For the system building the kernel,
-> they can patch pahole and revert the check so a bootable kernel can be
-> built. It's not convenient but it is manageable and pahole has until
-> 5.13 releases to release a v1.22. The downsides for the alternative --
-> a non-booting kernel are much more severe.
->
-> > I'm asking to have that ugly work-around to ensure sizeof(struct
-> > pagesets) > 0 as a temporary solution only.
->
-> Another temporary solution is to locally build pahole and either revert
-> the check or fake the 1.22 release number with the self-built pahole.
->
+On 2021/5/30 2:49, Jakub Kicinski wrote:
+> On Sat, 29 May 2021 15:03:09 +0800 Yunsheng Lin wrote:
+>> On 2021/5/29 12:32, Jakub Kicinski wrote:
+>>> On Sat, 29 May 2021 09:44:57 +0800 Yunsheng Lin wrote:  
+>>>> MISSED is only set when there is lock contention, which means it
+>>>> is better not to do the qdisc bypass to avoid out of order packet
+>>>> problem,   
+>>>
+>>> Avoid as in make less likely? Nothing guarantees other thread is not
+>>> interrupted after ->enqueue and before qdisc_run_begin().
+>>>
+>>> TBH I'm not sure what out-of-order situation you're referring to,
+>>> there is no ordering guarantee between separate threads trying to
+>>> transmit AFAIU.  
+>> A thread need to do the bypass checking before doing enqueuing, so
+>> it means MISSED is set or the trylock fails for the bypass transmiting(
+>> which will set the MISSED after the first trylock), so the MISSED will
+>> always be set before a thread doing a enqueuing, and we ensure MISSED
+>> only be cleared during the protection of q->seqlock, after clearing
+>> MISSED, we do anther round of dequeuing within the protection of
+>> q->seqlock.
+> 
+> The fact that MISSED is only cleared under q->seqlock does not matter,
+> because setting it and ->enqueue() are not under any lock. If the thread
+> gets interrupted between:
+> 
+> 	if (q->flags & TCQ_F_CAN_BYPASS && nolock_qdisc_is_empty(q) &&
+> 	    qdisc_run_begin(q)) {
+> 
+> and ->enqueue() we can't guarantee that something else won't come in,
+> take q->seqlock and clear MISSED.
+> 
+> thread1                thread2             thread3
+> # holds seqlock
+>                        qdisc_run_begin(q)
+>                        set(MISSED)
+> pfifo_fast_dequeue
+>   clear(MISSED)
+>   # recheck the queue
+> qdisc_run_end()
+>                        ->enqueue()
+>                                             q->flags & TCQ_F_CAN_BYPASS..
+>                                             qdisc_run_begin() # true
+>                                             sch_direct_xmit()
+>                        qdisc_run_begin()
+>                        set(MISSED)
+> 
+> Or am I missing something?
+> 
+> Re-checking nolock_qdisc_is_empty() may or may not help.
+> But it doesn't really matter because there is no ordering
+> requirement between thread2 and thread3 here.
 
-Well, luckily it seems we anticipated issues like that and added
---skip_encoding_btf_vars argument, which I completely forgot about and
-just accidentally came across reviewing Arnaldo's latest pahole patch.
-I think that one is a much better solution, as then it will impact
-only those that explicitly relies on availability of BTF for per-CPU
-variables, which is a subset of all possible uses for kernel BTF. Sent
-a patch ([0]), please take a look.
+I were more focued on explaining that using MISSED is reliable
+as sch_may_need_requeuing() checking in RFCv3 [1] to indicate a
+empty qdisc, and forgot to mention the data race described in
+RFCv3, which is kind of like the one described above:
 
-  [0] https://lore.kernel.org/linux-mm/20210530002536.3193829-1-andrii@kernel.org/T/#u
+"There is a data race as below:
 
-> --
-> Mel Gorman
-> SUSE Labs
+      CPU1                                   CPU2
+qdisc_run_begin(q)                            .
+        .                                q->enqueue()
+sch_may_need_requeuing()                      .
+    return true                               .
+        .                                     .
+        .                                     .
+    q->enqueue()                              .
+
+When above happen, the skb enqueued by CPU1 is dequeued after the
+skb enqueued by CPU2 because sch_may_need_requeuing() return true.
+If there is not qdisc bypass, the CPU1 has better chance to queue
+the skb quicker than CPU2.
+
+This patch does not take care of the above data race, because I
+view this as similar as below:
+
+Even at the same time CPU1 and CPU2 write the skb to two socket
+which both heading to the same qdisc, there is no guarantee that
+which skb will hit the qdisc first, becuase there is a lot of
+factor like interrupt/softirq/cache miss/scheduling afffecting
+that."
+
+Does above make sense? Or any idea to avoid it?
+
+1. https://patchwork.kernel.org/project/netdevbpf/patch/1616404156-11772-1-git-send-email-linyunsheng@huawei.com/
+
+> 
+>> So if a thread has taken the q->seqlock and the MISSED is not set yet,
+>> it is allowed to send the packet directly without going through the
+>> qdisc enqueuing and dequeuing process.
+>>
+>>> IOW this check is not required for correctness, right?  
+>>
+>> if a thread has taken the q->seqlock and the MISSED is not set, it means
+>> other thread has not set MISSED after the first trylock and before the
+>> second trylock, which means the enqueuing is not done yet.
+>> So I assume the this check is required for correctness if I understand
+>> your question correctly.
+>>
+>>>> another good thing is that we could also do the batch
+>>>> dequeuing and transmiting of packets when there is lock contention.  
+>>>
+>>> No doubt, but did you see the flag get set significantly often here 
+>>> to warrant the double-checking?  
+>>
+>> No, that is just my guess:)
+> 
+> 
