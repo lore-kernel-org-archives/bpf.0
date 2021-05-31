@@ -5,55 +5,56 @@ X-Spam-Level:
 X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_NONE,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 63670C47083
-	for <bpf@archiver.kernel.org>; Mon, 31 May 2021 18:26:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3743BC4708F
+	for <bpf@archiver.kernel.org>; Mon, 31 May 2021 18:26:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 48E4461090
-	for <bpf@archiver.kernel.org>; Mon, 31 May 2021 18:26:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 19E836127C
+	for <bpf@archiver.kernel.org>; Mon, 31 May 2021 18:26:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232043AbhEaS1z (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 31 May 2021 14:27:55 -0400
-Received: from smtp-fw-80007.amazon.com ([99.78.197.218]:65526 "EHLO
-        smtp-fw-80007.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232116AbhEaS1k (ORCPT <rfc822;bpf@vger.kernel.org>);
+        id S232683AbhEaS16 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 31 May 2021 14:27:58 -0400
+Received: from smtp-fw-80006.amazon.com ([99.78.197.217]:64104 "EHLO
+        smtp-fw-80006.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232185AbhEaS1k (ORCPT <rfc822;bpf@vger.kernel.org>);
         Mon, 31 May 2021 14:27:40 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
   t=1622485560; x=1654021560;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=GsmhFNa2nLqeN9+231ZLCZpuqp3bb65LqW6+ArtWKQc=;
-  b=eoQijMFRoKI9ji7V0uurBH8fIBtOT08q/yXH6FS9iZyJcZP0BncMgsZn
-   B7Yl1KezYHsCAnNZurEcMz/qgbRTbPZYeC1GR4tXNQfBz52goFteJzVMk
-   VFwUmsfkSS5UCxQXTyxOFIj7SxiUwRHuj4IhqP0NdYcsrhA6Gk+g4F8y3
-   g=;
+  bh=l93EwFKQYf8DxYvKVkvqtrhNJPeAIb6G39YMsa425wc=;
+  b=Jl+ZxDA6uxw8cWxTnzaajxKpxQsOrHOxR8+iI9YB9/oJbiiCjFbbfjcx
+   uOivEi8ByV3ZIuyOvJYnyjokM1DGKw/7rzDmfeS69nFf8WQ+TVtJC8BWv
+   DcVUoH1KCD1K/O0wMtEKFTEEqoQO918kaKGmiG2XPTNDmdALcqNp7BZkq
+   I=;
 X-IronPort-AV: E=Sophos;i="5.83,238,1616457600"; 
-   d="scan'208";a="4116908"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-1a-807d4a99.us-east-1.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP; 31 May 2021 18:25:59 +0000
-Received: from EX13MTAUEB001.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan3.iad.amazon.com [10.40.159.166])
-        by email-inbound-relay-1a-807d4a99.us-east-1.amazon.com (Postfix) with ESMTPS id 8BB57A1D52;
-        Mon, 31 May 2021 18:25:58 +0000 (UTC)
-Received: from EX13D05UEB002.ant.amazon.com (10.43.60.76) by
- EX13MTAUEB001.ant.amazon.com (10.43.60.129) with Microsoft SMTP Server (TLS)
- id 15.0.1497.18; Mon, 31 May 2021 18:25:58 +0000
-Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
- EX13D05UEB002.ant.amazon.com (10.43.60.76) with Microsoft SMTP Server (TLS)
+   d="scan'208";a="4141094"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-1e-27fb8269.us-east-1.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP; 31 May 2021 18:26:00 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan2.iad.amazon.com [10.40.159.162])
+        by email-inbound-relay-1e-27fb8269.us-east-1.amazon.com (Postfix) with ESMTPS id 73489A18E6;
+        Mon, 31 May 2021 18:25:59 +0000 (UTC)
+Received: from EX13P01UWB003.ant.amazon.com (10.43.161.209) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.18; Mon, 31 May 2021 18:25:59 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
+ EX13P01UWB003.ant.amazon.com (10.43.161.209) with Microsoft SMTP Server (TLS)
  id 15.0.1497.18; Mon, 31 May 2021 18:25:58 +0000
 Received: from dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com
- (172.19.206.175) by mail-relay.amazon.com (10.43.60.234) with Microsoft SMTP
+ (172.19.206.175) by mail-relay.amazon.com (10.43.161.249) with Microsoft SMTP
  Server id 15.0.1497.18 via Frontend Transport; Mon, 31 May 2021 18:25:57
  +0000
 Received: by dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com (Postfix, from userid 6262777)
-        id 8BD62FA1; Mon, 31 May 2021 18:25:57 +0000 (UTC)
+        id 8FDDBB55; Mon, 31 May 2021 18:25:57 +0000 (UTC)
 From:   Frank van der Linden <fllinden@amazon.com>
 To:     <stable@vger.kernel.org>
 CC:     <bpf@vger.kernel.org>, <daniel@iogearbox.net>
-Subject: [PATCH v2 4.14 12/17] selftests/bpf: fix test_align
-Date:   Mon, 31 May 2021 18:25:51 +0000
-Message-ID: <20210531182556.25277-13-fllinden@amazon.com>
+Subject: [PATCH v2 4.14 02/17] bpf: Move off_reg into sanitize_ptr_alu
+Date:   Mon, 31 May 2021 18:25:41 +0000
+Message-ID: <20210531182556.25277-3-fllinden@amazon.com>
 X-Mailer: git-send-email 2.23.4
 In-Reply-To: <20210531182556.25277-1-fllinden@amazon.com>
 References: <20210531182556.25277-1-fllinden@amazon.com>
@@ -64,56 +65,59 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Alexei Starovoitov <ast@fb.com>
+From: Daniel Borkmann <daniel@iogearbox.net>
 
-commit 2b36047e7889b7efee22c11e17f035f721855731 upstream.
+commit 6f55b2f2a1178856c19bbce2f71449926e731914 upstream.
 
-since commit 82abbf8d2fc4 the verifier rejects the bit-wise
-arithmetic on pointers earlier.
-The test 'dubious pointer arithmetic' now has less output to match on.
-Adjust it.
+Small refactor to drag off_reg into sanitize_ptr_alu(), so we later on can
+use off_reg for generalizing some of the checks for all pointer types.
 
-Fixes: 82abbf8d2fc4 ("bpf: do not allow root to mangle valid pointers")
-Reported-by: kernel test robot <xiaolong.ye@intel.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Reviewed-by: John Fastabend <john.fastabend@gmail.com>
+Acked-by: Alexei Starovoitov <ast@kernel.org>
+[fllinden@amazon.com: fix minor contextual conflict for 4.14]
+Signed-off-by: Frank van der Linden <fllinden@amazon.com>
 ---
- tools/testing/selftests/bpf/test_align.c | 22 +---------------------
- 1 file changed, 1 insertion(+), 21 deletions(-)
+ kernel/bpf/verifier.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/test_align.c b/tools/testing/selftests/bpf/test_align.c
-index 8591c89c0828..471bbbdb94db 100644
---- a/tools/testing/selftests/bpf/test_align.c
-+++ b/tools/testing/selftests/bpf/test_align.c
-@@ -474,27 +474,7 @@ static struct bpf_align_test tests[] = {
- 		.result = REJECT,
- 		.matches = {
- 			{4, "R5=pkt(id=0,off=0,r=0,imm=0)"},
--			/* ptr & 0x40 == either 0 or 0x40 */
--			{5, "R5=inv(id=0,umax_value=64,var_off=(0x0; 0x40))"},
--			/* ptr << 2 == unknown, (4n) */
--			{7, "R5=inv(id=0,smax_value=9223372036854775804,umax_value=18446744073709551612,var_off=(0x0; 0xfffffffffffffffc))"},
--			/* (4n) + 14 == (4n+2).  We blow our bounds, because
--			 * the add could overflow.
--			 */
--			{8, "R5=inv(id=0,var_off=(0x2; 0xfffffffffffffffc))"},
--			/* Checked s>=0 */
--			{10, "R5=inv(id=0,umin_value=2,umax_value=9223372036854775806,var_off=(0x2; 0x7ffffffffffffffc))"},
--			/* packet pointer + nonnegative (4n+2) */
--			{12, "R6=pkt(id=1,off=0,r=0,umin_value=2,umax_value=9223372036854775806,var_off=(0x2; 0x7ffffffffffffffc))"},
--			{14, "R4=pkt(id=1,off=4,r=0,umin_value=2,umax_value=9223372036854775806,var_off=(0x2; 0x7ffffffffffffffc))"},
--			/* NET_IP_ALIGN + (4n+2) == (4n), alignment is fine.
--			 * We checked the bounds, but it might have been able
--			 * to overflow if the packet pointer started in the
--			 * upper half of the address space.
--			 * So we did not get a 'range' on R6, and the access
--			 * attempt will fail.
--			 */
--			{16, "R6=pkt(id=1,off=0,r=0,umin_value=2,umax_value=9223372036854775806,var_off=(0x2; 0x7ffffffffffffffc))"},
-+			/* R5 bitwise operator &= on pointer prohibited */
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index f28ba90a43a7..434829d4438b 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -2094,11 +2094,12 @@ static int sanitize_val_alu(struct bpf_verifier_env *env,
+ static int sanitize_ptr_alu(struct bpf_verifier_env *env,
+ 			    struct bpf_insn *insn,
+ 			    const struct bpf_reg_state *ptr_reg,
+-			    struct bpf_reg_state *dst_reg,
+-			    bool off_is_neg)
++			    const struct bpf_reg_state *off_reg,
++			    struct bpf_reg_state *dst_reg)
+ {
+ 	struct bpf_verifier_state *vstate = env->cur_state;
+ 	struct bpf_insn_aux_data *aux = cur_aux(env);
++	bool off_is_neg = off_reg->smin_value < 0;
+ 	bool ptr_is_dst_reg = ptr_reg == dst_reg;
+ 	u8 opcode = BPF_OP(insn->code);
+ 	u32 alu_state, alu_limit;
+@@ -2224,7 +2225,7 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
+ 
+ 	switch (opcode) {
+ 	case BPF_ADD:
+-		ret = sanitize_ptr_alu(env, insn, ptr_reg, dst_reg, smin_val < 0);
++		ret = sanitize_ptr_alu(env, insn, ptr_reg, off_reg, dst_reg);
+ 		if (ret < 0) {
+ 			verbose("R%d tried to add from different maps, paths, or prohibited types\n", dst);
+ 			return ret;
+@@ -2279,7 +2280,7 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
  		}
- 	},
- 	{
+ 		break;
+ 	case BPF_SUB:
+-		ret = sanitize_ptr_alu(env, insn, ptr_reg, dst_reg, smin_val < 0);
++		ret = sanitize_ptr_alu(env, insn, ptr_reg, off_reg, dst_reg);
+ 		if (ret < 0) {
+ 			verbose("R%d tried to sub from different maps, paths, or prohibited types\n", dst);
+ 			return ret;
 -- 
 2.23.4
 
