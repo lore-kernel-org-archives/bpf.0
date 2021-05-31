@@ -2,149 +2,109 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_NONE,
-	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23D29C4708F
-	for <bpf@archiver.kernel.org>; Mon, 31 May 2021 18:26:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F2A0C47080
+	for <bpf@archiver.kernel.org>; Mon, 31 May 2021 19:56:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 09E066127C
-	for <bpf@archiver.kernel.org>; Mon, 31 May 2021 18:26:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 72F81610A8
+	for <bpf@archiver.kernel.org>; Mon, 31 May 2021 19:56:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232854AbhEaS2S (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 31 May 2021 14:28:18 -0400
-Received: from smtp-fw-4101.amazon.com ([72.21.198.25]:14146 "EHLO
-        smtp-fw-4101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232573AbhEaS1w (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 31 May 2021 14:27:52 -0400
+        id S231563AbhEaT5x (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 31 May 2021 15:57:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59522 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230385AbhEaT5w (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 31 May 2021 15:57:52 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABE10C061574;
+        Mon, 31 May 2021 12:56:11 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id m13so8605916qtk.13;
+        Mon, 31 May 2021 12:56:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1622485573; x=1654021573;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=1jEc7I/9tRcVYzVXtkPMeF4qBl3Aoc4IBMPa97CdcRI=;
-  b=mvEctfOEy4weAYC81j7YP1582Gwq33Z/smZsw975AsvXt9oY7CpZQum1
-   4oLbb/giQxKupHiNhcbDC7YPahlqpNB3AXSpd7K+sjjOhh1N+xnKTh8kt
-   iETExcSNzsCBWud+/ja4vJvT0nRAegfQJT/PD2j+cklB4zqyC0erhc+5W
-   k=;
-X-IronPort-AV: E=Sophos;i="5.83,238,1616457600"; 
-   d="scan'208";a="111190630"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-2c-4e7c8266.us-west-2.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-4101.iad4.amazon.com with ESMTP; 31 May 2021 18:26:00 +0000
-Received: from EX13MTAUEA001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-2c-4e7c8266.us-west-2.amazon.com (Postfix) with ESMTPS id 1F160A0502;
-        Mon, 31 May 2021 18:25:59 +0000 (UTC)
-Received: from EX13D01UEA002.ant.amazon.com (10.43.61.37) by
- EX13MTAUEA001.ant.amazon.com (10.43.61.243) with Microsoft SMTP Server (TLS)
- id 15.0.1497.18; Mon, 31 May 2021 18:25:58 +0000
-Received: from EX13MTAUEA002.ant.amazon.com (10.43.61.77) by
- EX13D01UEA002.ant.amazon.com (10.43.61.37) with Microsoft SMTP Server (TLS)
- id 15.0.1497.18; Mon, 31 May 2021 18:25:58 +0000
-Received: from dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com
- (172.19.206.175) by mail-relay.amazon.com (10.43.61.169) with Microsoft SMTP
- Server id 15.0.1497.18 via Frontend Transport; Mon, 31 May 2021 18:25:58
- +0000
-Received: by dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com (Postfix, from userid 6262777)
-        id 8E9DE13FE; Mon, 31 May 2021 18:25:57 +0000 (UTC)
-From:   Frank van der Linden <fllinden@amazon.com>
-To:     <stable@vger.kernel.org>
-CC:     <bpf@vger.kernel.org>, <daniel@iogearbox.net>
-Subject: [PATCH v2 4.14 15/17] bpf: Wrap aux data inside bpf_sanitize_info container
-Date:   Mon, 31 May 2021 18:25:54 +0000
-Message-ID: <20210531182556.25277-16-fllinden@amazon.com>
-X-Mailer: git-send-email 2.23.4
-In-Reply-To: <20210531182556.25277-1-fllinden@amazon.com>
-References: <20210531182556.25277-1-fllinden@amazon.com>
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CgVBqkQLZmOYqPkge4g0jcqhV/Khxx+58SBmawGWouA=;
+        b=AaVt4mkEetpGQ/YDrne8rVrkdxgcLFaCcuqa2pUcjTewMqFwyyZeI3SY0T0RrYtmQP
+         1y2kNQ8bzSEPhTp1qjdbtjIgpETUH7hV4h6TM03iVwy+obHyh+SrAcD7YVGTOnfuvk62
+         FBdXLObEgGd5zZr9fT9/S3m6iLu/6ddkiknGcsvq0VMhfchzkEwhbBXdnu2akeMFf9V2
+         xezfBqo4E9/O6GWrK5Ys3xDY7v5O7BLR2uW7GdhQEhLGL1QjAfvgpdjr47FPD6FKEf35
+         o6In377vVYEC5nEysyzrFo9w7TYxa8r8Yk5Ka0fW9ZIrEB1pxu9O6GMnUFSovgSCEkZs
+         X8Og==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CgVBqkQLZmOYqPkge4g0jcqhV/Khxx+58SBmawGWouA=;
+        b=X83zDBRQPnx/5bT7ABZoE9gIlXfDQ5oES0ll0bXalakHRh4lyClBUZgviVoACI5esz
+         M6oMl6PYCPjgImQQrx2VTMeK8+I9uvVdlFkj6HZBGV3bpmAsEQTw97tbJmleVcMLzKn9
+         EVcIskLraiyGeRM+UndjD8TBIZpKHkDuWZZ1fwKocaTb5BzGgKxV4QoF9YFN+UHE1CX2
+         94Qj41IKuRQ5oBlX8LVELgE3dVXhReNFaSghufeinf9Ppf7u89XwlCyZ/fZ9UrPq9AqO
+         ZzNoIrklhClebJPBpJ5nJWwoJinLZPoIP9WU/13nmNlDCf59HmXwWCqKwTajGhxWAtpW
+         fOPQ==
+X-Gm-Message-State: AOAM532iIMAKQkTUXJRJLBayf174y3ZfQ3rDXCZgmfRsH5HXGzRgRBKP
+        FhSsJgd8PF6a/us6b6R+zwUmqDofsdUaiQxz
+X-Google-Smtp-Source: ABdhPJxnnTX9v6s/AghcsXuakbSWvaFzCo2NeHxn03hMexmFROnoVK+PRmrMFVhsN0Ct03xtXU3MEQ==
+X-Received: by 2002:ac8:4ccb:: with SMTP id l11mr11402701qtv.127.1622490970809;
+        Mon, 31 May 2021 12:56:10 -0700 (PDT)
+Received: from localhost.localdomain (pool-108-54-205-133.nycmny.fios.verizon.net. [108.54.205.133])
+        by smtp.gmail.com with ESMTPSA id d18sm9939549qkc.28.2021.05.31.12.56.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 May 2021 12:56:10 -0700 (PDT)
+From:   grantseltzer <grantseltzer@gmail.com>
+To:     andrii@kernel.org, daniel@iogearbox.net, corbet@lwn.net
+Cc:     linux-doc@vger.kernel.org, grantseltzer@gmail.com,
+        bpf@vger.kernel.org
+Subject: [PATCH bpf-next 0/2] Autogenerating libbpf API documentation
+Date:   Mon, 31 May 2021 19:55:51 +0000
+Message-Id: <20210531195553.168298-1-grantseltzer@gmail.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Daniel Borkmann <daniel@iogearbox.net>
+This patch series is meant to start the initiative to document libbpf.
+It includes .rst files which are text documentation describing building, 
+API naming convention, as well as an index to generated API documentation.
 
-commit 3d0220f6861d713213b015b582e9f21e5b28d2e0 upstream.
+In this approach the generated API documentation is enabled by the kernels
+existing kernel documentation system which uses sphinx. The resulting docs
+would then be synced to kernel.org/doc
 
-Add a container structure struct bpf_sanitize_info which holds
-the current aux info, and update call-sites to sanitize_ptr_alu()
-to pass it in. This is needed for passing in additional state
-later on.
+You can test this by running `make htmldocs` and serving the html in 
+Documentation/output. Since libbpf does not yet have comments in kernel
+doc format, see kernel.org/doc/html/latest/doc-guide/kernel-doc.html for
+an example so you can test this.
 
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Reviewed-by: Piotr Krysiuk <piotras@gmail.com>
-Acked-by: Alexei Starovoitov <ast@kernel.org>
----
- kernel/bpf/verifier.c | 18 +++++++++++-------
- 1 file changed, 11 insertions(+), 7 deletions(-)
+The advantage of this approach is to use the existing sphinx
+infrastructure that the kernel has, and have libbpf docs in
+the same place as everything else.
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 84779fe35ebc..db359b796442 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -2110,15 +2110,19 @@ static bool sanitize_needed(u8 opcode)
- 	return opcode == BPF_ADD || opcode == BPF_SUB;
- }
- 
-+struct bpf_sanitize_info {
-+	struct bpf_insn_aux_data aux;
-+};
-+
- static int sanitize_ptr_alu(struct bpf_verifier_env *env,
- 			    struct bpf_insn *insn,
- 			    const struct bpf_reg_state *ptr_reg,
- 			    const struct bpf_reg_state *off_reg,
- 			    struct bpf_reg_state *dst_reg,
--			    struct bpf_insn_aux_data *tmp_aux,
-+			    struct bpf_sanitize_info *info,
- 			    const bool commit_window)
- {
--	struct bpf_insn_aux_data *aux = commit_window ? cur_aux(env) : tmp_aux;
-+	struct bpf_insn_aux_data *aux = commit_window ? cur_aux(env) : &info->aux;
- 	struct bpf_verifier_state *vstate = env->cur_state;
- 	bool off_is_imm = tnum_is_const(off_reg->var_off);
- 	bool off_is_neg = off_reg->smin_value < 0;
-@@ -2147,8 +2151,8 @@ static int sanitize_ptr_alu(struct bpf_verifier_env *env,
- 		/* In commit phase we narrow the masking window based on
- 		 * the observed pointer move after the simulated operation.
- 		 */
--		alu_state = tmp_aux->alu_state;
--		alu_limit = abs(tmp_aux->alu_limit - alu_limit);
-+		alu_state = info->aux.alu_state;
-+		alu_limit = abs(info->aux.alu_limit - alu_limit);
- 	} else {
- 		alu_state  = off_is_neg ? BPF_ALU_NEG_VALUE : 0;
- 		alu_state |= off_is_imm ? BPF_ALU_IMMEDIATE : 0;
-@@ -2276,7 +2280,7 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
- 	    smin_ptr = ptr_reg->smin_value, smax_ptr = ptr_reg->smax_value;
- 	u64 umin_val = off_reg->umin_value, umax_val = off_reg->umax_value,
- 	    umin_ptr = ptr_reg->umin_value, umax_ptr = ptr_reg->umax_value;
--	struct bpf_insn_aux_data tmp_aux = {};
-+	struct bpf_sanitize_info info = {};
- 	u8 opcode = BPF_OP(insn->code);
- 	u32 dst = insn->dst_reg;
- 	int ret;
-@@ -2327,7 +2331,7 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
- 
- 	if (sanitize_needed(opcode)) {
- 		ret = sanitize_ptr_alu(env, insn, ptr_reg, off_reg, dst_reg,
--				       &tmp_aux, false);
-+				       &info, false);
- 		if (ret < 0)
- 			return sanitize_err(env, insn, ret, off_reg, dst_reg);
- 	}
-@@ -2468,7 +2472,7 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
- 		return -EACCES;
- 	if (sanitize_needed(opcode)) {
- 		ret = sanitize_ptr_alu(env, insn, dst_reg, off_reg, dst_reg,
--				       &tmp_aux, true);
-+				       &info, true);
- 		if (ret < 0)
- 			return sanitize_err(env, insn, ret, off_reg, dst_reg);
- 	}
+The perhaps large disadvantage of this approach is that libbpf versions
+independently from the kernel. If it's possible to version libbpf
+separately without having duplicates that would be the ideal scenario.
+
+grantseltzer (2):
+  Add documentation for libbpf including API autogen
+  Remove duplicate README doc from libbpf
+
+ Documentation/bpf/index.rst                   | 13 +++++++
+ Documentation/bpf/libbpf.rst                  | 14 +++++++
+ Documentation/bpf/libbpf_api.rst              | 18 +++++++++
+ Documentation/bpf/libbpf_build.rst            | 37 +++++++++++++++++++
+ .../bpf/libbpf_naming_convention.rst          | 20 +++++-----
+ 5 files changed, 93 insertions(+), 9 deletions(-)
+ create mode 100644 Documentation/bpf/libbpf.rst
+ create mode 100644 Documentation/bpf/libbpf_api.rst
+ create mode 100644 Documentation/bpf/libbpf_build.rst
+ rename tools/lib/bpf/README.rst => Documentation/bpf/libbpf_naming_convention.rst (96%)
+
 -- 
-2.23.4
+2.29.2
 
