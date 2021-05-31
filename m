@@ -2,59 +2,61 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 82334C47082
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F26EAC47083
 	for <bpf@archiver.kernel.org>; Mon, 31 May 2021 18:26:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6B80661285
+	by mail.kernel.org (Postfix) with ESMTP id D08F96128A
 	for <bpf@archiver.kernel.org>; Mon, 31 May 2021 18:26:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232565AbhEaS1t (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 31 May 2021 14:27:49 -0400
-Received: from smtp-fw-9102.amazon.com ([207.171.184.29]:15273 "EHLO
-        smtp-fw-9102.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232023AbhEaS1j (ORCPT <rfc822;bpf@vger.kernel.org>);
+        id S232437AbhEaS1v (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 31 May 2021 14:27:51 -0400
+Received: from smtp-fw-9103.amazon.com ([207.171.188.200]:25787 "EHLO
+        smtp-fw-9103.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232062AbhEaS1j (ORCPT <rfc822;bpf@vger.kernel.org>);
         Mon, 31 May 2021 14:27:39 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
   t=1622485560; x=1654021560;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=zgue9LdRFIrhSzSfpiimjBB+WSTbFvB1kk0jQ6j5iOs=;
-  b=jpD1wDFEUUShmgOTkBM1CeBuC/6Eqes9cTRMOucSJp1qfVbgdqWzIDBP
-   qApv1YDqbU9Lhx4HxFmflqMR19n6xSelQn0xkM3/q0UuKutgwEl1oJSlX
-   tNDr1yS2RbVYh2WFtK03npcMvrlzYo+9835vu747jfko6ZBBycBIKDuPj
-   w=;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=BZjquoJ/oQFDtgT3SLoaHv/l88D2w92qL1biojPQlSY=;
+  b=rBCxrtmdC+4pwnZ5SmTX/L9BVOL4DsWDrnod0b4VTHwjdGrIwwVaNIjx
+   kRKvomOx0IhETv+VxbRb3Rw6omt6DJtM2KJuHvAqnttDbmYnW8qM98KOv
+   RlOqeWIB8M4/NMfQ+URL7xSlGnqQrnKpQHy1XuFzrLq7fI+35Yf2LcH3p
+   I=;
 X-IronPort-AV: E=Sophos;i="5.83,238,1616457600"; 
-   d="scan'208";a="137675706"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-2a-53356bf6.us-west-2.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-9102.sea19.amazon.com with ESMTP; 31 May 2021 18:25:59 +0000
-Received: from EX13MTAUEA001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-2a-53356bf6.us-west-2.amazon.com (Postfix) with ESMTPS id 05C81A06B0;
+   d="scan'208";a="935853352"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-1e-c7c08562.us-east-1.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-9103.sea19.amazon.com with ESMTP; 31 May 2021 18:25:59 +0000
+Received: from EX13MTAUWC001.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan3.iad.amazon.com [10.40.159.166])
+        by email-inbound-relay-1e-c7c08562.us-east-1.amazon.com (Postfix) with ESMTPS id 9BD96240AF2;
         Mon, 31 May 2021 18:25:58 +0000 (UTC)
-Received: from EX13D04UEA002.ant.amazon.com (10.43.61.61) by
- EX13MTAUEA001.ant.amazon.com (10.43.61.82) with Microsoft SMTP Server (TLS)
+Received: from EX13D25UWC004.ant.amazon.com (10.43.162.201) by
+ EX13MTAUWC001.ant.amazon.com (10.43.162.135) with Microsoft SMTP Server (TLS)
  id 15.0.1497.18; Mon, 31 May 2021 18:25:58 +0000
-Received: from EX13MTAUEA001.ant.amazon.com (10.43.61.82) by
- EX13D04UEA002.ant.amazon.com (10.43.61.61) with Microsoft SMTP Server (TLS)
+Received: from EX13MTAUWC001.ant.amazon.com (10.43.162.135) by
+ EX13D25UWC004.ant.amazon.com (10.43.162.201) with Microsoft SMTP Server (TLS)
  id 15.0.1497.18; Mon, 31 May 2021 18:25:57 +0000
 Received: from dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com
- (172.19.206.175) by mail-relay.amazon.com (10.43.61.243) with Microsoft SMTP
+ (172.19.206.175) by mail-relay.amazon.com (10.43.162.232) with Microsoft SMTP
  Server id 15.0.1497.18 via Frontend Transport; Mon, 31 May 2021 18:25:57
  +0000
 Received: by dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com (Postfix, from userid 6262777)
-        id 873B4149E; Mon, 31 May 2021 18:25:56 +0000 (UTC)
+        id 8CDF1120; Mon, 31 May 2021 18:25:57 +0000 (UTC)
 From:   Frank van der Linden <fllinden@amazon.com>
 To:     <stable@vger.kernel.org>
 CC:     <bpf@vger.kernel.org>, <daniel@iogearbox.net>
-Subject: [PATCH v2 4.14 00/16] CVE fixes and selftests cleanup
-Date:   Mon, 31 May 2021 18:25:39 +0000
-Message-ID: <20210531182556.25277-1-fllinden@amazon.com>
+Subject: [PATCH v2 4.14 08/17] bpf: Tighten speculative pointer arithmetic mask
+Date:   Mon, 31 May 2021 18:25:47 +0000
+Message-ID: <20210531182556.25277-9-fllinden@amazon.com>
 X-Mailer: git-send-email 2.23.4
+In-Reply-To: <20210531182556.25277-1-fllinden@amazon.com>
+References: <20210531182556.25277-1-fllinden@amazon.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -62,202 +64,197 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Now that these are being included in 4.19, I am resending this
-4.14 series. It was originally sent here:
+From: Daniel Borkmann <daniel@iogearbox.net>
 
-https://lore.kernel.org/bpf/20210501043014.33300-5-fllinden@amazon.com/T/
+commit 7fedb63a8307dda0ec3b8969a3b233a1dd7ea8e0 upstream.
 
-v2:
-  * The backport repairs in that original series were already included in
-    4.14, so they are no longer needed.
+This work tightens the offset mask we use for unprivileged pointer arithmetic
+in order to mitigate a corner case reported by Piotr and Benedict where in
+the speculative domain it is possible to advance, for example, the map value
+pointer by up to value_size-1 out-of-bounds in order to leak kernel memory
+via side-channel to user space.
 
-  * Add additional commit for CVE-2021-31829.
+Before this change, the computed ptr_limit for retrieve_ptr_limit() helper
+represents largest valid distance when moving pointer to the right or left
+which is then fed as aux->alu_limit to generate masking instructions against
+the offset register. After the change, the derived aux->alu_limit represents
+the largest potential value of the offset register which we mask against which
+is just a narrower subset of the former limit.
 
-  * Added cherry-picks for CVE-2021-33200.
+For minimal complexity, we call sanitize_ptr_alu() from 2 observation points
+in adjust_ptr_min_max_vals(), that is, before and after the simulated alu
+operation. In the first step, we retieve the alu_state and alu_limit before
+the operation as well as we branch-off a verifier path and push it to the
+verification stack as we did before which checks the dst_reg under truncation,
+in other words, when the speculative domain would attempt to move the pointer
+out-of-bounds.
 
-==
+In the second step, we retrieve the new alu_limit and calculate the absolute
+distance between both. Moreover, we commit the alu_state and final alu_limit
+via update_alu_sanitation_state() to the env's instruction aux data, and bail
+out from there if there is a mismatch due to coming from different verification
+paths with different states.
 
-This series contains backports for BPF commits for 4.14, fixing
-some CVEs and making the verifier selftests clean (666 passed,
-0 failures).
+Reported-by: Piotr Krysiuk <piotras@gmail.com>
+Reported-by: Benedict Schlueter <benedict.schlueter@rub.de>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Reviewed-by: John Fastabend <john.fastabend@gmail.com>
+Acked-by: Alexei Starovoitov <ast@kernel.org>
+Tested-by: Benedict Schlueter <benedict.schlueter@rub.de>
+[fllinden@amazon.com: backported to 4.14]
+Signed-off-by: Frank van der Linden <fllinden@amazon.com>
+---
+ kernel/bpf/verifier.c | 70 +++++++++++++++++++++++++++----------------
+ 1 file changed, 44 insertions(+), 26 deletions(-)
 
-What the series does is:
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index f76177a37b18..1a39a89e1584 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -2039,7 +2039,7 @@ static int retrieve_ptr_limit(const struct bpf_reg_state *ptr_reg,
+ 	bool off_is_neg = off_reg->smin_value < 0;
+ 	bool mask_to_left = (opcode == BPF_ADD &&  off_is_neg) ||
+ 			    (opcode == BPF_SUB && !off_is_neg);
+-	u32 off, max = 0, ptr_limit = 0;
++	u32 max = 0, ptr_limit = 0;
+ 
+ 	if (!tnum_is_const(off_reg->var_off) &&
+ 	    (off_reg->smin_value < 0) != (off_reg->smax_value < 0))
+@@ -2048,23 +2048,18 @@ static int retrieve_ptr_limit(const struct bpf_reg_state *ptr_reg,
+ 	switch (ptr_reg->type) {
+ 	case PTR_TO_STACK:
+ 		/* Offset 0 is out-of-bounds, but acceptable start for the
+-		 * left direction, see BPF_REG_FP.
++		 * left direction, see BPF_REG_FP. Also, unknown scalar
++		 * offset where we would need to deal with min/max bounds is
++		 * currently prohibited for unprivileged.
+ 		 */
+ 		max = MAX_BPF_STACK + mask_to_left;
+-		off = ptr_reg->off + ptr_reg->var_off.value;
+-		if (mask_to_left)
+-			ptr_limit = MAX_BPF_STACK + off;
+-		else
+-			ptr_limit = -off - 1;
++		ptr_limit = -(ptr_reg->var_off.value + ptr_reg->off);
+ 		break;
+ 	case PTR_TO_MAP_VALUE:
+ 		max = ptr_reg->map_ptr->value_size;
+-		if (mask_to_left) {
+-			ptr_limit = ptr_reg->umax_value + ptr_reg->off;
+-		} else {
+-			off = ptr_reg->smin_value + ptr_reg->off;
+-			ptr_limit = ptr_reg->map_ptr->value_size - off - 1;
+-		}
++		ptr_limit = (mask_to_left ?
++			     ptr_reg->smin_value :
++			     ptr_reg->umax_value) + ptr_reg->off;
+ 		break;
+ 	default:
+ 		return REASON_TYPE;
+@@ -2119,10 +2114,12 @@ static int sanitize_ptr_alu(struct bpf_verifier_env *env,
+ 			    struct bpf_insn *insn,
+ 			    const struct bpf_reg_state *ptr_reg,
+ 			    const struct bpf_reg_state *off_reg,
+-			    struct bpf_reg_state *dst_reg)
++			    struct bpf_reg_state *dst_reg,
++			    struct bpf_insn_aux_data *tmp_aux,
++			    const bool commit_window)
+ {
++	struct bpf_insn_aux_data *aux = commit_window ? cur_aux(env) : tmp_aux;
+ 	struct bpf_verifier_state *vstate = env->cur_state;
+-	struct bpf_insn_aux_data *aux = cur_aux(env);
+ 	bool off_is_neg = off_reg->smin_value < 0;
+ 	bool ptr_is_dst_reg = ptr_reg == dst_reg;
+ 	u8 opcode = BPF_OP(insn->code);
+@@ -2141,18 +2138,33 @@ static int sanitize_ptr_alu(struct bpf_verifier_env *env,
+ 	if (vstate->speculative)
+ 		goto do_sim;
+ 
+-	alu_state  = off_is_neg ? BPF_ALU_NEG_VALUE : 0;
+-	alu_state |= ptr_is_dst_reg ?
+-		     BPF_ALU_SANITIZE_SRC : BPF_ALU_SANITIZE_DST;
+-
+ 	err = retrieve_ptr_limit(ptr_reg, off_reg, &alu_limit, opcode);
+ 	if (err < 0)
+ 		return err;
+ 
++	if (commit_window) {
++		/* In commit phase we narrow the masking window based on
++		 * the observed pointer move after the simulated operation.
++		 */
++		alu_state = tmp_aux->alu_state;
++		alu_limit = abs(tmp_aux->alu_limit - alu_limit);
++	} else {
++		alu_state  = off_is_neg ? BPF_ALU_NEG_VALUE : 0;
++		alu_state |= ptr_is_dst_reg ?
++			     BPF_ALU_SANITIZE_SRC : BPF_ALU_SANITIZE_DST;
++	}
++
+ 	err = update_alu_sanitation_state(aux, alu_state, alu_limit);
+ 	if (err < 0)
+ 		return err;
+ do_sim:
++	/* If we're in commit phase, we're done here given we already
++	 * pushed the truncated dst_reg into the speculative verification
++	 * stack.
++	 */
++	if (commit_window)
++		return 0;
++
+ 	/* Simulate and find potential out-of-bounds access under
+ 	 * speculative execution from truncation as a result of
+ 	 * masking when off was not within expected range. If off
+@@ -2262,6 +2274,7 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
+ 	    smin_ptr = ptr_reg->smin_value, smax_ptr = ptr_reg->smax_value;
+ 	u64 umin_val = off_reg->umin_value, umax_val = off_reg->umax_value,
+ 	    umin_ptr = ptr_reg->umin_value, umax_ptr = ptr_reg->umax_value;
++	struct bpf_insn_aux_data tmp_aux = {};
+ 	u8 opcode = BPF_OP(insn->code);
+ 	u32 dst = insn->dst_reg;
+ 	int ret;
+@@ -2314,12 +2327,15 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
+ 	    !check_reg_sane_offset(env, ptr_reg, ptr_reg->type))
+ 		return -EINVAL;
+ 
+-	switch (opcode) {
+-	case BPF_ADD:
+-		ret = sanitize_ptr_alu(env, insn, ptr_reg, off_reg, dst_reg);
++	if (sanitize_needed(opcode)) {
++		ret = sanitize_ptr_alu(env, insn, ptr_reg, off_reg, dst_reg,
++				       &tmp_aux, false);
+ 		if (ret < 0)
+ 			return sanitize_err(env, insn, ret, off_reg, dst_reg);
++	}
+ 
++	switch (opcode) {
++	case BPF_ADD:
+ 		/* We can take a fixed offset as long as it doesn't overflow
+ 		 * the s32 'off' field
+ 		 */
+@@ -2370,10 +2386,6 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
+ 		}
+ 		break;
+ 	case BPF_SUB:
+-		ret = sanitize_ptr_alu(env, insn, ptr_reg, off_reg, dst_reg);
+-		if (ret < 0)
+-			return sanitize_err(env, insn, ret, off_reg, dst_reg);
+-
+ 		if (dst_reg == off_reg) {
+ 			/* scalar -= pointer.  Creates an unknown scalar */
+ 			if (!env->allow_ptr_leaks)
+@@ -2463,6 +2475,12 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
+ 
+ 	if (sanitize_check_bounds(env, insn, dst_reg) < 0)
+ 		return -EACCES;
++	if (sanitize_needed(opcode)) {
++		ret = sanitize_ptr_alu(env, insn, dst_reg, off_reg, dst_reg,
++				       &tmp_aux, true);
++		if (ret < 0)
++			return sanitize_err(env, insn, ret, off_reg, dst_reg);
++	}
+ 
+ 	return 0;
+ }
+-- 
+2.23.4
 
-* Fix selftests after recent bpf backports to 4.14 (but before the
-  fixes for CVE-2021-29155).
-* Backport fixes for CVE-2021-29155, including selftests changes.
-* Backport commits that disallow the mangling of valid pointers by root
-  (one commit that came in shortly after 4.14, one follow-up fix). This
-  also means that 5 verifier selftests that always failed on the 4.14
-  branch are OK again.
-* Backport selftest commits to adapt alignment selftests after the previous.
-* Cherry-pick commit for CVE-2021-31829
-* Cherry-pick commits for CVE-2021-33200
-
-Verifier/alignment selftests are now clean on the 4.14 branch.
-
-Listed by their mainline commit id, with comments on changes made
-for backporting:
-
-0a13e3537ea6 ("bpf, selftests: Fix up some test_verifier cases for unprivileged")
-	After some recent backports of bpf fixes to 4.14 (separate from this
-	series), there are some selftests that need to be modified. This
-	backported commit does that. No major conflicts/issues. For 4.14,
-	some tests do not exist yet, so they were skipped.
-
-
-
-The next ones  are a backport of the BPF verifier fixes for CVE-2021-29155.
-Original series was part of the pull request here: https://lore.kernel.org/bpf/20210416223700.15611-1-daniel@iogearbox.net/T/
-
-
-960114839252 ("bpf: Use correct permission flag for mixed signed bounds arithmetic")
-	* Not applicable for 4.14, as it does not have
-	  2c78ee898d8f ("bpf: Implement CAP_BPF").
-
-6f55b2f2a117 ("bpf: Move off_reg into sanitize_ptr_alu")
-	* Minor contextual conflict: verbose() does not have the env
-	  argument in 4.14.
-
-24c109bb1537 ("bpf: Ensure off_reg has no mixed signed bounds for all types")
-	* This deletes a switch() case in adjust_ptr_min_max_vals, since
-	  it moves the check in it to retrieve_ptr_limit. For 4.14, that
-	  switch() statement was still 2 if() statements, since it does not
-	  have aad2eeaf4697 ("bpf: Simplify ptr_min_max_vals adjustment").
-
-	  The equivalent change for 4.14 is to delete the PTR_TO_MAP_VALUE
-	  if().
-
-b658bbb844e2 ("bpf: Rework ptr_limit into alu_limit and add common error path")
-	* Clean cherry-pick.
-
-a6aaece00a57 ("bpf: Improve verifier error messages for users")
-	* Simple contextual conflict in adjust_scalar_min_max_vals().
-	  because of a var declaration that was added by this post-5.4 commit:
-	  3f50f132d840 ("bpf: Verifier, do explicit ALU32 bounds tracking").
-	* Additional simple contextual conflict: verbose() does not have
-	  the env argument in 4.14.
-
-073815b756c5 ("bpf: Refactor and streamline bounds check into helper")
-	* This factors out the bounds check in adjust_ptr_min_max_vals
-	  in to a separate function. In 4.14, the bounds check block
-	  in question looks a little different, because:
-		* 4.14 still uses allow_ptr_leaks, not bypass_spec_v1.
-		* 01f810ace9ed ("bpf: Allow variable-offset stack access")
-		  changed the call to check_stack_access to a new function,
-		  check_stack_access_for_ptr_arithmetic(), and moved/changed
-		  an error message.
-	* Since this commit just factors out some code from
-	  adjust_ptr_min_max_vals() in to a new function, do the same
-  	  with the corresponding block in 4.14 that doesn't have the
-	  changes listed above from post-4.14 commits.
-	
-f528819334 ("bpf: Move sanitize_val_alu out of op switch")
-	* Resolved contextual conflict from post-4.14 commit
-	  3f50f132d840 ("bpf: Verifier, do explicit ALU32 bounds tracking"),
-	  that added a comment on top of the switch referenced in the commit
-	  message.
-
-7fedb63a8307 ("bpf: Tighten speculative pointer arithmetic mask")
-	* Resolved contextual conflict post-4.14 commit:
-	  3f50f132d840 ("bpf: Verifier, do explicit ALU32 bounds tracking")
-	  added a call to a new function just above the switch statement in
-	  adjust_ptr_min_max_vals. This doesn't affect the lines that were
-	  actually changed.
-	* Resolved contextual conflict:
-	  01f810ace9ed ("bpf: Allow variable-offset stack access") added
-	  a comment to the PTR_TO_STACK case in retrieve_ptr_limit. This
-	  comment is not present in 4.14, but the code is the same.
-
-d7a509135175 ("bpf: Update selftests to reflect new error states")
-	* Post-4.14, the verifier tests were split in to different
-	  files, in 4.14 they are still all in test_verifier.c.
-	* The bounds.c tests have undergone several changes since 4.14,
-	  related to commits that were not backported (like e.g. the
-	  ALU32 changes). The error message will remain the same on 4.14.
-	* 4f7b3e82589e ("bpf: improve verifier branch analysis") changed
-	  the error message for the "bounds checks mixing signed and
-	  unsigned, variant 14" test. Since 4.14 does not have that commit,
-	  this test will still produce the original error message ("R0
-	  invalid mem access 'inv'").
-
-These next commits are to pull in a few commits that get the number
-of verifier/align selftest errors on the 4.14 branch down to 0. This is
-mainly about the first one:
-
-82abbf8d2fc4 ("bpf: do not allow root to mangle valid pointers")
-	* This commit has a follow-up that must be added as well,
-	  see the next commit.
-	* As the commit message states, this mostly disallows
-	  pointer mangling that was allowed by
-	  f1174f77b50c ("bpf/verifier: rework value tracking").
-	  Allowing root to mangle valid pointers also results
-	  in the unexpected successful loading of some selftests,
-	  so backporting this fixes that.
-	* Resolved contextual conflict: 4.14 does not have the
-	  env argument to verbose
-
-dd066823db2a ("bpf/verifier: disallow pointer subtraction")
-	* Fixes the above.
-	* Minor contextual conflict: mark_reg_unknown does not
-	  have an env argument on 4.14.
-
-2b36047e7889 ("selftests/bpf: fix test_align")
-	* Selftest follow-up to
-	  82abbf8d2fc4 ("bpf: do not allow root to mangle valid pointers")
-	* Clean cherry-pick.
-
-31e95b61e172 ("selftests/bpf: make 'dubious pointer arithmetic' test useful")
-	* Selftest follow-up to the above.
-	* Conflict: 4.14 does not have 'liveness' of registers in the
-	  output, so adjust the expected output to match.
-
-The next commit is to fix CVE-2021-31829. One of two commits that fixes
-this was already applied (b9b34ddbe207 ("bpf: Fix masking negation logic
-upon negative dst register"), but we still need this one.
-
-801c6058d14a ("bpf: Fix leakage of uninitialized bpf stack under
-speculation")
-	* Minor fixup: e6ac593372aa ("bpf: Rename fixup_bpf_calls and
-	  add some comments") renamed fixup_bpf_calls, which did not happen
-	  on the 4.14 branch.
-
-The last ones are for CVE-2021-33200, and were all clean cherry-picks.
-This also has a selftests change in mainline, but the test it changes
-isn't present in 4.14.
-
-3d0220f6861d ("bpf: Wrap aux data inside bpf_sanitize_info container")
-bb01a1bba579 ("bpf: Fix mask direction swap upon off reg sign change")
-a7036191277f ("bpf: No need to simulate speculative domain for
-immediates")
-
-====
-
-Alexei Starovoitov (4):
-  bpf: do not allow root to mangle valid pointers
-  bpf/verifier: disallow pointer subtraction
-  selftests/bpf: fix test_align
-  selftests/bpf: make 'dubious pointer arithmetic' test useful
-
-Daniel Borkmann (12):
-  bpf: Move off_reg into sanitize_ptr_alu
-  bpf: Ensure off_reg has no mixed signed bounds for all types
-  bpf: Rework ptr_limit into alu_limit and add common error path
-  bpf: Improve verifier error messages for users
-  bpf: Refactor and streamline bounds check into helper
-  bpf: Move sanitize_val_alu out of op switch
-  bpf: Tighten speculative pointer arithmetic mask
-  bpf: Update selftests to reflect new error states
-  bpf: Fix leakage of uninitialized bpf stack under speculation
-  bpf: Wrap aux data inside bpf_sanitize_info container
-  bpf: Fix mask direction swap upon off reg sign change
-  bpf: No need to simulate speculative domain for immediates
-
-Piotr Krysiuk (1):
-  bpf, selftests: Fix up some test_verifier cases for unprivileged
-
- include/linux/bpf_verifier.h                |   5 +-
- kernel/bpf/verifier.c                       | 369 ++++++++++++--------
- tools/testing/selftests/bpf/test_align.c    |  26 +-
- tools/testing/selftests/bpf/test_verifier.c | 114 +++---
- 4 files changed, 299 insertions(+), 215 deletions(-)
