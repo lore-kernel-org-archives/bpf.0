@@ -2,58 +2,59 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-16.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_NONE,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD87EC47097
-	for <bpf@archiver.kernel.org>; Mon, 31 May 2021 18:26:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 23D29C4708F
+	for <bpf@archiver.kernel.org>; Mon, 31 May 2021 18:26:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 966756127C
-	for <bpf@archiver.kernel.org>; Mon, 31 May 2021 18:26:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 09E066127C
+	for <bpf@archiver.kernel.org>; Mon, 31 May 2021 18:26:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232198AbhEaS2W (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 31 May 2021 14:28:22 -0400
-Received: from smtp-fw-2101.amazon.com ([72.21.196.25]:5627 "EHLO
-        smtp-fw-2101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232540AbhEaS1u (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 31 May 2021 14:27:50 -0400
+        id S232854AbhEaS2S (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 31 May 2021 14:28:18 -0400
+Received: from smtp-fw-4101.amazon.com ([72.21.198.25]:14146 "EHLO
+        smtp-fw-4101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232573AbhEaS1w (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 31 May 2021 14:27:52 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1622485571; x=1654021571;
+  t=1622485573; x=1654021573;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=l6B8S98NcQV6FfE5dwj6T+QjsPcTqxFc00dXHmQUmKY=;
-  b=teYNVVmiw83iiaeE6RAGt7Kf3SrepAOSrnCINza7GYs24Q/zcr0Iq76k
-   QK8b9sIVuuCMHgfF1mugEUJziQLdxpqwRd0ixVzWIWRyBVx3+CqWvZkSi
-   c/BlCh63H5jt8pIcf/Edd7lZDlRdLOj0jK84UG01yu/aDINYBWSb0UtIb
-   0=;
+  bh=1jEc7I/9tRcVYzVXtkPMeF4qBl3Aoc4IBMPa97CdcRI=;
+  b=mvEctfOEy4weAYC81j7YP1582Gwq33Z/smZsw975AsvXt9oY7CpZQum1
+   4oLbb/giQxKupHiNhcbDC7YPahlqpNB3AXSpd7K+sjjOhh1N+xnKTh8kt
+   iETExcSNzsCBWud+/ja4vJvT0nRAegfQJT/PD2j+cklB4zqyC0erhc+5W
+   k=;
 X-IronPort-AV: E=Sophos;i="5.83,238,1616457600"; 
-   d="scan'208";a="112734625"
-Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-2c-c6afef2e.us-west-2.amazon.com) ([10.43.8.2])
-  by smtp-border-fw-2101.iad2.amazon.com with ESMTP; 31 May 2021 18:26:00 +0000
-Received: from EX13MTAUEB002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-2c-c6afef2e.us-west-2.amazon.com (Postfix) with ESMTPS id ACFD8A17C1;
+   d="scan'208";a="111190630"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-2c-4e7c8266.us-west-2.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-4101.iad4.amazon.com with ESMTP; 31 May 2021 18:26:00 +0000
+Received: from EX13MTAUEA001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-2c-4e7c8266.us-west-2.amazon.com (Postfix) with ESMTPS id 1F160A0502;
         Mon, 31 May 2021 18:25:59 +0000 (UTC)
-Received: from EX13D04UEB002.ant.amazon.com (10.43.60.41) by
- EX13MTAUEB002.ant.amazon.com (10.43.60.12) with Microsoft SMTP Server (TLS)
+Received: from EX13D01UEA002.ant.amazon.com (10.43.61.37) by
+ EX13MTAUEA001.ant.amazon.com (10.43.61.243) with Microsoft SMTP Server (TLS)
  id 15.0.1497.18; Mon, 31 May 2021 18:25:58 +0000
-Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
- EX13D04UEB002.ant.amazon.com (10.43.60.41) with Microsoft SMTP Server (TLS)
+Received: from EX13MTAUEA002.ant.amazon.com (10.43.61.77) by
+ EX13D01UEA002.ant.amazon.com (10.43.61.37) with Microsoft SMTP Server (TLS)
  id 15.0.1497.18; Mon, 31 May 2021 18:25:58 +0000
 Received: from dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com
- (172.19.206.175) by mail-relay.amazon.com (10.43.60.234) with Microsoft SMTP
+ (172.19.206.175) by mail-relay.amazon.com (10.43.61.169) with Microsoft SMTP
  Server id 15.0.1497.18 via Frontend Transport; Mon, 31 May 2021 18:25:58
  +0000
 Received: by dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com (Postfix, from userid 6262777)
-        id 8E1911485; Mon, 31 May 2021 18:25:57 +0000 (UTC)
+        id 8E9DE13FE; Mon, 31 May 2021 18:25:57 +0000 (UTC)
 From:   Frank van der Linden <fllinden@amazon.com>
 To:     <stable@vger.kernel.org>
 CC:     <bpf@vger.kernel.org>, <daniel@iogearbox.net>
-Subject: [PATCH v2 4.14 06/17] bpf: Refactor and streamline bounds check into helper
-Date:   Mon, 31 May 2021 18:25:45 +0000
-Message-ID: <20210531182556.25277-7-fllinden@amazon.com>
+Subject: [PATCH v2 4.14 15/17] bpf: Wrap aux data inside bpf_sanitize_info container
+Date:   Mon, 31 May 2021 18:25:54 +0000
+Message-ID: <20210531182556.25277-16-fllinden@amazon.com>
 X-Mailer: git-send-email 2.23.4
 In-Reply-To: <20210531182556.25277-1-fllinden@amazon.com>
 References: <20210531182556.25277-1-fllinden@amazon.com>
@@ -66,92 +67,84 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Daniel Borkmann <daniel@iogearbox.net>
 
-commit 073815b756c51ba9d8384d924c5d1c03ca3d1ae4 upstream.
+commit 3d0220f6861d713213b015b582e9f21e5b28d2e0 upstream.
 
-Move the bounds check in adjust_ptr_min_max_vals() into a small helper named
-sanitize_check_bounds() in order to simplify the former a bit.
+Add a container structure struct bpf_sanitize_info which holds
+the current aux info, and update call-sites to sanitize_ptr_alu()
+to pass it in. This is needed for passing in additional state
+later on.
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Reviewed-by: John Fastabend <john.fastabend@gmail.com>
+Reviewed-by: Piotr Krysiuk <piotras@gmail.com>
 Acked-by: Alexei Starovoitov <ast@kernel.org>
-[fllinden@amazon.com: backport to 4.14]
-Signed-off-by: Frank van der Linden <fllinden@amazon.com>
 ---
- kernel/bpf/verifier.c | 54 +++++++++++++++++++++++++++++--------------
- 1 file changed, 37 insertions(+), 17 deletions(-)
+ kernel/bpf/verifier.c | 18 +++++++++++-------
+ 1 file changed, 11 insertions(+), 7 deletions(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index b44a4efeb1be..d178098f2298 100644
+index 84779fe35ebc..db359b796442 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -2206,6 +2206,41 @@ static int sanitize_err(struct bpf_verifier_env *env,
- 	return -EACCES;
+@@ -2110,15 +2110,19 @@ static bool sanitize_needed(u8 opcode)
+ 	return opcode == BPF_ADD || opcode == BPF_SUB;
  }
  
-+static int sanitize_check_bounds(struct bpf_verifier_env *env,
-+				 const struct bpf_insn *insn,
-+				 const struct bpf_reg_state *dst_reg)
-+{
-+	u32 dst = insn->dst_reg;
++struct bpf_sanitize_info {
++	struct bpf_insn_aux_data aux;
++};
 +
-+	/* For unprivileged we require that resulting offset must be in bounds
-+	 * in order to be able to sanitize access later on.
-+	 */
-+	if (env->allow_ptr_leaks)
-+		return 0;
-+
-+	switch (dst_reg->type) {
-+	case PTR_TO_STACK:
-+		if (check_stack_access(env, dst_reg, dst_reg->off +
-+				       dst_reg->var_off.value, 1)) {
-+			verbose("R%d stack pointer arithmetic goes out of range, "
-+				"prohibited for !root\n", dst);
-+			return -EACCES;
-+		}
-+		break;
-+	case PTR_TO_MAP_VALUE:
-+		if (check_map_access(env, dst, dst_reg->off, 1)) {
-+			verbose("R%d pointer arithmetic of map value goes out of range, "
-+				"prohibited for !root\n", dst);
-+			return -EACCES;
-+		}
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	return 0;
-+}
-+
- /* Handles arithmetic on a pointer and a scalar: computes new min/max and var_off.
-  * Caller should also handle BPF_MOV case separately.
-  * If we return -EACCES, caller may want to try again treating pointer as a
-@@ -2421,23 +2456,8 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
- 	__reg_deduce_bounds(dst_reg);
- 	__reg_bound_offset(dst_reg);
+ static int sanitize_ptr_alu(struct bpf_verifier_env *env,
+ 			    struct bpf_insn *insn,
+ 			    const struct bpf_reg_state *ptr_reg,
+ 			    const struct bpf_reg_state *off_reg,
+ 			    struct bpf_reg_state *dst_reg,
+-			    struct bpf_insn_aux_data *tmp_aux,
++			    struct bpf_sanitize_info *info,
+ 			    const bool commit_window)
+ {
+-	struct bpf_insn_aux_data *aux = commit_window ? cur_aux(env) : tmp_aux;
++	struct bpf_insn_aux_data *aux = commit_window ? cur_aux(env) : &info->aux;
+ 	struct bpf_verifier_state *vstate = env->cur_state;
+ 	bool off_is_imm = tnum_is_const(off_reg->var_off);
+ 	bool off_is_neg = off_reg->smin_value < 0;
+@@ -2147,8 +2151,8 @@ static int sanitize_ptr_alu(struct bpf_verifier_env *env,
+ 		/* In commit phase we narrow the masking window based on
+ 		 * the observed pointer move after the simulated operation.
+ 		 */
+-		alu_state = tmp_aux->alu_state;
+-		alu_limit = abs(tmp_aux->alu_limit - alu_limit);
++		alu_state = info->aux.alu_state;
++		alu_limit = abs(info->aux.alu_limit - alu_limit);
+ 	} else {
+ 		alu_state  = off_is_neg ? BPF_ALU_NEG_VALUE : 0;
+ 		alu_state |= off_is_imm ? BPF_ALU_IMMEDIATE : 0;
+@@ -2276,7 +2280,7 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
+ 	    smin_ptr = ptr_reg->smin_value, smax_ptr = ptr_reg->smax_value;
+ 	u64 umin_val = off_reg->umin_value, umax_val = off_reg->umax_value,
+ 	    umin_ptr = ptr_reg->umin_value, umax_ptr = ptr_reg->umax_value;
+-	struct bpf_insn_aux_data tmp_aux = {};
++	struct bpf_sanitize_info info = {};
+ 	u8 opcode = BPF_OP(insn->code);
+ 	u32 dst = insn->dst_reg;
+ 	int ret;
+@@ -2327,7 +2331,7 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
  
--	/* For unprivileged we require that resulting offset must be in bounds
--	 * in order to be able to sanitize access later on.
--	 */
--	if (!env->allow_ptr_leaks) {
--		if (dst_reg->type == PTR_TO_MAP_VALUE &&
--		    check_map_access(env, dst, dst_reg->off, 1)) {
--			verbose("R%d pointer arithmetic of map value goes out of range, "
--				"prohibited for !root\n", dst);
--			return -EACCES;
--		} else if (dst_reg->type == PTR_TO_STACK &&
--			   check_stack_access(env, dst_reg, dst_reg->off +
--					      dst_reg->var_off.value, 1)) {
--			verbose("R%d stack pointer arithmetic goes out of range, "
--				"prohibited for !root\n", dst);
--			return -EACCES;
--		}
--	}
-+	if (sanitize_check_bounds(env, insn, dst_reg) < 0)
-+		return -EACCES;
- 
- 	return 0;
- }
+ 	if (sanitize_needed(opcode)) {
+ 		ret = sanitize_ptr_alu(env, insn, ptr_reg, off_reg, dst_reg,
+-				       &tmp_aux, false);
++				       &info, false);
+ 		if (ret < 0)
+ 			return sanitize_err(env, insn, ret, off_reg, dst_reg);
+ 	}
+@@ -2468,7 +2472,7 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
+ 		return -EACCES;
+ 	if (sanitize_needed(opcode)) {
+ 		ret = sanitize_ptr_alu(env, insn, dst_reg, off_reg, dst_reg,
+-				       &tmp_aux, true);
++				       &info, true);
+ 		if (ret < 0)
+ 			return sanitize_err(env, insn, ret, off_reg, dst_reg);
+ 	}
 -- 
 2.23.4
 
