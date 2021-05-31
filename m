@@ -8,53 +8,53 @@ X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D04F1C47082
-	for <bpf@archiver.kernel.org>; Mon, 31 May 2021 18:26:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BFD2C47096
+	for <bpf@archiver.kernel.org>; Mon, 31 May 2021 18:26:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B4F4661090
+	by mail.kernel.org (Postfix) with ESMTP id E4C696127C
 	for <bpf@archiver.kernel.org>; Mon, 31 May 2021 18:26:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232382AbhEaS1m (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 31 May 2021 14:27:42 -0400
-Received: from smtp-fw-33001.amazon.com ([207.171.190.10]:21063 "EHLO
-        smtp-fw-33001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230323AbhEaS1i (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 31 May 2021 14:27:38 -0400
+        id S232524AbhEaS1s (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 31 May 2021 14:27:48 -0400
+Received: from smtp-fw-6002.amazon.com ([52.95.49.90]:12136 "EHLO
+        smtp-fw-6002.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232018AbhEaS1j (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 31 May 2021 14:27:39 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1622485559; x=1654021559;
+  t=1622485560; x=1654021560;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=gZJcroFDlYpi1OCbvDRD8KfoCGUBw3jaU/z8DTPpQnc=;
-  b=XWj8W86vp6jr5F7yu0Nm1YdpcIfMeFFJf95a8rkUbBY52Rs5VdBqMmTU
-   cRl0UcjbTDsVWkMXgM5aeH5jiQhoxuZCmGEPEOjFDRKcZccqv7wTgislM
-   KdADFlWLjzw7bjb5/CUiqh+W4vO3xsLE32ITAVe+BT6D4dSPV/mSCdCLN
-   Y=;
+  bh=gnkO6HbxtWgpLLubZF5txt5lfMb6qkJdo86vYzWv6r8=;
+  b=OVy280LXJ4R1AkYRIoaRy8tk3N6d1TORyGMu/v/BjvOu0OISRohvxoK3
+   ZRHtNMco4qIqguSdmw+pI8yqAmxPMohCqEza3OHfAi0u+f+iOYyzEwPsJ
+   qFQvQVgY3c+PDzVvTJgtUvWJuGRdRh7PPuKQFsSq4OPlJoEu5ggAuXApR
+   4=;
 X-IronPort-AV: E=Sophos;i="5.83,238,1616457600"; 
-   d="scan'208";a="128471756"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-2a-f14f4a47.us-west-2.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-33001.sea14.amazon.com with ESMTP; 31 May 2021 18:25:59 +0000
-Received: from EX13MTAUEA002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-2a-f14f4a47.us-west-2.amazon.com (Postfix) with ESMTPS id 659BEA21A2;
-        Mon, 31 May 2021 18:25:58 +0000 (UTC)
-Received: from EX13D07UEA001.ant.amazon.com (10.43.61.44) by
- EX13MTAUEA002.ant.amazon.com (10.43.61.77) with Microsoft SMTP Server (TLS)
- id 15.0.1497.18; Mon, 31 May 2021 18:25:58 +0000
-Received: from EX13MTAUEA001.ant.amazon.com (10.43.61.82) by
- EX13D07UEA001.ant.amazon.com (10.43.61.44) with Microsoft SMTP Server (TLS)
+   d="scan'208";a="115653031"
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-1e-27fb8269.us-east-1.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-6002.iad6.amazon.com with ESMTP; 31 May 2021 18:25:59 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan2.iad.amazon.com [10.40.159.162])
+        by email-inbound-relay-1e-27fb8269.us-east-1.amazon.com (Postfix) with ESMTPS id 07DD1A18E6;
+        Mon, 31 May 2021 18:25:57 +0000 (UTC)
+Received: from EX13D07UWB004.ant.amazon.com (10.43.161.196) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.18; Mon, 31 May 2021 18:25:57 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
+ EX13D07UWB004.ant.amazon.com (10.43.161.196) with Microsoft SMTP Server (TLS)
  id 15.0.1497.18; Mon, 31 May 2021 18:25:57 +0000
 Received: from dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com
- (172.19.206.175) by mail-relay.amazon.com (10.43.61.243) with Microsoft SMTP
+ (172.19.206.175) by mail-relay.amazon.com (10.43.161.249) with Microsoft SMTP
  Server id 15.0.1497.18 via Frontend Transport; Mon, 31 May 2021 18:25:57
  +0000
 Received: by dev-dsk-fllinden-2c-d7720709.us-west-2.amazon.com (Postfix, from userid 6262777)
-        id 8AC661497; Mon, 31 May 2021 18:25:57 +0000 (UTC)
+        id 899D079; Mon, 31 May 2021 18:25:57 +0000 (UTC)
 From:   Frank van der Linden <fllinden@amazon.com>
 To:     <stable@vger.kernel.org>
 CC:     <bpf@vger.kernel.org>, <daniel@iogearbox.net>
-Subject: [PATCH v2 4.14 07/17] bpf: Move sanitize_val_alu out of op switch
-Date:   Mon, 31 May 2021 18:25:46 +0000
-Message-ID: <20210531182556.25277-8-fllinden@amazon.com>
+Subject: [PATCH v2 4.14 17/17] bpf: No need to simulate speculative domain for immediates
+Date:   Mon, 31 May 2021 18:25:56 +0000
+Message-ID: <20210531182556.25277-18-fllinden@amazon.com>
 X-Mailer: git-send-email 2.23.4
 In-Reply-To: <20210531182556.25277-1-fllinden@amazon.com>
 References: <20210531182556.25277-1-fllinden@amazon.com>
@@ -67,64 +67,44 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Daniel Borkmann <daniel@iogearbox.net>
 
-commit f528819334881fd622fdadeddb3f7edaed8b7c9b upstream.
+commit a7036191277f9fa68d92f2071ddc38c09b1e5ee5 upstream.
 
-Add a small sanitize_needed() helper function and move sanitize_val_alu()
-out of the main opcode switch. In upcoming work, we'll move sanitize_ptr_alu()
-as well out of its opcode switch so this helps to streamline both.
+In 801c6058d14a ("bpf: Fix leakage of uninitialized bpf stack under
+speculation") we replaced masking logic with direct loads of immediates
+if the register is a known constant. Given in this case we do not apply
+any masking, there is also no reason for the operation to be truncated
+under the speculative domain.
+
+Therefore, there is also zero reason for the verifier to branch-off and
+simulate this case, it only needs to do it for unknown but bounded scalars.
+As a side-effect, this also enables few test cases that were previously
+rejected due to simulation under zero truncation.
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Reviewed-by: John Fastabend <john.fastabend@gmail.com>
+Reviewed-by: Piotr Krysiuk <piotras@gmail.com>
 Acked-by: Alexei Starovoitov <ast@kernel.org>
-[fllinden@amazon.com: backported to 4.14]
-Signed-off-by: Frank van der Linden <fllinden@amazon.com>
 ---
- kernel/bpf/verifier.c | 15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+ kernel/bpf/verifier.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index d178098f2298..f76177a37b18 100644
+index f3f14519708d..4a3333039bf2 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -2110,6 +2110,11 @@ static int sanitize_val_alu(struct bpf_verifier_env *env,
- 	return update_alu_sanitation_state(aux, BPF_ALU_NON_POINTER, 0);
- }
- 
-+static bool sanitize_needed(u8 opcode)
-+{
-+	return opcode == BPF_ADD || opcode == BPF_SUB;
-+}
-+
- static int sanitize_ptr_alu(struct bpf_verifier_env *env,
- 			    struct bpf_insn *insn,
- 			    const struct bpf_reg_state *ptr_reg,
-@@ -2510,11 +2515,14 @@ static int adjust_scalar_min_max_vals(struct bpf_verifier_env *env,
+@@ -2169,8 +2169,12 @@ static int sanitize_ptr_alu(struct bpf_verifier_env *env,
+ 	/* If we're in commit phase, we're done here given we already
+ 	 * pushed the truncated dst_reg into the speculative verification
+ 	 * stack.
++	 *
++	 * Also, when register is a known constant, we rewrite register-based
++	 * operation to immediate-based, and thus do not need masking (and as
++	 * a consequence, do not need to simulate the zero-truncation either).
+ 	 */
+-	if (commit_window)
++	if (commit_window || off_is_imm)
  		return 0;
- 	}
  
--	switch (opcode) {
--	case BPF_ADD:
-+	if (sanitize_needed(opcode)) {
- 		ret = sanitize_val_alu(env, insn);
- 		if (ret < 0)
- 			return sanitize_err(env, insn, ret, NULL, NULL);
-+	}
-+
-+	switch (opcode) {
-+	case BPF_ADD:
- 		if (signed_add_overflows(dst_reg->smin_value, smin_val) ||
- 		    signed_add_overflows(dst_reg->smax_value, smax_val)) {
- 			dst_reg->smin_value = S64_MIN;
-@@ -2534,9 +2542,6 @@ static int adjust_scalar_min_max_vals(struct bpf_verifier_env *env,
- 		dst_reg->var_off = tnum_add(dst_reg->var_off, src_reg.var_off);
- 		break;
- 	case BPF_SUB:
--		ret = sanitize_val_alu(env, insn);
--		if (ret < 0)
--			return sanitize_err(env, insn, ret, NULL, NULL);
- 		if (signed_sub_overflows(dst_reg->smin_value, smax_val) ||
- 		    signed_sub_overflows(dst_reg->smax_value, smin_val)) {
- 			/* Overflow possible, we know nothing */
+ 	/* Simulate and find potential out-of-bounds access under
 -- 
 2.23.4
 
