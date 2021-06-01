@@ -2,104 +2,81 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9350AC4708F
-	for <bpf@archiver.kernel.org>; Tue,  1 Jun 2021 11:06:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76C13C47080
+	for <bpf@archiver.kernel.org>; Tue,  1 Jun 2021 11:40:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 681AA613AD
-	for <bpf@archiver.kernel.org>; Tue,  1 Jun 2021 11:06:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4CC2C613CD
+	for <bpf@archiver.kernel.org>; Tue,  1 Jun 2021 11:40:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233437AbhFALIc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 1 Jun 2021 07:08:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:59865 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231219AbhFALIb (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 1 Jun 2021 07:08:31 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1622545610;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aaASPp3wsnjRSRxwYNnrbRgJnT5vvPPdfGvm6PNwdHA=;
-        b=KPfK2bGq+PG6tXPU+SV56oltBQLhYSgFpoNvNYfNsxLofYjmOK9DD0TlYNw7B4WTYJ/B9S
-        WfqRWRZ8Z8tq73q4jg3k9E6RzVx+uotC1pzl26epzpmjE4HOl9ktO8ITJvZDHQU5cZ3FJE
-        MowZgpeOLTnsNTrzmZvGn0vmIIl7+CQ=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-316-eCrkLOZDMYCHVjCOPWA1Hw-1; Tue, 01 Jun 2021 07:06:49 -0400
-X-MC-Unique: eCrkLOZDMYCHVjCOPWA1Hw-1
-Received: by mail-wm1-f70.google.com with SMTP id l18-20020a05600c4f12b02901921c0f2098so317967wmq.0
-        for <bpf@vger.kernel.org>; Tue, 01 Jun 2021 04:06:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=aaASPp3wsnjRSRxwYNnrbRgJnT5vvPPdfGvm6PNwdHA=;
-        b=iq8zzeotea0SnkiNrQA2Nh7ra7fkcZGN6luTnz9GRhYpm1UZlDXU/S7DCHcS5bj7d+
-         1L9xcwkBsYlSZzBbDsheIt6wxyZCcUMJqntWPiATXTf5urILbZ4E8rlFVOySrLD1DMUu
-         SATSxLySvOgoqGQFkIdBsaeIURGnsl2RjktHg/ZGdv16I6vSgrJXJfdFPbMwAzhXk/XK
-         PzY4N7maKi9blFaqg5+U8CXoRzsyOVWY6I2ERNkLj478DI7ic0pVwd2/icO2g8lBWZHM
-         TgRuyMs+WskW0yN9YpYx64S8QGPNEap6vJjXubg9wOOOgp4DwTsdOvlKU/UZNdOzcu9t
-         UWiQ==
-X-Gm-Message-State: AOAM5312SIJPMVrJXNDYR4RptCChp32hWM/pU5rhtp89J28PcdTdWHJd
-        I/QC8UrAOJ4vMez8IosAqxALbVl8D4lLrPXUc1RgFBGZ6s4rli0m+ZwpSx8S1ymOdKSrFQzoH9u
-        czQ08Zt0jSKS8
-X-Received: by 2002:adf:c38a:: with SMTP id p10mr13213651wrf.138.1622545608107;
-        Tue, 01 Jun 2021 04:06:48 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxse7H7NC7uKSyVhO6tqCkb28FmQf5X8G+WwPdEHDAGaDn6G2Zi6zozpeSFKQlrGMyxGwqDxw==
-X-Received: by 2002:adf:c38a:: with SMTP id p10mr13213630wrf.138.1622545607887;
-        Tue, 01 Jun 2021 04:06:47 -0700 (PDT)
-Received: from redhat.com (line103-35.adsl.actcom.co.il. [192.117.103.35])
-        by smtp.gmail.com with ESMTPSA id o17sm2656386wrp.47.2021.06.01.04.06.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Jun 2021 04:06:47 -0700 (PDT)
-Date:   Tue, 1 Jun 2021 07:06:43 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Cc:     netdev@vger.kernel.org, Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
-Subject: Re: [PATCH net v2 0/2] virtio-net: fix for build_skb()
-Message-ID: <20210601070610-mutt-send-email-mst@kernel.org>
-References: <20210601064000.66909-1-xuanzhuo@linux.alibaba.com>
+        id S230308AbhFALlp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 1 Jun 2021 07:41:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54134 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230288AbhFALlo (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 1 Jun 2021 07:41:44 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 8DDF9613C8;
+        Tue,  1 Jun 2021 11:40:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1622547603;
+        bh=9epvEB+4UOCKxVbv6swmLvdXdCFcmTLxvY2xT1/f56Y=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=rSv8SpcXZdW48gMyWVQCsyx/nYwpqIRV7vqCu/f1/cNe+cnH1vR8AghdhEf1GSKm3
+         dkhL+MYBJhfEnAx47njTwONRF9LyhJX31TyLnzin9gAzp2p9emshVXRgBzLi4juL1x
+         kPZqLakMVAe6PrFqBmDFMyWWzvcB+VEjtCKU7w2flzOqZkgIQ1xLZISY34YEtzfdWk
+         Ban8PhVDUO/UblgAoQnD3V1pDqcTsQAxGtejkeaixli+leZwXz4mxSonoUjtg9QBxP
+         puG5eJ3KhpItkEzM0gBGYTb0QuLwMafYajb+e1RuoPJtAlf5g0xbsYkzoC73qTaKM+
+         tys11HHZAXbuA==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210601064000.66909-1-xuanzhuo@linux.alibaba.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 bpf-next] bpf: tnums: Provably sound, faster,
+ and more precise algorithm for tnum_mul
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <162254760352.13469.8265184561226766194.git-patchwork-notify@kernel.org>
+Date:   Tue, 01 Jun 2021 11:40:03 +0000
+References: <20210531020157.7386-1-harishankar.vishwanathan@rutgers.edu>
+In-Reply-To: <20210531020157.7386-1-harishankar.vishwanathan@rutgers.edu>
+To:     HARISHANKAR VISHWANATHAN <hv90@scarletmail.rutgers.edu>
+Cc:     ast@kernel.org, bpf@vger.kernel.org, ecree@solarflare.com,
+        harishankar.vishwanathan@rutgers.edu, m.shachnai@rutgers.edu,
+        srinivas.narayana@rutgers.edu, santosh.nagarakatte@rutgers.edu
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Jun 01, 2021 at 02:39:58PM +0800, Xuan Zhuo wrote:
-> #1 Fixed a serious error.
-> #2 Fixed a logical error, but this error did not cause any serious consequences.
-> 
-> The logic of this piece is really messy. Fortunately, my refactored patch can be
-> completed with a small amount of testing.
+Hello:
 
-Looks good, thanks!
-Also needed for stable I think.
+This patch was applied to bpf/bpf-next.git (refs/heads/master):
 
-Acked-by: Michael S. Tsirkin <mst@redhat.com>
+On Sun, 30 May 2021 22:01:57 -0400 you wrote:
+> From: Harishankar Vishwanathan <harishankar.vishwanathan@rutgers.edu>
+> 
+> This patch introduces a new algorithm for multiplication of tristate
+> numbers (tnums) that is provably sound. It is faster and more precise when
+> compared to the existing method.
+> 
+> Like the existing method, this new algorithm follows the long
+> multiplication algorithm. The idea is to generate partial products by
+> multiplying each bit in the multiplier (tnum a) with the multiplicand
+> (tnum b), and adding the partial products after appropriately bit-shifting
+> them. The new algorithm, however, uses just a single loop over the bits of
+> the multiplier (tnum a) and accumulates only the uncertain components of
+> the multiplicand (tnum b) into a mask-only tnum. The following paper
+> explains the algorithm in more detail: https://arxiv.org/abs/2105.05398.
+> 
+> [...]
 
-> Thanks.
-> 
-> Xuan Zhuo (2):
->   virtio-net: fix for unable to handle page fault for address
->   virtio_net: get build_skb() buf by data ptr
-> 
->  drivers/net/virtio_net.c | 20 ++++++++------------
->  1 file changed, 8 insertions(+), 12 deletions(-)
-> 
-> --
-> 2.31.0
+Here is the summary with links:
+  - [v2,bpf-next] bpf: tnums: Provably sound, faster, and more precise algorithm for tnum_mul
+    https://git.kernel.org/bpf/bpf-next/c/05924717ac70
+
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
