@@ -5,170 +5,172 @@ X-Spam-Level:
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 66B28C47096
-	for <bpf@archiver.kernel.org>; Wed,  2 Jun 2021 03:28:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 43785C4708F
+	for <bpf@archiver.kernel.org>; Wed,  2 Jun 2021 03:28:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 52FBF6128A
-	for <bpf@archiver.kernel.org>; Wed,  2 Jun 2021 03:28:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 27A6C6128A
+	for <bpf@archiver.kernel.org>; Wed,  2 Jun 2021 03:28:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231248AbhFBD3x (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 1 Jun 2021 23:29:53 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:45760 "EHLO loongson.cn"
+        id S231259AbhFBDaB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 1 Jun 2021 23:30:01 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:45838 "EHLO loongson.cn"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231210AbhFBD3w (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 1 Jun 2021 23:29:52 -0400
+        id S231217AbhFBDaB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 1 Jun 2021 23:30:01 -0400
 Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxH0O6+rZgh7MIAA--.9496S5;
-        Wed, 02 Jun 2021 11:28:06 +0800 (CST)
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxH0O6+rZgh7MIAA--.9496S7;
+        Wed, 02 Jun 2021 11:28:13 +0800 (CST)
 From:   Tiezhu Yang <yangtiezhu@loongson.cn>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>
 Cc:     stable@vger.kernel.org, bpf@vger.kernel.org,
-        Joe Stringer <joe@wand.net.nz>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH 4.19 3/9] selftests/bpf: Generalize dummy program types
-Date:   Wed,  2 Jun 2021 11:27:47 +0800
-Message-Id: <1622604473-781-4-git-send-email-yangtiezhu@loongson.cn>
+        "David S. Miller" <davem@davemloft.net>,
+        Alexei Starovoitov <ast@kernel.org>
+Subject: [PATCH 4.19 5/9] bpf: Adjust F_NEEDS_EFFICIENT_UNALIGNED_ACCESS handling in test_verifier.c
+Date:   Wed,  2 Jun 2021 11:27:49 +0800
+Message-Id: <1622604473-781-6-git-send-email-yangtiezhu@loongson.cn>
 X-Mailer: git-send-email 2.1.0
 In-Reply-To: <1622604473-781-1-git-send-email-yangtiezhu@loongson.cn>
 References: <1622604473-781-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf9DxH0O6+rZgh7MIAA--.9496S5
-X-Coremail-Antispam: 1UD129KBjvJXoWxAF4kXr4fXw1fAryfJFW5Jrb_yoWrWF4UpF
-        WrtF9FkF1kJFnrXay5Aa45Zr95tF1DXrWUGrWUZ3yUZa1UZw1rWFyfGFZ0yrn3uFWrWr1S
-        v3W29r93uw1fKrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBYb7Iv0xC_Zr1lb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I2
+X-CM-TRANSID: AQAAf9DxH0O6+rZgh7MIAA--.9496S7
+X-Coremail-Antispam: 1UD129KBjvJXoWxXFyDGrykWFyfCFWUtFyfXrb_yoWrCrWrpF
+        1ftF90kF48tF13K3y2y34kuFW0v3WvqryfCF10y347XF1kA34xKrW8WFyrXF95CrZ5X3WF
+        9w17t3Z0kw13XaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBab7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I2
         0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI
-        8067AKxVWUWwA2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF
-        64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcV
-        CY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv
-        6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c
-        02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE
-        4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc2xSY4AK67AK6r48MxAIw28IcxkI7V
-        AKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCj
-        r7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6x
-        IIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAI
-        w20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x
-        0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0XyCJUUUUU==
+        8067AKxVWUAVCq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28C
+        jxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI
+        8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2
+        z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0V
+        AKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1l
+        Ox8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkIecxEwVAFwVW8GwCF04k20x
+        vY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I
+        3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIx
+        AIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAI
+        cVCF04k26cxKx2IYs7xG6r1I6r4UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2js
+        IEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07brtxDUUUUU=
 X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Joe Stringer <joe@wand.net.nz>
+From: "David S. Miller" <davem@davemloft.net>
 
-commit 0c586079f852187d19fea60c9a4981ad29e22ba8 upstream
+commit c7665702d3208b77b8e00f0699b6b88241b04360 upstream
 
-Don't hardcode the dummy program types to SOCKET_FILTER type, as this
-prevents testing bpf_tail_call in conjunction with other program types.
-Instead, use the program type specified in the test case.
+Make it set the flag argument to bpf_verify_program() which will relax
+the alignment restrictions.
 
-Signed-off-by: Joe Stringer <joe@wand.net.nz>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Now all such test cases will go properly through the verifier even on
+inefficient unaligned access architectures.
+
+On inefficient unaligned access architectures do not try to run such
+programs, instead mark the test case as passing but annotate the
+result similarly to how it is done now in the presence of this flag.
+
+So, we get complete full coverage for all REJECT test cases, and at
+least verifier level coverage for ACCEPT test cases.
+
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 ---
- tools/testing/selftests/bpf/test_verifier.c | 31 ++++++++++++++++-------------
- 1 file changed, 17 insertions(+), 14 deletions(-)
+ tools/testing/selftests/bpf/test_verifier.c | 42 ++++++++++++++++-------------
+ 1 file changed, 24 insertions(+), 18 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
-index 38dd129..809d8e9 100644
+index 919f97a..686f5d1 100644
 --- a/tools/testing/selftests/bpf/test_verifier.c
 +++ b/tools/testing/selftests/bpf/test_verifier.c
-@@ -12631,18 +12631,18 @@ static int create_map(uint32_t type, uint32_t size_key,
- 	return fd;
- }
- 
--static int create_prog_dummy1(void)
-+static int create_prog_dummy1(enum bpf_map_type prog_type)
+@@ -12844,13 +12844,14 @@ static int set_admin(bool admin)
+ static void do_test_single(struct bpf_test *test, bool unpriv,
+ 			   int *passes, int *errors)
  {
- 	struct bpf_insn prog[] = {
- 		BPF_MOV64_IMM(BPF_REG_0, 42),
- 		BPF_EXIT_INSN(),
- 	};
+-	int fd_prog, expected_ret, reject_from_alignment;
++	int fd_prog, expected_ret, alignment_prevented_execution;
+ 	int prog_len, prog_type = test->prog_type;
+ 	struct bpf_insn *prog = test->insns;
+ 	int map_fds[MAX_NR_MAPS];
+ 	const char *expected_err;
+ 	uint32_t expected_val;
+ 	uint32_t retval;
++	__u32 pflags;
+ 	int i, err;
  
--	return bpf_load_program(BPF_PROG_TYPE_SOCKET_FILTER, prog,
-+	return bpf_load_program(prog_type, prog,
- 				ARRAY_SIZE(prog), "GPL", 0, NULL, 0);
- }
- 
--static int create_prog_dummy2(int mfd, int idx)
-+static int create_prog_dummy2(enum bpf_map_type prog_type, int mfd, int idx)
- {
- 	struct bpf_insn prog[] = {
- 		BPF_MOV64_IMM(BPF_REG_3, idx),
-@@ -12653,11 +12653,12 @@ static int create_prog_dummy2(int mfd, int idx)
- 		BPF_EXIT_INSN(),
- 	};
- 
--	return bpf_load_program(BPF_PROG_TYPE_SOCKET_FILTER, prog,
-+	return bpf_load_program(prog_type, prog,
- 				ARRAY_SIZE(prog), "GPL", 0, NULL, 0);
- }
- 
--static int create_prog_array(uint32_t max_elem, int p1key)
-+static int create_prog_array(enum bpf_map_type prog_type, uint32_t max_elem,
-+			     int p1key)
- {
- 	int p2key = 1;
- 	int mfd, p1fd, p2fd;
-@@ -12669,8 +12670,8 @@ static int create_prog_array(uint32_t max_elem, int p1key)
- 		return -1;
- 	}
- 
--	p1fd = create_prog_dummy1();
--	p2fd = create_prog_dummy2(mfd, p2key);
-+	p1fd = create_prog_dummy1(prog_type);
-+	p2fd = create_prog_dummy2(prog_type, mfd, p2key);
- 	if (p1fd < 0 || p2fd < 0)
- 		goto out;
- 	if (bpf_map_update_elem(mfd, &p1key, &p1fd, BPF_ANY) < 0)
-@@ -12725,8 +12726,8 @@ static int create_cgroup_storage(void)
- 
- static char bpf_vlog[UINT_MAX >> 8];
- 
--static void do_test_fixup(struct bpf_test *test, struct bpf_insn *prog,
--			  int *map_fds)
-+static void do_test_fixup(struct bpf_test *test, enum bpf_map_type prog_type,
-+			  struct bpf_insn *prog, int *map_fds)
- {
- 	int *fixup_map1 = test->fixup_map1;
- 	int *fixup_map2 = test->fixup_map2;
-@@ -12781,7 +12782,7 @@ static void do_test_fixup(struct bpf_test *test, struct bpf_insn *prog,
- 	}
- 
- 	if (*fixup_prog1) {
--		map_fds[4] = create_prog_array(4, 0);
-+		map_fds[4] = create_prog_array(prog_type, 4, 0);
- 		do {
- 			prog[*fixup_prog1].imm = map_fds[4];
- 			fixup_prog1++;
-@@ -12789,7 +12790,7 @@ static void do_test_fixup(struct bpf_test *test, struct bpf_insn *prog,
- 	}
- 
- 	if (*fixup_prog2) {
--		map_fds[5] = create_prog_array(8, 7);
-+		map_fds[5] = create_prog_array(prog_type, 8, 7);
- 		do {
- 			prog[*fixup_prog2].imm = map_fds[5];
- 			fixup_prog2++;
-@@ -12855,11 +12856,13 @@ static void do_test_single(struct bpf_test *test, bool unpriv,
  	for (i = 0; i < MAX_NR_MAPS; i++)
- 		map_fds[i] = -1;
- 
--	do_test_fixup(test, prog, map_fds);
-+	if (!prog_type)
-+		prog_type = BPF_PROG_TYPE_SOCKET_FILTER;
-+	do_test_fixup(test, prog_type, prog, map_fds);
+@@ -12861,9 +12862,12 @@ static void do_test_single(struct bpf_test *test, bool unpriv,
+ 	do_test_fixup(test, prog_type, prog, map_fds);
  	prog_len = probe_filter_length(prog);
  
--	fd_prog = bpf_verify_program(prog_type ? : BPF_PROG_TYPE_SOCKET_FILTER,
--				     prog, prog_len, test->flags & F_LOAD_WITH_STRICT_ALIGNMENT,
-+	fd_prog = bpf_verify_program(prog_type, prog, prog_len,
-+				     test->flags & F_LOAD_WITH_STRICT_ALIGNMENT,
+-	fd_prog = bpf_verify_program(prog_type, prog, prog_len,
+-				     test->flags & F_LOAD_WITH_STRICT_ALIGNMENT ?
+-				     BPF_F_STRICT_ALIGNMENT : 0,
++	pflags = 0;
++	if (test->flags & F_LOAD_WITH_STRICT_ALIGNMENT)
++		pflags |= BPF_F_STRICT_ALIGNMENT;
++	if (test->flags & F_NEEDS_EFFICIENT_UNALIGNED_ACCESS)
++		pflags |= BPF_F_ANY_ALIGNMENT;
++	fd_prog = bpf_verify_program(prog_type, prog, prog_len, pflags,
  				     "GPL", 0, bpf_vlog, sizeof(bpf_vlog), 1);
  
  	expected_ret = unpriv && test->result_unpriv != UNDEF ?
+@@ -12873,28 +12877,27 @@ static void do_test_single(struct bpf_test *test, bool unpriv,
+ 	expected_val = unpriv && test->retval_unpriv ?
+ 		       test->retval_unpriv : test->retval;
+ 
+-	reject_from_alignment = fd_prog < 0 &&
+-				(test->flags & F_NEEDS_EFFICIENT_UNALIGNED_ACCESS) &&
+-				strstr(bpf_vlog, "misaligned");
+-#ifdef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+-	if (reject_from_alignment) {
+-		printf("FAIL\nFailed due to alignment despite having efficient unaligned access: '%s'!\n",
+-		       strerror(errno));
+-		goto fail_log;
+-	}
+-#endif
++	alignment_prevented_execution = 0;
++
+ 	if (expected_ret == ACCEPT) {
+-		if (fd_prog < 0 && !reject_from_alignment) {
++		if (fd_prog < 0) {
+ 			printf("FAIL\nFailed to load prog '%s'!\n",
+ 			       strerror(errno));
+ 			goto fail_log;
+ 		}
++#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
++		if (fd_prog >= 0 &&
++		    (test->flags & F_NEEDS_EFFICIENT_UNALIGNED_ACCESS)) {
++			alignment_prevented_execution = 1;
++			goto test_ok;
++		}
++#endif
+ 	} else {
+ 		if (fd_prog >= 0) {
+ 			printf("FAIL\nUnexpected success to load!\n");
+ 			goto fail_log;
+ 		}
+-		if (!strstr(bpf_vlog, expected_err) && !reject_from_alignment) {
++		if (!strstr(bpf_vlog, expected_err)) {
+ 			printf("FAIL\nUnexpected error message!\n\tEXP: %s\n\tRES: %s\n",
+ 			      expected_err, bpf_vlog);
+ 			goto fail_log;
+@@ -12922,9 +12925,12 @@ static void do_test_single(struct bpf_test *test, bool unpriv,
+ 			goto fail_log;
+ 		}
+ 	}
++#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
++test_ok:
++#endif
+ 	(*passes)++;
+-	printf("OK%s\n", reject_from_alignment ?
+-	       " (NOTE: reject due to unknown alignment)" : "");
++	printf("OK%s\n", alignment_prevented_execution ?
++	       " (NOTE: not executed due to unknown alignment)" : "");
+ close_fds:
+ 	close(fd_prog);
+ 	for (i = 0; i < MAX_NR_MAPS; i++)
 -- 
 2.1.0
 
