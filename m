@@ -7,25 +7,25 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3890AC47096
-	for <bpf@archiver.kernel.org>; Thu,  3 Jun 2021 01:48:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 87CABC47098
+	for <bpf@archiver.kernel.org>; Thu,  3 Jun 2021 01:48:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1D79A613F1
-	for <bpf@archiver.kernel.org>; Thu,  3 Jun 2021 01:48:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6B388613F1
+	for <bpf@archiver.kernel.org>; Thu,  3 Jun 2021 01:48:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbhFCBuE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 2 Jun 2021 21:50:04 -0400
-Received: from szxga02-in.huawei.com ([45.249.212.188]:2970 "EHLO
+        id S229884AbhFCBuF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 2 Jun 2021 21:50:05 -0400
+Received: from szxga02-in.huawei.com ([45.249.212.188]:3518 "EHLO
         szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229825AbhFCBuA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 2 Jun 2021 21:50:00 -0400
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4FwTHH4djnz6tps;
-        Thu,  3 Jun 2021 09:45:15 +0800 (CST)
+        with ESMTP id S229833AbhFCBuB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 2 Jun 2021 21:50:01 -0400
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4FwTHY2Q10zZcBy;
+        Thu,  3 Jun 2021 09:45:29 +0800 (CST)
 Received: from dggpemm500005.china.huawei.com (7.185.36.74) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Thu, 3 Jun 2021 09:48:14 +0800
+ 15.1.2176.2; Thu, 3 Jun 2021 09:48:13 +0800
 Received: from localhost.localdomain (10.69.192.56) by
  dggpemm500005.china.huawei.com (7.185.36.74) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
@@ -48,9 +48,9 @@ CC:     <olteanv@gmail.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <alexander.duyck@gmail.com>, <hdanton@sina.com>, <jgross@suse.com>,
         <JKosina@suse.com>, <mkubecek@suse.cz>, <bjorn@kernel.org>,
         <alobakin@pm.me>
-Subject: [PATCH net-next v2 3/3] net: sched: remove qdisc->empty for lockless qdisc
-Date:   Thu, 3 Jun 2021 09:48:00 +0800
-Message-ID: <1622684880-39895-4-git-send-email-linyunsheng@huawei.com>
+Subject: [PATCH net-next v2 1/3] net: sched: avoid unnecessary seqcount operation for lockless qdisc
+Date:   Thu, 3 Jun 2021 09:47:58 +0800
+Message-ID: <1622684880-39895-2-git-send-email-linyunsheng@huawei.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1622684880-39895-1-git-send-email-linyunsheng@huawei.com>
 References: <1622684880-39895-1-git-send-email-linyunsheng@huawei.com>
@@ -64,80 +64,46 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-As MISSED and DRAINING state are used to indicate a non-empty
-qdisc, qdisc->empty is not longer needed, so remove it.
+qdisc->running seqcount operation is mainly used to do heuristic
+locking on q->busylock for locked qdisc, see qdisc_is_running()
+and __dev_xmit_skb().
+
+So avoid doing seqcount operation for qdisc with TCQ_F_NOLOCK
+flag.
 
 Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
 ---
- include/net/sch_generic.h | 13 +++----------
- net/sched/sch_generic.c   |  3 ---
- 2 files changed, 3 insertions(+), 13 deletions(-)
+ include/net/sch_generic.h | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/include/net/sch_generic.h b/include/net/sch_generic.h
-index 177f240..c99ffe9 100644
+index 1e62551..3ed6bcc 100644
 --- a/include/net/sch_generic.h
 +++ b/include/net/sch_generic.h
-@@ -117,8 +117,6 @@ struct Qdisc {
- 	spinlock_t		busylock ____cacheline_aligned_in_smp;
- 	spinlock_t		seqlock;
+@@ -188,6 +188,7 @@ static inline bool qdisc_run_begin(struct Qdisc *qdisc)
  
--	/* for NOLOCK qdisc, true if there are no enqueued skbs */
--	bool			empty;
- 	struct rcu_head		rcu;
- 
- 	/* private data */
-@@ -165,7 +163,7 @@ static inline bool qdisc_is_percpu_stats(const struct Qdisc *q)
- static inline bool qdisc_is_empty(const struct Qdisc *qdisc)
- {
- 	if (qdisc_is_percpu_stats(qdisc))
--		return READ_ONCE(qdisc->empty);
-+		return nolock_qdisc_is_empty(qdisc);
- 	return !READ_ONCE(qdisc->q.qlen);
- }
- 
-@@ -173,7 +171,7 @@ static inline bool qdisc_run_begin(struct Qdisc *qdisc)
- {
- 	if (qdisc->flags & TCQ_F_NOLOCK) {
- 		if (spin_trylock(&qdisc->seqlock))
--			goto nolock_empty;
-+			return true;
- 
- 		/* If the MISSED flag is set, it means other thread has
- 		 * set the MISSED flag before second spin_trylock(), so
-@@ -195,12 +193,7 @@ static inline bool qdisc_run_begin(struct Qdisc *qdisc)
- 		/* Retry again in case other CPU may not see the new flag
- 		 * after it releases the lock at the end of qdisc_run_end().
- 		 */
--		if (!spin_trylock(&qdisc->seqlock))
--			return false;
--
--nolock_empty:
--		WRITE_ONCE(qdisc->empty, false);
--		return true;
-+		return spin_trylock(&qdisc->seqlock);
+ nolock_empty:
+ 		WRITE_ONCE(qdisc->empty, false);
++		return true;
  	} else if (qdisc_is_running(qdisc)) {
  		return false;
  	}
-diff --git a/net/sched/sch_generic.c b/net/sched/sch_generic.c
-index 83d7f5f..1abd9c7 100644
---- a/net/sched/sch_generic.c
-+++ b/net/sched/sch_generic.c
-@@ -707,8 +707,6 @@ static struct sk_buff *pfifo_fast_dequeue(struct Qdisc *qdisc)
- 		need_retry = false;
+@@ -201,7 +202,6 @@ static inline bool qdisc_run_begin(struct Qdisc *qdisc)
  
- 		goto retry;
--	} else {
--		WRITE_ONCE(qdisc->empty, true);
+ static inline void qdisc_run_end(struct Qdisc *qdisc)
+ {
+-	write_seqcount_end(&qdisc->running);
+ 	if (qdisc->flags & TCQ_F_NOLOCK) {
+ 		spin_unlock(&qdisc->seqlock);
+ 
+@@ -210,6 +210,8 @@ static inline void qdisc_run_end(struct Qdisc *qdisc)
+ 			clear_bit(__QDISC_STATE_MISSED, &qdisc->state);
+ 			__netif_schedule(qdisc);
+ 		}
++	} else {
++		write_seqcount_end(&qdisc->running);
  	}
- 
- 	return skb;
-@@ -909,7 +907,6 @@ struct Qdisc *qdisc_alloc(struct netdev_queue *dev_queue,
- 	sch->enqueue = ops->enqueue;
- 	sch->dequeue = ops->dequeue;
- 	sch->dev_queue = dev_queue;
--	sch->empty = true;
- 	dev_hold(dev);
- 	refcount_set(&sch->refcnt, 1);
+ }
  
 -- 
 2.7.4
