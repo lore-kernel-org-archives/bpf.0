@@ -2,317 +2,371 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B312AC47092
-	for <bpf@archiver.kernel.org>; Thu,  3 Jun 2021 01:48:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16E0EC47083
+	for <bpf@archiver.kernel.org>; Thu,  3 Jun 2021 01:54:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 99042613F3
-	for <bpf@archiver.kernel.org>; Thu,  3 Jun 2021 01:48:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F2D886139A
+	for <bpf@archiver.kernel.org>; Thu,  3 Jun 2021 01:54:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229878AbhFCBuF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 2 Jun 2021 21:50:05 -0400
-Received: from szxga08-in.huawei.com ([45.249.212.255]:4288 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbhFCBuA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 2 Jun 2021 21:50:00 -0400
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4FwTFG1PMkz1BH7j;
-        Thu,  3 Jun 2021 09:43:30 +0800 (CST)
-Received: from dggpemm500005.china.huawei.com (7.185.36.74) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Thu, 3 Jun 2021 09:48:13 +0800
-Received: from localhost.localdomain (10.69.192.56) by
- dggpemm500005.china.huawei.com (7.185.36.74) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Thu, 3 Jun 2021 09:48:13 +0800
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-To:     <davem@davemloft.net>, <kuba@kernel.org>
-CC:     <olteanv@gmail.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <andriin@fb.com>, <edumazet@google.com>, <weiwan@google.com>,
-        <cong.wang@bytedance.com>, <ap420073@gmail.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linuxarm@openeuler.org>, <mkl@pengutronix.de>,
-        <linux-can@vger.kernel.org>, <jhs@mojatatu.com>,
-        <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
-        <andrii@kernel.org>, <kafai@fb.com>, <songliubraving@fb.com>,
-        <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
-        <bpf@vger.kernel.org>, <jonas.bonn@netrounds.com>,
-        <pabeni@redhat.com>, <mzhivich@akamai.com>, <johunt@akamai.com>,
-        <albcamus@gmail.com>, <kehuan.feng@gmail.com>,
-        <a.fatoum@pengutronix.de>, <atenart@kernel.org>,
-        <alexander.duyck@gmail.com>, <hdanton@sina.com>, <jgross@suse.com>,
-        <JKosina@suse.com>, <mkubecek@suse.cz>, <bjorn@kernel.org>,
-        <alobakin@pm.me>
-Subject: [PATCH net-next v2 2/3] net: sched: implement TCQ_F_CAN_BYPASS for lockless qdisc
-Date:   Thu, 3 Jun 2021 09:47:59 +0800
-Message-ID: <1622684880-39895-3-git-send-email-linyunsheng@huawei.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1622684880-39895-1-git-send-email-linyunsheng@huawei.com>
-References: <1622684880-39895-1-git-send-email-linyunsheng@huawei.com>
+        id S229765AbhFCB4a (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 2 Jun 2021 21:56:30 -0400
+Received: from mail-pf1-f178.google.com ([209.85.210.178]:44783 "EHLO
+        mail-pf1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229721AbhFCB4a (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 2 Jun 2021 21:56:30 -0400
+Received: by mail-pf1-f178.google.com with SMTP id u18so3658613pfk.11;
+        Wed, 02 Jun 2021 18:54:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=BIk0PMoQhOV/x90cI4e2Y7NdRtdEOssK09H6LOQ3mpo=;
+        b=MgP7KfdRirgHkNML2wGGa8GfbzYrmhUhfFsoS41PViRkfWVcj+JAx79vhNejkjUBC2
+         CZJWgt2NnWfy+hF9YJfPfcmheTMyVJJmojz6UI7gBjwyXWH+njNnA2S1YHnAK4QyQZ0S
+         I/7Vue9xSunvzFH/1OE8OGcZENLJMKvCf2UTP2mPo3Ib1SoPCUQTxYQM2eoi0xSF5Tbq
+         GVCSselUoWpjIFcC9K+dVxQucaaEVBXIWlfxclgVEDoGQWs0kvM+MkMKWiVhIBKsHAUB
+         MmGOTob7u1cFOrvnUIiYcZz8uXjYufm1PxeZeCllykqXObB2XPLQPmKciJu9yyl+e+yW
+         KxmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=BIk0PMoQhOV/x90cI4e2Y7NdRtdEOssK09H6LOQ3mpo=;
+        b=R7wsO+zZBIxuPeKz6ixIOg3sx0gL7fT4yu5dTuzPbbEUvuSpFM6XnbL2ff/Luz7mH3
+         wYS6pzgR8GPrNu1WE4X344Vo/RHGPDD5y06ZEvpzenPYrUrlipOS7Wxr0orIPDfgh7/I
+         pyputGzo/4d+uLCaW+Xke50f+huI/tIfeZJVZbUuV+Wq6SL2mfre1nfnEsWSuX3+9Oc3
+         6wpiEyVP+Z8ORlJUU/IxoyDr4XMxq98L94X7nUzLt37UdD0L+d3VCwiklvkxZe+awUAl
+         ruBLdJC3GHx6QDRLo3wzn3w5TdISFVlpGd7Pfk7YertgNfTB6DBJ+OMnZGycGjf9ANBn
+         QRRw==
+X-Gm-Message-State: AOAM532HrG8ZPU1J1HS+NnAm2TqQr0IQbcqOWOL5RMtQbG+DIT16xK6f
+        J9NWh0sZxucCg4GFC2pIlUKTGtoM4EI=
+X-Google-Smtp-Source: ABdhPJydu+MRC4tjDQ7El0Dd5GPjrb3Zv61pfSD0JthwuS0zCzYxnnD2QKV48Su/1g4XNkSZrxoGaQ==
+X-Received: by 2002:aa7:8ec8:0:b029:2ea:32b:9202 with SMTP id b8-20020aa78ec80000b02902ea032b9202mr10684926pfr.36.1622685214110;
+        Wed, 02 Jun 2021 18:53:34 -0700 (PDT)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::5:27da])
+        by smtp.gmail.com with ESMTPSA id s48sm657107pfw.205.2021.06.02.18.53.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Jun 2021 18:53:33 -0700 (PDT)
+Date:   Wed, 2 Jun 2021 18:53:30 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Kernel Team <kernel-team@fb.com>
+Subject: Re: [PATCH bpf-next 1/3] bpf: Introduce bpf_timer
+Message-ID: <20210603015330.vd4zgr5rdishemgi@ast-mbp.dhcp.thefacebook.com>
+References: <20210527040259.77823-1-alexei.starovoitov@gmail.com>
+ <20210527040259.77823-2-alexei.starovoitov@gmail.com>
+ <CAEf4BzbyikY1b4vAzb+t88odbqWOR7K4TpwjM1zGF4Nmqu6ysg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.56]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500005.china.huawei.com (7.185.36.74)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzbyikY1b4vAzb+t88odbqWOR7K4TpwjM1zGF4Nmqu6ysg@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently pfifo_fast has both TCQ_F_CAN_BYPASS and TCQ_F_NOLOCK
-flag set, but queue discipline by-pass does not work for lockless
-qdisc because skb is always enqueued to qdisc even when the qdisc
-is empty, see __dev_xmit_skb().
+On Wed, Jun 02, 2021 at 03:08:08PM -0700, Andrii Nakryiko wrote:
+> On Wed, May 26, 2021 at 9:03 PM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> >
+> > From: Alexei Starovoitov <ast@kernel.org>
+> >
+> > Introduce 'struct bpf_timer { __u64 :64; };' that can be embedded
+> > in hash/array/lru maps as regular field and helpers to operate on it:
+> > long bpf_timer_init(struct bpf_timer *timer, void *callback, int flags);
+> > long bpf_timer_start(struct bpf_timer *timer, u64 nsecs);
+> > long bpf_timer_cancel(struct bpf_timer *timer);
+> >
+> > Here is how BPF program might look like:
+> > struct map_elem {
+> >     int counter;
+> >     struct bpf_timer timer;
+> > };
+> >
+> > struct {
+> >     __uint(type, BPF_MAP_TYPE_HASH);
+> >     __uint(max_entries, 1000);
+> >     __type(key, int);
+> >     __type(value, struct map_elem);
+> > } hmap SEC(".maps");
+> >
+> > struct bpf_timer global_timer;
+> 
+> Using bpf_timer as a global variable has at least two problems. We
+> discussed one offline but I realized another one reading the code in
+> this patch:
+>   1. this memory can and is memory-mapped as read-write, so user-space
+> can just write over this (intentionally or accidentally), so it's
+> quite unsafe
 
-This patch calls sch_direct_xmit() to transmit the skb directly
-to the driver for empty lockless qdisc, which aviod enqueuing
-and dequeuing operation.
+yep.
 
-As qdisc->empty is not reliable to indicate a empty qdisc because
-there is a time window between enqueuing and setting qdisc->empty.
-So we use the MISSED state added in commit a90c57f2cedd ("net:
-sched: fix packet stuck problem for lockless qdisc"), which
-indicate there is lock contention, suggesting that it is better
-not to do the qdisc bypass in order to avoid packet out of order
-problem.
+>   2. with current restriction of having offset 0 for struct bpf_timer,
+> you have to use global variable for it, because clang will reorder
+> static variables after global variables.
 
-In order to make MISSED state reliable to indicate a empty qdisc,
-we need to ensure that testing and clearing of MISSED state is
-within the protection of qdisc->seqlock, only setting MISSED state
-can be done without the protection of qdisc->seqlock. A MISSED
-state testing is added without the protection of qdisc->seqlock to
-aviod doing unnecessary spin_trylock() for contention case.
+that is addressed in 2nd patch.
 
-As the enqueuing is not within the protection of qdisc->seqlock,
-there is still a potential data race as pointed by Jakub [1]:
+> > + * long bpf_timer_init(struct bpf_timer *timer, void *callback_fn, int flags)
+> > + *     Description
+> > + *             Initialize the timer to call given static function.
+> > + *     Return
+> > + *             zero
+> 
+> -EBUSY is probably the most important to mention here, but generally
+> the way it's described right now it seems like it can't fail, which is
+> not true. Similar for bpf_timer_start() and bpf_timer_cancel().
 
-      thread1               thread2             thread3
-qdisc_run_begin() # true
-                        qdisc_run_begin(q)
-                             set(MISSED)
-pfifo_fast_dequeue
-  clear(MISSED)
-  # recheck the queue
-qdisc_run_end()
-                            enqueue skb1
-                                             qdisc empty # true
-                                          qdisc_run_begin() # true
-                                          sch_direct_xmit() # skb2
-                         qdisc_run_begin()
-                            set(MISSED)
+good point.
 
-When above happens, skb1 enqueued by thread2 is transmited after
-skb2 is transmited by thread3 because MISSED state setting and
-enqueuing is not under the qdisc->seqlock. If qdisc bypass is
-disabled, skb1 has better chance to be transmited quicker than
-skb2
+> > + *
+> > + * long bpf_timer_start(struct bpf_timer *timer, u64 nsecs)
+> > + *     Description
+> > + *             Start the timer and set its expiration N nanoseconds from
+> > + *             the current time.
+> 
+> The case of nsecs == 0 is a bit special and interesting, it's useful
+> to explain what will happen in that case. I'm actually curious as
+> well, in the code you say "call ASAP", but does it mean after the BPF
+> program exits? Or can it start immediately on another CPU? Or will it
+> interrupt the currently running BPF program to run the callback
+> (unlikely, but that might be someone's expectation).
 
-This patch does not take care of the above data race, because we
-view this as similar as below:
-Even at the same time CPU1 and CPU2 write the skb to two socket
-which both heading to the same qdisc, there is no guarantee that
-which skb will hit the qdisc first, because there is a lot of
-factor like interrupt/softirq/cache miss/scheduling afffecting
-that.
+nsecs == 0 is not special. nsecs is a relative expiry time.
+1 nanosecond is not much different from zero :)
+Most likely this timer will be the first one to run once it's added
+to per-cpu rb-tree.
 
-There are below cases that need special handling:
-1. When MISSED state is cleared before another round of dequeuing
-   in pfifo_fast_dequeue(), and __qdisc_run() might not be able to
-   dequeue all skb in one round and call __netif_schedule(), which
-   might result in a non-empty qdisc without MISSED set. In order
-   to avoid this, the MISSED state is set for lockless qdisc and
-   __netif_schedule() will be called at the end of qdisc_run_end.
+I think going too much into implementation details in the helper
+description is unnecessary.
+" Start the timer and set its expiration N nanoseconds from
+  the current time. "
+is probably about right amount of details.
+I can add that the time clock is monotonic
+and callback is called in softirq.
 
-2. The MISSED state also need to be set for lockless qdisc instead
-   of calling __netif_schedule() directly when requeuing a skb for
-   a similar reason.
+> > +static enum hrtimer_restart timer_cb(struct hrtimer *timer)
+> 
+> nit: can you please call it bpf_timer_cb, so it might be possible to
+> trace it a bit easier due to bpf_ prefix?
 
-3. For netdev queue stopped case, the MISSED case need clearing
-   while the netdev queue is stopped, otherwise there may be
-   unnecessary __netif_schedule() calling. So a new DRAINING state
-   is added to indicate this case, which also indicate a non-empty
-   qdisc.
+sure.
 
-4. As there is already netif_xmit_frozen_or_stopped() checking in
-   dequeue_skb() and sch_direct_xmit(), which are both within the
-   protection of qdisc->seqlock, but the same checking in
-   __dev_xmit_skb() is without the protection, which might cause
-   empty indication of a lockless qdisc to be not reliable. So
-   remove the checking in __dev_xmit_skb(), and the checking in
-   the protection of qdisc->seqlock seems enough to avoid the cpu
-   consumption problem for netdev queue stopped case.
+> > +{
+> > +       struct bpf_hrtimer *t = container_of(timer, struct bpf_hrtimer, timer);
+> > +       unsigned long flags;
+> > +       int ret;
+> > +
+> > +       /* timer_cb() runs in hrtimer_run_softirq and doesn't migrate.
+> > +        * Remember the timer this callback is servicing to prevent
+> > +        * deadlock if callback_fn() calls bpf_timer_cancel() on the same timer.
+> > +        */
+> > +       this_cpu_write(hrtimer_running, t);
+> > +       ret = BPF_CAST_CALL(t->callback_fn)((u64)(long)t->map,
+> > +                                           (u64)(long)t->key,
+> > +                                           (u64)(long)t->value, 0, 0);
+> > +       WARN_ON(ret != 0); /* todo: define 0 vs 1 or disallow 1 in the verifier */
+> 
+> if we define 0 vs 1, what would their meaning be?
 
-1. https://lkml.org/lkml/2021/5/29/215
-Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
----
-V2: Adjust the comment and commit log according to discussion
-    in V1.
-V1: Add nolock_qdisc_is_empty() and do the qdisc empty checking
-    without the protection of qdisc->seqlock to aviod doing
-    unnecessary spin_trylock() for contention case.
-RFC v4: Use STATE_MISSED and STATE_DRAINING to indicate non-empty
-        qdisc.
----
- include/net/sch_generic.h | 16 +++++++++++++---
- net/core/dev.c            | 27 +++++++++++++++++++++++++--
- net/sched/sch_generic.c   | 20 ++++++++++++++++----
- 3 files changed, 54 insertions(+), 9 deletions(-)
+How would you define it?
+The hrtimer has support for HRTIMER_NORESTART vs HRTIMER_RESTART.
+This feature of hrtimer is already exposed into user space via timerfd,
+so no concerns there.
+But to use HRTIMER_RESTART in a meaningful way the bpf prog
+would need to be able to call to hrtimer_forward_now() to set
+the new expiry.
+That function has an interesting caution comment in hrtimer.h:
+ * Can be safely called from the callback function of @timer. If
+ * called from other contexts @timer must neither be enqueued nor
+ * running the callback and the caller needs to take care of
+ * serialization.
+I'm not sure how to teach the verifier to enforce that.. yet...
 
-diff --git a/include/net/sch_generic.h b/include/net/sch_generic.h
-index 3ed6bcc..177f240 100644
---- a/include/net/sch_generic.h
-+++ b/include/net/sch_generic.h
-@@ -37,8 +37,15 @@ enum qdisc_state_t {
- 	__QDISC_STATE_SCHED,
- 	__QDISC_STATE_DEACTIVATED,
- 	__QDISC_STATE_MISSED,
-+	__QDISC_STATE_DRAINING,
- };
- 
-+#define QDISC_STATE_MISSED	BIT(__QDISC_STATE_MISSED)
-+#define QDISC_STATE_DRAINING	BIT(__QDISC_STATE_DRAINING)
-+
-+#define QDISC_STATE_NON_EMPTY	(QDISC_STATE_MISSED | \
-+					QDISC_STATE_DRAINING)
-+
- struct qdisc_size_table {
- 	struct rcu_head		rcu;
- 	struct list_head	list;
-@@ -145,6 +152,11 @@ static inline bool qdisc_is_running(struct Qdisc *qdisc)
- 	return (raw_read_seqcount(&qdisc->running) & 1) ? true : false;
- }
- 
-+static inline bool nolock_qdisc_is_empty(const struct Qdisc *qdisc)
-+{
-+	return !(READ_ONCE(qdisc->state) & QDISC_STATE_NON_EMPTY);
-+}
-+
- static inline bool qdisc_is_percpu_stats(const struct Qdisc *q)
- {
- 	return q->flags & TCQ_F_CPUSTATS;
-@@ -206,10 +218,8 @@ static inline void qdisc_run_end(struct Qdisc *qdisc)
- 		spin_unlock(&qdisc->seqlock);
- 
- 		if (unlikely(test_bit(__QDISC_STATE_MISSED,
--				      &qdisc->state))) {
--			clear_bit(__QDISC_STATE_MISSED, &qdisc->state);
-+				      &qdisc->state)))
- 			__netif_schedule(qdisc);
--		}
- 	} else {
- 		write_seqcount_end(&qdisc->running);
- 	}
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 50531a2..991d09b 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -3852,10 +3852,33 @@ static inline int __dev_xmit_skb(struct sk_buff *skb, struct Qdisc *q,
- 	qdisc_calculate_pkt_len(skb, q);
- 
- 	if (q->flags & TCQ_F_NOLOCK) {
-+		if (q->flags & TCQ_F_CAN_BYPASS && nolock_qdisc_is_empty(q) &&
-+		    qdisc_run_begin(q)) {
-+			/* Retest nolock_qdisc_is_empty() within the protection
-+			 * of q->seqlock to protect from racing with requeuing.
-+			 */
-+			if (unlikely(!nolock_qdisc_is_empty(q))) {
-+				rc = q->enqueue(skb, q, &to_free) &
-+					NET_XMIT_MASK;
-+				__qdisc_run(q);
-+				qdisc_run_end(q);
-+
-+				goto no_lock_out;
-+			}
-+
-+			qdisc_bstats_cpu_update(q, skb);
-+			if (sch_direct_xmit(skb, q, dev, txq, NULL, true) &&
-+			    !nolock_qdisc_is_empty(q))
-+				__qdisc_run(q);
-+
-+			qdisc_run_end(q);
-+			return NET_XMIT_SUCCESS;
-+		}
-+
- 		rc = q->enqueue(skb, q, &to_free) & NET_XMIT_MASK;
--		if (likely(!netif_xmit_frozen_or_stopped(txq)))
--			qdisc_run(q);
-+		qdisc_run(q);
- 
-+no_lock_out:
- 		if (unlikely(to_free))
- 			kfree_skb_list(to_free);
- 		return rc;
-diff --git a/net/sched/sch_generic.c b/net/sched/sch_generic.c
-index fc8b56b..83d7f5f 100644
---- a/net/sched/sch_generic.c
-+++ b/net/sched/sch_generic.c
-@@ -52,6 +52,8 @@ static void qdisc_maybe_clear_missed(struct Qdisc *q,
- 	 */
- 	if (!netif_xmit_frozen_or_stopped(txq))
- 		set_bit(__QDISC_STATE_MISSED, &q->state);
-+	else
-+		set_bit(__QDISC_STATE_DRAINING, &q->state);
- }
- 
- /* Main transmission queue. */
-@@ -164,9 +166,13 @@ static inline void dev_requeue_skb(struct sk_buff *skb, struct Qdisc *q)
- 
- 		skb = next;
- 	}
--	if (lock)
-+
-+	if (lock) {
- 		spin_unlock(lock);
--	__netif_schedule(q);
-+		set_bit(__QDISC_STATE_MISSED, &q->state);
-+	} else {
-+		__netif_schedule(q);
-+	}
- }
- 
- static void try_bulk_dequeue_skb(struct Qdisc *q,
-@@ -409,7 +415,11 @@ void __qdisc_run(struct Qdisc *q)
- 	while (qdisc_restart(q, &packets)) {
- 		quota -= packets;
- 		if (quota <= 0) {
--			__netif_schedule(q);
-+			if (q->flags & TCQ_F_NOLOCK)
-+				set_bit(__QDISC_STATE_MISSED, &q->state);
-+			else
-+				__netif_schedule(q);
-+
- 			break;
- 		}
- 	}
-@@ -680,13 +690,14 @@ static struct sk_buff *pfifo_fast_dequeue(struct Qdisc *qdisc)
- 	if (likely(skb)) {
- 		qdisc_update_stats_at_dequeue(qdisc, skb);
- 	} else if (need_retry &&
--		   test_bit(__QDISC_STATE_MISSED, &qdisc->state)) {
-+		   READ_ONCE(qdisc->state) & QDISC_STATE_NON_EMPTY) {
- 		/* Delay clearing the STATE_MISSED here to reduce
- 		 * the overhead of the second spin_trylock() in
- 		 * qdisc_run_begin() and __netif_schedule() calling
- 		 * in qdisc_run_end().
- 		 */
- 		clear_bit(__QDISC_STATE_MISSED, &qdisc->state);
-+		clear_bit(__QDISC_STATE_DRAINING, &qdisc->state);
- 
- 		/* Make sure dequeuing happens after clearing
- 		 * STATE_MISSED.
-@@ -1204,6 +1215,7 @@ static void dev_reset_queue(struct net_device *dev,
- 	spin_unlock_bh(qdisc_lock(qdisc));
- 	if (nolock) {
- 		clear_bit(__QDISC_STATE_MISSED, &qdisc->state);
-+		clear_bit(__QDISC_STATE_DRAINING, &qdisc->state);
- 		spin_unlock_bh(&qdisc->seqlock);
- 	}
- }
--- 
-2.7.4
+As an alternative we can interpret bpf timer callback return value
+inside bpf_timer_cb() kernel function as:
+0 - return HRTIMER_NORESTART
+N - hrtimer_forward_now(,N); return HRTIMER_RESTART.
 
+but the same can be achieved by calling bpf_timer_start()
+from the bpf prog. The speed of re-arming is roughly the same
+in both cases.
+Doing the same functionality two different ways doesn't seem
+necessary.
+
+I couldn't come up with other ways to use the return value
+and currently thinking to allow 0 only for now.
+Other ideas?
+
+> > +       spin_lock_irqsave(&t->lock, flags);
+> > +       if (!hrtimer_is_queued(timer))
+> > +               bpf_prog_put(t->prog);
+> > +       spin_unlock_irqrestore(&t->lock, flags);
+> > +       this_cpu_write(hrtimer_running, NULL);
+> 
+> Don't know if it's a problem. Above you say that timer_cb doesn't
+> migrate, but can it be preempted? 
+
+My understanding that no, it cannot be. Even in RT.
+
+> If yes, and timer_cb is called in
+> the meantime for another timer, setting hrtimer_running to NULL will
+> clobber the previous value, right? So no nesting is possible. Is this
+> a problem?
+
+Based on my current understanding of hrtimer implemention we're safe here.
+
+> Also is there a chance for timer callback to be a sleepable BPF (sub-)program?
+
+Eventually yes. The whole bpf program can be sleepable, but the
+timer callback cannot be. So the verifier would need to
+treat different functions of the bpf prog as sleepable and non-sleepable.
+Easy enough to implement. Eventually.
+
+> What if we add a field to struct bpf_hrtimer that will be inc/dec to
+> show whether it's active or not? That should bypass per-CPU
+> assumptions, but I haven't thought through races, worst case we might
+> need to take t->lock.
+
+You mean to get rid of per-cpu hrtimer_running and replace
+with bool flag inside bpf_hrtimer. Like is_callback_fn_running ?
+That won't work as-is, since bpf_timer_cancel will be called
+sooner or later when another cpu is inside the callback.
+Something like:
+bpf_timer_cb()
+{
+  bpf_hrtimer->running_on_cpu = smp_processor_id();
+  BPF_CAST_CALL(t->callback_fn)
+  bpf_hrtimer->running_on_cpu = -1;
+}
+
+bpf_timer_cancel()
+{ 
+  if (bpf_hrtimer->running_on_cpu == smp_processor_id())
+    return -EBUSY;
+}
+
+will work, but it's potentially wasting more memory
+if there are millions of timers
+than single per-cpu hrtimer_running and seems less clean.
+
+> > +BPF_CALL_2(bpf_timer_start, struct bpf_timer_kern *, timer, u64, nsecs)
+> 
+> Not entirely sure, but it feels like adding flags would be good here as well?
+
+Same here. Not entirely sure, but I think it's good without it.
+Here is why:
+hrtimer_start() has 3rd argument which allows some flexibility
+to change the mode of the timer after hrtimer_init.
+But I think it's too flexible part of hrtimer api.
+Like io_uring is exposing hrtimers, but remembers the mode specified
+during hrtimer_init phase and uses it during hrtimer_start.
+I think eventually the bpf_hrtimer_init() might support
+not only clock_monotonic and relative expiry, but other
+features of hrtimer as well, but I think it's better to
+follow what io_uring did and remember the mode during bpf_hrtimer_init()
+and use the same mode in bpf_hrtimer_start().
+Because of that there is nothing extra to pass into hrtimer_start()
+and hence no use for 3rd argument in bpf_timer_start.
+
+The flags argument in bpf_timer_init() will eventually
+be able to specify monotonic vs boottime and
+relative vs absolute expiry.
+
+> > +BPF_CALL_1(bpf_timer_cancel, struct bpf_timer_kern *, timer)
+> > +{
+> > +       struct bpf_hrtimer *t;
+> > +       unsigned long flags;
+> > +
+> > +       t = READ_ONCE(timer->timer);
+> > +       if (!t)
+> > +               return -EINVAL;
+> > +       if (this_cpu_read(hrtimer_running) == t)
+> > +               /* If bpf callback_fn is trying to bpf_timer_cancel()
+> > +                * its own timer the hrtimer_cancel() will deadlock
+> > +                * since it waits for callback_fn to finish
+> > +                */
+> > +               return -EBUSY;
+> > +       spin_lock_irqsave(&t->lock, flags);
+> > +       /* Cancel the timer and wait for associated callback to finish
+> > +        * if it was running.
+> > +        */
+> > +       if (hrtimer_cancel(&t->timer) == 1)
+> > +               /* If the timer was active then drop the prog refcnt,
+> > +                * since callback will not be invoked.
+> > +                */
+> 
+> So the fact whether the timer was cancelled or it's active/already
+> fired seems useful to know in BPF program (sometimes). I can't recall
+> an exact example, but in the past dealing with some timers (in
+> user-space, but the point stands) I remember it was important to know
+> this, so maybe we can communicate that as 0 or 1 returned from
+> bpf_timer_cancel?
+
+Good idea!
+
+> > +void bpf_timer_cancel_and_free(void *val)
+> > +{
+> > +       struct bpf_timer_kern *timer = val;
+> > +       struct bpf_hrtimer *t;
+> > +
+> > +       t = READ_ONCE(timer->timer);
+> > +       if (!t)
+> > +               return;
+> > +       /* Cancel the timer and wait for callback to complete
+> > +        * if it was running
+> > +        */
+> > +       if (hrtimer_cancel(&t->timer) == 1)
+> > +               bpf_prog_put(t->prog);
+> > +       kfree(t);
+> > +       WRITE_ONCE(timer->timer, NULL);
+> 
+> this seems to race with bpf_timer_start, no? Doing WRITE_ONCE and then
+> kfree() timer would be a bit safer (we won't have dangling pointer at
+> any point in time), but I think that still is racy, because
+> bpf_start_timer can read timer->timer before WRITE_ONCE(NULL) here,
+> then we kfree(t), and then bpf_timer_start() proceeds to take t->lock
+> which might explode or might do whatever.
+
+This race is not possible with bpf_timer inside array
+and inside non-prealloc htab.
+The bpf_timer_cancel_and_free() is called when element being
+deleted in htab or the whole array/htab is destroyed.
+When element is deleted the bpf prog cannot look it up.
+Hence it cannot reach bpf_timer pointer and call bpf_timer_start() on it.
+In case of preallocated htab there is race.
+The bpf prog can do a lookup then delete an element
+while still using earlier value pointer. Since all elements
+are preallocated the elem could be reused for another value at that time.
+I need to think more about ways to address it.
+Currently thinking to do cmpxchg in bpf_timer_start() and
+bpf_timer_cancel*() similar to bpf_timer_init() to address it.
+Kinda sucks to use atomic ops to address a race by deliberately 
+malicious prog. bpf prog writers cannot just stumble on such race.
+
+> A small nit, you added bpf_timer_cancel_and_free() prototype in the
+> next patch, but it should probably be done in this patch to avoid
+> unnecessary compiler warnings during bisecting.
+
+There is no warning in default build.
+It's just an unused (yet) global function. That's why I've sent
+the patch this way, but since you asked I've tried few other ways
+and found that "make W=1" indeed warns.
+I'll move the proto to shut it up.
+
+> > +               if (insn->imm == BPF_FUNC_timer_init) {
+> > +
+> 
+> nit: why empty line here?
+
+no clue. will fix.
+
+Thank you for the review!
