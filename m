@@ -2,73 +2,80 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F1121C47082
-	for <bpf@archiver.kernel.org>; Thu,  3 Jun 2021 18:02:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AF101C47096
+	for <bpf@archiver.kernel.org>; Thu,  3 Jun 2021 18:35:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DD369613EE
-	for <bpf@archiver.kernel.org>; Thu,  3 Jun 2021 18:02:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9D530613EE
+	for <bpf@archiver.kernel.org>; Thu,  3 Jun 2021 18:35:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230080AbhFCSDx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 3 Jun 2021 14:03:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34046 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230075AbhFCSDw (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 3 Jun 2021 14:03:52 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61D3AC061756
-        for <bpf@vger.kernel.org>; Thu,  3 Jun 2021 11:01:26 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id m3so8208282lji.12
-        for <bpf@vger.kernel.org>; Thu, 03 Jun 2021 11:01:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=r9MzWZjKPqmlOjFqE3Qrd2asRPZ12yoFNhArngWxvS0=;
-        b=a2XVL0xjWzNmMVySfXwLhDZ042VdNWI/mlGbg22MHKi83/dz+Au4Lo1l0YBdZamgam
-         xuXSHqdF20ibK57qRQhiaHCMniecGwlNSrpAECIGIhuca36POi8dJrgfjnoDQsLcpnE8
-         WV8u/4nABeCFGdVQSoN5V50SiN67XfbEEbGfawVl7t+YsranSPk1XQvB4RDqnZA7TwP7
-         tnQQzMiJyCxDEx3mHkbWKd2WXejigs4BFYhvbIbzRGr2LrfqxNR2pTO6ZxJM55srCPUe
-         H3rM7iFJDXXB0thuv/XhdcJzXscGTE3sQep+UM6RHGwydrN84z67QddxUTYDXCQXJCaw
-         x5fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=r9MzWZjKPqmlOjFqE3Qrd2asRPZ12yoFNhArngWxvS0=;
-        b=sY2zXOOlDdaPZ9h2UpSy0O4vmn3zIkfhTgyW9jVvfvU/60V942me2DUnTEEa05A4iT
-         SRxE0b+azB6q3TLGRNOnAst8WKTVCjwAJQ0vjj9+irMwlEvY84GFTyl/laE7eIIGQoQI
-         VRJSazCEL2N/mEJ/HBI4SbnJq/y7T+QBty6eev6Yu37PXfE3kPbTuQUX1pOmDAz+GQwP
-         NI6GZEpak173FQFqZU8K57pLZI/9XD1abn1uXgm/ZcOASTf++vx821uioQema1gvGdCQ
-         SV/rro2eyXv1wpcdhSoZ/JiwhU+ZXbAtg5tbH6UHeWxcnUBG0NJYF3J+nd6XDDBSAvW7
-         Q+Qw==
-X-Gm-Message-State: AOAM530729FnNzin/CGBYdhTo89EYSrqDHhiqZFFvTbC8hsh7aSa/lzW
-        bl0Gz8PQmeWeIqO4vcEB0X7JVOhw1VaPdqfXmGBpZamFVRY7gZNcrrs=
-X-Google-Smtp-Source: ABdhPJw+zfRWfok6+YxbTE26DXE2GMveQA8aBor2Kow6ZPPB1PILI5yW453kZANSzHAWUDf8y8TLuDLDggV6LemRZwU=
-X-Received: by 2002:a05:651c:2001:: with SMTP id s1mr406240ljo.173.1622743284940;
- Thu, 03 Jun 2021 11:01:24 -0700 (PDT)
+        id S229661AbhFCShf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 3 Jun 2021 14:37:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51706 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229576AbhFCShf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 3 Jun 2021 14:37:35 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 11DE9613F3;
+        Thu,  3 Jun 2021 18:35:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1622745350;
+        bh=ff8c2MjuINj4Z68DxBy172+R76+T6ILfVjdeXXZ2NaM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=t8J2VpCStOku7beQqJjqRzVTE8AevnBQGPNheec5ehM+Y0n/6juzl7mty2DeEFclm
+         LXJjpFIYVPkYSNY4nd1K2CvufA6ehDSHxdWZIBMsm7VfLnB/OlNYCOq00mnX2pjUMq
+         RjDPyJNqyAsbVXSSoq6jhcNH3QI1BYBI8Ea/lNPCUS4DCn+/F5CyuS62GoC4ufP7AE
+         uA0DdRMLafHql1E2iLZbPHi1F2LFLYOjIXuhLNajCH66vDtsf3Y9SAtNYqCGG/ufKL
+         fL9DzXsAq55rCTMcls+6AC+rhT2aGu1UwnS4DVI5iPAhpaZQLW0bVG47wiCSHiYiaq
+         59ar0AirWhTew==
+Date:   Thu, 3 Jun 2021 11:35:48 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Yunsheng Lin <linyunsheng@huawei.com>
+Cc:     <davem@davemloft.net>, <olteanv@gmail.com>, <ast@kernel.org>,
+        <daniel@iogearbox.net>, <andriin@fb.com>, <edumazet@google.com>,
+        <weiwan@google.com>, <cong.wang@bytedance.com>,
+        <ap420073@gmail.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linuxarm@openeuler.org>,
+        <mkl@pengutronix.de>, <linux-can@vger.kernel.org>,
+        <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
+        <andrii@kernel.org>, <kafai@fb.com>, <songliubraving@fb.com>,
+        <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
+        <bpf@vger.kernel.org>, <jonas.bonn@netrounds.com>,
+        <pabeni@redhat.com>, <mzhivich@akamai.com>, <johunt@akamai.com>,
+        <albcamus@gmail.com>, <kehuan.feng@gmail.com>,
+        <a.fatoum@pengutronix.de>, <atenart@kernel.org>,
+        <alexander.duyck@gmail.com>, <hdanton@sina.com>, <jgross@suse.com>,
+        <JKosina@suse.com>, <mkubecek@suse.cz>, <bjorn@kernel.org>,
+        <alobakin@pm.me>
+Subject: Re: [PATCH net-next v2 0/3] Some optimization for lockless qdisc
+Message-ID: <20210603113548.2d71b4d3@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+In-Reply-To: <1622684880-39895-1-git-send-email-linyunsheng@huawei.com>
+References: <1622684880-39895-1-git-send-email-linyunsheng@huawei.com>
 MIME-Version: 1.0
-From:   Kenny Ho <y2kenny@gmail.com>
-Date:   Thu, 3 Jun 2021 14:01:13 -0400
-Message-ID: <CAOWid-drUQKifjPgzQ3MQiKUUrHp5eKOydgSToadW1fNkUME7g@mail.gmail.com>
-Subject: Headers for whitelisted kernel functions available to BPF programs
-To:     Martin KaFai Lau <kafai@fb.com>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi,
+On Thu, 3 Jun 2021 09:47:57 +0800 Yunsheng Lin wrote:
+> Patch 1: remove unnecessary seqcount operation.
+> Patch 2: implement TCQ_F_CAN_BYPASS.
+> Patch 3: remove qdisc->empty.
+> 
+> Performance data for pktgen in queue_xmit mode + dummy netdev
+> with pfifo_fast:
+> 
+>  threads    unpatched           patched             delta
+>     1       2.60Mpps            3.21Mpps             +23%
+>     2       3.84Mpps            5.56Mpps             +44%
+>     4       5.52Mpps            5.58Mpps             +1%
+>     8       2.77Mpps            2.76Mpps             -0.3%
+>    16       2.24Mpps            2.23Mpps             +0.4%
+> 
+> Performance for IP forward testing: 1.05Mpps increases to
+> 1.16Mpps, about 10% improvement.
 
-I understand that helper functions available to bpf programs are
-listed in include/uapi/linux/bpf.h and kernel headers can be made
-available at /sys/kernel/kheaders.tar.xz with CONFIG_IKHEADERS.  But
-with the support of calling kernel functions from bpf programs, how
-would one know which functions are whitelisted?  Are the headers for
-these whitelisted functions available via something like "bpftool btf
-dump file /sys/kernel/btf/vmlinux format c"?
-
-Regards,
-Kenny
+Acked-by: Jakub Kicinski <kuba@kernel.org>
