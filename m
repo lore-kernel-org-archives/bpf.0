@@ -4,54 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DC6AC47096
-	for <bpf@archiver.kernel.org>; Thu,  3 Jun 2021 10:15:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F827C47082
+	for <bpf@archiver.kernel.org>; Thu,  3 Jun 2021 10:16:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 24F27613EE
-	for <bpf@archiver.kernel.org>; Thu,  3 Jun 2021 10:15:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EC2D36138C
+	for <bpf@archiver.kernel.org>; Thu,  3 Jun 2021 10:16:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbhFCKR3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 3 Jun 2021 06:17:29 -0400
-Received: from mail-wr1-f46.google.com ([209.85.221.46]:40857 "EHLO
-        mail-wr1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbhFCKR3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 3 Jun 2021 06:17:29 -0400
-Received: by mail-wr1-f46.google.com with SMTP id y7so622058wrh.7
-        for <bpf@vger.kernel.org>; Thu, 03 Jun 2021 03:15:44 -0700 (PDT)
+        id S230041AbhFCKRv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 3 Jun 2021 06:17:51 -0400
+Received: from mail-wr1-f53.google.com ([209.85.221.53]:45833 "EHLO
+        mail-wr1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229774AbhFCKRu (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 3 Jun 2021 06:17:50 -0400
+Received: by mail-wr1-f53.google.com with SMTP id z8so5230470wrp.12
+        for <bpf@vger.kernel.org>; Thu, 03 Jun 2021 03:16:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ubique-spb-ru.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=5+z9yQBwGKLQ3pjRj4QMkBOoGjzosPzwejTgCIv89Lg=;
-        b=fEyaH/xoapt+Nbgw1o+/0sbcrWyyWSxcAFw24xpOSpGT7Gxnhs4HqCKDVOZNpcpmZ5
-         3JOb/f58y/OTJ/iv+2Sy+LGI/J2yGLFZrnDOGELFiH/RdnnqhGSJ2mrxVQ3iAR1Dfuhm
-         YcqRfBNGBnV8RPZCvujxSr6XkYSl9q61xpMJ6WHho3gi0mtnf9s0c6zbc74UUl83KhA6
-         Ve1GjiGkq4YGYNC/Y2Q+6iRzKoE/89Ml6CEQMK7WfvFukKwzVhSPYp78zktI08CRdGc9
-         w5lEb9jdpmE2fj5bnuJimofgPNvlgfV3zH2i3nCO+rju/pV5yU2SKHS85FzIT+yn+rok
-         A7jg==
+        bh=y8W3XdtBsyo4G7m2GOlm4F23ti6XMBPdC4TasHorY8U=;
+        b=r6nOTOVt5iuhnwfTN0/shMtC0jshcHLjtJdP7YGywikchCo7u7hAnAuX1TP3e+UWSd
+         YVH7+QRXbL87kDLvAqLXbB4UbBcPL8HTLxIP346WUvGP78aZjtW+Gu3qoCNiro+hFTrx
+         Iei9hm35IE4HGMJF5BaxPeaM4g5VhqEOH3W5QNru+JM8LQtRg31LySqufrII4lxMslgf
+         +uP9URCS+qCc9lPr5HpEJHJvmkN+mcr93ymNwzy/VSgi8kXrbA4tDOJ65/msz95XOddz
+         RZTFPZ/Cmf2J4C4ftrVQ4lBlTyrv5+YayCJAruuyLGVHX4EiR70HnPj9RjS/oLgjZufk
+         DIBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=5+z9yQBwGKLQ3pjRj4QMkBOoGjzosPzwejTgCIv89Lg=;
-        b=gzMz6o1jtIucF5V3eCCAIjt4zR+b8/4QWN2SzwkBQXnryG0HJIoUJ1D/aChMRviB97
-         OMUFziOnL1QJ6uzSFvnaRUAmeZsqO535aHA/HGGcHvx3Q7/o9geagRoP83LnmMSm2GBq
-         01JK8blW7u+K1w6wKsErpLyoGiV9W/SfA51Jxx+xdPDIiV3S/sn5cQUTqy+toPY2hIf0
-         Q7zYtdEdeQD1RNrcHhXhv/1DoQRH1l+L5NWGdAmT+n23bgNyR/8blYTRipfKIo7fFKu3
-         wsl9NPC2CzxOvrRTTgF0gvX73KZlfE+2diGj2J0LK9I1zuagnInwJgVUWzzlXC3u3YYc
-         pd3Q==
-X-Gm-Message-State: AOAM530TqOibNM7wOQ+TiyXpj78jZ2GKMy0uH3OsL3CDiFlpn1qSUar7
-        xoHjuWVpQX83m5RcQyEfvcL8pxtn5K80xqKiv/A=
-X-Google-Smtp-Source: ABdhPJw2Y8e3+pA1up1bQe4dRrPGqAR9RUUPTI55nH03DR5PgEOXFApWqPdvSTcAWCFcgGeZggRfdw==
-X-Received: by 2002:a05:6000:12cc:: with SMTP id l12mr37189092wrx.91.1622715284081;
-        Thu, 03 Jun 2021 03:14:44 -0700 (PDT)
+        bh=y8W3XdtBsyo4G7m2GOlm4F23ti6XMBPdC4TasHorY8U=;
+        b=kqN9HIIBNvssPv3isTUhGGEW6LMJGP8UJ33FIaBAlOJR75251d7OwV/3iGqy7bE800
+         yWw0OpmYAEDpg8GY1pm3vTjhRw81FK17PaJXZy92g2XQVeGZH5hEwmbUqeMx9bt7eolr
+         btw3nuZ7m54GNoRbkJszlWlX+7mcvJBj9ro3QgJdM18oV7FyKqgZgT9Ho+Rwt4Jkqvn4
+         jU2ea5ByvPCml3GgGN/1gqbq3HfZ2JY30I951hcq+QJojaGW58PKCopyeS56mTr9U1o8
+         GOjcPajmB8bFNOeQRZcZZLyml5xMKHryHRz8Wh6e+HH3CzYy4YrfzZbiqrRk9ikiEWMS
+         qMUg==
+X-Gm-Message-State: AOAM533mlpH/CLEosA7dVYdiCq4rAtbVq7aVcHzAgRqUvirEQT/v7uoL
+        BHSQIOs2TGcfCOqZBra+20l3o0igxlzHQlda5Lk=
+X-Google-Smtp-Source: ABdhPJw2hbGU8yvOrHPYQOT+gkY9gGKgAupue+G4io0kYzK8fkoD8IQVUflOPGNaUSQ1cfTZp0z6TQ==
+X-Received: by 2002:a5d:5902:: with SMTP id v2mr25405209wrd.272.1622715305598;
+        Thu, 03 Jun 2021 03:15:05 -0700 (PDT)
 Received: from localhost ([154.21.15.43])
-        by smtp.gmail.com with ESMTPSA id p10sm2761055wrr.58.2021.06.03.03.14.43
+        by smtp.gmail.com with ESMTPSA id 30sm3052943wrl.37.2021.06.03.03.15.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Jun 2021 03:14:43 -0700 (PDT)
+        Thu, 03 Jun 2021 03:15:05 -0700 (PDT)
 From:   Dmitrii Banshchikov <me@ubique.spb.ru>
 To:     bpf@vger.kernel.org
 Cc:     Dmitrii Banshchikov <me@ubique.spb.ru>, ast@kernel.org,
@@ -59,9 +59,9 @@ Cc:     Dmitrii Banshchikov <me@ubique.spb.ru>, ast@kernel.org,
         kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
         john.fastabend@gmail.com, kpsingh@kernel.org,
         netdev@vger.kernel.org, rdna@fb.com
-Subject: [PATCH bpf-next v1 01/10] bpfilter: Add types for usermode helper
-Date:   Thu,  3 Jun 2021 14:14:16 +0400
-Message-Id: <20210603101425.560384-2-me@ubique.spb.ru>
+Subject: [PATCH bpf-next v1 07/10] bpfilter: Add struct rule
+Date:   Thu,  3 Jun 2021 14:14:22 +0400
+Message-Id: <20210603101425.560384-8-me@ubique.spb.ru>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210603101425.560384-1-me@ubique.spb.ru>
 References: <20210603101425.560384-1-me@ubique.spb.ru>
@@ -71,185 +71,364 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add more definitions that mirror existing iptables' ABI.
-These definitions will be used in bpfilter usermode helper.
+struct rule is an equivalent of struct ipt_entry. A rule consists of
+zero or more matches and a target. A rule has a pointer to its ipt_entry
+in entries blob.  struct rule should simplify iteration over a blob and
+avoid blob's guts in code generation.
 
 Signed-off-by: Dmitrii Banshchikov <me@ubique.spb.ru>
 ---
- include/uapi/linux/bpfilter.h | 155 ++++++++++++++++++++++++++++++++++
- 1 file changed, 155 insertions(+)
+ net/bpfilter/Makefile                         |   2 +-
+ net/bpfilter/rule.c                           | 163 ++++++++++++++++++
+ net/bpfilter/rule.h                           |  32 ++++
+ .../testing/selftests/bpf/bpfilter/.gitignore |   1 +
+ tools/testing/selftests/bpf/bpfilter/Makefile |   5 +-
+ .../selftests/bpf/bpfilter/bpfilter_util.h    |   8 +
+ .../selftests/bpf/bpfilter/test_rule.c        |  55 ++++++
+ 7 files changed, 264 insertions(+), 2 deletions(-)
+ create mode 100644 net/bpfilter/rule.c
+ create mode 100644 net/bpfilter/rule.h
+ create mode 100644 tools/testing/selftests/bpf/bpfilter/test_rule.c
 
-diff --git a/include/uapi/linux/bpfilter.h b/include/uapi/linux/bpfilter.h
-index cbc1f5813f50..e97d95d0ba54 100644
---- a/include/uapi/linux/bpfilter.h
-+++ b/include/uapi/linux/bpfilter.h
-@@ -3,6 +3,13 @@
- #define _UAPI_LINUX_BPFILTER_H
+diff --git a/net/bpfilter/Makefile b/net/bpfilter/Makefile
+index 031c9dd40d2d..7ce961162283 100644
+--- a/net/bpfilter/Makefile
++++ b/net/bpfilter/Makefile
+@@ -4,7 +4,7 @@
+ #
  
- #include <linux/if.h>
-+#include <linux/const.h>
-+
-+#define BPFILTER_FUNCTION_MAXNAMELEN    30
-+#define BPFILTER_EXTENSION_MAXNAMELEN   29
-+
-+#define BPFILTER_STANDARD_TARGET        ""
-+#define BPFILTER_ERROR_TARGET           "ERROR"
+ userprogs := bpfilter_umh
+-bpfilter_umh-objs := main.o map-common.o context.o match.o target.o
++bpfilter_umh-objs := main.o map-common.o context.o match.o target.o rule.o
+ bpfilter_umh-objs += xt_udp.o
+ userccflags += -I $(srctree)/tools/include/ -I $(srctree)/tools/include/uapi
  
- enum {
- 	BPFILTER_IPT_SO_SET_REPLACE = 64,
-@@ -18,4 +25,152 @@ enum {
- 	BPFILTER_IPT_GET_MAX,
- };
+diff --git a/net/bpfilter/rule.c b/net/bpfilter/rule.c
+new file mode 100644
+index 000000000000..6018b4b7c0cc
+--- /dev/null
++++ b/net/bpfilter/rule.c
+@@ -0,0 +1,163 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (c) 2021 Telegram FZ-LLC
++ */
++
++#define _GNU_SOURCE
++
++#include "rule.h"
++
++#include "../../include/uapi/linux/bpfilter.h"
++
++#include <linux/err.h>
++#include <linux/netfilter/x_tables.h>
++
++#include <errno.h>
++#include <stdlib.h>
++#include <string.h>
++
++#include "context.h"
++#include "match.h"
++
++static const struct bpfilter_ipt_target *
++ipt_entry_target(const struct bpfilter_ipt_entry *ipt_entry)
++{
++	return (const void *)ipt_entry + ipt_entry->target_offset;
++}
++
++static const struct bpfilter_ipt_match *ipt_entry_match(const struct bpfilter_ipt_entry *entry,
++							size_t offset)
++{
++	return (const void *)entry + offset;
++}
++
++static int ipt_entry_num_matches(const struct bpfilter_ipt_entry *ipt_entry)
++{
++	const struct bpfilter_ipt_match *ipt_match;
++	uint32_t offset = sizeof(*ipt_entry);
++	int num_matches = 0;
++
++	while (offset < ipt_entry->target_offset) {
++		ipt_match = ipt_entry_match(ipt_entry, offset);
++
++		if ((uintptr_t)ipt_match % __alignof__(struct bpfilter_ipt_match))
++			return -EINVAL;
++
++		if (ipt_entry->target_offset < offset + sizeof(*ipt_match))
++			return -EINVAL;
++
++		if (ipt_match->u.match_size < sizeof(*ipt_match))
++			return -EINVAL;
++
++		if (ipt_entry->target_offset < offset + ipt_match->u.match_size)
++			return -EINVAL;
++
++		++num_matches;
++		offset += ipt_match->u.match_size;
++	}
++
++	if (offset != ipt_entry->target_offset)
++		return -EINVAL;
++
++	return num_matches;
++}
++
++static int init_rule_matches(struct context *ctx, const struct bpfilter_ipt_entry *ipt_entry,
++			     struct rule *rule)
++{
++	const struct bpfilter_ipt_match *ipt_match;
++	uint32_t offset = sizeof(*ipt_entry);
++	struct match *match;
++	int err;
++
++	rule->matches = calloc(rule->num_matches, sizeof(rule->matches[0]));
++	if (!rule->matches)
++		return -ENOMEM;
++
++	match = rule->matches;
++	while (offset < ipt_entry->target_offset) {
++		ipt_match = ipt_entry_match(ipt_entry, offset);
++		err = init_match(ctx, ipt_match, match);
++		if (err) {
++			free(rule->matches);
++			rule->matches = NULL;
++			return err;
++		}
++
++		++match;
++		offset += ipt_match->u.match_size;
++	}
++
++	return 0;
++}
++
++static int check_ipt_entry_ip(const struct bpfilter_ipt_ip *ip)
++{
++	if (ip->flags & ~BPFILTER_IPT_F_MASK)
++		return -EINVAL;
++
++	if (ip->invflags & ~BPFILTER_IPT_INV_MASK)
++		return -EINVAL;
++
++	return 0;
++}
++
++bool rule_has_standard_target(const struct rule *rule)
++{
++	return rule->target.target_ops == &standard_target_ops;
++}
++
++bool is_rule_unconditional(const struct rule *rule)
++{
++	static const struct bpfilter_ipt_ip unconditional;
++
++	if (rule->num_matches)
++		return false;
++
++	return !memcmp(&rule->ipt_entry->ip, &unconditional, sizeof(unconditional));
++}
++
++int init_rule(struct context *ctx, const struct bpfilter_ipt_entry *ipt_entry, struct rule *rule)
++{
++	const struct bpfilter_ipt_target *ipt_target;
++	int err;
++
++	err = check_ipt_entry_ip(&ipt_entry->ip);
++	if (err)
++		return err;
++
++	if (ipt_entry->target_offset < sizeof(*ipt_entry))
++		return -EINVAL;
++
++	if (ipt_entry->next_offset < ipt_entry->target_offset + sizeof(*ipt_target))
++		return -EINVAL;
++
++	ipt_target = ipt_entry_target(ipt_entry);
++
++	if (ipt_target->u.target_size < sizeof(*ipt_target))
++		return -EINVAL;
++
++	if (ipt_entry->next_offset < ipt_entry->target_offset + ipt_target->u.target_size)
++		return -EINVAL;
++
++	err = init_target(ctx, ipt_target, &rule->target);
++	if (err)
++		return err;
++
++	if (rule_has_standard_target(rule)) {
++		if (XT_ALIGN(ipt_entry->target_offset +
++			     sizeof(struct bpfilter_ipt_standard_target)) != ipt_entry->next_offset)
++			return -EINVAL;
++	}
++
++	rule->num_matches = ipt_entry_num_matches(ipt_entry);
++	if (rule->num_matches < 0)
++		return rule->num_matches;
++
++	return init_rule_matches(ctx, ipt_entry, rule);
++}
++
++void free_rule(struct rule *rule)
++{
++	free(rule->matches);
++}
+diff --git a/net/bpfilter/rule.h b/net/bpfilter/rule.h
+new file mode 100644
+index 000000000000..cf879a19c670
+--- /dev/null
++++ b/net/bpfilter/rule.h
+@@ -0,0 +1,32 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (c) 2021 Telegram FZ-LLC
++ */
++
++#ifndef NET_BPFILTER_RULE_H
++#define NET_BPFILTER_RULE_H
++
++#include <stdint.h>
++#include <stdbool.h>
++
++#include "target.h"
++
++struct bpfilter_ipt_entry;
++struct context;
++struct match;
++
++struct rule {
++	const struct bpfilter_ipt_entry *ipt_entry;
++	uint32_t came_from;
++	uint32_t hook_mask;
++	uint16_t num_matches;
++	struct match *matches;
++	struct target target;
++};
++
++bool rule_has_standard_target(const struct rule *rule);
++bool is_rule_unconditional(const struct rule *rule);
++int init_rule(struct context *ctx, const struct bpfilter_ipt_entry *ipt_entry, struct rule *rule);
++void free_rule(struct rule *rule);
++
++#endif // NET_BPFILTER_RULE_H
+diff --git a/tools/testing/selftests/bpf/bpfilter/.gitignore b/tools/testing/selftests/bpf/bpfilter/.gitignore
+index 7e077f506af1..4d7c5083d980 100644
+--- a/tools/testing/selftests/bpf/bpfilter/.gitignore
++++ b/tools/testing/selftests/bpf/bpfilter/.gitignore
+@@ -2,3 +2,4 @@
+ test_map
+ test_match
+ test_target
++test_rule
+diff --git a/tools/testing/selftests/bpf/bpfilter/Makefile b/tools/testing/selftests/bpf/bpfilter/Makefile
+index a11775e8b5af..27a1ddcb6dc9 100644
+--- a/tools/testing/selftests/bpf/bpfilter/Makefile
++++ b/tools/testing/selftests/bpf/bpfilter/Makefile
+@@ -11,6 +11,7 @@ CFLAGS += -Wall -g -pthread -I$(TOOLSINCDIR) -I$(APIDIR) -I$(BPFILTERSRCDIR)
+ TEST_GEN_PROGS += test_map
+ TEST_GEN_PROGS += test_match
+ TEST_GEN_PROGS += test_target
++TEST_GEN_PROGS += test_rule
  
-+enum {
-+	BPFILTER_XT_TABLE_MAXNAMELEN = 32,
+ KSFT_KHDR_INSTALL := 1
+ 
+@@ -19,9 +20,11 @@ include ../../lib.mk
+ BPFILTER_MATCH_SRCS := $(BPFILTERSRCDIR)/match.c $(BPFILTERSRCDIR)/xt_udp.c
+ BPFILTER_TARGET_SRCS := $(BPFILTERSRCDIR)/target.c
+ 
+-BPFILTER_COMMON_SRCS := $(BPFILTERSRCDIR)/map-common.c $(BPFILTERSRCDIR)/context.c
++BPFILTER_COMMON_SRCS := $(BPFILTERSRCDIR)/map-common.c $(BPFILTERSRCDIR)/context.c \
++	$(BPFILTERSRCDIR)/rule.c
+ BPFILTER_COMMON_SRCS += $(BPFILTER_MATCH_SRCS) $(BPFILTER_TARGET_SRCS)
+ 
+ $(OUTPUT)/test_map: test_map.c $(BPFILTERSRCDIR)/map-common.c
+ $(OUTPUT)/test_match: test_match.c $(BPFILTER_COMMON_SRCS)
+ $(OUTPUT)/test_target: test_target.c $(BPFILTER_COMMON_SRCS)
++$(OUTPUT)/test_rule: test_rule.c $(BPFILTER_COMMON_SRCS)
+diff --git a/tools/testing/selftests/bpf/bpfilter/bpfilter_util.h b/tools/testing/selftests/bpf/bpfilter/bpfilter_util.h
+index d82ff86f280e..55fb0e959fca 100644
+--- a/tools/testing/selftests/bpf/bpfilter/bpfilter_util.h
++++ b/tools/testing/selftests/bpf/bpfilter/bpfilter_util.h
+@@ -7,6 +7,7 @@
+ #include <linux/netfilter/x_tables.h>
+ 
+ #include <stdio.h>
++#include <string.h>
+ 
+ static inline void init_standard_target(struct xt_standard_target *ipt_target, int revision,
+ 					int verdict)
+@@ -28,4 +29,11 @@ static inline void init_error_target(struct xt_error_target *ipt_target, int rev
+ 	snprintf(ipt_target->errorname, sizeof(ipt_target->errorname), "%s", error_name);
+ }
+ 
++static inline void init_standard_entry(struct ipt_entry *entry, __u16 matches_size)
++{
++	memset(entry, 0, sizeof(*entry));
++	entry->target_offset = sizeof(*entry) + matches_size;
++	entry->next_offset = sizeof(*entry) + matches_size + sizeof(struct xt_standard_target);
++}
++
+ #endif // BPFILTER_UTIL_H
+diff --git a/tools/testing/selftests/bpf/bpfilter/test_rule.c b/tools/testing/selftests/bpf/bpfilter/test_rule.c
+new file mode 100644
+index 000000000000..fe12adf32fe5
+--- /dev/null
++++ b/tools/testing/selftests/bpf/bpfilter/test_rule.c
+@@ -0,0 +1,55 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#define _GNU_SOURCE
++
++#include "rule.h"
++
++#include <linux/bpfilter.h>
++#include <linux/err.h>
++
++#include <linux/netfilter_ipv4/ip_tables.h>
++
++#include <stdio.h>
++#include <stdlib.h>
++
++#include "../../kselftest_harness.h"
++
++#include "context.h"
++#include "rule.h"
++
++#include "bpfilter_util.h"
++
++FIXTURE(test_standard_rule)
++{
++	struct context ctx;
++	struct {
++		struct ipt_entry entry;
++		struct xt_standard_target target;
++	} entry;
++	struct rule rule;
 +};
 +
-+enum {
-+	BPFILTER_NF_DROP = 0,
-+	BPFILTER_NF_ACCEPT = 1,
-+	BPFILTER_NF_STOLEN = 2,
-+	BPFILTER_NF_QUEUE = 3,
-+	BPFILTER_NF_REPEAT = 4,
-+	BPFILTER_NF_STOP = 5,
-+	BPFILTER_NF_MAX_VERDICT = BPFILTER_NF_STOP,
-+	BPFILTER_RETURN = (-BPFILTER_NF_REPEAT - 1),
-+};
++FIXTURE_SETUP(test_standard_rule)
++{
++	const int verdict = BPFILTER_NF_ACCEPT;
 +
-+enum {
-+	BPFILTER_INET_HOOK_PRE_ROUTING = 0,
-+	BPFILTER_INET_HOOK_LOCAL_IN = 1,
-+	BPFILTER_INET_HOOK_FORWARD = 2,
-+	BPFILTER_INET_HOOK_LOCAL_OUT = 3,
-+	BPFILTER_INET_HOOK_POST_ROUTING = 4,
-+	BPFILTER_INET_HOOK_MAX,
-+};
++	ASSERT_EQ(create_context(&self->ctx), 0);
++	self->ctx.log_file = stderr;
 +
-+enum {
-+	BPFILTER_IPT_F_MASK = 0x03,
-+	BPFILTER_IPT_INV_MASK = 0x7f
-+};
++	init_standard_entry(&self->entry.entry, 0);
++	init_standard_target(&self->entry.target, 0, -verdict - 1);
++}
 +
-+struct bpfilter_ipt_match {
-+	union {
-+		struct {
-+			__u16 match_size;
-+			char name[BPFILTER_EXTENSION_MAXNAMELEN];
-+			__u8 revision;
-+		} user;
-+		struct {
-+			__u16 match_size;
-+			void *match;
-+		} kernel;
-+		__u16 match_size;
-+	} u;
-+	unsigned char data[0];
-+};
++FIXTURE_TEARDOWN(test_standard_rule)
++{
++	free_rule(&self->rule);
++	free_context(&self->ctx);
++}
 +
-+struct bpfilter_ipt_target {
-+	union {
-+		struct {
-+			__u16 target_size;
-+			char name[BPFILTER_EXTENSION_MAXNAMELEN];
-+			__u8 revision;
-+		} user;
-+		struct {
-+			__u16 target_size;
-+			void *target;
-+		} kernel;
-+		__u16 target_size;
-+	} u;
-+	unsigned char data[0];
-+};
++TEST_F(test_standard_rule, init)
++{
++	ASSERT_EQ(0, init_rule(&self->ctx, (const struct bpfilter_ipt_entry *)&self->entry.entry,
++			       &self->rule));
++}
 +
-+struct bpfilter_ipt_standard_target {
-+	struct bpfilter_ipt_target target;
-+	int verdict;
-+};
-+
-+struct bpfilter_ipt_error_target {
-+	struct bpfilter_ipt_target target;
-+	char error_name[BPFILTER_FUNCTION_MAXNAMELEN];
-+};
-+
-+struct bpfilter_ipt_get_info {
-+	char name[BPFILTER_XT_TABLE_MAXNAMELEN];
-+	__u32 valid_hooks;
-+	__u32 hook_entry[BPFILTER_INET_HOOK_MAX];
-+	__u32 underflow[BPFILTER_INET_HOOK_MAX];
-+	__u32 num_entries;
-+	__u32 size;
-+};
-+
-+struct bpfilter_ipt_counters {
-+	__u64 packet_cnt;
-+	__u64 byte_cnt;
-+};
-+
-+struct bpfilter_ipt_counters_info {
-+	char name[BPFILTER_XT_TABLE_MAXNAMELEN];
-+	__u32 num_counters;
-+	struct bpfilter_ipt_counters counters[0];
-+};
-+
-+struct bpfilter_ipt_get_revision {
-+	char name[BPFILTER_EXTENSION_MAXNAMELEN];
-+	__u8 revision;
-+};
-+
-+struct bpfilter_ipt_ip {
-+	__u32 src;
-+	__u32 dst;
-+	__u32 src_mask;
-+	__u32 dst_mask;
-+	char in_iface[IFNAMSIZ];
-+	char out_iface[IFNAMSIZ];
-+	__u8 in_iface_mask[IFNAMSIZ];
-+	__u8 out_iface_mask[IFNAMSIZ];
-+	__u16 protocol;
-+	__u8 flags;
-+	__u8 invflags;
-+};
-+
-+struct bpfilter_ipt_entry {
-+	struct bpfilter_ipt_ip ip;
-+	__u32 bfcache;
-+	__u16 target_offset;
-+	__u16 next_offset;
-+	__u32 comefrom;
-+	struct bpfilter_ipt_counters counters;
-+	__u8 elems[0];
-+};
-+
-+struct bpfilter_ipt_standard_entry {
-+	struct bpfilter_ipt_entry entry;
-+	struct bpfilter_ipt_standard_target target;
-+};
-+
-+struct bpfilter_ipt_error_entry {
-+	struct bpfilter_ipt_entry entry;
-+	struct bpfilter_ipt_error_target target;
-+};
-+
-+struct bpfilter_ipt_get_entries {
-+	char name[BPFILTER_XT_TABLE_MAXNAMELEN];
-+	__u32 size;
-+	struct bpfilter_ipt_entry entries[0];
-+};
-+
-+struct bpfilter_ipt_replace {
-+	char name[BPFILTER_XT_TABLE_MAXNAMELEN];
-+	__u32 valid_hooks;
-+	__u32 num_entries;
-+	__u32 size;
-+	__u32 hook_entry[BPFILTER_INET_HOOK_MAX];
-+	__u32 underflow[BPFILTER_INET_HOOK_MAX];
-+	__u32 num_counters;
-+	struct bpfilter_ipt_counters *cntrs;
-+	struct bpfilter_ipt_entry entries[0];
-+};
-+
- #endif /* _UAPI_LINUX_BPFILTER_H */
++TEST_HARNESS_MAIN
 -- 
 2.25.1
 
