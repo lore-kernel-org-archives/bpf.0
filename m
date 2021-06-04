@@ -2,118 +2,153 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CE186C47083
-	for <bpf@archiver.kernel.org>; Fri,  4 Jun 2021 06:44:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC7A0C07E94
+	for <bpf@archiver.kernel.org>; Fri,  4 Jun 2021 07:51:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A79EF6140B
-	for <bpf@archiver.kernel.org>; Fri,  4 Jun 2021 06:44:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 82D22613AA
+	for <bpf@archiver.kernel.org>; Fri,  4 Jun 2021 07:51:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230098AbhFDGqL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 4 Jun 2021 02:46:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58658 "EHLO
+        id S229922AbhFDHxD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 4 Jun 2021 03:53:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230092AbhFDGqL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 4 Jun 2021 02:46:11 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F5F8C061760;
-        Thu,  3 Jun 2021 23:44:09 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id o17-20020a17090a9f91b029015cef5b3c50so6880222pjp.4;
-        Thu, 03 Jun 2021 23:44:09 -0700 (PDT)
+        with ESMTP id S229775AbhFDHxC (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 4 Jun 2021 03:53:02 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F9AC06174A
+        for <bpf@vger.kernel.org>; Fri,  4 Jun 2021 00:51:16 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id r11so10019905edt.13
+        for <bpf@vger.kernel.org>; Fri, 04 Jun 2021 00:51:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=3lY7p/u7GioL1Vux+6QXVoEdXdtGYLzRSaAk61G4V5c=;
-        b=GVR481rCMQMyr5bI0UEuhgjcXsuiBRScn1t8jpe5n4y37B8mUFmLeAr41O29osxJfu
-         Le+xTXVDOM8GLp9qZD36Euhhqaf5jkk6o9NSXGdOtaEz/hBgdLwUyE4gXLiSsXnnujEu
-         1Vz78YrV5QD7RrMA6T2eCur9FqQJqC52kY8gj9A9mlqc11B1DPXJiwNmho2WwrNlOyEn
-         20GDuMTy23KcJdSNY+Z6J542YBJivUbhkarzFGkj5xaD/oQs2BJP6WLbwF9eN9oAqLET
-         gZMwkG24jS6Se9ooFkm8txhBPcrvBOFmyRigwGKWQ7naOC+yNQ82N9HLOnXyA0MNbNHb
-         +YTA==
+        bh=c6O3KETJybAv3EcHwaqClUWBG02L9KTl1SYGJ6XpiUc=;
+        b=s7L67OAqqK5mtutFqFgyLFdWPS7tUb9AfycqkvtILl5z0dKx2pYAcJfcCy9pxEmirg
+         8gMe8LATF7oQKj6dKnziNeUMwMgK0HIgo1Kfxaw34H7d5OHI4ZTCs7FLIjPLw5AvlIsQ
+         CDA/MvMAALL/adcRAmu7JuxyUHj8ooIOLw8Sl0awnCIJ3AhtJmUZ1JLNZNb8CPNr/odB
+         g5TdQ3ZqmzoF0YoMNVPu8RET9WSRCQMg1mVK7PabfkJp5W+EVaxoT5lrlN8uCxc68Uxl
+         f2VlKM250kS9fGUAhHRUGascb6ku8QvoWmsnwSTd9QJAkIOUcuQ9JRmhwnqkDoEPJqhY
+         3LHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=3lY7p/u7GioL1Vux+6QXVoEdXdtGYLzRSaAk61G4V5c=;
-        b=g3aWEJ+hHTG9l+2Xkndu+7YvUAG0vF+Lt+FQZ4ULq6Pcw0fSfewSxAcKm66xOgXEmy
-         HI/uVnuvxPZTIvLLqC+AdTv0fSBQ0RPPRwxH0qqghFW6hnh/LwmQ6vKxLe8EZA0Gdpk9
-         Co3333H4zoGiMCO9/gi4JArl130/ExEvg0QKmexUCj324mU68qqADekZb7aMEIw3RRsd
-         dCvgtPEP+T2Gd+YlMDjWO3jwPUu46dy9vRCACUEj8cNmltCKyZkzCoW3nsMtPGTgr1Y7
-         KOX8gDfTga1WlzHqnmWeeoGZblEVQ9r2TVpEQrEgYb84PTnt19gvcG5+nsvVQmPSkiLX
-         yxIQ==
-X-Gm-Message-State: AOAM530rsSe0tWpZD8+xWr2/pORQZ/21ieSZ7VT+LBlEVXWVKWIoGgsT
-        Nl+EOIuFzr3vQv+5W2qeoJk=
-X-Google-Smtp-Source: ABdhPJyUu+3m01oYdHZruJCA+TOkEcavRSZi/MPypBU6Qm7Q2/MzPrA7rvvO6c79G1pe69KNX8NQDw==
-X-Received: by 2002:a17:902:db06:b029:102:6e01:cecb with SMTP id m6-20020a170902db06b02901026e01cecbmr2935902plx.9.1622789048826;
-        Thu, 03 Jun 2021 23:44:08 -0700 (PDT)
-Received: from localhost ([2402:3a80:11cb:b599:c759:2079:3ef5:1764])
-        by smtp.gmail.com with ESMTPSA id s6sm3785564pjr.29.2021.06.03.23.44.07
+        bh=c6O3KETJybAv3EcHwaqClUWBG02L9KTl1SYGJ6XpiUc=;
+        b=X9YKmim9EqvIG6HpIgMqpTaRFuC7QiGZYW3/DPIE8Uq2bW+aAAjaaah44+IBHr0jPc
+         slJzFFKofBsKIOY0d0IrA3liW628n9o2Nlbrq701AVnAsCaZdczTzJWdCHJ4pSAj7t2e
+         tL2WgVIvLYBcGPen6fmOiDFSvM3D6U/lFvZEUhnXLQGkLRqXZGeduMVGVIm5jtOosi95
+         yfFPVce6Eu5mOSAbXBvY/IipzcFddKE1lmF8vMUBJx1Nclspb7bHjeIuYkufTcs2BL+W
+         HNgNcKAQ1sON8nxjXunI3MfsTCWHG4x39g1Vg4UQ8qwb2AlPQ7KACDm9Jw2DV7gDRvkE
+         mxmQ==
+X-Gm-Message-State: AOAM533hvqsNHIp7aYG7KbVVcixLmt3eS1qYZ75llKIVPvXegH4n4ZA5
+        g6YwAlIgM3QPzL2NNgu0eBSSJg==
+X-Google-Smtp-Source: ABdhPJz/d9G69MYF1ZodlOERBJAH8Pkv5n1IKCkzwGmwiqVjDPdjw3smdbmIEIJtnOydEpsQUW4rrw==
+X-Received: by 2002:aa7:c7c7:: with SMTP id o7mr3421959eds.231.1622793075214;
+        Fri, 04 Jun 2021 00:51:15 -0700 (PDT)
+Received: from myrica (adsl-84-226-111-173.adslplus.ch. [84.226.111.173])
+        by smtp.gmail.com with ESMTPSA id b15sm2767046ede.66.2021.06.04.00.51.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Jun 2021 23:44:08 -0700 (PDT)
-Date:   Fri, 4 Jun 2021 12:13:03 +0530
-From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Fri, 04 Jun 2021 00:51:14 -0700 (PDT)
+Date:   Fri, 4 Jun 2021 09:50:55 +0200
+From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Vlad Buslov <vladbu@nvidia.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, Joe Stringer <joe@cilium.io>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Networking <netdev@vger.kernel.org>
-Subject: Re: [PATCH RFC bpf-next 0/7] Add bpf_link based TC-BPF API
-Message-ID: <20210604064303.bfso3oml2ouazwia@apollo>
-References: <20210528195946.2375109-1-memxor@gmail.com>
- <CAEf4BzZt5nRsfCiqGkJxW2b-==AYEVCiz6jHC-FrXKkPF=Qj7w@mail.gmail.com>
- <20210602214513.eprgwxqgqruliqeu@apollo>
- <20210602235058.njuz2gzsd5wqxwes@ast-mbp.dhcp.thefacebook.com>
+        john fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, bpf <bpf@vger.kernel.org>
+Subject: Re: [PATCH bpf-next] tools/bpftool: Fix cross-build
+Message-ID: <YLnbXzlEGuyAYh/0@myrica>
+References: <20210603170515.1854642-1-jean-philippe@linaro.org>
+ <CAEf4BzZqNjBhMVk7T_XZt2NTtDsajECGmHX-n71GBRjK6TmSWA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210602235058.njuz2gzsd5wqxwes@ast-mbp.dhcp.thefacebook.com>
+In-Reply-To: <CAEf4BzZqNjBhMVk7T_XZt2NTtDsajECGmHX-n71GBRjK6TmSWA@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Jun 03, 2021 at 05:20:58AM IST, Alexei Starovoitov wrote:
-> On Thu, Jun 03, 2021 at 03:15:13AM +0530, Kumar Kartikeya Dwivedi wrote:
+On Thu, Jun 03, 2021 at 10:50:08AM -0700, Andrii Nakryiko wrote:
+> On Thu, Jun 3, 2021 at 10:06 AM Jean-Philippe Brucker
+> <jean-philippe@linaro.org> wrote:
 > >
-> > > The problem is that your patch set was marked as spam by Google, so I
-> > > suspect a bunch of folks haven't gotten it. I suggest re-sending it
-> > > again but trimming down the CC list, leaving only bpf@vger,
-> > > netdev@vger, and BPF maintainers CC'ed directly.
-> > >
+> > When the bootstrap and final bpftool have different architectures, we
+> > need to build two distinct disasm.o objects. Add a recipe for the
+> > bootstrap disasm.o
 > >
-> > Thanks for the heads up, I'll resend tomorrow.
->
-> fyi I see this thread in my inbox, but, sadly, not the patches.
-> So guessing based on cover letter and hoping that the following is true:
-> link_fd is returned by BPF_LINK_CREATE command.
-> If anything is missing in struct link_create the patches are adding it there.
-> target_ifindex, flags are reused. attach_type indicates ingress vs egress.
+> > Fixes: d510296d331a ("bpftool: Use syscall/loader program in "prog load" and "gen skeleton" command.")
+> 
+> Did this commit break something specifically?
 
-Everything is true except the attach_type part. I don't hook directly into
-sch_handle_{ingress,egress}. It's a normal TC filter, and if one wants to hook
-into ingress, egress, they attach it to clsact qdisc. The lifetime however is
-decided by the link fd.
+Yes, cross-building bpftool doesn't work anymore, because the bootstrap
+bpftool is linked using objects from different architectures:
 
-The new version is here:
-https://lore.kernel.org/bpf/20210604063116.234316-1-memxor@gmail.com
+$ make O=/tmp/bpftool ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -C tools/bpf/bpftool/ V=1
 
---
-Kartikeya
+  aarch64-linux-gnu-gcc ... -c -MMD -o /tmp/bpftool/disasm.o /home/z/src/linux/kernel/bpf/disasm.c
+  gcc ... -c -MMD -o /tmp/bpftool//bootstrap/main.o main.c
+  gcc ... -o /tmp/bpftool//bootstrap/bpftool /tmp/bpftool//bootstrap/main.o ... /tmp/bpftool/disasm.o
+/usr/bin/ld: /tmp/bpftool/disasm.o: Relocations in generic ELF (EM: 183)
+/usr/bin/ld: /tmp/bpftool/disasm.o: Relocations in generic ELF (EM: 183)
+/usr/bin/ld: /tmp/bpftool/disasm.o: Relocations in generic ELF (EM: 183)
+/usr/bin/ld: /tmp/bpftool/disasm.o: error adding symbols: file in wrong format
+collect2: error: ld returned 1 exit status
+
+The final bpftool is built for arm64, while the bootstrap bpftool,
+executed on the host, is built for x86. The problem here is that disasm.o
+linked into the bootstrap bpftool is arm64 rather than x86. With my fix we
+build two disasm.o, one for the target bpftool in arm64, and one for the
+bootstrap bpftool in x86.
+
+> > Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+> > ---
+> >  tools/bpf/bpftool/Makefile | 5 ++++-
+> >  1 file changed, 4 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+> > index d16d289ade7a..d73232be1e99 100644
+> > --- a/tools/bpf/bpftool/Makefile
+> > +++ b/tools/bpf/bpftool/Makefile
+> > @@ -136,7 +136,7 @@ endif
+> >
+> >  BPFTOOL_BOOTSTRAP := $(BOOTSTRAP_OUTPUT)bpftool
+> >
+> > -BOOTSTRAP_OBJS = $(addprefix $(BOOTSTRAP_OUTPUT),main.o common.o json_writer.o gen.o btf.o xlated_dumper.o btf_dumper.o) $(OUTPUT)disasm.o
+> > +BOOTSTRAP_OBJS = $(addprefix $(BOOTSTRAP_OUTPUT),main.o common.o json_writer.o gen.o btf.o xlated_dumper.o btf_dumper.o disasm.o)
+> >  OBJS = $(patsubst %.c,$(OUTPUT)%.o,$(SRCS)) $(OUTPUT)disasm.o
+> >
+> >  VMLINUX_BTF_PATHS ?= $(if $(O),$(O)/vmlinux)                           \
+> > @@ -180,6 +180,9 @@ endif
+> >
+> >  CFLAGS += $(if $(BUILD_BPF_SKELS),,-DBPFTOOL_WITHOUT_SKELETONS)
+> >
+> > +$(BOOTSTRAP_OUTPUT)disasm.o: $(srctree)/kernel/bpf/disasm.c
+> > +       $(QUIET_CC)$(HOSTCC) $(CFLAGS) -c -MMD -o $@ $<
+> > +
+> >  $(OUTPUT)disasm.o: $(srctree)/kernel/bpf/disasm.c
+> 
+> maybe just do
+> 
+> $(BOOTSTRAP_OUTPUT)disasm.o $(OUTPUT)disasm.o: $(srctree)/kernel/bpf/disasm.c
+
+They need two different recipes. The bootstrap disasm.o needs to be built
+with $(HOSTCC) rather than $(CC) (CC=aarch64-linux-gnu-gcc and HOSTCC=gcc)
+
+Thanks,
+Jean
+
+> ?
+> 
+> >         $(QUIET_CC)$(CC) $(CFLAGS) -c -MMD -o $@ $<
+> >
+> > --
+> > 2.31.1
+> >
