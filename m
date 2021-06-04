@@ -5,54 +5,54 @@ X-Spam-Level:
 X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BDE42C47083
-	for <bpf@archiver.kernel.org>; Fri,  4 Jun 2021 06:33:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E5615C4708F
+	for <bpf@archiver.kernel.org>; Fri,  4 Jun 2021 06:34:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A5E566140B
-	for <bpf@archiver.kernel.org>; Fri,  4 Jun 2021 06:33:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C964161405
+	for <bpf@archiver.kernel.org>; Fri,  4 Jun 2021 06:34:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230145AbhFDGff (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 4 Jun 2021 02:35:35 -0400
-Received: from mail-pj1-f66.google.com ([209.85.216.66]:51854 "EHLO
-        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229852AbhFDGff (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 4 Jun 2021 02:35:35 -0400
-Received: by mail-pj1-f66.google.com with SMTP id k5so5035806pjj.1;
-        Thu, 03 Jun 2021 23:33:34 -0700 (PDT)
+        id S230139AbhFDGfu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 4 Jun 2021 02:35:50 -0400
+Received: from mail-pj1-f67.google.com ([209.85.216.67]:46830 "EHLO
+        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229917AbhFDGfu (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 4 Jun 2021 02:35:50 -0400
+Received: by mail-pj1-f67.google.com with SMTP id pi6-20020a17090b1e46b029015cec51d7cdso5265983pjb.5;
+        Thu, 03 Jun 2021 23:33:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=HIkO5xHNdj7DYLT/gHf6yv2N1FB/qOHnMv8myBnn9/s=;
-        b=fMkEacn5SGX9TdOGNKHWCc7+VTcSL9Hhgwb88PnEsaYaee+4Etqa23LSo4VSF4QNFL
-         PrCEvdKqTmINvYzjjwuB8yXBMqWhkg3xS8LnZxqm+gjAnkjBXw+Hf14EWxCP/AgOLDx8
-         DUqbNdSh/zZmeWbSdfXX0MYzuOO6H5Uo6bzT6YknL7V8fUA8m/BnvsvDdggySdUfZet9
-         eMnti8WgsLA+8S66+A/3J8QhXRzwJFj++bji9WmWbTV1ABKS2LF/w0uHKvGsGE51Umxk
-         eioFBS8CLO7wksH0UY8MJe2bpP3iavENHUy6S9uT9JXQlsNIEpjl+tivwWSrouVbxb5z
-         GnvQ==
+        bh=bql1CSLWVtdo+ym3+LiQMgBDO2sCSamBHF3UpfjFx8Q=;
+        b=L/IHMw2NESpV7xFUZZBBgC6xox+aRAs0r2uCV675ZpQ3buQX7jB/NVVpE5TnjTXLAa
+         dHDF/L9JQD6QZvCX26r4B27uv+6kfU0O1aUXlPxyST1oURyBRnkiD1iv91w7VASPG7/W
+         lgfXVNochO6dSF4bGOaqq9fiqZAAsaO5P+2uBHLAW84jeyhr4Y3WDIoQx0ToU/yVl9O4
+         D3zgOhfQOLjRWNPGCbXk0GVTExrpTmu537qXpHH456bnv2/FpSp9kkaHd/30ouDEhdOI
+         MzIPhhS75I2yfWYgwKktplKDjah4atZ72QJFfbArVw0n6dpEcQEU3Ho+CcFORhb4M7Sa
+         QWeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=HIkO5xHNdj7DYLT/gHf6yv2N1FB/qOHnMv8myBnn9/s=;
-        b=rlvIOt4E8GXggDfYGtrld7P2w5NYD8zHfBD85huf/Cl7CViBOOSGbZQAgsiTZBFfao
-         /5eo7ADz7giMHaEIkWEHJsAHHJbCztNFuWkF3e49T5TXVg/IXbG+I2uxXf4Kgps5y1p/
-         imVvJfFjvzBrfXeV35JxdEmfpj1WImgL9dISnExfU6WaqyRJSXMLePYua71epWlAbknq
-         JqwnVoHO3ZK2Eg+zAJxUcuW9fwQMm+3jx90/GyBMDQDrAhZ2jAXPqdr6tbIhq9dcesu5
-         AYqcNz2D7BSsWPuPDKGzUM5HSD1AEzBsb5nhLFCOUMc7YhLD3En75UzXhftJHgR4avV0
-         htig==
-X-Gm-Message-State: AOAM531Shu15I+aP+gf73q4dzjUO6QoU4vd0LRuIDdpxqCcb0KFXqE3F
-        8lnu5KBP90l9DQC6uQrDf8Ow14M3Rhc=
-X-Google-Smtp-Source: ABdhPJz5qHXHgmAWmbeXyDKWlgaXo9s9sn1iRd5iMi6FkqRNmnfBUPKJQI85ptSU3bAhs+lNDuD8aQ==
-X-Received: by 2002:a17:90a:ba01:: with SMTP id s1mr15270515pjr.74.1622788353759;
-        Thu, 03 Jun 2021 23:32:33 -0700 (PDT)
+        bh=bql1CSLWVtdo+ym3+LiQMgBDO2sCSamBHF3UpfjFx8Q=;
+        b=tkcB4vZ8d9e266OsFYNZqHc6kwUG0QPwvWY0r6HcKsq3XanqhWJeMPDjwNLjbHffNc
+         7Wfv85ULkKA1F1xfLy5kZroxGcAw1MhVgXwfmz8fh20Lon8Hk0Ol2QaJ0nF3nr881sJw
+         NXWP6GunExDNOsI5zIRcynpnwoEwSz5me8yDhnmzjv9bslJl8qI4v/82Tt+OSKIDN6NB
+         H5RRwuoOtmlkL6I1YucheB7BZ+9eYN0PqtdS6rGRmgttyjt/3KQF9lDRMX6AeTQopNYW
+         j7oSNhYRX7k1Wt0bt8lF/KhZN6Rq0eqa7xKMJXXB9Z5UZ/AGLscpiPDSKSuTKsqfuUFn
+         BK5w==
+X-Gm-Message-State: AOAM530DvPMRnSoFdBm7l6vU74j4UjAvJos6XIx7qfTV9EgpHFr/afZn
+        ngbGP6v7xWqOgSLMlK5Bj3DCX61cuOA=
+X-Google-Smtp-Source: ABdhPJwAvY1VAMv3gmiDxkdcqBkxIfKCRNaTAmpkNU/1PQCNpjkgTFPX7+Dnu9NZzIzhBK39iothwA==
+X-Received: by 2002:a17:90a:5406:: with SMTP id z6mr3221711pjh.130.1622788368221;
+        Thu, 03 Jun 2021 23:32:48 -0700 (PDT)
 Received: from localhost ([2402:3a80:11cb:b599:c759:2079:3ef5:1764])
-        by smtp.gmail.com with ESMTPSA id gz18sm3793902pjb.19.2021.06.03.23.32.32
+        by smtp.gmail.com with ESMTPSA id g6sm886321pfq.110.2021.06.03.23.32.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Jun 2021 23:32:33 -0700 (PDT)
+        Thu, 03 Jun 2021 23:32:48 -0700 (PDT)
 From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To:     bpf@vger.kernel.org
 Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
@@ -65,9 +65,9 @@ Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
         Cong Wang <xiyou.wangcong@gmail.com>,
         Jesper Dangaard Brouer <brouer@redhat.com>,
         netdev@vger.kernel.org
-Subject: [PATCH bpf-next v2 3/7] net: sched: add bpf_link API for bpf classifier
-Date:   Fri,  4 Jun 2021 12:01:12 +0530
-Message-Id: <20210604063116.234316-4-memxor@gmail.com>
+Subject: [PATCH bpf-next v2 7/7] libbpf: add selftest for bpf_link based TC-BPF management API
+Date:   Fri,  4 Jun 2021 12:01:16 +0530
+Message-Id: <20210604063116.234316-8-memxor@gmail.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210604063116.234316-1-memxor@gmail.com>
 References: <20210604063116.234316-1-memxor@gmail.com>
@@ -78,688 +78,307 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This commit introduces a bpf_link based kernel API for creating tc
-filters and using the cls_bpf classifier. Only a subset of what netlink
-API offers is supported, things like TCA_BPF_POLICE, TCA_RATE and
-embedded actions are unsupported.
-
-The kernel API and the libbpf wrapper added in a subsequent patch are
-more opinionated and mirror the semantics of low level netlink based
-TC-BPF API, i.e. always setting direct action mode, always setting
-protocol to ETH_P_ALL, and only exposing handle and priority as the
-variables the user can control. We add an additional gen_flags parameter
-though to allow for offloading use cases. It would be trivial to extend
-the current API to support specifying other attributes in the future,
-but for now I'm sticking how we want to push usage.
-
-The semantics around bpf_link support are as follows:
-
-A user can create a classifier attached to a filter using the bpf_link
-API, after which changing it and deleting it only happens through the
-bpf_link API. It is not possible to bind the bpf_link to existing
-filter, and any such attempt will fail with EEXIST. Hence EEXIST can be
-returned in two cases, when existing bpf_link owned filter exists, or
-existing netlink owned filter exists.
-
-Removing bpf_link owned filter from netlink returns EPERM, denoting that
-netlink is locked out from filter manipulation when bpf_link is
-involved.
-
-Whenever a filter is detached due to chain removal, or qdisc tear down,
-or net_device shutdown, the bpf_link becomes automatically detached.
-
-In this way, the netlink API and bpf_link creation path are exclusive
-and don't stomp over one another. Filters created using bpf_link API
-cannot be replaced by netlink API, and filters created by netlink API are
-never replaced by bpf_link. Netfilter also cannot detach bpf_link filters.
-
-We serialize all changes dover rtnl_lock as cls_bpf API doesn't support the
-unlocked classifier API.
+This covers basic attach/detach/update, and tests interaction with the
+netlink API. It also exercises the bpf_link_info and fdinfo codepaths.
 
 Reviewed-by: Toke Høiland-Jørgensen <toke@redhat.com>.
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- include/linux/bpf_types.h |   3 +
- include/net/pkt_cls.h     |  13 ++
- include/net/sch_generic.h |   6 +-
- include/uapi/linux/bpf.h  |  15 +++
- kernel/bpf/syscall.c      |  10 +-
- net/sched/cls_api.c       | 139 ++++++++++++++++++++-
- net/sched/cls_bpf.c       | 250 +++++++++++++++++++++++++++++++++++++-
- 7 files changed, 430 insertions(+), 6 deletions(-)
+ .../selftests/bpf/prog_tests/tc_bpf_link.c    | 285 ++++++++++++++++++
+ 1 file changed, 285 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/tc_bpf_link.c
 
-diff --git a/include/linux/bpf_types.h b/include/linux/bpf_types.h
-index a9db1eae6796..b1aaf7680917 100644
---- a/include/linux/bpf_types.h
-+++ b/include/linux/bpf_types.h
-@@ -135,3 +135,6 @@ BPF_LINK_TYPE(BPF_LINK_TYPE_ITER, iter)
- #ifdef CONFIG_NET
- BPF_LINK_TYPE(BPF_LINK_TYPE_NETNS, netns)
- #endif
-+#if IS_ENABLED(CONFIG_NET_CLS_BPF)
-+BPF_LINK_TYPE(BPF_LINK_TYPE_TC, tc)
-+#endif
-diff --git a/include/net/pkt_cls.h b/include/net/pkt_cls.h
-index 255e4f4b521f..c36c5d79db6b 100644
---- a/include/net/pkt_cls.h
-+++ b/include/net/pkt_cls.h
-@@ -2,6 +2,7 @@
- #ifndef __NET_PKT_CLS_H
- #define __NET_PKT_CLS_H
- 
-+#include <linux/bpf.h>
- #include <linux/pkt_cls.h>
- #include <linux/workqueue.h>
- #include <net/sch_generic.h>
-@@ -45,6 +46,9 @@ bool tcf_queue_work(struct rcu_work *rwork, work_func_t func);
- struct tcf_chain *tcf_chain_get_by_act(struct tcf_block *block,
- 				       u32 chain_index);
- void tcf_chain_put_by_act(struct tcf_chain *chain);
-+void tcf_chain_tp_delete_empty(struct tcf_chain *chain,
-+			       struct tcf_proto *tp, bool rtnl_held,
-+			       struct netlink_ext_ack *extack);
- struct tcf_chain *tcf_get_next_chain(struct tcf_block *block,
- 				     struct tcf_chain *chain);
- struct tcf_proto *tcf_get_next_proto(struct tcf_chain *chain,
-@@ -1004,4 +1008,13 @@ struct tc_fifo_qopt_offload {
- 	};
- };
- 
-+#if IS_ENABLED(CONFIG_NET_CLS_BPF)
-+int bpf_tc_link_attach(union bpf_attr *attr, struct bpf_prog *prog);
-+#else
-+static inline int bpf_tc_link_attach(union bpf_attr *attr, struct bpf_prog *prog)
+diff --git a/tools/testing/selftests/bpf/prog_tests/tc_bpf_link.c b/tools/testing/selftests/bpf/prog_tests/tc_bpf_link.c
+new file mode 100644
+index 000000000000..beaf06e0557c
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/tc_bpf_link.c
+@@ -0,0 +1,285 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <test_progs.h>
++#include <linux/pkt_cls.h>
++
++#include "test_tc_bpf.skel.h"
++
++#define LO_IFINDEX 1
++
++static int test_tc_bpf_link_basic(struct bpf_tc_hook *hook,
++				  struct bpf_program *prog)
 +{
-+	return -EOPNOTSUPP;
-+}
-+#endif
-+
- #endif
-diff --git a/include/net/sch_generic.h b/include/net/sch_generic.h
-index f7a6e14491fb..bacd70bfc5ed 100644
---- a/include/net/sch_generic.h
-+++ b/include/net/sch_generic.h
-@@ -341,7 +341,11 @@ struct tcf_proto_ops {
- 	int			(*tmplt_dump)(struct sk_buff *skb,
- 					      struct net *net,
- 					      void *tmplt_priv);
--
-+#if IS_ENABLED(CONFIG_NET_CLS_BPF)
-+	int			(*bpf_link_change)(struct net *net, struct tcf_proto *tp,
-+						   struct bpf_prog *filter, void **arg, u32 handle,
-+						   u32 gen_flags);
-+#endif
- 	struct module		*owner;
- 	int			flags;
- };
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 2c1ba70abbf1..a3488463d145 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -994,6 +994,7 @@ enum bpf_attach_type {
- 	BPF_SK_LOOKUP,
- 	BPF_XDP,
- 	BPF_SK_SKB_VERDICT,
-+	BPF_TC,
- 	__MAX_BPF_ATTACH_TYPE
- };
- 
-@@ -1007,6 +1008,7 @@ enum bpf_link_type {
- 	BPF_LINK_TYPE_ITER = 4,
- 	BPF_LINK_TYPE_NETNS = 5,
- 	BPF_LINK_TYPE_XDP = 6,
-+	BPF_LINK_TYPE_TC = 7,
- 
- 	MAX_BPF_LINK_TYPE,
- };
-@@ -1447,6 +1449,12 @@ union bpf_attr {
- 				__aligned_u64	iter_info;	/* extra bpf_iter_link_info */
- 				__u32		iter_info_len;	/* iter_info length */
- 			};
-+			struct { /* used by BPF_TC */
-+				__u32 parent;
-+				__u32 handle;
-+				__u32 gen_flags;
-+				__u16 priority;
-+			} tc;
- 		};
- 	} link_create;
- 
-@@ -5519,6 +5527,13 @@ struct bpf_link_info {
- 		struct {
- 			__u32 ifindex;
- 		} xdp;
-+		struct {
-+			__u32 ifindex;
-+			__u32 parent;
-+			__u32 handle;
-+			__u32 gen_flags;
-+			__u16 priority;
-+		} tc;
- 	};
- } __attribute__((aligned(8)));
- 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index e5934b748ced..ce7c00ea135c 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /* Copyright (c) 2011-2014 PLUMgrid, http://plumgrid.com
-  */
-+#include <net/pkt_cls.h>
- #include <linux/bpf.h>
- #include <linux/bpf_trace.h>
- #include <linux/bpf_lirc.h>
-@@ -3027,6 +3028,8 @@ attach_type_to_prog_type(enum bpf_attach_type attach_type)
- 		return BPF_PROG_TYPE_SK_LOOKUP;
- 	case BPF_XDP:
- 		return BPF_PROG_TYPE_XDP;
-+	case BPF_TC:
-+		return BPF_PROG_TYPE_SCHED_CLS;
- 	default:
- 		return BPF_PROG_TYPE_UNSPEC;
- 	}
-@@ -4085,7 +4088,7 @@ static int tracing_bpf_link_attach(const union bpf_attr *attr, bpfptr_t uattr,
- 	return -EINVAL;
- }
- 
--#define BPF_LINK_CREATE_LAST_FIELD link_create.iter_info_len
-+#define BPF_LINK_CREATE_LAST_FIELD link_create.tc.priority
- static int link_create(union bpf_attr *attr, bpfptr_t uattr)
- {
- 	enum bpf_prog_type ptype;
-@@ -4136,6 +4139,11 @@ static int link_create(union bpf_attr *attr, bpfptr_t uattr)
- 	case BPF_PROG_TYPE_XDP:
- 		ret = bpf_xdp_link_attach(attr, prog);
- 		break;
-+#endif
-+#if IS_ENABLED(CONFIG_NET_CLS_BPF)
-+	case BPF_PROG_TYPE_SCHED_CLS:
-+		ret = bpf_tc_link_attach(attr, prog);
-+		break;
- #endif
- 	default:
- 		ret = -EINVAL;
-diff --git a/net/sched/cls_api.c b/net/sched/cls_api.c
-index 75e3a288a7c8..f492b4764301 100644
---- a/net/sched/cls_api.c
-+++ b/net/sched/cls_api.c
-@@ -9,6 +9,7 @@
-  * Eduardo J. Blanco <ejbs@netlabs.com.uy> :990222: kmod support
-  */
- 
-+#include <linux/bpf.h>
- #include <linux/module.h>
- #include <linux/types.h>
- #include <linux/kernel.h>
-@@ -1720,9 +1721,9 @@ static struct tcf_proto *tcf_chain_tp_insert_unique(struct tcf_chain *chain,
- 	return tp_new;
- }
- 
--static void tcf_chain_tp_delete_empty(struct tcf_chain *chain,
--				      struct tcf_proto *tp, bool rtnl_held,
--				      struct netlink_ext_ack *extack)
-+void tcf_chain_tp_delete_empty(struct tcf_chain *chain,
-+			       struct tcf_proto *tp, bool rtnl_held,
-+			       struct netlink_ext_ack *extack)
- {
- 	struct tcf_chain_info chain_info;
- 	struct tcf_proto *tp_iter;
-@@ -1760,6 +1761,7 @@ static void tcf_chain_tp_delete_empty(struct tcf_chain *chain,
- 
- 	tcf_proto_put(tp, rtnl_held, extack);
- }
-+EXPORT_SYMBOL_GPL(tcf_chain_tp_delete_empty);
- 
- static struct tcf_proto *tcf_chain_tp_find(struct tcf_chain *chain,
- 					   struct tcf_chain_info *chain_info,
-@@ -3917,3 +3919,134 @@ static int __init tc_filter_init(void)
- }
- 
- subsys_initcall(tc_filter_init);
-+
-+#if IS_ENABLED(CONFIG_NET_CLS_BPF)
-+
-+int bpf_tc_link_attach(union bpf_attr *attr, struct bpf_prog *prog)
-+{
-+	struct net *net = current->nsproxy->net_ns;
-+	struct tcf_chain_info chain_info;
-+	u32 chain_index, prio, parent;
-+	struct tcf_block *block;
-+	struct tcf_chain *chain;
-+	struct tcf_proto *tp;
-+	int err, tp_created;
-+	unsigned long cl;
-+	struct Qdisc *q;
-+	__be16 protocol;
-+	void *fh;
-+
-+	/* Caller already checks bpf_capable */
-+	if (!ns_capable(current->nsproxy->net_ns->user_ns, CAP_NET_ADMIN))
-+		return -EPERM;
-+
-+	if (attr->link_create.flags ||
-+	    !attr->link_create.target_ifindex ||
-+	    !tc_flags_valid(attr->link_create.tc.gen_flags))
-+		return -EINVAL;
-+
-+replay:
-+	parent = attr->link_create.tc.parent;
-+	prio = attr->link_create.tc.priority;
-+	protocol = htons(ETH_P_ALL);
-+	chain_index = 0;
-+	tp_created = 0;
-+	prio <<= 16;
-+	cl = 0;
-+
-+	/* Address this when cls_bpf switches to RTNL_FLAG_DOIT_UNLOCKED */
-+	rtnl_lock();
-+
-+	block = tcf_block_find(net, &q, &parent, &cl,
-+			       attr->link_create.target_ifindex, parent, NULL);
-+	if (IS_ERR(block)) {
-+		err = PTR_ERR(block);
-+		goto out_unlock;
-+	}
-+	block->classid = parent;
-+
-+	chain = tcf_chain_get(block, chain_index, true);
-+	if (!chain) {
-+		err = -ENOMEM;
-+		goto out_block;
-+	}
-+
-+	mutex_lock(&chain->filter_chain_lock);
-+
-+	tp = tcf_chain_tp_find(chain, &chain_info, protocol,
-+			       prio ?: TC_H_MAKE(0x80000000U, 0U),
-+			       !prio);
-+	if (IS_ERR(tp)) {
-+		err = PTR_ERR(tp);
-+		goto out_chain_unlock;
-+	}
-+
-+	if (!tp) {
-+		struct tcf_proto *tp_new = NULL;
-+
-+		if (chain->flushing) {
-+			err = -EAGAIN;
-+			goto out_chain_unlock;
-+		}
-+
-+		if (!prio)
-+			prio = tcf_auto_prio(tcf_chain_tp_prev(chain,
-+							       &chain_info));
-+
-+		mutex_unlock(&chain->filter_chain_lock);
-+
-+		tp_new = tcf_proto_create("bpf", protocol, prio, chain, true,
-+					  NULL);
-+		if (IS_ERR(tp_new)) {
-+			err = PTR_ERR(tp_new);
-+			goto out_chain;
-+		}
-+
-+		tp_created = 1;
-+		tp = tcf_chain_tp_insert_unique(chain, tp_new, protocol, prio,
-+						true);
-+		if (IS_ERR(tp)) {
-+			err = PTR_ERR(tp);
-+			goto out_chain;
-+		}
-+	} else {
-+		mutex_unlock(&chain->filter_chain_lock);
-+	}
-+
-+	fh = tp->ops->get(tp, attr->link_create.tc.handle);
-+
-+	if (!tp->ops->bpf_link_change)
-+		err = -EDEADLK;
-+	else
-+		err = tp->ops->bpf_link_change(net, tp, prog, &fh,
-+					       attr->link_create.tc.handle,
-+					       attr->link_create.tc.gen_flags);
-+	if (err >= 0 && q)
-+		q->flags &= ~TCQ_F_CAN_BYPASS;
-+
-+out:
-+	if (err < 0 && tp_created)
-+		tcf_chain_tp_delete_empty(chain, tp, true, NULL);
-+out_chain:
-+	if (chain) {
-+		if (!IS_ERR_OR_NULL(tp))
-+			tcf_proto_put(tp, true, NULL);
-+		/* Chain reference only kept for tp creation
-+		 * to pair with tcf_chain_put from tcf_proto_destroy
-+		 */
-+		if (!tp_created)
-+			tcf_chain_put(chain);
-+	}
-+out_block:
-+	tcf_block_release(q, block, true);
-+out_unlock:
-+	rtnl_unlock();
-+	if (err == -EAGAIN)
-+		goto replay;
-+	return err;
-+out_chain_unlock:
-+	mutex_unlock(&chain->filter_chain_lock);
-+	goto out;
-+}
-+
-+#endif
-diff --git a/net/sched/cls_bpf.c b/net/sched/cls_bpf.c
-index 360b97ab8646..bf61ffbb7fd0 100644
---- a/net/sched/cls_bpf.c
-+++ b/net/sched/cls_bpf.c
-@@ -34,6 +34,11 @@ struct cls_bpf_head {
- 	struct rcu_head rcu;
- };
- 
-+struct cls_bpf_link {
-+	struct bpf_link link;
-+	struct cls_bpf_prog *prog;
-+};
-+
- struct cls_bpf_prog {
- 	struct bpf_prog *filter;
- 	struct list_head link;
-@@ -48,6 +53,7 @@ struct cls_bpf_prog {
- 	const char *bpf_name;
- 	struct tcf_proto *tp;
- 	struct rcu_work rwork;
-+	struct cls_bpf_link *bpf_link;
- };
- 
- static const struct nla_policy bpf_policy[TCA_BPF_MAX + 1] = {
-@@ -289,6 +295,8 @@ static void __cls_bpf_delete(struct tcf_proto *tp, struct cls_bpf_prog *prog,
- {
- 	struct cls_bpf_head *head = rtnl_dereference(tp->root);
- 
-+	if (prog->bpf_link)
-+		prog->bpf_link->prog = NULL;
- 	idr_remove(&head->handle_idr, prog->handle);
- 	cls_bpf_stop_offload(tp, prog, extack);
- 	list_del_rcu(&prog->link);
-@@ -303,8 +311,13 @@ static int cls_bpf_delete(struct tcf_proto *tp, void *arg, bool *last,
- 			  bool rtnl_held, struct netlink_ext_ack *extack)
- {
- 	struct cls_bpf_head *head = rtnl_dereference(tp->root);
-+	struct cls_bpf_prog *prog = arg;
-+
-+	/* Cannot remove bpf_link owned filter using netlink */
-+	if (prog->bpf_link)
-+		return -EPERM;
- 
--	__cls_bpf_delete(tp, arg, extack);
-+	__cls_bpf_delete(tp, prog, extack);
- 	*last = list_empty(&head->plist);
- 	return 0;
- }
-@@ -494,6 +507,11 @@ static int __cls_bpf_change(struct cls_bpf_head *head, struct tcf_proto *tp,
- 		prog->gen_flags |= TCA_CLS_FLAGS_NOT_IN_HW;
- 
- 	if (oldprog) {
-+		/* Since netfilter and bpf_link cannot replace a bpf_link
-+		 * attached filter, this should never be true.
-+		 */
-+		WARN_ON(oldprog->bpf_link);
-+
- 		idr_replace(&head->handle_idr, prog, prog->handle);
- 		list_replace_rcu(&oldprog->link, &prog->link);
- 		tcf_unbind_filter(tp, &oldprog->res);
-@@ -521,6 +539,10 @@ static int cls_bpf_change(struct net *net, struct sk_buff *in_skb,
- 	if (tca[TCA_OPTIONS] == NULL)
- 		return -EINVAL;
- 
-+	/* Can't touch bpf_link filter */
-+	if (oldprog && oldprog->bpf_link)
-+		return -EPERM;
-+
- 	ret = nla_parse_nested_deprecated(tb, TCA_BPF_MAX, tca[TCA_OPTIONS],
- 					  bpf_policy, NULL);
- 	if (ret < 0)
-@@ -716,6 +738,231 @@ static int cls_bpf_reoffload(struct tcf_proto *tp, bool add, flow_setup_cb_t *cb
- 	return 0;
- }
- 
-+static void cls_bpf_link_release(struct bpf_link *link)
-+{
-+	struct cls_bpf_link *cls_link;
-+	struct cls_bpf_prog *prog;
-+	struct cls_bpf_head *head;
-+
-+	rtnl_lock();
-+
-+	cls_link = container_of(link, struct cls_bpf_link, link);
-+	prog = cls_link->prog;
-+
-+	if (prog) {
-+		head = rtnl_dereference(prog->tp->root);
-+		/* Deletion of the filter will unset cls_link->prog */
-+		__cls_bpf_delete(prog->tp, prog, NULL);
-+		if (list_empty(&head->plist))
-+			tcf_chain_tp_delete_empty(prog->tp->chain, prog->tp,
-+						  true, NULL);
-+	}
-+
-+	rtnl_unlock();
-+}
-+
-+static void cls_bpf_link_dealloc(struct bpf_link *link)
-+{
-+	struct cls_bpf_link *cls_link;
-+
-+	cls_link = container_of(link, struct cls_bpf_link, link);
-+	kfree(cls_link);
-+}
-+
-+static int cls_bpf_link_detach(struct bpf_link *link)
-+{
-+	cls_bpf_link_release(link);
-+	return 0;
-+}
-+
-+static void __bpf_fill_link_info(struct cls_bpf_link *link,
-+				 struct bpf_link_info *info)
-+{
-+	struct tcf_block *block;
-+	struct tcf_proto *tp;
-+	struct Qdisc *q;
-+
-+	ASSERT_RTNL();
-+
-+	if (WARN_ON(!link->prog))
-+		return;
-+
-+	tp = link->prog->tp;
-+	block = tp->chain->block;
-+	q = block->q;
-+
-+	info->tc.ifindex = q ? qdisc_dev(q)->ifindex : TCM_IFINDEX_MAGIC_BLOCK;
-+	info->tc.parent = block->classid;
-+	info->tc.handle = link->prog->handle;
-+	info->tc.priority = tp->prio >> 16;
-+	info->tc.gen_flags = link->prog->gen_flags;
-+}
-+
-+#ifdef CONFIG_PROC_FS
-+
-+static void cls_bpf_link_show_fdinfo(const struct bpf_link *link,
-+				     struct seq_file *seq)
-+{
-+	struct cls_bpf_link *cls_link;
-+	struct bpf_link_info info = {};
-+
-+	rtnl_lock();
-+
-+	cls_link = container_of(link, struct cls_bpf_link, link);
-+	if (!cls_link->prog)
-+		goto out;
-+
-+	__bpf_fill_link_info(cls_link, &info);
-+
-+	seq_printf(seq,
-+		   "ifindex:\t%u\n"
-+		   "parent:\t%u\n"
-+		   "handle:\t%u\n"
-+		   "priority:\t%u\n"
-+		   "gen_flags:\t%u\n",
-+		   info.tc.ifindex, info.tc.parent,
-+		   info.tc.handle, (u32)info.tc.priority,
-+		   info.tc.gen_flags);
-+
-+out:
-+	rtnl_unlock();
-+}
-+
-+#endif
-+
-+static int cls_bpf_link_fill_link_info(const struct bpf_link *link,
-+				       struct bpf_link_info *info)
-+{
-+	struct cls_bpf_link *cls_link;
-+	int ret = 0;
-+
-+	rtnl_lock();
-+
-+	cls_link = container_of(link, struct cls_bpf_link, link);
-+	if (!cls_link->prog) {
-+		ret = -ENOLINK;
-+		goto out;
-+	}
-+
-+	__bpf_fill_link_info(cls_link, info);
-+
-+out:
-+	rtnl_unlock();
-+	return ret;
-+}
-+
-+static const struct bpf_link_ops cls_bpf_link_ops = {
-+	.release = cls_bpf_link_release,
-+	.dealloc = cls_bpf_link_dealloc,
-+	.detach = cls_bpf_link_detach,
-+#ifdef CONFIG_PROC_FS
-+	.show_fdinfo = cls_bpf_link_show_fdinfo,
-+#endif
-+	.fill_link_info = cls_bpf_link_fill_link_info,
-+};
-+
-+static inline char *cls_bpf_link_name(u32 prog_id, const char *name)
-+{
-+	char *str = kmalloc(CLS_BPF_NAME_LEN, GFP_KERNEL);
-+
-+	if (str)
-+		snprintf(str, CLS_BPF_NAME_LEN, "%s:[%u]", name, prog_id);
-+
-+	return str;
-+}
-+
-+static int cls_bpf_link_change(struct net *net, struct tcf_proto *tp,
-+			       struct bpf_prog *filter, void **arg,
-+			       u32 handle, u32 gen_flags)
-+{
-+	struct cls_bpf_head *head = rtnl_dereference(tp->root);
-+	struct cls_bpf_prog *oldprog = *arg, *prog;
-+	struct bpf_link_primer primer;
-+	struct cls_bpf_link *link;
++	DECLARE_LIBBPF_OPTS(bpf_tc_link_opts, opts, .handle = 1, .priority = 1);
++	DECLARE_LIBBPF_OPTS(bpf_tc_opts, qopts, .handle = 1, .priority = 1);
++	struct bpf_prog_info info = {};
++	__u32 info_len = sizeof(info);
++	struct bpf_link *link, *invl;
 +	int ret;
 +
-+	if (gen_flags & ~CLS_BPF_SUPPORTED_GEN_FLAGS)
-+		return -EINVAL;
++	link = bpf_program__attach_tc(prog, hook, &opts);
++	if (!ASSERT_OK_PTR(link, "bpf_program__attach_tc"))
++		return PTR_ERR(link);
 +
-+	if (oldprog)
-+		return -EEXIST;
++	ret = bpf_obj_get_info_by_fd(bpf_program__fd(prog), &info, &info_len);
++	if (!ASSERT_OK(ret, "bpf_obj_get_info_by_fd"))
++		goto end;
 +
-+	prog = kzalloc(sizeof(*prog), GFP_KERNEL);
-+	if (!prog)
-+		return -ENOMEM;
++	ret = bpf_tc_query(hook, &qopts);
++	if (!ASSERT_OK(ret, "bpf_tc_query"))
++		goto end;
 +
-+	link = kzalloc(sizeof(*link), GFP_KERNEL);
-+	if (!link) {
-+		ret = -ENOMEM;
-+		goto err_prog;
++	if (!ASSERT_EQ(qopts.prog_id, info.id, "prog_id match"))
++		goto end;
++
++	opts.gen_flags = ~0u;
++	invl = bpf_program__attach_tc(prog, hook, &opts);
++	if (!ASSERT_ERR_PTR(invl, "bpf_program__attach_tc with invalid flags")) {
++		bpf_link__destroy(invl);
++		ret = -EINVAL;
 +	}
 +
-+	bpf_link_init(&link->link, BPF_LINK_TYPE_TC, &cls_bpf_link_ops,
-+		      filter);
-+
-+	ret = bpf_link_prime(&link->link, &primer);
-+	if (ret < 0)
-+		goto err_link;
-+
-+	/* We don't init exts to save on memory, but we still need to store the
-+	 * net_ns pointer, as during delete whether the deletion work will be
-+	 * queued or executed inline depends on the refcount of net_ns. In
-+	 * __cls_bpf_delete the reference is taken to keep the action IDR alive
-+	 * (which we don't require), but its maybe_get_net also allows us to
-+	 * detect whether we are being invoked in netns destruction path or not.
-+	 * In the former case deletion will have to be done synchronously.
-+	 *
-+	 * Leaving it NULL would prevent us from doing deletion work
-+	 * asynchronously, so set it here.
-+	 *
-+	 * On the tcf_classify side, exts->actions are not touched for
-+	 * exts_integrated progs, so we should be good.
-+	 */
-+#ifdef CONFIG_NET_CLS_ACT
-+	prog->exts.net = net;
-+#endif
-+
-+	ret = __cls_bpf_alloc_idr(head, handle, prog, oldprog);
-+	if (ret < 0)
-+		goto err_primer;
-+
-+	prog->exts_integrated = true;
-+	prog->bpf_link = link;
-+	prog->filter = filter;
-+	prog->tp = tp;
-+	link->prog = prog;
-+
-+	prog->bpf_name = cls_bpf_link_name(filter->aux->id, filter->aux->name);
-+	if (!prog->bpf_name) {
-+		ret = -ENOMEM;
-+		goto err_idr;
-+	}
-+
-+	ret = __cls_bpf_change(head, tp, prog, oldprog, NULL);
-+	if (ret < 0)
-+		goto err_name;
-+
-+	bpf_prog_inc(filter);
-+
-+	if (filter->dst_needed)
-+		tcf_block_netif_keep_dst(tp->chain->block);
-+
-+	return bpf_link_settle(&primer);
-+
-+err_name:
-+	kfree(prog->bpf_name);
-+err_idr:
-+	idr_remove(&head->handle_idr, prog->handle);
-+err_primer:
-+	bpf_link_cleanup(&primer);
-+	link = NULL;
-+err_link:
-+	kfree(link);
-+err_prog:
-+	kfree(prog);
++end:
++	bpf_link__destroy(link);
 +	return ret;
 +}
 +
- static struct tcf_proto_ops cls_bpf_ops __read_mostly = {
- 	.kind		=	"bpf",
- 	.owner		=	THIS_MODULE,
-@@ -729,6 +976,7 @@ static struct tcf_proto_ops cls_bpf_ops __read_mostly = {
- 	.reoffload	=	cls_bpf_reoffload,
- 	.dump		=	cls_bpf_dump,
- 	.bind_class	=	cls_bpf_bind_class,
-+	.bpf_link_change =	cls_bpf_link_change,
- };
- 
- static int __init cls_bpf_init_mod(void)
++static int test_tc_bpf_link_netlink_interaction(struct bpf_tc_hook *hook,
++						struct bpf_program *prog)
++{
++	DECLARE_LIBBPF_OPTS(bpf_link_update_opts, lopts,
++			    .old_prog_fd = bpf_program__fd(prog));
++	DECLARE_LIBBPF_OPTS(bpf_tc_link_opts, opts, .handle = 1, .priority = 1);
++	DECLARE_LIBBPF_OPTS(bpf_tc_opts, nopts, .handle = 1, .priority = 1);
++	DECLARE_LIBBPF_OPTS(bpf_tc_opts, dopts, .handle = 1, .priority = 1);
++	struct bpf_link *link;
++	int ret;
++
++	/* We need to test the following cases:
++	 *	1. BPF link owned filter cannot be replaced by netlink
++	 *	2. Netlink owned filter cannot be replaced by BPF link
++	 *	3. Netlink cannot do targeted delete of BPF link owned filter
++	 *	4. Filter is actually deleted (with chain cleanup)
++	 *	   We actually (ab)use the kernel behavior of returning EINVAL when
++	 *	   target chain doesn't exist on tc_get_tfilter (which maps to
++	 *	   bpf_tc_query) here, to know if the chain was really cleaned
++	 *	   up on tcf_proto destruction. Our setup is so that there is
++	 *	   only one reference to the chain.
++	 *
++	 *	   So on query, chain ? (filter ?: ENOENT) : EINVAL
++	 */
++
++	link = bpf_program__attach_tc(prog, hook, &opts);
++	if (!ASSERT_OK_PTR(link, "bpf_program__attach_tc"))
++		return PTR_ERR(link);
++
++	nopts.prog_fd = bpf_program__fd(prog);
++	ret = bpf_tc_attach(hook, &nopts);
++	if (!ASSERT_EQ(ret, -EEXIST, "bpf_tc_attach without replace"))
++		goto end;
++
++	nopts.flags = BPF_TC_F_REPLACE;
++	ret = bpf_tc_attach(hook, &nopts);
++	if (!ASSERT_EQ(ret, -EPERM, "bpf_tc_attach with replace"))
++		goto end;
++
++	ret = bpf_tc_detach(hook, &dopts);
++	if (!ASSERT_EQ(ret, -EPERM, "bpf_tc_detach"))
++		goto end;
++
++	lopts.flags = BPF_F_REPLACE;
++	ret = bpf_link_update(bpf_link__fd(link), bpf_program__fd(prog),
++			      &lopts);
++	ASSERT_OK(ret, "bpf_link_update");
++	ret = ret < 0 ? -errno : ret;
++
++end:
++	bpf_link__destroy(link);
++	if (!ret && !ASSERT_EQ(bpf_tc_query(hook, &dopts), -EINVAL,
++			       "chain empty delete"))
++		ret = -EINVAL;
++	return ret;
++}
++
++static int test_tc_bpf_link_update_ways(struct bpf_tc_hook *hook,
++					struct bpf_program *prog)
++{
++	DECLARE_LIBBPF_OPTS(bpf_tc_link_opts, opts, .handle = 1, .priority = 1);
++	DECLARE_LIBBPF_OPTS(bpf_link_update_opts, uopts, 0);
++	struct test_tc_bpf *skel;
++	struct bpf_link *link;
++	int ret;
++
++	skel = test_tc_bpf__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "test_tc_bpf__open_and_load"))
++		return PTR_ERR(skel);
++
++	link = bpf_program__attach_tc(prog, hook, &opts);
++	if (!ASSERT_OK_PTR(link, "bpf_program__attach_tc")) {
++		ret = PTR_ERR(link);
++		goto end;
++	}
++
++	ret = bpf_link_update(bpf_link__fd(link), bpf_program__fd(prog),
++			      &uopts);
++	if (!ASSERT_OK(ret, "bpf_link_update no old prog"))
++		goto end;
++
++	uopts.old_prog_fd = bpf_program__fd(prog);
++	ret = bpf_link_update(bpf_link__fd(link), bpf_program__fd(prog),
++			      &uopts);
++	if (!ASSERT_TRUE(ret < 0 && errno == EINVAL,
++			 "bpf_link_update with old prog without BPF_F_REPLACE")) {
++		ret = -EINVAL;
++		goto end;
++	}
++
++	uopts.flags = BPF_F_REPLACE;
++	ret = bpf_link_update(bpf_link__fd(link), bpf_program__fd(prog),
++			      &uopts);
++	if (!ASSERT_OK(ret, "bpf_link_update with old prog with BPF_F_REPLACE"))
++		goto end;
++
++	uopts.old_prog_fd = bpf_program__fd(skel->progs.cls);
++	ret = bpf_link_update(bpf_link__fd(link), bpf_program__fd(prog),
++			      &uopts);
++	if (!ASSERT_TRUE(ret < 0 && errno == EINVAL,
++			 "bpf_link_update with wrong old prog")) {
++		ret = -EINVAL;
++		goto end;
++	}
++	ret = 0;
++
++end:
++	test_tc_bpf__destroy(skel);
++	return ret;
++}
++
++static int test_tc_bpf_link_info_api(struct bpf_tc_hook *hook,
++				     struct bpf_program *prog)
++{
++	DECLARE_LIBBPF_OPTS(bpf_tc_link_opts, opts, .handle = 1, .priority = 1);
++	__u32 ifindex, parent, handle, gen_flags, priority;
++	char buf[4096], path[256], *begin;
++	struct bpf_link_info info = {};
++	__u32 info_len = sizeof(info);
++	struct bpf_link *link;
++	int ret, fdinfo;
++
++	link = bpf_program__attach_tc(prog, hook, &opts);
++	if (!ASSERT_OK_PTR(link, "bpf_program__attach_tc"))
++		return PTR_ERR(link);
++
++	ret = bpf_obj_get_info_by_fd(bpf_link__fd(link), &info, &info_len);
++	if (!ASSERT_OK(ret, "bpf_obj_get_info_by_fd"))
++		goto end;
++
++	ret = snprintf(path, sizeof(path), "/proc/self/fdinfo/%d",
++		       bpf_link__fd(link));
++	if (!ASSERT_TRUE(!ret || ret < sizeof(path), "snprintf pathname"))
++		goto end;
++
++	fdinfo = open(path, O_RDONLY);
++	if (!ASSERT_GT(fdinfo, -1, "open fdinfo"))
++		goto end;
++
++	ret = read(fdinfo, buf, sizeof(buf));
++	if (!ASSERT_GT(ret, 0, "read fdinfo")) {
++		ret = -EINVAL;
++		goto end_file;
++	}
++
++	begin = strstr(buf, "ifindex");
++	if (!ASSERT_OK_PTR(begin, "find beginning of fdinfo info")) {
++		ret = -EINVAL;
++		goto end_file;
++	}
++
++	ret = sscanf(begin, "ifindex:\t%u\n"
++			    "parent:\t%u\n"
++			    "handle:\t%u\n"
++			    "priority:\t%u\n"
++			    "gen_flags:\t%u\n",
++			    &ifindex, &parent, &handle, &priority, &gen_flags);
++	if (!ASSERT_EQ(ret, 5, "sscanf fdinfo")) {
++		ret = -EINVAL;
++		goto end_file;
++	}
++
++	ret = -EINVAL;
++
++#define X(a, b, c) (!ASSERT_EQ(a, b, #a " == " #b) || !ASSERT_EQ(b, c, #b " == " #c))
++	if (X(info.tc.ifindex, ifindex, 1) ||
++	    X(info.tc.parent, parent,
++	      TC_H_MAKE(TC_H_CLSACT, TC_H_MIN_EGRESS)) ||
++	    X(info.tc.handle, handle, 1) ||
++	    X(info.tc.gen_flags, gen_flags, TCA_CLS_FLAGS_NOT_IN_HW) ||
++	    X(info.tc.priority, priority, 1))
++#undef X
++		goto end_file;
++
++	ret = 0;
++
++end_file:
++	close(fdinfo);
++end:
++	bpf_link__destroy(link);
++	return ret;
++}
++
++void test_tc_bpf_link(void)
++{
++	DECLARE_LIBBPF_OPTS(bpf_tc_hook, hook, .ifindex = LO_IFINDEX,
++			    .attach_point = BPF_TC_INGRESS);
++	struct test_tc_bpf *skel = NULL;
++	bool hook_created = false;
++	int ret;
++
++	skel = test_tc_bpf__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "test_tc_bpf__open_and_load"))
++		return;
++
++	ret = bpf_tc_hook_create(&hook);
++	if (ret == 0)
++		hook_created = true;
++
++	ret = ret == -EEXIST ? 0 : ret;
++	if (!ASSERT_OK(ret, "bpf_tc_hook_create(BPF_TC_INGRESS)"))
++		goto end;
++
++	ret = test_tc_bpf_link_basic(&hook, skel->progs.cls);
++	if (!ASSERT_OK(ret, "test_tc_bpf_link_basic"))
++		goto end;
++
++	bpf_tc_hook_destroy(&hook);
++
++	hook.attach_point = BPF_TC_EGRESS;
++	ret = test_tc_bpf_link_basic(&hook, skel->progs.cls);
++	if (!ASSERT_OK(ret, "test_tc_bpf_link_basic"))
++		goto end;
++
++	bpf_tc_hook_destroy(&hook);
++
++	ret = test_tc_bpf_link_netlink_interaction(&hook, skel->progs.cls);
++	if (!ASSERT_OK(ret, "test_tc_bpf_link_netlink_interaction"))
++		goto end;
++
++	bpf_tc_hook_destroy(&hook);
++
++	ret = test_tc_bpf_link_update_ways(&hook, skel->progs.cls);
++	if (!ASSERT_OK(ret, "test_tc_bpf_link_update_ways"))
++		goto end;
++
++	bpf_tc_hook_destroy(&hook);
++
++	ret = test_tc_bpf_link_info_api(&hook, skel->progs.cls);
++	if (!ASSERT_OK(ret, "test_tc_bpf_link_info_api"))
++		goto end;
++
++end:
++	if (hook_created) {
++		hook.attach_point = BPF_TC_INGRESS | BPF_TC_EGRESS;
++		bpf_tc_hook_destroy(&hook);
++	}
++	test_tc_bpf__destroy(skel);
++}
 -- 
 2.31.1
 
