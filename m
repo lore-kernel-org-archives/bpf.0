@@ -2,181 +2,137 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-23.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B619BC47082
-	for <bpf@archiver.kernel.org>; Fri,  4 Jun 2021 01:54:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 77617C4708F
+	for <bpf@archiver.kernel.org>; Fri,  4 Jun 2021 04:15:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 98189613F8
-	for <bpf@archiver.kernel.org>; Fri,  4 Jun 2021 01:54:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 58386613E4
+	for <bpf@archiver.kernel.org>; Fri,  4 Jun 2021 04:15:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230041AbhFDBzu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 3 Jun 2021 21:55:50 -0400
-Received: from mail-pf1-f180.google.com ([209.85.210.180]:36353 "EHLO
-        mail-pf1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbhFDBzu (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 3 Jun 2021 21:55:50 -0400
-Received: by mail-pf1-f180.google.com with SMTP id c12so6340500pfl.3;
-        Thu, 03 Jun 2021 18:53:50 -0700 (PDT)
+        id S229490AbhFDERe (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 4 Jun 2021 00:17:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54856 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229474AbhFDERe (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 4 Jun 2021 00:17:34 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73EB1C06174A
+        for <bpf@vger.kernel.org>; Thu,  3 Jun 2021 21:15:48 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id l11-20020a05600c4f0bb029017a7cd488f5so4861922wmq.0
+        for <bpf@vger.kernel.org>; Thu, 03 Jun 2021 21:15:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wBg06JBpiPCzgvoJ4HY+DQglchFViQwPvQYbexv1VvI=;
-        b=J7CZDMGflxAkoaz4zNQRN/MDQCXtr/sHow7cgB8Jr2WGgwjl7Tu6ycwSbc0rQGZ8+9
-         nh2AI1LIeI/KM6bQifGDyjVaQD3SAU9Dfs/nAU1cybc8ntJrKFQ12qlJ2Zu9Sql10ETA
-         chUwj0v15TsD6QEp8QvRawmAAE+IviEQ4zMRkmcUhDd3/Egbcc5KEWOT6bT8mYR8GQn+
-         DliO/Xc5Xcg0Grg/evOo/AoUEZomnithpuEO3ZeaalyPyd5UT3j0HAiFgg4epXkZgUAk
-         xh+xy5aWWY6X63hFVRukALs7t8vaCJIv/n5mWSjFnGIRtzzGfJAmm6g7HBz23B60Uqe9
-         rBtA==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gt5r+lBwCuoOA7rfQIlaZBhTcz5xyY6ZuYMcbufKUos=;
+        b=pXfVS0SZxq556lEc4rP04GJ+qgvT/OfgZ6GWjum1lWJGmFlLn0UIhfcmvLozoTMPl6
+         dFTZer+0saAoVGELO7+tFHPmONEOIFsP/2B24YoqJOSbVT1Qbp8MhvrOythK2lI8ZcSK
+         lfYFhogf0BkpuuMQ2vgzYsV8SBe/Z3umeGLXeDHcPOzyosYXZtapt4idJ2Vgt79tiV9A
+         AcbR/UUZJt4JO0HYV6GSl49RUNE1HAZ2Z0kxIct7cR2hyhnysXQ8LN/yGMV/3gz1E023
+         MEqggsPvjm0V4piYAYa5Td9JqYxf4aWJnqMAdcuRpsoKH9W/EmMQmuiHJ3kT+W4xV1Va
+         zFFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wBg06JBpiPCzgvoJ4HY+DQglchFViQwPvQYbexv1VvI=;
-        b=tn15DPw9Rmu0NLiKK6UifBMn4zVHjyTmWuRmp/VRdl3gD7sxbf4zI5AoOFWhGQSZKk
-         772o9+APyf4PRA2U27Eiy6IIVff5HLYOsdQpBE9fkxoN8IScFNOxHWHTC8Od1XdLx3af
-         U8oyXpqvYlX6qv9+FFvUxTWifWtxWucTeEnhW1sQCBr4ZKYIfg4NfpxaXaRzIAXiGX8/
-         X7zMWUm48aNXGlPtBCF8H7KpZVTDaCao7G1PKmSeT/1FHnaV4jWLyNf2GKYovlegdYOQ
-         bpEExwtW5Ct0oR90FXCNj6Z22CPQGBzMp4/UJIyIYvG33EKYSrzbanUTQdV4V2aGRzdK
-         8hKw==
-X-Gm-Message-State: AOAM531HorAYiN0h8y14qZMzoaRTVvl7yWweeeQgOsVLdmDA/wnTD0bc
-        8N+DPFnoARZ9e+qx9/EHRtc=
-X-Google-Smtp-Source: ABdhPJyLezzkJaJdoYuq76C9UPYY5C26bq1ehr7BHzIkk1tSJGa9IAH93tWSh1xjdPcekd79SMsnlw==
-X-Received: by 2002:a63:581c:: with SMTP id m28mr2353577pgb.353.1622771570513;
-        Thu, 03 Jun 2021 18:52:50 -0700 (PDT)
-Received: from athina.mtv.corp.google.com ([2620:15c:211:0:c45:b07d:e001:d01])
-        by smtp.gmail.com with ESMTPSA id c130sm274502pfc.51.2021.06.03.18.52.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Jun 2021 18:52:49 -0700 (PDT)
-From:   =?UTF-8?q?Maciej=20=C5=BBenczykowski?= <zenczykowski@gmail.com>
-To:     =?UTF-8?q?Maciej=20=C5=BBenczykowski?= <maze@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Linux Network Development Mailing List <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        BPF Mailing List <bpf@vger.kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Dongseok Yi <dseok.yi@samsung.com>,
-        Willem de Bruijn <willemb@google.com>
-Subject: [PATCH bpf-next 1/2] Revert "bpf: Check for BPF_F_ADJ_ROOM_FIXED_GSO when bpf_skb_change_proto"
-Date:   Thu,  3 Jun 2021 18:52:37 -0700
-Message-Id: <20210604015238.2422145-1-zenczykowski@gmail.com>
-X-Mailer: git-send-email 2.32.0.rc1.229.g3e70b5a671-goog
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gt5r+lBwCuoOA7rfQIlaZBhTcz5xyY6ZuYMcbufKUos=;
+        b=uc5TtkXbk5jy1iiFPmB53tE35qE3XPDskCBIbOJwEswiPYhlGUa04l3mJfl4Ao77gc
+         B1jO769ZqnYQyqBu4NrLO8j/TmDbIRTTrMCQ/+qsddXuBRwD/YRkqpWNZ2BJfMUetSjZ
+         dlRSoAbRoOVgXTrGBZK81vo8hCAY9zta4wIJTnGJDK7kI+CB44K5YGWucVCtFmXVDoeB
+         d7s/1aahDW2hctFhwsLjc9fmz9YjzNwYglLIY2Zs7AaSdg0dz9sJajU92ZYSARd3Vr1N
+         fn1lqGKikhhso5EBHvUIAerHoY8X9o7llIjkrRCNzjm98JV5x0B3+g8hrq8p7EgacLZW
+         /r4Q==
+X-Gm-Message-State: AOAM5319syNBrLpdV8wCDNAowZt/jYZZ+kDOQDC6s9YRKJG4I2tiAALT
+        1gCS0vQ5EJyhATPQpxB2Vrj2q3cw2/P94P/fF2tjYA==
+X-Google-Smtp-Source: ABdhPJx2vWndMsU19H1kNaO6+JL/13qRYUi8/RATBdr+TJtyTLGIJgpuoWpiH5i1lF4ag++WCkz/IclGw42XD007YWQ=
+X-Received: by 2002:a1c:b603:: with SMTP id g3mr1451928wmf.58.1622780145144;
+ Thu, 03 Jun 2021 21:15:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20210602224024.300485-1-rickyman7@gmail.com>
+In-Reply-To: <20210602224024.300485-1-rickyman7@gmail.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Thu, 3 Jun 2021 21:15:32 -0700
+Message-ID: <CAP-5=fW5btkb9izxcUy+XgAQPCTRZAUMa4uQMUR_+N_d=17Mfg@mail.gmail.com>
+Subject: Re: [PATCH] perf env: fix memory leak: free bpf_prog_info_linear
+To:     Riccardo Mancini <rickyman7@gmail.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Maciej Żenczykowski <maze@google.com>
+On Wed, Jun 2, 2021 at 3:41 PM Riccardo Mancini <rickyman7@gmail.com> wrote:
+>
+> ASan reported a memory leak caused by info_linear not being
+> deallocated. The info_linear was allocated during
+> perf_event__synthesize_one_bpf_prog.
+> This patch adds the corresponding free() when bpf_prog_info_node
+> is freed in perf_env__purge_bpf.
+>
+> $ sudo ./perf record -- sleep 5
+> [ perf record: Woken up 1 times to write data ]
+> [ perf record: Captured and wrote 0.025 MB perf.data (8 samples) ]
+>
+> =================================================================
+> ==297735==ERROR: LeakSanitizer: detected memory leaks
+>
+> Direct leak of 7688 byte(s) in 19 object(s) allocated from:
+>     #0 0x4f420f in malloc (/home/user/linux/tools/perf/perf+0x4f420f)
+>     #1 0xc06a74 in bpf_program__get_prog_info_linear /home/user/linux/tools/lib/bpf/libbpf.c:11113:16
+>     #2 0xb426fe in perf_event__synthesize_one_bpf_prog /home/user/linux/tools/perf/util/bpf-event.c:191:16
+>     #3 0xb42008 in perf_event__synthesize_bpf_events /home/user/linux/tools/perf/util/bpf-event.c:410:9
+>     #4 0x594596 in record__synthesize /home/user/linux/tools/perf/builtin-record.c:1490:8
+>     #5 0x58c9ac in __cmd_record /home/user/linux/tools/perf/builtin-record.c:1798:8
+>     #6 0x58990b in cmd_record /home/user/linux/tools/perf/builtin-record.c:2901:8
+>     #7 0x7b2a20 in run_builtin /home/user/linux/tools/perf/perf.c:313:11
+>     #8 0x7b12ff in handle_internal_command /home/user/linux/tools/perf/perf.c:365:8
+>     #9 0x7b2583 in run_argv /home/user/linux/tools/perf/perf.c:409:2
+>     #10 0x7b0d79 in main /home/user/linux/tools/perf/perf.c:539:3
+>     #11 0x7fa357ef6b74 in __libc_start_main /usr/src/debug/glibc-2.33-8.fc34.x86_64/csu/../csu/libc-start.c:332:16
+>
+> Signed-off-by: Riccardo Mancini <rickyman7@gmail.com>
 
-This reverts commit fa7b83bf3b156c767f3e4a25bbf3817b08f3ff8e.
+Acked-by: Ian Rogers <irogers@google.com>
 
-See the followup commit for the reasoning why I believe the appropriate
-approach is to simply make this change without a flag, but it can basically
-be summarized as using this helper without the flag is bug-prone or outright
-buggy, and thus the default should be this new behaviour.
+Thanks,
+Ian
 
-As this commit has only made it into net-next/master, but not into
-any real release, such a backwards incompatible change is still ok.
-
-Cc: Dongseok Yi <dseok.yi@samsung.com>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Willem de Bruijn <willemb@google.com>
-Signed-off-by: Maciej Żenczykowski <maze@google.com>
----
- net/core/filter.c | 22 +++++++++-------------
- 1 file changed, 9 insertions(+), 13 deletions(-)
-
-diff --git a/net/core/filter.c b/net/core/filter.c
-index caa88955562e..04848de3e058 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -3235,7 +3235,7 @@ static int bpf_skb_net_hdr_pop(struct sk_buff *skb, u32 off, u32 len)
- 	return ret;
- }
- 
--static int bpf_skb_proto_4_to_6(struct sk_buff *skb, u64 flags)
-+static int bpf_skb_proto_4_to_6(struct sk_buff *skb)
- {
- 	const u32 len_diff = sizeof(struct ipv6hdr) - sizeof(struct iphdr);
- 	u32 off = skb_mac_header_len(skb);
-@@ -3264,9 +3264,7 @@ static int bpf_skb_proto_4_to_6(struct sk_buff *skb, u64 flags)
- 		}
- 
- 		/* Due to IPv6 header, MSS needs to be downgraded. */
--		if (!(flags & BPF_F_ADJ_ROOM_FIXED_GSO))
--			skb_decrease_gso_size(shinfo, len_diff);
--
-+		skb_decrease_gso_size(shinfo, len_diff);
- 		/* Header must be checked, and gso_segs recomputed. */
- 		shinfo->gso_type |= SKB_GSO_DODGY;
- 		shinfo->gso_segs = 0;
-@@ -3278,7 +3276,7 @@ static int bpf_skb_proto_4_to_6(struct sk_buff *skb, u64 flags)
- 	return 0;
- }
- 
--static int bpf_skb_proto_6_to_4(struct sk_buff *skb, u64 flags)
-+static int bpf_skb_proto_6_to_4(struct sk_buff *skb)
- {
- 	const u32 len_diff = sizeof(struct ipv6hdr) - sizeof(struct iphdr);
- 	u32 off = skb_mac_header_len(skb);
-@@ -3307,9 +3305,7 @@ static int bpf_skb_proto_6_to_4(struct sk_buff *skb, u64 flags)
- 		}
- 
- 		/* Due to IPv4 header, MSS can be upgraded. */
--		if (!(flags & BPF_F_ADJ_ROOM_FIXED_GSO))
--			skb_increase_gso_size(shinfo, len_diff);
--
-+		skb_increase_gso_size(shinfo, len_diff);
- 		/* Header must be checked, and gso_segs recomputed. */
- 		shinfo->gso_type |= SKB_GSO_DODGY;
- 		shinfo->gso_segs = 0;
-@@ -3321,17 +3317,17 @@ static int bpf_skb_proto_6_to_4(struct sk_buff *skb, u64 flags)
- 	return 0;
- }
- 
--static int bpf_skb_proto_xlat(struct sk_buff *skb, __be16 to_proto, u64 flags)
-+static int bpf_skb_proto_xlat(struct sk_buff *skb, __be16 to_proto)
- {
- 	__be16 from_proto = skb->protocol;
- 
- 	if (from_proto == htons(ETH_P_IP) &&
- 	      to_proto == htons(ETH_P_IPV6))
--		return bpf_skb_proto_4_to_6(skb, flags);
-+		return bpf_skb_proto_4_to_6(skb);
- 
- 	if (from_proto == htons(ETH_P_IPV6) &&
- 	      to_proto == htons(ETH_P_IP))
--		return bpf_skb_proto_6_to_4(skb, flags);
-+		return bpf_skb_proto_6_to_4(skb);
- 
- 	return -ENOTSUPP;
- }
-@@ -3341,7 +3337,7 @@ BPF_CALL_3(bpf_skb_change_proto, struct sk_buff *, skb, __be16, proto,
- {
- 	int ret;
- 
--	if (unlikely(flags & ~(BPF_F_ADJ_ROOM_FIXED_GSO)))
-+	if (unlikely(flags))
- 		return -EINVAL;
- 
- 	/* General idea is that this helper does the basic groundwork
-@@ -3361,7 +3357,7 @@ BPF_CALL_3(bpf_skb_change_proto, struct sk_buff *, skb, __be16, proto,
- 	 * that. For offloads, we mark packet as dodgy, so that headers
- 	 * need to be verified first.
- 	 */
--	ret = bpf_skb_proto_xlat(skb, proto, flags);
-+	ret = bpf_skb_proto_xlat(skb, proto);
- 	bpf_compute_data_pointers(skb);
- 	return ret;
- }
--- 
-2.32.0.rc1.229.g3e70b5a671-goog
-
+> ---
+>  tools/perf/util/env.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/tools/perf/util/env.c b/tools/perf/util/env.c
+> index 9130f6fad8d54..bc5e4f294e9e9 100644
+> --- a/tools/perf/util/env.c
+> +++ b/tools/perf/util/env.c
+> @@ -144,6 +144,7 @@ static void perf_env__purge_bpf(struct perf_env *env)
+>                 node = rb_entry(next, struct bpf_prog_info_node, rb_node);
+>                 next = rb_next(&node->rb_node);
+>                 rb_erase(&node->rb_node, root);
+> +               free(node->info_linear);
+>                 free(node);
+>         }
+>
+> --
+> 2.31.1
+>
