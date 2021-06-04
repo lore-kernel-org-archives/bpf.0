@@ -2,217 +2,218 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D94D9C47082
-	for <bpf@archiver.kernel.org>; Fri,  4 Jun 2021 01:13:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E5F6C47096
+	for <bpf@archiver.kernel.org>; Fri,  4 Jun 2021 01:53:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BE2B3610A0
-	for <bpf@archiver.kernel.org>; Fri,  4 Jun 2021 01:13:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 66986613E9
+	for <bpf@archiver.kernel.org>; Fri,  4 Jun 2021 01:53:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbhFDBPb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 3 Jun 2021 21:15:31 -0400
-Received: from mail-pg1-f179.google.com ([209.85.215.179]:40959 "EHLO
-        mail-pg1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229764AbhFDBPa (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 3 Jun 2021 21:15:30 -0400
-Received: by mail-pg1-f179.google.com with SMTP id j12so6512344pgh.7;
-        Thu, 03 Jun 2021 18:13:35 -0700 (PDT)
+        id S229758AbhFDByv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 3 Jun 2021 21:54:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52150 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229576AbhFDByv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 3 Jun 2021 21:54:51 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65D08C06174A;
+        Thu,  3 Jun 2021 18:52:52 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id z26so6315018pfj.5;
+        Thu, 03 Jun 2021 18:52:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=cyAZd6hKa9HUgtM9DI+wcqUInKkOsq+lYtlBkJdUwEU=;
-        b=GXGnQZw9iGluZalhPGuRK6zuNxdzhyLlvwQsogNbu1WPBHiEW1qvZQ77GM/53m1xxt
-         olLPzx7VMBUWeNr4ADMdteXe8X5b9thXF3vUwfoRor0VJ+kk2GBRc+zIVqahuk5x1n+H
-         qQ9QCvH6OLcSF55Gv4MuFPc7zQU8H30D0Zy9q3u/18ZXLqh8qSavy2jQ5gEoI3a3xqO+
-         EUNQPU5mRz0jtEQUqqkOGJNTnnwQZhl44h/7tZnAFoskjCGRfvYdZl3WklNerBF0Lsdu
-         iiczrqSoTooE/5JmkvY42vssIo7K/snZkBGUrTvjywSRlD8LLd0amlKXnAUdEYRGa1Sb
-         gMpg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=rWOwslvWBfTdFK9pe5secWd9IFRH1Q9FtXwAnGwKEVU=;
+        b=sERKOkseJBRpIlw6qDLx8DFOEh7xSh2tdQM+Vo5MzEGDxDraN0bj2YqlkkP1jS7OGc
+         kDOjIN6Qke/N9oLTDBHCS2++/qtDB5Ly1wGl/N8zSXaEOQZ/nb8HvSZA2TQl70aGeuCz
+         SAS9Elr+OVzQ3bXqs4kerFIXfsHwOlo8wG0FP6Kx7GaRf2wP0T2BRV+ZbOvNyzI6XPH1
+         tSpSD9pNSeCCdCvD3EI67q0WIOmN7H9Y43IyiAtDrczWQkisvZeswu/23IfxqlRzfoVw
+         Ty5eyzuqWbZFkspyMyDnNsvuPhHV20oVKB9OSLCOusyLsShDCSvmuzPzHJknIh3kkRPv
+         Fsjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=cyAZd6hKa9HUgtM9DI+wcqUInKkOsq+lYtlBkJdUwEU=;
-        b=c9+2YshevYqKm2J5SxJrfjcQ/T8XhSY9euJu7yBj6Xo7XGRQyVc9WoF0x0mh7Dlgkx
-         +T5VxToLKJJqoxly2d0VQQ7LXAHRYlCX03SV4xgH2U5RL0ijf98xJ4dVZkY+t4bIwW34
-         RlpAe1cm+CUy1wWZfLfoVuAwPFGQonyayknR0YiojZZcsjwGetqwKQv8WwdOLmGRDwwU
-         9XK364Otos5ZpCMf2xsFm18j4L6BvGE+YzFa6WLHrPVDjku+qaCNotj672gCknS9ZX+i
-         oTn+vZPnI1CbsMIZIum0FvB/0z3HavNDRm0V1VvvCLxgPFmWXA9wokLDpPTxRwPmhvg8
-         Gfdg==
-X-Gm-Message-State: AOAM531JacDcbHqdoWivuytTdIyLz32Yx+SUVgv9k8NEXSSD9uHX2KGZ
-        Dntf+mNqCcjpSp1XfVCrqiAWw+Vo6WA=
-X-Google-Smtp-Source: ABdhPJxVyC9K2Gn9PkjBzr+unlSk9ypEorIr29+D/AcNtQchsyI01mhdK1/Uox/QB4QvNTB+yPwenQ==
-X-Received: by 2002:aa7:92da:0:b029:2e0:461f:2808 with SMTP id k26-20020aa792da0000b02902e0461f2808mr1797802pfa.25.1622769154948;
-        Thu, 03 Jun 2021 18:12:34 -0700 (PDT)
-Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::5:82fb])
-        by smtp.gmail.com with ESMTPSA id y73sm228690pfb.129.2021.06.03.18.12.33
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=rWOwslvWBfTdFK9pe5secWd9IFRH1Q9FtXwAnGwKEVU=;
+        b=EX5ni06SfqkyoS5TnWC1Qw0MvrOca1n/Kh8pB3ik2aR84LaHr7d6DYuvl6ysePv6tt
+         3gf11GOnss3rG2wn/Q2yjfXhYkdMBU9kZT2f+B61tUdafsDo2y1ByqyCqzrvYdpZVfAe
+         NqjgRlx+QyEQ3bnCRLtAHMpQEixlpOevIsHHBitBmCaSwmzfCXSuQRPEjSi74RTcWoDt
+         9cgQjihghbxva/4I9MbyqkoiAzY6K1i1VEv024Sfz9qZTS2OrEsmFDvFDDBMEkyXjguS
+         DSz1W7RZA5wF+IvHOkoa0JhBUsKHzt8RgctzOvp2hY+y8jzigWn+Fl4+XfE/RrGgcQg/
+         7cYw==
+X-Gm-Message-State: AOAM533D3EQXHDpazgr31pSUbhvj/aLf8DbBUfeoJm5eDvpAT1zarrVh
+        HLU001zvoRNLVcpgEmvvpG6z/Urkugt+2Q==
+X-Google-Smtp-Source: ABdhPJybdLpn0UL/mudtnYCe9s2xDSm14wNZs+O3lI07HkGz4EpjbQPQRiVyfHDdEl8aThnW5TMLGQ==
+X-Received: by 2002:a63:7945:: with SMTP id u66mr2352213pgc.200.1622771571862;
+        Thu, 03 Jun 2021 18:52:51 -0700 (PDT)
+Received: from athina.mtv.corp.google.com ([2620:15c:211:0:c45:b07d:e001:d01])
+        by smtp.gmail.com with ESMTPSA id c130sm274502pfc.51.2021.06.03.18.52.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Jun 2021 18:12:34 -0700 (PDT)
-Date:   Thu, 3 Jun 2021 18:12:31 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Kernel Team <kernel-team@fb.com>
-Subject: Re: [PATCH bpf-next 1/3] bpf: Introduce bpf_timer
-Message-ID: <20210604011231.p24eb6py7hjhskn3@ast-mbp.dhcp.thefacebook.com>
-References: <20210527040259.77823-1-alexei.starovoitov@gmail.com>
- <20210527040259.77823-2-alexei.starovoitov@gmail.com>
- <CAEf4BzbyikY1b4vAzb+t88odbqWOR7K4TpwjM1zGF4Nmqu6ysg@mail.gmail.com>
- <20210603015330.vd4zgr5rdishemgi@ast-mbp.dhcp.thefacebook.com>
- <CAEf4BzafEP_b7vXT9pTB4mDWWP7N5ACe82V3yq-1doH=awNbUg@mail.gmail.com>
+        Thu, 03 Jun 2021 18:52:51 -0700 (PDT)
+From:   =?UTF-8?q?Maciej=20=C5=BBenczykowski?= <zenczykowski@gmail.com>
+To:     =?UTF-8?q?Maciej=20=C5=BBenczykowski?= <maze@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Linux Network Development Mailing List <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        BPF Mailing List <bpf@vger.kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Dongseok Yi <dseok.yi@samsung.com>,
+        Willem de Bruijn <willemb@google.com>
+Subject: [PATCH bpf-next 2/2] bpf: do not change gso_size during bpf_skb_change_proto()
+Date:   Thu,  3 Jun 2021 18:52:38 -0700
+Message-Id: <20210604015238.2422145-2-zenczykowski@gmail.com>
+X-Mailer: git-send-email 2.32.0.rc1.229.g3e70b5a671-goog
+In-Reply-To: <20210604015238.2422145-1-zenczykowski@gmail.com>
+References: <20210604015238.2422145-1-zenczykowski@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzafEP_b7vXT9pTB4mDWWP7N5ACe82V3yq-1doH=awNbUg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Jun 03, 2021 at 10:10:38AM -0700, Andrii Nakryiko wrote:
-> >
-> > I think going too much into implementation details in the helper
-> > description is unnecessary.
-> > " Start the timer and set its expiration N nanoseconds from
-> >   the current time. "
-> > is probably about right amount of details.
-> > I can add that the time clock is monotonic
-> > and callback is called in softirq.
-> 
-> I think mentioning whether it's going to be run on the same CPU or
-> another CPU is the most important part. I'm honestly still not sure
-> which one is the case, because I don't completely understand all the
-> implications of what "called in softirq" implies.
+From: Maciej Żenczykowski <maze@google.com>
 
-"called in softirq" means that timer callback will be executing
-in softirq context on some cpu. That's all.
-The proposed API doesn't provide a way to call a timer on a given cpu
-or to pin it to a cpu.
-There are few places in the kernel that use ABS_PINNED and REL_PINNED
-variants of hrtimer.
-One such example is napi timer.
-The initial cpu is picked during hrtimer_init and it's always
-current cpu. napi is bound to a cpu. So when it calls hrtimer_init(.., _PINNED);
-it wants the callback to stay on the same cpu.
-The hrtimer doc says that _PINNED is ignored during hrtimer_init :)
-It is ignored, kinda, since initial target cpu is picked as current.
-Then during hrtimer_start the actual cpu will be selected.
-If it's called as hrtimer_start(,_PINNED); then the cpu will stay
-as it was during hrtimer_init.
-If hrtimer_start() is called without _PINNED the hrtimer algorithm can 
-migrate the timer to a more appropriate cpu depending on idle and no_hz. 
-See get_nohz_timer_target.
-In case of napi it's necessary to stay on the same cpu,
-so it's using _PINNED in hrtimer_init and in hrtimer_start.
-TCP is using pinned timers for compressed acks and pacing.
-I'm guessing it's done to improve performance. I suspect TCP doesn't
-need the timers pinned.
-All other _PINNED cases of hrtimer are similar to napi.
+This is technically a backwards incompatible change in behaviour,
+but I'm going to argue that it is very unlikely to break things,
+and likely to fix *far* more then it breaks.
 
-In bpf world we don't have a way to deterministically
-execute on a given cpu and the hrtimer infra won't give us such
-possibility.
+In no particular order, various reasons follow:
 
-We can potentailly hack it on top of it. Like
-bpf_timer_init(..., int cpu, ...)
-{
-  smp_call_function_single(cpu, rest_of_bpf_timer_init)
-}
+(a) I've long had a bug assigned to myself to debug a super rare kernel
+crash on Android Pixel phones which can (per stacktrace) be traced back
+to bpf clat ipv6 to ipv4 protocol conversion causing some sort of ugly
+failure much later on during transmit deep in the GSO engine, AFAICT
+precisely because of this change to gso_size, though I've never been able
+to manually reproduce it.
+I believe it may be related to the particular network offload support
+of attached usb ethernet dongle being used for tethering off of an
+IPv6-only cellular connection.  The reason might be we end up with more
+segments than max permitted, or with a gso packet with only one segment...
+(either way we break some assumption and hit a BUG_ON)
 
-rest_of_bpf_timer_init()
-{
-  hrtimer_init
-}
+(b) There is no check that the gso_size is > 20 when reducing it by 20,
+so we might end up with a negative (or underflowing) gso_size or
+a gso_size of 0.  This can't possibly be good.
+Indeed this is probably somehow exploitable (or at least can result
+in a kernel crash) by delivering crafted packets and perhaps triggering
+an infinite loop or a divide by zero...
+As a reminder: gso_size (mss) is related to mtu, but not directly
+derived from it: gso_size/mss may be significantly smaller then
+one would get by deriving from local mtu.  And on some nics (which
+do loose mtu checking on receive, it may even potentially be larger,
+for example my work pc with 1500 mtu can receive 1520 byte frames
+[and sometimes does due to bugs in a vendor plat46 implementation]).
+Indeed even just going from 21 to 1 is potentially problematic because
+it increases the number of segments by a factor of 21 (think DoS,
+or some other crash due to too many segments).
 
-But there are lots of things to consider with such api.
-It feels like two building blocks collapsed into one already.
-If we do anything like this we should expose smp_call_function_single()
-directly as bpf helper instead of side effect of bpf_timer.
+(c) It's always safe to not increase the gso_size, because it doesn't
+result in the max packet size increasing.  So the skb_increase_gso_size()
+call was always unnecessary for correctness (and outright undesirable, see
+later).  As such the only part which is potentially dangerous (ie. could
+cause backwards compatibility issues) is the removal of the
+skb_decrease_gso_size() call.
 
-> > > Also is there a chance for timer callback to be a sleepable BPF (sub-)program?
-> >
-> > Eventually yes. The whole bpf program can be sleepable, but the
-> > timer callback cannot be. So the verifier would need to
-> > treat different functions of the bpf prog as sleepable and non-sleepable.
-> > Easy enough to implement. Eventually.
-> 
-> Ok, so non-sleepable callback is hrtimer's implementation restriction
-> due to softirq, right? Too bad, of course, I can imagine sleepable
-> callbacks being useful, but it's not a deal breaker.
+(d) If the packets are ultimately destined to the local device, then
+there is absolutely no benefit to playing around with gso_size.
+It only matters if the packets will egress the device.  ie. we're
+either forwarding, or transmitting from the device.
 
-Sleeping in softirq is no-go. The timer callback will be always
-non-sleepable. If it would need to do extra work that requires sleeping
-we'd need to create bpf kthreads similar to io_uring worker threads.
-bpf program would have to ask for such things explicitly.
+(e) This logic only triggers for packets which are GSO.  It does not
+trigger for skbs which are not GSO.  It will not convert a non-GSO mtu
+sized packet into a GSO packet (and you don't even know what the mtu is,
+so you can't even fix it).  As such your transmit path must *already* be
+able to handle an mtu 20 bytes larger then your receive path (for ipv4
+to ipv6 translation) - and indeed 28 bytes larger due to ipv4 fragments.
+Thus removing the skb_decrease_gso_size() call doesn't actually increase
+the size of the packets your transmit side must be able to handle.
+ie. to handle non-GSO max-mtu packets, the ipv4/ipv6 device/route mtus
+must already be set correctly.  Since for example with an ipv4 egress mtu
+of 1500, ipv4 to ipv6 translation will already build 1520 byte ipv6 frames,
+so you need a 1520 byte device mtu.  This means if your ipv6 device's
+egress mtu is 1280, your ipv4 route must be 1260 (and actually 1252,
+because of the need to handle fragments).  This is to handle normal non-GSO
+packets.  Thus the reduction is simply not needed for GSO packets,
+because when they're correctly built, they will already be the right size.
 
-> > The flags argument in bpf_timer_init() will eventually
-> > be able to specify monotonic vs boottime and
-> > relative vs absolute expiry.
-> 
-> Yeah, I was thinking about relative vs absolute expiry case, but we
-> never know what kind of extensibility we'll need, so there might be
-> something that we don't see as a possibility yet. Seems simple enough
-> to reserve flags argument here (we usually do not regret adding flags
-> argument for extensibility), but I'm fine either way.
+(f) TSO/GSO should be able to exactly undo GRO: the number of packets
+(TCP segments) should not be modified, so that TCP's mss counting works
+correctly (this matters for congestion control).
+If protocol conversion changes the gso_size, then the number of TCP segments
+may increase or decrease.  Packet loss after protocol conversion can result
+in partial loss of mss segments that the sender sent.  How's the sending
+TCP stack going to react to receiving ACKs/SACKs in the middle of the
+segments it sent?
 
-We cannot predict the future of bpf_timer, but the way it's going
-so far there is a certainty that bpf_timer_start will be limited by
-what hrtimer_start can do.
-If we ever decide to use jiffy based timer as well they most likely
-going to be represented as new set of helpers.
-May be both hidden in the same 'struct bpf_timer',
-but helper names would have to be different not to confuse users.
+(g) skb_{decrease,increase}_gso_size() are already no-ops for GSO_BY_FRAGS
+case (besides triggering WARN_ON_ONCE). This means you already cannot
+guarantee that gso_size (and thus resulting packet mtu) is changed.
+ie. you must assume it won't be changed.
 
-> > Currently thinking to do cmpxchg in bpf_timer_start() and
-> > bpf_timer_cancel*() similar to bpf_timer_init() to address it.
-> > Kinda sucks to use atomic ops to address a race by deliberately
-> > malicious prog. bpf prog writers cannot just stumble on such race.
-> 
-> Why deliberately malicious? Just sufficiently sloppy or even just a
-> clever concurrent BPF program. 
+(h) changing gso_size is outright buggy for UDP GSO packets, where framing
+matters (I believe that's also the case for SCTP, but it's already excluded
+by [g]).  So the only remaining case is TCP, which also doesn't want it
+(see [f]).
 
-because hrtimers internals don't have protection for concurrent access.
-It's assumed by kernel apis that the same hrtimer is not concurrently
-accessed on multiple cpus.
-Like doing hrtimer_init in parallel will certainly crash the kernel.
-That's why bpf_timer_init() has extra cmpxchg safety builtin.
-bpf_timer_start and bpf_timer_cancel don't have extra safety,
-because the first thing hrtimer_start and hrtimer_cancel do
-is they grab the lock, so everything will be safe even in bpf
-programs try to access the same timer in parallel.
+(i) see also the reasoning on the previous attempt at fixing this
+(commit fa7b83bf3b156c767f3e4a25bbf3817b08f3ff8e) which shows
+that the current behaviour causes TCP packet loss:
 
-The malicicous part comes when bpf prog does bpf_timer_start
-on the pointer from a deleted map element. It's clearly a bug.
-Concurrent bpf_timer_start and bpf_timer_cancel is ok to do
-and it's safe.
-The malicious situation is concurrent lookup+bpf_timer_start
-with parallel delete of that element.
-It's wrong thing to do with map element regardless of timers.
+  In the forwarding path GRO -> BPF 6 to 4 -> GSO for TCP traffic, the
+  coalesced packet payload can be > MSS, but < MSS + 20.
 
-> So your idea is to cmpxchg() to NULL while bpf_timer_start() or
-> bpf_timer_cancel() works with the timer? Wouldn't that cause
-> bpf_timer_init() believe that that timer is not yet initialized and
-> not return -EBUSY. Granted that's a corner-case race, but still.
+  bpf_skb_proto_6_to_4() will upgrade the MSS and it can be > the payload
+  length. After then tcp_gso_segment checks for the payload length if it
+  is <= MSS. The condition is causing the packet to be dropped.
 
-Not following.
-bpf prog should do bpf_timer_init only once.
-bpf_timer_init after bpf_timer_cancel is a wrong usage.
-hrtimer api doesn't have any protection for such use.
-while bpf_timer_init returns EBUSY.
-2nd bpf_timer_init is just a misuse of bpf_timer api.
+  tcp_gso_segment():
+    [...]
+    mss = skb_shinfo(skb)->gso_size;
+    if (unlikely(skb->len <= mss)) goto out;
+    [...]
 
-> What if the spinlock was moved out of struct bpf_hrtimer into struct
-> bpf_timer instead? Then all that cmpxchg and READ_ONCE/WRITE_ONCE
-> could go away and be more "obviously correct" and race-free? We'd just
-> need to make sure that the size of that spinlock struct doesn't change
-> depending on kernel config (so no diagnostics should be embedded).
+Thus changing the gso_size is simply a very bad idea.
+Increasing is unnecessary and buggy, and decreasing can go negative.
 
-We already tackled that concern with bpf_spin_lock.
-So moving the lock into 'struct bpf_timer' is easy and it's a great idea.
-I suspect it should simplify the code. Thanks!
+Cc: Dongseok Yi <dseok.yi@samsung.com>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Willem de Bruijn <willemb@google.com>
+Fixes: 6578171a7ff0 ("bpf: add bpf_skb_change_proto helper")
+Signed-off-by: Maciej Żenczykowski <maze@google.com>
+---
+ net/core/filter.c | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 04848de3e058..953b6c31b803 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -3263,8 +3263,6 @@ static int bpf_skb_proto_4_to_6(struct sk_buff *skb)
+ 			shinfo->gso_type |=  SKB_GSO_TCPV6;
+ 		}
+ 
+-		/* Due to IPv6 header, MSS needs to be downgraded. */
+-		skb_decrease_gso_size(shinfo, len_diff);
+ 		/* Header must be checked, and gso_segs recomputed. */
+ 		shinfo->gso_type |= SKB_GSO_DODGY;
+ 		shinfo->gso_segs = 0;
+@@ -3304,8 +3302,6 @@ static int bpf_skb_proto_6_to_4(struct sk_buff *skb)
+ 			shinfo->gso_type |=  SKB_GSO_TCPV4;
+ 		}
+ 
+-		/* Due to IPv4 header, MSS can be upgraded. */
+-		skb_increase_gso_size(shinfo, len_diff);
+ 		/* Header must be checked, and gso_segs recomputed. */
+ 		shinfo->gso_type |= SKB_GSO_DODGY;
+ 		shinfo->gso_segs = 0;
+-- 
+2.32.0.rc1.229.g3e70b5a671-goog
+
