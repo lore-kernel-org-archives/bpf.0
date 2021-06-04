@@ -2,64 +2,59 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 04476C4708F
-	for <bpf@archiver.kernel.org>; Fri,  4 Jun 2021 06:33:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33535C47083
+	for <bpf@archiver.kernel.org>; Fri,  4 Jun 2021 06:33:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DDB2F613D2
-	for <bpf@archiver.kernel.org>; Fri,  4 Jun 2021 06:33:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0D69861412
+	for <bpf@archiver.kernel.org>; Fri,  4 Jun 2021 06:33:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbhFDGeq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 4 Jun 2021 02:34:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56162 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230099AbhFDGeq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 4 Jun 2021 02:34:46 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A86CC06174A;
-        Thu,  3 Jun 2021 23:32:45 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id pi6-20020a17090b1e46b029015cec51d7cdso5265920pjb.5;
-        Thu, 03 Jun 2021 23:32:45 -0700 (PDT)
+        id S230099AbhFDGfJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 4 Jun 2021 02:35:09 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:45030 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229844AbhFDGfI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 4 Jun 2021 02:35:08 -0400
+Received: by mail-pf1-f196.google.com with SMTP id u18so6714759pfk.11;
+        Thu, 03 Jun 2021 23:33:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=NuSM2nw7OiKj22dYy2bWK9naZDCqqZDjU97+LGfZFPw=;
-        b=ueuAgrQ18VVl2Qq5rgFaUbVpkEIKoKoQU0RXUJ6CrFoGpV4iE4a6V603wE+spP0gAM
-         M2jAVttKvr8xllW1uaK6QHnHFMoSmzc6/T0ezy4+e1DSMDYDmflTpoLqZFbH8eTj/NCC
-         1htQWPIGHl2mDLYSf6rpiLlZUhTXsGO3jJFiDnpZ0mwbGMkJVQbhrqmnNnv/RwVYIBHx
-         fHqVLl2I4lN4OHTMrIzemHNgk2HF144BFGO/To4SEnGOrDzBTlwe0Y8PyhegmbswV61I
-         FXDoFDKdYsRpuPzDDjMGQSVIOmFaYQMAuSD1LCtPq2LFh7xzsrPHbwEcGYA6BWaQqzsv
-         2ryA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=j7klZjcVBcs6h9HZr2YYg5JL8UCcJh1ymVzboKFNgMY=;
+        b=ub1Ve3CQiSs1uUlbxYzDX5xp3v3WY7ygxztBNK/yIZr8JT6kgkkW+SwIfMLnBrRiI9
+         xELIHzmVWgWV1whadZ5PUhiqUVf70ZgQcZSxt69vLn/YdvWDeOXk6LzRi0nS6gawomdM
+         JRESVREE2+VILd0dN6Lm5MWNZjHhm9ogSXinx9g5eIT61yRRf6x16srFmXKdBb/gcg23
+         SMBhkSXMosp/Biuu4+6g3dHeLpJ3oNxat6N0heINk/q/5lqfPscVHzO9urjZXGc8OS3S
+         99ree/L6F1TdtKm/w7IcTpYiFlc8pyUvvJatzIbynVsSyM3XlHG/0mR1YB5sbCralJ1b
+         vxUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=NuSM2nw7OiKj22dYy2bWK9naZDCqqZDjU97+LGfZFPw=;
-        b=fT5P/DMtDZ+0qG20Rm4pKi9Q6yYXispaTra6WjzPRHv8pa2GPIyOIBRtlIWZTrpI1S
-         qgWKc1kHSbHdSSLTmxhRPr1Rs103zUzJ6tiHPqsn1++hDgtZn41nmGWYPiz9NhsIFK6E
-         3CE0RUkAtGfgn+Ipsw2qeSYG4Z/dtOtEeKPl1+DLukROnjdFoIL24vhDUe4uKxIFMzx+
-         oh4dKUn5q1cKA0NHatOO2V6aQBBS3FI3webjcv1Am0FQ0lN8hNr7K7H/9m77UQg9RYlD
-         45qYAnjpHk5d3SJyqGb6/nX1KJ03BmUbfeDp7iDJ/y1Gq+SeQ0yG2S/o9jvqvb4VZLrw
-         qBWQ==
-X-Gm-Message-State: AOAM53018naqclVV6hvpCEPNoUVPEbxejynbihCTdLIY0SSwYNQQNBW6
-        fzJtGY6/aBCT+bKlzcwBlrRNEh60CL8=
-X-Google-Smtp-Source: ABdhPJz9Y0Cw8JfLETsNeGJA/D2nVvZCGknAod11degO//jBupPGoSKF8HvW8j5Naic5UnP9XtB8Ng==
-X-Received: by 2002:a17:902:ea0f:b029:10d:6029:780f with SMTP id s15-20020a170902ea0fb029010d6029780fmr2792672plg.66.1622788364507;
-        Thu, 03 Jun 2021 23:32:44 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=j7klZjcVBcs6h9HZr2YYg5JL8UCcJh1ymVzboKFNgMY=;
+        b=nruTS6cf1BaC/gZQDvZQ9xNNVCPkWVhtL6gMVeyh9Ab5V0h7fo9pWNn79uT6I6x3DT
+         Pauy1nEFOFlWEZngwaLtjeqjIdkViv3jyNZJGP+VOXb8oMFyXUL25MV8RIZ8JGrLxNjn
+         Trb7Piewsw4cSMZFTR6TOf9KeN3yUqilmfvuA0JKlFRL6NK34WNRA4e23m4ndBnR9kNh
+         YDNB12QU9QEEUafntDjm90fDdSDK41+nMp910XgrzkFOj6NAceL5bJIobpT28FpiU26m
+         aJGhoSgUenmS/KsU85m/nQNCK7QjDIDlt+1G+66c76lD8VUSDVz/oo1ouyCg/FYLumEG
+         jIkA==
+X-Gm-Message-State: AOAM532lujxVekfoU26BrJsYSB/JLkbQ58b+T6l9/Xvh5kiuZULZnLOE
+        wkSfMfmVgqSdhcoPxcKcTL5cIr7ysO0=
+X-Google-Smtp-Source: ABdhPJyDIVpwDzckUlBAmaiaX9oxLwRC6UNctHsr8zaM1cLKWINXboOBEexdZPgEoUpN0SxJm7s0+g==
+X-Received: by 2002:a63:7204:: with SMTP id n4mr3485828pgc.78.1622788342402;
+        Thu, 03 Jun 2021 23:32:22 -0700 (PDT)
 Received: from localhost ([2402:3a80:11cb:b599:c759:2079:3ef5:1764])
-        by smtp.gmail.com with ESMTPSA id ca6sm3964707pjb.21.2021.06.03.23.32.43
+        by smtp.gmail.com with ESMTPSA id i8sm3783026pjs.54.2021.06.03.23.32.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Jun 2021 23:32:44 -0700 (PDT)
+        Thu, 03 Jun 2021 23:32:21 -0700 (PDT)
 From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To:     bpf@vger.kernel.org
 Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
@@ -67,13 +62,12 @@ Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
         Vlad Buslov <vladbu@nvidia.com>,
         Cong Wang <xiyou.wangcong@gmail.com>,
         Jesper Dangaard Brouer <brouer@redhat.com>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
         netdev@vger.kernel.org
-Subject: [PATCH bpf-next v2 6/7] libbpf: add bpf_link based TC-BPF management API
-Date:   Fri,  4 Jun 2021 12:01:15 +0530
-Message-Id: <20210604063116.234316-7-memxor@gmail.com>
+Subject: [PATCH bpf-next v2 0/7] Add bpf_link based TC-BPF API
+Date:   Fri,  4 Jun 2021 12:01:09 +0530
+Message-Id: <20210604063116.234316-1-memxor@gmail.com>
 X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210604063116.234316-1-memxor@gmail.com>
-References: <20210604063116.234316-1-memxor@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -81,234 +75,137 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This adds userspace TC-BPF management API based on bpf_link.
+This is the second (non-RFC) version.
 
-Reviewed-by: Toke Høiland-Jørgensen <toke@redhat.com>.
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
----
- tools/lib/bpf/bpf.c      |  8 +++++-
- tools/lib/bpf/bpf.h      |  8 +++++-
- tools/lib/bpf/libbpf.c   | 59 ++++++++++++++++++++++++++++++++++++++--
- tools/lib/bpf/libbpf.h   | 17 ++++++++++++
- tools/lib/bpf/libbpf.map |  1 +
- tools/lib/bpf/netlink.c  |  5 ++--
- tools/lib/bpf/netlink.h  |  8 ++++++
- 7 files changed, 100 insertions(+), 6 deletions(-)
+This adds a bpf_link path to create TC filters tied to cls_bpf classifier, and
+introduces fd based ownership for such TC filters. Netlink cannot delete or
+replace such filters, but the bpf_link is severed on indirect destruction of the
+filter (backing qdisc being deleted, or chain being flushed, etc.). To ensure
+that filters remain attached beyond process lifetime, the usual bpf_link fd
+pinning approach can be used.
+
+The individual patches contain more details and comments, but the overall kernel
+API and libbpf helper mirrors the semantics of the netlink based TC-BPF API
+merged recently. This means that we start by always setting direct action mode,
+protocol to ETH_P_ALL, chain_index as 0, etc. If there is a need for more
+options in the future, they can be easily exposed through the bpf_link API in
+the future.
+
+Patch 1 refactors cls_bpf change function to extract two helpers that will be
+reused in bpf_link creation.
+
+Patch 2 exports some bpf_link management functions to modules. This is needed
+because our bpf_link object is tied to the cls_bpf_prog object. Tying it to
+tcf_proto would be weird, because the update path has to replace offloaded bpf
+prog, which happens using internal cls_bpf helpers, and would in general be more
+code to abstract over an operation that is unlikely to be implemented for other
+filter types.
+
+Patch 3 adds the main bpf_link API. A function in cls_api takes care of
+obtaining block reference, creating the filter object, and then calls the
+bpf_link_change tcf_proto op (only supported by cls_bpf) that returns a fd after
+setting up the internal structures. An optimization is made to not keep around
+resources for extended actions, which is explained in a code comment as it wasn't
+immediately obvious.
+
+Patch 4 adds an update path for bpf_link. Since bpf_link_update only supports
+replacing the bpf_prog, we can skip tc filter's change path by reusing the
+filter object but swapping its bpf_prog. This takes care of replacing the
+offloaded prog as well (if that fails, update is aborted). So far however,
+tcf_classify could do normal load (possibly torn) as the cls_bpf_prog->filter
+would never be modified concurrently. This is no longer true, and to not
+penalize the classify hot path, we also cannot impose serialization around
+its load. Hence the load is changed to READ_ONCE, so that the pointer value is
+always consistent. Due to invocation in a RCU critical section, the lifetime of
+the prog is guaranteed for the duration of the call.
+
+Patch 5, 6 take care of updating the userspace bits and add a bpf_link returning
+function to libbpf.
+
+Patch 7 adds a selftest that exercises all possible problematic interactions
+that I could think of.
+
+Design:
+
+This is where in the object hierarchy our bpf_link object is attached.
+
+                                                                            ┌─────┐
+                                                                            │     │
+                                                                            │ BPF │
+                                                                            program
+                                                                            │     │
+                                                                            └──▲──┘
+                                                      ┌───────┐                │
+                                                      │       │         ┌──────┴───────┐
+                                                      │  mod  ├─────────► cls_bpf_prog │
+┌────────────────┐                                    │cls_bpf│         └────┬───▲─────┘
+│    tcf_block   │                                    │       │              │   │
+└────────┬───────┘                                    └───▲───┘              │   │
+         │          ┌─────────────┐                       │                ┌─▼───┴──┐
+         └──────────►  tcf_chain  │                       │                │bpf_link│
+                    └───────┬─────┘                       │                └────────┘
+                            │          ┌─────────────┐    │
+                            └──────────►  tcf_proto  ├────┘
+                                       └─────────────┘
+
+The bpf_link is detached on destruction of the cls_bpf_prog.  Doing it this way
+allows us to implement update in a lightweight manner without having to recreate
+a new filter, where we can just replace the BPF prog attached to cls_bpf_prog.
+
+The other way to do it would be to link the bpf_link to tcf_proto, there are
+numerous downsides to this:
+
+1. All filters have to embed the pointer even though they won't be using it when
+cls_bpf is compiled in.
+2. This probably won't make sense to be extended to other filter types anyway.
+3. We aren't able to optimize the update case without adding another bpf_link
+specific update operation to tcf_proto ops.
+
+The downside with tying this to the module is having to export bpf_link
+management functions and introducing a tcf_proto op. Hopefully the cost of
+another operation func pointer is not big enough (as there is only one ops
+struct per module).
+
+Changelog:
+----------
+v1 (RFC) -> v2
+v1: https://lore.kernel.org/bpf/20210528195946.2375109-1-memxor@gmail.com
+
+ * Avoid overwriting other members of union in bpf_attr (Andrii)
+ * Set link to NULL after bpf_link_cleanup to avoid double free (Andrii)
+ * Use __be16 to store the result of htons (Kernel Test Robot)
+ * Make assignment of tcf_exts::net conditional on CONFIG_NET_CLS_ACT
+   (Kernel Test Robot)
+
+Kumar Kartikeya Dwivedi (7):
+  net: sched: refactor cls_bpf creation code
+  bpf: export bpf_link functions for modules
+  net: sched: add bpf_link API for bpf classifier
+  net: sched: add lightweight update path for cls_bpf
+  tools: bpf.h: sync with kernel sources
+  libbpf: add bpf_link based TC-BPF management API
+  libbpf: add selftest for bpf_link based TC-BPF management API
+
+ include/linux/bpf_types.h                     |   3 +
+ include/net/pkt_cls.h                         |  13 +
+ include/net/sch_generic.h                     |   6 +-
+ include/uapi/linux/bpf.h                      |  15 +
+ kernel/bpf/syscall.c                          |  14 +-
+ net/sched/cls_api.c                           | 139 ++++++-
+ net/sched/cls_bpf.c                           | 389 ++++++++++++++++--
+ tools/include/uapi/linux/bpf.h                |  15 +
+ tools/lib/bpf/bpf.c                           |   8 +-
+ tools/lib/bpf/bpf.h                           |   8 +-
+ tools/lib/bpf/libbpf.c                        |  59 ++-
+ tools/lib/bpf/libbpf.h                        |  17 +
+ tools/lib/bpf/libbpf.map                      |   1 +
+ tools/lib/bpf/netlink.c                       |   5 +-
+ tools/lib/bpf/netlink.h                       |   8 +
+ .../selftests/bpf/prog_tests/tc_bpf_link.c    | 285 +++++++++++++
+ 16 files changed, 940 insertions(+), 45 deletions(-)
  create mode 100644 tools/lib/bpf/netlink.h
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/tc_bpf_link.c
 
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index 86dcac44f32f..bebccea9bfd7 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -28,6 +28,7 @@
- #include <asm/unistd.h>
- #include <errno.h>
- #include <linux/bpf.h>
-+#include <arpa/inet.h>
- #include "bpf.h"
- #include "libbpf.h"
- #include "libbpf_internal.h"
-@@ -693,7 +694,12 @@ int bpf_link_create(int prog_fd, int target_fd,
- 	attr.link_create.attach_type = attach_type;
- 	attr.link_create.flags = OPTS_GET(opts, flags, 0);
- 
--	if (iter_info_len) {
-+	if (attach_type == BPF_TC) {
-+		attr.link_create.tc.parent = OPTS_GET(opts, tc.parent, 0);
-+		attr.link_create.tc.handle = OPTS_GET(opts, tc.handle, 0);
-+		attr.link_create.tc.priority = OPTS_GET(opts, tc.priority, 0);
-+		attr.link_create.tc.gen_flags = OPTS_GET(opts, tc.gen_flags, 0);
-+	} else if (iter_info_len) {
- 		attr.link_create.iter_info =
- 			ptr_to_u64(OPTS_GET(opts, iter_info, (void *)0));
- 		attr.link_create.iter_info_len = iter_info_len;
-diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index 4f758f8f50cd..f2178309e9ea 100644
---- a/tools/lib/bpf/bpf.h
-+++ b/tools/lib/bpf/bpf.h
-@@ -177,8 +177,14 @@ struct bpf_link_create_opts {
- 	union bpf_iter_link_info *iter_info;
- 	__u32 iter_info_len;
- 	__u32 target_btf_id;
-+	struct {
-+		__u32 parent;
-+		__u32 handle;
-+		__u32 priority;
-+		__u32 gen_flags;
-+	} tc;
- };
--#define bpf_link_create_opts__last_field target_btf_id
-+#define bpf_link_create_opts__last_field tc.gen_flags
- 
- LIBBPF_API int bpf_link_create(int prog_fd, int target_fd,
- 			       enum bpf_attach_type attach_type,
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 1c4e20e75237..7809536980b1 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -55,6 +55,7 @@
- #include "libbpf_internal.h"
- #include "hashmap.h"
- #include "bpf_gen_internal.h"
-+#include "netlink.h"
- 
- #ifndef BPF_FS_MAGIC
- #define BPF_FS_MAGIC		0xcafe4a11
-@@ -7185,7 +7186,7 @@ static int bpf_object__collect_relos(struct bpf_object *obj)
- 
- 	for (i = 0; i < obj->nr_programs; i++) {
- 		struct bpf_program *p = &obj->programs[i];
--		
-+
- 		if (!p->nr_reloc)
- 			continue;
- 
-@@ -10005,7 +10006,7 @@ struct bpf_link {
- int bpf_link__update_program(struct bpf_link *link, struct bpf_program *prog)
- {
- 	int ret;
--	
-+
- 	ret = bpf_link_update(bpf_link__fd(link), bpf_program__fd(prog), NULL);
- 	return libbpf_err_errno(ret);
- }
-@@ -10613,6 +10614,60 @@ struct bpf_link *bpf_program__attach_xdp(struct bpf_program *prog, int ifindex)
- 	return bpf_program__attach_fd(prog, ifindex, 0, "xdp");
- }
- 
-+struct bpf_link *bpf_program__attach_tc(struct bpf_program *prog,
-+					const struct bpf_tc_hook *hook,
-+					const struct bpf_tc_link_opts *opts)
-+{
-+	DECLARE_LIBBPF_OPTS(bpf_link_create_opts, lopts, 0);
-+	char errmsg[STRERR_BUFSIZE];
-+	int prog_fd, link_fd, ret;
-+	struct bpf_link *link;
-+	__u32 parent;
-+
-+	if (!hook || !OPTS_VALID(hook, bpf_tc_hook) ||
-+	    !OPTS_VALID(opts, bpf_tc_link_opts))
-+		return ERR_PTR(-EINVAL);
-+
-+	if (OPTS_GET(hook, ifindex, 0) <= 0 ||
-+	    OPTS_GET(opts, priority, 0) > UINT16_MAX)
-+		return ERR_PTR(-EINVAL);
-+
-+	parent = OPTS_GET(hook, parent, 0);
-+
-+	ret = tc_get_tcm_parent(OPTS_GET(hook, attach_point, 0),
-+				&parent);
-+	if (ret < 0)
-+		return ERR_PTR(ret);
-+
-+	lopts.tc.parent = parent;
-+	lopts.tc.handle = OPTS_GET(opts, handle, 0);
-+	lopts.tc.priority = OPTS_GET(opts, priority, 0);
-+	lopts.tc.gen_flags = OPTS_GET(opts, gen_flags, 0);
-+
-+	prog_fd = bpf_program__fd(prog);
-+	if (prog_fd < 0) {
-+		pr_warn("prog '%s': can't attach before loaded\n", prog->name);
-+		return ERR_PTR(-EINVAL);
-+	}
-+
-+	link = calloc(1, sizeof(*link));
-+	if (!link)
-+		return ERR_PTR(-ENOMEM);
-+	link->detach = &bpf_link__detach_fd;
-+
-+	link_fd = bpf_link_create(prog_fd, OPTS_GET(hook, ifindex, 0), BPF_TC, &lopts);
-+	if (link_fd < 0) {
-+		link_fd = -errno;
-+		free(link);
-+		pr_warn("prog '%s': failed to attach tc filter: %s\n",
-+			prog->name, libbpf_strerror_r(link_fd, errmsg, sizeof(errmsg)));
-+		return ERR_PTR(link_fd);
-+	}
-+	link->fd = link_fd;
-+
-+	return link;
-+}
-+
- struct bpf_link *bpf_program__attach_freplace(struct bpf_program *prog,
- 					      int target_fd,
- 					      const char *attach_func_name)
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 6e61342ba56c..284a446c6513 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -282,6 +282,23 @@ LIBBPF_API struct bpf_link *
- bpf_program__attach_iter(struct bpf_program *prog,
- 			 const struct bpf_iter_attach_opts *opts);
- 
-+/* TC bpf_link related API */
-+struct bpf_tc_hook;
-+
-+struct bpf_tc_link_opts {
-+	size_t sz;
-+	__u32 handle;
-+	__u32 priority;
-+	__u32 gen_flags;
-+	size_t :0;
-+};
-+#define bpf_tc_link_opts__last_field gen_flags
-+
-+LIBBPF_API struct bpf_link *
-+bpf_program__attach_tc(struct bpf_program *prog,
-+		       const struct bpf_tc_hook *hook,
-+		       const struct bpf_tc_link_opts *opts);
-+
- struct bpf_insn;
- 
- /*
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 944c99d1ded3..5aa2e62b9fc2 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -373,5 +373,6 @@ LIBBPF_0.5.0 {
- 		bpf_map__initial_value;
- 		bpf_map_lookup_and_delete_elem_flags;
- 		bpf_object__gen_loader;
-+		bpf_program__attach_tc;
- 		libbpf_set_strict_mode;
- } LIBBPF_0.4.0;
-diff --git a/tools/lib/bpf/netlink.c b/tools/lib/bpf/netlink.c
-index d743c8721aa7..b7ac36fc9c1a 100644
---- a/tools/lib/bpf/netlink.c
-+++ b/tools/lib/bpf/netlink.c
-@@ -17,6 +17,7 @@
- #include "libbpf.h"
- #include "libbpf_internal.h"
- #include "nlattr.h"
-+#include "netlink.h"
- 
- #ifndef SOL_NETLINK
- #define SOL_NETLINK 270
-@@ -405,8 +406,8 @@ static int attach_point_to_config(struct bpf_tc_hook *hook,
- 	}
- }
- 
--static int tc_get_tcm_parent(enum bpf_tc_attach_point attach_point,
--			     __u32 *parent)
-+int tc_get_tcm_parent(enum bpf_tc_attach_point attach_point,
-+		      __u32 *parent)
- {
- 	switch (attach_point) {
- 	case BPF_TC_INGRESS:
-diff --git a/tools/lib/bpf/netlink.h b/tools/lib/bpf/netlink.h
-new file mode 100644
-index 000000000000..c89133d56eb4
---- /dev/null
-+++ b/tools/lib/bpf/netlink.h
-@@ -0,0 +1,8 @@
-+// SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
-+#pragma once
-+
-+#include <linux/types.h>
-+#include "libbpf.h"
-+
-+int tc_get_tcm_parent(enum bpf_tc_attach_point attach_point,
-+		      __u32 *parent);
 -- 
 2.31.1
 
