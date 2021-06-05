@@ -6,30 +6,30 @@ X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BC3BC4743E
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69E8DC47082
 	for <bpf@archiver.kernel.org>; Sat,  5 Jun 2021 11:11:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8750961354
+	by mail.kernel.org (Postfix) with ESMTP id 551FD61242
 	for <bpf@archiver.kernel.org>; Sat,  5 Jun 2021 11:11:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230197AbhFELMs convert rfc822-to-8bit (ORCPT
+        id S230222AbhFELMs convert rfc822-to-8bit (ORCPT
         <rfc822;bpf@archiver.kernel.org>); Sat, 5 Jun 2021 07:12:48 -0400
-Received: from us-smtp-delivery-44.mimecast.com ([205.139.111.44]:31357 "EHLO
+Received: from us-smtp-delivery-44.mimecast.com ([205.139.111.44]:35529 "EHLO
         us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230207AbhFELMp (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sat, 5 Jun 2021 07:12:45 -0400
+        by vger.kernel.org with ESMTP id S230197AbhFELMo (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sat, 5 Jun 2021 07:12:44 -0400
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-496-86K5U44kNGybDMapupeB1w-1; Sat, 05 Jun 2021 07:10:53 -0400
-X-MC-Unique: 86K5U44kNGybDMapupeB1w-1
+ us-mta-476-XAGNN3y7OmmpP6l2y-Mz6Q-1; Sat, 05 Jun 2021 07:10:47 -0400
+X-MC-Unique: XAGNN3y7OmmpP6l2y-Mz6Q-1
 Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id CAC9A8015F8;
-        Sat,  5 Jun 2021 11:10:51 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9DFBF1927800;
+        Sat,  5 Jun 2021 11:10:45 +0000 (UTC)
 Received: from krava.cust.in.nbox.cz (unknown [10.40.192.14])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 107F1614FD;
-        Sat,  5 Jun 2021 11:10:48 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id EC6DA614FD;
+        Sat,  5 Jun 2021 11:10:42 +0000 (UTC)
 From:   Jiri Olsa <jolsa@kernel.org>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -41,9 +41,9 @@ Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@chromium.org>, Daniel Xu <dxu@dxuuu.xyz>,
         Viktor Malik <vmalik@redhat.com>
-Subject: [PATCH 04/19] tracing: Add trampoline/graph selftest
-Date:   Sat,  5 Jun 2021 13:10:19 +0200
-Message-Id: <20210605111034.1810858-5-jolsa@kernel.org>
+Subject: [PATCH 02/19] x86/ftrace: Remove fault protection code in prepare_ftrace_return
+Date:   Sat,  5 Jun 2021 13:10:17 +0200
+Message-Id: <20210605111034.1810858-3-jolsa@kernel.org>
 In-Reply-To: <20210605111034.1810858-1-jolsa@kernel.org>
 References: <20210605111034.1810858-1-jolsa@kernel.org>
 MIME-Version: 1.0
@@ -53,97 +53,84 @@ Authentication-Results: relay.mimecast.com;
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: kernel.org
 Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset=WINDOWS-1252
+Content-Type: text/plain; charset="US-ASCII"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Adding selftest for checking that direct trampoline can
-co-exist together with graph tracer on same function.
+From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
 
-This is supported for CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS
-config option, which is defined only for x86_64 for now.
+Removing the fault protection code when writing return_hooker
+to stack. As Steven noted:
 
+> That protection was there from the beginning due to being "paranoid",
+> considering ftrace was bricking network cards. But that protection
+> would not have even protected against that.
+
+Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- kernel/trace/trace_selftest.c | 49 ++++++++++++++++++++++++++++++++++-
- 1 file changed, 48 insertions(+), 1 deletion(-)
+ arch/x86/kernel/ftrace.c | 38 +++-----------------------------------
+ 1 file changed, 3 insertions(+), 35 deletions(-)
 
-diff --git a/kernel/trace/trace_selftest.c b/kernel/trace/trace_selftest.c
-index adf7ef194005..f8e55b949cdd 100644
---- a/kernel/trace/trace_selftest.c
-+++ b/kernel/trace/trace_selftest.c
-@@ -750,6 +750,8 @@ static struct fgraph_ops fgraph_ops __initdata  = {
- 	.retfunc		= &trace_graph_return,
- };
- 
-+noinline __noclone static void trace_direct_tramp(void) { }
-+
- /*
-  * Pretty much the same than for the function tracer from which the selftest
-  * has been borrowed.
-@@ -760,6 +762,7 @@ trace_selftest_startup_function_graph(struct tracer *trace,
+diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
+index 1b3ce3b4a2a2..c555624da989 100644
+--- a/arch/x86/kernel/ftrace.c
++++ b/arch/x86/kernel/ftrace.c
+@@ -625,12 +625,10 @@ int ftrace_disable_ftrace_graph_caller(void)
+  * Hook the return address and push it in the stack of return addrs
+  * in current thread info.
+  */
+-void prepare_ftrace_return(unsigned long self_addr, unsigned long *parent,
++void prepare_ftrace_return(unsigned long ip, unsigned long *parent,
+ 			   unsigned long frame_pointer)
  {
- 	int ret;
- 	unsigned long count;
-+	char *func_name __maybe_unused;
+ 	unsigned long return_hooker = (unsigned long)&return_to_handler;
+-	unsigned long old;
+-	int faulted;
  
- #ifdef CONFIG_DYNAMIC_FTRACE
- 	if (ftrace_filter_param) {
-@@ -808,8 +811,52 @@ trace_selftest_startup_function_graph(struct tracer *trace,
- 		goto out;
- 	}
+ 	/*
+ 	 * When resuming from suspend-to-ram, this function can be indirectly
+@@ -650,37 +648,7 @@ void prepare_ftrace_return(unsigned long self_addr, unsigned long *parent,
+ 	if (unlikely(atomic_read(&current->tracing_graph_pause)))
+ 		return;
  
--	/* Don't test dynamic tracing, the function tracer already did */
-+#ifdef CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS
-+	tracing_reset_online_cpus(&tr->array_buffer);
-+	set_graph_array(tr);
- 
-+	/*
-+	 * Some archs *cough*PowerPC*cough* add characters to the
-+	 * start of the function names. We simply put a '*' to
-+	 * accommodate them.
-+	 */
-+	func_name = "*" __stringify(DYN_FTRACE_TEST_NAME);
-+	ftrace_set_global_filter(func_name, strlen(func_name), 1);
-+
-+	/*
-+	 * Register direct function together with graph tracer
-+	 * and make sure we get graph trace.
-+	 */
-+	ret = register_ftrace_direct((unsigned long) DYN_FTRACE_TEST_NAME,
-+				     (unsigned long) trace_direct_tramp);
-+	if (ret)
-+		goto out;
-+
-+	ret = register_ftrace_graph(&fgraph_ops);
-+	if (ret) {
-+		warn_failed_init_tracer(trace, ret);
-+		goto out;
-+	}
-+
-+	DYN_FTRACE_TEST_NAME();
-+
-+	count = 0;
-+
-+	tracing_stop();
-+	/* check the trace buffer */
-+	ret = trace_test_buffer(&tr->array_buffer, &count);
-+
-+	unregister_ftrace_graph(&fgraph_ops);
-+
-+	tracing_start();
-+
-+	if (!ret && !count) {
-+		ret = -1;
-+		goto out;
-+	}
-+#endif
-+
-+	/* Don't test dynamic tracing, the function tracer already did */
- out:
- 	/* Stop it if we failed */
- 	if (ret)
+-	/*
+-	 * Protect against fault, even if it shouldn't
+-	 * happen. This tool is too much intrusive to
+-	 * ignore such a protection.
+-	 */
+-	asm volatile(
+-		"1: " _ASM_MOV " (%[parent]), %[old]\n"
+-		"2: " _ASM_MOV " %[return_hooker], (%[parent])\n"
+-		"   movl $0, %[faulted]\n"
+-		"3:\n"
+-
+-		".section .fixup, \"ax\"\n"
+-		"4: movl $1, %[faulted]\n"
+-		"   jmp 3b\n"
+-		".previous\n"
+-
+-		_ASM_EXTABLE(1b, 4b)
+-		_ASM_EXTABLE(2b, 4b)
+-
+-		: [old] "=&r" (old), [faulted] "=r" (faulted)
+-		: [parent] "r" (parent), [return_hooker] "r" (return_hooker)
+-		: "memory"
+-	);
+-
+-	if (unlikely(faulted)) {
+-		ftrace_graph_stop();
+-		WARN_ON(1);
+-		return;
+-	}
+-
+-	if (function_graph_enter(old, self_addr, frame_pointer, parent))
+-		*parent = old;
++	if (!function_graph_enter(*parent, ip, frame_pointer, parent))
++		*parent = return_hooker;
+ }
+ #endif /* CONFIG_FUNCTION_GRAPH_TRACER */
 -- 
 2.31.1
 
