@@ -2,122 +2,118 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F051C48BE6
-	for <bpf@archiver.kernel.org>; Tue,  8 Jun 2021 18:54:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6DD3C4743D
+	for <bpf@archiver.kernel.org>; Tue,  8 Jun 2021 18:54:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 890146147F
-	for <bpf@archiver.kernel.org>; Tue,  8 Jun 2021 18:54:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D22A8613B9
+	for <bpf@archiver.kernel.org>; Tue,  8 Jun 2021 18:54:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234719AbhFHS4I (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Jun 2021 14:56:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:21919 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236067AbhFHSx3 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 8 Jun 2021 14:53:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1623178296;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AteLOuehZrKRBifQp7t2eCpFqM5PYx89clHcr7jZONw=;
-        b=SYRC7H6s8gYPCdMgYIYEIzRutTM3CkbC2BEarWxO9ANEeztmh859tMYHHpKWQyequ33u+m
-        jYfUhcS5X/y9okjRI7aN3ai0LkxnrlFvb3/aeAte0Rkte5NbxdiGLHYRXH30UdY9iwsHXW
-        b6iyaMmiOgTIt1lxAeDBOYpvNzyjLyI=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-3-WXdMcdbxN8eSCRpoo4FlBw-1; Tue, 08 Jun 2021 14:51:31 -0400
-X-MC-Unique: WXdMcdbxN8eSCRpoo4FlBw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 93882107ACC7;
-        Tue,  8 Jun 2021 18:51:29 +0000 (UTC)
-Received: from krava (unknown [10.40.192.49])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 825C45C1C2;
-        Tue,  8 Jun 2021 18:51:26 +0000 (UTC)
-Date:   Tue, 8 Jun 2021 20:51:25 +0200
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+        id S236985AbhFHS4L (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Jun 2021 14:56:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32970 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236419AbhFHSyL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 8 Jun 2021 14:54:11 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1C5AC061145;
+        Tue,  8 Jun 2021 11:49:08 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id u7so11178516plq.4;
+        Tue, 08 Jun 2021 11:49:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=wL6KSwo0TwWeM3oDNEJHVYbpsiCDr8Co8+WhySeHKfg=;
+        b=FDEmou5ruDlz3H9qbrSR+MWOOgzpv/UHNnV9es24BzpMrVdIqoiYXItjNM+9eHqNBJ
+         OSJCOxJiSKy4lvxauFwNDbNYEyHA+PmzN4ebrjOfTJOOEci3hjhL2bDQTv7EC4oHbDyF
+         ESBXnombma1DAfc3MO+2K0vXaE8lcdjaZlv8YwDzGbXFKO2idY5x0GPkA5rO7G3vJniy
+         2cWnK7SJNMeQpovLVVGh2VpcxAq88CRoOLuAsGJN8EBzvVr/7Y5yz7x/LL9aOuY3LRjX
+         XDM5LPAUh/AGblSMghYCmaeq2Zngw8qyHJsi1ehZuedB6cGrpfIxAcYLGHe8k7jO+Q87
+         y0rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=wL6KSwo0TwWeM3oDNEJHVYbpsiCDr8Co8+WhySeHKfg=;
+        b=M6kHBJtK+aR0ElEgEOG8TrgfUQN/wp6a5abKZ0y/o4zV1025HNNyKQH+P8spJ/9tGB
+         HiYFHCz/vJcNAdgBqZsOtxbMH2hHlhKbSZLdxp6HmskVDMGaMkjnPFUyPJ6fmoURXU0Y
+         DNebK+xWlfjiP95dx0OUeaxLeE4Z3PWGTwqrz6n91YE2NvB1Tf9Iol4lrGJhzguEPhJO
+         nP8u/6XbpNoA6hw6Hh7iOiT2H1sNrX4GMZ7uIBRCHGqSjzL7Zf9zAFlIAl2SrYWs8VrZ
+         VEX1HRSbTrF4L9dfVlxqDd0kwU5lw1SSrg5tdIDdkobBSO06sJ8l6kVYSpLvsMkAw5M4
+         v+1w==
+X-Gm-Message-State: AOAM531pYQ13bQEDumbc1uG3DqnC6gGl9NWleZSKnskHjv6LkVI5/Pfz
+        erFJ/1l9ElLjxj1Wi1lIq3o=
+X-Google-Smtp-Source: ABdhPJwokHQva/lAebPiaJ11reZnpju3tMKp4zSxvTaq2jLbUBIoB/bMWyY+a9ICly8AxWULCjIU6w==
+X-Received: by 2002:a17:902:6501:b029:ef:8518:a25a with SMTP id b1-20020a1709026501b02900ef8518a25amr1108048plk.64.1623178148174;
+        Tue, 08 Jun 2021 11:49:08 -0700 (PDT)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::5:336e])
+        by smtp.gmail.com with ESMTPSA id y6sm15776988pjf.40.2021.06.08.11.49.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Jun 2021 11:49:07 -0700 (PDT)
+Date:   Tue, 8 Jun 2021 11:49:03 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Jiri Olsa <jolsa@redhat.com>
 Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andriin@fb.com>,
         "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@chromium.org>, Daniel Xu <dxu@dxuuu.xyz>,
         Viktor Malik <vmalik@redhat.com>
-Subject: Re: [PATCH 03/19] x86/ftrace: Make function graph use ftrace directly
-Message-ID: <YL+8LRsVndGdgOMF@krava>
+Subject: Re: [PATCH 13/19] bpf: Add support to link multi func tracing program
+Message-ID: <20210608184903.rgnv65jimekqugol@ast-mbp.dhcp.thefacebook.com>
 References: <20210605111034.1810858-1-jolsa@kernel.org>
- <20210605111034.1810858-4-jolsa@kernel.org>
- <CAEf4BzY5ngJz_=e2wnqG7yB996xdQAPCBfz3_4mB9P2N-1RoCw@mail.gmail.com>
+ <20210605111034.1810858-14-jolsa@kernel.org>
+ <CAADnVQJV+0SjqUrTw+3Y02tFedcAaPKJS-W8sQHw5YT4XUW0hQ@mail.gmail.com>
+ <YL+0HLQ9oSrNM7ip@krava>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAEf4BzY5ngJz_=e2wnqG7yB996xdQAPCBfz3_4mB9P2N-1RoCw@mail.gmail.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+In-Reply-To: <YL+0HLQ9oSrNM7ip@krava>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Jun 08, 2021 at 11:35:58AM -0700, Andrii Nakryiko wrote:
-
-SNIP
-
-> > diff --git a/kernel/trace/fgraph.c b/kernel/trace/fgraph.c
-> > index b8a0d1d564fb..58e96b45e9da 100644
-> > --- a/kernel/trace/fgraph.c
-> > +++ b/kernel/trace/fgraph.c
-> > @@ -115,6 +115,7 @@ int function_graph_enter(unsigned long ret, unsigned long func,
-> >  {
-> >         struct ftrace_graph_ent trace;
-> >
-> > +#ifndef CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS
-> >         /*
-> >          * Skip graph tracing if the return location is served by direct trampoline,
-> >          * since call sequence and return addresses are unpredictable anyway.
-> > @@ -124,6 +125,7 @@ int function_graph_enter(unsigned long ret, unsigned long func,
-> >         if (ftrace_direct_func_count &&
-> >             ftrace_find_rec_direct(ret - MCOUNT_INSN_SIZE))
-> >                 return -EBUSY;
-> > +#endif
-> >         trace.func = func;
-> >         trace.depth = ++current->curr_ret_depth;
-> >
-> > @@ -333,10 +335,10 @@ unsigned long ftrace_graph_ret_addr(struct task_struct *task, int *idx,
-> >  #endif /* HAVE_FUNCTION_GRAPH_RET_ADDR_PTR */
-> >
-> >  static struct ftrace_ops graph_ops = {
-> > -       .func                   = ftrace_stub,
-> > +       .func                   = ftrace_graph_func,
-> >         .flags                  = FTRACE_OPS_FL_INITIALIZED |
-> > -                                  FTRACE_OPS_FL_PID |
-> > -                                  FTRACE_OPS_FL_STUB,
-> > +                                  FTRACE_OPS_FL_PID
-> > +                                  FTRACE_OPS_GRAPH_STUB,
+On Tue, Jun 08, 2021 at 08:17:00PM +0200, Jiri Olsa wrote:
+> On Tue, Jun 08, 2021 at 08:42:32AM -0700, Alexei Starovoitov wrote:
+> > On Sat, Jun 5, 2021 at 4:11 AM Jiri Olsa <jolsa@kernel.org> wrote:
+> > >
+> > > Adding support to attach multiple functions to tracing program
+> > > by using the link_create/link_update interface.
+> > >
+> > > Adding multi_btf_ids/multi_btf_ids_cnt pair to link_create struct
+> > > API, that define array of functions btf ids that will be attached
+> > > to prog_fd.
+> > >
+> > > The prog_fd needs to be multi prog tracing program (BPF_F_MULTI_FUNC).
+> > >
+> > > The new link_create interface creates new BPF_LINK_TYPE_TRACING_MULTI
+> > > link type, which creates separate bpf_trampoline and registers it
+> > > as direct function for all specified btf ids.
+> > >
+> > > The new bpf_trampoline is out of scope (bpf_trampoline_lookup) of
+> > > standard trampolines, so all registered functions need to be free
+> > > of direct functions, otherwise the link fails.
+> > 
+> > Overall the api makes sense to me.
+> > The restriction of multi vs non-multi is too severe though.
+> > The multi trampoline can serve normal fentry/fexit too.
 > 
-> nit: this looks so weird... Why not define FTRACE_OPS_GRAPH_STUB as
-> zero in case of #ifdef ftrace_graph_func? Then it will be natural and
-> correctly looking | FTRACE_OPS_GRAPH_STUB?
+> so multi trampoline gets called from all the registered functions,
+> so there would need to be filter for specific ip before calling the
+> standard program.. single cmp/jnz might not be that bad, I'll check
 
-ok, I can change that
-
-thanks,
-jirka
-
-> 
-> >  #ifdef FTRACE_GRAPH_TRAMP_ADDR
-> >         .trampoline             = FTRACE_GRAPH_TRAMP_ADDR,
-> >         /* trampoline_size is only needed for dynamically allocated tramps */
-> > --
-> > 2.31.1
-> >
-> 
-
+You mean reusing the same multi trampoline for all IPs and regenerating
+it with a bunch of cmp/jnz checks? There should be a better way to scale.
+Maybe clone multi trampoline instead?
+IPs[1-10] will point to multi.
+IP[11] will point to a clone of multi that serves multi prog and
+fentry/fexit progs specific for that IP.
