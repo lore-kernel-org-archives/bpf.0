@@ -2,66 +2,70 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BDA19C47082
-	for <bpf@archiver.kernel.org>; Tue,  8 Jun 2021 19:39:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6090CC47082
+	for <bpf@archiver.kernel.org>; Tue,  8 Jun 2021 19:40:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8F0C061182
-	for <bpf@archiver.kernel.org>; Tue,  8 Jun 2021 19:39:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3F99261182
+	for <bpf@archiver.kernel.org>; Tue,  8 Jun 2021 19:40:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236918AbhFHTlq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Jun 2021 15:41:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43610 "EHLO
+        id S237527AbhFHTlx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Jun 2021 15:41:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236519AbhFHTlG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 8 Jun 2021 15:41:06 -0400
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF234C06114E;
-        Tue,  8 Jun 2021 12:30:09 -0700 (PDT)
-Received: by mail-il1-x12c.google.com with SMTP id b9so20916949ilr.2;
-        Tue, 08 Jun 2021 12:30:09 -0700 (PDT)
+        with ESMTP id S236993AbhFHTlL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 8 Jun 2021 15:41:11 -0400
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C892C061156;
+        Tue,  8 Jun 2021 12:30:45 -0700 (PDT)
+Received: by mail-il1-x130.google.com with SMTP id w14so11258991ilv.1;
+        Tue, 08 Jun 2021 12:30:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:from:to:cc:date:message-id:user-agent:mime-version
-         :content-transfer-encoding;
-        bh=Q+AFeIk+1Wo3OVzoBBOFsZcJ17Rk8amBn+Q22ssWRXw=;
-        b=Zc9I5aRcgtPCDMrkR6VOcBCYuquTbEOH4P4oHOHpvO5+mDbYZLTyM+Yqfme0cka3d0
-         BxFciO0yN5EVbhxTVwCvTu+ayxf9QfS8omsqyz80S1JPjyRJpvov2gEx5XchOg7Ms3vl
-         jDhz1j2heTmgbrZALwDoSGyPPe9m1awhrvfVC+TjRdnlGjBxtEQhG9Ajnnti7BzidUNX
-         TbDOYTmYNmyoLoONGCVQjr/fpAaY47PcwiBOUb9z18kbrdh7MT/j0SIfN1qCqpaBAtx7
-         QrTLltxLM0XLjP25Obbottq3s68cUiciJcLjw1BXBN2WWxPlbjXN9IYijZic3evu0iqC
-         lD1A==
+        h=subject:from:to:cc:date:message-id:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=mfH1UX8C5+kcSTDkXc72bX/N/gu9ql6SA6+vXMivO/w=;
+        b=HkyAPlyktMCbzAyk2VZTLUAFjP+Snr6IZra0iQPMUFKI9KSfB3bV/nHTvDjpFkBZH/
+         6HczMKxpviei57dDW2TKEIlK+ZRdK1lYnihz/tLC/trEsajFTcnpMgNm3rsbtBf48nDh
+         yKQFdCgE9+GniwrUBLR6x3+64xtqmSAQcS4z2wUM5B9SAvU9RfWGsu01Tehe0GdSVjZw
+         ctFFLgh2KK/aiFf3cW3lYrHGRVYLg+8CziqOwu4aqZzT1RKXGiX1cLTJsusW9svTeMK4
+         l2Ij6u8jmbIYgkqUzJi9zbBr82Oimx+TIrN4OMMBu+NNMxc7+0bZQJAAOVVCXD5GTr5c
+         BPjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:date:message-id:user-agent
-         :mime-version:content-transfer-encoding;
-        bh=Q+AFeIk+1Wo3OVzoBBOFsZcJ17Rk8amBn+Q22ssWRXw=;
-        b=YQtSIsaSE9F+mUK8QLU4Wfw50UXbtP2rMOCLr5bcLKp3uSuJ2NUTxK0OYT4WZfwUYv
-         yOF2NbgWyZT50Bn9R3cPCLzrD5V2U7Eu4BzqyqnKic1dzVZyUHkB3n7Db12oNRtx7xc9
-         EPIErTLJqN+CgYggYIvry12qGY6x26423DvFilFB4kfpzpXmvPwTN/jM9BvARA2w6jQx
-         Nnsy6c5cSy+6SVJB0KqGw/f1wL+zaRxF63aNfDVUqV0EliCxIopoVH0zc/2xUiwbYnLQ
-         VbrQAigBd99ZaeJGv8VB1rtI1F5d1NoBhyBu9hrjZeUiZDvT+aj8jY+Emxz29glIlslg
-         lvfA==
-X-Gm-Message-State: AOAM533gb6hoOEt/S/XzdHYKv1xQIc+8BzdAQAKD31Ck7LKJsXO8g8XY
-        TEo2hGZ07W9VMn86NYcDfbU=
-X-Google-Smtp-Source: ABdhPJywl+IoZFzEkRAmQFjsbeFRXnO3PbVBlb9t1Nf0HSFjUvZGyfUt0rMaS/eh2GzZ/avxUbO86Q==
-X-Received: by 2002:a6b:4e0a:: with SMTP id c10mr19649163iob.183.1623180609175;
-        Tue, 08 Jun 2021 12:30:09 -0700 (PDT)
+        h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=mfH1UX8C5+kcSTDkXc72bX/N/gu9ql6SA6+vXMivO/w=;
+        b=a2ds4uUSEsTu9Y4hToE8bu+VCB23GHI8AntbqnFarl7d7+X+oZGnA6CQEBlkM8cB6E
+         cop2hEWTLvEQv4Lh6Eu4eFnxfJIvDXaZ3XfnVG7LHd4UIkna6XsyShh+DBen2JhqWJEG
+         4SYHH+hVbWByq0HJGfUVd2Wzh/qf2akrlXhDiqaazbsSVHdLvTJzkPVWE0PQujGlZkgg
+         X0D45Zk4o5nbZ43AOC6+0HqvNWgG27Fh6a3CxrDyPI/I1toUXKeYhqBXuC7lWYYwO8JS
+         sR8eoOWBzWlPviansIwKCyNW7auRVS9ZFsMlrwpN6TfMfqiV2jtxxa84fIQJNKvZXPnT
+         solw==
+X-Gm-Message-State: AOAM530Qp4fD0rhb3ExOi7furnuTr2DInfWkE+5ujJCFYS7MHsS69Se6
+        zK309glngoFwc91+oNQfiB0=
+X-Google-Smtp-Source: ABdhPJyGfiffRj8Igu6XoH+AerY0dm06DNsar7wcF97f9/YR8/oAwx521NsERdWXNC0a7e/2DZa9PQ==
+X-Received: by 2002:a05:6e02:1d1a:: with SMTP id i26mr21564716ila.180.1623180644884;
+        Tue, 08 Jun 2021 12:30:44 -0700 (PDT)
 Received: from [127.0.1.1] ([172.243.157.240])
-        by smtp.gmail.com with ESMTPSA id o18sm364277ioh.35.2021.06.08.12.30.02
+        by smtp.gmail.com with ESMTPSA id n33sm311500ioz.51.2021.06.08.12.30.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Jun 2021 12:30:08 -0700 (PDT)
-Subject: [PATCH bpf  0/2] bpf fix for mixed tail calls and subprograms
+        Tue, 08 Jun 2021 12:30:44 -0700 (PDT)
+Subject: [PATCH bpf 2/2] bpf: selftest to verify mixing bpf2bpf calls and
+ tailcalls with insn patch
 From:   John Fastabend <john.fastabend@gmail.com>
 To:     ast@kernel.org, daniel@iogearbox.net, andriin@fb.com
 Cc:     john.fastabend@gmail.com, netdev@vger.kernel.org,
         bpf@vger.kernel.org, maciej.fijalkowski@intel.com
-Date:   Tue, 08 Jun 2021 12:29:57 -0700
-Message-ID: <162318053542.323820.3719766457956848570.stgit@john-XPS-13-9370>
+Date:   Tue, 08 Jun 2021 12:30:33 -0700
+Message-ID: <162318063321.323820.18256758193426055338.stgit@john-XPS-13-9370>
+In-Reply-To: <162318053542.323820.3719766457956848570.stgit@john-XPS-13-9370>
+References: <162318053542.323820.3719766457956848570.stgit@john-XPS-13-9370>
 User-Agent: StGit/0.23-85-g6af9
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
@@ -70,22 +74,54 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-We recently tried to use mixed programs that have both tail calls and
-subprograms, but it needs the attached fix. Also added a small test
-addition that will cause the failure without the fix.
+This adds some extra noise to the tailcall_bpf2bpf4 tests that will cause
+verifier to patch insns. This then moves around subprog start/end insn
+index and poke descriptor insn index to ensure that verify and JIT will
+continue to track these correctly.
 
-Thanks,
-John
-
+Reviewed-by: Daniel Borkmann <daniel@iogearbox.net>
+Signed-off-by: John Fastabend <john.fastabend@gmail.com>
 ---
-
-John Fastabend (2):
-      bpf: Fix null ptr deref with mixed tail calls and subprogs
-      bpf: selftest to verify mixing bpf2bpf calls and tailcalls with insn patch
-
-
- .../selftests/bpf/progs/tailcall_bpf2bpf4.c     | 17 +++++++++++++++++
+ .../selftests/bpf/progs/tailcall_bpf2bpf4.c        |   17 +++++++++++++++++
  1 file changed, 17 insertions(+)
 
---
+diff --git a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf4.c b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf4.c
+index 9a1b166b7fbe..0d70de5f97e2 100644
+--- a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf4.c
++++ b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf4.c
+@@ -2,6 +2,13 @@
+ #include <linux/bpf.h>
+ #include <bpf/bpf_helpers.h>
+ 
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 1);
++	__uint(key_size, sizeof(__u32));
++	__uint(value_size, sizeof(__u32));
++} nop_table SEC(".maps");
++
+ struct {
+ 	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
+ 	__uint(max_entries, 3);
+@@ -11,9 +18,19 @@ struct {
+ 
+ static volatile int count;
+ 
++__noinline
++int subprog_noise(struct __sk_buff *skb)
++{
++	__u32 key = 0;
++
++	bpf_map_lookup_elem(&nop_table, &key);
++	return 0;
++}
++
+ __noinline
+ int subprog_tail_2(struct __sk_buff *skb)
+ {
++	subprog_noise(skb);
+ 	bpf_tail_call_static(skb, &jmp_table, 2);
+ 	return skb->len * 3;
+ }
+
 
