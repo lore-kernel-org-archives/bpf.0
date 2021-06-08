@@ -2,117 +2,197 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27956C47082
-	for <bpf@archiver.kernel.org>; Tue,  8 Jun 2021 10:17:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0BAEC4743E
+	for <bpf@archiver.kernel.org>; Tue,  8 Jun 2021 11:03:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0345860D07
-	for <bpf@archiver.kernel.org>; Tue,  8 Jun 2021 10:17:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9E5696128D
+	for <bpf@archiver.kernel.org>; Tue,  8 Jun 2021 11:03:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231278AbhFHKTN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Jun 2021 06:19:13 -0400
-Received: from mail-lf1-f50.google.com ([209.85.167.50]:46767 "EHLO
-        mail-lf1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbhFHKTM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 8 Jun 2021 06:19:12 -0400
-Received: by mail-lf1-f50.google.com with SMTP id m21so15505773lfg.13;
-        Tue, 08 Jun 2021 03:17:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=/kG8V+AHwF7Vw4Oeyk2iREQwi0kZ/IRfBQgI4KKxp6M=;
-        b=P6Jh/6syS0z2xae2Z5DjWFQlgwL7X4THFA7MBZaDIJhg5Zv93nuJ/xdLceo/op85MZ
-         ctEPcWirnWTaXk2oRlEeuUw5vOB+kxKemXEHv2ndcSpS3TUQmkW2SqePSpUy81oW8HnA
-         rpM8A5l6WUpXklLuHFG0JO5Bvs6ytV+FqIVVGL3Eu5nAp7FRKRX9symYSKMuFOiRQmcT
-         qf/Ka+GOjHIovV656tjKIFiUnXL6XqWLGoRPNVPuweYeTj1eJtwu6rZPOFkfQymtfqgH
-         9IFbG3rxngZURrr7fH3Esc0ena6wAY2VbenbbdkZ00KKudxs04skulCBa6CmkmY+XtdS
-         B6QQ==
+        id S231435AbhFHLEx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Jun 2021 07:04:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:38229 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231603AbhFHLEC (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 8 Jun 2021 07:04:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1623150128;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LH+kGGXvul4/VtBvp8swcElDLFMoCOqrADXXWgo8nOs=;
+        b=iXsjBCq6kCstNwlA/049ydTPjayi8ucMnHJwaN1fMlf27u6urhdy8fu/l6S8ldSHN/Fadp
+        7negXJxv3Ej61MrgGzziMjRZtZ/+vWxo18JkNUB4OL643TXAlypG7yFoflDQyv19q4sqTB
+        zj9irAvqe4BBwG0xab+oBDnz/OOwcGk=
+Received: from mail-yb1-f199.google.com (mail-yb1-f199.google.com
+ [209.85.219.199]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-299-ouKyxPRIM02AhuCx7RL0TA-1; Tue, 08 Jun 2021 07:02:07 -0400
+X-MC-Unique: ouKyxPRIM02AhuCx7RL0TA-1
+Received: by mail-yb1-f199.google.com with SMTP id r5-20020a2582850000b02905381b1b616eso26462007ybk.6
+        for <bpf@vger.kernel.org>; Tue, 08 Jun 2021 04:02:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=/kG8V+AHwF7Vw4Oeyk2iREQwi0kZ/IRfBQgI4KKxp6M=;
-        b=QpXN+KX6o0d08vBpTgTPQIAOTCfDEXt80SnD4RFKlaay06gCUilvmCPpaM15lkofwV
-         qOqv2FoF+jZ3015c1tDhngiBRGwWkib7DxGIgL8Sv+SXqkE86lS0oTeQVrNRhMYAilTr
-         CR1xDSPTfDsS6HFNDxL6ZrX5+WCuJx6GVAEZX4wOap5M2pzttfjmHDL5Xp90H0ZioHGi
-         765ovOAD6JlREB/GVXqiqohF72DX2DOKLjhJI8rryvlSaDNLE/tiIbi2Naya6iJsQUvd
-         0f4XCSYHMHDudbn9Q22J38ONVFyooqzPe2xcMgZPaF70kibZO0ATmE20DMeONhHpjToL
-         d01g==
-X-Gm-Message-State: AOAM533UUmbTd6yTUhGHSrsjkuvcNdeNARe5s4MAO62NY4Zqy9hj93Sn
-        QdqTj5yR9QnHioOi4V3af0jkewUJiawdaA==
-X-Google-Smtp-Source: ABdhPJw+AKbNsLTeVJfThbrF4GRfbCRIxC8oxgrZtZUHtRrtD7Eh1PFM54cR/rdw+rFbNzuAlv6dfQ==
-X-Received: by 2002:a05:6512:ace:: with SMTP id n14mr14077603lfu.368.1623147377985;
-        Tue, 08 Jun 2021 03:16:17 -0700 (PDT)
-Received: from localhost.localdomain ([94.103.224.40])
-        by smtp.gmail.com with ESMTPSA id h19sm95405lfj.256.2021.06.08.03.16.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Jun 2021 03:16:17 -0700 (PDT)
-Date:   Tue, 8 Jun 2021 13:16:14 +0300
-From:   Pavel Skripkin <paskripkin@gmail.com>
-To:     syzbot <syzbot+65badd5e74ec62cb67dc@syzkaller.appspotmail.com>
-Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        coreteam@netfilter.org, daniel@iogearbox.net, davem@davemloft.net,
-        dsahern@kernel.org, fw@strlen.de, john.fastabend@gmail.com,
-        jonathan.lemon@gmail.com, kadlec@netfilter.org, kafai@fb.com,
-        kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        matthieu.baerts@tessares.net, netdev@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, pablo@netfilter.org,
-        songliubraving@fb.com, syzkaller-bugs@googlegroups.com,
-        unixbhaskar@gmail.com, yhs@fb.com, yoshfuji@linux-ipv6.org,
-        zhengyongjun3@huawei.com
-Subject: Re: [syzbot] general protection fault in kcm_sendmsg
-Message-ID: <20210608131614.15ca4340@gmail.com>
-In-Reply-To: <000000000000b3f96105c42ef146@google.com>
-References: <000000000000b3f96105c42ef146@google.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-suse-linux-gnu)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LH+kGGXvul4/VtBvp8swcElDLFMoCOqrADXXWgo8nOs=;
+        b=aWXCmBNFEsDVHkPGb4t1nPYt74ZMMUlGutRJciCMoro71oG+MofgL+S7CAsarzU9Mk
+         QAOjibJg7Zdp4IqbD+We9SK84EXKfuWyiCowFFcoO8MAUnsyW3Qnd4hQodumQWvzsoa7
+         HRfilw2oIFK9wuFeovWfHtS/tBCoM2VwSt5WD7WutcFb6//4SrGMpM3BtG17lM6eALoH
+         KP9uAHp4XUjvcj+IczcwYoSJMrpRdgZePJVEn2nOp+fAcvRPiX8UnGKHCvAx68ARpaWS
+         FmXa3zvX5qhEM0bLMPBzW2JZpIjxOiDz+DZ5GMGOSV+7SbKVYS7rHiRPQi/dbpI1Boy0
+         MZkQ==
+X-Gm-Message-State: AOAM532Xvi8D5F2xo32yQNfciBUqgGtUqXOLnKpGLuVZhsBkQXq1iteZ
+        09mL3j6F6GCf4l5AQkwAfn5N6nHjqRMIt2javq0dBE0eMb7qayKWfSmrQ7mKfrjO1ePlyxrGX2c
+        WanMgLClTg2PTYnHjYVTAkHHfccTw
+X-Received: by 2002:a25:a289:: with SMTP id c9mr32424319ybi.26.1623150125803;
+        Tue, 08 Jun 2021 04:02:05 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwoJTMJYLIo5JLaPCKlMaY1uD307CdnL8W3DmtqP8Cl7oP8zg5QoWPG6RgZg/bw1HmnyqkVBMTehY7r2dHLJUY=
+X-Received: by 2002:a25:a289:: with SMTP id c9mr32424289ybi.26.1623150125563;
+ Tue, 08 Jun 2021 04:02:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20210517092006.803332-1-omosnace@redhat.com> <CAHC9VhTasra0tU=bKwVqAwLRYaC+hYakirRz0Mn5jbVMuDkwrA@mail.gmail.com>
+ <CAFqZXNsh9njbFUNBugidbdiNqD3QbKzsw=KgNKSmW5hv-fD6tA@mail.gmail.com> <CAHC9VhQj_FvBqSGE+eZtbzvDoRAEbbo-6t_2E6MVuyiGA9N8Hw@mail.gmail.com>
+In-Reply-To: <CAHC9VhQj_FvBqSGE+eZtbzvDoRAEbbo-6t_2E6MVuyiGA9N8Hw@mail.gmail.com>
+From:   Ondrej Mosnacek <omosnace@redhat.com>
+Date:   Tue, 8 Jun 2021 13:01:54 +0200
+Message-ID: <CAFqZXNsVFv2yh5cXwWYXscYTAuoCKk4H-JbPAYzDbwKUzSDP3A@mail.gmail.com>
+Subject: Re: [PATCH v2] lockdown,selinux: avoid bogus SELinux lockdown
+ permission checks
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Linux Security Module list 
+        <linux-security-module@vger.kernel.org>,
+        James Morris <jmorris@namei.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        SElinux list <selinux@vger.kernel.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, network dev <netdev@vger.kernel.org>,
+        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, 07 Jun 2021 08:46:26 -0700
-syzbot <syzbot+65badd5e74ec62cb67dc@syzkaller.appspotmail.com> wrote:
+On Thu, Jun 3, 2021 at 7:46 PM Paul Moore <paul@paul-moore.com> wrote:
+> On Wed, Jun 2, 2021 at 9:40 AM Ondrej Mosnacek <omosnace@redhat.com> wrote:
+> > On Fri, May 28, 2021 at 3:37 AM Paul Moore <paul@paul-moore.com> wrote:
+[...]
+> > > I know you and Casey went back and forth on this in v1, but I agree
+> > > with Casey that having two LSM hooks here is a mistake.  I know it
+> > > makes backports hard, but spoiler alert: maintaining complex software
+> > > over any non-trivial period of time is hard, reeeeally hard sometimes
+> > > ;)
+> >
+> > Do you mean having two slots in lsm_hook_defs.h or also having two
+> > security_*() functions? (It's not clear to me if you're just
+> > reiterating disagreement with v1 or if you dislike the simplified v2
+> > as well.)
+>
+> To be clear I don't think there should be two functions for this, just
+> make whatever changes are necessary to the existing
+> security_locked_down() LSM hook.  Yes, the backport is hard.  Yes, it
+> will touch a lot of code.  Yes, those are lame excuses to not do the
+> right thing.
 
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    1a802423 virtio-net: fix for skb_over_panic inside
-> big mode git tree:       bpf
-> console output:
-> https://syzkaller.appspot.com/x/log.txt?x=159b08afd00000 kernel
-> config:  https://syzkaller.appspot.com/x/.config?x=770708ea7cfd4916
-> dashboard link:
-> https://syzkaller.appspot.com/bug?extid=65badd5e74ec62cb67dc syz
-> repro:
-> https://syzkaller.appspot.com/x/repro.syz?x=104624afd00000 C
-> reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16e36197d00000
-> 
-> The issue was bisected to:
-> 
-> commit f9006acc8dfe59e25aa75729728ac57a8d84fc32
-> Author: Florian Westphal <fw@strlen.de>
-> Date:   Wed Apr 21 07:51:08 2021 +0000
-> 
->     netfilter: arp_tables: pass table pointer via nf_hook_ops
-> 
-> bisection log:
-> https://syzkaller.appspot.com/x/bisect.txt?x=11739740300000 final
-> oops:     https://syzkaller.appspot.com/x/report.txt?x=13739740300000
-> console output:
-> https://syzkaller.appspot.com/x/log.txt?x=15739740300000
-> 
+OK, I guess I'll just go with the bigger patch.
 
-#syz fix: revert "net: kcm: fix memory leak in kcm_sendmsg"
+> > > > The callers migrated to the new hook, passing NULL as cred:
+> > > > 1. arch/powerpc/xmon/xmon.c
+> > > >      Here the hook seems to be called from non-task context and is only
+> > > >      used for redacting some sensitive values from output sent to
+> > > >      userspace.
+> > >
+> > > This definitely sounds like kernel_t based on the description above.
+> >
+> > Here I'm a little concerned that the hook might be called from some
+> > unusual interrupt, which is not masked by spin_lock_irqsave()... We
+> > ran into this with PMI (Platform Management Interrupt) before, see
+> > commit 5ae5fbd21079 ("powerpc/perf: Fix handling of privilege level
+> > checks in perf interrupt context"). While I can't see anything that
+> > would suggest something like this happening here, the whole thing is
+> > so foreign to me that I'm wary of making assumptions :)
+> >
+> > @Michael/PPC devs, can you confirm to us that xmon_is_locked_down() is
+> > only called from normal syscall/interrupt context (as opposed to
+> > something tricky like PMI)?
+>
+> You did submit the code change so I assumed you weren't concerned
+> about it :)  If it is a bad hook placement that is something else
+> entirely.
 
+What I submitted effectively avoided the SELinux hook to be called, so
+I didn't bother checking deeper in what context those hook calls would
+occur.
 
+> Hopefully we'll get some guidance from the PPC folks.
+>
+> > > > 4. net/xfrm/xfrm_user.c:copy_to_user_*()
+> > > >      Here a cryptographic secret is redacted based on the value returned
+> > > >      from the hook. There are two possible actions that may lead here:
+> > > >      a) A netlink message XFRM_MSG_GETSA with NLM_F_DUMP set - here the
+> > > >         task context is relevant, since the dumped data is sent back to
+> > > >         the current task.
+> > >
+> > > If the task context is relevant we should use it.
+> >
+> > Yes, but as I said it would create an asymmetry with case b), which
+> > I'll expand on below...
+> >
+> > > >      b) When deleting an SA via XFRM_MSG_DELSA, the dumped SAs are
+> > > >         broadcasted to tasks subscribed to XFRM events - here the
+> > > >         SELinux check is not meningful as the current task's creds do
+> > > >         not represent the tasks that could potentially see the secret.
+> > >
+> > > This looks very similar to the BPF hook discussed above, I believe my
+> > > comments above apply here as well.
+> >
+> > Using the current task is just logically wrong in this case. The
+> > current task here is just simply deleting an SA that happens to have
+> > some secret value in it. When deleting an SA, a notification is sent
+> > to a group of subscribers (some group of other tasks), which includes
+> > a dump of the secret value. The current task isn't doing any attempt
+> > to breach lockdown, it's just deleting an SA.
+> >
+> > It also makes it really awkward to make policy decisions around this.
+> > Suppose that domains A, B, and C need to be able to add/delete SAs and
+> > domains D, E, and F need to receive notifications about changes in
+> > SAs. Then if, say, domain E actually needs to see the secret values in
+> > the notifications, you must grant the confidentiality permission to
+> > all of A, B, C to keep things working. And now you have opened up the
+> > door for A, B, C to do other lockdown-confidentiality stuff, even
+> > though these domains themselves actually don't request/need any
+> > confidential data from the kernel. That's just not logical and you may
+> > actually end up (slightly) worse security-wise than if you just
+> > skipped checking for XFRM secrets altogether, because you need to
+> > allow confidentiality to domains for which it may be excessive.
+>
+> It sounds an awful lot like the lockdown hook is in the wrong spot.
+> It sounds like it would be a lot better to relocate the hook than
+> remove it.
 
-With regards,
-Pavel Skripkin
+I don't see how you would solve this by moving the hook. Where do you
+want to relocate it? The main obstacle is that the message containing
+the SA dump is sent to consumers via a simple netlink broadcast, which
+doesn't provide a facility to redact the SA secret on a per-consumer
+basis. I can't see any way to make the checks meaningful for SELinux
+without a major overhaul of the broadcast logic.
+
+IMO, switching the subject to kernel_t either in both cases or at
+least in case b) is the best compromise between usability, security,
+and developers' time / code complexity. I don't think controlling
+which of the CAP_NET_ADMIN domains can/can't see/leak SA secrets is
+worth obsessing about.
+
+--
+Ondrej Mosnacek
+Software Engineer, Linux Security - SELinux kernel
+Red Hat, Inc.
+
