@@ -2,95 +2,121 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C71D1C47082
-	for <bpf@archiver.kernel.org>; Tue,  8 Jun 2021 11:03:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F652C47082
+	for <bpf@archiver.kernel.org>; Tue,  8 Jun 2021 11:08:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 96DA46105A
-	for <bpf@archiver.kernel.org>; Tue,  8 Jun 2021 11:03:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6F86E6128E
+	for <bpf@archiver.kernel.org>; Tue,  8 Jun 2021 11:08:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231696AbhFHLFP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Jun 2021 07:05:15 -0400
-Received: from mail-yb1-f169.google.com ([209.85.219.169]:45940 "EHLO
-        mail-yb1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231664AbhFHLFP (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 8 Jun 2021 07:05:15 -0400
-Received: by mail-yb1-f169.google.com with SMTP id g38so29539094ybi.12
-        for <bpf@vger.kernel.org>; Tue, 08 Jun 2021 04:03:08 -0700 (PDT)
+        id S231626AbhFHLKb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Jun 2021 07:10:31 -0400
+Received: from mail-pg1-f169.google.com ([209.85.215.169]:38536 "EHLO
+        mail-pg1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231303AbhFHLKb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 8 Jun 2021 07:10:31 -0400
+Received: by mail-pg1-f169.google.com with SMTP id 6so16221740pgk.5;
+        Tue, 08 Jun 2021 04:08:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=rlvUoDN9yc/zMTIo/KYEfU7FFB0Fqdn4J0EeD0WqhV0=;
-        b=Yb9TZyz+ZAhopsM7qeh2hVGTjR9mvypFx6LMSCI74bk3D8Xf5FDvyWftwZXT7MZTg/
-         Wz/rznAWRbEcFVUrInl79yh/+cwdGqwTQ4OWFjjCAVOQnPs+fanD1tThhX1UcxsZ3Nfq
-         Vm+r1gnDQ80hkZ1gnzJtV78i4TdyJyw6ga0QG8VRIbyjSlro1IJJF9zrIUqA57uCjDnu
-         RrbFhr/5bGun0gobYE2OQFY38QunJZmu8ibqvaoQNgobFArPI9jA8lUehIoLtwcLbXiI
-         n3jUWrIwFXIUocRCHKDre+jly4CIc+mUg9KMOo0cyiKqFbeQSuITFJdtgCUBhcqBVXOI
-         PeYQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UJVsqI/ei0WczshYuB8pLAQsFgqQWwx9v5zxVqgopwU=;
+        b=B9ab52pbsKXDXa+qRWwLhBk1hn1Q5Y5Epsog2G5yDfhkg5IOo9jKJ2yFIQFwMAzGud
+         AcSRIaZ8KgYDCs+rim+4y/6lRxahUee70hAve0OSKrKrsbZZQij7nBPhyvvDc1HBnS6M
+         ngcCKuustZvvUxVhpJYky5CuYcYU4kUvomXBT9SOle0uV5+XZoXfXEQH4t9GhG2hbRS3
+         Bj3KqAasLfgPV7LJBkffZQB5uBR+wC3S/r/+wrwD79PoJZgN9ov0Q6SlyNIkVznJzrKx
+         VikGD3Fo8rv+94mK8O47KXO6kqFcS+lnDOMXrGGMWVpyB8mztLWH4TukVO7Hh8ZWKPf7
+         eXaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=rlvUoDN9yc/zMTIo/KYEfU7FFB0Fqdn4J0EeD0WqhV0=;
-        b=gcIyXifksY6QXXC7CtsJDM3ohIHbQjRvOP6APCc0yew/6T7LHm4B4rDq4VJYQjbbMU
-         iZJHdBje44O4s+3ZvR7kLUsHH55GPE+G7p4LGUlCO3FTFYdakbe9xXe/2+BFenkuN8zo
-         q0GlSpdxVSrC2OWvuporfp4s9ndOOg3udIvG8VjgVTR/FEWYgvIr4bwvZyDDWdqV2oif
-         16xaX6nMpskPmCm/LrByc6GZfD3w0li2TnYY7ne9BpWYJ9ZaR1hK18vFq70NM+9PwbCs
-         wgxN3Habg5BsuNCLtwL2+aX7wkWFhdK8fiKH245u87S/c/OyEg+jIbk21stteC3jKUZT
-         LXlQ==
-X-Gm-Message-State: AOAM530ExhCLNcDNuD96F4jHJfnnZglO5e9ZAIUzKZ0hEXpu0FMqzC0M
-        ySugwt49ScvCfKUbt8rD+377CvdWD1QaVlQoaSmavlF/101nkdPf
-X-Google-Smtp-Source: ABdhPJxmNpnaciyHPz+z+GailtH3HcBCPPNhHqehS2+EZBKH+ScyXRDfCiOdnizBflujhS7q9USdwFspNfyrlupfnbs=
-X-Received: by 2002:a25:888b:: with SMTP id d11mr32905375ybl.385.1623150128021;
- Tue, 08 Jun 2021 04:02:08 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UJVsqI/ei0WczshYuB8pLAQsFgqQWwx9v5zxVqgopwU=;
+        b=HUw/8bMBXZJWaXcNHSSIyXEuYo/qLlqkRjSN8CkC3ubQghE3vC4uUWXyVwGZifr5cm
+         ahaFWnspBd2vVz0f5drpl66DzAHG5/k9b+IMVwHH7DNQiL8cujP82FXIGlpwDEgPOAnz
+         LMP/6R5XN/+kY/uV2I90NZ1qW3atNWCoPm8MonRjavOOEf02cboymmmDEP+IFlQFZLfO
+         xq8Je1PEjPiXKyi8qEuqviWy3gVd0B02vblaz7G42Fx4M1rfX2KYudXykmSlylKCqWtl
+         L4tpJtE5QAzUCa61IehC6CmidqXy6Iu+MZTZvhXMWybSPZ/4UD/afsInNKVFxjRsQpW4
+         o5sA==
+X-Gm-Message-State: AOAM530W1bgvsqoODc/Ux9gqtu7bakhW4b9dM6g6mWokEOqn6cNYcoj9
+        Apr3jDSC3hCUo58fI5Vq1yuX9A1aCqOpkyxjMwU=
+X-Google-Smtp-Source: ABdhPJxjGu8PU0C2DW8HKf2a2BcxewJ3P/4FVJ4FKwCahJzQrzq27XcDUuxYrsnQ3WmcxDTGCfmmKI5172RPm/6SJlM=
+X-Received: by 2002:a63:4e4f:: with SMTP id o15mr22260611pgl.208.1623150442052;
+ Tue, 08 Jun 2021 04:07:22 -0700 (PDT)
 MIME-Version: 1.0
-From:   rainkin <rainkin1993@gmail.com>
-Date:   Tue, 8 Jun 2021 19:01:32 +0800
-Message-ID: <CAHb-xaum8ftH1kWktSh6NZ_z0ZrBNqG9Rchs+68ePHOwq31dBQ@mail.gmail.com>
-Subject: How to get the updated content of an argument which is updated in a
- kernel function by kprobe
-To:     bpf@vger.kernel.org
+References: <20210607122644.59021-1-wanghai38@huawei.com>
+In-Reply-To: <20210607122644.59021-1-wanghai38@huawei.com>
+From:   Magnus Karlsson <magnus.karlsson@gmail.com>
+Date:   Tue, 8 Jun 2021 13:07:11 +0200
+Message-ID: <CAJ8uoz2mfCGNmEaAhGZAaSs=Mrer008f3+C7MdoAySsLn=busw@mail.gmail.com>
+Subject: Re: [Intel-wired-lan] [PATCH net] ixgbe, xsk: clean up the resources
+ in ixgbe_xsk_pool_enable error path
+To:     Wang Hai <wanghai38@huawei.com>
+Cc:     "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
+        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
+        jan.sokolowski@intel.com,
+        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        intel-wired-lan <intel-wired-lan@lists.osuosl.org>,
+        open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi,
-Assume that a kernel function has an input argument (i.e., a pointer),
-and the function will update the content pointed by the pointer during
-execution. My question is how to get the updated content using kprobe.
+On Mon, Jun 7, 2021 at 2:17 PM Wang Hai <wanghai38@huawei.com> wrote:
+>
+> In ixgbe_xsk_pool_enable(), if ixgbe_xsk_wakeup() fails,
+> We should restore the previous state and clean up the
+> resources. Add the missing clear af_xdp_zc_qps and unmap dma
+> to fix this bug.
+>
+> Fixes: d49e286d354e ("ixgbe: add tracking of AF_XDP zero-copy state for each queue pair")
+> Fixes: 4a9b32f30f80 ("ixgbe: fix potential RX buffer starvation for AF_XDP")
+> Signed-off-by: Wang Hai <wanghai38@huawei.com>
+> ---
+>  drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 
-Take the kernel function path_lookupat as example:
-static int path_lookupat(struct nameidata *nd, unsigned flags, struct
-path *path)
-It lookup the path according to a given file name and store the
-founded path in the third input arguments (i.e., struct path *path).
+Thanks Wang.
 
-My goal is to get the founded path from the third input argument.
+Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
 
-I attach my ebpf program to this kernel function using kprobe, and try
-to print the content of the path argument. However, the content is
-empty, which is reasonable because the function has not beed executed.
-The following is the code:
-
-SEC("kprobe/path_lookupat")
-int BPF_KPROBE(path_lookupat, struct nameidata *nd, unsigned flags,
-struct path *path)
-{
-    char fn[127];
-    const unsigned char *fn_ptr = BPF_CORE_READ(path, dentry, d_name.name);
-     bpf_core_read_str(fn, sizeof(fn), fn_ptr);
-     bpf_printk("path_lookupat: %s\n", fn);
-     return 0;
-}
-
-Then I try to do that by kretprobe where the function has been
-executed, but it seems that I cannot get the input arguments in
-kretprobe.
-
-Do you have any ideas or suggestions to do that?
-Thanks,
-rainkin
+> diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
+> index 91ad5b902673..d912f14d2ba4 100644
+> --- a/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
+> +++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
+> @@ -52,8 +52,11 @@ static int ixgbe_xsk_pool_enable(struct ixgbe_adapter *adapter,
+>
+>                 /* Kick start the NAPI context so that receiving will start */
+>                 err = ixgbe_xsk_wakeup(adapter->netdev, qid, XDP_WAKEUP_RX);
+> -               if (err)
+> +               if (err) {
+> +                       clear_bit(qid, adapter->af_xdp_zc_qps);
+> +                       xsk_pool_dma_unmap(pool, IXGBE_RX_DMA_ATTR);
+>                         return err;
+> +               }
+>         }
+>
+>         return 0;
+> --
+> 2.17.1
+>
+> _______________________________________________
+> Intel-wired-lan mailing list
+> Intel-wired-lan@osuosl.org
+> https://lists.osuosl.org/mailman/listinfo/intel-wired-lan
