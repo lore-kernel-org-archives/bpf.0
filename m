@@ -2,74 +2,75 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E9E8C48BCD
-	for <bpf@archiver.kernel.org>; Wed,  9 Jun 2021 22:19:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 71683C48BCF
+	for <bpf@archiver.kernel.org>; Wed,  9 Jun 2021 22:40:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 094C461377
-	for <bpf@archiver.kernel.org>; Wed,  9 Jun 2021 22:19:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 588806139A
+	for <bpf@archiver.kernel.org>; Wed,  9 Jun 2021 22:40:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229931AbhFIWVn (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 9 Jun 2021 18:21:43 -0400
-Received: from mga17.intel.com ([192.55.52.151]:20664 "EHLO mga17.intel.com"
+        id S230232AbhFIWm2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 9 Jun 2021 18:42:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38452 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229542AbhFIWVm (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 9 Jun 2021 18:21:42 -0400
-IronPort-SDR: u2IyVKA1gkQ0htT9LOFhE+RykOU032BsHfXhtv1WnLJvz8ZEOLsszzV6LedUxWQhwM196ey4SG
- Cfb2FmqHdOZQ==
-X-IronPort-AV: E=McAfee;i="6200,9189,10010"; a="185556025"
-X-IronPort-AV: E=Sophos;i="5.83,261,1616482800"; 
-   d="scan'208";a="185556025"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2021 15:19:46 -0700
-IronPort-SDR: nv+aQ2uz386ovpA9ZvQDqGWhF8Ul9InQEU47EE7X0D3FGsGXEsXO1lZCpHWPq79AD8+47KZ28t
- NLO+dMQZrEhQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.83,261,1616482800"; 
-   d="scan'208";a="477096374"
-Received: from ranger.igk.intel.com ([10.102.21.164])
-  by FMSMGA003.fm.intel.com with ESMTP; 09 Jun 2021 15:19:44 -0700
-Date:   Thu, 10 Jun 2021 00:07:13 +0200
-From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     Jussi Maki <joamaki@gmail.com>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, daniel@iogearbox.net,
-        j.vosburgh@gmail.com, andy@greyhouse.net, vfalico@gmail.com,
-        andrii@kernel.org, magnus.karlsson@intel.com
-Subject: Re: [PATCH bpf-next 3/3] selftests/bpf: Add tests for XDP bonding
-Message-ID: <20210609220713.GA14929@ranger.igk.intel.com>
-References: <20210609135537.1460244-1-joamaki@gmail.com>
- <20210609135537.1460244-4-joamaki@gmail.com>
+        id S230120AbhFIWmU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 9 Jun 2021 18:42:20 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 53469613FE;
+        Wed,  9 Jun 2021 22:40:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623278425;
+        bh=mKnfoPfoNQ50Hbg5UNhOlgJddrhjTD+bnzKHnkbmodM=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=cPY20DzBpWKxWVZ4p767SyvM7AyuMGcC9RYqkV/D2lUCc9kITSCEsXAMXhe79QQRs
+         CzfblPSIUB3raeZlhcmD79+feRUuiHJ/ptevID7m6CtEry6ItRYgdOkwJl6LOe9a+N
+         i2dW4SJ5Zyq305Cl9ZSiy3Ek163C4/InwsofUZaqNpxjjFvCgAks4hfbIYPaIgHF6F
+         uA8f8PexjMvVIzubhbE8GZGAoFlddoJNcn7NW0hxQ572EbY4+9/L8J0qJIb59m7EfJ
+         MSpMZCFBLLhfeuCC/bA6kx6J8lRF27FExv4vYm0JYBiZp33XLQHGXKPaIhAF+5KcXH
+         NkSZ4P8HopNKw==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210609135537.1460244-4-joamaki@gmail.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next] net: ena: make symbol 'ena_alloc_map_page' static
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <162327842529.25473.13013541269021930169.git-patchwork-notify@kernel.org>
+Date:   Wed, 09 Jun 2021 22:40:25 +0000
+References: <20210609142506.1621773-1-weiyongjun1@huawei.com>
+In-Reply-To: <20210609142506.1621773-1-weiyongjun1@huawei.com>
+To:     Wei Yongjun <weiyongjun1@huawei.com>
+Cc:     netanel@amazon.com, akiyano@amazon.com, davem@davemloft.net,
+        kuba@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        hawk@kernel.org, john.fastabend@gmail.com, andrii@kernel.org,
+        shayagr@amazon.com, sameehj@amazon.com, lorenzo@kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, hulkci@huawei.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Jun 09, 2021 at 01:55:37PM +0000, Jussi Maki wrote:
-> Add a test suite to test XDP bonding implementation
-> over a pair of veth devices.
+Hello:
 
-Cc: Magnus
+This patch was applied to netdev/net-next.git (refs/heads/master):
 
-Jussi,
-AF_XDP selftests have very similar functionality just like you are trying
-to introduce over here, e.g. we setup veth pair and generate traffic.
-After a quick look seems that we could have a generic layer that would
-be used by both AF_XDP and bonding selftests.
-
-WDYT?
-
+On Wed, 9 Jun 2021 14:25:06 +0000 you wrote:
+> The sparse tool complains as follows:
 > 
-> Signed-off-by: Jussi Maki <joamaki@gmail.com>
-> ---
->  .../selftests/bpf/prog_tests/xdp_bonding.c    | 342 ++++++++++++++++++
->  tools/testing/selftests/bpf/vmtest.sh         |  30 +-
->  2 files changed, 360 insertions(+), 12 deletions(-)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
+> drivers/net/ethernet/amazon/ena/ena_netdev.c:978:13: warning:
+>  symbol 'ena_alloc_map_page' was not declared. Should it be static?
+> 
+> This symbol is not used outside of ena_netdev.c, so marks it static.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next] net: ena: make symbol 'ena_alloc_map_page' static
+    https://git.kernel.org/netdev/net-next/c/6fb566c9278a
+
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
