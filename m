@@ -2,174 +2,205 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-16.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 52335C48BCF
-	for <bpf@archiver.kernel.org>; Wed,  9 Jun 2021 17:07:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7741C48BCF
+	for <bpf@archiver.kernel.org>; Wed,  9 Jun 2021 18:20:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3A5AC61287
-	for <bpf@archiver.kernel.org>; Wed,  9 Jun 2021 17:07:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BCD1D613D0
+	for <bpf@archiver.kernel.org>; Wed,  9 Jun 2021 18:20:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230318AbhFIRJt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 9 Jun 2021 13:09:49 -0400
-Received: from mail-qt1-f176.google.com ([209.85.160.176]:44749 "EHLO
-        mail-qt1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229788AbhFIRJs (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 9 Jun 2021 13:09:48 -0400
-Received: by mail-qt1-f176.google.com with SMTP id t17so18555194qta.11
-        for <bpf@vger.kernel.org>; Wed, 09 Jun 2021 10:07:53 -0700 (PDT)
+        id S229519AbhFISWo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 9 Jun 2021 14:22:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33762 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229472AbhFISWo (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 9 Jun 2021 14:22:44 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B733C061574
+        for <bpf@vger.kernel.org>; Wed,  9 Jun 2021 11:20:36 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id d16so19058041pfn.12
+        for <bpf@vger.kernel.org>; Wed, 09 Jun 2021 11:20:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=riotgames.com; s=riotgames;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vEsFi6rO4MHKgEXC6vig8dvK754LxLMuTykgEyj39fE=;
-        b=iRW5rn4UJKSkBapsxQQDBN2vpREcEJsdspbX+SFia7Lw7s3NJB1EPttoiCffvYmwil
-         k1f8uhqvTTnAT6hJXQQd0UDdTRzphUxGbE42nCxJzeQm3PHROG7dSGMON7OqpMUvJt7R
-         RSj6V9ErDo5fuLYya3uqmp71uNo6V8oR2E3/c=
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=pMNtPdB4yeaOaJg4oKXM0D8sPt6m955IeGjoIXPrk70=;
+        b=PazdJpi79UQEsNsJQD2CIaSYmwpf00Mw0MCZeW5GC2zdnsa0IB92sYjdiUDujBLmOv
+         3yiW/7qHaVhsPjbZomfBsLbYDeD+/ig/7taYFSIjA7Cs35U9xgJInZA2nA7XIhz+eX/f
+         YAYlYYJX5H3ZqKlrBYtQLFY0ybk6rdc7RljwY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vEsFi6rO4MHKgEXC6vig8dvK754LxLMuTykgEyj39fE=;
-        b=uUdCuwxH2nVlKQEpHB5HzA49hyrt05UcTaHU2VL7HLviACq4MTOMaD6dWLmhc2rlzm
-         6YREXCWCnLydYDLmIhe9EKmWmycmlKjET29P2mwc8mjskjy/JPjlunrcYNm6A5kxYIrw
-         2Xpk6A00pmQA/F7cZBeIfQysqwO2K3uQST4m7gyewKosflbNUVydE8+i3Kx+FQMgVmbs
-         IdSdO/CQOdWoVMg4JAKZtar9opgYNJ+FmT+q4rK3zZN68Uv9cPmQzilEXiQmcrChywzB
-         c+EjX8oQtFraJUJoBshnPACcOy6K/TPudxEzzs8EcN9JjoMTeodND/91frOsvWwtakpu
-         07Qw==
-X-Gm-Message-State: AOAM530Rzhz3ni2PoimPXDNgF0CChd614xY5BAQkE9/jyrx47XStnueE
-        Ypco/cRXvu4mXYrprdFROEkCV2XvBdwQ/jVQm1lJLQ==
-X-Google-Smtp-Source: ABdhPJxPanB8XhvteVrtOC1n5AXgdnKfQrT9b+ssxypfUwossTuB3Jo3ccCMedjU3+FZkDy7uSEQZFGgK/T4n/JbYn4=
-X-Received: by 2002:a05:622a:14a:: with SMTP id v10mr903141qtw.307.1623258413546;
- Wed, 09 Jun 2021 10:06:53 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210604220235.6758-1-zeffron@riotgames.com> <20210604220235.6758-2-zeffron@riotgames.com>
- <f3c5a8d9-6d23-dde6-e9a3-178d9f572f29@fb.com>
-In-Reply-To: <f3c5a8d9-6d23-dde6-e9a3-178d9f572f29@fb.com>
-From:   Zvi Effron <zeffron@riotgames.com>
-Date:   Wed, 9 Jun 2021 12:06:42 -0500
-Message-ID: <CAC1LvL1oRTN=F26eOeTvzWUU+_9=8-q++Z+cjFXxZa+A7cLRzw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 1/3] bpf: support input xdp_md context in BPF_PROG_TEST_RUN
-To:     Yonghong Song <yhs@fb.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pMNtPdB4yeaOaJg4oKXM0D8sPt6m955IeGjoIXPrk70=;
+        b=rL1rS2MPCSMdZevMrPf2eFaXW03x7E7kloVwNsLSpkay7ZAt2cz11eVHkjfjAezGzM
+         +MlWRH0jfepTT2cmy14SafVvr7Nwu1GPnehak55TomiTofv+NEn9PNnr+rYdAiha3Gsu
+         P4y4Q1VBgzL3IdiSCurKr4bYTsnLNDin7PEkEb/gg0pzBSXDnC+XMxsMKzB2XRsf8mIj
+         3tyfdcEFiQnCz/DTloyx+2X/jg1s4Tmq94znGSVoiNu9AO0rY8EyN8nqcw5ARuJGvtNK
+         amIqSPR1AW/aafHFNytxsxbPDF35SxAAsAumNw0uPg3ahXixyHGL047MEMS6t5tat3i/
+         zZaw==
+X-Gm-Message-State: AOAM530mE3Glh9dNg5sdXNoZCedMNqw0YCglWjB1eSS47oyRLxXXvhI/
+        KqjxJppu/GSna7+H7FMxCry4uQ==
+X-Google-Smtp-Source: ABdhPJwLivfhU+7xTPT8sWB9xanESizvLeRBJblRt/PXXDrCMVDmnpcAtkIZk9u/qQeEhmYEwcu4IA==
+X-Received: by 2002:a62:3444:0:b029:2ec:9658:a755 with SMTP id b65-20020a6234440000b02902ec9658a755mr1010418pfa.71.1623262835683;
+        Wed, 09 Jun 2021 11:20:35 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id p14sm445214pgk.6.2021.06.09.11.20.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Jun 2021 11:20:34 -0700 (PDT)
+Date:   Wed, 9 Jun 2021 11:20:33 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Yonghong Song <yhs@fb.com>,
+        Kurt Manucredo <fuzzybritches0@gmail.com>,
+        syzbot+bed360704c521841c85d@syzkaller.appspotmail.com,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
+        "David S. Miller" <davem@davemloft.net>,
         Jesper Dangaard Brouer <hawk@kernel.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        John Fastabend <john.fastabend@gmail.com>,
         Martin KaFai Lau <kafai@fb.com>,
-        Cody Haas <chaas@riotgames.com>,
-        Lisa Watanabe <lwatanabe@riotgames.com>
-Content-Type: text/plain; charset="UTF-8"
+        KP Singh <kpsingh@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        Song Liu <songliubraving@fb.com>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        nathan@kernel.org, Nick Desaulniers <ndesaulniers@google.com>,
+        Clang-Built-Linux ML <clang-built-linux@googlegroups.com>,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        kasan-dev <kasan-dev@googlegroups.com>
+Subject: Re: [PATCH v4] bpf: core: fix shift-out-of-bounds in ___bpf_prog_run
+Message-ID: <202106091119.84A88B6FE7@keescook>
+References: <000000000000c2987605be907e41@google.com>
+ <20210602212726.7-1-fuzzybritches0@gmail.com>
+ <YLhd8BL3HGItbXmx@kroah.com>
+ <87609-531187-curtm@phaethon>
+ <6a392b66-6f26-4532-d25f-6b09770ce366@fb.com>
+ <CAADnVQKexxZQw0yK_7rmFOdaYabaFpi2EmF6RGs5bXvFHtUQaA@mail.gmail.com>
+ <CACT4Y+b=si6NCx=nRHKm_pziXnVMmLo-eSuRajsxmx5+Hy_ycg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACT4Y+b=si6NCx=nRHKm_pziXnVMmLo-eSuRajsxmx5+Hy_ycg@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sat, Jun 5, 2021 at 10:17 PM Yonghong Song <yhs@fb.com> wrote:
->
->
->
-> On 6/4/21 3:02 PM, Zvi Effron wrote:
-> > --- a/net/bpf/test_run.c
-> > +++ b/net/bpf/test_run.c
-> > @@ -687,6 +687,38 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
-> >       return ret;
-> >   }
+On Mon, Jun 07, 2021 at 09:38:43AM +0200, 'Dmitry Vyukov' via Clang Built Linux wrote:
+> On Sat, Jun 5, 2021 at 9:10 PM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> > On Sat, Jun 5, 2021 at 10:55 AM Yonghong Song <yhs@fb.com> wrote:
+> > > On 6/5/21 8:01 AM, Kurt Manucredo wrote:
+> > > > Syzbot detects a shift-out-of-bounds in ___bpf_prog_run()
+> > > > kernel/bpf/core.c:1414:2.
+> > >
+> > > This is not enough. We need more information on why this happens
+> > > so we can judge whether the patch indeed fixed the issue.
+> > >
+> > > >
+> > > > I propose: In adjust_scalar_min_max_vals() move boundary check up to avoid
+> > > > missing them and return with error when detected.
+> > > >
+> > > > Reported-and-tested-by: syzbot+bed360704c521841c85d@syzkaller.appspotmail.com
+> > > > Signed-off-by: Kurt Manucredo <fuzzybritches0@gmail.com>
+> > > > ---
+> > > >
+> > > > https://syzkaller.appspot.com/bug?id=edb51be4c9a320186328893287bb30d5eed09231
+> > > >
+> > > > Changelog:
+> > > > ----------
+> > > > v4 - Fix shift-out-of-bounds in adjust_scalar_min_max_vals.
+> > > >       Fix commit message.
+> > > > v3 - Make it clearer what the fix is for.
+> > > > v2 - Fix shift-out-of-bounds in ___bpf_prog_run() by adding boundary
+> > > >       check in check_alu_op() in verifier.c.
+> > > > v1 - Fix shift-out-of-bounds in ___bpf_prog_run() by adding boundary
+> > > >       check in ___bpf_prog_run().
+> > > >
+> > > > thanks
+> > > >
+> > > > kind regards
+> > > >
+> > > > Kurt
+> > > >
+> > > >   kernel/bpf/verifier.c | 30 +++++++++---------------------
+> > > >   1 file changed, 9 insertions(+), 21 deletions(-)
+> > > >
+> > > > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > > > index 94ba5163d4c5..ed0eecf20de5 100644
+> > > > --- a/kernel/bpf/verifier.c
+> > > > +++ b/kernel/bpf/verifier.c
+> > > > @@ -7510,6 +7510,15 @@ static int adjust_scalar_min_max_vals(struct bpf_verifier_env *env,
+> > > >       u32_min_val = src_reg.u32_min_value;
+> > > >       u32_max_val = src_reg.u32_max_value;
+> > > >
+> > > > +     if ((opcode == BPF_LSH || opcode == BPF_RSH || opcode == BPF_ARSH) &&
+> > > > +                     umax_val >= insn_bitness) {
+> > > > +             /* Shifts greater than 31 or 63 are undefined.
+> > > > +              * This includes shifts by a negative number.
+> > > > +              */
+> > > > +             verbose(env, "invalid shift %lld\n", umax_val);
+> > > > +             return -EINVAL;
+> > > > +     }
+> > >
+> > > I think your fix is good. I would like to move after
 > >
-> > +static int xdp_convert_md_to_buff(struct xdp_buff *xdp, struct xdp_md *xdp_md)
->
-> Should the order of parameters be switched to (xdp_md, xdp)?
-> This will follow the convention of below function xdp_convert_buff_to_md().
->
-
-The order was done to match the skb versions of these functions, which seem to
-have the output format first and the input format second, which is why the
-order flips between conversion functions. We're not particular about order, so
-we can definitely make it consistent.
-
-> > +{
-> > +     void *data;
-> > +
-> > +     if (!xdp_md)
-> > +             return 0;
-> > +
-> > +     if (xdp_md->egress_ifindex != 0)
-> > +             return -EINVAL;
-> > +
-> > +     if (xdp_md->data > xdp_md->data_end)
-> > +             return -EINVAL;
-> > +
-> > +     xdp->data = xdp->data_meta + xdp_md->data;
-> > +
-> > +     if (xdp_md->ingress_ifindex != 0 || xdp_md->rx_queue_index != 0)
-> > +             return -EINVAL;
->
-> It would be good if you did all error checking before doing xdp->data
-> assignment. Also looks like xdp_md error checking happens here and
-> bpf_prog_test_run_xdp(). If it is hard to put all error checking
-> in bpf_prog_test_run_xdp(), at least put "xdp_md->data >
-> xdp_md->data_end) in bpf_prog_test_run_xdp(), so this function only
-> checks *_ifindex and rx_queue_index?
->
-
-bpf_prog_test_run_xdp() was already a large function, which is why this was
-turned into a helper. Initially, we tried to have all xdp_md related logic in
-the helper, with only the required logic in bpf_prog_test_run_xdp(). Based on
-a prior suggestion, we moved one additional check from the helper to
-bpf_prog_test_run_xdp() as it simplified the logic. It's not clear to us what
-benefit moving the other checks to bpf_prog_test_run_xdp() provides, but it
-does reduce the benefit of having the helper function.
-
-> > @@ -696,36 +728,68 @@ int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
-> >       u32 repeat = kattr->test.repeat;
-> >       struct netdev_rx_queue *rxqueue;
-> >       struct xdp_buff xdp = {};
-> > +     struct xdp_md *ctx;
->
-> Let us try to maintain reverse christmas tree?
-
-Sure.
-
-
->
-> >       u32 retval, duration;
-> >       u32 max_data_sz;
-> >       void *data;
-> >       int ret;
+> > I suspect such change will break valid programs that do shift by register.
 > >
-> > -     if (kattr->test.ctx_in || kattr->test.ctx_out)
-> > -             return -EINVAL;
-> > +     ctx = bpf_ctx_init(kattr, sizeof(struct xdp_md));
-> > +     if (IS_ERR(ctx))
-> > +             return PTR_ERR(ctx);
-> > +
-> > +     /* There can't be user provided data before the metadata */
-> > +     if (ctx) {
-> > +             if (ctx->data_meta)
-> > +                     return -EINVAL;
-> > +             if (ctx->data_end != size)
-> > +                     return -EINVAL;
-> > +             if (unlikely((ctx->data & (sizeof(__u32) - 1)) ||
-> > +                          ctx->data > 32))
->
-> Why 32? Should it be sizeof(struct xdp_md)?
+> > > the following code though:
+> > >
+> > >          if (!src_known &&
+> > >              opcode != BPF_ADD && opcode != BPF_SUB && opcode != BPF_AND) {
+> > >                  __mark_reg_unknown(env, dst_reg);
+> > >                  return 0;
+> > >          }
+> > >
+> > > > +
+> > > >       if (alu32) {
+> > > >               src_known = tnum_subreg_is_const(src_reg.var_off);
+> > > >               if ((src_known &&
+> > > > @@ -7592,39 +7601,18 @@ static int adjust_scalar_min_max_vals(struct bpf_verifier_env *env,
+> > > >               scalar_min_max_xor(dst_reg, &src_reg);
+> > > >               break;
+> > > >       case BPF_LSH:
+> > > > -             if (umax_val >= insn_bitness) {
+> > > > -                     /* Shifts greater than 31 or 63 are undefined.
+> > > > -                      * This includes shifts by a negative number.
+> > > > -                      */
+> > > > -                     mark_reg_unknown(env, regs, insn->dst_reg);
+> > > > -                     break;
+> > > > -             }
+> > >
+> > > I think this is what happens. For the above case, we simply
+> > > marks the dst reg as unknown and didn't fail verification.
+> > > So later on at runtime, the shift optimization will have wrong
+> > > shift value (> 31/64). Please correct me if this is not right
+> > > analysis. As I mentioned in the early please write detailed
+> > > analysis in commit log.
+> >
+> > The large shift is not wrong. It's just undefined.
+> > syzbot has to ignore such cases.
+> 
+> Hi Alexei,
+> 
+> The report is produced by KUBSAN. I thought there was an agreement on
+> cleaning up KUBSAN reports from the kernel (the subset enabled on
+> syzbot at least).
+> What exactly cases should KUBSAN ignore?
+> +linux-hardening/kasan-dev for KUBSAN false positive
 
-This is not checking the context itself, but the amount of metadata. XDP allows
-at most 32 bytes of metadata.
+Can check_shl_overflow() be used at all? Best to just make things
+readable and compiler-happy, whatever the implementation. :)
 
->
-> > +             /* Metadata is allocated from the headroom */
-> > +             headroom -= ctx->data;
->
-> sizeof(struct xdp_md) should be smaller than headroom
-> (XDP_PACKET_HEADROOM), so we don't need to a check, but
-> some comments might be helpful so people looking at the
-> code doesn't need to double check.
-
-We're not sure what check you're referring to, as there's no check here. This
-subtraction is, as the comment says, because the XDP metadata is allocated out
-of the XDP headroom, so the headroom size needs to be reduced by the metadata
-size.
+-- 
+Kees Cook
