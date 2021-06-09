@@ -2,115 +2,100 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE11EC48BCD
-	for <bpf@archiver.kernel.org>; Wed,  9 Jun 2021 16:11:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 729B0C48BCF
+	for <bpf@archiver.kernel.org>; Wed,  9 Jun 2021 16:18:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D2B80610A2
-	for <bpf@archiver.kernel.org>; Wed,  9 Jun 2021 16:11:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 53B2A611AE
+	for <bpf@archiver.kernel.org>; Wed,  9 Jun 2021 16:18:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230519AbhFIQNf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 9 Jun 2021 12:13:35 -0400
-Received: from mga03.intel.com ([134.134.136.65]:38052 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233896AbhFIQNf (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 9 Jun 2021 12:13:35 -0400
-IronPort-SDR: f7Iukt5eIeccGof+nJ0GmaPQ7EUITZFbNwIfpkAkUGghGjR+HzWKcrKHftnMBgc0Jv0/xkyJRH
- D7ui+1vCD3/g==
-X-IronPort-AV: E=McAfee;i="6200,9189,10010"; a="205132500"
-X-IronPort-AV: E=Sophos;i="5.83,261,1616482800"; 
-   d="scan'208";a="205132500"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2021 09:09:35 -0700
-IronPort-SDR: XdtyxdsuOFh20zhDOs0rEHT5LAV2pN7lHigK2haDDFpNDzsigM8YEbfhzzUQhOzUI5+obBoAOR
- jaRj0FTP6XZA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.83,261,1616482800"; 
-   d="scan'208";a="419329872"
-Received: from ranger.igk.intel.com ([10.102.21.164])
-  by orsmga002.jf.intel.com with ESMTP; 09 Jun 2021 09:09:33 -0700
-Date:   Wed, 9 Jun 2021 17:57:04 +0200
-From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     John Fastabend <john.fastabend@gmail.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andriin@fb.com,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH bpf 2/2] bpf: selftest to verify mixing bpf2bpf calls and
- tailcalls with insn patch
-Message-ID: <20210609155704.GB12061@ranger.igk.intel.com>
+        id S229743AbhFIQUs (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 9 Jun 2021 12:20:48 -0400
+Received: from mail-il1-f179.google.com ([209.85.166.179]:38573 "EHLO
+        mail-il1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231338AbhFIQUr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 9 Jun 2021 12:20:47 -0400
+Received: by mail-il1-f179.google.com with SMTP id d1so24043898ils.5;
+        Wed, 09 Jun 2021 09:18:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:message-id:in-reply-to:references:subject
+         :mime-version:content-transfer-encoding;
+        bh=j3p+5VJ1d2gl2kt6X6tDU7XdZVaL9ybD/hRYi8R8WOw=;
+        b=iEtOK9IvhBhlYSwdMM06sv05I5YnqdiWf+et7E56BvnsH6gdYF9yg8WEXcLpxXgx8i
+         9BEpMwY2sUmR7IYxn0TcE9PpciRODsuzEdHqnVv50R7P9awARSzUAfJU156lDWBW6d72
+         8qDM7X5TC9fTqaCZ4feUVH5EKQV5Fa6FZ3aLNOmHoT94vbG6jTotZVGSrqWk3mITl0Ph
+         Pv6mhvpfsFFPWirmrahe8dRo60A5IaoyhTAZIhzEnZ4NEwB7Vqt6rNKEOmQmZqDJfG3d
+         b2gv40Z+aEQJdplf001JvaI0Z67C4YqbitiaSTOAJwS20+6gl7/0u53l9tKbQFo869um
+         q+1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
+         :references:subject:mime-version:content-transfer-encoding;
+        bh=j3p+5VJ1d2gl2kt6X6tDU7XdZVaL9ybD/hRYi8R8WOw=;
+        b=nHlgUzYef46qxwDx55PC6sFnZAYTRl0sy6V8M3F0ERcwtvlL+qjSfPDn/h0OaRJb6J
+         C2bhKH/Y3te34i2OAu3XHhpbV0WZC5QgGlP6n7QmwiobZ0Ln4wR/XcRrC57fG+wDojIf
+         KnORFe1QaGIq6ov6ypyFPxj8NRplnGZQvFYolBvSpmxBdG4RGsmjk2rNI4Enr+dxJf6/
+         HiKOeYdxWL916kseTobgj4OAEgBgadxxo8VJmpUezPq6fRK7iLYvbytddaNKZEDct1ap
+         yXiN4BjDitYfgORGnjixjBmHetHwKCx4Zx4w2JOIt4eqq0ILqV3jIRd6f41kedgNYFHL
+         HTAg==
+X-Gm-Message-State: AOAM533b7kxOG3fGUzEK9X9+8ipozcSjNVwEWa5zlbUyUi4y7gIHRTld
+        jiz7NwEUNw+1tHqQZefc9xs=
+X-Google-Smtp-Source: ABdhPJwgZa++VW/bv3YLGBU0fzluOrW2Qa9jN+0PkShqgU2pltxYYM2xVufLCIWn6u8pjzoyFMmISw==
+X-Received: by 2002:a92:c792:: with SMTP id c18mr373615ilk.103.1623255457809;
+        Wed, 09 Jun 2021 09:17:37 -0700 (PDT)
+Received: from localhost ([172.243.157.240])
+        by smtp.gmail.com with ESMTPSA id u5sm161027iob.44.2021.06.09.09.17.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Jun 2021 09:17:37 -0700 (PDT)
+Date:   Wed, 09 Jun 2021 09:17:29 -0700
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>, ast@kernel.org,
+        daniel@iogearbox.net, andriin@fb.com
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        maciej.fijalkowski@intel.com
+Message-ID: <60c0e99991232_986212085a@john-XPS-13-9370.notmuch>
+In-Reply-To: <588e062e-f1aa-6bc5-8011-380be7bf1176@fb.com>
 References: <162318053542.323820.3719766457956848570.stgit@john-XPS-13-9370>
- <162318063321.323820.18256758193426055338.stgit@john-XPS-13-9370>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <162318063321.323820.18256758193426055338.stgit@john-XPS-13-9370>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+ <588e062e-f1aa-6bc5-8011-380be7bf1176@fb.com>
+Subject: Re: [PATCH bpf 0/2] bpf fix for mixed tail calls and subprograms
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Jun 08, 2021 at 12:30:33PM -0700, John Fastabend wrote:
-> This adds some extra noise to the tailcall_bpf2bpf4 tests that will cause
-> verifier to patch insns. This then moves around subprog start/end insn
-> index and poke descriptor insn index to ensure that verify and JIT will
-> continue to track these correctly.
+Yonghong Song wrote:
+> 
+> 
+> On 6/8/21 12:29 PM, John Fastabend wrote:
+> > We recently tried to use mixed programs that have both tail calls and
+> > subprograms, but it needs the attached fix. Also added a small test
+> > addition that will cause the failure without the fix.
+> > 
+> > Thanks,
+> > John
+> > 
+> > ---
+> > 
+> > John Fastabend (2):
+> >        bpf: Fix null ptr deref with mixed tail calls and subprogs
+> >        bpf: selftest to verify mixing bpf2bpf calls and tailcalls with insn patch
+> > 
+> > 
+> >   .../selftests/bpf/progs/tailcall_bpf2bpf4.c     | 17 +++++++++++++++++
+> >   1 file changed, 17 insertions(+)
+> 
+> Don't know what happens. Apparently, the first patch made changes
+> in kernel/bpf/verifier.c, but it didn't show up in the above.
 
-This test is the most complicated one where I tried to document the scope
-of it on the side of prog_tests/tailcalls.c. I feel that it would make it
-more difficult to debug it if under any circumstances something would have
-been broken with that logic.
-
-Maybe a separate test scenario? Or is this an overkill? If so, I would
-vote for moving it to tailcall_bpf2bpf1.c and have a little comment that
-testing other bpf helpers mixed in is in scope of that test.
-
-> 
-> Reviewed-by: Daniel Borkmann <daniel@iogearbox.net>
-> Signed-off-by: John Fastabend <john.fastabend@gmail.com>
-> ---
->  .../selftests/bpf/progs/tailcall_bpf2bpf4.c        |   17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf4.c b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf4.c
-> index 9a1b166b7fbe..0d70de5f97e2 100644
-> --- a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf4.c
-> +++ b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf4.c
-> @@ -2,6 +2,13 @@
->  #include <linux/bpf.h>
->  #include <bpf/bpf_helpers.h>
->  
-> +struct {
-> +	__uint(type, BPF_MAP_TYPE_ARRAY);
-> +	__uint(max_entries, 1);
-> +	__uint(key_size, sizeof(__u32));
-> +	__uint(value_size, sizeof(__u32));
-> +} nop_table SEC(".maps");
-> +
->  struct {
->  	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
->  	__uint(max_entries, 3);
-> @@ -11,9 +18,19 @@ struct {
->  
->  static volatile int count;
->  
-> +__noinline
-> +int subprog_noise(struct __sk_buff *skb)
-> +{
-> +	__u32 key = 0;
-> +
-> +	bpf_map_lookup_elem(&nop_table, &key);
-> +	return 0;
-> +}
-> +
->  __noinline
->  int subprog_tail_2(struct __sk_buff *skb)
->  {
-> +	subprog_noise(skb);
->  	bpf_tail_call_static(skb, &jmp_table, 2);
->  	return skb->len * 3;
->  }
-> 
-> 
+Agh its how I applied the patches and cover-letter :/ I moved them between
+trees (bpf-next -> bpf) and lost the diff. I can resubmit if anyone
+cares.
