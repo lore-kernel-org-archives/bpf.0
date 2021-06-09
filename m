@@ -2,221 +2,86 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C93EC48BCF
-	for <bpf@archiver.kernel.org>; Wed,  9 Jun 2021 13:59:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 37A77C48BCF
+	for <bpf@archiver.kernel.org>; Wed,  9 Jun 2021 14:14:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1E152613AD
-	for <bpf@archiver.kernel.org>; Wed,  9 Jun 2021 13:59:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 24ED561285
+	for <bpf@archiver.kernel.org>; Wed,  9 Jun 2021 14:14:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237110AbhFIOBv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 9 Jun 2021 10:01:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:55341 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231175AbhFIOBr (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 9 Jun 2021 10:01:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1623247192;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=gjECBgepBKUOQN9KWDqQV7wge2o1vkGBrM1TtLcfPPc=;
-        b=h1nTJ6mkkgekQiVkjuHwYElQVujeQKYzlUW+VR2/VMUKuu1BMC0EFBA5vCj3HzXTr8ArJG
-        Nd8SFD3Sh7uoVojmC2AIe3GvcbUn0KrMyOVjad3UVTSBySeGa5CfxvqAqI14k06uFRnV1u
-        UCKOF6QCC+hoS74Np1cxf3RjRxG9cMc=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-144-FoeELBVfOO-qWzqvbyLVpg-1; Wed, 09 Jun 2021 09:59:49 -0400
-X-MC-Unique: FoeELBVfOO-qWzqvbyLVpg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 60D808049CD;
-        Wed,  9 Jun 2021 13:59:47 +0000 (UTC)
-Received: from krava (unknown [10.40.195.97])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 57EAC5C1C2;
-        Wed,  9 Jun 2021 13:59:44 +0000 (UTC)
-Date:   Wed, 9 Jun 2021 15:59:43 +0200
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        id S234463AbhFIOQh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 9 Jun 2021 10:16:37 -0400
+Received: from szxga02-in.huawei.com ([45.249.212.188]:3928 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237645AbhFIOQg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 9 Jun 2021 10:16:36 -0400
+Received: from dggeml759-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4G0TYc6tJDz6vyG;
+        Wed,  9 Jun 2021 22:11:32 +0800 (CST)
+Received: from localhost.localdomain (10.175.102.38) by
+ dggeml759-chm.china.huawei.com (10.1.199.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2176.2; Wed, 9 Jun 2021 22:14:36 +0800
+From:   Wei Yongjun <weiyongjun1@huawei.com>
+To:     <weiyongjun1@huawei.com>, Netanel Belgazal <netanel@amazon.com>,
+        Arthur Kiyanovski <akiyano@amazon.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>,
-        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>, Daniel Xu <dxu@dxuuu.xyz>,
-        Viktor Malik <vmalik@redhat.com>
-Subject: Re: [PATCH 14/19] libbpf: Add btf__find_by_pattern_kind function
-Message-ID: <YMDJT4fnLCOsfFuS@krava>
-References: <20210605111034.1810858-1-jolsa@kernel.org>
- <20210605111034.1810858-15-jolsa@kernel.org>
- <CAEf4BzaT9eiyMrpKbmmq3hOpD29b8K6DiRzB0eRKnTso93YRoA@mail.gmail.com>
+        Andrii Nakryiko <andrii@kernel.org>,
+        Shay Agroskin <shayagr@amazon.com>,
+        Sameeh Jubran <sameehj@amazon.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>
+CC:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <kernel-janitors@vger.kernel.org>, Hulk Robot <hulkci@huawei.com>
+Subject: [PATCH net-next] net: ena: make symbol 'ena_alloc_map_page' static
+Date:   Wed, 9 Jun 2021 14:25:06 +0000
+Message-ID: <20210609142506.1621773-1-weiyongjun1@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzaT9eiyMrpKbmmq3hOpD29b8K6DiRzB0eRKnTso93YRoA@mail.gmail.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+Content-Type:   text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7BIT
+X-Originating-IP: [10.175.102.38]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggeml759-chm.china.huawei.com (10.1.199.138)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Jun 08, 2021 at 10:29:19PM -0700, Andrii Nakryiko wrote:
-> On Sat, Jun 5, 2021 at 4:14 AM Jiri Olsa <jolsa@kernel.org> wrote:
-> >
-> > Adding btf__find_by_pattern_kind function that returns
-> > array of BTF ids for given function name pattern.
-> >
-> > Using libc's regex.h support for that.
-> >
-> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > ---
-> >  tools/lib/bpf/btf.c | 68 +++++++++++++++++++++++++++++++++++++++++++++
-> >  tools/lib/bpf/btf.h |  3 ++
-> >  2 files changed, 71 insertions(+)
-> >
-> > diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-> > index b46760b93bb4..421dd6c1e44a 100644
-> > --- a/tools/lib/bpf/btf.c
-> > +++ b/tools/lib/bpf/btf.c
-> > @@ -1,6 +1,7 @@
-> >  // SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
-> >  /* Copyright (c) 2018 Facebook */
-> >
-> > +#define _GNU_SOURCE
-> >  #include <byteswap.h>
-> >  #include <endian.h>
-> >  #include <stdio.h>
-> > @@ -16,6 +17,7 @@
-> >  #include <linux/err.h>
-> >  #include <linux/btf.h>
-> >  #include <gelf.h>
-> > +#include <regex.h>
-> >  #include "btf.h"
-> >  #include "bpf.h"
-> >  #include "libbpf.h"
-> > @@ -711,6 +713,72 @@ __s32 btf__find_by_name_kind(const struct btf *btf, const char *type_name,
-> >         return libbpf_err(-ENOENT);
-> >  }
-> >
-> > +static bool is_wildcard(char c)
-> > +{
-> > +       static const char *wildchars = "*?[|";
-> > +
-> > +       return strchr(wildchars, c);
-> > +}
-> > +
-> > +int btf__find_by_pattern_kind(const struct btf *btf,
-> > +                             const char *type_pattern, __u32 kind,
-> > +                             __s32 **__ids)
-> > +{
-> > +       __u32 i, nr_types = btf__get_nr_types(btf);
-> > +       __s32 *ids = NULL;
-> > +       int cnt = 0, alloc = 0, ret;
-> > +       regex_t regex;
-> > +       char *pattern;
-> > +
-> > +       if (kind == BTF_KIND_UNKN || !strcmp(type_pattern, "void"))
-> > +               return 0;
-> > +
-> > +       /* When the pattern does not start with wildcard, treat it as
-> > +        * if we'd want to match it from the beginning of the string.
-> > +        */
-> 
-> This assumption is absolutely atrocious. If we say it's regexp, then
-> it has to always be regexp, not something based on some random
-> heuristic based on the first character.
-> 
-> Taking a step back, though. Do we really need to provide this API? Why
-> applications can't implement it on their own, given regexp
-> functionality is provided by libc. Which I didn't know, actually, so
-> that's pretty nice, assuming that it's also available in more minimal
-> implementations like musl.
-> 
+The sparse tool complains as follows:
 
-so the only purpose for this function is to support wildcards in
-tests like:
+drivers/net/ethernet/amazon/ena/ena_netdev.c:978:13: warning:
+ symbol 'ena_alloc_map_page' was not declared. Should it be static?
 
-  SEC("fentry.multi/bpf_fentry_test*")
+This symbol is not used outside of ena_netdev.c, so marks it static.
 
-so the generic skeleton attach function can work.. but that can be
-removed and the test programs can be attached manually through some
-other attach function that will have list of functions as argument
+Fixes: 947c54c395cb ("net: ena: Use dev_alloc() in RX buffer allocation")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+---
+ drivers/net/ethernet/amazon/ena/ena_netdev.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-jirka
-
-> > +       asprintf(&pattern, "%s%s",
-> > +                is_wildcard(type_pattern[0]) ? "^" : "",
-> > +                type_pattern);
-> > +
-> > +       ret = regcomp(&regex, pattern, REG_EXTENDED);
-> > +       if (ret) {
-> > +               pr_warn("failed to compile regex\n");
-> > +               free(pattern);
-> > +               return -EINVAL;
-> > +       }
-> > +
-> > +       free(pattern);
-> > +
-> > +       for (i = 1; i <= nr_types; i++) {
-> > +               const struct btf_type *t = btf__type_by_id(btf, i);
-> > +               const char *name;
-> > +               __s32 *p;
-> > +
-> > +               if (btf_kind(t) != kind)
-> > +                       continue;
-> > +               name = btf__name_by_offset(btf, t->name_off);
-> > +               if (name && regexec(&regex, name, 0, NULL, 0))
-> > +                       continue;
-> > +               if (cnt == alloc) {
-> > +                       alloc = max(100, alloc * 3 / 2);
-> > +                       p = realloc(ids, alloc * sizeof(__u32));
-> 
-> this memory allocation and re-allocation on behalf of users is another
-> argument against this API
-> 
-> > +                       if (!p) {
-> > +                               free(ids);
-> > +                               regfree(&regex);
-> > +                               return -ENOMEM;
-> > +                       }
-> > +                       ids = p;
-> > +               }
-> > +
-> > +               ids[cnt] = i;
-> > +               cnt++;
-> > +       }
-> > +
-> > +       regfree(&regex);
-> > +       *__ids = ids;
-> > +       return cnt ?: -ENOENT;
-> > +}
-> > +
-> >  static bool btf_is_modifiable(const struct btf *btf)
-> >  {
-> >         return (void *)btf->hdr != btf->raw_data;
-> > diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
-> > index b54f1c3ebd57..036857aded94 100644
-> > --- a/tools/lib/bpf/btf.h
-> > +++ b/tools/lib/bpf/btf.h
-> > @@ -371,6 +371,9 @@ btf_var_secinfos(const struct btf_type *t)
-> >         return (struct btf_var_secinfo *)(t + 1);
-> >  }
-> >
-> > +int btf__find_by_pattern_kind(const struct btf *btf,
-> > +                             const char *type_pattern, __u32 kind,
-> > +                             __s32 **__ids);
-> >  #ifdef __cplusplus
-> >  } /* extern "C" */
-> >  #endif
-> > --
-> > 2.31.1
-> >
-> 
+diff --git a/drivers/net/ethernet/amazon/ena/ena_netdev.c b/drivers/net/ethernet/amazon/ena/ena_netdev.c
+index cd6ea59c543c..3bb0e66b2c7e 100644
+--- a/drivers/net/ethernet/amazon/ena/ena_netdev.c
++++ b/drivers/net/ethernet/amazon/ena/ena_netdev.c
+@@ -975,7 +975,8 @@ static void ena_free_all_io_rx_resources(struct ena_adapter *adapter)
+ 		ena_free_rx_resources(adapter, i);
+ }
+ 
+-struct page *ena_alloc_map_page(struct ena_ring *rx_ring, dma_addr_t *dma)
++static struct page *ena_alloc_map_page(struct ena_ring *rx_ring,
++				       dma_addr_t *dma)
+ {
+ 	struct page *page;
+ 
 
