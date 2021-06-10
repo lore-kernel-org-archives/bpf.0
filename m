@@ -5,24 +5,24 @@ X-Spam-Level:
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DC086C48BE0
-	for <bpf@archiver.kernel.org>; Thu, 10 Jun 2021 08:22:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0296BC48BE5
+	for <bpf@archiver.kernel.org>; Thu, 10 Jun 2021 08:22:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C70D461419
-	for <bpf@archiver.kernel.org>; Thu, 10 Jun 2021 08:22:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DF44961436
+	for <bpf@archiver.kernel.org>; Thu, 10 Jun 2021 08:22:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230360AbhFJIYM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 10 Jun 2021 04:24:12 -0400
-Received: from out30-131.freemail.mail.aliyun.com ([115.124.30.131]:38830 "EHLO
-        out30-131.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230370AbhFJIYJ (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 10 Jun 2021 04:24:09 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0UbxDLww_1623313331;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0UbxDLww_1623313331)
+        id S230113AbhFJIYT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 10 Jun 2021 04:24:19 -0400
+Received: from out30-130.freemail.mail.aliyun.com ([115.124.30.130]:46958 "EHLO
+        out30-130.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230506AbhFJIYL (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 10 Jun 2021 04:24:11 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R871e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0UbxH89d_1623313332;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0UbxH89d_1623313332)
           by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 10 Jun 2021 16:22:12 +0800
+          Thu, 10 Jun 2021 16:22:13 +0800
 From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To:     netdev@vger.kernel.org
 Cc:     "David S. Miller" <davem@davemloft.net>,
@@ -43,9 +43,9 @@ Cc:     "David S. Miller" <davem@davemloft.net>,
         Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
         virtualization@lists.linux-foundation.org, bpf@vger.kernel.org,
         "dust . li" <dust.li@linux.alibaba.com>
-Subject: [PATCH net-next v5 06/15] virtio-net: unify the code for recycling the xmit ptr
-Date:   Thu, 10 Jun 2021 16:22:00 +0800
-Message-Id: <20210610082209.91487-7-xuanzhuo@linux.alibaba.com>
+Subject: [PATCH net-next v5 08/15] virtio-net: split the receive_mergeable function
+Date:   Thu, 10 Jun 2021 16:22:02 +0800
+Message-Id: <20210610082209.91487-9-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.31.0
 In-Reply-To: <20210610082209.91487-1-xuanzhuo@linux.alibaba.com>
 References: <20210610082209.91487-1-xuanzhuo@linux.alibaba.com>
@@ -55,188 +55,231 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Now there are two types of "skb" and "xdp frame" during recycling old
-xmit.
-
-There are two completely similar and independent implementations. This
-is inconvenient for the subsequent addition of new types. So extract a
-function from this piece of code and call this function uniformly to
-recover old xmit ptr.
-
-Rename free_old_xmit_skbs() to free_old_xmit().
+receive_mergeable() is too complicated, so this function is split here.
+One is to make the function more readable. On the other hand, the two
+independent functions will be called separately in subsequent patches.
 
 Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 ---
- drivers/net/virtio_net.c | 86 ++++++++++++++++++----------------------
- 1 file changed, 38 insertions(+), 48 deletions(-)
+ drivers/net/virtio_net.c | 181 ++++++++++++++++++++++++---------------
+ 1 file changed, 111 insertions(+), 70 deletions(-)
 
 diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index 6c1233f0ab3e..d791543a8dd8 100644
+index 3fd87bf2b2ad..989aba600e63 100644
 --- a/drivers/net/virtio_net.c
 +++ b/drivers/net/virtio_net.c
-@@ -264,6 +264,30 @@ static struct xdp_frame *ptr_to_xdp(void *ptr)
- 	return (struct xdp_frame *)((unsigned long)ptr & ~VIRTIO_XDP_FLAG);
+@@ -733,6 +733,109 @@ static struct page *xdp_linearize_page(struct receive_queue *rq,
+ 	return NULL;
  }
  
-+static void __free_old_xmit(struct send_queue *sq, bool in_napi,
-+			    struct virtnet_sq_stats *stats)
++static void merge_drop_follow_bufs(struct net_device *dev,
++				   struct receive_queue *rq,
++				   u16 num_buf,
++				   struct virtnet_rq_stats *stats)
 +{
++	struct page *page;
 +	unsigned int len;
-+	void *ptr;
++	void *buf;
 +
-+	while ((ptr = virtqueue_get_buf(sq->vq, &len)) != NULL) {
-+		if (!is_xdp_frame(ptr)) {
-+			struct sk_buff *skb = ptr;
-+
-+			pr_debug("Sent skb %p\n", skb);
-+
-+			stats->bytes += skb->len;
-+			napi_consume_skb(skb, in_napi);
-+		} else {
-+			struct xdp_frame *frame = ptr_to_xdp(ptr);
-+
-+			stats->bytes += frame->len;
-+			xdp_return_frame(frame);
++	while (num_buf-- > 1) {
++		buf = virtqueue_get_buf(rq->vq, &len);
++		if (unlikely(!buf)) {
++			pr_debug("%s: rx error: %d buffers missing\n",
++				 dev->name, num_buf);
++			dev->stats.rx_length_errors++;
++			break;
 +		}
-+		stats->packets++;
++		stats->bytes += len;
++		page = virt_to_head_page(buf);
++		put_page(page);
 +	}
 +}
 +
- /* Converting between virtqueue no. and kernel tx/rx queue no.
-  * 0:rx0 1:tx0 2:rx1 3:tx1 ... 2N:rxN 2N+1:txN 2N+2:cvq
-  */
-@@ -572,15 +596,12 @@ static int virtnet_xdp_xmit(struct net_device *dev,
- 			    int n, struct xdp_frame **frames, u32 flags)
- {
- 	struct virtnet_info *vi = netdev_priv(dev);
-+	struct virtnet_sq_stats stats = {};
- 	struct receive_queue *rq = vi->rq;
++static struct sk_buff *merge_receive_follow_bufs(struct net_device *dev,
++						 struct virtnet_info *vi,
++						 struct receive_queue *rq,
++						 struct sk_buff *head_skb,
++						 u16 num_buf,
++						 struct virtnet_rq_stats *stats)
++{
++	struct sk_buff *curr_skb;
++	unsigned int truesize;
++	unsigned int len, num;
++	struct page *page;
++	void *buf, *ctx;
++	int offset;
++
++	curr_skb = head_skb;
++	num = num_buf;
++
++	while (--num_buf) {
++		int num_skb_frags;
++
++		buf = virtqueue_get_buf_ctx(rq->vq, &len, &ctx);
++		if (unlikely(!buf)) {
++			pr_debug("%s: rx error: %d buffers out of %d missing\n",
++				 dev->name, num_buf, num);
++			dev->stats.rx_length_errors++;
++			goto err_buf;
++		}
++
++		stats->bytes += len;
++		page = virt_to_head_page(buf);
++
++		truesize = mergeable_ctx_to_truesize(ctx);
++		if (unlikely(len > truesize)) {
++			pr_debug("%s: rx error: len %u exceeds truesize %lu\n",
++				 dev->name, len, (unsigned long)ctx);
++			dev->stats.rx_length_errors++;
++			goto err_skb;
++		}
++
++		num_skb_frags = skb_shinfo(curr_skb)->nr_frags;
++		if (unlikely(num_skb_frags == MAX_SKB_FRAGS)) {
++			struct sk_buff *nskb = alloc_skb(0, GFP_ATOMIC);
++
++			if (unlikely(!nskb))
++				goto err_skb;
++			if (curr_skb == head_skb)
++				skb_shinfo(curr_skb)->frag_list = nskb;
++			else
++				curr_skb->next = nskb;
++			curr_skb = nskb;
++			head_skb->truesize += nskb->truesize;
++			num_skb_frags = 0;
++		}
++		if (curr_skb != head_skb) {
++			head_skb->data_len += len;
++			head_skb->len += len;
++			head_skb->truesize += truesize;
++		}
++		offset = buf - page_address(page);
++		if (skb_can_coalesce(curr_skb, num_skb_frags, page, offset)) {
++			put_page(page);
++			skb_coalesce_rx_frag(curr_skb, num_skb_frags - 1,
++					     len, truesize);
++		} else {
++			skb_add_rx_frag(curr_skb, num_skb_frags, page,
++					offset, len, truesize);
++		}
++	}
++
++	return head_skb;
++
++err_skb:
++	put_page(page);
++	merge_drop_follow_bufs(dev, rq, num_buf, stats);
++err_buf:
++	stats->drops++;
++	dev_kfree_skb(head_skb);
++	return NULL;
++}
++
+ static struct sk_buff *receive_small(struct net_device *dev,
+ 				     struct virtnet_info *vi,
+ 				     struct receive_queue *rq,
+@@ -909,7 +1012,7 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
+ 	u16 num_buf = virtio16_to_cpu(vi->vdev, hdr->num_buffers);
+ 	struct page *page = virt_to_head_page(buf);
+ 	int offset = buf - page_address(page);
+-	struct sk_buff *head_skb, *curr_skb;
++	struct sk_buff *head_skb;
  	struct bpf_prog *xdp_prog;
- 	struct send_queue *sq;
--	unsigned int len;
--	int packets = 0;
--	int bytes = 0;
- 	int nxmit = 0;
- 	int kicks = 0;
--	void *ptr;
- 	int ret;
- 	int i;
+ 	unsigned int truesize = mergeable_ctx_to_truesize(ctx);
+ 	unsigned int headroom = mergeable_ctx_to_headroom(ctx);
+@@ -1054,65 +1157,15 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
  
-@@ -599,20 +620,7 @@ static int virtnet_xdp_xmit(struct net_device *dev,
- 	}
+ 	head_skb = page_to_skb(vi, rq, page, offset, len, truesize, !xdp_prog,
+ 			       metasize, !!headroom);
+-	curr_skb = head_skb;
+-
+-	if (unlikely(!curr_skb))
++	if (unlikely(!head_skb))
+ 		goto err_skb;
+-	while (--num_buf) {
+-		int num_skb_frags;
  
- 	/* Free up any pending old buffers before queueing new ones. */
--	while ((ptr = virtqueue_get_buf(sq->vq, &len)) != NULL) {
--		if (likely(is_xdp_frame(ptr))) {
--			struct xdp_frame *frame = ptr_to_xdp(ptr);
--
--			bytes += frame->len;
--			xdp_return_frame(frame);
--		} else {
--			struct sk_buff *skb = ptr;
--
--			bytes += skb->len;
--			napi_consume_skb(skb, false);
+-		buf = virtqueue_get_buf_ctx(rq->vq, &len, &ctx);
+-		if (unlikely(!buf)) {
+-			pr_debug("%s: rx error: %d buffers out of %d missing\n",
+-				 dev->name, num_buf,
+-				 virtio16_to_cpu(vi->vdev,
+-						 hdr->num_buffers));
+-			dev->stats.rx_length_errors++;
+-			goto err_buf;
 -		}
--		packets++;
--	}
-+	__free_old_xmit(sq, false, &stats);
- 
- 	for (i = 0; i < n; i++) {
- 		struct xdp_frame *xdpf = frames[i];
-@@ -629,8 +637,8 @@ static int virtnet_xdp_xmit(struct net_device *dev,
- 	}
- out:
- 	u64_stats_update_begin(&sq->stats.syncp);
--	sq->stats.bytes += bytes;
--	sq->stats.packets += packets;
-+	sq->stats.bytes += stats.bytes;
-+	sq->stats.packets += stats.packets;
- 	sq->stats.xdp_tx += n;
- 	sq->stats.xdp_tx_drops += n - nxmit;
- 	sq->stats.kicks += kicks;
-@@ -1459,39 +1467,21 @@ static int virtnet_receive(struct receive_queue *rq, int budget,
- 	return stats.packets;
- }
- 
--static void free_old_xmit_skbs(struct send_queue *sq, bool in_napi)
-+static void free_old_xmit(struct send_queue *sq, bool in_napi)
- {
--	unsigned int len;
--	unsigned int packets = 0;
--	unsigned int bytes = 0;
--	void *ptr;
-+	struct virtnet_sq_stats stats = {};
- 
--	while ((ptr = virtqueue_get_buf(sq->vq, &len)) != NULL) {
--		if (likely(!is_xdp_frame(ptr))) {
--			struct sk_buff *skb = ptr;
 -
--			pr_debug("Sent skb %p\n", skb);
+-		stats->bytes += len;
+-		page = virt_to_head_page(buf);
 -
--			bytes += skb->len;
--			napi_consume_skb(skb, in_napi);
--		} else {
--			struct xdp_frame *frame = ptr_to_xdp(ptr);
--
--			bytes += frame->len;
--			xdp_return_frame(frame);
+-		truesize = mergeable_ctx_to_truesize(ctx);
+-		if (unlikely(len > truesize)) {
+-			pr_debug("%s: rx error: len %u exceeds truesize %lu\n",
+-				 dev->name, len, (unsigned long)ctx);
+-			dev->stats.rx_length_errors++;
+-			goto err_skb;
 -		}
--		packets++;
+-
+-		num_skb_frags = skb_shinfo(curr_skb)->nr_frags;
+-		if (unlikely(num_skb_frags == MAX_SKB_FRAGS)) {
+-			struct sk_buff *nskb = alloc_skb(0, GFP_ATOMIC);
+-
+-			if (unlikely(!nskb))
+-				goto err_skb;
+-			if (curr_skb == head_skb)
+-				skb_shinfo(curr_skb)->frag_list = nskb;
+-			else
+-				curr_skb->next = nskb;
+-			curr_skb = nskb;
+-			head_skb->truesize += nskb->truesize;
+-			num_skb_frags = 0;
+-		}
+-		if (curr_skb != head_skb) {
+-			head_skb->data_len += len;
+-			head_skb->len += len;
+-			head_skb->truesize += truesize;
+-		}
+-		offset = buf - page_address(page);
+-		if (skb_can_coalesce(curr_skb, num_skb_frags, page, offset)) {
+-			put_page(page);
+-			skb_coalesce_rx_frag(curr_skb, num_skb_frags - 1,
+-					     len, truesize);
+-		} else {
+-			skb_add_rx_frag(curr_skb, num_skb_frags, page,
+-					offset, len, truesize);
+-		}
 -	}
-+	__free_old_xmit(sq, in_napi, &stats);
++	if (num_buf > 1)
++		head_skb = merge_receive_follow_bufs(dev, vi, rq, head_skb,
++						     num_buf, stats);
++	if (head_skb)
++		ewma_pkt_len_add(&rq->mrg_avg_pkt_len, head_skb->len);
  
- 	/* Avoid overhead when no packets have been processed
- 	 * happens when called speculatively from start_xmit.
- 	 */
--	if (!packets)
-+	if (!stats.packets)
- 		return;
+-	ewma_pkt_len_add(&rq->mrg_avg_pkt_len, head_skb->len);
+ 	return head_skb;
  
- 	u64_stats_update_begin(&sq->stats.syncp);
--	sq->stats.bytes += bytes;
--	sq->stats.packets += packets;
-+	sq->stats.bytes += stats.bytes;
-+	sq->stats.packets += stats.packets;
- 	u64_stats_update_end(&sq->stats.syncp);
- }
- 
-@@ -1516,7 +1506,7 @@ static void virtnet_poll_cleantx(struct receive_queue *rq)
- 		return;
- 
- 	if (__netif_tx_trylock(txq)) {
--		free_old_xmit_skbs(sq, true);
-+		free_old_xmit(sq, true);
- 		__netif_tx_unlock(txq);
- 	}
- 
-@@ -1601,7 +1591,7 @@ static int virtnet_poll_tx(struct napi_struct *napi, int budget)
- 
- 	txq = netdev_get_tx_queue(vi->dev, index);
- 	__netif_tx_lock(txq, raw_smp_processor_id());
--	free_old_xmit_skbs(sq, true);
-+	free_old_xmit(sq, true);
- 	__netif_tx_unlock(txq);
- 
- 	virtqueue_napi_complete(napi, sq->vq, 0);
-@@ -1670,7 +1660,7 @@ static netdev_tx_t start_xmit(struct sk_buff *skb, struct net_device *dev)
- 	bool use_napi = sq->napi.weight;
- 
- 	/* Free up any pending old buffers before queueing new ones. */
--	free_old_xmit_skbs(sq, false);
-+	free_old_xmit(sq, false);
- 
- 	if (use_napi && kick)
- 		virtqueue_enable_cb_delayed(sq->vq);
-@@ -1714,7 +1704,7 @@ static netdev_tx_t start_xmit(struct sk_buff *skb, struct net_device *dev)
- 		if (!use_napi &&
- 		    unlikely(!virtqueue_enable_cb_delayed(sq->vq))) {
- 			/* More just got used, free them then recheck. */
--			free_old_xmit_skbs(sq, false);
-+			free_old_xmit(sq, false);
- 			if (sq->vq->num_free >= 2+MAX_SKB_FRAGS) {
- 				netif_start_subqueue(dev, qnum);
- 				virtqueue_disable_cb(sq->vq);
+ err_xdp:
+@@ -1120,19 +1173,7 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
+ 	stats->xdp_drops++;
+ err_skb:
+ 	put_page(page);
+-	while (num_buf-- > 1) {
+-		buf = virtqueue_get_buf(rq->vq, &len);
+-		if (unlikely(!buf)) {
+-			pr_debug("%s: rx error: %d buffers missing\n",
+-				 dev->name, num_buf);
+-			dev->stats.rx_length_errors++;
+-			break;
+-		}
+-		stats->bytes += len;
+-		page = virt_to_head_page(buf);
+-		put_page(page);
+-	}
+-err_buf:
++	merge_drop_follow_bufs(dev, rq, num_buf, stats);
+ 	stats->drops++;
+ 	dev_kfree_skb(head_skb);
+ xdp_xmit:
 -- 
 2.31.0
 
