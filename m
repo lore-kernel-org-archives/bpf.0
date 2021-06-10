@@ -4,232 +4,156 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B3F15C47094
-	for <bpf@archiver.kernel.org>; Thu, 10 Jun 2021 17:16:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 048CEC47094
+	for <bpf@archiver.kernel.org>; Thu, 10 Jun 2021 17:24:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8E3F5613FF
-	for <bpf@archiver.kernel.org>; Thu, 10 Jun 2021 17:16:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E039A613C9
+	for <bpf@archiver.kernel.org>; Thu, 10 Jun 2021 17:24:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229935AbhFJRSF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 10 Jun 2021 13:18:05 -0400
-Received: from mail-yb1-f181.google.com ([209.85.219.181]:43976 "EHLO
-        mail-yb1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229802AbhFJRSE (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 10 Jun 2021 13:18:04 -0400
-Received: by mail-yb1-f181.google.com with SMTP id b9so326897ybg.10
-        for <bpf@vger.kernel.org>; Thu, 10 Jun 2021 10:15:57 -0700 (PDT)
+        id S229990AbhFJR0m (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 10 Jun 2021 13:26:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56812 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229802AbhFJR0l (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 10 Jun 2021 13:26:41 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E363C061574;
+        Thu, 10 Jun 2021 10:24:45 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id p184so363301yba.11;
+        Thu, 10 Jun 2021 10:24:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=stfbqOIV89FUH0XCyxeAlJ82MP2mOSsHysgBzljvNgU=;
-        b=tn6tRLdkmYbcPawpw7gZIfSaKaTVNblN69wznBM6tuWb7UwibEJKyAgYfA6TsIuz9X
-         P5q6FWDYPWf2ZGsfX90VYtAxsc353w0CuCbPmjL173Lfs59Um8CSc49sbDQKTDIq5JHL
-         /ZaH7E/4NcKtoLChK8c59EQcxqmHOXe/PPXkz0CRrM5Oh2GmklgADHWpAaKQoOCiv6Vj
-         nosaIT+rtp9+jGGlil5lxFp3J9yf9GtaZZWKKfWmWck9+1eEP1Z2/FxizLJsdo+J7RuN
-         wv3FRtOd4iFwvM0x4e3Ri7lxxpSrfrcmrWfTu4tHhQIoh/egG4SPbJjPcqU9Fu2+PWgV
-         cdLA==
+        bh=eW+5V+zbDfUdAlLcDcRVdOxN1l6x5Hh789VvE9XY038=;
+        b=q+Sze6h033k9a8LBwJXN5cVATMf3X84rcfng3rsxlWmiXFf5SNqxPCXoH7H45vPrTq
+         s5ne4pvnV6QPM0pi1a2Tm8yIMMJJY1AnLLebySuMqoMPPSVdoc/4cMDl0N77pN4A0Mnk
+         A8KTYOoilXhxhyyNoClVBMprF2hWHoJ3C25+vyF+dYb3Ip3C7v6Nc/V4GZMJcWxl0lnM
+         QQXCjQMtXwSXpF/nBfyXyJZn/G1U0o/YX7c1NaXlRfWH+IUQNvQ9qkoRJVdTbZE0Wu0y
+         i5rzrsnD36Bw8Nls6SM9913/mzfquQPNYKlmOJ5z03CVvYt5I7KzOJetk/TAYVA39zLr
+         axFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=stfbqOIV89FUH0XCyxeAlJ82MP2mOSsHysgBzljvNgU=;
-        b=dmMIPbxuCY/dtsAx12Dq8xsQ3mPiSz9aOopLj5VpAwfOkBHzh9chO7IySjK/e0TJnM
-         pv3UlzpNBcZJ5X72iW7u93c5CtIbLWESYZ+ZsIPdsI44dUvXeVnbfCvumbbp1uNmA6C9
-         Cebkj0wLMwa4Hetz8AhRFC6valkLvvKRk9Cdg9Zvh8xbqlsOiDeWm635fskcAHJ+8LO5
-         VlNMJKiiP8HjlfSCo9aJR3WNtvvLUlYzj3CGgUksZ16sDcApQ8zklBLXuTyhqGe9I2W3
-         UpEhV79BhKZ5SAKHI6nG6rWBJyq1+9AZhX5uI8sQQi1WXJV3EdYMxpn8y6HzEo2YsJ7K
-         uJfA==
-X-Gm-Message-State: AOAM531ZD6sH9TCzt70ezhUJ5hl/61h+E7DeizgpWXEi8DwCS8vdQe/J
-        BGIDVGvMuzI22E1Zv4rIVJ5hWCOO0nVUDpLmp+8=
-X-Google-Smtp-Source: ABdhPJy3+9ExJ8UKsAph6fqu3mmMjTDug07oMCZ/xBg4PestylEsr50U5Tt42BpgwXmbPeLBmvQ0sqeeGq0G3PJLxfI=
-X-Received: by 2002:a25:7246:: with SMTP id n67mr9293816ybc.510.1623345296596;
- Thu, 10 Jun 2021 10:14:56 -0700 (PDT)
+        bh=eW+5V+zbDfUdAlLcDcRVdOxN1l6x5Hh789VvE9XY038=;
+        b=rxq6CK5WuiIyCTiHDFIRNSixT7+xKJjAGPYwhUcT1YGTFjcNetlyiJQerhJ0C8AsXw
+         ZRoS5WaWK3/QjsiyAOGYoWFHHkZZ//n4qTvMub8byjLQPrCVy80ZWXCbbd0adnrkdxLe
+         KFtm6MLaaYJXt/0OWpS1Diqis8VlWWQP/kfrrnY7mj3h6e5gV3LvGJ51h2DCtfxW8wzL
+         9yc8s6n8C4tc97jOVyssux1dyRwpI4Fmqp+5YRL66nwKFfSjjiBcvAKSqXDHv7UuVWsX
+         PmWr5/tEFBcmrPkhvSPQ46Go7QcsgjkpXDU8AmbGPQZuoaSF78mmte4WzO5v/M2nJUQV
+         +2aA==
+X-Gm-Message-State: AOAM533ViI5xHsb63oNZNEfBmyNFub2zxrWS7YCULSLk5/bzqclupbfy
+        2XR9m4RbWAAkXpzGXRMbdemrwl3cHA81Bvvxtco=
+X-Google-Smtp-Source: ABdhPJwklyvU0Q8rmj0IRZV39jUSVWLBBaCQC+kN6HBez3IDqgr/L8Hiw9N50OCsZ23j7/J37xEQJ9ZIMAK8q6vRn/o=
+X-Received: by 2002:a25:1455:: with SMTP id 82mr9054485ybu.403.1623345884428;
+ Thu, 10 Jun 2021 10:24:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210429054734.53264-1-grantseltzer@gmail.com>
- <877dkkd7gp.fsf@meer.lwn.net> <CAO658oV2vJ0O=D3HWXyCUztsHD5GzDY_5p3jaAicEqqj+2-i+Q@mail.gmail.com>
- <87tunnc0oj.fsf@meer.lwn.net> <CAO658oUMkxR7VO1i3wCYHp7hMC3exP3ccHqeA-2BGnL4bPwfPA@mail.gmail.com>
- <CAEf4BzZJUtPiGn+8mkzNd2k+-3EEE85_xezab3RYy9ZW4zqANQ@mail.gmail.com>
- <CAO658oWPrEDBE8FUBuDUnrBVM91Mgu-svXfXgAXawAUp1MmWZA@mail.gmail.com>
- <CAEf4BzZJDqR7mRSKbOCWfZV-dqwin+PGYxBTTYMVVYwriD33JQ@mail.gmail.com>
- <CAO658oUAg02tN4Gr9r5PJvb93HhN_yj3BzpvC2oVc6oaSn0FUw@mail.gmail.com>
- <CAEf4BzY=JQiHquwoUypU2fD4Xe5rr+DuQA2Xw=n6OXvH7hXbew@mail.gmail.com>
- <CAO658oUH3u8yWV3Ft-96OCrgkzLacv_saecv4e1u4a_X0nF0eg@mail.gmail.com>
- <87wnrd9zp8.fsf@meer.lwn.net> <CAO658oW-_-bOX=xZNjzR=S89rY99gzuwh8Ln9MNtgA4zkwEh+g@mail.gmail.com>
- <875yyx895z.fsf@meer.lwn.net> <CAO658oWwqtZFnhVg3hC8dO=2obOKn5Mp2uqrOYa-3xsNwiRU8Q@mail.gmail.com>
- <CAO658oXRN=JnP+e=qM2-uBu94BxoWCyHcScOgSwxpoHOw5ByLQ@mail.gmail.com>
- <CAEf4Bzaupx7dvv8nZAQKqo2UbdRmYgCb=54Uy0x5+96UTD6DTA@mail.gmail.com> <CAO658oW-XiuS_FLVCkj1pTtQS5MPxk=jyA+-LRkiMgt=27e21A@mail.gmail.com>
-In-Reply-To: <CAO658oW-XiuS_FLVCkj1pTtQS5MPxk=jyA+-LRkiMgt=27e21A@mail.gmail.com>
+References: <20210609135537.1460244-1-joamaki@gmail.com>
+In-Reply-To: <20210609135537.1460244-1-joamaki@gmail.com>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 10 Jun 2021 10:14:43 -0700
-Message-ID: <CAEf4BzbUQ07qzfRDOZWjfz-7P_dZG33xcJaC3TM5PbRpxJC5tw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 0/3] Autogenerating API documentation
-To:     Grant Seltzer Richman <grantseltzer@gmail.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        bpf <bpf@vger.kernel.org>
+Date:   Thu, 10 Jun 2021 10:24:33 -0700
+Message-ID: <CAEf4Bzar4+HQ_0BBGt75_UPG-tVpjqz9YVdeBi2GVY1iam4Y2g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 0/3] XDP bonding support
+To:     Jussi Maki <joamaki@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, j.vosburgh@gmail.com,
+        andy@greyhouse.net, vfalico@gmail.com,
+        Andrii Nakryiko <andrii@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Jun 9, 2021 at 10:04 AM Grant Seltzer Richman
-<grantseltzer@gmail.com> wrote:
+On Wed, Jun 9, 2021 at 6:55 AM Jussi Maki <joamaki@gmail.com> wrote:
 >
-> On Mon, Jun 7, 2021 at 6:45 PM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
+> This patchset introduces XDP support to the bonding driver.
 >
-> > So I assume you looked at the DOC: block that Jonathan suggested
-> > above? Can you walk us a bit on how that would look like and why you
-> > think it's not going to work?
+> Patch 1 contains the implementation, including support for
+> the recently introduced EXCLUDE_INGRESS. Patch 2 contains a
+> performance fix to the roundrobin mode which switches rr_tx_counter
+> to be per-cpu. Patch 3 contains the test suite for the implementation
+> using a pair of veth devices.
 >
-> If I understand correctly, the using the  DOC: comment block and
-> extracting it would require you to manually update a comment in code
-> that labels the libbpf version number and then cut a release. The
-> problems are:
->
-> 1) Having to do that manually
-> 2) The docs on kernel.org would not show previous libbpf releases
-> (just the ones that were released with different kernel versions)
->
-> > > If you check out libbpf.readthedocs.io you can see what that would
-> > > look like. I made a test release (v21.21.21) to show how easy this is.
-> > > That is being pulled from my PR at github.com/libbpf/libbpf/pull/260.
-> >
-> > It looks pretty nice. Where does v21.21.21 come from, though?
->
-> libbpf.readthedocs.org currently tracks my libbpf fork at
-> github.com/grantseltzer/libbpf, I cut the 21.21.21 release there.
->
-> What this demonstrates is that readthedocs pulls in any release or
-> branch I enable in the admin panel and builds a seperate site for each
-> one. You can see the release/branches by toggling them in the bottom
-> left.
->
-> > also weird that docs are under src/docs, not just under docs/, but I
-> > assume that's a quick hack to demonstrate this?
->
-> I can move that no problem. All the config files have relative paths
-> that point at each other.
->
-> > To be entirely honest, I'm already a bit lost on all the
-> > possibilities. It would be great if you can summarize what's possible
-> > and how it would look like.
->
-> That's my fault, I'm not making this easy to review (2 different patch
-> series, plus github PR). Here is a summary of the 3 different
-> approaches I've presented. At the bottom I have my recommendation.
->
-> 1) Integrate libbpf docs into the kernel documentation system:
->
-> - Add libbpf documentation files (e.g. 'naming-convention',
-> 'building-libbpf') under the Linux 'Documentation' directory.
-> - Include a file which has sphinx directives to pull in API
-> documentation from the code under tools/lib/bpf.
-> - This documentation would appear on kernel.org/doc alongside all
-> other kernel documentation
->
-> Pro: Make use of existing kernel documentation infrastructure
-> Con: In order to have the libbpf documentation be versioned based on
-> github releases it would require manually updating comments in code.
-> To get it how we really want it (i.e. select a libbpf release and see
-> the documentation specific for it), it would likely require
-> rearranging/duplicating code in libbpf under subdirectories.
-> Contributing simple documentation has to go through the mailing list
-> which is daunting for new contributors.
->
-> 2) Have all libbpf documentation in the kernel repo under
-> tools/lib/bpf/docs, including libbpf's own sphinx configuration files
->
-> - The github mirror would pull in these documentation files and sphinx
-> configuration files.
-> - readthedocs would be configured to build off of the github libbpf mirror repo.
-> - The documentation would be accessible at libbpf.readthedocs.org.
-> - Users would be able to navigate documentation of different releases
-> of libbpf easily. Maintainers would not need to do any manual work to
-> make that happen.
->
-> Pro: Documentation all in one place, in the kernel repo, integrates
-> easily with the github mirror, and we easily get to version
-> documentation by libbpf releases.
-> Con: We don't make use of existing kernel documentation
-> infrastructure. Contributing simple documentation has to go through
-> the mailing list which is daunting for new contributors.
->
-> 3) Host all the documentation on the libbpf github mirror
->
-> - Documents (e.g. 'naming-convention', 'building-libbpf') would be
-> available at libbpf.readthedocs.org
-> - Sphinx configuration files would live in the libbpf github mirror
-> - Code comment documentation would still go through the mailing list
->
-> Pro: Documentation is explorable by different versions. Some
-> documentation can be contributed via github which is easier than the
-> mailing list.
-> Con: Documentation would be scattered across different places.
->
-> My recommendation:
->
-> I would go with option 2, it feels like the best compromise. However,
-> I'd like to contribute changes to the kernel documentation such that
-> it can support versioning particular documentation files based on
-> specified git hashes. That way we can have libbpf docs on kernel.org
-> but still get to version docs based on libbpf releases, not kernel
-> ones.
->
-> I'm happy to explore other options, but if one of these sounds like
-> something that we can agree on for now, I can submit a fresh patch for
-> it.
+> The vmtest.sh is modified to enable the bonding module and install
+> modules. The config change should probably be done in the libbpf
+> repository. Andrii: How would you like this done properly?
 
-Honestly, I think option #3 would be best for actually getting more
-docs contributions, because it will reduce the friction of getting
-started. Figuring out the kernel mailing list submission process is
-not a trivial problem.
-
-But I'm sure some people will have strong feelings about keeping docs
-in the kernel source tree. Assuming we'd get a lot of push back for
-option #3, I think the next best thing would be a hybrid of #1 and #2.
-Host docs in kernel docs under Documentation/bpf/libbpf, so it will
-get into kernel sources automatically. But also copy those docs into
-Github mirror during sync under /docs and have readthedocs pull and
-version it properly. That has a chance of creating a bit of confusion
-for where exactly libbpf docs are (it would be libbpf.readthedocs.org,
-versioned properly), but given docs will have the same source of truth
-(modulo minor versioning differences, potentially), I think this might
-be ok. WDYT? Are there any problems with that?
-
-Hosting docs under tools/libbpf/docs in kernel repo is the worst of
-both worlds, IMO. Hard to contribute, but also not integrated with the
-rest of kernel docs.
+I think vmtest.sh and CI setup doesn't support modules (not easily at
+least). Can we just compile that driver in? Then you can submit a PR
+against libbpf Github repo to adjust the config. We have also kernel
+CI repo where we'll need to make this change.
 
 >
+> The motivation for this change is to enable use of bonding (and
+> 802.3ad) in hairpinning L4 load-balancers such as [1] implemented with
+> XDP and also to transparently support bond devices for projects that
+> use XDP given most modern NICs have dual port adapters.  An alternative
+> to this approach would be to implement 802.3ad in user-space and
+> implement the bonding load-balancing in the XDP program itself, but
+> is rather a cumbersome endeavor in terms of slave device management
+> (e.g. by watching netlink) and requires separate programs for native
+> vs bond cases for the orchestrator. A native in-kernel implementation
+> overcomes these issues and provides more flexibility.
 >
-> >
-> > As a general guidance, I think we should try to keep all the
-> > documentation in one place (which means kernel sources, because that's
-> > where API documentation will have to leave). As for config files,
-> > unless they will "stick out" too much, I'd keep them close to the docs
-> > themselves. If not, putting them in Github mirror is fine by me as
-> > well.
-> >
-> > Pretty much the only important aspect, from my point of view, is that
-> > docs are versioned according to the libbpf version, not kernel
-> > version. Otherwise huge confusion will ensue for all the users of
-> > libbpf, most of not all of which are using Github mirror.
-> >
-> > Does this make sense and is doable?
-> >
-> > > > >
-> > > > > If you're wanting to replace the version code that appears at the top of
-> > > > > the left column in the HTML output, though, it's going to be a bit
-> > > > > harder.  I don't doubt we can do it, but it may require messing around
-> > > > > with template files and such.
-> > > > >
-> > > > > Thanks,
-> > > > >
-> > > > > jon
+> Below are benchmark results done on two machines with 100Gbit
+> Intel E810 (ice) NIC and with 32-core 3970X on sending machine, and
+> 16-core 3950X on receiving machine. 64 byte packets were sent with
+> pktgen-dpdk at full rate. Two issues [2, 3] were identified with the
+> ice driver, so the tests were performed with iommu=off and patch [2]
+> applied. Additionally the bonding round robin algorithm was modified
+> to use per-cpu tx counters as high CPU load (50% vs 10%) and high rate
+> of cache misses were caused by the shared rr_tx_counter (see patch
+> 2/3). The statistics were collected using "sar -n dev -u 1 10".
+>
+>  -----------------------|  CPU  |--| rxpck/s |--| txpck/s |----
+>  without patch (1 dev):
+>    XDP_DROP:              3.15%      48.6Mpps
+>    XDP_TX:                3.12%      18.3Mpps     18.3Mpps
+>    XDP_DROP (RSS):        9.47%      116.5Mpps
+>    XDP_TX (RSS):          9.67%      25.3Mpps     24.2Mpps
+>  -----------------------
+>  with patch, bond (1 dev):
+>    XDP_DROP:              3.14%      46.7Mpps
+>    XDP_TX:                3.15%      13.9Mpps     13.9Mpps
+>    XDP_DROP (RSS):        10.33%     117.2Mpps
+>    XDP_TX (RSS):          10.64%     25.1Mpps     24.0Mpps
+>  -----------------------
+>  with patch, bond (2 devs):
+>    XDP_DROP:              6.27%      92.7Mpps
+>    XDP_TX:                6.26%      17.6Mpps     17.5Mpps
+>    XDP_DROP (RSS):       11.38%      117.2Mpps
+>    XDP_TX (RSS):         14.30%      28.7Mpps     27.4Mpps
+>  --------------------------------------------------------------
+>
+> RSS: Receive Side Scaling, e.g. the packets were sent to a range of
+> destination IPs.
+>
+> [1]: https://cilium.io/blog/2021/05/20/cilium-110#standalonelb
+> [2]: https://lore.kernel.org/bpf/20210601113236.42651-1-maciej.fijalkowski@intel.com/T/#t
+> [3]: https://lore.kernel.org/bpf/CAHn8xckNXci+X_Eb2WMv4uVYjO2331UWB2JLtXr_58z0Av8+8A@mail.gmail.com/
+>
+> ---
+>
+> Jussi Maki (3):
+>   net: bonding: Add XDP support to the bonding driver
+>   net: bonding: Use per-cpu rr_tx_counter
+>   selftests/bpf: Add tests for XDP bonding
+>
+>  drivers/net/bonding/bond_main.c               | 459 +++++++++++++++---
+>  include/linux/filter.h                        |  13 +-
+>  include/linux/netdevice.h                     |   5 +
+>  include/net/bonding.h                         |   3 +-
+>  kernel/bpf/devmap.c                           |  34 +-
+>  net/core/filter.c                             |  37 +-
+>  .../selftests/bpf/prog_tests/xdp_bonding.c    | 342 +++++++++++++
+>  tools/testing/selftests/bpf/vmtest.sh         |  30 +-
+>  8 files changed, 843 insertions(+), 80 deletions(-)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
+>
+> --
+> 2.30.2
+>
