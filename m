@@ -5,24 +5,24 @@ X-Spam-Level:
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D525C48BE0
-	for <bpf@archiver.kernel.org>; Thu, 10 Jun 2021 08:22:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EFD00C47094
+	for <bpf@archiver.kernel.org>; Thu, 10 Jun 2021 08:22:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 841A8613DF
-	for <bpf@archiver.kernel.org>; Thu, 10 Jun 2021 08:22:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D703A61374
+	for <bpf@archiver.kernel.org>; Thu, 10 Jun 2021 08:22:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231156AbhFJIYW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 10 Jun 2021 04:24:22 -0400
-Received: from out30-44.freemail.mail.aliyun.com ([115.124.30.44]:46488 "EHLO
-        out30-44.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230467AbhFJIYM (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 10 Jun 2021 04:24:12 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=alimailimapcm10staff010182156082;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0Ubx5.ID_1623313333;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0Ubx5.ID_1623313333)
+        id S231169AbhFJIYX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 10 Jun 2021 04:24:23 -0400
+Received: from out30-56.freemail.mail.aliyun.com ([115.124.30.56]:55282 "EHLO
+        out30-56.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230473AbhFJIYO (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 10 Jun 2021 04:24:14 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R561e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0Ubx5.Id_1623313335;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0Ubx5.Id_1623313335)
           by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 10 Jun 2021 16:22:13 +0800
+          Thu, 10 Jun 2021 16:22:16 +0800
 From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To:     netdev@vger.kernel.org
 Cc:     "David S. Miller" <davem@davemloft.net>,
@@ -43,9 +43,9 @@ Cc:     "David S. Miller" <davem@davemloft.net>,
         Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
         virtualization@lists.linux-foundation.org, bpf@vger.kernel.org,
         "dust . li" <dust.li@linux.alibaba.com>
-Subject: [PATCH net-next v5 09/15] virtio-net: virtnet_poll_tx support budget check
-Date:   Thu, 10 Jun 2021 16:22:03 +0800
-Message-Id: <20210610082209.91487-10-xuanzhuo@linux.alibaba.com>
+Subject: [PATCH net-next v5 14/15] virtio-net: xsk direct xmit inside xsk wakeup
+Date:   Thu, 10 Jun 2021 16:22:08 +0800
+Message-Id: <20210610082209.91487-15-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.31.0
 In-Reply-To: <20210610082209.91487-1-xuanzhuo@linux.alibaba.com>
 References: <20210610082209.91487-1-xuanzhuo@linux.alibaba.com>
@@ -55,54 +55,78 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-virtnet_poll_tx() check the work done like other network card drivers.
+Calling virtqueue_napi_schedule() in wakeup results in napi running on
+the current cpu. If the application is not busy, then there is no
+problem. But if the application itself is busy, it will cause a lot of
+scheduling.
 
-When work < budget, napi_poll() in dev.c will exit directly. And
-virtqueue_napi_complete() will be called to close napi. If closing napi
-fails or there is still data to be processed, virtqueue_napi_complete()
-will make napi schedule again, and no conflicts with the logic of
-napi_poll().
+If the application is continuously sending data packets, due to the
+continuous scheduling between the application and napi, the data packet
+transmission will not be smooth, and there will be an obvious delay in
+the transmission (you can use tcpdump to see it). When pressing a
+channel to 100% (vhost reaches 100%), the cpu where the application is
+located reaches 100%.
 
-When work == budget, virtnet_poll_tx() will return the var 'work', and
-the napi_poll() in dev.c will re-add napi to the queue.
-
-The purpose of this patch is to support xsk xmit in virtio_poll_tx for
-subsequent patch.
+This patch sends a small amount of data directly in wakeup. The purpose
+of this is to trigger the tx interrupt. The tx interrupt will be
+awakened on the cpu of its affinity, and then trigger the operation of
+the napi mechanism, napi can continue to consume the xsk tx queue. Two
+cpus are running, cpu0 is running applications, cpu1 executes
+napi consumption data. The same is to press a channel to 100%, but the
+utilization rate of cpu0 is 12.7% and the utilization rate of cpu1 is
+2.9%.
 
 Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Acked-by: Jason Wang <jasowang@redhat.com>
 ---
- drivers/net/virtio_net.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/net/virtio/xsk.c | 28 +++++++++++++++++++++++-----
+ 1 file changed, 23 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index 989aba600e63..953739860563 100644
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -1634,6 +1634,7 @@ static int virtnet_poll_tx(struct napi_struct *napi, int budget)
- 	struct virtnet_info *vi = sq->vq->vdev->priv;
- 	unsigned int index = vq2txq(sq->vq);
- 	struct netdev_queue *txq;
-+	int work_done = 0;
+diff --git a/drivers/net/virtio/xsk.c b/drivers/net/virtio/xsk.c
+index 36cda2dcf8e7..3973c82d1ad2 100644
+--- a/drivers/net/virtio/xsk.c
++++ b/drivers/net/virtio/xsk.c
+@@ -547,6 +547,7 @@ int virtnet_xsk_wakeup(struct net_device *dev, u32 qid, u32 flag)
+ {
+ 	struct virtnet_info *vi = netdev_priv(dev);
+ 	struct xsk_buff_pool *pool;
++	struct netdev_queue *txq;
+ 	struct send_queue *sq;
  
- 	if (unlikely(is_xdp_raw_buffer_queue(vi, index))) {
- 		/* We don't need to enable cb for XDP */
-@@ -1646,12 +1647,13 @@ static int virtnet_poll_tx(struct napi_struct *napi, int budget)
- 	free_old_xmit(sq, true);
- 	__netif_tx_unlock(txq);
+ 	if (!netif_running(dev))
+@@ -559,11 +560,28 @@ int virtnet_xsk_wakeup(struct net_device *dev, u32 qid, u32 flag)
  
--	virtqueue_napi_complete(napi, sq->vq, 0);
-+	if (work_done < budget)
-+		virtqueue_napi_complete(napi, sq->vq, 0);
- 
- 	if (sq->vq->num_free >= 2 + MAX_SKB_FRAGS)
- 		netif_tx_wake_queue(txq);
- 
--	return 0;
-+	return work_done;
+ 	rcu_read_lock();
+ 	pool = rcu_dereference(sq->xsk.pool);
+-	if (pool) {
+-		local_bh_disable();
+-		virtqueue_napi_schedule(&sq->napi, sq->vq);
+-		local_bh_enable();
+-	}
++	if (!pool)
++		goto end;
++
++	if (napi_if_scheduled_mark_missed(&sq->napi))
++		goto end;
++
++	txq = netdev_get_tx_queue(dev, qid);
++
++	__netif_tx_lock_bh(txq);
++
++	/* Send part of the packet directly to reduce the delay in sending the
++	 * packet, and this can actively trigger the tx interrupts.
++	 *
++	 * If no packet is sent out, the ring of the device is full. In this
++	 * case, we will still get a tx interrupt response. Then we will deal
++	 * with the subsequent packet sending work.
++	 */
++	virtnet_xsk_run(sq, pool, sq->napi.weight, false);
++
++	__netif_tx_unlock_bh(txq);
++
++end:
+ 	rcu_read_unlock();
+ 	return 0;
  }
- 
- static int xmit_skb(struct send_queue *sq, struct sk_buff *skb)
 -- 
 2.31.0
 
