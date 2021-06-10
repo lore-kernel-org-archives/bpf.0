@@ -2,27 +2,27 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0296BC48BE5
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BDA45C48BCD
 	for <bpf@archiver.kernel.org>; Thu, 10 Jun 2021 08:22:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DF44961436
-	for <bpf@archiver.kernel.org>; Thu, 10 Jun 2021 08:22:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A309961429
+	for <bpf@archiver.kernel.org>; Thu, 10 Jun 2021 08:22:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230113AbhFJIYT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S231124AbhFJIYT (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Thu, 10 Jun 2021 04:24:19 -0400
-Received: from out30-130.freemail.mail.aliyun.com ([115.124.30.130]:46958 "EHLO
-        out30-130.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230506AbhFJIYL (ORCPT
+Received: from out30-45.freemail.mail.aliyun.com ([115.124.30.45]:46307 "EHLO
+        out30-45.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230507AbhFJIYL (ORCPT
         <rfc822;bpf@vger.kernel.org>); Thu, 10 Jun 2021 04:24:11 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R871e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0UbxH89d_1623313332;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0UbxH89d_1623313332)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R901e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0UbxDLwc_1623313330;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0UbxDLwc_1623313330)
           by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 10 Jun 2021 16:22:13 +0800
+          Thu, 10 Jun 2021 16:22:11 +0800
 From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To:     netdev@vger.kernel.org
 Cc:     "David S. Miller" <davem@davemloft.net>,
@@ -43,9 +43,9 @@ Cc:     "David S. Miller" <davem@davemloft.net>,
         Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
         virtualization@lists.linux-foundation.org, bpf@vger.kernel.org,
         "dust . li" <dust.li@linux.alibaba.com>
-Subject: [PATCH net-next v5 08/15] virtio-net: split the receive_mergeable function
-Date:   Thu, 10 Jun 2021 16:22:02 +0800
-Message-Id: <20210610082209.91487-9-xuanzhuo@linux.alibaba.com>
+Subject: [PATCH net-next v5 04/15] xsk: XDP_SETUP_XSK_POOL support option IFF_NOT_USE_DMA_ADDR
+Date:   Thu, 10 Jun 2021 16:21:58 +0800
+Message-Id: <20210610082209.91487-5-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.31.0
 In-Reply-To: <20210610082209.91487-1-xuanzhuo@linux.alibaba.com>
 References: <20210610082209.91487-1-xuanzhuo@linux.alibaba.com>
@@ -55,231 +55,30 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-receive_mergeable() is too complicated, so this function is split here.
-One is to make the function more readable. On the other hand, the two
-independent functions will be called separately in subsequent patches.
+Some devices, such as virtio-net, do not directly use dma addr. These
+devices do not initialize dma after completing the xsk setup, so the dma
+check is skipped here.
 
 Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Reviewed-by: Dust Li <dust.li@linux.alibaba.com>
+Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
 ---
- drivers/net/virtio_net.c | 181 ++++++++++++++++++++++++---------------
- 1 file changed, 111 insertions(+), 70 deletions(-)
+ net/xdp/xsk_buff_pool.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index 3fd87bf2b2ad..989aba600e63 100644
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -733,6 +733,109 @@ static struct page *xdp_linearize_page(struct receive_queue *rq,
- 	return NULL;
- }
+diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
+index 8de01aaac4a0..a7e434de0308 100644
+--- a/net/xdp/xsk_buff_pool.c
++++ b/net/xdp/xsk_buff_pool.c
+@@ -171,7 +171,7 @@ int xp_assign_dev(struct xsk_buff_pool *pool,
+ 	if (err)
+ 		goto err_unreg_pool;
  
-+static void merge_drop_follow_bufs(struct net_device *dev,
-+				   struct receive_queue *rq,
-+				   u16 num_buf,
-+				   struct virtnet_rq_stats *stats)
-+{
-+	struct page *page;
-+	unsigned int len;
-+	void *buf;
-+
-+	while (num_buf-- > 1) {
-+		buf = virtqueue_get_buf(rq->vq, &len);
-+		if (unlikely(!buf)) {
-+			pr_debug("%s: rx error: %d buffers missing\n",
-+				 dev->name, num_buf);
-+			dev->stats.rx_length_errors++;
-+			break;
-+		}
-+		stats->bytes += len;
-+		page = virt_to_head_page(buf);
-+		put_page(page);
-+	}
-+}
-+
-+static struct sk_buff *merge_receive_follow_bufs(struct net_device *dev,
-+						 struct virtnet_info *vi,
-+						 struct receive_queue *rq,
-+						 struct sk_buff *head_skb,
-+						 u16 num_buf,
-+						 struct virtnet_rq_stats *stats)
-+{
-+	struct sk_buff *curr_skb;
-+	unsigned int truesize;
-+	unsigned int len, num;
-+	struct page *page;
-+	void *buf, *ctx;
-+	int offset;
-+
-+	curr_skb = head_skb;
-+	num = num_buf;
-+
-+	while (--num_buf) {
-+		int num_skb_frags;
-+
-+		buf = virtqueue_get_buf_ctx(rq->vq, &len, &ctx);
-+		if (unlikely(!buf)) {
-+			pr_debug("%s: rx error: %d buffers out of %d missing\n",
-+				 dev->name, num_buf, num);
-+			dev->stats.rx_length_errors++;
-+			goto err_buf;
-+		}
-+
-+		stats->bytes += len;
-+		page = virt_to_head_page(buf);
-+
-+		truesize = mergeable_ctx_to_truesize(ctx);
-+		if (unlikely(len > truesize)) {
-+			pr_debug("%s: rx error: len %u exceeds truesize %lu\n",
-+				 dev->name, len, (unsigned long)ctx);
-+			dev->stats.rx_length_errors++;
-+			goto err_skb;
-+		}
-+
-+		num_skb_frags = skb_shinfo(curr_skb)->nr_frags;
-+		if (unlikely(num_skb_frags == MAX_SKB_FRAGS)) {
-+			struct sk_buff *nskb = alloc_skb(0, GFP_ATOMIC);
-+
-+			if (unlikely(!nskb))
-+				goto err_skb;
-+			if (curr_skb == head_skb)
-+				skb_shinfo(curr_skb)->frag_list = nskb;
-+			else
-+				curr_skb->next = nskb;
-+			curr_skb = nskb;
-+			head_skb->truesize += nskb->truesize;
-+			num_skb_frags = 0;
-+		}
-+		if (curr_skb != head_skb) {
-+			head_skb->data_len += len;
-+			head_skb->len += len;
-+			head_skb->truesize += truesize;
-+		}
-+		offset = buf - page_address(page);
-+		if (skb_can_coalesce(curr_skb, num_skb_frags, page, offset)) {
-+			put_page(page);
-+			skb_coalesce_rx_frag(curr_skb, num_skb_frags - 1,
-+					     len, truesize);
-+		} else {
-+			skb_add_rx_frag(curr_skb, num_skb_frags, page,
-+					offset, len, truesize);
-+		}
-+	}
-+
-+	return head_skb;
-+
-+err_skb:
-+	put_page(page);
-+	merge_drop_follow_bufs(dev, rq, num_buf, stats);
-+err_buf:
-+	stats->drops++;
-+	dev_kfree_skb(head_skb);
-+	return NULL;
-+}
-+
- static struct sk_buff *receive_small(struct net_device *dev,
- 				     struct virtnet_info *vi,
- 				     struct receive_queue *rq,
-@@ -909,7 +1012,7 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
- 	u16 num_buf = virtio16_to_cpu(vi->vdev, hdr->num_buffers);
- 	struct page *page = virt_to_head_page(buf);
- 	int offset = buf - page_address(page);
--	struct sk_buff *head_skb, *curr_skb;
-+	struct sk_buff *head_skb;
- 	struct bpf_prog *xdp_prog;
- 	unsigned int truesize = mergeable_ctx_to_truesize(ctx);
- 	unsigned int headroom = mergeable_ctx_to_headroom(ctx);
-@@ -1054,65 +1157,15 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
- 
- 	head_skb = page_to_skb(vi, rq, page, offset, len, truesize, !xdp_prog,
- 			       metasize, !!headroom);
--	curr_skb = head_skb;
--
--	if (unlikely(!curr_skb))
-+	if (unlikely(!head_skb))
- 		goto err_skb;
--	while (--num_buf) {
--		int num_skb_frags;
- 
--		buf = virtqueue_get_buf_ctx(rq->vq, &len, &ctx);
--		if (unlikely(!buf)) {
--			pr_debug("%s: rx error: %d buffers out of %d missing\n",
--				 dev->name, num_buf,
--				 virtio16_to_cpu(vi->vdev,
--						 hdr->num_buffers));
--			dev->stats.rx_length_errors++;
--			goto err_buf;
--		}
--
--		stats->bytes += len;
--		page = virt_to_head_page(buf);
--
--		truesize = mergeable_ctx_to_truesize(ctx);
--		if (unlikely(len > truesize)) {
--			pr_debug("%s: rx error: len %u exceeds truesize %lu\n",
--				 dev->name, len, (unsigned long)ctx);
--			dev->stats.rx_length_errors++;
--			goto err_skb;
--		}
--
--		num_skb_frags = skb_shinfo(curr_skb)->nr_frags;
--		if (unlikely(num_skb_frags == MAX_SKB_FRAGS)) {
--			struct sk_buff *nskb = alloc_skb(0, GFP_ATOMIC);
--
--			if (unlikely(!nskb))
--				goto err_skb;
--			if (curr_skb == head_skb)
--				skb_shinfo(curr_skb)->frag_list = nskb;
--			else
--				curr_skb->next = nskb;
--			curr_skb = nskb;
--			head_skb->truesize += nskb->truesize;
--			num_skb_frags = 0;
--		}
--		if (curr_skb != head_skb) {
--			head_skb->data_len += len;
--			head_skb->len += len;
--			head_skb->truesize += truesize;
--		}
--		offset = buf - page_address(page);
--		if (skb_can_coalesce(curr_skb, num_skb_frags, page, offset)) {
--			put_page(page);
--			skb_coalesce_rx_frag(curr_skb, num_skb_frags - 1,
--					     len, truesize);
--		} else {
--			skb_add_rx_frag(curr_skb, num_skb_frags, page,
--					offset, len, truesize);
--		}
--	}
-+	if (num_buf > 1)
-+		head_skb = merge_receive_follow_bufs(dev, vi, rq, head_skb,
-+						     num_buf, stats);
-+	if (head_skb)
-+		ewma_pkt_len_add(&rq->mrg_avg_pkt_len, head_skb->len);
- 
--	ewma_pkt_len_add(&rq->mrg_avg_pkt_len, head_skb->len);
- 	return head_skb;
- 
- err_xdp:
-@@ -1120,19 +1173,7 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
- 	stats->xdp_drops++;
- err_skb:
- 	put_page(page);
--	while (num_buf-- > 1) {
--		buf = virtqueue_get_buf(rq->vq, &len);
--		if (unlikely(!buf)) {
--			pr_debug("%s: rx error: %d buffers missing\n",
--				 dev->name, num_buf);
--			dev->stats.rx_length_errors++;
--			break;
--		}
--		stats->bytes += len;
--		page = virt_to_head_page(buf);
--		put_page(page);
--	}
--err_buf:
-+	merge_drop_follow_bufs(dev, rq, num_buf, stats);
- 	stats->drops++;
- 	dev_kfree_skb(head_skb);
- xdp_xmit:
+-	if (!pool->dma_pages) {
++	if (!(netdev->priv_flags & IFF_NOT_USE_DMA_ADDR) && !pool->dma_pages) {
+ 		WARN(1, "Driver did not DMA map zero-copy buffers");
+ 		err = -EINVAL;
+ 		goto err_unreg_xsk;
 -- 
 2.31.0
 
