@@ -8,54 +8,57 @@ X-Spam-Status: No, score=-14.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0ACADC47094
-	for <bpf@archiver.kernel.org>; Thu, 10 Jun 2021 17:25:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 41554C48BD1
+	for <bpf@archiver.kernel.org>; Thu, 10 Jun 2021 17:39:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D87B9613DD
-	for <bpf@archiver.kernel.org>; Thu, 10 Jun 2021 17:25:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 271AA61040
+	for <bpf@archiver.kernel.org>; Thu, 10 Jun 2021 17:39:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbhFJR1Q (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 10 Jun 2021 13:27:16 -0400
-Received: from mail-wm1-f54.google.com ([209.85.128.54]:56133 "EHLO
-        mail-wm1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230113AbhFJR1P (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 10 Jun 2021 13:27:15 -0400
-Received: by mail-wm1-f54.google.com with SMTP id g204so6611970wmf.5;
-        Thu, 10 Jun 2021 10:25:18 -0700 (PDT)
+        id S230343AbhFJRlA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 10 Jun 2021 13:41:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60054 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229823AbhFJRlA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 10 Jun 2021 13:41:00 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6337AC061574;
+        Thu, 10 Jun 2021 10:38:50 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id c5so3220745wrq.9;
+        Thu, 10 Jun 2021 10:38:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=gHUSjbESYNfD7sG28gBLSykvdruQjgsFLHrNm+2HmfQ=;
-        b=emflGDuQWMyQVmaReahmSphhsN3tGq/01vqu6RyLp5Axnm+528aJAiwHnxjq+x+799
-         cmpg+bS8CflQUI6AO1f5ERbbfejwjnAFrpDyUXsJ/K5CvPIshDAZfh03ia6DUXm84Mbn
-         GEEeIKPyy0hH73WIJtWFc7G49QT9mQHthBxWLQqBtM0VNmpqXZF4H/fChX+dBKA6D1xi
-         GPcQloo24VIQ2z7F7nmAW6GdD83xhxL9IPoBN++47/8QwVt51XPKb1kfwdDQS6QN2B75
-         cG3/Hgfpp8hebVs5paQ+r9s1wzuCiH1cRWyvlV8WiL40nrtSEJw2FDXoFpzPA95dbeGK
-         hGwA==
+        bh=tUXqSeEZXltOhPTHiAdqKtvdjZ0xLSS8jzn9c1dkxjY=;
+        b=pjfRdjx4L/QnD58wtcJ6TM/aLvwpHmU8YQJfsqmj8xb85HSGjgBfshNjR/j9kr4yVj
+         OMYST3l5aaJQ1VCSksnoUJfqWNPfT4epA7pIrymzyp6AZWuDodv1/WXkF74xTrD+4rx+
+         MEWljkHKYzkZyNj/naudRBHTLluWido3OoIKMQGZtqj+u3DUETqIAMedUNDhFjfIiGDy
+         mm6QfrmcSGDNqvZH6R/yE0SFsTHRbGVn15qSzvSS4i76ObSDml5+0IkxMhBQm/85sRuP
+         B2NsbCtgPsq3WceqC+hzgWSSp6K/LBSjVbfVGEn7UOVeuhT4ybflbbnXLVXSmjsiJdzI
+         LCCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=gHUSjbESYNfD7sG28gBLSykvdruQjgsFLHrNm+2HmfQ=;
-        b=JfmynvajxoWxnUzv4bZIIIm3ElGokr4EZJmZKFZg1OrcsuNBthfUzgiARBPulWO7Ml
-         9DLuLZgJA7K3DPMkOqKGvgYDgFsHeH4wn06JcCB0snqd4EB20dOoKWnJPPsKczapS/xg
-         sG3oC5QLfhRkn1SxLgqpePjSGYLTcoP5dHFqv4Yx8uIgMJeftlIvE8b5cVjjVp4I1PT+
-         5l8UNJW/Od2UWuxiN1Yuo49BJ3VdN0gyDgL1iUoR9RXSSSvxlVCfTyIAo19GrV/24SSE
-         ZX7mDS0zeeCZapYxPxEIq/eYSy4+uAa8f4Vpy4jK0ReQ2i9k674Uy8ugIWbPijSzv7q4
-         FpwA==
-X-Gm-Message-State: AOAM532gkjkiqD0iskan4386ysIsIexJeYK56seypHQlKQeNkaP2WxQf
-        p9jZQttaCdkmz8OYS73pG9qbfipujTAq8g==
-X-Google-Smtp-Source: ABdhPJywlX06vBk6jltAnNjUFb5g1wiIIz5kiuW5Yo4w+tKby+/h5S0v09iWGBmzSvqcqV5BUF+rdA==
-X-Received: by 2002:a05:600c:3514:: with SMTP id h20mr3816566wmq.70.1623345857699;
-        Thu, 10 Jun 2021 10:24:17 -0700 (PDT)
+        bh=tUXqSeEZXltOhPTHiAdqKtvdjZ0xLSS8jzn9c1dkxjY=;
+        b=d06oyO8dvSjkHi/e1fwh2b6aWG/QFLvF9RnYoCA26MFUGTOOLOmTg+u3MPU1MgtCBa
+         7km0gVSaOvWj+HuLAVYbQ/sXh3AhTS8gCKrjysAN9Kxt4NB70YqEEIPTHU7Xo80SucEH
+         T3dbM/xcVs/tbbaTZSaLgAf3vrR+ETu1yP7Fux6fon/OAtjHDqTXNZmb/v52u3FyQSXv
+         ALB0Zn2kzS4x0+nzaxqcFcGmDQUPsljCwCyoUSx6Idoo6veFEG6vl0nFmojwh7jqIt8g
+         ZXL9Aj6AGWKy4xWmXvXpjomdPderrpYwzDRARlBUBkv4C49QsmlnF3OKP9fAaRh4VWHs
+         H+Qg==
+X-Gm-Message-State: AOAM5303wy736Kr3AB7Sv1KTdywhUa/WcDDGlAiYJnKXGLOL4nDLudpA
+        1RLjUu0g4r74TKq7ivRuFST6F/nCZsDAqQ==
+X-Google-Smtp-Source: ABdhPJyW3em1GAoiY1cGwoDdGbzEerrtlDApG0CGW8yDf/p5nnK70PRh4ID0ShpihZuNsXMyeFUd5g==
+X-Received: by 2002:adf:de03:: with SMTP id b3mr6724701wrm.15.1623346728707;
+        Thu, 10 Jun 2021 10:38:48 -0700 (PDT)
 Received: from [192.168.181.98] (228.18.23.93.rev.sfr.net. [93.23.18.228])
-        by smtp.gmail.com with ESMTPSA id x125sm4033996wmg.37.2021.06.10.10.24.16
+        by smtp.gmail.com with ESMTPSA id f14sm9074150wmq.10.2021.06.10.10.38.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Jun 2021 10:24:17 -0700 (PDT)
-Subject: Re: [PATCH v7 bpf-next 01/11] net: Introduce
- net.ipv4.tcp_migrate_req.
+        Thu, 10 Jun 2021 10:38:48 -0700 (PDT)
+Subject: Re: [PATCH v7 bpf-next 02/11] tcp: Add num_closed_socks to struct
+ sock_reuseport.
 To:     Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
         "David S . Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
@@ -68,14 +71,14 @@ Cc:     Benjamin Herrenschmidt <benh@amazon.com>,
         Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20210521182104.18273-1-kuniyu@amazon.co.jp>
- <20210521182104.18273-2-kuniyu@amazon.co.jp>
+ <20210521182104.18273-3-kuniyu@amazon.co.jp>
 From:   Eric Dumazet <eric.dumazet@gmail.com>
-Message-ID: <3a9ecbe4-fe7e-1acf-36b7-1f999f8f01d6@gmail.com>
-Date:   Thu, 10 Jun 2021 19:24:14 +0200
+Message-ID: <942283cd-4b8a-5127-b047-0e26031adc6c@gmail.com>
+Date:   Thu, 10 Jun 2021 19:38:45 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.10.0
 MIME-Version: 1.0
-In-Reply-To: <20210521182104.18273-2-kuniyu@amazon.co.jp>
+In-Reply-To: <20210521182104.18273-3-kuniyu@amazon.co.jp>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -86,19 +89,215 @@ X-Mailing-List: bpf@vger.kernel.org
 
 
 On 5/21/21 8:20 PM, Kuniyuki Iwashima wrote:
-> This commit adds a new sysctl option: net.ipv4.tcp_migrate_req. If this
-> option is enabled or eBPF program is attached, we will be able to migrate
-> child sockets from a listener to another in the same reuseport group after
-> close() or shutdown() syscalls.
+> As noted in the following commit, a closed listener has to hold the
+> reference to the reuseport group for socket migration. This patch adds a
+> field (num_closed_socks) to struct sock_reuseport to manage closed sockets
+> within the same reuseport group. Moreover, this and the following commits
+> introduce some helper functions to split socks[] into two sections and keep
+> TCP_LISTEN and TCP_CLOSE sockets in each section. Like a double-ended
+> queue, we will place TCP_LISTEN sockets from the front and TCP_CLOSE
+> sockets from the end.
+> 
+>   TCP_LISTEN---------->       <-------TCP_CLOSE
+>   +---+---+  ---  +---+  ---  +---+  ---  +---+
+>   | 0 | 1 |  ...  | i |  ...  | j |  ...  | k |
+>   +---+---+  ---  +---+  ---  +---+  ---  +---+
+> 
+>   i = num_socks - 1
+>   j = max_socks - num_closed_socks
+>   k = max_socks - 1
+> 
+> This patch also extends reuseport_add_sock() and reuseport_grow() to
+> support num_closed_socks.
 > 
 > Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
-> Reviewed-by: Benjamin Herrenschmidt <benh@amazon.com>
 > Acked-by: Martin KaFai Lau <kafai@fb.com>
 > ---
->  Documentation/networking/ip-sysctl.rst | 25 +++++++++++++++++++++++++
->  include/net/netns/ipv4.h               |  1 +
->  net/ipv4/sysctl_net_ipv4.c             |  9 +++++++++
->  3 files changed, 35 insertions(+)
+>  include/net/sock_reuseport.h |  5 ++-
+>  net/core/sock_reuseport.c    | 76 +++++++++++++++++++++++++++---------
+>  2 files changed, 60 insertions(+), 21 deletions(-)
+> 
+> diff --git a/include/net/sock_reuseport.h b/include/net/sock_reuseport.h
+> index 505f1e18e9bf..0e558ca7afbf 100644
+> --- a/include/net/sock_reuseport.h
+> +++ b/include/net/sock_reuseport.h
+> @@ -13,8 +13,9 @@ extern spinlock_t reuseport_lock;
+>  struct sock_reuseport {
+>  	struct rcu_head		rcu;
+>  
+> -	u16			max_socks;	/* length of socks */
+> -	u16			num_socks;	/* elements in socks */
+> +	u16			max_socks;		/* length of socks */
+> +	u16			num_socks;		/* elements in socks */
+> +	u16			num_closed_socks;	/* closed elements in socks */
+>  	/* The last synq overflow event timestamp of this
+>  	 * reuse->socks[] group.
+>  	 */
+> diff --git a/net/core/sock_reuseport.c b/net/core/sock_reuseport.c
+> index b065f0a103ed..079bd1aca0e7 100644
+> --- a/net/core/sock_reuseport.c
+> +++ b/net/core/sock_reuseport.c
+> @@ -18,6 +18,49 @@ DEFINE_SPINLOCK(reuseport_lock);
+>  
+>  static DEFINE_IDA(reuseport_ida);
+>  
+> +static int reuseport_sock_index(struct sock *sk,
+> +				struct sock_reuseport *reuse,
+> +				bool closed)
 
-Reviewed-by: Eric Dumazet <edumazet@google.com>
 
+const struct sock_reuseport *reuse
+
+
+> +{
+> +	int left, right;
+> +
+> +	if (!closed) {
+> +		left = 0;
+> +		right = reuse->num_socks;
+> +	} else {
+> +		left = reuse->max_socks - reuse->num_closed_socks;
+> +		right = reuse->max_socks;
+> +	}
+
+
+
+> +
+> +	for (; left < right; left++)
+> +		if (reuse->socks[left] == sk)
+> +			return left;
+
+
+Is this even possible (to return -1) ?
+
+> +	return -1;
+> +}
+> +
+> +static void __reuseport_add_sock(struct sock *sk,
+> +				 struct sock_reuseport *reuse)
+> +{
+> +	reuse->socks[reuse->num_socks] = sk;
+> +	/* paired with smp_rmb() in reuseport_select_sock() */
+> +	smp_wmb();
+> +	reuse->num_socks++;
+> +}
+> +
+> +static bool __reuseport_detach_sock(struct sock *sk,
+> +				    struct sock_reuseport *reuse)
+> +{
+> +	int i = reuseport_sock_index(sk, reuse, false);
+> +
+> +	if (i == -1)
+> +		return false;
+> +
+> +	reuse->socks[i] = reuse->socks[reuse->num_socks - 1];
+> +	reuse->num_socks--;
+> +
+> +	return true;
+> +}
+> +
+>  static struct sock_reuseport *__reuseport_alloc(unsigned int max_socks)
+>  {
+>  	unsigned int size = sizeof(struct sock_reuseport) +
+> @@ -72,9 +115,8 @@ int reuseport_alloc(struct sock *sk, bool bind_inany)
+>  	}
+>  
+>  	reuse->reuseport_id = id;
+> -	reuse->socks[0] = sk;
+> -	reuse->num_socks = 1;
+>  	reuse->bind_inany = bind_inany;
+> +	__reuseport_add_sock(sk, reuse);
+
+Not sure why you changed this part, really no smp_wmb() is needed at this point ?
+
+>  	rcu_assign_pointer(sk->sk_reuseport_cb, reuse);
+>  
+>  out:
+> @@ -98,6 +140,7 @@ static struct sock_reuseport *reuseport_grow(struct sock_reuseport *reuse)
+>  		return NULL;
+>  
+>  	more_reuse->num_socks = reuse->num_socks;
+> +	more_reuse->num_closed_socks = reuse->num_closed_socks;
+>  	more_reuse->prog = reuse->prog;
+>  	more_reuse->reuseport_id = reuse->reuseport_id;
+>  	more_reuse->bind_inany = reuse->bind_inany;
+> @@ -105,9 +148,13 @@ static struct sock_reuseport *reuseport_grow(struct sock_reuseport *reuse)
+>  
+>  	memcpy(more_reuse->socks, reuse->socks,
+>  	       reuse->num_socks * sizeof(struct sock *));
+> +	memcpy(more_reuse->socks +
+> +	       (more_reuse->max_socks - more_reuse->num_closed_socks),
+> +	       reuse->socks + reuse->num_socks,
+
+The second memcpy() is to copy the closed sockets,
+they should start at reuse->socks + (reuse->max_socks - reuse->num_closed_socks) ?
+
+
+> +	       reuse->num_closed_socks * sizeof(struct sock *));
+>  	more_reuse->synq_overflow_ts = READ_ONCE(reuse->synq_overflow_ts);
+>  
+> -	for (i = 0; i < reuse->num_socks; ++i)
+> +	for (i = 0; i < reuse->max_socks; ++i)
+>  		rcu_assign_pointer(reuse->socks[i]->sk_reuseport_cb,
+>  				   more_reuse);
+>  
+> @@ -158,7 +205,7 @@ int reuseport_add_sock(struct sock *sk, struct sock *sk2, bool bind_inany)
+>  		return -EBUSY;
+>  	}
+>  
+> -	if (reuse->num_socks == reuse->max_socks) {
+> +	if (reuse->num_socks + reuse->num_closed_socks == reuse->max_socks) {
+>  		reuse = reuseport_grow(reuse);
+>  		if (!reuse) {
+>  			spin_unlock_bh(&reuseport_lock);
+> @@ -166,10 +213,7 @@ int reuseport_add_sock(struct sock *sk, struct sock *sk2, bool bind_inany)
+>  		}
+>  	}
+>  
+> -	reuse->socks[reuse->num_socks] = sk;
+> -	/* paired with smp_rmb() in reuseport_select_sock() */
+> -	smp_wmb();
+> -	reuse->num_socks++;
+> +	__reuseport_add_sock(sk, reuse);
+>  	rcu_assign_pointer(sk->sk_reuseport_cb, reuse);
+>  
+>  	spin_unlock_bh(&reuseport_lock);
+> @@ -183,7 +227,6 @@ EXPORT_SYMBOL(reuseport_add_sock);
+>  void reuseport_detach_sock(struct sock *sk)
+>  {
+>  	struct sock_reuseport *reuse;
+> -	int i;
+>  
+>  	spin_lock_bh(&reuseport_lock);
+>  	reuse = rcu_dereference_protected(sk->sk_reuseport_cb,
+> @@ -200,16 +243,11 @@ void reuseport_detach_sock(struct sock *sk)
+>  	bpf_sk_reuseport_detach(sk);
+>  
+>  	rcu_assign_pointer(sk->sk_reuseport_cb, NULL);
+> +	__reuseport_detach_sock(sk, reuse);
+> +
+> +	if (reuse->num_socks + reuse->num_closed_socks == 0)
+> +		call_rcu(&reuse->rcu, reuseport_free_rcu);
+>  
+> -	for (i = 0; i < reuse->num_socks; i++) {
+> -		if (reuse->socks[i] == sk) {
+> -			reuse->socks[i] = reuse->socks[reuse->num_socks - 1];
+> -			reuse->num_socks--;
+> -			if (reuse->num_socks == 0)
+> -				call_rcu(&reuse->rcu, reuseport_free_rcu);
+> -			break;
+> -		}
+> -	}
+>  	spin_unlock_bh(&reuseport_lock);
+>  }
+>  EXPORT_SYMBOL(reuseport_detach_sock);
+> @@ -274,7 +312,7 @@ struct sock *reuseport_select_sock(struct sock *sk,
+>  	prog = rcu_dereference(reuse->prog);
+>  	socks = READ_ONCE(reuse->num_socks);
+>  	if (likely(socks)) {
+> -		/* paired with smp_wmb() in reuseport_add_sock() */
+> +		/* paired with smp_wmb() in __reuseport_add_sock() */
+>  		smp_rmb();
+>  
+>  		if (!prog || !skb)
+> 
