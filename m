@@ -2,60 +2,56 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E375FC48BE6
-	for <bpf@archiver.kernel.org>; Sat, 12 Jun 2021 02:36:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 25F3CC48BE5
+	for <bpf@archiver.kernel.org>; Sat, 12 Jun 2021 02:37:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C44136128A
-	for <bpf@archiver.kernel.org>; Sat, 12 Jun 2021 02:36:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 04AB661246
+	for <bpf@archiver.kernel.org>; Sat, 12 Jun 2021 02:37:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230440AbhFLCik (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 11 Jun 2021 22:38:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44628 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbhFLCij (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 11 Jun 2021 22:38:39 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 067BDC0617AF;
-        Fri, 11 Jun 2021 19:36:29 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id g24so6668499pji.4;
-        Fri, 11 Jun 2021 19:36:29 -0700 (PDT)
+        id S230017AbhFLCjb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 11 Jun 2021 22:39:31 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:44017 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229584AbhFLCjb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 11 Jun 2021 22:39:31 -0400
+Received: by mail-pl1-f193.google.com with SMTP id v12so3724406plo.10;
+        Fri, 11 Jun 2021 19:37:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=5oTyBg2zzSvZuVYD/2K5aNP50Oymbht27Q2wyBGJt3w=;
-        b=ptskm5sgUj/qxXMUF/gLmV6yBKXYt3QpalwYbSOy0xqEUATqnL6KHqZ33FcRJaOHwG
-         n6WpLK5dqW0p4c+yOvRlwQnD7LRC7JJz0gjsOaRU0/4lZwRWRCicUifFzA314WnsgLWb
-         QzT2gI1Vzkv8LctzNDOtqEZHlFUxrbK3im9RC/c1Aeg8GFCqGWEe6Bte1XYL5fKunNng
-         BwNDIxeouajOhYpaFLhiQ+r1SjTx5HC+yrJTN3OM99sQ5+8z+11rcHuh0Ju8w36hU3Rc
-         JZVR4Vcl4aF6LUJsHlVccmdfSGVLH285mup+bqhW3+7A16fi78bAJOVpEB4MWVKIKXCT
-         6BDQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IITX7U/U2NxdQ4BXZwOJpYFoyLbJ0R4PGybi+Tq0JRM=;
+        b=qLhWylQHjo/V0ABaewfoPz2kj0xo0y+oG51iT858MekfOVQ2vMaSou6Bk7AFE7Bty6
+         qKfvUhqpnNLik+UH4NEN/cZl/l9rEkAoEWmiLHmVuqk/jJ14ahtoxxdT34f9mii1qRCj
+         gvuwkfdfmfQCep7zsZyF2/Jscq6cIcTBWQHqd//zcmEsXPs7CA1asdvZ7P21joR1q6aC
+         RqyAxNawNjIPu8PLjA+f+3DQV1WEWgl+KjuW8cZHlozYlAvhYHyneGLTJ39htUxy6I1P
+         r3RBZ1DqRHQuOLPQCzBOUxrEtX+grae4OgBsiZ65EtB8hoGyktstWaGhF2VJvoedCA/C
+         1V2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=5oTyBg2zzSvZuVYD/2K5aNP50Oymbht27Q2wyBGJt3w=;
-        b=XT0mZEt2afgrkV/fX9xrYwaewDjopUAefFk/kn6MQN11oFnbxV3WUoakB1NK6cDEaV
-         OMUwUtMjrZUpZg6GuWf6ownXw8u1zZYYeKzOI3WVu+pgYsjJTNs7JE4SfHFpX65SQaHO
-         vVtR1LWZlDA1IbZiMm46qpi4oV7fMau2kE4k37pxaVVkMTnGtaFUsfZD01lkbGVjh9fK
-         xhIrVM1b6wfrgl78+ifWJYm/KV0i3qQkh/FO7k19IFjC4OKbyrJ3qags9Xw36M5ON3FD
-         g8sRThv6se46F997Bs2sJzBmYKvu4t6n+LS72yX+OKj2nwJZgBePdc556I2emE/wmaNv
-         dyYQ==
-X-Gm-Message-State: AOAM533E/Uk+Yqa/WNafYu9Wr8/Vvh3Wtc48JTy7okg4LAPL/D5qX7hS
-        PjE4gVd4mm1X9G5AEj04f+AffKanHj0=
-X-Google-Smtp-Source: ABdhPJwxDA2DovcyD9w/5/CEBjVlJZOoZW/0BrrK2UUjLsyh7qzRiX3UbYbT6piPIzIRieODIhhjVA==
-X-Received: by 2002:a17:90a:7841:: with SMTP id y1mr12074959pjl.119.1623465388439;
-        Fri, 11 Jun 2021 19:36:28 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IITX7U/U2NxdQ4BXZwOJpYFoyLbJ0R4PGybi+Tq0JRM=;
+        b=irPuKuxjRkJp0WBCw6CENkmpgaNgydkwkzamZdKWP5j7k7To5r7KCDUKbEcNEuhlJo
+         8xqFCVhpgcTT/PvfwPPADDmGkVSgbTdX/Yz6KFdPQfKPv5lfKqY6WFhZCHGkQxXqehxU
+         kfsrULhruS5BdEdpq3vM1VQ8eA2CURSdIMoUjIyJlqnPKGfjXF4MhEHzlz8wHNJiZNry
+         6NLf4lHNqa0inJBrqjJbnK6flPHXBAiMKsMzaV501H9cIcYGCJWIAc2fm/ejWqEhTC1v
+         t2wtSM8T0HOtT7+LLk9tDSIhKq7lKyOGM9JzKsxmhyaNi4oiybXV/2RqQGSd0McJCNi/
+         H+nQ==
+X-Gm-Message-State: AOAM533Q3PFRYfsMwDTKOmxs+L7KRhstdhnSnPaxv1Dtn9CYU3IPEjcp
+        CA/2JkcpjakiqA4t+R3r4+YRzmqK8lU=
+X-Google-Smtp-Source: ABdhPJzFTmx0hBg0Jz7gl16khYdFFsmpdbuPl4Eyv3u8X/o6i6CqHoCsBUZ/XXCVQmpVbB4l5lNTjg==
+X-Received: by 2002:a17:90a:d204:: with SMTP id o4mr7281964pju.23.1623465381271;
+        Fri, 11 Jun 2021 19:36:21 -0700 (PDT)
 Received: from localhost ([2409:4063:4d05:9fb3:bc63:2dba:460a:d70e])
-        by smtp.gmail.com with ESMTPSA id cl4sm5842238pjb.32.2021.06.11.19.36.27
+        by smtp.gmail.com with ESMTPSA id fs24sm6059161pjb.6.2021.06.11.19.36.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Jun 2021 19:36:28 -0700 (PDT)
+        Fri, 11 Jun 2021 19:36:20 -0700 (PDT)
 From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To:     bpf@vger.kernel.org
 Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
@@ -64,41 +60,33 @@ Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
         Andrii Nakryiko <andrii@kernel.org>,
         =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
         netdev@vger.kernel.org
-Subject: [PATCH bpf-next 2/3] libbpf: set NLM_F_EXCL when creating qdisc
-Date:   Sat, 12 Jun 2021 08:05:01 +0530
-Message-Id: <20210612023502.1283837-3-memxor@gmail.com>
+Subject: [PATCH bpf-next 0/3] Fixes for TC-BPF series
+Date:   Sat, 12 Jun 2021 08:04:59 +0530
+Message-Id: <20210612023502.1283837-1-memxor@gmail.com>
 X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210612023502.1283837-1-memxor@gmail.com>
-References: <20210612023502.1283837-1-memxor@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This got lost during the refactoring across versions. We always use
-NLM_F_EXCL when creating some TC object, so reflect what the function
-says and set the flag.
+These are a few simple cleanups. Two of these hopefully silence the coverity
+warnings. Even though there is no real bug here, the report is valid as per
+language rules, and overall it does make the code a bit simpler. There's one
+other patch to add the forgotten NLM_F_EXCL that I spotted while doing this.
 
-Fixes: 715c5ce454a6 ("libbpf: Add low level TC-BPF management API")
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
----
- tools/lib/bpf/netlink.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Andrii, would you be able to tell whether this silences the warnings? I wasn't
+able to figure out how to run the Coverity suite locally.
 
-diff --git a/tools/lib/bpf/netlink.c b/tools/lib/bpf/netlink.c
-index efbb50ad59d8..cf9381f03b16 100644
---- a/tools/lib/bpf/netlink.c
-+++ b/tools/lib/bpf/netlink.c
-@@ -457,7 +457,7 @@ static int tc_qdisc_modify(struct bpf_tc_hook *hook, int cmd, int flags)
- 
- static int tc_qdisc_create_excl(struct bpf_tc_hook *hook)
- {
--	return tc_qdisc_modify(hook, RTM_NEWQDISC, NLM_F_CREATE);
-+	return tc_qdisc_modify(hook, RTM_NEWQDISC, NLM_F_CREATE | NLM_F_EXCL);
- }
- 
- static int tc_qdisc_delete(struct bpf_tc_hook *hook)
+Kumar Kartikeya Dwivedi (3):
+  libbpf: remove unneeded check for flags during detach
+  libbpf: set NLM_F_EXCL when creating qdisc
+  libbpf: add request buffer type for netlink messages
+
+ tools/lib/bpf/netlink.c | 111 +++++++++++++++-------------------------
+ tools/lib/bpf/nlattr.h  |  37 +++++++++-----
+ 2 files changed, 66 insertions(+), 82 deletions(-)
+
 -- 
 2.31.1
 
