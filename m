@@ -2,114 +2,104 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FF42C48BE5
-	for <bpf@archiver.kernel.org>; Sat, 12 Jun 2021 01:13:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CFACC48BE5
+	for <bpf@archiver.kernel.org>; Sat, 12 Jun 2021 02:36:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5A050610F8
-	for <bpf@archiver.kernel.org>; Sat, 12 Jun 2021 01:13:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 76CE461374
+	for <bpf@archiver.kernel.org>; Sat, 12 Jun 2021 02:36:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230370AbhFLBPV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 11 Jun 2021 21:15:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54890 "EHLO
+        id S229874AbhFLCig (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 11 Jun 2021 22:38:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbhFLBPU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 11 Jun 2021 21:15:20 -0400
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899BDC061574
-        for <bpf@vger.kernel.org>; Fri, 11 Jun 2021 18:13:11 -0700 (PDT)
-Received: by mail-ot1-x32e.google.com with SMTP id h24-20020a9d64180000b029036edcf8f9a6so4939495otl.3
-        for <bpf@vger.kernel.org>; Fri, 11 Jun 2021 18:13:11 -0700 (PDT)
+        with ESMTP id S229584AbhFLCif (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 11 Jun 2021 22:38:35 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84F65C061574;
+        Fri, 11 Jun 2021 19:36:25 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id i34so3901258pgl.9;
+        Fri, 11 Jun 2021 19:36:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=KHipPYRZ4uATvkcpMUfSP44douiaEMPmq7tpq4EMPvI=;
-        b=RZ4qX0dt1Z4pXPPpknRmxfsbcNinDdRNVQxX/g6Ke7AC5LuVPGT7pA6Xv+rXkCC/9/
-         sUT8vZv3HL1XWUwMNCXH3htct1pe3GA5oZbL2aMXPu+fVGCvo4BFnkZOlmXvXuIksLSv
-         8pbABMXB/kYcZ7O6TC/K4VoM8PRiOlDGipLeBuaxe9nvi68gRt1Di837/sy5Mrn3C1MD
-         f4i1pVsDReukzX+ly79qR+UIEfcie3USIuysSvXMEETNUCFRmgFuf54nslT8rzP0wMRK
-         70xqwREAGYeuwagXSrfCIucNe58rPupLLJMwYmrHEXg5oYQXtKSzbtayfntHG0jxYN00
-         3ZzQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=6oXG9vdCurXKmOdJS+c0Sh8RTbrP7GR5GJEYzeBms5A=;
+        b=d/mr0GV+HvbS44NUwfeq2VHLzjZXryTIEE8CarYc4VjvzL+MNOGULMnitC2YAK5TcV
+         RFTxmQElpkpyrFBKTYuabNWFC+bSTrd6l8FDgun39/18OHTU0Kx6Tl0xCRc8nD50ma2X
+         1cZxU3UO2Wx+K4SlEpXvWa/O1AgrpzRemGS2I2fCG6eV3Q7HqYD6LVR44Z8Qh0K9ggCA
+         s0yNaQIJ1Z5KEVZ1bEYeUjiKh+yxjMXUQhakCqnC9g05GjDXGB70ggLH1xzmagklZcSD
+         LRw/6PYYm42sBQbW5U6tRonZXYro0HQ395f0VdZATJlngZW2P4WOPvwduuDvHsatyeQU
+         XLmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=KHipPYRZ4uATvkcpMUfSP44douiaEMPmq7tpq4EMPvI=;
-        b=dSyZ5AWRFEDxBT4OhucFGYCFDLJWhxiRRivdg6C+F0SD0N6CI75Skym8qIlIC0a5fx
-         8HUYshGB7uU+hm/qq6BT1O8wWwmpYySOcHGvK53uWDcrXDDY7ZcOzBVHbDFEtAs5dXHC
-         g5Z5puFUvxA9kNsCvPPHQwuuk+Zrsuz6/Si12OK+LdQIWCNVxbhqqBxkCm19GvLJz5IZ
-         y9HAVVBFkKW+4u3VbMwlgWISAYOK2xNFcDzPa+OQqOXwUnBqXsydhhQwIC0ypD8ZVLn/
-         mP9BIfXSue0g4UGn21lRIbp3qGnES9oLpDJbihloShuR8A9xmuBKkngS9v5pYuM8Z6rf
-         w9Ag==
-X-Gm-Message-State: AOAM532pjSWFR+rqgZafGhOHO8o+I9fjo6nJBl62ZWF+2gpSN6bM5kzI
-        yL/4yiO0TCxw8/zu5mpCh8ulKcCvE8w=
-X-Google-Smtp-Source: ABdhPJxxtHRiTlTuyWkOhl4bn4o/fAA2erZOG5yrL45/CUXCS2SlpBKDwteNMKuk7UkxIlUiS8eZ8g==
-X-Received: by 2002:a05:6830:22ec:: with SMTP id t12mr5270706otc.243.1623460390629;
-        Fri, 11 Jun 2021 18:13:10 -0700 (PDT)
-Received: from Davids-MacBook-Pro.local ([8.48.134.22])
-        by smtp.googlemail.com with ESMTPSA id s15sm1541038oih.15.2021.06.11.18.13.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Jun 2021 18:13:10 -0700 (PDT)
-Subject: Re: bpf_fib_lookup support for firewall mark
-To:     Rumen Telbizov <rumen.telbizov@menlosecurity.com>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org
-References: <CA+FoirDxh7AhApwWVG_19j5RWT1dp23ab1h0P1nTjhhWpRC5Ow@mail.gmail.com>
- <3e6ba294-12ca-3a2f-d17c-9588ae221dda@gmail.com>
- <CA+FoirCt1TXuBpyayTnRXC2MfW-taN9Ob-3mioPojfaWvwjqqg@mail.gmail.com>
- <CA+FoirALjdwJ0=F6E4w2oNmC+fRkpwHx8AZb7mW1D=nU4_qZUQ@mail.gmail.com>
- <c2f77a3d-508f-236c-057c-6233fbc7e5d2@iogearbox.net>
- <68345713-e679-fe9f-fedd-62f76911b55a@gmail.com>
- <CA+FoirA28PANkzHE-4uHb7M0vf-V3UZ6NfjKbc_RBJ2=sKSrOQ@mail.gmail.com>
- <6248c547-ad64-04d6-fcec-374893cc1ef2@gmail.com>
- <7742f2a2-11a7-4d8f-d8c1-7787483a3935@iogearbox.net>
- <64222254-eef3-f1c4-2b75-6ea1668a0ad5@gmail.com>
- <CA+FoirARDoWWpif2tw47BG0Rh5+uBpsoVZ7Y05JnZO2UqBDSEw@mail.gmail.com>
- <CA+FoirA-eAfux3PfxjgyO=--7duWCKuyeJfxWTdW6jiMWzShTw@mail.gmail.com>
-From:   David Ahern <dsahern@gmail.com>
-Message-ID: <ae33242e-25c0-744b-6060-4cdecb32e3dc@gmail.com>
-Date:   Fri, 11 Jun 2021 19:13:08 -0600
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.11.0
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=6oXG9vdCurXKmOdJS+c0Sh8RTbrP7GR5GJEYzeBms5A=;
+        b=nYkqJi2MeOX+g7E7HKbgsHRNLteDIO068+jCauK0z0AtNTnfBnbeNWdOFqrGeilbW+
+         wysAQCPzqvqFpTzGu8nDvn4z+1qdB5L0nD0NOAFlRmtVSV71c0FV53DkLz8OQVT6JdH2
+         IMgvn+1UVLVoXhqElvyuj7jA7s/gIrM0iW0EogETTIdXLhNtaRdE6mFOWmLx4NGzO5pH
+         BQrXYgp0no2C2wsVZUh/0whC11r6UojWajVvMjR1ih+mc7PaVRNxdW3YvIqEPW5RGokj
+         cM7tQHQaOrCXIa2W5I2Hbv+70EVUQ0ZBmtVTMEf7SmD/brXP0wvwR3DAvsaTsgiHO+dg
+         plAw==
+X-Gm-Message-State: AOAM5301i0GloHHQsy0zNOWywKGMJTmCEt9gqbU1O9MAGnwL5UzJhvmt
+        QH1riitZj/b11TZ6C909RftTAUdEfFo=
+X-Google-Smtp-Source: ABdhPJw0dx3xNUbywwe6e21p1hM96NjZxI7FVbEdpFTeqL6/+mo4vrEB/y1fx3aAD9T6Gq50S3yAeQ==
+X-Received: by 2002:a65:438d:: with SMTP id m13mr6333212pgp.87.1623465384857;
+        Fri, 11 Jun 2021 19:36:24 -0700 (PDT)
+Received: from localhost ([2409:4063:4d05:9fb3:bc63:2dba:460a:d70e])
+        by smtp.gmail.com with ESMTPSA id t39sm5857834pfg.147.2021.06.11.19.36.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Jun 2021 19:36:24 -0700 (PDT)
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To:     bpf@vger.kernel.org
+Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        netdev@vger.kernel.org
+Subject: [PATCH bpf-next 1/3] libbpf: remove unneeded check for flags during detach
+Date:   Sat, 12 Jun 2021 08:05:00 +0530
+Message-Id: <20210612023502.1283837-2-memxor@gmail.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20210612023502.1283837-1-memxor@gmail.com>
+References: <20210612023502.1283837-1-memxor@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <CA+FoirA-eAfux3PfxjgyO=--7duWCKuyeJfxWTdW6jiMWzShTw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 6/11/21 5:56 PM, Rumen Telbizov wrote:
-> Hey David,
-> 
-> I just tested your proposed patch and I want to confirm that it works
-> great for my use-case.
-> I get the same rule-selected route based on firewall mark as the outside
-> ip route get ... mark ...
-> Also since we didn't touch the ports, multipathing works as expected -
-> gives a different route
-> based on the hash of the socket tuple.
+Coverity complained about this being unreachable code. It is right
+because we already enforce flags to be unset, so a check validating the
+flag value is redundant.
 
-great.
+CID: 322808
+Fixes: 715c5ce454a6 ("libbpf: Add low level TC-BPF management API")
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+---
+ tools/lib/bpf/netlink.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-> 
-> So having said that I can't help but wonder what the next steps might be.
-> 
-> Are you able/willing to incorporate this work in the kernel?
+diff --git a/tools/lib/bpf/netlink.c b/tools/lib/bpf/netlink.c
+index d743c8721aa7..efbb50ad59d8 100644
+--- a/tools/lib/bpf/netlink.c
++++ b/tools/lib/bpf/netlink.c
+@@ -675,8 +675,6 @@ static int __bpf_tc_detach(const struct bpf_tc_hook *hook,
+ 		return -EINVAL;
+ 	if (priority > UINT16_MAX)
+ 		return -EINVAL;
+-	if (flags & ~BPF_TC_F_REPLACE)
+-		return -EINVAL;
+ 	if (!flush) {
+ 		if (!handle || !priority)
+ 			return -EINVAL;
+-- 
+2.31.1
 
-I do not have the time or hardware at the moment to do the testing - or
-create the selftest for it. If you do have the time for the selftest, we
-can tag team it.
-
-
-> If yes I also wonder if it would be possible to backport it into 5.10
-> branch?
-> 
-
-5.10 backports are done out of tree, so you are on your own there.
