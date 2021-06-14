@@ -2,164 +2,285 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AB0AC4743C
-	for <bpf@archiver.kernel.org>; Mon, 14 Jun 2021 16:55:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C7CFC2B9F4
+	for <bpf@archiver.kernel.org>; Mon, 14 Jun 2021 22:36:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4F64E61209
-	for <bpf@archiver.kernel.org>; Mon, 14 Jun 2021 16:55:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 693CE611CE
+	for <bpf@archiver.kernel.org>; Mon, 14 Jun 2021 22:36:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234371AbhFNQ5o (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 14 Jun 2021 12:57:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60586 "EHLO
+        id S229536AbhFNWiL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 14 Jun 2021 18:38:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234789AbhFNQ5o (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 14 Jun 2021 12:57:44 -0400
-Received: from ustc.edu.cn (email6.ustc.edu.cn [IPv6:2001:da8:d800::8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A543EC061767;
-        Mon, 14 Jun 2021 09:55:39 -0700 (PDT)
+        with ESMTP id S229499AbhFNWiK (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 14 Jun 2021 18:38:10 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23111C061574
+        for <bpf@vger.kernel.org>; Mon, 14 Jun 2021 15:35:51 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id h15so17607973ybm.13
+        for <bpf@vger.kernel.org>; Mon, 14 Jun 2021 15:35:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mail.ustc.edu.cn; s=dkim; h=Received:Date:From:To:Cc:Subject:
-        Message-ID:In-Reply-To:References:MIME-Version:Content-Type:
-        Content-Transfer-Encoding; bh=cTQGzuLTNvXEGjTEb/xgHNPQ2J7ygTLFE8
-        lIngQ6Kvo=; b=wWznm3uOYMP7ZaPY0FbHy2D0Gm9kzmPwgpizUTsOaAhFkkouL6
-        NgLIEabXd3vxCW95bcATrbHvcnopyPoqkIiG0jF7PTENzeD7JXxe+NZmUPTEcImv
-        k6mZ4qp6PVKmLg2Zy5cnPz508vd4/5GvVv+D22hQDEk7Ypjk7a60Ovf7o=
-Received: from xhacker (unknown [101.86.20.15])
-        by newmailweb.ustc.edu.cn (Coremail) with SMTP id LkAmygDHz8PpicdgdkfbAA--.3750S2;
-        Tue, 15 Jun 2021 00:55:05 +0800 (CST)
-Date:   Tue, 15 Jun 2021 00:49:27 +0800
-From:   Jisheng Zhang <jszhang3@mail.ustc.edu.cn>
-To:     Andreas Schwab <schwab@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Cc:     Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Luke Nelson <luke.r.nels@gmail.com>,
-        Xi Wang <xi.wang@gmail.com>, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH] riscv: Ensure BPF_JIT_REGION_START aligned with PMD size
-Message-ID: <20210615004928.2d27d2ac@xhacker>
-In-Reply-To: <87im2hsfvm.fsf@igel.home>
-References: <20210330022144.150edc6e@xhacker>
-        <20210330022521.2a904a8c@xhacker>
-        <87o8ccqypw.fsf@igel.home>
-        <20210612002334.6af72545@xhacker>
-        <87bl8cqrpv.fsf@igel.home>
-        <20210614010546.7a0d5584@xhacker>
-        <87im2hsfvm.fsf@igel.home>
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QSaoIEvD5LDIv7lZY3XT/e/MFW4rjx9ifiebDaEsNpc=;
+        b=VMQSDjznZtFVJ5xgSMaQd1Q4PMqPM4Ab0FgOxQf6qNkf8jACSY7JSTErANhr/p0/cp
+         MlyIOb4LsoLOg/zQkSxzTc+KpmfA8YcTpiAHDZxAs0MEOjCi25yEGl3e7scKb1WobkXo
+         ewf3lY2kSh5Ye9aeGrKvuts5bVxqsp5SdzehZTVsXa6VavvCRaHhCH4uwcUTdGXs0eib
+         jPIaEOTkQ9uhEIhuKrDmpIF4SrC25/wxgXVTIJgsN/yroQIwA/t2UOnQpd3yvIbQqI2W
+         sUgvhUyaRBQMy0Ol0NDk7iCqqKjjQyaOjYmK2tkqADq62mceT+mleZMK0A4V0o+ugeyT
+         IpNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QSaoIEvD5LDIv7lZY3XT/e/MFW4rjx9ifiebDaEsNpc=;
+        b=nH+41ZEBDixkrHzlbHmArGgt8Ny8sjNKY+yu3s94tmoZULbJTWvXgHoW4Tx323TYe/
+         Nt+L2J7Djb9FMjlMT/1mxM7I8XqnErE84ezYyC9bLr1CrXfKRepqkB9jGdD9G8niyioE
+         hPORoefTPg0OhZWBJOJD7OC8cwtpbKMZAS171u4FA29n9HmNedggFaeHVzhHvosmlDkc
+         oYNpBlDGgysrBHX0ZeyMLEdozHftg1KqytIEDpvCfRVVgUbjlCe8WhPlyqPaJbxX1VRc
+         srggMRn3M7MfAXgZjjn84DPBtHbv0hAUIyxJ8PHRkhAu5z0q6lXlHTLyK6OM7/7GWjb5
+         TWfQ==
+X-Gm-Message-State: AOAM533rpx6FE09gXpWNNTWV/Y/LJraVTRylejIcyvmXY2wBzRu5jII9
+        tQN47sVbfTn9t5gD9NVHSY/QtuMBennc2GVfJC7IZSKvGkc=
+X-Google-Smtp-Source: ABdhPJw/0oHt/gKtncrc5j/fBJ+7MpP29PsmJzy9tSBcdmIjXjWifQjqI5sMSQ6LHViQvpbUJx+a2VBoDsBSohMbCsM=
+X-Received: by 2002:a25:aa66:: with SMTP id s93mr28589902ybi.260.1623710150275;
+ Mon, 14 Jun 2021 15:35:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LkAmygDHz8PpicdgdkfbAA--.3750S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxury3Cr1DGrWxGr4DZF4DCFg_yoWrGr4kpF
-        15tr13GrW8Jry7XFy8Zry5Ar1UJw15A3W3JrnrJr15X3W7G3WDZr10qFW7ur1DXF4xJ3W7
-        Kr4DXr48Kr4UAaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkGb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwV
-        C2z280aVCY1x0267AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVAC
-        Y4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJV
-        W8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkI
-        wI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxV
-        WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI
-        7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
-        4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4U
-        MIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07b5sjbUUU
-        UU=
-X-CM-SenderInfo: xmv2xttqjtqzxdloh3xvwfhvlgxou0/
+References: <20210429054734.53264-1-grantseltzer@gmail.com>
+ <877dkkd7gp.fsf@meer.lwn.net> <CAO658oV2vJ0O=D3HWXyCUztsHD5GzDY_5p3jaAicEqqj+2-i+Q@mail.gmail.com>
+ <87tunnc0oj.fsf@meer.lwn.net> <CAO658oUMkxR7VO1i3wCYHp7hMC3exP3ccHqeA-2BGnL4bPwfPA@mail.gmail.com>
+ <CAEf4BzZJUtPiGn+8mkzNd2k+-3EEE85_xezab3RYy9ZW4zqANQ@mail.gmail.com>
+ <CAO658oWPrEDBE8FUBuDUnrBVM91Mgu-svXfXgAXawAUp1MmWZA@mail.gmail.com>
+ <CAEf4BzZJDqR7mRSKbOCWfZV-dqwin+PGYxBTTYMVVYwriD33JQ@mail.gmail.com>
+ <CAO658oUAg02tN4Gr9r5PJvb93HhN_yj3BzpvC2oVc6oaSn0FUw@mail.gmail.com>
+ <CAEf4BzY=JQiHquwoUypU2fD4Xe5rr+DuQA2Xw=n6OXvH7hXbew@mail.gmail.com>
+ <CAO658oUH3u8yWV3Ft-96OCrgkzLacv_saecv4e1u4a_X0nF0eg@mail.gmail.com>
+ <87wnrd9zp8.fsf@meer.lwn.net> <CAO658oW-_-bOX=xZNjzR=S89rY99gzuwh8Ln9MNtgA4zkwEh+g@mail.gmail.com>
+ <875yyx895z.fsf@meer.lwn.net> <CAO658oWwqtZFnhVg3hC8dO=2obOKn5Mp2uqrOYa-3xsNwiRU8Q@mail.gmail.com>
+ <CAO658oXRN=JnP+e=qM2-uBu94BxoWCyHcScOgSwxpoHOw5ByLQ@mail.gmail.com>
+ <CAEf4Bzaupx7dvv8nZAQKqo2UbdRmYgCb=54Uy0x5+96UTD6DTA@mail.gmail.com>
+ <CAO658oW-XiuS_FLVCkj1pTtQS5MPxk=jyA+-LRkiMgt=27e21A@mail.gmail.com>
+ <CAEf4BzbUQ07qzfRDOZWjfz-7P_dZG33xcJaC3TM5PbRpxJC5tw@mail.gmail.com> <CAO658oX6kUvqQvJQ7Yd1Vh5FYymLgxNGTDV-fjjrsQTBNxjo1g@mail.gmail.com>
+In-Reply-To: <CAO658oX6kUvqQvJQ7Yd1Vh5FYymLgxNGTDV-fjjrsQTBNxjo1g@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 14 Jun 2021 15:35:39 -0700
+Message-ID: <CAEf4BzZFz-gO4yVmgYpvM4AVA4ORr-Hi=h+FDgJri3jj8AR0_A@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 0/3] Autogenerating API documentation
+To:     Grant Seltzer Richman <grantseltzer@gmail.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Jisheng Zhang <jszhang@kernel.org>
+On Fri, Jun 11, 2021 at 1:01 PM Grant Seltzer Richman
+<grantseltzer@gmail.com> wrote:
+>
+> On Thu, Jun 10, 2021 at 1:14 PM Andrii Nakryiko
+> <andrii.nakryiko@gmail.com> wrote:
+> >
+> > On Wed, Jun 9, 2021 at 10:04 AM Grant Seltzer Richman
+> > <grantseltzer@gmail.com> wrote:
+> > >
+> > > On Mon, Jun 7, 2021 at 6:45 PM Andrii Nakryiko
+> > > <andrii.nakryiko@gmail.com> wrote:
+> > >
+> > > > So I assume you looked at the DOC: block that Jonathan suggested
+> > > > above? Can you walk us a bit on how that would look like and why you
+> > > > think it's not going to work?
+> > >
+> > > If I understand correctly, the using the  DOC: comment block and
+> > > extracting it would require you to manually update a comment in code
+> > > that labels the libbpf version number and then cut a release. The
+> > > problems are:
+> > >
+> > > 1) Having to do that manually
+> > > 2) The docs on kernel.org would not show previous libbpf releases
+> > > (just the ones that were released with different kernel versions)
+> > >
+> > > > > If you check out libbpf.readthedocs.io you can see what that would
+> > > > > look like. I made a test release (v21.21.21) to show how easy this is.
+> > > > > That is being pulled from my PR at github.com/libbpf/libbpf/pull/260.
+> > > >
+> > > > It looks pretty nice. Where does v21.21.21 come from, though?
+> > >
+> > > libbpf.readthedocs.org currently tracks my libbpf fork at
+> > > github.com/grantseltzer/libbpf, I cut the 21.21.21 release there.
+> > >
+> > > What this demonstrates is that readthedocs pulls in any release or
+> > > branch I enable in the admin panel and builds a seperate site for each
+> > > one. You can see the release/branches by toggling them in the bottom
+> > > left.
+> > >
+> > > > also weird that docs are under src/docs, not just under docs/, but I
+> > > > assume that's a quick hack to demonstrate this?
+> > >
+> > > I can move that no problem. All the config files have relative paths
+> > > that point at each other.
+> > >
+> > > > To be entirely honest, I'm already a bit lost on all the
+> > > > possibilities. It would be great if you can summarize what's possible
+> > > > and how it would look like.
+> > >
+> > > That's my fault, I'm not making this easy to review (2 different patch
+> > > series, plus github PR). Here is a summary of the 3 different
+> > > approaches I've presented. At the bottom I have my recommendation.
+> > >
+> > > 1) Integrate libbpf docs into the kernel documentation system:
+> > >
+> > > - Add libbpf documentation files (e.g. 'naming-convention',
+> > > 'building-libbpf') under the Linux 'Documentation' directory.
+> > > - Include a file which has sphinx directives to pull in API
+> > > documentation from the code under tools/lib/bpf.
+> > > - This documentation would appear on kernel.org/doc alongside all
+> > > other kernel documentation
+> > >
+> > > Pro: Make use of existing kernel documentation infrastructure
+> > > Con: In order to have the libbpf documentation be versioned based on
+> > > github releases it would require manually updating comments in code.
+> > > To get it how we really want it (i.e. select a libbpf release and see
+> > > the documentation specific for it), it would likely require
+> > > rearranging/duplicating code in libbpf under subdirectories.
+> > > Contributing simple documentation has to go through the mailing list
+> > > which is daunting for new contributors.
+> > >
+> > > 2) Have all libbpf documentation in the kernel repo under
+> > > tools/lib/bpf/docs, including libbpf's own sphinx configuration files
+> > >
+> > > - The github mirror would pull in these documentation files and sphinx
+> > > configuration files.
+> > > - readthedocs would be configured to build off of the github libbpf mirror repo.
+> > > - The documentation would be accessible at libbpf.readthedocs.org.
+> > > - Users would be able to navigate documentation of different releases
+> > > of libbpf easily. Maintainers would not need to do any manual work to
+> > > make that happen.
+> > >
+> > > Pro: Documentation all in one place, in the kernel repo, integrates
+> > > easily with the github mirror, and we easily get to version
+> > > documentation by libbpf releases.
+> > > Con: We don't make use of existing kernel documentation
+> > > infrastructure. Contributing simple documentation has to go through
+> > > the mailing list which is daunting for new contributors.
+> > >
+> > > 3) Host all the documentation on the libbpf github mirror
+> > >
+> > > - Documents (e.g. 'naming-convention', 'building-libbpf') would be
+> > > available at libbpf.readthedocs.org
+> > > - Sphinx configuration files would live in the libbpf github mirror
+> > > - Code comment documentation would still go through the mailing list
+> > >
+> > > Pro: Documentation is explorable by different versions. Some
+> > > documentation can be contributed via github which is easier than the
+> > > mailing list.
+> > > Con: Documentation would be scattered across different places.
+> > >
+> > > My recommendation:
+> > >
+> > > I would go with option 2, it feels like the best compromise. However,
+> > > I'd like to contribute changes to the kernel documentation such that
+> > > it can support versioning particular documentation files based on
+> > > specified git hashes. That way we can have libbpf docs on kernel.org
+> > > but still get to version docs based on libbpf releases, not kernel
+> > > ones.
+> > >
+> > > I'm happy to explore other options, but if one of these sounds like
+> > > something that we can agree on for now, I can submit a fresh patch for
+> > > it.
+> >
+> > Honestly, I think option #3 would be best for actually getting more
+> > docs contributions, because it will reduce the friction of getting
+> > started. Figuring out the kernel mailing list submission process is
+> > not a trivial problem.
+>
+> I can agree to that. This is also the easiest option to change,
+> completely undo, or migrate off of. Since it's on github only we don't
+> have to worry about all the different mailing lists. I think that
+> makes it a really good starting point regardless.
 
-Andreas reported commit fc8504765ec5 ("riscv: bpf: Avoid breaking W^X")
-breaks booting with one kind of config file, I reproduced a kernel panic
-with the config:
+Let's just go with option #1, let's put the docs in kernel repo under
+Documentation/bpf/libbpf and copy/sync them in the sync script. That
+will keep most libbpf stuff (except Github-specific Travis CI configs)
+in one repo (kernel), reviewed by the bigger set of folks (not just me
+on Github). Let's see how confusing having two libbpf documentation
+sites will be (we can always add a sentence to README.md on Github to
+point to the "canonical" source of documentation at
+libbpf.readthedocs.io).
 
-[    0.138553] Unable to handle kernel paging request at virtual address ffffffff81201220
-[    0.139159] Oops [#1]
-[    0.139303] Modules linked in:
-[    0.139601] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.13.0-rc5-default+ #1
-[    0.139934] Hardware name: riscv-virtio,qemu (DT)
-[    0.140193] epc : __memset+0xc4/0xfc
-[    0.140416]  ra : skb_flow_dissector_init+0x1e/0x82
-[    0.140609] epc : ffffffff8029806c ra : ffffffff8033be78 sp : ffffffe001647da0
-[    0.140878]  gp : ffffffff81134b08 tp : ffffffe001654380 t0 : ffffffff81201158
-[    0.141156]  t1 : 0000000000000002 t2 : 0000000000000154 s0 : ffffffe001647dd0
-[    0.141424]  s1 : ffffffff80a43250 a0 : ffffffff81201220 a1 : 0000000000000000
-[    0.141654]  a2 : 000000000000003c a3 : ffffffff81201258 a4 : 0000000000000064
-[    0.141893]  a5 : ffffffff8029806c a6 : 0000000000000040 a7 : ffffffffffffffff
-[    0.142126]  s2 : ffffffff81201220 s3 : 0000000000000009 s4 : ffffffff81135088
-[    0.142353]  s5 : ffffffff81135038 s6 : ffffffff8080ce80 s7 : ffffffff80800438
-[    0.142584]  s8 : ffffffff80bc6578 s9 : 0000000000000008 s10: ffffffff806000ac
-[    0.142810]  s11: 0000000000000000 t3 : fffffffffffffffc t4 : 0000000000000000
-[    0.143042]  t5 : 0000000000000155 t6 : 00000000000003ff
-[    0.143220] status: 0000000000000120 badaddr: ffffffff81201220 cause: 000000000000000f
-[    0.143560] [<ffffffff8029806c>] __memset+0xc4/0xfc
-[    0.143859] [<ffffffff8061e984>] init_default_flow_dissectors+0x22/0x60
-[    0.144092] [<ffffffff800010fc>] do_one_initcall+0x3e/0x168
-[    0.144278] [<ffffffff80600df0>] kernel_init_freeable+0x1c8/0x224
-[    0.144479] [<ffffffff804868a8>] kernel_init+0x12/0x110
-[    0.144658] [<ffffffff800022de>] ret_from_exception+0x0/0xc
-[    0.145124] ---[ end trace f1e9643daa46d591 ]---
+>
+> My PR on the github repo is up to date and ready for review. Once
+> merged I can seamlessly move libbpf.readthedocs.org to pull from that
+> repo instead of my fork.
+>
+> Also I'd like to add you and whoever else as an admin, if you can sign
+> up for readthedocs just let me know your username and i'll add you.
+> And feel free to add any other libbpf maintainers that you think it'd
+> be appropriate.
 
-After some investigation, I think I found the root cause: commit
-2bfc6cd81bd ("move kernel mapping outside of linear mapping") moves
-BPF JIT region after the kernel:
+I signed up, my user is anakryiko, thanks.
 
-The &_end is unlikely aligned with PMD size, so the front bpf jit
-region sits with part of kernel .data section in one PMD size mapping.
-But kernel is mapped in PMD SIZE, when bpf_jit_binary_lock_ro() is
-called to make the first bpf jit prog ROX, we will make part of kernel
-.data section RO too, so when we write to, for example memset the
-.data section, MMU will trigger a store page fault.
+>
+> >
+> > But I'm sure some people will have strong feelings about keeping docs
+> > in the kernel source tree. Assuming we'd get a lot of push back for
+> > option #3, I think the next best thing would be a hybrid of #1 and #2.
+> > Host docs in kernel docs under Documentation/bpf/libbpf, so it will
+> > get into kernel sources automatically. But also copy those docs into
+> > Github mirror during sync under /docs and have readthedocs pull and
+> > version it properly. That has a chance of creating a bit of confusion
+> > for where exactly libbpf docs are (it would be libbpf.readthedocs.org,
+> > versioned properly), but given docs will have the same source of truth
+> > (modulo minor versioning differences, potentially), I think this might
+> > be ok. WDYT? Are there any problems with that?
+>
+> The only issue I foresee is having the 'latest' docs on kernel.org/doc
+> and having versioned docs on libbpf.readthedocs.org. That'd confuse
+> me.
 
-To fix the issue, we need to ensure the BPF JIT region is PMD size
-aligned. This patch acchieve this goal by restoring the BPF JIT region
-to original position, I.E the 128MB before kernel .text section.
+Yep, I share the feeling, but let's start with being good citizens in
+the kernel. If that turns out to be too confusing and painful, we'll
+reassess.
 
-Reported-by: Andreas Schwab <schwab@linux-m68k.org>
-Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
----
- arch/riscv/include/asm/pgtable.h | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
-index 9469f464e71a..380cd3a7e548 100644
---- a/arch/riscv/include/asm/pgtable.h
-+++ b/arch/riscv/include/asm/pgtable.h
-@@ -30,9 +30,8 @@
- 
- #define BPF_JIT_REGION_SIZE	(SZ_128M)
- #ifdef CONFIG_64BIT
--/* KASLR should leave at least 128MB for BPF after the kernel */
--#define BPF_JIT_REGION_START	PFN_ALIGN((unsigned long)&_end)
--#define BPF_JIT_REGION_END	(BPF_JIT_REGION_START + BPF_JIT_REGION_SIZE)
-+#define BPF_JIT_REGION_START	(BPF_JIT_REGION_END - BPF_JIT_REGION_SIZE)
-+#define BPF_JIT_REGION_END	(MODULES_END)
- #else
- #define BPF_JIT_REGION_START	(PAGE_OFFSET - BPF_JIT_REGION_SIZE)
- #define BPF_JIT_REGION_END	(VMALLOC_END)
--- 
-2.32.0
-
-
+>
+> >
+> > Hosting docs under tools/libbpf/docs in kernel repo is the worst of
+> > both worlds, IMO. Hard to contribute, but also not integrated with the
+> > rest of kernel docs.
+>
+> Yea, that's also a good point!
+> >
+> > >
+> > >
+> > > >
+> > > > As a general guidance, I think we should try to keep all the
+> > > > documentation in one place (which means kernel sources, because that's
+> > > > where API documentation will have to leave). As for config files,
+> > > > unless they will "stick out" too much, I'd keep them close to the docs
+> > > > themselves. If not, putting them in Github mirror is fine by me as
+> > > > well.
+> > > >
+> > > > Pretty much the only important aspect, from my point of view, is that
+> > > > docs are versioned according to the libbpf version, not kernel
+> > > > version. Otherwise huge confusion will ensue for all the users of
+> > > > libbpf, most of not all of which are using Github mirror.
+> > > >
+> > > > Does this make sense and is doable?
+> > > >
+> > > > > > >
+> > > > > > > If you're wanting to replace the version code that appears at the top of
+> > > > > > > the left column in the HTML output, though, it's going to be a bit
+> > > > > > > harder.  I don't doubt we can do it, but it may require messing around
+> > > > > > > with template files and such.
+> > > > > > >
+> > > > > > > Thanks,
+> > > > > > >
+> > > > > > > jon
