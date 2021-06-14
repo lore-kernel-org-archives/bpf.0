@@ -2,96 +2,164 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BB1FC2B9F4
-	for <bpf@archiver.kernel.org>; Mon, 14 Jun 2021 16:54:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AB0AC4743C
+	for <bpf@archiver.kernel.org>; Mon, 14 Jun 2021 16:55:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5AFDB611C1
-	for <bpf@archiver.kernel.org>; Mon, 14 Jun 2021 16:54:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4F64E61209
+	for <bpf@archiver.kernel.org>; Mon, 14 Jun 2021 16:55:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234056AbhFNQ4b (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 14 Jun 2021 12:56:31 -0400
-Received: from mail-pl1-f226.google.com ([209.85.214.226]:37400 "EHLO
-        mail-pl1-f226.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233843AbhFNQ4b (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 14 Jun 2021 12:56:31 -0400
-Received: by mail-pl1-f226.google.com with SMTP id h12so6894646plf.4
-        for <bpf@vger.kernel.org>; Mon, 14 Jun 2021 09:54:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:dkim-signature:mime-version:references
-         :in-reply-to:from:date:message-id:subject:to:cc;
-        bh=efVDtLyYl6Rfag2Jmdz2WmCO2ZqRbPjkeEymvW563ok=;
-        b=ZP3yUSOlWcbJZyP/8mwxSV+a79oZKfmwa4B2Uw40D2dy5EU/YPGaK7vSx6nL2D4+RI
-         N5GqobeC8tlV2Sx7bpl3F72y5PgUi9fpEOh8IT3HJtvfdfWKegbqAxgEXvj9WP/Yd1x9
-         BZZm+yVGL1V687FF+ar2HP2F/tQuB3yAZdfL3pK6zNSRevLZZLLGNb0HAaD70MrFVT9K
-         31d7sMhMYoo4WVihQPVSr0Mo1qOIuJL6HEumnvEukQn5o9PE+B5eEVSMtwfCC235niPq
-         nmAeRomMNiP46V1k/Un2W0UqJ/x7vMpHp3vj0AlhlRaINxnHjLevEZysH+WRXhQVpX4n
-         Ym2w==
-X-Gm-Message-State: AOAM5300orygB+r8BVfhhNplF89O68KX+eOr7R/HN7QiEC21NpNwllJi
-        WNd8fY5W5rJu6fMzgHbK5yp82cdHJvM2D+IdNNkHRLUXzojVpg==
-X-Google-Smtp-Source: ABdhPJzAu/2n2nLch3EiXpuIRFXwQ4fI6th/nq1GjESKK3hKUTgLRPjDX33ti7Q50XDCiIyZAyHUJNjildOt
-X-Received: by 2002:a17:90a:fd86:: with SMTP id cx6mr67143pjb.148.1623689608328;
-        Mon, 14 Jun 2021 09:53:28 -0700 (PDT)
-Received: from restore.menlosecurity.com ([34.202.62.170])
-        by smtp-relay.gmail.com with ESMTPS id c10sm3544731pjn.8.2021.06.14.09.53.27
-        for <bpf@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 14 Jun 2021 09:53:28 -0700 (PDT)
-X-Relaying-Domain: menlosecurity.com
-Received: from safemail-prod-02780031cr-re.menlosecurity.com (34.202.62.171)
-    by restore.menlosecurity.com (34.202.62.170)
-    with SMTP id 09eb01a0-cd31-11eb-b2d6-4f7e48d1f4a9;
-    Mon, 14 Jun 2021 16:53:28 GMT
-Received: from mail-ej1-f70.google.com (209.85.218.70)
-    by safemail-prod-02780031cr-re.menlosecurity.com (34.202.62.171)
-    with SMTP id 09eb01a0-cd31-11eb-b2d6-4f7e48d1f4a9;
-    Mon, 14 Jun 2021 16:53:28 GMT
-Received: by mail-ej1-f70.google.com with SMTP id w1-20020a1709064a01b02903f1e4e947c9so3267998eju.16
-        for <bpf@vger.kernel.org>; Mon, 14 Jun 2021 09:53:26 -0700 (PDT)
+        id S234371AbhFNQ5o (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 14 Jun 2021 12:57:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60586 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234789AbhFNQ5o (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 14 Jun 2021 12:57:44 -0400
+Received: from ustc.edu.cn (email6.ustc.edu.cn [IPv6:2001:da8:d800::8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A543EC061767;
+        Mon, 14 Jun 2021 09:55:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=menlosecurity.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=efVDtLyYl6Rfag2Jmdz2WmCO2ZqRbPjkeEymvW563ok=;
-        b=AZxLqFXPuMNGkhob/AEpyTD2okOs8e/CQA5jiBOULAHHsIM3hLBXfkxxinkgJZsbBJ
-         zdQXcNHrZ4N7gL6rnT1l6Lxyq+9lALl9mqeGENxAkiNqM3G7uDoexRuEleexti3WPVN5
-         x4AYWSu/up6KFLq44QF9SiqdaJPpYduqXttqc=
-X-Received: by 2002:a17:906:24d8:: with SMTP id f24mr16644892ejb.188.1623689605406;
-        Mon, 14 Jun 2021 09:53:25 -0700 (PDT)
-X-Received: by 2002:a17:906:24d8:: with SMTP id f24mr16644884ejb.188.1623689605313;
- Mon, 14 Jun 2021 09:53:25 -0700 (PDT)
+        d=mail.ustc.edu.cn; s=dkim; h=Received:Date:From:To:Cc:Subject:
+        Message-ID:In-Reply-To:References:MIME-Version:Content-Type:
+        Content-Transfer-Encoding; bh=cTQGzuLTNvXEGjTEb/xgHNPQ2J7ygTLFE8
+        lIngQ6Kvo=; b=wWznm3uOYMP7ZaPY0FbHy2D0Gm9kzmPwgpizUTsOaAhFkkouL6
+        NgLIEabXd3vxCW95bcATrbHvcnopyPoqkIiG0jF7PTENzeD7JXxe+NZmUPTEcImv
+        k6mZ4qp6PVKmLg2Zy5cnPz508vd4/5GvVv+D22hQDEk7Ypjk7a60Ovf7o=
+Received: from xhacker (unknown [101.86.20.15])
+        by newmailweb.ustc.edu.cn (Coremail) with SMTP id LkAmygDHz8PpicdgdkfbAA--.3750S2;
+        Tue, 15 Jun 2021 00:55:05 +0800 (CST)
+Date:   Tue, 15 Jun 2021 00:49:27 +0800
+From:   Jisheng Zhang <jszhang3@mail.ustc.edu.cn>
+To:     Andreas Schwab <schwab@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Cc:     Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Luke Nelson <luke.r.nels@gmail.com>,
+        Xi Wang <xi.wang@gmail.com>, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH] riscv: Ensure BPF_JIT_REGION_START aligned with PMD size
+Message-ID: <20210615004928.2d27d2ac@xhacker>
+In-Reply-To: <87im2hsfvm.fsf@igel.home>
+References: <20210330022144.150edc6e@xhacker>
+        <20210330022521.2a904a8c@xhacker>
+        <87o8ccqypw.fsf@igel.home>
+        <20210612002334.6af72545@xhacker>
+        <87bl8cqrpv.fsf@igel.home>
+        <20210614010546.7a0d5584@xhacker>
+        <87im2hsfvm.fsf@igel.home>
 MIME-Version: 1.0
-References: <CA+FoirDxh7AhApwWVG_19j5RWT1dp23ab1h0P1nTjhhWpRC5Ow@mail.gmail.com>
- <3e6ba294-12ca-3a2f-d17c-9588ae221dda@gmail.com> <CA+FoirCt1TXuBpyayTnRXC2MfW-taN9Ob-3mioPojfaWvwjqqg@mail.gmail.com>
- <CA+FoirALjdwJ0=F6E4w2oNmC+fRkpwHx8AZb7mW1D=nU4_qZUQ@mail.gmail.com>
- <c2f77a3d-508f-236c-057c-6233fbc7e5d2@iogearbox.net> <68345713-e679-fe9f-fedd-62f76911b55a@gmail.com>
- <CA+FoirA28PANkzHE-4uHb7M0vf-V3UZ6NfjKbc_RBJ2=sKSrOQ@mail.gmail.com>
- <6248c547-ad64-04d6-fcec-374893cc1ef2@gmail.com> <7742f2a2-11a7-4d8f-d8c1-7787483a3935@iogearbox.net>
- <64222254-eef3-f1c4-2b75-6ea1668a0ad5@gmail.com> <CA+FoirARDoWWpif2tw47BG0Rh5+uBpsoVZ7Y05JnZO2UqBDSEw@mail.gmail.com>
- <CA+FoirA-eAfux3PfxjgyO=--7duWCKuyeJfxWTdW6jiMWzShTw@mail.gmail.com> <ae33242e-25c0-744b-6060-4cdecb32e3dc@gmail.com>
-In-Reply-To: <ae33242e-25c0-744b-6060-4cdecb32e3dc@gmail.com>
-From:   Rumen Telbizov <rumen.telbizov@menlosecurity.com>
-Date:   Mon, 14 Jun 2021 09:53:14 -0700
-Message-ID: <CA+FoirAZ-cQKoTabFK9RemhLuNqZL462D=B8EwdPO9tiE-4B5Q@mail.gmail.com>
-Subject: Re: bpf_fib_lookup support for firewall mark
-To:     David Ahern <dsahern@gmail.com>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: LkAmygDHz8PpicdgdkfbAA--.3750S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxury3Cr1DGrWxGr4DZF4DCFg_yoWrGr4kpF
+        15tr13GrW8Jry7XFy8Zry5Ar1UJw15A3W3JrnrJr15X3W7G3WDZr10qFW7ur1DXF4xJ3W7
+        Kr4DXr48Kr4UAaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkGb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwV
+        C2z280aVCY1x0267AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVAC
+        Y4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJV
+        W8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkI
+        wI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxV
+        WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI
+        7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
+        4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4U
+        MIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07b5sjbUUU
+        UU=
+X-CM-SenderInfo: xmv2xttqjtqzxdloh3xvwfhvlgxou0/
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-> I do not have the time or hardware at the moment to do the testing - or
-> create the selftest for it. If you do have the time for the selftest, we
-> can tag team it.
+From: Jisheng Zhang <jszhang@kernel.org>
 
-Sure I can definitely do what I can but you'll need to walk me
-through, since I am not sure what I is needed.
-Can you point me in the right direction?
+Andreas reported commit fc8504765ec5 ("riscv: bpf: Avoid breaking W^X")
+breaks booting with one kind of config file, I reproduced a kernel panic
+with the config:
 
-Cheers,
-Rumen Telbizov
+[    0.138553] Unable to handle kernel paging request at virtual address ffffffff81201220
+[    0.139159] Oops [#1]
+[    0.139303] Modules linked in:
+[    0.139601] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.13.0-rc5-default+ #1
+[    0.139934] Hardware name: riscv-virtio,qemu (DT)
+[    0.140193] epc : __memset+0xc4/0xfc
+[    0.140416]  ra : skb_flow_dissector_init+0x1e/0x82
+[    0.140609] epc : ffffffff8029806c ra : ffffffff8033be78 sp : ffffffe001647da0
+[    0.140878]  gp : ffffffff81134b08 tp : ffffffe001654380 t0 : ffffffff81201158
+[    0.141156]  t1 : 0000000000000002 t2 : 0000000000000154 s0 : ffffffe001647dd0
+[    0.141424]  s1 : ffffffff80a43250 a0 : ffffffff81201220 a1 : 0000000000000000
+[    0.141654]  a2 : 000000000000003c a3 : ffffffff81201258 a4 : 0000000000000064
+[    0.141893]  a5 : ffffffff8029806c a6 : 0000000000000040 a7 : ffffffffffffffff
+[    0.142126]  s2 : ffffffff81201220 s3 : 0000000000000009 s4 : ffffffff81135088
+[    0.142353]  s5 : ffffffff81135038 s6 : ffffffff8080ce80 s7 : ffffffff80800438
+[    0.142584]  s8 : ffffffff80bc6578 s9 : 0000000000000008 s10: ffffffff806000ac
+[    0.142810]  s11: 0000000000000000 t3 : fffffffffffffffc t4 : 0000000000000000
+[    0.143042]  t5 : 0000000000000155 t6 : 00000000000003ff
+[    0.143220] status: 0000000000000120 badaddr: ffffffff81201220 cause: 000000000000000f
+[    0.143560] [<ffffffff8029806c>] __memset+0xc4/0xfc
+[    0.143859] [<ffffffff8061e984>] init_default_flow_dissectors+0x22/0x60
+[    0.144092] [<ffffffff800010fc>] do_one_initcall+0x3e/0x168
+[    0.144278] [<ffffffff80600df0>] kernel_init_freeable+0x1c8/0x224
+[    0.144479] [<ffffffff804868a8>] kernel_init+0x12/0x110
+[    0.144658] [<ffffffff800022de>] ret_from_exception+0x0/0xc
+[    0.145124] ---[ end trace f1e9643daa46d591 ]---
+
+After some investigation, I think I found the root cause: commit
+2bfc6cd81bd ("move kernel mapping outside of linear mapping") moves
+BPF JIT region after the kernel:
+
+The &_end is unlikely aligned with PMD size, so the front bpf jit
+region sits with part of kernel .data section in one PMD size mapping.
+But kernel is mapped in PMD SIZE, when bpf_jit_binary_lock_ro() is
+called to make the first bpf jit prog ROX, we will make part of kernel
+.data section RO too, so when we write to, for example memset the
+.data section, MMU will trigger a store page fault.
+
+To fix the issue, we need to ensure the BPF JIT region is PMD size
+aligned. This patch acchieve this goal by restoring the BPF JIT region
+to original position, I.E the 128MB before kernel .text section.
+
+Reported-by: Andreas Schwab <schwab@linux-m68k.org>
+Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+---
+ arch/riscv/include/asm/pgtable.h | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
+index 9469f464e71a..380cd3a7e548 100644
+--- a/arch/riscv/include/asm/pgtable.h
++++ b/arch/riscv/include/asm/pgtable.h
+@@ -30,9 +30,8 @@
+ 
+ #define BPF_JIT_REGION_SIZE	(SZ_128M)
+ #ifdef CONFIG_64BIT
+-/* KASLR should leave at least 128MB for BPF after the kernel */
+-#define BPF_JIT_REGION_START	PFN_ALIGN((unsigned long)&_end)
+-#define BPF_JIT_REGION_END	(BPF_JIT_REGION_START + BPF_JIT_REGION_SIZE)
++#define BPF_JIT_REGION_START	(BPF_JIT_REGION_END - BPF_JIT_REGION_SIZE)
++#define BPF_JIT_REGION_END	(MODULES_END)
+ #else
+ #define BPF_JIT_REGION_START	(PAGE_OFFSET - BPF_JIT_REGION_SIZE)
+ #define BPF_JIT_REGION_END	(VMALLOC_END)
+-- 
+2.32.0
+
+
