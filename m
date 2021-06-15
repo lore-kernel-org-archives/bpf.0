@@ -2,100 +2,131 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-5.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A386FC48BE5
-	for <bpf@archiver.kernel.org>; Tue, 15 Jun 2021 10:11:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B68FAC48BDF
+	for <bpf@archiver.kernel.org>; Tue, 15 Jun 2021 11:54:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8D59361438
-	for <bpf@archiver.kernel.org>; Tue, 15 Jun 2021 10:11:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 80E556145B
+	for <bpf@archiver.kernel.org>; Tue, 15 Jun 2021 11:54:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231287AbhFOKNW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 15 Jun 2021 06:13:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35354 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231470AbhFOKNV (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 15 Jun 2021 06:13:21 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97562C06175F
-        for <bpf@vger.kernel.org>; Tue, 15 Jun 2021 03:11:16 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id a1so26021262lfr.12
-        for <bpf@vger.kernel.org>; Tue, 15 Jun 2021 03:11:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IyvkIcwwdoDL37FE6kX9vMk5LMKw+sW+txneM0TaPaM=;
-        b=i5RkcgI+tZZZjVLxQhbDXbcXnQH173TnSUKH2BaKT5urJjkYMP/rHGwyM4tDh9KlnZ
-         71p0Sj+oDBELvc5Eogx+QXZ/tgPSrflLDrVkl1wPIJKCjWbCvNj0LayYOiUBrDv5l8WK
-         bx8j77bcvhOs10Z8CPR8O40+qhAY8oiUh9nyU=
+        id S230087AbhFOL46 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 15 Jun 2021 07:56:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:50117 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229909AbhFOL46 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 15 Jun 2021 07:56:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1623758093;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=r9ZcD21ZX/ou29BDDRauVXqm9CpSppybq1/8AzdM/BE=;
+        b=gG6V+WFX8+0Hrii7fxCmUn2gb58wWJMswXbgbRlDjF3gh+C4vJh5Ik++7mJyyUTlH4rKSo
+        6MuO7SZXL+lJt4Kww/4BYuFOQk2LfEWhd07NiU+A8v2K3jgTwsmH3G7e3v9u/sTnZ8k41z
+        yKJxSt/hYkwD9FsUtobVGgZUUCurhrw=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-253-VrhocZjDNxaMNSdZkeEJww-1; Tue, 15 Jun 2021 07:54:52 -0400
+X-MC-Unique: VrhocZjDNxaMNSdZkeEJww-1
+Received: by mail-ed1-f69.google.com with SMTP id v12-20020aa7dbcc0000b029038fc8e57037so3863536edt.0
+        for <bpf@vger.kernel.org>; Tue, 15 Jun 2021 04:54:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IyvkIcwwdoDL37FE6kX9vMk5LMKw+sW+txneM0TaPaM=;
-        b=FooFN4j99Ab2K/HhR8nUzC2pcGdp4InVfbF/2yL80vxAJZLPEMhNE73k46oxZwgtdP
-         FLrIp+EUwonUx79tRqJt4Hr59I4zdijCJPjV0ayu2jmwLkvtEjwm6Q/c7fMlKuyH4cKY
-         bN3s1PqYNUW2PI7Z+ehdPShy4iYDKuXOa/KeaJMXKeKJAt5pqKyJeIjE+dHIO1iQU+N0
-         QVJiUkwwiMngddj7fADn/CbSwHFsysoI84ibfxUjiV8fkAQlrGiyiaADrlsinfX9XyQC
-         tZ6JVRrtqAeFyrYJic2cbkrllL+ZCDIzjuLZh9XkMwGZ39ylixhuHeaRe+bF7vjRul96
-         u0wQ==
-X-Gm-Message-State: AOAM532VugNbgbHVSl/BOlQ11JADl13Fj7bsl31oYquPwPGlfRQ05U/O
-        8zLgCJuKMHpxwBt6yxrcTSapw0Ljmqnuz9yBtrr+HQ==
-X-Google-Smtp-Source: ABdhPJwjloOjO7IrNwTLlATV17OWemrQn98sIs0ptxJ0pAXIE8gohgDOCQef2dpCfGItXCQyWGm99EvLbLn0mzBMk88=
-X-Received: by 2002:a05:6512:2ea:: with SMTP id m10mr15579620lfq.325.1623751874994;
- Tue, 15 Jun 2021 03:11:14 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210610161027.255372-1-lmb@cloudflare.com> <CAEf4BzZDDuyybofAjxm8QG9VYFMGAF8gZ9g-rnoD1-8R_9LExw@mail.gmail.com>
- <CACAyw9-UbOD_H5=KfscPHzwOHL13nTUpojhtQnOTNJpTS-DVzQ@mail.gmail.com> <CAEf4BzbFhGkRi0YSa0pB+2SFYtJKXLEVKx=hQpVbBO_D4KUjtQ@mail.gmail.com>
-In-Reply-To: <CAEf4BzbFhGkRi0YSa0pB+2SFYtJKXLEVKx=hQpVbBO_D4KUjtQ@mail.gmail.com>
-From:   Lorenz Bauer <lmb@cloudflare.com>
-Date:   Tue, 15 Jun 2021 11:11:03 +0100
-Message-ID: <CACAyw9-0qDakujnUBT3uZcgnBZr0dZ8o=GbLx_OEiF1xXvRdzQ@mail.gmail.com>
-Subject: Re: [PATCH bpf] lib: bpf: tracing: fail compilation if target arch is missing
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=r9ZcD21ZX/ou29BDDRauVXqm9CpSppybq1/8AzdM/BE=;
+        b=dVA/5QEvjWGhvlL8UdhyGMU3pMH1Kvh4HDkaMAzgsBLEA6wTWg6W0OFQXbfaFBc1kK
+         zVOAzJYAj8pcvFEQEljlJJjo6UVw+TC1r2fNxAxlTyJTbd7lJr0GuP7i3sXt2/nEEyDU
+         dldvfQAL1KJLgLhOG5CVVUJaFUcWkyLZw/97NhL3yev9CF9tFjNQYgVdatEPJDFlaEnO
+         dHW7KYkDXqRo66LGcNPFjwCUaQeh/pfqDkaCo1Dc8BOvHlm/M2JZgvlPBh1B6tIK9Isl
+         HnAetRKlS2yXL8TgcKkODV7idj9mhTYSsPCFAb5Za3TiZf1PXibslybEjX0SJjtfL3MC
+         6dFw==
+X-Gm-Message-State: AOAM531bGjCDunvgmU0NU4ofjewhfyZJpMRDRe66e08xnPfaXDj0srLt
+        /1JE/5PKbV2xsSGLLr+hvrjxk5iedZKqAg6OmZgOoKVcLMEQUroo/rayVWy6OtS18H1XgzYTK5R
+        SM16k3jfWfKUs
+X-Received: by 2002:a05:6402:6c8:: with SMTP id n8mr22504750edy.180.1623758091271;
+        Tue, 15 Jun 2021 04:54:51 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx6VRfui25Fk7gETjn32Em0zrvcKKVgDXu79Wc1czwESYsDkvGpci2Q171qwd/tpWzV0WpyJA==
+X-Received: by 2002:a05:6402:6c8:: with SMTP id n8mr22504720edy.180.1623758090925;
+        Tue, 15 Jun 2021 04:54:50 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id m18sm9988254ejx.56.2021.06.15.04.54.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Jun 2021 04:54:50 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 6089A180734; Tue, 15 Jun 2021 13:54:49 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Cong Wang <xiyou.wangcong@gmail.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        bpf <bpf@vger.kernel.org>,
-        kernel-team <kernel-team@cloudflare.com>
-Content-Type: text/plain; charset="UTF-8"
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Vlad Buslov <vladbu@nvidia.com>, Jiri Pirko <jiri@resnulli.us>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, Joe Stringer <joe@cilium.io>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Linux Kernel Network Developers <netdev@vger.kernel.org>
+Subject: Re: [PATCH RFC bpf-next 0/7] Add bpf_link based TC-BPF API
+In-Reply-To: <CAM_iQpW7ZAz5rLAanMRg7R52Pn55N=puVkvoHcHF618wq8uA1g@mail.gmail.com>
+References: <20210528195946.2375109-1-memxor@gmail.com>
+ <CAM_iQpVqVKhK+09Sj_At226mdWpVXfVbhy89As2dai7ip8Nmtw@mail.gmail.com>
+ <20210607033724.wn6qn4v42dlm4j4o@apollo>
+ <CAM_iQpVCnG8pSci2sMbJ1B5YE-y=reAUp82itgrguecyNBCUVQ@mail.gmail.com>
+ <20210607060724.4nidap5eywb23l3d@apollo>
+ <CAM_iQpWA=SXNR3Ya8_L2aoVJGP_uaRP8EYCpDrnq3y8Uf6qu=g@mail.gmail.com>
+ <20210608071908.sos275adj3gunewo@apollo>
+ <CAM_iQpXFmsWhMA-RO2j5Ph5Ak8yJgUVBppGj2_5NS3BuyjkvzQ@mail.gmail.com>
+ <20210613025308.75uia7rnt4ue2k7q@apollo>
+ <CAM_iQpW7ZAz5rLAanMRg7R52Pn55N=puVkvoHcHF618wq8uA1g@mail.gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Tue, 15 Jun 2021 13:54:49 +0200
+Message-ID: <877divs5py.fsf@toke.dk>
+MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, 15 Jun 2021 at 00:27, Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+Cong Wang <xiyou.wangcong@gmail.com> writes:
+
+>> > I offer two different views here:
+>> >
+>> > 1. If you view a TC filter as an instance as a netdev/qdisc/action, they
+>> > are no different from this perspective. Maybe the fact that a TC filter
+>> > resides in a qdisc makes a slight difference here, but like I mentioned, it
+>> > actually makes sense to let TC filters be standalone, qdisc's just have to
+>> > bind with them, like how we bind TC filters with standalone TC actions.
+>>
+>> You propose something different below IIUC, but I explained why I'm wary of
+>> these unbound filters. They seem to add a step to classifier setup for no real
+>> benefit to the user (except keeping track of one more object and cleaning it
+>> up with the link when done).
 >
-> It doesn't seem avoidable. But I'm surprised you are satisfied with
-> your patch, it doesn't seem to solve your problem, because you'll
-> never trigger those _Pragmas as you'll just fallback to using your
-> host architecture. Isn't that right? How did you test your patch?
+> I am not even sure if unbound filters help your case at all, making
+> them unbound merely changes their residence, not ownership.
+> You are trying to pass the ownership from TC to bpf_link, which
+> is what I am against.
 
-I tested the patch by removing -D__TARGET_ARCH_$(SRCARCH) from
-BPF_CFLAGS in the Makefile. The pragmas are triggered because the
-testsuite compiles with -target bpf. This prevents the "host arch"
-fallback from activating. bpf2go specifies -target bpf(el|eb) as well,
-so any users will get the _Pragma if they use a new enough
-bpf_tracing.h.
+So what do you propose instead?
 
-> >
-> > Without it we sometimes get an integer cast warning, something about
-> > an int to void* cast I think?
->
-> hmm.. ok
+bpf_link is solving a specific problem: ensuring automatic cleanup of
+kernel resources held by a userspace application with a BPF component.
+Not all applications work this way, but for the ones that do it's very
+useful. But if the TC filter stays around after bpf_link detaches, that
+kinda defeats the point of the automatic cleanup.
 
-This is the error I get:
+So I don't really see any way around transferring ownership somehow.
+Unless you have some other idea that I'm missing?
 
-progs/lsm.c:166:14: warning: cast to 'void *' from smaller integer
-type 'int' [-Wint-to-void-pointer-cast]
-        void *ptr = (void *)PT_REGS_PARM1(regs);
-                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+-Toke
 
--- 
-Lorenz Bauer  |  Systems Engineer
-6th Floor, County Hall/The Riverside Building, SE1 7PB, UK
-
-www.cloudflare.com
