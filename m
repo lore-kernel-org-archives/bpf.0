@@ -2,63 +2,64 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-18.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8033FC49EAB
-	for <bpf@archiver.kernel.org>; Tue, 15 Jun 2021 14:55:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6227DC49EA2
+	for <bpf@archiver.kernel.org>; Tue, 15 Jun 2021 14:55:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 655366161E
-	for <bpf@archiver.kernel.org>; Tue, 15 Jun 2021 14:55:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 47CC36161C
+	for <bpf@archiver.kernel.org>; Tue, 15 Jun 2021 14:55:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231332AbhFOO5V (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 15 Jun 2021 10:57:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:26043 "EHLO
+        id S231445AbhFOO5R (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 15 Jun 2021 10:57:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:43747 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231496AbhFOO5Q (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 15 Jun 2021 10:57:16 -0400
+        by vger.kernel.org with ESMTP id S231417AbhFOO5O (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 15 Jun 2021 10:57:14 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1623768912;
+        s=mimecast20190719; t=1623768909;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=jsmFUHJU0jtXU3GGMToOByMQ5jR14adcLCwMi9CMD1M=;
-        b=NXHn+A2XYMJgvCSYRPlfcdCkSAtnwlqaKtsHnGIgWOxK97uVVACksBfLlZNEMzhq2Mf9j3
-        gnLNbij+/29a3kwEV0cep4EsbpGMPm/uf//e6NkonOzEAkXbf7K4eoSElvflyW4+OyM4Ml
-        WLKljvnHxUYo7jR4AXPBSWJPDYWU1r8=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-589-sziyrq3kOXCDfVipwNY2VQ-1; Tue, 15 Jun 2021 10:55:02 -0400
-X-MC-Unique: sziyrq3kOXCDfVipwNY2VQ-1
-Received: by mail-ed1-f71.google.com with SMTP id y16-20020a0564024410b0290394293f6816so5039209eda.20
-        for <bpf@vger.kernel.org>; Tue, 15 Jun 2021 07:55:01 -0700 (PDT)
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UuVwKA1OMw5HxgYVzw3xNIdTf1mnrwsBt+MXeIcnXmI=;
+        b=i2Vru2rc7NQrdQUfLAEzXPjuj8e5z6g0fiEkeA4zeAoWn76Z0Gl04E0eTf98OLLDTdAKkl
+        1IzI2WJ67qo51KtE01mj6P6J13ZfejjS/GApxstdOMLVUpIr0OyWk6+ukotTuBYMImHx2+
+        qM4wDltKrv3Tvs9lmIqUQqCgTHbmnmY=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-494-x_ZcpvGBNAq5IF7IEDglYA-1; Tue, 15 Jun 2021 10:55:08 -0400
+X-MC-Unique: x_ZcpvGBNAq5IF7IEDglYA-1
+Received: by mail-ed1-f70.google.com with SMTP id q7-20020aa7cc070000b029038f59dab1c5so22520484edt.23
+        for <bpf@vger.kernel.org>; Tue, 15 Jun 2021 07:55:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jsmFUHJU0jtXU3GGMToOByMQ5jR14adcLCwMi9CMD1M=;
-        b=R4yWXTOXWc3BJtoLGCfDAIJqpS9129VIGUFh07LAQuCRvtzGYWOeJilAsG9a+lyfAL
-         O/Ng2xU3qKdEzt6lqr8AZ3LuFiCA+6jG7Q321A27P2yGda1LVI4QnsTo3QMkRLP/d4ut
-         lj4unLsHBaOXJwQRTLobb98VUu+CwlDeurAD0LSF4TiAkt7tpWhR1UDLuqYlQl5b/3q9
-         vqXvmsQncwsZkEY9cQ4l07J6zplvFvUt6Fkw7b10oEfzDhB0io+tKxwZXMeYka5wfLb8
-         IMvLCO4VC0BRr9StBQ2M/Wx0X9f4jaB5R8ghEWq7rIgY605GJ0bqkqZfw4PVYfMr01uw
-         sB+Q==
-X-Gm-Message-State: AOAM532jATPPFqL4jthSdEcSsrJSptvRs+F846JcRqbsroC1ajN2vt9F
-        nJ5kL5EMDo/P6rZDz57WRodPlj2KtKjLDVWGFClO4iOZllBLtpZK6qkEmXPzukg0qzjq8pTuZ9S
-        uQF/m2TW3cWcf
-X-Received: by 2002:a05:6402:655:: with SMTP id u21mr23879013edx.211.1623768900336;
-        Tue, 15 Jun 2021 07:55:00 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzepJ27/G7iCpuyA7bFmAeYr9gqzK0v04wsRcNTp5eb1XEl1d7OLnTuryzGzsp5FJqY+kzJ8w==
-X-Received: by 2002:a05:6402:655:: with SMTP id u21mr23878979edx.211.1623768899961;
-        Tue, 15 Jun 2021 07:54:59 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id w8sm2423385edq.67.2021.06.15.07.54.59
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=UuVwKA1OMw5HxgYVzw3xNIdTf1mnrwsBt+MXeIcnXmI=;
+        b=Pvlbx/mow0MTmRrYquKLadfRMgi57uTMlfwRiGFwh4+VBFn+fkukFeNrHSb+xAR/BN
+         mvwbzlcf6WgnZn2Iolmp5Ct4JJLGF0qVhc4au4TJVUALMrqGPXSnYezlfBkFwZ5Bi8tg
+         dBdubqABkWt97+KyKyBCguuFiDP7kYRNwtmIbBJjN7LscDW2Ej+zSl8jxnG+Y4EchyK3
+         D9rinGPoFsCujCOivQ3ow6G32jUdglBZRb5y/466Ob0CV7F1nGkwRl/bB2uixdhz1lm8
+         QlEAYYY/ByGVOMVb74l+o4XrzEqMW8bDBDJeloq/azh6S+W4pnoOq7FugVfPAh+hldu5
+         DZTA==
+X-Gm-Message-State: AOAM532NnFQUJwnznKGbKHYzXoMKPClwxccFKLQjt3SGhVHkd3iRz2mo
+        NDTyjYSXCopwKiWRZaS4ECJck+mJ/5Ct6Idb/9zLs+JWZJTOf4XR0LAPg+TpmVJK5s0LoxlDZAC
+        O0TqzQf4/bAR4
+X-Received: by 2002:a17:906:86d2:: with SMTP id j18mr20741204ejy.180.1623768906893;
+        Tue, 15 Jun 2021 07:55:06 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxWpfiZnqpYkM92g7guVvXh6FJ1+oiuUPPVMTAPBLOqzvhVwFA4IyVKuSf3Gx69P5gjjEnkoA==
+X-Received: by 2002:a17:906:86d2:: with SMTP id j18mr20741184ejy.180.1623768906755;
+        Tue, 15 Jun 2021 07:55:06 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id u15sm12524316edy.29.2021.06.15.07.55.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Jun 2021 07:54:59 -0700 (PDT)
+        Tue, 15 Jun 2021 07:55:04 -0700 (PDT)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id A29221802B8; Tue, 15 Jun 2021 16:54:58 +0200 (CEST)
+        id D550418072F; Tue, 15 Jun 2021 16:54:58 +0200 (CEST)
 From:   =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     bpf@vger.kernel.org, netdev@vger.kernel.org
 Cc:     Martin KaFai Lau <kafai@fb.com>,
@@ -67,11 +68,15 @@ Cc:     Martin KaFai Lau <kafai@fb.com>,
         Magnus Karlsson <magnus.karlsson@gmail.com>,
         "Paul E . McKenney" <paulmck@kernel.org>,
         Jakub Kicinski <kuba@kernel.org>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-Subject: [PATCH bpf-next v2 00/16] Clean up and document RCU-based object protection for XDP_REDIRECT
-Date:   Tue, 15 Jun 2021 16:54:39 +0200
-Message-Id: <20210615145455.564037-1-toke@redhat.com>
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH bpf-next v2 06/16] thunderx: remove rcu_read_lock() around XDP program invocation
+Date:   Tue, 15 Jun 2021 16:54:45 +0200
+Message-Id: <20210615145455.564037-7-toke@redhat.com>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20210615145455.564037-1-toke@redhat.com>
+References: <20210615145455.564037-1-toke@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -79,105 +84,43 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-During the discussion[0] of Hangbin's multicast patch series, Martin pointed out
-that the lifetime of the RCU-protected  map entries used by XDP_REDIRECT is by
-no means obvious. I promised to look into cleaning this up, and Paul helpfully
-provided some hints and a new unrcu_pointer() helper to aid in this.
+The thunderx driver has rcu_read_lock()/rcu_read_unlock() pairs around XDP
+program invocations. However, the actual lifetime of the objects referred
+by the XDP program invocation is longer, all the way through to the call to
+xdp_do_flush(), making the scope of the rcu_read_lock() too small. This
+turns out to be harmless because it all happens in a single NAPI poll
+cycle (and thus under local_bh_disable()), but it makes the rcu_read_lock()
+misleading.
 
-It seems[1] that back in the early days of XDP, local_bh_disable() did not
-provide RCU protection, which is why the rcu_read_lock() calls were added
-to drivers in the first place. But according to Paul[2], in recent kernels
-a local_bh_disable()/local_bh_enable() pair functions as one big RCU
-read-side section, so no further protection is needed. This even applies to
--rt kernels, which has an explicit rcu_read_lock() in place as part of the
-local_bh_disable()[3].
+Rather than extend the scope of the rcu_read_lock(), just get rid of it
+entirely. With the addition of RCU annotations to the XDP_REDIRECT map
+types that take bh execution into account, lockdep even understands this to
+be safe, so there's really no reason to keep it around.
 
-This patch series is mostly a documentation exercise, cleaning up the
-description of the lifetime expectations and adding __rcu annotations so
-sparse and lockdep can help verify it.
+Cc: Sunil Goutham <sgoutham@marvell.com>
+Cc: linux-arm-kernel@lists.infradead.org
+Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
+---
+ drivers/net/ethernet/cavium/thunder/nicvf_main.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Patches 1 and 2 are preparatory: Patch 1 adds Paul's unrcu_pointer()
-helper (which has already been added to his tree), which we need for some
-of the operations in devmap, and patch 2 adds bh context as a valid
-condition for map lookups. Patch 3 is the main bit that adds the __rcu
-annotations and updates documentation comments, and the rest are patches
-updating the drivers, with one patch per distinct maintainer.
-
-Unfortunately I don't have any hardware to test any of the driver patches;
-Jesper helpfully verified that it doesn't break anything on i40e, but the rest
-of the driver patches are only compile-tested.
-
-[0] https://lore.kernel.org/bpf/20210415173551.7ma4slcbqeyiba2r@kafai-mbp.dhcp.thefacebook.com/
-[1] https://lore.kernel.org/bpf/c5192ab3-1c05-8679-79f2-59d98299095b@iogearbox.net/
-[2] https://lore.kernel.org/bpf/20210417002301.GO4212@paulmck-ThinkPad-P17-Gen-1/
-[3] https://lore.kernel.org/bpf/20210419165837.GA975577@paulmck-ThinkPad-P17-Gen-1/
-
-Changelog:
-v2:
-  - Add a comment about RCU protection to the drivers where rcu_read_lock()
-    is removed
-  - Drop unnecessary patch 3 which changed dev_get_by_index_rcu()
-  - Add some more text with the history to cover letter
-  - Fix a few places where the wrong RCU checks were used in cpumap and
-    xskmap code
-  - Carry forward ACKs
-
-Paul E. McKenney (1):
-  rcu: Create an unrcu_pointer() to remove __rcu from a pointer
-
-Toke Høiland-Jørgensen (15):
-  bpf: allow RCU-protected lookups to happen from bh context
-  xdp: add proper __rcu annotations to redirect map entries
-  ena: remove rcu_read_lock() around XDP program invocation
-  bnxt: remove rcu_read_lock() around XDP program invocation
-  thunderx: remove rcu_read_lock() around XDP program invocation
-  freescale: remove rcu_read_lock() around XDP program invocation
-  net: intel: remove rcu_read_lock() around XDP program invocation
-  marvell: remove rcu_read_lock() around XDP program invocation
-  mlx4: remove rcu_read_lock() around XDP program invocation
-  nfp: remove rcu_read_lock() around XDP program invocation
-  qede: remove rcu_read_lock() around XDP program invocation
-  sfc: remove rcu_read_lock() around XDP program invocation
-  netsec: remove rcu_read_lock() around XDP program invocation
-  stmmac: remove rcu_read_lock() around XDP program invocation
-  net: ti: remove rcu_read_lock() around XDP program invocation
-
- drivers/net/ethernet/amazon/ena/ena_netdev.c  |  6 +--
- drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c |  5 +-
- .../net/ethernet/cavium/thunder/nicvf_main.c  |  5 +-
- .../net/ethernet/freescale/dpaa/dpaa_eth.c    | 11 ++--
- .../net/ethernet/freescale/dpaa2/dpaa2-eth.c  |  6 +--
- drivers/net/ethernet/intel/i40e/i40e_txrx.c   |  5 +-
- drivers/net/ethernet/intel/i40e/i40e_xsk.c    | 11 ++--
- drivers/net/ethernet/intel/ice/ice_txrx.c     |  6 +--
- drivers/net/ethernet/intel/ice/ice_xsk.c      |  6 +--
- drivers/net/ethernet/intel/igb/igb_main.c     |  5 +-
- drivers/net/ethernet/intel/igc/igc_main.c     | 10 ++--
- drivers/net/ethernet/intel/ixgbe/ixgbe_main.c |  5 +-
- drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c  |  9 ++--
- .../net/ethernet/intel/ixgbevf/ixgbevf_main.c |  5 +-
- drivers/net/ethernet/marvell/mvneta.c         |  6 ++-
- .../net/ethernet/marvell/mvpp2/mvpp2_main.c   |  8 +--
- drivers/net/ethernet/mellanox/mlx4/en_rx.c    |  8 +--
- .../ethernet/netronome/nfp/nfp_net_common.c   |  6 ++-
- drivers/net/ethernet/qlogic/qede/qede_fp.c    |  7 +--
- drivers/net/ethernet/sfc/rx.c                 | 12 ++---
- drivers/net/ethernet/socionext/netsec.c       |  7 +--
- .../net/ethernet/stmicro/stmmac/stmmac_main.c | 13 ++---
- drivers/net/ethernet/ti/cpsw_priv.c           | 13 ++---
- include/linux/rcupdate.h                      | 14 +++++
- include/net/xdp_sock.h                        |  2 +-
- kernel/bpf/cpumap.c                           | 13 +++--
- kernel/bpf/devmap.c                           | 52 ++++++++-----------
- kernel/bpf/hashtab.c                          | 21 +++++---
- kernel/bpf/helpers.c                          |  6 +--
- kernel/bpf/lpm_trie.c                         |  6 ++-
- net/core/filter.c                             | 28 ++++++++++
- net/xdp/xsk.c                                 |  4 +-
- net/xdp/xsk.h                                 |  4 +-
- net/xdp/xskmap.c                              | 29 ++++++-----
- 34 files changed, 196 insertions(+), 158 deletions(-)
-
+diff --git a/drivers/net/ethernet/cavium/thunder/nicvf_main.c b/drivers/net/ethernet/cavium/thunder/nicvf_main.c
+index c33b4e837515..1d752815c69a 100644
+--- a/drivers/net/ethernet/cavium/thunder/nicvf_main.c
++++ b/drivers/net/ethernet/cavium/thunder/nicvf_main.c
+@@ -555,9 +555,10 @@ static inline bool nicvf_xdp_rx(struct nicvf *nic, struct bpf_prog *prog,
+ 	xdp_prepare_buff(&xdp, hard_start, data - hard_start, len, false);
+ 	orig_data = xdp.data;
+ 
+-	rcu_read_lock();
++	/* This code is invoked within a single NAPI poll cycle and thus under
++	 * local_bh_disable(), which provides the needed RCU protection.
++	 */
+ 	action = bpf_prog_run_xdp(prog, &xdp);
+-	rcu_read_unlock();
+ 
+ 	len = xdp.data_end - xdp.data;
+ 	/* Check if XDP program has changed headers */
 -- 
 2.31.1
 
