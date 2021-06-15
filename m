@@ -7,17 +7,17 @@ X-Spam-Status: No, score=-18.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E1B8C49EA7
-	for <bpf@archiver.kernel.org>; Tue, 15 Jun 2021 14:55:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 136E2C49EAF
+	for <bpf@archiver.kernel.org>; Tue, 15 Jun 2021 14:55:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 154AB6161C
+	by mail.kernel.org (Postfix) with ESMTP id F23586161C
 	for <bpf@archiver.kernel.org>; Tue, 15 Jun 2021 14:55:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231468AbhFOO5U (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 15 Jun 2021 10:57:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:45233 "EHLO
+        id S231551AbhFOO5V (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 15 Jun 2021 10:57:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:45010 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231477AbhFOO5Q (ORCPT
+        by vger.kernel.org with ESMTP id S231482AbhFOO5Q (ORCPT
         <rfc822;bpf@vger.kernel.org>); Tue, 15 Jun 2021 10:57:16 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
         s=mimecast20190719; t=1623768911;
@@ -25,41 +25,41 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=rY2VfBWw6NJ0/51nfkfzpQbN8Kg/IiRrFOK+qEg2pA4=;
-        b=fJGgf0fmYBJ/yu0/oXh4QqvwosS682jmUbvzFLAYILs+04z/ZSo+vIWOx3rQRiOnxmQiHj
-        CVePXs21ZwsBkDr+QwU1sRz+RlvDxV8gv0kGFi65fwRtybe/n/qr34v4Mwz7yX8WadHDHb
-        GtryHSWYT6U9TJ8tzaEaDSsBnZqB6lQ=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-316-8zKBDl0tOK6AsJpNoCqA5w-1; Tue, 15 Jun 2021 10:55:09 -0400
-X-MC-Unique: 8zKBDl0tOK6AsJpNoCqA5w-1
-Received: by mail-ed1-f69.google.com with SMTP id a16-20020aa7cf100000b0290391819a774aso20495642edy.8
-        for <bpf@vger.kernel.org>; Tue, 15 Jun 2021 07:55:09 -0700 (PDT)
+        bh=ByKk7NdGTOHi1KbabnH0lRUOaQxO13c2A34mff7i6os=;
+        b=SbAXjpPeYT+081YcqQbCEc8ZSMc37BXsmElgi/VtCLhuLZ1BA5ZoLFdcADbU4psCwKfhUg
+        NJvwgHh8OUtY4ZU4OeHBEtLcaX2K0uc5Ykn8ir1LAcs9b7iwrx/IPSmE0KLNYWeFQli3cG
+        t4pnlzYFJMLLFWspKn+KBlK/a8H9NCI=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-97-nXq09iPYP2a4b3YRpnoBtA-1; Tue, 15 Jun 2021 10:55:10 -0400
+X-MC-Unique: nXq09iPYP2a4b3YRpnoBtA-1
+Received: by mail-ej1-f72.google.com with SMTP id q7-20020a1709063607b02903f57f85ac45so4635283ejb.15
+        for <bpf@vger.kernel.org>; Tue, 15 Jun 2021 07:55:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=rY2VfBWw6NJ0/51nfkfzpQbN8Kg/IiRrFOK+qEg2pA4=;
-        b=hdosVOHw8548CBxk14xXhCGMzgE2kuzUlhjOJpf8Zf/zj7ZrpO3vq9g09E4kEr+x6m
-         sgXrz6YURykc7E3PqF8KeUpuq8EDb4BruTJvQZtEIPqH7J+931+W4If4iUYjUmYoZcsf
-         5xa52utboTrofplPUZqTGtPMMWonOTSo+JgraePHe0ZRGZImtdHElxGxvs2+arjn+FvM
-         zcZgfjkk1U8qVDMzrJKSly5/hBJim9BPbbyY6waVVZsThQokU1Gqvo4w+XI2UJpGjKfD
-         NWMtJbvJXVnT4UaGY244Lk1jBVairtl5m95jVtzVt317JkLW0CYgJuGufTfmD/KC7lNi
-         ix4g==
-X-Gm-Message-State: AOAM531oSkLIU5NJNyUPW+VwCJgdcY28+2ex/0m5yEiK7guQDyMz4U1/
-        isnyG9eRAmJ4Xl5V+XbTIsjVOhM6sOdVzNv7T33pdsplKksa5xMRUZDHq8fK2P3uwiOFt492ceT
-        INAjt4F2mBe1f
-X-Received: by 2002:a17:906:dfd1:: with SMTP id jt17mr21253055ejc.486.1623768908511;
+        bh=ByKk7NdGTOHi1KbabnH0lRUOaQxO13c2A34mff7i6os=;
+        b=oQuWDbb4fyeqMSwu/flRWV4eTdewq7BoZoCMknDsOYP4LIWENVAbGQ9491b6bjNnfR
+         cTjfLHy03UjLZrA0N6rUElfFeXegoU0zheGHf9y/Ql0vpiVMvLa75tIIk0hGzn/tjxAa
+         fqnySbIdekUoSFA/jWKzdFVA1XVSeFnHc4jvfvHeprE151N5OvHo5/FsqX+PGSpfwbee
+         pIMK5E8O9iI5Ww1Os5+QkiDuQ5plvRpp9Ac4AfdJ5DlQnzJ6fjFF8cGOc3e8dHC0/EUB
+         0J94jnP62PI8DEXlB6Av04Q+bavfCxOoCGl5o3kfpvHqPY6kK0XXALDgz8UDnje521AN
+         BD0Q==
+X-Gm-Message-State: AOAM531pXo1UezQlomZimiO3ScmtLHU1a1sj5VBsJ/q6Zx2jvgb9XFsg
+        q3U1wC6rh42qYPNm6Rxd82o6//ffHmstTOaaJ5lQZ2MGNNhnjjVLlPc9cIFVP0+9FAIzH81Eo2Q
+        AEEtmxipnV8zn
+X-Received: by 2002:a17:906:1790:: with SMTP id t16mr21140737eje.203.1623768908968;
         Tue, 15 Jun 2021 07:55:08 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxUc77COnG0WIdO1tAjDrhLpnKaKhnq5sFxyuzHGltCcw1hnUBlYA0poEo+mX++Ywz8VM61xg==
-X-Received: by 2002:a17:906:dfd1:: with SMTP id jt17mr21253020ejc.486.1623768908212;
+X-Google-Smtp-Source: ABdhPJzO7NzkHVdn3I9zDxJvs+KHKQGP1gNNIkOvx0CUNjvYdIP8qMYlgja+FT1bnm1L0s5u+E2uKg==
+X-Received: by 2002:a17:906:1790:: with SMTP id t16mr21140717eje.203.1623768908806;
         Tue, 15 Jun 2021 07:55:08 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id cf26sm10281358ejb.38.2021.06.15.07.55.04
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id o20sm11770169eds.20.2021.06.15.07.55.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Tue, 15 Jun 2021 07:55:06 -0700 (PDT)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id E6CA1180732; Tue, 15 Jun 2021 16:54:58 +0200 (CEST)
+        id 28118180738; Tue, 15 Jun 2021 16:54:59 +0200 (CEST)
 From:   =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     bpf@vger.kernel.org, netdev@vger.kernel.org
 Cc:     Martin KaFai Lau <kafai@fb.com>,
@@ -69,12 +69,12 @@ Cc:     Martin KaFai Lau <kafai@fb.com>,
         "Paul E . McKenney" <paulmck@kernel.org>,
         Jakub Kicinski <kuba@kernel.org>,
         =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Russell King <linux@armlinux.org.uk>
-Subject: [PATCH bpf-next v2 09/16] marvell: remove rcu_read_lock() around XDP program invocation
-Date:   Tue, 15 Jun 2021 16:54:48 +0200
-Message-Id: <20210615145455.564037-10-toke@redhat.com>
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>
+Subject: [PATCH bpf-next v2 15/16] stmmac: remove rcu_read_lock() around XDP program invocation
+Date:   Tue, 15 Jun 2021 16:54:54 +0200
+Message-Id: <20210615145455.564037-16-toke@redhat.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210615145455.564037-1-toke@redhat.com>
 References: <20210615145455.564037-1-toke@redhat.com>
@@ -85,92 +85,80 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The mvneta and mvpp2 drivers have rcu_read_lock()/rcu_read_unlock() pairs
-around XDP program invocations. However, the actual lifetime of the objects
-referred by the XDP program invocation is longer, all the way through to
-the call to xdp_do_flush(), making the scope of the rcu_read_lock() too
-small. This turns out to be harmless because it all happens in a single
-NAPI poll cycle (and thus under local_bh_disable()), but it makes the
-rcu_read_lock() misleading.
+The stmmac driver has rcu_read_lock()/rcu_read_unlock() pairs around XDP
+program invocations. However, the actual lifetime of the objects referred
+by the XDP program invocation is longer, all the way through to the call to
+xdp_do_flush(), making the scope of the rcu_read_lock() too small. This
+turns out to be harmless because it all happens in a single NAPI poll
+cycle (and thus under local_bh_disable()), but it makes the rcu_read_lock()
+misleading.
 
 Rather than extend the scope of the rcu_read_lock(), just get rid of it
 entirely. With the addition of RCU annotations to the XDP_REDIRECT map
 types that take bh execution into account, lockdep even understands this to
 be safe, so there's really no reason to keep it around.
 
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Marcin Wojtas <mw@semihalf.com>
-Cc: Russell King <linux@armlinux.org.uk>
+Cc: Giuseppe Cavallaro <peppe.cavallaro@st.com>
+Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc: Jose Abreu <joabreu@synopsys.com>
 Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- drivers/net/ethernet/marvell/mvneta.c           | 6 ++++--
- drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c | 8 ++++----
- 2 files changed, 8 insertions(+), 6 deletions(-)
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 13 +++++--------
+ 1 file changed, 5 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/net/ethernet/marvell/mvneta.c b/drivers/net/ethernet/marvell/mvneta.c
-index 7d5cd9bc6c99..c2e9cbebc8d1 100644
---- a/drivers/net/ethernet/marvell/mvneta.c
-+++ b/drivers/net/ethernet/marvell/mvneta.c
-@@ -2370,7 +2370,6 @@ static int mvneta_rx_swbm(struct napi_struct *napi,
- 	/* Get number of received packets */
- 	rx_todo = mvneta_rxq_busy_desc_num_get(pp, rxq);
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+index bf9fe25fed69..5dcc8a42abf9 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -4654,7 +4654,6 @@ static int stmmac_xdp_xmit_back(struct stmmac_priv *priv,
+ 	return res;
+ }
  
--	rcu_read_lock();
- 	xdp_prog = READ_ONCE(pp->xdp_prog);
+-/* This function assumes rcu_read_lock() is held by the caller. */
+ static int __stmmac_xdp_run_prog(struct stmmac_priv *priv,
+ 				 struct bpf_prog *prog,
+ 				 struct xdp_buff *xdp)
+@@ -4662,6 +4661,9 @@ static int __stmmac_xdp_run_prog(struct stmmac_priv *priv,
+ 	u32 act;
+ 	int res;
  
- 	/* Fairness NAPI loop */
-@@ -2421,6 +2420,10 @@ static int mvneta_rx_swbm(struct napi_struct *napi,
- 			goto next;
- 		}
- 
-+		/* This code is invoked within a single NAPI poll cycle and thus
-+		 * under local_bh_disable(), which provides the needed RCU
-+		 * protection.
-+		 */
- 		if (xdp_prog &&
- 		    mvneta_run_xdp(pp, rxq, xdp_prog, &xdp_buf, frame_sz, &ps))
- 			goto next;
-@@ -2448,7 +2451,6 @@ static int mvneta_rx_swbm(struct napi_struct *napi,
- 		xdp_buf.data_hard_start = NULL;
- 		sinfo.nr_frags = 0;
- 	}
--	rcu_read_unlock();
- 
- 	if (xdp_buf.data_hard_start)
- 		mvneta_xdp_put_buff(pp, rxq, &xdp_buf, &sinfo, -1);
-diff --git a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-index b2259bf1d299..658db1720826 100644
---- a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-+++ b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-@@ -3852,8 +3852,6 @@ static int mvpp2_rx(struct mvpp2_port *port, struct napi_struct *napi,
- 	int rx_done = 0;
- 	u32 xdp_ret = 0;
++	/* This code is invoked within a single NAPI poll cycle and thus under
++	 * local_bh_disable(), which provides the needed RCU protection.
++	 */
+ 	act = bpf_prog_run_xdp(prog, xdp);
+ 	switch (act) {
+ 	case XDP_PASS:
+@@ -4696,17 +4698,14 @@ static struct sk_buff *stmmac_xdp_run_prog(struct stmmac_priv *priv,
+ 	struct bpf_prog *prog;
+ 	int res;
  
 -	rcu_read_lock();
 -
- 	xdp_prog = READ_ONCE(port->xdp_prog);
- 
- 	/* Get number of received packets and clamp the to-do */
-@@ -3925,6 +3923,10 @@ static int mvpp2_rx(struct mvpp2_port *port, struct napi_struct *napi,
- 					 MVPP2_MH_SIZE + MVPP2_SKB_HEADROOM,
- 					 rx_bytes, false);
- 
-+			/* This code is invoked within a single NAPI poll cycle
-+			 * and thus under local_bh_disable(), which provides the
-+			 * needed RCU protection.
-+			 */
- 			ret = mvpp2_run_xdp(port, xdp_prog, &xdp, pp, &ps);
- 
- 			if (ret) {
-@@ -3988,8 +3990,6 @@ static int mvpp2_rx(struct mvpp2_port *port, struct napi_struct *napi,
- 		mvpp2_bm_pool_put(port, pool, dma_addr, phys_addr);
+ 	prog = READ_ONCE(priv->xdp_prog);
+ 	if (!prog) {
+ 		res = STMMAC_XDP_PASS;
+-		goto unlock;
++		goto out;
  	}
  
+ 	res = __stmmac_xdp_run_prog(priv, prog, xdp);
+-unlock:
 -	rcu_read_unlock();
--
- 	if (xdp_ret & MVPP2_XDP_REDIR)
- 		xdp_do_flush_map();
++out:
+ 	return ERR_PTR(-res);
+ }
  
+@@ -4976,10 +4975,8 @@ static int stmmac_rx_zc(struct stmmac_priv *priv, int limit, u32 queue)
+ 		buf->xdp->data_end = buf->xdp->data + buf1_len;
+ 		xsk_buff_dma_sync_for_cpu(buf->xdp, rx_q->xsk_pool);
+ 
+-		rcu_read_lock();
+ 		prog = READ_ONCE(priv->xdp_prog);
+ 		res = __stmmac_xdp_run_prog(priv, prog, buf->xdp);
+-		rcu_read_unlock();
+ 
+ 		switch (res) {
+ 		case STMMAC_XDP_PASS:
 -- 
 2.31.1
 
