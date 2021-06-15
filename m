@@ -7,59 +7,59 @@ X-Spam-Status: No, score=-18.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF261C49361
-	for <bpf@archiver.kernel.org>; Tue, 15 Jun 2021 14:55:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 144FAC49EA3
+	for <bpf@archiver.kernel.org>; Tue, 15 Jun 2021 14:55:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8E20F615FF
-	for <bpf@archiver.kernel.org>; Tue, 15 Jun 2021 14:55:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 028486161E
+	for <bpf@archiver.kernel.org>; Tue, 15 Jun 2021 14:55:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231373AbhFOO5R (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 15 Jun 2021 10:57:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:26572 "EHLO
+        id S231461AbhFOO5S (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 15 Jun 2021 10:57:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:31926 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231389AbhFOO5N (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 15 Jun 2021 10:57:13 -0400
+        by vger.kernel.org with ESMTP id S231439AbhFOO5P (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 15 Jun 2021 10:57:15 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1623768908;
+        s=mimecast20190719; t=1623768910;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Gxp4+onf8wuO87Iii4KRL2PGeBHDLINdkwBz3RXDQ8I=;
-        b=Ork+8lDa6MW/38/iou6InCKIfEPEYF/Qs15sPeNrKfKQeHwF07OKJZJORDe12y+5x4f6XI
-        pXm3wf84Ls70UEjutIU4UbbvEyJn0j5hL1g5ossy0TDbKINfy3Muc4CaHvHJVBL61kIB+5
-        KG6hFYUo8Y5VTJ14idX8Pe5NHWSCyYg=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-446-lfc0S7EhN5y7--uqcqeNSA-1; Tue, 15 Jun 2021 10:55:06 -0400
-X-MC-Unique: lfc0S7EhN5y7--uqcqeNSA-1
-Received: by mail-ej1-f71.google.com with SMTP id am5-20020a1709065685b02903eef334e563so4669267ejc.2
-        for <bpf@vger.kernel.org>; Tue, 15 Jun 2021 07:55:06 -0700 (PDT)
+        bh=7zXHSL7RwyAJWnz3yfpZ7/QXhLd143qN0GShu6MwfqY=;
+        b=GFGug33ocwRA9NG0Gg6g6zaTYvemTjQmMlyWA2Mk4JLjhLLaq0FmnRq18KZ90sErhVrj7w
+        4PJs96x9T7bvstC5aaIv0+TEuS3rmPvmxG38WOTlAgUXSgF3VdxTKjBE+8AnVrTIASGS+k
+        P2g0IVMZUY0zKUVfYQjrQkU7WlkvA4o=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-3-mi7_TPJJPoOAcbNmZge7yw-1; Tue, 15 Jun 2021 10:55:09 -0400
+X-MC-Unique: mi7_TPJJPoOAcbNmZge7yw-1
+Received: by mail-ed1-f70.google.com with SMTP id x8-20020aa7d3880000b029038fe468f5f4so22264327edq.10
+        for <bpf@vger.kernel.org>; Tue, 15 Jun 2021 07:55:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Gxp4+onf8wuO87Iii4KRL2PGeBHDLINdkwBz3RXDQ8I=;
-        b=XO2+eW6RGHCCk0Ko0YXKh1i2xJ1f67w1TljA9R3OVNA3qOWELtv1uXx074PNskqa/Z
-         B/S2S8VECwyJRAQMl+ry36EJsUWBL431IwJqyelWmPftGZNllBiOyZAzHzdTsLgMwKu3
-         e/fRYHmYbrnixsJW/NsPNosN65RrJKVQbjNvNpiwmFLIA3FWTMu94NAywam6oO6x9Qxo
-         HMOnINY5TyyTlZ5megCWUz5kkQUf+Mgt4/6Ym7CR4G71xvzLStisT+4SBHWubPx5PHyt
-         s3LArz9rtFwtQNgmoxWB4Uj/hCpRKk94dEwBRHzdMoZVeyjb9+rkcGW18Nn+R2XsuqMh
-         Vudw==
-X-Gm-Message-State: AOAM533qf79obHL3wxYm8ROfOSQVecmb9zOn+KooKVcwyHh5JL9N4YiQ
-        gbMjZ9aoEL3Trp/gFaPrZy+KL++YqiOEp7+N5M/SanvX3rWl6GfP3qF9cEC6vT6Xc1lVyBQLRvu
-        VI+9BDGB+lT+A
-X-Received: by 2002:a50:b2c5:: with SMTP id p63mr10055611edd.5.1623768905657;
-        Tue, 15 Jun 2021 07:55:05 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz/YwZa9hwA5T/K0ZvJNmG1D6JAT7VKQUI+n0jma5WK9p1jIeM6YWlaebazh4ioDqp7gZhVVw==
-X-Received: by 2002:a50:b2c5:: with SMTP id p63mr10055582edd.5.1623768905390;
-        Tue, 15 Jun 2021 07:55:05 -0700 (PDT)
+        bh=7zXHSL7RwyAJWnz3yfpZ7/QXhLd143qN0GShu6MwfqY=;
+        b=uHLFbAAxGBwiEPvpSi8lY1QSRWmxSCZhoqwdYmbXd2JDBgPh7UwIz2+pYkk9sqfn3a
+         NAjItFM5bHsR+IINqyMp1kXI0e0mj1SN+A0+7+GIy+wRfUa6Y2WuRlSu19bYwNA2wLHw
+         R6ntldFUGroIaLNXjb7B2BhQ1VSDdNGDO4QaQqO+xLpXOqepfT673UW981ivHQYvkRe7
+         CEYL1HoZKQ7DpNbUvdeSkB5u7FL+cZJl/xLSxtG1qhBT3TNwmuBYoRlxK4+sbUg2iWNw
+         HSSzACwvrnDhAuBonOAIi+zywc9pfI1NVtWmBrOoFTSKPUzGOI7GYCUciuIa3sOGQj5X
+         3+MA==
+X-Gm-Message-State: AOAM533rxeVogymCFAKVpf5bSJltD1DK3XRdqY4kUYSMjHrSG/xJv4hv
+        xB212Gho+jetKXGxaRo4NeAPhf9H8RnyeczkPMtGKzZHzfyUvHPLLaEyVxwtt+Fv4IBU+8YJ2Xv
+        WahoIWfhgVLY3
+X-Received: by 2002:a05:6402:1652:: with SMTP id s18mr23048009edx.131.1623768908124;
+        Tue, 15 Jun 2021 07:55:08 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzAy/n5Es33Uj8+GjOWq3YRmuEbjhuD5rzEEzzfpqUH7cASDVtLd3bVhCfFDT4UAd0JjxkZnQ==
+X-Received: by 2002:a05:6402:1652:: with SMTP id s18mr23047988edx.131.1623768907804;
+        Tue, 15 Jun 2021 07:55:07 -0700 (PDT)
 Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id ci12sm10333745ejc.17.2021.06.15.07.55.00
+        by smtp.gmail.com with ESMTPSA id f8sm9985632ejw.75.2021.06.15.07.55.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Jun 2021 07:55:04 -0700 (PDT)
+        Tue, 15 Jun 2021 07:55:05 -0700 (PDT)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id A7CD31802AB; Tue, 15 Jun 2021 16:54:58 +0200 (CEST)
+        id 354DC180739; Tue, 15 Jun 2021 16:54:59 +0200 (CEST)
 From:   =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     bpf@vger.kernel.org, netdev@vger.kernel.org
 Cc:     Martin KaFai Lau <kafai@fb.com>,
@@ -68,10 +68,12 @@ Cc:     Martin KaFai Lau <kafai@fb.com>,
         Magnus Karlsson <magnus.karlsson@gmail.com>,
         "Paul E . McKenney" <paulmck@kernel.org>,
         Jakub Kicinski <kuba@kernel.org>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-Subject: [PATCH bpf-next v2 01/16] rcu: Create an unrcu_pointer() to remove __rcu from a pointer
-Date:   Tue, 15 Jun 2021 16:54:40 +0200
-Message-Id: <20210615145455.564037-2-toke@redhat.com>
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        linux-omap@vger.kernel.org
+Subject: [PATCH bpf-next v2 16/16] net: ti: remove rcu_read_lock() around XDP program invocation
+Date:   Tue, 15 Jun 2021 16:54:55 +0200
+Message-Id: <20210615145455.564037-17-toke@redhat.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210615145455.564037-1-toke@redhat.com>
 References: <20210615145455.564037-1-toke@redhat.com>
@@ -82,55 +84,63 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: "Paul E. McKenney" <paulmck@kernel.org>
+The cpsw driver has rcu_read_lock()/rcu_read_unlock() pairs around XDP
+program invocations. However, the actual lifetime of the objects referred
+by the XDP program invocation is longer, all the way through to the call to
+xdp_do_flush(), making the scope of the rcu_read_lock() too small. This
+turns out to be harmless because it all happens in a single NAPI poll
+cycle (and thus under local_bh_disable()), but it makes the rcu_read_lock()
+misleading.
 
-The xchg() and cmpxchg() functions are sometimes used to carry out RCU
-updates.  Unfortunately, this can result in sparse warnings for both
-the old-value and new-value arguments, as well as for the return value.
-The arguments can be dealt with using RCU_INITIALIZER():
+Rather than extend the scope of the rcu_read_lock(), just get rid of it
+entirely. With the addition of RCU annotations to the XDP_REDIRECT map
+types that take bh execution into account, lockdep even understands this to
+be safe, so there's really no reason to keep it around.
 
-        old_p = xchg(&p, RCU_INITIALIZER(new_p));
-
-But a sparse warning still remains due to assigning the __rcu pointer
-returned from xchg to the (most likely) non-__rcu pointer old_p.
-
-This commit therefore provides an unrcu_pointer() macro that strips
-the __rcu.  This macro can be used as follows:
-
-        old_p = unrcu_pointer(xchg(&p, RCU_INITIALIZER(new_p)));
-
-Reported-by: Toke Høiland-Jørgensen <toke@redhat.com>
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+Cc: Grygorii Strashko <grygorii.strashko@ti.com>
+Cc: linux-omap@vger.kernel.org
+Tested-by: Grygorii Strashko <grygorii.strashko@ti.com>
+Reviewed-by: Grygorii Strashko <grygorii.strashko@ti.com>
 Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- include/linux/rcupdate.h | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ drivers/net/ethernet/ti/cpsw_priv.c | 13 +++++--------
+ 1 file changed, 5 insertions(+), 8 deletions(-)
 
-diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
-index 9455476c5ba2..d7895b81264e 100644
---- a/include/linux/rcupdate.h
-+++ b/include/linux/rcupdate.h
-@@ -363,6 +363,20 @@ static inline void rcu_preempt_sleep_check(void) { }
- #define rcu_check_sparse(p, space)
- #endif /* #else #ifdef __CHECKER__ */
+diff --git a/drivers/net/ethernet/ti/cpsw_priv.c b/drivers/net/ethernet/ti/cpsw_priv.c
+index 5862f0a4a975..25fa7304a542 100644
+--- a/drivers/net/ethernet/ti/cpsw_priv.c
++++ b/drivers/net/ethernet/ti/cpsw_priv.c
+@@ -1328,14 +1328,13 @@ int cpsw_run_xdp(struct cpsw_priv *priv, int ch, struct xdp_buff *xdp,
+ 	struct bpf_prog *prog;
+ 	u32 act;
  
-+/**
-+ * unrcu_pointer - mark a pointer as not being RCU protected
-+ * @p: pointer needing to lose its __rcu property
-+ *
-+ * Converts @p from an __rcu pointer to a __kernel pointer.
-+ * This allows an __rcu pointer to be used with xchg() and friends.
-+ */
-+#define unrcu_pointer(p)						\
-+({									\
-+	typeof(*p) *_________p1 = (typeof(*p) *__force)(p);		\
-+	rcu_check_sparse(p, __rcu); 					\
-+	((typeof(*p) __force __kernel *)(_________p1)); 		\
-+})
-+
- #define __rcu_access_pointer(p, space) \
- ({ \
- 	typeof(*p) *_________p1 = (typeof(*p) *__force)READ_ONCE(p); \
+-	rcu_read_lock();
+-
+ 	prog = READ_ONCE(priv->xdp_prog);
+-	if (!prog) {
+-		ret = CPSW_XDP_PASS;
+-		goto out;
+-	}
++	if (!prog)
++		return CPSW_XDP_PASS;
+ 
++	/* This code is invoked within a single NAPI poll cycle and thus under
++	 * local_bh_disable(), which provides the needed RCU protection.
++	 */
+ 	act = bpf_prog_run_xdp(prog, xdp);
+ 	/* XDP prog might have changed packet data and boundaries */
+ 	*len = xdp->data_end - xdp->data;
+@@ -1378,10 +1377,8 @@ int cpsw_run_xdp(struct cpsw_priv *priv, int ch, struct xdp_buff *xdp,
+ 	ndev->stats.rx_bytes += *len;
+ 	ndev->stats.rx_packets++;
+ out:
+-	rcu_read_unlock();
+ 	return ret;
+ drop:
+-	rcu_read_unlock();
+ 	page_pool_recycle_direct(cpsw->page_pool[ch], page);
+ 	return ret;
+ }
 -- 
 2.31.1
 
