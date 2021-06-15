@@ -2,132 +2,273 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45339C2B9F4
-	for <bpf@archiver.kernel.org>; Tue, 15 Jun 2021 00:06:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B4230C48BE8
+	for <bpf@archiver.kernel.org>; Tue, 15 Jun 2021 02:23:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0F16060231
-	for <bpf@archiver.kernel.org>; Tue, 15 Jun 2021 00:06:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 99026613F5
+	for <bpf@archiver.kernel.org>; Tue, 15 Jun 2021 02:23:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbhFOAIe (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 14 Jun 2021 20:08:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39898 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229536AbhFOAIe (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 14 Jun 2021 20:08:34 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A705A60FEA;
-        Tue, 15 Jun 2021 00:06:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623715590;
-        bh=RMii/VLLTCvCVHMFN18fdNCg3G9EDAUjvrxZCNvuRiU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=eM8VGoGxy9VEGIi37hrK9bCogcybs+WFEIp5s1KM+D/nkUtkRhZzJglMixPb2Ywgl
-         PUkeX6o/AR2d8OKT5cHbsUaSosbRVnxWEbVw7yjBukm8OQFPK9ms3ZgrCRvUVPFPlY
-         RuTguB4fu4PaN7A5ks+skd9K49g7t0p1krCpj5F4LJ2n3kAlcocWih3rYL5HIENKbK
-         p1bG0cvT0aycIKs2cLLqKZ5URSmXYcT7Jc9yXbU6bybHqQRBzp9rSvnu/APbQZ1HCG
-         K1+IoIq8qcOPAI4JryPVkPuWVXQO1lvITATzvQVUWfBrxULh+Zq+PmDfkLE/o6H72m
-         OOzw932zSr3fQ==
-Date:   Tue, 15 Jun 2021 09:06:26 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>, ast@kernel.org,
-        bpf@vger.kernel.org, Daniel Xu <dxu@dxuuu.xyz>,
-        Josh Poimboeuf <jpoimboe@redhat.com>, kernel-team@fb.com,
-        kuba@kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mingo@redhat.com,
-        Abhishek Sagar <sagar.abhishek@gmail.com>, tglx@linutronix.de,
-        X86 ML <x86@kernel.org>, yhs@fb.com
-Subject: Re: [PATCH -tip v7 03/13] kprobes: treewide: Remove
- trampoline_address from kretprobe_trampoline_handler()
-Message-Id: <20210615090626.f2b536ce7c5cf8b31264451c@kernel.org>
-In-Reply-To: <1623685371.y5qy4nxer2.naveen@linux.ibm.com>
-References: <162209754288.436794.3904335049560916855.stgit@devnote2>
-        <162209757191.436794.12654958417415894884.stgit@devnote2>
-        <1623685371.y5qy4nxer2.naveen@linux.ibm.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S229743AbhFOCZW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 14 Jun 2021 22:25:22 -0400
+Received: from mail-qk1-f179.google.com ([209.85.222.179]:36698 "EHLO
+        mail-qk1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229689AbhFOCZW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 14 Jun 2021 22:25:22 -0400
+Received: by mail-qk1-f179.google.com with SMTP id i68so36960365qke.3;
+        Mon, 14 Jun 2021 19:23:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=utSDi74JoxgeFkn6+VzF9KRMzUGip+skVUxRXuPWjX0=;
+        b=I5MKGwIiqyzjIfqJa0sA7eJ9/pLktaqzVsh5G6k6BX/pJGIJKjyy05IFd8TpJLa5MA
+         pXVcT1zjFGmXQ/m4EcTpgsuOy4uwuIX7pHde7HQEmAmTdvKogrOGmcpWh9gWK4zb7f5S
+         xvAqt94OQqYWg9jdo14jKMlgcwJ8vs355aYUVHFSGqQ/FOPSdXZOc7XBT4znoCd97s93
+         oRGejrt0m4i/9UedHt9CnpmZWYJhGzCSTKP80WTSDzZcdYCPKfgNsTAw8VimNyvY5pxm
+         nl+vfR7rsrII0EvWhyCzwh/LMsAcYd71pzKfMUTHHOhrsRnnBcv2bWIqM7MdMDe20Lsr
+         GUUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=utSDi74JoxgeFkn6+VzF9KRMzUGip+skVUxRXuPWjX0=;
+        b=p+sZPti+0p3OS9SiE7csyIyefutOhNmKwk1E9U4H3spJVVEqwelmwgHdvYn2m3ahVW
+         xqUJyQV+kYV34iYS1VjaH+jau0Wfg7OYygoYUGwNwSiA/pFdxC0TXd5MHqtTY0VJqXKe
+         1wceWw0H4fTgjIymgP2pES/CknYC/D6djdswjIL6znRQjQbd3sjhG6zHu9oBU4sFIzqT
+         b75KVaq0y2szYCH0dXCF02301SFG4WIpIEAut4nj4uN8dLCPSATmOPVxaV75eHonglPW
+         7daL0PjBfijARzh9xiakIgKGVgv2qe1JCeNxKbbbZF/qShyPOg2goW47MVlDO+PbKI4u
+         g1Bg==
+X-Gm-Message-State: AOAM531nkUFz56LuyLMDnGe0lKi+qC87vPoAwBGqLQp3k5XKlUfMwtqk
+        fd0FbgLOFVTB0/bQYrRF/GjYHfEinsBOzg==
+X-Google-Smtp-Source: ABdhPJxAYSngxxAksyB+vc/nTlMLwXTToT29novZ9PebuWBhrwfpN8fee14VyMKUkrqEqqDe9gAn+g==
+X-Received: by 2002:a37:8345:: with SMTP id f66mr19165442qkd.396.1623723236367;
+        Mon, 14 Jun 2021 19:13:56 -0700 (PDT)
+Received: from unknown.attlocal.net ([2600:1700:65a0:ab60:e9a1:5f1d:df88:4f3c])
+        by smtp.gmail.com with ESMTPSA id t15sm10774497qtr.35.2021.06.14.19.13.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Jun 2021 19:13:55 -0700 (PDT)
+From:   Cong Wang <xiyou.wangcong@gmail.com>
+To:     netdev@vger.kernel.org
+Cc:     bpf@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        Lorenz Bauer <lmb@cloudflare.com>
+Subject: [PATCH RESEND bpf v3 1/8] skmsg: improve udp_bpf_recvmsg() accuracy
+Date:   Mon, 14 Jun 2021 19:13:35 -0700
+Message-Id: <20210615021342.7416-2-xiyou.wangcong@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210615021342.7416-1-xiyou.wangcong@gmail.com>
+References: <20210615021342.7416-1-xiyou.wangcong@gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, 14 Jun 2021 21:16:26 +0530
-"Naveen N. Rao" <naveen.n.rao@linux.ibm.com> wrote:
+From: Cong Wang <cong.wang@bytedance.com>
 
-> Hi Masami,
-> 
-> Masami Hiramatsu wrote:
-> > Remove trampoline_address from kretprobe_trampoline_handler().
-> > Instead of passing the address, kretprobe_trampoline_handler()
-> > can use new kretprobe_trampoline_addr().
-> > 
-> > Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
-> > Tested-by: Andrii Nakryik <andrii@kernel.org>
-> > ---
-> >  Changes in v3:
-> >    - Remove wrong kretprobe_trampoline declaration from
-> >      arch/x86/include/asm/kprobes.h.
-> >  Changes in v2:
-> >    - Remove arch_deref_entry_point() from comment.
-> > ---
-> >  arch/arc/kernel/kprobes.c          |    2 +-
-> >  arch/arm/probes/kprobes/core.c     |    3 +--
-> >  arch/arm64/kernel/probes/kprobes.c |    3 +--
-> >  arch/csky/kernel/probes/kprobes.c  |    2 +-
-> >  arch/ia64/kernel/kprobes.c         |    5 ++---
-> >  arch/mips/kernel/kprobes.c         |    3 +--
-> >  arch/parisc/kernel/kprobes.c       |    4 ++--
-> >  arch/powerpc/kernel/kprobes.c      |    2 +-
-> >  arch/riscv/kernel/probes/kprobes.c |    2 +-
-> >  arch/s390/kernel/kprobes.c         |    2 +-
-> >  arch/sh/kernel/kprobes.c           |    2 +-
-> >  arch/sparc/kernel/kprobes.c        |    2 +-
-> >  arch/x86/include/asm/kprobes.h     |    1 -
-> >  arch/x86/kernel/kprobes/core.c     |    2 +-
-> >  include/linux/kprobes.h            |   18 +++++++++++++-----
-> >  kernel/kprobes.c                   |    3 +--
-> >  16 files changed, 29 insertions(+), 27 deletions(-)
-> > 
-> 
-> <snip>
-> 
-> > diff --git a/include/linux/kprobes.h b/include/linux/kprobes.h
-> > index d65c041b5c22..65dadd4238a2 100644
-> > --- a/include/linux/kprobes.h
-> > +++ b/include/linux/kprobes.h
-> > @@ -205,15 +205,23 @@ extern void arch_prepare_kretprobe(struct kretprobe_instance *ri,
-> >  				   struct pt_regs *regs);
-> >  extern int arch_trampoline_kprobe(struct kprobe *p);
-> >  
-> > +void kretprobe_trampoline(void);
-> > +/*
-> > + * Since some architecture uses structured function pointer,
-> > + * use dereference_function_descriptor() to get real function address.
-> > + */
-> > +static nokprobe_inline void *kretprobe_trampoline_addr(void)
-> > +{
-> > +	return dereference_function_descriptor(kretprobe_trampoline);
-> 
-> I'm afraid this won't work correctly. For kernel functions, please use 
-> dereference_kernel_function_descriptor() which checks if the function 
-> has a descriptor before dereferencing it.
+I tried to reuse sk_msg_wait_data() for different protocols,
+but it turns out it can not be simply reused. For example,
+UDP actually uses two queues to receive skb:
+udp_sk(sk)->reader_queue and sk->sk_receive_queue. So we have
+to check both of them to know whether we have received any
+packet.
 
-Oops, there is *kernel_function* version, I didn't notice that.
-Thank you for reviewing! I'll fix that.
+Also, UDP does not lock the sock during BH Rx path, it makes
+no sense for its ->recvmsg() to lock the sock. It is always
+possible for ->recvmsg() to be called before packets actually
+arrive in the receive queue, we just use best effort to make
+it accurate here.
 
-> 
-> 
-> Thanks,
-> Naveen
-> 
+Fixes: 1f5be6b3b063 ("udp: Implement udp_bpf_recvmsg() for sockmap")
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Jakub Sitnicki <jakub@cloudflare.com>
+Cc: Lorenz Bauer <lmb@cloudflare.com>
+Signed-off-by: Cong Wang <cong.wang@bytedance.com>
+---
+ include/linux/skmsg.h |  2 --
+ net/core/skmsg.c      | 23 ---------------------
+ net/ipv4/tcp_bpf.c    | 24 +++++++++++++++++++++-
+ net/ipv4/udp_bpf.c    | 47 ++++++++++++++++++++++++++++++++++++++-----
+ 4 files changed, 65 insertions(+), 31 deletions(-)
 
-
+diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
+index aba0f0f429be..e3d080c299f6 100644
+--- a/include/linux/skmsg.h
++++ b/include/linux/skmsg.h
+@@ -126,8 +126,6 @@ int sk_msg_zerocopy_from_iter(struct sock *sk, struct iov_iter *from,
+ 			      struct sk_msg *msg, u32 bytes);
+ int sk_msg_memcopy_from_iter(struct sock *sk, struct iov_iter *from,
+ 			     struct sk_msg *msg, u32 bytes);
+-int sk_msg_wait_data(struct sock *sk, struct sk_psock *psock, int flags,
+-		     long timeo, int *err);
+ int sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
+ 		   int len, int flags);
+ 
+diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+index 43ce17a6a585..f9a81b314e4c 100644
+--- a/net/core/skmsg.c
++++ b/net/core/skmsg.c
+@@ -399,29 +399,6 @@ int sk_msg_memcopy_from_iter(struct sock *sk, struct iov_iter *from,
+ }
+ EXPORT_SYMBOL_GPL(sk_msg_memcopy_from_iter);
+ 
+-int sk_msg_wait_data(struct sock *sk, struct sk_psock *psock, int flags,
+-		     long timeo, int *err)
+-{
+-	DEFINE_WAIT_FUNC(wait, woken_wake_function);
+-	int ret = 0;
+-
+-	if (sk->sk_shutdown & RCV_SHUTDOWN)
+-		return 1;
+-
+-	if (!timeo)
+-		return ret;
+-
+-	add_wait_queue(sk_sleep(sk), &wait);
+-	sk_set_bit(SOCKWQ_ASYNC_WAITDATA, sk);
+-	ret = sk_wait_event(sk, &timeo,
+-			    !list_empty(&psock->ingress_msg) ||
+-			    !skb_queue_empty(&sk->sk_receive_queue), &wait);
+-	sk_clear_bit(SOCKWQ_ASYNC_WAITDATA, sk);
+-	remove_wait_queue(sk_sleep(sk), &wait);
+-	return ret;
+-}
+-EXPORT_SYMBOL_GPL(sk_msg_wait_data);
+-
+ /* Receive sk_msg from psock->ingress_msg to @msg. */
+ int sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
+ 		   int len, int flags)
+diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
+index ad9d17923fc5..bb49b52d7be8 100644
+--- a/net/ipv4/tcp_bpf.c
++++ b/net/ipv4/tcp_bpf.c
+@@ -163,6 +163,28 @@ static bool tcp_bpf_stream_read(const struct sock *sk)
+ 	return !empty;
+ }
+ 
++static int tcp_msg_wait_data(struct sock *sk, struct sk_psock *psock, int flags,
++			     long timeo, int *err)
++{
++	DEFINE_WAIT_FUNC(wait, woken_wake_function);
++	int ret = 0;
++
++	if (sk->sk_shutdown & RCV_SHUTDOWN)
++		return 1;
++
++	if (!timeo)
++		return ret;
++
++	add_wait_queue(sk_sleep(sk), &wait);
++	sk_set_bit(SOCKWQ_ASYNC_WAITDATA, sk);
++	ret = sk_wait_event(sk, &timeo,
++			    !list_empty(&psock->ingress_msg) ||
++			    !skb_queue_empty(&sk->sk_receive_queue), &wait);
++	sk_clear_bit(SOCKWQ_ASYNC_WAITDATA, sk);
++	remove_wait_queue(sk_sleep(sk), &wait);
++	return ret;
++}
++
+ static int tcp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
+ 		    int nonblock, int flags, int *addr_len)
+ {
+@@ -188,7 +210,7 @@ static int tcp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
+ 		long timeo;
+ 
+ 		timeo = sock_rcvtimeo(sk, nonblock);
+-		data = sk_msg_wait_data(sk, psock, flags, timeo, &err);
++		data = tcp_msg_wait_data(sk, psock, flags, timeo, &err);
+ 		if (data) {
+ 			if (!sk_psock_queue_empty(psock))
+ 				goto msg_bytes_ready;
+diff --git a/net/ipv4/udp_bpf.c b/net/ipv4/udp_bpf.c
+index 954c4591a6fd..565a70040c57 100644
+--- a/net/ipv4/udp_bpf.c
++++ b/net/ipv4/udp_bpf.c
+@@ -21,6 +21,45 @@ static int sk_udp_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
+ 	return udp_prot.recvmsg(sk, msg, len, noblock, flags, addr_len);
+ }
+ 
++static bool udp_sk_has_data(struct sock *sk)
++{
++	return !skb_queue_empty(&udp_sk(sk)->reader_queue) ||
++	       !skb_queue_empty(&sk->sk_receive_queue);
++}
++
++static bool psock_has_data(struct sk_psock *psock)
++{
++	return !skb_queue_empty(&psock->ingress_skb) ||
++	       !sk_psock_queue_empty(psock);
++}
++
++#define udp_msg_has_data(__sk, __psock)	\
++		({ udp_sk_has_data(__sk) || psock_has_data(__psock); })
++
++static int udp_msg_wait_data(struct sock *sk, struct sk_psock *psock, int flags,
++			     long timeo, int *err)
++{
++	DEFINE_WAIT_FUNC(wait, woken_wake_function);
++	int ret = 0;
++
++	if (sk->sk_shutdown & RCV_SHUTDOWN)
++		return 1;
++
++	if (!timeo)
++		return ret;
++
++	add_wait_queue(sk_sleep(sk), &wait);
++	sk_set_bit(SOCKWQ_ASYNC_WAITDATA, sk);
++	ret = udp_msg_has_data(sk, psock);
++	if (!ret) {
++		wait_woken(&wait, TASK_INTERRUPTIBLE, timeo);
++		ret = udp_msg_has_data(sk, psock);
++	}
++	sk_clear_bit(SOCKWQ_ASYNC_WAITDATA, sk);
++	remove_wait_queue(sk_sleep(sk), &wait);
++	return ret;
++}
++
+ static int udp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
+ 			   int nonblock, int flags, int *addr_len)
+ {
+@@ -34,8 +73,7 @@ static int udp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
+ 	if (unlikely(!psock))
+ 		return sk_udp_recvmsg(sk, msg, len, nonblock, flags, addr_len);
+ 
+-	lock_sock(sk);
+-	if (sk_psock_queue_empty(psock)) {
++	if (!psock_has_data(psock)) {
+ 		ret = sk_udp_recvmsg(sk, msg, len, nonblock, flags, addr_len);
+ 		goto out;
+ 	}
+@@ -47,9 +85,9 @@ static int udp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
+ 		long timeo;
+ 
+ 		timeo = sock_rcvtimeo(sk, nonblock);
+-		data = sk_msg_wait_data(sk, psock, flags, timeo, &err);
++		data = udp_msg_wait_data(sk, psock, flags, timeo, &err);
+ 		if (data) {
+-			if (!sk_psock_queue_empty(psock))
++			if (psock_has_data(psock))
+ 				goto msg_bytes_ready;
+ 			ret = sk_udp_recvmsg(sk, msg, len, nonblock, flags, addr_len);
+ 			goto out;
+@@ -62,7 +100,6 @@ static int udp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
+ 	}
+ 	ret = copied;
+ out:
+-	release_sock(sk);
+ 	sk_psock_put(sk, psock);
+ 	return ret;
+ }
 -- 
-Masami Hiramatsu <mhiramat@kernel.org>
+2.25.1
+
