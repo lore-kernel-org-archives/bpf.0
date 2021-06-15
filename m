@@ -2,115 +2,123 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E016C2B9F4
-	for <bpf@archiver.kernel.org>; Tue, 15 Jun 2021 02:46:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61DF1C48BDF
+	for <bpf@archiver.kernel.org>; Tue, 15 Jun 2021 03:29:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 571D3613C2
-	for <bpf@archiver.kernel.org>; Tue, 15 Jun 2021 02:46:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 45BD16140B
+	for <bpf@archiver.kernel.org>; Tue, 15 Jun 2021 03:29:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229781AbhFOCsS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 14 Jun 2021 22:48:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48722 "EHLO
+        id S229919AbhFODbu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 14 Jun 2021 23:31:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbhFOCsR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 14 Jun 2021 22:48:17 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DA54C061574;
-        Mon, 14 Jun 2021 19:46:13 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id g19so7806971qkk.2;
-        Mon, 14 Jun 2021 19:46:13 -0700 (PDT)
+        with ESMTP id S229809AbhFODbt (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 14 Jun 2021 23:31:49 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1651C061574;
+        Mon, 14 Jun 2021 20:29:44 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id d2so22897465ljj.11;
+        Mon, 14 Jun 2021 20:29:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=DV0T/Qr/nJx8jfvW3ukFjANC4TKgQt+cqMliLspYgy0=;
-        b=TyvUdaj9mu/Y8GbmB/A7t1MkJtCWQoLM+uRbnlvtl3gMyN9GNAdWipqQbd5OVKbMG7
-         zZhfDxTRtTiGUzxSO9WeC+khEg6MEiipckMc5J2EkoCngtfi4DTe46QPE4qNjeQJhOFg
-         /h2AK7Z3O+XJtLbuVGbrY5aXkB43tV/Jb9D4nnQcftVgiKx8VyvlsUjsxkuZvk9gMdAK
-         ntoRAAa+K/aoMWtOOEkLsVeL3l03Vl+x0mobo/LGay/id1IW4F3aXQUd6RSAuUtgpzIQ
-         Rk8a2jrU37qJ7cX7IJUkpTeqfTn88Dnj1yfuLOX9y9lwPsPmsITMFAXv87miX77VWCEg
-         1UsQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IXQWaYly8JM4VmslPhoY/L6f5WRG/3PghUxhYVVe4TQ=;
+        b=owNKoxVx9EzVp8r8fXJSCNE2CGbITHw7vfEKqZkwWV+BU8v7gZq+GjDrVwQ/iU3ICj
+         NFFZMJa7kTW8nHw7PpR4nWLNoDu/C8n8ZH4Fq43ra/cQdJH1CkRa8d/RA4TyWxMDLqZX
+         S85Uxba535Z6aY0X6H+2C+QEEDKmFb4wpSbumOfYwT1luH302JNFe6sd+uUiNZj5sEz+
+         s3bg/krQO/ORC0yOJc12FcKBBdR1CULG8oLpTQomPi/2UzWHxysOIHRKdxAUw4gNeFZT
+         QnMUN7jEQ9rpUq68UpiCjTee4hjR82xGIEtKgqx3qggKbps+5XFe60INonFfFW1QrjXM
+         S1Bw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=DV0T/Qr/nJx8jfvW3ukFjANC4TKgQt+cqMliLspYgy0=;
-        b=Uf7O6paWpyLG2LxaJA5BMYE93QkDQY7s9ROl0Ia9pC/QzgbYVXK1OraeEjWy66WZB9
-         QkAQvaEisRlIY3XYCL754aCyXgi3MNJjiiz2Bq4Va419y+whBsc0NhYiWnp0RGzccwed
-         RDVhNBSl/ppwtsWddrH8Fuxa/0EIBTx3G0K9ujGfIUTSxA078DDLVZCVJVjeKWw9cr0a
-         HURo28Py3nhhAC6YLoU73C9p2rKu7xPIXJuEt2oTykqWbuQhru6FO7v7TSzoRFsbMmt0
-         ReD/BTQMDKpUX8OecyTrF319U8BvRQ/kHMaHnD9RDMxiXDO82ZZxSt5njlWvxz07DUZo
-         AXLQ==
-X-Gm-Message-State: AOAM5331IILs1nKbJT7kao8aFaWnB3+OtZK3RjdbXdvWr/mrLfxdywzy
-        35JjTNX3tNu8hpgDJZzZnK4vibIvybLQHQ==
-X-Google-Smtp-Source: ABdhPJxROlCDb5f3PnQDmV9B3n+h8p2HvhvOQerLQxiDh0rQ0hA+6AV6bfJSrAWvrK9zRwDXV3jquQ==
-X-Received: by 2002:a37:89c5:: with SMTP id l188mr19739046qkd.27.1623723239038;
-        Mon, 14 Jun 2021 19:13:59 -0700 (PDT)
-Received: from unknown.attlocal.net ([2600:1700:65a0:ab60:e9a1:5f1d:df88:4f3c])
-        by smtp.gmail.com with ESMTPSA id t15sm10774497qtr.35.2021.06.14.19.13.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Jun 2021 19:13:58 -0700 (PDT)
-From:   Cong Wang <xiyou.wangcong@gmail.com>
-To:     netdev@vger.kernel.org
-Cc:     bpf@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        Lorenz Bauer <lmb@cloudflare.com>
-Subject: [PATCH RESEND bpf v3 3/8] udp: fix a memory leak in udp_read_sock()
-Date:   Mon, 14 Jun 2021 19:13:37 -0700
-Message-Id: <20210615021342.7416-4-xiyou.wangcong@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210615021342.7416-1-xiyou.wangcong@gmail.com>
-References: <20210615021342.7416-1-xiyou.wangcong@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IXQWaYly8JM4VmslPhoY/L6f5WRG/3PghUxhYVVe4TQ=;
+        b=fXuqLVf1SIJBVSJZ7rAja3sDDugkl3+qoWT/okdgrF+lhrLBH2IzLL89jMparD36YM
+         OGrCdG6FviLYmX9Qn6aN1aMo8Xjb4avvpChpwXnZsZCG2ticAjy51fHrdbosRISAP1Eo
+         kF34s7Gw0A6581u5/xpgP0hdgqXmGZeVxu9pwa2dO5nrS3n2WkuAuEjO6JPQ0DnTogq3
+         /uWMGPzfKlYoBFUVYwptuuAmgm6G4WxwjynX30jNrorKmjzSDFBnMHWaJ8Ch3eZlqxvy
+         +Z06Z6yfAerAHZ/7wsNviwaBHd8/QSu/N1XY1Sm0GlMLqQLIIMUnjUSoplXd+d7zccWz
+         abbA==
+X-Gm-Message-State: AOAM530qR1jaRqfNsSV2vAFR8JYTIbr0E0yuXHPQVKOCzlQ25CHZnbhQ
+        ls7w5GDzJOPEujYQxzm8X1VpwtUDJIWvVly/LR4=
+X-Google-Smtp-Source: ABdhPJyoP8EIaBnGrO30rKf+pq5dHlcP6NxDCPJUC8K2vlIeK8JBCl5+3w3SkMtIzMEbbiRNqh3QXvuUqWOJuBCb2ho=
+X-Received: by 2002:a2e:a4a5:: with SMTP id g5mr15353735ljm.32.1623727783201;
+ Mon, 14 Jun 2021 20:29:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210611042442.65444-1-alexei.starovoitov@gmail.com>
+ <20210611042442.65444-2-alexei.starovoitov@gmail.com> <9b23b2c6-28b2-3ab3-4e8b-1fa0c926c4d2@fb.com>
+In-Reply-To: <9b23b2c6-28b2-3ab3-4e8b-1fa0c926c4d2@fb.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Mon, 14 Jun 2021 20:29:31 -0700
+Message-ID: <CAADnVQLS=Jx9=znx6XAtrRoY08bTQHTipXQwvnPNo0SRSJsK0Q@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 1/3] bpf: Introduce bpf_timer
+To:     Yonghong Song <yhs@fb.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Cong Wang <cong.wang@bytedance.com>
+On Mon, Jun 14, 2021 at 9:51 AM Yonghong Song <yhs@fb.com> wrote:
+> > +     ret = BPF_CAST_CALL(t->callback_fn)((u64)(long)map,
+> > +                                         (u64)(long)key,
+> > +                                         (u64)(long)t->value, 0, 0);
+> > +     WARN_ON(ret != 0); /* Next patch disallows 1 in the verifier */
+>
+> I didn't find that next patch disallows callback return value 1 in the
+> verifier. If we indeed disallows return value 1 in the verifier. We
+> don't need WARN_ON here. Did I miss anything?
 
-sk_psock_verdict_recv() clones the skb and uses the clone
-afterward, so udp_read_sock() should free the skb after using
-it, regardless of error or not.
+Ohh. I forgot to address this bit in the verifier. Will fix.
 
-This fixes a real kmemleak.
+> > +     if (!hrtimer_active(&t->timer) || hrtimer_callback_running(&t->timer))
+> > +             /* If the timer wasn't active or callback already executing
+> > +              * bump the prog refcnt to keep it alive until
+> > +              * callback is invoked (again).
+> > +              */
+> > +             bpf_prog_inc(t->prog);
+>
+> I am not 100% sure. But could we have race condition here?
+>     cpu 1: running bpf_timer_start() helper call
+>     cpu 2: doing hrtimer work (calling callback etc.)
+>
+> Is it possible that
+>    !hrtimer_active(&t->timer) || hrtimer_callback_running(&t->timer)
+> may be true and then right before bpf_prog_inc(t->prog), it becomes
+> true? If hrtimer_callback_running() is called, it is possible that
+> callback function could have dropped the reference count for t->prog,
+> so we could already go into the body of the function
+> __bpf_prog_put()?
 
-Fixes: d7f571188ecf ("udp: Implement ->read_sock() for sockmap")
-Cc: John Fastabend <john.fastabend@gmail.com>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Jakub Sitnicki <jakub@cloudflare.com>
-Cc: Lorenz Bauer <lmb@cloudflare.com>
-Signed-off-by: Cong Wang <cong.wang@bytedance.com>
----
- net/ipv4/udp.c | 2 ++
- 1 file changed, 2 insertions(+)
+you're correct. Indeed there is a race.
+Circular dependency is a never ending headache.
+That's the same design mistake as with tail_calls.
+It felt that this case would be simpler than tail_calls and a bpf program
+pinning itself with bpf_prog_inc can be made to work... nope.
+I'll get rid of this and switch to something 'obviously correct'.
+Probably a link list with a lock to keep a set of init-ed timers and
+auto-cancel them on prog refcnt going to zero.
+To do 'bpf daemon' the prog would need to be pinned.
 
-diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
-index 15f5504adf5b..e31d67fd5183 100644
---- a/net/ipv4/udp.c
-+++ b/net/ipv4/udp.c
-@@ -1798,11 +1798,13 @@ int udp_read_sock(struct sock *sk, read_descriptor_t *desc,
- 		if (used <= 0) {
- 			if (!copied)
- 				copied = used;
-+			kfree_skb(skb);
- 			break;
- 		} else if (used <= skb->len) {
- 			copied += used;
- 		}
- 
-+		kfree_skb(skb);
- 		if (!desc->count)
- 			break;
- 	}
--- 
-2.25.1
+> > +     if (val) {
+> > +             /* This restriction will be removed in the next patch */
+> > +             verbose(env, "bpf_timer field can only be first in the map value element\n");
+> > +             return -EINVAL;
+> > +     }
+> > +     WARN_ON(meta->map_ptr);
+>
+> Could you explain when this could happen?
 
+Only if there is a verifier bug or new helper is added with arg to timer
+and arg to map. I'll switch to verbose() + efault instead.
