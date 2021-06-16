@@ -2,104 +2,85 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.4 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99F9CC49EA3
-	for <bpf@archiver.kernel.org>; Wed, 16 Jun 2021 06:27:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00E2CC48BE6
+	for <bpf@archiver.kernel.org>; Wed, 16 Jun 2021 06:57:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7D07C613C2
-	for <bpf@archiver.kernel.org>; Wed, 16 Jun 2021 06:27:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CEC5461001
+	for <bpf@archiver.kernel.org>; Wed, 16 Jun 2021 06:57:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231749AbhFPG36 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 16 Jun 2021 02:29:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59906 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231481AbhFPG3y (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 16 Jun 2021 02:29:54 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E0EC3613DC;
-        Wed, 16 Jun 2021 06:27:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623824868;
-        bh=TBS6JoAxPmOD9dx9GzeTj3rbPrTu3AsIuW9k8qlWnzU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cvf48LwFRDgIKhclCtr3FEhmUOggvXofz9CCdHQx+jkk1DsZU88KPa2K02jfFJdmX
-         ZnjjYQi5XeedFfmI2YJnM3qIcYkSsPFaRwyNSTnYqVH/wzsXbopt388skz2FHQ0pOJ
-         6yObsuhaidcj3nLZJBeVVr8b7DEqWxax/HxEaK+dQv4Nt9aupErg/RIaLlWPzfAeOz
-         ULynHSIpC3JsEtI20GSQSrCud5Jt4pX5wKI5OxoLKE4NqkK1wcPZx1bpFqiZjJqVfJ
-         tn/gilM5g5C8nVZMU8PWQhHIGu0A5NFipdro3QdQVBuC2lKm2jdfdkVY7AsMpAapAG
-         xqqYp4741lazQ==
-Received: by mail.kernel.org with local (Exim 4.94.2)
-        (envelope-from <mchehab@kernel.org>)
-        id 1ltP1e-004kIk-65; Wed, 16 Jun 2021 08:27:46 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+        id S230515AbhFPG7u (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 16 Jun 2021 02:59:50 -0400
+Received: from out30-133.freemail.mail.aliyun.com ([115.124.30.133]:60137 "EHLO
+        out30-133.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230508AbhFPG7s (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 16 Jun 2021 02:59:48 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R801e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04420;MF=chengshuyi@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0UcaecIg_1623826661;
+Received: from B-39YZML7H-2200.local(mailfrom:chengshuyi@linux.alibaba.com fp:SMTPD_---0UcaecIg_1623826661)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 16 Jun 2021 14:57:41 +0800
+Subject: Re: How to avoid compilation errors like "error: no member named xxx
+ in strut xxx"?
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Martin Lau <kafai@fb.com>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Brendan Jackman <jackmanb@chromium.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Florent Revest <revest@chromium.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH v2 07/29] docs: bpf: bpf_lsm.rst: avoid using ReST :doc:`foo` markup
-Date:   Wed, 16 Jun 2021 08:27:22 +0200
-Message-Id: <fcee73b9bb55a8d0efd07cf04076c66278a42db4.1623824363.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <cover.1623824363.git.mchehab+huawei@kernel.org>
-References: <cover.1623824363.git.mchehab+huawei@kernel.org>
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>
+References: <756efe9a-a237-e5d1-17fc-47936e76dacc@linux.alibaba.com>
+ <CAEf4Bza2ytug5PMzTcXZjggZU-Zo63XJZzmw0ZoLHJ3-erJkpg@mail.gmail.com>
+From:   Shuyi Cheng <chengshuyi@linux.alibaba.com>
+Message-ID: <05ec3172-0d79-0b65-f231-15a309c4d3af@linux.alibaba.com>
+Date:   Wed, 16 Jun 2021 14:57:41 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
+In-Reply-To: <CAEf4Bza2ytug5PMzTcXZjggZU-Zo63XJZzmw0ZoLHJ3-erJkpg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The :doc:`foo` tag is auto-generated via automarkup.py.
-So, use the filename at the sources, instead of :doc:`foo`.
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- Documentation/bpf/bpf_lsm.rst | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/Documentation/bpf/bpf_lsm.rst b/Documentation/bpf/bpf_lsm.rst
-index 1c0a75a51d79..0dc3fb0d9544 100644
---- a/Documentation/bpf/bpf_lsm.rst
-+++ b/Documentation/bpf/bpf_lsm.rst
-@@ -20,10 +20,10 @@ LSM hook:
- Other LSM hooks which can be instrumented can be found in
- ``include/linux/lsm_hooks.h``.
- 
--eBPF programs that use :doc:`/bpf/btf` do not need to include kernel headers
--for accessing information from the attached eBPF program's context. They can
--simply declare the structures in the eBPF program and only specify the fields
--that need to be accessed.
-+eBPF programs that use Documentation/bpf/btf.rst do not need to include kernel
-+headers for accessing information from the attached eBPF program's context.
-+They can simply declare the structures in the eBPF program and only specify
-+the fields that need to be accessed.
- 
- .. code-block:: c
- 
-@@ -88,8 +88,9 @@ example:
- 
- The ``__attribute__((preserve_access_index))`` is a clang feature that allows
- the BPF verifier to update the offsets for the access at runtime using the
--:doc:`/bpf/btf` information. Since the BPF verifier is aware of the types, it
--also validates all the accesses made to the various types in the eBPF program.
-+Documentation/bpf/btf.rst information. Since the BPF verifier is aware of the
-+types, it also validates all the accesses made to the various types in the
-+eBPF program.
- 
- Loading
- -------
--- 
-2.31.1
+On 6/16/21 2:02 PM, Andrii Nakryiko wrote:
+> On Tue, Jun 15, 2021 at 9:06 PM Shuyi Cheng
+> <chengshuyi@linux.alibaba.com> wrote:
+>>
+>> I am trying to write a bpf program that supports multiple linux kernel
+>> versions. However, there are some differences in the definition of
+>> struct net in these multiple kernel versions.
+>>
+>> Therefore, when we include a certain kernel version of vmlinux.h, the
+>> compilation error "error: no member named'proc_inum' in strut net" will
+>> appear.
+>>
+>> However, when we include another kernel version of vmlinux.h, the
+>> compilation will appear "error: no member named'ns.inum' in strut net".
+>>
+>> Anakryiko mentioned in the issue of libbpf/libbpf-bootstrap: vmlinux.h
+>> is just a convenient way to have most of kernel types defined for you,
+>> so that you don't have to re-define them manually. Link here: https:
+>> //github.com/libbpf/libbpf-bootstrap/issues/31#issuecomment-861035643
+>>
+>> But struct net is a very huge structure, and it may be very difficult to
+> 
+> You don't need to declare the entire struct, it's enough to declare
+> only fields that you need and use.
+> 
+> If the type has incompatible changes between kernel versions (e.g., if
+> some field changed it's type), you can use my_type___suffix approach,
+> see [0] and struct kernfs_iattrs___old example. Let me know if you
+> need more concrete example (but then also provide more concrete
+> explanation of what you actually need).
+> 
+>    [0] https://nakryiko.com/posts/bcc-to-libbpf-howto-guide/#dealing-with-compile-time-if-s-in-bcc
+> 
+>> add it manually. So, how can we avoid compilation errors like "error: no
+>> member named'xxx' in xxx"
 
+
+Thank you very much, i get it.
