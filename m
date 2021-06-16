@@ -2,147 +2,358 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.2 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D74A3C48BE5
-	for <bpf@archiver.kernel.org>; Tue, 15 Jun 2021 23:44:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E043FC48BDF
+	for <bpf@archiver.kernel.org>; Wed, 16 Jun 2021 00:06:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B63CD6137D
-	for <bpf@archiver.kernel.org>; Tue, 15 Jun 2021 23:44:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B165461019
+	for <bpf@archiver.kernel.org>; Wed, 16 Jun 2021 00:06:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbhFOXqh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 15 Jun 2021 19:46:37 -0400
-Received: from www62.your-server.de ([213.133.104.62]:43280 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229966AbhFOXqh (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 15 Jun 2021 19:46:37 -0400
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1ltIjK-0002KH-C1; Wed, 16 Jun 2021 01:44:26 +0200
-Received: from [85.7.101.30] (helo=linux-3.home)
-        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1ltIjJ-000K4g-Vt; Wed, 16 Jun 2021 01:44:26 +0200
-Subject: Re: [PATCH RFC bpf-next 0/7] Add bpf_link based TC-BPF API
-To:     =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Vlad Buslov <vladbu@nvidia.com>, Jiri Pirko <jiri@resnulli.us>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, Joe Stringer <joe@cilium.io>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Linux Kernel Network Developers <netdev@vger.kernel.org>
-References: <20210528195946.2375109-1-memxor@gmail.com>
- <CAM_iQpVqVKhK+09Sj_At226mdWpVXfVbhy89As2dai7ip8Nmtw@mail.gmail.com>
- <20210607033724.wn6qn4v42dlm4j4o@apollo>
- <CAM_iQpVCnG8pSci2sMbJ1B5YE-y=reAUp82itgrguecyNBCUVQ@mail.gmail.com>
- <20210607060724.4nidap5eywb23l3d@apollo>
- <CAM_iQpWA=SXNR3Ya8_L2aoVJGP_uaRP8EYCpDrnq3y8Uf6qu=g@mail.gmail.com>
- <20210608071908.sos275adj3gunewo@apollo>
- <CAM_iQpXFmsWhMA-RO2j5Ph5Ak8yJgUVBppGj2_5NS3BuyjkvzQ@mail.gmail.com>
- <20210613025308.75uia7rnt4ue2k7q@apollo>
- <CAM_iQpW7ZAz5rLAanMRg7R52Pn55N=puVkvoHcHF618wq8uA1g@mail.gmail.com>
- <877divs5py.fsf@toke.dk>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <15cd0a9c-95a1-9766-fca1-4bf9d09e4100@iogearbox.net>
-Date:   Wed, 16 Jun 2021 01:44:25 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S230082AbhFPAIw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 15 Jun 2021 20:08:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57068 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229811AbhFPAIw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 15 Jun 2021 20:08:52 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED898C061574
+        for <bpf@vger.kernel.org>; Tue, 15 Jun 2021 17:06:45 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id f84so446790ybg.0
+        for <bpf@vger.kernel.org>; Tue, 15 Jun 2021 17:06:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RQexx5LVkdV318CpG6zh5NCoav3ETAxxXPd9ZBLUp9Q=;
+        b=jUVMyv2PJWfPrfyK60UVEzoaE2yU5B2+8MltwiJB5ociJHywWyDQ7Y/Q6+OonN+jQu
+         IzizuRLlGXJ1mMCiir7m566oGGUhRmWxomJ78Gu13gAhDxIRVBXyDQINqAFIj/1PMEtC
+         maDuFrfNgKLO+G9KOHHIbXzv4A5XVCgHogDgSP7aRO1yVI9+HUN7/sfQG5FXwgJOPAh1
+         fkqsIlpmx8IhIrZjF9bhDy5n+MmgNmAnhPJ8ijJHQZBnKr2evRUwQ903a0Cphn0aYWnb
+         ntXuUWJlmNbZPry2m9lxbgMtYe1wOk9lfkjzRzYBJbVVutTwLmtzYp5XBGtNPUmmhoOz
+         QkSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RQexx5LVkdV318CpG6zh5NCoav3ETAxxXPd9ZBLUp9Q=;
+        b=cw0Z/cAlpvb6KfmzV6doM5628X/LU1tgl7MgJROTeZHiiebEp8ywQEkWio9P9VDDaw
+         d20BRHW1pFKbk70jdKPgNEy5aNha6Vp5JabO8nH+D5iMIJhVUNu2+R+TEooI8uEHP0rE
+         xxFxdtQ5iGwrzj09xBuBlCKtWPYIL9JzgvasfweX3de4rt74bWzszDTdWx/hvRyXBjYh
+         ZuLMc+OtqvywB6D4ywJnfwqqQ01NmjihYnrdSm1ttlVsNTzUHG9TFUzhEpKJWftMSfWg
+         DuAoX+X52b9MrIyNR+0rZoGPxh2iidA3/NlZgjXZ12Wugdi8g+5Aa+vh2BT44J76uDdP
+         VVHw==
+X-Gm-Message-State: AOAM533HPmd+wN06dVReytkwA0MlMIeqyAc4lNWkANcmHW9sF3LgGmjp
+        JVL2oBwL1hEYuYgWKBBak3lZ4js/5cU7BoOqL9pPnA==
+X-Google-Smtp-Source: ABdhPJwIeBTt8YkUUq6aAs8WyPGOurwN/6Cy9gCuhSUbkFV6y4AqXk0ICje16nCtEFQ4CNVYbU3LBRGzQ1XEX0i/9gA=
+X-Received: by 2002:a25:be44:: with SMTP id d4mr2378362ybm.497.1623802004787;
+ Tue, 15 Jun 2021 17:06:44 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <877divs5py.fsf@toke.dk>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.2/26202/Tue Jun 15 13:21:24 2021)
+References: <20210604015238.2422145-1-zenczykowski@gmail.com>
+ <20210604015238.2422145-2-zenczykowski@gmail.com> <CANP3RGc8PmPOjTGkDmbjzEVBezcQuNMcg17qpJx2aLU9juM_5w@mail.gmail.com>
+ <80bb7f49-4b69-169a-a540-f2a46551ef7c@iogearbox.net>
+In-Reply-To: <80bb7f49-4b69-169a-a540-f2a46551ef7c@iogearbox.net>
+From:   =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
+Date:   Tue, 15 Jun 2021 17:06:32 -0700
+Message-ID: <CANP3RGfjLikQ6dg=YpBU0OeHvyv7JOki7CyOUS9modaXAi-9vQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/2] bpf: do not change gso_size during bpf_skb_change_proto()
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Linux Network Development Mailing List 
+        <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        BPF Mailing List <bpf@vger.kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Dongseok Yi <dseok.yi@samsung.com>,
+        Willem de Bruijn <willemb@google.com>, yhs@fb.com,
+        kpsingh@kernel.org, andrii@kernel.org,
+        Jakub Kicinski <kuba@kernel.org>, songliubraving@fb.com,
+        John Fastabend <john.fastabend@gmail.com>,
+        Martin Lau <kafai@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 6/15/21 1:54 PM, Toke Høiland-Jørgensen wrote:
-> Cong Wang <xiyou.wangcong@gmail.com> writes:
-[...]
->>>> I offer two different views here:
->>>>
->>>> 1. If you view a TC filter as an instance as a netdev/qdisc/action, they
->>>> are no different from this perspective. Maybe the fact that a TC filter
->>>> resides in a qdisc makes a slight difference here, but like I mentioned, it
->>>> actually makes sense to let TC filters be standalone, qdisc's just have to
->>>> bind with them, like how we bind TC filters with standalone TC actions.
->>>
->>> You propose something different below IIUC, but I explained why I'm wary of
->>> these unbound filters. They seem to add a step to classifier setup for no real
->>> benefit to the user (except keeping track of one more object and cleaning it
->>> up with the link when done).
->>
->> I am not even sure if unbound filters help your case at all, making
->> them unbound merely changes their residence, not ownership.
->> You are trying to pass the ownership from TC to bpf_link, which
->> is what I am against.
-> 
-> So what do you propose instead?
-> 
-> bpf_link is solving a specific problem: ensuring automatic cleanup of
-> kernel resources held by a userspace application with a BPF component.
-> Not all applications work this way, but for the ones that do it's very
-> useful. But if the TC filter stays around after bpf_link detaches, that
-> kinda defeats the point of the automatic cleanup.
-> 
-> So I don't really see any way around transferring ownership somehow.
-> Unless you have some other idea that I'm missing?
+> >> (a) I've long had a bug assigned to myself to debug a super rare kernel
+> >> crash on Android Pixel phones which can (per stacktrace) be traced back
+> >> to bpf clat ipv6 to ipv4 protocol conversion causing some sort of ugly
+> >> failure much later on during transmit deep in the GSO engine, AFAICT
+> >> precisely because of this change to gso_size, though I've never been able
+> >> to manually reproduce it.
+> >> I believe it may be related to the particular network offload support
+> >> of attached usb ethernet dongle being used for tethering off of an
+> >> IPv6-only cellular connection.  The reason might be we end up with more
+> >> segments than max permitted, or with a gso packet with only one segment...
+> >> (either way we break some assumption and hit a BUG_ON)
+>
+> Do you happen to have some more debug data from there, e.g. which bug_on
+> is hit? Do you have some pointers to the driver code where you suspect
+> this could cause an issue?
 
-Just to keep on brainstorming here, I wanted to bring back Alexei's earlier quote:
+Yes, I found an old relevant stack trace in google bug 158835517.
+This is from a blueline (Pixel 3 non-XL) running a 4.9.223 derived kernel.
 
-   > I think it makes sense to create these objects as part of establishing bpf_link.
-   > ingress qdisc is a fake qdisc anyway.
-   > If we could go back in time I would argue that its existence doesn't
-   > need to be shown in iproute2. It's an object that serves no purpose
-   > other than attaching filters to it. It doesn't do any queuing unlike
-   > real qdiscs.
-   > It's an artifact of old choices. Old doesn't mean good.
-   > The kernel is full of such quirks and oddities. New api-s shouldn't
-   > blindly follow them.
-   > tc qdisc add dev eth0 clsact
-   > is a useless command with nop effect.
+[57742.623372] c0      0 ------------[ cut here ]------------
+[57742.623451] c0      0 kernel BUG at net/core/skbuff.c:3290!
+[57742.623473] c0      0 Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
+[57742.623500] Modules linked in: ftm5 heatmap videobuf2_vmalloc
+videobuf2_memops snd_soc_sdm845 snd_soc_cs35l36 snd_soc_wcd_spi
+snd_soc_wcd934x snd_soc_wcd9xxx wcd_dsp_glink wcd_core pinctrl_wcd
+wlan(O)
+[57742.623676] c0      0 CPU: 0 PID: 0 Comm: swapper/0 Tainted: G
+     O    4.9.223-ga7ce4286ca2d-ab6546858 #0
+[57742.623696] c0      0 Hardware name: Google Inc. MSM sdm845 B1 DVT1.1 (DT)
+[57742.623727] c0      0 task: 0000000097327d34 task.stack: 00000000533bef44
+[57742.623770] c0      0 PC is at skb_segment+0xeb8/0xf1c
+[57742.623786] c0      0 LR is at skb_segment+0x998/0xf1c
+...
+[57742.625301] c0      0 1720: 0000000000000011 ffffffc13b8b1850
+ffffff898aa2b530 ffffffc13b8b1770
+[57742.625321] c0      0 [<000000008025a24e>] skb_segment+0xeb8/0xf1c
+[57742.625348] c0      0 [<00000000f0dbe6cc>] tcp_gso_segment+0xdc/0x428
+[57742.625376] c0      0 [<000000009ff681a5>] tcp6_gso_segment+0x60/0x17c
+[57742.625391] c0      0 [<00000000ae27ff84>] ipv6_gso_segment+0x208/0x3d0
+[57742.625413] c0      0 [<000000009ff20266>] skb_mac_gso_segment+0xcc/0x198
+[57742.625430] c0      0 [<000000005f3e189b>] __skb_gso_segment+0xe0/0x198
+[57742.625448] c0      0 [<000000002756bf90>] validate_xmit_skb+0x214/0x3ac
+[57742.625473] c0      0 [<00000000d536666c>] sch_direct_xmit+0x8c/0x37c
+[57742.625492] c0      0 [<000000006ae4cbff>] __qdisc_run+0x3e4/0x5d4
+[57742.625512] c0      0 [<0000000040112c03>] __dev_queue_xmit+0x4d8/0xc9c
+[57742.625538] c0      0 [<000000002adaadc6>] __bpf_redirect+0x148/0x2f8
+[57742.625557] c0      0 [<00000000766573a7>] __dev_queue_xmit+0x830/0xc9c
+[57742.625578] c0      0 [<000000006df3822d>] neigh_direct_output+0x1c/0x28
+[57742.625607] c0      0 [<00000000bacb35cc>] ip_finish_output2+0x3ac/0x6cc
+[57742.625628] c0      0 [<00000000e7f62131>] ip_finish_output+0x2e4/0x360
+[57742.625643] c0      0 [<0000000079e638f1>] ip_output+0x19c/0x274
+[57742.625666] c0      0 [<0000000092e42b8c>] NF_HOOK_THRESH+0x150/0x1cc
+[57742.625685] c0      0 [<00000000b4e9c6f8>] ip_forward+0x468/0x510
+[57742.625704] c0      0 [<00000000779cadd9>] ip_rcv_finish+0x228/0x3c0
+[57742.625723] c0      0 [<000000006eee429d>] ip_rcv+0x3b8/0x53c
+[57742.625740] c0      0 [<00000000eabf9034>]
+__netif_receive_skb_core+0xb10/0xe68
+[57742.625761] c0      0 [<000000009368ee55>]
+netif_receive_skb_internal+0x1b4/0x26c
+[57742.625775] c0      0 [<00000000afac19f3>] napi_gro_complete+0x5c/0x180
+[57742.625795] c0      0 [<000000001a7429fd>] napi_complete_done+0x70/0x14c
+[57742.625824] c0      0 [<000000000876f6ad>] r8152_poll+0x1138/0x14c8
+[57742.625846] c0      0 [<000000006a1f8e3a>] napi_poll+0x8c/0x2f0
+[57742.625868] c0      0 [<00000000128c5761>] net_rx_action+0xa8/0x2e8
+[57742.625892] c0      0 [<00000000684eda45>] __do_softirq+0x23c/0x568
+[57742.625921] c0      0 [<000000008094d781>] irq_exit+0x130/0x144
+[57742.625949] c0      0 [<00000000c3de88cc>] __handle_domain_irq+0x108/0x16c
+[57742.625963] c0      0 [<000000005c213a95>] gic_handle_irq.21048+0x124/0x19c
+[57742.625979] c0      0 Exception stack(0xffffff898c003c20 to
+0xffffff898c003d50)
+[57742.625999] c0      0 3c20: ffffcb7ad1c65ff9 0000000000000000
+0000000000000000 0000000000000001
+[57742.626014] c0      0 3c40: 000034852e1f1c83 0000000000000000
+0000000000300000 0000000000000000
+[57742.626033] c0      0 3c60: 0000000000000000 00000000000039d0
+0000000000000018 003529018eb90a43
+[57742.626052] c0      0 3c80: 00000000341555ac 00000000019b7894
+00000000c800ffff 0000000000000000
+[57742.626070] c0      0 3ca0: 00000000000003fc 00000000ffffffff
+ffffff898c004030 0000000000000002
+[57742.626089] c0      0 3cc0: ffffffc12c4d2858 ffffffc12c4d2018
+ffffff898c00f7f0 ffffff898c11f990
+[57742.626107] c0      0 3ce0: 0000000000000001 00003484f804e64b
+ffffff898adce668 ffffff898c460108
+[57742.626126] c0      0 3d00: ffffff898c460000 ffffff898c003d90
+ffffff898a547e1c ffffff898c003d50
+[57742.626145] c0      0 3d20: ffffff898a547e58 00000000a0c00145
+ffffff898c00f7f0 ffffffc12c4d2018
+[57742.626159] c0      0 3d40: ffffffffffffffff 0000000000000002
+[57742.626179] c0      0 [<00000000179ba2a9>] el1_irq+0xc4/0x13c
+[57742.626205] c0      0 [<0000000052ad168a>] lpm_cpuidle_enter+0x5c0/0x670
+[57742.626233] c0      0 [<00000000b8e10462>] cpuidle_enter_state+0x200/0x400
+[57742.626260] c0      0 [<0000000048578bb9>] cpu_idle_loop+0x294/0x440
+[57742.626276] c0      0 [<00000000fbf7777c>] cpu_idle_loop+0x0/0x440
+[57742.626304] c0      0 [<0000000012a6efc3>] kernel_init+0x0/0x2a8
+[57742.626333] c0      0 [<0000000034e25c8d>] start_kernel+0xe04/0xe0c
+[57742.626350] c0      0 [<000000000861285f>] __primary_switched+0x6c/0x98
+[57742.626375] c0      0 Code: a94f6ffc f85f8e5e 910503ff d65f03c0 (d4210000)
+[57742.626419] c0      0 ---[ end trace 5245603348170006 ]---
+[57742.727830] c0      0 Kernel panic - not syncing: Fatal exception
+in interrupt
 
-The whole bpf_link in this context feels somewhat awkward because both are two
-different worlds, one accessible via netlink with its own lifetime etc, the other
-one tied to fds and bpf syscall. Back in the days we did the cls_bpf integration
-since it felt the most natural at that time and it had support for both the ingress
-and egress side, along with the direct action support which was added later to have
-a proper fast path for BPF. One thing that I personally never liked is that later
-on tc sadly became a complex, quirky dumping ground for all the nic hw offloads (I
-guess mainly driven from ovs side) for which I have a hard time convincing myself
-that this is used at scale in production. Stuff like af699626ee26 just to pick one
-which annoyingly also adds to the fast path given distros will just compile in most
-of these things (like NET_TC_SKB_EXT)... what if such bpf_link object is not tied
-at all to cls_bpf or cls_act qdisc, and instead would implement the tcf_classify_
-{egress,ingress}() as-is in that sense, similar like the bpf_lsm hooks. Meaning,
-you could run existing tc BPF prog without any modifications and without additional
-extra overhead (no need to walk the clsact qdisc and then again into the cls_bpf
-one). These tc BPF programs would be managed only from bpf() via tc bpf_link api,
-and are otherwise not bothering to classic tc command (though they could be dumped
-there as well for sake of visibility, though bpftool would be fitting too). However,
-if there is something attached from classic tc side, it would also go into the old
-style tcf_classify_ingress() implementation and walk whatever is there so that nothing
-existing breaks (same as when no bpf_link would be present so that there is no extra
-overhead). This would also allow for a migration path of multi prog from cls_bpf to
-this new implementation. Details still tbd, but I would much rather like such an
-approach than the current discussed one, and it would also fit better given we don't
-run into this current mismatch of both worlds.
+The commit is 'a7ce4286ca2d LTS: Merge android-4.9-q (4.9.223) into
+android-msm-pixel-4.9' and it is crashing at
+https://android.googlesource.com/kernel/msm/+/a7ce4286ca2d640068055973938f69e3a069e67a/net/core/skbuff.c#3290
 
-Thanks,
-Daniel
+struct sk_buff *skb_segment(struct sk_buff *head_skb,
+netdev_features_t features) {
+  ...
+  while (pos < offset + len) {
+    if (i >= nfrags) {
+      BUG_ON(skb_headlen(list_skb));  <-- crash
+
+My bare bones initial analysis:
+
+This looks like an ipv4/tcp upload from rx csum/gso capable ethernet
+(realtek 8152 100mbps or 8153 gigabit) usb dongle hitting ipv4 nat +
+forwarding to v4 tun clat device, and then tc egress bpf on that v4
+tun device doing clat ipv4-to-ipv6 translation and bpf_redirect to v6
+only cell interface (ethernet header less), then triggering a bug in
+the kernel's software segmentation engine on transmit through the
+cellular uplink (which is a T-Mobile ipv6 only cell network).  This is
+on a blueline 4.9 kernel.
+
+User confirmed - to paraphrase:
+
+Home internet was down. I thought I would try using ethernet tethering
+to power my whole home's internet. I plugged my Pixel 3 into the
+included USB-A to USB-C adapter, into an Insignia NS-PU98635 [note:
+https://www.insigniaproducts.com/pdp/NS-PU98635/3510527 ] into my Nest
+Wifi router [note: presumably via an ethernet cable] then turned on
+ethernet tethering. It seemed to work for a while, but then the phone
+rebooted.
+
+Carrier was Google Fi, presumably 'roaming' on T-Mobile, so ipv6-only
+cellular network]
+
+Internally, I already asked Willem and Eric about this, I'll quote
+from the initial investigation in the bug.
+
+Eric said (trimmed):
+  skb_segment() is not yet able to segment something that GRO has
+aggregated with a frag_list, if gso_size has to be changed.
+  skb_segment() is not generic enough.
+  I tried to fix this in the past:
+https://lore.kernel.org/netdev/94cd6f4d-09d4-11c0-64f4-bdc544bb3dcb@gmail.com/
+  This was the patch Herbert came up 7 years ago.
+  https://marc.info/?l=linux-netdev&m=138419594024851&w=2
+  I believe my proposal was :
+https://www.spinics.net/lists/netdev/msg255549.html
+
+Willem said (slightly trimmed):
+  I wonder if the fix as a result of that upstream discussion would
+help here, too.
+  Basically, it falls back onto non-sg copy based segmentation for some packets.
+  I think so. Can you check whether your kernel has this 4.19 stable backport:
+
+  net: gso: Fix skb_segment splat when splitting gso_size mangled skb
+having linear-headed frag_list
+  https://lore.kernel.org/patchwork/patch/1128590/
+
+  The real solution is to not play gso_size games in
+bpf_skb_proto_[46]_to_[64], of course.
+  I should have added support for BPF_F_ADJ_ROOM_FIXED_GSO to those
+functions when I introduced that.
+  As you pointed out offline, even if we add it now, a missing flag causes
+  runtime, not build time, failure and requires a workaround...
+
+(back story: writing bpf code that works on all manner of kernels that
+may or may not have all fixes/backports,
+and may be as old as 4.9 is challenging.  Some things rely on multiple
+versions of the bpf code, and using
+the first one that successfully loads, other things depend on runtime
+fallbacks, etc.  Here with the new flag,
+we'd have to do something like bpf_skb_change_proto(FIXED_GSO), and if
+that fails [presumably due to lack
+of kernel patch] fall back to bpf_skb_change_proto(0).  With the
+revert + this patch, it'll 'just' work.)
+
+  One more thing, maybe you can trigger linearization of these skbs when
+  they traverse an intermediary device, notably tun, by disabling with
+  ethtool -K tx-scatter-gather-fraglist
+
+  Then in validate_xmit_skb on transmit from that device it should hit
+  the skb_need_linearize (?)  This is wild speculation..
+
+  Oh 4.9. Also, the bpf_redirect means that that egress path is never
+hit on the tun device of course.
+
+  This is the 4.9 stable backport
+  https://lore.kernel.org/stable/20190919214802.102848604@linuxfoundation.org/
+
+To which my response was:
+  commit 162a5a8c3aff15c449e6b38355cdf80ab4f77a5a
+  net: gso: Fix skb_segment splat when splitting gso_size mangled skb
+having linear-headed frag_list
+git describe 162a5a8c3aff15c449e6b38355cdf80ab4f77a5a
+v4.9.193-6-g162a5a8c3aff
+So theoretically it's already in the tree...
+
+And the discussion petered out roughly a year ago.
+I've never found a way to trigger this on demand (via veth or otherwise)
+
+> >> (b) There is no check that the gso_size is > 20 when reducing it by 20,
+> >> so we might end up with a negative (or underflowing) gso_size or
+> >> a gso_size of 0.  This can't possibly be good.
+> >> Indeed this is probably somehow exploitable (or at least can result
+> >> in a kernel crash) by delivering crafted packets and perhaps triggering
+> >> an infinite loop or a divide by zero...
+> >> As a reminder: gso_size (mss) is related to mtu, but not directly
+> >> derived from it: gso_size/mss may be significantly smaller then
+> >> one would get by deriving from local mtu.  And on some nics (which
+> >> do loose mtu checking on receive, it may even potentially be larger,
+> >> for example my work pc with 1500 mtu can receive 1520 byte frames
+> >> [and sometimes does due to bugs in a vendor plat46 implementation]).
+> >> Indeed even just going from 21 to 1 is potentially problematic because
+> >> it increases the number of segments by a factor of 21 (think DoS,
+> >> or some other crash due to too many segments).
+>
+> Do you have a reproducer for creating such small gso_size from stack, is
+> this mainly from virtio_net side possible? If it's too small, perhaps the
+> gso attributes should just be cleared from the skb generally instead of
+> marking SKB_GSO_DODGY as we otherwise do?
+
+I don't.  I tend to think it's not possible with the linux tcp stack,
+but it should be possible - if annoying to do - with a raw socket.
+
+You don't even need an established tcp connection, since gro will
+happily aggregate packets for non existing flows.
+
+So you simply need to send two consecutive ipv4/tcp segments with 20
+byte tcp payload (ie. gso_size),
+and gro should merge them, and then ipv4-to-ipv6 conversion should
+result in a ipv6/tcp headers + 40 byte payload, yet 0-byte gso_size
+packet, and it should crash.
+
+I've checked the code and we later DIV_ROUND_UP by gso_size, which
+should thus div by zero.
+
+But I haven't ever actually tried to trigger it.
+
+> The change you're reverting in patch 1/2 is only in net-next, but not in
+> Linus tree, so there still is a large enough time window for at least the
+> revert. That said, I presume what you mean here is to just revert the 1/2
+> in bpf-next and the 2/2 fix targeted for bpf tree, no?
+
+That would be ideal, yes.
+
+> Few follow-up questions:
+>
+> 1) Could we then also cover the case of skb_is_gso(skb) && !skb_is_gso_tcp(skb)
+>     that we currently reject with -ENOTSUPP, in other words all GSO cases?
+
+I think so.  Somehow I missed this condition even being there.
+If this patch series is accepted I'll follow up to remove that
+(presumably in bpf-next though?)
+
+> 2) Do we still need to mark SKB_GSO_DODGY and reset segs? I presume not anymore
+>     after this change?
+
+I'm uncertain.  It certainly seems safer to leave it?
+
+One could argue that any gso packet modified by bpf write operations
+should technically be SKB_GSO_DODGY...
+
+After all, the user may fail to even put in a valid
+ethernet/ipv4/ipv6(/tcp) header...
+
+That said, that seems to be user error, so I think I'd be willing to
+remove it, but I think that would belong in bpf-next rather than bpf.
+
+> 3) skb_{decrease,increase}_gso_size() should probably just removed then.
+
+Oh, interesting, are there no other users?  But again, that would seem
+to be a bpf-next candidate I think?
+But in general I would agree playing games with gso_size is just a bad
+idea no matter what.
+
+- Maciej
