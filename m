@@ -2,370 +2,383 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51D57C2B9F4
-	for <bpf@archiver.kernel.org>; Thu, 17 Jun 2021 13:35:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F4033C48BE5
+	for <bpf@archiver.kernel.org>; Thu, 17 Jun 2021 14:19:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2C0DF613BA
-	for <bpf@archiver.kernel.org>; Thu, 17 Jun 2021 13:35:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CE751613A9
+	for <bpf@archiver.kernel.org>; Thu, 17 Jun 2021 14:19:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232229AbhFQNiA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 17 Jun 2021 09:38:00 -0400
-Received: from www62.your-server.de ([213.133.104.62]:46862 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231451AbhFQNiA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 17 Jun 2021 09:38:00 -0400
-Received: from 30.101.7.85.dynamic.wline.res.cust.swisscom.ch ([85.7.101.30] helo=localhost)
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1ltsBR-000CN5-QE; Thu, 17 Jun 2021 15:35:50 +0200
-From:   Daniel Borkmann <daniel@iogearbox.net>
-To:     davem@davemloft.net
-Cc:     kuba@kernel.org, daniel@iogearbox.net, ast@kernel.org,
-        andrii@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: pull-request: bpf-next 2021-06-17
-Date:   Thu, 17 Jun 2021 15:35:49 +0200
-Message-Id: <20210617133549.26128-1-daniel@iogearbox.net>
-X-Mailer: git-send-email 2.21.0
+        id S231955AbhFQOVT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 17 Jun 2021 10:21:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33728 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231666AbhFQOVT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 17 Jun 2021 10:21:19 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BCABC061574
+        for <bpf@vger.kernel.org>; Thu, 17 Jun 2021 07:19:11 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id g4so3890348pjk.0
+        for <bpf@vger.kernel.org>; Thu, 17 Jun 2021 07:19:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:date:to:cc:subject:in-reply-to:message-id:references
+         :mime-version;
+        bh=/1UczQSLpDCUUWa43iLedI3l8nkc2dHNA+5NemDu+Z4=;
+        b=BIffTftdHAl31gIE2xi6S5mMLN+ejIimeAI0usFQoYefeFxWmPWQUn7DZYCyBbf69I
+         TbdDcv6t3EFzvjjwXsPGoERvZZSFLLKCjErM+vcppNG0uj+ptWbWbsCwdMej89CFx9Tc
+         uPHKPrj9C9nCIuPQTHfLhJ6PAAMHwjVAIGy97gWnYB+9AWZwG+p9DHiisC2nv7yupILq
+         z9+MWFg56yfje2Y2k3wLL+3EbTP8T763oltp0fOdVOw0rqU3DynfxbdbCkb/2HkUkm/D
+         TiYUYD/1Ll4zoGnutFWmOWfWlA2EjFm4Xkc2svOLV6ZMcb3YoNseTBG7qkhQ4P5O1n1/
+         sX/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:date:to:cc:subject:in-reply-to:message-id
+         :references:mime-version;
+        bh=/1UczQSLpDCUUWa43iLedI3l8nkc2dHNA+5NemDu+Z4=;
+        b=hh/t/b6wEbImQVFjQIY6OZa62ZDYvxL9s/8q8Y6ejd3FtbUxgQLkkZZ2npXd2Xmkek
+         pBmr9EWrcdPr0ZjAzcdnFhypjv9gT9cY70XG2tj5AL6lfUYjdS1R/G/GYbRj2+D5B+Kz
+         hznNe5LJNEkbdPfMlPm9M2S0vJbP3VLxpuJTdf7BFXxcsa1Zk75G58B1rU17JsvPiHNv
+         oEFPMyjrfWzpQ8f/n3ccj/ut+r0kASp9QdLSVYy6sicth3sDuH8aixCWs6IBbPX9Mrxf
+         w4EwvhRIFpK9nwxHkXyA2RGKpKrEjybd3rIJvXM5CiLfyERei+wScTvQLF10VPYw0v2i
+         HwQg==
+X-Gm-Message-State: AOAM53197zSnEDPrs138QyRL869ErHdQNn17Zvc0nagkF6wOsz7WyUCc
+        ijRfMMFCxrOwbN19VdYG3AlY3emR1AA=
+X-Google-Smtp-Source: ABdhPJz5UDENJPv7NyAoZFjrpJXoGyRKcwUvIBP+K5tuHqQL3+mXZVF+KFjHg5/6bYr00TK+FQIzeQ==
+X-Received: by 2002:a17:90a:10c8:: with SMTP id b8mr16838830pje.147.1623939551047;
+        Thu, 17 Jun 2021 07:19:11 -0700 (PDT)
+Received: from sea-l-00029082.olympus.f5net.com (d66-183-43-174.bchsia.telus.net. [66.183.43.174])
+        by smtp.gmail.com with ESMTPSA id g8sm5482613pfu.177.2021.06.17.07.19.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Jun 2021 07:19:10 -0700 (PDT)
+From:   Vincent Li <vincent.mc.li@gmail.com>
+X-Google-Original-From: Vincent Li <vli@gmail.com>
+Date:   Thu, 17 Jun 2021 07:19:08 -0700 (PDT)
+To:     Yonghong Song <yhs@fb.com>
+cc:     Vincent Li <vincent.mc.li@gmail.com>, bpf@vger.kernel.org
+Subject: Re: R1 invalid mem access 'inv'
+In-Reply-To: <92121d33-4a45-b27a-e3cd-e54232924583@fb.com>
+Message-ID: <79e4924c-e581-47dd-875c-6fd72e85dfac@gmail.com>
+References: <c43bc0a9-9eca-44df-d0c7-7865f448cc24@gmail.com> <92121d33-4a45-b27a-e3cd-e54232924583@fb.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.2/26204/Thu Jun 17 13:19:00 2021)
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi David, hi Jakub,
 
-The following pull-request contains BPF updates for your *net-next* tree.
+Hi Song,
 
-We've added 50 non-merge commits during the last 25 day(s) which contain
-a total of 148 files changed, 4779 insertions(+), 1248 deletions(-).
+Thank you for your response!
 
-The main changes are:
 
-1) BPF infrastructure to migrate TCP child sockets from a listener to another
-   in the same reuseport group/map, from Kuniyuki Iwashima.
+On Wed, 16 Jun 2021, Yonghong Song wrote:
 
-2) Add a provably sound, faster and more precise algorithm for tnum_mul() as
-   noted in https://arxiv.org/abs/2105.05398, from Harishankar Vishwanathan.
+> 
+> 
+> On 6/16/21 5:05 PM, Vincent Li wrote:
+> > Hi BPF Experts,
+> > 
+> > I had a problem that verifier report "R1 invalid mem access 'inv'" when
+> > I attempted to rewrite packet destination ethernet MAC address in Cilium
+> > tunnel mode, I opened an issue
+> > with detail here https://github.com/cilium/cilium/issues/16571:
+> > 
+> > I have couple of questions in general to try to understand the compiler,
+> > BPF byte code, and the verifier.
+> > 
+> > 1 Why the BPF byte code changes so much with my simple C code change
+> > 
+> > a: BPF byte code  before C code change:
+> > 
+> > 0000000000006068 <LBB12_410>:
+> >      3085:       bf a2 00 00 00 00 00 00 r2 = r10
+> > ;       tunnel = map_lookup_elem(&TUNNEL_MAP, key);
+> >      3086:       07 02 00 00 78 ff ff ff r2 += -136
+> >      3087:       18 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 r1 = 0 ll
+> >      3089:       85 00 00 00 01 00 00 00 call 1
+> > ;       if (!tunnel)
+> >      3090:       15 00 06 01 00 00 00 00 if r0 == 0 goto +262 <LBB12_441>
+> > ;       key.tunnel_id = seclabel;
+> >      3091:       18 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 r2 = 0 ll
+> >      3093:       67 02 00 00 20 00 00 00 r2 <<= 32
+> >      3094:       77 02 00 00 20 00 00 00 r2 >>= 32
+> >      3095:       b7 01 00 00 06 00 00 00 r1 = 6
+> >      3096:       15 02 02 00 01 00 00 00 if r2 == 1 goto +2 <LBB12_413>
+> >      3097:       18 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 r1 = 0 ll
+> > 
+> > 00000000000060d8 <LBB12_413>:
+> > ;       return __encap_and_redirect_with_nodeid(ctx, tunnel->ip4,
+> > seclabel, monitor);
+> > 
+> > 
+> > b: BPF byte code  after C code change:
+> > 
+> > the C code diff change:
+> > 
+> > diff --git a/bpf/lib/encap.h b/bpf/lib/encap.h
+> > index dfd87bd82..19199429d 100644
+> > --- a/bpf/lib/encap.h
+> > +++ b/bpf/lib/encap.h
+> > @@ -187,6 +187,8 @@ encap_and_redirect_lxc(struct __ctx_buff *ctx, __u32
+> > tunnel_endpoint,
+> >                         struct endpoint_key *key, __u32 seclabel, __u32
+> > monitor)
+> >   {
+> >          struct endpoint_key *tunnel;
+> > +#define VTEP_MAC  { .addr = { 0xce, 0x72, 0xa7, 0x03, 0x88, 0x58 } }
+> > +       union macaddr vtep_mac = VTEP_MAC;
+> >            if (tunnel_endpoint) {
+> >   #ifdef ENABLE_IPSEC
+> > @@ -221,6 +223,8 @@ encap_and_redirect_lxc(struct __ctx_buff *ctx, __u32
+> > tunnel_endpoint,
+> >                                                  seclabel);
+> >          }
+> >   #endif
+> > +       if (eth_store_daddr(ctx, (__u8 *) &vtep_mac.addr, 0) < 0)
+> > +               return DROP_WRITE_ERROR;
+> >          return __encap_and_redirect_with_nodeid(ctx, tunnel->ip4,
+> > seclabel, monitor);
+> >   }
+> > 
+> > the result BPF byte code
+> > 
+> > 0000000000004468 <LBB3_274>:
+> >      2189:       bf a2 00 00 00 00 00 00 r2 = r10
+> > ;       tunnel = map_lookup_elem(&TUNNEL_MAP, key);
+> >      2190:       07 02 00 00 50 ff ff ff r2 += -176
+> >      2191:       18 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 r1 = 0 ll
+> >      2193:       85 00 00 00 01 00 00 00 call 1
+> >      2194:       bf 07 00 00 00 00 00 00 r7 = r0
+> >      2195:       79 a6 48 ff 00 00 00 00 r6 = *(u64 *)(r10 - 184)
+> > ;       if (!tunnel)
+> >      2196:       55 07 94 00 00 00 00 00 if r7 != 0 goto +148 <LBB3_289>
+> > 
+> > 00000000000044a8 <LBB3_275>:
+> > ;       __u8 new_ttl, ttl = ip4->ttl;
+> >      2197:       79 a1 38 ff 00 00 00 00 r1 = *(u64 *)(r10 - 200)
+> >      2198:       71 13 16 00 00 00 00 00 r3 = *(u8 *)(r1 + 22)
+> > ;       if (ttl <= 1)
+> >      2199:       25 03 01 00 01 00 00 00 if r3 > 1 goto +1 <LBB3_277>
+> >      2200:       05 00 20 ff 00 00 00 00 goto -224 <LBB3_253>
+> > 
+> > 
+> > You can see that:
+> > 
+> > before change:  <LBB12_410>
+> > after change    <LBB3_274>
+> > 
+> > is different that <LBB12_410> has instructions 3091, 3092... but
+> > <LBB3_274> end with instruction 2196
+> > 
+> > before change: <LBB12_413> follows <LBB12_410>
+> > after change: <LBB3_275> follows <LBB3_274>
+> > 
+> > <LBB12_413> and <LBB3_275> is very much different
+> > 
+> > and  <LBB3_275> instruction 2198 is the one with "R1 invalid mem access
+> > 'inv'"
+> > 
+> > Why <LBB3_275> follows <LBB3_274> ? from C code, <LBB3_275> is not close
+> > to <LBB3_274>.
+> 
+> The cilium code has a lot of functions inlined and after inlining, clang may
+> do reordering based on its internal heuristics. It is totally possible slight
+> code change may cause generated codes quite different.
+> 
+> Regarding to
+> > and  <LBB3_275> instruction 2198 is the one with "R1 invalid mem access
+> > 'inv'"
+> 
+> 
+> > 00000000000044a8 <LBB3_275>:
+> > ;       __u8 new_ttl, ttl = ip4->ttl;
+> >      2197:       79 a1 38 ff 00 00 00 00 r1 = *(u64 *)(r10 - 200)
+> >      2198:       71 13 16 00 00 00 00 00 r3 = *(u8 *)(r1 + 22)
+> > ;       if (ttl <= 1)
+> >      2199:       25 03 01 00 01 00 00 00 if r3 > 1 goto +1 <LBB3_277>
+> >      2200:       05 00 20 ff 00 00 00 00 goto -224 <LBB3_253>
+> 
+> Looks like "ip4" is spilled on the stack. and maybe the stack save/restore for
+> "ip4" does not preserve its original type.
+> This mostly happens to old kernels, I think.
+> 
 
-3) Streamline error reporting changes in libbpf as planned out in the
-   'libbpf: the road to v1.0' effort, from Andrii Nakryiko.
+the kernel 4.18 on Centos8, I also custom build most recent mainline git 
+kernel 5.13 on Centos8, I recall I got same invaid memory access 
 
-4) Add broadcast support to xdp_redirect_map(), from Hangbin Liu.
+> If you have verifier log, it may help identify issues easily.
 
-5) Extends bpf_map_lookup_and_delete_elem() functionality to 4 more map
-   types, that is, {LRU_,PERCPU_,LRU_PERCPU_,}HASH, from Denis Salopek.
+Here is the complete verifer log, I skipped the BTF part
 
-6) Support new LLVM relocations in libbpf to make them more linker friendly,
-   also add a doc to describe the BPF backend relocations, from Yonghong Song.
+level=warning msg="Prog section '2/7' rejected: Permission denied (13)!" 
+subsys=datapath-loader
+level=warning msg=" - Type:         3" subsys=datapath-loader
+level=warning msg=" - Attach Type:  0" subsys=datapath-loader
+level=warning msg=" - Instructions: 2488 (0 over limit)" 
+subsys=datapath-loader
+level=warning msg=" - License:      GPL" subsys=datapath-loader
+level=warning subsys=datapath-loader
+level=warning msg="Verifier analysis:" subsys=datapath-loader
+level=warning subsys=datapath-loader
+level=warning msg="Skipped 158566 bytes, use 'verb' option for the full 
+verbose log." subsys=datapath-loader
+level=warning msg="[...]" subsys=datapath-loader
+level=warning msg="-136=????00mm fp-144=00000000 fp-152=0000mmmm 
+fp-160=????mmmm fp-168=mmmmmmmm fp-176=mmmmmmmm fp-184=ctx fp-192=mmmmmmmm 
+fp-200=inv fp-208=mmmmmmmm fp-216=inv3 fp-224=mmmmmmmm fp-232=mmmmmmmm 
+fp-240=inv128" subsys=datapath-loader
+level=warning msg="2437: (0f) r1 += r8" subsys=datapath-loader
+level=warning msg="2438: (7b) *(u64 *)(r0 +8) = r1" subsys=datapath-loader
+level=warning msg=" R0_w=map_value(id=0,off=0,ks=8,vs=16,imm=0) 
+R1_w=inv(id=0) R6=ctx(id=0,off=0,imm=0) 
+R7=inv(id=0,umax_value=128,var_off=(0x0; 0xff)) 
+R8=inv(id=0,umax_value=128,var_off=(0x0; 0xff)) R9=invP0 R10=fp0 
+fp-8=mmmmmmmm fp-16=????mmmm fp-24=mmmmmmmm fp-32=mmmmmmmm fp-40=mmmmmmmm 
+fp-48=mmmmmmmm fp-88=mmmmmmmm fp-96=00000000 fp-104=00000000 
+fp-112=??mmmmmm fp-120=mmmmmmmm fp-128=??mmmmmm fp-136=????00mm 
+fp-144=00000000 fp-152=0000mmmm fp-160=????mmmm fp-168=mmmmmmmm 
+fp-176=mmmmmmmm fp-184=ctx fp-192=mmmmmmmm fp-200=inv fp-208=mmmmmmmm 
+fp-216=inv3 fp-224=mmmmmmmm fp-232=mmmmmmmm fp-240=inv128" 
+subsys=datapath-loader
+level=warning msg="2439: (05) goto pc+41" subsys=datapath-loader
+level=warning msg="2481: (18) r2 = 0x5c7" subsys=datapath-loader
+level=warning msg="2483: (67) r2 <<= 32" subsys=datapath-loader
+level=warning msg="2484: (77) r2 >>= 32" subsys=datapath-loader
+level=warning msg="2485: (b7) r1 = 6" subsys=datapath-loader
+level=warning msg="2486: (15) if r2 == 0x1 goto pc-341" 
+subsys=datapath-loader
+level=warning msg="last_idx 2486 first_idx 2481" subsys=datapath-loader
+level=warning msg="regs=4 stack=0 before 2485: (b7) r1 = 6" 
+subsys=datapath-loader
+level=warning msg="regs=4 stack=0 before 2484: (77) r2 >>= 32" 
+subsys=datapath-loader
+level=warning msg="regs=4 stack=0 before 2483: (67) r2 <<= 32" 
+subsys=datapath-loader
+level=warning msg="regs=4 stack=0 before 2481: (18) r2 = 0x5c7" 
+subsys=datapath-loader
+level=warning msg="2487: (05) goto pc-344" subsys=datapath-loader
+level=warning msg="2144: (18) r1 = 0x5c7" subsys=datapath-loader
+level=warning msg="2146: (61) r2 = *(u32 *)(r6 +68)" 
+subsys=datapath-loader
+level=warning msg="2147: (b7) r3 = 39" subsys=datapath-loader
+level=warning msg="2148: (63) *(u32 *)(r10 -76) = r3" 
+subsys=datapath-loader
+level=warning msg="2149: (b7) r3 = 1" subsys=datapath-loader
+level=warning msg="2150: (6b) *(u16 *)(r10 -90) = r3" 
+subsys=datapath-loader
+level=warning msg="2151: (63) *(u32 *)(r10 -96) = r8" 
+subsys=datapath-loader
+level=warning msg="2152: (63) *(u32 *)(r10 -100) = r2" 
+subsys=datapath-loader
+level=warning msg="2153: (18) r2 = 0x1d3" subsys=datapath-loader
+level=warning msg="2155: (6b) *(u16 *)(r10 -102) = r2" 
+subsys=datapath-loader
+level=warning msg="2156: (b7) r2 = 1028" subsys=datapath-loader
+level=warning msg="2157: (6b) *(u16 *)(r10 -104) = r2" 
+subsys=datapath-loader
+level=warning msg="2158: (b7) r2 = 0" subsys=datapath-loader
+level=warning msg="2159: (63) *(u32 *)(r10 -80) = r2" 
+subsys=datapath-loader
+level=warning msg="last_idx 2159 first_idx 2481" subsys=datapath-loader
+level=warning msg="regs=4 stack=0 before 2158: (b7) r2 = 0" 
+subsys=datapath-loader
+level=warning msg="2160: (63) *(u32 *)(r10 -84) = r2" 
+subsys=datapath-loader
+level=warning msg="2161: (7b) *(u64 *)(r10 -72) = r2" 
+subsys=datapath-loader
+level=warning msg="2162: (7b) *(u64 *)(r10 -64) = r2" 
+subsys=datapath-loader
+level=warning msg="2163: (63) *(u32 *)(r10 -88) = r1" 
+subsys=datapath-loader
+level=warning msg="2164: (6b) *(u16 *)(r10 -92) = r7" 
+subsys=datapath-loader
+level=warning msg="2165: (67) r7 <<= 32" subsys=datapath-loader
+level=warning msg="2166: (18) r1 = 0xffffffff" subsys=datapath-loader
+level=warning msg="2168: (4f) r7 |= r1" subsys=datapath-loader
+level=warning msg="2169: (bf) r4 = r10" subsys=datapath-loader
+level=warning msg="2170: (07) r4 += -104" subsys=datapath-loader
+level=warning msg="2171: (bf) r1 = r6" subsys=datapath-loader
+level=warning msg="2172: (18) r2 = 0xffffa0c68cae1600" 
+subsys=datapath-loader
+level=warning msg="2174: (bf) r3 = r7" subsys=datapath-loader
+level=warning msg="2175: (b7) r5 = 48" subsys=datapath-loader
+level=warning msg="2176: (85) call bpf_perf_event_output#25" 
+subsys=datapath-loader
+level=warning msg="last_idx 2176 first_idx 2481" subsys=datapath-loader
+level=warning msg="regs=20 stack=0 before 2175: (b7) r5 = 48" 
+subsys=datapath-loader
+level=warning msg="2177: (b7) r1 = 39" subsys=datapath-loader
+level=warning msg="2178: (b7) r2 = 0" subsys=datapath-loader
+level=warning msg="2179: (85) call bpf_redirect#23" subsys=datapath-loader
+level=warning msg="2180: (bf) r9 = r0" subsys=datapath-loader
+level=warning msg="2181: (bf) r1 = r9" subsys=datapath-loader
+level=warning msg="2182: (67) r1 <<= 32" subsys=datapath-loader
+level=warning msg="2183: (77) r1 >>= 32" subsys=datapath-loader
+level=warning msg="2184: (15) if r1 == 0x0 goto pc+57" 
+subsys=datapath-loader
+level=warning msg=" R0_w=inv(id=0) 
+R1_w=inv(id=0,umax_value=2147483647,var_off=(0x0; 0x7fffffff)) 
+R6=ctx(id=0,off=0,imm=0) 
+R7=inv(id=0,umin_value=4294967295,umax_value=1099511627775,var_off=(0xffffffff; 
+0xff00000000),s32_min_value=-1,s32_max_value=0,u32_max_value=0) 
+R8=inv(id=0,umax_value=128,var_off=(0x0; 0xff)) R9_w=inv(id=0) R10=fp0 
+fp-8=mmmmmmmm fp-16=????mmmm fp-24=mmmmmmmm fp-32=mmmmmmmm fp-40=mmmmmmmm 
+fp-48=mmmmmmmm fp-64=mmmmmmmm fp-72=mmmmmmmm fp-80=mmmmmmmm fp-88=mmmmmmmm 
+fp-96=mmmmmmmm fp-104=mmmmmmmm fp-112=??mmmmmm fp-120=mmmmmmmm 
+fp-128=??mmmmmm fp-136=????00mm fp-144=00000000 fp-152=0000mmmm 
+fp-160=????mmmm fp-168=mmmmmmmm fp-176=mmmmmmmm fp-184=ctx fp-192=mmmmmmmm 
+fp-200=inv fp-208=mmmmmmmm fp-216=inv3 fp-224=mmmmmmmm fp-232=mmmmmmmm 
+fp-240=inv128" subsys=datapath-loader
+level=warning msg="2185: (18) r2 = 0xffffff60" subsys=datapath-loader
+level=warning msg="2187: (1d) if r1 == r2 goto pc+9" 
+subsys=datapath-loader
+level=warning subsys=datapath-loader
+level=warning msg="from 2187 to 2197: R0=inv(id=0) R1=inv4294967136 
+R2=inv4294967136 R6=ctx(id=0,off=0,imm=0) 
+R7=inv(id=0,umin_value=4294967295,umax_value=1099511627775,var_off=(0xffffffff; 
+0xff00000000),s32_min_value=-1,s32_max_value=0,u32_max_value=0) 
+R8=inv(id=0,umax_value=128,var_off=(0x0; 0xff)) R9=inv(id=0) R10=fp0 
+fp-8=mmmmmmmm fp-16=????mmmm fp-24=mmmmmmmm fp-32=mmmmmmmm fp-40=mmmmmmmm 
+fp-48=mmmmmmmm fp-64=mmmmmmmm fp-72=mmmmmmmm fp-80=mmmmmmmm fp-88=mmmmmmmm 
+fp-96=mmmmmmmm fp-104=mmmmmmmm fp-112=??mmmmmm fp-120=mmmmmmmm 
+fp-128=??mmmmmm fp-136=????00mm fp-144=00000000 fp-152=0000mmmm 
+fp-160=????mmmm fp-168=mmmmmmmm fp-176=mmmmmmmm fp-184=ctx fp-192=mmmmmmmm 
+fp-200=inv fp-208=mmmmmmmm fp-216=inv3 fp-224=mmmmmmmm fp-232=mmmmmmmm 
+fp-240=inv128" subsys=datapath-loader
+level=warning msg="2197: (79) r1 = *(u64 *)(r10 -200)" 
+subsys=datapath-loader
+level=warning msg="2198: (71) r3 = *(u8 *)(r1 +22)" subsys=datapath-loader
+level=warning msg="R1 invalid mem access 'inv'" subsys=datapath-loader
+level=warning msg="processed 1802 insns (limit 1000000) 
+max_states_per_insn 4 total_states 103 peak_states 103 mark_read 49" 
+subsys=datapath-loader
+level=warning subsys=datapath-loader
+level=warning msg="Error filling program arrays!" subsys=datapath-loader
+level=warning msg="Unable to load program" subsys=datapath-loader
+ 
 
-7) Silence long standing KUBSAN complaints on register-based shifts in
-   interpreter, from Daniel Borkmann and Eric Biggers.
 
-8) Add dummy PT_REGS macros in libbpf to fail BPF program compilation when
-   target arch cannot be determined, from Lorenz Bauer.
 
-9) Extend AF_XDP to support large umems with 1M+ pages, from Magnus Karlsson.
-
-10) Fix two minor libbpf tc BPF API issues, from Kumar Kartikeya Dwivedi.
-
-11) Move libbpf BPF_SEQ_PRINTF/BPF_SNPRINTF macros that can be used by BPF
-    programs to bpf_helpers.h header, from Florent Revest.
-
-Please consider pulling these changes from:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
-
-Thanks a lot!
-
-Also thanks to reporters, reviewers and testers of commits in this pull-request:
-
-Alexei Starovoitov, Andrii Nakryiko, Benjamin Herrenschmidt, Björn 
-Töpel, Colin Ian King, Dan Siemon, Edward Cree, Eric Dumazet, Hulk 
-Robot, Jesper Dangaard Brouer, John Fastabend, Kuniyuki Iwashima, Kurt 
-Manucredo, Martin KaFai Lau, Quentin Monnet, Randy Dunlap, Toke 
-Høiland-Jørgensen, Yonghong Song
-
-----------------------------------------------------------------
-
-The following changes since commit ec7d6dd870d421a853ffa692d4bce5783a519342:
-
-  ethernet: ucc_geth: Use kmemdup() rather than kmalloc+memcpy (2021-05-23 18:51:42 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git 
-
-for you to fetch changes up to f20792d425d2efd2680f2855c1e3fec01c2e569e:
-
-  selftests/bpf: Fix selftests build with old system-wide headers (2021-06-17 13:05:10 +0200)
-
-----------------------------------------------------------------
-Aditya Srivastava (1):
-      samples: bpf: Ix kernel-doc syntax in file header
-
-Alexei Starovoitov (1):
-      Merge branch 'libbpf: error reporting changes for v1.0'
-
-Andrii Nakryiko (11):
-      Merge branch 'Add lookup_and_delete_elem support to BPF hash map types'
-      libbpf: Add libbpf_set_strict_mode() API to turn on libbpf 1.0 behaviors
-      selftests/bpf: Turn on libbpf 1.0 mode and fix all IS_ERR checks
-      libbpf: Streamline error reporting for low-level APIs
-      libbpf: Streamline error reporting for high-level APIs
-      bpftool: Set errno on skeleton failures and propagate errors
-      libbpf: Move few APIs from 0.4 to 0.5 version
-      libbpf: Refactor header installation portions of Makefile
-      libbpf: Install skel_internal.h header used from light skeletons
-      selftests/bpf: Add xdp_redirect_multi into .gitignore
-      selftests/bpf: Fix selftests build with old system-wide headers
-
-Daniel Borkmann (3):
-      Merge branch 'bpf-xdp-bcast'
-      Merge branch 'bpf-sock-migration'
-      bpf: Fix up register-based shifts in interpreter to silence KUBSAN
-
-Daniel Xu (1):
-      selftests/bpf: Whitelist test_progs.h from .gitignore
-
-Denis Salopek (3):
-      bpf: Add lookup_and_delete_elem support to hashtab
-      bpf: Extend libbpf with bpf_map_lookup_and_delete_elem_flags
-      selftests/bpf: Add bpf_lookup_and_delete_elem tests
-
-Florent Revest (1):
-      libbpf: Move BPF_SEQ_PRINTF and BPF_SNPRINTF to bpf_helpers.h
-
-Hangbin Liu (4):
-      xdp: Extend xdp_redirect_map with broadcast support
-      sample/bpf: Add xdp_redirect_map_multi for redirect_map broadcast test
-      selftests/bpf: Add xdp_redirect_multi test
-      bpf, devmap: Remove drops variable from bq_xmit_all()
-
-Harishankar Vishwanathan (1):
-      bpf, tnums: Provably sound, faster, and more precise algorithm for tnum_mul
-
-Jean-Philippe Brucker (1):
-      tools/bpftool: Fix cross-build
-
-Jesper Dangaard Brouer (1):
-      bpf: Run devmap xdp_prog on flush instead of bulk enqueue
-
-Joe Stringer (1):
-      selftests, bpf: Make docs tests fail more reliably
-
-Kumar Kartikeya Dwivedi (2):
-      libbpf: Remove unneeded check for flags during tc detach
-      libbpf: Set NLM_F_EXCL when creating qdisc
-
-Kuniyuki Iwashima (11):
-      net: Introduce net.ipv4.tcp_migrate_req.
-      tcp: Add num_closed_socks to struct sock_reuseport.
-      tcp: Keep TCP_CLOSE sockets in the reuseport group.
-      tcp: Add reuseport_migrate_sock() to select a new listener.
-      tcp: Migrate TCP_ESTABLISHED/TCP_SYN_RECV sockets in accept queues.
-      tcp: Migrate TCP_NEW_SYN_RECV requests at retransmitting SYN+ACKs.
-      tcp: Migrate TCP_NEW_SYN_RECV requests at receiving the final ACK.
-      bpf: Support BPF_FUNC_get_socket_cookie() for BPF_PROG_TYPE_SK_REUSEPORT.
-      bpf: Support socket migration by eBPF.
-      libbpf: Set expected_attach_type for BPF_PROG_TYPE_SK_REUSEPORT.
-      bpf: Test BPF_SK_REUSEPORT_SELECT_OR_MIGRATE.
-
-Lorenz Bauer (1):
-      libbpf: Fail compilation if target arch is missing
-
-Magnus Karlsson (1):
-      xsk: Use kvcalloc to support large umems
-
-Michal Suchanek (1):
-      libbpf: Fix pr_warn type warnings on 32bit
-
-Shuyi Cheng (1):
-      bpf: Fix typo in kernel/bpf/bpf_lsm.c
-
-Stanislav Fomichev (1):
-      libbpf: Skip bpf_object__probe_loading for light skeleton
-
-Wang Hai (3):
-      libbpf: Simplify the return expression of bpf_object__init_maps function
-      samples/bpf: Add missing option to xdp_fwd usage
-      samples/bpf: Add missing option to xdp_sample_pkts usage
-
-Yonghong Song (2):
-      libbpf: Add support for new llvm bpf relocations
-      bpf, docs: Add llvm_reloc.rst to explain llvm bpf relocations
-
-Zhen Lei (1):
-      bpf: Fix spelling mistakes
-
-Zhihao Cheng (1):
-      tools/bpftool: Fix error return code in do_batch()
-
- Documentation/bpf/index.rst                        |   1 +
- Documentation/bpf/llvm_reloc.rst                   | 240 +++++++++
- Documentation/networking/ip-sysctl.rst             |  25 +
- include/linux/bpf.h                                |  23 +
- include/linux/bpf_local_storage.h                  |   4 +-
- include/linux/filter.h                             |  21 +-
- include/net/netns/ipv4.h                           |   1 +
- include/net/sock_reuseport.h                       |   9 +-
- include/net/xdp.h                                  |   1 +
- include/trace/events/xdp.h                         |   6 +-
- include/uapi/linux/bpf.h                           |  43 +-
- kernel/bpf/bpf_inode_storage.c                     |   2 +-
- kernel/bpf/bpf_lsm.c                               |   2 +-
- kernel/bpf/btf.c                                   |   6 +-
- kernel/bpf/core.c                                  |  61 ++-
- kernel/bpf/cpumap.c                                |   3 +-
- kernel/bpf/devmap.c                                | 305 +++++++++--
- kernel/bpf/hashtab.c                               | 102 +++-
- kernel/bpf/preload/iterators/iterators.bpf.c       |   1 -
- kernel/bpf/reuseport_array.c                       |   2 +-
- kernel/bpf/syscall.c                               |  47 +-
- kernel/bpf/tnum.c                                  |  41 +-
- kernel/bpf/trampoline.c                            |   2 +-
- kernel/bpf/verifier.c                              |  12 +-
- net/core/filter.c                                  |  60 ++-
- net/core/sock_reuseport.c                          | 359 +++++++++++--
- net/core/xdp.c                                     |  28 ++
- net/ipv4/inet_connection_sock.c                    | 191 ++++++-
- net/ipv4/inet_hashtables.c                         |   2 +-
- net/ipv4/sysctl_net_ipv4.c                         |   9 +
- net/ipv4/tcp_ipv4.c                                |  20 +-
- net/ipv4/tcp_minisocks.c                           |   4 +-
- net/ipv6/tcp_ipv6.c                                |  14 +-
- net/xdp/xdp_umem.c                                 |   7 +-
- net/xdp/xskmap.c                                   |   3 +-
- samples/bpf/Makefile                               |   3 +
- samples/bpf/ibumad_kern.c                          |   2 +-
- samples/bpf/ibumad_user.c                          |   2 +-
- samples/bpf/xdp_fwd_user.c                         |   2 +
- samples/bpf/xdp_redirect_map_multi_kern.c          |  88 ++++
- samples/bpf/xdp_redirect_map_multi_user.c          | 302 +++++++++++
- samples/bpf/xdp_sample_pkts_user.c                 |   3 +-
- tools/bpf/bpftool/Makefile                         |   5 +-
- tools/bpf/bpftool/gen.c                            |  27 +-
- tools/bpf/bpftool/main.c                           |   4 +-
- tools/include/uapi/linux/bpf.h                     |  43 +-
- tools/lib/bpf/Makefile                             |  18 +-
- tools/lib/bpf/bpf.c                                | 179 +++++--
- tools/lib/bpf/bpf.h                                |   2 +
- tools/lib/bpf/bpf_helpers.h                        |  66 +++
- tools/lib/bpf/bpf_prog_linfo.c                     |  18 +-
- tools/lib/bpf/bpf_tracing.h                        | 108 ++--
- tools/lib/bpf/btf.c                                | 302 +++++------
- tools/lib/bpf/btf_dump.c                           |  14 +-
- tools/lib/bpf/libbpf.c                             | 535 +++++++++++---------
- tools/lib/bpf/libbpf.h                             |   1 +
- tools/lib/bpf/libbpf.map                           |  10 +-
- tools/lib/bpf/libbpf_errno.c                       |   7 +-
- tools/lib/bpf/libbpf_internal.h                    |  59 +++
- tools/lib/bpf/libbpf_legacy.h                      |  59 +++
- tools/lib/bpf/linker.c                             |  25 +-
- tools/lib/bpf/netlink.c                            |  85 ++--
- tools/lib/bpf/ringbuf.c                            |  26 +-
- tools/testing/selftests/bpf/.gitignore             |   3 +
- tools/testing/selftests/bpf/Makefile               |   3 +-
- tools/testing/selftests/bpf/Makefile.docs          |   3 +-
- tools/testing/selftests/bpf/README.rst             |  19 +
- tools/testing/selftests/bpf/bench.c                |   1 +
- tools/testing/selftests/bpf/benchs/bench_rename.c  |   2 +-
- .../testing/selftests/bpf/benchs/bench_ringbufs.c  |   6 +-
- tools/testing/selftests/bpf/benchs/bench_trigger.c |   2 +-
- tools/testing/selftests/bpf/network_helpers.c      |   2 +-
- tools/testing/selftests/bpf/network_helpers.h      |   1 +
- .../selftests/bpf/prog_tests/attach_probe.c        |  12 +-
- tools/testing/selftests/bpf/prog_tests/bpf_iter.c  |  31 +-
- .../testing/selftests/bpf/prog_tests/bpf_tcp_ca.c  |   8 +-
- tools/testing/selftests/bpf/prog_tests/btf.c       |  93 ++--
- tools/testing/selftests/bpf/prog_tests/btf_dump.c  |   8 +-
- tools/testing/selftests/bpf/prog_tests/btf_write.c |   4 +-
- .../selftests/bpf/prog_tests/cg_storage_multi.c    |  84 ++--
- .../selftests/bpf/prog_tests/cgroup_attach_multi.c |   2 +-
- .../testing/selftests/bpf/prog_tests/cgroup_link.c |  14 +-
- .../bpf/prog_tests/cgroup_skb_sk_lookup.c          |   2 +-
- tools/testing/selftests/bpf/prog_tests/check_mtu.c |   2 +-
- .../testing/selftests/bpf/prog_tests/core_reloc.c  |  15 +-
- .../selftests/bpf/prog_tests/fexit_bpf2bpf.c       |  25 +-
- .../selftests/bpf/prog_tests/flow_dissector.c      |   2 +-
- .../bpf/prog_tests/flow_dissector_reattach.c       |  10 +-
- .../selftests/bpf/prog_tests/get_stack_raw_tp.c    |  10 +-
- .../bpf/prog_tests/get_stackid_cannot_attach.c     |   9 +-
- tools/testing/selftests/bpf/prog_tests/hashmap.c   |   9 +-
- tools/testing/selftests/bpf/prog_tests/kfree_skb.c |  19 +-
- tools/testing/selftests/bpf/prog_tests/ksyms_btf.c |   3 +-
- .../selftests/bpf/prog_tests/link_pinning.c        |   7 +-
- .../selftests/bpf/prog_tests/lookup_and_delete.c   | 288 +++++++++++
- .../selftests/bpf/prog_tests/migrate_reuseport.c   | 559 +++++++++++++++++++++
- tools/testing/selftests/bpf/prog_tests/obj_name.c  |   8 +-
- .../selftests/bpf/prog_tests/perf_branches.c       |   4 +-
- .../testing/selftests/bpf/prog_tests/perf_buffer.c |   2 +-
- .../selftests/bpf/prog_tests/perf_event_stackmap.c |   3 +-
- .../testing/selftests/bpf/prog_tests/probe_user.c  |   7 +-
- .../selftests/bpf/prog_tests/prog_run_xattr.c      |   4 +-
- .../selftests/bpf/prog_tests/raw_tp_test_run.c     |   4 +-
- .../testing/selftests/bpf/prog_tests/rdonly_maps.c |   7 +-
- .../selftests/bpf/prog_tests/reference_tracking.c  |   2 +-
- .../selftests/bpf/prog_tests/resolve_btfids.c      |   2 +-
- .../selftests/bpf/prog_tests/ringbuf_multi.c       |   2 +-
- .../selftests/bpf/prog_tests/select_reuseport.c    |  53 +-
- .../testing/selftests/bpf/prog_tests/send_signal.c |   3 +-
- tools/testing/selftests/bpf/prog_tests/sk_lookup.c |   2 +-
- .../testing/selftests/bpf/prog_tests/sock_fields.c |  14 +-
- .../selftests/bpf/prog_tests/sockmap_basic.c       |   8 +-
- .../selftests/bpf/prog_tests/sockmap_ktls.c        |   2 +-
- .../selftests/bpf/prog_tests/sockmap_listen.c      |  10 +-
- .../bpf/prog_tests/stacktrace_build_id_nmi.c       |   3 +-
- .../selftests/bpf/prog_tests/stacktrace_map.c      |   2 +-
- .../bpf/prog_tests/stacktrace_map_raw_tp.c         |   5 +-
- .../selftests/bpf/prog_tests/tcp_hdr_options.c     |  15 +-
- .../selftests/bpf/prog_tests/test_overhead.c       |  12 +-
- .../selftests/bpf/prog_tests/trampoline_count.c    |  14 +-
- tools/testing/selftests/bpf/prog_tests/udp_limit.c |   7 +-
- .../testing/selftests/bpf/prog_tests/xdp_bpf2bpf.c |   2 +-
- tools/testing/selftests/bpf/prog_tests/xdp_link.c  |   8 +-
- .../selftests/bpf/progs/bpf_iter_bpf_hash_map.c    |   1 -
- .../testing/selftests/bpf/progs/bpf_iter_bpf_map.c |   1 -
- .../selftests/bpf/progs/bpf_iter_ipv6_route.c      |   1 -
- .../testing/selftests/bpf/progs/bpf_iter_netlink.c |   1 -
- tools/testing/selftests/bpf/progs/bpf_iter_task.c  |   1 -
- .../selftests/bpf/progs/bpf_iter_task_btf.c        |   1 -
- .../selftests/bpf/progs/bpf_iter_task_file.c       |   1 -
- .../selftests/bpf/progs/bpf_iter_task_stack.c      |   1 -
- .../selftests/bpf/progs/bpf_iter_task_vma.c        |   1 -
- tools/testing/selftests/bpf/progs/bpf_iter_tcp4.c  |   1 -
- tools/testing/selftests/bpf/progs/bpf_iter_tcp6.c  |   1 -
- tools/testing/selftests/bpf/progs/bpf_iter_udp4.c  |   1 -
- tools/testing/selftests/bpf/progs/bpf_iter_udp6.c  |   1 -
- .../selftests/bpf/progs/test_lookup_and_delete.c   |  26 +
- .../selftests/bpf/progs/test_migrate_reuseport.c   | 135 +++++
- tools/testing/selftests/bpf/progs/test_snprintf.c  |   1 -
- .../selftests/bpf/progs/xdp_redirect_multi_kern.c  |  94 ++++
- tools/testing/selftests/bpf/test_doc_build.sh      |   1 +
- tools/testing/selftests/bpf/test_lru_map.c         |   8 +
- tools/testing/selftests/bpf/test_maps.c            | 185 ++++---
- tools/testing/selftests/bpf/test_progs.c           |   3 +
- tools/testing/selftests/bpf/test_progs.h           |   9 +-
- tools/testing/selftests/bpf/test_tcpnotify_user.c  |   7 +-
- .../selftests/bpf/test_xdp_redirect_multi.sh       | 204 ++++++++
- tools/testing/selftests/bpf/xdp_redirect_multi.c   | 226 +++++++++
- 148 files changed, 4779 insertions(+), 1248 deletions(-)
- create mode 100644 Documentation/bpf/llvm_reloc.rst
- create mode 100644 samples/bpf/xdp_redirect_map_multi_kern.c
- create mode 100644 samples/bpf/xdp_redirect_map_multi_user.c
- create mode 100644 tools/lib/bpf/libbpf_legacy.h
- create mode 100644 tools/testing/selftests/bpf/prog_tests/lookup_and_delete.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_lookup_and_delete.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_migrate_reuseport.c
- create mode 100644 tools/testing/selftests/bpf/progs/xdp_redirect_multi_kern.c
- create mode 100755 tools/testing/selftests/bpf/test_xdp_redirect_multi.sh
- create mode 100644 tools/testing/selftests/bpf/xdp_redirect_multi.c
+> > 
+> > 
+> > 2, Can I assume the verifier is to simulate the order of BPF byte
+> > code execution in run time, like if without any jump or goto in
+> > <LBB3_274>, <LBB3_275> will be executed after <LBB3_274>?
+> 
+> The verifier will try to verify both paths, jumping to LBB3_289
+> or fall back to LBB3_275.
+> 
+> > 
+> > 
+> > 
+> > Enterprise Network Engineer
+> > F5 Networks Inc
+> > https://www.youtube.com/c/VincentLi
+> > 
+> 
