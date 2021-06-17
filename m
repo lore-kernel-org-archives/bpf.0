@@ -2,65 +2,63 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-13.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A1EEC2B9F4
-	for <bpf@archiver.kernel.org>; Thu, 17 Jun 2021 21:28:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 23530C49EA2
+	for <bpf@archiver.kernel.org>; Thu, 17 Jun 2021 21:28:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1E9A460D07
-	for <bpf@archiver.kernel.org>; Thu, 17 Jun 2021 21:28:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0E95B613D5
+	for <bpf@archiver.kernel.org>; Thu, 17 Jun 2021 21:28:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232939AbhFQVaH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 17 Jun 2021 17:30:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:31862 "EHLO
+        id S231319AbhFQVaJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 17 Jun 2021 17:30:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:55671 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230334AbhFQVaH (ORCPT
+        by vger.kernel.org with ESMTP id S232406AbhFQVaH (ORCPT
         <rfc822;bpf@vger.kernel.org>); Thu, 17 Jun 2021 17:30:07 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
         s=mimecast20190719; t=1623965278;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=x+C1vvBih2DDvMDumUaYzwO9FAV6D2CItQN3YHn0G7w=;
-        b=UyVLYk+R40TPN2gjxxJ6AnCrY6BqKrtvb/0N0vPT7aiuiIw/e9n0o+5Jhq00VvueZDnc5v
-        ANOLoNNYA3sOIM+A0ZDWza8+EMrc8CWERzq9bOFS9Vw2Lt2nZxhSYw4Q910PAv0E9Fc2J4
-        /bZRNSO5Pd3OMB3LK6crZ5N4dmaDIm0=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-394-ZpfDd0uFMj-HNA11kmiSeA-1; Thu, 17 Jun 2021 17:27:57 -0400
-X-MC-Unique: ZpfDd0uFMj-HNA11kmiSeA-1
-Received: by mail-ed1-f69.google.com with SMTP id q7-20020aa7cc070000b029038f59dab1c5so2368957edt.23
+         content-transfer-encoding:content-transfer-encoding;
+        bh=rxampRGzjcE7BXi+IGLmLgs/KjriV77RZF0FeFiCmCs=;
+        b=Vcb48Q+7Dp5IAmoeUS6WVaJfEaEMIkc51kgRHbqkBNF7Lam891pg6KX+8AbnrEJrtPnVVA
+        vsptNEt7zAgUy653WBlz7CL+KYeVksBHMpVYu7bjK+Nd1Ap77rBMV4QO3fUsXKe/amMGVT
+        7r4PYDLXIO8if12b4BIEYvzSgTq5JPA=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-54-jyZO1OENMhCgmaAHzod8nw-1; Thu, 17 Jun 2021 17:27:57 -0400
+X-MC-Unique: jyZO1OENMhCgmaAHzod8nw-1
+Received: by mail-ed1-f70.google.com with SMTP id y18-20020a0564022712b029038ffac1995eso2399295edd.12
         for <bpf@vger.kernel.org>; Thu, 17 Jun 2021 14:27:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=x+C1vvBih2DDvMDumUaYzwO9FAV6D2CItQN3YHn0G7w=;
-        b=M/aAkeQ0arlmZlAXoorx02jx7W5MJQwcbudXuvKyLGB9et9swjo9DQaL2YW1g+qBU9
-         UqaSMZSORozFdoZhRzkfmvaCfYXSltk2Q/8FHsNNqhFILTkVF6yasFVQdVa7uxaOME2z
-         dqezskooGmnGptWvo+zrG4XAu6SC9S9qK79SHhRROpf7CyTVxO2/0EasiWH//sAAsKWn
-         dQior7JVgoVR2DNJrafpVftlANhKN3lVS+yNTi9McPtHTjrhw2W5+YcMYxbmyV1rFarI
-         051NUOCe1rz15ompx6DW8/Nz66pNSxJEhzFs2g6GvxSlSd6Y0MWeJLr8nmSFdyG5XB+E
-         Dw3Q==
-X-Gm-Message-State: AOAM53105L7sron5XNpnVs4j+W+QTqWAbHy8Hs9iiGS5HHBfNlTBv8bD
-        on/hO3c+OgnfD83eVvW3+qe5JjB2L2uU8xdra9CsSvXfuAS4BTJvLhpdr9iO6AxTqTahI/LY7HS
-        +myDy+m4+8+id
-X-Received: by 2002:a05:6402:51d1:: with SMTP id r17mr451085edd.91.1623965276166;
-        Thu, 17 Jun 2021 14:27:56 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzuJMoUy1hXydwhfMQBzqzr6BrEg7lbvkkFSNeTBiotlbBoHDl0qp+bpeu9UXkB60eR8jNOsQ==
-X-Received: by 2002:a05:6402:51d1:: with SMTP id r17mr451071edd.91.1623965276019;
-        Thu, 17 Jun 2021 14:27:56 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rxampRGzjcE7BXi+IGLmLgs/KjriV77RZF0FeFiCmCs=;
+        b=P/CgU0LZ+XAir/aofWFgHwOSERuqaw67NW3rclSTcb60k+IH0OfEeaFrFXp9pbSiPl
+         mEmoFKw40dZXXtq5ZC2hFIAVY7EROtXGEF1nP00PvSg0UNd2WkIiAJs4XAWUC99tJOf1
+         0jP/qgSfbY4vZ4D5dffYyRismy7rD/jwv95BsyffuSjPXKSJUZScE0L84kyPFSOhjTCK
+         RsM9GGYXjCQqF+bmgtgj7+F4vW0N6P5L4go0O0E9iWBpn9IcZlP89QSFdWgzTgk+ljuj
+         3CKC7Im1g9BGDd7czLxJJv09zjLDp2dNqpTXckbJmPb2JmvXQsDj9q19SBp4dJj9CEkE
+         gFHw==
+X-Gm-Message-State: AOAM533Qtdp2jphF10ZryxINnx7SdxuZiS4gCyO0vAQZUnP6gwKmGL/5
+        oisbQ8Xbxy2PEH6BSdK7N51T4AXO/YjD1C+kzeynmL4sJnrC97BirQAsLXju6l4yqD6lbitWXeS
+        gtgqUGjDckJej
+X-Received: by 2002:a05:6402:1103:: with SMTP id u3mr470076edv.342.1623965275811;
+        Thu, 17 Jun 2021 14:27:55 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzM0kueSEDLWcIYuLGthw4ZqP5zUb8HNiqz9jdFgszpKXT8+imS4nr/anhF9YS+4qcNJaAvdw==
+X-Received: by 2002:a05:6402:1103:: with SMTP id u3mr470051edv.342.1623965275581;
+        Thu, 17 Jun 2021 14:27:55 -0700 (PDT)
 Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id t18sm5186222edw.47.2021.06.17.14.27.54
+        by smtp.gmail.com with ESMTPSA id g12sm2237113edb.80.2021.06.17.14.27.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Thu, 17 Jun 2021 14:27:55 -0700 (PDT)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 7E6BC18071E; Thu, 17 Jun 2021 23:27:54 +0200 (CEST)
+        id 71900180350; Thu, 17 Jun 2021 23:27:54 +0200 (CEST)
 From:   =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     bpf@vger.kernel.org, netdev@vger.kernel.org
 Cc:     Martin KaFai Lau <kafai@fb.com>,
@@ -70,12 +68,10 @@ Cc:     Martin KaFai Lau <kafai@fb.com>,
         "Paul E . McKenney" <paulmck@kernel.org>,
         Jakub Kicinski <kuba@kernel.org>,
         =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-Subject: [PATCH bpf-next v3 02/16] bpf: allow RCU-protected lookups to happen from bh context
-Date:   Thu, 17 Jun 2021 23:27:34 +0200
-Message-Id: <20210617212748.32456-3-toke@redhat.com>
+Subject: [PATCH bpf-next v3 00/16] Clean up and document RCU-based object protection for XDP_REDIRECT
+Date:   Thu, 17 Jun 2021 23:27:32 +0200
+Message-Id: <20210617212748.32456-1-toke@redhat.com>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210617212748.32456-1-toke@redhat.com>
-References: <20210617212748.32456-1-toke@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -83,155 +79,108 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-XDP programs are called from a NAPI poll context, which means the RCU
-reference liveness is ensured by local_bh_disable(). Add
-rcu_read_lock_bh_held() as a condition to the RCU checks for map lookups so
-lockdep understands that the dereferences are safe from inside *either* an
-rcu_read_lock() section *or* a local_bh_disable() section. While both
-bh_disabled and rcu_read_lock() provide RCU protection, they are
-semantically distinct, so we need both conditions to prevent lockdep
-complaints.
+During the discussion[0] of Hangbin's multicast patch series, Martin pointed out
+that the lifetime of the RCU-protected  map entries used by XDP_REDIRECT is by
+no means obvious. I promised to look into cleaning this up, and Paul helpfully
+provided some hints and a new unrcu_pointer() helper to aid in this.
 
-This change is done in preparation for removing the redundant
-rcu_read_lock()s from drivers.
+It seems[1] that back in the early days of XDP, local_bh_disable() did not
+provide RCU protection, which is why the rcu_read_lock() calls were added
+to drivers in the first place. But according to Paul[2], in recent kernels
+a local_bh_disable()/local_bh_enable() pair functions as one big RCU
+read-side section, so no further protection is needed. This even applies to
+-rt kernels, which has an explicit rcu_read_lock() in place as part of the
+local_bh_disable()[3].
 
-Acked-by: Martin KaFai Lau <kafai@fb.com>
-Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
----
- kernel/bpf/hashtab.c  | 21 ++++++++++++++-------
- kernel/bpf/helpers.c  |  6 +++---
- kernel/bpf/lpm_trie.c |  6 ++++--
- 3 files changed, 21 insertions(+), 12 deletions(-)
+This patch series is mostly a documentation exercise, cleaning up the
+description of the lifetime expectations and adding __rcu annotations so
+sparse and lockdep can help verify it.
 
-diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-index 6f6681b07364..72c58cc516a3 100644
---- a/kernel/bpf/hashtab.c
-+++ b/kernel/bpf/hashtab.c
-@@ -596,7 +596,8 @@ static void *__htab_map_lookup_elem(struct bpf_map *map, void *key)
- 	struct htab_elem *l;
- 	u32 hash, key_size;
- 
--	WARN_ON_ONCE(!rcu_read_lock_held() && !rcu_read_lock_trace_held());
-+	WARN_ON_ONCE(!rcu_read_lock_held() && !rcu_read_lock_trace_held() &&
-+		     !rcu_read_lock_bh_held());
- 
- 	key_size = map->key_size;
- 
-@@ -989,7 +990,8 @@ static int htab_map_update_elem(struct bpf_map *map, void *key, void *value,
- 		/* unknown flags */
- 		return -EINVAL;
- 
--	WARN_ON_ONCE(!rcu_read_lock_held() && !rcu_read_lock_trace_held());
-+	WARN_ON_ONCE(!rcu_read_lock_held() && !rcu_read_lock_trace_held() &&
-+		     !rcu_read_lock_bh_held());
- 
- 	key_size = map->key_size;
- 
-@@ -1082,7 +1084,8 @@ static int htab_lru_map_update_elem(struct bpf_map *map, void *key, void *value,
- 		/* unknown flags */
- 		return -EINVAL;
- 
--	WARN_ON_ONCE(!rcu_read_lock_held() && !rcu_read_lock_trace_held());
-+	WARN_ON_ONCE(!rcu_read_lock_held() && !rcu_read_lock_trace_held() &&
-+		     !rcu_read_lock_bh_held());
- 
- 	key_size = map->key_size;
- 
-@@ -1148,7 +1151,8 @@ static int __htab_percpu_map_update_elem(struct bpf_map *map, void *key,
- 		/* unknown flags */
- 		return -EINVAL;
- 
--	WARN_ON_ONCE(!rcu_read_lock_held() && !rcu_read_lock_trace_held());
-+	WARN_ON_ONCE(!rcu_read_lock_held() && !rcu_read_lock_trace_held() &&
-+		     !rcu_read_lock_bh_held());
- 
- 	key_size = map->key_size;
- 
-@@ -1202,7 +1206,8 @@ static int __htab_lru_percpu_map_update_elem(struct bpf_map *map, void *key,
- 		/* unknown flags */
- 		return -EINVAL;
- 
--	WARN_ON_ONCE(!rcu_read_lock_held() && !rcu_read_lock_trace_held());
-+	WARN_ON_ONCE(!rcu_read_lock_held() && !rcu_read_lock_trace_held() &&
-+		     !rcu_read_lock_bh_held());
- 
- 	key_size = map->key_size;
- 
-@@ -1276,7 +1281,8 @@ static int htab_map_delete_elem(struct bpf_map *map, void *key)
- 	u32 hash, key_size;
- 	int ret;
- 
--	WARN_ON_ONCE(!rcu_read_lock_held() && !rcu_read_lock_trace_held());
-+	WARN_ON_ONCE(!rcu_read_lock_held() && !rcu_read_lock_trace_held() &&
-+		     !rcu_read_lock_bh_held());
- 
- 	key_size = map->key_size;
- 
-@@ -1311,7 +1317,8 @@ static int htab_lru_map_delete_elem(struct bpf_map *map, void *key)
- 	u32 hash, key_size;
- 	int ret;
- 
--	WARN_ON_ONCE(!rcu_read_lock_held() && !rcu_read_lock_trace_held());
-+	WARN_ON_ONCE(!rcu_read_lock_held() && !rcu_read_lock_trace_held() &&
-+		     !rcu_read_lock_bh_held());
- 
- 	key_size = map->key_size;
- 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 544773970dbc..e880f6bb6f28 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -28,7 +28,7 @@
-  */
- BPF_CALL_2(bpf_map_lookup_elem, struct bpf_map *, map, void *, key)
- {
--	WARN_ON_ONCE(!rcu_read_lock_held());
-+	WARN_ON_ONCE(!rcu_read_lock_held() && !rcu_read_lock_bh_held());
- 	return (unsigned long) map->ops->map_lookup_elem(map, key);
- }
- 
-@@ -44,7 +44,7 @@ const struct bpf_func_proto bpf_map_lookup_elem_proto = {
- BPF_CALL_4(bpf_map_update_elem, struct bpf_map *, map, void *, key,
- 	   void *, value, u64, flags)
- {
--	WARN_ON_ONCE(!rcu_read_lock_held());
-+	WARN_ON_ONCE(!rcu_read_lock_held() && !rcu_read_lock_bh_held());
- 	return map->ops->map_update_elem(map, key, value, flags);
- }
- 
-@@ -61,7 +61,7 @@ const struct bpf_func_proto bpf_map_update_elem_proto = {
- 
- BPF_CALL_2(bpf_map_delete_elem, struct bpf_map *, map, void *, key)
- {
--	WARN_ON_ONCE(!rcu_read_lock_held());
-+	WARN_ON_ONCE(!rcu_read_lock_held() && !rcu_read_lock_bh_held());
- 	return map->ops->map_delete_elem(map, key);
- }
- 
-diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
-index 1b7b8a6f34ee..423549d2c52e 100644
---- a/kernel/bpf/lpm_trie.c
-+++ b/kernel/bpf/lpm_trie.c
-@@ -232,7 +232,8 @@ static void *trie_lookup_elem(struct bpf_map *map, void *_key)
- 
- 	/* Start walking the trie from the root node ... */
- 
--	for (node = rcu_dereference(trie->root); node;) {
-+	for (node = rcu_dereference_check(trie->root, rcu_read_lock_bh_held());
-+	     node;) {
- 		unsigned int next_bit;
- 		size_t matchlen;
- 
-@@ -264,7 +265,8 @@ static void *trie_lookup_elem(struct bpf_map *map, void *_key)
- 		 * traverse down.
- 		 */
- 		next_bit = extract_bit(key->data, node->prefixlen);
--		node = rcu_dereference(node->child[next_bit]);
-+		node = rcu_dereference_check(node->child[next_bit],
-+					     rcu_read_lock_bh_held());
- 	}
- 
- 	if (!found)
+Patches 1 and 2 are preparatory: Patch 1 adds Paul's unrcu_pointer()
+helper (which has already been added to his tree), which we need for some
+of the operations in devmap, and patch 2 adds bh context as a valid
+condition for map lookups. Patch 3 is the main bit that adds the __rcu
+annotations and updates documentation comments, and the rest are patches
+updating the drivers, with one patch per distinct maintainer.
+
+Unfortunately I don't have any hardware to test any of the driver patches;
+Jesper helpfully verified that it doesn't break anything on i40e, but the rest
+of the driver patches are only compile-tested.
+
+[0] https://lore.kernel.org/bpf/20210415173551.7ma4slcbqeyiba2r@kafai-mbp.dhcp.thefacebook.com/
+[1] https://lore.kernel.org/bpf/c5192ab3-1c05-8679-79f2-59d98299095b@iogearbox.net/
+[2] https://lore.kernel.org/bpf/20210417002301.GO4212@paulmck-ThinkPad-P17-Gen-1/
+[3] https://lore.kernel.org/bpf/20210419165837.GA975577@paulmck-ThinkPad-P17-Gen-1/
+
+Changelog:
+v3:
+  - Remove one other unnecessary change to hlist_for_each_entry_rcu()
+  - Carry forward another ACK
+v2:
+  - Add a comment about RCU protection to the drivers where rcu_read_lock()
+    is removed
+  - Drop unnecessary patch 3 which changed dev_get_by_index_rcu()
+  - Add some more text with the history to cover letter
+  - Fix a few places where the wrong RCU checks were used in cpumap and
+    xskmap code
+  - Carry forward ACKs
+
+Paul E. McKenney (1):
+  rcu: Create an unrcu_pointer() to remove __rcu from a pointer
+
+Toke Høiland-Jørgensen (15):
+  bpf: allow RCU-protected lookups to happen from bh context
+  xdp: add proper __rcu annotations to redirect map entries
+  ena: remove rcu_read_lock() around XDP program invocation
+  bnxt: remove rcu_read_lock() around XDP program invocation
+  thunderx: remove rcu_read_lock() around XDP program invocation
+  freescale: remove rcu_read_lock() around XDP program invocation
+  net: intel: remove rcu_read_lock() around XDP program invocation
+  marvell: remove rcu_read_lock() around XDP program invocation
+  mlx4: remove rcu_read_lock() around XDP program invocation
+  nfp: remove rcu_read_lock() around XDP program invocation
+  qede: remove rcu_read_lock() around XDP program invocation
+  sfc: remove rcu_read_lock() around XDP program invocation
+  netsec: remove rcu_read_lock() around XDP program invocation
+  stmmac: remove rcu_read_lock() around XDP program invocation
+  net: ti: remove rcu_read_lock() around XDP program invocation
+
+ drivers/net/ethernet/amazon/ena/ena_netdev.c  |  6 +--
+ drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c |  5 +-
+ .../net/ethernet/cavium/thunder/nicvf_main.c  |  5 +-
+ .../net/ethernet/freescale/dpaa/dpaa_eth.c    | 11 ++---
+ .../net/ethernet/freescale/dpaa2/dpaa2-eth.c  |  6 +--
+ drivers/net/ethernet/intel/i40e/i40e_txrx.c   |  5 +-
+ drivers/net/ethernet/intel/i40e/i40e_xsk.c    | 11 ++---
+ drivers/net/ethernet/intel/ice/ice_txrx.c     |  6 +--
+ drivers/net/ethernet/intel/ice/ice_xsk.c      |  6 +--
+ drivers/net/ethernet/intel/igb/igb_main.c     |  5 +-
+ drivers/net/ethernet/intel/igc/igc_main.c     | 10 ++--
+ drivers/net/ethernet/intel/ixgbe/ixgbe_main.c |  5 +-
+ drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c  |  9 ++--
+ .../net/ethernet/intel/ixgbevf/ixgbevf_main.c |  5 +-
+ drivers/net/ethernet/marvell/mvneta.c         |  6 ++-
+ .../net/ethernet/marvell/mvpp2/mvpp2_main.c   |  8 +--
+ drivers/net/ethernet/mellanox/mlx4/en_rx.c    |  8 +--
+ .../ethernet/netronome/nfp/nfp_net_common.c   |  6 ++-
+ drivers/net/ethernet/qlogic/qede/qede_fp.c    |  7 +--
+ drivers/net/ethernet/sfc/rx.c                 | 12 ++---
+ drivers/net/ethernet/socionext/netsec.c       |  7 +--
+ .../net/ethernet/stmicro/stmmac/stmmac_main.c | 13 ++---
+ drivers/net/ethernet/ti/cpsw_priv.c           | 13 ++---
+ include/linux/rcupdate.h                      | 14 ++++++
+ include/net/xdp_sock.h                        |  2 +-
+ kernel/bpf/cpumap.c                           | 13 +++--
+ kernel/bpf/devmap.c                           | 49 ++++++++-----------
+ kernel/bpf/hashtab.c                          | 21 +++++---
+ kernel/bpf/helpers.c                          |  6 +--
+ kernel/bpf/lpm_trie.c                         |  6 ++-
+ net/core/filter.c                             | 28 +++++++++++
+ net/xdp/xsk.c                                 |  4 +-
+ net/xdp/xsk.h                                 |  4 +-
+ net/xdp/xskmap.c                              | 29 ++++++-----
+ 34 files changed, 194 insertions(+), 157 deletions(-)
+
 -- 
 2.32.0
 
