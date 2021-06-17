@@ -5,61 +5,61 @@ X-Spam-Level:
 X-Spam-Status: No, score=-18.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BF529C49EA6
-	for <bpf@archiver.kernel.org>; Thu, 17 Jun 2021 21:28:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 839FDC48BE5
+	for <bpf@archiver.kernel.org>; Thu, 17 Jun 2021 21:28:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A9D8F60D07
-	for <bpf@archiver.kernel.org>; Thu, 17 Jun 2021 21:28:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6DB3161375
+	for <bpf@archiver.kernel.org>; Thu, 17 Jun 2021 21:28:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233056AbhFQVaK (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 17 Jun 2021 17:30:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:39869 "EHLO
+        id S233009AbhFQVaI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 17 Jun 2021 17:30:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:39164 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232079AbhFQVaK (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 17 Jun 2021 17:30:10 -0400
+        by vger.kernel.org with ESMTP id S230288AbhFQVaH (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 17 Jun 2021 17:30:07 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1623965281;
+        s=mimecast20190719; t=1623965278;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=gpw0jr2etcJQOtwBBETmSUpHlhu94Ou8Nardir8qwr8=;
-        b=CMai4sOtFpXBo6gptTIoEADYAbeiSYp3t1qHoeeBXkmdt+U+mQxqupsM8MgAkqixY/+dMq
-        dvuyCEXOz0LqhXagVWh/CqcVF/aoDXHuDtZKqsfRastsPD07nuBmW/+HWE0FXh6Z8QRwW9
-        QQfcnvP1/LXr6GZjk/lm+oFEMdMfoCc=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-272-LmTqsbu1M6adUUxb4VLfQA-1; Thu, 17 Jun 2021 17:28:00 -0400
-X-MC-Unique: LmTqsbu1M6adUUxb4VLfQA-1
-Received: by mail-ej1-f71.google.com with SMTP id br12-20020a170906d14cb02904311c0f32adso3026706ejb.9
-        for <bpf@vger.kernel.org>; Thu, 17 Jun 2021 14:28:00 -0700 (PDT)
+        bh=ESlzoBrCtV1p5Bz5L61JWXgmG5edOzrWTpf13f6lwsQ=;
+        b=EUNzvsFw1gUIvG2m24sl/ooKd0gr/8H4zQ7xV3X+3nUQMQ3pemtMyGQYnUwe0UpCDk+MAb
+        hrTFNdCiHlBjvTPSE5Yec49g3fVC1LcqQzabvfS12SIH/1RxIONYQMhGgHNX6e7r39KGVC
+        5h9UwmpcYgvw5XrRG41kQdwJ/sc4C4E=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-448-mtOtoRsbN5aofYJlzOb7bA-1; Thu, 17 Jun 2021 17:27:57 -0400
+X-MC-Unique: mtOtoRsbN5aofYJlzOb7bA-1
+Received: by mail-ed1-f69.google.com with SMTP id v8-20020a0564023488b0290393873961f6so2373405edc.17
+        for <bpf@vger.kernel.org>; Thu, 17 Jun 2021 14:27:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=gpw0jr2etcJQOtwBBETmSUpHlhu94Ou8Nardir8qwr8=;
-        b=sv/9MyNywdNk4dnd6v4Dj1JEebKCD9rz3Cj49KauNNgWOqTJsxfbfKA3EWjyUX3n3z
-         jF7c8vMxMsRZF/gRlGIjRmDkMYFAyh3GSEy/kC7WKXmlMA74OWA9/tf7pz5dzbaLh5O9
-         98Y2jOlJ46vZDWo0JGI5NcH1zY+k+1rlnhprUpgZlXwMfQZiRtbvhqReAqTIPzUyTxdn
-         2qfRQpQIQxsglS3HZBq56V/zGjOFlAJLfJIhVkt+LxDRyRk2yaYm8T2jyO3ReLbIiwMD
-         MWJD9HbKIEoKcHyKZUuYdp2MoPuoA2dGokB3flsaJ4h2JzktZc4zvYIm80poVEWgUwLD
-         zg8w==
-X-Gm-Message-State: AOAM530iKfRgPmyX5ylbdl0Ed/iFsaPsOzuGh7sqLZEb6D85JWTtVZhi
-        4RrfbDEdP5ENOH0/L1p2v2Hs4/vZk1ep8QDjeq/VHARoER6/xgFgbKkVzJen4GH/+x7rrVZoA/b
-        42pn9ksh3DM+4
-X-Received: by 2002:a17:906:22c7:: with SMTP id q7mr7355896eja.547.1623965279114;
-        Thu, 17 Jun 2021 14:27:59 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwJ0vfR8rrkBi2MA3Q9968M4U2OVMwrReOPcnhagocHm36uIqqyWEHWUNmgXDLaWB74kPUh2Q==
-X-Received: by 2002:a17:906:22c7:: with SMTP id q7mr7355863eja.547.1623965278752;
-        Thu, 17 Jun 2021 14:27:58 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id g16sm93259ejh.92.2021.06.17.14.27.54
+        bh=ESlzoBrCtV1p5Bz5L61JWXgmG5edOzrWTpf13f6lwsQ=;
+        b=IRVI+cej4MrIOIeQ2a7jzZFcCJcKeaaSvwCqfIIhnisyVql+peC+NY31LFhbKRuT0S
+         zp60oxBFE/pMZpCmEvQwhyifVddXtlpqig4EQvoHR99Nx2CJXlItM4KmVIpRoMAees4c
+         wX9eYHye3KaWrWXlGvp0oJvQsibr/QBtAwubXVTeYtjqMwjFklIVbUo2hFT9uz5piNqp
+         eaCmymAFvT4quCeKfFHnz9KeO1rPOOIbPAHzlAwytX7+eJzX8EYcgLuP5/NnocWJA9AI
+         7OPwsiij60GCK8UAw3UTMPBKgE0PrBjcPGbwplj+NBkE3xMupkzqIIh1nzpCq44f7V8n
+         N10w==
+X-Gm-Message-State: AOAM532XZd/G64JrGEZbrl6bmAOAnsCdPxlJSOsr8/14NWBED6ydzJi/
+        EbfyFxGjibFZMX0tNyQx6ZoAlFonhL1ZpCWWKUBZJngRuhoc+JduTVZxXCEoRlEZV+PiROaX3md
+        XuFd6KEEOm/V5
+X-Received: by 2002:a17:906:b03:: with SMTP id u3mr7263312ejg.95.1623965275938;
+        Thu, 17 Jun 2021 14:27:55 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxVq90bXdFT/ATvZR+KbPRvFhmdGeDC2xS3RJdzmjp7zYHS+Yy5ZefFxwZeuZ2Lr3aFcVh7Nw==
+X-Received: by 2002:a17:906:b03:: with SMTP id u3mr7263295ejg.95.1623965275782;
+        Thu, 17 Jun 2021 14:27:55 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id h9sm5028627edt.18.2021.06.17.14.27.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Thu, 17 Jun 2021 14:27:55 -0700 (PDT)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 8C8D1180728; Thu, 17 Jun 2021 23:27:54 +0200 (CEST)
+        id 775961802A5; Thu, 17 Jun 2021 23:27:54 +0200 (CEST)
 From:   =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     bpf@vger.kernel.org, netdev@vger.kernel.org
 Cc:     Martin KaFai Lau <kafai@fb.com>,
@@ -68,12 +68,10 @@ Cc:     Martin KaFai Lau <kafai@fb.com>,
         Magnus Karlsson <magnus.karlsson@gmail.com>,
         "Paul E . McKenney" <paulmck@kernel.org>,
         Jakub Kicinski <kuba@kernel.org>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Guy Tzalik <gtzalik@amazon.com>,
-        Saeed Bishara <saeedb@amazon.com>
-Subject: [PATCH bpf-next v3 04/16] ena: remove rcu_read_lock() around XDP program invocation
-Date:   Thu, 17 Jun 2021 23:27:36 +0200
-Message-Id: <20210617212748.32456-5-toke@redhat.com>
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+Subject: [PATCH bpf-next v3 01/16] rcu: Create an unrcu_pointer() to remove __rcu from a pointer
+Date:   Thu, 17 Jun 2021 23:27:33 +0200
+Message-Id: <20210617212748.32456-2-toke@redhat.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210617212748.32456-1-toke@redhat.com>
 References: <20210617212748.32456-1-toke@redhat.com>
@@ -84,50 +82,55 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The ena driver has rcu_read_lock()/rcu_read_unlock() pairs around XDP
-program invocations. However, the actual lifetime of the objects referred
-by the XDP program invocation is longer, all the way through to the call to
-xdp_do_flush(), making the scope of the rcu_read_lock() too small. This
-turns out to be harmless because it all happens in a single NAPI poll
-cycle (and thus under local_bh_disable()), but it makes the rcu_read_lock()
-misleading.
+From: "Paul E. McKenney" <paulmck@kernel.org>
 
-Rather than extend the scope of the rcu_read_lock(), just get rid of it
-entirely. With the addition of RCU annotations to the XDP_REDIRECT map
-types that take bh execution into account, lockdep even understands this to
-be safe, so there's really no reason to keep it around.
+The xchg() and cmpxchg() functions are sometimes used to carry out RCU
+updates.  Unfortunately, this can result in sparse warnings for both
+the old-value and new-value arguments, as well as for the return value.
+The arguments can be dealt with using RCU_INITIALIZER():
 
-Cc: Guy Tzalik <gtzalik@amazon.com>
-Cc: Saeed Bishara <saeedb@amazon.com>
+        old_p = xchg(&p, RCU_INITIALIZER(new_p));
+
+But a sparse warning still remains due to assigning the __rcu pointer
+returned from xchg to the (most likely) non-__rcu pointer old_p.
+
+This commit therefore provides an unrcu_pointer() macro that strips
+the __rcu.  This macro can be used as follows:
+
+        old_p = unrcu_pointer(xchg(&p, RCU_INITIALIZER(new_p)));
+
+Reported-by: Toke Høiland-Jørgensen <toke@redhat.com>
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- drivers/net/ethernet/amazon/ena/ena_netdev.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ include/linux/rcupdate.h | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/drivers/net/ethernet/amazon/ena/ena_netdev.c b/drivers/net/ethernet/amazon/ena/ena_netdev.c
-index 881f88754bf6..cd5f03691b4c 100644
---- a/drivers/net/ethernet/amazon/ena/ena_netdev.c
-+++ b/drivers/net/ethernet/amazon/ena/ena_netdev.c
-@@ -385,7 +385,9 @@ static int ena_xdp_execute(struct ena_ring *rx_ring, struct xdp_buff *xdp)
- 	u64 *xdp_stat;
- 	int qid;
+diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
+index 9455476c5ba2..d7895b81264e 100644
+--- a/include/linux/rcupdate.h
++++ b/include/linux/rcupdate.h
+@@ -363,6 +363,20 @@ static inline void rcu_preempt_sleep_check(void) { }
+ #define rcu_check_sparse(p, space)
+ #endif /* #else #ifdef __CHECKER__ */
  
--	rcu_read_lock();
-+	/* This code is invoked within a single NAPI poll cycle and thus under
-+	 * local_bh_disable(), which provides the needed RCU protection.
-+	 */
- 	xdp_prog = READ_ONCE(rx_ring->xdp_bpf_prog);
- 
- 	if (!xdp_prog)
-@@ -443,8 +445,6 @@ static int ena_xdp_execute(struct ena_ring *rx_ring, struct xdp_buff *xdp)
- 
- 	ena_increase_stat(xdp_stat, 1, &rx_ring->syncp);
- out:
--	rcu_read_unlock();
--
- 	return verdict;
- }
- 
++/**
++ * unrcu_pointer - mark a pointer as not being RCU protected
++ * @p: pointer needing to lose its __rcu property
++ *
++ * Converts @p from an __rcu pointer to a __kernel pointer.
++ * This allows an __rcu pointer to be used with xchg() and friends.
++ */
++#define unrcu_pointer(p)						\
++({									\
++	typeof(*p) *_________p1 = (typeof(*p) *__force)(p);		\
++	rcu_check_sparse(p, __rcu); 					\
++	((typeof(*p) __force __kernel *)(_________p1)); 		\
++})
++
+ #define __rcu_access_pointer(p, space) \
+ ({ \
+ 	typeof(*p) *_________p1 = (typeof(*p) *__force)READ_ONCE(p); \
 -- 
 2.32.0
 
