@@ -8,58 +8,58 @@ X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B066C2B9F4
-	for <bpf@archiver.kernel.org>; Thu, 17 Jun 2021 18:42:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 47C2BC49EA2
+	for <bpf@archiver.kernel.org>; Thu, 17 Jun 2021 18:42:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 41AA760E08
-	for <bpf@archiver.kernel.org>; Thu, 17 Jun 2021 18:42:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 31D6C613E1
+	for <bpf@archiver.kernel.org>; Thu, 17 Jun 2021 18:42:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232734AbhFQSok (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 17 Jun 2021 14:44:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36726 "EHLO
+        id S233284AbhFQSot (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 17 Jun 2021 14:44:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232483AbhFQSoj (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 17 Jun 2021 14:44:39 -0400
-Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D80FCC061760
-        for <bpf@vger.kernel.org>; Thu, 17 Jun 2021 11:42:31 -0700 (PDT)
-Received: by mail-qv1-xf49.google.com with SMTP id eb2-20020ad44e420000b029025a58adfc6bso1866754qvb.9
-        for <bpf@vger.kernel.org>; Thu, 17 Jun 2021 11:42:31 -0700 (PDT)
+        with ESMTP id S233286AbhFQSop (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 17 Jun 2021 14:44:45 -0400
+Received: from mail-qt1-x849.google.com (mail-qt1-x849.google.com [IPv6:2607:f8b0:4864:20::849])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A324C061768
+        for <bpf@vger.kernel.org>; Thu, 17 Jun 2021 11:42:36 -0700 (PDT)
+Received: by mail-qt1-x849.google.com with SMTP id z5-20020ac86c450000b029024e9a87714dso4689011qtu.2
+        for <bpf@vger.kernel.org>; Thu, 17 Jun 2021 11:42:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=PFZQwytkaiwWlIlKohYqf6fjHhndSooLEMwUFHht7ds=;
-        b=iyJ1e2QDwkO2dM31gs2gGxDqbXMTnBTPHawrQ46ZYkK1iL09n0hHmRo50WUvVWMF1o
-         j4i74zlkPXYgC9ZQTxakKY2nVhpaODFg8TpjOWOjtPqCOSjpleV/gByQbmj98wgYlYsO
-         yWmn4LHLY1bbJw87u3Y4/6hUVR4xVy8fkz8WCUCHuASES/yhxsr8BMhA0szo/Xs9XKX+
-         vGHQTsCVj812n/TeIQeuWwu6R9kwVQ3IhDNEhmh2BIDjD7NbVboT9QT1adqLGA1y9njG
-         E1SeuhymSiP6QdRYN7r8f4l9i6lTW/sGCCX2kV26XDTKmfDO3coo19/4fKOaodfvO02T
-         ckzQ==
+        bh=5DjNG/5LrW+h84YK4KYw+ImmLTxQ10GkkIqN1ecfe50=;
+        b=U67lanHkkfa0ltY86P0m9Lk89MeEmTbJ+2mZ9Wqd1wYOQ5MgP7PXnYgh0iY/U8haW5
+         DQaO04AZkL/bvpONjjQxefNZN6I2pDT6LJ+nm4fSNjlvGETIdULShNNbcyjmu0hmVNW4
+         cihAn6VL4SPwgfX3jvOHDr2hJ17hbhADYfnf0x4B7NstfALSrmPgPwo93ItstMBbg6DP
+         aHzAL+owhPPtmiV8kUwXrnwMrSVSn5zB3MQBoG/W13kTXPib25bOfH8nWkuDtKn8H2XI
+         vN5f/ixpv7jS2hsL0b6EV/oTaeBgoFX5HL4W5fBlH1wbI07LxZwmVseHGk8cBlx3ooYw
+         CfRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=PFZQwytkaiwWlIlKohYqf6fjHhndSooLEMwUFHht7ds=;
-        b=NP1qfOaS9fsEoBmRihCXwtufF/8W/MXpwBKEfTO29ZHpSJXDJWvV4XmavvkLFInexo
-         6czJFXSpPyr2buOtkk6lKb1udAGXUdmzCDGSdd1OYg1E5XhOINrk//BNC07FTahb6teb
-         uuro7elKEd7UboBwfjG3AxO7yEmfGAXzJsHhlwqr9NS9yc1Lbh//Aghl8HQRYrjo5NQG
-         kXak4WxA2TAuNxnqGSG18o1qnrzDBQO/k7hXQCENOksVCnQhbTgTCCVyflunVHqWUMyu
-         TsyBzyw61fPZXcVssIr2hZHbWtK3PaD+ku2ExKMJ7aA1+tYARv8mpqF0Uusp39Zs1dsa
-         ZzKQ==
-X-Gm-Message-State: AOAM533uJeKrkiFGfHjGfQpIDWSvlqMn6iqan4c74o0yKBhtQgiwHMw1
-        oh45rtMdP/Lv2eUF9TSTeFYpGBdw8FRP
-X-Google-Smtp-Source: ABdhPJxCHi9VcrdwhllY0LhoGwLekF7I6iEiE23gPOhHNruIdT2wgVP0bd5Vr4d54ca3YYS+iZblTXZdWg4a
+        bh=5DjNG/5LrW+h84YK4KYw+ImmLTxQ10GkkIqN1ecfe50=;
+        b=UX/TTGHYWZ6v0+IJOXTOCd1bEoBQNFEsJ9tFsMn0+4nEmms7c10cFxSMrT7Chbru5k
+         dltxMNVS1XchNFR6GME60PGGM09rt/659wAB3IkO8HL0T6eWvYnlp06xDFNMXNhrd2Qy
+         q4y2aPM+JIWC3/LcTl5Na8KBJqG6MNDh5fuBOUAbTC5xLAJQDRqTQssgv94zbMj4TuWH
+         jM7XteP2nyU+TtpmTSjUuF+Mr65fousxehTHseRqlsJcBwdqxB5+yRd5F9WCM1/z+6ae
+         Ap0+8hMpWyY3+cnv7+67SkmES9SIAEZkxsKdnMRPjVWqWyvN7usllJDPYTCIVISlPFB5
+         e5NA==
+X-Gm-Message-State: AOAM530a0QUmUPAC3dXWtbYUGiW+otHDYGA7ES1X5nbJYkGtX/asjB3w
+        42TdlTbQnkHSEFw/BHM+LXB6Y/6B4TEO
+X-Google-Smtp-Source: ABdhPJwzE0fiA+ui94SKI9ag06uXUpN6/xN+13AkJwieIj2mSxVaBw+2ipmvQVZW7nK8sWjK5SCrg5eB0O9I
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:ef90:beff:e92f:7ce0])
- (user=irogers job=sendgmr) by 2002:a25:c243:: with SMTP id
- s64mr8032005ybf.171.1623955350902; Thu, 17 Jun 2021 11:42:30 -0700 (PDT)
-Date:   Thu, 17 Jun 2021 11:42:14 -0700
+ (user=irogers job=sendgmr) by 2002:a25:43:: with SMTP id 64mr8267727yba.109.1623955355646;
+ Thu, 17 Jun 2021 11:42:35 -0700 (PDT)
+Date:   Thu, 17 Jun 2021 11:42:16 -0700
 In-Reply-To: <20210617184216.2075588-1-irogers@google.com>
-Message-Id: <20210617184216.2075588-2-irogers@google.com>
+Message-Id: <20210617184216.2075588-4-irogers@google.com>
 Mime-Version: 1.0
 References: <20210617184216.2075588-1-irogers@google.com>
 X-Mailer: git-send-email 2.32.0.288.g62a8d224e6-goog
-Subject: [PATCH 2/4] perf test: Pass the verbose option to shell tests
+Subject: [PATCH 4/4] perf test: Make stat bpf counters test more robust
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -77,34 +77,35 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Having a verbose option will allow shell tests to provide extra failure
-details when the fail or skip.
+If the test is run on a hypervisor then the cycles event may not be
+counted, skip the test in this situation. Fail the test if cycles are
+not counted in the subsequent bpf counter run.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/tests/builtin-test.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ tools/perf/tests/shell/stat_bpf_counters.sh | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-test.c
-index cbbfe48ab802..a8160b1684de 100644
---- a/tools/perf/tests/builtin-test.c
-+++ b/tools/perf/tests/builtin-test.c
-@@ -577,11 +577,14 @@ struct shell_test {
- static int shell_test__run(struct test *test, int subdir __maybe_unused)
- {
- 	int err;
--	char script[PATH_MAX];
-+	char script[PATH_MAX + 3];
- 	struct shell_test *st = test->priv;
+diff --git a/tools/perf/tests/shell/stat_bpf_counters.sh b/tools/perf/tests/shell/stat_bpf_counters.sh
+index 81d61b6e1208..2aed20dc2262 100755
+--- a/tools/perf/tests/shell/stat_bpf_counters.sh
++++ b/tools/perf/tests/shell/stat_bpf_counters.sh
+@@ -31,7 +31,15 @@ if ! perf stat --bpf-counters true > /dev/null 2>&1; then
+ fi
  
- 	path__join(script, sizeof(script), st->dir, st->file);
+ base_cycles=$(perf stat --no-big-num -e cycles -- perf bench sched messaging -g 1 -l 100 -t 2>&1 | awk '/cycles/ {print $1}')
++if [ "$base_cycles" == "<not" ]; then
++	echo "Skipping: cycles event not counted"
++	exit 2
++fi
+ bpf_cycles=$(perf stat --no-big-num --bpf-counters -e cycles -- perf bench sched messaging -g 1 -l 100 -t 2>&1 | awk '/cycles/ {print $1}')
++if [ "$bpf_cycles" == "<not" ]; then
++	echo "Failed: cycles not counted with --bpf-counters"
++	exit 1
++fi
  
-+	if (verbose)
-+		strncat(script, " -v", sizeof(script));
-+
- 	err = system(script);
- 	if (!err)
- 		return TEST_OK;
+ compare_number $base_cycles $bpf_cycles
+ exit 0
 -- 
 2.32.0.288.g62a8d224e6-goog
 
