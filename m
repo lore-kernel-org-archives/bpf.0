@@ -7,44 +7,44 @@ X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 287E3C48BE8
-	for <bpf@archiver.kernel.org>; Fri, 18 Jun 2021 15:00:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 449BCC49EA2
+	for <bpf@archiver.kernel.org>; Fri, 18 Jun 2021 15:10:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 015EF613B4
-	for <bpf@archiver.kernel.org>; Fri, 18 Jun 2021 15:00:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 33848613BD
+	for <bpf@archiver.kernel.org>; Fri, 18 Jun 2021 15:10:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234796AbhFRPCO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 18 Jun 2021 11:02:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48654 "EHLO mail.kernel.org"
+        id S234560AbhFRPMQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 18 Jun 2021 11:12:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51114 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234780AbhFRPCN (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 18 Jun 2021 11:02:13 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 6DAF461260;
-        Fri, 18 Jun 2021 15:00:04 +0000 (UTC)
+        id S231461AbhFRPMN (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 18 Jun 2021 11:12:13 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 9A088613D1;
+        Fri, 18 Jun 2021 15:10:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624028404;
-        bh=9jZ2mXvTw/RWuE316jNx14yMB+zLHBQuldybPoxUN64=;
+        s=k20201202; t=1624029003;
+        bh=y7D2QxM8hT5xLQTejr2q3FNQ9Ih9QX98O+xXCp5QQMU=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=ElnNkh4Wwc/IOhU9hGwm7cAmpFvMkgS4oOVm4KZQIzGoBhF18LfozsiQpFpR8z1tQ
-         +lvyuyfQ0G2eKT7IBKoOKefyBW1hn+fq+D8amLts5IAerceO0l1+4Ird32LnkrkcP7
-         LnmmcePmsyGxmaxA5K83jL7UQCY7Exny4RaygUXLlR9Gwp2F/4QfDDHMme/EL+hKi3
-         qf82QKqQscaxovtIg8tvMcN1woS90hGJtpd6gscRwaq9vm75tDkeJNwGxOVqYVBS6X
-         zeOLhgcudBsPMAyGBC6Oh9disFJPlPnLogPlrYgM9+31dcX12KFRye/qrqMgO3oJrQ
-         QKjFWRjbLjXNQ==
+        b=chMTqVjmCmZirlgVERMdEomTZtr2chUw074fqkbRvd/Ctj2y1IYYzV+nRtN/mD6eW
+         o26fQnNC8YSZOBUriq/MT/CySVZDhwhdzF3BQm/8qLV6ThJN4mn4iPodchqCefOkS4
+         Nb3XM83dzBLm+N2ONqFkw0J1EqNjTcJowbAfqgYL+NoAWhVkPXurVDuHx+DmNn/IdO
+         EGUC0W8BPn6D3MxZ+vkt6eKds7L8digrwdmH3a06I3TvPH0/HNHfyedZUyxb1BF1Ih
+         LwguOsWvmOJbwHE+HvoK6JSZkjbF3Se45GZC07Yhs0QQgT8PhG7fKBEG2rAiD8bhSc
+         Z/RKrzCgkE8gg==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf] xsk: fix missing validation for skb and unaligned mode
+Subject: Re: [PATCH bpf v2] xsk: fix broken Tx ring validation
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <162402840440.8973.13278193576359189223.git-patchwork-notify@kernel.org>
-Date:   Fri, 18 Jun 2021 15:00:04 +0000
-References: <20210617092255.3487-1-magnus.karlsson@gmail.com>
-In-Reply-To: <20210617092255.3487-1-magnus.karlsson@gmail.com>
+Message-Id: <162402900355.14256.7025664905117630187.git-patchwork-notify@kernel.org>
+Date:   Fri, 18 Jun 2021 15:10:03 +0000
+References: <20210618075805.14412-1-magnus.karlsson@gmail.com>
+In-Reply-To: <20210618075805.14412-1-magnus.karlsson@gmail.com>
 To:     Magnus Karlsson <magnus.karlsson@gmail.com>
 Cc:     magnus.karlsson@intel.com, bjorn@kernel.org, ast@kernel.org,
         daniel@iogearbox.net, netdev@vger.kernel.org,
         maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com,
-        bpf@vger.kernel.org
+        bpf@vger.kernel.org, xuanzhuo@linux.alibaba.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
@@ -53,20 +53,22 @@ Hello:
 
 This patch was applied to bpf/bpf.git (refs/heads/master):
 
-On Thu, 17 Jun 2021 11:22:55 +0200 you wrote:
+On Fri, 18 Jun 2021 09:58:05 +0200 you wrote:
 > From: Magnus Karlsson <magnus.karlsson@intel.com>
 > 
-> Fix a missing validation of a Tx descriptor when executing in skb mode
-> and the umem is in unaligned mode. A descriptor could point to a
-> buffer straddling the end of the umem, thus effectively tricking the
-> kernel to read outside the allowed umem region. This could lead to a
-> kernel crash if that part of memory is not mapped.
+> Fix broken Tx ring validation for AF_XDP. The commit under the Fixes
+> tag, fixed an off-by-one error in the validation but introduced
+> another error. Descriptors are now let through even if they straddle a
+> chunk boundary which they are not allowed to do in aligned mode. Worse
+> is that they are let through even if they straddle the end of the umem
+> itself, tricking the kernel to read data outside the allowed umem
+> region which might or might not be mapped at all.
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf] xsk: fix missing validation for skb and unaligned mode
-    https://git.kernel.org/bpf/bpf/c/2f99619820c2
+  - [bpf,v2] xsk: fix broken Tx ring validation
+    https://git.kernel.org/bpf/bpf/c/f654fae47e83
 
 You are awesome, thank you!
 --
