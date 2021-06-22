@@ -2,84 +2,82 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-16.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E697C2B9F4
-	for <bpf@archiver.kernel.org>; Tue, 22 Jun 2021 22:18:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9250C2B9F4
+	for <bpf@archiver.kernel.org>; Tue, 22 Jun 2021 23:03:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5E7CD60FF2
-	for <bpf@archiver.kernel.org>; Tue, 22 Jun 2021 22:18:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 92D8161107
+	for <bpf@archiver.kernel.org>; Tue, 22 Jun 2021 23:03:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230143AbhFVWVE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 22 Jun 2021 18:21:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:51925 "EHLO
+        id S229800AbhFVXFe (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 22 Jun 2021 19:05:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:50148 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229625AbhFVWVE (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 22 Jun 2021 18:21:04 -0400
+        by vger.kernel.org with ESMTP id S229675AbhFVXFe (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 22 Jun 2021 19:05:34 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1624400327;
+        s=mimecast20190719; t=1624402997;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=uVjhLDtJhsrPmwpZ576YLQgGs/VGWOCyo3tFRjK1wVc=;
-        b=E0yyc9fbxJFAB+t00kAS12Qe/tuCVb4hcWxDsJB/DcoOytPbtBE3azUNfHNCqMSGo0jxdp
-        01HwRyoDHx9FeLuPADySA4mNrSFVfhToZG3GirLzPGhLyjKIX4fb1myGLXFNvHFJlB+uFL
-        XegDwwenRJibiraeXvsETZPe5iX+4mk=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-108-mA0ZDs9GNLylXGKD92HMEQ-1; Tue, 22 Jun 2021 18:18:46 -0400
-X-MC-Unique: mA0ZDs9GNLylXGKD92HMEQ-1
-Received: by mail-wr1-f72.google.com with SMTP id j1-20020adfb3010000b02901232ed22e14so161188wrd.5
-        for <bpf@vger.kernel.org>; Tue, 22 Jun 2021 15:18:46 -0700 (PDT)
+        bh=gkdf7S21VnLiNI2hSPYpqilho1jT158l5Aks2PTMc+8=;
+        b=W7IjcjJYWCI1puXNeEpuymE22zmTOOQCv6tA/2pIvTte5FPFc+P0N+mbKQI2d6SUNTv6z/
+        ec5BuPaiudUSfurTB00fUOA9RJntZL8yCRLoWuPJDgpPAD9pkIZOT7mRsdi7HyD7RoGeC0
+        +NI6rN8i4Hsmib/+cT3eK/kJ4ipSeV4=
+Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
+ [209.85.208.200]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-367-u9AzugDUNh-57bqhkiyMxg-1; Tue, 22 Jun 2021 19:03:16 -0400
+X-MC-Unique: u9AzugDUNh-57bqhkiyMxg-1
+Received: by mail-lj1-f200.google.com with SMTP id v3-20020a2e99030000b0290144dc7b6cf0so85743lji.2
+        for <bpf@vger.kernel.org>; Tue, 22 Jun 2021 16:03:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
          :message-id:mime-version:content-transfer-encoding;
-        bh=uVjhLDtJhsrPmwpZ576YLQgGs/VGWOCyo3tFRjK1wVc=;
-        b=emnY2KNIDUBh00/s1bpkysDqJIaahbcpaYmW5VM4ZJPp6mFO0qIdFncqAu2SVXp7yL
-         qvJs8gUlMLLO8ykaBKgwnkm+i9AflRwwMkQqGduBdHvXejhAHK7/wkDzCw8cQ9vrnocq
-         +N92SZiclxxik7xFmRkQLBFAs8KSgNiNkb/nQpS7cQPNQh0xHKrQWLZ0x6buX4VHGwHo
-         HS/tEcNUMIuMtmU/TPsKmGhmM3UEDdlB7CoWhVFu+hFH0yBuzZZOHawemcWCctTbdAHU
-         gTdKmUSvCfv3M1xkwleWvoGs5oTap0lcQJcLODJzum2UScQ80Sg1M7ael5SI4+F3dU/C
-         OSOA==
-X-Gm-Message-State: AOAM532m/8+uK+WrpxYl9XlRbfiRhnipINg+KOwQvut7sUBrnh+9DKEf
-        3f4IIk4zt4jXPbsDlxImeW4m3SpnIsVW5s6u/g9i9Flt2AY7+uk6mdVr+zz2n/Vu1I97ezAz11z
-        o0sEr4VtWgj/a
-X-Received: by 2002:a17:907:62a5:: with SMTP id nd37mr6232986ejc.148.1624398507924;
-        Tue, 22 Jun 2021 14:48:27 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxJYc4EPMTh0Uqt1cLxNZiku3xd51dHPTQpEsvO1j5WnZ7aApODp+VBuPPzksxLysFyRy9DeA==
-X-Received: by 2002:a17:907:62a5:: with SMTP id nd37mr6232977ejc.148.1624398507771;
-        Tue, 22 Jun 2021 14:48:27 -0700 (PDT)
+        bh=gkdf7S21VnLiNI2hSPYpqilho1jT158l5Aks2PTMc+8=;
+        b=QkX+AD3OE8gDFn49JcQRZuVxM5L0cYJof5Cw/B3boRnI/qJOwlSvSLpSv3B3FtIYri
+         77FMKS73GacM4l68WXgOg6xM3bpXp+JXah4wqj0ZxgUtVyzvJTeQycShBakqWBlYHfSy
+         Ll2CJGmuKvId7Ih2x1U2Xoev43dU9QDDsGZcB3QGtQuhpySRykraDaYJgcKsh/ooi9Bj
+         /lun3KAldn9cJLkldPMlV8DywRJcNiZBxQ4Kr/shNXn3z//3Y3plS6K9deQziPUb5BVK
+         l54SdC7ESajf57Pt0/NSpWdq428/Axp/pCEYHf9Lt/JUlUlHek2I+/xdDHMLVBBfyRSN
+         mMsg==
+X-Gm-Message-State: AOAM530vZJY0lgqEY95Pv4N0tPDFsg8+SaOcNBueNy+3b71QdKlyuz5A
+        IeurkK4vwBYmhcJv6ba3UWaPiQFtVMkJW8BF0Gfjw+llxfefdERgaN0Rlh+wn3cwJS1nIguFSCP
+        Y/QWqlyXISoM5
+X-Received: by 2002:a17:906:3057:: with SMTP id d23mr6367481ejd.131.1624401189507;
+        Tue, 22 Jun 2021 15:33:09 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzloo3phLmnqBeluVZUPr6bPCfoe/PWVRjC8errtEifQAVlZ/aBqsnGR8bFTh5W5SFYJukYkw==
+X-Received: by 2002:a17:906:3057:: with SMTP id d23mr6367463ejd.131.1624401189297;
+        Tue, 22 Jun 2021 15:33:09 -0700 (PDT)
 Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id e6sm12947248edk.63.2021.06.22.14.48.27
+        by smtp.gmail.com with ESMTPSA id cw10sm6493977ejb.62.2021.06.22.15.33.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Jun 2021 14:48:27 -0700 (PDT)
+        Tue, 22 Jun 2021 15:33:08 -0700 (PDT)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id BCF71180730; Tue, 22 Jun 2021 23:48:26 +0200 (CEST)
+        id 1DA17180730; Wed, 23 Jun 2021 00:33:06 +0200 (CEST)
 From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     paulmck@kernel.org
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Hangbin Liu <liuhangbin@gmail.com>,
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
         Jesper Dangaard Brouer <brouer@redhat.com>,
-        Magnus Karlsson <magnus.karlsson@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH bpf-next v3 03/16] xdp: add proper __rcu annotations to
- redirect map entries
-In-Reply-To: <20210622202604.GH4397@paulmck-ThinkPad-P17-Gen-1>
-References: <20210617212748.32456-1-toke@redhat.com>
- <20210617212748.32456-4-toke@redhat.com>
- <1881ecbe-06ec-6b0a-836c-033c31fabef4@iogearbox.net>
- <87zgvirj6g.fsf@toke.dk> <87r1guovg2.fsf@toke.dk>
- <20210622202604.GH4397@paulmck-ThinkPad-P17-Gen-1>
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Martin KaFai Lau <kafai@fb.com>, bpf@vger.kernel.org
+Subject: Re: [PATCH net-next v3 2/5] bitops: add non-atomic bitops for pointers
+In-Reply-To: <20210622221023.gklikg5yib4ky35m@apollo>
+References: <20210622202835.1151230-1-memxor@gmail.com>
+ <20210622202835.1151230-3-memxor@gmail.com> <871r8tpnws.fsf@toke.dk>
+ <20210622221023.gklikg5yib4ky35m@apollo>
 X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Tue, 22 Jun 2021 23:48:26 +0200
-Message-ID: <874kdppo45.fsf@toke.dk>
+Date:   Wed, 23 Jun 2021 00:33:06 +0200
+Message-ID: <87y2b1o7h9.fsf@toke.dk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
@@ -87,35 +85,88 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-"Paul E. McKenney" <paulmck@kernel.org> writes:
+Kumar Kartikeya Dwivedi <memxor@gmail.com> writes:
 
-> On Tue, Jun 22, 2021 at 03:55:25PM +0200, Toke H=C3=B8iland-J=C3=B8rgense=
-n wrote:
->> Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com> writes:
->>=20
->> >> It would also be great if this scenario in general could be placed
->> >> under the Documentation/RCU/whatisRCU.rst as an example, so we could
->> >> refer to the official doc on this, too, if Paul is good with this.
+> On Wed, Jun 23, 2021 at 03:22:51AM IST, Toke H=C3=B8iland-J=C3=B8rgensen =
+wrote:
+>> Kumar Kartikeya Dwivedi <memxor@gmail.com> writes:
+>>
+>> > cpumap needs to set, clear, and test the lowest bit in skb pointer in
+>> > various places. To make these checks less noisy, add pointer friendly
+>> > bitop macros that also do some typechecking to sanitize the argument.
 >> >
->> > I'll take a look and see if I can find a way to fit it in there...
->>=20
->> OK, I poked around in Documentation/RCU and decided that the most
->> natural place to put this was in checklist.rst which already talks about
->> local_bh_disable(), but a bit differently. Fixing that up to correspond
->> to what we've been discussing in this thread, and adding a mention of
->> XDP as a usage example, results in the patch below.
->>=20
->> Paul, WDYT?
+>> > These wrap the non-atomic bitops __set_bit, __clear_bit, and test_bit
+>> > but for pointer arguments. Pointer's address has to be passed in and it
+>> > is treated as an unsigned long *, since width and representation of
+>> > pointer and unsigned long match on targets Linux supports. They are
+>> > prefixed with double underscore to indicate lack of atomicity.
+>> >
+>> > Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+>> > ---
+>> >  include/linux/bitops.h    | 19 +++++++++++++++++++
+>> >  include/linux/typecheck.h | 10 ++++++++++
+>> >  2 files changed, 29 insertions(+)
+>> >
+>> > diff --git a/include/linux/bitops.h b/include/linux/bitops.h
+>> > index 26bf15e6cd35..a9e336b9fa4d 100644
+>> > --- a/include/linux/bitops.h
+>> > +++ b/include/linux/bitops.h
+>> > @@ -4,6 +4,7 @@
+>> >
+>> >  #include <asm/types.h>
+>> >  #include <linux/bits.h>
+>> > +#include <linux/typecheck.h>
+>> >
+>> >  #include <uapi/linux/kernel.h>
+>> >
+>> > @@ -253,6 +254,24 @@ static __always_inline void __assign_bit(long nr,=
+ volatile unsigned long *addr,
+>> >  		__clear_bit(nr, addr);
+>> >  }
+>> >
+>> > +#define __ptr_set_bit(nr, addr)                         \
+>> > +	({                                              \
+>> > +		typecheck_pointer(*(addr));             \
+>> > +		__set_bit(nr, (unsigned long *)(addr)); \
+>> > +	})
+>> > +
+>> > +#define __ptr_clear_bit(nr, addr)                         \
+>> > +	({                                                \
+>> > +		typecheck_pointer(*(addr));               \
+>> > +		__clear_bit(nr, (unsigned long *)(addr)); \
+>> > +	})
+>> > +
+>> > +#define __ptr_test_bit(nr, addr)                       \
+>> > +	({                                             \
+>> > +		typecheck_pointer(*(addr));            \
+>> > +		test_bit(nr, (unsigned long *)(addr)); \
+>> > +	})
+>> > +
+>>
+>> Before these were functions that returned the modified values, now they
+>> are macros that modify in-place. Why the change? :)
+>>
 >
-> I think that my original paragraph needed to have been updated back
-> when v4.20 came out.  And again when RCU Tasks Trace came out.  ;-)
->
-> So I did that updating, then approximated your patch on top of it,
-> as shown below.  Does this work for you?
+> Given that we're exporting this to all kernel users now, it felt more
+> appropriate to follow the existing convention/argument order for the
+> functions/ops they are wrapping.
 
-Yup, LGTM, thanks! Shall I just fold that version into the next version
-of my series, or do you want to take it through your tree (I suppose
-it's independent of the rest, so either way is fine by me)?
+I wasn't talking about the order of the arguments; swapping those is
+fine. But before, you had:
+
+static void *__ptr_set_bit(void *ptr, int bit)
+
+with usage (function return is the modified value):
+ret =3D ptr_ring_produce(rcpu->queue, __ptr_set_bit(skb, 0));
+
+now you have:
+#define __ptr_set_bit(nr, addr)
+
+with usage (modifies argument in-place):
+__ptr_set_bit(0, &skb);
+ret =3D ptr_ring_produce(rcpu->queue, skb);
+
+why change from function to macro?
 
 -Toke
 
