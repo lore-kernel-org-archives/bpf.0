@@ -2,320 +2,144 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DA60C49EA2
-	for <bpf@archiver.kernel.org>; Tue, 22 Jun 2021 06:50:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E15BFC2B9F4
+	for <bpf@archiver.kernel.org>; Tue, 22 Jun 2021 07:12:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 786456134F
-	for <bpf@archiver.kernel.org>; Tue, 22 Jun 2021 06:50:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BDDDD6128C
+	for <bpf@archiver.kernel.org>; Tue, 22 Jun 2021 07:12:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230290AbhFVGwp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 22 Jun 2021 02:52:45 -0400
-Received: from szxga03-in.huawei.com ([45.249.212.189]:7373 "EHLO
-        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230107AbhFVGwo (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 22 Jun 2021 02:52:44 -0400
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4G8H3t3nV3z71L9;
-        Tue, 22 Jun 2021 14:46:18 +0800 (CST)
-Received: from dggpemm500005.china.huawei.com (7.185.36.74) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Tue, 22 Jun 2021 14:50:23 +0800
-Received: from localhost.localdomain (10.69.192.56) by
- dggpemm500005.china.huawei.com (7.185.36.74) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Tue, 22 Jun 2021 14:50:23 +0800
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-To:     <davem@davemloft.net>, <kuba@kernel.org>
-CC:     <olteanv@gmail.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <andriin@fb.com>, <edumazet@google.com>, <weiwan@google.com>,
-        <cong.wang@bytedance.com>, <ap420073@gmail.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linuxarm@openeuler.org>, <mkl@pengutronix.de>,
-        <linux-can@vger.kernel.org>, <jhs@mojatatu.com>,
-        <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
-        <andrii@kernel.org>, <kafai@fb.com>, <songliubraving@fb.com>,
-        <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
-        <bpf@vger.kernel.org>, <jonas.bonn@netrounds.com>,
-        <pabeni@redhat.com>, <mzhivich@akamai.com>, <johunt@akamai.com>,
-        <albcamus@gmail.com>, <kehuan.feng@gmail.com>,
-        <a.fatoum@pengutronix.de>, <atenart@kernel.org>,
-        <alexander.duyck@gmail.com>, <hdanton@sina.com>, <jgross@suse.com>,
-        <JKosina@suse.com>, <mkubecek@suse.cz>, <bjorn@kernel.org>,
-        <alobakin@pm.me>
-Subject: [PATCH net-next v3 2/3] net: sched: implement TCQ_F_CAN_BYPASS for lockless qdisc
-Date:   Tue, 22 Jun 2021 14:49:56 +0800
-Message-ID: <1624344597-11806-3-git-send-email-linyunsheng@huawei.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1624344597-11806-1-git-send-email-linyunsheng@huawei.com>
-References: <1624344597-11806-1-git-send-email-linyunsheng@huawei.com>
+        id S230001AbhFVHOW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 22 Jun 2021 03:14:22 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:43530 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229628AbhFVHOQ (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 22 Jun 2021 03:14:16 -0400
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15M73tJ4026652;
+        Tue, 22 Jun 2021 03:11:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : subject : to : cc
+ : references : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=DmFy3Ba0GQktUP84N/Xh5kSVt/I7Z6RAqewGIHWSsOw=;
+ b=ZFtoLB7lFXWOH+lMB/4NA1zlcFoElVyxQA0SywE0eGzHTkc6AzneeunZU/mv8bMNDu/S
+ bzHVNnLUqojO582zOEYskwIHrAmn/Qlzi3/zDQrny95C6KezT7T/PJRjwUIwz91wUt/Z
+ Sqeb+GZL2Wq0LITa0z/2df5RuTNxhZJ/TxsbDn0Drv+vS3AqaGohGqk1q7Zpgefb2Mb1
+ tc2c6MPvz8tdDyvVFfPZmPz15GD9HEXlLl4aaB+rC32smNhgulzM174f3tDBP+LUIoAA
+ DeTDRFndeml1kpaHOipplXK3sHpdZUPD+ijjW++QMA6jkVN81/5EYuWtC6hku3LLAzHL uw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 39ba85hm9j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Jun 2021 03:11:10 -0400
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 15M73old025895;
+        Tue, 22 Jun 2021 03:11:10 -0400
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 39ba85hm8t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Jun 2021 03:11:10 -0400
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 15M784nb015650;
+        Tue, 22 Jun 2021 07:11:08 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma03ams.nl.ibm.com with ESMTP id 399878993d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 22 Jun 2021 07:11:08 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 15M79ngk32899492
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 22 Jun 2021 07:09:49 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EE11AA405F;
+        Tue, 22 Jun 2021 07:11:05 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7DCDDA405C;
+        Tue, 22 Jun 2021 07:10:59 +0000 (GMT)
+Received: from [9.199.39.114] (unknown [9.199.39.114])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 22 Jun 2021 07:10:59 +0000 (GMT)
+From:   Ravi Bangoria <ravi.bangoria@linux.ibm.com>
+Subject: Re: [PATCH bpf-next 0/1] arm64: Add BPF exception tables
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        bpf <bpf@vger.kernel.org>,
+        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Ravi Bangoria <ravi.bangoria@linux.ibm.com>
+References: <20200728152122.1292756-1-jean-philippe@linaro.org>
+ <daba29d3-46bb-8246-74a7-83184c92435c@linux.ibm.com>
+ <CAADnVQJsCkSdqCaQt2hretdqamWJmWRQvh+=RvwHmHAOW2kL6g@mail.gmail.com>
+ <fedff32f-e511-a191-22b0-bf421bdcce2a@linux.ibm.com>
+ <CAADnVQJux+8n-vpuK9FqTLuj4cXrp04pGkpvKaUdAPXLQ4c-PQ@mail.gmail.com>
+Message-ID: <3bc13a55-c0c4-e2fe-762c-794138adebf6@linux.ibm.com>
+Date:   Tue, 22 Jun 2021 12:40:57 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.56]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500005.china.huawei.com (7.185.36.74)
-X-CFilter-Loop: Reflected
+In-Reply-To: <CAADnVQJux+8n-vpuK9FqTLuj4cXrp04pGkpvKaUdAPXLQ4c-PQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: R2pniiIf8D9jys73ZpSG380JQPRrTxja
+X-Proofpoint-GUID: TenCV2jNI72BffM_rrIWYqe56dqr0-H8
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-06-22_04:2021-06-21,2021-06-22 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ lowpriorityscore=0 suspectscore=0 malwarescore=0 bulkscore=0 adultscore=0
+ mlxlogscore=999 spamscore=0 clxscore=1015 impostorscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2106220043
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently pfifo_fast has both TCQ_F_CAN_BYPASS and TCQ_F_NOLOCK
-flag set, but queue discipline by-pass does not work for lockless
-qdisc because skb is always enqueued to qdisc even when the qdisc
-is empty, see __dev_xmit_skb().
+Hi Alexei,
 
-This patch calls sch_direct_xmit() to transmit the skb directly
-to the driver for empty lockless qdisc, which aviod enqueuing
-and dequeuing operation.
+On 6/18/21 10:04 PM, Alexei Starovoitov wrote:
+> On Wed, Jun 16, 2021 at 11:58 PM Ravi Bangoria
+> <ravi.bangoria@linux.ibm.com> wrote:
+>>
+>>     $ dmesg
+>>     [  166.864325] BUG: unable to handle page fault for address: 0000000000d12345
+>>     [  166.864336] #PF: supervisor read access in kernel mode
+>>     [  166.864338] #PF: error_code(0x0000) - not-present page
+>>
+>> 0xd12345 is unallocated userspace address. Similarly, I also tried with
+> 
+> that's unfortunately expected, since this is a user address.
 
-As qdisc->empty is not reliable to indicate a empty qdisc because
-there is a time window between enqueuing and setting qdisc->empty.
-So we use the MISSED state added in commit a90c57f2cedd ("net:
-sched: fix packet stuck problem for lockless qdisc"), which
-indicate there is lock contention, suggesting that it is better
-not to do the qdisc bypass in order to avoid packet out of order
-problem.
+Sure. fwiw, it works with bpf_probe_read().
 
-In order to make MISSED state reliable to indicate a empty qdisc,
-we need to ensure that testing and clearing of MISSED state is
-within the protection of qdisc->seqlock, only setting MISSED state
-can be done without the protection of qdisc->seqlock. A MISSED
-state testing is added without the protection of qdisc->seqlock to
-aviod doing unnecessary spin_trylock() for contention case.
+>> p->dte = (void *)0xffffffffc1234567 after confirming it's not allocated
+>> to kernel or any module address. I see the same failure with it too.
+> 
+> This one is surprising though. Sounds like a bug in exception table
+> construction. Can you debug it to see what's causing it?
+> First check that do_kern_addr_fault() is invoked in this case.
+> And then fixup_exception() and why search_bpf_extables()
+> cannot find it.
 
-As the enqueuing is not within the protection of qdisc->seqlock,
-there is still a potential data race as mentioned by Jakub [1]:
+It seems the commit 4c5de127598e1 ("bpf: Emit explicit NULL pointer checks
+for PROBE_LDX instructions.") added few instructions before actual load
+but does not consider those additional instruction while calculating
+extable offset. Let me prepare a fix.
 
-      thread1               thread2             thread3
-qdisc_run_begin() # true
-                        qdisc_run_begin(q)
-                             set(MISSED)
-pfifo_fast_dequeue
-  clear(MISSED)
-  # recheck the queue
-qdisc_run_end()
-                            enqueue skb1
-                                             qdisc empty # true
-                                          qdisc_run_begin() # true
-                                          sch_direct_xmit() # skb2
-                         qdisc_run_begin()
-                            set(MISSED)
+> Separately we probably need to replace the NULL check
+> with addr >= TASK_SIZE_MAX to close this issue though it's a bit artificial.
 
-When above happens, skb1 enqueued by thread2 is transmited after
-skb2 is transmited by thread3 because MISSED state setting and
-enqueuing is not under the qdisc->seqlock. If qdisc bypass is
-disabled, skb1 has better chance to be transmited quicker than
-skb2.
-
-This patch does not take care of the above data race, because we
-view this as similar as below:
-Even at the same time CPU1 and CPU2 write the skb to two socket
-which both heading to the same qdisc, there is no guarantee that
-which skb will hit the qdisc first, because there is a lot of
-factor like interrupt/softirq/cache miss/scheduling afffecting
-that.
-
-There are below cases that need special handling:
-1. When MISSED state is cleared before another round of dequeuing
-   in pfifo_fast_dequeue(), and __qdisc_run() might not be able to
-   dequeue all skb in one round and call __netif_schedule(), which
-   might result in a non-empty qdisc without MISSED set. In order
-   to avoid this, the MISSED state is set for lockless qdisc and
-   __netif_schedule() will be called at the end of qdisc_run_end.
-
-2. The MISSED state also need to be set for lockless qdisc instead
-   of calling __netif_schedule() directly when requeuing a skb for
-   a similar reason.
-
-3. For netdev queue stopped case, the MISSED case need clearing
-   while the netdev queue is stopped, otherwise there may be
-   unnecessary __netif_schedule() calling. So a new DRAINING state
-   is added to indicate this case, which also indicate a non-empty
-   qdisc.
-
-4. As there is already netif_xmit_frozen_or_stopped() checking in
-   dequeue_skb() and sch_direct_xmit(), which are both within the
-   protection of qdisc->seqlock, but the same checking in
-   __dev_xmit_skb() is without the protection, which might cause
-   empty indication of a lockless qdisc to be not reliable. So
-   remove the checking in __dev_xmit_skb(), and the checking in
-   the protection of qdisc->seqlock seems enough to avoid the cpu
-   consumption problem for netdev queue stopped case.
-
-1. https://lkml.org/lkml/2021/5/29/215
-
-Acked-by: Jakub Kicinski <kuba@kernel.org>
-Tested-by: Vladimir Oltean <vladimir.oltean@nxp.com> # flexcan
-Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
----
-V2: Adjust the comment and commit log according to discussion
-    in V1.
-V1: Add nolock_qdisc_is_empty() and do the qdisc empty checking
-    without the protection of qdisc->seqlock to aviod doing
-    unnecessary spin_trylock() for contention case.
-RFC v4: Use STATE_MISSED and STATE_DRAINING to indicate non-empty
-        qdisc.
----
- include/net/sch_generic.h | 16 +++++++++++++---
- net/core/dev.c            | 27 +++++++++++++++++++++++++--
- net/sched/sch_generic.c   | 20 ++++++++++++++++----
- 3 files changed, 54 insertions(+), 9 deletions(-)
-
-diff --git a/include/net/sch_generic.h b/include/net/sch_generic.h
-index 3ed6bcc..177f240 100644
---- a/include/net/sch_generic.h
-+++ b/include/net/sch_generic.h
-@@ -37,8 +37,15 @@ enum qdisc_state_t {
- 	__QDISC_STATE_SCHED,
- 	__QDISC_STATE_DEACTIVATED,
- 	__QDISC_STATE_MISSED,
-+	__QDISC_STATE_DRAINING,
- };
- 
-+#define QDISC_STATE_MISSED	BIT(__QDISC_STATE_MISSED)
-+#define QDISC_STATE_DRAINING	BIT(__QDISC_STATE_DRAINING)
-+
-+#define QDISC_STATE_NON_EMPTY	(QDISC_STATE_MISSED | \
-+					QDISC_STATE_DRAINING)
-+
- struct qdisc_size_table {
- 	struct rcu_head		rcu;
- 	struct list_head	list;
-@@ -145,6 +152,11 @@ static inline bool qdisc_is_running(struct Qdisc *qdisc)
- 	return (raw_read_seqcount(&qdisc->running) & 1) ? true : false;
- }
- 
-+static inline bool nolock_qdisc_is_empty(const struct Qdisc *qdisc)
-+{
-+	return !(READ_ONCE(qdisc->state) & QDISC_STATE_NON_EMPTY);
-+}
-+
- static inline bool qdisc_is_percpu_stats(const struct Qdisc *q)
- {
- 	return q->flags & TCQ_F_CPUSTATS;
-@@ -206,10 +218,8 @@ static inline void qdisc_run_end(struct Qdisc *qdisc)
- 		spin_unlock(&qdisc->seqlock);
- 
- 		if (unlikely(test_bit(__QDISC_STATE_MISSED,
--				      &qdisc->state))) {
--			clear_bit(__QDISC_STATE_MISSED, &qdisc->state);
-+				      &qdisc->state)))
- 			__netif_schedule(qdisc);
--		}
- 	} else {
- 		write_seqcount_end(&qdisc->running);
- 	}
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 50531a2..991d09b 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -3852,10 +3852,33 @@ static inline int __dev_xmit_skb(struct sk_buff *skb, struct Qdisc *q,
- 	qdisc_calculate_pkt_len(skb, q);
- 
- 	if (q->flags & TCQ_F_NOLOCK) {
-+		if (q->flags & TCQ_F_CAN_BYPASS && nolock_qdisc_is_empty(q) &&
-+		    qdisc_run_begin(q)) {
-+			/* Retest nolock_qdisc_is_empty() within the protection
-+			 * of q->seqlock to protect from racing with requeuing.
-+			 */
-+			if (unlikely(!nolock_qdisc_is_empty(q))) {
-+				rc = q->enqueue(skb, q, &to_free) &
-+					NET_XMIT_MASK;
-+				__qdisc_run(q);
-+				qdisc_run_end(q);
-+
-+				goto no_lock_out;
-+			}
-+
-+			qdisc_bstats_cpu_update(q, skb);
-+			if (sch_direct_xmit(skb, q, dev, txq, NULL, true) &&
-+			    !nolock_qdisc_is_empty(q))
-+				__qdisc_run(q);
-+
-+			qdisc_run_end(q);
-+			return NET_XMIT_SUCCESS;
-+		}
-+
- 		rc = q->enqueue(skb, q, &to_free) & NET_XMIT_MASK;
--		if (likely(!netif_xmit_frozen_or_stopped(txq)))
--			qdisc_run(q);
-+		qdisc_run(q);
- 
-+no_lock_out:
- 		if (unlikely(to_free))
- 			kfree_skb_list(to_free);
- 		return rc;
-diff --git a/net/sched/sch_generic.c b/net/sched/sch_generic.c
-index e9c0afc8..9984ccc 100644
---- a/net/sched/sch_generic.c
-+++ b/net/sched/sch_generic.c
-@@ -52,6 +52,8 @@ static void qdisc_maybe_clear_missed(struct Qdisc *q,
- 	 */
- 	if (!netif_xmit_frozen_or_stopped(txq))
- 		set_bit(__QDISC_STATE_MISSED, &q->state);
-+	else
-+		set_bit(__QDISC_STATE_DRAINING, &q->state);
- }
- 
- /* Main transmission queue. */
-@@ -164,9 +166,13 @@ static inline void dev_requeue_skb(struct sk_buff *skb, struct Qdisc *q)
- 
- 		skb = next;
- 	}
--	if (lock)
-+
-+	if (lock) {
- 		spin_unlock(lock);
--	__netif_schedule(q);
-+		set_bit(__QDISC_STATE_MISSED, &q->state);
-+	} else {
-+		__netif_schedule(q);
-+	}
- }
- 
- static void try_bulk_dequeue_skb(struct Qdisc *q,
-@@ -409,7 +415,11 @@ void __qdisc_run(struct Qdisc *q)
- 	while (qdisc_restart(q, &packets)) {
- 		quota -= packets;
- 		if (quota <= 0) {
--			__netif_schedule(q);
-+			if (q->flags & TCQ_F_NOLOCK)
-+				set_bit(__QDISC_STATE_MISSED, &q->state);
-+			else
-+				__netif_schedule(q);
-+
- 			break;
- 		}
- 	}
-@@ -698,13 +708,14 @@ static struct sk_buff *pfifo_fast_dequeue(struct Qdisc *qdisc)
- 	if (likely(skb)) {
- 		qdisc_update_stats_at_dequeue(qdisc, skb);
- 	} else if (need_retry &&
--		   test_bit(__QDISC_STATE_MISSED, &qdisc->state)) {
-+		   READ_ONCE(qdisc->state) & QDISC_STATE_NON_EMPTY) {
- 		/* Delay clearing the STATE_MISSED here to reduce
- 		 * the overhead of the second spin_trylock() in
- 		 * qdisc_run_begin() and __netif_schedule() calling
- 		 * in qdisc_run_end().
- 		 */
- 		clear_bit(__QDISC_STATE_MISSED, &qdisc->state);
-+		clear_bit(__QDISC_STATE_DRAINING, &qdisc->state);
- 
- 		/* Make sure dequeuing happens after clearing
- 		 * STATE_MISSED.
-@@ -1222,6 +1233,7 @@ static void dev_reset_queue(struct net_device *dev,
- 	spin_unlock_bh(qdisc_lock(qdisc));
- 	if (nolock) {
- 		clear_bit(__QDISC_STATE_MISSED, &qdisc->state);
-+		clear_bit(__QDISC_STATE_DRAINING, &qdisc->state);
- 		spin_unlock_bh(&qdisc->seqlock);
- 	}
- }
--- 
-2.7.4
-
+Ravi
