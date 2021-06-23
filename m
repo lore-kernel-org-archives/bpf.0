@@ -2,64 +2,63 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-14.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65C0FC4743C
-	for <bpf@archiver.kernel.org>; Wed, 23 Jun 2021 11:07:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8172C48BC2
+	for <bpf@archiver.kernel.org>; Wed, 23 Jun 2021 11:07:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3F91A6108E
-	for <bpf@archiver.kernel.org>; Wed, 23 Jun 2021 11:07:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BFD0F611AD
+	for <bpf@archiver.kernel.org>; Wed, 23 Jun 2021 11:07:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbhFWLJv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 23 Jun 2021 07:09:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:39466 "EHLO
+        id S230137AbhFWLJw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 23 Jun 2021 07:09:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:48472 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230036AbhFWLJt (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 23 Jun 2021 07:09:49 -0400
+        by vger.kernel.org with ESMTP id S230061AbhFWLJv (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 23 Jun 2021 07:09:51 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1624446452;
+        s=mimecast20190719; t=1624446453;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gCA//v5U2zdeKF30MPJkPlDU8nWyKsxnTIF8PhfpTLo=;
-        b=dDlPByXZSbb6E6YCDuJB2bazeF0T8u0IOoh7/lXWfhX3c1dVRMFD5WD6u7TUibAJBEk15O
-        kAmeOmDe080gZgaEM3dCXM5AHSofAPSUT1FPMCeWV99+jGcb2XN3S5JuGvG6eVNAL6HWw+
-        WuO1ynNUW7RIXmMVUI3tXrFTn74Rwyw=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-122-qawLYOH3PaOOjuCBmRWg6g-1; Wed, 23 Jun 2021 07:07:30 -0400
-X-MC-Unique: qawLYOH3PaOOjuCBmRWg6g-1
-Received: by mail-ed1-f71.google.com with SMTP id j15-20020a05640211cfb0290394f9de5750so532811edw.16
-        for <bpf@vger.kernel.org>; Wed, 23 Jun 2021 04:07:30 -0700 (PDT)
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ODOU5hswW+B+bZqC14Fry2tBxLecVcrhAvqccjhp3os=;
+        b=hpgvrgq15uIOH052YYlCQX/5qaanUuHiRdq622VovfWTFyZRlBuWx53ApJ+b2Z2kNXpABU
+        PPVlYVqvm6FsGyrfmm8WzG3KYg0PHhpIyT/U5ABKceodpTZ431pC1jtlErxmetp2Nf0fRE
+        9jHZKS+bwAq6hkChOmHzR2meDmVMOJA=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-64-gIUKwh_pOIqqxF1eEdUlBQ-1; Wed, 23 Jun 2021 07:07:32 -0400
+X-MC-Unique: gIUKwh_pOIqqxF1eEdUlBQ-1
+Received: by mail-ej1-f72.google.com with SMTP id lt4-20020a170906fa84b0290481535542e3so837814ejb.18
+        for <bpf@vger.kernel.org>; Wed, 23 Jun 2021 04:07:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=gCA//v5U2zdeKF30MPJkPlDU8nWyKsxnTIF8PhfpTLo=;
-        b=ov0u6pIjh54xkU1qaOv8c+2PRh5E+hFFzvNtqzAYzQGCps68TGcS3zeSO9+gz6izvC
-         z0NEDa2bW7wkU6Zyb41XVksG6iziQhAcTfNIgXQ4U8i23A3qKgXYPeKo5krHAyM5lEdq
-         IGnq1dlJzVYbLB67U9x4h+rZMCxW25v+CvCUiV2P/G9DCmKqbw2wTlSthHS8WDf29mBB
-         JaTIYAOxF/U4mDcet7giFkMrhcHCz2Fpg5wghJnUz7lXLxdAG3l+juW17We1XqQr2Jjw
-         pVaa4Gaxkz78MtD6UiDuZDRmntzVSUFMGmZFVoj0Pgd/jMLGDIRAEzNt/xx4SZRUgBJV
-         orxQ==
-X-Gm-Message-State: AOAM531XqAotNWHewp3KJ3VjBD8BBlKNsqHJzfht0XX40A0fx5PobAFK
-        A3es3kICZtvHO+VBconBdZTpsadBUoluxklz1v4Nk8lNUIp5pEOqoQzjnyTy3qWyZ2NU7Raz6BE
-        6u+uMLlEH93c8
-X-Received: by 2002:a05:6402:100e:: with SMTP id c14mr11312164edu.51.1624446449338;
-        Wed, 23 Jun 2021 04:07:29 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxK5QVgpNKfKSNK2v/czWwASjaveoabV2SEAVqeVJeP9mCNaG4Ztjz6zIgdwue4LxXhpgF06A==
-X-Received: by 2002:a05:6402:100e:: with SMTP id c14mr11312118edu.51.1624446449004;
-        Wed, 23 Jun 2021 04:07:29 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ODOU5hswW+B+bZqC14Fry2tBxLecVcrhAvqccjhp3os=;
+        b=hnK6DjHzzVI/NCmHRs03D5SJz72WPKeyU+TUDuWNNR/wDQ8HH9juOwb//DUceYctcH
+         CBdiQjfFXe5hWz1VMWm/IJxrAzplUXhFVvnDbC6cZxJcRHC7ZNSC6BjNaqt2caP3x5oI
+         Hm5Txhq+zFCe1/FTKY4BcqlfHEL0aXzvF+A4E3Toe3HICRqn8qhA3RNObKyTMnGF6esa
+         vPJdwK6omIkuMJ6yqvj2Zti7AlMlINLjDCzjJBCwe5A4SkLdqY2oclOYipiRbguwgkq/
+         NTgm7jyS+ufmg766zGfIdWi0DRe1le4xyUeleFd34v7NJxnrsmhBrZJxqQMBwHYdx6f0
+         1n3Q==
+X-Gm-Message-State: AOAM5301bBSXNuuijYyYugMHusQUX2oarDXS9Vd9jh+soYbYZGvFHjY5
+        ag9v9oUHAhYK+Q56K1SyqBUkhW907xEL9lOABwhcY8ZijAKuifXuSkaYpabJYdE+U3CAv2dxnCe
+        35yiJ+qWIjWx0
+X-Received: by 2002:a05:6402:d66:: with SMTP id ec38mr11676252edb.212.1624446450488;
+        Wed, 23 Jun 2021 04:07:30 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzE798RTK+zik4pkwc4nDgSMCxYIimq4+Qyc50RxhJ7/R3P14oFJECIBKEe/icrH26k82Sszw==
+X-Received: by 2002:a05:6402:d66:: with SMTP id ec38mr11676196edb.212.1624446450033;
+        Wed, 23 Jun 2021 04:07:30 -0700 (PDT)
 Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id cn10sm10177304edb.38.2021.06.23.04.07.28
+        by smtp.gmail.com with ESMTPSA id ia20sm3817823ejc.96.2021.06.23.04.07.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Jun 2021 04:07:28 -0700 (PDT)
+        Wed, 23 Jun 2021 04:07:29 -0700 (PDT)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 07804180732; Wed, 23 Jun 2021 13:07:28 +0200 (CEST)
+        id F36F7180730; Wed, 23 Jun 2021 13:07:27 +0200 (CEST)
 From:   =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     bpf@vger.kernel.org, netdev@vger.kernel.org
 Cc:     Martin KaFai Lau <kafai@fb.com>,
@@ -69,12 +68,10 @@ Cc:     Martin KaFai Lau <kafai@fb.com>,
         "Paul E . McKenney" <paulmck@kernel.org>,
         Jakub Kicinski <kuba@kernel.org>,
         =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-Subject: [PATCH bpf-next v4 02/19] doc: Clarify and expand RCU updaters and corresponding readers
-Date:   Wed, 23 Jun 2021 13:07:10 +0200
-Message-Id: <20210623110727.221922-3-toke@redhat.com>
+Subject: [PATCH bpf-next v4 00/19] Clean up and document RCU-based object protection for XDP and TC BPF
+Date:   Wed, 23 Jun 2021 13:07:08 +0200
+Message-Id: <20210623110727.221922-1-toke@redhat.com>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210623110727.221922-1-toke@redhat.com>
-References: <20210623110727.221922-1-toke@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -82,78 +79,122 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: "Paul E. McKenney" <paulmck@kernel.org>
+During the discussion[0] of Hangbin's multicast patch series, Martin pointed out
+that the lifetime of the RCU-protected  map entries used by XDP_REDIRECT is by
+no means obvious. I promised to look into cleaning this up, and Paul helpfully
+provided some hints and a new unrcu_pointer() helper to aid in this.
 
-This commit clarifies which primitives readers can use given that the
-corresponding updaters have made a specific choice.  This commit also adds
-this information for the various RCU Tasks flavors.  While in the area, it
-removes a paragraph that no longer applies in any straightforward manner.
+It seems[1] that back in the early days of XDP, local_bh_disable() did not
+provide RCU protection, which is why the rcu_read_lock() calls were added
+to drivers in the first place. But according to Paul[2], in recent kernels
+a local_bh_disable()/local_bh_enable() pair functions as one big RCU
+read-side section, so no further protection is needed. This even applies to
+-rt kernels, which has an explicit rcu_read_lock() in place as part of the
+local_bh_disable()[3].
 
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
----
- Documentation/RCU/checklist.rst | 48 ++++++++++++++++++---------------
- 1 file changed, 27 insertions(+), 21 deletions(-)
+This patch series is mostly a documentation exercise, cleaning up the
+description of the lifetime expectations and adding __rcu annotations so
+sparse and lockdep can help verify it.
 
-diff --git a/Documentation/RCU/checklist.rst b/Documentation/RCU/checklist.rst
-index 1030119294d0..07f6cb8f674d 100644
---- a/Documentation/RCU/checklist.rst
-+++ b/Documentation/RCU/checklist.rst
-@@ -211,27 +211,33 @@ over a rather long period of time, but improvements are always welcome!
- 	of the system, especially to real-time workloads running on
- 	the rest of the system.
- 
--7.	As of v4.20, a given kernel implements only one RCU flavor,
--	which is RCU-sched for PREEMPTION=n and RCU-preempt for PREEMPTION=y.
--	If the updater uses call_rcu() or synchronize_rcu(),
--	then the corresponding readers may use rcu_read_lock() and
--	rcu_read_unlock(), rcu_read_lock_bh() and rcu_read_unlock_bh(),
--	or any pair of primitives that disables and re-enables preemption,
--	for example, rcu_read_lock_sched() and rcu_read_unlock_sched().
--	If the updater uses synchronize_srcu() or call_srcu(),
--	then the corresponding readers must use srcu_read_lock() and
--	srcu_read_unlock(), and with the same srcu_struct.  The rules for
--	the expedited primitives are the same as for their non-expedited
--	counterparts.  Mixing things up will result in confusion and
--	broken kernels, and has even resulted in an exploitable security
--	issue.
--
--	One exception to this rule: rcu_read_lock() and rcu_read_unlock()
--	may be substituted for rcu_read_lock_bh() and rcu_read_unlock_bh()
--	in cases where local bottom halves are already known to be
--	disabled, for example, in irq or softirq context.  Commenting
--	such cases is a must, of course!  And the jury is still out on
--	whether the increased speed is worth it.
-+7.	As of v4.20, a given kernel implements only one RCU flavor, which
-+	is RCU-sched for PREEMPTION=n and RCU-preempt for PREEMPTION=y.
-+	If the updater uses call_rcu() or synchronize_rcu(), then
-+	the corresponding readers may use:  (1) rcu_read_lock() and
-+	rcu_read_unlock(), (2) any pair of primitives that disables
-+	and re-enables softirq, for example, rcu_read_lock_bh() and
-+	rcu_read_unlock_bh(), or (3) any pair of primitives that disables
-+	and re-enables preemption, for example, rcu_read_lock_sched() and
-+	rcu_read_unlock_sched().  If the updater uses synchronize_srcu()
-+	or call_srcu(), then the corresponding readers must use
-+	srcu_read_lock() and srcu_read_unlock(), and with the same
-+	srcu_struct.  The rules for the expedited RCU grace-period-wait
-+	primitives are the same as for their non-expedited counterparts.
-+
-+	If the updater uses call_rcu_tasks() or synchronize_rcu_tasks(),
-+	then the readers must refrain from executing voluntary
-+	context switches, that is, from blocking.  If the updater uses
-+	call_rcu_tasks_trace() or synchronize_rcu_tasks_trace(), then
-+	the corresponding readers must use rcu_read_lock_trace() and
-+	rcu_read_unlock_trace().  If an updater uses call_rcu_tasks_rude()
-+	or synchronize_rcu_tasks_rude(), then the corresponding readers
-+	must use anything that disables interrupts.
-+
-+	Mixing things up will result in confusion and broken kernels, and
-+	has even resulted in an exploitable security issue.  Therefore,
-+	when using non-obvious pairs of primitives, commenting is of
-+	course a must.
- 
- 8.	Although synchronize_rcu() is slower than is call_rcu(), it
- 	usually results in simpler code.  So, unless update performance is
+Patches 1-4 are preparatory: Patch 1 adds Paul's unrcu_pointer()
+helper (which has already been added to his tree), which we need for some
+of the operations in devmap, patches 2 and 3 update the RCU documentation
+and patch 4 adds bh context as a valid condition for map lookups. Patch 5
+is the main bit that adds the __rcu annotations and updates documentation
+comments. Finally, patch 6 removes unneeded rcu_read_lock()s from TC BPF,
+and the rest are patches updating the drivers, with one patch per distinct
+maintainer.
+
+Unfortunately I don't have any hardware to test any of the driver patches;
+Jesper helpfully verified that it doesn't break anything on i40e, but the rest
+of the driver patches are only compile-tested.
+
+[0] https://lore.kernel.org/bpf/20210415173551.7ma4slcbqeyiba2r@kafai-mbp.dhcp.thefacebook.com/
+[1] https://lore.kernel.org/bpf/c5192ab3-1c05-8679-79f2-59d98299095b@iogearbox.net/
+[2] https://lore.kernel.org/bpf/20210417002301.GO4212@paulmck-ThinkPad-P17-Gen-1/
+[3] https://lore.kernel.org/bpf/20210419165837.GA975577@paulmck-ThinkPad-P17-Gen-1/
+
+Changelog:
+v4:
+  - Move comment about RCU protection into core instead of leaving it in
+    drivers
+  - Also remove rcu_read_lock() around TC BPF program execution
+  - Fold in a couple of patches from Paul updating the RCU documentation
+v3:
+  - Remove one other unnecessary change to hlist_for_each_entry_rcu()
+  - Carry forward another ACK
+v2:
+  - Add a comment about RCU protection to the drivers where rcu_read_lock()
+    is removed
+  - Drop unnecessary patch 3 which changed dev_get_by_index_rcu()
+  - Add some more text with the history to cover letter
+  - Fix a few places where the wrong RCU checks were used in cpumap and
+    xskmap code
+  - Carry forward ACKs
+
+Paul E. McKenney (2):
+  rcu: Create an unrcu_pointer() to remove __rcu from a pointer
+  doc: Clarify and expand RCU updaters and corresponding readers
+
+Toke Høiland-Jørgensen (17):
+  doc: Give XDP as example of non-obvious RCU reader/updater pairing
+  bpf: allow RCU-protected lookups to happen from bh context
+  xdp: add proper __rcu annotations to redirect map entries
+  sched: remove unneeded rcu_read_lock() around BPF program invocation
+  ena: remove rcu_read_lock() around XDP program invocation
+  bnxt: remove rcu_read_lock() around XDP program invocation
+  thunderx: remove rcu_read_lock() around XDP program invocation
+  freescale: remove rcu_read_lock() around XDP program invocation
+  net: intel: remove rcu_read_lock() around XDP program invocation
+  marvell: remove rcu_read_lock() around XDP program invocation
+  mlx4: remove rcu_read_lock() around XDP program invocation
+  nfp: remove rcu_read_lock() around XDP program invocation
+  qede: remove rcu_read_lock() around XDP program invocation
+  sfc: remove rcu_read_lock() around XDP program invocation
+  netsec: remove rcu_read_lock() around XDP program invocation
+  stmmac: remove rcu_read_lock() around XDP program invocation
+  net: ti: remove rcu_read_lock() around XDP program invocation
+
+ Documentation/RCU/checklist.rst               | 55 ++++++++++++-------
+ drivers/net/ethernet/amazon/ena/ena_netdev.c  |  3 -
+ drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c |  2 -
+ .../net/ethernet/cavium/thunder/nicvf_main.c  |  2 -
+ .../net/ethernet/freescale/dpaa/dpaa_eth.c    |  8 +--
+ .../net/ethernet/freescale/dpaa2/dpaa2-eth.c  |  3 -
+ drivers/net/ethernet/intel/i40e/i40e_txrx.c   |  2 -
+ drivers/net/ethernet/intel/i40e/i40e_xsk.c    |  6 +-
+ drivers/net/ethernet/intel/ice/ice_txrx.c     |  6 +-
+ drivers/net/ethernet/intel/ice/ice_xsk.c      |  6 +-
+ drivers/net/ethernet/intel/igb/igb_main.c     |  2 -
+ drivers/net/ethernet/intel/igc/igc_main.c     |  7 +--
+ drivers/net/ethernet/intel/ixgbe/ixgbe_main.c |  2 -
+ drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c  |  6 +-
+ .../net/ethernet/intel/ixgbevf/ixgbevf_main.c |  2 -
+ drivers/net/ethernet/marvell/mvneta.c         |  2 -
+ .../net/ethernet/marvell/mvpp2/mvpp2_main.c   |  4 --
+ drivers/net/ethernet/mellanox/mlx4/en_rx.c    |  8 +--
+ .../ethernet/netronome/nfp/nfp_net_common.c   |  2 -
+ drivers/net/ethernet/qlogic/qede/qede_fp.c    |  6 --
+ drivers/net/ethernet/sfc/rx.c                 |  9 +--
+ drivers/net/ethernet/socionext/netsec.c       |  3 -
+ .../net/ethernet/stmicro/stmmac/stmmac_main.c | 10 +---
+ drivers/net/ethernet/ti/cpsw_priv.c           | 10 +---
+ include/linux/filter.h                        | 10 ++--
+ include/linux/rcupdate.h                      | 14 +++++
+ include/net/xdp_sock.h                        |  2 +-
+ kernel/bpf/cpumap.c                           | 13 +++--
+ kernel/bpf/devmap.c                           | 49 +++++++----------
+ kernel/bpf/hashtab.c                          | 21 ++++---
+ kernel/bpf/helpers.c                          |  6 +-
+ kernel/bpf/lpm_trie.c                         |  6 +-
+ net/core/filter.c                             | 28 ++++++++++
+ net/sched/act_bpf.c                           |  2 -
+ net/sched/cls_bpf.c                           |  3 -
+ net/xdp/xsk.c                                 |  4 +-
+ net/xdp/xsk.h                                 |  4 +-
+ net/xdp/xskmap.c                              | 29 ++++++----
+ 38 files changed, 168 insertions(+), 189 deletions(-)
+
 -- 
 2.32.0
 
