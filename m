@@ -7,59 +7,59 @@ X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AE7CAC4743C
-	for <bpf@archiver.kernel.org>; Wed, 23 Jun 2021 11:08:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63CA3C48BE5
+	for <bpf@archiver.kernel.org>; Wed, 23 Jun 2021 11:08:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 95C1E61075
-	for <bpf@archiver.kernel.org>; Wed, 23 Jun 2021 11:08:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4D0D161003
+	for <bpf@archiver.kernel.org>; Wed, 23 Jun 2021 11:08:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230351AbhFWLKO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 23 Jun 2021 07:10:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:55524 "EHLO
+        id S230393AbhFWLKS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 23 Jun 2021 07:10:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:48499 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230202AbhFWLJz (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 23 Jun 2021 07:09:55 -0400
+        by vger.kernel.org with ESMTP id S230212AbhFWLJ4 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 23 Jun 2021 07:09:56 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1624446457;
+        s=mimecast20190719; t=1624446459;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=r8Kxje9mo0eA1OfdUdQS/iz/Q4P9zCSTZ9JCaTqfbwY=;
-        b=LJ/LrixdY0DomJ1qdS+pxgzhaqOT9CEW3QPgifRTaeoZVKaIBnhZFij+ah/r7f/jxTFVA+
-        kLUCK/5s/5QAAbBDh0y4J63alDqtBb9vHu880OIZNaygFRrv9yTnccS5c2vT3V2nz1pbAi
-        cVfcT6P/Sikq/Q6I599bWqwd9W4zVIU=
+        bh=LUCuBp+kMAaiYhpJP43bLBOzgEXgjURSXqNOTfyeabU=;
+        b=VWQt80RtVNXwPvukaon6UZmYZxuttdvGqFJ6Zu83iTc/IBWMTory0foFeSTa9pFl55KvOz
+        CQ15IY4CqwTkuv3R/OaQ8ZzXL9wYdlno/B42hLWe1IbH730ZK+EEX60batRMIb3Ppx6DJB
+        hOgzQrfPzdJfJWhNtFtLakpguSHKfuQ=
 Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
  [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-598-04jS0yrxOUiTOFq0HlOBbg-1; Wed, 23 Jun 2021 07:07:36 -0400
-X-MC-Unique: 04jS0yrxOUiTOFq0HlOBbg-1
-Received: by mail-ed1-f70.google.com with SMTP id v8-20020a0564023488b0290393873961f6so1091162edc.17
-        for <bpf@vger.kernel.org>; Wed, 23 Jun 2021 04:07:36 -0700 (PDT)
+ us-mta-74-NkKyRla2O7-tdDjjLQG48w-1; Wed, 23 Jun 2021 07:07:37 -0400
+X-MC-Unique: NkKyRla2O7-tdDjjLQG48w-1
+Received: by mail-ed1-f70.google.com with SMTP id j19-20020aa7c4130000b029039497d5cdbeso1088774edq.15
+        for <bpf@vger.kernel.org>; Wed, 23 Jun 2021 04:07:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=r8Kxje9mo0eA1OfdUdQS/iz/Q4P9zCSTZ9JCaTqfbwY=;
-        b=RCOM7Ksu3RgjVXrmElNFJb0FhqpeOtL5D8nx3qqztJ0r4SUvKVbuT96XVsczsjBRIY
-         84JBDunMU/lz/PogO8bz4pN7PYg+VN3SQV5t0GklFdEjUDAQ/IJ4xvYUGl/QbsW7VUQ3
-         mOu6GZw94SczpF3d1fNWI0ZGe0+MI2r2ONyTlehTlqbYQCbWsZBHdBwOwy/0gscrj1Yi
-         TGdDZDCQBuUimtbQz3vsFed+qkbE7ETtMdQmd65EIeT/8cSayozFMJkDdIwUvcx8K2Za
-         Es7q70uIonSVzMOGModchxB3o/u86gu0j/sUmTWNJcbb8lxGixJQQSemVlnbvp+D27Z0
-         r4XQ==
-X-Gm-Message-State: AOAM5330xDUZapjz54O5p1oAsYeAp+hzQN8WSpRd+EzRbScUYuPV5thd
-        acYjPUXDNEgFB569xj+eHr6u2RbGOg9OkefZJi83MRgUHV5cSH6Y2m4iJD0nu07g2dcvp6GiSUJ
-        t0TJKq7x1U+4g
-X-Received: by 2002:a17:907:2622:: with SMTP id aq2mr9352238ejc.48.1624446455072;
-        Wed, 23 Jun 2021 04:07:35 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx9y32Eh+jTvhrwfrV+XjryvNhw+II0gK5l99fd1c7Gry3y4vk/TmSfoejTBO7gW/Bf7bP9qw==
-X-Received: by 2002:a17:907:2622:: with SMTP id aq2mr9352206ejc.48.1624446454670;
-        Wed, 23 Jun 2021 04:07:34 -0700 (PDT)
+        bh=LUCuBp+kMAaiYhpJP43bLBOzgEXgjURSXqNOTfyeabU=;
+        b=Kyg9Wq2WGW15imIDHb5sTvtAi0aZ7I9t//9/A0hm9pb00Bf0B/KSLLLU4CK8vngB2H
+         Ione/5uBr5Vn0iAgEnke8dGB45it85Q2+sdNsFTlfyxKIawLY5FVHX+xyacC5DcLAEbe
+         /gZ7X771/ksGPob6E7jr1JEt5MByFVBQzJAkE7Qku2al5r0EXx5YIkKRGNbjXylnjJM5
+         rpt2GFYiwKdj0EfgB34YQ+5P67CCz11+6l6TXSptcR0McTiGv+r0D4CSG/aIYlnFZ1kW
+         GPluX33yI8DYUtL4QcCirvSrG96EY/0zrjpdOsMCn9cF+D8Md4lz6bU3c3YzUIL/GAPs
+         dC/g==
+X-Gm-Message-State: AOAM532figUbi3qC1h/iL+fhfNyDJuIgT+bmSzcZz4gU43OpDcLK64bv
+        cOGy1sZuyiRMRz1QejPyU2izLoK3EboPDFD8XXAl+L2zznH0XewLIQMHkZSCzgIUhaQWcBrwSkG
+        Oc6/P/7TyelrI
+X-Received: by 2002:a05:6402:34d1:: with SMTP id w17mr9016405edc.167.1624446456599;
+        Wed, 23 Jun 2021 04:07:36 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzryCgWTnTknnV/8acg2toeAqckr6zU4GlElUrLt6wlnzWfynQHUxYeQyBdepxK81ABJex3bg==
+X-Received: by 2002:a05:6402:34d1:: with SMTP id w17mr9016360edc.167.1624446456219;
+        Wed, 23 Jun 2021 04:07:36 -0700 (PDT)
 Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id c15sm10860553edu.19.2021.06.23.04.07.29
+        by smtp.gmail.com with ESMTPSA id w2sm7152669ejn.118.2021.06.23.04.07.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Jun 2021 04:07:29 -0700 (PDT)
+        Wed, 23 Jun 2021 04:07:30 -0700 (PDT)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 266CE180737; Wed, 23 Jun 2021 13:07:28 +0200 (CEST)
+        id 0CE81180733; Wed, 23 Jun 2021 13:07:28 +0200 (CEST)
 From:   =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     bpf@vger.kernel.org, netdev@vger.kernel.org
 Cc:     Martin KaFai Lau <kafai@fb.com>,
@@ -68,12 +68,10 @@ Cc:     Martin KaFai Lau <kafai@fb.com>,
         Magnus Karlsson <magnus.karlsson@gmail.com>,
         "Paul E . McKenney" <paulmck@kernel.org>,
         Jakub Kicinski <kuba@kernel.org>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Guy Tzalik <gtzalik@amazon.com>,
-        Saeed Bishara <saeedb@amazon.com>
-Subject: [PATCH bpf-next v4 07/19] ena: remove rcu_read_lock() around XDP program invocation
-Date:   Wed, 23 Jun 2021 13:07:15 +0200
-Message-Id: <20210623110727.221922-8-toke@redhat.com>
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+Subject: [PATCH bpf-next v4 03/19] doc: Give XDP as example of non-obvious RCU reader/updater pairing
+Date:   Wed, 23 Jun 2021 13:07:11 +0200
+Message-Id: <20210623110727.221922-4-toke@redhat.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210623110727.221922-1-toke@redhat.com>
 References: <20210623110727.221922-1-toke@redhat.com>
@@ -84,47 +82,38 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The ena driver has rcu_read_lock()/rcu_read_unlock() pairs around XDP
-program invocations. However, the actual lifetime of the objects referred
-by the XDP program invocation is longer, all the way through to the call to
-xdp_do_flush(), making the scope of the rcu_read_lock() too small. This
-turns out to be harmless because it all happens in a single NAPI poll
-cycle (and thus under local_bh_disable()), but it makes the rcu_read_lock()
-misleading.
+This commit gives an example of non-obvious RCU reader/updater pairing
+in the guise of the XDP feature in networking, which calls BPF programs
+from network-driver NAPI (softirq) context.
 
-Rather than extend the scope of the rcu_read_lock(), just get rid of it
-entirely. With the addition of RCU annotations to the XDP_REDIRECT map
-types that take bh execution into account, lockdep even understands this to
-be safe, so there's really no reason to keep it around.
-
-Cc: Guy Tzalik <gtzalik@amazon.com>
-Cc: Saeed Bishara <saeedb@amazon.com>
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- drivers/net/ethernet/amazon/ena/ena_netdev.c | 3 ---
- 1 file changed, 3 deletions(-)
+ Documentation/RCU/checklist.rst | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/amazon/ena/ena_netdev.c b/drivers/net/ethernet/amazon/ena/ena_netdev.c
-index 881f88754bf6..a4378b14af4c 100644
---- a/drivers/net/ethernet/amazon/ena/ena_netdev.c
-+++ b/drivers/net/ethernet/amazon/ena/ena_netdev.c
-@@ -385,7 +385,6 @@ static int ena_xdp_execute(struct ena_ring *rx_ring, struct xdp_buff *xdp)
- 	u64 *xdp_stat;
- 	int qid;
+diff --git a/Documentation/RCU/checklist.rst b/Documentation/RCU/checklist.rst
+index 07f6cb8f674d..01cc21f17f7b 100644
+--- a/Documentation/RCU/checklist.rst
++++ b/Documentation/RCU/checklist.rst
+@@ -236,8 +236,15 @@ over a rather long period of time, but improvements are always welcome!
  
--	rcu_read_lock();
- 	xdp_prog = READ_ONCE(rx_ring->xdp_bpf_prog);
+ 	Mixing things up will result in confusion and broken kernels, and
+ 	has even resulted in an exploitable security issue.  Therefore,
+-	when using non-obvious pairs of primitives, commenting is of
+-	course a must.
++	when using non-obvious pairs of primitives, commenting is
++	of course a must.  One example of non-obvious pairing is
++	the XDP feature in networking, which calls BPF programs from
++	network-driver NAPI (softirq) context.	BPF relies heavily on RCU
++	protection for its data structures, but because the BPF program
++	invocation happens entirely within a single local_bh_disable()
++	section in a NAPI poll cycle, this usage is safe.  The reason
++	that this usage is safe is that readers can use anything that
++	disables BH when updaters use call_rcu() or synchronize_rcu().
  
- 	if (!xdp_prog)
-@@ -443,8 +442,6 @@ static int ena_xdp_execute(struct ena_ring *rx_ring, struct xdp_buff *xdp)
- 
- 	ena_increase_stat(xdp_stat, 1, &rx_ring->syncp);
- out:
--	rcu_read_unlock();
--
- 	return verdict;
- }
- 
+ 8.	Although synchronize_rcu() is slower than is call_rcu(), it
+ 	usually results in simpler code.  So, unless update performance is
 -- 
 2.32.0
 
