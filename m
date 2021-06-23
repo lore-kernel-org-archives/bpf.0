@@ -2,336 +2,133 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-16.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ABA3AC49EA4
-	for <bpf@archiver.kernel.org>; Wed, 23 Jun 2021 11:14:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 38840C48BC2
+	for <bpf@archiver.kernel.org>; Wed, 23 Jun 2021 11:17:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 948746102A
-	for <bpf@archiver.kernel.org>; Wed, 23 Jun 2021 11:14:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 200356102A
+	for <bpf@archiver.kernel.org>; Wed, 23 Jun 2021 11:17:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230500AbhFWLQR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 23 Jun 2021 07:16:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:22080 "EHLO
+        id S230224AbhFWLT7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 23 Jun 2021 07:19:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:24808 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230205AbhFWLQG (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 23 Jun 2021 07:16:06 -0400
+        by vger.kernel.org with ESMTP id S230204AbhFWLT4 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 23 Jun 2021 07:19:56 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1624446828;
+        s=mimecast20190719; t=1624447058;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Qk5GBiM0tj1/P0/7gaLS65wrkya24n+AVH6Pdae+6a0=;
-        b=RRut4kD/ofm4Cz56Ku9dhscPOp1VT3GK53d0zg1OnhaLI5PbUPmBHu1Wp0aeiWygzLHFz2
-        1noEPxhN9ltg8L7pSyXKnViPHVdiX5ePNx7HwEiQr0Avqhstgh9ugJDrexSK0MtwGpYud1
-        +MMyPlOgyClhRr3KZ02fusBQ5+UHNHE=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-244-EyFxPtafNhC4PWUB7T8Ovg-1; Wed, 23 Jun 2021 07:13:45 -0400
-X-MC-Unique: EyFxPtafNhC4PWUB7T8Ovg-1
-Received: by mail-ed1-f69.google.com with SMTP id t11-20020a056402524bb029038ffacf1cafso1118539edd.5
-        for <bpf@vger.kernel.org>; Wed, 23 Jun 2021 04:13:44 -0700 (PDT)
+        bh=b/3yS7LjHTHKfwybIlEpPmbf7+iHJm11BxEfhxSMx4s=;
+        b=SxQGLlR7g284IO5qTrBzTivM1l94i6wUUv8GFWr2FVWvd3LYWhyPb3eIiBtaJG8+02f7Qk
+        ARb588eA81/RW7o4yYZiYSSV2lx/dhJkUvmmC5Hm6lI4n6Iu2S7GQ2ioXW9FMrjbw22n1X
+        z5c0IJPE91L3PJ/Gc3lePSb9UQY0yDw=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-373-LSOPQmGCODyAvFlGcO6RXw-1; Wed, 23 Jun 2021 07:17:37 -0400
+X-MC-Unique: LSOPQmGCODyAvFlGcO6RXw-1
+Received: by mail-ej1-f69.google.com with SMTP id w22-20020a17090652d6b029048a3391d9f6so856590ejn.12
+        for <bpf@vger.kernel.org>; Wed, 23 Jun 2021 04:17:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Qk5GBiM0tj1/P0/7gaLS65wrkya24n+AVH6Pdae+6a0=;
-        b=JL/yb4DKu20IacmIUn/BxM6NfaQh292SSR37JJSVzrbhZjMaPJ99g4qxbBHWtUNA3w
-         BqlQLFmAcXWNGjoP8pCIrP8jEAd2FSsRyssanE0hRaBLeluYue50a4v52QBN16s2H0a5
-         VC//OYu9DaPYhU9aLs9XzfHjrysDEerjhDoCLT8pBoDXoMQzJuagQPO3nDPUN4VV44zR
-         bTEec18mPksknT5tRXLYgfCjLI6n7ib/CiskoXXH9DUXJQGTgTP16JLuEo/8dAG4AJlw
-         tu0Y2TJ8/bBq2pOMaYa48m27YPGjdc0RfhCNh3W8o3C2M8sj3syZ/IC58GYQxirWDfA5
-         yAfg==
-X-Gm-Message-State: AOAM531kdlPU02AG6gEHhtwhFK4hwhFJnlny/petnyA5qBQIb9NG56c+
-        1j80C607oUXn36nBnI95PZrtGhjOpwgP+qmTIDxXZb/QWyGraExgW2umnWeS4bwnFRgPNRo9clA
-        3LpNmFU2xoVau
-X-Received: by 2002:aa7:c50d:: with SMTP id o13mr11372715edq.9.1624446823855;
-        Wed, 23 Jun 2021 04:13:43 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJztF5ae03ntoyILjp8pqHlp+iOfl1HNxJXBQz0XPbt2+lIDWho8ON30nAuFqqxYDRxnx9LSsA==
-X-Received: by 2002:aa7:c50d:: with SMTP id o13mr11372696edq.9.1624446823683;
-        Wed, 23 Jun 2021 04:13:43 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=b/3yS7LjHTHKfwybIlEpPmbf7+iHJm11BxEfhxSMx4s=;
+        b=FifgSAdj+6vBQMzxq7ytryuQeLM6nbPCXv6ty/8oWVRIrn60H8QzvrkVd66k9s74Cf
+         UAayV+4iHC8BsC+qJjnxclM3fcmCw1kR697p1hwI4Uwnsg7VnmAogIuJtG2sBeNnCq3g
+         mjGIOP5yxW6um5EpPo7bFG2Bc3G2rXNSnDPf8rneDhfRoKyX6+uyKCLoaPnFHerpkjsB
+         CnmT+n0XHWvIu/5DPiUChjWbprMnmdQj8Y5NIC7N0pJd5MnLjVj9VjVHHpPN9CcL4rkv
+         G8g6FVolrnDpgtSoh8diazHA1E155JuOWuU5vf0nUKhAQkxYrn9gO3SIRTRzgZsFf0Au
+         257A==
+X-Gm-Message-State: AOAM5328mjkuFK5QGQNhTWY8FHRa2POXwIC48Yau0ov3e0A/90B2hr1+
+        HSB+f9jU70C9sGEXFjIBng8vpeLELvXSJs5e90hIdHxL2+QQFhiFbCJk5e77I2793aYONWMoDnt
+        1KGPyNUSwPQy1
+X-Received: by 2002:a17:907:628a:: with SMTP id nd10mr9446187ejc.326.1624447056182;
+        Wed, 23 Jun 2021 04:17:36 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz25B0vO27pZCcHDvVK0CgKzd9Bg8TdjridQdPvHb/yGoxtJKIdGkfYPe6XcUq0TCELpd5TLQ==
+X-Received: by 2002:a17:907:628a:: with SMTP id nd10mr9446166ejc.326.1624447056034;
+        Wed, 23 Jun 2021 04:17:36 -0700 (PDT)
 Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id g8sm13567784edw.89.2021.06.23.04.13.41
+        by smtp.gmail.com with ESMTPSA id cd4sm7154729ejb.104.2021.06.23.04.17.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Jun 2021 04:13:43 -0700 (PDT)
+        Wed, 23 Jun 2021 04:17:35 -0700 (PDT)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 3EFD618073B; Wed, 23 Jun 2021 13:07:28 +0200 (CEST)
-From:   =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     bpf@vger.kernel.org, netdev@vger.kernel.org
-Cc:     Martin KaFai Lau <kafai@fb.com>,
-        Hangbin Liu <liuhangbin@gmail.com>,
+        id EC264180730; Wed, 23 Jun 2021 13:17:34 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>, netdev@vger.kernel.org
+Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
         Jesper Dangaard Brouer <brouer@redhat.com>,
-        Magnus Karlsson <magnus.karlsson@gmail.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        intel-wired-lan@lists.osuosl.org
-Subject: [PATCH bpf-next v4 11/19] net: intel: remove rcu_read_lock() around XDP program invocation
-Date:   Wed, 23 Jun 2021 13:07:19 +0200
-Message-Id: <20210623110727.221922-12-toke@redhat.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210623110727.221922-1-toke@redhat.com>
-References: <20210623110727.221922-1-toke@redhat.com>
+        John Fastabend <john.fastabend@gmail.com>,
+        Martin KaFai Lau <kafai@fb.com>, bpf@vger.kernel.org
+Subject: Re: [PATCH net-next v3 5/5] bpf: update XDP selftests to not fail
+ with generic XDP
+In-Reply-To: <20210622202835.1151230-6-memxor@gmail.com>
+References: <20210622202835.1151230-1-memxor@gmail.com>
+ <20210622202835.1151230-6-memxor@gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Wed, 23 Jun 2021 13:17:34 +0200
+Message-ID: <878s30omnl.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The Intel drivers all have rcu_read_lock()/rcu_read_unlock() pairs around
-XDP program invocations. However, the actual lifetime of the objects
-referred by the XDP program invocation is longer, all the way through to
-the call to xdp_do_flush(), making the scope of the rcu_read_lock() too
-small. This turns out to be harmless because it all happens in a single
-NAPI poll cycle (and thus under local_bh_disable()), but it makes the
-rcu_read_lock() misleading.
+Kumar Kartikeya Dwivedi <memxor@gmail.com> writes:
 
-Rather than extend the scope of the rcu_read_lock(), just get rid of it
-entirely. With the addition of RCU annotations to the XDP_REDIRECT map
-types that take bh execution into account, lockdep even understands this to
-be safe, so there's really no reason to keep it around.
+> Generic XDP devmaps and cpumaps now allow setting value_size to 8 bytes
+> (so that prog_fd can be specified) and XDP progs using them succeed in
+> SKB mode now. Adjust the checks.
+>
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> ---
+>  tools/testing/selftests/bpf/prog_tests/xdp_cpumap_attach.c | 4 ++--
+>  tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_cpumap_attach.c b/tools/testing/selftests/bpf/prog_tests/xdp_cpumap_attach.c
+> index 0176573fe4e7..42e46d2ae349 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/xdp_cpumap_attach.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/xdp_cpumap_attach.c
+> @@ -29,8 +29,8 @@ void test_xdp_with_cpumap_helpers(void)
+>  	 */
+>  	prog_fd = bpf_program__fd(skel->progs.xdp_redir_prog);
+>  	err = bpf_set_link_xdp_fd(IFINDEX_LO, prog_fd, XDP_FLAGS_SKB_MODE);
+> -	CHECK(err == 0, "Generic attach of program with 8-byte CPUMAP",
+> -	      "should have failed\n");
+> +	CHECK(err, "Generic attach of program with 8-byte CPUMAP",
+> +	      "shouldn't have failed\n");
 
-Cc: Jesse Brandeburg <jesse.brandeburg@intel.com>
-Cc: Tony Nguyen <anthony.l.nguyen@intel.com>
-Cc: intel-wired-lan@lists.osuosl.org
-Tested-by: Jesper Dangaard Brouer <brouer@redhat.com> # i40e
-Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
----
- drivers/net/ethernet/intel/i40e/i40e_txrx.c       | 2 --
- drivers/net/ethernet/intel/i40e/i40e_xsk.c        | 6 +-----
- drivers/net/ethernet/intel/ice/ice_txrx.c         | 6 +-----
- drivers/net/ethernet/intel/ice/ice_xsk.c          | 6 +-----
- drivers/net/ethernet/intel/igb/igb_main.c         | 2 --
- drivers/net/ethernet/intel/igc/igc_main.c         | 7 ++-----
- drivers/net/ethernet/intel/ixgbe/ixgbe_main.c     | 2 --
- drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c      | 6 +-----
- drivers/net/ethernet/intel/ixgbevf/ixgbevf_main.c | 2 --
- 9 files changed, 6 insertions(+), 33 deletions(-)
+There's a comment right above this that is now wrong... Also, this
+program is never being detached.
 
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_txrx.c b/drivers/net/ethernet/intel/i40e/i40e_txrx.c
-index de70c16ef619..ae3a64b6f5f8 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_txrx.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_txrx.c
-@@ -2298,7 +2298,6 @@ static int i40e_run_xdp(struct i40e_ring *rx_ring, struct xdp_buff *xdp)
- 	struct bpf_prog *xdp_prog;
- 	u32 act;
- 
--	rcu_read_lock();
- 	xdp_prog = READ_ONCE(rx_ring->xdp_prog);
- 
- 	if (!xdp_prog)
-@@ -2329,7 +2328,6 @@ static int i40e_run_xdp(struct i40e_ring *rx_ring, struct xdp_buff *xdp)
- 		break;
- 	}
- xdp_out:
--	rcu_read_unlock();
- 	return result;
- }
- 
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_xsk.c b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-index 46d884417c63..8dca53b7daff 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-@@ -153,7 +153,6 @@ static int i40e_run_xdp_zc(struct i40e_ring *rx_ring, struct xdp_buff *xdp)
- 	struct bpf_prog *xdp_prog;
- 	u32 act;
- 
--	rcu_read_lock();
- 	/* NB! xdp_prog will always be !NULL, due to the fact that
- 	 * this path is enabled by setting an XDP program.
- 	 */
-@@ -162,9 +161,7 @@ static int i40e_run_xdp_zc(struct i40e_ring *rx_ring, struct xdp_buff *xdp)
- 
- 	if (likely(act == XDP_REDIRECT)) {
- 		err = xdp_do_redirect(rx_ring->netdev, xdp, xdp_prog);
--		result = !err ? I40E_XDP_REDIR : I40E_XDP_CONSUMED;
--		rcu_read_unlock();
--		return result;
-+		return !err ? I40E_XDP_REDIR : I40E_XDP_CONSUMED;
- 	}
- 
- 	switch (act) {
-@@ -184,7 +181,6 @@ static int i40e_run_xdp_zc(struct i40e_ring *rx_ring, struct xdp_buff *xdp)
- 		result = I40E_XDP_CONSUMED;
- 		break;
- 	}
--	rcu_read_unlock();
- 	return result;
- }
- 
-diff --git a/drivers/net/ethernet/intel/ice/ice_txrx.c b/drivers/net/ethernet/intel/ice/ice_txrx.c
-index e2b4b29ea207..1a311e91fb6d 100644
---- a/drivers/net/ethernet/intel/ice/ice_txrx.c
-+++ b/drivers/net/ethernet/intel/ice/ice_txrx.c
-@@ -1129,15 +1129,11 @@ int ice_clean_rx_irq(struct ice_ring *rx_ring, int budget)
- 		xdp.frame_sz = ice_rx_frame_truesize(rx_ring, size);
- #endif
- 
--		rcu_read_lock();
- 		xdp_prog = READ_ONCE(rx_ring->xdp_prog);
--		if (!xdp_prog) {
--			rcu_read_unlock();
-+		if (!xdp_prog)
- 			goto construct_skb;
--		}
- 
- 		xdp_res = ice_run_xdp(rx_ring, &xdp, xdp_prog);
--		rcu_read_unlock();
- 		if (!xdp_res)
- 			goto construct_skb;
- 		if (xdp_res & (ICE_XDP_TX | ICE_XDP_REDIR)) {
-diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.c b/drivers/net/ethernet/intel/ice/ice_xsk.c
-index faa7b8d96adb..d6da377f5ac3 100644
---- a/drivers/net/ethernet/intel/ice/ice_xsk.c
-+++ b/drivers/net/ethernet/intel/ice/ice_xsk.c
-@@ -463,7 +463,6 @@ ice_run_xdp_zc(struct ice_ring *rx_ring, struct xdp_buff *xdp)
- 	struct ice_ring *xdp_ring;
- 	u32 act;
- 
--	rcu_read_lock();
- 	/* ZC patch is enabled only when XDP program is set,
- 	 * so here it can not be NULL
- 	 */
-@@ -473,9 +472,7 @@ ice_run_xdp_zc(struct ice_ring *rx_ring, struct xdp_buff *xdp)
- 
- 	if (likely(act == XDP_REDIRECT)) {
- 		err = xdp_do_redirect(rx_ring->netdev, xdp, xdp_prog);
--		result = !err ? ICE_XDP_REDIR : ICE_XDP_CONSUMED;
--		rcu_read_unlock();
--		return result;
-+		return !err ? ICE_XDP_REDIR : ICE_XDP_CONSUMED;
- 	}
- 
- 	switch (act) {
-@@ -496,7 +493,6 @@ ice_run_xdp_zc(struct ice_ring *rx_ring, struct xdp_buff *xdp)
- 		break;
- 	}
- 
--	rcu_read_unlock();
- 	return result;
- }
- 
-diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethernet/intel/igb/igb_main.c
-index 038a9fd1af44..8a11b7e55326 100644
---- a/drivers/net/ethernet/intel/igb/igb_main.c
-+++ b/drivers/net/ethernet/intel/igb/igb_main.c
-@@ -8387,7 +8387,6 @@ static struct sk_buff *igb_run_xdp(struct igb_adapter *adapter,
- 	struct bpf_prog *xdp_prog;
- 	u32 act;
- 
--	rcu_read_lock();
- 	xdp_prog = READ_ONCE(rx_ring->xdp_prog);
- 
- 	if (!xdp_prog)
-@@ -8420,7 +8419,6 @@ static struct sk_buff *igb_run_xdp(struct igb_adapter *adapter,
- 		break;
- 	}
- xdp_out:
--	rcu_read_unlock();
- 	return ERR_PTR(-result);
- }
- 
-diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
-index ea998d2defa4..2b666a6ec989 100644
---- a/drivers/net/ethernet/intel/igc/igc_main.c
-+++ b/drivers/net/ethernet/intel/igc/igc_main.c
-@@ -2175,18 +2175,15 @@ static struct sk_buff *igc_xdp_run_prog(struct igc_adapter *adapter,
- 	struct bpf_prog *prog;
- 	int res;
- 
--	rcu_read_lock();
--
- 	prog = READ_ONCE(adapter->xdp_prog);
- 	if (!prog) {
- 		res = IGC_XDP_PASS;
--		goto unlock;
-+		goto out;
- 	}
- 
- 	res = __igc_xdp_run_prog(adapter, prog, xdp);
- 
--unlock:
--	rcu_read_unlock();
-+out:
- 	return ERR_PTR(-res);
- }
- 
-diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-index c5ec17d19c59..27d7467534e0 100644
---- a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-+++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-@@ -2199,7 +2199,6 @@ static struct sk_buff *ixgbe_run_xdp(struct ixgbe_adapter *adapter,
- 	struct xdp_frame *xdpf;
- 	u32 act;
- 
--	rcu_read_lock();
- 	xdp_prog = READ_ONCE(rx_ring->xdp_prog);
- 
- 	if (!xdp_prog)
-@@ -2237,7 +2236,6 @@ static struct sk_buff *ixgbe_run_xdp(struct ixgbe_adapter *adapter,
- 		break;
- 	}
- xdp_out:
--	rcu_read_unlock();
- 	return ERR_PTR(-result);
- }
- 
-diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
-index 91ad5b902673..ffbf8a694362 100644
---- a/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
-+++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
-@@ -100,15 +100,12 @@ static int ixgbe_run_xdp_zc(struct ixgbe_adapter *adapter,
- 	struct xdp_frame *xdpf;
- 	u32 act;
- 
--	rcu_read_lock();
- 	xdp_prog = READ_ONCE(rx_ring->xdp_prog);
- 	act = bpf_prog_run_xdp(xdp_prog, xdp);
- 
- 	if (likely(act == XDP_REDIRECT)) {
- 		err = xdp_do_redirect(rx_ring->netdev, xdp, xdp_prog);
--		result = !err ? IXGBE_XDP_REDIR : IXGBE_XDP_CONSUMED;
--		rcu_read_unlock();
--		return result;
-+		return !err ? IXGBE_XDP_REDIR : IXGBE_XDP_CONSUMED;
- 	}
- 
- 	switch (act) {
-@@ -132,7 +129,6 @@ static int ixgbe_run_xdp_zc(struct ixgbe_adapter *adapter,
- 		result = IXGBE_XDP_CONSUMED;
- 		break;
- 	}
--	rcu_read_unlock();
- 	return result;
- }
- 
-diff --git a/drivers/net/ethernet/intel/ixgbevf/ixgbevf_main.c b/drivers/net/ethernet/intel/ixgbevf/ixgbevf_main.c
-index ba2ed8a43d2d..fabada4ce315 100644
---- a/drivers/net/ethernet/intel/ixgbevf/ixgbevf_main.c
-+++ b/drivers/net/ethernet/intel/ixgbevf/ixgbevf_main.c
-@@ -1054,7 +1054,6 @@ static struct sk_buff *ixgbevf_run_xdp(struct ixgbevf_adapter *adapter,
- 	struct bpf_prog *xdp_prog;
- 	u32 act;
- 
--	rcu_read_lock();
- 	xdp_prog = READ_ONCE(rx_ring->xdp_prog);
- 
- 	if (!xdp_prog)
-@@ -1079,7 +1078,6 @@ static struct sk_buff *ixgbevf_run_xdp(struct ixgbevf_adapter *adapter,
- 		break;
- 	}
- xdp_out:
--	rcu_read_unlock();
- 	return ERR_PTR(-result);
- }
- 
--- 
-2.32.0
+>  	prog_fd = bpf_program__fd(skel->progs.xdp_dummy_cm);
+>  	map_fd = bpf_map__fd(skel->maps.cpu_map);
+> diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c b/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
+> index 88ef3ec8ac4c..861db508ace2 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
+> @@ -31,8 +31,8 @@ void test_xdp_with_devmap_helpers(void)
+>  	 */
+>  	dm_fd = bpf_program__fd(skel->progs.xdp_redir_prog);
+>  	err = bpf_set_link_xdp_fd(IFINDEX_LO, dm_fd, XDP_FLAGS_SKB_MODE);
+> -	CHECK(err == 0, "Generic attach of program with 8-byte devmap",
+> -	      "should have failed\n");
+> +	CHECK(err, "Generic attach of program with 8-byte devmap",
+> +	      "shouldn't have failed\n");
+
+... same here
+
+
+-Toke
 
