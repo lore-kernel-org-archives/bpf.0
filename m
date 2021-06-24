@@ -5,61 +5,61 @@ X-Spam-Level:
 X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02CE8C49EA5
-	for <bpf@archiver.kernel.org>; Thu, 24 Jun 2021 16:06:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3202FC49EA7
+	for <bpf@archiver.kernel.org>; Thu, 24 Jun 2021 16:06:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E2173613EE
-	for <bpf@archiver.kernel.org>; Thu, 24 Jun 2021 16:06:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1BE09613EA
+	for <bpf@archiver.kernel.org>; Thu, 24 Jun 2021 16:06:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231157AbhFXQIq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 24 Jun 2021 12:08:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:46151 "EHLO
+        id S230239AbhFXQIy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 24 Jun 2021 12:08:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:35779 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231250AbhFXQIm (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 24 Jun 2021 12:08:42 -0400
+        by vger.kernel.org with ESMTP id S231569AbhFXQIo (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 24 Jun 2021 12:08:44 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1624550783;
+        s=mimecast20190719; t=1624550784;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=8n6XcLLXm/HC8/e7TDiaIKa4D1+079NdF0CtM9PlMq8=;
-        b=VQfWnt4zia9pxvAY3ZolyWQb1DZiqNHWkk9gscRMnuo/cU+MGikTLxu7pTuli1lLSrzh2u
-        prv+DUPAdBuAF/2y93V4oZD9rF22Eb6UYECHQSPjik7654zBk2ICS4SlHkURBTt0wDv8m9
-        Lt5HtF4su8MdYpS+Bk087E03odsLcnY=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-157-vytXenA2MdKg65VTtdx5DQ-1; Thu, 24 Jun 2021 12:06:22 -0400
-X-MC-Unique: vytXenA2MdKg65VTtdx5DQ-1
-Received: by mail-ed1-f71.google.com with SMTP id h11-20020a50ed8b0000b02903947b9ca1f3so3614424edr.7
-        for <bpf@vger.kernel.org>; Thu, 24 Jun 2021 09:06:21 -0700 (PDT)
+        bh=gCA//v5U2zdeKF30MPJkPlDU8nWyKsxnTIF8PhfpTLo=;
+        b=IQ2wdmJ9vgKKLCihvF70MJ/rJPJBUSaLe6XFbl3BTmJVauZLzyyxO6WRy0dUUWLu0cLw4c
+        8HiA6Sdvnl5T5DpMgB8Sm/WagAsNM0aNFKvQDjd5nPa4e6M9EI5y0fEeAfali1nR51XfQl
+        pQyRHno43/caGKzTttvXeCnPx8T1BsM=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-529-n4SnMtH8OMitetuzDDtJ7g-1; Thu, 24 Jun 2021 12:06:22 -0400
+X-MC-Unique: n4SnMtH8OMitetuzDDtJ7g-1
+Received: by mail-ed1-f72.google.com with SMTP id v8-20020a0564023488b0290393873961f6so3593114edc.17
+        for <bpf@vger.kernel.org>; Thu, 24 Jun 2021 09:06:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=8n6XcLLXm/HC8/e7TDiaIKa4D1+079NdF0CtM9PlMq8=;
-        b=PhAfjToPpdRuf5gg4OsJtmOS/H+F1TcaO+q2zSGL2bvw9K4q7hBDNTdRzHWrRbeDyH
-         pW8jJxBZnIGopQE+Zx5nFvNcaGo3fJLfH+tpRp0gvi7Qh2Uaj0P63+gE3w04iXnnX/NH
-         V6T/QcIoRoKi7WJqblDYQ5MQh3on5Rn/OZcbVXSmAPGFS4tgE9R9BQOA4SEHxMpx5O6o
-         tv3K5TJ4nDTHVObdt9jG7rDWf2rUsMICfSeDLJdtoPMo4f9CZnVoUScHo6elcKPxXRsm
-         JyO5EDlMk2AaJNMs0dOZXp4oDDF2KNHH+b6kwfCgbAffyhIXvlBWVMQHVmG1t7Eaj4T8
-         UQCw==
-X-Gm-Message-State: AOAM531tcIC79DT7yqudyIMZjSk69IUsGtFGZpMWoDT5Od7TWc35jiaM
-        j8C3AckgSgxJh8PTe1CVRrVV2apCWOxgYEPiGBIGBvxJIR1PBH8DRsEl+xqsF+4V/0wOv+VCc9J
-        oe+vL+bwJT+G4
-X-Received: by 2002:a50:b8e6:: with SMTP id l93mr8489733ede.25.1624550780923;
-        Thu, 24 Jun 2021 09:06:20 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx9a+Zc1daHM7E7EaR+rO9SkTP3jW41sNbM6ubu90/JqfixkamnHJK4VwcKKUiE6oKNLXWagA==
-X-Received: by 2002:a50:b8e6:: with SMTP id l93mr8489702ede.25.1624550780757;
-        Thu, 24 Jun 2021 09:06:20 -0700 (PDT)
+        bh=gCA//v5U2zdeKF30MPJkPlDU8nWyKsxnTIF8PhfpTLo=;
+        b=Y3KsterjLR3mogz7uVu0MA4OAQExmW/7lb5uz8PMYB0wJh5AhUcy7X5tCkXW+CEo+a
+         xJKuuFsqkw6AJOq2hApjTGinXzlj/AK57C5eL2s7XXIqdI09MqfLgHlp1rbGvB89tfMf
+         A+jevots7/BjqSX714fRgXq31uQGcXU2sYn/60K+y/X+oAp0Xs/WNTfLIy8SrvyUI9l/
+         oeoJsMrcHWfwHJcdnJR5ZHdXiBwYh/fp5rFxpo/MmC5/6vgO7Y90B3gd4suUWYpW4XGs
+         3KWnkjfSNWzpE8pNKMTTHoQYrD8U7MtWYta/Hyct5IGo7UBI+B1Bg3Lx5tGHaIRT23zl
+         3PnA==
+X-Gm-Message-State: AOAM5307MuaSfFG90wyFtPukr41PUAWSCZAffja0SsXvTEX4pX5oEerr
+        bYzKr6hk3POV8QO0/YO/5Vwj3AwsrRQmbAy2w3ODwi0nTiQFjvAnL0OCkrKu5PBdii3M9YQEYS+
+        THO0ep5z0RSwa
+X-Received: by 2002:a17:906:680f:: with SMTP id k15mr5958332ejr.75.1624550781494;
+        Thu, 24 Jun 2021 09:06:21 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzaQsXTowCVLdvWyPcdt8T/pD1yrSeJT5zej5tl3HbfAnh9ZWpoWQScDtHMX0OC5sfsqpPpLQ==
+X-Received: by 2002:a17:906:680f:: with SMTP id k15mr5958316ejr.75.1624550781251;
+        Thu, 24 Jun 2021 09:06:21 -0700 (PDT)
 Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id p18sm1308833edu.8.2021.06.24.09.06.14
+        by smtp.gmail.com with ESMTPSA id fl21sm1448600ejc.79.2021.06.24.09.06.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Thu, 24 Jun 2021 09:06:15 -0700 (PDT)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 6EED918073B; Thu, 24 Jun 2021 18:06:10 +0200 (CEST)
+        id 345FC180733; Thu, 24 Jun 2021 18:06:10 +0200 (CEST)
 From:   =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     bpf@vger.kernel.org, netdev@vger.kernel.org
 Cc:     Martin KaFai Lau <kafai@fb.com>,
@@ -68,14 +68,10 @@ Cc:     Martin KaFai Lau <kafai@fb.com>,
         Magnus Karlsson <magnus.karlsson@gmail.com>,
         "Paul E . McKenney" <paulmck@kernel.org>,
         Jakub Kicinski <kuba@kernel.org>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Madalin Bucur <madalin.bucur@nxp.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        Ioana Radulescu <ruxandra.radulescu@nxp.com>,
-        Camelia Groza <camelia.groza@nxp.com>
-Subject: [PATCH bpf-next v5 10/19] freescale: remove rcu_read_lock() around XDP program invocation
-Date:   Thu, 24 Jun 2021 18:06:00 +0200
-Message-Id: <20210624160609.292325-11-toke@redhat.com>
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+Subject: [PATCH bpf-next v5 02/19] doc: Clarify and expand RCU updaters and corresponding readers
+Date:   Thu, 24 Jun 2021 18:05:52 +0200
+Message-Id: <20210624160609.292325-3-toke@redhat.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210624160609.292325-1-toke@redhat.com>
 References: <20210624160609.292325-1-toke@redhat.com>
@@ -86,78 +82,78 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The dpaa and dpaa2 drivers have rcu_read_lock()/rcu_read_unlock() pairs
-around XDP program invocations. However, the actual lifetime of the objects
-referred by the XDP program invocation is longer, all the way through to
-the call to xdp_do_flush(), making the scope of the rcu_read_lock() too
-small. This turns out to be harmless because it all happens in a single
-NAPI poll cycle (and thus under local_bh_disable()), but it makes the
-rcu_read_lock() misleading.
+From: "Paul E. McKenney" <paulmck@kernel.org>
 
-Rather than extend the scope of the rcu_read_lock(), just get rid of it
-entirely. With the addition of RCU annotations to the XDP_REDIRECT map
-types that take bh execution into account, lockdep even understands this to
-be safe, so there's really no reason to keep it around.
+This commit clarifies which primitives readers can use given that the
+corresponding updaters have made a specific choice.  This commit also adds
+this information for the various RCU Tasks flavors.  While in the area, it
+removes a paragraph that no longer applies in any straightforward manner.
 
-Cc: Madalin Bucur <madalin.bucur@nxp.com>
-Cc: Ioana Ciornei <ioana.ciornei@nxp.com>
-Cc: Ioana Radulescu <ruxandra.radulescu@nxp.com>
-Reviewed-by: Camelia Groza <camelia.groza@nxp.com>
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- drivers/net/ethernet/freescale/dpaa/dpaa_eth.c   | 8 +-------
- drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c | 3 ---
- 2 files changed, 1 insertion(+), 10 deletions(-)
+ Documentation/RCU/checklist.rst | 48 ++++++++++++++++++---------------
+ 1 file changed, 27 insertions(+), 21 deletions(-)
 
-diff --git a/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c b/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
-index 177c020bf34a..e6826561cf11 100644
---- a/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
-+++ b/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
-@@ -2558,13 +2558,9 @@ static u32 dpaa_run_xdp(struct dpaa_priv *priv, struct qm_fd *fd, void *vaddr,
- 	u32 xdp_act;
- 	int err;
+diff --git a/Documentation/RCU/checklist.rst b/Documentation/RCU/checklist.rst
+index 1030119294d0..07f6cb8f674d 100644
+--- a/Documentation/RCU/checklist.rst
++++ b/Documentation/RCU/checklist.rst
+@@ -211,27 +211,33 @@ over a rather long period of time, but improvements are always welcome!
+ 	of the system, especially to real-time workloads running on
+ 	the rest of the system.
  
--	rcu_read_lock();
+-7.	As of v4.20, a given kernel implements only one RCU flavor,
+-	which is RCU-sched for PREEMPTION=n and RCU-preempt for PREEMPTION=y.
+-	If the updater uses call_rcu() or synchronize_rcu(),
+-	then the corresponding readers may use rcu_read_lock() and
+-	rcu_read_unlock(), rcu_read_lock_bh() and rcu_read_unlock_bh(),
+-	or any pair of primitives that disables and re-enables preemption,
+-	for example, rcu_read_lock_sched() and rcu_read_unlock_sched().
+-	If the updater uses synchronize_srcu() or call_srcu(),
+-	then the corresponding readers must use srcu_read_lock() and
+-	srcu_read_unlock(), and with the same srcu_struct.  The rules for
+-	the expedited primitives are the same as for their non-expedited
+-	counterparts.  Mixing things up will result in confusion and
+-	broken kernels, and has even resulted in an exploitable security
+-	issue.
 -
- 	xdp_prog = READ_ONCE(priv->xdp_prog);
--	if (!xdp_prog) {
--		rcu_read_unlock();
-+	if (!xdp_prog)
- 		return XDP_PASS;
--	}
+-	One exception to this rule: rcu_read_lock() and rcu_read_unlock()
+-	may be substituted for rcu_read_lock_bh() and rcu_read_unlock_bh()
+-	in cases where local bottom halves are already known to be
+-	disabled, for example, in irq or softirq context.  Commenting
+-	such cases is a must, of course!  And the jury is still out on
+-	whether the increased speed is worth it.
++7.	As of v4.20, a given kernel implements only one RCU flavor, which
++	is RCU-sched for PREEMPTION=n and RCU-preempt for PREEMPTION=y.
++	If the updater uses call_rcu() or synchronize_rcu(), then
++	the corresponding readers may use:  (1) rcu_read_lock() and
++	rcu_read_unlock(), (2) any pair of primitives that disables
++	and re-enables softirq, for example, rcu_read_lock_bh() and
++	rcu_read_unlock_bh(), or (3) any pair of primitives that disables
++	and re-enables preemption, for example, rcu_read_lock_sched() and
++	rcu_read_unlock_sched().  If the updater uses synchronize_srcu()
++	or call_srcu(), then the corresponding readers must use
++	srcu_read_lock() and srcu_read_unlock(), and with the same
++	srcu_struct.  The rules for the expedited RCU grace-period-wait
++	primitives are the same as for their non-expedited counterparts.
++
++	If the updater uses call_rcu_tasks() or synchronize_rcu_tasks(),
++	then the readers must refrain from executing voluntary
++	context switches, that is, from blocking.  If the updater uses
++	call_rcu_tasks_trace() or synchronize_rcu_tasks_trace(), then
++	the corresponding readers must use rcu_read_lock_trace() and
++	rcu_read_unlock_trace().  If an updater uses call_rcu_tasks_rude()
++	or synchronize_rcu_tasks_rude(), then the corresponding readers
++	must use anything that disables interrupts.
++
++	Mixing things up will result in confusion and broken kernels, and
++	has even resulted in an exploitable security issue.  Therefore,
++	when using non-obvious pairs of primitives, commenting is of
++	course a must.
  
- 	xdp_init_buff(&xdp, DPAA_BP_RAW_SIZE - DPAA_TX_PRIV_DATA_SIZE,
- 		      &dpaa_fq->xdp_rxq);
-@@ -2638,8 +2634,6 @@ static u32 dpaa_run_xdp(struct dpaa_priv *priv, struct qm_fd *fd, void *vaddr,
- 		break;
- 	}
- 
--	rcu_read_unlock();
--
- 	return xdp_act;
- }
- 
-diff --git a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
-index 8433aa730c42..973352393bd4 100644
---- a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
-+++ b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
-@@ -352,8 +352,6 @@ static u32 dpaa2_eth_run_xdp(struct dpaa2_eth_priv *priv,
- 	u32 xdp_act = XDP_PASS;
- 	int err, offset;
- 
--	rcu_read_lock();
--
- 	xdp_prog = READ_ONCE(ch->xdp.prog);
- 	if (!xdp_prog)
- 		goto out;
-@@ -414,7 +412,6 @@ static u32 dpaa2_eth_run_xdp(struct dpaa2_eth_priv *priv,
- 
- 	ch->xdp.res |= xdp_act;
- out:
--	rcu_read_unlock();
- 	return xdp_act;
- }
- 
+ 8.	Although synchronize_rcu() is slower than is call_rcu(), it
+ 	usually results in simpler code.  So, unless update performance is
 -- 
 2.32.0
 
