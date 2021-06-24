@@ -5,61 +5,61 @@ X-Spam-Level:
 X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AFA4DC49EA5
-	for <bpf@archiver.kernel.org>; Thu, 24 Jun 2021 16:06:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B7DCC49EB7
+	for <bpf@archiver.kernel.org>; Thu, 24 Jun 2021 16:06:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 99721613EA
-	for <bpf@archiver.kernel.org>; Thu, 24 Jun 2021 16:06:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ED224613EC
+	for <bpf@archiver.kernel.org>; Thu, 24 Jun 2021 16:06:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231321AbhFXQIm (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 24 Jun 2021 12:08:42 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:54119 "EHLO
+        id S231527AbhFXQIn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 24 Jun 2021 12:08:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:27125 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229878AbhFXQIi (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 24 Jun 2021 12:08:38 -0400
+        by vger.kernel.org with ESMTP id S230257AbhFXQIj (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 24 Jun 2021 12:08:39 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1624550778;
+        s=mimecast20190719; t=1624550780;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=2arA4F9H8piXSu2BaYZfrwo91oZXpALZLKMt5odcOCY=;
-        b=cxJHIkM5DPs+Z3+An7FZA7UqGNoRZKRVPiM+qFS8xEBTcWT79opsgTHBx7zMboqkWJubDr
-        +Gbb7r7xDA03SLUjD7BNnSZ09tpZLjxBjQoAbL1IZzlXDWOxf0yahYoiCRuy/kwF3NLu4o
-        N3ISjM4/z80wJHT7WbAPivhWMWl/F0E=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-545-aHF2feOHNciDquy5lCmujg-1; Thu, 24 Jun 2021 12:06:17 -0400
-X-MC-Unique: aHF2feOHNciDquy5lCmujg-1
-Received: by mail-ej1-f71.google.com with SMTP id u4-20020a1709061244b02904648b302151so2179269eja.17
+        bh=xn+g4Oy4TbzIlhU9jJ2+v158p0Us5HC5PaMOKTXC9pw=;
+        b=fWJpM3R2VCR0xrPEDWTq1C7DNkpJDTFnk1nasqMwFrmD+JeI9uiAtFoOjwOklzdrXWi3BJ
+        XRsZRSktWuQhd7kXTVydXuaohO7rgeBhPOvnNx0BvlXMSAyZLm0FOYMkYNRLEAVrEr8azs
+        syEazuEmACCStusTKrmLBbjfoHjMofE=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-323-kAblAKqIM1KszIwWm9m1cQ-1; Thu, 24 Jun 2021 12:06:19 -0400
+X-MC-Unique: kAblAKqIM1KszIwWm9m1cQ-1
+Received: by mail-ej1-f69.google.com with SMTP id ho42-20020a1709070eaab02904a77ea3380eso2191823ejc.4
         for <bpf@vger.kernel.org>; Thu, 24 Jun 2021 09:06:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=2arA4F9H8piXSu2BaYZfrwo91oZXpALZLKMt5odcOCY=;
-        b=C32f/eCpRLQbwyWaN4luo7m7dsRgHzvazzmc7VAOviDCN5d9ZaRCNveJk3KqDadduA
-         7XrDHRsBddWXdyiqeFLsc6TANMWdck484J+70PdxN9bQfoCfki4HPWhG9+rd/wthh8Nv
-         NYbW3ZwDoUeIl6jR7sQPa3VoaeSqpwc5zOOxWhhtvh9RWg3ZfnB3oDBlQ+A9sj6p9blX
-         lhQpzk/Vd4sbsqHtkO+mfhqTdZZ4aRqG2JncylqAzCHspd5/hEagtJ4GF0HTdEU2YZNh
-         Xp+mDXcnmFzI4cbOIiqxFDwoshuF4vfXGHPyKELO98aCkJxMG5BwD/MXdj7wuEkv1FnA
-         OdBg==
-X-Gm-Message-State: AOAM531PYvavCguoouEM/+DoS4VUiV77uxOzLwJ/jgjaN5pk6kl/mcCs
-        pbueQdp3gotxzG8ozuUukiBTffhniQD9glmkV8WDX99hGdsv5UcpuUmyEuMWYptzcZNl5kr81ek
-        tohP0LKTHpg+b
-X-Received: by 2002:aa7:c3d6:: with SMTP id l22mr8228020edr.245.1624550775703;
-        Thu, 24 Jun 2021 09:06:15 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw09H7v0DCCEjs/tE/s2mmEWHfFhayzievmvBhlMCyz27KgLfOMPcrR1ar5NxO3zWi0Usga7Q==
-X-Received: by 2002:aa7:c3d6:: with SMTP id l22mr8227949edr.245.1624550775257;
-        Thu, 24 Jun 2021 09:06:15 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id o4sm2122595edc.94.2021.06.24.09.06.13
+        bh=xn+g4Oy4TbzIlhU9jJ2+v158p0Us5HC5PaMOKTXC9pw=;
+        b=nW5+S9j7zFuGvE/sYm4TgtxhIM7xVdpMFww3SvkZ+6eEjrj7quVTSGHkAq0S9wHqZR
+         Jq3e53PofQSbO+XXVqojYiTuTVlV/R/LqTq9ailJ6YhCNXzADv+tFBjFmNo5z/KoWcOr
+         Q7C/WvvO+sviEjKoQAtyfRgUoxXbT0DQ3ED5adcvEnm6Sl/bgF3GvgC3zPSTBgvS2VwJ
+         Arh4R/mj9L2eNdZ374BvatAkWDt81ISWHX8+vYmAxShNHHnGRq5Zd6T9kXVmITHM4FIZ
+         1VAJclhTWqrFt8WmgUUu4BqwcxOEi6JJX5+d1cH8jM6U1mZwx6Mnefqcr6pmlRwxHGED
+         R3Bg==
+X-Gm-Message-State: AOAM532Msmi5V3fJ4Z36DFb1OzUyI3NUQdHLQ26lU6t1rJLRiaZ1U9WZ
+        iFAwHkM9hYDsl3TLidqtc3q9yxdpfDqtHn/EmRJBTMy5265LAEemg23HKlxNph8df622RD08sbh
+        X3ZSli0DkHzYw
+X-Received: by 2002:a05:6402:4cb:: with SMTP id n11mr8118335edw.292.1624550776918;
+        Thu, 24 Jun 2021 09:06:16 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxpnYPJAzm/4qtNBc7xfhD4QoTY11++wL13HFV4VgIRqY/z6BaZza/LEmUfZUO3YnT8+UY0ZA==
+X-Received: by 2002:a05:6402:4cb:: with SMTP id n11mr8118313edw.292.1624550776778;
+        Thu, 24 Jun 2021 09:06:16 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id x17sm2267495edr.88.2021.06.24.09.06.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Jun 2021 09:06:14 -0700 (PDT)
+        Thu, 24 Jun 2021 09:06:15 -0700 (PDT)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 66FF318073A; Thu, 24 Jun 2021 18:06:10 +0200 (CEST)
+        id 53E8B180738; Thu, 24 Jun 2021 18:06:10 +0200 (CEST)
 From:   =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     bpf@vger.kernel.org, netdev@vger.kernel.org
 Cc:     Martin KaFai Lau <kafai@fb.com>,
@@ -69,11 +69,11 @@ Cc:     Martin KaFai Lau <kafai@fb.com>,
         "Paul E . McKenney" <paulmck@kernel.org>,
         Jakub Kicinski <kuba@kernel.org>,
         =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Sunil Goutham <sgoutham@marvell.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH bpf-next v5 09/19] thunderx: remove rcu_read_lock() around XDP program invocation
-Date:   Thu, 24 Jun 2021 18:05:59 +0200
-Message-Id: <20210624160609.292325-10-toke@redhat.com>
+        Guy Tzalik <gtzalik@amazon.com>,
+        Saeed Bishara <saeedb@amazon.com>
+Subject: [PATCH bpf-next v5 07/19] ena: remove rcu_read_lock() around XDP program invocation
+Date:   Thu, 24 Jun 2021 18:05:57 +0200
+Message-Id: <20210624160609.292325-8-toke@redhat.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210624160609.292325-1-toke@redhat.com>
 References: <20210624160609.292325-1-toke@redhat.com>
@@ -84,7 +84,7 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The thunderx driver has rcu_read_lock()/rcu_read_unlock() pairs around XDP
+The ena driver has rcu_read_lock()/rcu_read_unlock() pairs around XDP
 program invocations. However, the actual lifetime of the objects referred
 by the XDP program invocation is longer, all the way through to the call to
 xdp_do_flush(), making the scope of the rcu_read_lock() too small. This
@@ -97,27 +97,34 @@ entirely. With the addition of RCU annotations to the XDP_REDIRECT map
 types that take bh execution into account, lockdep even understands this to
 be safe, so there's really no reason to keep it around.
 
-Cc: Sunil Goutham <sgoutham@marvell.com>
-Cc: linux-arm-kernel@lists.infradead.org
+Cc: Guy Tzalik <gtzalik@amazon.com>
+Cc: Saeed Bishara <saeedb@amazon.com>
 Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- drivers/net/ethernet/cavium/thunder/nicvf_main.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/net/ethernet/amazon/ena/ena_netdev.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/drivers/net/ethernet/cavium/thunder/nicvf_main.c b/drivers/net/ethernet/cavium/thunder/nicvf_main.c
-index c33b4e837515..e2b290135fd9 100644
---- a/drivers/net/ethernet/cavium/thunder/nicvf_main.c
-+++ b/drivers/net/ethernet/cavium/thunder/nicvf_main.c
-@@ -555,9 +555,7 @@ static inline bool nicvf_xdp_rx(struct nicvf *nic, struct bpf_prog *prog,
- 	xdp_prepare_buff(&xdp, hard_start, data - hard_start, len, false);
- 	orig_data = xdp.data;
+diff --git a/drivers/net/ethernet/amazon/ena/ena_netdev.c b/drivers/net/ethernet/amazon/ena/ena_netdev.c
+index 3bb0e66b2c7e..44ef6b88f715 100644
+--- a/drivers/net/ethernet/amazon/ena/ena_netdev.c
++++ b/drivers/net/ethernet/amazon/ena/ena_netdev.c
+@@ -382,7 +382,6 @@ static int ena_xdp_execute(struct ena_ring *rx_ring, struct xdp_buff *xdp)
+ 	struct xdp_frame *xdpf;
+ 	u64 *xdp_stat;
  
 -	rcu_read_lock();
- 	action = bpf_prog_run_xdp(prog, &xdp);
--	rcu_read_unlock();
+ 	xdp_prog = READ_ONCE(rx_ring->xdp_bpf_prog);
  
- 	len = xdp.data_end - xdp.data;
- 	/* Check if XDP program has changed headers */
+ 	if (!xdp_prog)
+@@ -439,8 +438,6 @@ static int ena_xdp_execute(struct ena_ring *rx_ring, struct xdp_buff *xdp)
+ 
+ 	ena_increase_stat(xdp_stat, 1, &rx_ring->syncp);
+ out:
+-	rcu_read_unlock();
+-
+ 	return verdict;
+ }
+ 
 -- 
 2.32.0
 
