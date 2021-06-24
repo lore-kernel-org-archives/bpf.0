@@ -8,60 +8,60 @@ X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E80E5C49EA6
-	for <bpf@archiver.kernel.org>; Thu, 24 Jun 2021 02:25:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F054C48BC2
+	for <bpf@archiver.kernel.org>; Thu, 24 Jun 2021 02:25:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D2B12613B0
-	for <bpf@archiver.kernel.org>; Thu, 24 Jun 2021 02:25:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 57D5C613B9
+	for <bpf@archiver.kernel.org>; Thu, 24 Jun 2021 02:25:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229889AbhFXC16 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 23 Jun 2021 22:27:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50448 "EHLO
+        id S229995AbhFXC2B (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 23 Jun 2021 22:28:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbhFXC1w (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 23 Jun 2021 22:27:52 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C9A1C061767;
-        Wed, 23 Jun 2021 19:25:32 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id e22so3423328pgv.10;
-        Wed, 23 Jun 2021 19:25:32 -0700 (PDT)
+        with ESMTP id S230030AbhFXC14 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 23 Jun 2021 22:27:56 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B884EC0617AD;
+        Wed, 23 Jun 2021 19:25:35 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id g21so2181865pfc.11;
+        Wed, 23 Jun 2021 19:25:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=gWLeiI/YxLXkaPJxEUwZ2EHBQUf5f2raKdNCp6AYQe0=;
-        b=YdXLxr6Pi501wpAFp9/YwG/wEL6VBL8FbJ8jvoT/nDALtXTK0OylaL5O5K3pqHlX2t
-         27XWYWAVTaEYwaKyXo6kP1+/+XeyNwsOJj6WP/zfXbnRHTAdJSjfjGPxhsX0TK0Nf7h1
-         ClOr1Zr94DmdAAe0qlGgxnuAnZVirTqAulGvfRnWiEQ8IFkFevaD+kDc6jO9blitiQc8
-         v+3qhvC9CQUZVJkQNHR1N5HWC6F+0cPC7OTHRcPnVbMWNrNsf/etQHBQmjPQHa7i9+f3
-         dkaAs9lUzpfQjZYQXAib5vz+DYfasNeWS4BFao3wnGr4P8y5X4hX3J9WxY+xUuKAnwNe
-         2OLw==
+        bh=W6OMaDkgPCSNRt4S9ZxziI3BCvcsK+GxZc4bBmTa4Tg=;
+        b=HvS6Ko/gR//Ru2kLd0sh8y0oG4kqilKvT2X5F28NUKMYZ7f3T4Jzq3a/swxSpOvKvf
+         yOq+/ChQm0A63ngbsXrmls5omZaaOu1fJXS1BJXEPCupAWwBraj4OHBlc3CN7zVLLuTB
+         B7F59VtrR/y7ifMFqDYxXIodmrsmv7ph2xeYMxuLIRVohc+ltAfNhwe8HShxkN390O3d
+         iAw8ShmIWmO33eyNWm8cd1O3bQzWaftE7wCMHXcAFSOji0AGAEcNHxZseqhoY66ATkNo
+         WpVGoNV9UYi1/DT2/+fvfdlgIgy27/DS0IzfMt/AqOl8EZpdAPl3zJZYpO24WYZadrBb
+         UQyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=gWLeiI/YxLXkaPJxEUwZ2EHBQUf5f2raKdNCp6AYQe0=;
-        b=kcnNf2cjSXqRTQLMqjDyJmmyKOXqtJfsxg1G/j66nrprH+hXg18KmYq90madv6bUp1
-         34MDLwgz8Tq1IlrF37HmQe/cFxeucLGvubXHCiJWrJU6ai8uRiCUFbghOtx+XKSPl3Xp
-         a9icy9QopavQTYmqPOOyzR73PZEJjxYyplGrckkmVyVcaPMkIzR/3k5mIzLYlDLiIywO
-         OM2gxMry1HfPX9FVhrh7IR4f94bBi9itrfYdGKnMHBYA3JULDLbs3iCgUPrE6YQ1KDcA
-         UrPWN752fuO2HojL6Aa9FJ9HZ1bLNuQn/TwYKHIZ86OMOhNBlI2t18BQom4i+QBrta/y
-         aC7A==
-X-Gm-Message-State: AOAM531ZuITiQ+XmcII10/alChYBCpmcLDGheNLb+pnz6uV6zew0fRTk
-        EOM1/MHx4nW9MLlXagJAGTH80YJr5Hs=
-X-Google-Smtp-Source: ABdhPJxfH9QpfWNkwLnurSVfThdoKEu2CuzxQ87QkOtYR8kTqI5f6RUuJIVaTL/Ik7B3Op+2TA9xiw==
-X-Received: by 2002:a63:4d62:: with SMTP id n34mr2497006pgl.302.1624501531931;
-        Wed, 23 Jun 2021 19:25:31 -0700 (PDT)
+        bh=W6OMaDkgPCSNRt4S9ZxziI3BCvcsK+GxZc4bBmTa4Tg=;
+        b=kVQJ0QabXykQ3ngQJxFNbHKQoA5DCODHDiLT9V/NGUgstUh5zUwZCqsvnh8kU4ai43
+         nDo5K1v9VKX5nc1wi3kOC38GmyKEhMOCu8SIuTVZJ7BxcO6Q8WFklx01ow0tZnr/Ds2L
+         ZyVdFbprU6vMnoxsUWR9Yrd4OgtrMdEs1R0o+4xn+x8Cj26vP1SqG4f3YNuESzcKFv2J
+         CqqvPYoji9TrisCp2AjWFLZZ0dtSgr80DzP6ZMaR1SrTI6/MJJOPcWo/6xZqz0s8tPnu
+         5KxNj0P+5MHITzyzbPj928/ACHbVJny2cnkw3rhAGYz+1/fy9/nGeyQKqzEi1d374Eid
+         O/KQ==
+X-Gm-Message-State: AOAM532ucTTZC4nr917AH1k0IiZrIqNiAmdS2ECrvpIXqli00Efwg1He
+        KRmJ/wZ1Cvdjvm8meVDzllg=
+X-Google-Smtp-Source: ABdhPJy/5v4PjeGqE4kMx3R9RJkecD+7ELpYufyS4FA/Ei2nle7+h14vI+iRdkYJqXgtPk/LWfBdrw==
+X-Received: by 2002:a62:687:0:b029:2ef:be02:c346 with SMTP id 129-20020a6206870000b02902efbe02c346mr2698991pfg.51.1624501535326;
+        Wed, 23 Jun 2021 19:25:35 -0700 (PDT)
 Received: from ast-mbp.thefacebook.com ([2620:10d:c090:400::5:a319])
-        by smtp.gmail.com with ESMTPSA id f17sm4675965pjj.21.2021.06.23.19.25.30
+        by smtp.gmail.com with ESMTPSA id f17sm4675965pjj.21.2021.06.23.19.25.33
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 23 Jun 2021 19:25:31 -0700 (PDT)
+        Wed, 23 Jun 2021 19:25:34 -0700 (PDT)
 From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To:     davem@davemloft.net
 Cc:     daniel@iogearbox.net, andrii@kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org, kernel-team@fb.com
-Subject: [PATCH v3 bpf-next 6/8] bpf: Teach stack depth check about async callbacks.
-Date:   Wed, 23 Jun 2021 19:25:16 -0700
-Message-Id: <20210624022518.57875-7-alexei.starovoitov@gmail.com>
+Subject: [PATCH v3 bpf-next 8/8] selftests/bpf: Add a test with bpf_timer in inner map.
+Date:   Wed, 23 Jun 2021 19:25:18 -0700
+Message-Id: <20210624022518.57875-9-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.13.5
 In-Reply-To: <20210624022518.57875-1-alexei.starovoitov@gmail.com>
 References: <20210624022518.57875-1-alexei.starovoitov@gmail.com>
@@ -71,77 +71,181 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Teach max stack depth checking algorithm about async callbacks
-that don't increase bpf program stack size.
-Also add sanity check that bpf_tail_call didn't sneak into async cb.
-It's impossible, since PTR_TO_CTX is not available in async cb,
-hence the program cannot contain bpf_tail_call(ctx,...);
+Check that map-in-map supports bpf timers.
+
+Check that indirect "recursion" of timer callbacks works:
+timer_cb1() { bpf_timer_start(timer_cb2); }
+timer_cb2() { bpf_timer_start(timer_cb1); }
+
+Check that
+  bpf_map_release
+    htab_free_prealloced_timers
+      bpf_timer_cancel_and_free
+        hrtimer_cancel
+works while timer cb is running.
+"while true; do ./test_progs -t timer_mim; done"
+is a great stress test. It caught missing timer cancel in htab->extra_elems.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf_verifier.h |  1 +
- kernel/bpf/verifier.c        | 18 +++++++++++++++---
- 2 files changed, 16 insertions(+), 3 deletions(-)
+ .../selftests/bpf/prog_tests/timer_mim.c      | 59 ++++++++++++++
+ tools/testing/selftests/bpf/progs/timer_mim.c | 81 +++++++++++++++++++
+ 2 files changed, 140 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/timer_mim.c
+ create mode 100644 tools/testing/selftests/bpf/progs/timer_mim.c
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index ce30c4ceaa6d..5001cdcc3677 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -399,6 +399,7 @@ struct bpf_subprog_info {
- 	bool has_tail_call;
- 	bool tail_call_reachable;
- 	bool has_ld_abs;
-+	bool is_async_cb;
- };
- 
- /* single container for all structs
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 503338093184..fe5ba8a46ce9 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -3704,6 +3704,8 @@ static int check_max_stack_depth(struct bpf_verifier_env *env)
- continue_func:
- 	subprog_end = subprog[idx + 1].start;
- 	for (; i < subprog_end; i++) {
-+		int next_insn;
+diff --git a/tools/testing/selftests/bpf/prog_tests/timer_mim.c b/tools/testing/selftests/bpf/prog_tests/timer_mim.c
+new file mode 100644
+index 000000000000..d54b16a3d9ea
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/timer_mim.c
+@@ -0,0 +1,59 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2021 Facebook */
++#include <test_progs.h>
++#include "timer_mim.skel.h"
 +
- 		if (!bpf_pseudo_call(insn + i) && !bpf_pseudo_func(insn + i))
- 			continue;
- 		/* remember insn and function to return to */
-@@ -3711,13 +3713,22 @@ static int check_max_stack_depth(struct bpf_verifier_env *env)
- 		ret_prog[frame] = idx;
- 
- 		/* find the callee */
--		i = i + insn[i].imm + 1;
--		idx = find_subprog(env, i);
-+		next_insn = i + insn[i].imm + 1;
-+		idx = find_subprog(env, next_insn);
- 		if (idx < 0) {
- 			WARN_ONCE(1, "verifier bug. No program starts at insn %d\n",
--				  i);
-+				  next_insn);
- 			return -EFAULT;
- 		}
-+		if (subprog[idx].is_async_cb) {
-+			if (subprog[idx].has_tail_call) {
-+				verbose(env, "verifier bug. subprog has tail_call and async cb\n");
-+				return -EFAULT;
-+			}
-+			 /* async callbacks don't increase bpf prog stack size */
-+			continue;
-+		}
-+		i = next_insn;
- 
- 		if (subprog[idx].has_tail_call)
- 			tail_call_reachable = true;
-@@ -5733,6 +5744,7 @@ static int __check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn
- 		struct bpf_verifier_state *async_cb;
- 
- 		/* there is no real recursion here. timer callbacks are async */
-+		env->subprog_info[subprog].is_async_cb = true;
- 		async_cb = push_async_cb(env, env->subprog_info[subprog].start,
- 					 *insn_idx, subprog);
- 		if (!async_cb)
++static int timer_mim(struct timer_mim *timer_skel)
++{
++	__u32 duration = 0, retval;
++	__u64 cnt1, cnt2;
++	int err, prog_fd, key1 = 1;
++
++	err = timer_mim__attach(timer_skel);
++	if (!ASSERT_OK(err, "timer_attach"))
++		return err;
++
++	prog_fd = bpf_program__fd(timer_skel->progs.test1);
++	err = bpf_prog_test_run(prog_fd, 1, NULL, 0,
++				NULL, NULL, &retval, &duration);
++	ASSERT_OK(err, "test_run");
++	ASSERT_EQ(retval, 0, "test_run");
++	timer_mim__detach(timer_skel);
++
++	/* check that timer_cb[12] are incrementing 'cnt' */
++	cnt1 = READ_ONCE(timer_skel->bss->cnt);
++	usleep(2);
++	cnt2 = READ_ONCE(timer_skel->bss->cnt);
++	ASSERT_GT(cnt2, cnt1, "cnt");
++
++	ASSERT_EQ(timer_skel->bss->err, 0, "err");
++	/* check that code paths completed */
++	ASSERT_EQ(timer_skel->bss->ok, 1 | 2, "ok");
++
++	close(bpf_map__fd(timer_skel->maps.inner_map));
++	err = bpf_map_delete_elem(bpf_map__fd(timer_skel->maps.outer_arr), &key1);
++	ASSERT_EQ(err, 0, "delete inner map");
++
++	/* check that timer_cb[12] are no longer running */
++	cnt1 = READ_ONCE(timer_skel->bss->cnt);
++	usleep(2);
++	cnt2 = READ_ONCE(timer_skel->bss->cnt);
++	ASSERT_EQ(cnt2, cnt1, "cnt");
++
++	return 0;
++}
++
++void test_timer_mim(void)
++{
++	struct timer_mim *timer_skel = NULL;
++	int err;
++
++	timer_skel = timer_mim__open_and_load();
++	if (!ASSERT_OK_PTR(timer_skel, "timer_skel_load"))
++		goto cleanup;
++
++	err = timer_mim(timer_skel);
++	ASSERT_OK(err, "timer_mim");
++cleanup:
++	timer_mim__destroy(timer_skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/timer_mim.c b/tools/testing/selftests/bpf/progs/timer_mim.c
+new file mode 100644
+index 000000000000..4d1d785d8d26
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/timer_mim.c
+@@ -0,0 +1,81 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2021 Facebook */
++#include <linux/bpf.h>
++#include <time.h>
++#include <errno.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_tcp_helpers.h"
++
++char _license[] SEC("license") = "GPL";
++struct hmap_elem {
++	int pad; /* unused */
++	struct bpf_timer timer;
++};
++
++struct inner_map {
++	__uint(type, BPF_MAP_TYPE_HASH);
++	__uint(max_entries, 1024);
++	__type(key, int);
++	__type(value, struct hmap_elem);
++} inner_map SEC(".maps");
++
++#define ARRAY_KEY 1
++#define HASH_KEY 1234
++
++struct outer_arr {
++	__uint(type, BPF_MAP_TYPE_ARRAY_OF_MAPS);
++	__uint(max_entries, 2);
++	__uint(key_size, sizeof(int));
++	__uint(value_size, sizeof(int));
++	__array(values, struct inner_map);
++} outer_arr SEC(".maps") = {
++	.values = { [ARRAY_KEY] = &inner_map },
++};
++
++__u64 err;
++__u64 ok;
++__u64 cnt;
++
++static int timer_cb1(void *map, int *key, struct hmap_elem *val);
++
++static int timer_cb2(void *map, int *key, struct hmap_elem *val)
++{
++	cnt++;
++	if (bpf_timer_start(&val->timer, timer_cb1, 1000) != 0)
++		err |= 1;
++	ok |= 1;
++	return 0;
++}
++
++/* callback for inner hash map */
++static int timer_cb1(void *map, int *key, struct hmap_elem *val)
++{
++	cnt++;
++	if (bpf_timer_start(&val->timer, timer_cb2, 1000) != 0)
++		err |= 2;
++	ok |= 2;
++	return 0;
++}
++
++SEC("fentry/bpf_fentry_test1")
++int BPF_PROG(test1, int a)
++{
++	struct hmap_elem init = {};
++	struct bpf_map *inner_map;
++	struct hmap_elem *val;
++	int array_key = ARRAY_KEY;
++	int hash_key = HASH_KEY;
++
++	inner_map = bpf_map_lookup_elem(&outer_arr, &array_key);
++	if (!inner_map)
++		return 0;
++
++	bpf_map_update_elem(inner_map, &hash_key, &init, 0);
++	val = bpf_map_lookup_elem(inner_map, &hash_key);
++	if (!val)
++		return 0;
++
++	bpf_timer_init(&val->timer, CLOCK_MONOTONIC);
++	bpf_timer_start(&val->timer, timer_cb1, 0);
++	return 0;
++}
 -- 
 2.30.2
 
