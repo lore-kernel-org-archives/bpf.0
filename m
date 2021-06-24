@@ -2,205 +2,293 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 00438C49EA5
-	for <bpf@archiver.kernel.org>; Thu, 24 Jun 2021 15:17:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B5DA8C49EA5
+	for <bpf@archiver.kernel.org>; Thu, 24 Jun 2021 16:04:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DDC38613DA
-	for <bpf@archiver.kernel.org>; Thu, 24 Jun 2021 15:17:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8DDEE60C3E
+	for <bpf@archiver.kernel.org>; Thu, 24 Jun 2021 16:04:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232375AbhFXPTV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 24 Jun 2021 11:19:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55296 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232358AbhFXPTT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 24 Jun 2021 11:19:19 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D283BC061756
-        for <bpf@vger.kernel.org>; Thu, 24 Jun 2021 08:16:59 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id bu12so10217043ejb.0
-        for <bpf@vger.kernel.org>; Thu, 24 Jun 2021 08:16:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=riotgames.com; s=riotgames;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=22Y42jbPpmoIkLk/IuRR1ccQuv0bmYkqo5PtAHbSdH4=;
-        b=P3TR7/0JAw5ltnrWXbgbwGgKDb7xESJQnbzm52rLFHQjluUFSiXwTyqxlOoJIOUto9
-         KsONtCEmqsd8vRIbOu/6XQoRCpN5Psy0c2AlET8uDUXuRHb8QMJ5YLqehPr9LsH4qQP2
-         6sMyF7zT0bGsSg1QOpdiIAz8lQ3Gknco+VM00=
+        id S229878AbhFXQHP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 24 Jun 2021 12:07:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:20858 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229464AbhFXQHP (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 24 Jun 2021 12:07:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1624550695;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gmfoWcZwTaeCUKyxu2GkJJmWB1vAe4vpCSHCNlvY+ug=;
+        b=Gz0swRkNbzM/jhuYzJO/aS3cD207J4Jz41JohlprBmuPbQ5AEO/seAM1FohCET8I1nRBJ/
+        kaxHVWmkimMLkD7B2xNV3xxfGmGF46tPuOnUyDbVvrNe8dejTQVDa+zGeOVPHSI1Avgk4z
+        vEhcD/+At/+GdwPiLEk3N5famtMAzBo=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-599-IHtTQsuVMryb-tol1NFwpg-1; Thu, 24 Jun 2021 12:04:54 -0400
+X-MC-Unique: IHtTQsuVMryb-tol1NFwpg-1
+Received: by mail-ej1-f72.google.com with SMTP id de48-20020a1709069bf0b029048ae3ebecabso2164246ejc.16
+        for <bpf@vger.kernel.org>; Thu, 24 Jun 2021 09:04:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=22Y42jbPpmoIkLk/IuRR1ccQuv0bmYkqo5PtAHbSdH4=;
-        b=uATax/6VF3+aqAHCh5WNOnHCY16fbpwjRC1BW4PyOkeJT3+ysajSNWRpIMcgq2NB/E
-         4gqOQclanqheCVxcx4ZrktgA3oukMWwswmXAiRhhoKccm4pP5dvwsthmcmz2OP+U5J6j
-         uxEHT7N5bBteaxy/exPHz0oqThBcdPXT3UjrdgIwHCYQPLHfFAALdPe6AksDfuwCnM7D
-         O4IEBYiicwTO3bQbo/p0eWaFapsBeo1LMq1MWMlI+dfblvoX2s6hR1mPMjhUOlAVAA72
-         0jz3c6X+X/XlXRd88Gk9odLbvmJ4DHwgBRq4SHHP104PnQEoK/vkiCQ6PJu2KvoMJuDG
-         fzEQ==
-X-Gm-Message-State: AOAM53022XYtkMs7NLf7SM7s2rQS2XSAVfJZaxfHpSQNQ27I9/4VJ/B6
-        3rCg3guG6rhOuIVHa9QprZ17j3eD2IEOnsxmc8JTPQ==
-X-Google-Smtp-Source: ABdhPJxeiQZYYynTSeIrS2wCBkIK9QDAkD/Kt5eh4syfFc1Nui5REYA/ZueyOvBuvrAXrZuoqdBAqSOJR9RhpTOSMrY=
-X-Received: by 2002:a17:907:c87:: with SMTP id gi7mr5824600ejc.452.1624547817912;
- Thu, 24 Jun 2021 08:16:57 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1623674025.git.lorenzo@kernel.org> <863f4934d251f44ad85a6be08b3737fac74f9b5a.1623674025.git.lorenzo@kernel.org>
- <60d2744ee12c2_1342e208f7@john-XPS-13-9370.notmuch> <4F52EE5B-1A3F-46CE-9A39-98475CA6B684@redhat.com>
- <60d495a914773_2e84a2082d@john-XPS-13-9370.notmuch>
-In-Reply-To: <60d495a914773_2e84a2082d@john-XPS-13-9370.notmuch>
-From:   Zvi Effron <zeffron@riotgames.com>
-Date:   Thu, 24 Jun 2021 08:16:46 -0700
-Message-ID: <CAC1LvL0_DhsStjzHhRY_JrCVeBW0J6M2CDJ6qT77Do-deXq8Zg@mail.gmail.com>
-Subject: Re: [PATCH v9 bpf-next 08/14] bpf: add multi-buff support to the
- bpf_xdp_adjust_tail() API
-To:     John Fastabend <john.fastabend@gmail.com>
-Cc:     Eelco Chaudron <echaudro@redhat.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        bpf <bpf@vger.kernel.org>, netdev@vger.kernel.org,
-        lorenzo.bianconi@redhat.com, David Miller <davem@davemloft.net>,
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=gmfoWcZwTaeCUKyxu2GkJJmWB1vAe4vpCSHCNlvY+ug=;
+        b=nhJjuBDdRBsSqeHtvGLJIpks/YdWh7BlTF4pQgEvIooL8Ur3rcA166WzRYe6UBDbe8
+         TN+l1lxxp3n3270OQb8YvBU+cit9PJvojmx0L6epdJ85rWlI5e+o3JvXjJJ6eFbf0ZsM
+         sg6+Fm9zqqxmDXPnYTZ8HBsQ++7f2aVBNGrXNFkSF/9W/G41c1zpBTjnjjOltRRMbhvW
+         VHrXMyO2tJzNW+HjBmp11w2krzfGecrJ2XEWDajeF+gUUJ0L5IlWW2k1jQvR2sf4phdz
+         wgG4O0xirB1+C7FFfPiH7SjWJphdfxyOlLZCexSm0Lc7cq1VQB4pBPJ8WMVGJT4cmFKr
+         kuqg==
+X-Gm-Message-State: AOAM533D6CKsaq7d56xio8o17DGP6f+cDVWogaIbDDhlKbCzCrJ7M9xx
+        0tWz3PmumSmfYa0tCa4BsqDRNlG4ia2JahFGg2pRZiiMyxyhjlT1LkCYxFtWjHqEb12ngUzdSG/
+        b4TSNIbDbGgMz
+X-Received: by 2002:a17:906:4b0a:: with SMTP id y10mr6163725eju.388.1624550693025;
+        Thu, 24 Jun 2021 09:04:53 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx6rIEV6VYEmWLNMBGnjJqLbMIgYb9TTU/bDxbNbUZIDQLCTWkipgKEIz6FWayOl5R1RLLH6A==
+X-Received: by 2002:a17:906:4b0a:: with SMTP id y10mr6163678eju.388.1624550692571;
+        Thu, 24 Jun 2021 09:04:52 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id ce3sm1413692ejc.53.2021.06.24.09.04.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Jun 2021 09:04:51 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 4AEC1180731; Thu, 24 Jun 2021 18:04:48 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Zvi Effron <zeffron@riotgames.com>
+Cc:     Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, shayagr@amazon.com,
-        sameehj@amazon.com, dsahern@kernel.org,
+        John Fastabend <john.fastabend@gmail.com>,
         Jesper Dangaard Brouer <brouer@redhat.com>,
-        jasowang@redhat.com, alexander.duyck@gmail.com, saeed@kernel.org,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
-        tirthendu.sarkar@intel.com
-Content-Type: text/plain; charset="UTF-8"
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        BPF-dev-list <bpf@vger.kernel.org>,
+        Magnus Karlsson <magnus.karlsson@gmail.com>,
+        William Tu <u9012063@gmail.com>, xdp-hints@xdp-project.net
+Subject: Re: XDP-hints: Howto support multiple BTF types per packet basis?
+In-Reply-To: <CAC1LvL0i6mY2pAuNriwA_CWmxpO=VHoRHGfMK6ovp3LUt43g1g@mail.gmail.com>
+References: <60b08442b18d5_1cf8208a0@john-XPS-13-9370.notmuch>
+ <87fsy7gqv7.fsf@toke.dk>
+ <60b0ffb63a21a_1cf82089e@john-XPS-13-9370.notmuch>
+ <20210528180214.3b427837@carbon>
+ <60b12897d2e3f_1cf820896@john-XPS-13-9370.notmuch>
+ <8735u3dv2l.fsf@toke.dk>
+ <60b6cf5b6505e_38d6d208d8@john-XPS-13-9370.notmuch>
+ <20210602091837.65ec197a@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+ <YNGU4GhL8fZ0ErzS@localhost.localdomain> <874kdqqfnm.fsf@toke.dk>
+ <YNLxtsasQSv+YR1w@localhost.localdomain> <87mtrfmoyh.fsf@toke.dk>
+ <CAC1LvL0i6mY2pAuNriwA_CWmxpO=VHoRHGfMK6ovp3LUt43g1g@mail.gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Thu, 24 Jun 2021 18:04:48 +0200
+Message-ID: <878s2zmeov.fsf@toke.dk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Jun 24, 2021 at 7:24 AM John Fastabend <john.fastabend@gmail.com> w=
-rote:
->
-> Eelco Chaudron wrote:
-> >
-> >
-> > On 23 Jun 2021, at 1:37, John Fastabend wrote:
-> >
-> > > Lorenzo Bianconi wrote:
-> > >> From: Eelco Chaudron <echaudro@redhat.com>
-> > >>
-> > >> This change adds support for tail growing and shrinking for XDP mult=
-i-buff.
-> > >>
-> > >
-> > > It would be nice if the commit message gave us some details on how th=
-e
-> > > growing/shrinking works in the multi-buff support.
-> >
-> > Will add this to the next rev.
-> >
-> > >> Signed-off-by: Eelco Chaudron <echaudro@redhat.com>
-> > >> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-> > >> ---
-> > >>  include/net/xdp.h |  7 ++++++
-> > >>  net/core/filter.c | 62 ++++++++++++++++++++++++++++++++++++++++++++=
-+++
-> > >>  net/core/xdp.c    |  5 ++--
-> > >>  3 files changed, 72 insertions(+), 2 deletions(-)
-> > >>
-> > >> diff --git a/include/net/xdp.h b/include/net/xdp.h
-> > >> index 935a6f83115f..3525801c6ed5 100644
-> > >> --- a/include/net/xdp.h
-> > >> +++ b/include/net/xdp.h
-> > >> @@ -132,6 +132,11 @@ xdp_get_shared_info_from_buff(struct xdp_buff *=
-xdp)
-> > >>    return (struct skb_shared_info *)xdp_data_hard_end(xdp);
-> > >>  }
-> > >>
-> > >> +static inline unsigned int xdp_get_frag_tailroom(const skb_frag_t *=
-frag)
-> > >> +{
-> > >> +  return PAGE_SIZE - skb_frag_size(frag) - skb_frag_off(frag);
-> > >> +}
-> > >> +
-> > >>  struct xdp_frame {
-> > >>    void *data;
-> > >>    u16 len;
-> > >> @@ -259,6 +264,8 @@ struct xdp_frame *xdp_convert_buff_to_frame(stru=
-ct xdp_buff *xdp)
-> > >>    return xdp_frame;
-> > >>  }
-> > >>
-> > >> +void __xdp_return(void *data, struct xdp_mem_info *mem, bool napi_d=
-irect,
-> > >> +            struct xdp_buff *xdp);
-> > >>  void xdp_return_frame(struct xdp_frame *xdpf);
-> > >>  void xdp_return_frame_rx_napi(struct xdp_frame *xdpf);
-> > >>  void xdp_return_buff(struct xdp_buff *xdp);
-> > >> diff --git a/net/core/filter.c b/net/core/filter.c
-> > >> index caa88955562e..05f574a3d690 100644
-> > >> --- a/net/core/filter.c
-> > >> +++ b/net/core/filter.c
-> > >> @@ -3859,11 +3859,73 @@ static const struct bpf_func_proto bpf_xdp_a=
-djust_head_proto =3D {
-> > >>    .arg2_type      =3D ARG_ANYTHING,
-> > >>  };
-> > >>
-> > >> +static int bpf_xdp_mb_adjust_tail(struct xdp_buff *xdp, int offset)
-> > >> +{
-> > >> +  struct skb_shared_info *sinfo;
-> > >> +
-> > >> +  if (unlikely(!xdp_buff_is_mb(xdp)))
-> > >> +          return -EINVAL;
-> > >> +
-> > >> +  sinfo =3D xdp_get_shared_info_from_buff(xdp);
-> > >> +  if (offset >=3D 0) {
-> > >> +          skb_frag_t *frag =3D &sinfo->frags[sinfo->nr_frags - 1];
-> > >> +          int size;
-> > >> +
-> > >> +          if (unlikely(offset > xdp_get_frag_tailroom(frag)))
-> > >> +                  return -EINVAL;
-> > >> +
-> > >> +          size =3D skb_frag_size(frag);
-> > >> +          memset(skb_frag_address(frag) + size, 0, offset);
-> > >> +          skb_frag_size_set(frag, size + offset);
-> > >> +          sinfo->data_len +=3D offset;
-> > >
-> > > Can you add some comment on how this works? So today I call
-> > > bpf_xdp_adjust_tail() to add some trailer to my packet.
-> > > This looks like it adds tailroom to the last frag? But, then
-> > > how do I insert my trailer? I don't think we can without the
-> > > extra multi-buffer access support right.
-> >
-> > You are right, we need some kind of multi-buffer access helpers.
-> >
-> > > Also data_end will be unchanged yet it will return 0 so my
-> > > current programs will likely be a bit confused by this.
-> >
-> > Guess this is the tricky part, applications need to be multi-buffer awa=
-re. If current applications rely on bpf_xdp_adjust_tail(+) to determine max=
-imum frame length this approach might not work. In this case, we might need=
- an additional helper to do tail expansion with multi buffer support.
-> >
-> > But then the question arrives how would mb unaware application behave i=
-n general when an mb packet is supplied?? It would definitely not determine=
- the correct packet length.
->
-> Right that was my conclusion as well. Existing programs might
-> have subtle side effects if they start running on multibuffer
-> drivers as is. I don't have any good ideas though on how
-> to handle this.
->
+Zvi Effron via xdp-hints <xdp-hints@xdp-project.net> writes:
 
-Would it be possible to detect multibuffer awareness of a program at load
-(or attach) time, perhaps by looking for the use of the new multibuffer
-helpers? That might make it possible to reject a non-multibuffer aware
-program on multibuffer drivers (or maybe even put the driver into a
-non-multibuffer mode at attach time), or at the very least issue a
-warning?
+> On Thu, Jun 24, 2021 at 5:23 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@re=
+dhat.com> wrote:
+>>
+>> Michal Swiatkowski <michal.swiatkowski@linux.intel.com> writes:
+>>
+>> > On Tue, Jun 22, 2021 at 01:53:33PM +0200, Toke H=C3=B8iland-J=C3=B8rge=
+nsen wrote:
+>> >> Michal Swiatkowski <michal.swiatkowski@linux.intel.com> writes:
+>> >>
+>> >> > On Wed, Jun 02, 2021 at 09:18:37AM -0700, Jakub Kicinski wrote:
+>> >> >> On Tue, 01 Jun 2021 17:22:51 -0700 John Fastabend wrote:
+>> >> >> > > If we do this, the BPF program obviously needs to know which f=
+ields are
+>> >> >> > > valid and which are not. AFAICT you're proposing that this sho=
+uld be
+>> >> >> > > done out-of-band (i.e., by the system administrator manually e=
+nsuring
+>> >> >> > > BPF program config fits system config)? I think there are a co=
+uple of
+>> >> >> > > problems with this:
+>> >> >> > >
+>> >> >> > > - It requires the system admin to coordinate device config wit=
+h all of
+>> >> >> > >   their installed XDP applications. This is error-prone, espec=
+ially as
+>> >> >> > >   the number of applications grows (say if different container=
+s have
+>> >> >> > >   different XDP programs installed on their virtual devices).
+>> >> >> >
+>> >> >> > A complete "system" will need to be choerent. If I forward into =
+a veth
+>> >> >> > device the orchestration component needs to ensure program sendi=
+ng
+>> >> >> > bits there is using the same format the program installed there =
+expects.
+>> >> >> >
+>> >> >> > If I tailcall/fentry into another program that program the calle=
+e and
+>> >> >> > caller need to agree on the metadata protocol.
+>> >> >> >
+>> >> >> > I don't see any way around this. Someone has to manage the netwo=
+rk.
+>> >> >>
+>> >> >> FWIW I'd like to +1 Toke's concerns.
+>> >> >>
+>> >> >> In large deployments there won't be a single arbiter. Saying there
+>> >> >> is seems to contradict BPF maintainers' previous stand which lead
+>> >> >> to addition of bpf_links for XDP.
+>> >> >>
+>> >> >> In practical terms person rolling out an NTP config change may not
+>> >> >> be aware that in some part of the network some BPF program expects
+>> >> >> descriptor not to contain time stamps. Besides features may depend
+>> >> >> or conflict so the effects of feature changes may not be obvious
+>> >> >> across multiple drivers in a heterogeneous environment.
+>> >> >>
+>> >> >> IMO guarding from obvious mis-configuration provides obvious value.
+>> >> >
+>> >> > Hi,
+>> >> >
+>> >> > Thanks for a lot of usefull information about CO-RE. I have read
+>> >> > recommended articles, but still don't understand everything, so sor=
+ry if
+>> >> > my questions are silly.
+>> >> >
+>> >> > As introduction, I wrote small XDP example using CO-RE (autogenerat=
+ed
+>> >> > vmlinux.h and getting rid of skeleton etc.) based on runqslower
+>> >> > implementation. Offset reallocation of hints works great, I built C=
+O-RE
+>> >> > application, added new field to hints struct, changed struct layout=
+ and
+>> >> > without rebuilding application everything still works fine. Is it w=
+orth
+>> >> > to add XDP sample using CO-RE in kernel or this isn't good place for
+>> >> > this kind of sample?
+>> >> >
+>> >> > First question not stricte related to hints. How to get rid of #def=
+ine
+>> >> > and macro when I am using generated vmlinux.h? For example I wanted=
+ to
+>> >> > use htons macro and ethtype definition. They are located in headers=
+ that
+>> >> > also contains few struct definition. Because of that I have redefin=
+ition
+>> >> > error when I am trying to include them (redefinition in vmlinux.h a=
+nd
+>> >> > this included file). What can I do with this besides coping definit=
+ions
+>> >> > to bpf code?
+>> >>
+>> >> One way is to only include the structs you actually need from vmlinux=
+.h.
+>> >> You can even prune struct members, since CO-RE works just fine with
+>> >> partial struct definitions as long as the member names match.
+>> >>
+>> >> Jesper has an example on how to handle this here:
+>> >> https://github.com/netoptimizer/bpf-examples/blob/ktrace01-CO-RE.publ=
+ic/headers/vmlinux_local.h
+>> >>
+>> >
+>> > I see, thanks, I will take a look at other examples.
+>> >
+>> >> > I defined hints struct in driver code, is it right place for that? =
+All
+>> >> > vendors will define their own hints struct or the idea is to have o=
+ne
+>> >> > big hints struct with flags informing about availability of each fi=
+elds?
+>> >> >
+>> >> > For me defining it in driver code was easier because I can have used
+>> >> > module btf to generate vmlinux.h with hints struct inside. However =
+this
+>> >> > break portability if other vendors will have different struct name =
+etc,
+>> >> > am I right?
+>> >>
+>> >> I would expect the easiest is for drivers to just define their own
+>> >> structs and maybe have some infrastructure in the core to let userspa=
+ce
+>> >> discover the right BTF IDs to use for a particular netdev. However, as
+>> >> you say it's not going to work if every driver just invents their own
+>> >> field names, so we'll need to coordinate somehow. We could do this by
+>> >> convention, though, it'll need manual intervention to make sure the
+>> >> semantics of identically-named fields match anyway.
+>> >>
+>> >> Cf the earlier discussion with how many BTF IDs each driver might
+>> >> define, I think we *also* need a way to have flags that specify which
+>> >> fields of a given BTF ID are currently used; and having some common
+>> >> infrastructure for that would be good...
+>> >>
+>> >
+>> > Sounds good.
+>> >
+>> > Sorry, but I feel that I don't fully understand the idea. Correct me if
+>> > I am wrong:
+>> >
+>> > In building CO-RE application step we can defined big struct with
+>> > all possible fields or even empty struct (?) and use
+>> > bpf_core_field_exists.
+>> >
+>> > bpf_core_field_exists will be resolve before loading program by libbpf
+>> > code. In normal case libbpf will look for btf with hints name in vmlin=
+ux
+>> > of running kernel and do offset rewrite and exsistence check. But as t=
+he
+>> > same hints struct will be define in multiple modules we want to add mo=
+re
+>> > logic to libbpf to discover correct BTF ID based on netdev on which pr=
+ogram
+>> > will be loaded?
+>>
+>> I would expect that the program would decide ahead-of-time which BTF IDs
+>> it supports, by something like including the relevant structs from
+>> vmlinux.h. And then we need the BTF ID encoded into the packet metadata
+>> as well, so that it is possible to check at run-time which driver the
+>> packet came from (since a packet can be redirected, so you may end up
+>> having to deal with multiple formats in the same XDP program).
+>>
+>> Which would allow you to write code like:
+>>
+>> if (ctx->has_driver_meta) {
+>>   /* this should be at a well-known position, like first (or last) in me=
+ta area */
+>>   __u32 *meta_btf_id =3D ctx->data_meta;
+>>
+>>   if (*meta_btf_id =3D=3D BTF_ID_MLX5) {
+>>     struct meta_mlx5 *meta =3D ctx->data_meta;
+>>     /* do something with meta */
+>>   } else if (meta_btf_id =3D=3D BTF_ID_I40E) {
+>>     struct meta_i40e *meta =3D ctx->data_meta;
+>>     /* do something with meta */
+>>   } /* etc */
+>> }
+>>
+>> and libbpf could do relocations based on the different meta structs,
+>> even removing the code for the ones that don't exist on the running
+>> kernel.
+>>
+>> -Toke
+>>
+>
+> How does putting the BTF ID and the driver metadata into the XDP metadata
+> section interact with programs that are already using the metadata section
+> for other purposes. For example, programs that use the XDP metadata to pa=
+ss
+> information through BPF tail calls?
+>
+> Would this break existing programs that aren't aware of the new driver
+> metadata? Do we need to make driver metadata opt-in at XDP program
+> load?
 
-> >
-> > >> +  } else {
-> >
->
->
+Well, XDP applications would be free to just ignore the driver-provided
+metadata and overwrite it with its own data? And I guess any application
+that doesn't know about it will just implicitly do that? :)
+
+-Toke
+
