@@ -2,98 +2,70 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C01AC48BC2
-	for <bpf@archiver.kernel.org>; Mon, 28 Jun 2021 03:05:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BC75AC2B9F4
+	for <bpf@archiver.kernel.org>; Mon, 28 Jun 2021 07:32:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 414BC61C2A
-	for <bpf@archiver.kernel.org>; Mon, 28 Jun 2021 03:05:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9F43B61582
+	for <bpf@archiver.kernel.org>; Mon, 28 Jun 2021 07:32:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231815AbhF1DHw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 27 Jun 2021 23:07:52 -0400
-Received: from szxga02-in.huawei.com ([45.249.212.188]:8473 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231678AbhF1DHw (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 27 Jun 2021 23:07:52 -0400
-Received: from dggeme754-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4GCsph3sJ7zZfy4;
-        Mon, 28 Jun 2021 11:02:20 +0800 (CST)
-Received: from localhost.localdomain (10.175.103.91) by
- dggeme754-chm.china.huawei.com (10.3.19.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2176.2; Mon, 28 Jun 2021 11:05:24 +0800
-From:   Wei Li <liwei391@huawei.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>
-CC:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <huawei.libin@huawei.com>
-Subject: [PATCH] tools: bpf: Fix error in 'make -C tools/ bpf_install'
-Date:   Mon, 28 Jun 2021 11:04:09 +0800
-Message-ID: <20210628030409.3459095-1-liwei391@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        id S232402AbhF1HeZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 28 Jun 2021 03:34:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55790 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232397AbhF1HeX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 28 Jun 2021 03:34:23 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1830C061766
+        for <bpf@vger.kernel.org>; Mon, 28 Jun 2021 00:31:57 -0700 (PDT)
+Date:   Mon, 28 Jun 2021 09:31:53 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
+        s=mail; t=1624865514;
+        bh=GtfBo6P8teq4bX0PeFtT0D/ojACshn8SCvUnRDe32k4=;
+        h=Date:From:To:Subject:From;
+        b=rAeW7OgnbnQVXQrpaWXAnk9anUIOMLyBPFwyUacyCKoJguiz4gIczc8pYJSrKR9pG
+         uMP3lQ2boJ8J+gpRe82/XGW6FWG2fEz7MOlHmQlxR6+MUcAlDJB3Q+UR7V6JcITg0+
+         olWFBHd0sfX7oZI+EDwn9HlCumPquNfT/TujabMg=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To:     linux-audit@redhat.com, bpf@vger.kernel.org
+Subject: AUDIT_ARCH_ and __NR_syscall constants for seccomp filters
+Message-ID: <0b926f59-464d-4b67-8f32-329cf9695cf7@t-8ch.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggeme754-chm.china.huawei.com (10.3.19.100)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-make[2]: *** No rule to make target 'install'.  Stop.
-make[1]: *** [Makefile:122: runqslower_install] Error 2
-make: *** [Makefile:116: bpf_install] Error 2
+Hi everyone,
 
-There is no rule for target 'install' in tools/bpf/runqslower/Makefile,
-and there is no need to install it, so just remove 'runqslower_install'.
+there does not seem to be a way to access the AUDIT_ARCH_ constant that matches
+the currently visible syscall numbers (__NR_...) from the kernel uapi headers.
 
-Fixes: 9c01546d26d2 ("tools/bpf: Add runqslower tool to tools/bpf")
-Signed-off-by: Wei Li <liwei391@huawei.com>
----
- tools/bpf/Makefile | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+Background:
 
-diff --git a/tools/bpf/Makefile b/tools/bpf/Makefile
-index 39bb322707b4..b11cfc86a3d0 100644
---- a/tools/bpf/Makefile
-+++ b/tools/bpf/Makefile
-@@ -97,7 +97,7 @@ clean: bpftool_clean runqslower_clean resolve_btfids_clean
- 	$(Q)$(RM) -- $(OUTPUT)FEATURE-DUMP.bpf
- 	$(Q)$(RM) -r -- $(OUTPUT)feature
- 
--install: $(PROGS) bpftool_install runqslower_install
-+install: $(PROGS) bpftool_install
- 	$(call QUIET_INSTALL, bpf_jit_disasm)
- 	$(Q)$(INSTALL) -m 0755 -d $(DESTDIR)$(prefix)/bin
- 	$(Q)$(INSTALL) $(OUTPUT)bpf_jit_disasm $(DESTDIR)$(prefix)/bin/bpf_jit_disasm
-@@ -118,9 +118,6 @@ bpftool_clean:
- runqslower:
- 	$(call descend,runqslower)
- 
--runqslower_install:
--	$(call descend,runqslower,install)
--
- runqslower_clean:
- 	$(call descend,runqslower,clean)
- 
-@@ -131,5 +128,5 @@ resolve_btfids_clean:
- 	$(call descend,resolve_btfids,clean)
- 
- .PHONY: all install clean bpftool bpftool_install bpftool_clean \
--	runqslower runqslower_install runqslower_clean \
-+	runqslower runqslower_clean \
- 	resolve_btfids resolve_btfids_clean
--- 
-2.25.1
+I am writing a seccomp BPF filter using the syscall constants to get the
+correct syscall numbers for the target architecture.
 
+seccomp_filter.rst tells users to always check the arch values.
+But there does not seem a way to get the correct AUDIT_ARCH_ value from the
+kernel headers.
+
+Questions:
+
+Is it really necessary to validate the arch value when syscall numbers are
+already target-specific?
+(If not, should this be added to the docs?)
+
+Would it make sense to expose the audit arch matching the syscall numbers in
+the uapi headers?
+
+Link to the actual BPF code:
+https://github.com/t-8ch/qmk_firmware/blob/optimize-udev/util/udev/qmk_id.c#L154
+
+Thanks,
+Thomas
