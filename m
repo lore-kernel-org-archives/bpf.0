@@ -2,129 +2,114 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C2D6BC49EA7
-	for <bpf@archiver.kernel.org>; Mon, 28 Jun 2021 07:33:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4921C49EAF
+	for <bpf@archiver.kernel.org>; Mon, 28 Jun 2021 08:43:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A5CFE61582
-	for <bpf@archiver.kernel.org>; Mon, 28 Jun 2021 07:33:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B4A7D61C2F
+	for <bpf@archiver.kernel.org>; Mon, 28 Jun 2021 08:43:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232312AbhF1HgW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 28 Jun 2021 03:36:22 -0400
-Received: from mailgw01.mediatek.com ([60.244.123.138]:53400 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S232246AbhF1HgV (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 28 Jun 2021 03:36:21 -0400
-X-UUID: 574c76e2c2aa4ea5935980c50dcfcddf-20210628
-X-UUID: 574c76e2c2aa4ea5935980c50dcfcddf-20210628
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <rocco.yue@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 253331028; Mon, 28 Jun 2021 15:33:51 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 28 Jun 2021 15:33:43 +0800
-Received: from localhost.localdomain (10.15.20.246) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 28 Jun 2021 15:33:42 +0800
-From:   Rocco Yue <rocco.yue@mediatek.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>, <netdev@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <bpf@vger.kernel.org>,
-        <wsd_upstream@mediatek.com>, <chao.song@mediatek.com>,
-        <kuohong.wang@mediatek.com>, Rocco Yue <rocco.yue@mediatek.com>
-Subject: Re: [PATCH 4/4] drivers: net: mediatek: initial implementation of ccmni
-Date:   Mon, 28 Jun 2021 15:18:30 +0800
-Message-ID: <20210628071829.14925-1-rocco.yue@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <YNS4GzYHpxMWIH+1@kroah.com>
-References: <YNS4GzYHpxMWIH+1@kroah.com>
+        id S232329AbhF1Ipu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 28 Jun 2021 04:45:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43424 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232312AbhF1Ipt (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 28 Jun 2021 04:45:49 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FCE4C061787
+        for <bpf@vger.kernel.org>; Mon, 28 Jun 2021 01:43:23 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id f13so6866855qtb.6
+        for <bpf@vger.kernel.org>; Mon, 28 Jun 2021 01:43:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+G0aFIa+dKIdQGhhAX7TYqH/nk+PfE3E5edNbclxiZM=;
+        b=SnecMWl5iR/bF/bsX0hSkvINZEErBldRKMwqj/t01OhZmr/rUI6aWOgdV2Z63oUgM8
+         6pqllFAquDXwhOQfUujcnQXr2Vdt/TS3VRqpGQQPXN39+8ZaFdMt+w6j7XAiAv7kkBKF
+         MkImyUeZ8SQcIaj50jvgoPeP+PjxLMw18cHaiGzDDHYp7DkDVtrgn9+Q5TdbukBrXTEj
+         wHo4sHoFMFroy4QnXleLwU4bn4lUpYGQKiJyfeTI9OHRFnv4nno16WIDeej7Bhm6OgYY
+         JNPI/h25UQu0S8vBO8Snj9ZCwWPrND4i+29JHGnz0A2KJsTCYh9ntV1ES2Wy3CYa4Gh7
+         RqZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+G0aFIa+dKIdQGhhAX7TYqH/nk+PfE3E5edNbclxiZM=;
+        b=AUiVWYAGZgtm4Ga0QPLU3HdC+7tpoVp14AikR2gpkB3BaRlV7Jp3KxZ4AZtzZ5AmCn
+         M6bpyD12daXaISi2u4Fn1C3V61AjUOTpptVxECwOsRYJ9Tie1iNq4+jMV7C4oJAECkyD
+         BDnc3MwDnDw52bh81b/k8VIp3iNdT5arncnM+uJeu/tYyYQtqqGp8ntG6JcJFGk3xvbY
+         wp14HXP50P2HcgGpVi5HS1m3D4IzaYm+kMKhmwGuIBcblMslqRt9UPUTVCDwONlLspjq
+         V1fkqfQG5DS451LhZnZJ5F8KDVNXflDUb16ZFNaYYGd9U2CWbO5TmaMML38BOaCG/FRU
+         0EMA==
+X-Gm-Message-State: AOAM532elfy7AIcF/m517V0wQ8zPnhY9473yN425xFltOgFhRcS6T+5M
+        ECFBY3Hl6T9C//+0/kez0zlyR5vIAIQjAuztQKVd8dqz79pFRg==
+X-Google-Smtp-Source: ABdhPJxVs9ovjQ9jj3UPUGVpqeS8rM0QoHg1qqvU59gg0Usr9RQl2QZjr4tMZakv7PIzKG8ZKBTB8VWWRxLoV12CKEw=
+X-Received: by 2002:ac8:1090:: with SMTP id a16mr20368058qtj.290.1624869796278;
+ Mon, 28 Jun 2021 01:43:16 -0700 (PDT)
 MIME-Version: 1.0
+References: <000000000000f034fc05c2da6617@google.com> <000000000000cac82d05c5214992@google.com>
+ <20210621224119.GW4397@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20210621224119.GW4397@paulmck-ThinkPad-P17-Gen-1>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Mon, 28 Jun 2021 10:43:04 +0200
+Message-ID: <CACT4Y+bL26nyHU5Tc4SV7AepPYSt_YZVfhLEMaLncZ2+-OyFCg@mail.gmail.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in check_all_holdout_tasks_trace
+To:     paulmck@kernel.org
+Cc:     syzbot <syzbot+7b2b13f4943374609532@syzkaller.appspotmail.com>,
+        akpm@linux-foundation.org, andrii@kernel.org, ast@kernel.org,
+        axboe@kernel.dk, bpf@vger.kernel.org, christian@brauner.io,
+        coreteam@netfilter.org, daniel@iogearbox.net, davem@davemloft.net,
+        dsahern@kernel.org, fw@strlen.de, jiangshanlai@gmail.com,
+        joel@joelfernandes.org, john.fastabend@gmail.com,
+        josh@joshtriplett.org, kadlec@netfilter.org, kafai@fb.com,
+        kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        mathieu.desnoyers@efficios.com, netdev@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, pablo@netfilter.org,
+        peterz@infradead.org, rcu@vger.kernel.org, rostedt@goodmis.org,
+        shakeelb@google.com, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, yanfei.xu@windriver.com,
+        yhs@fb.com, yoshfuji@linux-ipv6.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-MTK:  N
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, 2021-06-24 at 18:51 +0200, Greg KH wrote:
-On Thu, Jun 24, 2021 at 11:55:02PM +0800, Rocco Yue wrote:
->> On Thu, 2021-06-24 at 14:23 +0200, Greg KH wrote:
->> On Thu, Jun 24, 2021 at 07:53:49PM +0800, Rocco Yue wrote:
->>> 
->>> not have exports that no one uses.  Please add the driver to this patch
->>> series when you resend it.
->>> 
->> 
->> I've just took a look at what the Linux staging tree is. It looks like
->> a good choice for the current ccmni driver.
->> 
->> honstly, If I simply upload the relevant driver code B that calls
->> A (e.g. ccmni_rx_push), there is still a lack of code to call B.
->> This seems to be a continuty problem, unless all drivers codes are
->> uploaded (e.g. power on modem, get hardware status, complete tx/rx flow).
-> 
-> Great, send it all!  Why is it different modules, it's only for one
-> chunk of hardware, no need to split it up into tiny pieces.  That way
-> only causes it to be more code overall.
-> 
->> 
->> Thanks~
->> 
->> Can I resend patch set as follows:
->> (1) supplement the details of pureip for patch 1/4;
->> (2) the document of ccmni.rst still live in the Documentation/...
->> (3) modify ccmni and move it into the drivers/staging/...
-> 
-> for drivers/staging/ the code needs to be "self contained" in that it
-> does not require adding anything outside of the directory for it.
-> 
-> If you still require this core networking change, that needs to be
-> accepted first by the networking developers and maintainers.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+On Tue, Jun 22, 2021 at 12:41 AM Paul E. McKenney <paulmck@kernel.org> wrote:
+>
+> On Sat, Jun 19, 2021 at 09:54:06AM -0700, syzbot wrote:
+> > syzbot has bisected this issue to:
+> >
+> > commit f9006acc8dfe59e25aa75729728ac57a8d84fc32
+> > Author: Florian Westphal <fw@strlen.de>
+> > Date:   Wed Apr 21 07:51:08 2021 +0000
+> >
+> >     netfilter: arp_tables: pass table pointer via nf_hook_ops
+> >
+> > bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=10dceae8300000
+> > start commit:   0c38740c selftests/bpf: Fix ringbuf test fetching map FD
+> > git tree:       bpf-next
+> > final oops:     https://syzkaller.appspot.com/x/report.txt?x=12dceae8300000
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=14dceae8300000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=a6380da8984033f1
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=7b2b13f4943374609532
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1264c2d7d00000
+> >
+> > Reported-by: syzbot+7b2b13f4943374609532@syzkaller.appspotmail.com
+> > Fixes: f9006acc8dfe ("netfilter: arp_tables: pass table pointer via nf_hook_ops")
+> >
+> > For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+>
+> I am not seeing any mention of check_all_holdout_tasks_trace() in
+> the console output, but I again suggest the following two patches:
+>
+> 6a04a59eacbd ("rcu-tasks: Don't delete holdouts within trc_inspect_reader()"
+> dd5da0a9140e ("rcu-tasks: Don't delete holdouts within trc_wait_for_one_reader()")
 
-Hi Greg,
+Let's tell syzbot about these fixes, then it will tell us if they help or not.
 
-I am grateful for your help.
-
-Both ccmni change and networking changes are needed, because as far
-as I know, usually a device type should have at least one device to
-use it, and pureip is what the ccmni driver needs, so I uploaded the
-networking change and ccmni driver together;
-
-Since MTK’s modem driver has a large amount of code and strong code
-coupling, it takes some time to clean up them. At this stage, it may
-be difficult to upstream all the codes together.
-
-During this period, even if ccmni is incomplete, can I put the ccmni
-driver initial code in the driver/staging first ? After that, we will
-gradually implement more functions of ccmni in the staging tree, and
-we can also gradually sort out and clean up modem driver in the staging.
-
-In addition, due to the requirements of GKI 2.0, if ccmni device
-uses RAWIP or NONE, it will hit ipv6 issue; and if ccmni uses
-a device type other than PUREIP/RAWIP/NONE, there will be tethering
-ebpf offload or clat ebpf offload can not work problems.
-
-I hope PUREIP and ccmni can be accepted by the Linux community.
-
-Thanks,
-Rocco
-
+#syz fix: rcu-tasks: Don't delete holdouts within trc_inspect_reader()
