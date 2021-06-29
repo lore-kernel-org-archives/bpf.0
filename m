@@ -2,62 +2,62 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-16.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CB5DC11F66
-	for <bpf@archiver.kernel.org>; Tue, 29 Jun 2021 12:43:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DA89C11F66
+	for <bpf@archiver.kernel.org>; Tue, 29 Jun 2021 12:45:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 74F8A61DA0
-	for <bpf@archiver.kernel.org>; Tue, 29 Jun 2021 12:43:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5C3F561D9E
+	for <bpf@archiver.kernel.org>; Tue, 29 Jun 2021 12:45:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232925AbhF2MqF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 29 Jun 2021 08:46:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:44258 "EHLO
+        id S233670AbhF2Mrb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 29 Jun 2021 08:47:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:53332 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232894AbhF2MqF (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 29 Jun 2021 08:46:05 -0400
+        by vger.kernel.org with ESMTP id S233000AbhF2Mra (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 29 Jun 2021 08:47:30 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1624970617;
+        s=mimecast20190719; t=1624970703;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=yyNLaQOoPGIq71zJhTuanVIUejq6DWASK6M626mU0CM=;
-        b=BX0CEXbZRTrFpV4zpGKNksd/jxjJ+GQ/ZIX/tp4/4wtfCGsj9piyyO2UuCn3xoGN+DaV13
-        CiL392LabuOxKoqe4ESuhKFFRwV+JHFQJprcex0/RvDalHL4sb2Xj6eKZZ9ejOdxqNXyBs
-        Bq6IaTFzyYdm+WdFmTS6FYDYkU2rrqY=
+        bh=xIjW/V4kVWn/MdXXf2UdvAErF5+HSdnEQLS6aNgfUT0=;
+        b=RoFYQg2VTG0z0lEDUgHq24RvKLjlo6T8XZnQF0zB2H/WEonSGXNeuF8kVxGkNORoivbxUu
+        uKx0tkJ5BYT19KGWermztjpNfpJFMzfhO7GotVeCUa/+YfPm10PQF5Q3FgEQuLuNumqtkU
+        Xe1D9UxmD40qZT8rfMvK3slN5M4nr54=
 Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
  [209.85.128.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-383-blsR7fnHPuOFNPSXnCKJOQ-1; Tue, 29 Jun 2021 08:43:35 -0400
-X-MC-Unique: blsR7fnHPuOFNPSXnCKJOQ-1
-Received: by mail-wm1-f70.google.com with SMTP id o3-20020a05600c5103b02901aeb7a4ac06so1248235wms.5
-        for <bpf@vger.kernel.org>; Tue, 29 Jun 2021 05:43:35 -0700 (PDT)
+ us-mta-268-Q4zyCUDbNJWhC1ho3AIPBA-1; Tue, 29 Jun 2021 08:45:01 -0400
+X-MC-Unique: Q4zyCUDbNJWhC1ho3AIPBA-1
+Received: by mail-wm1-f70.google.com with SMTP id f11-20020a05600c154bb02901e0210617aaso536694wmg.1
+        for <bpf@vger.kernel.org>; Tue, 29 Jun 2021 05:45:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=yyNLaQOoPGIq71zJhTuanVIUejq6DWASK6M626mU0CM=;
-        b=hs38N47aWcql888bF8yfEK/801FnGTxrXn/woRbMJEXfLfUHwkXXvC1J+U0w2bGvkO
-         qjouIniR51KUYFnoFCep2zoM3f3LgR8NjC7+eo0/qPpGRdnWBIm3wuUbeMqv2CmT/9x7
-         Hsp6Nmw5BlWw2Bx9qwETupXbmAaxImjd8e8Yr0hWJik5CHaBeHs5nOOhIWS+qiukAg1r
-         NK/CoheudP/rnMs7K0rtQL8w9sI5VFE65mP/34wPd9c8tC5IO75VgeCNIiQ3sSc7wkUc
-         NjnIgUSOrMz8Ngm/1DeJXSEbcc2kuwQ5GiVBVtIvdzb78T2ldRw/mXtJqxfNi1y4IRRK
-         Af0w==
-X-Gm-Message-State: AOAM531gPFhYYlyyaxgqIseKdvMhXm20JB/6+WsDIZhkOgd3wQ+WJHXW
-        KCAyNRRNru2eIhjAmV+W84jkdmE18CzQqb/vytOYoIWISnlGtFUxisVpmtdqRrRetQKM/3w+vIe
-        R09OIkk8s2oiw
-X-Received: by 2002:a5d:6cce:: with SMTP id c14mr12518476wrc.183.1624970614755;
-        Tue, 29 Jun 2021 05:43:34 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwsf0VMED12h7fYp2HlnA99Tk63UyMm41linO8I665c5thVC9jLaMZBoREbYWJo2NopfwWRQw==
-X-Received: by 2002:a5d:6cce:: with SMTP id c14mr12518451wrc.183.1624970614615;
-        Tue, 29 Jun 2021 05:43:34 -0700 (PDT)
+        bh=xIjW/V4kVWn/MdXXf2UdvAErF5+HSdnEQLS6aNgfUT0=;
+        b=t6mRl0fO85020DMdvQAKUhaSveBaOwo2YdgEcC2OObi4pTKwLwLMLaD8QVV7NRaKJ6
+         MHopgN7vv95xEg079ftCRmtwXnGAl1b3rUOsknf8LhtPtHDGFm4x0yxuvDeJkfUzOghM
+         /GEc+SVvwYX9eBeRNK/3i0ijX2g6F6wv7SJ+r/yxQaRrkTeOADzIGR0Thj/JpQqdis0u
+         +jmg5aWOLPM5PQ470URHe7YWa0FfpC6MJLggAtKyJPGw0mGR9Q0orwlDSQGBLga0VJds
+         MKIlIxW0jQoBX9+zxccNRYEFNlNJHj2LyBXQ8jVYjyfCcbS+IkzVRaPy2tR3OQXGsZFw
+         pVnA==
+X-Gm-Message-State: AOAM532s73nj7fzYWOIOz3e18PpLvsElU24z6Qie9yivS7U9cpMpaFGp
+        HugZIA2EszQAlW9+NOW8WCWyFCrUmDDhIRqe5jAZMbnHqOYgwGThwRnPV8rgtQ0CpCO96mETkRf
+        phuj+kR9rgqLy
+X-Received: by 2002:a5d:5742:: with SMTP id q2mr13942857wrw.256.1624970699913;
+        Tue, 29 Jun 2021 05:44:59 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyotqRFyli+/8rVZrv9pvFzSzm2HLFibGkrDpQKFRn5/xEi7IrLcvCjXFQPc3qOoI6HNGSmcQ==
+X-Received: by 2002:a5d:5742:: with SMTP id q2mr13942835wrw.256.1624970699730;
+        Tue, 29 Jun 2021 05:44:59 -0700 (PDT)
 Received: from localhost (net-130-25-105-72.cust.vodafonedsl.it. [130.25.105.72])
-        by smtp.gmail.com with ESMTPSA id t17sm16519941wmi.47.2021.06.29.05.43.33
+        by smtp.gmail.com with ESMTPSA id u12sm18900267wrq.50.2021.06.29.05.44.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Jun 2021 05:43:34 -0700 (PDT)
-Date:   Tue, 29 Jun 2021 14:43:31 +0200
+        Tue, 29 Jun 2021 05:44:59 -0700 (PDT)
+Date:   Tue, 29 Jun 2021 14:44:56 +0200
 From:   Lorenzo Bianconi <lorenzo.bianconi@redhat.com>
 To:     Alexander Duyck <alexander.duyck@gmail.com>
 Cc:     Lorenzo Bianconi <lorenzo@kernel.org>, bpf <bpf@vger.kernel.org>,
@@ -76,23 +76,23 @@ Cc:     Lorenzo Bianconi <lorenzo@kernel.org>, bpf <bpf@vger.kernel.org>,
         Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
         "Karlsson, Magnus" <magnus.karlsson@intel.com>,
         Tirthendu <tirthendu.sarkar@intel.com>
-Subject: Re: [PATCH v9 bpf-next 02/14] xdp: introduce flags field in
- xdp_buff/xdp_frame
-Message-ID: <YNsVcy8e4Mgyg7g3@lore-desk>
+Subject: Re: [PATCH v9 bpf-next 01/14] net: skbuff: add data_len field to
+ skb_shared_info
+Message-ID: <YNsVyBw5i4hAHRN8@lore-desk>
 References: <cover.1623674025.git.lorenzo@kernel.org>
- <1316f3ef2763ff4c02244fb726c61568c972514c.1623674025.git.lorenzo@kernel.org>
- <CAKgT0Ue7TsgwbQF+mfeDB-18Q-R29YZWe=y6Kgeg0xxbwds=vw@mail.gmail.com>
+ <8ad0d38259a678fb42245368f974f1a5cf47d68d.1623674025.git.lorenzo@kernel.org>
+ <CAKgT0UcwYHXosz-XuQximak63=ugb9thEc=dkUUZzDpoPCH+Qg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="/WJaeTxyp07KkM0F"
+        protocol="application/pgp-signature"; boundary="TnpqoEfdeJq0NZsS"
 Content-Disposition: inline
-In-Reply-To: <CAKgT0Ue7TsgwbQF+mfeDB-18Q-R29YZWe=y6Kgeg0xxbwds=vw@mail.gmail.com>
+In-Reply-To: <CAKgT0UcwYHXosz-XuQximak63=ugb9thEc=dkUUZzDpoPCH+Qg@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
 
---/WJaeTxyp07KkM0F
+--TnpqoEfdeJq0NZsS
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
@@ -100,44 +100,49 @@ Content-Transfer-Encoding: quoted-printable
 > On Mon, Jun 14, 2021 at 5:50 AM Lorenzo Bianconi <lorenzo@kernel.org> wro=
 te:
 > >
-> > Introduce flags field in xdp_frame/xdp_buffer data structure
-> > to define additional buffer features. At the moment the only
-> > supported buffer feature is multi-buffer bit (mb). Multi-buffer bit
-> > is used to specify if this is a linear buffer (mb =3D 0) or a multi-buf=
-fer
-> > frame (mb =3D 1). In the latter case the shared_info area at the end of
-> > the first buffer will be properly initialized to link together
-> > subsequent buffers.
+> > data_len field will be used for paged frame len for xdp_buff/xdp_frame.
+> > This is a preliminary patch to properly support xdp-multibuff
 > >
 > > Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+> > ---
+> >  include/linux/skbuff.h | 5 ++++-
+> >  1 file changed, 4 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+> > index dbf820a50a39..332ec56c200d 100644
+> > --- a/include/linux/skbuff.h
+> > +++ b/include/linux/skbuff.h
+> > @@ -522,7 +522,10 @@ struct skb_shared_info {
+> >         struct sk_buff  *frag_list;
+> >         struct skb_shared_hwtstamps hwtstamps;
+> >         unsigned int    gso_type;
+> > -       u32             tskey;
+> > +       union {
+> > +               u32     tskey;
+> > +               u32     data_len;
+> > +       };
+> >
 >=20
-> Instead of passing this between buffers and frames I wonder if this
-> wouldn't be better to place in something like the xdp_mem_info
-> structure since this is something that would be specific to how the
-> device is handling memory anyway. You could probably split the type
-> field into a 16b type and a 16b flags field. Then add your bit where 0
-> is linear/legacy and 1 is scatter-gather/multi-buffer.
+> Rather than use the tskey field why not repurpose the gso_size field?
+> I would think in the XDP paths that the gso fields would be unused
+> since LRO and HW_GRO would be incompatible with XDP anyway.
 >=20
 
-ack, this should be fine but I put the flag field in xdp_buff/xdp_frame
-in order to reuse it for some xdp hw-hints (e.g rx checksum type).
-We can put it in xdp_mem_info too but I guess it would be less intuitive, w=
-hat
-do you think?
+ack, I agree. I will fix it in v10.
 
 Regards,
 Lorenzo
 
---/WJaeTxyp07KkM0F
+--TnpqoEfdeJq0NZsS
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCYNsVcAAKCRA6cBh0uS2t
-rOBMAP0QuANCEfNrUHQieXmXcMC+YQjXw8MI4YP+VcEiWVtNMwD/blc9x9QPmb+b
-UZUgAMV3XFYBY6qo0gER2PyEmoQdnww=
-=mvKO
+iHUEABYIAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCYNsVxQAKCRA6cBh0uS2t
+rEmgAP9KZXucmbMs8RGZQqN1U14pzi2BrPVzx7MbkYu4b1UwjwD+MRc5OwyXRxU2
+KxbPHqzyhcEiQqaZ4ETD/w8rIWaUwAU=
+=T+wb
 -----END PGP SIGNATURE-----
 
---/WJaeTxyp07KkM0F--
+--TnpqoEfdeJq0NZsS--
 
