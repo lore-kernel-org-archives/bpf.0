@@ -4,59 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-19.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C820AC11F69
-	for <bpf@archiver.kernel.org>; Tue, 29 Jun 2021 19:29:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ED905C11F67
+	for <bpf@archiver.kernel.org>; Tue, 29 Jun 2021 19:29:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AC77D61DDE
-	for <bpf@archiver.kernel.org>; Tue, 29 Jun 2021 19:29:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D57F561DDE
+	for <bpf@archiver.kernel.org>; Tue, 29 Jun 2021 19:29:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234221AbhF2TcX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 29 Jun 2021 15:32:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:43777 "EHLO
+        id S234749AbhF2TcZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 29 Jun 2021 15:32:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:58180 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234180AbhF2TcV (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 29 Jun 2021 15:32:21 -0400
+        by vger.kernel.org with ESMTP id S234594AbhF2TcY (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 29 Jun 2021 15:32:24 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1624994993;
+        s=mimecast20190719; t=1624994996;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=EXphjE5iDPBSdRkWFkye1lTrfv8N97NQ//BDC7tfWi4=;
-        b=Yj4lXm1eEk5nS/2Cjrf+GciW8byTyO21EdTmMKmqUYBCOmMTvTqmOVpqcgnPbe2m712lNN
-        rUdoc367z1Tc7WI/Bx+5ybY2T+x5ZtUrjns7DY/QIQZQPjOqqkC2FMkLGEonXFp/iYhOIu
-        +6ReQ5b3MZWXsN50bUe9eiJLhLtExhg=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-435-1lCOL0eQMViVMcAuST7_3g-1; Tue, 29 Jun 2021 15:29:52 -0400
-X-MC-Unique: 1lCOL0eQMViVMcAuST7_3g-1
-Received: by mail-ej1-f69.google.com with SMTP id j26-20020a170906411ab02904774cb499f8so6086896ejk.6
-        for <bpf@vger.kernel.org>; Tue, 29 Jun 2021 12:29:51 -0700 (PDT)
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Jm5cd0zOZ7Itm+FjlMPQhsBe4LoJlMQjbASHrTs/ggA=;
+        b=cCLo6L8xdEkdjjqJvWpg9bl8KYp0p1bhWd5aESB0bv5/sQqDzU+t1eiFCOM3WOYoX4cdwn
+        CRaMWocCytNgYKn3jtt10kn1pxYoKc6FUkvi4hInMD0RRnwaEFydSjD9ipdUFgvlnxT6gS
+        7XmktfwI5eNiJZi4vI3jTosy7ul/no0=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-349-DKMX2oaSOpeDzM9FItwh8w-1; Tue, 29 Jun 2021 15:29:54 -0400
+X-MC-Unique: DKMX2oaSOpeDzM9FItwh8w-1
+Received: by mail-ed1-f72.google.com with SMTP id w1-20020aa7da410000b029039533674a84so7305699eds.9
+        for <bpf@vger.kernel.org>; Tue, 29 Jun 2021 12:29:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=EXphjE5iDPBSdRkWFkye1lTrfv8N97NQ//BDC7tfWi4=;
-        b=D2STNVqQGaj15Qd0d1J2wvX07pidHD4/xXlYZKVHUVpc3Wes5cIkCBO5/gaPgr8VGy
-         cQmV/HnWYG2YqEKTRrQDzpAfaKNTt/AawsMXX1O7l+mx4PJHOsvosQh4dss5KzNKa87p
-         kXdlZoLneQGa42lfJxDoIx+30kQuHURLjRuvFY939s3jB8YeXwRH560Lw0M/eSAwwbK9
-         bLfUOTH7ft1qlTougopySaYloBame/8yEad3n7vpOhXul2fI6+yWlY7nUA3oukvi8qwZ
-         uOKPaVakKCaFHNnsW1RcFErpdkmkHn6xXrIj3kbud7+XpnU5eyiff3IiTCZH1X7HfbBI
-         nFQw==
-X-Gm-Message-State: AOAM530MZmoDpw4YLSd+EdeJqQIfHt7IhK0xTZK8I61ADhjIvBREf8Zs
-        KwHBe51xV8gWRVfnYzfbWwODTJxE5fFWpJQZkwc4tg5QjAsNWf3nvpITMzuOjR6b7jDTV+g+gsh
-        /VgzneP6kUUua
-X-Received: by 2002:a17:906:cb81:: with SMTP id mf1mr32378928ejb.199.1624994988569;
-        Tue, 29 Jun 2021 12:29:48 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx+JyIotMLeITE1z4hHGqD9QoJk9a6CpkIRr0d92trk3HAASPjHtbjZIssFROgiR8XvaLgiKg==
-X-Received: by 2002:a17:906:cb81:: with SMTP id mf1mr32378911ejb.199.1624994988335;
-        Tue, 29 Jun 2021 12:29:48 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Jm5cd0zOZ7Itm+FjlMPQhsBe4LoJlMQjbASHrTs/ggA=;
+        b=Kanvb6e4emQA1Bipk/bN4H/oxWAjjif6oI1cdYzUsiuBUxw7lq/XXSxsD+aJ1/mEVR
+         rJYXTWCjwmf9m0eolM5jCcMXTqgpfD4KwQIpTs//aPAfh3k7DD92trCLHvqYhmNfD4mX
+         c/foqO1c+hjGWIGDhFwf7OuzouW0XDl3/vrHZ3iJaKjMQ+s9hCtum/HbI3+Fmz/uYSRr
+         bhulnz4OlbWcYGCEiURyHn8cDz+dqLZK7ZB5iPvPlEAzXqvSpWDGg4wSwFn6DFgiMOck
+         B3oh7Bhh1pdWbAE6k1IDN+neO1XMotLoXsEUTFfxaqP4oZurJ0frJoJaexugmOdHuADM
+         r4hA==
+X-Gm-Message-State: AOAM532pkqBeiJcLU7j0QSbHRZMfGMK2ttsTAF8ZKHJCLw4GG8Ws9hEg
+        EpJF8JUI+obnhrMGNZaKh0bAO3OLwxOj8Rd9AEmK9bALrRB32MoQ8OEpSCtH3KhgleihXug5ZdK
+        WMn8Uf8BPikwl
+X-Received: by 2002:aa7:d8d4:: with SMTP id k20mr41688296eds.143.1624994993070;
+        Tue, 29 Jun 2021 12:29:53 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz5OvjTkKZzLuY/9wnAZ95R6xQ/Jmsq4KCZeL0+5Rkjq44ZUqUpAvXSe1v+Q79LdCNb87I4/g==
+X-Received: by 2002:aa7:d8d4:: with SMTP id k20mr41688287eds.143.1624994992931;
+        Tue, 29 Jun 2021 12:29:52 -0700 (PDT)
 Received: from krava.redhat.com ([185.153.78.55])
-        by smtp.gmail.com with ESMTPSA id n22sm472559eje.3.2021.06.29.12.29.46
+        by smtp.gmail.com with ESMTPSA id n22sm472559eje.3.2021.06.29.12.29.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Jun 2021 12:29:47 -0700 (PDT)
+        Tue, 29 Jun 2021 12:29:52 -0700 (PDT)
 From:   Jiri Olsa <jolsa@redhat.com>
 X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
 To:     Alexei Starovoitov <ast@kernel.org>,
@@ -68,63 +69,94 @@ Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@chromium.org>,
         Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [RFC bpf-next 0/5] bpf, x86: Add bpf_get_func_ip helper
-Date:   Tue, 29 Jun 2021 21:29:40 +0200
-Message-Id: <20210629192945.1071862-1-jolsa@kernel.org>
+Subject: [PATCH bpf-next 2/5] bpf: Enable BPF_TRAMP_F_IP_ARG for trampolines with call_get_func_ip
+Date:   Tue, 29 Jun 2021 21:29:42 +0200
+Message-Id: <20210629192945.1071862-3-jolsa@kernel.org>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20210629192945.1071862-1-jolsa@kernel.org>
+References: <20210629192945.1071862-1-jolsa@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-hi,
-adding bpf_get_func_ip helper that returns IP address of the
-caller function for trampoline and krobe programs.
+Enabling BPF_TRAMP_F_IP_ARG for trampolines that actually need it.
 
-There're 2 specific implementation of the bpf_get_func_ip
-helper, one for trampoline progs and one for kprobe/kretprobe
-progs.
+The BPF_TRAMP_F_IP_ARG adds extra 3 instructions to trampoline code
+and is used only by programs with bpf_get_func_ip helper, which is
+added in following patch and sets call_get_func_ip bit.
 
-The trampoline helper call is replaced/inlined by verifier
-with simple move instruction. The kprobe/kretprobe is actual
-helper call that returns prepared caller address.
+This patch ensures that BPF_TRAMP_F_IP_ARG flag is used only for
+trampolines that have programs with call_get_func_ip set.
 
-The trampoline extra 3 instructions for storing IP address
-is now optional, which I'm not completely sure is necessary,
-so I plan to do some benchmarks, if it's noticeable, hence
-the RFC. I'm also not completely sure about the kprobe/kretprobe
-implementation.
-
-Also available at:
-  https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
-  bpf/get_func_ip
-
-thanks,
-jirka
-
-
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
-Jiri Olsa (5):
-      bpf, x86: Store caller's ip in trampoline stack
-      bpf: Enable BPF_TRAMP_F_IP_ARG for trampolines with call_get_func_ip
-      bpf: Add bpf_get_func_ip helper for tracing programs
-      bpf: Add bpf_get_func_ip helper for kprobe programs
-      selftests/bpf: Add test for bpf_get_func_ip helper
+ include/linux/filter.h  |  3 ++-
+ kernel/bpf/trampoline.c | 12 +++++++++---
+ 2 files changed, 11 insertions(+), 4 deletions(-)
 
- arch/x86/net/bpf_jit_comp.c                               | 19 +++++++++++++++++++
- include/linux/bpf.h                                       |  5 +++++
- include/linux/filter.h                                    |  3 ++-
- include/uapi/linux/bpf.h                                  |  7 +++++++
- kernel/bpf/trampoline.c                                   | 12 +++++++++---
- kernel/bpf/verifier.c                                     | 55 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
- kernel/trace/bpf_trace.c                                  | 29 +++++++++++++++++++++++++++++
- kernel/trace/trace_kprobe.c                               | 20 ++++++++++++++++++--
- kernel/trace/trace_probe.h                                |  5 +++++
- tools/include/uapi/linux/bpf.h                            |  7 +++++++
- tools/testing/selftests/bpf/prog_tests/get_func_ip_test.c | 42 ++++++++++++++++++++++++++++++++++++++++++
- tools/testing/selftests/bpf/progs/get_func_ip_test.c      | 62 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 12 files changed, 260 insertions(+), 6 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/get_func_ip_test.c
- create mode 100644 tools/testing/selftests/bpf/progs/get_func_ip_test.c
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 472f97074da0..ba36989f711a 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -559,7 +559,8 @@ struct bpf_prog {
+ 				kprobe_override:1, /* Do we override a kprobe? */
+ 				has_callchain_buf:1, /* callchain buffer allocated? */
+ 				enforce_expected_attach_type:1, /* Enforce expected_attach_type checking at attach time */
+-				call_get_stack:1; /* Do we call bpf_get_stack() or bpf_get_stackid() */
++				call_get_stack:1, /* Do we call bpf_get_stack() or bpf_get_stackid() */
++				call_get_func_ip:1; /* Do we call get_func_ip() */
+ 	enum bpf_prog_type	type;		/* Type of BPF program */
+ 	enum bpf_attach_type	expected_attach_type; /* For some prog types */
+ 	u32			len;		/* Number of filter blocks */
+diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+index 28a3630c48ee..b2535acfe9db 100644
+--- a/kernel/bpf/trampoline.c
++++ b/kernel/bpf/trampoline.c
+@@ -172,7 +172,7 @@ static int register_fentry(struct bpf_trampoline *tr, void *new_addr)
+ }
+ 
+ static struct bpf_tramp_progs *
+-bpf_trampoline_get_progs(const struct bpf_trampoline *tr, int *total)
++bpf_trampoline_get_progs(const struct bpf_trampoline *tr, int *total, bool *ip_arg)
+ {
+ 	const struct bpf_prog_aux *aux;
+ 	struct bpf_tramp_progs *tprogs;
+@@ -189,8 +189,10 @@ bpf_trampoline_get_progs(const struct bpf_trampoline *tr, int *total)
+ 		*total += tr->progs_cnt[kind];
+ 		progs = tprogs[kind].progs;
+ 
+-		hlist_for_each_entry(aux, &tr->progs_hlist[kind], tramp_hlist)
++		hlist_for_each_entry(aux, &tr->progs_hlist[kind], tramp_hlist) {
++			*ip_arg |= aux->prog->call_get_func_ip;
+ 			*progs++ = aux->prog;
++		}
+ 	}
+ 	return tprogs;
+ }
+@@ -333,9 +335,10 @@ static int bpf_trampoline_update(struct bpf_trampoline *tr)
+ 	struct bpf_tramp_image *im;
+ 	struct bpf_tramp_progs *tprogs;
+ 	u32 flags = BPF_TRAMP_F_RESTORE_REGS;
++	bool ip_arg = false;
+ 	int err, total;
+ 
+-	tprogs = bpf_trampoline_get_progs(tr, &total);
++	tprogs = bpf_trampoline_get_progs(tr, &total, &ip_arg);
+ 	if (IS_ERR(tprogs))
+ 		return PTR_ERR(tprogs);
+ 
+@@ -357,6 +360,9 @@ static int bpf_trampoline_update(struct bpf_trampoline *tr)
+ 	    tprogs[BPF_TRAMP_MODIFY_RETURN].nr_progs)
+ 		flags = BPF_TRAMP_F_CALL_ORIG | BPF_TRAMP_F_SKIP_FRAME;
+ 
++	if (ip_arg)
++		flags |= BPF_TRAMP_F_IP_ARG;
++
+ 	err = arch_prepare_bpf_trampoline(im, im->image, im->image + PAGE_SIZE,
+ 					  &tr->func.model, flags, tprogs,
+ 					  tr->func.addr);
+-- 
+2.31.1
 
