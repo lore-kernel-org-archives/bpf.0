@@ -2,153 +2,154 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-19.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D147C11F67
-	for <bpf@archiver.kernel.org>; Tue, 29 Jun 2021 19:18:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B6CAC11F67
+	for <bpf@archiver.kernel.org>; Tue, 29 Jun 2021 19:29:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2438361DE4
-	for <bpf@archiver.kernel.org>; Tue, 29 Jun 2021 19:18:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 114D561DE6
+	for <bpf@archiver.kernel.org>; Tue, 29 Jun 2021 19:29:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234757AbhF2TUp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 29 Jun 2021 15:20:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:38867 "EHLO
+        id S234186AbhF2TcW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 29 Jun 2021 15:32:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:24460 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234343AbhF2TUp (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 29 Jun 2021 15:20:45 -0400
+        by vger.kernel.org with ESMTP id S234171AbhF2TcV (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 29 Jun 2021 15:32:21 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1624994297;
+        s=mimecast20190719; t=1624994993;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=IqdDEOpnK3NKWLa8ezHVVL8U7Yuv2knGXjAeUbjwxys=;
-        b=hOa0d7d8Cx7pf/fOdN8EzS8R9i3m5+DJ4UXw3d7BCFUGo7B12yqlLtFHifpw0rgsfdTKeb
-        LstHmO0q99RHezU0D8oUEJwpZay+VELwy6m/P3bFxrhcXle/1fs4+wgcoaPBv7L/U1BmQd
-        75F13tyZOIQg86buM9XUKaMddtKg4ZY=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-155-B2H2EArqNx6VPOngHWYzwg-1; Tue, 29 Jun 2021 15:18:14 -0400
-X-MC-Unique: B2H2EArqNx6VPOngHWYzwg-1
-Received: by mail-ej1-f69.google.com with SMTP id og25-20020a1709071dd9b02904c99c7e61f1so416959ejc.18
-        for <bpf@vger.kernel.org>; Tue, 29 Jun 2021 12:18:14 -0700 (PDT)
+        bh=QgBr4LV9SR6/Qelufj3zindVEajUhYS2+l3zjx7rHSU=;
+        b=jN8Mb9waVl6aEdlN2rQLLeHjomuDBp9x8ciwcANSFVFpozF/uqAb6xfNq7F9MUZn59D6eb
+        y2ZRJUlXJt68i2qwTAH33bGCiI4jv1iapnKYGhosqK8MSAfED3yh1SvW3YbolvTYhqzFm2
+        tcLB+SQ9KTqQ47ZBo4uMBCjR2WlmvAk=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-97-Vxx7jdzFOOOXDqgx8g9TZA-1; Tue, 29 Jun 2021 15:29:51 -0400
+X-MC-Unique: Vxx7jdzFOOOXDqgx8g9TZA-1
+Received: by mail-ed1-f71.google.com with SMTP id j15-20020a05640211cfb0290394f9de5750so11368172edw.16
+        for <bpf@vger.kernel.org>; Tue, 29 Jun 2021 12:29:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=IqdDEOpnK3NKWLa8ezHVVL8U7Yuv2knGXjAeUbjwxys=;
-        b=cYz+k4dqPFVadcYmhjhJlUS9OORqjAN3dcBsgOe2fZusdRlh7p7th8B5tLPUCyxMt5
-         JGPmthPq4Hk2qUqSVEYfNACmQ4zzi5+8Ni6eHQhx7sVrR/RVbfOmTd9Ibja/8W4PJq8F
-         A6SSOy947Pz2FmCI/2YznD5E00zfSLGJsN3nhYFN44El0jV3I2f3lWniDFHk4iUL/XkA
-         r/CbN4oi8DNwTpBtnxPJQ7oeslstgCRzPSf5bX4SZCUdZlD4BvD1oBxBQRXUrshNsm4e
-         FpbRmgkl3LcSxofpXUQ8YtGpKxVxZZ120168SLT6GUA+O4/ZWTc1KjEEb9N1+WOlamiB
-         9ImQ==
-X-Gm-Message-State: AOAM532kicS0X93pM1Qr1LQBUu8vz8Mw5vxamXypskKME/pc9nCj5DJN
-        32XWxk4O3389OsaXXwikfXIGcatgT67DZOCw7RUzRV94q1upmgJxxjn1X6ChnFOqO8QbO79eNBt
-        4rRYc2QirDKqE
-X-Received: by 2002:a17:906:5d1:: with SMTP id t17mr9312204ejt.320.1624994293527;
-        Tue, 29 Jun 2021 12:18:13 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzlk8OzUQ1l5pgK2pv5qrOaH1T+7hSakRLbpDQfCO0FsuMl+BXv48QoVJizMEr8wVhX0apmWg==
-X-Received: by 2002:a17:906:5d1:: with SMTP id t17mr9312177ejt.320.1624994293320;
-        Tue, 29 Jun 2021 12:18:13 -0700 (PDT)
-Received: from localhost (net-130-25-105-72.cust.vodafonedsl.it. [130.25.105.72])
-        by smtp.gmail.com with ESMTPSA id og26sm8825532ejc.52.2021.06.29.12.18.12
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=QgBr4LV9SR6/Qelufj3zindVEajUhYS2+l3zjx7rHSU=;
+        b=pKy0F901A8IgaurZYhAdYW699Nhp/DzR9FbNY4F6PU54hUXOg9MJFJQ096LWGrZ8xr
+         nv4AP+IvWJaGuyHZZ1EMgejSOSBc7x+fXaDpNxZCEzhSv0XUTfu8o7jzX3XOcypyfY7w
+         vWp5EjnPMOjYCdNV6ttGg3BXhjwHcoKCqJkNqJ+gtmW21Yvg9+j9Hw/n4wIpa/rKXvpD
+         DmpQtgje6v5B5etWDRFFRRDVOZUdx+0asAjCrbvj31w9l/44hnhom9o+1rlaT36pIhbH
+         M2sDuduciEpP3H8DdDNY++xeztXQkrDwvI57N47fho3xO4s2bbR+7QO/Vq9mvoBxjlk7
+         qcUA==
+X-Gm-Message-State: AOAM530t19hitjViRFUxrOy4HrhX+987L+me0X+3Q8R6tbg5iocD0UK9
+        Wxsogc96JapudIZA4GxkASTGVOZBHc/9SMTZq0iqkO1hP1WWW9nyKIPI6gz6Sh/lxf9lbFJuLhb
+        odKkZPZHXy/Sb
+X-Received: by 2002:a05:6402:1c11:: with SMTP id ck17mr29205326edb.370.1624994990334;
+        Tue, 29 Jun 2021 12:29:50 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwXHlbTwtU81vylTCzW77E+j+DPUwj3/0W67M0b+va71aRhfz4ja1tt1bjornX+DBMxs/e2RA==
+X-Received: by 2002:a05:6402:1c11:: with SMTP id ck17mr29205314edb.370.1624994990153;
+        Tue, 29 Jun 2021 12:29:50 -0700 (PDT)
+Received: from krava.redhat.com ([185.153.78.55])
+        by smtp.gmail.com with ESMTPSA id n22sm472559eje.3.2021.06.29.12.29.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Jun 2021 12:18:12 -0700 (PDT)
-Date:   Tue, 29 Jun 2021 21:18:09 +0200
-From:   Lorenzo Bianconi <lorenzo.bianconi@redhat.com>
-To:     Jesper Dangaard Brouer <jbrouer@redhat.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        bpf <bpf@vger.kernel.org>, Netdev <netdev@vger.kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, shayagr@amazon.com,
-        "Jubran, Samih" <sameehj@amazon.com>,
+        Tue, 29 Jun 2021 12:29:49 -0700 (PDT)
+From:   Jiri Olsa <jolsa@redhat.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andriin@fb.com>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Eelco Chaudron <echaudro@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Saeed Mahameed <saeed@kernel.org>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
-        Tirthendu <tirthendu.sarkar@intel.com>
-Subject: Re: [PATCH v9 bpf-next 01/14] net: skbuff: add data_len field to
- skb_shared_info
-Message-ID: <YNtx8aBMM7/8b1lb@lore-desk>
-References: <cover.1623674025.git.lorenzo@kernel.org>
- <8ad0d38259a678fb42245368f974f1a5cf47d68d.1623674025.git.lorenzo@kernel.org>
- <CAKgT0UcwYHXosz-XuQximak63=ugb9thEc=dkUUZzDpoPCH+Qg@mail.gmail.com>
- <YNsVyBw5i4hAHRN8@lore-desk>
- <20210629100852.56d995a6@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <CAKgT0Ue1HKMpsBtoW=js2oMRAhcqSrAfTTmPC8Wc97G6=TiaZg@mail.gmail.com>
- <20210629113714.6d8e2445@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <e0b50540-0055-1f5c-af5f-0cd26616693a@redhat.com>
+        KP Singh <kpsingh@chromium.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: [PATCH bpf-next 1/5] bpf, x86: Store caller's ip in trampoline stack
+Date:   Tue, 29 Jun 2021 21:29:41 +0200
+Message-Id: <20210629192945.1071862-2-jolsa@kernel.org>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20210629192945.1071862-1-jolsa@kernel.org>
+References: <20210629192945.1071862-1-jolsa@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="6C7xQUoMCT1UaPk3"
-Content-Disposition: inline
-In-Reply-To: <e0b50540-0055-1f5c-af5f-0cd26616693a@redhat.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+Storing caller's ip in trampoline's stack. Trampoline programs
+can reach the IP in (ctx - 8) address, so there's no change in
+program's arguments interface.
 
---6C7xQUoMCT1UaPk3
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The IP address is takes from [fp + 8], which is return address
+from the initial 'call fentry' call to trampoline.
 
->=20
-> On 29/06/2021 20.37, Jakub Kicinski wrote:
-> > On Tue, 29 Jun 2021 11:18:38 -0700 Alexander Duyck wrote:
-> > > On Tue, Jun 29, 2021 at 10:08 AM Jakub Kicinski <kuba@kernel.org> wro=
-te:
-> > > > > ack, I agree. I will fix it in v10.
-> > > > Why is XDP mb incompatible with LRO? I thought that was one of the =
-use
-> > > > cases (mentioned by Willem IIRC).
-> > > XDP is meant to be a per packet operation with support for TX and
-> > > REDIRECT, and LRO isn't routable. So we could put together a large LRO
-> > > frame but we wouldn't be able to break it apart again. If we allow
-> > > that then we are going to need a ton more exception handling added to
-> > > the XDP paths.
-> > >=20
-> > > As far as GSO it would require setting many more fields in order to
-> > > actually make it offloadable by any hardware.
-> > It would require more work, but TSO seems to be explicitly stated
-> > as what the series builds towards (in the cover letter). It's fine
-> > to make choices we'd need to redo later, I guess, I'm just trying
-> > to understand the why.
->=20
-> This is also my understanding that LRO and TSO is what this patchset is
-> working towards.
->=20
-> Sorry, I don't agree or understand this requested change.
->=20
->=20
+This IP address will be returned via bpf_get_func_ip helper
+helper, which is added in following patches.
 
-My understanding here is to use gso_size to store paged length of the
-xdp multi-buffer. When converting the xdp_frame to a skb we will need
-to overwrite it to support gro/lro. Is my understanding correct?
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+---
+ arch/x86/net/bpf_jit_comp.c | 19 +++++++++++++++++++
+ include/linux/bpf.h         |  5 +++++
+ 2 files changed, 24 insertions(+)
 
-Regards,
-Lorenzo
-
---6C7xQUoMCT1UaPk3
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCYNtx7wAKCRA6cBh0uS2t
-rH/UAPwNEZ4DDX3WqxSWMTWy1OOH6l9pB0wd1UVwORqh4iBoUQEAnkjE2TT5F3KA
-AOiKWMPB6kUrags5y7wvAi82DQNFbQ8=
-=3YJx
------END PGP SIGNATURE-----
-
---6C7xQUoMCT1UaPk3--
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index e835164189f1..c320b3ce7b58 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -1951,6 +1951,9 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image, void *i
+ 	if (flags & BPF_TRAMP_F_CALL_ORIG)
+ 		stack_size += 8; /* room for return value of orig_call */
+ 
++	if (flags & BPF_TRAMP_F_IP_ARG)
++		stack_size += 8; /* room for IP address argument */
++
+ 	if (flags & BPF_TRAMP_F_SKIP_FRAME)
+ 		/* skip patched call instruction and point orig_call to actual
+ 		 * body of the kernel function.
+@@ -1964,6 +1967,22 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image, void *i
+ 	EMIT4(0x48, 0x83, 0xEC, stack_size); /* sub rsp, stack_size */
+ 	EMIT1(0x53);		 /* push rbx */
+ 
++	if (flags & BPF_TRAMP_F_IP_ARG) {
++		/* Store IP address of the traced function:
++		 * mov rax, QWORD PTR [rbp + 8]
++		 * sub rax, X86_PATCH_SIZE
++		 * mov QWORD PTR [rbp - stack_size], rax
++		 */
++		emit_ldx(&prog, BPF_DW, BPF_REG_0, BPF_REG_FP, 8);
++		EMIT4(0x48, 0x83, 0xe8, X86_PATCH_SIZE);
++		emit_stx(&prog, BPF_DW, BPF_REG_FP, BPF_REG_0, -stack_size);
++
++		/* Continue with stack_size for regs storage, stack will
++		 * be correctly restored with 'leave' instruction.
++		 */
++		stack_size -= 8;
++	}
++
+ 	save_regs(m, &prog, nr_args, stack_size);
+ 
+ 	if (flags & BPF_TRAMP_F_CALL_ORIG) {
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index f309fc1509f2..6b3da9bc3d16 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -554,6 +554,11 @@ struct btf_func_model {
+  */
+ #define BPF_TRAMP_F_SKIP_FRAME		BIT(2)
+ 
++/* Store IP address of the caller on the trampoline stack,
++ * so it's available for trampoline's programs.
++ */
++#define BPF_TRAMP_F_IP_ARG		BIT(3)
++
+ /* Each call __bpf_prog_enter + call bpf_func + call __bpf_prog_exit is ~50
+  * bytes on x86.  Pick a number to fit into BPF_IMAGE_SIZE / 2
+  */
+-- 
+2.31.1
 
