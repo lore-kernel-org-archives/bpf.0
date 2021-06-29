@@ -2,344 +2,210 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+X-Spam-Status: No, score=-13.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B56A2C11F66
-	for <bpf@archiver.kernel.org>; Tue, 29 Jun 2021 12:56:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DD88C11F66
+	for <bpf@archiver.kernel.org>; Tue, 29 Jun 2021 12:58:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8E96F61DED
-	for <bpf@archiver.kernel.org>; Tue, 29 Jun 2021 12:56:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7CBA061DED
+	for <bpf@archiver.kernel.org>; Tue, 29 Jun 2021 12:58:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233134AbhF2M7A (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 29 Jun 2021 08:59:00 -0400
-Received: from mga11.intel.com ([192.55.52.93]:52838 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232947AbhF2M67 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 29 Jun 2021 08:58:59 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10029"; a="205130919"
-X-IronPort-AV: E=Sophos;i="5.83,308,1616482800"; 
-   d="scan'208";a="205130919"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2021 05:56:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.83,308,1616482800"; 
-   d="scan'208";a="641299691"
-Received: from ranger.igk.intel.com ([10.102.21.164])
-  by fmsmga006.fm.intel.com with ESMTP; 29 Jun 2021 05:56:24 -0700
-Date:   Tue, 29 Jun 2021 14:44:03 +0200
-From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     Maxim Mikityanskiy <maximmi@nvidia.com>
-Cc:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        id S233299AbhF2NA4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 29 Jun 2021 09:00:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53340 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233006AbhF2NA4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 29 Jun 2021 09:00:56 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D27B7C061760
+        for <bpf@vger.kernel.org>; Tue, 29 Jun 2021 05:58:28 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id i4so24261426ybe.2
+        for <bpf@vger.kernel.org>; Tue, 29 Jun 2021 05:58:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1Ixc1yg9az9B0t1cymNZSTN2Zbg+u86yZpoOKVTjo0E=;
+        b=Wicg5j6Czkzx0aBfwLjleCGbinRhL8+0w31l9FEZowcaMUpWvwBFPkRpcYqAIq9Uhn
+         E/eMTTWZeI+EKOhf4H++Inrj3nLMtGcbPRthOpIWvPU9ZmoRh54CInF1TPBq8qaOcML3
+         tv+eMU6hdKk3RSimSdiuYz3fuVFIXc5LrHNGoNn0v5la4fA5NQIzcBmQhbFzSBmoQfcw
+         Srg8l463/0H/NQh/0SnvrHEwFqijLF0lSv6Mgh99EyZCG2ATAywcksdxC5avjcBuwa/M
+         9ALnQkHDCcsr7Z8AZJsCIMqeB1MArs/LWT6uP+QARJjnyjCjwGkbEXFii77kkOS3lXtT
+         h19A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1Ixc1yg9az9B0t1cymNZSTN2Zbg+u86yZpoOKVTjo0E=;
+        b=r/tAWXQW5ltS7y7eeNwej5BFJbgjpv/GFbF2gOY5MPTgMQOjDawHp6aRUOAC2+/qRR
+         +pvOo13JUNwFwwtj172RdhIAiEuAswyqoAKZgh4nJnkLzzD6CjQYV3sSoLSdY17WFRvf
+         YA9slKEDB0wXMSn/hB1HGjQErPwgHHWyQSuQA3g/ram7JczEdzJC9Bx+ZPXbpNjU7beS
+         3Nh4q8RBQTxUwn+D9dXsbdsVs3QcKGip9SC5xhYjU1XyxDO5NXnqnwYjBOD4+8Oiu5a4
+         oZO7al+6UjA2anq95SPar8Ao1lyXgbQjM4bg2bUwEodcgWwByBSemZm2diRWlIBWNv36
+         sixA==
+X-Gm-Message-State: AOAM5326bUOne8s2zYPd6ahSF9hd0TVN7Xab3mbkMASh/GuxIqq3ugC6
+        ZlQXe0BveKmzcedx87YWdqQE0TlVKAeSOREKc7Gz8Q==
+X-Google-Smtp-Source: ABdhPJzzoslHpNOjPtnVYKAzjGWGsIH245MtaS0SvFM7raV9Sntz6KxmD/giFXDhp6Zk1NFGv/oaa+Fhm006+0DYpUI=
+X-Received: by 2002:a05:6902:544:: with SMTP id z4mr39530633ybs.452.1624971507741;
+ Tue, 29 Jun 2021 05:58:27 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210628144908.881499-1-phind.uet@gmail.com> <CANn89iJ6M2WFS3B+sSOysekScUFmO9q5YHxgHGsbozbvkW9ivg@mail.gmail.com>
+ <79490158-e6d1-aabf-64aa-154b71205c74@gmail.com> <CADVnQy=Q9W=Vxu81ctPLx08D=ALnHBXGr0c4BLtQGxwQE+yjRg@mail.gmail.com>
+ <ee5ef69e-ee3f-1df0-2033-5adc06a46b9c@gmail.com> <CADVnQynqMQhO4cBON=xUCkne9-E1hze3naMZZ8tQ-a0k71kh8g@mail.gmail.com>
+ <205F52AB-4A5B-4953-B97E-17E7CACBBCD8@gmail.com> <CANn89iJbquZ=tVBRg7JNR8pB106UY4Xvi7zkPVn0Uov9sj8akg@mail.gmail.com>
+ <1786BBEE-9C7B-45B2-B451-F535ABB804EF@gmail.com>
+In-Reply-To: <1786BBEE-9C7B-45B2-B451-F535ABB804EF@gmail.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Tue, 29 Jun 2021 14:58:16 +0200
+Message-ID: <CANn89iK4Qwf0ezWac3Cn1xWN_Hw+-QL-+H8YmDm4cZP=FH+MTQ@mail.gmail.com>
+Subject: Re: [PATCH] tcp: Do not reset the icsk_ca_initialized in tcp_init_transfer.
+To:     Nguyen Dinh Phi <phind.uet@gmail.com>
+Cc:     Neal Cardwell <ncardwell@google.com>,
+        David Miller <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
         Jakub Kicinski <kuba@kernel.org>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
-        Krzysztof Kazimierczak <krzysztof.kazimierczak@intel.com>,
-        Ong Boon Leong <boon.leong.ong@intel.com>,
-        intel-wired-lan@lists.osuosl.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Saeed Mahameed <saeedm@nvidia.com>
-Subject: Re: [PATCH net v2] xdp, net: fix for construct skb by xdp inside xsk
- zc rx
-Message-ID: <20210629124403.GA60701@ranger.igk.intel.com>
-References: <20210617145534.101458-1-xuanzhuo@linux.alibaba.com>
- <20210628104721.GA57589@ranger.igk.intel.com>
- <9d017748-3a4e-367f-94f4-2dcc6bb3e50e@nvidia.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9d017748-3a4e-367f-94f4-2dcc6bb3e50e@nvidia.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>, kpsingh@kernel.org,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        syzbot+f1e24a0594d4e3a895d3@syzkaller.appspotmail.com,
+        Yuchung Cheng <ycheng@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Jun 29, 2021 at 12:50:53PM +0300, Maxim Mikityanskiy wrote:
-> On 2021-06-28 13:47, Maciej Fijalkowski wrote:
-> > On Thu, Jun 17, 2021 at 10:55:34PM +0800, Xuan Zhuo wrote:
-> > > When each driver supports xsk rx, if the received buff returns XDP_PASS
-> > > after run xdp prog, it must construct skb based on xdp. This patch
-> > > extracts this logic into a public function xdp_construct_skb().
-> > > 
-> > > There is a bug in the original logic. When constructing skb, we should
-> > > copy the meta information to skb and then use __skb_pull() to correct
-> > > the data.
-> > 
-> > Thanks for fixing the bug on Intel drivers, Xuan. However, together with
-> > Magnus we feel that include/net/xdp.h is not a correct place for
-> > introducing xdp_construct_skb. If mlx side could use it, then probably
-> > include/net/xdp_sock_drv.h is a better fit for that.
-> > 
-> > Once again, CCing Maxim.
-> > Maxim, any chances that mlx driver could be aligned in a way that we could
-> > have a common function for creating skb on ZC path?
-> 
-> I'm sorry I missed the v1.
-> 
-> I have reviewed the differences between mlx5e_xsk_construct_skb and
-> xdp_construct_skb. I would say it is possible for mlx5 to adapt and use the
-> new API, but it may also require changes to xdp_construct_skb. Please see
-> the list of differences below.
+On Tue, Jun 29, 2021 at 2:28 PM Nguyen Dinh Phi <phind.uet@gmail.com> wrote:
+>
+> On June 29, 2021 4:21:59 PM GMT+08:00, Eric Dumazet <edumazet@google.com> wrote:
+> >On Tue, Jun 29, 2021 at 9:17 AM Nguyen Dinh Phi <phind.uet@gmail.com>
+> >wrote:
+> >>
+> >> On June 29, 2021 1:20:19 AM GMT+08:00, Neal Cardwell
+> ><ncardwell@google.com> wrote:
+> >> >)
+> >> >
+> >> >On Mon, Jun 28, 2021 at 1:15 PM Phi Nguyen <phind.uet@gmail.com>
+> >wrote:
+> >> >>
+> >> >> On 6/29/2021 12:24 AM, Neal Cardwell wrote:
+> >> >>
+> >> >> > Thanks.
+> >> >> >
+> >> >> > Can you also please provide a summary of the event sequence that
+> >> >> > triggers the bug? Based on your Reported-by tag, I guess this is
+> >> >based
+> >> >> > on the syzbot reproducer:
+> >> >> >
+> >> >> >
+> >>
+> >>https://groups.google.com/g/syzkaller-bugs/c/VbHoSsBz0hk/m/cOxOoTgPCAAJ
+> >> >> >
+> >> >> > but perhaps you can give a summary of the event sequence that
+> >> >causes
+> >> >> > the bug? Is it that the call:
+> >> >> >
+> >> >> > setsockopt$inet_tcp_TCP_CONGESTION(r0, 0x6, 0xd,
+> >> >> > &(0x7f0000000000)='cdg\x00', 0x4)
+> >> >> >
+> >> >> > initializes the CC and happens before the connection is
+> >> >established,
+> >> >> > and then when the connection is established, the line that sets:
+> >> >> >    icsk->icsk_ca_initialized = 0;
+> >> >> > is incorrect, causing the CC to be initialized again without
+> >first
+> >> >> > calling the cleanup code that deallocates the CDG-allocated
+> >memory?
+> >> >> >
+> >> >> > thanks,
+> >> >> > neal
+> >> >> >
+> >> >>
+> >> >> Hi Neal,
+> >> >>
+> >> >> The gdb stack trace that lead to init_transfer_input() is as
+> >bellow,
+> >> >the
+> >> >> current sock state is TCP_SYN_RECV.
+> >> >
+> >> >Thanks. That makes sense as a snapshot of time for
+> >> >tcp_init_transfer(), but I think what would be more useful would be
+> >a
+> >> >description of the sequence of events, including when the CC was
+> >> >initialized previous to that point (as noted above, was it that the
+> >> >setsockopt(TCP_CONGESTION) completed before that point?).
+> >> >
+> >> >thanks,
+> >> >neal
+> >>
+> >> I resend my message because I accidently used html format in last
+> >one. I am very sorry for the inconvenience caused.
+> >> ---
+> >> Yes, the CC had been initialized by the setsockopt, after that, it
+> >was initialized again in function tcp_init_transfer() because of
+> >setting isck_ca_initialized to 0.
+> >
+> >"the setsockopt" is rather vague, sorry.
+> >
+> >
+> >The hard part is that all scenarios have to be considered.
+> >
+> >TCP flows can either be passive and active.
+> >
+> >CC can be set :
+> >
+> >1) Before the connect() or accept()
+> >2) After the connect() or accept()
+> >3) after the connect() but before 3WHS is completed.
+> >
+> >So we need to make sure all cases will still work with any combination
+> >of CDG CC (before/after) in the picture.
+> >
+> >Note that a memory leak for a restricted CC (CDG can only be used by
+> >CAP_NET_ADMIN privileged user)
+> > is a small problem compared to more serious bug that could be added
+> >by an incomplete fix.
+> >
+> >I also note that if icsk_ca_priv] was increased from 104 to 120 bytes,
+> >tcp_cdg would no longer need a dynamic memory allocation.
+> >
+> >Thank you.
+>
+> Hi,
+> I will try to see whether I am able to get the full sequence. I am also affraid of making a change that could affect big part of the kernel.
+> About CDG, how we can get rid of dynamic allocation by increasing icsk_priv_data to 120? because I see that the window size is a module parameter, so I guess it is not a fixed value.
 
-Great!
+Given this module parameter is constant, I doubt anyone really uses a
+bigger window.
+If researchers want to experiment bigger window, they could adjust a
+macro and recompile (#define TCP_CDG_WINDOW 8 -> X)
 
-> 
-> > 
-> > Otherwise, maybe we should think about introducing the Intel-specific
-> > common header in tree?
-> 
-> Sure, you can do it to share Intel-specific stuff between Intel drivers.
-> However, in this particular case I think all XSK-enabled drivers would
-> benefit from this function, especially after previous efforts that aimed to
-> minimize the differences between drivers, the amount of code in the drivers
-> and to share as much as possible. So, in my opinion, this stuff belongs to
-> xdp_sock_drv.h. (Moreover, I see this patch also changes stmmac, so it's no
-> longer Intel-specific.)
+> Because the problem only happens with CDG, is adding check in its tcp_cdg_init() function Ok? And about  icsk_ca_initialized, Could I expect it to be 0 in CC's init functions?
 
-Right, stmmac just looked similar to what Intel is doing and AFAICT the
-author of that code was from Intel, sorry for assumption.
+I think icsk_ca_initialized  lost its strong meaning when CDG was
+introduced (since this is the only CC allocating memory)
 
-> 
-> Differences between mlx5e_xsk_construct_skb and xdp_construct_skb:
-> 
-> 1. __napi_alloc_skb is called with __GFP_NOWARN in xdp_construct_skb, but
-> without this flag in mlx5. Why do we need to use non-default flags? Why
-> can't we stick with napi_alloc_skb? I see only Intel drivers and XSK in
-> stmmac use __napi_alloc_skb instead of napi_alloc_skb, and it looks to me as
-> it was just copied from the regular (non-XSK) datapath of i40e
-> (i40e_construct_skb) to i40e's XSK, then to stmmac, then to
-> xdp_construct_skb, and I don't truly understand the reason of having
-> __GFP_NOWARN where it first appeared (i40e_construct_skb). Could someone
-> explain the reason for __GFP_NOWARN, so that we could decide whether we want
-> it in a generic XSK helper?
+The bug really is that before clearing icsk_ca_initialized we should
+call cc->release()
 
-It's a c&p to me.
+Maybe we missed this cleanup in commit
+8919a9b31eb4fb4c0a93e5fb350a626924302aa6 ("tcp: Only init congestion
+control if not initialized already")
 
-> 
-> 2. skb_put in mlx5 vs __skb_put in xdp_construct_skb - shouldn't be a big
-> deal, the difference is just an extra overflow check in skb_put.
-> 
-> 3. XDP metadata. mlx5 calls xdp_set_data_meta_invalid, while other
-> XSK-enabled drivers set metadata size to 0 and allow the XDP program to push
-> some metadata. xdp_construct_skb only supports xdp_buffs with metadata, it
-> will break if xdp_data_meta_unsupported. There are a few possible ways to
-> address it:
-> 
-> 3.1. Add a check for xdp_data_meta_unsupported to xdp_construct_skb. It will
-> lift the undocumented limitation of this function and allow it to handle all
-> valid kinds of xdp_buff.
-> 
-> 3.2. Have two versions of xdp_construct_skb: one for xdp_buffs with
-> metadata, the other for ones without metadata. Sounds ugly and not robust,
-> but could spare a few CPU cycles for drivers that can't have metadata.
-> 
-> 3.3. Remove xdp_set_data_meta_invalid from mlx5. I think the reason for this
-> call was some design decision, rather than a technical limitation. On the
-> other hand, even though it will allow mlx5 to work with xdp_construct_skb in
-> its current implementation, it would still be nice to combine it with 3.1 to
-> avoid having issues with future drivers (if not, at least document in a
-> clear way that the xdp_buff parameter must have metadata). Tariq/Saeed,
-> could you comment on this point?
+Although I am not sure what happens at accept() time when the listener
+socket is cloned.
 
-So this sounds like we need to hear from you guys if you're going to add a
-support to metadata in AF_XDP ZC. Then we can decide with steps forward.
-Thanks for this breakdown!
+If we make any hypothesis, we need to check all CC modules to make
+sure they respect it.
 
-> 
-> Thanks,
-> Max
-> 
-> > > 
-> > > Fixes: 0a714186d3c0f ("i40e: add AF_XDP zero-copy Rx support")
-> > > Fixes: 2d4238f556972 ("ice: Add support for AF_XDP")
-> > > Fixes: bba2556efad66 ("net: stmmac: Enable RX via AF_XDP zero-copy")
-> > > Fixes: d0bcacd0a1309 ("ixgbe: add AF_XDP zero-copy Rx support")
-> > > Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-> > > ---
-> > >   drivers/net/ethernet/intel/i40e/i40e_xsk.c    | 16 +---------
-> > >   drivers/net/ethernet/intel/ice/ice_xsk.c      | 12 +-------
-> > >   drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c  | 12 +-------
-> > >   .../net/ethernet/stmicro/stmmac/stmmac_main.c | 23 +-------------
-> > >   include/net/xdp.h                             | 30 +++++++++++++++++++
-> > >   5 files changed, 34 insertions(+), 59 deletions(-)
-> > > 
-> > > diff --git a/drivers/net/ethernet/intel/i40e/i40e_xsk.c b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-> > > index 68f177a86403..81b0f44eedda 100644
-> > > --- a/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-> > > +++ b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-> > > @@ -246,23 +246,9 @@ bool i40e_alloc_rx_buffers_zc(struct i40e_ring *rx_ring, u16 count)
-> > >   static struct sk_buff *i40e_construct_skb_zc(struct i40e_ring *rx_ring,
-> > >   					     struct xdp_buff *xdp)
-> > >   {
-> > > -	unsigned int metasize = xdp->data - xdp->data_meta;
-> > > -	unsigned int datasize = xdp->data_end - xdp->data;
-> > >   	struct sk_buff *skb;
-> > > -	/* allocate a skb to store the frags */
-> > > -	skb = __napi_alloc_skb(&rx_ring->q_vector->napi,
-> > > -			       xdp->data_end - xdp->data_hard_start,
-> > > -			       GFP_ATOMIC | __GFP_NOWARN);
-> > > -	if (unlikely(!skb))
-> > > -		goto out;
-> > > -
-> > > -	skb_reserve(skb, xdp->data - xdp->data_hard_start);
-> > > -	memcpy(__skb_put(skb, datasize), xdp->data, datasize);
-> > > -	if (metasize)
-> > > -		skb_metadata_set(skb, metasize);
-> > > -
-> > > -out:
-> > > +	skb = xdp_construct_skb(xdp, &rx_ring->q_vector->napi);
-> > >   	xsk_buff_free(xdp);
-> > >   	return skb;
-> > >   }
-> > > diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.c b/drivers/net/ethernet/intel/ice/ice_xsk.c
-> > > index a1f89ea3c2bd..f95e1adcebda 100644
-> > > --- a/drivers/net/ethernet/intel/ice/ice_xsk.c
-> > > +++ b/drivers/net/ethernet/intel/ice/ice_xsk.c
-> > > @@ -430,22 +430,12 @@ static void ice_bump_ntc(struct ice_ring *rx_ring)
-> > >   static struct sk_buff *
-> > >   ice_construct_skb_zc(struct ice_ring *rx_ring, struct ice_rx_buf *rx_buf)
-> > >   {
-> > > -	unsigned int metasize = rx_buf->xdp->data - rx_buf->xdp->data_meta;
-> > > -	unsigned int datasize = rx_buf->xdp->data_end - rx_buf->xdp->data;
-> > > -	unsigned int datasize_hard = rx_buf->xdp->data_end -
-> > > -				     rx_buf->xdp->data_hard_start;
-> > >   	struct sk_buff *skb;
-> > > -	skb = __napi_alloc_skb(&rx_ring->q_vector->napi, datasize_hard,
-> > > -			       GFP_ATOMIC | __GFP_NOWARN);
-> > > +	skb = xdp_construct_skb(rx_buf->xdp, &rx_ring->q_vector->napi);
-> > >   	if (unlikely(!skb))
-> > >   		return NULL;
-> > > -	skb_reserve(skb, rx_buf->xdp->data - rx_buf->xdp->data_hard_start);
-> > > -	memcpy(__skb_put(skb, datasize), rx_buf->xdp->data, datasize);
-> > > -	if (metasize)
-> > > -		skb_metadata_set(skb, metasize);
-> > > -
-> > >   	xsk_buff_free(rx_buf->xdp);
-> > >   	rx_buf->xdp = NULL;
-> > >   	return skb;
-> > > diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
-> > > index f72d2978263b..123945832c96 100644
-> > > --- a/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
-> > > +++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
-> > > @@ -203,22 +203,12 @@ bool ixgbe_alloc_rx_buffers_zc(struct ixgbe_ring *rx_ring, u16 count)
-> > >   static struct sk_buff *ixgbe_construct_skb_zc(struct ixgbe_ring *rx_ring,
-> > >   					      struct ixgbe_rx_buffer *bi)
-> > >   {
-> > > -	unsigned int metasize = bi->xdp->data - bi->xdp->data_meta;
-> > > -	unsigned int datasize = bi->xdp->data_end - bi->xdp->data;
-> > >   	struct sk_buff *skb;
-> > > -	/* allocate a skb to store the frags */
-> > > -	skb = __napi_alloc_skb(&rx_ring->q_vector->napi,
-> > > -			       bi->xdp->data_end - bi->xdp->data_hard_start,
-> > > -			       GFP_ATOMIC | __GFP_NOWARN);
-> > > +	skb = xdp_construct_skb(bi->xdp, &rx_ring->q_vector->napi);
-> > >   	if (unlikely(!skb))
-> > >   		return NULL;
-> > > -	skb_reserve(skb, bi->xdp->data - bi->xdp->data_hard_start);
-> > > -	memcpy(__skb_put(skb, datasize), bi->xdp->data, datasize);
-> > > -	if (metasize)
-> > > -		skb_metadata_set(skb, metasize);
-> > > -
-> > >   	xsk_buff_free(bi->xdp);
-> > >   	bi->xdp = NULL;
-> > >   	return skb;
-> > > diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> > > index c87202cbd3d6..143ac1edb876 100644
-> > > --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> > > +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> > > @@ -4729,27 +4729,6 @@ static void stmmac_finalize_xdp_rx(struct stmmac_priv *priv,
-> > >   		xdp_do_flush();
-> > >   }
-> > > -static struct sk_buff *stmmac_construct_skb_zc(struct stmmac_channel *ch,
-> > > -					       struct xdp_buff *xdp)
-> > > -{
-> > > -	unsigned int metasize = xdp->data - xdp->data_meta;
-> > > -	unsigned int datasize = xdp->data_end - xdp->data;
-> > > -	struct sk_buff *skb;
-> > > -
-> > > -	skb = __napi_alloc_skb(&ch->rxtx_napi,
-> > > -			       xdp->data_end - xdp->data_hard_start,
-> > > -			       GFP_ATOMIC | __GFP_NOWARN);
-> > > -	if (unlikely(!skb))
-> > > -		return NULL;
-> > > -
-> > > -	skb_reserve(skb, xdp->data - xdp->data_hard_start);
-> > > -	memcpy(__skb_put(skb, datasize), xdp->data, datasize);
-> > > -	if (metasize)
-> > > -		skb_metadata_set(skb, metasize);
-> > > -
-> > > -	return skb;
-> > > -}
-> > > -
-> > >   static void stmmac_dispatch_skb_zc(struct stmmac_priv *priv, u32 queue,
-> > >   				   struct dma_desc *p, struct dma_desc *np,
-> > >   				   struct xdp_buff *xdp)
-> > > @@ -4761,7 +4740,7 @@ static void stmmac_dispatch_skb_zc(struct stmmac_priv *priv, u32 queue,
-> > >   	struct sk_buff *skb;
-> > >   	u32 hash;
-> > > -	skb = stmmac_construct_skb_zc(ch, xdp);
-> > > +	skb = xdp_construct_skb(xdp, &ch->rxtx_napi);
-> > >   	if (!skb) {
-> > >   		priv->dev->stats.rx_dropped++;
-> > >   		return;
-> > > diff --git a/include/net/xdp.h b/include/net/xdp.h
-> > > index a5bc214a49d9..561e21eaf718 100644
-> > > --- a/include/net/xdp.h
-> > > +++ b/include/net/xdp.h
-> > > @@ -95,6 +95,36 @@ xdp_prepare_buff(struct xdp_buff *xdp, unsigned char *hard_start,
-> > >   	xdp->data_meta = meta_valid ? data : data + 1;
-> > >   }
-> > > +static __always_inline struct sk_buff *
-> > > +xdp_construct_skb(struct xdp_buff *xdp, struct napi_struct *napi)
-> > > +{
-> > > +	unsigned int metasize;
-> > > +	unsigned int datasize;
-> > > +	unsigned int headroom;
-> > > +	struct sk_buff *skb;
-> > > +	unsigned int len;
-> > > +
-> > > +	/* this include metasize */
-> > > +	datasize = xdp->data_end  - xdp->data_meta;
-> > > +	metasize = xdp->data      - xdp->data_meta;
-> > > +	headroom = xdp->data_meta - xdp->data_hard_start;
-> > > +	len      = xdp->data_end  - xdp->data_hard_start;
-> > > +
-> > > +	/* allocate a skb to store the frags */
-> > > +	skb = __napi_alloc_skb(napi, len, GFP_ATOMIC | __GFP_NOWARN);
-> > > +	if (unlikely(!skb))
-> > > +		return NULL;
-> > > +
-> > > +	skb_reserve(skb, headroom);
-> > > +	memcpy(__skb_put(skb, datasize), xdp->data_meta, datasize);
-> > > +	if (metasize) {
-> > > +		__skb_pull(skb, metasize);
-> > > +		skb_metadata_set(skb, metasize);
-> > > +	}
-> > > +
-> > > +	return skb;
-> > > +}
-> > > +
-> > >   /* Reserve memory area at end-of data area.
-> > >    *
-> > >    * This macro reserves tailroom in the XDP buffer by limiting the
-> > > -- 
-> > > 2.31.0
-> > > 
-> 
+>
+> Thank you.
