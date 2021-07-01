@@ -5,40 +5,40 @@ X-Spam-Level:
 X-Spam-Status: No, score=-19.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A18EFC11F64
-	for <bpf@archiver.kernel.org>; Thu,  1 Jul 2021 20:06:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 423FFC11F69
+	for <bpf@archiver.kernel.org>; Thu,  1 Jul 2021 20:06:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 83A4661411
-	for <bpf@archiver.kernel.org>; Thu,  1 Jul 2021 20:06:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2511161411
+	for <bpf@archiver.kernel.org>; Thu,  1 Jul 2021 20:06:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233688AbhGAUIo (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 1 Jul 2021 16:08:44 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:42404 "EHLO
+        id S233776AbhGAUIq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 1 Jul 2021 16:08:46 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:6292 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233308AbhGAUIn (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 1 Jul 2021 16:08:43 -0400
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 161JwhK8001179
-        for <bpf@vger.kernel.org>; Thu, 1 Jul 2021 13:06:12 -0700
+        by vger.kernel.org with ESMTP id S233714AbhGAUIq (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 1 Jul 2021 16:08:46 -0400
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 161K0l1I013139
+        for <bpf@vger.kernel.org>; Thu, 1 Jul 2021 13:06:15 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=rd2j3ZlAVroBlCex8ZrTfxaxPgjFrj2sxhXUmFOs6pM=;
- b=N3kKDUanfINSmaMr97SPHJb8CENPDc2y9nGnM3W6QigxZJVL4ODJIB4zkY5zrpml2hKM
- qkJ6I3kuZvqSUdrX6xgTRrJL3O+bJzAz4KCi/TzBUhsEMA8Vcgl2l5Lm5tUaMKuEmmU/
- NeFGZktgp5Bijb3QlWHry4si+0NatrANAks= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 39h1wyxbsc-7
+ bh=y8p8sl+K6IUkuJFM9HAbZB+OAhB1dBzP3va6Ro5qn4I=;
+ b=RHvHHvio/4Rw/YuiC2pN10dqSQvjNbaHwD4wsQezrVzjXSF5ZErAxK1TNo7OfLNBCcT8
+ XPGoea5prgbZl9yuJ5MncQtpFjJ9UaW0vKz9xi8zQYt9OfSAdk5qvZe+Auch3qiygqgL
+ sPNVMesxL5cfaQYqJuz5du5Ol8e1T2EeEn0= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 39h222x85r-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 01 Jul 2021 13:06:12 -0700
-Received: from intmgw001.05.ash7.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 01 Jul 2021 13:06:15 -0700
+Received: from intmgw001.06.ash9.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Thu, 1 Jul 2021 13:06:10 -0700
+ 15.1.2176.2; Thu, 1 Jul 2021 13:06:01 -0700
 Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id D1DE92940BCC; Thu,  1 Jul 2021 13:06:06 -0700 (PDT)
+        id 1E87B2940BB9; Thu,  1 Jul 2021 13:05:48 -0700 (PDT)
 From:   Martin KaFai Lau <kafai@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
@@ -46,9 +46,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Eric Dumazet <edumazet@google.com>, <kernel-team@fb.com>,
         Neal Cardwell <ncardwell@google.com>, <netdev@vger.kernel.org>,
         Yonghong Song <yhs@fb.com>, Yuchung Cheng <ycheng@google.com>
-Subject: [PATCH v2 bpf-next 5/8] tcp: seq_file: Replace listening_hash with lhash2
-Date:   Thu, 1 Jul 2021 13:06:06 -0700
-Message-ID: <20210701200606.1035783-1-kafai@fb.com>
+Subject: [PATCH v2 bpf-next 2/8] tcp: seq_file: Refactor net and family matching
+Date:   Thu, 1 Jul 2021 13:05:48 -0700
+Message-ID: <20210701200548.1034629-1-kafai@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210701200535.1033513-1-kafai@fb.com>
 References: <20210701200535.1033513-1-kafai@fb.com>
@@ -56,154 +56,175 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: dmR-BbXqHOYlHGn8eS5EhMgJEEp10fR0
-X-Proofpoint-GUID: dmR-BbXqHOYlHGn8eS5EhMgJEEp10fR0
+X-Proofpoint-ORIG-GUID: cO5ZnLoi4B54VmAr_5FL5K0HwDxhY_G7
+X-Proofpoint-GUID: cO5ZnLoi4B54VmAr_5FL5K0HwDxhY_G7
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
  definitions=2021-07-01_12:2021-07-01,2021-07-01 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0
- impostorscore=0 mlxscore=0 lowpriorityscore=0 malwarescore=0 bulkscore=0
- clxscore=1015 priorityscore=1501 spamscore=0 mlxlogscore=688
- suspectscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2104190000 definitions=main-2107010117
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 phishscore=0
+ spamscore=0 suspectscore=0 clxscore=1015 mlxlogscore=999 impostorscore=0
+ lowpriorityscore=0 adultscore=0 priorityscore=1501 bulkscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2107010117
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch moves the tcp seq_file iteration on listeners
-from the port only listening_hash to the port+addr lhash2.
+This patch refactors the net and family matching into
+two new helpers, seq_sk_match() and seq_file_family().
 
-When iterating from the bpf iter, the next patch will need to
-lock the socket such that the bpf iter can call setsockopt (e.g. to
-change the TCP_CONGESTION).  To avoid locking the bucket and then locking
-the sock, the bpf iter will first batch some sockets from the same bucket
-and then unlock the bucket.  If the bucket size is small (which
-usually is), it is easier to batch the whole bucket such that it is less
-likely to miss a setsockopt on a socket due to changes in the bucket.
-
-However, the port only listening_hash could have many listeners
-hashed to a bucket (e.g. many individual VIP(s):443 and also
-multiple by the number of SO_REUSEPORT).  We have seen bucket size in
-tens of thousands range.  Also, the chance of having changes
-in some popular port buckets (e.g. 443) is also high.
-
-The port+addr lhash2 was introduced to solve this large listener bucket
-issue.  Also, the listening_hash usage has already been replaced with
-lhash2 in the fast path inet[6]_lookup_listener().  This patch follows
-the same direction on moving to lhash2 and iterates the lhash2
-instead of listening_hash.
+seq_file_family() is in the later part of the file to prepare
+the change of a following patch.
 
 Acked-by: Yonghong Song <yhs@fb.com>
 Signed-off-by: Martin KaFai Lau <kafai@fb.com>
 ---
- include/net/inet_hashtables.h |  6 ++++++
- net/ipv4/tcp_ipv4.c           | 35 ++++++++++++++++++-----------------
- 2 files changed, 24 insertions(+), 17 deletions(-)
+ net/ipv4/tcp_ipv4.c | 68 ++++++++++++++++++++-------------------------
+ 1 file changed, 30 insertions(+), 38 deletions(-)
 
-diff --git a/include/net/inet_hashtables.h b/include/net/inet_hashtables.=
-h
-index ca6a3ea9057e..f72ec113ae56 100644
---- a/include/net/inet_hashtables.h
-+++ b/include/net/inet_hashtables.h
-@@ -160,6 +160,12 @@ struct inet_hashinfo {
- 					____cacheline_aligned_in_smp;
- };
-=20
-+#define inet_lhash2_for_each_icsk_continue(__icsk) \
-+	hlist_for_each_entry_continue(__icsk, icsk_listen_portaddr_node)
-+
-+#define inet_lhash2_for_each_icsk(__icsk, list) \
-+	hlist_for_each_entry(__icsk, list, icsk_listen_portaddr_node)
-+
- #define inet_lhash2_for_each_icsk_rcu(__icsk, list) \
- 	hlist_for_each_entry_rcu(__icsk, list, icsk_listen_portaddr_node)
-=20
 diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
-index fc2c2ecd10e1..6b3c26be539b 100644
+index 26b7b2056585..e4e9f73a19a6 100644
 --- a/net/ipv4/tcp_ipv4.c
 +++ b/net/ipv4/tcp_ipv4.c
-@@ -2296,21 +2296,22 @@ static void *listening_get_first(struct seq_file =
-*seq)
- 	struct tcp_iter_state *st =3D seq->private;
+@@ -2277,6 +2277,17 @@ EXPORT_SYMBOL(tcp_v4_destroy_sock);
+ #ifdef CONFIG_PROC_FS
+ /* Proc filesystem TCP sock list dumping. */
 =20
- 	st->offset =3D 0;
--	for (; st->bucket < INET_LHTABLE_SIZE; st->bucket++) {
--		struct inet_listen_hashbucket *ilb;
--		struct hlist_nulls_node *node;
-+	for (; st->bucket <=3D tcp_hashinfo.lhash2_mask; st->bucket++) {
-+		struct inet_listen_hashbucket *ilb2;
-+		struct inet_connection_sock *icsk;
- 		struct sock *sk;
-=20
--		ilb =3D &tcp_hashinfo.listening_hash[st->bucket];
--		if (hlist_nulls_empty(&ilb->nulls_head))
-+		ilb2 =3D &tcp_hashinfo.lhash2[st->bucket];
-+		if (hlist_empty(&ilb2->head))
- 			continue;
-=20
--		spin_lock(&ilb->lock);
--		sk_nulls_for_each(sk, node, &ilb->nulls_head) {
-+		spin_lock(&ilb2->lock);
-+		inet_lhash2_for_each_icsk(icsk, &ilb2->head) {
-+			sk =3D (struct sock *)icsk;
- 			if (seq_sk_match(seq, sk))
- 				return sk;
- 		}
--		spin_unlock(&ilb->lock);
-+		spin_unlock(&ilb2->lock);
- 	}
-=20
- 	return NULL;
-@@ -2324,22 +2325,22 @@ static void *listening_get_first(struct seq_file =
-*seq)
++static unsigned short seq_file_family(const struct seq_file *seq);
++
++static bool seq_sk_match(struct seq_file *seq, const struct sock *sk)
++{
++	unsigned short family =3D seq_file_family(seq);
++
++	/* AF_UNSPEC is used as a match all */
++	return ((family =3D=3D AF_UNSPEC || family =3D=3D sk->sk_family) &&
++		net_eq(sock_net(sk), seq_file_net(seq)));
++}
++
+ /*
+  * Get next listener socket follow cur.  If cur is NULL, get first socke=
+t
+  * starting from bucket given in st->bucket; when st->bucket is zero the
+@@ -2284,18 +2295,11 @@ EXPORT_SYMBOL(tcp_v4_destroy_sock);
+  */
  static void *listening_get_next(struct seq_file *seq, void *cur)
  {
+-	struct tcp_seq_afinfo *afinfo;
  	struct tcp_iter_state *st =3D seq->private;
--	struct inet_listen_hashbucket *ilb;
--	struct hlist_nulls_node *node;
-+	struct inet_listen_hashbucket *ilb2;
-+	struct inet_connection_sock *icsk;
+-	struct net *net =3D seq_file_net(seq);
+ 	struct inet_listen_hashbucket *ilb;
+ 	struct hlist_nulls_node *node;
  	struct sock *sk =3D cur;
+=20
+-	if (st->bpf_seq_afinfo)
+-		afinfo =3D st->bpf_seq_afinfo;
+-	else
+-		afinfo =3D PDE_DATA(file_inode(seq->file));
+-
+ 	if (!sk) {
+ get_head:
+ 		ilb =3D &tcp_hashinfo.listening_hash[st->bucket];
+@@ -2311,10 +2315,7 @@ static void *listening_get_next(struct seq_file *s=
+eq, void *cur)
+ 	sk =3D sk_nulls_next(sk);
+ get_sk:
+ 	sk_nulls_for_each_from(sk, node) {
+-		if (!net_eq(sock_net(sk), net))
+-			continue;
+-		if (afinfo->family =3D=3D AF_UNSPEC ||
+-		    sk->sk_family =3D=3D afinfo->family)
++		if (seq_sk_match(seq, sk))
+ 			return sk;
+ 	}
+ 	spin_unlock(&ilb->lock);
+@@ -2351,15 +2352,7 @@ static inline bool empty_bucket(const struct tcp_i=
+ter_state *st)
+  */
+ static void *established_get_first(struct seq_file *seq)
+ {
+-	struct tcp_seq_afinfo *afinfo;
+ 	struct tcp_iter_state *st =3D seq->private;
+-	struct net *net =3D seq_file_net(seq);
+-	void *rc =3D NULL;
+-
+-	if (st->bpf_seq_afinfo)
+-		afinfo =3D st->bpf_seq_afinfo;
+-	else
+-		afinfo =3D PDE_DATA(file_inode(seq->file));
+=20
+ 	st->offset =3D 0;
+ 	for (; st->bucket <=3D tcp_hashinfo.ehash_mask; ++st->bucket) {
+@@ -2373,32 +2366,20 @@ static void *established_get_first(struct seq_fil=
+e *seq)
+=20
+ 		spin_lock_bh(lock);
+ 		sk_nulls_for_each(sk, node, &tcp_hashinfo.ehash[st->bucket].chain) {
+-			if ((afinfo->family !=3D AF_UNSPEC &&
+-			     sk->sk_family !=3D afinfo->family) ||
+-			    !net_eq(sock_net(sk), net)) {
+-				continue;
+-			}
+-			rc =3D sk;
+-			goto out;
++			if (seq_sk_match(seq, sk))
++				return sk;
+ 		}
+ 		spin_unlock_bh(lock);
+ 	}
+-out:
+-	return rc;
++
++	return NULL;
+ }
+=20
+ static void *established_get_next(struct seq_file *seq, void *cur)
+ {
+-	struct tcp_seq_afinfo *afinfo;
+ 	struct sock *sk =3D cur;
+ 	struct hlist_nulls_node *node;
+ 	struct tcp_iter_state *st =3D seq->private;
+-	struct net *net =3D seq_file_net(seq);
+-
+-	if (st->bpf_seq_afinfo)
+-		afinfo =3D st->bpf_seq_afinfo;
+-	else
+-		afinfo =3D PDE_DATA(file_inode(seq->file));
 =20
  	++st->num;
  	++st->offset;
+@@ -2406,9 +2387,7 @@ static void *established_get_next(struct seq_file *=
+seq, void *cur)
+ 	sk =3D sk_nulls_next(sk);
 =20
--	sk =3D sk_nulls_next(sk);
--
--	sk_nulls_for_each_from(sk, node) {
-+	icsk =3D inet_csk(sk);
-+	inet_lhash2_for_each_icsk_continue(icsk) {
-+		sk =3D (struct sock *)icsk;
- 		if (seq_sk_match(seq, sk))
+ 	sk_nulls_for_each_from(sk, node) {
+-		if ((afinfo->family =3D=3D AF_UNSPEC ||
+-		     sk->sk_family =3D=3D afinfo->family) &&
+-		    net_eq(sock_net(sk), net))
++		if (seq_sk_match(seq, sk))
  			return sk;
  	}
 =20
--	ilb =3D &tcp_hashinfo.listening_hash[st->bucket];
--	spin_unlock(&ilb->lock);
-+	ilb2 =3D &tcp_hashinfo.lhash2[st->bucket];
-+	spin_unlock(&ilb2->lock);
- 	++st->bucket;
- 	return listening_get_first(seq);
- }
-@@ -2456,7 +2457,7 @@ static void *tcp_seek_last_pos(struct seq_file *seq=
-)
+@@ -2754,6 +2733,19 @@ static const struct seq_operations bpf_iter_tcp_se=
+q_ops =3D {
+ 	.stop		=3D bpf_iter_tcp_seq_stop,
+ };
+ #endif
++static unsigned short seq_file_family(const struct seq_file *seq)
++{
++	const struct tcp_iter_state *st =3D seq->private;
++	const struct tcp_seq_afinfo *afinfo =3D st->bpf_seq_afinfo;
++
++	/* Iterated from bpf_iter.  Let the bpf prog to filter instead. */
++	if (afinfo)
++		return AF_UNSPEC;
++
++	/* Iterated from proc fs */
++	afinfo =3D PDE_DATA(file_inode(seq->file));
++	return afinfo->family;
++}
 =20
- 	switch (st->state) {
- 	case TCP_SEQ_STATE_LISTENING:
--		if (st->bucket >=3D INET_LHTABLE_SIZE)
-+		if (st->bucket > tcp_hashinfo.lhash2_mask)
- 			break;
- 		st->state =3D TCP_SEQ_STATE_LISTENING;
- 		rc =3D listening_get_first(seq);
-@@ -2541,7 +2542,7 @@ void tcp_seq_stop(struct seq_file *seq, void *v)
- 	switch (st->state) {
- 	case TCP_SEQ_STATE_LISTENING:
- 		if (v !=3D SEQ_START_TOKEN)
--			spin_unlock(&tcp_hashinfo.listening_hash[st->bucket].lock);
-+			spin_unlock(&tcp_hashinfo.lhash2[st->bucket].lock);
- 		break;
- 	case TCP_SEQ_STATE_ESTABLISHED:
- 		if (v)
+ static const struct seq_operations tcp4_seq_ops =3D {
+ 	.show		=3D tcp4_seq_show,
 --=20
 2.30.2
 
