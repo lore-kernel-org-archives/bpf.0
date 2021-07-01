@@ -2,108 +2,99 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E5D1C11F6C
-	for <bpf@archiver.kernel.org>; Thu,  1 Jul 2021 15:56:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 85ACCC11F64
+	for <bpf@archiver.kernel.org>; Thu,  1 Jul 2021 16:03:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 755D361374
-	for <bpf@archiver.kernel.org>; Thu,  1 Jul 2021 15:56:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6388361403
+	for <bpf@archiver.kernel.org>; Thu,  1 Jul 2021 16:03:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233701AbhGAP6t (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 1 Jul 2021 11:58:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52836 "EHLO
+        id S230052AbhGAQGH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 1 Jul 2021 12:06:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233444AbhGAP6s (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 1 Jul 2021 11:58:48 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE526C061762
-        for <bpf@vger.kernel.org>; Thu,  1 Jul 2021 08:56:17 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id x20so9167252ljc.5
-        for <bpf@vger.kernel.org>; Thu, 01 Jul 2021 08:56:17 -0700 (PDT)
+        with ESMTP id S229664AbhGAQGG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 1 Jul 2021 12:06:06 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB0AC061762
+        for <bpf@vger.kernel.org>; Thu,  1 Jul 2021 09:03:36 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id k8so9180965lja.4
+        for <bpf@vger.kernel.org>; Thu, 01 Jul 2021 09:03:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=references:user-agent:from:to:cc:subject:in-reply-to:date
-         :message-id:mime-version;
-        bh=EWMfplk1+E9qv/BJMYr9wuJzgYw35Tkq30B5gBP8ayU=;
-        b=KMImn+fMpu/UCH/8Y163vpsWNShJ0j+vmdUzijdVm/6HZjgAgLOj4KpdkctvAgRwSK
-         8tLnOFPygqQ1kWbhW38qn7xpTKF2P5pt8NksTvBLmblfl15hJNSTwti2vy/8AfB0Kxj2
-         jI4uI5aOc7o66koPJlPE60i43SUw8MSvg4ODs=
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=csy0oso8sVVNOjKf5Gla0HtyiXTuq9Jx8AcUlJu8ImQ=;
+        b=W1hitavDQEn8qNccnxW8+c9VumLiSxCJcP12eYPMdesJOpDw+paTePwzJA1Gua8Iel
+         2GM50RvgO0jf8yvuEecDlrtjJBs/Mz8/2fIymDYYHr08u8zSQJFY6Pv5DaLiv5wVtxVv
+         SJlOYKaMMZbMC/A2RAL1dJzPdnM4G7XO+crdmBz5Aw/tXgFCAOy4uZB3+o/SmuNEA+W1
+         v1j8j440WhQEQF5Q7A7tJAlWO8eWRawEukYNXRpIJ3ev0zn5wJ7HlwK9qx2ZW6RK3UAK
+         W8U6Sw76TVO36oILcUl142hF9NVUdFGSLz1hflHxC9z4UWOUaxQ2daAYyCeQPHhlqqW5
+         ZylA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject
-         :in-reply-to:date:message-id:mime-version;
-        bh=EWMfplk1+E9qv/BJMYr9wuJzgYw35Tkq30B5gBP8ayU=;
-        b=I8pG8cjIIfub+UJq7ZEZ6SemQ14YtjqvQLSlyYLBC9CJuZuNVNNuTfS9P9IuAHms7n
-         YX3VGb/z+RtCko2YeN0xXmLcxgs34mb/unevW/9Q6fx6tuslVL9yMn4vUAoGN1CkrhCH
-         sqmLmI3A4B7V7UQ7t+m6U2XWNUNsnG1tVfXckJSKsHPcxx9XLcUCZ9dkK8/Kza6hpXt9
-         2LLmYkat9/l4u3EwuREY6/hcUfqvAKkJm7oTJX4Ew3t+/Ubb156XwUMVwFElxNFO04J5
-         6vktsOzaSfgCqKzhDqT0kj8aHeSiSuvCDBM74fGJepr7gWkoQ9piMEbmN+SWeREVdeDI
-         RQ6Q==
-X-Gm-Message-State: AOAM530H7hkcEJCw0Ka/RJnhflEpCogLEX8nma1+kt/If4XEuGpo0rnA
-        ZL3xN8gS6WS4OJqbSS0J8TOcvg==
-X-Google-Smtp-Source: ABdhPJxu5QBTaoNnXWim8i4I+vDDqdP6jrz4BF3wUCa4CxyVKGKO5mF+Wh4XPuYJsCJH1+EbfivxDA==
-X-Received: by 2002:a05:651c:1115:: with SMTP id d21mr181091ljo.476.1625154976091;
-        Thu, 01 Jul 2021 08:56:16 -0700 (PDT)
-Received: from cloudflare.com (79.191.58.233.ipv4.supernova.orange.pl. [79.191.58.233])
-        by smtp.gmail.com with ESMTPSA id t24sm49412ljj.97.2021.07.01.08.56.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jul 2021 08:56:14 -0700 (PDT)
-References: <20210701061656.34150-1-xiyou.wangcong@gmail.com>
-User-agent: mu4e 1.1.0; emacs 27.2
-From:   Jakub Sitnicki <jakub@cloudflare.com>
-To:     Cong Wang <xiyou.wangcong@gmail.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Cong Wang <cong.wang@bytedance.com>,
-        Jiang Wang <jiang.wang@bytedance.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Lorenz Bauer <lmb@cloudflare.com>
-Subject: Re: [Patch bpf v2] skmsg: check sk_rcvbuf limit before queuing to
- ingress_skb
-In-reply-to: <20210701061656.34150-1-xiyou.wangcong@gmail.com>
-Date:   Thu, 01 Jul 2021 17:56:12 +0200
-Message-ID: <877diarpsz.fsf@cloudflare.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=csy0oso8sVVNOjKf5Gla0HtyiXTuq9Jx8AcUlJu8ImQ=;
+        b=fbnom2pJD0M2pjPqFQLV/q/NI4vaqW5upaqL0IJCgyohxocXMRlOqe72MJJyhT9w0Z
+         QRNi81ol7zA78knP1PRUuvr65xw9xKWAKb/uFM5q9T3fz7r39BwgCT3WzzNj0jYkdZdg
+         FO47/inbsSiNmasTR3qgqMQKSwaBkNgC3irL8DAEGrcXrEkVQoVkHEh9Oso4pVt15I68
+         1CkPTtIfa8/pXYOoechBYEFMk+CRaZUJZH6XOsp9R0kpLVSnmpaZ7dhZ5CnSh106jFwy
+         Bg2LRY4/1LJgldlb5oE/vQg9demrOi73XWlef4lfw9PWXusU4jy+M+J1+wisALS0vzSh
+         0EDQ==
+X-Gm-Message-State: AOAM531+QU2/6t+tqmI8oicE1oAKU3Fi1ezN1U2hRiKpa6cB0K4/lpes
+        f5LyY6KhCKtg6Fr1MGL199LDphCgq9mxKsHWRX8=
+X-Google-Smtp-Source: ABdhPJwvTVCLAGoZOJRP0cbmhkzFDDGwtTUKErvtvOWGV08yJxAwgFzrRudfLAQcVSjb5vTaIPhzQ+N/SyE/3VBKqno=
+X-Received: by 2002:a2e:390f:: with SMTP id g15mr231914lja.44.1625155414065;
+ Thu, 01 Jul 2021 09:03:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <cover.1625145429.git.naveen.n.rao@linux.vnet.ibm.com> <4117b430ffaa8cd7af042496f87fd7539e4f17fd.1625145429.git.naveen.n.rao@linux.vnet.ibm.com>
+In-Reply-To: <4117b430ffaa8cd7af042496f87fd7539e4f17fd.1625145429.git.naveen.n.rao@linux.vnet.ibm.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Thu, 1 Jul 2021 09:03:22 -0700
+Message-ID: <CAADnVQ+78iDs7N=8xA6BZVBnPx78Q-Ljp860nmb8cOq7V_6qtQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] powerpc/bpf: Fix detecting BPF atomic instructions
+To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Cc:     bpf <bpf@vger.kernel.org>, ppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Brendan Jackman <jackmanb@google.com>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Jul 01, 2021 at 08:16 AM CEST, Cong Wang wrote:
-> From: Cong Wang <cong.wang@bytedance.com>
+On Thu, Jul 1, 2021 at 8:09 AM Naveen N. Rao
+<naveen.n.rao@linux.vnet.ibm.com> wrote:
 >
-> Jiang observed OOM frequently when testing our AF_UNIX/UDP
-> proxy. This is due to the fact that we do not actually limit
-> the socket memory before queueing skb to ingress_skb. We
-> charge the skb memory later when handling the psock backlog,
-> but it is not limited either.
+> Commit 91c960b0056672 ("bpf: Rename BPF_XADD and prepare to encode other
+> atomics in .imm") converted BPF_XADD to BPF_ATOMIC and added a way to
+> distinguish instructions based on the immediate field. Existing JIT
+> implementations were updated to check for the immediate field and to
+> reject programs utilizing anything more than BPF_ADD (such as BPF_FETCH)
+> in the immediate field.
 >
-> This patch adds checks for sk->sk_rcvbuf right before queuing
-> to ingress_skb and drops packets if this limit exceeds. This
-> is very similar to UDP receive path. Ideally we should set the
-> skb owner before this check too, but it is hard to make TCP
-> happy about sk_forward_alloc.
+> However, the check added to powerpc64 JIT did not look at the correct
+> BPF instruction. Due to this, such programs would be accepted and
+> incorrectly JIT'ed resulting in soft lockups, as seen with the atomic
+> bounds test. Fix this by looking at the correct immediate value.
 >
-> Reported-by: Jiang Wang <jiang.wang@bytedance.com>
-> Cc: Daniel Borkmann <daniel@iogearbox.net>
-> Cc: John Fastabend <john.fastabend@gmail.com>
-> Cc: Lorenz Bauer <lmb@cloudflare.com>
-> Cc: Jakub Sitnicki <jakub@cloudflare.com>
-> Signed-off-by: Cong Wang <cong.wang@bytedance.com>
+> Fixes: 91c960b0056672 ("bpf: Rename BPF_XADD and prepare to encode other atomics in .imm")
+> Reported-by: Jiri Olsa <jolsa@redhat.com>
+> Tested-by: Jiri Olsa <jolsa@redhat.com>
+> Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
 > ---
+> Hi Jiri,
+> FYI: I made a small change in this patch -- using 'imm' directly, rather
+> than insn[i].imm. I've still added your Tested-by since this shouldn't
+> impact the fix in any way.
+>
+> - Naveen
 
-Acked-by: Jakub Sitnicki <jakub@cloudflare.com>
-
-By saying that it is hard to make TCP happy about sk_forward_alloc, I'm
-guessing you're referring to problems described in 144748eb0c44 ("bpf,
-sockmap: Fix incorrect fwd_alloc accounting") [1]?
-
-Thanks for the fix.
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=144748eb0c445091466c9b741ebd0bfcc5914f3d
-
-[...]
+Excellent debugging! You guys are awesome.
+How do you want this fix routed? via bpf tree?
