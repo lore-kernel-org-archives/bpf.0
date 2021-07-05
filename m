@@ -2,106 +2,79 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E4F7C07E99
-	for <bpf@archiver.kernel.org>; Mon,  5 Jul 2021 10:39:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10FDAC07E9C
+	for <bpf@archiver.kernel.org>; Mon,  5 Jul 2021 11:37:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3104D613F3
-	for <bpf@archiver.kernel.org>; Mon,  5 Jul 2021 10:39:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F0BCB613B7
+	for <bpf@archiver.kernel.org>; Mon,  5 Jul 2021 11:37:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230512AbhGEKlp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 5 Jul 2021 06:41:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:28900 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230114AbhGEKlp (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 5 Jul 2021 06:41:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1625481548;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=nGQUOo7dih5SsR/eYJTAqFGEk1u85z/Uj7xxDty7zgs=;
-        b=bJrfDUQGuxRXk4iJKLFetlTxKjv+N8bhyC9BaDNN/FApGsTYlPSWeX0S4KF934Mbl6GVNi
-        Q9SjLhT33rAEzjWIZCBSzYf5leskorIlGXmU2Jfa5cHL3lmNFKgABx3lsL8fbm+bUclIcv
-        M9Ovx/wiIH4CfkDJDaJr6v+81nfWfkU=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-526-FF3cSZrVP1OMD57UW_d21w-1; Mon, 05 Jul 2021 06:39:06 -0400
-X-MC-Unique: FF3cSZrVP1OMD57UW_d21w-1
-Received: by mail-ed1-f71.google.com with SMTP id f20-20020a0564020054b0290395573bbc17so8856009edu.19
-        for <bpf@vger.kernel.org>; Mon, 05 Jul 2021 03:39:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nGQUOo7dih5SsR/eYJTAqFGEk1u85z/Uj7xxDty7zgs=;
-        b=SuSITTtkpDA2StHNE3tZFOf71s7VZip1UxnlIoVfX60+5NDp2Vq3ZJHYeiDPi28/Nh
-         DH+KthjnotERpe18jVScsXbcQVXImuVTj3Q8xWNSmuCtCfSC4tsox5Q3mAAcEIhcgaRB
-         eDosMIYujItkySVsGjL2DOlXTVAF/ypd6DIaTMeqAniUYXZN1WTmUVNCf5eCPr0eL5uG
-         ctduVZal5M0KsbJ2wL7ps6RpqBlFI95F+29mulSbXFsa37n3xmr2nuQGRs4XaGtE2KSS
-         fP2J3FQsgsufO4MDD/dHccPcv6lW/toz6bTov7oy2+gD0Mfs86SHlCuA5hdHXXXwt2Ud
-         Q7UA==
-X-Gm-Message-State: AOAM5330Dl/ktbaJysLrtv4A90I9yVDdsn31hLO58jM9QACVI4KkiJO5
-        T8BDCcZzRntPs0dzXwhhQM7HtSetpUSAlhhkFUDPi/EDO/3XaqlNiOOaT89HN/6BeZZENp2Yd0N
-        2/DFPOe9sxxQA
-X-Received: by 2002:a50:ff0a:: with SMTP id a10mr15534601edu.273.1625481545588;
-        Mon, 05 Jul 2021 03:39:05 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx7AdVa/ufIWFAME312qFMf9TF3XV/MioLYjFkYwJs7x9qatrRfikQLgmYhM9YTs1FWMmfkxg==
-X-Received: by 2002:a50:ff0a:: with SMTP id a10mr15534579edu.273.1625481545241;
-        Mon, 05 Jul 2021 03:39:05 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id x16sm1622024ejj.74.2021.07.05.03.39.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jul 2021 03:39:04 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 1650918072E; Mon,  5 Jul 2021 12:39:04 +0200 (CEST)
-From:   =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-Subject: [PATCH bpf-next] samples/bpf: add -fno-asynchronous-unwind-tables to BPF Clang invocation
-Date:   Mon,  5 Jul 2021 12:38:41 +0200
-Message-Id: <20210705103841.180260-1-toke@redhat.com>
-X-Mailer: git-send-email 2.32.0
+        id S231334AbhGELkC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 5 Jul 2021 07:40:02 -0400
+Received: from outbound-smtp25.blacknight.com ([81.17.249.193]:50586 "EHLO
+        outbound-smtp25.blacknight.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231279AbhGELkC (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 5 Jul 2021 07:40:02 -0400
+Received: from mail.blacknight.com (pemlinmail05.blacknight.ie [81.17.254.26])
+        by outbound-smtp25.blacknight.com (Postfix) with ESMTPS id D364242026
+        for <bpf@vger.kernel.org>; Mon,  5 Jul 2021 12:37:24 +0100 (IST)
+Received: (qmail 21946 invoked from network); 5 Jul 2021 11:37:24 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.17.255])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 5 Jul 2021 11:37:24 -0000
+Date:   Mon, 5 Jul 2021 12:37:23 +0100
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Marco Elver <elver@google.com>
+Cc:     akpm@linux-foundation.org, glider@google.com, dvyukov@google.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        kasan-dev@googlegroups.com, Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Yang Shi <shy828301@gmail.com>, bpf@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>
+Subject: Re: [PATCH] Revert "mm/page_alloc: make should_fail_alloc_page()
+ static"
+Message-ID: <20210705113723.GN3840@techsingularity.net>
+References: <20210705103806.2339467-1-elver@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <20210705103806.2339467-1-elver@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The samples/bpf Makefile currently compiles BPF files in a way that will
-produce an .eh_frame section, which will in turn confuse libbpf and produce
-errors when loading BPF programs, like:
+On Mon, Jul 05, 2021 at 12:38:06PM +0200, Marco Elver wrote:
+> This reverts commit f7173090033c70886d925995e9dfdfb76dbb2441.
+> 
+> Commit 76cd61739fd1 ("mm/error_inject: Fix allow_error_inject function
+> signatures") explicitly made should_fail_alloc_page() non-static, due to
+> worries of remaining compiler optimizations in the absence of function
+> side-effects while being noinline.
+> 
+> Furthermore, kernel/bpf/verifier.c pushes should_fail_alloc_page onto
+> the btf_non_sleepable_error_inject BTF IDs set, which when enabling
+> CONFIG_DEBUG_INFO_BTF results in an error at the BTFIDS stage:
+> 
+>   FAILED unresolved symbol should_fail_alloc_page
+> 
+> To avoid the W=1 warning, add a function declaration right above the
+> function itself, with a comment it is required in a BTF IDs set.
+> 
+> Fixes: f7173090033c ("mm/page_alloc: make should_fail_alloc_page() static")
+> Cc: Mel Gorman <mgorman@techsingularity.net>
+> Cc: Alexei Starovoitov <ast@kernel.org>
+> Signed-off-by: Marco Elver <elver@google.com>
 
-libbpf: elf: skipping unrecognized data section(32) .eh_frame
-libbpf: elf: skipping relo section(33) .rel.eh_frame for section(32) .eh_frame
+Acked-by: Mel Gorman <mgorman@techsingularity.net>
 
-Fix this by instruction Clang not to produce this section, as it's useless
-for BPF anyway.
+Out of curiousity though, why does block/blk-core.c not require
+something similar for should_fail_bio?
 
-Suggested-by: Daniel Borkmann <daniel@iogearbox.net>
-Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
----
- samples/bpf/Makefile | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
-index 520434ea966f..036998d11ded 100644
---- a/samples/bpf/Makefile
-+++ b/samples/bpf/Makefile
-@@ -331,6 +331,7 @@ $(obj)/%.o: $(src)/%.c
- 		-Wno-gnu-variable-sized-type-not-at-end \
- 		-Wno-address-of-packed-member -Wno-tautological-compare \
- 		-Wno-unknown-warning-option $(CLANG_ARCH_ARGS) \
-+		-fno-asynchronous-unwind-tables \
- 		-I$(srctree)/samples/bpf/ -include asm_goto_workaround.h \
- 		-O2 -emit-llvm -Xclang -disable-llvm-passes -c $< -o - | \
- 		$(OPT) -O2 -mtriple=bpf-pc-linux | $(LLVM_DIS) | \
 -- 
-2.32.0
-
+Mel Gorman
+SUSE Labs
