@@ -2,62 +2,38 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A80B0C07E98
-	for <bpf@archiver.kernel.org>; Mon,  5 Jul 2021 08:35:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3B18C07E99
+	for <bpf@archiver.kernel.org>; Mon,  5 Jul 2021 10:03:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8F69C613C2
-	for <bpf@archiver.kernel.org>; Mon,  5 Jul 2021 08:35:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C0722613E7
+	for <bpf@archiver.kernel.org>; Mon,  5 Jul 2021 10:03:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230134AbhGEIhj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 5 Jul 2021 04:37:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57872 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230085AbhGEIhi (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 5 Jul 2021 04:37:38 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD4DC061574;
-        Mon,  5 Jul 2021 01:35:01 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id g8-20020a1c9d080000b02901f13dd1672aso8636878wme.0;
-        Mon, 05 Jul 2021 01:35:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=vGRWvdOK1PgDadGaQtrO3gHLl2eTZPMYHv0bkQBzh00=;
-        b=iS+lH8U9/XgWWefVhtVSlFRj5PsQkAjqPPdERklq6ayKTQPmRvs4vnr3SDUy2vNTRw
-         f/GdEj1zz4eBn4lZumC+4tZ6ruSYP5Q6MA/CWiyF/15wvxgxkTHVtGfTldj9fvRByZGj
-         94YaWvJSt6d+yNDl+FRC2sKu/FDI3T3FyLr+OT7lh+sA88G5p6nwESmiYD6Aybw09+aC
-         5CgMTBLfnSe7MOqW6a0cvFo8cFrFCzFkn0vXOiQ7RcnM1LE14HgfDTXFk+MCgcrv3kZ6
-         N5tCNlehjL+RxKFY6uKc5V3N2I0Q2ow68v3wn+8+nhS6Y9va5Z3r7c1bVPbPfKIuF/Y1
-         drFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=vGRWvdOK1PgDadGaQtrO3gHLl2eTZPMYHv0bkQBzh00=;
-        b=b4y462iJ2QD5oS4KXuhdjrDhpql2hgENnkkf7QDrhzFRlUzFe+dWxh35b6iZjsI3hX
-         /C0SoQMo2gmtMvJru8m7DF+ApO0zDjkRX/nP93PnosHHqUnYYZE3riqOq4J2H+E4qsyO
-         lgV6OGhS4XwZqleJZlroQOA6oHde8aGlIQsYJmhlGZhqS4vfZnLed9WSSlOObWmAxgR0
-         K6HOnDhqfh5ZPwzw7JUxsdLJvJ08gXeMSFW2yHCJXwQi/hep2KRj2owWnE/5fNQPrnlg
-         unQD8Mui6GoIhLP1weXV+qn8n++ikLn19zDVObt389Fo71auJasPE7E64RPXjdL0hG6l
-         UHVw==
-X-Gm-Message-State: AOAM530pvpVXYirVmJbcEXRHxgg4jdRC6Qlv2Jfxpcvquw9UtaqPozO8
-        gSPVzUAwFHnaU59wyN1Zapg=
-X-Google-Smtp-Source: ABdhPJwoW+wrIqWbqydnd2SnNFn+Rr7wab7v4jWy971rPZ7WDn00TetlfWn+CwRfKmrKoYP01daj9w==
-X-Received: by 2002:a1c:9dce:: with SMTP id g197mr13985028wme.149.1625474100512;
-        Mon, 05 Jul 2021 01:35:00 -0700 (PDT)
-Received: from gmail.com (178-164-188-14.pool.digikabel.hu. [178.164.188.14])
-        by smtp.gmail.com with ESMTPSA id a9sm12092809wrv.37.2021.07.05.01.34.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jul 2021 01:35:00 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Mon, 5 Jul 2021 10:34:58 +0200
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
+        id S230477AbhGEKGL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 5 Jul 2021 06:06:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38060 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230476AbhGEKGK (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 5 Jul 2021 06:06:10 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CE968613C8;
+        Mon,  5 Jul 2021 10:03:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1625479414;
+        bh=Q8/L2LRHglK2rXQ7PV40+1czQBiJ/w+Kx+K0KseNmao=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=XVf7rhMls18J9mYaKp4sO/vU7UNqO27Sea2F2RLPt6xM22kkJlLVMKD0NPBSdCzqw
+         Ey/aI6wwkszdnn6rA/wC1ltyHxN0h+EY6dduRVFqDg9wqqo+CE7nb4doc/j3w6UQv4
+         HLDnq16sZ3HLpRqccxQ8XPHzPlTBhPDkYHv+q1/L1otOHzgye1yO7mNZjbo96iF0YH
+         PdsJI0dunM2qwyyhZljvTfXZ+SmMDUhs0lkC2lw0V11llGuXcmZs5lzMKnVBrGkmAY
+         I7Qxt5vwMRb0LAdEGEr0z7sHvzNa7iHUKy/PfUT4Y9dpuk2ISXFjetSouZ64vLASs0
+         XTG3BLYVVehbw==
+Date:   Mon, 5 Jul 2021 19:03:28 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Ingo Molnar <mingo@kernel.org>
 Cc:     Steven Rostedt <rostedt@goodmis.org>,
         Josh Poimboeuf <jpoimboe@redhat.com>, X86 ML <x86@kernel.org>,
         Daniel Xu <dxu@dxuuu.xyz>, linux-kernel@vger.kernel.org,
@@ -68,88 +44,55 @@ Cc:     Steven Rostedt <rostedt@goodmis.org>,
         yhs@fb.com, linux-ia64@vger.kernel.org,
         Abhishek Sagar <sagar.abhishek@gmail.com>,
         Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Subject: Re: [PATCH -tip v8 13/13] x86/kprobes: Fixup return address in
- generic trampoline handler
-Message-ID: <YOLEMvR1bCQiIMcl@gmail.com>
+Subject: Re: [PATCH -tip v8 03/13] kprobes: treewide: Remove
+ trampoline_address from kretprobe_trampoline_handler()
+Message-Id: <20210705190328.8cf3fb4397500f2dafb761f0@kernel.org>
+In-Reply-To: <YOKut2jZ4f+oSKAI@gmail.com>
 References: <162399992186.506599.8457763707951687195.stgit@devnote2>
- <162400004562.506599.7549585083316952768.stgit@devnote2>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <162400004562.506599.7549585083316952768.stgit@devnote2>
+        <162399994996.506599.17672270294950096639.stgit@devnote2>
+        <YOKut2jZ4f+oSKAI@gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+Hi Ingo,
 
-* Masami Hiramatsu <mhiramat@kernel.org> wrote:
+On Mon, 5 Jul 2021 09:03:19 +0200
+Ingo Molnar <mingo@kernel.org> wrote:
 
-> In x86, kretprobe trampoline address on the stack frame will
-> be replaced with the real return address after returning from
-> trampoline_handler. Before fixing the return address, the real
-> return address can be found in the current->kretprobe_instances.
 > 
-> However, since there is a window between updating the
-> current->kretprobe_instances and fixing the address on the stack,
-> if an interrupt caused at that timing and the interrupt handler
-> does stacktrace, it may fail to unwind because it can not get
-> the correct return address from current->kretprobe_instances.
+> * Masami Hiramatsu <mhiramat@kernel.org> wrote:
 > 
-> This will minimize that window by fixing the return address
-> right before updating current->kretprobe_instances.
+> > --- a/include/linux/kprobes.h
+> > +++ b/include/linux/kprobes.h
+> > @@ -197,15 +197,23 @@ extern void arch_prepare_kretprobe(struct kretprobe_instance *ri,
+> >  				   struct pt_regs *regs);
+> >  extern int arch_trampoline_kprobe(struct kprobe *p);
+> >  
+> > +void kretprobe_trampoline(void);
+> > +/*
+> > + * Since some architecture uses structured function pointer,
+> > + * use dereference_function_descriptor() to get real function address.
+> > + */
+> > +static nokprobe_inline void *kretprobe_trampoline_addr(void)
+> > +{
+> > +	return dereference_kernel_function_descriptor(kretprobe_trampoline);
+> > +}
+> 
+> Could we please also make 'kretprobe_trampoline' harder to use 
+> accidentally, such by naming it appropriately?
+> 
+> __kretprobe_trampoline would be a good first step I guess.
 
-Is there still a window? I.e. is it "minimized" (to how big of a window?), 
-or eliminated?
+Good idea! Let me update it.
 
-> +void arch_kretprobe_fixup_return(struct pt_regs *regs,
-> +				 unsigned long correct_ret_addr)
-> +{
-> +	unsigned long *frame_pointer;
-> +
-> +	frame_pointer = ((unsigned long *)&regs->sp) + 1;
-> +
-> +	/* Replace fake return address with real one. */
-> +	*frame_pointer = correct_ret_addr;
+Thank you,
 
-Firstly, why does &regs->sp have to be forced to 'unsigned long *'? 
 
-pt_regs::sp is 'unsigned long' on both 32-bit and 64-bit kernels AFAICS.
 
-Secondly, the new code modified by your patch now looks like this:
-
-        frame_pointer = ((unsigned long *)&regs->sp) + 1;
- 
-+       kretprobe_trampoline_handler(regs, frame_pointer);
-
-where:
-
-+void arch_kretprobe_fixup_return(struct pt_regs *regs,
-+                                unsigned long correct_ret_addr)
-+{
-+       unsigned long *frame_pointer;
-+
-+       frame_pointer = ((unsigned long *)&regs->sp) + 1;
-+
-+       /* Replace fake return address with real one. */
-+       *frame_pointer = correct_ret_addr;
-+}
-
-So we first do:
-
-        frame_pointer = ((unsigned long *)&regs->sp) + 1;
-
-... and pass that in to arch_kretprobe_fixup_return() as 
-'correct_ret_addr', which does:
-
-+       frame_pointer = ((unsigned long *)&regs->sp) + 1;
-+	*frame_pointer = correct_ret_addr;
-
-... which looks like the exact same thing as:
-
-	*frame_pointer = frame_pointer;
-
-... obfuscated through a thick layer of type casts?
-
-Thanks,
-
-	Ingo
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>
