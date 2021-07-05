@@ -2,101 +2,90 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8F3DC07E99
-	for <bpf@archiver.kernel.org>; Mon,  5 Jul 2021 11:37:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DDC59C07E99
+	for <bpf@archiver.kernel.org>; Mon,  5 Jul 2021 11:44:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CFD68613B7
-	for <bpf@archiver.kernel.org>; Mon,  5 Jul 2021 11:37:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ADE766128D
+	for <bpf@archiver.kernel.org>; Mon,  5 Jul 2021 11:44:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231386AbhGELkO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 5 Jul 2021 07:40:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42810 "EHLO
+        id S230377AbhGELrG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 5 Jul 2021 07:47:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231286AbhGELkO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 5 Jul 2021 07:40:14 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 761D3C061574;
-        Mon,  5 Jul 2021 04:37:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=CtwriWiKNwEyPS7wLGosDrs1cNvFIMaj7va3rpRQQIg=; b=tmtzEHW3+X0tS77m9YJ9iqG4hq
-        KZ6c5b4LQxTd/0FbCgReItHmXkmQXz+fVrK/XAThajPegKRWxD3+QLJE7XIuP054SYCBp5HRgsSrt
-        Krevd8NbRA3zaGwAEgi82jX1FzhtGyoXk2aC1FvLF7lPN1uIiEqFdOoikHiKE3HHyX4iIdIPH48Iz
-        XXOJIYcyJQIPz43O3BoIr1qmaNp6chmnlZGGCNNCSe/9vspoOMBEbME/WiysvjKHhpPhyJZIqQjKC
-        I4E0mb+HraGyZUN8qj3mgIY97Q/y97pDFmYzdb5UZLgh6RnGaqzDrviBlUZrbB3dmfJ+HiuT5DfVO
-        hoWLslYQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1m0Mtd-00ACWy-27; Mon, 05 Jul 2021 11:36:20 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C2C3E3001DC;
-        Mon,  5 Jul 2021 13:36:14 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 5F23A200E1E64; Mon,  5 Jul 2021 13:36:14 +0200 (CEST)
-Date:   Mon, 5 Jul 2021 13:36:14 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Ingo Molnar <mingo@kernel.org>, X86 ML <x86@kernel.org>,
-        Daniel Xu <dxu@dxuuu.xyz>, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, kuba@kernel.org, mingo@redhat.com,
-        ast@kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>, kernel-team@fb.com, yhs@fb.com,
-        linux-ia64@vger.kernel.org,
-        Abhishek Sagar <sagar.abhishek@gmail.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Subject: Re: [PATCH -tip v8 11/13] x86/unwind: Recover kretprobe trampoline
- entry
-Message-ID: <YOLurg5mGHdBc+fz@hirez.programming.kicks-ass.net>
-References: <162399992186.506599.8457763707951687195.stgit@devnote2>
- <162400002631.506599.2413605639666466945.stgit@devnote2>
+        with ESMTP id S230174AbhGELrG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 5 Jul 2021 07:47:06 -0400
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B519EC061574;
+        Mon,  5 Jul 2021 04:44:28 -0700 (PDT)
+Received: by mail-qk1-x729.google.com with SMTP id e14so5785379qkl.9;
+        Mon, 05 Jul 2021 04:44:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=y5GEj+8326+PbDDr2Nykyt3XrIRloqp5T0iaY8wvCN4=;
+        b=G24fJESmPH7nMdQIwUF+gb58lyy7jFnZXRymXctn3VclV53TwK3vCHPmR/+fy1Xiyk
+         dZrcbk1TXH/kk/UA+a6WCEsgPASxBYuaz82UQSBuNNgO+iio+ACdlfpBBU26QLIoGjiI
+         dbu9d3RBTrQrDstdev67/pEn1BoL9D3wfA60ghspnb4O0cloQ6Lu5Nx3hcx5XPiNqVdG
+         G1kWJSPXzWx+JdAwMj8CJMlsKRrq5z5PZGjgbBg2tbavl4CVvYtS97LWempUSqoPmSw1
+         SBQZ0JnrwvvEbuVxaTvRqXLfh1+udw7lUA471drIw9XIQUJyqgWMW+v9BN+R8xSHkR7W
+         BMzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=y5GEj+8326+PbDDr2Nykyt3XrIRloqp5T0iaY8wvCN4=;
+        b=pHrFsn9iQH3l0+h/oyKuMPc6349fuzAYYO/ycW3ipASxQR6Q6wqcyQNdXi+oauZuuI
+         a3PhMP1NvbY2aR+x9J7GFVQV/Rh9cN4117YL11SV3S0gO12deQJSon3/jyDCEb1Tt0hO
+         ZHr4tEkO6irBit1S9285WolQ9jJDK+6XIGJMhjDP9ofoHLnBQ4pHt90dvfi6kM0a7+qP
+         5+agLZzynULyF93VkJKV3Dv16ed80BRX1g0KjpJBJG2yEqgTfdsenJcjkTrwr4q+XELj
+         0UbliqZ/ZaHF9Ui6CcK7JmfUOSSFVj7t+l7y51vKngHVrFv+EkZTTcEspM3pfErZm2eC
+         I6XQ==
+X-Gm-Message-State: AOAM5327HD9S1yDVMjyci+wd2Aj7thO2VhlnYAYhNbmjQbRR3BKZu6WT
+        zb/LYSLkFC/vINCFf2fnxJyNDUVgKOZO7o1Ctw==
+X-Google-Smtp-Source: ABdhPJzzvfN9ja3xrr+zfs22ZbMSe98belDpsaJbzFRIfwLcqhb3FwVgOTTioY6zAgoIuzsz2uwHW9CofOuY+gGxr0E=
+X-Received: by 2002:a05:620a:17a5:: with SMTP id ay37mr13801980qkb.465.1625485467815;
+ Mon, 05 Jul 2021 04:44:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <162400002631.506599.2413605639666466945.stgit@devnote2>
+References: <20210609135537.1460244-1-joamaki@gmail.com> <20210624091843.5151-1-joamaki@gmail.com>
+ <20210624091843.5151-5-joamaki@gmail.com> <31210.1625163167@famine>
+In-Reply-To: <31210.1625163167@famine>
+From:   Jussi Maki <joamaki@gmail.com>
+Date:   Mon, 5 Jul 2021 14:44:16 +0300
+Message-ID: <CAHn8xcmkDz9DG_s_6G9osakb5QD9O3AE46PfZTeAyi12h_s5rQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 4/4] devmap: Exclude XDP broadcast to master device
+To:     Jay Vosburgh <jay.vosburgh@canonical.com>
+Cc:     bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andy Gospodarek <andy@greyhouse.net>, vfalico@gmail.com,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        "Karlsson, Magnus" <magnus.karlsson@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Jun 18, 2021 at 04:07:06PM +0900, Masami Hiramatsu wrote:
-> @@ -549,7 +548,15 @@ bool unwind_next_frame(struct unwind_state *state)
->  					 (void *)orig_ip);
->  			goto err;
->  		}
-> -
-> +		/*
-> +		 * There is a small chance to interrupt at the entry of
-> +		 * kretprobe_trampoline where the ORC info doesn't exist.
-> +		 * That point is right after the RET to kretprobe_trampoline
-> +		 * which was modified return address. So the @addr_p must
-> +		 * be right before the regs->sp.
-> +		 */
-> +		state->ip = unwind_recover_kretprobe(state, state->ip,
-> +				(unsigned long *)(state->sp - sizeof(long)));
->  		state->regs = (struct pt_regs *)sp;
->  		state->prev_regs = NULL;
->  		state->full_regs = true;
-> @@ -562,6 +569,9 @@ bool unwind_next_frame(struct unwind_state *state)
->  					 (void *)orig_ip);
->  			goto err;
->  		}
-> +		/* See UNWIND_HINT_TYPE_REGS case comment. */
-> +		state->ip = unwind_recover_kretprobe(state, state->ip,
-> +				(unsigned long *)(state->sp - sizeof(long)));
->  
->  		if (state->full_regs)
->  			state->prev_regs = state->regs;
+On Thu, Jul 1, 2021 at 9:12 PM Jay Vosburgh <jay.vosburgh@canonical.com> wrote:
+> >+      if (static_branch_unlikely(&bpf_master_redirect_enabled_key)) {
+> >+              struct net_device *master = netdev_master_upper_dev_get_rcu(dev_rx);
+> >+
+> >+              exclude_ifindex_master = (master && exclude_ingress) ? master->ifindex : 0;
+> >+      }
+> >+
+>
+>         Will the above logic do what is intended if the device stacking
+> isn't a simple bond -> ethX arrangement?  I.e., bond -> VLAN.?? -> ethX
+> or perhaps even bondA -> VLAN.?? -> bondB -> ethX ?
 
-Why doesn't the ftrace case have this? That is, why aren't both return
-trampolines having the same general shape?
+Good point. "bond -> VLAN -> eth" isn't an issue currently as vlan
+devices do not support XDP. "bondA -> bondB -> ethX" however would be
+supported, so I think it makes sense to change the code to collect all
+upper devices and exclude them. I'll try to follow up with an updated
+patch for this soon.
