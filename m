@@ -2,142 +2,144 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F34B2C07E9B
-	for <bpf@archiver.kernel.org>; Tue,  6 Jul 2021 14:55:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49D8EC07E96
+	for <bpf@archiver.kernel.org>; Tue,  6 Jul 2021 15:02:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D0EC7619B4
-	for <bpf@archiver.kernel.org>; Tue,  6 Jul 2021 14:55:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2E2AD61C1C
+	for <bpf@archiver.kernel.org>; Tue,  6 Jul 2021 15:02:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231923AbhGFO6C (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 6 Jul 2021 10:58:02 -0400
-Received: from szxga02-in.huawei.com ([45.249.212.188]:6429 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231460AbhGFO6B (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 6 Jul 2021 10:58:01 -0400
-Received: from dggeme756-chm.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4GK3vQ6Qspz76rF;
-        Tue,  6 Jul 2021 21:54:26 +0800 (CST)
-Received: from [10.174.178.171] (10.174.178.171) by
- dggeme756-chm.china.huawei.com (10.3.19.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2176.2; Tue, 6 Jul 2021 21:57:53 +0800
-Subject: Re: [PATCH v4 bpf-next 1/9] bpf: Introduce bpf timers.
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        <davem@davemloft.net>
-CC:     <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <kernel-team@fb.com>
-References: <20210701192044.78034-1-alexei.starovoitov@gmail.com>
- <20210701192044.78034-2-alexei.starovoitov@gmail.com>
-From:   "luwei (O)" <luwei32@huawei.com>
-Message-ID: <bcdccd37-6372-859f-824e-c96250361904@huawei.com>
-Date:   Tue, 6 Jul 2021 21:57:52 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S231400AbhGFPFc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 6 Jul 2021 11:05:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39278 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231266AbhGFPFc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 6 Jul 2021 11:05:32 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8408C061788;
+        Tue,  6 Jul 2021 07:04:43 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id t3so28162311edc.7;
+        Tue, 06 Jul 2021 07:04:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=P2YpnvVFTcqnm3T4OIfBBmLwbYwnj6OekGoEs3hm+8A=;
+        b=Pg7vg6d+zq8rYY/qr+eHDhCTW68T8Soz3s3tjrtXpNb1DV60YocaZhaQUk6ux+0p92
+         ZTaLD7IB5BGvkRyqG8rh4abSfhPIOwU5QIKetcmvk6TH4zrhrRLIMeuQ72JdsVdAtva4
+         hM6myJEG+5YU51IsKhEp8N/h3Vg3AGxC9waCWayc8KDBvAeCjv3IkA64YgI+RAkA3Md4
+         5Cp2K2YjsRtIQMc2gDrWUywbgRtEI2cGW8cnRSPNFmF8ouObi0QGPKu9ECxHaj9FOB3J
+         UrZoYqDs3vemaJJJsROfERcK1rX4kziCwUl4Ic5HaCQJms+8KJkeFDnDHhEoF7v2OjpH
+         VZEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=P2YpnvVFTcqnm3T4OIfBBmLwbYwnj6OekGoEs3hm+8A=;
+        b=sw2TmDmDYoh6CyLrn1Ko/PJhhkNck5bnShaCgEvMYRIR8j6pUhfUKZXivwnxdztZnN
+         +kQzVYeJbuuca3FPmRE2XsNobVygswoNEpVyYqqBzY2Zya4Btmw9IQzJjP7pjofWFBCK
+         ZnEqGspDfCCBFo3X9gYjwUbz45Y4Lc6wYLtWHlxnmqvk04F33FsJszeoyCYUyn2lLXey
+         0qS2HTse3vfXZ6mpAlxFwNa4OdLTrPgFsKVpB8e6asELnCpFxJf4v4MkGw0GaNiUqR29
+         GnVFZ1L27p7XleSq5s647dLxY5zjHcIF3U2363LFeA+SNDENlVl1YrYu54rQGF7XEE40
+         o20Q==
+X-Gm-Message-State: AOAM530MtQ9tVS3Be4P5hX9q7eiBy5Is0306aJjySlDoLI/Bzk5UkO2o
+        /h96D06HTR3x/rrTC3w9Ab9VqBB91a/UQKbZvZA=
+X-Google-Smtp-Source: ABdhPJw8z0ZSaEn+fu6H7vuSFPmrvSZlGm3Ck8hqWZBKEnzeW15b5CXKFpd/vYCvqqjqkZSNNIZoDmv1RtM8i7kvyqA=
+X-Received: by 2002:aa7:d554:: with SMTP id u20mr23354485edr.50.1625580282310;
+ Tue, 06 Jul 2021 07:04:42 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210701192044.78034-2-alexei.starovoitov@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.171]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggeme756-chm.china.huawei.com (10.3.19.102)
-X-CFilter-Loop: Reflected
+References: <cover.1623674025.git.lorenzo@kernel.org> <1316f3ef2763ff4c02244fb726c61568c972514c.1623674025.git.lorenzo@kernel.org>
+ <CAKgT0Ue7TsgwbQF+mfeDB-18Q-R29YZWe=y6Kgeg0xxbwds=vw@mail.gmail.com>
+ <YNsVcy8e4Mgyg7g3@lore-desk> <CAKgT0Ucg5RbzKt63u5RfXee94kd+1oJ+o_qgUwCwnVCoQjDdPw@mail.gmail.com>
+ <YOMq0WRu4lsGZJk2@lore-desk> <CAKgT0Udn90g9s3RYiGA0hFz7bXaepPNJNqgRjMtwjpdj1zZTDw@mail.gmail.com>
+ <YORELD7ve/RMYsua@lore-desk>
+In-Reply-To: <YORELD7ve/RMYsua@lore-desk>
+From:   Alexander Duyck <alexander.duyck@gmail.com>
+Date:   Tue, 6 Jul 2021 07:04:31 -0700
+Message-ID: <CAKgT0UceWvSzYrt=0cJTqjhTE6CHiuo0nXV+YG+1qc9Nr2bJZg@mail.gmail.com>
+Subject: Re: [PATCH v9 bpf-next 02/14] xdp: introduce flags field in xdp_buff/xdp_frame
+To:     Lorenzo Bianconi <lorenzo.bianconi@redhat.com>
+Cc:     Lorenzo Bianconi <lorenzo@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, shayagr@amazon.com,
+        "Jubran, Samih" <sameehj@amazon.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Eelco Chaudron <echaudro@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Saeed Mahameed <saeed@kernel.org>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
+        Tirthendu <tirthendu.sarkar@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+On Tue, Jul 6, 2021 at 4:53 AM Lorenzo Bianconi
+<lorenzo.bianconi@redhat.com> wrote:
+>
+> > On Mon, Jul 5, 2021 at 8:52 AM Lorenzo Bianconi
+> > <lorenzo.bianconi@redhat.com> wrote:
+> > >
+> > > > On Tue, Jun 29, 2021 at 5:43 AM Lorenzo Bianconi
+> > > > <lorenzo.bianconi@redhat.com> wrote:
+>
+> [...]
+> >
+> > Hi Lorenzo,
+> >
+> > What about doing something like breaking up the type value in
+> > xdp_mem_info? The fact is having it as an enum doesn't get us much
+> > since we have a 32b type field but are only storing 4 possible values
+> > there currently
+> >
+> > The way I see it, scatter-gather is just another memory model
+> > attribute rather than being something entirely new. It makes as much
+> > sense to have a bit there for MEM_TYPE_PAGE_SG as it does for
+> > MEM_TYPE_PAGE_SHARED. I would consider either splitting the type field
+> > into two 16b fields. For example you might have one field that
+> > describes the source pool which is currently either allocated page
+> > (ORDER0, SHARED), page_pool (PAGE_POOL), or XSK pool (XSK_BUFF_POOL),
+> > and then two flags for type with there being either shared and/or
+> > scatter-gather.
+>
+> Hi Alex,
+>
+> I am fine reducing the xdp_mem_info size defining type field as u16 instead of
+> u32 but I think mb is a per-xdp_buff/xdp_frame property since at runtime we can
+> receive a tiny single page xdp_buff/xdp_frame and a "jumbo" xdp_buff/xdp_frame
+> composed by multiple pages. According to the documentation available in
+> include/net/xdp.h, xdp_rxq_info (where xdp_mem_info is contained for xdp_buff)
+> is "associated with the driver level RX-ring queues and it is information that
+> is specific to how the driver have configured a given RX-ring queue" so I guess
+> it is a little bit counterintuitive to add this info there.
 
-在 2021/7/2 3:20 AM, Alexei Starovoitov 写道:
-> From: Alexei Starovoitov <ast@kernel.org>
->
-> Introduce 'struct bpf_timer { __u64 :64; __u64 :64; };' that can be embedded
-> in hash/array/lru maps as a regular field and helpers to operate on it:
->
-> // Initialize the timer.
-> // First 4 bits of 'flags' specify clockid.
-> // Only CLOCK_MONOTONIC, CLOCK_REALTIME, CLOCK_BOOTTIME are allowed.
-> long bpf_timer_init(struct bpf_timer *timer, struct bpf_map *map, int flags);
->
-> // Configure the timer to call 'callback_fn' static function.
-> long bpf_timer_set_callback(struct bpf_timer *timer, void *callback_fn);
->
-> // Arm the timer to expire 'nsec' nanoseconds from the current time.
-> long bpf_timer_start(struct bpf_timer *timer, u64 nsec, u64 flags);
->
-> // Cancel the timer and wait for callback_fn to finish if it was running.
-> long bpf_timer_cancel(struct bpf_timer *timer);
->
-[...]
-> +static enum hrtimer_restart bpf_timer_cb(struct hrtimer *hrtimer)
-> +{
-> +	struct bpf_hrtimer *t = container_of(hrtimer, struct bpf_hrtimer, timer);
-> +	struct bpf_map *map = t->map;
-> +	void *value = t->value;
-> +	struct bpf_timer_kern *timer = value + map->timer_off;
-> +	struct bpf_prog *prog;
-> +	void *callback_fn;
-> +	void *key;
-> +	u32 idx;
-> +	int ret;
-> +
-> +	/* The triple underscore bpf_spin_lock is a direct call
-> +	 * to BPF_CALL_1(bpf_spin_lock) which does irqsave.
-> +	 */
-> +	____bpf_spin_lock(&timer->lock);
-> +	/* callback_fn and prog need to match. They're updated together
-> +	 * and have to be read under lock.
-> +	 */
-> +	prog = t->prog;
-> +	callback_fn = t->callback_fn;
-> +
-> +	/* wrap bpf subprog invocation with prog->refcnt++ and -- to make
-> +	 * sure that refcnt doesn't become zero when subprog is executing.
-> +	 * Do it under lock to make sure that bpf_timer_start doesn't drop
-> +	 * prev prog refcnt to zero before timer_cb has a chance to bump it.
-> +	 */
-> +	bpf_prog_inc(prog);
-> +	____bpf_spin_unlock(&timer->lock);
-> +
-> +	/* bpf_timer_cb() runs in hrtimer_run_softirq. It doesn't migrate and
-> +	 * cannot be preempted by another bpf_timer_cb() on the same cpu.
-> +	 * Remember the timer this callback is servicing to prevent
-> +	 * deadlock if callback_fn() calls bpf_timer_cancel() on the same timer.
-> +	 */
-> +	this_cpu_write(hrtimer_running, t);
-> +	if (map->map_type == BPF_MAP_TYPE_ARRAY) {
-> +		struct bpf_array *array = container_of(map, struct bpf_array, map);
-> +
-> +		/* compute the key */
-> +		idx = ((char *)value - array->value) / array->elem_size;
-> +		key = &idx;
-> +	} else { /* hash or lru */
-> +		key = value - round_up(map->key_size, 8);
-> +	}
-> +
-> +	ret = BPF_CAST_CALL(callback_fn)((u64)(long)map,
-> +					 (u64)(long)key,
-> +					 (u64)(long)value, 0, 0);
-> +	WARN_ON(ret != 0); /* Next patch moves this check into the verifier */
-> +	bpf_prog_put(prog);
-> +
-> +	this_cpu_write(hrtimer_running, NULL);
-> +	return HRTIMER_NORESTART;
-> +}
-> +
-Your patch is awesome, and I tried your example and it works, my 
-call_back() is called after a certained time.  But  I am confued that 
-the bpf_timer_cb() function only returns HRTIMER_NORESTART,
+It isn't really all that counterintuitive. However it does put the
+onus on the driver to be consistent about things. So even a
+single-buffer xdp_buff would technically have to be a scatter-gather
+buff, but it would have no fragments in it. So the requirement would
+be to initialize the frags and data_len fields to 0 for all xdp_buff
+structures.
 
-how to trigger a periodic task, that means I want to call my call_back() 
-periodically, not just for one time ?
+> Moreover we have the "issue" for devmap in dev_map_bpf_prog_run() when we
+> perform XDP_REDIRECT with the approach you proposed and last we can reuse this
+> new flags filed for XDP hw-hints support.
+> What about reducing xdp_mem_info and add the flags field in xdp_buff/xdp_frame
+> in order to avoid increasing the xdp_buff/xdp_frame size? Am I missing
+> something?
 
-[...]
+The problem is there isn't a mem_info field in the xdp_buff. It is in
+the Rx queue info structure.
 
--- 
-Best Regards,
-Lu Wei
+Thanks,
 
+- Alex
