@@ -2,74 +2,115 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A4F95C07E96
-	for <bpf@archiver.kernel.org>; Tue,  6 Jul 2021 07:20:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E5D1C07E96
+	for <bpf@archiver.kernel.org>; Tue,  6 Jul 2021 07:33:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7BFBA61986
-	for <bpf@archiver.kernel.org>; Tue,  6 Jul 2021 07:20:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2949061995
+	for <bpf@archiver.kernel.org>; Tue,  6 Jul 2021 07:33:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230198AbhGFHWl (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 6 Jul 2021 03:22:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50394 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230164AbhGFHWl (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 6 Jul 2021 03:22:41 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 3242261206;
-        Tue,  6 Jul 2021 07:20:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625556003;
-        bh=VRirDG2vqV1nQEPAVuRRRHRJ/jYUaivULuPRDwECKCo=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=QfEKn9ty58ArQ+bjfRZX48ZeQ7V6gV5ghBr9MvqhlOgpU+BljNjLM+FP6lp/w1k17
-         T6TIDd2RHI5gbJs0q9CWab4Pw2Wq3b0udJyANczIq+eECX1+XasSTC0zvpL1TDjyks
-         qWnC8aZw81SdVsbSdfQT7DhladPquiPZm5r5JfqfKvJriinM1Zwmt/4XSSdxkhsHBf
-         A+vc6w0zbWvGDUUJICMWv1RN5SzW61otiSrXPQnLs/0SviAL2WlY/kKZHSI/DjqGsi
-         kVZcfkeSf1rMOzWU2VaNDF2Z+dXlwLV2UnLzxgEdh20tSd52VtvkV6YFQqgXRDyZcB
-         J2zEytjMNRhmQ==
-Content-Type: text/plain; charset="utf-8"
+        id S230218AbhGFHfw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 6 Jul 2021 03:35:52 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:45706 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230203AbhGFHfw (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 6 Jul 2021 03:35:52 -0400
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16674QM6185824;
+        Tue, 6 Jul 2021 03:32:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=DhBG00BRIDS9kY/TDk/2w+U8fw1d5Z+WFBhN857SAik=;
+ b=QyblCeiUXdMoqa3q3MhZIkl4WzRG0zvhrIFL/Yg5XL2u3CrGQjLNCt38BKSAWSKKN3AL
+ An5pklNzCAgkc18+lCbQZfvcAA7yqdM3amI5OagQvEzWtEpr4KCu+2cqbcwkydejZwP1
+ iCLqBoeV8ykvdsW78KyhkIopu13UL7LQhTYU3dXpzDh8QRyVsuwyrO32+2fpbbogDaQ8
+ tj1xg5/8f8w/kb7sshdDfKSST6ulo5nVJdiNxBuIRg/aXkGb4MCZdgiIRWgRzBWGE2jf
+ 9OaJP2DKctoUt9A/5cU8+qIhQXmlGCo/RFH10Y1mpr1bWv2JNR7vZop3dsB5L4QIqmOt Rg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 39mdbg6xxq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Jul 2021 03:32:41 -0400
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 16675IOB188846;
+        Tue, 6 Jul 2021 03:32:41 -0400
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 39mdbg6xx5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Jul 2021 03:32:41 -0400
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1667WNZO024949;
+        Tue, 6 Jul 2021 07:32:39 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma03fra.de.ibm.com with ESMTP id 39jfh88kkv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Jul 2021 07:32:39 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1667WaoW10944922
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 6 Jul 2021 07:32:36 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 69FD75205A;
+        Tue,  6 Jul 2021 07:32:36 +0000 (GMT)
+Received: from bangoria.ibmuc.com (unknown [9.199.43.134])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id EA0445205F;
+        Tue,  6 Jul 2021 07:32:30 +0000 (GMT)
+From:   Ravi Bangoria <ravi.bangoria@linux.ibm.com>
+To:     naveen.n.rao@linux.ibm.com, mpe@ellerman.id.au, ast@kernel.org,
+        daniel@iogearbox.net
+Cc:     ravi.bangoria@linux.ibm.com, sandipan@linux.ibm.com,
+        paulus@samba.org, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/4] bpf powerpc: Remove unused SEEN_STACK
+Date:   Tue,  6 Jul 2021 13:02:08 +0530
+Message-Id: <20210706073211.349889-2-ravi.bangoria@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20210706073211.349889-1-ravi.bangoria@linux.ibm.com>
+References: <20210706073211.349889-1-ravi.bangoria@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3] tools: bpftool: close va_list 'ap' by va_end()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <162555600314.16241.8997704889590852579.git-patchwork-notify@kernel.org>
-Date:   Tue, 06 Jul 2021 07:20:03 +0000
-References: <20210706013543.671114-1-gushengxian507419@gmail.com>
-In-Reply-To: <20210706013543.671114-1-gushengxian507419@gmail.com>
-To:     Gu Shengxian <gushengxian507419@gmail.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, gushengxian@yulong.com
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: cy01iGkQvCtyoumv8h3vh9LnZwa3uABo
+X-Proofpoint-GUID: w_ZGQdruiDboe7bzlPoSITu85UJvuUas
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-07-06_02:2021-07-02,2021-07-06 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
+ phishscore=0 impostorscore=0 adultscore=0 malwarescore=0 bulkscore=0
+ spamscore=0 suspectscore=0 lowpriorityscore=0 priorityscore=1501
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2107060035
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
+SEEN_STACK is unused on PowerPC. Remove it. Also, have
+SEEN_TAILCALL use 0x40000000.
 
-This patch was applied to bpf/bpf.git (refs/heads/master):
+Signed-off-by: Ravi Bangoria <ravi.bangoria@linux.ibm.com>
+---
+ arch/powerpc/net/bpf_jit.h | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-On Mon,  5 Jul 2021 18:35:43 -0700 you wrote:
-> From: Gu Shengxian <gushengxian@yulong.com>
-> 
-> va_list 'ap' was opened but not closed by va_end(). It should be
-> closed by va_end() before return.
-> 
-> According to suggestion of Daniel Borkmann <daniel@iogearbox.net>.
-> Signed-off-by: Gu Shengxian <gushengxian@yulong.com>
-> 
-> [...]
-
-Here is the summary with links:
-  - [v3] tools: bpftool: close va_list 'ap' by va_end()
-    https://git.kernel.org/bpf/bpf/c/519f9d19e135
-
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+diff --git a/arch/powerpc/net/bpf_jit.h b/arch/powerpc/net/bpf_jit.h
+index 99fad093f43e..d6267e93027a 100644
+--- a/arch/powerpc/net/bpf_jit.h
++++ b/arch/powerpc/net/bpf_jit.h
+@@ -116,8 +116,7 @@ static inline bool is_nearbranch(int offset)
+ #define COND_LE		(CR0_GT | COND_CMP_FALSE)
+ 
+ #define SEEN_FUNC	0x20000000 /* might call external helpers */
+-#define SEEN_STACK	0x40000000 /* uses BPF stack */
+-#define SEEN_TAILCALL	0x80000000 /* uses tail calls */
++#define SEEN_TAILCALL	0x40000000 /* uses tail calls */
+ 
+ #define SEEN_VREG_MASK	0x1ff80000 /* Volatile registers r3-r12 */
+ #define SEEN_NVREG_MASK	0x0003ffff /* Non volatile registers r14-r31 */
+-- 
+2.26.3
 
