@@ -2,153 +2,79 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7C5FC11F66
-	for <bpf@archiver.kernel.org>; Tue,  6 Jul 2021 12:14:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2D8CC11F68
+	for <bpf@archiver.kernel.org>; Tue,  6 Jul 2021 12:14:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9DB3362044
-	for <bpf@archiver.kernel.org>; Tue,  6 Jul 2021 12:14:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E0A6761EB6
+	for <bpf@archiver.kernel.org>; Tue,  6 Jul 2021 12:14:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234467AbhGFMRH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 6 Jul 2021 08:17:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:39237 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238402AbhGFLye (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 6 Jul 2021 07:54:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1625572315;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DiTI9c6T5l9HgqGMHwic7EfszJBjFE6dl2V5J6/ONnM=;
-        b=ihnzg1nUtVOt9HXUGqx5EVFBwrImaYqSH97YNgOqGHcm3uMKU/ip5J8VrDT4HJKzxH2+vM
-        DLh2k6uqzgmaDbWm/ebtxuxIll/BpkiSqSTGtkW/9dh56qRpVIHqdll+bOKPauAYFmg/1+
-        TCKvXBqPm23aVzAzT5lfy4RQGM3zBng=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-296-hxHuWiVCO9aRiLRUVGVw1Q-1; Tue, 06 Jul 2021 07:51:54 -0400
-X-MC-Unique: hxHuWiVCO9aRiLRUVGVw1Q-1
-Received: by mail-ej1-f70.google.com with SMTP id v5-20020a1709068585b02904eb913da73bso40474ejx.8
-        for <bpf@vger.kernel.org>; Tue, 06 Jul 2021 04:51:53 -0700 (PDT)
+        id S238147AbhGFMRL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 6 Jul 2021 08:17:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54372 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245112AbhGFMM1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 6 Jul 2021 08:12:27 -0400
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01A16C08EC23
+        for <bpf@vger.kernel.org>; Tue,  6 Jul 2021 04:56:21 -0700 (PDT)
+Received: by mail-il1-x133.google.com with SMTP id i13so20327919ilu.4
+        for <bpf@vger.kernel.org>; Tue, 06 Jul 2021 04:56:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=MgMduQFyj2+3I/MiKDJaPgLQZIvIl4Pjf9M0dRhRxd0=;
+        b=ARpdgP+Uisj4uBKSSFlaA6j8SPoQvVmnEDQhF1jjov8wZJtDN8VdCKIdzwi9/r6tbg
+         ApeJlxBgLE6R3JGkn7XURwJdnaOFm0zHzvlccNgk7FMtosW5dVRHeFL5goKh/i0+JVds
+         LaZeOFtMICCt/KAwCfBWPPM0SseDKJWEl9oWC9oJ3iGZ0Ld4lEmorXHLL+3Gi+LEba64
+         onPSEvJyiGPqZx2dIiELtgRzMN1wo0hfTNgkJX8WTjqp+afVh+a7EjAM+l+NIRv0OiNY
+         BIXGKVJMYRj0LeZ3Pri+mI8FdEIuVC9Oyn7yS3Jla2DXBksRvvc7GHRwB+xPd+2G/ucb
+         y5gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version:content-transfer-encoding;
-        bh=DiTI9c6T5l9HgqGMHwic7EfszJBjFE6dl2V5J6/ONnM=;
-        b=be6jeoJvUa3H8iKGL4RlRHmcsYFA2wQ8T2ieifPKZsieMUfccEH2K1vOnjf/tGej8z
-         5+PcpWFX4leVAvROgv9caaP1ebSwL2pajR2sM0np573bjtjIiP8OlHqKFxpLMQ1CXLAY
-         VPaTaw/5HSMgNqVIaUR5uPB6FjkKO9VHYQbidGryoJ0S7jpMm+2DwY+1HahiZrVRJCHQ
-         e5rtwjUtpRoakTyyvrEH1Xsbd9UyVZbgQkGoKMlhUC7aS/Qncl9r2Ss3/0BNd3lJaKEn
-         BdRHVybjkjnede2aA5OimJTdtBGqVr31w80EbexBljbmQ4Hm930ec5JdaiVcNB3IjfIL
-         GIgw==
-X-Gm-Message-State: AOAM530+dJVIW44OOiBcwOWhFhLZsPdK3DlrbFW3I/dB083P4tk12kce
-        7J2G9UFmIgIvUtCYXeEashKVsCXtw3j5wczyOobQsvSe/UFtkHbOrva7K22lH6LBi9lKYaQ8mu0
-        48sjopCCH/6gE
-X-Received: by 2002:a17:906:8149:: with SMTP id z9mr18060915ejw.547.1625572312745;
-        Tue, 06 Jul 2021 04:51:52 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzu8opq+E4dS5G9On8xvZNBMIv3W9wkdoI9GmptYcaDf1n7hRZjWvUW4mUeKLoMlcB7wl/IOw==
-X-Received: by 2002:a17:906:8149:: with SMTP id z9mr18060880ejw.547.1625572312336;
-        Tue, 06 Jul 2021 04:51:52 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id d13sm7190658eds.56.2021.07.06.04.51.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jul 2021 04:51:51 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id C5D7518072E; Tue,  6 Jul 2021 13:51:50 +0200 (CEST)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, yhs@fb.com
-Subject: Re: [PATCH bpf-next] libbpf: ignore .eh_frame sections when parsing
- elf files
-In-Reply-To: <e8385d06-ac0a-de99-de92-c91d5970b7e8@iogearbox.net>
-References: <20210629110923.580029-1-toke@redhat.com>
- <ac14ef3c-ccd5-5f74-dda5-1d9366883813@iogearbox.net>
- <87czrxyrru.fsf@toke.dk>
- <e8385d06-ac0a-de99-de92-c91d5970b7e8@iogearbox.net>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Tue, 06 Jul 2021 13:51:50 +0200
-Message-ID: <87k0m3y815.fsf@toke.dk>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=MgMduQFyj2+3I/MiKDJaPgLQZIvIl4Pjf9M0dRhRxd0=;
+        b=DdAsYc7IlRd6aCHk9fiFZi/qXmqhEDthD3Mt/pA4MM8O8eZ1qPctCJzQg9PLvfpXZR
+         yZ5+8ybT+aG60l9BGfgk0TM54XKMB6qXSC2GnSKe50zm+ppS9JkEhjZak+8E2M5GqjCL
+         ffmEUIanjJXyLc+7TBs+vdHE830uiSNJi60f5/kKYOQSGlt4QKd5SWrImgO3Srxny+Ly
+         eCakIczzc9dkilbFUybpIY61cX0cbHF/upZN0Id3UVIPcVHcRYQ8626VOhMPkgzJWrhH
+         HLFc9OcmrH7hPWTbItY1Mt3zuzRAL5TMGDN1vy7oPjeg87kS8I/lvsQaOc6YkVN7T2EZ
+         Uzug==
+X-Gm-Message-State: AOAM531s1LBDAc1PRJtKeOMO7w1RfC4Fn+CI8uJWdpxt8ekvXkJ2J+1r
+        I8Wpo9t0M4tNo9B/L1BBMoOC9AEGoKUQY5dT9C5705E+474=
+X-Google-Smtp-Source: ABdhPJw/FLqih/FWzZfan50tlDRyAlrp/KN1+zrCRo5gTgqq8PCROnK1DXcKCFLpel6KOVfRsk/NZXh0+KMKh/jI2d8=
+X-Received: by 2002:a92:b004:: with SMTP id x4mr14718899ilh.121.1625572580238;
+ Tue, 06 Jul 2021 04:56:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+From:   asaf eitani <eitaniasaf@gmail.com>
+Date:   Tue, 6 Jul 2021 14:56:09 +0300
+Message-ID: <CAAihumD0AOem=UhqRBDULQ6ZDL=n2vhn-3rLJq+mOm5-q2Wfjw@mail.gmail.com>
+Subject: Failed to attach to kprobe (non blacklisted)
+To:     bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Daniel Borkmann <daniel@iogearbox.net> writes:
+Hi BPF experts,
 
-> On 7/5/21 12:33 PM, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
->> Daniel Borkmann <daniel@iogearbox.net> writes:
->>> On 6/29/21 1:09 PM, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
->>>> The .eh_frame and .rel.eh_frame sections will be present in BPF object
->>>> files when compiled using a multi-stage compile pipe like in samples/b=
-pf.
->>>> This produces errors when loading such a file with libbpf. While the e=
-rrors
->>>> are technically harmless, they look odd and confuse users. So add .eh_=
-frame
->>>> sections to is_sec_name_dwarf() so they will also be ignored by libbpf
->>>> processing. This gets rid of output like this from samples/bpf:
->>>>
->>>> libbpf: elf: skipping unrecognized data section(32) .eh_frame
->>>> libbpf: elf: skipping relo section(33) .rel.eh_frame for section(32) .=
-eh_frame
->>>>
->>>> Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
->>>
->>> For the samples/bpf case, could we instead just add a -fno-asynchronous=
--unwind-tables
->>> to clang as cflags to avoid .eh_frame generation in the first place?
->>=20
->> Ah, great suggestion! Was trying, but failed, to figure out how to do
->> that. Just tested it, and yeah, that does fix samples; will send a
->> separate patch to add that.
->
-> Sounds good, just applied.
+I'm having issues to attach to certain kprobes and kretprobes that are
+not in the blacklist, like ftrace_modify_all_code.
+There are kernel modules that are capable of attaching to those
+kprobes and kretprobes but I could not attach them using libbpf.
 
-Awesome, thanks!
+I tried using both tracee(https://github.com/aquasecurity/tracee) and
+bpftrace(https://github.com/iovisor/bpftrace) to attach to those
+kprobes, which to my understanding uses libbpf, but both of them
+returned an "Invalid argument" error.
 
->> I still think filtering this section name in libbpf is worthwhile,
->> though, as the error message is really just noise... WDYT?
->
-> No strong opinion from my side, I can also see the argument that
-> Andrii made some time ago [0] in that normally you should never see
-> these in a BPF object file. But then ... there's BPF samples giving a
-> wrong sample. ;( And I bet some users might have copied from there,
-> and it's generally confusing from a user experience in libbpf on
-> whether it's harmless or not.
+As the blacklist doesn't seem to cover all the functions which are not
+attachable to kprobes, is there a way to get/compile such a list?
+Also, what is the specific problem with attaching to this function
+(ftrace_modify_all_code)?
 
-Yeah, they "shouldn't" be there, but they clearly can be. So given that
-it's pretty trivial to filter it, IMO, that would be the friendly thing
-to do. Let's see what Andrii thinks.
-
-> Side-question: Did you check if it is still necessary in general to
-> have this multi-stage compile pipe in samples with the native clang
-> frontend invocation (instead of bpf target one)? (Maybe it's time to
-> get rid of it in general.)
-
-I started looking into this, but chickened out of actually changing it.
-The comment above the rule mentions LLVM 12, so it seems like it has
-been updated fairly recently, specifically in:
-9618bde489b2 ("samples/bpf: Change Makefile to cope with latest llvm")
-
-OTOH, that change does seem to be a fix to the native-compilation mode;
-so maybe it would be viable to just change it to straight bpf-target
-clang compilation? Yonghong, any opinion?
-
-> Anyway, would be nice to add further context/description about it to
-> the commit message at least for future reference on what the .eh_frame
-> sections contain exactly and why it's harmless. (Right now it only
-> states that it is but without more concrete rationale, would be good
-> to still add.)
-
-Sure, can add that and send a v2 :)
-
--Toke
-
+Thanks.
