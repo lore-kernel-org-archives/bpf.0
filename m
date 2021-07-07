@@ -2,143 +2,277 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53FB7C07E9C
-	for <bpf@archiver.kernel.org>; Wed,  7 Jul 2021 22:39:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B622C07E95
+	for <bpf@archiver.kernel.org>; Wed,  7 Jul 2021 22:39:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 343C861C77
-	for <bpf@archiver.kernel.org>; Wed,  7 Jul 2021 22:39:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7B07261CCA
+	for <bpf@archiver.kernel.org>; Wed,  7 Jul 2021 22:39:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231202AbhGGWlp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 7 Jul 2021 18:41:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37210 "EHLO
+        id S231213AbhGGWly (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 7 Jul 2021 18:41:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230501AbhGGWlo (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 7 Jul 2021 18:41:44 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B7D0C06175F
-        for <bpf@vger.kernel.org>; Wed,  7 Jul 2021 15:39:03 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id g19so5688075ybe.11
-        for <bpf@vger.kernel.org>; Wed, 07 Jul 2021 15:39:03 -0700 (PDT)
+        with ESMTP id S230106AbhGGWly (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 7 Jul 2021 18:41:54 -0400
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 849EAC061574;
+        Wed,  7 Jul 2021 15:39:12 -0700 (PDT)
+Received: by mail-il1-x129.google.com with SMTP id z1so4672272ils.0;
+        Wed, 07 Jul 2021 15:39:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CInolWkjka4YkrrNE0uUpeI7eDmXu/P/OnqT82g/gxA=;
-        b=PZe5eNo47W2O6JWl6IvEyFZ2j8vMH6W+Yqd7xmUrWfgjwH+reiCDGVL+kO8Qp4DDvy
-         FAMrGQS06HmJprdYnBe65unEeBzL4mBY/mrQDwHQRBgJtsGTeL0OpZOdhkLDytQZE6z6
-         3SgofXsS/J6n7bCPM86MMj5RudY5nQXCpCaK/YcnGiDwDQ6vcXtXqJEXJU1LKAuDJeKs
-         7Vr3Q8XPNNe4sXitkoDIrYTYQYieCMlNWaHY+NdeymTCsr8i42wLHiZh6dk/gFE3A0gn
-         2uitjGokmLkXiTfDlTQ9WuL3uP1r5ipIxlInzb/aAU5rAIvCzu3JuWGMn2Iw89cJqQkZ
-         Txww==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=z+sjd+s/r2IhZPy8Smr9kFhc+9Fy1TVVXFgPMydonWE=;
+        b=h53Ztx3pkuiQ0XhkrJXBD1WoQ0LPeRAVTi6BHcxm6N6ciiUbqN2/8Z9QmNaOINgOYD
+         rc0gFB3yD7ZeVtvKo+bGpQDy1ChFtL1ACezVHJTE+85oW0rFeDEFjZRQQBKKZQyRBNvk
+         ozOSpOyCiWxAerMgdDwgEIpEkCHEKOAM21oV45ZWJtfScmSQ4DqYw3CuTj2UKTwALYyH
+         QADdGoCOdNabnZlBThwr2YKORtg0L0R/OkEblCWV6fB1c1yxwafSzObj7E4gq1w/YLZU
+         saHI/hg3gO4SHzTu1ZgRJDCury/UHRJIuooV5YNRGkaErwPNeJlzrZfatLyrYN/UF6Zb
+         nNwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CInolWkjka4YkrrNE0uUpeI7eDmXu/P/OnqT82g/gxA=;
-        b=GQvWxGiua6YSY8S0rlr2/n7p1IbXPaApke+oTljJnC8z4HFZ6Yft+/VqcIBDU7F5Ne
-         m54bH3vt+a2qu1meI2Q433ycBievAmmIY9yI7FFCkluRwins3oHra8KP0LGCL91dH0E/
-         57mLp5QMQLwQii+raC61zZgDGo9/O+DWGlgYh2qiP2Va2irF7hR2jQ1d+SqYtDlRmC7n
-         OEa5dW8bmFy7cRDlDUOsq5ZUfvO6abnR1ESZnuk80cV+VLO6TbH1QVa9eB8s4DEB5nH+
-         zpz59Axg1ZUebZPRDfeJiMCjMD0wFzIyW/AZyvOGaRtiA4id68zNjj3KW77HjEic/hSO
-         I4qw==
-X-Gm-Message-State: AOAM530qRPgW42PUE9yzV7JFyYbMv96Zjs3PDlvrKwuttdMWbF1IIVr4
-        iyf5wrETeISi1mJ9HPIb9PicSXQhNsp7SCi16gY=
-X-Google-Smtp-Source: ABdhPJyZzr2DXM0rtwJ8mY0M1aog2DkL3T53V+Gw9B2k5a0+DFwxQwUEECybLe+HIL/10vyfwoGMH8Dkzqmj1TfH3uM=
-X-Received: by 2002:a25:bd09:: with SMTP id f9mr36734272ybk.27.1625697542324;
- Wed, 07 Jul 2021 15:39:02 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210705190926.222119-1-m@lambda.lt>
-In-Reply-To: <20210705190926.222119-1-m@lambda.lt>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 7 Jul 2021 15:38:51 -0700
-Message-ID: <CAEf4BzaHCgNSfoEVXkBweycHtVj2MKBBH45aZy+FM-BTjSJ3kA@mail.gmail.com>
-Subject: Re: [PATCH bpf] libbpf: fix race when pinning maps in parallel
-To:     Martynas Pumputis <m@lambda.lt>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Joe Stringer <joe@wand.net.nz>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=z+sjd+s/r2IhZPy8Smr9kFhc+9Fy1TVVXFgPMydonWE=;
+        b=fR1TpAWkf2ujGQCVt8ONnWzvZ4REz/8V4BsbcAHhR6QjZurfLk6EHzvbXyl/iC8lDE
+         04YXQzNQ5yzZXs8cAwlcAN63aN9mTec5PrN7lYurkxsfeAP07Z0MkudE2YCbdnt+257p
+         W5//UdzPID9BkyatqT2Q8BMPGkJrnGsTfvhmlc4W2+bkQycLNbuHJxJCEXcfYzFBIjbJ
+         wSVUgzkadEtmjeOGoTii5dFpVZTBT5GdXy1wuHTO6eigPvVK9T19AeikUeJ3zyRQJjtI
+         omchffPxXS6P5a1xNpRTaUQFUsxrvzqTZN0uhQLCqoXyoIzAZK3Ju5KMY8TPW0xi8HH+
+         bStQ==
+X-Gm-Message-State: AOAM531M0MHyYb7I8Bocx3txf4X44I5iaPt9xEvl0TqWJAt5QYbdAT9N
+        6lWz3zplxzrlAiWTKjhY4+g=
+X-Google-Smtp-Source: ABdhPJzpMaKzAQZj90Odn/9qGvYG2wvDUuP8moltFRIfZw3Ahm6Nxun2xK+bAtkiFpQUACo6TeGYZw==
+X-Received: by 2002:a92:c84f:: with SMTP id b15mr19454344ilq.27.1625697551988;
+        Wed, 07 Jul 2021 15:39:11 -0700 (PDT)
+Received: from john-Precision-5820-Tower.lan ([172.243.157.240])
+        by smtp.gmail.com with ESMTPSA id f4sm253455ile.8.2021.07.07.15.39.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jul 2021 15:39:11 -0700 (PDT)
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andriin@fb.com
+Cc:     john.fastabend@gmail.com, bpf@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH bpf v2 1/2] bpf: track subprog poke correctly, fix use-after-free
+Date:   Wed,  7 Jul 2021 15:38:47 -0700
+Message-Id: <20210707223848.14580-2-john.fastabend@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210707223848.14580-1-john.fastabend@gmail.com>
+References: <20210707223848.14580-1-john.fastabend@gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Jul 5, 2021 at 12:08 PM Martynas Pumputis <m@lambda.lt> wrote:
->
-> When loading in parallel multiple programs which use the same to-be
-> pinned map, it is possible that two instances of the loader will call
-> bpf_object__create_maps() at the same time. If the map doesn't exist
-> when both instances call bpf_object__reuse_map(), then one of the
-> instances will fail with EEXIST when calling bpf_map__pin().
->
-> Fix the race by retrying creating a map if bpf_map__pin() returns
-> EEXIST. The fix is similar to the one in iproute2: e4c4685fd6e4 ("bpf:
-> Fix race condition with map pinning").
->
-> Cc: Joe Stringer <joe@wand.net.nz>
-> Signed-off-by: Martynas Pumputis <m@lambda.lt>
-> ---
->  tools/lib/bpf/libbpf.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 1e04ce724240..7a31c7c3cd21 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-> @@ -4616,10 +4616,12 @@ bpf_object__create_maps(struct bpf_object *obj)
->         char *cp, errmsg[STRERR_BUFSIZE];
->         unsigned int i, j;
->         int err;
-> +       bool retried = false;
+Subprograms are calling map_poke_track but on program release there is no
+hook to call map_poke_untrack. But on prog release the aux memory is freed
+even though we still have a reference to it in the element list of the
+map aux data.
 
-retried has to be reset for each map, so just move it inside the for
-loop? you can also generalize it to retry_cnt (> 1 attempts) to allow
-for more extreme cases of multiple loaders fighting very heavily
+So when we run map_poke_run() we end up accessing free'd memory. This
+triggers with KASAN in prog_array_map_poke_run() shown here.
 
->
->         for (i = 0; i < obj->nr_maps; i++) {
->                 map = &obj->maps[i];
->
-> +retry:
->                 if (map->pin_path) {
->                         err = bpf_object__reuse_map(map);
->                         if (err) {
-> @@ -4660,9 +4662,13 @@ bpf_object__create_maps(struct bpf_object *obj)
->                 if (map->pin_path && !map->pinned) {
->                         err = bpf_map__pin(map, NULL);
->                         if (err) {
-> +                               zclose(map->fd);
-> +                               if (!retried && err == EEXIST) {
+    [  402.824686] ==================================================================
+    [  402.824689] BUG: KASAN: use-after-free in prog_array_map_poke_run+0xc2/0x34e
+    [  402.824698] Read of size 4 at addr ffff8881905a7940 by task hubble-fgs/4337
 
-so I'm also wondering... should we commit at this point to trying to
-pin and not attempt to re-create the map? I'm worried that
-bpf_object__create_map() is not designed and tested to be called
-multiple times for the same bpf_map, but it's technically possible for
-it to be called multiple times in this scenario. Check the inner map
-creation scenario, for example (btw, I think there is a bug in
-bpf_object__create_map clean up for inner map, care to take a look at
-that as well?).
+    [  402.824705] CPU: 1 PID: 4337 Comm: hubble-fgs Tainted: G          I       5.12.0+ #399
+    [  402.824715] Call Trace:
+    [  402.824719]  dump_stack+0x93/0xc2
+    [  402.824727]  print_address_description.constprop.0+0x1a/0x140
+    [  402.824736]  ? prog_array_map_poke_run+0xc2/0x34e
+    [  402.824740]  ? prog_array_map_poke_run+0xc2/0x34e
+    [  402.824744]  kasan_report.cold+0x7c/0xd8
+    [  402.824752]  ? prog_array_map_poke_run+0xc2/0x34e
+    [  402.824757]  prog_array_map_poke_run+0xc2/0x34e
+    [  402.824765]  bpf_fd_array_map_update_elem+0x124/0x1a0
 
-So unless we want to allow map re-creation if (in a highly unlikely
-scenario) someone already unpinned the other instance, I'd say we
-should just bpf_map__pin() here directly, maybe in a short loop to
-allow for a few attempts.
+The elements concerned are walked like this,
 
-> +                                       retried = true;
-> +                                       goto retry;
-> +                               }
->                                 pr_warn("map '%s': failed to auto-pin at '%s': %d\n",
->                                         map->name, map->pin_path, err);
-> -                               zclose(map->fd);
->                                 goto err_out;
->                         }
->                 }
-> --
-> 2.32.0
->
+    for (i = 0; i < elem->aux->size_poke_tab; i++) {
+           poke = &elem->aux->poke_tab[i];
+
+So the access to size_poke_tab is the 4B read, verified by checking offsets
+in the KASAN dump,
+
+    [  402.825004] The buggy address belongs to the object at ffff8881905a7800
+                    which belongs to the cache kmalloc-1k of size 1024
+    [  402.825008] The buggy address is located 320 bytes inside of
+                    1024-byte region [ffff8881905a7800, ffff8881905a7c00)
+
+With pahol output,
+
+     struct bpf_prog_aux {
+     ...
+            /* --- cacheline 5 boundary (320 bytes) --- */
+            u32                        size_poke_tab;        /*   320     4 */
+     ...
+
+In general subprograms do not manage their own data structures. For example
+btf func_info, linfo, etc are just pointers to the prog structure. This
+allows reference counting and cleanup to be done on the main prog.
+
+The aux->poke_tab struct however did not follow this logic. The initial fix
+for above use after free further embedded subprogram tracking of poke data
+tracking into the subprogram with proper reference counting. However,
+Daniel and Alexei questioned why we were treating these objects specially.
+I agree its unnecessary.
+
+The fix here removes the per subprogram poke data structure alloc and map
+tracking and instead simply points the aux->poke_tab pointer at the main
+programs poke_tab. This way map tracking is done on the origin program
+and we do not need to manage them per subprogram. A couple small
+complication arise here. First on bpf_prog_free_deferred(), where we unwind
+the prog reference counting and kfree objects, we need to ensure that we
+don't try to double free the poke_tab when free'ing the subprog structures.
+This is easily solved by NULL'ing the poke_tab pointer.
+
+The second detail is to ensure that per subprog jit logic only does fixups
+on poke_tab[] entries it owns. To do this we add a pointer in the poke
+structure to point at the subprog value so JITs can easily check while
+walking the poke_tab structure if the current entry belongs to the current
+program. This change is necessary per JIT. See x86/net/bpf_jit_compo.c func
+bpf_tail_call_direct_fixup() for the details. Only x86 is currently using
+the poke_tab struct so we only need to fixup the x86 JIT.
+
+On the error path we omit cleaning up the poke->aux field because these
+are only ever referenced from the JIT side, but on error we will never
+make it to the JIT so its fine to leave them dangling. Removing these
+pointers would complicate the error path for no reason.
+
+Signed-off-by: John Fastabend <john.fastabend@gmail.com>
+---
+ arch/x86/net/bpf_jit_comp.c |  4 ++++
+ include/linux/bpf.h         |  1 +
+ kernel/bpf/core.c           |  7 +++++-
+ kernel/bpf/verifier.c       | 45 +++++++------------------------------
+ 4 files changed, 19 insertions(+), 38 deletions(-)
+
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index 2a2e290fa5d8..ce8dbc9310a9 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -576,6 +576,10 @@ static void bpf_tail_call_direct_fixup(struct bpf_prog *prog)
+ 
+ 	for (i = 0; i < prog->aux->size_poke_tab; i++) {
+ 		poke = &prog->aux->poke_tab[i];
++
++		if (poke->aux && poke->aux != prog->aux)
++			continue;
++
+ 		WARN_ON_ONCE(READ_ONCE(poke->tailcall_target_stable));
+ 
+ 		if (poke->reason != BPF_POKE_REASON_TAIL_CALL)
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 02b02cb29ce2..a7532cb3493a 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -777,6 +777,7 @@ struct bpf_jit_poke_descriptor {
+ 	void *tailcall_target;
+ 	void *tailcall_bypass;
+ 	void *bypass_addr;
++	void *aux;
+ 	union {
+ 		struct {
+ 			struct bpf_map *map;
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 5e31ee9f7512..72810314c43b 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -2211,8 +2211,13 @@ static void bpf_prog_free_deferred(struct work_struct *work)
+ #endif
+ 	if (aux->dst_trampoline)
+ 		bpf_trampoline_put(aux->dst_trampoline);
+-	for (i = 0; i < aux->func_cnt; i++)
++	for (i = 0; i < aux->func_cnt; i++) {
++		/* poke_tab in subprogs are links to main prog and are
++		 * freed above so delete link without kfree.
++		 */
++		aux->func[i]->aux->poke_tab = NULL;
+ 		bpf_jit_free(aux->func[i]);
++	}
+ 	if (aux->func_cnt) {
+ 		kfree(aux->func);
+ 		bpf_prog_unlock_free(aux->prog);
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 6e2ebcb0d66f..a58e19223e85 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -12109,30 +12109,17 @@ static int jit_subprogs(struct bpf_verifier_env *env)
+ 		/* the btf and func_info will be freed only at prog->aux */
+ 		func[i]->aux->btf = prog->aux->btf;
+ 		func[i]->aux->func_info = prog->aux->func_info;
++		func[i]->aux->poke_tab = prog->aux->poke_tab;
++		func[i]->aux->size_poke_tab = prog->aux->size_poke_tab;
+ 
+ 		for (j = 0; j < prog->aux->size_poke_tab; j++) {
+-			u32 insn_idx = prog->aux->poke_tab[j].insn_idx;
+-			int ret;
++			struct bpf_jit_poke_descriptor *poke;
+ 
+-			if (!(insn_idx >= subprog_start &&
+-			      insn_idx <= subprog_end))
+-				continue;
+-
+-			ret = bpf_jit_add_poke_descriptor(func[i],
+-							  &prog->aux->poke_tab[j]);
+-			if (ret < 0) {
+-				verbose(env, "adding tail call poke descriptor failed\n");
+-				goto out_free;
+-			}
+-
+-			func[i]->insnsi[insn_idx - subprog_start].imm = ret + 1;
++			poke = &prog->aux->poke_tab[j];
+ 
+-			map_ptr = func[i]->aux->poke_tab[ret].tail_call.map;
+-			ret = map_ptr->ops->map_poke_track(map_ptr, func[i]->aux);
+-			if (ret < 0) {
+-				verbose(env, "tracking tail call prog failed\n");
+-				goto out_free;
+-			}
++			if (poke->insn_idx < subprog_end &&
++			    poke->insn_idx >= subprog_start)
++				poke->aux = func[i]->aux;
+ 		}
+ 
+ 		/* Use bpf_prog_F_tag to indicate functions in stack traces.
+@@ -12163,18 +12150,6 @@ static int jit_subprogs(struct bpf_verifier_env *env)
+ 		cond_resched();
+ 	}
+ 
+-	/* Untrack main program's aux structs so that during map_poke_run()
+-	 * we will not stumble upon the unfilled poke descriptors; each
+-	 * of the main program's poke descs got distributed across subprogs
+-	 * and got tracked onto map, so we are sure that none of them will
+-	 * be missed after the operation below
+-	 */
+-	for (i = 0; i < prog->aux->size_poke_tab; i++) {
+-		map_ptr = prog->aux->poke_tab[i].tail_call.map;
+-
+-		map_ptr->ops->map_poke_untrack(map_ptr, prog->aux);
+-	}
+-
+ 	/* at this point all bpf functions were successfully JITed
+ 	 * now populate all bpf_calls with correct addresses and
+ 	 * run last pass of JIT
+@@ -12255,11 +12230,7 @@ static int jit_subprogs(struct bpf_verifier_env *env)
+ 	for (i = 0; i < env->subprog_cnt; i++) {
+ 		if (!func[i])
+ 			continue;
+-
+-		for (j = 0; j < func[i]->aux->size_poke_tab; j++) {
+-			map_ptr = func[i]->aux->poke_tab[j].tail_call.map;
+-			map_ptr->ops->map_poke_untrack(map_ptr, func[i]->aux);
+-		}
++		func[i]->aux->poke_tab = NULL;
+ 		bpf_jit_free(func[i]);
+ 	}
+ 	kfree(func);
+-- 
+2.17.1
+
