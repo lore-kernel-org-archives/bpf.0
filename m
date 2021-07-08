@@ -2,65 +2,30 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9154BC07E95
-	for <bpf@archiver.kernel.org>; Wed,  7 Jul 2021 23:49:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 06E36C07E9B
+	for <bpf@archiver.kernel.org>; Thu,  8 Jul 2021 00:05:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 69FEE61C2F
-	for <bpf@archiver.kernel.org>; Wed,  7 Jul 2021 23:49:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D474261C94
+	for <bpf@archiver.kernel.org>; Thu,  8 Jul 2021 00:05:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbhGGXwU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 7 Jul 2021 19:52:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52610 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbhGGXwT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 7 Jul 2021 19:52:19 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0187EC061574;
-        Wed,  7 Jul 2021 16:49:38 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id r135so6053879ybc.0;
-        Wed, 07 Jul 2021 16:49:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=M62+xgW8tbtCkoE/qKRY/F/lq3oX6OU+lrgDIeeGUJI=;
-        b=o81Nx/Y/DTY6FoB3IW6z6OqQpZil1gT/cBeR3xNdRkfiszkBgfH4ArUls8s4L6pEsj
-         2W3Fg7Hxm/xuZvzQmRwEF3VnPrgSFwxeWBuAjErcUvrI03tMX01AJ5DxZXATnK+WJybD
-         4EnJ5enwruhx7XUVlJz6rS7eA0M+WWo2NqVrznV/JNiTpUmdHM3AEXxqYeCaMupmzb0s
-         bk77vQ1jyhZnKJSLutkaHsccf24BcVbgwkiIwiDgK5IePs0wlH2bcr/7i4tN0Cr1yMcR
-         X2/lf+g+DcJfj3gqMYBz0GvUnYkYvL0imaOe/2sd2Vxk6Fy7ee0U9dPbf3gf08AQIaE1
-         i0lQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=M62+xgW8tbtCkoE/qKRY/F/lq3oX6OU+lrgDIeeGUJI=;
-        b=p/fNHF5ZuVG2sUNAvq1eTGvfN5sgICFLRqLCUMnnvcqoqWjWRQ1KhtIdwF0JMzKc2l
-         /qzbF0UuNyXaANrGJUolHupKirFcYfcwWaOoGlF9bltkIBVzcJ17S6kseiTntj3B18PJ
-         RGstBZxqVRVgmCpgHNfiGY9k38ehf4NzmVe+X4PTSO5rr3TmCSMoZvA+6YeVfrv3V/Yx
-         DZz5Y98jZ/K9hKCvtdF0OcVoKS8b+ZiXoUAHv/l8bZSzh1Lo1mM8UaI4xXheGyQtlGxK
-         t9gKSP9WPJrujnFmwOz7ehcXrnLzkiAkao8kMBNibJOW/bHEIx/p24+rB9Ddq+Z/nmVP
-         feqw==
-X-Gm-Message-State: AOAM532/Jwao1ieQn5m66wUxXGIcruKtomLpYGxPek4Awhq7Hkkh2SXn
-        t+hfEILDiGxoy1ZeVN/WmNksplY7ehYgy1eK/gc=
-X-Google-Smtp-Source: ABdhPJyfABX1O38vDqWzo/jHf5GAudd8qlqgCVCYhgmC/vW6hNu9bpBNpYY6VmvHX4HxolQrS4k1Z1MMLmw6BeZJWQQ=
-X-Received: by 2002:a25:3787:: with SMTP id e129mr34722432yba.459.1625701777220;
- Wed, 07 Jul 2021 16:49:37 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210629095543.391ac606@oasis.local.home> <CAEf4BzZPb=cPf9V1Bz+USiq+b5opUTNkj4+CRjXdHcmExW3jVg@mail.gmail.com>
- <20210707184518.618ae497@rorschach.local.home>
-In-Reply-To: <20210707184518.618ae497@rorschach.local.home>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 7 Jul 2021 16:49:26 -0700
-Message-ID: <CAEf4BzZ=hFZw1RNx0Pw=kMNq2xRrqHYCQQ_TY_pt86Zg9HFJfA@mail.gmail.com>
-Subject: Re: [PATCH] tracepoint: Add tracepoint_probe_register_may_exist() for
- BPF tracing
-To:     Steven Rostedt <rostedt@goodmis.org>
+        id S229987AbhGHAI2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 7 Jul 2021 20:08:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59374 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229729AbhGHAI2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 7 Jul 2021 20:08:28 -0400
+Received: from rorschach.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9352261C42;
+        Thu,  8 Jul 2021 00:05:46 +0000 (UTC)
+Date:   Wed, 7 Jul 2021 20:05:44 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
         syzbot+721aa903751db87aa244@syzkaller.appspotmail.com,
         Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
@@ -70,41 +35,32 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
         netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH] tracepoint: Add tracepoint_probe_register_may_exist()
+ for BPF tracing
+Message-ID: <20210707200544.1fbfd42b@rorschach.local.home>
+In-Reply-To: <CAEf4BzZ=hFZw1RNx0Pw=kMNq2xRrqHYCQQ_TY_pt86Zg9HFJfA@mail.gmail.com>
+References: <20210629095543.391ac606@oasis.local.home>
+        <CAEf4BzZPb=cPf9V1Bz+USiq+b5opUTNkj4+CRjXdHcmExW3jVg@mail.gmail.com>
+        <20210707184518.618ae497@rorschach.local.home>
+        <CAEf4BzZ=hFZw1RNx0Pw=kMNq2xRrqHYCQQ_TY_pt86Zg9HFJfA@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Jul 7, 2021 at 3:45 PM Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> On Wed, 7 Jul 2021 15:12:28 -0700
-> Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
->
-> > There doesn't seem to be anything conceptually wrong with attaching
-> > the same BPF program twice to the same tracepoint. Is it a hard
-> > requirement to have a unique tp+callback combination, or was it done
-> > mostly to detect an API misuse? How hard is it to support such use
-> > cases?
-> >
-> > I was surprised to discover this is not supported (though I never had
-> > a use for this, had to construct a test to see the warning).
->
-> The callback is identified by the function and its data combination. If
-> there's two callbacks calling the same function with the same data on
-> the same tracepoint, one question is, why? And the second is how do you
-> differentiate the two?
+On Wed, 7 Jul 2021 16:49:26 -0700
+Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
 
-For places where multiple BPF programs can be attached (kprobes,
-cgroup programs, etc), we don't put a restriction that all programs
-have to be unique. It's totally legal to have the same program
-attached multiple times. So having this for tracepoints will be a
-one-off behavior.
+> As for why the user might need that, it's up to the user and I don't
+> want to speculate because it will always sound contrived without a
+> specific production use case. But people are very creative and we try
+> not to dictate how and what can be done if it doesn't break any
+> fundamental assumption and safety.
 
-As for why the user might need that, it's up to the user and I don't
-want to speculate because it will always sound contrived without a
-specific production use case. But people are very creative and we try
-not to dictate how and what can be done if it doesn't break any
-fundamental assumption and safety.
+I guess it doesn't matter, because if they try to do it, the second
+attachment will simply fail to attach.
 
->
-> -- Steve
+-- Steve
