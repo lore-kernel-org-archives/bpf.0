@@ -2,69 +2,62 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 34A83C07E96
-	for <bpf@archiver.kernel.org>; Thu,  8 Jul 2021 15:41:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 09F4AC07E96
+	for <bpf@archiver.kernel.org>; Thu,  8 Jul 2021 15:47:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1D6D46162B
-	for <bpf@archiver.kernel.org>; Thu,  8 Jul 2021 15:41:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DE6DE61483
+	for <bpf@archiver.kernel.org>; Thu,  8 Jul 2021 15:47:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232067AbhGHPoF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 8 Jul 2021 11:44:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37304 "EHLO
+        id S231967AbhGHPud (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 8 Jul 2021 11:50:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231915AbhGHPoD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 8 Jul 2021 11:44:03 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62BB0C061574;
-        Thu,  8 Jul 2021 08:41:21 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id c17so10335572ejk.13;
-        Thu, 08 Jul 2021 08:41:21 -0700 (PDT)
+        with ESMTP id S231845AbhGHPuc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 8 Jul 2021 11:50:32 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03C64C06175F
+        for <bpf@vger.kernel.org>; Thu,  8 Jul 2021 08:47:49 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id d12so7495285wre.13
+        for <bpf@vger.kernel.org>; Thu, 08 Jul 2021 08:47:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5bU32yJf64wWn9CfdxsNuw5tyIVyQgOrDIQvU4YN6Bc=;
-        b=VXajLMBrDp9MZZibgCZ0QCEOc5WbEkmG/g1P1YrY5mnZdqXZmKi9ttOjsQr9Zd17k4
-         CF0X4hUWbXylNczO00mH4C8+EiaNfeEgrxjat6YShpfqsvrxSTjlZdS4zmuCt2BUXRJF
-         2A2MUXpNJX5mzZhl0D4Eq7U5aRxmmMb9wTNDPBA9ew1KeHGrEIYzzLMxfEz808qgAp5v
-         REw6HfCcEPLwvGFUYvmCLcFhy70/F1A7K4R5CRvbSrFxyHUlwAXCjdk27HzwH8qCXFPK
-         o04KSL/hgtx4thmUEg9QwjJ4VkcFlhT7nTZrkPSmZceYMie+Qq/D7M05xAUtB/M2JDcG
-         ladA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=WJZpdcS1MW7Mj0T2TQvKXriF3MrXgDJAl+1qoxtsXRg=;
+        b=mHfMB0eAj0cSxvZ60HKwN3+EhKCHtLHT+8luhQ4eY8fRDYpK9CaMIv1ifSd1fYpdy/
+         XS6M0+kAJNKbfnba459XmxOqX4Y7EN6z71Q9go4+f1zU5We4FEgis8U+Vn/Ct+RSOPqb
+         fkzW7m9HokblG4zTQoDzp8XQoge2BZKTB9UjRlvCtT2BZs2BybA9GaFYRRr2ipw3Vxs8
+         thuRsKHak4/x7lfKkC/+0gaSfKTOOT6/RIo/cZXRLmUmKihtR9SFdGJL8N+I2ObgBUO1
+         O+qr9cpRMZ0Fx53Le7z3jODSLuCCWE5QhAmp0c4j7kK37z4Axp1aQ2p3pXft/mLpryc7
+         bc4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5bU32yJf64wWn9CfdxsNuw5tyIVyQgOrDIQvU4YN6Bc=;
-        b=HgqDWjtEBmahzDgWZhoVtOPJ/vGu0qFS4NK23ZigKHF4I4tBH39Mn0oODhIC1dIOI6
-         vwnZL6tcnCeNSA04q1wbuGWNSGq96cSTA2OvfDwhcZCAXjuxnL9SKZDffvL00v4ieT++
-         OzwYP9M5plF9F5QXFizFohbq3remO3aIdnLobd8cFnuw79gP0BhaNqW9maAxtnNuk8jq
-         oZ+yebF/uuKhmMEhjHAPC8/8BzlgbsaLbmElHTQTwYOZVneDLQlkLPWR8DmldGYW89gK
-         wkT249XJMnAAhDeVJneMtrgpPCB49aacBgAOoeZfRECfIXiyul6xDbCqTm3XOtGdITN2
-         Zzgg==
-X-Gm-Message-State: AOAM5317lCjwL7Gr3eFhuZqSHdy7EJkm8UtYSbt0+88IpFNsnmRqfdp4
-        ZsaZk7yBmfLC3FdXVdlAzWxUK+kXsRkfJiNjg/4=
-X-Google-Smtp-Source: ABdhPJwCNoAHske5J5uWUfE99nkBOdwzueLyp2cACPMXjO+HwO0XN2yQgspY5xXym3RPo7ole52HvaSDABcfj++0wY8=
-X-Received: by 2002:a17:907:3e22:: with SMTP id hp34mr20001925ejc.470.1625758879806;
- Thu, 08 Jul 2021 08:41:19 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAKgT0Ueyc8BqjkdTVC_c-Upn-ghNeahYQrWJtQSqxoqN7VvMWA@mail.gmail.com>
- <29403911-bc26-dd86-83b8-da3c1784d087@huawei.com> <CAKgT0UcGDYcuZRXX1MaFAzzBySu3R4_TSdC6S0cyS7Ppt_dNng@mail.gmail.com>
- <YOX6bPEL0cq8CgPG@enceladus> <CAKgT0UfPFbAptXMJ4BQyeAadaxyHfkKRfeiwhrVMwafNEM_0cw@mail.gmail.com>
- <YOcKASZ9Bp0/cz1d@enceladus> <CAKgT0UfJuvdkccr=SXWNUaGx7y5nUHFL-E9g3qi4sagY_jWUUQ@mail.gmail.com>
- <YOcQyKt6i+UeMzSS@enceladus> <YOcXDISpR7Cf+eZG@enceladus> <CAKgT0UcoLE=MhG+QxS=up5BH_cK5FBSwyMHDvfUg2g8083UM+w@mail.gmail.com>
- <YOcbgEKqq/cRBxX9@enceladus>
-In-Reply-To: <YOcbgEKqq/cRBxX9@enceladus>
-From:   Alexander Duyck <alexander.duyck@gmail.com>
-Date:   Thu, 8 Jul 2021 08:41:08 -0700
-Message-ID: <CAKgT0Ucnd4Oia8xy2D65O04901+Rh6cepX-d2vK1+0_Of2NwoA@mail.gmail.com>
-Subject: Re: [PATCH net-next RFC 1/2] page_pool: add page recycling support
- based on elevated refcnt
-To:     Ilias Apalodimas <ilias.apalodimas@linaro.org>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=WJZpdcS1MW7Mj0T2TQvKXriF3MrXgDJAl+1qoxtsXRg=;
+        b=L6SzMeekHP6EWjuyo/decKqtLoe+N+46XchYHJJCchkb/8lbS5Hkg/SDSi4n95k+pJ
+         hOwJGoD4QNnAoQNkH5Jc7WZrwR4pDJ+idOWp/177Y8k7k7Qwa6Ckf0wTRrDihVs5NJSL
+         vLm6tsD6O/JkAI0iAI7NCyQ58ahTo78Ff0QKFVQX4oLPQZyAgwyy0KZW00AttaxAcqUD
+         2nu2NM3cbLokn6qcuBW73+WwxMulH875QVhxmc5+8Q7Mr+OJmxJDWN6OPUuIHWumKVuo
+         BaisPnTj681gJRitdJwCsxF4IxJ1erhFqkYyfGspa0C3Y9BPP9v6P4/bTSsqHyWnwbaD
+         oRbw==
+X-Gm-Message-State: AOAM531slcqFQWjk/fHj1uxJL1qahgtIqu8g61ToVpyojafxlYRNE9d6
+        NOAXmHSGHxF/OgjWqt8Ij/Kc0A==
+X-Google-Smtp-Source: ABdhPJyDE9/Btnk3TzRVAgkbEJA7gXb+0SPCg1ltU0i0gw0XPQQtP0VO3H33i/Yx5mdMOloXMWS1dg==
+X-Received: by 2002:a5d:47a7:: with SMTP id 7mr3990891wrb.150.1625759267621;
+        Thu, 08 Jul 2021 08:47:47 -0700 (PDT)
+Received: from enceladus (ppp-94-66-242-227.home.otenet.gr. [94.66.242.227])
+        by smtp.gmail.com with ESMTPSA id x1sm9535888wmc.0.2021.07.08.08.47.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jul 2021 08:47:47 -0700 (PDT)
+Date:   Thu, 8 Jul 2021 18:47:43 +0300
+From:   Ilias Apalodimas <ilias.apalodimas@linaro.org>
+To:     Alexander Duyck <alexander.duyck@gmail.com>
 Cc:     Yunsheng Lin <linyunsheng@huawei.com>,
         David Miller <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>, linuxarm@openeuler.org,
@@ -89,62 +82,88 @@ Cc:     Yunsheng Lin <linyunsheng@huawei.com>,
         nogikh@google.com, Marco Elver <elver@google.com>,
         Netdev <netdev@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH net-next RFC 1/2] page_pool: add page recycling support
+ based on elevated refcnt
+Message-ID: <YOceH0VLXVl6QJEI@enceladus>
+References: <CAKgT0UcGDYcuZRXX1MaFAzzBySu3R4_TSdC6S0cyS7Ppt_dNng@mail.gmail.com>
+ <YOX6bPEL0cq8CgPG@enceladus>
+ <CAKgT0UfPFbAptXMJ4BQyeAadaxyHfkKRfeiwhrVMwafNEM_0cw@mail.gmail.com>
+ <YOcKASZ9Bp0/cz1d@enceladus>
+ <CAKgT0UfJuvdkccr=SXWNUaGx7y5nUHFL-E9g3qi4sagY_jWUUQ@mail.gmail.com>
+ <YOcQyKt6i+UeMzSS@enceladus>
+ <YOcXDISpR7Cf+eZG@enceladus>
+ <CAKgT0UcoLE=MhG+QxS=up5BH_cK5FBSwyMHDvfUg2g8083UM+w@mail.gmail.com>
+ <YOcbgEKqq/cRBxX9@enceladus>
+ <CAKgT0Ucnd4Oia8xy2D65O04901+Rh6cepX-d2vK1+0_Of2NwoA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKgT0Ucnd4Oia8xy2D65O04901+Rh6cepX-d2vK1+0_Of2NwoA@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Jul 8, 2021 at 8:36 AM Ilias Apalodimas
-<ilias.apalodimas@linaro.org> wrote:
->
-> On Thu, Jul 08, 2021 at 08:29:56AM -0700, Alexander Duyck wrote:
-> > On Thu, Jul 8, 2021 at 8:17 AM Ilias Apalodimas
-> > <ilias.apalodimas@linaro.org> wrote:
-
-<snip>
-
-> > > What do you think about resetting pp_recycle bit on pskb_expand_head()?
+On Thu, Jul 08, 2021 at 08:41:08AM -0700, Alexander Duyck wrote:
+> On Thu, Jul 8, 2021 at 8:36 AM Ilias Apalodimas
+> <ilias.apalodimas@linaro.org> wrote:
 > >
-> > I assume you mean specifically in the cloned case?
+> > On Thu, Jul 08, 2021 at 08:29:56AM -0700, Alexander Duyck wrote:
+> > > On Thu, Jul 8, 2021 at 8:17 AM Ilias Apalodimas
+> > > <ilias.apalodimas@linaro.org> wrote:
+> 
+> <snip>
+> 
+> > > > What do you think about resetting pp_recycle bit on pskb_expand_head()?
+> > >
+> > > I assume you mean specifically in the cloned case?
+> > >
 > >
->
-> Yes. Even if we do it unconditionally we'll just loose non-cloned buffers from
-> the recycling.
-> I'll send a patch later today.
-
-If you do it unconditionally you could leak DMA mappings since in the
-non-cloned case we don't bother with releasing the shared info since
-we just did a memcpy of it without the reference count tweaks. We have
-to be really careful here. The idea is that we have to make exactly
-one call to the __page_pool_put_page function for this page.
-
-> > > If my memory serves me right Eric wanted that from the beginning. Then the
-> > > cloned/expanded SKB won't trigger the recycling.  If that skb hits the free
-> > > path first, we'll end up recycling the fragments eventually.  If the
-> > > original one goes first, we'll just unmap the page(s) and freeing the cloned
-> > > one will free all the remaining buffers.
+> > Yes. Even if we do it unconditionally we'll just loose non-cloned buffers from
+> > the recycling.
+> > I'll send a patch later today.
+> 
+> If you do it unconditionally you could leak DMA mappings since in the
+> non-cloned case we don't bother with releasing the shared info since
+> we just did a memcpy of it without the reference count tweaks. We have
+> to be really careful here. The idea is that we have to make exactly
+> one call to the __page_pool_put_page function for this page.
+> 
+> > > > If my memory serves me right Eric wanted that from the beginning. Then the
+> > > > cloned/expanded SKB won't trigger the recycling.  If that skb hits the free
+> > > > path first, we'll end up recycling the fragments eventually.  If the
+> > > > original one goes first, we'll just unmap the page(s) and freeing the cloned
+> > > > one will free all the remaining buffers.
+> > >
+> > > I *think* that should be fine. Effectively what we are doing is making
+> > > it so that if the original skb is freed first the pages are released,
+> > > and if it is released after the clone/expended skb then it can be
+> > > recycled.
 > >
-> > I *think* that should be fine. Effectively what we are doing is making
-> > it so that if the original skb is freed first the pages are released,
-> > and if it is released after the clone/expended skb then it can be
-> > recycled.
->
-> Exactly
->
+> > Exactly
 > >
-> > The issue is we have to maintain it so that there will be exactly one
-> > caller of the recycling function for the pages. So any spot where we
-> > are updating skb->head we will have to see if there is a clone and if
-> > so we have to clear the pp_recycle flag on our skb so that it doesn't
-> > try to recycle the page frags as well.
->
-> Correct. I'll keep looking around in case there's something less fragile we
-> can do
+> > >
+> > > The issue is we have to maintain it so that there will be exactly one
+> > > caller of the recycling function for the pages. So any spot where we
+> > > are updating skb->head we will have to see if there is a clone and if
+> > > so we have to clear the pp_recycle flag on our skb so that it doesn't
+> > > try to recycle the page frags as well.
+> >
+> > Correct. I'll keep looking around in case there's something less fragile we
+> > can do
+> 
+> That is the risk to this kind of thing. We have to make the call once
+> and only once and if we either miss it or call it too many times we
+> can introduce some serious issues.
 
-That is the risk to this kind of thing. We have to make the call once
-and only once and if we either miss it or call it too many times we
-can introduce some serious issues.
+And I fully agree. Let me fix the obvious one now and I'll have a closer
+look on the recycling function it self. I can probably pick up the
+"changed head"/expanded SKB in the generic recycling code and refuse to recycle
+these packets. Then we'll just accept the fact that if those kind of
+packets are freed last, we won't recycle.
 
-Thanks.
-
-- Alex
+Thanks, that was a very nice catch
+/Ilias
+> 
+> Thanks.
+> 
+> - Alex
