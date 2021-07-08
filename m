@@ -8,60 +8,60 @@ X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F3D5C07E9E
-	for <bpf@archiver.kernel.org>; Thu,  8 Jul 2021 01:18:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C83B8C07E95
+	for <bpf@archiver.kernel.org>; Thu,  8 Jul 2021 01:18:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4B81D61CD0
-	for <bpf@archiver.kernel.org>; Thu,  8 Jul 2021 01:18:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B111B61CC4
+	for <bpf@archiver.kernel.org>; Thu,  8 Jul 2021 01:18:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230297AbhGHBVg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 7 Jul 2021 21:21:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44184 "EHLO
+        id S230371AbhGHBVh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 7 Jul 2021 21:21:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230343AbhGHBVd (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 7 Jul 2021 21:21:33 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F692C061764;
-        Wed,  7 Jul 2021 18:18:51 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id f11so2094185plg.0;
-        Wed, 07 Jul 2021 18:18:51 -0700 (PDT)
+        with ESMTP id S230349AbhGHBVg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 7 Jul 2021 21:21:36 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8CC1C061574;
+        Wed,  7 Jul 2021 18:18:54 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id x21-20020a17090aa395b029016e25313bfcso2774912pjp.2;
+        Wed, 07 Jul 2021 18:18:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=IxE5DE3y2nt9vdXUjXFCPDE3BwXcH+IzGbMLLaHKMfk=;
-        b=cTXI4VGpxRdoO2yUEX8YOkkq4guCME7vRHeT5LnoNCXUpETR+5rcHsOO5OFMn+fMsI
-         xYxkd8xLALlQN3eCqfQCy4hrVbE6PWYxwwsJXvRxMbZBGnMEO3UvkUceBdrqXc7a215u
-         sZUVsn0i9tBPzR68cPcS7f+qxYd2sruIC3Fu0T4Wi5B9bdjDzI57UeAiQb5/IF9RbyCM
-         0nWon3QmYZhPN38zYjoGQ9q9R/DQUhm2/cT6LP4OReHe/PzbrGh5bo9hjg+8whUVwh9w
-         ajpkd06k+jffzI1Ju9f4+U8ee/B06q8C3JGpH+BzxD5fqRjIQ0FzcdlcqsJn1q8SDyCO
-         NuJw==
+        bh=BJa6mry8J0MwiXrptb/iORsTljLvfzWlcZ7RwWWwnMg=;
+        b=ECUs4vwd/c+D7k1A1Z5HAToiuobz2CVK/k6jTcFr7DwPt0iklBejYXIuywcywAxu11
+         g7snkEXv2uPLDhZh/pnPpVMiyAFlMLFwONjbRP/HdTmsJEsC8BMukl4254pWR1xb0lcN
+         fCXSBdIrMMRU1DujXI7OIqxrw/A9yWIdUrPklA+pv4RI1qJRkzWqcKeag0zGgORmNbhU
+         SclBgep51PhDt7zrehuwNc0otxW9OWH9Z8ADZZhItbzvveZMFXLPb4U/J7j1XgqYZYN4
+         YxPhC62S3qcYPSEEg5u/J+45jmVmXvzCbpys6K0qDzIegTm18BGP+Rlzl22KOiGb/ZH0
+         lsgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=IxE5DE3y2nt9vdXUjXFCPDE3BwXcH+IzGbMLLaHKMfk=;
-        b=boJQyPNIgJk52nBD6+FQnzFUv0HHK/8fv7PPKO5jUUjJkkYfxtsah9NMd+rV2irlEV
-         vrdYmAFt4sCh+TvnisOa3UZG7NUmCL5q45a4XZQ06+odUYxV64Snl8xQP3fnBS2r7ETh
-         wzU2cKYjYUydcj1s4Z+j1IdYgOoTQiLw3t5yQScTIEcUNMWdTU1u2sHk59GAE4YZ1Uqa
-         t4UCanYHCD6sn2J0V1PZfEKZ7RFjygzkFDcA5g/Lk1A56vSngw+4dkQclzX/JB+3j51w
-         oRh/5D4IwX3UEHHcWq6B6zgQJROlV/vfjCd5T2k+VA7AbPAq7KZ+7MJfB8Ir1Xklz2ne
-         TNrQ==
-X-Gm-Message-State: AOAM532TQ/V26ARAnLJhV63Z/ky2z1VD394LGVzl7GeW4ho/r2LiQp92
-        k4Jqev0Xh4fDqJXvdlqKAYY=
-X-Google-Smtp-Source: ABdhPJycwr+R0Dse2ZFUofw9Z74Zbg3FssMnjEDZeM1gyserD+1K6AQaWQ6J3WG+a9LRWx6E5PlvRg==
-X-Received: by 2002:a17:90b:2411:: with SMTP id nr17mr6466729pjb.153.1625707130875;
-        Wed, 07 Jul 2021 18:18:50 -0700 (PDT)
+        bh=BJa6mry8J0MwiXrptb/iORsTljLvfzWlcZ7RwWWwnMg=;
+        b=LQl7fcF4dLNCAq1cm0gYr1R+/jORckX88ikKhYTqf84vo2+iWURIwrg68JtjYw2UYe
+         5c4IR/0yeC+PEgYrlYnTbjo+zpHAQrP4KKKtS3qRfYrER9u6ioVnY5U1SSQkKs0dN5tQ
+         vlAg1X81htupXqjB/I5GbbsCNYTXqf1SR7i5UuWlLw20NQLlCVCj92N6asm1j1kRWK+w
+         XDKEfxAaw2sxwCOxSQrYoFJ/YoWSXT7Js3rlaoHkll0pFoZUv0Az8eexkDQEUtgRX7JK
+         uqDaiC0WvKES8RPMPj+a2MseGne0RdkyD0y72SLDFfJGWCymsDNkdh/Vv/3qx8MBQuVN
+         hXjQ==
+X-Gm-Message-State: AOAM532KT4Ng3DkrcVLA3+lZ1DRSpx6bfSgNeaJMTh+mueLwWWVmhAXJ
+        N30kLvs7L7qTCkTHrBFw48Y=
+X-Google-Smtp-Source: ABdhPJxcTOOIIWP7S7QSCJ/KKdat4ZZRmC2Z2NrabBJwotqSYfcHK8tsXY5BIKgAg4jhGT0Lxn4l9A==
+X-Received: by 2002:a17:90a:f986:: with SMTP id cq6mr29944700pjb.127.1625707134142;
+        Wed, 07 Jul 2021 18:18:54 -0700 (PDT)
 Received: from ast-mbp.thefacebook.com ([2620:10d:c090:400::5:9f4e])
-        by smtp.gmail.com with ESMTPSA id d20sm417450pfn.219.2021.07.07.18.18.49
+        by smtp.gmail.com with ESMTPSA id d20sm417450pfn.219.2021.07.07.18.18.52
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 07 Jul 2021 18:18:50 -0700 (PDT)
+        Wed, 07 Jul 2021 18:18:53 -0700 (PDT)
 From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To:     davem@davemloft.net
 Cc:     daniel@iogearbox.net, andrii@kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org, kernel-team@fb.com
-Subject: [PATCH v5 bpf-next 08/11] bpf: Implement verifier support for validation of async callbacks.
-Date:   Wed,  7 Jul 2021 18:18:30 -0700
-Message-Id: <20210708011833.67028-9-alexei.starovoitov@gmail.com>
+Subject: [PATCH v5 bpf-next 10/11] selftests/bpf: Add bpf_timer test.
+Date:   Wed,  7 Jul 2021 18:18:32 -0700
+Message-Id: <20210708011833.67028-11-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.13.5
 In-Reply-To: <20210708011833.67028-1-alexei.starovoitov@gmail.com>
 References: <20210708011833.67028-1-alexei.starovoitov@gmail.com>
@@ -71,275 +71,386 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-bpf_for_each_map_elem() and bpf_timer_set_callback() helpers are relying on
-PTR_TO_FUNC infra in the verifier to validate addresses to subprograms
-and pass them into the helpers as function callbacks.
-In case of bpf_for_each_map_elem() the callback is invoked synchronously
-and the verifier treats it as a normal subprogram call by adding another
-bpf_func_state and new frame in __check_func_call().
-bpf_timer_set_callback() doesn't invoke the callback directly.
-The subprogram will be called asynchronously from bpf_timer_cb().
-Teach the verifier to validate such async callbacks as special kind
-of jump by pushing verifier state into stack and let pop_stack() process it.
-
-Special care needs to be taken during state pruning.
-The call insn doing bpf_timer_set_callback has to be a prune_point.
-Otherwise short timer callbacks might not have prune points in front of
-bpf_timer_set_callback() which means is_state_visited() will be called
-after this call insn is processed in __check_func_call(). Which means that
-another async_cb state will be pushed to be walked later and the verifier
-will eventually hit BPF_COMPLEXITY_LIMIT_JMP_SEQ limit.
-Since push_async_cb() looks like another push_stack() branch the
-infinite loop detection will trigger false positive. To recognize
-this case mark such states as in_async_callback_fn.
-To distinguish infinite loop in async callback vs the same callback called
-with different arguments for different map and timer add async_entry_cnt
-to bpf_func_state.
-
-Enforce return zero from async callbacks.
+Add bpf_timer test that creates timers in preallocated and
+non-preallocated hash, in array and in lru maps.
+Let array timer expire once and then re-arm it for 35 seconds.
+Arm lru timer into the same callback.
+Then arm and re-arm hash timers 10 times each.
+At the last invocation of prealloc hash timer cancel the array timer.
+Force timer free via LRU eviction and direct bpf_map_delete_elem.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf_verifier.h |   9 ++-
- kernel/bpf/helpers.c         |   8 +--
- kernel/bpf/verifier.c        | 123 ++++++++++++++++++++++++++++++++++-
- 3 files changed, 131 insertions(+), 9 deletions(-)
+ .../testing/selftests/bpf/prog_tests/timer.c  |  55 ++++
+ tools/testing/selftests/bpf/progs/timer.c     | 297 ++++++++++++++++++
+ 2 files changed, 352 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/timer.c
+ create mode 100644 tools/testing/selftests/bpf/progs/timer.c
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 5d3169b57e6e..242d0b1a0772 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -208,12 +208,19 @@ struct bpf_func_state {
- 	 * zero == main subprog
- 	 */
- 	u32 subprogno;
-+	/* Every bpf_timer_start will increment async_entry_cnt.
-+	 * It's used to distinguish:
-+	 * void foo(void) { for(;;); }
-+	 * void foo(void) { bpf_timer_set_callback(,foo); }
-+	 */
-+	u32 async_entry_cnt;
-+	bool in_callback_fn;
-+	bool in_async_callback_fn;
- 
- 	/* The following fields should be last. See copy_func_state() */
- 	int acquired_refs;
- 	struct bpf_reference_state *refs;
- 	int allocated_stack;
--	bool in_callback_fn;
- 	struct bpf_stack_state *stack;
- };
- 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 8f44b8c23543..9a1e554f7cab 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -1043,7 +1043,6 @@ static enum hrtimer_restart bpf_timer_cb(struct hrtimer *hrtimer)
- 	void *callback_fn;
- 	void *key;
- 	u32 idx;
--	int ret;
- 
- 	callback_fn = rcu_dereference_check(t->callback_fn, rcu_read_lock_bh_held());
- 	if (!callback_fn)
-@@ -1066,10 +1065,9 @@ static enum hrtimer_restart bpf_timer_cb(struct hrtimer *hrtimer)
- 		key = value - round_up(map->key_size, 8);
- 	}
- 
--	ret = BPF_CAST_CALL(callback_fn)((u64)(long)map,
--					 (u64)(long)key,
--					 (u64)(long)value, 0, 0);
--	WARN_ON(ret != 0); /* Next patch moves this check into the verifier */
-+	BPF_CAST_CALL(callback_fn)((u64)(long)map, (u64)(long)key,
-+				   (u64)(long)value, 0, 0);
-+	/* The verifier checked that return value is zero. */
- 
- 	this_cpu_write(hrtimer_running, NULL);
- out:
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 1511f92b4cf4..ab6ce598a652 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -735,6 +735,10 @@ static void print_verifier_state(struct bpf_verifier_env *env,
- 			if (state->refs[i].id)
- 				verbose(env, ",%d", state->refs[i].id);
- 	}
-+	if (state->in_callback_fn)
-+		verbose(env, " cb");
-+	if (state->in_async_callback_fn)
-+		verbose(env, " async_cb");
- 	verbose(env, "\n");
- }
- 
-@@ -1527,6 +1531,54 @@ static void init_func_state(struct bpf_verifier_env *env,
- 	init_reg_state(env, state);
- }
- 
-+/* Similar to push_stack(), but for async callbacks */
-+static struct bpf_verifier_state *push_async_cb(struct bpf_verifier_env *env,
-+						int insn_idx, int prev_insn_idx,
-+						int subprog)
+diff --git a/tools/testing/selftests/bpf/prog_tests/timer.c b/tools/testing/selftests/bpf/prog_tests/timer.c
+new file mode 100644
+index 000000000000..25f40e1b9967
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/timer.c
+@@ -0,0 +1,55 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2021 Facebook */
++#include <test_progs.h>
++#include "timer.skel.h"
++
++static int timer(struct timer *timer_skel)
 +{
-+	struct bpf_verifier_stack_elem *elem;
-+	struct bpf_func_state *frame;
++	int err, prog_fd;
++	__u32 duration = 0, retval;
 +
-+	elem = kzalloc(sizeof(struct bpf_verifier_stack_elem), GFP_KERNEL);
-+	if (!elem)
-+		goto err;
++	err = timer__attach(timer_skel);
++	if (!ASSERT_OK(err, "timer_attach"))
++		return err;
 +
-+	elem->insn_idx = insn_idx;
-+	elem->prev_insn_idx = prev_insn_idx;
-+	elem->next = env->head;
-+	elem->log_pos = env->log.len_used;
-+	env->head = elem;
-+	env->stack_size++;
-+	if (env->stack_size > BPF_COMPLEXITY_LIMIT_JMP_SEQ) {
-+		verbose(env,
-+			"The sequence of %d jumps is too complex for async cb.\n",
-+			env->stack_size);
-+		goto err;
-+	}
-+	/* Unlike push_stack() do not copy_verifier_state().
-+	 * The caller state doesn't matter.
-+	 * This is async callback. It starts in a fresh stack.
-+	 * Initialize it similar to do_check_common().
-+	 */
-+	elem->st.branches = 1;
-+	frame = kzalloc(sizeof(*frame), GFP_KERNEL);
-+	if (!frame)
-+		goto err;
-+	init_func_state(env, frame,
-+			BPF_MAIN_FUNC /* callsite */,
-+			0 /* frameno within this callchain */,
-+			subprog /* subprog number within this prog */);
-+	elem->st.frame[0] = frame;
-+	return &elem->st;
-+err:
-+	free_verifier_state(env->cur_state, true);
-+	env->cur_state = NULL;
-+	/* pop all elements and return */
-+	while (!pop_stack(env, NULL, NULL, false));
-+	return NULL;
++	ASSERT_EQ(timer_skel->data->callback_check, 52, "callback_check1");
++	ASSERT_EQ(timer_skel->data->callback2_check, 52, "callback2_check1");
++
++	prog_fd = bpf_program__fd(timer_skel->progs.test1);
++	err = bpf_prog_test_run(prog_fd, 1, NULL, 0,
++				NULL, NULL, &retval, &duration);
++	ASSERT_OK(err, "test_run");
++	ASSERT_EQ(retval, 0, "test_run");
++	timer__detach(timer_skel);
++
++	usleep(50); /* 10 usecs should be enough, but give it extra */
++	/* check that timer_cb1() was executed 10+10 times */
++	ASSERT_EQ(timer_skel->data->callback_check, 42, "callback_check2");
++	ASSERT_EQ(timer_skel->data->callback2_check, 42, "callback2_check2");
++
++	/* check that timer_cb2() was executed twice */
++	ASSERT_EQ(timer_skel->bss->bss_data, 10, "bss_data");
++
++	/* check that there were no errors in timer execution */
++	ASSERT_EQ(timer_skel->bss->err, 0, "err");
++
++	/* check that code paths completed */
++	ASSERT_EQ(timer_skel->bss->ok, 1 | 2 | 4, "ok");
++
++	return 0;
 +}
 +
++void test_timer(void)
++{
++	struct timer *timer_skel = NULL;
++	int err;
 +
- enum reg_arg_type {
- 	SRC_OP,		/* register is used as source operand */
- 	DST_OP,		/* register is used as destination operand */
-@@ -5704,6 +5756,30 @@ static int __check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn
- 		}
- 	}
- 
-+	if (insn->code == (BPF_JMP | BPF_CALL) &&
-+	    insn->imm == BPF_FUNC_timer_set_callback) {
-+		struct bpf_verifier_state *async_cb;
++	timer_skel = timer__open_and_load();
++	if (!ASSERT_OK_PTR(timer_skel, "timer_skel_load"))
++		goto cleanup;
 +
-+		/* there is no real recursion here. timer callbacks are async */
-+		async_cb = push_async_cb(env, env->subprog_info[subprog].start,
-+					 *insn_idx, subprog);
-+		if (!async_cb)
-+			return -EFAULT;
-+		callee = async_cb->frame[0];
-+		callee->async_entry_cnt = caller->async_entry_cnt + 1;
++	err = timer(timer_skel);
++	ASSERT_OK(err, "timer");
++cleanup:
++	timer__destroy(timer_skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/timer.c b/tools/testing/selftests/bpf/progs/timer.c
+new file mode 100644
+index 000000000000..5f5309791649
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/timer.c
+@@ -0,0 +1,297 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2021 Facebook */
++#include <linux/bpf.h>
++#include <time.h>
++#include <errno.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_tcp_helpers.h"
 +
-+		/* Convert bpf_timer_set_callback() args into timer callback args */
-+		err = set_callee_state_cb(env, caller, callee, *insn_idx);
-+		if (err)
-+			return err;
++char _license[] SEC("license") = "GPL";
++struct hmap_elem {
++	int counter;
++	struct bpf_timer timer;
++	struct bpf_spin_lock lock; /* unused */
++};
 +
-+		clear_caller_saved_regs(env, caller->regs);
-+		mark_reg_unknown(env, caller->regs, BPF_REG_0);
-+		caller->regs[BPF_REG_0].subreg_def = DEF_NOT_SUBREG;
-+		/* continue with next insn after call */
-+		return 0;
-+	}
++struct {
++	__uint(type, BPF_MAP_TYPE_HASH);
++	__uint(max_entries, 1000);
++	__type(key, int);
++	__type(value, struct hmap_elem);
++} hmap SEC(".maps");
 +
- 	callee = kzalloc(sizeof(*callee), GFP_KERNEL);
- 	if (!callee)
- 		return -ENOMEM;
-@@ -5856,6 +5932,7 @@ static int set_timer_callback_state(struct bpf_verifier_env *env,
- 	/* unused */
- 	__mark_reg_not_init(env, &callee->regs[BPF_REG_4]);
- 	__mark_reg_not_init(env, &callee->regs[BPF_REG_5]);
-+	callee->in_async_callback_fn = true;
- 	return 0;
- }
- 
-@@ -9224,7 +9301,8 @@ static int check_return_code(struct bpf_verifier_env *env)
- 	struct tnum range = tnum_range(0, 1);
- 	enum bpf_prog_type prog_type = resolve_prog_type(env->prog);
- 	int err;
--	const bool is_subprog = env->cur_state->frame[0]->subprogno;
-+	struct bpf_func_state *frame = env->cur_state->frame[0];
-+	const bool is_subprog = frame->subprogno;
- 
- 	/* LSM and struct_ops func-ptr's return type could be "void" */
- 	if (!is_subprog &&
-@@ -9249,6 +9327,22 @@ static int check_return_code(struct bpf_verifier_env *env)
- 	}
- 
- 	reg = cur_regs(env) + BPF_REG_0;
++struct {
++	__uint(type, BPF_MAP_TYPE_HASH);
++	__uint(map_flags, BPF_F_NO_PREALLOC);
++	__uint(max_entries, 1000);
++	__type(key, int);
++	__type(value, struct hmap_elem);
++} hmap_malloc SEC(".maps");
 +
-+	if (frame->in_async_callback_fn) {
-+		/* enforce return zero from async callbacks like timer */
-+		if (reg->type != SCALAR_VALUE) {
-+			verbose(env, "In async callback the register R0 is not a known value (%s)\n",
-+				reg_type_str[reg->type]);
-+			return -EINVAL;
-+		}
++struct elem {
++	struct bpf_timer t;
++};
 +
-+		if (!tnum_in(tnum_const(0), reg->var_off)) {
-+			verbose_invalid_scalar(env, reg, &range, "async callback", "R0");
-+			return -EINVAL;
-+		}
-+		return 0;
-+	}
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 2);
++	__type(key, int);
++	__type(value, struct elem);
++} array SEC(".maps");
 +
- 	if (is_subprog) {
- 		if (reg->type != SCALAR_VALUE) {
- 			verbose(env, "At subprogram exit the register R0 is not a scalar value (%s)\n",
-@@ -9496,6 +9590,13 @@ static int visit_insn(int t, int insn_cnt, struct bpf_verifier_env *env)
- 		return DONE_EXPLORING;
- 
- 	case BPF_CALL:
-+		if (insns[t].imm == BPF_FUNC_timer_set_callback)
-+			/* Mark this call insn to trigger is_state_visited() check
-+			 * before call itself is processed by __check_func_call().
-+			 * Otherwise new async state will be pushed for further
-+			 * exploration.
++struct {
++	__uint(type, BPF_MAP_TYPE_LRU_HASH);
++	__uint(max_entries, 4);
++	__type(key, int);
++	__type(value, struct elem);
++} lru SEC(".maps");
++
++__u64 bss_data;
++__u64 err;
++__u64 ok;
++__u64 callback_check = 52;
++__u64 callback2_check = 52;
++
++#define ARRAY 1
++#define HTAB 2
++#define HTAB_MALLOC 3
++#define LRU 4
++
++/* callback for array and lru timers */
++static int timer_cb1(void *map, int *key, struct bpf_timer *timer)
++{
++	/* increment bss variable twice.
++	 * Once via array timer callback and once via lru timer callback
++	 */
++	bss_data += 5;
++
++	/* *key == 0 - the callback was called for array timer.
++	 * *key == 4 - the callback was called from lru timer.
++	 */
++	if (*key == ARRAY) {
++		struct bpf_timer *lru_timer;
++		int lru_key = LRU;
++
++		/* rearm array timer to be called again in ~35 seconds */
++		if (bpf_timer_start(timer, 1ull << 35, 0) != 0)
++			err |= 1;
++
++		lru_timer = bpf_map_lookup_elem(&lru, &lru_key);
++		if (!lru_timer)
++			return 0;
++		bpf_timer_set_callback(lru_timer, timer_cb1);
++		if (bpf_timer_start(lru_timer, 0, 0) != 0)
++			err |= 2;
++	} else if (*key == LRU) {
++		int lru_key, i;
++
++		for (i = LRU + 1;
++		     i <= 100  /* for current LRU eviction algorithm this number
++				* should be larger than ~ lru->max_entries * 2
++				*/;
++		     i++) {
++			struct elem init = {};
++
++			/* lru_key cannot be used as loop induction variable
++			 * otherwise the loop will be unbounded.
 +			 */
-+			init_explored_state(env, t);
- 		return visit_func_call_insn(t, insn_cnt, insns, env,
- 					    insns[t].src_reg == BPF_PSEUDO_CALL);
- 
-@@ -10503,9 +10604,25 @@ static int is_state_visited(struct bpf_verifier_env *env, int insn_idx)
- 		states_cnt++;
- 		if (sl->state.insn_idx != insn_idx)
- 			goto next;
++			lru_key = i;
 +
- 		if (sl->state.branches) {
--			if (states_maybe_looping(&sl->state, cur) &&
--			    states_equal(env, &sl->state, cur)) {
-+			struct bpf_func_state *frame = sl->state.frame[sl->state.curframe];
++			/* add more elements into lru map to push out current
++			 * element and force deletion of this timer
++			 */
++			bpf_map_update_elem(map, &lru_key, &init, 0);
++			/* look it up to bump it into active list */
++			bpf_map_lookup_elem(map, &lru_key);
 +
-+			if (frame->in_async_callback_fn &&
-+			    frame->async_entry_cnt != cur->frame[cur->curframe]->async_entry_cnt) {
-+				/* Different async_entry_cnt means that the verifier is
-+				 * processing another entry into async callback.
-+				 * Seeing the same state is not an indication of infinite
-+				 * loop or infinite recursion.
-+				 * But finding the same state doesn't mean that it's safe
-+				 * to stop processing the current state. The previous state
-+				 * hasn't yet reached bpf_exit, since state.branches > 0.
-+				 * Checking in_async_callback_fn alone is not enough either.
-+				 * Since the verifier still needs to catch infinite loops
-+				 * inside async callbacks.
-+				 */
-+			} else if (states_maybe_looping(&sl->state, cur) &&
-+				   states_equal(env, &sl->state, cur)) {
- 				verbose_linfo(env, insn_idx, "; ");
- 				verbose(env, "infinite loop detected at insn %d\n", insn_idx);
- 				return -EINVAL;
++			/* keep adding until *key changes underneath,
++			 * which means that key/timer memory was reused
++			 */
++			if (*key != LRU)
++				break;
++		}
++
++		/* check that the timer was removed */
++		if (bpf_timer_cancel(timer) != -EINVAL)
++			err |= 4;
++		ok |= 1;
++	}
++	return 0;
++}
++
++SEC("fentry/bpf_fentry_test1")
++int BPF_PROG(test1, int a)
++{
++	struct bpf_timer *arr_timer, *lru_timer;
++	struct elem init = {};
++	int lru_key = LRU;
++	int array_key = ARRAY;
++
++	arr_timer = bpf_map_lookup_elem(&array, &array_key);
++	if (!arr_timer)
++		return 0;
++	bpf_timer_init(arr_timer, &array, CLOCK_MONOTONIC);
++
++	bpf_map_update_elem(&lru, &lru_key, &init, 0);
++	lru_timer = bpf_map_lookup_elem(&lru, &lru_key);
++	if (!lru_timer)
++		return 0;
++	bpf_timer_init(lru_timer, &lru, CLOCK_MONOTONIC);
++
++	bpf_timer_set_callback(arr_timer, timer_cb1);
++	bpf_timer_start(arr_timer, 0 /* call timer_cb1 asap */, 0);
++
++	/* init more timers to check that array destruction
++	 * doesn't leak timer memory.
++	 */
++	array_key = 0;
++	arr_timer = bpf_map_lookup_elem(&array, &array_key);
++	if (!arr_timer)
++		return 0;
++	bpf_timer_init(arr_timer, &array, CLOCK_MONOTONIC);
++	return 0;
++}
++
++/* callback for prealloc and non-prealloca hashtab timers */
++static int timer_cb2(void *map, int *key, struct hmap_elem *val)
++{
++	if (*key == HTAB)
++		callback_check--;
++	else
++		callback2_check--;
++	if (val->counter > 0 && --val->counter) {
++		/* re-arm the timer again to execute after 1 usec */
++		bpf_timer_start(&val->timer, 1000, 0);
++	} else if (*key == HTAB) {
++		struct bpf_timer *arr_timer;
++		int array_key = ARRAY;
++
++		/* cancel arr_timer otherwise bpf_fentry_test1 prog
++		 * will stay alive forever.
++		 */
++		arr_timer = bpf_map_lookup_elem(&array, &array_key);
++		if (!arr_timer)
++			return 0;
++		if (bpf_timer_cancel(arr_timer) != 1)
++			/* bpf_timer_cancel should return 1 to indicate
++			 * that arr_timer was active at this time
++			 */
++			err |= 8;
++
++		/* try to cancel ourself. It shouldn't deadlock. */
++		if (bpf_timer_cancel(&val->timer) != -EDEADLK)
++			err |= 16;
++
++		/* delete this key and this timer anyway.
++		 * It shouldn't deadlock either.
++		 */
++		bpf_map_delete_elem(map, key);
++
++		/* in preallocated hashmap both 'key' and 'val' could have been
++		 * reused to store another map element (like in LRU above),
++		 * but in controlled test environment the below test works.
++		 * It's not a use-after-free. The memory is owned by the map.
++		 */
++		if (bpf_timer_start(&val->timer, 1000, 0) != -EINVAL)
++			err |= 32;
++		ok |= 2;
++	} else {
++		if (*key != HTAB_MALLOC)
++			err |= 64;
++
++		/* try to cancel ourself. It shouldn't deadlock. */
++		if (bpf_timer_cancel(&val->timer) != -EDEADLK)
++			err |= 128;
++
++		/* delete this key and this timer anyway.
++		 * It shouldn't deadlock either.
++		 */
++		bpf_map_delete_elem(map, key);
++
++		/* in non-preallocated hashmap both 'key' and 'val' are RCU
++		 * protected and still valid though this element was deleted
++		 * from the map. Arm this timer for ~35 seconds. When callback
++		 * finishes the call_rcu will invoke:
++		 * htab_elem_free_rcu
++		 *   check_and_free_timer
++		 *     bpf_timer_cancel_and_free
++		 * to cancel this 35 second sleep and delete the timer for real.
++		 */
++		if (bpf_timer_start(&val->timer, 1ull << 35, 0) != 0)
++			err |= 256;
++		ok |= 4;
++	}
++	return 0;
++}
++
++int bpf_timer_test(void)
++{
++	struct hmap_elem *val;
++	int key = HTAB, key_malloc = HTAB_MALLOC;
++
++	val = bpf_map_lookup_elem(&hmap, &key);
++	if (val) {
++		if (bpf_timer_init(&val->timer, &hmap, CLOCK_BOOTTIME) != 0)
++			err |= 512;
++		bpf_timer_set_callback(&val->timer, timer_cb2);
++		bpf_timer_start(&val->timer, 1000, 0);
++	}
++	val = bpf_map_lookup_elem(&hmap_malloc, &key_malloc);
++	if (val) {
++		if (bpf_timer_init(&val->timer, &hmap_malloc, CLOCK_BOOTTIME) != 0)
++			err |= 1024;
++		bpf_timer_set_callback(&val->timer, timer_cb2);
++		bpf_timer_start(&val->timer, 1000, 0);
++	}
++	return 0;
++}
++
++SEC("fentry/bpf_fentry_test2")
++int BPF_PROG(test2, int a, int b)
++{
++	struct hmap_elem init = {}, *val;
++	int key = HTAB, key_malloc = HTAB_MALLOC;
++
++	init.counter = 10; /* number of times to trigger timer_cb2 */
++	bpf_map_update_elem(&hmap, &key, &init, 0);
++	val = bpf_map_lookup_elem(&hmap, &key);
++	if (val)
++		bpf_timer_init(&val->timer, &hmap, CLOCK_BOOTTIME);
++	/* update the same key to free the timer */
++	bpf_map_update_elem(&hmap, &key, &init, 0);
++
++	bpf_map_update_elem(&hmap_malloc, &key_malloc, &init, 0);
++	val = bpf_map_lookup_elem(&hmap_malloc, &key_malloc);
++	if (val)
++		bpf_timer_init(&val->timer, &hmap_malloc, CLOCK_BOOTTIME);
++	/* update the same key to free the timer */
++	bpf_map_update_elem(&hmap_malloc, &key_malloc, &init, 0);
++
++	/* init more timers to check that htab operations
++	 * don't leak timer memory.
++	 */
++	key = 0;
++	bpf_map_update_elem(&hmap, &key, &init, 0);
++	val = bpf_map_lookup_elem(&hmap, &key);
++	if (val)
++		bpf_timer_init(&val->timer, &hmap, CLOCK_BOOTTIME);
++	bpf_map_delete_elem(&hmap, &key);
++	bpf_map_update_elem(&hmap, &key, &init, 0);
++	val = bpf_map_lookup_elem(&hmap, &key);
++	if (val)
++		bpf_timer_init(&val->timer, &hmap, CLOCK_BOOTTIME);
++
++	/* and with non-prealloc htab */
++	key_malloc = 0;
++	bpf_map_update_elem(&hmap_malloc, &key_malloc, &init, 0);
++	val = bpf_map_lookup_elem(&hmap_malloc, &key_malloc);
++	if (val)
++		bpf_timer_init(&val->timer, &hmap_malloc, CLOCK_BOOTTIME);
++	bpf_map_delete_elem(&hmap_malloc, &key_malloc);
++	bpf_map_update_elem(&hmap_malloc, &key_malloc, &init, 0);
++	val = bpf_map_lookup_elem(&hmap_malloc, &key_malloc);
++	if (val)
++		bpf_timer_init(&val->timer, &hmap_malloc, CLOCK_BOOTTIME);
++
++	return bpf_timer_test();
++}
 -- 
 2.30.2
 
