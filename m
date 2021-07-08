@@ -2,168 +2,130 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-12.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09096C4338F
-	for <bpf@archiver.kernel.org>; Mon, 26 Jul 2021 14:10:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FBE6C4338F
+	for <bpf@archiver.kernel.org>; Mon, 26 Jul 2021 14:20:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E3DC26008E
-	for <bpf@archiver.kernel.org>; Mon, 26 Jul 2021 14:10:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1786C608FB
+	for <bpf@archiver.kernel.org>; Mon, 26 Jul 2021 14:20:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233993AbhGZNa2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 26 Jul 2021 09:30:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53138 "EHLO
+        id S233970AbhGZNkE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 26 Jul 2021 09:40:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233959AbhGZNa2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 26 Jul 2021 09:30:28 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6400C061757
-        for <bpf@vger.kernel.org>; Mon, 26 Jul 2021 07:10:56 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id l19so13140100pjz.0
-        for <bpf@vger.kernel.org>; Mon, 26 Jul 2021 07:10:56 -0700 (PDT)
+        with ESMTP id S234359AbhGZNj7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 26 Jul 2021 09:39:59 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D8E8C061765
+        for <bpf@vger.kernel.org>; Mon, 26 Jul 2021 07:20:24 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id u3so15720955lff.9
+        for <bpf@vger.kernel.org>; Mon, 26 Jul 2021 07:20:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=opjptYABd9lTAjTURUlye+PGqKAxcZ0rcai12mEW6Gw=;
-        b=uCUW0kdYL4B4847h7AnDLCG65JZvkqnHy99+dHXU4SLXpcbbxSzMqcJpEEKEgXbEr7
-         0m5Yol/8ViWxU169rxDBcSLnWQ4bUWePcxOGNbUK1Cv2DLrrk7rgoqm8X9MAAzqb6PA7
-         NqLmAPOm5BDd3SaG4Q5EGCXN4m0j5txlksTQEWTtrKDmkFLCfMm2IZYfJdTMJjOHzLG+
-         4iPRpUdKY4GwWY7PClNlUpEyr8Z99xGZtjyWG65ebJKbyAVAMwTQoH7LYgSEbMP+biOF
-         1xSMfFy2wXft3L2YDCQ5OmQJMAW4XrUBKY7EX47mvzPyfMcsu2NsQvS4k2ogOBHs2zot
-         UA8g==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=innoMiax/6j+Ydu2wz7DZ/eLaBFwTp809yu9WTfkGdU=;
+        b=oVX1a29LktyslfuTcX+62an+IK8NNMLRT5wMozGIGx8cCt9NN5d+F3YDG3Aaqe9JpP
+         ZhCe2UhVPpbT/4ClJJhdLnRKHEIiUFbVgZOTsjY2Q59Rkt5XJ5jtI1ctgbVIrfI14tGk
+         vLKIE5R3kdTrMq0dcZmeTyBg2Tpj9GbdzaysS7kvfst+1DU4qglrgjQaenkZ85r2K1LV
+         jMayQJEwYuU05RmQUkUkpTbYduWHYOduzlmi9SXZaZigyFljfW14Kc3bSssHLt0B7XFE
+         dNvwkXwKzZboYiyx4EUkxZ8dnCanVXkRxlVUr1wUqN9IdnpmrGNp9xcW0Wy0CNay+eqm
+         V0og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=opjptYABd9lTAjTURUlye+PGqKAxcZ0rcai12mEW6Gw=;
-        b=thnojVgryAeh9hOnJB/8LrXBvN7U+2UwhQmFFgtucK/QZvyO2G4ZULiYpxRYoPFD1r
-         7PPywEjinljPhpkh96+OEhnH2tVRvXjJyep0AaJ2HbRmFi7lDl1jIaHdnO7okEn1MOiZ
-         oKOCYw5cGPQAWDAgLg4+1XZ+V5hewJFXJ4gpxZzqsx5+FjnCBFcy6vfeJ/aefWfBFrKu
-         CN9G/7vzpeXDL+TBEDQ8A6tKitqqYNFRzvxZRfroqaVrRNV0M8puRwu1khXNpoVfxClI
-         dNApFVfHavu4YhRMIj60kHA6P42UGsuir7ixIj1DeXaiBy4UYRvOFOCyj4G2Bhk+qtED
-         cZYw==
-X-Gm-Message-State: AOAM530fLTFxi8iMISHXje3E8ubsLAN60+HZO7j2eAawpbNuj44DIth8
-        mwGFv3EAcs4W6kPBoFAswuThn9DyiEc0XQ==
-X-Google-Smtp-Source: ABdhPJyeAKdHjfYBTDGehD05xyfriIcmhewsv1R1GDER3lRch2tuYLV5l3FR1mff/95WSpiq8adpIQ==
-X-Received: by 2002:a63:1648:: with SMTP id 8mr18372289pgw.140.1627308656405;
-        Mon, 26 Jul 2021 07:10:56 -0700 (PDT)
-Received: from localhost.localdomain ([119.28.83.143])
-        by smtp.gmail.com with ESMTPSA id r18sm4847074pgk.54.2021.07.26.07.10.54
+         :references;
+        bh=innoMiax/6j+Ydu2wz7DZ/eLaBFwTp809yu9WTfkGdU=;
+        b=WN41j7xSEnv1JycNGyIjeB2hxfFje+JAUAZGRwSqUpxs3jOzLTwkNG8IaM97DZf0Bk
+         Zo3+hv/ia8ItcpLXi/cCnOEGYbSVCB1WSFAx2kf79MMnCaubdbsBuKUnwpyoBfpOYZGS
+         nw3DjESCn/VZ3d7nb+ehoG6YNShiDXJ4FI4hjLqkHiQvCYbz6+Qsc9JzqUYfBcMkGYJ0
+         WxNXsBCPc0U6k0tKpBvRV7opGuwncVu6A0Eo5O9B7p+E42Jf2KrPhOx2BDMpIiRq88J/
+         rqXyWu56ki57VGkL13YivJQtvXHvrQ/5NxxHaKbYDnHRhCgL1ejZdN9NrKE2E4JHRIC9
+         +KFw==
+X-Gm-Message-State: AOAM531cZZQtJjQXehVaMnyKQxG977Nlsoxw6Tmw7LUdrTgFk45h+oHl
+        YlRLFkfzlUmM4w1KutSfBg==
+X-Google-Smtp-Source: ABdhPJxbRG9Eup7xA2iQ0q5xmBU4mgCmlg6AIIhTw+DyogAOmTqyFE3svZwaKu4fU+q914jcuVFVsQ==
+X-Received: by 2002:a05:6512:3ba2:: with SMTP id g34mr13032656lfv.613.1627309222000;
+        Mon, 26 Jul 2021 07:20:22 -0700 (PDT)
+Received: from localhost.localdomain (82-181-76-45.bb.dnainternet.fi. [82.181.76.45])
+        by smtp.gmail.com with ESMTPSA id n24sm14017lfb.54.2021.07.26.07.20.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jul 2021 07:10:56 -0700 (PDT)
-From:   Hengqi Chen <hengqi.chen@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, jolsa@kernel.org,
-        yanivagman@gmail.com, hengqi.chen@gmail.com
-Subject: [PATCH bpf-next v4 2/2] bpf: expose bpf_d_path helper to vfs_* and security_* functions
-Date:   Mon, 26 Jul 2021 22:10:13 +0800
-Message-Id: <20210726141013.2239765-3-hengqi.chen@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210726141013.2239765-1-hengqi.chen@gmail.com>
-References: <20210726141013.2239765-1-hengqi.chen@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Mon, 26 Jul 2021 07:20:21 -0700 (PDT)
+From:   Jussi Maki <joamaki@gmail.com>
+To:     andrii@kernel.org
+Cc:     bpf@vger.kernel.org, daniel@iogearbox.net,
+        Jussi Maki <joamaki@gmail.com>
+Subject: [PATCH bpf] selftests/bpf: Use ping6 only if available in tc_redirect
+Date:   Thu,  8 Jul 2021 02:17:27 +0000
+Message-Id: <20210708021727.5538-1-joamaki@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <CAEf4BzaSN+aN5RV=anaGewGAmqOWJRZpHtSeMfYcJ2HZ98LqLQ@mail.gmail.com>
+References: <CAEf4BzaSN+aN5RV=anaGewGAmqOWJRZpHtSeMfYcJ2HZ98LqLQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add vfs_* and security_* to bpf_d_path allowlist, so that we can use
-bpf_d_path helper to extract full file path from these functions' arguments.
-This will help tools like BCC's filetop[1]/filelife to get full file path.
+In the tc_redirect test only use ping6 if it's available and
+otherwise fall back to using "ping -6".
 
-[1] https://github.com/iovisor/bcc/issues/3527
-
-Acked-by: Yonghong Song <yhs@fb.com>
-Signed-off-by: Hengqi Chen <hengqi.chen@gmail.com>
+Signed-off-by: Jussi Maki <joamaki@gmail.com>
 ---
- kernel/trace/bpf_trace.c | 60 +++++++++++++++++++++++++++++++++++++---
- 1 file changed, 56 insertions(+), 4 deletions(-)
+ .../selftests/bpf/prog_tests/tc_redirect.c    | 23 ++++++++++++++-----
+ 1 file changed, 17 insertions(+), 6 deletions(-)
 
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index c5e0b6a64091..e7b24abcf3bf 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -849,18 +849,70 @@ BPF_CALL_3(bpf_d_path, struct path *, path, char *, buf, u32, sz)
+diff --git a/tools/testing/selftests/bpf/prog_tests/tc_redirect.c b/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
+index 5703c918812b..932e4ee3f97c 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
++++ b/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
+@@ -13,15 +13,16 @@
+ #define _GNU_SOURCE
  
- BTF_SET_START(btf_allowlist_d_path)
- #ifdef CONFIG_SECURITY
-+BTF_ID(func, security_bprm_check)
-+BTF_ID(func, security_bprm_committed_creds)
-+BTF_ID(func, security_bprm_committing_creds)
-+BTF_ID(func, security_bprm_creds_for_exec)
-+BTF_ID(func, security_bprm_creds_from_file)
-+BTF_ID(func, security_file_alloc)
-+BTF_ID(func, security_file_fcntl)
-+BTF_ID(func, security_file_free)
-+BTF_ID(func, security_file_ioctl)
-+BTF_ID(func, security_file_lock)
-+BTF_ID(func, security_file_open)
- BTF_ID(func, security_file_permission)
-+BTF_ID(func, security_file_receive)
-+BTF_ID(func, security_file_set_fowner)
- BTF_ID(func, security_inode_getattr)
--BTF_ID(func, security_file_open)
-+BTF_ID(func, security_sb_mount)
- #endif
- #ifdef CONFIG_SECURITY_PATH
-+BTF_ID(func, security_path_chmod)
-+BTF_ID(func, security_path_chown)
-+BTF_ID(func, security_path_chroot)
-+BTF_ID(func, security_path_link)
-+BTF_ID(func, security_path_mkdir)
-+BTF_ID(func, security_path_mknod)
-+BTF_ID(func, security_path_notify)
-+BTF_ID(func, security_path_rename)
-+BTF_ID(func, security_path_rmdir)
-+BTF_ID(func, security_path_symlink)
- BTF_ID(func, security_path_truncate)
-+BTF_ID(func, security_path_unlink)
- #endif
--BTF_ID(func, vfs_truncate)
--BTF_ID(func, vfs_fallocate)
- BTF_ID(func, dentry_open)
--BTF_ID(func, vfs_getattr)
- BTF_ID(func, filp_close)
-+BTF_ID(func, vfs_cancel_lock)
-+BTF_ID(func, vfs_clone_file_range)
-+BTF_ID(func, vfs_copy_file_range)
-+BTF_ID(func, vfs_dedupe_file_range)
-+BTF_ID(func, vfs_dedupe_file_range_one)
-+BTF_ID(func, vfs_fadvise)
-+BTF_ID(func, vfs_fallocate)
-+BTF_ID(func, vfs_fchmod)
-+BTF_ID(func, vfs_fchown)
-+BTF_ID(func, vfs_fsync)
-+BTF_ID(func, vfs_fsync_range)
-+BTF_ID(func, vfs_getattr)
-+BTF_ID(func, vfs_getattr_nosec)
-+BTF_ID(func, vfs_iocb_iter_read)
-+BTF_ID(func, vfs_iocb_iter_write)
-+BTF_ID(func, vfs_ioctl)
-+BTF_ID(func, vfs_iter_read)
-+BTF_ID(func, vfs_iter_write)
-+BTF_ID(func, vfs_llseek)
-+BTF_ID(func, vfs_lock_file)
-+BTF_ID(func, vfs_open)
-+BTF_ID(func, vfs_read)
-+BTF_ID(func, vfs_readv)
-+BTF_ID(func, vfs_setlease)
-+BTF_ID(func, vfs_setpos)
-+BTF_ID(func, vfs_statfs)
-+BTF_ID(func, vfs_test_lock)
-+BTF_ID(func, vfs_truncate)
-+BTF_ID(func, vfs_utimes)
-+BTF_ID(func, vfs_write)
-+BTF_ID(func, vfs_writev)
- BTF_SET_END(btf_allowlist_d_path)
+ #include <arpa/inet.h>
++#include <linux/if.h>
++#include <linux/if_tun.h>
+ #include <linux/limits.h>
+ #include <linux/sysctl.h>
+-#include <linux/if_tun.h>
+-#include <linux/if.h>
+ #include <sched.h>
+ #include <stdbool.h>
+ #include <stdio.h>
+-#include <sys/stat.h>
+ #include <sys/mount.h>
++#include <sys/stat.h>
++#include <unistd.h>
  
- static bool bpf_d_path_allowed(const struct bpf_prog *prog)
+ #include "test_progs.h"
+ #include "network_helpers.h"
+@@ -389,11 +390,21 @@ static void test_tcp(int family, const char *addr, __u16 port)
+ 		close(client_fd);
+ }
+ 
+-static int test_ping(int family, const char *addr)
++static char *ping_command(int family)
+ {
+-	const char *ping = family == AF_INET6 ? "ping6" : "ping";
++	if (family == AF_INET6) {
++		/* On some systems 'ping' doesn't support IPv6, so use ping6 if it is present. */
++		if (!system("which ping6 >/dev/null 2>&1"))
++			return "ping6";
++		else
++			return "ping -6";
++	}
++	return "ping";
++}
+ 
+-	SYS("ip netns exec " NS_SRC " %s " PING_ARGS " %s > /dev/null", ping, addr);
++static int test_ping(int family, const char *addr)
++{
++	SYS("ip netns exec " NS_SRC " %s " PING_ARGS " %s > /dev/null", ping_command(family), addr);
+ 	return 0;
+ fail:
+ 	return -1;
 -- 
-2.25.1
+2.17.1
 
