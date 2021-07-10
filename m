@@ -7,22 +7,22 @@ X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E64AAC07E99
-	for <bpf@archiver.kernel.org>; Sat, 10 Jul 2021 03:11:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EE6E5C07E99
+	for <bpf@archiver.kernel.org>; Sat, 10 Jul 2021 03:16:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B86AB613C3
-	for <bpf@archiver.kernel.org>; Sat, 10 Jul 2021 03:11:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B5446613C9
+	for <bpf@archiver.kernel.org>; Sat, 10 Jul 2021 03:16:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231150AbhGJDOO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 9 Jul 2021 23:14:14 -0400
-Received: from out30-133.freemail.mail.aliyun.com ([115.124.30.133]:36599 "EHLO
-        out30-133.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230233AbhGJDOO (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 9 Jul 2021 23:14:14 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R871e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0UfGEv.N_1625886688;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0UfGEv.N_1625886688)
+        id S230409AbhGJDTX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 9 Jul 2021 23:19:23 -0400
+Received: from out30-131.freemail.mail.aliyun.com ([115.124.30.131]:57424 "EHLO
+        out30-131.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230233AbhGJDTW (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 9 Jul 2021 23:19:22 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0UfGEvcR_1625886995;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0UfGEvcR_1625886995)
           by smtp.aliyun-inc.com(127.0.0.1);
-          Sat, 10 Jul 2021 11:11:28 +0800
+          Sat, 10 Jul 2021 11:16:35 +0800
 From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To:     netdev@vger.kernel.org
 Cc:     "David S. Miller" <davem@davemloft.net>,
@@ -41,9 +41,9 @@ Cc:     "David S. Miller" <davem@davemloft.net>,
         Wei Wang <weiwan@google.com>, Taehee Yoo <ap420073@gmail.com>,
         bpf@vger.kernel.org, Abaci <abaci@linux.alibaba.com>,
         Dust Li <dust.li@linux.alibaba.com>
-Subject: [PATCH net v3] xdp, net: fix use-after-free in bpf_xdp_link_release
-Date:   Sat, 10 Jul 2021 11:11:28 +0800
-Message-Id: <20210710031128.35937-1-xuanzhuo@linux.alibaba.com>
+Subject: [PATCH net v4] xdp, net: fix use-after-free in bpf_xdp_link_release
+Date:   Sat, 10 Jul 2021 11:16:35 +0800
+Message-Id: <20210710031635.41649-1-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -70,9 +70,6 @@ rtnl_unlock();            |
 bpf_xdp_link_release()    |
     /* access dev.        |
        use-after-free */  |
-
-This patch adds a check of dev->reg_state in dev_xdp_attach_link(). If
-dev has been called release, it will return -EINVAL.
 
 [   45.966867] BUG: KASAN: use-after-free in bpf_xdp_link_release+0x3b8/0x3d0
 [   45.967619] Read of size 8 at addr ffff00000f9980c8 by task a.out/732
@@ -145,6 +142,8 @@ Reported-by: Abaci <abaci@linux.alibaba.com>
 Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 Reviewed-by: Dust Li <dust.li@linux.alibaba.com>
 ---
+
+v4: fix commit message
 
 v3: v1 + "link->dev = NULL"
 
