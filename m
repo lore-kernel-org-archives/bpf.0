@@ -8,54 +8,54 @@ X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 228C3C11F6F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B73EC07E9C
 	for <bpf@archiver.kernel.org>; Mon, 12 Jul 2021 00:35:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 03EFA60551
-	for <bpf@archiver.kernel.org>; Mon, 12 Jul 2021 00:35:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 71B0560551
+	for <bpf@archiver.kernel.org>; Mon, 12 Jul 2021 00:35:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232544AbhGLAia (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 11 Jul 2021 20:38:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33306 "EHLO
+        id S232582AbhGLAib (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 11 Jul 2021 20:38:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232090AbhGLAiX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 11 Jul 2021 20:38:23 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5849AC0613DD;
-        Sun, 11 Jul 2021 17:35:35 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id s18so1184645pgq.3;
-        Sun, 11 Jul 2021 17:35:35 -0700 (PDT)
+        with ESMTP id S232193AbhGLAi0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 11 Jul 2021 20:38:26 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E86FFC0613EE;
+        Sun, 11 Jul 2021 17:35:37 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id w15so16459308pgk.13;
+        Sun, 11 Jul 2021 17:35:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=B0unYZuIjXroRmLeSdEAWvOsYYAcsr17oWsLSXDQ15w=;
-        b=YH6QeaxEeMovxNg/MDaDzsL3I+L57mXEUwztNZX8OnzgEZhXzP241cBepJ5EeQ55Xs
-         zsOCh7tMinRD+QNaddog6ArwHMRPUDW85nyjJ3llkDWg6nr/5MTSVhSdJf5VdevLlc8Q
-         tVEZhpDEvW8Z0n1w831cYhNSeiZoYUjyPLegsNluVnL9gKxsLFiK3Kml+Rlzy7drm2ED
-         AIMeL9rSLxWuEAG0lLLCKIo2rvevYxo85u0zqmFqWBG5KCswDxitv2TfRbOLdxTIyTPa
-         fROJ5/VsyZ601lue5ruv6s+prHsS31oNg2VcAqCnmL3l/p4jkMF0AUANVNjJIp8eGcVS
-         +c7g==
+        bh=xV2HdIRH4UfRrAHXN/H9DTR/2ZGLXLPOFFF8iUGihdI=;
+        b=iqGS6jwOogU85vAVz7EzI0ONnzoVCWpt1kgujjjWx61sWmyIA5vYT/NRuvRzjIPHE7
+         tLq66ltpEdsOMDVjdrL6OtHPfggRcmn8sdzW9n0ZxoLwq+3OxNBcVxAe0N+GUKYDcOYo
+         wIVG1yf4GlQXQlT0w+xPAcRgl/2LHvHAr5hCzwzzWbaGEvpaGD6xZLUMvOGxYQtr71IO
+         bJuilMU5bvtxsqCIFMOveMUdrtlbm9l53CJ7LWwqvqFvgRSVsLq8XJTEAsFf9zoAibHM
+         4KbDb4IV36q06RYdvRULfBIC9p34CeIOP8/+50LZAf4W8b5YZ8xW6D/u+CZZPMTi+ub4
+         TqSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=B0unYZuIjXroRmLeSdEAWvOsYYAcsr17oWsLSXDQ15w=;
-        b=UjL04q2ec318qtZhnkUbjGZXH6v9+EHy6otBrCovQCAJ7Vvo3I2BhGEz5VhHSIQ6Of
-         koyBBqNeo391tmh+gx1Vi51vwxQX2rftHQCc8UzcVYtZqVcJww/u9CSj+peRvVQ22cEc
-         tH6e1rSwQhHuotNAHVpyQVgxXWEAJthOi2CGMCHtfYnFVl8Z7YGBiyfobvgl7nWHjD5l
-         ESdA4yZg26ZFQQRK6DnuyWYCqDs3zdDio+wZJl9XQVsTamlRBT+uT9pB6T3SFKzsl4MH
-         RcAfW34+Rj/mrG3dBGW3zUy8jUcoruTtrY5pfOVtbaoh5E4f741l0Wz01tPrNGdjM0rH
-         VIDA==
-X-Gm-Message-State: AOAM532nI/90/nEsl5IT+XV5XvMdr1mlb5DFz9ab6t0/WC4J3sDFfVWL
-        ay6p3P63Qvw70DBpAKO591Q=
-X-Google-Smtp-Source: ABdhPJxU1giKJp7HNS+yHRwlhR1DVja/yTEMojfwjkOXVlVXRYZ8+yh+rfP5cXpXdwqgcMhcOalWOQ==
-X-Received: by 2002:aa7:8d01:0:b029:311:47d0:f169 with SMTP id j1-20020aa78d010000b029031147d0f169mr36795986pfe.78.1626050134450;
-        Sun, 11 Jul 2021 17:35:34 -0700 (PDT)
+        bh=xV2HdIRH4UfRrAHXN/H9DTR/2ZGLXLPOFFF8iUGihdI=;
+        b=RBUF1TU8DVgEnVPiK0wFwdGknArfqBIhzZtueodKdrUfKgtzN2OI9GYTP+oV/jSyGO
+         MpX4zk/YOfoGPrFCyulttCG8hysa56Ek/0Pz6eudfRAuU9H5voLYm2Kj4OTfpBpDjEEu
+         E5aFULoSf2Glad7Z0LhpNcjhVZzsL6VBgKBuntzGZUjok9iq8MvdxpdGp+B+IRiaQvsE
+         47GWdq8KEOpsbOqiU3o8/lMEo04+rltEeC7J4aUAsHvwruMkLqm6qZcZ/A/+W2VZaEQY
+         Zwp8ta6Cy0LvwMMpDnlts5HHdz1kmaOSaKSjaPtbink1AiHRZSwH+jJIYjr2onggQ5OC
+         1oWQ==
+X-Gm-Message-State: AOAM530Mu5p92zJdZledb43bTl9AWELsqDuRnWm5IV+QIu4/64llU/FW
+        w6iFMIFVGYZfhmqmBPNLp6HWNshIkPo8ww==
+X-Google-Smtp-Source: ABdhPJzrIt6Zodpqq8ncxTnLEq+8L79neCI209zuG0wLSWubTeFeUK2CKj7bygFajsasyqIWvvUsSw==
+X-Received: by 2002:a62:e90b:0:b029:30e:4530:8dca with SMTP id j11-20020a62e90b0000b029030e45308dcamr50228994pfh.17.1626050137560;
+        Sun, 11 Jul 2021 17:35:37 -0700 (PDT)
 Received: from localhost.localdomain ([2001:470:e92d:10:4039:6c0e:1168:cc74])
-        by smtp.gmail.com with ESMTPSA id c24sm15588447pgj.11.2021.07.11.17.35.33
+        by smtp.gmail.com with ESMTPSA id c24sm15588447pgj.11.2021.07.11.17.35.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Jul 2021 17:35:34 -0700 (PDT)
+        Sun, 11 Jul 2021 17:35:37 -0700 (PDT)
 From:   Tony Ambardar <tony.ambardar@gmail.com>
 X-Google-Original-From: Tony Ambardar <Tony.Ambardar@gmail.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
@@ -74,9 +74,9 @@ Cc:     Tony Ambardar <Tony.Ambardar@gmail.com>, netdev@vger.kernel.org,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>
-Subject: [RFC PATCH bpf-next v1 06/14] MIPS: eBPF: fix JIT static analysis hang with bounded loops
-Date:   Sun, 11 Jul 2021 17:34:52 -0700
-Message-Id: <c802f35b32b863e87c99322a1ee51913f7d7b01f.1625970384.git.Tony.Ambardar@gmail.com>
+Subject: [RFC PATCH bpf-next v1 09/14] MIPS: eBPF: drop src_reg restriction in BPF_LD|BPF_DW|BPF_IMM
+Date:   Sun, 11 Jul 2021 17:34:55 -0700
+Message-Id: <e2c64e0121959db6216e1f6c23447c06ce2b14a3.1625970384.git.Tony.Ambardar@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1625970383.git.Tony.Ambardar@gmail.com>
 References: <cover.1625970383.git.Tony.Ambardar@gmail.com>
@@ -86,54 +86,32 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Support for bounded loops allowed the verifier to output backward jumps
-such as BPF_JMP_A(-4). These trap the JIT's static analysis in a loop,
-resulting in a system hang and eventual RCU stall.
+Stop enforcing (insn->src_reg == 0) and allow special verifier insns such
+as "BPF_LD_MAP_FD(BPF_REG_2, 0)", used to refer to a process-local map fd
+and introduced in 0246e64d9a5f ("bpf: handle pseudo BPF_LD_IMM64 insn").
 
-Fix by updating reg_val_propagate_range() to skip backward jumps when in
-fallthrough mode and if the jump target has been visited already.
+This is consistent with other JITs such as riscv32 and also used by
+test_verifier (e.g. "runtime/jit: tail_call within bounds, prog once").
 
-Trigger the bug using the test_verifier test "bounded loop that jumps out
-rather than in".
-
-Fixes: 2589726d12a1 ("bpf: introduce bounded loops")
+Fixes: b6bd53f9c4e8 ("MIPS: Add missing file for eBPF JIT.")
 Signed-off-by: Tony Ambardar <Tony.Ambardar@gmail.com>
 ---
- arch/mips/net/ebpf_jit.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ arch/mips/net/ebpf_jit.c | 2 --
+ 1 file changed, 2 deletions(-)
 
 diff --git a/arch/mips/net/ebpf_jit.c b/arch/mips/net/ebpf_jit.c
-index e60a089ee3b3..4f641dcb2031 100644
+index f510c692975e..bba41f334d07 100644
 --- a/arch/mips/net/ebpf_jit.c
 +++ b/arch/mips/net/ebpf_jit.c
-@@ -1690,6 +1690,10 @@ static int reg_val_propagate_range(struct jit_ctx *ctx, u64 initial_rvt,
- 				rvt[prog->len] = exit_rvt;
- 				return idx;
- 			case BPF_JA:
-+			{
-+				int tgt = idx + 1 + insn->off;
-+				bool visited = (rvt[tgt] & RVT_FALL_THROUGH);
-+
- 				rvt[idx] |= RVT_DONE;
- 				/*
- 				 * Verifier dead code patching can use
-@@ -1699,8 +1703,16 @@ static int reg_val_propagate_range(struct jit_ctx *ctx, u64 initial_rvt,
- 				 */
- 				if (insn->off == -1)
- 					break;
-+				/*
-+				 * Bounded loops cause the same issues in
-+				 * fallthrough mode; follow only if jump
-+				 * target is unvisited to mitigate.
-+				 */
-+				if (insn->off < 0 && !follow_taken && visited)
-+					break;
- 				idx += insn->off;
- 				break;
-+			}
- 			case BPF_JEQ:
- 			case BPF_JGT:
- 			case BPF_JGE:
+@@ -1303,8 +1303,6 @@ static int build_one_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
+ 		emit_instr(ctx, nop);
+ 		break;
+ 	case BPF_LD | BPF_DW | BPF_IMM:
+-		if (insn->src_reg != 0)
+-			return -EINVAL;
+ 		dst = ebpf_to_mips_reg(ctx, insn, dst_reg);
+ 		if (dst < 0)
+ 			return dst;
 -- 
 2.25.1
 
