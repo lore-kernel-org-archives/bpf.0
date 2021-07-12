@@ -8,54 +8,54 @@ X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1BF34C11F76
-	for <bpf@archiver.kernel.org>; Mon, 12 Jul 2021 00:35:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4033FC11F68
+	for <bpf@archiver.kernel.org>; Mon, 12 Jul 2021 00:35:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 011626100C
-	for <bpf@archiver.kernel.org>; Mon, 12 Jul 2021 00:35:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1CA8161059
+	for <bpf@archiver.kernel.org>; Mon, 12 Jul 2021 00:35:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232634AbhGLAib (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 11 Jul 2021 20:38:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33330 "EHLO
+        id S232618AbhGLAid (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 11 Jul 2021 20:38:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232201AbhGLAi0 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 11 Jul 2021 20:38:26 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA273C0613DD;
-        Sun, 11 Jul 2021 17:35:38 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id p4so3994355plo.11;
-        Sun, 11 Jul 2021 17:35:38 -0700 (PDT)
+        with ESMTP id S232569AbhGLAib (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 11 Jul 2021 20:38:31 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9A51C0613E5;
+        Sun, 11 Jul 2021 17:35:42 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id d9-20020a17090ae289b0290172f971883bso11141301pjz.1;
+        Sun, 11 Jul 2021 17:35:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=jw7YhCYvkORE+kKaZ4OGGD3iGi/XtNNMa4bsdRSUdJU=;
-        b=qhdAF39A6JSBf8FNNpO7mNHkGRhYz6SraAUZivrN0tfL641UK21X33qE/j508BkNpi
-         /fzZgqTm8qh1LU77rnoK39Oy+yN7SDK910x8AAqtK9WFwARJv9y1qNf6pYsKm9RNpTci
-         gchty2QZ6PiDb9z633I005BU/nU6BBSrwvtKwhkwQBYX24FX3wjuUTEvadbKGty2i1gv
-         cYauEJjJSiGk808DrQY0GV2Sf2UFgeMDxePkwFHIJbFhk6HUuf4fS+Ja1e9wLNxRCZ67
-         n6am1CPbuTUXu4im3+MC90lquwylbPLYpHP1DlMpvQcePty6rgIS0C8E1AChVV9wQE16
-         6MQA==
+        bh=oB80oYMulhrt43Nc7h4b8WTmJ925bEkBYiIlwoCVavE=;
+        b=NxP01KNhkrSiBxyEIGraariMdqCYl7thvxueTtkC4eWIOa++ocF+MOwloKQBLmsPQi
+         dC+v+6N2GJ00z7af2/i+ugI5Zy9or7H8OeqtMA92xfLXoQY4ac5KVEuwiogaq5s2nI6x
+         wqZwRGppD0niZR8GpdOdLz3qY3GtDNuwqRCSvX80pv1CDBcRczn/DkzjUCM99I6tLpUb
+         mNkxgKAqRvKwsR+xUFNEGnVVXspKxmALCroOE+N4l53iJo9//wkpQOsGJsJxtvmfAvUn
+         XAfbyJAO3sRwMbLTgRukrDW0kj0byGBXpdZP0FIuD7eYL79p3FbB8MlhHhiwWzj4Bi6A
+         LD9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=jw7YhCYvkORE+kKaZ4OGGD3iGi/XtNNMa4bsdRSUdJU=;
-        b=gRVorBUsFc8ijFbkk3RunWoK7b7AwlNy3tIWfMMewHm05PHtD3JROnX+Ept7TSB8by
-         RtPBt0hVk2OjpuFJyJlmYWnLci27EmWJINV1lI4PtTyBBXRjDtiu4tRuJDqdHa8Zvdsa
-         1K6wbGn9BrjoUHurNIEUYUTY7j5hh+9RcxpIRpGsnzQe6MSYLICZVKl4civwQj/X8gN6
-         qaks3d41juOLwuQzCLAFw+iFnAx82xwDu3jR/h98qRb/XgIGsw0kZHqnhughWRtod3fv
-         HeMXUx4kJik4XUXO2Ika7kAWFimZ1L4nc+Rt68+BLOuxHPN/Df8QEUVjX6pNyYK+0l0w
-         lrAQ==
-X-Gm-Message-State: AOAM532yV5YGEkwx0RF5sxl3XcdQr4QeaA8g1wXBIRmwn8A1NwpdteL6
-        toJj+IuLikDyAW6GHBEkNaw=
-X-Google-Smtp-Source: ABdhPJwZxh1FtkAyQNLnCkGTnJmXy0K3N9PofEXhfbduE8653nL35X0Joxeygj4r0hySN//vuBGIKA==
-X-Received: by 2002:a17:902:d293:b029:12b:1912:2540 with SMTP id t19-20020a170902d293b029012b19122540mr963903plc.76.1626050138521;
-        Sun, 11 Jul 2021 17:35:38 -0700 (PDT)
+        bh=oB80oYMulhrt43Nc7h4b8WTmJ925bEkBYiIlwoCVavE=;
+        b=sX+p3ojPqucyYhDD/UJMoRr6Y30bEO8Z10IC5YQ/kZUf9pK57Y60/V0bRmfQiJqAap
+         0i4byLTtIwUJXOOmDPJqfNjANw3XWB+QUR7kyqpONaaLaoXRDKpd3o9SRAH4bbgc1FRe
+         a+Gm7UygsckZH1+ewlv6e+6cc1eODtUGCEY3qI8E0nRSDSTcxukYQ2n23zZnk14RyVF0
+         ErbtOz77Snp5ajOYi0F9WcKrgP/rry34OzK8DwgqBZcQabwgVuSTW+JQb19wg4ju9i3h
+         asSmVzomYsHBH/o970oYg3HCxzZbwTqKPin2RyBTekyzuzpuCPexQG0Pmz9GkGffCmgS
+         R+9A==
+X-Gm-Message-State: AOAM532Jcy8fY8pQLjtH7hID5PQe7ZfsajdR6zMXcHERIO7TlYbZ+ntV
+        00H9OnUAYZ+TZNfmFVyiMy4=
+X-Google-Smtp-Source: ABdhPJz1KEiQJEmGbn390SxZyaPk+Zi8fa4F2g+2F6GcpkwMNjNRb1jJgBkY3Y49srHXIVRhsJszKw==
+X-Received: by 2002:a17:903:300c:b029:129:dd30:2b8a with SMTP id o12-20020a170903300cb0290129dd302b8amr17858041pla.85.1626050142430;
+        Sun, 11 Jul 2021 17:35:42 -0700 (PDT)
 Received: from localhost.localdomain ([2001:470:e92d:10:4039:6c0e:1168:cc74])
-        by smtp.gmail.com with ESMTPSA id c24sm15588447pgj.11.2021.07.11.17.35.37
+        by smtp.gmail.com with ESMTPSA id c24sm15588447pgj.11.2021.07.11.17.35.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Jul 2021 17:35:38 -0700 (PDT)
+        Sun, 11 Jul 2021 17:35:42 -0700 (PDT)
 From:   Tony Ambardar <tony.ambardar@gmail.com>
 X-Google-Original-From: Tony Ambardar <Tony.Ambardar@gmail.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
@@ -74,9 +74,9 @@ Cc:     Tony Ambardar <Tony.Ambardar@gmail.com>, netdev@vger.kernel.org,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>
-Subject: [RFC PATCH bpf-next v1 10/14] MIPS: eBPF: improve and clarify enum 'which_ebpf_reg'
-Date:   Sun, 11 Jul 2021 17:34:56 -0700
-Message-Id: <a2cb9a208b069eeef12f5ebcd34b8a071d4eb8f1.1625970384.git.Tony.Ambardar@gmail.com>
+Subject: [RFC PATCH bpf-next v1 13/14] MIPS: uasm: Enable muhu opcode for MIPS R6
+Date:   Sun, 11 Jul 2021 17:34:59 -0700
+Message-Id: <94f6da32a6990e64c69ccbbd435fcba67d3c7ec6.1625970384.git.Tony.Ambardar@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1625970383.git.Tony.Ambardar@gmail.com>
 References: <cover.1625970383.git.Tony.Ambardar@gmail.com>
@@ -86,246 +86,73 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Update enum and literals to be more consistent and less confusing. Prior
-usage resulted in 'dst_reg' variables and 'dst_reg' enum literals, often
-adjacent to each other and hampering maintenance.
+Enable the 'muhu' instruction, complementing the existing 'mulu', needed
+to implement a MIPS32 BPF JIT.
+
+Also fix a typo in the existing definition of 'dmulu'.
 
 Signed-off-by: Tony Ambardar <Tony.Ambardar@gmail.com>
 ---
- arch/mips/net/ebpf_jit.c | 64 ++++++++++++++++++++--------------------
- 1 file changed, 32 insertions(+), 32 deletions(-)
+ arch/mips/include/asm/uasm.h | 1 +
+ arch/mips/mm/uasm-mips.c     | 4 +++-
+ arch/mips/mm/uasm.c          | 3 ++-
+ 3 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/arch/mips/net/ebpf_jit.c b/arch/mips/net/ebpf_jit.c
-index bba41f334d07..61d7894051aa 100644
---- a/arch/mips/net/ebpf_jit.c
-+++ b/arch/mips/net/ebpf_jit.c
-@@ -177,11 +177,11 @@ static u32 b_imm(unsigned int tgt, struct jit_ctx *ctx)
- 		(ctx->idx * 4) - 4;
- }
- 
--enum which_ebpf_reg {
--	src_reg,
--	src_reg_no_fp,
--	dst_reg,
--	dst_reg_fp_ok
-+enum reg_usage {
-+	REG_SRC_FP_OK,
-+	REG_SRC_NO_FP,
-+	REG_DST_FP_OK,
-+	REG_DST_NO_FP
- };
- 
- /*
-@@ -192,9 +192,9 @@ enum which_ebpf_reg {
-  */
- static int ebpf_to_mips_reg(struct jit_ctx *ctx,
- 			    const struct bpf_insn *insn,
--			    enum which_ebpf_reg w)
-+			    enum reg_usage u)
- {
--	int ebpf_reg = (w == src_reg || w == src_reg_no_fp) ?
-+	int ebpf_reg = (u == REG_SRC_FP_OK || u == REG_SRC_NO_FP) ?
- 		insn->src_reg : insn->dst_reg;
- 
- 	switch (ebpf_reg) {
-@@ -223,7 +223,7 @@ static int ebpf_to_mips_reg(struct jit_ctx *ctx,
- 		ctx->flags |= EBPF_SAVE_S3;
- 		return MIPS_R_S3;
- 	case BPF_REG_10:
--		if (w == dst_reg || w == src_reg_no_fp)
-+		if (u == REG_DST_NO_FP || u == REG_SRC_NO_FP)
- 			goto bad_reg;
- 		ctx->flags |= EBPF_SEEN_FP;
- 		/*
-@@ -423,7 +423,7 @@ static int gen_imm_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 			int idx)
- {
- 	int upper_bound, lower_bound;
--	int dst = ebpf_to_mips_reg(ctx, insn, dst_reg);
-+	int dst = ebpf_to_mips_reg(ctx, insn, REG_DST_NO_FP);
- 
- 	if (dst < 0)
- 		return dst;
-@@ -696,7 +696,7 @@ static int build_one_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 			return r;
- 		break;
- 	case BPF_ALU64 | BPF_MUL | BPF_K: /* ALU64_IMM */
--		dst = ebpf_to_mips_reg(ctx, insn, dst_reg);
-+		dst = ebpf_to_mips_reg(ctx, insn, REG_DST_NO_FP);
- 		if (dst < 0)
- 			return dst;
- 		if (get_reg_val_type(ctx, this_idx, insn->dst_reg) == REG_32BIT)
-@@ -712,7 +712,7 @@ static int build_one_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 		}
- 		break;
- 	case BPF_ALU64 | BPF_NEG | BPF_K: /* ALU64_IMM */
--		dst = ebpf_to_mips_reg(ctx, insn, dst_reg);
-+		dst = ebpf_to_mips_reg(ctx, insn, REG_DST_NO_FP);
- 		if (dst < 0)
- 			return dst;
- 		if (get_reg_val_type(ctx, this_idx, insn->dst_reg) == REG_32BIT)
-@@ -720,7 +720,7 @@ static int build_one_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 		emit_instr(ctx, dsubu, dst, MIPS_R_ZERO, dst);
- 		break;
- 	case BPF_ALU | BPF_MUL | BPF_K: /* ALU_IMM */
--		dst = ebpf_to_mips_reg(ctx, insn, dst_reg);
-+		dst = ebpf_to_mips_reg(ctx, insn, REG_DST_NO_FP);
- 		if (dst < 0)
- 			return dst;
- 		td = get_reg_val_type(ctx, this_idx, insn->dst_reg);
-@@ -739,7 +739,7 @@ static int build_one_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 		}
- 		break;
- 	case BPF_ALU | BPF_NEG | BPF_K: /* ALU_IMM */
--		dst = ebpf_to_mips_reg(ctx, insn, dst_reg);
-+		dst = ebpf_to_mips_reg(ctx, insn, REG_DST_NO_FP);
- 		if (dst < 0)
- 			return dst;
- 		td = get_reg_val_type(ctx, this_idx, insn->dst_reg);
-@@ -753,7 +753,7 @@ static int build_one_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 	case BPF_ALU | BPF_MOD | BPF_K: /* ALU_IMM */
- 		if (insn->imm == 0)
- 			return -EINVAL;
--		dst = ebpf_to_mips_reg(ctx, insn, dst_reg);
-+		dst = ebpf_to_mips_reg(ctx, insn, REG_DST_NO_FP);
- 		if (dst < 0)
- 			return dst;
- 		td = get_reg_val_type(ctx, this_idx, insn->dst_reg);
-@@ -784,7 +784,7 @@ static int build_one_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 	case BPF_ALU64 | BPF_MOD | BPF_K: /* ALU_IMM */
- 		if (insn->imm == 0)
- 			return -EINVAL;
--		dst = ebpf_to_mips_reg(ctx, insn, dst_reg);
-+		dst = ebpf_to_mips_reg(ctx, insn, REG_DST_NO_FP);
- 		if (dst < 0)
- 			return dst;
- 		if (get_reg_val_type(ctx, this_idx, insn->dst_reg) == REG_32BIT)
-@@ -821,8 +821,8 @@ static int build_one_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 	case BPF_ALU64 | BPF_LSH | BPF_X: /* ALU64_REG */
- 	case BPF_ALU64 | BPF_RSH | BPF_X: /* ALU64_REG */
- 	case BPF_ALU64 | BPF_ARSH | BPF_X: /* ALU64_REG */
--		src = ebpf_to_mips_reg(ctx, insn, src_reg);
--		dst = ebpf_to_mips_reg(ctx, insn, dst_reg);
-+		src = ebpf_to_mips_reg(ctx, insn, REG_SRC_FP_OK);
-+		dst = ebpf_to_mips_reg(ctx, insn, REG_DST_NO_FP);
- 		if (src < 0 || dst < 0)
- 			return -EINVAL;
- 		if (get_reg_val_type(ctx, this_idx, insn->dst_reg) == REG_32BIT)
-@@ -917,8 +917,8 @@ static int build_one_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 	case BPF_ALU | BPF_LSH | BPF_X: /* ALU_REG */
- 	case BPF_ALU | BPF_RSH | BPF_X: /* ALU_REG */
- 	case BPF_ALU | BPF_ARSH | BPF_X: /* ALU_REG */
--		src = ebpf_to_mips_reg(ctx, insn, src_reg_no_fp);
--		dst = ebpf_to_mips_reg(ctx, insn, dst_reg);
-+		src = ebpf_to_mips_reg(ctx, insn, REG_SRC_NO_FP);
-+		dst = ebpf_to_mips_reg(ctx, insn, REG_DST_NO_FP);
- 		if (src < 0 || dst < 0)
- 			return -EINVAL;
- 		td = get_reg_val_type(ctx, this_idx, insn->dst_reg);
-@@ -1008,7 +1008,7 @@ static int build_one_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 	case BPF_JMP | BPF_JEQ | BPF_K: /* JMP_IMM */
- 	case BPF_JMP | BPF_JNE | BPF_K: /* JMP_IMM */
- 		cmp_eq = (bpf_op == BPF_JEQ);
--		dst = ebpf_to_mips_reg(ctx, insn, dst_reg_fp_ok);
-+		dst = ebpf_to_mips_reg(ctx, insn, REG_DST_FP_OK);
- 		if (dst < 0)
- 			return dst;
- 		if (insn->imm == 0) {
-@@ -1029,8 +1029,8 @@ static int build_one_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 	case BPF_JMP | BPF_JGT | BPF_X:
- 	case BPF_JMP | BPF_JGE | BPF_X:
- 	case BPF_JMP | BPF_JSET | BPF_X:
--		src = ebpf_to_mips_reg(ctx, insn, src_reg_no_fp);
--		dst = ebpf_to_mips_reg(ctx, insn, dst_reg);
-+		src = ebpf_to_mips_reg(ctx, insn, REG_SRC_NO_FP);
-+		dst = ebpf_to_mips_reg(ctx, insn, REG_DST_NO_FP);
- 		if (src < 0 || dst < 0)
- 			return -EINVAL;
- 		td = get_reg_val_type(ctx, this_idx, insn->dst_reg);
-@@ -1160,7 +1160,7 @@ static int build_one_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 	case BPF_JMP | BPF_JSLT | BPF_K: /* JMP_IMM */
- 	case BPF_JMP | BPF_JSLE | BPF_K: /* JMP_IMM */
- 		cmp_eq = (bpf_op == BPF_JSGE);
--		dst = ebpf_to_mips_reg(ctx, insn, dst_reg_fp_ok);
-+		dst = ebpf_to_mips_reg(ctx, insn, REG_DST_FP_OK);
- 		if (dst < 0)
- 			return dst;
- 
-@@ -1235,7 +1235,7 @@ static int build_one_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 	case BPF_JMP | BPF_JLT | BPF_K:
- 	case BPF_JMP | BPF_JLE | BPF_K:
- 		cmp_eq = (bpf_op == BPF_JGE);
--		dst = ebpf_to_mips_reg(ctx, insn, dst_reg_fp_ok);
-+		dst = ebpf_to_mips_reg(ctx, insn, REG_DST_FP_OK);
- 		if (dst < 0)
- 			return dst;
- 		/*
-@@ -1258,7 +1258,7 @@ static int build_one_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 		goto jeq_common;
- 
- 	case BPF_JMP | BPF_JSET | BPF_K: /* JMP_IMM */
--		dst = ebpf_to_mips_reg(ctx, insn, dst_reg_fp_ok);
-+		dst = ebpf_to_mips_reg(ctx, insn, REG_DST_FP_OK);
- 		if (dst < 0)
- 			return dst;
- 
-@@ -1303,7 +1303,7 @@ static int build_one_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 		emit_instr(ctx, nop);
- 		break;
- 	case BPF_LD | BPF_DW | BPF_IMM:
--		dst = ebpf_to_mips_reg(ctx, insn, dst_reg);
-+		dst = ebpf_to_mips_reg(ctx, insn, REG_DST_NO_FP);
- 		if (dst < 0)
- 			return dst;
- 		t64 = ((u64)(u32)insn->imm) | ((u64)(insn + 1)->imm << 32);
-@@ -1326,7 +1326,7 @@ static int build_one_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 
- 	case BPF_ALU | BPF_END | BPF_FROM_BE:
- 	case BPF_ALU | BPF_END | BPF_FROM_LE:
--		dst = ebpf_to_mips_reg(ctx, insn, dst_reg);
-+		dst = ebpf_to_mips_reg(ctx, insn, REG_DST_NO_FP);
- 		if (dst < 0)
- 			return dst;
- 		td = get_reg_val_type(ctx, this_idx, insn->dst_reg);
-@@ -1369,7 +1369,7 @@ static int build_one_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 			dst = MIPS_R_SP;
- 			mem_off = insn->off + MAX_BPF_STACK;
- 		} else {
--			dst = ebpf_to_mips_reg(ctx, insn, dst_reg);
-+			dst = ebpf_to_mips_reg(ctx, insn, REG_DST_NO_FP);
- 			if (dst < 0)
- 				return dst;
- 			mem_off = insn->off;
-@@ -1400,12 +1400,12 @@ static int build_one_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 			src = MIPS_R_SP;
- 			mem_off = insn->off + MAX_BPF_STACK;
- 		} else {
--			src = ebpf_to_mips_reg(ctx, insn, src_reg_no_fp);
-+			src = ebpf_to_mips_reg(ctx, insn, REG_SRC_NO_FP);
- 			if (src < 0)
- 				return src;
- 			mem_off = insn->off;
- 		}
--		dst = ebpf_to_mips_reg(ctx, insn, dst_reg);
-+		dst = ebpf_to_mips_reg(ctx, insn, REG_DST_NO_FP);
- 		if (dst < 0)
- 			return dst;
- 		switch (BPF_SIZE(insn->code)) {
-@@ -1435,12 +1435,12 @@ static int build_one_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 			dst = MIPS_R_SP;
- 			mem_off = insn->off + MAX_BPF_STACK;
- 		} else {
--			dst = ebpf_to_mips_reg(ctx, insn, dst_reg);
-+			dst = ebpf_to_mips_reg(ctx, insn, REG_DST_NO_FP);
- 			if (dst < 0)
- 				return dst;
- 			mem_off = insn->off;
- 		}
--		src = ebpf_to_mips_reg(ctx, insn, src_reg_no_fp);
-+		src = ebpf_to_mips_reg(ctx, insn, REG_SRC_NO_FP);
- 		if (src < 0)
- 			return src;
- 		if (BPF_MODE(insn->code) == BPF_ATOMIC) {
+diff --git a/arch/mips/include/asm/uasm.h b/arch/mips/include/asm/uasm.h
+index f7effca791a5..5efa4e2dc9ab 100644
+--- a/arch/mips/include/asm/uasm.h
++++ b/arch/mips/include/asm/uasm.h
+@@ -145,6 +145,7 @@ Ip_u1(_mtlo);
+ Ip_u3u1u2(_mul);
+ Ip_u1u2(_multu);
+ Ip_u3u1u2(_mulu);
++Ip_u3u1u2(_muhu);
+ Ip_u3u1u2(_nor);
+ Ip_u3u1u2(_or);
+ Ip_u2u1u3(_ori);
+diff --git a/arch/mips/mm/uasm-mips.c b/arch/mips/mm/uasm-mips.c
+index 7154a1d99aad..e15c6700cd08 100644
+--- a/arch/mips/mm/uasm-mips.c
++++ b/arch/mips/mm/uasm-mips.c
+@@ -90,7 +90,7 @@ static const struct insn insn_table[insn_invalid] = {
+ 				RS | RT | RD},
+ 	[insn_dmtc0]	= {M(cop0_op, dmtc_op, 0, 0, 0, 0), RT | RD | SET},
+ 	[insn_dmultu]	= {M(spec_op, 0, 0, 0, 0, dmultu_op), RS | RT},
+-	[insn_dmulu]	= {M(spec_op, 0, 0, 0, dmult_dmul_op, dmultu_op),
++	[insn_dmulu]	= {M(spec_op, 0, 0, 0, dmultu_dmulu_op, dmultu_op),
+ 				RS | RT | RD},
+ 	[insn_drotr]	= {M(spec_op, 1, 0, 0, 0, dsrl_op), RT | RD | RE},
+ 	[insn_drotr32]	= {M(spec_op, 1, 0, 0, 0, dsrl32_op), RT | RD | RE},
+@@ -150,6 +150,8 @@ static const struct insn insn_table[insn_invalid] = {
+ 	[insn_mtlo]	= {M(spec_op, 0, 0, 0, 0, mtlo_op), RS},
+ 	[insn_mulu]	= {M(spec_op, 0, 0, 0, multu_mulu_op, multu_op),
+ 				RS | RT | RD},
++	[insn_muhu]	= {M(spec_op, 0, 0, 0, multu_muhu_op, multu_op),
++				RS | RT | RD},
+ #ifndef CONFIG_CPU_MIPSR6
+ 	[insn_mul]	= {M(spec2_op, 0, 0, 0, 0, mul_op), RS | RT | RD},
+ #else
+diff --git a/arch/mips/mm/uasm.c b/arch/mips/mm/uasm.c
+index 81dd226d6b6b..125140979d62 100644
+--- a/arch/mips/mm/uasm.c
++++ b/arch/mips/mm/uasm.c
+@@ -59,7 +59,7 @@ enum opcode {
+ 	insn_lddir, insn_ldpte, insn_ldx, insn_lh, insn_lhu, insn_ll, insn_lld,
+ 	insn_lui, insn_lw, insn_lwu, insn_lwx, insn_mfc0, insn_mfhc0, insn_mfhi,
+ 	insn_mflo, insn_modu, insn_movn, insn_movz, insn_mtc0, insn_mthc0,
+-	insn_mthi, insn_mtlo, insn_mul, insn_multu, insn_mulu, insn_nor,
++	insn_mthi, insn_mtlo, insn_mul, insn_multu, insn_mulu, insn_muhu, insn_nor,
+ 	insn_or, insn_ori, insn_pref, insn_rfe, insn_rotr, insn_sb, insn_sc,
+ 	insn_scd, insn_seleqz, insn_selnez, insn_sd, insn_sh, insn_sll,
+ 	insn_sllv, insn_slt, insn_slti, insn_sltiu, insn_sltu, insn_sra,
+@@ -344,6 +344,7 @@ I_u1(_mtlo)
+ I_u3u1u2(_mul)
+ I_u1u2(_multu)
+ I_u3u1u2(_mulu)
++I_u3u1u2(_muhu)
+ I_u3u1u2(_nor)
+ I_u3u1u2(_or)
+ I_u2u1u3(_ori)
 -- 
 2.25.1
 
