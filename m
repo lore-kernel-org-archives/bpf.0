@@ -2,40 +2,42 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14397C07E99
-	for <bpf@archiver.kernel.org>; Mon, 12 Jul 2021 13:45:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F1212C07E99
+	for <bpf@archiver.kernel.org>; Mon, 12 Jul 2021 13:45:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E4DCE61042
-	for <bpf@archiver.kernel.org>; Mon, 12 Jul 2021 13:45:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CF0186101D
+	for <bpf@archiver.kernel.org>; Mon, 12 Jul 2021 13:45:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234156AbhGLNsY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 12 Jul 2021 09:48:24 -0400
-Received: from relay.sw.ru ([185.231.240.75]:51760 "EHLO relay.sw.ru"
+        id S233162AbhGLNs1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 12 Jul 2021 09:48:27 -0400
+Received: from relay.sw.ru ([185.231.240.75]:51768 "EHLO relay.sw.ru"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233162AbhGLNsY (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 12 Jul 2021 09:48:24 -0400
+        id S234641AbhGLNs0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 12 Jul 2021 09:48:26 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=virtuozzo.com; s=relay; h=Content-Type:MIME-Version:Date:Message-ID:Subject
-        :From; bh=oVLqaRerUNUUvBWSQ6/QuqbFXlum72VBI6Uq+5WdkfI=; b=KybgMFAQyGKZhipKOoJ
-        fT3l+z0yF8GlQFcALPUlq55hkj7cOiVE7/R1Ilwl5hiYUGKHqJF5JF5ofSvCgFtCVfggVXY9eH/A0
-        mNVZ7aT+drha3qA0f3BJtSDMU23w8ByIiRRCjFd78f7VyTWjFW9PtQRwnQQD98MI3edCMkGSh9Q=;
+        :From; bh=tsW93LKYsNwVYesCYjOwJko0OG56avvmHsNuF/Nk5SA=; b=EQ6wutd32AQNESjSR/Q
+        4YQCZM+lubNVPm4LNJ3GKPgmjrVQNDEaw0xUKaq9+dU1p1r5Swr004UfmXkes+PKrpeEcBTeXBJFE
+        Nb2lUZBGi/N0qtww+YY70vdA6SI2UG+Su9H42CaNf1xmdIX0o/q7Igg3+0cWckhjoZA92p4fDwk=;
 Received: from [10.93.0.56]
         by relay.sw.ru with esmtp (Exim 4.94.2)
         (envelope-from <vvs@virtuozzo.com>)
-        id 1m2vy2-003iEA-Ly; Mon, 12 Jul 2021 16:27:26 +0300
+        id 1m2vxH-003iBx-FX; Mon, 12 Jul 2021 16:26:39 +0300
 From:   Vasily Averin <vvs@virtuozzo.com>
-Subject: [PATCH NET 7/7] bpf: use pskb_realloc_headroom in bpf_out_neigh_v4/6
+Subject: [PATCH NET 0/7] skbuff: introduce pskb_realloc_headroom()
 To:     "David S. Miller" <davem@davemloft.net>,
         Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
         David Ahern <dsahern@kernel.org>,
         Jakub Kicinski <kuba@kernel.org>,
         Eric Dumazet <eric.dumazet@gmail.com>
-Cc:     netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+Cc:     netdev@vger.kernel.org, Joerg Reuter <jreuter@yaina.de>,
+        Ralf Baechle <ralf@linux-mips.org>, linux-hams@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
@@ -43,13 +45,12 @@ Cc:     netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
         KP Singh <kpsingh@kernel.org>, bpf@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <74e90fba-df9f-5078-13de-41df54d2b257@virtuozzo.com>
- <cover.1626093470.git.vvs@virtuozzo.com>
-Message-ID: <5396c84f-81c3-8097-2504-61e4654b7f92@virtuozzo.com>
-Date:   Mon, 12 Jul 2021 16:27:26 +0300
+Message-ID: <02202ac2-4cd8-4fea-290f-e49fb83eeb07@virtuozzo.com>
+Date:   Mon, 12 Jul 2021 16:26:38 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <cover.1626093470.git.vvs@virtuozzo.com>
+In-Reply-To: <74e90fba-df9f-5078-13de-41df54d2b257@virtuozzo.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -57,60 +58,43 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Unlike skb_realloc_headroom, new helper pskb_realloc_headroom
-does not allocate a new skb if possible.
+currently if skb does not have enough headroom skb_realloc_headrom is called.
+It is not optimal because it creates new skb.
 
-Additionally this patch replaces commonly used dereferencing with variables.
+Unlike skb_realloc_headroom, new helper pskb_realloc_headroom 
+does not allocate a new skb if possible; 
+copies skb->sk on new skb when as needed
+and frees original skb in case of failures.
 
-Signed-off-by: Vasily Averin <vvs@virtuozzo.com>
----
- net/core/filter.c | 22 ++++------------------
- 1 file changed, 4 insertions(+), 18 deletions(-)
+This helps to simplify ip[6]_finish_output2(), ip6_xmit() and a few other
+functions in vrf, ax25 and bpf.
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 65ab4e2..cf6cd93 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -2179,17 +2179,10 @@ static int bpf_out_neigh_v6(struct net *net, struct sk_buff *skb,
- 	skb->tstamp = 0;
- 
- 	if (unlikely(skb_headroom(skb) < hh_len && dev->header_ops)) {
--		struct sk_buff *skb2;
-+		skb = pskb_realloc_headroom(skb, hh_len);
- 
--		skb2 = skb_realloc_headroom(skb, hh_len);
--		if (unlikely(!skb2)) {
--			kfree_skb(skb);
-+		if (!skb)
- 			return -ENOMEM;
--		}
--		if (skb->sk)
--			skb_set_owner_w(skb2, skb->sk);
--		consume_skb(skb);
--		skb = skb2;
- 	}
- 
- 	rcu_read_lock_bh();
-@@ -2286,17 +2279,10 @@ static int bpf_out_neigh_v4(struct net *net, struct sk_buff *skb,
- 	skb->tstamp = 0;
- 
- 	if (unlikely(skb_headroom(skb) < hh_len && dev->header_ops)) {
--		struct sk_buff *skb2;
-+		skb = pskb_realloc_headroom(skb, hh_len);
- 
--		skb2 = skb_realloc_headroom(skb, hh_len);
--		if (unlikely(!skb2)) {
--			kfree_skb(skb);
-+		if (!skb)
- 			return -ENOMEM;
--		}
--		if (skb->sk)
--			skb_set_owner_w(skb2, skb->sk);
--		consume_skb(skb);
--		skb = skb2;
- 	}
- 
- 	rcu_read_lock_bh();
+There are few other cases where this helper can be used but they require
+an additional investigations. 
+
+NB: patch "ipv6: use pskb_realloc_headroom in ip6_finish_output2" depends on 
+patch "ipv6: allocate enough headroom in ip6_finish_output2()" submitted separately
+https://lkml.org/lkml/2021/7/12/732
+
+Vasily Averin (7):
+  skbuff: introduce pskb_realloc_headroom()
+  ipv6: use pskb_realloc_headroom in ip6_finish_output2
+  ipv6: use pskb_realloc_headroom in ip6_xmit
+  ipv4: use pskb_realloc_headroom in ip_finish_output2
+  vrf: use pskb_realloc_headroom in vrf_finish_output
+  ax25: use pskb_realloc_headroom
+  bpf: use pskb_realloc_headroom in bpf_out_neigh_v4/6
+
+ drivers/net/vrf.c      | 14 +++------
+ include/linux/skbuff.h |  2 ++
+ net/ax25/ax25_out.c    | 13 +++------
+ net/ax25/ax25_route.c  | 13 +++------
+ net/core/filter.c      | 22 +++-----------
+ net/core/skbuff.c      | 41 ++++++++++++++++++++++++++
+ net/ipv4/ip_output.c   | 12 ++------
+ net/ipv6/ip6_output.c  | 78 ++++++++++++++++++--------------------------------
+ 8 files changed, 89 insertions(+), 106 deletions(-)
+
 -- 
 1.8.3.1
 
