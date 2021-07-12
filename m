@@ -2,172 +2,141 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F4F2C07E99
-	for <bpf@archiver.kernel.org>; Mon, 12 Jul 2021 12:55:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DCF89C07E99
+	for <bpf@archiver.kernel.org>; Mon, 12 Jul 2021 13:45:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 46C9D610CB
-	for <bpf@archiver.kernel.org>; Mon, 12 Jul 2021 12:55:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B7C7C6101D
+	for <bpf@archiver.kernel.org>; Mon, 12 Jul 2021 13:45:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234132AbhGLM5x (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 12 Jul 2021 08:57:53 -0400
-Received: from out3-smtp.messagingengine.com ([66.111.4.27]:40985 "EHLO
-        out3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234098AbhGLM5x (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 12 Jul 2021 08:57:53 -0400
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id A53D15C01A8;
-        Mon, 12 Jul 2021 08:55:03 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Mon, 12 Jul 2021 08:55:03 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=Eaqf+mQPb0CqgNn2L
-        8o/sO7Y2ipNcfWsZn6yLFoG/dc=; b=npunvrrrpVqGisHITrAbWtCK4GGr1G4GY
-        6tPhpPIyxjnSRp1N4DIQE5TfC3lxiBVcjX2otGkt6qnrYaNSNKsR9EZWPMWufP4Q
-        GhHptBq/1R31Wcbx50DoKOEflRq1fydQ0EtBU8kabz20jLclg9SXOymVt5uJkbXt
-        Ti9im6Exlj9qptjSWBJ/fCQoJFq03SGXmAlouTTRegiL5z+qSjYchwNv2TQGsN5F
-        ACzekPuCOuBmhClpFiO4qt5NopI9gUIAN1I1WwRZHQB6p0mKAi2lMh7VbnCCsbSX
-        yABqajnx+UBX6JBW2bj2QKv8uTr1TOB0di+CAM73wBIbHSJcz6VEA==
-X-ME-Sender: <xms:pjvsYHTB85nQn4k32lMyR4DmaNPFoMrbZ60Qtt4p0i14DLBWjP_CZA>
-    <xme:pjvsYIyyfcMqtvAjP_9GRm93uk9TUAoWJgS6lMZfI35VOKxVzp3ELEgbPS5sg1-ut
-    HBEEvLV1uowgKLHmkE>
-X-ME-Received: <xmr:pjvsYM0lXyMICXVtrmpRlJe36xz4obC9N1F3eIBbWxy7KMK0yb2efIx3UXD_mK2eMcOofA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddruddvgdehjecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecunecujfgurhephffvufffkffoggfgsedtkeertdertd
-    dtnecuhfhrohhmpeforghrthihnhgrshcurfhumhhpuhhtihhsuceomheslhgrmhgsuggr
-    rdhltheqnecuggftrfgrthhtvghrnhepuefhfedvheelieduhedvveeiffdtleehieduue
-    ehjeejtdekuddvtdffheeuleejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghm
-    pehmrghilhhfrhhomhepmheslhgrmhgsuggrrdhlth
-X-ME-Proxy: <xmx:pjvsYHCyWG-Uf5V1Th-vmvethyx5USdkGCAivM_q2EqL4uME5qWl2g>
-    <xmx:pjvsYAhemPSCxRWesX-PlRMj4cUEOmggOf3-iMOzlnlEBGs-EY2OcA>
-    <xmx:pjvsYLrVoSk4n9kgF5903U-8I-SIzJKK-i9bJhKTtkubhESkJ4K6mw>
-    <xmx:pzvsYDsk_nVmgYPsNGZ_LB_Qbk6IE4xr8QOHCx0YYWc3wHOz7xP8Hw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 12 Jul 2021 08:55:00 -0400 (EDT)
-From:   Martynas Pumputis <m@lambda.lt>
-To:     bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        m@lambda.lt
-Subject: [PATCH v2 bpf-next] libbpf: fix reuse of pinned map on older kernel
-Date:   Mon, 12 Jul 2021 14:55:51 +0200
-Message-Id: <20210712125552.58705-1-m@lambda.lt>
-X-Mailer: git-send-email 2.32.0
+        id S233603AbhGLNsT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 12 Jul 2021 09:48:19 -0400
+Received: from relay.sw.ru ([185.231.240.75]:51744 "EHLO relay.sw.ru"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229503AbhGLNsT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 12 Jul 2021 09:48:19 -0400
+X-Greylist: delayed 1124 seconds by postgrey-1.27 at vger.kernel.org; Mon, 12 Jul 2021 09:48:18 EDT
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=virtuozzo.com; s=relay; h=Content-Type:MIME-Version:Date:Message-ID:Subject
+        :From; bh=4xvvJxEFJ5BdiccDhVEn/6X1ajbfe8RaCWu9N5O1n48=; b=VY1gLHJ58pd3yGm3n+p
+        Bad9BfbADwp1dhq1s1WZjymtyMHP+IlQbe99P8JdU4IafAYMoDMxHTZRIu8Z+iMXBRmy2R4aoKxzf
+        le1+QtltnFVu7VDNBXAI5uV6qlBtkZN05SrqednvcgHrk7P0yZWDqJiZD/dt1P2ekWu1Ey50LYo=;
+Received: from [10.93.0.56]
+        by relay.sw.ru with esmtp (Exim 4.94.2)
+        (envelope-from <vvs@virtuozzo.com>)
+        id 1m2vxN-003iC0-7p; Mon, 12 Jul 2021 16:26:45 +0300
+From:   Vasily Averin <vvs@virtuozzo.com>
+Subject: [PATCH NET 1/7] skbuff: introduce pskb_realloc_headroom()
+To:     "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <eric.dumazet@gmail.com>
+Cc:     netdev@vger.kernel.org, Joerg Reuter <jreuter@yaina.de>,
+        Ralf Baechle <ralf@linux-mips.org>, linux-hams@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <74e90fba-df9f-5078-13de-41df54d2b257@virtuozzo.com>
+ <cover.1626093470.git.vvs@virtuozzo.com>
+Message-ID: <8049e16b-3d7a-64c3-c948-ec504590a136@virtuozzo.com>
+Date:   Mon, 12 Jul 2021 16:26:44 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <cover.1626093470.git.vvs@virtuozzo.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When loading a BPF program with a pinned map, the loader checks whether
-the pinned map can be reused, i.e. their properties match. To derive
-such of the pinned map, the loader invokes BPF_OBJ_GET_INFO_BY_FD and
-then does the comparison.
+Unlike skb_realloc_headroom, new helper does not allocate a new skb
+if possible; copies skb->sk on new skb when as needed and frees
+original skb in case of failures.
 
-Unfortunately, on < 4.12 kernels the BPF_OBJ_GET_INFO_BY_FD is not
-available, so loading the program fails with the following error:
+This helps to simplify ip[6]_finish_output2() and a few other similar cases.
 
-	libbpf: failed to get map info for map FD 5: Invalid argument
-	libbpf: couldn't reuse pinned map at
-		'/sys/fs/bpf/tc/globals/cilium_call_policy': parameter
-		mismatch"
-	libbpf: map 'cilium_call_policy': error reusing pinned map
-	libbpf: map 'cilium_call_policy': failed to create:
-		Invalid argument(-22)
-	libbpf: failed to load object 'bpf_overlay.o'
-
-To fix this, fallback to derivation of the map properties via
-/proc/$PID/fdinfo/$MAP_FD if BPF_OBJ_GET_INFO_BY_FD fails with EINVAL,
-which can be used as an indicator that the kernel doesn't support
-the latter.
-
-Signed-off-by: Martynas Pumputis <m@lambda.lt>
+Signed-off-by: Vasily Averin <vvs@virtuozzo.com>
 ---
- tools/lib/bpf/libbpf.c | 48 +++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 45 insertions(+), 3 deletions(-)
+ include/linux/skbuff.h |  2 ++
+ net/core/skbuff.c      | 41 +++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 43 insertions(+)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 1e04ce724240..a952acd6cd77 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -3894,6 +3894,42 @@ static int bpf_map_find_btf_info(struct bpf_object *obj, struct bpf_map *map)
- 	return 0;
- }
+diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+index dbf820a..381a219 100644
+--- a/include/linux/skbuff.h
++++ b/include/linux/skbuff.h
+@@ -1174,6 +1174,8 @@ static inline struct sk_buff *__pskb_copy(struct sk_buff *skb, int headroom,
+ int pskb_expand_head(struct sk_buff *skb, int nhead, int ntail, gfp_t gfp_mask);
+ struct sk_buff *skb_realloc_headroom(struct sk_buff *skb,
+ 				     unsigned int headroom);
++struct sk_buff *pskb_realloc_headroom(struct sk_buff *skb,
++				      unsigned int headroom);
+ struct sk_buff *skb_copy_expand(const struct sk_buff *skb, int newheadroom,
+ 				int newtailroom, gfp_t priority);
+ int __must_check skb_to_sgvec_nomark(struct sk_buff *skb, struct scatterlist *sg,
+diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+index bbc3b4b..13cbe98 100644
+--- a/net/core/skbuff.c
++++ b/net/core/skbuff.c
+@@ -1769,6 +1769,47 @@ struct sk_buff *skb_realloc_headroom(struct sk_buff *skb, unsigned int headroom)
+ EXPORT_SYMBOL(skb_realloc_headroom);
  
-+static int bpf_get_map_info_from_fdinfo(int fd, struct bpf_map_info *info)
+ /**
++ *	pskb_realloc_headroom - reallocate header of &sk_buff
++ *	@skb: buffer to reallocate
++ *	@headroom: needed headroom
++ *
++ *	Unlike skb_realloc_headroom, this one does not allocate a new skb
++ *	if possible; copies skb->sk to new skb as needed
++ *	and frees original scb in case of failures.
++ *
++ *	It expect increased headroom, and generates warning otherwise.
++ */
++
++struct sk_buff *pskb_realloc_headroom(struct sk_buff *skb, unsigned int headroom)
 +{
-+	char file[PATH_MAX], buff[4096];
-+	FILE *fp;
-+	__u32 val;
-+	int err;
++	int delta = headroom - skb_headroom(skb);
 +
-+	snprintf(file, sizeof(file), "/proc/%d/fdinfo/%d", getpid(), fd);
-+	memset(info, 0, sizeof(*info));
++	if (WARN_ONCE(delta <= 0, "%s expect positive delta", __func__))
++		return skb;
 +
-+	fp = fopen(file, "r");
-+	if (!fp) {
-+		err = -errno;
-+		pr_warn("failed to open %s: %d. No procfs support?\n", file,
-+			err);
-+		return err;
++	/* pskb_expand_head() might crash, if skb is shared */
++	if (skb_shared(skb)) {
++		struct sk_buff *nskb = skb_clone(skb, GFP_ATOMIC);
++
++		if (likely(nskb)) {
++			if (skb->sk)
++				skb_set_owner_w(skb, skb->sk);
++			consume_skb(skb);
++		} else {
++			kfree(skb);
++		}
++		skb = nskb;
 +	}
-+
-+	while (fgets(buff, sizeof(buff), fp)) {
-+		if (sscanf(buff, "map_type:\t%u", &val) == 1)
-+			info->type = val;
-+		else if (sscanf(buff, "key_size:\t%u", &val) == 1)
-+			info->key_size = val;
-+		else if (sscanf(buff, "value_size:\t%u", &val) == 1)
-+			info->value_size = val;
-+		else if (sscanf(buff, "max_entries:\t%u", &val) == 1)
-+			info->max_entries = val;
-+		else if (sscanf(buff, "map_flags:\t%i", &val) == 1)
-+			info->map_flags = val;
++	if (skb &&
++	    pskb_expand_head(skb, SKB_DATA_ALIGN(delta), 0, GFP_ATOMIC)) {
++		kfree(skb);
++		skb = NULL;
 +	}
-+
-+	fclose(fp);
-+
-+	return 0;
++	return skb;
 +}
++EXPORT_SYMBOL(pskb_realloc_headroom);
 +
- int bpf_map__reuse_fd(struct bpf_map *map, int fd)
- {
- 	struct bpf_map_info info = {};
-@@ -3902,6 +3938,8 @@ int bpf_map__reuse_fd(struct bpf_map *map, int fd)
- 	char *new_name;
- 
- 	err = bpf_obj_get_info_by_fd(fd, &info, &len);
-+	if (err && errno == EINVAL)
-+		err = bpf_get_map_info_from_fdinfo(fd, &info);
- 	if (err)
- 		return libbpf_err(err);
- 
-@@ -4381,12 +4419,16 @@ static bool map_is_reuse_compat(const struct bpf_map *map, int map_fd)
- 	struct bpf_map_info map_info = {};
- 	char msg[STRERR_BUFSIZE];
- 	__u32 map_info_len;
-+	int err;
- 
- 	map_info_len = sizeof(map_info);
- 
--	if (bpf_obj_get_info_by_fd(map_fd, &map_info, &map_info_len)) {
--		pr_warn("failed to get map info for map FD %d: %s\n",
--			map_fd, libbpf_strerror_r(errno, msg, sizeof(msg)));
-+	err = bpf_obj_get_info_by_fd(map_fd, &map_info, &map_info_len);
-+	if (err && errno == EINVAL)
-+		err = bpf_get_map_info_from_fdinfo(map_fd, &map_info);
-+	if (err) {
-+		pr_warn("failed to get map info for map FD %d: %s\n", map_fd,
-+			libbpf_strerror_r(errno, msg, sizeof(msg)));
- 		return false;
- 	}
- 
++/**
+  *	skb_copy_expand	-	copy and expand sk_buff
+  *	@skb: buffer to copy
+  *	@newheadroom: new free bytes at head
 -- 
-2.32.0
+1.8.3.1
 
