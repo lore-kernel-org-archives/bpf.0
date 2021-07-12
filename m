@@ -8,54 +8,54 @@ X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D529C11F69
-	for <bpf@archiver.kernel.org>; Mon, 12 Jul 2021 00:35:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CA079C11F6D
+	for <bpf@archiver.kernel.org>; Mon, 12 Jul 2021 00:35:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7BDAD6102A
-	for <bpf@archiver.kernel.org>; Mon, 12 Jul 2021 00:35:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A758E6100B
+	for <bpf@archiver.kernel.org>; Mon, 12 Jul 2021 00:35:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231753AbhGLAi1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 11 Jul 2021 20:38:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33298 "EHLO
+        id S232430AbhGLAi2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 11 Jul 2021 20:38:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231998AbhGLAiW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 11 Jul 2021 20:38:22 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A866FC0613DD;
-        Sun, 11 Jul 2021 17:35:33 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id v7so16488178pgl.2;
-        Sun, 11 Jul 2021 17:35:33 -0700 (PDT)
+        with ESMTP id S232184AbhGLAiZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 11 Jul 2021 20:38:25 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED53C0613E9;
+        Sun, 11 Jul 2021 17:35:36 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 62so16506067pgf.1;
+        Sun, 11 Jul 2021 17:35:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=EalCyecMW2572H9VkyfBPRqHeeHC2CH2d/QT1GKpwg8=;
-        b=IxkDm8adSbqtlwlgLCgDUo/NkLyJX1d3cErtYIdhRp2jaFasDIrnFLpNHvUxis3oh1
-         UPRVgcXYwvFHHFALsBhFld5paL+DhSm+ZauQUaD1sjZvl4kbSLf3BBZzrQqLQn2d/hmH
-         kSeK6xqeAUywe+dXEfGmBApHKOtUvxNrXmgPbFwCSh4GG+QXOmc34TYSoeNTFGFReDzR
-         iQAOK0zVMSt+w854SWzCucGf7R2KPoVvkw3Wj4skqnXpI8W1rIsypl9++rShBcOXQwvp
-         e9sFVctgLtf6h49qhJgtNl7xYvwCoYP2Yf90niANP2qOBUYl4TYzIB8L5OSha9AErbZO
-         4CnA==
+        bh=i+Gabeg7gBRlgfLEH6jm47+oAGtcKCXKDUoYmp14LZk=;
+        b=f71Qw1xyigLXDaFJo/m7+YMnVEcTiHPENXPAj/xcWL8vIHRy/0VbpzrlKFkQqF4GoV
+         hEYhe5AtLucPFJtN6Lij3yrgGSiqwhdSYHzZELWCfOu/mP/t5oZV7zZ7D2GC2N2+mDC1
+         p+b0O88B1qK3WYQH5o0r6KkTi3y3ggxTzdhzePSohUmMq9ZuT+XlEaEMd3KbwOrMsOqA
+         woF2HWyWDqEhnG9OZ8f5OO0eMgO2CoareYbAiDs/OVEXcVkrv58Xo4flwkI96o5uf4Wg
+         lkQDvnm7paD/mfZjM0VulRyhY26zf/bR25NhX/jJIdYDHyHq3MkafP9c2zXcoTbp62MC
+         pg3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=EalCyecMW2572H9VkyfBPRqHeeHC2CH2d/QT1GKpwg8=;
-        b=R1/P9wFXB/mwXeu3N1OocTsu1jpYjQakAwpSavO5Na8I0iwc38oaLa19HPZvBO4jdM
-         EXD3ggULcHr/r60Q5O4BCqrva4WMJU1bc4UibMzbGoQgBjrP+gm/w8R9WfjWtGLo9Axh
-         i+L0lvwvXesQc5jVBXPzdWq+36PyfpfTyxc92aWyul7gyRx+WxAEcHjqEPZNv1O2PwwV
-         c1Y76zZZyNoIbcwrUR7ugqB8pimbNFBbFsFlVEo/4Q5TgS1YDrZMJkZ02rv1HpOgdZiE
-         GP1z2D/pMjKs3x5fAnC9uR9pa2H72qFInesKjAzR8jM/WTkXmeA74x8EBMl2F8rBqTPV
-         ZAFQ==
-X-Gm-Message-State: AOAM530xweC8R4LfKWPS3MwQscpGzFOGvfJ2m/zvHV2VZED2E0h6O6Eb
-        paWsXd5N4DV6V9XlfrR9+vg=
-X-Google-Smtp-Source: ABdhPJwlhW+6BbknidrHJtpLhO+5/xNKE9xfj4mRa+aQVwFpEp8XjIsJAGJckvT9u5fZegcdfEgtAQ==
-X-Received: by 2002:a62:3344:0:b029:24c:735c:4546 with SMTP id z65-20020a6233440000b029024c735c4546mr50583458pfz.1.1626050133301;
-        Sun, 11 Jul 2021 17:35:33 -0700 (PDT)
+        bh=i+Gabeg7gBRlgfLEH6jm47+oAGtcKCXKDUoYmp14LZk=;
+        b=CxfIPfHrzW+nZx6Ls3o++ORIyW2IBRxh1uackupcVWK+s/L1zM8UZLC7Wqvxei/riU
+         Pvro+R0XBYXVSMQ+VT6lHOjdACefbM9PQCAEuQhyVKGLQiQjQvWFgOLbvHA64AQG3Y7x
+         KNzlEC9/tKjzSKRFDC3WSf7C2ViCwNbcNU0zTLh2JUrUt9L7PNicWZU0GZl5N5u+GybZ
+         lE6AE+0DAql5X9WO3R+NtRtrkmlgMsaiWvnqTV6N7EiE4e/TIR13qhN42Y075t2TgC+j
+         45Joa5GQLUBLMqmxJ534MFywUh2foDA/fZGGzGhl/06qGnTFBq5CcgF2qIiXOFwXAwL8
+         tkAw==
+X-Gm-Message-State: AOAM5322UrjuAsolzdDOI/9GamVdkTowwDS3HoXwSH8qgjej4xjG7rvJ
+        1KWHPPMfal54IP8CqV9xRn4=
+X-Google-Smtp-Source: ABdhPJywamGR/Ym0qxdUshaPf4U0mClZS9ejbnhwFzUXqUkIWQWSFYHb+lehOW9cCG2SPg/mi7L0KA==
+X-Received: by 2002:aa7:8112:0:b029:328:70bc:3307 with SMTP id b18-20020aa781120000b029032870bc3307mr18193320pfi.67.1626050136575;
+        Sun, 11 Jul 2021 17:35:36 -0700 (PDT)
 Received: from localhost.localdomain ([2001:470:e92d:10:4039:6c0e:1168:cc74])
-        by smtp.gmail.com with ESMTPSA id c24sm15588447pgj.11.2021.07.11.17.35.32
+        by smtp.gmail.com with ESMTPSA id c24sm15588447pgj.11.2021.07.11.17.35.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Jul 2021 17:35:33 -0700 (PDT)
+        Sun, 11 Jul 2021 17:35:36 -0700 (PDT)
 From:   Tony Ambardar <tony.ambardar@gmail.com>
 X-Google-Original-From: Tony Ambardar <Tony.Ambardar@gmail.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
@@ -74,9 +74,9 @@ Cc:     Tony Ambardar <Tony.Ambardar@gmail.com>, netdev@vger.kernel.org,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>
-Subject: [RFC PATCH bpf-next v1 05/14] MIPS: eBPF: fix system hang with verifier dead-code patching
-Date:   Sun, 11 Jul 2021 17:34:51 -0700
-Message-Id: <9d192df017fd2fb79030477508e7de88f21c6b4e.1625970384.git.Tony.Ambardar@gmail.com>
+Subject: [RFC PATCH bpf-next v1 08/14] MIPS: eBPF: support long jump for BPF_JMP|EXIT
+Date:   Sun, 11 Jul 2021 17:34:54 -0700
+Message-Id: <068c7d433d5ca78e791827f93275474fec64ef6d.1625970384.git.Tony.Ambardar@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1625970383.git.Tony.Ambardar@gmail.com>
 References: <cover.1625970383.git.Tony.Ambardar@gmail.com>
@@ -86,39 +86,48 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Commit 2a5418a13fcf changed verifier dead code handling from patching with
-NOPs to using a loop trap made with BPF_JMP_IMM(BPF_JA, 0, 0, -1). This
-confuses the JIT static analysis, which follows the loop assuming the
-verifier passed safe code, and results in a system hang and RCU stall.
-Update reg_val_propagate_range() to fall through these trap insns.
+Existing JIT code supports only short (18-bit) branches for BPF EXIT, and
+results in some tests from module test_bpf not being jited. Update code
+to fall back to long (28-bit) jumps if short branches are insufficient.
 
-Trigger the bug using test_verifier "check known subreg with unknown reg".
+Before:
+  test_bpf: #296 BPF_MAXINSNS: exec all MSH jited:0 1556004 PASS
+  test_bpf: #297 BPF_MAXINSNS: ld_abs+get_processor_id jited:0 824957 PASS
+  test_bpf: Summary: 378 PASSED, 0 FAILED, [364/366 JIT'ed]
 
-Fixes: 2a5418a13fcf ("bpf: improve dead code sanitizing")
+After:
+  test_bpf: #296 BPF_MAXINSNS: exec all MSH jited:1 221998 PASS
+  test_bpf: #297 BPF_MAXINSNS: ld_abs+get_processor_id jited:1 490507 PASS
+  test_bpf: Summary: 378 PASSED, 0 FAILED, [366/366 JIT'ed]
+
+Fixes: b6bd53f9c4e8 ("MIPS: Add missing file for eBPF JIT.")
 Signed-off-by: Tony Ambardar <Tony.Ambardar@gmail.com>
 ---
- arch/mips/net/ebpf_jit.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ arch/mips/net/ebpf_jit.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
 diff --git a/arch/mips/net/ebpf_jit.c b/arch/mips/net/ebpf_jit.c
-index ad0e54a842fc..e60a089ee3b3 100644
+index e8c403c6cfa3..f510c692975e 100644
 --- a/arch/mips/net/ebpf_jit.c
 +++ b/arch/mips/net/ebpf_jit.c
-@@ -1691,6 +1691,14 @@ static int reg_val_propagate_range(struct jit_ctx *ctx, u64 initial_rvt,
- 				return idx;
- 			case BPF_JA:
- 				rvt[idx] |= RVT_DONE;
-+				/*
-+				 * Verifier dead code patching can use
-+				 * infinite-loop traps, causing hangs and
-+				 * RCU stalls here. Treat traps as nops
-+				 * if detected and fall through.
-+				 */
-+				if (insn->off == -1)
-+					break;
- 				idx += insn->off;
- 				break;
- 			case BPF_JEQ:
+@@ -994,9 +994,14 @@ static int build_one_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
+ 	case BPF_JMP | BPF_EXIT:
+ 		if (this_idx + 1 < exit_idx) {
+ 			b_off = b_imm(exit_idx, ctx);
+-			if (is_bad_offset(b_off))
+-				return -E2BIG;
+-			emit_instr(ctx, beq, MIPS_R_ZERO, MIPS_R_ZERO, b_off);
++			if (is_bad_offset(b_off)) {
++				target = j_target(ctx, exit_idx);
++				if (target == (unsigned int)-1)
++					return -E2BIG;
++				emit_instr(ctx, j, target);
++			} else {
++				emit_instr(ctx, b, b_off);
++			}
+ 			emit_instr(ctx, nop);
+ 		}
+ 		break;
 -- 
 2.25.1
 
