@@ -5,57 +5,57 @@ X-Spam-Level:
 X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 07E22C11F66
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D529C11F69
 	for <bpf@archiver.kernel.org>; Mon, 12 Jul 2021 00:35:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D50F460551
-	for <bpf@archiver.kernel.org>; Mon, 12 Jul 2021 00:35:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7BDAD6102A
+	for <bpf@archiver.kernel.org>; Mon, 12 Jul 2021 00:35:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232040AbhGLAiW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 11 Jul 2021 20:38:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33286 "EHLO
+        id S231753AbhGLAi1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 11 Jul 2021 20:38:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231772AbhGLAiT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 11 Jul 2021 20:38:19 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5886C0613DD;
-        Sun, 11 Jul 2021 17:35:31 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id d12so16455863pgd.9;
-        Sun, 11 Jul 2021 17:35:31 -0700 (PDT)
+        with ESMTP id S231998AbhGLAiW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 11 Jul 2021 20:38:22 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A866FC0613DD;
+        Sun, 11 Jul 2021 17:35:33 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id v7so16488178pgl.2;
+        Sun, 11 Jul 2021 17:35:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=PdYhsrqGfOzHQe0K7vA77OCurMz/VH4pNLXIe9BYfjs=;
-        b=TcmPHYxBslPI3lbXCEOxmInhmZizPMoy2Ro29mJnAfhOnUpELT0Pc4YcihUwLbC2De
-         +rZZrY8M4iRwkxeHUxtWLntKgoOcCiR1MTVZa8QMXI+rlp8htIRvA8i+m38vbiqK5gqI
-         q3smbnEhK8npKx3hpJ3ehaTmySrBmZkVPCl162fgmlcLHjP0tutLN8FLLw+qAAnQQgrs
-         O3Sq/VGzbQdoLcLfH7IgcnLFyKVPvHJ/u+x9fiWjoCuQ4FUi9lxq2x50ortkGjQ+Xp/P
-         NuwVyB+3TPeUh4jIn0ibs0cfD25Lji+3e05WvKsYXseJIQjDFPkG59LNfnvOjhSvVhsG
-         lc4Q==
+        bh=EalCyecMW2572H9VkyfBPRqHeeHC2CH2d/QT1GKpwg8=;
+        b=IxkDm8adSbqtlwlgLCgDUo/NkLyJX1d3cErtYIdhRp2jaFasDIrnFLpNHvUxis3oh1
+         UPRVgcXYwvFHHFALsBhFld5paL+DhSm+ZauQUaD1sjZvl4kbSLf3BBZzrQqLQn2d/hmH
+         kSeK6xqeAUywe+dXEfGmBApHKOtUvxNrXmgPbFwCSh4GG+QXOmc34TYSoeNTFGFReDzR
+         iQAOK0zVMSt+w854SWzCucGf7R2KPoVvkw3Wj4skqnXpI8W1rIsypl9++rShBcOXQwvp
+         e9sFVctgLtf6h49qhJgtNl7xYvwCoYP2Yf90niANP2qOBUYl4TYzIB8L5OSha9AErbZO
+         4CnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=PdYhsrqGfOzHQe0K7vA77OCurMz/VH4pNLXIe9BYfjs=;
-        b=HELJetJSp/HJaHT1WnpcQhCrT8+9AIO0Ft+qDOst1NWxNObgoXjZgZqFyKQ9su+8/J
-         lBLmTKTdUqTk2MpJC1DfY2MOYTAB2n434FE5d9q1681tQYk2WcJ/el9ay2D36hruAeSz
-         yPZxnicBpezYh9Fj0ZhYTdd82VGXCiMpeZKsP5vmcy60PcyEkLNzULk6knYvUic3wWkM
-         f/EMXG/JuE7DidT7LAx9zlnofFunAtd4gdLMjNgAILwAz8BB7uvv7diYr8Nde22191Bm
-         IfydQ4S7xmmrxj9MJbQ1WMLf21GTyrKQYGVqUPD1H4nW/53Ulp9tLkQHm5jFPChk+CkI
-         j/zw==
-X-Gm-Message-State: AOAM531sWGDS3Jl7OXbWOxo1IqAC9ezq6+WhLZiWzBYXeyMYNAStO20G
-        7pUPADkcGFhuhCbbluWkXR8=
-X-Google-Smtp-Source: ABdhPJxsCAQ1+j/Nu6C3zH6Pyxyu7SIV9c7ClPohXeDwxhj23W92lOvEu0XGMFUudP3gm2YPLjTj9g==
-X-Received: by 2002:a63:3d08:: with SMTP id k8mr15557220pga.147.1626050131342;
-        Sun, 11 Jul 2021 17:35:31 -0700 (PDT)
+        bh=EalCyecMW2572H9VkyfBPRqHeeHC2CH2d/QT1GKpwg8=;
+        b=R1/P9wFXB/mwXeu3N1OocTsu1jpYjQakAwpSavO5Na8I0iwc38oaLa19HPZvBO4jdM
+         EXD3ggULcHr/r60Q5O4BCqrva4WMJU1bc4UibMzbGoQgBjrP+gm/w8R9WfjWtGLo9Axh
+         i+L0lvwvXesQc5jVBXPzdWq+36PyfpfTyxc92aWyul7gyRx+WxAEcHjqEPZNv1O2PwwV
+         c1Y76zZZyNoIbcwrUR7ugqB8pimbNFBbFsFlVEo/4Q5TgS1YDrZMJkZ02rv1HpOgdZiE
+         GP1z2D/pMjKs3x5fAnC9uR9pa2H72qFInesKjAzR8jM/WTkXmeA74x8EBMl2F8rBqTPV
+         ZAFQ==
+X-Gm-Message-State: AOAM530xweC8R4LfKWPS3MwQscpGzFOGvfJ2m/zvHV2VZED2E0h6O6Eb
+        paWsXd5N4DV6V9XlfrR9+vg=
+X-Google-Smtp-Source: ABdhPJwlhW+6BbknidrHJtpLhO+5/xNKE9xfj4mRa+aQVwFpEp8XjIsJAGJckvT9u5fZegcdfEgtAQ==
+X-Received: by 2002:a62:3344:0:b029:24c:735c:4546 with SMTP id z65-20020a6233440000b029024c735c4546mr50583458pfz.1.1626050133301;
+        Sun, 11 Jul 2021 17:35:33 -0700 (PDT)
 Received: from localhost.localdomain ([2001:470:e92d:10:4039:6c0e:1168:cc74])
-        by smtp.gmail.com with ESMTPSA id c24sm15588447pgj.11.2021.07.11.17.35.30
+        by smtp.gmail.com with ESMTPSA id c24sm15588447pgj.11.2021.07.11.17.35.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Jul 2021 17:35:31 -0700 (PDT)
+        Sun, 11 Jul 2021 17:35:33 -0700 (PDT)
 From:   Tony Ambardar <tony.ambardar@gmail.com>
 X-Google-Original-From: Tony Ambardar <Tony.Ambardar@gmail.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
@@ -74,9 +74,9 @@ Cc:     Tony Ambardar <Tony.Ambardar@gmail.com>, netdev@vger.kernel.org,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>
-Subject: [RFC PATCH bpf-next v1 03/14] MIPS: eBPF: fix BPF_ALU|ARSH handling in JIT static analysis
-Date:   Sun, 11 Jul 2021 17:34:49 -0700
-Message-Id: <ad3c9df52fadf63586d4efd8f6b3ee601f034654.1625970384.git.Tony.Ambardar@gmail.com>
+Subject: [RFC PATCH bpf-next v1 05/14] MIPS: eBPF: fix system hang with verifier dead-code patching
+Date:   Sun, 11 Jul 2021 17:34:51 -0700
+Message-Id: <9d192df017fd2fb79030477508e7de88f21c6b4e.1625970384.git.Tony.Ambardar@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1625970383.git.Tony.Ambardar@gmail.com>
 References: <cover.1625970383.git.Tony.Ambardar@gmail.com>
@@ -86,32 +86,39 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Update reg_val_propagate_range() to add the missing case for BPF_ALU|ARSH,
-otherwise zero-extension breaks for this opcode.
+Commit 2a5418a13fcf changed verifier dead code handling from patching with
+NOPs to using a loop trap made with BPF_JMP_IMM(BPF_JA, 0, 0, -1). This
+confuses the JIT static analysis, which follows the loop assuming the
+verifier passed safe code, and results in a system hang and RCU stall.
+Update reg_val_propagate_range() to fall through these trap insns.
 
-Resolves failures for test_verifier tests:
-  963/p arsh32 reg zero extend check FAIL retval -1 != 0
-  964/u arsh32 imm zero extend check FAIL retval -1 != 0
-  964/p arsh32 imm zero extend check FAIL retval -1 != 0
+Trigger the bug using test_verifier "check known subreg with unknown reg".
 
-Fixes: b6bd53f9c4e8 ("MIPS: Add missing file for eBPF JIT.")
+Fixes: 2a5418a13fcf ("bpf: improve dead code sanitizing")
 Signed-off-by: Tony Ambardar <Tony.Ambardar@gmail.com>
 ---
- arch/mips/net/ebpf_jit.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/mips/net/ebpf_jit.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
 diff --git a/arch/mips/net/ebpf_jit.c b/arch/mips/net/ebpf_jit.c
-index 64f76c7191b1..67b45d502435 100644
+index ad0e54a842fc..e60a089ee3b3 100644
 --- a/arch/mips/net/ebpf_jit.c
 +++ b/arch/mips/net/ebpf_jit.c
-@@ -1587,6 +1587,7 @@ static int reg_val_propagate_range(struct jit_ctx *ctx, u64 initial_rvt,
- 			case BPF_AND:
- 			case BPF_LSH:
- 			case BPF_RSH:
-+			case BPF_ARSH:
- 			case BPF_NEG:
- 			case BPF_MOD:
- 			case BPF_XOR:
+@@ -1691,6 +1691,14 @@ static int reg_val_propagate_range(struct jit_ctx *ctx, u64 initial_rvt,
+ 				return idx;
+ 			case BPF_JA:
+ 				rvt[idx] |= RVT_DONE;
++				/*
++				 * Verifier dead code patching can use
++				 * infinite-loop traps, causing hangs and
++				 * RCU stalls here. Treat traps as nops
++				 * if detected and fall through.
++				 */
++				if (insn->off == -1)
++					break;
+ 				idx += insn->off;
+ 				break;
+ 			case BPF_JEQ:
 -- 
 2.25.1
 
