@@ -5,57 +5,57 @@ X-Spam-Level:
 X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BDC9CC07E9C
-	for <bpf@archiver.kernel.org>; Mon, 12 Jul 2021 00:35:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07E22C11F66
+	for <bpf@archiver.kernel.org>; Mon, 12 Jul 2021 00:35:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9A53161076
+	by mail.kernel.org (Postfix) with ESMTP id D50F460551
 	for <bpf@archiver.kernel.org>; Mon, 12 Jul 2021 00:35:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231857AbhGLAiV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 11 Jul 2021 20:38:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33278 "EHLO
+        id S232040AbhGLAiW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 11 Jul 2021 20:38:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231753AbhGLAiR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 11 Jul 2021 20:38:17 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1AFAC0613E5;
-        Sun, 11 Jul 2021 17:35:29 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id j3so6318579plx.7;
-        Sun, 11 Jul 2021 17:35:29 -0700 (PDT)
+        with ESMTP id S231772AbhGLAiT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 11 Jul 2021 20:38:19 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5886C0613DD;
+        Sun, 11 Jul 2021 17:35:31 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id d12so16455863pgd.9;
+        Sun, 11 Jul 2021 17:35:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Pq5zfFYvJRJp/wFGTGQ6c/E4wNoaWHlEdO1OBbdRBdc=;
-        b=EWbU54tmOwmJPHgIKjujeR9uuTq+dJh14Zn3GkZe7AJ+ebrGN21BQozej+t2qPttFT
-         HhM2l0ylPSc4t1t6jeEppHcgkEd7zVJaFaQB07uDsg5O7OqzhY5GixKquhqRQcn2kSY+
-         QeLiGg0WXCnb0VhlJMFg7sXnqyZq0256Vi9nB36fXlQtXumOCQoELzy+rVTlKCINhnBO
-         x27E0GadNDK9vXFMq19cnPsyt+fClTKMLEE6xrcGd2fHDU2H2TxqqdGPbpLNSA3/0WJ3
-         bXdQEZz/Wet+7KQw4yv51WyQZ9Uo8rXvs6S/Sdy+NDg/8AssIeJt6cTrCq6Ev4OzCOzS
-         jJDQ==
+        bh=PdYhsrqGfOzHQe0K7vA77OCurMz/VH4pNLXIe9BYfjs=;
+        b=TcmPHYxBslPI3lbXCEOxmInhmZizPMoy2Ro29mJnAfhOnUpELT0Pc4YcihUwLbC2De
+         +rZZrY8M4iRwkxeHUxtWLntKgoOcCiR1MTVZa8QMXI+rlp8htIRvA8i+m38vbiqK5gqI
+         q3smbnEhK8npKx3hpJ3ehaTmySrBmZkVPCl162fgmlcLHjP0tutLN8FLLw+qAAnQQgrs
+         O3Sq/VGzbQdoLcLfH7IgcnLFyKVPvHJ/u+x9fiWjoCuQ4FUi9lxq2x50ortkGjQ+Xp/P
+         NuwVyB+3TPeUh4jIn0ibs0cfD25Lji+3e05WvKsYXseJIQjDFPkG59LNfnvOjhSvVhsG
+         lc4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Pq5zfFYvJRJp/wFGTGQ6c/E4wNoaWHlEdO1OBbdRBdc=;
-        b=ahtVn+5TaWSaOczPQbpqCKhSEolTVrbGitNKO1OgLfS6VqAd3qYteSFv7tbcXJ0ImI
-         TONyPyuusDzC+gFwQW1AK+ja2bf5gR4df4LF6E4ZFePgzWKHnasR9lNkdSC8BgpdIIfp
-         05+Gf7+UiM7AQy3Jib+B/vOMLtJwNfjCEhq8ij5rW1fvrBdB2Kxzy0Sj1lcewz9FJdZu
-         55nuat2TnAOeKvXCeG28oByzjOKTgZuLSsTOmFtw6x12xBW8eNC76H+KJls3CUQe0f6j
-         hMp0TZbxn1GwSwPMXScgs375qYTkmJ2dB/KHqWc6R3M8EhHV4xJKCbwc+goWxqXFXCRy
-         XJoQ==
-X-Gm-Message-State: AOAM533zOFbDxAxPSS9bPvGEt5tqXcNe3lycyRiqsetOcLIkHuaCTdaJ
-        FmMfNu5kvY8W4eW/TGZH3Uk=
-X-Google-Smtp-Source: ABdhPJxVPCrDqfktMD/mzYKEPeAO4zTe+4jFdAOyVMjP4bjytDpWrBV1exym7bFScf7LfgwHUK5q3A==
-X-Received: by 2002:a17:90a:1f43:: with SMTP id y3mr28259256pjy.0.1626050129292;
-        Sun, 11 Jul 2021 17:35:29 -0700 (PDT)
+        bh=PdYhsrqGfOzHQe0K7vA77OCurMz/VH4pNLXIe9BYfjs=;
+        b=HELJetJSp/HJaHT1WnpcQhCrT8+9AIO0Ft+qDOst1NWxNObgoXjZgZqFyKQ9su+8/J
+         lBLmTKTdUqTk2MpJC1DfY2MOYTAB2n434FE5d9q1681tQYk2WcJ/el9ay2D36hruAeSz
+         yPZxnicBpezYh9Fj0ZhYTdd82VGXCiMpeZKsP5vmcy60PcyEkLNzULk6knYvUic3wWkM
+         f/EMXG/JuE7DidT7LAx9zlnofFunAtd4gdLMjNgAILwAz8BB7uvv7diYr8Nde22191Bm
+         IfydQ4S7xmmrxj9MJbQ1WMLf21GTyrKQYGVqUPD1H4nW/53Ulp9tLkQHm5jFPChk+CkI
+         j/zw==
+X-Gm-Message-State: AOAM531sWGDS3Jl7OXbWOxo1IqAC9ezq6+WhLZiWzBYXeyMYNAStO20G
+        7pUPADkcGFhuhCbbluWkXR8=
+X-Google-Smtp-Source: ABdhPJxsCAQ1+j/Nu6C3zH6Pyxyu7SIV9c7ClPohXeDwxhj23W92lOvEu0XGMFUudP3gm2YPLjTj9g==
+X-Received: by 2002:a63:3d08:: with SMTP id k8mr15557220pga.147.1626050131342;
+        Sun, 11 Jul 2021 17:35:31 -0700 (PDT)
 Received: from localhost.localdomain ([2001:470:e92d:10:4039:6c0e:1168:cc74])
-        by smtp.gmail.com with ESMTPSA id c24sm15588447pgj.11.2021.07.11.17.35.28
+        by smtp.gmail.com with ESMTPSA id c24sm15588447pgj.11.2021.07.11.17.35.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Jul 2021 17:35:29 -0700 (PDT)
+        Sun, 11 Jul 2021 17:35:31 -0700 (PDT)
 From:   Tony Ambardar <tony.ambardar@gmail.com>
 X-Google-Original-From: Tony Ambardar <Tony.Ambardar@gmail.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
@@ -74,9 +74,9 @@ Cc:     Tony Ambardar <Tony.Ambardar@gmail.com>, netdev@vger.kernel.org,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>
-Subject: [RFC PATCH bpf-next v1 01/14] MIPS: eBPF: support BPF_TAIL_CALL in JIT static analysis
-Date:   Sun, 11 Jul 2021 17:34:47 -0700
-Message-Id: <c19e3b68eb7ff1356a941a0180f7ec2d3a3efa02.1625970384.git.Tony.Ambardar@gmail.com>
+Subject: [RFC PATCH bpf-next v1 03/14] MIPS: eBPF: fix BPF_ALU|ARSH handling in JIT static analysis
+Date:   Sun, 11 Jul 2021 17:34:49 -0700
+Message-Id: <ad3c9df52fadf63586d4efd8f6b3ee601f034654.1625970384.git.Tony.Ambardar@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1625970383.git.Tony.Ambardar@gmail.com>
 References: <cover.1625970383.git.Tony.Ambardar@gmail.com>
@@ -86,30 +86,32 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add support in reg_val_propagate_range() for BPF_TAIL_CALL, fixing many
-kernel log WARNINGs ("Unhandled BPF_JMP case") seen during JIT testing.
-Treat BPF_TAIL_CALL like a NOP, falling through as if the tail call failed.
+Update reg_val_propagate_range() to add the missing case for BPF_ALU|ARSH,
+otherwise zero-extension breaks for this opcode.
+
+Resolves failures for test_verifier tests:
+  963/p arsh32 reg zero extend check FAIL retval -1 != 0
+  964/u arsh32 imm zero extend check FAIL retval -1 != 0
+  964/p arsh32 imm zero extend check FAIL retval -1 != 0
 
 Fixes: b6bd53f9c4e8 ("MIPS: Add missing file for eBPF JIT.")
 Signed-off-by: Tony Ambardar <Tony.Ambardar@gmail.com>
 ---
- arch/mips/net/ebpf_jit.c | 3 +++
- 1 file changed, 3 insertions(+)
+ arch/mips/net/ebpf_jit.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/arch/mips/net/ebpf_jit.c b/arch/mips/net/ebpf_jit.c
-index 939dd06764bc..ed47a10d533f 100644
+index 64f76c7191b1..67b45d502435 100644
 --- a/arch/mips/net/ebpf_jit.c
 +++ b/arch/mips/net/ebpf_jit.c
-@@ -1714,6 +1714,9 @@ static int reg_val_propagate_range(struct jit_ctx *ctx, u64 initial_rvt,
- 				for (reg = BPF_REG_0; reg <= BPF_REG_5; reg++)
- 					set_reg_val_type(&exit_rvt, reg, REG_64BIT);
- 
-+				rvt[idx] |= RVT_DONE;
-+				break;
-+			case BPF_TAIL_CALL:
- 				rvt[idx] |= RVT_DONE;
- 				break;
- 			default:
+@@ -1587,6 +1587,7 @@ static int reg_val_propagate_range(struct jit_ctx *ctx, u64 initial_rvt,
+ 			case BPF_AND:
+ 			case BPF_LSH:
+ 			case BPF_RSH:
++			case BPF_ARSH:
+ 			case BPF_NEG:
+ 			case BPF_MOD:
+ 			case BPF_XOR:
 -- 
 2.25.1
 
