@@ -2,30 +2,29 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C5C7AC11F66
-	for <bpf@archiver.kernel.org>; Mon, 12 Jul 2021 12:17:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ABF24C07E9A
+	for <bpf@archiver.kernel.org>; Mon, 12 Jul 2021 12:17:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B044E61108
-	for <bpf@archiver.kernel.org>; Mon, 12 Jul 2021 12:17:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 94E5361153
+	for <bpf@archiver.kernel.org>; Mon, 12 Jul 2021 12:17:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234205AbhGLMUN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 12 Jul 2021 08:20:13 -0400
-Received: from szxga08-in.huawei.com ([45.249.212.255]:11264 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232627AbhGLMUH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 12 Jul 2021 08:20:07 -0400
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4GNjL460P5z1CJ28;
-        Mon, 12 Jul 2021 20:11:40 +0800 (CST)
+        id S234322AbhGLMU2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 12 Jul 2021 08:20:28 -0400
+Received: from szxga03-in.huawei.com ([45.249.212.189]:11288 "EHLO
+        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234255AbhGLMUR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 12 Jul 2021 08:20:17 -0400
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4GNjMb4PdWz78fP;
+        Mon, 12 Jul 2021 20:12:59 +0800 (CST)
 Received: from dggpemm500005.china.huawei.com (7.185.36.74) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Mon, 12 Jul 2021 20:17:16 +0800
+ 15.1.2176.2; Mon, 12 Jul 2021 20:17:15 +0800
 Received: from localhost.localdomain (10.69.192.56) by
  dggpemm500005.china.huawei.com (7.185.36.74) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
@@ -48,12 +47,10 @@ CC:     <alexander.duyck@gmail.com>, <linux@armlinux.org.uk>,
         <yhs@fb.com>, <kpsingh@kernel.org>, <andrii@kernel.org>,
         <kafai@fb.com>, <songliubraving@fb.com>, <netdev@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
-Subject: [PATCH rfc v3 2/4] page_pool: add interface for getting and setting pagecnt_bias
-Date:   Mon, 12 Jul 2021 20:16:33 +0800
-Message-ID: <1626092196-44697-3-git-send-email-linyunsheng@huawei.com>
+Subject: [PATCH rfc v3 0/4] add frag page support in page pool
+Date:   Mon, 12 Jul 2021 20:16:31 +0800
+Message-ID: <1626092196-44697-1-git-send-email-linyunsheng@huawei.com>
 X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1626092196-44697-1-git-send-email-linyunsheng@huawei.com>
-References: <1626092196-44697-1-git-send-email-linyunsheng@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.69.192.56]
@@ -64,99 +61,43 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-As suggested by Alexander, "A DMA mapping should be page
-aligned anyway so the lower 12 bits would be reserved 0",
-so it might make more sense to repurpose the lower 12 bits
-of the dma address to store the pagecnt_bias for frag page
-support in page pool.
+This patchset adds frag page support in page pool and
+enable skb's page frag recycling based on page pool in
+hns3 drvier.
 
-As newly added page_pool_get_pagecnt_bias() may be called
-outside of the softirq context, so annotate the access to
-page->dma_addr[0] with READ_ONCE() and WRITE_ONCE().
+RFC v3:
+1. Implement the semantic of "page recycling only wait for the
+   page pool user instead of all user of a page" 
+2. Support the frag allocation of different sizes
+3. Merge patch 4 & 5 to one patch as it does not make sense to
+   use page_pool_dev_alloc_pages() API directly with elevated
+   refcnt.
+4. other minor comment suggested by Alexander.
 
-And page_pool_get_pagecnt_bias_ptr() is added to implement
-the pagecnt_bias atomic updating when a page is passsed to
-the user.
+RFC v2:
+1. Split patch 1 to more reviewable one.
+2. Repurpose the lower 12 bits of the dma address to store the
+   pagecnt_bias as suggested by Alexander.
+3. support recycling to pool->alloc for elevated refcnt case
+   too.
 
-Other three interfaces using page->dma_addr[0] is only called
-in the softirq context during normal rx processing, hopefully
-the barrier in the rx processing will ensure the correct order
-between getting and setting pagecnt_bias.
+Yunsheng Lin (4):
+  page_pool: keep pp info as long as page pool owns the page
+  page_pool: add interface for getting and setting pagecnt_bias
+  page_pool: add frag page recycling support in page pool
+  net: hns3: support skb's frag page recycling based on page pool
 
-Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
----
- include/net/page_pool.h | 29 +++++++++++++++++++++++++++--
- net/core/page_pool.c    |  8 +++++++-
- 2 files changed, 34 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/hisilicon/hns3/hns3_enet.c |  79 +++++++++++-
+ drivers/net/ethernet/hisilicon/hns3/hns3_enet.h |   3 +
+ drivers/net/ethernet/marvell/mvneta.c           |   6 +-
+ drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c |   2 +-
+ drivers/net/ethernet/ti/cpsw.c                  |   2 +-
+ drivers/net/ethernet/ti/cpsw_new.c              |   2 +-
+ include/linux/skbuff.h                          |   4 +-
+ include/net/page_pool.h                         |  58 +++++++--
+ net/core/page_pool.c                            | 155 +++++++++++++++++++++---
+ 9 files changed, 267 insertions(+), 44 deletions(-)
 
-diff --git a/include/net/page_pool.h b/include/net/page_pool.h
-index 8d7744d..84cd972 100644
---- a/include/net/page_pool.h
-+++ b/include/net/page_pool.h
-@@ -200,17 +200,42 @@ static inline void page_pool_recycle_direct(struct page_pool *pool,
- 
- static inline dma_addr_t page_pool_get_dma_addr(struct page *page)
- {
--	dma_addr_t ret = page->dma_addr[0];
-+	dma_addr_t ret = READ_ONCE(page->dma_addr[0]) & PAGE_MASK;
- 	if (sizeof(dma_addr_t) > sizeof(unsigned long))
- 		ret |= (dma_addr_t)page->dma_addr[1] << 16 << 16;
- 	return ret;
- }
- 
--static inline void page_pool_set_dma_addr(struct page *page, dma_addr_t addr)
-+static inline bool page_pool_set_dma_addr(struct page *page, dma_addr_t addr)
- {
-+	if (WARN_ON(addr & ~PAGE_MASK))
-+		return false;
-+
- 	page->dma_addr[0] = addr;
- 	if (sizeof(dma_addr_t) > sizeof(unsigned long))
- 		page->dma_addr[1] = upper_32_bits(addr);
-+
-+	return true;
-+}
-+
-+static inline int page_pool_get_pagecnt_bias(struct page *page)
-+{
-+	return READ_ONCE(page->dma_addr[0]) & ~PAGE_MASK;
-+}
-+
-+static inline unsigned long *page_pool_pagecnt_bias_ptr(struct page *page)
-+{
-+	return page->dma_addr;
-+}
-+
-+static inline void page_pool_set_pagecnt_bias(struct page *page, int bias)
-+{
-+	unsigned long dma_addr_0 = READ_ONCE(page->dma_addr[0]);
-+
-+	dma_addr_0 &= PAGE_MASK;
-+	dma_addr_0 |= bias;
-+
-+	WRITE_ONCE(page->dma_addr[0], dma_addr_0);
- }
- 
- static inline bool is_page_pool_compiled_in(void)
-diff --git a/net/core/page_pool.c b/net/core/page_pool.c
-index 78838c6..1abefc6 100644
---- a/net/core/page_pool.c
-+++ b/net/core/page_pool.c
-@@ -198,7 +198,13 @@ static bool page_pool_dma_map(struct page_pool *pool, struct page *page)
- 	if (dma_mapping_error(pool->p.dev, dma))
- 		return false;
- 
--	page_pool_set_dma_addr(page, dma);
-+	if (unlikely(!page_pool_set_dma_addr(page, dma))) {
-+		dma_unmap_page_attrs(pool->p.dev, dma,
-+				     PAGE_SIZE << pool->p.order,
-+				     pool->p.dma_dir,
-+				     DMA_ATTR_SKIP_CPU_SYNC);
-+		return false;
-+	}
- 
- 	if (pool->p.flags & PP_FLAG_DMA_SYNC_DEV)
- 		page_pool_dma_sync_for_device(pool, page, pool->p.max_len);
 -- 
 2.7.4
 
