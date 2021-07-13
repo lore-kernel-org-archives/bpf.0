@@ -2,393 +2,172 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5D37C11F69
-	for <bpf@archiver.kernel.org>; Tue, 13 Jul 2021 08:45:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B6990C07E95
+	for <bpf@archiver.kernel.org>; Tue, 13 Jul 2021 08:53:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 92BAF613C2
-	for <bpf@archiver.kernel.org>; Tue, 13 Jul 2021 08:45:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9896461369
+	for <bpf@archiver.kernel.org>; Tue, 13 Jul 2021 08:53:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234776AbhGMIsg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 13 Jul 2021 04:48:36 -0400
-Received: from mga05.intel.com ([192.55.52.43]:36908 "EHLO mga05.intel.com"
+        id S234692AbhGMI4o (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 13 Jul 2021 04:56:44 -0400
+Received: from mga17.intel.com ([192.55.52.151]:23190 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234758AbhGMIsf (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 13 Jul 2021 04:48:35 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10043"; a="295772335"
+        id S234599AbhGMI4n (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 13 Jul 2021 04:56:43 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10043"; a="190506037"
 X-IronPort-AV: E=Sophos;i="5.84,236,1620716400"; 
-   d="scan'208";a="295772335"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2021 01:45:42 -0700
+   d="scan'208";a="190506037"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2021 01:53:52 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.84,236,1620716400"; 
-   d="scan'208";a="629972612"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga005.jf.intel.com with ESMTP; 13 Jul 2021 01:45:34 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 3C634FF; Tue, 13 Jul 2021 11:46:00 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-media@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Thomas Graf <tgraf@suug.ch>,
-        Andrew Morton <akpm@linux-foundation.org>, jic23@kernel.org,
-        linux@rasmusvillemoes.dk
-Subject: [PATCH v1 3/3] kernel.h: Split out container_of() and typeof_memeber() macros
-Date:   Tue, 13 Jul 2021 11:45:41 +0300
-Message-Id: <20210713084541.7958-3-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210713084541.7958-1-andriy.shevchenko@linux.intel.com>
-References: <20210713084541.7958-1-andriy.shevchenko@linux.intel.com>
+   d="scan'208";a="649320931"
+Received: from ranger.igk.intel.com ([10.102.21.164])
+  by fmsmga006.fm.intel.com with ESMTP; 13 Jul 2021 01:53:51 -0700
+Date:   Tue, 13 Jul 2021 10:39:41 +0200
+From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+        John Fastabend <john.fastabend@gmail.com>
+Subject: Re: [PATCH bpf] bpf: Fix tail_call_reachable rejection for
+ interpreter when jit failed
+Message-ID: <20210713083941.GB60476@ranger.igk.intel.com>
+References: <618c34e3163ad1a36b1e82377576a6081e182f25.1626123173.git.daniel@iogearbox.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <618c34e3163ad1a36b1e82377576a6081e182f25.1626123173.git.daniel@iogearbox.net>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-kernel.h is being used as a dump for all kinds of stuff for a long time.
-Here is the attempt cleaning it up by splitting out container_of() and
-typeof_memeber() macros.
+On Mon, Jul 12, 2021 at 10:57:35PM +0200, Daniel Borkmann wrote:
+> During testing of f263a81451c1 ("bpf: Track subprog poke descriptors correctly
+> and fix use-after-free") under various failure conditions, for example, when
+> jit_subprogs() fails and tries to clean up the program to be run under the
+> interpreter, we ran into the following freeze:
+> 
+>   [...]
+>   #127/8 tailcall_bpf2bpf_3:FAIL
+>   [...]
+>   [   92.041251] BUG: KASAN: slab-out-of-bounds in ___bpf_prog_run+0x1b9d/0x2e20
+>   [   92.042408] Read of size 8 at addr ffff88800da67f68 by task test_progs/682
+>   [   92.043707]
+>   [   92.044030] CPU: 1 PID: 682 Comm: test_progs Tainted: G   O   5.13.0-53301-ge6c08cb33a30-dirty #87
+>   [   92.045542] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1 04/01/2014
+>   [   92.046785] Call Trace:
+>   [   92.047171]  ? __bpf_prog_run_args64+0xc0/0xc0
+>   [   92.047773]  ? __bpf_prog_run_args32+0x8b/0xb0
+>   [   92.048389]  ? __bpf_prog_run_args64+0xc0/0xc0
+>   [   92.049019]  ? ktime_get+0x117/0x130
+>   [...] // few hundred [similar] lines more
+>   [   92.659025]  ? ktime_get+0x117/0x130
+>   [   92.659845]  ? __bpf_prog_run_args64+0xc0/0xc0
+>   [   92.660738]  ? __bpf_prog_run_args32+0x8b/0xb0
+>   [   92.661528]  ? __bpf_prog_run_args64+0xc0/0xc0
+>   [   92.662378]  ? print_usage_bug+0x50/0x50
+>   [   92.663221]  ? print_usage_bug+0x50/0x50
+>   [   92.664077]  ? bpf_ksym_find+0x9c/0xe0
+>   [   92.664887]  ? ktime_get+0x117/0x130
+>   [   92.665624]  ? kernel_text_address+0xf5/0x100
+>   [   92.666529]  ? __kernel_text_address+0xe/0x30
+>   [   92.667725]  ? unwind_get_return_address+0x2f/0x50
+>   [   92.668854]  ? ___bpf_prog_run+0x15d4/0x2e20
+>   [   92.670185]  ? ktime_get+0x117/0x130
+>   [   92.671130]  ? __bpf_prog_run_args64+0xc0/0xc0
+>   [   92.672020]  ? __bpf_prog_run_args32+0x8b/0xb0
+>   [   92.672860]  ? __bpf_prog_run_args64+0xc0/0xc0
+>   [   92.675159]  ? ktime_get+0x117/0x130
+>   [   92.677074]  ? lock_is_held_type+0xd5/0x130
+>   [   92.678662]  ? ___bpf_prog_run+0x15d4/0x2e20
+>   [   92.680046]  ? ktime_get+0x117/0x130
+>   [   92.681285]  ? __bpf_prog_run32+0x6b/0x90
+>   [   92.682601]  ? __bpf_prog_run64+0x90/0x90
+>   [   92.683636]  ? lock_downgrade+0x370/0x370
+>   [   92.684647]  ? mark_held_locks+0x44/0x90
+>   [   92.685652]  ? ktime_get+0x117/0x130
+>   [   92.686752]  ? lockdep_hardirqs_on+0x79/0x100
+>   [   92.688004]  ? ktime_get+0x117/0x130
+>   [   92.688573]  ? __cant_migrate+0x2b/0x80
+>   [   92.689192]  ? bpf_test_run+0x2f4/0x510
+>   [   92.689869]  ? bpf_test_timer_continue+0x1c0/0x1c0
+>   [   92.690856]  ? rcu_read_lock_bh_held+0x90/0x90
+>   [   92.691506]  ? __kasan_slab_alloc+0x61/0x80
+>   [   92.692128]  ? eth_type_trans+0x128/0x240
+>   [   92.692737]  ? __build_skb+0x46/0x50
+>   [   92.693252]  ? bpf_prog_test_run_skb+0x65e/0xc50
+>   [   92.693954]  ? bpf_prog_test_run_raw_tp+0x2d0/0x2d0
+>   [   92.694639]  ? __fget_light+0xa1/0x100
+>   [   92.695162]  ? bpf_prog_inc+0x23/0x30
+>   [   92.695685]  ? __sys_bpf+0xb40/0x2c80
+>   [   92.696324]  ? bpf_link_get_from_fd+0x90/0x90
+>   [   92.697150]  ? mark_held_locks+0x24/0x90
+>   [   92.698007]  ? lockdep_hardirqs_on_prepare+0x124/0x220
+>   [   92.699045]  ? finish_task_switch+0xe6/0x370
+>   [   92.700072]  ? lockdep_hardirqs_on+0x79/0x100
+>   [   92.701233]  ? finish_task_switch+0x11d/0x370
+>   [   92.702264]  ? __switch_to+0x2c0/0x740
+>   [   92.703148]  ? mark_held_locks+0x24/0x90
+>   [   92.704155]  ? __x64_sys_bpf+0x45/0x50
+>   [   92.705146]  ? do_syscall_64+0x35/0x80
+>   [   92.706953]  ? entry_SYSCALL_64_after_hwframe+0x44/0xae
+>   [...]
+> 
+> Turns out that the program rejection from e411901c0b77 ("bpf: allow for tailcalls
+> in BPF subprograms for x64 JIT") is buggy since env->prog->aux->tail_call_reachable
+> is never true. Commit ebf7d1f508a7 ("bpf, x64: rework pro/epilogue and tailcall
+> handling in JIT") added a tracker into check_max_stack_depth() which propagates
+> the tail_call_reachable condition throughout the subprograms. This info is then
+> assigned to the subprogram's func[i]->aux->tail_call_reachable. However, in the
+> case of the rejection check upon JIT failure, env->prog->aux->tail_call_reachable
+> is used. func[0]->aux->tail_call_reachable which represents the main program's
+> information did not propagate this to the outer env->prog->aux, though. Add this
+> propagation into check_max_stack_depth() where it needs to belong so that the
+> check can be done reliably.
+> 
+> Fixes: ebf7d1f508a7 ("bpf, x64: rework pro/epilogue and tailcall handling in JIT")
+> Fixes: e411901c0b77 ("bpf: allow for tailcalls in BPF subprograms for x64 JIT")
+> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+> Co-developed-by: John Fastabend <john.fastabend@gmail.com>
+> Signed-off-by: John Fastabend <john.fastabend@gmail.com>
+> Cc: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+> ---
+>  kernel/bpf/verifier.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 42a4063de7cd..9de3c9c3267c 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -3677,6 +3677,8 @@ static int check_max_stack_depth(struct bpf_verifier_env *env)
+>  	if (tail_call_reachable)
+>  		for (j = 0; j < frame; j++)
+>  			subprog[ret_prog[j]].tail_call_reachable = true;
+> +	if (subprog[0].tail_call_reachable)
 
-At the same time convert users in the header and other folders to use it.
-Though for time being include new header back to kernel.h to avoid twisted
-indirected includes for existing users.
+This could be just:
+	if (tail_call_reachable)
 
-Note, there are _a lot_ of headers and modules that include kernel.h solely
-for one of these macros and this allows to unburden compiler for the twisted
-inclusion paths and to make new code cleaner in the future.
+But what you propose is fine to me as well. Not sure how we missed it.
+Acked-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- include/kunit/test.h         | 14 ++++++++++++--
- include/linux/container_of.h | 37 ++++++++++++++++++++++++++++++++++++
- include/linux/kernel.h       | 31 +-----------------------------
- include/linux/kobject.h      | 14 +++++++-------
- include/linux/list.h         |  6 ++++--
- include/linux/llist.h        |  4 +++-
- include/linux/plist.h        |  5 ++++-
- include/media/media-entity.h |  3 ++-
- lib/radix-tree.c             |  6 +++++-
- lib/rhashtable.c             | 17 +++++++++++------
- 10 files changed, 86 insertions(+), 51 deletions(-)
- create mode 100644 include/linux/container_of.h
+With that I expect that we bail out in fixup_call_args() right?
 
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index 24b40e5c160b..d88d9f7ead0a 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -11,11 +11,21 @@
- 
- #include <kunit/assert.h>
- #include <kunit/try-catch.h>
--#include <linux/kernel.h>
-+
-+#include <linux/compiler_attributes.h>
-+#include <linux/container_of.h>
-+#include <linux/err.h>
-+#include <linux/init.h>
-+#include <linux/kconfig.h>
-+#include <linux/kref.h>
-+#include <linux/list.h>
- #include <linux/module.h>
- #include <linux/slab.h>
-+#include <linux/spinlock.h>
-+#include <linux/string.h>
- #include <linux/types.h>
--#include <linux/kref.h>
-+
-+#include <asm/rwonce.h>
- 
- struct kunit_resource;
- 
-diff --git a/include/linux/container_of.h b/include/linux/container_of.h
-new file mode 100644
-index 000000000000..f6ee1be0e784
---- /dev/null
-+++ b/include/linux/container_of.h
-@@ -0,0 +1,37 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _LINUX_CONTAINER_OF_H
-+#define _LINUX_CONTAINER_OF_H
-+
-+#define typeof_member(T, m)	typeof(((T*)0)->m)
-+
-+/**
-+ * container_of - cast a member of a structure out to the containing structure
-+ * @ptr:	the pointer to the member.
-+ * @type:	the type of the container struct this is embedded in.
-+ * @member:	the name of the member within the struct.
-+ *
-+ */
-+#define container_of(ptr, type, member) ({				\
-+	void *__mptr = (void *)(ptr);					\
-+	BUILD_BUG_ON_MSG(!__same_type(*(ptr), ((type *)0)->member) &&	\
-+			 !__same_type(*(ptr), void),			\
-+			 "pointer type mismatch in container_of()");	\
-+	((type *)(__mptr - offsetof(type, member))); })
-+
-+/**
-+ * container_of_safe - cast a member of a structure out to the containing structure
-+ * @ptr:	the pointer to the member.
-+ * @type:	the type of the container struct this is embedded in.
-+ * @member:	the name of the member within the struct.
-+ *
-+ * If IS_ERR_OR_NULL(ptr), ptr is returned unchanged.
-+ */
-+#define container_of_safe(ptr, type, member) ({				\
-+	void *__mptr = (void *)(ptr);					\
-+	BUILD_BUG_ON_MSG(!__same_type(*(ptr), ((type *)0)->member) &&	\
-+			 !__same_type(*(ptr), void),			\
-+			 "pointer type mismatch in container_of()");	\
-+	IS_ERR_OR_NULL(__mptr) ? ERR_CAST(__mptr) :			\
-+		((type *)(__mptr - offsetof(type, member))); })
-+
-+#endif	/* _LINUX_CONTAINER_OF_H */
-diff --git a/include/linux/kernel.h b/include/linux/kernel.h
-index 743d3c9a3227..55ea8e6bf31a 100644
---- a/include/linux/kernel.h
-+++ b/include/linux/kernel.h
-@@ -9,6 +9,7 @@
- #include <linux/stddef.h>
- #include <linux/types.h>
- #include <linux/compiler.h>
-+#include <linux/container_of.h>
- #include <linux/bitops.h>
- #include <linux/kstrtox.h>
- #include <linux/log2.h>
-@@ -476,36 +477,6 @@ ftrace_vprintk(const char *fmt, va_list ap)
- static inline void ftrace_dump(enum ftrace_dump_mode oops_dump_mode) { }
- #endif /* CONFIG_TRACING */
- 
--/**
-- * container_of - cast a member of a structure out to the containing structure
-- * @ptr:	the pointer to the member.
-- * @type:	the type of the container struct this is embedded in.
-- * @member:	the name of the member within the struct.
-- *
-- */
--#define container_of(ptr, type, member) ({				\
--	void *__mptr = (void *)(ptr);					\
--	BUILD_BUG_ON_MSG(!__same_type(*(ptr), ((type *)0)->member) &&	\
--			 !__same_type(*(ptr), void),			\
--			 "pointer type mismatch in container_of()");	\
--	((type *)(__mptr - offsetof(type, member))); })
--
--/**
-- * container_of_safe - cast a member of a structure out to the containing structure
-- * @ptr:	the pointer to the member.
-- * @type:	the type of the container struct this is embedded in.
-- * @member:	the name of the member within the struct.
-- *
-- * If IS_ERR_OR_NULL(ptr), ptr is returned unchanged.
-- */
--#define container_of_safe(ptr, type, member) ({				\
--	void *__mptr = (void *)(ptr);					\
--	BUILD_BUG_ON_MSG(!__same_type(*(ptr), ((type *)0)->member) &&	\
--			 !__same_type(*(ptr), void),			\
--			 "pointer type mismatch in container_of()");	\
--	IS_ERR_OR_NULL(__mptr) ? ERR_CAST(__mptr) :			\
--		((type *)(__mptr - offsetof(type, member))); })
--
- /* Rebuild everything on CONFIG_FTRACE_MCOUNT_RECORD */
- #ifdef CONFIG_FTRACE_MCOUNT_RECORD
- # define REBUILD_DUE_TO_FTRACE_MCOUNT_RECORD
-diff --git a/include/linux/kobject.h b/include/linux/kobject.h
-index ea30529fba08..c7284418a6d0 100644
---- a/include/linux/kobject.h
-+++ b/include/linux/kobject.h
-@@ -15,18 +15,18 @@
- #ifndef _KOBJECT_H_
- #define _KOBJECT_H_
- 
--#include <linux/types.h>
--#include <linux/list.h>
--#include <linux/sysfs.h>
-+#include <linux/atomic.h>
- #include <linux/compiler.h>
--#include <linux/spinlock.h>
-+#include <linux/container_of.h>
-+#include <linux/list.h>
- #include <linux/kref.h>
- #include <linux/kobject_ns.h>
--#include <linux/kernel.h>
- #include <linux/wait.h>
--#include <linux/atomic.h>
--#include <linux/workqueue.h>
-+#include <linux/spinlock.h>
-+#include <linux/sysfs.h>
-+#include <linux/types.h>
- #include <linux/uidgid.h>
-+#include <linux/workqueue.h>
- 
- #define UEVENT_HELPER_PATH_LEN		256
- #define UEVENT_NUM_ENVP			64	/* number of env pointers */
-diff --git a/include/linux/list.h b/include/linux/list.h
-index f2af4b4aa4e9..5dc679b373da 100644
---- a/include/linux/list.h
-+++ b/include/linux/list.h
-@@ -2,11 +2,13 @@
- #ifndef _LINUX_LIST_H
- #define _LINUX_LIST_H
- 
-+#include <linux/container_of.h>
-+#include <linux/const.h>
- #include <linux/types.h>
- #include <linux/stddef.h>
- #include <linux/poison.h>
--#include <linux/const.h>
--#include <linux/kernel.h>
-+
-+#include <asm/barrier.h>
- 
- /*
-  * Circular doubly linked list implementation.
-diff --git a/include/linux/llist.h b/include/linux/llist.h
-index 24f207b0190b..85bda2d02d65 100644
---- a/include/linux/llist.h
-+++ b/include/linux/llist.h
-@@ -49,7 +49,9 @@
-  */
- 
- #include <linux/atomic.h>
--#include <linux/kernel.h>
-+#include <linux/container_of.h>
-+#include <linux/stddef.h>
-+#include <linux/types.h>
- 
- struct llist_head {
- 	struct llist_node *first;
-diff --git a/include/linux/plist.h b/include/linux/plist.h
-index 66bab1bca35c..0f352c1d3c80 100644
---- a/include/linux/plist.h
-+++ b/include/linux/plist.h
-@@ -73,8 +73,11 @@
- #ifndef _LINUX_PLIST_H_
- #define _LINUX_PLIST_H_
- 
--#include <linux/kernel.h>
-+#include <linux/container_of.h>
- #include <linux/list.h>
-+#include <linux/types.h>
-+
-+#include <asm/bug.h>
- 
- struct plist_head {
- 	struct list_head node_list;
-diff --git a/include/media/media-entity.h b/include/media/media-entity.h
-index 09737b47881f..fea489f03d57 100644
---- a/include/media/media-entity.h
-+++ b/include/media/media-entity.h
-@@ -13,10 +13,11 @@
- 
- #include <linux/bitmap.h>
- #include <linux/bug.h>
-+#include <linux/container_of.h>
- #include <linux/fwnode.h>
--#include <linux/kernel.h>
- #include <linux/list.h>
- #include <linux/media.h>
-+#include <linux/types.h>
- 
- /* Enums used internally at the media controller to represent graphs */
- 
-diff --git a/lib/radix-tree.c b/lib/radix-tree.c
-index b3afafe46fff..a0f346a095df 100644
---- a/lib/radix-tree.c
-+++ b/lib/radix-tree.c
-@@ -12,19 +12,21 @@
- #include <linux/bitmap.h>
- #include <linux/bitops.h>
- #include <linux/bug.h>
-+#include <linux/container_of.h>
- #include <linux/cpu.h>
- #include <linux/errno.h>
- #include <linux/export.h>
- #include <linux/idr.h>
- #include <linux/init.h>
--#include <linux/kernel.h>
- #include <linux/kmemleak.h>
-+#include <linux/math.h>
- #include <linux/percpu.h>
- #include <linux/preempt.h>		/* in_interrupt() */
- #include <linux/radix-tree.h>
- #include <linux/rcupdate.h>
- #include <linux/slab.h>
- #include <linux/string.h>
-+#include <linux/types.h>
- #include <linux/xarray.h>
- 
- /*
-@@ -285,6 +287,8 @@ radix_tree_node_alloc(gfp_t gfp_mask, struct radix_tree_node *parent,
- 	return ret;
- }
- 
-+extern void radix_tree_node_rcu_free(struct rcu_head *head);
-+
- void radix_tree_node_rcu_free(struct rcu_head *head)
- {
- 	struct radix_tree_node *node =
-diff --git a/lib/rhashtable.c b/lib/rhashtable.c
-index e12bbfb240b8..64823476bb53 100644
---- a/lib/rhashtable.c
-+++ b/lib/rhashtable.c
-@@ -12,19 +12,24 @@
-  */
- 
- #include <linux/atomic.h>
--#include <linux/kernel.h>
-+#include <linux/bit_spinlock.h>
-+#include <linux/container_of.h>
-+#include <linux/err.h>
-+#include <linux/export.h>
- #include <linux/init.h>
-+#include <linux/jhash.h>
-+#include <linux/lockdep.h>
- #include <linux/log2.h>
- #include <linux/sched.h>
--#include <linux/rculist.h>
- #include <linux/slab.h>
--#include <linux/vmalloc.h>
- #include <linux/mm.h>
--#include <linux/jhash.h>
-+#include <linux/mutex.h>
- #include <linux/random.h>
-+#include <linux/rculist.h>
- #include <linux/rhashtable.h>
--#include <linux/err.h>
--#include <linux/export.h>
-+#include <linux/types.h>
-+#include <linux/vmalloc.h>
-+#include <linux/workqueue.h>
- 
- #define HASH_DEFAULT_SIZE	64UL
- #define HASH_MIN_SIZE		4U
--- 
-2.30.2
+Oh and John's f263a81451c1 ("bpf: Track subprog poke descriptors correctly
+and fix use-after-free") landed in my junk folder, heh, that's why I
+stayed silent and didn't participate in further review. Need to talk to
+IT.
 
+> +		env->prog->aux->tail_call_reachable = true;
+>  
+>  	/* end of for() loop means the last insn of the 'subprog'
+>  	 * was reached. Doesn't matter whether it was JA or EXIT
+> -- 
+> 2.21.0
+> 
