@@ -2,172 +2,107 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B6990C07E95
-	for <bpf@archiver.kernel.org>; Tue, 13 Jul 2021 08:53:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0709DC07E95
+	for <bpf@archiver.kernel.org>; Tue, 13 Jul 2021 09:25:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9896461369
-	for <bpf@archiver.kernel.org>; Tue, 13 Jul 2021 08:53:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D83B761073
+	for <bpf@archiver.kernel.org>; Tue, 13 Jul 2021 09:25:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234692AbhGMI4o (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 13 Jul 2021 04:56:44 -0400
-Received: from mga17.intel.com ([192.55.52.151]:23190 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234599AbhGMI4n (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 13 Jul 2021 04:56:43 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10043"; a="190506037"
-X-IronPort-AV: E=Sophos;i="5.84,236,1620716400"; 
-   d="scan'208";a="190506037"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2021 01:53:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,236,1620716400"; 
-   d="scan'208";a="649320931"
-Received: from ranger.igk.intel.com ([10.102.21.164])
-  by fmsmga006.fm.intel.com with ESMTP; 13 Jul 2021 01:53:51 -0700
-Date:   Tue, 13 Jul 2021 10:39:41 +0200
-From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
-        John Fastabend <john.fastabend@gmail.com>
-Subject: Re: [PATCH bpf] bpf: Fix tail_call_reachable rejection for
- interpreter when jit failed
-Message-ID: <20210713083941.GB60476@ranger.igk.intel.com>
-References: <618c34e3163ad1a36b1e82377576a6081e182f25.1626123173.git.daniel@iogearbox.net>
+        id S235038AbhGMJ2E (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 13 Jul 2021 05:28:04 -0400
+Received: from szxga08-in.huawei.com ([45.249.212.255]:11270 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234397AbhGMJ2E (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 13 Jul 2021 05:28:04 -0400
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4GPFT40BWlz1CJRS;
+        Tue, 13 Jul 2021 17:19:36 +0800 (CST)
+Received: from dggpemm500005.china.huawei.com (7.185.36.74) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Tue, 13 Jul 2021 17:25:12 +0800
+Received: from localhost.localdomain (10.69.192.56) by
+ dggpemm500005.china.huawei.com (7.185.36.74) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Tue, 13 Jul 2021 17:25:12 +0800
+From:   Yunsheng Lin <linyunsheng@huawei.com>
+To:     <davem@davemloft.net>, <kuba@kernel.org>
+CC:     <alexander.duyck@gmail.com>, <linux@armlinux.org.uk>,
+        <mw@semihalf.com>, <linuxarm@openeuler.org>,
+        <yisen.zhuang@huawei.com>, <salil.mehta@huawei.com>,
+        <thomas.petazzoni@bootlin.com>, <hawk@kernel.org>,
+        <ilias.apalodimas@linaro.org>, <ast@kernel.org>,
+        <daniel@iogearbox.net>, <john.fastabend@gmail.com>,
+        <akpm@linux-foundation.org>, <peterz@infradead.org>,
+        <will@kernel.org>, <willy@infradead.org>, <vbabka@suse.cz>,
+        <fenghua.yu@intel.com>, <guro@fb.com>, <peterx@redhat.com>,
+        <feng.tang@intel.com>, <jgg@ziepe.ca>, <mcroce@microsoft.com>,
+        <hughd@google.com>, <jonathan.lemon@gmail.com>, <alobakin@pm.me>,
+        <willemb@google.com>, <wenxu@ucloud.cn>, <cong.wang@bytedance.com>,
+        <haokexin@gmail.com>, <nogikh@google.com>, <elver@google.com>,
+        <yhs@fb.com>, <kpsingh@kernel.org>, <andrii@kernel.org>,
+        <kafai@fb.com>, <songliubraving@fb.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
+Subject: [PATCH rfc v4 0/4] add frag page support in page pool
+Date:   Tue, 13 Jul 2021 17:24:28 +0800
+Message-ID: <1626168272-25622-1-git-send-email-linyunsheng@huawei.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <618c34e3163ad1a36b1e82377576a6081e182f25.1626123173.git.daniel@iogearbox.net>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.56]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Jul 12, 2021 at 10:57:35PM +0200, Daniel Borkmann wrote:
-> During testing of f263a81451c1 ("bpf: Track subprog poke descriptors correctly
-> and fix use-after-free") under various failure conditions, for example, when
-> jit_subprogs() fails and tries to clean up the program to be run under the
-> interpreter, we ran into the following freeze:
-> 
->   [...]
->   #127/8 tailcall_bpf2bpf_3:FAIL
->   [...]
->   [   92.041251] BUG: KASAN: slab-out-of-bounds in ___bpf_prog_run+0x1b9d/0x2e20
->   [   92.042408] Read of size 8 at addr ffff88800da67f68 by task test_progs/682
->   [   92.043707]
->   [   92.044030] CPU: 1 PID: 682 Comm: test_progs Tainted: G   O   5.13.0-53301-ge6c08cb33a30-dirty #87
->   [   92.045542] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1 04/01/2014
->   [   92.046785] Call Trace:
->   [   92.047171]  ? __bpf_prog_run_args64+0xc0/0xc0
->   [   92.047773]  ? __bpf_prog_run_args32+0x8b/0xb0
->   [   92.048389]  ? __bpf_prog_run_args64+0xc0/0xc0
->   [   92.049019]  ? ktime_get+0x117/0x130
->   [...] // few hundred [similar] lines more
->   [   92.659025]  ? ktime_get+0x117/0x130
->   [   92.659845]  ? __bpf_prog_run_args64+0xc0/0xc0
->   [   92.660738]  ? __bpf_prog_run_args32+0x8b/0xb0
->   [   92.661528]  ? __bpf_prog_run_args64+0xc0/0xc0
->   [   92.662378]  ? print_usage_bug+0x50/0x50
->   [   92.663221]  ? print_usage_bug+0x50/0x50
->   [   92.664077]  ? bpf_ksym_find+0x9c/0xe0
->   [   92.664887]  ? ktime_get+0x117/0x130
->   [   92.665624]  ? kernel_text_address+0xf5/0x100
->   [   92.666529]  ? __kernel_text_address+0xe/0x30
->   [   92.667725]  ? unwind_get_return_address+0x2f/0x50
->   [   92.668854]  ? ___bpf_prog_run+0x15d4/0x2e20
->   [   92.670185]  ? ktime_get+0x117/0x130
->   [   92.671130]  ? __bpf_prog_run_args64+0xc0/0xc0
->   [   92.672020]  ? __bpf_prog_run_args32+0x8b/0xb0
->   [   92.672860]  ? __bpf_prog_run_args64+0xc0/0xc0
->   [   92.675159]  ? ktime_get+0x117/0x130
->   [   92.677074]  ? lock_is_held_type+0xd5/0x130
->   [   92.678662]  ? ___bpf_prog_run+0x15d4/0x2e20
->   [   92.680046]  ? ktime_get+0x117/0x130
->   [   92.681285]  ? __bpf_prog_run32+0x6b/0x90
->   [   92.682601]  ? __bpf_prog_run64+0x90/0x90
->   [   92.683636]  ? lock_downgrade+0x370/0x370
->   [   92.684647]  ? mark_held_locks+0x44/0x90
->   [   92.685652]  ? ktime_get+0x117/0x130
->   [   92.686752]  ? lockdep_hardirqs_on+0x79/0x100
->   [   92.688004]  ? ktime_get+0x117/0x130
->   [   92.688573]  ? __cant_migrate+0x2b/0x80
->   [   92.689192]  ? bpf_test_run+0x2f4/0x510
->   [   92.689869]  ? bpf_test_timer_continue+0x1c0/0x1c0
->   [   92.690856]  ? rcu_read_lock_bh_held+0x90/0x90
->   [   92.691506]  ? __kasan_slab_alloc+0x61/0x80
->   [   92.692128]  ? eth_type_trans+0x128/0x240
->   [   92.692737]  ? __build_skb+0x46/0x50
->   [   92.693252]  ? bpf_prog_test_run_skb+0x65e/0xc50
->   [   92.693954]  ? bpf_prog_test_run_raw_tp+0x2d0/0x2d0
->   [   92.694639]  ? __fget_light+0xa1/0x100
->   [   92.695162]  ? bpf_prog_inc+0x23/0x30
->   [   92.695685]  ? __sys_bpf+0xb40/0x2c80
->   [   92.696324]  ? bpf_link_get_from_fd+0x90/0x90
->   [   92.697150]  ? mark_held_locks+0x24/0x90
->   [   92.698007]  ? lockdep_hardirqs_on_prepare+0x124/0x220
->   [   92.699045]  ? finish_task_switch+0xe6/0x370
->   [   92.700072]  ? lockdep_hardirqs_on+0x79/0x100
->   [   92.701233]  ? finish_task_switch+0x11d/0x370
->   [   92.702264]  ? __switch_to+0x2c0/0x740
->   [   92.703148]  ? mark_held_locks+0x24/0x90
->   [   92.704155]  ? __x64_sys_bpf+0x45/0x50
->   [   92.705146]  ? do_syscall_64+0x35/0x80
->   [   92.706953]  ? entry_SYSCALL_64_after_hwframe+0x44/0xae
->   [...]
-> 
-> Turns out that the program rejection from e411901c0b77 ("bpf: allow for tailcalls
-> in BPF subprograms for x64 JIT") is buggy since env->prog->aux->tail_call_reachable
-> is never true. Commit ebf7d1f508a7 ("bpf, x64: rework pro/epilogue and tailcall
-> handling in JIT") added a tracker into check_max_stack_depth() which propagates
-> the tail_call_reachable condition throughout the subprograms. This info is then
-> assigned to the subprogram's func[i]->aux->tail_call_reachable. However, in the
-> case of the rejection check upon JIT failure, env->prog->aux->tail_call_reachable
-> is used. func[0]->aux->tail_call_reachable which represents the main program's
-> information did not propagate this to the outer env->prog->aux, though. Add this
-> propagation into check_max_stack_depth() where it needs to belong so that the
-> check can be done reliably.
-> 
-> Fixes: ebf7d1f508a7 ("bpf, x64: rework pro/epilogue and tailcall handling in JIT")
-> Fixes: e411901c0b77 ("bpf: allow for tailcalls in BPF subprograms for x64 JIT")
-> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-> Co-developed-by: John Fastabend <john.fastabend@gmail.com>
-> Signed-off-by: John Fastabend <john.fastabend@gmail.com>
-> Cc: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-> ---
->  kernel/bpf/verifier.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 42a4063de7cd..9de3c9c3267c 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -3677,6 +3677,8 @@ static int check_max_stack_depth(struct bpf_verifier_env *env)
->  	if (tail_call_reachable)
->  		for (j = 0; j < frame; j++)
->  			subprog[ret_prog[j]].tail_call_reachable = true;
-> +	if (subprog[0].tail_call_reachable)
+This patchset adds frag page support in page pool and
+enable skb's page frag recycling based on page pool in
+hns3 drvier.
 
-This could be just:
-	if (tail_call_reachable)
+RFC v4:
+1. Use the dma_addr[1] to store bias.
+2. Default to a pagecnt_bias of PAGE_SIZE - 1.
+3. other minor comment suggested by Alexander.
 
-But what you propose is fine to me as well. Not sure how we missed it.
-Acked-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+RFC v3:
+1. Implement the semantic of "page recycling only wait for the
+   page pool user instead of all user of a page" 
+2. Support the frag allocation of different sizes
+3. Merge patch 4 & 5 to one patch as it does not make sense to
+   use page_pool_dev_alloc_pages() API directly with elevated
+   refcnt.
+4. other minor comment suggested by Alexander.
 
-With that I expect that we bail out in fixup_call_args() right?
+RFC v2:
+1. Split patch 1 to more reviewable one.
+2. Repurpose the lower 12 bits of the dma address to store the
+   pagecnt_bias as suggested by Alexander.
+3. support recycling to pool->alloc for elevated refcnt case
+   too.
 
-Oh and John's f263a81451c1 ("bpf: Track subprog poke descriptors correctly
-and fix use-after-free") landed in my junk folder, heh, that's why I
-stayed silent and didn't participate in further review. Need to talk to
-IT.
+Yunsheng Lin (4):
+  page_pool: keep pp info as long as page pool owns the page
+  page_pool: add interface to manipulate bias in page pool
+  page_pool: add frag page recycling support in page pool
+  net: hns3: support skb's frag page recycling based on page pool
 
-> +		env->prog->aux->tail_call_reachable = true;
->  
->  	/* end of for() loop means the last insn of the 'subprog'
->  	 * was reached. Doesn't matter whether it was JA or EXIT
-> -- 
-> 2.21.0
-> 
+ drivers/net/ethernet/hisilicon/hns3/hns3_enet.c |  79 +++++++++++++-
+ drivers/net/ethernet/hisilicon/hns3/hns3_enet.h |   3 +
+ drivers/net/ethernet/marvell/mvneta.c           |   6 +-
+ drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c |   2 +-
+ drivers/net/ethernet/ti/cpsw.c                  |   2 +-
+ drivers/net/ethernet/ti/cpsw_new.c              |   2 +-
+ include/linux/skbuff.h                          |   4 +-
+ include/net/page_pool.h                         |  99 +++++++++++++++--
+ net/core/page_pool.c                            | 135 +++++++++++++++++++++---
+ 9 files changed, 288 insertions(+), 44 deletions(-)
+
+-- 
+2.7.4
+
