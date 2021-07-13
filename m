@@ -2,125 +2,209 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0682EC07E95
-	for <bpf@archiver.kernel.org>; Tue, 13 Jul 2021 20:58:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C514C07E95
+	for <bpf@archiver.kernel.org>; Tue, 13 Jul 2021 23:17:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E4F1A61152
-	for <bpf@archiver.kernel.org>; Tue, 13 Jul 2021 20:58:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 482916128D
+	for <bpf@archiver.kernel.org>; Tue, 13 Jul 2021 23:17:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236098AbhGMVBg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 13 Jul 2021 17:01:36 -0400
-Received: from relay.sw.ru ([185.231.240.75]:56872 "EHLO relay.sw.ru"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235060AbhGMVBf (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 13 Jul 2021 17:01:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=virtuozzo.com; s=relay; h=Content-Type:MIME-Version:Date:Message-ID:Subject
-        :From; bh=Zrmp38HLQSSBOIHCzrhOGN2I10/GGB7t9iYmdElr2i4=; b=oMb4Zx3XkPrKaEbUyM5
-        Wje5X6G4fTPCuW8lq2suLGXW4TgOCp3OBmHH00y2+c8S2v3SusR25Qn+9XuCa5+lRKj94uTuhRNP/
-        iXlyHbEjI3G1wn0S0pYAjM0i8kU7eYZurzXkFfp9sddH2FQI/V2+x06yB+T2hZ8RISMH1qTvwjw=;
-Received: from [10.93.0.56]
-        by relay.sw.ru with esmtp (Exim 4.94.2)
-        (envelope-from <vvs@virtuozzo.com>)
-        id 1m3PUJ-003san-IH; Tue, 13 Jul 2021 23:58:43 +0300
-From:   Vasily Averin <vvs@virtuozzo.com>
-Subject: [PATCH NET v2 7/7] bpf: use skb_expand_head in bpf_out_neigh_v4/6
-To:     "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <eric.dumazet@gmail.com>
-Cc:     netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        id S236666AbhGMXUZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 13 Jul 2021 19:20:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51886 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229500AbhGMXUY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 13 Jul 2021 19:20:24 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9BA9C0613DD;
+        Tue, 13 Jul 2021 16:17:33 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id h9so530892ljm.5;
+        Tue, 13 Jul 2021 16:17:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=+L+XSIts3sWSH9rPyJ8d19pb+TeTwIO8ubgRgT2nCB8=;
+        b=gE2m7yi4rjuyo6pQCeTQaZDq10FPCiBd+mDVvaE63noY7iJN3j52jfLt6NWEaeGB3C
+         NBvrvl/V8cV82vgnh3keaG3KRJ93QuF9TgP8v52f2DXrU77rpfj5lBdzFHXP0zWuTM45
+         qVltDwy0+2mHwZRjPLXLr88kfqTag1VhVoI1yPchhfej7pyDLw2qIIGTIX6SUJ8xUrZK
+         8O+VbwxeevkuEviuvvsfqjxWrsYOlf1OU9epg2agBzkbqDCwxC0RJOXoPour03eEBP67
+         ENxTTebbtRvjNdlaTgL/y7oooSpsIn/+LV9KAzwJ+VlIIXk+kc3BvUHYevE/fHdiJQpx
+         U0tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=+L+XSIts3sWSH9rPyJ8d19pb+TeTwIO8ubgRgT2nCB8=;
+        b=EHSjqNf7Vp2iYGmOb6B7t9a9UKus1QmaH9Hq/QprebatHuDixDW5PZgpxvGmSwfmGx
+         35W4K3UA3XZODydHkIiGuC5jMOMc4Do5d24Pqk0qVTAXFGd2ZWAg+rg4peO+Xl5Xdq7b
+         /yFkLJIDLqsYKrFXdmkfPNVkMeqQaxLICJ+/xuf/Qetmio4/nJX8cTzOdOGHH0yjfdmv
+         1Kjo8APaFdAFW1t2xRfvrjRSjsFeCivvi361HvmfaCUhufzhPPidAKN2DVcZA41PZEDq
+         kHubkJLpKaXzwQ7dPMEIZah3zkfOUIomKsklvRNPP/0mRdKnHcR/GEZQvRDdd7SpoEeX
+         7znA==
+X-Gm-Message-State: AOAM530CSp7qCR4+6/yiIatR8wEyABcuu9dMbZ7rZzxvRQ1jsdiyJIqC
+        Q9JqgFCW2x2776vuDKi+uH5RwyKqXNWaO1i1bmg=
+X-Google-Smtp-Source: ABdhPJzpajTynGgHQnsdxC4op3aEsBjv23iB9LydkL+oUyBZSLQ1EernGefxkAPqy7Yh+/kcdEMoDkGDC/jq1Enz9mo=
+X-Received: by 2002:a2e:b80e:: with SMTP id u14mr6330406ljo.204.1626218252221;
+ Tue, 13 Jul 2021 16:17:32 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210707043811.5349-1-hefengqing@huawei.com> <20210707043811.5349-4-hefengqing@huawei.com>
+ <CAPhsuW7ssFzvS5-kdZa3tY-2EJk8QUdVpQCJYVBr+vD11JzrsQ@mail.gmail.com>
+ <1c5b393d-6848-3d10-30cf-7063a331f76c@huawei.com> <CAADnVQJ0Q0dLVs5UM-CyJe90N+KHomccAy-S_LOOARa9nXkXsA@mail.gmail.com>
+ <bc75c9c5-7479-5021-58ea-ed8cf53fb331@huawei.com> <CAADnVQJ2DnoC07XLki_=xPti7V=wH153tQb1bowP+xdLwn580w@mail.gmail.com>
+ <21d8cd9e-487e-411f-1cfd-67cebc86b221@huawei.com>
+In-Reply-To: <21d8cd9e-487e-411f-1cfd-67cebc86b221@huawei.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 13 Jul 2021 16:17:20 -0700
+Message-ID: <CAADnVQ+XGGaXfte6aDdEp6euYckGtyP6S+VDUe4JusUz7xDLLg@mail.gmail.com>
+Subject: Re: [bpf-next 3/3] bpf: Fix a use after free in bpf_check()
+To:     He Fengqing <hefengqing@huawei.com>
+Cc:     Song Liu <song@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <55c9e2ae-b060-baa2-460c-90eb3e9ded5c@virtuozzo.com>
- <cover.1626206993.git.vvs@virtuozzo.com>
-Message-ID: <47012e92-9978-cab1-68e4-9565ebe96994@virtuozzo.com>
-Date:   Tue, 13 Jul 2021 23:58:42 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-MIME-Version: 1.0
-In-Reply-To: <cover.1626206993.git.vvs@virtuozzo.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Unlike skb_realloc_headroom, new helper skb_expand_head
-does not allocate a new skb if possible.
+On Sun, Jul 11, 2021 at 7:17 PM He Fengqing <hefengqing@huawei.com> wrote:
+>
+>
+>
+> =E5=9C=A8 2021/7/9 23:12, Alexei Starovoitov =E5=86=99=E9=81=93:
+> > On Fri, Jul 9, 2021 at 4:11 AM He Fengqing <hefengqing@huawei.com> wrot=
+e:
+> >>
+> >>
+> >>
+> >> =E5=9C=A8 2021/7/8 11:09, Alexei Starovoitov =E5=86=99=E9=81=93:
+> >>> On Wed, Jul 7, 2021 at 8:00 PM He Fengqing <hefengqing@huawei.com> wr=
+ote:
+> >>>>
+> >>>> Ok, I will change this in next version.
+> >>>
+> >>> before you spam the list with the next version
+> >>> please explain why any of these changes are needed?
+> >>> I don't see an explanation in the patches and I don't see a bug in th=
+e code.
+> >>> Did you check what is the prog clone ?
+> >>> When is it constructed? Why verifier has anything to do with it?
+> >>> .
+> >>>
+> >>
+> >>
+> >> I'm sorry, I didn't describe these errors clearly.
+> >>
+> >> bpf_check(bpf_verifier_env)
+> >>       |
+> >>       |->do_misc_fixups(env)
+> >>       |    |
+> >>       |    |->bpf_patch_insn_data(env)
+> >>       |    |    |
+> >>       |    |    |->bpf_patch_insn_single(env->prog)
+> >>       |    |    |    |
+> >>       |    |    |    |->bpf_prog_realloc(env->prog)
+> >>       |    |    |    |    |
+> >>       |    |    |    |    |->construct new_prog
+> >>       |    |    |    |    |    free old_prog(env->prog)
+> >>       |    |    |    |    |
+> >>       |    |    |    |    |->return new_prog;
+> >>       |    |    |    |
+> >>       |    |    |    |->return new_prog;
+> >>       |    |    |
+> >>       |    |    |->adjust_insn_aux_data
+> >>       |    |    |    |
+> >>       |    |    |    |->return ENOMEM;
+> >>       |    |    |
+> >>       |    |    |->return NULL;
+> >>       |    |
+> >>       |    |->return ENOMEM;
+> >>
+> >> bpf_verifier_env->prog had been freed in bpf_prog_realloc function.
+> >>
+> >>
+> >> There are two errors here, the first is memleak in the
+> >> bpf_patch_insn_data function, and the second is use after free in the
+> >> bpf_check function.
+> >>
+> >> memleak in bpf_patch_insn_data:
+> >>
+> >> Look at the call chain above, if adjust_insn_aux_data function return
+> >> ENOMEM, bpf_patch_insn_data will return NULL, but we do not free the
+> >> new_prog.
+> >>
+> >> So in the patch 2, before bpf_patch_insn_data return NULL, we free the
+> >> new_prog.
+> >>
+> >> use after free in bpf_check:
+> >>
+> >> If bpf_patch_insn_data function return NULL, we will not assign new_pr=
+og
+> >> to the bpf_verifier_env->prog, but bpf_verifier_env->prog has been fre=
+ed
+> >> in the bpf_prog_realloc function. Then in bpf_check function, we will
+> >> use bpf_verifier_env->prog after do_misc_fixups function.
+> >>
+> >> In the patch 3, I added a free_old parameter to bpf_prog_realloc, in
+> >> this scenario we don't free old_prog. Instead, we free it in the
+> >> do_misc_fixups function when bpf_patch_insn_data return a valid new_pr=
+og.
+> >
+> > Thanks for explaining.
+> > Why not to make adjust_insn_aux_data() in bpf_patch_insn_data() first t=
+hen?
+> > Just changing the order will resolve both issues, no?
+> > .
+> >
+> adjust_insn_aux_data() need the new constructed new_prog as an input
+> parameter, so we must call bpf_patch_insn_single() before
+> adjust_insn_aux_data().
 
-Additionally this patch replaces commonly used dereferencing with variables.
+Right. I forgot about insn_has_def32() logic and
+commit b325fbca4b13 ("bpf: verifier: mark patched-insn with
+sub-register zext flag")
+that added that extra parameter.
 
-Signed-off-by: Vasily Averin <vvs@virtuozzo.com>
----
- net/core/filter.c | 27 +++++----------------------
- 1 file changed, 5 insertions(+), 22 deletions(-)
+> But we can make adjust_insn_aux_data() never return ENOMEM. In
+> bpf_patch_insn_data(), first we pre-malloc memory for new aux_data, then
+> call bpf_patch_insn_single() to constructed the new_prog, at last call
+> adjust_insn_aux_data() functin. In this way, adjust_insn_aux_data()
+> never fails.
+>
+> bpf_patch_insn_data(env) {
+>         struct bpf_insn_aux_data *new_data =3D vzalloc();
+>         struct bpf_prog *new_prog;
+>         if (new_data =3D=3D NULL)
+>                 return NULL;
+>
+>         new_prog =3D bpf_patch_insn_single(env->prog);
+>         if (new_prog =3D=3D NULL) {
+>                 vfree(new_data);
+>                 return NULL;
+>         }
+>
+>         adjust_insn_aux_data(new_prog, new_data);
+>         return new_prog;
+> }
+> What do you think about it?
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 65ab4e2..25a6950 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -2179,17 +2179,9 @@ static int bpf_out_neigh_v6(struct net *net, struct sk_buff *skb,
- 	skb->tstamp = 0;
- 
- 	if (unlikely(skb_headroom(skb) < hh_len && dev->header_ops)) {
--		struct sk_buff *skb2;
--
--		skb2 = skb_realloc_headroom(skb, hh_len);
--		if (unlikely(!skb2)) {
--			kfree_skb(skb);
-+		skb = skb_expand_head(skb, hh_len);
-+		if (!skb)
- 			return -ENOMEM;
--		}
--		if (skb->sk)
--			skb_set_owner_w(skb2, skb->sk);
--		consume_skb(skb);
--		skb = skb2;
- 	}
- 
- 	rcu_read_lock_bh();
-@@ -2213,8 +2205,7 @@ static int bpf_out_neigh_v6(struct net *net, struct sk_buff *skb,
- 	}
- 	rcu_read_unlock_bh();
- 	if (dst)
--		IP6_INC_STATS(dev_net(dst->dev),
--			      ip6_dst_idev(dst), IPSTATS_MIB_OUTNOROUTES);
-+		IP6_INC_STATS(net, ip6_dst_idev(dst), IPSTATS_MIB_OUTNOROUTES);
- out_drop:
- 	kfree_skb(skb);
- 	return -ENETDOWN;
-@@ -2286,17 +2277,9 @@ static int bpf_out_neigh_v4(struct net *net, struct sk_buff *skb,
- 	skb->tstamp = 0;
- 
- 	if (unlikely(skb_headroom(skb) < hh_len && dev->header_ops)) {
--		struct sk_buff *skb2;
--
--		skb2 = skb_realloc_headroom(skb, hh_len);
--		if (unlikely(!skb2)) {
--			kfree_skb(skb);
-+		skb = skb_expand_head(skb, hh_len);
-+		if (!skb)
- 			return -ENOMEM;
--		}
--		if (skb->sk)
--			skb_set_owner_w(skb2, skb->sk);
--		consume_skb(skb);
--		skb = skb2;
- 	}
- 
- 	rcu_read_lock_bh();
--- 
-1.8.3.1
-
+That's a good idea. Let's do that. The new size for vzalloc is easy to comp=
+ute.
+What should be the commit in the Fixes tag?
+commit 8041902dae52 ("bpf: adjust insn_aux_data when patching insns")
+right?
+4 year old bug then.
+I wonder why syzbot with malloc error injection didn't catch it sooner.
