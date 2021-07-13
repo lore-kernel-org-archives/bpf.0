@@ -2,95 +2,119 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 301D3C07E95
-	for <bpf@archiver.kernel.org>; Tue, 13 Jul 2021 07:47:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B26DEC11F66
+	for <bpf@archiver.kernel.org>; Tue, 13 Jul 2021 08:45:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1920860724
-	for <bpf@archiver.kernel.org>; Tue, 13 Jul 2021 07:47:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9E168613B0
+	for <bpf@archiver.kernel.org>; Tue, 13 Jul 2021 08:45:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234411AbhGMHuK (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 13 Jul 2021 03:50:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36474 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234095AbhGMHuK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 13 Jul 2021 03:50:10 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D07C5C0613E9
-        for <bpf@vger.kernel.org>; Tue, 13 Jul 2021 00:47:20 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id b40so28542273ljf.12
-        for <bpf@vger.kernel.org>; Tue, 13 Jul 2021 00:47:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=references:user-agent:from:to:cc:subject:in-reply-to:date
-         :message-id:mime-version;
-        bh=fFjwfKPaDmTvA12xJ1cddKKruumFi9mppnHQwGZxxcc=;
-        b=GI0hoCu82BxtDJ/N+ecMPikxFKcQ4Dg2sE4rTI5BOrfBNZFY35I/WV6yMghIbEPg64
-         ScSue8E7gVirrqGBStRjkAW2dS4jVjxNBbyi1QgLUqmoDMvW61tvb43BSP5vUEtOl8kF
-         8mF8dK3QSFUORHU7MPyQq6Aog2AGuS131Op6w=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject
-         :in-reply-to:date:message-id:mime-version;
-        bh=fFjwfKPaDmTvA12xJ1cddKKruumFi9mppnHQwGZxxcc=;
-        b=kYRuQMZUvFGSZYCn9LM02AQHSBCjEOHYa9Lxw7KwRe9LCSwH6XLmhKU0O3GWNoXBws
-         /OxvmUaPWWN1juLz+fPKywH7tOMAGHtruf69PULjPiyo+7oeEigS1drKkCmp/UmtTRz9
-         FkHbmoUE7iFRd9awr2gOhbDGSycz7oNQjIy6N2hilObuQeX+9no/seu6k648dOfTmNZ7
-         S53e1OfYRBObbpZ8Qv+mO3vV5KoOARV+954pdZKY9isMeJ5NXMDow4zy8ShSjhR91nnE
-         lBHtZm/ZIBi2/TlusO3B5wc3b6DC+hX71i/xyiCGYhKTUA7QTaiJ4OWm+2hMDKilUaTh
-         9siQ==
-X-Gm-Message-State: AOAM531b4TgnA+s7yyBRkc76ZjfK4OOJSVYAR083PpkJaVnSLKsu1ofC
-        NdxR2yr1zHzpWJJmd/oiEhrVdQ==
-X-Google-Smtp-Source: ABdhPJwZDd8yEt28Nz9fni7h069Cdd5pMFXgrZ7QF6w9qE94Jnga/+xrqPLYnmZ8Ay1JeUSu83ts4w==
-X-Received: by 2002:a2e:8883:: with SMTP id k3mr2982372lji.247.1626162439218;
-        Tue, 13 Jul 2021 00:47:19 -0700 (PDT)
-Received: from cloudflare.com (79.191.183.149.ipv4.supernova.orange.pl. [79.191.183.149])
-        by smtp.gmail.com with ESMTPSA id n19sm368381lji.68.2021.07.13.00.47.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jul 2021 00:47:18 -0700 (PDT)
-References: <20210712195546.423990-1-john.fastabend@gmail.com>
-User-agent: mu4e 1.1.0; emacs 27.2
-From:   Jakub Sitnicki <jakub@cloudflare.com>
-To:     John Fastabend <john.fastabend@gmail.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andriin@fb.com,
-        xiyou.wangcong@gmail.com, bpf@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH bpf v4 0/2] bpf, sockmap: fix potential memory leak
-In-reply-to: <20210712195546.423990-1-john.fastabend@gmail.com>
-Date:   Tue, 13 Jul 2021 09:47:17 +0200
-Message-ID: <87y2aar6yi.fsf@cloudflare.com>
+        id S234642AbhGMIs0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 13 Jul 2021 04:48:26 -0400
+Received: from mga12.intel.com ([192.55.52.136]:4569 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234121AbhGMIsZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 13 Jul 2021 04:48:25 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10043"; a="189809123"
+X-IronPort-AV: E=Sophos;i="5.84,236,1620716400"; 
+   d="scan'208";a="189809123"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2021 01:45:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.84,236,1620716400"; 
+   d="scan'208";a="426893556"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga007.fm.intel.com with ESMTP; 13 Jul 2021 01:45:23 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id E7695FF; Tue, 13 Jul 2021 11:45:50 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-media@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Thomas Graf <tgraf@suug.ch>,
+        Andrew Morton <akpm@linux-foundation.org>, jic23@kernel.org,
+        linux@rasmusvillemoes.dk
+Subject: [PATCH v1 1/3] kernel.h: Don't pollute header with single user macros
+Date:   Tue, 13 Jul 2021 11:45:39 +0300
+Message-Id: <20210713084541.7958-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Jul 12, 2021 at 09:55 PM CEST, John Fastabend wrote:
-> While investigating a memleak in sockmap I found these two issues. Patch
-> 1 found doing code review, I wasn't able to get KASAN to trigger a
-> memleak here, but should be necessary. Patch 2 fixes proc stats so when
-> we use sockstats for debugging we get correct values.
->
-> The fix for observered memleak will come after these, but requires some
-> more discussion and potentially patch revert so I'll try to get the set
-> here going now.
->
-> v4: fix both users of sk_psock_skb_ingress_enqueue and then fix the
->     inuse idx by moving init hook later after tcp/udp init calls.
-> v3: move kfree into same function as kalloc
->
-> John Fastabend (2):
->   bpf, sockmap: fix potential memory leak on unlikely error case
->   bpf, sockmap: sk_prot needs inuse_idx set for proc stats
->
->  net/core/skmsg.c    | 16 +++++++++++-----
->  net/core/sock_map.c | 11 ++++++++++-
->  2 files changed, 21 insertions(+), 6 deletions(-)
+The COUNT_ARGS() and CONCATENATE() macros are used by a single user.
+Let move them to it.
 
-For the series:
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ include/linux/kernel.h    | 7 -------
+ include/trace/bpf_probe.h | 7 +++++++
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-Acked-by: Jakub Sitnicki <jakub@cloudflare.com>
+diff --git a/include/linux/kernel.h b/include/linux/kernel.h
+index 1b2f0a7e00d6..743d3c9a3227 100644
+--- a/include/linux/kernel.h
++++ b/include/linux/kernel.h
+@@ -476,13 +476,6 @@ ftrace_vprintk(const char *fmt, va_list ap)
+ static inline void ftrace_dump(enum ftrace_dump_mode oops_dump_mode) { }
+ #endif /* CONFIG_TRACING */
+ 
+-/* This counts to 12. Any more, it will return 13th argument. */
+-#define __COUNT_ARGS(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _n, X...) _n
+-#define COUNT_ARGS(X...) __COUNT_ARGS(, ##X, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
+-
+-#define __CONCAT(a, b) a ## b
+-#define CONCATENATE(a, b) __CONCAT(a, b)
+-
+ /**
+  * container_of - cast a member of a structure out to the containing structure
+  * @ptr:	the pointer to the member.
+diff --git a/include/trace/bpf_probe.h b/include/trace/bpf_probe.h
+index a23be89119aa..6f57c96f7dc3 100644
+--- a/include/trace/bpf_probe.h
++++ b/include/trace/bpf_probe.h
+@@ -27,6 +27,13 @@
+ #undef __perf_task
+ #define __perf_task(t)	(t)
+ 
++/* This counts to 12. Any more, it will return 13th argument. */
++#define __COUNT_ARGS(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _n, X...) _n
++#define COUNT_ARGS(X...) __COUNT_ARGS(, ##X, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
++
++#define __CONCAT(a, b) a ## b
++#define CONCATENATE(a, b) __CONCAT(a, b)
++
+ /* cast any integer, pointer, or small struct to u64 */
+ #define UINTTYPE(size) \
+ 	__typeof__(__builtin_choose_expr(size == 1,  (u8)1, \
+-- 
+2.30.2
+
