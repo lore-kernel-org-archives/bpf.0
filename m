@@ -2,136 +2,152 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0E8FC07E9A
-	for <bpf@archiver.kernel.org>; Wed, 14 Jul 2021 08:23:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98454C07E9A
+	for <bpf@archiver.kernel.org>; Wed, 14 Jul 2021 09:33:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 97F24613B0
-	for <bpf@archiver.kernel.org>; Wed, 14 Jul 2021 08:23:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8139761396
+	for <bpf@archiver.kernel.org>; Wed, 14 Jul 2021 09:33:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238214AbhGNI0q (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 14 Jul 2021 04:26:46 -0400
-Received: from szxga08-in.huawei.com ([45.249.212.255]:11275 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbhGNI0q (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 14 Jul 2021 04:26:46 -0400
-Received: from dggeme756-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4GPr3q12g9z1CJkt;
-        Wed, 14 Jul 2021 16:18:15 +0800 (CST)
-Received: from [10.174.178.171] (10.174.178.171) by
- dggeme756-chm.china.huawei.com (10.3.19.102) with Microsoft SMTP Server
+        id S238779AbhGNJgC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 14 Jul 2021 05:36:02 -0400
+Received: from szxga02-in.huawei.com ([45.249.212.188]:6924 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238337AbhGNJgC (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 14 Jul 2021 05:36:02 -0400
+Received: from dggeme751-chm.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4GPsf71mxFz7BlB;
+        Wed, 14 Jul 2021 17:29:35 +0800 (CST)
+Received: from k03.huawei.com (10.67.174.111) by
+ dggeme751-chm.china.huawei.com (10.3.19.97) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2176.2; Wed, 14 Jul 2021 16:23:52 +0800
-Subject: Re: Ask for help about bpf map
-From:   "luwei (O)" <luwei32@huawei.com>
-To:     =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>
-CC:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
-        David Ahern <dahern@digitalocean.com>
-References: <5aebe6f4-ca0d-4f64-8ee6-b68c58675271@huawei.com>
- <CAEf4BzZpSo8Kqz8mgPdbWTTVLqJ1AgE429_KHTiXgEVpbT97Yw@mail.gmail.com>
- <8735sidtwe.fsf@toke.dk> <d1f47a24-6328-5121-3a1f-5a102444e50c@huawei.com>
- <26db412c-a8b7-6d37-844f-7909a0c5744b@huawei.com>
-Message-ID: <189e4437-bb2c-2573-be96-0d6776feb5dd@huawei.com>
-Date:   Wed, 14 Jul 2021 16:23:52 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+ 15.1.2176.2; Wed, 14 Jul 2021 17:33:08 +0800
+From:   He Fengqing <hefengqing@huawei.com>
+To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <kafai@fb.com>, <songliubraving@fb.com>, <yhs@fb.com>,
+        <john.fastabend@gmail.com>, <kpsingh@kernel.org>
+CC:     <davem@davemloft.net>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [bpf-next, v2] bpf: verifier: Fix potential memleak and UAF in bpf verifier
+Date:   Wed, 14 Jul 2021 10:18:15 +0000
+Message-ID: <20210714101815.164322-1-hefengqing@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <26db412c-a8b7-6d37-844f-7909a0c5744b@huawei.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.171]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggeme756-chm.china.huawei.com (10.3.19.102)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.111]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggeme751-chm.china.huawei.com (10.3.19.97)
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi Andrii and toke,
+In bpf_patch_insn_data(), we first use the bpf_patch_insn_single() to
+insert new instructions, then use adjust_insn_aux_data() to adjust
+insn_aux_data. If the old env->prog have no enough room for new inserted
+instructions, we use bpf_prog_realloc to construct new_prog and free the
+old env->prog.
 
-     I have sovled this issue. The reason is that my iproute2 does not 
-support libbpf, once I compile iproute2 with libbpf, it works. Thanks 
-for reply!
+There have two errors here. First, if adjust_insn_aux_data() return
+ENOMEM, we should free the new_prog. Second, if adjust_insn_aux_data()
+return ENOMEM, bpf_patch_insn_data() will return NULL, and env->prog has
+been freed in bpf_prog_realloc, but we will use it in bpf_check().
 
-在 2021/7/14 10:02 AM, luwei (O) 写道:
-> I tried 5.13 version in this page: 
-> https://git.kernel.org/pub/scm/network/iproute2/iproute2.git , still 
-> failed with the same error.
->
-> 在 2021/7/14 9:05 AM, luwei (O) 写道:
->> I have updated the iproute2 according this page: 
->> https://github.com/cilium/cilium/issues/7446
->>
->> Now I use this version of iproute2: 
->> https://github.com/shemminger/iproute2
->>
->> The version of iproute2 is 5.11, and the kernel version is 5.13(the 
->> latest version).
->>
->>
->> 在 2021/7/14 1:07 AM, Toke Høiland-Jørgensen 写道:
->>> Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
->>>
->>>> On Mon, Jul 12, 2021 at 11:35 PM luwei (O) <luwei32@huawei.com> wrote:
->>>>> Hi, List:
->>>>>
->>>>>         I am a beginner about bpf and working on XDP now. I meet a
->>>>> problem and feel difficult to figure it out.
->>>>>
->>>>>         In my following codes, I use two ways to define my_map: in 
->>>>> SEC
->>>>> maps and SEC .maps respectively. When I load the xdp_kern.o file,
->>>>>
->>>>> It has different results. The way I load is: ip link set dev ens3 xdp
->>>>> obj xdp1_kern.o sec xdp1.
->>>>>
->>>>>         when I define my_map using SEC maps, it loads successfully 
->>>>> but
->>>>> fails to load using SEC .maps, it reports:
->>>>>
->>>>> "
->>>>>
->>>>> [12] TYPEDEF __u32 type_id=13
->>>>> [13] INT unsigned int size=4 bits_offset=0 nr_bits=32 encoding=(none)
->>>>> [14] FUNC_PROTO (anon) return=2 args=(10 ctx)
->>>>> [15] FUNC xdp_prog1 type_id=14
->>>>> [16] INT char size=1 bits_offset=0 nr_bits=8 encoding=SIGNED
->>>>> [17] ARRAY (anon) type_id=16 index_type_id=4 nr_elems=4
->>>>> [18] VAR _license type_id=17 linkage=1
->>>>> [19] DATASEC .maps size=0 vlen=1 size == 0
->>>>>
->>>>>
->>>>> Prog section 'xdp1' rejected: Permission denied (13)!
->>>>>    - Type:         6
->>>>>    - Instructions: 9 (0 over limit)
->>>>>    - License:      GPL
->>>>>
->>>>> Verifier analysis:
->>>>>
->>>>> 0: (b7) r1 = 0
->>>>> 1: (63) *(u32 *)(r10 -4) = r1
->>>>> last_idx 1 first_idx 0
->>>>> regs=2 stack=0 before 0: (b7) r1 = 0
->>>>> 2: (bf) r2 = r10
->>>>> 3: (07) r2 += -4
->>>>> 4: (18) r1 = 0x0
->>>> this shouldn't be 0x0.
->>>>
->>>> I suspect you have an old iproute2 which doesn't yet use libbpf to
->>>> load BPF programs, so .maps definition is not yet supported. cc'ing
->>>> netdev@vger, David and Toke
->>> That would be my guess as well; what's the output of 'ip -V'?
->>>
->>> -Toke
->>>
->>> .
->>
+So in this patch, we make the adjust_insn_aux_data() never fails. In
+bpf_patch_insn_data(), we first pre-malloc memory for the new
+insn_aux_data, then call bpf_patch_insn_single() to insert new
+instructions, at last call adjust_insn_aux_data() to adjust
+insn_aux_data.
+
+Fixes: 8041902dae52 ("bpf: adjust insn_aux_data when patching insns")
+
+Signed-off-by: He Fengqing <hefengqing@huawei.com>
+
+  v1->v2:
+    pre-malloc memory for new insn_aux_data first, then
+    adjust_insn_aux_data() will never fails.
+---
+ kernel/bpf/verifier.c | 30 +++++++++++++++++++-----------
+ 1 file changed, 19 insertions(+), 11 deletions(-)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index be38bb930bf1..07cf791510f1 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -11425,10 +11425,11 @@ static void convert_pseudo_ld_imm64(struct bpf_verifier_env *env)
+  * insni[off, off + cnt).  Adjust corresponding insn_aux_data by copying
+  * [0, off) and [off, end) to new locations, so the patched range stays zero
+  */
+-static int adjust_insn_aux_data(struct bpf_verifier_env *env,
+-				struct bpf_prog *new_prog, u32 off, u32 cnt)
++static void adjust_insn_aux_data(struct bpf_verifier_env *env,
++				 struct bpf_insn_aux_data *new_data,
++				 struct bpf_prog *new_prog, u32 off, u32 cnt)
+ {
+-	struct bpf_insn_aux_data *new_data, *old_data = env->insn_aux_data;
++	struct bpf_insn_aux_data *old_data = env->insn_aux_data;
+ 	struct bpf_insn *insn = new_prog->insnsi;
+ 	u32 old_seen = old_data[off].seen;
+ 	u32 prog_len;
+@@ -11441,12 +11442,9 @@ static int adjust_insn_aux_data(struct bpf_verifier_env *env,
+ 	old_data[off].zext_dst = insn_has_def32(env, insn + off + cnt - 1);
+ 
+ 	if (cnt == 1)
+-		return 0;
++		return;
+ 	prog_len = new_prog->len;
+-	new_data = vzalloc(array_size(prog_len,
+-				      sizeof(struct bpf_insn_aux_data)));
+-	if (!new_data)
+-		return -ENOMEM;
++
+ 	memcpy(new_data, old_data, sizeof(struct bpf_insn_aux_data) * off);
+ 	memcpy(new_data + off + cnt - 1, old_data + off,
+ 	       sizeof(struct bpf_insn_aux_data) * (prog_len - off - cnt + 1));
+@@ -11457,7 +11455,7 @@ static int adjust_insn_aux_data(struct bpf_verifier_env *env,
+ 	}
+ 	env->insn_aux_data = new_data;
+ 	vfree(old_data);
+-	return 0;
++	return;
+ }
+ 
+ static void adjust_subprog_starts(struct bpf_verifier_env *env, u32 off, u32 len)
+@@ -11492,6 +11490,14 @@ static struct bpf_prog *bpf_patch_insn_data(struct bpf_verifier_env *env, u32 of
+ 					    const struct bpf_insn *patch, u32 len)
+ {
+ 	struct bpf_prog *new_prog;
++	struct bpf_insn_aux_data *new_data = NULL;
++
++	if (len > 1) {
++		new_data = vzalloc(array_size(env->prog->len + len - 1,
++					      sizeof(struct bpf_insn_aux_data)));
++		if (!new_data)
++			return NULL;
++	}
+ 
+ 	new_prog = bpf_patch_insn_single(env->prog, off, patch, len);
+ 	if (IS_ERR(new_prog)) {
+@@ -11499,10 +11505,12 @@ static struct bpf_prog *bpf_patch_insn_data(struct bpf_verifier_env *env, u32 of
+ 			verbose(env,
+ 				"insn %d cannot be patched due to 16-bit range\n",
+ 				env->insn_aux_data[off].orig_idx);
++		if (new_data)
++			vfree(new_data);
++
+ 		return NULL;
+ 	}
+-	if (adjust_insn_aux_data(env, new_prog, off, len))
+-		return NULL;
++	adjust_insn_aux_data(env, new_data, new_prog, off, len);
+ 	adjust_subprog_starts(env, off, len);
+ 	adjust_poke_descs(new_prog, off, len);
+ 	return new_prog;
 -- 
-Best Regards,
-Lu Wei
+2.25.1
 
