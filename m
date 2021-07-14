@@ -2,68 +2,68 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47B3EC07E9A
-	for <bpf@archiver.kernel.org>; Wed, 14 Jul 2021 14:15:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E6D9C11F67
+	for <bpf@archiver.kernel.org>; Wed, 14 Jul 2021 14:15:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2B43E613C3
+	by mail.kernel.org (Postfix) with ESMTP id EBEC8613D0
 	for <bpf@archiver.kernel.org>; Wed, 14 Jul 2021 14:15:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233139AbhGNOSl (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 14 Jul 2021 10:18:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57878 "EHLO
+        id S232270AbhGNOSm (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 14 Jul 2021 10:18:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231543AbhGNOSj (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 14 Jul 2021 10:18:39 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B6FC06175F
-        for <bpf@vger.kernel.org>; Wed, 14 Jul 2021 07:15:46 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id g12so1693776wme.2
-        for <bpf@vger.kernel.org>; Wed, 14 Jul 2021 07:15:46 -0700 (PDT)
+        with ESMTP id S232816AbhGNOSl (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 14 Jul 2021 10:18:41 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BDACC061765
+        for <bpf@vger.kernel.org>; Wed, 14 Jul 2021 07:15:49 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id u8-20020a7bcb080000b02901e44e9caa2aso1524936wmj.4
+        for <bpf@vger.kernel.org>; Wed, 14 Jul 2021 07:15:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=isovalent-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=2e9bWP8sof1c4hjxI9a8uAGITp4HXNPUGK5CMz0uo/c=;
-        b=AD9P7dIbeC/tvILoqAn/ihGMgFSzgIQk9U4kBgDLGnGk2rxQs034kvv53QS/2jiQTP
-         whKo8jaRXRJlISw0LiXB87hE0eUb6Pp6+ii/W0JrkZvKordFmbt/NnfZ8e1VAfUyaQp7
-         ZMgF5m5zX1yfj60svjvB1e8NqKxZLZ0eBhABFBOJqsmjVBWqp1UpcYaznOUvBo10Cdcb
-         MRlY9NDSw2izpQ8YYny050IQN3Mv1SKdpmF/xH0C6F3pNRUqNUag9TPBIPV+gtMyYuL9
-         Y6C2rYvcvfjtfuNI5d0pffAGEGqoFxRRH1bqxEuYU7PjCEsTv66ZtGkS6H7M8CXLeYHB
-         zgyw==
+        bh=KnV1IxvXRQoR00fEj1yWcBXzpeN1it4YJCVUINfscbk=;
+        b=PLSU9UfQ4FbWS0Zps9YzeqR+qUSHaTWyYhANYa2EQCh1xekU6PbcRRBlLCr/SSlilc
+         i1QHDfWRF86U2OKRmZiChuDFYMtQDvNRoMBRrh8lI2OfgNYjUgziLYgDZANQZlvBA2cY
+         1YrcSUYj6iLr5GCKS2kpd948q5Xvsvy3gPjtz2WBc9f/aInhTVcBu2uQse6gVU26o4Q1
+         qqMZ9rh6P6GMKstdnTTRkFlLnqCmdFEuvJ8PfUSzmSwBW13WaZTpEZ6Yy8o5SxVR18s5
+         miO+kZlsQOSNjifJUHGts79GcnzeG6z8DQbj6ssC3NClhKuHhrNrLuzQyFSau6ONOp5J
+         qJWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=2e9bWP8sof1c4hjxI9a8uAGITp4HXNPUGK5CMz0uo/c=;
-        b=BuqCWLLbJeTDtSOdo2qvQEs00jiO1sG/v+QHGk7Mxv2rIIS3vEmbXpBNIV7HAMUFX7
-         UcQoOcimV0K9sRNAX2E5dpeD4/kaQ6z8aWR0UNsW0dIbJT/IkJ7b7Z24/RuHUQqibaZ+
-         2M3S+Gh9l3vQEu27iLLq9LHn3vBktrRF5ydh879vrNpf7Rt3jWoLMsnbch1IQHakMlk1
-         uvzAdrGIF0f71zpsmG5UfVIs5flJjy6CG6fuWJcP1EkbpvAs0wUzttarjsB0Iy9i8SNx
-         SSFBROwasSB81q74fuoGV+5OGhfaTx46Qw2cPyDVuklQHCGzqmuCPs9aZAY5NdHqLTkE
-         Rffw==
-X-Gm-Message-State: AOAM531mHQeki9Yr9M7OjwasWP8TGEPbbk0db9d7FbU5mH2bKl5V67Dv
-        TZQLLjvGBQ2hBBAh1QpY2GkICQ==
-X-Google-Smtp-Source: ABdhPJx5CkeJ9H0z8Qc+tCY1bKPlX17dD3iuZG5n2melu/9cHOpMMLlMIgbFAgtz9VETXLUsNLjDcQ==
-X-Received: by 2002:a7b:c346:: with SMTP id l6mr11315586wmj.109.1626272145603;
-        Wed, 14 Jul 2021 07:15:45 -0700 (PDT)
+        bh=KnV1IxvXRQoR00fEj1yWcBXzpeN1it4YJCVUINfscbk=;
+        b=jBIJnWLObNQJs5KDuQTDmK0l1zOL3ZMhoNQzu7u2TIfFCy6bqohzU48P347jdB8+4T
+         a/f6IDoI9McP1PVHgyiKH2Bi2+gaBZ4n3b3sg31O0YLXLUQQlLBez4hpY6AmBx1fdZTg
+         qBTcGsWJeXH3S9PgMO2QKdZiUsmqwHbEsg1iH/1Nm0zXy2SAGgSnknIMKoP2W5web8F9
+         7WkFxGq/tLKG0e9MVnj7/UlWdav1v0amqlmpETspZ9BB8ZjduPzguE1+Y0DEC7A2hNLz
+         YJwBwJQiOcHR20yJ7CO9+SRGza//haYU9yf2r20/B8mz+51/yS4AYfuRrtcpcaUrQCxP
+         Ujgg==
+X-Gm-Message-State: AOAM530/1THQhRoHV2Q7EHUV/7Vzy730w8NAxrafM6OiubMIlTOw+SYu
+        b8dMKFoanGrYlJY7/peiQKPbEg==
+X-Google-Smtp-Source: ABdhPJzOo5vmz7mcCJLZ/ajcg6ZW/XTcy/zt2U3R9LVJ4Atwy8Aamfvhpv/Xp/eeD2k/02qEwDbl7w==
+X-Received: by 2002:a1c:25c6:: with SMTP id l189mr4477132wml.49.1626272148002;
+        Wed, 14 Jul 2021 07:15:48 -0700 (PDT)
 Received: from localhost.localdomain ([149.86.90.174])
-        by smtp.gmail.com with ESMTPSA id a207sm6380037wme.27.2021.07.14.07.15.44
+        by smtp.gmail.com with ESMTPSA id a207sm6380037wme.27.2021.07.14.07.15.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jul 2021 07:15:45 -0700 (PDT)
+        Wed, 14 Jul 2021 07:15:47 -0700 (PDT)
 From:   Quentin Monnet <quentin@isovalent.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         Quentin Monnet <quentin@isovalent.com>
-Subject: [PATCH bpf-next 1/6] libbpf: rename btf__load() as btf__load_into_kernel()
-Date:   Wed, 14 Jul 2021 15:15:27 +0100
-Message-Id: <20210714141532.28526-2-quentin@isovalent.com>
+Subject: [PATCH bpf-next 3/6] tools: replace btf__get_from_id() with btf__load_from_kernel_by_id()
+Date:   Wed, 14 Jul 2021 15:15:29 +0100
+Message-Id: <20210714141532.28526-4-quentin@isovalent.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210714141532.28526-1-quentin@isovalent.com>
 References: <20210714141532.28526-1-quentin@isovalent.com>
@@ -73,85 +73,147 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-As part of the effort to move towards a v1.0 for libbpf, rename
-btf__load() function, used to "upload" BTF information into the kernel,
-and rename it instead as btf__load_into_kernel().
-
-This new name better reflects what the function does, and should be less
-confusing.
-
-References:
-
-- https://github.com/libbpf/libbpf/issues/278
-- https://github.com/libbpf/libbpf/wiki/Libbpf:-the-road-to-v1.0#btfh-apis
+Replace the calls to deprecated function btf__get_from_id() with calls
+to btf__load_from_kernel_by_id() in tools/ (bpftool, perf, selftests).
 
 Signed-off-by: Quentin Monnet <quentin@isovalent.com>
 ---
- tools/lib/bpf/btf.c      | 3 ++-
- tools/lib/bpf/btf.h      | 1 +
- tools/lib/bpf/libbpf.c   | 2 +-
- tools/lib/bpf/libbpf.map | 5 +++++
- 4 files changed, 9 insertions(+), 2 deletions(-)
+ tools/bpf/bpftool/btf.c                      | 2 +-
+ tools/bpf/bpftool/btf_dumper.c               | 2 +-
+ tools/bpf/bpftool/map.c                      | 4 ++--
+ tools/bpf/bpftool/prog.c                     | 6 +++---
+ tools/perf/util/bpf-event.c                  | 4 ++--
+ tools/perf/util/bpf_counter.c                | 2 +-
+ tools/testing/selftests/bpf/prog_tests/btf.c | 2 +-
+ 7 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index b46760b93bb4..7e0de560490e 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -1180,7 +1180,7 @@ int btf__finalize_data(struct bpf_object *obj, struct btf *btf)
- 
- static void *btf_get_raw_data(const struct btf *btf, __u32 *size, bool swap_endian);
- 
--int btf__load(struct btf *btf)
-+int btf__load_into_kernel(struct btf *btf)
- {
- 	__u32 log_buf_size = 0, raw_size;
- 	char *log_buf = NULL;
-@@ -1228,6 +1228,7 @@ int btf__load(struct btf *btf)
- 	free(log_buf);
- 	return libbpf_err(err);
- }
-+int btf__load(struct btf *) __attribute__((alias("btf__load_into_kernel")));
- 
- int btf__fd(const struct btf *btf)
- {
-diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
-index b54f1c3ebd57..b36f1b2805dc 100644
---- a/tools/lib/bpf/btf.h
-+++ b/tools/lib/bpf/btf.h
-@@ -46,6 +46,7 @@ LIBBPF_API struct btf *btf__parse_raw_split(const char *path, struct btf *base_b
- 
- LIBBPF_API int btf__finalize_data(struct bpf_object *obj, struct btf *btf);
- LIBBPF_API int btf__load(struct btf *btf);
-+LIBBPF_API int btf__load_into_kernel(struct btf *btf);
- LIBBPF_API __s32 btf__find_by_name(const struct btf *btf,
- 				   const char *type_name);
- LIBBPF_API __s32 btf__find_by_name_kind(const struct btf *btf,
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 88b99401040c..d8b7c7750402 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -2768,7 +2768,7 @@ static int bpf_object__sanitize_and_load_btf(struct bpf_object *obj)
- 		 */
- 		btf__set_fd(kern_btf, 0);
- 	} else {
--		err = btf__load(kern_btf);
-+		err = btf__load_into_kernel(kern_btf);
+diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
+index 385d5c955cf3..2296e8eba0ff 100644
+--- a/tools/bpf/bpftool/btf.c
++++ b/tools/bpf/bpftool/btf.c
+@@ -580,7 +580,7 @@ static int do_dump(int argc, char **argv)
  	}
- 	if (sanitize) {
- 		if (!err) {
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 944c99d1ded3..d42f20b0e9e4 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -375,3 +375,8 @@ LIBBPF_0.5.0 {
- 		bpf_object__gen_loader;
- 		libbpf_set_strict_mode;
- } LIBBPF_0.4.0;
-+
-+LIBBPF_0.6.0 {
-+	global:
-+		btf__load_into_kernel;
-+} LIBBPF_0.5.0;
+ 
+ 	if (!btf) {
+-		err = btf__get_from_id(btf_id, &btf);
++		err = btf__load_from_kernel_by_id(btf_id, &btf);
+ 		if (err) {
+ 			p_err("get btf by id (%u): %s", btf_id, strerror(err));
+ 			goto done;
+diff --git a/tools/bpf/bpftool/btf_dumper.c b/tools/bpf/bpftool/btf_dumper.c
+index 7ca54d046362..92db1fccda49 100644
+--- a/tools/bpf/bpftool/btf_dumper.c
++++ b/tools/bpf/bpftool/btf_dumper.c
+@@ -65,7 +65,7 @@ static int dump_prog_id_as_func_ptr(const struct btf_dumper *d,
+ 	info = &prog_info->info;
+ 
+ 	if (!info->btf_id || !info->nr_func_info ||
+-	    btf__get_from_id(info->btf_id, &prog_btf))
++	    btf__load_from_kernel_by_id(info->btf_id, &prog_btf))
+ 		goto print;
+ 	finfo = u64_to_ptr(info->func_info);
+ 	func_type = btf__type_by_id(prog_btf, finfo->type_id);
+diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+index 09ae0381205b..69ced1af0ab1 100644
+--- a/tools/bpf/bpftool/map.c
++++ b/tools/bpf/bpftool/map.c
+@@ -807,7 +807,7 @@ static struct btf *get_map_kv_btf(const struct bpf_map_info *info)
+ 	} else if (info->btf_value_type_id) {
+ 		int err;
+ 
+-		err = btf__get_from_id(info->btf_id, &btf);
++		err = btf__load_from_kernel_by_id(info->btf_id, &btf);
+ 		if (err || !btf) {
+ 			p_err("failed to get btf");
+ 			btf = err ? ERR_PTR(err) : ERR_PTR(-ESRCH);
+@@ -1042,7 +1042,7 @@ static void print_key_value(struct bpf_map_info *info, void *key,
+ 	struct btf *btf = NULL;
+ 	int err;
+ 
+-	err = btf__get_from_id(info->btf_id, &btf);
++	err = btf__load_from_kernel_by_id(info->btf_id, &btf);
+ 	if (err) {
+ 		p_err("failed to get btf");
+ 		return;
+diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+index cc48726740ad..663828f96358 100644
+--- a/tools/bpf/bpftool/prog.c
++++ b/tools/bpf/bpftool/prog.c
+@@ -263,7 +263,7 @@ static void show_prog_metadata(int fd, __u32 num_maps)
+ 	if (!value)
+ 		return;
+ 
+-	err = btf__get_from_id(map_info.btf_id, &btf);
++	err = btf__load_from_kernel_by_id(map_info.btf_id, &btf);
+ 	if (err || !btf)
+ 		goto out_free;
+ 
+@@ -646,7 +646,7 @@ prog_dump(struct bpf_prog_info *info, enum dump_mode mode,
+ 		member_len = info->xlated_prog_len;
+ 	}
+ 
+-	if (info->btf_id && btf__get_from_id(info->btf_id, &btf)) {
++	if (info->btf_id && btf__load_from_kernel_by_id(info->btf_id, &btf)) {
+ 		p_err("failed to get btf");
+ 		return -1;
+ 	}
+@@ -2013,7 +2013,7 @@ static char *profile_target_name(int tgt_fd)
+ 	}
+ 
+ 	if (info_linear->info.btf_id == 0 ||
+-	    btf__get_from_id(info_linear->info.btf_id, &btf)) {
++	    btf__load_from_kernel_by_id(info_linear->info.btf_id, &btf)) {
+ 		p_err("prog FD %d doesn't have valid btf", tgt_fd);
+ 		goto out;
+ 	}
+diff --git a/tools/perf/util/bpf-event.c b/tools/perf/util/bpf-event.c
+index cdecda1ddd36..5e0aa7d379f0 100644
+--- a/tools/perf/util/bpf-event.c
++++ b/tools/perf/util/bpf-event.c
+@@ -223,7 +223,7 @@ static int perf_event__synthesize_one_bpf_prog(struct perf_session *session,
+ 			free(info_linear);
+ 			return -1;
+ 		}
+-		if (btf__get_from_id(info->btf_id, &btf)) {
++		if (btf__load_from_kernel_by_id(info->btf_id, &btf)) {
+ 			pr_debug("%s: failed to get BTF of id %u, aborting\n", __func__, info->btf_id);
+ 			err = -1;
+ 			btf = NULL;
+@@ -478,7 +478,7 @@ static void perf_env__add_bpf_info(struct perf_env *env, u32 id)
+ 	if (btf_id == 0)
+ 		goto out;
+ 
+-	if (btf__get_from_id(btf_id, &btf)) {
++	if (btf__load_from_kernel_by_id(btf_id, &btf)) {
+ 		pr_debug("%s: failed to get BTF of id %u, aborting\n",
+ 			 __func__, btf_id);
+ 		goto out;
+diff --git a/tools/perf/util/bpf_counter.c b/tools/perf/util/bpf_counter.c
+index 5ed674a2f55e..9b9d24016772 100644
+--- a/tools/perf/util/bpf_counter.c
++++ b/tools/perf/util/bpf_counter.c
+@@ -85,7 +85,7 @@ static char *bpf_target_prog_name(int tgt_fd)
+ 	}
+ 
+ 	if (info_linear->info.btf_id == 0 ||
+-	    btf__get_from_id(info_linear->info.btf_id, &btf)) {
++	    btf__load_from_kernel_by_id(info_linear->info.btf_id, &btf)) {
+ 		pr_debug("prog FD %d doesn't have valid btf\n", tgt_fd);
+ 		goto out;
+ 	}
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing/selftests/bpf/prog_tests/btf.c
+index 857e3f26086f..60e0be02931d 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf.c
+@@ -4350,7 +4350,7 @@ static void do_test_file(unsigned int test_num)
+ 		goto done;
+ 	}
+ 
+-	err = btf__get_from_id(info.btf_id, &btf);
++	err = btf__load_from_kernel_by_id(info.btf_id, &btf);
+ 	if (CHECK(err, "cannot get btf from kernel, err: %d", err))
+ 		goto done;
+ 
 -- 
 2.30.2
 
