@@ -2,120 +2,122 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.6 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DE3CAC07E96
-	for <bpf@archiver.kernel.org>; Wed, 14 Jul 2021 01:05:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 319ACC11F66
+	for <bpf@archiver.kernel.org>; Wed, 14 Jul 2021 01:05:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BF06A61374
-	for <bpf@archiver.kernel.org>; Wed, 14 Jul 2021 01:05:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1B678613AB
+	for <bpf@archiver.kernel.org>; Wed, 14 Jul 2021 01:05:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237283AbhGNBIX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 13 Jul 2021 21:08:23 -0400
-Received: from szxga01-in.huawei.com ([45.249.212.187]:6812 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237288AbhGNBIW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 13 Jul 2021 21:08:22 -0400
-Received: from dggeme756-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4GPfKz5z3nzXpcc;
-        Wed, 14 Jul 2021 08:59:51 +0800 (CST)
-Received: from [10.174.178.171] (10.174.178.171) by
- dggeme756-chm.china.huawei.com (10.3.19.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2176.2; Wed, 14 Jul 2021 09:05:28 +0800
-Subject: Re: Ask for help about bpf map
-To:     =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>
-CC:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
-        David Ahern <dahern@digitalocean.com>
-References: <5aebe6f4-ca0d-4f64-8ee6-b68c58675271@huawei.com>
- <CAEf4BzZpSo8Kqz8mgPdbWTTVLqJ1AgE429_KHTiXgEVpbT97Yw@mail.gmail.com>
- <8735sidtwe.fsf@toke.dk>
-From:   "luwei (O)" <luwei32@huawei.com>
-Message-ID: <d1f47a24-6328-5121-3a1f-5a102444e50c@huawei.com>
-Date:   Wed, 14 Jul 2021 09:05:28 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-MIME-Version: 1.0
-In-Reply-To: <8735sidtwe.fsf@toke.dk>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.171]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggeme756-chm.china.huawei.com (10.3.19.102)
-X-CFilter-Loop: Reflected
+        id S237290AbhGNBIa (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 13 Jul 2021 21:08:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47748 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237208AbhGNBIZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 13 Jul 2021 21:08:25 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2838C0613DD;
+        Tue, 13 Jul 2021 18:05:33 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id t9so318314pgn.4;
+        Tue, 13 Jul 2021 18:05:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=nsh0AS3OcdVrubNX9rYe3X2dfuQPi9s1kICXW8jXMeA=;
+        b=H5dQBw+X60DcdfzpH1LdDkx0b7V3tGQHCFmkyOzdAJb43csV3Sfn1w0yoKXiClQabe
+         MO03qRl2LFUf9NJDy13jQIkBEaayhL4LPOqNLGHI71xHvf4K2ZboD2ASvSFtH8ioMwea
+         fjfdTEwm4lpmU1wE/nCctYGnREM8D1KnGVpf2B5l8A2n4F53dmGXJa0IsvuP/MIcF8vk
+         g5xpAqNmL7TT26+yDSN6PfoqvT02Hs+Fp7Oy9jIGo25fuxumvlfTzEQIXy1lAVuDMKd+
+         WctRTOQljmRZcJM9boZ60o/6un0yillQuXgTjSQEVRr0H0z8fMt8PLHJUYXgH8ye+FLv
+         IA7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=nsh0AS3OcdVrubNX9rYe3X2dfuQPi9s1kICXW8jXMeA=;
+        b=ostg2hSELmjjH9kRZNi7QXye9aw9S1zz52zqdUawZtD8XP1DSRGsWT9hS7osJfqrjT
+         0N0N2nCbpk1e+6gw1SbMf1Ab2mKGydEh9psQYjgBtWbVLaZ/KQhuKC0qCZB1H/2zmSvu
+         p3FVsBlIY7jyA3lW64lVQHc2nnCto/eeVJw/h4iaKOyNSKwOF7yyRTrcFVmP2CV/mYAm
+         uA1BtU240NhuwWBil3whnxs5FwYMpSlrSPx4auW/4pxEPyjhWYZKEGY0MGCOb393vdZW
+         7PFIdjKuLgJku1HAZ27gLRh9rjq2chrVzN4NSh8x5Jtey5zxVyN5fr8jASEouX8c4bJ3
+         ttBg==
+X-Gm-Message-State: AOAM532C4p6X7P2qMOsjQfofqm3zjfw39dO+/cQVJ8UUjaShuGrBXcOc
+        4JAFSQF7caq89COIRWI+JGCHHn8852s=
+X-Google-Smtp-Source: ABdhPJyaJ7o9bdnKT5FfhywUD3wgBa7NAxKXOR9NlXZt49+nRKdsNpWYhxQwMncM08EhidYDnMAA1A==
+X-Received: by 2002:a65:4009:: with SMTP id f9mr6845936pgp.148.1626224733494;
+        Tue, 13 Jul 2021 18:05:33 -0700 (PDT)
+Received: from ast-mbp.thefacebook.com ([2620:10d:c090:400::5:10f1])
+        by smtp.gmail.com with ESMTPSA id cx4sm4073560pjb.53.2021.07.13.18.05.31
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 13 Jul 2021 18:05:32 -0700 (PDT)
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     davem@davemloft.net
+Cc:     daniel@iogearbox.net, andrii@kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, kernel-team@fb.com
+Subject: [PATCH v6 bpf-next 06/11] bpf: Remember BTF of inner maps.
+Date:   Tue, 13 Jul 2021 18:05:14 -0700
+Message-Id: <20210714010519.37922-7-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.13.5
+In-Reply-To: <20210714010519.37922-1-alexei.starovoitov@gmail.com>
+References: <20210714010519.37922-1-alexei.starovoitov@gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-I have updated the iproute2 according this page: 
-https://github.com/cilium/cilium/issues/7446
+From: Alexei Starovoitov <ast@kernel.org>
 
-Now I use this version of iproute2: https://github.com/shemminger/iproute2
+BTF is required for 'struct bpf_timer' to be recognized inside map value.
+The bpf timers are supported inside inner maps.
+Remember 'struct btf *' in inner_map_meta to make it available
+to the verifier in the sequence:
 
-The version of iproute2 is 5.11, and the kernel version is 5.13(the 
-latest version).
+struct bpf_map *inner_map = bpf_map_lookup_elem(&outer_map, ...);
+if (inner_map)
+    timer = bpf_map_lookup_elem(&inner_map, ...);
 
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Acked-by: Yonghong Song <yhs@fb.com>
+Acked-by: Martin KaFai Lau <kafai@fb.com>
+---
+ kernel/bpf/map_in_map.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-在 2021/7/14 1:07 AM, Toke Høiland-Jørgensen 写道:
-> Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
->
->> On Mon, Jul 12, 2021 at 11:35 PM luwei (O) <luwei32@huawei.com> wrote:
->>> Hi, List:
->>>
->>>         I am a beginner about bpf and working on XDP now. I meet a
->>> problem and feel difficult to figure it out.
->>>
->>>         In my following codes, I use two ways to define my_map: in SEC
->>> maps and SEC .maps respectively. When I load the xdp_kern.o file,
->>>
->>> It has different results. The way I load is: ip link set dev ens3 xdp
->>> obj xdp1_kern.o sec xdp1.
->>>
->>>         when I define my_map using SEC maps, it loads successfully but
->>> fails to load using SEC .maps, it reports:
->>>
->>> "
->>>
->>> [12] TYPEDEF __u32 type_id=13
->>> [13] INT unsigned int size=4 bits_offset=0 nr_bits=32 encoding=(none)
->>> [14] FUNC_PROTO (anon) return=2 args=(10 ctx)
->>> [15] FUNC xdp_prog1 type_id=14
->>> [16] INT char size=1 bits_offset=0 nr_bits=8 encoding=SIGNED
->>> [17] ARRAY (anon) type_id=16 index_type_id=4 nr_elems=4
->>> [18] VAR _license type_id=17 linkage=1
->>> [19] DATASEC .maps size=0 vlen=1 size == 0
->>>
->>>
->>> Prog section 'xdp1' rejected: Permission denied (13)!
->>>    - Type:         6
->>>    - Instructions: 9 (0 over limit)
->>>    - License:      GPL
->>>
->>> Verifier analysis:
->>>
->>> 0: (b7) r1 = 0
->>> 1: (63) *(u32 *)(r10 -4) = r1
->>> last_idx 1 first_idx 0
->>> regs=2 stack=0 before 0: (b7) r1 = 0
->>> 2: (bf) r2 = r10
->>> 3: (07) r2 += -4
->>> 4: (18) r1 = 0x0
->> this shouldn't be 0x0.
->>
->> I suspect you have an old iproute2 which doesn't yet use libbpf to
->> load BPF programs, so .maps definition is not yet supported. cc'ing
->> netdev@vger, David and Toke
-> That would be my guess as well; what's the output of 'ip -V'?
->
-> -Toke
->
-> .
-
+diff --git a/kernel/bpf/map_in_map.c b/kernel/bpf/map_in_map.c
+index 890dfe14e731..5cd8f5277279 100644
+--- a/kernel/bpf/map_in_map.c
++++ b/kernel/bpf/map_in_map.c
+@@ -3,6 +3,7 @@
+  */
+ #include <linux/slab.h>
+ #include <linux/bpf.h>
++#include <linux/btf.h>
+ 
+ #include "map_in_map.h"
+ 
+@@ -51,6 +52,10 @@ struct bpf_map *bpf_map_meta_alloc(int inner_map_ufd)
+ 	inner_map_meta->max_entries = inner_map->max_entries;
+ 	inner_map_meta->spin_lock_off = inner_map->spin_lock_off;
+ 	inner_map_meta->timer_off = inner_map->timer_off;
++	if (inner_map->btf) {
++		btf_get(inner_map->btf);
++		inner_map_meta->btf = inner_map->btf;
++	}
+ 
+ 	/* Misc members not needed in bpf_map_meta_equal() check. */
+ 	inner_map_meta->ops = inner_map->ops;
+@@ -66,6 +71,7 @@ struct bpf_map *bpf_map_meta_alloc(int inner_map_ufd)
+ 
+ void bpf_map_meta_free(struct bpf_map *map_meta)
+ {
++	btf_put(map_meta->btf);
+ 	kfree(map_meta);
+ }
+ 
 -- 
-Best Regards,
-Lu Wei
+2.30.2
 
