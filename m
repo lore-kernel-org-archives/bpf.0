@@ -7,29 +7,29 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 654A7C11F69
-	for <bpf@archiver.kernel.org>; Wed, 14 Jul 2021 09:35:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BC79C11F67
+	for <bpf@archiver.kernel.org>; Wed, 14 Jul 2021 09:35:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 41BED613AA
-	for <bpf@archiver.kernel.org>; Wed, 14 Jul 2021 09:35:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E3F9861073
+	for <bpf@archiver.kernel.org>; Wed, 14 Jul 2021 09:35:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238858AbhGNJiV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 14 Jul 2021 05:38:21 -0400
-Received: from szxga01-in.huawei.com ([45.249.212.187]:15012 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238362AbhGNJiT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 14 Jul 2021 05:38:19 -0400
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4GPsj50DW4zbc2x;
-        Wed, 14 Jul 2021 17:32:09 +0800 (CST)
+        id S238890AbhGNJiY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 14 Jul 2021 05:38:24 -0400
+Received: from szxga02-in.huawei.com ([45.249.212.188]:6926 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238852AbhGNJiW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 14 Jul 2021 05:38:22 -0400
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4GPshq6RRrz7C21;
+        Wed, 14 Jul 2021 17:31:55 +0800 (CST)
 Received: from dggpemm500005.china.huawei.com (7.185.36.74) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2176.2; Wed, 14 Jul 2021 17:35:26 +0800
 Received: from localhost.localdomain (10.69.192.56) by
  dggpemm500005.china.huawei.com (7.185.36.74) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Wed, 14 Jul 2021 17:35:25 +0800
+ 15.1.2176.2; Wed, 14 Jul 2021 17:35:26 +0800
 From:   Yunsheng Lin <linyunsheng@huawei.com>
 To:     <davem@davemloft.net>, <kuba@kernel.org>
 CC:     <alexander.duyck@gmail.com>, <linux@armlinux.org.uk>,
@@ -48,9 +48,9 @@ CC:     <alexander.duyck@gmail.com>, <linux@armlinux.org.uk>,
         <yhs@fb.com>, <kpsingh@kernel.org>, <andrii@kernel.org>,
         <kafai@fb.com>, <songliubraving@fb.com>, <netdev@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
-Subject: [PATCH rfc v5 2/4] page_pool: add interface to manipulate frag count in page pool
-Date:   Wed, 14 Jul 2021 17:34:43 +0800
-Message-ID: <1626255285-5079-3-git-send-email-linyunsheng@huawei.com>
+Subject: [PATCH rfc v5 4/4] net: hns3: support skb's frag page recycling based on page pool
+Date:   Wed, 14 Jul 2021 17:34:45 +0800
+Message-ID: <1626255285-5079-5-git-send-email-linyunsheng@huawei.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1626255285-5079-1-git-send-email-linyunsheng@huawei.com>
 References: <1626255285-5079-1-git-send-email-linyunsheng@huawei.com>
@@ -64,150 +64,221 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-As suggested by Alexander, "A DMA mapping should be page
-aligned anyway so the lower 12 bits would be reserved 0",
-so it might make more sense to repurpose the lower 12 bits
-of the dma address to store the frag count for frag page
-support in page pool for 32 bit systems with 64 bit dma,
-which should be rare those days.
+This patch adds skb's frag page recycling support based on
+the frag page support in page pool.
 
-For normal system, the dma_addr[1] in 'struct page' is not
-used, so we can reuse one of the dma_addr for storing frag
-count, which means how many frags this page might be splited
-to.
+The performance improves above 10~20% for single thread iperf
+TCP flow with IOMMU disabled when iperf server and irq/NAPI
+have a different CPU.
 
-The PAGE_POOL_DMA_USE_PP_FRAG_COUNT macro is added to decide
-where to store the frag count, as the "sizeof(dma_addr_t) >
-sizeof(unsigned long)" is false for most systems those days,
-so hopefully the compiler will optimize out the unused code
-for those systems.
-
-The newly added page_pool_set_frag_count() should be called
-before the page is passed to any user. Otherwise, call the
-newly added page_pool_atomic_sub_frag_count_return().
+The performance improves about 135%(14Gbit to 33Gbit) for single
+thread iperf TCP flow IOMMU is in strict mode and iperf server
+shares the same cpu with irq/NAPI.
 
 Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
 ---
- include/linux/mm_types.h |  8 +++++--
- include/net/page_pool.h  | 54 ++++++++++++++++++++++++++++++++++++++++++------
- net/core/page_pool.c     | 10 +++++++++
- 3 files changed, 64 insertions(+), 8 deletions(-)
+ drivers/net/ethernet/hisilicon/hns3/hns3_enet.c | 82 +++++++++++++++++++++++--
+ drivers/net/ethernet/hisilicon/hns3/hns3_enet.h |  3 +
+ 2 files changed, 80 insertions(+), 5 deletions(-)
 
-diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-index d33d97c..82bcbb0 100644
---- a/include/linux/mm_types.h
-+++ b/include/linux/mm_types.h
-@@ -103,11 +103,15 @@ struct page {
- 			unsigned long pp_magic;
- 			struct page_pool *pp;
- 			unsigned long _pp_mapping_pad;
-+			atomic_long_t pp_frag_count;
- 			/**
- 			 * @dma_addr: might require a 64-bit value on
--			 * 32-bit architectures.
-+			 * 32-bit architectures, if so, store the lower 32
-+			 * bits in pp_frag_count, and a DMA mapping should
-+			 * be page aligned, so the frag count can be stored
-+			 * in lower 12 bits for 4K page size.
- 			 */
--			unsigned long dma_addr[2];
-+			unsigned long dma_addr;
- 		};
- 		struct {	/* slab, slob and slub */
- 			union {
-diff --git a/include/net/page_pool.h b/include/net/page_pool.h
-index 8d7744d..ef449c2 100644
---- a/include/net/page_pool.h
-+++ b/include/net/page_pool.h
-@@ -198,19 +198,61 @@ static inline void page_pool_recycle_direct(struct page_pool *pool,
- 	page_pool_put_full_page(pool, page, true);
- }
+diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c b/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
+index cdb5f14..f3f9b13 100644
+--- a/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
++++ b/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
+@@ -3205,6 +3205,21 @@ static int hns3_alloc_buffer(struct hns3_enet_ring *ring,
+ 	unsigned int order = hns3_page_order(ring);
+ 	struct page *p;
  
-+#define PAGE_POOL_DMA_USE_PP_FRAG_COUNT	\
-+			(sizeof(dma_addr_t) > sizeof(unsigned long))
++	if (ring->page_pool) {
++		p = page_pool_dev_alloc_frag(ring->page_pool,
++					     &cb->page_offset,
++					     hns3_buf_size(ring));
++		if (unlikely(!p))
++			return -ENOMEM;
 +
- static inline dma_addr_t page_pool_get_dma_addr(struct page *page)
- {
--	dma_addr_t ret = page->dma_addr[0];
--	if (sizeof(dma_addr_t) > sizeof(unsigned long))
--		ret |= (dma_addr_t)page->dma_addr[1] << 16 << 16;
-+	dma_addr_t ret = page->dma_addr;
-+
-+	if (PAGE_POOL_DMA_USE_PP_FRAG_COUNT) {
-+		ret <<= 32;
-+		ret |= atomic_long_read(&page->pp_frag_count) & PAGE_MASK;
++		cb->priv = p;
++		cb->buf = page_address(p);
++		cb->dma = page_pool_get_dma_addr(p);
++		cb->type = DESC_TYPE_FRAG;
++		cb->reuse_flag = 0;
++		return 0;
 +	}
 +
- 	return ret;
+ 	p = dev_alloc_pages(order);
+ 	if (!p)
+ 		return -ENOMEM;
+@@ -3227,8 +3242,13 @@ static void hns3_free_buffer(struct hns3_enet_ring *ring,
+ 	if (cb->type & (DESC_TYPE_SKB | DESC_TYPE_BOUNCE_HEAD |
+ 			DESC_TYPE_BOUNCE_ALL | DESC_TYPE_SGL_SKB))
+ 		napi_consume_skb(cb->priv, budget);
+-	else if (!HNAE3_IS_TX_RING(ring) && cb->pagecnt_bias)
+-		__page_frag_cache_drain(cb->priv, cb->pagecnt_bias);
++	else if (!HNAE3_IS_TX_RING(ring)) {
++		if (cb->type & DESC_TYPE_PAGE && cb->pagecnt_bias)
++			__page_frag_cache_drain(cb->priv, cb->pagecnt_bias);
++		else if (cb->type & DESC_TYPE_FRAG)
++			page_pool_put_full_page(ring->page_pool, cb->priv,
++						false);
++	}
+ 	memset(cb, 0, sizeof(*cb));
  }
  
- static inline void page_pool_set_dma_addr(struct page *page, dma_addr_t addr)
+@@ -3315,7 +3335,7 @@ static int hns3_alloc_and_map_buffer(struct hns3_enet_ring *ring,
+ 	int ret;
+ 
+ 	ret = hns3_alloc_buffer(ring, cb);
+-	if (ret)
++	if (ret || ring->page_pool)
+ 		goto out;
+ 
+ 	ret = hns3_map_buffer(ring, cb);
+@@ -3337,7 +3357,8 @@ static int hns3_alloc_and_attach_buffer(struct hns3_enet_ring *ring, int i)
+ 	if (ret)
+ 		return ret;
+ 
+-	ring->desc[i].addr = cpu_to_le64(ring->desc_cb[i].dma);
++	ring->desc[i].addr = cpu_to_le64(ring->desc_cb[i].dma +
++					 ring->desc_cb[i].page_offset);
+ 
+ 	return 0;
+ }
+@@ -3367,7 +3388,8 @@ static void hns3_replace_buffer(struct hns3_enet_ring *ring, int i,
  {
--	page->dma_addr[0] = addr;
--	if (sizeof(dma_addr_t) > sizeof(unsigned long))
--		page->dma_addr[1] = upper_32_bits(addr);
-+	if (PAGE_POOL_DMA_USE_PP_FRAG_COUNT) {
-+		atomic_long_set(&page->pp_frag_count, addr & PAGE_MASK);
-+		addr >>= 32;
+ 	hns3_unmap_buffer(ring, &ring->desc_cb[i]);
+ 	ring->desc_cb[i] = *res_cb;
+-	ring->desc[i].addr = cpu_to_le64(ring->desc_cb[i].dma);
++	ring->desc[i].addr = cpu_to_le64(ring->desc_cb[i].dma +
++					 ring->desc_cb[i].page_offset);
+ 	ring->desc[i].rx.bd_base_info = 0;
+ }
+ 
+@@ -3539,6 +3561,12 @@ static void hns3_nic_reuse_page(struct sk_buff *skb, int i,
+ 	u32 frag_size = size - pull_len;
+ 	bool reused;
+ 
++	if (ring->page_pool) {
++		skb_add_rx_frag(skb, i, desc_cb->priv, frag_offset,
++				frag_size, truesize);
++		return;
 +	}
 +
-+	page->dma_addr = addr;
-+}
+ 	/* Avoid re-using remote or pfmem page */
+ 	if (unlikely(!dev_page_is_reusable(desc_cb->priv)))
+ 		goto out;
+@@ -3856,6 +3884,9 @@ static int hns3_alloc_skb(struct hns3_enet_ring *ring, unsigned int length,
+ 		/* We can reuse buffer as-is, just make sure it is reusable */
+ 		if (dev_page_is_reusable(desc_cb->priv))
+ 			desc_cb->reuse_flag = 1;
++		else if (desc_cb->type & DESC_TYPE_FRAG)
++			page_pool_put_full_page(ring->page_pool, desc_cb->priv,
++						false);
+ 		else /* This page cannot be reused so discard it */
+ 			__page_frag_cache_drain(desc_cb->priv,
+ 						desc_cb->pagecnt_bias);
+@@ -3863,6 +3894,10 @@ static int hns3_alloc_skb(struct hns3_enet_ring *ring, unsigned int length,
+ 		hns3_rx_ring_move_fw(ring);
+ 		return 0;
+ 	}
 +
-+static inline long page_pool_atomic_sub_frag_count_return(struct page *page,
-+							  long nr)
++	if (ring->page_pool)
++		skb_mark_for_recycle(skb);
++
+ 	u64_stats_update_begin(&ring->syncp);
+ 	ring->stats.seg_pkt_cnt++;
+ 	u64_stats_update_end(&ring->syncp);
+@@ -3901,6 +3936,10 @@ static int hns3_add_frag(struct hns3_enet_ring *ring)
+ 					    "alloc rx fraglist skb fail\n");
+ 				return -ENXIO;
+ 			}
++
++			if (ring->page_pool)
++				skb_mark_for_recycle(new_skb);
++
+ 			ring->frag_num = 0;
+ 
+ 			if (ring->tail_skb) {
+@@ -4705,6 +4744,31 @@ static void hns3_put_ring_config(struct hns3_nic_priv *priv)
+ 	priv->ring = NULL;
+ }
+ 
++static void hns3_alloc_page_pool(struct hns3_enet_ring *ring)
 +{
-+	long frag_count = atomic_long_read(&page->pp_frag_count);
-+	long ret;
++	struct page_pool_params pp_params = {
++		.flags = PP_FLAG_DMA_MAP | PP_FLAG_PAGE_FRAG |
++				PP_FLAG_DMA_SYNC_DEV,
++		.order = hns3_page_order(ring),
++		.pool_size = ring->desc_num * hns3_buf_size(ring) /
++				(PAGE_SIZE << hns3_page_order(ring)),
++		.nid = dev_to_node(ring_to_dev(ring)),
++		.dev = ring_to_dev(ring),
++		.dma_dir = DMA_FROM_DEVICE,
++		.offset = 0,
++		.max_len = PAGE_SIZE << hns3_page_order(ring),
++	};
 +
-+	if (PAGE_POOL_DMA_USE_PP_FRAG_COUNT) {
-+		if ((frag_count & ~PAGE_MASK) == nr)
-+			return 0;
-+
-+		ret = atomic_long_sub_return(nr, &page->pp_frag_count);
-+		WARN_ON((ret & PAGE_MASK) != (frag_count & PAGE_MASK));
-+		ret &= ~PAGE_MASK;
++	ring->page_pool = page_pool_create(&pp_params);
++	if (IS_ERR(ring->page_pool)) {
++		dev_warn(ring_to_dev(ring), "page pool creation failed: %ld\n",
++			 PTR_ERR(ring->page_pool));
++		ring->page_pool = NULL;
 +	} else {
-+		if (frag_count == nr)
-+			return 0;
-+
-+		ret = atomic_long_sub_return(nr, &page->pp_frag_count);
-+		WARN_ON(ret < 0);
++		dev_info(ring_to_dev(ring), "page pool creation succeeded\n");
 +	}
-+
-+	return ret;
 +}
 +
-+static inline void page_pool_set_frag_count(struct page *page, long nr)
-+{
-+	if (PAGE_POOL_DMA_USE_PP_FRAG_COUNT)
-+		nr |= atomic_long_read(&page->pp_frag_count) & PAGE_MASK;
+ static int hns3_alloc_ring_memory(struct hns3_enet_ring *ring)
+ {
+ 	int ret;
+@@ -4724,6 +4788,8 @@ static int hns3_alloc_ring_memory(struct hns3_enet_ring *ring)
+ 		goto out_with_desc_cb;
+ 
+ 	if (!HNAE3_IS_TX_RING(ring)) {
++		hns3_alloc_page_pool(ring);
 +
-+	atomic_long_set(&page->pp_frag_count, nr);
+ 		ret = hns3_alloc_ring_buffers(ring);
+ 		if (ret)
+ 			goto out_with_desc;
+@@ -4764,6 +4830,12 @@ void hns3_fini_ring(struct hns3_enet_ring *ring)
+ 		devm_kfree(ring_to_dev(ring), tx_spare);
+ 		ring->tx_spare = NULL;
+ 	}
++
++	if (!HNAE3_IS_TX_RING(ring) && ring->page_pool) {
++		page_pool_destroy(ring->page_pool);
++		ring->page_pool = NULL;
++		dev_info(ring_to_dev(ring), "page pool destroyed\n");
++	}
  }
  
- static inline bool is_page_pool_compiled_in(void)
-diff --git a/net/core/page_pool.c b/net/core/page_pool.c
-index 78838c6..0082f33 100644
---- a/net/core/page_pool.c
-+++ b/net/core/page_pool.c
-@@ -198,6 +198,16 @@ static bool page_pool_dma_map(struct page_pool *pool, struct page *page)
- 	if (dma_mapping_error(pool->p.dev, dma))
- 		return false;
+ static int hns3_buf_size2type(u32 buf_size)
+diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3_enet.h b/drivers/net/ethernet/hisilicon/hns3/hns3_enet.h
+index 15af3d9..115c0ce 100644
+--- a/drivers/net/ethernet/hisilicon/hns3/hns3_enet.h
++++ b/drivers/net/ethernet/hisilicon/hns3/hns3_enet.h
+@@ -6,6 +6,7 @@
  
-+	if (PAGE_POOL_DMA_USE_PP_FRAG_COUNT &&
-+	    WARN_ON(pool->p.flags & PP_FLAG_PAGE_FRAG &&
-+		    dma & ~PAGE_MASK)) {
-+		dma_unmap_page_attrs(pool->p.dev, dma,
-+				     PAGE_SIZE << pool->p.order,
-+				     pool->p.dma_dir,
-+				     DMA_ATTR_SKIP_CPU_SYNC);
-+		return false;
-+	}
-+
- 	page_pool_set_dma_addr(page, dma);
+ #include <linux/dim.h>
+ #include <linux/if_vlan.h>
++#include <net/page_pool.h>
  
- 	if (pool->p.flags & PP_FLAG_DMA_SYNC_DEV)
+ #include "hnae3.h"
+ 
+@@ -307,6 +308,7 @@ enum hns3_desc_type {
+ 	DESC_TYPE_BOUNCE_ALL		= 1 << 3,
+ 	DESC_TYPE_BOUNCE_HEAD		= 1 << 4,
+ 	DESC_TYPE_SGL_SKB		= 1 << 5,
++	DESC_TYPE_FRAG			= 1 << 6,
+ };
+ 
+ struct hns3_desc_cb {
+@@ -451,6 +453,7 @@ struct hns3_enet_ring {
+ 	struct hnae3_queue *tqp;
+ 	int queue_index;
+ 	struct device *dev; /* will be used for DMA mapping of descriptors */
++	struct page_pool *page_pool;
+ 
+ 	/* statistic */
+ 	struct ring_stats stats;
 -- 
 2.7.4
 
