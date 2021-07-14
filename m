@@ -2,68 +2,68 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02682C11F6A
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 720DCC07E9C
 	for <bpf@archiver.kernel.org>; Wed, 14 Jul 2021 14:15:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E19D4613C3
-	for <bpf@archiver.kernel.org>; Wed, 14 Jul 2021 14:15:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5DC48613C3
+	for <bpf@archiver.kernel.org>; Wed, 14 Jul 2021 14:15:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239425AbhGNOSp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S239447AbhGNOSp (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Wed, 14 Jul 2021 10:18:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57906 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239447AbhGNOSn (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 14 Jul 2021 10:18:43 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC7CC061760
-        for <bpf@vger.kernel.org>; Wed, 14 Jul 2021 07:15:51 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id q18-20020a1ce9120000b02901f259f3a250so1540536wmc.2
-        for <bpf@vger.kernel.org>; Wed, 14 Jul 2021 07:15:51 -0700 (PDT)
+        with ESMTP id S239453AbhGNOSo (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 14 Jul 2021 10:18:44 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1B37C06175F
+        for <bpf@vger.kernel.org>; Wed, 14 Jul 2021 07:15:52 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id l17-20020a05600c1d11b029021f84fcaf75so4021349wms.1
+        for <bpf@vger.kernel.org>; Wed, 14 Jul 2021 07:15:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=isovalent-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=9g7oMOBxjsI3jeOuNMCaoSoX+v79UXg5NQkt+WfPeBE=;
-        b=RagfVc4cz29UZtABpYH5XLJymWhhFKFHhqsVMwsa2WXAEEqlPxcHS5blXMdL6LDS5b
-         8nZdggt4SnZpunNI1bZuC60yUdnC3P5RLkJyQNsM4M2GUV+M5U/INEcrwqDoQiz2FcbS
-         x30VEzbUM8rtM5Kv38UWd7fDtTJFpwBYCfNgGg+Fw5ZvMxRTLsEFEKsWB85hyFnVDbKk
-         ZpHGG+d+5O+cyv3hP25JY9k3Frr3PXRtaJ5DKbAuSwEoqG90DBVwABiC2oMJGymAxD/y
-         SOsALrHwSUy0RJeJYLfwu6Hr/d22VggS+umUsflKLWMAVKsOrPlummumP3iK10FQTkSv
-         pKBw==
+        bh=mUCBpk5CyiIy6Bvb2NbvqDJflK7m0z2f3UFX/XqbowU=;
+        b=RAYn8/FyE0vDqn1+um4/dz8OvsCxr3xK8V0y/cH7AFK8aH+gE18yp3X0EcDEfpSPoc
+         KTky/k9y28lPJmzcxhzKgAi8aJUsdbOLvGAVl6MnEMEB1Btovt0aGlKZYMQBXsQHVG2g
+         Q/zTCmD1iytWlKFNoCsm0zOzBxqDLR88Z0uZJmWdxCMK+DujzcTCA566SpjqTBHxUqsI
+         cKHXwn97FRXHi7+T4zBYII3biel0jV0TizP04thyvHsHeGWuctfdMr5pCJOdWamJgwn1
+         wntfJYFam8/DLeKRtRtpk94h3nbCDC9ehAQvzAB3RctJBt/znjQPu3nKlErKEi7mvDq7
+         4cFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=9g7oMOBxjsI3jeOuNMCaoSoX+v79UXg5NQkt+WfPeBE=;
-        b=giatmN6uQFSKfJ097pKm/4asNYmusBx/zPOxq106UchbTOsUAqEXfs21t07apMGoqP
-         1swq4uoGc+iCtPtYtwbEyGVocNtylQiw9UTSSiwSb1IS+EnqO/1B318ca2TtnjhUFO2+
-         PJ+wByy0HxAunMz1ukJQA0n2hw/5LKso06ms+hO1uvCO6VzrLVJDSIUIj8CiBqScovfb
-         oJr3uBXaD91cKgynsrBu25bXFBhoEQ17nY3AjeeDeP2NSZ7msP4Wy+h8IVoAqd6EpnVX
-         zzFoFWq1bF1J+GuQ0/KxfifEEjP0vSKe39i7lCr578oDxKw86ypOz4qD2P5z91lkQZuT
-         ZGKQ==
-X-Gm-Message-State: AOAM532YmSiDcEckIt+SuIHeah8imDyyYphwaR1MUqgarAQ/qLQUjSex
-        HRJ2zPeXCJxbRpTYG8Z2PE1Uww==
-X-Google-Smtp-Source: ABdhPJzoi3IW041Df/KOPi4/TALvaa/DA0LmFOtk5iOIqGcHvlAq5ZFzZEJAE1hoYUfQFMLyN2jO4Q==
-X-Received: by 2002:a05:600c:2197:: with SMTP id e23mr11457397wme.101.1626272149176;
-        Wed, 14 Jul 2021 07:15:49 -0700 (PDT)
+        bh=mUCBpk5CyiIy6Bvb2NbvqDJflK7m0z2f3UFX/XqbowU=;
+        b=XYn0CnUlEPGES5/rSnorat6gX3/nmDiQn96wbKiefwxOO33cO+URiW22BgrQDgMEKR
+         2+g6rx7sCWHb2EmNXF8AyJVMWJsVyEoOf6q9zdHd+OEDiZ+t9lqCCgxLbxbaLsFazkWS
+         ZzIGdJNZt06ALxsmrU4zXq4yZ1MINAw152MoOhKTxEBxUnl9TdjmYkuWhzmWEWG8X9Q0
+         XUO+YOSPgwLqkzjFB73IdQpSX9qsWS9j4LnwtQsMyy4B2IyEEh5Hlx4P1nyJpWbgztmf
+         jAz/C3gnfAoPiL4Wi/QJRCgx7eywRzEO3khzZT1AP2//AAdQeEcwnX2naYiYjs145v7W
+         qr4g==
+X-Gm-Message-State: AOAM532ExvkV84yQz2r0nmhjsr7cOKy7ys6aJ1cC+Hqwhb+hNUhnNOdG
+        qnvlgemCU/GQ5G9/2yZNmtWjGA==
+X-Google-Smtp-Source: ABdhPJyj3j4nBjWxbdPwSLusLHVQgftz8JotKj/8bOPJqJh0mVBKnenv5b0+bmlA5F65Nne5T1f5vA==
+X-Received: by 2002:a7b:c147:: with SMTP id z7mr2175067wmi.110.1626272151231;
+        Wed, 14 Jul 2021 07:15:51 -0700 (PDT)
 Received: from localhost.localdomain ([149.86.90.174])
-        by smtp.gmail.com with ESMTPSA id a207sm6380037wme.27.2021.07.14.07.15.48
+        by smtp.gmail.com with ESMTPSA id a207sm6380037wme.27.2021.07.14.07.15.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jul 2021 07:15:48 -0700 (PDT)
+        Wed, 14 Jul 2021 07:15:50 -0700 (PDT)
 From:   Quentin Monnet <quentin@isovalent.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         Quentin Monnet <quentin@isovalent.com>
-Subject: [PATCH bpf-next 4/6] libbpf: explicitly mark btf__load() and btf__get_from_id() as deprecated
-Date:   Wed, 14 Jul 2021 15:15:30 +0100
-Message-Id: <20210714141532.28526-5-quentin@isovalent.com>
+Subject: [PATCH bpf-next 6/6] tools: bpftool: support dumping split BTF by id
+Date:   Wed, 14 Jul 2021 15:15:32 +0100
+Message-Id: <20210714141532.28526-7-quentin@isovalent.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210714141532.28526-1-quentin@isovalent.com>
 References: <20210714141532.28526-1-quentin@isovalent.com>
@@ -73,45 +73,52 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Now that we have replacement functions for btf__load() and
-btf__get_from_id(), with names that better reflect what the functions
-do, and that we have updated the different tools in the repository
-calling the legacy functions, let's explicitly mark those as deprecated.
+Split BTF objects are typically BTF objects for kernel modules, which
+are incrementally built on top of kernel BTF instead of redefining all
+kernel symbols they need. We can use bpftool with its -B command-line
+option to dump split BTF objects. It works well when the handle provided
+for the BTF object to dump is a "path" to the BTF object, typically
+under /sys/kernel/btf, because bpftool internally calls
+btf__parse_split() which can take a "base_btf" pointer and resolve the
+BTF reconstruction (although in that case, the "-B" option is
+unnecessary because bpftool performs autodetection).
 
-References:
+However, it did not work so far when passing the BTF object through its
+id, because bpftool would call btf__get_from_id() which did not provide
+a way to pass a "base_btf" pointer.
 
-- https://github.com/libbpf/libbpf/issues/278
-- https://github.com/libbpf/libbpf/wiki/Libbpf:-the-road-to-v1.0#btfh-apis
+In other words, the following works:
+
+    # bpftool btf dump file /sys/kernel/btf/i2c_smbus -B /sys/kernel/btf/vmlinux
+
+But this was not possible:
+
+    # bpftool btf dump id 6 -B /sys/kernel/btf/vmlinux
+
+The libbpf API has recently changed, and btf__get_from_id() has been
+deprecated in favour of btf__load_from_kernel_by_id() and its version
+with support for split BTF, btf__load_from_kernel_by_id_split(). Let's
+update bpftool to make it able to dump the BTF object in the second case
+as well.
 
 Signed-off-by: Quentin Monnet <quentin@isovalent.com>
 ---
- tools/lib/bpf/btf.h | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ tools/bpf/bpftool/btf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
-index 0bd9d3952d19..522277b16a88 100644
---- a/tools/lib/bpf/btf.h
-+++ b/tools/lib/bpf/btf.h
-@@ -45,7 +45,8 @@ LIBBPF_API struct btf *btf__parse_raw(const char *path);
- LIBBPF_API struct btf *btf__parse_raw_split(const char *path, struct btf *base_btf);
+diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
+index 2296e8eba0ff..b77a59225f5b 100644
+--- a/tools/bpf/bpftool/btf.c
++++ b/tools/bpf/bpftool/btf.c
+@@ -580,7 +580,7 @@ static int do_dump(int argc, char **argv)
+ 	}
  
- LIBBPF_API int btf__finalize_data(struct bpf_object *obj, struct btf *btf);
--LIBBPF_API int btf__load(struct btf *btf);
-+LIBBPF_API LIBBPF_DEPRECATED("the name was confusing and will be removed in the future libbpf versions, please use btf__load_into_kernel() instead")
-+int btf__load(struct btf *btf);
- LIBBPF_API int btf__load_into_kernel(struct btf *btf);
- LIBBPF_API __s32 btf__find_by_name(const struct btf *btf,
- 				   const char *type_name);
-@@ -67,7 +68,8 @@ LIBBPF_API void btf__set_fd(struct btf *btf, int fd);
- LIBBPF_API const void *btf__get_raw_data(const struct btf *btf, __u32 *size);
- LIBBPF_API const char *btf__name_by_offset(const struct btf *btf, __u32 offset);
- LIBBPF_API const char *btf__str_by_offset(const struct btf *btf, __u32 offset);
--LIBBPF_API int btf__get_from_id(__u32 id, struct btf **btf);
-+LIBBPF_API LIBBPF_DEPRECATED("the name was confusing and will be removed in the future libbpf versions, please use btf__load_from_kernel_by_id() instead")
-+int btf__get_from_id(__u32 id, struct btf **btf);
- LIBBPF_API int btf__load_from_kernel_by_id(__u32 id, struct btf **btf);
- LIBBPF_API int btf__get_map_kv_tids(const struct btf *btf, const char *map_name,
- 				    __u32 expected_key_size,
+ 	if (!btf) {
+-		err = btf__load_from_kernel_by_id(btf_id, &btf);
++		err = btf__load_from_kernel_by_id_split(btf_id, &btf, base_btf);
+ 		if (err) {
+ 			p_err("get btf by id (%u): %s", btf_id, strerror(err));
+ 			goto done;
 -- 
 2.30.2
 
