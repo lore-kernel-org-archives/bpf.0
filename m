@@ -2,160 +2,262 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-17.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B652AC07E9A
-	for <bpf@archiver.kernel.org>; Wed, 14 Jul 2021 09:45:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EE37C07E9A
+	for <bpf@archiver.kernel.org>; Wed, 14 Jul 2021 10:18:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A3111613C1
-	for <bpf@archiver.kernel.org>; Wed, 14 Jul 2021 09:45:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3ECC56101D
+	for <bpf@archiver.kernel.org>; Wed, 14 Jul 2021 10:18:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238904AbhGNJsC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 14 Jul 2021 05:48:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:35403 "EHLO
+        id S238976AbhGNKVm (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 14 Jul 2021 06:21:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:31187 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238917AbhGNJsC (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 14 Jul 2021 05:48:02 -0400
+        by vger.kernel.org with ESMTP id S238768AbhGNKVl (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 14 Jul 2021 06:21:41 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1626255910;
+        s=mimecast20190719; t=1626257929;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ZN3a1tvndTSdC7YsooBDBFTgb7MR0oz3akD0iS1avfE=;
-        b=UHjzfvzWl9ExW2XTfoR19g13E/VIPrL74CEMuD2dzXUzOXt7++XBxF0Ih2du1U5AWaaeA/
-        NEbf79NzWklqzGNtjcKLDcCYoLiV0IX3bmH+WIdFupObhD1fGUxL1aVIkqbDPW5BI+Si80
-        cgkd0Lk4TjnqZoZ+oTsCwPmLevc7RbY=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-384-wcBXSp0_NGOoN06sPUlHAQ-1; Wed, 14 Jul 2021 05:45:09 -0400
-X-MC-Unique: wcBXSp0_NGOoN06sPUlHAQ-1
-Received: by mail-wr1-f69.google.com with SMTP id y15-20020a5d614f0000b029013cd60e9baaso1218080wrt.7
-        for <bpf@vger.kernel.org>; Wed, 14 Jul 2021 02:45:09 -0700 (PDT)
+        bh=LfBNZ1nRgQ8vQTHVhw7mjr+RaP8o0JiRU/ocXdcO9YA=;
+        b=NCzLOh3t9lZfuELQovu8AhcLkkGA3mP2QnX+tTOqCwKqGo6Avwzrs2pe7sNlTPbuXXwFdd
+        GKqcWDjyfRBJHvPEZ0q3pDUuqfKZZE29+0Cqdb2P7rMkJrSH1m7n5nPasp//ARaNft+nio
+        xyxFt8IgjV41w8OK7B5daowAvFgpaoA=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-46-GcsNkAsQNomv-tZJfe8_AQ-1; Wed, 14 Jul 2021 06:18:48 -0400
+X-MC-Unique: GcsNkAsQNomv-tZJfe8_AQ-1
+Received: by mail-wr1-f71.google.com with SMTP id i12-20020adffc0c0000b0290140ab4d8389so1272246wrr.10
+        for <bpf@vger.kernel.org>; Wed, 14 Jul 2021 03:18:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ZN3a1tvndTSdC7YsooBDBFTgb7MR0oz3akD0iS1avfE=;
-        b=X/GP4iDpm2Hx21YY9cBfzI3FENIJz6zlGi6/cR3jpzpcbfXKmcaUrigZHpRfKNJOG2
-         2bAiuATwBO7g4augmefGfw841mBQjjxXowkBiWUwl6ULHCPdQWK5MJR4F2S/yV2LTr5t
-         UDKeKhfNOTkUt7cQl6h7Rg/ItsoCMdvHFx98NQykwv2QVBbA4pqwMXVo1yVb4EIL+0ZV
-         B9Z0H3oW6YHdhGtOo/T8CnuK/+FYOWNV+XUG0ZkET36iGS75ZKkT6ZtVBOmwUxR/lSX2
-         yskqmC08iL/MSEaNgI013yS5Dt3PCtvoAfvRHtE57hFs3cdV7zk9L/rI5ruz8C4O4e5B
-         /GKQ==
-X-Gm-Message-State: AOAM530FBPMoOzGeHtWevDUhjuiWmzjixS9WhktDezGlxzE2nfB1qaPQ
-        Wt5qb4VepJlo5tmwqpxBTha5VBRdd0yJQVjbbai7gUtBELJPPiPW/t/wyrj4SHXhyfpcte2LSb0
-        aAuAZNEh1ivpd
-X-Received: by 2002:a5d:64aa:: with SMTP id m10mr11766433wrp.351.1626255908344;
-        Wed, 14 Jul 2021 02:45:08 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyLVyxjqH+zKP2iLuw7jWabuqEbAAePGdeqkySMndl6Fvplu9NljgNilCAW5cz7H5MlpEdX0w==
-X-Received: by 2002:a5d:64aa:: with SMTP id m10mr11766409wrp.351.1626255908218;
-        Wed, 14 Jul 2021 02:45:08 -0700 (PDT)
-Received: from krava.redhat.com ([5.171.203.6])
-        by smtp.gmail.com with ESMTPSA id o18sm1953328wrx.21.2021.07.14.02.45.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jul 2021 02:45:07 -0700 (PDT)
-From:   Jiri Olsa <jolsa@redhat.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCHv4 bpf-next 8/8] selftests/bpf: Add test for bpf_get_func_ip in kprobe+offset probe
-Date:   Wed, 14 Jul 2021 11:44:00 +0200
-Message-Id: <20210714094400.396467-9-jolsa@kernel.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210714094400.396467-1-jolsa@kernel.org>
-References: <20210714094400.396467-1-jolsa@kernel.org>
+        h=x-gm-message-state:from:cc:subject:to:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=LfBNZ1nRgQ8vQTHVhw7mjr+RaP8o0JiRU/ocXdcO9YA=;
+        b=QoAyRI1tH+GVA5F8vI8slVTlutfRWONnXqBEpYh/2ZpXbJ+6hiMxc9W9q2dS+Mwint
+         yFmoo2hBjr3kmvCzcETXwki9VaancTSv0F+qW/5I65tDMEKPnc4aPYOmOp95egGCiRi9
+         GOcvXS/pkplWD69xr6pqPhLmvE7h3kCFMwBN31ZDVZdWk1CUFfUmtxE1H8k4WPClZr/t
+         ZK3r0p03wYntSmfc7y8tRM0RO56fLKWEnQuYh++aFiHjDlJEp6LniEVTVPj9WiULXo6N
+         Dbo8nqaheSikDfZCoBWEm0+Yyd2dyOrqhkGTj2MW9YBXC2fnfpM7Wb1j5kCWMygPvCbk
+         Jp+A==
+X-Gm-Message-State: AOAM5335lgzLztAd1EfEqDMuaZAwTdVD/MZGl9ofOrvbGxgeRaFLNLgu
+        ua8bsBf0cm9Xu5qLEMD+f9XcvLfaHZMx5eS2OfFAtgXA96WgpzjHHtliW7QSxF3hwtRkvL40HF2
+        LFrHRQ8faNtr7pxEpNw8so+K5SnLAtTnH1Z8kh+0QzO5QwLuS/OncZjQJuXUCUBY=
+X-Received: by 2002:a5d:6b8d:: with SMTP id n13mr11957096wrx.258.1626257927418;
+        Wed, 14 Jul 2021 03:18:47 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwgfZFM3rD5Ku3g+Nf/khVvTbnZKuQr/7PrPxOlAJJ44Gr2x6+IQc7EVQyw6OkLkr42lsqTBw==
+X-Received: by 2002:a5d:6b8d:: with SMTP id n13mr11957029wrx.258.1626257927046;
+        Wed, 14 Jul 2021 03:18:47 -0700 (PDT)
+Received: from [192.168.42.238] (3-14-107-185.static.kviknet.dk. [185.107.14.3])
+        by smtp.gmail.com with ESMTPSA id t9sm1812790wmq.14.2021.07.14.03.18.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Jul 2021 03:18:46 -0700 (PDT)
+From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
+X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
+Cc:     brouer@redhat.com, alexander.duyck@gmail.com,
+        linux@armlinux.org.uk, mw@semihalf.com, linuxarm@openeuler.org,
+        yisen.zhuang@huawei.com, salil.mehta@huawei.com,
+        thomas.petazzoni@bootlin.com, hawk@kernel.org,
+        ilias.apalodimas@linaro.org, ast@kernel.org, daniel@iogearbox.net,
+        john.fastabend@gmail.com, akpm@linux-foundation.org,
+        peterz@infradead.org, will@kernel.org, willy@infradead.org,
+        vbabka@suse.cz, fenghua.yu@intel.com, guro@fb.com,
+        peterx@redhat.com, feng.tang@intel.com, jgg@ziepe.ca,
+        mcroce@microsoft.com, hughd@google.com, jonathan.lemon@gmail.com,
+        alobakin@pm.me, willemb@google.com, wenxu@ucloud.cn,
+        cong.wang@bytedance.com, haokexin@gmail.com, nogikh@google.com,
+        elver@google.com, yhs@fb.com, kpsingh@kernel.org,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH rfc v5 2/4] page_pool: add interface to manipulate frag
+ count in page pool
+To:     Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
+        kuba@kernel.org
+References: <1626255285-5079-1-git-send-email-linyunsheng@huawei.com>
+ <1626255285-5079-3-git-send-email-linyunsheng@huawei.com>
+Message-ID: <79d9e41c-6433-efe1-773a-4f5e91e8de0f@redhat.com>
+Date:   Wed, 14 Jul 2021 12:18:44 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <1626255285-5079-3-git-send-email-linyunsheng@huawei.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Adding test for bpf_get_func_ip in kprobe+ofset probe.
-Because of the offset value it's arch specific, enabling
-the new test only for x86_64 architecture.
 
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
----
- .../bpf/prog_tests/get_func_ip_test.c          | 18 ++++++++++++++++--
- .../selftests/bpf/progs/get_func_ip_test.c     | 11 +++++++++++
- 2 files changed, 27 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/get_func_ip_test.c b/tools/testing/selftests/bpf/prog_tests/get_func_ip_test.c
-index 8bb18a8d31a0..088b3653610d 100644
---- a/tools/testing/selftests/bpf/prog_tests/get_func_ip_test.c
-+++ b/tools/testing/selftests/bpf/prog_tests/get_func_ip_test.c
-@@ -8,10 +8,21 @@ void test_get_func_ip_test(void)
- 	__u32 duration = 0, retval;
- 	int err, prog_fd;
- 
--	skel = get_func_ip_test__open_and_load();
--	if (!ASSERT_OK_PTR(skel, "get_func_ip_test__open_and_load"))
-+	skel = get_func_ip_test__open();
-+	if (!ASSERT_OK_PTR(skel, "get_func_ip_test__open"))
- 		return;
- 
-+	/* test6 is x86_64 specifc because of the instruction
-+	 * offset, disabling it for all other archs
-+	 */
-+#ifndef __x86_64__
-+	bpf_program__set_autoload(skel->progs.test6, false);
-+#endif
-+
-+	err = get_func_ip_test__load(skel);
-+	if (!ASSERT_OK(err, "get_func_ip_test__load"))
-+		goto cleanup;
-+
- 	err = get_func_ip_test__attach(skel);
- 	if (!ASSERT_OK(err, "get_func_ip_test__attach"))
- 		goto cleanup;
-@@ -33,6 +44,9 @@ void test_get_func_ip_test(void)
- 	ASSERT_EQ(skel->bss->test3_result, 1, "test3_result");
- 	ASSERT_EQ(skel->bss->test4_result, 1, "test4_result");
- 	ASSERT_EQ(skel->bss->test5_result, 1, "test5_result");
-+#ifdef __x86_64__
-+	ASSERT_EQ(skel->bss->test6_result, 1, "test6_result");
-+#endif
- 
- cleanup:
- 	get_func_ip_test__destroy(skel);
-diff --git a/tools/testing/selftests/bpf/progs/get_func_ip_test.c b/tools/testing/selftests/bpf/progs/get_func_ip_test.c
-index ba3e107b52dd..acd587b6e859 100644
---- a/tools/testing/selftests/bpf/progs/get_func_ip_test.c
-+++ b/tools/testing/selftests/bpf/progs/get_func_ip_test.c
-@@ -10,6 +10,7 @@ extern const void bpf_fentry_test2 __ksym;
- extern const void bpf_fentry_test3 __ksym;
- extern const void bpf_fentry_test4 __ksym;
- extern const void bpf_modify_return_test __ksym;
-+extern const void bpf_fentry_test6 __ksym;
- 
- __u64 test1_result = 0;
- SEC("fentry/bpf_fentry_test1")
-@@ -60,3 +61,13 @@ int BPF_PROG(test5, int a, int *b, int ret)
- 	test5_result = (const void *) addr == &bpf_modify_return_test;
- 	return ret;
- }
-+
-+__u64 test6_result = 0;
-+SEC("kprobe/bpf_fentry_test6+0x5")
-+int test6(struct pt_regs *ctx)
-+{
-+	__u64 addr = bpf_get_func_ip(ctx);
-+
-+	test6_result = (const void *) addr == &bpf_fentry_test6 + 5;
-+	return 0;
-+}
--- 
-2.31.1
+On 14/07/2021 11.34, Yunsheng Lin wrote:
+> As suggested by Alexander, "A DMA mapping should be page
+> aligned anyway so the lower 12 bits would be reserved 0",
+> so it might make more sense to repurpose the lower 12 bits
+> of the dma address to store the frag count for frag page
+> support in page pool for 32 bit systems with 64 bit dma,
+> which should be rare those days.
+
+Do we have any real driver users with 32-bit arch and 64-bit DMA, that 
+want to use this new frag-count system you are adding to page_pool?
+
+This "lower 12-bit use" complicates the code we need to maintain 
+forever. My guess is that it is never used, but we need to update and 
+maintain it, and it will never be tested.
+
+Why don't you simply reject using page_pool flag PP_FLAG_PAGE_FRAG 
+during setup of the page_pool for this case?
+
+  if ((pool->p.flags & PP_FLAG_PAGE_FRAG) &&
+      (sizeof(dma_addr_t) > sizeof(unsigned long)))
+    goto reject-setup;
+
+
+> For normal system, the dma_addr[1] in 'struct page' is not
+> used, so we can reuse one of the dma_addr for storing frag
+> count, which means how many frags this page might be splited
+> to.
+> 
+> The PAGE_POOL_DMA_USE_PP_FRAG_COUNT macro is added to decide
+> where to store the frag count, as the "sizeof(dma_addr_t) >
+> sizeof(unsigned long)" is false for most systems those days,
+> so hopefully the compiler will optimize out the unused code
+> for those systems.
+> 
+> The newly added page_pool_set_frag_count() should be called
+> before the page is passed to any user. Otherwise, call the
+> newly added page_pool_atomic_sub_frag_count_return().
+> 
+> Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
+> ---
+>   include/linux/mm_types.h |  8 +++++--
+>   include/net/page_pool.h  | 54 ++++++++++++++++++++++++++++++++++++++++++------
+>   net/core/page_pool.c     | 10 +++++++++
+>   3 files changed, 64 insertions(+), 8 deletions(-)
+> 
+> diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+> index d33d97c..82bcbb0 100644
+> --- a/include/linux/mm_types.h
+> +++ b/include/linux/mm_types.h
+> @@ -103,11 +103,15 @@ struct page {
+>   			unsigned long pp_magic;
+>   			struct page_pool *pp;
+>   			unsigned long _pp_mapping_pad;
+> +			atomic_long_t pp_frag_count;
+>   			/**
+>   			 * @dma_addr: might require a 64-bit value on
+> -			 * 32-bit architectures.
+> +			 * 32-bit architectures, if so, store the lower 32
+> +			 * bits in pp_frag_count, and a DMA mapping should
+> +			 * be page aligned, so the frag count can be stored
+> +			 * in lower 12 bits for 4K page size.
+>   			 */
+> -			unsigned long dma_addr[2];
+> +			unsigned long dma_addr;
+>   		};
+>   		struct {	/* slab, slob and slub */
+>   			union {
+> diff --git a/include/net/page_pool.h b/include/net/page_pool.h
+> index 8d7744d..ef449c2 100644
+> --- a/include/net/page_pool.h
+> +++ b/include/net/page_pool.h
+> @@ -198,19 +198,61 @@ static inline void page_pool_recycle_direct(struct page_pool *pool,
+>   	page_pool_put_full_page(pool, page, true);
+>   }
+>   
+> +#define PAGE_POOL_DMA_USE_PP_FRAG_COUNT	\
+> +			(sizeof(dma_addr_t) > sizeof(unsigned long))
+> +
+>   static inline dma_addr_t page_pool_get_dma_addr(struct page *page)
+>   {
+> -	dma_addr_t ret = page->dma_addr[0];
+> -	if (sizeof(dma_addr_t) > sizeof(unsigned long))
+> -		ret |= (dma_addr_t)page->dma_addr[1] << 16 << 16;
+> +	dma_addr_t ret = page->dma_addr;
+> +
+> +	if (PAGE_POOL_DMA_USE_PP_FRAG_COUNT) {
+> +		ret <<= 32;
+> +		ret |= atomic_long_read(&page->pp_frag_count) & PAGE_MASK;
+> +	}
+> +
+>   	return ret;
+>   }
+>   
+>   static inline void page_pool_set_dma_addr(struct page *page, dma_addr_t addr)
+>   {
+> -	page->dma_addr[0] = addr;
+> -	if (sizeof(dma_addr_t) > sizeof(unsigned long))
+> -		page->dma_addr[1] = upper_32_bits(addr);
+> +	if (PAGE_POOL_DMA_USE_PP_FRAG_COUNT) {
+> +		atomic_long_set(&page->pp_frag_count, addr & PAGE_MASK);
+> +		addr >>= 32;
+> +	}
+> +
+> +	page->dma_addr = addr;
+> +}
+> +
+> +static inline long page_pool_atomic_sub_frag_count_return(struct page *page,
+> +							  long nr)
+> +{
+> +	long frag_count = atomic_long_read(&page->pp_frag_count);
+> +	long ret;
+> +
+> +	if (PAGE_POOL_DMA_USE_PP_FRAG_COUNT) {
+> +		if ((frag_count & ~PAGE_MASK) == nr)
+> +			return 0;
+> +
+> +		ret = atomic_long_sub_return(nr, &page->pp_frag_count);
+> +		WARN_ON((ret & PAGE_MASK) != (frag_count & PAGE_MASK));
+> +		ret &= ~PAGE_MASK;
+> +	} else {
+> +		if (frag_count == nr)
+> +			return 0;
+> +
+> +		ret = atomic_long_sub_return(nr, &page->pp_frag_count);
+> +		WARN_ON(ret < 0);
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static inline void page_pool_set_frag_count(struct page *page, long nr)
+> +{
+> +	if (PAGE_POOL_DMA_USE_PP_FRAG_COUNT)
+> +		nr |= atomic_long_read(&page->pp_frag_count) & PAGE_MASK;
+> +
+> +	atomic_long_set(&page->pp_frag_count, nr);
+>   }
+>   
+>   static inline bool is_page_pool_compiled_in(void)
+> diff --git a/net/core/page_pool.c b/net/core/page_pool.c
+> index 78838c6..0082f33 100644
+> --- a/net/core/page_pool.c
+> +++ b/net/core/page_pool.c
+> @@ -198,6 +198,16 @@ static bool page_pool_dma_map(struct page_pool *pool, struct page *page)
+>   	if (dma_mapping_error(pool->p.dev, dma))
+>   		return false;
+>   
+> +	if (PAGE_POOL_DMA_USE_PP_FRAG_COUNT &&
+> +	    WARN_ON(pool->p.flags & PP_FLAG_PAGE_FRAG &&
+> +		    dma & ~PAGE_MASK)) {
+> +		dma_unmap_page_attrs(pool->p.dev, dma,
+> +				     PAGE_SIZE << pool->p.order,
+> +				     pool->p.dma_dir,
+> +				     DMA_ATTR_SKIP_CPU_SYNC);
+> +		return false;
+> +	}
+> +
+>   	page_pool_set_dma_addr(page, dma);
+>   
+>   	if (pool->p.flags & PP_FLAG_DMA_SYNC_DEV)
+> 
 
