@@ -8,60 +8,60 @@ X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DDAB8C47E51
-	for <bpf@archiver.kernel.org>; Thu, 15 Jul 2021 00:54:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 145CCC12002
+	for <bpf@archiver.kernel.org>; Thu, 15 Jul 2021 00:54:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C826960240
-	for <bpf@archiver.kernel.org>; Thu, 15 Jul 2021 00:54:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F312460FD8
+	for <bpf@archiver.kernel.org>; Thu, 15 Jul 2021 00:54:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231434AbhGOA5e (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 14 Jul 2021 20:57:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36978 "EHLO
+        id S234332AbhGOA5q (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 14 Jul 2021 20:57:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231301AbhGOA5Y (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 14 Jul 2021 20:57:24 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBB57C06175F;
-        Wed, 14 Jul 2021 17:54:32 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id 21so3568906pfp.3;
-        Wed, 14 Jul 2021 17:54:32 -0700 (PDT)
+        with ESMTP id S231477AbhGOA5f (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 14 Jul 2021 20:57:35 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5354C061760;
+        Wed, 14 Jul 2021 17:54:41 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id 70so937568pgh.2;
+        Wed, 14 Jul 2021 17:54:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=FVHofXjsSn+YToG5Mlz3X8cSwYGdWIyhL0CMSeE/g7s=;
-        b=Ly7vuIixfpgcQpooe+AoYSlZZsn0KkQxd6czKtFYQGhqOiGU0zuUVzDiD04g9vXgj/
-         Nr4ZhM/T97oevhsYrwTDfyXA8/LLR/EnyMGlhrTU3Nkf68AnqEEq2qJW22zGqGIkvcs1
-         NbIBPkzRl1BodwdKJBzRQxdw84LA+XZcpEplDhPJnIkju7avv5sNW8xrXsG3abSi9NnZ
-         pCzHZwdjJqvAJRfwQdr9afKzpipCL5p+PNrWhRKpa6FtQEI0WDGOCYr1QLRvDFExEuAi
-         +PCGpnJphjcJIE9nYlCPyDW4a5OY+ebdmnRk2OYkeZEki38t/96v4fmUXv9/mT3uUVTp
-         QkEQ==
+        bh=LNlh7ErWiTtr7/sCr5asAT8Vf7CkuB43ibafMS37p1A=;
+        b=UgTozhoMoUV1gIhadV7s9ZQwoOrKrzOSiVOefgf4YkbHrhrew1jof24XW7JagqZ+xx
+         skB9+2KHRK8gtRViJRLnrfzNbzxJriPHWk3Wv8CALzT6D3m6XEQAZ5yZIicAUw88L/dU
+         2z3rV133vMg0ja3koFzhZwspcE+hKgRtyMTJpAboKBKCRQnbP9GrVZlfuBhSY/xfSwZz
+         +zgCubLxxxxatPtwWCSAXc1dqfB86Sx7HHFqU6nc28IagpwcYbR6r48eTjBKwTZKV/E4
+         mFeAc004pfanN9vlNP81OJwEhzopbBKj7WPFRiHJ3uZQ0O1M2gDE6KVvxRPrfTk+8UGd
+         Notg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=FVHofXjsSn+YToG5Mlz3X8cSwYGdWIyhL0CMSeE/g7s=;
-        b=jy6s2DWILUm113m2Uh0pV3khL/YBdGJUZdDxQj5LtQi41X3GWQEzEIpN/0GpV2fAND
-         c+Cj6kvYhzQNkV2x33nd04tK1G8apVfDs+yBTsqjaSdsDTeMGjfKaW6EZ/Ut1DKkauQn
-         gcS+QsnpGtmqA+KkqVoyrBRYyvlTL9uYGaU0DcHz2cKYutT6sKefxX+G9EPYoYDcfXYk
-         ljofct4BzAZ8+eQVw9Rm+QCi40Xeur9mMAPsH3u6wTICRYS95ZVJvgEVUynON3QWtv0Z
-         lb3a+K/wak3bd7kFBNgl3EI/XUPPgiiVBcO677A/H3Cr6lu5gA8Z0uB3G/I/a81ERMCC
-         WEmg==
-X-Gm-Message-State: AOAM5303MX553TqlT7P7JQE/ViVEZ0RW3NDuXRidhRYiiIhCTbn1Xf6Z
-        J7chfJxGCx0jBgnRxE/AHJQ=
-X-Google-Smtp-Source: ABdhPJzbELTcrg/1dIokAZRVdMAhksOzogxTUW9oT3kfxIigXq6XRmpiVk5SxCzn+RRAJlRqdu67WQ==
-X-Received: by 2002:a63:4c0e:: with SMTP id z14mr809635pga.427.1626310472277;
-        Wed, 14 Jul 2021 17:54:32 -0700 (PDT)
+        bh=LNlh7ErWiTtr7/sCr5asAT8Vf7CkuB43ibafMS37p1A=;
+        b=q6ngFt5hFWHwi9kI7jMNxos+SCt839AV2r90ApbFW67VCOfaFWfKYNbpp6Mk7Tp6OT
+         gRzmC7uFEFf7HkyWLdDgyHWOJdGm/TEDkBM7FzSKwEjxX8xXU6hX9sf5DvyI0d5PODys
+         CjA3aKuIx70RWpYF93B3sunSjw/0zLdBBdcCTNS4BpPbfP9Z+mAcU1JQVvv1b6pitPlG
+         muh2pAwYBHnkUxkjrxN/Cx4Of8HjORmVPN1sSxQZ38pPirzlueRfXC0RBGOy8vr0d5Cf
+         K+5dpt9z1hyD5sIQEH5P1fDeVLYOiJf7Qd4Y9uwt81T4pmzlIGWyaiIA8FJD8yUa+cyQ
+         +ZwQ==
+X-Gm-Message-State: AOAM530sPnRAlwPZbCkqGt4nMpYIhY/Yv/1AzLnvYpqcZNNFQu2lyV2d
+        a1X3ngrIe3upwZFB3mgfX50=
+X-Google-Smtp-Source: ABdhPJwxKqEcHsBFuZLTKAStRdvglnT51WekPYhvWW+NlwQcS1piQhk2HAi26DhlGXOo5VmbjIM+gQ==
+X-Received: by 2002:a63:ee06:: with SMTP id e6mr826350pgi.374.1626310481477;
+        Wed, 14 Jul 2021 17:54:41 -0700 (PDT)
 Received: from ast-mbp.thefacebook.com ([2620:10d:c090:400::5:120c])
-        by smtp.gmail.com with ESMTPSA id nl2sm3439011pjb.10.2021.07.14.17.54.30
+        by smtp.gmail.com with ESMTPSA id nl2sm3439011pjb.10.2021.07.14.17.54.39
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 14 Jul 2021 17:54:31 -0700 (PDT)
+        Wed, 14 Jul 2021 17:54:40 -0700 (PDT)
 From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To:     davem@davemloft.net
 Cc:     daniel@iogearbox.net, andrii@kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org, kernel-team@fb.com
-Subject: [PATCH v7 bpf-next 06/11] bpf: Remember BTF of inner maps.
-Date:   Wed, 14 Jul 2021 17:54:12 -0700
-Message-Id: <20210715005417.78572-7-alexei.starovoitov@gmail.com>
+Subject: [PATCH v7 bpf-next 09/11] bpf: Teach stack depth check about async callbacks.
+Date:   Wed, 14 Jul 2021 17:54:15 -0700
+Message-Id: <20210715005417.78572-10-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.13.5
 In-Reply-To: <20210715005417.78572-1-alexei.starovoitov@gmail.com>
 References: <20210715005417.78572-1-alexei.starovoitov@gmail.com>
@@ -71,54 +71,78 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-BTF is required for 'struct bpf_timer' to be recognized inside map value.
-The bpf timers are supported inside inner maps.
-Remember 'struct btf *' in inner_map_meta to make it available
-to the verifier in the sequence:
-
-struct bpf_map *inner_map = bpf_map_lookup_elem(&outer_map, ...);
-if (inner_map)
-    timer = bpf_map_lookup_elem(&inner_map, ...);
+Teach max stack depth checking algorithm about async callbacks
+that don't increase bpf program stack size.
+Also add sanity check that bpf_tail_call didn't sneak into async cb.
+It's impossible, since PTR_TO_CTX is not available in async cb,
+hence the program cannot contain bpf_tail_call(ctx,...);
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Acked-by: Yonghong Song <yhs@fb.com>
-Acked-by: Martin KaFai Lau <kafai@fb.com>
 Acked-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- kernel/bpf/map_in_map.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ include/linux/bpf_verifier.h |  1 +
+ kernel/bpf/verifier.c        | 18 +++++++++++++++---
+ 2 files changed, 16 insertions(+), 3 deletions(-)
 
-diff --git a/kernel/bpf/map_in_map.c b/kernel/bpf/map_in_map.c
-index 890dfe14e731..5cd8f5277279 100644
---- a/kernel/bpf/map_in_map.c
-+++ b/kernel/bpf/map_in_map.c
-@@ -3,6 +3,7 @@
-  */
- #include <linux/slab.h>
- #include <linux/bpf.h>
-+#include <linux/btf.h>
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 242d0b1a0772..b847e1ccd10f 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -406,6 +406,7 @@ struct bpf_subprog_info {
+ 	bool has_tail_call;
+ 	bool tail_call_reachable;
+ 	bool has_ld_abs;
++	bool is_async_cb;
+ };
  
- #include "map_in_map.h"
+ /* single container for all structs
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index ab6ce598a652..84f67580ab19 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -3709,6 +3709,8 @@ static int check_max_stack_depth(struct bpf_verifier_env *env)
+ continue_func:
+ 	subprog_end = subprog[idx + 1].start;
+ 	for (; i < subprog_end; i++) {
++		int next_insn;
++
+ 		if (!bpf_pseudo_call(insn + i) && !bpf_pseudo_func(insn + i))
+ 			continue;
+ 		/* remember insn and function to return to */
+@@ -3716,13 +3718,22 @@ static int check_max_stack_depth(struct bpf_verifier_env *env)
+ 		ret_prog[frame] = idx;
  
-@@ -51,6 +52,10 @@ struct bpf_map *bpf_map_meta_alloc(int inner_map_ufd)
- 	inner_map_meta->max_entries = inner_map->max_entries;
- 	inner_map_meta->spin_lock_off = inner_map->spin_lock_off;
- 	inner_map_meta->timer_off = inner_map->timer_off;
-+	if (inner_map->btf) {
-+		btf_get(inner_map->btf);
-+		inner_map_meta->btf = inner_map->btf;
-+	}
+ 		/* find the callee */
+-		i = i + insn[i].imm + 1;
+-		idx = find_subprog(env, i);
++		next_insn = i + insn[i].imm + 1;
++		idx = find_subprog(env, next_insn);
+ 		if (idx < 0) {
+ 			WARN_ONCE(1, "verifier bug. No program starts at insn %d\n",
+-				  i);
++				  next_insn);
+ 			return -EFAULT;
+ 		}
++		if (subprog[idx].is_async_cb) {
++			if (subprog[idx].has_tail_call) {
++				verbose(env, "verifier bug. subprog has tail_call and async cb\n");
++				return -EFAULT;
++			}
++			 /* async callbacks don't increase bpf prog stack size */
++			continue;
++		}
++		i = next_insn;
  
- 	/* Misc members not needed in bpf_map_meta_equal() check. */
- 	inner_map_meta->ops = inner_map->ops;
-@@ -66,6 +71,7 @@ struct bpf_map *bpf_map_meta_alloc(int inner_map_ufd)
+ 		if (subprog[idx].has_tail_call)
+ 			tail_call_reachable = true;
+@@ -5761,6 +5772,7 @@ static int __check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+ 		struct bpf_verifier_state *async_cb;
  
- void bpf_map_meta_free(struct bpf_map *map_meta)
- {
-+	btf_put(map_meta->btf);
- 	kfree(map_meta);
- }
- 
+ 		/* there is no real recursion here. timer callbacks are async */
++		env->subprog_info[subprog].is_async_cb = true;
+ 		async_cb = push_async_cb(env, env->subprog_info[subprog].start,
+ 					 *insn_idx, subprog);
+ 		if (!async_cb)
 -- 
 2.30.2
 
