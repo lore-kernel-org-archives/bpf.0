@@ -2,79 +2,81 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 262B7C07E96
-	for <bpf@archiver.kernel.org>; Thu, 15 Jul 2021 15:15:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C9D0FC1B08C
+	for <bpf@archiver.kernel.org>; Thu, 15 Jul 2021 15:16:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 066946128B
-	for <bpf@archiver.kernel.org>; Thu, 15 Jul 2021 15:15:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B69A9613C0
+	for <bpf@archiver.kernel.org>; Thu, 15 Jul 2021 15:16:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238339AbhGOPSq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 15 Jul 2021 11:18:46 -0400
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:15080 "EHLO
-        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231970AbhGOPSp (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 15 Jul 2021 11:18:45 -0400
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16FF6IQY017710;
-        Thu, 15 Jul 2021 15:15:36 GMT
+        id S238519AbhGOPSy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 15 Jul 2021 11:18:54 -0400
+Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:37610 "EHLO
+        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238470AbhGOPSv (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 15 Jul 2021 11:18:51 -0400
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16FF7WrA024682;
+        Thu, 15 Jul 2021 15:15:40 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : content-type : mime-version;
- s=corp-2021-07-09; bh=jR2d/NIUZDWqKGLv0kVviYnSsXlY8+3hSDGj2Rb9z6U=;
- b=pbD8yyHvpYEuw4vIESV5uzT2GjjTCh5q9t1+VasHWLa088rzn2Hq2uCMjdlKRTZ7AeUu
- 5D2xWg9frdzjdzaCVT/uvR8koPnljNn6KmNJExpP4ifH/qQQjvcmAwBKknOW65eAHWfu
- 2sjQ3jU3FTnQ2qXdH0XgJttkiFdwMe0y+KoWdc5SAsDW4fOYa2/SjWY99hmmCLIkyhEG
- N98yA4nYV3V8PLNnMDN9HlTIC74HqiR6XvY5GYTnarRzMoMhdOqtIagZ42n+ctQQNcr1
- NOqNknIz9SnsloZeF4z1TxWKyZoYhaZxUjnTWSXOk8G7pDgqGQJ6nuYiYWXSCWdPC2SR vQ== 
+ subject : date : message-id : in-reply-to : references : content-type :
+ mime-version; s=corp-2021-07-09;
+ bh=2TAzlCf/asjE1KjZ/nZEE+1tfqARE2ekC6iwVS7c7aA=;
+ b=ybP/I9cNzI6fC7+AZl331cgL6Wb0kDgH7iVEA5MyLi20cjHMUT4rODVP86/H8KJlnIi6
+ ZO+gxvwmRIV3/5rSJ4yHFAKU/0po2vIaXPv9HBfgQ+9Zp/NXyCzhA5pQU8rUQgSAReaD
+ JjkSx/DOPPzsZIzdxBNhqmwpARwrIqlRsX6vmuihHM2pSMuxB7QmkjMdYXxM60/6pq+L
+ 5c/LJM5+ZIvIKjG+uKhLfbLbrQtb14dXNF5/hpElrNMEbK33OXKLG/2LLpz4nJ+IgkbA
+ +GByiCKezM48xP22xtDAJp6fqSTOx3f9U4sSd1zfEHo3Ai/Dpo0iPVyFLkmYr4JSbE7U Aw== 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : content-type : mime-version;
- s=corp-2020-01-29; bh=jR2d/NIUZDWqKGLv0kVviYnSsXlY8+3hSDGj2Rb9z6U=;
- b=wSytX0IiZPvpMjksqmUIYs8MHfn3b7P4amh2g5yqrAjk3352GzdMaYJ5+X1MIz+LENxa
- IU65ezhlOGVRAv7qf9qzJK3K7otWyMH7OAKxDvFQtew2aFojKFT/lNI68Dvxxy+5EQo9
- hjDwx2kNE07Lqj/yE68pG39dt1OD7S1xrv5uy+eLKOUpzOei9jtO83KPh6nFQaNR8y5c
- vvmU3bxzgMzYGIi5WWBSwJFRyV/HHDhjuDm6d9LcNLDp+yauo1L0hoy0QNwhS6A7UVjc
- CaE3+jrHwfU2M9FCODNOQO6SrVxMAAmd6L8hX+FK96vhzrs6LkY13i+czBUK81FTfZdH iA== 
+ subject : date : message-id : in-reply-to : references : content-type :
+ mime-version; s=corp-2020-01-29;
+ bh=2TAzlCf/asjE1KjZ/nZEE+1tfqARE2ekC6iwVS7c7aA=;
+ b=cLPQoHCBObiYOR8+Q0hAvAvPNgJlV2MhTO206icatj/799KVVyEM2UJ35FF8iS6kss65
+ rzAXcfUd+takiFf6pH3q9TmzqjMTTqINLkL5zrUm84aPthyveLLJCSUJlcuFrYgc+mk4
+ 3TUuEbWtCRFFDWZT6J3It6x7iRp7Dio1GE89LMLMnuBX8bIMgst9TF623BP+pntalyZu
+ b8ZxIijeJPKaqgHezQQjOiVKiuMcs6dg44ipZDk/TUNkei5zGn2l7Sp2Ug/k/8Gkt7j2
+ tcJNp8WOERaw8WGW7Wy8ONsS4rbYkhvW5Qk0jbpKqB1ZbQaWIGsa4afG6WE61irJ9TyC 5Q== 
 Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by mx0b-00069f02.pphosted.com with ESMTP id 39t2fcjc7f-1
+        by mx0b-00069f02.pphosted.com with ESMTP id 39t77uspj0-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 15 Jul 2021 15:15:35 +0000
+        Thu, 15 Jul 2021 15:15:40 +0000
 Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 16FF6pHU092409;
-        Thu, 15 Jul 2021 15:15:34 GMT
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2174.outbound.protection.outlook.com [104.47.57.174])
-        by aserp3020.oracle.com with ESMTP id 39q3chuham-1
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 16FF6oaM092315;
+        Thu, 15 Jul 2021 15:15:39 GMT
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2168.outbound.protection.outlook.com [104.47.57.168])
+        by aserp3020.oracle.com with ESMTP id 39q3chuhhh-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 15 Jul 2021 15:15:34 +0000
+        Thu, 15 Jul 2021 15:15:38 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=C8hgGydaSyDNxMS5XYxDxEROLGpJYTKBqzI7c89g9yTgDWOP9x+BKv8K9+lLmD81KbnDoldW479mUAw3FYYpiIbbCAya9Gjq2oane9Mjd8NtWP7u//GkN0EldBUpD+zmWBftCo4olUV7HDeeTiUP9j8e9DuMQjbEMEYjdgIYGwwQk6qgg4TNC0RAHhmhYNN77UtK/gOmRxBm+S0hlP4L1w3Q/ah8DZoKQVtbfACXSc6P4MQtgYE673UvnbwPGYFxHTprEC97lwcbvlBq+tS7Hck1e3hS7kSqpcgR5A+Deherpol2zDYI3h4jw0I3cp17/nVzZsm58xv9TEGByjJJVQ==
+ b=EjxwATIelqlWho2nKYGUmtD267tf2ogF8EwYyTaSBAB0Fz4og+brpebgJIBkT2FRbe8CyMwM40+bEDKArxQ93U/58ArAVGDurbJS3yLPq7ziMgPOm4v6ypGzjA5/zc0oVbvRAv4ZQrsA0/ovtJjTO8U7lDeL7jxmYPEDUTqYdaCRbfkSRvnakjMK/fBQFxndlWhLJ+dXEg2sAGp9ZZblJTDBMk1gCoKJqXaEUAU/jCMbu86dPcd7aoJD1TdIXmsVGJiJYCtWOm+hePAfWKhlvh5nSFz45u4JhC8ugvZVvx4X6LsMurxpfbN4aSWy0zolQUNmGnskCW6B/ycIxyzuhg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jR2d/NIUZDWqKGLv0kVviYnSsXlY8+3hSDGj2Rb9z6U=;
- b=eehC7Y4mrjGw+ogRihGoVKZwOi0wEC7uP+0fDhXH/2pw3MeaSjN5yU5OcmsmnfSOQqWJ203sS/ujRAbdZKbTV5BtHJa3aUolr4bI+jeavucWQ+nPJ/L6PyK9lvCtZZNFEp7jdly4KkNBbG6rTMLMUZoPtDPCkUYo6ZwTd3DkedXDBFpBn0huvi1E+flvgg8ERSB9qNVCB2MNf4RIRxyDZG1K+euHC/4dyOtlZX66CokAoz4Cxn2gtclzHgI552lycrIcXm4qfEzPDuJCSrwslLWvoHI7+QnT3bchN4350ErL0epHNCgz0W8mtsVno0QtUpVy/s6XhW6dTnPfU2QQVw==
+ bh=2TAzlCf/asjE1KjZ/nZEE+1tfqARE2ekC6iwVS7c7aA=;
+ b=iCYZiAt04YFTaUBSfZxeYTvi1Kt0Gx/DQ/+CbaVkAZJDLL7fwHYyiNa4Y7Neh9EhJgU/O29szXCaIHcB9TSFgMT2x66PT4Yats86fLGL5bAIKKFfAgP+/4R1dQOdS1tn5Jc34us7QaQ/9UgeBJUOsflvjr1FsaoRu+f+3xmEc2J20R6UFQ4XWhvolP1A6o5a0GPXzmBfhNoYn7DznwQvzmduixO2iKG1vwBsQV9ACQjUWQUma2KbmQi6T2RJ2gFSiViQDn2omvLx+mvL9z2urfBWhas/CCbEp32gmtZYsk0JL10uIWdbjDn4Vc8HljXIfW6IMj+L5ZqrH7uOhV9w4w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jR2d/NIUZDWqKGLv0kVviYnSsXlY8+3hSDGj2Rb9z6U=;
- b=gSgK1/X9WlvneMH9AC1fBjQ1crb2IEc3Cj6n4R3LoxR2FfAHwqv1mUaSwZ85QH2CXlbtW2klzqVt2I7rLnd17DYD9TpRlm+Sp6gk8x0nCQTHMYkDsham+beHpPaKJi53h18aQt7CbnIuTyQcF2f3rrGxX/kwX94SB5DwoJ1VlRc=
+ bh=2TAzlCf/asjE1KjZ/nZEE+1tfqARE2ekC6iwVS7c7aA=;
+ b=tZCfTzBLkI2+CoqmgJazi+cG38uVSGMOJklTJC2qo5q0F14sUaKbC7rq6MfO6ftwAETe+M45+3GQ6O314bJNlQ7l32jmDroPotf4qA/H2eDkFg23rVLsefe6D4pcsePzSSKt8+naLuAMSnfp6NqRPBoa1CJpJa4p0FS9gj3Gj2s=
 Authentication-Results: kernel.org; dkim=none (message not signed)
  header.d=none;kernel.org; dmarc=none action=none header.from=oracle.com;
 Received: from BLAPR10MB5267.namprd10.prod.outlook.com (2603:10b6:208:30e::22)
  by BLAPR10MB5123.namprd10.prod.outlook.com (2603:10b6:208:333::13) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4331.21; Thu, 15 Jul
- 2021 15:15:32 +0000
+ 2021 15:15:36 +0000
 Received: from BLAPR10MB5267.namprd10.prod.outlook.com
  ([fe80::39e8:94ec:fc2d:5a56]) by BLAPR10MB5267.namprd10.prod.outlook.com
  ([fe80::39e8:94ec:fc2d:5a56%9]) with mapi id 15.20.4331.024; Thu, 15 Jul 2021
- 15:15:32 +0000
+ 15:15:36 +0000
 From:   Alan Maguire <alan.maguire@oracle.com>
 To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
 Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
@@ -82,285 +84,107 @@ Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
         shuah@kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v6 bpf-next 0/3] libbpf: BTF dumper support for typed data
-Date:   Thu, 15 Jul 2021 16:15:23 +0100
-Message-Id: <1626362126-27775-1-git-send-email-alan.maguire@oracle.com>
+Subject: [PATCH v6 bpf-next 2/3] selftests/bpf: add ASSERT_STRNEQ() variant for test_progs
+Date:   Thu, 15 Jul 2021 16:15:25 +0100
+Message-Id: <1626362126-27775-3-git-send-email-alan.maguire@oracle.com>
 X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1626362126-27775-1-git-send-email-alan.maguire@oracle.com>
+References: <1626362126-27775-1-git-send-email-alan.maguire@oracle.com>
 Content-Type: text/plain
 X-ClientProxiedBy: LO4P123CA0357.GBRP123.PROD.OUTLOOK.COM
  (2603:10a6:600:18d::20) To BLAPR10MB5267.namprd10.prod.outlook.com
  (2603:10b6:208:30e::22)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from localhost.uk.oracle.com (95.45.14.174) by LO4P123CA0357.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:18d::20) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4331.21 via Frontend Transport; Thu, 15 Jul 2021 15:15:30 +0000
+Received: from localhost.uk.oracle.com (95.45.14.174) by LO4P123CA0357.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:18d::20) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4331.21 via Frontend Transport; Thu, 15 Jul 2021 15:15:34 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ba1a2e32-495a-4c1e-1ad9-08d947a3636d
+X-MS-Office365-Filtering-Correlation-Id: 5e7244f4-7070-4985-ed8f-08d947a365d3
 X-MS-TrafficTypeDiagnostic: BLAPR10MB5123:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BLAPR10MB5123A6909EB6843FF7AA2709EF129@BLAPR10MB5123.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-Microsoft-Antispam-PRVS: <BLAPR10MB5123348E078249E99C1D0711EF129@BLAPR10MB5123.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:65;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: L2neigxDS3tSBHJQV65gf7cKcXsDkNcp5Ja+girrMinwq+ELqzu42lrhsoHBPV71eJuXlDO8MItIYburaDSk2KOSzfZdT4vYQgzxtuApQKSrvvvU9jN7jILBCBLRxdbXYl5n1vvfHhMfVEgeSPKbLSndFlPyCP+GdP0yr2ONPPXJzegRFZgD7kGgyDorAWqXQWtZrCU6pR9U6BC1QDlHxyrFFn3A+eTEYS9GaDZQ91xGbVG2CAEycXBgdtsKyYzbWj1AACOuwWA22G6grjPOPgKnMPVlE0/z71tljWBSN60AmRPhPaqk+mVAK0uUyoAnHSt5L9e1/GU03qFClcVektWBH9wlaulh4dC8DhSRJBGhpmgDkrxO83SxNNycjZ+qLdG8/dS0AEq8M12vZ0iMLi78NlqRSSfyu7raIGTe8t3ArTLacHNUZG8ycaJTchDIOc6yzsABz9137XzjE1jZLU4m1A8kYw+xaiXDavn6q/qU58BsHFp+dOI0/dcOx8ID7jiQ+zfLcPe/D93i9eMIPgYdr0Ho19+RQCmLcG7XJah054/B0NspeoLDMSge78c53aANwIi+GBGLsR+fcsWYgBY6x6fbGgVn3Tr7c83OIRgL4YgRrjAmrjIqeAhErbBV63vmc/nxD5jEPsy0KuJxDkQh6++D2vU08ZJ+OjGMZI+eyRLrD8tqnlmOrwtADWvtWrY2wvGIVB/phDMoCueh7ryjo6y9RMzdynVKeLHn91kSkbdOp6chDHrYqmZSfwiT1cqxg0flVAVkk1FCqJ7XUhu3DgMcjdSyZXDGv46J9BRtV38PjaTk2YoLlQ+8pDYmVitDrqDnpW90TQmNzpLUWw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5267.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(2616005)(44832011)(83380400001)(316002)(8676002)(478600001)(966005)(2906002)(66476007)(4326008)(66556008)(86362001)(66946007)(8936002)(6486002)(52116002)(7696005)(186003)(5660300002)(36756003)(956004)(7416002)(6666004)(26005)(38100700002)(107886003)(38350700002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: mJ1aav61+0pi2OmZH/p+khlV4aG/yMIBZ5T6DsxmCeG1dq9NiOMAQeX+JhpsrUrx+ZLIktvU42zrDmDWzPXSK/cA1LmawGXN4E3DGFM7hqdII3D99BHPOPQpz69iAUXwUdDCGaTEAzGLBZCF8IK34oG5r+KWDriOJ6emVlnesr/xOsMz51QjoWsVQ0Wm51IepgEBPq6bEoFZOdIwMCpGrPsWSzPDg/zdE1jMqi5Eeh6lulRnSViMvLbRMgKoVz0wEPXmA6nWcjMOaG6Opm7MQ0RStZnbWRLRAdxmaAon5lSgluCJPjqt9P3e7sOJ5//Pf2ROEN8Ld4jViTOG5GsQfVTSbQIFszCobhIWMQ6XI6Roret6bEevJFCamk+g1eO8mytWm9GPfF6LlyU9CmpDG2C5iBtaN7iQzAUOn//lUYMO4tZxU8g9CYry4BR7KHzrLLnQ+WGp9PJepJ4Wpet4nDlOxbY31O4/XTNn62JdmRhYXuut8K2Fn/n/60nJA7a/gXkNoUyojG/ApvHpKiBUWQh5+vyJCjliatNBS5iGz51OOkHAXWDuxrrzUJbJ61n4g19q2j3j5u8D5HXRnrWJj6ckLIlEM6P+JPbwa6jlcMBP+C4sc0u2BepH+3hO53V4j2n/E/Wny0wDOD04zqysFSq/4kx3MkXQpG0kfah8GfQCjTVROTTXnA3v76sFrUJ41Vn4cLnNpw4SA6vg0+XUFg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5267.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(2616005)(44832011)(316002)(8676002)(478600001)(2906002)(66476007)(4326008)(66556008)(86362001)(66946007)(8936002)(6486002)(52116002)(7696005)(186003)(5660300002)(36756003)(956004)(7416002)(6666004)(26005)(38100700002)(107886003)(38350700002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?eO83t6EMVLpM8E7xLkocd+KXSZL6HNw5LdonJdpEGFTTCtjEEXv9XraeG3Z7?=
- =?us-ascii?Q?rCitdBEbG2NelvTY5HmkNqgE0NE1L8pAR/au8rg17iCGbYMsVVvkD3p4IGIw?=
- =?us-ascii?Q?IlhRxE7jZ8MigRi+miHYJ3M+5bagiLh4Amb6m3ANsbViCg6Jex7NSP373p6g?=
- =?us-ascii?Q?KFmBaoiXaeUQrmbNnfDeOIa7y7jFXtL0vZuOHDrZs8srx+9HUtcZMmowhmL/?=
- =?us-ascii?Q?+jVHDvWUZ64Q0lTJw3CH0YlK0emQyFouvnTaBKPar8lWKGhegB+G90XSQjyf?=
- =?us-ascii?Q?7pyBrqflr9quFc7hUblUrBb4d+lwnmTI5A4/5paf3PXjBN4L1BHTjAsFoOiy?=
- =?us-ascii?Q?M8ftDwoiumEl0Xamesrbr6FduGY8mkZ9Vju9umRbSpTp3CIv0l0UzW/OQsse?=
- =?us-ascii?Q?+ilMefkOtj9pebYsAw/pbHu1tBaz9FlbndwYOZkODe4WHFfRPpZ9WtX4kzZz?=
- =?us-ascii?Q?gjxCz5TGKGJrCXTokJbftAuGzzFpnHR+yqxorE1F6xBTomXZrpDnhA8qAmHm?=
- =?us-ascii?Q?QJd2dJXaUzNhoNg4RXORVRkaBfhr7J2PJROqu1oWmZcuX5Slw9nuFDp1/NSr?=
- =?us-ascii?Q?5xedQpZJBUfjCYPF80CEtLLCERoAcsr8Hh12qrk8BD7BSReuRjR6s0R8ArqF?=
- =?us-ascii?Q?Gtr/KTHNOffCI1nCw49IZNbnMK6r9iwkCNNHaJmCJZFK7f88un4SR7+H3Imm?=
- =?us-ascii?Q?JTDS7Tl0vIQcpJ6YpYURsSi0ZYYMz3wFCSF9zcowvBmvERuZBL3cOIobKGMQ?=
- =?us-ascii?Q?ay08wnfeVFX87/OjXlFCSZ3C/ZjMTOI9W3/3+ldEfYHHtKVbqlgA22LqOCww?=
- =?us-ascii?Q?Y0tiROMuvIvx5CTJk/c0bCx+atybi1fWk722+JFxO4EUrSvm8tSLQyO+7cOZ?=
- =?us-ascii?Q?MC6P4JzIyi2bXRTiNDp02NRCKlGhW1UtG9jTCHiCh+U1RIulu5UAON5sNmvK?=
- =?us-ascii?Q?q8TC+V9uqEotnVedD8aVYayKFpGNUsL2tUN9RLk11ZR9w58pGOw4AXSjIO3H?=
- =?us-ascii?Q?g63SrGSF3GRjv4jWNhso11P47tBksIJV6QQobniMyeInGUFThNhZAEUv4bGd?=
- =?us-ascii?Q?Prf78idnKqs4YNGp1eGThg062iKLRL+cMIZsZsv/BuNWt5P8Jjb2r9P1KAVF?=
- =?us-ascii?Q?4yWdJgG+n/Ua+f+j7t2R3iPrNT1pTbyaTxP9ptYwgAGYVXItZS7IwRpV9Ti8?=
- =?us-ascii?Q?Hsa0RHnJLU0qRlX+Z+EAJxf3odK7UHUNjbf4kL/GDwbn19SMsm1S5PREUlQe?=
- =?us-ascii?Q?5kPExtyjIDNjISZLyGa1K9Qd0ZTrbRzj6TBidTA6kVovkzUJ8efNMl2SGRXW?=
- =?us-ascii?Q?xuCauUKqQ70A3gb46LohMZ5i?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?FnAxzrxnpR65NSBgjx3cBQQGYWqB4x74GIdVgET8MALSih6I76AST1mWnEVr?=
+ =?us-ascii?Q?lft+4Bo7Ap7v4nQPXEthSb1Fz/wPdGqBZ/cCF7Cn+38lY3CwyL5DJ5Gujdgn?=
+ =?us-ascii?Q?IYS1mq+7aky5RlKsx+uW3xuRRx2dr1acI+kMJM/2xYP0hpgyMS6szXBNMV+2?=
+ =?us-ascii?Q?YSjxZ1pDg9oHTvxJwCeCxfk+hEOlnkpOMT3MrLVeetuGRxKS7K2JsjKG59mx?=
+ =?us-ascii?Q?H5eDtIlFtzP+QRT+Ao4JhaC8vpF3fyonJrGtxNe6R09priAQwEQNf7do6haM?=
+ =?us-ascii?Q?ARpvj8IKOVvIE4mX5KdBiqU93NZu4k8tfcHcamspq9SQJ77PFa3scUJX9ETL?=
+ =?us-ascii?Q?Hco9j0MclB1rrrgyubcAdk4bQt6nZQwAqkDQ6vKN2t8o1qD18PVYgL3jRP5G?=
+ =?us-ascii?Q?DqAt2kGnMB+F4sV42hHgRVN6TorDB2g3NW1aCszCzzDMgCui4AbqiyYEjB3i?=
+ =?us-ascii?Q?svhvwmUsYsRfkibNGvb45+35zvK1utybRmERDfo17LKyY9UmYzNkSkwvihWi?=
+ =?us-ascii?Q?+A2tKXnCGmlq4EgZ1rA9WVz0N7w5Z8GrK1zIv4zsKN6GArIwOx7HLtGOQtD/?=
+ =?us-ascii?Q?SNuajnUvokTBJ3EkMMzRz0RUfm2JURip15r8Gp1PpZ7D87rf4UsweC89Eyoo?=
+ =?us-ascii?Q?gM3GXfmiUWF7C7ndtuQDFZQlLZE2H7dQ3bnr+aKksQdSxvIXOBzkPP6pSaD5?=
+ =?us-ascii?Q?qnUb1E9KCXIDsGeHuiHfC9Dy9K0RA6OK2HIZpSi8B+Mzx7BL2hAlDthuUIyu?=
+ =?us-ascii?Q?ShAhWFC5XKC06YPSp4d/x3GVlWBLDvI4Y+FjSIudoGlG6pIHGNXoKH7fQdEa?=
+ =?us-ascii?Q?S7ndf5kEW0CYxFbbNaZX1s9h/pBLlFU4FhdKzx8bYmOIDY2oC7NC61QVoDCL?=
+ =?us-ascii?Q?hQskgYu1pb9XdwmsTWB0yhqSyygf0X2sXAUgaYSxgOjp2S9EZgsJNqBfc9iF?=
+ =?us-ascii?Q?HLf/Mq17f2i6+HZ214p72qLhWMQCjKZ6QV3zedMc37qlYx8AS969AOSeosAk?=
+ =?us-ascii?Q?7Y63p3l+HUDdqY6DO6VGTqA8DdR8CHsgPhPIsex7220+Vu+tYqLwFRusUVOq?=
+ =?us-ascii?Q?kUBc9J0J64h24ZXO4ZdTGzEiuPxNWPjN7/+9MOn/ajmUFnrPMLi/IYDVCF3F?=
+ =?us-ascii?Q?dycWak/hRc6w+WQeZKPC3BVGuK9EbsaCD8OlBRKJV//6r9KsInIc+LWYnbxs?=
+ =?us-ascii?Q?0FSPprZtP0lxVOA2FM7/f8rucoSZ/NPM1lRWpFb25FrC+X5mL04O6DRuUVmZ?=
+ =?us-ascii?Q?GRRbhQFqY6NpUgW43LUKb/sDRT2+QpCTWULi+XIa/5A7yV+KGSRy7G8tq/b6?=
+ =?us-ascii?Q?kCg2907zX0ZNTuf+H4U1ZErt?=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ba1a2e32-495a-4c1e-1ad9-08d947a3636d
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5e7244f4-7070-4985-ed8f-08d947a365d3
 X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5267.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jul 2021 15:15:32.4355
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jul 2021 15:15:36.5116
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VC6QOxStqz1ae9bNnQx8Hh2z/fq5+mpzNWVfoK4h/kdJ7+gsomLfoUh239mzl1NdVjJZ7TsE2gClI51FOEuHIA==
+X-MS-Exchange-CrossTenant-UserPrincipalName: YoGJYw6/mr7C7pMY9PWbHOXPebEW3ReFlLu7R1IVncuFZ0tZ2dpegZQ3e0ShV6xorljzF9mABawpv7XrIs1ubw==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB5123
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=10045 signatures=668682
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 malwarescore=0 mlxscore=0
  suspectscore=0 phishscore=0 adultscore=0 mlxlogscore=999 bulkscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104190000
  definitions=main-2107150107
-X-Proofpoint-GUID: PoxCcQ_vsjyafmdULkQKJ75yazG5_1ng
-X-Proofpoint-ORIG-GUID: PoxCcQ_vsjyafmdULkQKJ75yazG5_1ng
+X-Proofpoint-GUID: ICdq73TMgfEmG04Uv_0yMjev0UdILqXs
+X-Proofpoint-ORIG-GUID: ICdq73TMgfEmG04Uv_0yMjev0UdILqXs
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add a libbpf dumper function that supports dumping a representation
-of data passed in using the BTF id associated with the data in a
-manner similar to the bpf_snprintf_btf helper.
+It will support strncmp()-style string comparisons.
 
-Default output format is identical to that dumped by bpf_snprintf_btf()
-(bar using tabs instead of spaces for indentation, but the indent string
-can be customized also); for example, a "struct sk_buff" representation
-would look like this:
+Suggested-by: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+---
+ tools/testing/selftests/bpf/test_progs.h | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-(struct sk_buff){
-        (union){
-                (struct){
-                        .next = (struct sk_buff *)0xffffffffffffffff,
-                        .prev = (struct sk_buff *)0xffffffffffffffff,
-                        (union){
-                                .dev = (struct net_device *)0xffffffffffffffff,
-                                .dev_scratch = (long unsigned int)18446744073709551615,
-                        },
-        },
-...
-
-Patch 1 implements the dump functionality in a manner similar
-to that in kernel/bpf/btf.c, but with a view to fitting into
-libbpf more naturally.  For example, rather than using flags,
-boolean dump options are used to control output.  In addition,
-rather than combining checks for display (such as is this
-field zero?) and actual display - as is done for the kernel
-code - the code is organized to separate zero and overflow
-checks from type display.
-
-Patch 2 adds ASSERT_STRNEQ() for use in the following BTF dumper
-tests.
-
-Patch 3 consists of selftests that utilize a dump printf function
-to snprintf the dump output to a string for comparison with
-expected output.  Tests deliberately mirror those in
-snprintf_btf helper test to keep output consistent, but
-also cover overflow handling, var/section display.
-
-Changes since v5 [1]
- - readjust dump options to avoid unnecessary padding (Andrii, patch 1).
- - tidied up bitfield data checking/retrieval using Andrii's suggestions.
-   Removed code where we adjust data pointer prior to calling bitfield
-   functions as this adjustment is not needed, provided we use the type
-   size as the number of bytes to iterate over when retrieving the
-   full value we apply bit shifting operations to retrieve the bitfield
-   value.  With these chances, the *_int_bits() functions were no longer needed
-   (Andrii, patch 1).
- - coalesced the "is zero" checking for ints, floats and pointers
-   into btf_dump_base_type_check_zero(), using a memcmp() of the
-   size of the data.  This can be derived from t->size for ints
-   and floats, and pointer size is retrieved from dump's ptr_sz
-   field (Andrii, patch 1).
- - Added alignment-aware handling for int, enum, float retrieval.
-   Packed data structures can force ints, enums and floats to be
-   aligned on different boundaries; for example, the 
-
-struct p {
-        char f1;
-        int f2;
-} __attribute__((packed));
-
-   ...will have the int f2 field offset at byte 1, rather than at
-   byte 4 for an unpacked structure.  The problem is directly
-   dereferencing that as an int is problematic on some platforms.
-   For ints and enums, we can reuse bitfield retrieval to get the 
-   value for display, while for floats we use a local union of the
-   floating-point types and memcpy into it, ensuring we can then 
-   dereference pointers into that union which will have safe alignment
-   (Andrii, patch 1).
- - added comments to explain why we increment depth prior to displaying
-   opening parens, and decrement it prior to displaying closing parens
-   for structs, unions and arrays.  The reason is that we don't want
-   to have a trailing newline when displaying a type.  The logic that
-   handles this says "don't show a newline when the depth we're at is 0".
-   For this to work for opening parens then we need to bump depth before
-   showing opening parens + newline, and when we close out structure
-   we need to show closing parens after reducing depth so that we don't
-   append a newline to a top-level structure. So as a result we have
-
-struct foo {\n
- struct bar {\n
- }\n
-}
-
- - silently truncate provided indent string with strncat() if > 31 bytes
-   (Andrii, patch 1).
- - fixed ASSERT_STRNEQ() macro to show only n bytes of string
-   (Andrii, patch 2).
- - fixed strncat() of type data string to avoid stack corruption
-   (Andrii, patch 3).
- - removed early returns from dump type tests (Andrii, patch 3).
- - have tests explicitly specify prefix (enum, struct, union)
-   (Andrii, patch 3).
- - switch from CHECK() to ASSERT_* where possible (Andrii, patch 3).
-
-Changes since v4 [2]
-- Andrii kindly provided code to unify emitting a prepended cast
-  (for example "(int)") with existing code, and this had the nice
-  benefit of adding array indices in type specifications (Andrii,
-  patches 1, 3)
-- Fixed indent_str option to make it a const char *, stored in a
-  fixed-length buffer internally (Andrii, patch 1)
-- Reworked bit shift logic to minimize endian-specific interactions,
-  and use same macros as found elsewhere in libbpf to determine endianness
-  (Andrii, patch 1)
-- Fixed type emitting to ensure that a trailing '\n' is not displayed;
-  newlines are added during struct/array display, but for a single type
-  the last character is no longer a newline (Andrii, patches 1, 3)
-- Added support for ASSERT_STRNEQ() macro (Andrii, patch 2)
-- Split tests into subtests for int, char, enum etc rather than one
-  "dump type data" subtest (Andrii, patch 3)
-- Made better use of ASSERT* macros (Andrii, patch 3)
-- Got rid of some other TEST_* macros that were unneeded (Andrii, patch 3)
-- Switched to using "struct fs_context" to verify enum bitfield values
-  (Andrii, patch 3)
-
-Changes since v3 [3]
-- Retained separation of emitting of type name cast prefixing
-  type values from existing functionality such as btf_dump_emit_type_chain()
-  since initial code-shared version had so many exceptions it became
-  hard to read.  For example, we don't emit a type name if the type
-  to be displayed is an array member, we also always emit "forward"
-  definitions for structs/unions that aren't really forward definitions
-  (we just want a "struct foo" output for "(struct foo){.bar = ...".
-  We also always ignore modifiers const/volatile/restrict as they
-  clutter output when emitting large types.
-- Added configurable 4-char indent string option; defaults to tab
-  (Andrii)
-- Added support for BTF_KIND_FLOAT and associated tests (Andrii)
-- Added support for BTF_KIND_FUNC_PROTO function pointers to
-  improve output of "ops" structures; for example:
-
-(struct file_operations){
-        .owner = (struct module *)0xffffffffffffffff,
-        .llseek = (loff_t(*)(struct file *, loff_t, int))0xffffffffffffffff,
-        ...
-  Added associated test also (Andrii)
-- Added handling for enum bitfields and associated test (Andrii)
-- Allocation of "struct btf_dump_data" done on-demand (Andrii)
-- Removed ".field = " output from function emitting type name and
-  into caller (Andrii)
-- Removed BTF_INT_OFFSET() support (Andrii)
-- Use libbpf_err() to set errno for error cases (Andrii)
-- btf_dump_dump_type_data() returns size written, which is used
-  when returning successfully from btf_dump__dump_type_data()
-  (Andrii)
-
-Changes since v2 [4]
-- Renamed function to btf_dump__dump_type_data, reorganized
-  arguments such that opts are last (Andrii)
-- Modified code to separate questions about display such
-  as have we overflowed?/is this field zero? from actual
-  display of typed data, such that we ask those questions
-  separately from the code that actually displays typed data
-  (Andrii)
-- Reworked code to handle overflow - where we do not provide
-  enough data for the type we wish to display - by returning
-  -E2BIG and attempting to present as much data as possible.
-  Such a mode of operation allows for tracers which retrieve
-  partial data (such as first 1024 bytes of a
-  "struct task_struct" say), and want to display that partial
-  data, while also knowing that it is not the full type.
- Such tracers can then denote this (perhaps via "..." or
-  similar).
-- Explored reusing existing type emit functions, such as
-  passing in a type id stack with a single type id to
-  btf_dump_emit_type_chain() to support the display of
-  typed data where a "cast" is prepended to the data to
-  denote its type; "(int)1", "(struct foo){", etc.
-  However the task of emitting a
-  ".field_name = (typecast)" did not match well with model
-  of walking the stack to display innermost types first
-  and made the resultant code harder to read.  Added a
-  dedicated btf_dump_emit_type_name() function instead which
-  is only ~70 lines (Andrii)
-- Various cleanups around bitfield macros, unneeded member
-  iteration macros, avoiding compiler complaints when
-  displaying int da ta by casting to long long, etc (Andrii)
-- Use DECLARE_LIBBPF_OPTS() in defining opts for tests (Andrii)
-- Added more type tests, overflow tests, var tests and
-  section tests.
-
-Changes since RFC [5]
-- The initial approach explored was to share the kernel code
-  with libbpf using #defines to paper over the different needs;
-  however it makes more sense to try and fit in with libbpf
-  code style for maintenance.  A comment in the code points at
-  the implementation in kernel/bpf/btf.c and notes that any
-  issues found in it should be fixed there or vice versa;
-  mirroring the tests should help with this also
-  (Andrii)
-
-[1] https://lore.kernel.org/bpf/1624092968-5598-1-git-send-email-alan.maguire@oracle.com/
-[2] https://lore.kernel.org/bpf/CAEf4BzYtbnphCkhz0epMKE4zWfvSOiMpu+-SXp9hadsrRApuZw@mail.gmail.com/T/
-[3] https://lore.kernel.org/bpf/1622131170-8260-1-git-send-email-alan.maguire@oracle.com/
-[4] https://lore.kernel.org/bpf/1610921764-7526-1-git-send-email-alan.maguire@oracle.com/
-[5] https://lore.kernel.org/bpf/1610386373-24162-1-git-send-email-alan.maguire@oracle.com/
-
-Alan Maguire (3):
-  libbpf: BTF dumper support for typed data
-  selftests/bpf: add ASSERT_STRNEQ() variant for test_progs
-  selftests/bpf: add dump type data tests to btf dump tests
-
- tools/lib/bpf/btf.h                               |  19 +
- tools/lib/bpf/btf_dump.c                          | 819 +++++++++++++++++++++-
- tools/lib/bpf/libbpf.map                          |   1 +
- tools/testing/selftests/bpf/prog_tests/btf_dump.c | 600 ++++++++++++++++
- tools/testing/selftests/bpf/test_progs.h          |  12 +
- 5 files changed, 1446 insertions(+), 5 deletions(-)
-
+diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/selftests/bpf/test_progs.h
+index 8ef7f33..c8c2bf8 100644
+--- a/tools/testing/selftests/bpf/test_progs.h
++++ b/tools/testing/selftests/bpf/test_progs.h
+@@ -221,6 +221,18 @@ struct test_env {
+ 	___ok;								\
+ })
+ 
++#define ASSERT_STRNEQ(actual, expected, len, name) ({			\
++	static int duration = 0;					\
++	const char *___act = actual;					\
++	const char *___exp = expected;					\
++	int ___len = len;						\
++	bool ___ok = strncmp(___act, ___exp, ___len) == 0;		\
++	CHECK(!___ok, (name),						\
++	      "unexpected %s: actual '%.*s' != expected '%.*s'\n",	\
++	      (name), ___len, ___act, ___len, ___exp);			\
++	___ok;								\
++})
++
+ #define ASSERT_OK(res, name) ({						\
+ 	static int duration = 0;					\
+ 	long long ___res = (res);					\
 -- 
 1.8.3.1
 
