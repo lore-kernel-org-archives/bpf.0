@@ -3,75 +3,124 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-11.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B70CC636CB
-	for <bpf@archiver.kernel.org>; Thu, 15 Jul 2021 18:00:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E0C8FC636C9
+	for <bpf@archiver.kernel.org>; Thu, 15 Jul 2021 18:09:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 40110613C9
-	for <bpf@archiver.kernel.org>; Thu, 15 Jul 2021 18:00:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C28256128D
+	for <bpf@archiver.kernel.org>; Thu, 15 Jul 2021 18:09:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236795AbhGOSC7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 15 Jul 2021 14:02:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34724 "EHLO mail.kernel.org"
+        id S236973AbhGOSMf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 15 Jul 2021 14:12:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37472 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236602AbhGOSC7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 15 Jul 2021 14:02:59 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 8580361289;
-        Thu, 15 Jul 2021 18:00:05 +0000 (UTC)
+        id S231970AbhGOSMf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 15 Jul 2021 14:12:35 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B1CF261289;
+        Thu, 15 Jul 2021 18:09:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1626372005;
-        bh=EPMLqhsofFZNRecEg8FQjQHn2xUEC1dJdDzwtqQGntk=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=FfkAWuHntaUOOiMfjiQs4BklUAqkM0kL55H0acHuzrM1k5vslL0A5Mc8q2ZJ7KBIr
-         fQ6m8tsu/rlJFPmdw0p7z7tk13m3K+zuhO7pDbjS4m/H2stUQRdZkaTFvJF2B57iD4
-         XUkgbWyY/6dLCt75yYMi5KWABuognfVJeow1FtEVPFpdTDrdAJ0YgKqhCKlOORoE40
-         qjELqDOPhQyiscirr0teeIbq6HrUZGu8IkG7drUPItksjbYy22vMN2bHDIvyFhUzl5
-         Wm0JpDp5txo4cGIBEbHvTLopGgo19IEXvkNQQagrGLEDjDxoU1nY+S4+Qf42g+BCnJ
-         5rRF+BuuIwTQg==
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1626372581;
+        bh=irYZePOTsExTG/YVIdVkIAar0SBLVHgC4JlvhEGcTYM=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=KfQvT4hXs224Ib9VRB9q9scjEWH9IsguwjBLktw+UVs7tAP147CHJSHqEBakacb0c
+         YeqCzwuUpgrWccEAE+0qT7VKNk6lFQfobuDZXrtrWVKJPdVhY5i5FHRcyRhSy9po8Z
+         CtdX2A9oVkGhdINpS0xUftPv96dO+Cj0yG0vjNl0mBoulg48PTsRLqtr6YXPv8mCky
+         s7iYlkORJM0Lfv8/NEh84970FleRBbn0nk2Y+VA8uROC31a4GJfgAZL2/yDUBPi+fA
+         nyPR8ujtLUrGKhZqPfHpDj67Og5CXbPABy1c3Zg9CI/5m0fJFVJHzc3IU67hYgh3Pl
+         OULrUwiG3gJ8Q==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 7FDD95C0373; Thu, 15 Jul 2021 11:09:41 -0700 (PDT)
+Date:   Thu, 15 Jul 2021 11:09:41 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Zhouyi Zhou <zhouzhouyi@gmail.com>
+Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        rostedt <rostedt@goodmis.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        "Joel Fernandes, Google" <joel@joelfernandes.org>,
+        rcu <rcu@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>, apw@canonical.com,
+        joe@perches.com, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH] RCU: Fix macro name CONFIG_TASKS_RCU_TRACE
+Message-ID: <20210715180941.GK4397@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20210713005645.8565-1-zhouzhouyi@gmail.com>
+ <20210713041607.GU4397@paulmck-ThinkPad-P17-Gen-1>
+ <520385500.15226.1626181744332.JavaMail.zimbra@efficios.com>
+ <20210713131812.GV4397@paulmck-ThinkPad-P17-Gen-1>
+ <20210713151908.GW4397@paulmck-ThinkPad-P17-Gen-1>
+ <CAABZP2zO6WpaYW33V_Di5naxr1TRm0tokCmTZahDuXmRupxd=A@mail.gmail.com>
+ <20210715035149.GI4397@paulmck-ThinkPad-P17-Gen-1>
+ <CAABZP2xDNtjZew=Rr7QvEDX7jnVCcE+JFpSDxiQ4yNPUE6kj-g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf v4 0/2] bpf, sockmap: fix potential memory leak
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <162637200547.28238.17943000923023342508.git-patchwork-notify@kernel.org>
-Date:   Thu, 15 Jul 2021 18:00:05 +0000
-References: <20210712195546.423990-1-john.fastabend@gmail.com>
-In-Reply-To: <20210712195546.423990-1-john.fastabend@gmail.com>
-To:     John Fastabend <john.fastabend@gmail.com>
-Cc:     ast@kernel.org, jakub@cloudflare.com, daniel@iogearbox.net,
-        andriin@fb.com, xiyou.wangcong@gmail.com, bpf@vger.kernel.org,
-        netdev@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAABZP2xDNtjZew=Rr7QvEDX7jnVCcE+JFpSDxiQ4yNPUE6kj-g@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
+On Thu, Jul 15, 2021 at 04:45:04PM +0800, Zhouyi Zhou wrote:
+> On Thu, Jul 15, 2021 at 11:51 AM Paul E. McKenney <paulmck@kernel.org> wrote:
+> >
+> > On Wed, Jul 14, 2021 at 12:44:36PM +0800, Zhouyi Zhou wrote:
+> > > On Tue, Jul 13, 2021 at 11:19 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+> > > >
+> > > > On Tue, Jul 13, 2021 at 06:18:12AM -0700, Paul E. McKenney wrote:
+> > > > > On Tue, Jul 13, 2021 at 09:09:04AM -0400, Mathieu Desnoyers wrote:
+> > > > > > ----- On Jul 13, 2021, at 12:16 AM, paulmck paulmck@kernel.org wrote:
+> > > > > >
+> > > > > > > On Tue, Jul 13, 2021 at 08:56:45AM +0800, zhouzhouyi@gmail.com wrote:
+> > > > > > >> From: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> > > > > > >>
+> > > > > > >> Hi Paul,
+> > > > > > >>
+> > > > > > >> During my studying of RCU, I did a grep in the kernel source tree.
+> > > > > > >> I found there are 3 places where the macro name CONFIG_TASKS_RCU_TRACE
+> > > > > > >> should be CONFIG_TASKS_TRACE_RCU instead.
+> > > > > > >>
+> > > > > > >> Without memory fencing, the idle/userspace task inspection may not
+> > > > > > >> be so accurate.
+> > > > > > >>
+> > > > > > >> Thanks for your constant encouragement for my studying.
+> > > > > > >>
+> > > > > > >> Best Wishes
+> > > > > > >> Zhouyi
+> > > > > > >>
+> > > > > > >> Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> > > > > > >
+> > > > > > > Good eyes, and those could cause real bugs, so thank you!
+> > > > > >
+> > > > > > Hi Paul,
+> > > > > >
+> > > > > > This makes me wonder: what is missing testing-wise in rcutorture to
+> > > > > > catch those issues with testing before they reach mainline ?
+> > > > >
+> > > > > My guess:  Running on weakly ordered architectures.  ;-)
+> > > >
+> > > > And another guess:  A tool that identifies use of Kconfig options
+> > > > that are not defined in any Kconfig* file.
+> > > Based on Paul's second guess ;-),  I did a small research, and I think
+> > > the best answer is to modify scripts/checkpatch.pl. We modify checkpatch.pl
+> > > to identify use of Kconfig options that are not defined in any Kconfig* file.
+> > >
+> > > As I am a C/C++ programmer, I would be glad to take some time to learn
+> > > perl (checkpatch is implented in perl) first if no other volunteer is
+> > > about to do it ;-)
+> >
+> > I haven't heard anyone else volunteer.  ;-)
+> >
+> > Others might have opinions on where best to implement these checks,
+> > but I must confess that I have not given it much thought.
+> I recklessly cc the maintainers of checkpatch.pl without your
+> permission to see others' opion,
+> and I begin to study perl at the same time, after all, learning
+> something is always good ;-)
 
-This series was applied to bpf/bpf.git (refs/heads/master):
+Works for me!
 
-On Mon, 12 Jul 2021 12:55:44 -0700 you wrote:
-> While investigating a memleak in sockmap I found these two issues. Patch
-> 1 found doing code review, I wasn't able to get KASAN to trigger a
-> memleak here, but should be necessary. Patch 2 fixes proc stats so when
-> we use sockstats for debugging we get correct values.
-> 
-> The fix for observered memleak will come after these, but requires some
-> more discussion and potentially patch revert so I'll try to get the set
-> here going now.
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf,v4,1/2] bpf, sockmap: fix potential memory leak on unlikely error case
-    https://git.kernel.org/bpf/bpf/c/7e6b27a69167
-  - [bpf,v4,2/2] bpf, sockmap: sk_prot needs inuse_idx set for proc stats
-    https://git.kernel.org/bpf/bpf/c/228a4a7ba8e9
-
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+							Thanx, Paul
