@@ -7,76 +7,76 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,
 	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 319EBC636CD
-	for <bpf@archiver.kernel.org>; Fri, 16 Jul 2021 22:47:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 74894C636CB
+	for <bpf@archiver.kernel.org>; Fri, 16 Jul 2021 22:47:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 185E8613EE
-	for <bpf@archiver.kernel.org>; Fri, 16 Jul 2021 22:47:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5ABEE611AE
+	for <bpf@archiver.kernel.org>; Fri, 16 Jul 2021 22:47:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236673AbhGPWul (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 16 Jul 2021 18:50:41 -0400
-Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:38264 "EHLO
-        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232601AbhGPWuj (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 16 Jul 2021 18:50:39 -0400
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16GMfjnT007626;
-        Fri, 16 Jul 2021 22:47:19 GMT
+        id S237211AbhGPWum (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 16 Jul 2021 18:50:42 -0400
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:8612 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230399AbhGPWuk (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 16 Jul 2021 18:50:40 -0400
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16GMgNT0020076;
+        Fri, 16 Jul 2021 22:47:14 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : content-type :
  mime-version; s=corp-2021-07-09;
- bh=auwPqAGnnwXkDIkBx2v2BO9iZ931eRgjh4vhAKmKjKk=;
- b=P67BuTly26b0idvCxlQHXWgqSF1hjNnOfLYg2E3dniorvDKsgHp9xw4WJlAahhfHXrzB
- FYPqlD8pMf2dr5jgG+rW09lcezC2b5AehQVTQIIBdc1KuDSRs0aeLz8ykFX4ovNfGby8
- RLBxAaMyq6bpzQ2U+LSbMhiKfvP4+NpKACxboIhZ8Z7YdFcB1mvX25uCZbsHZuGBItBi
- Do+R596HZu25cQu7JWMYepgM532X4H5UjCR4Czp76zhZPSOJ6PS090NX+GfmqjYCvZ8X
- NU7e7G6FVMcgnmGbWCmlJIOo3JgFdJgGN1h1Xp3hgITWf8nke7EWyPfShZS/oHMNn+gU nA== 
+ bh=fdjorHEFhu2yaIC1cgldbiFo1kZZP2Dd+W4zRfcn2DE=;
+ b=VHOQ60aaq9bI8EwRSfmAfDS+FHjsoVmaCckkq9uG+OcTDPGVi92XY/ouWmqnF6TtGj+A
+ tQOQvP6GA6UeYLM/akiHTghZwAqYIYK92rarwYiK7+FQdedbRXRVTtr2oi9+QEN1HrkA
+ 2gvtY9h+THszYHEoBbCRf5EoGHhF/HAt8HmopD4Mwdzu64sNuAdcsMIb+Nk1ERTUegP8
+ KfmsS/deMi2rDkkENUgJJ32y54A/lgwYIm8KMpdI7is+DX8zdWhfwqnbOD2/BWA2W0Tg
+ +9DJwWLoMF7EYlEGOmu8HvsoG+88Ozp3F8LoRj9oCQ45wCY3Rr//7uSpmNmlrcVUjpLQ SA== 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : content-type :
  mime-version; s=corp-2020-01-29;
- bh=auwPqAGnnwXkDIkBx2v2BO9iZ931eRgjh4vhAKmKjKk=;
- b=HWm5GGUMclU9vLGtMu4BO3SXIo4w4mV6kNPBfAtQlePDOcfm4PnfX7GjWzQ4Xja1twx/
- JYSsBQwlLIfF8gfXviUPhZNnG98mTvLYNNJEA5aZR5VQjLxb28PX7ASzpyqhpoa8U0a7
- SlIXi7xMjmObr/LCGYcl2kf/SNFXnEvyZVoRw5TawfxLiPxoT01ivafs8T5L1uNyIKpj
- QbHdZ1lHJFaU+alw5TEp4YWHMzB0EcmFsoMV5+omZWPDkWoPemMU/wZyJFA1Kqyv4751
- 1BV50LLP3kHoR7sKXJw6yDB4wqM6922mGzIuVeshYo1zFpFzXzTX3FSaAudT7T/2mqeV +g== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by mx0b-00069f02.pphosted.com with ESMTP id 39twnmac94-1
+ bh=fdjorHEFhu2yaIC1cgldbiFo1kZZP2Dd+W4zRfcn2DE=;
+ b=YUULF0iZkyKwhLeYgc9MPbF59/CVaiygPaXg8ei7KuESa6wV4cJDfYUvGRUUWyalEQId
+ r0q6s3PEOc3S21KG2ajh5IdVfh8Mhp8rOukBnxhrEYirXGyIPCYCk8lD9txWBrmriIfk
+ WMmFCzj+9w7jBbsobwduPeWF/dKsENxhVT/CMEDJIIru1JTgX7NlpQYZMz1L3Q78eyYT
+ /kkfKYM/ZH4G/pTjs0/4EP03i55Fu52iwRz2ZS4Sr0n1htR8+SMEQzndOKb2dON65Rjw
+ B/rt0jiw8hKJQMES6pU2daXsiuceMVzvm0vQtNnZr3pi2zWIV/kmarvTXBZP0Pdj94Jg VA== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by mx0b-00069f02.pphosted.com with ESMTP id 39tw2w2c84-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 16 Jul 2021 22:47:19 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 16GMequE181803;
-        Fri, 16 Jul 2021 22:47:18 GMT
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2175.outbound.protection.outlook.com [104.47.56.175])
-        by aserp3020.oracle.com with ESMTP id 39twnhjm8s-1
+        Fri, 16 Jul 2021 22:47:14 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 16GMdtdE186272;
+        Fri, 16 Jul 2021 22:47:13 GMT
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2171.outbound.protection.outlook.com [104.47.56.171])
+        by userp3020.oracle.com with ESMTP id 39twqrx98t-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 16 Jul 2021 22:47:18 +0000
+        Fri, 16 Jul 2021 22:47:13 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=igr7WZXbjasUYeUoYIoRCFl7LPXPSl/ytT9RsLjL66lU/LqJpQ1TYkYgCGNCTJiJvDO13ZE14NMUVGBUnyRU9kHv1vYhhRKkUTH+INydEpYONR5Ng1T/oaEABOCI9cZD5mdCvh0i281qTmGOhD9eYhCEWkXItbdMYLowc2308PW0r5uoA0+oVRLggnyEsqAfTCnWwhaL9v+eh2hMdcWMuE94YyR0EZuaQ9ia85l3ZUPug355AZ8/6+8OcSguFnB3FjOu0OvurCkCZC83ZKMi0uwrEiqIs0DXQQsN+o4l7WLp7LAuhkwXfLuZtkV3R/W91SwEc64CvwGYCqLLQnpwiQ==
+ b=P2bJP7xrUw8AHMeAYIB5aG1o27BX1ziSJ9Q8N44JH0wT4zWjHYkDS7k6xdfND6s1xhkO80OUJw8lOCg425MRgz/zZkPb1i70P2vqO+32NH64h+8gIFdLqdtxiFLmwj/w7eEmdxyZeqIG+9/LWOXCrRnl7vSzpgrXV3eNbxSlbdbWPU0O5gKvRj2rUnhf75cr1bCujgrtGK2viKawFukuIs2uHBXRW3vFnAOYMdGKySblYmxvRB8EHMNSgse8rIoyKakfzX4OjifzEoLZVMuME/WTg9GLp0TJunMiisExlthSrKD9FdS19l5VdtDDbxk0kGGqyqb5n+8moZNTcn2qRQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=auwPqAGnnwXkDIkBx2v2BO9iZ931eRgjh4vhAKmKjKk=;
- b=oZlk4vKyLHSD504yDsIzW8/7pNWU0Ef5uELofuzgtVdXRqCrPe6ItmoZkAI69X3zVMy28hHaH5sRL5b+mxZdKOE/yF9gMsjKIpsYtzHi4yjX0oYoPOsTe91M4Iw5A/jxTZx45Vbp5lWbM197gJSMabhZmqbjDvc3VFvrhf8O60sWP4j+eALUK3pJigbHouKcFriPrfj9mEQ+Im9YM7JxOaHSkohA3/KSayX85q0P9pWy+iWBMBWNgx+hGw0dImlEXYapVak5V0Eiv1n527C6gN5T3nGG1q1354pl00pCevB1+2434HLz4ez8Mp7w2g8we3j+DeWbvS1JhR+51AGIIg==
+ bh=fdjorHEFhu2yaIC1cgldbiFo1kZZP2Dd+W4zRfcn2DE=;
+ b=lIl7L3XjXrZ9QuyMTnzNJ5Ug6Kb3KnDxBQQZ/HsjZ4OhwRJGdwpH1MxcPYoXJrSetBppU2sLT8NCQ0miiuNPdV5R26QbXlEXoKUBJxj5fcqnbZhAhAVgA0LvHPTXS9UGB4zphhJu2gavheGrOJOef4CQC6GMlrVoqj9eE/t4tLInN0epKzmxZHiWjYkz7tNBwqHoWxFVaPIm0VZkfPFYDWuW9aYUcUVpZB1aOTsVkmMmCod+sxc8BN+ivY3M+O8cldKS/WhsHMxtfIPYBEFcejTmc0OevCKEZq1ZCeLUy+OtosxM21Yyri6kCA6zyg0UTLHCFngTeYJDmNZWAd1fbA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=auwPqAGnnwXkDIkBx2v2BO9iZ931eRgjh4vhAKmKjKk=;
- b=L601U/1W7ZMGe2ZD1ybsk8p07FwQrLuzLvtpHjJ0hab4lt6Kqo5hdBp4aVmLQToHE9Yk3/l+GgUv939VbaVc2987qn8zx/W6Q69CcTgWnudY+8ijrZy/OgsZ/ikfvG7o1bsyFLkfz0FLEzShvC+Zzw/KNkLwYKaSbmbo5QgLyJo=
+ bh=fdjorHEFhu2yaIC1cgldbiFo1kZZP2Dd+W4zRfcn2DE=;
+ b=dW5cp0jisHufMgX8TEiId7GVsyyEGZhLN2qjWjDgV/7bU/d8rDo/BuLV6d5pgCxWiiThdlF15QvyV1IDaqeI6rgk0Enq6gFI/EPbhKoiAgY2vntFNVeQ/UQPiLVWvBt4+j4zdzIaaEqXsGM0/GCC1sfCJxHxrcnCMWpDUdTk5UI=
 Authentication-Results: kernel.org; dkim=none (message not signed)
  header.d=none;kernel.org; dmarc=none action=none header.from=oracle.com;
 Received: from BLAPR10MB5267.namprd10.prod.outlook.com (2603:10b6:208:30e::22)
  by BLAPR10MB5378.namprd10.prod.outlook.com (2603:10b6:208:328::12) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4331.21; Fri, 16 Jul
- 2021 22:47:16 +0000
+ 2021 22:47:12 +0000
 Received: from BLAPR10MB5267.namprd10.prod.outlook.com
  ([fe80::39e8:94ec:fc2d:5a56]) by BLAPR10MB5267.namprd10.prod.outlook.com
  ([fe80::39e8:94ec:fc2d:5a56%9]) with mapi id 15.20.4331.026; Fri, 16 Jul 2021
- 22:47:16 +0000
+ 22:47:12 +0000
 From:   Alan Maguire <alan.maguire@oracle.com>
 To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
 Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
@@ -84,9 +84,9 @@ Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
         shuah@kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v2 bpf-next 3/3] libbpf: btf typed dump does not need to allocate dump data
-Date:   Fri, 16 Jul 2021 23:46:57 +0100
-Message-Id: <1626475617-25984-4-git-send-email-alan.maguire@oracle.com>
+Subject: [PATCH v2 bpf-next 1/3] libbpf: clarify/fix unaligned data issues for btf typed dump
+Date:   Fri, 16 Jul 2021 23:46:55 +0100
+Message-Id: <1626475617-25984-2-git-send-email-alan.maguire@oracle.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1626475617-25984-1-git-send-email-alan.maguire@oracle.com>
 References: <1626475617-25984-1-git-send-email-alan.maguire@oracle.com>
@@ -96,101 +96,158 @@ X-ClientProxiedBy: AM4PR0501CA0058.eurprd05.prod.outlook.com
  (2603:10b6:208:30e::22)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from localhost.uk.oracle.com (95.45.14.174) by AM4PR0501CA0058.eurprd05.prod.outlook.com (2603:10a6:200:68::26) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4331.21 via Frontend Transport; Fri, 16 Jul 2021 22:47:14 +0000
+Received: from localhost.uk.oracle.com (95.45.14.174) by AM4PR0501CA0058.eurprd05.prod.outlook.com (2603:10a6:200:68::26) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4331.21 via Frontend Transport; Fri, 16 Jul 2021 22:47:10 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4f8e13ad-aca6-4f32-19d4-08d948aba929
+X-MS-Office365-Filtering-Correlation-Id: 78f1e505-0fe4-4aa2-c2eb-08d948aba689
 X-MS-TrafficTypeDiagnostic: BLAPR10MB5378:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BLAPR10MB53786424779EEB18D092BF33EF119@BLAPR10MB5378.namprd10.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:4714;
+X-Microsoft-Antispam-PRVS: <BLAPR10MB5378CCFF2B0627C3AEC7C11EEF119@BLAPR10MB5378.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yL8KaByptLfebMFvrjKRQofiBm5rGUsATaNYWvsmrUTHzOye11ssdyqkJxYOxlsPPdyFbrSEZGsQ+6Hxw81FBXjpmiGq5VU65czRJXZFGZ7+Lsc++HzcLOs6vV0GRYp17JALOKTx6SVxXbYOCG3E2bGtYFAPO201Ymie+ilJ9Exuiy2MoKBUCcTZnzEBYUwwg92RGdbCErr1XhE0vSwvv771RqKUmE0HbWRCKZuLYSBbqXsAf+y0Stz1QdjKFn8blLmPKLwUfZDM1mUMq2EShOKgFpPgLugIYasx5q06rPnbSphYW8so+heJz1Lv0OcMhJZ7OiJtjNnIUDbAEo5jpgOZgEMzQNvetglgb5idmra1Nk/LuQLHCKH6OSxxDHEdFu7TquTbOfzYNy5Xq2oST7cfk0xl+BYv3E35fWgty1oYsqgKNXjbGcbb3jC2sShNrDnchkpR87szgcMeLBauxTLliMmtds4DVZ6p4a+t88OOxscxWS5z0zeGsDURsy451FONBOpvgtmQVUbxLt07nOAQLxODq7m+cyDFlt5FK77Y78ymYrMJG6hR0M7xav/3M6ARAp3n4u1pFD6cYyKZy8W2PFkhLgvOk+rudNrM1HWwBYKJQTUxQAwI0yMfmXOPPRo1jeSvTkXHAZ8UjS91Yf9R5hcBy0hEoyaZgr0TaBq+OGB6TApXiRLRvV4/iuhA4VugsDW5hKp7xZ5FIuuWpg==
+X-Microsoft-Antispam-Message-Info: nqb4br0ww606Dh6KZ9FeZG06xpX7ErQ/HmwHpxIKTl/9sUEZN3GOiNtrUwopnaNExXOasNd3PO/2Vx4QAFMQn1ySCAL8tUr9LzqVOoBUVisdkR52t6pjdDwx+hg4RvAW+kvkCDSWZ4ur3p0DvWX2K3NNVCgAOp3MYaxwmmrqrI/43t6sd+2mILCSnA48C6TdYYcC2w2c9aV+t1EX2qpDtz0pZaBwKDk09ybJ15b6OTnPSabH3EhDQg/zpej9UyJvBBnI+QmvdcnG4jG5JmLnwJJzltr2reduy1JfA7J+4aiApIQsmH4Mi4aoceb9QgVVGDcEkegyY7HzAlfObQp2OEdw/Hm0ZmvBDWvD4zD1uOQZNfvpGkQBVzvtE/Be6stwkEx8oK+02yLmHwrBapIDDVEN2pYQUg8+GMOTu0AWwzgbg4MI3VCH0IvGidUCJSGUjKcwhZrgpVEOSdG/6wEWKtzrL1CCodlSNQ+Ikz/2CYZyXr0VzOb039Nq5+nxYnKaPsAaTXjnY6wauWzRvdw4T3p2EvKlr9TYn87NPvvWwyR8CS+Ciyg6213hYJ7mJj+Qsfd+gHuGpFhN4EnDm0xmhEdA5BxvWNPdDwTWBxz0HanzDEgPEArtUgpB6f21vAvymO0UrurDd31KMIyk/1Qht8wIR4ZABQV5nVdjoJT2Gfwxq/FZwt4kq3Hl1EWFsAAFZLMsqrHxusDW3HhPKaN4rg==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5267.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(346002)(366004)(376002)(396003)(136003)(39860400002)(83380400001)(2906002)(6486002)(8936002)(36756003)(107886003)(6666004)(4326008)(5660300002)(316002)(44832011)(86362001)(38100700002)(478600001)(38350700002)(2616005)(7696005)(956004)(52116002)(8676002)(186003)(26005)(7416002)(66946007)(66556008)(66476007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?29O2wQQBNzwHqgwAG4zvuyPWvUIcGlQ173tojvxmqya71LrncyAMjXVNiAEA?=
- =?us-ascii?Q?2nvNgSgiPq8MEVHXBnEQh+38QTgyRC/8HpsE5Qvcv2oQ3LaFCt2bcpVG9PfN?=
- =?us-ascii?Q?BOsktjYbRfoHtUFxzcV23FOGc47JtgIIJ4qZu62Du3oLxRuJTvzRRB98AVIR?=
- =?us-ascii?Q?nTyjcSpgupBcIvReWbB8dsiX3X/2E+22bmv7q5WMsGyVsGGJcAVEtJGDbTGh?=
- =?us-ascii?Q?ubWG9Zc25FY9CgsyJFu/4SOqRcwBPhKc0VIOh6WixtSl8+lFIowtyPTUFJOM?=
- =?us-ascii?Q?0atmQon5zHoufhkVJtNaESohja5ZMvKV4ViV9drji2DYIX+zi4qXvsai8MPn?=
- =?us-ascii?Q?lG5BDJlXOdi3De6es9i3FG56VpHzyaMhtli0nvLd8RDceroo9YKN9HfQl4AC?=
- =?us-ascii?Q?v8/U9VAh1Vz369grV8LVEfYpeuEtD49HAWiLuAya6BMShy/NpPZbsu6L97Ke?=
- =?us-ascii?Q?pTKHDMUkM+cQx6/ExET3agAw4QCceiv1k54i4Rxe6W5uFv8xV8U8bPNxuDiv?=
- =?us-ascii?Q?T8ZIa0KErsfX2+f703vR06AFVe+tlVaarraP+vzQ9K2J0jmXnniQCoIutQtE?=
- =?us-ascii?Q?pvnawKu01LkqYT0/dG2YEE5PuEZmT2PuDaVhfZSAqVQvY9q4KinOTevKpPd/?=
- =?us-ascii?Q?MWBJ7CS6M0LaThdFRaXXl+LPArCgLfEYyryQ4DcDfiPwicNyxF8YAmkd/FUU?=
- =?us-ascii?Q?KX9bcx+UyzEZpp/92skwCOGycgz5Kr30miI03G9mAQVCyMnPEaPaHP/RJ9no?=
- =?us-ascii?Q?G+fLiuITHE1lcQLIY/wnEa1a6X0PHqSYV8HMAvTZAtvGSzPlV6oPc2kAJMkn?=
- =?us-ascii?Q?zDJV0hl4HedtAo3SaG+rhwsd1O2DNl+iMD40lVnATe5AXSpyeIwKcIeWScsI?=
- =?us-ascii?Q?kXznxpAWkvPdXaLNfdDaLQGttbwucEDRWLlJgRMD6WIDq/rPlMhl6EQUBX55?=
- =?us-ascii?Q?AkVc7MoTiQ6BDfIZ+/0cMJg400beRwsz1poefD1kokspTk8K+RFpt+m5hQMa?=
- =?us-ascii?Q?wSSczmQBWgQ7oKx/elEoU8co4k4niaccPNEBo95XJrO38EfTEp/hElKlJc67?=
- =?us-ascii?Q?x53ia/ojzfshgn+RK+YlLkE0nkmQvO4QhK791GESx5M45drKJ9cMzf2Owgoi?=
- =?us-ascii?Q?/XsEG/aUNkd5cJkzMXrK9Qoshx2xOSDGQbiSgITrqo1t4KmJ3dWLFevz7RvX?=
- =?us-ascii?Q?7vlPWrhhVMfVqYiMFwHuVBdq83aatmhEAjmPI6aiom2ZJsz809qLlMaXpivk?=
- =?us-ascii?Q?usYQU7CaqY0I1y8i9TnwZjdpwX3EMT7fxO1d3upzfqdzaKxl4atUcrYaVCtv?=
- =?us-ascii?Q?EwzzPuSTmqOsdXxmFrcE6zTO?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?sq55S86bTx3n7UmqI23rF9SAiRobAvZMPuqRqaAwRkJvg+NwcAIYxKUn457W?=
+ =?us-ascii?Q?0uITULIV2tXd6N9+54ZUkHZSj+a5r5IfuycIdVRHKZhGPVxQ8SiykXqza4jK?=
+ =?us-ascii?Q?OGsuumo86jmBFLsOu7qRFaFwcBjA2+ij4IyH3xlM+AzZDmoZEzo+QN8B0L+p?=
+ =?us-ascii?Q?jbzRdRBcLIYgGOGwmpZO8xU9fAbvJuqFVa0sC/V69kCjIDbqU74kwSV3D6Om?=
+ =?us-ascii?Q?1rfomSp74eSCL5L+kqugesb+TD6eyGhhKoOrVgMIbn6ccd9YGBIiOAWtG5pu?=
+ =?us-ascii?Q?U6I6lYBe9uQEfvIja+UQIv9BfQWSc2RuQHzcMbz25I3h5gBvwchtnVe3T98+?=
+ =?us-ascii?Q?iManQpYEG6/posxIGfpRvBB8hFDYz4ne4Bv330D5hV5igs1Sv2V1NOHz9buy?=
+ =?us-ascii?Q?pXCRhZXpp8RwnMuJPNwRwV6um+3xtJ+Ed1JpA3u6e9cINtsnpSZDa61M1EWc?=
+ =?us-ascii?Q?Ph0aKAqusmsJq+nm2JPbkbfLwH0lb2IwdVRVy7FzXiFD8cw6YDpXnc0ymnAq?=
+ =?us-ascii?Q?weF8wCGSSjLUHzEtkNaLEbBQaxUj63v9nBWSq0pluWq1FCeM5VmbmLZC5Ktw?=
+ =?us-ascii?Q?0mP7/p4kKhyr4/cTMdlSI+SnDZMRG3duALqz9r92McXUTUM0wZWX2G643f9M?=
+ =?us-ascii?Q?+QwUdB5+QWSKgJy7xmVB9arlGoEURifllPzstkQblK1Ay/YRyzjkUGCI+drR?=
+ =?us-ascii?Q?obxOK7BUTJ7k/FLixbrZdCSVjO5aWQUC86P3cc+YLbNnPUw4I6bkDKd9QIBw?=
+ =?us-ascii?Q?5HM5xTrdQUqAhTHW4v2vGvTRQbSijRIQH+VxnUO1rsmI5XWyx8YaHponbN5U?=
+ =?us-ascii?Q?37uzaHOOuF+nsFvtgGv/lBZwWAL7SoHsxDda8f6fRkY4svZR1h1+O9NoLxwn?=
+ =?us-ascii?Q?JwVCwZwDwFxceKFXeqaPWUyHbb3hdndqsBU8OZ99bhnMFQv/QvKf6tccm/fy?=
+ =?us-ascii?Q?hrG8lYUrvydqtYL8B9fXzhsBUb+j8tM9tR4V4V2YiD4JZi6SJ5wg3uKy2K91?=
+ =?us-ascii?Q?S5uRCEsBxuEyWvcGSvq8M6LWhRIK2AYYeLi3kn+X1AruwptsnSaPu1NHwZC3?=
+ =?us-ascii?Q?CdwEbgU3sm+QERMwyC7KoAN2m/uF/fz63+uoCNigIAH1Ska8eoRQB0/+NhxD?=
+ =?us-ascii?Q?GOTmbksCmhrwJWfeOn7dEMmmj/wWd5MPjtgKk44C4K5wWxRL34kHZY5ieEBC?=
+ =?us-ascii?Q?2yZYYpsOZRkgq8HXUUXL/6twhGo5SZ6mtE/THO+G4HJZxeAthPTFoyOR8WoR?=
+ =?us-ascii?Q?Cmj5R7rxNwh8zaGhK1zeVlaGF5R0q+VImtBYQbaxVTMf6oSuNY8XBKiT9UOR?=
+ =?us-ascii?Q?Eww49ztbmzZLkWQhjRPMoqsq?=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4f8e13ad-aca6-4f32-19d4-08d948aba929
+X-MS-Exchange-CrossTenant-Network-Message-Id: 78f1e505-0fe4-4aa2-c2eb-08d948aba689
 X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5267.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jul 2021 22:47:16.6297
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jul 2021 22:47:12.1265
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: p5+h9RrbPgkWfABSHSBXKrx021rhmwOxcQxhjv1y3popLunyhuqmJMF6BSlAHugZEkyFOTJpLH3ZF9B1KPz+rw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: aP+OxD/6p84qx8XJctBlVimSWFIf20mI1leYVg/uMSEMYGADdzPFoHczjnERrH6ER5oc7kWY9JROZsja6RZrlw==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB5378
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=10047 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 adultscore=0 spamscore=0
- mlxlogscore=999 bulkscore=0 phishscore=0 suspectscore=0 malwarescore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 mlxscore=0
+ adultscore=0 phishscore=0 mlxlogscore=999 malwarescore=0 suspectscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104190000
  definitions=main-2107160145
-X-Proofpoint-ORIG-GUID: ZYarI40cWSXmbqcfVX1cTsom9V2ZFDOO
-X-Proofpoint-GUID: ZYarI40cWSXmbqcfVX1cTsom9V2ZFDOO
+X-Proofpoint-ORIG-GUID: BsslnyrQse0SUwKO3168l1jrbPhKaK5c
+X-Proofpoint-GUID: BsslnyrQse0SUwKO3168l1jrbPhKaK5c
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-By using the stack for this small structure, we avoid the need
-for freeing memory in error paths.
+If data is packed, data structures can store it outside of usual
+boundaries.  For example a 4-byte int can be stored on a unaligned
+boundary in a case like this:
+
+struct s {
+	char f1;
+	int f2;
+} __attribute((packed));
+
+...the int is stored at an offset of one byte.  Some platforms have
+problems dereferencing data that is not aligned with its size, and
+code exists to handle most cases of this for BTF typed data display.
+However pointer display was missed, and a simple function to test if
+"ptr_is_aligned(data, data_sz)" would help clarify this code.
 
 Suggested-by: Andrii Nakryiko <andrii@kernel.org>
 Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 ---
- tools/lib/bpf/btf_dump.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ tools/lib/bpf/btf_dump.c | 30 ++++++++++++++++++++++++++----
+ 1 file changed, 26 insertions(+), 4 deletions(-)
 
 diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
-index e5fbfb8..bd8e005 100644
+index 929cf93..814a538 100644
 --- a/tools/lib/bpf/btf_dump.c
 +++ b/tools/lib/bpf/btf_dump.c
-@@ -2240,6 +2240,7 @@ int btf_dump__dump_type_data(struct btf_dump *d, __u32 id,
- 			     const void *data, size_t data_sz,
- 			     const struct btf_dump_type_data_opts *opts)
- {
-+	struct btf_dump_data typed_dump = {};
- 	const struct btf_type *t;
- 	int ret;
- 
-@@ -2250,7 +2251,7 @@ int btf_dump__dump_type_data(struct btf_dump *d, __u32 id,
- 	if (!t)
- 		return libbpf_err(-ENOENT);
- 
--	d->typed_dump = calloc(1, sizeof(struct btf_dump_data));
-+	d->typed_dump = &typed_dump;
- 	if (!d->typed_dump)
- 		return libbpf_err(-ENOMEM);
- 
-@@ -2269,7 +2270,5 @@ int btf_dump__dump_type_data(struct btf_dump *d, __u32 id,
- 
- 	ret = btf_dump_dump_type_data(d, NULL, t, id, data, 0, 0);
- 
--	free(d->typed_dump);
--
- 	return libbpf_err(ret);
+@@ -1654,6 +1654,11 @@ static int btf_dump_base_type_check_zero(struct btf_dump *d,
+ 	return 0;
  }
+ 
++static bool ptr_is_aligned(const void *data, int data_sz)
++{
++	return ((uintptr_t)data) % data_sz == 0;
++}
++
+ static int btf_dump_int_data(struct btf_dump *d,
+ 			     const struct btf_type *t,
+ 			     __u32 type_id,
+@@ -1672,7 +1677,7 @@ static int btf_dump_int_data(struct btf_dump *d,
+ 	/* handle packed int data - accesses of integers not aligned on
+ 	 * int boundaries can cause problems on some platforms.
+ 	 */
+-	if (((uintptr_t)data) % sz)
++	if (!ptr_is_aligned(data, sz))
+ 		return btf_dump_bitfield_data(d, t, data, 0, 0);
+ 
+ 	switch (sz) {
+@@ -1739,7 +1744,7 @@ static int btf_dump_float_data(struct btf_dump *d,
+ 	int sz = t->size;
+ 
+ 	/* handle unaligned data; copy to local union */
+-	if (((uintptr_t)data) % sz) {
++	if (!ptr_is_aligned(data, sz)) {
+ 		memcpy(&fl, data, sz);
+ 		flp = &fl;
+ 	}
+@@ -1892,12 +1897,29 @@ static int btf_dump_struct_data(struct btf_dump *d,
+ 	return err;
+ }
+ 
++union ptr_data {
++	unsigned int p;
++	unsigned long lp;
++};
++
+ static int btf_dump_ptr_data(struct btf_dump *d,
+ 			      const struct btf_type *t,
+ 			      __u32 id,
+ 			      const void *data)
+ {
+-	btf_dump_type_values(d, "%p", *(void **)data);
++	bool ptr_sz_matches = d->ptr_sz == sizeof(void *);
++
++	if (ptr_sz_matches && ptr_is_aligned(data, d->ptr_sz)) {
++		btf_dump_type_values(d, "%p", *(void **)data);
++	} else {
++		union ptr_data pt;
++
++		memcpy(&pt, data, d->ptr_sz);
++		if (d->ptr_sz == 4)
++			btf_dump_type_values(d, "0x%x", pt.p);
++		else
++			btf_dump_type_values(d, "0x%llx", pt.lp);
++	}
+ 	return 0;
+ }
+ 
+@@ -1910,7 +1932,7 @@ static int btf_dump_get_enum_value(struct btf_dump *d,
+ 	int sz = t->size;
+ 
+ 	/* handle unaligned enum value */
+-	if (((uintptr_t)data) % sz) {
++	if (!ptr_is_aligned(data, sz)) {
+ 		*value = (__s64)btf_dump_bitfield_get_data(d, t, data, 0, 0);
+ 		return 0;
+ 	}
 -- 
 1.8.3.1
 
