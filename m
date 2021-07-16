@@ -2,77 +2,98 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3292BC12002
-	for <bpf@archiver.kernel.org>; Fri, 16 Jul 2021 19:27:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 174BBC636CA
+	for <bpf@archiver.kernel.org>; Fri, 16 Jul 2021 20:13:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 06F4661400
-	for <bpf@archiver.kernel.org>; Fri, 16 Jul 2021 19:27:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EB1E1613FB
+	for <bpf@archiver.kernel.org>; Fri, 16 Jul 2021 20:13:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232625AbhGPTaU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 16 Jul 2021 15:30:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35504 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232172AbhGPTaT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 16 Jul 2021 15:30:19 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 68E03613FE;
-        Fri, 16 Jul 2021 19:27:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1626463644;
-        bh=6NgBJ/YZayNdXv9tJZpoBnBfM1/BhfDN/v9X3Ga7sbs=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=rFlA4wEYi6M69Yl+AP2GgCDkDmQa8rqx6hxz5umbqNynP6KNi6lBI+ZkfaFStUO0N
-         Pb5l1SlebNueFH1jc7JVqFfGPyiG+LKVDgYRsnsb8It65NsyCWDHm1loT9wBGWQWj7
-         XHCgf1jymvLtgvSkzulvr6uVqvXr5mLTLVFSETFsSn3k9oA+68mwR1MpAqfqBvMBtW
-         YKZxqP++7WJ3OBavQOKsm9iB1MTRhkI1yegLjIA/68deEMcnP/egAGT9DJbz83zvhe
-         zosVpXLN3saGPa1PvxBnzEZKCYsKARy5laAkGDNyJM8EA0FqA61YAmohtE/85RbVsT
-         sGqSvP8uUbInQ==
-Content-Type: text/plain; charset="utf-8"
+        id S232146AbhGPUQF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 16 Jul 2021 16:16:05 -0400
+Received: from www62.your-server.de ([213.133.104.62]:39720 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229896AbhGPUQF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 16 Jul 2021 16:16:05 -0400
+Received: from sslproxy01.your-server.de ([78.46.139.224])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1m4UCf-0006dK-96; Fri, 16 Jul 2021 22:12:57 +0200
+Received: from [85.5.47.65] (helo=linux.home)
+        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1m4UCe-000QgN-RO; Fri, 16 Jul 2021 22:12:56 +0200
+Subject: Re: [PATCH v2 bpf-nxt] Documentation/bpf: Add heading and example for
+ extensions in filter.rst
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        John Fastabend <john.fastabend@gmail.com>
+Cc:     "Roy, UjjaL" <royujjal@gmail.com>, Song Liu <song@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Networking <netdev@vger.kernel.org>, BPF <bpf@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Clang-Built-Linux ML <clang-built-linux@googlegroups.com>
+References: <royujjal@gmail.com> <20210712173723.1597-1-royujjal@gmail.com>
+ <60ee2dc76ac1c_196e22088d@john-XPS-13-9370.notmuch>
+ <CAADnVQJ=DoRDcVkaXmY3EmNdLoO7gq1mkJOn5G=00wKH8qUtZQ@mail.gmail.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <80579c8d-ecdb-4334-9912-c04f75f7a6d3@iogearbox.net>
+Date:   Fri, 16 Jul 2021 22:12:56 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 bpf-next] bpf: add ambient BPF runtime context stored in
- current
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <162646364436.14878.13764135374807267506.git-patchwork-notify@kernel.org>
-Date:   Fri, 16 Jul 2021 19:27:24 +0000
-References: <20210712230615.3525979-1-andrii@kernel.org>
-In-Reply-To: <20210712230615.3525979-1-andrii@kernel.org>
-To:     Andrii Nakryiko <andrii@kernel.org>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, ast@fb.com,
-        daniel@iogearbox.net, linux-kernel@vger.kernel.org,
-        kernel-team@fb.com, yhs@fb.com
+In-Reply-To: <CAADnVQJ=DoRDcVkaXmY3EmNdLoO7gq1mkJOn5G=00wKH8qUtZQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.2/26234/Fri Jul 16 10:18:39 2021)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
-
-This patch was applied to bpf/bpf-next.git (refs/heads/master):
-
-On Mon, 12 Jul 2021 16:06:15 -0700 you wrote:
-> b910eaaaa4b8 ("bpf: Fix NULL pointer dereference in bpf_get_local_storage()
-> helper") fixed the problem with cgroup-local storage use in BPF by
-> pre-allocating per-CPU array of 8 cgroup storage pointers to accommodate
-> possible BPF program preemptions and nested executions.
+On 7/16/21 3:48 AM, Alexei Starovoitov wrote:
+> On Tue, Jul 13, 2021 at 5:20 PM John Fastabend <john.fastabend@gmail.com> wrote:
+>>
+>> Roy, UjjaL wrote:
+>>> [1] https://www.kernel.org/doc/html/latest/bpf/
+>>>
+>>> Add new heading for extensions to make it more readable. Also, add one
+>>> more example of filtering interface index for better understanding.
+>>>
+>>> Signed-off-by: Roy, UjjaL <royujjal@gmail.com>
+>>> Acked-by: Song Liu <songliubraving@fb.com>
+>>
+>> Looks OK to me. I thought the original was readable without the header, but
+>> if it helps someone seems easy enough to do.
+>>
+>> Acked-by: John Fastabend <john.fastabend@gmail.com>
 > 
-> While this seems to work good in practice, it introduces new and unnecessary
-> failure mode in which not all BPF programs might be executed if we fail to
-> find an unused slot for cgroup storage, however unlikely it is. It might also
-> not be so unlikely when/if we allow sleepable cgroup BPF programs in the
-> future.
+> I cannot figure out how to apply this patch, because I see:
+> Applying: Documentation/bpf: Add heading and example for extensions in
+> filter.rst
+> fatal: empty ident name (for <>) not allowed
 > 
-> [...]
+> Any idea?
 
-Here is the summary with links:
-  - [v2,bpf-next] bpf: add ambient BPF runtime context stored in current
-    https://git.kernel.org/bpf/bpf-next/c/c7603cfa04e7
-
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Same happened on my side. Maybe not sent via git-send-email(1)? Anyway, I've
+applied manually meanwhile.
