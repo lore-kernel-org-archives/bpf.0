@@ -2,218 +2,178 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-23.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	MSGID_FROM_MTA_HEADER,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B2079C636CA
-	for <bpf@archiver.kernel.org>; Sat, 17 Jul 2021 16:43:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C30FC636CB
+	for <bpf@archiver.kernel.org>; Sat, 17 Jul 2021 22:03:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 896186115B
-	for <bpf@archiver.kernel.org>; Sat, 17 Jul 2021 16:43:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0F8C8610CD
+	for <bpf@archiver.kernel.org>; Sat, 17 Jul 2021 22:03:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231504AbhGQQqQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 17 Jul 2021 12:46:16 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:12384 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231346AbhGQQqQ (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sat, 17 Jul 2021 12:46:16 -0400
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16HGcpt4008955;
-        Sat, 17 Jul 2021 09:43:18 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : to : cc :
- references : from : message-id : date : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=facebook;
- bh=WZFM9c7yej4tZXDNsk3S9GA7pFaq399WHOv3HnfneRY=;
- b=qGk0PFVpTsGX+UZ+SWB27FtbS9ZnJsZDOmVH/zDxVxotBn17d8YjVgDeRLHiv86+FfqK
- o+bZfB2v9GF/M3qcKGh3pFQe0YdU2ZinKtZbvG8RcVKoRtY8DZECVusZdUfv0Izwx1qa
- /kYfVu4UiYsIElkrHIesp8LCrWCdel371Ho= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 39uxh8911m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Sat, 17 Jul 2021 09:43:18 -0700
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (100.104.98.9) by
- o365-in.thefacebook.com (100.104.94.230) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Sat, 17 Jul 2021 09:43:17 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=k4koDxHusfDKjKMzRYgOUU1JR6MCspSq4U/Vg7dF6koeOxDUv13LJfsT/HKdvK6o+mSBnJP+2X0SRpfEJiI4oFbp0FkUCO+KT1WRYGgqUPBM5brq1ZK386KbP5ofrWCoXcCgBZB6r+DJURPE0bgdQ+soCj+hRoSognrr9/0tEce87YpuBXnIZ0/q77VlU8IA9KG8N8jUrMGBjJCACZfP2K4p16rRT3lTcu1+69gDgKpw/ycCT/rXXUrAfR0BJw5SVDyJDsobCWA/WRLVx7jZiDKtQtnO4QBZYDPOgr8hLW4q48+SCf79RqpFk8+3lLKK9BzRzpXCqO24iNeoEr//Yw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WZFM9c7yej4tZXDNsk3S9GA7pFaq399WHOv3HnfneRY=;
- b=W7GrUkQIiGcjlZup/oTUOW94hxTdCzN007djaWTcNK3OUKb7hu6cGHmtTStvfC5EXHKgT14GArBetbPSvwbYrt/t2xnh3Tx4InsfBI1Y+Al2q4HyFRog43qPBfy0dB4ga+ZysGlVenfLzOvXczrK5hNZi9U/muveDhPViqPBe/oCnMueDnhIN69CGdtMlJRsa2/1G17RPMCqimRrwK+ejbx4BVd1SwTu6m3WslAPYasloSMtyBqcDvFo4DlbkEnYSKitiErR8PQQnRlP2/IjkdmNoqy0e74YvLtzwO54AQFfNov/p3EH/cdEaJidThMQILTrbjERQaZbmZr2uj5oDw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Authentication-Results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=fb.com;
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by SA0PR15MB3966.namprd15.prod.outlook.com (2603:10b6:806:8e::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4331.21; Sat, 17 Jul
- 2021 16:43:14 +0000
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::c143:fac2:85b4:14cb]) by SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::c143:fac2:85b4:14cb%7]) with mapi id 15.20.4331.026; Sat, 17 Jul 2021
- 16:43:14 +0000
-Subject: Re: [PATCH bpf-next] bpf: Expose bpf_d_path helper to
- vfs_read/vfs_write
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-CC:     John Fastabend <john.fastabend@gmail.com>,
-        Hengqi Chen <hengqi.chen@gmail.com>, bpf <bpf@vger.kernel.org>,
-        Andrii Nakryiko <andriin@fb.com>, Jiri Olsa <jolsa@kernel.org>
-References: <20210712162424.2034006-1-hengqi.chen@gmail.com>
- <60ec94013acd1_50e1d2081@john-XPS-13-9370.notmuch>
- <6f42985e-063e-205b-820e-6bad600caf54@fb.com>
- <CAADnVQL9X7xrLKa5_tfgzAnEjPckz0jaWozAH+oNKz3=tZ6r=Q@mail.gmail.com>
-From:   Yonghong Song <yhs@fb.com>
-Message-ID: <a4faf9ec-ba94-13d1-d2e1-7710902450d7@fb.com>
-Date:   Sat, 17 Jul 2021 09:43:11 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.12.0
-In-Reply-To: <CAADnVQL9X7xrLKa5_tfgzAnEjPckz0jaWozAH+oNKz3=tZ6r=Q@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-X-ClientProxiedBy: BY5PR04CA0010.namprd04.prod.outlook.com
- (2603:10b6:a03:1d0::20) To SN6PR1501MB2064.namprd15.prod.outlook.com
- (2603:10b6:805:d::27)
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [IPv6:2620:10d:c085:21e8::1032] (2620:10d:c090:400::5:3550) by BY5PR04CA0010.namprd04.prod.outlook.com (2603:10b6:a03:1d0::20) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4331.21 via Frontend Transport; Sat, 17 Jul 2021 16:43:14 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 56de5284-3d41-47bd-364d-08d94941f8bb
-X-MS-TrafficTypeDiagnostic: SA0PR15MB3966:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <SA0PR15MB3966B679DBA3EEFEA899B6DAD3109@SA0PR15MB3966.namprd15.prod.outlook.com>
-X-FB-Source: Internal
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 5VgTRaJG/JwGyP4MmOqdSgZMJ31LXyBhhTaB0a1bujhXaHhVSf07fnNamDPBcEXeePTQ3C+c3yvpyDXdfNOkFv0KkkN6pSufySjfzVIWHIDApLUEaWjKiWl2wXiLYFaOI30JAGvPIDAkjJjgrTQfFQ1kC6tbGNE7wbHZ4lDpGbkW5Stx5Lpep3W2r/SrFp1YGz14Xj8fz3OeNifoOEH0C8gc/GT7kQEe9mb3VYiC3Ig7aNG1i0UePnNwpu2p+cIZZG8QtbynbrrKEBdD1cTWCilyEJsE/wrESlLmhr6rAhNZB4NZIEckEX0FPS13h77NqQ0oW8uWgTLz47CajhNTyJkDQWYVRvgL3ZDIjHCmbGppIaFb6s0SmgzPKOiODeOFxfP2DV0i7LWud7/hZrGDODTA8FMZZRlrXlMV0YDGFNsCs2w/7pPjooBprDoPtZbRjKkKqR/4hIFOnx+g5Pnhrk0KkKTJvNR5QoEmIm3i2CyF1nBJpIZKUrcdHGtbIJPWauBnpKQDN1GGG67g9NOAVXs1f5RMiLCcCr2ER35oHc4v7ZEk2WWyLSFg1o2hJbVqr8OMVRQ9hZK2DtQdWbmJ65Ov4x14tFR9XfQ1pvMbwqDjLT8eO7f/FGvptmL0B7ZdVcntQHMzb5RThx+x1nprk4k0dA48SK30sNT9TcMS07BfEvIGMWW0Z1qvmjTGg0N5eFsr9mL0E2Vbb+Kbw7quOyHkrK/bYErnjy3N5ULvc3WTCgzwm25bDEicrzO1hfh+HMYL/AaA3T3Onc+MmvCczMIqA6mauTlZkMlLCoVblKreVsQP4GRoAqmAFklNuYnY
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(346002)(396003)(39860400002)(136003)(366004)(966005)(6486002)(5660300002)(52116002)(53546011)(8936002)(478600001)(83380400001)(4326008)(38100700002)(66946007)(66556008)(66476007)(31686004)(2616005)(36756003)(2906002)(31696002)(6666004)(8676002)(6916009)(54906003)(186003)(316002)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?M3NCRU5tVnZkUDEwb0YxVEs1MWhqWlJvbnYyK1lwZjZ4RW4zRFY3YmZ3RElE?=
- =?utf-8?B?YnowblExR01teEIxWFdVMC9xNVQ4RVZ4OEw4NjhSM3VqUmNNVVNFdld2bGhI?=
- =?utf-8?B?UEdDRjIzRTVNRk5mRm5xaDRjckZlVVJnZkdWeEt0SHM2UmJYWFBwRmZyNzRi?=
- =?utf-8?B?WklXaWtGSHhXeUZQcVRiUnhhVUIyVnZwYnBTOXhyVFFkcVdpRWE2dHZvNVVH?=
- =?utf-8?B?WXQwalhHb2hnQkdwRGJCbEIrblFFeXBQQnlNV2lGM3VWSFBCeEJPOHhDbC9L?=
- =?utf-8?B?eFBLTnI2aXcvTmZiZGZoVk44SFFSOVNpUTU2MUh5UmU4MEtVSk1IVXMrSi9t?=
- =?utf-8?B?aXNOQnJKVnQxU0cvc1JaWjgwVmtHOXI3VnkwR2E5d3lWczVDL3IvZ2p3YkVa?=
- =?utf-8?B?WmtLUnlsRjNuOUR6RlRtWkpQSFdRTUpLZW05REw2TWVRSjBreFlYdEpaYnZa?=
- =?utf-8?B?OUcwKzlwUGdVSHNFLytiWFRuV2FBUW5OTXJPVnZ5SEdwVllGY2tsNkEvNlVx?=
- =?utf-8?B?TVpheW54dGtTU3ZGZTJKUUlqbnBYVFFWYWY3MmplNU05clgwV3pwTDdRQ2h4?=
- =?utf-8?B?ejFjcXJxcnA5eXlhVkVCaW93S3Y0N1Rkc1RZL0MycTM3a29kUnBEdWQ2NGtp?=
- =?utf-8?B?RHE2YkJ4NFhtVlNndm9RVCswNzVIWS9GSTQvcEM2YjRnMGowMjhmR1BkU2Nx?=
- =?utf-8?B?d3R3aXJhYkh2N2JCTzNtajYzbnlrbld3eXFycDhuOWxHenRUNndjTERIYUIv?=
- =?utf-8?B?RDJLQWExZ28ySnNTT3RnOXYzTFdGYzFUUjBWc1VZQWFlSUJ6SzlCYVFsWENM?=
- =?utf-8?B?RVFoUzZwVHYrK3BWc1RjSDJKVTJkUlA1YURmWElLRG9GWTNwc1JXcVVkYWFP?=
- =?utf-8?B?cWpzOGtkRmJwOXowVTY1NVY3TzlrcWRla0VmcENNUy9uWnRHdWNuODlxakRm?=
- =?utf-8?B?NkJoR2VVR09DOHRzM2FvdGpIUDBTV0NGV2JPVWFMTklvU0o1T0d0eFJJNlNO?=
- =?utf-8?B?aTVQYkp2OVFIbGhsNjJ3Y1V0WU1vNldVZkMybzNNdDlWYVo0N0lhQ05paXF2?=
- =?utf-8?B?K25PQ2dMQVdvdzUrM1FlQkZuU0JnTXUzeVhyTkhEQ1VuQmFBU1Q0Tm95TklC?=
- =?utf-8?B?VFhyRjRzRm9LeXRKN3pPeUR1MVFRZ1VwY0ZRRUZmdzdVQ2MzYUhCMTUzeG1D?=
- =?utf-8?B?Y1BoY1owSklsaXNtd2RNSU94MnpicVR2Q1VXc0NtMDRHVjJkUUhlRnN4SzNl?=
- =?utf-8?B?ZlZILzQ3Snh5YWcvY2Z4RitPb2ZLc1BGeGkwZTZYZGRHazl0c3k2WXF5dWhO?=
- =?utf-8?B?UjFhNHd5OVFFZjJ6RVU3U1FjLzhWcUlhMHFMNmZZNTl1aWhxbVBXeTBtOXJq?=
- =?utf-8?B?cDVFYUJUTXdhZmFIeUhQamI1eFh0UUtKR1Vab2VCN0Y1VTAxbkxrbDltaGtQ?=
- =?utf-8?B?WEdLdVU0MVN3ZWcwbkFzb2tmRkJnUnVVdTlKTEYvNGlsSGVNT01QUDM2YjJV?=
- =?utf-8?B?R2x0SnNMc3dGZkNXdWNEckpST3lObU5zQVd6ZE00OHNNeGhjSEdBYjJFM2tU?=
- =?utf-8?B?ZUhETVVEeGhOYWdhOVdsY3VZMGtTalVCZEE5Rytob2xPWE9sc3Y5RUEwMlpL?=
- =?utf-8?B?d2JlRTRPZUVtcXRZUlRXKzBFblBPRVdQSlF6RnhTcS9lNlVMMnBaeWpJT1ZS?=
- =?utf-8?B?dU1EOXFNTGdLRVFzaERCMTZXKy9rYVdQTUJOb0tndU43MzI3NVZUYmFlQTNa?=
- =?utf-8?B?NEpuNUVreE52alVGemk0K1kwTzBxZzJPRFNtVWtDYTc2cUJsS0V2VWRBTVV1?=
- =?utf-8?B?eVZKSjZMS21mSlA3TmJXUT09?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 56de5284-3d41-47bd-364d-08d94941f8bb
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jul 2021 16:43:14.5545
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: IJmaqRgFHKrDZPq8xeYuWG4gVvicc6hfNu5YNxYPzPu+JSZSEMKul6HKgODpsAO8
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR15MB3966
-X-OriginatorOrg: fb.com
-X-Proofpoint-ORIG-GUID: mdJ9Up_aq0cO37OEYFRyFGVp1oUck0kV
-X-Proofpoint-GUID: mdJ9Up_aq0cO37OEYFRyFGVp1oUck0kV
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        id S231300AbhGQWGp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 17 Jul 2021 18:06:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35748 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230210AbhGQWGp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 17 Jul 2021 18:06:45 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C33A4C061762;
+        Sat, 17 Jul 2021 15:03:47 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id nd37so21041239ejc.3;
+        Sat, 17 Jul 2021 15:03:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IWdaGFPzrQtxwDMoSrykP9DB3UY/nGQkXWNBfMY4IEw=;
+        b=JAA1cgbQ81iA7FqwA27Ls0FDhBGKSFgIHMIPnhstTzhyDO0nRgbG5GwtAfFLymfgJ8
+         k7PcyANNT5qRv7nz/MwnMatiwlVBmhHkx3ZBm93x4/QnKKrfJAyH/Vzo66dntgiYiRfF
+         wskDs0IQvzxv/BFcqPD7mIAK1StJkcVWuiIUKQ0ZlePCntQlGYs1iREiBz890zt0dS5M
+         xQo2kJ3pLpHxU+WjcxWZ3/hSAWlMdx8iHv8OhcaBzQw0C2p1UXGNRK5V8R2/Wam/AS3b
+         q/gytkrXBv1MLrajKTCbZKmB2q5dlGWgqlBRe3bAxptPG5bnE6fjqj2zMGzedbTQOLyb
+         /RVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IWdaGFPzrQtxwDMoSrykP9DB3UY/nGQkXWNBfMY4IEw=;
+        b=ZIUHObc4unVMPYCj++Cj3Q531fvTcgnGVrS9DMRKwpe/P1sXIb2a01Y8IkyXVLMxiA
+         +sXOHBF+jiL4DJeKHjU65xtwTrsyu28VyrcidoUtHbFXmXyiCty6zoTtvdCr04N/Qp5G
+         AqFYE7fEXmIRZoMkODQnO0YeAlLIGQYqEnsv/Gfmjj3U8pt6B00C0CZ6+KUUqkWMMjD/
+         W5xyzPPHuVvNrEi4sssVU9fzehilYm0wxpWZuXuBylPlT8kFE1XZjqLi6y+4sfEYHJb8
+         VK2sSthpEs6TPQ93ktQIrkv7rnME8Q346J2PXbpI0TWswQ+kMgWfhGUjZMwBggODSKbC
+         gxnQ==
+X-Gm-Message-State: AOAM530ZlRcOsNG5yQkeas8fhXXDMIRV/EHNbTWis2Rq1H3Jc+YfJkwc
+        jUUU8mKKZccwDC/QtcsNdAQTDgcnpAaVulwAaQw=
+X-Google-Smtp-Source: ABdhPJx/bVG/+f5cDTG05pqgwjT03uO1ugT+RxTJWMohEj0lWYMRyNe7JoX+RDdelc3oMjl53YYOLyE9X6VklhSWw4c=
+X-Received: by 2002:a17:907:7203:: with SMTP id dr3mr19141903ejc.52.1626559426168;
+ Sat, 17 Jul 2021 15:03:46 -0700 (PDT)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-07-17_07:2021-07-16,2021-07-17 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=999
- clxscore=1015 adultscore=0 malwarescore=0 bulkscore=0 suspectscore=0
- impostorscore=0 mlxscore=0 phishscore=0 spamscore=0 lowpriorityscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104190000 definitions=main-2107170100
-X-FB-Internal: deliver
+References: <20210713005645.8565-1-zhouzhouyi@gmail.com> <20210713041607.GU4397@paulmck-ThinkPad-P17-Gen-1>
+ <520385500.15226.1626181744332.JavaMail.zimbra@efficios.com>
+ <20210713131812.GV4397@paulmck-ThinkPad-P17-Gen-1> <20210713151908.GW4397@paulmck-ThinkPad-P17-Gen-1>
+ <CAABZP2zO6WpaYW33V_Di5naxr1TRm0tokCmTZahDuXmRupxd=A@mail.gmail.com>
+ <20210715035149.GI4397@paulmck-ThinkPad-P17-Gen-1> <CAABZP2xDNtjZew=Rr7QvEDX7jnVCcE+JFpSDxiQ4yNPUE6kj-g@mail.gmail.com>
+ <20210715180941.GK4397@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20210715180941.GK4397@paulmck-ThinkPad-P17-Gen-1>
+From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
+Date:   Sun, 18 Jul 2021 06:03:34 +0800
+Message-ID: <CAABZP2wuWtGAGRqWJb3Gewm5VLZdZ_C=LRZsFbaG3jcQabO3qA@mail.gmail.com>
+Subject: Re: [PATCH] RCU: Fix macro name CONFIG_TASKS_RCU_TRACE
+To:     paulmck@kernel.org
+Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        rostedt <rostedt@goodmis.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        "Joel Fernandes, Google" <joel@joelfernandes.org>,
+        rcu <rcu@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>, apw@canonical.com,
+        joe@perches.com, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, bpf@vger.kernel.org,
+        mingo@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+Hi Paul
+During the research, I found a already existing tool to detect
+undefined Kconfig macro:
+scripts/checkkconfigsymbols.py. It is marvellous!
 
+By invoking ./scripts/checkkconfigsymbols.py > /tmp/log, I found
+following possibly undefined Kconfig macros
+which may need our attention:
 
-On 7/15/21 6:44 PM, Alexei Starovoitov wrote:
-> On Wed, Jul 14, 2021 at 5:55 PM Yonghong Song <yhs@fb.com> wrote:
->>
->>
->>
->> On 7/12/21 12:12 PM, John Fastabend wrote:
->>> Hengqi Chen wrote:
->>>> Add vfs_read and vfs_write to bpf_d_path allowlist.
->>>> This will help tools like IOVisor's filetop to get
->>>> full file path.
->>>>
->>>> Signed-off-by: Hengqi Chen <hengqi.chen@gmail.com>
->>>> ---
->>>
->>> As I understand it dpath helper is allowed as long as we
->>> are not in NMI/interrupt context, so these should be fine
->>> to add.
->>>
->>> Acked-by: John Fastabend <john.fastabend@gmail.com>
->>
->> The corresponding bcc discussion thread is here:
->>     https://github.com/iovisor/bcc/issues/3527
->>
->> Acked-by: Yonghong Song <yhs@fb.com>
->>
->>>
->>>>    kernel/trace/bpf_trace.c | 2 ++
->>>>    1 file changed, 2 insertions(+)
->>>>
->>>> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
->>>> index 64bd2d84367f..6d3f951f38c5 100644
->>>> --- a/kernel/trace/bpf_trace.c
->>>> +++ b/kernel/trace/bpf_trace.c
->>>> @@ -861,6 +861,8 @@ BTF_ID(func, vfs_fallocate)
->>>>    BTF_ID(func, dentry_open)
->>>>    BTF_ID(func, vfs_getattr)
->>>>    BTF_ID(func, filp_close)
->>>> +BTF_ID(func, vfs_read)
->>>> +BTF_ID(func, vfs_write)
->>>>    BTF_SET_END(btf_allowlist_d_path)
-> 
-> That feels incomplete.
-> I know we can add more later, but why these two and not vfs_readv ?
-> security_file_permission should probably be added as well ?
-> Along with all sys_* entry points ?
+PREEMPT_LOCK
+Referencing files: include/linux/lockdep_types.h
 
-The first argument of bpf_d_path is "struct path *, path"
-which needs to be a BTF_ID w.r.t. verifier.
+PREEMT_DYNAMIC
+Referencing files: kernel/entry/common.c
 
-I think maybe we should target the common kernel functions which
-has "struct path *" or "struct file *" arguments?
+TREE_PREEMPT_RCU
+Referencing files: arch/sh/configs/sdk7786_defconfig
 
-vfs_readv and security_file_permission or other possible candidates
-are not added since there are no use case for those yet. But agree
-that adding some vfs_* calls and security_file* options are a good
-call since they could be used in a different situation and adding
-them may save another kernel patch.
+RCU_CPU_STALL_INFO
+Referencing files: arch/xtensa/configs/nommu_kc705_defconfig
 
-The syscall entry points typically only contains fd. Although
-bpf program might hack to do something to convert fd to a file,
-I still think this is a unlikely use case.
+RCU_NOCB_CPU_ALL
+Referencing files:
+Documentation/RCU/Design/Memory-Ordering/Tree-RCU-Memory-Ordering.rst
+
+RCU_TORTURE_TESTS
+Referencing files: kernel/rcu/rcutorture.c
+
+and finally the macro which drive me to do this research
+
+TASKS_RCU_TRACE
+Referencing files: include/linux/rcupdate.h, kernel/rcu/tree_plugin.h
+
+On Fri, Jul 16, 2021 at 2:09 AM Paul E. McKenney <paulmck@kernel.org> wrote:
+>
+> On Thu, Jul 15, 2021 at 04:45:04PM +0800, Zhouyi Zhou wrote:
+> > On Thu, Jul 15, 2021 at 11:51 AM Paul E. McKenney <paulmck@kernel.org> wrote:
+> > >
+> > > On Wed, Jul 14, 2021 at 12:44:36PM +0800, Zhouyi Zhou wrote:
+> > > > On Tue, Jul 13, 2021 at 11:19 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+> > > > >
+> > > > > On Tue, Jul 13, 2021 at 06:18:12AM -0700, Paul E. McKenney wrote:
+> > > > > > On Tue, Jul 13, 2021 at 09:09:04AM -0400, Mathieu Desnoyers wrote:
+> > > > > > > ----- On Jul 13, 2021, at 12:16 AM, paulmck paulmck@kernel.org wrote:
+> > > > > > >
+> > > > > > > > On Tue, Jul 13, 2021 at 08:56:45AM +0800, zhouzhouyi@gmail.com wrote:
+> > > > > > > >> From: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> > > > > > > >>
+> > > > > > > >> Hi Paul,
+> > > > > > > >>
+> > > > > > > >> During my studying of RCU, I did a grep in the kernel source tree.
+> > > > > > > >> I found there are 3 places where the macro name CONFIG_TASKS_RCU_TRACE
+> > > > > > > >> should be CONFIG_TASKS_TRACE_RCU instead.
+> > > > > > > >>
+> > > > > > > >> Without memory fencing, the idle/userspace task inspection may not
+> > > > > > > >> be so accurate.
+> > > > > > > >>
+> > > > > > > >> Thanks for your constant encouragement for my studying.
+> > > > > > > >>
+> > > > > > > >> Best Wishes
+> > > > > > > >> Zhouyi
+> > > > > > > >>
+> > > > > > > >> Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> > > > > > > >
+> > > > > > > > Good eyes, and those could cause real bugs, so thank you!
+> > > > > > >
+> > > > > > > Hi Paul,
+> > > > > > >
+> > > > > > > This makes me wonder: what is missing testing-wise in rcutorture to
+> > > > > > > catch those issues with testing before they reach mainline ?
+> > > > > >
+> > > > > > My guess:  Running on weakly ordered architectures.  ;-)
+> > > > >
+> > > > > And another guess:  A tool that identifies use of Kconfig options
+> > > > > that are not defined in any Kconfig* file.
+> > > > Based on Paul's second guess ;-),  I did a small research, and I think
+> > > > the best answer is to modify scripts/checkpatch.pl. We modify checkpatch.pl
+> > > > to identify use of Kconfig options that are not defined in any Kconfig* file.
+> > > >
+> > > > As I am a C/C++ programmer, I would be glad to take some time to learn
+> > > > perl (checkpatch is implented in perl) first if no other volunteer is
+> > > > about to do it ;-)
+> > >
+> > > I haven't heard anyone else volunteer.  ;-)
+> > >
+> > > Others might have opinions on where best to implement these checks,
+> > > but I must confess that I have not given it much thought.
+> > I recklessly cc the maintainers of checkpatch.pl without your
+> > permission to see others' opion,
+> > and I begin to study perl at the same time, after all, learning
+> > something is always good ;-)
+>
+> Works for me!
+>
+>                                                         Thanx, Paul
+Best Wishes
+Zhouyi
