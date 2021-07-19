@@ -2,107 +2,106 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CBECEC07E9D
-	for <bpf@archiver.kernel.org>; Tue, 20 Jul 2021 00:13:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A0AFC6377A
+	for <bpf@archiver.kernel.org>; Tue, 20 Jul 2021 00:13:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9FFCC6115B
+	by mail.kernel.org (Postfix) with ESMTP id E82BF61222
 	for <bpf@archiver.kernel.org>; Tue, 20 Jul 2021 00:13:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238838AbhGSXb5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 19 Jul 2021 19:31:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58734 "EHLO
+        id S1356699AbhGSXcX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 19 Jul 2021 19:32:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1441833AbhGSWN7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 19 Jul 2021 18:13:59 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72902C061767
-        for <bpf@vger.kernel.org>; Mon, 19 Jul 2021 15:30:49 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id 37so20805813pgq.0
-        for <bpf@vger.kernel.org>; Mon, 19 Jul 2021 15:30:49 -0700 (PDT)
+        with ESMTP id S1351025AbhGSWqW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 19 Jul 2021 18:46:22 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A47EAC061574
+        for <bpf@vger.kernel.org>; Mon, 19 Jul 2021 16:27:01 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id v189so30311939ybg.3
+        for <bpf@vger.kernel.org>; Mon, 19 Jul 2021 16:27:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=h9xYF/FgBs5Wya1s6TdSYN6WuGi2vLkqTN091aVRm6U=;
-        b=eAQEcwctm4M+hi2fwnkRpLmIIJkTBtreDu0rAkaLAcAbm2rpVJdPl+4XK0kHZ36a6K
-         2Y5yF5dysvcG7wqsEKVoHp8yHK9sJQtgI6CHjkRBi0iIM31FtXsQCYanO3p5TQ6OkNpJ
-         HJEOiqG+fXtc1kQY/gyv7ebtrvGmhYTjlajtSdRucd6KeE3aAGNM4k1660T7N9caNrig
-         Uwz7K7AF9PDTfrzTczKklrvkJOzJuOp/KiyV5fy/+UXu9rSpvioYlW0e3jgl6cjwzI6/
-         XJMf4WKi+jsSNcVRy3XtUi8B9cxNGgzwddgQos8gKgnEAZ2PIkVGm7G/VokeoyOCif+G
-         RFXg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dTZXTpgF2i2C0t8/kbGyjVPSkn7uNri2/0/lBwkeoeQ=;
+        b=qCcm3nXAjTdFQ/kLVySjYD8F9zAqh6VcxPvLtkJwOP2x7/ArVmQO5OVgLtGEghdVDt
+         IeAa+LJb8sDse72p97LHgWyJYx0pL5dJnjntbVTBy77zaUhOcH9KarxgvtSrQ2CVHr0M
+         PjmOLlcSJJhGgHK84gcEwSTrfWH3gCmd/5J1SesHZPX5x2Q9/uf4xWS9TTroHv9EM+dC
+         3NNMZJLRvUYD5Cv9ODmX5BWLV9PHCuMYJY0N4gIMOc2f8PQ6hmOa217Ylj9D7yfLrYsG
+         GXia36bd2BNjHVfk7ZnyOttWXNntwRarWSXiX2gNAALiRgU0oMlRQuQkaeLtBRlHLBY0
+         OZ7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=h9xYF/FgBs5Wya1s6TdSYN6WuGi2vLkqTN091aVRm6U=;
-        b=Lz4bidmgUL3V48HN1g0ed6KF60JUt3DD3g4vM+XP01xh02scF2EJg9exbN1eET2oNw
-         gFEI+kp2xs26GrxeaOWoAMLZrzVklDKDy+syu142B14gHzl3qDhnzmbThzi52/qP2QZl
-         q3wjhmLJZhcsrRdd3k+z6xNhaXZZgfOdmzIMdiDicqT7E+QLKCeM7j6Q/WGiURwH3PdC
-         BavlAY58jZt8Z6RnxUqetYWOawju0NvBAapjzY88KM875adoVrxVeRgfpaYBlShdwEQh
-         CM8LZxJb8a9QHFTOIyKndEnrHCI8LaSO7DVuECS7iDvlhgNcIDX5zl6Vk7sRSwoNYyOO
-         z6xg==
-X-Gm-Message-State: AOAM531W7Bp0osnkcD7sOTodTtMeMqVqBsYRnvvfA6wB+IeMZchvZTYm
-        +JwW36soW0O1iAT5mBR8jdmj6aTHq3E=
-X-Google-Smtp-Source: ABdhPJziNDEdUCUBufNFSo3e8RpeIYFpzr+rwNAiqN6CPvH3bYaAgBKPODbmmtnzlQIKjQbrxJc/Sg==
-X-Received: by 2002:a63:b60:: with SMTP id a32mr27975924pgl.29.1626733848552;
-        Mon, 19 Jul 2021 15:30:48 -0700 (PDT)
-Received: from SEA-ML-00029224.olympus.f5net.com (c-73-19-16-93.hsd1.wa.comcast.net. [73.19.16.93])
-        by smtp.gmail.com with ESMTPSA id h17sm20846877pfh.192.2021.07.19.15.30.47
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 19 Jul 2021 15:30:47 -0700 (PDT)
-From:   Vincent Li <vincent.mc.li@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     daniel@iogearbox.net, Vincent Li <vincent.mc.li@gmail.com>
-Subject: [PATCH bpf-next] selftests, bpf: test_tc_tunnel.sh nc: cannot use -p and -l
-Date:   Mon, 19 Jul 2021 15:30:22 -0700
-Message-Id: <20210719223022.66681-1-vincent.mc.li@gmail.com>
-X-Mailer: git-send-email 2.24.3 (Apple Git-128)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dTZXTpgF2i2C0t8/kbGyjVPSkn7uNri2/0/lBwkeoeQ=;
+        b=VrMTtg0KOxPJj7bZmB+MtIUe/Qbgs5iCZgcwwAVY/Oi9Gmqz4s5yDWRzeqQmAKnY9S
+         s2rBMSKY7EFP+0y2cb8HhZT5V3OuQCVJL1HEbSSFL9O6WkRqFWc4PfWWGVlyCiVYgeB0
+         niceRQu13Fir5f0JlFDf4drd6Zv9wEpONIpETGnih40vCxVyLE8s0yhFuQ54TZMIEIo6
+         X355nNLPGvuRUlFHORcAxvhVjNhNtTC4qC/OLulCo+mkM/Wr1T5YTDhClI6RJNBZr3BP
+         +rCf9goDNEnTJ6O5xfAqmSw4Mf3pahbZwWxHgFuwI26GcxDDStlUP/OO5ggyMBIvySId
+         pJ9w==
+X-Gm-Message-State: AOAM531MUFIuK8zoCLHqBqJOAsADi7BCpTEaL2/Id+XzAr60n8tiIGZN
+        nYLGBmFnGbBzMQjAovrJ8S4utz8UGj/qHmJrsGQ=
+X-Google-Smtp-Source: ABdhPJzmB7pTs9XRhdDFscvG8yLdDXmfEyoLuMmJEDf+zk19YC+TEAsO0Fwz+3MtUx6byph5aAli8YtklnJd3SMEQn4=
+X-Received: by 2002:a25:1455:: with SMTP id 82mr34364097ybu.403.1626737220956;
+ Mon, 19 Jul 2021 16:27:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210429153043.3145478-1-joamaki@gmail.com>
+In-Reply-To: <20210429153043.3145478-1-joamaki@gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 19 Jul 2021 16:26:50 -0700
+Message-ID: <CAEf4BzaSN+aN5RV=anaGewGAmqOWJRZpHtSeMfYcJ2HZ98LqLQ@mail.gmail.com>
+Subject: Re: [PATCH bpf] selftests/bpf: Rewrite test_tc_redirect.sh as prog_tests/tc_redirect.c
+To:     Jussi Maki <joamaki@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When run test_tc_tunnel.sh, it complains following error
+On Thu, Apr 29, 2021 at 8:32 AM Jussi Maki <joamaki@gmail.com> wrote:
+>
+> Ports test_tc_redirect.sh to the test_progs framework and removes the
+> old test. This makes it more in line with rest of the tests and makes
+> it possible to run this test with vmtest.sh and under the bpf CI.
+>
+> Signed-off-by: Jussi Maki <joamaki@gmail.com>
+> ---
 
-ipip
-encap 192.168.1.1 to 192.168.1.2, type ipip, mac none len 100
-test basic connectivity
-nc: cannot use -p and -l
+Hey Jussi,
 
-nc man page has:
+I noticed that running these new tc_redirect tests locally in my qemu
+image were failing. I narrowed it down to `ping6` vs `ping -6`
+differences. My image lacks ping6. I see that there were previous
+attempts to gracefully handle them both:
 
-     -l  Listen for an incoming connection rather than initiating
-         a connection to a remote host.Cannot be used together with
-         any of the options -psxz. Additionally, any timeouts specified
-         with the -w option are ignored.
+da85d8bfd151 ("kselftests/bpf: use ping6 as the default ipv6 ping
+binary when it exists")
+deee2cae27d1 ("kselftests/bpf: use ping6 as the default ipv6 ping
+binary if it exists")
 
-Correct nc in server_listen().
+(those are two different commits, yeah :) )
 
-Signed-off-by: Vincent Li <vincent.mc.li@gmail.com>
----
- tools/testing/selftests/bpf/test_tc_tunnel.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+It seems the shell script version used to handle this more gracefully.
+Can you please update the test to handle the lack of ping6 binary?
 
-diff --git a/tools/testing/selftests/bpf/test_tc_tunnel.sh b/tools/testing/selftests/bpf/test_tc_tunnel.sh
-index c9dde9b9d987..088fcad138c9 100755
---- a/tools/testing/selftests/bpf/test_tc_tunnel.sh
-+++ b/tools/testing/selftests/bpf/test_tc_tunnel.sh
-@@ -69,7 +69,7 @@ cleanup() {
- }
- 
- server_listen() {
--	ip netns exec "${ns2}" nc "${netcat_opt}" -l -p "${port}" > "${outfile}" &
-+	ip netns exec "${ns2}" nc "${netcat_opt}" -l "${port}" > "${outfile}" &
- 	server_pid=$!
- 	sleep 0.2
- }
--- 
-2.27.0
+>  tools/testing/selftests/bpf/network_helpers.c |   2 +-
+>  tools/testing/selftests/bpf/network_helpers.h |   1 +
+>  .../selftests/bpf/prog_tests/tc_redirect.c    | 481 ++++++++++++++++++
+>  .../selftests/bpf/progs/test_tc_neigh.c       |  33 +-
+>  .../selftests/bpf/progs/test_tc_neigh_fib.c   |   9 +-
+>  .../selftests/bpf/progs/test_tc_peer.c        |  33 +-
+>  .../testing/selftests/bpf/test_tc_redirect.sh | 216 --------
+>  7 files changed, 509 insertions(+), 266 deletions(-)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/tc_redirect.c
+>  delete mode 100755 tools/testing/selftests/bpf/test_tc_redirect.sh
+>
 
+[...]
