@@ -2,89 +2,165 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4568AC07E95
-	for <bpf@archiver.kernel.org>; Tue, 20 Jul 2021 00:13:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03218C07E95
+	for <bpf@archiver.kernel.org>; Tue, 20 Jul 2021 00:13:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 14FC36115B
+	by mail.kernel.org (Postfix) with ESMTP id EA316611EF
 	for <bpf@archiver.kernel.org>; Tue, 20 Jul 2021 00:13:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239053AbhGSXbk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 19 Jul 2021 19:31:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56414 "EHLO
+        id S1356500AbhGSXcN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 19 Jul 2021 19:32:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238838AbhGSWH3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 19 Jul 2021 18:07:29 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F714C08EA7C;
-        Mon, 19 Jul 2021 15:31:53 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id a16so30104324ybt.8;
-        Mon, 19 Jul 2021 15:31:53 -0700 (PDT)
+        with ESMTP id S1392000AbhGSW0Q (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 19 Jul 2021 18:26:16 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 279E1C0610DF
+        for <bpf@vger.kernel.org>; Mon, 19 Jul 2021 15:59:14 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id g5so30180687ybu.10
+        for <bpf@vger.kernel.org>; Mon, 19 Jul 2021 15:59:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=a6nTlCczBubJeeLJwO3JRXwlA8aijOD64z9YKs0Er54=;
-        b=AtX3Zf/A/mRdVqiH/xpmUxXSLXCxsg2c0XnnlhBVvcZLyaexTvcxfFxmU+X5pAZZpP
-         nPGEWwAeoaj29NczvYVJqhUINAXpuNES4Ld4dLVRsYowzCU5iTi9ltxF3U7kubgIeyK5
-         lWeHs3teLXJsFzh4I760t8DblXIFEtURtx21jotZcKnNhlI/QIpXlL/lRG064727KyLm
-         YX9P+9yQZnO6rp1332PKortf0kX0SGdmL3r0jsddxM78Mk9D7sGcK368QkMIIKXiEKPw
-         7wAV813MGz72fARDRZQf14yHWiX7CKT9zt2qjKcaCepGZzpwNffB4kbsb8b2/3I5B8Xy
-         X15A==
+        bh=6Z+qeuTYQofR99lVoPOn0FXcRHswoHfrAVzXWRvWTaU=;
+        b=qE+sBW+mHnV4QDC6vTXlz1bW3+7SJ1C8+Fwz8Rmr1mCHIg/nKZtEg7JwT3liEEf+bM
+         ng7UemdpEOZzUW+f5PxzC4xHNEafHiztyvU3VeMhm8OgsCce0fJEVVUg0yU1eKMdYMOB
+         jBngdLSdVvmVmw3+OMM4jKZbtXc5rR6D5BmPC8VGq8Ce8utGYPEm8wQjD6gtHKMGUZf8
+         gu9ccgv4ZQO9KRiLOtZjE5pgNqGC/6O8Olc7iGxYI/97QOd6bfE5cpWDgn8a7fpCfG42
+         Nv1IVb6B+l8vBR5xXlfXh4YTkXTZa+o1P0qzoo+TWJTdnxyRxS6pCwcYHbqVX57ohHQZ
+         4dUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=a6nTlCczBubJeeLJwO3JRXwlA8aijOD64z9YKs0Er54=;
-        b=ow2j4jMsQK+/2v1wLdMJifz5WarTbb9c+pdQW1D5KrurJcAtI+6aSx96+ov8LiljlB
-         jLCJ5335ydjejtxaWE1GX/jHdkHsFWqwJYBeq+Cz2DK4OE2mZQEw1oZMnlHPysOrUPU7
-         Ok4tnYGfNj24u+MASHWiLnAPrtlh9+VU2RfsVJaC9sMmNLMx3WJDrMxVafwlFMtRPcyR
-         8I9gdderE69sO5+Gpzy1hECKDfyOOA8DZhAIevAEY/9u0LU/1Y2YzQq8Mbonl/+rfDWK
-         7yf/ZiX6ehWZrAWbnHicK4/dh0nEzMCeuvYfRz52uL8XfhSinW/vYmrTxH1doq3IIsZz
-         0yhw==
-X-Gm-Message-State: AOAM531nRwXLT3T9zRHwMEnXqqwqUugt3NHM4slg0pmqkMdl8muvkf2c
-        Z8MUWiCPqsMNWccECuNK0D84JCNxh/Eh7iqgRUI=
-X-Google-Smtp-Source: ABdhPJyZ09xgWNlI7GKlcY7SDDD63Th6GjQ/3rv9Oha/WRGv4dadKPuK+QRqy9QW794nt0VUhpvQbO4j9AYcUzC0+B8=
-X-Received: by 2002:a25:9942:: with SMTP id n2mr35195752ybo.230.1626733912580;
- Mon, 19 Jul 2021 15:31:52 -0700 (PDT)
+        bh=6Z+qeuTYQofR99lVoPOn0FXcRHswoHfrAVzXWRvWTaU=;
+        b=hMpOa36HadLNNBbpRgpcLY6bh1TwJaMqUoj/lyOH0JbHt0wMuFagAVsVhQMKhY+dz4
+         2bP56rdw65vfjcdOtRIr+butT7aMC01jEK5EDyDjsB9belNMP8WhrsymK9xrF0d5phEu
+         WfJOpTQ7vImlDynJxEUl/5b7WBBE234lR74T2qmceRkJg9AvcJQnVu6AZ2F6Zj1SAK9y
+         ZuGnOoT8DZ/rz6Fros+dJhr6gbVE63WohuQb1Xdn7MDDNI7MnuELSxIfjJiBxb7w0ChI
+         sL53EtJAqC/8BLbsg4ung0LY6s5qYWeAMuwz1/VekwTGNxIBVc9Ph8Dp0lAHETT83F09
+         fa6A==
+X-Gm-Message-State: AOAM532oY0HcdNU21Ix4mMBhX8yAn0Qc3D6FdRdIfG2XTRyb76w45BZp
+        84ClfMzlxxxt7hWYlgqnSj2tuFYOFfMtHTd2FN8=
+X-Google-Smtp-Source: ABdhPJwHmx2WxWPXwJMcpHZ8Jstw/6HSDh8UF4znu2c/LOnv3VEkdcreG3TNK18B7/wVPEN0hy89EKkUyiwVnCtlWDE=
+X-Received: by 2002:a25:d349:: with SMTP id e70mr34689499ybf.510.1626735553464;
+ Mon, 19 Jul 2021 15:59:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210719085134.43325-1-lmb@cloudflare.com>
-In-Reply-To: <20210719085134.43325-1-lmb@cloudflare.com>
+References: <20210719173838.423148-1-m@lambda.lt> <20210719173838.423148-3-m@lambda.lt>
+In-Reply-To: <20210719173838.423148-3-m@lambda.lt>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 19 Jul 2021 15:31:41 -0700
-Message-ID: <CAEf4Bza-Zy-ichEEPUaLgNCW5-HoRW-w7-Na7VyGrdbvi=fGzw@mail.gmail.com>
-Subject: Re: [PATCH bpf v2 0/1] bpf: fix OOB read when printing XDP link fdinfo
-To:     Lorenz Bauer <lmb@cloudflare.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
+Date:   Mon, 19 Jul 2021 15:59:02 -0700
+Message-ID: <CAEf4Bzbx0SxK5mqKNydVQzM9f0-d9yaeKK6e2Q9Mhe1O0m_04g@mail.gmail.com>
+Subject: Re: [PATCH bpf 2/2] selftests/bpf: check inner map deletion
+To:     Martynas Pumputis <m@lambda.lt>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        kernel-team <kernel-team@cloudflare.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+        Andrii Nakryiko <andrii@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Jul 19, 2021 at 1:51 AM Lorenz Bauer <lmb@cloudflare.com> wrote:
+On Mon, Jul 19, 2021 at 10:36 AM Martynas Pumputis <m@lambda.lt> wrote:
 >
-> See the first patch message for details. Same fix as before, except that the
-> macro invocation is guarded by CONFIG_NET now.
+> Add a test case to check whether an unsuccessful creation of an outer
+> map of a BTF-defined map-in-map destroys the inner map.
 >
-> Lorenz Bauer (1):
->   bpf: fix OOB read when printing XDP link fdinfo
+> As bpf_object__create_map() is a static function, we cannot just call it
+> from the test case and then check whether a map accessible via
+> map->inner_map_fd has been closed. Instead, we iterate over all maps and
+> check whether the map "$MAP_NAME.inner" does not exist.
 >
+> Signed-off-by: Martynas Pumputis <m@lambda.lt>
+> ---
+>  .../bpf/progs/test_map_in_map_invalid.c       | 26 ++++++++
+>  tools/testing/selftests/bpf/test_maps.c       | 64 ++++++++++++++++++-
+>  2 files changed, 89 insertions(+), 1 deletion(-)
+>  create mode 100644 tools/testing/selftests/bpf/progs/test_map_in_map_invalid.c
+>
+> diff --git a/tools/testing/selftests/bpf/progs/test_map_in_map_invalid.c b/tools/testing/selftests/bpf/progs/test_map_in_map_invalid.c
+> new file mode 100644
+> index 000000000000..2918caea1e3d
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/test_map_in_map_invalid.c
+> @@ -0,0 +1,26 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (c) 2021 Isovalent, Inc. */
+> +#include <linux/bpf.h>
+> +#include <bpf/bpf_helpers.h>
+> +
+> +struct inner {
+> +       __uint(type, BPF_MAP_TYPE_ARRAY);
+> +       __type(key, __u32);
+> +       __type(value, int);
+> +       __uint(max_entries, 4);
+> +};
+> +
+> +struct {
+> +       __uint(type, BPF_MAP_TYPE_ARRAY_OF_MAPS);
+> +       __uint(max_entries, 0); /* This will make map creation to fail */
+> +       __uint(key_size, sizeof(__u32));
+> +       __array(values, struct inner);
+> +} mim SEC(".maps");
+> +
+> +SEC("xdp_noop")
 
-Applied to bpf tree, thanks. There is no need to send a cover letter
-for a single patch, though, and it didn't contribute much to the
-description in this case, so I dropped it.
+canonical section name for XDP programs is strictly "xdp", so I
+updated it to avoid fixing that later when libbpf will start enforcing
+this
 
->  include/linux/bpf_types.h | 1 +
->  1 file changed, 1 insertion(+)
+> +int xdp_noop0(struct xdp_md *ctx)
+> +{
+> +       return XDP_PASS;
+> +}
+> +
+> +char _license[] SEC("license") = "GPL";
+> diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/selftests/bpf/test_maps.c
+> index 30cbf5d98f7d..d4184dde04df 100644
+> --- a/tools/testing/selftests/bpf/test_maps.c
+> +++ b/tools/testing/selftests/bpf/test_maps.c
+> @@ -1153,12 +1153,16 @@ static void test_sockmap(unsigned int tasks, void *data)
+>  }
 >
-> --
-> 2.30.2
+>  #define MAPINMAP_PROG "./test_map_in_map.o"
+> +#define MAPINMAP_INVALID_PROG "./test_map_in_map_invalid.o"
+>  static void test_map_in_map(void)
+>  {
+>         struct bpf_object *obj;
+>         struct bpf_map *map;
+>         int mim_fd, fd, err;
+>         int pos = 0;
+> +       struct bpf_map_info info = {};
+> +       __u32 len = sizeof(info);
+> +       __u32 id = 0;
 >
+>         obj = bpf_object__open(MAPINMAP_PROG);
+>
+> @@ -1229,10 +1233,68 @@ static void test_map_in_map(void)
+>
+>         close(fd);
+
+added fd = -1 here
+
+>         bpf_object__close(obj);
+> +
+> +
+> +       /* Test that failing bpf_object__create_map() destroys the inner map */
+> +
+> +       obj = bpf_object__open(MAPINMAP_INVALID_PROG);
+> +       err = libbpf_get_error(obj);
+> +       if (err) {
+> +               printf("Failed to load %s program: %d %d",
+> +                      MAPINMAP_INVALID_PROG, err, errno);
+> +               goto out_map_in_map;
+> +       }
+> +
+
+[...]
