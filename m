@@ -2,138 +2,78 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CAFCC636C9
-	for <bpf@archiver.kernel.org>; Mon, 19 Jul 2021 09:00:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A752C636CB
+	for <bpf@archiver.kernel.org>; Mon, 19 Jul 2021 09:01:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 30248611AF
-	for <bpf@archiver.kernel.org>; Mon, 19 Jul 2021 09:00:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 651656100C
+	for <bpf@archiver.kernel.org>; Mon, 19 Jul 2021 09:01:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235412AbhGSITh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 19 Jul 2021 04:19:37 -0400
-Received: from mail-wm1-f50.google.com ([209.85.128.50]:38521 "EHLO
-        mail-wm1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234954AbhGSITe (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 19 Jul 2021 04:19:34 -0400
-Received: by mail-wm1-f50.google.com with SMTP id b14-20020a1c1b0e0000b02901fc3a62af78so12311975wmb.3
-        for <bpf@vger.kernel.org>; Mon, 19 Jul 2021 02:00:14 -0700 (PDT)
+        id S235584AbhGSIU4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 19 Jul 2021 04:20:56 -0400
+Received: from mail-wm1-f44.google.com ([209.85.128.44]:45821 "EHLO
+        mail-wm1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235760AbhGSIUx (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 19 Jul 2021 04:20:53 -0400
+Received: by mail-wm1-f44.google.com with SMTP id u8-20020a7bcb080000b02901e44e9caa2aso9990315wmj.4
+        for <bpf@vger.kernel.org>; Mon, 19 Jul 2021 02:01:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=NxO5u2m/WVWG39hgIbDJ0ZUbjUb2aBaNDMtLZUWAtSE=;
-        b=zEq+wT3EN0r60MoQF4ywKFoXQfty/1PcTdDVXUsST7Y52y/FRB4+4ivyI+celySiBP
-         FyujFSndPF96XRaAXUb2SPPhj6Op97PPzEZ8YRG44JPTworVmaBAYrX4eKX/EJFq9cTR
-         YzMiSb8LFfujoOsWxIT1JvFl0GBAExIrdntSQ=
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gicoTuhx62Lz0IXi9HyKg/EPZjby5OAg9N4Cc+WYi3s=;
+        b=UeIE377QK2WGUeE/NyuK7L1kbnQYpERmhrdXLxMaiJl4nTX/JzP4PiWtiw4aw0pntU
+         33aLmGIBDoAeyMlQzLIRi7MMyGRHr9sxmEXc/cp3+Xg75zsrv02bEXt0O/V82MZISBQy
+         n5j+qMd/honSQ2CDlFw6cOOazEKcl3jlf5wxQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=NxO5u2m/WVWG39hgIbDJ0ZUbjUb2aBaNDMtLZUWAtSE=;
-        b=Rv9STMHutjxMGlHtgcUeWgg9Qsexo5pWFYxobJRqLojlZjiWdvlGnT9+fdDopLfQfm
-         9vf6bZ8Bvx7i+1bvejtO2JtjQZczE8LR6qGJqbjW6V7vNR+zVkLRl9ylPcOz6frdtXFw
-         MW4WJGWo2zGHQ9uFGTiArrYyJ2yfTJUt+CkN1kjFN1W+y19jGolwUSoyp3oFDPGBazK7
-         GhHAs3WVgV5FZoAsjaVAluMjH9Gip+oYfucrJCd7Q6pe7jWoTCQ7kMAbi28CFL2b1GmV
-         +iUAlJ29rb9wUHjl559UkIawER2/cVPzvdWMRQMPUZu66AtmOwYefEn0ICfqE+U7e8Il
-         07zQ==
-X-Gm-Message-State: AOAM532oVcAQfotWm4bohUndXaOc23xav1G5ZdRsFeJNl/5bu6gYmZKQ
-        GQ4tEM5YqR5VMEw4Q0Z63S4BDVFNeJldgw==
-X-Google-Smtp-Source: ABdhPJwiRWzVkYTeESpwfioliaNRShYfOHT5QlSdrSw9nFeeAoQoqRUtoY3NQ9Iu3AVxcVqZVWsZLw==
-X-Received: by 2002:a05:600c:3b93:: with SMTP id n19mr30885778wms.3.1626684714205;
-        Mon, 19 Jul 2021 01:51:54 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gicoTuhx62Lz0IXi9HyKg/EPZjby5OAg9N4Cc+WYi3s=;
+        b=TaUuAD3kV8dD+MH8nYTzoQ9FpSfUz3t96QA97EyyKfuG0umdc3xKiNFkCHcAg9ktin
+         fyR0TubT3DLEXg8cYwARWzQFaGTpCfZNduU6KcNgmhTwgg5cGkDCIi/Dt3qTG+GHVgwz
+         S+XbZeFQIDWgVLjUFWv5R05SSP/tPna15t5jwE0bprBse5gVuOo6lXxkPl6qnJdTNHGz
+         pmdJODKIS6zqF+S9fbReYGtrYqey30C9sVqLfYsYbEeUhdalZNtP3zyXSQxJJMb8O1fK
+         zFT19QaXpk1CEGVnyaBGMom4Hl/d1K9icRm2/RqgOG1naHK6JuwbErkvYnfjiEAXtDtZ
+         GgEg==
+X-Gm-Message-State: AOAM533t6l5o1YpIXjwaSufN2UfQA+qcy5gcsc3b1gFXNqgt+FYtlc+m
+        cOh1Bj076aX5RF5fr5xQqdbP2ZkJHdNCZw==
+X-Google-Smtp-Source: ABdhPJx00yXKDB0CcKZ1Zx5X9m0kVYKDhWQ2GUaHqEN1fHPkW3nFFGSN6N53fqYurbSRHBVD7FQkig==
+X-Received: by 2002:a7b:c208:: with SMTP id x8mr31330824wmi.187.1626684712228;
+        Mon, 19 Jul 2021 01:51:52 -0700 (PDT)
 Received: from antares.. (8.5.4.3.6.6.4.c.b.0.4.b.8.b.e.4.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:4eb8:b40b:c466:3458])
-        by smtp.gmail.com with ESMTPSA id 12sm20079763wme.28.2021.07.19.01.51.53
+        by smtp.gmail.com with ESMTPSA id 12sm20079763wme.28.2021.07.19.01.51.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jul 2021 01:51:53 -0700 (PDT)
+        Mon, 19 Jul 2021 01:51:51 -0700 (PDT)
 From:   Lorenz Bauer <lmb@cloudflare.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>
+        Andrii Nakryiko <andrii@kernel.org>
 Cc:     kernel-team@cloudflare.com, Lorenz Bauer <lmb@cloudflare.com>,
-        Andrii Nakryiko <andriin@fb.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf v2 1/1] bpf: fix OOB read when printing XDP link fdinfo
-Date:   Mon, 19 Jul 2021 09:51:34 +0100
-Message-Id: <20210719085134.43325-2-lmb@cloudflare.com>
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH bpf v2 0/1] bpf: fix OOB read when printing XDP link fdinfo
+Date:   Mon, 19 Jul 2021 09:51:33 +0100
+Message-Id: <20210719085134.43325-1-lmb@cloudflare.com>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210719085134.43325-1-lmb@cloudflare.com>
-References: <20210719085134.43325-1-lmb@cloudflare.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-We got the following UBSAN report on one of our testing machines:
+See the first patch message for details. Same fix as before, except that the
+macro invocation is guarded by CONFIG_NET now.
 
-    ================================================================================
-    UBSAN: array-index-out-of-bounds in kernel/bpf/syscall.c:2389:24
-    index 6 is out of range for type 'char *[6]'
-    CPU: 43 PID: 930921 Comm: systemd-coredum Tainted: G           O      5.10.48-cloudflare-kasan-2021.7.0 #1
-    Hardware name: <snip>
-    Call Trace:
-     dump_stack+0x7d/0xa3
-     ubsan_epilogue+0x5/0x40
-     __ubsan_handle_out_of_bounds.cold+0x43/0x48
-     ? seq_printf+0x17d/0x250
-     bpf_link_show_fdinfo+0x329/0x380
-     ? bpf_map_value_size+0xe0/0xe0
-     ? put_files_struct+0x20/0x2d0
-     ? __kasan_kmalloc.constprop.0+0xc2/0xd0
-     seq_show+0x3f7/0x540
-     seq_read_iter+0x3f8/0x1040
-     seq_read+0x329/0x500
-     ? seq_read_iter+0x1040/0x1040
-     ? __fsnotify_parent+0x80/0x820
-     ? __fsnotify_update_child_dentry_flags+0x380/0x380
-     vfs_read+0x123/0x460
-     ksys_read+0xed/0x1c0
-     ? __x64_sys_pwrite64+0x1f0/0x1f0
-     do_syscall_64+0x33/0x40
-     entry_SYSCALL_64_after_hwframe+0x44/0xa9
-    <snip>
-    ================================================================================
-    ================================================================================
-    UBSAN: object-size-mismatch in kernel/bpf/syscall.c:2384:2
+Lorenz Bauer (1):
+  bpf: fix OOB read when printing XDP link fdinfo
 
-From the report, we can infer that some array access in bpf_link_show_fdinfo at index 6
-is out of bounds. The obvious candidate is bpf_link_type_strs[BPF_LINK_TYPE_XDP] with
-BPF_LINK_TYPE_XDP == 6. It turns out that BPF_LINK_TYPE_XDP is missing from bpf_types.h
-and therefore doesn't have an entry in bpf_link_type_strs:
-
-    pos:	0
-    flags:	02000000
-    mnt_id:	13
-    link_type:	(null)
-    link_id:	4
-    prog_tag:	bcf7977d3b93787c
-    prog_id:	4
-    ifindex:	1
-
-Fixes: aa8d3a716b59 ("bpf, xdp: Add bpf_link-based XDP attachment API")
-Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
----
  include/linux/bpf_types.h | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/include/linux/bpf_types.h b/include/linux/bpf_types.h
-index a9db1eae6796..ae3ac3a2018c 100644
---- a/include/linux/bpf_types.h
-+++ b/include/linux/bpf_types.h
-@@ -134,4 +134,5 @@ BPF_LINK_TYPE(BPF_LINK_TYPE_CGROUP, cgroup)
- BPF_LINK_TYPE(BPF_LINK_TYPE_ITER, iter)
- #ifdef CONFIG_NET
- BPF_LINK_TYPE(BPF_LINK_TYPE_NETNS, netns)
-+BPF_LINK_TYPE(BPF_LINK_TYPE_XDP, xdp)
- #endif
 -- 
 2.30.2
 
