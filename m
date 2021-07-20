@@ -5,29 +5,29 @@ X-Spam-Level:
 X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CED42C07E95
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC547C636C9
 	for <bpf@archiver.kernel.org>; Tue, 20 Jul 2021 04:56:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B7268610D0
+	by mail.kernel.org (Postfix) with ESMTP id D095D61164
 	for <bpf@archiver.kernel.org>; Tue, 20 Jul 2021 04:56:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241562AbhGTEPX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 20 Jul 2021 00:15:23 -0400
-Received: from mga14.intel.com ([192.55.52.115]:51770 "EHLO mga14.intel.com"
+        id S241987AbhGTEPZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 20 Jul 2021 00:15:25 -0400
+Received: from mga14.intel.com ([192.55.52.115]:51773 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237680AbhGTEPR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 20 Jul 2021 00:15:17 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10050"; a="210897305"
+        id S240042AbhGTEPT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 20 Jul 2021 00:15:19 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10050"; a="210897311"
 X-IronPort-AV: E=Sophos;i="5.84,254,1620716400"; 
-   d="scan'208";a="210897305"
+   d="scan'208";a="210897311"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2021 21:55:56 -0700
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2021 21:55:58 -0700
 X-IronPort-AV: E=Sophos;i="5.84,254,1620716400"; 
-   d="scan'208";a="431923344"
+   d="scan'208";a="431923364"
 Received: from ywei11-mobl1.amr.corp.intel.com (HELO skuppusw-desk1.amr.corp.intel.com) ([10.251.138.31])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2021 21:55:55 -0700
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2021 21:55:57 -0700
 From:   Kuppuswamy Sathyanarayanan 
         <sathyanarayanan.kuppuswamy@linux.intel.com>
 To:     Thomas Gleixner <tglx@linutronix.de>,
@@ -49,9 +49,9 @@ Cc:     Peter H Anvin <hpa@zytor.com>, Dave Hansen <dave.hansen@intel.com>,
         x86@kernel.org, linux-kernel@vger.kernel.org,
         platform-driver-x86@vger.kernel.org, bpf@vger.kernel.org,
         netdev@vger.kernel.org
-Subject: [PATCH v3 2/6] x86/tdx: Add GetQuote TDX hypercall support
-Date:   Mon, 19 Jul 2021 21:55:48 -0700
-Message-Id: <20210720045552.2124688-3-sathyanarayanan.kuppuswamy@linux.intel.com>
+Subject: [PATCH v3 4/6] x86/tdx: Add TDX Guest event notify interrupt vector support
+Date:   Mon, 19 Jul 2021 21:55:50 -0700
+Message-Id: <20210720045552.2124688-5-sathyanarayanan.kuppuswamy@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210720045552.2124688-1-sathyanarayanan.kuppuswamy@linux.intel.com>
 References: <20210720045552.2124688-1-sathyanarayanan.kuppuswamy@linux.intel.com>
@@ -61,102 +61,182 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The second stage in the attestation process is for the guest to
-request the VMM generate and sign a quote based on the TDREPORT
-acquired earlier.
+Allocate 0xec IRQ vector address for TDX guest to receive the event
+completion notification from VMM. Since this vector address will be
+sent to VMM via hypercall, allocate a fixed address and move
+LOCAL_TIMER_VECTOR vector address by 1 byte. Also add related IDT
+handler to process the notification event.
 
-Add tdx_hcall_get_quote() helper function to implement the GetQuote
-hypercall.
+It will be mainly used by attestation driver to receive Quote event
+completion notification from host.
 
-More details about the GetQuote TDVMCALL are in the Guest-Host
-Communication Interface (GHCI) Specification, sec 3.3, titled
-"TDG.VP.VMCALL<GetQuote>".
-
-This will be used by the TD attestation driver in follow-on patches.
+Add support to track the notification event status via /proc/interrupts.
 
 Reviewed-by: Tony Luck <tony.luck@intel.com>
 Reviewed-by: Andi Kleen <ak@linux.intel.com>
 Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 ---
+ arch/x86/include/asm/hardirq.h     |  1 +
+ arch/x86/include/asm/idtentry.h    |  4 +++
+ arch/x86/include/asm/irq_vectors.h |  7 ++++-
+ arch/x86/include/asm/tdx.h         |  2 ++
+ arch/x86/kernel/irq.c              |  7 +++++
+ arch/x86/kernel/tdx.c              | 41 ++++++++++++++++++++++++++++++
+ 6 files changed, 61 insertions(+), 1 deletion(-)
 
-Change since v2:
- * Included TDVMCALL_SUCCESS case check in tdx_hcall_get_quote().
-
- arch/x86/include/asm/tdx.h |  2 ++
- arch/x86/kernel/tdx.c      | 33 +++++++++++++++++++++++++++++++++
- 2 files changed, 35 insertions(+)
-
+diff --git a/arch/x86/include/asm/hardirq.h b/arch/x86/include/asm/hardirq.h
+index 07d79fa9c5c6..40d0534e7d82 100644
+--- a/arch/x86/include/asm/hardirq.h
++++ b/arch/x86/include/asm/hardirq.h
+@@ -46,6 +46,7 @@ typedef struct {
+ #endif
+ #if IS_ENABLED(CONFIG_INTEL_TDX_GUEST)
+ 	unsigned int tdg_ve_count;
++	unsigned int irq_tdg_event_notify_count;
+ #endif
+ } ____cacheline_aligned irq_cpustat_t;
+ 
+diff --git a/arch/x86/include/asm/idtentry.h b/arch/x86/include/asm/idtentry.h
+index 8ccc81d653b3..6f3472a88e9c 100644
+--- a/arch/x86/include/asm/idtentry.h
++++ b/arch/x86/include/asm/idtentry.h
+@@ -693,6 +693,10 @@ DECLARE_IDTENTRY_SYSVEC(HYPERVISOR_CALLBACK_VECTOR,	sysvec_xen_hvm_callback);
+ DECLARE_IDTENTRY_SYSVEC(HYPERVISOR_CALLBACK_VECTOR,	sysvec_kvm_asyncpf_interrupt);
+ #endif
+ 
++#ifdef CONFIG_INTEL_TDX_GUEST
++DECLARE_IDTENTRY_SYSVEC(TDX_GUEST_EVENT_NOTIFY_VECTOR,	sysvec_tdg_event_notify);
++#endif
++
+ #undef X86_TRAP_OTHER
+ 
+ #endif
+diff --git a/arch/x86/include/asm/irq_vectors.h b/arch/x86/include/asm/irq_vectors.h
+index 43dcb9284208..82ac0c0a34b1 100644
+--- a/arch/x86/include/asm/irq_vectors.h
++++ b/arch/x86/include/asm/irq_vectors.h
+@@ -104,7 +104,12 @@
+ #define HYPERV_STIMER0_VECTOR		0xed
+ #endif
+ 
+-#define LOCAL_TIMER_VECTOR		0xec
++#if IS_ENABLED(CONFIG_INTEL_TDX_GUEST)
++/* Vector on which TDX Guest event notification is delivered */
++#define TDX_GUEST_EVENT_NOTIFY_VECTOR	0xec
++#endif
++
++#define LOCAL_TIMER_VECTOR		0xeb
+ 
+ #define NR_VECTORS			 256
+ 
 diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
-index 4f1b5c14a09b..1599aa4850e5 100644
+index 1599aa4850e5..a7ebc6e448d7 100644
 --- a/arch/x86/include/asm/tdx.h
 +++ b/arch/x86/include/asm/tdx.h
-@@ -98,6 +98,8 @@ bool tdg_filter_enabled(void);
+@@ -100,6 +100,8 @@ int tdx_mcall_tdreport(u64 data, u64 reportdata);
  
- int tdx_mcall_tdreport(u64 data, u64 reportdata);
+ int tdx_hcall_get_quote(u64 data);
  
-+int tdx_hcall_get_quote(u64 data);
++extern void (*tdg_event_notify_handler)(void);
 +
  /*
   * To support I/O port access in decompressor or early kernel init
   * code, since #VE exception handler cannot be used, use paravirt
+diff --git a/arch/x86/kernel/irq.c b/arch/x86/kernel/irq.c
+index 669869bd46ec..a4fe53c8c18f 100644
+--- a/arch/x86/kernel/irq.c
++++ b/arch/x86/kernel/irq.c
+@@ -182,11 +182,18 @@ int arch_show_interrupts(struct seq_file *p, int prec)
+ 			   irq_stats(j)->kvm_posted_intr_wakeup_ipis);
+ 	seq_puts(p, "  Posted-interrupt wakeup event\n");
+ #endif
++
+ #if IS_ENABLED(CONFIG_INTEL_TDX_GUEST)
+ 	seq_printf(p, "%*s: ", prec, "TGV");
+ 	for_each_online_cpu(j)
+ 		seq_printf(p, "%10u ", irq_stats(j)->tdg_ve_count);
+ 	seq_puts(p, "  TDX Guest VE event\n");
++
++	seq_printf(p, "%*s: ", prec, "TGN");
++	for_each_online_cpu(j)
++		seq_printf(p, "%10u ",
++			   irq_stats(j)->irq_tdg_event_notify_count);
++	seq_puts(p, "  TDX Guest event notification\n");
+ #endif
+ 	return 0;
+ }
 diff --git a/arch/x86/kernel/tdx.c b/arch/x86/kernel/tdx.c
-index f9a28b4e6d3e..aa49c6809a0c 100644
+index 27e56ab0d4a2..334cac8792c2 100644
 --- a/arch/x86/kernel/tdx.c
 +++ b/arch/x86/kernel/tdx.c
-@@ -28,6 +28,7 @@
- 
- /* TDX hypercall Leaf IDs */
- #define TDVMCALL_MAP_GPA		0x10001
-+#define TDVMCALL_GET_QUOTE		0x10002
- 
- /* TDX Module call error codes */
- #define TDX_PAGE_ALREADY_ACCEPTED       0x8000000000000001
-@@ -37,6 +38,10 @@
- #define TDCALL_SUCCESS			0x0
- #define TDCALL_RETURN_CODE(a)		((a) & TDCALL_RETURN_CODE_MASK)
- 
-+/* TDX hypercall error codes */
-+#define TDVMCALL_SUCCESS		0x0
-+#define TDVMCALL_INVALID_OPERAND	0x8000000000000000
-+#define TDVMCALL_TDREPORT_FAILED	0x8000000000000001
- 
- #define VE_IS_IO_OUT(exit_qual)		(((exit_qual) & 8) ? 0 : 1)
- #define VE_GET_IO_SIZE(exit_qual)	(((exit_qual) & 7) + 1)
-@@ -175,6 +180,34 @@ int tdx_mcall_tdreport(u64 data, u64 reportdata)
- }
- EXPORT_SYMBOL_GPL(tdx_mcall_tdreport);
+@@ -11,6 +11,11 @@
+ #include <asm/tdx.h>
+ #include <asm/cmdline.h>
+ #include <asm/i8259.h>
++#include <asm/apic.h>
++#include <asm/idtentry.h>
++#include <asm/irq_regs.h>
++#include <asm/desc.h>
++#include <asm/idtentry.h>
+ #include <asm/vmx.h>
+ #include <asm/insn.h>
+ #include <asm/insn-eval.h>
+@@ -54,6 +59,14 @@ static struct {
+ 	unsigned long attributes;
+ } td_info __ro_after_init;
  
 +/*
-+ * tdx_hcall_get_quote() - Generate TDQUOTE using TDREPORT_STRUCT.
-+ *
-+ * @data        : Physical address of 4KB GPA memory which contains
-+ *                TDREPORT_STRUCT.
-+ *
-+ * return 0 on success or failure error number.
++ * Currently it will be used only by the attestation
++ * driver. So, race condition with read/write operation
++ * is not considered.
 + */
-+int tdx_hcall_get_quote(u64 data)
++void (*tdg_event_notify_handler)(void);
++EXPORT_SYMBOL_GPL(tdg_event_notify_handler);
++
+ /*
+  * Wrapper for standard use of __tdx_hypercall with BUG_ON() check
+  * for TDCALL error.
+@@ -152,6 +165,28 @@ static bool tdg_perfmon_enabled(void)
+ 	return td_info.attributes & BIT(63);
+ }
+ 
++/* TDX guest event notification handler */
++DEFINE_IDTENTRY_SYSVEC(sysvec_tdg_event_notify)
 +{
-+	u64 ret;
++	struct pt_regs *old_regs = set_irq_regs(regs);
 +
-+	if (!data || !prot_guest_has(PR_GUEST_TDX))
-+		return -EINVAL;
++	inc_irq_stat(irq_tdg_event_notify_count);
 +
-+	ret = _trace_tdx_hypercall(TDVMCALL_GET_QUOTE, data, 0, 0, 0, NULL);
++	if (tdg_event_notify_handler)
++		tdg_event_notify_handler();
 +
-+	if (ret == TDVMCALL_SUCCESS)
-+		return 0;
-+	else if (ret == TDVMCALL_INVALID_OPERAND)
-+		return -EINVAL;
-+	else if (ret == TDVMCALL_TDREPORT_FAILED)
-+		return -EBUSY;
++	/*
++	 * The hypervisor requires that the APIC EOI should be acked.
++	 * If the APIC EOI is not acked, the APIC ISR bit for the
++	 * TDX_GUEST_EVENT_NOTIFY_VECTOR will not be cleared and then it
++	 * will block the interrupt whose vector is lower than
++	 * TDX_GUEST_EVENT_NOTIFY_VECTOR.
++	 */
++	ack_APIC_irq();
 +
-+	return -EIO;
++	set_irq_regs(old_regs);
 +}
-+EXPORT_SYMBOL_GPL(tdx_hcall_get_quote);
 +
- static void tdg_get_info(void)
- {
- 	u64 ret;
+ /*
+  * tdx_mcall_tdreport() - Generate TDREPORT_STRUCT using TDCALL.
+  *
+@@ -720,5 +755,11 @@ void __init tdx_early_init(void)
+ 		lock_kernel_down("TDX guest init", lockdown_reason);
+ 	}
+ 
++	alloc_intr_gate(TDX_GUEST_EVENT_NOTIFY_VECTOR,
++			asm_sysvec_tdg_event_notify);
++
++	if (tdx_hcall_set_notify_intr(TDX_GUEST_EVENT_NOTIFY_VECTOR))
++		pr_warn("Setting event notification interrupt failed\n");
++
+ 	pr_info("Guest initialized\n");
+ }
 -- 
 2.25.1
 
