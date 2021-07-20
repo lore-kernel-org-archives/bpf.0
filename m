@@ -2,87 +2,203 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C6E0C07E95
-	for <bpf@archiver.kernel.org>; Tue, 20 Jul 2021 02:17:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A03FAC07E95
+	for <bpf@archiver.kernel.org>; Tue, 20 Jul 2021 03:38:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E2AD161029
-	for <bpf@archiver.kernel.org>; Tue, 20 Jul 2021 02:17:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 762FD61186
+	for <bpf@archiver.kernel.org>; Tue, 20 Jul 2021 03:38:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235860AbhGTBf6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 19 Jul 2021 21:35:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59478 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241853AbhGTB1E (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 19 Jul 2021 21:27:04 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9C3EC61164;
-        Tue, 20 Jul 2021 02:07:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1626746861;
-        bh=r5wSh0N4B6XoXmmj5VoGs+TOmUC23WqLrxAwPTMxhoQ=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=OBWz8xXpkqJGSA8ojBaW0KwNmW7OQyIdOvwR3SaOz64AUscnJJqspPyQ+ILyM0Hli
-         8CnpSqb8pMhHw2n4RozPYP9v69Z2i11mXUfVV+zBA70Y5kMSe0THk640gSjSrqgxFX
-         oBBZJRIAfbt33d0Tv79cCnsxBpyXjwv1VZirwa8b5hJ04TFpFjh3cqCo5HQkNAsQvF
-         bwZLO7aHRGVVpjxkA2cjrwUBdipSA29QMZ3XWX6FgevtDDkaBAEuPSBRmUJZ9yMalN
-         5jltaLsOX3aRzqLcqX2rDMGnvQ/4Q+BRGsdHGkWH70yvFxVoGiLehnvhz7pRGyrtmt
-         YbyXQGBBLd4wA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 67CFC5C06CA; Mon, 19 Jul 2021 19:07:41 -0700 (PDT)
-Date:   Mon, 19 Jul 2021 19:07:41 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Zhouyi Zhou <zhouzhouyi@gmail.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        rostedt <rostedt@goodmis.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        "Joel Fernandes, Google" <joel@joelfernandes.org>,
-        rcu <rcu@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>, apw@canonical.com,
-        joe@perches.com, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, bpf@vger.kernel.org,
-        mingo@kernel.org
-Subject: Re: [PATCH] RCU: Fix macro name CONFIG_TASKS_RCU_TRACE
-Message-ID: <20210720020741.GD4397@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <520385500.15226.1626181744332.JavaMail.zimbra@efficios.com>
- <20210713131812.GV4397@paulmck-ThinkPad-P17-Gen-1>
- <20210713151908.GW4397@paulmck-ThinkPad-P17-Gen-1>
- <CAABZP2zO6WpaYW33V_Di5naxr1TRm0tokCmTZahDuXmRupxd=A@mail.gmail.com>
- <20210715035149.GI4397@paulmck-ThinkPad-P17-Gen-1>
- <CAABZP2xDNtjZew=Rr7QvEDX7jnVCcE+JFpSDxiQ4yNPUE6kj-g@mail.gmail.com>
- <20210715180941.GK4397@paulmck-ThinkPad-P17-Gen-1>
- <CAABZP2wuWtGAGRqWJb3Gewm5VLZdZ_C=LRZsFbaG3jcQabO3qA@mail.gmail.com>
- <20210718210854.GP4397@paulmck-ThinkPad-P17-Gen-1>
- <de4785f8-8a9f-c32e-7642-d5bb08bff343@infradead.org>
+        id S243483AbhGTC5W (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 19 Jul 2021 22:57:22 -0400
+Received: from szxga02-in.huawei.com ([45.249.212.188]:11453 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347098AbhGTCzy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 19 Jul 2021 22:55:54 -0400
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4GTPS50Ch9zcfp1;
+        Tue, 20 Jul 2021 11:33:09 +0800 (CST)
+Received: from dggpemm500005.china.huawei.com (7.185.36.74) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Tue, 20 Jul 2021 11:36:30 +0800
+Received: from localhost.localdomain (10.69.192.56) by
+ dggpemm500005.china.huawei.com (7.185.36.74) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Tue, 20 Jul 2021 11:36:30 +0800
+From:   Yunsheng Lin <linyunsheng@huawei.com>
+To:     <davem@davemloft.net>, <kuba@kernel.org>
+CC:     <alexander.duyck@gmail.com>, <linux@armlinux.org.uk>,
+        <mw@semihalf.com>, <linuxarm@openeuler.org>,
+        <yisen.zhuang@huawei.com>, <salil.mehta@huawei.com>,
+        <thomas.petazzoni@bootlin.com>, <hawk@kernel.org>,
+        <ilias.apalodimas@linaro.org>, <ast@kernel.org>,
+        <daniel@iogearbox.net>, <john.fastabend@gmail.com>,
+        <akpm@linux-foundation.org>, <peterz@infradead.org>,
+        <will@kernel.org>, <willy@infradead.org>, <vbabka@suse.cz>,
+        <fenghua.yu@intel.com>, <guro@fb.com>, <peterx@redhat.com>,
+        <feng.tang@intel.com>, <jgg@ziepe.ca>, <mcroce@microsoft.com>,
+        <hughd@google.com>, <jonathan.lemon@gmail.com>, <alobakin@pm.me>,
+        <willemb@google.com>, <wenxu@ucloud.cn>, <cong.wang@bytedance.com>,
+        <haokexin@gmail.com>, <nogikh@google.com>, <elver@google.com>,
+        <yhs@fb.com>, <kpsingh@kernel.org>, <andrii@kernel.org>,
+        <kafai@fb.com>, <songliubraving@fb.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
+Subject: [PATCH rfc v6 2/4] page_pool: add interface to manipulate frag count in page pool
+Date:   Tue, 20 Jul 2021 11:35:43 +0800
+Message-ID: <1626752145-27266-3-git-send-email-linyunsheng@huawei.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1626752145-27266-1-git-send-email-linyunsheng@huawei.com>
+References: <1626752145-27266-1-git-send-email-linyunsheng@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <de4785f8-8a9f-c32e-7642-d5bb08bff343@infradead.org>
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.56]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Jul 19, 2021 at 06:39:17PM -0700, Randy Dunlap wrote:
-> On 7/18/21 2:08 PM, Paul E. McKenney wrote:
-> > On Sun, Jul 18, 2021 at 06:03:34AM +0800, Zhouyi Zhou wrote:
-> >> Hi Paul
-> >> During the research, I found a already existing tool to detect
-> >> undefined Kconfig macro:
-> >> scripts/checkkconfigsymbols.py. It is marvellous!
-> > 
-> > Nice!  Maybe I should add this to torture.sh.
-> 
-> Paul, I believe that subsystems should take care of themselves,
-> so you can do that for RCU, e.g., but at the same time, I think that
-> some CI should be running that script (and other relevant scripts)
-> on the entire kernel tree and reporting problems that are found.
+For 32 bit systems with 64 bit dma, dma_addr[1] is used to
+store the upper 32 bit dma addr, those system should be rare
+those days.
 
-Even better!  ;-)
+For normal system, the dma_addr[1] in 'struct page' is not
+used, so we can reuse dma_addr[1] for storing frag count,
+which means how many frags this page might be splited to.
 
-							Thanx, Paul
+In order to simplify the page frag support in the page pool,
+the PAGE_POOL_DMA_USE_PP_FRAG_COUNT macro is added to indicate
+the 32 bit systems with 64 bit dma, and the page frag support
+in page pool is disabled for such system.
+
+The newly added page_pool_set_frag_count() is called to reserve
+the maximum frag count before any page frag is passed to the
+user. The page_pool_atomic_sub_frag_count_return() is called
+when user is done with the page frag.
+
+Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
+---
+ include/linux/mm_types.h | 18 +++++++++++++-----
+ include/net/page_pool.h  | 41 ++++++++++++++++++++++++++++++++++-------
+ net/core/page_pool.c     |  4 ++++
+ 3 files changed, 51 insertions(+), 12 deletions(-)
+
+diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+index d33d97c..3e339dd 100644
+--- a/include/linux/mm_types.h
++++ b/include/linux/mm_types.h
+@@ -103,11 +103,19 @@ struct page {
+ 			unsigned long pp_magic;
+ 			struct page_pool *pp;
+ 			unsigned long _pp_mapping_pad;
+-			/**
+-			 * @dma_addr: might require a 64-bit value on
+-			 * 32-bit architectures.
+-			 */
+-			unsigned long dma_addr[2];
++			unsigned long dma_addr;
++			union {
++				/**
++				 * dma_addr_upper: might require a 64-bit
++				 * value on 32-bit architectures.
++				 */
++				unsigned long dma_addr_upper;
++				/**
++				 * For frag page support, not supported in
++				 * 32-bit architectures with 64-bit DMA.
++				 */
++				atomic_long_t pp_frag_count;
++			};
+ 		};
+ 		struct {	/* slab, slob and slub */
+ 			union {
+diff --git a/include/net/page_pool.h b/include/net/page_pool.h
+index 8d7744d..517d89f 100644
+--- a/include/net/page_pool.h
++++ b/include/net/page_pool.h
+@@ -45,7 +45,10 @@
+ 					* Please note DMA-sync-for-CPU is still
+ 					* device driver responsibility
+ 					*/
+-#define PP_FLAG_ALL		(PP_FLAG_DMA_MAP | PP_FLAG_DMA_SYNC_DEV)
++#define PP_FLAG_PAGE_FRAG	BIT(2) /* for page frag feature */
++#define PP_FLAG_ALL		(PP_FLAG_DMA_MAP |\
++				 PP_FLAG_DMA_SYNC_DEV |\
++				 PP_FLAG_PAGE_FRAG)
+ 
+ /*
+  * Fast allocation side cache array/stack
+@@ -198,19 +201,43 @@ static inline void page_pool_recycle_direct(struct page_pool *pool,
+ 	page_pool_put_full_page(pool, page, true);
+ }
+ 
++#define PAGE_POOL_DMA_USE_PP_FRAG_COUNT	\
++		(sizeof(dma_addr_t) > sizeof(unsigned long))
++
+ static inline dma_addr_t page_pool_get_dma_addr(struct page *page)
+ {
+-	dma_addr_t ret = page->dma_addr[0];
+-	if (sizeof(dma_addr_t) > sizeof(unsigned long))
+-		ret |= (dma_addr_t)page->dma_addr[1] << 16 << 16;
++	dma_addr_t ret = page->dma_addr;
++
++	if (PAGE_POOL_DMA_USE_PP_FRAG_COUNT)
++		ret |= (dma_addr_t)page->dma_addr_upper << 16 << 16;
++
+ 	return ret;
+ }
+ 
+ static inline void page_pool_set_dma_addr(struct page *page, dma_addr_t addr)
+ {
+-	page->dma_addr[0] = addr;
+-	if (sizeof(dma_addr_t) > sizeof(unsigned long))
+-		page->dma_addr[1] = upper_32_bits(addr);
++	page->dma_addr = addr;
++	if (PAGE_POOL_DMA_USE_PP_FRAG_COUNT)
++		page->dma_addr_upper = upper_32_bits(addr);
++}
++
++static inline void page_pool_set_frag_count(struct page *page, long nr)
++{
++	atomic_long_set(&page->pp_frag_count, nr);
++}
++
++static inline long page_pool_atomic_sub_frag_count_return(struct page *page,
++							  long nr)
++{
++	long frag_count = atomic_long_read(&page->pp_frag_count);
++	long ret;
++
++	if (frag_count == nr)
++		return 0;
++
++	ret = atomic_long_sub_return(nr, &page->pp_frag_count);
++	WARN_ON(ret < 0);
++	return ret;
+ }
+ 
+ static inline bool is_page_pool_compiled_in(void)
+diff --git a/net/core/page_pool.c b/net/core/page_pool.c
+index 78838c6..68fab94 100644
+--- a/net/core/page_pool.c
++++ b/net/core/page_pool.c
+@@ -67,6 +67,10 @@ static int page_pool_init(struct page_pool *pool,
+ 		 */
+ 	}
+ 
++	if (PAGE_POOL_DMA_USE_PP_FRAG_COUNT &&
++	    pool->p.flags & PP_FLAG_PAGE_FRAG)
++		return -EINVAL;
++
+ 	if (ptr_ring_init(&pool->ring, ring_qsize, GFP_KERNEL) < 0)
+ 		return -ENOMEM;
+ 
+-- 
+2.7.4
+
