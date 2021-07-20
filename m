@@ -2,116 +2,116 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E44ADC07E95
-	for <bpf@archiver.kernel.org>; Tue, 20 Jul 2021 03:38:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CD53C07E9B
+	for <bpf@archiver.kernel.org>; Tue, 20 Jul 2021 04:19:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CA75461164
-	for <bpf@archiver.kernel.org>; Tue, 20 Jul 2021 03:38:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F12D061003
+	for <bpf@archiver.kernel.org>; Tue, 20 Jul 2021 04:19:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346782AbhGTC51 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 19 Jul 2021 22:57:27 -0400
-Received: from szxga02-in.huawei.com ([45.249.212.188]:7399 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347110AbhGTC4A (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 19 Jul 2021 22:56:00 -0400
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4GTPRs6n7lz7x0b;
-        Tue, 20 Jul 2021 11:32:57 +0800 (CST)
-Received: from dggpemm500005.china.huawei.com (7.185.36.74) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Tue, 20 Jul 2021 11:36:30 +0800
-Received: from localhost.localdomain (10.69.192.56) by
- dggpemm500005.china.huawei.com (7.185.36.74) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Tue, 20 Jul 2021 11:36:30 +0800
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-To:     <davem@davemloft.net>, <kuba@kernel.org>
-CC:     <alexander.duyck@gmail.com>, <linux@armlinux.org.uk>,
-        <mw@semihalf.com>, <linuxarm@openeuler.org>,
-        <yisen.zhuang@huawei.com>, <salil.mehta@huawei.com>,
-        <thomas.petazzoni@bootlin.com>, <hawk@kernel.org>,
-        <ilias.apalodimas@linaro.org>, <ast@kernel.org>,
-        <daniel@iogearbox.net>, <john.fastabend@gmail.com>,
-        <akpm@linux-foundation.org>, <peterz@infradead.org>,
-        <will@kernel.org>, <willy@infradead.org>, <vbabka@suse.cz>,
-        <fenghua.yu@intel.com>, <guro@fb.com>, <peterx@redhat.com>,
-        <feng.tang@intel.com>, <jgg@ziepe.ca>, <mcroce@microsoft.com>,
-        <hughd@google.com>, <jonathan.lemon@gmail.com>, <alobakin@pm.me>,
-        <willemb@google.com>, <wenxu@ucloud.cn>, <cong.wang@bytedance.com>,
-        <haokexin@gmail.com>, <nogikh@google.com>, <elver@google.com>,
-        <yhs@fb.com>, <kpsingh@kernel.org>, <andrii@kernel.org>,
-        <kafai@fb.com>, <songliubraving@fb.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
-Subject: [PATCH rfc v6 0/4] add frag page support in page pool
-Date:   Tue, 20 Jul 2021 11:35:41 +0800
-Message-ID: <1626752145-27266-1-git-send-email-linyunsheng@huawei.com>
-X-Mailer: git-send-email 2.7.4
-MIME-Version: 1.0
+        id S1345685AbhGTDib (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 19 Jul 2021 23:38:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45478 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245445AbhGTDgz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 19 Jul 2021 23:36:55 -0400
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4276DC0613DF
+        for <bpf@vger.kernel.org>; Mon, 19 Jul 2021 21:16:34 -0700 (PDT)
+Received: by mail-il1-x12c.google.com with SMTP id a7so18037154iln.6
+        for <bpf@vger.kernel.org>; Mon, 19 Jul 2021 21:16:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=user-agent:mime-version:message-id:in-reply-to:references:date:from
+         :to:cc:subject;
+        bh=0tQss4tGfn4OQIzt1lN20MAOzzsntRq7ZNCJXJ/tuZM=;
+        b=Z8cveZ6SpzniE8rU45nsU6Yr+p7sUDcnDdhdNQjF6f6JJPzZmP59lSsUD71/9qp5OM
+         lOVvTY+k5XSk9WNrdWk9Nl1WqRE1U55gTJPykJRbrwsleq1+b9lnXhM4+gqixRsZYQtA
+         lpRluc5gcmY8JL2xbRsyN8kgCjQbjLY5vyIKTFr6tHe824dshqd9tnKo7n1YDUuYrtp4
+         zghYUm1llYfhMIRPGBxIcVdJ590i82de3fOU8oSxDh8Bci14q7qM9BBqgRXoBOKxZYRa
+         6nZuj0+BL9kf2xPObmrku+DAoJ0WlBYvSDMSL2jxgO8EDfdcqcB9MSifoCkfMEav/rTg
+         8XaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:user-agent:mime-version:message-id:in-reply-to
+         :references:date:from:to:cc:subject;
+        bh=0tQss4tGfn4OQIzt1lN20MAOzzsntRq7ZNCJXJ/tuZM=;
+        b=XYEZH2IfAFZmkPBCnDMUhUhkhoPKLxbgUsn1aeJUB8EvxMGdHhmlFkA2nqu9ErpAnj
+         lRAs2NMcTxzSYWOXJDTWRllpnjO3dD0945lCC9cAFZRuVVbR9YT//fnz6ljPMQtdmPIV
+         4aaCpAK2eJ+zYfiGMi5ClJfw6GwcpC7rZe9yhEetl9msgc6H7AumxHbwbt+aonGUMvrr
+         hZuG2zTRYzZhvKRN8HRCrthJ3ik6UlSCanuyKkzfBYcGIqGwGC6+ifCAbhdtWeNjzbvY
+         Hgr6CgvoBzhuOS6Xq628rFsyCqNS40/+3JlwwFp+bpdJvD4heD8YlFHoiOrn8qA6B2lL
+         wQHw==
+X-Gm-Message-State: AOAM533doJjui4MgMjNh8YoKmBMK9w5W/XFHmS76KnXNjU4WxIsi6Vm/
+        n31c4SG/T7AoMBmUdNIhKA==
+X-Google-Smtp-Source: ABdhPJyc5ixekBI9ZX0KWnyy2nTb78YBclc5UNGVsQwxvbaegUzayMZue5p1IKNxXqMQjbm6zKgzMg==
+X-Received: by 2002:a92:7303:: with SMTP id o3mr19641340ilc.36.1626754593717;
+        Mon, 19 Jul 2021 21:16:33 -0700 (PDT)
+Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
+        by smtp.gmail.com with ESMTPSA id w21sm11343024iol.52.2021.07.19.21.16.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jul 2021 21:16:33 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 47F9C27C0054;
+        Tue, 20 Jul 2021 00:16:32 -0400 (EDT)
+Received: from imap10 ([10.202.2.60])
+  by compute3.internal (MEProxy); Tue, 20 Jul 2021 00:16:32 -0400
+X-ME-Sender: <xms:H072YF4cTNJT09LzvJiGYI4CtnGrK-A_eEz-bQUWUGU10Xs0Wy5_mw>
+    <xme:H072YC6kgt4NfI0DhjHoKjRhb0GEema_ZkdNYmayCYAxk04P3XMY0SEL0mbK4uUt4
+    GVAcoEAxqmMPxGzZYI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrfedugdejfecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvufgtsehttdertderreejnecuhfhrohhmpedftfgrfhgr
+    vghlucffrghvihguucfvihhnohgtohdfuceorhgrfhgrvghlughtihhnohgtohesghhmrg
+    hilhdrtghomheqnecuggftrfgrthhtvghrnhepledtteelfeekjeelvdelieejfefhkeeu
+    ffeitedutdelueefkefhvedtffeigeeunecuvehluhhsthgvrhfuihiivgeptdenucfrrg
+    hrrghmpehmrghilhhfrhhomheprhgrfhgrvghlughtihhnohgtohdomhgvshhmthhprghu
+    thhhphgvrhhsohhnrghlihhthidqudduvdehieehledtgedqvdehheekjeelfeeiqdhrrg
+    hfrggvlhguthhinhhotghopeepghhmrghilhdrtghomhesuddvfehmrghilhdrohhrgh
+X-ME-Proxy: <xmx:H072YMeT6VIl2_j1vDk031MNZyelhulX0DI2MHBa3wt0LxSg7E30sg>
+    <xmx:H072YOIhkDpfoD-hHbDgTN5bq70IRHAUhU7SWT4mwlN2AAGMz55Qqw>
+    <xmx:H072YJI9a-JPlUMyxMKs_nyQ0K_4El3xXVWP54HVVcTjiOxpfwxQRw>
+    <xmx:IE72YMnuOY8cZPX8dMeEvtw401UtlIyN4usUT6iiWyn0v4_Um3kYgQ>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id DCC064E00F5; Tue, 20 Jul 2021 00:16:31 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-533-gf73e617b8a-fm-20210712.002-gf73e617b
+Mime-Version: 1.0
+Message-Id: <0487b7af-bd8c-4a83-94ed-eb26cca90fb9@www.fastmail.com>
+In-Reply-To: <CAEf4BzaVrMcLe-0FowM1upkRfBePnJiksmc3vfKvbAFFUFscoA@mail.gmail.com>
+References: <CAEf4BzYQcD8vrTkXSgwBVGhRKvSWM6KyNc07QthK+=60+vUf8w@mail.gmail.com>
+ <20210625044459.1249282-1-rafaeldtinoco@gmail.com>
+ <CAEf4BzYz4BJp8beyoKD03ao4PuvuDg+QpMszeJSGrqPC==JoGw@mail.gmail.com>
+ <701c5dea-2db9-4df8-888b-9e10c854afc3@www.fastmail.com>
+ <CAEf4BzaVrMcLe-0FowM1upkRfBePnJiksmc3vfKvbAFFUFscoA@mail.gmail.com>
+Date:   Tue, 20 Jul 2021 01:16:11 -0300
+From:   "Rafael David Tinoco" <rafaeldtinoco@gmail.com>
+To:     "Andrii Nakryiko" <andrii.nakryiko@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>
+Subject: =?UTF-8?Q?Re:_[PATCH_bpf-next_v3]_libbpf:_introduce_legacy_kprobe_events?=
+ =?UTF-8?Q?_support?=
 Content-Type: text/plain
-X-Originating-IP: [10.69.192.56]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500005.china.huawei.com (7.185.36.74)
-X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patchset adds frag page support in page pool and
-enable skb's page frag recycling based on page pool in
-hns3 drvier.
+> >         plink = (struct bpf_link *const *) link;
+> >         kplink = container_of(plink, struct bpf_link_kprobe, link);
+> 
+> Did you check if this works? Also how that could ever even work for
+> non-kprobe but perf_event-based cases, like tracepoint? And why are we
+> even discussing these "alternatives"? What's wrong with the way I
+> proposed earlier? For container_of() to work you have to do it the way
+> I described in my previous email with one struct being embedded in
+> another one.
 
-RFC v6:
-1. Disable frag page support in system 32-bit arch and
-   64-bit DMA.
+Nevermind. Sorry for the noise. I'll do the container encapsulation like
+you said so. I was being lazy and trying to find a way to change just the
+kprobes path instead of thinking in the overall project.
 
-RFC v5:
-1. Rename dma_addr[0] to pp_frag_count and adjust codes
-   according to the rename.
-
-RFC v4:
-1. Use the dma_addr[1] to store bias.
-2. Default to a pagecnt_bias of PAGE_SIZE - 1.
-3. other minor comment suggested by Alexander.
-
-RFC v3:
-1. Implement the semantic of "page recycling only wait for the
-   page pool user instead of all user of a page"
-2. Support the frag allocation of different sizes
-3. Merge patch 4 & 5 to one patch as it does not make sense to
-   use page_pool_dev_alloc_pages() API directly with elevated
-   refcnt.
-4. other minor comment suggested by Alexander.
-
-RFC v2:
-1. Split patch 1 to more reviewable one.
-2. Repurpose the lower 12 bits of the dma address to store the
-   pagecnt_bias as suggested by Alexander.
-3. support recycling to pool->alloc for elevated refcnt case
-   too.
-
-Yunsheng Lin (4):
-  page_pool: keep pp info as long as page pool owns the page
-  page_pool: add interface to manipulate frag count in page pool
-  page_pool: add frag page recycling support in page pool
-  net: hns3: support skb's frag page recycling based on page pool
-
- drivers/net/ethernet/hisilicon/hns3/hns3_enet.c |  82 +++++++++++++++--
- drivers/net/ethernet/hisilicon/hns3/hns3_enet.h |   3 +
- drivers/net/ethernet/marvell/mvneta.c           |   6 +-
- drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c |   2 +-
- drivers/net/ethernet/ti/cpsw.c                  |   2 +-
- drivers/net/ethernet/ti/cpsw_new.c              |   2 +-
- include/linux/mm_types.h                        |  18 ++--
- include/linux/skbuff.h                          |   4 +-
- include/net/page_pool.h                         |  65 +++++++++++---
- net/core/page_pool.c                            | 112 +++++++++++++++++++++++-
- 10 files changed, 257 insertions(+), 39 deletions(-)
-
--- 
-2.7.4
-
+Sorry again, will come up with what you said in the first place. 
