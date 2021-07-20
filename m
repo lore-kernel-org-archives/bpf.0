@@ -2,459 +2,200 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.9 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95979C07E95
-	for <bpf@archiver.kernel.org>; Tue, 20 Jul 2021 04:56:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5448CC07E95
+	for <bpf@archiver.kernel.org>; Tue, 20 Jul 2021 08:56:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7CAB5610D0
-	for <bpf@archiver.kernel.org>; Tue, 20 Jul 2021 04:56:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 37CB461209
+	for <bpf@archiver.kernel.org>; Tue, 20 Jul 2021 08:56:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242633AbhGTEPb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 20 Jul 2021 00:15:31 -0400
-Received: from mga14.intel.com ([192.55.52.115]:51770 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241125AbhGTEPV (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 20 Jul 2021 00:15:21 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10050"; a="210897317"
-X-IronPort-AV: E=Sophos;i="5.84,254,1620716400"; 
-   d="scan'208";a="210897317"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2021 21:55:59 -0700
-X-IronPort-AV: E=Sophos;i="5.84,254,1620716400"; 
-   d="scan'208";a="431923383"
-Received: from ywei11-mobl1.amr.corp.intel.com (HELO skuppusw-desk1.amr.corp.intel.com) ([10.251.138.31])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2021 21:55:59 -0700
-From:   Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <mgross@linux.intel.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Peter H Anvin <hpa@zytor.com>, Dave Hansen <dave.hansen@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, bpf@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH v3 6/6] tools/tdx: Add a sample attestation user app
-Date:   Mon, 19 Jul 2021 21:55:52 -0700
-Message-Id: <20210720045552.2124688-7-sathyanarayanan.kuppuswamy@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210720045552.2124688-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-References: <20210720045552.2124688-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+        id S234561AbhGTIPZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 20 Jul 2021 04:15:25 -0400
+Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:7388 "EHLO
+        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234725AbhGTIJv (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 20 Jul 2021 04:09:51 -0400
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16K8g6wY026401;
+        Tue, 20 Jul 2021 08:50:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : content-type :
+ mime-version; s=corp-2021-07-09;
+ bh=3Kxgyz1cBR1FVhlGxpQZPYoZeqUSJwYJGNBOMS3cMeM=;
+ b=y8rFsvVVdMUydpnySZlcfVaKgUaERrCKDbkKe8J+adcUUXYtSzCHbR9JULOlXnYFQCia
+ Zm0i9qGz+3qxMQsrDIOrxOsprr9XDACBKSHhMtVwYtRGnFIbuNfn2h+QrhRyXKI1h94X
+ s8EB8il3VRedFaxznF7aoENRiVCwHEiox1oNR6bEEgJGTkK8thh9+M4vRnrgrlG6E0l7
+ NkzXYsfKh/yRBUxndild2HxH9OI8jFMVF819wc53mQvy9fshyFd6rZEFEcIBBwXEAdpf
+ /msjyV8kH6ap8sRYQsizYUjOuY6skCwRDkqgnyGJTlxJIjn4Wp8fCgG8NCQ6KDYhv1Vu 2A== 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : content-type :
+ mime-version; s=corp-2020-01-29;
+ bh=3Kxgyz1cBR1FVhlGxpQZPYoZeqUSJwYJGNBOMS3cMeM=;
+ b=GQyQVkTBVDVR90cGq6Gg/7unDNmAY0xa7suGHFgZP8kBRSyS9aaMcziE/vgknfkJAyDi
+ X8e+ndRaBAKczsFpK2FdC3BaYxVv7yp/0DsI954eitXX6l5AZOKmH/Du/bJhx2r5JjsA
+ STBwyn1HxWxtJxl0LbPM7RoWjCI+FD5XihMWDhR56ovejvnZYk7+P7KgbBoe2oea0YuF
+ 55+O+wqLabWsmCHkzS+7rt4XX769EgMX0oqcuWjCnqELXQYuy4SfTy+PwLODqwaJx9sK
+ b+1BDA1w5mxWpBNAEL8rkccyKW/P8uc2hVETvjMVq3S+N2MPB5kJ378+IzZYOpB1juo2 TA== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by mx0b-00069f02.pphosted.com with ESMTP id 39w9hft3v5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 20 Jul 2021 08:50:12 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 16K8fHhL048484;
+        Tue, 20 Jul 2021 08:50:11 GMT
+Received: from nam04-dm6-obe.outbound.protection.outlook.com (mail-dm6nam08lp2041.outbound.protection.outlook.com [104.47.73.41])
+        by aserp3030.oracle.com with ESMTP id 39upea14nw-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 20 Jul 2021 08:50:10 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Uvsf4FQx1fgb5cUgXVogGmOo5TQFJE41AowIL/vnIhs3htVmZfHRyEUMJCvn2pgo4Hzi6QAHjpc+UB590f1lCJ06nZCk/7hWcGEzbXxHX2WfuMpvHewtrpjacncFvgwbWawIRd0bkh75nUvOSK5qLkiK4Flht98y79lyC/bkME520XQiYu1uJBmrv2AK9UYGDLEbmY7gxuUk+J3tAOcqL+AwLa2JWCMUwMMbbwpgFfHPBuCkiReRjH4DZM0WdZ5PnBNZEaswI2zyU+8kLGZGQQUQM5HQq6+4IJbVE56//rks351FUPc3jJsxJppBTZ7FfCftppad+JHpo7R40Uo++g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3Kxgyz1cBR1FVhlGxpQZPYoZeqUSJwYJGNBOMS3cMeM=;
+ b=Mh/pJ6vD3+VjtUhjmpdB069yZjWIhhF90kHenJ6qxBcqaygvDVuuTTD0ieiTfRX0eU5Cypod7KGbg3+RpPOGeJ84YsXK1wnbi2sabPcEK+AcZyRkSRcGCGrYx0dWzV/rE9Jg6hzQaX4ZdCBTqVmi+EAiH9NmEQHOY+2bxlI8psuBNL0ztRiDLFvGxF/cqJrJAGy7hVb4Wt+5m+D2qYZwFR7eQ/s/bjPe1sTMvfBGkR1n2Thu2BU+4Hi3XIj9x+nONvq1+G2t2UrTUsxma1SSkIKBttI2PklKGSF/ETO0j12BtbSxRT2baE27v4hTuaMuVZlWCJO31bs3c3ZpnngtVg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3Kxgyz1cBR1FVhlGxpQZPYoZeqUSJwYJGNBOMS3cMeM=;
+ b=fRjUBkCpH37eo/GQo5v1nUDj6/CudvUN40Z/yFH49gl+tBu4tWMb5zSAduNxHI+UZXFRTmg3ZZ9jFmS8szoP/F+qFDiXAO8ULupFR+b3gijvhQAYQz4mbuJ9LwjGhzchh0EzwVcBFh8YA5HQAt1TJOVtt4G0+/OXEpOEQ3EkZi8=
+Authentication-Results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=oracle.com;
+Received: from BLAPR10MB5267.namprd10.prod.outlook.com (2603:10b6:208:30e::22)
+ by MN2PR10MB3470.namprd10.prod.outlook.com (2603:10b6:208:10d::29) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4331.22; Tue, 20 Jul
+ 2021 08:50:09 +0000
+Received: from BLAPR10MB5267.namprd10.prod.outlook.com
+ ([fe80::39e8:94ec:fc2d:5a56]) by BLAPR10MB5267.namprd10.prod.outlook.com
+ ([fe80::39e8:94ec:fc2d:5a56%9]) with mapi id 15.20.4331.034; Tue, 20 Jul 2021
+ 08:50:09 +0000
+From:   Alan Maguire <alan.maguire@oracle.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
+Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, morbo@google.com,
+        bpf@vger.kernel.org, netdev@vger.kernel.org,
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH v2 bpf-next 2/3] selftests/bpf: add __int128-specific tests for typed data dump
+Date:   Tue, 20 Jul 2021 09:49:52 +0100
+Message-Id: <1626770993-11073-3-git-send-email-alan.maguire@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1626770993-11073-1-git-send-email-alan.maguire@oracle.com>
+References: <1626770993-11073-1-git-send-email-alan.maguire@oracle.com>
+Content-Type: text/plain
+X-ClientProxiedBy: DB6PR07CA0158.eurprd07.prod.outlook.com
+ (2603:10a6:6:43::12) To BLAPR10MB5267.namprd10.prod.outlook.com
+ (2603:10b6:208:30e::22)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from localhost.localdomain (95.45.14.174) by DB6PR07CA0158.eurprd07.prod.outlook.com (2603:10a6:6:43::12) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4352.9 via Frontend Transport; Tue, 20 Jul 2021 08:50:08 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 9e2151b7-d819-432b-abbe-08d94b5b610e
+X-MS-TrafficTypeDiagnostic: MN2PR10MB3470:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <MN2PR10MB34700CFD6713686EDF5B40C8EFE29@MN2PR10MB3470.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2449;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5z+Tzydo1HAt1HnGaHtAFj0kOdw79a0pV5/HgmAtVpppGcaq70aCtY2fXHkZ4T/J3AXv44lLu/U9CCGWXpMRpZJ3BX+03mUVGciYrJUNMVYe7dJRAe5yLsT0lSOm+OhRC3Rr1vYQV++BOixt6Gx4Ddme/nNTezEQ7TEmXwK7YmY63GM1n0NnAfVQJbz2PIQixTWz3Ov0LirIY89s3wEQMeoAju8ghzj3ssk5o6UgRt2ii+ADNmTAchNEgZ5Z0SbwQHm7r2v0exvue+HKFqSeyfFsN4/vS3i4XSyXOjgSBCGpznwZL2RQXVjJ0b7h90oCp73OqdjltIsLo/lg/pEhQY18Q4PW4VRtpSUfHbK8FFlXUniuIYjtTrrLwlfj8CH1zRIey6ODvQK0PUz4mH7pKOqbElFgZP+vTBnRRPT0SChnvl+8HUdnJuprtQ/3JiM+nlPD0/GwUeJXwmG/tA+i+I92RojdGuUgyCmobSRhwFHVQStc4h5TfPtfPnX4ZV4ynG8APYf8bNsUfj1eFZvy/TBhaB8LvfEccrLP80KYsn0r/yKu7NXEoiOZIb44XFHnYN967+QwlmWf6Pj1l5QGiUN/Wb85u6aAPQENZ0w1NU38JR/q3pKrePgAtjxpiNHCWrD671onv3s+iJalSKOelwn2GGnnl34gajK+0fQRQnzbmLRIjpoiJZ4X7GQyN+aj75IKasCIVaZCJKoCCQM99A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5267.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(376002)(39860400002)(136003)(346002)(396003)(366004)(6506007)(6512007)(8936002)(2616005)(107886003)(26005)(66946007)(66476007)(956004)(6666004)(2906002)(4326008)(66556008)(86362001)(5660300002)(36756003)(52116002)(38100700002)(38350700002)(8676002)(6486002)(44832011)(186003)(316002)(7416002)(478600001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ThSMjX0QL8j+xxecg/XLwem09HU57ZTEWyL94sDeT+kJEcGU0lwK/JtJ1Iz5?=
+ =?us-ascii?Q?dQAzE0tgefFW6Ss5s8g7AmBznYksnQjHc43+cmzAXS1S6QxZ82dmhGmgpw9V?=
+ =?us-ascii?Q?Gnsnld0FMgziKda1nl9RgUdPcHK5nJkp1ORL/J+q9dmw1H5KdRutLl+G9soG?=
+ =?us-ascii?Q?jDoJcKBCqNUNuT1WCxAZq7PNHmlEdildL9hLpw5G1hYmUUTihpGEjQNDL6tM?=
+ =?us-ascii?Q?0X7+GyzNZ4Ol1qbjpDctOdLvXg8bjQytaB2Qw49aTRYLSw7PFwbnC1tUFFo+?=
+ =?us-ascii?Q?Eqnrl75BKOa2liGTpppvaXqyve+c6kOmOb0S0bD4TADvAhTAFufLlOkjCW9N?=
+ =?us-ascii?Q?WOp3z/y2g/CqlCp1BHsDKHEUs05yH2Y7ah+gLfGBhWA6/vq1GI0fxuBovQ49?=
+ =?us-ascii?Q?KhzKhoqRA/EiO7HlsxEJhwJAfQiQiQaTKCnXAeQLc1hygCtZoTkLesx9PKor?=
+ =?us-ascii?Q?/L81j2qfMxTzTq4bIM5Sjt1FI+r/aWhLo6KPXqsiQEGsr99GF71KG4kIHa//?=
+ =?us-ascii?Q?Vkr5VX90oPSQbf7WEXQG6oxEi1eTQNzUw+1PL0SkmXEkyBs7vaN1g4WSvCVl?=
+ =?us-ascii?Q?ghEuHhvUJh2Ur5HVRHQ3n2ZsF6MRHE1J81jfmgHkv1mLNlrj3avj+5pF4m3k?=
+ =?us-ascii?Q?fbouoHy4pqyPBQ4hKzrydTvgoU+QE2gs5JDs8ex7wrdAsvUHQbqgLklawNQD?=
+ =?us-ascii?Q?D+984fbFxrXf76Xwbzx0b0rhjpg2I/S/RZRIkJ9hRG8NuRSYr1OEPiiZIDrS?=
+ =?us-ascii?Q?sAyiWzmdWsMXBnQGy9SLau4OAd+lSToIT52mS70vxrzpwR0gwhMOKeArdye6?=
+ =?us-ascii?Q?SMhNZ7cvXmOpbREEA7+XinWxLAmvHplRH+MOMWdp/oQVvihZupZH2sbAOhaJ?=
+ =?us-ascii?Q?imZGfHoRKhmL2F+ARAP3uTSfR5wKWGd49GzJ4+2+NhCkGsANSmRHIma2t+wy?=
+ =?us-ascii?Q?qDhYUeQ8wAjDa5BIfzpNlp1sbb1+MaQ9QnnK/VhBaqRc8k7kqqh5hMx/WlHk?=
+ =?us-ascii?Q?nvg/cXbkULPYNuBrL1bav0a3tZBWJMjKVnSfWnbMtC+d39uDoz5J0PVqc33/?=
+ =?us-ascii?Q?Zw6QJQdE5Iwnasl6BIEHvrha+5LNt+ytF9rzMJ7QhCC/HZfjpiEA1PCSy3r4?=
+ =?us-ascii?Q?o9zlvSv8d+B7xc5wXE+Ljw+G2Jr31V5pXsociQnnNOOr+Qkor9ySoLBZ0P5n?=
+ =?us-ascii?Q?BWFRzJ+yAWv31UFM6EeRSL/IbumHV7zGAVS7PdsKRCCNGRulTazjPArK1UMR?=
+ =?us-ascii?Q?pzxu7f+0zNkiRY9huPbVRrxvrtQIIPDhNIQKSJplOdoS/8YAACiyGhnzCL0X?=
+ =?us-ascii?Q?HMfyZk0cdySk+PJ03VExfFdu?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9e2151b7-d819-432b-abbe-08d94b5b610e
+X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5267.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jul 2021 08:50:09.4215
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hUAUCtq7VKBHeBBCTozKZnTBsNmZVOyVrd7nzo/NioTH+0uJqYGtZozR+97FtY/NmADMX/LQSnX0iV/MjWgo5Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR10MB3470
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=10050 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 suspectscore=0 bulkscore=0
+ malwarescore=0 phishscore=0 mlxlogscore=999 mlxscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104190000
+ definitions=main-2107200052
+X-Proofpoint-GUID: imG1uRKnLFcw60-ql9ZwVaQiEPOOJITU
+X-Proofpoint-ORIG-GUID: imG1uRKnLFcw60-ql9ZwVaQiEPOOJITU
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This application uses the misc device /dev/tdx-attest to get TDREPORT
-from the TDX Module or request quote from the VMM.
+Add tests for __int128 display for platforms that support it.
+__int128s are dumped as hex values.
 
-It tests following attestation features:
-
-  - Get report using TDX_CMD_GET_TDREPORT IOCTL.
-  - Using report data request quote from VMM using TDX_CMD_GEN_QUOTE IOCTL.
-  - Get the quote size using TDX_CMD_GET_QUOTE_SIZE IOCTL.
-
-Reviewed-by: Tony Luck <tony.luck@intel.com>
-Reviewed-by: Andi Kleen <ak@linux.intel.com>
-Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 ---
+ tools/testing/selftests/bpf/prog_tests/btf_dump.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-Changes since v1:
- * Removed MMIO reference in gen_quote().
-
- tools/Makefile                     |  13 +-
- tools/tdx/Makefile                 |  19 +++
- tools/tdx/attest/.gitignore        |   2 +
- tools/tdx/attest/Makefile          |  24 +++
- tools/tdx/attest/tdx-attest-test.c | 232 +++++++++++++++++++++++++++++
- 5 files changed, 284 insertions(+), 6 deletions(-)
- create mode 100644 tools/tdx/Makefile
- create mode 100644 tools/tdx/attest/.gitignore
- create mode 100644 tools/tdx/attest/Makefile
- create mode 100644 tools/tdx/attest/tdx-attest-test.c
-
-diff --git a/tools/Makefile b/tools/Makefile
-index 7e9d34ddd74c..5d68084511cb 100644
---- a/tools/Makefile
-+++ b/tools/Makefile
-@@ -30,6 +30,7 @@ help:
- 	@echo '  selftests              - various kernel selftests'
- 	@echo '  bootconfig             - boot config tool'
- 	@echo '  spi                    - spi tools'
-+	@echo '  tdx                    - TDX related test tools'
- 	@echo '  tmon                   - thermal monitoring and tuning tool'
- 	@echo '  tracing                - misc tracing tools'
- 	@echo '  turbostat              - Intel CPU idle stats and freq reporting tool'
-@@ -65,7 +66,7 @@ acpi: FORCE
- cpupower: FORCE
- 	$(call descend,power/$@)
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf_dump.c b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
+index 0b4ba53..52ccf0c 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf_dump.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
+@@ -327,6 +327,14 @@ static int btf_dump_data(struct btf *btf, struct btf_dump *d,
+ static void test_btf_dump_int_data(struct btf *btf, struct btf_dump *d,
+ 				   char *str)
+ {
++#ifdef __SIZEOF_INT128__
++	__int128 i = 0xffffffffffffffff;
++
++	/* this dance is required because we cannot directly initialize
++	 * a 128-bit value to anything larger than a 64-bit value.
++	 */
++	i = (i << 64) | (i - 1);
++#endif
+ 	/* simple int */
+ 	TEST_BTF_DUMP_DATA_C(btf, d, NULL, str, int, BTF_F_COMPACT, 1234);
+ 	TEST_BTF_DUMP_DATA(btf, d, NULL, str, int, BTF_F_COMPACT | BTF_F_NONAME,
+@@ -348,6 +356,15 @@ static void test_btf_dump_int_data(struct btf *btf, struct btf_dump *d,
+ 	TEST_BTF_DUMP_DATA(btf, d, NULL, str, int, 0, "(int)-4567", -4567);
  
--cgroup firewire hv guest bootconfig spi usb virtio vm bpf iio gpio objtool leds wmi pci firmware debugging tracing: FORCE
-+cgroup firewire hv guest bootconfig spi usb virtio vm bpf iio gpio objtool leds wmi pci firmware debugging tracing tdx: FORCE
- 	$(call descend,$@)
+ 	TEST_BTF_DUMP_DATA_OVER(btf, d, NULL, str, int, sizeof(int)-1, "", 1);
++
++#ifdef __SIZEOF_INT128__
++	TEST_BTF_DUMP_DATA(btf, d, NULL, str, __int128, BTF_F_COMPACT,
++			   "(__int128)0xffffffffffffffff",
++			   0xffffffffffffffff);
++	ASSERT_OK(btf_dump_data(btf, d, "__int128", NULL, 0, &i, 16, str,
++				"(__int128)0xfffffffffffffffffffffffffffffffe"),
++		  "dump __int128");
++#endif
+ }
  
- bpf/%: FORCE
-@@ -104,7 +105,7 @@ all: acpi cgroup cpupower gpio hv firewire liblockdep \
- 		perf selftests bootconfig spi turbostat usb \
- 		virtio vm bpf x86_energy_perf_policy \
- 		tmon freefall iio objtool kvm_stat wmi \
--		pci debugging tracing
-+		pci debugging tracing tdx
- 
- acpi_install:
- 	$(call descend,power/$(@:_install=),install)
-@@ -112,7 +113,7 @@ acpi_install:
- cpupower_install:
- 	$(call descend,power/$(@:_install=),install)
- 
--cgroup_install firewire_install gpio_install hv_install iio_install perf_install bootconfig_install spi_install usb_install virtio_install vm_install bpf_install objtool_install wmi_install pci_install debugging_install tracing_install:
-+cgroup_install firewire_install gpio_install hv_install iio_install perf_install bootconfig_install spi_install usb_install virtio_install vm_install bpf_install objtool_install wmi_install pci_install debugging_install tracing_install tdx_install:
- 	$(call descend,$(@:_install=),install)
- 
- liblockdep_install:
-@@ -139,7 +140,7 @@ install: acpi_install cgroup_install cpupower_install gpio_install \
- 		virtio_install vm_install bpf_install x86_energy_perf_policy_install \
- 		tmon_install freefall_install objtool_install kvm_stat_install \
- 		wmi_install pci_install debugging_install intel-speed-select_install \
--		tracing_install
-+		tracing_install tdx_install
- 
- acpi_clean:
- 	$(call descend,power/acpi,clean)
-@@ -147,7 +148,7 @@ acpi_clean:
- cpupower_clean:
- 	$(call descend,power/cpupower,clean)
- 
--cgroup_clean hv_clean firewire_clean bootconfig_clean spi_clean usb_clean virtio_clean vm_clean wmi_clean bpf_clean iio_clean gpio_clean objtool_clean leds_clean pci_clean firmware_clean debugging_clean tracing_clean:
-+cgroup_clean hv_clean firewire_clean bootconfig_clean spi_clean usb_clean virtio_clean vm_clean wmi_clean bpf_clean iio_clean gpio_clean objtool_clean leds_clean pci_clean firmware_clean debugging_clean tracing_clean tdx_clean:
- 	$(call descend,$(@:_clean=),clean)
- 
- liblockdep_clean:
-@@ -186,6 +187,6 @@ clean: acpi_clean cgroup_clean cpupower_clean hv_clean firewire_clean \
- 		vm_clean bpf_clean iio_clean x86_energy_perf_policy_clean tmon_clean \
- 		freefall_clean build_clean libbpf_clean libsubcmd_clean liblockdep_clean \
- 		gpio_clean objtool_clean leds_clean wmi_clean pci_clean firmware_clean debugging_clean \
--		intel-speed-select_clean tracing_clean
-+		intel-speed-select_clean tracing_clean tdx_clean
- 
- .PHONY: FORCE
-diff --git a/tools/tdx/Makefile b/tools/tdx/Makefile
-new file mode 100644
-index 000000000000..e2564557d463
---- /dev/null
-+++ b/tools/tdx/Makefile
-@@ -0,0 +1,19 @@
-+# SPDX-License-Identifier: GPL-2.0
-+include ../scripts/Makefile.include
-+
-+all: attest
-+
-+clean: attest_clean
-+
-+install: attest_install
-+
-+attest:
-+	$(call descend,attest)
-+
-+attest_install:
-+	$(call descend,attest,install)
-+
-+attest_clean:
-+	$(call descend,attest,clean)
-+
-+.PHONY: all install clean attest latency_install latency_clean
-diff --git a/tools/tdx/attest/.gitignore b/tools/tdx/attest/.gitignore
-new file mode 100644
-index 000000000000..5f819a8a6c49
---- /dev/null
-+++ b/tools/tdx/attest/.gitignore
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0
-+tdx-attest-test
-diff --git a/tools/tdx/attest/Makefile b/tools/tdx/attest/Makefile
-new file mode 100644
-index 000000000000..bf47ba718386
---- /dev/null
-+++ b/tools/tdx/attest/Makefile
-@@ -0,0 +1,24 @@
-+# SPDX-License-Identifier: GPL-2.0
-+# Makefile for vm tools
-+#
-+VAR_CFLAGS := $(shell pkg-config --cflags libtracefs 2>/dev/null)
-+VAR_LDLIBS := $(shell pkg-config --libs libtracefs 2>/dev/null)
-+
-+TARGETS = tdx-attest-test
-+CFLAGS = -static -Wall -Wextra -g -O2 $(VAR_CFLAGS)
-+LDFLAGS = -lpthread $(VAR_LDLIBS)
-+
-+all: $(TARGETS)
-+
-+%: %.c
-+	$(CC) $(CFLAGS) -o $@ $< $(LDFLAGS)
-+
-+clean:
-+	$(RM) tdx-attest-test
-+
-+prefix ?= /usr/local
-+sbindir ?= ${prefix}/sbin
-+
-+install: all
-+	install -d $(DESTDIR)$(sbindir)
-+	install -m 755 -p $(TARGETS) $(DESTDIR)$(sbindir)
-diff --git a/tools/tdx/attest/tdx-attest-test.c b/tools/tdx/attest/tdx-attest-test.c
-new file mode 100644
-index 000000000000..cff33c3a0c32
---- /dev/null
-+++ b/tools/tdx/attest/tdx-attest-test.c
-@@ -0,0 +1,232 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * tdx-attest-test.c - utility to test TDX attestation feature.
-+ *
-+ * Copyright (C) 2020 - 2021 Intel Corporation. All rights reserved.
-+ *
-+ * Author: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-+ *
-+ */
-+
-+#include <linux/types.h>
-+#include <linux/ioctl.h>
-+#include <sys/ioctl.h>
-+#include <sys/stat.h>
-+#include <sys/types.h>
-+#include <stdio.h>
-+#include <ctype.h>
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+#include <string.h>
-+#include <limits.h>
-+#include <stdbool.h>
-+#include <getopt.h>
-+#include <stdint.h> /* uintmax_t */
-+#include <sys/mman.h>
-+#include <unistd.h> /* sysconf */
-+#include <time.h>
-+
-+#include "../../../include/uapi/misc/tdx.h"
-+
-+#define devname		"/dev/tdx-attest"
-+
-+#define HEX_DUMP_SIZE	16
-+#define MAX_ROW_SIZE	70
-+
-+#define ATTESTATION_TEST_BIN_VERSION "0.1"
-+
-+struct tdx_attest_args {
-+	bool is_dump_data;
-+	bool is_get_tdreport;
-+	bool is_get_quote_size;
-+	bool is_gen_quote;
-+	bool debug_mode;
-+	char *out_file;
-+};
-+
-+static void print_hex_dump(const char *title, const char *prefix_str,
-+			   const void *buf, int len)
-+{
-+	const __u8 *ptr = buf;
-+	int i, rowsize = HEX_DUMP_SIZE;
-+
-+	if (!len || !buf)
-+		return;
-+
-+	printf("\t\t%s", title);
-+
-+	for (i = 0; i < len; i++) {
-+		if (!(i % rowsize))
-+			printf("\n%s%.8x:", prefix_str, i);
-+		printf(" %.2x", ptr[i]);
-+	}
-+
-+	printf("\n");
-+}
-+
-+static void gen_report_data(__u8 *report_data, bool dump_data)
-+{
-+	int i;
-+
-+	srand(time(NULL));
-+
-+	for (i = 0; i < TDX_REPORT_DATA_LEN; i++)
-+		report_data[i] = rand();
-+
-+	if (dump_data)
-+		print_hex_dump("\n\t\tTDX report data\n", " ",
-+			       report_data, TDX_REPORT_DATA_LEN);
-+}
-+
-+static int get_tdreport(int devfd, bool dump_data, __u8 *report_data)
-+{
-+	__u8 tdrdata[TDX_TDREPORT_LEN] = {0};
-+	int ret;
-+
-+	if (!report_data)
-+		report_data = tdrdata;
-+
-+	gen_report_data(report_data, dump_data);
-+
-+	ret = ioctl(devfd, TDX_CMD_GET_TDREPORT, report_data);
-+	if (ret) {
-+		printf("TDX_CMD_GET_TDREPORT ioctl() %d failed\n", ret);
-+		return -EIO;
-+	}
-+
-+	if (dump_data)
-+		print_hex_dump("\n\t\tTDX tdreport data\n", " ", report_data,
-+			       TDX_TDREPORT_LEN);
-+
-+	return 0;
-+}
-+
-+static __u64 get_quote_size(int devfd)
-+{
-+	int ret;
-+	__u64 quote_size;
-+
-+	ret = ioctl(devfd, TDX_CMD_GET_QUOTE_SIZE, &quote_size);
-+	if (ret) {
-+		printf("TDX_CMD_GET_QUOTE_SIZE ioctl() %d failed\n", ret);
-+		return -EIO;
-+	}
-+
-+	printf("Quote size: %lld\n", quote_size);
-+
-+	return quote_size;
-+}
-+
-+static int gen_quote(int devfd, bool dump_data)
-+{
-+	__u8 *quote_data;
-+	__u64 quote_size;
-+	int ret;
-+
-+	quote_size = get_quote_size(devfd);
-+
-+	quote_data = malloc(sizeof(char) * quote_size);
-+	if (!quote_data) {
-+		printf("%s queue data alloc failed\n", devname);
-+		return -ENOMEM;
-+	}
-+
-+	ret = get_tdreport(devfd, dump_data, quote_data);
-+	if (ret) {
-+		printf("TDX_CMD_GET_TDREPORT ioctl() %d failed\n", ret);
-+		goto done;
-+	}
-+
-+	ret = ioctl(devfd, TDX_CMD_GEN_QUOTE, quote_data);
-+	if (ret) {
-+		printf("TDX_CMD_GEN_QUOTE ioctl() %d failed\n", ret);
-+		goto done;
-+	}
-+
-+	print_hex_dump("\n\t\tTDX Quote data\n", " ", quote_data,
-+		       quote_size);
-+
-+done:
-+	free(quote_data);
-+
-+	return ret;
-+}
-+
-+static void usage(void)
-+{
-+	puts("\nUsage:\n");
-+	puts("tdx_attest [options] \n");
-+
-+	puts("Attestation device test utility.");
-+
-+	puts("\nOptions:\n");
-+	puts(" -d, --dump                Dump tdreport/tdquote data");
-+	puts(" -r, --get-tdreport        Get TDREPORT data");
-+	puts(" -g, --gen-quote           Generate TDQUOTE");
-+	puts(" -s, --get-quote-size      Get TDQUOTE size");
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	int ret, devfd;
-+	struct tdx_attest_args args = {0};
-+
-+	static const struct option longopts[] = {
-+		{ "dump",           no_argument,       NULL, 'd' },
-+		{ "get-tdreport",   required_argument, NULL, 'r' },
-+		{ "gen-quote",      required_argument, NULL, 'g' },
-+		{ "gen-quote-size", required_argument, NULL, 's' },
-+		{ "version",        no_argument,       NULL, 'V' },
-+		{ NULL,             0, NULL, 0 }
-+	};
-+
-+	while ((ret = getopt_long(argc, argv, "hdrgsV", longopts,
-+				  NULL)) != -1) {
-+		switch (ret) {
-+		case 'd':
-+			args.is_dump_data = true;
-+			break;
-+		case 'r':
-+			args.is_get_tdreport = true;
-+			break;
-+		case 'g':
-+			args.is_gen_quote = true;
-+			break;
-+		case 's':
-+			args.is_get_quote_size = true;
-+			break;
-+		case 'h':
-+			usage();
-+			return 0;
-+		case 'V':
-+			printf("Version: %s\n", ATTESTATION_TEST_BIN_VERSION);
-+			return 0;
-+		default:
-+			printf("Invalid options\n");
-+			usage();
-+			return -EINVAL;
-+		}
-+	}
-+
-+	devfd = open(devname, O_RDWR | O_SYNC);
-+	if (devfd < 0) {
-+		printf("%s open() failed\n", devname);
-+		return -ENODEV;
-+	}
-+
-+	if (args.is_get_quote_size)
-+		get_quote_size(devfd);
-+
-+	if (args.is_get_tdreport)
-+		get_tdreport(devfd, args.is_dump_data, NULL);
-+
-+	if (args.is_gen_quote)
-+		gen_quote(devfd, args.is_dump_data);
-+
-+	close(devfd);
-+
-+	return 0;
-+}
+ static void test_btf_dump_float_data(struct btf *btf, struct btf_dump *d,
 -- 
-2.25.1
+1.8.3.1
 
