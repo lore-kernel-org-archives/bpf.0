@@ -2,212 +2,106 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60B24C636C8
-	for <bpf@archiver.kernel.org>; Tue, 20 Jul 2021 23:12:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B4860C07E9B
+	for <bpf@archiver.kernel.org>; Wed, 21 Jul 2021 00:08:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4154061029
-	for <bpf@archiver.kernel.org>; Tue, 20 Jul 2021 23:12:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8A1D4610F7
+	for <bpf@archiver.kernel.org>; Wed, 21 Jul 2021 00:08:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233296AbhGTWbQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 20 Jul 2021 18:31:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47578 "EHLO
+        id S230308AbhGTX16 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 20 Jul 2021 19:27:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233502AbhGTWas (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 20 Jul 2021 18:30:48 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D15C0613DE
-        for <bpf@vger.kernel.org>; Tue, 20 Jul 2021 16:11:15 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id hc15so433441ejc.4
-        for <bpf@vger.kernel.org>; Tue, 20 Jul 2021 16:11:15 -0700 (PDT)
+        with ESMTP id S230164AbhGTX1u (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 20 Jul 2021 19:27:50 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 909CAC061574;
+        Tue, 20 Jul 2021 17:08:25 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id j73so284391pge.1;
+        Tue, 20 Jul 2021 17:08:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=anyfinetworks-com.20150623.gappssmtp.com; s=20150623;
+        d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=0J4Kjzrympnf9Wt7ZCuovmlD6MDwpBP3vMPXhqXkxvw=;
-        b=eqd+dnBT8WYqDFmI4jRUZp3mFVwGp/fP2kh0p0aaQ9ZiokbqGMpHJJbN5z5kZCTqAf
-         1zLLMBslGqON9D6jU1fLmnolXXmwuXlayGKdL0ShtUqym1qzwkIzXJ3F7ayTP/qLvfBf
-         GIw1poysuQH/2GIPelOQS+QP9FJ5iRJVFN685/S8InLRsIfE3oe3n7Al7ySpLIO/biNp
-         QJZRbDAn+cuPlu/B7uA4oL+5FRIoDvi5NvE606R3DOxiEMOotytOiwMrOGr5mOyy2529
-         215zpYxeYxjBsnl7eZ8MEgR/7XVoCijrN9bmac4SuigWc/fMaClmEmvWf+nQyJJkp3gE
-         pbjA==
+        bh=XD+5w5d0nOB9HAnbrEPa07AhJ1PdtZ8e4Xmaj/6HQss=;
+        b=kJEAV6UouwUwSMFYLIK4L7bSOwlAIolxUiQtLqrrB+6J+Q8kFbKIIxMyYGIsxnRrCP
+         pMe6Ofv2hZMIpv5bSK6r8aHYwFjK9xuYLxBryjQ6zif7+2gfO4JzWGk8seswtCiUGHSW
+         Gxa85GPN/qIZeuGXckTXhXuozlWUhsugwpNsVqJ69vl3sl6tCYhg5TXvRIVG5fez8eOY
+         ihW1gXD+XiXkSGw1YGTaOVhyoerhYsYK5n7NHzhtlWPj2fq+XTLITySjYkU41EdNBYAJ
+         OkzT4t+J04p8aPTaNmL08FvV760zCthKJo2s8tuNnhTpASn+aMFNBbH/AFhjjBtYkRU6
+         gaLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=0J4Kjzrympnf9Wt7ZCuovmlD6MDwpBP3vMPXhqXkxvw=;
-        b=qT6WOTg0AgiMyIxCllfGjnMk2lE5svNx7agnQNQSfC27b49E0zUMh9Wijx5eZuGLYD
-         ilOycCllcLs81N0Of3Qt1fpS3QAJHQfVyuDsaOiVsuQBP7k1QPs8xV55RiT4LNTD64Oj
-         bI9BITIAL3D6TasYGbP3Fn+dH48svbMMzZJWh9Js7PV6+ZIWMCHeWYlWRs/DkjY6qxCT
-         JT5rCXh83JawMxu8sJQ/L+cXkLkinKSUhmfmpGyH6ebcDBsNCkpDaMDUMTcXdlKPa4es
-         Keex2ub6t7oONNtSA2buTKU23dYbRz/FxC4JBUwdGpMOd0aozOgKa7+dC1ce/Xph8X92
-         JZLw==
-X-Gm-Message-State: AOAM531EFf+AmB+6Kw7UUpHS2TjdMW5y1uCbkEK63gTZCqdhQOicAFKn
-        KsdlxfM9VUC3dq+JBWX+EFNh9Q==
-X-Google-Smtp-Source: ABdhPJx6AUAHwvdF+gGk4HFgGaqNKgSH2AfedcPduYs2qxmlOe/W+sDBexvtsAImHk9B7+nZlhVIgQ==
-X-Received: by 2002:a17:906:4551:: with SMTP id s17mr34310633ejq.26.1626822673724;
-        Tue, 20 Jul 2021 16:11:13 -0700 (PDT)
-Received: from anpc2.lan (static-213-115-136-2.sme.telenor.se. [213.115.136.2])
-        by smtp.gmail.com with ESMTPSA id d10sm9778303edh.62.2021.07.20.16.11.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jul 2021 16:11:13 -0700 (PDT)
-From:   Johan Almbladh <johan.almbladh@anyfinetworks.com>
-To:     Tony.Ambardar@gmail.com, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, tsbogend@alpha.franken.de, paulburton@kernel.org
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-mips@vger.kernel.org, ddaney@caviumnetworks.com,
-        luke.r.nels@gmail.com, fancer.lancer@gmail.com, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org,
-        Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Subject: [RFC PATCH 0/2] mips: bpf: An eBPF JIT implementation for 32-bit MIPS
-Date:   Wed, 21 Jul 2021 01:10:34 +0200
-Message-Id: <20210720231036.3740924-1-johan.almbladh@anyfinetworks.com>
-X-Mailer: git-send-email 2.25.1
+        bh=XD+5w5d0nOB9HAnbrEPa07AhJ1PdtZ8e4Xmaj/6HQss=;
+        b=Tkn9ZnJhJyKAe8aMahw813gIMXYkLh5ticnor7Vq+DF+DzQKL9DmkMSADnKpbn25TL
+         uEysv1WB3TqvEZLHdJZ3lhot9Xcrvez/7GCmcBvj2eCsE36/ziWgSg/g/6wf2Uc/iCbg
+         srocXelE0IGF5mJIgFlnqPgXrN6I3M81Kcy/Hmsx1Fz86MhoXiziEJxO1xyYA/CdzcrY
+         Pb6fP3u/bWa+sGoxrLPJmLkmQlF+okKBPqySL7fBKCmLhfzrOQXLJfax+T8BvC3qCWk9
+         fw668aNnki418RXASiKHf/tY7fbvA52td20yj7yYPrHRjrhovJefdMQtV7R0CChYVqfk
+         jz7Q==
+X-Gm-Message-State: AOAM533IKa05o/n0aPuyagQrol2n/676SZA00M553cDaJWFgtk8LzTr3
+        2Q2Hp/K1zfCphwQlzcDSEmpnJZ4AHjs=
+X-Google-Smtp-Source: ABdhPJzRYbviZGkvTVWQgRFPZkgYCOC/8S/Cjf5x4oO992CAfD6fAoA3vidVMw/glul0EEM9I7xbeQ==
+X-Received: by 2002:a63:d84b:: with SMTP id k11mr33313928pgj.372.1626826105067;
+        Tue, 20 Jul 2021 17:08:25 -0700 (PDT)
+Received: from ast-mbp.thefacebook.com ([2620:10d:c090:500::6:4ad3])
+        by smtp.gmail.com with ESMTPSA id o91sm3830168pjo.15.2021.07.20.17.08.23
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 20 Jul 2021 17:08:24 -0700 (PDT)
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     davem@davemloft.net
+Cc:     daniel@iogearbox.net, andrii@kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, kernel-team@fb.com
+Subject: [PATCH bpf-next 0/4] libbpf: Move CO-RE logic into separate file.
+Date:   Tue, 20 Jul 2021 17:08:18 -0700
+Message-Id: <20210721000822.40958-1-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello!
+From: Alexei Starovoitov <ast@kernel.org>
 
-I have been working on this JIT during last couple of weeks, following
-my initial questions and thoughs around this in April ("Completing eBPF
-JIT support for MIPS32"). Perhaps I should have been clearer that I
-intended to add the missing functionality, but when I received no response,
-no activity on the subject since 2019, and with MIPS the company switching
-to RISC-V, I frankly did not think anyone else was interested. I was not
-aware that Tony was working on the same thing. Anyway, here it goes.
+Split CO-RE processing logic from libbpf into separate file
+with an interface that doesn't dependend on libbpf internal details.
+As the next step relo_core.c will be compiled with libbpf and with the kernel.
+The _internal_ interface between libbpf/CO-RE and kernel/CO-RE will be:
+int bpf_core_apply_relo_insn(const char *prog_name, struct bpf_insn *insn,
+			     int insn_idx,
+			     const struct bpf_core_relo *relo,
+			     int relo_idx,
+			     const struct btf *local_btf,
+			     struct bpf_core_cand_list *cands);
+where bpf_core_relo and bpf_core_cand_list are simple types
+prepared by kernel and libbpf.
 
-This is an implementation of an eBPF JIT for MIPS I-V and MIPS32. The
-implementation supports all 32-bit and 64-bit ALU and JMP operations,
-including the recently-added atomics. 64-bit div/mod and 64-bit atomics
-are implemented using function calls to math64 and atomic64 functions,
-respectively. All 32-bit operations are implemented natively by the JIT.
+Though diff stat shows a lot of lines inserted/deleted they are moved lines.
+Pls review with diff.colorMoved.
 
-The implemention is intended to provide good ALU32 performance, and
-completeness for ALU64 instructions so it never has to fall back to the
-interpreter. Care has also been taken to make the code as simple and
-clean as possible. Complex and input-sensitive logic that is hard to
-test has intentionally been avoided, especially for ALU64 operations.
-The JIT relies on the verifier to do more complex analysis such as
-explicit zero-extension.
+Alexei Starovoitov (4):
+  libbpf: Cleanup the layering between CORE and bpf_program.
+  libbpf: Split bpf_core_apply_relo() into bpf_program indepdent helper.
+  libbpf: Move CO-RE types into relo_core.h.
+  libbpf: Split CO-RE logic into relo_core.c.
 
-Relation to the MIPS64 JIT
-==========================
-The decision to not extend the existing MIPS64 JIT with 32-bit support
-was made for the following reasons.
-
-First, the 64-bit JIT is already very complex. It contains its own static
-analyzer for doing zero- and sign-extensions on 32-bit values. That is
-complexity not needed for the 32-bit JIT.
-
-Second, the 32-bit JIT has more in common with other 32-bit JITs, say, ARM,
-than MIPS64. The register mapping will be different. ALU32 operations are
-different. ALU64 operations are different. JMP/JMP32 operations are different.
-What is native word size and easy on one is emulated and difficult on the
-other, and vice-versa.
-
-There may of course be utility code that can be shared between the two
-JITs, but as a whole the 32-bit and 64-bit JITs are likely easier to
-test and maintain as separate, dedicated implementations rather than as
-one big JIT that needs to handle a super-set of the combined omplexity.
-
-Register mapping
-================
-All 64-bit eBPF registers are mapped to native 32-bit MIPS register pairs,
-and does not use any stack scratch space for register swapping. This means
-that all eBPF register data is kept in CPU registers all the time, which
-is good for performance of course. It also simplifies the register management
-a lot and reduces the hunger for temporary registers since we do not have
-to move data around.
-
-Native register pairs are ordered according to CPU endianness, following the
-O32 calling convention for passing 64-bit arguments and return values. The
-eBPF return value, arguments and callee-saved registers are mapped to their
-native MIPS equivalents.
-
-Since the 32 highest bits in the eBPF FP (frame pointer) register are
-always zero, only one general-purpose register is actually needed for the
-mapping. The MIPS fp register is used for this purpose. The high bits are
-mapped to MIPS register r0. This saves us one CPU register, which is much
-needed for temporaries, while still allowing us to treat the R10 (FP)
-register just like any other eBPF register in the JIT.
-
-The MIPS gp (global pointer) and at (assembler temporary) registers are
-used as internal temporary registers for constant blinding. CPU registers
-t6-t9 are used internally by the JIT when constructing more complex 64-bit
-operations. This is precisely what is needed - two registers to store an
-immediate operand value, and two more as scratch registers to perform the
-operation.
-
-The register mapping is shown below.
-
-    R0 - $v1, $v0   return value
-    R1 - $a1, $a0   argument 1, passed in registers
-    R2 - $a3, $a2   argument 2, passed in registers
-    R3 - $t1, $t0   argument 3, passed on stack
-    R4 - $t3, $t2   argument 4, passed on stack
-    R5 - $t4, $t3   argument 5, passed on stack
-    R6 - $s1, $s0   callee-saved
-    R7 - $s3, $s2   callee-saved
-    R8 - $s5, $s4   callee-saved
-    R9 - $s7, $s6   callee-saved
-    FP - $r0, $fp   32-bit frame pointer
-    AX - $gp, $at   constant-blinding
-         $t6 - $t9  unallocated, JIT temporaries
-
-Jump offsets
-============
-The JIT tries to map all conditional JMP operations to MIPS conditional
-PC-relative branches. The MIPS branch offset field is 18 bits, in bytes,
-which is equivalent to the eBPF 16-bit instruction offset. However, since
-the JIT may emit more than one CPU instruction per eBPF instruction, the
-value may overflow the field width. If that happens, the JIT converts the
-long conditional jump to a short PC-relative branch with the condition
-inverted, jumping over a long unconditional absolute jmp (ja).
-
-This conversion will change the instruction offset mapping used for jumps,
-and may in turn result in more branch offset overflows. The JIT therefore
-dry-runs the translation until no more branches are converted and the
-offsets do not change anymore. There is an upper bound on this of course,
-and if the JIT hits that limit, the last two iterations are run with all
-branches being converted.
-
-Testing
-=======
-The implementation has been verified with the BPF test suite on QEMU,
-emulating MIPS32r2 in big and little endian configurations. It has also
-been verified on a MIPS 24Kc CPU (MT7628 SoC, little endian). The MIPS
-I-V variants that exist for some operations has been verified "manually"
-by forcing fallback to pre-r1 instructions only. As of this writing, the
-BPF test suite JITs all tests successfully.
-
-    test_bpf: Summary: 378 PASSED, 0 FAILED, [366/366 JIT'ed]
-
-During the development of this JIT, several new tests were added to the
-test suite in order to test corner cases inherent to 32-bit JITs, tail
-calls and also to actually trigger the branch conversion handling. That
-is another patch set, though.
-
-Cheers,
-Johan
-
-Johan Almbladh (2):
-  mips: bpf: add eBPF JIT for 32-bit MIPS
-  mips: bpf: enable 32-bit eBPF JIT
-
- arch/mips/Kconfig           |    5 +-
- arch/mips/net/Makefile      |    7 +-
- arch/mips/net/ebpf_jit_32.c | 2207 +++++++++++++++++++++++++++++++++++
- 3 files changed, 2216 insertions(+), 3 deletions(-)
- create mode 100644 arch/mips/net/ebpf_jit_32.c
+ tools/lib/bpf/Build             |    2 +-
+ tools/lib/bpf/libbpf.c          | 1344 +------------------------------
+ tools/lib/bpf/libbpf_internal.h |   81 +-
+ tools/lib/bpf/relo_core.c       | 1326 ++++++++++++++++++++++++++++++
+ tools/lib/bpf/relo_core.h       |  102 +++
+ 5 files changed, 1473 insertions(+), 1382 deletions(-)
+ create mode 100644 tools/lib/bpf/relo_core.c
+ create mode 100644 tools/lib/bpf/relo_core.h
 
 -- 
-2.25.1
+2.30.2
 
