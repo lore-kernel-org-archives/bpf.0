@@ -2,67 +2,70 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B4860C07E9B
-	for <bpf@archiver.kernel.org>; Wed, 21 Jul 2021 00:08:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC542C07E9B
+	for <bpf@archiver.kernel.org>; Wed, 21 Jul 2021 00:08:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8A1D4610F7
-	for <bpf@archiver.kernel.org>; Wed, 21 Jul 2021 00:08:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CFA416101B
+	for <bpf@archiver.kernel.org>; Wed, 21 Jul 2021 00:08:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230308AbhGTX16 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 20 Jul 2021 19:27:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60220 "EHLO
+        id S230470AbhGTX2B (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 20 Jul 2021 19:28:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230164AbhGTX1u (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 20 Jul 2021 19:27:50 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 909CAC061574;
-        Tue, 20 Jul 2021 17:08:25 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id j73so284391pge.1;
-        Tue, 20 Jul 2021 17:08:25 -0700 (PDT)
+        with ESMTP id S230234AbhGTX14 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 20 Jul 2021 19:27:56 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E401C061766;
+        Tue, 20 Jul 2021 17:08:33 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id gx2so642992pjb.5;
+        Tue, 20 Jul 2021 17:08:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XD+5w5d0nOB9HAnbrEPa07AhJ1PdtZ8e4Xmaj/6HQss=;
-        b=kJEAV6UouwUwSMFYLIK4L7bSOwlAIolxUiQtLqrrB+6J+Q8kFbKIIxMyYGIsxnRrCP
-         pMe6Ofv2hZMIpv5bSK6r8aHYwFjK9xuYLxBryjQ6zif7+2gfO4JzWGk8seswtCiUGHSW
-         Gxa85GPN/qIZeuGXckTXhXuozlWUhsugwpNsVqJ69vl3sl6tCYhg5TXvRIVG5fez8eOY
-         ihW1gXD+XiXkSGw1YGTaOVhyoerhYsYK5n7NHzhtlWPj2fq+XTLITySjYkU41EdNBYAJ
-         OkzT4t+J04p8aPTaNmL08FvV760zCthKJo2s8tuNnhTpASn+aMFNBbH/AFhjjBtYkRU6
-         gaLQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=23OGjKPb+9sB1yzxSNv30nOcf9KZbnh75M6FzI+C6f0=;
+        b=OlArwQT2DgkZeiweg7k4hqxsftpx7bOyPPYFlaa+6Nj1i/2j5xR4Jxjv+bRZFCqBI+
+         7R9AZorcsGU4+6HMwtm3i1JgGtUkuEnFtK3w72ovZ/A2kAnN5Tb7+6GNCE+FA0dED2Wt
+         rNnOaqYGGyDJ2c1itabJmfb9Y8fCl19/onl6B0ozPs1fPBkKyp+FLAVnY0eGjYAUQNLM
+         eLeoXYURSLoHWQDzC3ATaVuO90wTWmNT/UEtn1i7YY8W5/zKMNZ76mfty5aoaf9U++jV
+         axLApWQNpOfsKcsYFsl+0radg9DNvf6sTFioyaBHMMnkALOLrPg/LXdcfM43gmYWeSC9
+         wTPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XD+5w5d0nOB9HAnbrEPa07AhJ1PdtZ8e4Xmaj/6HQss=;
-        b=Tkn9ZnJhJyKAe8aMahw813gIMXYkLh5ticnor7Vq+DF+DzQKL9DmkMSADnKpbn25TL
-         uEysv1WB3TqvEZLHdJZ3lhot9Xcrvez/7GCmcBvj2eCsE36/ziWgSg/g/6wf2Uc/iCbg
-         srocXelE0IGF5mJIgFlnqPgXrN6I3M81Kcy/Hmsx1Fz86MhoXiziEJxO1xyYA/CdzcrY
-         Pb6fP3u/bWa+sGoxrLPJmLkmQlF+okKBPqySL7fBKCmLhfzrOQXLJfax+T8BvC3qCWk9
-         fw668aNnki418RXASiKHf/tY7fbvA52td20yj7yYPrHRjrhovJefdMQtV7R0CChYVqfk
-         jz7Q==
-X-Gm-Message-State: AOAM533IKa05o/n0aPuyagQrol2n/676SZA00M553cDaJWFgtk8LzTr3
-        2Q2Hp/K1zfCphwQlzcDSEmpnJZ4AHjs=
-X-Google-Smtp-Source: ABdhPJzRYbviZGkvTVWQgRFPZkgYCOC/8S/Cjf5x4oO992CAfD6fAoA3vidVMw/glul0EEM9I7xbeQ==
-X-Received: by 2002:a63:d84b:: with SMTP id k11mr33313928pgj.372.1626826105067;
-        Tue, 20 Jul 2021 17:08:25 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=23OGjKPb+9sB1yzxSNv30nOcf9KZbnh75M6FzI+C6f0=;
+        b=qUhwQKzxSjwuymgdheK4hfF2q9zDltKKl8lOpbpgDKZ+fg9qnQWcLmdI8epM1d5XmM
+         ZaRuLqC5UE1twwc3p66rdSq8V3Xi4t8NMyBuY02D2Mu5xEC8pjjo+QFurRGRS2siM3LX
+         V1FrFjZGBvF8X5Uukw8RYNvPkQSMpA5uy523GGjeKDuXQw5I16peB2PpKfMMk0/uv5PH
+         UWOLH5Er4cpVEKY6IAFyHe+KZu9abqVT/Vq4W13FgZBJKNNuUFo5aOwp5I45cqw5sIEE
+         PYeTUQgUL/eYv3LE52iPJDeaO87DHFmF2jqmdWURY6Qvs63Wu68MhYIvs6sx12EKy1yV
+         Gq7Q==
+X-Gm-Message-State: AOAM532hy2/ouLmh8WQowfh6Tq8uOskgvRAyutfwiykdviQkzvCZZOn2
+        aYLlRQbJ0W95tkbBeaIaZIa9eqK7GW0=
+X-Google-Smtp-Source: ABdhPJxKMbWYQA1lwELJ980Yxt7c69izsyFmOMiXDAlTAarQwHXoQKyI6L8RY4JzJJhJoQBWKHm6LA==
+X-Received: by 2002:a17:90a:1941:: with SMTP id 1mr948268pjh.217.1626826112171;
+        Tue, 20 Jul 2021 17:08:32 -0700 (PDT)
 Received: from ast-mbp.thefacebook.com ([2620:10d:c090:500::6:4ad3])
-        by smtp.gmail.com with ESMTPSA id o91sm3830168pjo.15.2021.07.20.17.08.23
+        by smtp.gmail.com with ESMTPSA id d15sm24356841pfl.82.2021.07.20.17.08.30
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 20 Jul 2021 17:08:24 -0700 (PDT)
+        Tue, 20 Jul 2021 17:08:31 -0700 (PDT)
 From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To:     davem@davemloft.net
 Cc:     daniel@iogearbox.net, andrii@kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org, kernel-team@fb.com
-Subject: [PATCH bpf-next 0/4] libbpf: Move CO-RE logic into separate file.
-Date:   Tue, 20 Jul 2021 17:08:18 -0700
-Message-Id: <20210721000822.40958-1-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 2/4] libbpf: Split bpf_core_apply_relo() into bpf_program indepdent helper.
+Date:   Tue, 20 Jul 2021 17:08:20 -0700
+Message-Id: <20210721000822.40958-3-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20210721000822.40958-1-alexei.starovoitov@gmail.com>
+References: <20210721000822.40958-1-alexei.starovoitov@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -71,37 +74,193 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Split CO-RE processing logic from libbpf into separate file
-with an interface that doesn't dependend on libbpf internal details.
-As the next step relo_core.c will be compiled with libbpf and with the kernel.
-The _internal_ interface between libbpf/CO-RE and kernel/CO-RE will be:
-int bpf_core_apply_relo_insn(const char *prog_name, struct bpf_insn *insn,
-			     int insn_idx,
-			     const struct bpf_core_relo *relo,
-			     int relo_idx,
-			     const struct btf *local_btf,
-			     struct bpf_core_cand_list *cands);
-where bpf_core_relo and bpf_core_cand_list are simple types
-prepared by kernel and libbpf.
+bpf_core_apply_relo() doesn't need to know bpf_program internals
+and hashmap details.
 
-Though diff stat shows a lot of lines inserted/deleted they are moved lines.
-Pls review with diff.colorMoved.
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+---
+ tools/lib/bpf/libbpf.c | 117 +++++++++++++++++++++++++----------------
+ 1 file changed, 71 insertions(+), 46 deletions(-)
 
-Alexei Starovoitov (4):
-  libbpf: Cleanup the layering between CORE and bpf_program.
-  libbpf: Split bpf_core_apply_relo() into bpf_program indepdent helper.
-  libbpf: Move CO-RE types into relo_core.h.
-  libbpf: Split CO-RE logic into relo_core.c.
-
- tools/lib/bpf/Build             |    2 +-
- tools/lib/bpf/libbpf.c          | 1344 +------------------------------
- tools/lib/bpf/libbpf_internal.h |   81 +-
- tools/lib/bpf/relo_core.c       | 1326 ++++++++++++++++++++++++++++++
- tools/lib/bpf/relo_core.h       |  102 +++
- 5 files changed, 1473 insertions(+), 1382 deletions(-)
- create mode 100644 tools/lib/bpf/relo_core.c
- create mode 100644 tools/lib/bpf/relo_core.h
-
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 57af20574f06..4f71b4218f14 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -5972,26 +5972,13 @@ static int insn_bytes_to_bpf_size(__u32 sz)
+  * 5. *(T *)(rX + <off>) = rY, where T is one of {u8, u16, u32, u64};
+  * 6. *(T *)(rX + <off>) = <imm>, where T is one of {u8, u16, u32, u64}.
+  */
+-static int bpf_core_patch_insn(struct bpf_program *prog,
+-			       const struct bpf_core_relo *relo,
+-			       int relo_idx,
+-			       const struct bpf_core_relo_res *res)
++static int bpf_core_patch_insn(const char *prog_name, struct bpf_insn *insn,
++			       int insn_idx, const struct bpf_core_relo *relo,
++			       int relo_idx, const struct bpf_core_relo_res *res)
+ {
+-	const char *prog_name = prog->name;
+ 	__u32 orig_val, new_val;
+-	struct bpf_insn *insn;
+-	int insn_idx;
+ 	__u8 class;
+ 
+-	if (relo->insn_off % BPF_INSN_SZ)
+-		return -EINVAL;
+-	insn_idx = relo->insn_off / BPF_INSN_SZ;
+-	/* adjust insn_idx from section frame of reference to the local
+-	 * program's frame of reference; (sub-)program code is not yet
+-	 * relocated, so it's enough to just subtract in-section offset
+-	 */
+-	insn_idx = insn_idx - prog->sec_insn_off;
+-	insn = &prog->insns[insn_idx];
+ 	class = BPF_CLASS(insn->code);
+ 
+ 	if (res->poison) {
+@@ -6077,7 +6064,6 @@ static int bpf_core_patch_insn(struct bpf_program *prog,
+ 
+ 		if (!is_ldimm64_insn(insn) ||
+ 		    insn[0].src_reg != 0 || insn[0].off != 0 ||
+-		    insn_idx + 1 >= prog->insns_cnt ||
+ 		    insn[1].code != 0 || insn[1].dst_reg != 0 ||
+ 		    insn[1].src_reg != 0 || insn[1].off != 0) {
+ 			pr_warn("prog '%s': relo #%d: insn #%d (LDIMM64) has unexpected form\n",
+@@ -6227,19 +6213,17 @@ static void *u32_as_hash_key(__u32 x)
+  *    between multiple relocations for the same type ID and is updated as some
+  *    of the candidates are pruned due to structural incompatibility.
+  */
+-static int bpf_core_apply_relo(struct bpf_program *prog,
+-			       const struct bpf_core_relo *relo,
+-			       int relo_idx,
+-			       const struct btf *local_btf,
+-			       struct hashmap *cand_cache)
++static int bpf_core_apply_relo_insn(const char *prog_name, struct bpf_insn *insn,
++				    int insn_idx,
++				    const struct bpf_core_relo *relo,
++				    int relo_idx,
++				    const struct btf *local_btf,
++				    struct core_cand_list *cands)
+ {
+ 	struct bpf_core_spec local_spec, cand_spec, targ_spec = {};
+-	const void *type_key = u32_as_hash_key(relo->type_id);
+ 	struct bpf_core_relo_res cand_res, targ_res;
+ 	const struct btf_type *local_type;
+ 	const char *local_name;
+-	struct core_cand_list *cands = NULL;
+-	const char *prog_name = prog->name;
+ 	__u32 local_id;
+ 	const char *spec_str;
+ 	int i, j, err;
+@@ -6257,12 +6241,6 @@ static int bpf_core_apply_relo(struct bpf_program *prog,
+ 	if (str_is_empty(spec_str))
+ 		return -EINVAL;
+ 
+-	if (prog->obj->gen_loader) {
+-		pr_warn("// TODO core_relo: prog %td insn[%d] %s %s kind %d\n",
+-			prog - prog->obj->programs, relo->insn_off / 8,
+-			local_name, spec_str, relo->kind);
+-		return -ENOTSUP;
+-	}
+ 	err = bpf_core_parse_spec(local_btf, local_id, spec_str, relo->kind, &local_spec);
+ 	if (err) {
+ 		pr_warn("prog '%s': relo #%d: parsing [%d] %s %s + %s failed: %d\n",
+@@ -6293,20 +6271,6 @@ static int bpf_core_apply_relo(struct bpf_program *prog,
+ 		return -EOPNOTSUPP;
+ 	}
+ 
+-	if (!hashmap__find(cand_cache, type_key, (void **)&cands)) {
+-		cands = bpf_core_find_cands(prog->obj, local_btf, local_id);
+-		if (IS_ERR(cands)) {
+-			pr_warn("prog '%s': relo #%d: target candidate search failed for [%d] %s %s: %ld\n",
+-				prog_name, relo_idx, local_id, btf_kind_str(local_type),
+-				local_name, PTR_ERR(cands));
+-			return PTR_ERR(cands);
+-		}
+-		err = hashmap__set(cand_cache, type_key, cands, NULL, NULL);
+-		if (err) {
+-			bpf_core_free_cands(cands);
+-			return err;
+-		}
+-	}
+ 
+ 	for (i = 0, j = 0; i < cands->len; i++) {
+ 		err = bpf_core_spec_match(&local_spec, cands->cands[i].btf,
+@@ -6391,7 +6355,7 @@ static int bpf_core_apply_relo(struct bpf_program *prog,
+ 
+ patch_insn:
+ 	/* bpf_core_patch_insn() should know how to handle missing targ_spec */
+-	err = bpf_core_patch_insn(prog, relo, relo_idx, &targ_res);
++	err = bpf_core_patch_insn(prog_name, insn, insn_idx, relo, relo_idx, &targ_res);
+ 	if (err) {
+ 		pr_warn("prog '%s': relo #%d: failed to patch insn #%zu: %d\n",
+ 			prog_name, relo_idx, relo->insn_off / BPF_INSN_SZ, err);
+@@ -6401,6 +6365,67 @@ static int bpf_core_apply_relo(struct bpf_program *prog,
+ 	return 0;
+ }
+ 
++static int bpf_core_apply_relo(struct bpf_program *prog,
++			       const struct bpf_core_relo *relo,
++			       int relo_idx,
++			       const struct btf *local_btf,
++			       struct hashmap *cand_cache)
++{
++	const void *type_key = u32_as_hash_key(relo->type_id);
++	struct core_cand_list *cands = NULL;
++	const char *prog_name = prog->name;
++	const struct btf_type *local_type;
++	const char *local_name;
++	__u32 local_id = relo->type_id;
++	struct bpf_insn *insn;
++	int insn_idx, err;
++
++	if (relo->insn_off % BPF_INSN_SZ)
++		return -EINVAL;
++	insn_idx = relo->insn_off / BPF_INSN_SZ;
++	/* adjust insn_idx from section frame of reference to the local
++	 * program's frame of reference; (sub-)program code is not yet
++	 * relocated, so it's enough to just subtract in-section offset
++	 */
++	insn_idx = insn_idx - prog->sec_insn_off;
++	if (insn_idx > prog->insns_cnt)
++		return -EINVAL;
++	insn = &prog->insns[insn_idx];
++
++	local_type = btf__type_by_id(local_btf, local_id);
++	if (!local_type)
++		return -EINVAL;
++
++	local_name = btf__name_by_offset(local_btf, local_type->name_off);
++	if (!local_name)
++		return -EINVAL;
++
++	if (prog->obj->gen_loader) {
++		pr_warn("// TODO core_relo: prog %td insn[%d] %s kind %d\n",
++			prog - prog->obj->programs, relo->insn_off / 8,
++			local_name, relo->kind);
++		return -ENOTSUP;
++	}
++
++	if (relo->kind != BPF_TYPE_ID_LOCAL &&
++	    !hashmap__find(cand_cache, type_key, (void **)&cands)) {
++		cands = bpf_core_find_cands(prog->obj, local_btf, local_id);
++		if (IS_ERR(cands)) {
++			pr_warn("prog '%s': relo #%d: target candidate search failed for [%d] %s %s: %ld\n",
++				prog_name, relo_idx, local_id, btf_kind_str(local_type),
++				local_name, PTR_ERR(cands));
++			return PTR_ERR(cands);
++		}
++		err = hashmap__set(cand_cache, type_key, cands, NULL, NULL);
++		if (err) {
++			bpf_core_free_cands(cands);
++			return err;
++		}
++	}
++
++	return bpf_core_apply_relo_insn(prog_name, insn, insn_idx, relo, relo_idx, local_btf, cands);
++}
++
+ static int
+ bpf_object__relocate_core(struct bpf_object *obj, const char *targ_btf_path)
+ {
 -- 
 2.30.2
 
