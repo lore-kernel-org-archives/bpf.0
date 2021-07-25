@@ -2,223 +2,112 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2492FC4338F
-	for <bpf@archiver.kernel.org>; Sun, 25 Jul 2021 17:41:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 947FBC4338F
+	for <bpf@archiver.kernel.org>; Sun, 25 Jul 2021 17:58:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 06B3D60F11
-	for <bpf@archiver.kernel.org>; Sun, 25 Jul 2021 17:41:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 71F0060F11
+	for <bpf@archiver.kernel.org>; Sun, 25 Jul 2021 17:58:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbhGYRBD convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Sun, 25 Jul 2021 13:01:03 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:59570 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229545AbhGYRBC (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sun, 25 Jul 2021 13:01:02 -0400
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16PHXWma007506
-        for <bpf@vger.kernel.org>; Sun, 25 Jul 2021 10:41:33 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 3a0j67w615-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Sun, 25 Jul 2021 10:41:32 -0700
-Received: from intmgw001.05.ash9.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Sun, 25 Jul 2021 10:41:30 -0700
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 2ACB73D405B3; Sun, 25 Jul 2021 10:39:01 -0700 (PDT)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCH bpf-next 03/14] bpf: refactor perf_event_set_bpf_prog() to use struct bpf_prog input
-Date:   Sun, 25 Jul 2021 10:38:34 -0700
-Message-ID: <20210725173845.2593626-4-andrii@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210725173845.2593626-1-andrii@kernel.org>
-References: <20210725173845.2593626-1-andrii@kernel.org>
+        id S230110AbhGYRSQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 25 Jul 2021 13:18:16 -0400
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:58376 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229545AbhGYRSP (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sun, 25 Jul 2021 13:18:15 -0400
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16PHpicd020329;
+        Sun, 25 Jul 2021 17:58:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2021-07-09; bh=Ygb71Ej7t4/iCOSbs3hi14+PKz2VeCjb05VDTH4vhug=;
+ b=f48Vh/5Fhn9LTxlZo/KWQL2syByztQFnkMY0lC+g5AM1HggwCKFy0ogQVlcib/u2WU/j
+ Y4mGfZlMQUcfUU6gGHY9Zgk31Nw48/53q0cp3t/G8NoFuE4E4OeZ3VmCwVbNeyNwOY7i
+ 2Gtgxuf7H5pcmnvj4JUaKDexHYIkuwobI+De5lPaIhAjUHV+Wm7crTggzdiQb6bbx38b
+ kKowfy06TuhTOEUnM6Sd0qdxE36rsZzjH9JRaGUk7RTuuWhFQUDCW15Xkr2emfV2JWB9
+ 8Oy4Pgbrjn3c5Igwc3avBk1wMsPmPgBhI9r63aAAUz0utBKib2NSwDn7IW9RwYj4b/4q wQ== 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2020-01-29; bh=Ygb71Ej7t4/iCOSbs3hi14+PKz2VeCjb05VDTH4vhug=;
+ b=jMnhItR6Ba+v5wuRAInW15nDU+kyMPXDQlVGxNXmTNX7sCBciuuUICURfVmOOJt6hfTV
+ /7qypz2+MYIvdzf/+UWMpjVECGkG/PPLjYKhMOu12oJb6kbM+jRGry828HqcW3MC71e6
+ GngsAYrG6cSTmJgviMTo5IonXFLRecNisx0iAngxrlR+K9WTpcVRyDCJBBOh6aOuMk3w
+ w9w4ZwE3IM4DpptYbDlFlC50Fpa5OHyzOaY8ek3I0JOTso5FKxO0Y2h+ONr3JyUomGlh
+ 7KfpCg7nV+mo8q1M5BtEysv6ilMfBvW6hSQ3EL5L1vA1ABv4YqnIj3bjSOs8yiIDuJm2 5w== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3a09n31n0s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 25 Jul 2021 17:58:29 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 16PHoeJC179201;
+        Sun, 25 Jul 2021 17:58:28 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by userp3020.oracle.com with ESMTP id 3a0vmrhnjk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 25 Jul 2021 17:58:28 +0000
+Received: from userp3020.oracle.com (userp3020.oracle.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 16PHwRWB193976;
+        Sun, 25 Jul 2021 17:58:27 GMT
+Received: from manjaro.in.oracle.com (dhcp-10-191-232-135.vpn.oracle.com [10.191.232.135])
+        by userp3020.oracle.com with ESMTP id 3a0vmrhner-1;
+        Sun, 25 Jul 2021 17:58:27 +0000
+From:   Harshvardhan Jha <harshvardhan.jha@oracle.com>
+To:     aelior@marvell.com
+Cc:     GR-everest-linux-l2@marvell.com, davem@davemloft.net,
+        kuba@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        hawk@kernel.org, john.fastabend@gmail.com, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        kpsingh@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        Harshvardhan Jha <harshvardhan.jha@oracle.com>
+Subject: [PATCH net] net: qede: Fix end of loop tests for list_for_each_entry
+Date:   Sun, 25 Jul 2021 23:28:04 +0530
+Message-Id: <20210725175803.60559-1-harshvardhan.jha@oracle.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: s7HuSI6QIRCF-oUpeVcOa9ThV7MX0rh6
-X-Proofpoint-GUID: s7HuSI6QIRCF-oUpeVcOa9ThV7MX0rh6
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-07-25_05:2021-07-23,2021-07-25 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
- adultscore=0 malwarescore=0 mlxscore=0 clxscore=1015 spamscore=0
- phishscore=0 priorityscore=1501 bulkscore=0 suspectscore=0
- lowpriorityscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2104190000 definitions=main-2107250126
-X-FB-Internal: deliver
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: wXNOiNO1AF_db4ZP1-y7SxLtEvl7nt0u
+X-Proofpoint-ORIG-GUID: wXNOiNO1AF_db4ZP1-y7SxLtEvl7nt0u
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Make internal perf_event_set_bpf_prog() use struct bpf_prog pointer as an
-input argument, which makes it easier to re-use for other internal uses
-(coming up for BPF link in the next patch). BPF program FD is not as
-convenient and in some cases it's not available. So switch to struct bpf_prog,
-move out refcounting outside and let caller do bpf_prog_put() in case of an
-error. This follows the approach of most of the other BPF internal functions.
+The list_for_each_entry() iterator, "vlan" in this code, can never be
+NULL so the warning will never be printed.
 
-Cc: Peter Zijlstra <peterz@infradead.org>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Harshvardhan Jha <harshvardhan.jha@oracle.com>
 ---
- kernel/events/core.c | 61 ++++++++++++++++++++------------------------
- 1 file changed, 28 insertions(+), 33 deletions(-)
+From static analysis.  Not tested.
+---
+ drivers/net/ethernet/qlogic/qede/qede_filter.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 464917096e73..bf4689403498 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -5574,7 +5574,7 @@ static inline int perf_fget_light(int fd, struct fd *p)
- static int perf_event_set_output(struct perf_event *event,
- 				 struct perf_event *output_event);
- static int perf_event_set_filter(struct perf_event *event, void __user *arg);
--static int perf_event_set_bpf_prog(struct perf_event *event, u32 prog_fd);
-+static int perf_event_set_bpf_prog(struct perf_event *event, struct bpf_prog *prog);
- static int perf_copy_attr(struct perf_event_attr __user *uattr,
- 			  struct perf_event_attr *attr);
- 
-@@ -5637,7 +5637,22 @@ static long _perf_ioctl(struct perf_event *event, unsigned int cmd, unsigned lon
- 		return perf_event_set_filter(event, (void __user *)arg);
- 
- 	case PERF_EVENT_IOC_SET_BPF:
--		return perf_event_set_bpf_prog(event, arg);
-+	{
-+		struct bpf_prog *prog;
-+		int err;
-+
-+		prog = bpf_prog_get(arg);
-+		if (IS_ERR(prog))
-+			return PTR_ERR(prog);
-+
-+		err = perf_event_set_bpf_prog(event, prog);
-+		if (err) {
-+			bpf_prog_put(prog);
-+			return err;
-+		}
-+
-+		return 0;
-+	}
- 
- 	case PERF_EVENT_IOC_PAUSE_OUTPUT: {
- 		struct perf_buffer *rb;
-@@ -9923,10 +9938,8 @@ static void bpf_overflow_handler(struct perf_event *event,
- 	event->orig_overflow_handler(event, data, regs);
- }
- 
--static int perf_event_set_bpf_handler(struct perf_event *event, u32 prog_fd)
-+static int perf_event_set_bpf_handler(struct perf_event *event, struct bpf_prog *prog)
+diff --git a/drivers/net/ethernet/qlogic/qede/qede_filter.c b/drivers/net/ethernet/qlogic/qede/qede_filter.c
+index c59b72c90293..a2e4dfb5cb44 100644
+--- a/drivers/net/ethernet/qlogic/qede/qede_filter.c
++++ b/drivers/net/ethernet/qlogic/qede/qede_filter.c
+@@ -831,7 +831,7 @@ int qede_configure_vlan_filters(struct qede_dev *edev)
+ int qede_vlan_rx_kill_vid(struct net_device *dev, __be16 proto, u16 vid)
  {
--	struct bpf_prog *prog;
--
- 	if (event->overflow_handler_context)
- 		/* hw breakpoint or kernel counter */
- 		return -EINVAL;
-@@ -9934,9 +9947,8 @@ static int perf_event_set_bpf_handler(struct perf_event *event, u32 prog_fd)
- 	if (event->prog)
- 		return -EEXIST;
+ 	struct qede_dev *edev = netdev_priv(dev);
+-	struct qede_vlan *vlan = NULL;
++	struct qede_vlan *vlan;
+ 	int rc = 0;
  
--	prog = bpf_prog_get_type(prog_fd, BPF_PROG_TYPE_PERF_EVENT);
--	if (IS_ERR(prog))
--		return PTR_ERR(prog);
-+	if (prog->type != BPF_PROG_TYPE_PERF_EVENT)
-+		return -EINVAL;
+ 	DP_VERBOSE(edev, NETIF_MSG_IFDOWN, "Removing vlan 0x%04x\n", vid);
+@@ -842,7 +842,7 @@ int qede_vlan_rx_kill_vid(struct net_device *dev, __be16 proto, u16 vid)
+ 		if (vlan->vid == vid)
+ 			break;
  
- 	if (event->attr.precise_ip &&
- 	    prog->call_get_stack &&
-@@ -9952,7 +9964,6 @@ static int perf_event_set_bpf_handler(struct perf_event *event, u32 prog_fd)
- 		 * attached to perf_sample_data, do not allow attaching BPF
- 		 * program that calls bpf_get_[stack|stackid].
- 		 */
--		bpf_prog_put(prog);
- 		return -EPROTO;
- 	}
- 
-@@ -9974,7 +9985,7 @@ static void perf_event_free_bpf_handler(struct perf_event *event)
- 	bpf_prog_put(prog);
- }
- #else
--static int perf_event_set_bpf_handler(struct perf_event *event, u32 prog_fd)
-+static int perf_event_set_bpf_handler(struct perf_event *event, struct bpf_prog *prog)
- {
- 	return -EOPNOTSUPP;
- }
-@@ -10002,14 +10013,12 @@ static inline bool perf_event_is_tracing(struct perf_event *event)
- 	return false;
- }
- 
--static int perf_event_set_bpf_prog(struct perf_event *event, u32 prog_fd)
-+static int perf_event_set_bpf_prog(struct perf_event *event, struct bpf_prog *prog)
- {
- 	bool is_kprobe, is_tracepoint, is_syscall_tp;
--	struct bpf_prog *prog;
--	int ret;
- 
- 	if (!perf_event_is_tracing(event))
--		return perf_event_set_bpf_handler(event, prog_fd);
-+		return perf_event_set_bpf_handler(event, prog);
- 
- 	is_kprobe = event->tp_event->flags & TRACE_EVENT_FL_UKPROBE;
- 	is_tracepoint = event->tp_event->flags & TRACE_EVENT_FL_TRACEPOINT;
-@@ -10018,38 +10027,24 @@ static int perf_event_set_bpf_prog(struct perf_event *event, u32 prog_fd)
- 		/* bpf programs can only be attached to u/kprobe or tracepoint */
- 		return -EINVAL;
- 
--	prog = bpf_prog_get(prog_fd);
--	if (IS_ERR(prog))
--		return PTR_ERR(prog);
--
- 	if ((is_kprobe && prog->type != BPF_PROG_TYPE_KPROBE) ||
- 	    (is_tracepoint && prog->type != BPF_PROG_TYPE_TRACEPOINT) ||
--	    (is_syscall_tp && prog->type != BPF_PROG_TYPE_TRACEPOINT)) {
--		/* valid fd, but invalid bpf program type */
--		bpf_prog_put(prog);
-+	    (is_syscall_tp && prog->type != BPF_PROG_TYPE_TRACEPOINT))
- 		return -EINVAL;
--	}
- 
- 	/* Kprobe override only works for kprobes, not uprobes. */
- 	if (prog->kprobe_override &&
--	    !(event->tp_event->flags & TRACE_EVENT_FL_KPROBE)) {
--		bpf_prog_put(prog);
-+	    !(event->tp_event->flags & TRACE_EVENT_FL_KPROBE))
- 		return -EINVAL;
--	}
- 
- 	if (is_tracepoint || is_syscall_tp) {
- 		int off = trace_event_get_offsets(event->tp_event);
- 
--		if (prog->aux->max_ctx_offset > off) {
--			bpf_prog_put(prog);
-+		if (prog->aux->max_ctx_offset > off)
- 			return -EACCES;
--		}
- 	}
- 
--	ret = perf_event_attach_bpf_prog(event, prog);
--	if (ret)
--		bpf_prog_put(prog);
--	return ret;
-+	return perf_event_attach_bpf_prog(event, prog);
- }
- 
- static void perf_event_free_bpf_prog(struct perf_event *event)
-@@ -10071,7 +10066,7 @@ static void perf_event_free_filter(struct perf_event *event)
- {
- }
- 
--static int perf_event_set_bpf_prog(struct perf_event *event, u32 prog_fd)
-+static int perf_event_set_bpf_prog(struct perf_event *event, struct bpf_prog *prog)
- {
- 	return -ENOENT;
- }
+-	if (!vlan || (vlan->vid != vid)) {
++	if (list_entry_is_head(vlan, &edev->vlan_list, list)) {
+ 		DP_VERBOSE(edev, (NETIF_MSG_IFUP | NETIF_MSG_IFDOWN),
+ 			   "Vlan isn't configured\n");
+ 		goto out;
 -- 
-2.30.2
+2.32.0
 
