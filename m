@@ -2,130 +2,141 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FBE6C4338F
-	for <bpf@archiver.kernel.org>; Mon, 26 Jul 2021 14:20:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95318C4320A
+	for <bpf@archiver.kernel.org>; Mon, 26 Jul 2021 15:19:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1786C608FB
-	for <bpf@archiver.kernel.org>; Mon, 26 Jul 2021 14:20:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 761BC60F5A
+	for <bpf@archiver.kernel.org>; Mon, 26 Jul 2021 15:19:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233970AbhGZNkE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 26 Jul 2021 09:40:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55248 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234359AbhGZNj7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 26 Jul 2021 09:39:59 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D8E8C061765
-        for <bpf@vger.kernel.org>; Mon, 26 Jul 2021 07:20:24 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id u3so15720955lff.9
-        for <bpf@vger.kernel.org>; Mon, 26 Jul 2021 07:20:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=innoMiax/6j+Ydu2wz7DZ/eLaBFwTp809yu9WTfkGdU=;
-        b=oVX1a29LktyslfuTcX+62an+IK8NNMLRT5wMozGIGx8cCt9NN5d+F3YDG3Aaqe9JpP
-         ZhCe2UhVPpbT/4ClJJhdLnRKHEIiUFbVgZOTsjY2Q59Rkt5XJ5jtI1ctgbVIrfI14tGk
-         vLKIE5R3kdTrMq0dcZmeTyBg2Tpj9GbdzaysS7kvfst+1DU4qglrgjQaenkZ85r2K1LV
-         jMayQJEwYuU05RmQUkUkpTbYduWHYOduzlmi9SXZaZigyFljfW14Kc3bSssHLt0B7XFE
-         dNvwkXwKzZboYiyx4EUkxZ8dnCanVXkRxlVUr1wUqN9IdnpmrGNp9xcW0Wy0CNay+eqm
-         V0og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=innoMiax/6j+Ydu2wz7DZ/eLaBFwTp809yu9WTfkGdU=;
-        b=WN41j7xSEnv1JycNGyIjeB2hxfFje+JAUAZGRwSqUpxs3jOzLTwkNG8IaM97DZf0Bk
-         Zo3+hv/ia8ItcpLXi/cCnOEGYbSVCB1WSFAx2kf79MMnCaubdbsBuKUnwpyoBfpOYZGS
-         nw3DjESCn/VZ3d7nb+ehoG6YNShiDXJ4FI4hjLqkHiQvCYbz6+Qsc9JzqUYfBcMkGYJ0
-         WxNXsBCPc0U6k0tKpBvRV7opGuwncVu6A0Eo5O9B7p+E42Jf2KrPhOx2BDMpIiRq88J/
-         rqXyWu56ki57VGkL13YivJQtvXHvrQ/5NxxHaKbYDnHRhCgL1ejZdN9NrKE2E4JHRIC9
-         +KFw==
-X-Gm-Message-State: AOAM531cZZQtJjQXehVaMnyKQxG977Nlsoxw6Tmw7LUdrTgFk45h+oHl
-        YlRLFkfzlUmM4w1KutSfBg==
-X-Google-Smtp-Source: ABdhPJxbRG9Eup7xA2iQ0q5xmBU4mgCmlg6AIIhTw+DyogAOmTqyFE3svZwaKu4fU+q914jcuVFVsQ==
-X-Received: by 2002:a05:6512:3ba2:: with SMTP id g34mr13032656lfv.613.1627309222000;
-        Mon, 26 Jul 2021 07:20:22 -0700 (PDT)
-Received: from localhost.localdomain (82-181-76-45.bb.dnainternet.fi. [82.181.76.45])
-        by smtp.gmail.com with ESMTPSA id n24sm14017lfb.54.2021.07.26.07.20.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jul 2021 07:20:21 -0700 (PDT)
-From:   Jussi Maki <joamaki@gmail.com>
-To:     andrii@kernel.org
-Cc:     bpf@vger.kernel.org, daniel@iogearbox.net,
-        Jussi Maki <joamaki@gmail.com>
-Subject: [PATCH bpf] selftests/bpf: Use ping6 only if available in tc_redirect
-Date:   Thu,  8 Jul 2021 02:17:27 +0000
-Message-Id: <20210708021727.5538-1-joamaki@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <CAEf4BzaSN+aN5RV=anaGewGAmqOWJRZpHtSeMfYcJ2HZ98LqLQ@mail.gmail.com>
-References: <CAEf4BzaSN+aN5RV=anaGewGAmqOWJRZpHtSeMfYcJ2HZ98LqLQ@mail.gmail.com>
+        id S234778AbhGZOir (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 26 Jul 2021 10:38:47 -0400
+Received: from wout4-smtp.messagingengine.com ([64.147.123.20]:36363 "EHLO
+        wout4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234725AbhGZOig (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 26 Jul 2021 10:38:36 -0400
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id C493132005CA;
+        Mon, 26 Jul 2021 11:18:56 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Mon, 26 Jul 2021 11:18:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:date:from
+        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=ADxx3z4emZIDkOP7e
+        x7VQNz3tFWmhUAeYpAGVdt8jtg=; b=tYxAheAtf6b3yG8/S5b4/TltHgBjR1kSi
+        ustVWmdUNHW1UhM0T/gOJlqtgaZi8/mG7trQJEs322iSoiZYcyHBKuqnyrMq6Ru8
+        lHCNedSQj8oykSWJs1ZUD4o/lAXtvVjXG4Q1VbfWfGtAoFUHTduDC2Ci+jrTCF80
+        1irZU7g/e/3IQYaNSojqu8NJ+MvwLxdRTz0sHWStZ6eT+QSd2FiCvL7zt//8dC4p
+        gbWwkb+sUJWcGfmY9hgkMN0Jq+EMT+LzunnUhCoh2/5aDsMhZn6gYblyCZ/GkKZV
+        KH0MSBLDiioZin+pewbqL1MXBojJV3rRmlN6ApGCbJQzDiLMsDxtg==
+X-ME-Sender: <xms:XtL-YKaZNlJWXzdvdJUGdMNBBQcSYfmC9krP8xGUcRgGYz6DMHVRJw>
+    <xme:XtL-YNarSPCUN4V0vjzh-Bhw8I7xYjWC5_Z75knkXSoplvJj48hquA1-SVTjaNdOb
+    FN_OUXhXFwWS8I3ZSQ>
+X-ME-Received: <xmr:XtL-YE_G-43L-D9ursREI81x1yMMFpilNheHTWfm38ufD_uiODQuLCfN1KkERgrODg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrgeehgdekiecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecunecujfgurhephffvufffkffoggfgsedtkeertdertd
+    dtnecuhfhrohhmpeforghrthihnhgrshcurfhumhhpuhhtihhsuceomheslhgrmhgsuggr
+    rdhltheqnecuggftrfgrthhtvghrnhepuefhfedvheelieduhedvveeiffdtleehieduue
+    ehjeejtdekuddvtdffheeuleejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghm
+    pehmrghilhhfrhhomhepmheslhgrmhgsuggrrdhlth
+X-ME-Proxy: <xmx:XtL-YMrVFUBIKoqSYSIg8pgxqp4UJWRnczAbIBTWlD1njb8PIH7cwQ>
+    <xmx:XtL-YFpH22VOaTMQocapT-oIGy7FRf54XRkPlmg3xdan4VE_SjSYRA>
+    <xmx:XtL-YKTZVrSsCBFAaR9LqRZXU_ySs-IonLUSBYcX8pBDOh0VpTlGMg>
+    <xmx:YNL-YMVPu2aerXJtNze5NLz93G5lD_BBf09amE9LKHAVMO2eEBYrWg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 26 Jul 2021 11:18:53 -0400 (EDT)
+From:   Martynas Pumputis <m@lambda.lt>
+To:     bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        m@lambda.lt, Joe Stringer <joe@wand.net.nz>
+Subject: [PATCH v2 bpf] libbpf: fix race when pinning maps in parallel
+Date:   Mon, 26 Jul 2021 17:20:01 +0200
+Message-Id: <20210726152001.34845-1-m@lambda.lt>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-In the tc_redirect test only use ping6 if it's available and
-otherwise fall back to using "ping -6".
+When loading in parallel multiple programs which use the same to-be
+pinned map, it is possible that two instances of the loader will call
+bpf_object__create_maps() at the same time. If the map doesn't exist
+when both instances call bpf_object__reuse_map(), then one of the
+instances will fail with EEXIST when calling bpf_map__pin().
 
-Signed-off-by: Jussi Maki <joamaki@gmail.com>
+Fix the race by retrying reusing a map if bpf_map__pin() returns
+EEXIST. The fix is similar to the one in iproute2: e4c4685fd6e4 ("bpf:
+Fix race condition with map pinning").
+
+Before retrying the pinning, we don't do any special cleaning of an
+internal map state. The closer code inspection revealed that it's not
+required:
+
+    - bpf_object__create_map(): map->inner_map is destroyed after a
+      successful call, map->fd is closed if pinning fails.
+    - bpf_object__populate_internal_map(): created map elements is
+      destroyed upon close(map->fd).
+    - init_map_slots(): slots are freed after their initialization.
+
+Cc: Joe Stringer <joe@wand.net.nz>
+Signed-off-by: Martynas Pumputis <m@lambda.lt>
 ---
- .../selftests/bpf/prog_tests/tc_redirect.c    | 23 ++++++++++++++-----
- 1 file changed, 17 insertions(+), 6 deletions(-)
+ tools/lib/bpf/libbpf.c | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/tc_redirect.c b/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
-index 5703c918812b..932e4ee3f97c 100644
---- a/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
-@@ -13,15 +13,16 @@
- #define _GNU_SOURCE
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 6f5e2757bb3c..9a39453bb45b 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -4616,10 +4616,13 @@ bpf_object__create_maps(struct bpf_object *obj)
+ 	char *cp, errmsg[STRERR_BUFSIZE];
+ 	unsigned int i, j;
+ 	int err;
++	bool retried;
  
- #include <arpa/inet.h>
-+#include <linux/if.h>
-+#include <linux/if_tun.h>
- #include <linux/limits.h>
- #include <linux/sysctl.h>
--#include <linux/if_tun.h>
--#include <linux/if.h>
- #include <sched.h>
- #include <stdbool.h>
- #include <stdio.h>
--#include <sys/stat.h>
- #include <sys/mount.h>
-+#include <sys/stat.h>
-+#include <unistd.h>
+ 	for (i = 0; i < obj->nr_maps; i++) {
+ 		map = &obj->maps[i];
  
- #include "test_progs.h"
- #include "network_helpers.h"
-@@ -389,11 +390,21 @@ static void test_tcp(int family, const char *addr, __u16 port)
- 		close(client_fd);
- }
++		retried = false;
++retry:
+ 		if (map->pin_path) {
+ 			err = bpf_object__reuse_map(map);
+ 			if (err) {
+@@ -4627,6 +4630,12 @@ bpf_object__create_maps(struct bpf_object *obj)
+ 					map->name);
+ 				goto err_out;
+ 			}
++			if (retried && map->fd < 0) {
++				pr_warn("map '%s': cannot find pinned map\n",
++					map->name);
++				err = -ENOENT;
++				goto err_out;
++			}
+ 		}
  
--static int test_ping(int family, const char *addr)
-+static char *ping_command(int family)
- {
--	const char *ping = family == AF_INET6 ? "ping6" : "ping";
-+	if (family == AF_INET6) {
-+		/* On some systems 'ping' doesn't support IPv6, so use ping6 if it is present. */
-+		if (!system("which ping6 >/dev/null 2>&1"))
-+			return "ping6";
-+		else
-+			return "ping -6";
-+	}
-+	return "ping";
-+}
- 
--	SYS("ip netns exec " NS_SRC " %s " PING_ARGS " %s > /dev/null", ping, addr);
-+static int test_ping(int family, const char *addr)
-+{
-+	SYS("ip netns exec " NS_SRC " %s " PING_ARGS " %s > /dev/null", ping_command(family), addr);
- 	return 0;
- fail:
- 	return -1;
+ 		if (map->fd >= 0) {
+@@ -4660,9 +4669,13 @@ bpf_object__create_maps(struct bpf_object *obj)
+ 		if (map->pin_path && !map->pinned) {
+ 			err = bpf_map__pin(map, NULL);
+ 			if (err) {
++				zclose(map->fd);
++				if (!retried && err == -EEXIST) {
++					retried = true;
++					goto retry;
++				}
+ 				pr_warn("map '%s': failed to auto-pin at '%s': %d\n",
+ 					map->name, map->pin_path, err);
+-				zclose(map->fd);
+ 				goto err_out;
+ 			}
+ 		}
 -- 
-2.17.1
+2.32.0
 
