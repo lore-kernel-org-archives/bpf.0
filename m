@@ -3,41 +3,41 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EFB16C43216
-	for <bpf@archiver.kernel.org>; Mon, 26 Jul 2021 16:12:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F6CBC43216
+	for <bpf@archiver.kernel.org>; Mon, 26 Jul 2021 16:12:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D2DA76056B
-	for <bpf@archiver.kernel.org>; Mon, 26 Jul 2021 16:12:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4D67C60C41
+	for <bpf@archiver.kernel.org>; Mon, 26 Jul 2021 16:12:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232861AbhGZPcN convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Mon, 26 Jul 2021 11:32:13 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:48443 "EHLO
+        id S233278AbhGZPcP convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Mon, 26 Jul 2021 11:32:15 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:61544 "EHLO
         mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233069AbhGZPb6 (ORCPT
+        by vger.kernel.org with ESMTP id S233101AbhGZPb6 (ORCPT
         <rfc822;bpf@vger.kernel.org>); Mon, 26 Jul 2021 11:31:58 -0400
 Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16QGAB7g028962
-        for <bpf@vger.kernel.org>; Mon, 26 Jul 2021 09:12:24 -0700
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 3a0gm0aet2-9
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16QGACKu028984
+        for <bpf@vger.kernel.org>; Mon, 26 Jul 2021 09:12:26 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 3a0gm0aeux-5
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 26 Jul 2021 09:12:24 -0700
-Received: from intmgw001.05.ash9.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Mon, 26 Jul 2021 09:12:26 -0700
+Received: from intmgw001.05.ash7.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Mon, 26 Jul 2021 09:12:20 -0700
+ 15.1.2176.2; Mon, 26 Jul 2021 09:12:24 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 373A63D405AD; Mon, 26 Jul 2021 09:12:16 -0700 (PDT)
+        id 4D62F3D405AD; Mon, 26 Jul 2021 09:12:20 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
         Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCH v2 bpf-next 01/14] bpf: refactor BPF_PROG_RUN into a function
-Date:   Mon, 26 Jul 2021 09:11:58 -0700
-Message-ID: <20210726161211.925206-2-andrii@kernel.org>
+Subject: [PATCH v2 bpf-next 03/14] bpf: refactor perf_event_set_bpf_prog() to use struct bpf_prog input
+Date:   Mon, 26 Jul 2021 09:12:00 -0700
+Message-ID: <20210726161211.925206-4-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210726161211.925206-1-andrii@kernel.org>
 References: <20210726161211.925206-1-andrii@kernel.org>
@@ -45,13 +45,13 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: frI7OocXK5uKvEeJA4VGf5yewu1jzsRQ
-X-Proofpoint-GUID: frI7OocXK5uKvEeJA4VGf5yewu1jzsRQ
+X-Proofpoint-ORIG-GUID: Eh-wm2j1k7hFJi7oHf2NC0Ly88BsFHu5
+X-Proofpoint-GUID: Eh-wm2j1k7hFJi7oHf2NC0Ly88BsFHu5
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
  definitions=2021-07-26_10:2021-07-26,2021-07-26 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
  phishscore=0 spamscore=0 priorityscore=1501 malwarescore=0 impostorscore=0
- bulkscore=0 mlxlogscore=940 mlxscore=0 adultscore=0 suspectscore=0
+ bulkscore=0 mlxlogscore=999 mlxscore=0 adultscore=0 suspectscore=0
  clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2104190000 definitions=main-2107260094
 X-FB-Internal: deliver
@@ -59,109 +59,166 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Turn BPF_PROG_RUN into a proper always inlined function. No functional and
-performance changes are intended, but it makes it much easier to understand
-what's going on with how BPF programs are actually get executed. It's more
-obvious what types and callbacks are expected. Also extra () around input
-parameters can be dropped, as well as `__` variable prefixes intended to avoid
-naming collisions, which makes the code simpler to read and write.
+Make internal perf_event_set_bpf_prog() use struct bpf_prog pointer as an
+input argument, which makes it easier to re-use for other internal uses
+(coming up for BPF link in the next patch). BPF program FD is not as
+convenient and in some cases it's not available. So switch to struct bpf_prog,
+move out refcounting outside and let caller do bpf_prog_put() in case of an
+error. This follows the approach of most of the other BPF internal functions.
 
-This refactoring also highlighted one possible issue. BPF_PROG_RUN is both
-a macro and an enum value (BPF_PROG_RUN == BPF_PROG_TEST_RUN). Turning
-BPF_PROG_RUN into a function causes naming conflict compilation error. So
-rename BPF_PROG_RUN into lower-case bpf_prog_run(), similar to
-bpf_prog_run_xdp(), bpf_prog_run_pin_on_cpu(), etc. To avoid unnecessary code
-churn across many networking calls to BPF_PROG_RUN, #define BPF_PROG_RUN as an
-alias to bpf_prog_run.
-
+Cc: Peter Zijlstra <peterz@infradead.org>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- include/linux/filter.h | 58 +++++++++++++++++++++++++++---------------
- 1 file changed, 37 insertions(+), 21 deletions(-)
+ kernel/events/core.c | 61 ++++++++++++++++++++------------------------
+ 1 file changed, 28 insertions(+), 33 deletions(-)
 
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index ba36989f711a..e59c97c72233 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -585,25 +585,41 @@ struct sk_filter {
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index 464917096e73..bf4689403498 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -5574,7 +5574,7 @@ static inline int perf_fget_light(int fd, struct fd *p)
+ static int perf_event_set_output(struct perf_event *event,
+ 				 struct perf_event *output_event);
+ static int perf_event_set_filter(struct perf_event *event, void __user *arg);
+-static int perf_event_set_bpf_prog(struct perf_event *event, u32 prog_fd);
++static int perf_event_set_bpf_prog(struct perf_event *event, struct bpf_prog *prog);
+ static int perf_copy_attr(struct perf_event_attr __user *uattr,
+ 			  struct perf_event_attr *attr);
  
- DECLARE_STATIC_KEY_FALSE(bpf_stats_enabled_key);
+@@ -5637,7 +5637,22 @@ static long _perf_ioctl(struct perf_event *event, unsigned int cmd, unsigned lon
+ 		return perf_event_set_filter(event, (void __user *)arg);
  
--#define __BPF_PROG_RUN(prog, ctx, dfunc)	({			\
--	u32 __ret;							\
--	cant_migrate();							\
--	if (static_branch_unlikely(&bpf_stats_enabled_key)) {		\
--		struct bpf_prog_stats *__stats;				\
--		u64 __start = sched_clock();				\
--		__ret = dfunc(ctx, (prog)->insnsi, (prog)->bpf_func);	\
--		__stats = this_cpu_ptr(prog->stats);			\
--		u64_stats_update_begin(&__stats->syncp);		\
--		__stats->cnt++;						\
--		__stats->nsecs += sched_clock() - __start;		\
--		u64_stats_update_end(&__stats->syncp);			\
--	} else {							\
--		__ret = dfunc(ctx, (prog)->insnsi, (prog)->bpf_func);	\
--	}								\
--	__ret; })
--
--#define BPF_PROG_RUN(prog, ctx)						\
--	__BPF_PROG_RUN(prog, ctx, bpf_dispatcher_nop_func)
-+typedef unsigned int (*bpf_dispatcher_fn)(const void *ctx,
-+					  const struct bpf_insn *insnsi,
-+					  unsigned int (*bpf_func)(const void *,
-+								   const struct bpf_insn *));
+ 	case PERF_EVENT_IOC_SET_BPF:
+-		return perf_event_set_bpf_prog(event, arg);
++	{
++		struct bpf_prog *prog;
++		int err;
 +
-+static __always_inline u32 __bpf_prog_run(const struct bpf_prog *prog,
-+					  const void *ctx,
-+					  bpf_dispatcher_fn dfunc)
-+{
-+	u32 ret;
++		prog = bpf_prog_get(arg);
++		if (IS_ERR(prog))
++			return PTR_ERR(prog);
 +
-+	cant_migrate();
-+	if (static_branch_unlikely(&bpf_stats_enabled_key)) {
-+		struct bpf_prog_stats *stats;
-+		u64 start = sched_clock();
++		err = perf_event_set_bpf_prog(event, prog);
++		if (err) {
++			bpf_prog_put(prog);
++			return err;
++		}
 +
-+		ret = dfunc(ctx, prog->insnsi, prog->bpf_func);
-+		stats = this_cpu_ptr(prog->stats);
-+		u64_stats_update_begin(&stats->syncp);
-+		stats->cnt++;
-+		stats->nsecs += sched_clock() - start;
-+		u64_stats_update_end(&stats->syncp);
-+	} else {
-+		ret = dfunc(ctx, prog->insnsi, prog->bpf_func);
++		return 0;
 +	}
-+	return ret;
-+}
-+
-+static __always_inline u32 bpf_prog_run(const struct bpf_prog *prog, const void *ctx)
-+{
-+	return __bpf_prog_run(prog, ctx, bpf_dispatcher_nop_func);
-+}
-+
-+/* avoids name conflict with BPF_PROG_RUN enum definedi uapi/linux/bpf.h */
-+#define BPF_PROG_RUN bpf_prog_run
  
- /*
-  * Use in preemptible and therefore migratable context to make sure that
-@@ -622,7 +638,7 @@ static inline u32 bpf_prog_run_pin_on_cpu(const struct bpf_prog *prog,
- 	u32 ret;
- 
- 	migrate_disable();
--	ret = __BPF_PROG_RUN(prog, ctx, bpf_dispatcher_nop_func);
-+	ret = __bpf_prog_run(prog, ctx, bpf_dispatcher_nop_func);
- 	migrate_enable();
- 	return ret;
- }
-@@ -768,7 +784,7 @@ static __always_inline u32 bpf_prog_run_xdp(const struct bpf_prog *prog,
- 	 * under local_bh_disable(), which provides the needed RCU protection
- 	 * for accessing map entries.
- 	 */
--	return __BPF_PROG_RUN(prog, xdp, BPF_DISPATCHER_FUNC(xdp));
-+	return __bpf_prog_run(prog, xdp, BPF_DISPATCHER_FUNC(xdp));
+ 	case PERF_EVENT_IOC_PAUSE_OUTPUT: {
+ 		struct perf_buffer *rb;
+@@ -9923,10 +9938,8 @@ static void bpf_overflow_handler(struct perf_event *event,
+ 	event->orig_overflow_handler(event, data, regs);
  }
  
- void bpf_prog_change_xdp(struct bpf_prog *prev_prog, struct bpf_prog *prog);
+-static int perf_event_set_bpf_handler(struct perf_event *event, u32 prog_fd)
++static int perf_event_set_bpf_handler(struct perf_event *event, struct bpf_prog *prog)
+ {
+-	struct bpf_prog *prog;
+-
+ 	if (event->overflow_handler_context)
+ 		/* hw breakpoint or kernel counter */
+ 		return -EINVAL;
+@@ -9934,9 +9947,8 @@ static int perf_event_set_bpf_handler(struct perf_event *event, u32 prog_fd)
+ 	if (event->prog)
+ 		return -EEXIST;
+ 
+-	prog = bpf_prog_get_type(prog_fd, BPF_PROG_TYPE_PERF_EVENT);
+-	if (IS_ERR(prog))
+-		return PTR_ERR(prog);
++	if (prog->type != BPF_PROG_TYPE_PERF_EVENT)
++		return -EINVAL;
+ 
+ 	if (event->attr.precise_ip &&
+ 	    prog->call_get_stack &&
+@@ -9952,7 +9964,6 @@ static int perf_event_set_bpf_handler(struct perf_event *event, u32 prog_fd)
+ 		 * attached to perf_sample_data, do not allow attaching BPF
+ 		 * program that calls bpf_get_[stack|stackid].
+ 		 */
+-		bpf_prog_put(prog);
+ 		return -EPROTO;
+ 	}
+ 
+@@ -9974,7 +9985,7 @@ static void perf_event_free_bpf_handler(struct perf_event *event)
+ 	bpf_prog_put(prog);
+ }
+ #else
+-static int perf_event_set_bpf_handler(struct perf_event *event, u32 prog_fd)
++static int perf_event_set_bpf_handler(struct perf_event *event, struct bpf_prog *prog)
+ {
+ 	return -EOPNOTSUPP;
+ }
+@@ -10002,14 +10013,12 @@ static inline bool perf_event_is_tracing(struct perf_event *event)
+ 	return false;
+ }
+ 
+-static int perf_event_set_bpf_prog(struct perf_event *event, u32 prog_fd)
++static int perf_event_set_bpf_prog(struct perf_event *event, struct bpf_prog *prog)
+ {
+ 	bool is_kprobe, is_tracepoint, is_syscall_tp;
+-	struct bpf_prog *prog;
+-	int ret;
+ 
+ 	if (!perf_event_is_tracing(event))
+-		return perf_event_set_bpf_handler(event, prog_fd);
++		return perf_event_set_bpf_handler(event, prog);
+ 
+ 	is_kprobe = event->tp_event->flags & TRACE_EVENT_FL_UKPROBE;
+ 	is_tracepoint = event->tp_event->flags & TRACE_EVENT_FL_TRACEPOINT;
+@@ -10018,38 +10027,24 @@ static int perf_event_set_bpf_prog(struct perf_event *event, u32 prog_fd)
+ 		/* bpf programs can only be attached to u/kprobe or tracepoint */
+ 		return -EINVAL;
+ 
+-	prog = bpf_prog_get(prog_fd);
+-	if (IS_ERR(prog))
+-		return PTR_ERR(prog);
+-
+ 	if ((is_kprobe && prog->type != BPF_PROG_TYPE_KPROBE) ||
+ 	    (is_tracepoint && prog->type != BPF_PROG_TYPE_TRACEPOINT) ||
+-	    (is_syscall_tp && prog->type != BPF_PROG_TYPE_TRACEPOINT)) {
+-		/* valid fd, but invalid bpf program type */
+-		bpf_prog_put(prog);
++	    (is_syscall_tp && prog->type != BPF_PROG_TYPE_TRACEPOINT))
+ 		return -EINVAL;
+-	}
+ 
+ 	/* Kprobe override only works for kprobes, not uprobes. */
+ 	if (prog->kprobe_override &&
+-	    !(event->tp_event->flags & TRACE_EVENT_FL_KPROBE)) {
+-		bpf_prog_put(prog);
++	    !(event->tp_event->flags & TRACE_EVENT_FL_KPROBE))
+ 		return -EINVAL;
+-	}
+ 
+ 	if (is_tracepoint || is_syscall_tp) {
+ 		int off = trace_event_get_offsets(event->tp_event);
+ 
+-		if (prog->aux->max_ctx_offset > off) {
+-			bpf_prog_put(prog);
++		if (prog->aux->max_ctx_offset > off)
+ 			return -EACCES;
+-		}
+ 	}
+ 
+-	ret = perf_event_attach_bpf_prog(event, prog);
+-	if (ret)
+-		bpf_prog_put(prog);
+-	return ret;
++	return perf_event_attach_bpf_prog(event, prog);
+ }
+ 
+ static void perf_event_free_bpf_prog(struct perf_event *event)
+@@ -10071,7 +10066,7 @@ static void perf_event_free_filter(struct perf_event *event)
+ {
+ }
+ 
+-static int perf_event_set_bpf_prog(struct perf_event *event, u32 prog_fd)
++static int perf_event_set_bpf_prog(struct perf_event *event, struct bpf_prog *prog)
+ {
+ 	return -ENOENT;
+ }
 -- 
 2.30.2
 
