@@ -2,190 +2,123 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D6701C4320A
-	for <bpf@archiver.kernel.org>; Mon, 26 Jul 2021 16:16:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2ACB6C4338F
+	for <bpf@archiver.kernel.org>; Mon, 26 Jul 2021 17:12:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C3C786056B
-	for <bpf@archiver.kernel.org>; Mon, 26 Jul 2021 16:16:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0D88B6056C
+	for <bpf@archiver.kernel.org>; Mon, 26 Jul 2021 17:12:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234306AbhGZPgN convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Mon, 26 Jul 2021 11:36:13 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:54562 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S237700AbhGZPgB (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 26 Jul 2021 11:36:01 -0400
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.43/8.16.0.43) with SMTP id 16QGAbfP001981
-        for <bpf@vger.kernel.org>; Mon, 26 Jul 2021 09:16:29 -0700
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0089730.ppops.net with ESMTP id 3a0eceawav-5
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 26 Jul 2021 09:16:28 -0700
-Received: from intmgw001.38.frc1.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Mon, 26 Jul 2021 09:12:43 -0700
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 3412F3D405AD; Mon, 26 Jul 2021 09:12:39 -0700 (PDT)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCH v2 bpf-next 12/14] selftests/bpf: test low-level perf BPF link API
-Date:   Mon, 26 Jul 2021 09:12:09 -0700
-Message-ID: <20210726161211.925206-13-andrii@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210726161211.925206-1-andrii@kernel.org>
-References: <20210726161211.925206-1-andrii@kernel.org>
+        id S240249AbhGZQc1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 26 Jul 2021 12:32:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37850 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240200AbhGZQcU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 26 Jul 2021 12:32:20 -0400
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2B7FC0619C6;
+        Mon, 26 Jul 2021 09:53:18 -0700 (PDT)
+Received: by mail-il1-x129.google.com with SMTP id r1so9580621iln.6;
+        Mon, 26 Jul 2021 09:53:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WAPlEKvePxMV/07fFAQg33qz9JHtYkUoU3AwtWDs8ZE=;
+        b=Zfk+jgu0UuPSNtmQCCFN27DGr/fswBtxpev/419AxQcySm9lYPGTVlv82Hia+WlyBx
+         vp1dr2U63aTEvuBuETsRZFPzccYXDJV91l41ctpOeodLeEsLOVLlINvnM6WjNA49g6bb
+         gXvIS5d8TYuQLN6hKCIuKpeTkd+ttTgVU9DiIRM3qPpi4ZMWuRkoyQZfCRObJA4A2DTw
+         1wMzqIkS//WnAPp7ePsobU3HXn2v77OkOvliEjxPWwBICs3pIkbcU+ZZeVRH4ZvSnZD7
+         ZKT9hse6yyljpY5fcDVtuP42ZdHnRfwIYwzZ7JBW2iAAmBGLTmvYlvziOuxjea+JntQs
+         e/Gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WAPlEKvePxMV/07fFAQg33qz9JHtYkUoU3AwtWDs8ZE=;
+        b=fOCXnWqtbHkjtIzGKJlVEVAP0ISPDr/UKB27WeRi/taCHbUzj2n7GfCtnRUIqIptkl
+         6Z4Y5JSidAROLUvlmfwcgXm6R8CV9EqR5juG+bHaxoNG0kue1TlCbrO6HXxxlGGDuDLv
+         BxTFnXchHpJQ2HKEvzzymjJntqI9HFXMJqKliQY8jvqX5VZUfWZbIaeQlnxVdxmnXBif
+         rO+yQkv1ru8wqbn7iEuG6AqRH1N74PiGlB5annqAggC3+9aHPvHv1VcDULMqCwUkiMdO
+         WTXjE3fpkCRjeal/t53lvvihXjSPVtHH2HPJL1KSCeoJQ+WNLFHtDmHnI5jF7M9cWMCn
+         hhFQ==
+X-Gm-Message-State: AOAM533sLYcWAmqP2+IPfL2qOtoFo1sUgaOH3N2dlmDSot6sk3tHcIn/
+        i38683P0TpVfUeQJIBz/wtw=
+X-Google-Smtp-Source: ABdhPJwf5VaFmuydDi8Bgt7ry/DKcX2DIfIFQFAOwxoECRAk18NXVncNOfWCigAhOEoUu9tIqxN8JQ==
+X-Received: by 2002:a05:6e02:550:: with SMTP id i16mr13642067ils.207.1627318398341;
+        Mon, 26 Jul 2021 09:53:18 -0700 (PDT)
+Received: from john-XPS-13-9370.lan ([172.243.157.240])
+        by smtp.gmail.com with ESMTPSA id r198sm254483ior.7.2021.07.26.09.53.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jul 2021 09:53:17 -0700 (PDT)
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     jakub@cloudflare.com, daniel@iogearbox.net,
+        xiyou.wangcong@gmail.com, alexei.starovoitov@gmail.com
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        john.fastabend@gmail.com
+Subject: [PATCH bpf v2 0/3] sockmap fixes picked up by stress tests
+Date:   Mon, 26 Jul 2021 09:53:01 -0700
+Message-Id: <20210726165304.1443836-1-john.fastabend@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: 7pIVdRMIzE3zNidRLgp1nZHmSI_psNT7
-X-Proofpoint-ORIG-GUID: 7pIVdRMIzE3zNidRLgp1nZHmSI_psNT7
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-07-26_10:2021-07-26,2021-07-26 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 malwarescore=0
- suspectscore=0 priorityscore=1501 phishscore=0 clxscore=1015
- mlxlogscore=999 adultscore=0 lowpriorityscore=0 spamscore=0
- impostorscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2104190000 definitions=main-2107260094
-X-FB-Internal: deliver
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add tests utilizing low-level bpf_link_create() API to create perf BPF link.
+Running stress tests with recent patch to remove an extra lock in sockmap
+resulted in a couple new issues popping up. It seems only one of them
+is actually related to the patch:
 
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- .../selftests/bpf/prog_tests/perf_link.c      | 89 +++++++++++++++++++
- .../selftests/bpf/progs/test_perf_link.c      | 16 ++++
- 2 files changed, 105 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/perf_link.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_perf_link.c
+799aa7f98d53 ("skmsg: Avoid lock_sock() in sk_psock_backlog()")
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/perf_link.c b/tools/testing/selftests/bpf/prog_tests/perf_link.c
-new file mode 100644
-index 000000000000..b1abd0c46607
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/perf_link.c
-@@ -0,0 +1,89 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2021 Facebook */
-+#define _GNU_SOURCE
-+#include <pthread.h>
-+#include <sched.h>
-+#include <test_progs.h>
-+#include "test_perf_link.skel.h"
-+
-+static void burn_cpu(void)
-+{
-+	volatile int j = 0;
-+	cpu_set_t cpu_set;
-+	int i, err;
-+
-+	/* generate some branches on cpu 0 */
-+	CPU_ZERO(&cpu_set);
-+	CPU_SET(0, &cpu_set);
-+	err = pthread_setaffinity_np(pthread_self(), sizeof(cpu_set), &cpu_set);
-+	ASSERT_OK(err, "set_thread_affinity");
-+
-+	/* spin the loop for a while (random high number) */
-+	for (i = 0; i < 1000000; ++i)
-+		++j;
-+}
-+
-+void test_perf_link(void)
-+{
-+	struct test_perf_link *skel = NULL;
-+	struct perf_event_attr attr;
-+	int pfd = -1, link_fd = -1, err;
-+	int run_cnt_before, run_cnt_after;
-+	struct bpf_link_info info;
-+	__u32 info_len = sizeof(info);
-+
-+	/* create perf event */
-+	memset(&attr, 0, sizeof(attr));
-+	attr.size = sizeof(attr);
-+	attr.type = PERF_TYPE_SOFTWARE;
-+	attr.config = PERF_COUNT_SW_CPU_CLOCK;
-+	attr.freq = 1;
-+	attr.sample_freq = 4000;
-+	pfd = syscall(__NR_perf_event_open, &attr, -1, 0, -1, PERF_FLAG_FD_CLOEXEC);
-+	if (!ASSERT_GE(pfd, 0, "perf_fd"))
-+		goto cleanup;
-+
-+	skel = test_perf_link__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_load"))
-+		goto cleanup;
-+
-+	link_fd = bpf_link_create(bpf_program__fd(skel->progs.handler), pfd,
-+				  BPF_PERF_EVENT, NULL);
-+	if (!ASSERT_GE(link_fd, 0, "link_fd"))
-+		goto cleanup;
-+
-+	memset(&info, 0, sizeof(info));
-+	err = bpf_obj_get_info_by_fd(link_fd, &info, &info_len);
-+	if (!ASSERT_OK(err, "link_get_info"))
-+		goto cleanup;
-+
-+	ASSERT_EQ(info.type, BPF_LINK_TYPE_PERF_EVENT, "link_type");
-+	ASSERT_GT(info.id, 0, "link_id");
-+	ASSERT_GT(info.prog_id, 0, "link_prog_id");
-+
-+	/* ensure we get at least one perf_event prog execution */
-+	burn_cpu();
-+	ASSERT_GT(skel->bss->run_cnt, 0, "run_cnt");
-+
-+	/* perf_event is still active, but we close link and BPF program
-+	 * shouldn't be executed anymore
-+	 */
-+	close(link_fd);
-+	link_fd = -1;
-+
-+	/* make sure there are no stragglers */
-+	kern_sync_rcu();
-+
-+	run_cnt_before = skel->bss->run_cnt;
-+	burn_cpu();
-+	run_cnt_after = skel->bss->run_cnt;
-+
-+	ASSERT_EQ(run_cnt_before, run_cnt_after, "run_cnt_before_after");
-+
-+cleanup:
-+	if (link_fd >= 0)
-+		close(link_fd);
-+	if (pfd >= 0)
-+		close(pfd);
-+	test_perf_link__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_perf_link.c b/tools/testing/selftests/bpf/progs/test_perf_link.c
-new file mode 100644
-index 000000000000..c1db9fd98d0c
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_perf_link.c
-@@ -0,0 +1,16 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2021 Facebook */
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+int run_cnt = 0;
-+
-+SEC("perf_event")
-+int handler(struct pt_regs *ctx)
-+{
-+	__sync_fetch_and_add(&run_cnt, 1);
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
+The other two issues had existed long before, but I guess the timing
+with the serialization we had before was too tight to get any of
+our tests or deployments to hit it.
+
+With attached series stress testing sockmap+TCP with workloads that
+create lots of short-lived connections no more splats like below were
+seen on upstream bpf branch.
+
+[224913.935822] WARNING: CPU: 3 PID: 32100 at net/core/stream.c:208 sk_stream_kill_queues+0x212/0x220
+[224913.935841] Modules linked in: fuse overlay bpf_preload x86_pkg_temp_thermal intel_uncore wmi_bmof squashfs sch_fq_codel efivarfs ip_tables x_tables uas xhci_pci ixgbe mdio xfrm_algo xhci_hcd wmi
+[224913.935897] CPU: 3 PID: 32100 Comm: fgs-bench Tainted: G          I       5.14.0-rc1alu+ #181
+[224913.935908] Hardware name: Dell Inc. Precision 5820 Tower/002KVM, BIOS 1.9.2 01/24/2019
+[224913.935914] RIP: 0010:sk_stream_kill_queues+0x212/0x220
+[224913.935923] Code: 8b 83 20 02 00 00 85 c0 75 20 5b 5d 41 5c 41 5d 41 5e 41 5f c3 48 89 df e8 2b 11 fe ff eb c3 0f 0b e9 7c ff ff ff 0f 0b eb ce <0f> 0b 5b 5d 41 5c 41 5d 41 5e 41 5f c3 90 0f 1f 44 00 00 41 57 41
+[224913.935932] RSP: 0018:ffff88816271fd38 EFLAGS: 00010206
+[224913.935941] RAX: 0000000000000ae8 RBX: ffff88815acd5240 RCX: dffffc0000000000
+[224913.935948] RDX: 0000000000000003 RSI: 0000000000000ae8 RDI: ffff88815acd5460
+[224913.935954] RBP: ffff88815acd5460 R08: ffffffff955c0ae8 R09: fffffbfff2e6f543
+[224913.935961] R10: ffffffff9737aa17 R11: fffffbfff2e6f542 R12: ffff88815acd5390
+[224913.935967] R13: ffff88815acd5480 R14: ffffffff98d0c080 R15: ffffffff96267500
+[224913.935974] FS:  00007f86e6bd1700(0000) GS:ffff888451cc0000(0000) knlGS:0000000000000000
+[224913.935981] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[224913.935988] CR2: 000000c0008eb000 CR3: 00000001020e0005 CR4: 00000000003706e0
+[224913.935994] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[224913.936000] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[224913.936007] Call Trace:
+[224913.936016]  inet_csk_destroy_sock+0xba/0x1f0
+[224913.936033]  __tcp_close+0x620/0x790
+[224913.936047]  tcp_close+0x20/0x80
+[224913.936056]  inet_release+0x8f/0xf0
+[224913.936070]  __sock_release+0x72/0x120
+
+v2: init skb to null and fix a space/tab issue. Added Jakub's acks.
+
+John Fastabend (3):
+  bpf, sockmap: zap ingress queues after stopping strparser
+  bpf, sockmap: on cleanup we additionally need to remove cached skb
+  bpf, sockmap: fix memleak on ingress msg enqueue
+
+ include/linux/skmsg.h | 54 ++++++++++++++++++++++++++++---------------
+ net/core/skmsg.c      | 39 ++++++++++++++++++++++---------
+ 2 files changed, 63 insertions(+), 30 deletions(-)
+
 -- 
-2.30.2
+2.25.1
 
