@@ -2,358 +2,107 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FDD0C4338F
-	for <bpf@archiver.kernel.org>; Mon, 26 Jul 2021 08:19:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A339BC4338F
+	for <bpf@archiver.kernel.org>; Mon, 26 Jul 2021 14:10:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 754A060F51
-	for <bpf@archiver.kernel.org>; Mon, 26 Jul 2021 08:19:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7B1C760560
+	for <bpf@archiver.kernel.org>; Mon, 26 Jul 2021 14:10:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233282AbhGZHim (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 26 Jul 2021 03:38:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56952 "EHLO
+        id S233815AbhGZNaR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 26 Jul 2021 09:30:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233093AbhGZHiO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 26 Jul 2021 03:38:14 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93722C061796
-        for <bpf@vger.kernel.org>; Mon, 26 Jul 2021 01:18:43 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id gt31so15015766ejc.12
-        for <bpf@vger.kernel.org>; Mon, 26 Jul 2021 01:18:43 -0700 (PDT)
+        with ESMTP id S231319AbhGZNaR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 26 Jul 2021 09:30:17 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 317C6C061757
+        for <bpf@vger.kernel.org>; Mon, 26 Jul 2021 07:10:46 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id e14so11780602plh.8
+        for <bpf@vger.kernel.org>; Mon, 26 Jul 2021 07:10:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=anyfinetworks-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=9CjLQoI5rdzt5LfunlSTf0iy4Wv50I0WTrlHprV/hY4=;
-        b=yp/jncfuB9q8NYtZqn8sR6ZItBi7nlGm9xV94FOm5bZzgWPtwdxaFYtJptWMWt5Gei
-         fXH0EDIjPHbk2S1GgiuTFQ8ctK3EnHNaU1iZpcV6/vjCco/InAJR61E17sxHyA4XuvAe
-         WdTf19H+uLWPqEtBJHoSRMGNLLM2D4V9RBszv7/qHUGUamVgNP1CX88Y0Hvn6s5vZd90
-         LevSLA2wQy5TzK7E2WxT/+QlzmavgH5oHbiGuypggkDKCW8SDtX4as9+YaiH1bdAZzXB
-         UcWxR/vAnGEllspZY0rzGLyVk8kGRchR/eywt/C1bj7Zeh0LLoUsAUO+U2ICyOiFeZdK
-         4tDw==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8VozWXixIfDY/soeTQXILNz3g1ltpTqy9ydTJwf0M+k=;
+        b=EzNSwf3bc0e6K9tW4PBckmSfH1Of39eGzbRwLpcWoGVXBvwahxW04ctHHWhpXUuudU
+         aulwtWDRMrNjD4iMJzJRm+j6WuENFFxFarnJwX4ZhYMPhsnPm66X+oHPmlWJVrIilInm
+         kqalO39kMGmT4+1oEnryKsV9ecI7bsQuXkDfU/opDPoeNrTmRjUlm2MODKKqNwMc8kbJ
+         psR/EOh+lT2iIeRA/sWTuLKfNmy/baT9RuJPaMHFawWr00eKCfoonb5BYzNyBg2v37fx
+         qsHLie6vphvMHidXEwyXcitSpmTsyTOzLaS9/5OAZkhNU2sCwdgW4yck5qnvChI2/MWM
+         vX2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=9CjLQoI5rdzt5LfunlSTf0iy4Wv50I0WTrlHprV/hY4=;
-        b=TAfIZUHZK/vdBubT6q+jl7++Kl1aP+yak4rMEs0fPE0SbCwQTT1/vk6ewoksqCrfHI
-         6LR0pAz9lNS5EJrkjfW/w2hYJa59m5B1h4qNUX1MaRFtz2MvI8MyDPZxSJjlmWqYBgT7
-         oO/MmVUnp3UpV4AmBo/IEcDqUw2k5TwOWnBDPsz6R5MidKSMw3EjEpHoStGNwW2cgj18
-         QsagshfqdkjRjJrNqvD5YDdDFPo9E1KcAdHFBmmhKe8dJzp0Dsup6MAMQDI1tObHjDX9
-         eYsSbCemiXvHY/dv22HVSerqghF82zWzyXFh0YTQmppGimmD1C8ViC1nrtNU0CybRzHt
-         K9Yg==
-X-Gm-Message-State: AOAM5312kMGr9SjwVddmoB58onvD2RRO6mAWO3dBrmilNGzTxZpXF26S
-        lioeRNKs6lSh/CzGAvEas38o2MnYYbFgJMY123I=
-X-Google-Smtp-Source: ABdhPJzajUZXTBlltd1YZHD8Q55tEzQPBjGe/mYWGxweQxo91Eoxar//AzZrPMSASTkbp3ZSQQrb+Q==
-X-Received: by 2002:a17:906:2f15:: with SMTP id v21mr15713833eji.220.1627287522172;
-        Mon, 26 Jul 2021 01:18:42 -0700 (PDT)
-Received: from anpc2.lan (static-213-115-136-2.sme.telenor.se. [213.115.136.2])
-        by smtp.gmail.com with ESMTPSA id q9sm13937539ejf.70.2021.07.26.01.18.41
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8VozWXixIfDY/soeTQXILNz3g1ltpTqy9ydTJwf0M+k=;
+        b=t4TUvbsYmo8QwHaeBp7Sp2GgMaH0/ACqKYhvXonP/LXHzhOo0jHuJ0rrwKH8i+MFIh
+         CJiHwWsLXr8SJ2ScfW7XnsXymGvH4RSH78ut9LD05ORciFVqzAnD4yx4EEft7cgUTRKD
+         lmgxlR94Hf2QasGHeheRVaIxJLsv7dw5q9wD+jse8LHI38YTOWXdqO7YrZlIJpdsoOrW
+         iPnYKr4yY/dLIF6VKN46qAlBPQfcWneB8mqXihj7Do+wsCxXGujc/P0H4mh9IQnMl4gB
+         LkgoPHNdWkNN6czzLxbK2O70M6QTAPxjBlFb91rmpgaDOPb1loALIbAofK38ldKhVPha
+         bOgA==
+X-Gm-Message-State: AOAM5326kbj5MNSwsOARUjbXrODVhzFRVfF1E3LuMiktkQpo9696uYNB
+        IUKfXuY1qdqxHMFnaaz0LLAOX4z0nGZHIQ==
+X-Google-Smtp-Source: ABdhPJzNu8Gz5FSJNvnbTogp5dPFNqV4SrAvEIDzuZ/xJXHijGe11W2xgj307juZg/6mBtRsyy9/xg==
+X-Received: by 2002:aa7:948c:0:b029:328:8e56:aefd with SMTP id z12-20020aa7948c0000b02903288e56aefdmr18277490pfk.19.1627308645664;
+        Mon, 26 Jul 2021 07:10:45 -0700 (PDT)
+Received: from localhost.localdomain ([119.28.83.143])
+        by smtp.gmail.com with ESMTPSA id r18sm4847074pgk.54.2021.07.26.07.10.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jul 2021 01:18:41 -0700 (PDT)
-From:   Johan Almbladh <johan.almbladh@anyfinetworks.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
-Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        Tony.Ambardar@gmail.com, netdev@vger.kernel.org,
-        bpf@vger.kernel.org,
-        Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Subject: [RFC PATCH 14/14] bpf/tests: add tail call test suite
-Date:   Mon, 26 Jul 2021 10:17:38 +0200
-Message-Id: <20210726081738.1833704-15-johan.almbladh@anyfinetworks.com>
+        Mon, 26 Jul 2021 07:10:45 -0700 (PDT)
+From:   Hengqi Chen <hengqi.chen@gmail.com>
+To:     bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, jolsa@kernel.org,
+        yanivagman@gmail.com, hengqi.chen@gmail.com
+Subject: [PATCH bpf-next v4 0/2] bpf: expand bpf_d_path helper allowlist
+Date:   Mon, 26 Jul 2021 22:10:11 +0800
+Message-Id: <20210726141013.2239765-1-hengqi.chen@gmail.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210726081738.1833704-1-johan.almbladh@anyfinetworks.com>
-References: <20210726081738.1833704-1-johan.almbladh@anyfinetworks.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-While BPF_CALL instructions were tested implicitly by the cBPF-to-eBPF
-translation, there has not been any tests for BPF_TAIL_CALL instructions.
-The new test suite includes tests for tail call chaining, tail call count
-tracking and error paths. It is mainly intended for JIT development and
-testing.
+This patch set adds more functions to bpf_d_path allowlist.
 
-Signed-off-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
----
- lib/test_bpf.c | 249 +++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 249 insertions(+)
+Patch 1 is prep work which updates resolve_btfids to emit warnings
+on missing symbols instead of aborting kernel build process.
 
-diff --git a/lib/test_bpf.c b/lib/test_bpf.c
-index af5758151d0a..05ba00049052 100644
---- a/lib/test_bpf.c
-+++ b/lib/test_bpf.c
-@@ -8981,8 +8981,249 @@ static __init int test_bpf(void)
- 	return err_cnt ? -EINVAL : 0;
- }
- 
-+struct tail_call_test {
-+	const char *descr;
-+	struct bpf_insn insns[MAX_INSNS];
-+	int result;
-+	int stack_depth;
-+};
-+
-+/*
-+ * Magic marker used in test snippets for tail calls below.
-+ * BPF_LD/MOV to R2 and R2 with this immediate value is replaced
-+ * with the proper values by the test runner.
-+ */
-+#define TAIL_CALL_MARKER 0x7a11ca11
-+
-+/* Special offset to indicate a NULL call target */
-+#define TAIL_CALL_NULL 0x7fff
-+
-+#define TAIL_CALL(offset)			       \
-+	BPF_LD_IMM64(R2, TAIL_CALL_MARKER),	       \
-+	BPF_RAW_INSN(BPF_ALU | BPF_MOV | BPF_K, R3, 0, \
-+		     offset, TAIL_CALL_MARKER),	       \
-+	BPF_JMP_IMM(BPF_TAIL_CALL, 0, 0, 0)
-+
-+/*
-+ * Tail call tests. Each test case may call any other test in the table,
-+ * including itself, specified as a relative index offset from the calling
-+ * test. The index TAIL_CALL_NULL can be used to specify a NULL target
-+ * function to test the JIT error path.
-+ */
-+static struct tail_call_test tail_call_tests[] = {
-+	{
-+		"Tail call leaf",
-+		.insns = {
-+			BPF_ALU64_REG(BPF_MOV, R0, R1),
-+			BPF_ALU64_IMM(BPF_ADD, R0, 1),
-+			BPF_EXIT_INSN(),
-+		},
-+		.result = 1,
-+	},
-+	{
-+		"Tail call 2",
-+		.insns = {
-+			BPF_ALU64_IMM(BPF_ADD, R1, 2),
-+			TAIL_CALL(-1),
-+			BPF_ALU64_IMM(BPF_MOV, R0, -1),
-+			BPF_EXIT_INSN(),
-+		},
-+		.result = 3,
-+	},
-+	{
-+		"Tail call 3",
-+		.insns = {
-+			BPF_ALU64_IMM(BPF_ADD, R1, 3),
-+			TAIL_CALL(-1),
-+			BPF_ALU64_IMM(BPF_MOV, R0, -1),
-+			BPF_EXIT_INSN(),
-+		},
-+		.result = 6,
-+	},
-+	{
-+		"Tail call 4",
-+		.insns = {
-+			BPF_ALU64_IMM(BPF_ADD, R1, 4),
-+			TAIL_CALL(-1),
-+			BPF_ALU64_IMM(BPF_MOV, R0, -1),
-+			BPF_EXIT_INSN(),
-+		},
-+		.result = 10,
-+	},
-+	{
-+		"Tail call error path, max count reached",
-+		.insns = {
-+			BPF_ALU64_IMM(BPF_ADD, R1, 1),
-+			BPF_ALU64_REG(BPF_MOV, R0, R1),
-+			TAIL_CALL(0),
-+			BPF_EXIT_INSN(),
-+		},
-+		.result = MAX_TAIL_CALL_CNT + 2,
-+	},
-+	{
-+		"Tail call error path, NULL target",
-+		.insns = {
-+			BPF_ALU64_IMM(BPF_MOV, R0, -1),
-+			TAIL_CALL(TAIL_CALL_NULL),
-+			BPF_ALU64_IMM(BPF_MOV, R0, 1),
-+			BPF_EXIT_INSN(),
-+		},
-+		.result = 1,
-+	},
-+	{
-+		/* Must be the last test */
-+		"Tail call error path, index out of range",
-+		.insns = {
-+			BPF_ALU64_IMM(BPF_MOV, R0, -1),
-+			TAIL_CALL(1),    /* Index out of range */
-+			BPF_ALU64_IMM(BPF_MOV, R0, 1),
-+			BPF_EXIT_INSN(),
-+		},
-+		.result = 1,
-+	},
-+};
-+
-+static void __init destroy_tail_call_tests(struct bpf_array *progs)
-+{
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(tail_call_tests); i++)
-+		if (progs->ptrs[i])
-+			bpf_prog_free(progs->ptrs[i]);
-+	kfree(progs);
-+}
-+
-+static __init int prepare_tail_call_tests(struct bpf_array **pprogs)
-+{
-+	struct bpf_array *progs;
-+	int ntests = ARRAY_SIZE(tail_call_tests);
-+	int which, err;
-+
-+	/* Allocate the table of programs to be used for tall calls */
-+	progs = kzalloc(sizeof(*progs) + (ntests + 1) * sizeof(progs->ptrs[0]),
-+			GFP_KERNEL);
-+	if (!progs)
-+		goto out_nomem;
-+
-+	/* Create all eBPF programs and populate the table */
-+	for (which = 0; which < ntests; which++) {
-+		struct tail_call_test *test = &tail_call_tests[which];
-+		struct bpf_prog *fp;
-+		int err, len, i;
-+
-+		/* Compute the number of program instructions */
-+		for (len = 0; len < MAX_INSNS; len++) {
-+			struct bpf_insn *insn = &test->insns[len];
-+
-+			if (len < MAX_INSNS - 1 &&
-+			    insn->code == (BPF_LD | BPF_DW | BPF_IMM))
-+				len++;
-+			if (insn->code == 0)
-+				break;
-+		}
-+
-+		/* Allocate and initialize the program */
-+		fp = bpf_prog_alloc(bpf_prog_size(len), 0);
-+		if (!fp)
-+			goto out_nomem;
-+
-+		fp->len = len;
-+		fp->type = BPF_PROG_TYPE_SOCKET_FILTER;
-+		fp->aux->stack_depth = test->stack_depth;
-+		memcpy(fp->insnsi, test->insns, len * sizeof(struct bpf_insn));
-+
-+		/* Relocate runtime tail call offsets and addresses */
-+		for (i = 0; i < len; i++) {
-+			struct bpf_insn *insn = &fp->insnsi[i];
-+			int target;
-+
-+			if (insn->imm != TAIL_CALL_MARKER)
-+				continue;
-+
-+			switch (insn->code) {
-+			case BPF_LD | BPF_DW | BPF_IMM:
-+				if (insn->dst_reg == R2) {
-+					insn[0].imm = (u32)progs;
-+					insn[1].imm = ((u64)(long)progs) >> 32;
-+				}
-+				break;
-+
-+			case BPF_ALU | BPF_MOV | BPF_K:
-+			case BPF_ALU64 | BPF_MOV | BPF_K:
-+				if (insn->off == TAIL_CALL_NULL)
-+					target = ntests;
-+				else
-+					target = which + insn->off;
-+				if (insn->dst_reg == R3)
-+					insn->imm = target;
-+				break;
-+			}
-+		}
-+
-+		fp = bpf_prog_select_runtime(fp, &err);
-+		if (err)
-+			goto out_err;
-+
-+		progs->ptrs[which] = fp;
-+	}
-+
-+	/* The last entry contains a NULL program pointer */
-+	progs->map.max_entries = ntests + 1;
-+	*pprogs = progs;
-+	return 0;
-+
-+out_nomem:
-+	err = -ENOMEM;
-+
-+out_err:
-+	if (progs)
-+		destroy_tail_call_tests(progs);
-+	return err;
-+}
-+
-+static __init int test_tail_calls(struct bpf_array *progs)
-+{
-+	int i, err_cnt = 0, pass_cnt = 0;
-+	int jit_cnt = 0, run_cnt = 0;
-+
-+	for (i = 0; i < ARRAY_SIZE(tail_call_tests); i++) {
-+		struct tail_call_test *test = &tail_call_tests[i];
-+		struct bpf_prog *fp = progs->ptrs[i];
-+		u64 duration;
-+		int ret;
-+
-+		cond_resched();
-+
-+		pr_info("#%d %s ", i, test->descr);
-+		if (!fp) {
-+			err_cnt++;
-+			continue;
-+		}
-+		pr_cont("jited:%u ", fp->jited);
-+
-+		run_cnt++;
-+		if (fp->jited)
-+			jit_cnt++;
-+
-+		ret = __run_one(fp, NULL, MAX_TESTRUNS, &duration);
-+		if (ret == test->result) {
-+			pr_cont("%lld PASS", duration);
-+			pass_cnt++;
-+		} else {
-+			pr_cont("ret %d != %d FAIL", ret, test->result);
-+			err_cnt++;
-+		}
-+	}
-+
-+	pr_info("%s: Summary: %d PASSED, %d FAILED, [%d/%d JIT'ed]\n",
-+		__func__, pass_cnt, err_cnt, jit_cnt, run_cnt);
-+
-+	return err_cnt ? -EINVAL : 0;
-+}
-+
- static int __init test_bpf_init(void)
- {
-+	struct bpf_array *progs = NULL;
- 	int ret;
- 
- 	ret = prepare_bpf_tests();
-@@ -8994,6 +9235,14 @@ static int __init test_bpf_init(void)
- 	if (ret)
- 		return ret;
- 
-+	ret = prepare_tail_call_tests(&progs);
-+	if (ret)
-+		return ret;
-+	ret = test_tail_calls(progs);
-+	destroy_tail_call_tests(progs);
-+	if (ret)
-+		return ret;
-+
- 	return test_skb_segment();
- }
- 
+Patch 2 expands bpf_d_path allowlist.
+
+Changes since v3: [3]
+ - Addressed Yonghong's comments. Sort allowlist and add security_bprm_*
+
+Changes since v2: [2]
+ - Andrii suggested that we should first address an issue of .BTF_ids
+   before adding more symbols to .BTF_ids. Fixed that.
+ - Yaniv proposed adding security_sb_mount and security_bprm_check.
+   Added them.
+
+Changes since v1: [1]
+ - Alexei and Yonghong suggested that bpf_d_path helper could also
+   apply to vfs_* and security_file_* kernel functions. Added them.
+
+[1] https://lore.kernel.org/bpf/20210712162424.2034006-1-hengqi.chen@gmail.com/
+[2] https://lore.kernel.org/bpf/20210719151753.399227-1-hengqi.chen@gmail.com/
+[3] https://lore.kernel.org/bpf/20210725141814.2000828-3-hengqi.chen@gmail.com/
+
+Hengqi Chen (2):
+  tools/resolve_btfids: emit warnings and patch zero id for missing
+    symbols
+  bpf: expose bpf_d_path helper to vfs_* and security_* functions
+
+ kernel/trace/bpf_trace.c        | 60 ++++++++++++++++++++++++++++++---
+ tools/bpf/resolve_btfids/main.c | 13 +++----
+ 2 files changed, 63 insertions(+), 10 deletions(-)
+
 -- 
 2.25.1
 
