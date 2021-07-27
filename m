@@ -2,119 +2,144 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 29923C432BE
-	for <bpf@archiver.kernel.org>; Tue, 27 Jul 2021 13:18:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4716C432BE
+	for <bpf@archiver.kernel.org>; Tue, 27 Jul 2021 13:18:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0E32261A3A
-	for <bpf@archiver.kernel.org>; Tue, 27 Jul 2021 13:18:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B87EB6187F
+	for <bpf@archiver.kernel.org>; Tue, 27 Jul 2021 13:18:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232155AbhG0NSN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 27 Jul 2021 09:18:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59544 "EHLO
+        id S232214AbhG0NSO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 27 Jul 2021 09:18:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236509AbhG0NSJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 27 Jul 2021 09:18:09 -0400
+        with ESMTP id S236602AbhG0NSN (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 27 Jul 2021 09:18:13 -0400
 Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF683C061757;
-        Tue, 27 Jul 2021 06:18:08 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id b9so14344949wrx.12;
-        Tue, 27 Jul 2021 06:18:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 981D9C061760;
+        Tue, 27 Jul 2021 06:18:13 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id e2so15193900wrq.6;
+        Tue, 27 Jul 2021 06:18:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hseTPeOuWoQZCzp4T+8xs/PPj4x/QmGmh/W2U5WUemg=;
-        b=e2/qE5+zJy4a/KUgNh9xnP28gzMM4Kng4XTviknNV5Op13DhovHqim71nKXdmsoKdU
-         1B6gjiAQAol7zB+kD2CcBUUb4poDNm+KsnjbqnBthKbceVQaS1VSbpdA/fLC8ANW6Vje
-         BnPoaTOSqf+TLTM37wHy6fMH7sFxgTPfHSGEX4dQ8X/RMSSD7osF8xIvG6qBBj+9Nx1a
-         CzrucEsDNKXRRwfZzbwsr4P9QEkGMYQxb6QJ9gLBNi64jFq9SGyJUag/e2QpimfUvfeZ
-         YBtGyBjiCpQfYGS5p8jI8cUhjuyNc7BZpwy7ynW44UZfGznsBOZVyuzgl/g2xzbjCktE
-         wckA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Q6qddnNCl+ddNnMLMws7fqahAlg13r+FeqAPD2rVFjc=;
+        b=aJqpmSLWRfHLkKwRYoek6R/vHvCoLzHN4XXBESd+RKWMSTzkjXZd/q9aFtb6jtRDCb
+         1mtNaVROsFAPpufGEr2dsET42CsMzFgBd4sFg78go7wsry07frFNOvvit6UAJLvk7WtD
+         RkzXmBi3EncxEszN7n63oIhKNHxSHXrL5/0riIU43jpUWOHY+/KX4Jj+beWbvh2FJVwE
+         2tDNQWMqC7gwi8ygR2gpR7Xu9C0iMUWqSP5AalePVGhllGgKIALmNnj7fb2R0gZ6N00+
+         T3xZrc/wGDJ0G2nXIzIDLJ/9HhRcpvZL+mMMBrf1QhY734M1QhjeKA0Pc3Qv0IexkERv
+         0Yyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hseTPeOuWoQZCzp4T+8xs/PPj4x/QmGmh/W2U5WUemg=;
-        b=X+dTA9/lgXSpq5u0Zf/XVqNSSoDUZLDc7SfgbW5pHt9561WYtYL7mrXLLkh0xxuVfs
-         v+eI4kVQ/daPP7Aym2MQd9ERzFb2B2wC/g5C8sbi1XLxehnqggOm/gU7h6JJj4YaQ3B3
-         74VIGkQFY3gBD9+Gzfb+sVk+/5e/c6ARO27Ldzwrv9HYYJMP9MhX5dRCGKeS4uwqL9hW
-         QWcPECXveRRvL/g96xYa51CKWVBXw24yuv386M1YMa8iSG9PtpyONa4HZ2UjBZw/EQGu
-         wcf0A5iYWKag3i7dbe5aJUs91Pxl1hdE95lDUV0n1vnUMAhAY/kX3ub+VWKPl1Zuiwwv
-         AVQA==
-X-Gm-Message-State: AOAM530+2/Z6mRl5J9YzJut0FkPBlV1RuQN6f4k92oTOBSluBm738llD
-        fsC+8B8Y67OWHacnLcYvSSE=
-X-Google-Smtp-Source: ABdhPJwIvJtL31PV1WGQWvpHEmYBLIFYFOpH9KBxjnr4noQA6hZRFExrHBYhQx9ifXsV/9Jh8yxTVQ==
-X-Received: by 2002:adf:a2c3:: with SMTP id t3mr23867253wra.223.1627391887323;
-        Tue, 27 Jul 2021 06:18:07 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Q6qddnNCl+ddNnMLMws7fqahAlg13r+FeqAPD2rVFjc=;
+        b=Lw8HIusWzvQYBBtpgML62D5J4eBN689MiV8NRPhA7C4L7IA2w4WiT33Z392i6eU0Rf
+         62OQhrWvqFupYymkosE/agnLvwPLtK66/LXVB/CK9uE4E3D+KE56fkbNBppxt4hmnpa4
+         E7H9ZXoTQy4Cvx9yknDzbx6cg6wl1ZXUiymlt1KrVUxQZ4U9W9bF2KrXYtd/AgVD/Q+8
+         0qHTQ8rnXzzjrX4az7/RC18TOw8i+chmrC+oGi7c3nNvPAqAsUXMalxRlvI/f9Jx+dF1
+         OncuPcTdpmneAaWjpfq4PQy+fCSTllG3KJ3J60MIdylxgbisMz526+Yh7VAvk0Ks7AaR
+         VMHA==
+X-Gm-Message-State: AOAM531qJA/r2MfDHyox84S39rCV8wiFgjo9WGiO8oS4jRvtQX4FkqD1
+        rcMa+L1Qa5UN+l7tZruUoy4=
+X-Google-Smtp-Source: ABdhPJyVHvvfNjftmENTBOs7xY3P2y0cE2sy0I1fxTuDd/VgqqYCAmA2mZylIQTYIIJ8znvSKej2cA==
+X-Received: by 2002:adf:eacb:: with SMTP id o11mr25759431wrn.62.1627391892272;
+        Tue, 27 Jul 2021 06:18:12 -0700 (PDT)
 Received: from localhost.localdomain (h-46-59-47-246.A165.priv.bahnhof.se. [46.59.47.246])
-        by smtp.gmail.com with ESMTPSA id u11sm3277553wrr.44.2021.07.27.06.18.05
+        by smtp.gmail.com with ESMTPSA id u11sm3277553wrr.44.2021.07.27.06.18.10
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 27 Jul 2021 06:18:06 -0700 (PDT)
+        Tue, 27 Jul 2021 06:18:11 -0700 (PDT)
 From:   Magnus Karlsson <magnus.karlsson@gmail.com>
 To:     magnus.karlsson@intel.com, bjorn@kernel.org, ast@kernel.org,
         daniel@iogearbox.net, netdev@vger.kernel.org,
         maciej.fijalkowski@intel.com
-Cc:     Magnus Karlsson <magnus.karlsson@gmail.com>,
-        jonathan.lemon@gmail.com, ciara.loftus@intel.com,
+Cc:     jonathan.lemon@gmail.com, ciara.loftus@intel.com,
         joamaki@gmail.com, bpf@vger.kernel.org, yhs@fb.com,
         andrii@kernel.org
-Subject: [PATCH bpf-next 00/17] selftests: xsk: various simplifications
-Date:   Tue, 27 Jul 2021 15:17:36 +0200
-Message-Id: <20210727131753.10924-1-magnus.karlsson@gmail.com>
+Subject: [PATCH bpf-next 03/17] selftests: xsk: remove unused variables
+Date:   Tue, 27 Jul 2021 15:17:39 +0200
+Message-Id: <20210727131753.10924-4-magnus.karlsson@gmail.com>
 X-Mailer: git-send-email 2.29.0
+In-Reply-To: <20210727131753.10924-1-magnus.karlsson@gmail.com>
+References: <20210727131753.10924-1-magnus.karlsson@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch set mainly contains various simplifications to the xsk
-selftests. The only exception is the introduction of packet streams
-that describes what the Tx process should send and what the Rx process
-should receive. If it receives anything else, the test fails. This
-mechanism can be used to produce tests were all packets are not
-received by the Rx thread or modified in some way. An example of this
-is if an XDP program does XDP_PASS on some of the packets.
+From: Magnus Karlsson <magnus.karlsson@intel.com>
 
-This patch set will be followed by another patch set that implements a
-new structure that will facilitate adding new tests. A couple of new
-tests will also be included in that patch set.
+Remove unused variables and typedefs. The *_npkts variables are
+incremented but never used.
 
-Thanks: Magnus
+Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
+---
+ tools/testing/selftests/bpf/xdpxceiver.c | 3 ---
+ tools/testing/selftests/bpf/xdpxceiver.h | 8 --------
+ 2 files changed, 11 deletions(-)
 
-Magnus Karlsson (17):
-  selftests: xsk: remove color mode
-  selftests: xsk: remove the num_tx_packets option
-  selftests: xsk: remove unused variables
-  selftests: xsk: set rlimit per thread
-  selftests: xsk: return correct error codes
-  selftests: xsk: simplify the retry code
-  selftests: xsk: remove end-of-test packet
-  selftests: xsk: disassociate umem size with packets sent
-  selftests: xsk: rename worker_* functions that are not thred entry
-    points
-  selftests: xsk: simplify packet validation in xsk tests
-  selftests: xsk: validate tx stats on tx thread
-  selftests: xsk: decrease batch size
-  selftests: xsk: remove cleanup at end of program
-  selftests: xsk: generate packet directly in umem
-  selftests: xsk: generate packets from specification
-  selftests: xsk: make enums lower case
-  selftests: xsk: preface options with opt
-
- tools/testing/selftests/bpf/test_xsk.sh    |  10 +-
- tools/testing/selftests/bpf/xdpxceiver.c   | 635 +++++++++------------
- tools/testing/selftests/bpf/xdpxceiver.h   |  61 +-
- tools/testing/selftests/bpf/xsk_prereqs.sh |  30 +-
- 4 files changed, 315 insertions(+), 421 deletions(-)
-
-
-base-commit: 793eccae89bb495cfb44dceeaa13044160c49611
---
+diff --git a/tools/testing/selftests/bpf/xdpxceiver.c b/tools/testing/selftests/bpf/xdpxceiver.c
+index 1b0efe566278..4d8ee636fc24 100644
+--- a/tools/testing/selftests/bpf/xdpxceiver.c
++++ b/tools/testing/selftests/bpf/xdpxceiver.c
+@@ -70,7 +70,6 @@
+ #include <errno.h>
+ #include <getopt.h>
+ #include <asm/barrier.h>
+-typedef __u16 __sum16;
+ #include <linux/if_link.h>
+ #include <linux/if_ether.h>
+ #include <linux/ip.h>
+@@ -454,7 +453,6 @@ static void complete_tx_only(struct xsk_socket_info *xsk, int batch_size)
+ 	if (rcvd) {
+ 		xsk_ring_cons__release(&xsk->umem->cq, rcvd);
+ 		xsk->outstanding_tx -= rcvd;
+-		xsk->tx_npkts += rcvd;
+ 	}
+ }
+ 
+@@ -512,7 +510,6 @@ static void rx_pkt(struct xsk_socket_info *xsk, struct pollfd *fds)
+ 
+ 	xsk_ring_prod__submit(&xsk->umem->fq, rcvd);
+ 	xsk_ring_cons__release(&xsk->rx, rcvd);
+-	xsk->rx_npkts += rcvd;
+ }
+ 
+ static void tx_only(struct xsk_socket_info *xsk, u32 *frameptr, int batch_size)
+diff --git a/tools/testing/selftests/bpf/xdpxceiver.h b/tools/testing/selftests/bpf/xdpxceiver.h
+index 4ce5a18b32e7..02b7d0d6f45d 100644
+--- a/tools/testing/selftests/bpf/xdpxceiver.h
++++ b/tools/testing/selftests/bpf/xdpxceiver.h
+@@ -44,10 +44,6 @@
+ 
+ #define print_verbose(x...) do { if (opt_verbose) ksft_print_msg(x); } while (0)
+ 
+-typedef __u32 u32;
+-typedef __u16 u16;
+-typedef __u8 u8;
+-
+ enum TEST_MODES {
+ 	TEST_MODE_UNCONFIGURED = -1,
+ 	TEST_MODE_SKB,
+@@ -104,10 +100,6 @@ struct xsk_socket_info {
+ 	struct xsk_ring_prod tx;
+ 	struct xsk_umem_info *umem;
+ 	struct xsk_socket *xsk;
+-	unsigned long rx_npkts;
+-	unsigned long tx_npkts;
+-	unsigned long prev_rx_npkts;
+-	unsigned long prev_tx_npkts;
+ 	u32 outstanding_tx;
+ };
+ 
+-- 
 2.29.0
+
