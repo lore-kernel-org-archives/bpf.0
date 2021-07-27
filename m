@@ -8,54 +8,54 @@ X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 94EAAC4338F
-	for <bpf@archiver.kernel.org>; Tue, 27 Jul 2021 13:18:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28C9EC432BE
+	for <bpf@archiver.kernel.org>; Tue, 27 Jul 2021 13:18:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7A4D5601FD
-	for <bpf@archiver.kernel.org>; Tue, 27 Jul 2021 13:18:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 15CCC61A2F
+	for <bpf@archiver.kernel.org>; Tue, 27 Jul 2021 13:18:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236668AbhG0NS1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S236583AbhG0NS1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Tue, 27 Jul 2021 09:18:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59582 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236619AbhG0NSR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 27 Jul 2021 09:18:17 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99CD9C061760;
-        Tue, 27 Jul 2021 06:18:16 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id q3so15269350wrx.0;
-        Tue, 27 Jul 2021 06:18:16 -0700 (PDT)
+        with ESMTP id S236627AbhG0NSU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 27 Jul 2021 09:18:20 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2EF0C061757;
+        Tue, 27 Jul 2021 06:18:19 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id j2so15142826wrx.9;
+        Tue, 27 Jul 2021 06:18:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=lZnPXa0eEcKFLvwVi4z8DOLXiy35bMAQiZXhSutBkPM=;
-        b=NKaSVhcaGLz6qHmdm7lI8ZWYhbipAOAWt1CTfun8JxcqbN21MKN2HUSQ9UEsoLV6Ae
-         QDiFn2hgNGuQxHYtxmhCRVWg2ApCAIZB462pxuaq4fCpz96h2Q7HEp1tgt/1/XparCJi
-         FCFwOvTKdG6mnQ0wI2fXTig4L+cKKWLG5XywNuSCSy9DlYN43s0AJ+s2uijcjnzrLNXD
-         TqVR7c5blasru0n0KE7g26bIUw9CSsMcKkZpQHBfHtE9aGNPAz3rNocnrB5kFqsiZwfu
-         8kVSHQIVPy2E/bBQ60nPujIQVKf8QE+sEm2A5N2hTd3dlQKbQXB87Nl/uo1T24pyBF6A
-         bwbA==
+        bh=Wk+4pD6RIN81xKg5WXM+jVKJ2jvOv76Hf6DkK14dZfc=;
+        b=fgL3GKWecJrhOcSIvVFwA+MkDnHaAZknPj/1pMTjAZC4/lAD2RYcpsQsFuBWJAxUAJ
+         eLqAfNAXLYJiEKpbZNqqVlFdUMtEIGydO7vW4ABczKiEQQLTz04yIH4msgkU7eGPHMBP
+         5TTH1mB/vHd/ywkdd6ZQ54oJRxZil+TSjo3V6MEivI8FZoSKhiJM4Gx0pFbBqhZ/6m+y
+         mCOTfdFxV5f4PFDo8oI3WGrSx5Ym2lnzW3j7T8XjCPfPQIjNd0Hq+H4B9ayqlIwxjLUP
+         2dZKQ9r3gpeATbgNHexuH2i8BV90TZ87mT73E5JhrB3LTqxu3NWfiKaUg9+EVZdfcNF+
+         0mtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=lZnPXa0eEcKFLvwVi4z8DOLXiy35bMAQiZXhSutBkPM=;
-        b=kRSRB9U8jBGQYUIOvsFx0nLVkjBaZAroUxTs5/3w8URUd22BZJ6JYpAGTyDFwr1uHa
-         9tlZAcXJrQvB+MPmsMapXlFJMZ6TRldNLeFhHbg+ptCJLhv6Rg18VPbqL0ot/ZxIceqC
-         JNQXvE/wBTPe6spsqJKwLCVfVQ2QPsIq0mKM64YHuzxbEIjcpodxYb2USaNMweEsloZu
-         nWqKqbL549Z3sw4sFhyj8qyk5HTWaydRv7+iY7DEuGNQOn5Mj9roeGCkcUb9v571kpta
-         Jyy3NCF5ffAmzmY9Oz6aiUxVw0o0E3NvntG4AQnDhXo8XaX9mO9x1BRUL2cqQuyL9KOi
-         jU0w==
-X-Gm-Message-State: AOAM533TlB/rjeXtJSDFGTFOfLqNYvzpMw1xffwFBbJcdQOLNoxMxRE1
-        NPKBUhLYPk8DawmvWCK7tGY=
-X-Google-Smtp-Source: ABdhPJzzHC9Hf6PPOA8eQiLtQQtwAvhmPvfCnRS0hMDM41ZyKQvcriPh/CzzhrDN5TJwve2l96UK6A==
-X-Received: by 2002:adf:efc6:: with SMTP id i6mr24322176wrp.213.1627391895279;
-        Tue, 27 Jul 2021 06:18:15 -0700 (PDT)
+        bh=Wk+4pD6RIN81xKg5WXM+jVKJ2jvOv76Hf6DkK14dZfc=;
+        b=IGce/qPZafNwRenDhkRHnrMVpRf+UyWxwuLnutFNdPzYITIMNzDqWYWlST7F3Nf2Fz
+         R/Hrp0neSLMDLz4pU7JO4E/gFbDzk4iJcSmywdxebHbS0jBcUHyvqENHsylrOaHryAD5
+         8KzsyP+yu4AmAQrfmW/AyZiPFLX7OgObbu5jUG4bepL9aBrekycWtvnXi4LaVthPDQZI
+         7PrDwJhkdJkJVswiHCThWxg1iSWRS2z/SdMhXfaU7ZS4kuRUG36UFKqS8b6DnuAebTkC
+         5qS73MGynXrkqY1B0f6LWMNP1PUQP9ZZgDqE7oxsApRAnRiavVZ+h79Sf0+snY2awwQS
+         9Fdg==
+X-Gm-Message-State: AOAM5312RjqqT1GxZi5gRsiE2pfn1wbNbsZ0fqX6xkAfiNJvojtrra7c
+        Nkv11X70epJyATzZ6DZ55HPTn7bEkH8sxWWNAgt3Fw==
+X-Google-Smtp-Source: ABdhPJyluaQCkxF47Qm328duZ3my2+PsSPBxnjOR934/IizNPG08H07Rcc3bN3xzlNj5WdAz2oqREA==
+X-Received: by 2002:adf:d20e:: with SMTP id j14mr13726685wrh.177.1627391898411;
+        Tue, 27 Jul 2021 06:18:18 -0700 (PDT)
 Received: from localhost.localdomain (h-46-59-47-246.A165.priv.bahnhof.se. [46.59.47.246])
-        by smtp.gmail.com with ESMTPSA id u11sm3277553wrr.44.2021.07.27.06.18.13
+        by smtp.gmail.com with ESMTPSA id u11sm3277553wrr.44.2021.07.27.06.18.16
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 27 Jul 2021 06:18:14 -0700 (PDT)
+        Tue, 27 Jul 2021 06:18:18 -0700 (PDT)
 From:   Magnus Karlsson <magnus.karlsson@gmail.com>
 To:     magnus.karlsson@intel.com, bjorn@kernel.org, ast@kernel.org,
         daniel@iogearbox.net, netdev@vger.kernel.org,
@@ -63,9 +63,9 @@ To:     magnus.karlsson@intel.com, bjorn@kernel.org, ast@kernel.org,
 Cc:     jonathan.lemon@gmail.com, ciara.loftus@intel.com,
         joamaki@gmail.com, bpf@vger.kernel.org, yhs@fb.com,
         andrii@kernel.org
-Subject: [PATCH bpf-next 05/17] selftests: xsk: return correct error codes
-Date:   Tue, 27 Jul 2021 15:17:41 +0200
-Message-Id: <20210727131753.10924-6-magnus.karlsson@gmail.com>
+Subject: [PATCH bpf-next 07/17] selftests: xsk: remove end-of-test packet
+Date:   Tue, 27 Jul 2021 15:17:43 +0200
+Message-Id: <20210727131753.10924-8-magnus.karlsson@gmail.com>
 X-Mailer: git-send-email 2.29.0
 In-Reply-To: <20210727131753.10924-1-magnus.karlsson@gmail.com>
 References: <20210727131753.10924-1-magnus.karlsson@gmail.com>
@@ -77,58 +77,162 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Magnus Karlsson <magnus.karlsson@intel.com>
 
-Return the correct error codes so they can be printed correctly.
+Get rid of the end-of-test packet and just count the number of packets
+received and quit when the expected number as been
+received. Simplifies the code.
 
 Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
 ---
- tools/testing/selftests/bpf/xdpxceiver.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ tools/testing/selftests/bpf/xdpxceiver.c | 42 +++++++-----------------
+ tools/testing/selftests/bpf/xdpxceiver.h |  2 --
+ 2 files changed, 12 insertions(+), 32 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/xdpxceiver.c b/tools/testing/selftests/bpf/xdpxceiver.c
-index 2100ab4e58b7..2ae83b9a1ff4 100644
+index dcde73db7b29..b77ee9bb91e1 100644
 --- a/tools/testing/selftests/bpf/xdpxceiver.c
 +++ b/tools/testing/selftests/bpf/xdpxceiver.c
-@@ -275,7 +275,7 @@ static void xsk_configure_umem(struct ifobject *data, void *buffer, int idx)
- 	ret = xsk_umem__create(&umem->umem, buffer, size,
- 			       &umem->fq, &umem->cq, &cfg);
- 	if (ret)
--		exit_with_error(ret);
-+		exit_with_error(-ret);
+@@ -605,7 +605,7 @@ static void worker_pkt_dump(void)
+ 	void *ptr;
  
- 	umem->buffer = buffer;
+ 	fprintf(stdout, "---------------------------------------\n");
+-	for (int iter = 0; iter < num_frames - 1; iter++) {
++	for (int iter = 0; iter < num_frames; iter++) {
+ 		ptr = pkt_buf[iter]->payload;
+ 		ethhdr = ptr;
+ 		iphdr = ptr + sizeof(*ethhdr);
+@@ -632,11 +632,6 @@ static void worker_pkt_dump(void)
+ 		/*extract L5 frame */
+ 		payload = *((uint32_t *)(ptr + PKT_HDR_SIZE));
  
-@@ -289,7 +289,7 @@ static void xsk_populate_fill_ring(struct xsk_umem_info *umem)
- 
- 	ret = xsk_ring_prod__reserve(&umem->fq, XSK_RING_PROD__DEFAULT_NUM_DESCS, &idx);
- 	if (ret != XSK_RING_PROD__DEFAULT_NUM_DESCS)
--		exit_with_error(ret);
-+		exit_with_error(-ret);
- 	for (i = 0; i < XSK_RING_PROD__DEFAULT_NUM_DESCS; i++)
- 		*xsk_ring_prod__fill_addr(&umem->fq, idx++) = i * XSK_UMEM__DEFAULT_FRAME_SIZE;
- 	xsk_ring_prod__submit(&umem->fq, XSK_RING_PROD__DEFAULT_NUM_DESCS);
-@@ -472,7 +472,7 @@ static void rx_pkt(struct xsk_socket_info *xsk, struct pollfd *fds)
- 		if (xsk_ring_prod__needs_wakeup(&xsk->umem->fq)) {
- 			ret = poll(fds, 1, POLL_TMOUT);
- 			if (ret < 0)
--				exit_with_error(ret);
-+				exit_with_error(-ret);
- 		}
- 		return;
+-		if (payload == EOT) {
+-			print_verbose("End-of-transmission frame received\n");
+-			fprintf(stdout, "---------------------------------------\n");
+-			break;
+-		}
+ 		fprintf(stdout, "DEBUG>> L5: payload: %d\n", payload);
+ 		fprintf(stdout, "---------------------------------------\n");
  	}
-@@ -480,11 +480,11 @@ static void rx_pkt(struct xsk_socket_info *xsk, struct pollfd *fds)
- 	ret = xsk_ring_prod__reserve(&xsk->umem->fq, rcvd, &idx_fq);
- 	while (ret != rcvd) {
- 		if (ret < 0)
--			exit_with_error(ret);
-+			exit_with_error(-ret);
- 		if (xsk_ring_prod__needs_wakeup(&xsk->umem->fq)) {
- 			ret = poll(fds, 1, POLL_TMOUT);
- 			if (ret < 0)
--				exit_with_error(ret);
-+				exit_with_error(-ret);
- 		}
- 		ret = xsk_ring_prod__reserve(&xsk->umem->fq, rcvd, &idx_fq);
+@@ -699,28 +694,24 @@ static void worker_pkt_validate(void)
+ 		/*do not increment pktcounter if !(tos=0x9 and ipv4) */
+ 		if (iphdr->version == IP_PKT_VER && iphdr->tos == IP_PKT_TOS) {
+ 			payloadseqnum = *((uint32_t *)(pkt_node_rx_q->pkt_frame + PKT_HDR_SIZE));
+-			if (debug_pkt_dump && payloadseqnum != EOT) {
++			if (debug_pkt_dump) {
+ 				pkt_obj = malloc(sizeof(*pkt_obj));
+ 				pkt_obj->payload = malloc(PKT_SIZE);
+ 				memcpy(pkt_obj->payload, pkt_node_rx_q->pkt_frame, PKT_SIZE);
+ 				pkt_buf[payloadseqnum] = pkt_obj;
+ 			}
+ 
+-			if (payloadseqnum == EOT) {
+-				print_verbose("End-of-transmission frame received: PASS\n");
+-				sigvar = 1;
+-				break;
+-			}
+-
+-			if (prev_pkt + 1 != payloadseqnum) {
++			if (pkt_counter % num_frames != payloadseqnum) {
+ 				ksft_test_result_fail
+-				    ("ERROR: [%s] prev_pkt [%d], payloadseqnum [%d]\n",
+-				     __func__, prev_pkt, payloadseqnum);
++				    ("ERROR: [%s] expected counter [%d], payloadseqnum [%d]\n",
++				     __func__, pkt_counter, payloadseqnum);
+ 				ksft_exit_xfail();
+ 			}
+ 
+-			prev_pkt = payloadseqnum;
+-			pkt_counter++;
++			if (++pkt_counter == opt_pkt_count) {
++				sigvar = 1;
++				break;
++			}
+ 		} else {
+ 			ksft_print_msg("Invalid frame received: ");
+ 			ksft_print_msg("[IP_PKT_VER: %02X], [IP_PKT_TOS: %02X]\n", iphdr->version,
+@@ -805,11 +796,7 @@ static void *worker_testapp_validate_tx(void *arg)
+ 		thread_common_ops(ifobject, bufs);
+ 
+ 	for (int i = 0; i < num_frames; i++) {
+-		/*send EOT frame */
+-		if (i == (num_frames - 1))
+-			data.seqnum = -1;
+-		else
+-			data.seqnum = i;
++		data.seqnum = i;
+ 		gen_udp_hdr(&data, ifobject, udp_hdr);
+ 		gen_ip_hdr(ifobject, ip_hdr);
+ 		gen_udp_csum(udp_hdr, ip_hdr);
+@@ -817,8 +804,7 @@ static void *worker_testapp_validate_tx(void *arg)
+ 		gen_eth_frame(ifobject->umem, i * XSK_UMEM__DEFAULT_FRAME_SIZE);
  	}
+ 
+-	print_verbose("Sending %d packets on interface %s\n",
+-		      (opt_pkt_count - 1), ifobject->ifname);
++	print_verbose("Sending %d packets on interface %s\n", opt_pkt_count, ifobject->ifname);
+ 	tx_only_all(ifobject);
+ 
+ 	testapp_cleanup_xsk_res(ifobject);
+@@ -893,7 +879,7 @@ static void testapp_validate(void)
+ 
+ 	if (debug_pkt_dump && test_type != TEST_TYPE_STATS) {
+ 		worker_pkt_dump();
+-		for (int iter = 0; iter < num_frames - 1; iter++) {
++		for (int iter = 0; iter < num_frames; iter++) {
+ 			free(pkt_buf[iter]->payload);
+ 			free(pkt_buf[iter]);
+ 		}
+@@ -910,7 +896,6 @@ static void testapp_teardown(void)
+ 
+ 	for (i = 0; i < MAX_TEARDOWN_ITER; i++) {
+ 		pkt_counter = 0;
+-		prev_pkt = -1;
+ 		sigvar = 0;
+ 		print_verbose("Creating socket\n");
+ 		testapp_validate();
+@@ -938,7 +923,6 @@ static void testapp_bidi(void)
+ {
+ 	for (int i = 0; i < MAX_BIDI_ITER; i++) {
+ 		pkt_counter = 0;
+-		prev_pkt = -1;
+ 		sigvar = 0;
+ 		print_verbose("Creating socket\n");
+ 		testapp_validate();
+@@ -972,7 +956,6 @@ static void testapp_bpf_res(void)
+ 
+ 	for (i = 0; i < MAX_BPF_ITER; i++) {
+ 		pkt_counter = 0;
+-		prev_pkt = -1;
+ 		sigvar = 0;
+ 		print_verbose("Creating socket\n");
+ 		testapp_validate();
+@@ -1048,7 +1031,6 @@ static void run_pkt_test(int mode, int type)
+ 	xdp_flags = XDP_FLAGS_UPDATE_IF_NOEXIST;
+ 	pkt_counter = 0;
+ 	second_step = 0;
+-	prev_pkt = -1;
+ 	sigvar = 0;
+ 	stat_test_type = -1;
+ 	rxqsize = XSK_RING_CONS__DEFAULT_NUM_DESCS;
+diff --git a/tools/testing/selftests/bpf/xdpxceiver.h b/tools/testing/selftests/bpf/xdpxceiver.h
+index 1c94230c351a..a4371d9e2798 100644
+--- a/tools/testing/selftests/bpf/xdpxceiver.h
++++ b/tools/testing/selftests/bpf/xdpxceiver.h
+@@ -34,7 +34,6 @@
+ #define IP_PKT_TOS 0x9
+ #define UDP_PKT_SIZE (IP_PKT_SIZE - sizeof(struct iphdr))
+ #define UDP_PKT_DATA_SIZE (UDP_PKT_SIZE - sizeof(struct udphdr))
+-#define EOT (-1)
+ #define USLEEP_MAX 10000
+ #define SOCK_RECONF_CTR 10
+ #define BATCH_SIZE 64
+@@ -82,7 +81,6 @@ static u32 xdp_flags = XDP_FLAGS_UPDATE_IF_NOEXIST;
+ static u32 xdp_bind_flags = XDP_USE_NEED_WAKEUP | XDP_COPY;
+ static u8 pkt_data[XSK_UMEM__DEFAULT_FRAME_SIZE];
+ static u32 pkt_counter;
+-static long prev_pkt = -1;
+ static int sigvar;
+ static int stat_test_type;
+ static u32 rxqsize;
 -- 
 2.29.0
 
