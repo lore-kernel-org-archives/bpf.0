@@ -2,142 +2,101 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 84B95C4338F
-	for <bpf@archiver.kernel.org>; Tue, 27 Jul 2021 13:26:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D4DDC4338F
+	for <bpf@archiver.kernel.org>; Tue, 27 Jul 2021 14:12:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 61AD561A40
-	for <bpf@archiver.kernel.org>; Tue, 27 Jul 2021 13:26:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 488AF61AE3
+	for <bpf@archiver.kernel.org>; Tue, 27 Jul 2021 14:12:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236888AbhG0N0p (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 27 Jul 2021 09:26:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33030 "EHLO
+        id S236730AbhG0OMi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 27 Jul 2021 10:12:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236903AbhG0N0C (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 27 Jul 2021 09:26:02 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C2BC0617A0
-        for <bpf@vger.kernel.org>; Tue, 27 Jul 2021 06:26:02 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id k1so15641761plt.12
-        for <bpf@vger.kernel.org>; Tue, 27 Jul 2021 06:26:02 -0700 (PDT)
+        with ESMTP id S236609AbhG0OMh (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 27 Jul 2021 10:12:37 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF3BC061760
+        for <bpf@vger.kernel.org>; Tue, 27 Jul 2021 07:12:34 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id p5so10278655wro.7
+        for <bpf@vger.kernel.org>; Tue, 27 Jul 2021 07:12:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=w0DZS25dqNWjln6apj95C/bElmocAC2rNL+DbbtPC48=;
-        b=glwmcTCaUbofxvceGZtvinhEW4tIV8M/d5MO+4RtpMQ2x2M3mvl2fJ1S/8YE6OqrhB
-         XTizafTB+xePqzWt5ZzArUV5rzrLEKGCNufwAvLugCCsBnq8qhFqyL0WknUtDIMivl8r
-         Q2AaW/UHdbUhTMazqDZFv8yVA+fSd2D9B2hXO56OUtOltkZclB+zX0Cog9sZDNFx90VZ
-         GMBhAZH7dj9MeTihzimZyrP+iNb9lbZMRj0YWshc1Wd0vKmVZUknfpysL3UkC8lcYzFR
-         mb6cw0DRKL912bz4vybE4zqLDRFcfjSpuuo21xkCENs//uO8Mjft2Afw0reFFUumNIz4
-         1asA==
+        d=sartura-hr.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wxFe0uNWW9r8apP/FU5g02YgcMO4sIOQrIvQ0ldAwCE=;
+        b=tKqva2x/CG8NzNjWImVr+kujX/2pkcv6GBJov7A0FHrtTM+AWUaZg2RbsIt+2FlCm9
+         MzAOgq5MVu7g44j7ba+GmRwMWp8FsuxUIzw2wnBV/giol1NiN51RCQeb/dbT/KdDnbcN
+         xOM10soYVdAlqUz8jz9HAMYFBVicmcOR3rAcAyR3eVJocoqUN2Ei0IVTNdgM/RDIKr8G
+         xfDdwLzGJAEsvexyVUv4E2q3DnwYOgmYcTdfoKlH+zb4+LA36Y6VluffdgsH+KN89DNL
+         ZP2UaaUjHblc3whx0DDG85xV38HvCrZ0PgS9Oly7LyceGcyk6DUTkcSn995pXbHOt3s0
+         tf2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=w0DZS25dqNWjln6apj95C/bElmocAC2rNL+DbbtPC48=;
-        b=QmAB2sHf4ZSTm/oYvwbfZFyWhjcsghLRowXbW+lkdS43nwwG96ON5f9mtNJ17SZmBc
-         7gMLSTOcLeRsYMmGyjX7/HwC9Fx5i9FqVK/8c7kASnpMoNlNMy6Wg40rX4/eIzfX1rpQ
-         pKzcywoytNxVa7o8FuVu0Xmde+T7VcDhYY8o4KWTdiGJe3N0AQ8piomkv49j16v6WoCV
-         nWb+zUf22pH3b+sySnW6hqxZMkY8id4rgGFdhZN7aNubP1rcIzEPCa8mxz3bDAuX8XmZ
-         NoGbqev3uETmCsUDqmp536x78COw8JKSsKFjx8WBZZjZ2pY4t7THVBZa73Z88eGQpdgi
-         G2MQ==
-X-Gm-Message-State: AOAM532ogP7U971qsM4inqhWsQG/9XFRIcobApw5Z7yyKGjtsTSxSTHT
-        soL15kqXmYffoKYhTSvwUj3EZnqKSiimqw==
-X-Google-Smtp-Source: ABdhPJyFZWy5z/AedWb84dZuaKh4v6nr0at0824H5TiuGlWmjUwWyZVeleWqrsgRGczH0tASR7oTHQ==
-X-Received: by 2002:a17:902:6b82:b029:120:3404:ce99 with SMTP id p2-20020a1709026b82b02901203404ce99mr18575538plk.49.1627392361455;
-        Tue, 27 Jul 2021 06:26:01 -0700 (PDT)
-Received: from localhost.localdomain ([119.28.83.143])
-        by smtp.gmail.com with ESMTPSA id l11sm2002892pfd.187.2021.07.27.06.25.59
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wxFe0uNWW9r8apP/FU5g02YgcMO4sIOQrIvQ0ldAwCE=;
+        b=strc2ciGq4h7NCg2gWFponYpe7wqJ7N3FGV700k7UWNE+3WDkl6sfPxHHU+vKz80bD
+         0x7Z2p/I4/QH4gksVS3n1+4SFM57Phh/tY1Y1UgrtXFEc93AFhCFDDhBhVWDLJPTs5AE
+         z3EdeYowBtDUR9bv9QC0VlX/W83i6+X3hGqu7RK5RAQC/W6pFhWmlib9dF8DofmChRDX
+         9I2IowzEiOEq5F74o3GBtcgW1HDUTUopcohyIFiwfCj1I4P8nYwoU9rNf3pTwr3mqB9u
+         h4kjiBLVpUiWMSaT3naLCYUuA5XT3JsE2FRTeaKRuPr9w1k40wLYmxeQlnWfYwAXA51O
+         FOlA==
+X-Gm-Message-State: AOAM532fPzOSLj/ZI6W9ueQ27khRV/KoL6+7749JdCxVkFPBpRFmtlg5
+        M4wkOoAE8ZshAHtTk5qk9JzWyw==
+X-Google-Smtp-Source: ABdhPJyo/1NSvfJMApolEVn/Cme3lrJZj6EUMJjCA+6U4kBT2iMR/FUJLcqUvmi6jmSG+c2lQdwkTg==
+X-Received: by 2002:a5d:64c8:: with SMTP id f8mr25032728wri.290.1627395152923;
+        Tue, 27 Jul 2021 07:12:32 -0700 (PDT)
+Received: from localhost.localdomain ([89.18.44.40])
+        by smtp.gmail.com with ESMTPSA id t1sm3403912wrm.42.2021.07.27.07.12.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jul 2021 06:26:01 -0700 (PDT)
-From:   Hengqi Chen <hengqi.chen@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, jolsa@kernel.org,
-        yanivagman@gmail.com, hengqi.chen@gmail.com
-Subject: [PATCH bpf-next v5 1/2] tools/resolve_btfids: emit warnings and patch zero id for missing symbols
-Date:   Tue, 27 Jul 2021 21:25:31 +0800
-Message-Id: <20210727132532.2473636-2-hengqi.chen@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210727132532.2473636-1-hengqi.chen@gmail.com>
-References: <20210727132532.2473636-1-hengqi.chen@gmail.com>
+        Tue, 27 Jul 2021 07:12:32 -0700 (PDT)
+From:   Pavo Banicevic <pavo.banicevic@sartura.hr>
+To:     linux@armlinux.org.uk, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, nathan@kernel.org,
+        ndesaulniers@google.com, ivan.khoronzhuk@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        clang-built-linux@googlegroups.com, matt.redfearn@mips.com,
+        mingo@kernel.org, dvlasenk@redhat.com, juraj.vijtiuk@sartura.hr,
+        robert.marko@sartura.hr, luka.perkov@sartura.hr,
+        jakov.petrina@sartura.hr
+Cc:     Pavo Banicevic <pavo.banicevic@sartura.hr>
+Subject: [PATCH 0/3] Address compilation of eBPF related software with clang compiler on arm architecture
+Date:   Tue, 27 Jul 2021 16:11:16 +0200
+Message-Id: <20210727141119.19812-1-pavo.banicevic@sartura.hr>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Kernel functions referenced by .BTF_ids may be changed from global to static
-and get inlined or get renamed/removed, and thus disappears from BTF.
-This causes kernel build failure when resolve_btfids do id patch for symbols
-in .BTF_ids in vmlinux. Update resolve_btfids to emit warning messages and
-patch zero id for missing symbols instead of aborting kernel build process.
+This patchset is fixing compilation issues that are encountered in our usage of the Linux kernel.
 
-Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-Acked-by: Yonghong Song <yhs@fb.com>
-Signed-off-by: Hengqi Chen <hengqi.chen@gmail.com>
----
- tools/bpf/resolve_btfids/main.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+Two patches are addressing compilation of eBPF related software with clang compiler on arm architecture.
+The third patch resolves compilation of the perf tool in this specific scenario.
 
-diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
-index 3ad9301b0f00..de6365b53c9c 100644
---- a/tools/bpf/resolve_btfids/main.c
-+++ b/tools/bpf/resolve_btfids/main.c
-@@ -291,7 +291,7 @@ static int compressed_section_fix(Elf *elf, Elf_Scn *scn, GElf_Shdr *sh)
- 	sh->sh_addralign = expected;
- 
- 	if (gelf_update_shdr(scn, sh) == 0) {
--		printf("FAILED cannot update section header: %s\n",
-+		pr_err("FAILED cannot update section header: %s\n",
- 			elf_errmsg(-1));
- 		return -1;
- 	}
-@@ -317,6 +317,7 @@ static int elf_collect(struct object *obj)
- 
- 	elf = elf_begin(fd, ELF_C_RDWR_MMAP, NULL);
- 	if (!elf) {
-+		close(fd);
- 		pr_err("FAILED cannot create ELF descriptor: %s\n",
- 			elf_errmsg(-1));
- 		return -1;
-@@ -484,7 +485,7 @@ static int symbols_resolve(struct object *obj)
- 	err = libbpf_get_error(btf);
- 	if (err) {
- 		pr_err("FAILED: load BTF from %s: %s\n",
--			obj->path, strerror(-err));
-+			obj->btf ?: obj->path, strerror(-err));
- 		return -1;
- 	}
- 
-@@ -555,8 +556,7 @@ static int id_patch(struct object *obj, struct btf_id *id)
- 	int i;
- 
- 	if (!id->id) {
--		pr_err("FAILED unresolved symbol %s\n", id->name);
--		return -EINVAL;
-+		pr_err("WARN: resolve_btfids: unresolved symbol %s\n", id->name);
- 	}
- 
- 	for (i = 0; i < id->addr_cnt; i++) {
-@@ -734,8 +734,9 @@ int main(int argc, const char **argv)
- 
- 	err = 0;
- out:
--	if (obj.efile.elf)
-+	if (obj.efile.elf) {
- 		elf_end(obj.efile.elf);
--	close(obj.efile.fd);
-+		close(obj.efile.fd);
-+	}
- 	return err;
- }
+We are also interested in possible alternative approaches in fixing these compilation issues which could
+then be incorporated into the mainline.
+
+Ivan Khoronzhuk (2):
+  arm: include: asm: swab: mask rev16 instruction for clang
+  arm: include: asm: unified: mask .syntax unified for clang
+
+Matt Redfearn (1):
+  include/uapi/linux/swab: Fix potentially missing __always_inline
+
+ arch/arm/include/asm/swab.h    | 3 +++
+ arch/arm/include/asm/unified.h | 4 +++-
+ include/uapi/linux/swab.h      | 2 +-
+ 3 files changed, 7 insertions(+), 2 deletions(-)
+
 -- 
-2.25.1
+2.32.0
 
