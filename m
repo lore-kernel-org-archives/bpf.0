@@ -6,56 +6,56 @@ X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D322C4338F
-	for <bpf@archiver.kernel.org>; Tue, 27 Jul 2021 13:18:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE4E6C4338F
+	for <bpf@archiver.kernel.org>; Tue, 27 Jul 2021 13:18:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 846DA61A2F
-	for <bpf@archiver.kernel.org>; Tue, 27 Jul 2021 13:18:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 972A661A2F
+	for <bpf@archiver.kernel.org>; Tue, 27 Jul 2021 13:18:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236584AbhG0NSP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 27 Jul 2021 09:18:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59552 "EHLO
+        id S236608AbhG0NSU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 27 Jul 2021 09:18:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236562AbhG0NSK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 27 Jul 2021 09:18:10 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A0E4C061760;
-        Tue, 27 Jul 2021 06:18:10 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id c16so5343063wrp.13;
-        Tue, 27 Jul 2021 06:18:10 -0700 (PDT)
+        with ESMTP id S236588AbhG0NSQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 27 Jul 2021 09:18:16 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E58C061757;
+        Tue, 27 Jul 2021 06:18:15 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id r2so15242582wrl.1;
+        Tue, 27 Jul 2021 06:18:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=hZEC18504OHAsi2e9utRRxz2gA4Wf91ujANloy8IGrE=;
-        b=H7UJBeBdmHb8CRixb4hG/jt8aetvnd77ww+940S00N3avNpovjX+W1iue4qQNrZbWc
-         tzGL8lKPhnE+D7JHwOkokKqBKQ+qvojOCPXp3jzsOWnQq/tH/OnpnJlrcmwzIY+cc3ed
-         YHFrCw9FyL6qHUeFr5MpEmMfvN0IP7aG/VXkLVhc+JtkIMIOYcZ3RGbAo6uwRO9J6LGG
-         J4xaFveEm3Jp3M/WoaYFeA7S7WfQBR9+a3kJWZx4QrezjOq9xJ5T23dhdk/2DNDoKS4x
-         /bJk5IAg7YnTJX6XQl5AFN5zV1wdXq1vfazbGTNcWrB02hJifrN62q9necGnrXSdUiCD
-         3D3w==
+        bh=W7zIgbgW6/DPdT5XF0HKQ5fkIrROov4Vv/7AX2hWIEM=;
+        b=P8XBgNESgl7FFmSGfdDEocZT4Mq1wcByAgJsoJA8zjJo5c7ghwrTAuuwNfJi75zKtz
+         7uDZnZR2xSBY3AI+ClHENZSfx74m7/ZZTFtWFh//1eLhp6ZS2oxJvRTMmrl+G1h/WWSW
+         IekinN6M8dMo4ctlrdcMJ4kSBfzuhNvdVra+7UPVwjNAB8YYTpCE+5gRTu3zOdfP6QWk
+         nOHPnNlLEkdiOAZDfKTvYYcUURzIfgvSz+EqIPT5vXZpbusqFaLoAwHOurqPEF2gs05S
+         nVneLH27D4XF6k2wK4hOImt+DV83FFzHNVHLGFUOpL0JgmgbsKgOxG4kV2Gdy/ZemWhI
+         M1ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=hZEC18504OHAsi2e9utRRxz2gA4Wf91ujANloy8IGrE=;
-        b=HhdBa5H7mMlTd2b+CBDegv4svl6Jx1d3uo/rnpATJnvSFObMSmrYzBjI/QoU1ABRhW
-         MmtCY+T3lsRVG3dZQonDRhrQe2/gw9nzJzxasylSIdd9adDTmtsgHOuQlrRwbJRI0pZQ
-         8uJgAt0BVIV9A2ch17O3mAVjJXEm6SSyqhfwFBhHhXw1x4TFGIJ9Iv1gQOl1tet9v4xi
-         wyH2FLRet2D98k5R6wcX1ZQQh6jGAWkELu3SxtNp7QBcJoQkDOO3A7UVSuJ3teUU4NP2
-         6SkevG9YIG0SkyAP8jlA1nj3e+GMyg7YCt9tK3IKz6OWtSyM2l2rZ1J6aW5I1lfxDkGA
-         RbyA==
-X-Gm-Message-State: AOAM5333+Cox/W2NNlOFNDPhD1J/AddC0z7rH40eu+N1v7G1R5RqUV+J
-        7tm4OIQY3xUdGV4thnCH4fQ=
-X-Google-Smtp-Source: ABdhPJxMuTDyEBT7BnVjvymxk6OtgHuOXr/tUMvOlnVobDAqqdr5VA8t4cWPmy+d/nucmdslbhoSVg==
-X-Received: by 2002:a5d:6991:: with SMTP id g17mr13848206wru.253.1627391888964;
-        Tue, 27 Jul 2021 06:18:08 -0700 (PDT)
+        bh=W7zIgbgW6/DPdT5XF0HKQ5fkIrROov4Vv/7AX2hWIEM=;
+        b=DxDNWnX/A9Ws+aCx+f2SB38yN/edsZjpUFjF6+onjiDZ7BSn6WQVL5ye+wq9oMLxcu
+         JC89HhkTWX7s/C/NEXQ+iktvH6QjcWIvk1j9pn7gLRu+kC1Wy8lpi2GT1PWPSWLgviaZ
+         jH7Kwh6paezrUdqZwQ9FUCxn0wxFIjs1EvlmiyxNrvSptW5j+I0ciuxaV2FT8xib9bQA
+         DXh73LHHC4moVcZVW2kcpwZB5yVc3I4nqL+AlnI3NbKvz6NllTrwYgQamV6Gov3lgwAS
+         bIpZ3eKpNKEJlRMHesjUYMi0DP2C+5SpkwK0z+iB+k28GSJOinGYHQL/DhsAejGGFan6
+         MfNg==
+X-Gm-Message-State: AOAM533pBVVOZWGSfZgO02yWSFjWz7uzLgQGQtR3uf4MWbpnbMsUVl0D
+        0Dui9NZCg0qPRDp3kPVyyx7UwiLviZJWP4HkKBSorg==
+X-Google-Smtp-Source: ABdhPJwhL5f8EmPl2wVHs2C4iy4tIDNPbnDzKpg6XX4TDnm3eVeIMS+7szZLgg5gHnyEtBEM2vZlCA==
+X-Received: by 2002:a5d:5541:: with SMTP id g1mr9978826wrw.29.1627391893788;
+        Tue, 27 Jul 2021 06:18:13 -0700 (PDT)
 Received: from localhost.localdomain (h-46-59-47-246.A165.priv.bahnhof.se. [46.59.47.246])
-        by smtp.gmail.com with ESMTPSA id u11sm3277553wrr.44.2021.07.27.06.18.07
+        by smtp.gmail.com with ESMTPSA id u11sm3277553wrr.44.2021.07.27.06.18.12
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 27 Jul 2021 06:18:08 -0700 (PDT)
+        Tue, 27 Jul 2021 06:18:13 -0700 (PDT)
 From:   Magnus Karlsson <magnus.karlsson@gmail.com>
 To:     magnus.karlsson@intel.com, bjorn@kernel.org, ast@kernel.org,
         daniel@iogearbox.net, netdev@vger.kernel.org,
@@ -63,9 +63,9 @@ To:     magnus.karlsson@intel.com, bjorn@kernel.org, ast@kernel.org,
 Cc:     jonathan.lemon@gmail.com, ciara.loftus@intel.com,
         joamaki@gmail.com, bpf@vger.kernel.org, yhs@fb.com,
         andrii@kernel.org
-Subject: [PATCH bpf-next 01/17] selftests: xsk: remove color mode
-Date:   Tue, 27 Jul 2021 15:17:37 +0200
-Message-Id: <20210727131753.10924-2-magnus.karlsson@gmail.com>
+Subject: [PATCH bpf-next 04/17] selftests: xsk: set rlimit per thread
+Date:   Tue, 27 Jul 2021 15:17:40 +0200
+Message-Id: <20210727131753.10924-5-magnus.karlsson@gmail.com>
 X-Mailer: git-send-email 2.29.0
 In-Reply-To: <20210727131753.10924-1-magnus.karlsson@gmail.com>
 References: <20210727131753.10924-1-magnus.karlsson@gmail.com>
@@ -77,89 +77,51 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Magnus Karlsson <magnus.karlsson@intel.com>
 
-Remove color mode.
+Set rlimit per thread instead of on the main thread. The main thread
+does not register any umem area so do not need this.
 
 Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
 ---
- tools/testing/selftests/bpf/test_xsk.sh    | 10 +++-----
- tools/testing/selftests/bpf/xsk_prereqs.sh | 27 +++++-----------------
- 2 files changed, 9 insertions(+), 28 deletions(-)
+ tools/testing/selftests/bpf/xdpxceiver.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/test_xsk.sh b/tools/testing/selftests/bpf/test_xsk.sh
-index 46633a3bfb0b..cd7bf32e6a17 100755
---- a/tools/testing/selftests/bpf/test_xsk.sh
-+++ b/tools/testing/selftests/bpf/test_xsk.sh
-@@ -63,14 +63,11 @@
- # ----------------
- # Must run with CAP_NET_ADMIN capability.
- #
--# Run (full color-coded output):
--#   sudo ./test_xsk.sh -c
-+# Run:
-+#   sudo ./test_xsk.sh
- #
- # If running from kselftests:
--#   sudo make colorconsole=1 run_tests
--#
--# Run (full output without color-coding):
--#   sudo ./test_xsk.sh
-+#   sudo make run_tests
- #
- # Run with verbose output:
- #   sudo ./test_xsk.sh -v
-@@ -83,7 +80,6 @@
- while getopts "cvD" flag
- do
- 	case "${flag}" in
--		c) colorconsole=1;;
- 		v) verbose=1;;
- 		D) dump_pkts=1;;
- 	esac
-diff --git a/tools/testing/selftests/bpf/xsk_prereqs.sh b/tools/testing/selftests/bpf/xsk_prereqs.sh
-index dac1c5f78752..8fe022a4dbfa 100755
---- a/tools/testing/selftests/bpf/xsk_prereqs.sh
-+++ b/tools/testing/selftests/bpf/xsk_prereqs.sh
-@@ -8,11 +8,6 @@ ksft_xfail=2
- ksft_xpass=3
- ksft_skip=4
+diff --git a/tools/testing/selftests/bpf/xdpxceiver.c b/tools/testing/selftests/bpf/xdpxceiver.c
+index 4d8ee636fc24..2100ab4e58b7 100644
+--- a/tools/testing/selftests/bpf/xdpxceiver.c
++++ b/tools/testing/selftests/bpf/xdpxceiver.c
+@@ -252,6 +252,7 @@ static void gen_eth_frame(struct xsk_umem_info *umem, u64 addr)
  
--GREEN='\033[0;92m'
--YELLOW='\033[0;93m'
--RED='\033[0;31m'
--NC='\033[0m'
--STACK_LIM=131072
- SPECFILE=veth.spec
- XSKOBJ=xdpxceiver
- NUMPKTS=10000
-@@ -50,22 +45,12 @@ validate_veth_spec_file()
- test_status()
+ static void xsk_configure_umem(struct ifobject *data, void *buffer, int idx)
  {
- 	statusval=$1
--	if [ -n "${colorconsole+set}" ]; then
--		if [ $statusval -eq 2 ]; then
--			echo -e "${YELLOW}$2${NC}: [ ${RED}FAIL${NC} ]"
--		elif [ $statusval -eq 1 ]; then
--			echo -e "${YELLOW}$2${NC}: [ ${RED}SKIPPED${NC} ]"
--		elif [ $statusval -eq 0 ]; then
--			echo -e "${YELLOW}$2${NC}: [ ${GREEN}PASS${NC} ]"
--		fi
--	else
--		if [ $statusval -eq 2 ]; then
--			echo -e "$2: [ FAIL ]"
--		elif [ $statusval -eq 1 ]; then
--			echo -e "$2: [ SKIPPED ]"
--		elif [ $statusval -eq 0 ]; then
--			echo -e "$2: [ PASS ]"
--		fi
-+	if [ $statusval -eq 2 ]; then
-+		echo -e "$2: [ FAIL ]"
-+	elif [ $statusval -eq 1 ]; then
-+		echo -e "$2: [ SKIPPED ]"
-+	elif [ $statusval -eq 0 ]; then
-+		echo -e "$2: [ PASS ]"
- 	fi
- }
++	const struct rlimit _rlim = { RLIM_INFINITY, RLIM_INFINITY };
+ 	struct xsk_umem_config cfg = {
+ 		.fill_size = XSK_RING_PROD__DEFAULT_NUM_DESCS,
+ 		.comp_size = XSK_RING_CONS__DEFAULT_NUM_DESCS,
+@@ -263,6 +264,10 @@ static void xsk_configure_umem(struct ifobject *data, void *buffer, int idx)
+ 	struct xsk_umem_info *umem;
+ 	int ret;
  
++	ret = XSK_UMEM__DEFAULT_FRAME_SIZE;
++	if (setrlimit(RLIMIT_MEMLOCK, &_rlim))
++		exit_with_error(errno);
++
+ 	umem = calloc(1, sizeof(struct xsk_umem_info));
+ 	if (!umem)
+ 		exit_with_error(errno);
+@@ -1088,13 +1093,9 @@ static void run_pkt_test(int mode, int type)
+ 
+ int main(int argc, char **argv)
+ {
+-	struct rlimit _rlim = { RLIM_INFINITY, RLIM_INFINITY };
+ 	bool failure = false;
+ 	int i, j;
+ 
+-	if (setrlimit(RLIMIT_MEMLOCK, &_rlim))
+-		exit_with_error(errno);
+-
+ 	for (int i = 0; i < MAX_INTERFACES; i++) {
+ 		ifdict[i] = malloc(sizeof(struct ifobject));
+ 		if (!ifdict[i])
 -- 
 2.29.0
 
