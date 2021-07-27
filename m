@@ -8,54 +8,54 @@ X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 597B7C4338F
-	for <bpf@archiver.kernel.org>; Tue, 27 Jul 2021 13:18:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59315C4320A
+	for <bpf@archiver.kernel.org>; Tue, 27 Jul 2021 13:18:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 41FFB6187F
-	for <bpf@archiver.kernel.org>; Tue, 27 Jul 2021 13:18:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4361961A3A
+	for <bpf@archiver.kernel.org>; Tue, 27 Jul 2021 13:18:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236619AbhG0NS3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 27 Jul 2021 09:18:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59622 "EHLO
+        id S236689AbhG0NSd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 27 Jul 2021 09:18:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236597AbhG0NSX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 27 Jul 2021 09:18:23 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6EAAC061799;
-        Tue, 27 Jul 2021 06:18:22 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id l4so15194751wrs.4;
-        Tue, 27 Jul 2021 06:18:22 -0700 (PDT)
+        with ESMTP id S236659AbhG0NS1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 27 Jul 2021 09:18:27 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5C3FC06179B;
+        Tue, 27 Jul 2021 06:18:26 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id j2so15143297wrx.9;
+        Tue, 27 Jul 2021 06:18:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=bba+y4nJBkf6RA1osUz615uUTTAXiRDM2vfS6QEZz24=;
-        b=JqSaHH7OTs3/ggIOhlFDTdqq8x36h5R1VAOUAUN3gjxqZxqWkmtoc0Rwc1cAkVmil5
-         ughzqSm8mXIy+H0wqouxvWqeMLTCOu5xgeVLjCnqZs4f0qL1JDJOeryqOTu+HxTu/bLj
-         pYwHotMRsyJXpYKCSMVMETYsdR5SjZo84BUoQTEpikqDGBqH/CC6ajpj8yiaR8hNDqA3
-         6FquPXfRIIn+yjRbRbInpVGmlJQYLSMZGciqPiESLsQINfd8+g2JEyyTiefCKB7Sem/C
-         SNWbHfeTFGXgEH8618SXXT8y9ONk9ryHy359bSKwFPPGpkmZkoOhcfGwKqzjClXCPk+7
-         /6Kw==
+        bh=t5RWs8vZAU+/Um0yFAtE4HXGCWPZdEksqOpGUduLBlw=;
+        b=vL/5R6lUyLfWJaW0PDYp8gSx7yGrQ93fWoxT2F5f0LaGSdNlIiZveeHuJ/jg5EylUN
+         jCs2V3dwxThltXlPKASjhAnP1KZbWq2UAjeosYkLh6T3iCZ7lGwqe3Xef/annNNPRnVB
+         dFWxMIB9Hp5cuFhqvHM/dnl0XyZqTJtD4R1WqmwZycy8XNBlyH+Z3IOHtvQygfNAKJwG
+         FqkZXcg+KcLPESEfPI/DOhrBxHtCghNnnMRn7dzYmqb0GYlFL5bJGqjQGej4+al0gWzx
+         96QjNGSTDTXjpeLUebXJDANwuIgXu+2wEXnUAwk2tUfgt2edbNvjal6lcB2rnmu0m5Fe
+         qFrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=bba+y4nJBkf6RA1osUz615uUTTAXiRDM2vfS6QEZz24=;
-        b=QgRFRLtDrlGkKoiy/nYOiBDbRY4w9tlcoJ1onbTponyPR5vtzaOABrGm+Ofh/ot8A4
-         QQf5amWj24HBzWmcZEMK6jL50iLN9QKtprHEqD1EP0LDZYCo/hdIn+TA0iSvXzeBD7sM
-         halpqVy2/0rOIT5vnrJCgCiqX+V8e3xaIBGlZYLvBYgQQ9j1kQu/5R2mB2BE3xg+72RZ
-         Csc2iJNWhvBYRSLQ8lViZXyw3lrwQqfpHbfgUbj1UCC6dsIbxvYyj7XNX8/CEZCZuiOd
-         S/fgBtXDehAt3HkB7yT7iO7SnrQLFCGF85VkuJ0BKeN089xQ0Mjlpbjw+ejfJpKV5Q6p
-         RBgA==
-X-Gm-Message-State: AOAM533+dcbA97KyIGtkjwuPYkx5VxIoq4t9p6zgG5I3nUs1byu+vXHH
-        M12OoI57qV5H8C1RiH9SQmo=
-X-Google-Smtp-Source: ABdhPJxTsh0MulB7Ui44dUk8ZGkFJNLEcst2Dcn/KV5fwfRvnRucwCqW7ME2u0jxVzPj+8jVvYZRaA==
-X-Received: by 2002:adf:eacb:: with SMTP id o11mr25760446wrn.62.1627391901539;
-        Tue, 27 Jul 2021 06:18:21 -0700 (PDT)
+        bh=t5RWs8vZAU+/Um0yFAtE4HXGCWPZdEksqOpGUduLBlw=;
+        b=bgCYrlr6Cq9G4NZwltQMxPwYveuAo5IvLMJbkHOHv5aho4GzUV4vHM2EbpatcqXKjU
+         tUrI2adKirxgW5olchYSRvw3rgRBRpo0vl1XbGjVebJ8mf39WwyrS6UQ06ignrYirUK6
+         K6yOknAT7xYXmPPcU35k9lFYvPa0XR/CAAldzan/s6Nkc7VyoL4vtcs0OZGLNCg4a8oY
+         shvgxCXhCaYz+qEuRdaSTEjN0SsKW3+PEnsgUGrfVxP7ajRnMtmXuUh7PQuhMlnp0R5t
+         NRoo3//k0uTbuW8N0ZQ3hs+x+r3eLZNDSiwjl5DTOkC5V5YcnU0U0PxAsyxRvPukewTz
+         Yx7Q==
+X-Gm-Message-State: AOAM53238f5Gqc4xMtUugSNSbJxevBJijF46Y0mIR4Rt4tTvPOwc8Uq3
+        pOUlxCZ4Vvu/5Us7YSquvIE=
+X-Google-Smtp-Source: ABdhPJwkKFM2u4LdGUnPw/aSk7R9l+aNhMy77qxbrs56d6mxUSPPYXONUahPW8gK9/ASBG2UeoX8kw==
+X-Received: by 2002:a5d:4812:: with SMTP id l18mr25052099wrq.68.1627391905389;
+        Tue, 27 Jul 2021 06:18:25 -0700 (PDT)
 Received: from localhost.localdomain (h-46-59-47-246.A165.priv.bahnhof.se. [46.59.47.246])
-        by smtp.gmail.com with ESMTPSA id u11sm3277553wrr.44.2021.07.27.06.18.20
+        by smtp.gmail.com with ESMTPSA id u11sm3277553wrr.44.2021.07.27.06.18.23
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 27 Jul 2021 06:18:21 -0700 (PDT)
+        Tue, 27 Jul 2021 06:18:24 -0700 (PDT)
 From:   Magnus Karlsson <magnus.karlsson@gmail.com>
 To:     magnus.karlsson@intel.com, bjorn@kernel.org, ast@kernel.org,
         daniel@iogearbox.net, netdev@vger.kernel.org,
@@ -63,9 +63,9 @@ To:     magnus.karlsson@intel.com, bjorn@kernel.org, ast@kernel.org,
 Cc:     jonathan.lemon@gmail.com, ciara.loftus@intel.com,
         joamaki@gmail.com, bpf@vger.kernel.org, yhs@fb.com,
         andrii@kernel.org
-Subject: [PATCH bpf-next 09/17] selftests: xsk: rename worker_* functions that are not thred entry points
-Date:   Tue, 27 Jul 2021 15:17:45 +0200
-Message-Id: <20210727131753.10924-10-magnus.karlsson@gmail.com>
+Subject: [PATCH bpf-next 11/17] selftests: xsk: validate tx stats on tx thread
+Date:   Tue, 27 Jul 2021 15:17:47 +0200
+Message-Id: <20210727131753.10924-12-magnus.karlsson@gmail.com>
 X-Mailer: git-send-email 2.29.0
 In-Reply-To: <20210727131753.10924-1-magnus.karlsson@gmail.com>
 References: <20210727131753.10924-1-magnus.karlsson@gmail.com>
@@ -77,67 +77,118 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Magnus Karlsson <magnus.karlsson@intel.com>
 
-Rename worker_* functions that are not thread entry points to
-something else. This was confusing. Now only thread entry points are
-worker_something.
+Validate the tx stats on the Tx thread instead of the Rx
+tread. Depending on your settings, you might not be allowed to query
+the statistics of a socket you do not own, so better to do this on the
+correct thread to start with.
 
 Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
 ---
- tools/testing/selftests/bpf/xdpxceiver.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ tools/testing/selftests/bpf/xdpxceiver.c | 55 ++++++++++++++++++------
+ 1 file changed, 41 insertions(+), 14 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/xdpxceiver.c b/tools/testing/selftests/bpf/xdpxceiver.c
-index 4c9f38e9a268..2dca79b2762d 100644
+index cbd6739faeb5..327129f83fef 100644
 --- a/tools/testing/selftests/bpf/xdpxceiver.c
 +++ b/tools/testing/selftests/bpf/xdpxceiver.c
-@@ -594,7 +594,7 @@ static void tx_only_all(struct ifobject *ifobject)
+@@ -647,23 +647,22 @@ static void tx_only_all(struct ifobject *ifobject)
  	complete_tx_only_all(ifobject);
  }
  
--static void worker_pkt_dump(void)
-+static void pkt_dump(void)
+-static void stats_validate(struct ifobject *ifobject)
++static bool rx_stats_are_valid(struct ifobject *ifobject)
  {
- 	struct ethhdr *ethhdr;
- 	struct iphdr *iphdr;
-@@ -636,7 +636,7 @@ static void worker_pkt_dump(void)
- 	}
- }
- 
--static void worker_stats_validate(struct ifobject *ifobject)
-+static void stats_validate(struct ifobject *ifobject)
- {
++	u32 xsk_stat = 0, expected_stat = opt_pkt_count;
++	struct xsk_socket *xsk = ifobject->xsk->xsk;
++	int fd = xsk_socket__fd(xsk);
  	struct xdp_statistics stats;
  	socklen_t optlen;
-@@ -678,7 +678,7 @@ static void worker_stats_validate(struct ifobject *ifobject)
+ 	int err;
+-	struct xsk_socket *xsk = stat_test_type == STAT_TEST_TX_INVALID ?
+-							ifdict[!ifobject->ifdict_index]->xsk->xsk :
+-							ifobject->xsk->xsk;
+-	int fd = xsk_socket__fd(xsk);
+-	unsigned long xsk_stat = 0, expected_stat = opt_pkt_count;
+-
+-	sigvar = 0;
+ 
+ 	optlen = sizeof(stats);
+ 	err = getsockopt(fd, SOL_XDP, XDP_STATISTICS, &stats, &optlen);
+-	if (err)
+-		return;
++	if (err) {
++		ksft_test_result_fail("ERROR: [%s] getsockopt(XDP_STATISTICS) error %u %s\n",
++				      __func__, -err, strerror(-err));
++		return true;
++	}
+ 
+ 	if (optlen == sizeof(struct xdp_statistics)) {
+ 		switch (stat_test_type) {
+@@ -671,8 +670,7 @@ static void stats_validate(struct ifobject *ifobject)
+ 			xsk_stat = stats.rx_dropped;
+ 			break;
+ 		case STAT_TEST_TX_INVALID:
+-			xsk_stat = stats.tx_invalid_descs;
+-			break;
++			return true;
+ 		case STAT_TEST_RX_FULL:
+ 			xsk_stat = stats.rx_ring_full;
+ 			expected_stat -= RX_FULL_RXQSIZE;
+@@ -685,8 +683,33 @@ static void stats_validate(struct ifobject *ifobject)
+ 		}
+ 
+ 		if (xsk_stat == expected_stat)
+-			sigvar = 1;
++			return true;
++	}
++
++	return false;
++}
++
++static void tx_stats_validate(struct ifobject *ifobject)
++{
++	struct xsk_socket *xsk = ifobject->xsk->xsk;
++	int fd = xsk_socket__fd(xsk);
++	struct xdp_statistics stats;
++	socklen_t optlen;
++	int err;
++
++	optlen = sizeof(stats);
++	err = getsockopt(fd, SOL_XDP, XDP_STATISTICS, &stats, &optlen);
++	if (err) {
++		ksft_test_result_fail("ERROR: [%s] getsockopt(XDP_STATISTICS) error %u %s\n",
++				      __func__, -err, strerror(-err));
++		return;
  	}
++
++	if (stats.tx_invalid_descs == opt_pkt_count)
++		return;
++
++	ksft_test_result_fail("ERROR: [%s] tx_invalid_descs incorrect. Got [%u] expected [%u]\n",
++			      __func__, stats.tx_invalid_descs, opt_pkt_count);
  }
  
--static void worker_pkt_validate(void)
-+static void pkt_validate(void)
- {
- 	u32 payloadseqnum = -2;
- 	struct iphdr *iphdr;
-@@ -838,9 +838,9 @@ static void *worker_testapp_validate_rx(void *arg)
- 	while (1) {
+ static void thread_common_ops(struct ifobject *ifobject, void *bufs)
+@@ -772,6 +795,9 @@ static void *worker_testapp_validate_tx(void *arg)
+ 	print_verbose("Sending %d packets on interface %s\n", opt_pkt_count, ifobject->ifname);
+ 	tx_only_all(ifobject);
+ 
++	if (stat_test_type == STAT_TEST_TX_INVALID)
++		tx_stats_validate(ifobject);
++
+ 	testapp_cleanup_xsk_res(ifobject);
+ 	pthread_exit(NULL);
+ }
+@@ -797,7 +823,8 @@ static void *worker_testapp_validate_rx(void *arg)
  		if (test_type != TEST_TYPE_STATS) {
  			rx_pkt(ifobject->xsk, fds);
--			worker_pkt_validate();
-+			pkt_validate();
  		} else {
--			worker_stats_validate(ifobject);
-+			stats_validate(ifobject);
+-			stats_validate(ifobject);
++			if (rx_stats_are_valid(ifobject))
++				break;
  		}
  		if (sigvar)
  			break;
-@@ -878,7 +878,7 @@ static void testapp_validate(void)
- 	pthread_join(t0, NULL);
- 
- 	if (debug_pkt_dump && test_type != TEST_TYPE_STATS) {
--		worker_pkt_dump();
-+		pkt_dump();
- 		for (int iter = 0; iter < num_frames; iter++) {
- 			free(pkt_buf[iter]->payload);
- 			free(pkt_buf[iter]);
 -- 
 2.29.0
 
