@@ -8,54 +8,54 @@ X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9ACAC4338F
-	for <bpf@archiver.kernel.org>; Wed, 28 Jul 2021 16:57:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 31A0FC4338F
+	for <bpf@archiver.kernel.org>; Wed, 28 Jul 2021 16:57:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8F7AE61039
-	for <bpf@archiver.kernel.org>; Wed, 28 Jul 2021 16:57:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1730461037
+	for <bpf@archiver.kernel.org>; Wed, 28 Jul 2021 16:57:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230412AbhG1Q5G (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 28 Jul 2021 12:57:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45530 "EHLO
+        id S230387AbhG1Q5J (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 28 Jul 2021 12:57:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230262AbhG1Q47 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 28 Jul 2021 12:56:59 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95C29C061757;
-        Wed, 28 Jul 2021 09:56:57 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id t3so1325705plg.9;
-        Wed, 28 Jul 2021 09:56:57 -0700 (PDT)
+        with ESMTP id S230426AbhG1Q5H (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 28 Jul 2021 12:57:07 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B22D7C06179A;
+        Wed, 28 Jul 2021 09:57:03 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id j1so6066750pjv.3;
+        Wed, 28 Jul 2021 09:57:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=WmTiSRs5LuqsEaNI5OzvIj+waWhN9ColKzwkE1PrbbM=;
-        b=SeoSPW5Cgs7zZ86aQBrJdZI0Ku11s3qw87LIMYqtCQjnp1OLV6cldlQuI29vL9ZMpL
-         7EDxQGjcAB44mTGk5lSNyzbXCx5u0FdijJlc+pMs5JHwFNN3Y45r3mgqtMNdSF/Qg8wi
-         rKyONHntdvAkL2WKZ6TY4C2tG7MEVLH8whUkIdTEjC9kcXyKm3ivKnzxqajyWOm+wUlp
-         YA5rEfuNQopk0FgLxW8f9RwkhdzWLa7LrhVwLoW6N9cBm/jEsdQlE72uOt7KXRCXUIg2
-         yk46vDg9x0+ipzDenWgP0tCJdY4qKpzuf64kiry/I+ALTgvOCVcOKvCAEVGpVdcRfQ7G
-         0O4g==
+        bh=k8X14nnFP+ryP9U3NWWRMr/x1JxV9GHXhMa2zhoQiTk=;
+        b=EZaVpMYNK1emjyZIKMnFzZ9ir7prZaDMC1Y2CNbdBKTfuzMEfekdglUicdsZ0uHKOn
+         LQXDRoHgGgz7P2IYZZ2Hj1nBNcUhTRcy9Le4fPrpD3g0b8kV8JdKneIiTWpwriqxh4Cv
+         Xfyf9AyM/WOCWaB39Y9BzrMs57Y1xf3YPj+OF93UsXsaMg7O8UnHhYeidnlijajdhSvu
+         h4i1dGjD/mb/Nu30VSEiZZtv2BcEXt6k9P2zfRlznrvwwy1FAsmoxwFMHcMsVa4uXC+V
+         QD5XbsnSjPGCeNg4kTMBYKxDhMKP9eehCZUw/Opw0l/WVRogxWYpWGjPJif/2/hYdSiu
+         DouQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=WmTiSRs5LuqsEaNI5OzvIj+waWhN9ColKzwkE1PrbbM=;
-        b=FPIdiOeW6MGTVrczPqM/pYNIOqAwfBpn6VjPesUqSIF/tBvlsuVCB5jKGFJaSo8SYc
-         t6ITEBhyP2ETKpd3EOcJdHdrS46UW9yk20dAT/P+V1knW3mQCNAWjfsbMV0cPTK78vIQ
-         A5CcKWilQYxd0Wmpj051EUfUvezMZtpvrJkuoTLiBbZ5+6F8EkCKldUR6aCFR9+tlJoY
-         kNDbH05Z1OV4GEPIAFVXR6kw4ROwTzTMjtTWr/YPutGOVMRZP29n8mZR1b2CxuoZWK4i
-         9M4/ddYwzyCPpjVz0dcZ1LrDdEGXRp8TuCv4xczyVfOL/X1KPFZWZsNdEWKxEtt4JJtw
-         tbHg==
-X-Gm-Message-State: AOAM5300TU8bVqvJGlCglC51wHk+ZkR3Odc0rHEP/5expRD2ACIHhuZy
-        g4GEcHdfQoNhzthWEG9xnqkwNryYwDZVrg==
-X-Google-Smtp-Source: ABdhPJwVxmKbgCQRiF7m2+cYEL2I87Hvpd27UKalOOu///7j4/5y0UUZRRSOkyGS/fNghfo9mFn0TQ==
-X-Received: by 2002:a63:d849:: with SMTP id k9mr731389pgj.67.1627491416764;
-        Wed, 28 Jul 2021 09:56:56 -0700 (PDT)
+        bh=k8X14nnFP+ryP9U3NWWRMr/x1JxV9GHXhMa2zhoQiTk=;
+        b=mBnLG/fVWqvfcBLrwAgpibmPzPbX82gj4oR3buJkkI+oDa2tDuLhdW+dRLYZzhZ4Sc
+         ssO5mFmn+eZlAawOmej4O9iBevmddYC9BWgCSiL09mf7QILsOpRrz/v85g6t+ED0wQXk
+         UKsK7M3i8rFgLmxHXxRhe3aeetPCkqtBwxqlLrcduhpQJMC9G+jKbDlrFS7OZvb33Ey9
+         XW4sYVjSux3wCS9wtyW9d/Gu2uBl9EEHA5scJ6SJoMjqNy+N13tJ2LL47QSTa5rAYf1Y
+         +O9noNXcGNu5CnaPdmSBy/Y5nE0yjBXDNJsTzFTqtyRFY+nMKVuaogumoHCZKecaCJMH
+         /mpw==
+X-Gm-Message-State: AOAM533tTkX+FHKuBANINm3GgNh7B3EA32kRDN+hYIQby8cBe9jmGsnV
+        Tf7vqsyor4gOg0yM4uJ8qqd/mHHtN+DLiQ==
+X-Google-Smtp-Source: ABdhPJw1Bjwuy/uLi4obcSw5EMiHa0wMaW/lXvJM5D9XOWhF0rPl9oUEMUjn2CKz5yqI7ZgvNFriOg==
+X-Received: by 2002:a17:90a:5201:: with SMTP id v1mr718502pjh.46.1627491423063;
+        Wed, 28 Jul 2021 09:57:03 -0700 (PDT)
 Received: from localhost ([2405:201:6014:d0bb:dc30:f309:2f53:5818])
-        by smtp.gmail.com with ESMTPSA id q17sm324702pgd.39.2021.07.28.09.56.55
+        by smtp.gmail.com with ESMTPSA id x14sm521081pfq.143.2021.07.28.09.57.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jul 2021 09:56:56 -0700 (PDT)
+        Wed, 28 Jul 2021 09:57:02 -0700 (PDT)
 From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To:     bpf@vger.kernel.org
 Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
@@ -65,9 +65,9 @@ Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
         Jesper Dangaard Brouer <brouer@redhat.com>,
         =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
         netdev@vger.kernel.org
-Subject: [PATCH bpf-next v3 4/8] samples: bpf: Convert xdp_monitor to use XDP samples helper
-Date:   Wed, 28 Jul 2021 22:25:48 +0530
-Message-Id: <20210728165552.435050-5-memxor@gmail.com>
+Subject: [PATCH bpf-next v3 6/8] samples: bpf: Convert xdp_redirect_map to use XDP samples helpers
+Date:   Wed, 28 Jul 2021 22:25:50 +0530
+Message-Id: <20210728165552.435050-7-memxor@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210728165552.435050-1-memxor@gmail.com>
 References: <20210728165552.435050-1-memxor@gmail.com>
@@ -77,1244 +77,681 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This change converts XDP monitor tool to use the XDP samples support
-introduced in previous changes.
-
-Makefile support is added to produce the BPF skeleton and link
-xdp_monitor bpf object with xdp_sample bpf object. This is then used to
-open and load the bpf object and attach the needed tracepoints only.
+This change converts XDP redirect_map tool to use the XDP samples
+support introduced in previous changes.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- samples/bpf/Makefile           |  50 ++-
- samples/bpf/xdp_monitor.bpf.c  |   8 +
- samples/bpf/xdp_monitor_kern.c | 257 -----------
- samples/bpf/xdp_monitor_user.c | 792 +++------------------------------
- 4 files changed, 110 insertions(+), 997 deletions(-)
- create mode 100644 samples/bpf/xdp_monitor.bpf.c
- delete mode 100644 samples/bpf/xdp_monitor_kern.c
+ samples/bpf/Makefile                          |  10 +-
+ ...rect_map_kern.c => xdp_redirect_map.bpf.c} |  87 +---
+ samples/bpf/xdp_redirect_map_user.c           | 380 +++++++-----------
+ 3 files changed, 179 insertions(+), 298 deletions(-)
+ rename samples/bpf/{xdp_redirect_map_kern.c => xdp_redirect_map.bpf.c} (58%)
 
 diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
-index 4a3151fa163f..1c7e1d5830c7 100644
+index 53ddf63c94d6..53046fd37b6c 100644
 --- a/samples/bpf/Makefile
 +++ b/samples/bpf/Makefile
-@@ -43,7 +43,6 @@ tprogs-y += xdp_redirect
- tprogs-y += xdp_redirect_map
+@@ -39,7 +39,6 @@ tprogs-y += lwt_len_hist
+ tprogs-y += xdp_tx_iptunnel
+ tprogs-y += test_map_in_map
+ tprogs-y += per_socket_stats_example
+-tprogs-y += xdp_redirect_map
  tprogs-y += xdp_redirect_map_multi
  tprogs-y += xdp_redirect_cpu
--tprogs-y += xdp_monitor
  tprogs-y += xdp_rxq_info
- tprogs-y += syscall_tp
- tprogs-y += cpustat
-@@ -57,6 +56,8 @@ tprogs-y += xdp_sample_pkts
+@@ -55,6 +54,7 @@ tprogs-y += xdp_sample_pkts
  tprogs-y += ibumad
  tprogs-y += hbm
  
-+tprogs-y += xdp_monitor
-+
- # Libbpf dependencies
- LIBBPF = $(TOOLS_PATH)/lib/bpf/libbpf.a
++tprogs-y += xdp_redirect_map
+ tprogs-y += xdp_redirect
+ tprogs-y += xdp_monitor
  
-@@ -103,7 +104,6 @@ xdp_redirect-objs := xdp_redirect_user.o
- xdp_redirect_map-objs := xdp_redirect_map_user.o
+@@ -100,7 +100,6 @@ lwt_len_hist-objs := lwt_len_hist_user.o
+ xdp_tx_iptunnel-objs := xdp_tx_iptunnel_user.o
+ test_map_in_map-objs := test_map_in_map_user.o
+ per_socket_stats_example-objs := cookie_uid_helper_example.o
+-xdp_redirect_map-objs := xdp_redirect_map_user.o
  xdp_redirect_map_multi-objs := xdp_redirect_map_multi_user.o
  xdp_redirect_cpu-objs := xdp_redirect_cpu_user.o
--xdp_monitor-objs := xdp_monitor_user.o
  xdp_rxq_info-objs := xdp_rxq_info_user.o
- syscall_tp-objs := syscall_tp_user.o
- cpustat-objs := cpustat_user.o
-@@ -117,6 +117,8 @@ xdp_sample_pkts-objs := xdp_sample_pkts_user.o
+@@ -116,6 +115,7 @@ xdp_sample_pkts-objs := xdp_sample_pkts_user.o
  ibumad-objs := ibumad_user.o
  hbm-objs := hbm.o $(CGROUP_HELPERS)
  
-+xdp_monitor-objs := xdp_monitor_user.o $(XDP_SAMPLE)
-+
- # Tell kbuild to always build the programs
- always-y := $(tprogs-y)
- always-y += sockex1_kern.o
-@@ -165,7 +167,6 @@ always-y += xdp_redirect_kern.o
- always-y += xdp_redirect_map_kern.o
++xdp_redirect_map-objs := xdp_redirect_map_user.o $(XDP_SAMPLE)
+ xdp_redirect-objs := xdp_redirect_user.o $(XDP_SAMPLE)
+ xdp_monitor-objs := xdp_monitor_user.o $(XDP_SAMPLE)
+ 
+@@ -163,7 +163,6 @@ always-y += tcp_clamp_kern.o
+ always-y += tcp_basertt_kern.o
+ always-y += tcp_tos_reflect_kern.o
+ always-y += tcp_dumpstats_kern.o
+-always-y += xdp_redirect_map_kern.o
  always-y += xdp_redirect_map_multi_kern.o
  always-y += xdp_redirect_cpu_kern.o
--always-y += xdp_monitor_kern.o
  always-y += xdp_rxq_info_kern.o
- always-y += xdp2skb_meta_kern.o
- always-y += syscall_tp_kern.o
-@@ -312,6 +313,8 @@ verify_target_bpf: verify_cmds
+@@ -312,6 +311,7 @@ verify_target_bpf: verify_cmds
  $(BPF_SAMPLES_PATH)/*.c: verify_target_bpf $(LIBBPF)
  $(src)/*.c: verify_target_bpf $(LIBBPF)
  
-+$(obj)/xdp_monitor_user.o: $(obj)/xdp_monitor.skel.h
-+
- $(obj)/tracex5_kern.o: $(obj)/syscall_nrs.h
- $(obj)/hbm_out_kern.o: $(src)/hbm.h $(src)/hbm_kern.h
- $(obj)/hbm.o: $(src)/hbm.h
-@@ -339,6 +342,47 @@ endif
++$(obj)/xdp_redirect_map_user.o: $(obj)/xdp_redirect_map.skel.h
+ $(obj)/xdp_redirect_user.o: $(obj)/xdp_redirect.skel.h
+ $(obj)/xdp_monitor_user.o: $(obj)/xdp_monitor.skel.h
  
- clean-files += vmlinux.h
+@@ -356,6 +356,7 @@ endef
  
-+# Get Clang's default includes on this system, as opposed to those seen by
-+# '-target bpf'. This fixes "missing" files on some architectures/distros,
-+# such as asm/byteorder.h, asm/socket.h, asm/sockios.h, sys/cdefs.h etc.
-+#
-+# Use '-idirafter': Don't interfere with include mechanics except where the
-+# build would have failed anyways.
-+define get_sys_includes
-+$(shell $(1) -v -E - </dev/null 2>&1 \
-+        | sed -n '/<...> search starts here:/,/End of search list./{ s| \(/.*\)|-idirafter \1|p }') \
-+$(shell $(1) -dM -E - </dev/null | grep '#define __riscv_xlen ' | sed 's/#define /-D/' | sed 's/ /=/')
-+endef
-+
-+CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG))
-+
-+$(obj)/xdp_monitor.bpf.o: $(obj)/xdp_sample.bpf.o
-+
-+$(obj)/%.bpf.o: $(src)/%.bpf.c $(obj)/vmlinux.h $(src)/xdp_sample.bpf.h $(src)/xdp_sample_shared.h
-+	@echo "  CLANG-BPF " $@
-+	$(Q)$(CLANG) -g -O2 -target bpf -D__TARGET_ARCH_$(SRCARCH) \
-+		-Wno-compare-distinct-pointer-types \
-+		-I$(srctree)/samples/bpf -I$(srctree)/tools/include \
-+		-I$(srctree)/tools/lib $(CLANG_SYS_INCLUDES) \
-+		-c $(filter %.bpf.c,$^) -o $@
-+
-+LINKED_SKELS := xdp_monitor.skel.h
-+clean-files += $(LINKED_SKELS)
-+
-+xdp_monitor.skel.h-deps := xdp_monitor.bpf.o xdp_sample.bpf.o
-+
-+LINKED_BPF_SRCS := $(patsubst %.bpf.o,%.bpf.c,$(foreach skel,$(LINKED_SKELS),$($(skel)-deps)))
-+
-+BPF_SRCS_LINKED := $(notdir $(wildcard $(src)/*.bpf.c))
-+BPF_OBJS_LINKED := $(patsubst %.bpf.c,$(obj)/%.bpf.o, $(BPF_SRCS_LINKED))
-+BPF_SKELS_LINKED := $(addprefix $(obj)/,$(LINKED_SKELS))
-+
-+$(BPF_SKELS_LINKED): $(BPF_OBJS_LINKED) $(BPFTOOL)
-+	@echo "  BPF GEN-OBJ " $(@:.skel.h=)
-+	$(Q)$(BPFTOOL) gen object $(@:.skel.h=.lbpf.o) $(addprefix $(obj)/,$($(@F)-deps))
-+	@echo "  BPF GEN-SKEL" $(@:.skel.h=)
-+	$(Q)$(BPFTOOL) gen skeleton $(@:.skel.h=.lbpf.o) name $(notdir $(@:.skel.h=)) > $@
-+
- # asm/sysreg.h - inline assembly used by it is incompatible with llvm.
- # But, there is no easy way to fix it, so just exclude it since it is
- # useless for BPF samples.
-diff --git a/samples/bpf/xdp_monitor.bpf.c b/samples/bpf/xdp_monitor.bpf.c
-new file mode 100644
-index 000000000000..cfb41e2205f4
---- /dev/null
-+++ b/samples/bpf/xdp_monitor.bpf.c
-@@ -0,0 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*  Copyright(c) 2017-2018 Jesper Dangaard Brouer, Red Hat Inc.
-+ *
-+ * XDP monitor tool, based on tracepoints
-+ */
-+#include "xdp_sample.bpf.h"
-+
-+char _license[] SEC("license") = "GPL";
-diff --git a/samples/bpf/xdp_monitor_kern.c b/samples/bpf/xdp_monitor_kern.c
-deleted file mode 100644
-index 5c955b812c47..000000000000
---- a/samples/bpf/xdp_monitor_kern.c
-+++ /dev/null
-@@ -1,257 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0
-- *  Copyright(c) 2017-2018 Jesper Dangaard Brouer, Red Hat Inc.
-- *
-- * XDP monitor tool, based on tracepoints
-- */
+ CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG))
+ 
++$(obj)/xdp_redirect_map.bpf.o: $(obj)/xdp_sample.bpf.o
+ $(obj)/xdp_redirect.bpf.o: $(obj)/xdp_sample.bpf.o
+ $(obj)/xdp_monitor.bpf.o: $(obj)/xdp_sample.bpf.o
+ 
+@@ -367,9 +368,10 @@ $(obj)/%.bpf.o: $(src)/%.bpf.c $(obj)/vmlinux.h $(src)/xdp_sample.bpf.h $(src)/x
+ 		-I$(srctree)/tools/lib $(CLANG_SYS_INCLUDES) \
+ 		-c $(filter %.bpf.c,$^) -o $@
+ 
+-LINKED_SKELS := xdp_redirect.skel.h xdp_monitor.skel.h
++LINKED_SKELS := xdp_redirect_map.skel.h xdp_redirect.skel.h xdp_monitor.skel.h
+ clean-files += $(LINKED_SKELS)
+ 
++xdp_redirect_map.skel.h-deps := xdp_redirect_map.bpf.o xdp_sample.bpf.o
+ xdp_redirect.skel.h-deps := xdp_redirect.bpf.o xdp_sample.bpf.o
+ xdp_monitor.skel.h-deps := xdp_monitor.bpf.o xdp_sample.bpf.o
+ 
+diff --git a/samples/bpf/xdp_redirect_map_kern.c b/samples/bpf/xdp_redirect_map.bpf.c
+similarity index 58%
+rename from samples/bpf/xdp_redirect_map_kern.c
+rename to samples/bpf/xdp_redirect_map.bpf.c
+index a92b8e567bdd..ba221209cee2 100644
+--- a/samples/bpf/xdp_redirect_map_kern.c
++++ b/samples/bpf/xdp_redirect_map.bpf.c
+@@ -10,14 +10,10 @@
+  * General Public License for more details.
+  */
+ #define KBUILD_MODNAME "foo"
 -#include <uapi/linux/bpf.h>
+-#include <linux/in.h>
+-#include <linux/if_ether.h>
+-#include <linux/if_packet.h>
+-#include <linux/if_vlan.h>
+-#include <linux/ip.h>
+-#include <linux/ipv6.h>
 -#include <bpf/bpf_helpers.h>
--
--struct {
--	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
--	__type(key, u32);
--	__type(value, u64);
--	__uint(max_entries, 2);
--	/* TODO: have entries for all possible errno's */
--} redirect_err_cnt SEC(".maps");
--
--#define XDP_UNKNOWN	XDP_REDIRECT + 1
--struct {
--	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
--	__type(key, u32);
--	__type(value, u64);
--	__uint(max_entries, XDP_UNKNOWN + 1);
--} exception_cnt SEC(".maps");
--
--/* Tracepoint format: /sys/kernel/debug/tracing/events/xdp/xdp_redirect/format
-- * Code in:                kernel/include/trace/events/xdp.h
-- */
--struct xdp_redirect_ctx {
--	u64 __pad;		// First 8 bytes are not accessible by bpf code
--	int prog_id;		//	offset:8;  size:4; signed:1;
--	u32 act;		//	offset:12  size:4; signed:0;
--	int ifindex;		//	offset:16  size:4; signed:1;
--	int err;		//	offset:20  size:4; signed:1;
--	int to_ifindex;		//	offset:24  size:4; signed:1;
--	u32 map_id;		//	offset:28  size:4; signed:0;
--	int map_index;		//	offset:32  size:4; signed:1;
--};				//	offset:36
--
--enum {
--	XDP_REDIRECT_SUCCESS = 0,
--	XDP_REDIRECT_ERROR = 1
--};
--
--static __always_inline
--int xdp_redirect_collect_stat(struct xdp_redirect_ctx *ctx)
--{
--	u32 key = XDP_REDIRECT_ERROR;
--	int err = ctx->err;
--	u64 *cnt;
--
--	if (!err)
--		key = XDP_REDIRECT_SUCCESS;
--
--	cnt  = bpf_map_lookup_elem(&redirect_err_cnt, &key);
--	if (!cnt)
--		return 1;
--	*cnt += 1;
--
--	return 0; /* Indicate event was filtered (no further processing)*/
--	/*
--	 * Returning 1 here would allow e.g. a perf-record tracepoint
--	 * to see and record these events, but it doesn't work well
--	 * in-practice as stopping perf-record also unload this
--	 * bpf_prog.  Plus, there is additional overhead of doing so.
--	 */
--}
--
--SEC("tracepoint/xdp/xdp_redirect_err")
--int trace_xdp_redirect_err(struct xdp_redirect_ctx *ctx)
--{
--	return xdp_redirect_collect_stat(ctx);
--}
--
--
--SEC("tracepoint/xdp/xdp_redirect_map_err")
--int trace_xdp_redirect_map_err(struct xdp_redirect_ctx *ctx)
--{
--	return xdp_redirect_collect_stat(ctx);
--}
--
--/* Likely unloaded when prog starts */
--SEC("tracepoint/xdp/xdp_redirect")
--int trace_xdp_redirect(struct xdp_redirect_ctx *ctx)
--{
--	return xdp_redirect_collect_stat(ctx);
--}
--
--/* Likely unloaded when prog starts */
--SEC("tracepoint/xdp/xdp_redirect_map")
--int trace_xdp_redirect_map(struct xdp_redirect_ctx *ctx)
--{
--	return xdp_redirect_collect_stat(ctx);
--}
--
--/* Tracepoint format: /sys/kernel/debug/tracing/events/xdp/xdp_exception/format
-- * Code in:                kernel/include/trace/events/xdp.h
-- */
--struct xdp_exception_ctx {
--	u64 __pad;	// First 8 bytes are not accessible by bpf code
--	int prog_id;	//	offset:8;  size:4; signed:1;
--	u32 act;	//	offset:12; size:4; signed:0;
--	int ifindex;	//	offset:16; size:4; signed:1;
--};
--
--SEC("tracepoint/xdp/xdp_exception")
--int trace_xdp_exception(struct xdp_exception_ctx *ctx)
--{
--	u64 *cnt;
--	u32 key;
--
--	key = ctx->act;
--	if (key > XDP_REDIRECT)
--		key = XDP_UNKNOWN;
--
--	cnt = bpf_map_lookup_elem(&exception_cnt, &key);
--	if (!cnt)
--		return 1;
--	*cnt += 1;
--
--	return 0;
--}
--
--/* Common stats data record shared with _user.c */
--struct datarec {
--	u64 processed;
--	u64 dropped;
--	u64 info;
--	u64 err;
--};
--#define MAX_CPUS 64
--
--struct {
--	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
--	__type(key, u32);
--	__type(value, struct datarec);
--	__uint(max_entries, MAX_CPUS);
--} cpumap_enqueue_cnt SEC(".maps");
--
--struct {
--	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
--	__type(key, u32);
--	__type(value, struct datarec);
--	__uint(max_entries, 1);
--} cpumap_kthread_cnt SEC(".maps");
--
--/* Tracepoint: /sys/kernel/debug/tracing/events/xdp/xdp_cpumap_enqueue/format
-- * Code in:         kernel/include/trace/events/xdp.h
-- */
--struct cpumap_enqueue_ctx {
--	u64 __pad;		// First 8 bytes are not accessible by bpf code
--	int map_id;		//	offset:8;  size:4; signed:1;
--	u32 act;		//	offset:12; size:4; signed:0;
--	int cpu;		//	offset:16; size:4; signed:1;
--	unsigned int drops;	//	offset:20; size:4; signed:0;
--	unsigned int processed;	//	offset:24; size:4; signed:0;
--	int to_cpu;		//	offset:28; size:4; signed:1;
--};
--
--SEC("tracepoint/xdp/xdp_cpumap_enqueue")
--int trace_xdp_cpumap_enqueue(struct cpumap_enqueue_ctx *ctx)
--{
--	u32 to_cpu = ctx->to_cpu;
--	struct datarec *rec;
--
--	if (to_cpu >= MAX_CPUS)
--		return 1;
--
--	rec = bpf_map_lookup_elem(&cpumap_enqueue_cnt, &to_cpu);
--	if (!rec)
--		return 0;
--	rec->processed += ctx->processed;
--	rec->dropped   += ctx->drops;
--
--	/* Record bulk events, then userspace can calc average bulk size */
--	if (ctx->processed > 0)
--		rec->info += 1;
--
--	return 0;
--}
--
--/* Tracepoint: /sys/kernel/debug/tracing/events/xdp/xdp_cpumap_kthread/format
-- * Code in:         kernel/include/trace/events/xdp.h
-- */
--struct cpumap_kthread_ctx {
--	u64 __pad;		// First 8 bytes are not accessible by bpf code
--	int map_id;		//	offset:8;  size:4; signed:1;
--	u32 act;		//	offset:12; size:4; signed:0;
--	int cpu;		//	offset:16; size:4; signed:1;
--	unsigned int drops;	//	offset:20; size:4; signed:0;
--	unsigned int processed;	//	offset:24; size:4; signed:0;
--	int sched;		//	offset:28; size:4; signed:1;
--};
--
--SEC("tracepoint/xdp/xdp_cpumap_kthread")
--int trace_xdp_cpumap_kthread(struct cpumap_kthread_ctx *ctx)
--{
--	struct datarec *rec;
--	u32 key = 0;
--
--	rec = bpf_map_lookup_elem(&cpumap_kthread_cnt, &key);
--	if (!rec)
--		return 0;
--	rec->processed += ctx->processed;
--	rec->dropped   += ctx->drops;
--
--	/* Count times kthread yielded CPU via schedule call */
--	if (ctx->sched)
--		rec->info++;
--
--	return 0;
--}
--
--struct {
--	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
--	__type(key, u32);
--	__type(value, struct datarec);
--	__uint(max_entries, 1);
--} devmap_xmit_cnt SEC(".maps");
--
--/* Tracepoint: /sys/kernel/debug/tracing/events/xdp/xdp_devmap_xmit/format
-- * Code in:         kernel/include/trace/events/xdp.h
-- */
--struct devmap_xmit_ctx {
--	u64 __pad;		// First 8 bytes are not accessible by bpf code
--	int from_ifindex;	//	offset:8;  size:4; signed:1;
--	u32 act;		//	offset:12; size:4; signed:0;
--	int to_ifindex; 	//	offset:16; size:4; signed:1;
--	int drops;		//	offset:20; size:4; signed:1;
--	int sent;		//	offset:24; size:4; signed:1;
--	int err;		//	offset:28; size:4; signed:1;
--};
--
--SEC("tracepoint/xdp/xdp_devmap_xmit")
--int trace_xdp_devmap_xmit(struct devmap_xmit_ctx *ctx)
--{
--	struct datarec *rec;
--	u32 key = 0;
--
--	rec = bpf_map_lookup_elem(&devmap_xmit_cnt, &key);
--	if (!rec)
--		return 0;
--	rec->processed += ctx->sent;
--	rec->dropped   += ctx->drops;
--
--	/* Record bulk events, then userspace can calc average bulk size */
--	rec->info += 1;
--
--	/* Record error cases, where no frame were sent */
--	if (ctx->err)
--		rec->err++;
--
--	/* Catch API error of drv ndo_xdp_xmit sent more than count */
--	if (ctx->drops < 0)
--		rec->err++;
--
--	return 1;
--}
-diff --git a/samples/bpf/xdp_monitor_user.c b/samples/bpf/xdp_monitor_user.c
-index 49ebc49aefc3..4c06eb816172 100644
---- a/samples/bpf/xdp_monitor_user.c
-+++ b/samples/bpf/xdp_monitor_user.c
-@@ -1,15 +1,12 @@
--/* SPDX-License-Identifier: GPL-2.0
-- * Copyright(c) 2017 Jesper Dangaard Brouer, Red Hat, Inc.
-- */
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright(c) 2017 Jesper Dangaard Brouer, Red Hat, Inc. */
- static const char *__doc__=
-- "XDP monitor tool, based on tracepoints\n"
--;
-+"XDP monitor tool, based on tracepoints\n";
++
++#include "vmlinux.h"
++#include "xdp_sample.bpf.h"
++#include "xdp_sample_shared.h"
  
- static const char *__doc_err_only__=
-- " NOTICE: Only tracking XDP redirect errors\n"
-- "         Enable TX success stats via '--stats'\n"
-- "         (which comes with a per packet processing overhead)\n"
--;
-+" NOTICE: Only tracking XDP redirect errors\n"
-+"         Enable redirect success stats via '-s/--stats'\n"
-+"         (which comes with a per packet processing overhead)\n";
+ /* The 2nd xdp prog on egress does not support skb mode, so we define two
+  * maps, tx_port_general and tx_port_native.
+@@ -26,114 +22,73 @@ struct {
+ 	__uint(type, BPF_MAP_TYPE_DEVMAP);
+ 	__uint(key_size, sizeof(int));
+ 	__uint(value_size, sizeof(int));
+-	__uint(max_entries, 100);
++	__uint(max_entries, 1);
+ } tx_port_general SEC(".maps");
  
- #include <errno.h>
- #include <stdio.h>
-@@ -20,768 +17,89 @@ static const char *__doc_err_only__=
- #include <ctype.h>
- #include <unistd.h>
- #include <locale.h>
+ struct {
+ 	__uint(type, BPF_MAP_TYPE_DEVMAP);
+ 	__uint(key_size, sizeof(int));
+ 	__uint(value_size, sizeof(struct bpf_devmap_val));
+-	__uint(max_entries, 100);
+-} tx_port_native SEC(".maps");
 -
- #include <sys/resource.h>
- #include <getopt.h>
+-/* Count RX packets, as XDP bpf_prog doesn't get direct TX-success
+- * feedback.  Redirect TX errors can be caught via a tracepoint.
+- */
+-struct {
+-	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
+-	__type(key, u32);
+-	__type(value, long);
+ 	__uint(max_entries, 1);
+-} rxcnt SEC(".maps");
+-
+-/* map to store egress interface mac address */
+-struct {
+-	__uint(type, BPF_MAP_TYPE_ARRAY);
+-	__type(key, u32);
+-	__type(value, __be64);
+-	__uint(max_entries, 1);
+-} tx_mac SEC(".maps");
++} tx_port_native SEC(".maps");
+ 
+-static void swap_src_dst_mac(void *data)
+-{
+-	unsigned short *p = data;
+-	unsigned short dst[3];
+-
+-	dst[0] = p[0];
+-	dst[1] = p[1];
+-	dst[2] = p[2];
+-	p[0] = p[3];
+-	p[1] = p[4];
+-	p[2] = p[5];
+-	p[3] = dst[0];
+-	p[4] = dst[1];
+-	p[5] = dst[2];
+-}
++/* store egress interface mac address */
++const volatile char tx_mac_addr[ETH_ALEN];
+ 
+ static __always_inline int xdp_redirect_map(struct xdp_md *ctx, void *redirect_map)
+ {
+ 	void *data_end = (void *)(long)ctx->data_end;
+ 	void *data = (void *)(long)ctx->data;
++	u32 key = bpf_get_smp_processor_id();
+ 	struct ethhdr *eth = data;
+-	int rc = XDP_DROP;
+-	long *value;
+-	u32 key = 0;
++	struct datarec *rec;
+ 	u64 nh_off;
+-	int vport;
+ 
+ 	nh_off = sizeof(*eth);
+ 	if (data + nh_off > data_end)
+-		return rc;
++		return XDP_DROP;
+ 
+-	/* constant virtual port */
+-	vport = 0;
++	if (key >= ELEMENTS_OF(sample_data.rx_cnt))
++		return XDP_PASS;
+ 
+ 	/* count packet in global counter */
+-	value = bpf_map_lookup_elem(&rxcnt, &key);
+-	if (value)
+-		*value += 1;
+-
++	rec = &sample_data.rx_cnt[key];
++	NO_TEAR_INC(rec->processed);
+ 	swap_src_dst_mac(data);
+-
+-	/* send packet out physical port */
+-	return bpf_redirect_map(redirect_map, vport, 0);
++	return bpf_redirect_map(redirect_map, 0, 0);
+ }
+ 
+-SEC("xdp_redirect_general")
++SEC("xdp")
+ int xdp_redirect_map_general(struct xdp_md *ctx)
+ {
+ 	return xdp_redirect_map(ctx, &tx_port_general);
+ }
+ 
+-SEC("xdp_redirect_native")
++SEC("xdp")
+ int xdp_redirect_map_native(struct xdp_md *ctx)
+ {
+ 	return xdp_redirect_map(ctx, &tx_port_native);
+ }
+ 
+-SEC("xdp_devmap/map_prog")
++SEC("xdp_devmap/egress")
+ int xdp_redirect_map_egress(struct xdp_md *ctx)
+ {
+ 	void *data_end = (void *)(long)ctx->data_end;
+ 	void *data = (void *)(long)ctx->data;
+ 	struct ethhdr *eth = data;
+-	__be64 *mac;
+-	u32 key = 0;
+ 	u64 nh_off;
+ 
+ 	nh_off = sizeof(*eth);
+ 	if (data + nh_off > data_end)
+ 		return XDP_DROP;
+ 
+-	mac = bpf_map_lookup_elem(&tx_mac, &key);
+-	if (mac)
+-		__builtin_memcpy(eth->h_source, mac, ETH_ALEN);
++	__builtin_memcpy(eth->h_source, (const char *)tx_mac_addr, ETH_ALEN);
+ 
+ 	return XDP_PASS;
+ }
+ 
+ /* Redirect require an XDP bpf_prog loaded on the TX device */
+-SEC("xdp_redirect_dummy")
++SEC("xdp")
+ int xdp_redirect_dummy_prog(struct xdp_md *ctx)
+ {
+ 	return XDP_PASS;
+diff --git a/samples/bpf/xdp_redirect_map_user.c b/samples/bpf/xdp_redirect_map_user.c
+index ad3cdc4c07d3..bab3a5abfc89 100644
+--- a/samples/bpf/xdp_redirect_map_user.c
++++ b/samples/bpf/xdp_redirect_map_user.c
+@@ -1,6 +1,10 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ /* Copyright (c) 2017 Covalent IO, Inc. http://covalent.io
+  */
++static const char *__doc__ =
++"XDP redirect tool, using BPF_MAP_TYPE_DEVMAP\n"
++"Usage: xdp_redirect_map <IFINDEX|IFNAME>_IN <IFINDEX|IFNAME>_OUT\n";
++
+ #include <linux/bpf.h>
+ #include <linux/if_link.h>
+ #include <assert.h>
+@@ -13,165 +17,83 @@
  #include <net/if.h>
- #include <time.h>
+ #include <unistd.h>
+ #include <libgen.h>
+-#include <sys/resource.h>
+-#include <sys/ioctl.h>
+-#include <sys/types.h>
+-#include <sys/socket.h>
+-#include <netinet/in.h>
 -
- #include <signal.h>
+-#include "bpf_util.h"
++#include <getopt.h>
  #include <bpf/bpf.h>
  #include <bpf/libbpf.h>
- #include "bpf_util.h"
++#include "bpf_util.h"
 +#include "xdp_sample_user.h"
-+#include "xdp_monitor.skel.h"
++#include "xdp_redirect_map.skel.h"
  
--enum map_type {
--	REDIRECT_ERR_CNT,
--	EXCEPTION_CNT,
--	CPUMAP_ENQUEUE_CNT,
--	CPUMAP_KTHREAD_CNT,
--	DEVMAP_XMIT_CNT,
--};
-+static int mask = SAMPLE_REDIRECT_ERR_CNT | SAMPLE_CPUMAP_ENQUEUE_CNT |
-+		  SAMPLE_CPUMAP_KTHREAD_CNT | SAMPLE_EXCEPTION_CNT |
-+		  SAMPLE_DEVMAP_XMIT_CNT | SAMPLE_DEVMAP_XMIT_CNT_MULTI;
- 
--static const char *const map_type_strings[] = {
--	[REDIRECT_ERR_CNT] = "redirect_err_cnt",
--	[EXCEPTION_CNT] = "exception_cnt",
--	[CPUMAP_ENQUEUE_CNT] = "cpumap_enqueue_cnt",
--	[CPUMAP_KTHREAD_CNT] = "cpumap_kthread_cnt",
--	[DEVMAP_XMIT_CNT] = "devmap_xmit_cnt",
--};
+-static int ifindex_in;
+-static int ifindex_out;
+-static bool ifindex_out_xdp_dummy_attached = true;
+-static bool xdp_devmap_attached;
+-static __u32 prog_id;
+-static __u32 dummy_prog_id;
 -
--#define NUM_MAP 5
--#define NUM_TP 8
--
--static int tp_cnt;
--static int map_cnt;
--static int verbose = 1;
--static bool debug = false;
--struct bpf_map *map_data[NUM_MAP] = {};
--struct bpf_link *tp_links[NUM_TP] = {};
--struct bpf_object *obj;
-+DEFINE_SAMPLE_INIT(xdp_monitor);
- 
- static const struct option long_options[] = {
--	{"help",	no_argument,		NULL, 'h' },
--	{"debug",	no_argument,		NULL, 'D' },
--	{"stats",	no_argument,		NULL, 'S' },
--	{"sec", 	required_argument,	NULL, 's' },
--	{0, 0, NULL,  0 }
--};
+-static __u32 xdp_flags = XDP_FLAGS_UPDATE_IF_NOEXIST;
+-static int rxcnt_map_fd;
 -
 -static void int_exit(int sig)
 -{
--	/* Detach tracepoints */
--	while (tp_cnt)
--		bpf_link__destroy(tp_links[--tp_cnt]);
+-	__u32 curr_prog_id = 0;
 -
--	bpf_object__close(obj);
+-	if (bpf_get_link_xdp_id(ifindex_in, &curr_prog_id, xdp_flags)) {
+-		printf("bpf_get_link_xdp_id failed\n");
+-		exit(1);
+-	}
+-	if (prog_id == curr_prog_id)
+-		bpf_set_link_xdp_fd(ifindex_in, -1, xdp_flags);
+-	else if (!curr_prog_id)
+-		printf("couldn't find a prog id on iface IN\n");
+-	else
+-		printf("program on iface IN changed, not removing\n");
+-
+-	if (ifindex_out_xdp_dummy_attached) {
+-		curr_prog_id = 0;
+-		if (bpf_get_link_xdp_id(ifindex_out, &curr_prog_id,
+-					xdp_flags)) {
+-			printf("bpf_get_link_xdp_id failed\n");
+-			exit(1);
+-		}
+-		if (dummy_prog_id == curr_prog_id)
+-			bpf_set_link_xdp_fd(ifindex_out, -1, xdp_flags);
+-		else if (!curr_prog_id)
+-			printf("couldn't find a prog id on iface OUT\n");
+-		else
+-			printf("program on iface OUT changed, not removing\n");
+-	}
 -	exit(0);
 -}
 -
--/* C standard specifies two constants, EXIT_SUCCESS(0) and EXIT_FAILURE(1) */
--#define EXIT_FAIL_MEM	5
--
--static void usage(char *argv[])
+-static void poll_stats(int interval, int ifindex)
 -{
--	int i;
--	printf("\nDOCUMENTATION:\n%s\n", __doc__);
--	printf("\n");
--	printf(" Usage: %s (options-see-below)\n",
--	       argv[0]);
--	printf(" Listing options:\n");
--	for (i = 0; long_options[i].name != 0; i++) {
--		printf(" --%-15s", long_options[i].name);
--		if (long_options[i].flag != NULL)
--			printf(" flag (internal value:%d)",
--			       *long_options[i].flag);
--		else
--			printf("short-option: -%c",
--			       long_options[i].val);
--		printf("\n");
+-	unsigned int nr_cpus = bpf_num_possible_cpus();
+-	__u64 values[nr_cpus], prev[nr_cpus];
+-
+-	memset(prev, 0, sizeof(prev));
+-
+-	while (1) {
+-		__u64 sum = 0;
+-		__u32 key = 0;
+-		int i;
+-
+-		sleep(interval);
+-		assert(bpf_map_lookup_elem(rxcnt_map_fd, &key, values) == 0);
+-		for (i = 0; i < nr_cpus; i++)
+-			sum += (values[i] - prev[i]);
+-		if (sum)
+-			printf("ifindex %i: %10llu pkt/s\n",
+-			       ifindex, sum / interval);
+-		memcpy(prev, values, sizeof(values));
 -	}
--	printf("\n");
 -}
 -
--#define NANOSEC_PER_SEC 1000000000 /* 10^9 */
--static __u64 gettime(void)
+-static int get_mac_addr(unsigned int ifindex_out, void *mac_addr)
 -{
--	struct timespec t;
--	int res;
+-	char ifname[IF_NAMESIZE];
+-	struct ifreq ifr;
+-	int fd, ret = -1;
 -
--	res = clock_gettime(CLOCK_MONOTONIC, &t);
--	if (res < 0) {
--		fprintf(stderr, "Error with gettimeofday! (%i)\n", res);
--		exit(EXIT_FAILURE);
--	}
--	return (__u64) t.tv_sec * NANOSEC_PER_SEC + t.tv_nsec;
+-	fd = socket(AF_INET, SOCK_DGRAM, 0);
+-	if (fd < 0)
+-		return ret;
+-
+-	if (!if_indextoname(ifindex_out, ifname))
+-		goto err_out;
+-
+-	strcpy(ifr.ifr_name, ifname);
+-
+-	if (ioctl(fd, SIOCGIFHWADDR, &ifr) != 0)
+-		goto err_out;
++static int mask = SAMPLE_RX_CNT | SAMPLE_REDIRECT_ERR_MAP_CNT |
++		  SAMPLE_EXCEPTION_CNT | SAMPLE_DEVMAP_XMIT_CNT_MULTI;
+ 
+-	memcpy(mac_addr, ifr.ifr_hwaddr.sa_data, 6 * sizeof(char));
+-	ret = 0;
++DEFINE_SAMPLE_INIT(xdp_redirect_map);
+ 
+-err_out:
+-	close(fd);
+-	return ret;
 -}
 -
--enum {
--	REDIR_SUCCESS = 0,
--	REDIR_ERROR = 1,
--};
--#define REDIR_RES_MAX 2
--static const char *redir_names[REDIR_RES_MAX] = {
--	[REDIR_SUCCESS]	= "Success",
--	[REDIR_ERROR]	= "Error",
--};
--static const char *err2str(int err)
+-static void usage(const char *prog)
 -{
--	if (err < REDIR_RES_MAX)
--		return redir_names[err];
--	return NULL;
+-	fprintf(stderr,
+-		"usage: %s [OPTS] <IFNAME|IFINDEX>_IN <IFNAME|IFINDEX>_OUT\n\n"
+-		"OPTS:\n"
+-		"    -S    use skb-mode\n"
+-		"    -N    enforce native mode\n"
+-		"    -F    force loading prog\n"
+-		"    -X    load xdp program on egress\n",
+-		prog);
 -}
--/* enum xdp_action */
--#define XDP_UNKNOWN	XDP_REDIRECT + 1
--#define XDP_ACTION_MAX (XDP_UNKNOWN + 1)
--static const char *xdp_action_names[XDP_ACTION_MAX] = {
--	[XDP_ABORTED]	= "XDP_ABORTED",
--	[XDP_DROP]	= "XDP_DROP",
--	[XDP_PASS]	= "XDP_PASS",
--	[XDP_TX]	= "XDP_TX",
--	[XDP_REDIRECT]	= "XDP_REDIRECT",
--	[XDP_UNKNOWN]	= "XDP_UNKNOWN",
++static const struct option long_options[] = {
 +	{ "help", no_argument, NULL, 'h' },
++	{ "skb-mode", no_argument, NULL, 'S' },
++	{ "force", no_argument, NULL, 'F' },
++	{ "load-egress", no_argument, NULL, 'X' },
 +	{ "stats", no_argument, NULL, 's' },
 +	{ "interval", required_argument, NULL, 'i' },
 +	{ "verbose", no_argument, NULL, 'v' },
 +	{}
- };
--static const char *action2str(int action)
--{
--	if (action < XDP_ACTION_MAX)
--		return xdp_action_names[action];
--	return NULL;
--}
--
--/* Common stats data record shared with _kern.c */
--struct datarec {
--	__u64 processed;
--	__u64 dropped;
--	__u64 info;
--	__u64 err;
--};
--#define MAX_CPUS 64
--
--/* Userspace structs for collection of stats from maps */
--struct record {
--	__u64 timestamp;
--	struct datarec total;
--	struct datarec *cpu;
--};
--struct u64rec {
--	__u64 processed;
--};
--struct record_u64 {
--	/* record for _kern side __u64 values */
--	__u64 timestamp;
--	struct u64rec total;
--	struct u64rec *cpu;
--};
--
--struct stats_record {
--	struct record_u64 xdp_redirect[REDIR_RES_MAX];
--	struct record_u64 xdp_exception[XDP_ACTION_MAX];
--	struct record xdp_cpumap_kthread;
--	struct record xdp_cpumap_enqueue[MAX_CPUS];
--	struct record xdp_devmap_xmit;
--};
--
--static bool map_collect_record(int fd, __u32 key, struct record *rec)
--{
--	/* For percpu maps, userspace gets a value per possible CPU */
--	unsigned int nr_cpus = bpf_num_possible_cpus();
--	struct datarec values[nr_cpus];
--	__u64 sum_processed = 0;
--	__u64 sum_dropped = 0;
--	__u64 sum_info = 0;
--	__u64 sum_err = 0;
--	int i;
--
--	if ((bpf_map_lookup_elem(fd, &key, values)) != 0) {
--		fprintf(stderr,
--			"ERR: bpf_map_lookup_elem failed key:0x%X\n", key);
--		return false;
--	}
--	/* Get time as close as possible to reading map contents */
--	rec->timestamp = gettime();
--
--	/* Record and sum values from each CPU */
--	for (i = 0; i < nr_cpus; i++) {
--		rec->cpu[i].processed = values[i].processed;
--		sum_processed        += values[i].processed;
--		rec->cpu[i].dropped = values[i].dropped;
--		sum_dropped        += values[i].dropped;
--		rec->cpu[i].info = values[i].info;
--		sum_info        += values[i].info;
--		rec->cpu[i].err = values[i].err;
--		sum_err        += values[i].err;
--	}
--	rec->total.processed = sum_processed;
--	rec->total.dropped   = sum_dropped;
--	rec->total.info      = sum_info;
--	rec->total.err       = sum_err;
--	return true;
--}
--
--static bool map_collect_record_u64(int fd, __u32 key, struct record_u64 *rec)
--{
--	/* For percpu maps, userspace gets a value per possible CPU */
--	unsigned int nr_cpus = bpf_num_possible_cpus();
--	struct u64rec values[nr_cpus];
--	__u64 sum_total = 0;
--	int i;
--
--	if ((bpf_map_lookup_elem(fd, &key, values)) != 0) {
--		fprintf(stderr,
--			"ERR: bpf_map_lookup_elem failed key:0x%X\n", key);
--		return false;
--	}
--	/* Get time as close as possible to reading map contents */
--	rec->timestamp = gettime();
--
--	/* Record and sum values from each CPU */
--	for (i = 0; i < nr_cpus; i++) {
--		rec->cpu[i].processed = values[i].processed;
--		sum_total            += values[i].processed;
--	}
--	rec->total.processed = sum_total;
--	return true;
--}
--
--static double calc_period(struct record *r, struct record *p)
--{
--	double period_ = 0;
--	__u64 period = 0;
--
--	period = r->timestamp - p->timestamp;
--	if (period > 0)
--		period_ = ((double) period / NANOSEC_PER_SEC);
--
--	return period_;
--}
--
--static double calc_period_u64(struct record_u64 *r, struct record_u64 *p)
--{
--	double period_ = 0;
--	__u64 period = 0;
--
--	period = r->timestamp - p->timestamp;
--	if (period > 0)
--		period_ = ((double) period / NANOSEC_PER_SEC);
--
--	return period_;
--}
--
--static double calc_pps(struct datarec *r, struct datarec *p, double period)
--{
--	__u64 packets = 0;
--	double pps = 0;
--
--	if (period > 0) {
--		packets = r->processed - p->processed;
--		pps = packets / period;
--	}
--	return pps;
--}
--
--static double calc_pps_u64(struct u64rec *r, struct u64rec *p, double period)
--{
--	__u64 packets = 0;
--	double pps = 0;
--
--	if (period > 0) {
--		packets = r->processed - p->processed;
--		pps = packets / period;
--	}
--	return pps;
--}
--
--static double calc_drop(struct datarec *r, struct datarec *p, double period)
--{
--	__u64 packets = 0;
--	double pps = 0;
--
--	if (period > 0) {
--		packets = r->dropped - p->dropped;
--		pps = packets / period;
--	}
--	return pps;
--}
--
--static double calc_info(struct datarec *r, struct datarec *p, double period)
--{
--	__u64 packets = 0;
--	double pps = 0;
--
--	if (period > 0) {
--		packets = r->info - p->info;
--		pps = packets / period;
--	}
--	return pps;
--}
--
--static double calc_err(struct datarec *r, struct datarec *p, double period)
--{
--	__u64 packets = 0;
--	double pps = 0;
--
--	if (period > 0) {
--		packets = r->err - p->err;
--		pps = packets / period;
--	}
--	return pps;
--}
--
--static void stats_print(struct stats_record *stats_rec,
--			struct stats_record *stats_prev,
--			bool err_only)
--{
--	unsigned int nr_cpus = bpf_num_possible_cpus();
--	int rec_i = 0, i, to_cpu;
--	double t = 0, pps = 0;
--
--	/* Header */
--	printf("%-15s %-7s %-12s %-12s %-9s\n",
--	       "XDP-event", "CPU:to", "pps", "drop-pps", "extra-info");
--
--	/* tracepoint: xdp:xdp_redirect_* */
--	if (err_only)
--		rec_i = REDIR_ERROR;
--
--	for (; rec_i < REDIR_RES_MAX; rec_i++) {
--		struct record_u64 *rec, *prev;
--		char *fmt1 = "%-15s %-7d %'-12.0f %'-12.0f %s\n";
--		char *fmt2 = "%-15s %-7s %'-12.0f %'-12.0f %s\n";
--
--		rec  =  &stats_rec->xdp_redirect[rec_i];
--		prev = &stats_prev->xdp_redirect[rec_i];
--		t = calc_period_u64(rec, prev);
--
--		for (i = 0; i < nr_cpus; i++) {
--			struct u64rec *r = &rec->cpu[i];
--			struct u64rec *p = &prev->cpu[i];
--
--			pps = calc_pps_u64(r, p, t);
--			if (pps > 0)
--				printf(fmt1, "XDP_REDIRECT", i,
--				       rec_i ? 0.0: pps, rec_i ? pps : 0.0,
--				       err2str(rec_i));
--		}
--		pps = calc_pps_u64(&rec->total, &prev->total, t);
--		printf(fmt2, "XDP_REDIRECT", "total",
--		       rec_i ? 0.0: pps, rec_i ? pps : 0.0, err2str(rec_i));
--	}
--
--	/* tracepoint: xdp:xdp_exception */
--	for (rec_i = 0; rec_i < XDP_ACTION_MAX; rec_i++) {
--		struct record_u64 *rec, *prev;
--		char *fmt1 = "%-15s %-7d %'-12.0f %'-12.0f %s\n";
--		char *fmt2 = "%-15s %-7s %'-12.0f %'-12.0f %s\n";
--
--		rec  =  &stats_rec->xdp_exception[rec_i];
--		prev = &stats_prev->xdp_exception[rec_i];
--		t = calc_period_u64(rec, prev);
--
--		for (i = 0; i < nr_cpus; i++) {
--			struct u64rec *r = &rec->cpu[i];
--			struct u64rec *p = &prev->cpu[i];
--
--			pps = calc_pps_u64(r, p, t);
--			if (pps > 0)
--				printf(fmt1, "Exception", i,
--				       0.0, pps, action2str(rec_i));
--		}
--		pps = calc_pps_u64(&rec->total, &prev->total, t);
--		if (pps > 0)
--			printf(fmt2, "Exception", "total",
--			       0.0, pps, action2str(rec_i));
--	}
--
--	/* cpumap enqueue stats */
--	for (to_cpu = 0; to_cpu < MAX_CPUS; to_cpu++) {
--		char *fmt1 = "%-15s %3d:%-3d %'-12.0f %'-12.0f %'-10.2f %s\n";
--		char *fmt2 = "%-15s %3s:%-3d %'-12.0f %'-12.0f %'-10.2f %s\n";
--		struct record *rec, *prev;
--		char *info_str = "";
--		double drop, info;
--
--		rec  =  &stats_rec->xdp_cpumap_enqueue[to_cpu];
--		prev = &stats_prev->xdp_cpumap_enqueue[to_cpu];
--		t = calc_period(rec, prev);
--		for (i = 0; i < nr_cpus; i++) {
--			struct datarec *r = &rec->cpu[i];
--			struct datarec *p = &prev->cpu[i];
--
--			pps  = calc_pps(r, p, t);
--			drop = calc_drop(r, p, t);
--			info = calc_info(r, p, t);
--			if (info > 0) {
--				info_str = "bulk-average";
--				info = pps / info; /* calc average bulk size */
--			}
--			if (pps > 0)
--				printf(fmt1, "cpumap-enqueue",
--				       i, to_cpu, pps, drop, info, info_str);
--		}
--		pps = calc_pps(&rec->total, &prev->total, t);
--		if (pps > 0) {
--			drop = calc_drop(&rec->total, &prev->total, t);
--			info = calc_info(&rec->total, &prev->total, t);
--			if (info > 0) {
--				info_str = "bulk-average";
--				info = pps / info; /* calc average bulk size */
--			}
--			printf(fmt2, "cpumap-enqueue",
--			       "sum", to_cpu, pps, drop, info, info_str);
--		}
--	}
--
--	/* cpumap kthread stats */
--	{
--		char *fmt1 = "%-15s %-7d %'-12.0f %'-12.0f %'-10.0f %s\n";
--		char *fmt2 = "%-15s %-7s %'-12.0f %'-12.0f %'-10.0f %s\n";
--		struct record *rec, *prev;
--		double drop, info;
--		char *i_str = "";
--
--		rec  =  &stats_rec->xdp_cpumap_kthread;
--		prev = &stats_prev->xdp_cpumap_kthread;
--		t = calc_period(rec, prev);
--		for (i = 0; i < nr_cpus; i++) {
--			struct datarec *r = &rec->cpu[i];
--			struct datarec *p = &prev->cpu[i];
--
--			pps  = calc_pps(r, p, t);
--			drop = calc_drop(r, p, t);
--			info = calc_info(r, p, t);
--			if (info > 0)
--				i_str = "sched";
--			if (pps > 0 || drop > 0)
--				printf(fmt1, "cpumap-kthread",
--				       i, pps, drop, info, i_str);
--		}
--		pps = calc_pps(&rec->total, &prev->total, t);
--		drop = calc_drop(&rec->total, &prev->total, t);
--		info = calc_info(&rec->total, &prev->total, t);
--		if (info > 0)
--			i_str = "sched-sum";
--		printf(fmt2, "cpumap-kthread", "total", pps, drop, info, i_str);
--	}
--
--	/* devmap ndo_xdp_xmit stats */
--	{
--		char *fmt1 = "%-15s %-7d %'-12.0f %'-12.0f %'-10.2f %s %s\n";
--		char *fmt2 = "%-15s %-7s %'-12.0f %'-12.0f %'-10.2f %s %s\n";
--		struct record *rec, *prev;
--		double drop, info, err;
--		char *i_str = "";
--		char *err_str = "";
--
--		rec  =  &stats_rec->xdp_devmap_xmit;
--		prev = &stats_prev->xdp_devmap_xmit;
--		t = calc_period(rec, prev);
--		for (i = 0; i < nr_cpus; i++) {
--			struct datarec *r = &rec->cpu[i];
--			struct datarec *p = &prev->cpu[i];
--
--			pps  = calc_pps(r, p, t);
--			drop = calc_drop(r, p, t);
--			info = calc_info(r, p, t);
--			err  = calc_err(r, p, t);
--			if (info > 0) {
--				i_str = "bulk-average";
--				info = (pps+drop) / info; /* calc avg bulk */
--			}
--			if (err > 0)
--				err_str = "drv-err";
--			if (pps > 0 || drop > 0)
--				printf(fmt1, "devmap-xmit",
--				       i, pps, drop, info, i_str, err_str);
--		}
--		pps = calc_pps(&rec->total, &prev->total, t);
--		drop = calc_drop(&rec->total, &prev->total, t);
--		info = calc_info(&rec->total, &prev->total, t);
--		err  = calc_err(&rec->total, &prev->total, t);
--		if (info > 0) {
--			i_str = "bulk-average";
--			info = (pps+drop) / info; /* calc avg bulk */
--		}
--		if (err > 0)
--			err_str = "drv-err";
--		printf(fmt2, "devmap-xmit", "total", pps, drop,
--		       info, i_str, err_str);
--	}
--
--	printf("\n");
--}
--
--static bool stats_collect(struct stats_record *rec)
--{
--	int fd;
--	int i;
--
--	/* TODO: Detect if someone unloaded the perf event_fd's, as
--	 * this can happen by someone running perf-record -e
--	 */
--
--	fd = bpf_map__fd(map_data[REDIRECT_ERR_CNT]);
--	for (i = 0; i < REDIR_RES_MAX; i++)
--		map_collect_record_u64(fd, i, &rec->xdp_redirect[i]);
--
--	fd = bpf_map__fd(map_data[EXCEPTION_CNT]);
--	for (i = 0; i < XDP_ACTION_MAX; i++) {
--		map_collect_record_u64(fd, i, &rec->xdp_exception[i]);
--	}
--
--	fd = bpf_map__fd(map_data[CPUMAP_ENQUEUE_CNT]);
--	for (i = 0; i < MAX_CPUS; i++)
--		map_collect_record(fd, i, &rec->xdp_cpumap_enqueue[i]);
--
--	fd = bpf_map__fd(map_data[CPUMAP_KTHREAD_CNT]);
--	map_collect_record(fd, 0, &rec->xdp_cpumap_kthread);
--
--	fd = bpf_map__fd(map_data[DEVMAP_XMIT_CNT]);
--	map_collect_record(fd, 0, &rec->xdp_devmap_xmit);
--
--	return true;
--}
--
--static void *alloc_rec_per_cpu(int record_size)
--{
--	unsigned int nr_cpus = bpf_num_possible_cpus();
--	void *array;
--
--	array = calloc(nr_cpus, record_size);
--	if (!array) {
--		fprintf(stderr, "Mem alloc error (nr_cpus:%u)\n", nr_cpus);
--		exit(EXIT_FAIL_MEM);
--	}
--	return array;
--}
--
--static struct stats_record *alloc_stats_record(void)
--{
--	struct stats_record *rec;
--	int rec_sz;
--	int i;
--
--	/* Alloc main stats_record structure */
--	rec = calloc(1, sizeof(*rec));
--	if (!rec) {
--		fprintf(stderr, "Mem alloc error\n");
--		exit(EXIT_FAIL_MEM);
--	}
--
--	/* Alloc stats stored per CPU for each record */
--	rec_sz = sizeof(struct u64rec);
--	for (i = 0; i < REDIR_RES_MAX; i++)
--		rec->xdp_redirect[i].cpu = alloc_rec_per_cpu(rec_sz);
--
--	for (i = 0; i < XDP_ACTION_MAX; i++)
--		rec->xdp_exception[i].cpu = alloc_rec_per_cpu(rec_sz);
--
--	rec_sz = sizeof(struct datarec);
--	rec->xdp_cpumap_kthread.cpu = alloc_rec_per_cpu(rec_sz);
--	rec->xdp_devmap_xmit.cpu    = alloc_rec_per_cpu(rec_sz);
--
--	for (i = 0; i < MAX_CPUS; i++)
--		rec->xdp_cpumap_enqueue[i].cpu = alloc_rec_per_cpu(rec_sz);
--
--	return rec;
--}
--
--static void free_stats_record(struct stats_record *r)
--{
--	int i;
--
--	for (i = 0; i < REDIR_RES_MAX; i++)
--		free(r->xdp_redirect[i].cpu);
--
--	for (i = 0; i < XDP_ACTION_MAX; i++)
--		free(r->xdp_exception[i].cpu);
--
--	free(r->xdp_cpumap_kthread.cpu);
--	free(r->xdp_devmap_xmit.cpu);
--
--	for (i = 0; i < MAX_CPUS; i++)
--		free(r->xdp_cpumap_enqueue[i].cpu);
--
--	free(r);
--}
--
--/* Pointer swap trick */
--static inline void swap(struct stats_record **a, struct stats_record **b)
--{
--	struct stats_record *tmp;
--
--	tmp = *a;
--	*a = *b;
--	*b = tmp;
--}
--
--static void stats_poll(int interval, bool err_only)
--{
--	struct stats_record *rec, *prev;
--
--	rec  = alloc_stats_record();
--	prev = alloc_stats_record();
--	stats_collect(rec);
--
--	if (err_only)
--		printf("\n%s\n", __doc_err_only__);
--
--	/* Trick to pretty printf with thousands separators use %' */
--	setlocale(LC_NUMERIC, "en_US");
--
--	/* Header */
--	if (verbose)
--		printf("\n%s", __doc__);
--
--	/* TODO Need more advanced stats on error types */
--	if (verbose) {
--		printf(" - Stats map0: %s\n", bpf_map__name(map_data[0]));
--		printf(" - Stats map1: %s\n", bpf_map__name(map_data[1]));
--		printf("\n");
--	}
--	fflush(stdout);
--
--	while (1) {
--		swap(&prev, &rec);
--		stats_collect(rec);
--		stats_print(rec, prev, err_only);
--		fflush(stdout);
--		sleep(interval);
--	}
--
--	free_stats_record(rec);
--	free_stats_record(prev);
--}
--
--static void print_bpf_prog_info(void)
--{
--	struct bpf_program *prog;
--	struct bpf_map *map;
--	int i = 0;
--
--	/* Prog info */
--	printf("Loaded BPF prog have %d bpf program(s)\n", tp_cnt);
--	bpf_object__for_each_program(prog, obj) {
--		printf(" - prog_fd[%d] = fd(%d)\n", i, bpf_program__fd(prog));
--		i++;
--	}
--
--	i = 0;
--	/* Maps info */
--	printf("Loaded BPF prog have %d map(s)\n", map_cnt);
--	bpf_object__for_each_map(map, obj) {
--		const char *name = bpf_map__name(map);
--		int fd		 = bpf_map__fd(map);
--
--		printf(" - map_data[%d] = fd(%d) name:%s\n", i, fd, name);
--		i++;
--	}
--
--	/* Event info */
--	printf("Searching for (max:%d) event file descriptor(s)\n", tp_cnt);
--	for (i = 0; i < tp_cnt; i++) {
--		int fd = bpf_link__fd(tp_links[i]);
--
--		if (fd != -1)
--			printf(" - event_fd[%d] = fd(%d)\n", i, fd);
--	}
--}
++};
  
  int main(int argc, char **argv)
  {
--	struct bpf_program *prog;
--	int longindex = 0, opt;
--	int ret = EXIT_FAILURE;
--	enum map_type type;
+-	struct bpf_prog_load_attr prog_load_attr = {
+-		.prog_type	= BPF_PROG_TYPE_UNSPEC,
+-	};
+-	struct bpf_program *prog, *dummy_prog, *devmap_prog;
+-	int prog_fd, dummy_prog_fd, devmap_prog_fd = 0;
+-	int tx_port_map_fd, tx_mac_map_fd;
+-	struct bpf_devmap_val devmap_val;
+-	struct bpf_prog_info info = {};
+-	__u32 info_len = sizeof(info);
+-	const char *optstr = "FSNX";
+-	struct bpf_object *obj;
+-	int ret, opt, key = 0;
 -	char filename[256];
 -
--	/* Default settings: */
+-	while ((opt = getopt(argc, argv, optstr)) != -1) {
++	struct bpf_devmap_val devmap_val = {};
++	bool xdp_devmap_attached = false;
++	struct xdp_redirect_map *skel;
++	char str[2 * IF_NAMESIZE + 1];
++	char ifname_out[IF_NAMESIZE];
++	struct bpf_map *tx_port_map;
++	char ifname_in[IF_NAMESIZE];
++	int ifindex_in, ifindex_out;
 +	unsigned long interval = 2;
 +	int ret = EXIT_FAIL_OPTION;
-+	struct xdp_monitor *skel;
- 	bool errors_only = true;
--	int interval = 2;
-+	int longindex = 0, opt;
++	struct bpf_program *prog;
++	bool generic = false;
++	bool force = false;
++	bool tried = false;
 +	bool error = true;
- 
- 	/* Parse commands line args */
--	while ((opt = getopt_long(argc, argv, "hDSs:",
-+	while ((opt = getopt_long(argc, argv, "si:vh",
- 				  long_options, &longindex)) != -1) {
++	int opt, key = 0;
++
++	while ((opt = getopt_long(argc, argv, "SFXi:vs",
++				  long_options, NULL)) != -1) {
  		switch (opt) {
--		case 'D':
--			debug = true;
+ 		case 'S':
+-			xdp_flags |= XDP_FLAGS_SKB_MODE;
 -			break;
--		case 'S':
-+		case 's':
- 			errors_only = false;
-+			mask |= SAMPLE_REDIRECT_CNT;
+-		case 'N':
+-			/* default, set below */
++			generic = true;
++			/* devmap_xmit tracepoint not available */
++			mask &= ~(SAMPLE_DEVMAP_XMIT_CNT |
++				  SAMPLE_DEVMAP_XMIT_CNT_MULTI);
  			break;
--		case 's':
--			interval = atoi(optarg);
+ 		case 'F':
+-			xdp_flags &= ~XDP_FLAGS_UPDATE_IF_NOEXIST;
++			force = true;
+ 			break;
+ 		case 'X':
+ 			xdp_devmap_attached = true;
+ 			break;
 +		case 'i':
 +			interval = strtoul(optarg, NULL, 0);
 +			break;
 +		case 'v':
 +			sample_switch_mode();
- 			break;
- 		case 'h':
++			break;
++		case 's':
++			mask |= SAMPLE_REDIRECT_MAP_CNT;
++			break;
++		case 'h':
 +			error = false;
  		default:
--			usage(argv);
+-			usage(basename(argv[0]));
+-			return 1;
 +			sample_usage(argv, long_options, __doc__, mask, error);
- 			return ret;
++			return ret;
  		}
  	}
  
+-	if (!(xdp_flags & XDP_FLAGS_SKB_MODE)) {
+-		xdp_flags |= XDP_FLAGS_DRV_MODE;
+-	} else if (xdp_devmap_attached) {
+-		printf("Load xdp program on egress with SKB mode not supported yet\n");
+-		return 1;
+-	}
+-
+ 	if (argc <= optind + 1) {
+-		usage(basename(argv[0]));
+-		return 1;
++		sample_usage(argv, long_options, __doc__, mask, true);
++		goto end;
+ 	}
+ 
+ 	ifindex_in = if_nametoindex(argv[optind]);
+@@ -182,107 +104,109 @@ int main(int argc, char **argv)
+ 	if (!ifindex_out)
+ 		ifindex_out = strtoul(argv[optind + 1], NULL, 0);
+ 
+-	printf("input: %d output: %d\n", ifindex_in, ifindex_out);
+-
 -	snprintf(filename, sizeof(filename), "%s_kern.o", argv[0]);
+-	prog_load_attr.file = filename;
 -
--	/* Remove tracepoint program when program is interrupted or killed */
--	signal(SIGINT, int_exit);
--	signal(SIGTERM, int_exit);
+-	if (bpf_prog_load_xattr(&prog_load_attr, &obj, &prog_fd))
+-		return 1;
 -
--	obj = bpf_object__open_file(filename, NULL);
--	if (libbpf_get_error(obj)) {
--		printf("ERROR: opening BPF object file failed\n");
--		obj = NULL;
--		goto cleanup;
-+	skel = xdp_monitor__open_and_load();
+-	if (xdp_flags & XDP_FLAGS_SKB_MODE) {
+-		prog = bpf_object__find_program_by_name(obj, "xdp_redirect_map_general");
+-		tx_port_map_fd = bpf_object__find_map_fd_by_name(obj, "tx_port_general");
+-	} else {
+-		prog = bpf_object__find_program_by_name(obj, "xdp_redirect_map_native");
+-		tx_port_map_fd = bpf_object__find_map_fd_by_name(obj, "tx_port_native");
+-	}
+-	dummy_prog = bpf_object__find_program_by_name(obj, "xdp_redirect_dummy_prog");
+-	if (!prog || dummy_prog < 0 || tx_port_map_fd < 0) {
+-		printf("finding prog/dummy_prog/tx_port_map in obj file failed\n");
+-		goto out;
+-	}
+-	prog_fd = bpf_program__fd(prog);
+-	dummy_prog_fd = bpf_program__fd(dummy_prog);
+-	if (prog_fd < 0 || dummy_prog_fd < 0 || tx_port_map_fd < 0) {
+-		printf("bpf_prog_load_xattr: %s\n", strerror(errno));
+-		return 1;
+-	}
+-
+-	tx_mac_map_fd = bpf_object__find_map_fd_by_name(obj, "tx_mac");
+-	rxcnt_map_fd = bpf_object__find_map_fd_by_name(obj, "rxcnt");
+-	if (tx_mac_map_fd < 0 || rxcnt_map_fd < 0) {
+-		printf("bpf_object__find_map_fd_by_name failed\n");
+-		return 1;
+-	}
+-
+-	if (bpf_set_link_xdp_fd(ifindex_in, prog_fd, xdp_flags) < 0) {
+-		printf("ERROR: link set xdp fd failed on %d\n", ifindex_in);
+-		return 1;
+-	}
+-
+-	ret = bpf_obj_get_info_by_fd(prog_fd, &info, &info_len);
+-	if (ret) {
+-		printf("can't get prog info - %s\n", strerror(errno));
+-		return ret;
+-	}
+-	prog_id = info.id;
+-
+-	/* Loading dummy XDP prog on out-device */
+-	if (bpf_set_link_xdp_fd(ifindex_out, dummy_prog_fd,
+-			    (xdp_flags | XDP_FLAGS_UPDATE_IF_NOEXIST)) < 0) {
+-		printf("WARN: link set xdp fd failed on %d\n", ifindex_out);
+-		ifindex_out_xdp_dummy_attached = false;
++	if (!ifindex_in || !ifindex_out) {
++		fprintf(stderr, "Bad interface index or name\n");
++		sample_usage(argv, long_options, __doc__, mask, true);
++		goto end;
+ 	}
+ 
+-	memset(&info, 0, sizeof(info));
+-	ret = bpf_obj_get_info_by_fd(dummy_prog_fd, &info, &info_len);
+-	if (ret) {
+-		printf("can't get prog info - %s\n", strerror(errno));
+-		return ret;
++	skel = xdp_redirect_map__open();
 +	if (!skel) {
-+		fprintf(stderr, "Failed to xdp_monitor__open_and_load: %s\n",
++		fprintf(stderr, "Failed to xdp_redirect_map__open: %s\n",
 +			strerror(errno));
 +		ret = EXIT_FAIL_BPF;
 +		goto end;
  	}
+-	dummy_prog_id = info.id;
  
--	/* load BPF program */
--	if (bpf_object__load(obj)) {
--		printf("ERROR: loading BPF object file failed\n");
--		goto cleanup;
+ 	/* Load 2nd xdp prog on egress. */
+ 	if (xdp_devmap_attached) {
+-		unsigned char mac_addr[6];
+-
+-		devmap_prog = bpf_object__find_program_by_name(obj, "xdp_redirect_map_egress");
+-		if (!devmap_prog) {
+-			printf("finding devmap_prog in obj file failed\n");
+-			goto out;
+-		}
+-		devmap_prog_fd = bpf_program__fd(devmap_prog);
+-		if (devmap_prog_fd < 0) {
+-			printf("finding devmap_prog fd failed\n");
+-			goto out;
+-		}
+-
+-		if (get_mac_addr(ifindex_out, mac_addr) < 0) {
+-			printf("get interface %d mac failed\n", ifindex_out);
+-			goto out;
++		ret = get_mac_addr(ifindex_out, skel->rodata->tx_mac_addr);
++		if (ret < 0) {
++			fprintf(stderr, "Failed to get interface %d mac address: %s\n",
++				ifindex_out, strerror(-ret));
++			ret = EXIT_FAIL;
++			goto end_destroy;
+ 		}
++	}
+ 
+-		ret = bpf_map_update_elem(tx_mac_map_fd, &key, mac_addr, 0);
+-		if (ret) {
+-			perror("bpf_update_elem tx_mac_map_fd");
+-			goto out;
++	skel->rodata->from_match[0] = ifindex_in;
++	skel->rodata->to_match[0] = ifindex_out;
++
++	ret = xdp_redirect_map__load(skel);
++	if (ret < 0) {
++		fprintf(stderr, "Failed to xdp_redirect_map__load: %s\n",
++			strerror(errno));
++		ret = EXIT_FAIL_BPF;
++		goto end_destroy;
++	}
++
 +	ret = sample_init(skel, mask);
 +	if (ret < 0) {
 +		fprintf(stderr, "Failed to initialize sample: %s\n", strerror(-ret));
-+		ret = EXIT_FAIL_BPF;
++		ret = EXIT_FAIL;
++		goto end_destroy;
++	}
++
++	prog = skel->progs.xdp_redirect_map_native;
++	tx_port_map = skel->maps.tx_port_native;
++restart:
++	if (sample_install_xdp(prog, ifindex_in, generic, force) < 0) {
++		/* First try with struct bpf_devmap_val as value for generic
++		 * mode, then fallback to sizeof(int) for older kernels.
++		 */
++		fprintf(stderr,
++			"Trying fallback to sizeof(int) as value_size for devmap in generic mode\n");
++		if (generic && !tried) {
++			prog = skel->progs.xdp_redirect_map_general;
++			tx_port_map = skel->maps.tx_port_general;
++			tried = true;
++			goto restart;
+ 		}
++		ret = EXIT_FAIL_XDP;
 +		goto end_destroy;
  	}
  
--	for (type = 0; type < NUM_MAP; type++) {
--		map_data[type] =
--			bpf_object__find_map_by_name(obj, map_type_strings[type]);
-+	if (errors_only)
-+		printf("%s", __doc_err_only__);
+-	signal(SIGINT, int_exit);
+-	signal(SIGTERM, int_exit);
++	/* Loading dummy XDP prog on out-device */
++	sample_install_xdp(skel->progs.xdp_redirect_dummy_prog, ifindex_out, generic, force);
  
--		if (libbpf_get_error(map_data[type])) {
--			printf("ERROR: finding a map in obj file failed\n");
--			goto cleanup;
--		}
--		map_cnt++;
+ 	devmap_val.ifindex = ifindex_out;
+-	devmap_val.bpf_prog.fd = devmap_prog_fd;
+-	ret = bpf_map_update_elem(tx_port_map_fd, &key, &devmap_val, 0);
+-	if (ret) {
+-		perror("bpf_update_elem");
+-		goto out;
+-	}
+-
+-	poll_stats(2, ifindex_out);
+-
+-out:
+-	return 0;
++	if (xdp_devmap_attached)
++		devmap_val.bpf_prog.fd = bpf_program__fd(skel->progs.xdp_redirect_map_egress);
++	ret = bpf_map_update_elem(bpf_map__fd(tx_port_map), &key, &devmap_val, 0);
++	if (ret < 0) {
++		fprintf(stderr, "Failed to update devmap value: %s\n",
++			strerror(errno));
++		ret = EXIT_FAIL_BPF;
++		goto end_destroy;
++	}
++
++	ret = EXIT_FAIL;
++	if (!if_indextoname(ifindex_in, ifname_in)) {
++		fprintf(stderr, "Failed to if_indextoname for %d: %s\n", ifindex_in,
++			strerror(errno));
++		goto end_destroy;
++	}
++
++	if (!if_indextoname(ifindex_out, ifname_out)) {
++		fprintf(stderr, "Failed to if_indextoname for %d: %s\n", ifindex_out,
++			strerror(errno));
++		goto end_destroy;
++	}
++
++	safe_strncpy(str, get_driver_name(ifindex_in), sizeof(str));
++	printf("Redirecting from %s (ifindex %d; driver %s) to %s (ifindex %d; driver %s)\n",
++	       ifname_in, ifindex_in, str, ifname_out, ifindex_out, get_driver_name(ifindex_out));
++	snprintf(str, sizeof(str), "%s->%s", ifname_in, ifname_out);
++
 +	ret = sample_run(interval, NULL, NULL);
 +	if (ret < 0) {
 +		fprintf(stderr, "Failed during sample run: %s\n", strerror(-ret));
 +		ret = EXIT_FAIL;
 +		goto end_destroy;
- 	}
--
--	bpf_object__for_each_program(prog, obj) {
--		tp_links[tp_cnt] = bpf_program__attach(prog);
--		if (libbpf_get_error(tp_links[tp_cnt])) {
--			printf("ERROR: bpf_program__attach failed\n");
--			tp_links[tp_cnt] = NULL;
--			goto cleanup;
--		}
--		tp_cnt++;
--	}
--
--	if (debug) {
--		print_bpf_prog_info();
--	}
--
--	/* Unload/stop tracepoint event by closing bpf_link's */
--	if (errors_only) {
--		/* The bpf_link[i] depend on the order of
--		 * the functions was defined in _kern.c
--		 */
--		bpf_link__destroy(tp_links[2]);	/* tracepoint/xdp/xdp_redirect */
--		tp_links[2] = NULL;
--
--		bpf_link__destroy(tp_links[3]);	/* tracepoint/xdp/xdp_redirect_map */
--		tp_links[3] = NULL;
--	}
--
--	stats_poll(interval, errors_only);
--
--	ret = EXIT_SUCCESS;
--
--cleanup:
--	/* Detach tracepoints */
--	while (tp_cnt)
--		bpf_link__destroy(tp_links[--tp_cnt]);
--
--	bpf_object__close(obj);
--	return ret;
++	}
 +	ret = EXIT_OK;
 +end_destroy:
-+	xdp_monitor__destroy(skel);
++	xdp_redirect_map__destroy(skel);
 +end:
 +	sample_exit(ret);
  }
