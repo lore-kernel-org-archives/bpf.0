@@ -2,100 +2,113 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.2 required=3.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CEC9CC432BE
-	for <bpf@archiver.kernel.org>; Wed, 28 Jul 2021 13:52:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AEF80C4320A
+	for <bpf@archiver.kernel.org>; Wed, 28 Jul 2021 13:53:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B01B760F45
-	for <bpf@archiver.kernel.org>; Wed, 28 Jul 2021 13:52:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 94D016101B
+	for <bpf@archiver.kernel.org>; Wed, 28 Jul 2021 13:53:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236285AbhG1NvW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 28 Jul 2021 09:51:22 -0400
-Received: from mga14.intel.com ([192.55.52.115]:65514 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236945AbhG1Ntv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 28 Jul 2021 09:49:51 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10058"; a="212391343"
-X-IronPort-AV: E=Sophos;i="5.84,276,1620716400"; 
-   d="scan'208";a="212391343"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2021 06:47:31 -0700
-X-IronPort-AV: E=Sophos;i="5.84,276,1620716400"; 
-   d="scan'208";a="517461662"
-Received: from unknown (HELO localhost.localdomain) ([10.102.102.63])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2021 06:47:26 -0700
-Date:   Wed, 28 Jul 2021 05:54:13 -0400
-From:   Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
-To:     Jesper Dangaard Brouer <brouer@redhat.com>
-Cc:     BPF-dev-list <bpf@vger.kernel.org>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
-        Magnus Karlsson <magnus.karlsson@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-        Saeed Mahameed <saeed@kernel.org>,
-        "kurt@linutronix.de" <kurt@linutronix.de>,
-        "Raczynski, Piotr" <piotr.raczynski@intel.com>,
-        "Zhang, Jessica" <jessica.zhang@intel.com>,
-        "Maloor, Kishen" <kishen.maloor@intel.com>,
-        "Gomes, Vinicius" <vinicius.gomes@intel.com>,
-        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
-        "Swiatkowski, Michal" <michal.swiatkowski@intel.com>,
-        "Plantykow, Marta A" <marta.a.plantykow@intel.com>,
-        "Desouza, Ederson" <ederson.desouza@intel.com>,
-        "Song, Yoong Siang" <yoong.siang.song@intel.com>,
-        "Czapnik, Lukasz" <lukasz.czapnik@intel.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        "Joseph, Jithu" <jithu.joseph@intel.com>,
-        William Tu <u9012063@gmail.com>,
-        Ong Boon Leong <boon.leong.ong@intel.com>
-Subject: XDP-hints: how to inform driver about hints
-Message-ID: <YQEpRRxxf0R4Znd3@localhost.localdomain>
-References: <20210526125848.1c7adbb0@carbon>
+        id S237526AbhG1NxF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 28 Jul 2021 09:53:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58492 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236889AbhG1NwE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 28 Jul 2021 09:52:04 -0400
+X-Greylist: delayed 145 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 28 Jul 2021 06:52:02 PDT
+Received: from gmmr3.centrum.cz (gmmr3.centrum.cz [IPv6:2a00:da80:0:502::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 461B4C061764;
+        Wed, 28 Jul 2021 06:52:02 -0700 (PDT)
+Received: from gmmr-2.centrum.cz (unknown [10.255.254.15])
+        by gmmr3.centrum.cz (Postfix) with ESMTP id 527B718007FA5;
+        Wed, 28 Jul 2021 15:49:35 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=atlas.cz; s=mail;
+        t=1627480175; bh=btdGKWwqdzolFUEYa7m2BSrGTcmJuco6D2JUC+cfccY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eTjGvc+8YQyWse+4rXP0H3odllxS9gF81n8nQGrQ1RMtQfMkxKILQ+bNpDMjtWhnm
+         wKAidtGPjheHzecYALPBCJSw+8Pl4dhSk1H27maQO6djIgtCsqJruQxYUXO7rlkW8m
+         uBEJuao9LEfXF8nnLVwUNI/FqZrqLWkJT2idkmYU=
+Received: from vm2.excello.cz (vm2.excello.cz [212.24.139.173])
+        by gmmr-2.centrum.cz (Postfix) with QMQP
+        id 5029F77DE; Wed, 28 Jul 2021 15:49:35 +0200 (CEST)
+Received: from vm2.excello.cz by vm2.excello.cz
+ (VF-Scanner: Clear:RC:0(2a00:da80:1:502::8):SC:0(-20.5/5.0):CC:0:;
+ processed in 0.3 s); 28 Jul 2021 13:49:35 +0000
+X-VF-Scanner-ID: 20210728134935.001014.21804.vm2.excello.cz.0
+Received: from gmmr-4.centrum.cz (2a00:da80:1:502::8)
+  by out1.virusfree.cz with ESMTPS (TLSv1.3, TLS_AES_256_GCM_SHA384); 28 Jul 2021 15:49:34 +0200
+Received: from gm-smtp10.centrum.cz (unknown [10.255.254.32])
+        by gmmr-4.centrum.cz (Postfix) with ESMTP id EC69A20056064;
+        Wed, 28 Jul 2021 15:49:34 +0200 (CEST)
+Received: from arkam (unknown [94.113.86.190])
+        by gm-smtp10.centrum.cz (Postfix) with ESMTPA id 815C4C063A35;
+        Wed, 28 Jul 2021 15:49:34 +0200 (CEST)
+Date:   Wed, 28 Jul 2021 15:49:33 +0200
+From:   Petr =?utf-8?B?VmFuxJtr?= <arkamar@atlas.cz>
+To:     Pavo Banicevic <pavo.banicevic@sartura.hr>
+Cc:     linux@armlinux.org.uk, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, nathan@kernel.org,
+        ndesaulniers@google.com, ivan.khoronzhuk@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        clang-built-linux@googlegroups.com, matt.redfearn@mips.com,
+        mingo@kernel.org, dvlasenk@redhat.com, juraj.vijtiuk@sartura.hr,
+        robert.marko@sartura.hr, luka.perkov@sartura.hr,
+        jakov.petrina@sartura.hr
+Subject: Re: [PATCH 3/3] include/uapi/linux/swab: Fix potentially missing
+ __always_inline
+Message-ID: <YQFgbRXKIeZ7H6mo@arkam>
+References: <20210727141119.19812-1-pavo.banicevic@sartura.hr>
+ <20210727141119.19812-4-pavo.banicevic@sartura.hr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210526125848.1c7adbb0@carbon>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210727141119.19812-4-pavo.banicevic@sartura.hr>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi
+On Tue, Jul 27, 2021 at 04:11:19PM +0200, Pavo Banicevic wrote:
+> From: Matt Redfearn <matt.redfearn@mips.com>
+> 
+> Commit bc27fb68aaad ("include/uapi/linux/byteorder, swab: force inlining
+> of some byteswap operations") added __always_inline to swab functions
+> and commit 283d75737837 ("uapi/linux/stddef.h: Provide __always_inline to
+> userspace headers") added a definition of __always_inline for use in
+> exported headers when the kernel's compiler.h is not available.
+> 
+> However, since swab.h does not include stddef.h, if the header soup does
+> not indirectly include it, the definition of __always_inline is missing,
+> resulting in a compilation failure, which was observed compiling the
+> perf tool using exported headers containing this commit:
+> 
+> In file included from /usr/include/linux/byteorder/little_endian.h:12:0,
+>                  from /usr/include/asm/byteorder.h:14,
+>                  from tools/include/uapi/linux/perf_event.h:20,
+>                  from perf.h:8,
+>                  from builtin-bench.c:18:
+> /usr/include/linux/swab.h:160:8: error: unknown type name `__always_inline'
+>  static __always_inline __u16 __swab16p(const __u16 *p)
+> 
+> Fix this by replacing the inclusion of linux/compiler.h with
+> linux/stddef.h to ensure that we pick up that definition if required,
+> without relying on it's indirect inclusion. compiler.h is then included
+> indirectly, via stddef.h.
+> 
+> Fixes: 283d75737837 ("uapi/linux/stddef.h: Provide __always_inline to userspace headers")
+> 
+> Signed-off-by: Matt Redfearn <matt.redfearn@mips.com>
+> ---
 
-I have just stareted working on generic hints implementation that was
-discussed on netdev workshop. I wondering how we should tell driver that
-hints is supported on XDP program.
+I use this patch in order to fix __always_inline issue for kernels
+5.12+, see https://lore.kernel.org/lkml/YPGXXt6Z3O1W0AYS@arkam/ .
+I believe this is the correct solution.
 
-I prepared 3 implementation of this approach. In 1 and 3 solution I
-wanted to automatically search for hints usage in XDP program, but it
-doesn't look good because of comparing lines of XDP program in libbpf
-(3) or in bpf core (1).
-
-For me solution 2 with reusing XDP flags looks good, but I don't
-know if XDP flags can be used for storing information about hints.
-What do you guys think about that?
-
-Please take a look at code samples:
-
-(1)
-https://github.com/alobakin/linux/commit/a4f32ba74e5d3eefe607789547e9d5529ed775b0
-don't know how to send flag to driver. Searching for metadata happens
-in load program path, but communication with driver
-(by ndo_bpf call happens in creating link)
-
-(2)
-https://github.com/alobakin/linux/commit/72a5d930bea330f5f4827fdf098b723f96acff0c
-simplest solution. Add another flag, everything are there, driver will
-check this flag in ndo_bpf
-
-(3)
-https://github.com/alobakin/linux/commit/92de1e0e3523317c5749f3c87173dc90b1e8011b
-I haven't tested it yet. I think it is doable to do this search in creating
-link path, but only when user uses syscall instead of netlink API
-(I am pretty sure that this is used in auto generated code by libbpf).
-If we will decide that this solution can be correct I will write a suitable
-sample and chec if this works
+Reviewed-by: Petr Vaněk <arkamar@atlas.cz>
