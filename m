@@ -7,54 +7,54 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39F3EC432BE
-	for <bpf@archiver.kernel.org>; Wed, 28 Jul 2021 17:05:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 06FA5C43214
+	for <bpf@archiver.kernel.org>; Wed, 28 Jul 2021 17:05:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 27D0060FED
+	by mail.kernel.org (Postfix) with ESMTP id D527E61038
 	for <bpf@archiver.kernel.org>; Wed, 28 Jul 2021 17:05:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231259AbhG1RFq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 28 Jul 2021 13:05:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47554 "EHLO
+        id S230431AbhG1RFr (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 28 Jul 2021 13:05:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230469AbhG1RFk (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 28 Jul 2021 13:05:40 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ED66C0613D3
-        for <bpf@vger.kernel.org>; Wed, 28 Jul 2021 10:05:37 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id f13so4147736edq.13
-        for <bpf@vger.kernel.org>; Wed, 28 Jul 2021 10:05:37 -0700 (PDT)
+        with ESMTP id S230493AbhG1RFp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 28 Jul 2021 13:05:45 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 045EBC0617A4
+        for <bpf@vger.kernel.org>; Wed, 28 Jul 2021 10:05:42 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id r16so4192913edt.7
+        for <bpf@vger.kernel.org>; Wed, 28 Jul 2021 10:05:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=anyfinetworks-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=IxySBhmvimi4ZKs2eujmLdd7HTtzSlS7O6wcYvbvLCE=;
-        b=n2YSbg6qGoYEIaxxb71PgaB/RzkW2abc35KbLZe0e83sUYyEPo5Kq85f1iszYJh2pS
-         nM79vFlmSozKc2kXuegtqtE1YEqZN4bDL5sbyyZ/IAZp45/j1slnwhaOaLP38rdogc3H
-         mejVkMgSTUC6CRG+TbsUaKd3JfXCEHEON4wyZbGLWxEVk2CHAFVDvJcamUyUWoiQzZXP
-         +j0IE6yMKnaKzmbF4X6xs0RWwmrZvsld+pMzokDrVLev6SGJqVxeNM8dQQDZAED0VZo+
-         y3ATMLnIBNwLBm3dHqdkw7MjUmbPpT3/VMOmaxAmmBQKxaSmvyAYrHgQvNCe+LUevsqg
-         wqLA==
+        bh=RRL0VLp6qutZXrZd4cRKeYTVqt51qEo+4j74ZFYX/gc=;
+        b=KRfqerB4VTDxxbA3y6UzEebVUH0ALRUnLBb3IjTdzlb2dtDlof8ZjWQUf7+xVeZDOP
+         TtaWQ+fntm89vMX06hrbgCd0IcGVvDItsvRthw8CxsAjQWmp0IKG3YH9rbTyMiYuoMN4
+         o9a655OWi10lrM2U1wdtz9EgSH6ddQvwa40jvo59XqtkL0L8ElFqip1aowa4Cdk5ZSmk
+         qohiTk2mka5LOo/rz0zXHAyxiabNqx7Srxr9DhI/JChErvpDIoFH4Kz5UT5taK3s16ZH
+         bURl9a9Ps22Whw4c0u87lZ0jakDZOm82veT8hizsJUAg9pZ8+NOJPTFs/4k6V1UAkAID
+         tK5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=IxySBhmvimi4ZKs2eujmLdd7HTtzSlS7O6wcYvbvLCE=;
-        b=pc0rZLSpq+5XkE6NwwArpsuO5GGkyn+7QWSdVSbUtAsp7tcT17aa+g01I74VUsjUFT
-         wmOn/J4ennWPRtq1xLobvSlriXMRgPrZXSlO5g/apI91CgH1XbxN4888wgI3jjdj4/9Z
-         dxrvzluC68cNyKx6zQ4/ByKPUSIVPEcxH4pwdDJ5QxXlUa16cQKSJBxg5AkSDBUrS8e7
-         nQB9nwwDgdpCQMTNc/dV4Hzct2ubmZG9qjgYAUXqRTvM3EkM2R4iMp1i+X+dO9gJ8U0b
-         VZ11+xl3GfrPpfJGPYWZMjoZdZ+MV3i9XCmwd1Xvyh6tQlTpI6UES0cRX4os8Ih0HyMd
-         tehw==
-X-Gm-Message-State: AOAM531NPdLDEFYiDPik3xah/otr6B93+YwwLmmZ1rregX8StxGpz/JC
-        aqqQXwpfH1PemavY8ooIENKvDg==
-X-Google-Smtp-Source: ABdhPJyPynATMhopF/SueiSrsW9YsQCEpPM++w6Vbi1wFmBLB+HBoSYhFYeMfP9tnzgSevyVlPTa/w==
-X-Received: by 2002:a05:6402:7c9:: with SMTP id u9mr949994edy.387.1627491936074;
-        Wed, 28 Jul 2021 10:05:36 -0700 (PDT)
+        bh=RRL0VLp6qutZXrZd4cRKeYTVqt51qEo+4j74ZFYX/gc=;
+        b=ILechpwqGHVAxL9XDQsSixtH+0qEsFTNEedu3p+PIT981OqH9FcGo1kWf1N59Lkvs2
+         wLLr2pZAbvqSM4CE/Tc+4kw9WEjHotY+MryLcut2Qvu724LErsnx6vD6IeFrWxEisI55
+         lSZgT7TwMWQtJ7VTB+ew/9mTNYuZbQqd6AFUTcNUDMhZ2RLUAW8ypaUyDwq0kFv1ektA
+         u8LONzjovNe/MXTNwN6XwjtpGhPaxRMG2UXEF9KPWh4qVvtW2qcCX3Z5yBZtkqHfYdb7
+         LE9kmMmk4cjDmSuW+D6KLXw3FSDbA+kFiFRagdVJ//aQWcX8m+43Ukve7JPschUutyaH
+         Cmpw==
+X-Gm-Message-State: AOAM533/YIMn9t6nA6YfllUBkRACUUDBR1chWTh9KS+j0MXD/yVT8SqW
+        L/1pQLL5avjqhrctlmjkJidgSg==
+X-Google-Smtp-Source: ABdhPJzEl6xuRN5mlrhZ5qK3Q+xJly8EfAb/H8Lwegn+sSFyypw9tAcur2O0cxMRQw+fZWuUoEEVpw==
+X-Received: by 2002:a50:fe10:: with SMTP id f16mr965092edt.85.1627491940668;
+        Wed, 28 Jul 2021 10:05:40 -0700 (PDT)
 Received: from anpc2.lan (static-213-115-136-2.sme.telenor.se. [213.115.136.2])
-        by smtp.gmail.com with ESMTPSA id bd24sm139349edb.56.2021.07.28.10.05.34
+        by smtp.gmail.com with ESMTPSA id bd24sm139349edb.56.2021.07.28.10.05.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jul 2021 10:05:35 -0700 (PDT)
+        Wed, 28 Jul 2021 10:05:40 -0700 (PDT)
 From:   Johan Almbladh <johan.almbladh@anyfinetworks.com>
 To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
 Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
@@ -62,9 +62,9 @@ Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
         Tony.Ambardar@gmail.com, netdev@vger.kernel.org,
         bpf@vger.kernel.org,
         Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Subject: [PATCH 06/14] bpf/tests: Add more BPF_LSH/RSH/ARSH tests for ALU64
-Date:   Wed, 28 Jul 2021 19:04:54 +0200
-Message-Id: <20210728170502.351010-7-johan.almbladh@anyfinetworks.com>
+Subject: [PATCH 10/14] bpf/tests: Add branch conversion JIT test
+Date:   Wed, 28 Jul 2021 19:04:58 +0200
+Message-Id: <20210728170502.351010-11-johan.almbladh@anyfinetworks.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210728170502.351010-1-johan.almbladh@anyfinetworks.com>
 References: <20210728170502.351010-1-johan.almbladh@anyfinetworks.com>
@@ -74,620 +74,72 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch adds a number of tests for BPF_LSH, BPF_RSH amd BPF_ARSH
-ALU64 operations with values that may trigger different JIT code paths.
-Mainly testing 32-bit JITs that implement ALU64 operations with two
-32-bit CPU registers per operand.
+Some JITs may need to convert a conditional jump instruction to
+to short PC-relative branch and a long unconditional jump, if the
+PC-relative offset exceeds offset field width in the CPU instruction.
+This test triggers such branch conversion on the 32-bit MIPS JIT.
 
 Signed-off-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
 ---
- lib/test_bpf.c | 544 ++++++++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 542 insertions(+), 2 deletions(-)
+ lib/test_bpf.c | 38 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
 diff --git a/lib/test_bpf.c b/lib/test_bpf.c
-index ef75dbf53ec2..b930fa35b9ef 100644
+index 8b94902702ed..55914b6236aa 100644
 --- a/lib/test_bpf.c
 +++ b/lib/test_bpf.c
-@@ -4139,6 +4139,106 @@ static struct bpf_test tests[] = {
- 		{ },
- 		{ { 0, 0x80000000 } },
- 	},
-+	{
-+		"ALU64_LSH_X: Shift < 32, low word",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x0123456789abcdefLL),
-+			BPF_ALU32_IMM(BPF_MOV, R1, 12),
-+			BPF_ALU64_REG(BPF_LSH, R0, R1),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 0xbcdef000 } }
-+	},
-+	{
-+		"ALU64_LSH_X: Shift < 32, high word",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x0123456789abcdefLL),
-+			BPF_ALU32_IMM(BPF_MOV, R1, 12),
-+			BPF_ALU64_REG(BPF_LSH, R0, R1),
-+			BPF_ALU64_IMM(BPF_RSH, R0, 32),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 0x3456789a } }
-+	},
-+	{
-+		"ALU64_LSH_X: Shift > 32, low word",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x0123456789abcdefLL),
-+			BPF_ALU32_IMM(BPF_MOV, R1, 36),
-+			BPF_ALU64_REG(BPF_LSH, R0, R1),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 0 } }
-+	},
-+	{
-+		"ALU64_LSH_X: Shift > 32, high word",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x0123456789abcdefLL),
-+			BPF_ALU32_IMM(BPF_MOV, R1, 36),
-+			BPF_ALU64_REG(BPF_LSH, R0, R1),
-+			BPF_ALU64_IMM(BPF_RSH, R0, 32),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 0x9abcdef0 } }
-+	},
-+	{
-+		"ALU64_LSH_X: Shift == 32, low word",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x0123456789abcdefLL),
-+			BPF_ALU32_IMM(BPF_MOV, R1, 32),
-+			BPF_ALU64_REG(BPF_LSH, R0, R1),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 0 } }
-+	},
-+	{
-+		"ALU64_LSH_X: Shift == 32, high word",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x0123456789abcdefLL),
-+			BPF_ALU32_IMM(BPF_MOV, R1, 32),
-+			BPF_ALU64_REG(BPF_LSH, R0, R1),
-+			BPF_ALU64_IMM(BPF_RSH, R0, 32),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 0x89abcdef } }
-+	},
-+	{
-+		"ALU64_LSH_X: Zero shift, low word",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x0123456789abcdefLL),
-+			BPF_ALU32_IMM(BPF_MOV, R1, 0),
-+			BPF_ALU64_REG(BPF_LSH, R0, R1),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 0x89abcdef } }
-+	},
-+	{
-+		"ALU64_LSH_X: Zero shift, high word",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x0123456789abcdefLL),
-+			BPF_ALU32_IMM(BPF_MOV, R1, 0),
-+			BPF_ALU64_REG(BPF_LSH, R0, R1),
-+			BPF_ALU64_IMM(BPF_RSH, R0, 32),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 0x01234567 } }
-+	},
- 	/* BPF_ALU | BPF_LSH | BPF_K */
+@@ -461,6 +461,36 @@ static int bpf_fill_stxdw(struct bpf_test *self)
+ 	return __bpf_fill_stxdw(self, BPF_DW);
+ }
+ 
++static int bpf_fill_long_jmp(struct bpf_test *self)
++{
++	unsigned int len = BPF_MAXINSNS;
++	struct bpf_insn *insn;
++	int i;
++
++	insn = kmalloc_array(len, sizeof(*insn), GFP_KERNEL);
++	if (!insn)
++		return -ENOMEM;
++
++	insn[0] = BPF_ALU64_IMM(BPF_MOV, R0, 1);
++	insn[1] = BPF_JMP_IMM(BPF_JEQ, R0, 1, len - 2 - 1);
++
++	/*
++	 * Fill with a complex 64-bit operation that expands to a lot of
++	 * instructions on 32-bit JITs. The large jump offset can then
++	 * overflow the conditional branch field size, triggering a branch
++	 * conversion mechanism in some JITs.
++	 */
++	for (i = 2; i < len - 1; i++)
++		insn[i] = BPF_ALU64_IMM(BPF_MUL, R0, (i << 16) + i);
++
++	insn[len - 1] = BPF_EXIT_INSN();
++
++	self->u.ptr.insns = insn;
++	self->u.ptr.len = len;
++
++	return 0;
++}
++
+ static struct bpf_test tests[] = {
  	{
- 		"ALU_LSH_K: 1 << 1 = 2",
-@@ -4206,6 +4306,86 @@ static struct bpf_test tests[] = {
- 		{ },
- 		{ { 0, 0x80000000 } },
- 	},
-+	{
-+		"ALU64_LSH_K: Shift < 32, low word",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x0123456789abcdefLL),
-+			BPF_ALU64_IMM(BPF_LSH, R0, 12),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 0xbcdef000 } }
-+	},
-+	{
-+		"ALU64_LSH_K: Shift < 32, high word",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x0123456789abcdefLL),
-+			BPF_ALU64_IMM(BPF_LSH, R0, 12),
-+			BPF_ALU64_IMM(BPF_RSH, R0, 32),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 0x3456789a } }
-+	},
-+	{
-+		"ALU64_LSH_K: Shift > 32, low word",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x0123456789abcdefLL),
-+			BPF_ALU64_IMM(BPF_LSH, R0, 36),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 0 } }
-+	},
-+	{
-+		"ALU64_LSH_K: Shift > 32, high word",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x0123456789abcdefLL),
-+			BPF_ALU64_IMM(BPF_LSH, R0, 36),
-+			BPF_ALU64_IMM(BPF_RSH, R0, 32),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 0x9abcdef0 } }
-+	},
-+	{
-+		"ALU64_LSH_K: Shift == 32, low word",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x0123456789abcdefLL),
-+			BPF_ALU64_IMM(BPF_LSH, R0, 32),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 0 } }
-+	},
-+	{
-+		"ALU64_LSH_K: Shift == 32, high word",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x0123456789abcdefLL),
-+			BPF_ALU64_IMM(BPF_LSH, R0, 32),
-+			BPF_ALU64_IMM(BPF_RSH, R0, 32),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 0x89abcdef } }
-+	},
-+	{
-+		"ALU64_LSH_K: Zero shift",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x0123456789abcdefLL),
-+			BPF_ALU64_IMM(BPF_LSH, R0, 0),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 0x89abcdef } }
-+	},
- 	/* BPF_ALU | BPF_RSH | BPF_X */
- 	{
- 		"ALU_RSH_X: 2 >> 1 = 1",
-@@ -4267,6 +4447,106 @@ static struct bpf_test tests[] = {
+ 		"TAX",
+@@ -6892,6 +6922,14 @@ static struct bpf_test tests[] = {
  		{ },
  		{ { 0, 1 } },
  	},
-+	{
-+		"ALU64_RSH_X: Shift < 32, low word",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x8123456789abcdefLL),
-+			BPF_ALU32_IMM(BPF_MOV, R1, 12),
-+			BPF_ALU64_REG(BPF_RSH, R0, R1),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
++	{	/* Mainly checking JIT here. */
++		"BPF_MAXINSNS: Very long conditional jump",
 +		{ },
-+		{ { 0, 0x56789abc } }
-+	},
-+	{
-+		"ALU64_RSH_X: Shift < 32, high word",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x8123456789abcdefLL),
-+			BPF_ALU32_IMM(BPF_MOV, R1, 12),
-+			BPF_ALU64_REG(BPF_RSH, R0, R1),
-+			BPF_ALU64_IMM(BPF_RSH, R0, 32),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
++		INTERNAL | FLAG_NO_DATA,
 +		{ },
-+		{ { 0, 0x00081234 } }
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_long_jmp,
 +	},
-+	{
-+		"ALU64_RSH_X: Shift > 32, low word",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x8123456789abcdefLL),
-+			BPF_ALU32_IMM(BPF_MOV, R1, 36),
-+			BPF_ALU64_REG(BPF_RSH, R0, R1),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 0x08123456 } }
-+	},
-+	{
-+		"ALU64_RSH_X: Shift > 32, high word",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x8123456789abcdefLL),
-+			BPF_ALU32_IMM(BPF_MOV, R1, 36),
-+			BPF_ALU64_REG(BPF_RSH, R0, R1),
-+			BPF_ALU64_IMM(BPF_RSH, R0, 32),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 0 } }
-+	},
-+	{
-+		"ALU64_RSH_X: Shift == 32, low word",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x8123456789abcdefLL),
-+			BPF_ALU32_IMM(BPF_MOV, R1, 32),
-+			BPF_ALU64_REG(BPF_RSH, R0, R1),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 0x81234567 } }
-+	},
-+	{
-+		"ALU64_RSH_X: Shift == 32, high word",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x8123456789abcdefLL),
-+			BPF_ALU32_IMM(BPF_MOV, R1, 32),
-+			BPF_ALU64_REG(BPF_RSH, R0, R1),
-+			BPF_ALU64_IMM(BPF_RSH, R0, 32),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 0 } }
-+	},
-+	{
-+		"ALU64_RSH_X: Zero shift, low word",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x8123456789abcdefLL),
-+			BPF_ALU32_IMM(BPF_MOV, R1, 0),
-+			BPF_ALU64_REG(BPF_RSH, R0, R1),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 0x89abcdef } }
-+	},
-+	{
-+		"ALU64_RSH_X: Zero shift, high word",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x8123456789abcdefLL),
-+			BPF_ALU32_IMM(BPF_MOV, R1, 0),
-+			BPF_ALU64_REG(BPF_RSH, R0, R1),
-+			BPF_ALU64_IMM(BPF_RSH, R0, 32),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 0x81234567 } }
-+	},
- 	/* BPF_ALU | BPF_RSH | BPF_K */
  	{
- 		"ALU_RSH_K: 2 >> 1 = 1",
-@@ -4334,6 +4614,86 @@ static struct bpf_test tests[] = {
+ 		"JMP_JA: Jump, gap, jump, ...",
  		{ },
- 		{ { 0, 1 } },
- 	},
-+	{
-+		"ALU64_RSH_K: Shift < 32, low word",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x8123456789abcdefLL),
-+			BPF_ALU64_IMM(BPF_RSH, R0, 12),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 0x56789abc } }
-+	},
-+	{
-+		"ALU64_RSH_K: Shift < 32, high word",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x8123456789abcdefLL),
-+			BPF_ALU64_IMM(BPF_RSH, R0, 12),
-+			BPF_ALU64_IMM(BPF_RSH, R0, 32),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 0x00081234 } }
-+	},
-+	{
-+		"ALU64_RSH_K: Shift > 32, low word",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x8123456789abcdefLL),
-+			BPF_ALU64_IMM(BPF_RSH, R0, 36),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 0x08123456 } }
-+	},
-+	{
-+		"ALU64_RSH_K: Shift > 32, high word",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x8123456789abcdefLL),
-+			BPF_ALU64_IMM(BPF_RSH, R0, 36),
-+			BPF_ALU64_IMM(BPF_RSH, R0, 32),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 0 } }
-+	},
-+	{
-+		"ALU64_RSH_K: Shift == 32, low word",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x8123456789abcdefLL),
-+			BPF_ALU64_IMM(BPF_RSH, R0, 32),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 0x81234567 } }
-+	},
-+	{
-+		"ALU64_RSH_K: Shift == 32, high word",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x8123456789abcdefLL),
-+			BPF_ALU64_IMM(BPF_RSH, R0, 32),
-+			BPF_ALU64_IMM(BPF_RSH, R0, 32),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 0 } }
-+	},
-+	{
-+		"ALU64_RSH_K: Zero shift",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x0123456789abcdefLL),
-+			BPF_ALU64_IMM(BPF_RSH, R0, 0),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 0x89abcdef } }
-+	},
- 	/* BPF_ALU | BPF_ARSH | BPF_X */
- 	{
- 		"ALU32_ARSH_X: -1234 >> 7 = -10",
-@@ -4348,7 +4708,7 @@ static struct bpf_test tests[] = {
- 		{ { 0, -10 } }
- 	},
- 	{
--		"ALU_ARSH_X: 0xff00ff0000000000 >> 40 = 0xffffffffffff00ff",
-+		"ALU64_ARSH_X: 0xff00ff0000000000 >> 40 = 0xffffffffffff00ff",
- 		.u.insns_int = {
- 			BPF_LD_IMM64(R0, 0xff00ff0000000000LL),
- 			BPF_ALU32_IMM(BPF_MOV, R1, 40),
-@@ -4359,6 +4719,106 @@ static struct bpf_test tests[] = {
- 		{ },
- 		{ { 0, 0xffff00ff } },
- 	},
-+	{
-+		"ALU64_ARSH_X: Shift < 32, low word",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x8123456789abcdefLL),
-+			BPF_ALU32_IMM(BPF_MOV, R1, 12),
-+			BPF_ALU64_REG(BPF_ARSH, R0, R1),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 0x56789abc } }
-+	},
-+	{
-+		"ALU64_ARSH_X: Shift < 32, high word",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x8123456789abcdefLL),
-+			BPF_ALU32_IMM(BPF_MOV, R1, 12),
-+			BPF_ALU64_REG(BPF_ARSH, R0, R1),
-+			BPF_ALU64_IMM(BPF_RSH, R0, 32),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 0xfff81234 } }
-+	},
-+	{
-+		"ALU64_ARSH_X: Shift > 32, low word",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x8123456789abcdefLL),
-+			BPF_ALU32_IMM(BPF_MOV, R1, 36),
-+			BPF_ALU64_REG(BPF_ARSH, R0, R1),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 0xf8123456 } }
-+	},
-+	{
-+		"ALU64_ARSH_X: Shift > 32, high word",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x8123456789abcdefLL),
-+			BPF_ALU32_IMM(BPF_MOV, R1, 36),
-+			BPF_ALU64_REG(BPF_ARSH, R0, R1),
-+			BPF_ALU64_IMM(BPF_RSH, R0, 32),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, -1 } }
-+	},
-+	{
-+		"ALU64_ARSH_X: Shift == 32, low word",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x8123456789abcdefLL),
-+			BPF_ALU32_IMM(BPF_MOV, R1, 32),
-+			BPF_ALU64_REG(BPF_ARSH, R0, R1),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 0x81234567 } }
-+	},
-+	{
-+		"ALU64_ARSH_X: Shift == 32, high word",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x8123456789abcdefLL),
-+			BPF_ALU32_IMM(BPF_MOV, R1, 32),
-+			BPF_ALU64_REG(BPF_ARSH, R0, R1),
-+			BPF_ALU64_IMM(BPF_RSH, R0, 32),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, -1 } }
-+	},
-+	{
-+		"ALU64_ARSH_X: Zero shift, low word",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x8123456789abcdefLL),
-+			BPF_ALU32_IMM(BPF_MOV, R1, 0),
-+			BPF_ALU64_REG(BPF_ARSH, R0, R1),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 0x89abcdef } }
-+	},
-+	{
-+		"ALU64_ARSH_X: Zero shift, high word",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x8123456789abcdefLL),
-+			BPF_ALU32_IMM(BPF_MOV, R1, 0),
-+			BPF_ALU64_REG(BPF_ARSH, R0, R1),
-+			BPF_ALU64_IMM(BPF_RSH, R0, 32),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 0x81234567 } }
-+	},
- 	/* BPF_ALU | BPF_ARSH | BPF_K */
- 	{
- 		"ALU32_ARSH_K: -1234 >> 7 = -10",
-@@ -4383,7 +4843,7 @@ static struct bpf_test tests[] = {
- 		{ { 0, -1234 } }
- 	},
- 	{
--		"ALU_ARSH_K: 0xff00ff0000000000 >> 40 = 0xffffffffffff00ff",
-+		"ALU64_ARSH_K: 0xff00ff0000000000 >> 40 = 0xffffffffffff00ff",
- 		.u.insns_int = {
- 			BPF_LD_IMM64(R0, 0xff00ff0000000000LL),
- 			BPF_ALU64_IMM(BPF_ARSH, R0, 40),
-@@ -4393,6 +4853,86 @@ static struct bpf_test tests[] = {
- 		{ },
- 		{ { 0, 0xffff00ff } },
- 	},
-+	{
-+		"ALU64_ARSH_K: Shift < 32, low word",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x8123456789abcdefLL),
-+			BPF_ALU64_IMM(BPF_RSH, R0, 12),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 0x56789abc } }
-+	},
-+	{
-+		"ALU64_ARSH_K: Shift < 32, high word",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x8123456789abcdefLL),
-+			BPF_ALU64_IMM(BPF_ARSH, R0, 12),
-+			BPF_ALU64_IMM(BPF_RSH, R0, 32),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 0xfff81234 } }
-+	},
-+	{
-+		"ALU64_ARSH_K: Shift > 32, low word",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x8123456789abcdefLL),
-+			BPF_ALU64_IMM(BPF_ARSH, R0, 36),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 0xf8123456 } }
-+	},
-+	{
-+		"ALU64_ARSH_K: Shift > 32, high word",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0xf123456789abcdefLL),
-+			BPF_ALU64_IMM(BPF_ARSH, R0, 36),
-+			BPF_ALU64_IMM(BPF_RSH, R0, 32),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, -1 } }
-+	},
-+	{
-+		"ALU64_ARSH_K: Shift == 32, low word",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x8123456789abcdefLL),
-+			BPF_ALU64_IMM(BPF_ARSH, R0, 32),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 0x81234567 } }
-+	},
-+	{
-+		"ALU64_ARSH_K: Shift == 32, high word",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x8123456789abcdefLL),
-+			BPF_ALU64_IMM(BPF_ARSH, R0, 32),
-+			BPF_ALU64_IMM(BPF_RSH, R0, 32),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, -1 } }
-+	},
-+	{
-+		"ALU64_ARSH_K: Zero shoft",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x8123456789abcdefLL),
-+			BPF_ALU64_IMM(BPF_ARSH, R0, 0),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 0x89abcdef } }
-+	},
- 	/* BPF_ALU | BPF_NEG */
- 	{
- 		"ALU_NEG: -(3) = -3",
 -- 
 2.25.1
 
