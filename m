@@ -2,82 +2,100 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.2 required=3.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AE1EFC4338F
-	for <bpf@archiver.kernel.org>; Wed, 28 Jul 2021 12:15:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CEC9CC432BE
+	for <bpf@archiver.kernel.org>; Wed, 28 Jul 2021 13:52:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9125760F9B
-	for <bpf@archiver.kernel.org>; Wed, 28 Jul 2021 12:15:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B01B760F45
+	for <bpf@archiver.kernel.org>; Wed, 28 Jul 2021 13:52:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234912AbhG1MPV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 28 Jul 2021 08:15:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36024 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234758AbhG1MPU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 28 Jul 2021 08:15:20 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53BF1C061764
-        for <bpf@vger.kernel.org>; Wed, 28 Jul 2021 05:15:19 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id x192so3634349ybe.0
-        for <bpf@vger.kernel.org>; Wed, 28 Jul 2021 05:15:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=anyfinetworks-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YkDxrgrEVg6tw+Td7iNYrIfj80xo4Flt2pA0V0PfbyE=;
-        b=XKmmcNW+KMe99DyKo7MPqtLY3kmkpOZuDtBuENQ3CQxYeJU9C+eM3vWJp6/P5CXU6n
-         RRYWmF5Sk4ffJtiYRZ2Z7eAqrHd7C4Z8kOxgBVRD3ifAYcG1ojTvsWPaM6aVk6gpMqp5
-         Fagk6ift32oS3zPGJlpfce7bhk9cOv7XOfPcp6EiPhdG/a4UptP2KYLGgmGVh28ONQ5Y
-         wKuy1SxEhdHMpzcVn6OMuazbUufV24wGr7CcxGq4YSxJO9sJqthJ/5fnw6CLiOGVmxHG
-         DorzbQ1TRHGviwHS2R2g582ItgCtek5HD9j0yTasHmb+9ki8ilVV0g+7bbgkIecvUoTt
-         Ts3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YkDxrgrEVg6tw+Td7iNYrIfj80xo4Flt2pA0V0PfbyE=;
-        b=noXoHFTrmTPxuHD7bnPk4b9Z7NV9Jbn3ZfT9oWF3tkUFPEb94j6vQkri5Y4MuloRQP
-         Ww0xmnlV/efz09PKMOFxSTCCja3sp73aNZlKbMEIVQSPUr4jkCmVp+MekySIOjj3Rbyr
-         VfGH9J7ViVDigj5w8uCsUIoc15NBnfy/X2LKOgElgOC/+ZjA4IYKORj5ICSavkb4+5Mb
-         mIOfR2JfZ6DEkHKbExMgEI6WkampYiXAQETnp1OMw29yRXJEBHtSTw99R565Pi3nHqX2
-         e5Ud16dzQhsT2H9RumhfR+XPzCPKVVXiImqWcC8IhtJQOgyEJQOtoc2TJfywWu8MQCgS
-         6ajA==
-X-Gm-Message-State: AOAM531uyySD0kn1sIabl2iWfwjezth7GSBSduiLtyO2/xHiYpIoTZL5
-        vjWNFy7K7Mx4xGaRITZjyfKk6h8J8nHfH8LOmCAF3A==
-X-Google-Smtp-Source: ABdhPJzIXMVkoZ9OK3XH6VeVrJjbY9D6/ev3O5D5BPxxLC9ShFop+gESwxnfrnwIaJV1ratBfodrpqmbpu3wLliBL2w=
-X-Received: by 2002:a25:e910:: with SMTP id n16mr20613870ybd.226.1627474518602;
- Wed, 28 Jul 2021 05:15:18 -0700 (PDT)
+        id S236285AbhG1NvW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 28 Jul 2021 09:51:22 -0400
+Received: from mga14.intel.com ([192.55.52.115]:65514 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236945AbhG1Ntv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 28 Jul 2021 09:49:51 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10058"; a="212391343"
+X-IronPort-AV: E=Sophos;i="5.84,276,1620716400"; 
+   d="scan'208";a="212391343"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2021 06:47:31 -0700
+X-IronPort-AV: E=Sophos;i="5.84,276,1620716400"; 
+   d="scan'208";a="517461662"
+Received: from unknown (HELO localhost.localdomain) ([10.102.102.63])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2021 06:47:26 -0700
+Date:   Wed, 28 Jul 2021 05:54:13 -0400
+From:   Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
+To:     Jesper Dangaard Brouer <brouer@redhat.com>
+Cc:     BPF-dev-list <bpf@vger.kernel.org>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
+        Magnus Karlsson <magnus.karlsson@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+        Saeed Mahameed <saeed@kernel.org>,
+        "kurt@linutronix.de" <kurt@linutronix.de>,
+        "Raczynski, Piotr" <piotr.raczynski@intel.com>,
+        "Zhang, Jessica" <jessica.zhang@intel.com>,
+        "Maloor, Kishen" <kishen.maloor@intel.com>,
+        "Gomes, Vinicius" <vinicius.gomes@intel.com>,
+        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
+        "Swiatkowski, Michal" <michal.swiatkowski@intel.com>,
+        "Plantykow, Marta A" <marta.a.plantykow@intel.com>,
+        "Desouza, Ederson" <ederson.desouza@intel.com>,
+        "Song, Yoong Siang" <yoong.siang.song@intel.com>,
+        "Czapnik, Lukasz" <lukasz.czapnik@intel.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        "Joseph, Jithu" <jithu.joseph@intel.com>,
+        William Tu <u9012063@gmail.com>,
+        Ong Boon Leong <boon.leong.ong@intel.com>
+Subject: XDP-hints: how to inform driver about hints
+Message-ID: <YQEpRRxxf0R4Znd3@localhost.localdomain>
+References: <20210526125848.1c7adbb0@carbon>
 MIME-Version: 1.0
-References: <20210726081738.1833704-1-johan.almbladh@anyfinetworks.com>
- <CAEf4BzYdvjz36K7=qYnfL6q=cX=ha27Ro2x6cV1X4hp22VEO=g@mail.gmail.com> <5afe26c6-7ab1-88ab-a3e0-eb007256a856@iogearbox.net>
-In-Reply-To: <5afe26c6-7ab1-88ab-a3e0-eb007256a856@iogearbox.net>
-From:   Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Date:   Wed, 28 Jul 2021 14:15:36 +0200
-Message-ID: <CAM1=_QQWPX4FumpfPXqRd1UnsLyTZhy7f6bcUsW5C1uBuEV0OQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 00/14] bpf/tests: Extend the eBPF test suite
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Tony Ambardar <Tony.Ambardar@gmail.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210526125848.1c7adbb0@carbon>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Jul 28, 2021 at 10:27 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
-> Yes, lets fix up the interpreter.
->
-> Could you send a fix for the latter, Johan, along with this series?
+Hi
 
-Thanks for the comments, Andrii and Daniel. Yes, I agree that fixing
-up the interpreter makes most sense. I'll submit the patches shortly.
+I have just stareted working on generic hints implementation that was
+discussed on netdev workshop. I wondering how we should tell driver that
+hints is supported on XDP program.
 
-Johan
+I prepared 3 implementation of this approach. In 1 and 3 solution I
+wanted to automatically search for hints usage in XDP program, but it
+doesn't look good because of comparing lines of XDP program in libbpf
+(3) or in bpf core (1).
+
+For me solution 2 with reusing XDP flags looks good, but I don't
+know if XDP flags can be used for storing information about hints.
+What do you guys think about that?
+
+Please take a look at code samples:
+
+(1)
+https://github.com/alobakin/linux/commit/a4f32ba74e5d3eefe607789547e9d5529ed775b0
+don't know how to send flag to driver. Searching for metadata happens
+in load program path, but communication with driver
+(by ndo_bpf call happens in creating link)
+
+(2)
+https://github.com/alobakin/linux/commit/72a5d930bea330f5f4827fdf098b723f96acff0c
+simplest solution. Add another flag, everything are there, driver will
+check this flag in ndo_bpf
+
+(3)
+https://github.com/alobakin/linux/commit/92de1e0e3523317c5749f3c87173dc90b1e8011b
+I haven't tested it yet. I think it is doable to do this search in creating
+link path, but only when user uses syscall instead of netlink API
+(I am pretty sure that this is used in auto generated code by libbpf).
+If we will decide that this solution can be correct I will write a suitable
+sample and chec if this works
