@@ -2,26 +2,36 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+X-Spam-Status: No, score=-19.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 32569C4338F
-	for <bpf@archiver.kernel.org>; Wed, 28 Jul 2021 09:33:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 081AEC4338F
+	for <bpf@archiver.kernel.org>; Wed, 28 Jul 2021 09:38:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1A25960F01
-	for <bpf@archiver.kernel.org>; Wed, 28 Jul 2021 09:33:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D52C760FDB
+	for <bpf@archiver.kernel.org>; Wed, 28 Jul 2021 09:38:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235558AbhG1Jdt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 28 Jul 2021 05:33:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50482 "EHLO mail.kernel.org"
+        id S231522AbhG1Jio (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 28 Jul 2021 05:38:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51300 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231256AbhG1Jdt (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 28 Jul 2021 05:33:49 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8BFC560F6D;
-        Wed, 28 Jul 2021 09:33:47 +0000 (UTC)
-From:   Lorenzo Bianconi <me@lorenzobianconi.net>
+        id S231576AbhG1Jin (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 28 Jul 2021 05:38:43 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 47B7560F9E;
+        Wed, 28 Jul 2021 09:38:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1627465122;
+        bh=FXnuQeg0BTDrLkshLrDL5Ji6P2ynWULeXV/J/p6ePpI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=YH2wFlBgLn/jjMdvtkYrMGaueHAm721iWO/Qnom13Nh7H0DSm8QJ6lDT3aQyZRFPF
+         u+EzHa5o4EShr2ID1ZrugKxIU9uJ9qkTRJt+m5NhJSigufgPxVitvSISrCZrOFV7oD
+         uaXMHofsAw0Y7qaZfPBnFdrbZ6msdZtuAdn9hpIYALOxWdRNfudp1k9LZZPOl66QTU
+         rLwJCZfqU5cz+t3RrB+ZqNokRTyee1pcfV6rhMWQ250hGmMhSkEAj6SrR6z1k4pvZE
+         ezz1ZiCcVUeQV4/7zbQVksba/q9LrKStbfEcnTlubKYum7iGSPMoaOWPpk3ta3LUAx
+         iiKayYt3DUpuw==
+From:   Lorenzo Bianconi <lorenzo@kernel.org>
 To:     bpf@vger.kernel.org, netdev@vger.kernel.org
 Cc:     lorenzo.bianconi@redhat.com, davem@davemloft.net, kuba@kernel.org,
         ast@kernel.org, daniel@iogearbox.net, shayagr@amazon.com,
@@ -29,11 +39,10 @@ Cc:     lorenzo.bianconi@redhat.com, davem@davemloft.net, kuba@kernel.org,
         echaudro@redhat.com, jasowang@redhat.com,
         alexander.duyck@gmail.com, saeed@kernel.org,
         maciej.fijalkowski@intel.com, magnus.karlsson@intel.com,
-        tirthendu.sarkar@intel.com, toke@redhat.com,
-        Lorenzo Bianconi <lorenzo@kernel.org>
+        tirthendu.sarkar@intel.com, toke@redhat.com
 Subject: [PATCH v10 bpf-next 00/18] mvneta: introduce XDP multi-buffer support
-Date:   Wed, 28 Jul 2021 11:33:21 +0200
-Message-Id: <cover.1627463617.git.lorenzo@kernel.org>
+Date:   Wed, 28 Jul 2021 11:38:05 +0200
+Message-ID: <cover.1627463617.git.lorenzo@kernel.org>
 X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset=y
@@ -41,8 +50,7 @@ Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
-
-From: Lorenzo Bianconi <lorenzo@kernel.org>
+Message-ID: <20210728093805.9fW8jECsJ2Wc1Ws1mCHh3FBQa6FISaej4uZMcY6_cm0@z>
 
 This series introduce XDP multi-buffer support. The mvneta driver is
 the first to support these new "non-linear" xdp_{buff,frame}. Reviewers
