@@ -2,290 +2,145 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A141C4338F
-	for <bpf@archiver.kernel.org>; Wed, 28 Jul 2021 09:47:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 12A84C4338F
+	for <bpf@archiver.kernel.org>; Wed, 28 Jul 2021 10:59:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E0F0B60F9D
-	for <bpf@archiver.kernel.org>; Wed, 28 Jul 2021 09:47:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E8F2960F00
+	for <bpf@archiver.kernel.org>; Wed, 28 Jul 2021 10:59:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235444AbhG1Jrh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 28 Jul 2021 05:47:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:54966 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235012AbhG1Jrg (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 28 Jul 2021 05:47:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1627465655;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WDaMubqK0Fd8+wWZIhOupnRVnlJaFggSC8O1W6H2+y4=;
-        b=Z1oLg9crOQ17Mzq2NWOnwdMP9r8tw1VqnMVWNzaL41ahPAvEU2kQ7pDWSCMYuDCyfhn20n
-        zOhSeLcCMQVVUwfOUNWIko9H31DLIzHEmomeAXQiX8P6Uk+jzsUt9kFY9nof3pX+0vVcDX
-        Wf8kp/zyMCiTfQACcgKpYoURa1zTPjU=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-173-rJLBuID5OqiIf3tAT0z9mw-1; Wed, 28 Jul 2021 05:47:33 -0400
-X-MC-Unique: rJLBuID5OqiIf3tAT0z9mw-1
-Received: by mail-ed1-f72.google.com with SMTP id u25-20020aa7d8990000b02903bb6a903d90so968140edq.17
-        for <bpf@vger.kernel.org>; Wed, 28 Jul 2021 02:47:33 -0700 (PDT)
+        id S233513AbhG1K71 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 28 Jul 2021 06:59:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46918 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232530AbhG1K7Y (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 28 Jul 2021 06:59:24 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9928C061757;
+        Wed, 28 Jul 2021 03:59:21 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id o185so3172588oih.13;
+        Wed, 28 Jul 2021 03:59:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=EBN6n460UBT8iz0V/+V0RJfO2gnHS3Gi9OOil4PHTno=;
+        b=i9XFgH6TG3jWr00bRIcLxZWNcxzzzTgaG1WnJlNu+8DVYAWtSA6bkltSbcvwbU3kLK
+         vevh386iP9H8eN4MoEjrTYhrgF9FkI+xl2eOcflkkNlcaWK0OBkS93RlGNv0D4lUbbW5
+         gtq7aYbUybbuXeyuww/IhfLo9zx8CMVuKU2UbyfvODa7KEbVbt1rWSZYUBCPcVfHMbRZ
+         MRSXSk3AmmSinBXeQai0WnVOkieaEO7b40afVFNktA0PdX+9zc/J2Di7U3WJJOq526dS
+         29dj+EEagBdTU8qS4r4I9T2c3tfOdI5qQ6W96uFsXjrd0ePd4UJSb0YzzkneFT8L2MIB
+         BaMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WDaMubqK0Fd8+wWZIhOupnRVnlJaFggSC8O1W6H2+y4=;
-        b=jPbKSqBLArsd3kQSoZAB+UXtQP4nUO7gPNlatb9wKO86WNF3EwdfA7BI8C2asd+Nn4
-         DTuEP1Zl27sYxRmuAgksPLS7Vi80sEijF5YnwS85m+hKtP7tVGU29D2WYrutu1JjGdoZ
-         wxUiMGA2fAB60Dyf6kpTUHO6UlBJxaUqrr57NBFRbVt5wk/20gHYb8ITUGAvtx5rtEgP
-         wrtCkQC7Mu3VmmJHXgL9GWGX4PrRsOLLbSituLvIdAkv4UFIFovlrLGDrOx1+RsjlzUL
-         /cLUDhwKG3Gpt1yychll+JBPvR7KjDwnyu24nDHN9FPvpYli3RmSMCyQqqPaG7k6Mzmk
-         lZJw==
-X-Gm-Message-State: AOAM530P3pwzb0f2e6xL3O2WLeOwLy+1w+X0/vLKbOwrKDL9RyVkrDAH
-        vIrXf/7Gs9GAIAIcPX62XU4DkFqqkCUfMA/JbSkSG4K9dWoA/SATvdeU0GCdfhl8eMUz9HWZUS+
-        ifFUaQ6JzJZve
-X-Received: by 2002:a17:906:6b1b:: with SMTP id q27mr25794852ejr.169.1627465652320;
-        Wed, 28 Jul 2021 02:47:32 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxexPbM9qAg077pwD8pYOWNBOZRGV+IXB+EZCCH7ky8P6pZSrovPj1jH7ZktgOZ/Xs96h1Lqg==
-X-Received: by 2002:a17:906:6b1b:: with SMTP id q27mr25794826ejr.169.1627465652132;
-        Wed, 28 Jul 2021 02:47:32 -0700 (PDT)
-Received: from localhost (net-130-25-106-225.cust.vodafonedsl.it. [130.25.106.225])
-        by smtp.gmail.com with ESMTPSA id bx11sm1828409ejb.107.2021.07.28.02.47.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jul 2021 02:47:31 -0700 (PDT)
-Date:   Wed, 28 Jul 2021 11:47:28 +0200
-From:   Lorenzo Bianconi <lorenzo.bianconi@redhat.com>
-To:     Lorenzo Bianconi <me@lorenzobianconi.net>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, davem@davemloft.net,
-        kuba@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        shayagr@amazon.com, john.fastabend@gmail.com, dsahern@kernel.org,
-        brouer@redhat.com, echaudro@redhat.com, jasowang@redhat.com,
-        alexander.duyck@gmail.com, saeed@kernel.org,
-        maciej.fijalkowski@intel.com, magnus.karlsson@intel.com,
-        tirthendu.sarkar@intel.com, toke@redhat.com,
-        Lorenzo Bianconi <lorenzo@kernel.org>
-Subject: Re: [PATCH v10 bpf-next 00/18] mvneta: introduce XDP multi-buffer
- support
-Message-ID: <YQEnsALmUCp2w/fL@lore-desk>
-References: <cover.1627463617.git.lorenzo@kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=EBN6n460UBT8iz0V/+V0RJfO2gnHS3Gi9OOil4PHTno=;
+        b=QvHPZUEr5kezpZK+OKbvg0enYGT48QtKLWGWG0lhge0t2/pBCGhgTVVvV8zs0o7TZR
+         EoyHywbJ+WEf3cJNfAijvlWOsIQubgWMQ1F9b+gdNDHXZJMGa7GbeoHPN1LwjhG9liTd
+         HpiME6HpbCbyg9VJ5izsAKD+LVzSTmEM07Z21hSNyFTYeAzSobAEdMsCY2TelU6R3fk1
+         Vx1Lb+5XyloQ1TS3P3C6jmkWdJlNJDLlh0TnqA8xOt987dCR4DNePag3Oin4gy+VqtP6
+         ZamsJM2tDbO7k/985QJbTNdY108UTMnxmFItYAX/aeXu+0DMjUsF4JHBe7uGWDiWoI4V
+         cWGg==
+X-Gm-Message-State: AOAM533lS6MQC3/i88VUtQLK4GcaDT1PcCmFjywgQeX8rAJRI3B+Vx9G
+        P8IwbMsC2VgzBeI8uSj6FOOraRQVQvbfdljwOV8=
+X-Google-Smtp-Source: ABdhPJy6kitM6hVhjg8otVodIIawPEAqSygak98gW3nUlTIWPwHclST+eBl1nmM1xwe+SE4ll58keuVMcnRU+nn3m4Y=
+X-Received: by 2002:a54:4094:: with SMTP id i20mr17956262oii.159.1627469961038;
+ Wed, 28 Jul 2021 03:59:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="wPo4DG1yq8ErvLYq"
-Content-Disposition: inline
-In-Reply-To: <cover.1627463617.git.lorenzo@kernel.org>
+References: <DB8P193MB0581FEB4CB90263430546C4C88E99@DB8P193MB0581.EURP193.PROD.OUTLOOK.COM>
+ <CAEf4BzaSthevAa_0Jjc4meKtW898NPgzd6yywzLLfztVa_c55Q@mail.gmail.com>
+In-Reply-To: <CAEf4BzaSthevAa_0Jjc4meKtW898NPgzd6yywzLLfztVa_c55Q@mail.gmail.com>
+From:   =?UTF-8?B?Um9iaW4gR8O2Z2dl?= <r.goegge@googlemail.com>
+Date:   Wed, 28 Jul 2021 12:59:09 +0200
+Message-ID: <CAM798qBDjKk2Na4qfe+OKNWX6z4Boo+eTzrsTisBzUXYKXQCwQ@mail.gmail.com>
+Subject: Re: [PATCH bpf] libbpf: fix probe for BPF_PROG_TYPE_CGROUP_SOCKOPT
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Quentin Monnet <quentin@isovalent.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+On Tue, Jul 27, 2021 at 11:17 PM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Tue, Jul 27, 2021 at 7:41 AM Robin G=C3=B6gge <r.goegge@outlook.com> w=
+rote:
+> >
+> > This patch fixes the probe for BPF_PROG_TYPE_CGROUP_SOCKOPT,
+> > so the probe reports accurate results when used by e.g.
+> > bpftool.
+> >
+> > Fixes: 4cdbfb59c44a ("libbpf: support sockopt hooks")
+> >
+> > Signed-off-by: Robin G=C3=B6gge <r.goegge@outlook.com>
+> > Reviewed-by: Quentin Monnet <quentin@isovalent.com>
+> > ---
+>
+> Looks good, I'll apply to bpf tree once this patch makes it into patchwor=
+ks.
 
---wPo4DG1yq8ErvLYq
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I think I'll have to resend the patch from my gmail account, rookie mistake
+on my part for using my outlook account in the first place I guess.
+>
+> Meanwhile, looking at probe_load() seems like a bunch of other program
+> types are not handled properly as well. Would you mind checking that
+> as well and following up with more fixes for this? See also [0] for
+> this whole probing APIs situation.
+>
+>   [0] https://github.com/libbpf/libbpf/issues/312
 
-> From: Lorenzo Bianconi <lorenzo@kernel.org>
->=20
-> This series introduce XDP multi-buffer support. The mvneta driver is
-> the first to support these new "non-linear" xdp_{buff,frame}. Reviewers
-> please focus on how these new types of xdp_{buff,frame} packets
-> traverse the different layers and the layout design. It is on purpose
-> that BPF-helpers are kept simple, as we don't want to expose the
-> internal layout to allow later changes.
+Yes, some other program type probes are broken at the moment. But
+as far as I can tell fixing them won't be as easy for me as this one. I'm
+currently working on implementing a feature probe API in cilium/ebpf,
+once I have working probes for the types there I can try and translate
+them to follow up with fixes here.
+>
+> >  tools/lib/bpf/libbpf_probes.c | 4 +++-
+> >  1 file changed, 3 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/tools/lib/bpf/libbpf_probes.c b/tools/lib/bpf/libbpf_probe=
+s.c
+> > index ecaae2927ab8..cd8c703dde71 100644
+> > --- a/tools/lib/bpf/libbpf_probes.c
+> > +++ b/tools/lib/bpf/libbpf_probes.c
+> > @@ -75,6 +75,9 @@ probe_load(enum bpf_prog_type prog_type, const struct=
+ bpf_insn *insns,
+> >         case BPF_PROG_TYPE_CGROUP_SOCK_ADDR:
+> >                 xattr.expected_attach_type =3D BPF_CGROUP_INET4_CONNECT=
+;
+> >                 break;
+> > +       case BPF_PROG_TYPE_CGROUP_SOCKOPT:
+> > +               xattr.expected_attach_type =3D BPF_CGROUP_GETSOCKOPT;
+> > +               break;
+> >         case BPF_PROG_TYPE_SK_LOOKUP:
+> >                 xattr.expected_attach_type =3D BPF_SK_LOOKUP;
+> >                 break;
+> > @@ -104,7 +107,6 @@ probe_load(enum bpf_prog_type prog_type, const stru=
+ct bpf_insn *insns,
+> >         case BPF_PROG_TYPE_SK_REUSEPORT:
+> >         case BPF_PROG_TYPE_FLOW_DISSECTOR:
+> >         case BPF_PROG_TYPE_CGROUP_SYSCTL:
+> > -       case BPF_PROG_TYPE_CGROUP_SOCKOPT:
+> >         case BPF_PROG_TYPE_TRACING:
+> >         case BPF_PROG_TYPE_STRUCT_OPS:
+> >         case BPF_PROG_TYPE_EXT:
+> > --
+> > 2.25.1
+> >
 
-I sent the cover-letter. Sorry for the noise.
-
-Regards,
-Lorenzo
-
->=20
-> The main idea for the new multi-buffer layout is to reuse the same
-> layout used for non-linear SKB. This rely on the "skb_shared_info"
-> struct at the end of the first buffer to link together subsequent
-> buffers. Keeping the layout compatible with SKBs is also done to ease
-> and speedup creating a SKB from an xdp_{buff,frame}.
-> Converting xdp_frame to SKB and deliver it to the network stack is shown
-> in patch 05/18 (e.g. cpumaps).
->=20
-> A multi-buffer bit (mb) has been introduced in the flags field of xdp_{bu=
-ff,frame}
-> structure to notify the bpf/network layer if this is a xdp multi-buffer f=
-rame
-> (mb =3D 1) or not (mb =3D 0).
-> The mb bit will be set by a xdp multi-buffer capable driver only for
-> non-linear frames maintaining the capability to receive linear frames
-> without any extra cost since the skb_shared_info structure at the end
-> of the first buffer will be initialized only if mb is set.
-> Moreover the flags field in xdp_{buff,frame} will be reused even for
-> xdp rx csum offloading in future series.
->=20
-> Typical use cases for this series are:
-> - Jumbo-frames
-> - Packet header split (please see Google=E2=80=99s use-case @ NetDevConf =
-0x14, [0])
-> - TSO
->=20
-> The two following ebpf helpers (and related selftests) has been introduce=
-d:
-> - bpf_xdp_adjust_data:
->   Move xdp_md->data and xdp_md->data_end pointers in subsequent fragments
->   according to the offset provided by the ebpf program. This helper can be
->   used to read/write values in frame payload.
-> - bpf_xdp_get_buff_len:
->   Return the total frame size (linear + paged parts)
->=20
-> bpf_xdp_adjust_tail and bpf_xdp_copy helpers have been modified to take i=
-nto
-> account xdp multi-buff frames.
->=20
-> More info about the main idea behind this approach can be found here [1][=
-2].
->=20
-> Changes since v9:
-> - introduce bpf_xdp_adjust_data helper and related selftest
-> - add xdp_frags_size and xdp_frags_tsize fields in skb_shared_info
-> - introduce xdp_update_skb_shared_info utility routine in ordere to not r=
-eset
->   frags array in skb_shared_info converting from a xdp_buff/xdp_frame to =
-a skb=20
-> - simplify bpf_xdp_copy routine
->=20
-> Changes since v8:
-> - add proper dma unmapping if XDP_TX fails on mvneta for a xdp multi-buff
-> - switch back to skb_shared_info implementation from previous xdp_shared_=
-info
->   one
-> - avoid using a bietfield in xdp_buff/xdp_frame since it introduces perfo=
-rmance
->   regressions. Tested now on 10G NIC (ixgbe) to verify there are no perfo=
-rmance
->   penalties for regular codebase
-> - add bpf_xdp_get_buff_len helper and remove frame_length field in xdp ctx
-> - add data_len field in skb_shared_info struct
-> - introduce XDP_FLAGS_FRAGS_PF_MEMALLOC flag
->=20
-> Changes since v7:
-> - rebase on top of bpf-next
-> - fix sparse warnings
-> - improve comments for frame_length in include/net/xdp.h
->=20
-> Changes since v6:
-> - the main difference respect to previous versions is the new approach pr=
-oposed
->   by Eelco to pass full length of the packet to eBPF layer in XDP context
-> - reintroduce multi-buff support to eBPF kself-tests
-> - reintroduce multi-buff support to bpf_xdp_adjust_tail helper
-> - introduce multi-buffer support to bpf_xdp_copy helper
-> - rebase on top of bpf-next
->=20
-> Changes since v5:
-> - rebase on top of bpf-next
-> - initialize mb bit in xdp_init_buff() and drop per-driver initialization
-> - drop xdp->mb initialization in xdp_convert_zc_to_xdp_frame()
-> - postpone introduction of frame_length field in XDP ctx to another series
-> - minor changes
->=20
-> Changes since v4:
-> - rebase ontop of bpf-next
-> - introduce xdp_shared_info to build xdp multi-buff instead of using the
->   skb_shared_info struct
-> - introduce frame_length in xdp ctx
-> - drop previous bpf helpers
-> - fix bpf_xdp_adjust_tail for xdp multi-buff
-> - introduce xdp multi-buff self-tests for bpf_xdp_adjust_tail
-> - fix xdp_return_frame_bulk for xdp multi-buff
->=20
-> Changes since v3:
-> - rebase ontop of bpf-next
-> - add patch 10/13 to copy back paged data from a xdp multi-buff frame to
->   userspace buffer for xdp multi-buff selftests
->=20
-> Changes since v2:
-> - add throughput measurements
-> - drop bpf_xdp_adjust_mb_header bpf helper
-> - introduce selftest for xdp multibuffer
-> - addressed comments on bpf_xdp_get_frags_count
-> - introduce xdp multi-buff support to cpumaps
->=20
-> Changes since v1:
-> - Fix use-after-free in xdp_return_{buff/frame}
-> - Introduce bpf helpers
-> - Introduce xdp_mb sample program
-> - access skb_shared_info->nr_frags only on the last fragment
->=20
-> Changes since RFC:
-> - squash multi-buffer bit initialization in a single patch
-> - add mvneta non-linear XDP buff support for tx side
->=20
-> [0] https://netdevconf.info/0x14/session.html?talk-the-path-to-tcp-4k-mtu=
--and-rx-zerocopy
-> [1] https://github.com/xdp-project/xdp-project/blob/master/areas/core/xdp=
--multi-buffer01-design.org
-> [2] https://netdevconf.info/0x14/session.html?tutorial-add-XDP-support-to=
--a-NIC-driver (XDPmulti-buffers section)
->=20
-> Eelco Chaudron (3):
->   bpf: add multi-buff support to the bpf_xdp_adjust_tail() API
->   bpf: add multi-buffer support to xdp copy helpers
->   bpf: update xdp_adjust_tail selftest to include multi-buffer
->=20
-> Lorenzo Bianconi (15):
->   net: skbuff: add size metadata to skb_shared_info for xdp
->   xdp: introduce flags field in xdp_buff/xdp_frame
->   net: mvneta: update mb bit before passing the xdp buffer to eBPF layer
->   net: mvneta: simplify mvneta_swbm_add_rx_fragment management
->   net: xdp: add xdp_update_skb_shared_info utility routine
->   net: marvell: rely on xdp_update_skb_shared_info utility routine
->   xdp: add multi-buff support to xdp_return_{buff/frame}
->   net: mvneta: add multi buffer support to XDP_TX
->   net: mvneta: enable jumbo frames for XDP
->   bpf: introduce bpf_xdp_get_buff_len helper
->   bpf: move user_size out of bpf_test_init
->   bpf: introduce multibuff support to bpf_prog_test_run_xdp()
->   bpf: test_run: add xdp_shared_info pointer in bpf_test_finish
->     signature
->   net: xdp: introduce bpf_xdp_adjust_data helper
->   bpf: add bpf_xdp_adjust_data selftest
->=20
->  drivers/net/ethernet/marvell/mvneta.c         | 213 ++++++++++--------
->  include/linux/skbuff.h                        |   6 +-
->  include/net/xdp.h                             |  95 +++++++-
->  include/uapi/linux/bpf.h                      |  38 ++++
->  kernel/trace/bpf_trace.c                      |   3 +
->  net/bpf/test_run.c                            | 117 ++++++++--
->  net/core/filter.c                             | 210 ++++++++++++++++-
->  net/core/xdp.c                                |  76 ++++++-
->  tools/include/uapi/linux/bpf.h                |  38 ++++
->  .../bpf/prog_tests/xdp_adjust_data.c          |  55 +++++
->  .../bpf/prog_tests/xdp_adjust_tail.c          | 118 ++++++++++
->  .../selftests/bpf/prog_tests/xdp_bpf2bpf.c    | 151 +++++++++----
->  .../bpf/progs/test_xdp_adjust_tail_grow.c     |  10 +-
->  .../bpf/progs/test_xdp_adjust_tail_shrink.c   |  32 ++-
->  .../selftests/bpf/progs/test_xdp_bpf2bpf.c    |   2 +-
->  .../bpf/progs/test_xdp_update_frags.c         |  49 ++++
->  16 files changed, 1044 insertions(+), 169 deletions(-)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp_adjust_dat=
-a.c
->  create mode 100644 tools/testing/selftests/bpf/progs/test_xdp_update_fra=
-gs.c
->=20
-> --=20
-> 2.31.1
->=20
-
---wPo4DG1yq8ErvLYq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCYQEnrgAKCRA6cBh0uS2t
-rAD5AQDhrF+/pHgQX5mUOmTyuGht46lwzCeL6nh/pqZa0XKhlwEA4lPHPsqZ0i0l
-mn37rBuEbGO45HY28twoQYsQ8vbY5Qk=
-=f9BA
------END PGP SIGNATURE-----
-
---wPo4DG1yq8ErvLYq--
-
+--=20
+Robin Goegge
+Tel. +491732422154
