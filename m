@@ -2,149 +2,133 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B829DC4320E
-	for <bpf@archiver.kernel.org>; Thu, 29 Jul 2021 16:20:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72BD4C4338F
+	for <bpf@archiver.kernel.org>; Thu, 29 Jul 2021 16:29:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A519660F4A
-	for <bpf@archiver.kernel.org>; Thu, 29 Jul 2021 16:20:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5C01F60EBC
+	for <bpf@archiver.kernel.org>; Thu, 29 Jul 2021 16:29:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231888AbhG2QVA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 29 Jul 2021 12:21:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60888 "EHLO
+        id S230428AbhG2Q3o (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 29 Jul 2021 12:29:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231841AbhG2QUu (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 29 Jul 2021 12:20:50 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 310ADC061765
-        for <bpf@vger.kernel.org>; Thu, 29 Jul 2021 09:20:46 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id n11so4089446wmd.2
-        for <bpf@vger.kernel.org>; Thu, 29 Jul 2021 09:20:46 -0700 (PDT)
+        with ESMTP id S229565AbhG2Q3o (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 29 Jul 2021 12:29:44 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3816C0613CF
+        for <bpf@vger.kernel.org>; Thu, 29 Jul 2021 09:29:40 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id b7so7668879wri.8
+        for <bpf@vger.kernel.org>; Thu, 29 Jul 2021 09:29:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=isovalent-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=GLAH0UGomdUat0GatMlVuuZxkfmHz9v5KV19sL9pJ5o=;
-        b=v3x8PWC4siRBKA6XN/dbpeJJAURFGja0rv6yXY3XF5iKlWwU/OCiJ5A4tepDF31VUL
-         AraSFvisTTJAE/oHdUf99FAH3S5mtgeg7FG/dwjnMvksrKgRfbPTUn0eKCIa9Bn6pqLu
-         rRYnFwrzS/t37SJGShz8ffttnnODwGj67cw9FVIvAxKhkzLuF4UGErcY7uha6RaMxVBj
-         LwfdIiQhDx6dO7pqYrmlE64jXV+b9qDAjxN7YCe0ri4wIo8R6Q6Lx4LFp/voEUTspRmS
-         71OH4uOWtr+tcNNWBo95V2Ksi/Psgd8M11Vjyu0rFgW+ZX8VWPG35ThEeZZsEqpwYZE2
-         8moA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=M78Ftq0r5+Gxb4834D7jHiP+RomZ8457QnIJIRUgcOI=;
+        b=bKl7u3uaABVis3GH6fFOZjHTV255SrHgbHL/s1F0vYbV6E86Thhsqh/LtqJ/aYsRIO
+         DvouSR/Vo4Tz1MfMIwDpdKB9+U5T/rlXL305cDtb47xVZopCYLuq8I0NxZHEXj1RlevY
+         DrqorDn+fJ4AzOuaMcjUNkO+irniBAf7RFyt6/kozd+7JDLYgihbQE9+1hZHlE4kWLXe
+         wl6LCtCwLRw8kXLrLOoPsuRxeLHgY2/S5pV//nug9Zsa09zrVa3y5DeMrXnycZrJVmJC
+         aqao27l8Gu6ZdMbzDdTT8vLGCajym5PXCv/L9KQKPkEVnyvqKH1RZQDN8g0MEDEw03Ns
+         WHDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=GLAH0UGomdUat0GatMlVuuZxkfmHz9v5KV19sL9pJ5o=;
-        b=HNo6YWfraltpVDvJ8qseTHDLowzBErH6sls/wAmA1fcu5Z5kkng6wF7v3KaCMjWYze
-         VWdZ9xqaABBrT2xCIsVaOA0pSbTSEzjgeuxjnK8NUbHNUMNoud28LAh8iTDhcvprAwJz
-         ToEIcLp0eq+u1z8bJFoB23NNnUJn5v2EHM3Kjgq3N+ZHMAwPwrVlDJ6oAHQ/bB9vf/1H
-         ooEaO1MAzdFSUKSF4pO2jXzclQsTXj24rKoX+Te4yx1UeViEnfQ4HM8pTLTO05eIJuC4
-         I2l3cgGQ76ErPYcH6KsZxQXpZzXaoSz8swJG94BcUm0c8XpKyaEBJV0mIziqKNb6SRW/
-         cBPw==
-X-Gm-Message-State: AOAM530UZKrmq5n20obzcUHXzo/DiOOZIOCZHITJEQYlda+D8QJWQNP8
-        iDiuXSd07fiIUn4gQ34I8E+4U9jOC8rqOiCsbwo=
-X-Google-Smtp-Source: ABdhPJyFWIZLqWsppsfu4zePJLVoOV33Wp4buOgmpKS9ZSqax4M268T4rOSvk9BKoJ02UeRrse6T0g==
-X-Received: by 2002:a7b:cc16:: with SMTP id f22mr15212938wmh.99.1627575644791;
-        Thu, 29 Jul 2021 09:20:44 -0700 (PDT)
-Received: from localhost.localdomain ([149.86.66.250])
-        by smtp.gmail.com with ESMTPSA id c10sm3854853wmb.40.2021.07.29.09.20.43
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=M78Ftq0r5+Gxb4834D7jHiP+RomZ8457QnIJIRUgcOI=;
+        b=KfrwxjZrqqprCncAfdJk/x3UbDTIh+G0q3QnCzZWGkhP1ymfNiMw1Pw1k+7cqozg7L
+         Ekx7A2H3FsQhrXc3p88ZpZQ9aPs1R5aIfOxz9pO84XmEYVWx2NySc0aZjdHi1n50mBrs
+         kHe+x/4dNOJS8EBlk7KBXqLx5JLmaqfIDQJ1l9CLd9QxZZRrFIgll6Kf2YTX8pA7oJ/0
+         rDwLc3QQ9HjVUe0Ady1EqKqV607GL0OxeF8vwk1kFKCEVvDydquoZt52FyKt4yenzGA8
+         u1PMUsTFyG5MvWLuPt5eGiQHL2aSLlSQP5ZJoIxBxIHJRV2d5GyFATzwkkCtqkzyGMEd
+         W96Q==
+X-Gm-Message-State: AOAM532IZZ6118OIJAmr2q0e9DQy7RcP/5BLBZbCfkzfKFQeCkeUvCJc
+        RBj9jwYB/RHqX5Nf69hfuHbzhQ==
+X-Google-Smtp-Source: ABdhPJw7A6f24FlktQs4TQ8AAtJWJ81ViKwRx8vCAUlitboMB5jLzVgaM2/IYj7APrdnRsCipMez7w==
+X-Received: by 2002:adf:ee4e:: with SMTP id w14mr5890955wro.15.1627576179314;
+        Thu, 29 Jul 2021 09:29:39 -0700 (PDT)
+Received: from localhost.localdomain ([149.86.75.13])
+        by smtp.gmail.com with ESMTPSA id 140sm3859331wmb.43.2021.07.29.09.29.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jul 2021 09:20:44 -0700 (PDT)
+        Thu, 29 Jul 2021 09:29:38 -0700 (PDT)
 From:   Quentin Monnet <quentin@isovalent.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Quentin Monnet <quentin@isovalent.com>,
-        John Fastabend <john.fastabend@gmail.com>
-Subject: [PATCH bpf-next v3 7/8] libbpf: add split BTF support for btf__load_from_kernel_by_id()
-Date:   Thu, 29 Jul 2021 17:20:27 +0100
-Message-Id: <20210729162028.29512-8-quentin@isovalent.com>
+        Quentin Monnet <quentin@isovalent.com>
+Subject: [PATCH bpf-next 0/7] tools: bpftool: update, synchronise and
+Date:   Thu, 29 Jul 2021 17:29:25 +0100
+Message-Id: <20210729162932.30365-1-quentin@isovalent.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210729162028.29512-1-quentin@isovalent.com>
-References: <20210729162028.29512-1-quentin@isovalent.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add a new API function btf__load_from_kernel_by_id_split(), which takes
-a pointer to a base BTF object in order to support split BTF objects
-when retrieving BTF information from the kernel.
+To work with the different program types, map types, attach types etc.
+supported by eBPF, bpftool needs occasional updates to learn about the new
+features supported by the kernel. When such types translate into new
+keyword for the command line, updates are expected in several locations:
+typically, the help message displayed from bpftool itself, the manual page,
+and the bash completion file should be updated. The options used by the
+different commands for bpftool should also remain synchronised at those
+locations.
 
-Reference: https://github.com/libbpf/libbpf/issues/314
+Several omissions have occurred in the past, and a number of types are
+still missing today. This set is an attempt to improve the situation. It
+brings up-to-date the lists of types or options in bpftool, and also adds a
+Python script to the BPF selftests to automatically check that most of
+these lists remain synchronised.
 
-Signed-off-by: Quentin Monnet <quentin@isovalent.com>
-Acked-by: John Fastabend <john.fastabend@gmail.com>
----
- tools/lib/bpf/btf.c      | 9 +++++++--
- tools/lib/bpf/btf.h      | 1 +
- tools/lib/bpf/libbpf.map | 1 +
- 3 files changed, 9 insertions(+), 2 deletions(-)
+Quentin Monnet (7):
+  tools: bpftool: slightly ease bash completion updates
+  selftests/bpf: check consistency between bpftool source, doc,
+    completion
+  tools: bpftool: complete and synchronise attach or map types
+  tools: bpftool: update and synchronise option list in doc and help msg
+  selftests/bpf: update bpftool's consistency script for checking
+    options
+  tools: bpftool: document and add bash completion for -L, -B options
+  tools: bpftool: complete metrics list in "bpftool prog profile" doc
 
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index 948c29fee447..cafa4f6bd9b1 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -1383,7 +1383,7 @@ struct btf *btf_get_from_fd(int btf_fd, struct btf *base_btf)
- 	return btf;
- }
- 
--struct btf *btf__load_from_kernel_by_id(__u32 id)
-+struct btf *btf__load_from_kernel_by_id_split(__u32 id, struct btf *base_btf)
- {
- 	struct btf *btf;
- 	int btf_fd;
-@@ -1392,12 +1392,17 @@ struct btf *btf__load_from_kernel_by_id(__u32 id)
- 	if (btf_fd < 0)
- 		return libbpf_err_ptr(-errno);
- 
--	btf = btf_get_from_fd(btf_fd, NULL);
-+	btf = btf_get_from_fd(btf_fd, base_btf);
- 	close(btf_fd);
- 
- 	return libbpf_ptr(btf);
- }
- 
-+struct btf *btf__load_from_kernel_by_id(__u32 id)
-+{
-+	return btf__load_from_kernel_by_id_split(id, NULL);
-+}
-+
- int btf__get_from_id(__u32 id, struct btf **btf)
- {
- 	struct btf *res;
-diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
-index a6039ca66895..358046ffc7bd 100644
---- a/tools/lib/bpf/btf.h
-+++ b/tools/lib/bpf/btf.h
-@@ -44,6 +44,7 @@ LIBBPF_API struct btf *btf__parse_elf_split(const char *path, struct btf *base_b
- LIBBPF_API struct btf *btf__parse_raw(const char *path);
- LIBBPF_API struct btf *btf__parse_raw_split(const char *path, struct btf *base_btf);
- LIBBPF_API struct btf *btf__load_from_kernel_by_id(__u32 id);
-+LIBBPF_API struct btf *btf__load_from_kernel_by_id_split(__u32 id, struct btf *base_btf);
- LIBBPF_DEPRECATED_SINCE(0, 6, "use btf__load_from_kernel_by_id instead")
- LIBBPF_API int btf__get_from_id(__u32 id, struct btf **btf);
- 
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 3a9c6939301e..5aca3686ca5e 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -376,6 +376,7 @@ LIBBPF_0.5.0 {
- 		bpf_program__attach_kprobe_opts;
- 		bpf_object__gen_loader;
- 		btf__load_from_kernel_by_id;
-+		btf__load_from_kernel_by_id_split;
- 		btf__load_into_kernel;
- 		btf_dump__dump_type_data;
- 		libbpf_set_strict_mode;
+ .../bpf/bpftool/Documentation/bpftool-btf.rst |  48 +-
+ .../bpftool/Documentation/bpftool-cgroup.rst  |   3 +-
+ .../bpftool/Documentation/bpftool-feature.rst |   2 +-
+ .../bpf/bpftool/Documentation/bpftool-gen.rst |   9 +-
+ .../bpftool/Documentation/bpftool-iter.rst    |   2 +
+ .../bpftool/Documentation/bpftool-link.rst    |   3 +-
+ .../bpf/bpftool/Documentation/bpftool-map.rst |   3 +-
+ .../bpf/bpftool/Documentation/bpftool-net.rst |   2 +-
+ .../bpftool/Documentation/bpftool-perf.rst    |   2 +-
+ .../bpftool/Documentation/bpftool-prog.rst    |  36 +-
+ .../Documentation/bpftool-struct_ops.rst      |   2 +-
+ tools/bpf/bpftool/Documentation/bpftool.rst   |  12 +-
+ tools/bpf/bpftool/bash-completion/bpftool     |  69 ++-
+ tools/bpf/bpftool/btf.c                       |   3 +-
+ tools/bpf/bpftool/cgroup.c                    |   3 +-
+ tools/bpf/bpftool/common.c                    |  76 +--
+ tools/bpf/bpftool/feature.c                   |   1 +
+ tools/bpf/bpftool/gen.c                       |   3 +-
+ tools/bpf/bpftool/iter.c                      |   2 +
+ tools/bpf/bpftool/link.c                      |   3 +-
+ tools/bpf/bpftool/main.c                      |   3 +-
+ tools/bpf/bpftool/main.h                      |   3 +-
+ tools/bpf/bpftool/map.c                       |   5 +-
+ tools/bpf/bpftool/net.c                       |   1 +
+ tools/bpf/bpftool/perf.c                      |   5 +-
+ tools/bpf/bpftool/prog.c                      |   8 +-
+ tools/bpf/bpftool/struct_ops.c                |   2 +-
+ tools/testing/selftests/bpf/Makefile          |   1 +
+ .../selftests/bpf/test_bpftool_synctypes.py   | 586 ++++++++++++++++++
+ 29 files changed, 802 insertions(+), 96 deletions(-)
+ create mode 100755 tools/testing/selftests/bpf/test_bpftool_synctypes.py
+
 -- 
 2.30.2
 
