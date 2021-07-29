@@ -7,30 +7,30 @@ X-Spam-Status: No, score=-19.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57DE9C4320E
-	for <bpf@archiver.kernel.org>; Thu, 29 Jul 2021 14:09:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4CC2C4338F
+	for <bpf@archiver.kernel.org>; Thu, 29 Jul 2021 14:09:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 45C2360EBD
-	for <bpf@archiver.kernel.org>; Thu, 29 Jul 2021 14:09:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8E7F06054F
+	for <bpf@archiver.kernel.org>; Thu, 29 Jul 2021 14:09:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238535AbhG2OJk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 29 Jul 2021 10:09:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57024 "EHLO mail.kernel.org"
+        id S238588AbhG2OJm (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 29 Jul 2021 10:09:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57018 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238652AbhG2OHd (ORCPT <rfc822;bpf@vger.kernel.org>);
+        id S238647AbhG2OHd (ORCPT <rfc822;bpf@vger.kernel.org>);
         Thu, 29 Jul 2021 10:07:33 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A296860FE7;
-        Thu, 29 Jul 2021 14:07:21 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DE33D60F5C;
+        Thu, 29 Jul 2021 14:06:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627567644;
-        bh=KEe5WdEyJHtzuPMGzpiocUmfrX3xOnunn5dZvpKwBh8=;
+        s=k20201202; t=1627567616;
+        bh=ycaasLRNKeb4PrJCUm1tk0Rz6wHrs2EJsJbv1cIxaz0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=g7kMJSyTGhPNbxT3kA9PC39kYiBS/Ye1esT/cbIh/ApuGw7tznQMZMnoFdFL5dhk6
-         +5XDLAHAsLvnD76/etbLGieR/gJugg8L5gEgaK19GRFgpPkxUUfGy/SXYtdJxsrQdr
-         bklQ8qkWUPdkP/FXdD4jo+CZXf1XUJjcklF107Ztpg67dBQJKPI8jaLbQNYtnnh9U+
-         8dogW8Ums8slKEq2Fs024T7lmI9zvFZMF1mHXrZyob4Zys3fIyOCUxCzKJk5j9gg43
-         r8rYHXe+PXw4lmtesr9UtaK/nWyrEkQWMSSRFLs7Vyp9O+O4nNTHlCSyCWGdfCqAbz
-         juOIKbMdeGkjQ==
+        b=EWegB5VL/daZljB6yFptDSgMUcmjJ+Ut0IxnlsLjW/o7PP/Tc+XZksOe/p5wM3Bih
+         49pwb/lLrAZKh5kVHSuuO3lawMlx6QtOyVl9xoEDyibSnQv1eYOv4ToIlpURox243r
+         348upTkksj6r03c+iU3Gltqo6H1lwNfiUdizoMV95n8j6shO8oBvjZp9nQXxcpWwPX
+         d7UV7hyuDdSNes51Q/2vH0gdoNER4qMH2ujXynvzrlyucIPqPPypeTUqG/AIdw1Wp4
+         oqpGctBI9Gj+SAQqbVxi3RO6wuU1LBIblQhHXtbu9p5J30nPu+osCFPxypHH+0JO9S
+         IdSZY2V+A5SZw==
 From:   Masami Hiramatsu <mhiramat@kernel.org>
 To:     Steven Rostedt <rostedt@goodmis.org>,
         Josh Poimboeuf <jpoimboe@redhat.com>,
@@ -44,9 +44,9 @@ Cc:     X86 ML <x86@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>,
         yhs@fb.com, linux-ia64@vger.kernel.org,
         Abhishek Sagar <sagar.abhishek@gmail.com>,
         Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Subject: [PATCH -tip v10 09/16] ARC: Add instruction_pointer_set() API
-Date:   Thu, 29 Jul 2021 23:07:20 +0900
-Message-Id: <162756764030.301564.8584321072467173508.stgit@devnote2>
+Subject: [PATCH -tip v10 06/16] objtool: Add frame-pointer-specific function ignore
+Date:   Thu, 29 Jul 2021 23:06:52 +0900
+Message-Id: <162756761247.301564.17977809654703678605.stgit@devnote2>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <162756755600.301564.4957591913842010341.stgit@devnote2>
 References: <162756755600.301564.4957591913842010341.stgit@devnote2>
@@ -58,27 +58,83 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add instruction_pointer_set() API for arc.
+From: Josh Poimboeuf <jpoimboe@redhat.com>
 
+Add a CONFIG_FRAME_POINTER-specific version of
+STACK_FRAME_NON_STANDARD() for the case where a function is
+intentionally missing frame pointer setup, but otherwise needs
+objtool/ORC coverage when frame pointers are disabled.
+
+Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
+Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
+Tested-by: Masami Hiramatsu <mhiramat@kernel.org>
 Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
 ---
- arch/arc/include/asm/ptrace.h |    5 +++++
- 1 file changed, 5 insertions(+)
+ Changes in v10:
+  - Fixes error in CONFIG_STACK_VALIDATION=n case.
+---
+ include/linux/objtool.h       |   12 ++++++++++++
+ tools/include/linux/objtool.h |   12 ++++++++++++
+ 2 files changed, 24 insertions(+)
 
-diff --git a/arch/arc/include/asm/ptrace.h b/arch/arc/include/asm/ptrace.h
-index 4c3c9be5bd16..cca8d6583e31 100644
---- a/arch/arc/include/asm/ptrace.h
-+++ b/arch/arc/include/asm/ptrace.h
-@@ -149,6 +149,11 @@ static inline long regs_return_value(struct pt_regs *regs)
- 	return (long)regs->r0;
- }
+diff --git a/include/linux/objtool.h b/include/linux/objtool.h
+index 7e72d975cb76..aca52db2f3f3 100644
+--- a/include/linux/objtool.h
++++ b/include/linux/objtool.h
+@@ -66,6 +66,17 @@ struct unwind_hint {
+ 	static void __used __section(".discard.func_stack_frame_non_standard") \
+ 		*__func_stack_frame_non_standard_##func = func
  
-+static inline void instruction_pointer_set(struct pt_regs *regs,
-+					   unsigned long val)
-+{
-+	instruction_pointer(regs) = val;
-+}
- #endif /* !__ASSEMBLY__ */
++/*
++ * STACK_FRAME_NON_STANDARD_FP() is a frame-pointer-specific function ignore
++ * for the case where a function is intentionally missing frame pointer setup,
++ * but otherwise needs objtool/ORC coverage when frame pointers are disabled.
++ */
++#ifdef CONFIG_FRAME_POINTER
++#define STACK_FRAME_NON_STANDARD_FP(func) STACK_FRAME_NON_STANDARD(func)
++#else
++#define STACK_FRAME_NON_STANDARD_FP(func)
++#endif
++
+ #else /* __ASSEMBLY__ */
  
- #endif /* __ASM_PTRACE_H */
+ /*
+@@ -127,6 +138,7 @@ struct unwind_hint {
+ #define UNWIND_HINT(sp_reg, sp_offset, type, end)	\
+ 	"\n\t"
+ #define STACK_FRAME_NON_STANDARD(func)
++#define STACK_FRAME_NON_STANDARD_FP(func)
+ #else
+ #define ANNOTATE_INTRA_FUNCTION_CALL
+ .macro UNWIND_HINT sp_reg:req sp_offset=0 type:req end=0
+diff --git a/tools/include/linux/objtool.h b/tools/include/linux/objtool.h
+index 7e72d975cb76..aca52db2f3f3 100644
+--- a/tools/include/linux/objtool.h
++++ b/tools/include/linux/objtool.h
+@@ -66,6 +66,17 @@ struct unwind_hint {
+ 	static void __used __section(".discard.func_stack_frame_non_standard") \
+ 		*__func_stack_frame_non_standard_##func = func
+ 
++/*
++ * STACK_FRAME_NON_STANDARD_FP() is a frame-pointer-specific function ignore
++ * for the case where a function is intentionally missing frame pointer setup,
++ * but otherwise needs objtool/ORC coverage when frame pointers are disabled.
++ */
++#ifdef CONFIG_FRAME_POINTER
++#define STACK_FRAME_NON_STANDARD_FP(func) STACK_FRAME_NON_STANDARD(func)
++#else
++#define STACK_FRAME_NON_STANDARD_FP(func)
++#endif
++
+ #else /* __ASSEMBLY__ */
+ 
+ /*
+@@ -127,6 +138,7 @@ struct unwind_hint {
+ #define UNWIND_HINT(sp_reg, sp_offset, type, end)	\
+ 	"\n\t"
+ #define STACK_FRAME_NON_STANDARD(func)
++#define STACK_FRAME_NON_STANDARD_FP(func)
+ #else
+ #define ANNOTATE_INTRA_FUNCTION_CALL
+ .macro UNWIND_HINT sp_reg:req sp_offset=0 type:req end=0
 
