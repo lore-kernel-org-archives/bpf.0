@@ -2,219 +2,455 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85507C4338F
-	for <bpf@archiver.kernel.org>; Fri, 30 Jul 2021 05:23:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B4D1C4338F
+	for <bpf@archiver.kernel.org>; Fri, 30 Jul 2021 05:34:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6C53460E76
-	for <bpf@archiver.kernel.org>; Fri, 30 Jul 2021 05:23:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 38E806103B
+	for <bpf@archiver.kernel.org>; Fri, 30 Jul 2021 05:34:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231897AbhG3FXH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 30 Jul 2021 01:23:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46772 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbhG3FXH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 30 Jul 2021 01:23:07 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0996EC061765
-        for <bpf@vger.kernel.org>; Thu, 29 Jul 2021 22:23:03 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id g23-20020a17090a5797b02901765d605e14so12730493pji.5
-        for <bpf@vger.kernel.org>; Thu, 29 Jul 2021 22:23:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=oLWSV/ZYyYbOfxHVI474Gytzy7BuKYTbQ1F/xZKWAFA=;
-        b=iLLUHPD+imc20OkfoPCTqRNXG2FnEPPnDn7WBBG7GWRnzraqZjaFa9Gae4wDydikRC
-         cUDmIWqu29y8r+/xFRcsOL33dw9szVjQ3K721Ln2quky/hKkUob6QH2o4Ih4+wHg9ojY
-         eHoHVTRwNdQXw2p3g8UdPHaWUB4SJtSilXszjgPHHfBX5SL+pOOlXAd0hK6bzKsefojq
-         xsUfoNBSzn+hXGiAaXj+ARieiQYmRewkLIF3zkPs07YKQxTnEIeLJfQSbPHMf+Qcz8T9
-         GpP/PYPwdNJPFIi4mv2b5o9XdYiECh5AHe/PzVTl1GARPREZ4m7A/lZvC3CO7ked07mQ
-         h9kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=oLWSV/ZYyYbOfxHVI474Gytzy7BuKYTbQ1F/xZKWAFA=;
-        b=QNJzwHj9KvQ1gBBENMWQMf9hkoOscEM69eCClzWyQ7/IJRtD4chymCi08PrewSSSKY
-         3/yJjCnw1H/T9ycvReOA25SflNt9rqPonDBsmGFwH4iRav45EZDWUjpeLbix3n1EQAdd
-         gWwLgQofwJqZIB57FuePC/AoMFMKtlLK+vsWDv8cCpj4NQ4CD0ZpouIWpjg6tEgTKQnO
-         TLgZk0DHcZqUXn35ZtgLX22Z5Tr5MVgUh9LDZXAU6NMo58uxJCGeg3HvLRVHsv8VI71b
-         F+EgHDDEvYgrlfQRSiaqTlsqFENJ0jjBVyJsaFCnDG6T6VC90xoAqYyFUk7wf30GMc58
-         MeYA==
-X-Gm-Message-State: AOAM532LRNJ+Car/wu5crnIl6lZ8Q+roj36e6+KO2tOykzL83bETzIB2
-        5n23QtWGTxPzpYpljjzpadw=
-X-Google-Smtp-Source: ABdhPJwCTVZ4KgI1I4e1WIRvW2QajbjiM+2Onc7AIkY4Jer6u2Y+NOVWJvFpxwE0Qor0A+deuNWhnA==
-X-Received: by 2002:aa7:864c:0:b029:34d:afdd:e70e with SMTP id a12-20020aa7864c0000b029034dafdde70emr1043997pfo.9.1627622582554;
-        Thu, 29 Jul 2021 22:23:02 -0700 (PDT)
-Received: from [192.168.255.10] ([203.205.141.114])
-        by smtp.gmail.com with ESMTPSA id bg8sm563344pjb.4.2021.07.29.22.23.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Jul 2021 22:23:02 -0700 (PDT)
-Subject: Re: [PATCH bpf-next v2] libbpf: add
- libbpf_load_vmlinux_btf/libbpf_load_module_btf APIs
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Yonghong Song <yhs@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        Martin Lau <kafai@fb.com>
-References: <20210728165525.19104-1-hengqi.chen@gmail.com>
- <CAEf4BzaejZHivWPPrWAEEDAiTM_HUDuB3v10HqsnYUUj+CshFA@mail.gmail.com>
-From:   Hengqi Chen <hengqi.chen@gmail.com>
-Message-ID: <1987f2c1-9759-229f-6e67-f68948a23079@gmail.com>
-Date:   Fri, 30 Jul 2021 13:22:59 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.12.0
+        id S231705AbhG3Fe1 convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 30 Jul 2021 01:34:27 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:21262 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230149AbhG3Fe1 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 30 Jul 2021 01:34:27 -0400
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16U5UPUg009516
+        for <bpf@vger.kernel.org>; Thu, 29 Jul 2021 22:34:23 -0700
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 3a3cde32xv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Thu, 29 Jul 2021 22:34:22 -0700
+Received: from intmgw001.06.ash9.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Thu, 29 Jul 2021 22:34:22 -0700
+Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
+        id 5ADE53D405B3; Thu, 29 Jul 2021 22:34:20 -0700 (PDT)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Yonghong Song <yhs@fb.com>
+Subject: [PATCH v3 bpf-next 02/14] bpf: refactor BPF_PROG_RUN_ARRAY family of macros into functions
+Date:   Thu, 29 Jul 2021 22:34:01 -0700
+Message-ID: <20210730053413.1090371-3-andrii@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210730053413.1090371-1-andrii@kernel.org>
+References: <20210730053413.1090371-1-andrii@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAEf4BzaejZHivWPPrWAEEDAiTM_HUDuB3v10HqsnYUUj+CshFA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: faM3LccrCODuZwskiGOYlvSkQcldcmBL
+X-Proofpoint-GUID: faM3LccrCODuZwskiGOYlvSkQcldcmBL
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-07-30_03:2021-07-29,2021-07-30 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0
+ lowpriorityscore=0 adultscore=0 clxscore=1034 impostorscore=0
+ priorityscore=1501 mlxlogscore=999 phishscore=0 mlxscore=0 malwarescore=0
+ suspectscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2107140000 definitions=main-2107300032
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+Similar to BPF_PROG_RUN, turn BPF_PROG_RUN_ARRAY macros into proper functions
+with all the same readability and maintainability benefits. Making them into
+functions required shuffling around bpf_set_run_ctx/bpf_reset_run_ctx
+functions. Also, explicitly specifying the type of the BPF prog run callback
+required adjusting __bpf_prog_run_save_cb() to accept const void *, casted
+internally to const struct sk_buff.
 
+Further, split out a cgroup-specific BPF_PROG_RUN_ARRAY_CG and
+BPF_PROG_RUN_ARRAY_CG_FLAGS from the more generic BPF_PROG_RUN_ARRAY due to
+the differences in bpf_run_ctx used for those two different use cases.
 
-On 2021/7/30 5:35 AM, Andrii Nakryiko wrote:
-> On Wed, Jul 28, 2021 at 9:55 AM Hengqi Chen <hengqi.chen@gmail.com> wrote:
->>
->> Add two new APIs: libbpf_load_vmlinux_btf/libbpf_load_module_btf.
->> libbpf_load_vmlinux_btf is just an alias to the existing API named
->> libbpf_find_kernel_btf, rename it to be more precisely.
->> libbpf_load_module_btf can be used to load module BTF, add it for
->> completeness. These two APIs are useful for implementing tracing
->> tools and introspection tools.
->> This is part of the efforts towards libbpf 1.0. [1]
->>
->> [1] https://github.com/libbpf/libbpf/issues/280
->>
->> Signed-off-by: Hengqi Chen <hengqi.chen@gmail.com>
->> ---
->>  tools/lib/bpf/btf.c      | 15 ++++++++++++++-
->>  tools/lib/bpf/btf.h      |  2 ++
->>  tools/lib/bpf/libbpf.c   |  4 ++--
->>  tools/lib/bpf/libbpf.map |  2 ++
->>  4 files changed, 20 insertions(+), 3 deletions(-)
->>
->> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
->> index b46760b93bb4..5f801739a1a2 100644
->> --- a/tools/lib/bpf/btf.c
->> +++ b/tools/lib/bpf/btf.c
->> @@ -4021,7 +4021,7 @@ static void btf_dedup_merge_hypot_map(struct btf_dedup *d)
->>                  */
->>                 if (d->hypot_adjust_canon)
->>                         continue;
->> -
->> +
->>                 if (t_kind == BTF_KIND_FWD && c_kind != BTF_KIND_FWD)
->>                         d->map[t_id] = c_id;
->>
->> @@ -4395,6 +4395,11 @@ static int btf_dedup_remap_types(struct btf_dedup *d)
->>   * data out of it to use for target BTF.
->>   */
->>  struct btf *libbpf_find_kernel_btf(void)
->> +{
->> +       return libbpf_load_vmlinux_btf();
->> +}
->> +
->> +struct btf *libbpf_load_vmlinux_btf(void)
->>  {
->>         struct {
->>                 const char *path_fmt;
->> @@ -4440,6 +4445,14 @@ struct btf *libbpf_find_kernel_btf(void)
->>         return libbpf_err_ptr(-ESRCH);
->>  }
->>
->> +struct btf *libbpf_load_module_btf(const char *module_name, struct btf *vmlinux_btf)
-> 
-> In the light of Quentin's btf__load_from_kernel_by_id(), I'm now
-> wondering if it's better to keep the naming consistent as
-> btf__load_vmlinux_btf() and btf__load_module_btf()? And we should put
-> them after btf__parse() family of constructors, as just another set of
-> (special, but still) constructors. WDYT?
-> 
-> Sorry for a bit of back and forth...
-> 
-> Otherwise everything looks good, thanks.
-> 
+I think BPF_PROG_RUN_ARRAY_CG would benefit from further refactoring to accept
+struct cgroup and enum bpf_attach_type instead of bpf_prog_array, fetching
+cgrp->bpf.effective[type] and RCU-dereferencing it internally. But that
+required including include/linux/cgroup-defs.h, which I wasn't sure is ok with
+everyone.
 
-Thanks for the review. Will update as you suggested.
-Sometimes naming is the hardest part of programming, I am not good at that. :)
+The remaining generic BPF_PROG_RUN_ARRAY function will be extended to
+pass-through user-provided context value in the next patch.
 
-(BTW, Quentin's tweet led me to here)
+Acked-by: Yonghong Song <yhs@fb.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ include/linux/bpf.h      | 187 +++++++++++++++++++++++----------------
+ include/linux/filter.h   |   5 +-
+ kernel/bpf/cgroup.c      |  32 +++----
+ kernel/trace/bpf_trace.c |   2 +-
+ 4 files changed, 132 insertions(+), 94 deletions(-)
 
->> +{
->> +       char path[80];
->> +
->> +       snprintf(path, sizeof(path), "/sys/kernel/btf/%s", module_name);
->> +       return btf__parse_split(path, vmlinux_btf);
->> +}
->> +
->>  int btf_type_visit_type_ids(struct btf_type *t, type_id_visit_fn visit, void *ctx)
->>  {
->>         int i, n, err;
->> diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
->> index 374e9f15de2e..1abf94e3bd9e 100644
->> --- a/tools/lib/bpf/btf.h
->> +++ b/tools/lib/bpf/btf.h
->> @@ -90,6 +90,8 @@ LIBBPF_API __u32 btf_ext__func_info_rec_size(const struct btf_ext *btf_ext);
->>  LIBBPF_API __u32 btf_ext__line_info_rec_size(const struct btf_ext *btf_ext);
->>
->>  LIBBPF_API struct btf *libbpf_find_kernel_btf(void);
->> +LIBBPF_API struct btf *libbpf_load_vmlinux_btf(void);
->> +LIBBPF_API struct btf *libbpf_load_module_btf(const char *module_name, struct btf *vmlinux_btf);
-> 
-> as mentioned above, let's move these right after btf__parse() family,
-> so that all BTF constructor APIs are listed first.
-> 
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index c8cc09013210..9c44b56b698f 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1146,67 +1146,124 @@ struct bpf_run_ctx {};
+ 
+ struct bpf_cg_run_ctx {
+ 	struct bpf_run_ctx run_ctx;
+-	struct bpf_prog_array_item *prog_item;
++	const struct bpf_prog_array_item *prog_item;
+ };
+ 
++#ifdef CONFIG_BPF_SYSCALL
++static inline struct bpf_run_ctx *bpf_set_run_ctx(struct bpf_run_ctx *new_ctx)
++{
++	struct bpf_run_ctx *old_ctx;
++
++	old_ctx = current->bpf_ctx;
++	current->bpf_ctx = new_ctx;
++	return old_ctx;
++}
++
++static inline void bpf_reset_run_ctx(struct bpf_run_ctx *old_ctx)
++{
++	current->bpf_ctx = old_ctx;
++}
++#else /* CONFIG_BPF_SYSCALL */
++static inline struct bpf_run_ctx *bpf_set_run_ctx(struct bpf_run_ctx *new_ctx)
++{
++	return NULL;
++}
++
++static inline void bpf_reset_run_ctx(struct bpf_run_ctx *old_ctx)
++{
++}
++#endif /* CONFIG_BPF_SYSCALL */
++
++
+ /* BPF program asks to bypass CAP_NET_BIND_SERVICE in bind. */
+ #define BPF_RET_BIND_NO_CAP_NET_BIND_SERVICE			(1 << 0)
+ /* BPF program asks to set CN on the packet. */
+ #define BPF_RET_SET_CN						(1 << 0)
+ 
+-#define BPF_PROG_RUN_ARRAY_FLAGS(array, ctx, func, ret_flags)		\
+-	({								\
+-		struct bpf_prog_array_item *_item;			\
+-		struct bpf_prog *_prog;					\
+-		struct bpf_prog_array *_array;				\
+-		struct bpf_run_ctx *old_run_ctx;			\
+-		struct bpf_cg_run_ctx run_ctx;				\
+-		u32 _ret = 1;						\
+-		u32 func_ret;						\
+-		migrate_disable();					\
+-		rcu_read_lock();					\
+-		_array = rcu_dereference(array);			\
+-		_item = &_array->items[0];				\
+-		old_run_ctx = bpf_set_run_ctx(&run_ctx.run_ctx);	\
+-		while ((_prog = READ_ONCE(_item->prog))) {		\
+-			run_ctx.prog_item = _item;			\
+-			func_ret = func(_prog, ctx);			\
+-			_ret &= (func_ret & 1);				\
+-			*(ret_flags) |= (func_ret >> 1);		\
+-			_item++;					\
+-		}							\
+-		bpf_reset_run_ctx(old_run_ctx);				\
+-		rcu_read_unlock();					\
+-		migrate_enable();					\
+-		_ret;							\
+-	 })
+-
+-#define __BPF_PROG_RUN_ARRAY(array, ctx, func, check_non_null, set_cg_storage)	\
+-	({						\
+-		struct bpf_prog_array_item *_item;	\
+-		struct bpf_prog *_prog;			\
+-		struct bpf_prog_array *_array;		\
+-		struct bpf_run_ctx *old_run_ctx;	\
+-		struct bpf_cg_run_ctx run_ctx;		\
+-		u32 _ret = 1;				\
+-		migrate_disable();			\
+-		rcu_read_lock();			\
+-		_array = rcu_dereference(array);	\
+-		if (unlikely(check_non_null && !_array))\
+-			goto _out;			\
+-		_item = &_array->items[0];		\
+-		old_run_ctx = bpf_set_run_ctx(&run_ctx.run_ctx);\
+-		while ((_prog = READ_ONCE(_item->prog))) {	\
+-			run_ctx.prog_item = _item;	\
+-			_ret &= func(_prog, ctx);	\
+-			_item++;			\
+-		}					\
+-		bpf_reset_run_ctx(old_run_ctx);		\
+-_out:							\
+-		rcu_read_unlock();			\
+-		migrate_enable();			\
+-		_ret;					\
+-	 })
++typedef u32 (*bpf_prog_run_fn)(const struct bpf_prog *prog, const void *ctx);
++
++static __always_inline u32
++BPF_PROG_RUN_ARRAY_CG_FLAGS(const struct bpf_prog_array __rcu *array_rcu,
++			    const void *ctx, bpf_prog_run_fn run_prog,
++			    u32 *ret_flags)
++{
++	const struct bpf_prog_array_item *item;
++	const struct bpf_prog *prog;
++	const struct bpf_prog_array *array;
++	struct bpf_run_ctx *old_run_ctx;
++	struct bpf_cg_run_ctx run_ctx;
++	u32 ret = 1;
++	u32 func_ret;
++
++	migrate_disable();
++	rcu_read_lock();
++	array = rcu_dereference(array_rcu);
++	item = &array->items[0];
++	old_run_ctx = bpf_set_run_ctx(&run_ctx.run_ctx);
++	while ((prog = READ_ONCE(item->prog))) {
++		run_ctx.prog_item = item;
++		func_ret = run_prog(prog, ctx);
++		ret &= (func_ret & 1);
++		*(ret_flags) |= (func_ret >> 1);
++		item++;
++	}
++	bpf_reset_run_ctx(old_run_ctx);
++	rcu_read_unlock();
++	migrate_enable();
++	return ret;
++}
++
++static __always_inline u32
++BPF_PROG_RUN_ARRAY_CG(const struct bpf_prog_array __rcu *array_rcu,
++		      const void *ctx, bpf_prog_run_fn run_prog)
++{
++	const struct bpf_prog_array_item *item;
++	const struct bpf_prog *prog;
++	const struct bpf_prog_array *array;
++	struct bpf_run_ctx *old_run_ctx;
++	struct bpf_cg_run_ctx run_ctx;
++	u32 ret = 1;
++
++	migrate_disable();
++	rcu_read_lock();
++	array = rcu_dereference(array_rcu);
++	item = &array->items[0];
++	old_run_ctx = bpf_set_run_ctx(&run_ctx.run_ctx);
++	while ((prog = READ_ONCE(item->prog))) {
++		run_ctx.prog_item = item;
++		ret &= run_prog(prog, ctx);
++		item++;
++	}
++	bpf_reset_run_ctx(old_run_ctx);
++	rcu_read_unlock();
++	migrate_enable();
++	return ret;
++}
++
++static __always_inline u32
++BPF_PROG_RUN_ARRAY(const struct bpf_prog_array __rcu *array_rcu,
++		   const void *ctx, bpf_prog_run_fn run_prog)
++{
++	const struct bpf_prog_array_item *item;
++	const struct bpf_prog *prog;
++	const struct bpf_prog_array *array;
++	u32 ret = 1;
++
++	migrate_disable();
++	rcu_read_lock();
++	array = rcu_dereference(array_rcu);
++	if (unlikely(!array))
++		goto out;
++	item = &array->items[0];
++	while ((prog = READ_ONCE(item->prog))) {
++		ret &= run_prog(prog, ctx);
++		item++;
++	}
++out:
++	rcu_read_unlock();
++	migrate_enable();
++	return ret;
++}
+ 
+ /* To be used by __cgroup_bpf_run_filter_skb for EGRESS BPF progs
+  * so BPF programs can request cwr for TCP packets.
+@@ -1235,7 +1292,7 @@ _out:							\
+ 		u32 _flags = 0;				\
+ 		bool _cn;				\
+ 		u32 _ret;				\
+-		_ret = BPF_PROG_RUN_ARRAY_FLAGS(array, ctx, func, &_flags); \
++		_ret = BPF_PROG_RUN_ARRAY_CG_FLAGS(array, ctx, func, &_flags); \
+ 		_cn = _flags & BPF_RET_SET_CN;		\
+ 		if (_ret)				\
+ 			_ret = (_cn ? NET_XMIT_CN : NET_XMIT_SUCCESS);	\
+@@ -1244,12 +1301,6 @@ _out:							\
+ 		_ret;					\
+ 	})
+ 
+-#define BPF_PROG_RUN_ARRAY(array, ctx, func)		\
+-	__BPF_PROG_RUN_ARRAY(array, ctx, func, false, true)
+-
+-#define BPF_PROG_RUN_ARRAY_CHECK(array, ctx, func)	\
+-	__BPF_PROG_RUN_ARRAY(array, ctx, func, true, false)
+-
+ #ifdef CONFIG_BPF_SYSCALL
+ DECLARE_PER_CPU(int, bpf_prog_active);
+ extern struct mutex bpf_stats_enabled_mutex;
+@@ -1284,20 +1335,6 @@ static inline void bpf_enable_instrumentation(void)
+ 	migrate_enable();
+ }
+ 
+-static inline struct bpf_run_ctx *bpf_set_run_ctx(struct bpf_run_ctx *new_ctx)
+-{
+-	struct bpf_run_ctx *old_ctx;
+-
+-	old_ctx = current->bpf_ctx;
+-	current->bpf_ctx = new_ctx;
+-	return old_ctx;
+-}
+-
+-static inline void bpf_reset_run_ctx(struct bpf_run_ctx *old_ctx)
+-{
+-	current->bpf_ctx = old_ctx;
+-}
+-
+ extern const struct file_operations bpf_map_fops;
+ extern const struct file_operations bpf_prog_fops;
+ extern const struct file_operations bpf_iter_fops;
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 18518e321ce4..830b98999a68 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -711,7 +711,7 @@ static inline void bpf_restore_data_end(
+ 	cb->data_end = saved_data_end;
+ }
+ 
+-static inline u8 *bpf_skb_cb(struct sk_buff *skb)
++static inline u8 *bpf_skb_cb(const struct sk_buff *skb)
+ {
+ 	/* eBPF programs may read/write skb->cb[] area to transfer meta
+ 	 * data between tail calls. Since this also needs to work with
+@@ -732,8 +732,9 @@ static inline u8 *bpf_skb_cb(struct sk_buff *skb)
+ 
+ /* Must be invoked with migration disabled */
+ static inline u32 __bpf_prog_run_save_cb(const struct bpf_prog *prog,
+-					 struct sk_buff *skb)
++					 const void *ctx)
+ {
++	const struct sk_buff *skb = ctx;
+ 	u8 *cb_data = bpf_skb_cb(skb);
+ 	u8 cb_saved[BPF_SKB_CB_LEN];
+ 	u32 res;
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index b567ca46555c..dd2c0d4ae4f8 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -1012,8 +1012,8 @@ int __cgroup_bpf_run_filter_skb(struct sock *sk,
+ 		ret = BPF_PROG_CGROUP_INET_EGRESS_RUN_ARRAY(
+ 			cgrp->bpf.effective[type], skb, __bpf_prog_run_save_cb);
+ 	} else {
+-		ret = BPF_PROG_RUN_ARRAY(cgrp->bpf.effective[type], skb,
+-					  __bpf_prog_run_save_cb);
++		ret = BPF_PROG_RUN_ARRAY_CG(cgrp->bpf.effective[type], skb,
++					    __bpf_prog_run_save_cb);
+ 		ret = (ret == 1 ? 0 : -EPERM);
+ 	}
+ 	bpf_restore_data_end(skb, saved_data_end);
+@@ -1043,7 +1043,7 @@ int __cgroup_bpf_run_filter_sk(struct sock *sk,
+ 	struct cgroup *cgrp = sock_cgroup_ptr(&sk->sk_cgrp_data);
+ 	int ret;
+ 
+-	ret = BPF_PROG_RUN_ARRAY(cgrp->bpf.effective[type], sk, BPF_PROG_RUN);
++	ret = BPF_PROG_RUN_ARRAY_CG(cgrp->bpf.effective[type], sk, BPF_PROG_RUN);
+ 	return ret == 1 ? 0 : -EPERM;
+ }
+ EXPORT_SYMBOL(__cgroup_bpf_run_filter_sk);
+@@ -1090,8 +1090,8 @@ int __cgroup_bpf_run_filter_sock_addr(struct sock *sk,
+ 	}
+ 
+ 	cgrp = sock_cgroup_ptr(&sk->sk_cgrp_data);
+-	ret = BPF_PROG_RUN_ARRAY_FLAGS(cgrp->bpf.effective[type], &ctx,
+-				       BPF_PROG_RUN, flags);
++	ret = BPF_PROG_RUN_ARRAY_CG_FLAGS(cgrp->bpf.effective[type], &ctx,
++				          BPF_PROG_RUN, flags);
+ 
+ 	return ret == 1 ? 0 : -EPERM;
+ }
+@@ -1120,8 +1120,8 @@ int __cgroup_bpf_run_filter_sock_ops(struct sock *sk,
+ 	struct cgroup *cgrp = sock_cgroup_ptr(&sk->sk_cgrp_data);
+ 	int ret;
+ 
+-	ret = BPF_PROG_RUN_ARRAY(cgrp->bpf.effective[type], sock_ops,
+-				 BPF_PROG_RUN);
++	ret = BPF_PROG_RUN_ARRAY_CG(cgrp->bpf.effective[type], sock_ops,
++				    BPF_PROG_RUN);
+ 	return ret == 1 ? 0 : -EPERM;
+ }
+ EXPORT_SYMBOL(__cgroup_bpf_run_filter_sock_ops);
+@@ -1139,8 +1139,8 @@ int __cgroup_bpf_check_dev_permission(short dev_type, u32 major, u32 minor,
+ 
+ 	rcu_read_lock();
+ 	cgrp = task_dfl_cgroup(current);
+-	allow = BPF_PROG_RUN_ARRAY(cgrp->bpf.effective[type], &ctx,
+-				   BPF_PROG_RUN);
++	allow = BPF_PROG_RUN_ARRAY_CG(cgrp->bpf.effective[type], &ctx,
++				      BPF_PROG_RUN);
+ 	rcu_read_unlock();
+ 
+ 	return !allow;
+@@ -1271,7 +1271,7 @@ int __cgroup_bpf_run_filter_sysctl(struct ctl_table_header *head,
+ 
+ 	rcu_read_lock();
+ 	cgrp = task_dfl_cgroup(current);
+-	ret = BPF_PROG_RUN_ARRAY(cgrp->bpf.effective[type], &ctx, BPF_PROG_RUN);
++	ret = BPF_PROG_RUN_ARRAY_CG(cgrp->bpf.effective[type], &ctx, BPF_PROG_RUN);
+ 	rcu_read_unlock();
+ 
+ 	kfree(ctx.cur_val);
+@@ -1385,8 +1385,8 @@ int __cgroup_bpf_run_filter_setsockopt(struct sock *sk, int *level,
+ 	}
+ 
+ 	lock_sock(sk);
+-	ret = BPF_PROG_RUN_ARRAY(cgrp->bpf.effective[BPF_CGROUP_SETSOCKOPT],
+-				 &ctx, BPF_PROG_RUN);
++	ret = BPF_PROG_RUN_ARRAY_CG(cgrp->bpf.effective[BPF_CGROUP_SETSOCKOPT],
++				    &ctx, BPF_PROG_RUN);
+ 	release_sock(sk);
+ 
+ 	if (!ret) {
+@@ -1495,8 +1495,8 @@ int __cgroup_bpf_run_filter_getsockopt(struct sock *sk, int level,
+ 	}
+ 
+ 	lock_sock(sk);
+-	ret = BPF_PROG_RUN_ARRAY(cgrp->bpf.effective[BPF_CGROUP_GETSOCKOPT],
+-				 &ctx, BPF_PROG_RUN);
++	ret = BPF_PROG_RUN_ARRAY_CG(cgrp->bpf.effective[BPF_CGROUP_GETSOCKOPT],
++				    &ctx, BPF_PROG_RUN);
+ 	release_sock(sk);
+ 
+ 	if (!ret) {
+@@ -1556,8 +1556,8 @@ int __cgroup_bpf_run_filter_getsockopt_kern(struct sock *sk, int level,
+ 	 * be called if that data shouldn't be "exported".
+ 	 */
+ 
+-	ret = BPF_PROG_RUN_ARRAY(cgrp->bpf.effective[BPF_CGROUP_GETSOCKOPT],
+-				 &ctx, BPF_PROG_RUN);
++	ret = BPF_PROG_RUN_ARRAY_CG(cgrp->bpf.effective[BPF_CGROUP_GETSOCKOPT],
++				    &ctx, BPF_PROG_RUN);
+ 	if (!ret)
+ 		return -EPERM;
+ 
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index c5e0b6a64091..b427eac10780 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -124,7 +124,7 @@ unsigned int trace_call_bpf(struct trace_event_call *call, void *ctx)
+ 	 * out of events when it was updated in between this and the
+ 	 * rcu_dereference() which is accepted risk.
+ 	 */
+-	ret = BPF_PROG_RUN_ARRAY_CHECK(call->prog_array, ctx, BPF_PROG_RUN);
++	ret = BPF_PROG_RUN_ARRAY(call->prog_array, ctx, bpf_prog_run);
+ 
+  out:
+ 	__this_cpu_dec(bpf_prog_active);
+-- 
+2.30.2
 
-Sure, will do.
-
->>
->>  LIBBPF_API int btf__find_str(struct btf *btf, const char *s);
->>  LIBBPF_API int btf__add_str(struct btf *btf, const char *s);
->> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
->> index a1ca6fb0c6d8..321d8f4889af 100644
->> --- a/tools/lib/bpf/libbpf.c
->> +++ b/tools/lib/bpf/libbpf.c
->> @@ -2680,7 +2680,7 @@ static int bpf_object__load_vmlinux_btf(struct bpf_object *obj, bool force)
->>         if (!force && !obj_needs_vmlinux_btf(obj))
->>                 return 0;
->>
->> -       obj->btf_vmlinux = libbpf_find_kernel_btf();
->> +       obj->btf_vmlinux = libbpf_load_vmlinux_btf();
->>         err = libbpf_get_error(obj->btf_vmlinux);
->>         if (err) {
->>                 pr_warn("Error loading vmlinux BTF: %d\n", err);
->> @@ -8297,7 +8297,7 @@ int libbpf_find_vmlinux_btf_id(const char *name,
->>         struct btf *btf;
->>         int err;
->>
->> -       btf = libbpf_find_kernel_btf();
->> +       btf = libbpf_load_vmlinux_btf();
->>         err = libbpf_get_error(btf);
->>         if (err) {
->>                 pr_warn("vmlinux BTF is not found\n");
->> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
->> index c240d488eb5e..2088bdbc0f50 100644
->> --- a/tools/lib/bpf/libbpf.map
->> +++ b/tools/lib/bpf/libbpf.map
->> @@ -377,4 +377,6 @@ LIBBPF_0.5.0 {
->>                 bpf_object__gen_loader;
->>                 btf_dump__dump_type_data;
->>                 libbpf_set_strict_mode;
->> +               libbpf_load_vmlinux_btf;
->> +               libbpf_load_module_btf;
->>  } LIBBPF_0.4.0;
->> --
->> 2.25.1
->>
