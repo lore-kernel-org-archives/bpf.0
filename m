@@ -6,38 +6,39 @@ X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 185C2C4320A
-	for <bpf@archiver.kernel.org>; Fri, 30 Jul 2021 05:34:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00916C4338F
+	for <bpf@archiver.kernel.org>; Fri, 30 Jul 2021 05:34:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0336761040
-	for <bpf@archiver.kernel.org>; Fri, 30 Jul 2021 05:34:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DD21560F46
+	for <bpf@archiver.kernel.org>; Fri, 30 Jul 2021 05:34:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236802AbhG3Fev convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 30 Jul 2021 01:34:51 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:12658 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236850AbhG3Feu (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 30 Jul 2021 01:34:50 -0400
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16U5Sukx005756
-        for <bpf@vger.kernel.org>; Thu, 29 Jul 2021 22:34:46 -0700
+        id S236885AbhG3Fez convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 30 Jul 2021 01:34:55 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:63944 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S236850AbhG3Fey (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 30 Jul 2021 01:34:54 -0400
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.0.43/8.16.0.43) with SMTP id 16U5Tc2R023691
+        for <bpf@vger.kernel.org>; Thu, 29 Jul 2021 22:34:50 -0700
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 3a3cde331w-3
+        by m0089730.ppops.net with ESMTP id 3a37bfcp47-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 29 Jul 2021 22:34:46 -0700
-Received: from intmgw006.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 29 Jul 2021 22:34:50 -0700
+Received: from intmgw001.05.ash9.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Thu, 29 Jul 2021 22:34:20 -0700
+ 15.1.2176.2; Thu, 29 Jul 2021 22:34:49 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 562F23D405B3; Thu, 29 Jul 2021 22:34:18 -0700 (PDT)
+        id C29563D405B3; Thu, 29 Jul 2021 22:34:38 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCH v3 bpf-next 01/14] bpf: refactor BPF_PROG_RUN into a function
-Date:   Thu, 29 Jul 2021 22:34:00 -0700
-Message-ID: <20210730053413.1090371-2-andrii@kernel.org>
+        Peter Zijlstra <peterz@infradead.org>,
+        Rafael David Tinoco <rafaeldtinoco@gmail.com>
+Subject: [PATCH v3 bpf-next 11/14] libbpf: add bpf_cookie to perf_event, kprobe, uprobe, and tp attach APIs
+Date:   Thu, 29 Jul 2021 22:34:10 -0700
+Message-ID: <20210730053413.1090371-12-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210730053413.1090371-1-andrii@kernel.org>
 References: <20210730053413.1090371-1-andrii@kernel.org>
@@ -45,123 +46,345 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: M-t9gMeTIa1V08TTTh_G_0cpT58Blddu
-X-Proofpoint-GUID: M-t9gMeTIa1V08TTTh_G_0cpT58Blddu
+X-Proofpoint-ORIG-GUID: WJD_45pYHDBBpnFlFtX2kRM4B_hm_XZv
+X-Proofpoint-GUID: WJD_45pYHDBBpnFlFtX2kRM4B_hm_XZv
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
  definitions=2021-07-30_03:2021-07-29,2021-07-30 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0
- lowpriorityscore=0 adultscore=0 clxscore=1015 impostorscore=0
- priorityscore=1501 mlxlogscore=906 phishscore=0 mlxscore=0 malwarescore=0
- suspectscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0
+ impostorscore=0 priorityscore=1501 mlxscore=0 mlxlogscore=999 phishscore=0
+ clxscore=1015 adultscore=0 suspectscore=0 malwarescore=0 bulkscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2107140000 definitions=main-2107300032
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Turn BPF_PROG_RUN into a proper always inlined function. No functional and
-performance changes are intended, but it makes it much easier to understand
-what's going on with how BPF programs are actually get executed. It's more
-obvious what types and callbacks are expected. Also extra () around input
-parameters can be dropped, as well as `__` variable prefixes intended to avoid
-naming collisions, which makes the code simpler to read and write.
+Wire through bpf_cookie for all attach APIs that use perf_event_open under the
+hood:
+  - for kprobes, extend existing bpf_kprobe_opts with bpf_cookie field;
+  - for perf_event, uprobe, and tracepoint APIs, add their _opts variants and
+    pass bpf_cookie through opts.
 
-This refactoring also highlighted one possible issue. BPF_PROG_RUN is both
-a macro and an enum value (BPF_PROG_RUN == BPF_PROG_TEST_RUN). Turning
-BPF_PROG_RUN into a function causes naming conflict compilation error. So
-rename BPF_PROG_RUN into lower-case bpf_prog_run(), similar to
-bpf_prog_run_xdp(), bpf_prog_run_pin_on_cpu(), etc. To avoid unnecessary code
-churn across many networking calls to BPF_PROG_RUN, #define BPF_PROG_RUN as an
-alias to bpf_prog_run.
+For kernel that don't support BPF_LINK_CREATE for perf_events, and thus
+bpf_cookie is not supported either, return error and log warning for user.
 
+Cc: Rafael David Tinoco <rafaeldtinoco@gmail.com>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- include/linux/filter.h | 58 +++++++++++++++++++++++++++---------------
- 1 file changed, 37 insertions(+), 21 deletions(-)
+ tools/lib/bpf/libbpf.c   | 78 +++++++++++++++++++++++++++++++++-------
+ tools/lib/bpf/libbpf.h   | 71 +++++++++++++++++++++++++++++-------
+ tools/lib/bpf/libbpf.map |  3 ++
+ 3 files changed, 127 insertions(+), 25 deletions(-)
 
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index ba36989f711a..18518e321ce4 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -585,25 +585,41 @@ struct sk_filter {
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index d2230454e2d9..b8455641c9d5 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -9012,12 +9012,16 @@ static void bpf_link_perf_dealloc(struct bpf_link *link)
+ 	free(perf_link);
+ }
  
- DECLARE_STATIC_KEY_FALSE(bpf_stats_enabled_key);
+-struct bpf_link *bpf_program__attach_perf_event(struct bpf_program *prog, int pfd)
++struct bpf_link *bpf_program__attach_perf_event_opts(struct bpf_program *prog, int pfd,
++						     const struct bpf_perf_event_opts *opts)
+ {
+ 	char errmsg[STRERR_BUFSIZE];
+ 	struct bpf_link_perf *link;
+ 	int prog_fd, link_fd = -1, err;
  
--#define __BPF_PROG_RUN(prog, ctx, dfunc)	({			\
--	u32 __ret;							\
--	cant_migrate();							\
--	if (static_branch_unlikely(&bpf_stats_enabled_key)) {		\
--		struct bpf_prog_stats *__stats;				\
--		u64 __start = sched_clock();				\
--		__ret = dfunc(ctx, (prog)->insnsi, (prog)->bpf_func);	\
--		__stats = this_cpu_ptr(prog->stats);			\
--		u64_stats_update_begin(&__stats->syncp);		\
--		__stats->cnt++;						\
--		__stats->nsecs += sched_clock() - __start;		\
--		u64_stats_update_end(&__stats->syncp);			\
--	} else {							\
--		__ret = dfunc(ctx, (prog)->insnsi, (prog)->bpf_func);	\
--	}								\
--	__ret; })
--
--#define BPF_PROG_RUN(prog, ctx)						\
--	__BPF_PROG_RUN(prog, ctx, bpf_dispatcher_nop_func)
-+typedef unsigned int (*bpf_dispatcher_fn)(const void *ctx,
-+					  const struct bpf_insn *insnsi,
-+					  unsigned int (*bpf_func)(const void *,
-+								   const struct bpf_insn *));
++	if (!OPTS_VALID(opts, bpf_perf_event_opts))
++		return libbpf_err_ptr(-EINVAL);
 +
-+static __always_inline u32 __bpf_prog_run(const struct bpf_prog *prog,
-+					  const void *ctx,
-+					  bpf_dispatcher_fn dfunc)
+ 	if (pfd < 0) {
+ 		pr_warn("prog '%s': invalid perf event FD %d\n",
+ 			prog->name, pfd);
+@@ -9038,7 +9042,10 @@ struct bpf_link *bpf_program__attach_perf_event(struct bpf_program *prog, int pf
+ 	link->perf_event_fd = pfd;
+ 
+ 	if (kernel_supports(prog->obj, FEAT_PERF_LINK)) {
+-		link_fd = bpf_link_create(prog_fd, pfd, BPF_PERF_EVENT, NULL);
++		DECLARE_LIBBPF_OPTS(bpf_link_create_opts, link_opts,
++			.perf_event.bpf_cookie = OPTS_GET(opts, bpf_cookie, 0));
++
++		link_fd = bpf_link_create(prog_fd, pfd, BPF_PERF_EVENT, &link_opts);
+ 		if (link_fd < 0) {
+ 			err = -errno;
+ 			pr_warn("prog '%s': failed to create BPF link for perf_event FD %d: %d (%s)\n",
+@@ -9048,6 +9055,12 @@ struct bpf_link *bpf_program__attach_perf_event(struct bpf_program *prog, int pf
+ 		}
+ 		link->link.fd = link_fd;
+ 	} else {
++		if (OPTS_GET(opts, bpf_cookie, 0)) {
++			pr_warn("prog '%s': user context value is not supported\n", prog->name);
++			err = -EOPNOTSUPP;
++			goto err_out;
++		}
++
+ 		if (ioctl(pfd, PERF_EVENT_IOC_SET_BPF, prog_fd) < 0) {
+ 			err = -errno;
+ 			pr_warn("prog '%s': failed to attach to perf_event FD %d: %s\n",
+@@ -9074,6 +9087,11 @@ struct bpf_link *bpf_program__attach_perf_event(struct bpf_program *prog, int pf
+ 	return libbpf_err_ptr(err);
+ }
+ 
++struct bpf_link *bpf_program__attach_perf_event(struct bpf_program *prog, int pfd)
 +{
-+	u32 ret;
-+
-+	cant_migrate();
-+	if (static_branch_unlikely(&bpf_stats_enabled_key)) {
-+		struct bpf_prog_stats *stats;
-+		u64 start = sched_clock();
-+
-+		ret = dfunc(ctx, prog->insnsi, prog->bpf_func);
-+		stats = this_cpu_ptr(prog->stats);
-+		u64_stats_update_begin(&stats->syncp);
-+		stats->cnt++;
-+		stats->nsecs += sched_clock() - start;
-+		u64_stats_update_end(&stats->syncp);
-+	} else {
-+		ret = dfunc(ctx, prog->insnsi, prog->bpf_func);
-+	}
-+	return ret;
++	return bpf_program__attach_perf_event_opts(prog, pfd, NULL);
 +}
 +
-+static __always_inline u32 bpf_prog_run(const struct bpf_prog *prog, const void *ctx)
-+{
-+	return __bpf_prog_run(prog, ctx, bpf_dispatcher_nop_func);
-+}
-+
-+/* avoids name conflict with BPF_PROG_RUN enum definedi uapi/linux/bpf.h */
-+#define BPF_PROG_RUN bpf_prog_run
- 
  /*
-  * Use in preemptible and therefore migratable context to make sure that
-@@ -622,7 +638,7 @@ static inline u32 bpf_prog_run_pin_on_cpu(const struct bpf_prog *prog,
- 	u32 ret;
+  * this function is expected to parse integer in the range of [0, 2^31-1] from
+  * given file using scanf format string fmt. If actual parsed value is
+@@ -9182,8 +9200,9 @@ static int perf_event_open_probe(bool uprobe, bool retprobe, const char *name,
+ struct bpf_link *
+ bpf_program__attach_kprobe_opts(struct bpf_program *prog,
+ 				const char *func_name,
+-				struct bpf_kprobe_opts *opts)
++				const struct bpf_kprobe_opts *opts)
+ {
++	DECLARE_LIBBPF_OPTS(bpf_perf_event_opts, pe_opts);
+ 	char errmsg[STRERR_BUFSIZE];
+ 	struct bpf_link *link;
+ 	unsigned long offset;
+@@ -9195,6 +9214,7 @@ bpf_program__attach_kprobe_opts(struct bpf_program *prog,
  
- 	migrate_disable();
--	ret = __BPF_PROG_RUN(prog, ctx, bpf_dispatcher_nop_func);
-+	ret = bpf_prog_run(prog, ctx);
- 	migrate_enable();
- 	return ret;
- }
-@@ -768,7 +784,7 @@ static __always_inline u32 bpf_prog_run_xdp(const struct bpf_prog *prog,
- 	 * under local_bh_disable(), which provides the needed RCU protection
- 	 * for accessing map entries.
- 	 */
--	return __BPF_PROG_RUN(prog, xdp, BPF_DISPATCHER_FUNC(xdp));
-+	return __bpf_prog_run(prog, xdp, BPF_DISPATCHER_FUNC(xdp));
+ 	retprobe = OPTS_GET(opts, retprobe, false);
+ 	offset = OPTS_GET(opts, offset, 0);
++	pe_opts.bpf_cookie = OPTS_GET(opts, bpf_cookie, 0);
+ 
+ 	pfd = perf_event_open_probe(false /* uprobe */, retprobe, func_name,
+ 				    offset, -1 /* pid */);
+@@ -9204,7 +9224,7 @@ bpf_program__attach_kprobe_opts(struct bpf_program *prog,
+ 			libbpf_strerror_r(pfd, errmsg, sizeof(errmsg)));
+ 		return libbpf_err_ptr(pfd);
+ 	}
+-	link = bpf_program__attach_perf_event(prog, pfd);
++	link = bpf_program__attach_perf_event_opts(prog, pfd, &pe_opts);
+ 	err = libbpf_get_error(link);
+ 	if (err) {
+ 		close(pfd);
+@@ -9259,14 +9279,22 @@ static struct bpf_link *attach_kprobe(const struct bpf_sec_def *sec,
+ 	return link;
  }
  
- void bpf_prog_change_xdp(struct bpf_prog *prev_prog, struct bpf_prog *prog);
+-struct bpf_link *bpf_program__attach_uprobe(struct bpf_program *prog,
+-					    bool retprobe, pid_t pid,
+-					    const char *binary_path,
+-					    size_t func_offset)
++LIBBPF_API struct bpf_link *
++bpf_program__attach_uprobe_opts(struct bpf_program *prog, pid_t pid,
++				const char *binary_path, size_t func_offset,
++				const struct bpf_uprobe_opts *opts)
+ {
++	DECLARE_LIBBPF_OPTS(bpf_perf_event_opts, pe_opts);
+ 	char errmsg[STRERR_BUFSIZE];
+ 	struct bpf_link *link;
+ 	int pfd, err;
++	bool retprobe;
++
++	if (!OPTS_VALID(opts, bpf_uprobe_opts))
++		return libbpf_err_ptr(-EINVAL);
++
++	retprobe = OPTS_GET(opts, retprobe, false);
++	pe_opts.bpf_cookie = OPTS_GET(opts, bpf_cookie, 0);
+ 
+ 	pfd = perf_event_open_probe(true /* uprobe */, retprobe,
+ 				    binary_path, func_offset, pid);
+@@ -9277,7 +9305,7 @@ struct bpf_link *bpf_program__attach_uprobe(struct bpf_program *prog,
+ 			libbpf_strerror_r(pfd, errmsg, sizeof(errmsg)));
+ 		return libbpf_err_ptr(pfd);
+ 	}
+-	link = bpf_program__attach_perf_event(prog, pfd);
++	link = bpf_program__attach_perf_event_opts(prog, pfd, &pe_opts);
+ 	err = libbpf_get_error(link);
+ 	if (err) {
+ 		close(pfd);
+@@ -9290,6 +9318,16 @@ struct bpf_link *bpf_program__attach_uprobe(struct bpf_program *prog,
+ 	return link;
+ }
+ 
++struct bpf_link *bpf_program__attach_uprobe(struct bpf_program *prog,
++					    bool retprobe, pid_t pid,
++					    const char *binary_path,
++					    size_t func_offset)
++{
++	DECLARE_LIBBPF_OPTS(bpf_uprobe_opts, opts, .retprobe = retprobe);
++
++	return bpf_program__attach_uprobe_opts(prog, pid, binary_path, func_offset, &opts);
++}
++
+ static int determine_tracepoint_id(const char *tp_category,
+ 				   const char *tp_name)
+ {
+@@ -9340,14 +9378,21 @@ static int perf_event_open_tracepoint(const char *tp_category,
+ 	return pfd;
+ }
+ 
+-struct bpf_link *bpf_program__attach_tracepoint(struct bpf_program *prog,
+-						const char *tp_category,
+-						const char *tp_name)
++struct bpf_link *bpf_program__attach_tracepoint_opts(struct bpf_program *prog,
++						     const char *tp_category,
++						     const char *tp_name,
++						     const struct bpf_tracepoint_opts *opts)
+ {
++	DECLARE_LIBBPF_OPTS(bpf_perf_event_opts, pe_opts);
+ 	char errmsg[STRERR_BUFSIZE];
+ 	struct bpf_link *link;
+ 	int pfd, err;
+ 
++	if (!OPTS_VALID(opts, bpf_tracepoint_opts))
++		return libbpf_err_ptr(-EINVAL);
++
++	pe_opts.bpf_cookie = OPTS_GET(opts, bpf_cookie, 0);
++
+ 	pfd = perf_event_open_tracepoint(tp_category, tp_name);
+ 	if (pfd < 0) {
+ 		pr_warn("prog '%s': failed to create tracepoint '%s/%s' perf event: %s\n",
+@@ -9355,7 +9400,7 @@ struct bpf_link *bpf_program__attach_tracepoint(struct bpf_program *prog,
+ 			libbpf_strerror_r(pfd, errmsg, sizeof(errmsg)));
+ 		return libbpf_err_ptr(pfd);
+ 	}
+-	link = bpf_program__attach_perf_event(prog, pfd);
++	link = bpf_program__attach_perf_event_opts(prog, pfd, &pe_opts);
+ 	err = libbpf_get_error(link);
+ 	if (err) {
+ 		close(pfd);
+@@ -9367,6 +9412,13 @@ struct bpf_link *bpf_program__attach_tracepoint(struct bpf_program *prog,
+ 	return link;
+ }
+ 
++struct bpf_link *bpf_program__attach_tracepoint(struct bpf_program *prog,
++						const char *tp_category,
++						const char *tp_name)
++{
++	return bpf_program__attach_tracepoint_opts(prog, tp_category, tp_name, NULL);
++}
++
+ static struct bpf_link *attach_tp(const struct bpf_sec_def *sec,
+ 				  struct bpf_program *prog)
+ {
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index 1271d99bb7aa..1f4a67285365 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -104,17 +104,6 @@ struct bpf_object_open_opts {
+ };
+ #define bpf_object_open_opts__last_field btf_custom_path
+ 
+-struct bpf_kprobe_opts {
+-	/* size of this struct, for forward/backward compatiblity */
+-	size_t sz;
+-	/* function's offset to install kprobe to */
+-	unsigned long offset;
+-	/* kprobe is return probe */
+-	bool retprobe;
+-	size_t :0;
+-};
+-#define bpf_kprobe_opts__last_field retprobe
+-
+ LIBBPF_API struct bpf_object *bpf_object__open(const char *path);
+ LIBBPF_API struct bpf_object *
+ bpf_object__open_file(const char *path, const struct bpf_object_open_opts *opts);
+@@ -255,24 +244,82 @@ LIBBPF_API int bpf_link__destroy(struct bpf_link *link);
+ 
+ LIBBPF_API struct bpf_link *
+ bpf_program__attach(struct bpf_program *prog);
++
++struct bpf_perf_event_opts {
++	/* size of this struct, for forward/backward compatiblity */
++	size_t sz;
++	/* custom user-provided value fetchable through bpf_get_attach_cookie() */
++	__u64 bpf_cookie;
++};
++#define bpf_perf_event_opts__last_field bpf_cookie
++
+ LIBBPF_API struct bpf_link *
+ bpf_program__attach_perf_event(struct bpf_program *prog, int pfd);
++
++LIBBPF_API struct bpf_link *
++bpf_program__attach_perf_event_opts(struct bpf_program *prog, int pfd,
++				    const struct bpf_perf_event_opts *opts);
++
++struct bpf_kprobe_opts {
++	/* size of this struct, for forward/backward compatiblity */
++	size_t sz;
++	/* custom user-provided value fetchable through bpf_get_attach_cookie() */
++	__u64 bpf_cookie;
++	/* function's offset to install kprobe to */
++	unsigned long offset;
++	/* kprobe is return probe */
++	bool retprobe;
++	size_t :0;
++};
++#define bpf_kprobe_opts__last_field retprobe
++
+ LIBBPF_API struct bpf_link *
+ bpf_program__attach_kprobe(struct bpf_program *prog, bool retprobe,
+ 			   const char *func_name);
+ LIBBPF_API struct bpf_link *
+ bpf_program__attach_kprobe_opts(struct bpf_program *prog,
+                                 const char *func_name,
+-                                struct bpf_kprobe_opts *opts);
++                                const struct bpf_kprobe_opts *opts);
++
++struct bpf_uprobe_opts {
++	/* size of this struct, for forward/backward compatiblity */
++	size_t sz;
++	/* custom user-provided value fetchable through bpf_get_attach_cookie() */
++	__u64 bpf_cookie;
++	/* uprobe is return probe, invoked at function return time */
++	bool retprobe;
++	size_t :0;
++};
++#define bpf_uprobe_opts__last_field retprobe
++
+ LIBBPF_API struct bpf_link *
+ bpf_program__attach_uprobe(struct bpf_program *prog, bool retprobe,
+ 			   pid_t pid, const char *binary_path,
+ 			   size_t func_offset);
++LIBBPF_API struct bpf_link *
++bpf_program__attach_uprobe_opts(struct bpf_program *prog, pid_t pid,
++				const char *binary_path, size_t func_offset,
++				const struct bpf_uprobe_opts *opts);
++
++struct bpf_tracepoint_opts {
++	/* size of this struct, for forward/backward compatiblity */
++	size_t sz;
++	/* custom user-provided value fetchable through bpf_get_attach_cookie() */
++	__u64 bpf_cookie;
++};
++#define bpf_tracepoint_opts__last_field bpf_cookie
++
+ LIBBPF_API struct bpf_link *
+ bpf_program__attach_tracepoint(struct bpf_program *prog,
+ 			       const char *tp_category,
+ 			       const char *tp_name);
+ LIBBPF_API struct bpf_link *
++bpf_program__attach_tracepoint_opts(struct bpf_program *prog,
++				    const char *tp_category,
++				    const char *tp_name,
++				    const struct bpf_tracepoint_opts *opts);
++
++LIBBPF_API struct bpf_link *
+ bpf_program__attach_raw_tracepoint(struct bpf_program *prog,
+ 				   const char *tp_name);
+ LIBBPF_API struct bpf_link *
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index 5aca3686ca5e..090aca3452bc 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -374,6 +374,9 @@ LIBBPF_0.5.0 {
+ 		bpf_map__pin_path;
+ 		bpf_map_lookup_and_delete_elem_flags;
+ 		bpf_program__attach_kprobe_opts;
++		bpf_program__attach_perf_event_opts;
++		bpf_program__attach_tracepoint_opts;
++		bpf_program__attach_uprobe_opts;
+ 		bpf_object__gen_loader;
+ 		btf__load_from_kernel_by_id;
+ 		btf__load_from_kernel_by_id_split;
 -- 
 2.30.2
 
