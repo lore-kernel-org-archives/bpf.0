@@ -6,38 +6,38 @@ X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CC7BC432BE
-	for <bpf@archiver.kernel.org>; Fri, 30 Jul 2021 05:34:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BA6CC4338F
+	for <bpf@archiver.kernel.org>; Fri, 30 Jul 2021 05:34:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 873146101C
-	for <bpf@archiver.kernel.org>; Fri, 30 Jul 2021 05:34:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1F90360FED
+	for <bpf@archiver.kernel.org>; Fri, 30 Jul 2021 05:34:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236848AbhG3Feq convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 30 Jul 2021 01:34:46 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:56074 "EHLO
+        id S236868AbhG3Feu convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 30 Jul 2021 01:34:50 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:20030 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236802AbhG3Feq (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 30 Jul 2021 01:34:46 -0400
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16U5VGxL002638
-        for <bpf@vger.kernel.org>; Thu, 29 Jul 2021 22:34:42 -0700
+        by vger.kernel.org with ESMTP id S230518AbhG3Feu (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 30 Jul 2021 01:34:50 -0400
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16U5UqhG004958
+        for <bpf@vger.kernel.org>; Thu, 29 Jul 2021 22:34:46 -0700
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 3a3vrtdwan-2
+        by mx0a-00082601.pphosted.com with ESMTP id 3a491c8puc-6
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 29 Jul 2021 22:34:42 -0700
-Received: from intmgw002.06.ash9.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 29 Jul 2021 22:34:46 -0700
+Received: from intmgw001.38.frc1.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Thu, 29 Jul 2021 22:34:40 -0700
+ 15.1.2176.2; Thu, 29 Jul 2021 22:34:43 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id B77DF3D405B3; Thu, 29 Jul 2021 22:34:36 -0700 (PDT)
+        id CC4743D405B3; Thu, 29 Jul 2021 22:34:40 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
         Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCH v3 bpf-next 10/14] libbpf: add bpf_cookie support to bpf_link_create() API
-Date:   Thu, 29 Jul 2021 22:34:09 -0700
-Message-ID: <20210730053413.1090371-11-andrii@kernel.org>
+Subject: [PATCH v3 bpf-next 12/14] selftests/bpf: test low-level perf BPF link API
+Date:   Thu, 29 Jul 2021 22:34:11 -0700
+Message-ID: <20210730053413.1090371-13-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210730053413.1090371-1-andrii@kernel.org>
 References: <20210730053413.1090371-1-andrii@kernel.org>
@@ -45,165 +45,147 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 12Xgh1qwlWY5MpCeJ6KRvMnzhwLdHk_H
-X-Proofpoint-GUID: 12Xgh1qwlWY5MpCeJ6KRvMnzhwLdHk_H
+X-Proofpoint-ORIG-GUID: nbk8KzICN9Tv6b35SyPxiu9zO7VC239z
+X-Proofpoint-GUID: nbk8KzICN9Tv6b35SyPxiu9zO7VC239z
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
  definitions=2021-07-30_03:2021-07-29,2021-07-30 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=0
- adultscore=0 priorityscore=1501 mlxlogscore=999 impostorscore=0
- clxscore=1015 lowpriorityscore=0 spamscore=0 mlxscore=0 phishscore=0
- malwarescore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ priorityscore=1501 mlxscore=0 bulkscore=0 lowpriorityscore=0 spamscore=0
+ malwarescore=0 impostorscore=0 adultscore=0 mlxlogscore=999 clxscore=1034
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2107140000 definitions=main-2107300032
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add ability to specify bpf_cookie value when creating BPF perf link with
-bpf_link_create() low-level API.
-
-Given BPF_LINK_CREATE command is growing and keeps getting new fields that are
-specific to the type of BPF_LINK, extend libbpf side of bpf_link_create() API
-and corresponding OPTS struct to accomodate such changes. Add extra checks to
-prevent using incompatible/unexpected combinations of fields.
+Add tests utilizing low-level bpf_link_create() API to create perf BPF link.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/lib/bpf/bpf.c             | 32 +++++++++++++++++++++++++-------
- tools/lib/bpf/bpf.h             |  8 +++++++-
- tools/lib/bpf/libbpf_internal.h | 32 ++++++++++++++++++++++----------
- 3 files changed, 54 insertions(+), 18 deletions(-)
+ .../selftests/bpf/prog_tests/perf_link.c      | 89 +++++++++++++++++++
+ .../selftests/bpf/progs/test_perf_link.c      | 16 ++++
+ 2 files changed, 105 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/perf_link.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_perf_link.c
 
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index 86dcac44f32f..2401fad090c5 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -684,8 +684,13 @@ int bpf_link_create(int prog_fd, int target_fd,
- 	iter_info_len = OPTS_GET(opts, iter_info_len, 0);
- 	target_btf_id = OPTS_GET(opts, target_btf_id, 0);
- 
--	if (iter_info_len && target_btf_id)
--		return libbpf_err(-EINVAL);
-+	/* validate we don't have unexpected combinations of non-zero fields */
-+	if (iter_info_len || target_btf_id) {
-+		if (iter_info_len && target_btf_id)
-+			return libbpf_err(-EINVAL);
-+		if (!OPTS_ZEROED(opts, target_btf_id))
-+			return libbpf_err(-EINVAL);
-+	}
- 
- 	memset(&attr, 0, sizeof(attr));
- 	attr.link_create.prog_fd = prog_fd;
-@@ -693,14 +698,27 @@ int bpf_link_create(int prog_fd, int target_fd,
- 	attr.link_create.attach_type = attach_type;
- 	attr.link_create.flags = OPTS_GET(opts, flags, 0);
- 
--	if (iter_info_len) {
--		attr.link_create.iter_info =
--			ptr_to_u64(OPTS_GET(opts, iter_info, (void *)0));
--		attr.link_create.iter_info_len = iter_info_len;
--	} else if (target_btf_id) {
-+	if (target_btf_id) {
- 		attr.link_create.target_btf_id = target_btf_id;
-+		goto proceed;
- 	}
- 
-+	switch (attach_type) {
-+	case BPF_TRACE_ITER:
-+		attr.link_create.iter_info = ptr_to_u64(OPTS_GET(opts, iter_info, (void *)0));
-+		attr.link_create.iter_info_len = iter_info_len;
-+		break;
-+	case BPF_PERF_EVENT:
-+		attr.link_create.perf_event.bpf_cookie = OPTS_GET(opts, perf_event.bpf_cookie, 0);
-+		if (!OPTS_ZEROED(opts, perf_event))
-+			return libbpf_err(-EINVAL);
-+		break;
-+	default:
-+		if (!OPTS_ZEROED(opts, flags))
-+			return libbpf_err(-EINVAL);
-+		break;
-+	}
-+proceed:
- 	fd = sys_bpf(BPF_LINK_CREATE, &attr, sizeof(attr));
- 	return libbpf_err_errno(fd);
- }
-diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index 4f758f8f50cd..6fffb3cdf39b 100644
---- a/tools/lib/bpf/bpf.h
-+++ b/tools/lib/bpf/bpf.h
-@@ -177,8 +177,14 @@ struct bpf_link_create_opts {
- 	union bpf_iter_link_info *iter_info;
- 	__u32 iter_info_len;
- 	__u32 target_btf_id;
-+	union {
-+		struct {
-+			__u64 bpf_cookie;
-+		} perf_event;
-+	};
-+	size_t :0;
- };
--#define bpf_link_create_opts__last_field target_btf_id
-+#define bpf_link_create_opts__last_field perf_event
- 
- LIBBPF_API int bpf_link_create(int prog_fd, int target_fd,
- 			       enum bpf_attach_type attach_type,
-diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
-index f7b691d5f9eb..533b0211f40a 100644
---- a/tools/lib/bpf/libbpf_internal.h
-+++ b/tools/lib/bpf/libbpf_internal.h
-@@ -196,6 +196,17 @@ void *libbpf_add_mem(void **data, size_t *cap_cnt, size_t elem_sz,
- 		     size_t cur_cnt, size_t max_cnt, size_t add_cnt);
- int libbpf_ensure_mem(void **data, size_t *cap_cnt, size_t elem_sz, size_t need_cnt);
- 
-+static inline bool libbpf_is_mem_zeroed(const char *p, ssize_t len)
+diff --git a/tools/testing/selftests/bpf/prog_tests/perf_link.c b/tools/testing/selftests/bpf/prog_tests/perf_link.c
+new file mode 100644
+index 000000000000..b1abd0c46607
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/perf_link.c
+@@ -0,0 +1,89 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2021 Facebook */
++#define _GNU_SOURCE
++#include <pthread.h>
++#include <sched.h>
++#include <test_progs.h>
++#include "test_perf_link.skel.h"
++
++static void burn_cpu(void)
 +{
-+	while (len > 0) {
-+		if (*p)
-+			return false;
-+		p++;
-+		len--;
-+	}
-+	return true;
++	volatile int j = 0;
++	cpu_set_t cpu_set;
++	int i, err;
++
++	/* generate some branches on cpu 0 */
++	CPU_ZERO(&cpu_set);
++	CPU_SET(0, &cpu_set);
++	err = pthread_setaffinity_np(pthread_self(), sizeof(cpu_set), &cpu_set);
++	ASSERT_OK(err, "set_thread_affinity");
++
++	/* spin the loop for a while (random high number) */
++	for (i = 0; i < 1000000; ++i)
++		++j;
 +}
 +
- static inline bool libbpf_validate_opts(const char *opts,
- 					size_t opts_sz, size_t user_sz,
- 					const char *type_name)
-@@ -204,16 +215,9 @@ static inline bool libbpf_validate_opts(const char *opts,
- 		pr_warn("%s size (%zu) is too small\n", type_name, user_sz);
- 		return false;
- 	}
--	if (user_sz > opts_sz) {
--		size_t i;
--
--		for (i = opts_sz; i < user_sz; i++) {
--			if (opts[i]) {
--				pr_warn("%s has non-zero extra bytes\n",
--					type_name);
--				return false;
--			}
--		}
-+	if (!libbpf_is_mem_zeroed(opts + opts_sz, (ssize_t)user_sz - opts_sz)) {
-+		pr_warn("%s has non-zero extra bytes\n", type_name);
-+		return false;
- 	}
- 	return true;
- }
-@@ -233,6 +237,14 @@ static inline bool libbpf_validate_opts(const char *opts,
- 			(opts)->field = value;	\
- 	} while (0)
- 
-+#define OPTS_ZEROED(opts, last_nonzero_field)				      \
-+({									      \
-+	ssize_t __off = offsetofend(typeof(*(opts)), last_nonzero_field);     \
-+	!(opts) || libbpf_is_mem_zeroed((const void *)opts + __off,	      \
-+					(opts)->sz - __off);		      \
-+})
++void test_perf_link(void)
++{
++	struct test_perf_link *skel = NULL;
++	struct perf_event_attr attr;
++	int pfd = -1, link_fd = -1, err;
++	int run_cnt_before, run_cnt_after;
++	struct bpf_link_info info;
++	__u32 info_len = sizeof(info);
 +
++	/* create perf event */
++	memset(&attr, 0, sizeof(attr));
++	attr.size = sizeof(attr);
++	attr.type = PERF_TYPE_SOFTWARE;
++	attr.config = PERF_COUNT_SW_CPU_CLOCK;
++	attr.freq = 1;
++	attr.sample_freq = 4000;
++	pfd = syscall(__NR_perf_event_open, &attr, -1, 0, -1, PERF_FLAG_FD_CLOEXEC);
++	if (!ASSERT_GE(pfd, 0, "perf_fd"))
++		goto cleanup;
 +
- int parse_cpu_mask_str(const char *s, bool **mask, int *mask_sz);
- int parse_cpu_mask_file(const char *fcpu, bool **mask, int *mask_sz);
- int libbpf__load_raw_btf(const char *raw_types, size_t types_len,
++	skel = test_perf_link__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel_load"))
++		goto cleanup;
++
++	link_fd = bpf_link_create(bpf_program__fd(skel->progs.handler), pfd,
++				  BPF_PERF_EVENT, NULL);
++	if (!ASSERT_GE(link_fd, 0, "link_fd"))
++		goto cleanup;
++
++	memset(&info, 0, sizeof(info));
++	err = bpf_obj_get_info_by_fd(link_fd, &info, &info_len);
++	if (!ASSERT_OK(err, "link_get_info"))
++		goto cleanup;
++
++	ASSERT_EQ(info.type, BPF_LINK_TYPE_PERF_EVENT, "link_type");
++	ASSERT_GT(info.id, 0, "link_id");
++	ASSERT_GT(info.prog_id, 0, "link_prog_id");
++
++	/* ensure we get at least one perf_event prog execution */
++	burn_cpu();
++	ASSERT_GT(skel->bss->run_cnt, 0, "run_cnt");
++
++	/* perf_event is still active, but we close link and BPF program
++	 * shouldn't be executed anymore
++	 */
++	close(link_fd);
++	link_fd = -1;
++
++	/* make sure there are no stragglers */
++	kern_sync_rcu();
++
++	run_cnt_before = skel->bss->run_cnt;
++	burn_cpu();
++	run_cnt_after = skel->bss->run_cnt;
++
++	ASSERT_EQ(run_cnt_before, run_cnt_after, "run_cnt_before_after");
++
++cleanup:
++	if (link_fd >= 0)
++		close(link_fd);
++	if (pfd >= 0)
++		close(pfd);
++	test_perf_link__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_perf_link.c b/tools/testing/selftests/bpf/progs/test_perf_link.c
+new file mode 100644
+index 000000000000..c1db9fd98d0c
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_perf_link.c
+@@ -0,0 +1,16 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2021 Facebook */
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++int run_cnt = 0;
++
++SEC("perf_event")
++int handler(struct pt_regs *ctx)
++{
++	__sync_fetch_and_add(&run_cnt, 1);
++	return 0;
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.30.2
 
