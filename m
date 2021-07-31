@@ -2,111 +2,124 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E3A3BC4338F
-	for <bpf@archiver.kernel.org>; Sat, 31 Jul 2021 00:56:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A169CC4320E
+	for <bpf@archiver.kernel.org>; Sat, 31 Jul 2021 06:13:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BEE8560F46
-	for <bpf@archiver.kernel.org>; Sat, 31 Jul 2021 00:56:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 811F46103B
+	for <bpf@archiver.kernel.org>; Sat, 31 Jul 2021 06:13:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234928AbhGaA4v (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 30 Jul 2021 20:56:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57750 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231337AbhGaA4u (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 30 Jul 2021 20:56:50 -0400
-Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AD54C06175F;
-        Fri, 30 Jul 2021 17:56:44 -0700 (PDT)
-Received: by mail-oo1-xc2e.google.com with SMTP id z3-20020a4a98430000b029025f4693434bso2920237ooi.3;
-        Fri, 30 Jul 2021 17:56:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4I3sfRH5c1qD7pcvAmdOAVZq247JJaOlPdDXsBkGJVo=;
-        b=ePI09i2bpo2YPJWdPQb/QyYlqRI+5DeVdB9MuwfnpYuxP+/QNVeIB6FaakuodQZTkc
-         CBbIu6gfXy6JnZ3A8aZBA3RL9qkltsvuc5dKP8EH6l8GrDR84+5wECbzjBFdSuiZKKUH
-         ELA4CwtHt3LJ1LR3PSp8hMN05vDQZJuM87NTKzoEijtq9D5VKCUYe/XQat4quuq8ad8I
-         dLZOgxTCb6VaFIYSSmCC5iDsZQxxwoDzvFnsVDAoVCK7Sc5J6701BDRw7AFiovdF3IJb
-         b75pYp4o2WBzvCJugtInU8UZ++fRjKV0j3NazSiatL4nXZck6KBSF0TEISQsKsSXEZsx
-         pYew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4I3sfRH5c1qD7pcvAmdOAVZq247JJaOlPdDXsBkGJVo=;
-        b=TAouX7ng3SldTzz+EkgXHZsWljKWGDhyC4ntzyOq83UWARyt1pH+H8iC9C9BM8TRMY
-         cXB8A3qIDnZnkRJm7aBAlaTF7CxhKoIMRerl/xNUvRy0AUZRWAv1uaKK3tEXYhE8Q11+
-         ZkbuGp0csAYLBfeM10naCQtDIbZ7Im3mpEQfDAvPP8MvoU5/TNA+RfJKHd09Kn/BwRaa
-         D3EqCP70Lf2RbgDgvWcFUjnlxeIJYlIcYbisqP0r4NolmGwZcPDHWa8287PWOb36qx0B
-         nSKmaU02hIpV3d7+18sk51qD/ZrSi4nbxn1j06x8SNz4WHaXZ36EfCi3cO3LnSUcKimG
-         zunQ==
-X-Gm-Message-State: AOAM532j2v4Qvd1MhmRVrPO7DkdYfzXKk+zf2kgrFCwdeqwTWZgkc4pD
-        funSjAMTdXQRSxMY31sAtb6tDGbpsIf24A==
-X-Google-Smtp-Source: ABdhPJxm5TUERunhOkcXMvDJv8MwzDzJ6uuPZ3avpd0l2fWXxFE17D9tHU35lS0+orEuCdoA1CvkCQ==
-X-Received: by 2002:a4a:bf11:: with SMTP id r17mr3645698oop.29.1627693003731;
-        Fri, 30 Jul 2021 17:56:43 -0700 (PDT)
-Received: from localhost.localdomain (ip98-171-33-13.ph.ph.cox.net. [98.171.33.13])
-        by smtp.gmail.com with ESMTPSA id c26sm592804otu.38.2021.07.30.17.56.41
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 30 Jul 2021 17:56:43 -0700 (PDT)
-From:   Matthew Cover <werekraken@gmail.com>
-X-Google-Original-From: Matthew Cover <matthew.cover@stackpath.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Matthew Cover <matthew.cover@stackpath.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next] samples/bpf: xdp_redirect_cpu: Add mprog-disable to optstring.
-Date:   Fri, 30 Jul 2021 17:56:32 -0700
-Message-Id: <20210731005632.13228-1-matthew.cover@stackpath.com>
-X-Mailer: git-send-email 2.24.3 (Apple Git-128)
+        id S231794AbhGaGNY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 31 Jul 2021 02:13:24 -0400
+Received: from condef-04.nifty.com ([202.248.20.69]:51870 "EHLO
+        condef-04.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231768AbhGaGNX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 31 Jul 2021 02:13:23 -0400
+X-Greylist: delayed 419 seconds by postgrey-1.27 at vger.kernel.org; Sat, 31 Jul 2021 02:13:22 EDT
+Received: from conssluserg-04.nifty.com ([10.126.8.83])by condef-04.nifty.com with ESMTP id 16V63FAC005419;
+        Sat, 31 Jul 2021 15:03:15 +0900
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id 16V62rkF031113;
+        Sat, 31 Jul 2021 15:02:54 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 16V62rkF031113
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1627711374;
+        bh=LWga7esoyndTXDvF0XQrO+vJSaL7iFQWmNBogYT4sq8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=o9+5X1SvbKPA2o86uIvsZmNKz7uw3ZKipq2egDDNyfQXwyelhjvU/vkhbyAnsomP1
+         5k90nSNWCPkOokpYdxNV9xh8CcY6kQ35iP6HdLl9wubIhvlVOZTUq71HQdDkvAyK8q
+         HBICHZxRbtx7wkuoK7pg7QmDz8OA3mj7plkm01+n70w0+vDizjN21pwZNNs4ZBhVFc
+         gVi/0GRxgNpN/OT6c42x1SM6V7TX9vEgrMZbwnM5LfizxpqF3Sjc17/qXt6WKfdnqY
+         R3Mgt2d0hIVQuanDe4cKkC9BFLah6M2yjCWPCrPGkZ2m4r33etqmo8n/FgX52e7vUt
+         pTv1R8CueOVQw==
+X-Nifty-SrcIP: [209.85.216.41]
+Received: by mail-pj1-f41.google.com with SMTP id m10-20020a17090a34cab0290176b52c60ddso17420195pjf.4;
+        Fri, 30 Jul 2021 23:02:54 -0700 (PDT)
+X-Gm-Message-State: AOAM530I4qVbIB0CrPpKUEzB6fncQPvhkcqBxO4iNZ0ETSRJZNm3/l5K
+        TR5TlMhSDPTRbSJ3QeGeVqxsxkULlh165lUPYMA=
+X-Google-Smtp-Source: ABdhPJzxLT+VYMsbrrrUfBrOvhroV7QceyySrzxnrMoK+CQLQXj71gGswBHbIPxUKhjhWKEfixEolyP5TyUd8ncd048=
+X-Received: by 2002:a05:6a00:26d0:b029:32d:7d40:5859 with SMTP id
+ p16-20020a056a0026d0b029032d7d405859mr6056229pfw.76.1627711373301; Fri, 30
+ Jul 2021 23:02:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210528180140.176257-1-masahiroy@kernel.org>
+In-Reply-To: <20210528180140.176257-1-masahiroy@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sat, 31 Jul 2021 15:02:16 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQ5x55oCYRQbbC6fCE6qP5cp1Jdw+9SH-BNFuN=bqntFw@mail.gmail.com>
+Message-ID: <CAK7LNAQ5x55oCYRQbbC6fCE6qP5cp1Jdw+9SH-BNFuN=bqntFw@mail.gmail.com>
+Subject: Re: [PATCH] security: remove unneeded subdir-$(CONFIG_...)
+To:     James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Martin KaFai Lau <kafai@fb.com>,
+        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        bpf <bpf@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Commit ce4dade7f12a ("samples/bpf: xdp_redirect_cpu: Load a eBPF program
-on cpumap") added the following option, but missed adding it to optstring:
-- mprog-disable: disable loading XDP program on cpumap entries
+On Sat, May 29, 2021 at 3:02 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> All of these are unneeded. The directories to descend are specified
+> by obj-$(CONFIG_...).
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-Add the missing option character.
 
-Fixes: ce4dade7f12a ("samples/bpf: xdp_redirect_cpu: Load a eBPF program on cpumap")
-Signed-off-by: Matthew Cover <matthew.cover@stackpath.com>
----
- samples/bpf/xdp_redirect_cpu_user.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Ping?
 
-diff --git a/samples/bpf/xdp_redirect_cpu_user.c b/samples/bpf/xdp_redirect_cpu_user.c
-index d3ecdc1..9e225c9 100644
---- a/samples/bpf/xdp_redirect_cpu_user.c
-+++ b/samples/bpf/xdp_redirect_cpu_user.c
-@@ -841,7 +841,7 @@ int main(int argc, char **argv)
- 	memset(cpu, 0, n_cpus * sizeof(int));
- 
- 	/* Parse commands line args */
--	while ((opt = getopt_long(argc, argv, "hSd:s:p:q:c:xzFf:e:r:m:",
-+	while ((opt = getopt_long(argc, argv, "hSd:s:p:q:c:xzFf:e:r:m:n",
- 				  long_options, &longindex)) != -1) {
- 		switch (opt) {
- 		case 'd':
+
+
+
+> ---
+>
+>  security/Makefile | 11 -----------
+>  1 file changed, 11 deletions(-)
+>
+> diff --git a/security/Makefile b/security/Makefile
+> index 47e432900e24..18121f8f85cd 100644
+> --- a/security/Makefile
+> +++ b/security/Makefile
+> @@ -4,16 +4,6 @@
+>  #
+>
+>  obj-$(CONFIG_KEYS)                     += keys/
+> -subdir-$(CONFIG_SECURITY_SELINUX)      += selinux
+> -subdir-$(CONFIG_SECURITY_SMACK)                += smack
+> -subdir-$(CONFIG_SECURITY_TOMOYO)        += tomoyo
+> -subdir-$(CONFIG_SECURITY_APPARMOR)     += apparmor
+> -subdir-$(CONFIG_SECURITY_YAMA)         += yama
+> -subdir-$(CONFIG_SECURITY_LOADPIN)      += loadpin
+> -subdir-$(CONFIG_SECURITY_SAFESETID)    += safesetid
+> -subdir-$(CONFIG_SECURITY_LOCKDOWN_LSM) += lockdown
+> -subdir-$(CONFIG_BPF_LSM)               += bpf
+> -subdir-$(CONFIG_SECURITY_LANDLOCK)     += landlock
+>
+>  # always enable default capabilities
+>  obj-y                                  += commoncap.o
+> @@ -36,5 +26,4 @@ obj-$(CONFIG_BPF_LSM)                 += bpf/
+>  obj-$(CONFIG_SECURITY_LANDLOCK)                += landlock/
+>
+>  # Object integrity file lists
+> -subdir-$(CONFIG_INTEGRITY)             += integrity
+>  obj-$(CONFIG_INTEGRITY)                        += integrity/
+> --
+> 2.27.0
+>
+
+
 -- 
-1.8.3.1
-
+Best Regards
+Masahiro Yamada
