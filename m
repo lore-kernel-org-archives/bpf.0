@@ -2,102 +2,300 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-11.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E3CB3C4338F
-	for <bpf@archiver.kernel.org>; Sat, 31 Jul 2021 23:33:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 574B0C4338F
+	for <bpf@archiver.kernel.org>; Sun,  1 Aug 2021 03:30:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C016B61040
-	for <bpf@archiver.kernel.org>; Sat, 31 Jul 2021 23:33:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3141A61055
+	for <bpf@archiver.kernel.org>; Sun,  1 Aug 2021 03:30:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229505AbhGaXd2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 31 Jul 2021 19:33:28 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:47706 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229449AbhGaXd2 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sat, 31 Jul 2021 19:33:28 -0400
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16VNEBPb004686
-        for <bpf@vger.kernel.org>; Sat, 31 Jul 2021 16:33:21 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=HD3wSVNd3+9Z9Wo8mAqH6cUfUOmpG2rhej5gPge0ur4=;
- b=j6QFbyukE0LpjiZIyD6r4qaLc05TZ1T5FfWIZN9BHD3Uzyul9k/FYC7sXnKEf9pNARqg
- 14eSoex4tFePTMYMgyclEOr4+fxRRer+Q3z+vLLVsTkIAX0/+wm2ffl/8iIrI4llV92c
- tG+j1yy3QoU/pN6VCfD2P/E9NGr0K69kXxY= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 3a54bxjbb8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Sat, 31 Jul 2021 16:33:21 -0700
-Received: from intmgw001.37.frc1.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Sat, 31 Jul 2021 16:33:20 -0700
-Received: by devbig030.frc3.facebook.com (Postfix, from userid 158236)
-        id 5ADFF4B6972B; Sat, 31 Jul 2021 16:31:03 -0700 (PDT)
-From:   Dave Marchevsky <davemarchevsky@fb.com>
-To:     <bpf@vger.kernel.org>
-CC:     <netdev@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        id S231452AbhHAD0J (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 31 Jul 2021 23:26:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54542 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230364AbhHAD0I (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 31 Jul 2021 23:26:08 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B73C06175F
+        for <bpf@vger.kernel.org>; Sat, 31 Jul 2021 20:26:00 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id b1-20020a17090a8001b029017700de3903so15687209pjn.1
+        for <bpf@vger.kernel.org>; Sat, 31 Jul 2021 20:26:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=3XR3Rna7Rr+9CL16uPJTtqZhFZ3n6mMMJSTweWOLXfo=;
+        b=H5qg3Rv7MU+P4vxEQBBg941EZz82TEbn+YLrXqAJYjPhYWhV7UUm6FSQhDPS/94SFQ
+         BBg1I1Tw2eXYkRdW7gLanO5HTB3oQl6I+FCnpIOlJfBBEhth03qDoYYFqLk0Nx4/3/j0
+         2txnkcrm3GXKTBF649x92vWh4fDiipIVK9heE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=3XR3Rna7Rr+9CL16uPJTtqZhFZ3n6mMMJSTweWOLXfo=;
+        b=c4+owN7K+H0i+FdV6xDwOExmcp4GVxaRKwg3CbpmtahtCBTL2dShU6Xj5bYy8i4ltc
+         EdycN+7v8aHimQ6rD2vELroK/4flZw9vXoNloVTjYPNhEdOLpPUNL7cAuNnZyqh4GDKl
+         0ruOXYJOwmpsjTgWDLHyxtj6dayclgQ5lOds9QQw7gUYg9VG51GQeBNz5iWKSaznV0x3
+         39jAIO6AMUK8HoBys//LEwXnQTehq+55sSC61SaEnMiOHu1iV4BY1vSsJo5lpjdaZO1u
+         yRX04ZLyy7hI4xxOKM5MA+8HgNgB1odguhxX8MTnzSOqNW9OkX2jpCDkwnptUdwehTK3
+         teQg==
+X-Gm-Message-State: AOAM531v0EFqJZgXIYLpM7ABhC20vdhd5pjHilHJhlqgnIp4Ds+zS8o4
+        fafpQB89d1043wl8SDoK8fc5cw==
+X-Google-Smtp-Source: ABdhPJztWny8qDLoF9aDrOGGwPEkUl8/lCnKXM6Yi4tE7zPw7q2cjlDL6++ccQRH4HMcKCFTQSzjiA==
+X-Received: by 2002:a62:584:0:b029:32e:3b57:a1c6 with SMTP id 126-20020a6205840000b029032e3b57a1c6mr10199216pff.13.1627788360124;
+        Sat, 31 Jul 2021 20:26:00 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id r4sm6540476pjo.46.2021.07.31.20.25.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 31 Jul 2021 20:25:59 -0700 (PDT)
+Date:   Sat, 31 Jul 2021 20:25:58 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Cc:     Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>
-Subject: [PATCH bpf-next 0/1] Refactor cgroup_bpf internals to use more specific attach_type
-Date:   Sat, 31 Jul 2021 16:30:55 -0700
-Message-ID: <20210731233056.850105-1-davemarchevsky@fb.com>
-X-Mailer: git-send-email 2.30.2
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>, bpf@vger.kernel.org,
+        alaaemadhossney.ae@gmail.com, syzkaller@googlegroups.com,
+        Jann Horn <jannh@google.com>,
+        Tycho Andersen <tycho@tycho.pizza>,
+        Sargun Dhillon <sargun@sargun.me>,
+        Christian Brauner <christian.brauner@ubuntu.com>
+Subject: Re: memory leak in do_seccomp
+Message-ID: <202107311901.8CDF235F65@keescook>
+References: <CADVatmPShADZ0F133eS3KjeKj1ZjTNAQfy_QOoJVBan02wuR+Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: nynvp4lprXKMeCSkAn6wEFr--lOsfOx9
-X-Proofpoint-GUID: nynvp4lprXKMeCSkAn6wEFr--lOsfOx9
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-07-31_05:2021-07-30,2021-07-31 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=1 mlxscore=1 adultscore=0
- priorityscore=1501 lowpriorityscore=0 suspectscore=0 malwarescore=0
- bulkscore=0 clxscore=1015 mlxlogscore=206 impostorscore=0 spamscore=1
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2107140000 definitions=main-2107310136
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CADVatmPShADZ0F133eS3KjeKj1ZjTNAQfy_QOoJVBan02wuR+Q@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The cgroup_bpf struct has a few arrays (effective, progs, and flags) of
-size MAX_BPF_ATTACH_TYPE. These are meant to separate progs by their
-attach type, currently represented by the bpf_attach_type enum.
+On Sat, Jul 31, 2021 at 08:20:29PM +0100, Sudip Mukherjee wrote:
+> Hi All,
+> 
+> We had been running syzkaller on v5.10.y and a "memory leak in
+> do_seccomp" was being reported on it. I got some time to check that
+> today and have managed to get a syzkaller
+> reproducer. I dont have a C reproducer which I can share but I can use
+> the syz-reproducer to reproduce this with next-20210730.
+> The old report on v5.10.y is at
+> https://elisa-builder-00.iol.unh.edu/syzkaller/report?id=f6ddd3b592f00e95f9cbd2e74f70a5b04b015c6f
 
-There are some bpf_attach_type values which are not valid attach types
-for cgroup bpf programs. Programs with these attach types will never be
-handled by cgroup_bpf_{attach,detach} and thus will never be held in
-cgroup_bpf structs. Even if such programs did make it into their
-reserved slot in those arrays, they would never be executed.
+Thanks for the details!
 
-Accordingly we can migrate to a new internal cgroup_bpf-specific enum
-for these arrays, saving some bytes per cgroup and making it more
-obvious which BPF programs belong there. netns_bpf_attach_type is an
-existing example of this pattern, let's do similar for cgroup_bpf.
+Is this the same as what syzbot saw here (with a C reproducer)?
+https://syzkaller.appspot.com/bug?id=2809bb0ac77ad9aa3f4afe42d6a610aba594a987
 
-Dave Marchevsky (1):
-  bpf: migrate cgroup_bpf to internal cgroup_bpf_attach_type enum
+I can't figure out what happened with the "Patch testing request" that
+was made; there's no link?
 
- include/linux/bpf-cgroup.h     | 200 +++++++++++++++++++++++----------
- include/uapi/linux/bpf.h       |   2 +-
- kernel/bpf/cgroup.c            | 154 +++++++++++++++----------
- net/ipv4/af_inet.c             |   6 +-
- net/ipv4/udp.c                 |   2 +-
- net/ipv6/af_inet6.c            |   6 +-
- net/ipv6/udp.c                 |   2 +-
- tools/include/uapi/linux/bpf.h |   2 +-
- 8 files changed, 243 insertions(+), 131 deletions(-)
+> 
+> BUG: memory leak
+> unreferenced object 0xffff888019282c00 (size 512):
+>   comm "syz-executor.1", pid 7389, jiffies 4294761829 (age 17.841s)
+>   hex dump (first 32 bytes):
+>     01 00 00 00 01 00 00 00 00 00 00 00 00 00 00 00  ................
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>   backtrace:
+>     [<00000000762c0963>] do_seccomp+0x2d5/0x27d0
 
---=20
-2.30.2
+Can you run "./scripts/faddr2line do_seccomp+0x2d5/0x27d0" for this? I
+expect it'll be:
+        sfilter = kzalloc(sizeof(*sfilter), GFP_KERNEL | __GFP_NOWARN);
 
+>     [<0000000006e512d1>] do_syscall_64+0x3b/0x90
+>     [<0000000094ae9ff8>] entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+The "size 512" in your v5.10.y report is from seccomp_prepare_filter()
+(noted above). seccomp_prepare_filter() cleans up its error paths.
+
+> 
+> BUG: memory leak
+> unreferenced object 0xffffc900006b5000 (size 4096):
+>   comm "syz-executor.1", pid 7389, jiffies 4294761829 (age 17.841s)
+>   hex dump (first 32 bytes):
+>     01 00 00 00 00 00 00 00 00 00 00 00 05 00 00 00  ................
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>   backtrace:
+>     [<00000000854901e5>] __vmalloc_node_range+0x550/0x9a0
+>     [<000000002686628f>] __vmalloc_node+0xb5/0x100
+>     [<0000000004cbd298>] bpf_prog_alloc_no_stats+0x38/0x350
+>     [<0000000009149728>] bpf_prog_alloc+0x24/0x170
+>     [<000000000fe7f1e7>] bpf_prog_create_from_user+0xad/0x2e0
+>     [<000000000c70eb02>] do_seccomp+0x325/0x27d0
+>     [<0000000006e512d1>] do_syscall_64+0x3b/0x90
+>     [<0000000094ae9ff8>] entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+Again, I'm curious about where do_seccomp+0x325/0x27d0 is for this, but
+the matching one in v5.10 shows:
+        ret = bpf_prog_create_from_user(&sfilter->prog, fprog,
+                                        seccomp_check_filter, save_orig);
+
+This and everything remaining below else has bpf_prog_create_from_user()
+in the allocation path.
+
+> 
+> BUG: memory leak
+> unreferenced object 0xffff888026eb1000 (size 2048):
+>   comm "syz-executor.1", pid 7389, jiffies 4294761829 (age 17.842s)
+>   hex dump (first 32 bytes):
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>   backtrace:
+>     [<0000000072de7240>] bpf_prog_alloc_no_stats+0xeb/0x350
+>     [<0000000009149728>] bpf_prog_alloc+0x24/0x170
+>     [<000000000fe7f1e7>] bpf_prog_create_from_user+0xad/0x2e0
+>     [<000000000c70eb02>] do_seccomp+0x325/0x27d0
+>     [<0000000006e512d1>] do_syscall_64+0x3b/0x90
+>     [<0000000094ae9ff8>] entry_SYSCALL_64_after_hwframe+0x44/0xae
+> 
+> BUG: memory leak
+> unreferenced object 0xffff888014dddac0 (size 16):
+>   comm "syz-executor.1", pid 7389, jiffies 4294761829 (age 17.842s)
+>   hex dump (first 16 bytes):
+>     01 00 ca 08 80 88 ff ff c8 ef df 14 80 88 ff ff  ................
+
+These are two kernel pointers:
+	0xffff888008ca0001 (unaligned by 1 byte?!)
+	0xffff888014dfefc8
+
+Ah, no, this is from:
+
+struct sock_fprog_kern {
+        u16                     len;
+        struct sock_filter      *filter;
+};
+
+The "ca 08 80 88 ff ff" bytes are uninitialized padding. ;) "len" has
+a value of 1 (which matches the syzkaller reproducer args below of a
+single BPF instruction).
+
+        fp->orig_prog = kmalloc(sizeof(*fkprog), GFP_KERNEL);
+        if (!fp->orig_prog)
+                return -ENOMEM;
+
+        fkprog = fp->orig_prog;
+        fkprog->len = fprog->len;
+	...
+        fkprog->filter = kmemdup(fp->insns, fsize,
+                                 GFP_KERNEL | __GFP_NOWARN);
+
+>   backtrace:
+>     [<00000000c5d4ed93>] bpf_prog_store_orig_filter+0x7b/0x1e0
+>     [<000000007cb21c2a>] bpf_prog_create_from_user+0x1c6/0x2e0
+>     [<000000000c70eb02>] do_seccomp+0x325/0x27d0
+>     [<0000000006e512d1>] do_syscall_64+0x3b/0x90
+>     [<0000000094ae9ff8>] entry_SYSCALL_64_after_hwframe+0x44/0xae
+> 
+> BUG: memory leak
+> unreferenced object 0xffff888014dfefc8 (size 8):
+>   comm "syz-executor.1", pid 7389, jiffies 4294761829 (age 17.842s)
+>   hex dump (first 8 bytes):
+>     06 00 00 00 ff ff ff 7f                          ........
+
+This contains a userspace (likely stack) pointer, and is referenced
+by the second pointer above. (i.e. kmemdup() above, but how have the
+contents become a user stack pointer?)
+
+>   backtrace:
+>     [<00000000ee5550f8>] kmemdup+0x23/0x50
+>     [<00000000f1acd067>] bpf_prog_store_orig_filter+0x103/0x1e0
+>     [<000000007cb21c2a>] bpf_prog_create_from_user+0x1c6/0x2e0
+>     [<000000000c70eb02>] do_seccomp+0x325/0x27d0
+>     [<0000000006e512d1>] do_syscall_64+0x3b/0x90
+>     [<0000000094ae9ff8>] entry_SYSCALL_64_after_hwframe+0x44/0xae
+> 
+> Not sure if this has been already reported or not, but I will be happy
+> to test if you have a fix for this.
+
+I was suspecting a missing error path free near bpf_prepare_filter()
+as called by bpf_prog_create_from_user() here:
+
+        /* bpf_prepare_filter() already takes care of freeing
+         * memory in case something goes wrong.
+         */
+        fp = bpf_prepare_filter(fp, trans);
+        if (IS_ERR(fp))
+                return PTR_ERR(fp);
+
+Since only seccomp and af_packet use bpf_prog_create_from_user(),
+and af_packet sets neither a "trans" callback nor save_orig. But if
+"trans" fails (due to some BPF instructions seccomp doesn't support),
+I'd expect this leak to be detected more often.
+
+bpf_prepare_filter() is documented as cleaning up allocations on failure,
+though I notice its cleanup differs from bpf_prog_create_from_user()'s,
+which uses __bpf_prog_free() instead of __bfp_prog_release(). But
+that should only make a difference for orig_prog getting freed,
+and bpf_prog_store_orig_filter() should already be freeing that on
+failures too.
+
+Similarly, bpf_migrate_filter() cleanups up on failure too, so this
+doesn't seem to be it:
+
+        if (!fp->jited)
+                fp = bpf_migrate_filter(fp);
+
+        return fp;
+
+So, I'm going to assume the missing free is somehow related to
+process management, since I see the Syzkaller reproducer mentions
+SECCOMP_SET_MODE_FILTER_LISTENER, fork(), and ptrace(). :)
+
+Quoting from the v5.10.y report:
+> # {Threaded:true Collide:true Repeat:true RepeatTimes:0 Procs:8 Slowdown:1 Sandbox:none Fault:false FaultCall:-1 FaultNth:0 Leak:true NetInjection:true NetDevices:true NetReset:true Cgroups:true BinfmtMisc:true CloseFDs:true KCSAN:false DevlinkPCI:false USB:true VhciInjection:false Wifi:false IEEE802154:false Sysctl:true UseTmpDir:true HandleSegv:true Repro:false Trace:false}
+> seccomp$SECCOMP_SET_MODE_FILTER_LISTENER(0x1, 0x0, &(0x7f0000000000)={0x1, &(0x7f0000000040)=[{0x6, 0x0, 0x0, 0x7fffffff}]})
+
+0x1 is SECCOMP_SET_MODE_FILTER
+0x0 is empty flags
+{0x6, 0x0, 0x0, 0x7fffffff} is
+	BPF_STMT(BPF_RET, SECCOMP_RET_ALLOW | 0xffff)
+
+For "SECCOMP_SET_MODE_FILTER_LISTENER", defined here:
+https://github.com/google/syzkaller/blob/master/sys/linux/seccomp.txt#L15
+I was expecting flags to include SECCOMP_FILTER_FLAG_NEW_LISTENER:
+	seccomp$SECCOMP_SET_MODE_FILTER_LISTENER(
+			op const[SECCOMP_SET_MODE_FILTER],
+			flags flags[seccomp_flags_listener],
+			arg ptr[in, sock_fprog]) fd_seccomp (breaks_returns)
+
+For the flags:
+
+	seccomp_flags_listener = SECCOMP_FILTER_FLAG_NEW_LISTENER,
+				 SECCOMP_FILTER_FLAG_LOG_LISTENER,
+				 SECCOMP_FILTER_FLAG_SPEC_ALLOW_LISTENER
+
+which is:
+
+	SECCOMP_FILTER_FLAG_LOG_LISTENER = 10
+	SECCOMP_FILTER_FLAG_NEW_LISTENER = 8
+	SECCOMP_FILTER_FLAG_SPEC_ALLOW = 4
+	SECCOMP_FILTER_FLAG_SPEC_ALLOW_LISTENER = 12
+
+How is flags 0 above? (Maybe I don't understand the syzkaller reproducer
+meaning fully?)
+
+> r0 = fork()
+> ptrace(0x10, r0)
+
+0x10 is PTRACE_ATTACH
+
+My best guess is there is some LISTENER refcount state we can get into
+where all the processes die, but a reference is left alive.
+
+-Kees
+
+-- 
+Kees Cook
