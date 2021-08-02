@@ -4,203 +4,189 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-18.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8231EC4338F
-	for <bpf@archiver.kernel.org>; Mon,  2 Aug 2021 02:44:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DD4BC4338F
+	for <bpf@archiver.kernel.org>; Mon,  2 Aug 2021 04:45:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5791560EB2
-	for <bpf@archiver.kernel.org>; Mon,  2 Aug 2021 02:44:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5DDE960EFD
+	for <bpf@archiver.kernel.org>; Mon,  2 Aug 2021 04:45:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230341AbhHBCoi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 1 Aug 2021 22:44:38 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:5454 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229915AbhHBCoh (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sun, 1 Aug 2021 22:44:37 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 1722f7TH020592;
-        Sun, 1 Aug 2021 19:44:16 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : to : cc :
- references : from : message-id : date : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=facebook;
- bh=g+FiLvTo8XU/yEmkTs+j+LC91FGGxrZzYNfFlZVnn1Y=;
- b=OWhqbBNQgyC4Ax7g0cDq9JXawEcleH8HmZiTUFYWRJQCaOGEqS/d5oFfVkdheF2CTt1R
- tpQuQefCqOnALj/PJyUifuBUxnYQpOhuo7RhmeWT1VAqesoHfW/kdVVzUC8Nd4Nt5irN
- uu4f7vT5SW6/X/ht1e+qcrSkXbdG60TSrOU= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 3a51ut6tu8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Sun, 01 Aug 2021 19:44:15 -0700
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (100.104.98.9) by
- o365-in.thefacebook.com (100.104.94.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Sun, 1 Aug 2021 19:44:15 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VuDP+r9lmXH6alhW/C/sqBEjNPfb/rYnH/tA0PN27+7k0YSsz12NGCpLkPhsMRf88lvIdrsUUPeXmb+GOD9/D/Qxil1FXwm4iX1J/DXC1Mkr/W4qCx8k7B+jRF6SlWW5LpOZKSAgtk9PAxb+kvrVmdxm++KSwt+hudhyrIB3xI0r0SvAyVJkmSueO+j5AWTDfXVWsycCprD6Vt/mHcNZtZ0qL1L2641tLEPrQ9adTstY48m9jinzOw0b4vI1UYi9rB8N8Ux2c/h5apvsI+b3nsbPubbXnyrV25xV53cvsCLF5+t2m3phGTX3SaD3K8/B/aFj0gzcv5gMobEtXmaFag==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=g+FiLvTo8XU/yEmkTs+j+LC91FGGxrZzYNfFlZVnn1Y=;
- b=lTTnXp2yZxhtULs7HVaQX5dbqI9HscuXJoRDLCW1LeJ7XaFWeuBvnWv1+n8WVm0dBbZOFswcHEMWkvHEoGBi0OrOoiYQRU+AgEnz2cMTu4p9ZXAI4eA5mcmRwVxBkgk7S1K2extFigInsZBuhWqf15Nk9vQ6EjbFKPd8GGmzLUsVysh05vwFKtptczwFNshVICC/sZNuXrdn4RzWy2P5Wp9i8CqKUMTvxnHWhdMEQ35eLkzYMiM7vHXJE+insy1WQs/5JcrFcfx4xO+gMqq1dDfmfHKG1GcFMf6nqcn5YoF+C2GVYL6U28eMSAkqgpAdPdSDKJYH/9Pgwdc5DEmxog==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Authentication-Results: gmail.com; dkim=none (message not signed)
- header.d=none;gmail.com; dmarc=none action=none header.from=fb.com;
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by SN7PR15MB4223.namprd15.prod.outlook.com (2603:10b6:806:107::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4373.18; Mon, 2 Aug
- 2021 02:44:13 +0000
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::c143:fac2:85b4:14cb]) by SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::c143:fac2:85b4:14cb%7]) with mapi id 15.20.4373.026; Mon, 2 Aug 2021
- 02:44:13 +0000
-Subject: Re: [PATCH] selftests/bpf: Test
- btf__load_vmlinux_btf/btf__load_module_btf APIs
-To:     Hengqi Chen <hengqi.chen@gmail.com>, <bpf@vger.kernel.org>
-CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <john.fastabend@gmail.com>
-References: <20210731143244.784959-1-hengqi.chen@gmail.com>
-From:   Yonghong Song <yhs@fb.com>
-Message-ID: <ac1139ff-0680-0aae-550d-3222fb4c4710@fb.com>
-Date:   Sun, 1 Aug 2021 19:44:09 -0700
+        id S229595AbhHBEpY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 2 Aug 2021 00:45:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:51505 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229472AbhHBEpX (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 2 Aug 2021 00:45:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1627879514;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CWU1k5rzzQ7Vi8eeYiIsQOirmMRXBw0kSKn136zOB28=;
+        b=JpsxOPlB/qRZ7Dx0aRNKXyHEZ82qp2t6scCPNwe+oY+eGvXrzZrmIebgK+A70l3+udYcaN
+        9L6F9AV11ex1lWDkHcMxz13nb61uLM5P09RWbkokrXJp8G+290H2dQc9dkZobbelv1zvaL
+        huHHSd+EyV8EK6HMwRZJFgjT/yoOleM=
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com
+ [209.85.216.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-306-4iPe_SE0MaCe5JTsodG1UA-1; Mon, 02 Aug 2021 00:45:13 -0400
+X-MC-Unique: 4iPe_SE0MaCe5JTsodG1UA-1
+Received: by mail-pj1-f70.google.com with SMTP id q63-20020a17090a17c5b02901774f4b30ebso12897946pja.1
+        for <bpf@vger.kernel.org>; Sun, 01 Aug 2021 21:45:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=CWU1k5rzzQ7Vi8eeYiIsQOirmMRXBw0kSKn136zOB28=;
+        b=S+VvJ3xE2xjzbcxPtkst6pfk0vQlR4o34TQthJqqo6be38eJDhrii7kchVBf0yvpVC
+         VxRdalr66eya1dEnG6np7SrwwCBQjyg2341C4A/mXobWp0qD4hueII7/U8D1ClWsJG1z
+         AXniOy3/uCOG6J3PHAlE3rqZuvrNDIo+xxWgKdW6/tbXojqbnPCXTYeNoiAiJ9Z+fp8l
+         UVEmS1LRaFsZWjn5XyMuL7NvdZfdvMxlK0LRikFhi8t+ECPBdxK/jp7XzPg1NO1uxUba
+         SM4g7PrwGVUfi5pvv2SLqm9u6WL95/m/5oqgXeN1MYiKerJPAeV+rcrk3P+mbe5ax5Oa
+         hqpw==
+X-Gm-Message-State: AOAM532XAQR/nivlCedYhSykkegNx9CQ40T2oTuojSTZPEg5r3LdLKtR
+        UmGCyqwchZ8c+PfB4m2h+ysiDZl2kOa6IYg+n9F0uaY1SppSyPFNNHtPgZR77Bo/sSPsqt50LGM
+        ii/AbNGk+jqHcQzMAODk0+c0GtLN9ZNPdHO+zhlkXiC5hElNxmLZb1myVTJrDT4WF
+X-Received: by 2002:a63:1359:: with SMTP id 25mr541184pgt.79.1627879512392;
+        Sun, 01 Aug 2021 21:45:12 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxoXngPrq5rRn9UeJyNSEFumVnGGLTEtq2/2ysIovNTb7ygYq/sFdvyihjsErzHXJFXhFvKSg==
+X-Received: by 2002:a63:1359:: with SMTP id 25mr541160pgt.79.1627879512138;
+        Sun, 01 Aug 2021 21:45:12 -0700 (PDT)
+Received: from wangxiaodeMacBook-Air.local ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id j128sm10345988pfd.38.2021.08.01.21.45.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 01 Aug 2021 21:45:11 -0700 (PDT)
+Subject: Re: [PATCH net v2 0/2] virtio-net: fix for build_skb()
+To:     Jakub Kicinski <kuba@kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
+References: <20210601064000.66909-1-xuanzhuo@linux.alibaba.com>
+ <20210601070610-mutt-send-email-mst@kernel.org>
+ <20210730051643.54198a9e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+From:   Jason Wang <jasowang@redhat.com>
+Message-ID: <7ec67d98-190e-343d-bc2b-6f42a7ee6402@redhat.com>
+Date:   Mon, 2 Aug 2021 12:45:03 +0800
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
  Gecko/20100101 Thunderbird/78.12.0
-In-Reply-To: <20210731143244.784959-1-hengqi.chen@gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MW4PR03CA0306.namprd03.prod.outlook.com
- (2603:10b6:303:dd::11) To SN6PR1501MB2064.namprd15.prod.outlook.com
- (2603:10b6:805:d::27)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [IPv6:2620:10d:c085:21d6::1130] (2620:10d:c090:400::5:a39) by MW4PR03CA0306.namprd03.prod.outlook.com (2603:10b6:303:dd::11) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4373.18 via Frontend Transport; Mon, 2 Aug 2021 02:44:12 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: caa4dd1c-c1b9-456c-dc18-08d9555f6998
-X-MS-TrafficTypeDiagnostic: SN7PR15MB4223:
-X-Microsoft-Antispam-PRVS: <SN7PR15MB4223593F8AC708174CF53FD6D3EF9@SN7PR15MB4223.namprd15.prod.outlook.com>
-X-FB-Source: Internal
-X-MS-Oob-TLC-OOBClassifiers: OLM:2512;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8DftfLRpyOwT/NiugFgw9nrZA4rqRDOSWMc89aYpaJLRiodrhB7mrcuXJ5riPk9nuQ3FIfWLm/nWJxzGQV3XpqAKS1erJ5pZRQOpc1vP8cL+AQ9zwPiSKY+0FfCYZgaRn32GA+0IYGq6WmikPInzKAi6YV2yWiuY64sOq+4MWBEitv8LxWGqUYpCB9VGDHzm6B8C1gCwVwrUA8ecmDvG8j3ONtKTApoRU4EXUL+s5h8ysd1O74F5QN6hdWrMHywc2pf5Vu1bYX5iizsoBoPXngz/GT8PPuewwA3s4AhAXhiqAHHvByytYb1jpZmGZKUjGXtRreFOoDhhOm+pq+/LuXMcCSYnL3DZA31WbggbW58ROwEuQUwpIgt01xCeExxEoHFzd0WovnN60IcvvCfkrLDwYkbbuV0XHYIrRIU2Dwj/xqBzjDXzwB5EdCHpKEd94fuzUfUuJDdL7GUSPqH5y1S0Ra1RH5r2Runto+r/gc+uHWAOpomy3n78LxMB6MtWygMxdTzOVgP5oIiqEJY7+sPnarCLNp5S3B28ztm2stNH5ZcfhHbP9+kXPeHRPAaP0+98RF5T22VMYMLLqO3PfGTeHSe/jYGgRa04PYn8nM90+w3n85s7Y0mAixOkjKIjpfl/G9Ln/YW82tzLJ+scx8nEMyvNTcg9V/Y5Uqs1x3r69xbVl58I9ocpi0v8Q9VIrceMvcb9h2nqD9fNShVAkvrFXDl6u0QtatoQUJT2wDStnKuDGibCPyC1Xo/TXkHvoBOL8XmS78aJyvpwDYSGcA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(136003)(346002)(39860400002)(396003)(376002)(66946007)(66476007)(83380400001)(38100700002)(86362001)(36756003)(52116002)(66556008)(186003)(5660300002)(2906002)(6666004)(31686004)(2616005)(8936002)(6486002)(53546011)(31696002)(4326008)(316002)(8676002)(478600001)(101420200003)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UEJ5blVXdUJxT2ErMmNsSWZTMisyaG9uTXVDYTg0QXVoM2pZblpqUTBVTklF?=
- =?utf-8?B?M1JKMmVtakJJeDRTdnp0NDQ0NHNrNWEzVTlMdW9MUmZGQms5RXF2TG9rbjZh?=
- =?utf-8?B?OGhESTFaemdLSUVaMHovTG02ekxkV05lUEFFTDduTGJtcGZOVVRoUWw1U0w3?=
- =?utf-8?B?blluOG1TT09yQkJ6UzlSbnRSeGVucThVNGI4RDVON2pPclhYNUNJRWpsWnhX?=
- =?utf-8?B?SjlTY1lBSjBzWVlZNGhLbG0vRktlWG92Z3dJRzhDQkp5c1lYMjdxaGxBZUt5?=
- =?utf-8?B?Z0IzeHlBdWRwVCs3OEdPRGEzcXZsdHhMTXk1dlVoRkd1S1cvRHdFLzJrODJ1?=
- =?utf-8?B?bHNGN0RSUmdMQWo3OWFGL3hFK2pQaE05TFFIb2tzNlZNNjBZVUhjcTQwNzZK?=
- =?utf-8?B?RDVkUUZFZ2ROazV3NU14WmNNdDJvVU9WQkVrdDJMQVJTNDlDL0Q0VnVnOE95?=
- =?utf-8?B?cjZkTFdKTk0wNlhHV3JUeE1oNjNyYWNUZG1VZnJWcXlZdStxeE9Pa3lFRkJj?=
- =?utf-8?B?YjZjU3VNaC9hbDhRRU1kN2thRWVhV29kY2x5dDBneFpDYldjUzVKVjVieHh5?=
- =?utf-8?B?RW5XbVc1eTR0UEVBVlcrLytZWmp0M2p5OEM4cmthK0J1clpmcEl0VVNYaUFI?=
- =?utf-8?B?dnlpdklZdEdkOVB1ME5YUGlOVVVCRFpoS3pGOG5CUkxFMlFFb2tFNUhGT3dE?=
- =?utf-8?B?YjlJSlFGZW5DWW9valN6d1RtR2Y2WG9LalRSZ0h5RVE2ZnZMV29nV0hwTG50?=
- =?utf-8?B?MGhNZGdQQW1Uc0g1ekltckR5TTI0UFhneGczNnBNYmN0c0JqYkYrRGViNzJB?=
- =?utf-8?B?MWZnNjB6cjhIbTVsQ01SNkMwVTlBNXVJVjBUejRMa3lnQ1lOYVg3b0UyRUtq?=
- =?utf-8?B?L1NuN0krRzdaZ1lBdWZpWjU4SzNwTVRMdXBwN2FmcmdZV0Y3eWhQWFBCdTYw?=
- =?utf-8?B?YWpzVmgvd3JGUit5Mi8xdnhsVEpUa0hJRVgxaTJTZUJpVlBSaFd4ditSbUUw?=
- =?utf-8?B?SmRjWjJiU1Vlb3ZJNzNndlRvdUlvT29WUTdLd0lwaEU3ZStGVWFWcERNUDc5?=
- =?utf-8?B?eHVmWm02UU1Oa0dMMjJQSk1TUGxiRTFtZFdKR2dpUHFMTVFPeGEzUjNWdkM0?=
- =?utf-8?B?Sno4U0pLQnN6Ni9nbzl4WDRwOE5GYktTM1FHTEZPb3BIMHQxd3BpV3FiYk9G?=
- =?utf-8?B?ZW9JbXY4U1lYZW02RTdPTk5YRmhTUnc4OGUrVkZPdGFFcUhjT2k2UDJPNU0x?=
- =?utf-8?B?anlpeWprUFp3UTVucGdxSHpHTGY1ZHcydE9vbi94NTJiVEZnNTd3MHBmVEd2?=
- =?utf-8?B?eDdQbFUxaFpQbTk0bFdtYUo5R20wNW5QUjVMT1FWR0R2eEQxR0lqTS8vVitJ?=
- =?utf-8?B?a3o0OGhXQzBXVmRvTkdMbmhZYlBUemhEcHA4QW9rRVFWeEtVcXZlZTBsbVZS?=
- =?utf-8?B?Y21aTlN1elZOV1lCc1MyYSt6d01DMFlCbzVhMjFaK1d6TnJmQnBwTGFXOTIy?=
- =?utf-8?B?R0VIKzdPblg4UW9aQ0RjQXFjdS9uS1I4ZUJwMHZxM0RRQjVYYnp6YWhhdS8z?=
- =?utf-8?B?Z3oxRkZOdDB1OVhJVFU0THdqYmhTbytDRlRZMFN5bHNEK1ZUaEFHOTF2SVBq?=
- =?utf-8?B?bTU0VWhiY1I4UkNWNUh2MWVBNml0UVRSQXZzZitGVHZmTVE3N2dONVBZbXVk?=
- =?utf-8?B?YUI5NktDK1R4SXEraURRdS9rZWdIUW5DOGFPVkwveW1kL1ZJQWxySklKN2lM?=
- =?utf-8?B?UWlIUkZqT21XTFowRGJja2RwQ1BsaVBUeXdWL2hxMzBnaWprOVB2eTI4enBu?=
- =?utf-8?B?VXVHZUFqbjNiN1NLWENQZz09?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: caa4dd1c-c1b9-456c-dc18-08d9555f6998
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Aug 2021 02:44:13.2474
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: oNlN5bsGIzhAy/DrDAXh757fntTl9PBSIrRev3xsSFTkNM+YvobOcjuYP47ft1sP
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR15MB4223
-X-OriginatorOrg: fb.com
-X-Proofpoint-ORIG-GUID: ja1q89L32M5hRCFcdFdzf9XJAeRCxLf0
-X-Proofpoint-GUID: ja1q89L32M5hRCFcdFdzf9XJAeRCxLf0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-08-02_01:2021-07-30,2021-08-02 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- suspectscore=0 bulkscore=0 clxscore=1015 adultscore=0 mlxscore=0
- mlxlogscore=999 phishscore=0 lowpriorityscore=0 malwarescore=0
- impostorscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2107140000 definitions=main-2108020016
-X-FB-Internal: deliver
+In-Reply-To: <20210730051643.54198a9e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+Content-Type: text/plain; charset=gbk; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
 
+ÔÚ 2021/7/30 ÏÂÎç8:16, Jakub Kicinski Ð´µÀ:
+> On Tue, 1 Jun 2021 07:06:43 -0400 Michael S. Tsirkin wrote:
+>> On Tue, Jun 01, 2021 at 02:39:58PM +0800, Xuan Zhuo wrote:
+>>> #1 Fixed a serious error.
+>>> #2 Fixed a logical error, but this error did not cause any serious consequences.
+>>>
+>>> The logic of this piece is really messy. Fortunately, my refactored patch can be
+>>> completed with a small amount of testing.
+>> Looks good, thanks!
+>> Also needed for stable I think.
+>>
+>> Acked-by: Michael S. Tsirkin <mst@redhat.com>
+> Just a heads up folks, looks like we ended up merging both this and the
+> net-next version of the patch set:
+>
+> 8fb7da9e9907 virtio_net: get build_skb() buf by data ptr
+> 5c37711d9f27 virtio-net: fix for unable to handle page fault for address
+>
+> and
+>
+> 7bf64460e3b2 virtio-net: get build_skb() buf by data ptr
+> 6c66c147b9a4 virtio-net: fix for unable to handle page fault for address
+>
+> Are you okay with the code as is or should we commit something like:
 
-On 7/31/21 7:32 AM, Hengqi Chen wrote:
-> Add test for btf__load_vmlinux_btf/btf__load_module_btf APIs. It first
-> checks that if btrfs module BTF exists, if yes, load module BTF and
-> check symbol existence.
-> 
-> Signed-off-by: Hengqi Chen <hengqi.chen@gmail.com>
+
+I think we need commit the following codes since it's more easier to be 
+understood.
+
+Thanks
+
+
+>
 > ---
->   .../selftests/bpf/prog_tests/btf_module.c     | 31 +++++++++++++++++++
->   1 file changed, 31 insertions(+)
->   create mode 100644 tools/testing/selftests/bpf/prog_tests/btf_module.c
-> 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/btf_module.c b/tools/testing/selftests/bpf/prog_tests/btf_module.c
-> new file mode 100644
-> index 000000000000..cad1314e3356
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/btf_module.c
-> @@ -0,0 +1,31 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2021 Hengqi Chen */
-> +
-> +#include <test_progs.h>
-> +#include <bpf/btf.h>
-> +
-> +static const char *module_path = "/sys/kernel/btf/btrfs";
-> +static const char *module_name = "btrfs";
-> +
-> +void test_btf_module()
-> +{
-> +	struct btf *vmlinux_btf, *module_btf;
-> +	__s32 type_id;
-> +
-> +	if (access(module_path, F_OK))
-> +		return;
-> +
-> +	vmlinux_btf = btf__load_vmlinux_btf();
-> +	if (!ASSERT_OK_PTR(vmlinux_btf, "could not load vmlinux BTF"))
-> +		return;
-> +
-> +	module_btf = btf__load_module_btf(module_name, vmlinux_btf);
-> +	if (!ASSERT_OK_PTR(module_btf, "could not load module BTF"))
-> +		return;
+>
+> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> index 56c3f8519093..74482a52f076 100644
+> --- a/drivers/net/virtio_net.c
+> +++ b/drivers/net/virtio_net.c
+> @@ -380,7 +380,7 @@ static struct sk_buff *page_to_skb(struct virtnet_info *vi,
+>   				   struct page *page, unsigned int offset,
+>   				   unsigned int len, unsigned int truesize,
+>   				   bool hdr_valid, unsigned int metasize,
+> -				   bool whole_page)
+> +				   unsigned int headroom)
+>   {
+>   	struct sk_buff *skb;
+>   	struct virtio_net_hdr_mrg_rxbuf *hdr;
+> @@ -398,28 +398,16 @@ static struct sk_buff *page_to_skb(struct virtnet_info *vi,
+>   	else
+>   		hdr_padded_len = sizeof(struct padded_vnet_hdr);
+>   
+> -	/* If whole_page, there is an offset between the beginning of the
+> +	/* If headroom is not 0, there is an offset between the beginning of the
+>   	 * data and the allocated space, otherwise the data and the allocated
+>   	 * space are aligned.
+>   	 *
+>   	 * Buffers with headroom use PAGE_SIZE as alloc size, see
+>   	 * add_recvbuf_mergeable() + get_mergeable_buf_len()
+>   	 */
+> -	if (whole_page) {
+> -		/* Buffers with whole_page use PAGE_SIZE as alloc size,
+> -		 * see add_recvbuf_mergeable() + get_mergeable_buf_len()
+> -		 */
+> -		truesize = PAGE_SIZE;
+> -
+> -		/* page maybe head page, so we should get the buf by p, not the
+> -		 * page
+> -		 */
+> -		tailroom = truesize - len - offset_in_page(p);
+> -		buf = (char *)((unsigned long)p & PAGE_MASK);
+> -	} else {
+> -		tailroom = truesize - len;
+> -		buf = p;
+> -	}
+> +	truesize = headroom ? PAGE_SIZE : truesize;
+> +	tailroom = truesize - len - headroom;
+> +	buf = p - headroom;
+>   
+>   	len -= hdr_len;
+>   	offset += hdr_padded_len;
+> @@ -978,7 +966,8 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
+>   				put_page(page);
+>   				head_skb = page_to_skb(vi, rq, xdp_page, offset,
+>   						       len, PAGE_SIZE, false,
+> -						       metasize, true);
+> +						       metasize,
+> +						       VIRTIO_XDP_HEADROOM);
+>   				return head_skb;
+>   			}
+>   			break;
+> @@ -1029,7 +1018,7 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
+>   	rcu_read_unlock();
+>   
+>   	head_skb = page_to_skb(vi, rq, page, offset, len, truesize, !xdp_prog,
+> -			       metasize, !!headroom);
+> +			       metasize, headroom);
+>   	curr_skb = head_skb;
+>   
+>   	if (unlikely(!curr_skb))
+>
 
-Should we do `btf__free(vmlinux_btf)` before `return`?
- From implementation perspective, maybe use "goto" so we have one
-place to do `btf__free(vmlinux_btf)`.
-
-> +
-> +	type_id = btf__find_by_name(module_btf, "btrfs_file_open");
-> +	ASSERT_GT(type_id, 0, "func btrfs_file_open not found");
-> +
-> +	btf__free(module_btf);
-> +	btf__free(vmlinux_btf);
-> +}
-> 
