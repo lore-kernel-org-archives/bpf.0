@@ -4,34 +4,34 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C74EC432BE
-	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 16:38:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D04EFC4338F
+	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 16:38:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 858B761104
-	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 16:38:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BBA4361104
+	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 16:38:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234541AbhHCQiq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 3 Aug 2021 12:38:46 -0400
-Received: from mga09.intel.com ([134.134.136.24]:17023 "EHLO mga09.intel.com"
+        id S235571AbhHCQit (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 3 Aug 2021 12:38:49 -0400
+Received: from mga06.intel.com ([134.134.136.31]:46659 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234530AbhHCQiV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        id S234357AbhHCQiV (ORCPT <rfc822;bpf@vger.kernel.org>);
         Tue, 3 Aug 2021 12:38:21 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10065"; a="213715316"
+X-IronPort-AV: E=McAfee;i="6200,9189,10065"; a="274787051"
 X-IronPort-AV: E=Sophos;i="5.84,292,1620716400"; 
-   d="scan'208";a="213715316"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2021 09:37:53 -0700
+   d="scan'208";a="274787051"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2021 09:38:00 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.84,292,1620716400"; 
-   d="scan'208";a="419720900"
+   d="scan'208";a="458336256"
 Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga003.jf.intel.com with ESMTP; 03 Aug 2021 09:37:29 -0700
+  by orsmga007.jf.intel.com with ESMTP; 03 Aug 2021 09:37:49 -0700
 Received: from alobakin-mobl.ger.corp.intel.com (eflejszm-mobl2.ger.corp.intel.com [10.213.26.164])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 173GahF0029968;
-        Tue, 3 Aug 2021 17:37:24 +0100
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 173GahF5029968;
+        Tue, 3 Aug 2021 17:37:45 +0100
 From:   Alexander Lobakin <alexandr.lobakin@intel.com>
 To:     "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>
@@ -82,9 +82,9 @@ Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
         netdev@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
-Subject: [PATCH net-next 10/21] ethernet, mvneta: convert to standard XDP stats
-Date:   Tue,  3 Aug 2021 18:36:30 +0200
-Message-Id: <20210803163641.3743-11-alexandr.lobakin@intel.com>
+Subject: [PATCH net-next 15/21] veth: rename xdp_xmit_errors to xdp_xmit_drops
+Date:   Tue,  3 Aug 2021 18:36:35 +0200
+Message-Id: <20210803163641.3743-16-alexandr.lobakin@intel.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210803163641.3743-1-alexandr.lobakin@intel.com>
 References: <20210803163641.3743-1-alexandr.lobakin@intel.com>
@@ -94,181 +94,95 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Replace custom Ethtools XDP statistics with the standard infra based
-one (7 basic fields).
-This driver uses global [per-cpu] stats, no other callbacks needed.
+veth keeps tracking of numbers of XDP frames being dropped from
+inside of .ndo_xdp_xmit() callback. This counter really should
+be named after drops, not errors.
 
 Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 Reviewed-by: Jesse Brandeburg <jesse.brandeburg@intel.com>
 ---
- drivers/net/ethernet/marvell/mvneta.c | 108 +++++++++++++-------------
- 1 file changed, 52 insertions(+), 56 deletions(-)
+ drivers/net/veth.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/net/ethernet/marvell/mvneta.c b/drivers/net/ethernet/marvell/mvneta.c
-index f030d5b7bdee..9015c8b45395 100644
---- a/drivers/net/ethernet/marvell/mvneta.c
-+++ b/drivers/net/ethernet/marvell/mvneta.c
-@@ -345,13 +345,6 @@ enum {
- 	ETHTOOL_STAT_EEE_WAKEUP,
- 	ETHTOOL_STAT_SKB_ALLOC_ERR,
- 	ETHTOOL_STAT_REFILL_ERR,
--	ETHTOOL_XDP_REDIRECT,
--	ETHTOOL_XDP_PASS,
--	ETHTOOL_XDP_DROP,
--	ETHTOOL_XDP_TX,
--	ETHTOOL_XDP_TX_ERR,
--	ETHTOOL_XDP_XMIT,
--	ETHTOOL_XDP_XMIT_DROPS,
- 	ETHTOOL_MAX_STATS,
+diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+index 914aebfbe7c4..c5079b9145c9 100644
+--- a/drivers/net/veth.c
++++ b/drivers/net/veth.c
+@@ -47,7 +47,7 @@ struct veth_stats {
+ 	u64	xdp_tx;
+ 	u64	xdp_tx_err;
+ 	u64	peer_tq_xdp_xmit;
+-	u64	peer_tq_xdp_xmit_err;
++	u64	peer_tq_xdp_xmit_drops;
  };
  
-@@ -406,13 +399,6 @@ static const struct mvneta_statistic mvneta_statistics[] = {
- 	{ ETHTOOL_STAT_EEE_WAKEUP, T_SW, "eee_wakeup_errors", },
- 	{ ETHTOOL_STAT_SKB_ALLOC_ERR, T_SW, "skb_alloc_errors", },
- 	{ ETHTOOL_STAT_REFILL_ERR, T_SW, "refill_errors", },
--	{ ETHTOOL_XDP_REDIRECT, T_SW, "rx_xdp_redirect", },
--	{ ETHTOOL_XDP_PASS, T_SW, "rx_xdp_pass", },
--	{ ETHTOOL_XDP_DROP, T_SW, "rx_xdp_drop", },
--	{ ETHTOOL_XDP_TX, T_SW, "rx_xdp_tx", },
--	{ ETHTOOL_XDP_TX_ERR, T_SW, "rx_xdp_tx_errors", },
--	{ ETHTOOL_XDP_XMIT, T_SW, "tx_xdp_xmit", },
--	{ ETHTOOL_XDP_XMIT_DROPS, T_SW, "tx_xdp_xmit_drops", },
+ struct veth_rq_stats {
+@@ -105,7 +105,7 @@ static const struct veth_q_stat_desc veth_rq_stats_desc[] = {
+ 
+ static const struct veth_q_stat_desc veth_tq_stats_desc[] = {
+ 	{ "xdp_xmit",		VETH_RQ_STAT(peer_tq_xdp_xmit) },
+-	{ "xdp_xmit_errors",	VETH_RQ_STAT(peer_tq_xdp_xmit_err) },
++	{ "xdp_xmit_drops",	VETH_RQ_STAT(peer_tq_xdp_xmit_drops) },
  };
  
- struct mvneta_stats {
-@@ -4630,38 +4616,17 @@ mvneta_ethtool_update_pcpu_stats(struct mvneta_port *pp,
- 	for_each_possible_cpu(cpu) {
- 		struct mvneta_pcpu_stats *stats;
- 		u64 skb_alloc_error;
--		u64 xdp_xmit_drops;
- 		u64 refill_error;
--		u64 xdp_redirect;
--		u64 xdp_tx_err;
--		u64 xdp_pass;
--		u64 xdp_drop;
--		u64 xdp_xmit;
--		u64 xdp_tx;
+ #define VETH_TQ_STATS_LEN	ARRAY_SIZE(veth_tq_stats_desc)
+@@ -375,25 +375,25 @@ static void veth_stats_rx(struct veth_stats *result, struct net_device *dev)
+ 	struct veth_priv *priv = netdev_priv(dev);
+ 	int i;
  
- 		stats = per_cpu_ptr(pp->stats, cpu);
+-	result->peer_tq_xdp_xmit_err = 0;
++	result->peer_tq_xdp_xmit_drops = 0;
+ 	result->xdp_packets = 0;
+ 	result->xdp_tx_err = 0;
+ 	result->xdp_bytes = 0;
+ 	result->xdp_errors = 0;
+ 	for (i = 0; i < dev->num_rx_queues; i++) {
+-		u64 packets, bytes, xdp_err, xdp_tx_err, peer_tq_xdp_xmit_err;
++		u64 packets, bytes, xdp_err, xdp_tx_err, peer_tq_xdp_xmit_drops;
+ 		struct veth_rq_stats *stats = &priv->rq[i].stats;
+ 		unsigned int start;
+ 
  		do {
  			start = u64_stats_fetch_begin_irq(&stats->syncp);
- 			skb_alloc_error = stats->es.skb_alloc_error;
- 			refill_error = stats->es.refill_error;
--			xdp_redirect = stats->es.ps.xdp_redirect;
--			xdp_pass = stats->es.ps.xdp_pass;
--			xdp_drop = stats->es.ps.xdp_drop;
--			xdp_xmit = stats->es.ps.xdp_xmit;
--			xdp_xmit_drops = stats->es.ps.xdp_xmit_drops;
--			xdp_tx = stats->es.ps.xdp_tx;
--			xdp_tx_err = stats->es.ps.xdp_tx_err;
+-			peer_tq_xdp_xmit_err = stats->vs.peer_tq_xdp_xmit_err;
++			peer_tq_xdp_xmit_drops = stats->vs.peer_tq_xdp_xmit_drops;
+ 			xdp_tx_err = stats->vs.xdp_tx_err;
+ 			packets = stats->vs.xdp_packets;
+ 			bytes = stats->vs.xdp_bytes;
+ 			xdp_err = stats->vs.xdp_errors;
  		} while (u64_stats_fetch_retry_irq(&stats->syncp, start));
+-		result->peer_tq_xdp_xmit_err += peer_tq_xdp_xmit_err;
++		result->peer_tq_xdp_xmit_drops += peer_tq_xdp_xmit_drops;
+ 		result->xdp_tx_err += xdp_tx_err;
+ 		result->xdp_packets += packets;
+ 		result->xdp_bytes += bytes;
+@@ -415,7 +415,7 @@ static void veth_get_stats64(struct net_device *dev,
  
- 		es->skb_alloc_error += skb_alloc_error;
- 		es->refill_error += refill_error;
--		es->ps.xdp_redirect += xdp_redirect;
--		es->ps.xdp_pass += xdp_pass;
--		es->ps.xdp_drop += xdp_drop;
--		es->ps.xdp_xmit += xdp_xmit;
--		es->ps.xdp_xmit_drops += xdp_xmit_drops;
--		es->ps.xdp_tx += xdp_tx;
--		es->ps.xdp_tx_err += xdp_tx_err;
+ 	veth_stats_rx(&rx, dev);
+ 	tot->tx_dropped += rx.xdp_tx_err;
+-	tot->rx_dropped = rx.xdp_errors + rx.peer_tq_xdp_xmit_err;
++	tot->rx_dropped = rx.xdp_errors + rx.peer_tq_xdp_xmit_drops;
+ 	tot->rx_bytes = rx.xdp_bytes;
+ 	tot->rx_packets = rx.xdp_packets;
+ 
+@@ -427,7 +427,7 @@ static void veth_get_stats64(struct net_device *dev,
+ 		tot->rx_packets += packets;
+ 
+ 		veth_stats_rx(&rx, peer);
+-		tot->tx_dropped += rx.peer_tq_xdp_xmit_err;
++		tot->tx_dropped += rx.peer_tq_xdp_xmit_drops;
+ 		tot->rx_dropped += rx.xdp_tx_err;
+ 		tot->tx_bytes += rx.xdp_bytes;
+ 		tot->tx_packets += rx.xdp_packets;
+@@ -515,7 +515,7 @@ static int veth_xdp_xmit(struct net_device *dev, int n,
+ 	if (ndo_xmit) {
+ 		u64_stats_update_begin(&rq->stats.syncp);
+ 		rq->stats.vs.peer_tq_xdp_xmit += nxmit;
+-		rq->stats.vs.peer_tq_xdp_xmit_err += n - nxmit;
++		rq->stats.vs.peer_tq_xdp_xmit_drops += n - nxmit;
+ 		u64_stats_update_end(&rq->stats.syncp);
  	}
- }
  
-@@ -4702,27 +4667,6 @@ static void mvneta_ethtool_update_stats(struct mvneta_port *pp)
- 			case ETHTOOL_STAT_REFILL_ERR:
- 				pp->ethtool_stats[i] = stats.refill_error;
- 				break;
--			case ETHTOOL_XDP_REDIRECT:
--				pp->ethtool_stats[i] = stats.ps.xdp_redirect;
--				break;
--			case ETHTOOL_XDP_PASS:
--				pp->ethtool_stats[i] = stats.ps.xdp_pass;
--				break;
--			case ETHTOOL_XDP_DROP:
--				pp->ethtool_stats[i] = stats.ps.xdp_drop;
--				break;
--			case ETHTOOL_XDP_TX:
--				pp->ethtool_stats[i] = stats.ps.xdp_tx;
--				break;
--			case ETHTOOL_XDP_TX_ERR:
--				pp->ethtool_stats[i] = stats.ps.xdp_tx_err;
--				break;
--			case ETHTOOL_XDP_XMIT:
--				pp->ethtool_stats[i] = stats.ps.xdp_xmit;
--				break;
--			case ETHTOOL_XDP_XMIT_DROPS:
--				pp->ethtool_stats[i] = stats.ps.xdp_xmit_drops;
--				break;
- 			}
- 			break;
- 		}
-@@ -4748,6 +4692,57 @@ static int mvneta_ethtool_get_sset_count(struct net_device *dev, int sset)
- 	return -EOPNOTSUPP;
- }
- 
-+static void mvneta_ethtool_get_xdp_stats(struct net_device *dev,
-+					 struct ethtool_xdp_stats *xdp_stats)
-+{
-+	const struct mvneta_port *pp = netdev_priv(dev);
-+	u32 cpu;
-+
-+	xdp_stats->drop = 0;
-+	xdp_stats->pass = 0;
-+	xdp_stats->redirect = 0;
-+	xdp_stats->tx = 0;
-+	xdp_stats->tx_errors = 0;
-+	xdp_stats->xmit = 0;
-+	xdp_stats->xmit_drops = 0;
-+
-+	for_each_possible_cpu(cpu) {
-+		const struct mvneta_pcpu_stats *stats;
-+		const struct mvneta_stats *ps;
-+		u64 xdp_xmit_drops;
-+		u64 xdp_redirect;
-+		u64 xdp_tx_err;
-+		u64 xdp_pass;
-+		u64 xdp_drop;
-+		u64 xdp_xmit;
-+		u64 xdp_tx;
-+		u32 start;
-+
-+		stats = per_cpu_ptr(pp->stats, cpu);
-+		ps = &stats->es.ps;
-+
-+		do {
-+			start = u64_stats_fetch_begin_irq(&stats->syncp);
-+
-+			xdp_drop = ps->xdp_drop;
-+			xdp_pass = ps->xdp_pass;
-+			xdp_redirect = ps->xdp_redirect;
-+			xdp_tx = ps->xdp_tx;
-+			xdp_tx_err = ps->xdp_tx_err;
-+			xdp_xmit = ps->xdp_xmit;
-+			xdp_xmit_drops = ps->xdp_xmit_drops;
-+		} while (u64_stats_fetch_retry_irq(&stats->syncp, start));
-+
-+		xdp_stats->drop += xdp_drop;
-+		xdp_stats->pass += xdp_pass;
-+		xdp_stats->redirect += xdp_redirect;
-+		xdp_stats->tx += xdp_tx;
-+		xdp_stats->tx_errors += xdp_tx_err;
-+		xdp_stats->xmit += xdp_xmit;
-+		xdp_stats->xmit_drops += xdp_xmit_drops;
-+	}
-+}
-+
- static u32 mvneta_ethtool_get_rxfh_indir_size(struct net_device *dev)
- {
- 	return MVNETA_RSS_LU_TABLE_SIZE;
-@@ -5025,6 +5020,7 @@ static const struct ethtool_ops mvneta_eth_tool_ops = {
- 	.set_wol        = mvneta_ethtool_set_wol,
- 	.get_eee	= mvneta_ethtool_get_eee,
- 	.set_eee	= mvneta_ethtool_set_eee,
-+	.get_xdp_stats	= mvneta_ethtool_get_xdp_stats,
- };
- 
- /* Initialize hw */
 -- 
 2.31.1
 
