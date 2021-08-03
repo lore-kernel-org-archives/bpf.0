@@ -4,34 +4,34 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C7927C4320E
-	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 16:37:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD1ADC4338F
+	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 16:37:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B19DB610FB
-	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 16:37:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A707A610FB
+	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 16:37:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234384AbhHCQhu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 3 Aug 2021 12:37:50 -0400
-Received: from mga12.intel.com ([192.55.52.136]:57769 "EHLO mga12.intel.com"
+        id S233560AbhHCQhp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 3 Aug 2021 12:37:45 -0400
+Received: from mga17.intel.com ([192.55.52.151]:62851 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234308AbhHCQhr (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 3 Aug 2021 12:37:47 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10065"; a="193324561"
+        id S234241AbhHCQhn (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 3 Aug 2021 12:37:43 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10065"; a="194013638"
 X-IronPort-AV: E=Sophos;i="5.84,292,1620716400"; 
-   d="scan'208";a="193324561"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2021 09:37:16 -0700
+   d="scan'208";a="194013638"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2021 09:37:31 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.84,292,1620716400"; 
-   d="scan'208";a="419108156"
+   d="scan'208";a="511394690"
 Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga006.jf.intel.com with ESMTP; 03 Aug 2021 09:37:04 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 03 Aug 2021 09:37:21 -0700
 Received: from alobakin-mobl.ger.corp.intel.com (eflejszm-mobl2.ger.corp.intel.com [10.213.26.164])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 173GahEs029968;
-        Tue, 3 Aug 2021 17:37:00 +0100
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 173GahEw029968;
+        Tue, 3 Aug 2021 17:37:16 +0100
 From:   Alexander Lobakin <alexandr.lobakin@intel.com>
 To:     "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>
@@ -82,9 +82,9 @@ Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
         netdev@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
-Subject: [PATCH net-next 04/21] ethernet, dpaa2: simplify per-channel Ethtool stats counting
-Date:   Tue,  3 Aug 2021 18:36:24 +0200
-Message-Id: <20210803163641.3743-5-alexandr.lobakin@intel.com>
+Subject: [PATCH net-next 08/21] ethernet, enetc: convert to standard XDP stats
+Date:   Tue,  3 Aug 2021 18:36:28 +0200
+Message-Id: <20210803163641.3743-9-alexandr.lobakin@intel.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210803163641.3743-1-alexandr.lobakin@intel.com>
 References: <20210803163641.3743-1-alexandr.lobakin@intel.com>
@@ -94,51 +94,128 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Don't hardcode ARRAY_SIZE() - 1, just put a placeholder and take
-offsetof() from it to hide unwanted statistics from Ethtool.
-Will be handy for switching to standard XDP stats.
+This driver has 6 per-channel XDP counters. Convert them to 5
+standard XDP stats (redirect_sg and redirect_failures go under
+the same redirect_errors).
+As this driver theoretically can have different numbers of RX
+and TX rings, collect statistics separately for each direction.
 
 Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 Reviewed-by: Jesse Brandeburg <jesse.brandeburg@intel.com>
 ---
- drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.h     | 7 ++++++-
- drivers/net/ethernet/freescale/dpaa2/dpaa2-ethtool.c | 2 +-
- 2 files changed, 7 insertions(+), 2 deletions(-)
+ .../ethernet/freescale/enetc/enetc_ethtool.c  | 58 ++++++++++++++-----
+ 1 file changed, 44 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.h b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.h
-index cdb623d5f2c1..8cb57f103d6b 100644
---- a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.h
-+++ b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.h
-@@ -382,10 +382,15 @@ struct dpaa2_eth_ch_stats {
- 	__u64 xdp_tx;
- 	__u64 xdp_tx_err;
- 	__u64 xdp_redirect;
--	/* Must be last, does not show up in ethtool stats */
-+	/* The rest of the structure does not show up in ethtool stats */
-+	struct { } __eth_end;
-+	/* Must be last */
- 	__u64 frames;
+diff --git a/drivers/net/ethernet/freescale/enetc/enetc_ethtool.c b/drivers/net/ethernet/freescale/enetc/enetc_ethtool.c
+index ebccaf02411c..1b94cb488850 100644
+--- a/drivers/net/ethernet/freescale/enetc/enetc_ethtool.c
++++ b/drivers/net/ethernet/freescale/enetc/enetc_ethtool.c
+@@ -192,18 +192,12 @@ static const struct {
+ static const char rx_ring_stats[][ETH_GSTRING_LEN] = {
+ 	"Rx ring %2d frames",
+ 	"Rx ring %2d alloc errors",
+-	"Rx ring %2d XDP drops",
+ 	"Rx ring %2d recycles",
+ 	"Rx ring %2d recycle failures",
+-	"Rx ring %2d redirects",
+-	"Rx ring %2d redirect failures",
+-	"Rx ring %2d redirect S/G",
  };
  
-+#define DPAA2_ETH_NUM_CH_STATS		(offsetof(struct dpaa2_eth_ch_stats, \
-+						  __eth_end) / sizeof(u64))
-+
- /* Maximum number of queues associated with a DPNI */
- #define DPAA2_ETH_MAX_TCS		8
- #define DPAA2_ETH_MAX_RX_QUEUES_PER_TC	16
-diff --git a/drivers/net/ethernet/freescale/dpaa2/dpaa2-ethtool.c b/drivers/net/ethernet/freescale/dpaa2/dpaa2-ethtool.c
-index ad5e374eeccf..95ae83905458 100644
---- a/drivers/net/ethernet/freescale/dpaa2/dpaa2-ethtool.c
-+++ b/drivers/net/ethernet/freescale/dpaa2/dpaa2-ethtool.c
-@@ -278,7 +278,7 @@ static void dpaa2_eth_get_ethtool_stats(struct net_device *net_dev,
- 	/* Per-channel stats */
- 	for (k = 0; k < priv->num_channels; k++) {
- 		ch_stats = &priv->channel[k]->stats;
--		for (j = 0; j < sizeof(*ch_stats) / sizeof(__u64) - 1; j++)
-+		for (j = 0; j < DPAA2_ETH_NUM_CH_STATS; j++)
- 			*((__u64 *)data + i + j) += *((__u64 *)ch_stats + j);
+ static const char tx_ring_stats[][ETH_GSTRING_LEN] = {
+ 	"Tx ring %2d frames",
+-	"Tx ring %2d XDP frames",
+-	"Tx ring %2d XDP drops",
+ };
+ 
+ static int enetc_get_sset_count(struct net_device *ndev, int sset)
+@@ -275,21 +269,14 @@ static void enetc_get_ethtool_stats(struct net_device *ndev,
+ 	for (i = 0; i < ARRAY_SIZE(enetc_si_counters); i++)
+ 		data[o++] = enetc_rd64(hw, enetc_si_counters[i].reg);
+ 
+-	for (i = 0; i < priv->num_tx_rings; i++) {
++	for (i = 0; i < priv->num_tx_rings; i++)
+ 		data[o++] = priv->tx_ring[i]->stats.packets;
+-		data[o++] = priv->tx_ring[i]->stats.xdp_tx;
+-		data[o++] = priv->tx_ring[i]->stats.xdp_tx_drops;
+-	}
+ 
+ 	for (i = 0; i < priv->num_rx_rings; i++) {
+ 		data[o++] = priv->rx_ring[i]->stats.packets;
+ 		data[o++] = priv->rx_ring[i]->stats.rx_alloc_errs;
+-		data[o++] = priv->rx_ring[i]->stats.xdp_drops;
+ 		data[o++] = priv->rx_ring[i]->stats.recycles;
+ 		data[o++] = priv->rx_ring[i]->stats.recycle_failures;
+-		data[o++] = priv->rx_ring[i]->stats.xdp_redirect;
+-		data[o++] = priv->rx_ring[i]->stats.xdp_redirect_failures;
+-		data[o++] = priv->rx_ring[i]->stats.xdp_redirect_sg;
  	}
- 	i += j;
+ 
+ 	if (!enetc_si_is_pf(priv->si))
+@@ -299,6 +286,45 @@ static void enetc_get_ethtool_stats(struct net_device *ndev,
+ 		data[o++] = enetc_port_rd(hw, enetc_port_counters[i].reg);
+ }
+ 
++static int enetc_get_std_stats_channels(struct net_device *ndev, u32 sset)
++{
++	const struct enetc_ndev_priv *priv = netdev_priv(ndev);
++
++	switch (sset) {
++	case ETH_SS_STATS_XDP:
++		return max(priv->num_rx_rings, priv->num_tx_rings);
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
++static void enetc_get_xdp_stats(struct net_device *ndev,
++				struct ethtool_xdp_stats *xdp_stats)
++{
++	const struct enetc_ndev_priv *priv = netdev_priv(ndev);
++	const struct enetc_ring_stats *stats;
++	struct ethtool_xdp_stats *iter;
++	u32 i;
++
++	for (i = 0; i < priv->num_tx_rings; i++) {
++		stats = &priv->tx_ring[i]->stats;
++		iter = xdp_stats + i;
++
++		iter->tx = stats->xdp_tx;
++		iter->tx_errors = stats->xdp_tx_drops;
++	}
++
++	for (i = 0; i < priv->num_rx_rings; i++) {
++		stats = &priv->rx_ring[i]->stats;
++		iter = xdp_stats + i;
++
++		iter->drop = stats->xdp_drops;
++		iter->redirect = stats->xdp_redirect;
++		iter->redirect_errors = stats->xdp_redirect_failures;
++		iter->redirect_errors += stats->xdp_redirect_sg;
++	}
++}
++
+ #define ENETC_RSSHASH_L3 (RXH_L2DA | RXH_VLAN | RXH_L3_PROTO | RXH_IP_SRC | \
+ 			  RXH_IP_DST)
+ #define ENETC_RSSHASH_L4 (ENETC_RSSHASH_L3 | RXH_L4_B_0_1 | RXH_L4_B_2_3)
+@@ -772,6 +798,8 @@ static const struct ethtool_ops enetc_pf_ethtool_ops = {
+ 	.set_wol = enetc_set_wol,
+ 	.get_pauseparam = enetc_get_pauseparam,
+ 	.set_pauseparam = enetc_set_pauseparam,
++	.get_std_stats_channels = enetc_get_std_stats_channels,
++	.get_xdp_stats = enetc_get_xdp_stats,
+ };
+ 
+ static const struct ethtool_ops enetc_vf_ethtool_ops = {
+@@ -793,6 +821,8 @@ static const struct ethtool_ops enetc_vf_ethtool_ops = {
+ 	.set_coalesce = enetc_set_coalesce,
+ 	.get_link = ethtool_op_get_link,
+ 	.get_ts_info = enetc_get_ts_info,
++	.get_std_stats_channels = enetc_get_std_stats_channels,
++	.get_xdp_stats = enetc_get_xdp_stats,
+ };
+ 
+ void enetc_set_ethtool_ops(struct net_device *ndev)
 -- 
 2.31.1
 
