@@ -7,33 +7,33 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7333DC19F39
-	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 01:03:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84B86C432BE
+	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 01:03:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5284C60F9C
-	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 01:03:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 64A6D60F58
+	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 01:03:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233496AbhHCBED (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 2 Aug 2021 21:04:03 -0400
+        id S233013AbhHCBEE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 2 Aug 2021 21:04:04 -0400
 Received: from mga07.intel.com ([134.134.136.100]:65283 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233427AbhHCBEB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        id S233455AbhHCBEB (ORCPT <rfc822;bpf@vger.kernel.org>);
         Mon, 2 Aug 2021 21:04:01 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10064"; a="277327851"
+X-IronPort-AV: E=McAfee;i="6200,9189,10064"; a="277327859"
 X-IronPort-AV: E=Sophos;i="5.84,290,1620716400"; 
-   d="scan'208";a="277327851"
+   d="scan'208";a="277327859"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
   by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2021 18:03:50 -0700
 X-IronPort-AV: E=Sophos;i="5.84,290,1620716400"; 
-   d="scan'208";a="419480132"
+   d="scan'208";a="419480135"
 Received: from ticela-or-032.amr.corp.intel.com (HELO localhost.localdomain) ([10.212.166.34])
   by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2021 18:03:50 -0700
 From:   Ederson de Souza <ederson.desouza@intel.com>
 To:     xdp-hints@xdp-project.net
 Cc:     bpf@vger.kernel.org
-Subject: [[RFC xdp-hints] 11/16] igc: XDP packet TX timestamp
-Date:   Mon,  2 Aug 2021 18:03:26 -0700
-Message-Id: <20210803010331.39453-12-ederson.desouza@intel.com>
+Subject: [[RFC xdp-hints] 14/16] libbpf: Helpers to access XDP hints based on BTF definitions
+Date:   Mon,  2 Aug 2021 18:03:29 -0700
+Message-Id: <20210803010331.39453-15-ederson.desouza@intel.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210803010331.39453-1-ederson.desouza@intel.com>
 References: <20210803010331.39453-1-ederson.desouza@intel.com>
@@ -43,444 +43,285 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-ADD the PTP timestamp of when a packet was transmitted to the XDP hints.
-An application using AF_XDP can get this timestamp by inspecting the XDP
-frame metadata when it gets to the completion queue.
+A new set of functions to help get the BTF definition of XDP hints
+structure and get the information based on it.
 
-One notable difference from TX timestamp for SKB, is that the XDP frame
-actually resides in the UMEM. As such, the timestamp is added to the
-frame, and user space applications can access it when the frame is sent
-to the completion queue.
+`xsk_umem__btf_id` helps retrieve the BTF id of XDP metadata.
+`xsk_btf__init` sets up a context based on the BTF, including a hashmap,
+so that subsequent queries are faster.
+`xsk_btf__read` returns a pointer to the position in the XDP metadata
+containing a given field.
+`xsk_btf__has_field` checks the presence of a field in the BTF.
+`xsk_btf__free` frees up the context.
 
-When performing the clean-up of TX descriptors, driver will check if an
-XDP socket frame is "expecting" a TX timestamp. If so, driver will stop
-clean-up to give an opportunity for the TX timestamp interrupt arrive.
+Besides those, a macro `XSK_BTF_READ_INTO` acts as a convenient helper
+to read the field contents into a given variable.
+
+Note that currently, the hashmap used to speed-up offset location into
+the BTF doesn't use the field name as a string as key to the hashmap. It
+directly uses the pointer value instead, as it is expected that most of
+time, field names will be addressed by a shared constant string residing
+on read-only memory, thus saving some time. If this assumption is not
+entirely true, this optimisation needs to be rethought (or discarded
+altogether).
 
 Signed-off-by: Ederson de Souza <ederson.desouza@intel.com>
 ---
- drivers/net/ethernet/intel/igc/igc.h      |  22 ++--
- drivers/net/ethernet/intel/igc/igc_main.c | 122 ++++++++++++++++++----
- drivers/net/ethernet/intel/igc/igc_ptp.c  |  47 ++++++---
- 3 files changed, 152 insertions(+), 39 deletions(-)
+ tools/lib/bpf/libbpf.map |   5 ++
+ tools/lib/bpf/xsk.c      | 177 +++++++++++++++++++++++++++++++++++++++
+ tools/lib/bpf/xsk.h      |  15 ++++
+ 3 files changed, 197 insertions(+)
 
-diff --git a/drivers/net/ethernet/intel/igc/igc.h b/drivers/net/ethernet/intel/igc/igc.h
-index 84e5f3c97351..eb955b5fb58f 100644
---- a/drivers/net/ethernet/intel/igc/igc.h
-+++ b/drivers/net/ethernet/intel/igc/igc.h
-@@ -68,11 +68,23 @@ struct igc_rx_packet_stats {
- 	u64 other_packets;
- };
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index 663585f7f186..04ffee0dc005 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -375,8 +375,13 @@ LIBBPF_0.5.0 {
+ 		bpf_map_lookup_and_delete_elem_flags;
+ 		bpf_object__gen_loader;
+ 		libbpf_set_strict_mode;
++		xsk_btf__init;
++		xsk_btf__read;
++		xsk_btf__has_field;
++		xsk_btf__free;
+ 		xsk_umem__adjust_cons_data;
+ 		xsk_umem__adjust_cons_data_meta;
+ 		xsk_umem__adjust_prod_data;
+ 		xsk_umem__adjust_prod_data_meta;
++		xsk_umem__btf_id;
+ } LIBBPF_0.4.0;
+diff --git a/tools/lib/bpf/xsk.c b/tools/lib/bpf/xsk.c
+index 17e8045eac0e..0455ddaa1734 100644
+--- a/tools/lib/bpf/xsk.c
++++ b/tools/lib/bpf/xsk.c
+@@ -31,6 +31,7 @@
+ #include <linux/if_link.h>
  
-+enum igc_tx_buffer_type {
-+	IGC_TX_BUFFER_TYPE_SKB,
-+	IGC_TX_BUFFER_TYPE_XDP,
-+	IGC_TX_BUFFER_TYPE_XSK,
+ #include "bpf.h"
++#include "hashmap.h"
+ #include "libbpf.h"
+ #include "libbpf_internal.h"
+ #include "xsk.h"
+@@ -143,6 +144,14 @@ void *xsk_umem__adjust_cons_data_meta(void *umem_data, const struct xsk_umem *um
+ 	return umem_data;
+ }
+ 
++int xsk_umem__btf_id(void *umem_data, const struct xsk_umem *umem)
++{
++	if (umem->config.xdp_headroom < sizeof(int))
++		return -EINVAL;
++
++	return *(int *)(umem_data - sizeof(int));
++}
++
+ static bool xsk_page_aligned(void *buffer)
+ {
+ 	unsigned long addr = (unsigned long)buffer;
+@@ -1290,3 +1299,171 @@ void xsk_socket__delete(struct xsk_socket *xsk)
+ 		close(xsk->fd);
+ 	free(xsk);
+ }
++
++struct xsk_btf_info {
++	struct hashmap map;
++	struct btf *btf;
++	const struct btf_type *type;
 +};
 +
- #define IGC_MAX_TX_TSTAMP_TIMERS	4
- 
- struct igc_tx_timestamp_request {
--	struct sk_buff *skb;
-+	union igc_pending_ts_pkt {
-+		struct sk_buff *skb;
-+		struct xdp_desc xsk_desc;
-+		void *ptr;
-+	} pending_ts_pkt;
-+	struct xsk_buff_pool *xsk_pool;
- 	unsigned long start;
-+	enum igc_tx_buffer_type type;
- 	u32 mask;
- 	u32 regl;
- 	u32 regh;
-@@ -435,12 +447,6 @@ enum igc_boards {
- #define TXD_USE_COUNT(S)	DIV_ROUND_UP((S), IGC_MAX_DATA_PER_TXD)
- #define DESC_NEEDED	(MAX_SKB_FRAGS + 4)
- 
--enum igc_tx_buffer_type {
--	IGC_TX_BUFFER_TYPE_SKB,
--	IGC_TX_BUFFER_TYPE_XDP,
--	IGC_TX_BUFFER_TYPE_XSK,
--};
--
- /* wrapper around a pointer to a socket buffer,
-  * so a DMA handle can be stored along with the buffer
-  */
-@@ -451,6 +457,7 @@ struct igc_tx_buffer {
- 	union {
- 		struct sk_buff *skb;
- 		struct xdp_frame *xdpf;
-+		struct xdp_desc xsk_desc;
- 	};
- 	unsigned int bytecount;
- 	u16 gso_segs;
-@@ -641,6 +648,7 @@ int igc_ptp_set_ts_config(struct net_device *netdev, struct ifreq *ifr);
- int igc_ptp_get_ts_config(struct net_device *netdev, struct ifreq *ifr);
- void igc_ptp_tx_hang(struct igc_adapter *adapter);
- void igc_ptp_read(struct igc_adapter *adapter, struct timespec64 *ts);
-+ktime_t igc_retrieve_ptp_tx_timestamp(struct igc_adapter *adapter);
- 
- #define igc_rx_pg_size(_ring) (PAGE_SIZE << igc_rx_pg_order(_ring))
- 
-diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
-index 82e9b493cad6..46c8c393d03e 100644
---- a/drivers/net/ethernet/intel/igc/igc_main.c
-+++ b/drivers/net/ethernet/intel/igc/igc_main.c
-@@ -1157,7 +1157,8 @@ static u32 igc_tx_cmd_type(struct sk_buff *skb, u32 tx_flags)
- 				 (IGC_ADVTXD_TSTAMP_REG_3));
- 
- 	/* insert frame checksum */
--	cmd_type ^= IGC_SET_FLAG(skb->no_fcs, 1, IGC_ADVTXD_DCMD_IFCS);
-+	if (skb)
-+		cmd_type ^= IGC_SET_FLAG(skb->no_fcs, 1, IGC_ADVTXD_DCMD_IFCS);
- 
- 	return cmd_type;
- }
-@@ -1413,17 +1414,25 @@ static int igc_tso(struct igc_ring *tx_ring,
- 	return 1;
- }
- 
--static bool igc_request_tx_tstamp(struct igc_adapter *adapter, struct sk_buff *skb, u32 *flags)
-+static bool igc_request_tx_tstamp(struct igc_adapter *adapter,
-+				  union igc_pending_ts_pkt ts_pkt, u32 *flags,
-+				  struct xsk_buff_pool *xsk_pool)
- {
- 	int i;
- 
- 	for (i = 0; i < IGC_MAX_TX_TSTAMP_TIMERS; i++) {
- 		struct igc_tx_timestamp_request *tstamp = &adapter->tx_tstamp[i];
- 
--		if (tstamp->skb)
-+		if (tstamp->pending_ts_pkt.ptr)
- 			continue;
- 
--		tstamp->skb = skb_get(skb);
-+		tstamp->pending_ts_pkt = ts_pkt;
-+		if (xsk_pool) {
-+			tstamp->xsk_pool = xsk_pool;
-+			tstamp->type = IGC_TX_BUFFER_TYPE_XSK;
-+		} else {
-+			tstamp->type = IGC_TX_BUFFER_TYPE_SKB;
-+		}
- 		tstamp->start = jiffies;
- 		*flags = tstamp->flags;
- 
-@@ -1468,17 +1477,20 @@ static netdev_tx_t igc_xmit_frame_ring(struct sk_buff *skb,
- 
- 	if (unlikely(skb_shinfo(skb)->tx_flags & SKBTX_HW_TSTAMP)) {
- 		struct igc_adapter *adapter = netdev_priv(tx_ring->netdev);
-+		union igc_pending_ts_pkt ts_pkt;
- 		unsigned long flags;
- 		u32 tstamp_flags;
- 
- 		spin_lock_irqsave(&adapter->ptp_tx_lock, flags);
- 
-+		ts_pkt.skb = skb_get(skb);
- 		if (adapter->tstamp_config.tx_type == HWTSTAMP_TX_ON &&
--		    igc_request_tx_tstamp(adapter, skb, &tstamp_flags)) {
-+		    igc_request_tx_tstamp(adapter, ts_pkt, &tstamp_flags, NULL)) {
- 			skb_shinfo(skb)->tx_flags |= SKBTX_IN_PROGRESS;
- 			tx_flags |= IGC_TX_FLAGS_TSTAMP | tstamp_flags;
- 		} else {
- 			adapter->tx_hwtstamp_skipped++;
-+			skb_unref(skb);
- 		}
- 
- 		spin_unlock_irqrestore(&adapter->ptp_tx_lock, flags);
-@@ -2163,7 +2175,8 @@ static int igc_xdp_init_tx_buffer(struct igc_tx_buffer *buffer,
- 
- /* This function requires __netif_tx_lock is held by the caller. */
- static int igc_xdp_init_tx_descriptor(struct igc_ring *ring,
--				      struct xdp_frame *xdpf)
-+				      struct xdp_frame *xdpf,
-+				      u32 tx_flags)
- {
- 	struct igc_tx_buffer *buffer;
- 	union igc_adv_tx_desc *desc;
-@@ -2191,6 +2204,7 @@ static int igc_xdp_init_tx_descriptor(struct igc_ring *ring,
- 	netdev_tx_sent_queue(txring_txq(ring), buffer->bytecount);
- 
- 	buffer->next_to_watch = desc;
-+	buffer->tx_flags = tx_flags;
- 
- 	ring->next_to_use++;
- 	if (ring->next_to_use == ring->count)
-@@ -2228,7 +2242,7 @@ static int igc_xdp_xmit_back(struct igc_adapter *adapter, struct xdp_buff *xdp)
- 	nq = txring_txq(ring);
- 
- 	__netif_tx_lock(nq, cpu);
--	res = igc_xdp_init_tx_descriptor(ring, xdpf);
-+	res = igc_xdp_init_tx_descriptor(ring, xdpf, 0);
- 	__netif_tx_unlock(nq);
- 	return res;
- }
-@@ -2630,6 +2644,7 @@ static void igc_update_tx_stats(struct igc_q_vector *q_vector,
- 
- static void igc_xdp_xmit_zc(struct igc_ring *ring)
- {
-+	struct igc_adapter *adapter = netdev_priv(ring->netdev);
- 	struct xsk_buff_pool *pool = ring->xsk_pool;
- 	struct netdev_queue *nq = txring_txq(ring);
- 	union igc_adv_tx_desc *tx_desc = NULL;
-@@ -2646,13 +2661,36 @@ static void igc_xdp_xmit_zc(struct igc_ring *ring)
- 	budget = igc_desc_unused(ring);
- 
- 	while (xsk_tx_peek_desc(pool, &xdp_desc) && budget--) {
--		u32 cmd_type, olinfo_status;
-+		u32 cmd_type, olinfo_status, tx_flags = 0;
- 		struct igc_tx_buffer *bi;
-+		unsigned long flags;
- 		dma_addr_t dma;
- 
--		cmd_type = IGC_ADVTXD_DTYP_DATA | IGC_ADVTXD_DCMD_DEXT |
--			   IGC_ADVTXD_DCMD_IFCS | IGC_TXD_DCMD |
--			   xdp_desc.len;
-+		if (adapter->tstamp_config.tx_type == HWTSTAMP_TX_ON &&
-+		    adapter->btf_enabled) {
-+			union igc_pending_ts_pkt ts_pkt;
-+			struct xdp_hints___igc *hints;
-+			u32 tstamp_flags;
++struct xsk_btf_entry {
++	__u32 offset;
++	__u32 size;
++};
 +
-+			/* Ensure there's no garbage on metadata */
-+			hints = (struct xdp_hints___igc *)
-+				((char *)xsk_buff_raw_get_data(pool, xdp_desc.addr)
-+				 - sizeof(*hints));
-+			hints->valid_map = 0;
-+			spin_lock_irqsave(&adapter->ptp_tx_lock, flags);
-+
-+			ts_pkt.xsk_desc = xdp_desc;
-+			if (igc_request_tx_tstamp(
-+			    adapter, ts_pkt, &tstamp_flags, pool)) {
-+				tx_flags |= IGC_TX_FLAGS_TSTAMP | tstamp_flags;
-+				hints->tx_timestamp = 0;;
-+			} else
-+				adapter->tx_hwtstamp_skipped++;
-+
-+			spin_unlock_irqrestore(&adapter->ptp_tx_lock, flags);
-+		}
-+
-+		cmd_type = igc_tx_cmd_type(NULL, tx_flags) | IGC_TXD_DCMD | xdp_desc.len;
- 		olinfo_status = xdp_desc.len << IGC_ADVTXD_PAYLEN_SHIFT;
- 
- 		dma = xsk_buff_raw_get_dma(pool, xdp_desc.addr);
-@@ -2670,6 +2708,7 @@ static void igc_xdp_xmit_zc(struct igc_ring *ring)
- 		bi->gso_segs = 1;
- 		bi->time_stamp = jiffies;
- 		bi->next_to_watch = tx_desc;
-+		bi->xsk_desc = xdp_desc;
- 
- 		netdev_tx_sent_queue(txring_txq(ring), xdp_desc.len);
- 
-@@ -2687,6 +2726,47 @@ static void igc_xdp_xmit_zc(struct igc_ring *ring)
- 	__netif_tx_unlock(nq);
- }
- 
-+static bool igc_xsk_complete_tx_tstamp(struct igc_adapter *adapter,
-+				       struct igc_tx_buffer *tx_buffer)
++static void __xsk_btf_free_hash(struct xsk_btf_info *xbi)
 +{
-+	unsigned long flags;
-+	bool ret = true;
++	struct hashmap_entry *entry;
 +	int i;
 +
-+	if (!adapter->btf_enabled)
++	hashmap__for_each_entry((&(xbi->map)), entry, i) {
++		free(entry->value);
++	}
++	hashmap__clear(&(xbi->map));
++}
++
++static size_t __xsk_hash_fn(const void *key, void *ctx)
++{
++	return (size_t)key;
++}
++
++static bool __xsk_equal_fn(const void *k1, const void *k2, void *ctx)
++{
++	return k1 == k2;
++}
++
++int xsk_btf__init(__u32 btf_id, struct xsk_btf_info **xbi)
++{
++	const struct btf_member *m;
++	const struct btf_type *t;
++	unsigned short vlen;
++	struct btf *btf;
++	int i, id, ret = 0;
++
++	if (!xbi)
++		return -EINVAL;
++
++	ret = btf__get_from_id(btf_id, &btf);
++	if (ret < 0)
 +		return ret;
 +
-+	spin_lock_irqsave(&adapter->ptp_tx_lock, flags);
-+	for (i = 0; i < IGC_MAX_TX_TSTAMP_TIMERS; i++) {
-+		struct igc_tx_timestamp_request *tstamp = &adapter->tx_tstamp[i];
++	id = btf__find_by_name(btf, "xdp_hints");
++	if (id < 0) {
++		ret = id;
++		goto error_btf;
++	}
 +
-+		if (!tstamp->pending_ts_pkt.ptr)
-+			continue;
++	t = btf__type_by_id(btf, id);
 +
-+		if (tstamp->type == IGC_TX_BUFFER_TYPE_XSK) {
-+			struct xdp_desc xdp_desc = tstamp->pending_ts_pkt.xsk_desc;
++	if (!BTF_INFO_KFLAG(t->info)) {
++		ret = -EINVAL;
++		goto error_btf;
++	}
 +
-+			if (xdp_desc.addr == tx_buffer->xsk_desc.addr) {
-+				struct xdp_hints___igc *hints;
-+				struct xsk_buff_pool *pool;
++	*xbi = malloc(sizeof(**xbi));
++	if (!*xbi) {
++		ret = -ENOMEM;
++		goto error_btf;
++	}
 +
-+				pool = tstamp->xsk_pool;
-+				hints = (struct xdp_hints___igc *)
-+					((char *)xsk_buff_raw_get_data(pool, xdp_desc.addr)
-+					 - sizeof(*hints));
-+				if (hints->tx_timestamp) {
-+					ret = false;
-+					break;
-+				}
-+				tstamp->pending_ts_pkt.ptr = NULL;
-+			}
++	hashmap__init(&(*xbi)->map, __xsk_hash_fn, __xsk_equal_fn, NULL);
++
++	/* Validate no BTF field is a bitfield */
++	m = btf_members(t);
++	vlen = BTF_INFO_VLEN(t->info);
++	for (i = 0; i < vlen; i++, m++) {
++		if (BTF_MEMBER_BITFIELD_SIZE(m->offset)) {
++			ret = -ENOTSUP;
++			goto error_entry;
 +		}
 +	}
-+	spin_unlock_irqrestore(&adapter->ptp_tx_lock, flags);
 +
++	(*xbi)->btf = btf;
++	(*xbi)->type = t;
++
++	return ret;
++
++error_entry:
++	__xsk_btf_free_hash(*xbi);
++	free(*xbi);
++
++error_btf:
++	btf__free(btf);
 +	return ret;
 +}
 +
- /**
-  * igc_clean_tx_irq - Reclaim resources after transmit completes
-  * @q_vector: pointer to q_vector containing needed info
-@@ -2726,15 +2806,10 @@ static bool igc_clean_tx_irq(struct igc_q_vector *q_vector, int napi_budget)
- 		if (!(eop_desc->wb.status & cpu_to_le32(IGC_TXD_STAT_DD)))
- 			break;
- 
--		/* clear next_to_watch to prevent false hangs */
--		tx_buffer->next_to_watch = NULL;
--
--		/* update the statistics for this packet */
--		total_bytes += tx_buffer->bytecount;
--		total_packets += tx_buffer->gso_segs;
--
- 		switch (tx_buffer->type) {
- 		case IGC_TX_BUFFER_TYPE_XSK:
-+			if (!igc_xsk_complete_tx_tstamp(adapter, tx_buffer))
-+				goto budget_out;
- 			xsk_frames++;
- 			break;
- 		case IGC_TX_BUFFER_TYPE_XDP:
-@@ -2750,6 +2825,13 @@ static bool igc_clean_tx_irq(struct igc_q_vector *q_vector, int napi_budget)
- 			break;
- 		}
- 
-+		/* clear next_to_watch to prevent false hangs */
-+		tx_buffer->next_to_watch = NULL;
++static int __xsk_btf_field_entry(struct xsk_btf_info *xbi, const char *field,
++			  struct xsk_btf_entry **entry)
++{
++	const struct btf_member *m;
++	unsigned short vlen;
++	int i;
 +
-+		/* update the statistics for this packet */
-+		total_bytes += tx_buffer->bytecount;
-+		total_packets += tx_buffer->gso_segs;
++	m = btf_members(xbi->type);
++	vlen = BTF_INFO_VLEN(xbi->type->info);
++	for (i = 0; i < vlen; i++, m++) {
++		const struct btf_type *member_type;
++		const char *name = btf__name_by_offset(xbi->btf, m->name_off);
 +
- 		/* clear last DMA location and unmap remaining buffers */
- 		while (tx_desc != eop_desc) {
- 			tx_buffer++;
-@@ -2783,6 +2865,7 @@ static bool igc_clean_tx_irq(struct igc_q_vector *q_vector, int napi_budget)
- 		budget--;
- 	} while (likely(budget));
- 
-+budget_out:
- 	netdev_tx_completed_queue(txring_txq(tx_ring),
- 				  total_packets, total_bytes);
- 
-@@ -5986,6 +6069,7 @@ static int igc_xdp_xmit(struct net_device *dev, int num_frames,
- 	int cpu = smp_processor_id();
- 	struct netdev_queue *nq;
- 	struct igc_ring *ring;
-+	u32 tx_flags = 0;
- 	int i, drops;
- 
- 	if (unlikely(test_bit(__IGC_DOWN, &adapter->state)))
-@@ -6004,7 +6088,7 @@ static int igc_xdp_xmit(struct net_device *dev, int num_frames,
- 		int err;
- 		struct xdp_frame *xdpf = frames[i];
- 
--		err = igc_xdp_init_tx_descriptor(ring, xdpf);
-+		err = igc_xdp_init_tx_descriptor(ring, xdpf, tx_flags);
- 		if (err) {
- 			xdp_return_frame_rx_napi(xdpf);
- 			drops++;
-diff --git a/drivers/net/ethernet/intel/igc/igc_ptp.c b/drivers/net/ethernet/intel/igc/igc_ptp.c
-index 911c36a909a4..0f6b91a421e9 100644
---- a/drivers/net/ethernet/intel/igc/igc_ptp.c
-+++ b/drivers/net/ethernet/intel/igc/igc_ptp.c
-@@ -9,6 +9,9 @@
- #include <linux/ptp_classify.h>
- #include <linux/clocksource.h>
- #include <linux/ktime.h>
-+#include <net/xdp_sock_drv.h>
-+
-+#include "igc_xdp.h"
- 
- #define INCVALUE_MASK		0x7fffffff
- #define ISGN			0x80000000
-@@ -613,9 +616,10 @@ static void igc_ptp_tx_timeout(struct igc_adapter *adapter,
- {
- 	struct igc_hw *hw = &adapter->hw;
- 
--	dev_kfree_skb_any(tstamp->skb);
--	tstamp->skb = NULL;
-+	if (tstamp->type == IGC_TX_BUFFER_TYPE_SKB)
-+		dev_kfree_skb_any(tstamp->pending_ts_pkt.skb);
- 	tstamp->start = 0;
-+	tstamp->pending_ts_pkt.ptr = NULL;
- 	adapter->tx_hwtstamp_timeouts++;
- 	/* Clear the tx valid bit in TSYNCTXCTL register to enable interrupt. */
- 	rd32(tstamp->regh);
-@@ -634,7 +638,7 @@ void igc_ptp_tx_hang(struct igc_adapter *adapter)
- 	for (i = 0; i < IGC_MAX_TX_TSTAMP_TIMERS; i++) {
- 		tstamp = &adapter->tx_tstamp[i];
- 
--		if (!tstamp->skb)
-+		if (!tstamp->pending_ts_pkt.ptr)
- 			continue;
- 
- 		if (time_is_after_jiffies(tstamp->start + IGC_PTP_TX_TIMEOUT))
-@@ -661,7 +665,6 @@ void igc_ptp_tx_hwtstamp(struct igc_adapter *adapter, u32 mask)
- 	struct skb_shared_hwtstamps shhwtstamps;
- 	struct igc_hw *hw = &adapter->hw;
- 	unsigned long flags;
--	struct sk_buff *skb;
- 	int adjust = 0;
- 	u64 regval;
- 	int i;
-@@ -675,12 +678,13 @@ void igc_ptp_tx_hwtstamp(struct igc_adapter *adapter, u32 mask)
- 		if (!(mask & tstamp->mask))
- 			continue;
- 
--		skb = tstamp->skb;
--		if (!skb)
--			continue;
--
-+		/* Always need to read register, to clean interrupt cause */
- 		regval = rd32(tstamp->regl);
- 		regval |= (u64)rd32(tstamp->regh) << 32;
-+
-+		if (!tstamp->pending_ts_pkt.ptr)
++		if (strcmp(name, field))
 +			continue;
 +
- 		igc_ptp_systim_to_hwtstamp(adapter, &shhwtstamps, regval);
- 
- 		switch (adapter->link_speed) {
-@@ -706,12 +710,27 @@ void igc_ptp_tx_hwtstamp(struct igc_adapter *adapter, u32 mask)
- 		 * a copy of the skb pointer to ensure other threads can't change it
- 		 * while we're notifying the stack.
- 		 */
--		tstamp->skb = NULL;
- 		tstamp->start = 0;
- 
- 		/* Notify the stack and free the skb after we've unlocked */
--		skb_tstamp_tx(skb, &shhwtstamps);
--		dev_kfree_skb_any(skb);
-+		if (tstamp->type == IGC_TX_BUFFER_TYPE_SKB) {
-+			skb_tstamp_tx(tstamp->pending_ts_pkt.skb, &shhwtstamps);
-+			dev_kfree_skb_any(tstamp->pending_ts_pkt.skb);
-+			tstamp->pending_ts_pkt.ptr = NULL;
-+		} else if (tstamp->type == IGC_TX_BUFFER_TYPE_XSK) {
-+			struct xdp_hints___igc *hints;
-+			struct xsk_buff_pool *pool;
-+			struct xdp_desc xdp_desc;
++		if (entry) {
++			member_type = btf__type_by_id(xbi->btf, m->type);
++			*entry = malloc(sizeof(*entry));
++			if (!entry) {
++				return -ENOMEM;
++			}
 +
-+			pool = tstamp->xsk_pool;
-+			xdp_desc = tstamp->pending_ts_pkt.xsk_desc;
-+			hints = (struct xdp_hints___igc *)
-+				((char *)xsk_buff_raw_get_data(pool, xdp_desc.addr)
-+				 - sizeof(*hints));
-+			hints->tx_timestamp = shhwtstamps.hwtstamp;
-+			hints->valid_map = XDP_GENERIC_HINTS_TX_TIMESTAMP;
-+			hints->btf_id = btf_obj_id(adapter->btf);
++			/* As we bail out at init for bit fields, there should
++			 * be no entries whose offset is not a multiple of byte */
++			(*entry)->offset = BTF_MEMBER_BIT_OFFSET(m->offset) / 8;
++			(*entry)->size = member_type->size;
 +		}
- 	}
- 
- 	spin_unlock_irqrestore(&adapter->ptp_tx_lock, flags);
-@@ -883,8 +902,10 @@ static void igc_tx_tstamp_clear(struct igc_adapter *adapter)
- 	for (i = 0; i < IGC_MAX_TX_TSTAMP_TIMERS; i++) {
- 		struct igc_tx_timestamp_request *tstamp = &adapter->tx_tstamp[i];
- 
--		dev_kfree_skb_any(tstamp->skb);
--		tstamp->skb = NULL;
-+		if (tstamp->pending_ts_pkt.ptr && tstamp->type == IGC_TX_BUFFER_TYPE_SKB)
-+			dev_kfree_skb_any(tstamp->pending_ts_pkt.skb);
++		return 0;
++	}
 +
-+		tstamp->pending_ts_pkt.ptr = NULL;
- 		tstamp->start = 0;
- 	}
- }
++	return -ENOENT;
++}
++
++bool xsk_btf__has_field(const char *field, struct xsk_btf_info *xbi)
++{
++	if (!xbi)
++		return false;
++
++	return __xsk_btf_field_entry(xbi, field, NULL);
++}
++
++void xsk_btf__free(struct xsk_btf_info *xbi)
++{
++	if (!xbi)
++		return;
++
++	__xsk_btf_free_hash(xbi);
++	btf__free(xbi->btf);
++	free(xbi);
++}
++
++int xsk_btf__read(void **dest, size_t size, const char *field, struct xsk_btf_info *xbi,
++		  const void *addr)
++{
++	struct xsk_btf_entry *entry;
++	int err;
++
++	if (!field || !xbi || !dest || !addr)
++		return -EINVAL;
++
++	if (!hashmap__find(&(xbi->map), field, (void **)&entry)) {
++		err = __xsk_btf_field_entry(xbi, field, &entry);
++		if (err)
++			return err;
++
++		hashmap__add(&(xbi->map), field, entry);
++	}
++
++	if (entry->size != size)
++		return -EINVAL;
++
++	*dest = (void *)((char *)addr - xbi->type->size + entry->offset);
++	return 0;
++}
+diff --git a/tools/lib/bpf/xsk.h b/tools/lib/bpf/xsk.h
+index 7f4143150746..b0bddc70c5a6 100644
+--- a/tools/lib/bpf/xsk.h
++++ b/tools/lib/bpf/xsk.h
+@@ -253,6 +253,8 @@ LIBBPF_API void *xsk_umem__adjust_prod_data_meta(void *umem_data, const struct x
+ LIBBPF_API void *xsk_umem__adjust_cons_data(void *umem_data, const struct xsk_umem *umem);
+ LIBBPF_API void *xsk_umem__adjust_cons_data_meta(void *umem_data, const struct xsk_umem *umem);
+ 
++LIBBPF_API int xsk_umem__btf_id(void *umem_data, const struct xsk_umem *umem);
++
+ #define XSK_RING_CONS__DEFAULT_NUM_DESCS      2048
+ #define XSK_RING_PROD__DEFAULT_NUM_DESCS      2048
+ #define XSK_UMEM__DEFAULT_FRAME_SHIFT    12 /* 4096 bytes */
+@@ -322,6 +324,19 @@ xsk_socket__create_shared(struct xsk_socket **xsk_ptr,
+ LIBBPF_API int xsk_umem__delete(struct xsk_umem *umem);
+ LIBBPF_API void xsk_socket__delete(struct xsk_socket *xsk);
+ 
++struct xsk_btf_info;
++
++LIBBPF_API int xsk_btf__init(__u32 btf_id, struct xsk_btf_info **xbi);
++LIBBPF_API int xsk_btf__read(void **dest, size_t size, const char *field, struct xsk_btf_info *xbi,
++			     const void *addr);
++LIBBPF_API bool xsk_btf__has_field(const char *field, struct xsk_btf_info *xbi);
++LIBBPF_API void xsk_btf__free(struct xsk_btf_info *xbi);
++
++#define XSK_BTF_READ_INTO(dest, field, xbi, addr) ({ \
++	typeof(dest) *_d; \
++	xsk_btf__read((void **)&_d, sizeof(dest), #field, xbi, addr); \
++	dest = *_d; })
++
+ #ifdef __cplusplus
+ } /* extern "C" */
+ #endif
 -- 
 2.32.0
 
