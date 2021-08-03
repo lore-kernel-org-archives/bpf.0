@@ -2,158 +2,142 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D756CC432BE
-	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 17:10:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 386EBC43214
+	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 17:10:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BF63061050
-	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 17:10:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 231C261029
+	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 17:10:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237722AbhHCRKm (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 3 Aug 2021 13:10:42 -0400
+        id S237759AbhHCRKn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 3 Aug 2021 13:10:43 -0400
 Received: from mga14.intel.com ([192.55.52.115]:16898 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237631AbhHCRKm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        id S237657AbhHCRKm (ORCPT <rfc822;bpf@vger.kernel.org>);
         Tue, 3 Aug 2021 13:10:42 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10065"; a="213466140"
+X-IronPort-AV: E=McAfee;i="6200,9189,10065"; a="213466132"
 X-IronPort-AV: E=Sophos;i="5.84,292,1620716400"; 
-   d="scan'208";a="213466140"
+   d="scan'208";a="213466132"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2021 10:10:19 -0700
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2021 10:10:16 -0700
 X-IronPort-AV: E=Sophos;i="5.84,292,1620716400"; 
-   d="scan'208";a="521327135"
+   d="scan'208";a="521327092"
 Received: from shyamasr-mobl.amr.corp.intel.com ([10.209.65.83])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2021 10:10:18 -0700
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2021 10:10:15 -0700
 From:   Kishen Maloor <kishen.maloor@intel.com>
 To:     bpf@vger.kernel.org, netdev@vger.kernel.org, hawk@kernel.org,
         magnus.karlsson@intel.com
-Cc:     Jithu Joseph <jithu.joseph@intel.com>
-Subject: [RFC bpf-next 3/5] igc: Launchtime support in XDP Tx ZC path
-Date:   Tue,  3 Aug 2021 13:10:04 -0400
-Message-Id: <20210803171006.13915-4-kishen.maloor@intel.com>
+Cc:     Kishen Maloor <kishen.maloor@intel.com>
+Subject: [RFC bpf-next 0/5] SO_TXTIME support in AF_XDP
+Date:   Tue,  3 Aug 2021 13:10:01 -0400
+Message-Id: <20210803171006.13915-1-kishen.maloor@intel.com>
 X-Mailer: git-send-email 2.24.3 (Apple Git-128)
-In-Reply-To: <20210803171006.13915-1-kishen.maloor@intel.com>
-References: <20210803171006.13915-1-kishen.maloor@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Jithu Joseph <jithu.joseph@intel.com>
+Background
 
-Adds Launchtime support in the XDP Zero copy Tx path.
+This change adds kernel and userspace support for SO_TXTIME
+in AF_XDP to include a specific TXTIME (aka "Launch Time")
+with XDP frames issued from userspace XDP applications.
 
-If launchtime is enabled for the ring handling the
-packet and if the launch-time data is present, programs
-a context descriptor with the launchtime so that NIC
-can transmit the packet at the appropriate time.
+This feature may be used in conjunction with application-based traffic
+shaping methods to delay less critical traffic and prioritize
+latency sensitive packets to meet a desired QoS.
 
-As for the non-ZC path, txtime info is copied into
-skb->tstamp in the XDP layer and the existing Tx path
-in the driver has support for honoring that.
+Implementation notes
 
-Signed-off-by: Jithu Joseph <jithu.joseph@intel.com>
----
- drivers/net/ethernet/intel/igc/igc_main.c | 49 +++++++++++++++++++++--
- 1 file changed, 46 insertions(+), 3 deletions(-)
+The timestamp is stored in the XDP metadata area and passed down
+to the NIC driver to configure the launch time.
+The timestamp is internally conveyed to the sk_buff destined to generic 
+mode NIC drivers. Alternatively, it may be read via a new Zero-Copy 
+driver API.
 
-diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
-index b7aab35c1132..336cf6bc0a71 100644
---- a/drivers/net/ethernet/intel/igc/igc_main.c
-+++ b/drivers/net/ethernet/intel/igc/igc_main.c
-@@ -2582,6 +2582,35 @@ static void igc_update_tx_stats(struct igc_q_vector *q_vector,
- 	q_vector->tx.total_packets += packets;
- }
- 
-+static void igc_launchtm_ctxtdesc(struct igc_ring *tx_ring,
-+				  ktime_t txtime)
-+{
-+	struct igc_adapter *adapter = netdev_priv(tx_ring->netdev);
-+	struct igc_adv_tx_context_desc *context_desc;
-+	u16 i = tx_ring->next_to_use;
-+	u32 mss_l4len_idx = 0;
-+	u32 type_tucmd = 0;
-+
-+	context_desc = IGC_TX_CTXTDESC(tx_ring, i);
-+
-+	i++;
-+	tx_ring->next_to_use = (i < tx_ring->count) ? i : 0;
-+
-+	/* set bits to identify this as an advanced context descriptor */
-+	type_tucmd |= IGC_TXD_CMD_DEXT | IGC_ADVTXD_DTYP_CTXT;
-+
-+	/* For i225, context index must be unique per ring. */
-+	if (test_bit(IGC_RING_FLAG_TX_CTX_IDX, &tx_ring->flags))
-+		mss_l4len_idx |= tx_ring->reg_idx << 4;
-+
-+	context_desc->vlan_macip_lens	= 0;
-+	context_desc->type_tucmd_mlhl	= cpu_to_le32(type_tucmd);
-+	context_desc->mss_l4len_idx	= cpu_to_le32(mss_l4len_idx);
-+
-+	context_desc->launch_time = igc_tx_launchtime(adapter,
-+						      txtime);
-+}
-+
- static void igc_xdp_xmit_zc(struct igc_ring *ring)
- {
- 	struct xsk_buff_pool *pool = ring->xsk_pool;
-@@ -2599,11 +2628,25 @@ static void igc_xdp_xmit_zc(struct igc_ring *ring)
- 
- 	budget = igc_desc_unused(ring);
- 
--	while (xsk_tx_peek_desc(pool, &xdp_desc) && budget--) {
-+	while (xsk_tx_peek_desc(pool, &xdp_desc) && budget > 2) {
- 		u32 cmd_type, olinfo_status;
- 		struct igc_tx_buffer *bi;
-+		s64 launch_tm = 0;
- 		dma_addr_t dma;
- 
-+		bi = &ring->tx_buffer_info[ring->next_to_use];
-+
-+		if (ring->launchtime_enable && (xdp_desc.options & XDP_DESC_OPTION_SO_TXTIME)) {
-+			launch_tm = xsk_buff_get_txtime(pool, &xdp_desc);
-+			if (launch_tm != -1) {
-+				budget--;
-+				igc_launchtm_ctxtdesc(ring, (ktime_t)launch_tm);
-+			}
-+		}
-+
-+		/* re-read ntu as igc_launchtm_ctxtdesc() updates it */
-+		ntu = ring->next_to_use;
-+
- 		cmd_type = IGC_ADVTXD_DTYP_DATA | IGC_ADVTXD_DCMD_DEXT |
- 			   IGC_ADVTXD_DCMD_IFCS | IGC_TXD_DCMD |
- 			   xdp_desc.len;
-@@ -2612,12 +2655,12 @@ static void igc_xdp_xmit_zc(struct igc_ring *ring)
- 		dma = xsk_buff_raw_get_dma(pool, xdp_desc.addr);
- 		xsk_buff_raw_dma_sync_for_device(pool, dma, xdp_desc.len);
- 
-+		budget--;
- 		tx_desc = IGC_TX_DESC(ring, ntu);
- 		tx_desc->read.cmd_type_len = cpu_to_le32(cmd_type);
- 		tx_desc->read.olinfo_status = cpu_to_le32(olinfo_status);
- 		tx_desc->read.buffer_addr = cpu_to_le64(dma);
- 
--		bi = &ring->tx_buffer_info[ntu];
- 		bi->type = IGC_TX_BUFFER_TYPE_XSK;
- 		bi->protocol = 0;
- 		bi->bytecount = xdp_desc.len;
-@@ -2630,9 +2673,9 @@ static void igc_xdp_xmit_zc(struct igc_ring *ring)
- 		ntu++;
- 		if (ntu == ring->count)
- 			ntu = 0;
-+		ring->next_to_use = ntu;
- 	}
- 
--	ring->next_to_use = ntu;
- 	if (tx_desc) {
- 		igc_flush_tx_descriptors(ring);
- 		xsk_tx_release(pool);
+The structure of XDP metadata that stores the TXTIME takes a form
+(Shown below) that is aligned to ongoing work in the community
+for describing XDP metadata using BTF:
+
+struct xdp_user_tx_metadata {
+        __u64 timestamp;
+        __u32 md_valid;
+        __u32 btf_id;
+};
+
+On the control path from userspace XDP applications, this change
+repurposes the SO_TXTIME socket option to harness this 
+feature, and adopts the above metadata struct for storing the TXTIME.
+
+The (libbpf) userspace API has been expanded with two helper functons:
+
+- int xsk_socket__enable_so_txtime(struct xsk_socket *xsk, bool enable)
+   
+   Sets the SO_TXTIME option on the AF_XDP socket (using setsockopt()).
+
+- void xsk_umem__set_md_txtime(void *umem_area, __u64 chunkAddr,
+                               __s64 txtime)
+   
+   Packages the application supplied TXTIME into the above md struct 
+   and stores it in the XDP metadata area, which precedes the XDP frame.
+
+In practice, a userspace XDP application must ensure the following:
+
+* Store the XDP packet at the location following the XDP metadata area:
+   uint8_t *pkt = xsk_umem__get_data(xsk.buffer, chunkAddr) +
+                                     sizeof(struct xdp_user_tx_metadata);
+
+* Correctly set the pkt addr in the TX descriptor:
+   tx_desc->addr = chunkAddr + sizeof(struct xdp_user_tx_metadata);
+
+* Signal the kernel that it included metadata by setting the TX 
+  descriptor options:
+   tx_desc->options = XDP_DESC_OPTION_METADATA;
+
+In the NIC driver, a new XSK Zero-Copy Driver API:
+s64 xsk_buff_get_txtime(struct xsk_buff_pool *pool, struct xdp_desc *desc)
+is used to retrieve and consume a Launch Time provided by the userspace XDP
+application.
+
+Accompanying the kernel and userspace changes are the following updates:
+
+* Launch Time support along the XDP ZC path in the IGC driver by exercising
+  the new XSK ZC driver API.
+
+* SO_TXTIME support in the xdpsock sample application to illustrate the
+  userspace API.
+
+Jithu Joseph (3):
+  igc: Launchtime support in XDP Tx ZC path
+  samples/bpf/xdpsock_user.c: Make get_nsecs() generic
+  samples/bpf/xdpsock_user.c: Launchtime/TXTIME API usage
+
+Kishen Maloor (2):
+  net: xdp: SO_TXTIME support in AF_XDP
+  libbpf: SO_TXTIME support in AF_XDP
+
+ drivers/net/ethernet/intel/igc/igc_main.c | 49 ++++++++++++++-
+ include/net/xdp_sock.h                    |  1 +
+ include/net/xdp_sock_drv.h                | 10 +++
+ include/net/xsk_buff_pool.h               |  1 +
+ include/uapi/linux/if_xdp.h               |  2 +
+ include/uapi/linux/xdp_md_std.h           | 14 +++++
+ net/xdp/xsk.c                             | 51 +++++++++++++++-
+ net/xdp/xsk.h                             |  2 +
+ net/xdp/xsk_buff_pool.c                   | 23 +++++++
+ net/xdp/xsk_queue.h                       |  4 +-
+ samples/bpf/xdpsock_user.c                | 74 ++++++++++++++++++++---
+ tools/include/uapi/linux/if_xdp.h         |  2 +
+ tools/include/uapi/linux/xdp_md_std.h     | 14 +++++
+ tools/lib/bpf/xsk.h                       | 27 ++++++++-
+ 14 files changed, 258 insertions(+), 16 deletions(-)
+ create mode 100644 include/uapi/linux/xdp_md_std.h
+ create mode 100644 tools/include/uapi/linux/xdp_md_std.h
+
 -- 
 2.24.3 (Apple Git-128)
 
