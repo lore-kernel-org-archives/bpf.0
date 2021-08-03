@@ -2,39 +2,39 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D28B3C4338F
-	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 17:10:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B288EC4320E
+	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 17:10:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AA04860230
-	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 17:10:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9A1C361037
+	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 17:10:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237618AbhHCRKl (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 3 Aug 2021 13:10:41 -0400
-Received: from mga14.intel.com ([192.55.52.115]:16898 "EHLO mga14.intel.com"
+        id S237734AbhHCRKn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 3 Aug 2021 13:10:43 -0400
+Received: from mga14.intel.com ([192.55.52.115]:16903 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237502AbhHCRKl (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 3 Aug 2021 13:10:41 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10065"; a="213466138"
+        id S237691AbhHCRKm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 3 Aug 2021 13:10:42 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10065"; a="213466142"
 X-IronPort-AV: E=Sophos;i="5.84,292,1620716400"; 
-   d="scan'208";a="213466138"
+   d="scan'208";a="213466142"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2021 10:10:18 -0700
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2021 10:10:21 -0700
 X-IronPort-AV: E=Sophos;i="5.84,292,1620716400"; 
-   d="scan'208";a="521327118"
+   d="scan'208";a="521327149"
 Received: from shyamasr-mobl.amr.corp.intel.com ([10.209.65.83])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2021 10:10:17 -0700
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2021 10:10:19 -0700
 From:   Kishen Maloor <kishen.maloor@intel.com>
 To:     bpf@vger.kernel.org, netdev@vger.kernel.org, hawk@kernel.org,
         magnus.karlsson@intel.com
-Cc:     Kishen Maloor <kishen.maloor@intel.com>
-Subject: [RFC bpf-next 2/5] libbpf: SO_TXTIME support in AF_XDP
-Date:   Tue,  3 Aug 2021 13:10:03 -0400
-Message-Id: <20210803171006.13915-3-kishen.maloor@intel.com>
+Cc:     Jithu Joseph <jithu.joseph@intel.com>
+Subject: [RFC bpf-next 4/5] samples/bpf/xdpsock_user.c: Make get_nsecs() generic
+Date:   Tue,  3 Aug 2021 13:10:05 -0400
+Message-Id: <20210803171006.13915-5-kishen.maloor@intel.com>
 X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 In-Reply-To: <20210803171006.13915-1-kishen.maloor@intel.com>
 References: <20210803171006.13915-1-kishen.maloor@intel.com>
@@ -44,111 +44,66 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This change adds userspace support for SO_TXTIME in AF_XDP
-to include a specific TXTIME (aka "Launch Time")
-with XDP frames issued from userspace XDP applications.
+From: Jithu Joseph <jithu.joseph@intel.com>
 
-The userspace API has been expanded with two helper functons:
+The helper function get_nsecs() assumes clock to be CLOCK_MONOTONIC.
 
-- int xsk_socket__enable_so_txtime(struct xsk_socket *xsk, bool enable)
-   Sets the SO_TXTIME option on the AF_XDP socket (using setsockopt()).
+TSN features like Launchtime uses CLOCK_TAI. Subsequent patch
+extends this sample to show how Launchtime APIs maybe used
+in XDP context.
 
-- void xsk_umem__set_md_txtime(void *umem_area, __u64 chunkAddr,
-                               __s64 txtime)
-   Packages the application supplied TXTIME into struct xdp_user_tx_metadata:
-   struct xdp_user_tx_metadata {
-        __u64 timestamp;
-        __u32 md_valid;
-        __u32 btf_id;
-   };
-   and stores it in the XDP metadata area, which precedes the XDP frame.
+In prepration for this, extend the function to add CLOCKID parameter.
 
-Signed-off-by: Kishen Maloor <kishen.maloor@intel.com>
+Signed-off-by: Jithu Joseph <jithu.joseph@intel.com>
 ---
- tools/include/uapi/linux/if_xdp.h     |  2 ++
- tools/include/uapi/linux/xdp_md_std.h | 14 ++++++++++++++
- tools/lib/bpf/xsk.h                   | 27 ++++++++++++++++++++++++++-
- 3 files changed, 42 insertions(+), 1 deletion(-)
- create mode 100644 tools/include/uapi/linux/xdp_md_std.h
+ samples/bpf/xdpsock_user.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/tools/include/uapi/linux/if_xdp.h b/tools/include/uapi/linux/if_xdp.h
-index a78a8096f4ce..31f81f82ed86 100644
---- a/tools/include/uapi/linux/if_xdp.h
-+++ b/tools/include/uapi/linux/if_xdp.h
-@@ -106,6 +106,8 @@ struct xdp_desc {
- 	__u32 options;
- };
+diff --git a/samples/bpf/xdpsock_user.c b/samples/bpf/xdpsock_user.c
+index 33d0bdebbed8..3fd2f6a0d1eb 100644
+--- a/samples/bpf/xdpsock_user.c
++++ b/samples/bpf/xdpsock_user.c
+@@ -159,11 +159,11 @@ static int num_socks;
+ struct xsk_socket_info *xsks[MAX_SOCKS];
+ int sock;
  
-+#define XDP_DESC_OPTION_METADATA (1 << 0)
-+
- /* UMEM descriptor is __u64 */
+-static unsigned long get_nsecs(void)
++static unsigned long get_nsecs(int clockid)
+ {
+ 	struct timespec ts;
  
- #endif /* _LINUX_IF_XDP_H */
-diff --git a/tools/include/uapi/linux/xdp_md_std.h b/tools/include/uapi/linux/xdp_md_std.h
-new file mode 100644
-index 000000000000..f00996a61639
---- /dev/null
-+++ b/tools/include/uapi/linux/xdp_md_std.h
-@@ -0,0 +1,14 @@
-+#ifndef _UAPI_LINUX_XDP_MD_STD_H
-+#define _UAPI_LINUX_XDP_MD_STD_H
-+
-+#include <linux/types.h>
-+
-+#define XDP_METADATA_USER_TX_TIMESTAMP 0x1
-+
-+struct xdp_user_tx_metadata {
-+	__u64 timestamp;
-+	__u32 md_valid;
-+	__u32 btf_id;
-+};
-+
-+#endif /* _UAPI_LINUX_XDP_MD_STD_H */
-diff --git a/tools/lib/bpf/xsk.h b/tools/lib/bpf/xsk.h
-index 01c12dca9c10..1b52ffe1c9a3 100644
---- a/tools/lib/bpf/xsk.h
-+++ b/tools/lib/bpf/xsk.h
-@@ -16,7 +16,8 @@
- #include <stdint.h>
- #include <stdbool.h>
- #include <linux/if_xdp.h>
--
-+#include <linux/xdp_md_std.h>
-+#include <errno.h>
- #include "libbpf.h"
+-	clock_gettime(CLOCK_MONOTONIC, &ts);
++	clock_gettime(clockid, &ts);
+ 	return ts.tv_sec * 1000000000UL + ts.tv_nsec;
+ }
  
- #ifdef __cplusplus
-@@ -248,6 +249,30 @@ static inline __u64 xsk_umem__add_offset_to_addr(__u64 addr)
- LIBBPF_API int xsk_umem__fd(const struct xsk_umem *umem);
- LIBBPF_API int xsk_socket__fd(const struct xsk_socket *xsk);
+@@ -354,7 +354,7 @@ static void dump_driver_stats(long dt)
  
-+/* Helpers for SO_TXTIME */
-+
-+static inline void xsk_umem__set_md_txtime(void *umem_area, __u64 addr, __s64 txtime)
-+{
-+	struct xdp_user_tx_metadata *md;
-+
-+	md = (struct xdp_user_tx_metadata *)&((char *)umem_area)[addr];
-+
-+	md->timestamp = txtime;
-+	md->md_valid |= XDP_METADATA_USER_TX_TIMESTAMP;
-+}
-+
-+static inline int xsk_socket__enable_so_txtime(struct xsk_socket *xsk, bool enable)
-+{
-+	unsigned int val = (enable) ? 1 : 0;
-+	int err;
-+
-+	err = setsockopt(xsk_socket__fd(xsk), SOL_XDP, SO_TXTIME, &val, sizeof(val));
-+
-+	if (err)
-+		return -errno;
-+	return 0;
-+}
-+
- #define XSK_RING_CONS__DEFAULT_NUM_DESCS      2048
- #define XSK_RING_PROD__DEFAULT_NUM_DESCS      2048
- #define XSK_UMEM__DEFAULT_FRAME_SHIFT    12 /* 4096 bytes */
+ static void dump_stats(void)
+ {
+-	unsigned long now = get_nsecs();
++	unsigned long now = get_nsecs(CLOCK_MONOTONIC);
+ 	long dt = now - prev_time;
+ 	int i;
+ 
+@@ -443,7 +443,7 @@ static void dump_stats(void)
+ static bool is_benchmark_done(void)
+ {
+ 	if (opt_duration > 0) {
+-		unsigned long dt = (get_nsecs() - start_time);
++		unsigned long dt = (get_nsecs(CLOCK_MONOTONIC) - start_time);
+ 
+ 		if (dt >= opt_duration)
+ 			benchmark_done = true;
+@@ -1683,7 +1683,7 @@ int main(int argc, char **argv)
+ 			exit_with_error(ret);
+ 	}
+ 
+-	prev_time = get_nsecs();
++	prev_time = get_nsecs(CLOCK_MONOTONIC);
+ 	start_time = prev_time;
+ 
+ 	if (opt_bench == BENCH_RXDROP)
 -- 
 2.24.3 (Apple Git-128)
 
