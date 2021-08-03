@@ -7,33 +7,34 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 82B3CC43216
-	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 01:03:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 956FBC4320A
+	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 01:03:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6346060F9E
-	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 01:03:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 772B760FA0
+	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 01:03:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233319AbhHCBEA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 2 Aug 2021 21:04:00 -0400
-Received: from mga07.intel.com ([134.134.136.100]:65282 "EHLO mga07.intel.com"
+        id S233471AbhHCBEB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 2 Aug 2021 21:04:01 -0400
+Received: from mga07.intel.com ([134.134.136.100]:65281 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233050AbhHCBEA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        id S232849AbhHCBEA (ORCPT <rfc822;bpf@vger.kernel.org>);
         Mon, 2 Aug 2021 21:04:00 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10064"; a="277327836"
+X-IronPort-AV: E=McAfee;i="6200,9189,10064"; a="277327840"
 X-IronPort-AV: E=Sophos;i="5.84,290,1620716400"; 
-   d="scan'208";a="277327836"
+   d="scan'208";a="277327840"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
   by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2021 18:03:49 -0700
 X-IronPort-AV: E=Sophos;i="5.84,290,1620716400"; 
-   d="scan'208";a="419480111"
+   d="scan'208";a="419480126"
 Received: from ticela-or-032.amr.corp.intel.com (HELO localhost.localdomain) ([10.212.166.34])
   by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2021 18:03:49 -0700
 From:   Ederson de Souza <ederson.desouza@intel.com>
 To:     xdp-hints@xdp-project.net
-Cc:     bpf@vger.kernel.org, Saeed Mahameed <saeedm@mellanox.com>
-Subject: [[RFC xdp-hints] 04/16] tools/bpf: Add xdp set command for md btf
-Date:   Mon,  2 Aug 2021 18:03:19 -0700
-Message-Id: <20210803010331.39453-5-ederson.desouza@intel.com>
+Cc:     bpf@vger.kernel.org,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>
+Subject: [[RFC xdp-hints] 07/16] igc: Add support for multiple in-flight TX timestamps
+Date:   Mon,  2 Aug 2021 18:03:22 -0700
+Message-Id: <20210803010331.39453-8-ederson.desouza@intel.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210803010331.39453-1-ederson.desouza@intel.com>
 References: <20210803010331.39453-1-ederson.desouza@intel.com>
@@ -43,509 +44,474 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Saeed Mahameed <saeedm@mellanox.com>
+From: Vinicius Costa Gomes <vinicius.gomes@intel.com>
 
-Introduce a new bpftool net subcommand and use it to report and set XDP
-attributes:
+Adds support for using the four sets of timestamping registers that
+i225 has available for TX.
 
-$ /usr/local/sbin/bpftool net xdp help
-Usage: /usr/local/sbin/bpftool xdp xdp { show | list | set | md_btf} [dev <devname>]
-       /usr/local/sbin/bpftool xdp help
+In some TSN workloads, where multiple applications request hardware
+transmission timestamps, it was possible that some of those requests
+were denied because the only in use register was already occupied.
 
-$ /usr/local/sbin/bpftool net xdp set dev mlx0 md_btf on
-
-$ /usr/local/sbin/bpftool net xdp show
-xdp:
-mlx0(3) md_btf_id(1) md_btf_enabled(1)
-
-Issue: 2114293
-Change-Id: Id6abe633209852b4957001fcbee6e8b1ae248e4b
-Signed-off-by: Saeed Mahameed <saeedm@mellanox.com>
+Signed-off-by: Vinicius Costa Gomes <vinicius.gomes@intel.com>
 ---
- tools/bpf/bpftool/main.h |   3 +-
- tools/bpf/bpftool/net.c  |   7 +-
- tools/bpf/bpftool/xdp.c  | 310 +++++++++++++++++++++++++++++++++++++++
- tools/lib/bpf/libbpf.h   |   2 +
- tools/lib/bpf/libbpf.map |   1 +
- tools/lib/bpf/netlink.c  |  49 +++++++
- 6 files changed, 368 insertions(+), 4 deletions(-)
- create mode 100644 tools/bpf/bpftool/xdp.c
+ drivers/net/ethernet/intel/igc/igc.h         |  20 ++-
+ drivers/net/ethernet/intel/igc/igc_base.h    |   3 +
+ drivers/net/ethernet/intel/igc/igc_defines.h |   7 +
+ drivers/net/ethernet/intel/igc/igc_main.c    |  45 +++--
+ drivers/net/ethernet/intel/igc/igc_ptp.c     | 172 +++++++++++++------
+ drivers/net/ethernet/intel/igc/igc_regs.h    |  12 ++
+ 6 files changed, 192 insertions(+), 67 deletions(-)
 
-diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
-index c1cf29798b99..cb2ff2083000 100644
---- a/tools/bpf/bpftool/main.h
-+++ b/tools/bpf/bpftool/main.h
-@@ -168,7 +168,6 @@ int mount_bpffs_for_pin(const char *name);
- int do_pin_any(int argc, char **argv, int (*get_fd_by_id)(int *, char ***));
- int do_pin_fd(int fd, const char *name);
- 
--/* commands available in bootstrap mode */
- int do_gen(int argc, char **argv);
- int do_btf(int argc, char **argv);
- 
-@@ -180,6 +179,7 @@ int do_event_pipe(int argc, char **argv) __weak;
- int do_cgroup(int argc, char **arg) __weak;
- int do_perf(int argc, char **arg) __weak;
- int do_net(int argc, char **arg) __weak;
-+int do_xdp(int argc, char **arg) __weak;
- int do_tracelog(int argc, char **arg) __weak;
- int do_feature(int argc, char **argv) __weak;
- int do_struct_ops(int argc, char **argv) __weak;
-@@ -257,6 +257,7 @@ struct tcmsg;
- int do_xdp_dump(struct ifinfomsg *ifinfo, struct nlattr **tb);
- int do_filter_dump(struct tcmsg *ifinfo, struct nlattr **tb, const char *kind,
- 		   const char *devname, int ifindex);
-+int xdp_dump_link_nlmsg(void *cookie, void *msg, struct nlattr **tb);
- 
- int print_all_levels(__maybe_unused enum libbpf_print_level level,
- 		     const char *format, va_list args);
-diff --git a/tools/bpf/bpftool/net.c b/tools/bpf/bpftool/net.c
-index f836d115d7d6..264350a3ca3b 100644
---- a/tools/bpf/bpftool/net.c
-+++ b/tools/bpf/bpftool/net.c
-@@ -349,7 +349,7 @@ static int netlink_get_link(int sock, unsigned int nl_pid,
- 			    dump_link_nlmsg, cookie);
- }
- 
--static int dump_link_nlmsg(void *cookie, void *msg, struct nlattr **tb)
-+int xdp_dump_link_nlmsg(void *cookie, void *msg, struct nlattr **tb)
- {
- 	struct bpf_netdev_t *netinfo = cookie;
- 	struct ifinfomsg *ifinfo = msg;
-@@ -680,7 +680,7 @@ static int do_show(int argc, char **argv)
- 		jsonw_start_array(json_wtr);
- 	NET_START_OBJECT;
- 	NET_START_ARRAY("xdp", "%s:\n");
--	ret = netlink_get_link(sock, nl_pid, dump_link_nlmsg, &dev_array);
-+	ret = netlink_get_link(sock, nl_pid, xdp_dump_link_nlmsg, &dev_array);
- 	NET_END_ARRAY("\n");
- 
- 	if (!ret) {
-@@ -722,7 +722,7 @@ static int do_help(int argc, char **argv)
- 	}
- 
- 	fprintf(stderr,
--		"Usage: %1$s %2$s { show | list } [dev <devname>]\n"
-+		"Usage: %1$s %2$s { show | list | xdp } [dev <devname>]\n"
- 		"       %1$s %2$s attach ATTACH_TYPE PROG dev <devname> [ overwrite ]\n"
- 		"       %1$s %2$s detach ATTACH_TYPE dev <devname>\n"
- 		"       %1$s %2$s help\n"
-@@ -746,6 +746,7 @@ static const struct cmd cmds[] = {
- 	{ "list",	do_show },
- 	{ "attach",	do_attach },
- 	{ "detach",	do_detach },
-+	{ "xdp",	do_xdp },
- 	{ "help",	do_help },
- 	{ 0 }
+diff --git a/drivers/net/ethernet/intel/igc/igc.h b/drivers/net/ethernet/intel/igc/igc.h
+index 2b07a9dd29bb..6fd5901f07c7 100644
+--- a/drivers/net/ethernet/intel/igc/igc.h
++++ b/drivers/net/ethernet/intel/igc/igc.h
+@@ -67,6 +67,17 @@ struct igc_rx_packet_stats {
+ 	u64 other_packets;
  };
-diff --git a/tools/bpf/bpftool/xdp.c b/tools/bpf/bpftool/xdp.c
-new file mode 100644
-index 000000000000..f38d692d187c
---- /dev/null
-+++ b/tools/bpf/bpftool/xdp.c
-@@ -0,0 +1,310 @@
-+// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+// Copyright (C) 2019 Mellanox.
-+
-+#define _GNU_SOURCE
-+#include <errno.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <time.h>
-+#include <net/if.h>
-+#include <linux/if.h>
-+#include <linux/rtnetlink.h>
-+#include <sys/socket.h>
-+
-+#include "bpf/nlattr.h"
-+#include "main.h"
-+#include "netlink_dumper.h"
-+
-+
-+/* TODO: reuse  form net.c */
-+#ifndef SOL_NETLINK
-+#define SOL_NETLINK 270
-+#endif
-+
-+static int netlink_open(__u32 *nl_pid)
-+{
-+	struct sockaddr_nl sa;
-+	socklen_t addrlen;
-+	int one = 1, ret;
-+	int sock;
-+
-+	memset(&sa, 0, sizeof(sa));
-+	sa.nl_family = AF_NETLINK;
-+
-+	sock = socket(AF_NETLINK, SOCK_RAW, NETLINK_ROUTE);
-+	if (sock < 0)
-+		return -errno;
-+
-+	if (setsockopt(sock, SOL_NETLINK, NETLINK_EXT_ACK,
-+		       &one, sizeof(one)) < 0) {
-+		p_err("Netlink error reporting not supported");
-+	}
-+
-+	if (bind(sock, (struct sockaddr *)&sa, sizeof(sa)) < 0) {
-+		ret = -errno;
-+		goto cleanup;
-+	}
-+
-+	addrlen = sizeof(sa);
-+	if (getsockname(sock, (struct sockaddr *)&sa, &addrlen) < 0) {
-+		ret = -errno;
-+		goto cleanup;
-+	}
-+
-+	if (addrlen != sizeof(sa)) {
-+		ret = -LIBBPF_ERRNO__INTERNAL;
-+		goto cleanup;
-+	}
-+
-+	*nl_pid = sa.nl_pid;
-+	return sock;
-+
-+cleanup:
-+	close(sock);
-+	return ret;
-+}
-+
-+typedef int (*dump_nlmsg_t)(void *cookie, void *msg, struct nlattr **tb);
-+
-+typedef int (*__dump_nlmsg_t)(struct nlmsghdr *nlmsg, dump_nlmsg_t, void *cookie);
-+
-+static int netlink_recv(int sock, __u32 nl_pid, __u32 seq,
-+			__dump_nlmsg_t _fn, dump_nlmsg_t fn,
-+			void *cookie)
-+{
-+	bool multipart = true;
-+	struct nlmsgerr *err;
-+	struct nlmsghdr *nh;
-+	char buf[4096];
-+	int len, ret;
-+
-+	while (multipart) {
-+		multipart = false;
-+		len = recv(sock, buf, sizeof(buf), 0);
-+		if (len < 0) {
-+			ret = -errno;
-+			goto done;
-+		}
-+
-+		if (len == 0)
-+			break;
-+
-+		for (nh = (struct nlmsghdr *)buf; NLMSG_OK(nh, len);
-+		     nh = NLMSG_NEXT(nh, len)) {
-+			if (nh->nlmsg_pid != nl_pid) {
-+				ret = -LIBBPF_ERRNO__WRNGPID;
-+				goto done;
-+			}
-+			if (nh->nlmsg_seq != seq) {
-+				ret = -LIBBPF_ERRNO__INVSEQ;
-+				goto done;
-+			}
-+			if (nh->nlmsg_flags & NLM_F_MULTI)
-+				multipart = true;
-+			switch (nh->nlmsg_type) {
-+			case NLMSG_ERROR:
-+				err = (struct nlmsgerr *)NLMSG_DATA(nh);
-+				if (!err->error)
-+					continue;
-+				ret = err->error;
-+				libbpf_nla_dump_errormsg(nh);
-+				goto done;
-+			case NLMSG_DONE:
-+				return 0;
-+			default:
-+				break;
-+			}
-+			if (_fn) {
-+				ret = _fn(nh, fn, cookie);
-+				if (ret)
-+					return ret;
-+			}
-+		}
-+	}
-+	ret = 0;
-+done:
-+	return ret;
-+}
-+
-+
-+static int __dump_link_nlmsg(struct nlmsghdr *nlh,
-+			     dump_nlmsg_t dump_link_nlmsg, void *cookie)
-+{
-+	struct nlattr *tb[IFLA_MAX + 1], *attr;
-+	struct ifinfomsg *ifi = NLMSG_DATA(nlh);
-+	int len;
-+
-+	len = nlh->nlmsg_len - NLMSG_LENGTH(sizeof(*ifi));
-+	attr = (struct nlattr *) ((void *) ifi + NLMSG_ALIGN(sizeof(*ifi)));
-+	if (libbpf_nla_parse(tb, IFLA_MAX, attr, len, NULL) != 0)
-+		return -LIBBPF_ERRNO__NLPARSE;
-+
-+	return dump_link_nlmsg(cookie, ifi, tb);
-+}
-+
-+static int netlink_get_link(int sock, unsigned int nl_pid,
-+			    dump_nlmsg_t dump_link_nlmsg, void *cookie)
-+{
-+	struct {
-+		struct nlmsghdr nlh;
-+		struct ifinfomsg ifm;
-+	} req = {
-+		.nlh.nlmsg_len = NLMSG_LENGTH(sizeof(struct ifinfomsg)),
-+		.nlh.nlmsg_type = RTM_GETLINK,
-+		.nlh.nlmsg_flags = NLM_F_DUMP | NLM_F_REQUEST,
-+		.ifm.ifi_family = AF_PACKET,
-+	};
-+	int seq = time(NULL);
-+
-+	req.nlh.nlmsg_seq = seq;
-+	if (send(sock, &req, req.nlh.nlmsg_len, 0) < 0)
-+		return -errno;
-+
-+	return netlink_recv(sock, nl_pid, seq, __dump_link_nlmsg,
-+			    dump_link_nlmsg, cookie);
-+}
-+
-+struct ip_devname_ifindex {
-+	char	devname[64];
-+	int	ifindex;
-+};
-+
-+struct bpf_netdev_t {
-+	struct ip_devname_ifindex *devices;
-+	int	used_len;
-+	int	array_len;
-+	int	filter_idx;
-+};
-+
-+static int do_show(int argc, char **argv)
-+{
-+	int sock, ret, filter_idx = -1;
-+	struct bpf_netdev_t dev_array;
-+	unsigned int nl_pid = 0;
-+	char err_buf[256];
-+
-+	if (argc == 2) {
-+		if (strcmp(argv[0], "dev") != 0)
-+			usage();
-+		filter_idx = if_nametoindex(argv[1]);
-+		if (filter_idx == 0) {
-+			fprintf(stderr, "invalid dev name %s\n", argv[1]);
-+			return -1;
-+		}
-+	} else if (argc != 0) {
-+		usage();
-+	}
-+
-+	sock = netlink_open(&nl_pid);
-+	if (sock < 0) {
-+		fprintf(stderr, "failed to open netlink sock\n");
-+		return -1;
-+	}
-+
-+	dev_array.devices = NULL;
-+	dev_array.used_len = 0;
-+	dev_array.array_len = 0;
-+	dev_array.filter_idx = filter_idx;
-+
-+	if (json_output)
-+		jsonw_start_array(json_wtr);
-+	NET_START_OBJECT;
-+	NET_START_ARRAY("xdp", "%s:\n");
-+	ret = netlink_get_link(sock, nl_pid, xdp_dump_link_nlmsg, &dev_array);
-+	NET_END_ARRAY("\n");
-+
-+	NET_END_OBJECT;
-+	if (json_output)
-+		jsonw_end_array(json_wtr);
-+
-+	if (ret) {
-+		if (json_output)
-+			jsonw_null(json_wtr);
-+		libbpf_strerror(ret, err_buf, sizeof(err_buf));
-+		fprintf(stderr, "Error: %s\n", err_buf);
-+	}
-+	free(dev_array.devices);
-+	close(sock);
-+	return ret;
-+}
-+
-+static int set_usage(void)
-+{
-+	fprintf(stderr,
-+		"Usage: %s net xdp set dev <devname> {md_btf {on|off}}\n"
-+		"       %s net xdp set help\n"
-+		"       md_btf {on|off}: enable/disable meta data btf\n",
-+		bin_name, bin_name);
-+
-+	return -1;
-+}
-+
-+static int xdp_set_md_btf(int ifindex, char *arg)
-+{
-+	__u8 enable = (strcmp(arg, "on") == 0) ? 1 : 0;
-+	int ret;
-+
-+	ret = bpf_set_link_xdp_md_btf(ifindex, enable);
-+	if (ret)
-+		fprintf(stderr, "Failed to setup xdp md, err=%d\n", ret);
-+
-+	return -ret;
-+}
-+
-+static int do_set(int argc, char **argv)
-+{
-+	char *set_cmd, *set_arg;
-+	int dev_idx = -1;
-+
-+	if (argc < 4)
-+		return set_usage();
-+
-+	if (strcmp(argv[0], "dev") != 0)
-+		return set_usage();
-+
-+	dev_idx = if_nametoindex(argv[1]);
-+	if (dev_idx == 0) {
-+		fprintf(stderr, "invalid dev name %s\n", argv[1]);
-+		return -1;
-+	}
-+
-+	set_cmd = argv[2];
-+	set_arg = argv[3];
-+
-+	if (strcmp(set_cmd, "md_btf") != 0)
-+		return set_usage();
-+
-+	if (strcmp(set_arg, "on") != 0 && strcmp(set_arg, "off") != 0)
-+		return set_usage();
-+
-+	return xdp_set_md_btf(dev_idx, set_arg);
-+}
-+
-+static int do_help(int argc, char **argv)
-+{
-+	if (json_output) {
-+		jsonw_null(json_wtr);
-+		return 0;
-+	}
-+
-+	fprintf(stderr,
-+		"Usage: %s %s xdp { show | list | set } [dev <devname>]\n"
-+		"       %s %s help\n",
-+		bin_name, argv[-2], bin_name, argv[-2]);
-+
-+	return 0;
-+}
-+
-+static const struct cmd cmds[] = {
-+	{ "show",        do_show },
-+	{ "list",        do_show },
-+	{ "set",         do_set  },
-+	{ "help",        do_help },
-+	{ 0 }
-+};
-+
-+int do_xdp(int argc, char **argv)
-+{
-+	return cmd_select(cmds, argc, argv, do_help);
-+}
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 6e61342ba56c..5075cf9fd509 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -520,6 +520,7 @@ LIBBPF_API int bpf_set_link_xdp_fd(int ifindex, int fd, __u32 flags);
- LIBBPF_API int bpf_set_link_xdp_fd_opts(int ifindex, int fd, __u32 flags,
- 					const struct bpf_xdp_set_link_opts *opts);
- LIBBPF_API int bpf_get_link_xdp_id(int ifindex, __u32 *prog_id, __u32 flags);
-+
- LIBBPF_API int bpf_get_link_xdp_info(int ifindex, struct xdp_link_info *info,
- 				     size_t info_size, __u32 flags);
  
-@@ -607,6 +608,7 @@ struct perf_buffer_opts {
- LIBBPF_API struct perf_buffer *
- perf_buffer__new(int map_fd, size_t page_cnt,
- 		 const struct perf_buffer_opts *opts);
-+LIBBPF_API int bpf_set_link_xdp_md_btf(int ifindex, __u8 enable);
++#define IGC_MAX_TX_TSTAMP_TIMERS	4
++
++struct igc_tx_timestamp_request {
++	struct sk_buff *skb;
++	unsigned long start;
++	u32 mask;
++	u32 regl;
++	u32 regh;
++	u32 flags;
++};
++
+ struct igc_ring_container {
+ 	struct igc_ring *ring;          /* pointer to linked list of rings */
+ 	unsigned int total_bytes;       /* total bytes processed this int */
+@@ -220,9 +231,8 @@ struct igc_adapter {
+ 	 * ptp_tx_lock.
+ 	 */
+ 	spinlock_t ptp_tx_lock;
+-	struct sk_buff *ptp_tx_skb;
++	struct igc_tx_timestamp_request tx_tstamp[IGC_MAX_TX_TSTAMP_TIMERS];
+ 	struct hwtstamp_config tstamp_config;
+-	unsigned long ptp_tx_start;
+ 	unsigned int ptp_flags;
+ 	/* System time value lock */
+ 	spinlock_t tmreg_lock;
+@@ -401,6 +411,10 @@ enum igc_tx_flags {
+ 	/* olinfo flags */
+ 	IGC_TX_FLAGS_IPV4	= 0x10,
+ 	IGC_TX_FLAGS_CSUM	= 0x20,
++
++	IGC_TX_FLAGS_TSTAMP_1	= 0x100,
++	IGC_TX_FLAGS_TSTAMP_2	= 0x200,
++	IGC_TX_FLAGS_TSTAMP_3	= 0x400,
+ };
  
- enum bpf_perf_event_ret {
- 	LIBBPF_PERF_EVENT_DONE	= 0,
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 944c99d1ded3..492db50a4cd7 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -135,6 +135,7 @@ LIBBPF_0.0.2 {
- 		bpf_object__btf;
- 		bpf_object__find_map_fd_by_name;
- 		bpf_get_link_xdp_id;
-+		bpf_set_link_xdp_md_btf;
- 		btf__dedup;
- 		btf__get_map_kv_tids;
- 		btf__get_nr_types;
-diff --git a/tools/lib/bpf/netlink.c b/tools/lib/bpf/netlink.c
-index 39f25e09b51e..4f79972943e4 100644
---- a/tools/lib/bpf/netlink.c
-+++ b/tools/lib/bpf/netlink.c
-@@ -242,6 +242,55 @@ int bpf_set_link_xdp_fd(int ifindex, int fd, __u32 flags)
- 	return libbpf_err(ret);
+ enum igc_boards {
+@@ -618,7 +632,7 @@ void igc_ptp_reset(struct igc_adapter *adapter);
+ void igc_ptp_suspend(struct igc_adapter *adapter);
+ void igc_ptp_stop(struct igc_adapter *adapter);
+ ktime_t igc_ptp_rx_pktstamp(struct igc_adapter *adapter, __le32 *buf);
+-void igc_ptp_tx_hwtstamp(struct igc_adapter *adapter);
++void igc_ptp_tx_hwtstamp(struct igc_adapter *adapter, u32 mask);
+ int igc_ptp_set_ts_config(struct net_device *netdev, struct ifreq *ifr);
+ int igc_ptp_get_ts_config(struct net_device *netdev, struct ifreq *ifr);
+ void igc_ptp_tx_hang(struct igc_adapter *adapter);
+diff --git a/drivers/net/ethernet/intel/igc/igc_base.h b/drivers/net/ethernet/intel/igc/igc_base.h
+index ce530f5fd7bd..0d2b4482cb2f 100644
+--- a/drivers/net/ethernet/intel/igc/igc_base.h
++++ b/drivers/net/ethernet/intel/igc/igc_base.h
+@@ -32,6 +32,9 @@ struct igc_adv_tx_context_desc {
+ 
+ /* Adv Transmit Descriptor Config Masks */
+ #define IGC_ADVTXD_MAC_TSTAMP	0x00080000 /* IEEE1588 Timestamp packet */
++#define IGC_ADVTXD_TSTAMP_REG_1	0x00010000 /* IEEE1588 Timestamp packet */
++#define IGC_ADVTXD_TSTAMP_REG_2	0x00020000 /* IEEE1588 Timestamp packet */
++#define IGC_ADVTXD_TSTAMP_REG_3	0x00030000 /* IEEE1588 Timestamp packet */
+ #define IGC_ADVTXD_DTYP_CTXT	0x00200000 /* Advanced Context Descriptor */
+ #define IGC_ADVTXD_DTYP_DATA	0x00300000 /* Advanced Data Descriptor */
+ #define IGC_ADVTXD_DCMD_EOP	0x01000000 /* End of Packet */
+diff --git a/drivers/net/ethernet/intel/igc/igc_defines.h b/drivers/net/ethernet/intel/igc/igc_defines.h
+index c6315690e20f..04759c2c81eb 100644
+--- a/drivers/net/ethernet/intel/igc/igc_defines.h
++++ b/drivers/net/ethernet/intel/igc/igc_defines.h
+@@ -446,6 +446,9 @@
+ 
+ /* Time Sync Transmit Control bit definitions */
+ #define IGC_TSYNCTXCTL_TXTT_0			0x00000001  /* Tx timestamp reg 0 valid */
++#define IGC_TSYNCTXCTL_TXTT_1			0x00000002  /* Tx timestamp reg 1 valid */
++#define IGC_TSYNCTXCTL_TXTT_2			0x00000004  /* Tx timestamp reg 2 valid */
++#define IGC_TSYNCTXCTL_TXTT_3			0x00000008  /* Tx timestamp reg 3 valid */
+ #define IGC_TSYNCTXCTL_ENABLED			0x00000010  /* enable Tx timestamping */
+ #define IGC_TSYNCTXCTL_MAX_ALLOWED_DLY_MASK	0x0000F000  /* max delay */
+ #define IGC_TSYNCTXCTL_SYNC_COMP_ERR		0x20000000  /* sync err */
+@@ -453,6 +456,10 @@
+ #define IGC_TSYNCTXCTL_START_SYNC		0x80000000  /* initiate sync */
+ #define IGC_TSYNCTXCTL_TXSYNSIG			0x00000020  /* Sample TX tstamp in PHY sop */
+ 
++#define IGC_TSYNCTXCTL_TXTT_ANY ( \
++		IGC_TSYNCTXCTL_TXTT_0 | IGC_TSYNCTXCTL_TXTT_1 | \
++		IGC_TSYNCTXCTL_TXTT_2 | IGC_TSYNCTXCTL_TXTT_3)
++
+ /* Timer selection bits */
+ #define IGC_AUX_IO_TIMER_SEL_SYSTIM0	(0u << 30) /* Select SYSTIM0 for auxiliary time stamp */
+ #define IGC_AUX_IO_TIMER_SEL_SYSTIM1	(1u << 30) /* Select SYSTIM1 for auxiliary time stamp */
+diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
+index 400b9de51475..a2e0b71d1f4e 100644
+--- a/drivers/net/ethernet/intel/igc/igc_main.c
++++ b/drivers/net/ethernet/intel/igc/igc_main.c
+@@ -1146,6 +1146,15 @@ static u32 igc_tx_cmd_type(struct sk_buff *skb, u32 tx_flags)
+ 	cmd_type |= IGC_SET_FLAG(tx_flags, IGC_TX_FLAGS_TSTAMP,
+ 				 (IGC_ADVTXD_MAC_TSTAMP));
+ 
++	cmd_type |= IGC_SET_FLAG(tx_flags, IGC_TX_FLAGS_TSTAMP_1,
++				 (IGC_ADVTXD_TSTAMP_REG_1));
++
++	cmd_type |= IGC_SET_FLAG(tx_flags, IGC_TX_FLAGS_TSTAMP_2,
++				 (IGC_ADVTXD_TSTAMP_REG_2));
++
++	cmd_type |= IGC_SET_FLAG(tx_flags, IGC_TX_FLAGS_TSTAMP_3,
++				 (IGC_ADVTXD_TSTAMP_REG_3));
++
+ 	/* insert frame checksum */
+ 	cmd_type ^= IGC_SET_FLAG(skb->no_fcs, 1, IGC_ADVTXD_DCMD_IFCS);
+ 
+@@ -1403,6 +1412,26 @@ static int igc_tso(struct igc_ring *tx_ring,
+ 	return 1;
  }
  
-+int bpf_set_link_xdp_md_btf(int ifindex, __u8  enable)
++static bool igc_request_tx_tstamp(struct igc_adapter *adapter, struct sk_buff *skb, u32 *flags)
 +{
-+	struct nlattr *nla, *nla_xdp;
-+	int sock, seq = 0, ret;
-+	__u32 nl_pid;
-+	struct {
-+		struct nlmsghdr  nh;
-+		struct ifinfomsg ifinfo;
-+		char             attrbuf[64];
-+	} req;
++	int i;
 +
-+	sock = libbpf_netlink_open(&nl_pid);
-+	if (sock < 0)
-+		return sock;
++	for (i = 0; i < IGC_MAX_TX_TSTAMP_TIMERS; i++) {
++		struct igc_tx_timestamp_request *tstamp = &adapter->tx_tstamp[i];
 +
-+	memset(&req, 0, sizeof(req));
-+	req.nh.nlmsg_len = NLMSG_LENGTH(sizeof(struct ifinfomsg));
-+	req.nh.nlmsg_flags = NLM_F_REQUEST | NLM_F_ACK;
-+	req.nh.nlmsg_type = RTM_SETLINK;
-+	req.nh.nlmsg_pid = 0;
-+	req.nh.nlmsg_seq = ++seq;
-+	req.ifinfo.ifi_family = AF_UNSPEC;
-+	req.ifinfo.ifi_index = ifindex;
++		if (tstamp->skb)
++			continue;
 +
-+	/* started nested attribute for XDP */
-+	nla = (struct nlattr *)(((char *)&req)
-+				+ NLMSG_ALIGN(req.nh.nlmsg_len));
-+	nla->nla_type = NLA_F_NESTED | IFLA_XDP;
-+	nla->nla_len = NLA_HDRLEN;
-+	/* add XDP MD setup */
-+	nla_xdp = (struct nlattr *)((char *)nla + nla->nla_len);
-+	nla_xdp->nla_type = IFLA_XDP_MD_BTF_STATE;
-+	nla_xdp->nla_len = NLA_HDRLEN + sizeof(__u8);
-+	memcpy((char *)nla_xdp + NLA_HDRLEN, &enable, sizeof(__u8));
-+	nla->nla_len += nla_xdp->nla_len;
++		tstamp->skb = skb_get(skb);
++		tstamp->start = jiffies;
++		*flags = tstamp->flags;
 +
-+	req.nh.nlmsg_len += NLA_ALIGN(nla->nla_len);
-+
-+	if (send(sock, &req, req.nh.nlmsg_len, 0) < 0) {
-+		ret = -errno;
-+		goto cleanup;
++		return true;
 +	}
-+	ret = libbpf_netlink_recv(sock, nl_pid, seq, NULL, NULL, NULL);
 +
-+cleanup:
-+	close(sock);
-+	return ret;
++	return false;
 +}
 +
- static int __dump_link_nlmsg(struct nlmsghdr *nlh,
- 			     libbpf_dump_nlmsg_t dump_link_nlmsg, void *cookie)
+ static netdev_tx_t igc_xmit_frame_ring(struct sk_buff *skb,
+ 				       struct igc_ring *tx_ring)
  {
+@@ -1438,20 +1467,14 @@ static netdev_tx_t igc_xmit_frame_ring(struct sk_buff *skb,
+ 
+ 	if (unlikely(skb_shinfo(skb)->tx_flags & SKBTX_HW_TSTAMP)) {
+ 		struct igc_adapter *adapter = netdev_priv(tx_ring->netdev);
++		u32 tstamp_flags;
+ 
+ 		spin_lock(&adapter->ptp_tx_lock);
+ 
+-		/* FIXME: add support for retrieving timestamps from
+-		 * the other timer registers before skipping the
+-		 * timestamping request.
+-		 */
+ 		if (adapter->tstamp_config.tx_type == HWTSTAMP_TX_ON &&
+-		    !adapter->ptp_tx_skb) {
++		    igc_request_tx_tstamp(adapter, skb, &tstamp_flags)) {
+ 			skb_shinfo(skb)->tx_flags |= SKBTX_IN_PROGRESS;
+-			tx_flags |= IGC_TX_FLAGS_TSTAMP;
+-
+-			adapter->ptp_tx_skb = skb_get(skb);
+-			adapter->ptp_tx_start = jiffies;
++			tx_flags |= IGC_TX_FLAGS_TSTAMP | tstamp_flags;
+ 		} else {
+ 			adapter->tx_hwtstamp_skipped++;
+ 		}
+@@ -5001,9 +5024,7 @@ static void igc_tsync_interrupt(struct igc_adapter *adapter)
+ 	if (tsicr & IGC_TSICR_TXTS) {
+ 		u32 tsynctxctl = rd32(IGC_TSYNCTXCTL);;
+ 
+-		/* retrieve hardware timestamp */
+-		if (tsynctxctl & IGC_TSYNCTXCTL_TXTT_0)
+-			igc_ptp_tx_hwtstamp(adapter);
++		igc_ptp_tx_hwtstamp(adapter, tsynctxctl & IGC_TSYNCTXCTL_TXTT_ANY);
+ 
+ 		ack |= IGC_TSICR_TXTS;
+ 	}
+diff --git a/drivers/net/ethernet/intel/igc/igc_ptp.c b/drivers/net/ethernet/intel/igc/igc_ptp.c
+index 3ec0baa8451a..e286b0341575 100644
+--- a/drivers/net/ethernet/intel/igc/igc_ptp.c
++++ b/drivers/net/ethernet/intel/igc/igc_ptp.c
+@@ -541,8 +541,17 @@ static void igc_ptp_enable_tx_timestamp(struct igc_adapter *adapter)
+ 	wr32(IGC_TSYNCTXCTL, IGC_TSYNCTXCTL_ENABLED | IGC_TSYNCTXCTL_TXSYNSIG);
+ 
+ 	/* Read TXSTMP registers to discard any timestamp previously stored. */
+-	rd32(IGC_TXSTMPL);
+-	rd32(IGC_TXSTMPH);
++	rd32(IGC_TXSTMPL_0);
++	rd32(IGC_TXSTMPH_0);
++
++	rd32(IGC_TXSTMPL_1);
++	rd32(IGC_TXSTMPH_1);
++
++	rd32(IGC_TXSTMPL_2);
++	rd32(IGC_TXSTMPH_2);
++
++	rd32(IGC_TXSTMPL_3);
++	rd32(IGC_TXSTMPH_3);
+ }
+ 
+ /**
+@@ -599,33 +608,40 @@ static int igc_ptp_set_timestamp_mode(struct igc_adapter *adapter,
+ }
+ 
+ /* Requires adapter->ptp_tx_lock held by caller. */
+-static void igc_ptp_tx_timeout(struct igc_adapter *adapter)
++static void igc_ptp_tx_timeout(struct igc_adapter *adapter,
++			       struct igc_tx_timestamp_request *tstamp)
+ {
+ 	struct igc_hw *hw = &adapter->hw;
+ 
+-	dev_kfree_skb_any(adapter->ptp_tx_skb);
+-	adapter->ptp_tx_skb = NULL;
+-	adapter->ptp_tx_start = 0;
++	dev_kfree_skb_any(tstamp->skb);
++	tstamp->skb = NULL;
++	tstamp->start = 0;
+ 	adapter->tx_hwtstamp_timeouts++;
+ 	/* Clear the tx valid bit in TSYNCTXCTL register to enable interrupt. */
+-	rd32(IGC_TXSTMPH);
++	rd32(tstamp->regh);
+ 
+ 	netdev_warn(adapter->netdev, "Tx timestamp timeout\n");
+ }
+ 
+ void igc_ptp_tx_hang(struct igc_adapter *adapter)
+ {
++	struct igc_tx_timestamp_request *tstamp;
++	int i;
++
+ 	spin_lock(&adapter->ptp_tx_lock);
+ 
+-	if (!adapter->ptp_tx_skb)
+-		goto unlock;
++	for (i = 0; i < IGC_MAX_TX_TSTAMP_TIMERS; i++) {
++		tstamp = &adapter->tx_tstamp[i];
+ 
+-	if (time_is_after_jiffies(adapter->ptp_tx_start + IGC_PTP_TX_TIMEOUT))
+-		goto unlock;
++		if (!tstamp->skb)
++			continue;
+ 
+-	igc_ptp_tx_timeout(adapter);
++		if (time_is_after_jiffies(tstamp->start + IGC_PTP_TX_TIMEOUT))
++			continue;
++
++		igc_ptp_tx_timeout(adapter, tstamp);
++	}
+ 
+-unlock:
+ 	spin_unlock(&adapter->ptp_tx_lock);
+ }
+ 
+@@ -639,57 +655,73 @@ void igc_ptp_tx_hang(struct igc_adapter *adapter)
+  *
+  * Context: Expects adapter->ptp_tx_lock to be held by caller.
+  */
+-void igc_ptp_tx_hwtstamp(struct igc_adapter *adapter)
++void igc_ptp_tx_hwtstamp(struct igc_adapter *adapter, u32 mask)
+ {
+ 	struct skb_shared_hwtstamps shhwtstamps;
+ 	struct igc_hw *hw = &adapter->hw;
+ 	struct sk_buff *skb;
+ 	int adjust = 0;
+ 	u64 regval;
++	int i;
+ 
++again:
+ 	spin_lock(&adapter->ptp_tx_lock);
+-	skb = adapter->ptp_tx_skb;
+-
+-	if (WARN_ON_ONCE(!skb))
+-		goto done;
+ 
+-	regval = rd32(IGC_TXSTMPL);
+-	regval |= (u64)rd32(IGC_TXSTMPH) << 32;
+-	igc_ptp_systim_to_hwtstamp(adapter, &shhwtstamps, regval);
+-
+-	switch (adapter->link_speed) {
+-	case SPEED_10:
+-		adjust = IGC_I225_TX_LATENCY_10;
+-		break;
+-	case SPEED_100:
+-		adjust = IGC_I225_TX_LATENCY_100;
+-		break;
+-	case SPEED_1000:
+-		adjust = IGC_I225_TX_LATENCY_1000;
+-		break;
+-	case SPEED_2500:
+-		adjust = IGC_I225_TX_LATENCY_2500;
+-		break;
+-	}
++	for (i = 0; i < IGC_MAX_TX_TSTAMP_TIMERS; i++) {
++		struct igc_tx_timestamp_request *tstamp = &adapter->tx_tstamp[i];
++
++		if (!(mask & tstamp->mask))
++			continue;
++
++		skb = tstamp->skb;
++		if (!skb)
++			continue;
++
++		regval = rd32(tstamp->regl);
++		regval |= (u64)rd32(tstamp->regh) << 32;
++		igc_ptp_systim_to_hwtstamp(adapter, &shhwtstamps, regval);
++
++		switch (adapter->link_speed) {
++		case SPEED_10:
++			adjust = IGC_I225_TX_LATENCY_10;
++			break;
++		case SPEED_100:
++			adjust = IGC_I225_TX_LATENCY_100;
++			break;
++		case SPEED_1000:
++			adjust = IGC_I225_TX_LATENCY_1000;
++			break;
++		case SPEED_2500:
++			adjust = IGC_I225_TX_LATENCY_2500;
++			break;
++		}
+ 
+-	shhwtstamps.hwtstamp =
+-		ktime_add_ns(shhwtstamps.hwtstamp, adjust);
++		shhwtstamps.hwtstamp =
++			ktime_add_ns(shhwtstamps.hwtstamp, adjust);
+ 
+-	/* Clear the lock early before calling skb_tstamp_tx so that
+-	 * applications are not woken up before the lock bit is clear. We use
+-	 * a copy of the skb pointer to ensure other threads can't change it
+-	 * while we're notifying the stack.
+-	 */
+-	adapter->ptp_tx_skb = NULL;
+-	adapter->ptp_tx_start = 0;
++		/* Clear the lock early before calling skb_tstamp_tx so that
++		 * applications are not woken up before the lock bit is clear. We use
++		 * a copy of the skb pointer to ensure other threads can't change it
++		 * while we're notifying the stack.
++		 */
++		tstamp->skb = NULL;
++		tstamp->start = 0;
+ 
+-	/* Notify the stack and free the skb after we've unlocked */
+-	skb_tstamp_tx(skb, &shhwtstamps);
+-	dev_kfree_skb_any(skb);
++		/* Notify the stack and free the skb after we've unlocked */
++		skb_tstamp_tx(skb, &shhwtstamps);
++		dev_kfree_skb_any(skb);
++	}
+ 
+-done:
+ 	spin_unlock(&adapter->ptp_tx_lock);
+ 
++	mask = rd32(IGC_TSYNCTXCTL) & IGC_TSYNCTXCTL_TXTT_ANY;
++	if (mask) {
++		/* Some timestamps arrived while we were handling the
++		 * previous ones
++		 */
++		goto again;
++	}
++
+ }
+ 
+ /**
+@@ -747,9 +779,34 @@ int igc_ptp_get_ts_config(struct net_device *netdev, struct ifreq *ifr)
+ void igc_ptp_init(struct igc_adapter *adapter)
+ {
+ 	struct net_device *netdev = adapter->netdev;
++	struct igc_tx_timestamp_request *tstamp;
+ 	struct igc_hw *hw = &adapter->hw;
+ 	int i;
+ 
++	tstamp = &adapter->tx_tstamp[0];
++	tstamp->mask = IGC_TSYNCTXCTL_TXTT_0;
++	tstamp->regl = IGC_TXSTMPL_0;
++	tstamp->regh = IGC_TXSTMPH_0;
++	tstamp->flags = 0;
++
++	tstamp = &adapter->tx_tstamp[1];
++	tstamp->mask = IGC_TSYNCTXCTL_TXTT_1;
++	tstamp->regl = IGC_TXSTMPL_1;
++	tstamp->regh = IGC_TXSTMPH_1;
++	tstamp->flags = IGC_TX_FLAGS_TSTAMP_1;
++
++	tstamp = &adapter->tx_tstamp[2];
++	tstamp->mask = IGC_TSYNCTXCTL_TXTT_2;
++	tstamp->regl = IGC_TXSTMPL_2;
++	tstamp->regh = IGC_TXSTMPH_2;
++	tstamp->flags = IGC_TX_FLAGS_TSTAMP_2;
++
++	tstamp = &adapter->tx_tstamp[3];
++	tstamp->mask = IGC_TSYNCTXCTL_TXTT_3;
++	tstamp->regl = IGC_TXSTMPL_3;
++	tstamp->regh = IGC_TXSTMPH_3;
++	tstamp->flags = IGC_TX_FLAGS_TSTAMP_3;
++
+ 	switch (hw->mac.type) {
+ 	case igc_i225:
+ 		for (i = 0; i < IGC_N_SDP; i++) {
+@@ -817,6 +874,19 @@ static void igc_ptp_time_restore(struct igc_adapter *adapter)
+ 	igc_ptp_write_i225(adapter, &ts);
+ }
+ 
++static void igc_tx_tstamp_clear(struct igc_adapter *adapter)
++{
++	int i;
++
++	for (i = 0; i < IGC_MAX_TX_TSTAMP_TIMERS; i++) {
++		struct igc_tx_timestamp_request *tstamp = &adapter->tx_tstamp[i];
++
++		dev_kfree_skb_any(tstamp->skb);
++		tstamp->skb = NULL;
++		tstamp->start = 0;
++	}
++}
++
+ /**
+  * igc_ptp_suspend - Disable PTP work items and prepare for suspend
+  * @adapter: Board private structure
+@@ -831,9 +901,7 @@ void igc_ptp_suspend(struct igc_adapter *adapter)
+ 
+ 	spin_lock(&adapter->ptp_tx_lock);
+ 
+-	dev_kfree_skb_any(adapter->ptp_tx_skb);
+-	adapter->ptp_tx_skb = NULL;
+-	adapter->ptp_tx_start = 0;
++	igc_tx_tstamp_clear(adapter);
+ 
+ 	spin_unlock(&adapter->ptp_tx_lock);
+ 
+diff --git a/drivers/net/ethernet/intel/igc/igc_regs.h b/drivers/net/ethernet/intel/igc/igc_regs.h
+index 828c3501c448..313b28e33165 100644
+--- a/drivers/net/ethernet/intel/igc/igc_regs.h
++++ b/drivers/net/ethernet/intel/igc/igc_regs.h
+@@ -242,6 +242,18 @@
+ #define IGC_SYSTIMR	0x0B6F8  /* System time register Residue */
+ #define IGC_TIMINCA	0x0B608  /* Increment attributes register - RW */
+ 
++/* TX Timestamp Low */
++#define IGC_TXSTMPL_0		0x0B618
++#define IGC_TXSTMPL_1		0x0B698
++#define IGC_TXSTMPL_2		0x0B6B8
++#define IGC_TXSTMPL_3		0x0B6D8
++
++/* TX Timestamp High */
++#define IGC_TXSTMPH_0		0x0B61C
++#define IGC_TXSTMPH_1		0x0B69C
++#define IGC_TXSTMPH_2		0x0B6BC
++#define IGC_TXSTMPH_3		0x0B6DC
++
+ #define IGC_TXSTMPL	0x0B618  /* Tx timestamp value Low - RO */
+ #define IGC_TXSTMPH	0x0B61C  /* Tx timestamp value High - RO */
+ 
 -- 
 2.32.0
 
