@@ -2,36 +2,35 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D2EAC432BE
-	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 16:52:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C941BC4320E
+	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 16:52:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 799BE61029
-	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 16:52:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B2EA160EE7
+	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 16:52:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237494AbhHCQwc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 3 Aug 2021 12:52:32 -0400
-Received: from mga04.intel.com ([192.55.52.120]:6624 "EHLO mga04.intel.com"
+        id S237417AbhHCQwZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 3 Aug 2021 12:52:25 -0400
+Received: from mga18.intel.com ([134.134.136.126]:30450 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237457AbhHCQw3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 3 Aug 2021 12:52:29 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10065"; a="211868126"
+        id S237436AbhHCQwN (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 3 Aug 2021 12:52:13 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10065"; a="200924730"
 X-IronPort-AV: E=Sophos;i="5.84,292,1620716400"; 
-   d="scan'208";a="211868126"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2021 09:52:17 -0700
+   d="scan'208";a="200924730"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2021 09:51:59 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.84,292,1620716400"; 
-   d="scan'208";a="585041756"
+   d="scan'208";a="521321090"
 Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga001.fm.intel.com with ESMTP; 03 Aug 2021 09:52:07 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 03 Aug 2021 09:51:47 -0700
 Received: from alobakin-mobl.ger.corp.intel.com (mszymcza-mobl.ger.corp.intel.com [10.213.25.231])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 173Gpg7B004325;
-        Tue, 3 Aug 2021 17:52:02 +0100
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 173Gpg76004325;
+        Tue, 3 Aug 2021 17:51:42 +0100
 From:   Alexander Lobakin <alexandr.lobakin@intel.com>
 To:     Michal Kubecek <mkubecek@suse.cz>
 Cc:     "David S. Miller" <davem@davemloft.net>,
@@ -82,63 +81,42 @@ Cc:     "David S. Miller" <davem@davemloft.net>,
         netdev@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
-Subject: [PATCH ethtool-next 5/5] man: mention XDP standard statistics in help and man page
-Date:   Tue,  3 Aug 2021 18:51:40 +0200
-Message-Id: <20210803165140.172-6-alexandr.lobakin@intel.com>
+Subject: [PATCH ethtool-next 0/5] stats: add support for per-channel and XDP standard stats
+Date:   Tue,  3 Aug 2021 18:51:35 +0200
+Message-Id: <20210803165140.172-1-alexandr.lobakin@intel.com>
 X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210803165140.172-1-alexandr.lobakin@intel.com>
-References: <20210803165140.172-1-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-"xdp" is a new type of standard statistics landed in with Linux
-commit a9428aaed122 ("ethtool, stats: introduce standard XDP statistics").
-Mention it in the help text and the man page source.
+This series adds bits to support per-channel standard statistics,
+mentions the new "xdp" group of standard stats landed in Linux with
+commit 44eee6116fda ("ethtool, stats: introduce standard XDP statistics")
+and fixes one typo in the man page while at it.
 
-Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-Reviewed-by: Jesse Brandeburg <jesse.brandeburg@intel.com>
----
- ethtool.8.in | 3 ++-
- ethtool.c    | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+The original series for the kernel part is here: [0]
 
-diff --git a/ethtool.8.in b/ethtool.8.in
-index 6b7761849fca..7db0adebbdcf 100644
---- a/ethtool.8.in
-+++ b/ethtool.8.in
-@@ -245,6 +245,7 @@ ethtool \- query or control network driver and hardware settings
- .RB [\fBeth\-mac\fP]
- .RB [\fBeth\-ctrl\fP]
- .RB [\fBrmon\fP]
-+.RB [\fBxdp\fP]
- .RB ]
- .HP
- .B ethtool \-\-phy\-statistics
-@@ -673,7 +674,7 @@ naming of NIC- and driver-specific statistics across vendors.
- .B \fB\-\-all\-groups
- .E
- .TP
--.B \fB\-\-groups [\fBeth\-phy\fP] [\fBeth\-mac\fP] [\fBeth\-ctrl\fP] [\fBrmon\fP]
-+.B \fB\-\-groups [\fBeth\-phy\fP] [\fBeth\-mac\fP] [\fBeth\-ctrl\fP] [\fBrmon\fP] [\fBxdp\fP]
- Request groups of standard device statistics.
- .RE
- .TP
-diff --git a/ethtool.c b/ethtool.c
-index 33a0a492cb15..c1f1279bd9f0 100644
---- a/ethtool.c
-+++ b/ethtool.c
-@@ -5776,7 +5776,7 @@ static const struct option args[] = {
- 		.nlchk	= nl_gstats_chk,
- 		.nlfunc	= nl_gstats,
- 		.help	= "Show adapter statistics",
--		.xhelp	= "               [ --all-groups | --groups [eth-phy] [eth-mac] [eth-ctrl] [rmon] ]\n"
-+		.xhelp	= "               [ --all-groups | --groups [eth-phy] [eth-mac] [eth-ctrl] [rmon] [xdp] ]\n"
- 	},
- 	{
- 		.opts	= "--phy-statistics",
+[0] https://lore.kernel.org/netdev/20210803163641.3743-1-alexandr.lobakin@intel.com
+
+Alexander Lobakin (5):
+  sync UAPI header copies
+  stats: factor out one stat field printing
+  stats: add support for per-channel statistics [blocks]
+  man: fix typo for "rmon" standard stat type
+  man: mention XDP standard statistics in help and man page
+
+ ethtool.8.in                 |   5 +-
+ ethtool.c                    |   2 +-
+ netlink/stats.c              | 114 +++++++++++++++++++++++++++++------
+ uapi/linux/ethtool.h         |   6 +-
+ uapi/linux/ethtool_netlink.h |  51 +++++++++++++++-
+ uapi/linux/if_link.h         |  20 ++++++
+ uapi/linux/net_tstamp.h      |  17 +++++-
+ uapi/linux/netlink.h         |   5 +-
+ 8 files changed, 190 insertions(+), 30 deletions(-)
+
 -- 
 2.31.1
 
