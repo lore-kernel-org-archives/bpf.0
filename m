@@ -7,31 +7,31 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CADBC432BE
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7927C4320E
 	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 16:37:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5FCE0610FB
+	by mail.kernel.org (Postfix) with ESMTP id B19DB610FB
 	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 16:37:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234344AbhHCQhs (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 3 Aug 2021 12:37:48 -0400
-Received: from mga18.intel.com ([134.134.136.126]:29092 "EHLO mga18.intel.com"
+        id S234384AbhHCQhu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 3 Aug 2021 12:37:50 -0400
+Received: from mga12.intel.com ([192.55.52.136]:57769 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234277AbhHCQhr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        id S234308AbhHCQhr (ORCPT <rfc822;bpf@vger.kernel.org>);
         Tue, 3 Aug 2021 12:37:47 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10065"; a="200922446"
+X-IronPort-AV: E=McAfee;i="6200,9189,10065"; a="193324561"
 X-IronPort-AV: E=Sophos;i="5.84,292,1620716400"; 
-   d="scan'208";a="200922446"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2021 09:37:26 -0700
+   d="scan'208";a="193324561"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2021 09:37:16 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.84,292,1620716400"; 
-   d="scan'208";a="500883576"
+   d="scan'208";a="419108156"
 Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga001.jf.intel.com with ESMTP; 03 Aug 2021 09:37:12 -0700
+  by orsmga006.jf.intel.com with ESMTP; 03 Aug 2021 09:37:04 -0700
 Received: from alobakin-mobl.ger.corp.intel.com (eflejszm-mobl2.ger.corp.intel.com [10.213.26.164])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 173GahEu029968;
-        Tue, 3 Aug 2021 17:37:08 +0100
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 173GahEs029968;
+        Tue, 3 Aug 2021 17:37:00 +0100
 From:   Alexander Lobakin <alexandr.lobakin@intel.com>
 To:     "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>
@@ -82,9 +82,9 @@ Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
         netdev@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
-Subject: [PATCH net-next 06/21] ethernet, ena: constify src and syncp args of ena_safe_update_stat()
-Date:   Tue,  3 Aug 2021 18:36:26 +0200
-Message-Id: <20210803163641.3743-7-alexandr.lobakin@intel.com>
+Subject: [PATCH net-next 04/21] ethernet, dpaa2: simplify per-channel Ethtool stats counting
+Date:   Tue,  3 Aug 2021 18:36:24 +0200
+Message-Id: <20210803163641.3743-5-alexandr.lobakin@intel.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210803163641.3743-1-alexandr.lobakin@intel.com>
 References: <20210803163641.3743-1-alexandr.lobakin@intel.com>
@@ -94,29 +94,51 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-src and syncp pointers are being read only, and thus can be const.
+Don't hardcode ARRAY_SIZE() - 1, just put a placeholder and take
+offsetof() from it to hide unwanted statistics from Ethtool.
+Will be handy for switching to standard XDP stats.
 
 Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 Reviewed-by: Jesse Brandeburg <jesse.brandeburg@intel.com>
 ---
- drivers/net/ethernet/amazon/ena/ena_ethtool.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.h     | 7 ++++++-
+ drivers/net/ethernet/freescale/dpaa2/dpaa2-ethtool.c | 2 +-
+ 2 files changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/amazon/ena/ena_ethtool.c b/drivers/net/ethernet/amazon/ena/ena_ethtool.c
-index 27dae632efcb..851a198cec82 100644
---- a/drivers/net/ethernet/amazon/ena/ena_ethtool.c
-+++ b/drivers/net/ethernet/amazon/ena/ena_ethtool.c
-@@ -113,8 +113,8 @@ static const struct ena_stats ena_stats_ena_com_strings[] = {
- #define ENA_STATS_ARRAY_ENI(adapter)	\
- 	(ARRAY_SIZE(ena_stats_eni_strings) * (adapter)->eni_stats_supported)
+diff --git a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.h b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.h
+index cdb623d5f2c1..8cb57f103d6b 100644
+--- a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.h
++++ b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.h
+@@ -382,10 +382,15 @@ struct dpaa2_eth_ch_stats {
+ 	__u64 xdp_tx;
+ 	__u64 xdp_tx_err;
+ 	__u64 xdp_redirect;
+-	/* Must be last, does not show up in ethtool stats */
++	/* The rest of the structure does not show up in ethtool stats */
++	struct { } __eth_end;
++	/* Must be last */
+ 	__u64 frames;
+ };
  
--static void ena_safe_update_stat(u64 *src, u64 *dst,
--				 struct u64_stats_sync *syncp)
-+static void ena_safe_update_stat(const u64 *src, u64 *dst,
-+				 const struct u64_stats_sync *syncp)
- {
- 	unsigned int start;
- 
++#define DPAA2_ETH_NUM_CH_STATS		(offsetof(struct dpaa2_eth_ch_stats, \
++						  __eth_end) / sizeof(u64))
++
+ /* Maximum number of queues associated with a DPNI */
+ #define DPAA2_ETH_MAX_TCS		8
+ #define DPAA2_ETH_MAX_RX_QUEUES_PER_TC	16
+diff --git a/drivers/net/ethernet/freescale/dpaa2/dpaa2-ethtool.c b/drivers/net/ethernet/freescale/dpaa2/dpaa2-ethtool.c
+index ad5e374eeccf..95ae83905458 100644
+--- a/drivers/net/ethernet/freescale/dpaa2/dpaa2-ethtool.c
++++ b/drivers/net/ethernet/freescale/dpaa2/dpaa2-ethtool.c
+@@ -278,7 +278,7 @@ static void dpaa2_eth_get_ethtool_stats(struct net_device *net_dev,
+ 	/* Per-channel stats */
+ 	for (k = 0; k < priv->num_channels; k++) {
+ 		ch_stats = &priv->channel[k]->stats;
+-		for (j = 0; j < sizeof(*ch_stats) / sizeof(__u64) - 1; j++)
++		for (j = 0; j < DPAA2_ETH_NUM_CH_STATS; j++)
+ 			*((__u64 *)data + i + j) += *((__u64 *)ch_stats + j);
+ 	}
+ 	i += j;
 -- 
 2.31.1
 
