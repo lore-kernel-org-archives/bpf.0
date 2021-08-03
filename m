@@ -7,33 +7,33 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D7B99C19F38
-	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 01:03:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4A29C4320E
+	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 01:03:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B003060F9E
-	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 01:03:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B96FE60F9C
+	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 01:03:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233421AbhHCBEC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 2 Aug 2021 21:04:02 -0400
-Received: from mga07.intel.com ([134.134.136.100]:65282 "EHLO mga07.intel.com"
+        id S233498AbhHCBED (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 2 Aug 2021 21:04:03 -0400
+Received: from mga07.intel.com ([134.134.136.100]:65281 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233425AbhHCBEB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        id S233450AbhHCBEB (ORCPT <rfc822;bpf@vger.kernel.org>);
         Mon, 2 Aug 2021 21:04:01 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10064"; a="277327849"
+X-IronPort-AV: E=McAfee;i="6200,9189,10064"; a="277327856"
 X-IronPort-AV: E=Sophos;i="5.84,290,1620716400"; 
-   d="scan'208";a="277327849"
+   d="scan'208";a="277327856"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
   by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2021 18:03:50 -0700
 X-IronPort-AV: E=Sophos;i="5.84,290,1620716400"; 
-   d="scan'208";a="419480131"
+   d="scan'208";a="419480134"
 Received: from ticela-or-032.amr.corp.intel.com (HELO localhost.localdomain) ([10.212.166.34])
   by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2021 18:03:50 -0700
 From:   Ederson de Souza <ederson.desouza@intel.com>
 To:     xdp-hints@xdp-project.net
 Cc:     bpf@vger.kernel.org
-Subject: [[RFC xdp-hints] 10/16] igc: XDP packet RX timestamp
-Date:   Mon,  2 Aug 2021 18:03:25 -0700
-Message-Id: <20210803010331.39453-11-ederson.desouza@intel.com>
+Subject: [[RFC xdp-hints] 13/16] libbpf: Helpers to access XDP frame metadata
+Date:   Mon,  2 Aug 2021 18:03:28 -0700
+Message-Id: <20210803010331.39453-14-ederson.desouza@intel.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210803010331.39453-1-ederson.desouza@intel.com>
 References: <20210803010331.39453-1-ederson.desouza@intel.com>
@@ -43,256 +43,118 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Using XDP hints, driver adds the PTP timestamp of when a packet was
-received by the i225 NIC.
+Two new pairs of helpers: `xsk_umem__adjust_prod_data` and
+`xsk_umem__adjust_prod_data_meta` for data that is being produced by the
+application - such as data that will be sent; and
+`xsk_umem__adjust_cons_data` and `xsk_umem__adjust_cons_data_meta`,
+for data being consumed - such as data obtained from the completion
+queue.
+
+Those function should usually be used on data obtained via
+`xsk_umem__get_data`. Didn't change this function to avoid API breaks.
 
 Signed-off-by: Ederson de Souza <ederson.desouza@intel.com>
 ---
- drivers/net/ethernet/intel/igc/igc.h      |  4 +
- drivers/net/ethernet/intel/igc/igc_main.c | 40 ++++++++--
- drivers/net/ethernet/intel/igc/igc_xdp.c  | 93 +++++++++++++++++++++++
- drivers/net/ethernet/intel/igc/igc_xdp.h  | 11 +++
- 4 files changed, 143 insertions(+), 5 deletions(-)
+ tools/lib/bpf/libbpf.map |  4 ++++
+ tools/lib/bpf/xsk.c      | 26 ++++++++++++++++++++++++++
+ tools/lib/bpf/xsk.h      |  7 +++++++
+ 3 files changed, 37 insertions(+)
 
-diff --git a/drivers/net/ethernet/intel/igc/igc.h b/drivers/net/ethernet/intel/igc/igc.h
-index 6fd5901f07c7..84e5f3c97351 100644
---- a/drivers/net/ethernet/intel/igc/igc.h
-+++ b/drivers/net/ethernet/intel/igc/igc.h
-@@ -13,6 +13,7 @@
- #include <linux/ptp_clock_kernel.h>
- #include <linux/timecounter.h>
- #include <linux/net_tstamp.h>
-+#include <linux/if_xdp.h>
- 
- #include "igc_hw.h"
- 
-@@ -252,6 +253,9 @@ struct igc_adapter {
- 		struct timespec64 start;
- 		struct timespec64 period;
- 	} perout[IGC_N_PEROUT];
-+
-+	struct btf *btf;
-+	u8 btf_enabled;
- };
- 
- void igc_up(struct igc_adapter *adapter);
-diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
-index fe3619c25c05..82e9b493cad6 100644
---- a/drivers/net/ethernet/intel/igc/igc_main.c
-+++ b/drivers/net/ethernet/intel/igc/igc_main.c
-@@ -13,6 +13,7 @@
- #include <linux/bpf_trace.h>
- #include <net/xdp_sock_drv.h>
- #include <net/ipv6.h>
-+#include <linux/btf.h>
- 
- #include "igc.h"
- #include "igc_hw.h"
-@@ -2374,8 +2375,20 @@ static int igc_clean_rx_irq(struct igc_q_vector *q_vector, const int budget)
- 
- 		if (!skb) {
- 			xdp_init_buff(&xdp, truesize, &rx_ring->xdp_rxq);
-+
- 			xdp_prepare_buff(&xdp, pktbuf - igc_rx_offset(rx_ring),
--					 igc_rx_offset(rx_ring) + pkt_offset, size, false);
-+					 igc_rx_offset(rx_ring) + pkt_offset, size,
-+					 adapter->btf_enabled);
-+
-+			if (adapter->btf_enabled) {
-+				struct xdp_hints___igc *hints;
-+
-+				hints = xdp.data - sizeof(*hints);
-+				xdp.data_meta = hints;
-+				hints->rx_timestamp = timestamp;
-+				hints->valid_map = XDP_GENERIC_HINTS_RX_TIMESTAMP;
-+				hints->btf_id = btf_obj_id(adapter->btf);
-+			}
- 
- 			skb = igc_xdp_run_prog(adapter, &xdp);
- 		}
-@@ -2539,12 +2552,18 @@ static int igc_clean_rx_irq_zc(struct igc_q_vector *q_vector, const int budget)
- 							bi->xdp->data);
- 
- 			bi->xdp->data += IGC_TS_HDR_LEN;
--
--			/* HW timestamp has been copied into local variable. Metadata
--			 * length when XDP program is called should be 0.
--			 */
- 			bi->xdp->data_meta += IGC_TS_HDR_LEN;
- 			size -= IGC_TS_HDR_LEN;
-+
-+			if (adapter->btf_enabled) {
-+				struct xdp_hints___igc *hints;
-+
-+				hints = bi->xdp->data - sizeof(*hints);
-+				bi->xdp->data_meta = hints;
-+				hints->rx_timestamp = timestamp;
-+				hints->valid_map = XDP_GENERIC_HINTS_RX_TIMESTAMP;
-+				hints->btf_id = btf_obj_id(adapter->btf);
-+			}
- 		}
- 
- 		bi->xdp->data_end = bi->xdp->data + size;
-@@ -5949,6 +5968,12 @@ static int igc_bpf(struct net_device *dev, struct netdev_bpf *bpf)
- 	case XDP_SETUP_XSK_POOL:
- 		return igc_xdp_setup_pool(adapter, bpf->xsk.pool,
- 					  bpf->xsk.queue_id);
-+	case XDP_SETUP_MD_BTF:
-+		return igc_xdp_set_btf_md(dev, bpf->btf_enable);
-+	case XDP_QUERY_MD_BTF:
-+		bpf->btf_id = igc_xdp_query_btf(dev, &bpf->btf_enable);
-+		return 0;
-+
- 	default:
- 		return -EOPNOTSUPP;
- 	}
-@@ -6436,6 +6461,11 @@ static void igc_remove(struct pci_dev *pdev)
- 	cancel_work_sync(&adapter->reset_task);
- 	cancel_work_sync(&adapter->watchdog_task);
- 
-+	if (adapter->btf) {
-+		adapter->btf_enabled = 0;
-+		btf_unregister(adapter->btf);
-+	}
-+
- 	/* Release control of h/w to f/w.  If f/w is AMT enabled, this
- 	 * would have already happened in close and is redundant.
- 	 */
-diff --git a/drivers/net/ethernet/intel/igc/igc_xdp.c b/drivers/net/ethernet/intel/igc/igc_xdp.c
-index a8cf5374be47..00d223703424 100644
---- a/drivers/net/ethernet/intel/igc/igc_xdp.c
-+++ b/drivers/net/ethernet/intel/igc/igc_xdp.c
-@@ -2,10 +2,103 @@
- /* Copyright (c) 2020, Intel Corporation. */
- 
- #include <net/xdp_sock_drv.h>
-+#include <linux/btf.h>
- 
- #include "igc.h"
- #include "igc_xdp.h"
- 
-+#define IGC_XDP_HINTS_NUM_MMBRS 0
-+static const char names_str[] = XDP_GENERIC_HINTS_NAMES "yet_another_timestamp\0";
-+
-+/**
-+ * struct igc_xdp_hints {
-+ *      { generic_xdp_hints }
-+ * }
-+ */
-+
-+static const u32 igc_xdp_hints_raw[] = {
-+	XDP_GENERIC_HINTS_TYPES,
-+	XDP_GENERIC_HINTS_STRUCT(IGC_XDP_HINTS_NUM_MMBRS, 0),
-+	XDP_GENERIC_HINTS_MEMBERS(0),
-+};
-+
-+static int igc_xdp_register_btf(struct igc_adapter *priv)
-+{
-+	unsigned int type_sec_sz, str_sec_sz;
-+	char *types_sec, *str_sec;
-+	struct btf_header *hdr;
-+	unsigned int btf_size;
-+	void *raw_btf = NULL;
-+	int err = 0;
-+
-+	type_sec_sz = sizeof(igc_xdp_hints_raw);
-+	str_sec_sz  = sizeof(names_str);
-+
-+	btf_size = sizeof(*hdr) + type_sec_sz + str_sec_sz;
-+	raw_btf = kzalloc(btf_size, GFP_KERNEL);
-+	if (!raw_btf)
-+		return -ENOMEM;
-+
-+	hdr = raw_btf;
-+	hdr->magic	= BTF_MAGIC;
-+	hdr->version  = BTF_VERSION;
-+	hdr->hdr_len  = sizeof(*hdr);
-+	hdr->type_off = 0;
-+	hdr->type_len = type_sec_sz;
-+	hdr->str_off  = type_sec_sz;
-+	hdr->str_len  = str_sec_sz;
-+
-+	types_sec = raw_btf   + sizeof(*hdr);
-+	str_sec   = types_sec + type_sec_sz;
-+	memcpy(types_sec, igc_xdp_hints_raw, type_sec_sz);
-+	memcpy(str_sec, names_str, str_sec_sz);
-+
-+	priv->btf = btf_register(raw_btf, btf_size);
-+	if (IS_ERR(priv->btf)) {
-+		err = PTR_ERR(priv->btf);
-+		priv->btf = NULL;
-+		netdev_err(priv->netdev, "failed to register BTF MD, err (%d)\n", err);
-+	}
-+
-+	kfree(raw_btf);
-+	return err;
-+}
-+
-+int igc_xdp_query_btf(struct net_device *dev, u8 *enabled)
-+{
-+	struct igc_adapter *priv = netdev_priv(dev);
-+	u32 md_btf_id = 0;
-+
-+	if (!IS_ENABLED(CONFIG_BPF_SYSCALL))
-+		return md_btf_id;
-+
-+	if (!priv->btf)
-+		igc_xdp_register_btf(priv);
-+
-+	*enabled = !!priv->btf_enabled;
-+	md_btf_id = priv->btf ? btf_obj_id(priv->btf) : 0;
-+
-+	return md_btf_id;
-+}
-+
-+int igc_xdp_set_btf_md(struct net_device *dev, u8 enable)
-+{
-+	struct igc_adapter *priv = netdev_priv(dev);
-+	int err = 0;
-+
-+	if (enable && !priv->btf) {
-+		igc_xdp_register_btf(priv);
-+		if (!priv->btf) {
-+			err = -EINVAL;
-+			goto unlock;
-+		}
-+	}
-+
-+	priv->btf_enabled = enable;
-+unlock:
-+	return err;
-+}
-+
- int igc_xdp_set_prog(struct igc_adapter *adapter, struct bpf_prog *prog,
- 		     struct netlink_ext_ack *extack)
- {
-diff --git a/drivers/net/ethernet/intel/igc/igc_xdp.h b/drivers/net/ethernet/intel/igc/igc_xdp.h
-index a74e5487d199..2bf591f42cec 100644
---- a/drivers/net/ethernet/intel/igc/igc_xdp.h
-+++ b/drivers/net/ethernet/intel/igc/igc_xdp.h
-@@ -4,6 +4,8 @@
- #ifndef _IGC_XDP_H_
- #define _IGC_XDP_H_
- 
-+#include <linux/btf.h>
-+
- int igc_xdp_set_prog(struct igc_adapter *adapter, struct bpf_prog *prog,
- 		     struct netlink_ext_ack *extack);
- int igc_xdp_setup_pool(struct igc_adapter *adapter, struct xsk_buff_pool *pool,
-@@ -14,4 +16,13 @@ static inline bool igc_xdp_is_enabled(struct igc_adapter *adapter)
- 	return !!adapter->xdp_prog;
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index 492db50a4cd7..663585f7f186 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -375,4 +375,8 @@ LIBBPF_0.5.0 {
+ 		bpf_map_lookup_and_delete_elem_flags;
+ 		bpf_object__gen_loader;
+ 		libbpf_set_strict_mode;
++		xsk_umem__adjust_cons_data;
++		xsk_umem__adjust_cons_data_meta;
++		xsk_umem__adjust_prod_data;
++		xsk_umem__adjust_prod_data_meta;
+ } LIBBPF_0.4.0;
+diff --git a/tools/lib/bpf/xsk.c b/tools/lib/bpf/xsk.c
+index e9b619aa0cdf..17e8045eac0e 100644
+--- a/tools/lib/bpf/xsk.c
++++ b/tools/lib/bpf/xsk.c
+@@ -119,6 +119,30 @@ int xsk_socket__fd(const struct xsk_socket *xsk)
+ 	return xsk ? xsk->fd : -EINVAL;
  }
  
-+int igc_xdp_query_btf(struct net_device *dev, u8 *enabled);
-+int igc_xdp_set_btf_md(struct net_device *dev, u8 enable);
++void *xsk_umem__adjust_prod_data(void *umem_data, const struct xsk_umem *umem)
++{
++	return umem_data + umem->config.frame_headroom + umem->config.xdp_headroom;
++}
 +
-+struct xdp_hints___igc {
-+	XDP_GENERIC_HINTS_STRUCT_MEMBERS;
-+} __packed;
++void *xsk_umem__adjust_prod_data_meta(void *umem_data, const struct xsk_umem *umem)
++{
++	if (!umem->config.xdp_headroom)
++		return NULL;
++	return umem_data;
++}
 +
-+#define IGC_XDP_HINT_DMA_TIMESTAMP BIT(XDP_GENERIC_HINTS_BIT_MAX + 1)
++void *xsk_umem__adjust_cons_data(void *umem_data, const struct xsk_umem *umem)
++{
++	return umem_data;
++}
 +
- #endif /* _IGC_XDP_H_ */
++void *xsk_umem__adjust_cons_data_meta(void *umem_data, const struct xsk_umem *umem)
++{
++	if (!umem->config.xdp_headroom)
++		return NULL;
++	return umem_data;
++}
++
+ static bool xsk_page_aligned(void *buffer)
+ {
+ 	unsigned long addr = (unsigned long)buffer;
+@@ -135,6 +159,7 @@ static void xsk_set_umem_config(struct xsk_umem_config *cfg,
+ 		cfg->frame_size = XSK_UMEM__DEFAULT_FRAME_SIZE;
+ 		cfg->frame_headroom = XSK_UMEM__DEFAULT_FRAME_HEADROOM;
+ 		cfg->flags = XSK_UMEM__DEFAULT_FLAGS;
++		cfg->xdp_headroom = XSK_UMEM__DEFAULT_XDP_HEADROOM;
+ 		return;
+ 	}
+ 
+@@ -143,6 +168,7 @@ static void xsk_set_umem_config(struct xsk_umem_config *cfg,
+ 	cfg->frame_size = usr_cfg->frame_size;
+ 	cfg->frame_headroom = usr_cfg->frame_headroom;
+ 	cfg->flags = usr_cfg->flags;
++	cfg->xdp_headroom = usr_cfg->xdp_headroom;
+ }
+ 
+ static int xsk_set_xdp_socket_config(struct xsk_socket_config *cfg,
+diff --git a/tools/lib/bpf/xsk.h b/tools/lib/bpf/xsk.h
+index 01c12dca9c10..7f4143150746 100644
+--- a/tools/lib/bpf/xsk.h
++++ b/tools/lib/bpf/xsk.h
+@@ -248,12 +248,18 @@ static inline __u64 xsk_umem__add_offset_to_addr(__u64 addr)
+ LIBBPF_API int xsk_umem__fd(const struct xsk_umem *umem);
+ LIBBPF_API int xsk_socket__fd(const struct xsk_socket *xsk);
+ 
++LIBBPF_API void *xsk_umem__adjust_prod_data(void *umem_data, const struct xsk_umem *umem);
++LIBBPF_API void *xsk_umem__adjust_prod_data_meta(void *umem_data, const struct xsk_umem *umem);
++LIBBPF_API void *xsk_umem__adjust_cons_data(void *umem_data, const struct xsk_umem *umem);
++LIBBPF_API void *xsk_umem__adjust_cons_data_meta(void *umem_data, const struct xsk_umem *umem);
++
+ #define XSK_RING_CONS__DEFAULT_NUM_DESCS      2048
+ #define XSK_RING_PROD__DEFAULT_NUM_DESCS      2048
+ #define XSK_UMEM__DEFAULT_FRAME_SHIFT    12 /* 4096 bytes */
+ #define XSK_UMEM__DEFAULT_FRAME_SIZE     (1 << XSK_UMEM__DEFAULT_FRAME_SHIFT)
+ #define XSK_UMEM__DEFAULT_FRAME_HEADROOM 0
+ #define XSK_UMEM__DEFAULT_FLAGS 0
++#define XSK_UMEM__DEFAULT_XDP_HEADROOM 0
+ 
+ struct xsk_umem_config {
+ 	__u32 fill_size;
+@@ -261,6 +267,7 @@ struct xsk_umem_config {
+ 	__u32 frame_size;
+ 	__u32 frame_headroom;
+ 	__u32 flags;
++	__u32 xdp_headroom;
+ };
+ 
+ LIBBPF_API int xsk_setup_xdp_prog(int ifindex,
 -- 
 2.32.0
 
