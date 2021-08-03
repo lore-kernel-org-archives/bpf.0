@@ -2,336 +2,104 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.9 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DBAE3C19F3C
-	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 01:03:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5A39C4338F
+	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 01:11:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C20EF60F9C
-	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 01:03:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AAA0160EB2
+	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 01:11:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233425AbhHCBEF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 2 Aug 2021 21:04:05 -0400
-Received: from mga07.intel.com ([134.134.136.100]:65282 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233464AbhHCBEB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 2 Aug 2021 21:04:01 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10064"; a="277327861"
-X-IronPort-AV: E=Sophos;i="5.84,290,1620716400"; 
-   d="scan'208";a="277327861"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2021 18:03:51 -0700
-X-IronPort-AV: E=Sophos;i="5.84,290,1620716400"; 
-   d="scan'208";a="419480137"
-Received: from ticela-or-032.amr.corp.intel.com (HELO localhost.localdomain) ([10.212.166.34])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2021 18:03:50 -0700
-From:   Ederson de Souza <ederson.desouza@intel.com>
-To:     xdp-hints@xdp-project.net
-Cc:     bpf@vger.kernel.org
-Subject: [[RFC xdp-hints] 15/16] samples/bpf: XDP hints AF_XDP example
-Date:   Mon,  2 Aug 2021 18:03:30 -0700
-Message-Id: <20210803010331.39453-16-ederson.desouza@intel.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210803010331.39453-1-ederson.desouza@intel.com>
-References: <20210803010331.39453-1-ederson.desouza@intel.com>
+        id S233008AbhHCBLr (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 2 Aug 2021 21:11:47 -0400
+Received: from smtp-fw-9103.amazon.com ([207.171.188.200]:28564 "EHLO
+        smtp-fw-9103.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232768AbhHCBLq (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 2 Aug 2021 21:11:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.co.jp; i=@amazon.co.jp; q=dns/txt;
+  s=amazon201209; t=1627953096; x=1659489096;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=N1isNZVJRBvugRdsDdMgy3ggx2Dx8o/q+iel02p4buQ=;
+  b=qSL4+h3RQEKTRgThhRVGEQY2LBJeVSK78O7JGy84e4w+4aL0/ly+tDUW
+   9PqJC8ciW3rRpPoH8JLYFYHK54w3ANV8A3q5ueoTAZ4P0UuhCfevWduVR
+   Tl6pZw5z9403kj7yv6V4fQjFvh5RArUOucS6Gt3LkebsLHTQKlcO28i6E
+   c=;
+X-IronPort-AV: E=Sophos;i="5.84,290,1620691200"; 
+   d="scan'208";a="947875968"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-1e-a70de69e.us-east-1.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-9103.sea19.amazon.com with ESMTP; 03 Aug 2021 01:11:34 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan3.iad.amazon.com [10.40.159.166])
+        by email-inbound-relay-1e-a70de69e.us-east-1.amazon.com (Postfix) with ESMTPS id D6A0FA1E1D;
+        Tue,  3 Aug 2021 01:11:31 +0000 (UTC)
+Received: from EX13D04ANC001.ant.amazon.com (10.43.157.89) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.23; Tue, 3 Aug 2021 01:11:30 +0000
+Received: from 88665a182662.ant.amazon.com (10.43.162.186) by
+ EX13D04ANC001.ant.amazon.com (10.43.157.89) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.23; Tue, 3 Aug 2021 01:11:25 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        "Song Liu" <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>
+CC:     Benjamin Herrenschmidt <benh@amazon.com>,
+        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+        Kuniyuki Iwashima <kuni1840@gmail.com>, <bpf@vger.kernel.org>,
+        <netdev@vger.kernel.org>
+Subject: [PATCH v2 bpf-next 0/2] BPF iterator for UNIX domain socket.
+Date:   Tue, 3 Aug 2021 10:11:08 +0900
+Message-ID: <20210803011110.21205-1-kuniyu@amazon.co.jp>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.43.162.186]
+X-ClientProxiedBy: EX13D44UWC001.ant.amazon.com (10.43.162.26) To
+ EX13D04ANC001.ant.amazon.com (10.43.157.89)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Using -D option, xdpsock now shows the RX or TX timestamp of last
-sent/received packets (for rx only or tx only modes).
+This patch set adds BPF iterator support for UNIX domain socket.  The first
+patch implements it and the second adds a selftest.
 
-Signed-off-by: Ederson de Souza <ederson.desouza@intel.com>
----
- samples/bpf/xdpsock_user.c | 146 ++++++++++++++++++++++++++++++++++++-
- 1 file changed, 142 insertions(+), 4 deletions(-)
 
-diff --git a/samples/bpf/xdpsock_user.c b/samples/bpf/xdpsock_user.c
-index 33d0bdebbed8..9485bb6fe356 100644
---- a/samples/bpf/xdpsock_user.c
-+++ b/samples/bpf/xdpsock_user.c
-@@ -7,11 +7,13 @@
- #include <libgen.h>
- #include <linux/bpf.h>
- #include <linux/compiler.h>
-+#include <linux/ethtool.h>
- #include <linux/if_link.h>
- #include <linux/if_xdp.h>
- #include <linux/if_ether.h>
- #include <linux/ip.h>
- #include <linux/limits.h>
-+#include <linux/sockios.h>
- #include <linux/udp.h>
- #include <arpa/inet.h>
- #include <locale.h>
-@@ -25,6 +27,7 @@
- #include <stdlib.h>
- #include <string.h>
- #include <sys/capability.h>
-+#include <sys/ioctl.h>
- #include <sys/mman.h>
- #include <sys/resource.h>
- #include <sys/socket.h>
-@@ -99,6 +102,7 @@ static u32 opt_num_xsks = 1;
- static u32 prog_id;
- static bool opt_busy_poll;
- static bool opt_reduced_cap;
-+static bool opt_metadata;
- 
- struct xsk_ring_stats {
- 	unsigned long rx_npkts;
-@@ -142,6 +146,14 @@ struct xsk_umem_info {
- 	struct xsk_ring_cons cq;
- 	struct xsk_umem *umem;
- 	void *buffer;
-+	u32 frame_headroom;
-+};
-+
-+struct xsk_metadata {
-+	struct xsk_btf_info *xbi;
-+	unsigned long rx_timestamp;
-+	unsigned long tx_timestamp;
-+	u32 btf_id;
- };
- 
- struct xsk_socket_info {
-@@ -152,13 +164,48 @@ struct xsk_socket_info {
- 	struct xsk_ring_stats ring_stats;
- 	struct xsk_app_stats app_stats;
- 	struct xsk_driver_stats drv_stats;
-+	struct xsk_metadata metadata;
- 	u32 outstanding_tx;
- };
- 
-+struct xdp_hints {
-+	u64 rx_timestamp;
-+	u64 tx_timestamp;
-+	u32 hash32;
-+	u32 extension_id;
-+	u64 field_map;
-+} __attribute__((packed));
-+
- static int num_socks;
- struct xsk_socket_info *xsks[MAX_SOCKS];
- int sock;
- 
-+static u32 get_xdp_headroom(void)
-+{
-+	struct ethtool_drvinfo drvinfo = { .cmd = ETHTOOL_GDRVINFO };
-+	struct ifreq ifr = {};
-+	int fd, err, ret;
-+
-+	fd = socket(AF_LOCAL, SOCK_DGRAM, 0);
-+	if (fd < 0)
-+		return 0;
-+
-+	ifr.ifr_data = (void *)&drvinfo;
-+	memcpy(ifr.ifr_name, opt_if, strlen(opt_if) + 1);
-+	err = ioctl(fd, SIOCETHTOOL, &ifr);
-+
-+	if (err) {
-+		ret = 0;
-+		goto out;
-+	}
-+
-+	ret = drvinfo.xdp_headroom;
-+
-+out:
-+	close(fd);
-+	return ret;
-+}
-+
- static unsigned long get_nsecs(void)
- {
- 	struct timespec ts;
-@@ -258,6 +305,44 @@ static void dump_app_stats(long dt)
- 	}
- }
- 
-+static struct xsk_btf_info *init_xsk_metadata_info(u32 btf_id)
-+{
-+	struct xsk_btf_info *xbi;
-+
-+	if (xsk_btf__init(btf_id, &xbi) < 0)
-+		return NULL;
-+
-+	return xbi;
-+}
-+
-+static void save_metadata_tx(void *meta, struct xsk_socket_info *xsk)
-+{
-+	u64 valid_map;
-+
-+	if (!meta)
-+		return;
-+
-+	XSK_BTF_READ_INTO(valid_map, valid_map, xsk->metadata.xbi, meta);
-+	if (valid_map & XDP_GENERIC_HINTS_TX_TIMESTAMP) {
-+		XSK_BTF_READ_INTO(xsk->metadata.tx_timestamp,
-+				  tx_timestamp, xsk->metadata.xbi, meta);
-+	}
-+}
-+
-+static void save_metadata_rx(void *meta, struct xsk_socket_info *xsk)
-+{
-+	u64 valid_map;
-+
-+	if (!meta)
-+		return;
-+
-+	XSK_BTF_READ_INTO(valid_map, valid_map, xsk->metadata.xbi, meta);
-+	if (valid_map & XDP_GENERIC_HINTS_RX_TIMESTAMP) {
-+		XSK_BTF_READ_INTO(xsk->metadata.rx_timestamp,
-+				  rx_timestamp, xsk->metadata.xbi, meta);
-+	}
-+}
-+
- static bool get_interrupt_number(void)
- {
- 	FILE *f_int_proc;
-@@ -432,6 +517,12 @@ static void dump_stats(void)
- 				printf("%-15s\n", "Error retrieving extra stats");
- 			}
- 		}
-+
-+		if (opt_metadata) {
-+			printf("Last TX time: %lu\n", xsks[i]->metadata.tx_timestamp);
-+			printf("Last RX time: %lu\n", xsks[i]->metadata.rx_timestamp);
-+		}
-+
- 	}
- 
- 	if (opt_app_stats)
-@@ -798,8 +889,10 @@ static void gen_eth_hdr_data(void)
- 
- static void gen_eth_frame(struct xsk_umem_info *umem, u64 addr)
- {
--	memcpy(xsk_umem__get_data(umem->buffer, addr), pkt_data,
--	       PKT_SIZE);
-+	void *data = xsk_umem__get_data(umem->buffer, addr);
-+
-+	data = xsk_umem__adjust_prod_data(data, umem->umem);
-+	memcpy(data, pkt_data, PKT_SIZE);
- }
- 
- static struct xsk_umem_info *xsk_configure_umem(void *buffer, u64 size)
-@@ -819,6 +912,7 @@ static struct xsk_umem_info *xsk_configure_umem(void *buffer, u64 size)
- 		.comp_size = XSK_RING_CONS__DEFAULT_NUM_DESCS,
- 		.frame_size = opt_xsk_frame_size,
- 		.frame_headroom = XSK_UMEM__DEFAULT_FRAME_HEADROOM,
-+		.xdp_headroom = get_xdp_headroom(),
- 		.flags = opt_umem_flags
- 	};
- 	int ret;
-@@ -833,6 +927,7 @@ static struct xsk_umem_info *xsk_configure_umem(void *buffer, u64 size)
- 		exit_with_error(-ret);
- 
- 	umem->buffer = buffer;
-+	umem->frame_headroom = cfg.frame_headroom;
- 	return umem;
- }
- 
-@@ -927,6 +1022,7 @@ static struct option long_options[] = {
- 	{"irq-string", no_argument, 0, 'I'},
- 	{"busy-poll", no_argument, 0, 'B'},
- 	{"reduce-cap", no_argument, 0, 'R'},
-+	{"metadata", no_argument, 0, 'D'},
- 	{0, 0, 0, 0}
- };
- 
-@@ -967,6 +1063,7 @@ static void usage(const char *prog)
- 		"  -I, --irq-string	Display driver interrupt statistics for interface associated with irq-string.\n"
- 		"  -B, --busy-poll      Busy poll.\n"
- 		"  -R, --reduce-cap	Use reduced capabilities (cannot be used with -M)\n"
-+		"  -D, --metadata	Display latest packet metadata\n"
- 		"\n";
- 	fprintf(stderr, str, prog, XSK_UMEM__DEFAULT_FRAME_SIZE,
- 		opt_batch_size, MIN_PKT_SIZE, MIN_PKT_SIZE,
-@@ -982,7 +1079,7 @@ static void parse_command_line(int argc, char **argv)
- 	opterr = 0;
- 
- 	for (;;) {
--		c = getopt_long(argc, argv, "Frtli:q:pSNn:czf:muMd:b:C:s:P:xQaI:BR",
-+		c = getopt_long(argc, argv, "Frtli:q:pSNn:czf:muMd:b:C:s:P:xQaI:BRD",
- 				long_options, &option_index);
- 		if (c == -1)
- 			break;
-@@ -1087,6 +1184,9 @@ static void parse_command_line(int argc, char **argv)
- 		case 'R':
- 			opt_reduced_cap = true;
- 			break;
-+		case 'D':
-+			opt_metadata = true;
-+			break;
- 		default:
- 			usage(basename(argv[0]));
- 		}
-@@ -1193,6 +1293,25 @@ static inline void complete_tx_only(struct xsk_socket_info *xsk,
- 
- 	rcvd = xsk_ring_cons__peek(&xsk->umem->cq, batch_size, &idx);
- 	if (rcvd > 0) {
-+		if (opt_metadata) {
-+			const struct xdp_desc *cq_desc = xsk_ring_cons__rx_desc(&xsk->umem->cq,
-+					idx);
-+			char *pkt = xsk_umem__get_data(xsk->umem->buffer, cq_desc->addr);
-+			__u32 btf_id = xsk_umem__btf_id(pkt, xsk->umem->umem);
-+			if (btf_id > 0) {
-+				if (!xsk->metadata.xbi) {
-+					xsk->metadata.xbi = init_xsk_metadata_info(btf_id);
-+					if (xsk->metadata.xbi)
-+						xsk->metadata.btf_id = btf_id;
-+				}
-+				if (xsk->metadata.btf_id == btf_id) {
-+					void *m;
-+
-+					m = xsk_umem__adjust_cons_data_meta(pkt, xsk->umem->umem);
-+					save_metadata_tx(m, xsk);
-+				}
-+			}
-+		}
- 		xsk_ring_cons__release(&xsk->umem->cq, rcvd);
- 		xsk->outstanding_tx -= rcvd;
- 	}
-@@ -1232,6 +1351,23 @@ static void rx_drop(struct xsk_socket_info *xsk)
- 		addr = xsk_umem__add_offset_to_addr(addr);
- 		char *pkt = xsk_umem__get_data(xsk->umem->buffer, addr);
- 
-+		if (opt_metadata) {
-+			__u32 btf_id = xsk_umem__btf_id(pkt, xsk->umem->umem);
-+			if (btf_id > 0) {
-+				if (!xsk->metadata.xbi) {
-+					xsk->metadata.xbi = init_xsk_metadata_info(btf_id);
-+					if (xsk->metadata.xbi)
-+						xsk->metadata.btf_id = btf_id;
-+				}
-+				if (xsk->metadata.btf_id == btf_id) {
-+					void *m;
-+
-+					m = xsk_umem__adjust_cons_data_meta(pkt, xsk->umem->umem);
-+					save_metadata_rx(m, xsk);
-+				}
-+			}
-+		}
-+
- 		hex_dump(pkt, len, addr);
- 		*xsk_ring_prod__fill_addr(&xsk->umem->fq, idx_fq++) = orig;
- 	}
-@@ -1283,7 +1419,9 @@ static void tx_only(struct xsk_socket_info *xsk, u32 *frame_nb, int batch_size)
- 	for (i = 0; i < batch_size; i++) {
- 		struct xdp_desc *tx_desc = xsk_ring_prod__tx_desc(&xsk->tx,
- 								  idx + i);
--		tx_desc->addr = (*frame_nb + i) * opt_xsk_frame_size;
-+		tx_desc->addr = (__u64)xsk_umem__adjust_prod_data(
-+				(void *)(__u64)((*frame_nb + i) * opt_xsk_frame_size),
-+				xsk->umem->umem);
- 		tx_desc->len = PKT_SIZE;
- 	}
- 
+Changelog:
+  v2:
+  - Implement bpf_iter specific seq_ops->stop()
+  - Add bpf_iter__unix in bpf_iter.h
+  - Move common definitions in selftest to bpf_tracing_net.h
+  - Include the code for abstract UNIX domain socket as comment in selftest
+  - Use ASSERT_OK_PTR() instead of CHECK()
+  - Make ternary operators on single line
+
+  v1:
+  https://lore.kernel.org/netdev/20210729233645.4869-1-kuniyu@amazon.co.jp/
+
+
+Kuniyuki Iwashima (2):
+  bpf: af_unix: Implement BPF iterator for UNIX domain socket.
+  selftest/bpf: Implement sample UNIX domain socket iterator program.
+
+ include/linux/btf_ids.h                       |  3 +-
+ net/unix/af_unix.c                            | 93 +++++++++++++++++++
+ .../selftests/bpf/prog_tests/bpf_iter.c       | 16 ++++
+ tools/testing/selftests/bpf/progs/bpf_iter.h  |  8 ++
+ .../selftests/bpf/progs/bpf_iter_unix.c       | 86 +++++++++++++++++
+ .../selftests/bpf/progs/bpf_tracing_net.h     |  4 +
+ 6 files changed, 209 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_unix.c
+
 -- 
-2.32.0
+2.30.2
 
