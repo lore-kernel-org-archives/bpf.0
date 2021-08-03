@@ -7,34 +7,34 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED0F3C19F31
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DCFBAC43216
 	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 17:10:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CA43061050
+	by mail.kernel.org (Postfix) with ESMTP id BC74261037
 	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 17:10:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237772AbhHCRKp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 3 Aug 2021 13:10:45 -0400
-Received: from mga14.intel.com ([192.55.52.115]:16903 "EHLO mga14.intel.com"
+        id S237764AbhHCRKo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 3 Aug 2021 13:10:44 -0400
+Received: from mga14.intel.com ([192.55.52.115]:16898 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237726AbhHCRKn (ORCPT <rfc822;bpf@vger.kernel.org>);
+        id S237732AbhHCRKn (ORCPT <rfc822;bpf@vger.kernel.org>);
         Tue, 3 Aug 2021 13:10:43 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10065"; a="213466135"
+X-IronPort-AV: E=McAfee;i="6200,9189,10065"; a="213466147"
 X-IronPort-AV: E=Sophos;i="5.84,292,1620716400"; 
-   d="scan'208";a="213466135"
+   d="scan'208";a="213466147"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2021 10:10:17 -0700
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2021 10:10:22 -0700
 X-IronPort-AV: E=Sophos;i="5.84,292,1620716400"; 
-   d="scan'208";a="521327107"
+   d="scan'208";a="521327165"
 Received: from shyamasr-mobl.amr.corp.intel.com ([10.209.65.83])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2021 10:10:16 -0700
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2021 10:10:20 -0700
 From:   Kishen Maloor <kishen.maloor@intel.com>
 To:     bpf@vger.kernel.org, netdev@vger.kernel.org, hawk@kernel.org,
         magnus.karlsson@intel.com
-Cc:     Kishen Maloor <kishen.maloor@intel.com>
-Subject: [RFC bpf-next 1/5] net: xdp: SO_TXTIME support in AF_XDP
-Date:   Tue,  3 Aug 2021 13:10:02 -0400
-Message-Id: <20210803171006.13915-2-kishen.maloor@intel.com>
+Cc:     Jithu Joseph <jithu.joseph@intel.com>
+Subject: [RFC bpf-next 5/5] samples/bpf/xdpsock_user.c: Launchtime/TXTIME API usage
+Date:   Tue,  3 Aug 2021 13:10:06 -0400
+Message-Id: <20210803171006.13915-6-kishen.maloor@intel.com>
 X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 In-Reply-To: <20210803171006.13915-1-kishen.maloor@intel.com>
 References: <20210803171006.13915-1-kishen.maloor@intel.com>
@@ -44,316 +44,190 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This change adds kernel support for SO_TXTIME in AF_XDP
-to include a specific TXTIME (aka "Launch Time")
-with XDP frames issued from userspace XDP applications.
+From: Jithu Joseph <jithu.joseph@intel.com>
 
-The timestamp is stored in the XDP metadata area and
-passed down to the NIC driver to configure the launch time.
-The timestamp is internally conveyed to the sk_buff destined
-to generic mode NIC drivers.
+Adds -L flag to the xdpsock commandline options. Using this
+in conjuction with "-t txonly" option exercises the
+Launchtime/Txtime APIs. These allows the application to specify
+when each packet should be transmitted by the NIC.
 
-Alternatively, a new XSK Zero-Copy driver API:
+Below is an example of how this option may be exercised:
 
-s64 xsk_buff_get_txtime(struct xsk_buff_pool *pool,
-                        struct xdp_desc *desc)
+sudo xdpsock -i enp1s0  -t -q 1 -N -s 128 -z -L
 
-nay used to retrieve and consume the TXTIME provided by the
-userspace XDP application.
+The above invocation would transmit  "batch_size" packets each spaced
+1us apart. The first packet in the batch is to be launched
+"LAUNCH_TIME_ADVANCE_NS" into the future and the remaining packets
+in the batch should be spaced 1us apart.
 
-Signed-off-by: Kishen Maloor <kishen.maloor@intel.com>
+Since launch-time enabled NICs would wait LAUNCH_TIME_ADVANCE_NS(500us)
+between batches of packets, the emphasis of this path is not throughput.
+
+Launch-time should be enabled for the chosen hardware queue using the
+appropriate tc qdisc command before starting the application and
+also NIC hardware clock should be synchronized to the system clock
+using a mechanism like phc2sys.
+
+Signed-off-by: Jithu Joseph <jithu.joseph@intel.com>
 ---
- include/net/xdp_sock.h          |  1 +
- include/net/xdp_sock_drv.h      | 10 +++++++
- include/net/xsk_buff_pool.h     |  1 +
- include/uapi/linux/if_xdp.h     |  2 ++
- include/uapi/linux/xdp_md_std.h | 14 +++++++++
- net/xdp/xsk.c                   | 51 ++++++++++++++++++++++++++++++++-
- net/xdp/xsk.h                   |  2 ++
- net/xdp/xsk_buff_pool.c         | 23 +++++++++++++++
- net/xdp/xsk_queue.h             |  4 +--
- 9 files changed, 105 insertions(+), 3 deletions(-)
- create mode 100644 include/uapi/linux/xdp_md_std.h
+ samples/bpf/xdpsock_user.c | 64 +++++++++++++++++++++++++++++++++++---
+ 1 file changed, 60 insertions(+), 4 deletions(-)
 
-diff --git a/include/net/xdp_sock.h b/include/net/xdp_sock.h
-index fff069d2ed1b..b78932921b44 100644
---- a/include/net/xdp_sock.h
-+++ b/include/net/xdp_sock.h
-@@ -58,6 +58,7 @@ struct xdp_sock {
+diff --git a/samples/bpf/xdpsock_user.c b/samples/bpf/xdpsock_user.c
+index 3fd2f6a0d1eb..a0fd3d5414ba 100644
+--- a/samples/bpf/xdpsock_user.c
++++ b/samples/bpf/xdpsock_user.c
+@@ -55,6 +55,9 @@
  
- 	struct xsk_queue *tx ____cacheline_aligned_in_smp;
- 	struct list_head tx_list;
-+	u32 so_txtime_mask;
- 	/* Protects generic receive. */
- 	spinlock_t rx_lock;
+ #define DEBUG_HEXDUMP 0
  
-diff --git a/include/net/xdp_sock_drv.h b/include/net/xdp_sock_drv.h
-index 4e295541e396..7d190b454772 100644
---- a/include/net/xdp_sock_drv.h
-+++ b/include/net/xdp_sock_drv.h
-@@ -95,6 +95,11 @@ static inline dma_addr_t xsk_buff_raw_get_dma(struct xsk_buff_pool *pool,
- 	return xp_raw_get_dma(pool, addr);
- }
- 
-+static inline s64 xsk_buff_get_txtime(struct xsk_buff_pool *pool, struct xdp_desc *desc)
-+{
-+	return xp_raw_get_txtime(pool, desc);
-+}
++#define LAUNCH_TIME_ADVANCE_NS (500000)
++#define CLOCK_SYNC_DELAY (60)
 +
- static inline void *xsk_buff_raw_get_data(struct xsk_buff_pool *pool, u64 addr)
+ typedef __u64 u64;
+ typedef __u32 u32;
+ typedef __u16 u16;
+@@ -99,6 +102,7 @@ static u32 opt_num_xsks = 1;
+ static u32 prog_id;
+ static bool opt_busy_poll;
+ static bool opt_reduced_cap;
++static bool opt_launch_time;
+ 
+ struct xsk_ring_stats {
+ 	unsigned long rx_npkts;
+@@ -741,6 +745,8 @@ static inline u16 udp_csum(u32 saddr, u32 daddr, u32 len,
+ 
+ #define ETH_FCS_SIZE 4
+ 
++#define MD_SIZE (sizeof(struct xdp_user_tx_metadata))
++
+ #define PKT_HDR_SIZE (sizeof(struct ethhdr) + sizeof(struct iphdr) + \
+ 		      sizeof(struct udphdr))
+ 
+@@ -798,8 +804,10 @@ static void gen_eth_hdr_data(void)
+ 
+ static void gen_eth_frame(struct xsk_umem_info *umem, u64 addr)
  {
- 	return xp_raw_get_data(pool, addr);
-@@ -232,6 +237,11 @@ static inline void *xsk_buff_raw_get_data(struct xsk_buff_pool *pool, u64 addr)
- 	return NULL;
+-	memcpy(xsk_umem__get_data(umem->buffer, addr), pkt_data,
+-	       PKT_SIZE);
++	if (opt_launch_time)
++		memcpy(xsk_umem__get_data(umem->buffer, addr) + MD_SIZE, pkt_data, PKT_SIZE);
++	else
++		memcpy(xsk_umem__get_data(umem->buffer, addr), pkt_data, PKT_SIZE);
  }
  
-+static inline s64 xsk_buff_get_txtime(struct xsk_buff_pool *pool, u64 addr)
-+{
-+	return -1;
-+}
-+
- static inline void xsk_buff_dma_sync_for_cpu(struct xdp_buff *xdp, struct xsk_buff_pool *pool)
- {
- }
-diff --git a/include/net/xsk_buff_pool.h b/include/net/xsk_buff_pool.h
-index 7a9a23e7a604..32863cde4128 100644
---- a/include/net/xsk_buff_pool.h
-+++ b/include/net/xsk_buff_pool.h
-@@ -107,6 +107,7 @@ void xp_dma_unmap(struct xsk_buff_pool *pool, unsigned long attrs);
- struct xdp_buff *xp_alloc(struct xsk_buff_pool *pool);
- bool xp_can_alloc(struct xsk_buff_pool *pool, u32 count);
- void *xp_raw_get_data(struct xsk_buff_pool *pool, u64 addr);
-+s64 xp_raw_get_txtime(struct xsk_buff_pool *pool, struct xdp_desc *desc);
- dma_addr_t xp_raw_get_dma(struct xsk_buff_pool *pool, u64 addr);
- static inline dma_addr_t xp_get_dma(struct xdp_buff_xsk *xskb)
- {
-diff --git a/include/uapi/linux/if_xdp.h b/include/uapi/linux/if_xdp.h
-index a78a8096f4ce..31f81f82ed86 100644
---- a/include/uapi/linux/if_xdp.h
-+++ b/include/uapi/linux/if_xdp.h
-@@ -106,6 +106,8 @@ struct xdp_desc {
- 	__u32 options;
+ static struct xsk_umem_info *xsk_configure_umem(void *buffer, u64 size)
+@@ -927,6 +935,7 @@ static struct option long_options[] = {
+ 	{"irq-string", no_argument, 0, 'I'},
+ 	{"busy-poll", no_argument, 0, 'B'},
+ 	{"reduce-cap", no_argument, 0, 'R'},
++	{"launch-time", no_argument, 0, 'L'},
+ 	{0, 0, 0, 0}
  };
  
-+#define XDP_DESC_OPTION_METADATA (1 << 0)
-+
- /* UMEM descriptor is __u64 */
+@@ -967,6 +976,7 @@ static void usage(const char *prog)
+ 		"  -I, --irq-string	Display driver interrupt statistics for interface associated with irq-string.\n"
+ 		"  -B, --busy-poll      Busy poll.\n"
+ 		"  -R, --reduce-cap	Use reduced capabilities (cannot be used with -M)\n"
++		"  -L, --launch-time	Toy example of launchtime using XDP\n"
+ 		"\n";
+ 	fprintf(stderr, str, prog, XSK_UMEM__DEFAULT_FRAME_SIZE,
+ 		opt_batch_size, MIN_PKT_SIZE, MIN_PKT_SIZE,
+@@ -982,7 +992,7 @@ static void parse_command_line(int argc, char **argv)
+ 	opterr = 0;
  
- #endif /* _LINUX_IF_XDP_H */
-diff --git a/include/uapi/linux/xdp_md_std.h b/include/uapi/linux/xdp_md_std.h
-new file mode 100644
-index 000000000000..f00996a61639
---- /dev/null
-+++ b/include/uapi/linux/xdp_md_std.h
-@@ -0,0 +1,14 @@
-+#ifndef _UAPI_LINUX_XDP_MD_STD_H
-+#define _UAPI_LINUX_XDP_MD_STD_H
-+
-+#include <linux/types.h>
-+
-+#define XDP_METADATA_USER_TX_TIMESTAMP 0x1
-+
-+struct xdp_user_tx_metadata {
-+	__u64 timestamp;
-+	__u32 md_valid;
-+	__u32 btf_id;
-+};
-+
-+#endif /* _UAPI_LINUX_XDP_MD_STD_H */
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index d6b500dc4208..c92baedf18b8 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -339,6 +339,7 @@ bool xsk_tx_peek_desc(struct xsk_buff_pool *pool, struct xdp_desc *desc)
- 			continue;
+ 	for (;;) {
+-		c = getopt_long(argc, argv, "Frtli:q:pSNn:czf:muMd:b:C:s:P:xQaI:BR",
++		c = getopt_long(argc, argv, "Frtli:q:pSNn:czf:muMd:b:C:s:P:xQaI:BRL",
+ 				long_options, &option_index);
+ 		if (c == -1)
+ 			break;
+@@ -1087,6 +1097,9 @@ static void parse_command_line(int argc, char **argv)
+ 		case 'R':
+ 			opt_reduced_cap = true;
+ 			break;
++		case 'L':
++			opt_launch_time = true;
++			break;
+ 		default:
+ 			usage(basename(argv[0]));
  		}
- 
-+		desc->options |= xs->so_txtime_mask;
- 		/* This is the backpressure mechanism for the Tx path.
- 		 * Reserve space in the completion queue and only proceed
- 		 * if there is space in it. This avoids having to implement
-@@ -374,7 +375,7 @@ u32 xsk_tx_peek_release_desc_batch(struct xsk_buff_pool *pool, struct xdp_desc *
- 				   u32 max_entries)
+@@ -1272,6 +1285,7 @@ static void tx_only(struct xsk_socket_info *xsk, u32 *frame_nb, int batch_size)
  {
- 	struct xdp_sock *xs;
--	u32 nb_pkts;
-+	u32 nb_pkts, i;
+ 	u32 idx;
+ 	unsigned int i;
++	u64 cur_ts, launch_time;
  
- 	rcu_read_lock();
- 	if (!list_is_singular(&pool->xsk_tx_list)) {
-@@ -395,6 +396,9 @@ u32 xsk_tx_peek_release_desc_batch(struct xsk_buff_pool *pool, struct xdp_desc *
- 		goto out;
+ 	while (xsk_ring_prod__reserve(&xsk->tx, batch_size, &idx) <
+ 				      batch_size) {
+@@ -1280,10 +1294,28 @@ static void tx_only(struct xsk_socket_info *xsk, u32 *frame_nb, int batch_size)
+ 			return;
  	}
  
-+	for (i = 0; i < nb_pkts; i++)
-+		descs[i].options |= xs->so_txtime_mask;
++	cur_ts = get_nsecs(CLOCK_TAI);
 +
- 	/* This is the backpressure mechanism for the Tx path. Try to
- 	 * reserve space in the completion queue for all packets, but
- 	 * if there are fewer slots available, just process that many
-@@ -445,6 +449,19 @@ static void xsk_destruct_skb(struct sk_buff *skb)
- 	sock_wfree(skb);
- }
+ 	for (i = 0; i < batch_size; i++) {
+ 		struct xdp_desc *tx_desc = xsk_ring_prod__tx_desc(&xsk->tx,
+ 								  idx + i);
+-		tx_desc->addr = (*frame_nb + i) * opt_xsk_frame_size;
++		if (opt_launch_time) {
++			/*
++			 * Direct the NIC to launch "batch_size" packets each spaced 1us apart.
++			 * The below calculation specifies that the first packet in the batch
++			 * is to be launched "LAUNCH_TIME_ADVANCE_NS" into the future and the
++			 * remaining packets in the batch should be spaced 1us apart.
++			 */
++			launch_time = cur_ts + LAUNCH_TIME_ADVANCE_NS + (1000 * i);
++			xsk_umem__set_md_txtime(xsk->umem->buffer,
++						((*frame_nb + i) * opt_xsk_frame_size),
++						launch_time);
++			tx_desc->addr = (*frame_nb + i) * opt_xsk_frame_size + MD_SIZE;
++			tx_desc->options = XDP_DESC_OPTION_METADATA;
++		} else {
++			tx_desc->addr = (*frame_nb + i) * opt_xsk_frame_size;
++		}
++
+ 		tx_desc->len = PKT_SIZE;
+ 	}
  
-+static void xsk_process_so_txtime(struct xsk_buff_pool *pool,
-+				  struct xdp_desc *desc,
-+				  struct sk_buff *skb)
-+{
-+	if ((desc->options & (XDP_DESC_OPTION_METADATA | XDP_SOL_OPTION_SO_TXTIME))
-+	    == (XDP_DESC_OPTION_METADATA | XDP_SOL_OPTION_SO_TXTIME)) {
-+		s64 tstamp = xsk_buff_get_txtime(pool, desc);
-+
-+		if (tstamp != -1)
-+			skb->tstamp = tstamp;
+@@ -1293,6 +1325,16 @@ static void tx_only(struct xsk_socket_info *xsk, u32 *frame_nb, int batch_size)
+ 	*frame_nb += batch_size;
+ 	*frame_nb %= NUM_FRAMES;
+ 	complete_tx_only(xsk, batch_size);
++	if (opt_launch_time) {
++		/*
++		 * Hold the Tx loop until all the frames from this batch has been
++		 * transmitted by the driver. This also ensures that all packets from
++		 * this batch reach the driver ASAP before the proposed future launchtime
++		 * becomes stale
++		 */
++		while (xsk->outstanding_tx)
++			complete_tx_only(xsk, opt_batch_size);
 +	}
-+}
-+
- static struct sk_buff *xsk_build_skb_zerocopy(struct xdp_sock *xs,
- 					      struct xdp_desc *desc)
- {
-@@ -469,6 +486,7 @@ static struct sk_buff *xsk_build_skb_zerocopy(struct xdp_sock *xs,
- 	ts = pool->unaligned ? len : pool->chunk_size;
+ }
  
- 	buffer = xsk_buff_raw_get_data(pool, addr);
-+	xsk_process_so_txtime(pool, desc, skb);
- 	offset = offset_in_page(buffer);
- 	addr = buffer - pool->addrs;
- 
-@@ -520,6 +538,7 @@ static struct sk_buff *xsk_build_skb(struct xdp_sock *xs,
- 		skb_put(skb, len);
- 
- 		buffer = xsk_buff_raw_get_data(xs->pool, desc->addr);
-+		xsk_process_so_txtime(xs->pool, desc, skb);
- 		err = skb_store_bits(skb, 0, buffer, len);
- 		if (unlikely(err)) {
- 			kfree_skb(skb);
-@@ -557,6 +576,7 @@ static int xsk_generic_xmit(struct sock *sk)
- 			goto out;
- 		}
- 
-+		desc.options |= xs->so_txtime_mask;
- 		skb = xsk_build_skb(xs, &desc);
- 		if (IS_ERR(skb)) {
- 			err = PTR_ERR(skb);
-@@ -1098,6 +1118,23 @@ static int xsk_setsockopt(struct socket *sock, int level, int optname,
- 		mutex_unlock(&xs->mutex);
- 		return err;
+ static inline int get_batch_size(int pkt_cnt)
+@@ -1334,6 +1376,20 @@ static void tx_only_all(void)
+ 		fds[0].events = POLLOUT;
  	}
-+	case SO_TXTIME:
-+	{
-+		u32 option;
-+
-+		if (optlen != sizeof(u32))
-+			return -EINVAL;
-+
-+		if (copy_from_sockptr(&option, optval, sizeof(option)))
-+			return -EFAULT;
-+
-+		if (option)
-+			xs->so_txtime_mask |= XDP_SOL_OPTION_SO_TXTIME;
-+		else
-+			xs->so_txtime_mask &= ~XDP_SOL_OPTION_SO_TXTIME;
-+
-+		return 0;
+ 
++	if (opt_launch_time) {
++		/*
++		 * For launch-time to be meaningful, the system clock and NIC h/w clock
++		 * needs to be synchronized. Many NIC driver implementations resets the NIC
++		 * during the bind operation in the XDP initialization flow path.
++		 * The delay below is intended as a best case approach to hold off packet
++		 * transmission till the syncronization is acheived.
++		 */
++		xsk_socket__enable_so_txtime(xsks[0]->xsk, true);
++		printf("Waiting for %ds for the NIC clock to synchronize with the system clock\n",
++		       CLOCK_SYNC_DELAY);
++		sleep(CLOCK_SYNC_DELAY);
 +	}
- 	default:
- 		break;
- 	}
-@@ -1249,6 +1286,18 @@ static int xsk_getsockopt(struct socket *sock, int level, int optname,
++
+ 	while ((opt_pkt_count && pkt_cnt < opt_pkt_count) || !opt_pkt_count) {
+ 		int batch_size = get_batch_size(pkt_cnt);
  
- 		return 0;
- 	}
-+	case SO_TXTIME:
-+	{
-+		u32 option = 0;
-+
-+		if (xs->so_txtime_mask & XDP_SOL_OPTION_SO_TXTIME)
-+			option = 1;
-+
-+		if (copy_to_user(optval, &option, sizeof(option)))
-+			return -EFAULT;
-+
-+		return 0;
-+	}
- 	default:
- 		break;
- 	}
-diff --git a/net/xdp/xsk.h b/net/xdp/xsk.h
-index a4bc4749faac..9c8686185d68 100644
---- a/net/xdp/xsk.h
-+++ b/net/xdp/xsk.h
-@@ -11,6 +11,8 @@
- #define XSK_NEXT_PG_CONTIG_SHIFT 0
- #define XSK_NEXT_PG_CONTIG_MASK BIT_ULL(XSK_NEXT_PG_CONTIG_SHIFT)
- 
-+#define XDP_SOL_OPTION_SO_TXTIME (1 << 31)
-+
- struct xdp_ring_offset_v1 {
- 	__u64 producer;
- 	__u64 consumer;
-diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
-index 8de01aaac4a0..58bf877cc5cf 100644
---- a/net/xdp/xsk_buff_pool.c
-+++ b/net/xdp/xsk_buff_pool.c
-@@ -3,6 +3,7 @@
- #include <net/xsk_buff_pool.h>
- #include <net/xdp_sock.h>
- #include <net/xdp_sock_drv.h>
-+#include <linux/xdp_md_std.h>
- 
- #include "xsk_queue.h"
- #include "xdp_umem.h"
-@@ -522,6 +523,28 @@ void xp_free(struct xdp_buff_xsk *xskb)
- }
- EXPORT_SYMBOL(xp_free);
- 
-+s64 xp_raw_get_txtime(struct xsk_buff_pool *pool, struct xdp_desc *desc)
-+{
-+	struct xdp_user_tx_metadata *md;
-+
-+	if ((desc->addr % pool->chunk_size) <
-+	    sizeof(struct xdp_user_tx_metadata))
-+		return -1;
-+
-+	if (!(desc->options & XDP_SOL_OPTION_SO_TXTIME) ||
-+	    !(desc->options & XDP_DESC_OPTION_METADATA))
-+		return -1;
-+
-+	md = (xp_raw_get_data(pool, desc->addr) -
-+	      sizeof(struct xdp_user_tx_metadata));
-+
-+	if (!(md->md_valid & XDP_METADATA_USER_TX_TIMESTAMP))
-+		return -1;
-+
-+	return md->timestamp;
-+}
-+EXPORT_SYMBOL(xp_raw_get_txtime);
-+
- void *xp_raw_get_data(struct xsk_buff_pool *pool, u64 addr)
- {
- 	addr = pool->unaligned ? xp_unaligned_add_offset_to_addr(addr) : addr;
-diff --git a/net/xdp/xsk_queue.h b/net/xdp/xsk_queue.h
-index 9ae13cccfb28..f7b323374b6d 100644
---- a/net/xdp/xsk_queue.h
-+++ b/net/xdp/xsk_queue.h
-@@ -140,7 +140,7 @@ static inline bool xp_aligned_validate_desc(struct xsk_buff_pool *pool,
- 	if (chunk >= pool->addrs_cnt)
- 		return false;
- 
--	if (desc->options)
-+	if (desc->options & ~XDP_DESC_OPTION_METADATA)
- 		return false;
- 	return true;
- }
-@@ -160,7 +160,7 @@ static inline bool xp_unaligned_validate_desc(struct xsk_buff_pool *pool,
- 	    xp_desc_crosses_non_contig_pg(pool, addr, desc->len))
- 		return false;
- 
--	if (desc->options)
-+	if (desc->options & ~XDP_DESC_OPTION_METADATA)
- 		return false;
- 	return true;
- }
 -- 
 2.24.3 (Apple Git-128)
 
