@@ -7,33 +7,34 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D228FC43214
-	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 01:03:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BBF12C4338F
+	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 01:03:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B36FE60F9C
-	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 01:03:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A35F460F58
+	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 01:03:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233446AbhHCBEB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S233483AbhHCBEB (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Mon, 2 Aug 2021 21:04:01 -0400
-Received: from mga07.intel.com ([134.134.136.100]:65281 "EHLO mga07.intel.com"
+Received: from mga07.intel.com ([134.134.136.100]:65282 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233013AbhHCBEA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        id S233421AbhHCBEA (ORCPT <rfc822;bpf@vger.kernel.org>);
         Mon, 2 Aug 2021 21:04:00 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10064"; a="277327837"
+X-IronPort-AV: E=McAfee;i="6200,9189,10064"; a="277327843"
 X-IronPort-AV: E=Sophos;i="5.84,290,1620716400"; 
-   d="scan'208";a="277327837"
+   d="scan'208";a="277327843"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2021 18:03:49 -0700
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2021 18:03:50 -0700
 X-IronPort-AV: E=Sophos;i="5.84,290,1620716400"; 
-   d="scan'208";a="419480119"
+   d="scan'208";a="419480130"
 Received: from ticela-or-032.amr.corp.intel.com (HELO localhost.localdomain) ([10.212.166.34])
   by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2021 18:03:49 -0700
 From:   Ederson de Souza <ederson.desouza@intel.com>
 To:     xdp-hints@xdp-project.net
-Cc:     bpf@vger.kernel.org, Andre Guedes <andre.guedes@intel.com>
-Subject: [[RFC xdp-hints] 05/16] igc: Fix race condition in PTP Tx code
-Date:   Mon,  2 Aug 2021 18:03:20 -0700
-Message-Id: <20210803010331.39453-6-ederson.desouza@intel.com>
+Cc:     bpf@vger.kernel.org,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>
+Subject: [[RFC xdp-hints] 08/16] igc: Use irq safe locks for timestamping
+Date:   Mon,  2 Aug 2021 18:03:23 -0700
+Message-Id: <20210803010331.39453-9-ederson.desouza@intel.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210803010331.39453-1-ederson.desouza@intel.com>
 References: <20210803010331.39453-1-ederson.desouza@intel.com>
@@ -43,212 +44,108 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Andre Guedes <andre.guedes@intel.com>
+From: Vinicius Costa Gomes <vinicius.gomes@intel.com>
 
-Currently, the igc driver supports timestamping only one Tx packet at a
-time. During the transmission flow, the skb that requires hardware
-timestamping is saved in adapter->ptp_tx_skb. Once hardware has the
-timestamp, an interrupt is delivered, and adapter->ptp_tx_work is
-scheduled. In igc_ptp_tx_work(), we read the timestamp register, update
-adapter->ptp_tx_skb, and notify the network stack.
+Now that the timestamping is done in interrupt context we should
+protect against concurrent access using irq safe locks.
 
-While the thread executing the transmission flow (the user process
-running in kernel mode) and the thread executing ptp_tx_work don't
-access adapter->ptp_tx_skb concurrently, there are two other places
-where adapter->ptp_tx_skb is accessed: igc_ptp_tx_hang() and
-igc_ptp_suspend().
-
-igc_ptp_tx_hang() is executed by the adapter->watchdog_task worker
-thread which runs periodically so it is possible we have two threads
-accessing ptp_tx_skb at the same time. Consider the following scenario:
-right after __IGC_PTP_TX_IN_PROGRESS is set in igc_xmit_frame_ring(),
-igc_ptp_tx_hang() is executed. Since adapter->ptp_tx_start hasn't been
-written yet, this is considered a timeout and adapter->ptp_tx_skb is
-cleaned up.
-
-This patch fixes the issue described above by adding the ptp_tx_lock to
-protect access to ptp_tx_skb and ptp_tx_start fields from igc_adapter.
-Since igc_xmit_frame_ring() called in atomic context by the networking
-stack, ptp_tx_lock is defined as a spinlock.
-
-With the introduction of the ptp_tx_lock, the __IGC_PTP_TX_IN_PROGRESS
-flag doesn't provide much of a use anymore so this patch gets rid of it.
-
-Signed-off-by: Andre Guedes <andre.guedes@intel.com>
+Signed-off-by: Vinicius Costa Gomes <vinicius.gomes@intel.com>
 ---
- drivers/net/ethernet/intel/igc/igc.h      |  5 ++-
- drivers/net/ethernet/intel/igc/igc_main.c |  7 +++-
- drivers/net/ethernet/intel/igc/igc_ptp.c  | 49 ++++++++++++++---------
- 3 files changed, 40 insertions(+), 21 deletions(-)
+ drivers/net/ethernet/intel/igc/igc_main.c |  5 +++--
+ drivers/net/ethernet/intel/igc/igc_ptp.c  | 16 ++++++++++------
+ 2 files changed, 13 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/igc/igc.h b/drivers/net/ethernet/intel/igc/igc.h
-index a0ecfe5a4078..10635588263e 100644
---- a/drivers/net/ethernet/intel/igc/igc.h
-+++ b/drivers/net/ethernet/intel/igc/igc.h
-@@ -217,6 +217,10 @@ struct igc_adapter {
- 	struct ptp_clock *ptp_clock;
- 	struct ptp_clock_info ptp_caps;
- 	struct work_struct ptp_tx_work;
-+	/* Access to ptp_tx_skb and ptp_tx_start is protected by the
-+	 * ptp_tx_lock.
-+	 */
-+	spinlock_t ptp_tx_lock;
- 	struct sk_buff *ptp_tx_skb;
- 	struct hwtstamp_config tstamp_config;
- 	unsigned long ptp_tx_start;
-@@ -387,7 +391,6 @@ enum igc_state_t {
- 	__IGC_TESTING,
- 	__IGC_RESETTING,
- 	__IGC_DOWN,
--	__IGC_PTP_TX_IN_PROGRESS,
- };
- 
- enum igc_tx_flags {
 diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
-index 5c95bf82eaf7..ae6ceb0790d8 100644
+index a2e0b71d1f4e..fe3619c25c05 100644
 --- a/drivers/net/ethernet/intel/igc/igc_main.c
 +++ b/drivers/net/ethernet/intel/igc/igc_main.c
-@@ -1439,13 +1439,14 @@ static netdev_tx_t igc_xmit_frame_ring(struct sk_buff *skb,
+@@ -1467,9 +1467,10 @@ static netdev_tx_t igc_xmit_frame_ring(struct sk_buff *skb,
+ 
  	if (unlikely(skb_shinfo(skb)->tx_flags & SKBTX_HW_TSTAMP)) {
  		struct igc_adapter *adapter = netdev_priv(tx_ring->netdev);
++		unsigned long flags;
+ 		u32 tstamp_flags;
  
-+		spin_lock(&adapter->ptp_tx_lock);
-+
- 		/* FIXME: add support for retrieving timestamps from
- 		 * the other timer registers before skipping the
- 		 * timestamping request.
- 		 */
+-		spin_lock(&adapter->ptp_tx_lock);
++		spin_lock_irqsave(&adapter->ptp_tx_lock, flags);
+ 
  		if (adapter->tstamp_config.tx_type == HWTSTAMP_TX_ON &&
--		    !test_and_set_bit_lock(__IGC_PTP_TX_IN_PROGRESS,
--					   &adapter->state)) {
-+		    !adapter->ptp_tx_skb) {
- 			skb_shinfo(skb)->tx_flags |= SKBTX_IN_PROGRESS;
- 			tx_flags |= IGC_TX_FLAGS_TSTAMP;
- 
-@@ -1454,6 +1455,8 @@ static netdev_tx_t igc_xmit_frame_ring(struct sk_buff *skb,
- 		} else {
+ 		    igc_request_tx_tstamp(adapter, skb, &tstamp_flags)) {
+@@ -1479,7 +1480,7 @@ static netdev_tx_t igc_xmit_frame_ring(struct sk_buff *skb,
  			adapter->tx_hwtstamp_skipped++;
  		}
-+
-+		spin_unlock(&adapter->ptp_tx_lock);
+ 
+-		spin_unlock(&adapter->ptp_tx_lock);
++		spin_unlock_irqrestore(&adapter->ptp_tx_lock, flags);
  	}
  
  	if (skb_vlan_tag_present(skb)) {
 diff --git a/drivers/net/ethernet/intel/igc/igc_ptp.c b/drivers/net/ethernet/intel/igc/igc_ptp.c
-index 69617d2c1be2..92ed2760485b 100644
+index e286b0341575..911c36a909a4 100644
 --- a/drivers/net/ethernet/intel/igc/igc_ptp.c
 +++ b/drivers/net/ethernet/intel/igc/igc_ptp.c
-@@ -598,35 +598,35 @@ static int igc_ptp_set_timestamp_mode(struct igc_adapter *adapter,
- 	return 0;
- }
- 
-+/* Requires adapter->ptp_tx_lock held by caller. */
- static void igc_ptp_tx_timeout(struct igc_adapter *adapter)
- {
- 	struct igc_hw *hw = &adapter->hw;
- 
- 	dev_kfree_skb_any(adapter->ptp_tx_skb);
- 	adapter->ptp_tx_skb = NULL;
-+	adapter->ptp_tx_start = 0;
- 	adapter->tx_hwtstamp_timeouts++;
--	clear_bit_unlock(__IGC_PTP_TX_IN_PROGRESS, &adapter->state);
- 	/* Clear the tx valid bit in TSYNCTXCTL register to enable interrupt. */
- 	rd32(IGC_TXSTMPH);
-+
- 	netdev_warn(adapter->netdev, "Tx timestamp timeout\n");
- }
- 
+@@ -626,9 +626,10 @@ static void igc_ptp_tx_timeout(struct igc_adapter *adapter,
  void igc_ptp_tx_hang(struct igc_adapter *adapter)
  {
--	bool timeout = time_is_before_jiffies(adapter->ptp_tx_start +
--					      IGC_PTP_TX_TIMEOUT);
-+	spin_lock(&adapter->ptp_tx_lock);
+ 	struct igc_tx_timestamp_request *tstamp;
++	unsigned long flags;
+ 	int i;
  
--	if (!test_bit(__IGC_PTP_TX_IN_PROGRESS, &adapter->state))
--		return;
-+	if (!adapter->ptp_tx_skb)
-+		goto unlock;
+-	spin_lock(&adapter->ptp_tx_lock);
++	spin_lock_irqsave(&adapter->ptp_tx_lock, flags);
  
--	/* If we haven't received a timestamp within the timeout, it is
--	 * reasonable to assume that it will never occur, so we can unlock the
--	 * timestamp bit when this occurs.
--	 */
--	if (timeout) {
--		cancel_work_sync(&adapter->ptp_tx_work);
--		igc_ptp_tx_timeout(adapter);
--	}
-+	if (time_is_after_jiffies(adapter->ptp_tx_start + IGC_PTP_TX_TIMEOUT))
-+		goto unlock;
-+
-+	igc_ptp_tx_timeout(adapter);
-+
-+unlock:
-+	spin_unlock(&adapter->ptp_tx_lock);
- }
- 
- /**
-@@ -636,6 +636,8 @@ void igc_ptp_tx_hang(struct igc_adapter *adapter)
-  * If we were asked to do hardware stamping and such a time stamp is
-  * available, then it must have been for this skb here because we only
-  * allow only one such packet into the queue.
-+ *
-+ * Context: Expects adapter->ptp_tx_lock to be held by caller.
-  */
- static void igc_ptp_tx_hwtstamp(struct igc_adapter *adapter)
- {
-@@ -676,7 +678,7 @@ static void igc_ptp_tx_hwtstamp(struct igc_adapter *adapter)
- 	 * while we're notifying the stack.
- 	 */
- 	adapter->ptp_tx_skb = NULL;
--	clear_bit_unlock(__IGC_PTP_TX_IN_PROGRESS, &adapter->state);
-+	adapter->ptp_tx_start = 0;
- 
- 	/* Notify the stack and free the skb after we've unlocked */
- 	skb_tstamp_tx(skb, &shhwtstamps);
-@@ -697,14 +699,19 @@ static void igc_ptp_tx_work(struct work_struct *work)
- 	struct igc_hw *hw = &adapter->hw;
- 	u32 tsynctxctl;
- 
--	if (!test_bit(__IGC_PTP_TX_IN_PROGRESS, &adapter->state))
--		return;
-+	spin_lock(&adapter->ptp_tx_lock);
-+
-+	if (!adapter->ptp_tx_skb)
-+		goto unlock;
- 
- 	tsynctxctl = rd32(IGC_TSYNCTXCTL);
- 	if (WARN_ON_ONCE(!(tsynctxctl & IGC_TSYNCTXCTL_TXTT_0)))
--		return;
-+		goto unlock;
- 
- 	igc_ptp_tx_hwtstamp(adapter);
-+
-+unlock:
-+	spin_unlock(&adapter->ptp_tx_lock);
- }
- 
- /**
-@@ -795,6 +802,7 @@ void igc_ptp_init(struct igc_adapter *adapter)
+ 	for (i = 0; i < IGC_MAX_TX_TSTAMP_TIMERS; i++) {
+ 		tstamp = &adapter->tx_tstamp[i];
+@@ -642,7 +643,7 @@ void igc_ptp_tx_hang(struct igc_adapter *adapter)
+ 		igc_ptp_tx_timeout(adapter, tstamp);
  	}
  
- 	spin_lock_init(&adapter->tmreg_lock);
-+	spin_lock_init(&adapter->ptp_tx_lock);
- 	INIT_WORK(&adapter->ptp_tx_work, igc_ptp_tx_work);
+-	spin_unlock(&adapter->ptp_tx_lock);
++	spin_unlock_irqrestore(&adapter->ptp_tx_lock, flags);
+ }
  
- 	adapter->tstamp_config.rx_filter = HWTSTAMP_FILTER_NONE;
-@@ -845,9 +853,14 @@ void igc_ptp_suspend(struct igc_adapter *adapter)
+ /**
+@@ -659,13 +660,14 @@ void igc_ptp_tx_hwtstamp(struct igc_adapter *adapter, u32 mask)
+ {
+ 	struct skb_shared_hwtstamps shhwtstamps;
+ 	struct igc_hw *hw = &adapter->hw;
++	unsigned long flags;
+ 	struct sk_buff *skb;
+ 	int adjust = 0;
+ 	u64 regval;
+ 	int i;
+ 
+ again:
+-	spin_lock(&adapter->ptp_tx_lock);
++	spin_lock_irqsave(&adapter->ptp_tx_lock, flags);
+ 
+ 	for (i = 0; i < IGC_MAX_TX_TSTAMP_TIMERS; i++) {
+ 		struct igc_tx_timestamp_request *tstamp = &adapter->tx_tstamp[i];
+@@ -712,7 +714,7 @@ void igc_ptp_tx_hwtstamp(struct igc_adapter *adapter, u32 mask)
+ 		dev_kfree_skb_any(skb);
+ 	}
+ 
+-	spin_unlock(&adapter->ptp_tx_lock);
++	spin_unlock_irqrestore(&adapter->ptp_tx_lock, flags);
+ 
+ 	mask = rd32(IGC_TSYNCTXCTL) & IGC_TSYNCTXCTL_TXTT_ANY;
+ 	if (mask) {
+@@ -896,14 +898,16 @@ static void igc_tx_tstamp_clear(struct igc_adapter *adapter)
+  */
+ void igc_ptp_suspend(struct igc_adapter *adapter)
+ {
++	unsigned long flags;
++
+ 	if (!(adapter->ptp_flags & IGC_PTP_ENABLED))
  		return;
  
- 	cancel_work_sync(&adapter->ptp_tx_work);
-+
-+	spin_lock(&adapter->ptp_tx_lock);
-+
- 	dev_kfree_skb_any(adapter->ptp_tx_skb);
- 	adapter->ptp_tx_skb = NULL;
--	clear_bit_unlock(__IGC_PTP_TX_IN_PROGRESS, &adapter->state);
-+	adapter->ptp_tx_start = 0;
-+
-+	spin_unlock(&adapter->ptp_tx_lock);
+-	spin_lock(&adapter->ptp_tx_lock);
++	spin_lock_irqsave(&adapter->ptp_tx_lock, flags);
+ 
+ 	igc_tx_tstamp_clear(adapter);
+ 
+-	spin_unlock(&adapter->ptp_tx_lock);
++	spin_unlock_irqrestore(&adapter->ptp_tx_lock, flags);
  
  	igc_ptp_time_save(adapter);
  }
