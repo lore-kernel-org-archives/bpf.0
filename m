@@ -4,38 +4,39 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A8A0DC4320A
-	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 16:43:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D4DCC4320A
+	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 16:52:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8BCAC60555
-	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 16:43:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6877F60F94
+	for <bpf@archiver.kernel.org>; Tue,  3 Aug 2021 16:52:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234599AbhHCQnW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 3 Aug 2021 12:43:22 -0400
-Received: from mga12.intel.com ([192.55.52.136]:58212 "EHLO mga12.intel.com"
+        id S234718AbhHCQwZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 3 Aug 2021 12:52:25 -0400
+Received: from mga18.intel.com ([134.134.136.126]:30464 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234675AbhHCQnV (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 3 Aug 2021 12:43:21 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10065"; a="193325463"
+        id S237443AbhHCQwR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 3 Aug 2021 12:52:17 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10065"; a="200924744"
 X-IronPort-AV: E=Sophos;i="5.84,292,1620716400"; 
-   d="scan'208";a="193325463"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2021 09:42:59 -0700
+   d="scan'208";a="200924744"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2021 09:52:05 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.84,292,1620716400"; 
-   d="scan'208";a="521318629"
+   d="scan'208";a="500887399"
 Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga002.fm.intel.com with ESMTP; 03 Aug 2021 09:42:48 -0700
-Received: from alobakin-mobl.ger.corp.intel.com (lkalica-MOBL.ger.corp.intel.com [10.213.13.182])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 173Ggihn032389;
-        Tue, 3 Aug 2021 17:42:44 +0100
+  by orsmga001.jf.intel.com with ESMTP; 03 Aug 2021 09:51:55 -0700
+Received: from alobakin-mobl.ger.corp.intel.com (mszymcza-mobl.ger.corp.intel.com [10.213.25.231])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 173Gpg78004325;
+        Tue, 3 Aug 2021 17:51:50 +0100
 From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+To:     Michal Kubecek <mkubecek@suse.cz>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
         Jesse Brandeburg <jesse.brandeburg@intel.com>,
         Lukasz Czapnik <lukasz.czapnik@intel.com>,
         Marcin Kubiak <marcin.kubiak@intel.com>,
@@ -74,7 +75,6 @@ Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
         Jian Shen <shenjian15@huawei.com>,
         Petr Vorel <petr.vorel@gmail.com>, Dan Murphy <dmurphy@ti.com>,
         Yangbo Lu <yangbo.lu@nxp.com>,
-        Michal Kubecek <mkubecek@suse.cz>,
         Zheng Yongjun <zhengyongjun3@huawei.com>,
         Heiner Kallweit <hkallweit1@gmail.com>,
         YueHaibing <yuehaibing@huawei.com>,
@@ -82,104 +82,107 @@ Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
         netdev@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
-Subject: [PATCH net-next 21/21] Documentation, ethtool-netlink: update standard statistics documentation
-Date:   Tue,  3 Aug 2021 18:42:43 +0200
-Message-Id: <20210803164243.4469-1-alexandr.lobakin@intel.com>
+Subject: [PATCH ethtool-next 2/5] stats: factor out one stat field printing
+Date:   Tue,  3 Aug 2021 18:51:37 +0200
+Message-Id: <20210803165140.172-3-alexandr.lobakin@intel.com>
 X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210803163641.3743-1-alexandr.lobakin@intel.com>
-References: <20210803163641.3743-1-alexandr.lobakin@intel.com>
+In-Reply-To: <20210803165140.172-1-alexandr.lobakin@intel.com>
+References: <20210803165140.172-1-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Reflect the addition of the new standard XDP stats as well as of
-a new NL attribute.
+Move the code that takes one stat field nlattr, validates and prints
+it in either stdout or JSON, into a separate function.
+It will later be reused by per-channel statistics printing.
 
 Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 Reviewed-by: Jesse Brandeburg <jesse.brandeburg@intel.com>
 ---
- Documentation/networking/ethtool-netlink.rst | 45 +++++++++++++-------
- 1 file changed, 30 insertions(+), 15 deletions(-)
+ netlink/stats.c | 53 +++++++++++++++++++++++++++++++------------------
+ 1 file changed, 34 insertions(+), 19 deletions(-)
 
-diff --git a/Documentation/networking/ethtool-netlink.rst b/Documentation/networking/ethtool-netlink.rst
-index c86628e6a235..d304a5361569 100644
---- a/Documentation/networking/ethtool-netlink.rst
-+++ b/Documentation/networking/ethtool-netlink.rst
-@@ -1415,21 +1415,26 @@ Request contents:
+diff --git a/netlink/stats.c b/netlink/stats.c
+index 9f609a4ec550..9d950b77d656 100644
+--- a/netlink/stats.c
++++ b/netlink/stats.c
+@@ -87,6 +87,36 @@ err_close_rmon:
+ 	return 1;
+ }
  
- Kernel response contents:
- 
-- +-----------------------------------+--------+--------------------------------+
-- | ``ETHTOOL_A_STATS_HEADER``        | nested | reply header                   |
-- +-----------------------------------+--------+--------------------------------+
-- | ``ETHTOOL_A_STATS_GRP``           | nested | one or more group of stats     |
-- +-+---------------------------------+--------+--------------------------------+
-- | | ``ETHTOOL_A_STATS_GRP_ID``      | u32    | group ID - ``ETHTOOL_STATS_*`` |
-- +-+---------------------------------+--------+--------------------------------+
-- | | ``ETHTOOL_A_STATS_GRP_SS_ID``   | u32    | string set ID for names        |
-- +-+---------------------------------+--------+--------------------------------+
-- | | ``ETHTOOL_A_STATS_GRP_STAT``    | nested | nest containing a statistic    |
-- +-+---------------------------------+--------+--------------------------------+
-- | | ``ETHTOOL_A_STATS_GRP_HIST_RX`` | nested | histogram statistic (Rx)       |
-- +-+---------------------------------+--------+--------------------------------+
-- | | ``ETHTOOL_A_STATS_GRP_HIST_TX`` | nested | histogram statistic (Tx)       |
-- +-+---------------------------------+--------+--------------------------------+
-+ +--------------------------------------+--------+-----------------------------+
-+ | ``ETHTOOL_A_STATS_HEADER``           | nested | reply header                |
-+ +--------------------------------------+--------+-----------------------------+
-+ | ``ETHTOOL_A_STATS_GRP``              | nested | one or more group of stats  |
-+ +-+------------------------------------+--------+-----------------------------+
-+ | | ``ETHTOOL_A_STATS_GRP_ID``         | u32    | group ID -                  |
-+ | |                                    |        | ``ETHTOOL_STATS_*``         |
-+ +-+------------------------------------+--------+-----------------------------+
-+ | | ``ETHTOOL_A_STATS_GRP_SS_ID``      | u32    | string set ID for names     |
-+ +-+------------------------------------+--------+-----------------------------+
-+ | | ``ETHTOOL_A_STATS_GRP_STAT``       | nested | nest containing a statistic |
-+ +-+------------------------------------+--------+-----------------------------+
-+ | | ``ETHTOOL_A_STATS_GRP_STAT_BLOCK`` | nested | block of stats per channel  |
-+ +-+-+----------------------------------+--------+-----------------------------+
-+ | | | ``ETHTOOL_A_STATS_GRP_STAT``     | nested | nest containing a statistic |
-+ +-+-+----------------------------------+--------+-----------------------------+
-+ | | ``ETHTOOL_A_STATS_GRP_HIST_RX``    | nested | histogram statistic (Rx)    |
-+ +-+------------------------------------+--------+-----------------------------+
-+ | | ``ETHTOOL_A_STATS_GRP_HIST_TX``    | nested | histogram statistic (Tx)    |
-+ +-+------------------------------------+--------+-----------------------------+
- 
- Users specify which groups of statistics they are requesting via
- the ``ETHTOOL_A_STATS_GROUPS`` bitset. Currently defined values are:
-@@ -1439,6 +1444,7 @@ the ``ETHTOOL_A_STATS_GROUPS`` bitset. Currently defined values are:
-  ETHTOOL_STATS_ETH_PHY  eth-phy  Basic IEEE 802.3 PHY statistics (30.3.2.1.*)
-  ETHTOOL_STATS_ETH_CTRL eth-ctrl Basic IEEE 802.3 MAC Ctrl statistics (30.3.3.*)
-  ETHTOOL_STATS_RMON     rmon     RMON (RFC 2819) statistics
-+ ETHTOOL_STATS_XDP      xdp      XDP statistics
-  ====================== ======== ===============================================
- 
- Each group should have a corresponding ``ETHTOOL_A_STATS_GRP`` in the reply.
-@@ -1451,6 +1457,10 @@ Statistics are added to the ``ETHTOOL_A_STATS_GRP`` nest under
- single 8 byte (u64) attribute inside - the type of that attribute is
- the statistic ID and the value is the value of the statistic.
- Each group has its own interpretation of statistic IDs.
-+Statistics can be folded into a consistent (non-broken with any other attr)
-+sequence of blocks ``ETHTOOL_A_STATS_GRP_STAT_BLOCK``. This way they are
-+treated by Ethtool as per-channel statistics, and are printed with the
-+"channel%d-" prefix.
- Attribute IDs correspond to strings from the string set identified
- by ``ETHTOOL_A_STATS_GRP_SS_ID``. Complex statistics (such as RMON histogram
- entries) are also listed inside ``ETHTOOL_A_STATS_GRP`` and do not have
-@@ -1479,6 +1489,11 @@ Low and high bounds are inclusive, for example:
-  etherStatsPkts512to1023Octets 512  1023
-  ============================= ==== ====
- 
-+Drivers which want to export global (per-device) XDP statistics should
-+only implement ``get_xdp_stats`` callback. An additional one
-+``get_std_stats_channels`` is needed if the driver exposes per-channel
-+statistics.
++static int parse_stat(const struct nlattr *attr, const char *grp_name,
++		      const struct stringset *stat_str)
++{
++	const struct nlattr *stat;
++	unsigned long long val;
++	const char *name;
++	unsigned int s;
++	int ret;
 +
- PHC_VCLOCKS_GET
- ===============
++	stat = mnl_attr_get_payload(attr);
++	ret = mnl_attr_validate(stat, MNL_TYPE_U64);
++	if (ret) {
++		fprintf(stderr, "invalid kernel response - bad statistic entry\n");
++		return 1;
++	}
++
++	s = mnl_attr_get_type(stat);
++	name = get_string(stat_str, s);
++	if (!name || !name[0])
++		return 0;
++
++	if (!is_json_context())
++		fprintf(stdout, "%s-%s: ", grp_name, name);
++
++	val = mnl_attr_get_u64(stat);
++	print_u64(PRINT_ANY, name, "%llu\n", val);
++
++	return 0;
++}
++
+ static int parse_grp(struct nl_context *nlctx, const struct nlattr *grp,
+ 		     const struct stringset *std_str)
+ {
+@@ -94,10 +124,9 @@ static int parse_grp(struct nl_context *nlctx, const struct nlattr *grp,
+ 	DECLARE_ATTR_TB_INFO(tb);
+ 	bool hist_rx = false, hist_tx = false;
+ 	const struct stringset *stat_str;
+-	const struct nlattr *attr, *stat;
+-	const char *std_name, *name;
+-	unsigned int ss_id, id, s;
+-	unsigned long long val;
++	const struct nlattr *attr;
++	unsigned int ss_id, id;
++	const char *std_name;
+ 	int ret;
  
+ 	ret = mnl_attr_parse_nested(grp, attr_cb, &tb_info);
+@@ -131,22 +160,8 @@ static int parse_grp(struct nl_context *nlctx, const struct nlattr *grp,
+ 			continue;
+ 		}
+ 
+-		stat = mnl_attr_get_payload(attr);
+-		ret = mnl_attr_validate(stat, MNL_TYPE_U64);
+-		if (ret) {
+-			fprintf(stderr, "invalid kernel response - bad statistic entry\n");
++		if (parse_stat(attr, NULL, std_name, stat_str))
+ 			goto err_close_grp;
+-		}
+-		s = mnl_attr_get_type(stat);
+-		name = get_string(stat_str, s);
+-		if (!name || !name[0])
+-			continue;
+-
+-		if (!is_json_context())
+-			fprintf(stdout, "%s-%s: ", std_name, name);
+-
+-		val = mnl_attr_get_u64(stat);
+-		print_u64(PRINT_ANY, name, "%llu\n", val);
+ 	}
+ 
+ 	if (hist_rx)
 -- 
 2.31.1
 
