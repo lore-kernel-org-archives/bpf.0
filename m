@@ -2,47 +2,47 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,
-	SPF_PASS,SUBJ_AS_SEEN,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DF285C41537
-	for <bpf@archiver.kernel.org>; Thu,  5 Aug 2021 15:54:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 91DEDC4320A
+	for <bpf@archiver.kernel.org>; Thu,  5 Aug 2021 15:54:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CF4C3603E9
-	for <bpf@archiver.kernel.org>; Thu,  5 Aug 2021 15:54:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7808461131
+	for <bpf@archiver.kernel.org>; Thu,  5 Aug 2021 15:54:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242614AbhHEPyq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 5 Aug 2021 11:54:46 -0400
-Received: from mx0b-0064b401.pphosted.com ([205.220.178.238]:50352 "EHLO
-        mx0b-0064b401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242533AbhHEPyp (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 5 Aug 2021 11:54:45 -0400
-Received: from pps.filterd (m0250812.ppops.net [127.0.0.1])
-        by mx0a-0064b401.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 175E33f2000974;
-        Thu, 5 Aug 2021 15:54:06 GMT
+        id S242674AbhHEPys (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 5 Aug 2021 11:54:48 -0400
+Received: from mx0a-0064b401.pphosted.com ([205.220.166.238]:9340 "EHLO
+        mx0a-0064b401.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S242533AbhHEPys (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 5 Aug 2021 11:54:48 -0400
+Received: from pps.filterd (m0250810.ppops.net [127.0.0.1])
+        by mx0a-0064b401.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 175Dic6S032453;
+        Thu, 5 Aug 2021 08:54:13 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references :
  content-transfer-encoding : content-type : mime-version; s=PPS06212021;
- bh=/b0L+hGDTaliuoDYr2kRcuOqiUxRCZXrx4bYDdTMhdc=;
- b=EcRZYRwUlT9KZUmr6+lvxy5G/8bUzq2XtjqpYsm6Ehh8JHRgwSg8EDbxKwK206a2KU/n
- eXtfBBEKFimAfmwTexSw2fwkYbDa3+TRQOxw6MOqvjY54ssi6z/PVUCvTMVMal50+bvM
- MJkvTPhR0afyWz8OEokO9jsay+O3gxVyR6lVgSV9RQpIcnxxQieiFl/6JVZACt/fdFgN
- Ve3zmOpSUDRr3Q6zgZZYmpRJSHa2lMPSF0anZVdqpKpQMtIyekni8w4CGz79mh+w1Yfu
- 2lAX1cttEmYxReSf67cS8rFRDBx2YAmY4dFBNJ0/BBfprpXCNheKkBJoHyxSicIhcLYK iw== 
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2176.outbound.protection.outlook.com [104.47.55.176])
-        by mx0a-0064b401.pphosted.com with ESMTP id 3a8gny05bn-1
+ bh=FCfqUZsPS2ifpqoupsJ1L+ZnwqAlzS81J8jaVkgiCaw=;
+ b=efEdnQ/N26tkwCd/+SU/ILbkilKs2nuynOpTVYOwGrcp+rzeNKmHjC4HVrDROc56FVGw
+ gcvwyfVHKxSUf04VbjrlcsQHWgnFeE3twLwBQ46PYE+/h+yMYMkj0pIb4x29KJ++FghR
+ YJUI4Ey1IBwtQ7+89BjeBRfhCtSGfrJrK461froM8zBPW+wL6GlNhcD1acR7EpPmvHLr
+ TjAq5Vukl28Vc8QGfw25JmOlz2JqEPPOHTmdHkckbvNQCITd0QQWozM8mmuVfTRGjY8m
+ 27RIZmXmpvPAmKfrF+mIepR2BMTUDHWZG5h1bi3OXX0LGUz13z5LN/4vf5lyy5laPveL KA== 
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2177.outbound.protection.outlook.com [104.47.58.177])
+        by mx0a-0064b401.pphosted.com with ESMTP id 3a7vt6rx0s-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 Aug 2021 15:54:06 +0000
+        Thu, 05 Aug 2021 08:54:12 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Tw7JOm3LMe7OouQLra19yoWlJ0Xn44ShWh66XXj81viCwcBJ/lQUUlPfoxRX80xXACOTfj4fTEtXSbIBwBYBI9E9s6rib+A4VdgJUL1LOdcuxRfEqEbOeejs1c4pbPocv4FTBUme6Gv45gELx+K+loQifLPDRW5gDD5m6ZyFM3/RMOVexgOdRtjU+gmeDvyLqOzeS7N2gF6pSUFnDp6+lBwHUFvfF2pV+YDZrFGFrL7rfiOcLDt4wfQkVsNHiR0sHJFLBXtS23xErBpVTDJgz6AFG1SaOL1mn0OOEIPDAAHl2tJ0aHKeIzhGsn7DqFoV9Mkiph9T/YtJpf/+hR7nzA==
+ b=MlcLomj9bn2NZGq0CvJy3bVWaNEtFIt0AJRs6/z6GaPT1dsvTdUpGbYyZnYcgJt8eyTMg6aPchb86+sbxpnFGLYXFgldifqIKKzHmXF9qtxM/sqo10ZaRAiuc2YShovba/8LsdH8KXIKd1t8qeQ6/C8HGsflzGctXnmkB3XzNAemaaxKNnr910FOT2kVF2KONBuJVV/XWAPCge2KhMxtGxRty2p/JeSsY2hUJsW76x33okW2knEIw3u+/FpSLjIMndf/EEXwsT1xI+y0b93Q6xd31neslc/fs79O/T/lyTZUG9jfy4Z8O6B9R2Th6TAzOIYc1PkFo1spHYUhNzHNfg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/b0L+hGDTaliuoDYr2kRcuOqiUxRCZXrx4bYDdTMhdc=;
- b=JXyoObc5PPHkFKhHCXFHsfepfO6y+mHelHqeHteMxgH6+1WsbH9IzMM5Ixcr4gcCzsYEsKN+7RQba0CVJ0qojqSF95mz1dxTyfljUC7PhN9Syslg+FDS3vmOb8+oC3llpVhqydqQFBCs8nJ6e3/rrgsmJcssNgDh4R7JR2UIUmfnkzX7IzOuUC9QKCnMa672R5JCjaoHJeUvR+eyxqHu2Qtk3hXSUkwantKfkAbuuisBgg+dCATLDS/PWp2ZaIcQC4MkBwj7z4YVIuxSW1zIl5zQHRG1521DzgVVAkNkpZog8Py9bUFVRKxJ1VZwPbH/3terNKDAEwp1/MIal3U1jg==
+ bh=FCfqUZsPS2ifpqoupsJ1L+ZnwqAlzS81J8jaVkgiCaw=;
+ b=Bd2wHuy8sN9BjDexDQDjPJk/HGnHy5Axt/pA0apsZKeWqgQJcMqyXouRmnZYmm3KcG+q2aJNTw+G4hv2VRSPOSy+z2VFvaUngc7AFxYPDbnr3eKmkSvc5llu5chXshe53iFzWMTUMeam6zHaDRzfEho47G3kTvqJuAJZjOjWMqy/IFPI9fmGbmHMqzr7bcLY5mEXyNEzFfL13HJb5rV6q8OsAY8YGHkAQhKGVxeLMlXhlvU3Trv2V/r8LbeMjK+qJr2kWMQ+ACay0Q8ugRaHcoYZZ/XT7uKbWyJedK77POgvIB0Sx/zcKkoFNSfpZTImUHknZmU180CXvAvmn2ze0g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=windriver.com; dmarc=pass action=none
  header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
@@ -50,21 +50,22 @@ Authentication-Results: vger.kernel.org; dkim=none (message not signed)
  header.d=none;vger.kernel.org; dmarc=none action=none
  header.from=windriver.com;
 Received: from DM4PR11MB5327.namprd11.prod.outlook.com (2603:10b6:5:392::22)
- by DM5PR11MB1722.namprd11.prod.outlook.com (2603:10b6:3:f::10) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4394.15; Thu, 5 Aug 2021 15:54:05 +0000
+ by DM5PR1101MB2204.namprd11.prod.outlook.com (2603:10b6:4:58::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4394.18; Thu, 5 Aug
+ 2021 15:54:11 +0000
 Received: from DM4PR11MB5327.namprd11.prod.outlook.com
  ([fe80::ccb:2bce:6896:a0c3]) by DM4PR11MB5327.namprd11.prod.outlook.com
  ([fe80::ccb:2bce:6896:a0c3%7]) with mapi id 15.20.4394.017; Thu, 5 Aug 2021
- 15:54:05 +0000
+ 15:54:11 +0000
 From:   Ovidiu Panait <ovidiu.panait@windriver.com>
 To:     stable@vger.kernel.org
 Cc:     bpf@vger.kernel.org, daniel@iogearbox.net, ast@kernel.org,
         john.fastabend@gmail.com, benedict.schlueter@rub.de,
         piotras@gmail.com
-Subject: [PATCH 5.4 2/6] bpf: Do not mark insn as seen under speculative path verification
-Date:   Thu,  5 Aug 2021 18:53:39 +0300
-Message-Id: <20210805155343.3618696-3-ovidiu.panait@windriver.com>
+Subject: [PATCH 5.4 5/6] bpf, selftests: Add a verifier test for assigning 32bit reg states to 64bit ones
+Date:   Thu,  5 Aug 2021 18:53:42 +0300
+Message-Id: <20210805155343.3618696-6-ovidiu.panait@windriver.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210805155343.3618696-1-ovidiu.panait@windriver.com>
 References: <20210805155343.3618696-1-ovidiu.panait@windriver.com>
@@ -75,136 +76,115 @@ X-ClientProxiedBy: VI1PR0501CA0002.eurprd05.prod.outlook.com
  (2603:10b6:5:392::22)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from otp-linux03.wrs.com (46.97.150.20) by VI1PR0501CA0002.eurprd05.prod.outlook.com (2603:10a6:800:92::12) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4394.15 via Frontend Transport; Thu, 5 Aug 2021 15:54:03 +0000
+Received: from otp-linux03.wrs.com (46.97.150.20) by VI1PR0501CA0002.eurprd05.prod.outlook.com (2603:10a6:800:92::12) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4394.15 via Frontend Transport; Thu, 5 Aug 2021 15:54:09 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 09af3296-878f-458e-b911-08d9582940ac
-X-MS-TrafficTypeDiagnostic: DM5PR11MB1722:
-X-Microsoft-Antispam-PRVS: <DM5PR11MB17226F3EB0B98EB08E2C732DFEF29@DM5PR11MB1722.namprd11.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2449;
+X-MS-Office365-Filtering-Correlation-Id: 5a91a253-d64d-4f05-83f9-08d95829441a
+X-MS-TrafficTypeDiagnostic: DM5PR1101MB2204:
+X-Microsoft-Antispam-PRVS: <DM5PR1101MB220437BFB809DA71BBD507B4FEF29@DM5PR1101MB2204.namprd11.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:370;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: RJ3RLJOYWck1qvfoRHqobH5m5ao771pFdFNAO6pardIxyG8OKtKwrKtbAJo53A7w24f901p1xZJrQrHPVobS03y2WPHamAKV+S3miXgaxj3WHkv9sQwL3MswpfcYceAHccPvE8lM06AAKfOHI3DBwuepzl+IBDfcBlgeVshYCOqcD2SrsRTWaNRF/Z7vy5o1gBds+AvSdqPFe9wemWvu9wfj8S4Ex2x9lgsqmtzpwzQDQJ3FgiUsffW+vQZor1jRixsUDo7nX7ARhP8Ps48PRzCrQVnB2qFjf9tSZgLpKBeW7TIHFVM/HfYjh/babvmlpuSSaTxiCgqw5aVoByLKkxSWxtVHY/X/36NUHP/mo92O6O3q4Fq8sJtmztNVf+IQ+By93Nnfh/oHWvu5OvLVo8IJbcEEhA3XKShGOJG5U+BMA6sYfb53osNURqjxQfJSdPGSZQZJ79WfglWmh9GV97lgnznZOFdUzTaO1DiAYlGA5ia8FyMDjNXQT1xnSBx7LptXeSw5CsYnTg5CsoIDLRhflKoNg3KLZlhGfExK52RJn2cIOQts4ato4e0wx06woqjLx4wE+bFNCeMOW3Fwb4OcxSBUtzPRwmvkLgEXwA2UVrHAQ1eFzmbPXFoFokl/lR/4HzoMMZ8n4wd/fpk/Rbx6onSAM2rLF7G8Gu/uh4o95QtWrKxIphtAv/1OlwpMMy9yqAE4HKXUexuUVtMOBA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5327.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39850400004)(396003)(376002)(366004)(346002)(136003)(478600001)(6506007)(6486002)(956004)(36756003)(2616005)(15650500001)(186003)(38100700002)(1076003)(8676002)(5660300002)(38350700002)(316002)(6512007)(8936002)(6666004)(2906002)(52116002)(83380400001)(66946007)(44832011)(26005)(4326008)(6916009)(66476007)(66556008)(86362001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: jHeMfmkZEIrvCj6oVXONKu05RixL4Watm4Y5ef9CkeXI+bsI4hqKYdBHQm78k2IhZu6quBmjtPrACRbPOAFZ0f/li+eTB29xh+E4TsMZ8hzQBA8rfKsEbcSxG2Y7jGtFXRKNZoJckCasdb9Ht2nPlou1+Q84h/usMWculfV3TBDeSvVjfPO21P1fvNnEPjn2QcmRWKLM3e6SioxgsVuzaVi57yIIuiv/IIOhF7j5s83epZe7a4MEcZplHtbgcpjYQwzIbSukv+LwbHZE4m98+kWOF0lFEzZZu6kAFPXFCJq0gvhjCwTFrqaUEL6Bx9a0TTBO18w+Ij2jry9/APAAVf4YvaCCU5jyaVmUQDaLvxkfpFXRBLImGUQyM5kblal+Ko2RojFRKmHta5eg2AsutN9Lc1QvCT1UeXQETOOiifKmvENJkI8FWlg8sMNEhivLGDSTKhoCaUa72zd8N5bDHsqvTNh46DBEgVI6UjZgJzhUtySsdOd++jcBi4JrqbFjupDJh+iLsuA4cT+1Po51aDddetNX4WS+l+xXe3Hl4+2l2FIVcR1dNQDa/HRK7yiHYwWBTYRV6HNQARjNjokfJFKnOlwKJXRSDaM3CFCplluPTFQ5be+FJ8UOe2aOvIvq7n91M9VXlax7vCBBP411E3h6h2S9xCalzrw1Bgv4jUUpAGxxX2AYO6EaqizOj7bkliZuo7BEd2LcZDFI2iaLsU8+sbUFHZrG7wTXKnVGj3R9tWuZKHsK0T/EWtEfczg98GvVjeCOWAnnbkMwr6YWIQUQOk2Kol/YOaoyaKpbLJE=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5327.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(39850400004)(346002)(396003)(376002)(366004)(4326008)(2616005)(38350700002)(38100700002)(956004)(6916009)(66946007)(66476007)(6512007)(66556008)(316002)(6666004)(52116002)(86362001)(2906002)(5660300002)(8676002)(26005)(8936002)(83380400001)(186003)(1076003)(6506007)(44832011)(478600001)(36756003)(966005)(6486002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?jwSYCW46ar7rq91LHDN2jidEoUZk7MLDy5wdAkyArB+8n6lyns6hBE8xHKZD?=
- =?us-ascii?Q?aqzS2i0M3AT2R3WVnpxqYkoiOJ9YvZkFlE4df1u0oHGGvVwIv4psjTmuPZI4?=
- =?us-ascii?Q?AahgxKquWwL4+eeQGOdIvDI4iG5UMWJYuFeZ/hLSInaDzT8X0guW9/rAonxC?=
- =?us-ascii?Q?p73t/I175y0snsGruZShfo2mV4JMf7hJz28+sa9GzvHyMqMUOW6XIZssFjUL?=
- =?us-ascii?Q?XY7SwtPbJbs2BrKUGklwhC8987AJc9ibveury0bWGrvXqQpXjsc1yC/y8Nsd?=
- =?us-ascii?Q?oG6PMKGySJ2RCeCIUx+TCRQD+wZV6ex5EE/4cs3YcazhsECgNt26DC/27uRW?=
- =?us-ascii?Q?4G7SJLCN1b9ep1ahaUierHednE1MjbwFOIh+yifiWG6PQ/vqgqdTPxIxvLtT?=
- =?us-ascii?Q?gOwCWIn2rd2TS9fstFMovhCdMjKLyXhk2Uci2Q2Bhtr994TJJk2pqmgxtqzj?=
- =?us-ascii?Q?4c1rRwhIz4EDo9q2S8FhbSDSZRYFrjkOr13biMyUkG6ZBqWpU1peQvQACVDi?=
- =?us-ascii?Q?MGquYN16swD3oQe3MGkKKl1W27MI0fJTcac/yReZndRfnEJZA8VfNh/bTyrz?=
- =?us-ascii?Q?EGBJnmgUZGUGVLFVDbwMsjKaCSHoDJC7H1tBdKvGOngOhiP/P3CZDa9b1Iw4?=
- =?us-ascii?Q?lUSnAjb3nSlUmTCAF2tsnHwYJx2+SCgmuf6AFQ7VdhYn12s+Sz4l1nHH4Neo?=
- =?us-ascii?Q?CHAnrtAEEAwl4zjCXD0UexIM1dGhKGfGlzfr/lAweM+BP8DKaw1vltrhHTSv?=
- =?us-ascii?Q?HOG9ziGm4I2UAQ1aIjvoz09Dq7+m7QVbw0vdsmcstPstOL5B8D0A/KHtm5sY?=
- =?us-ascii?Q?r9qF/i/djulfQM3ImDSZAdu8MnyKAjb6iXCfKx3xWAHbMja99wRqM+d/r28o?=
- =?us-ascii?Q?lHY62tn+51wvAGh+wpdnBpbzU0N8d7RibxRAt4Sy7HaLyqd9K8eF/5GjI+hV?=
- =?us-ascii?Q?JYbIMj7fI9Blj8UJUS/9R3cvUYnbilN8QyiRFyrAsN4G/U5pFfo87AJ+zi7W?=
- =?us-ascii?Q?BNnqTptVnqHIZ6CarBWYrtCPyMUrxomqlTSuuh+4KmHFLPFzc3ER74E8DBnM?=
- =?us-ascii?Q?AtlX6RBzULPDNiciDtVdA/JPp//tG4MbMDeMKdjBdn+LY9lFCOHmpl6XNMyG?=
- =?us-ascii?Q?Wx3sSCw4zDM20MBwKrQAFElU7uwVWxy5/VxExyM6Vevs4K3MenfCLeh4xnbM?=
- =?us-ascii?Q?R8PeKmGWkSMTl70sS9UK2pSayit7mOAvg4Np1HiGLzYjtUB7uk/WRbLCzsgv?=
- =?us-ascii?Q?CfzriwY+69Vkn78xAN9sIS2YCGdtfX7YxIT1wbYZDHREnPHzddblsOsgPapG?=
- =?us-ascii?Q?v/kSuPtmdKzxMIamB5w3MEXR?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?H9rMqBuBvnuuclEBEJ/0jW1FN7oirGRCLEKxU/lJiUl9PcSd8e/WEsc+4fUA?=
+ =?us-ascii?Q?L1VOIE2riP8yUiVAj8cuE6MAKY/Awxe7SBGVrAywEbbMt7DRqxLFQVXYg/EW?=
+ =?us-ascii?Q?wEfpY/EAIU+funs9XvBpM9dAdK+DFhDMCO+P5IDRJ+3e5PS/yDkDDVhSH+8S?=
+ =?us-ascii?Q?n1s+t2HRGJnSUk9v6rKjUaGRVtBvSpCCjH7F1QONBj0rNFDwFj/Rbqz9loR5?=
+ =?us-ascii?Q?OF25QvUu6aQAOiFIwztE9FYGCoh+bYWpwjvauwnZQlc99ErZXGuHodrSB9nt?=
+ =?us-ascii?Q?vFv0F5FbOIGjRnOW9Y4PykSU0crc1Its4Vzumn/xG6m6hjGmb6BN+cwq6g/g?=
+ =?us-ascii?Q?nq6ji2xxvJ6NaNGFg6SnxTzYS+xXwDxRo7964BCGeXrgnULeZbqI7hMX6jCP?=
+ =?us-ascii?Q?qfic70M2ph6fZtgrAk6qsQ9tEBMEGPkNcn73hpdbNbbW+cv6p4JDiNwLJYaE?=
+ =?us-ascii?Q?uSy/b8QUMIiHJelGfBJfPzqpC4xXbi9wpttaLp2ftGtB2PJso0AXhFFxjawD?=
+ =?us-ascii?Q?kShu5P/TdLrXH248QuNxtdCZl7RdF41UZDIxHb8Ov/1OmH7d2gsWSwt2gA+K?=
+ =?us-ascii?Q?Wq1hWd63JV3fcRKT+9mYnLC8Gjk9n84W8yyoZqVafUrBZhKkD1qtYoeAFkqv?=
+ =?us-ascii?Q?YpnRiDRlONM/Hb+ZYUvmwa+0v9ylTwFf1OQhkR1Z5LTH+IHF3g0QY7emL2qo?=
+ =?us-ascii?Q?ug865iOMNUF+aAwSGUupjuRGl3ku794hX/f18rYIi3PgSi0cCpQf8mXZHxs/?=
+ =?us-ascii?Q?HF5CGPvzbFaCz66ovfOOXm/kZjRge3uxk8Hnxteb5lrYwacntQz3vtokDn0/?=
+ =?us-ascii?Q?sP9+Bfx+lwHOcETWweTtOcQh5YbHU3cefhezEk/mKM2ioSjWhNlsbFsj+tJu?=
+ =?us-ascii?Q?XqDnkRV6fjG9HoQR3WBUPWPfQ36HddUiEOStjbKSMzZBtoQvy1t+mEMIwKWt?=
+ =?us-ascii?Q?VqlhAolPHffeJrG+jRA6PBFkqjfQVIzz/1smfa1PkeXdauYY+Uf3ZI008ddU?=
+ =?us-ascii?Q?DMXiYNtln2OmdG9jnUIEd4QjfgDAnZmdzoeJ4A7LdRWriBkzhI7jGMf/4cND?=
+ =?us-ascii?Q?FxrgcON0aAw7MplasfVopdPwzLvDmAk9IjiszJ8khYcx2YyOa9XMOS9622Ub?=
+ =?us-ascii?Q?OL1gfPY6JDJcc4X5A3vk9u5FC5zSWOdre41DTRWkYSmpQShJmADUG1divPRd?=
+ =?us-ascii?Q?sRPKzzYSJefcmqH7jS25ttlWTrYPiH/rZEPiScRYnPJTJ0H7p5/s0lcVjsMt?=
+ =?us-ascii?Q?nK4nyWIeao3v6YNksCM8aYG9wZ2H+Y/bVonDKza6urgaDTe0bnx3cdsX3E+R?=
+ =?us-ascii?Q?j+ZTPD1Y5ALFOkRxinuWwn/A?=
 X-OriginatorOrg: windriver.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 09af3296-878f-458e-b911-08d9582940ac
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5a91a253-d64d-4f05-83f9-08d95829441a
 X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5327.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Aug 2021 15:54:05.3432
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Aug 2021 15:54:11.0481
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CratkG7cbEov3v5RbigsR78CjHOrgWtlBwOgTkhQhxzX1hQZuq79wqqqOlT25ruIfzJyuVrYdG0w4XqNdK0xWQv5NQzPqQIigknXQM6A6/I=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR11MB1722
-X-Proofpoint-GUID: PCfwaX2CaRrD5hLUp-R523TreYuOvYt5
-X-Proofpoint-ORIG-GUID: PCfwaX2CaRrD5hLUp-R523TreYuOvYt5
+X-MS-Exchange-CrossTenant-UserPrincipalName: /csgaP3uDZC6OPLhqS5KEQgydiIf3UF9fsEuBGt13+kO/m/wHM0HsLzqsaL9GJVYSxIK7vSWSEqIyBFn2AsNennGwR/6rVPt4xX+P3vZbJA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR1101MB2204
+X-Proofpoint-GUID: ekoyp5-AgOMoS-Efx4LdMKm9L2dphYO3
+X-Proofpoint-ORIG-GUID: ekoyp5-AgOMoS-Efx4LdMKm9L2dphYO3
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
  definitions=2021-08-05_05,2021-08-05_02,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
- phishscore=0 adultscore=0 priorityscore=1501 suspectscore=0 clxscore=1015
- malwarescore=0 impostorscore=0 spamscore=0 mlxlogscore=598 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2107140000
- definitions=main-2108050097
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ mlxlogscore=727 mlxscore=0 adultscore=0 lowpriorityscore=0 impostorscore=0
+ priorityscore=1501 phishscore=0 clxscore=1015 spamscore=0 bulkscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2107140000 definitions=main-2108050097
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Daniel Borkmann <daniel@iogearbox.net>
+From: John Fastabend <john.fastabend@gmail.com>
 
-commit fe9a5ca7e370e613a9a75a13008a3845ea759d6e upstream
+commit cf66c29bd7534813d2e1971fab71e25fe87c7e0a upstream
 
-... in such circumstances, we do not want to mark the instruction as seen given
-the goal is still to jmp-1 rewrite/sanitize dead code, if it is not reachable
-from the non-speculative path verification. We do however want to verify it for
-safety regardless.
+Added a verifier test for assigning 32bit reg states to
+64bit where 32bit reg holds a constant value of 0.
 
-With the patch as-is all the insns that have been marked as seen before the
-patch will also be marked as seen after the patch (just with a potentially
-different non-zero count). An upcoming patch will also verify paths that are
-unreachable in the non-speculative domain, hence this extension is needed.
+Without previous kernel verifier.c fix, the test in
+this patch will fail.
 
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Reviewed-by: John Fastabend <john.fastabend@gmail.com>
-Reviewed-by: Benedict Schlueter <benedict.schlueter@rub.de>
-Reviewed-by: Piotr Krysiuk <piotras@gmail.com>
-Acked-by: Alexei Starovoitov <ast@kernel.org>
-[OP: - env->pass_cnt is not used in 5.4, so adjust sanitize_mark_insn_seen()
-       to assign "true" instead
-     - drop sanitize_insn_aux_data() comment changes, as the function is not
-       present in 5.4]
+Signed-off-by: Yonghong Song <yhs@fb.com>
+Signed-off-by: John Fastabend <john.fastabend@gmail.com>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Link: https://lore.kernel.org/bpf/159077335867.6014.2075350327073125374.stgit@john-Precision-5820-Tower
 Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
 ---
- kernel/bpf/verifier.c | 17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
+ tools/testing/selftests/bpf/verifier/bounds.c | 22 +++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 526e52f45ab3..02a04a30070b 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -4435,6 +4435,19 @@ static int sanitize_ptr_alu(struct bpf_verifier_env *env,
- 	return !ret ? REASON_STACK : 0;
- }
- 
-+static void sanitize_mark_insn_seen(struct bpf_verifier_env *env)
+diff --git a/tools/testing/selftests/bpf/verifier/bounds.c b/tools/testing/selftests/bpf/verifier/bounds.c
+index d8e5388c9ba7..c42ce135786a 100644
+--- a/tools/testing/selftests/bpf/verifier/bounds.c
++++ b/tools/testing/selftests/bpf/verifier/bounds.c
+@@ -545,3 +545,25 @@
+ 	},
+ 	.result = ACCEPT
+ },
 +{
-+	struct bpf_verifier_state *vstate = env->cur_state;
-+
-+	/* If we simulate paths under speculation, we don't update the
-+	 * insn as 'seen' such that when we verify unreachable paths in
-+	 * the non-speculative domain, sanitize_dead_code() can still
-+	 * rewrite/sanitize them.
-+	 */
-+	if (!vstate->speculative)
-+		env->insn_aux_data[env->insn_idx].seen = true;
-+}
-+
- static int sanitize_err(struct bpf_verifier_env *env,
- 			const struct bpf_insn *insn, int reason,
- 			const struct bpf_reg_state *off_reg,
-@@ -7790,7 +7803,7 @@ static int do_check(struct bpf_verifier_env *env)
- 		}
- 
- 		regs = cur_regs(env);
--		env->insn_aux_data[env->insn_idx].seen = true;
-+		sanitize_mark_insn_seen(env);
- 		prev_insn_idx = env->insn_idx;
- 
- 		if (class == BPF_ALU || class == BPF_ALU64) {
-@@ -8025,7 +8038,7 @@ static int do_check(struct bpf_verifier_env *env)
- 					return err;
- 
- 				env->insn_idx++;
--				env->insn_aux_data[env->insn_idx].seen = true;
-+				sanitize_mark_insn_seen(env);
- 			} else {
- 				verbose(env, "invalid BPF_LD mode\n");
- 				return -EINVAL;
++	"assigning 32bit bounds to 64bit for wA = 0, wB = wA",
++	.insns = {
++	BPF_LDX_MEM(BPF_W, BPF_REG_8, BPF_REG_1,
++		    offsetof(struct __sk_buff, data_end)),
++	BPF_LDX_MEM(BPF_W, BPF_REG_7, BPF_REG_1,
++		    offsetof(struct __sk_buff, data)),
++	BPF_MOV32_IMM(BPF_REG_9, 0),
++	BPF_MOV32_REG(BPF_REG_2, BPF_REG_9),
++	BPF_MOV64_REG(BPF_REG_6, BPF_REG_7),
++	BPF_ALU64_REG(BPF_ADD, BPF_REG_6, BPF_REG_2),
++	BPF_MOV64_REG(BPF_REG_3, BPF_REG_6),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_3, 8),
++	BPF_JMP_REG(BPF_JGT, BPF_REG_3, BPF_REG_8, 1),
++	BPF_LDX_MEM(BPF_W, BPF_REG_5, BPF_REG_6, 0),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
++	.result = ACCEPT,
++	.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
++},
 -- 
 2.25.1
 
