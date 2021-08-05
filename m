@@ -2,610 +2,106 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D46E8C4338F
-	for <bpf@archiver.kernel.org>; Thu,  5 Aug 2021 16:10:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F33AC4320A
+	for <bpf@archiver.kernel.org>; Thu,  5 Aug 2021 16:42:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BC7C6610A2
-	for <bpf@archiver.kernel.org>; Thu,  5 Aug 2021 16:10:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2EC85610FF
+	for <bpf@archiver.kernel.org>; Thu,  5 Aug 2021 16:42:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbhHEQK4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 5 Aug 2021 12:10:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37578 "EHLO
+        id S232382AbhHEQmP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 5 Aug 2021 12:42:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230513AbhHEQKr (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 5 Aug 2021 12:10:47 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 909FCC0617A1;
-        Thu,  5 Aug 2021 09:10:29 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id b13so7292304wrs.3;
-        Thu, 05 Aug 2021 09:10:29 -0700 (PDT)
+        with ESMTP id S230028AbhHEQmO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 5 Aug 2021 12:42:14 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EB65C061765;
+        Thu,  5 Aug 2021 09:41:58 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id i10-20020a05600c354ab029025a0f317abfso6807097wmq.3;
+        Thu, 05 Aug 2021 09:41:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=IrZj62K2inceQssu/AMuv62cM5yILtqKBEklvWsChEw=;
-        b=XZmNZL4QrsFZEhYUNOckdjihvcNwlE+QX+nu2B2uNulsNmoqWxjsna51LiaLnLC3ET
-         7WUYyTu3VzQQv2XgdL7Y0x4fsLTRJREzmWh+1DeHtCA/TWHN0BhImCyd+aUCmAb6tqaZ
-         AMXB7tBWfi1vbasrDyvrPwnt6QnxNB5l8nN+Vd02aUaWVH8gRNN04GL9oJWh3LWGd8rQ
-         jyaITRFjR2zIzKti1Art+49/G0msZgfXkbaepARj77sthAGR6fjynwizTzcTa+JjLyy1
-         IzPpgXfaJSiv4fQ5vcteMStgp0zVWBVHgr3h/ERg4PUvhGxItNGeZ1PHe2pMJP8N6ZGf
-         CtXA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FPukj0sc+USjJnTorQ63Q8/krzolyQ2sY5zYNJxrZDo=;
+        b=WmBlcTbAHtBl+yyJN/NxbZVW2zlQ9P34ZkiJhQfLIovDVDrNm0RD+WDN9hi/8qqAN5
+         YPtCqYSFNjML8MCIZmmTetC/ISG8lRWojsdOc4oT23bgZQD6Lv6auIovuo8/sUj/TdqG
+         ntqt8btgZQhoyaLM9/s4jwS13pU1A9U81O4R34TwXDDKQ33SdbPmzo+1ScIFXZ8bnLEU
+         Nk9jGkMm9Y2xgmwtPuaG5S6uZ9Kd8TZ1IverZrYXnw4hsPNPokGdIrrfGEWelayQ3sSc
+         32eEq7Q25njbCi6dotbPkSI/gqAyG2qV2HmCA83K8DGN3YVkrivRREpJf2LBRO4PgC/x
+         UOfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=IrZj62K2inceQssu/AMuv62cM5yILtqKBEklvWsChEw=;
-        b=YVbpWe5YycFSCoUTyeirELtirfyZnzXlB3dIViHTHuYGrUoHVB7m8yH3SIQdLlt3lG
-         sinbUgmUVL4r+i8akk/ZAJLZXBXriJhb9SBaXu6PxbOKY/brIs0M/M3YDqlGD0nAKczL
-         BxCBdr6gkWm6OUwBzQaWquM6cmdwxHZNwpTC/XK8tPF+aA0IHBBEuw+sMiavdoGdJ26L
-         vd4BZVGa9fFuhJaUttF8NQCiUvJ9VLBLMCyhqerGvkFfHd4jD6AUspIYv3JSz5+pamLF
-         iZ6HXPCgtnu4nCaEJCYMVHt6pz+g2vvAHmaNBCysIbZTWMlB8UfoGBKvvr8gYigsmLby
-         C2OQ==
-X-Gm-Message-State: AOAM533zm/bybkskvDY2mCJiPfj4g2xJzUmKUWfu0a1hfa0eaS3qVNB4
-        WjU5Ir86aRcemUIYD/5vb/JlahVQRuELYDw=
-X-Google-Smtp-Source: ABdhPJz5+H9EGPuhDo/MCyyWBmWgYRfUBrYMw5BFF6G4/8Pb7jT5409ECwssJgr6Cz3pSHR2SC6rhw==
-X-Received: by 2002:a5d:66d1:: with SMTP id k17mr6339443wrw.251.1628179827809;
-        Thu, 05 Aug 2021 09:10:27 -0700 (PDT)
-Received: from localhost.localdomain ([77.109.191.101])
-        by smtp.gmail.com with ESMTPSA id n5sm5843968wme.47.2021.08.05.09.10.25
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FPukj0sc+USjJnTorQ63Q8/krzolyQ2sY5zYNJxrZDo=;
+        b=ADfGvyDWB42hhqFPikceWI+nknmpdne2bIAdZPdMuzAnYIYhEKeRP3gtA1tsiadmpG
+         to98q5Kq9LWL3vuJLhSNs5dWYyP+KBab02qUQi4cFf+m4koUaKoOZ0nPe1Xc2yzC/F6x
+         puoG8ni981yV6u5xoGpAK25E08Eg1+1LFEYht6OhmY1pwQmQZSYUmqXR7gjRuk5E5Z3G
+         IHPYoMfLE9oIh7xBEsk3D1O1Qi6m5xrcRyB3RIQFLOjBP68Jj8itHBzAwcXem5Ii8qnt
+         x8KwPkMCNtGtN4P+GAsokOq/tT48kaXLq1yuLDy618Z5goQaZr/nQrJJMediTmyxQvJY
+         Nk3w==
+X-Gm-Message-State: AOAM5328Oa+ppcXVqLxQPbE8Wck0H+ZTHRXGpkCs35nqSRdm1oz0+v1D
+        iuQXRja/QZtG2G8b8B1EuIs=
+X-Google-Smtp-Source: ABdhPJxjeciPuz3Y6G6V0UiOjBsGcL7vPRp1WDtha3ArtQVyYe7wjx7XSIEkPmhp1Oc+yA1lmv6PnQ==
+X-Received: by 2002:a7b:c939:: with SMTP id h25mr15605379wml.13.1628181716774;
+        Thu, 05 Aug 2021 09:41:56 -0700 (PDT)
+Received: from localhost.localdomain ([5.170.128.83])
+        by smtp.gmail.com with ESMTPSA id o17sm6755884wru.11.2021.08.05.09.41.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Aug 2021 09:10:27 -0700 (PDT)
-From:   Jussi Maki <joamaki@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     netdev@vger.kernel.org, daniel@iogearbox.net, j.vosburgh@gmail.com,
-        andy@greyhouse.net, vfalico@gmail.com, andrii@kernel.org,
-        maciej.fijalkowski@intel.com, magnus.karlsson@intel.com,
-        Jussi Maki <joamaki@gmail.com>
-Subject: [PATCH bpf-next v6 7/7] selftests/bpf: Add tests for XDP bonding
-Date:   Sat, 31 Jul 2021 05:57:38 +0000
-Message-Id: <20210731055738.16820-8-joamaki@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210731055738.16820-1-joamaki@gmail.com>
-References: <20210609135537.1460244-1-joamaki@gmail.com>
- <20210731055738.16820-1-joamaki@gmail.com>
+        Thu, 05 Aug 2021 09:41:56 -0700 (PDT)
+From:   Jose Blanquicet <blanquicet@gmail.com>
+X-Google-Original-From: Jose Blanquicet <josebl@microsoft.com>
+Cc:     blanquicet@gmail.com, Jose Blanquicet <josebl@microsoft.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Florent Revest <revest@chromium.org>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/bpf: Fix bpf-iter-tcp4 test to print correctly the dest IP
+Date:   Thu,  5 Aug 2021 18:40:36 +0200
+Message-Id: <20210805164044.527903-1-josebl@microsoft.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add a test suite to test XDP bonding implementation
-over a pair of veth devices.
+Currently, this test is incorrectly printing the destination port
+in place of the destination IP.
 
-Signed-off-by: Jussi Maki <joamaki@gmail.com>
+Signed-off-by: Jose Blanquicet <josebl@microsoft.com>
 ---
- .../selftests/bpf/prog_tests/xdp_bonding.c    | 520 ++++++++++++++++++
- 1 file changed, 520 insertions(+)
+ tools/testing/selftests/bpf/progs/bpf_iter_tcp4.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c b/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
-new file mode 100644
-index 000000000000..334a04721a59
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
-@@ -0,0 +1,520 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/**
-+ * Test XDP bonding support
-+ *
-+ * Sets up two bonded veth pairs between two fresh namespaces
-+ * and verifies that XDP_TX program loaded on a bond device
-+ * are correctly loaded onto the slave devices and XDP_TX'd
-+ * packets are balanced using bonding.
-+ */
-+
-+#define _GNU_SOURCE
-+#include <sched.h>
-+#include <net/if.h>
-+#include <linux/if_link.h>
-+#include "test_progs.h"
-+#include "network_helpers.h"
-+#include <linux/if_bonding.h>
-+#include <linux/limits.h>
-+#include <linux/udp.h>
-+
-+#include "xdp_dummy.skel.h"
-+#include "xdp_redirect_multi_kern.skel.h"
-+#include "xdp_tx.skel.h"
-+
-+#define BOND1_MAC {0x00, 0x11, 0x22, 0x33, 0x44, 0x55}
-+#define BOND1_MAC_STR "00:11:22:33:44:55"
-+#define BOND2_MAC {0x00, 0x22, 0x33, 0x44, 0x55, 0x66}
-+#define BOND2_MAC_STR "00:22:33:44:55:66"
-+#define NPACKETS 100
-+
-+static int root_netns_fd = -1;
-+
-+static void restore_root_netns(void)
-+{
-+	ASSERT_OK(setns(root_netns_fd, CLONE_NEWNET), "restore_root_netns");
-+}
-+
-+static int setns_by_name(char *name)
-+{
-+	int nsfd, err;
-+	char nspath[PATH_MAX];
-+
-+	snprintf(nspath, sizeof(nspath), "%s/%s", "/var/run/netns", name);
-+	nsfd = open(nspath, O_RDONLY | O_CLOEXEC);
-+	if (nsfd < 0)
-+		return -1;
-+
-+	err = setns(nsfd, CLONE_NEWNET);
-+	close(nsfd);
-+	return err;
-+}
-+
-+static int get_rx_packets(const char *iface)
-+{
-+	FILE *f;
-+	char line[512];
-+	int iface_len = strlen(iface);
-+
-+	f = fopen("/proc/net/dev", "r");
-+	if (!f)
-+		return -1;
-+
-+	while (fgets(line, sizeof(line), f)) {
-+		char *p = line;
-+
-+		while (*p == ' ')
-+			p++; /* skip whitespace */
-+		if (!strncmp(p, iface, iface_len)) {
-+			p += iface_len;
-+			if (*p++ != ':')
-+				continue;
-+			while (*p == ' ')
-+				p++; /* skip whitespace */
-+			while (*p && *p != ' ')
-+				p++; /* skip rx bytes */
-+			while (*p == ' ')
-+				p++; /* skip whitespace */
-+			fclose(f);
-+			return atoi(p);
-+		}
-+	}
-+	fclose(f);
-+	return -1;
-+}
-+
-+#define MAX_BPF_LINKS 8
-+
-+struct skeletons {
-+	struct xdp_dummy *xdp_dummy;
-+	struct xdp_tx *xdp_tx;
-+	struct xdp_redirect_multi_kern *xdp_redirect_multi_kern;
-+
-+	int nlinks;
-+	struct bpf_link *links[MAX_BPF_LINKS];
-+};
-+
-+static int xdp_attach(struct skeletons *skeletons, struct bpf_program *prog, char *iface)
-+{
-+	struct bpf_link *link;
-+	int ifindex;
-+
-+	ifindex = if_nametoindex(iface);
-+	if (!ASSERT_GT(ifindex, 0, "get ifindex"))
-+		return -1;
-+
-+	if (!ASSERT_LE(skeletons->nlinks+1, MAX_BPF_LINKS, "too many XDP programs attached"))
-+		return -1;
-+
-+	link = bpf_program__attach_xdp(prog, ifindex);
-+	if (!ASSERT_OK_PTR(link, "attach xdp program"))
-+		return -1;
-+
-+	skeletons->links[skeletons->nlinks++] = link;
-+	return 0;
-+}
-+
-+enum {
-+	BOND_ONE_NO_ATTACH = 0,
-+	BOND_BOTH_AND_ATTACH,
-+};
-+
-+static const char * const mode_names[] = {
-+	[BOND_MODE_ROUNDROBIN]   = "balance-rr",
-+	[BOND_MODE_ACTIVEBACKUP] = "active-backup",
-+	[BOND_MODE_XOR]          = "balance-xor",
-+	[BOND_MODE_BROADCAST]    = "broadcast",
-+	[BOND_MODE_8023AD]       = "802.3ad",
-+	[BOND_MODE_TLB]          = "balance-tlb",
-+	[BOND_MODE_ALB]          = "balance-alb",
-+};
-+
-+static const char * const xmit_policy_names[] = {
-+	[BOND_XMIT_POLICY_LAYER2]       = "layer2",
-+	[BOND_XMIT_POLICY_LAYER34]      = "layer3+4",
-+	[BOND_XMIT_POLICY_LAYER23]      = "layer2+3",
-+	[BOND_XMIT_POLICY_ENCAP23]      = "encap2+3",
-+	[BOND_XMIT_POLICY_ENCAP34]      = "encap3+4",
-+};
-+
-+static int bonding_setup(struct skeletons *skeletons, int mode, int xmit_policy,
-+			 int bond_both_attach)
-+{
-+#define SYS(fmt, ...)						\
-+	({							\
-+		char cmd[1024];					\
-+		snprintf(cmd, sizeof(cmd), fmt, ##__VA_ARGS__);	\
-+		if (!ASSERT_OK(system(cmd), cmd))		\
-+			return -1;				\
-+	})
-+
-+	SYS("ip netns add ns_dst");
-+	SYS("ip link add veth1_1 type veth peer name veth2_1 netns ns_dst");
-+	SYS("ip link add veth1_2 type veth peer name veth2_2 netns ns_dst");
-+
-+	SYS("ip link add bond1 type bond mode %s xmit_hash_policy %s",
-+	    mode_names[mode], xmit_policy_names[xmit_policy]);
-+	SYS("ip link set bond1 up address " BOND1_MAC_STR " addrgenmode none");
-+	SYS("ip -netns ns_dst link add bond2 type bond mode %s xmit_hash_policy %s",
-+	    mode_names[mode], xmit_policy_names[xmit_policy]);
-+	SYS("ip -netns ns_dst link set bond2 up address " BOND2_MAC_STR " addrgenmode none");
-+
-+	SYS("ip link set veth1_1 master bond1");
-+	if (bond_both_attach == BOND_BOTH_AND_ATTACH) {
-+		SYS("ip link set veth1_2 master bond1");
-+	} else {
-+		SYS("ip link set veth1_2 up addrgenmode none");
-+
-+		if (xdp_attach(skeletons, skeletons->xdp_dummy->progs.xdp_dummy_prog, "veth1_2"))
-+			return -1;
-+	}
-+
-+	SYS("ip -netns ns_dst link set veth2_1 master bond2");
-+
-+	if (bond_both_attach == BOND_BOTH_AND_ATTACH)
-+		SYS("ip -netns ns_dst link set veth2_2 master bond2");
-+	else
-+		SYS("ip -netns ns_dst link set veth2_2 up addrgenmode none");
-+
-+	/* Load a dummy program on sending side as with veth peer needs to have a
-+	 * XDP program loaded as well.
-+	 */
-+	if (xdp_attach(skeletons, skeletons->xdp_dummy->progs.xdp_dummy_prog, "bond1"))
-+		return -1;
-+
-+	if (bond_both_attach == BOND_BOTH_AND_ATTACH) {
-+		if (!ASSERT_OK(setns_by_name("ns_dst"), "set netns to ns_dst"))
-+			return -1;
-+
-+		if (xdp_attach(skeletons, skeletons->xdp_tx->progs.xdp_tx, "bond2"))
-+			return -1;
-+
-+		restore_root_netns();
-+	}
-+
-+	return 0;
-+
-+#undef SYS
-+}
-+
-+static void bonding_cleanup(struct skeletons *skeletons)
-+{
-+	restore_root_netns();
-+	while (skeletons->nlinks) {
-+		skeletons->nlinks--;
-+		bpf_link__destroy(skeletons->links[skeletons->nlinks]);
-+	}
-+	ASSERT_OK(system("ip link delete bond1"), "delete bond1");
-+	ASSERT_OK(system("ip link delete veth1_1"), "delete veth1_1");
-+	ASSERT_OK(system("ip link delete veth1_2"), "delete veth1_2");
-+	ASSERT_OK(system("ip netns delete ns_dst"), "delete ns_dst");
-+}
-+
-+static int send_udp_packets(int vary_dst_ip)
-+{
-+	struct ethhdr eh = {
-+		.h_source = BOND1_MAC,
-+		.h_dest = BOND2_MAC,
-+		.h_proto = htons(ETH_P_IP),
-+	};
-+	uint8_t buf[128] = {};
-+	struct iphdr *iph = (struct iphdr *)(buf + sizeof(eh));
-+	struct udphdr *uh = (struct udphdr *)(buf + sizeof(eh) + sizeof(*iph));
-+	int i, s = -1;
-+	int ifindex;
-+
-+	s = socket(AF_PACKET, SOCK_RAW, IPPROTO_RAW);
-+	if (!ASSERT_GE(s, 0, "socket"))
-+		goto err;
-+
-+	ifindex = if_nametoindex("bond1");
-+	if (!ASSERT_GT(ifindex, 0, "get bond1 ifindex"))
-+		goto err;
-+
-+	memcpy(buf, &eh, sizeof(eh));
-+	iph->ihl = 5;
-+	iph->version = 4;
-+	iph->tos = 16;
-+	iph->id = 1;
-+	iph->ttl = 64;
-+	iph->protocol = IPPROTO_UDP;
-+	iph->saddr = 1;
-+	iph->daddr = 2;
-+	iph->tot_len = htons(sizeof(buf) - ETH_HLEN);
-+	iph->check = 0;
-+
-+	for (i = 1; i <= NPACKETS; i++) {
-+		int n;
-+		struct sockaddr_ll saddr_ll = {
-+			.sll_ifindex = ifindex,
-+			.sll_halen = ETH_ALEN,
-+			.sll_addr = BOND2_MAC,
-+		};
-+
-+		/* vary the UDP destination port for even distribution with roundrobin/xor modes */
-+		uh->dest++;
-+
-+		if (vary_dst_ip)
-+			iph->daddr++;
-+
-+		n = sendto(s, buf, sizeof(buf), 0, (struct sockaddr *)&saddr_ll, sizeof(saddr_ll));
-+		if (!ASSERT_EQ(n, sizeof(buf), "sendto"))
-+			goto err;
-+	}
-+
-+	return 0;
-+
-+err:
-+	if (s >= 0)
-+		close(s);
-+	return -1;
-+}
-+
-+static void test_xdp_bonding_with_mode(struct skeletons *skeletons, int mode, int xmit_policy)
-+{
-+	int bond1_rx;
-+
-+	if (bonding_setup(skeletons, mode, xmit_policy, BOND_BOTH_AND_ATTACH))
-+		goto out;
-+
-+	if (send_udp_packets(xmit_policy != BOND_XMIT_POLICY_LAYER34))
-+		goto out;
-+
-+	bond1_rx = get_rx_packets("bond1");
-+	ASSERT_EQ(bond1_rx, NPACKETS, "expected more received packets");
-+
-+	switch (mode) {
-+	case BOND_MODE_ROUNDROBIN:
-+	case BOND_MODE_XOR: {
-+		int veth1_rx = get_rx_packets("veth1_1");
-+		int veth2_rx = get_rx_packets("veth1_2");
-+		int diff = abs(veth1_rx - veth2_rx);
-+
-+		ASSERT_GE(veth1_rx + veth2_rx, NPACKETS, "expected more packets");
-+
-+		switch (xmit_policy) {
-+		case BOND_XMIT_POLICY_LAYER2:
-+			ASSERT_GE(diff, NPACKETS,
-+				  "expected packets on only one of the interfaces");
-+			break;
-+		case BOND_XMIT_POLICY_LAYER23:
-+		case BOND_XMIT_POLICY_LAYER34:
-+			ASSERT_LT(diff, NPACKETS/2,
-+				  "expected even distribution of packets");
-+			break;
-+		default:
-+			PRINT_FAIL("Unimplemented xmit_policy=%d\n", xmit_policy);
-+			break;
-+		}
-+		break;
-+	}
-+	case BOND_MODE_ACTIVEBACKUP: {
-+		int veth1_rx = get_rx_packets("veth1_1");
-+		int veth2_rx = get_rx_packets("veth1_2");
-+		int diff = abs(veth1_rx - veth2_rx);
-+
-+		ASSERT_GE(diff, NPACKETS,
-+			  "expected packets on only one of the interfaces");
-+		break;
-+	}
-+	default:
-+		PRINT_FAIL("Unimplemented xmit_policy=%d\n", xmit_policy);
-+		break;
-+	}
-+
-+out:
-+	bonding_cleanup(skeletons);
-+}
-+
-+/* Test the broadcast redirection using xdp_redirect_map_multi_prog and adding
-+ * all the interfaces to it and checking that broadcasting won't send the packet
-+ * to neither the ingress bond device (bond2) or its slave (veth2_1).
-+ */
-+static void test_xdp_bonding_redirect_multi(struct skeletons *skeletons)
-+{
-+	static const char * const ifaces[] = {"bond2", "veth2_1", "veth2_2"};
-+	int veth1_1_rx, veth1_2_rx;
-+	int err;
-+
-+	if (bonding_setup(skeletons, BOND_MODE_ROUNDROBIN, BOND_XMIT_POLICY_LAYER23,
-+			  BOND_ONE_NO_ATTACH))
-+		goto out;
-+
-+
-+	if (!ASSERT_OK(setns_by_name("ns_dst"), "could not set netns to ns_dst"))
-+		goto out;
-+
-+	/* populate the devmap with the relevant interfaces */
-+	for (int i = 0; i < ARRAY_SIZE(ifaces); i++) {
-+		int ifindex = if_nametoindex(ifaces[i]);
-+		int map_fd = bpf_map__fd(skeletons->xdp_redirect_multi_kern->maps.map_all);
-+
-+		if (!ASSERT_GT(ifindex, 0, "could not get interface index"))
-+			goto out;
-+
-+		err = bpf_map_update_elem(map_fd, &ifindex, &ifindex, 0);
-+		if (!ASSERT_OK(err, "add interface to map_all"))
-+			goto out;
-+	}
-+
-+	if (xdp_attach(skeletons,
-+		       skeletons->xdp_redirect_multi_kern->progs.xdp_redirect_map_multi_prog,
-+		       "bond2"))
-+		goto out;
-+
-+	restore_root_netns();
-+
-+	if (send_udp_packets(BOND_MODE_ROUNDROBIN))
-+		goto out;
-+
-+	veth1_1_rx = get_rx_packets("veth1_1");
-+	veth1_2_rx = get_rx_packets("veth1_2");
-+
-+	ASSERT_EQ(veth1_1_rx, 0, "expected no packets on veth1_1");
-+	ASSERT_GE(veth1_2_rx, NPACKETS, "expected packets on veth1_2");
-+
-+out:
-+	restore_root_netns();
-+	bonding_cleanup(skeletons);
-+}
-+
-+/* Test that XDP programs cannot be attached to both the bond master and slaves simultaneously */
-+static void test_xdp_bonding_attach(struct skeletons *skeletons)
-+{
-+	struct bpf_link *link = NULL;
-+	struct bpf_link *link2 = NULL;
-+	int veth, bond;
-+	int err;
-+
-+	if (!ASSERT_OK(system("ip link add veth type veth"), "add veth"))
-+		goto out;
-+	if (!ASSERT_OK(system("ip link add bond type bond"), "add bond"))
-+		goto out;
-+
-+	veth = if_nametoindex("veth");
-+	if (!ASSERT_GE(veth, 0, "if_nametoindex veth"))
-+		goto out;
-+	bond = if_nametoindex("bond");
-+	if (!ASSERT_GE(bond, 0, "if_nametoindex bond"))
-+		goto out;
-+
-+	/* enslaving with a XDP program loaded fails */
-+	link = bpf_program__attach_xdp(skeletons->xdp_dummy->progs.xdp_dummy_prog, veth);
-+	if (!ASSERT_OK_PTR(link, "attach program to veth"))
-+		goto out;
-+
-+	err = system("ip link set veth master bond");
-+	if (!ASSERT_NEQ(err, 0, "attaching slave with xdp program expected to fail"))
-+		goto out;
-+
-+	bpf_link__destroy(link);
-+	link = NULL;
-+
-+	err = system("ip link set veth master bond");
-+	if (!ASSERT_OK(err, "set veth master"))
-+		goto out;
-+
-+	/* attaching to slave when master has no program is allowed */
-+	link = bpf_program__attach_xdp(skeletons->xdp_dummy->progs.xdp_dummy_prog, veth);
-+	if (!ASSERT_OK_PTR(link, "attach program to slave when enslaved"))
-+		goto out;
-+
-+	/* attaching to master not allowed when slave has program loaded */
-+	link2 = bpf_program__attach_xdp(skeletons->xdp_dummy->progs.xdp_dummy_prog, bond);
-+	if (!ASSERT_ERR_PTR(link2, "attach program to master when slave has program"))
-+		goto out;
-+
-+	bpf_link__destroy(link);
-+	link = NULL;
-+
-+	/* attaching XDP program to master allowed when slave has no program */
-+	link = bpf_program__attach_xdp(skeletons->xdp_dummy->progs.xdp_dummy_prog, bond);
-+	if (!ASSERT_OK_PTR(link, "attach program to master"))
-+		goto out;
-+
-+	/* attaching to slave not allowed when master has program loaded */
-+	link2 = bpf_program__attach_xdp(skeletons->xdp_dummy->progs.xdp_dummy_prog, bond);
-+	ASSERT_ERR_PTR(link2, "attach program to slave when master has program");
-+
-+out:
-+	bpf_link__destroy(link);
-+	bpf_link__destroy(link2);
-+
-+	system("ip link del veth");
-+	system("ip link del bond");
-+}
-+
-+static int libbpf_debug_print(enum libbpf_print_level level,
-+			      const char *format, va_list args)
-+{
-+	if (level != LIBBPF_WARN)
-+		vprintf(format, args);
-+	return 0;
-+}
-+
-+struct bond_test_case {
-+	char *name;
-+	int mode;
-+	int xmit_policy;
-+};
-+
-+static struct bond_test_case bond_test_cases[] = {
-+	{ "xdp_bonding_roundrobin", BOND_MODE_ROUNDROBIN, BOND_XMIT_POLICY_LAYER23, },
-+	{ "xdp_bonding_activebackup", BOND_MODE_ACTIVEBACKUP, BOND_XMIT_POLICY_LAYER23 },
-+
-+	{ "xdp_bonding_xor_layer2", BOND_MODE_XOR, BOND_XMIT_POLICY_LAYER2, },
-+	{ "xdp_bonding_xor_layer23", BOND_MODE_XOR, BOND_XMIT_POLICY_LAYER23, },
-+	{ "xdp_bonding_xor_layer34", BOND_MODE_XOR, BOND_XMIT_POLICY_LAYER34, },
-+};
-+
-+void test_xdp_bonding(void)
-+{
-+	libbpf_print_fn_t old_print_fn;
-+	struct skeletons skeletons = {};
-+	int i;
-+
-+	old_print_fn = libbpf_set_print(libbpf_debug_print);
-+
-+	root_netns_fd = open("/proc/self/ns/net", O_RDONLY);
-+	if (!ASSERT_GE(root_netns_fd, 0, "open /proc/self/ns/net"))
-+		goto out;
-+
-+	skeletons.xdp_dummy = xdp_dummy__open_and_load();
-+	if (!ASSERT_OK_PTR(skeletons.xdp_dummy, "xdp_dummy__open_and_load"))
-+		goto out;
-+
-+	skeletons.xdp_tx = xdp_tx__open_and_load();
-+	if (!ASSERT_OK_PTR(skeletons.xdp_tx, "xdp_tx__open_and_load"))
-+		goto out;
-+
-+	skeletons.xdp_redirect_multi_kern = xdp_redirect_multi_kern__open_and_load();
-+	if (!ASSERT_OK_PTR(skeletons.xdp_redirect_multi_kern,
-+			   "xdp_redirect_multi_kern__open_and_load"))
-+		goto out;
-+
-+	if (!test__start_subtest("xdp_bonding_attach"))
-+		test_xdp_bonding_attach(&skeletons);
-+
-+	for (i = 0; i < ARRAY_SIZE(bond_test_cases); i++) {
-+		struct bond_test_case *test_case = &bond_test_cases[i];
-+
-+		if (!test__start_subtest(test_case->name))
-+			test_xdp_bonding_with_mode(
-+				&skeletons,
-+				test_case->mode,
-+				test_case->xmit_policy);
-+	}
-+
-+	if (!test__start_subtest("xdp_bonding_redirect_multi"))
-+		test_xdp_bonding_redirect_multi(&skeletons);
-+
-+out:
-+	xdp_dummy__destroy(skeletons.xdp_dummy);
-+	xdp_tx__destroy(skeletons.xdp_tx);
-+	xdp_redirect_multi_kern__destroy(skeletons.xdp_redirect_multi_kern);
-+
-+	libbpf_set_print(old_print_fn);
-+	if (root_netns_fd)
-+		close(root_netns_fd);
-+}
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_tcp4.c b/tools/testing/selftests/bpf/progs/bpf_iter_tcp4.c
+index 2e4775c35414..92267abb462f 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_tcp4.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_tcp4.c
+@@ -121,7 +121,7 @@ static int dump_tcp_sock(struct seq_file *seq, struct tcp_sock *tp,
+ 	}
+ 
+ 	BPF_SEQ_PRINTF(seq, "%4d: %08X:%04X %08X:%04X ",
+-		       seq_num, src, srcp, destp, destp);
++		       seq_num, src, srcp, dest, destp);
+ 	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5u %8d %lu %d ",
+ 		       state,
+ 		       tp->write_seq - tp->snd_una, rx_queue,
 -- 
-2.17.1
+2.25.1
 
