@@ -2,47 +2,47 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_PASS,SUBJ_AS_SEEN,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 935E5C4320E
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DF285C41537
 	for <bpf@archiver.kernel.org>; Thu,  5 Aug 2021 15:54:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7EDF7603E9
+	by mail.kernel.org (Postfix) with ESMTP id CF4C3603E9
 	for <bpf@archiver.kernel.org>; Thu,  5 Aug 2021 15:54:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242510AbhHEPyp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 5 Aug 2021 11:54:45 -0400
-Received: from mx0b-0064b401.pphosted.com ([205.220.178.238]:49512 "EHLO
+        id S242614AbhHEPyq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 5 Aug 2021 11:54:46 -0400
+Received: from mx0b-0064b401.pphosted.com ([205.220.178.238]:50352 "EHLO
         mx0b-0064b401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242509AbhHEPyo (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 5 Aug 2021 11:54:44 -0400
+        by vger.kernel.org with ESMTP id S242533AbhHEPyp (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 5 Aug 2021 11:54:45 -0400
 Received: from pps.filterd (m0250812.ppops.net [127.0.0.1])
-        by mx0a-0064b401.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 175Ex0KG011530;
-        Thu, 5 Aug 2021 15:54:10 GMT
+        by mx0a-0064b401.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 175E33f2000974;
+        Thu, 5 Aug 2021 15:54:06 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references :
  content-transfer-encoding : content-type : mime-version; s=PPS06212021;
- bh=G4eAT1QX7/68lF7Iq23jbKj45whhoedMVpvnJRhvClI=;
- b=RVugGiNRzHLGBaZ2ggUxY4OGf7f3K5L9P0NVGrDNKv2J45+R4StSIOV+fwo+aqK+Z+C5
- RvtkpojCutKRByyqpCIDkvy+z/ew6MT+KCGhK+6uX7z8ts/+yVJdcTVvksUwSDhOA0rn
- E+E2VGaxB5H6+JE2bGbglyttD72gA84abYbZhkXR3EN7JBi+sE61vnH/bda7zElAVoBg
- ByNZnq30L3n0dfxeeSp01+gk30G2B2HscbZYbKtyjHpFIeXl2zoChz64vKPoz2SiqA7g
- HULJZO2xxzXH0gQeS9Pdk2IzYwamzNd0da1ZidUK0VExJ3Cpc0+D4EH9XIAOSY1Ng8e8 ZQ== 
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2043.outbound.protection.outlook.com [104.47.66.43])
-        by mx0a-0064b401.pphosted.com with ESMTP id 3a8gny05bq-2
+ bh=/b0L+hGDTaliuoDYr2kRcuOqiUxRCZXrx4bYDdTMhdc=;
+ b=EcRZYRwUlT9KZUmr6+lvxy5G/8bUzq2XtjqpYsm6Ehh8JHRgwSg8EDbxKwK206a2KU/n
+ eXtfBBEKFimAfmwTexSw2fwkYbDa3+TRQOxw6MOqvjY54ssi6z/PVUCvTMVMal50+bvM
+ MJkvTPhR0afyWz8OEokO9jsay+O3gxVyR6lVgSV9RQpIcnxxQieiFl/6JVZACt/fdFgN
+ Ve3zmOpSUDRr3Q6zgZZYmpRJSHa2lMPSF0anZVdqpKpQMtIyekni8w4CGz79mh+w1Yfu
+ 2lAX1cttEmYxReSf67cS8rFRDBx2YAmY4dFBNJ0/BBfprpXCNheKkBJoHyxSicIhcLYK iw== 
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2176.outbound.protection.outlook.com [104.47.55.176])
+        by mx0a-0064b401.pphosted.com with ESMTP id 3a8gny05bn-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 Aug 2021 15:54:10 +0000
+        Thu, 05 Aug 2021 15:54:06 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NSs26j5+iZN81DPlZI7dV5RpXRvJYObYqKz4lFgmP1TPnGfyK9iLi53WUek8BScN0Ix7+0oYmlCMOoKtnAzHUS+KC9BUHEqByM6Umkn5YXFS6PtNg1DgEpbsS9LKlZe3Y9wrsdAIc5IFMexX/URUlfZQa4QDn+Ek3nfFIXWeRotiWgIQaB1tM5QQa0/rUorsqFaZqKiXbdVjGSC4+z5EbzqDtfyZvBYL36QwQWZ8FNuRSM+PaqxVf4nwwYzwYeZm06w9oS6zhWzFfDfD1mUp9H/GQKZ34lwOyqVBONrzFBXHR3L3yNZAamAiuez5KxgilGJ9U339TDtQroSdI/qz/g==
+ b=Tw7JOm3LMe7OouQLra19yoWlJ0Xn44ShWh66XXj81viCwcBJ/lQUUlPfoxRX80xXACOTfj4fTEtXSbIBwBYBI9E9s6rib+A4VdgJUL1LOdcuxRfEqEbOeejs1c4pbPocv4FTBUme6Gv45gELx+K+loQifLPDRW5gDD5m6ZyFM3/RMOVexgOdRtjU+gmeDvyLqOzeS7N2gF6pSUFnDp6+lBwHUFvfF2pV+YDZrFGFrL7rfiOcLDt4wfQkVsNHiR0sHJFLBXtS23xErBpVTDJgz6AFG1SaOL1mn0OOEIPDAAHl2tJ0aHKeIzhGsn7DqFoV9Mkiph9T/YtJpf/+hR7nzA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=G4eAT1QX7/68lF7Iq23jbKj45whhoedMVpvnJRhvClI=;
- b=LoCkLdSR7iLKbEo2909akHzJ8wzSt0Wepd+M/4mNIDCjAcHtx8VDd7JO8NpClT0THZAt8n1jSBfif+jF4C5+hWvOBKzO/+VgLsaFNXHaH7+vubxjK1Hs9YNip2CKlf8D46fR/VgGA6X76s7jgJ0IbE9w0avRdbbMdxeTBB4CkuXuuYdwmmhygzI0qEwDTZ9LIM5PmLOFCXxghIFxYlhawPfggkDwWUbiZfI0hOfmW80/upu9r8Ah8LtZzTMMgWFb4QCss1nZLwrC319vkbgdrH5ZzKWPLwYvfKPh9IHe5Ee55ILJqTmXhhB9vIavXwAfUKeitz2SZ33CJwmSZY3+Fg==
+ bh=/b0L+hGDTaliuoDYr2kRcuOqiUxRCZXrx4bYDdTMhdc=;
+ b=JXyoObc5PPHkFKhHCXFHsfepfO6y+mHelHqeHteMxgH6+1WsbH9IzMM5Ixcr4gcCzsYEsKN+7RQba0CVJ0qojqSF95mz1dxTyfljUC7PhN9Syslg+FDS3vmOb8+oC3llpVhqydqQFBCs8nJ6e3/rrgsmJcssNgDh4R7JR2UIUmfnkzX7IzOuUC9QKCnMa672R5JCjaoHJeUvR+eyxqHu2Qtk3hXSUkwantKfkAbuuisBgg+dCATLDS/PWp2ZaIcQC4MkBwj7z4YVIuxSW1zIl5zQHRG1521DzgVVAkNkpZog8Py9bUFVRKxJ1VZwPbH/3terNKDAEwp1/MIal3U1jg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=windriver.com; dmarc=pass action=none
  header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
@@ -50,22 +50,21 @@ Authentication-Results: vger.kernel.org; dkim=none (message not signed)
  header.d=none;vger.kernel.org; dmarc=none action=none
  header.from=windriver.com;
 Received: from DM4PR11MB5327.namprd11.prod.outlook.com (2603:10b6:5:392::22)
- by DM5PR1101MB2204.namprd11.prod.outlook.com (2603:10b6:4:58::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4394.18; Thu, 5 Aug
- 2021 15:54:09 +0000
+ by DM5PR11MB1722.namprd11.prod.outlook.com (2603:10b6:3:f::10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4394.15; Thu, 5 Aug 2021 15:54:05 +0000
 Received: from DM4PR11MB5327.namprd11.prod.outlook.com
  ([fe80::ccb:2bce:6896:a0c3]) by DM4PR11MB5327.namprd11.prod.outlook.com
  ([fe80::ccb:2bce:6896:a0c3%7]) with mapi id 15.20.4394.017; Thu, 5 Aug 2021
- 15:54:09 +0000
+ 15:54:05 +0000
 From:   Ovidiu Panait <ovidiu.panait@windriver.com>
 To:     stable@vger.kernel.org
 Cc:     bpf@vger.kernel.org, daniel@iogearbox.net, ast@kernel.org,
         john.fastabend@gmail.com, benedict.schlueter@rub.de,
         piotras@gmail.com
-Subject: [PATCH 5.4 4/6] bpf: Test_verifier, add alu32 bounds tracking tests
-Date:   Thu,  5 Aug 2021 18:53:41 +0300
-Message-Id: <20210805155343.3618696-5-ovidiu.panait@windriver.com>
+Subject: [PATCH 5.4 2/6] bpf: Do not mark insn as seen under speculative path verification
+Date:   Thu,  5 Aug 2021 18:53:39 +0300
+Message-Id: <20210805155343.3618696-3-ovidiu.panait@windriver.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210805155343.3618696-1-ovidiu.panait@windriver.com>
 References: <20210805155343.3618696-1-ovidiu.panait@windriver.com>
@@ -76,150 +75,136 @@ X-ClientProxiedBy: VI1PR0501CA0002.eurprd05.prod.outlook.com
  (2603:10b6:5:392::22)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from otp-linux03.wrs.com (46.97.150.20) by VI1PR0501CA0002.eurprd05.prod.outlook.com (2603:10a6:800:92::12) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4394.15 via Frontend Transport; Thu, 5 Aug 2021 15:54:07 +0000
+Received: from otp-linux03.wrs.com (46.97.150.20) by VI1PR0501CA0002.eurprd05.prod.outlook.com (2603:10a6:800:92::12) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4394.15 via Frontend Transport; Thu, 5 Aug 2021 15:54:03 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f0c102ae-5453-47a2-a3a2-08d9582942f3
-X-MS-TrafficTypeDiagnostic: DM5PR1101MB2204:
-X-Microsoft-Antispam-PRVS: <DM5PR1101MB2204572230385FC1386DB901FEF29@DM5PR1101MB2204.namprd11.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1148;
+X-MS-Office365-Filtering-Correlation-Id: 09af3296-878f-458e-b911-08d9582940ac
+X-MS-TrafficTypeDiagnostic: DM5PR11MB1722:
+X-Microsoft-Antispam-PRVS: <DM5PR11MB17226F3EB0B98EB08E2C732DFEF29@DM5PR11MB1722.namprd11.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2449;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: CSEKjmCkbCalCG5LPLSkjJar7QtN2ulfWtqOOvw4nHVYklXd65Bqi85AYDmLOCJnPwfOcVl9wHBKXkQNbE5hDL2h0xsvKE3rQJlVaryuy9gE3aMgYEu/mq2JMY/LW41M20TT+WNnWtTLFzTzHaFk5xWPNE90RLZiIjR7RNGjSjvokIFE1P6sg0bLLDqK9k0AbWC08gx7P7gjmGcG14ouUCpv29OA6kqNv/5nQDZLak4XMEX7NeQJv88+UaB07aggsds/c5pNNEqQTH9yhEUaj/9M7Xzsx7xd7+mC5FcxdTmNyr4JpK/dkj0/6zwRCPEwplX1f7vKDR5ifja8kCqmaKNopgbBhZUsm+jLOyr+t8W1CgxM5JAQKtxlQ6OQUD6xXJyFRert3DtTpfRaa3YRjpKtlMdQhzGuDRzFHn2zKU4uZh0+9OrVCnQ2GK+L4ww8RJYcrwds/0jsNGCa4lJxPkqLFv5tq6rY+NL7ewW1/iPCQqr2FPyiGcg5MXv6SdFAUMD2tScSRPJAUQYcokRA2eCuVDe0I/DQmXaAyN7XDb8RBxHYrjCyqthFlN8KXuaa9m2snycWJlV0stiAw0dO8yTW9D2/tqlHce9yBmyJNh/oGqL7o2pYk5k2GbxDmHdQG+o9HeI8IxxejU3UWAMQ1r3wjcpRBIsvbT8+7pjdAKj23oHk9EO0K0ny2JD6g75qrnkWl8fOIMRBbDnQdXVNHt9Byj+NoXdO5ZpRnumFmclvDMIwtop9VwFyHBZ/fY/JACECuktMFe2tVo0CY++qpTtftvtrFLc2dGge6FYZlwY=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5327.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(39850400004)(346002)(396003)(376002)(366004)(4326008)(2616005)(38350700002)(38100700002)(956004)(6916009)(66946007)(66476007)(6512007)(66556008)(316002)(6666004)(52116002)(86362001)(2906002)(5660300002)(8676002)(26005)(8936002)(186003)(1076003)(6506007)(44832011)(478600001)(36756003)(966005)(6486002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: RJ3RLJOYWck1qvfoRHqobH5m5ao771pFdFNAO6pardIxyG8OKtKwrKtbAJo53A7w24f901p1xZJrQrHPVobS03y2WPHamAKV+S3miXgaxj3WHkv9sQwL3MswpfcYceAHccPvE8lM06AAKfOHI3DBwuepzl+IBDfcBlgeVshYCOqcD2SrsRTWaNRF/Z7vy5o1gBds+AvSdqPFe9wemWvu9wfj8S4Ex2x9lgsqmtzpwzQDQJ3FgiUsffW+vQZor1jRixsUDo7nX7ARhP8Ps48PRzCrQVnB2qFjf9tSZgLpKBeW7TIHFVM/HfYjh/babvmlpuSSaTxiCgqw5aVoByLKkxSWxtVHY/X/36NUHP/mo92O6O3q4Fq8sJtmztNVf+IQ+By93Nnfh/oHWvu5OvLVo8IJbcEEhA3XKShGOJG5U+BMA6sYfb53osNURqjxQfJSdPGSZQZJ79WfglWmh9GV97lgnznZOFdUzTaO1DiAYlGA5ia8FyMDjNXQT1xnSBx7LptXeSw5CsYnTg5CsoIDLRhflKoNg3KLZlhGfExK52RJn2cIOQts4ato4e0wx06woqjLx4wE+bFNCeMOW3Fwb4OcxSBUtzPRwmvkLgEXwA2UVrHAQ1eFzmbPXFoFokl/lR/4HzoMMZ8n4wd/fpk/Rbx6onSAM2rLF7G8Gu/uh4o95QtWrKxIphtAv/1OlwpMMy9yqAE4HKXUexuUVtMOBA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5327.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39850400004)(396003)(376002)(366004)(346002)(136003)(478600001)(6506007)(6486002)(956004)(36756003)(2616005)(15650500001)(186003)(38100700002)(1076003)(8676002)(5660300002)(38350700002)(316002)(6512007)(8936002)(6666004)(2906002)(52116002)(83380400001)(66946007)(44832011)(26005)(4326008)(6916009)(66476007)(66556008)(86362001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?e3Q0Q0j5QHsOep5fSHbb5/xchV/7eVQU076tmMqeWwGsU5ucsUbDeCAu3kVX?=
- =?us-ascii?Q?rm0KBSSgxFJjq6Ie1+XFWZ4YxPqGZs4ibXC2FNrj6ztqyCLudQq+Qi9EqJc5?=
- =?us-ascii?Q?lH+7v4+S6wpE8+lDTsWMMHdQ5a2k082EWhuksyltsBU77+1eFS5TXNGCxBt/?=
- =?us-ascii?Q?qVWS8TsZHKDouJ9B5QpcqBI70at7U3UGGqnOwMzLSsrzEipXGSLYbOLxDZ6f?=
- =?us-ascii?Q?cg8IDDi6lV5bqndohqpnR1y3feS6aWiYgRRgu0hzlOIhMP0ylWTeYCkhCDbq?=
- =?us-ascii?Q?V1qi1TEPB2t5ZIxEmUlG6oxcTa8ZxLiJqZ3/Fm8bxdj+XQzO6GhMkrJOV3TA?=
- =?us-ascii?Q?fEyoOkIdM4Z1tjRKciAhfCh4ydYVj8HqVXrCyMG12EP5vieBMO9xFCUAbg7S?=
- =?us-ascii?Q?nqMyar3K93XsscAvOH7cLpoloVY1keyvzQRIavxOevHUbvVKmpy5bE3KzGai?=
- =?us-ascii?Q?70UUGsQ76r9EAVfztRvCxBSPu2J4p28No3SkbGW/Pwx8AIKK/0honZ3/ENGX?=
- =?us-ascii?Q?/ogPkFJu4ptvvTEcJDFnkIynzfxG+jTo7CDiHqnoCu56Bm+JlmLmG1Slse1C?=
- =?us-ascii?Q?t43jikhOTAmQhU2ErGhYQ68wQdk1V9bPyWOvCkkcZbjcpD3thHs8zfSzONEy?=
- =?us-ascii?Q?c7zs9/YH1rKN1n9F3lsGsf5CkeUoSe0FZgMirh1RqEYlOjbBe1Vu8QqDNuN+?=
- =?us-ascii?Q?jrRIkgI1JPFJKXbqP+cN+uRfdnfjyl3uVB/fjyynWHK+rEfK6VuYP5DPhC/G?=
- =?us-ascii?Q?zCt0tSOrvUAJhH0kjETA0uQ7875kCu7oIRc9Ep/p/J6ihNy7poW6QAru8doO?=
- =?us-ascii?Q?DO0hpm+wxXV1HI0L7J1D3EbOFCR7HjbGpDhy6HG6oEDGrqKWR7UBmCWHAvjt?=
- =?us-ascii?Q?q27j1ZvIaFiTvr2gO7V69DtaT5+NXTqlho+V6QaKm3Kz1HfhD+w7+Krfoa6N?=
- =?us-ascii?Q?7sqh1jVUEInhbb5HZJbML85RrSg+B+b96VDLjWa2j2fnAbk5EFowBhsdL3ah?=
- =?us-ascii?Q?ItYNS2RjLD+ODmezb9Aq/Ze/y+M2Et3q3gKQpcsz4ueVOK7cSfpAWwRx/AJB?=
- =?us-ascii?Q?PWpEemDTjZrrbQbjqpt/ZxxkWlOHN0r1wqBMHB0AnR55lrkrb2cVG1rKZg5w?=
- =?us-ascii?Q?QLch3zqwlE4DV+lbyGvbYJ2o83+k6Zvge1n8YqbPdnHcgAOTF4sBQnbc48I8?=
- =?us-ascii?Q?v3/eKYijKYe7Iwd2v8fCg4S/+fZte+snWV81XUWzChYvL3rV/XmLkY6oaTmL?=
- =?us-ascii?Q?+D61ZdrXvObaOqYXIJstF1Qr80mRCRyvloiQKrG5GSD7lVodRsBEoznw3bIV?=
- =?us-ascii?Q?pcRiNygrSdf0Y2UH6j/gRU3J?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?jwSYCW46ar7rq91LHDN2jidEoUZk7MLDy5wdAkyArB+8n6lyns6hBE8xHKZD?=
+ =?us-ascii?Q?aqzS2i0M3AT2R3WVnpxqYkoiOJ9YvZkFlE4df1u0oHGGvVwIv4psjTmuPZI4?=
+ =?us-ascii?Q?AahgxKquWwL4+eeQGOdIvDI4iG5UMWJYuFeZ/hLSInaDzT8X0guW9/rAonxC?=
+ =?us-ascii?Q?p73t/I175y0snsGruZShfo2mV4JMf7hJz28+sa9GzvHyMqMUOW6XIZssFjUL?=
+ =?us-ascii?Q?XY7SwtPbJbs2BrKUGklwhC8987AJc9ibveury0bWGrvXqQpXjsc1yC/y8Nsd?=
+ =?us-ascii?Q?oG6PMKGySJ2RCeCIUx+TCRQD+wZV6ex5EE/4cs3YcazhsECgNt26DC/27uRW?=
+ =?us-ascii?Q?4G7SJLCN1b9ep1ahaUierHednE1MjbwFOIh+yifiWG6PQ/vqgqdTPxIxvLtT?=
+ =?us-ascii?Q?gOwCWIn2rd2TS9fstFMovhCdMjKLyXhk2Uci2Q2Bhtr994TJJk2pqmgxtqzj?=
+ =?us-ascii?Q?4c1rRwhIz4EDo9q2S8FhbSDSZRYFrjkOr13biMyUkG6ZBqWpU1peQvQACVDi?=
+ =?us-ascii?Q?MGquYN16swD3oQe3MGkKKl1W27MI0fJTcac/yReZndRfnEJZA8VfNh/bTyrz?=
+ =?us-ascii?Q?EGBJnmgUZGUGVLFVDbwMsjKaCSHoDJC7H1tBdKvGOngOhiP/P3CZDa9b1Iw4?=
+ =?us-ascii?Q?lUSnAjb3nSlUmTCAF2tsnHwYJx2+SCgmuf6AFQ7VdhYn12s+Sz4l1nHH4Neo?=
+ =?us-ascii?Q?CHAnrtAEEAwl4zjCXD0UexIM1dGhKGfGlzfr/lAweM+BP8DKaw1vltrhHTSv?=
+ =?us-ascii?Q?HOG9ziGm4I2UAQ1aIjvoz09Dq7+m7QVbw0vdsmcstPstOL5B8D0A/KHtm5sY?=
+ =?us-ascii?Q?r9qF/i/djulfQM3ImDSZAdu8MnyKAjb6iXCfKx3xWAHbMja99wRqM+d/r28o?=
+ =?us-ascii?Q?lHY62tn+51wvAGh+wpdnBpbzU0N8d7RibxRAt4Sy7HaLyqd9K8eF/5GjI+hV?=
+ =?us-ascii?Q?JYbIMj7fI9Blj8UJUS/9R3cvUYnbilN8QyiRFyrAsN4G/U5pFfo87AJ+zi7W?=
+ =?us-ascii?Q?BNnqTptVnqHIZ6CarBWYrtCPyMUrxomqlTSuuh+4KmHFLPFzc3ER74E8DBnM?=
+ =?us-ascii?Q?AtlX6RBzULPDNiciDtVdA/JPp//tG4MbMDeMKdjBdn+LY9lFCOHmpl6XNMyG?=
+ =?us-ascii?Q?Wx3sSCw4zDM20MBwKrQAFElU7uwVWxy5/VxExyM6Vevs4K3MenfCLeh4xnbM?=
+ =?us-ascii?Q?R8PeKmGWkSMTl70sS9UK2pSayit7mOAvg4Np1HiGLzYjtUB7uk/WRbLCzsgv?=
+ =?us-ascii?Q?CfzriwY+69Vkn78xAN9sIS2YCGdtfX7YxIT1wbYZDHREnPHzddblsOsgPapG?=
+ =?us-ascii?Q?v/kSuPtmdKzxMIamB5w3MEXR?=
 X-OriginatorOrg: windriver.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f0c102ae-5453-47a2-a3a2-08d9582942f3
+X-MS-Exchange-CrossTenant-Network-Message-Id: 09af3296-878f-458e-b911-08d9582940ac
 X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5327.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Aug 2021 15:54:09.1355
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Aug 2021 15:54:05.3432
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FXAGHr1ViXnMXtKqAGoMeFqboTBpRdtLiV3GpdJSkXLxmVhRQ/k57sJ0+vPLCW8m+6O5uO5JM/yxZPcJyOXZcX+lRbGUyb3vo2zRTrbg6+w=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR1101MB2204
-X-Proofpoint-GUID: vV9leNOetGJress7o2l2EIUKjrTBTzxy
-X-Proofpoint-ORIG-GUID: vV9leNOetGJress7o2l2EIUKjrTBTzxy
+X-MS-Exchange-CrossTenant-UserPrincipalName: CratkG7cbEov3v5RbigsR78CjHOrgWtlBwOgTkhQhxzX1hQZuq79wqqqOlT25ruIfzJyuVrYdG0w4XqNdK0xWQv5NQzPqQIigknXQM6A6/I=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR11MB1722
+X-Proofpoint-GUID: PCfwaX2CaRrD5hLUp-R523TreYuOvYt5
+X-Proofpoint-ORIG-GUID: PCfwaX2CaRrD5hLUp-R523TreYuOvYt5
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
  definitions=2021-08-05_05,2021-08-05_02,2020-04-07_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
  phishscore=0 adultscore=0 priorityscore=1501 suspectscore=0 clxscore=1015
- malwarescore=0 impostorscore=0 spamscore=0 mlxlogscore=999 bulkscore=0
+ malwarescore=0 impostorscore=0 spamscore=0 mlxlogscore=598 bulkscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2107140000
  definitions=main-2108050097
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: John Fastabend <john.fastabend@gmail.com>
+From: Daniel Borkmann <daniel@iogearbox.net>
 
-commit 41f70fe0649dddf02046315dc566e06da5a2dc91 upstream
+commit fe9a5ca7e370e613a9a75a13008a3845ea759d6e upstream
 
-Its possible to have divergent ALU32 and ALU64 bounds when using JMP32
-instructins and ALU64 arithmatic operations. Sometimes the clang will
-even generate this code. Because the case is a bit tricky lets add
-a specific test for it.
+... in such circumstances, we do not want to mark the instruction as seen given
+the goal is still to jmp-1 rewrite/sanitize dead code, if it is not reachable
+from the non-speculative path verification. We do however want to verify it for
+safety regardless.
 
-Here is  pseudocode asm version to illustrate the idea,
+With the patch as-is all the insns that have been marked as seen before the
+patch will also be marked as seen after the patch (just with a potentially
+different non-zero count). An upcoming patch will also verify paths that are
+unreachable in the non-speculative domain, hence this extension is needed.
 
- 1 r0 = 0xffffffff00000001;
- 2 if w0 > 1 goto %l[fail];
- 3 r0 += 1
- 5 if w0 > 2 goto %l[fail]
- 6 exit
-
-The intent here is the verifier will fail the load if the 32bit bounds
-are not tracked correctly through ALU64 op. Similarly we can check the
-64bit bounds are correctly zero extended after ALU32 ops.
-
- 1 r0 = 0xffffffff00000001;
- 2 w0 += 1
- 2 if r0 > 3 goto %l[fail];
- 6 exit
-
-The above will fail if we do not correctly zero extend 64bit bounds
-after 32bit op.
-
-Signed-off-by: John Fastabend <john.fastabend@gmail.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Link: https://lore.kernel.org/bpf/158560430155.10843.514209255758200922.stgit@john-Precision-5820-Tower
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Reviewed-by: John Fastabend <john.fastabend@gmail.com>
+Reviewed-by: Benedict Schlueter <benedict.schlueter@rub.de>
+Reviewed-by: Piotr Krysiuk <piotras@gmail.com>
+Acked-by: Alexei Starovoitov <ast@kernel.org>
+[OP: - env->pass_cnt is not used in 5.4, so adjust sanitize_mark_insn_seen()
+       to assign "true" instead
+     - drop sanitize_insn_aux_data() comment changes, as the function is not
+       present in 5.4]
 Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
 ---
- tools/testing/selftests/bpf/verifier/bounds.c | 39 +++++++++++++++++++
- 1 file changed, 39 insertions(+)
+ kernel/bpf/verifier.c | 17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/verifier/bounds.c b/tools/testing/selftests/bpf/verifier/bounds.c
-index d55f476f2237..d8e5388c9ba7 100644
---- a/tools/testing/selftests/bpf/verifier/bounds.c
-+++ b/tools/testing/selftests/bpf/verifier/bounds.c
-@@ -506,3 +506,42 @@
- 	.errstr = "map_value pointer and 1000000000000",
- 	.result = REJECT
- },
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 526e52f45ab3..02a04a30070b 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -4435,6 +4435,19 @@ static int sanitize_ptr_alu(struct bpf_verifier_env *env,
+ 	return !ret ? REASON_STACK : 0;
+ }
+ 
++static void sanitize_mark_insn_seen(struct bpf_verifier_env *env)
 +{
-+	"bounds check mixed 32bit and 64bit arithmatic. test1",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_MOV64_IMM(BPF_REG_1, -1),
-+	BPF_ALU64_IMM(BPF_LSH, BPF_REG_1, 32),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 1),
-+	/* r1 = 0xffffFFFF00000001 */
-+	BPF_JMP32_IMM(BPF_JGT, BPF_REG_1, 1, 3),
-+	/* check ALU64 op keeps 32bit bounds */
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 1),
-+	BPF_JMP32_IMM(BPF_JGT, BPF_REG_1, 2, 1),
-+	BPF_JMP_A(1),
-+	/* invalid ldx if bounds are lost above */
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_0, -1),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT
-+},
-+{
-+	"bounds check mixed 32bit and 64bit arithmatic. test2",
-+	.insns = {
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_MOV64_IMM(BPF_REG_1, -1),
-+	BPF_ALU64_IMM(BPF_LSH, BPF_REG_1, 32),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 1),
-+	/* r1 = 0xffffFFFF00000001 */
-+	BPF_MOV64_IMM(BPF_REG_2, 3),
-+	/* r1 = 0x2 */
-+	BPF_ALU32_IMM(BPF_ADD, BPF_REG_1, 1),
-+	/* check ALU32 op zero extends 64bit bounds */
-+	BPF_JMP_REG(BPF_JGT, BPF_REG_1, BPF_REG_2, 1),
-+	BPF_JMP_A(1),
-+	/* invalid ldx if bounds are lost above */
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_0, -1),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT
-+},
++	struct bpf_verifier_state *vstate = env->cur_state;
++
++	/* If we simulate paths under speculation, we don't update the
++	 * insn as 'seen' such that when we verify unreachable paths in
++	 * the non-speculative domain, sanitize_dead_code() can still
++	 * rewrite/sanitize them.
++	 */
++	if (!vstate->speculative)
++		env->insn_aux_data[env->insn_idx].seen = true;
++}
++
+ static int sanitize_err(struct bpf_verifier_env *env,
+ 			const struct bpf_insn *insn, int reason,
+ 			const struct bpf_reg_state *off_reg,
+@@ -7790,7 +7803,7 @@ static int do_check(struct bpf_verifier_env *env)
+ 		}
+ 
+ 		regs = cur_regs(env);
+-		env->insn_aux_data[env->insn_idx].seen = true;
++		sanitize_mark_insn_seen(env);
+ 		prev_insn_idx = env->insn_idx;
+ 
+ 		if (class == BPF_ALU || class == BPF_ALU64) {
+@@ -8025,7 +8038,7 @@ static int do_check(struct bpf_verifier_env *env)
+ 					return err;
+ 
+ 				env->insn_idx++;
+-				env->insn_aux_data[env->insn_idx].seen = true;
++				sanitize_mark_insn_seen(env);
+ 			} else {
+ 				verbose(env, "invalid BPF_LD mode\n");
+ 				return -EINVAL;
 -- 
 2.25.1
 
