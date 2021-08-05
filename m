@@ -2,162 +2,78 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,FROM_LOCAL_HEX,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C4DFAC4338F
-	for <bpf@archiver.kernel.org>; Thu,  5 Aug 2021 05:14:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CCE79C4338F
+	for <bpf@archiver.kernel.org>; Thu,  5 Aug 2021 10:13:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B3B1C610FC
-	for <bpf@archiver.kernel.org>; Thu,  5 Aug 2021 05:14:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ABF5060C51
+	for <bpf@archiver.kernel.org>; Thu,  5 Aug 2021 10:13:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237668AbhHEFOq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 5 Aug 2021 01:14:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56388 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237686AbhHEFOk (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 5 Aug 2021 01:14:40 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8467FC06179A
-        for <bpf@vger.kernel.org>; Wed,  4 Aug 2021 22:14:21 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id cl16-20020a17090af690b02901782c35c4ccso3157323pjb.5
-        for <bpf@vger.kernel.org>; Wed, 04 Aug 2021 22:14:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=9iqwgQUcM7kXjxKmNPoKYxMsXr+XLcOB8+pWCUZkNe8=;
-        b=RbpJzx+BoK8RbyOspFM+n29W5JH0aaCLGjko+2aoqRhjPFUM4R6/71EkAOhUPIp54h
-         6/KUb2shwI6HSqMwRcFwsJOezU9+mA05bVf//hYKutCXxfA5Y1zXGcF/ZSoYJAvFzX7B
-         tpCCbQC8YNWQamkT69AYaJ7+rX2cu626mDpfumFsOjquW7ytN4o5zo6SDPiVHneAphmz
-         7sr2Rijb7Vuk2pkmMoj4ojrFlnN+LBUi8EafRwqdB9wrq3ci/9F0L4rhpYQkHHqt8j+N
-         vv6ouIdmsMv5OGbjpAZkuUoVwdzVVJ4XN72JbUi9FwRZ3KpNGhHkmEOTksXjQ/riRbnh
-         mQ7Q==
+        id S240334AbhHEKN1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 5 Aug 2021 06:13:27 -0400
+Received: from mail-io1-f72.google.com ([209.85.166.72]:49989 "EHLO
+        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240328AbhHEKN0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 5 Aug 2021 06:13:26 -0400
+Received: by mail-io1-f72.google.com with SMTP id k6-20020a6b3c060000b0290568c2302268so3351099iob.16
+        for <bpf@vger.kernel.org>; Thu, 05 Aug 2021 03:13:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=9iqwgQUcM7kXjxKmNPoKYxMsXr+XLcOB8+pWCUZkNe8=;
-        b=GmdcC6bKFFcr9OanasXomtT0zhqrskHWay1IzNh3VbnjvhsDGDKdl/K26dhkNipqQk
-         56L8t8piXy9JftKbzvf5TQhPXBFgsuWBk0qAH2SFY/BUQyOhUiEZf1BgxdzYKvOEQixo
-         R5VZvIbuRyaT59QfGAwzNQ8rrJShGx+K6jCEOSypzXq7MGb9JjYcUiEoQel0WKXou2K9
-         xjdD7qm2HtNHtWx4sgKUtYWszTGRH/JfRRRCAdf+9geDZVKKRna90HpfURG4jN+7/u0n
-         vJ7gLy0luWoDtmOvS+NYCIe6VhU+XJ2tday6TufH7vflotyhtRuTrvHcQy2dNGLhuyD5
-         Ib9A==
-X-Gm-Message-State: AOAM531YE3/bx1NY6TboZreaTs8PkxLVbxsz17Cv3c+UBHEpjsA6BWuR
-        hKzsEQXm9a1XY79FCCVjHq5hkQ==
-X-Google-Smtp-Source: ABdhPJwxpstYm1Z68yFetFV4U3XzSVLVc5w6RZx9tXnuPslfOOTSiZZl0VLhXwmobFYSed0IpSgNpw==
-X-Received: by 2002:a05:6a00:180e:b029:39e:4765:20c4 with SMTP id y14-20020a056a00180eb029039e476520c4mr3119587pfa.30.1628140461072;
-        Wed, 04 Aug 2021 22:14:21 -0700 (PDT)
-Received: from ip-10-124-121-13.byted.org (ec2-54-241-92-238.us-west-1.compute.amazonaws.com. [54.241.92.238])
-        by smtp.gmail.com with ESMTPSA id k4sm4201098pjs.55.2021.08.04.22.14.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Aug 2021 22:14:20 -0700 (PDT)
-From:   Jiang Wang <jiang.wang@bytedance.com>
-To:     netdev@vger.kernel.org
-Cc:     cong.wang@bytedance.com, duanxiongchun@bytedance.com,
-        xieyongji@bytedance.com, chaiwen.cc@bytedance.com,
-        John Fastabend <john.fastabend@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        Lorenz Bauer <lmb@cloudflare.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Johan Almbladh <johan.almbladh@anyfinetworks.com>,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v4 5/5] selftest/bpf: add new tests in sockmap for unix stream to tcp.
-Date:   Thu,  5 Aug 2021 05:13:37 +0000
-Message-Id: <20210805051340.3798543-6-jiang.wang@bytedance.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210805051340.3798543-1-jiang.wang@bytedance.com>
-References: <20210805051340.3798543-1-jiang.wang@bytedance.com>
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=mfp3dcRamri2wGmkRJSK01Pfy3daGYI42UfXp0QgTjU=;
+        b=LWQBRxQOyr+vuflWwyV6sVZW/X56eC3iqo+uRECFMXMkV4ILfxUEN8S/Qt2oRIe4PI
+         v2q1ZtUoh2bSUqV1MdOFsABXkO/IWUIQ159iUKB5RLLeCreUvubYDzXVc7ooz1ntRTe1
+         eLiRSE0Xk1DyHiaLin33EiaHiuLcvy2BpTlSm1uPm7oNYfepMtvPR4g01IpYjexXxBqb
+         7CoYLWaEHloDwWE2pCZd2axh+toGqosMrzMFeIGW73AVSCe+CM0PIicvNMkeWQdPpA/c
+         +5OpdY50lVIV24YvsB2q8U4ousxk3DIFnx2pMG02BN29JcGaGnyHqPRLWaIYsUObyPb6
+         mF0A==
+X-Gm-Message-State: AOAM5305WDedxtyYNWQ5lzunZsXdGsZiX6xpqhAtNU3FWJhIBnAfJvpM
+        K/ih+JQbeZSumdw6mGhwnD3m6Z1qQ1JLOmks6mIQFL470Ias
+X-Google-Smtp-Source: ABdhPJzPTZ4ctrrUGavvOHBH4NTS8BJbXcUPvlgq/7QfOSLC+LhG2uxQJN+Qfdv0epwVMqtQzdMZM9CmWaSpH6ty4Vl8Ed/4Bek7
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a6b:28a:: with SMTP id 132mr527433ioc.157.1628158390707;
+ Thu, 05 Aug 2021 03:13:10 -0700 (PDT)
+Date:   Thu, 05 Aug 2021 03:13:10 -0700
+In-Reply-To: <00000000000040b7ba05ae32a94a@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000842d2f05c8cd2ac7@google.com>
+Subject: Re: [syzbot] possible deadlock in __sock_release
+From:   syzbot <syzbot+8e467b009209f1fcf666@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, dave@pr1mo.net, davem@davemloft.net,
+        dsahern@kernel.org, john.fastabend@gmail.com, kafai@fb.com,
+        kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com,
+        yoshfuji@linux-ipv6.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add two new test cases in sockmap tests, where unix stream is
-redirected to tcp and vice versa.
+syzbot suspects this issue was fixed by commit:
 
-Signed-off-by: Jiang Wang <jiang.wang@bytedance.com>
-Reviewed-by: Cong Wang <cong.wang@bytedance.com>
-Acked-by: John Fastabend <john.fastabend@gmail.com>
----
- .../selftests/bpf/prog_tests/sockmap_listen.c    | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+commit 8fb4792f091e608a0a1d353dfdf07ef55a719db5
+Author: Paolo Abeni <pabeni@redhat.com>
+Date:   Tue Jul 20 13:08:40 2021 +0000
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-index 07ed8081f9ae..afa14fb66f08 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-@@ -1884,7 +1884,7 @@ static void inet_unix_redir_to_connected(int family, int type, int sock_mapfd,
- 	xclose(p0);
- }
- 
--static void udp_unix_skb_redir_to_connected(struct test_sockmap_listen *skel,
-+static void inet_unix_skb_redir_to_connected(struct test_sockmap_listen *skel,
- 					    struct bpf_map *inner_map, int family)
- {
- 	int verdict = bpf_program__fd(skel->progs.prog_skb_verdict);
-@@ -1899,9 +1899,13 @@ static void udp_unix_skb_redir_to_connected(struct test_sockmap_listen *skel,
- 	skel->bss->test_ingress = false;
- 	inet_unix_redir_to_connected(family, SOCK_DGRAM, sock_map, verdict_map,
- 				    REDIR_EGRESS);
-+	inet_unix_redir_to_connected(family, SOCK_STREAM, sock_map, verdict_map,
-+				    REDIR_EGRESS);
- 	skel->bss->test_ingress = true;
- 	inet_unix_redir_to_connected(family, SOCK_DGRAM, sock_map, verdict_map,
- 				    REDIR_INGRESS);
-+	inet_unix_redir_to_connected(family, SOCK_STREAM, sock_map, verdict_map,
-+				    REDIR_INGRESS);
- 
- 	xbpf_prog_detach2(verdict, sock_map, BPF_SK_SKB_VERDICT);
- }
-@@ -1961,7 +1965,7 @@ static void unix_inet_redir_to_connected(int family, int type, int sock_mapfd,
- 
- }
- 
--static void unix_udp_skb_redir_to_connected(struct test_sockmap_listen *skel,
-+static void unix_inet_skb_redir_to_connected(struct test_sockmap_listen *skel,
- 					    struct bpf_map *inner_map, int family)
- {
- 	int verdict = bpf_program__fd(skel->progs.prog_skb_verdict);
-@@ -1976,9 +1980,13 @@ static void unix_udp_skb_redir_to_connected(struct test_sockmap_listen *skel,
- 	skel->bss->test_ingress = false;
- 	unix_inet_redir_to_connected(family, SOCK_DGRAM, sock_map, verdict_map,
- 				     REDIR_EGRESS);
-+	unix_inet_redir_to_connected(family, SOCK_STREAM, sock_map, verdict_map,
-+				     REDIR_EGRESS);
- 	skel->bss->test_ingress = true;
- 	unix_inet_redir_to_connected(family, SOCK_DGRAM, sock_map, verdict_map,
- 				     REDIR_INGRESS);
-+	unix_inet_redir_to_connected(family, SOCK_STREAM, sock_map, verdict_map,
-+				     REDIR_INGRESS);
- 
- 	xbpf_prog_detach2(verdict, sock_map, BPF_SK_SKB_VERDICT);
- }
-@@ -1994,8 +2002,8 @@ static void test_udp_unix_redir(struct test_sockmap_listen *skel, struct bpf_map
- 	snprintf(s, sizeof(s), "%s %s %s", map_name, family_name, __func__);
- 	if (!test__start_subtest(s))
- 		return;
--	udp_unix_skb_redir_to_connected(skel, map, family);
--	unix_udp_skb_redir_to_connected(skel, map, family);
-+	inet_unix_skb_redir_to_connected(skel, map, family);
-+	unix_inet_skb_redir_to_connected(skel, map, family);
- }
- 
- static void run_tests(struct test_sockmap_listen *skel, struct bpf_map *map,
--- 
-2.20.1
+    ipv6: fix another slab-out-of-bounds in fib6_nh_flush_exceptions
 
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=113a99f1300000
+start commit:   c6c205ed442e Merge branch 'stmmac-ptp'
+git tree:       net
+kernel config:  https://syzkaller.appspot.com/x/.config?x=26b64b13fcecb7e1
+dashboard link: https://syzkaller.appspot.com/bug?extid=8e467b009209f1fcf666
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=152188d2300000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10d5493c300000
+
+If the result looks correct, please mark the issue as fixed by replying with:
+
+#syz fix: ipv6: fix another slab-out-of-bounds in fib6_nh_flush_exceptions
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
