@@ -7,27 +7,27 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CAE2C4320E
-	for <bpf@archiver.kernel.org>; Fri,  6 Aug 2021 00:10:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EE1FBC432BE
+	for <bpf@archiver.kernel.org>; Fri,  6 Aug 2021 00:10:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 553F861052
-	for <bpf@archiver.kernel.org>; Fri,  6 Aug 2021 00:10:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D041D61052
+	for <bpf@archiver.kernel.org>; Fri,  6 Aug 2021 00:10:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242834AbhHFAK2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 5 Aug 2021 20:10:28 -0400
-Received: from mga04.intel.com ([192.55.52.120]:45292 "EHLO mga04.intel.com"
+        id S242892AbhHFAKi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 5 Aug 2021 20:10:38 -0400
+Received: from mga04.intel.com ([192.55.52.120]:45295 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242777AbhHFAKX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 5 Aug 2021 20:10:23 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10067"; a="212422379"
+        id S240392AbhHFAK0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 5 Aug 2021 20:10:26 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10067"; a="212422385"
 X-IronPort-AV: E=Sophos;i="5.84,299,1620716400"; 
-   d="scan'208";a="212422379"
+   d="scan'208";a="212422385"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2021 17:10:08 -0700
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2021 17:10:11 -0700
 X-IronPort-AV: E=Sophos;i="5.84,299,1620716400"; 
-   d="scan'208";a="420562732"
+   d="scan'208";a="420562748"
 Received: from rmgular-mobl2.amr.corp.intel.com (HELO skuppusw-desk1.amr.corp.intel.com) ([10.251.138.25])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2021 17:10:07 -0700
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2021 17:10:10 -0700
 From:   Kuppuswamy Sathyanarayanan 
         <sathyanarayanan.kuppuswamy@linux.intel.com>
 To:     Thomas Gleixner <tglx@linutronix.de>,
@@ -49,9 +49,9 @@ Cc:     Peter H Anvin <hpa@zytor.com>, Dave Hansen <dave.hansen@intel.com>,
         x86@kernel.org, linux-kernel@vger.kernel.org,
         platform-driver-x86@vger.kernel.org, bpf@vger.kernel.org,
         netdev@vger.kernel.org
-Subject: [PATCH v4 5/7] x86/tdx: Add TDX Guest event notify interrupt vector support
-Date:   Thu,  5 Aug 2021 17:09:43 -0700
-Message-Id: <20210806000946.2951441-6-sathyanarayanan.kuppuswamy@linux.intel.com>
+Subject: [PATCH v4 7/7] tools/tdx: Add a sample attestation user app
+Date:   Thu,  5 Aug 2021 17:09:45 -0700
+Message-Id: <20210806000946.2951441-8-sathyanarayanan.kuppuswamy@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210806000946.2951441-1-sathyanarayanan.kuppuswamy@linux.intel.com>
 References: <20210806000946.2951441-1-sathyanarayanan.kuppuswamy@linux.intel.com>
@@ -61,186 +61,396 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Allocate 0xec IRQ vector address for TDX guest to receive the event
-completion notification from VMM. Since this vector address will be
-sent to VMM via hypercall, allocate a fixed address and move
-LOCAL_TIMER_VECTOR vector address by 1 byte. Also add related IDT
-handler to process the notification event.
+This application uses the misc device /dev/tdx-attest to get TDREPORT
+from the TDX Module or request quote from the VMM.
 
-It will be mainly used by attestation driver to receive Quote event
-completion notification from host.
+It tests following attestation features:
 
-Add support to track the notification event status via /proc/interrupts.
+  - Get report using TDX_CMD_GET_TDREPORT IOCTL.
+  - Using report data request quote from VMM using TDX_CMD_GEN_QUOTE IOCTL.
+  - Get the quote size using TDX_CMD_GET_QUOTE_SIZE IOCTL.
 
 Reviewed-by: Tony Luck <tony.luck@intel.com>
 Reviewed-by: Andi Kleen <ak@linux.intel.com>
 Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 ---
+ tools/Makefile                     |  13 +-
+ tools/tdx/Makefile                 |  19 +++
+ tools/tdx/attest/.gitignore        |   2 +
+ tools/tdx/attest/Makefile          |  24 +++
+ tools/tdx/attest/tdx-attest-test.c | 232 +++++++++++++++++++++++++++++
+ 5 files changed, 284 insertions(+), 6 deletions(-)
+ create mode 100644 tools/tdx/Makefile
+ create mode 100644 tools/tdx/attest/.gitignore
+ create mode 100644 tools/tdx/attest/Makefile
+ create mode 100644 tools/tdx/attest/tdx-attest-test.c
 
-Changes since v3:
- * None
-
- arch/x86/include/asm/hardirq.h     |  1 +
- arch/x86/include/asm/idtentry.h    |  4 +++
- arch/x86/include/asm/irq_vectors.h |  7 ++++-
- arch/x86/include/asm/tdx.h         |  2 ++
- arch/x86/kernel/irq.c              |  7 +++++
- arch/x86/kernel/tdx.c              | 41 ++++++++++++++++++++++++++++++
- 6 files changed, 61 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/include/asm/hardirq.h b/arch/x86/include/asm/hardirq.h
-index 07d79fa9c5c6..40d0534e7d82 100644
---- a/arch/x86/include/asm/hardirq.h
-+++ b/arch/x86/include/asm/hardirq.h
-@@ -46,6 +46,7 @@ typedef struct {
- #endif
- #if IS_ENABLED(CONFIG_INTEL_TDX_GUEST)
- 	unsigned int tdg_ve_count;
-+	unsigned int irq_tdg_event_notify_count;
- #endif
- } ____cacheline_aligned irq_cpustat_t;
+diff --git a/tools/Makefile b/tools/Makefile
+index 7e9d34ddd74c..5d68084511cb 100644
+--- a/tools/Makefile
++++ b/tools/Makefile
+@@ -30,6 +30,7 @@ help:
+ 	@echo '  selftests              - various kernel selftests'
+ 	@echo '  bootconfig             - boot config tool'
+ 	@echo '  spi                    - spi tools'
++	@echo '  tdx                    - TDX related test tools'
+ 	@echo '  tmon                   - thermal monitoring and tuning tool'
+ 	@echo '  tracing                - misc tracing tools'
+ 	@echo '  turbostat              - Intel CPU idle stats and freq reporting tool'
+@@ -65,7 +66,7 @@ acpi: FORCE
+ cpupower: FORCE
+ 	$(call descend,power/$@)
  
-diff --git a/arch/x86/include/asm/idtentry.h b/arch/x86/include/asm/idtentry.h
-index 8ccc81d653b3..6f3472a88e9c 100644
---- a/arch/x86/include/asm/idtentry.h
-+++ b/arch/x86/include/asm/idtentry.h
-@@ -693,6 +693,10 @@ DECLARE_IDTENTRY_SYSVEC(HYPERVISOR_CALLBACK_VECTOR,	sysvec_xen_hvm_callback);
- DECLARE_IDTENTRY_SYSVEC(HYPERVISOR_CALLBACK_VECTOR,	sysvec_kvm_asyncpf_interrupt);
- #endif
+-cgroup firewire hv guest bootconfig spi usb virtio vm bpf iio gpio objtool leds wmi pci firmware debugging tracing: FORCE
++cgroup firewire hv guest bootconfig spi usb virtio vm bpf iio gpio objtool leds wmi pci firmware debugging tracing tdx: FORCE
+ 	$(call descend,$@)
  
-+#ifdef CONFIG_INTEL_TDX_GUEST
-+DECLARE_IDTENTRY_SYSVEC(TDX_GUEST_EVENT_NOTIFY_VECTOR,	sysvec_tdg_event_notify);
-+#endif
+ bpf/%: FORCE
+@@ -104,7 +105,7 @@ all: acpi cgroup cpupower gpio hv firewire liblockdep \
+ 		perf selftests bootconfig spi turbostat usb \
+ 		virtio vm bpf x86_energy_perf_policy \
+ 		tmon freefall iio objtool kvm_stat wmi \
+-		pci debugging tracing
++		pci debugging tracing tdx
+ 
+ acpi_install:
+ 	$(call descend,power/$(@:_install=),install)
+@@ -112,7 +113,7 @@ acpi_install:
+ cpupower_install:
+ 	$(call descend,power/$(@:_install=),install)
+ 
+-cgroup_install firewire_install gpio_install hv_install iio_install perf_install bootconfig_install spi_install usb_install virtio_install vm_install bpf_install objtool_install wmi_install pci_install debugging_install tracing_install:
++cgroup_install firewire_install gpio_install hv_install iio_install perf_install bootconfig_install spi_install usb_install virtio_install vm_install bpf_install objtool_install wmi_install pci_install debugging_install tracing_install tdx_install:
+ 	$(call descend,$(@:_install=),install)
+ 
+ liblockdep_install:
+@@ -139,7 +140,7 @@ install: acpi_install cgroup_install cpupower_install gpio_install \
+ 		virtio_install vm_install bpf_install x86_energy_perf_policy_install \
+ 		tmon_install freefall_install objtool_install kvm_stat_install \
+ 		wmi_install pci_install debugging_install intel-speed-select_install \
+-		tracing_install
++		tracing_install tdx_install
+ 
+ acpi_clean:
+ 	$(call descend,power/acpi,clean)
+@@ -147,7 +148,7 @@ acpi_clean:
+ cpupower_clean:
+ 	$(call descend,power/cpupower,clean)
+ 
+-cgroup_clean hv_clean firewire_clean bootconfig_clean spi_clean usb_clean virtio_clean vm_clean wmi_clean bpf_clean iio_clean gpio_clean objtool_clean leds_clean pci_clean firmware_clean debugging_clean tracing_clean:
++cgroup_clean hv_clean firewire_clean bootconfig_clean spi_clean usb_clean virtio_clean vm_clean wmi_clean bpf_clean iio_clean gpio_clean objtool_clean leds_clean pci_clean firmware_clean debugging_clean tracing_clean tdx_clean:
+ 	$(call descend,$(@:_clean=),clean)
+ 
+ liblockdep_clean:
+@@ -186,6 +187,6 @@ clean: acpi_clean cgroup_clean cpupower_clean hv_clean firewire_clean \
+ 		vm_clean bpf_clean iio_clean x86_energy_perf_policy_clean tmon_clean \
+ 		freefall_clean build_clean libbpf_clean libsubcmd_clean liblockdep_clean \
+ 		gpio_clean objtool_clean leds_clean wmi_clean pci_clean firmware_clean debugging_clean \
+-		intel-speed-select_clean tracing_clean
++		intel-speed-select_clean tracing_clean tdx_clean
+ 
+ .PHONY: FORCE
+diff --git a/tools/tdx/Makefile b/tools/tdx/Makefile
+new file mode 100644
+index 000000000000..e2564557d463
+--- /dev/null
++++ b/tools/tdx/Makefile
+@@ -0,0 +1,19 @@
++# SPDX-License-Identifier: GPL-2.0
++include ../scripts/Makefile.include
 +
- #undef X86_TRAP_OTHER
- 
- #endif
-diff --git a/arch/x86/include/asm/irq_vectors.h b/arch/x86/include/asm/irq_vectors.h
-index 43dcb9284208..82ac0c0a34b1 100644
---- a/arch/x86/include/asm/irq_vectors.h
-+++ b/arch/x86/include/asm/irq_vectors.h
-@@ -104,7 +104,12 @@
- #define HYPERV_STIMER0_VECTOR		0xed
- #endif
- 
--#define LOCAL_TIMER_VECTOR		0xec
-+#if IS_ENABLED(CONFIG_INTEL_TDX_GUEST)
-+/* Vector on which TDX Guest event notification is delivered */
-+#define TDX_GUEST_EVENT_NOTIFY_VECTOR	0xec
-+#endif
++all: attest
 +
-+#define LOCAL_TIMER_VECTOR		0xeb
- 
- #define NR_VECTORS			 256
- 
-diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
-index 34d14766b3bc..74c930869ee4 100644
---- a/arch/x86/include/asm/tdx.h
-+++ b/arch/x86/include/asm/tdx.h
-@@ -99,6 +99,8 @@ int tdx_mcall_tdreport(u64 data, u64 reportdata);
- 
- int tdx_hcall_get_quote(u64 data);
- 
-+extern void (*tdg_event_notify_handler)(void);
++clean: attest_clean
 +
- /*
-  * To support I/O port access in decompressor or early kernel init
-  * code, since #VE exception handler cannot be used, use paravirt
-diff --git a/arch/x86/kernel/irq.c b/arch/x86/kernel/irq.c
-index 669869bd46ec..a4fe53c8c18f 100644
---- a/arch/x86/kernel/irq.c
-+++ b/arch/x86/kernel/irq.c
-@@ -182,11 +182,18 @@ int arch_show_interrupts(struct seq_file *p, int prec)
- 			   irq_stats(j)->kvm_posted_intr_wakeup_ipis);
- 	seq_puts(p, "  Posted-interrupt wakeup event\n");
- #endif
++install: attest_install
 +
- #if IS_ENABLED(CONFIG_INTEL_TDX_GUEST)
- 	seq_printf(p, "%*s: ", prec, "TGV");
- 	for_each_online_cpu(j)
- 		seq_printf(p, "%10u ", irq_stats(j)->tdg_ve_count);
- 	seq_puts(p, "  TDX Guest VE event\n");
++attest:
++	$(call descend,attest)
 +
-+	seq_printf(p, "%*s: ", prec, "TGN");
-+	for_each_online_cpu(j)
-+		seq_printf(p, "%10u ",
-+			   irq_stats(j)->irq_tdg_event_notify_count);
-+	seq_puts(p, "  TDX Guest event notification\n");
- #endif
- 	return 0;
- }
-diff --git a/arch/x86/kernel/tdx.c b/arch/x86/kernel/tdx.c
-index 9fca354e014c..1276027daa1c 100644
---- a/arch/x86/kernel/tdx.c
-+++ b/arch/x86/kernel/tdx.c
-@@ -9,6 +9,11 @@
- 
- #include <asm/tdx.h>
- #include <asm/i8259.h>
-+#include <asm/apic.h>
-+#include <asm/idtentry.h>
-+#include <asm/irq_regs.h>
-+#include <asm/desc.h>
-+#include <asm/idtentry.h>
- #include <asm/vmx.h>
- #include <asm/insn.h>
- #include <asm/insn-eval.h>
-@@ -55,6 +60,14 @@ static struct {
- 
- unsigned int tdg_disable_prot = -1;
- 
++attest_install:
++	$(call descend,attest,install)
++
++attest_clean:
++	$(call descend,attest,clean)
++
++.PHONY: all install clean attest latency_install latency_clean
+diff --git a/tools/tdx/attest/.gitignore b/tools/tdx/attest/.gitignore
+new file mode 100644
+index 000000000000..5f819a8a6c49
+--- /dev/null
++++ b/tools/tdx/attest/.gitignore
+@@ -0,0 +1,2 @@
++# SPDX-License-Identifier: GPL-2.0
++tdx-attest-test
+diff --git a/tools/tdx/attest/Makefile b/tools/tdx/attest/Makefile
+new file mode 100644
+index 000000000000..bf47ba718386
+--- /dev/null
++++ b/tools/tdx/attest/Makefile
+@@ -0,0 +1,24 @@
++# SPDX-License-Identifier: GPL-2.0
++# Makefile for vm tools
++#
++VAR_CFLAGS := $(shell pkg-config --cflags libtracefs 2>/dev/null)
++VAR_LDLIBS := $(shell pkg-config --libs libtracefs 2>/dev/null)
++
++TARGETS = tdx-attest-test
++CFLAGS = -static -Wall -Wextra -g -O2 $(VAR_CFLAGS)
++LDFLAGS = -lpthread $(VAR_LDLIBS)
++
++all: $(TARGETS)
++
++%: %.c
++	$(CC) $(CFLAGS) -o $@ $< $(LDFLAGS)
++
++clean:
++	$(RM) tdx-attest-test
++
++prefix ?= /usr/local
++sbindir ?= ${prefix}/sbin
++
++install: all
++	install -d $(DESTDIR)$(sbindir)
++	install -m 755 -p $(TARGETS) $(DESTDIR)$(sbindir)
+diff --git a/tools/tdx/attest/tdx-attest-test.c b/tools/tdx/attest/tdx-attest-test.c
+new file mode 100644
+index 000000000000..cff33c3a0c32
+--- /dev/null
++++ b/tools/tdx/attest/tdx-attest-test.c
+@@ -0,0 +1,232 @@
++// SPDX-License-Identifier: GPL-2.0-only
 +/*
-+ * Currently it will be used only by the attestation
-+ * driver. So, race condition with read/write operation
-+ * is not considered.
++ * tdx-attest-test.c - utility to test TDX attestation feature.
++ *
++ * Copyright (C) 2020 - 2021 Intel Corporation. All rights reserved.
++ *
++ * Author: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
++ *
 + */
-+void (*tdg_event_notify_handler)(void);
-+EXPORT_SYMBOL_GPL(tdg_event_notify_handler);
 +
- /*
-  * Wrapper for standard use of __tdx_hypercall with BUG_ON() check
-  * for TDCALL error.
-@@ -151,6 +164,28 @@ bool tdg_debug_enabled(void)
- 	return td_info.attributes & BIT(0);
- }
- 
-+/* TDX guest event notification handler */
-+DEFINE_IDTENTRY_SYSVEC(sysvec_tdg_event_notify)
++#include <linux/types.h>
++#include <linux/ioctl.h>
++#include <sys/ioctl.h>
++#include <sys/stat.h>
++#include <sys/types.h>
++#include <stdio.h>
++#include <ctype.h>
++#include <errno.h>
++#include <fcntl.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <unistd.h>
++#include <string.h>
++#include <limits.h>
++#include <stdbool.h>
++#include <getopt.h>
++#include <stdint.h> /* uintmax_t */
++#include <sys/mman.h>
++#include <unistd.h> /* sysconf */
++#include <time.h>
++
++#include "../../../include/uapi/misc/tdx.h"
++
++#define devname		"/dev/tdx-attest"
++
++#define HEX_DUMP_SIZE	16
++#define MAX_ROW_SIZE	70
++
++#define ATTESTATION_TEST_BIN_VERSION "0.1"
++
++struct tdx_attest_args {
++	bool is_dump_data;
++	bool is_get_tdreport;
++	bool is_get_quote_size;
++	bool is_gen_quote;
++	bool debug_mode;
++	char *out_file;
++};
++
++static void print_hex_dump(const char *title, const char *prefix_str,
++			   const void *buf, int len)
 +{
-+	struct pt_regs *old_regs = set_irq_regs(regs);
++	const __u8 *ptr = buf;
++	int i, rowsize = HEX_DUMP_SIZE;
 +
-+	inc_irq_stat(irq_tdg_event_notify_count);
++	if (!len || !buf)
++		return;
 +
-+	if (tdg_event_notify_handler)
-+		tdg_event_notify_handler();
++	printf("\t\t%s", title);
 +
-+	/*
-+	 * The hypervisor requires that the APIC EOI should be acked.
-+	 * If the APIC EOI is not acked, the APIC ISR bit for the
-+	 * TDX_GUEST_EVENT_NOTIFY_VECTOR will not be cleared and then it
-+	 * will block the interrupt whose vector is lower than
-+	 * TDX_GUEST_EVENT_NOTIFY_VECTOR.
-+	 */
-+	ack_APIC_irq();
++	for (i = 0; i < len; i++) {
++		if (!(i % rowsize))
++			printf("\n%s%.8x:", prefix_str, i);
++		printf(" %.2x", ptr[i]);
++	}
 +
-+	set_irq_regs(old_regs);
++	printf("\n");
 +}
 +
- /*
-  * tdx_mcall_tdreport() - Generate TDREPORT_STRUCT using TDCALL.
-  *
-@@ -686,5 +721,11 @@ void __init tdx_early_init(void)
- 		add_taint(TAINT_CONF_NO_LOCKDOWN, LOCKDEP_STILL_OK);
- 	}
- 
-+	alloc_intr_gate(TDX_GUEST_EVENT_NOTIFY_VECTOR,
-+			asm_sysvec_tdg_event_notify);
++static void gen_report_data(__u8 *report_data, bool dump_data)
++{
++	int i;
 +
-+	if (tdx_hcall_set_notify_intr(TDX_GUEST_EVENT_NOTIFY_VECTOR))
-+		pr_warn("Setting event notification interrupt failed\n");
++	srand(time(NULL));
 +
- 	pr_info("Guest initialized\n");
- }
++	for (i = 0; i < TDX_REPORT_DATA_LEN; i++)
++		report_data[i] = rand();
++
++	if (dump_data)
++		print_hex_dump("\n\t\tTDX report data\n", " ",
++			       report_data, TDX_REPORT_DATA_LEN);
++}
++
++static int get_tdreport(int devfd, bool dump_data, __u8 *report_data)
++{
++	__u8 tdrdata[TDX_TDREPORT_LEN] = {0};
++	int ret;
++
++	if (!report_data)
++		report_data = tdrdata;
++
++	gen_report_data(report_data, dump_data);
++
++	ret = ioctl(devfd, TDX_CMD_GET_TDREPORT, report_data);
++	if (ret) {
++		printf("TDX_CMD_GET_TDREPORT ioctl() %d failed\n", ret);
++		return -EIO;
++	}
++
++	if (dump_data)
++		print_hex_dump("\n\t\tTDX tdreport data\n", " ", report_data,
++			       TDX_TDREPORT_LEN);
++
++	return 0;
++}
++
++static __u64 get_quote_size(int devfd)
++{
++	int ret;
++	__u64 quote_size;
++
++	ret = ioctl(devfd, TDX_CMD_GET_QUOTE_SIZE, &quote_size);
++	if (ret) {
++		printf("TDX_CMD_GET_QUOTE_SIZE ioctl() %d failed\n", ret);
++		return -EIO;
++	}
++
++	printf("Quote size: %lld\n", quote_size);
++
++	return quote_size;
++}
++
++static int gen_quote(int devfd, bool dump_data)
++{
++	__u8 *quote_data;
++	__u64 quote_size;
++	int ret;
++
++	quote_size = get_quote_size(devfd);
++
++	quote_data = malloc(sizeof(char) * quote_size);
++	if (!quote_data) {
++		printf("%s queue data alloc failed\n", devname);
++		return -ENOMEM;
++	}
++
++	ret = get_tdreport(devfd, dump_data, quote_data);
++	if (ret) {
++		printf("TDX_CMD_GET_TDREPORT ioctl() %d failed\n", ret);
++		goto done;
++	}
++
++	ret = ioctl(devfd, TDX_CMD_GEN_QUOTE, quote_data);
++	if (ret) {
++		printf("TDX_CMD_GEN_QUOTE ioctl() %d failed\n", ret);
++		goto done;
++	}
++
++	print_hex_dump("\n\t\tTDX Quote data\n", " ", quote_data,
++		       quote_size);
++
++done:
++	free(quote_data);
++
++	return ret;
++}
++
++static void usage(void)
++{
++	puts("\nUsage:\n");
++	puts("tdx_attest [options] \n");
++
++	puts("Attestation device test utility.");
++
++	puts("\nOptions:\n");
++	puts(" -d, --dump                Dump tdreport/tdquote data");
++	puts(" -r, --get-tdreport        Get TDREPORT data");
++	puts(" -g, --gen-quote           Generate TDQUOTE");
++	puts(" -s, --get-quote-size      Get TDQUOTE size");
++}
++
++int main(int argc, char **argv)
++{
++	int ret, devfd;
++	struct tdx_attest_args args = {0};
++
++	static const struct option longopts[] = {
++		{ "dump",           no_argument,       NULL, 'd' },
++		{ "get-tdreport",   required_argument, NULL, 'r' },
++		{ "gen-quote",      required_argument, NULL, 'g' },
++		{ "gen-quote-size", required_argument, NULL, 's' },
++		{ "version",        no_argument,       NULL, 'V' },
++		{ NULL,             0, NULL, 0 }
++	};
++
++	while ((ret = getopt_long(argc, argv, "hdrgsV", longopts,
++				  NULL)) != -1) {
++		switch (ret) {
++		case 'd':
++			args.is_dump_data = true;
++			break;
++		case 'r':
++			args.is_get_tdreport = true;
++			break;
++		case 'g':
++			args.is_gen_quote = true;
++			break;
++		case 's':
++			args.is_get_quote_size = true;
++			break;
++		case 'h':
++			usage();
++			return 0;
++		case 'V':
++			printf("Version: %s\n", ATTESTATION_TEST_BIN_VERSION);
++			return 0;
++		default:
++			printf("Invalid options\n");
++			usage();
++			return -EINVAL;
++		}
++	}
++
++	devfd = open(devname, O_RDWR | O_SYNC);
++	if (devfd < 0) {
++		printf("%s open() failed\n", devname);
++		return -ENODEV;
++	}
++
++	if (args.is_get_quote_size)
++		get_quote_size(devfd);
++
++	if (args.is_get_tdreport)
++		get_tdreport(devfd, args.is_dump_data, NULL);
++
++	if (args.is_gen_quote)
++		gen_quote(devfd, args.is_dump_data);
++
++	close(devfd);
++
++	return 0;
++}
 -- 
 2.25.1
 
