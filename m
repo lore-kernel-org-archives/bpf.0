@@ -2,166 +2,110 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E0BA0C4320A
-	for <bpf@archiver.kernel.org>; Fri,  6 Aug 2021 00:10:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C55EC4338F
+	for <bpf@archiver.kernel.org>; Fri,  6 Aug 2021 00:22:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C95D8610FB
-	for <bpf@archiver.kernel.org>; Fri,  6 Aug 2021 00:10:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 29FC061181
+	for <bpf@archiver.kernel.org>; Fri,  6 Aug 2021 00:22:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242974AbhHFAKq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 5 Aug 2021 20:10:46 -0400
-Received: from mga04.intel.com ([192.55.52.120]:45281 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242724AbhHFAKU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 5 Aug 2021 20:10:20 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10067"; a="212422372"
-X-IronPort-AV: E=Sophos;i="5.84,299,1620716400"; 
-   d="scan'208";a="212422372"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2021 17:10:05 -0700
-X-IronPort-AV: E=Sophos;i="5.84,299,1620716400"; 
-   d="scan'208";a="420562717"
-Received: from rmgular-mobl2.amr.corp.intel.com (HELO skuppusw-desk1.amr.corp.intel.com) ([10.251.138.25])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2021 17:10:03 -0700
-From:   Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <mgross@linux.intel.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Peter H Anvin <hpa@zytor.com>, Dave Hansen <dave.hansen@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, bpf@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH v4 3/7] x86/tdx: Add GetQuote TDX hypercall support
-Date:   Thu,  5 Aug 2021 17:09:41 -0700
-Message-Id: <20210806000946.2951441-4-sathyanarayanan.kuppuswamy@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210806000946.2951441-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-References: <20210806000946.2951441-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+        id S230004AbhHFAWX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 5 Aug 2021 20:22:23 -0400
+Received: from smtp-fw-80007.amazon.com ([99.78.197.218]:50966 "EHLO
+        smtp-fw-80007.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238757AbhHFAWW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 5 Aug 2021 20:22:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.co.jp; i=@amazon.co.jp; q=dns/txt;
+  s=amazon201209; t=1628209327; x=1659745327;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=uJuIXj/lwZ9S5dnXjWu54ZDuIjhbraez6ckXcvhlYCg=;
+  b=Th3xFzezcUyu7S4HNlkgVmkvyQX6nrH448GDqY/CFThL3RheIFf1hqxh
+   nr+iuktgH7NnLQ158C7ffZreTv6XXB0+m3Huabcjfs+X//2rBKOpphbjn
+   +fuZgdOiubhwq6m2j9jU2nTb1Nfij2fjCqjQJHU38B18NNMua/qqNbn1J
+   8=;
+X-IronPort-AV: E=Sophos;i="5.84,299,1620691200"; 
+   d="scan'208";a="17391139"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-2b-8cc5d68b.us-west-2.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP; 06 Aug 2021 00:22:07 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-2b-8cc5d68b.us-west-2.amazon.com (Postfix) with ESMTPS id 9EFA0A1EE6;
+        Fri,  6 Aug 2021 00:22:06 +0000 (UTC)
+Received: from EX13D04ANC001.ant.amazon.com (10.43.157.89) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.23; Fri, 6 Aug 2021 00:22:05 +0000
+Received: from 88665a182662.ant.amazon.com (10.43.162.75) by
+ EX13D04ANC001.ant.amazon.com (10.43.157.89) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.23; Fri, 6 Aug 2021 00:22:00 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+To:     <yhs@fb.com>
+CC:     <andrii@kernel.org>, <ast@kernel.org>, <benh@amazon.com>,
+        <bpf@vger.kernel.org>, <daniel@iogearbox.net>,
+        <davem@davemloft.net>, <john.fastabend@gmail.com>, <kafai@fb.com>,
+        <kpsingh@kernel.org>, <kuba@kernel.org>, <kuni1840@gmail.com>,
+        <kuniyu@amazon.co.jp>, <netdev@vger.kernel.org>,
+        <songliubraving@fb.com>
+Subject: Re: [PATCH v3 bpf-next 1/2] bpf: af_unix: Implement BPF iterator for UNIX domain socket.
+Date:   Fri, 6 Aug 2021 09:21:56 +0900
+Message-ID: <20210806002156.12075-1-kuniyu@amazon.co.jp>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <442b59b1-f7db-6bce-8fd8-d411ddec0956@fb.com>
+References: <442b59b1-f7db-6bce-8fd8-d411ddec0956@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.43.162.75]
+X-ClientProxiedBy: EX13D31UWA002.ant.amazon.com (10.43.160.82) To
+ EX13D04ANC001.ant.amazon.com (10.43.157.89)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The second stage in the attestation process is for the guest to
-request the VMM generate and sign a quote based on the TDREPORT
-acquired earlier.
+From:   Yonghong Song <yhs@fb.com>
+Date:   Thu, 5 Aug 2021 09:53:40 -0700
+> On 8/4/21 12:08 AM, Kuniyuki Iwashima wrote:
+> > This patch implements the BPF iterator for the UNIX domain socket and
+> > exports some functions under GPL for the CONFIG_UNIX=m case.
+> > 
+> > Currently, the batch optimization introduced for the TCP iterator in the
+> > commit 04c7820b776f ("bpf: tcp: Bpf iter batching and lock_sock") is not
+> > applied.  It will require replacing the big lock for the hash table with
+> > small locks for each hash list not to block other processes.
+> > 
+> > Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+> > ---
+> >   fs/proc/proc_net.c      |  2 +
+> >   include/linux/btf_ids.h |  3 +-
+> >   kernel/bpf/bpf_iter.c   |  3 ++
+> >   net/core/filter.c       |  1 +
+> >   net/unix/af_unix.c      | 93 +++++++++++++++++++++++++++++++++++++++++
+> >   5 files changed, 101 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/fs/proc/proc_net.c b/fs/proc/proc_net.c
+> > index 15c2e55d2ed2..887a8102da9f 100644
+> > --- a/fs/proc/proc_net.c
+> > +++ b/fs/proc/proc_net.c
+> > @@ -91,6 +91,7 @@ int bpf_iter_init_seq_net(void *priv_data, struct bpf_iter_aux_info *aux)
+> >   #endif
+> >   	return 0;
+> >   }
+> > +EXPORT_SYMBOL_GPL(bpf_iter_init_seq_net);
+> 
+> bpf_iter does not support modules for now as it is implemented before 
+> module btf support. It needs some changes.
+> For example, currently bpf_iter only caches/uses the vmlinux btf_id
+> and module obj_id and module btf_id is not used.
+> One example is ipv6 and bpf_iter is guarded with IS_BUILTIN(CONFIG_IPV6).
+> 
+> So you could (1) add btf_iter support module btf in this patch set, or
+> (2). check IS_BUILTIN(CONFIG_UNIX). (2) might be easier and you can have
+> a subsequent patch set to add module support for bpf_iter. But it is
+> up to you.
 
-Add tdx_hcall_get_quote() helper function to implement the GetQuote
-hypercall.
-
-More details about the GetQuote TDVMCALL are in the Guest-Host
-Communication Interface (GHCI) Specification, sec 3.3, titled
-"TDG.VP.VMCALL<GetQuote>".
-
-This will be used by the TD attestation driver in follow-on patches.
-
-Reviewed-by: Tony Luck <tony.luck@intel.com>
-Reviewed-by: Andi Kleen <ak@linux.intel.com>
-Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
----
-
-Changes since v3
- * Rebased on top of Tom Lendacky's protected guest
-   changes (https://lore.kernel.org/patchwork/cover/1468760/)
-
-Change since v2:
- * Included TDVMCALL_SUCCESS case check in tdx_hcall_get_quote().
-
- arch/x86/include/asm/tdx.h |  2 ++
- arch/x86/kernel/tdx.c      | 34 ++++++++++++++++++++++++++++++++++
- 2 files changed, 36 insertions(+)
-
-diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
-index 6e6abd2b0894..34d14766b3bc 100644
---- a/arch/x86/include/asm/tdx.h
-+++ b/arch/x86/include/asm/tdx.h
-@@ -97,6 +97,8 @@ extern int tdx_hcall_gpa_intent(phys_addr_t gpa, int numpages,
- 
- int tdx_mcall_tdreport(u64 data, u64 reportdata);
- 
-+int tdx_hcall_get_quote(u64 data);
-+
- /*
-  * To support I/O port access in decompressor or early kernel init
-  * code, since #VE exception handler cannot be used, use paravirt
-diff --git a/arch/x86/kernel/tdx.c b/arch/x86/kernel/tdx.c
-index 5eed2e660546..203ddc4c8412 100644
---- a/arch/x86/kernel/tdx.c
-+++ b/arch/x86/kernel/tdx.c
-@@ -27,6 +27,7 @@
- 
- /* TDX hypercall Leaf IDs */
- #define TDVMCALL_MAP_GPA		0x10001
-+#define TDVMCALL_GET_QUOTE		0x10002
- 
- /* TDX Module call error codes */
- #define TDX_PAGE_ALREADY_ACCEPTED	0x00000b0a00000000
-@@ -36,6 +37,11 @@
- #define TDCALL_SUCCESS			0x0
- #define TDCALL_RETURN_CODE(a)		((a) & TDCALL_RETURN_CODE_MASK)
- 
-+/* TDX hypercall error codes */
-+#define TDVMCALL_SUCCESS		0x0
-+#define TDVMCALL_INVALID_OPERAND	0x8000000000000000
-+#define TDVMCALL_TDREPORT_FAILED	0x8000000000000001
-+
- #define VE_IS_IO_OUT(exit_qual)		(((exit_qual) & 8) ? 0 : 1)
- #define VE_GET_IO_SIZE(exit_qual)	(((exit_qual) & 7) + 1)
- #define VE_GET_PORT_NUM(exit_qual)	((exit_qual) >> 16)
-@@ -173,6 +179,34 @@ int tdx_mcall_tdreport(u64 data, u64 reportdata)
- }
- EXPORT_SYMBOL_GPL(tdx_mcall_tdreport);
- 
-+/*
-+ * tdx_hcall_get_quote() - Generate TDQUOTE using TDREPORT_STRUCT.
-+ *
-+ * @data        : Physical address of 4KB GPA memory which contains
-+ *                TDREPORT_STRUCT.
-+ *
-+ * return 0 on success or failure error number.
-+ */
-+int tdx_hcall_get_quote(u64 data)
-+{
-+	u64 ret;
-+
-+	if (!data || !prot_guest_has(PATTR_GUEST_TDX))
-+		return -EINVAL;
-+
-+	ret = _trace_tdx_hypercall(TDVMCALL_GET_QUOTE, data, 0, 0, 0, NULL);
-+
-+	if (ret == TDVMCALL_SUCCESS)
-+		return 0;
-+	else if (ret == TDVMCALL_INVALID_OPERAND)
-+		return -EINVAL;
-+	else if (ret == TDVMCALL_TDREPORT_FAILED)
-+		return -EBUSY;
-+
-+	return -EIO;
-+}
-+EXPORT_SYMBOL_GPL(tdx_hcall_get_quote);
-+
- static void tdg_get_info(void)
- {
- 	u64 ret;
--- 
-2.25.1
-
+I'll add IS_BUILTIN() check in the next spin and give a try to (1).
+Thanks for review!
