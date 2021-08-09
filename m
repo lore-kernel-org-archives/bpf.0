@@ -7,54 +7,54 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16014C4338F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DCEFC4320A
 	for <bpf@archiver.kernel.org>; Mon,  9 Aug 2021 09:35:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id ECE186108D
-	for <bpf@archiver.kernel.org>; Mon,  9 Aug 2021 09:35:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5C1F96108F
+	for <bpf@archiver.kernel.org>; Mon,  9 Aug 2021 09:35:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234703AbhHIJfj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 9 Aug 2021 05:35:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34024 "EHLO
+        id S234705AbhHIJfk (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 9 Aug 2021 05:35:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234685AbhHIJff (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 9 Aug 2021 05:35:35 -0400
+        with ESMTP id S234701AbhHIJfi (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 9 Aug 2021 05:35:38 -0400
 Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 698BBC061796
-        for <bpf@vger.kernel.org>; Mon,  9 Aug 2021 02:35:14 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id y7so23577091eda.5
-        for <bpf@vger.kernel.org>; Mon, 09 Aug 2021 02:35:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF50C06179A
+        for <bpf@vger.kernel.org>; Mon,  9 Aug 2021 02:35:17 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id g21so23621558edb.4
+        for <bpf@vger.kernel.org>; Mon, 09 Aug 2021 02:35:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=anyfinetworks-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=4iS6lRKIwb+H10UNVM+WiLO7lEaIzX0B59TM+au6wcw=;
-        b=x1V+cagpq3wEGAJilDAKJQcSJGRsCCB/uIe2wAhFp5isaA2ACd6+KXpzIZ5JNKZh09
-         LNpCcPX8fePyollrGcX5JgiBfntG2JJ/yp/wh9r361sToCdDP93GB+GSeG9RpgSHIf/k
-         57ypxzAEKI5E297XqDfRr3ldN7a1gRAKvS/KVqzfVMBaR2hn/o/cOnCsMvrOMjvMGLlw
-         idfW1YI9czbxhEjdJckwQeQN6bhznTHRlbuW5Ak3HC7IrQNkMk9KFIB+8l0X0etk0s9L
-         3B7t4bWarXMZn23t8XkUfRoxBKphiy2jkKR2AVIM7DfyRcc7iGOzFsOC6z/mXa6HTo1I
-         w6Ww==
+        bh=R8nPDlZ8MIDkJQ2qkzTmbl3dcManmeczWh/bnjgLMVI=;
+        b=OJWw8If8eUJX/1o8BHkJ3jcN6fHCR8vVBjKDYajxsg2E5xub9TtztBSzpu147bvKaG
+         0aI58UN62MjGAdmuV/uWicHe2G5gwrqIqUm+246Egdnsdd4vTb49/g98J2/WfBIkjDCG
+         P+wbVrDxeCq4ctNdUTVFUq1DbOlds9p/ROk3Vo8aw6wKPJDGqJejvubAsUZWpeIhWguB
+         WVGL/KCObOUx+VtZZJskFZCIFsyxmd815JT3FXQR2BELGce81kBzV1iNpvS/1iXhTKLh
+         2zx4TDRUNFM2F2W/7KeJz1piJYP2/Mkr4lOPU2KNV9Q/UyE2DjR/Jczy8bf7dReEqDc2
+         qAiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=4iS6lRKIwb+H10UNVM+WiLO7lEaIzX0B59TM+au6wcw=;
-        b=D4hSslIvOlD1BD0NMbhO/qmLaSqfozJpdeJ4QNygB4sKDqHwe8LkahB/UbNq81l0/j
-         lmcis35xDgAmu94d9bKMliIJlANOdHR5dlhIMiY1MO3Cd6G+Yulp6dm8Ks3uf1g3O3be
-         oThqDPT2Lxg3XgW0UoLvuRlDdlUU6t1Vft7icFkTrslCM/WCRnkDjTKUcEVb7+e26anM
-         DeUiXTGQq6s+pzhb+ZxfJfcv0eYjXHJdjrSuXPTSnhWeNVCoihZVDZXBplgS6FRT9JO1
-         cN0WWqm9wawbBe22iCDrrDMRCgGG2AUNRG4tzSHoANYp03zciuJSDuBBR+LGzVPqQc1T
-         x6Fg==
-X-Gm-Message-State: AOAM531yn1G1TzL7W3XK1FtqtHZVAoldx42AecVHbWbSWBehuV74nI01
-        snv3pHBRODfqBmdh1FAFOyoUUg==
-X-Google-Smtp-Source: ABdhPJwiy2AKXZpcwV2uYAGh60iTXCl2cnz4TRR2Q491uFzgpMgRHbDLtElSFveFDXwO1Y5XlnSGuQ==
-X-Received: by 2002:a05:6402:b88:: with SMTP id cf8mr1997348edb.281.1628501713083;
-        Mon, 09 Aug 2021 02:35:13 -0700 (PDT)
+        bh=R8nPDlZ8MIDkJQ2qkzTmbl3dcManmeczWh/bnjgLMVI=;
+        b=TCqnRIoJXZvsumPogWphoTfW11Z8FDg34fa0/9Ii1urRLI14NWcc+B/eXTR6l3C7c/
+         ihOT77KFKCGKcX7dJii6sgcAh1VyZoOhcskz2x+wZz12av09z/SHI3ppNX9KrfLDJq6C
+         MbgpkP87mLXm7tk77Kc5F46cTlLHJ5w5Rc0XauFW76KP/tEs6k3pmyqAZ7wqeaDQQBkM
+         BGanSAyNL9AYlaN5Hh7kxICQjwaaPtgrYBdzGaKzE+cmfiVjEHvAdc4oVY0Y3+7TUi3Z
+         g4R5IFbXiYds0u/P/PpPSI0yhirHTB05yobsxWRzJg4aSw5YaRmwT3d2otmezAC2z/QC
+         Pmww==
+X-Gm-Message-State: AOAM530Oqpa+nqR8Tebv2Ng7l8kD7u24LHWFNMowh+3CDSoTATPqze9f
+        7NeUGxLc3KoLKz2M+6c8a4ykAA==
+X-Google-Smtp-Source: ABdhPJzjUGd0t7g3ba5yr7i3vWuv/aPgvCA+VCrgqtGO73BQBNvPUR6zOYdWoOWtky9wyqx3QW737w==
+X-Received: by 2002:aa7:da52:: with SMTP id w18mr11638224eds.48.1628501715756;
+        Mon, 09 Aug 2021 02:35:15 -0700 (PDT)
 Received: from anpc2.lan (static-213-115-136-2.sme.telenor.se. [213.115.136.2])
-        by smtp.gmail.com with ESMTPSA id c8sm1989732ejp.124.2021.08.09.02.35.11
+        by smtp.gmail.com with ESMTPSA id c8sm1989732ejp.124.2021.08.09.02.35.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Aug 2021 02:35:12 -0700 (PDT)
+        Mon, 09 Aug 2021 02:35:15 -0700 (PDT)
 From:   Johan Almbladh <johan.almbladh@anyfinetworks.com>
 To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
 Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
@@ -66,9 +66,9 @@ Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
         iii@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
         davem@davemloft.net, udknight@gmail.com,
         Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Subject: [PATCH bpf-next 4/7] s390: bpf: Fix off-by-one in tail call count limiting
-Date:   Mon,  9 Aug 2021 11:34:34 +0200
-Message-Id: <20210809093437.876558-5-johan.almbladh@anyfinetworks.com>
+Subject: [PATCH bpf-next 6/7] mips: bpf: Fix off-by-one in tail call count limiting
+Date:   Mon,  9 Aug 2021 11:34:36 +0200
+Message-Id: <20210809093437.876558-7-johan.almbladh@anyfinetworks.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210809093437.876558-1-johan.almbladh@anyfinetworks.com>
 References: <20210809093437.876558-1-johan.almbladh@anyfinetworks.com>
@@ -81,37 +81,34 @@ X-Mailing-List: bpf@vger.kernel.org
 Before, the eBPF JIT allowed up to MAX_TAIL_CALL_CNT + 1 tail calls.
 Now, precisely MAX_TAIL_CALL_CNT is allowed, which is in line with the
 behaviour of the interpreter. Verified with the test_bpf test suite
-on qemu-system-s390x.
+on qemu-system-mips64.
 
 Signed-off-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
 ---
- arch/s390/net/bpf_jit_comp.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ arch/mips/net/ebpf_jit.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/s390/net/bpf_jit_comp.c b/arch/s390/net/bpf_jit_comp.c
-index 88419263a89a..f6cdf13285ed 100644
---- a/arch/s390/net/bpf_jit_comp.c
-+++ b/arch/s390/net/bpf_jit_comp.c
-@@ -1363,7 +1363,7 @@ static noinline int bpf_jit_insn(struct bpf_jit *jit, struct bpf_prog *fp,
- 				 jit->prg);
- 
- 		/*
--		 * if (tail_call_cnt++ > MAX_TAIL_CALL_CNT)
-+		 * if (tail_call_cnt++ >= MAX_TAIL_CALL_CNT)
- 		 *         goto out;
- 		 */
- 
-@@ -1377,8 +1377,8 @@ static noinline int bpf_jit_insn(struct bpf_jit *jit, struct bpf_prog *fp,
- 		EMIT6_DISP_LH(0xeb000000, 0x00fa, REG_W1, REG_W0, REG_15, off);
- 		/* clij %w1,MAX_TAIL_CALL_CNT,0x2,out */
- 		patch_2_clij = jit->prg;
--		EMIT6_PCREL_RIEC(0xec000000, 0x007f, REG_W1, MAX_TAIL_CALL_CNT,
--				 2, jit->prg);
-+		EMIT6_PCREL_RIEC(0xec000000, 0x007f, REG_W1,
-+				 MAX_TAIL_CALL_CNT - 1, 2, jit->prg);
- 
- 		/*
- 		 * prog = array->ptrs[index];
+diff --git a/arch/mips/net/ebpf_jit.c b/arch/mips/net/ebpf_jit.c
+index 3a73e9375712..a93121d71c80 100644
+--- a/arch/mips/net/ebpf_jit.c
++++ b/arch/mips/net/ebpf_jit.c
+@@ -617,14 +617,14 @@ static int emit_bpf_tail_call(struct jit_ctx *ctx, int this_idx)
+ 	b_off = b_imm(this_idx + 1, ctx);
+ 	emit_instr(ctx, bne, MIPS_R_AT, MIPS_R_ZERO, b_off);
+ 	/*
+-	 * if (TCC-- < 0)
++	 * if (TCC-- <= 0)
+ 	 *     goto out;
+ 	 */
+ 	/* Delay slot */
+ 	tcc_reg = (ctx->flags & EBPF_TCC_IN_V1) ? MIPS_R_V1 : MIPS_R_S4;
+ 	emit_instr(ctx, daddiu, MIPS_R_T5, tcc_reg, -1);
+ 	b_off = b_imm(this_idx + 1, ctx);
+-	emit_instr(ctx, bltz, tcc_reg, b_off);
++	emit_instr(ctx, blez, tcc_reg, b_off);
+ 	/*
+ 	 * prog = array->ptrs[index];
+ 	 * if (prog == NULL)
 -- 
 2.25.1
 
