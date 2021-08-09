@@ -2,50 +2,50 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-14.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E68C3C4320A
-	for <bpf@archiver.kernel.org>; Mon,  9 Aug 2021 23:37:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2056AC4320A
+	for <bpf@archiver.kernel.org>; Mon,  9 Aug 2021 23:37:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C53AE61019
-	for <bpf@archiver.kernel.org>; Mon,  9 Aug 2021 23:37:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0307460FE3
+	for <bpf@archiver.kernel.org>; Mon,  9 Aug 2021 23:37:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236999AbhHIXhX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 9 Aug 2021 19:37:23 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:42000 "EHLO
+        id S237001AbhHIXhZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 9 Aug 2021 19:37:25 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:63322 "EHLO
         mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234746AbhHIXhW (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 9 Aug 2021 19:37:22 -0400
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 179NYKCl024454
-        for <bpf@vger.kernel.org>; Mon, 9 Aug 2021 16:37:01 -0700
+        by vger.kernel.org with ESMTP id S235336AbhHIXhY (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 9 Aug 2021 19:37:24 -0400
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 179NSieR027754
+        for <bpf@vger.kernel.org>; Mon, 9 Aug 2021 16:37:02 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=1OL3r+uAeSJ2PqDyNQVAuQwvQEkbBS2nQq3HypXa/sI=;
- b=em6sEO6hllQB4j69eQie7Cf5ViU3X0ai9WPlLDfWLqrQWoYkRapdrNYJWZLvEsyFiR9R
- y4a2DhrUf6xyVj9cfpBihHcZu5LPAbXOb1JotaxiYZZn5FnVcKDOAjV6G022J94fYq+V
- ZrptGsXldwgR9Gjs7beXUuhnwupHzlKCo70= 
+ bh=KQtqJ6p+pz0zS1MDx9XZ8kD6y2tuR26EUeYDXqyzj6A=;
+ b=EWn1McU/4oKdcYQMbIw83UkcsgZJba+19zQMPkCFRhfOra26Dja40DTI6VU0pA3AFgdZ
+ qiZLdWibe5993KqYa3E6PEE2xt4jxPhNVy+lwRGP4nm86NY/k7Nx9PiJq2KyyiHmLSc2
+ fL1f5vk0TrVdZrrWy9LwHRh8Dpz9JihwUUI= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 3abaa11awk-2
+        by mx0a-00082601.pphosted.com with ESMTP id 3ab7exahw6-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 09 Aug 2021 16:37:00 -0700
-Received: from intmgw001.38.frc1.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Mon, 09 Aug 2021 16:37:02 -0700
+Received: from intmgw002.48.prn1.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Mon, 9 Aug 2021 16:36:59 -0700
+ 15.1.2176.2; Mon, 9 Aug 2021 16:37:01 -0700
 Received: by devvm2661.vll0.facebook.com (Postfix, from userid 200310)
-        id AFC421E27904; Mon,  9 Aug 2021 16:36:55 -0700 (PDT)
+        id AACC01E27902; Mon,  9 Aug 2021 16:36:55 -0700 (PDT)
 From:   Yucong Sun <fallentree@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     <andrii@kernel.org>, <sunyucong@gmail.com>,
         Yucong Sun <fallentree@fb.com>
-Subject: [PATCH bpf-next 5/5] Record all failed tests and output after the summary line.
-Date:   Mon, 9 Aug 2021 16:36:33 -0700
-Message-ID: <20210809233633.973638-5-fallentree@fb.com>
+Subject: [PATCH bpf-next 4/5] Display test number when listing test names
+Date:   Mon, 9 Aug 2021 16:36:32 -0700
+Message-ID: <20210809233633.973638-4-fallentree@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210809233633.973638-1-fallentree@fb.com>
 References: <20210809233633.973638-1-fallentree@fb.com>
@@ -54,118 +54,39 @@ Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-ORIG-GUID: 3IiQRB25Q03agrbCNsEDnsjEDVaTmbTK
-X-Proofpoint-GUID: 3IiQRB25Q03agrbCNsEDnsjEDVaTmbTK
+X-Proofpoint-GUID: xyxXFdSpEHkzcSWD3lntWrCFjb4hH2dh
+X-Proofpoint-ORIG-GUID: xyxXFdSpEHkzcSWD3lntWrCFjb4hH2dh
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
  definitions=2021-08-09_09:2021-08-06,2021-08-09 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- suspectscore=0 adultscore=0 mlxlogscore=893 spamscore=0 impostorscore=0
- lowpriorityscore=0 bulkscore=0 clxscore=1015 mlxscore=0 malwarescore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2107140000 definitions=main-2108090166
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
+ mlxlogscore=720 priorityscore=1501 spamscore=0 adultscore=0 suspectscore=0
+ lowpriorityscore=0 phishscore=0 clxscore=1015 mlxscore=0 bulkscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2107140000 definitions=main-2108090165
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch records all failed tests and subtests during the run, output t=
-hem after the summary line, making it easier to identify failed tests in =
-the long output.
-
-Signed-off-by: Yucong Sun <fallentree@fb.com>
 ---
- tools/testing/selftests/bpf/test_progs.c | 25 +++++++++++++++++++++++-
- tools/testing/selftests/bpf/test_progs.h |  2 ++
- 2 files changed, 26 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/test_progs.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/sel=
 ftests/bpf/test_progs.c
-index 5cc808992b00..51a70031f07e 100644
+index 82d012671552..5cc808992b00 100644
 --- a/tools/testing/selftests/bpf/test_progs.c
 +++ b/tools/testing/selftests/bpf/test_progs.c
-@@ -244,6 +244,11 @@ void test__end_subtest()
- 	       test->test_num, test->subtest_num, test->subtest_name,
- 	       sub_error_cnt ? "FAIL" : (test->skip_cnt ? "SKIP" : "OK"));
+@@ -867,7 +867,8 @@ int main(int argc, char **argv)
+ 		}
 =20
-+	if (sub_error_cnt) {
-+		fprintf(env.summary_errors, "#%d/%d %s: FAIL\n",
-+			test->test_num, test->subtest_num, test->subtest_name);
-+	}
-+
- 	if (sub_error_cnt)
- 		env.fail_cnt++;
- 	else if (test->skip_cnt =3D=3D 0)
-@@ -816,6 +821,10 @@ int main(int argc, char **argv)
- 		.sa_flags =3D SA_RESETHAND,
- 	};
- 	int err, i;
-+	/* record errors to print after summary line */
-+	char *summary_errors_buf;
-+	size_t summary_errors_cnt;
-+
-=20
- 	sigaction(SIGSEGV, &sigact, NULL);
-=20
-@@ -823,6 +832,9 @@ int main(int argc, char **argv)
- 	if (err)
- 		return err;
-=20
-+	env.summary_errors =3D open_memstream(
-+		&summary_errors_buf, &summary_errors_cnt);
-+
- 	err =3D cd_flavor_subdir(argv[0]);
- 	if (err)
- 		return err;
-@@ -891,6 +903,11 @@ int main(int argc, char **argv)
- 			test->test_num, test->test_name,
- 			test->error_cnt ? "FAIL" : "OK");
-=20
-+		if(test->error_cnt) {
-+			fprintf(env.summary_errors, "#%d %s: FAIL\n",
+ 		if (env.list_test_names) {
+-			fprintf(env.stdout, "%s\n", test->test_name);
++			fprintf(env.stdout, "# %d %s\n",
 +				test->test_num, test->test_name);
-+		}
-+
- 		reset_affinity();
- 		restore_netns();
- 		if (test->need_cgroup_cleanup)
-@@ -908,9 +925,14 @@ int main(int argc, char **argv)
- 	if (env.list_test_names)
- 		goto out;
-=20
--	fprintf(stdout, "Summary: %d/%d PASSED, %d SKIPPED, %d FAILED\n",
-+	fprintf(stdout, "\nSummary: %d/%d PASSED, %d SKIPPED, %d FAILED\n\n",
- 		env.succ_cnt, env.sub_succ_cnt, env.skip_cnt, env.fail_cnt);
-=20
-+	fclose(env.summary_errors);
-+	if(env.fail_cnt) {
-+		fprintf(stdout, "%s", summary_errors_buf);
-+	}
-+
- out:
- 	free_str_set(&env.test_selector.blacklist);
- 	free_str_set(&env.test_selector.whitelist);
-@@ -919,6 +941,7 @@ int main(int argc, char **argv)
- 	free_str_set(&env.subtest_selector.whitelist);
- 	free(env.subtest_selector.num_set);
- 	close(env.saved_netns_fd);
-+	free(summary_errors_buf);
-=20
- 	if (env.succ_cnt + env.fail_cnt + env.skip_cnt =3D=3D 0)
- 		return EXIT_NO_TEST;
-diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/sel=
-ftests/bpf/test_progs.h
-index c8c2bf878f67..63f4e534c6e5 100644
---- a/tools/testing/selftests/bpf/test_progs.h
-+++ b/tools/testing/selftests/bpf/test_progs.h
-@@ -82,6 +82,8 @@ struct test_env {
- 	int skip_cnt; /* skipped tests */
-=20
- 	int saved_netns_fd;
-+
-+	FILE* summary_errors;
- };
-=20
- extern struct test_env env;
+ 			env.succ_cnt++;
+ 			continue;
+ 		}
 --=20
 2.30.2
 
