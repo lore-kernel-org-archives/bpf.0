@@ -2,59 +2,59 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 48C18C4338F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD137C432BE
 	for <bpf@archiver.kernel.org>; Mon,  9 Aug 2021 09:19:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 29E976056C
+	by mail.kernel.org (Postfix) with ESMTP id 9B2336056C
 	for <bpf@archiver.kernel.org>; Mon,  9 Aug 2021 09:19:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234366AbhHIJTL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 9 Aug 2021 05:19:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58090 "EHLO
+        id S234329AbhHIJTb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 9 Aug 2021 05:19:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234340AbhHIJTH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 9 Aug 2021 05:19:07 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D57F3C0613D3
-        for <bpf@vger.kernel.org>; Mon,  9 Aug 2021 02:18:46 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id z11so23497954edb.11
-        for <bpf@vger.kernel.org>; Mon, 09 Aug 2021 02:18:46 -0700 (PDT)
+        with ESMTP id S234388AbhHIJTR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 9 Aug 2021 05:19:17 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A00A6C06179F
+        for <bpf@vger.kernel.org>; Mon,  9 Aug 2021 02:18:56 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id u3so27781758ejz.1
+        for <bpf@vger.kernel.org>; Mon, 09 Aug 2021 02:18:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=anyfinetworks-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=dVbRKwcYZsowM9HPxnzGwN1JduAyXTyTDesTtMGR0Po=;
-        b=U7pCEqX7RD78CWqSMGhVkfpzmUtnbw+C7k8SBIykLrHDVtD9/QsQgp5d9efd+8b0nb
-         9+2kkDrKEl2GB05vzLwdh5slXdPw26mGIbuD0hYIxF+DVB3ecWZKyIAHQPkR/+EGZ+pt
-         ogxXnZJT7wAUmrPPi36UjjgR8GNtk1rCt97wArNBijP/7C2puP16gGeFoLpo519ZAgwE
-         VQ/OZ/aNcGjF/Am1RW8+AdHEOuzE8kbSdelAiUBbg9WL7HASPX7Vt/C0kZz6UWa6sXTT
-         T5QJGkhilwKylaoEzqfdt39sw0fCykpusSSS1ID34oYudvhR1oJN7a5E/g2ua7nX2CZx
-         1BOg==
+        bh=EdVLRDkMsSihNRWoYYCmTwrwwdtZDcRtRQ01vQHU6vo=;
+        b=brQIVFOxxm9Z5pCa/O5KAIffh7DOvaqsVOQNiOEVuiybI11MsI5uvZZH+hFj+c8ldc
+         YVViDzolaU8/VdDX7osvYKeyETUgil0MSXjUqSO6wWCIv1yriTlFw4dYR8CZIbgRxA9O
+         vhabyL9lKLKtBOMzHje0SFZJpmW5yPtr2f3ZKekQxvFSLvcAxDzpk7qf0aJpr98Q9hYe
+         OOZ+FIjvqnt0niANEtuYbUl6HHg3D+/P8X7JPIUO1ct+LsjG/PWo+H7DD0LOX0Da77cH
+         vFRbN0SI8FvhtySyz6bjI5xKTuxak+jbo2EIgrI2QtaiiZG87VlMm2Jt5W2TE41f+PHU
+         TZHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=dVbRKwcYZsowM9HPxnzGwN1JduAyXTyTDesTtMGR0Po=;
-        b=D8GBFw5JnTVap/6/pFen1J8wjcKUjB843o2RKH2Cm3nP0SovHF8pFhJ7eKmfS4Hmq9
-         GOY1PAiORJSxjpEEHD6uWxeG9TycqNHFtphLoxRF3fhBmmlrTLzNEC0rYrjFGm5yhBLb
-         BrqlWyUVONtoVxSN2F3kER16mwawe0De+2kxZgMbdaATQHKBI4ztqzrCCKEaIhhIIu+7
-         8JNU7PZM4F/OavPYKEF123K8gd1IIj9yEExk8shW7dbfaDv6sgPauIkPzr0Yiicsltvs
-         fGKqnirMKtxqqMUqFC8TbKCX3dM46iN3j0bOPgiexKwJVfkU5z5fDq+s3MZkdyMZBo9I
-         Cduw==
-X-Gm-Message-State: AOAM532YVr9hZkqOEJQhiLXG5tQLtS+s3OO07wZ+qrgNky6xjBvTVcKZ
-        2aSL8k68C2wPOjIPtnZZ8+5+UssGfQWkS6aW+Oc=
-X-Google-Smtp-Source: ABdhPJxgl9r1t3WZvdZLqbvpHGq6sh45Kw+wg+F3tWf9eHDnp6HAcS6hT612XkQUqKI7AjNsrgOTCw==
-X-Received: by 2002:a05:6402:10d6:: with SMTP id p22mr14456321edu.168.1628500725409;
-        Mon, 09 Aug 2021 02:18:45 -0700 (PDT)
+        bh=EdVLRDkMsSihNRWoYYCmTwrwwdtZDcRtRQ01vQHU6vo=;
+        b=t99OkNZa3CdQxdBgFJ0ZIUTsDj0FsSE63xoxlcw+FbfVDklp2yl5otYHcaf07TwcVr
+         Qw+8hPgRRYylysQLJ9rvHsnsXoCH+89TbOOzWmTAsXksZ6D5+bfn4yscrMTKcWCyJtWq
+         HeYiU3+uTN+IFthbDnedj1st55J0AXd6BJzGzl1lzZ3W3jWoutuoyu9z5l42oYZ3rm8A
+         lhBaBBQzsNrflz+3pWvOMpkj3ft0V1PN+tp/Tc0X2FznVUK2ps23wv0PHT6LlsfC6dyn
+         5MKB8kxPHfIONGQzRd90b/vCRIy3ek+mJiqCBarQZv8ccolUTkIHPa7U20VYzvrg8b2C
+         oW6A==
+X-Gm-Message-State: AOAM533kxpITnC8azaWhnBgX7Myj6JCAUlRtaPs8W63MKdj8VgAOnEo4
+        T5pnTyjc1oImkU68jZMiso8Y+A==
+X-Google-Smtp-Source: ABdhPJxkNycue+F/q0KoFKpyO69zTU+qaFc0ESg512169xw02k44oVWUuEkxdFPPY0t7IioSjwkeYQ==
+X-Received: by 2002:a17:907:2cf0:: with SMTP id hz16mr8877998ejc.466.1628500735235;
+        Mon, 09 Aug 2021 02:18:55 -0700 (PDT)
 Received: from anpc2.lan (static-213-115-136-2.sme.telenor.se. [213.115.136.2])
-        by smtp.gmail.com with ESMTPSA id dg24sm1234250edb.6.2021.08.09.02.18.44
+        by smtp.gmail.com with ESMTPSA id dg24sm1234250edb.6.2021.08.09.02.18.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Aug 2021 02:18:45 -0700 (PDT)
+        Mon, 09 Aug 2021 02:18:54 -0700 (PDT)
 From:   Johan Almbladh <johan.almbladh@anyfinetworks.com>
 To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
 Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
@@ -62,9 +62,9 @@ Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
         Tony.Ambardar@gmail.com, netdev@vger.kernel.org,
         bpf@vger.kernel.org,
         Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Subject: [PATCH bpf-next v2 04/14] bpf/tests: Add more tests of ALU32 and ALU64 bitwise operations
-Date:   Mon,  9 Aug 2021 11:18:19 +0200
-Message-Id: <20210809091829.810076-5-johan.almbladh@anyfinetworks.com>
+Subject: [PATCH bpf-next v2 13/14] bpf/tests: Add tests for BPF_CMPXCHG
+Date:   Mon,  9 Aug 2021 11:18:28 +0200
+Message-Id: <20210809091829.810076-14-johan.almbladh@anyfinetworks.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210809091829.810076-1-johan.almbladh@anyfinetworks.com>
 References: <20210809091829.810076-1-johan.almbladh@anyfinetworks.com>
@@ -74,272 +74,193 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch adds tests of BPF_AND, BPF_OR and BPF_XOR with different
-magnitude of the immediate value. Mainly checking 32-bit JIT sub-word
-handling and zero/sign extension.
+Tests for BPF_CMPXCHG with both word and double word operands. As with
+the tests for other atomic operations, these tests only check the result
+of the arithmetic operation. The atomicity of the operations is not tested.
 
 Signed-off-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
 Acked-by: Yonghong Song <yhs@fb.com>
 ---
- lib/test_bpf.c | 210 +++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 210 insertions(+)
+ lib/test_bpf.c | 166 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 166 insertions(+)
 
 diff --git a/lib/test_bpf.c b/lib/test_bpf.c
-index ec36a8bfa3f9..73c2ea0cb13b 100644
+index 855f64093ca7..d05fe7b4a9cb 100644
 --- a/lib/test_bpf.c
 +++ b/lib/test_bpf.c
-@@ -3514,6 +3514,44 @@ static struct bpf_test tests[] = {
- 		{ },
- 		{ { 0, 0xffffffff } },
- 	},
+@@ -5690,6 +5690,172 @@ static struct bpf_test tests[] = {
+ #undef BPF_ATOMIC_OP_TEST2
+ #undef BPF_ATOMIC_OP_TEST3
+ #undef BPF_ATOMIC_OP_TEST4
++	/* BPF_ATOMIC | BPF_W, BPF_CMPXCHG */
 +	{
-+		"ALU_AND_K: Small immediate",
++		"BPF_ATOMIC | BPF_W, BPF_CMPXCHG: Test successful return",
 +		.u.insns_int = {
-+			BPF_ALU32_IMM(BPF_MOV, R0, 0x01020304),
-+			BPF_ALU32_IMM(BPF_AND, R0, 15),
++			BPF_ST_MEM(BPF_W, R10, -40, 0x01234567),
++			BPF_ALU32_IMM(BPF_MOV, R0, 0x01234567),
++			BPF_ALU32_IMM(BPF_MOV, R3, 0x89abcdef),
++			BPF_ATOMIC_OP(BPF_W, BPF_CMPXCHG, R10, R3, -40),
 +			BPF_EXIT_INSN(),
 +		},
 +		INTERNAL,
 +		{ },
-+		{ { 0, 4 } }
++		{ { 0, 0x01234567 } },
++		.stack_depth = 40,
 +	},
 +	{
-+		"ALU_AND_K: Large immediate",
++		"BPF_ATOMIC | BPF_W, BPF_CMPXCHG: Test successful store",
 +		.u.insns_int = {
-+			BPF_ALU32_IMM(BPF_MOV, R0, 0xf1f2f3f4),
-+			BPF_ALU32_IMM(BPF_AND, R0, 0xafbfcfdf),
++			BPF_ST_MEM(BPF_W, R10, -40, 0x01234567),
++			BPF_ALU32_IMM(BPF_MOV, R0, 0x01234567),
++			BPF_ALU32_IMM(BPF_MOV, R3, 0x89abcdef),
++			BPF_ATOMIC_OP(BPF_W, BPF_CMPXCHG, R10, R3, -40),
++			BPF_LDX_MEM(BPF_W, R0, R10, -40),
 +			BPF_EXIT_INSN(),
 +		},
 +		INTERNAL,
 +		{ },
-+		{ { 0, 0xa1b2c3d4 } }
++		{ { 0, 0x89abcdef } },
++		.stack_depth = 40,
 +	},
 +	{
-+		"ALU_AND_K: Zero extension",
++		"BPF_ATOMIC | BPF_W, BPF_CMPXCHG: Test failure return",
 +		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x0123456789abcdefLL),
-+			BPF_LD_IMM64(R1, 0x0000000080a0c0e0LL),
-+			BPF_ALU32_IMM(BPF_AND, R0, 0xf0f0f0f0),
-+			BPF_JMP_REG(BPF_JEQ, R0, R1, 2),
-+			BPF_MOV32_IMM(R0, 2),
-+			BPF_EXIT_INSN(),
-+			BPF_MOV32_IMM(R0, 1),
++			BPF_ST_MEM(BPF_W, R10, -40, 0x01234567),
++			BPF_ALU32_IMM(BPF_MOV, R0, 0x76543210),
++			BPF_ALU32_IMM(BPF_MOV, R3, 0x89abcdef),
++			BPF_ATOMIC_OP(BPF_W, BPF_CMPXCHG, R10, R3, -40),
 +			BPF_EXIT_INSN(),
 +		},
 +		INTERNAL,
 +		{ },
-+		{ { 0, 1 } }
++		{ { 0, 0x01234567 } },
++		.stack_depth = 40,
 +	},
++	{
++		"BPF_ATOMIC | BPF_W, BPF_CMPXCHG: Test failure store",
++		.u.insns_int = {
++			BPF_ST_MEM(BPF_W, R10, -40, 0x01234567),
++			BPF_ALU32_IMM(BPF_MOV, R0, 0x76543210),
++			BPF_ALU32_IMM(BPF_MOV, R3, 0x89abcdef),
++			BPF_ATOMIC_OP(BPF_W, BPF_CMPXCHG, R10, R3, -40),
++			BPF_LDX_MEM(BPF_W, R0, R10, -40),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0x01234567 } },
++		.stack_depth = 40,
++	},
++	{
++		"BPF_ATOMIC | BPF_W, BPF_CMPXCHG: Test side effects",
++		.u.insns_int = {
++			BPF_ST_MEM(BPF_W, R10, -40, 0x01234567),
++			BPF_ALU32_IMM(BPF_MOV, R0, 0x01234567),
++			BPF_ALU32_IMM(BPF_MOV, R3, 0x89abcdef),
++			BPF_ATOMIC_OP(BPF_W, BPF_CMPXCHG, R10, R3, -40),
++			BPF_ATOMIC_OP(BPF_W, BPF_CMPXCHG, R10, R3, -40),
++			BPF_ALU32_REG(BPF_MOV, R0, R3),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0x89abcdef } },
++		.stack_depth = 40,
++	},
++	/* BPF_ATOMIC | BPF_DW, BPF_CMPXCHG */
++	{
++		"BPF_ATOMIC | BPF_DW, BPF_CMPXCHG: Test successful return",
++		.u.insns_int = {
++			BPF_LD_IMM64(R1, 0x0123456789abcdefULL),
++			BPF_LD_IMM64(R2, 0xfecdba9876543210ULL),
++			BPF_ALU64_REG(BPF_MOV, R0, R1),
++			BPF_STX_MEM(BPF_DW, R10, R1, -40),
++			BPF_ATOMIC_OP(BPF_DW, BPF_CMPXCHG, R10, R2, -40),
++			BPF_JMP_REG(BPF_JNE, R0, R1, 1),
++			BPF_ALU64_REG(BPF_SUB, R0, R1),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0 } },
++		.stack_depth = 40,
++	},
++	{
++		"BPF_ATOMIC | BPF_DW, BPF_CMPXCHG: Test successful store",
++		.u.insns_int = {
++			BPF_LD_IMM64(R1, 0x0123456789abcdefULL),
++			BPF_LD_IMM64(R2, 0xfecdba9876543210ULL),
++			BPF_ALU64_REG(BPF_MOV, R0, R1),
++			BPF_STX_MEM(BPF_DW, R10, R0, -40),
++			BPF_ATOMIC_OP(BPF_DW, BPF_CMPXCHG, R10, R2, -40),
++			BPF_LDX_MEM(BPF_DW, R0, R10, -40),
++			BPF_JMP_REG(BPF_JNE, R0, R2, 1),
++			BPF_ALU64_REG(BPF_SUB, R0, R2),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0 } },
++		.stack_depth = 40,
++	},
++	{
++		"BPF_ATOMIC | BPF_DW, BPF_CMPXCHG: Test failure return",
++		.u.insns_int = {
++			BPF_LD_IMM64(R1, 0x0123456789abcdefULL),
++			BPF_LD_IMM64(R2, 0xfecdba9876543210ULL),
++			BPF_ALU64_REG(BPF_MOV, R0, R1),
++			BPF_ALU64_IMM(BPF_ADD, R0, 1),
++			BPF_STX_MEM(BPF_DW, R10, R1, -40),
++			BPF_ATOMIC_OP(BPF_DW, BPF_CMPXCHG, R10, R2, -40),
++			BPF_JMP_REG(BPF_JNE, R0, R1, 1),
++			BPF_ALU64_REG(BPF_SUB, R0, R1),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0 } },
++		.stack_depth = 40,
++	},
++	{
++		"BPF_ATOMIC | BPF_DW, BPF_CMPXCHG: Test failure store",
++		.u.insns_int = {
++			BPF_LD_IMM64(R1, 0x0123456789abcdefULL),
++			BPF_LD_IMM64(R2, 0xfecdba9876543210ULL),
++			BPF_ALU64_REG(BPF_MOV, R0, R1),
++			BPF_ALU64_IMM(BPF_ADD, R0, 1),
++			BPF_STX_MEM(BPF_DW, R10, R1, -40),
++			BPF_ATOMIC_OP(BPF_DW, BPF_CMPXCHG, R10, R2, -40),
++			BPF_LDX_MEM(BPF_DW, R0, R10, -40),
++			BPF_JMP_REG(BPF_JNE, R0, R1, 1),
++			BPF_ALU64_REG(BPF_SUB, R0, R1),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0 } },
++		.stack_depth = 40,
++	},
++	{
++		"BPF_ATOMIC | BPF_DW, BPF_CMPXCHG: Test side effects",
++		.u.insns_int = {
++			BPF_LD_IMM64(R1, 0x0123456789abcdefULL),
++			BPF_LD_IMM64(R2, 0xfecdba9876543210ULL),
++			BPF_ALU64_REG(BPF_MOV, R0, R1),
++			BPF_STX_MEM(BPF_DW, R10, R1, -40),
++			BPF_ATOMIC_OP(BPF_DW, BPF_CMPXCHG, R10, R2, -40),
++			BPF_LD_IMM64(R0, 0xfecdba9876543210ULL),
++			BPF_JMP_REG(BPF_JNE, R0, R2, 1),
++			BPF_ALU64_REG(BPF_SUB, R0, R2),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0 } },
++		.stack_depth = 40,
++	},
+ 	/* BPF_JMP32 | BPF_JEQ | BPF_K */
  	{
- 		"ALU64_AND_K: 3 & 2 = 2",
- 		.u.insns_int = {
-@@ -3584,6 +3622,38 @@ static struct bpf_test tests[] = {
- 		{ },
- 		{ { 0, 0x1 } },
- 	},
-+	{
-+		"ALU64_AND_K: Sign extension 1",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x0123456789abcdefLL),
-+			BPF_LD_IMM64(R1, 0x00000000090b0d0fLL),
-+			BPF_ALU64_IMM(BPF_AND, R0, 0x0f0f0f0f),
-+			BPF_JMP_REG(BPF_JEQ, R0, R1, 2),
-+			BPF_MOV32_IMM(R0, 2),
-+			BPF_EXIT_INSN(),
-+			BPF_MOV32_IMM(R0, 1),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } }
-+	},
-+	{
-+		"ALU64_AND_K: Sign extension 2",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x0123456789abcdefLL),
-+			BPF_LD_IMM64(R1, 0x0123456780a0c0e0LL),
-+			BPF_ALU64_IMM(BPF_AND, R0, 0xf0f0f0f0),
-+			BPF_JMP_REG(BPF_JEQ, R0, R1, 2),
-+			BPF_MOV32_IMM(R0, 2),
-+			BPF_EXIT_INSN(),
-+			BPF_MOV32_IMM(R0, 1),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } }
-+	},
- 	/* BPF_ALU | BPF_OR | BPF_X */
- 	{
- 		"ALU_OR_X: 1 | 2 = 3",
-@@ -3656,6 +3726,44 @@ static struct bpf_test tests[] = {
- 		{ },
- 		{ { 0, 0xffffffff } },
- 	},
-+	{
-+		"ALU_OR_K: Small immediate",
-+		.u.insns_int = {
-+			BPF_ALU32_IMM(BPF_MOV, R0, 0x01020304),
-+			BPF_ALU32_IMM(BPF_OR, R0, 1),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 0x01020305 } }
-+	},
-+	{
-+		"ALU_OR_K: Large immediate",
-+		.u.insns_int = {
-+			BPF_ALU32_IMM(BPF_MOV, R0, 0x01020304),
-+			BPF_ALU32_IMM(BPF_OR, R0, 0xa0b0c0d0),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 0xa1b2c3d4 } }
-+	},
-+	{
-+		"ALU_OR_K: Zero extension",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x0123456789abcdefLL),
-+			BPF_LD_IMM64(R1, 0x00000000f9fbfdffLL),
-+			BPF_ALU32_IMM(BPF_OR, R0, 0xf0f0f0f0),
-+			BPF_JMP_REG(BPF_JEQ, R0, R1, 2),
-+			BPF_MOV32_IMM(R0, 2),
-+			BPF_EXIT_INSN(),
-+			BPF_MOV32_IMM(R0, 1),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } }
-+	},
- 	{
- 		"ALU64_OR_K: 1 | 2 = 3",
- 		.u.insns_int = {
-@@ -3726,6 +3834,38 @@ static struct bpf_test tests[] = {
- 		{ },
- 		{ { 0, 0x1 } },
- 	},
-+	{
-+		"ALU64_OR_K: Sign extension 1",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x0123456789abcdefLL),
-+			BPF_LD_IMM64(R1, 0x012345678fafcfefLL),
-+			BPF_ALU64_IMM(BPF_OR, R0, 0x0f0f0f0f),
-+			BPF_JMP_REG(BPF_JEQ, R0, R1, 2),
-+			BPF_MOV32_IMM(R0, 2),
-+			BPF_EXIT_INSN(),
-+			BPF_MOV32_IMM(R0, 1),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } }
-+	},
-+	{
-+		"ALU64_OR_K: Sign extension 2",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x0123456789abcdefLL),
-+			BPF_LD_IMM64(R1, 0xfffffffff9fbfdffLL),
-+			BPF_ALU64_IMM(BPF_OR, R0, 0xf0f0f0f0),
-+			BPF_JMP_REG(BPF_JEQ, R0, R1, 2),
-+			BPF_MOV32_IMM(R0, 2),
-+			BPF_EXIT_INSN(),
-+			BPF_MOV32_IMM(R0, 1),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } }
-+	},
- 	/* BPF_ALU | BPF_XOR | BPF_X */
- 	{
- 		"ALU_XOR_X: 5 ^ 6 = 3",
-@@ -3798,6 +3938,44 @@ static struct bpf_test tests[] = {
- 		{ },
- 		{ { 0, 0xfffffffe } },
- 	},
-+	{
-+		"ALU_XOR_K: Small immediate",
-+		.u.insns_int = {
-+			BPF_ALU32_IMM(BPF_MOV, R0, 0x01020304),
-+			BPF_ALU32_IMM(BPF_XOR, R0, 15),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 0x0102030b } }
-+	},
-+	{
-+		"ALU_XOR_K: Large immediate",
-+		.u.insns_int = {
-+			BPF_ALU32_IMM(BPF_MOV, R0, 0xf1f2f3f4),
-+			BPF_ALU32_IMM(BPF_XOR, R0, 0xafbfcfdf),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 0x5e4d3c2b } }
-+	},
-+	{
-+		"ALU_XOR_K: Zero extension",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x0123456789abcdefLL),
-+			BPF_LD_IMM64(R1, 0x00000000795b3d1fLL),
-+			BPF_ALU32_IMM(BPF_XOR, R0, 0xf0f0f0f0),
-+			BPF_JMP_REG(BPF_JEQ, R0, R1, 2),
-+			BPF_MOV32_IMM(R0, 2),
-+			BPF_EXIT_INSN(),
-+			BPF_MOV32_IMM(R0, 1),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } }
-+	},
- 	{
- 		"ALU64_XOR_K: 5 ^ 6 = 3",
- 		.u.insns_int = {
-@@ -3868,6 +4046,38 @@ static struct bpf_test tests[] = {
- 		{ },
- 		{ { 0, 0x1 } },
- 	},
-+	{
-+		"ALU64_XOR_K: Sign extension 1",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x0123456789abcdefLL),
-+			BPF_LD_IMM64(R1, 0x0123456786a4c2e0LL),
-+			BPF_ALU64_IMM(BPF_XOR, R0, 0x0f0f0f0f),
-+			BPF_JMP_REG(BPF_JEQ, R0, R1, 2),
-+			BPF_MOV32_IMM(R0, 2),
-+			BPF_EXIT_INSN(),
-+			BPF_MOV32_IMM(R0, 1),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } }
-+	},
-+	{
-+		"ALU64_XOR_K: Sign extension 2",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x0123456789abcdefLL),
-+			BPF_LD_IMM64(R1, 0xfedcba98795b3d1fLL),
-+			BPF_ALU64_IMM(BPF_XOR, R0, 0xf0f0f0f0),
-+			BPF_JMP_REG(BPF_JEQ, R0, R1, 2),
-+			BPF_MOV32_IMM(R0, 2),
-+			BPF_EXIT_INSN(),
-+			BPF_MOV32_IMM(R0, 1),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } }
-+	},
- 	/* BPF_ALU | BPF_LSH | BPF_X */
- 	{
- 		"ALU_LSH_X: 1 << 1 = 2",
+ 		"JMP32_JEQ_K: Small immediate",
 -- 
 2.25.1
 
