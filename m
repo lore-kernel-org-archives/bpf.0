@@ -5,56 +5,56 @@ X-Spam-Level:
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64881C19F31
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48C18C4338F
 	for <bpf@archiver.kernel.org>; Mon,  9 Aug 2021 09:19:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 408C061078
+	by mail.kernel.org (Postfix) with ESMTP id 29E976056C
 	for <bpf@archiver.kernel.org>; Mon,  9 Aug 2021 09:19:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234335AbhHIJTa (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 9 Aug 2021 05:19:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58138 "EHLO
+        id S234366AbhHIJTL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 9 Aug 2021 05:19:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234372AbhHIJTN (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 9 Aug 2021 05:19:13 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58EB1C061796
-        for <bpf@vger.kernel.org>; Mon,  9 Aug 2021 02:18:53 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id d6so23499376edt.7
-        for <bpf@vger.kernel.org>; Mon, 09 Aug 2021 02:18:53 -0700 (PDT)
+        with ESMTP id S234340AbhHIJTH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 9 Aug 2021 05:19:07 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D57F3C0613D3
+        for <bpf@vger.kernel.org>; Mon,  9 Aug 2021 02:18:46 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id z11so23497954edb.11
+        for <bpf@vger.kernel.org>; Mon, 09 Aug 2021 02:18:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=anyfinetworks-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=NEuJ/ph9W8GsGRnb9nvqKcUj76sJQox9oSzfTRyPjpw=;
-        b=TTEcmc8GkqewKQ3bVCoKXg303GoLO/eFp1IxP8Sl0jPZXz8X9e5XyJm5WNz7L9Gd+c
-         nFl23sLoZj9ks8Yhscp4u6WtEdIBW1zbPV5eY2Emo0hFQWdCmAee7YfabWFxZ3kZRBlW
-         QkoC9ijojYKer6N5efGhFUJHtcD94WGpovpWfeEVKa6otLSjmDGckmLa3ab6mvBs0fb4
-         IBwgIKaIsSnn3Nom5qt22K4/baO3GzF58jCZF+O5SIIPIijQ3BchKA9t1s6ZPX5Du5S1
-         +uMxtd0YQmd65b52rtGdDZ4JTWlNbT6a5k9aZYzvTi2F0lNK6uTPWNLV0hlPZH87ZoKC
-         8JYw==
+        bh=dVbRKwcYZsowM9HPxnzGwN1JduAyXTyTDesTtMGR0Po=;
+        b=U7pCEqX7RD78CWqSMGhVkfpzmUtnbw+C7k8SBIykLrHDVtD9/QsQgp5d9efd+8b0nb
+         9+2kkDrKEl2GB05vzLwdh5slXdPw26mGIbuD0hYIxF+DVB3ecWZKyIAHQPkR/+EGZ+pt
+         ogxXnZJT7wAUmrPPi36UjjgR8GNtk1rCt97wArNBijP/7C2puP16gGeFoLpo519ZAgwE
+         VQ/OZ/aNcGjF/Am1RW8+AdHEOuzE8kbSdelAiUBbg9WL7HASPX7Vt/C0kZz6UWa6sXTT
+         T5QJGkhilwKylaoEzqfdt39sw0fCykpusSSS1ID34oYudvhR1oJN7a5E/g2ua7nX2CZx
+         1BOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=NEuJ/ph9W8GsGRnb9nvqKcUj76sJQox9oSzfTRyPjpw=;
-        b=miyLXgCPpdGmyiDLcYwcpcvXMhGodbk7lisBf12aYdrPWn3k+HamLq5SjeDMrFcnl6
-         1EyGmBNE4w2sCZXDnlMVlPdI7FLkMxi4tJxdxK6+WTKEutJrVJ6azKGUe84yBfnYbEus
-         jSNugSyhiXRgYwS3iStoac9r7eOBneS/i6oNXkFTi0jTyJHNFv7LufAGNNfgi95f+lR8
-         wlqF0bi0KwPLcROBHieJVFUL+n2DvuZPAT+NufAvjyTxvjhjmdfxdGm/ZRX/MFNazAxP
-         5Q+bAjCOKDgxuhtudUP5jql7Cuxb0oqpQDt20Q4VTeWXn2sT/UaxMG8T7HaUh+Xe+s1q
-         06ug==
-X-Gm-Message-State: AOAM531neYKP9hJ3uHsv7Cf3q08VZ721s+bZyIwL/Xb27IZwuPjTM+uO
-        EsEItXD2x7WvUPGUpPvcr65YuA==
-X-Google-Smtp-Source: ABdhPJxZyVP97t66CKLgRUvA0QBKfHw395GUl/7PZHjK1WIHMKslNeQm93tMsoJuAlX6olcimjGTQQ==
-X-Received: by 2002:aa7:d3cf:: with SMTP id o15mr6411672edr.98.1628500732017;
-        Mon, 09 Aug 2021 02:18:52 -0700 (PDT)
+        bh=dVbRKwcYZsowM9HPxnzGwN1JduAyXTyTDesTtMGR0Po=;
+        b=D8GBFw5JnTVap/6/pFen1J8wjcKUjB843o2RKH2Cm3nP0SovHF8pFhJ7eKmfS4Hmq9
+         GOY1PAiORJSxjpEEHD6uWxeG9TycqNHFtphLoxRF3fhBmmlrTLzNEC0rYrjFGm5yhBLb
+         BrqlWyUVONtoVxSN2F3kER16mwawe0De+2kxZgMbdaATQHKBI4ztqzrCCKEaIhhIIu+7
+         8JNU7PZM4F/OavPYKEF123K8gd1IIj9yEExk8shW7dbfaDv6sgPauIkPzr0Yiicsltvs
+         fGKqnirMKtxqqMUqFC8TbKCX3dM46iN3j0bOPgiexKwJVfkU5z5fDq+s3MZkdyMZBo9I
+         Cduw==
+X-Gm-Message-State: AOAM532YVr9hZkqOEJQhiLXG5tQLtS+s3OO07wZ+qrgNky6xjBvTVcKZ
+        2aSL8k68C2wPOjIPtnZZ8+5+UssGfQWkS6aW+Oc=
+X-Google-Smtp-Source: ABdhPJxgl9r1t3WZvdZLqbvpHGq6sh45Kw+wg+F3tWf9eHDnp6HAcS6hT612XkQUqKI7AjNsrgOTCw==
+X-Received: by 2002:a05:6402:10d6:: with SMTP id p22mr14456321edu.168.1628500725409;
+        Mon, 09 Aug 2021 02:18:45 -0700 (PDT)
 Received: from anpc2.lan (static-213-115-136-2.sme.telenor.se. [213.115.136.2])
-        by smtp.gmail.com with ESMTPSA id dg24sm1234250edb.6.2021.08.09.02.18.51
+        by smtp.gmail.com with ESMTPSA id dg24sm1234250edb.6.2021.08.09.02.18.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Aug 2021 02:18:51 -0700 (PDT)
+        Mon, 09 Aug 2021 02:18:45 -0700 (PDT)
 From:   Johan Almbladh <johan.almbladh@anyfinetworks.com>
 To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
 Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
@@ -62,9 +62,9 @@ Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
         Tony.Ambardar@gmail.com, netdev@vger.kernel.org,
         bpf@vger.kernel.org,
         Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Subject: [PATCH bpf-next v2 10/14] bpf/tests: Add branch conversion JIT test
-Date:   Mon,  9 Aug 2021 11:18:25 +0200
-Message-Id: <20210809091829.810076-11-johan.almbladh@anyfinetworks.com>
+Subject: [PATCH bpf-next v2 04/14] bpf/tests: Add more tests of ALU32 and ALU64 bitwise operations
+Date:   Mon,  9 Aug 2021 11:18:19 +0200
+Message-Id: <20210809091829.810076-5-johan.almbladh@anyfinetworks.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210809091829.810076-1-johan.almbladh@anyfinetworks.com>
 References: <20210809091829.810076-1-johan.almbladh@anyfinetworks.com>
@@ -74,77 +74,272 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Some JITs may need to convert a conditional jump instruction to
-to short PC-relative branch and a long unconditional jump, if the
-PC-relative offset exceeds offset field width in the CPU instruction.
-This test triggers such branch conversion on the 32-bit MIPS JIT.
+This patch adds tests of BPF_AND, BPF_OR and BPF_XOR with different
+magnitude of the immediate value. Mainly checking 32-bit JIT sub-word
+handling and zero/sign extension.
 
 Signed-off-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
+Acked-by: Yonghong Song <yhs@fb.com>
 ---
- lib/test_bpf.c | 43 +++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
+ lib/test_bpf.c | 210 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 210 insertions(+)
 
 diff --git a/lib/test_bpf.c b/lib/test_bpf.c
-index 402c199cc119..896d37f4f4b3 100644
+index ec36a8bfa3f9..73c2ea0cb13b 100644
 --- a/lib/test_bpf.c
 +++ b/lib/test_bpf.c
-@@ -461,6 +461,41 @@ static int bpf_fill_stxdw(struct bpf_test *self)
- 	return __bpf_fill_stxdw(self, BPF_DW);
- }
- 
-+static int bpf_fill_long_jmp(struct bpf_test *self)
-+{
-+	unsigned int len = BPF_MAXINSNS;
-+	struct bpf_insn *insn;
-+	int i;
-+
-+	insn = kmalloc_array(len, sizeof(*insn), GFP_KERNEL);
-+	if (!insn)
-+		return -ENOMEM;
-+
-+	insn[0] = BPF_ALU64_IMM(BPF_MOV, R0, 1);
-+	insn[1] = BPF_JMP_IMM(BPF_JEQ, R0, 1, len - 2 - 1);
-+
-+	/*
-+	 * Fill with a complex 64-bit operation that expands to a lot of
-+	 * instructions on 32-bit JITs. The large jump offset can then
-+	 * overflow the conditional branch field size, triggering a branch
-+	 * conversion mechanism in some JITs.
-+	 *
-+	 * Note: BPF_MAXINSNS of ALU64 MUL is enough to trigger such branch
-+	 * conversion on the 32-bit MIPS JIT. For other JITs, the instruction
-+	 * count and/or operation may need to be modified to trigger the
-+	 * branch conversion.
-+	 */
-+	for (i = 2; i < len - 1; i++)
-+		insn[i] = BPF_ALU64_IMM(BPF_MUL, R0, (i << 16) + i);
-+
-+	insn[len - 1] = BPF_EXIT_INSN();
-+
-+	self->u.ptr.insns = insn;
-+	self->u.ptr.len = len;
-+
-+	return 0;
-+}
-+
- static struct bpf_test tests[] = {
- 	{
- 		"TAX",
-@@ -6895,6 +6930,14 @@ static struct bpf_test tests[] = {
+@@ -3514,6 +3514,44 @@ static struct bpf_test tests[] = {
  		{ },
- 		{ { 0, 1 } },
+ 		{ { 0, 0xffffffff } },
  	},
-+	{	/* Mainly checking JIT here. */
-+		"BPF_MAXINSNS: Very long conditional jump",
++	{
++		"ALU_AND_K: Small immediate",
++		.u.insns_int = {
++			BPF_ALU32_IMM(BPF_MOV, R0, 0x01020304),
++			BPF_ALU32_IMM(BPF_AND, R0, 15),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
 +		{ },
-+		INTERNAL | FLAG_NO_DATA,
++		{ { 0, 4 } }
++	},
++	{
++		"ALU_AND_K: Large immediate",
++		.u.insns_int = {
++			BPF_ALU32_IMM(BPF_MOV, R0, 0xf1f2f3f4),
++			BPF_ALU32_IMM(BPF_AND, R0, 0xafbfcfdf),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
 +		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_long_jmp,
++		{ { 0, 0xa1b2c3d4 } }
++	},
++	{
++		"ALU_AND_K: Zero extension",
++		.u.insns_int = {
++			BPF_LD_IMM64(R0, 0x0123456789abcdefLL),
++			BPF_LD_IMM64(R1, 0x0000000080a0c0e0LL),
++			BPF_ALU32_IMM(BPF_AND, R0, 0xf0f0f0f0),
++			BPF_JMP_REG(BPF_JEQ, R0, R1, 2),
++			BPF_MOV32_IMM(R0, 2),
++			BPF_EXIT_INSN(),
++			BPF_MOV32_IMM(R0, 1),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 1 } }
 +	},
  	{
- 		"JMP_JA: Jump, gap, jump, ...",
+ 		"ALU64_AND_K: 3 & 2 = 2",
+ 		.u.insns_int = {
+@@ -3584,6 +3622,38 @@ static struct bpf_test tests[] = {
  		{ },
+ 		{ { 0, 0x1 } },
+ 	},
++	{
++		"ALU64_AND_K: Sign extension 1",
++		.u.insns_int = {
++			BPF_LD_IMM64(R0, 0x0123456789abcdefLL),
++			BPF_LD_IMM64(R1, 0x00000000090b0d0fLL),
++			BPF_ALU64_IMM(BPF_AND, R0, 0x0f0f0f0f),
++			BPF_JMP_REG(BPF_JEQ, R0, R1, 2),
++			BPF_MOV32_IMM(R0, 2),
++			BPF_EXIT_INSN(),
++			BPF_MOV32_IMM(R0, 1),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 1 } }
++	},
++	{
++		"ALU64_AND_K: Sign extension 2",
++		.u.insns_int = {
++			BPF_LD_IMM64(R0, 0x0123456789abcdefLL),
++			BPF_LD_IMM64(R1, 0x0123456780a0c0e0LL),
++			BPF_ALU64_IMM(BPF_AND, R0, 0xf0f0f0f0),
++			BPF_JMP_REG(BPF_JEQ, R0, R1, 2),
++			BPF_MOV32_IMM(R0, 2),
++			BPF_EXIT_INSN(),
++			BPF_MOV32_IMM(R0, 1),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 1 } }
++	},
+ 	/* BPF_ALU | BPF_OR | BPF_X */
+ 	{
+ 		"ALU_OR_X: 1 | 2 = 3",
+@@ -3656,6 +3726,44 @@ static struct bpf_test tests[] = {
+ 		{ },
+ 		{ { 0, 0xffffffff } },
+ 	},
++	{
++		"ALU_OR_K: Small immediate",
++		.u.insns_int = {
++			BPF_ALU32_IMM(BPF_MOV, R0, 0x01020304),
++			BPF_ALU32_IMM(BPF_OR, R0, 1),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0x01020305 } }
++	},
++	{
++		"ALU_OR_K: Large immediate",
++		.u.insns_int = {
++			BPF_ALU32_IMM(BPF_MOV, R0, 0x01020304),
++			BPF_ALU32_IMM(BPF_OR, R0, 0xa0b0c0d0),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0xa1b2c3d4 } }
++	},
++	{
++		"ALU_OR_K: Zero extension",
++		.u.insns_int = {
++			BPF_LD_IMM64(R0, 0x0123456789abcdefLL),
++			BPF_LD_IMM64(R1, 0x00000000f9fbfdffLL),
++			BPF_ALU32_IMM(BPF_OR, R0, 0xf0f0f0f0),
++			BPF_JMP_REG(BPF_JEQ, R0, R1, 2),
++			BPF_MOV32_IMM(R0, 2),
++			BPF_EXIT_INSN(),
++			BPF_MOV32_IMM(R0, 1),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 1 } }
++	},
+ 	{
+ 		"ALU64_OR_K: 1 | 2 = 3",
+ 		.u.insns_int = {
+@@ -3726,6 +3834,38 @@ static struct bpf_test tests[] = {
+ 		{ },
+ 		{ { 0, 0x1 } },
+ 	},
++	{
++		"ALU64_OR_K: Sign extension 1",
++		.u.insns_int = {
++			BPF_LD_IMM64(R0, 0x0123456789abcdefLL),
++			BPF_LD_IMM64(R1, 0x012345678fafcfefLL),
++			BPF_ALU64_IMM(BPF_OR, R0, 0x0f0f0f0f),
++			BPF_JMP_REG(BPF_JEQ, R0, R1, 2),
++			BPF_MOV32_IMM(R0, 2),
++			BPF_EXIT_INSN(),
++			BPF_MOV32_IMM(R0, 1),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 1 } }
++	},
++	{
++		"ALU64_OR_K: Sign extension 2",
++		.u.insns_int = {
++			BPF_LD_IMM64(R0, 0x0123456789abcdefLL),
++			BPF_LD_IMM64(R1, 0xfffffffff9fbfdffLL),
++			BPF_ALU64_IMM(BPF_OR, R0, 0xf0f0f0f0),
++			BPF_JMP_REG(BPF_JEQ, R0, R1, 2),
++			BPF_MOV32_IMM(R0, 2),
++			BPF_EXIT_INSN(),
++			BPF_MOV32_IMM(R0, 1),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 1 } }
++	},
+ 	/* BPF_ALU | BPF_XOR | BPF_X */
+ 	{
+ 		"ALU_XOR_X: 5 ^ 6 = 3",
+@@ -3798,6 +3938,44 @@ static struct bpf_test tests[] = {
+ 		{ },
+ 		{ { 0, 0xfffffffe } },
+ 	},
++	{
++		"ALU_XOR_K: Small immediate",
++		.u.insns_int = {
++			BPF_ALU32_IMM(BPF_MOV, R0, 0x01020304),
++			BPF_ALU32_IMM(BPF_XOR, R0, 15),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0x0102030b } }
++	},
++	{
++		"ALU_XOR_K: Large immediate",
++		.u.insns_int = {
++			BPF_ALU32_IMM(BPF_MOV, R0, 0xf1f2f3f4),
++			BPF_ALU32_IMM(BPF_XOR, R0, 0xafbfcfdf),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0x5e4d3c2b } }
++	},
++	{
++		"ALU_XOR_K: Zero extension",
++		.u.insns_int = {
++			BPF_LD_IMM64(R0, 0x0123456789abcdefLL),
++			BPF_LD_IMM64(R1, 0x00000000795b3d1fLL),
++			BPF_ALU32_IMM(BPF_XOR, R0, 0xf0f0f0f0),
++			BPF_JMP_REG(BPF_JEQ, R0, R1, 2),
++			BPF_MOV32_IMM(R0, 2),
++			BPF_EXIT_INSN(),
++			BPF_MOV32_IMM(R0, 1),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 1 } }
++	},
+ 	{
+ 		"ALU64_XOR_K: 5 ^ 6 = 3",
+ 		.u.insns_int = {
+@@ -3868,6 +4046,38 @@ static struct bpf_test tests[] = {
+ 		{ },
+ 		{ { 0, 0x1 } },
+ 	},
++	{
++		"ALU64_XOR_K: Sign extension 1",
++		.u.insns_int = {
++			BPF_LD_IMM64(R0, 0x0123456789abcdefLL),
++			BPF_LD_IMM64(R1, 0x0123456786a4c2e0LL),
++			BPF_ALU64_IMM(BPF_XOR, R0, 0x0f0f0f0f),
++			BPF_JMP_REG(BPF_JEQ, R0, R1, 2),
++			BPF_MOV32_IMM(R0, 2),
++			BPF_EXIT_INSN(),
++			BPF_MOV32_IMM(R0, 1),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 1 } }
++	},
++	{
++		"ALU64_XOR_K: Sign extension 2",
++		.u.insns_int = {
++			BPF_LD_IMM64(R0, 0x0123456789abcdefLL),
++			BPF_LD_IMM64(R1, 0xfedcba98795b3d1fLL),
++			BPF_ALU64_IMM(BPF_XOR, R0, 0xf0f0f0f0),
++			BPF_JMP_REG(BPF_JEQ, R0, R1, 2),
++			BPF_MOV32_IMM(R0, 2),
++			BPF_EXIT_INSN(),
++			BPF_MOV32_IMM(R0, 1),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 1 } }
++	},
+ 	/* BPF_ALU | BPF_LSH | BPF_X */
+ 	{
+ 		"ALU_LSH_X: 1 << 1 = 2",
 -- 
 2.25.1
 
