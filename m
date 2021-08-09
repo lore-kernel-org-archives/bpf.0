@@ -2,59 +2,59 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51399C4320A
-	for <bpf@archiver.kernel.org>; Mon,  9 Aug 2021 09:18:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC67FC4338F
+	for <bpf@archiver.kernel.org>; Mon,  9 Aug 2021 09:18:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 37EA261058
-	for <bpf@archiver.kernel.org>; Mon,  9 Aug 2021 09:18:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D142660041
+	for <bpf@archiver.kernel.org>; Mon,  9 Aug 2021 09:18:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234302AbhHIJTD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 9 Aug 2021 05:19:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58056 "EHLO
+        id S234186AbhHIJTJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 9 Aug 2021 05:19:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234270AbhHIJTC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 9 Aug 2021 05:19:02 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 829B4C0613D3
-        for <bpf@vger.kernel.org>; Mon,  9 Aug 2021 02:18:42 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id f13so23490040edq.13
-        for <bpf@vger.kernel.org>; Mon, 09 Aug 2021 02:18:42 -0700 (PDT)
+        with ESMTP id S234310AbhHIJTE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 9 Aug 2021 05:19:04 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92D88C061798
+        for <bpf@vger.kernel.org>; Mon,  9 Aug 2021 02:18:44 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id f13so23490234edq.13
+        for <bpf@vger.kernel.org>; Mon, 09 Aug 2021 02:18:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=anyfinetworks-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2iLuig7hnPNCo1xvz7ikUqKL/k0jIgrQqZ82ub8BSsk=;
-        b=yl/Mgq89zx7j/2AGO2xts4EqdU330mRhor87v6Hso/45vs8r6S8vblCBMJ3aCD6Z3a
-         zdHTEIzejOAc/7O57J2ZFq8DmnwEzOXd8N3jj1L46tx2veQKOVVbd5Zi6/pXypkyRJJt
-         tV3NvWWEYzJhA5y2LwdQelQs1e2ST3kLG52BmmNXHAXINoEvlLclPf4HC4iTKVIaBy9N
-         xbIXaOVNvz2VhLUNpW8DOfm7kZ7Eo5RGuW8I6kepiWVvhZitxI6rJRY/NkGpPUlE1Iqn
-         x7EvqO2hYQyIsWOPPnswoVUg89LqFWWjRbiqZ1ygKbXXiNImWhTqGfxu3NHRQJpG1sFi
-         rqYw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=qhJU/1ad/ZW3iZ05XUZhhQ+cb6MRN1NcaxmyJCG/h/Y=;
+        b=du9Bj+nd1yctokvLRgNa8UZWXabh49I6ukxEghF+aZOCFluOGwzKHImMdRi0oQhIyD
+         dHOOpEfJgIoH1YgBuJ+L7t6IaSUgBVwWUDdV3ltsOwzrbV8CljUUHbIK97JMiu7FSL4o
+         3skrIm3Y0gM9GbSvsYpZRByNpDjA1hNEXE8yP29k/XokESaSNF0o8NBtxj5MhgdJc7Eo
+         QSV8kE0SrE9+ciKZOltcLJ54QoY5mTwfbtE96KytE0RbhLBH1pL6p5y/auWZyIyRtF2k
+         p6HU3DTXTZ1Vdg094FlxxztodH3vcl92efbg8xapd87YQUhYMIMNXNNxxAw0fHNgWFNL
+         tvYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2iLuig7hnPNCo1xvz7ikUqKL/k0jIgrQqZ82ub8BSsk=;
-        b=ujcZ7ocenBKWz6kC2E87JW/jSBmzbIcUbYtjuHpb62e5fKkBiC6Q0QSENGVNkcrrNa
-         mN4iQhvgpeBEcbKqDZuXDk9+vvKuJVJggaDji3Z+lW7++LtusNXX1gMNzwm3CaplVqg7
-         41VK0pPvbiAS9ZuoSKYenUnNJr+T7TEfYnaT9D/oOj87ZTOl99ZKjin/ZSCo3JTilHQt
-         ljP08W0GTEmIZe97RNM6Hw/vQWrFFcMwe+G5iLCX2HMbDiqQ1C6se+bhtfgMnoF/8KJZ
-         qJFBKNNauUUkaOy0u0RHhdTr0lXf7iPHeGur0wBFzK5BAcenntnumCQtZfrbm38jU4JW
-         AFyg==
-X-Gm-Message-State: AOAM530+lLviJjm7Qz0cjwPsZ2+toIdVuhuYt5NkjbMsXaF82F1jtvrK
-        Pc8jS6czsu+mdRv/kaKodh03ZA==
-X-Google-Smtp-Source: ABdhPJyM6417e1uu4vi72bVZQuJXJP3ufWjrrwlLo1pCORv6IE1WOQDbIjskMq7aJWKdroYX4pQ8Sw==
-X-Received: by 2002:a05:6402:cb9:: with SMTP id cn25mr29185480edb.271.1628500721074;
-        Mon, 09 Aug 2021 02:18:41 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=qhJU/1ad/ZW3iZ05XUZhhQ+cb6MRN1NcaxmyJCG/h/Y=;
+        b=l5Zzyn6zGZn9DJsVEGJ4mc/lggccSJ7j9YxDzHGYzbWRxxq+4UWQcNeOu0f153ngqv
+         Wycsk5pqlZBTEiqL2VnTKIytvqoNeVqHIKxHL9w8KpJ//1kN5ma5qQ0XHaE4zIyPsrSf
+         k4S7YMIn/+KIeuPQrLGo4/hStYOus1dcnHBZv32XXhHL18JH7VKyyEQhJACMlfVecFB0
+         HVFGkugS1CdQgt9yULfEq9Na5bHCTt9rVd7XwR3qZCYfRSUIzfEIESJxfg+/TG0sFurC
+         cx/2yekjvQnVFM+cpP6inTFET5GZNZC0vyVWIuKCg8abk9USP1U+ot3OTHtahpgQheRQ
+         65Hw==
+X-Gm-Message-State: AOAM533Bp//Mr65bzs01uiLOqM5b0mAvszsmoCLv/W9IteuWYU+mDhj4
+        jKrdhS2WVmTzIZR34K7PFxqDUg==
+X-Google-Smtp-Source: ABdhPJyHNU/Oqc1arIj7/7asJ73vEnN3Wa7W4gtFcIQEgM+T+Ocw+p2U/nJ5+tDyNAY3Ef2kn5rkfw==
+X-Received: by 2002:a50:a455:: with SMTP id v21mr11006484edb.369.1628500723253;
+        Mon, 09 Aug 2021 02:18:43 -0700 (PDT)
 Received: from anpc2.lan (static-213-115-136-2.sme.telenor.se. [213.115.136.2])
-        by smtp.gmail.com with ESMTPSA id dg24sm1234250edb.6.2021.08.09.02.18.39
+        by smtp.gmail.com with ESMTPSA id dg24sm1234250edb.6.2021.08.09.02.18.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Aug 2021 02:18:40 -0700 (PDT)
+        Mon, 09 Aug 2021 02:18:42 -0700 (PDT)
 From:   Johan Almbladh <johan.almbladh@anyfinetworks.com>
 To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
 Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
@@ -62,57 +62,132 @@ Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
         Tony.Ambardar@gmail.com, netdev@vger.kernel.org,
         bpf@vger.kernel.org,
         Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Subject: [PATCH bpf-next v2 00/14] bpf/tests: Extend the eBPF test suite
-Date:   Mon,  9 Aug 2021 11:18:15 +0200
-Message-Id: <20210809091829.810076-1-johan.almbladh@anyfinetworks.com>
+Subject: [PATCH bpf-next v2 02/14] bpf/tests: Add BPF_MOV tests for zero and sign extension
+Date:   Mon,  9 Aug 2021 11:18:17 +0200
+Message-Id: <20210809091829.810076-3-johan.almbladh@anyfinetworks.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210809091829.810076-1-johan.almbladh@anyfinetworks.com>
+References: <20210809091829.810076-1-johan.almbladh@anyfinetworks.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch set extends the eBPF test suite in the test_bpf kernel module
-to add more extensive tests of corner cases and new tests for operations
-not previously covered.
+Tests for ALU32 and ALU64 MOV with different sizes of the immediate
+value. Depending on the immediate field width of the native CPU
+instructions, a JIT may generate code differently depending on the
+immediate value. Test that zero or sign extension is performed as
+expected. Mainly for JIT testing.
 
-Link: https://lore.kernel.org/bpf/20210728170502.351010-1-johan.almbladh@anyfinetworks.com/
-Link: https://lore.kernel.org/bpf/20210726081738.1833704-1-johan.almbladh@anyfinetworks.com/
+Signed-off-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
+Acked-by: Yonghong Song <yhs@fb.com>
+---
+ lib/test_bpf.c | 84 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 84 insertions(+)
 
-Changes since v1:
- * Fixed bad jump offset in JMP32 tests that would cause a test
-   to pass in some cases when it should fail (1/14).
- * Added comment explaining the purpose of the register clobbering
-   test case for ALU operations implemented with function calls (8/14).
- * Fixed bug in test case that would cause it to pass in some cases
-   when it should fail (8/14).
- * Added comment explaining the branch conversion test (10/14).
- * Changed wording in commit message regarding 32-bit context
-   argument, /should/will/ (11/14).
- * Removed unnecessary conditionals in tail call test setup (14/14).
- * Set offset to 0 when preparing tail call instructions (14/14).
- * Formatting fixes and cleanup in tail call suite (14/14).
-
-Johan Almbladh (14):
-  bpf/tests: Add BPF_JMP32 test cases
-  bpf/tests: Add BPF_MOV tests for zero and sign extension
-  bpf/tests: Fix typos in test case descriptions
-  bpf/tests: Add more tests of ALU32 and ALU64 bitwise operations
-  bpf/tests: Add more ALU32 tests for BPF_LSH/RSH/ARSH
-  bpf/tests: Add more BPF_LSH/RSH/ARSH tests for ALU64
-  bpf/tests: Add more ALU64 BPF_MUL tests
-  bpf/tests: Add tests for ALU operations implemented with function
-    calls
-  bpf/tests: Add word-order tests for load/store of double words
-  bpf/tests: Add branch conversion JIT test
-  bpf/tests: Add test for 32-bit context pointer argument passing
-  bpf/tests: Add tests for atomic operations
-  bpf/tests: Add tests for BPF_CMPXCHG
-  bpf/tests: Add tail call test suite
-
- lib/test_bpf.c | 2743 +++++++++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 2484 insertions(+), 259 deletions(-)
-
+diff --git a/lib/test_bpf.c b/lib/test_bpf.c
+index 377e866764cb..450984433140 100644
+--- a/lib/test_bpf.c
++++ b/lib/test_bpf.c
+@@ -2360,6 +2360,48 @@ static struct bpf_test tests[] = {
+ 		{ },
+ 		{ { 0, 0x1 } },
+ 	},
++	{
++		"ALU_MOV_K: small negative",
++		.u.insns_int = {
++			BPF_ALU32_IMM(BPF_MOV, R0, -123),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, -123 } }
++	},
++	{
++		"ALU_MOV_K: small negative zero extension",
++		.u.insns_int = {
++			BPF_ALU32_IMM(BPF_MOV, R0, -123),
++			BPF_ALU64_IMM(BPF_RSH, R0, 32),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0 } }
++	},
++	{
++		"ALU_MOV_K: large negative",
++		.u.insns_int = {
++			BPF_ALU32_IMM(BPF_MOV, R0, -123456789),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, -123456789 } }
++	},
++	{
++		"ALU_MOV_K: large negative zero extension",
++		.u.insns_int = {
++			BPF_ALU32_IMM(BPF_MOV, R0, -123456789),
++			BPF_ALU64_IMM(BPF_RSH, R0, 32),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0 } }
++	},
+ 	{
+ 		"ALU64_MOV_K: dst = 2",
+ 		.u.insns_int = {
+@@ -2412,6 +2454,48 @@ static struct bpf_test tests[] = {
+ 		{ },
+ 		{ { 0, 0x1 } },
+ 	},
++	{
++		"ALU64_MOV_K: small negative",
++		.u.insns_int = {
++			BPF_ALU64_IMM(BPF_MOV, R0, -123),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, -123 } }
++	},
++	{
++		"ALU64_MOV_K: small negative sign extension",
++		.u.insns_int = {
++			BPF_ALU64_IMM(BPF_MOV, R0, -123),
++			BPF_ALU64_IMM(BPF_RSH, R0, 32),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0xffffffff } }
++	},
++	{
++		"ALU64_MOV_K: large negative",
++		.u.insns_int = {
++			BPF_ALU64_IMM(BPF_MOV, R0, -123456789),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, -123456789 } }
++	},
++	{
++		"ALU64_MOV_K: large negative sign extension",
++		.u.insns_int = {
++			BPF_ALU64_IMM(BPF_MOV, R0, -123456789),
++			BPF_ALU64_IMM(BPF_RSH, R0, 32),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0xffffffff } }
++	},
+ 	/* BPF_ALU | BPF_ADD | BPF_X */
+ 	{
+ 		"ALU_ADD_X: 1 + 2 = 3",
 -- 
 2.25.1
 
