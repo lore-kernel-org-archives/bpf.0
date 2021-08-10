@@ -6,39 +6,39 @@ X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BFE7AC432BE
-	for <bpf@archiver.kernel.org>; Tue, 10 Aug 2021 21:36:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07E99C4338F
+	for <bpf@archiver.kernel.org>; Tue, 10 Aug 2021 21:36:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9F3116056B
-	for <bpf@archiver.kernel.org>; Tue, 10 Aug 2021 21:36:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D7F6C60EE9
+	for <bpf@archiver.kernel.org>; Tue, 10 Aug 2021 21:36:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234347AbhHJVhP convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Tue, 10 Aug 2021 17:37:15 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:63414 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S233792AbhHJVhO (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 10 Aug 2021 17:37:14 -0400
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.43/8.16.0.43) with SMTP id 17ALXWPR022981
-        for <bpf@vger.kernel.org>; Tue, 10 Aug 2021 14:36:52 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0001303.ppops.net with ESMTP id 3abyjnrtgb-15
+        id S234647AbhHJVhR convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Tue, 10 Aug 2021 17:37:17 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:16096 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233792AbhHJVhR (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 10 Aug 2021 17:37:17 -0400
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17ALZA2Z015770
+        for <bpf@vger.kernel.org>; Tue, 10 Aug 2021 14:36:54 -0700
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 3abyfm0vhp-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 10 Aug 2021 14:36:51 -0700
-Received: from intmgw001.05.ash9.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 10 Aug 2021 14:36:54 -0700
+Received: from intmgw001.38.frc1.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Tue, 10 Aug 2021 14:36:49 -0700
+ 15.1.2176.2; Tue, 10 Aug 2021 14:36:52 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 269393D405A0; Tue, 10 Aug 2021 14:36:45 -0700 (PDT)
+        id 4823B3D405A0; Tue, 10 Aug 2021 14:36:51 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Yonghong Song <yhs@fb.com>
-Subject: [PATCH v4 bpf-next 03/14] bpf: refactor perf_event_set_bpf_prog() to use struct bpf_prog input
-Date:   Tue, 10 Aug 2021 14:36:23 -0700
-Message-ID: <20210810213634.272111-4-andrii@kernel.org>
+Subject: [PATCH v4 bpf-next 06/14] bpf: add bpf_get_attach_cookie() BPF helper to access bpf_cookie value
+Date:   Tue, 10 Aug 2021 14:36:26 -0700
+Message-ID: <20210810213634.272111-7-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210810213634.272111-1-andrii@kernel.org>
 References: <20210810213634.272111-1-andrii@kernel.org>
@@ -47,181 +47,201 @@ Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-GUID: JmBYNW9FuQNUOqdGCVqOVVZFnRuDKR0h
-X-Proofpoint-ORIG-GUID: JmBYNW9FuQNUOqdGCVqOVVZFnRuDKR0h
+X-Proofpoint-ORIG-GUID: FMX1imAld79B1AGF5b20ENfBTzt0PwFL
+X-Proofpoint-GUID: FMX1imAld79B1AGF5b20ENfBTzt0PwFL
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
  definitions=2021-08-10_08:2021-08-10,2021-08-10 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- mlxscore=0 spamscore=0 priorityscore=1501 bulkscore=0 phishscore=0
- impostorscore=0 mlxlogscore=999 malwarescore=0 adultscore=0 suspectscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 phishscore=0
+ lowpriorityscore=0 clxscore=1015 adultscore=0 bulkscore=0 suspectscore=0
+ priorityscore=1501 malwarescore=0 impostorscore=0 spamscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2107140000 definitions=main-2108100142
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Make internal perf_event_set_bpf_prog() use struct bpf_prog pointer as an
-input argument, which makes it easier to re-use for other internal uses
-(coming up for BPF link in the next patch). BPF program FD is not as
-convenient and in some cases it's not available. So switch to struct bpf_prog,
-move out refcounting outside and let caller do bpf_prog_put() in case of an
-error. This follows the approach of most of the other BPF internal functions.
+Add new BPF helper, bpf_get_attach_cookie(), which can be used by BPF programs
+to get access to a user-provided bpf_cookie value, specified during BPF
+program attachment (BPF link creation) time.
 
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Naming is hard, though. With the concept being named "BPF cookie", I've
+considered calling the helper:
+  - bpf_get_cookie() -- seems too unspecific and easily mistaken with socket
+    cookie;
+  - bpf_get_bpf_cookie() -- too much tautology;
+  - bpf_get_link_cookie() -- would be ok, but while we create a BPF link to
+    attach BPF program to BPF hook, it's still an "attachment" and the
+    bpf_cookie is associated with BPF program attachment to a hook, not a BPF
+    link itself. Technically, we could support bpf_cookie with old-style
+    cgroup programs.So I ultimately rejected it in favor of
+    bpf_get_attach_cookie().
+
+Currently all perf_event-backed BPF program types support
+bpf_get_attach_cookie() helper. Follow-up patches will add support for
+fentry/fexit programs as well.
+
+While at it, mark bpf_tracing_func_proto() as static to make it obvious that
+it's only used from within the kernel/trace/bpf_trace.c.
+
 Acked-by: Yonghong Song <yhs@fb.com>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- kernel/events/core.c | 61 ++++++++++++++++++++------------------------
- 1 file changed, 28 insertions(+), 33 deletions(-)
+ include/linux/bpf.h            |  3 ---
+ include/uapi/linux/bpf.h       | 16 ++++++++++++++++
+ kernel/trace/bpf_trace.c       | 35 +++++++++++++++++++++++++++++++++-
+ tools/include/uapi/linux/bpf.h | 16 ++++++++++++++++
+ 4 files changed, 66 insertions(+), 4 deletions(-)
 
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index a2bfc6a0e6a4..3102e35c4319 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -5574,7 +5574,7 @@ static inline int perf_fget_light(int fd, struct fd *p)
- static int perf_event_set_output(struct perf_event *event,
- 				 struct perf_event *output_event);
- static int perf_event_set_filter(struct perf_event *event, void __user *arg);
--static int perf_event_set_bpf_prog(struct perf_event *event, u32 prog_fd);
-+static int perf_event_set_bpf_prog(struct perf_event *event, struct bpf_prog *prog);
- static int perf_copy_attr(struct perf_event_attr __user *uattr,
- 			  struct perf_event_attr *attr);
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 83c3cc5e90df..f4c16f19f83e 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -2102,9 +2102,6 @@ extern const struct bpf_func_proto bpf_btf_find_by_name_kind_proto;
+ extern const struct bpf_func_proto bpf_sk_setsockopt_proto;
+ extern const struct bpf_func_proto bpf_sk_getsockopt_proto;
  
-@@ -5637,7 +5637,22 @@ static long _perf_ioctl(struct perf_event *event, unsigned int cmd, unsigned lon
- 		return perf_event_set_filter(event, (void __user *)arg);
- 
- 	case PERF_EVENT_IOC_SET_BPF:
--		return perf_event_set_bpf_prog(event, arg);
-+	{
-+		struct bpf_prog *prog;
-+		int err;
-+
-+		prog = bpf_prog_get(arg);
-+		if (IS_ERR(prog))
-+			return PTR_ERR(prog);
-+
-+		err = perf_event_set_bpf_prog(event, prog);
-+		if (err) {
-+			bpf_prog_put(prog);
-+			return err;
-+		}
-+
-+		return 0;
-+	}
- 
- 	case PERF_EVENT_IOC_PAUSE_OUTPUT: {
- 		struct perf_buffer *rb;
-@@ -9923,10 +9938,8 @@ static void bpf_overflow_handler(struct perf_event *event,
- 	event->orig_overflow_handler(event, data, regs);
- }
- 
--static int perf_event_set_bpf_handler(struct perf_event *event, u32 prog_fd)
-+static int perf_event_set_bpf_handler(struct perf_event *event, struct bpf_prog *prog)
- {
--	struct bpf_prog *prog;
+-const struct bpf_func_proto *bpf_tracing_func_proto(
+-	enum bpf_func_id func_id, const struct bpf_prog *prog);
 -
- 	if (event->overflow_handler_context)
- 		/* hw breakpoint or kernel counter */
- 		return -EINVAL;
-@@ -9934,9 +9947,8 @@ static int perf_event_set_bpf_handler(struct perf_event *event, u32 prog_fd)
- 	if (event->prog)
- 		return -EEXIST;
+ const struct bpf_func_proto *tracing_prog_func_proto(
+   enum bpf_func_id func_id, const struct bpf_prog *prog);
  
--	prog = bpf_prog_get_type(prog_fd, BPF_PROG_TYPE_PERF_EVENT);
--	if (IS_ERR(prog))
--		return PTR_ERR(prog);
-+	if (prog->type != BPF_PROG_TYPE_PERF_EVENT)
-+		return -EINVAL;
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 63ee482d50e1..c4f7892edb2b 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -4856,6 +4856,21 @@ union bpf_attr {
+  * 		Get address of the traced function (for tracing and kprobe programs).
+  * 	Return
+  * 		Address of the traced function.
++ *
++ * u64 bpf_get_attach_cookie(void *ctx)
++ * 	Description
++ * 		Get bpf_cookie value provided (optionally) during the program
++ * 		attachment. It might be different for each individual
++ * 		attachment, even if BPF program itself is the same.
++ * 		Expects BPF program context *ctx* as a first argument.
++ *
++ * 		Supported for the following program types:
++ *			- kprobe/uprobe;
++ *			- tracepoint;
++ *			- perf_event.
++ * 	Return
++ *		Value specified by user at BPF link creation/attachment time
++ *		or 0, if it was not specified.
+  */
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+@@ -5032,6 +5047,7 @@ union bpf_attr {
+ 	FN(timer_start),		\
+ 	FN(timer_cancel),		\
+ 	FN(get_func_ip),		\
++	FN(get_attach_cookie),		\
+ 	/* */
  
- 	if (event->attr.precise_ip &&
- 	    prog->call_get_stack &&
-@@ -9952,7 +9964,6 @@ static int perf_event_set_bpf_handler(struct perf_event *event, u32 prog_fd)
- 		 * attached to perf_sample_data, do not allow attaching BPF
- 		 * program that calls bpf_get_[stack|stackid].
- 		 */
--		bpf_prog_put(prog);
- 		return -EPROTO;
+ /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 2ad1607a612f..e369556add6b 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -975,7 +975,34 @@ static const struct bpf_func_proto bpf_get_func_ip_proto_kprobe = {
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ };
+ 
+-const struct bpf_func_proto *
++BPF_CALL_1(bpf_get_attach_cookie_trace, void *, ctx)
++{
++	struct bpf_trace_run_ctx *run_ctx;
++
++	run_ctx = container_of(current->bpf_ctx, struct bpf_trace_run_ctx, run_ctx);
++	return run_ctx->bpf_cookie;
++}
++
++static const struct bpf_func_proto bpf_get_attach_cookie_proto_trace = {
++	.func		= bpf_get_attach_cookie_trace,
++	.gpl_only	= false,
++	.ret_type	= RET_INTEGER,
++	.arg1_type	= ARG_PTR_TO_CTX,
++};
++
++BPF_CALL_1(bpf_get_attach_cookie_pe, struct bpf_perf_event_data_kern *, ctx)
++{
++	return ctx->event->bpf_cookie;
++}
++
++static const struct bpf_func_proto bpf_get_attach_cookie_proto_pe = {
++	.func		= bpf_get_attach_cookie_pe,
++	.gpl_only	= false,
++	.ret_type	= RET_INTEGER,
++	.arg1_type	= ARG_PTR_TO_CTX,
++};
++
++static const struct bpf_func_proto *
+ bpf_tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ {
+ 	switch (func_id) {
+@@ -1108,6 +1135,8 @@ kprobe_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ #endif
+ 	case BPF_FUNC_get_func_ip:
+ 		return &bpf_get_func_ip_proto_kprobe;
++	case BPF_FUNC_get_attach_cookie:
++		return &bpf_get_attach_cookie_proto_trace;
+ 	default:
+ 		return bpf_tracing_func_proto(func_id, prog);
  	}
- 
-@@ -9974,7 +9985,7 @@ static void perf_event_free_bpf_handler(struct perf_event *event)
- 	bpf_prog_put(prog);
- }
- #else
--static int perf_event_set_bpf_handler(struct perf_event *event, u32 prog_fd)
-+static int perf_event_set_bpf_handler(struct perf_event *event, struct bpf_prog *prog)
- {
- 	return -EOPNOTSUPP;
- }
-@@ -10002,14 +10013,12 @@ static inline bool perf_event_is_tracing(struct perf_event *event)
- 	return false;
- }
- 
--static int perf_event_set_bpf_prog(struct perf_event *event, u32 prog_fd)
-+static int perf_event_set_bpf_prog(struct perf_event *event, struct bpf_prog *prog)
- {
- 	bool is_kprobe, is_tracepoint, is_syscall_tp;
--	struct bpf_prog *prog;
--	int ret;
- 
- 	if (!perf_event_is_tracing(event))
--		return perf_event_set_bpf_handler(event, prog_fd);
-+		return perf_event_set_bpf_handler(event, prog);
- 
- 	is_kprobe = event->tp_event->flags & TRACE_EVENT_FL_UKPROBE;
- 	is_tracepoint = event->tp_event->flags & TRACE_EVENT_FL_TRACEPOINT;
-@@ -10018,38 +10027,24 @@ static int perf_event_set_bpf_prog(struct perf_event *event, u32 prog_fd)
- 		/* bpf programs can only be attached to u/kprobe or tracepoint */
- 		return -EINVAL;
- 
--	prog = bpf_prog_get(prog_fd);
--	if (IS_ERR(prog))
--		return PTR_ERR(prog);
--
- 	if ((is_kprobe && prog->type != BPF_PROG_TYPE_KPROBE) ||
- 	    (is_tracepoint && prog->type != BPF_PROG_TYPE_TRACEPOINT) ||
--	    (is_syscall_tp && prog->type != BPF_PROG_TYPE_TRACEPOINT)) {
--		/* valid fd, but invalid bpf program type */
--		bpf_prog_put(prog);
-+	    (is_syscall_tp && prog->type != BPF_PROG_TYPE_TRACEPOINT))
- 		return -EINVAL;
--	}
- 
- 	/* Kprobe override only works for kprobes, not uprobes. */
- 	if (prog->kprobe_override &&
--	    !(event->tp_event->flags & TRACE_EVENT_FL_KPROBE)) {
--		bpf_prog_put(prog);
-+	    !(event->tp_event->flags & TRACE_EVENT_FL_KPROBE))
- 		return -EINVAL;
--	}
- 
- 	if (is_tracepoint || is_syscall_tp) {
- 		int off = trace_event_get_offsets(event->tp_event);
- 
--		if (prog->aux->max_ctx_offset > off) {
--			bpf_prog_put(prog);
-+		if (prog->aux->max_ctx_offset > off)
- 			return -EACCES;
--		}
+@@ -1218,6 +1247,8 @@ tp_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 		return &bpf_get_stackid_proto_tp;
+ 	case BPF_FUNC_get_stack:
+ 		return &bpf_get_stack_proto_tp;
++	case BPF_FUNC_get_attach_cookie:
++		return &bpf_get_attach_cookie_proto_trace;
+ 	default:
+ 		return bpf_tracing_func_proto(func_id, prog);
  	}
+@@ -1325,6 +1356,8 @@ pe_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 		return &bpf_perf_prog_read_value_proto;
+ 	case BPF_FUNC_read_branch_records:
+ 		return &bpf_read_branch_records_proto;
++	case BPF_FUNC_get_attach_cookie:
++		return &bpf_get_attach_cookie_proto_pe;
+ 	default:
+ 		return bpf_tracing_func_proto(func_id, prog);
+ 	}
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 63ee482d50e1..c4f7892edb2b 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -4856,6 +4856,21 @@ union bpf_attr {
+  * 		Get address of the traced function (for tracing and kprobe programs).
+  * 	Return
+  * 		Address of the traced function.
++ *
++ * u64 bpf_get_attach_cookie(void *ctx)
++ * 	Description
++ * 		Get bpf_cookie value provided (optionally) during the program
++ * 		attachment. It might be different for each individual
++ * 		attachment, even if BPF program itself is the same.
++ * 		Expects BPF program context *ctx* as a first argument.
++ *
++ * 		Supported for the following program types:
++ *			- kprobe/uprobe;
++ *			- tracepoint;
++ *			- perf_event.
++ * 	Return
++ *		Value specified by user at BPF link creation/attachment time
++ *		or 0, if it was not specified.
+  */
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+@@ -5032,6 +5047,7 @@ union bpf_attr {
+ 	FN(timer_start),		\
+ 	FN(timer_cancel),		\
+ 	FN(get_func_ip),		\
++	FN(get_attach_cookie),		\
+ 	/* */
  
--	ret = perf_event_attach_bpf_prog(event, prog);
--	if (ret)
--		bpf_prog_put(prog);
--	return ret;
-+	return perf_event_attach_bpf_prog(event, prog);
- }
- 
- static void perf_event_free_bpf_prog(struct perf_event *event)
-@@ -10071,7 +10066,7 @@ static void perf_event_free_filter(struct perf_event *event)
- {
- }
- 
--static int perf_event_set_bpf_prog(struct perf_event *event, u32 prog_fd)
-+static int perf_event_set_bpf_prog(struct perf_event *event, struct bpf_prog *prog)
- {
- 	return -ENOENT;
- }
+ /* integer value in 'imm' field of BPF_CALL instruction selects which helper
 -- 
 2.30.2
 
