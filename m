@@ -7,45 +7,45 @@ X-Spam-Status: No, score=-19.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B042C432BE
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7250C4320A
 	for <bpf@archiver.kernel.org>; Tue, 10 Aug 2021 00:17:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 36A9660F6F
+	by mail.kernel.org (Postfix) with ESMTP id 9A82060F38
 	for <bpf@archiver.kernel.org>; Tue, 10 Aug 2021 00:17:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236315AbhHJAR5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S236124AbhHJAR5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Mon, 9 Aug 2021 20:17:57 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:57940 "EHLO
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:18098 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S236124AbhHJAR4 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 9 Aug 2021 20:17:56 -0400
+        by vger.kernel.org with ESMTP id S231439AbhHJAR5 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 9 Aug 2021 20:17:57 -0400
 Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.43/8.16.0.43) with SMTP id 17A0D1pU012610
-        for <bpf@vger.kernel.org>; Mon, 9 Aug 2021 17:17:35 -0700
+        by m0001303.ppops.net (8.16.0.43/8.16.0.43) with SMTP id 17A0D1pV012610
+        for <bpf@vger.kernel.org>; Mon, 9 Aug 2021 17:17:36 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=WtyLkZn7i/eLfXS8/FLa7u0rPdNbli2nCleZ2TUQUN4=;
- b=WNuxIPSYQkiQC2c0LCgoCXnDbNasTog8MXAu6CVw5I65dFBbr7hqp0q5uEd2UipkeBzT
- ktl62I1xSgQnTxH62aXAYr29T43+M9GbtRH7LHY9udU+z7n33WQ2dfaQjGI0ghicq0CP
- 9/YyA+y/5q+XeintA/4p6B/6ZRtVVCa+8to= 
+ bh=O8sHeNDWTZBptedNdbvKRS0XhkRECy7xRVDIHKw+9ZQ=;
+ b=f76rD91bbelwXSVCY5AH+yZXYwRlCsg70V9+wK++4vcpfHCaz4HOyWDQufL7iT6wMPPk
+ zcYYb9M0AaK61iAkozJsKEyPKrGEOCy3gYingCyeA08gVOgeeKUgTdig8+51dKcGaEx8
+ rvdeZ5XeA/YULmQx15K1OKwnsk52qtRImUs= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0001303.ppops.net with ESMTP id 3abbsqry8g-1
+        by m0001303.ppops.net with ESMTP id 3abbsqry8g-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
         for <bpf@vger.kernel.org>; Mon, 09 Aug 2021 17:17:35 -0700
-Received: from intmgw002.46.prn1.facebook.com (2620:10d:c085:108::4) by
+Received: from intmgw002.46.prn1.facebook.com (2620:10d:c085:208::f) by
  mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2176.2; Mon, 9 Aug 2021 17:17:34 -0700
 Received: by devvm2661.vll0.facebook.com (Postfix, from userid 200310)
-        id 42DC21E2CB70; Mon,  9 Aug 2021 17:17:25 -0700 (PDT)
+        id 2FF4C1E2CB68; Mon,  9 Aug 2021 17:17:25 -0700 (PDT)
 From:   Yucong Sun <fallentree@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     <andrii@kernel.org>, <sunyucong@gmail.com>,
         Yucong Sun <fallentree@fb.com>
-Subject: [PATCH v2 bpf-next 5/5] Record all failed tests and output after the summary line.
-Date:   Mon, 9 Aug 2021 17:16:25 -0700
-Message-ID: <20210810001625.1140255-6-fallentree@fb.com>
+Subject: [PATCH v2 bpf-next 1/5] Skip loading bpf_testmod when using -l to list tests.
+Date:   Mon, 9 Aug 2021 17:16:21 -0700
+Message-ID: <20210810001625.1140255-2-fallentree@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210810001625.1140255-1-fallentree@fb.com>
 References: <20210810001625.1140255-1-fallentree@fb.com>
@@ -54,13 +54,13 @@ Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-GUID: h4YYVPn-r1MdOV_pUzokWpASRnCyAa0V
-X-Proofpoint-ORIG-GUID: h4YYVPn-r1MdOV_pUzokWpASRnCyAa0V
+X-Proofpoint-GUID: BCxzVSPK7QJMs8r26RDVnyfyTdrDorlM
+X-Proofpoint-ORIG-GUID: BCxzVSPK7QJMs8r26RDVnyfyTdrDorlM
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
  definitions=2021-08-09_09:2021-08-06,2021-08-09 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0
  suspectscore=0 adultscore=0 lowpriorityscore=0 clxscore=1015 mlxscore=0
- priorityscore=1501 spamscore=0 malwarescore=0 mlxlogscore=885 phishscore=0
+ priorityscore=1501 spamscore=0 malwarescore=0 mlxlogscore=833 phishscore=0
  impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2107140000 definitions=main-2108100000
 X-FB-Internal: deliver
@@ -68,104 +68,38 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch records all failed tests and subtests during the run, output
-them after the summary line, making it easier to identify failed tests
-in the long output.
+This patch remove bpf_testmod load test when using "-l", making output
+cleaner.
 
 Signed-off-by: Yucong Sun <fallentree@fb.com>
 ---
- tools/testing/selftests/bpf/test_progs.c | 25 +++++++++++++++++++++++-
- tools/testing/selftests/bpf/test_progs.h |  2 ++
- 2 files changed, 26 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/test_progs.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/sel=
 ftests/bpf/test_progs.c
-index 5cc808992b00..51a70031f07e 100644
+index 6f103106a39b..74dde0af1592 100644
 --- a/tools/testing/selftests/bpf/test_progs.c
 +++ b/tools/testing/selftests/bpf/test_progs.c
-@@ -244,6 +244,11 @@ void test__end_subtest()
- 	       test->test_num, test->subtest_num, test->subtest_name,
- 	       sub_error_cnt ? "FAIL" : (test->skip_cnt ? "SKIP" : "OK"));
+@@ -754,10 +754,12 @@ int main(int argc, char **argv)
 =20
-+	if (sub_error_cnt) {
-+		fprintf(env.summary_errors, "#%d/%d %s: FAIL\n",
-+			test->test_num, test->subtest_num, test->subtest_name);
-+	}
-+
- 	if (sub_error_cnt)
- 		env.fail_cnt++;
- 	else if (test->skip_cnt =3D=3D 0)
-@@ -816,6 +821,10 @@ int main(int argc, char **argv)
- 		.sa_flags =3D SA_RESETHAND,
- 	};
- 	int err, i;
-+	/* record errors to print after summary line */
-+	char *summary_errors_buf;
-+	size_t summary_errors_cnt;
-+
-=20
- 	sigaction(SIGSEGV, &sigact, NULL);
-=20
-@@ -823,6 +832,9 @@ int main(int argc, char **argv)
- 	if (err)
- 		return err;
-=20
-+	env.summary_errors =3D open_memstream(
-+		&summary_errors_buf, &summary_errors_cnt);
-+
- 	err =3D cd_flavor_subdir(argv[0]);
- 	if (err)
- 		return err;
-@@ -891,6 +903,11 @@ int main(int argc, char **argv)
- 			test->test_num, test->test_name,
- 			test->error_cnt ? "FAIL" : "OK");
-=20
-+		if(test->error_cnt) {
-+			fprintf(env.summary_errors, "#%d %s: FAIL\n",
-+				test->test_num, test->test_name);
+ 	save_netns();
+ 	stdio_hijack();
+-	env.has_testmod =3D true;
+-	if (load_bpf_testmod()) {
+-		fprintf(env.stderr, "WARNING! Selftests relying on bpf_testmod.ko will=
+ be skipped.\n");
+-		env.has_testmod =3D false;
++	if (!env.list_test_names) {
++		env.has_testmod =3D true;
++		if (load_bpf_testmod()) {
++			fprintf(env.stderr, "WARNING! Selftests relying on bpf_testmod.ko wil=
+l be skipped.\n");
++			env.has_testmod =3D false;
 +		}
-+
- 		reset_affinity();
- 		restore_netns();
- 		if (test->need_cgroup_cleanup)
-@@ -908,9 +925,14 @@ int main(int argc, char **argv)
- 	if (env.list_test_names)
- 		goto out;
-=20
--	fprintf(stdout, "Summary: %d/%d PASSED, %d SKIPPED, %d FAILED\n",
-+	fprintf(stdout, "\nSummary: %d/%d PASSED, %d SKIPPED, %d FAILED\n\n",
- 		env.succ_cnt, env.sub_succ_cnt, env.skip_cnt, env.fail_cnt);
-=20
-+	fclose(env.summary_errors);
-+	if(env.fail_cnt) {
-+		fprintf(stdout, "%s", summary_errors_buf);
-+	}
-+
- out:
- 	free_str_set(&env.test_selector.blacklist);
- 	free_str_set(&env.test_selector.whitelist);
-@@ -919,6 +941,7 @@ int main(int argc, char **argv)
- 	free_str_set(&env.subtest_selector.whitelist);
- 	free(env.subtest_selector.num_set);
- 	close(env.saved_netns_fd);
-+	free(summary_errors_buf);
-=20
- 	if (env.succ_cnt + env.fail_cnt + env.skip_cnt =3D=3D 0)
- 		return EXIT_NO_TEST;
-diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/sel=
-ftests/bpf/test_progs.h
-index c8c2bf878f67..63f4e534c6e5 100644
---- a/tools/testing/selftests/bpf/test_progs.h
-+++ b/tools/testing/selftests/bpf/test_progs.h
-@@ -82,6 +82,8 @@ struct test_env {
- 	int skip_cnt; /* skipped tests */
-=20
- 	int saved_netns_fd;
-+
-+	FILE* summary_errors;
- };
-=20
- extern struct test_env env;
+ 	}
+ 	for (i =3D 0; i < prog_test_cnt; i++) {
+ 		struct prog_test_def *test =3D &prog_test_defs[i];
 --=20
 2.30.2
 
