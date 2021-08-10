@@ -2,64 +2,63 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-17.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39DE7C4338F
-	for <bpf@archiver.kernel.org>; Tue, 10 Aug 2021 16:03:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59059C4338F
+	for <bpf@archiver.kernel.org>; Tue, 10 Aug 2021 16:19:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1E6206108F
-	for <bpf@archiver.kernel.org>; Tue, 10 Aug 2021 16:03:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 321B3610A3
+	for <bpf@archiver.kernel.org>; Tue, 10 Aug 2021 16:19:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235538AbhHJQDb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 10 Aug 2021 12:03:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58226 "EHLO
+        id S231390AbhHJQTu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 10 Aug 2021 12:19:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232973AbhHJQDU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 10 Aug 2021 12:03:20 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC1C5C0613C1
-        for <bpf@vger.kernel.org>; Tue, 10 Aug 2021 09:02:58 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id r72so18799099iod.6
-        for <bpf@vger.kernel.org>; Tue, 10 Aug 2021 09:02:58 -0700 (PDT)
+        with ESMTP id S229783AbhHJQTt (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 10 Aug 2021 12:19:49 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61B2EC0613C1
+        for <bpf@vger.kernel.org>; Tue, 10 Aug 2021 09:19:27 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id w17so37119178ybl.11
+        for <bpf@vger.kernel.org>; Tue, 10 Aug 2021 09:19:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=6M6en2Ee71SR3RvluB6vGpwRU55s2fahqDIgqdFuyFU=;
-        b=YR01vciOlTLQsrWGxFi/90FRUlSCgcrv8sL4r/ciyCr+rf+kaFsOBBJdhkCHR4Eyf8
-         ztYGbp/AJhSBvwZU8CIDnbTwRvwZj/ZK2uQ3rqMh8xWkLl4S28ESLjWs8/Bts9TLi2vP
-         aGStE0H4/pit88ffAI4WDnfQ5zDSnvWkBZ9f3S/RcLVQFx2ZwzHL5RAFPsBnqXNGWtjl
-         tv1CyXzF2Hpydjca6cXSynC9tnPC8lv/w3AKoZ174O+n5ZuoJn8tMQ8HS//aSWn4wwTB
-         AawFLb/R8wI4SPV2oPzDur/Ru6Qav+OQl4XwvKTUHszXuVmpdoIB/1xZeKip6L2j2Lzz
-         cPwg==
+        bh=DTAshqWohnpHiP/QTpw352MTDZGiGY9mk3gv6p4K7Y4=;
+        b=b2ohOF/mTEg4GAbExY14uF8Fw04VmQ/0oqpUy9hkdBXfKGZDIY8DTsdk5YCtYQreky
+         FB45O63lzrIdZHjMINiXDgjpc3CcCuEEI9YElYCj1CyCzI6NO2SJavA3n+gdOv3Ws0bZ
+         pkAtq3+N3xyCvKb7C7+9vxOvUs2OA79u6vt7llt5vHOzO8hAo0HflZQz8EJ5m7D4kP5b
+         /Icrd8bTs++pJLA3qzi7u9g0uTZPhNFqtEfN82Pc3TPSMya3ntwNfqsg/nTGQsuC2o9N
+         JULQjiDso9uAzREeYfYTmJDX2GxvLf5iaD077JvC586CL8w5elNb6GBqn7e1S67NTHHh
+         j22w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=6M6en2Ee71SR3RvluB6vGpwRU55s2fahqDIgqdFuyFU=;
-        b=cPkhkucPyVlJBu+D52D2eVNF6bnZ+EL7dH/9TJvMbnT6mTHKSYR6mjQimK9W9PBGPD
-         QJpteBMHtxL8VuxrIzkK+7wTsgA6P6qyQjL3nG5e0u2vnH+9aBIC+LQoinc0oy6gCUzr
-         1LoQV1M+rDGW91Ka6FsbuygCjAEgDjZN9YRcz5LzVC4VUH0wAe2Bv6Inp2QI6HroyyUr
-         unDUC7oGdjrcTFzSNu6eUQy6yWiGFcbTpe0wglUuDP3n4QkwUfAkwfLvhOHWAxZJLnyM
-         qzAiQuVWJ8BxQNSWqoRvL883wt9fQAvjeZP4U0TkgdYHeegUxX7pzZFXY1Vt4EGyLdzf
-         vOWg==
-X-Gm-Message-State: AOAM530jx8frEoibRtSN2kFnLRI6A4o6xEKvDs0WiroYiH3dFEjXdW/X
-        FoYLcN5sVstcWP9kd54/j/9/lN5jFXkMnZqv7D0=
-X-Google-Smtp-Source: ABdhPJyDS1Hp6DCe6/+aLd4abpw71EF+PPgQ42wPC3XDgERhae4Szkk05EtDjBF8as5Xg6qwL6PiNOhqCsnySPSdYPg=
-X-Received: by 2002:a02:1d04:: with SMTP id 4mr2447825jaj.98.1628611378197;
- Tue, 10 Aug 2021 09:02:58 -0700 (PDT)
+        bh=DTAshqWohnpHiP/QTpw352MTDZGiGY9mk3gv6p4K7Y4=;
+        b=hJk8LiHq03pJoklLKj1dUhfGtc14hkU3IKYcY3kRSVg/Z3sW59UaA1bNN19wt6iglD
+         qAChL5gaj0slFvOpUyklPCt0tYNQEIIzSkQh5+EuqUy4intezKkdXwGVfGQ8GYJKl2pq
+         V4U7u/3ZMI56JcXfv2OTeuC+o426xjafWbFCu4zP7gCtJoXkCwwbXSIRem04zHfHgtdB
+         7uMN8HhDakQFZ2b8qryXKxviGiG6yGrr7C/Z303mOwD4uWLoCSnTGhCgBLXrVoOdqeCn
+         M89wB1qxEgDRBUshpoC13ovK/NkAWqR68vPtJ8QSab3h2WlVC/+3smAIdnXdsNW+USWW
+         cKlw==
+X-Gm-Message-State: AOAM5301ULaWgFTQtL77yuTKDAc8ByqIsH4xXv879t4hQ8pFb/1VcyLZ
+        SIOV7xQV4fkOzodzddq6Jw0/AoqbyqAIfl9lxHc=
+X-Google-Smtp-Source: ABdhPJzWRimijTCoAxNi43hBLBogqOZEmk47iTwKC4BQXWtkOD8eksdmZ+VavdQSPEdFQCzugHquy+/3I1HQStPArXs=
+X-Received: by 2002:a25:bb13:: with SMTP id z19mr41015118ybg.347.1628612366473;
+ Tue, 10 Aug 2021 09:19:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210810001625.1140255-1-fallentree@fb.com> <20210810001625.1140255-2-fallentree@fb.com>
-In-Reply-To: <20210810001625.1140255-2-fallentree@fb.com>
+References: <20210810001625.1140255-1-fallentree@fb.com> <20210810001625.1140255-3-fallentree@fb.com>
+In-Reply-To: <20210810001625.1140255-3-fallentree@fb.com>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 10 Aug 2021 09:02:47 -0700
-Message-ID: <CAEf4BzbpZMiXicGDUzrh0dmgmNEbDzPCvSU=YkCNeu5UE128XQ@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next 1/5] Skip loading bpf_testmod when using -l to
- list tests.
+Date:   Tue, 10 Aug 2021 09:19:15 -0700
+Message-ID: <CAEf4BzaO-jZ3=T4rZb9gojrL2hUfBg=jqgrSQLZLOqR0M3WZtQ@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 2/5] Add glob matching for test selector in test_progs.
 To:     Yucong Sun <fallentree@fb.com>
 Cc:     bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
         sunyucong@gmail.com
@@ -70,45 +69,180 @@ X-Mailing-List: bpf@vger.kernel.org
 
 On Mon, Aug 9, 2021 at 5:17 PM Yucong Sun <fallentree@fb.com> wrote:
 >
-> This patch remove bpf_testmod load test when using "-l", making output
-> cleaner.
+> This patch adds glob matching to test selector, it accepts
+> simple glob pattern "*", "?", "[]" to match the test names to run.
+
+do we really need ? and []? I've been pretty happy so far in retsnoop
+with supporting just these patterns:
+
+1. exact match ('abc')
+2. prefix match ('abc*')
+3. suffix match ('*abc')
+4. substring match ('*abc*')
+
+See [0] for a naive but simple implementation for that logic. So far
+with test_progs I've only needed two cases from the above: exact and
+substring matches. So I'm leaning towards keeping it simple, actually.
+
+But there is also an issue of backwards compatibility. People using
+`test_progs -t substr` are used to substring matching logic, so with
+this change you are breaking this, which will cause frustration, most
+probably. So maybe let's add a new parameter to specify these globs.
+E.g., maybe `-a <glob>` for whitelisting (allowlisting), and `-d
+<glob>` for blacklisting (denylisting)? Also, instead of parsing
+comma-separated lists as I did initially with -t, we should probably
+just allow multiple occurences of -a and -d:
+
+./test_progs -a '*core*' -a '*linux' -d 'core_autosize'
+
+will allow all CO-RE tests except autosize one, plus will admit
+vmlinux selftest.
+
+Also, keep in mind that there are subtests within some tests, and
+those should be matches with the same logic as well:
+
+./test_progs -a 'core_reloc/size*'
+
+should run:
+
+#32/58 size:OK
+#32/59 size___diff_sz:OK
+#32/60 size___err_ambiguous:OK
+
+
+It gets a bit trickier with globs for both test and subtest, e.g.
+'*core*/size*' -- should it match just core_reloc/size* tests as
+above? Or also core_retro, core_extern, etc tests even though they
+don't have subtests starting with 'size'? I'd say the latter is more
+desirable, but I haven't checked how hard that would be to support.
+
+
+  [0] https://github.com/anakryiko/retsnoop/blob/2e6217f7a82f421fcf3481cc401390605066ab26/src/mass_attacher.c#L982-L1015
+
+>
+> The glob matching function is copied from perf/util/string.c
 >
 > Signed-off-by: Yucong Sun <fallentree@fb.com>
 > ---
->  tools/testing/selftests/bpf/test_progs.c | 10 ++++++----
->  1 file changed, 6 insertions(+), 4 deletions(-)
+>  tools/testing/selftests/bpf/test_progs.c | 94 +++++++++++++++++++++++-
+>  1 file changed, 92 insertions(+), 2 deletions(-)
 >
 > diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
-> index 6f103106a39b..74dde0af1592 100644
+> index 74dde0af1592..c5bffd2e78ae 100644
 > --- a/tools/testing/selftests/bpf/test_progs.c
 > +++ b/tools/testing/selftests/bpf/test_progs.c
-> @@ -754,10 +754,12 @@ int main(int argc, char **argv)
+> @@ -13,6 +13,96 @@
+>  #include <execinfo.h> /* backtrace */
+>  #include <linux/membarrier.h>
 >
->         save_netns();
->         stdio_hijack();
-> -       env.has_testmod = true;
-> -       if (load_bpf_testmod()) {
-
-could keep this to minimal changes by just doing
-
-if (!env.list_test_names && load_bpf_testmod()) { ... }
-
-env.has_testmod = true doesn't make difference for listing tests (and
-in the future we might want to assume that testmod is available to be
-able to list all tests and subtests, including those that depend on
-testmod).
-
-> -               fprintf(env.stderr, "WARNING! Selftests relying on bpf_testmod.ko will be skipped.\n");
-> -               env.has_testmod = false;
-> +       if (!env.list_test_names) {
-> +               env.has_testmod = true;
-> +               if (load_bpf_testmod()) {
-> +                       fprintf(env.stderr, "WARNING! Selftests relying on bpf_testmod.ko will be skipped.\n");
-> +                       env.has_testmod = false;
+> +// Copied from perf/util/string.c
+> +
+> +/* Character class matching */
+> +static bool __match_charclass(const char *pat, char c, const char **npat)
+> +{
+> +       bool complement = false, ret = true;
+> +
+> +       if (*pat == '!') {
+> +               complement = true;
+> +               pat++;
+> +       }
+> +       if (*pat++ == c) /* First character is special */
+> +               goto end;
+> +
+> +       while (*pat && *pat != ']') { /* Matching */
+> +               if (*pat == '-' && *(pat + 1) != ']') { /* Range */
+> +                       if (*(pat - 1) <= c && c <= *(pat + 1))
+> +                               goto end;
+> +                       if (*(pat - 1) > *(pat + 1))
+> +                               goto error;
+> +                       pat += 2;
+> +               } else if (*pat++ == c)
+> +                       goto end;
+> +       }
+> +       if (!*pat)
+> +               goto error;
+> +       ret = false;
+> +
+> +end:
+> +       while (*pat && *pat != ']') /* Searching closing */
+> +               pat++;
+> +       if (!*pat)
+> +               goto error;
+> +       *npat = pat + 1;
+> +       return complement ? !ret : ret;
+> +
+> +error:
+> +       return false;
+> +}
+> +
+> +// Copied from perf/util/string.c
+> +/* Glob/lazy pattern matching */
+> +static bool __match_glob(const char *str, const char *pat, bool ignore_space,
+> +                        bool case_ins)
+> +{
+> +       while (*str && *pat && *pat != '*') {
+> +               if (ignore_space) {
+> +                       /* Ignore spaces for lazy matching */
+> +                       if (isspace(*str)) {
+> +                               str++;
+> +                               continue;
+> +                       }
+> +                       if (isspace(*pat)) {
+> +                               pat++;
+> +                               continue;
+> +                       }
 > +               }
+> +               if (*pat == '?') { /* Matches any single character */
+> +                       str++;
+> +                       pat++;
+> +                       continue;
+> +               } else if (*pat == '[') /* Character classes/Ranges */
+> +                       if (__match_charclass(pat + 1, *str, &pat)) {
+> +                               str++;
+> +                               continue;
+> +                       } else
+> +                               return false;
+> +               else if (*pat == '\\') /* Escaped char match as normal char */
+> +                       pat++;
+> +               if (case_ins) {
+> +                       if (tolower(*str) != tolower(*pat))
+> +                               return false;
+> +               } else if (*str != *pat)
+> +                       return false;
+> +               str++;
+> +               pat++;
+> +       }
+> +       /* Check wild card */
+> +       if (*pat == '*') {
+> +               while (*pat == '*')
+> +                       pat++;
+> +               if (!*pat) /* Tail wild card matches all */
+> +                       return true;
+> +               while (*str)
+> +                       if (__match_glob(str++, pat, ignore_space, case_ins))
+> +                               return true;
+> +       }
+> +       return !*str && !*pat;
+> +}
+> +
+>  #define EXIT_NO_TEST           2
+>  #define EXIT_ERR_SETUP_INFRA   3
+>
+> @@ -55,12 +145,12 @@ static bool should_run(struct test_selector *sel, int num, const char *name)
+>         int i;
+>
+>         for (i = 0; i < sel->blacklist.cnt; i++) {
+> -               if (strstr(name, sel->blacklist.strs[i]))
+> +               if (__match_glob(name, sel->blacklist.strs[i], false, false))
+>                         return false;
 >         }
->         for (i = 0; i < prog_test_cnt; i++) {
->                 struct prog_test_def *test = &prog_test_defs[i];
+>
+>         for (i = 0; i < sel->whitelist.cnt; i++) {
+> -               if (strstr(name, sel->whitelist.strs[i]))
+> +               if (__match_glob(name, sel->whitelist.strs[i], false, false))
+>                         return true;
+>         }
+>
 > --
 > 2.30.2
 >
