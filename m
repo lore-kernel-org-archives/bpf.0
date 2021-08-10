@@ -6,38 +6,39 @@ X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EFB43C4338F
-	for <bpf@archiver.kernel.org>; Tue, 10 Aug 2021 21:37:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BE7B6C432BE
+	for <bpf@archiver.kernel.org>; Tue, 10 Aug 2021 21:37:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D759660E9B
-	for <bpf@archiver.kernel.org>; Tue, 10 Aug 2021 21:37:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A186B60E9B
+	for <bpf@archiver.kernel.org>; Tue, 10 Aug 2021 21:37:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234248AbhHJVhr convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Tue, 10 Aug 2021 17:37:47 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:58324 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234842AbhHJVho (ORCPT
+        id S234707AbhHJVhs convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Tue, 10 Aug 2021 17:37:48 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:55208 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S234877AbhHJVho (ORCPT
         <rfc822;bpf@vger.kernel.org>); Tue, 10 Aug 2021 17:37:44 -0400
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17ALZVh4023445
-        for <bpf@vger.kernel.org>; Tue, 10 Aug 2021 14:37:12 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 3abyqwrqw2-3
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.0.43/8.16.0.43) with SMTP id 17ALYr6H023303
+        for <bpf@vger.kernel.org>; Tue, 10 Aug 2021 14:37:09 -0700
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by m0089730.ppops.net with ESMTP id 3abya40ycx-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 10 Aug 2021 14:37:12 -0700
-Received: from intmgw006.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 10 Aug 2021 14:37:09 -0700
+Received: from intmgw001.25.frc3.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Tue, 10 Aug 2021 14:37:10 -0700
+ 15.1.2176.2; Tue, 10 Aug 2021 14:37:07 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 8BF843D405A0; Tue, 10 Aug 2021 14:37:05 -0700 (PDT)
+        id 77B783D405A0; Tue, 10 Aug 2021 14:37:01 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCH v4 bpf-next 13/14] selftests/bpf: extract uprobe-related helpers into trace_helpers.{c,h}
-Date:   Tue, 10 Aug 2021 14:36:33 -0700
-Message-ID: <20210810213634.272111-14-andrii@kernel.org>
+        Peter Zijlstra <peterz@infradead.org>,
+        Rafael David Tinoco <rafaeldtinoco@gmail.com>
+Subject: [PATCH v4 bpf-next 11/14] libbpf: add bpf_cookie to perf_event, kprobe, uprobe, and tp attach APIs
+Date:   Tue, 10 Aug 2021 14:36:31 -0700
+Message-ID: <20210810213634.272111-12-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210810213634.272111-1-andrii@kernel.org>
 References: <20210810213634.272111-1-andrii@kernel.org>
@@ -46,196 +47,345 @@ Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-GUID: -1X-PG-oIArLExDndN5FAH1f3jlEDW3x
-X-Proofpoint-ORIG-GUID: -1X-PG-oIArLExDndN5FAH1f3jlEDW3x
+X-Proofpoint-GUID: B3MfVSZfxJhp-SyzFFqlpVEABessj2ZL
+X-Proofpoint-ORIG-GUID: B3MfVSZfxJhp-SyzFFqlpVEABessj2ZL
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
  definitions=2021-08-10_08:2021-08-10,2021-08-10 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 phishscore=0
- lowpriorityscore=0 mlxlogscore=999 priorityscore=1501 spamscore=0
- malwarescore=0 impostorscore=0 clxscore=1034 adultscore=0 bulkscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=0
+ spamscore=0 priorityscore=1501 adultscore=0 clxscore=1015 malwarescore=0
+ bulkscore=0 impostorscore=0 phishscore=0 mlxscore=0 lowpriorityscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2107140000 definitions=main-2108100142
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Extract two helpers used for working with uprobes into trace_helpers.{c,h} to
-be re-used between multiple uprobe-using selftests. Also rename get_offset()
-into more appropriate get_uprobe_offset().
+Wire through bpf_cookie for all attach APIs that use perf_event_open under the
+hood:
+  - for kprobes, extend existing bpf_kprobe_opts with bpf_cookie field;
+  - for perf_event, uprobe, and tracepoint APIs, add their _opts variants and
+    pass bpf_cookie through opts.
 
+For kernel that don't support BPF_LINK_CREATE for perf_events, and thus
+bpf_cookie is not supported either, return error and log warning for user.
+
+Cc: Rafael David Tinoco <rafaeldtinoco@gmail.com>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- .../selftests/bpf/prog_tests/attach_probe.c   | 61 +----------------
- tools/testing/selftests/bpf/trace_helpers.c   | 66 +++++++++++++++++++
- tools/testing/selftests/bpf/trace_helpers.h   |  3 +
- 3 files changed, 70 insertions(+), 60 deletions(-)
+ tools/lib/bpf/libbpf.c   | 78 +++++++++++++++++++++++++++++++++-------
+ tools/lib/bpf/libbpf.h   | 71 +++++++++++++++++++++++++++++-------
+ tools/lib/bpf/libbpf.map |  3 ++
+ 3 files changed, 127 insertions(+), 25 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/attach_probe.c b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-index ec11e20d2b92..e40b41c44f8b 100644
---- a/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-+++ b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-@@ -2,65 +2,6 @@
- #include <test_progs.h>
- #include "test_attach_probe.skel.h"
- 
--#if defined(__powerpc64__) && defined(_CALL_ELF) && _CALL_ELF == 2
--
--#define OP_RT_RA_MASK   0xffff0000UL
--#define LIS_R2          0x3c400000UL
--#define ADDIS_R2_R12    0x3c4c0000UL
--#define ADDI_R2_R2      0x38420000UL
--
--static ssize_t get_offset(ssize_t addr, ssize_t base)
--{
--	u32 *insn = (u32 *) addr;
--
--	/*
--	 * A PPC64 ABIv2 function may have a local and a global entry
--	 * point. We need to use the local entry point when patching
--	 * functions, so identify and step over the global entry point
--	 * sequence.
--	 *
--	 * The global entry point sequence is always of the form:
--	 *
--	 * addis r2,r12,XXXX
--	 * addi  r2,r2,XXXX
--	 *
--	 * A linker optimisation may convert the addis to lis:
--	 *
--	 * lis   r2,XXXX
--	 * addi  r2,r2,XXXX
--	 */
--	if ((((*insn & OP_RT_RA_MASK) == ADDIS_R2_R12) ||
--	     ((*insn & OP_RT_RA_MASK) == LIS_R2)) &&
--	    ((*(insn + 1) & OP_RT_RA_MASK) == ADDI_R2_R2))
--		return (ssize_t)(insn + 2) - base;
--	else
--		return addr - base;
--}
--#else
--#define get_offset(addr, base) (addr - base)
--#endif
--
--ssize_t get_base_addr() {
--	size_t start, offset;
--	char buf[256];
--	FILE *f;
--
--	f = fopen("/proc/self/maps", "r");
--	if (!f)
--		return -errno;
--
--	while (fscanf(f, "%zx-%*x %s %zx %*[^\n]\n",
--		      &start, buf, &offset) == 3) {
--		if (strcmp(buf, "r-xp") == 0) {
--			fclose(f);
--			return start - offset;
--		}
--	}
--
--	fclose(f);
--	return -EINVAL;
--}
--
- void test_attach_probe(void)
- {
- 	int duration = 0;
-@@ -74,7 +15,7 @@ void test_attach_probe(void)
- 	if (CHECK(base_addr < 0, "get_base_addr",
- 		  "failed to find base addr: %zd", base_addr))
- 		return;
--	uprobe_offset = get_offset((size_t)&get_base_addr, base_addr);
-+	uprobe_offset = get_uprobe_offset(&get_base_addr, base_addr);
- 
- 	skel = test_attach_probe__open_and_load();
- 	if (CHECK(!skel, "skel_open", "failed to open skeleton\n"))
-diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/selftests/bpf/trace_helpers.c
-index 1bbd1d9830c8..381dafce1d8f 100644
---- a/tools/testing/selftests/bpf/trace_helpers.c
-+++ b/tools/testing/selftests/bpf/trace_helpers.c
-@@ -136,3 +136,69 @@ void read_trace_pipe(void)
- 		}
- 	}
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index b6adb50f2711..2299ed7daf73 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -9012,12 +9012,16 @@ static void bpf_link_perf_dealloc(struct bpf_link *link)
+ 	free(perf_link);
  }
+ 
+-struct bpf_link *bpf_program__attach_perf_event(struct bpf_program *prog, int pfd)
++struct bpf_link *bpf_program__attach_perf_event_opts(struct bpf_program *prog, int pfd,
++						     const struct bpf_perf_event_opts *opts)
+ {
+ 	char errmsg[STRERR_BUFSIZE];
+ 	struct bpf_link_perf *link;
+ 	int prog_fd, link_fd = -1, err;
+ 
++	if (!OPTS_VALID(opts, bpf_perf_event_opts))
++		return libbpf_err_ptr(-EINVAL);
 +
-+#if defined(__powerpc64__) && defined(_CALL_ELF) && _CALL_ELF == 2
+ 	if (pfd < 0) {
+ 		pr_warn("prog '%s': invalid perf event FD %d\n",
+ 			prog->name, pfd);
+@@ -9038,7 +9042,10 @@ struct bpf_link *bpf_program__attach_perf_event(struct bpf_program *prog, int pf
+ 	link->perf_event_fd = pfd;
+ 
+ 	if (kernel_supports(prog->obj, FEAT_PERF_LINK)) {
+-		link_fd = bpf_link_create(prog_fd, pfd, BPF_PERF_EVENT, NULL);
++		DECLARE_LIBBPF_OPTS(bpf_link_create_opts, link_opts,
++			.perf_event.bpf_cookie = OPTS_GET(opts, bpf_cookie, 0));
 +
-+#define OP_RT_RA_MASK   0xffff0000UL
-+#define LIS_R2          0x3c400000UL
-+#define ADDIS_R2_R12    0x3c4c0000UL
-+#define ADDI_R2_R2      0x38420000UL
-+
-+ssize_t get_uprobe_offset(const void *addr, ssize_t base)
-+{
-+	u32 *insn = (u32 *)(uintptr_t)addr;
-+
-+	/*
-+	 * A PPC64 ABIv2 function may have a local and a global entry
-+	 * point. We need to use the local entry point when patching
-+	 * functions, so identify and step over the global entry point
-+	 * sequence.
-+	 *
-+	 * The global entry point sequence is always of the form:
-+	 *
-+	 * addis r2,r12,XXXX
-+	 * addi  r2,r2,XXXX
-+	 *
-+	 * A linker optimisation may convert the addis to lis:
-+	 *
-+	 * lis   r2,XXXX
-+	 * addi  r2,r2,XXXX
-+	 */
-+	if ((((*insn & OP_RT_RA_MASK) == ADDIS_R2_R12) ||
-+	     ((*insn & OP_RT_RA_MASK) == LIS_R2)) &&
-+	    ((*(insn + 1) & OP_RT_RA_MASK) == ADDI_R2_R2))
-+		return (ssize_t)(insn + 2) - base;
-+	else
-+		return (uintptr_t)addr - base;
-+}
-+
-+#else
-+
-+ssize_t get_uprobe_offset(const void *addr, ssize_t base)
-+{
-+	return (uintptr_t)addr - base;
-+}
-+
-+#endif
-+
-+ssize_t get_base_addr(void)
-+{
-+	size_t start, offset;
-+	char buf[256];
-+	FILE *f;
-+
-+	f = fopen("/proc/self/maps", "r");
-+	if (!f)
-+		return -errno;
-+
-+	while (fscanf(f, "%zx-%*x %s %zx %*[^\n]\n",
-+		      &start, buf, &offset) == 3) {
-+		if (strcmp(buf, "r-xp") == 0) {
-+			fclose(f);
-+			return start - offset;
++		link_fd = bpf_link_create(prog_fd, pfd, BPF_PERF_EVENT, &link_opts);
+ 		if (link_fd < 0) {
+ 			err = -errno;
+ 			pr_warn("prog '%s': failed to create BPF link for perf_event FD %d: %d (%s)\n",
+@@ -9048,6 +9055,12 @@ struct bpf_link *bpf_program__attach_perf_event(struct bpf_program *prog, int pf
+ 		}
+ 		link->link.fd = link_fd;
+ 	} else {
++		if (OPTS_GET(opts, bpf_cookie, 0)) {
++			pr_warn("prog '%s': user context value is not supported\n", prog->name);
++			err = -EOPNOTSUPP;
++			goto err_out;
 +		}
-+	}
 +
-+	fclose(f);
-+	return -EINVAL;
+ 		if (ioctl(pfd, PERF_EVENT_IOC_SET_BPF, prog_fd) < 0) {
+ 			err = -errno;
+ 			pr_warn("prog '%s': failed to attach to perf_event FD %d: %s\n",
+@@ -9074,6 +9087,11 @@ struct bpf_link *bpf_program__attach_perf_event(struct bpf_program *prog, int pf
+ 	return libbpf_err_ptr(err);
+ }
+ 
++struct bpf_link *bpf_program__attach_perf_event(struct bpf_program *prog, int pfd)
++{
++	return bpf_program__attach_perf_event_opts(prog, pfd, NULL);
 +}
-diff --git a/tools/testing/selftests/bpf/trace_helpers.h b/tools/testing/selftests/bpf/trace_helpers.h
-index f62fdef9e589..3d9435b3dd3b 100644
---- a/tools/testing/selftests/bpf/trace_helpers.h
-+++ b/tools/testing/selftests/bpf/trace_helpers.h
-@@ -18,4 +18,7 @@ int kallsyms_find(const char *sym, unsigned long long *addr);
- 
- void read_trace_pipe(void);
- 
-+ssize_t get_uprobe_offset(const void *addr, ssize_t base);
-+ssize_t get_base_addr(void);
 +
- #endif
+ /*
+  * this function is expected to parse integer in the range of [0, 2^31-1] from
+  * given file using scanf format string fmt. If actual parsed value is
+@@ -9182,8 +9200,9 @@ static int perf_event_open_probe(bool uprobe, bool retprobe, const char *name,
+ struct bpf_link *
+ bpf_program__attach_kprobe_opts(struct bpf_program *prog,
+ 				const char *func_name,
+-				struct bpf_kprobe_opts *opts)
++				const struct bpf_kprobe_opts *opts)
+ {
++	DECLARE_LIBBPF_OPTS(bpf_perf_event_opts, pe_opts);
+ 	char errmsg[STRERR_BUFSIZE];
+ 	struct bpf_link *link;
+ 	unsigned long offset;
+@@ -9195,6 +9214,7 @@ bpf_program__attach_kprobe_opts(struct bpf_program *prog,
+ 
+ 	retprobe = OPTS_GET(opts, retprobe, false);
+ 	offset = OPTS_GET(opts, offset, 0);
++	pe_opts.bpf_cookie = OPTS_GET(opts, bpf_cookie, 0);
+ 
+ 	pfd = perf_event_open_probe(false /* uprobe */, retprobe, func_name,
+ 				    offset, -1 /* pid */);
+@@ -9204,7 +9224,7 @@ bpf_program__attach_kprobe_opts(struct bpf_program *prog,
+ 			libbpf_strerror_r(pfd, errmsg, sizeof(errmsg)));
+ 		return libbpf_err_ptr(pfd);
+ 	}
+-	link = bpf_program__attach_perf_event(prog, pfd);
++	link = bpf_program__attach_perf_event_opts(prog, pfd, &pe_opts);
+ 	err = libbpf_get_error(link);
+ 	if (err) {
+ 		close(pfd);
+@@ -9259,14 +9279,22 @@ static struct bpf_link *attach_kprobe(const struct bpf_sec_def *sec,
+ 	return link;
+ }
+ 
+-struct bpf_link *bpf_program__attach_uprobe(struct bpf_program *prog,
+-					    bool retprobe, pid_t pid,
+-					    const char *binary_path,
+-					    size_t func_offset)
++LIBBPF_API struct bpf_link *
++bpf_program__attach_uprobe_opts(struct bpf_program *prog, pid_t pid,
++				const char *binary_path, size_t func_offset,
++				const struct bpf_uprobe_opts *opts)
+ {
++	DECLARE_LIBBPF_OPTS(bpf_perf_event_opts, pe_opts);
+ 	char errmsg[STRERR_BUFSIZE];
+ 	struct bpf_link *link;
+ 	int pfd, err;
++	bool retprobe;
++
++	if (!OPTS_VALID(opts, bpf_uprobe_opts))
++		return libbpf_err_ptr(-EINVAL);
++
++	retprobe = OPTS_GET(opts, retprobe, false);
++	pe_opts.bpf_cookie = OPTS_GET(opts, bpf_cookie, 0);
+ 
+ 	pfd = perf_event_open_probe(true /* uprobe */, retprobe,
+ 				    binary_path, func_offset, pid);
+@@ -9277,7 +9305,7 @@ struct bpf_link *bpf_program__attach_uprobe(struct bpf_program *prog,
+ 			libbpf_strerror_r(pfd, errmsg, sizeof(errmsg)));
+ 		return libbpf_err_ptr(pfd);
+ 	}
+-	link = bpf_program__attach_perf_event(prog, pfd);
++	link = bpf_program__attach_perf_event_opts(prog, pfd, &pe_opts);
+ 	err = libbpf_get_error(link);
+ 	if (err) {
+ 		close(pfd);
+@@ -9290,6 +9318,16 @@ struct bpf_link *bpf_program__attach_uprobe(struct bpf_program *prog,
+ 	return link;
+ }
+ 
++struct bpf_link *bpf_program__attach_uprobe(struct bpf_program *prog,
++					    bool retprobe, pid_t pid,
++					    const char *binary_path,
++					    size_t func_offset)
++{
++	DECLARE_LIBBPF_OPTS(bpf_uprobe_opts, opts, .retprobe = retprobe);
++
++	return bpf_program__attach_uprobe_opts(prog, pid, binary_path, func_offset, &opts);
++}
++
+ static int determine_tracepoint_id(const char *tp_category,
+ 				   const char *tp_name)
+ {
+@@ -9340,14 +9378,21 @@ static int perf_event_open_tracepoint(const char *tp_category,
+ 	return pfd;
+ }
+ 
+-struct bpf_link *bpf_program__attach_tracepoint(struct bpf_program *prog,
+-						const char *tp_category,
+-						const char *tp_name)
++struct bpf_link *bpf_program__attach_tracepoint_opts(struct bpf_program *prog,
++						     const char *tp_category,
++						     const char *tp_name,
++						     const struct bpf_tracepoint_opts *opts)
+ {
++	DECLARE_LIBBPF_OPTS(bpf_perf_event_opts, pe_opts);
+ 	char errmsg[STRERR_BUFSIZE];
+ 	struct bpf_link *link;
+ 	int pfd, err;
+ 
++	if (!OPTS_VALID(opts, bpf_tracepoint_opts))
++		return libbpf_err_ptr(-EINVAL);
++
++	pe_opts.bpf_cookie = OPTS_GET(opts, bpf_cookie, 0);
++
+ 	pfd = perf_event_open_tracepoint(tp_category, tp_name);
+ 	if (pfd < 0) {
+ 		pr_warn("prog '%s': failed to create tracepoint '%s/%s' perf event: %s\n",
+@@ -9355,7 +9400,7 @@ struct bpf_link *bpf_program__attach_tracepoint(struct bpf_program *prog,
+ 			libbpf_strerror_r(pfd, errmsg, sizeof(errmsg)));
+ 		return libbpf_err_ptr(pfd);
+ 	}
+-	link = bpf_program__attach_perf_event(prog, pfd);
++	link = bpf_program__attach_perf_event_opts(prog, pfd, &pe_opts);
+ 	err = libbpf_get_error(link);
+ 	if (err) {
+ 		close(pfd);
+@@ -9367,6 +9412,13 @@ struct bpf_link *bpf_program__attach_tracepoint(struct bpf_program *prog,
+ 	return link;
+ }
+ 
++struct bpf_link *bpf_program__attach_tracepoint(struct bpf_program *prog,
++						const char *tp_category,
++						const char *tp_name)
++{
++	return bpf_program__attach_tracepoint_opts(prog, tp_category, tp_name, NULL);
++}
++
+ static struct bpf_link *attach_tp(const struct bpf_sec_def *sec,
+ 				  struct bpf_program *prog)
+ {
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index 1271d99bb7aa..1f4a67285365 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -104,17 +104,6 @@ struct bpf_object_open_opts {
+ };
+ #define bpf_object_open_opts__last_field btf_custom_path
+ 
+-struct bpf_kprobe_opts {
+-	/* size of this struct, for forward/backward compatiblity */
+-	size_t sz;
+-	/* function's offset to install kprobe to */
+-	unsigned long offset;
+-	/* kprobe is return probe */
+-	bool retprobe;
+-	size_t :0;
+-};
+-#define bpf_kprobe_opts__last_field retprobe
+-
+ LIBBPF_API struct bpf_object *bpf_object__open(const char *path);
+ LIBBPF_API struct bpf_object *
+ bpf_object__open_file(const char *path, const struct bpf_object_open_opts *opts);
+@@ -255,24 +244,82 @@ LIBBPF_API int bpf_link__destroy(struct bpf_link *link);
+ 
+ LIBBPF_API struct bpf_link *
+ bpf_program__attach(struct bpf_program *prog);
++
++struct bpf_perf_event_opts {
++	/* size of this struct, for forward/backward compatiblity */
++	size_t sz;
++	/* custom user-provided value fetchable through bpf_get_attach_cookie() */
++	__u64 bpf_cookie;
++};
++#define bpf_perf_event_opts__last_field bpf_cookie
++
+ LIBBPF_API struct bpf_link *
+ bpf_program__attach_perf_event(struct bpf_program *prog, int pfd);
++
++LIBBPF_API struct bpf_link *
++bpf_program__attach_perf_event_opts(struct bpf_program *prog, int pfd,
++				    const struct bpf_perf_event_opts *opts);
++
++struct bpf_kprobe_opts {
++	/* size of this struct, for forward/backward compatiblity */
++	size_t sz;
++	/* custom user-provided value fetchable through bpf_get_attach_cookie() */
++	__u64 bpf_cookie;
++	/* function's offset to install kprobe to */
++	unsigned long offset;
++	/* kprobe is return probe */
++	bool retprobe;
++	size_t :0;
++};
++#define bpf_kprobe_opts__last_field retprobe
++
+ LIBBPF_API struct bpf_link *
+ bpf_program__attach_kprobe(struct bpf_program *prog, bool retprobe,
+ 			   const char *func_name);
+ LIBBPF_API struct bpf_link *
+ bpf_program__attach_kprobe_opts(struct bpf_program *prog,
+                                 const char *func_name,
+-                                struct bpf_kprobe_opts *opts);
++                                const struct bpf_kprobe_opts *opts);
++
++struct bpf_uprobe_opts {
++	/* size of this struct, for forward/backward compatiblity */
++	size_t sz;
++	/* custom user-provided value fetchable through bpf_get_attach_cookie() */
++	__u64 bpf_cookie;
++	/* uprobe is return probe, invoked at function return time */
++	bool retprobe;
++	size_t :0;
++};
++#define bpf_uprobe_opts__last_field retprobe
++
+ LIBBPF_API struct bpf_link *
+ bpf_program__attach_uprobe(struct bpf_program *prog, bool retprobe,
+ 			   pid_t pid, const char *binary_path,
+ 			   size_t func_offset);
++LIBBPF_API struct bpf_link *
++bpf_program__attach_uprobe_opts(struct bpf_program *prog, pid_t pid,
++				const char *binary_path, size_t func_offset,
++				const struct bpf_uprobe_opts *opts);
++
++struct bpf_tracepoint_opts {
++	/* size of this struct, for forward/backward compatiblity */
++	size_t sz;
++	/* custom user-provided value fetchable through bpf_get_attach_cookie() */
++	__u64 bpf_cookie;
++};
++#define bpf_tracepoint_opts__last_field bpf_cookie
++
+ LIBBPF_API struct bpf_link *
+ bpf_program__attach_tracepoint(struct bpf_program *prog,
+ 			       const char *tp_category,
+ 			       const char *tp_name);
+ LIBBPF_API struct bpf_link *
++bpf_program__attach_tracepoint_opts(struct bpf_program *prog,
++				    const char *tp_category,
++				    const char *tp_name,
++				    const struct bpf_tracepoint_opts *opts);
++
++LIBBPF_API struct bpf_link *
+ bpf_program__attach_raw_tracepoint(struct bpf_program *prog,
+ 				   const char *tp_name);
+ LIBBPF_API struct bpf_link *
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index 58e0fb2c482f..bbc53bb25f68 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -374,6 +374,9 @@ LIBBPF_0.5.0 {
+ 		bpf_map__pin_path;
+ 		bpf_map_lookup_and_delete_elem_flags;
+ 		bpf_program__attach_kprobe_opts;
++		bpf_program__attach_perf_event_opts;
++		bpf_program__attach_tracepoint_opts;
++		bpf_program__attach_uprobe_opts;
+ 		bpf_object__gen_loader;
+ 		btf__load_from_kernel_by_id;
+ 		btf__load_from_kernel_by_id_split;
 -- 
 2.30.2
 
