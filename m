@@ -2,202 +2,84 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-14.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65866C4338F
-	for <bpf@archiver.kernel.org>; Tue, 10 Aug 2021 00:17:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A92E9C432BE
+	for <bpf@archiver.kernel.org>; Tue, 10 Aug 2021 00:17:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3F69060F6F
-	for <bpf@archiver.kernel.org>; Tue, 10 Aug 2021 00:17:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 82E0C60F38
+	for <bpf@archiver.kernel.org>; Tue, 10 Aug 2021 00:17:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236033AbhHJARy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 9 Aug 2021 20:17:54 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:40980 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231439AbhHJARy (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 9 Aug 2021 20:17:54 -0400
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.43/8.16.0.43) with SMTP id 17A0D9kM012854
-        for <bpf@vger.kernel.org>; Mon, 9 Aug 2021 17:17:32 -0700
+        id S236100AbhHJARz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 9 Aug 2021 20:17:55 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:58450 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236088AbhHJARz (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 9 Aug 2021 20:17:55 -0400
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17A0Efum027829
+        for <bpf@vger.kernel.org>; Mon, 9 Aug 2021 17:17:34 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=ke8fywZq1kzC8TbePblyntQOf4q/GzDba0UZDrhrecw=;
- b=NvOPFQDt9304ybyFFSzYtxcLyu6bbchazxQwsZ6iQlBqjE3Cz5gdTKVV1Hk9KYlZ8oG7
- paSq9uBmKpPgI3PBAYa2oGmwagtAyHqLahwdD1G5Asxkvco8UZdaP+sZIE1HNu8QhhqK
- A2WRqUkqfeDa5FZFfFrMmuChdVNr3nBKWj0= 
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=facebook; bh=0WwT5WUhlPtXq+PFY9nKiBnRu9Z1rXWjZVF8skg7KE4=;
+ b=TrxdFKYHamngwtfTzyLE0ZrmsVL9pLG5tvtwwEuCfyuRxuxysWguPD4s7y1WJkfnKQEU
+ x3OtRatMpsKcFP4Eac3IyP3vPYrVPo+CGzrh5lb5VuEbcxoHJV0Wr/1/Q42Cl+3W21Jn
+ s9U4fYqmaSP7ivv7wZyVzVGBw6XMe4NA+KE= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0001303.ppops.net with ESMTP id 3abbsqry8a-2
+        by mx0a-00082601.pphosted.com with ESMTP id 3abdp30awa-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 09 Aug 2021 17:17:32 -0700
-Received: from intmgw001.05.prn6.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Mon, 09 Aug 2021 17:17:34 -0700
+Received: from intmgw001.27.prn2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Mon, 9 Aug 2021 17:17:31 -0700
+ 15.1.2176.2; Mon, 9 Aug 2021 17:17:32 -0700
 Received: by devvm2661.vll0.facebook.com (Postfix, from userid 200310)
-        id 348411E2CB6A; Mon,  9 Aug 2021 17:17:25 -0700 (PDT)
+        id 2CD9A1E2CB66; Mon,  9 Aug 2021 17:17:25 -0700 (PDT)
 From:   Yucong Sun <fallentree@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     <andrii@kernel.org>, <sunyucong@gmail.com>,
         Yucong Sun <fallentree@fb.com>
-Subject: [PATCH v2 bpf-next 2/5] Add glob matching for test selector in test_progs.
-Date:   Mon, 9 Aug 2021 17:16:22 -0700
-Message-ID: <20210810001625.1140255-3-fallentree@fb.com>
+Subject: [PATCH v2 bpf-next 0/5] Improve the usability of test_progs
+Date:   Mon, 9 Aug 2021 17:16:20 -0700
+Message-ID: <20210810001625.1140255-1-fallentree@fb.com>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210810001625.1140255-1-fallentree@fb.com>
-References: <20210810001625.1140255-1-fallentree@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-GUID: aUlIBX1ZsoA01TCmORAMVvib7vB-YZ1_
-X-Proofpoint-ORIG-GUID: aUlIBX1ZsoA01TCmORAMVvib7vB-YZ1_
+X-Proofpoint-GUID: SX4TwG92K6eJ7b-RFTFaSqqv0RFkIntL
+X-Proofpoint-ORIG-GUID: SX4TwG92K6eJ7b-RFTFaSqqv0RFkIntL
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
  definitions=2021-08-09_09:2021-08-06,2021-08-09 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0
- suspectscore=0 adultscore=0 lowpriorityscore=0 clxscore=1015 mlxscore=0
- priorityscore=1501 spamscore=0 malwarescore=0 mlxlogscore=999 phishscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2107140000 definitions=main-2108100000
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 bulkscore=0
+ mlxlogscore=700 phishscore=0 priorityscore=1501 suspectscore=0
+ clxscore=1015 impostorscore=0 adultscore=0 malwarescore=0
+ lowpriorityscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2107140000 definitions=main-2108100000
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch adds glob matching to test selector, it accepts
-simple glob pattern "*", "?", "[]" to match the test names to run.
+This short series focus on improving the usability of test_progs, making
+the output cleaner, easier to select test to run, and adding a summary of
+all failed the tests at the end of the output.
 
-The glob matching function is copied from perf/util/string.c
+Yucong Sun (5):
+  Skip loading bpf_testmod when using -l to list tests.
+  Add glob matching for test selector in test_progs.
+  Correctly display subtest skip status
+  Display test number when listing test names
+  Record all failed tests and output after the summary line.
 
-Signed-off-by: Yucong Sun <fallentree@fb.com>
----
- tools/testing/selftests/bpf/test_progs.c | 94 +++++++++++++++++++++++-
- 1 file changed, 92 insertions(+), 2 deletions(-)
+ tools/testing/selftests/bpf/test_progs.c | 144 ++++++++++++++++++++---
+ tools/testing/selftests/bpf/test_progs.h |   2 +
+ 2 files changed, 132 insertions(+), 14 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/sel=
-ftests/bpf/test_progs.c
-index 74dde0af1592..c5bffd2e78ae 100644
---- a/tools/testing/selftests/bpf/test_progs.c
-+++ b/tools/testing/selftests/bpf/test_progs.c
-@@ -13,6 +13,96 @@
- #include <execinfo.h> /* backtrace */
- #include <linux/membarrier.h>
-=20
-+// Copied from perf/util/string.c
-+
-+/* Character class matching */
-+static bool __match_charclass(const char *pat, char c, const char **npat=
-)
-+{
-+	bool complement =3D false, ret =3D true;
-+
-+	if (*pat =3D=3D '!') {
-+		complement =3D true;
-+		pat++;
-+	}
-+	if (*pat++ =3D=3D c) /* First character is special */
-+		goto end;
-+
-+	while (*pat && *pat !=3D ']') { /* Matching */
-+		if (*pat =3D=3D '-' && *(pat + 1) !=3D ']') { /* Range */
-+			if (*(pat - 1) <=3D c && c <=3D *(pat + 1))
-+				goto end;
-+			if (*(pat - 1) > *(pat + 1))
-+				goto error;
-+			pat +=3D 2;
-+		} else if (*pat++ =3D=3D c)
-+			goto end;
-+	}
-+	if (!*pat)
-+		goto error;
-+	ret =3D false;
-+
-+end:
-+	while (*pat && *pat !=3D ']') /* Searching closing */
-+		pat++;
-+	if (!*pat)
-+		goto error;
-+	*npat =3D pat + 1;
-+	return complement ? !ret : ret;
-+
-+error:
-+	return false;
-+}
-+
-+// Copied from perf/util/string.c
-+/* Glob/lazy pattern matching */
-+static bool __match_glob(const char *str, const char *pat, bool ignore_s=
-pace,
-+			 bool case_ins)
-+{
-+	while (*str && *pat && *pat !=3D '*') {
-+		if (ignore_space) {
-+			/* Ignore spaces for lazy matching */
-+			if (isspace(*str)) {
-+				str++;
-+				continue;
-+			}
-+			if (isspace(*pat)) {
-+				pat++;
-+				continue;
-+			}
-+		}
-+		if (*pat =3D=3D '?') { /* Matches any single character */
-+			str++;
-+			pat++;
-+			continue;
-+		} else if (*pat =3D=3D '[') /* Character classes/Ranges */
-+			if (__match_charclass(pat + 1, *str, &pat)) {
-+				str++;
-+				continue;
-+			} else
-+				return false;
-+		else if (*pat =3D=3D '\\') /* Escaped char match as normal char */
-+			pat++;
-+		if (case_ins) {
-+			if (tolower(*str) !=3D tolower(*pat))
-+				return false;
-+		} else if (*str !=3D *pat)
-+			return false;
-+		str++;
-+		pat++;
-+	}
-+	/* Check wild card */
-+	if (*pat =3D=3D '*') {
-+		while (*pat =3D=3D '*')
-+			pat++;
-+		if (!*pat) /* Tail wild card matches all */
-+			return true;
-+		while (*str)
-+			if (__match_glob(str++, pat, ignore_space, case_ins))
-+				return true;
-+	}
-+	return !*str && !*pat;
-+}
-+
- #define EXIT_NO_TEST		2
- #define EXIT_ERR_SETUP_INFRA	3
-=20
-@@ -55,12 +145,12 @@ static bool should_run(struct test_selector *sel, in=
-t num, const char *name)
- 	int i;
-=20
- 	for (i =3D 0; i < sel->blacklist.cnt; i++) {
--		if (strstr(name, sel->blacklist.strs[i]))
-+		if (__match_glob(name, sel->blacklist.strs[i], false, false))
- 			return false;
- 	}
-=20
- 	for (i =3D 0; i < sel->whitelist.cnt; i++) {
--		if (strstr(name, sel->whitelist.strs[i]))
-+		if (__match_glob(name, sel->whitelist.strs[i], false, false))
- 			return true;
- 	}
-=20
 --=20
 2.30.2
 
