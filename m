@@ -2,125 +2,137 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 66B37C4338F
-	for <bpf@archiver.kernel.org>; Thu, 12 Aug 2021 15:17:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F4220C4320E
+	for <bpf@archiver.kernel.org>; Thu, 12 Aug 2021 15:18:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3A85F60EB5
-	for <bpf@archiver.kernel.org>; Thu, 12 Aug 2021 15:17:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D647D60F35
+	for <bpf@archiver.kernel.org>; Thu, 12 Aug 2021 15:18:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236908AbhHLPRh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 12 Aug 2021 11:17:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:55342 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236638AbhHLPRh (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 12 Aug 2021 11:17:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1628781431;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OtzAV9SznvxCWIUzoJ2pSaFsvZKJsWXzbdCtRj/OA38=;
-        b=AqrDGW2kJacXKLgShVsLiM0Kwx0QRHok3t8zwMF4pzs5MKbIQbvqRE+N9jqONIXROlKV5u
-        8toclFxyWXLAaasUCucT3lJr54aUmgctbFFP+p5eNs2kq7IEgEEi6k86PUga/pFgQUMDfb
-        IwOWT9SY77DlDzlKpFB7BDn9vjMNj1w=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-11-d6BQrUIgMNWUfiqBZ-oOcQ-1; Thu, 12 Aug 2021 11:17:09 -0400
-X-MC-Unique: d6BQrUIgMNWUfiqBZ-oOcQ-1
-Received: by mail-wm1-f70.google.com with SMTP id f6-20020a05600c1546b029025af999e04dso1929332wmg.7
-        for <bpf@vger.kernel.org>; Thu, 12 Aug 2021 08:17:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:cc:subject:to:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=OtzAV9SznvxCWIUzoJ2pSaFsvZKJsWXzbdCtRj/OA38=;
-        b=dX0DRuyjr4aghTcyQfYOumoP480bLhH0AaK82oq3/gYNIB6Fr4f0s2flyJE4zo+6Rq
-         wyPu54EwdksvrGDmKzeovUI0NKd32/j9GTzXlaCCaJV6rlLHe5FFRe8lvebsTygIOjEY
-         TAJkc5kkfgn5WhlZRZyV/0fik+taouf2+QamQ+m/WtaSN5t5dmPR0xTd5wE4zfbRUDRG
-         VOWsTtpQHUXFE1QRmRmMXiV/2k9+7irtgfT4CaGWU4bnGJ7cIrSs0fANZ5JSUCHpiOKy
-         YByaeGRQ2y0nIPOefHlVioaXgztBkDpGa/kuYITD5GyySCgvsfqaVy6FvQHnxs47K159
-         B6VA==
-X-Gm-Message-State: AOAM5323leSvUYA+IwjO+109yE+/2QZXE/htIF9ws3Znqnv7CIpbD6Vi
-        S3CJrEWz5288emRZjNJWD8pmZ6HrZ2Yc8xjSKxogryc84dGSsUm4UI1CltZCY8YzudQMfSfEjZj
-        uTmR9TUYNdgzO
-X-Received: by 2002:a1c:f314:: with SMTP id q20mr16432154wmq.154.1628781428838;
-        Thu, 12 Aug 2021 08:17:08 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwgfhiKemqhJFNdNUa30wfwm7+Gv9CMt1jDRYr/2UjeRviuk7iczgvP230DtcLFs6EBZY6k9A==
-X-Received: by 2002:a1c:f314:: with SMTP id q20mr16432109wmq.154.1628781428463;
-        Thu, 12 Aug 2021 08:17:08 -0700 (PDT)
-Received: from [192.168.42.238] (3-14-107-185.static.kviknet.dk. [185.107.14.3])
-        by smtp.gmail.com with ESMTPSA id k31sm2595939wms.31.2021.08.12.08.17.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Aug 2021 08:17:08 -0700 (PDT)
-From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
-X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
-Cc:     brouer@redhat.com, alexander.duyck@gmail.com,
-        linux@armlinux.org.uk, mw@semihalf.com, linuxarm@openeuler.org,
-        yisen.zhuang@huawei.com, salil.mehta@huawei.com,
-        thomas.petazzoni@bootlin.com, hawk@kernel.org,
-        ilias.apalodimas@linaro.org, ast@kernel.org, daniel@iogearbox.net,
-        john.fastabend@gmail.com, akpm@linux-foundation.org,
-        peterz@infradead.org, will@kernel.org, willy@infradead.org,
-        vbabka@suse.cz, fenghua.yu@intel.com, guro@fb.com,
-        peterx@redhat.com, feng.tang@intel.com, jgg@ziepe.ca,
-        mcroce@microsoft.com, hughd@google.com, jonathan.lemon@gmail.com,
-        alobakin@pm.me, willemb@google.com, wenxu@ucloud.cn,
-        cong.wang@bytedance.com, haokexin@gmail.com, nogikh@google.com,
-        elver@google.com, yhs@fb.com, kpsingh@kernel.org,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, chenhao288@hisilicon.com
-Subject: Re: [PATCH net-next v2 2/4] page_pool: add interface to manipulate
- frag count in page pool
-To:     Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
-        kuba@kernel.org
-References: <1628217982-53533-1-git-send-email-linyunsheng@huawei.com>
- <1628217982-53533-3-git-send-email-linyunsheng@huawei.com>
-Message-ID: <d9bce937-1645-b209-a1d4-c7c0a6fcd1af@redhat.com>
-Date:   Thu, 12 Aug 2021 17:17:05 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S237934AbhHLPS5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 12 Aug 2021 11:18:57 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:57592 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237933AbhHLPS4 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 12 Aug 2021 11:18:56 -0400
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17CFDH8j084951;
+        Thu, 12 Aug 2021 11:18:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=iBSNIpLwOZH9WLiMdpzlQyMXkdlOHBCO7NU1Hq3rJQc=;
+ b=fIdCcdze+uT38AzVQ2nT+z3+UB+uTgTBranBAxLV6uGJRgSAaK14x8h5UsPk/K2VjfAh
+ 9Cn63m9lKk+6evpcdpvWPjQrAhNITDpieDC2yKO1Bind+ENwaPeSz+WEoCJ+ySnmVJM6
+ FMadz6O3IHZKYKpDmLwTi7peOp9Xb1bmEs8CaB3T4lNIEfpf+Yg39dBqcQxwZ+1oN+Fw
+ 4gpL0J1kda/xWb8QjMnTrYCBoMFj+n1OKLMjVQHnLbORpAEoBIIVguJI6N2wajGxwDKo
+ R0R1pM1R9Tjj84I1ASoF/G4piZPkItgdKb1FnGzC3dOhtXzCHVxOmo/0ctA4trqVydtP AQ== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3accug17t8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 Aug 2021 11:18:19 -0400
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 17CFDPmj030569;
+        Thu, 12 Aug 2021 15:18:17 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 3acf0ktndg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 Aug 2021 15:18:17 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 17CFEvqr55312750
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 12 Aug 2021 15:14:57 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9985EA405B;
+        Thu, 12 Aug 2021 15:18:13 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 46B4BA4060;
+        Thu, 12 Aug 2021 15:18:13 +0000 (GMT)
+Received: from vm.lan (unknown [9.145.77.113])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 12 Aug 2021 15:18:13 +0000 (GMT)
+From:   Ilya Leoshkevich <iii@linux.ibm.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     bpf@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>
+Subject: [PATCH bpf v3 1/2] bpf: clear zext_dst of dead insns
+Date:   Thu, 12 Aug 2021 17:18:10 +0200
+Message-Id: <20210812151811.184086-2-iii@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20210812151811.184086-1-iii@linux.ibm.com>
+References: <20210812151811.184086-1-iii@linux.ibm.com>
 MIME-Version: 1.0
-In-Reply-To: <1628217982-53533-3-git-send-email-linyunsheng@huawei.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: -5CaBHfNFXyqM5x9NqAklYoOA0XTv_up
+X-Proofpoint-ORIG-GUID: -5CaBHfNFXyqM5x9NqAklYoOA0XTv_up
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-08-12_05:2021-08-12,2021-08-12 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ adultscore=0 spamscore=0 mlxlogscore=999 clxscore=1015 impostorscore=0
+ bulkscore=0 priorityscore=1501 malwarescore=0 mlxscore=0 phishscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2107140000 definitions=main-2108120098
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+"access skb fields ok" verifier test fails on s390 with the "verifier
+bug. zext_dst is set, but no reg is defined" message. The first insns
+of the test prog are:
 
-On 06/08/2021 04.46, Yunsheng Lin wrote:
-> +static inline long page_pool_atomic_sub_frag_count_return(struct page *page,
-> +							  long nr)
-> +{
-> +	long ret;
-> +
-> +	/* As suggested by Alexander, atomic_long_read() may cover up the
-> +	 * reference count errors, so avoid calling atomic_long_read() in
-> +	 * the cases of freeing or draining the page_frags, where we would
-> +	 * not expect it to match or that are slowpath anyway.
-> +	 */
-> +	if (__builtin_constant_p(nr) &&
-> +	    atomic_long_read(&page->pp_frag_count) == nr)
-> +		return 0;
-> +
-> +	ret = atomic_long_sub_return(nr, &page->pp_frag_count);
-> +	WARN_ON(ret < 0);
+   0:	61 01 00 00 00 00 00 00 	ldxw %r0,[%r1+0]
+   8:	35 00 00 01 00 00 00 00 	jge %r0,0,1
+  10:	61 01 00 08 00 00 00 00 	ldxw %r0,[%r1+8]
 
-I worried about this WARN_ON() as it generates an 'ud2' instruction 
-which influence I-cache fetching.  But I have disassembled (objdump) the 
-page_pool.o binary and the ud2 gets placed last in the main function 
-page_pool_put_page() that use this inlined function.
-Thus, I assume this is not a problem :-)
+and the 3rd one is dead (this does not look intentional to me, but this
+is a separate topic).
 
+sanitize_dead_code() converts dead insns into "ja -1", but keeps
+zext_dst. When opt_subreg_zext_lo32_rnd_hi32() tries to parse such
+an insn, it sees this discrepancy and bails. This problem can be seen
+only with JITs whose bpf_jit_needs_zext() returns true.
 
-> +	return ret;
+Fix by clearning dead insns' zext_dst.
+
+The commits that contributed to this problem are:
+
+1. commit 5aa5bd14c5f8 ("bpf: add initial suite for selftests"), which
+   introduced the test with the dead code.
+2. commit 5327ed3d44b7 ("bpf: verifier: mark verified-insn with
+   sub-register zext flag"), which introduced the zext_dst flag.
+3. commit 83a2881903f3 ("bpf: Account for BPF_FETCH in
+   insn_has_def32()"), which introduced the sanity check.
+4. commit 9183671af6db ("bpf: Fix leakage under speculation on
+   mispredicted branches"), which bisect points to.
+
+It's best to fix this on stable branches that contain the second one,
+since that's the point where the inconsistency was introduced.
+
+Fixes: 5327ed3d44b7 ("bpf: verifier: mark verified-insn with sub-register zext flag")
+Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
+---
+ kernel/bpf/verifier.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index f9bda5476ea5..381d3d6f24bc 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -11663,6 +11663,7 @@ static void sanitize_dead_code(struct bpf_verifier_env *env)
+ 		if (aux_data[i].seen)
+ 			continue;
+ 		memcpy(insn + i, &trap, sizeof(trap));
++		aux_data[i].zext_dst = false;
+ 	}
+ }
+ 
+-- 
+2.31.1
 
