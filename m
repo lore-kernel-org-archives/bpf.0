@@ -2,104 +2,115 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C7D2C432BE
-	for <bpf@archiver.kernel.org>; Thu, 12 Aug 2021 15:18:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5993BC43214
+	for <bpf@archiver.kernel.org>; Thu, 12 Aug 2021 15:18:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 61CB160F35
-	for <bpf@archiver.kernel.org>; Thu, 12 Aug 2021 15:18:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4060160FBF
+	for <bpf@archiver.kernel.org>; Thu, 12 Aug 2021 15:18:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237925AbhHLPS4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 12 Aug 2021 11:18:56 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:56538 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S237941AbhHLPS4 (ORCPT
+        id S237933AbhHLPS5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 12 Aug 2021 11:18:57 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:42222 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237917AbhHLPS4 (ORCPT
         <rfc822;bpf@vger.kernel.org>); Thu, 12 Aug 2021 11:18:56 -0400
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17CF3tVd099242;
-        Thu, 12 Aug 2021 11:18:18 -0400
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17CF2dEm169911;
+        Thu, 12 Aug 2021 11:18:20 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : content-transfer-encoding : mime-version; s=pp1;
- bh=oEN+JbesSF9piPctlM8wApI71j5wvHwKavBHBckAPWY=;
- b=A52XnyLIlOpIoMM6EP3M/sDLFNWb/ufkDZ+JKB2vgcqysLUcnorqidO0+XZZ9V9CRXBj
- wGUePxocGA1bnMRBgiA1e9xLAgKqTbkN4ZN8tsP/etLhZJhulR45e1DvzBzY/ZHtXM3O
- SnlrZwOb8MKIjErZAQuWiMWebc8SqSu27a2EiFSaynWi0JI0P3IYipeemK+jp4u5IFb/
- BNkU7InlwwL+Jtl6TUpWOwI3L7z7L7gMDJFU/62fhId1lBUpxFQVZF8PuGkyQgJtXUKC
- 4agea1WlPKj0tzibC4GICgwSb6UhedYRjjtA4vR+zuosK4PwRduaa7cOlwDqCcATdIIH wg== 
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3acgg83g3f-1
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=4G5/4s83oiiY4Nz+mchKFYvy0mEJckidQFhBnYq3ago=;
+ b=YYVYkd7hi+3icHIt/gYE7KV7Q/emSs4y5S6Ms+I7QmcV2ri4VfIwA9G3WCWcvfmLgRFe
+ gcWAXhMHRQRSU8BHkqHX36KI7VwxYC5y77kH0LzATymU/YJIMFFURWJpl5ZV86r4L0Mg
+ lDEgoBdZU78KG+WayRdtmf+ohWhCQMvi8Gv4k+fO1TR9YqrBd8gx4RY1oE3knIMIc+dK
+ TjmeMmRDMQkXgRSo2tgrCroIanbqFG9Yj8wpStIyPuipSwQifoxPGRZCVZNgGljh6eXT
+ fmdpASevndPiSFq2Q2mBtas4qBN+YxE7r+2IBxCfR1q2w7kLxqojHzAi5g5g+cgRz+2v xw== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ad0qy3s7c-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 Aug 2021 11:18:17 -0400
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 17CFDM8c030559;
-        Thu, 12 Aug 2021 15:18:16 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma06ams.nl.ibm.com with ESMTP id 3acf0ktndf-1
+        Thu, 12 Aug 2021 11:18:20 -0400
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 17CFCNTl014968;
+        Thu, 12 Aug 2021 15:18:18 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma04ams.nl.ibm.com with ESMTP id 3acn76a5hb-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 Aug 2021 15:18:16 +0000
+        Thu, 12 Aug 2021 15:18:18 +0000
 Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 17CFIC2f55116258
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 17CFF0BJ23789900
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 12 Aug 2021 15:18:12 GMT
+        Thu, 12 Aug 2021 15:15:00 GMT
 Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 81FDAA4066;
-        Thu, 12 Aug 2021 15:18:12 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 5992BA406F;
+        Thu, 12 Aug 2021 15:18:14 +0000 (GMT)
 Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2EE77A405C;
-        Thu, 12 Aug 2021 15:18:12 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 0007DA405C;
+        Thu, 12 Aug 2021 15:18:13 +0000 (GMT)
 Received: from vm.lan (unknown [9.145.77.113])
         by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 12 Aug 2021 15:18:12 +0000 (GMT)
+        Thu, 12 Aug 2021 15:18:13 +0000 (GMT)
 From:   Ilya Leoshkevich <iii@linux.ibm.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>
 Cc:     bpf@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
         Vasily Gorbik <gor@linux.ibm.com>,
         Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: [PATCH bpf v3 0/2] selftests: bpf: test that dead ldx_w insns are accepted
-Date:   Thu, 12 Aug 2021 17:18:09 +0200
-Message-Id: <20210812151811.184086-1-iii@linux.ibm.com>
+Subject: [PATCH bpf v3 2/2] selftests: bpf: test that dead ldx_w insns are accepted
+Date:   Thu, 12 Aug 2021 17:18:11 +0200
+Message-Id: <20210812151811.184086-3-iii@linux.ibm.com>
 X-Mailer: git-send-email 2.31.1
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: nmhFjL9PWrOcqxHF_RA8dWAeleyeH6rk
-X-Proofpoint-ORIG-GUID: nmhFjL9PWrOcqxHF_RA8dWAeleyeH6rk
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+In-Reply-To: <20210812151811.184086-1-iii@linux.ibm.com>
+References: <20210812151811.184086-1-iii@linux.ibm.com>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Eh19lVGilFG-Q8yJ-gtdc4O-lIBbca0c
+X-Proofpoint-ORIG-GUID: Eh19lVGilFG-Q8yJ-gtdc4O-lIBbca0c
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
  definitions=2021-08-12_05:2021-08-12,2021-08-12 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- mlxlogscore=999 priorityscore=1501 mlxscore=0 lowpriorityscore=0
- bulkscore=0 impostorscore=0 malwarescore=0 clxscore=1015 phishscore=0
- adultscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2107140000 definitions=main-2108120098
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ spamscore=0 mlxlogscore=999 lowpriorityscore=0 suspectscore=0
+ clxscore=1015 phishscore=0 impostorscore=0 mlxscore=0 bulkscore=0
+ adultscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2107140000 definitions=main-2108120098
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Fix the "verifier bug. zext_dst is set, but no reg is defined" failure
-in the "access skb fields ok" test on s390.
+Prevent regressions related to zero-extension metadata handling during
+dead code sanitization.
 
-Patch 1 is the fix, patch 2 adds a test.
-
-v2: https://lore.kernel.org/bpf/20210812140518.183178-1-iii@linux.ibm.com/
-v2 -> v3: Make sure that the test fails in absence of the fix.
-
-v1: https://lore.kernel.org/bpf/20210812111220.181824-1-iii@linux.ibm.com/
-v1 -> v2: Rebase to bpf branch, add Fixes:, add a test (Daniel).
-
-Ilya Leoshkevich (2):
-  bpf: clear zext_dst of dead insns
-  selftests: bpf: test that dead ldx_w insns are accepted
-
- kernel/bpf/verifier.c                            |  1 +
+Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
+---
  tools/testing/selftests/bpf/verifier/dead_code.c | 12 ++++++++++++
- 2 files changed, 13 insertions(+)
+ 1 file changed, 12 insertions(+)
 
+diff --git a/tools/testing/selftests/bpf/verifier/dead_code.c b/tools/testing/selftests/bpf/verifier/dead_code.c
+index 2c8935b3e65d..ee454327e5c6 100644
+--- a/tools/testing/selftests/bpf/verifier/dead_code.c
++++ b/tools/testing/selftests/bpf/verifier/dead_code.c
+@@ -159,3 +159,15 @@
+ 	.result = ACCEPT,
+ 	.retval = 2,
+ },
++{
++	"dead code: zero extension",
++	.insns = {
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_STX_MEM(BPF_W, BPF_REG_10, BPF_REG_0, -4),
++	BPF_JMP_IMM(BPF_JGE, BPF_REG_0, 0, 1),
++	BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_10, -4),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.retval = 0,
++},
 -- 
 2.31.1
 
