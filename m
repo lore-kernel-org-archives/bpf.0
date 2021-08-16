@@ -2,105 +2,103 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3862FC432BE
-	for <bpf@archiver.kernel.org>; Mon, 16 Aug 2021 23:17:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D5C4C4338F
+	for <bpf@archiver.kernel.org>; Mon, 16 Aug 2021 23:28:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1C8DC60EFF
-	for <bpf@archiver.kernel.org>; Mon, 16 Aug 2021 23:17:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1CC7860F36
+	for <bpf@archiver.kernel.org>; Mon, 16 Aug 2021 23:28:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232660AbhHPXSD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 16 Aug 2021 19:18:03 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:10248 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232692AbhHPXSC (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 16 Aug 2021 19:18:02 -0400
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17GNBT59022106
-        for <bpf@vger.kernel.org>; Mon, 16 Aug 2021 16:17:30 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=e43ufeHsWr7CME+/FumfAWIsnKIzj07xiz/sZ1k7NQo=;
- b=SQuJZXPyx91oGE3GKe8PP8OsBK/38lCs3nWKd+rDusPxKHepSwg14WXGm7MnejAhk55a
- hjWN5lyZyeavV92EqLqQbrhUQaD/x8dj0HLwdx26a/i/N+cKwcwMIcJRenOLld1fYYdA
- uGqYMRrWq2Gd49XTDRGvbOhI7YViNkpJ0A0= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 3aftmjju09-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 16 Aug 2021 16:17:30 -0700
-Received: from intmgw001.06.ash9.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Mon, 16 Aug 2021 16:17:29 -0700
-Received: by devbig577.ftw3.facebook.com (Postfix, from userid 201728)
-        id 5124E6DC617E; Mon, 16 Aug 2021 16:17:17 -0700 (PDT)
-From:   Prankur gupta <prankgup@fb.com>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <andrii@kernel.org>,
-        <daniel@iogearbox.net>
-CC:     <kernel-team@fb.com>, <prankur.07@gmail.com>
-Subject: [PATCH bpf-next 1/2] bpf: Add support for {set|get} socket options from setsockopt BPF
-Date:   Mon, 16 Aug 2021 16:17:15 -0700
-Message-ID: <20210816231716.3824813-2-prankgup@fb.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210816231716.3824813-1-prankgup@fb.com>
-References: <20210816231716.3824813-1-prankgup@fb.com>
+        id S232828AbhHPX3N (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 16 Aug 2021 19:29:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55446 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234391AbhHPX3I (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 16 Aug 2021 19:29:08 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DE6B160F58
+        for <bpf@vger.kernel.org>; Mon, 16 Aug 2021 23:28:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1629156515;
+        bh=5bnvIV4VWElcsj2fXkT1fY88QtyfF7nwxgQgeNqY8Yw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=n1UK+ViTvcUMMKJgh9X/1LCmTi0sWKbxp7ecqYeBUs3YOhR99j/7bV6hF6KxzVmF4
+         J2swBU5UxWtSeqpLVIsy1BIi8qxe8QPOTNVF8xclX7r+Pr29qtqPOsIfgYof32re4F
+         Unp3pm1eVwHlpSoaYsUkIzIwoaFL10CUjAAQS7LfEqP1wTkd8kqniunKifgZOdWbVF
+         HqW05WiEYNBJ7RBQ3w1j+PxRnXbggJspGoMPyb/3Ty9WR3LH5qyhGDFpO0dsEimRcK
+         C2dnrHF7n+o5SNSPRLH60XKiwBkuL2u5R/T7n3rAk9MjhAxPBmd8Vg1Qdlo510FCFi
+         iwEDJDRjgZCFQ==
+Received: by mail-lf1-f48.google.com with SMTP id w20so37713058lfu.7
+        for <bpf@vger.kernel.org>; Mon, 16 Aug 2021 16:28:35 -0700 (PDT)
+X-Gm-Message-State: AOAM533UxJMmLFXEtQVJSkLJGy4bXMty43VeGyZb0MvSq+SruJoEH39/
+        kwAJNzBS5kcXqRZC8VDCb2/ygL2du6n3pt++Ico=
+X-Google-Smtp-Source: ABdhPJxFNMLMJKAcBWxulKAYwHgI0qqyhbxAnor8Hitj+UqcO2folbT1sXiiY68ZYKek4XXOxoSfOi3KRvedgIia3hk=
+X-Received: by 2002:ac2:55b9:: with SMTP id y25mr174139lfg.261.1629156514260;
+ Mon, 16 Aug 2021 16:28:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-FB-Source: Intern
-X-Proofpoint-ORIG-GUID: vvZrcpbsCIfGJiHXCaNfqOwK7jGhN6vR
-X-Proofpoint-GUID: vvZrcpbsCIfGJiHXCaNfqOwK7jGhN6vR
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-08-16_09:2021-08-16,2021-08-16 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- malwarescore=0 clxscore=1015 bulkscore=0 lowpriorityscore=0
- mlxlogscore=999 mlxscore=0 impostorscore=0 phishscore=0 spamscore=0
- suspectscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2107140000 definitions=main-2108160144
-X-FB-Internal: deliver
+References: <20210816175250.296110-1-fallentree@fb.com>
+In-Reply-To: <20210816175250.296110-1-fallentree@fb.com>
+From:   Song Liu <song@kernel.org>
+Date:   Mon, 16 Aug 2021 16:28:23 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW5NYMVRCmCXu=gJudfReYzMZqTUVUUWfH+U6FzVo=dWJQ@mail.gmail.com>
+Message-ID: <CAPhsuW5NYMVRCmCXu=gJudfReYzMZqTUVUUWfH+U6FzVo=dWJQ@mail.gmail.com>
+Subject: Re: [PATCH v1 bpf] selftests/bpf: Add exponential backoff to
+ map_update_retriable in test_maps
+To:     Yucong Sun <fallentree@fb.com>
+Cc:     Andrii Nakryiko <andrii@kernel.org>, sunyucong@gmail.com,
+        bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add logic to call bpf_setsockopt and bpf_getsockopt from
-setsockopt BPF programs.
-Example use case, when the user sets the IPV6_TCLASS socket option
-we would also like to change the tcp-cc for that socket.
-We don't have any use case for calling bpf_setsockopt from
-supposedly read-only sys_getsockopti, so it is made available to
-BPF_CGROUP_SETSOCKOPT only.
+On Mon, Aug 16, 2021 at 10:54 AM Yucong Sun <fallentree@fb.com> wrote:
+>
+> Using a fixed delay of 1ms is proven flaky in slow CPU environment, eg.  github
+> action CI system. This patch adds exponential backoff with a cap of 50ms, to
+> reduce the flakyness of the test.
 
-Signed-off-by: Prankur gupta <prankgup@fb.com>
----
- kernel/bpf/cgroup.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Do we have data showing how flaky the test is before and after this change?
 
-diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-index a1dedba4c174..9c92eff9af95 100644
---- a/kernel/bpf/cgroup.c
-+++ b/kernel/bpf/cgroup.c
-@@ -1873,6 +1873,14 @@ cg_sockopt_func_proto(enum bpf_func_id func_id, co=
-nst struct bpf_prog *prog)
- 		return &bpf_sk_storage_get_proto;
- 	case BPF_FUNC_sk_storage_delete:
- 		return &bpf_sk_storage_delete_proto;
-+	case BPF_FUNC_setsockopt:
-+		if (prog->expected_attach_type =3D=3D BPF_CGROUP_SETSOCKOPT)
-+			return &bpf_sk_setsockopt_proto;
-+		return NULL;
-+	case BPF_FUNC_getsockopt:
-+		if (prog->expected_attach_type =3D=3D BPF_CGROUP_SETSOCKOPT)
-+			return &bpf_sk_getsockopt_proto;
-+		return NULL;
- #endif
- #ifdef CONFIG_INET
- 	case BPF_FUNC_tcp_sock:
---=20
-2.30.2
+>
+> Signed-off-by: Yucong Sun <fallentree@fb.com>
+> ---
+>  tools/testing/selftests/bpf/test_maps.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/selftests/bpf/test_maps.c
+> index 14cea869235b..ed92d56c19cf 100644
+> --- a/tools/testing/selftests/bpf/test_maps.c
+> +++ b/tools/testing/selftests/bpf/test_maps.c
+> @@ -1400,11 +1400,16 @@ static void test_map_stress(void)
+>  static int map_update_retriable(int map_fd, const void *key, const void *value,
+>                                 int flags, int attempts)
+>  {
+> +       int delay = 1;
+> +
+>         while (bpf_map_update_elem(map_fd, key, value, flags)) {
+>                 if (!attempts || (errno != EAGAIN && errno != EBUSY))
+>                         return -errno;
+>
+> -               usleep(1);
+> +               if (delay < 50)
+> +                       delay *= 2;
+> +
+> +               usleep(delay);
 
+It is a little weird that the delay times in microseconds are 2, 4, 8,
+16, 32, 64, 64, ...
+Maybe just use rand()?
+
+Thanks,
+Song
+
+>                 attempts--;
+>         }
+>
+> --
+> 2.30.2
+>
