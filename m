@@ -2,65 +2,88 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A6E5C4338F
-	for <bpf@archiver.kernel.org>; Tue, 17 Aug 2021 16:26:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F013DC432BE
+	for <bpf@archiver.kernel.org>; Tue, 17 Aug 2021 17:08:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 643AD60F11
-	for <bpf@archiver.kernel.org>; Tue, 17 Aug 2021 16:26:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C69A460FD9
+	for <bpf@archiver.kernel.org>; Tue, 17 Aug 2021 17:08:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229699AbhHQQ0u (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 17 Aug 2021 12:26:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44084 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229518AbhHQQ0k (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 17 Aug 2021 12:26:40 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 986FB60F11;
-        Tue, 17 Aug 2021 16:26:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629217567;
-        bh=k0hboxp93Qz3WpPrRTXQkp9u+iM+tt+gVHJHQ1Yl6tE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=LEqhQqlCfolMHKtbG+W2vZdRYBB0Cs0G6fUsgPgbmDAtSti1hGMbi+uvE+LtcJHgh
-         GO8TpMw8jqcYvXne3o2ZLqeHzb6nxOri7if8+ftywvtraJrXP+ijhY7HB6DjEkqmVN
-         rPd3YU7p8+G85QIngZOKwEbEzE32KqwszVWhRJwe72r6hSCiMZ1lOReV0USuJbeADo
-         qYCaYZoW1nnaTEoZ1scLg1VPWNJRjmAiNs+lrMJf4GHm5/1r8DUYejcrz+xjRwHKtw
-         9/hJoILIPO1rdpIcdqX0REe/otrK51iimGTTmf0SbYqYTHPS2xKbRZd/ouyspxbp3s
-         VllUsBcymPywQ==
-Received: by mail-lj1-f173.google.com with SMTP id n6so33940062ljp.9;
-        Tue, 17 Aug 2021 09:26:07 -0700 (PDT)
-X-Gm-Message-State: AOAM530jUBkqXikZY8s8voqUIymkNWT8aI4/hzvD/r8JMBckJgiTBaJ+
-        9CFvE4LWeqMctcZV7af5EGJ1X3AA3AjtKfsThls=
-X-Google-Smtp-Source: ABdhPJxVncmL4LRbW0pqO7lluxTuMwxvNEIsS4b1i48FDkYcYBgfjPeDRPx07plm2fJHPZCRNVf5Po1KZQJoPGGvgNs=
-X-Received: by 2002:a2e:9953:: with SMTP id r19mr4006469ljj.270.1629217565975;
- Tue, 17 Aug 2021 09:26:05 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210817154556.92901-1-sdf@google.com> <20210817154556.92901-2-sdf@google.com>
-In-Reply-To: <20210817154556.92901-2-sdf@google.com>
-From:   Song Liu <song@kernel.org>
-Date:   Tue, 17 Aug 2021 09:25:55 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW6E4CYheAAicsv8ZqYqRd4C6Kn4qkb1-ckCTP_Kw=bDVg@mail.gmail.com>
-Message-ID: <CAPhsuW6E4CYheAAicsv8ZqYqRd4C6Kn4qkb1-ckCTP_Kw=bDVg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/2] bpf: use kvmalloc for map keys in syscalls
-To:     Stanislav Fomichev <sdf@google.com>
-Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+        id S231151AbhHQRJS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 17 Aug 2021 13:09:18 -0400
+Received: from smtp-relay-canonical-1.canonical.com ([185.125.188.121]:56726
+        "EHLO smtp-relay-canonical-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229700AbhHQRJR (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 17 Aug 2021 13:09:17 -0400
+Received: from localhost (1.general.cking.uk.vpn [10.172.193.212])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id AD0933F0B9;
+        Tue, 17 Aug 2021 17:08:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1629220122;
+        bh=WJBXkkU1tHc8E8eo8Usv6y0V0Z9Qgiu/DplUySoP91s=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type;
+        b=anFq0wsiYvXoedRMVYYKBJlaFe4IRTL41by7WARaDZFAfL9YofQcSVJTnYkSm7yPu
+         jlqQvHRdJp5OUwIunUOfcSZP5MlZtoRxDpSBwdaMNg4/qgVYMj+ps6366ON/TLxRJf
+         2foqSWHaPdYwCRpSkSULec1DOkdC3LSZWdtzsoI1oadmEpx1DiEkT1rMUff7G8GO7x
+         RtyvDQrTA796S7rfHD5V1TVJrGDQcsYiUCC2zv5H9cOcRILXdvYpOAUaxxyZXTiQxq
+         EQ0VEaVqXhX8x4ad2IXmkMBWh7zy1i0H0lSd1obaB9V0KQl8FcakBLAaUUU4ivQS6D
+         z5wbV61JPViqg==
+From:   Colin King <colin.king@canonical.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] bpf: remove redundant initialization of variable allow
+Date:   Tue, 17 Aug 2021 18:08:42 +0100
+Message-Id: <20210817170842.495440-1-colin.king@canonical.com>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Aug 17, 2021 at 8:46 AM Stanislav Fomichev <sdf@google.com> wrote:
->
-> Same as previous patch but for the keys. memdup_bpfptr is renamed
-> to vmemdup_bpfptr (and converted to kvmalloc).
->
-> Signed-off-by: Stanislav Fomichev <sdf@google.com>
+From: Colin Ian King <colin.king@canonical.com>
 
-Acked-by: Song Liu <songliubraving@fb.com>
+The variable allow is being initialized with a value that is never read, it
+is being updated later on. The assignment is redundant and can be removed.
+
+Addresses-Coverity: ("Unused value")
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
+---
+ kernel/bpf/cgroup.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index a1dedba4c174..9f35928bab0a 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -1133,11 +1133,11 @@ int __cgroup_bpf_check_dev_permission(short dev_type, u32 major, u32 minor,
+ 	struct bpf_cgroup_dev_ctx ctx = {
+ 		.access_type = (access << 16) | dev_type,
+ 		.major = major,
+ 		.minor = minor,
+ 	};
+-	int allow = 1;
++	int allow;
+ 
+ 	rcu_read_lock();
+ 	cgrp = task_dfl_cgroup(current);
+ 	allow = BPF_PROG_RUN_ARRAY_CG(cgrp->bpf.effective[type], &ctx,
+ 				      bpf_prog_run);
+-- 
+2.32.0
+
