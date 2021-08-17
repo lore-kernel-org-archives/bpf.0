@@ -2,581 +2,185 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DA4BBC4338F
-	for <bpf@archiver.kernel.org>; Tue, 17 Aug 2021 09:29:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81B6DC4338F
+	for <bpf@archiver.kernel.org>; Tue, 17 Aug 2021 10:39:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AB89160F35
-	for <bpf@archiver.kernel.org>; Tue, 17 Aug 2021 09:29:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 57136604AC
+	for <bpf@archiver.kernel.org>; Tue, 17 Aug 2021 10:39:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239682AbhHQJ37 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 17 Aug 2021 05:29:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43616 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239556AbhHQJ3w (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 17 Aug 2021 05:29:52 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB68EC0612A8;
-        Tue, 17 Aug 2021 02:29:15 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id q6so16073166wrv.6;
-        Tue, 17 Aug 2021 02:29:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=FFx14fkvhH8BwlEIJWmkrcgg2slLWQ6FicNKMVvcTNU=;
-        b=P6RpzvCaIXNWCCWDUfBpMRdhZm3G9DWqwJWCa08BoueIxPIQ5g1Cn7pKJ+kVY/ZWuU
-         qGOlqAUodBVgntr3uhlUd8bAo9a7j9dmjUllsnipvMEzhgoIz73ZZ72r5M2USq6BcwdB
-         9KbdLtSSe/qaOIPl/wOWLkKfjYlVu54MSHYd6yca8fIK7i17dAwu0tDwa8DlXMgJnUp0
-         3BsYo9ySdlu+4pbADTvq1mKLaxOYpUcCzws7ikyQQIgV3bqmAcpiAS/EgKYAozMRlWyL
-         aZbMBUGRA/aBSIFLzXocDu+3yfmcVF3NzIYZm5+Ked0LLpYDd8Dy3GQsifFWKd2zGbz0
-         1lBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=FFx14fkvhH8BwlEIJWmkrcgg2slLWQ6FicNKMVvcTNU=;
-        b=bikfHmPgw9/EODuJ+B250N+JWBigts8JPSoMFefCrTPioaOElmPtyAh8cwj8TpHKpx
-         E+Lxl5JL87TwdDeii+MTLJjiMcs+CGyVhrIdcAGQzSQMlPOLx6Pph4UK3OodY15mU8wz
-         XP5vuJ1VODOCk1R+OScptpX6cpz6M7sN6kyDtEH666sxdS/13DQ6fjljdzpKzGtddOvC
-         uwfR6CScGkPksoIi07mHuHjk/kI9HEPQpxj6v8MAHAaPT0iXnjcaFkzsmEKPXRY24vnn
-         i4S7RrshSoFAFB9NVy3WKkcg722KGvSPctMyRoltAO7w6siqiz2ssMdVNXxvXrfFig5M
-         kaQw==
-X-Gm-Message-State: AOAM53154IGe3XTAJgRgGlMQkLtZ2hMv+AXWy0HOaEiEH5QXcX8drSRn
-        wTHm7brdyJrHVUlzQrqunTo=
-X-Google-Smtp-Source: ABdhPJx9Vozb4SftGpkxsRIyIjC/1OZ8ueiVZMATVLhDcEDwHhS9GxykuOJ0GnwkOKZ8Wl3k4o3rbA==
-X-Received: by 2002:adf:e6cc:: with SMTP id y12mr2972795wrm.200.1629192554302;
-        Tue, 17 Aug 2021 02:29:14 -0700 (PDT)
-Received: from localhost.localdomain (h-46-59-47-246.A165.priv.bahnhof.se. [46.59.47.246])
-        by smtp.gmail.com with ESMTPSA id l2sm1462421wme.28.2021.08.17.02.29.12
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 17 Aug 2021 02:29:13 -0700 (PDT)
-From:   Magnus Karlsson <magnus.karlsson@gmail.com>
-To:     magnus.karlsson@intel.com, bjorn@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, netdev@vger.kernel.org,
-        maciej.fijalkowski@intel.com
-Cc:     jonathan.lemon@gmail.com, ciara.loftus@intel.com,
-        bpf@vger.kernel.org, yhs@fb.com, andrii@kernel.org
-Subject: [PATCH bpf-next v2 14/16] selftests: xsk: generate packets from specification
-Date:   Tue, 17 Aug 2021 11:27:27 +0200
-Message-Id: <20210817092729.433-15-magnus.karlsson@gmail.com>
-X-Mailer: git-send-email 2.29.0
-In-Reply-To: <20210817092729.433-1-magnus.karlsson@gmail.com>
-References: <20210817092729.433-1-magnus.karlsson@gmail.com>
+        id S235204AbhHQKkN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 17 Aug 2021 06:40:13 -0400
+Received: from mga03.intel.com ([134.134.136.65]:55323 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231837AbhHQKkM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 17 Aug 2021 06:40:12 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10078"; a="216071739"
+X-IronPort-AV: E=Sophos;i="5.84,328,1620716400"; 
+   d="scan'208";a="216071739"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2021 03:39:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.84,328,1620716400"; 
+   d="scan'208";a="593308092"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmsmga001.fm.intel.com with ESMTP; 17 Aug 2021 03:39:39 -0700
+Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.10; Tue, 17 Aug 2021 03:39:38 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.10 via Frontend Transport; Tue, 17 Aug 2021 03:39:38 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.169)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2242.10; Tue, 17 Aug 2021 03:39:36 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hPWOrjXeaFgEnLtv20nwSqATSJLKamXGw+fnI11wTmv315VMC0Rdek2od1I3L3inWaJDlLvOg5e44ZcVPkCHF4F321HsjpM7b38Z/ppaeYWWIL9siAdkZS/XxghfRDAw8GAwcqtzz9xmu4CNhbVNxBcr+L6TU7ZZBn0CCouD8NJ7jOjNPED0OQWtgY9BV2ytfPhvPhtcIuPSAXnQuCV8GE3KuTUyB4/AxBVk1OJdawuezdsg1yPCfygxtREhQprNt9wukjMt9LWOQvectkujyLnOzNOVnm+BbmY1PRT6gNbsdBZXzGN9gF9ZcNiT+rp69E6EYEM1z4O+qmo/abtHKw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=n2/AWyhl8+6kAt2Y/Bktnkm6Jp2mL7FN4VKacU8IRbc=;
+ b=Izbbhk3cuOI75K/wwlEGv2/2j9vo11+k06OfMrlTE19QFQ/dtz4DCK81++10E2ZppxP93ImDKAkENLA7maxxw4UsVhJ+peBA4ZhgNsNJB9B/2kWigmzVq/K57SJt6VEG0w5ktla+il8ipSmdvWon8nN+ZlyWj5RwJaXkCz+xhfLyOW3vnlKjQZDk1LNI3SGY5KVuSMEfxIyz0lDi6ok8tNSTG13Zfw45RRk5xu2vBzh9xIcNNqooNxJXebnPJVkZKurqEwTgujIBmqNmXWeVR/jBbnJPCsRo+lpQLt/ozPzo1rRZnh0EQvlHnuWlpZDxiHPOC1YyQOejRIwSKBbjmQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
+ s=selector2-intel-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=n2/AWyhl8+6kAt2Y/Bktnkm6Jp2mL7FN4VKacU8IRbc=;
+ b=AIrjIVzunAJTdWN6UDE3ZPtAbasj1mjuPlOs5o4jRL87rVu2DsTJAxipNzdx1OAHXLmXu37AiYyEq2Q7K1juBJ2VeXnyR/SlAgLFwRrZqxZoVVcqbgpHa/hTLthG6OFRloVA2HLq4cgS0yGsFidEpOFlkQh5hqyILIS0MZCfukM=
+Received: from MW3PR11MB4554.namprd11.prod.outlook.com (2603:10b6:303:5d::7)
+ by MWHPR11MB1424.namprd11.prod.outlook.com (2603:10b6:300:26::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4415.15; Tue, 17 Aug
+ 2021 10:39:27 +0000
+Received: from MW3PR11MB4554.namprd11.prod.outlook.com
+ ([fe80::c890:d669:a46d:eb03]) by MW3PR11MB4554.namprd11.prod.outlook.com
+ ([fe80::c890:d669:a46d:eb03%3]) with mapi id 15.20.4415.024; Tue, 17 Aug 2021
+ 10:39:27 +0000
+From:   "Penigalapati, Sandeep" <sandeep.penigalapati@intel.com>
+To:     Wang Hai <wanghai38@huawei.com>,
+        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
+        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "hawk@kernel.org" <hawk@kernel.org>,
+        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+        "jeffrey.t.kirsher@intel.com" <jeffrey.t.kirsher@intel.com>,
+        "Sokolowski, Jan" <jan.sokolowski@intel.com>,
+        "Karlsson, Magnus" <magnus.karlsson@intel.com>
+CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [Intel-wired-lan] [PATCH net] ixgbe, xsk: clean up the resources
+ in ixgbe_xsk_pool_enable error path
+Thread-Topic: [Intel-wired-lan] [PATCH net] ixgbe, xsk: clean up the resources
+ in ixgbe_xsk_pool_enable error path
+Thread-Index: AQHXW5cPLnhPlSK9DUSGVPv7dxwTYat38Pig
+Date:   Tue, 17 Aug 2021 10:39:26 +0000
+Message-ID: <MW3PR11MB45541B749D1F9773C19E7B749CFE9@MW3PR11MB4554.namprd11.prod.outlook.com>
+References: <20210607122644.59021-1-wanghai38@huawei.com>
+In-Reply-To: <20210607122644.59021-1-wanghai38@huawei.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-reaction: no-action
+dlp-version: 11.5.1.3
+dlp-product: dlpe-windows
+authentication-results: huawei.com; dkim=none (message not signed)
+ header.d=none;huawei.com; dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: c4fa5d2a-1a6c-4124-32dd-08d9616b496b
+x-ms-traffictypediagnostic: MWHPR11MB1424:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <MWHPR11MB142488106C24640C0C61B83F9CFE9@MWHPR11MB1424.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:5516;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: vSvAm8BpcLGNmtURsaGUC93+7cTi2qlfaKs45wJeopgO1nLTqanGc61NGSluahmINiYlUIOCqS9baDfYEH9974R8qIJCEdCuJqMoL79QhnBKaQcEbIJf8Z7Q8wFSvpuBtD33d2BHedkBgjA+CJEemkHgFypb1mUhFvh8D7+LEeEq5OwpHxshn0tc9hJAaSSTdgr0y/uskArvMA8+bLQp2VNJv6hxNquhge3UszTd3gGt9prx+HXZt5Hnz8MQWXLSF+x+wr5aYp2ZEmmo9y7kUq/k+0FRlvjIZ0RH6Z7axt+G+AQ6r0KObzrEAHzBWyQes2KZzQzJZJTSrEZ9eVnlSyNqG6Du6dleZu1Tfj2+WeGgJQi/CuC+ftLAq59tP83wAGxJduHZgaFANReTpjcxhQfbXVJQXfBS434fVjT2Y2+pCijB/GZG2QtiaWSyLZKJZ3zIFu08Xax037LSaW+DKHPcL/Uqr8SONq4zFfT5ydblvryOr6cFaqcIXqv4lPRPaIEgpVGqHB8+d2KUj0Zbimuuyg+AehcwoOjjOGe6mx3kZUoMl27DwRddlh4Ds+UilcRoWTLztY0alIJEZw0yh6Hb7hlMSyogFqpz1ks0AetBm8SdeBAQ29S2IwYeP7DQz3CHWif7YCecU9z7LGOtjy+9cLFW6Y6sMCXvX3HhsyjadrgSF8mtCBxaM7nnLdk48oGTpZ33CeodNR4UcXaU+H7KJ3ozG1BkFY8A5xeEFeI=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW3PR11MB4554.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(110136005)(26005)(83380400001)(76116006)(8676002)(186003)(71200400001)(86362001)(54906003)(8936002)(2906002)(7696005)(6636002)(6506007)(4326008)(64756008)(66556008)(66476007)(66446008)(9686003)(33656002)(7416002)(55016002)(122000001)(508600001)(38100700002)(52536014)(38070700005)(921005)(66946007)(5660300002)(316002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?CzHjXDD/BxVh90Xs3jyDJWZF/L1bIC9NAY2ZXdPB3SPA0ktBGwkc9ZzmT/7t?=
+ =?us-ascii?Q?M1iQyVmqFdKNDjh2lnd2f09WG8pwg1+2dARf2N8NcI9GBKlLON1B35wvAPh7?=
+ =?us-ascii?Q?+ogSN6VEm7iu5WBVdPDpuy2ilWTfmmd+5q1qPJiNmIHIkPXRb+JVJLsDb8TW?=
+ =?us-ascii?Q?csX1a4oMjtNwEVSYQKE7+7AZ6uxfiqzCNL3b6zvkgQSskgXGuFY4Eypeg/g8?=
+ =?us-ascii?Q?RUYPMrCQqFdr5bzbqp0hL0t/NlIjhTWt9XCfQ36R78i8YjwEqCOte+N3TPNO?=
+ =?us-ascii?Q?z6P/1CPFU0osUN/WwQ9GcYFBKI1hQCv4afEtSArw9+HVKFcTirTbrMBrron5?=
+ =?us-ascii?Q?nOldi0jybmtKRvvZ4/2f8x6wAacDr6oMt7p8G81ueo/rmc76JHOvnN4AwsmU?=
+ =?us-ascii?Q?hguSqkXkc0Tayiy6Y8GZPtwH8wVRQKpFeNa/4crraCZOq6kuP+O5uYy1y4Zb?=
+ =?us-ascii?Q?MvV/dXGPtiAI491XxLkTfrZ03ROXYu5QC/Ku+EC+wqZp6LhLyyEcQUWyOs1u?=
+ =?us-ascii?Q?+JiWXjJO9SYfOE5ySG5UmAVWmOK/j+HSGjIauEJRsNHfo0SmqQkaInd+mHqF?=
+ =?us-ascii?Q?hSvCz/KHHkOApb5CTKvnOc1Qp3NcaoubeMuctELKLfipFZ7UyOuyyvCg/fFn?=
+ =?us-ascii?Q?IXkfwNXEYiCfYH+wHwLOzrt3YyczYuPXDPb0CkYnCdEwH0xISB/iEFqwvy0K?=
+ =?us-ascii?Q?YzNYMbR8Vah59n6kG9Wwkv6jK3m/1H+5wIcTZh2vKIshnHykabb6nYGSq1hV?=
+ =?us-ascii?Q?Dy9VZZ22wesSZXbsCkL/wXy/qMz1zLAgddqap9wL1Be231EtXcXrDd5fn3UD?=
+ =?us-ascii?Q?9DVn5R20tNHORtXAyLP/Q9jReZj+Yrc1EwMYJrhjrjzi8+EAVv1ZjJpvt504?=
+ =?us-ascii?Q?1es53ziJa4GGwBQujD8fysZEuDyODFEqMcUd+6ESj8HVWBDDd7TdPodLKzzM?=
+ =?us-ascii?Q?f3Heps4U9Pz/Gt/NC64ME21qpO9LvFS7/wFMs8P0AzbuhWDffCewwAr0cd7C?=
+ =?us-ascii?Q?2kppVRtzIhHmoEG08N3rvyW8WmikvcJmCj6h9/EBhEWKXXKzsYfTzvG1IRN2?=
+ =?us-ascii?Q?V3OZbWsuZMSjD0qK/znKD+cmlSojE07GsY+Ociq4+oOyIJLSw/JyOdp/0gQ6?=
+ =?us-ascii?Q?ooshn+VHHbiCbx3yJpesO+TLcARlvQ5aLQRQ1F7ysFIDiK+GsbhBilpepje2?=
+ =?us-ascii?Q?sYZ2V+yXkYFZcJy85qMN8+EIPbp/vYHg8mZkehvhUrcYxfzA8EuKUXZfl5kk?=
+ =?us-ascii?Q?rYVjhdxt3VE2l7TxGJoPfNVGkMY9W16k2EKDw3zLQw0kYW5xu8B6qjSrl5nS?=
+ =?us-ascii?Q?GqFss4apLmGNVmceKiG8S8fq?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW3PR11MB4554.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c4fa5d2a-1a6c-4124-32dd-08d9616b496b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Aug 2021 10:39:26.9478
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: cvQJvZ6orpDMTO5mEEdUQiTHhrGOpn1C6T5zGvhzWjn1FttUPV566qIQDhmJxndmz+tLTH2cKea7Exnh7QKFynZiPjMItmTw+gttgFSORiw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR11MB1424
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Magnus Karlsson <magnus.karlsson@intel.com>
-
-Generate packets from a specification instead of something hard
-coded. The idea is that a test generates one or more packet
-specifications and provides it/them to both Tx and Rx. The Tx thread
-will generate from this specification and Rx will validate that it
-receives what is in the specification. The specification can be the
-same on both ends, meaning that everything that was sent should be
-received, or different which means that Rx will only receive part of
-the sent packets.
-
-Currently, the packet specification is the same for both Rx and Tx and
-the same for each test. This will change in later patches as features
-and tests are added.
-
-The data path functions are also renamed to better reflect what
-actions they are performing after introducing this feature.
-
-Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
----
- tools/testing/selftests/bpf/xdpxceiver.c | 254 +++++++++++++----------
- tools/testing/selftests/bpf/xdpxceiver.h |  15 +-
- 2 files changed, 152 insertions(+), 117 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/xdpxceiver.c b/tools/testing/selftests/bpf/xdpxceiver.c
-index a62e5ebb0f2c..4160ba5f50a3 100644
---- a/tools/testing/selftests/bpf/xdpxceiver.c
-+++ b/tools/testing/selftests/bpf/xdpxceiver.c
-@@ -417,18 +417,52 @@ static void parse_command_line(int argc, char **argv)
- 	}
- }
- 
--static void pkt_generate(struct ifobject *ifobject, u32 pkt_nb, u64 addr)
-+static struct pkt *pkt_stream_get_pkt(struct pkt_stream *pkt_stream, u32 pkt_nb)
- {
--	void *data = xsk_umem__get_data(ifobject->umem->buffer, addr);
-+	return &pkt_stream->pkts[pkt_nb];
-+}
-+
-+static struct pkt_stream *pkt_stream_generate(u32 nb_pkts, u32 pkt_len)
-+{
-+	struct pkt_stream *pkt_stream;
-+	u32 i;
-+
-+	pkt_stream = malloc(sizeof(*pkt_stream));
-+	if (!pkt_stream)
-+		exit_with_error(ENOMEM);
-+
-+	pkt_stream->pkts = calloc(DEFAULT_PKT_CNT, sizeof(*pkt_stream->pkts));
-+	if (!pkt_stream->pkts)
-+		exit_with_error(ENOMEM);
-+
-+	pkt_stream->nb_pkts = nb_pkts;
-+	for (i = 0; i < nb_pkts; i++) {
-+		pkt_stream->pkts[i].addr = (i % num_frames) * XSK_UMEM__DEFAULT_FRAME_SIZE;
-+		pkt_stream->pkts[i].len = pkt_len;
-+		pkt_stream->pkts[i].payload = i;
-+	}
-+
-+	return pkt_stream;
-+}
-+
-+static struct pkt *pkt_generate(struct ifobject *ifobject, u32 pkt_nb)
-+{
-+	struct pkt *pkt = pkt_stream_get_pkt(ifobject->pkt_stream, pkt_nb);
-+	void *data = xsk_umem__get_data(ifobject->umem->buffer, pkt->addr);
- 	struct udphdr *udp_hdr =
- 		(struct udphdr *)(data + sizeof(struct ethhdr) + sizeof(struct iphdr));
- 	struct iphdr *ip_hdr = (struct iphdr *)(data + sizeof(struct ethhdr));
- 	struct ethhdr *eth_hdr = (struct ethhdr *)data;
- 
-+	if (pkt_nb >= ifobject->pkt_stream->nb_pkts)
-+		return NULL;
-+
- 	gen_udp_hdr(pkt_nb, data, ifobject, udp_hdr);
- 	gen_ip_hdr(ifobject, ip_hdr);
- 	gen_udp_csum(udp_hdr, ip_hdr);
- 	gen_eth_hdr(ifobject, eth_hdr);
-+
-+	return pkt;
- }
- 
- static void pkt_dump(void *pkt, u32 len)
-@@ -468,33 +502,38 @@ static void pkt_dump(void *pkt, u32 len)
- 	fprintf(stdout, "---------------------------------------\n");
- }
- 
--static void pkt_validate(void *buffer, u64 addr)
-+static bool pkt_validate(struct pkt *pkt, void *buffer, const struct xdp_desc *desc)
- {
--	void *data = xsk_umem__get_data(buffer, addr);
-+	void *data = xsk_umem__get_data(buffer, desc->addr);
- 	struct iphdr *iphdr = (struct iphdr *)(data + sizeof(struct ethhdr));
- 
- 	if (iphdr->version == IP_PKT_VER && iphdr->tos == IP_PKT_TOS) {
- 		u32 seqnum = ntohl(*((u32 *)(data + PKT_HDR_SIZE)));
--		u32 expected_seqnum = pkt_counter % num_frames;
- 
- 		if (debug_pkt_dump && test_type != TEST_TYPE_STATS)
- 			pkt_dump(data, PKT_SIZE);
- 
--		if (expected_seqnum != seqnum) {
-+		if (pkt->len != desc->len) {
- 			ksft_test_result_fail
--				("ERROR: [%s] expected seqnum [%d], got seqnum [%d]\n",
--					__func__, expected_seqnum, seqnum);
--			sigvar = 1;
-+				("ERROR: [%s] expected length [%d], got length [%d]\n",
-+					__func__, pkt->len, desc->len);
-+			return false;
- 		}
- 
--		if (++pkt_counter == opt_pkt_count)
--			sigvar = 1;
-+		if (pkt->payload != seqnum) {
-+			ksft_test_result_fail
-+				("ERROR: [%s] expected seqnum [%d], got seqnum [%d]\n",
-+					__func__, pkt->payload, seqnum);
-+			return false;
-+		}
- 	} else {
- 		ksft_print_msg("Invalid frame received: ");
- 		ksft_print_msg("[IP_PKT_VER: %02X], [IP_PKT_TOS: %02X]\n", iphdr->version,
- 			       iphdr->tos);
--		sigvar = 1;
-+		return false;
- 	}
-+
-+	return true;
- }
- 
- static void kick_tx(struct xsk_socket_info *xsk)
-@@ -507,7 +546,7 @@ static void kick_tx(struct xsk_socket_info *xsk)
- 	exit_with_error(errno);
- }
- 
--static void complete_tx_only(struct xsk_socket_info *xsk, int batch_size)
-+static void complete_pkts(struct xsk_socket_info *xsk, int batch_size)
- {
- 	unsigned int rcvd;
- 	u32 idx;
-@@ -525,116 +564,106 @@ static void complete_tx_only(struct xsk_socket_info *xsk, int batch_size)
- 	}
- }
- 
--static void rx_pkt(struct xsk_socket_info *xsk, struct pollfd *fds)
-+static void receive_pkts(struct pkt_stream *pkt_stream, struct xsk_socket_info *xsk,
-+			 struct pollfd *fds)
- {
--	unsigned int rcvd, i;
--	u32 idx_rx = 0, idx_fq = 0;
-+	u32 idx_rx = 0, idx_fq = 0, rcvd, i, pkt_count = 0;
- 	int ret;
- 
--	rcvd = xsk_ring_cons__peek(&xsk->rx, BATCH_SIZE, &idx_rx);
--	if (!rcvd) {
--		if (xsk_ring_prod__needs_wakeup(&xsk->umem->fq)) {
--			ret = poll(fds, 1, POLL_TMOUT);
--			if (ret < 0)
--				exit_with_error(-ret);
-+	while (1) {
-+		rcvd = xsk_ring_cons__peek(&xsk->rx, BATCH_SIZE, &idx_rx);
-+		if (!rcvd) {
-+			if (xsk_ring_prod__needs_wakeup(&xsk->umem->fq)) {
-+				ret = poll(fds, 1, POLL_TMOUT);
-+				if (ret < 0)
-+					exit_with_error(-ret);
-+			}
-+			continue;
- 		}
--		return;
--	}
- 
--	ret = xsk_ring_prod__reserve(&xsk->umem->fq, rcvd, &idx_fq);
--	while (ret != rcvd) {
--		if (ret < 0)
--			exit_with_error(-ret);
--		if (xsk_ring_prod__needs_wakeup(&xsk->umem->fq)) {
--			ret = poll(fds, 1, POLL_TMOUT);
-+		ret = xsk_ring_prod__reserve(&xsk->umem->fq, rcvd, &idx_fq);
-+		while (ret != rcvd) {
- 			if (ret < 0)
- 				exit_with_error(-ret);
-+			if (xsk_ring_prod__needs_wakeup(&xsk->umem->fq)) {
-+				ret = poll(fds, 1, POLL_TMOUT);
-+				if (ret < 0)
-+					exit_with_error(-ret);
-+			}
-+			ret = xsk_ring_prod__reserve(&xsk->umem->fq, rcvd, &idx_fq);
- 		}
--		ret = xsk_ring_prod__reserve(&xsk->umem->fq, rcvd, &idx_fq);
--	}
- 
--	for (i = 0; i < rcvd; i++) {
--		u64 addr, orig;
-+		for (i = 0; i < rcvd; i++) {
-+			const struct xdp_desc *desc = xsk_ring_cons__rx_desc(&xsk->rx, idx_rx++);
-+			u64 addr = desc->addr, orig;
-+
-+			orig = xsk_umem__extract_addr(addr);
-+			addr = xsk_umem__add_offset_to_addr(addr);
-+			if (!pkt_validate(pkt_stream_get_pkt(pkt_stream, pkt_count++),
-+					  xsk->umem->buffer, desc))
-+				return;
- 
--		addr = xsk_ring_cons__rx_desc(&xsk->rx, idx_rx)->addr;
--		xsk_ring_cons__rx_desc(&xsk->rx, idx_rx++);
--		orig = xsk_umem__extract_addr(addr);
-+			*xsk_ring_prod__fill_addr(&xsk->umem->fq, idx_fq++) = orig;
-+		}
- 
--		addr = xsk_umem__add_offset_to_addr(addr);
--		pkt_validate(xsk->umem->buffer, addr);
-+		xsk_ring_prod__submit(&xsk->umem->fq, rcvd);
-+		xsk_ring_cons__release(&xsk->rx, rcvd);
- 
--		*xsk_ring_prod__fill_addr(&xsk->umem->fq, idx_fq++) = orig;
-+		if (pkt_count >= pkt_stream->nb_pkts)
-+			return;
- 	}
--
--	xsk_ring_prod__submit(&xsk->umem->fq, rcvd);
--	xsk_ring_cons__release(&xsk->rx, rcvd);
- }
- 
--static void tx_only(struct ifobject *ifobject, u32 *frameptr, int batch_size)
-+static u32 __send_pkts(struct ifobject *ifobject, u32 pkt_nb)
- {
- 	struct xsk_socket_info *xsk = ifobject->xsk;
--	u32 idx = 0;
--	unsigned int i;
--	bool tx_invalid_test = stat_test_type == STAT_TEST_TX_INVALID;
--	u32 len = tx_invalid_test ? XSK_UMEM__DEFAULT_FRAME_SIZE + 1 : PKT_SIZE;
-+	u32 i, idx;
- 
--	while (xsk_ring_prod__reserve(&xsk->tx, batch_size, &idx) < batch_size)
--		complete_tx_only(xsk, batch_size);
-+	while (xsk_ring_prod__reserve(&xsk->tx, BATCH_SIZE, &idx) < BATCH_SIZE)
-+		complete_pkts(xsk, BATCH_SIZE);
- 
--	for (i = 0; i < batch_size; i++) {
-+	for (i = 0; i < BATCH_SIZE; i++) {
- 		struct xdp_desc *tx_desc = xsk_ring_prod__tx_desc(&xsk->tx, idx + i);
-+		struct pkt *pkt = pkt_generate(ifobject, pkt_nb);
- 
--		tx_desc->addr = (*frameptr + i) << XSK_UMEM__DEFAULT_FRAME_SHIFT;
--		tx_desc->len = len;
--		pkt_generate(ifobject, *frameptr + i, tx_desc->addr);
--	}
-+		if (!pkt)
-+			break;
- 
--	xsk_ring_prod__submit(&xsk->tx, batch_size);
--	if (!tx_invalid_test) {
--		xsk->outstanding_tx += batch_size;
--	} else if (xsk_ring_prod__needs_wakeup(&xsk->tx)) {
--		kick_tx(xsk);
-+		tx_desc->addr = pkt->addr;
-+		tx_desc->len = pkt->len;
-+		pkt_nb++;
- 	}
--	*frameptr += batch_size;
--	*frameptr %= num_frames;
--	complete_tx_only(xsk, batch_size);
--}
- 
--static int get_batch_size(int pkt_cnt)
--{
--	if (pkt_cnt + BATCH_SIZE <= opt_pkt_count)
--		return BATCH_SIZE;
-+	xsk_ring_prod__submit(&xsk->tx, i);
-+	if (stat_test_type != STAT_TEST_TX_INVALID)
-+		xsk->outstanding_tx += i;
-+	else if (xsk_ring_prod__needs_wakeup(&xsk->tx))
-+		kick_tx(xsk);
-+	complete_pkts(xsk, i);
- 
--	return opt_pkt_count - pkt_cnt;
-+	return i;
- }
- 
--static void complete_tx_only_all(struct ifobject *ifobject)
-+static void wait_for_tx_completion(struct xsk_socket_info *xsk)
- {
--	bool pending;
--
--	do {
--		pending = false;
--		if (ifobject->xsk->outstanding_tx) {
--			complete_tx_only(ifobject->xsk, BATCH_SIZE);
--			pending = !!ifobject->xsk->outstanding_tx;
--		}
--	} while (pending);
-+	while (xsk->outstanding_tx)
-+		complete_pkts(xsk, BATCH_SIZE);
- }
- 
--static void tx_only_all(struct ifobject *ifobject)
-+static void send_pkts(struct ifobject *ifobject)
- {
- 	struct pollfd fds[MAX_SOCKS] = { };
--	u32 frame_nb = 0;
--	int pkt_cnt = 0;
--	int ret;
-+	u32 pkt_cnt = 0;
- 
- 	fds[0].fd = xsk_socket__fd(ifobject->xsk->xsk);
- 	fds[0].events = POLLOUT;
- 
--	while (pkt_cnt < opt_pkt_count) {
--		int batch_size = get_batch_size(pkt_cnt);
-+	while (pkt_cnt < ifobject->pkt_stream->nb_pkts) {
-+		u32 sent;
- 
- 		if (test_type == TEST_TYPE_POLL) {
-+			int ret;
-+
- 			ret = poll(fds, 1, POLL_TMOUT);
- 			if (ret <= 0)
- 				continue;
-@@ -643,16 +672,16 @@ static void tx_only_all(struct ifobject *ifobject)
- 				continue;
- 		}
- 
--		tx_only(ifobject, &frame_nb, batch_size);
--		pkt_cnt += batch_size;
-+		sent = __send_pkts(ifobject, pkt_cnt);
-+		pkt_cnt += sent;
- 	}
- 
--	complete_tx_only_all(ifobject);
-+	wait_for_tx_completion(ifobject->xsk);
- }
- 
- static bool rx_stats_are_valid(struct ifobject *ifobject)
- {
--	u32 xsk_stat = 0, expected_stat = opt_pkt_count;
-+	u32 xsk_stat = 0, expected_stat = ifobject->pkt_stream->nb_pkts;
- 	struct xsk_socket *xsk = ifobject->xsk->xsk;
- 	int fd = xsk_socket__fd(xsk);
- 	struct xdp_statistics stats;
-@@ -708,11 +737,11 @@ static void tx_stats_validate(struct ifobject *ifobject)
- 		return;
- 	}
- 
--	if (stats.tx_invalid_descs == opt_pkt_count)
-+	if (stats.tx_invalid_descs == ifobject->pkt_stream->nb_pkts)
- 		return;
- 
- 	ksft_test_result_fail("ERROR: [%s] tx_invalid_descs incorrect. Got [%u] expected [%u]\n",
--			      __func__, stats.tx_invalid_descs, opt_pkt_count);
-+			      __func__, stats.tx_invalid_descs, ifobject->pkt_stream->nb_pkts);
- }
- 
- static void thread_common_ops(struct ifobject *ifobject, void *bufs)
-@@ -781,8 +810,9 @@ static void *worker_testapp_validate_tx(void *arg)
- 	if (!second_step)
- 		thread_common_ops(ifobject, bufs);
- 
--	print_verbose("Sending %d packets on interface %s\n", opt_pkt_count, ifobject->ifname);
--	tx_only_all(ifobject);
-+	print_verbose("Sending %d packets on interface %s\n", ifobject->pkt_stream->nb_pkts,
-+		      ifobject->ifname);
-+	send_pkts(ifobject);
- 
- 	if (stat_test_type == STAT_TEST_TX_INVALID)
- 		tx_stats_validate(ifobject);
-@@ -808,19 +838,11 @@ static void *worker_testapp_validate_rx(void *arg)
- 
- 	pthread_barrier_wait(&barr);
- 
--	while (1) {
--		if (test_type != TEST_TYPE_STATS) {
--			rx_pkt(ifobject->xsk, fds);
--		} else {
--			if (rx_stats_are_valid(ifobject))
--				break;
--		}
--		if (sigvar)
--			break;
--	}
--
--	print_verbose("Received %d packets on interface %s\n",
--		      pkt_counter, ifobject->ifname);
-+	if (test_type == TEST_TYPE_STATS)
-+		while (!rx_stats_are_valid(ifobject))
-+			continue;
-+	else
-+		receive_pkts(ifobject->pkt_stream, ifobject->xsk, fds);
- 
- 	if (test_type == TEST_TYPE_TEARDOWN)
- 		print_verbose("Destroying socket\n");
-@@ -833,10 +855,20 @@ static void testapp_validate(void)
- {
- 	bool bidi = test_type == TEST_TYPE_BIDI;
- 	bool bpf = test_type == TEST_TYPE_BPF_RES;
-+	struct pkt_stream *pkt_stream;
- 
- 	if (pthread_barrier_init(&barr, NULL, 2))
- 		exit_with_error(errno);
- 
-+	if (stat_test_type == STAT_TEST_TX_INVALID) {
-+		pkt_stream = pkt_stream_generate(DEFAULT_PKT_CNT,
-+						 XSK_UMEM__DEFAULT_FRAME_SIZE + 1);
-+	} else {
-+		pkt_stream = pkt_stream_generate(DEFAULT_PKT_CNT, PKT_SIZE);
-+	}
-+	ifdict_tx->pkt_stream = pkt_stream;
-+	ifdict_rx->pkt_stream = pkt_stream;
-+
- 	/*Spawn RX thread */
- 	pthread_create(&t0, NULL, ifdict_rx->func_ptr, ifdict_rx);
- 
-@@ -859,8 +891,6 @@ static void testapp_teardown(void)
- 	int i;
- 
- 	for (i = 0; i < MAX_TEARDOWN_ITER; i++) {
--		pkt_counter = 0;
--		sigvar = 0;
- 		print_verbose("Creating socket\n");
- 		testapp_validate();
- 	}
-@@ -886,8 +916,6 @@ static void swap_vectors(struct ifobject *ifobj1, struct ifobject *ifobj2)
- static void testapp_bidi(void)
- {
- 	for (int i = 0; i < MAX_BIDI_ITER; i++) {
--		pkt_counter = 0;
--		sigvar = 0;
- 		print_verbose("Creating socket\n");
- 		testapp_validate();
- 		if (!second_step) {
-@@ -919,8 +947,6 @@ static void testapp_bpf_res(void)
- 	int i;
- 
- 	for (i = 0; i < MAX_BPF_ITER; i++) {
--		pkt_counter = 0;
--		sigvar = 0;
- 		print_verbose("Creating socket\n");
- 		testapp_validate();
- 		if (!second_step)
-@@ -948,6 +974,8 @@ static void testapp_stats(void)
- 		case STAT_TEST_RX_FULL:
- 			rxqsize = RX_FULL_RXQSIZE;
- 			break;
-+		case STAT_TEST_TX_INVALID:
-+			continue;
- 		default:
- 			break;
- 		}
-@@ -993,9 +1021,7 @@ static void run_pkt_test(int mode, int type)
- 
- 	/* reset defaults after potential previous test */
- 	xdp_flags = XDP_FLAGS_UPDATE_IF_NOEXIST;
--	pkt_counter = 0;
- 	second_step = 0;
--	sigvar = 0;
- 	stat_test_type = -1;
- 	rxqsize = XSK_RING_CONS__DEFAULT_NUM_DESCS;
- 	frame_headroom = XSK_UMEM__DEFAULT_FRAME_HEADROOM;
-diff --git a/tools/testing/selftests/bpf/xdpxceiver.h b/tools/testing/selftests/bpf/xdpxceiver.h
-index b3087270d837..f5b46cd3d8df 100644
---- a/tools/testing/selftests/bpf/xdpxceiver.h
-+++ b/tools/testing/selftests/bpf/xdpxceiver.h
-@@ -74,13 +74,10 @@ static u32 num_frames = DEFAULT_PKT_CNT / 4;
- static bool second_step;
- static int test_type;
- 
--static u32 opt_pkt_count = DEFAULT_PKT_CNT;
- static u8 opt_verbose;
- 
- static u32 xdp_flags = XDP_FLAGS_UPDATE_IF_NOEXIST;
- static u32 xdp_bind_flags = XDP_USE_NEED_WAKEUP | XDP_COPY;
--static u32 pkt_counter;
--static int sigvar;
- static int stat_test_type;
- static u32 rxqsize;
- static u32 frame_headroom;
-@@ -107,6 +104,17 @@ struct flow_vector {
- 	} vector;
- };
- 
-+struct pkt {
-+	u64 addr;
-+	u32 len;
-+	u32 payload;
-+};
-+
-+struct pkt_stream {
-+	u32 nb_pkts;
-+	struct pkt *pkts;
-+};
-+
- struct ifobject {
- 	char ifname[MAX_INTERFACE_NAME_CHARS];
- 	char nsname[MAX_INTERFACES_NAMESPACE_CHARS];
-@@ -116,6 +124,7 @@ struct ifobject {
- 	struct xsk_umem_info *umem;
- 	void *(*func_ptr)(void *arg);
- 	struct flow_vector fv;
-+	struct pkt_stream *pkt_stream;
- 	int ns_fd;
- 	int ifdict_index;
- 	u32 dst_ip;
--- 
-2.29.0
-
+>-----Original Message-----
+>From: Intel-wired-lan <intel-wired-lan-bounces@osuosl.org> On Behalf Of
+>Wang Hai
+>Sent: Monday, June 7, 2021 5:57 PM
+>To: Brandeburg, Jesse <jesse.brandeburg@intel.com>; Nguyen, Anthony L
+><anthony.l.nguyen@intel.com>; davem@davemloft.net; ast@kernel.org;
+>kuba@kernel.org; daniel@iogearbox.net; hawk@kernel.org;
+>john.fastabend@gmail.com; jeffrey.t.kirsher@intel.com; Sokolowski, Jan
+><jan.sokolowski@intel.com>; Karlsson, Magnus
+><magnus.karlsson@intel.com>
+>Cc: netdev@vger.kernel.org; bpf@vger.kernel.org; intel-wired-
+>lan@lists.osuosl.org; linux-kernel@vger.kernel.org
+>Subject: [Intel-wired-lan] [PATCH net] ixgbe, xsk: clean up the resources =
+in
+>ixgbe_xsk_pool_enable error path
+>
+>In ixgbe_xsk_pool_enable(), if ixgbe_xsk_wakeup() fails, We should restore
+>the previous state and clean up the resources. Add the missing clear
+>af_xdp_zc_qps and unmap dma to fix this bug.
+>
+>Fixes: d49e286d354e ("ixgbe: add tracking of AF_XDP zero-copy state for ea=
+ch
+>queue pair")
+>Fixes: 4a9b32f30f80 ("ixgbe: fix potential RX buffer starvation for AF_XDP=
+")
+>Signed-off-by: Wang Hai <wanghai38@huawei.com>
+>---
+> drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c | 5 ++++-
+> 1 file changed, 4 insertions(+), 1 deletion(-)
+>
+Tested-by: Sandeep Penigalapati <sandeep.penigalapati@intel.com>
