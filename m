@@ -2,173 +2,139 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0A95C4338F
-	for <bpf@archiver.kernel.org>; Tue, 17 Aug 2021 04:15:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CCBF5C4338F
+	for <bpf@archiver.kernel.org>; Tue, 17 Aug 2021 04:47:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9881660F11
-	for <bpf@archiver.kernel.org>; Tue, 17 Aug 2021 04:15:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A848560F41
+	for <bpf@archiver.kernel.org>; Tue, 17 Aug 2021 04:47:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbhHQEQM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 17 Aug 2021 00:16:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57008 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbhHQEQL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 17 Aug 2021 00:16:11 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43029C061764
-        for <bpf@vger.kernel.org>; Mon, 16 Aug 2021 21:15:39 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id z128so36996971ybc.10
-        for <bpf@vger.kernel.org>; Mon, 16 Aug 2021 21:15:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pQzmmsYUE54Ko8luKf2zGqVAJIvH8oqDwsVyff17EzI=;
-        b=UrAFsyPZo8lXzavzXwbnUxDmZKSHM1dEyYxfj0RobS40k5tloORVmgTFNfNGW2JxGR
-         G0kB2koXRb/yMLON/1SJXjh8NseAEkhCJndIhnfnG4Lx1M3B5y/f2WtfEtOvAuc0kfJv
-         reMqtvpWMSPya9LDHYzcXD/1UagpDR4fkwk8shRAxyXgnZOOnRbd3lZHR1wOPw6IZalI
-         D+/9fOIrimTCn05tpKm7/NElmFnNX4UkEkFe9+BsquJsSml1HkA2cNfBJv24Jv3FSLmL
-         WbQsKYjpO0ZdkpRCHQe3ifZW9QE73qsNRkSmHkHa/eS5y0+Mk5zVW0AxoAT0i9js8myj
-         dTfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pQzmmsYUE54Ko8luKf2zGqVAJIvH8oqDwsVyff17EzI=;
-        b=eRtcYOvOlPIyVgx5k9Y6/1PZ8v1fbZ16KnVNgIvRklcS1WHgSX7UUAuawl/0wVqEO7
-         DEOx5liOGyIgQshwbNRBjQLfkJ0KzthIOFR9PleyFanxYscTcejZDLw9HANRnkukK9vQ
-         /5l7be2fj8TaT+hEG9JdwKkZwMWXBtaDib2tk1Kc9Wu4O+VsNINH5gCtMtKCiWUJQqRC
-         98p9Sj+FtzVnecBE46p4fnr5QXVCUKWI74alRlj3gawKBalPc7s15hAEG43H+QEUse3J
-         62cpMSxrcYXlJJoXejbRW+wpjgHojjKNBCGeuYKsIA9acoyjRnJpAzpPsU/Erz6hR28y
-         Gruw==
-X-Gm-Message-State: AOAM530ko1SQzttawRMMe+aqiah5xTogFoatGz+CcFifR/1YYdOMunWa
-        6fESHRIsVie44Ejwg+DcyYw4RDH97Amtdp2SXSA=
-X-Google-Smtp-Source: ABdhPJxZRZQ/2+WesQ3UdHBrFpQzu6dfPylYLgu/NkzZHR4VzPCll4CAQue48vLywvNvKw7YJMdNgnCMtwLalc8F3aU=
-X-Received: by 2002:a25:d691:: with SMTP id n139mr2007082ybg.27.1629173738537;
- Mon, 16 Aug 2021 21:15:38 -0700 (PDT)
+        id S233978AbhHQEsO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 17 Aug 2021 00:48:14 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:59010 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231285AbhHQEsN (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 17 Aug 2021 00:48:13 -0400
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17H4isCJ023708
+        for <bpf@vger.kernel.org>; Mon, 16 Aug 2021 21:47:40 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=T1RfjzphPc4MrY7X7bEvKN9M3unnVbQ77EFxwXpA4Zw=;
+ b=GYAV+Y0MfKJ1jOQBc4jyaG/XYmS6zSs6reOmBLhySItr7JRCDaPIj2Av9aksbTOx8MKI
+ YWymS24LGkv6zzAZ0uRMIsrVEk5++SSA/jitmeGponXRt7mzK+sMi/AHKu0Ia6KRI+ZX
+ +crnyJBGtWsgc78uJVqP+Bq0kUXHF+6DcZc= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 3afj4d6ycw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Mon, 16 Aug 2021 21:47:40 -0700
+Received: from intmgw002.48.prn1.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Mon, 16 Aug 2021 21:47:39 -0700
+Received: by devvm2661.vll0.facebook.com (Postfix, from userid 200310)
+        id ED5E822A241A; Mon, 16 Aug 2021 21:47:36 -0700 (PDT)
+From:   Yucong Sun <fallentree@fb.com>
+To:     <andrii@kernel.org>
+CC:     <sunyucong@gmail.com>, <bpf@vger.kernel.org>,
+        Yucong Sun <fallentree@fb.com>
+Subject: [PATCH v5 bpf-next 2/4] selftests/bpf: correctly display subtest skip status
+Date:   Mon, 16 Aug 2021 21:47:30 -0700
+Message-ID: <20210817044732.3263066-3-fallentree@fb.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210817044732.3263066-1-fallentree@fb.com>
+References: <20210817044732.3263066-1-fallentree@fb.com>
 MIME-Version: 1.0
-References: <20210816175250.296110-1-fallentree@fb.com> <CAPhsuW5NYMVRCmCXu=gJudfReYzMZqTUVUUWfH+U6FzVo=dWJQ@mail.gmail.com>
- <CAJygYd2rF1UzD1fmWrJ=Rn2Aa43pRniLTtqVzLFpJdR2wVnSFQ@mail.gmail.com> <CAEf4Bzax+jq_67gzFM3G8K17_mUSvtBuBmXUHqx6Xk7SxFz+eQ@mail.gmail.com>
-In-Reply-To: <CAEf4Bzax+jq_67gzFM3G8K17_mUSvtBuBmXUHqx6Xk7SxFz+eQ@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 16 Aug 2021 21:15:27 -0700
-Message-ID: <CAEf4BzZhFpgM2KcZXiCWiAoW=uYhxMtV=kBr9zJjb=er8Lu2Dg@mail.gmail.com>
-Subject: Re: [PATCH v1 bpf] selftests/bpf: Add exponential backoff to
- map_update_retriable in test_maps
-To:     "sunyucong@gmail.com" <sunyucong@gmail.com>
-Cc:     Song Liu <song@kernel.org>, Yucong Sun <fallentree@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-FB-Source: Intern
+X-Proofpoint-GUID: 9VsKtI92KdzQdk45b6b7IfKjH0NYQ1Bf
+X-Proofpoint-ORIG-GUID: 9VsKtI92KdzQdk45b6b7IfKjH0NYQ1Bf
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-08-17_01:2021-08-16,2021-08-17 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
+ lowpriorityscore=0 mlxlogscore=999 bulkscore=0 adultscore=0 mlxscore=0
+ suspectscore=0 impostorscore=0 phishscore=0 spamscore=0 malwarescore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2107140000 definitions=main-2108170029
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Aug 16, 2021 at 7:19 PM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Mon, Aug 16, 2021 at 4:45 PM sunyucong@gmail.com <sunyucong@gmail.com> wrote:
-> >
-> > On Mon, Aug 16, 2021 at 4:28 PM Song Liu <song@kernel.org> wrote:
-> > >
-> > > On Mon, Aug 16, 2021 at 10:54 AM Yucong Sun <fallentree@fb.com> wrote:
-> > > >
-> > > > Using a fixed delay of 1ms is proven flaky in slow CPU environment, eg.  github
-> > > > action CI system. This patch adds exponential backoff with a cap of 50ms, to
-> > > > reduce the flakiness of the test.
-> > >
-> > > Do we have data showing how flaky the test is before and after this change?
-> >
-> > Before the change, on 2 CPU KVM on my laptop the test is perfectly
-> > fine, on Github action (2 emulated CPU) , it appeared to fail roughly
-> > 1 in 10 runs or even more frequently.
-> > After the change, it appears pretty robust both on my laptop and on
-> > github action, I ran the github action a couple times and it succeeded
-> > every time.
-> >
-> > >
-> > > >
-> > > > Signed-off-by: Yucong Sun <fallentree@fb.com>
-> > > > ---
-> > > >  tools/testing/selftests/bpf/test_maps.c | 7 ++++++-
-> > > >  1 file changed, 6 insertions(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/selftests/bpf/test_maps.c
-> > > > index 14cea869235b..ed92d56c19cf 100644
-> > > > --- a/tools/testing/selftests/bpf/test_maps.c
-> > > > +++ b/tools/testing/selftests/bpf/test_maps.c
-> > > > @@ -1400,11 +1400,16 @@ static void test_map_stress(void)
-> > > >  static int map_update_retriable(int map_fd, const void *key, const void *value,
-> > > >                                 int flags, int attempts)
-> > > >  {
-> > > > +       int delay = 1;
-> > > > +
-> > > >         while (bpf_map_update_elem(map_fd, key, value, flags)) {
-> > > >                 if (!attempts || (errno != EAGAIN && errno != EBUSY))
-> > > >                         return -errno;
-> > > >
-> > > > -               usleep(1);
-> > > > +               if (delay < 50)
-> > > > +                       delay *= 2;
-> > > > +
-> > > > +               usleep(delay);
-> > >
-> > > It is a little weird that the delay times in microseconds are 2, 4, 8,
-> > > 16, 32, 64, 64, ...
-> > > Maybe just use rand()?
-> >
-> > map_update_retriable is called by test_map_update() , which is being
-> > parallel executed in 1024 threads, so the lock contention is
-> > intentional, I think if we introduce randomness in the delay it kind
-> > of defeats the purpose of the test.
->
-> Not really, the purpose of the test is to test a lot of concurrent
-> updates with some collisions. It doesn't matter if there is one
-> collision or 20. We will still get an initial collision (we only
-> usleep() after the initial attempt fails with EAGAIN or EBUSY) even
-> with randomized initial sleep *after* the first collision, but after
-> that we should make sure that test eventually completes, so for that
-> random initial delay is a good thing.
->
-> I reworked the code a bit, added initial random delay between [0ms,
-> 5ms), and then actually capped delay under 50ms (it can't go to
-> >50ms). Note also that your code is actually working with microseconds
-> (usleep() takes microseconds), while commit was actually talking about
-> milliseconds.
->
-> Applied to bpf-next, thanks.
+In skip_account(), test->skip_cnt is set to 0 at the end, this makes next=
+ print
+statement never display SKIP status for the subtest. This patch moves the
+accounting logic after the print statement, fixing the issue.
 
-Fun, two out of three test runs now fail with (see [0], for an example):
+This patch also added SKIP status display for normal tests.
 
-  error -16 16
-  test_maps: test_maps.c:1374: test_update_delete: Assertion `err == 0' failed.
-  test_maps: test_maps.c:1312: __run_parallel: Assertion `status == 0' failed.
-  ./libbpf/travis-ci/vmtest/run_selftests.sh: line 19:  1226 Aborted
-              ./test_maps
+Signed-off-by: Yucong Sun <fallentree@fb.com>
+---
+ tools/testing/selftests/bpf/test_progs.c | 25 ++++++++++++------------
+ 1 file changed, 13 insertions(+), 12 deletions(-)
 
+diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/sel=
+ftests/bpf/test_progs.c
+index 532af3353edf..f0fbead40883 100644
+--- a/tools/testing/selftests/bpf/test_progs.c
++++ b/tools/testing/selftests/bpf/test_progs.c
+@@ -148,18 +148,18 @@ void test__end_subtest()
+ 	struct prog_test_def *test =3D env.test;
+ 	int sub_error_cnt =3D test->error_cnt - test->old_error_cnt;
+=20
+-	if (sub_error_cnt)
+-		env.fail_cnt++;
+-	else if (test->skip_cnt =3D=3D 0)
+-		env.sub_succ_cnt++;
+-	skip_account();
+-
+ 	dump_test_log(test, sub_error_cnt);
+=20
+ 	fprintf(env.stdout, "#%d/%d %s:%s\n",
+ 	       test->test_num, test->subtest_num, test->subtest_name,
+ 	       sub_error_cnt ? "FAIL" : (test->skip_cnt ? "SKIP" : "OK"));
+=20
++	if (sub_error_cnt)
++		env.fail_cnt++;
++	else if (test->skip_cnt =3D=3D 0)
++		env.sub_succ_cnt++;
++	skip_account();
++
+ 	free(test->subtest_name);
+ 	test->subtest_name =3D NULL;
+ }
+@@ -786,17 +786,18 @@ int main(int argc, char **argv)
+ 			test__end_subtest();
+=20
+ 		test->tested =3D true;
+-		if (test->error_cnt)
+-			env.fail_cnt++;
+-		else
+-			env.succ_cnt++;
+-		skip_account();
+=20
+ 		dump_test_log(test, test->error_cnt);
+=20
+ 		fprintf(env.stdout, "#%d %s:%s\n",
+ 			test->test_num, test->test_name,
+-			test->error_cnt ? "FAIL" : "OK");
++			test->error_cnt ? "FAIL" : (test->skip_cnt ? "SKIP" : "OK"));
++
++		if (test->error_cnt)
++			env.fail_cnt++;
++		else
++			env.succ_cnt++;
++		skip_account();
+=20
+ 		reset_affinity();
+ 		restore_netns();
+--=20
+2.30.2
 
-Seems like we need the same trick for bpf_map_delete_elem() calls?..
-
-
-  [0] https://github.com/kernel-patches/bpf/pull/1632/checks?check_run_id=3345916773
-
->
-> > My original proposal is to just increase the attempts to 10X , Andrii
-> > proposed to use an exponential back-off, which is what I ended up
-> > implementing.
-> >
-> > >
-> > > Thanks,
-> > > Song
-> > >
-> > > >                 attempts--;
-> > > >         }
-> > > >
-> > > > --
-> > > > 2.30.2
-> > > >
