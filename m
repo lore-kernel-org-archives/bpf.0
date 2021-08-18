@@ -7,29 +7,29 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C96DC4320A
-	for <bpf@archiver.kernel.org>; Wed, 18 Aug 2021 03:33:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E5A5C4338F
+	for <bpf@archiver.kernel.org>; Wed, 18 Aug 2021 03:34:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8440A6108E
-	for <bpf@archiver.kernel.org>; Wed, 18 Aug 2021 03:33:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 51DC4610C9
+	for <bpf@archiver.kernel.org>; Wed, 18 Aug 2021 03:34:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237460AbhHRDe1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 17 Aug 2021 23:34:27 -0400
-Received: from szxga02-in.huawei.com ([45.249.212.188]:8874 "EHLO
+        id S237594AbhHRDee (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 17 Aug 2021 23:34:34 -0400
+Received: from szxga02-in.huawei.com ([45.249.212.188]:8873 "EHLO
         szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237271AbhHRDeY (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 17 Aug 2021 23:34:24 -0400
+        with ESMTP id S236287AbhHRDeX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 17 Aug 2021 23:34:23 -0400
 Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4GqD0n3445z8sZf;
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4GqD0n1Tyjz8sZd;
         Wed, 18 Aug 2021 11:29:45 +0800 (CST)
 Received: from dggpemm500005.china.huawei.com (7.185.36.74) by
  dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Wed, 18 Aug 2021 11:33:29 +0800
+ 15.1.2176.2; Wed, 18 Aug 2021 11:33:27 +0800
 Received: from localhost.localdomain (10.69.192.56) by
  dggpemm500005.china.huawei.com (7.185.36.74) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Wed, 18 Aug 2021 11:33:28 +0800
+ 15.1.2176.2; Wed, 18 Aug 2021 11:33:27 +0800
 From:   Yunsheng Lin <linyunsheng@huawei.com>
 To:     <davem@davemloft.net>, <kuba@kernel.org>
 CC:     <alexander.duyck@gmail.com>, <linux@armlinux.org.uk>,
@@ -55,9 +55,9 @@ CC:     <alexander.duyck@gmail.com>, <linux@armlinux.org.uk>,
         <mathew.j.martineau@linux.intel.com>, <aahringo@redhat.com>,
         <ceggers@arri.de>, <yangbo.lu@nxp.com>, <fw@strlen.de>,
         <xiangxia.m.yue@gmail.com>, <linmiaohe@huawei.com>
-Subject: [PATCH RFC 5/7] sock: support refilling pfrag from pfrag_pool
-Date:   Wed, 18 Aug 2021 11:32:21 +0800
-Message-ID: <1629257542-36145-6-git-send-email-linyunsheng@huawei.com>
+Subject: [PATCH RFC 2/7] skbuff: add interface to manipulate frag count for tx recycling
+Date:   Wed, 18 Aug 2021 11:32:18 +0800
+Message-ID: <1629257542-36145-3-git-send-email-linyunsheng@huawei.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1629257542-36145-1-git-send-email-linyunsheng@huawei.com>
 References: <1629257542-36145-1-git-send-email-linyunsheng@huawei.com>
@@ -71,125 +71,135 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-As previous patch has added pfrag pool based on the page
-pool, so support refilling pfrag from the new pfrag pool
-for tcpv4.
+As the skb->pp_recycle and page->pp_magic may not be enough
+to track if a frag page is from page pool after the calling
+of __skb_frag_ref(), mostly because of a data race, see:
+commit 2cc3aeb5eccc ("skbuff: Fix a potential race while
+recycling page_pool packets").
+
+As the case of tcp, there may be fragmenting, coalescing or
+retransmiting case that might lose the track if a frag page
+is from page pool or not.
+
+So increment the frag count when __skb_frag_ref() is called,
+and use the bit 0 in frag->bv_page to indicate if a page is
+from a page pool, which automically pass down to another
+frag->bv_page when doing a '*new_frag = *frag' or memcpying
+the shinfo.
+
+It seems we could do the trick for rx too if it makes sense.
 
 Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
 ---
- include/net/sock.h |  1 +
- net/core/sock.c    |  9 +++++++++
- net/ipv4/tcp.c     | 34 ++++++++++++++++++++++++++--------
- 3 files changed, 36 insertions(+), 8 deletions(-)
+ include/linux/skbuff.h  | 43 ++++++++++++++++++++++++++++++++++++++++---
+ include/net/page_pool.h |  5 +++++
+ 2 files changed, 45 insertions(+), 3 deletions(-)
 
-diff --git a/include/net/sock.h b/include/net/sock.h
-index 6e76145..af40084 100644
---- a/include/net/sock.h
-+++ b/include/net/sock.h
-@@ -455,6 +455,7 @@ struct sock {
- 	unsigned long		sk_pacing_rate; /* bytes per second */
- 	unsigned long		sk_max_pacing_rate;
- 	struct page_frag	sk_frag;
-+	struct pfrag_pool	*sk_frag_pool;
- 	netdev_features_t	sk_route_caps;
- 	netdev_features_t	sk_route_nocaps;
- 	netdev_features_t	sk_route_forced_caps;
-diff --git a/net/core/sock.c b/net/core/sock.c
-index aada649..53152c9 100644
---- a/net/core/sock.c
-+++ b/net/core/sock.c
-@@ -140,6 +140,7 @@
- #include <net/busy_poll.h>
+diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+index 6bdb0db..2878d26 100644
+--- a/include/linux/skbuff.h
++++ b/include/linux/skbuff.h
+@@ -331,6 +331,11 @@ static inline unsigned int skb_frag_size(const skb_frag_t *frag)
+ 	return frag->bv_len;
+ }
  
- #include <linux/ethtool.h>
-+#include <net/pfrag_pool.h>
- 
- static DEFINE_MUTEX(proto_list_mutex);
- static LIST_HEAD(proto_list);
-@@ -1934,6 +1935,11 @@ static void __sk_destruct(struct rcu_head *head)
- 		put_page(sk->sk_frag.page);
- 		sk->sk_frag.page = NULL;
- 	}
-+	if (sk->sk_frag_pool) {
-+		pfrag_pool_flush(sk->sk_frag_pool);
-+		kfree(sk->sk_frag_pool);
-+		sk->sk_frag_pool = NULL;
-+	}
- 
- 	if (sk->sk_peer_cred)
- 		put_cred(sk->sk_peer_cred);
-@@ -3134,6 +3140,9 @@ void sock_init_data(struct socket *sock, struct sock *sk)
- 
- 	sk->sk_frag.page	=	NULL;
- 	sk->sk_frag.offset	=	0;
++static inline bool skb_frag_is_pp(const skb_frag_t *frag)
++{
++	return (unsigned long)frag->bv_page & 1UL;
++}
 +
-+	sk->sk_frag_pool = kzalloc(sizeof(*sk->sk_frag_pool), sk->sk_allocation);
+ /**
+  * skb_frag_size_set() - Sets the size of a skb fragment
+  * @frag: skb fragment
+@@ -2190,6 +2195,21 @@ static inline void __skb_fill_page_desc(struct sk_buff *skb, int i,
+ 		skb->pfmemalloc	= true;
+ }
+ 
++static inline void __skb_fill_pp_page_desc(struct sk_buff *skb, int i,
++					   struct page *page, int off,
++					   int size)
++{
++	skb_frag_t *frag = &skb_shinfo(skb)->frags[i];
 +
- 	sk->sk_peek_off		=	-1;
- 
- 	sk->sk_peer_pid 	=	NULL;
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index f931def..992dcbc 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -280,6 +280,7 @@
- #include <linux/uaccess.h>
- #include <asm/ioctls.h>
- #include <net/busy_poll.h>
-+#include <net/pfrag_pool.h>
- 
- /* Track pending CMSGs. */
- enum {
-@@ -1337,12 +1338,20 @@ int tcp_sendmsg_locked(struct sock *sk, struct msghdr *msg, size_t size)
- 			if (err)
- 				goto do_fault;
- 		} else if (!zc) {
--			bool merge = true;
-+			bool merge = true, pfrag_pool = true;
- 			int i = skb_shinfo(skb)->nr_frags;
--			struct page_frag *pfrag = sk_page_frag(sk);
-+			struct page_frag *pfrag;
- 
--			if (!sk_page_frag_refill(sk, pfrag))
--				goto wait_for_space;
-+			pfrag_pool_updata_napi(sk->sk_frag_pool,
-+					       READ_ONCE(sk->sk_napi_id));
-+			pfrag = pfrag_pool_refill(sk->sk_frag_pool, sk->sk_allocation);
-+			if (!pfrag) {
-+				pfrag = sk_page_frag(sk);
-+				if (!sk_page_frag_refill(sk, pfrag))
-+					goto wait_for_space;
++	frag->bv_page = (struct page *)((unsigned long)page | 0x1UL);
++	frag->bv_offset = off;
++	skb_frag_size_set(frag, size);
 +
-+				pfrag_pool = false;
-+			}
- 
- 			if (!skb_can_coalesce(skb, i, pfrag->page,
- 					      pfrag->offset)) {
-@@ -1369,11 +1378,20 @@ int tcp_sendmsg_locked(struct sock *sk, struct msghdr *msg, size_t size)
- 			if (merge) {
- 				skb_frag_size_add(&skb_shinfo(skb)->frags[i - 1], copy);
- 			} else {
--				skb_fill_page_desc(skb, i, pfrag->page,
--						   pfrag->offset, copy);
--				page_ref_inc(pfrag->page);
-+				if (pfrag_pool) {
-+					skb_fill_pp_page_desc(skb, i, pfrag->page,
-+							      pfrag->offset, copy);
-+				} else {
-+					page_ref_inc(pfrag->page);
-+					skb_fill_page_desc(skb, i, pfrag->page,
-+							   pfrag->offset, copy);
-+				}
- 			}
--			pfrag->offset += copy;
++	page = compound_head(page);
++	if (page_is_pfmemalloc(page))
++		skb->pfmemalloc = true;
++}
 +
-+			if (pfrag_pool)
-+				pfrag_pool_commit(sk->sk_frag_pool, copy, merge);
-+			else
-+				pfrag->offset += copy;
- 		} else {
- 			if (!sk_wmem_schedule(sk, copy))
- 				goto wait_for_space;
+ /**
+  * skb_fill_page_desc - initialise a paged fragment in an skb
+  * @skb: buffer containing fragment to be initialised
+@@ -2211,6 +2231,14 @@ static inline void skb_fill_page_desc(struct sk_buff *skb, int i,
+ 	skb_shinfo(skb)->nr_frags = i + 1;
+ }
+ 
++static inline void skb_fill_pp_page_desc(struct sk_buff *skb, int i,
++					 struct page *page, int off,
++					 int size)
++{
++	__skb_fill_pp_page_desc(skb, i, page, off, size);
++	skb_shinfo(skb)->nr_frags = i + 1;
++}
++
+ void skb_add_rx_frag(struct sk_buff *skb, int i, struct page *page, int off,
+ 		     int size, unsigned int truesize);
+ 
+@@ -3062,7 +3090,10 @@ static inline void skb_frag_off_copy(skb_frag_t *fragto,
+  */
+ static inline struct page *skb_frag_page(const skb_frag_t *frag)
+ {
+-	return frag->bv_page;
++	unsigned long page = (unsigned long)frag->bv_page;
++
++	page &= ~1UL;
++	return (struct page *)page;
+ }
+ 
+ /**
+@@ -3073,7 +3104,12 @@ static inline struct page *skb_frag_page(const skb_frag_t *frag)
+  */
+ static inline void __skb_frag_ref(skb_frag_t *frag)
+ {
+-	get_page(skb_frag_page(frag));
++	struct page *page = skb_frag_page(frag);
++
++	if (skb_frag_is_pp(frag))
++		page_pool_atomic_inc_frag_count(page);
++	else
++		get_page(page);
+ }
+ 
+ /**
+@@ -3101,7 +3137,8 @@ static inline void __skb_frag_unref(skb_frag_t *frag, bool recycle)
+ 	struct page *page = skb_frag_page(frag);
+ 
+ #ifdef CONFIG_PAGE_POOL
+-	if (recycle && page_pool_return_skb_page(page))
++	if ((recycle || skb_frag_is_pp(frag)) &&
++	    page_pool_return_skb_page(page))
+ 		return;
+ #endif
+ 	put_page(page);
+diff --git a/include/net/page_pool.h b/include/net/page_pool.h
+index 8d4ae4b..86babb2 100644
+--- a/include/net/page_pool.h
++++ b/include/net/page_pool.h
+@@ -270,6 +270,11 @@ static inline long page_pool_atomic_sub_frag_count_return(struct page *page,
+ 	return ret;
+ }
+ 
++static void page_pool_atomic_inc_frag_count(struct page *page)
++{
++	atomic_long_inc(&page->pp_frag_count);
++}
++
+ static inline bool is_page_pool_compiled_in(void)
+ {
+ #ifdef CONFIG_PAGE_POOL
 -- 
 2.7.4
 
