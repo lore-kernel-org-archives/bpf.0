@@ -7,28 +7,28 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C4979C432BE
-	for <bpf@archiver.kernel.org>; Wed, 18 Aug 2021 14:16:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 90BFEC4338F
+	for <bpf@archiver.kernel.org>; Wed, 18 Aug 2021 14:16:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A8DB1610C7
-	for <bpf@archiver.kernel.org>; Wed, 18 Aug 2021 14:16:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 710EA610C7
+	for <bpf@archiver.kernel.org>; Wed, 18 Aug 2021 14:16:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239605AbhHROR0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 18 Aug 2021 10:17:26 -0400
-Received: from mga01.intel.com ([192.55.52.88]:53823 "EHLO mga01.intel.com"
+        id S239882AbhHROR3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 18 Aug 2021 10:17:29 -0400
+Received: from mga04.intel.com ([192.55.52.120]:31297 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240102AbhHROPw (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 18 Aug 2021 10:15:52 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10080"; a="238431146"
+        id S240260AbhHROQB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 18 Aug 2021 10:16:01 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10080"; a="214484433"
 X-IronPort-AV: E=Sophos;i="5.84,330,1620716400"; 
-   d="scan'208";a="238431146"
+   d="scan'208";a="214484433"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2021 07:14:43 -0700
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2021 07:15:20 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.84,330,1620716400"; 
-   d="scan'208";a="531703523"
+   d="scan'208";a="531703788"
 Received: from ranger.igk.intel.com ([10.102.21.164])
-  by fmsmga002.fm.intel.com with ESMTP; 18 Aug 2021 07:14:39 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 18 Aug 2021 07:15:14 -0700
 From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 To:     intel-wired-lan@lists.osuosl.org
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org, davem@davemloft.net,
@@ -37,9 +37,9 @@ Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org, davem@davemloft.net,
         alexandr.lobakin@intel.com, joamaki@gmail.com, toke@redhat.com,
         brett.creeley@intel.com,
         Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH v6 intel-next 2/9] ice: move ice_container_type onto ice_ring_container
-Date:   Wed, 18 Aug 2021 15:59:09 +0200
-Message-Id: <20210818135916.25007-3-maciej.fijalkowski@intel.com>
+Subject: [PATCH v6 intel-next 8/9] ice: introduce XDP_TX fallback path
+Date:   Wed, 18 Aug 2021 15:59:15 +0200
+Message-Id: <20210818135916.25007-9-maciej.fijalkowski@intel.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20210818135916.25007-1-maciej.fijalkowski@intel.com>
 References: <20210818135916.25007-1-maciej.fijalkowski@intel.com>
@@ -49,194 +49,251 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently ice_container_type is scoped only for ice_ethtool.c. Next
-commit that will split the ice_ring struct onto Rx/Tx specific ring
-structs is going to also modify the type of linked list of rings that is
-within ice_ring_container. Therefore, the functions that are taking the
-ice_ring_container as an input argument will need to be aware of a ring
-type that will be looked up.
+Under rare circumstances there might be a situation where a requirement
+of having XDP Tx queue per CPU could not be fulfilled and some of the Tx
+resources have to be shared between CPUs. This yields a need for placing
+accesses to xdp_ring inside a critical section protected by spinlock.
+These accesses happen to be in the hot path, so let's introduce the
+static branch that will be triggered from the control plane when driver
+could not provide Tx queue dedicated for XDP on each CPU.
 
-Embed ice_container_type within ice_ring_container and initialize it
-properly when allocating the q_vectors.
+Currently, the design that has been picked is to allow any number of XDP
+Tx queues that is at least half of a count of CPUs that platform has.
+For lower number driver will bail out with a response to user that there
+were not enough Tx resources that would allow configuring XDP. The
+sharing of rings is signalled via static branch enablement which in turn
+indicates that lock for xdp_ring accesses needs to be taken in hot path.
+
+Approach based on static branch has no impact on performance of a
+non-fallback path. One thing that is needed to be mentioned is a fact
+that the static branch will act as a global driver switch, meaning that
+if one PF got out of Tx resources, then other PFs that ice driver is
+servicing will suffer. However, given the fact that HW that ice driver
+is handling has 1024 Tx queues per each PF, this is currently an
+unlikely scenario.
 
 Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 ---
- drivers/net/ethernet/intel/ice/ice_base.c    |  2 ++
- drivers/net/ethernet/intel/ice/ice_ethtool.c | 38 ++++++++------------
- drivers/net/ethernet/intel/ice/ice_txrx.h    |  6 ++++
- 3 files changed, 23 insertions(+), 23 deletions(-)
+ drivers/net/ethernet/intel/ice/ice.h          |  3 ++
+ drivers/net/ethernet/intel/ice/ice_lib.c      |  4 +-
+ drivers/net/ethernet/intel/ice/ice_main.c     | 53 ++++++++++++++++---
+ drivers/net/ethernet/intel/ice/ice_txrx.c     | 16 +++++-
+ drivers/net/ethernet/intel/ice/ice_txrx.h     |  1 +
+ drivers/net/ethernet/intel/ice/ice_txrx_lib.c |  7 ++-
+ 6 files changed, 75 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_base.c b/drivers/net/ethernet/intel/ice/ice_base.c
-index 59a0f312dab9..feb07750acb6 100644
---- a/drivers/net/ethernet/intel/ice/ice_base.c
-+++ b/drivers/net/ethernet/intel/ice/ice_base.c
-@@ -115,6 +115,8 @@ static int ice_vsi_alloc_q_vector(struct ice_vsi *vsi, u16 v_idx)
- 	q_vector->rx.itr_setting = ICE_DFLT_RX_ITR;
- 	q_vector->tx.itr_mode = ITR_DYNAMIC;
- 	q_vector->rx.itr_mode = ITR_DYNAMIC;
-+	q_vector->tx.type = ICE_TX_CONTAINER;
-+	q_vector->rx.type = ICE_RX_CONTAINER;
- 
- 	if (vsi->type == ICE_VSI_VF)
- 		goto out;
-diff --git a/drivers/net/ethernet/intel/ice/ice_ethtool.c b/drivers/net/ethernet/intel/ice/ice_ethtool.c
-index 54ccba8992ee..91efc8389df6 100644
---- a/drivers/net/ethernet/intel/ice/ice_ethtool.c
-+++ b/drivers/net/ethernet/intel/ice/ice_ethtool.c
-@@ -3501,15 +3501,9 @@ static int ice_set_wol(struct net_device *netdev, struct ethtool_wolinfo *wol)
- 	return 0;
- }
- 
--enum ice_container_type {
--	ICE_RX_CONTAINER,
--	ICE_TX_CONTAINER,
--};
--
- /**
-  * ice_get_rc_coalesce - get ITR values for specific ring container
-  * @ec: ethtool structure to fill with driver's coalesce settings
-- * @c_type: container type, Rx or Tx
-  * @rc: ring container that the ITR values will come from
-  *
-  * Query the device for ice_ring_container specific ITR values. This is
-@@ -3519,13 +3513,12 @@ enum ice_container_type {
-  * Returns 0 on success, negative otherwise.
-  */
- static int
--ice_get_rc_coalesce(struct ethtool_coalesce *ec, enum ice_container_type c_type,
--		    struct ice_ring_container *rc)
-+ice_get_rc_coalesce(struct ethtool_coalesce *ec, struct ice_ring_container *rc)
- {
- 	if (!rc->ring)
- 		return -EINVAL;
- 
--	switch (c_type) {
-+	switch (rc->type) {
- 	case ICE_RX_CONTAINER:
- 		ec->use_adaptive_rx_coalesce = ITR_IS_DYNAMIC(rc);
- 		ec->rx_coalesce_usecs = rc->itr_setting;
-@@ -3536,7 +3529,7 @@ ice_get_rc_coalesce(struct ethtool_coalesce *ec, enum ice_container_type c_type,
- 		ec->tx_coalesce_usecs = rc->itr_setting;
- 		break;
- 	default:
--		dev_dbg(ice_pf_to_dev(rc->ring->vsi->back), "Invalid c_type %d\n", c_type);
-+		dev_dbg(ice_pf_to_dev(rc->ring->vsi->back), "Invalid c_type %d\n", rc->type);
- 		return -EINVAL;
- 	}
- 
-@@ -3557,18 +3550,18 @@ static int
- ice_get_q_coalesce(struct ice_vsi *vsi, struct ethtool_coalesce *ec, int q_num)
- {
- 	if (q_num < vsi->num_rxq && q_num < vsi->num_txq) {
--		if (ice_get_rc_coalesce(ec, ICE_RX_CONTAINER,
-+		if (ice_get_rc_coalesce(ec,
- 					&vsi->rx_rings[q_num]->q_vector->rx))
- 			return -EINVAL;
--		if (ice_get_rc_coalesce(ec, ICE_TX_CONTAINER,
-+		if (ice_get_rc_coalesce(ec,
- 					&vsi->tx_rings[q_num]->q_vector->tx))
- 			return -EINVAL;
- 	} else if (q_num < vsi->num_rxq) {
--		if (ice_get_rc_coalesce(ec, ICE_RX_CONTAINER,
-+		if (ice_get_rc_coalesce(ec,
- 					&vsi->rx_rings[q_num]->q_vector->rx))
- 			return -EINVAL;
- 	} else if (q_num < vsi->num_txq) {
--		if (ice_get_rc_coalesce(ec, ICE_TX_CONTAINER,
-+		if (ice_get_rc_coalesce(ec,
- 					&vsi->tx_rings[q_num]->q_vector->tx))
- 			return -EINVAL;
- 	} else {
-@@ -3618,7 +3611,6 @@ ice_get_per_q_coalesce(struct net_device *netdev, u32 q_num,
- 
- /**
-  * ice_set_rc_coalesce - set ITR values for specific ring container
-- * @c_type: container type, Rx or Tx
-  * @ec: ethtool structure from user to update ITR settings
-  * @rc: ring container that the ITR values will come from
-  * @vsi: VSI associated to the ring container
-@@ -3630,10 +3622,10 @@ ice_get_per_q_coalesce(struct net_device *netdev, u32 q_num,
-  * Returns 0 on success, negative otherwise.
-  */
- static int
--ice_set_rc_coalesce(enum ice_container_type c_type, struct ethtool_coalesce *ec,
-+ice_set_rc_coalesce(struct ethtool_coalesce *ec,
- 		    struct ice_ring_container *rc, struct ice_vsi *vsi)
- {
--	const char *c_type_str = (c_type == ICE_RX_CONTAINER) ? "rx" : "tx";
-+	const char *c_type_str = (rc->type == ICE_RX_CONTAINER) ? "rx" : "tx";
- 	u32 use_adaptive_coalesce, coalesce_usecs;
- 	struct ice_pf *pf = vsi->back;
- 	u16 itr_setting;
-@@ -3641,7 +3633,7 @@ ice_set_rc_coalesce(enum ice_container_type c_type, struct ethtool_coalesce *ec,
- 	if (!rc->ring)
- 		return -EINVAL;
- 
--	switch (c_type) {
-+	switch (rc->type) {
- 	case ICE_RX_CONTAINER:
- 		if (ec->rx_coalesce_usecs_high > ICE_MAX_INTRL ||
- 		    (ec->rx_coalesce_usecs_high &&
-@@ -3674,7 +3666,7 @@ ice_set_rc_coalesce(enum ice_container_type c_type, struct ethtool_coalesce *ec,
- 		break;
- 	default:
- 		dev_dbg(ice_pf_to_dev(pf), "Invalid container type %d\n",
--			c_type);
-+			rc->type);
- 		return -EINVAL;
- 	}
- 
-@@ -3723,22 +3715,22 @@ static int
- ice_set_q_coalesce(struct ice_vsi *vsi, struct ethtool_coalesce *ec, int q_num)
- {
- 	if (q_num < vsi->num_rxq && q_num < vsi->num_txq) {
--		if (ice_set_rc_coalesce(ICE_RX_CONTAINER, ec,
-+		if (ice_set_rc_coalesce(ec,
- 					&vsi->rx_rings[q_num]->q_vector->rx,
- 					vsi))
- 			return -EINVAL;
- 
--		if (ice_set_rc_coalesce(ICE_TX_CONTAINER, ec,
-+		if (ice_set_rc_coalesce(ec,
- 					&vsi->tx_rings[q_num]->q_vector->tx,
- 					vsi))
- 			return -EINVAL;
- 	} else if (q_num < vsi->num_rxq) {
--		if (ice_set_rc_coalesce(ICE_RX_CONTAINER, ec,
-+		if (ice_set_rc_coalesce(ec,
- 					&vsi->rx_rings[q_num]->q_vector->rx,
- 					vsi))
- 			return -EINVAL;
- 	} else if (q_num < vsi->num_txq) {
--		if (ice_set_rc_coalesce(ICE_TX_CONTAINER, ec,
-+		if (ice_set_rc_coalesce(ec,
- 					&vsi->tx_rings[q_num]->q_vector->tx,
- 					vsi))
- 			return -EINVAL;
-diff --git a/drivers/net/ethernet/intel/ice/ice_txrx.h b/drivers/net/ethernet/intel/ice/ice_txrx.h
-index 901f16f1d286..58127376cfe4 100644
---- a/drivers/net/ethernet/intel/ice/ice_txrx.h
-+++ b/drivers/net/ethernet/intel/ice/ice_txrx.h
-@@ -336,6 +336,11 @@ static inline bool ice_ring_is_xdp(struct ice_ring *ring)
- 	return !!(ring->flags & ICE_TX_FLAGS_RING_XDP);
- }
- 
-+enum ice_container_type {
-+	ICE_RX_CONTAINER,
-+	ICE_TX_CONTAINER,
-+};
-+
- struct ice_ring_container {
- 	/* head of linked-list of rings */
- 	struct ice_ring *ring;
-@@ -347,6 +352,7 @@ struct ice_ring_container {
- 	u16 itr_setting:13;
- 	u16 itr_reserved:2;
- 	u16 itr_mode:1;
-+	enum ice_container_type type;
+diff --git a/drivers/net/ethernet/intel/ice/ice.h b/drivers/net/ethernet/intel/ice/ice.h
+index 17096efba216..7a489381dbe2 100644
+--- a/drivers/net/ethernet/intel/ice/ice.h
++++ b/drivers/net/ethernet/intel/ice/ice.h
+@@ -164,6 +164,8 @@ enum ice_feature {
+ 	ICE_F_MAX
  };
  
- struct ice_coalesce_stored {
++DECLARE_STATIC_KEY_FALSE(ice_xdp_locking_key);
++
+ struct ice_txq_meta {
+ 	u32 q_teid;	/* Tx-scheduler element identifier */
+ 	u16 q_id;	/* Entry in VSI's txq_map bitmap */
+@@ -714,6 +716,7 @@ int ice_up(struct ice_vsi *vsi);
+ int ice_down(struct ice_vsi *vsi);
+ int ice_vsi_cfg(struct ice_vsi *vsi);
+ struct ice_vsi *ice_lb_vsi_setup(struct ice_pf *pf, struct ice_port_info *pi);
++int ice_vsi_determine_xdp_res(struct ice_vsi *vsi);
+ int ice_prepare_xdp_rings(struct ice_vsi *vsi, struct bpf_prog *prog);
+ int ice_destroy_xdp_rings(struct ice_vsi *vsi);
+ int
+diff --git a/drivers/net/ethernet/intel/ice/ice_lib.c b/drivers/net/ethernet/intel/ice/ice_lib.c
+index d76e34515483..61152fc78773 100644
+--- a/drivers/net/ethernet/intel/ice/ice_lib.c
++++ b/drivers/net/ethernet/intel/ice/ice_lib.c
+@@ -3221,7 +3221,9 @@ int ice_vsi_rebuild(struct ice_vsi *vsi, bool init_vsi)
+ 
+ 		ice_vsi_map_rings_to_vectors(vsi);
+ 		if (ice_is_xdp_ena_vsi(vsi)) {
+-			vsi->num_xdp_txq = num_possible_cpus();
++			ret = ice_vsi_determine_xdp_res(vsi);
++			if (ret)
++				goto err_vectors;
+ 			ret = ice_prepare_xdp_rings(vsi, vsi->xdp_prog);
+ 			if (ret)
+ 				goto err_vectors;
+diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
+index 7267b8159b99..014762048fcb 100644
+--- a/drivers/net/ethernet/intel/ice/ice_main.c
++++ b/drivers/net/ethernet/intel/ice/ice_main.c
+@@ -44,6 +44,8 @@ MODULE_PARM_DESC(debug, "netif level (0=none,...,16=all)");
+ #endif /* !CONFIG_DYNAMIC_DEBUG */
+ 
+ static DEFINE_IDA(ice_aux_ida);
++DEFINE_STATIC_KEY_FALSE(ice_xdp_locking_key);
++EXPORT_SYMBOL(ice_xdp_locking_key);
+ 
+ static struct workqueue_struct *ice_wq;
+ static const struct net_device_ops ice_netdev_safe_mode_ops;
+@@ -2453,14 +2455,19 @@ static int ice_xdp_alloc_setup_rings(struct ice_vsi *vsi)
+ 			goto free_xdp_rings;
+ 		ice_set_ring_xdp(xdp_ring);
+ 		xdp_ring->xsk_pool = ice_tx_xsk_pool(xdp_ring);
++		spin_lock_init(&xdp_ring->tx_lock);
+ 		for (j = 0; j < xdp_ring->count; j++) {
+ 			tx_desc = ICE_TX_DESC(xdp_ring, j);
+ 			tx_desc->cmd_type_offset_bsz = cpu_to_le64(ICE_TX_DESC_DTYPE_DESC_DONE);
+ 		}
+ 	}
+ 
+-	ice_for_each_rxq(vsi, i)
+-		vsi->rx_rings[i]->xdp_ring = vsi->xdp_rings[i];
++	ice_for_each_rxq(vsi, i) {
++		if (static_key_enabled(&ice_xdp_locking_key))
++			vsi->rx_rings[i]->xdp_ring = vsi->xdp_rings[i % vsi->num_xdp_txq];
++		else
++			vsi->rx_rings[i]->xdp_ring = vsi->xdp_rings[i];
++	}
+ 
+ 	return 0;
+ 
+@@ -2525,6 +2532,10 @@ int ice_prepare_xdp_rings(struct ice_vsi *vsi, struct bpf_prog *prog)
+ 	if (__ice_vsi_get_qs(&xdp_qs_cfg))
+ 		goto err_map_xdp;
+ 
++	if (static_key_enabled(&ice_xdp_locking_key))
++		netdev_warn(vsi->netdev,
++			    "Could not allocate one XDP Tx ring per CPU, XDP_TX/XDP_REDIRECT actions will be slower\n");
++
+ 	if (ice_xdp_alloc_setup_rings(vsi))
+ 		goto clear_xdp_rings;
+ 
+@@ -2641,6 +2652,9 @@ int ice_destroy_xdp_rings(struct ice_vsi *vsi)
+ 	devm_kfree(ice_pf_to_dev(pf), vsi->xdp_rings);
+ 	vsi->xdp_rings = NULL;
+ 
++	if (static_key_enabled(&ice_xdp_locking_key))
++		static_branch_dec(&ice_xdp_locking_key);
++
+ 	if (ice_is_reset_in_progress(pf->state) || !vsi->q_vectors[0])
+ 		return 0;
+ 
+@@ -2675,6 +2689,29 @@ static void ice_vsi_rx_napi_schedule(struct ice_vsi *vsi)
+ 	}
+ }
+ 
++/**
++ * ice_vsi_determine_xdp_res - figure out how many Tx qs can XDP have
++ * @vsi: VSI to determine the count of XDP Tx qs
++ *
++ * returns 0 if Tx qs count is higher than at least half of CPU count,
++ * -ENOMEM otherwise
++ */
++int ice_vsi_determine_xdp_res(struct ice_vsi *vsi)
++{
++	u16 avail = ice_get_avail_txq_count(vsi->back);
++	u16 cpus = num_possible_cpus();
++
++	if (avail < cpus / 2)
++		return -ENOMEM;
++
++	vsi->num_xdp_txq = min_t(u16, avail, cpus);
++
++	if (vsi->num_xdp_txq < cpus)
++		static_branch_inc(&ice_xdp_locking_key);
++
++	return 0;
++}
++
+ /**
+  * ice_xdp_setup_prog - Add or remove XDP eBPF program
+  * @vsi: VSI to setup XDP for
+@@ -2704,10 +2741,14 @@ ice_xdp_setup_prog(struct ice_vsi *vsi, struct bpf_prog *prog,
+ 	}
+ 
+ 	if (!ice_is_xdp_ena_vsi(vsi) && prog) {
+-		vsi->num_xdp_txq = num_possible_cpus();
+-		xdp_ring_err = ice_prepare_xdp_rings(vsi, prog);
+-		if (xdp_ring_err)
+-			NL_SET_ERR_MSG_MOD(extack, "Setting up XDP Tx resources failed");
++		xdp_ring_err = ice_vsi_determine_xdp_res(vsi);
++		if (xdp_ring_err) {
++			NL_SET_ERR_MSG_MOD(extack, "Not enough Tx resources for XDP");
++		} else {
++			xdp_ring_err = ice_prepare_xdp_rings(vsi, prog);
++			if (xdp_ring_err)
++				NL_SET_ERR_MSG_MOD(extack, "Setting up XDP Tx resources failed");
++		}
+ 	} else if (ice_is_xdp_ena_vsi(vsi) && !prog) {
+ 		xdp_ring_err = ice_destroy_xdp_rings(vsi);
+ 		if (xdp_ring_err)
+diff --git a/drivers/net/ethernet/intel/ice/ice_txrx.c b/drivers/net/ethernet/intel/ice/ice_txrx.c
+index 927517e18ce3..01ae331927bd 100644
+--- a/drivers/net/ethernet/intel/ice/ice_txrx.c
++++ b/drivers/net/ethernet/intel/ice/ice_txrx.c
+@@ -547,7 +547,11 @@ ice_run_xdp(struct ice_rx_ring *rx_ring, struct xdp_buff *xdp,
+ 	case XDP_PASS:
+ 		return ICE_XDP_PASS;
+ 	case XDP_TX:
++		if (static_branch_unlikely(&ice_xdp_locking_key))
++			spin_lock(&xdp_ring->tx_lock);
+ 		err = ice_xmit_xdp_ring(xdp->data, xdp->data_end - xdp->data, xdp_ring);
++		if (static_branch_unlikely(&ice_xdp_locking_key))
++			spin_unlock(&xdp_ring->tx_lock);
+ 		if (err == ICE_XDP_CONSUMED)
+ 			goto out_failure;
+ 		return err;
+@@ -599,7 +603,14 @@ ice_xdp_xmit(struct net_device *dev, int n, struct xdp_frame **frames,
+ 	if (unlikely(flags & ~XDP_XMIT_FLAGS_MASK))
+ 		return -EINVAL;
+ 
+-	xdp_ring = vsi->xdp_rings[queue_index];
++	if (static_branch_unlikely(&ice_xdp_locking_key)) {
++		queue_index %= vsi->num_xdp_txq;
++		xdp_ring = vsi->xdp_rings[queue_index];
++		spin_lock(&xdp_ring->tx_lock);
++	} else {
++		xdp_ring = vsi->xdp_rings[queue_index];
++	}
++
+ 	for (i = 0; i < n; i++) {
+ 		struct xdp_frame *xdpf = frames[i];
+ 		int err;
+@@ -613,6 +624,9 @@ ice_xdp_xmit(struct net_device *dev, int n, struct xdp_frame **frames,
+ 	if (unlikely(flags & XDP_XMIT_FLUSH))
+ 		ice_xdp_ring_update_tail(xdp_ring);
+ 
++	if (static_branch_unlikely(&ice_xdp_locking_key))
++		spin_unlock(&xdp_ring->tx_lock);
++
+ 	return nxmit;
+ }
+ 
+diff --git a/drivers/net/ethernet/intel/ice/ice_txrx.h b/drivers/net/ethernet/intel/ice/ice_txrx.h
+index ff34ea80abe5..4bc8e24b8ba5 100644
+--- a/drivers/net/ethernet/intel/ice/ice_txrx.h
++++ b/drivers/net/ethernet/intel/ice/ice_txrx.h
+@@ -332,6 +332,7 @@ struct ice_tx_ring {
+ 	struct rcu_head rcu;		/* to avoid race on free */
+ 	DECLARE_BITMAP(xps_state, ICE_TX_NBITS);	/* XPS Config State */
+ 	struct ice_ptp_tx *tx_tstamps;
++	spinlock_t tx_lock;
+ 	u32 txq_teid;			/* Added Tx queue TEID */
+ #define ICE_TX_FLAGS_RING_XDP		BIT(0)
+ 	u8 flags;
+diff --git a/drivers/net/ethernet/intel/ice/ice_txrx_lib.c b/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
+index d55db9cedc9b..1dd7e84f41f8 100644
+--- a/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
++++ b/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
+@@ -350,6 +350,11 @@ void ice_finalize_xdp_rx(struct ice_tx_ring *xdp_ring, unsigned int xdp_res)
+ 	if (xdp_res & ICE_XDP_REDIR)
+ 		xdp_do_flush_map();
+ 
+-	if (xdp_res & ICE_XDP_TX)
++	if (xdp_res & ICE_XDP_TX) {
++		if (static_branch_unlikely(&ice_xdp_locking_key))
++			spin_lock(&xdp_ring->tx_lock);
+ 		ice_xdp_ring_update_tail(xdp_ring);
++		if (static_branch_unlikely(&ice_xdp_locking_key))
++			spin_unlock(&xdp_ring->tx_lock);
++	}
+ }
 -- 
 2.20.1
 
