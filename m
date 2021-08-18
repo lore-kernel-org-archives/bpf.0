@@ -7,29 +7,29 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F0ECC4338F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CCE0BC432BE
 	for <bpf@archiver.kernel.org>; Wed, 18 Aug 2021 03:33:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E13AD61051
-	for <bpf@archiver.kernel.org>; Wed, 18 Aug 2021 03:33:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ACCC261078
+	for <bpf@archiver.kernel.org>; Wed, 18 Aug 2021 03:33:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235554AbhHRDeU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 17 Aug 2021 23:34:20 -0400
-Received: from szxga02-in.huawei.com ([45.249.212.188]:8871 "EHLO
+        id S237128AbhHRDeV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 17 Aug 2021 23:34:21 -0400
+Received: from szxga02-in.huawei.com ([45.249.212.188]:8872 "EHLO
         szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237076AbhHRDeU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S237103AbhHRDeU (ORCPT <rfc822;bpf@vger.kernel.org>);
         Tue, 17 Aug 2021 23:34:20 -0400
 Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4GqD0h3NJVz8sZW;
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4GqD0h54PCz8sZR;
         Wed, 18 Aug 2021 11:29:40 +0800 (CST)
 Received: from dggpemm500005.china.huawei.com (7.185.36.74) by
  dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Wed, 18 Aug 2021 11:33:28 +0800
+ 15.1.2176.2; Wed, 18 Aug 2021 11:33:29 +0800
 Received: from localhost.localdomain (10.69.192.56) by
  dggpemm500005.china.huawei.com (7.185.36.74) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Wed, 18 Aug 2021 11:33:27 +0800
+ 15.1.2176.2; Wed, 18 Aug 2021 11:33:29 +0800
 From:   Yunsheng Lin <linyunsheng@huawei.com>
 To:     <davem@davemloft.net>, <kuba@kernel.org>
 CC:     <alexander.duyck@gmail.com>, <linux@armlinux.org.uk>,
@@ -55,9 +55,9 @@ CC:     <alexander.duyck@gmail.com>, <linux@armlinux.org.uk>,
         <mathew.j.martineau@linux.intel.com>, <aahringo@redhat.com>,
         <ceggers@arri.de>, <yangbo.lu@nxp.com>, <fw@strlen.de>,
         <xiangxia.m.yue@gmail.com>, <linmiaohe@huawei.com>
-Subject: [PATCH RFC 3/7] net: add NAPI api to register and retrieve the page pool ptr
-Date:   Wed, 18 Aug 2021 11:32:19 +0800
-Message-ID: <1629257542-36145-4-git-send-email-linyunsheng@huawei.com>
+Subject: [PATCH RFC 6/7] net: hns3: support tx recycling in the hns3 driver
+Date:   Wed, 18 Aug 2021 11:32:22 +0800
+Message-ID: <1629257542-36145-7-git-send-email-linyunsheng@huawei.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1629257542-36145-1-git-send-email-linyunsheng@huawei.com>
 References: <1629257542-36145-1-git-send-email-linyunsheng@huawei.com>
@@ -71,145 +71,94 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-As tx recycling is built upon the busy polling infrastructure,
-and busy polling is based on napi_id, so add a api for driver
-to register a page pool to a NAPI instance and api for socket
-layer to retrieve the page pool corresponding to a NAPI.
+Use netif_recyclable_napi_add() to register page pool to
+the NAPI instance, and avoid doing the DMA mapping/unmapping
+when the page is from page pool.
 
 Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
 ---
- include/linux/netdevice.h |  9 +++++++++
- net/core/dev.c            | 34 +++++++++++++++++++++++++++++++---
- 2 files changed, 40 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/hisilicon/hns3/hns3_enet.c | 32 +++++++++++++++----------
+ 1 file changed, 19 insertions(+), 13 deletions(-)
 
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index 2f03cd9..51a1169 100644
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -40,6 +40,7 @@
- #endif
- #include <net/netprio_cgroup.h>
- #include <net/xdp.h>
-+#include <net/page_pool.h>
+diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c b/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
+index fcbeb1f..ab86566 100644
+--- a/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
++++ b/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
+@@ -1689,12 +1689,18 @@ static int hns3_map_and_fill_desc(struct hns3_enet_ring *ring, void *priv,
+ 		return 0;
+ 	} else {
+ 		skb_frag_t *frag = (skb_frag_t *)priv;
++		struct page *page = skb_frag_page(frag);
  
- #include <linux/netdev_features.h>
- #include <linux/neighbour.h>
-@@ -336,6 +337,7 @@ struct napi_struct {
- 	struct hlist_node	napi_hash_node;
- 	unsigned int		napi_id;
- 	struct task_struct	*thread;
-+	struct page_pool        *pp;
- };
+ 		size = skb_frag_size(frag);
+ 		if (!size)
+ 			return 0;
  
- enum {
-@@ -349,6 +351,7 @@ enum {
- 	NAPI_STATE_PREFER_BUSY_POLL,	/* prefer busy-polling over softirq processing*/
- 	NAPI_STATE_THREADED,		/* The poll is performed inside its own thread*/
- 	NAPI_STATE_SCHED_THREADED,	/* Napi is currently scheduled in threaded mode */
-+	NAPI_STATE_RECYCLABLE,          /* Support tx page recycling */
- };
+-		dma = skb_frag_dma_map(dev, frag, 0, size, DMA_TO_DEVICE);
++		if (skb_frag_is_pp(frag) && page->pp->p.dev == dev) {
++			dma = page_pool_get_dma_addr(page) + skb_frag_off(frag);
++			type = DESC_TYPE_PP_FRAG;
++		} else {
++			dma = skb_frag_dma_map(dev, frag, 0, size, DMA_TO_DEVICE);
++		}
+ 	}
  
- enum {
-@@ -362,6 +365,7 @@ enum {
- 	NAPIF_STATE_PREFER_BUSY_POLL	= BIT(NAPI_STATE_PREFER_BUSY_POLL),
- 	NAPIF_STATE_THREADED		= BIT(NAPI_STATE_THREADED),
- 	NAPIF_STATE_SCHED_THREADED	= BIT(NAPI_STATE_SCHED_THREADED),
-+	NAPIF_STATE_RECYCLABLE          = BIT(NAPI_STATE_RECYCLABLE),
- };
+ 	if (unlikely(dma_mapping_error(dev, dma))) {
+@@ -4525,7 +4531,7 @@ static int hns3_nic_init_vector_data(struct hns3_nic_priv *priv)
+ 		ret = hns3_get_vector_ring_chain(tqp_vector,
+ 						 &vector_ring_chain);
+ 		if (ret)
+-			goto map_ring_fail;
++			return ret;
  
- enum gro_result {
-@@ -2473,6 +2477,10 @@ static inline void *netdev_priv(const struct net_device *dev)
- void netif_napi_add(struct net_device *dev, struct napi_struct *napi,
- 		    int (*poll)(struct napi_struct *, int), int weight);
+ 		ret = h->ae_algo->ops->map_ring_to_vector(h,
+ 			tqp_vector->vector_irq, &vector_ring_chain);
+@@ -4533,19 +4539,10 @@ static int hns3_nic_init_vector_data(struct hns3_nic_priv *priv)
+ 		hns3_free_vector_ring_chain(tqp_vector, &vector_ring_chain);
  
-+void netif_recyclable_napi_add(struct net_device *dev, struct napi_struct *napi,
-+			       int (*poll)(struct napi_struct *, int),
-+			       int weight, struct page_pool *pool);
-+
- /**
-  *	netif_tx_napi_add - initialize a NAPI context
-  *	@dev:  network device
-@@ -2997,6 +3005,7 @@ struct net_device *dev_get_by_index(struct net *net, int ifindex);
- struct net_device *__dev_get_by_index(struct net *net, int ifindex);
- struct net_device *dev_get_by_index_rcu(struct net *net, int ifindex);
- struct net_device *dev_get_by_napi_id(unsigned int napi_id);
-+struct page_pool *page_pool_get_by_napi_id(unsigned int napi_id);
- int netdev_get_name(struct net *net, char *name, int ifindex);
- int dev_restart(struct net_device *dev);
- int skb_gro_receive(struct sk_buff *p, struct sk_buff *skb);
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 74fd402..d6b905b 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -935,6 +935,19 @@ struct net_device *dev_get_by_napi_id(unsigned int napi_id)
+ 		if (ret)
+-			goto map_ring_fail;
+-
+-		netif_napi_add(priv->netdev, &tqp_vector->napi,
+-			       hns3_nic_common_poll, NAPI_POLL_WEIGHT);
++			return ret;
+ 	}
+ 
+ 	return 0;
+-
+-map_ring_fail:
+-	while (i--)
+-		netif_napi_del(&priv->tqp_vector[i].napi);
+-
+-	return ret;
  }
- EXPORT_SYMBOL(dev_get_by_napi_id);
  
-+struct page_pool *page_pool_get_by_napi_id(unsigned int napi_id)
-+{
-+	struct napi_struct *napi;
-+	struct page_pool *pp = NULL;
+ static void hns3_nic_init_coal_cfg(struct hns3_nic_priv *priv)
+@@ -4754,7 +4751,7 @@ static void hns3_alloc_page_pool(struct hns3_enet_ring *ring)
+ 				(PAGE_SIZE << hns3_page_order(ring)),
+ 		.nid = dev_to_node(ring_to_dev(ring)),
+ 		.dev = ring_to_dev(ring),
+-		.dma_dir = DMA_FROM_DEVICE,
++		.dma_dir = DMA_BIDIRECTIONAL,
+ 		.offset = 0,
+ 		.max_len = PAGE_SIZE << hns3_page_order(ring),
+ 	};
+@@ -4923,6 +4920,15 @@ int hns3_init_all_ring(struct hns3_nic_priv *priv)
+ 		u64_stats_init(&priv->ring[i].syncp);
+ 	}
+ 
++	for (i = 0; i < priv->vector_num; i++) {
++		struct hns3_enet_tqp_vector *tqp_vector;
 +
-+	napi = napi_by_id(napi_id);
-+	if (napi)
-+		pp = napi->pp;
-+
-+	return pp;
-+}
-+EXPORT_SYMBOL(page_pool_get_by_napi_id);
-+
- /**
-  *	netdev_get_name - get a netdevice name, knowing its ifindex.
-  *	@net: network namespace
-@@ -6757,7 +6770,8 @@ EXPORT_SYMBOL(napi_busy_loop);
- 
- static void napi_hash_add(struct napi_struct *napi)
- {
--	if (test_bit(NAPI_STATE_NO_BUSY_POLL, &napi->state))
-+	if (test_bit(NAPI_STATE_NO_BUSY_POLL, &napi->state) ||
-+	    !test_bit(NAPI_STATE_RECYCLABLE, &napi->state))
- 		return;
- 
- 	spin_lock(&napi_hash_lock);
-@@ -6860,8 +6874,10 @@ int dev_set_threaded(struct net_device *dev, bool threaded)
- }
- EXPORT_SYMBOL(dev_set_threaded);
- 
--void netif_napi_add(struct net_device *dev, struct napi_struct *napi,
--		    int (*poll)(struct napi_struct *, int), int weight)
-+void netif_recyclable_napi_add(struct net_device *dev,
-+			       struct napi_struct *napi,
-+			       int (*poll)(struct napi_struct *, int),
-+			       int weight, struct page_pool *pool)
- {
- 	if (WARN_ON(test_and_set_bit(NAPI_STATE_LISTED, &napi->state)))
- 		return;
-@@ -6886,6 +6902,11 @@ void netif_napi_add(struct net_device *dev, struct napi_struct *napi,
- 	set_bit(NAPI_STATE_SCHED, &napi->state);
- 	set_bit(NAPI_STATE_NPSVC, &napi->state);
- 	list_add_rcu(&napi->dev_list, &dev->napi_list);
-+	if (pool) {
-+		napi->pp = pool;
-+		set_bit(NAPI_STATE_RECYCLABLE, &napi->state);
++		tqp_vector = &priv->tqp_vector[i];
++		netif_recyclable_napi_add(priv->netdev, &tqp_vector->napi,
++					  hns3_nic_common_poll, NAPI_POLL_WEIGHT,
++					  tqp_vector->rx_group.ring->page_pool);
 +	}
 +
- 	napi_hash_add(napi);
- 	/* Create kthread for this napi if dev->threaded is set.
- 	 * Clear dev->threaded if kthread creation failed so that
-@@ -6894,6 +6915,13 @@ void netif_napi_add(struct net_device *dev, struct napi_struct *napi,
- 	if (dev->threaded && napi_kthread_create(napi))
- 		dev->threaded = 0;
- }
-+EXPORT_SYMBOL(netif_recyclable_napi_add);
-+
-+void netif_napi_add(struct net_device *dev, struct napi_struct *napi,
-+		    int (*poll)(struct napi_struct *, int), int weight)
-+{
-+	netif_recyclable_napi_add(dev, napi, poll, weight, NULL);
-+}
- EXPORT_SYMBOL(netif_napi_add);
+ 	return 0;
  
- void napi_disable(struct napi_struct *n)
+ out_when_alloc_ring_memory:
 -- 
 2.7.4
 
