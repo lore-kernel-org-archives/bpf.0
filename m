@@ -7,28 +7,28 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 700F9C4338F
-	for <bpf@archiver.kernel.org>; Wed, 18 Aug 2021 14:21:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E3F8C4338F
+	for <bpf@archiver.kernel.org>; Wed, 18 Aug 2021 14:22:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 51E936102A
-	for <bpf@archiver.kernel.org>; Wed, 18 Aug 2021 14:21:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 08DB060560
+	for <bpf@archiver.kernel.org>; Wed, 18 Aug 2021 14:22:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239595AbhHROWK (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 18 Aug 2021 10:22:10 -0400
-Received: from mga09.intel.com ([134.134.136.24]:35657 "EHLO mga09.intel.com"
+        id S239573AbhHROWl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 18 Aug 2021 10:22:41 -0400
+Received: from mga01.intel.com ([192.55.52.88]:54010 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239783AbhHROUN (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 18 Aug 2021 10:20:13 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10080"; a="216328959"
+        id S239839AbhHROVi (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 18 Aug 2021 10:21:38 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10080"; a="238431231"
 X-IronPort-AV: E=Sophos;i="5.84,330,1620716400"; 
-   d="scan'208";a="216328959"
+   d="scan'208";a="238431231"
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2021 07:15:28 -0700
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2021 07:14:57 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.84,330,1620716400"; 
-   d="scan'208";a="531703825"
+   d="scan'208";a="531703584"
 Received: from ranger.igk.intel.com ([10.102.21.164])
-  by fmsmga002.fm.intel.com with ESMTP; 18 Aug 2021 07:15:20 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 18 Aug 2021 07:14:53 -0700
 From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 To:     intel-wired-lan@lists.osuosl.org
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org, davem@davemloft.net,
@@ -37,9 +37,9 @@ Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org, davem@davemloft.net,
         alexandr.lobakin@intel.com, joamaki@gmail.com, toke@redhat.com,
         brett.creeley@intel.com,
         Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH v6 intel-next 9/9] ice: make use of ice_for_each_* macros
-Date:   Wed, 18 Aug 2021 15:59:16 +0200
-Message-Id: <20210818135916.25007-10-maciej.fijalkowski@intel.com>
+Subject: [PATCH v6 intel-next 4/9] ice: unify xdp_rings accesses
+Date:   Wed, 18 Aug 2021 15:59:11 +0200
+Message-Id: <20210818135916.25007-5-maciej.fijalkowski@intel.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20210818135916.25007-1-maciej.fijalkowski@intel.com>
 References: <20210818135916.25007-1-maciej.fijalkowski@intel.com>
@@ -49,272 +49,64 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Go through the code base and use ice_for_each_* macros.  While at it,
-introduce ice_for_each_xdp_txq() macro that can be used for looping over
-xdp_rings array.
+There has been a long lasting issue of improper xdp_rings indexing for
+XDP_TX and XDP_REDIRECT actions. Given that currently rx_ring->q_index
+is mixed with smp_processor_id(), there could be a situation where Tx
+descriptors are produced onto XDP Tx ring, but tail is never bumped -
+for example pin a particular queue id to non-matching IRQ line.
 
-Commit is not introducing any new functionality.
+Address this problem by ignoring the user ring count setting and always
+initialize the xdp_rings array to be of num_possible_cpus() size. Then,
+always use the smp_processor_id() as an index to xdp_rings array. This
+provides serialization as at given time only a single softirq can run on
+a particular CPU.
 
 Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 ---
- drivers/net/ethernet/intel/ice/ice.h         |  5 ++++-
- drivers/net/ethernet/intel/ice/ice_arfs.c    |  2 +-
- drivers/net/ethernet/intel/ice/ice_dcb_lib.c |  4 ++--
- drivers/net/ethernet/intel/ice/ice_ethtool.c | 10 ++++-----
- drivers/net/ethernet/intel/ice/ice_lib.c     | 22 ++++++++++----------
- drivers/net/ethernet/intel/ice/ice_main.c    | 14 ++++++-------
- 6 files changed, 30 insertions(+), 27 deletions(-)
+ drivers/net/ethernet/intel/ice/ice_lib.c      | 2 +-
+ drivers/net/ethernet/intel/ice/ice_main.c     | 2 +-
+ drivers/net/ethernet/intel/ice/ice_txrx_lib.c | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/ice/ice.h b/drivers/net/ethernet/intel/ice/ice.h
-index 7a489381dbe2..62d00c82cf2d 100644
---- a/drivers/net/ethernet/intel/ice/ice.h
-+++ b/drivers/net/ethernet/intel/ice/ice.h
-@@ -125,10 +125,13 @@
- #define ice_for_each_vsi(pf, i) \
- 	for ((i) = 0; (i) < (pf)->num_alloc_vsi; (i)++)
- 
--/* Macros for each Tx/Rx ring in a VSI */
-+/* Macros for each Tx/Xdp/Rx ring in a VSI */
- #define ice_for_each_txq(vsi, i) \
- 	for ((i) = 0; (i) < (vsi)->num_txq; (i)++)
- 
-+#define ice_for_each_xdp_txq(vsi, i) \
-+	for ((i) = 0; (i) < (vsi)->num_xdp_txq; (i)++)
-+
- #define ice_for_each_rxq(vsi, i) \
- 	for ((i) = 0; (i) < (vsi)->num_rxq; (i)++)
- 
-diff --git a/drivers/net/ethernet/intel/ice/ice_arfs.c b/drivers/net/ethernet/intel/ice/ice_arfs.c
-index 88d98c9e5f91..87f630b73b2b 100644
---- a/drivers/net/ethernet/intel/ice/ice_arfs.c
-+++ b/drivers/net/ethernet/intel/ice/ice_arfs.c
-@@ -614,7 +614,7 @@ int ice_set_cpu_rx_rmap(struct ice_vsi *vsi)
- 		return -EINVAL;
- 
- 	base_idx = vsi->base_vector;
--	for (i = 0; i < vsi->num_q_vectors; i++)
-+	ice_for_each_q_vector(vsi, i)
- 		if (irq_cpu_rmap_add(netdev->rx_cpu_rmap,
- 				     pf->msix_entries[base_idx + i].vector)) {
- 			ice_free_cpu_rx_rmap(vsi);
-diff --git a/drivers/net/ethernet/intel/ice/ice_dcb_lib.c b/drivers/net/ethernet/intel/ice/ice_dcb_lib.c
-index 4366626e0eb4..4284526e9e24 100644
---- a/drivers/net/ethernet/intel/ice/ice_dcb_lib.c
-+++ b/drivers/net/ethernet/intel/ice/ice_dcb_lib.c
-@@ -201,11 +201,11 @@ void ice_vsi_cfg_dcb_rings(struct ice_vsi *vsi)
- 
- 	if (!test_bit(ICE_FLAG_DCB_ENA, vsi->back->flags)) {
- 		/* Reset the TC information */
--		for (i = 0; i < vsi->num_txq; i++) {
-+		ice_for_each_txq(vsi, i) {
- 			tx_ring = vsi->tx_rings[i];
- 			tx_ring->dcb_tc = 0;
- 		}
--		for (i = 0; i < vsi->num_rxq; i++) {
-+		ice_for_each_rxq(vsi, i) {
- 			rx_ring = vsi->rx_rings[i];
- 			rx_ring->dcb_tc = 0;
- 		}
-diff --git a/drivers/net/ethernet/intel/ice/ice_ethtool.c b/drivers/net/ethernet/intel/ice/ice_ethtool.c
-index 746e0faf5501..cf6b1fbef584 100644
---- a/drivers/net/ethernet/intel/ice/ice_ethtool.c
-+++ b/drivers/net/ethernet/intel/ice/ice_ethtool.c
-@@ -2756,12 +2756,12 @@ ice_set_ringparam(struct net_device *netdev, struct ethtool_ringparam *ring)
- 
- 	/* set for the next time the netdev is started */
- 	if (!netif_running(vsi->netdev)) {
--		for (i = 0; i < vsi->alloc_txq; i++)
-+		ice_for_each_alloc_txq(vsi, i)
- 			vsi->tx_rings[i]->count = new_tx_cnt;
--		for (i = 0; i < vsi->alloc_rxq; i++)
-+		ice_for_each_alloc_rxq(vsi, i)
- 			vsi->rx_rings[i]->count = new_rx_cnt;
- 		if (ice_is_xdp_ena_vsi(vsi))
--			for (i = 0; i < vsi->num_xdp_txq; i++)
-+			ice_for_each_xdp_txq(vsi, i)
- 				vsi->xdp_rings[i]->count = new_tx_cnt;
- 		vsi->num_tx_desc = (u16)new_tx_cnt;
- 		vsi->num_rx_desc = (u16)new_rx_cnt;
-@@ -2810,7 +2810,7 @@ ice_set_ringparam(struct net_device *netdev, struct ethtool_ringparam *ring)
- 		goto free_tx;
- 	}
- 
--	for (i = 0; i < vsi->num_xdp_txq; i++) {
-+	ice_for_each_xdp_txq(vsi, i) {
- 		/* clone ring and setup updated count */
- 		xdp_rings[i] = *vsi->xdp_rings[i];
- 		xdp_rings[i].count = new_tx_cnt;
-@@ -2904,7 +2904,7 @@ ice_set_ringparam(struct net_device *netdev, struct ethtool_ringparam *ring)
- 		}
- 
- 		if (xdp_rings) {
--			for (i = 0; i < vsi->num_xdp_txq; i++) {
-+			ice_for_each_xdp_txq(vsi, i) {
- 				ice_free_tx_ring(vsi->xdp_rings[i]);
- 				*vsi->xdp_rings[i] = xdp_rings[i];
- 			}
 diff --git a/drivers/net/ethernet/intel/ice/ice_lib.c b/drivers/net/ethernet/intel/ice/ice_lib.c
-index 61152fc78773..f9f060da3f04 100644
+index ff403d6a5156..d76e34515483 100644
 --- a/drivers/net/ethernet/intel/ice/ice_lib.c
 +++ b/drivers/net/ethernet/intel/ice/ice_lib.c
-@@ -46,12 +46,12 @@ static int ice_vsi_ctrl_all_rx_rings(struct ice_vsi *vsi, bool ena)
- 	int ret = 0;
- 	u16 i;
+@@ -3221,7 +3221,7 @@ int ice_vsi_rebuild(struct ice_vsi *vsi, bool init_vsi)
  
--	for (i = 0; i < vsi->num_rxq; i++)
-+	ice_for_each_rxq(vsi, i)
- 		ice_vsi_ctrl_one_rx_ring(vsi, ena, i, false);
- 
- 	ice_flush(&vsi->back->hw);
- 
--	for (i = 0; i < vsi->num_rxq; i++) {
-+	ice_for_each_rxq(vsi, i) {
- 		ret = ice_vsi_wait_one_rx_ring(vsi, ena, i);
- 		if (ret)
- 			break;
-@@ -639,12 +639,12 @@ static void ice_vsi_put_qs(struct ice_vsi *vsi)
- 
- 	mutex_lock(&pf->avail_q_mutex);
- 
--	for (i = 0; i < vsi->alloc_txq; i++) {
-+	ice_for_each_alloc_txq(vsi, i) {
- 		clear_bit(vsi->txq_map[i], pf->avail_txqs);
- 		vsi->txq_map[i] = ICE_INVAL_Q_INDEX;
- 	}
- 
--	for (i = 0; i < vsi->alloc_rxq; i++) {
-+	ice_for_each_alloc_rxq(vsi, i) {
- 		clear_bit(vsi->rxq_map[i], pf->avail_rxqs);
- 		vsi->rxq_map[i] = ICE_INVAL_Q_INDEX;
- 	}
-@@ -1298,7 +1298,7 @@ static void ice_vsi_clear_rings(struct ice_vsi *vsi)
- 	}
- 
- 	if (vsi->tx_rings) {
--		for (i = 0; i < vsi->alloc_txq; i++) {
-+		ice_for_each_alloc_txq(vsi, i) {
- 			if (vsi->tx_rings[i]) {
- 				kfree_rcu(vsi->tx_rings[i], rcu);
- 				WRITE_ONCE(vsi->tx_rings[i], NULL);
-@@ -1306,7 +1306,7 @@ static void ice_vsi_clear_rings(struct ice_vsi *vsi)
- 		}
- 	}
- 	if (vsi->rx_rings) {
--		for (i = 0; i < vsi->alloc_rxq; i++) {
-+		ice_for_each_alloc_rxq(vsi, i) {
- 			if (vsi->rx_rings[i]) {
- 				kfree_rcu(vsi->rx_rings[i], rcu);
- 				WRITE_ONCE(vsi->rx_rings[i], NULL);
-@@ -1327,7 +1327,7 @@ static int ice_vsi_alloc_rings(struct ice_vsi *vsi)
- 
- 	dev = ice_pf_to_dev(pf);
- 	/* Allocate Tx rings */
--	for (i = 0; i < vsi->alloc_txq; i++) {
-+	ice_for_each_alloc_txq(vsi, i) {
- 		struct ice_tx_ring *ring;
- 
- 		/* allocate with kzalloc(), free with kfree_rcu() */
-@@ -1346,7 +1346,7 @@ static int ice_vsi_alloc_rings(struct ice_vsi *vsi)
- 	}
- 
- 	/* Allocate Rx rings */
--	for (i = 0; i < vsi->alloc_rxq; i++) {
-+	ice_for_each_alloc_rxq(vsi, i) {
- 		struct ice_rx_ring *ring;
- 
- 		/* allocate with kzalloc(), free with kfree_rcu() */
-@@ -1857,7 +1857,7 @@ int ice_vsi_cfg_xdp_txqs(struct ice_vsi *vsi)
- 	if (ret)
- 		return ret;
- 
--	for (i = 0; i < vsi->num_xdp_txq; i++)
-+	ice_for_each_xdp_txq(vsi, i)
- 		vsi->xdp_rings[i]->xsk_pool = ice_tx_xsk_pool(vsi->xdp_rings[i]);
- 
- 	return ret;
-@@ -1955,7 +1955,7 @@ void ice_vsi_cfg_msix(struct ice_vsi *vsi)
- 	u16 txq = 0, rxq = 0;
- 	int i, q;
- 
--	for (i = 0; i < vsi->num_q_vectors; i++) {
-+	ice_for_each_q_vector(vsi, i) {
- 		struct ice_q_vector *q_vector = vsi->q_vectors[i];
- 		u16 reg_idx = q_vector->reg_idx;
- 
-@@ -2646,7 +2646,7 @@ static void ice_vsi_release_msix(struct ice_vsi *vsi)
- 	u32 rxq = 0;
- 	int i, q;
- 
--	for (i = 0; i < vsi->num_q_vectors; i++) {
-+	ice_for_each_q_vector(vsi, i) {
- 		struct ice_q_vector *q_vector = vsi->q_vectors[i];
- 
- 		ice_write_intrl(q_vector, 0);
+ 		ice_vsi_map_rings_to_vectors(vsi);
+ 		if (ice_is_xdp_ena_vsi(vsi)) {
+-			vsi->num_xdp_txq = vsi->alloc_rxq;
++			vsi->num_xdp_txq = num_possible_cpus();
+ 			ret = ice_prepare_xdp_rings(vsi, vsi->xdp_prog);
+ 			if (ret)
+ 				goto err_vectors;
 diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
-index 014762048fcb..59cc7d04ab27 100644
+index 5645b6e95fbe..8dc00a14ef56 100644
 --- a/drivers/net/ethernet/intel/ice/ice_main.c
 +++ b/drivers/net/ethernet/intel/ice/ice_main.c
-@@ -103,7 +103,7 @@ static void ice_check_for_hang_subtask(struct ice_pf *pf)
- 
- 	hw = &vsi->back->hw;
- 
--	for (i = 0; i < vsi->num_txq; i++) {
-+	ice_for_each_txq(vsi, i) {
- 		struct ice_tx_ring *tx_ring = vsi->tx_rings[i];
- 
- 		if (tx_ring && tx_ring->desc) {
-@@ -2433,7 +2433,7 @@ static int ice_xdp_alloc_setup_rings(struct ice_vsi *vsi)
- 	struct ice_tx_desc *tx_desc;
- 	int i, j;
- 
--	for (i = 0; i < vsi->num_xdp_txq; i++) {
-+	ice_for_each_xdp_txq(vsi, i) {
- 		u16 xdp_q_idx = vsi->alloc_txq + i;
- 		struct ice_tx_ring *xdp_ring;
- 
-@@ -2582,7 +2582,7 @@ int ice_prepare_xdp_rings(struct ice_vsi *vsi, struct bpf_prog *prog)
- 
- 	return 0;
- clear_xdp_rings:
--	for (i = 0; i < vsi->num_xdp_txq; i++)
-+	ice_for_each_xdp_txq(vsi, i)
- 		if (vsi->xdp_rings[i]) {
- 			kfree_rcu(vsi->xdp_rings[i], rcu);
- 			vsi->xdp_rings[i] = NULL;
-@@ -2590,7 +2590,7 @@ int ice_prepare_xdp_rings(struct ice_vsi *vsi, struct bpf_prog *prog)
- 
- err_map_xdp:
- 	mutex_lock(&pf->avail_q_mutex);
--	for (i = 0; i < vsi->num_xdp_txq; i++) {
-+	ice_for_each_xdp_txq(vsi, i) {
- 		clear_bit(vsi->txq_map[i + vsi->alloc_txq], pf->avail_txqs);
- 		vsi->txq_map[i + vsi->alloc_txq] = ICE_INVAL_Q_INDEX;
- 	}
-@@ -2635,13 +2635,13 @@ int ice_destroy_xdp_rings(struct ice_vsi *vsi)
- 
- free_qmap:
- 	mutex_lock(&pf->avail_q_mutex);
--	for (i = 0; i < vsi->num_xdp_txq; i++) {
-+	ice_for_each_xdp_txq(vsi, i) {
- 		clear_bit(vsi->txq_map[i + vsi->alloc_txq], pf->avail_txqs);
- 		vsi->txq_map[i + vsi->alloc_txq] = ICE_INVAL_Q_INDEX;
- 	}
- 	mutex_unlock(&pf->avail_q_mutex);
- 
--	for (i = 0; i < vsi->num_xdp_txq; i++)
-+	ice_for_each_xdp_txq(vsi, i)
- 		if (vsi->xdp_rings[i]) {
- 			if (vsi->xdp_rings[i]->desc)
- 				ice_free_tx_ring(vsi->xdp_rings[i]);
-@@ -7131,7 +7131,7 @@ static void ice_tx_timeout(struct net_device *netdev, unsigned int txqueue)
+@@ -2694,7 +2694,7 @@ ice_xdp_setup_prog(struct ice_vsi *vsi, struct bpf_prog *prog,
  	}
  
- 	/* now that we have an index, find the tx_ring struct */
--	for (i = 0; i < vsi->num_txq; i++)
-+	ice_for_each_txq(vsi, i)
- 		if (vsi->tx_rings[i] && vsi->tx_rings[i]->desc)
- 			if (txqueue == vsi->tx_rings[i]->q_index) {
- 				tx_ring = vsi->tx_rings[i];
+ 	if (!ice_is_xdp_ena_vsi(vsi) && prog) {
+-		vsi->num_xdp_txq = vsi->alloc_rxq;
++		vsi->num_xdp_txq = num_possible_cpus();
+ 		xdp_ring_err = ice_prepare_xdp_rings(vsi, prog);
+ 		if (xdp_ring_err)
+ 			NL_SET_ERR_MSG_MOD(extack, "Setting up XDP Tx resources failed");
+diff --git a/drivers/net/ethernet/intel/ice/ice_txrx_lib.c b/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
+index d6d71f82142f..bc64610df7cb 100644
+--- a/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
++++ b/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
+@@ -297,7 +297,7 @@ void ice_finalize_xdp_rx(struct ice_rx_ring *rx_ring, unsigned int xdp_res)
+ 
+ 	if (xdp_res & ICE_XDP_TX) {
+ 		struct ice_tx_ring *xdp_ring =
+-			rx_ring->vsi->xdp_rings[rx_ring->q_index];
++			rx_ring->vsi->xdp_rings[smp_processor_id()];
+ 
+ 		ice_xdp_ring_update_tail(xdp_ring);
+ 	}
 -- 
 2.20.1
 
