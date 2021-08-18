@@ -2,111 +2,126 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E3F8C4338F
-	for <bpf@archiver.kernel.org>; Wed, 18 Aug 2021 14:22:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C464C4320E
+	for <bpf@archiver.kernel.org>; Wed, 18 Aug 2021 15:13:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 08DB060560
-	for <bpf@archiver.kernel.org>; Wed, 18 Aug 2021 14:22:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 506006104F
+	for <bpf@archiver.kernel.org>; Wed, 18 Aug 2021 15:13:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239573AbhHROWl (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 18 Aug 2021 10:22:41 -0400
-Received: from mga01.intel.com ([192.55.52.88]:54010 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239839AbhHROVi (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 18 Aug 2021 10:21:38 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10080"; a="238431231"
-X-IronPort-AV: E=Sophos;i="5.84,330,1620716400"; 
-   d="scan'208";a="238431231"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2021 07:14:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,330,1620716400"; 
-   d="scan'208";a="531703584"
-Received: from ranger.igk.intel.com ([10.102.21.164])
-  by fmsmga002.fm.intel.com with ESMTP; 18 Aug 2021 07:14:53 -0700
-From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     intel-wired-lan@lists.osuosl.org
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org, davem@davemloft.net,
-        anthony.l.nguyen@intel.com, kuba@kernel.org, bjorn@kernel.org,
-        magnus.karlsson@intel.com, jesse.brandeburg@intel.com,
-        alexandr.lobakin@intel.com, joamaki@gmail.com, toke@redhat.com,
-        brett.creeley@intel.com,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH v6 intel-next 4/9] ice: unify xdp_rings accesses
-Date:   Wed, 18 Aug 2021 15:59:11 +0200
-Message-Id: <20210818135916.25007-5-maciej.fijalkowski@intel.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210818135916.25007-1-maciej.fijalkowski@intel.com>
-References: <20210818135916.25007-1-maciej.fijalkowski@intel.com>
+        id S239837AbhHRPO3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 18 Aug 2021 11:14:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60956 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239811AbhHRPO3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 18 Aug 2021 11:14:29 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48075C0617AD;
+        Wed, 18 Aug 2021 08:13:54 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id l24so1811273qtj.4;
+        Wed, 18 Aug 2021 08:13:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PVCKykayEvXKVpNVfN4++L+SwCZYLayULNX7RQmbrok=;
+        b=oFN+Xg1BFqxHLaDXI3RvACmAAxzJAWNUJUkVNGUIDUmWy14DvyzCtds/hhqC+jda65
+         2MueVwL4IHg0PXBYigkmQeCoNSsf6dUAKz6SMpI34QIaeBx1qZ6lv33HkYM50f1fwrFd
+         UcfkVwkiLopgPONHy9CR+FlWTDtctU9HM6b03V1vGtcqcEsXLO7NlDgA+r2kjtQjLTY6
+         2i+yfbdllkzoBfNDBZuKn1Zb7Pi3JQ5WETID8qnVBr0ijo5KQIjSvocmqhhJNQ6+uluP
+         9mfpO45OF7WrDpxakuQdTfH3FNJUoNmzFnP9OS/KFoJ4FcgzpEWbGgl89pY0mCt4A1Ko
+         OgjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PVCKykayEvXKVpNVfN4++L+SwCZYLayULNX7RQmbrok=;
+        b=F2ImFBd65ngwtGnydXZbGOFiWG93oRbD3hNp2eEeKSo/IDMthtKH5YIPung+lmNLJM
+         /ECDH9NwBEZAywVaby5/Iplhpv6vkRQg7uT9s7NNnYQdjsvhFU9+VSw5gpLhYmqbbokC
+         ItHqbWXdY+xtAUggy+l/cT/ug4f558UWNMz0ks8nm9eXQRoq2SCnJniwlu55KlaJc8Zj
+         qtqQ8SUaFOBOsz51G6svgGUR5w1dh6DNdb0uHSSwB18BbtwoL55xmwfFCLq8ePunj/rL
+         TQx6guem45/UPaH4iuwLUuMOJetQbafx5FoQCOotViFug0X6ED761s5aVSEpzCG0wkEY
+         tdwg==
+X-Gm-Message-State: AOAM532FRiTCciM5CQDGLKze3csb0o9VqFzstRB+Y8/15S9nGcORCZkK
+        g8KZKU3ee8fBDPb6x2Se8q8=
+X-Google-Smtp-Source: ABdhPJyUdBH95XtiwZdV00IvNbeDrREQM77UQzy9t2JMppv6Pw/P7HvQn2y6HP/KedPEVWLuTgVjiA==
+X-Received: by 2002:ac8:53d6:: with SMTP id c22mr1287772qtq.38.1629299633413;
+        Wed, 18 Aug 2021 08:13:53 -0700 (PDT)
+Received: from localhost.localdomain (cpe-104-162-105-43.nyc.res.rr.com. [104.162.105.43])
+        by smtp.gmail.com with ESMTPSA id g12sm111556qtq.92.2021.08.18.08.13.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Aug 2021 08:13:52 -0700 (PDT)
+From:   grantseltzer <grantseltzer@gmail.com>
+To:     andrii@kernel.org
+Cc:     bpf@vger.kernel.org, corbet@lwn.net, linux-doc@vger.kernel.org,
+        grantseltzer@gmail.com
+Subject: [PATCH] Rename libbpf documentation index file
+Date:   Wed, 18 Aug 2021 11:13:13 -0400
+Message-Id: <20210818151313.49992-1-grantseltzer@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-There has been a long lasting issue of improper xdp_rings indexing for
-XDP_TX and XDP_REDIRECT actions. Given that currently rx_ring->q_index
-is mixed with smp_processor_id(), there could be a situation where Tx
-descriptors are produced onto XDP Tx ring, but tail is never bumped -
-for example pin a particular queue id to non-matching IRQ line.
+From: Grant Seltzer <grantseltzer@gmail.com>
 
-Address this problem by ignoring the user ring count setting and always
-initialize the xdp_rings array to be of num_possible_cpus() size. Then,
-always use the smp_processor_id() as an index to xdp_rings array. This
-provides serialization as at given time only a single softirq can run on
-a particular CPU.
+This patch renames a documentation libbpf.rst to index.rst. In order
+for readthedocs to pick this file up and properly build the
+documentation site.
 
-Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+It also changes the title type of the ABI subsection in the
+naming convention doc. This is so that readthedocs doesn't treat this
+section as a seperate document.
+
+Signed-off-by: Grant Seltzer <grantseltzer@gmail.com>
 ---
- drivers/net/ethernet/intel/ice/ice_lib.c      | 2 +-
- drivers/net/ethernet/intel/ice/ice_main.c     | 2 +-
- drivers/net/ethernet/intel/ice/ice_txrx_lib.c | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ Documentation/bpf/libbpf/{libbpf.rst => index.rst}    | 8 ++++++++
+ Documentation/bpf/libbpf/libbpf_naming_convention.rst | 2 +-
+ 2 files changed, 9 insertions(+), 1 deletion(-)
+ rename Documentation/bpf/libbpf/{libbpf.rst => index.rst} (75%)
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_lib.c b/drivers/net/ethernet/intel/ice/ice_lib.c
-index ff403d6a5156..d76e34515483 100644
---- a/drivers/net/ethernet/intel/ice/ice_lib.c
-+++ b/drivers/net/ethernet/intel/ice/ice_lib.c
-@@ -3221,7 +3221,7 @@ int ice_vsi_rebuild(struct ice_vsi *vsi, bool init_vsi)
+diff --git a/Documentation/bpf/libbpf/libbpf.rst b/Documentation/bpf/libbpf/index.rst
+similarity index 75%
+rename from Documentation/bpf/libbpf/libbpf.rst
+rename to Documentation/bpf/libbpf/index.rst
+index 1b1e61d5ead1..4f8adfc3ab83 100644
+--- a/Documentation/bpf/libbpf/libbpf.rst
++++ b/Documentation/bpf/libbpf/index.rst
+@@ -3,6 +3,14 @@
+ libbpf
+ ======
  
- 		ice_vsi_map_rings_to_vectors(vsi);
- 		if (ice_is_xdp_ena_vsi(vsi)) {
--			vsi->num_xdp_txq = vsi->alloc_rxq;
-+			vsi->num_xdp_txq = num_possible_cpus();
- 			ret = ice_prepare_xdp_rings(vsi, vsi->xdp_prog);
- 			if (ret)
- 				goto err_vectors;
-diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
-index 5645b6e95fbe..8dc00a14ef56 100644
---- a/drivers/net/ethernet/intel/ice/ice_main.c
-+++ b/drivers/net/ethernet/intel/ice/ice_main.c
-@@ -2694,7 +2694,7 @@ ice_xdp_setup_prog(struct ice_vsi *vsi, struct bpf_prog *prog,
- 	}
++For API documentation see the `versioned API documentation site <https://libbpf.readthedocs.io/en/latest/api.html>`_.
++
++.. toctree::
++   :maxdepth: 1
++
++   libbpf_naming_convention
++   libbpf_build
++
+ This is documentation for libbpf, a userspace library for loading and
+ interacting with bpf programs.
  
- 	if (!ice_is_xdp_ena_vsi(vsi) && prog) {
--		vsi->num_xdp_txq = vsi->alloc_rxq;
-+		vsi->num_xdp_txq = num_possible_cpus();
- 		xdp_ring_err = ice_prepare_xdp_rings(vsi, prog);
- 		if (xdp_ring_err)
- 			NL_SET_ERR_MSG_MOD(extack, "Setting up XDP Tx resources failed");
-diff --git a/drivers/net/ethernet/intel/ice/ice_txrx_lib.c b/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
-index d6d71f82142f..bc64610df7cb 100644
---- a/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
-+++ b/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
-@@ -297,7 +297,7 @@ void ice_finalize_xdp_rx(struct ice_rx_ring *rx_ring, unsigned int xdp_res)
+diff --git a/Documentation/bpf/libbpf/libbpf_naming_convention.rst b/Documentation/bpf/libbpf/libbpf_naming_convention.rst
+index 6bf9c5ac7576..9c68d5014ff1 100644
+--- a/Documentation/bpf/libbpf/libbpf_naming_convention.rst
++++ b/Documentation/bpf/libbpf/libbpf_naming_convention.rst
+@@ -69,7 +69,7 @@ functions. These can be mixed and matched. Note that these functions
+ are not reentrant for performance reasons.
  
- 	if (xdp_res & ICE_XDP_TX) {
- 		struct ice_tx_ring *xdp_ring =
--			rx_ring->vsi->xdp_rings[rx_ring->q_index];
-+			rx_ring->vsi->xdp_rings[smp_processor_id()];
+ ABI
+-==========
++---
  
- 		ice_xdp_ring_update_tail(xdp_ring);
- 	}
+ libbpf can be both linked statically or used as DSO. To avoid possible
+ conflicts with other libraries an application is linked with, all
 -- 
-2.20.1
+2.31.1
 
