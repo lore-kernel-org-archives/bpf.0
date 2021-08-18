@@ -2,204 +2,224 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E5A5C4338F
-	for <bpf@archiver.kernel.org>; Wed, 18 Aug 2021 03:34:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A60FCC19F37
+	for <bpf@archiver.kernel.org>; Wed, 18 Aug 2021 06:05:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 51DC4610C9
-	for <bpf@archiver.kernel.org>; Wed, 18 Aug 2021 03:34:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7E82E610F8
+	for <bpf@archiver.kernel.org>; Wed, 18 Aug 2021 06:05:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237594AbhHRDee (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 17 Aug 2021 23:34:34 -0400
-Received: from szxga02-in.huawei.com ([45.249.212.188]:8873 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236287AbhHRDeX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 17 Aug 2021 23:34:23 -0400
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4GqD0n1Tyjz8sZd;
-        Wed, 18 Aug 2021 11:29:45 +0800 (CST)
-Received: from dggpemm500005.china.huawei.com (7.185.36.74) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Wed, 18 Aug 2021 11:33:27 +0800
-Received: from localhost.localdomain (10.69.192.56) by
- dggpemm500005.china.huawei.com (7.185.36.74) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Wed, 18 Aug 2021 11:33:27 +0800
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-To:     <davem@davemloft.net>, <kuba@kernel.org>
-CC:     <alexander.duyck@gmail.com>, <linux@armlinux.org.uk>,
-        <mw@semihalf.com>, <linuxarm@openeuler.org>,
-        <yisen.zhuang@huawei.com>, <salil.mehta@huawei.com>,
-        <thomas.petazzoni@bootlin.com>, <hawk@kernel.org>,
-        <ilias.apalodimas@linaro.org>, <ast@kernel.org>,
-        <daniel@iogearbox.net>, <john.fastabend@gmail.com>,
-        <akpm@linux-foundation.org>, <peterz@infradead.org>,
-        <will@kernel.org>, <willy@infradead.org>, <vbabka@suse.cz>,
-        <fenghua.yu@intel.com>, <guro@fb.com>, <peterx@redhat.com>,
-        <feng.tang@intel.com>, <jgg@ziepe.ca>, <mcroce@microsoft.com>,
-        <hughd@google.com>, <jonathan.lemon@gmail.com>, <alobakin@pm.me>,
-        <willemb@google.com>, <wenxu@ucloud.cn>, <cong.wang@bytedance.com>,
-        <haokexin@gmail.com>, <nogikh@google.com>, <elver@google.com>,
-        <yhs@fb.com>, <kpsingh@kernel.org>, <andrii@kernel.org>,
-        <kafai@fb.com>, <songliubraving@fb.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <chenhao288@hisilicon.com>, <edumazet@google.com>,
-        <yoshfuji@linux-ipv6.org>, <dsahern@kernel.org>,
-        <memxor@gmail.com>, <linux@rempel-privat.de>, <atenart@kernel.org>,
-        <weiwan@google.com>, <ap420073@gmail.com>, <arnd@arndb.de>,
-        <mathew.j.martineau@linux.intel.com>, <aahringo@redhat.com>,
-        <ceggers@arri.de>, <yangbo.lu@nxp.com>, <fw@strlen.de>,
-        <xiangxia.m.yue@gmail.com>, <linmiaohe@huawei.com>
-Subject: [PATCH RFC 2/7] skbuff: add interface to manipulate frag count for tx recycling
-Date:   Wed, 18 Aug 2021 11:32:18 +0800
-Message-ID: <1629257542-36145-3-git-send-email-linyunsheng@huawei.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1629257542-36145-1-git-send-email-linyunsheng@huawei.com>
-References: <1629257542-36145-1-git-send-email-linyunsheng@huawei.com>
+        id S238135AbhHRGG3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 18 Aug 2021 02:06:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44282 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238049AbhHRGG0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 18 Aug 2021 02:06:26 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB62C0617AF
+        for <bpf@vger.kernel.org>; Tue, 17 Aug 2021 23:05:52 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id e19so1111149pla.10
+        for <bpf@vger.kernel.org>; Tue, 17 Aug 2021 23:05:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=LmJ99teUGdinNbfoKjiCNsrT2KdowhAH1C31uHkGRNA=;
+        b=nM31lfFAOiAjN7A/57oWr+7r1nf5LH0zL9iGjsbjp3MpbJHgmIG6NRCpmLUP7+D6W+
+         t4F04NRBUCS+iw0PDoiIOVzk0Wj2g4cJjNrxxEc89wMxoLS0VW6PpJclNE4E0s/zvA+2
+         GvDDgfCH2tc0Ii1HL7ljlrTlZ3Bbzvg8rF1KM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=LmJ99teUGdinNbfoKjiCNsrT2KdowhAH1C31uHkGRNA=;
+        b=LVF/jNuzBY7BrANyujOwmPnNqbtR0nu4Z9ZTk/i4qUJGeQHs6UmKrrqPAR8/JJyy+l
+         Gq4Jx/efL6ZoghYuhY2MXoxZv8E95M/YEuBfiC8kgkkiPmTWOEKbPoGQPVY74Fohn+bU
+         D+xTtvlkH20m9GH/W/SQeapbCMeu1KjuJe62vQ24VQtW7WAKxKNn8zrhSdHPKQSojiEJ
+         lWURnmPF2d0hW5rsIGWwzdU5yi5sejiWyVO/1W2h6UyIfFiQvCUlioG3cMrGfCvi3cw2
+         cLf7TvATaNIdh2weL0EKr0qOaJ3cKGLaZSoMPX+nFXE0Z+/ODiWSjK/l29zdrH6nHU3T
+         PTnw==
+X-Gm-Message-State: AOAM531zIh3kVB/LfkyhJ+unkWSCLKDE9SWRFTWdNOW5nhUS2MknRcII
+        JuDm591UgZP9of3+troHWz+hnQ==
+X-Google-Smtp-Source: ABdhPJzDDs2K6W8NeBw0p9VKqI2ppEEsxPx6pus3PTR7OTuglNs3DWBYKS4o7QYUFX3kjcJof49Kaw==
+X-Received: by 2002:a17:902:7b83:b029:12c:2758:1d2d with SMTP id w3-20020a1709027b83b029012c27581d2dmr5875382pll.80.1629266751880;
+        Tue, 17 Aug 2021 23:05:51 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id y7sm4717170pfp.102.2021.08.17.23.05.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Aug 2021 23:05:51 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Kees Cook <keescook@chromium.org>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
+        bpf@vger.kernel.org, "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-wireless@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-staging@lists.linux.dev, linux-block@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, clang-built-linux@googlegroups.com,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH v2 02/63] net/mlx5e: Avoid field-overflowing memcpy()
+Date:   Tue, 17 Aug 2021 23:04:32 -0700
+Message-Id: <20210818060533.3569517-3-keescook@chromium.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210818060533.3569517-1-keescook@chromium.org>
+References: <20210818060533.3569517-1-keescook@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.56]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500005.china.huawei.com (7.185.36.74)
-X-CFilter-Loop: Reflected
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5945; h=from:subject; bh=aAhXgOvjd8fFl6HHAOH2dNe1RpxfNiJeVAevXZn1G1s=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBhHKMes55xLZsomlfyqNbHN963vbWsu6lq/7sGdDVv bsZ6eIyJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYRyjHgAKCRCJcvTf3G3AJo6wD/ 9HEoTCQwJMnchXSExxpAugOa3YNMfNCtVVAxBYHvIWOemVW6gZ52KZ44NXt1hlyNky/uGCNGoJuopc JfQ8ClCOcrszDva14x4eDQZ9+KLwHWG9OaszUE83jFKhUfjuQ+sxeI6SxCBY74xBklApWgElkLOxfO 5EPS2Yi8kE85WxMqVEZlH6TZaxefdW3GANZEDH2w1lzj2bQgkpLg/VuTRPPnFj2F9dgZrRPgd04FZE yCShiKYs8Rii3ywLy3heZ5N7WjPIR7h2+D2gLcLgpb/SqpL+foxb0MrIrMlNw62Ovlzr+uUAzTNz6j gIYPvlKL05xZL2/YezlcTEApkB0nSeeZfShLOppBwxAf6Ipn5nVUnLfE2/ffn1WKeC9KhP3C9eEzeh sEE1YOz53a2RRLRUhtUVg88fCBtoOW1jvE87nMQq7Ym8GoF93q2V8ZYApl21Qp6oImjTU+ea9103Gg b0PngB8M2C9QtvT41T73F4XyVE5Trm8EghDfrx7myaE1x+YWCdwfizhG9314y8f5+miPuYaSO/3QHU M/e4LSbUv862bxYjUHhUnaO+OATI+TbGHqX73Yn+5IlG+NTwIc6lK3BmEZ7EzLdA7omPg9jv3grSV8 yvqB6LG7qp48lMGDpxMAeH9Ai7dby8FwWQVL49bwyuRiS9pW3oZhLm+3fh3A==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-As the skb->pp_recycle and page->pp_magic may not be enough
-to track if a frag page is from page pool after the calling
-of __skb_frag_ref(), mostly because of a data race, see:
-commit 2cc3aeb5eccc ("skbuff: Fix a potential race while
-recycling page_pool packets").
+In preparation for FORTIFY_SOURCE performing compile-time and run-time
+field bounds checking for memcpy(), memmove(), and memset(), avoid
+intentionally writing across neighboring fields.
 
-As the case of tcp, there may be fragmenting, coalescing or
-retransmiting case that might lose the track if a frag page
-is from page pool or not.
+Use flexible arrays instead of zero-element arrays (which look like they
+are always overflowing) and split the cross-field memcpy() into two halves
+that can be appropriately bounds-checked by the compiler.
 
-So increment the frag count when __skb_frag_ref() is called,
-and use the bit 0 in frag->bv_page to indicate if a page is
-from a page pool, which automically pass down to another
-frag->bv_page when doing a '*new_frag = *frag' or memcpying
-the shinfo.
+We were doing:
 
-It seems we could do the trick for rx too if it makes sense.
+	#define ETH_HLEN  14
+	#define VLAN_HLEN  4
+	...
+	#define MLX5E_XDP_MIN_INLINE (ETH_HLEN + VLAN_HLEN)
+	...
+        struct mlx5e_tx_wqe      *wqe  = mlx5_wq_cyc_get_wqe(wq, pi);
+	...
+        struct mlx5_wqe_eth_seg  *eseg = &wqe->eth;
+        struct mlx5_wqe_data_seg *dseg = wqe->data;
+	...
+	memcpy(eseg->inline_hdr.start, xdptxd->data, MLX5E_XDP_MIN_INLINE);
 
-Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
+target is wqe->eth.inline_hdr.start (which the compiler sees as being
+2 bytes in size), but copying 18, intending to write across start
+(really vlan_tci, 2 bytes). The remaining 16 bytes get written into
+wqe->data[0], covering byte_count (4 bytes), lkey (4 bytes), and addr
+(8 bytes).
+
+struct mlx5e_tx_wqe {
+        struct mlx5_wqe_ctrl_seg   ctrl;                 /*     0    16 */
+        struct mlx5_wqe_eth_seg    eth;                  /*    16    16 */
+        struct mlx5_wqe_data_seg   data[];               /*    32     0 */
+
+        /* size: 32, cachelines: 1, members: 3 */
+        /* last cacheline: 32 bytes */
+};
+
+struct mlx5_wqe_eth_seg {
+        u8                         swp_outer_l4_offset;  /*     0     1 */
+        u8                         swp_outer_l3_offset;  /*     1     1 */
+        u8                         swp_inner_l4_offset;  /*     2     1 */
+        u8                         swp_inner_l3_offset;  /*     3     1 */
+        u8                         cs_flags;             /*     4     1 */
+        u8                         swp_flags;            /*     5     1 */
+        __be16                     mss;                  /*     6     2 */
+        __be32                     flow_table_metadata;  /*     8     4 */
+        union {
+                struct {
+                        __be16     sz;                   /*    12     2 */
+                        u8         start[2];             /*    14     2 */
+                } inline_hdr;                            /*    12     4 */
+                struct {
+                        __be16     type;                 /*    12     2 */
+                        __be16     vlan_tci;             /*    14     2 */
+                } insert;                                /*    12     4 */
+                __be32             trailer;              /*    12     4 */
+        };                                               /*    12     4 */
+
+        /* size: 16, cachelines: 1, members: 9 */
+        /* last cacheline: 16 bytes */
+};
+
+struct mlx5_wqe_data_seg {
+        __be32                     byte_count;           /*     0     4 */
+        __be32                     lkey;                 /*     4     4 */
+        __be64                     addr;                 /*     8     8 */
+
+        /* size: 16, cachelines: 1, members: 3 */
+        /* last cacheline: 16 bytes */
+};
+
+So, split the memcpy() so the compiler can reason about the buffer
+sizes.
+
+"pahole" shows no size nor member offset changes to struct mlx5e_tx_wqe
+nor struct mlx5e_umr_wqe. "objdump -d" shows no meaningful object
+code changes (i.e. only source line number induced differences and
+optimizations).
+
+Cc: Saeed Mahameed <saeedm@nvidia.com>
+Cc: Leon Romanovsky <leon@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Jesper Dangaard Brouer <hawk@kernel.org>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: netdev@vger.kernel.org
+Cc: linux-rdma@vger.kernel.org
+Cc: bpf@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- include/linux/skbuff.h  | 43 ++++++++++++++++++++++++++++++++++++++++---
- include/net/page_pool.h |  5 +++++
- 2 files changed, 45 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/mellanox/mlx5/core/en.h     | 4 ++--
+ drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c | 4 +++-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index 6bdb0db..2878d26 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -331,6 +331,11 @@ static inline unsigned int skb_frag_size(const skb_frag_t *frag)
- 	return frag->bv_len;
- }
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en.h b/drivers/net/ethernet/mellanox/mlx5/core/en.h
+index 4f6897c1ea8d..8997476c20cc 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en.h
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en.h
+@@ -200,7 +200,7 @@ static inline int mlx5e_get_max_num_channels(struct mlx5_core_dev *mdev)
+ struct mlx5e_tx_wqe {
+ 	struct mlx5_wqe_ctrl_seg ctrl;
+ 	struct mlx5_wqe_eth_seg  eth;
+-	struct mlx5_wqe_data_seg data[0];
++	struct mlx5_wqe_data_seg data[];
+ };
  
-+static inline bool skb_frag_is_pp(const skb_frag_t *frag)
-+{
-+	return (unsigned long)frag->bv_page & 1UL;
-+}
-+
- /**
-  * skb_frag_size_set() - Sets the size of a skb fragment
-  * @frag: skb fragment
-@@ -2190,6 +2195,21 @@ static inline void __skb_fill_page_desc(struct sk_buff *skb, int i,
- 		skb->pfmemalloc	= true;
- }
+ struct mlx5e_rx_wqe_ll {
+@@ -216,7 +216,7 @@ struct mlx5e_umr_wqe {
+ 	struct mlx5_wqe_ctrl_seg       ctrl;
+ 	struct mlx5_wqe_umr_ctrl_seg   uctrl;
+ 	struct mlx5_mkey_seg           mkc;
+-	struct mlx5_mtt                inline_mtts[0];
++	struct mlx5_mtt                inline_mtts[];
+ };
  
-+static inline void __skb_fill_pp_page_desc(struct sk_buff *skb, int i,
-+					   struct page *page, int off,
-+					   int size)
-+{
-+	skb_frag_t *frag = &skb_shinfo(skb)->frags[i];
-+
-+	frag->bv_page = (struct page *)((unsigned long)page | 0x1UL);
-+	frag->bv_offset = off;
-+	skb_frag_size_set(frag, size);
-+
-+	page = compound_head(page);
-+	if (page_is_pfmemalloc(page))
-+		skb->pfmemalloc = true;
-+}
-+
- /**
-  * skb_fill_page_desc - initialise a paged fragment in an skb
-  * @skb: buffer containing fragment to be initialised
-@@ -2211,6 +2231,14 @@ static inline void skb_fill_page_desc(struct sk_buff *skb, int i,
- 	skb_shinfo(skb)->nr_frags = i + 1;
- }
+ extern const char mlx5e_self_tests[][ETH_GSTRING_LEN];
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
+index 2f0df5cc1a2d..efae2444c26f 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
+@@ -341,8 +341,10 @@ mlx5e_xmit_xdp_frame(struct mlx5e_xdpsq *sq, struct mlx5e_xmit_data *xdptxd,
  
-+static inline void skb_fill_pp_page_desc(struct sk_buff *skb, int i,
-+					 struct page *page, int off,
-+					 int size)
-+{
-+	__skb_fill_pp_page_desc(skb, i, page, off, size);
-+	skb_shinfo(skb)->nr_frags = i + 1;
-+}
-+
- void skb_add_rx_frag(struct sk_buff *skb, int i, struct page *page, int off,
- 		     int size, unsigned int truesize);
- 
-@@ -3062,7 +3090,10 @@ static inline void skb_frag_off_copy(skb_frag_t *fragto,
-  */
- static inline struct page *skb_frag_page(const skb_frag_t *frag)
- {
--	return frag->bv_page;
-+	unsigned long page = (unsigned long)frag->bv_page;
-+
-+	page &= ~1UL;
-+	return (struct page *)page;
- }
- 
- /**
-@@ -3073,7 +3104,12 @@ static inline struct page *skb_frag_page(const skb_frag_t *frag)
-  */
- static inline void __skb_frag_ref(skb_frag_t *frag)
- {
--	get_page(skb_frag_page(frag));
-+	struct page *page = skb_frag_page(frag);
-+
-+	if (skb_frag_is_pp(frag))
-+		page_pool_atomic_inc_frag_count(page);
-+	else
-+		get_page(page);
- }
- 
- /**
-@@ -3101,7 +3137,8 @@ static inline void __skb_frag_unref(skb_frag_t *frag, bool recycle)
- 	struct page *page = skb_frag_page(frag);
- 
- #ifdef CONFIG_PAGE_POOL
--	if (recycle && page_pool_return_skb_page(page))
-+	if ((recycle || skb_frag_is_pp(frag)) &&
-+	    page_pool_return_skb_page(page))
- 		return;
- #endif
- 	put_page(page);
-diff --git a/include/net/page_pool.h b/include/net/page_pool.h
-index 8d4ae4b..86babb2 100644
---- a/include/net/page_pool.h
-+++ b/include/net/page_pool.h
-@@ -270,6 +270,11 @@ static inline long page_pool_atomic_sub_frag_count_return(struct page *page,
- 	return ret;
- }
- 
-+static void page_pool_atomic_inc_frag_count(struct page *page)
-+{
-+	atomic_long_inc(&page->pp_frag_count);
-+}
-+
- static inline bool is_page_pool_compiled_in(void)
- {
- #ifdef CONFIG_PAGE_POOL
+ 	/* copy the inline part if required */
+ 	if (sq->min_inline_mode != MLX5_INLINE_MODE_NONE) {
+-		memcpy(eseg->inline_hdr.start, xdptxd->data, MLX5E_XDP_MIN_INLINE);
++		memcpy(eseg->inline_hdr.start, xdptxd->data, sizeof(eseg->inline_hdr.start));
+ 		eseg->inline_hdr.sz = cpu_to_be16(MLX5E_XDP_MIN_INLINE);
++		memcpy(dseg, xdptxd->data + sizeof(eseg->inline_hdr.start),
++		       MLX5E_XDP_MIN_INLINE - sizeof(eseg->inline_hdr.start));
+ 		dma_len  -= MLX5E_XDP_MIN_INLINE;
+ 		dma_addr += MLX5E_XDP_MIN_INLINE;
+ 		dseg++;
 -- 
-2.7.4
+2.30.2
 
