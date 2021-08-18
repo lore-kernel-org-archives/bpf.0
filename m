@@ -2,94 +2,82 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 17EACC4338F
-	for <bpf@archiver.kernel.org>; Wed, 18 Aug 2021 22:24:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BACD8C4338F
+	for <bpf@archiver.kernel.org>; Wed, 18 Aug 2021 22:40:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EBE4F6101A
-	for <bpf@archiver.kernel.org>; Wed, 18 Aug 2021 22:24:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8F9BB6108F
+	for <bpf@archiver.kernel.org>; Wed, 18 Aug 2021 22:40:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234106AbhHRWZT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 18 Aug 2021 18:25:19 -0400
-Received: from www62.your-server.de ([213.133.104.62]:57914 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232456AbhHRWZS (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 18 Aug 2021 18:25:18 -0400
-Received: from sslproxy06.your-server.de ([78.46.172.3])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1mGTzG-000657-Ck; Thu, 19 Aug 2021 00:24:42 +0200
-Received: from [85.5.47.65] (helo=linux.home)
-        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1mGTzG-0000BQ-75; Thu, 19 Aug 2021 00:24:42 +0200
-Subject: Re: [PATCH bpf-next v2 2/2] bpf: use kvmalloc for map keys in
- syscalls
-To:     Stanislav Fomichev <sdf@google.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Cc:     ast@kernel.org, andrii@kernel.org
-References: <20210817154556.92901-1-sdf@google.com>
- <20210817154556.92901-2-sdf@google.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <afd42427-f424-5f0d-360c-5fcdfc078704@iogearbox.net>
-Date:   Thu, 19 Aug 2021 00:24:41 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S234246AbhHRWkl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 18 Aug 2021 18:40:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55292 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232456AbhHRWkl (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 18 Aug 2021 18:40:41 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 33D0A6108B;
+        Wed, 18 Aug 2021 22:40:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1629326406;
+        bh=rpH07toMkyUa4SU29qgQ5rbYk0DjTSEbT1X0U1mDRts=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=OHGUzGE+sxlmXXSLaAXwOxb2wkIbkJQ2z/+CaZIEsIlTQdy+UJzWM57jutW8qml76
+         aHmHJVnelqICzA3oNQhTRzC88YDd5IdQLhcC8xC1csQdquKKvSnyUu+BY8w0T7jLGf
+         ZYULqcvzwcQI2wqXllEvoaszLgas8TckLsXqgZZ2V2nvv17/WPei2Guv5nwgd4Uj4X
+         zxZs/jPTGm5hPMSrNWAPdMeY81IrguyKs0kMd1dP+7r12u7igISFwdAzb2+x6e7Zsw
+         93usWvfFnsxhXQHIfMw8tmINLEUszmlGTCr6RF+VKcxagD+Uhk20VWbkoO+WcwjxOO
+         LH8TZZSs/dMmA==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <20210817154556.92901-2-sdf@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.2/26267/Wed Aug 18 10:21:27 2021)
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v2 0/2] bpf: Allow bpf_get_netns_cookie in
+ BPF_PROG_TYPE_SOCK_OPS
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <162932640615.7744.7394691791287169298.git-patchwork-notify@kernel.org>
+Date:   Wed, 18 Aug 2021 22:40:06 +0000
+References: <20210818105820.91894-1-liuxu623@gmail.com>
+In-Reply-To: <20210818105820.91894-1-liuxu623@gmail.com>
+To:     Xu Liu <liuxu623@gmail.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 8/17/21 5:45 PM, Stanislav Fomichev wrote:
-> Same as previous patch but for the keys. memdup_bpfptr is renamed
-> to vmemdup_bpfptr (and converted to kvmalloc).
+Hello:
+
+This series was applied to bpf/bpf-next.git (refs/heads/master):
+
+On Wed, 18 Aug 2021 18:58:18 +0800 you wrote:
+> v2: Added selftests
 > 
-> Signed-off-by: Stanislav Fomichev <sdf@google.com>
-> ---
->   include/linux/bpfptr.h | 12 ++++++++++--
->   kernel/bpf/syscall.c   | 34 +++++++++++++++++-----------------
->   2 files changed, 27 insertions(+), 19 deletions(-)
+> Xu Liu (2):
+>   bpf: Allow bpf_get_netns_cookie in BPF_PROG_TYPE_SOCK_OPS
+>   selftests/bpf: Test for get_netns_cookie
 > 
-> diff --git a/include/linux/bpfptr.h b/include/linux/bpfptr.h
-> index 5cdeab497cb3..84eeffb4316a 100644
-> --- a/include/linux/bpfptr.h
-> +++ b/include/linux/bpfptr.h
-> @@ -62,9 +62,17 @@ static inline int copy_to_bpfptr_offset(bpfptr_t dst, size_t offset,
->   	return copy_to_sockptr_offset((sockptr_t) dst, offset, src, size);
->   }
->   
-> -static inline void *memdup_bpfptr(bpfptr_t src, size_t len)
-> +static inline void *vmemdup_bpfptr(bpfptr_t src, size_t len)
+>  net/core/filter.c                             | 14 +++++
+>  .../selftests/bpf/prog_tests/netns_cookie.c   | 61 +++++++++++++++++++
+>  .../selftests/bpf/progs/netns_cookie_prog.c   | 39 ++++++++++++
+>  3 files changed, 114 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/netns_cookie.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/netns_cookie_prog.c
 
-nit: should we just name it kvmemdup_bpfptr() in that case?
+Here is the summary with links:
+  - [bpf-next,v2,1/2] bpf: Allow bpf_get_netns_cookie in BPF_PROG_TYPE_SOCK_OPS
+    https://git.kernel.org/bpf/bpf-next/c/6cf1770d63dd
+  - [bpf-next,v2,2/2] selftests/bpf: Test for get_netns_cookie
+    https://git.kernel.org/bpf/bpf-next/c/374e74de9631
 
->   {
-> -	return memdup_sockptr((sockptr_t) src, len);
-> +	void *p = kvmalloc(len, GFP_USER | __GFP_NOWARN);
-> +
-> +	if (!p)
-> +		return ERR_PTR(-ENOMEM);
-> +	if (copy_from_sockptr(p, (sockptr_t) src, len)) {
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Also, I think this one should rather use copy_from_bpfptr() here.
 
-> +		kvfree(p);
-> +		return ERR_PTR(-EFAULT);
-> +	}
-> +	return p;
->   }
->   
-
-Rest lgtm, thanks!
