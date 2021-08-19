@@ -2,109 +2,88 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-21.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25A6CC4338F
-	for <bpf@archiver.kernel.org>; Thu, 19 Aug 2021 14:10:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 25B9DC4338F
+	for <bpf@archiver.kernel.org>; Thu, 19 Aug 2021 14:49:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0F61D6113E
-	for <bpf@archiver.kernel.org>; Thu, 19 Aug 2021 14:10:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 098F761151
+	for <bpf@archiver.kernel.org>; Thu, 19 Aug 2021 14:49:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240553AbhHSOL3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 19 Aug 2021 10:11:29 -0400
-Received: from mout.perfora.net ([74.208.4.197]:44675 "EHLO mout.perfora.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240521AbhHSOL2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 19 Aug 2021 10:11:28 -0400
-Received: from toolbox.cardiotech.int ([81.221.236.183]) by mrelay.perfora.net
- (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0M7ZR3-1n1pE204ut-00xMEi;
- Thu, 19 Aug 2021 16:03:57 +0200
-From:   Marcel Ziswiler <marcel@ziswiler.com>
-To:     linux-arm-kernel@lists.infradead.org
-List-Id: <soc.lore.kernel.org>
-Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Anson Huang <Anson.Huang@nxp.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Fabio Estevam <festevam@gmail.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Marek Vasut <marex@denx.de>,
-        Martin KaFai Lau <kafai@fb.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Olof Johansson <olof@lixom.net>,
-        Otavio Salvador <otavio@ossystems.com.br>,
-        Pascal Zimmermann <pzimmermann@dh-electronics.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        bpf@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        soc@kernel.org
-Subject: [PATCH v1 0/7] ARM: prepare and add colibri imx6ull 1gb (emmc) support
-Date:   Thu, 19 Aug 2021 16:03:38 +0200
-Message-Id: <20210819140345.357167-1-marcel@ziswiler.com>
-X-Mailer: git-send-email 2.26.2
+        id S231956AbhHSOtn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 19 Aug 2021 10:49:43 -0400
+Received: from www62.your-server.de ([213.133.104.62]:56620 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238634AbhHSOtn (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 19 Aug 2021 10:49:43 -0400
+Received: from 65.47.5.85.dynamic.wline.res.cust.swisscom.ch ([85.5.47.65] helo=localhost)
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1mGjLs-000Dc7-Kv; Thu, 19 Aug 2021 16:49:04 +0200
+From:   Daniel Borkmann <daniel@iogearbox.net>
+To:     davem@davemloft.net
+Cc:     kuba@kernel.org, daniel@iogearbox.net, ast@kernel.org,
+        andrii@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: pull-request: bpf 2021-08-19
+Date:   Thu, 19 Aug 2021 16:49:04 +0200
+Message-Id: <20210819144904.20069-1-daniel@iogearbox.net>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:lx5GBGXPRAQ1C2RGAY9/BxYJ6AKfNJ32vg25PpQG17n/6Pk2u7J
- j0IrCvlaDcncp28bcdtMZIR/DwKQVvCWFr7vbql1AglQzGyZwh9oLK0G32II0gQxXr+KoEO
- YlarmDCsgoaZn3VKxmD9TDVL/XOw4pV+gxmsZRPGcCYDGOQ0+6A7pOHxAyDkALGxGqTawBq
- oh5ehsLsIEqorCggir/4w==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:mXrkhIbGR/4=:gpDAe+MQG0MDnf7deXR+2t
- 50k/pRMfwSbbCVF3rQ8KSgb2oiLAWFxxF0yRiDYgeSp+ihHCHZhhWr8NjKdwvxrCh6k0f9VLd
- 4d2aZhyOMaylPR54zmWrUt23uyoXmiI1I76kJNPnWZ/NwyqngR4f8Urs+E3cCcxEZuu8RWHxq
- nypxv1ZoN2O0ZlCHDDIXC0Obf4+f3f9BoE+eyxPAIlnjvIgEUFV/gP2cCMA3m2amoz2FuhB8O
- qhmx5sguQQKM6Kw5ylbfCwywvdob1KFO5HjQDnipXTkPzopfjO2bnXe3pEs7slv92ujdzcQPT
- maelNVPHwZfKJ0YBWd/c2nu9+MkTyqPFOXJim1tsbfaNbNqJLUyDog8Koxf26b5xfngwYsBTg
- Tx6mWtXmIfMWqVD5DBWdgH3HYIZpCrCgwqK7E9A+I0YkIRaqqz3kRzokp1DkMp9BlE9atzmgc
- i3JIfTx0V2x/FzsHaE8+FSKN/JW6iAouhD08/mfY5ZqB8ZaW3uBFvl568dfdwC/ir0cLd+/gV
- Ie5L51CmbQN7zIExKIyZI1PO5s9RLJaY8nMIS5+H3dAUU278IrRVdTBGO7G6h9OKph9G/ZO09
- 2pjibwWSkHVbFwk7X3qfoE4AaKGNycwJlNR5vcoS4ZwnsqH9U8tPEFIUsnqIjitI8HbLUsiwQ
- ia10gA8i694SeE57Fjl2mxoKoQB2O13X1prDynb5X1xOcDW1pd18rSBXexy88JutsAV/m2D5S
- vJf4CJ3E9g85Bk+mafOXD/KXsBKlO8Bobv4zgAUdc7AbzlblszZSXERlSS9fkNEqIUSN8okRb
- F2N3lum8AWVz3fNSd1g4mHWrJVZeLPd+CsTXQJ57/+/J4npsRKHZJrsSsGUUDIbGTd+sscT
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.2/26268/Thu Aug 19 10:20:50 2021)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Hi David, hi Jakub,
 
+The following pull-request contains BPF updates for your *net* tree.
 
-Clean-up imx_v6_v7_defconfig and then add support for the new Colibri
-iMX6ULL 1GB (eMMC) which builds on the success of the existing Colibri
-iMX6ULL SKUs using raw NAND but replaces this by more RAM (1 GB) and an
-eMMC (4 GB).
+We've added 3 non-merge commits during the last 3 day(s) which contain
+a total of 3 files changed, 29 insertions(+), 6 deletions(-).
 
+The main changes are:
 
-Marcel Ziswiler (6):
-  ARM: imx_v6_v7_defconfig: enable mtd physmap
-  ARM: imx_v6_v7_defconfig: enable fb
-  ARM: imx_v6_v7_defconfig: change snd soc tlv320aic3x to i2c variant
-  ARM: imx_v6_v7_defconfig: rebuild default configuration
-  ARM: imx_v6_v7_defconfig: build imx sdma driver as module
-  ARM: imx_v6_v7_defconfig: enable bpf syscall and cgroup bpf
+1) Fix to clear zext_dst for dead instructions which was causing invalid program
+   rejections on JITs with bpf_jit_needs_zext such as s390x, from Ilya Leoshkevich.
 
-Max Krummenacher (1):
-  ARM: dts: colibri-imx6ull-emmc: add device trees
+2) Fix RCU splat in bpf_get_current_{ancestor_,}cgroup_id() helpers when they are
+   invoked from sleepable programs, from Yonghong Song.
 
- arch/arm/boot/dts/Makefile                    |   1 +
- .../boot/dts/imx6ull-colibri-emmc-eval-v3.dts |  17 ++
- .../dts/imx6ull-colibri-emmc-nonwifi.dtsi     | 185 ++++++++++++++++++
- arch/arm/boot/dts/imx6ull-colibri.dtsi        |  30 ++-
- arch/arm/configs/imx_v6_v7_defconfig          |  46 ++---
- 5 files changed, 249 insertions(+), 30 deletions(-)
- create mode 100644 arch/arm/boot/dts/imx6ull-colibri-emmc-eval-v3.dts
- create mode 100644 arch/arm/boot/dts/imx6ull-colibri-emmc-nonwifi.dtsi
+Please consider pulling these changes from:
 
--- 
-2.26.2
+  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
 
+Thanks a lot!
+
+----------------------------------------------------------------
+
+The following changes since commit 519133debcc19f5c834e7e28480b60bdc234fe02:
+
+  net: bridge: fix memleak in br_add_if() (2021-08-10 13:25:14 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git 
+
+for you to fetch changes up to 3776f3517ed94d40ff0e3851d7ce2ce17b63099f:
+
+  selftests, bpf: Test that dead ldx_w insns are accepted (2021-08-13 17:46:26 +0200)
+
+----------------------------------------------------------------
+Ilya Leoshkevich (2):
+      bpf: Clear zext_dst of dead insns
+      selftests, bpf: Test that dead ldx_w insns are accepted
+
+Yonghong Song (1):
+      bpf: Add rcu_read_lock in bpf_get_current_[ancestor_]cgroup_id() helpers
+
+ kernel/bpf/helpers.c                             | 22 ++++++++++++++++------
+ kernel/bpf/verifier.c                            |  1 +
+ tools/testing/selftests/bpf/verifier/dead_code.c | 12 ++++++++++++
+ 3 files changed, 29 insertions(+), 6 deletions(-)
