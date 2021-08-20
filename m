@@ -2,40 +2,41 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39634C4320A
-	for <bpf@archiver.kernel.org>; Fri, 20 Aug 2021 01:58:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 09AA1C4320A
+	for <bpf@archiver.kernel.org>; Fri, 20 Aug 2021 01:58:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1C159610A1
-	for <bpf@archiver.kernel.org>; Fri, 20 Aug 2021 01:58:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E7256610E5
+	for <bpf@archiver.kernel.org>; Fri, 20 Aug 2021 01:58:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235004AbhHTB7P (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 19 Aug 2021 21:59:15 -0400
-Received: from mail.cn.fujitsu.com ([183.91.158.132]:41738 "EHLO
+        id S234982AbhHTB70 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 19 Aug 2021 21:59:26 -0400
+Received: from mail.cn.fujitsu.com ([183.91.158.132]:39272 "EHLO
         heian.cn.fujitsu.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S234428AbhHTB7P (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 19 Aug 2021 21:59:15 -0400
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3Akw+xbamDvtd26P+Sn+GA+fpoPEPpDfIQ3DAb?=
- =?us-ascii?q?v31ZSRFFG/Fw9vre+MjzsCWYtN9/Yh8dcK+7UpVoLUm8yXcX2/h1AV7BZniEhI?=
- =?us-ascii?q?LAFugLgrcKqAeQeREWmNQ86Y5QN4B6CPDVSWNxlNvG5mCDeOoI8Z2q97+JiI7l?=
- =?us-ascii?q?o0tQcQ=3D=3D?=
+        with ESMTP id S236815AbhHTB70 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 19 Aug 2021 21:59:26 -0400
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3Aqaou3qqj90ghTd5kce25x44aV5rPeYIsimQD?=
+ =?us-ascii?q?101hICG8cqSj+fxG+85rsyMc6QxhIU3I9urhBEDtex/hHNtOkOws1NSZLW7bUQ?=
+ =?us-ascii?q?mTXeJfBOLZqlWKcUDDH6xmpMNdmsNFaeEYY2IUsS+D2njbLz8/+qj7zImYwffZ?=
+ =?us-ascii?q?02x2TRxnL4Vp7wJCAA6dFUFsLTM2fqYRJd6N4NZdvTq8dTAyZsS/PHMMWO/OvJ?=
+ =?us-ascii?q?nlj5TjCCR2fSIP2U2fiy+y8r7mH1y91hcaaTlGxrAv6izkvmXCl92ej80=3D?=
 X-IronPort-AV: E=Sophos;i="5.84,336,1620662400"; 
-   d="scan'208";a="113155626"
+   d="scan'208";a="113155637"
 Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
-  by heian.cn.fujitsu.com with ESMTP; 20 Aug 2021 09:58:35 +0800
-Received: from G08CNEXMBPEKD04.g08.fujitsu.local (unknown [10.167.33.201])
-        by cn.fujitsu.com (Postfix) with ESMTP id B5CF14D0D4BE;
-        Fri, 20 Aug 2021 09:58:31 +0800 (CST)
+  by heian.cn.fujitsu.com with ESMTP; 20 Aug 2021 09:58:47 +0800
+Received: from G08CNEXMBPEKD06.g08.fujitsu.local (unknown [10.167.33.206])
+        by cn.fujitsu.com (Postfix) with ESMTP id EDFD04D0D9BC;
+        Fri, 20 Aug 2021 09:58:46 +0800 (CST)
 Received: from G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) by
- G08CNEXMBPEKD04.g08.fujitsu.local (10.167.33.201) with Microsoft SMTP Server
- (TLS) id 15.0.1497.23; Fri, 20 Aug 2021 09:58:32 +0800
+ G08CNEXMBPEKD06.g08.fujitsu.local (10.167.33.206) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.23; Fri, 20 Aug 2021 09:58:46 +0800
 Received: from FNSTPC.g08.fujitsu.local (10.167.226.45) by
  G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
- id 15.0.1497.23 via Frontend Transport; Fri, 20 Aug 2021 09:58:10 +0800
+ id 15.0.1497.23 via Frontend Transport; Fri, 20 Aug 2021 09:58:46 +0800
 From:   Li Zhijian <lizhijian@cn.fujitsu.com>
 To:     <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>,
         <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
@@ -44,48 +45,75 @@ CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
         <kpsingh@kernel.org>, <linux-kernel@vger.kernel.org>,
         <philip.li@intel.com>, <yifeix.zhu@intel.com>,
         Li Zhijian <lizhijian@cn.fujitsu.com>
-Subject: [PATCH v2 0/5] selftests/bpf: minor fixups
-Date:   Fri, 20 Aug 2021 09:55:52 +0800
-Message-ID: <20210820015556.23276-1-lizhijian@cn.fujitsu.com>
+Subject: [PATCH v2 4/5] selftests/bpf: add missing files required by test_bpftool.sh for installing
+Date:   Fri, 20 Aug 2021 09:55:56 +0800
+Message-ID: <20210820015556.23276-5-lizhijian@cn.fujitsu.com>
 X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20210820015556.23276-1-lizhijian@cn.fujitsu.com>
+References: <20210820015556.23276-1-lizhijian@cn.fujitsu.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
-X-yoursite-MailScanner-ID: B5CF14D0D4BE.A1391
+X-yoursite-MailScanner-ID: EDFD04D0D9BC.A3B18
 X-yoursite-MailScanner: Found to be clean
 X-yoursite-MailScanner-From: lizhijian@fujitsu.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Fix a few issues reported by 0Day/LKP during runing selftests/bpf.
+test_bpftool.sh relies on bpftool and test_bpftool.py.
 
-Changelog:
-V2:
-- folded previous similar standalone patch to [1/5], and add acked tag
-  from Song Liu
-- add acked tag to [2/5], [3/5] from Song Liu
-- [4/5]: move test_bpftool.py to TEST_PROGS_EXTENDED, files in TEST_GEN_PROGS_EXTENDED
+'make install' will install bpftool to INSTALL_PATH/bpf/bpftool, and
+export it to PATH so that it can be used after installing.
+
+Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
+---
+V2: move test_bpftool.py to TEST_PROGS_EXTENDED, files in TEST_GEN_PROGS_EXTENDED
 are generated by make. Otherwise, it will break out-of-tree install:
 'make O=/kselftest-build SKIP_TARGETS= V=1 -C tools/testing/selftests install INSTALL_PATH=/kselftest-install'
-- [5/5]: new patch
+---
+ tools/testing/selftests/bpf/Makefile        | 4 +++-
+ tools/testing/selftests/bpf/test_bpftool.sh | 3 ++-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-
-Li Zhijian (5):
-  selftests/bpf: enlarge select() timeout for test_maps
-  selftests/bpf: make test_doc_build.sh work from script directory
-  selftests/bpf: add default bpftool built by selftests to PATH
-  selftests/bpf: add missing files required by test_bpftool.sh for
-    installing
-  selftests/bpf: exit with KSFT_SKIP if no Makefile found
-
- tools/testing/selftests/bpf/Makefile              |  4 +++-
- tools/testing/selftests/bpf/test_bpftool.sh       |  6 ++++++
- tools/testing/selftests/bpf/test_bpftool_build.sh |  2 +-
- tools/testing/selftests/bpf/test_doc_build.sh     | 10 ++++++++--
- tools/testing/selftests/bpf/test_maps.c           |  2 +-
- 5 files changed, 19 insertions(+), 5 deletions(-)
-
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index f405b20c1e6c..43956afe36ae 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -79,7 +79,7 @@ TEST_PROGS := test_kmod.sh \
+ 
+ TEST_PROGS_EXTENDED := with_addr.sh \
+ 	with_tunnels.sh \
+-	test_xdp_vlan.sh
++	test_xdp_vlan.sh test_bpftool.py
+ 
+ # Compile but not part of 'make run_tests'
+ TEST_GEN_PROGS_EXTENDED = test_sock_addr test_skb_cgroup_id_user \
+@@ -187,6 +187,8 @@ $(OUTPUT)/runqslower: $(BPFOBJ) | $(DEFAULT_BPFTOOL)
+ 		    BPFOBJ=$(BPFOBJ) BPF_INCLUDE=$(INCLUDE_DIR) &&	\
+ 		    cp $(SCRATCH_DIR)/runqslower $@
+ 
++TEST_GEN_PROGS_EXTENDED += $(DEFAULT_BPFTOOL)
++
+ $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED): $(OUTPUT)/test_stub.o $(BPFOBJ)
+ 
+ $(OUTPUT)/test_dev_cgroup: cgroup_helpers.c
+diff --git a/tools/testing/selftests/bpf/test_bpftool.sh b/tools/testing/selftests/bpf/test_bpftool.sh
+index 6b7ba19be1d0..718f59692ccb 100755
+--- a/tools/testing/selftests/bpf/test_bpftool.sh
++++ b/tools/testing/selftests/bpf/test_bpftool.sh
+@@ -2,9 +2,10 @@
+ # SPDX-License-Identifier: GPL-2.0
+ # Copyright (c) 2020 SUSE LLC.
+ 
++# 'make -C tools/testing/selftests/bpf install' will install to SCRIPT_DIR
+ SCRIPT_DIR=$(dirname $(realpath $0))
+ 
+ # 'make -C tools/testing/selftests/bpf' will install to BPFTOOL_INSTALL_PATH
+ BPFTOOL_INSTALL_PATH="$SCRIPT_DIR"/tools/sbin
+-export PATH=$BPFTOOL_INSTALL_PATH:$PATH
++export PATH=$SCRIPT_DIR:$BPFTOOL_INSTALL_PATH:$PATH
+ python3 -m unittest -v test_bpftool.TestBpftool
 -- 
 2.32.0
 
