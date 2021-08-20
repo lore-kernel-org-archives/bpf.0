@@ -7,30 +7,30 @@ X-Spam-Status: No, score=-19.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CC3CC4338F
-	for <bpf@archiver.kernel.org>; Fri, 20 Aug 2021 15:43:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10F16C4338F
+	for <bpf@archiver.kernel.org>; Fri, 20 Aug 2021 15:45:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 88E096103C
-	for <bpf@archiver.kernel.org>; Fri, 20 Aug 2021 15:43:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E6AB5610FF
+	for <bpf@archiver.kernel.org>; Fri, 20 Aug 2021 15:45:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241059AbhHTPof (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 20 Aug 2021 11:44:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35016 "EHLO mail.kernel.org"
+        id S241140AbhHTPqN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 20 Aug 2021 11:46:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34692 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241250AbhHTPo2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 20 Aug 2021 11:44:28 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DCDC6610FF;
-        Fri, 20 Aug 2021 15:43:46 +0000 (UTC)
+        id S241313AbhHTPn7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 20 Aug 2021 11:43:59 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B153B6103C;
+        Fri, 20 Aug 2021 15:43:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629474230;
-        bh=sb2BeUs+EdYXtkzmBkfivuB9XqFS6eMIn4b9huUVAyg=;
+        s=k20201202; t=1629474201;
+        bh=SOl1JWndideS/gN4a2B68GsUnG2rwxxMkyKwLgmvsF0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=syVoTvIbWNx2iptpfdCxcg4TBmXATzR+C9hFbCCUW/apNBfVEJjrxeusqpe3XV9eD
-         6EIQewMRlpq1cPagdP1FLCEH+zUIucNH1Tkadg3kA6KUGmVgKCf6wF46d+SbtLKqEH
-         QUyXY3+uCQ3BhPY4afv4WidAPcbH/YUwqmrA/6LapeNyKQ/dfb2awa0vtWj91ImZOl
-         5yQKvMR6D8Wj3Y2bXxBWlMsBwvfqgWl74CrLm84eVFmQftNkDzE8EEJ5a/XD3It51+
-         daHNdfLNLFYqUej0LqVk+h5uv8Ck1yU/J8kM154rSb+m53XN3SzFh26ntwLRjh6r3J
-         VDdzF1ii+8PWA==
+        b=oMLQ8saLMF2gGUFkHCLKlePUwcLWgo8zR6RzO59UX9u4iyAMQEiScLIsuIoFcbEm0
+         t5vuM5TyfGkhJZGetoog6chgVBJltThqnbjcISxCit9RbRg/eQrdTvZ7vw6YEJ9WOy
+         zRPKi0b/6kDSBUD9IGlQxxXS1EaYQUhf+wBqhFx6IomKgvHcLJwu2eYtPVX5I8YelU
+         fHp4h+Bgy++Dqbiaq4WWgMHtCtAulHedNYI7Xjs/jHzp6Pa3712anCjwDT+X3W4BsK
+         UpNp5sOgV0EE/i4DUywQ8jIW+0ScwD352c1cUlD5ayujM/4bmMhZATelKRMgXhPwr/
+         iY61mQvg8ReYg==
 From:   Lorenzo Bianconi <lorenzo@kernel.org>
 To:     bpf@vger.kernel.org, netdev@vger.kernel.org
 Cc:     lorenzo.bianconi@redhat.com, davem@davemloft.net, kuba@kernel.org,
@@ -40,9 +40,9 @@ Cc:     lorenzo.bianconi@redhat.com, davem@davemloft.net, kuba@kernel.org,
         alexander.duyck@gmail.com, saeed@kernel.org,
         maciej.fijalkowski@intel.com, magnus.karlsson@intel.com,
         tirthendu.sarkar@intel.com, toke@redhat.com
-Subject: [PATCH v12 bpf-next 18/18] bpf: add bpf_xdp_adjust_data selftest
-Date:   Fri, 20 Aug 2021 17:40:31 +0200
-Message-Id: <9515bcaa081a6626f6fbc9b16c4cd75bbdb1eda7.1629473234.git.lorenzo@kernel.org>
+Subject: [PATCH v12 bpf-next 10/18] bpf: add multi-buff support to the bpf_xdp_adjust_tail() API
+Date:   Fri, 20 Aug 2021 17:40:23 +0200
+Message-Id: <a86c03ed84a6ca275e65d44aef8abaff890f7e3f.1629473233.git.lorenzo@kernel.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <cover.1629473233.git.lorenzo@kernel.org>
 References: <cover.1629473233.git.lorenzo@kernel.org>
@@ -52,124 +52,154 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Introduce kernel selftest for new bpf_xdp_adjust_data helper.
+From: Eelco Chaudron <echaudro@redhat.com>
 
+This change adds support for tail growing and shrinking for XDP multi-buff.
+
+When called on a multi-buffer packet with a grow request, it will always
+work on the last fragment of the packet. So the maximum grow size is the
+last fragments tailroom, i.e. no new buffer will be allocated.
+
+When shrinking, it will work from the last fragment, all the way down to
+the base buffer depending on the shrinking size. It's important to mention
+that once you shrink down the fragment(s) are freed, so you can not grow
+again to the original size.
+
+Co-developed-by: Lorenzo Bianconi <lorenzo@kernel.org>
 Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+Signed-off-by: Eelco Chaudron <echaudro@redhat.com>
 ---
- .../bpf/prog_tests/xdp_adjust_data.c          | 55 +++++++++++++++++++
- .../bpf/progs/test_xdp_update_frags.c         | 41 ++++++++++++++
- 2 files changed, 96 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp_adjust_data.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_xdp_update_frags.c
+ include/net/xdp.h |  9 +++++++
+ net/core/filter.c | 60 +++++++++++++++++++++++++++++++++++++++++++++++
+ net/core/xdp.c    |  5 ++--
+ 3 files changed, 72 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_data.c b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_data.c
-new file mode 100644
-index 000000000000..a3e098b72fc9
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_data.c
-@@ -0,0 +1,55 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
-+#include <network_helpers.h>
-+
-+void test_xdp_update_frag(void)
+diff --git a/include/net/xdp.h b/include/net/xdp.h
+index d66e9877d773..cdaecf8d4d61 100644
+--- a/include/net/xdp.h
++++ b/include/net/xdp.h
+@@ -145,6 +145,13 @@ xdp_get_shared_info_from_buff(struct xdp_buff *xdp)
+ 	return (struct skb_shared_info *)xdp_data_hard_end(xdp);
+ }
+ 
++static inline unsigned int xdp_get_frag_tailroom(const skb_frag_t *frag)
 +{
-+	const char *file = "./test_xdp_update_frags.o";
-+	__u32 duration, retval, size;
-+	struct bpf_object *obj;
-+	int err, prog_fd;
-+	__u8 *buf;
++	struct page *page = skb_frag_page(frag);
 +
-+	err = bpf_prog_load(file, BPF_PROG_TYPE_XDP, &obj, &prog_fd);
-+	if (CHECK_FAIL(err))
-+		return;
-+
-+	buf = malloc(128);
-+	if (CHECK(!buf, "malloc()", "error:%s\n", strerror(errno)))
-+		return;
-+
-+	memset(buf, 0, 128);
-+
-+	err = bpf_prog_test_run(prog_fd, 1, buf, 128,
-+				buf, &size, &retval, &duration);
-+	free(buf);
-+
-+	CHECK(err || retval != XDP_DROP,
-+	      "128b", "err %d errno %d retval %d size %d\n",
-+	      err, errno, retval, size);
-+
-+	buf = malloc(9000);
-+	if (CHECK(!buf, "malloc()", "error:%s\n", strerror(errno)))
-+		return;
-+
-+	memset(buf, 0, 9000);
-+	buf[5000] = 0xaa; /* marker at offset 5000 (frag0) */
-+
-+	err = bpf_prog_test_run(prog_fd, 1, buf, 9000,
-+				buf, &size, &retval, &duration);
-+
-+	/* test_xdp_update_frags: buf[5000]: 0xaa -> 0xbb */
-+	CHECK(err || retval != XDP_PASS || buf[5000] != 0xbb,
-+	      "9000b", "err %d errno %d retval %d size %d\n",
-+	      err, errno, retval, size);
-+
-+	free(buf);
-+
-+	bpf_object__close(obj);
++	return page_size(page) - skb_frag_size(frag) - skb_frag_off(frag);
 +}
 +
-+void test_xdp_adjust_data(void)
+ struct xdp_frame {
+ 	void *data;
+ 	u16 len;
+@@ -290,6 +297,8 @@ struct xdp_frame *xdp_convert_buff_to_frame(struct xdp_buff *xdp)
+ 	return xdp_frame;
+ }
+ 
++void __xdp_return(void *data, struct xdp_mem_info *mem, bool napi_direct,
++		  struct xdp_buff *xdp);
+ void xdp_return_frame(struct xdp_frame *xdpf);
+ void xdp_return_frame_rx_napi(struct xdp_frame *xdpf);
+ void xdp_return_buff(struct xdp_buff *xdp);
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 59b8f5050180..e6a589705813 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -3818,11 +3818,71 @@ static const struct bpf_func_proto bpf_xdp_adjust_head_proto = {
+ 	.arg2_type	= ARG_ANYTHING,
+ };
+ 
++static int bpf_xdp_mb_adjust_tail(struct xdp_buff *xdp, int offset)
 +{
-+	if (test__start_subtest("xdp_adjust_data"))
-+		test_xdp_update_frag();
++	struct skb_shared_info *sinfo;
++
++	sinfo = xdp_get_shared_info_from_buff(xdp);
++	if (offset >= 0) {
++		skb_frag_t *frag = &sinfo->frags[sinfo->nr_frags - 1];
++		int size;
++
++		if (unlikely(offset > xdp_get_frag_tailroom(frag)))
++			return -EINVAL;
++
++		size = skb_frag_size(frag);
++		memset(skb_frag_address(frag) + size, 0, offset);
++		skb_frag_size_set(frag, size + offset);
++		sinfo->xdp_frags_size += offset;
++	} else {
++		int i, n_frags_free = 0, len_free = 0, tlen_free = 0;
++
++		offset = abs(offset);
++		if (unlikely(offset > ((int)(xdp->data_end - xdp->data) +
++				       sinfo->xdp_frags_size - ETH_HLEN)))
++			return -EINVAL;
++
++		for (i = sinfo->nr_frags - 1; i >= 0 && offset > 0; i--) {
++			skb_frag_t *frag = &sinfo->frags[i];
++			int size = skb_frag_size(frag);
++			int shrink = min_t(int, offset, size);
++
++			len_free += shrink;
++			offset -= shrink;
++
++			if (unlikely(size == shrink)) {
++				struct page *page = skb_frag_page(frag);
++
++				__xdp_return(page_address(page), &xdp->rxq->mem,
++					     false, NULL);
++				tlen_free += page_size(page);
++				n_frags_free++;
++			} else {
++				skb_frag_size_set(frag, size - shrink);
++				break;
++			}
++		}
++		sinfo->nr_frags -= n_frags_free;
++		sinfo->xdp_frags_size -= len_free;
++		sinfo->xdp_frags_tsize -= tlen_free;
++
++		if (unlikely(offset > 0)) {
++			xdp_buff_clear_mb(xdp);
++			xdp->data_end -= offset;
++		}
++	}
++
++	return 0;
 +}
-diff --git a/tools/testing/selftests/bpf/progs/test_xdp_update_frags.c b/tools/testing/selftests/bpf/progs/test_xdp_update_frags.c
-new file mode 100644
-index 000000000000..c2d5772007f3
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_xdp_update_frags.c
-@@ -0,0 +1,41 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * This program is free software; you can redistribute it and/or
-+ * modify it under the terms of version 2 of the GNU General Public
-+ * License as published by the Free Software Foundation.
-+ */
-+#include <linux/bpf.h>
-+#include <linux/if_ether.h>
-+#include <bpf/bpf_helpers.h>
 +
-+int _version SEC("version") = 1;
+ BPF_CALL_2(bpf_xdp_adjust_tail, struct xdp_buff *, xdp, int, offset)
+ {
+ 	void *data_hard_end = xdp_data_hard_end(xdp); /* use xdp->frame_sz */
+ 	void *data_end = xdp->data_end + offset;
+ 
++	if (unlikely(xdp_buff_is_mb(xdp)))
++		return bpf_xdp_mb_adjust_tail(xdp, offset);
 +
-+SEC("xdp_adjust_frags")
-+int _xdp_adjust_frags(struct xdp_md *xdp)
-+{
-+	__u8 *data_end = (void *)(long)xdp->data_end;
-+	__u8 *data = (void *)(long)xdp->data;
-+	__u32 offset = 5000; /* marker offset */
-+	int base_offset, ret = XDP_DROP;
-+
-+	base_offset = bpf_xdp_adjust_data(xdp, offset);
-+	if (base_offset < 0 || base_offset > offset)
-+		return XDP_DROP;
-+
-+	data_end = (void *)(long)xdp->data_end;
-+	data = (void *)(long)xdp->data;
-+
-+	if (data + 1 > data_end)
-+		goto out;
-+
-+	if (*data != 0xaa) /* marker */
-+		goto out;
-+
-+	*data = 0xbb; /* update the marker */
-+	ret = XDP_PASS;
-+out:
-+	bpf_xdp_adjust_data(xdp, 0);
-+	return ret;
-+}
-+
-+char _license[] SEC("license") = "GPL";
+ 	/* Notice that xdp_data_hard_end have reserved some tailroom */
+ 	if (unlikely(data_end > data_hard_end))
+ 		return -EINVAL;
+diff --git a/net/core/xdp.c b/net/core/xdp.c
+index 1346fb8b3f50..a71cdea75306 100644
+--- a/net/core/xdp.c
++++ b/net/core/xdp.c
+@@ -339,8 +339,8 @@ EXPORT_SYMBOL_GPL(xdp_rxq_info_reg_mem_model);
+  * is used for those calls sites.  Thus, allowing for faster recycling
+  * of xdp_frames/pages in those cases.
+  */
+-static void __xdp_return(void *data, struct xdp_mem_info *mem, bool napi_direct,
+-			 struct xdp_buff *xdp)
++void __xdp_return(void *data, struct xdp_mem_info *mem, bool napi_direct,
++		  struct xdp_buff *xdp)
+ {
+ 	struct xdp_mem_allocator *xa;
+ 	struct page *page;
+@@ -373,6 +373,7 @@ static void __xdp_return(void *data, struct xdp_mem_info *mem, bool napi_direct,
+ 		break;
+ 	}
+ }
++EXPORT_SYMBOL_GPL(__xdp_return);
+ 
+ void xdp_return_frame(struct xdp_frame *xdpf)
+ {
 -- 
 2.31.1
 
