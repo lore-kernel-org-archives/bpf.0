@@ -2,69 +2,99 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 29CE3C4338F
-	for <bpf@archiver.kernel.org>; Fri, 20 Aug 2021 18:08:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A666BC432BE
+	for <bpf@archiver.kernel.org>; Fri, 20 Aug 2021 18:35:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0774961056
-	for <bpf@archiver.kernel.org>; Fri, 20 Aug 2021 18:08:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8CF7A61209
+	for <bpf@archiver.kernel.org>; Fri, 20 Aug 2021 18:35:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229560AbhHTSIx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 20 Aug 2021 14:08:53 -0400
-Received: from smtprelay0094.hostedemail.com ([216.40.44.94]:44300 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S229512AbhHTSIw (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 20 Aug 2021 14:08:52 -0400
-X-Greylist: delayed 577 seconds by postgrey-1.27 at vger.kernel.org; Fri, 20 Aug 2021 14:08:52 EDT
-Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
-        by smtpgrave01.hostedemail.com (Postfix) with ESMTP id ACDED1802BDE4
-        for <bpf@vger.kernel.org>; Fri, 20 Aug 2021 17:58:37 +0000 (UTC)
-Received: from omf18.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay07.hostedemail.com (Postfix) with ESMTP id 8C4981804EE3A;
-        Fri, 20 Aug 2021 17:58:36 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf18.hostedemail.com (Postfix) with ESMTPA id A29152EBFA4;
-        Fri, 20 Aug 2021 17:58:35 +0000 (UTC)
-Message-ID: <51685e024c86a691aaf7c94ad74f04971e736d3e.camel@perches.com>
-Subject: BPF MAINTAINERS entry "K: bpf" casts too wide a net
-From:   Joe Perches <joe@perches.com>
-To:     bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Date:   Fri, 20 Aug 2021 10:58:34 -0700
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.0-1 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Server: rspamout04
-X-Rspamd-Queue-Id: A29152EBFA4
-X-Stat-Signature: 3cimuwdoh68ae1q3gbc1ibx5uxjzssud
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/l2u7Um2HH+RyIjt7rz8+orLZYkJvFF/A=
-X-HE-Tag: 1629482315-825942
+        id S235229AbhHTSfv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 20 Aug 2021 14:35:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36474 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229512AbhHTSfv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 20 Aug 2021 14:35:51 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D77C06175F
+        for <bpf@vger.kernel.org>; Fri, 20 Aug 2021 11:35:12 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id 22so11830984qkg.2
+        for <bpf@vger.kernel.org>; Fri, 20 Aug 2021 11:35:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=toxicpanda-com.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:from:to:cc:subject;
+        bh=20/a0sZ2dzFKeddKBSkNEVtv2AMo9NoJrHJmvABR31k=;
+        b=iraa4Yg2ZIyDuLWjWxoz7XhaITVgAYkL2+UmLSFrqzMB3Uvs29V23Zg5ZWoo3nSrSZ
+         b0dXIrjTqoCGqlt1bugRacT5AbM7T5760fHd5UgMw48rJMdz4pQCKgkQqu+1q6icd7Lh
+         tR4z5xVyYZXDdAyNdKWuDuKWkAVefKGJAU+UbRIwopG6QmTsWlPBx9e+xAAOzGooNbGA
+         /5NPhzg0yAMk99xz4CasbFUmtvV3ciy4mALUH8pW1BZ0fEBCJlOUuEc8VXFVTaPaSSfd
+         lX0gEIIFctA+XwIkf/dWjE4RhQP77SJUbdLGVanMyBnf0sf3Vbd62+dQ9ux2O4jgxyRK
+         V1Hg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:from:to:cc:subject;
+        bh=20/a0sZ2dzFKeddKBSkNEVtv2AMo9NoJrHJmvABR31k=;
+        b=d5+52nxmSjFC/7ICHsAFF5sLhydqfGyLv5TAIFcNPa+G8JpvwM6i4RKgiq+lfMlwnP
+         rdsLANItZAGsDrRWS01z4N7RmrE7sIrqFfFTLXhRSAVAAexBHJwj5YEWuTYc6jOrU+/Q
+         dNp5b+XtFDHNzO2vGwbomS5OkUDt5P1N30UY5SOFEOPjDyVm1IENv56Pjo7Fj2bn1xmI
+         57yJQB7IOzXbfyeyffDNTpiaKaor+LYqT9yGHj+S3mqTparA/4GZIoGlGisCSFNdaBWN
+         ikN+Sjkme+oJNwI6AN/glZ3iE80lZN3+dgoXf1kemHjhGC5bTLJZt4JoKXdRvjAzpXP9
+         W4uA==
+X-Gm-Message-State: AOAM5308xAk5vbdvzIw27/CEUXYW47In91nQ1LEnjC2DzETbBwmhTIJY
+        j0oeJs7hKbufEpTFhcuBkiw3S1QruH6IgQ==
+X-Google-Smtp-Source: ABdhPJyu6VME/MSR6isTYWyYplihN92JlMd+BYrZuko4mFZdVnneppsOXB+uYbKpE5mJc8NKjPKd6A==
+X-Received: by 2002:a37:9481:: with SMTP id w123mr10382554qkd.75.1629484511800;
+        Fri, 20 Aug 2021 11:35:11 -0700 (PDT)
+Received: from localhost (cpe-174-109-172-136.nc.res.rr.com. [174.109.172.136])
+        by smtp.gmail.com with ESMTPSA id p187sm3584045qkd.101.2021.08.20.11.35.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Aug 2021 11:35:11 -0700 (PDT)
+Message-ID: <611ff5df.1c69fb81.43234.a478@mx.google.com>
+Date:   Fri, 20 Aug 2021 14:35:09 -0400
+From:   Josef Bacik <josef@toxicpanda.com>
+To:     lsf-pc@lists.linuxfoundation.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-nvme@lists.infradead.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [REMINDER] LSF/MM/BPF: 2021: Cancellation announcement
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The MAINTAINERS entry for BPF (Safe dynamic programs and tools)
-includes K: bpf
+Due to the continal assessments and growing concerns around the spiking COVID-19
+infections worldwide we have made the decision to cancel the Linux Storage,
+Filesystem, Memory Management, and BPF summit this year.
 
-This entry seems to match far too many files in the kernel sources.
+We are investigating dates for 2022 with the hopes that we can finally hold a
+safe and productive conference.  When we have finalized those plans and are
+ready to begin planning again we will send out a new call for participation.
+The current board will stay in place until we can successfully host the next
+conference.
 
-$ git grep --name-only 'bpf' | wc -l
-1398
+We thank you for your patience and understanding while we continue to work
+through this very unpredictable situation.
 
-Likely this entry should be removed or improved to ignore unnecessary
-matches within files like scripts/checkpatch.pl
+The linux plumbers conference is being held virtually, and there are several
+micro conferences that cover the various topics that we cover at LSF.  If you
+have the desire to still talk with your fellow colleagues I encourage you to
+look into participating in linux plumbers and possibly submitting talks for the
+appropriate micro conference.
 
-Perhaps instead this could be something like:
+Thank you again for your support.  Our sincere sympathies are with all those
+who continue to be affected by this pandemic and wish for good health and safety
+for all.
 
-K:	\bbpf_|_bpf\b
+Thank you on behalf of the program committe:
 
-
-
-
+        Josef Bacik (Filesystems)
+        Amir Goldstein (Filesystems)
+        Martin K. Petersen (Storage)
+        Omar Sandoval (Storage)
+        Michal Hocko (MM)
+        Dan Williams (MM)
+        Alexei Starovoitov (BPF)
+        Daniel Borkmann (BPF)
