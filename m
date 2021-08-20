@@ -7,35 +7,36 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 164F4C43214
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95ABAC432BE
 	for <bpf@archiver.kernel.org>; Fri, 20 Aug 2021 01:58:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EF4DD610A3
-	for <bpf@archiver.kernel.org>; Fri, 20 Aug 2021 01:58:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7FCEF610A3
+	for <bpf@archiver.kernel.org>; Fri, 20 Aug 2021 01:58:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237374AbhHTB73 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 19 Aug 2021 21:59:29 -0400
-Received: from mail.cn.fujitsu.com ([183.91.158.132]:39272 "EHLO
+        id S237485AbhHTB7a (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 19 Aug 2021 21:59:30 -0400
+Received: from mail.cn.fujitsu.com ([183.91.158.132]:39276 "EHLO
         heian.cn.fujitsu.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S236943AbhHTB72 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 19 Aug 2021 21:59:28 -0400
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AG21WiapE11kb+dXRNRDueKkaV5oXeYIsimQD?=
- =?us-ascii?q?101hICG9E/bo8/xG+c536faaslgssQ4b8+xoVJPgfZq+z+8R3WByB8bAYOCOgg?=
- =?us-ascii?q?LBQ72KhrGSoQEIdRefysdtkY9kc4VbTOb7FEVGi6/BizWQIpINx8am/cmT6dvj?=
- =?us-ascii?q?8w=3D=3D?=
+        with ESMTP id S237306AbhHTB73 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 19 Aug 2021 21:59:29 -0400
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AyLv4G6MWR86+cMBcTiWjsMiBIKoaSvp037Eq?=
+ =?us-ascii?q?v3oedfUzSL3/qynOpoVj6faaslYssR0b9exofZPwJE80lqQFhrX5X43SPzUO0V?=
+ =?us-ascii?q?HAROoJgLcKgQeQfxEWndQ96U4PScdD4aXLfDpHZNjBkXSFOudl0N+a67qpmOub?=
+ =?us-ascii?q?639sSDthY6Zm4xwRMHfhLmRGABlBGYEiFIeRou5Opz+bc3wRacihQlYfWeyrna?=
+ =?us-ascii?q?ywqLvWJQ4BGwU86BSDyReh6LvBGRCe2RsEFxNjqI1SiVT4rw=3D=3D?=
 X-IronPort-AV: E=Sophos;i="5.84,336,1620662400"; 
-   d="scan'208";a="113155636"
+   d="scan'208";a="113155635"
 Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
   by heian.cn.fujitsu.com with ESMTP; 20 Aug 2021 09:58:47 +0800
-Received: from G08CNEXMBPEKD05.g08.fujitsu.local (unknown [10.167.33.204])
-        by cn.fujitsu.com (Postfix) with ESMTP id B8BCB4D0D829;
-        Fri, 20 Aug 2021 09:58:45 +0800 (CST)
+Received: from G08CNEXMBPEKD04.g08.fujitsu.local (unknown [10.167.33.201])
+        by cn.fujitsu.com (Postfix) with ESMTP id 752644D0D4BF;
+        Fri, 20 Aug 2021 09:58:43 +0800 (CST)
 Received: from G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) by
- G08CNEXMBPEKD05.g08.fujitsu.local (10.167.33.204) with Microsoft SMTP Server
- (TLS) id 15.0.1497.23; Fri, 20 Aug 2021 09:58:45 +0800
+ G08CNEXMBPEKD04.g08.fujitsu.local (10.167.33.201) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.23; Fri, 20 Aug 2021 09:58:33 +0800
 Received: from FNSTPC.g08.fujitsu.local (10.167.226.45) by
  G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
- id 15.0.1497.23 via Frontend Transport; Fri, 20 Aug 2021 09:58:45 +0800
+ id 15.0.1497.23 via Frontend Transport; Fri, 20 Aug 2021 09:58:32 +0800
 From:   Li Zhijian <lizhijian@cn.fujitsu.com>
 To:     <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>,
         <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
@@ -43,89 +44,155 @@ CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
         <kafai@fb.com>, <songliubraving@fb.com>, <yhs@fb.com>,
         <kpsingh@kernel.org>, <linux-kernel@vger.kernel.org>,
         <philip.li@intel.com>, <yifeix.zhu@intel.com>,
-        Li Zhijian <lizhijian@cn.fujitsu.com>
-Subject: [PATCH v2 3/5] selftests/bpf: add default bpftool built by selftests to PATH
-Date:   Fri, 20 Aug 2021 09:55:55 +0800
-Message-ID: <20210820015556.23276-4-lizhijian@cn.fujitsu.com>
+        Li Zhijian <lizhijian@cn.fujitsu.com>,
+        "kernel test robot" <lkp@intel.com>
+Subject: [PATCH v2 1/5] selftests/bpf: enlarge select() timeout for test_maps
+Date:   Fri, 20 Aug 2021 09:55:53 +0800
+Message-ID: <20210820015556.23276-2-lizhijian@cn.fujitsu.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20210820015556.23276-1-lizhijian@cn.fujitsu.com>
 References: <20210820015556.23276-1-lizhijian@cn.fujitsu.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
-X-yoursite-MailScanner-ID: B8BCB4D0D829.A13AE
+X-yoursite-MailScanner-ID: 752644D0D4BF.AEE40
 X-yoursite-MailScanner: Found to be clean
 X-yoursite-MailScanner-From: lizhijian@fujitsu.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-For 'make run_tests':
-selftests will build bpftool into tools/testing/selftests/bpf/tools/sbin/bpftool
-by default.
+0Day robot observed that it's easily timeout on a heavy load host.
+-------------------
+ # selftests: bpf: test_maps
+ # Fork 1024 tasks to 'test_update_delete'
+ # Fork 1024 tasks to 'test_update_delete'
+ # Fork 100 tasks to 'test_hashmap'
+ # Fork 100 tasks to 'test_hashmap_percpu'
+ # Fork 100 tasks to 'test_hashmap_sizes'
+ # Fork 100 tasks to 'test_hashmap_walk'
+ # Fork 100 tasks to 'test_arraymap'
+ # Fork 100 tasks to 'test_arraymap_percpu'
+ # Failed sockmap unexpected timeout
+ not ok 3 selftests: bpf: test_maps # exit=1
+ # selftests: bpf: test_lru_map
+ # nr_cpus:8
+-------------------
+Since this test will be scheduled by 0Day to a random host that could have
+only a few cpus(2-8), enlarge the timeout to avoid a false NG report.
 
-==================
-root@lkp-skl-d01 /opt/rootfs/v5.14-rc4# make -C tools/testing/selftests/bpf run_tests
-make: Entering directory '/opt/rootfs/v5.14-rc4/tools/testing/selftests/bpf'
-  MKDIR    include
-  MKDIR    libbpf
-  MKDIR    bpftool
-[...]
-  GEN     /opt/rootfs/v5.14-rc4/tools/testing/selftests/bpf/tools/build/bpftool/profiler.skel.h
-  CC      /opt/rootfs/v5.14-rc4/tools/testing/selftests/bpf/tools/build/bpftool/prog.o
-  GEN     /opt/rootfs/v5.14-rc4/tools/testing/selftests/bpf/tools/build/bpftool/pid_iter.skel.h
-  CC      /opt/rootfs/v5.14-rc4/tools/testing/selftests/bpf/tools/build/bpftool/pids.o
-  LINK    /opt/rootfs/v5.14-rc4/tools/testing/selftests/bpf/tools/build/bpftool/bpftool
-  INSTALL bpftool
-  GEN      vmlinux.h
-[...]
- # test_feature_dev_json (test_bpftool.TestBpftool) ... ERROR
- # test_feature_kernel (test_bpftool.TestBpftool) ... ERROR
- # test_feature_kernel_full (test_bpftool.TestBpftool) ... ERROR
- # test_feature_kernel_full_vs_not_full (test_bpftool.TestBpftool) ... ERROR
- # test_feature_macros (test_bpftool.TestBpftool) ... Error: bug: failed to retrieve CAP_BPF status: Invalid argument
- # ERROR
- #
- # ======================================================================
- # ERROR: test_feature_dev_json (test_bpftool.TestBpftool)
- # ----------------------------------------------------------------------
- # Traceback (most recent call last):
- #   File "/opt/rootfs/v5.14-rc4/tools/testing/selftests/bpf/test_bpftool.py", line 57, in wrapper
- #     return f(*args, iface, **kwargs)
- #   File "/opt/rootfs/v5.14-rc4/tools/testing/selftests/bpf/test_bpftool.py", line 82, in test_feature_dev_json
- #     res = bpftool_json(["feature", "probe", "dev", iface])
- #   File "/opt/rootfs/v5.14-rc4/tools/testing/selftests/bpf/test_bpftool.py", line 42, in bpftool_json
- #     res = _bpftool(args)
- #   File "/opt/rootfs/v5.14-rc4/tools/testing/selftests/bpf/test_bpftool.py", line 34, in _bpftool
- #     return subprocess.check_output(_args)
- #   File "/usr/lib/python3.7/subprocess.py", line 395, in check_output
- #     **kwargs).stdout
- #   File "/usr/lib/python3.7/subprocess.py", line 487, in run
- #     output=stdout, stderr=stderr)
- # subprocess.CalledProcessError: Command '['bpftool', '-j', 'feature', 'probe', 'dev', 'dummy0']' returned non-zero exit status 255.
- #
-==================
+In practice, i tried to pin it to only one cpu by 'taskset 0x01 ./test_maps',
+and knew 10S is likely enough, but i still perfer to a larger value 30.
 
+Reported-by: kernel test robot <lkp@intel.com>
 Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
 Acked-by: Song Liu <songliubraving@fb.com>
----
- tools/testing/selftests/bpf/test_bpftool.sh | 5 +++++
- 1 file changed, 5 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/test_bpftool.sh b/tools/testing/selftests/bpf/test_bpftool.sh
-index 66690778e36d..6b7ba19be1d0 100755
---- a/tools/testing/selftests/bpf/test_bpftool.sh
-+++ b/tools/testing/selftests/bpf/test_bpftool.sh
-@@ -2,4 +2,9 @@
- # SPDX-License-Identifier: GPL-2.0
- # Copyright (c) 2020 SUSE LLC.
+---
+V2: update to 30 seconds
+3S is not enough sometimes on a very busy host
+taskset 1,1 ./test_maps 9
+Fork 1024 tasks to 'test_update_delete'
+Fork 1024 tasks to 'test_update_delete'
+Fork 100 tasks to 'test_hashmap'
+Fork 100 tasks to 'test_hashmap_percpu'
+Fork 100 tasks to 'test_hashmap_sizes'
+Fork 100 tasks to 'test_hashmap_walk'
+Fork 100 tasks to 'test_arraymap'
+Fork 100 tasks to 'test_arraymap_percpu'
+Failed sockmap unexpected timeout
+
+taskset 1,1 ./test_maps 10
+Fork 1024 tasks to 'test_update_delete'
+Fork 1024 tasks to 'test_update_delete'
+Fork 100 tasks to 'test_hashmap'
+Fork 100 tasks to 'test_hashmap_percpu'
+Fork 100 tasks to 'test_hashmap_sizes'
+Fork 100 tasks to 'test_hashmap_walk'
+Fork 100 tasks to 'test_arraymap'
+Fork 100 tasks to 'test_arraymap_percpu'
+Fork 1024 tasks to 'test_update_delete'
+Fork 1024 tasks to 'test_update_delete'
+Fork 100 tasks to 'test_hashmap'
+Fork 100 tasks to 'test_hashmap_percpu'
+Fork 100 tasks to 'test_hashmap_sizes'
+Fork 100 tasks to 'test_hashmap_walk'
+Fork 100 tasks to 'test_arraymap'
+Fork 100 tasks to 'test_arraymap_percpu'
+test_array_map_batch_ops:PASS
+test_array_percpu_map_batch_ops:PASS
+test_htab_map_batch_ops:PASS
+test_htab_percpu_map_batch_ops:PASS
+test_lpm_trie_map_batch_ops:PASS
+test_sk_storage_map:PASS
+test_maps: OK, 0 SKIPPED
+
+taskset 0x01 ./test_maps 9
+Fork 1024 tasks to 'test_update_delete'
+Fork 1024 tasks to 'test_update_delete'
+Fork 100 tasks to 'test_hashmap'
+Fork 100 tasks to 'test_hashmap_percpu'
+Fork 100 tasks to 'test_hashmap_sizes'
+Fork 100 tasks to 'test_hashmap_walk'
+Fork 100 tasks to 'test_arraymap'
+Fork 100 tasks to 'test_arraymap_percpu'
+Fork 1024 tasks to 'test_update_delete'
+Fork 1024 tasks to 'test_update_delete'
+Fork 100 tasks to 'test_hashmap'
+Fork 100 tasks to 'test_hashmap_percpu'
+Fork 100 tasks to 'test_hashmap_sizes'
+Fork 100 tasks to 'test_hashmap_walk'
+Fork 100 tasks to 'test_arraymap'
+Fork 100 tasks to 'test_arraymap_percpu'
+test_array_map_batch_ops:PASS
+test_array_percpu_map_batch_ops:PASS
+test_htab_map_batch_ops:PASS
+test_htab_percpu_map_batch_ops:PASS
+test_lpm_trie_map_batch_ops:PASS
+test_sk_storage_map:PASS
+test_maps: OK, 0 SKIPPED
+
+taskset 0x01 ./test_maps 10
+Fork 1024 tasks to 'test_update_delete'
+Fork 1024 tasks to 'test_update_delete'
+Fork 100 tasks to 'test_hashmap'
+Fork 100 tasks to 'test_hashmap_percpu'
+Fork 100 tasks to 'test_hashmap_sizes'
+Fork 100 tasks to 'test_hashmap_walk'
+Fork 100 tasks to 'test_arraymap'
+Fork 100 tasks to 'test_arraymap_percpu'
+Fork 1024 tasks to 'test_update_delete'
+Fork 1024 tasks to 'test_update_delete'
+Fork 100 tasks to 'test_hashmap'
+Fork 100 tasks to 'test_hashmap_percpu'
+Fork 100 tasks to 'test_hashmap_sizes'
+Fork 100 tasks to 'test_hashmap_walk'
+Fork 100 tasks to 'test_arraymap'
+Fork 100 tasks to 'test_arraymap_percpu'
+test_array_map_batch_ops:PASS
+test_array_percpu_map_batch_ops:PASS
+test_htab_map_batch_ops:PASS
+test_htab_percpu_map_batch_ops:PASS
+test_lpm_trie_map_batch_ops:PASS
+test_sk_storage_map:PASS
+test_maps: OK, 0 SKIPPED
+---
+ tools/testing/selftests/bpf/test_maps.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/selftests/bpf/test_maps.c
+index 30cbf5d98f7d..de58a3070eea 100644
+--- a/tools/testing/selftests/bpf/test_maps.c
++++ b/tools/testing/selftests/bpf/test_maps.c
+@@ -985,7 +985,7 @@ static void test_sockmap(unsigned int tasks, void *data)
  
-+SCRIPT_DIR=$(dirname $(realpath $0))
-+
-+# 'make -C tools/testing/selftests/bpf' will install to BPFTOOL_INSTALL_PATH
-+BPFTOOL_INSTALL_PATH="$SCRIPT_DIR"/tools/sbin
-+export PATH=$BPFTOOL_INSTALL_PATH:$PATH
- python3 -m unittest -v test_bpftool.TestBpftool
+ 		FD_ZERO(&w);
+ 		FD_SET(sfd[3], &w);
+-		to.tv_sec = 1;
++		to.tv_sec = 30;
+ 		to.tv_usec = 0;
+ 		s = select(sfd[3] + 1, &w, NULL, NULL, &to);
+ 		if (s == -1) {
 -- 
 2.32.0
 
