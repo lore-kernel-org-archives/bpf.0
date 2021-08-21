@@ -7,148 +7,153 @@ X-Spam-Status: No, score=-19.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1823AC4320A
-	for <bpf@archiver.kernel.org>; Sat, 21 Aug 2021 02:59:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DA41C4338F
+	for <bpf@archiver.kernel.org>; Sat, 21 Aug 2021 05:20:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 01826611C6
-	for <bpf@archiver.kernel.org>; Sat, 21 Aug 2021 02:59:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6AD7961163
+	for <bpf@archiver.kernel.org>; Sat, 21 Aug 2021 05:20:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241017AbhHUDAH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 20 Aug 2021 23:00:07 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:32942 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S241012AbhHUDAH (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 20 Aug 2021 23:00:07 -0400
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.43/8.16.0.43) with SMTP id 17L2wFeA009293
-        for <bpf@vger.kernel.org>; Fri, 20 Aug 2021 19:59:28 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=GQ9Jk4cKjDo5n6s12a91EWYn3PSX8lc5zqf/wOLJ20A=;
- b=i8WWi80l0DgnENQcNAnrLiQk4YrA6Vv+Q2Uy9q2k6rYvXLQGLqWOjzRrhLaZWha4YmDW
- vV9ArOtlaWnb+Glv98y0MvWsFUifxN/Vmz10PIABx6Ji0VPsR7QcbDWqDOXCCasxUfg9
- b8OuoH7+OgJaiGpi9ihJj5VbsLnXOunc3kY= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0001303.ppops.net with ESMTP id 3ajkg09gkf-15
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 20 Aug 2021 19:59:28 -0700
-Received: from intmgw001.38.frc1.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Fri, 20 Aug 2021 19:59:02 -0700
-Received: by devbig030.frc3.facebook.com (Postfix, from userid 158236)
-        id 1D3AC5730093; Fri, 20 Aug 2021 19:58:58 -0700 (PDT)
-From:   Dave Marchevsky <davemarchevsky@fb.com>
-To:     <bpf@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Yonghong Song <yhs@fb.com>,
-        Florent Revest <revest@chromium.org>, <netdev@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>
-Subject: [PATCH bpf-next 1/5] bpf: merge printk and seq_printf VARARG max macros
-Date:   Fri, 20 Aug 2021 19:58:33 -0700
-Message-ID: <20210821025837.1614098-2-davemarchevsky@fb.com>
+        id S229975AbhHUFU5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 21 Aug 2021 01:20:57 -0400
+Received: from smtp-fw-80006.amazon.com ([99.78.197.217]:46156 "EHLO
+        smtp-fw-80006.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229616AbhHUFU4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 21 Aug 2021 01:20:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.co.jp; i=@amazon.co.jp; q=dns/txt;
+  s=amazon201209; t=1629523218; x=1661059218;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=hRjIA2N7XqbYT9/bYzG7LF9KmVpB8TKkOtmPXU0WOg8=;
+  b=p7hKn6+vME6R58Vpi6gvRJdFXt88a0GhmCTZ/aLKoaa5vqgIbUq2nOy2
+   h8xvb7aHqNxzUTKKFboVGADZJYz1kCMB8/INiAQk+NzIa+3rUmt4AMzxu
+   n6cd3H6wnFLQSeYiyJXd/mCKdo4TkWi/nb5VA0t4nahpspP81hd/WrDRj
+   g=;
+X-IronPort-AV: E=Sophos;i="5.84,338,1620691200"; 
+   d="scan'208";a="20872219"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-1d-25e59222.us-east-1.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP; 21 Aug 2021 05:20:16 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan2.iad.amazon.com [10.40.159.162])
+        by email-inbound-relay-1d-25e59222.us-east-1.amazon.com (Postfix) with ESMTPS id 20D13A2437;
+        Sat, 21 Aug 2021 05:20:11 +0000 (UTC)
+Received: from EX13D04ANC001.ant.amazon.com (10.43.157.89) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.23; Sat, 21 Aug 2021 05:20:11 +0000
+Received: from 88665a182662.ant.amazon.com (10.43.161.229) by
+ EX13D04ANC001.ant.amazon.com (10.43.157.89) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.23; Sat, 21 Aug 2021 05:20:06 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+To:     <jiang.wang@bytedance.com>
+CC:     <andrii@kernel.org>, <ast@kernel.org>, <chaiwen.cc@bytedance.com>,
+        <christian.brauner@ubuntu.com>, <cong.wang@bytedance.com>,
+        <davem@davemloft.net>, <digetx@gmail.com>,
+        <duanxiongchun@bytedance.com>, <kuba@kernel.org>,
+        <kuniyu@amazon.co.jp>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <rao.shoaib@oracle.com>,
+        <viro@zeniv.linux.org.uk>, <xieyongji@bytedance.com>,
+        <bpf@vger.kernel.org>
+Subject: [PATCH v1] af_unix: fix NULL pointer bug in unix_shutdown
+Date:   Sat, 21 Aug 2021 14:20:02 +0900
+Message-ID: <20210821052002.37230-1-kuniyu@amazon.co.jp>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210821025837.1614098-1-davemarchevsky@fb.com>
-References: <20210821025837.1614098-1-davemarchevsky@fb.com>
+In-Reply-To: <20210821035045.373991-1-jiang.wang@bytedance.com>
+References: <20210821035045.373991-1-jiang.wang@bytedance.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-FB-Source: Intern
-X-Proofpoint-GUID: HvbNBJbg_ujTCoqY6EZIXzIRzx7f_wbz
-X-Proofpoint-ORIG-GUID: HvbNBJbg_ujTCoqY6EZIXzIRzx7f_wbz
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-08-20_11:2021-08-20,2021-08-20 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
- phishscore=0 priorityscore=1501 bulkscore=0 lowpriorityscore=0
- suspectscore=0 impostorscore=0 adultscore=0 clxscore=1015 mlxscore=0
- spamscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2107140000 definitions=main-2108210017
-X-FB-Internal: deliver
+X-Originating-IP: [10.43.161.229]
+X-ClientProxiedBy: EX13D29UWA004.ant.amazon.com (10.43.160.33) To
+ EX13D04ANC001.ant.amazon.com (10.43.157.89)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-MAX_SNPRINTF_VARARGS and MAX_SEQ_PRINTF_VARARGS are used by bpf helpers
-bpf_snprintf and bpf_seq_printf to limit their varargs. Both call into
-bpf_bprintf_prepare for print formatting logic and have convenience
-macros in libbpf (BPF_SNPRINTF, BPF_SEQ_PRINTF) which use the same
-helper macros to convert varargs to a byte array.
+From:   Jiang Wang <jiang.wang@bytedance.com>
+Date:   Sat, 21 Aug 2021 03:50:44 +0000
+> Commit 94531cfcbe79 ("af_unix: Add unix_stream_proto for sockmap") 
+> introduced a bug for af_unix SEQPACKET type. In unix_shutdown, the 
+> unhash function will call prot->unhash(), which is NULL for SEQPACKET. 
+> And kernel will panic. On ARM32, it will show following messages: (it 
+> likely affects x86 too).
+> 
+> Fix the bug by checking the sk->type first.
+> 
+> Kernel log:
+> <--- cut here ---
+>  Unable to handle kernel NULL pointer dereference at virtual address
+> 00000000
+>  pgd = 2fba1ffb
+>  *pgd=00000000
+>  Internal error: Oops: 80000005 [#1] PREEMPT SMP THUMB2
+>  Modules linked in:
+>  CPU: 1 PID: 1999 Comm: falkon Tainted: G        W
+> 5.14.0-rc5-01175-g94531cfcbe79-dirty #9240
+>  Hardware name: NVIDIA Tegra SoC (Flattened Device Tree)
+>  PC is at 0x0
+>  LR is at unix_shutdown+0x81/0x1a8
+>  pc : [<00000000>]    lr : [<c08f3311>]    psr: 600f0013
+>  sp : e45aff70  ip : e463a3c0  fp : beb54f04
+>  r10: 00000125  r9 : e45ae000  r8 : c4a56664
+>  r7 : 00000001  r6 : c4a56464  r5 : 00000001  r4 : c4a56400
+>  r3 : 00000000  r2 : c5a6b180  r1 : 00000000  r0 : c4a56400
+>  Flags: nZCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
+>  Control: 50c5387d  Table: 05aa804a  DAC: 00000051
+>  Register r0 information: slab PING start c4a56400 pointer offset 0
+>  Register r1 information: NULL pointer
+>  Register r2 information: slab task_struct start c5a6b180 pointer offset 0
+>  Register r3 information: NULL pointer
+>  Register r4 information: slab PING start c4a56400 pointer offset 0
+>  Register r5 information: non-paged memory
+>  Register r6 information: slab PING start c4a56400 pointer offset 100
+>  Register r7 information: non-paged memory
+>  Register r8 information: slab PING start c4a56400 pointer offset 612
+>  Register r9 information: non-slab/vmalloc memory
+>  Register r10 information: non-paged memory
+>  Register r11 information: non-paged memory
+>  Register r12 information: slab filp start e463a3c0 pointer offset 0
+>  Process falkon (pid: 1999, stack limit = 0x9ec48895)
+>  Stack: (0xe45aff70 to 0xe45b0000)
+>  ff60:                                     e45ae000 c5f26a00 00000000 00000125
+>  ff80: c0100264 c07f7fa3 beb54f04 fffffff7 00000001 e6f3fc0e b5e5e9ec beb54ec4
+>  ffa0: b5da0ccc c010024b b5e5e9ec beb54ec4 0000000f 00000000 00000000 beb54ebc
+>  ffc0: b5e5e9ec beb54ec4 b5da0ccc 00000125 beb54f58 00785238 beb5529c beb54f04
+>  ffe0: b5da1e24 beb54eac b301385c b62b6ee8 600f0030 0000000f 00000000 00000000
+>  [<c08f3311>] (unix_shutdown) from [<c07f7fa3>] (__sys_shutdown+0x2f/0x50)
+>  [<c07f7fa3>] (__sys_shutdown) from [<c010024b>]
+> (__sys_trace_return+0x1/0x16)
+>  Exception stack(0xe45affa8 to 0xe45afff0)
+> 
+> Signed-off-by: Jiang Wang <jiang.wang@bytedance.com>
+> Reported-by: Dmitry Osipenko <digetx@gmail.com>
+> Tested-by: Dmitry Osipenko <digetx@gmail.com>
 
-Changing shared functionality to support more varargs for either bpf
-helper would affect the other as well, so let's combine the _VARARGS
-macros to make this more obvious.
+Fixes: 94531cfcbe79 ("af_unix: Add unix_stream_proto for sockmap")
 
-Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
----
- include/linux/bpf.h      | 2 ++
- kernel/bpf/helpers.c     | 4 +---
- kernel/trace/bpf_trace.c | 4 +---
- 3 files changed, 4 insertions(+), 6 deletions(-)
+And the commit is not in net-next yet, so is this patch for bpf-next?
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index f4c16f19f83e..be8d57e6e78a 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -2216,6 +2216,8 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke=
-_type t,
- struct btf_id_set;
- bool btf_id_set_contains(const struct btf_id_set *set, u32 id);
-=20
-+#define MAX_BPRINTF_VARARGS		12
-+
- int bpf_bprintf_prepare(char *fmt, u32 fmt_size, const u64 *raw_args,
- 			u32 **bin_buf, u32 num_args);
- void bpf_bprintf_cleanup(void);
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 4e8540716187..5ce19b376ef7 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -969,15 +969,13 @@ int bpf_bprintf_prepare(char *fmt, u32 fmt_size, co=
-nst u64 *raw_args,
- 	return err;
- }
-=20
--#define MAX_SNPRINTF_VARARGS		12
--
- BPF_CALL_5(bpf_snprintf, char *, str, u32, str_size, char *, fmt,
- 	   const void *, data, u32, data_len)
- {
- 	int err, num_args;
- 	u32 *bin_args;
-=20
--	if (data_len % 8 || data_len > MAX_SNPRINTF_VARARGS * 8 ||
-+	if (data_len % 8 || data_len > MAX_BPRINTF_VARARGS * 8 ||
- 	    (data_len && !data))
- 		return -EINVAL;
- 	num_args =3D data_len / 8;
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index cbc73c08c4a4..2cf4bfa1ab7b 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -414,15 +414,13 @@ const struct bpf_func_proto *bpf_get_trace_printk_p=
-roto(void)
- 	return &bpf_trace_printk_proto;
- }
-=20
--#define MAX_SEQ_PRINTF_VARARGS		12
--
- BPF_CALL_5(bpf_seq_printf, struct seq_file *, m, char *, fmt, u32, fmt_s=
-ize,
- 	   const void *, data, u32, data_len)
- {
- 	int err, num_args;
- 	u32 *bin_args;
-=20
--	if (data_len & 7 || data_len > MAX_SEQ_PRINTF_VARARGS * 8 ||
-+	if (data_len & 7 || data_len > MAX_BPRINTF_VARARGS * 8 ||
- 	    (data_len && !data))
- 		return -EINVAL;
- 	num_args =3D data_len / 8;
---=20
-2.30.2
 
+> ---
+>  net/unix/af_unix.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
+> index 443c49081636..6965bc578a80 100644
+> --- a/net/unix/af_unix.c
+> +++ b/net/unix/af_unix.c
+> @@ -2847,7 +2847,8 @@ static int unix_shutdown(struct socket *sock, int mode)
+>  		int peer_mode = 0;
+>  		const struct proto *prot = READ_ONCE(other->sk_prot);
+>  
+> -		prot->unhash(other);
+> +		if (sk->sk_type == SOCK_STREAM)
+
+		if (prot->unhash)
+is more straight?
+
+
+> +			prot->unhash(other);
+>  		if (mode&RCV_SHUTDOWN)
+>  			peer_mode |= SEND_SHUTDOWN;
+>  		if (mode&SEND_SHUTDOWN)
+> -- 
+> 2.20.1
