@@ -7,67 +7,67 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C4A2EC4320A
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DF193C43214
 	for <bpf@archiver.kernel.org>; Tue, 24 Aug 2021 02:44:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AD65D61407
+	by mail.kernel.org (Postfix) with ESMTP id C784D6140B
 	for <bpf@archiver.kernel.org>; Tue, 24 Aug 2021 02:44:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233895AbhHXCo5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 23 Aug 2021 22:44:57 -0400
-Received: from out1-smtp.messagingengine.com ([66.111.4.25]:40503 "EHLO
+        id S233938AbhHXCo6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 23 Aug 2021 22:44:58 -0400
+Received: from out1-smtp.messagingengine.com ([66.111.4.25]:45469 "EHLO
         out1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233759AbhHXCox (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 23 Aug 2021 22:44:53 -0400
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 49A965C00D0;
-        Mon, 23 Aug 2021 22:44:09 -0400 (EDT)
+        by vger.kernel.org with ESMTP id S233815AbhHXCoz (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 23 Aug 2021 22:44:55 -0400
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 6D91C5C00E6;
+        Mon, 23 Aug 2021 22:44:11 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Mon, 23 Aug 2021 22:44:09 -0400
+  by compute6.internal (MEProxy); Mon, 23 Aug 2021 22:44:11 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=
         from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm1; bh=Q6Mw3g/mXE1iS
-        KUihMUa0TtUGExnnjhHmxPLwftdxpQ=; b=fgezGcFpvvuUL3NA2w6UPYRVg3htO
-        jo/bwmUNSmFqYxEkdxdGqBvYaAU/USoN5LwuPSpsiy36gnIFm1fsxzkH7t04kAW5
-        exnzZVD1mnVrOVp5W/A2PSyjmHOKHoyQM43UqBbFsRg08rI5igKkpdtVKW3NMF0L
-        0eowqLdFMPaCawmy+rCE6CNaHl0DAlOx6YRZRzN7kIwMoF1iAvqhDAMAEcZr5cwb
-        5KgVgm4GWoqA+bqDMa+NlIitWCIbOA0Nz2v0pclBklUNFzIfvAYSPDeN2aTnSYvo
-        D2WYRuUJXPlmPZbCYb6QRNjaAkGnvPZFyUAMEsfDUBKli7eRVpc0FgRNQ==
+        :mime-version:content-transfer-encoding; s=fm1; bh=3voj+wuwV49+M
+        Jgt0JSmO+SsOyMpEpeXM0TkdlTOE6A=; b=w6TmDVR6zghqm8Tks8cB3nAy7wMGp
+        UrFNjvCk0+LiC7TlsyhiTspK1VObYpkSAuc9ciIbwj9DUI1JTImOAzm4wis4KcOF
+        9Hxr62YeVIDZ6GDYK6JZqk1N8iaEs6bql5nvF2liRVnJF8WpJ+G6UBqvdcMvlcAL
+        0jRVVHdFnDVTw26LtGKsyVI8yeZQfEtDMZumVMUmV4oAWJg9D8a8Wq5QymIXk6h3
+        vFaC0F6/IOJEOiDSFr6OaJ2s/qs+f7+JE94zhW15nqbT9nH5R5jHzaiscxnf86zK
+        A6cF0Z07UuxJaYP/Kd9BXJIoF7ZLHPR/5MYdqzXasFYN1WKVKT2ZiENTA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:date:from
         :in-reply-to:message-id:mime-version:references:subject:to
         :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; bh=Q6Mw3g/mXE1iSKUihMUa0TtUGExnnjhHmxPLwftdxpQ=; b=OMTHJPQS
-        m1UAkaBe8mCIA6YETcaYsjMDfkkYoTyRo1CFWdL1qaYT33WIzyz68by33qwzygiP
-        eyJaI22QvXwscl7mq9hcZGq/9t1tv4qmB4IqIKb1xVyGGDAlCYjwl6sDEiwFnxTi
-        KypSXYun9/t4DRdEF6PHup08cgamkLRgcfFt/sSSSw3mOEalXdcbxzQAKGwPKO/o
-        HPJ86zFG9maYGvPX/hNl1uQiXfZ9ZNi1QmS8mbLDoXPcHA4utciX4kQo64Z9rMq1
-        1pnbvxJNnaDvXIwmXD6mMa9bYpbgNz9x8TgV1QY9dIgaUPVSF78rwwu6HzKIsGrb
-        4nmyxgPQiTuMvQ==
-X-ME-Sender: <xms:-VwkYar-E1CdEVbD-CWb98mT4UliZv92SxQfL5rAV1eJS22rYA-KZQ>
-    <xme:-VwkYYpG_ofoKhPbMJg0Dmro7r8NE8rYqg2C5TyfN2zguPTG84GaRzoBPJ1xl5B9_
-    OkqcMhuJ4c0UFzisg>
-X-ME-Received: <xmr:-VwkYfNcPAXlAKLoLPFwABcPUMy_OQmNEy9ejqnjfNDQU58hO8GH3zIXpOdMRUK3uP2pj-DC7-LyYJlbM_gK1nepYZNSSWCPUcGHqDUKdXrIpQ>
+        fm3; bh=3voj+wuwV49+MJgt0JSmO+SsOyMpEpeXM0TkdlTOE6A=; b=RelSlPJI
+        ygbDS3va6496d/6R5vUnXpqJCOzIReKlX+m5M4YS8n5xJh4R8rRUfzuREdXX86rJ
+        eMkkgctY4y8AyzByz68ev5kiPQJGn2B+vwi8+P5MGvubtYV+RaKAxFzdc8E9/wJe
+        izTgJRB+Yd9YO+H7lPeqNNEuZTw+eTi5/i/Boqts+zarvB2v0959Mnex3lnDbHIj
+        BpFTYxv/Fhs/2eBgF0ANosxSAq7Dwi7wx15p+t4RAwV0kXpYVXU8Z961r+GEZb8m
+        Yo89fZfgDLZolqNL1ixm5kLgDLO9/oJeLWahFZtjcl8++24QekxYgf+98AZQf3Cy
+        RvU49BSmlTj6NQ==
+X-ME-Sender: <xms:-1wkYfcWZ3pNzwriYwA19-2y80iXXuxxPz_T3LQMwpzeYj97TFVoWQ>
+    <xme:-1wkYVPNMGIB8wGkFydK13uwg5NbfJfxXjTRWEaZYY5B39ugYwKcl72POm_8Php3h
+    0lewnSz0Tr0MYXc9g>
+X-ME-Received: <xmr:-1wkYYhWJOEALDQ6RtW6KYrZm3PSa7HNUDJNkXakA9y76mfDjLFkTAVbwkJyIcMRmQlbVEBaZ60FPb1iWTFc8noJeRE8NndubXGfDZh9VEFWOA>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddruddtiedgieduucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdljedtmdenucfjughrpefhvf
     fufffkofgjfhgggfestdekredtredttdenucfhrhhomhepffgrnhhivghlucgiuhcuoegu
     gihusegugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpefgkeduleekhfetvefhge
     fgvdegfeejfefguedvuddthffggffhhedtueeuteefieenucevlhhushhtvghrufhiiigv
-    pedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiii
-X-ME-Proxy: <xmx:-VwkYZ5RHSU4hOPq-FxiAp-JalrrjfgRhAAcN7dKwzEuj7pNkS6g7A>
-    <xmx:-VwkYZ54u6LvEyuySMx4nJ2PNfRcOTvZUYiL3_X3Z-oKwOyOyE30Cw>
-    <xmx:-VwkYZjrvm6SGiAa3cLYaIEpoP1KNlwV0gFJ4wwIJIb4cwxnhjsVIQ>
-    <xmx:-VwkYc2pPWEEeseTxAjV1Ngi-vs7zgVAH6n308wwgx5jWgZWzXk_Aw>
+    pedunecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiii
+X-ME-Proxy: <xmx:-1wkYQ90enzgnydVbxXuaDqjntbd1OZeDIooCJ-gb5QN9GQtFlDnNg>
+    <xmx:-1wkYbuogEDv7R1vGccBgOfJkUQwKuvUq4BE37xCprr3LS77jr6-LA>
+    <xmx:-1wkYfF1qkXKUX7O78fs0XxdcEAcuN8bPEGtrDYsVDEWJlV6WpnnIA>
+    <xmx:-1wkYVJ_BSSBHfTiglbJW55xzYkeUL8YtouayDvguj4A6bePC8UGsA>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 23 Aug 2021 22:44:08 -0400 (EDT)
+ 23 Aug 2021 22:44:10 -0400 (EDT)
 From:   Daniel Xu <dxu@dxuuu.xyz>
 To:     bpf@vger.kernel.org, yhs@fb.com, andriin@fb.com
 Cc:     Daniel Xu <dxu@dxuuu.xyz>, kernel-team@fb.com,
         linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2 3/5] bpf: Extend bpf_base_func_proto helpers with bpf_get_current_task_btf()
-Date:   Mon, 23 Aug 2021 19:43:48 -0700
-Message-Id: <f99870ed5f834c9803d73b3476f8272b1bb987c0.1629772842.git.dxu@dxuuu.xyz>
+Subject: [PATCH bpf-next v2 5/5] bpf: selftests: Add bpf_task_pt_regs() selftest
+Date:   Mon, 23 Aug 2021 19:43:50 -0700
+Message-Id: <5581eb8800f6625ec8813fe21e9dce1fbdef4937.1629772842.git.dxu@dxuuu.xyz>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <cover.1629772842.git.dxu@dxuuu.xyz>
 References: <cover.1629772842.git.dxu@dxuuu.xyz>
@@ -77,52 +77,105 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-bpf_get_current_task() is already supported so it's natural to also
-include the _btf() variant for btf-powered helpers.
-
-This is required for non-tracing progs to use bpf_task_pt_regs() in the
-next commit.
+This test retrieves the uprobe's pt_regs in two different ways and
+compares the contents in an arch-agnostic way.
 
 Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
 ---
- kernel/bpf/helpers.c     | 3 +++
- kernel/trace/bpf_trace.c | 2 +-
- 2 files changed, 4 insertions(+), 1 deletion(-)
+ .../selftests/bpf/prog_tests/task_pt_regs.c   | 47 +++++++++++++++++++
+ .../selftests/bpf/progs/test_task_pt_regs.c   | 29 ++++++++++++
+ 2 files changed, 76 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/task_pt_regs.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_task_pt_regs.c
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 4e8540716187..609674f409ed 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -1322,6 +1322,7 @@ void bpf_timer_cancel_and_free(void *val)
- }
- 
- const struct bpf_func_proto bpf_get_current_task_proto __weak;
-+const struct bpf_func_proto bpf_get_current_task_btf_proto __weak;
- const struct bpf_func_proto bpf_probe_read_user_proto __weak;
- const struct bpf_func_proto bpf_probe_read_user_str_proto __weak;
- const struct bpf_func_proto bpf_probe_read_kernel_proto __weak;
-@@ -1407,6 +1408,8 @@ bpf_base_func_proto(enum bpf_func_id func_id)
- 		return bpf_get_trace_printk_proto();
- 	case BPF_FUNC_get_current_task:
- 		return &bpf_get_current_task_proto;
-+	case BPF_FUNC_get_current_task_btf:
-+		return &bpf_get_current_task_btf_proto;
- 	case BPF_FUNC_probe_read_user:
- 		return &bpf_probe_read_user_proto;
- 	case BPF_FUNC_probe_read_kernel:
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 50d055fc2327..4e54f3dc209f 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -716,7 +716,7 @@ BPF_CALL_0(bpf_get_current_task_btf)
- 
- BTF_ID_LIST_GLOBAL_SINGLE(btf_task_struct_ids, struct, task_struct)
- 
--static const struct bpf_func_proto bpf_get_current_task_btf_proto = {
-+const struct bpf_func_proto bpf_get_current_task_btf_proto = {
- 	.func		= bpf_get_current_task_btf,
- 	.gpl_only	= true,
- 	.ret_type	= RET_PTR_TO_BTF_ID,
+diff --git a/tools/testing/selftests/bpf/prog_tests/task_pt_regs.c b/tools/testing/selftests/bpf/prog_tests/task_pt_regs.c
+new file mode 100644
+index 000000000000..53f0e0fa1a53
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/task_pt_regs.c
+@@ -0,0 +1,47 @@
++// SPDX-License-Identifier: GPL-2.0
++#define _GNU_SOURCE
++#include <test_progs.h>
++#include <linux/ptrace.h>
++#include "test_task_pt_regs.skel.h"
++
++void test_task_pt_regs(void)
++{
++	struct test_task_pt_regs *skel;
++	struct bpf_link *uprobe_link;
++	size_t uprobe_offset;
++	ssize_t base_addr;
++	bool match;
++
++	base_addr = get_base_addr();
++	if (!ASSERT_GT(base_addr, 0, "get_base_addr"))
++		return;
++	uprobe_offset = get_uprobe_offset(&get_base_addr, base_addr);
++
++	skel = test_task_pt_regs__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel_open"))
++		return;
++	if (!ASSERT_OK_PTR(skel->bss, "check_bss"))
++		goto cleanup;
++
++	uprobe_link = bpf_program__attach_uprobe(skel->progs.handle_uprobe,
++						 false /* retprobe */,
++						 0 /* self pid */,
++						 "/proc/self/exe",
++						 uprobe_offset);
++	if (!ASSERT_OK_PTR(uprobe_link, "attach_uprobe"))
++		goto cleanup;
++	skel->links.handle_uprobe = uprobe_link;
++
++	/* trigger & validate uprobe */
++	get_base_addr();
++
++	if (!ASSERT_EQ(skel->bss->uprobe_res, 1, "check_uprobe_res"))
++		goto cleanup;
++
++	match = !memcmp(&skel->bss->current_regs, &skel->bss->ctx_regs,
++			sizeof(skel->bss->current_regs));
++	ASSERT_TRUE(match, "check_regs_match");
++
++cleanup:
++	test_task_pt_regs__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_task_pt_regs.c b/tools/testing/selftests/bpf/progs/test_task_pt_regs.c
+new file mode 100644
+index 000000000000..6c059f1cfa1b
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_task_pt_regs.c
+@@ -0,0 +1,29 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <linux/ptrace.h>
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++struct pt_regs current_regs = {};
++struct pt_regs ctx_regs = {};
++int uprobe_res = 0;
++
++SEC("uprobe/trigger_func")
++int handle_uprobe(struct pt_regs *ctx)
++{
++	struct task_struct *current;
++	struct pt_regs *regs;
++
++	current = bpf_get_current_task_btf();
++	regs = (struct pt_regs *) bpf_task_pt_regs(current);
++	__builtin_memcpy(&current_regs, regs, sizeof(*regs));
++	__builtin_memcpy(&ctx_regs, ctx, sizeof(*ctx));
++
++	/* Prove that uprobe was run */
++	uprobe_res = 1;
++
++	return 0;
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.33.0
 
