@@ -2,111 +2,75 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91AA9C4338F
-	for <bpf@archiver.kernel.org>; Tue, 24 Aug 2021 16:07:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A717C4320A
+	for <bpf@archiver.kernel.org>; Tue, 24 Aug 2021 16:10:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 755DC6125F
-	for <bpf@archiver.kernel.org>; Tue, 24 Aug 2021 16:07:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5E18F61373
+	for <bpf@archiver.kernel.org>; Tue, 24 Aug 2021 16:10:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230465AbhHXQIg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 24 Aug 2021 12:08:36 -0400
-Received: from mga12.intel.com ([192.55.52.136]:29617 "EHLO mga12.intel.com"
+        id S230187AbhHXQKw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 24 Aug 2021 12:10:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51420 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231176AbhHXQIe (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 24 Aug 2021 12:08:34 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10086"; a="196918374"
-X-IronPort-AV: E=Sophos;i="5.84,347,1620716400"; 
-   d="scan'208";a="196918374"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2021 09:07:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,347,1620716400"; 
-   d="scan'208";a="526678832"
-Received: from siang-ilbpg0.png.intel.com ([10.88.227.28])
-  by FMSMGA003.fm.intel.com with ESMTP; 24 Aug 2021 09:07:04 -0700
-From:   Song Yoong Siang <yoong.siang.song@intel.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Ong Boon Leong <boon.leong.ong@intel.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Song Yoong Siang <yoong.siang.song@intel.com>
-Subject: [PATCH net 1/1] net: stmmac: fix kernel panic due to NULL pointer dereference of buf->xdp
-Date:   Wed, 25 Aug 2021 00:00:15 +0800
-Message-Id: <20210824160015.979155-1-yoong.siang.song@intel.com>
-X-Mailer: git-send-email 2.25.1
+        id S229837AbhHXQKv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 24 Aug 2021 12:10:51 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id E948E61360;
+        Tue, 24 Aug 2021 16:10:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1629821407;
+        bh=E1Ksxp+X+PPCUkhgVn4HQEignA8RTOMvWxmhWHUHBGU=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=kkwnFzErtfFSq2FgGApZ4UjhomtJ6J9965oORL0YudALwXSc8oJcXNbU7S2Y+xnZZ
+         5RL1cpZohxTUuTBjE9IVrwxacFUtkRahAY1JFp+ETsY/Q1rF9H7WZGIUWOqRLzC5w0
+         HppKl0om6X0Q3zqDvkqrgFJHP+NBhbPaEzKeI4S0ohBwZ4bgY8W4h61EBxE3cGih+P
+         rjM02H0XZDNlxnERJkWioQVgJAqVNTzfo4IgRp1W3yyXBN676fn29zb/KDDXNkjNLV
+         hBz3p+sCWJH3g1G1FxPvQQdisi13GRs9w9EvL94RadhiFMZ2ivw6QN4EOsARdYvxt6
+         xwEqKqQawzm8Q==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next] netdevice: move xdp_rxq within netdev_rx_queue
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <162982140689.5804.3511834694954723686.git-patchwork-notify@kernel.org>
+Date:   Tue, 24 Aug 2021 16:10:06 +0000
+References: <20210823180135.1153608-1-kuba@kernel.org>
+In-Reply-To: <20210823180135.1153608-1-kuba@kernel.org>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     davem@davemloft.net, netdev@vger.kernel.org, bpf@vger.kernel.org,
+        hawk@kernel.org, magnus.karlsson@intel.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Ensure a valid XSK buffer before proceed to free the xdp buffer.
+Hello:
 
-The following kernel panic is observed without this patch:
+This patch was applied to netdev/net-next.git (refs/heads/master):
 
-RIP: 0010:xp_free+0x5/0x40
-Call Trace:
-stmmac_napi_poll_rxtx+0x332/0xb30 [stmmac]
-? stmmac_tx_timer+0x3c/0xb0 [stmmac]
-net_rx_action+0x13d/0x3d0
-__do_softirq+0xfc/0x2fb
-? smpboot_register_percpu_thread+0xe0/0xe0
-run_ksoftirqd+0x32/0x70
-smpboot_thread_fn+0x1d8/0x2c0
-kthread+0x169/0x1a0
-? kthread_park+0x90/0x90
-ret_from_fork+0x1f/0x30
----[ end trace 0000000000000002 ]---
+On Mon, 23 Aug 2021 11:01:35 -0700 you wrote:
+> Both struct netdev_rx_queue and struct xdp_rxq_info are cacheline
+> aligned. This causes extra padding before and after the xdp_rxq
+> member. Move the member upfront, so that it's naturally aligned.
+> 
+> Before:
+> 	/* size: 256, cachelines: 4, members: 6 */
+> 	/* sum members: 160, holes: 1, sum holes: 40 */
+> 	/* padding: 56 */
+> 	/* paddings: 1, sum paddings: 36 */
+> 	/* forced alignments: 1, forced holes: 1, sum forced holes: 40 */
+> 
+> [...]
 
-Fixes: bba2556efad6 ("net: stmmac: Enable RX via AF_XDP zero-copy")
-Cc: <stable@vger.kernel.org> # 5.13.x
-Suggested-by: Ong Boon Leong <boon.leong.ong@intel.com>
-Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
----
- drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Here is the summary with links:
+  - [net-next] netdevice: move xdp_rxq within netdev_rx_queue
+    https://git.kernel.org/netdev/net-next/c/95d1d2490c27
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index 7b8404a21544..fa90bcdf4e45 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -4914,6 +4914,10 @@ static int stmmac_rx_zc(struct stmmac_priv *priv, int limit, u32 queue)
- 
- 		prefetch(np);
- 
-+		/* Ensure a valid XSK buffer before proceed */
-+		if (!buf->xdp)
-+			break;
-+
- 		if (priv->extend_desc)
- 			stmmac_rx_extended_status(priv, &priv->dev->stats,
- 						  &priv->xstats,
-@@ -4934,10 +4938,6 @@ static int stmmac_rx_zc(struct stmmac_priv *priv, int limit, u32 queue)
- 			continue;
- 		}
- 
--		/* Ensure a valid XSK buffer before proceed */
--		if (!buf->xdp)
--			break;
--
- 		/* XSK pool expects RX frame 1:1 mapped to XSK buffer */
- 		if (likely(status & rx_not_ls)) {
- 			xsk_buff_free(buf->xdp);
--- 
-2.25.1
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
