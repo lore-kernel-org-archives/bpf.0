@@ -2,120 +2,138 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CC61C432BE
-	for <bpf@archiver.kernel.org>; Wed, 25 Aug 2021 18:42:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35917C432BE
+	for <bpf@archiver.kernel.org>; Wed, 25 Aug 2021 18:48:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 40EA2610A3
-	for <bpf@archiver.kernel.org>; Wed, 25 Aug 2021 18:42:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1472F610CA
+	for <bpf@archiver.kernel.org>; Wed, 25 Aug 2021 18:48:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237527AbhHYSnj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 25 Aug 2021 14:43:39 -0400
-Received: from mga14.intel.com ([192.55.52.115]:29739 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241704AbhHYSnh (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 25 Aug 2021 14:43:37 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10087"; a="217309983"
-X-IronPort-AV: E=Sophos;i="5.84,351,1620716400"; 
-   d="scan'208";a="217309983"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2021 11:42:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,351,1620716400"; 
-   d="scan'208";a="684612821"
-Received: from ranger.igk.intel.com ([10.102.21.164])
-  by fmsmga006.fm.intel.com with ESMTP; 25 Aug 2021 11:42:46 -0700
-Date:   Wed, 25 Aug 2021 20:26:56 +0200
-From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     Magnus Karlsson <magnus.karlsson@gmail.com>
-Cc:     magnus.karlsson@intel.com, bjorn@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, netdev@vger.kernel.org,
-        jonathan.lemon@gmail.com, ciara.loftus@intel.com,
-        bpf@vger.kernel.org, yhs@fb.com, andrii@kernel.org
-Subject: Re: [PATCH bpf-next v3 00/16] selftests: xsk: various simplifications
-Message-ID: <20210825182656.GA26792@ranger.igk.intel.com>
-References: <20210825093722.10219-1-magnus.karlsson@gmail.com>
+        id S240689AbhHYSsv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 25 Aug 2021 14:48:51 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:44126 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240322AbhHYSsu (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 25 Aug 2021 14:48:50 -0400
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17PIhPbF018479
+        for <bpf@vger.kernel.org>; Wed, 25 Aug 2021 11:48:04 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=facebook; bh=BljyG5RYg2rqg821rjy3xBXWmHYNrHQfXLuS6Xolp2o=;
+ b=NuybvQ1XrbQHR4ftCP2VpCUs4EBbvQqvJzMoQewsVBOQ1yvIqtotRT8zIgi1B/+ZvSDy
+ 9dbwL0GQF1mLr7nIxi5Zew5YT3WR5KJPlPPdCylsU1RrfS5ZcGbkvUlw4dnn8pkFcuST
+ dbXv8ehehZJYUgO1FbrWnfpo6eaGSc6dwsg= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 3an6hd7m7k-7
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 25 Aug 2021 11:48:04 -0700
+Received: from intmgw001.05.prn6.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Wed, 25 Aug 2021 11:48:02 -0700
+Received: by devvm2661.vll0.facebook.com (Postfix, from userid 200310)
+        id BCD6F2A16F12; Wed, 25 Aug 2021 11:47:54 -0700 (PDT)
+From:   Yucong Sun <fallentree@fb.com>
+To:     <andrii@kernel.org>
+CC:     <sunyucong@gmail.com>, <bpf@vger.kernel.org>,
+        Yucong Sun <fallentree@fb.com>
+Subject: [PATCH bpf-next] selftests/bpf: reduce more flakyness in sockmap_listen
+Date:   Wed, 25 Aug 2021 11:47:45 -0700
+Message-ID: <20210825184745.2680830-1-fallentree@fb.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210825093722.10219-1-magnus.karlsson@gmail.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-FB-Source: Intern
+X-Proofpoint-GUID: jypCTktTZpjDBxvVdVESXJ8ae0txsA-Y
+X-Proofpoint-ORIG-GUID: jypCTktTZpjDBxvVdVESXJ8ae0txsA-Y
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-08-25_07:2021-08-25,2021-08-25 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ suspectscore=0 priorityscore=1501 adultscore=0 clxscore=1015
+ impostorscore=0 mlxscore=0 phishscore=0 spamscore=0 mlxlogscore=945
+ bulkscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2107140000 definitions=main-2108250110
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Aug 25, 2021 at 11:37:06AM +0200, Magnus Karlsson wrote:
-> This patch set mainly contains various simplifications to the xsk
-> selftests. The only exception is the introduction of packet streams
-> that describes what the Tx process should send and what the Rx process
-> should receive. If it receives anything else, the test fails. This
-> mechanism can be used to produce tests were all packets are not
-> received by the Rx thread or modified in some way. An example of this
-> is if an XDP program does XDP_PASS on some of the packets.
-> 
-> This patch set will be followed by another patch set that implements a
-> new structure that will facilitate adding new tests. A couple of new
-> tests will also be included in that patch set.
+This patch adds similar retry logic to more places where read() is used, =
+to
+reduce flakyness in slow CI environment.
 
-I went through the series and besides the typo found by Alexei I have no
-objections.
+Signed-off-by: Yucong Sun <fallentree@fb.com>
+---
+ .../selftests/bpf/prog_tests/sockmap_listen.c | 19 ++++++++++++++++---
+ 1 file changed, 16 insertions(+), 3 deletions(-)
 
-Acked-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c b/to=
+ols/testing/selftests/bpf/prog_tests/sockmap_listen.c
+index 6a5df28f9a3d..5c5979046523 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+@@ -949,6 +949,7 @@ static void redir_to_connected(int family, int sotype=
+, int sock_mapfd,
+ 	int err, n;
+ 	u32 key;
+ 	char b;
++	int retries =3D 100;
+=20
+ 	zero_verdict_count(verd_mapfd);
+=20
+@@ -1001,10 +1002,15 @@ static void redir_to_connected(int family, int so=
+type, int sock_mapfd,
+ 		goto close_peer1;
+ 	if (pass !=3D 1)
+ 		FAIL("%s: want pass count 1, have %d", log_prefix, pass);
+-
++again:
+ 	n =3D read(c0, &b, 1);
+-	if (n < 0)
++	if (n < 0) {
++		if (errno =3D=3D EAGAIN && retries--) {
++			usleep(1000);
++			goto again;
++		}
+ 		FAIL_ERRNO("%s: read", log_prefix);
++	}
+ 	if (n =3D=3D 0)
+ 		FAIL("%s: incomplete read", log_prefix);
+=20
+@@ -1926,6 +1932,7 @@ static void unix_inet_redir_to_connected(int family=
+, int type, int sock_mapfd,
+ 	int sfd[2];
+ 	u32 key;
+ 	char b;
++	int retries =3D 100;
+=20
+ 	zero_verdict_count(verd_mapfd);
+=20
+@@ -1956,9 +1963,15 @@ static void unix_inet_redir_to_connected(int famil=
+y, int type, int sock_mapfd,
+ 	if (pass !=3D 1)
+ 		FAIL("%s: want pass count 1, have %d", log_prefix, pass);
+=20
++again:
+ 	n =3D read(mode =3D=3D REDIR_INGRESS ? p0 : c0, &b, 1);
+-	if (n < 0)
++	if (n < 0) {
++		if (errno =3D=3D EAGAIN && retries--) {
++			usleep(1000);
++			goto again;
++		}
+ 		FAIL_ERRNO("%s: read", log_prefix);
++	}
+ 	if (n =3D=3D 0)
+ 		FAIL("%s: incomplete read", log_prefix);
+=20
+--=20
+2.30.2
 
-Looking forward to next set that you mention above :)
-
-> 
-> v2 -> v3:
-> 
-> * Reworked patch 12 so that it now has functions for creating and
->   destroying ifobjects. Simplifies the code. [Maciej]
-> * The packet stream now allocates the supplied buffer array length,
->   instead of the default one. [Maciej]
-> * pkt_stream_get_pkt() now returns NULL when indexing a non-existing
->   packet. [Maciej]
-> * pkt_validate() is now is_pkt_valid(). [Maciej]
-> * Slowed down packet sending speed even more in patch 11 so that slow
->   systems do not silenty drop packets in skb mode.
-> 
-> v1 -> v2:
-> 
-> * Dropped the patch with per process limit changes as it is not needed
->   [Yonghong]
-> * Improved the commit message of patch 1 [Yonghong]
-> * Fixed a spelling error in patch 9
-> 
-> Thanks: Magnus
-> 
-> Magnus Karlsson (16):
->   selftests: xsk: remove color mode
->   selftests: xsk: remove the num_tx_packets option
->   selftests: xsk: remove unused variables
->   selftests: xsk: return correct error codes
->   selftests: xsk: simplify the retry code
->   selftests: xsk: remove end-of-test packet
->   selftests: xsk: disassociate umem size with packets sent
->   selftests: xsk: rename worker_* functions that are not thread entry
->     points
->   selftests: xsk: simplify packet validation in xsk tests
->   selftests: xsk: validate tx stats on tx thread
->   selftests: xsk: decrease sending speed
->   selftests: xsk: simplify cleanup of ifobjects
->   selftests: xsk: generate packet directly in umem
->   selftests: xsk: generate packets from specification
->   selftests: xsk: make enums lower case
->   selftests: xsk: preface options with opt
-> 
->  tools/testing/selftests/bpf/test_xsk.sh    |  10 +-
->  tools/testing/selftests/bpf/xdpxceiver.c   | 681 ++++++++++-----------
->  tools/testing/selftests/bpf/xdpxceiver.h   |  63 +-
->  tools/testing/selftests/bpf/xsk_prereqs.sh |  30 +-
->  4 files changed, 356 insertions(+), 428 deletions(-)
-> 
-> 
-> base-commit: 3bbc8ee7c363a83aa192d796ad37b6bf462a2947
-> --
-> 2.29.0
