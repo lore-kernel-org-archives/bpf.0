@@ -2,79 +2,176 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 716D9C4320E
-	for <bpf@archiver.kernel.org>; Wed, 25 Aug 2021 10:10:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A6B70C4320A
+	for <bpf@archiver.kernel.org>; Wed, 25 Aug 2021 11:59:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5757961103
-	for <bpf@archiver.kernel.org>; Wed, 25 Aug 2021 10:10:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8DA8461176
+	for <bpf@archiver.kernel.org>; Wed, 25 Aug 2021 11:59:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239755AbhHYKKx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 25 Aug 2021 06:10:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34088 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238949AbhHYKKv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 25 Aug 2021 06:10:51 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 70E7861183;
-        Wed, 25 Aug 2021 10:10:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629886206;
-        bh=65p/TIA87p7eJYjLp0QTn1JuyKk95BTYSGbqHgZY5Qw=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=k7iDOMivV62EC7EAlkOReOOg+q9yvXot4CH2A7q3TTMptJ+bq63IYHWTmnWcQ3E96
-         AgJnrzIdrXwvx1mVxOPiJ0iScY4sK2egYotLzkLp6IwhC/+BzCy9KAqDxK3hEUSfhE
-         5QOLCu0TK9pxF4/RFTxb5lDAQeB3k0ikabURBLxAlr9AN4HRIde6CWe0S5JPtOiUaJ
-         CDIDQNYml/+nC8JInsBee7hXJsf7FrQFpwXRqps6TBe7+QqtRj74kdW8pXkk6ihKIU
-         B/JlBPr+1+GQy4ukz/UvgbmZO0r/0iLvjNNu2WlMkO/Cg0nFZXDyWNb4AqpcDnuTUB
-         0lpK6X+uob/eQ==
-Content-Type: text/plain; charset="utf-8"
+        id S240476AbhHYMA0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 25 Aug 2021 08:00:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34366 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238434AbhHYMA0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 25 Aug 2021 08:00:26 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 839E9C061757;
+        Wed, 25 Aug 2021 04:59:40 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id c79so366337oib.11;
+        Wed, 25 Aug 2021 04:59:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xXGfHXHkacFj3hVjAUMIKLTRt2NjWIABsXsOJbwv1xg=;
+        b=m5g4kNz6Al26gevow/MoVyW3uh9WKyVcZ6nXsCyOM63pHloaWtfHOitbj/ddMrII8Z
+         BH49fwETN3J0KAb4hyOK0V61UNkUU2zIVZe6WA+2JSjp22qH3I87Pi0RfRHRg87dRtL2
+         2yJHVjk+aEHHpS8j0ezFb9h09F4LiRFrIX8PAYXS4uZhoeO+z5njZFyjX/YG0NM2KiJ+
+         g3WH1FSmp6OShKNgatAM1fKdH+1UYaYmJQncijEoM9sMkO+DIcdiW9c4+ACYWNjEacYr
+         KDFZqlmg5O/9TGY0QYOtJ2CayVIQoHpJRsrgN+nIWFza6f5Mo05MtRlbwiKuH7MTDQY4
+         LJUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xXGfHXHkacFj3hVjAUMIKLTRt2NjWIABsXsOJbwv1xg=;
+        b=Ztc0609xIWnsAt2Brcra685MN4z+0AR0zjl/DfoXtJKyWgBghRmS1QTvF4JWKZJpJ6
+         H7xsCV9QiKGb9GlSqvvAHk7h9XFTAbpBUtl6DRlR7hgSYKzn+riPDfTxF3qJh7nCMT7F
+         7OKTf8IvIsnjq5/uItDSY4HNx/4u2hFPuFYgEqibAGPDLqwpul/p5XJPX8tvDPtPv98R
+         ZirxnVQ9eUGG2vv65WA3AD8R9utuOfo6anzu1nF9f2mX7Nban5BAFBTJQh5t3/E9FHxs
+         bxICaqi77go36bM4FegbGx0Rvr4L+szwGYv4NbkF5QsBHWJvjeCiPb0IMoPLWPXmFfCs
+         KVvg==
+X-Gm-Message-State: AOAM533/L2/w+33Y2bzB2MUSmLc9w9WLttJxRE+MMMAgRfjwhSNnG6Fd
+        CyYHwuOq4ZuwrnaXClgU2tFE03MEndomklPZLec=
+X-Google-Smtp-Source: ABdhPJzWL+J6f3VWAKw/V+b1F/vnLPMT3Ack2d5dRdJjoa09Q2zMLn5qgMA6S2GCDl0lDpXLguAgSB22yJrbmwObfoA=
+X-Received: by 2002:aca:c2c6:: with SMTP id s189mr6426351oif.123.1629892779899;
+ Wed, 25 Aug 2021 04:59:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v2 1/1] net: stmmac: fix kernel panic due to NULL pointer
- dereference of xsk_pool
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <162988620641.3256.15807737014421094725.git-patchwork-notify@kernel.org>
-Date:   Wed, 25 Aug 2021 10:10:06 +0000
-References: <20210825005529.980109-1-yoong.siang.song@intel.com>
-In-Reply-To: <20210825005529.980109-1-yoong.siang.song@intel.com>
-To:     Song Yoong Siang <yoong.siang.song@intel.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net,
-        kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com,
-        peppe.cavallaro@st.com, alexandre.torgue@st.com,
-        joabreu@synopsys.com, mcoquelin.stm32@gmail.com,
-        boon.leong.ong@intel.com, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
+References: <20210824104918.7930-1-kerneljasonxing@gmail.com>
+ <59dff551-2d52-5ecc-14ac-4a6ada5b1275@redhat.com> <CAL+tcoDERDZqtjK1BCc0vYYwYtvgRtb8H6z2FTVbGqr+N7bVmA@mail.gmail.com>
+ <20210824153225.GA16546@ranger.igk.intel.com>
+In-Reply-To: <20210824153225.GA16546@ranger.igk.intel.com>
+From:   Jason Xing <kerneljasonxing@gmail.com>
+Date:   Wed, 25 Aug 2021 19:59:03 +0800
+Message-ID: <CAL+tcoDUhZfy3NTx4TOv3wa1f8SMkNhzNpVS5qyySaVOm6L-qQ@mail.gmail.com>
+Subject: Re: [PATCH] ixgbe: let the xdpdrv work with more than 64 cpus
+To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc:     Jesper Dangaard Brouer <jbrouer@redhat.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
+        David Miller <davem@davemloft.net>, kuba@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+        john.fastabend@gmail.com, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, kpsingh@kernel.org,
+        brouer@redhat.com, intel-wired-lan@lists.osuosl.org,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, bpf@vger.kernel.org,
+        Jason Xing <xingwanli@kuaishou.com>,
+        Shujin Li <lishujin@kuaishou.com>,
+        =?UTF-8?B?w43DsWlnbyBIdWd1ZXQ=?= <ihuguet@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
+On Tue, Aug 24, 2021 at 11:48 PM Maciej Fijalkowski
+<maciej.fijalkowski@intel.com> wrote:
+>
+> On Tue, Aug 24, 2021 at 11:23:29PM +0800, Jason Xing wrote:
+> > On Tue, Aug 24, 2021 at 9:32 PM Jesper Dangaard Brouer
+> > <jbrouer@redhat.com> wrote:
+> > >
+> > >
+> > >
+> > > On 24/08/2021 12.49, kerneljasonxing@gmail.com wrote:
+> > > > From: Jason Xing <xingwanli@kuaishou.com>
+> > > >
+> > > > Originally, ixgbe driver doesn't allow the mounting of xdpdrv if the
+> > > > server is equipped with more than 64 cpus online. So it turns out that
+> > > > the loading of xdpdrv causes the "NOMEM" failure.
+> > > >
+> > > > Actually, we can adjust the algorithm and then make it work, which has
+> > > > no harm at all, only if we set the maxmium number of xdp queues.
+> > >
+> > > This is not true, it can cause harm, because XDP transmission queues are
+> > > used without locking. See drivers ndo_xdp_xmit function ixgbe_xdp_xmit().
+> > > As driver assumption is that each CPU have its own XDP TX-queue.
+>
+> Thanks Jesper for chiming in.
+>
+> > >
+> >
+> > Point taken. I indeed miss that part which would cause bad behavior if it
+> > happens.
+> >
+> > At this point, I think I should find all the allocation and use of XDP
+> > related, say,
+> > queues and rings, then adjust them all?
+> >
+> > Let's say if the server is shipped with 128 cpus, we could map 128 cpus to 64
+> > rings in the function ixgbe_xdp_xmit(). However, it sounds a little bit odd.
+> >
+> > Do you think that it makes any sense?
+>
+> We need a fallback path for ixgbe. I did the following for ice:
+> https://x-lore.kernel.org/bpf/20210819120004.34392-9-maciej.fijalkowski@intel.com/T/#u
+>
 
-This patch was applied to netdev/net.git (refs/heads/master):
+Thanks. I'm ready to send the v2 patch. Please help me review the next
+submission.
 
-On Wed, 25 Aug 2021 08:55:29 +0800 you wrote:
-> After free xsk_pool, there is possibility that napi polling is still
-> running in the middle, thus causes a kernel crash due to kernel NULL
-> pointer dereference of rx_q->xsk_pool and tx_q->xsk_pool.
-> 
-> Fix this by changing the XDP pool setup sequence to:
->  1. disable napi before free xsk_pool
->  2. enable napi after init xsk_pool
-> 
-> [...]
+Jason
 
-Here is the summary with links:
-  - [net,v2,1/1] net: stmmac: fix kernel panic due to NULL pointer dereference of xsk_pool
-    https://git.kernel.org/netdev/net/c/a6451192da26
-
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+> >
+> > Thanks,
+> > Jason
+> >
+> > > This patch is not a proper fix.
+> > >
+> > > I do think we need a proper fix for this issue on ixgbe.
+> > >
+> > >
+> > > > Fixes: 33fdc82f08 ("ixgbe: add support for XDP_TX action")
+> > > > Co-developed-by: Shujin Li <lishujin@kuaishou.com>
+> > > > Signed-off-by: Shujin Li <lishujin@kuaishou.com>
+> > > > Signed-off-by: Jason Xing <xingwanli@kuaishou.com>
+> > > > ---
+> > > >   drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c  | 2 +-
+> > > >   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c | 3 ---
+> > > >   2 files changed, 1 insertion(+), 4 deletions(-)
+> > > >
+> > > > diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c
+> > > > index 0218f6c..5953996 100644
+> > > > --- a/drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c
+> > > > +++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_lib.c
+> > > > @@ -299,7 +299,7 @@ static void ixgbe_cache_ring_register(struct ixgbe_adapter *adapter)
+> > > >
+> > > >   static int ixgbe_xdp_queues(struct ixgbe_adapter *adapter)
+> > > >   {
+> > > > -     return adapter->xdp_prog ? nr_cpu_ids : 0;
+> > > > +     return adapter->xdp_prog ? min_t(int, MAX_XDP_QUEUES, nr_cpu_ids) : 0;
+> > > >   }
+> > > >
+> > > >   #define IXGBE_RSS_64Q_MASK  0x3F
+> > > > diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
+> > > > index 14aea40..b36d16b 100644
+> > > > --- a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
+> > > > +++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
+> > > > @@ -10130,9 +10130,6 @@ static int ixgbe_xdp_setup(struct net_device *dev, struct bpf_prog *prog)
+> > > >                       return -EINVAL;
+> > > >       }
+> > > >
+> > > > -     if (nr_cpu_ids > MAX_XDP_QUEUES)
+> > > > -             return -ENOMEM;
+> > > > -
+> > > >       old_prog = xchg(&adapter->xdp_prog, prog);
+> > > >       need_reset = (!!prog != !!old_prog);
+> > > >
+> > > >
+> > >
