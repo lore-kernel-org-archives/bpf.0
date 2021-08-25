@@ -2,142 +2,88 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3311C4338F
-	for <bpf@archiver.kernel.org>; Wed, 25 Aug 2021 09:44:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D4FFC432BE
+	for <bpf@archiver.kernel.org>; Wed, 25 Aug 2021 10:10:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9E2D56115A
-	for <bpf@archiver.kernel.org>; Wed, 25 Aug 2021 09:44:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 74E2361103
+	for <bpf@archiver.kernel.org>; Wed, 25 Aug 2021 10:10:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235088AbhHYJot (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 25 Aug 2021 05:44:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58878 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237574AbhHYJot (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 25 Aug 2021 05:44:49 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBB25C061796
-        for <bpf@vger.kernel.org>; Wed, 25 Aug 2021 02:44:03 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id j4so16764102lfg.9
-        for <bpf@vger.kernel.org>; Wed, 25 Aug 2021 02:44:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=references:user-agent:from:to:cc:subject:in-reply-to:date
-         :message-id:mime-version;
-        bh=mVBCLMrmtNi0cBtd2h0yR4rj69aPWXuUyL2zj6muVGc=;
-        b=nvhJO0jOM9EWIg+YirpaPwyNot5o45tv1yCyrmltHv0cBZhd17TNcCrZ4atxwswTl4
-         5uhYYq3S9cLZPs9WAV3wSBKLyJwPW/XfLAlH1kvqTSTPi58I/oU36SmUuST6bOGHp4Qb
-         yh3p+qfKpVDwWAggGmGVFa8olBj3vQF2keIu4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject
-         :in-reply-to:date:message-id:mime-version;
-        bh=mVBCLMrmtNi0cBtd2h0yR4rj69aPWXuUyL2zj6muVGc=;
-        b=fuxXi7f/rSFeW3TeIMbufakjO/BCMLmjgvlKQmkXRJhnLeFmvjeEhDeDWn7psyR1/2
-         /fOeEVt4NaIMC8k2P/Gj3x1JVN9jGRMunNinCkhREwhsHnLH9V1Kr/Woy/bsIfY2cP06
-         egVu9H/3Q7jT0pMJRoprV5HluLiXevFvY2q1YFIHgRvH7eidRiCU/bCk+4sfxEIE85qa
-         IRoKmhcyz4W65RygP1/2tnHlRJ2hj00slSk6tJOmVRmXRJkH30EIChKDiM0+lLkmooKH
-         ryHIJvtvI1mT8o1PmGrQ8fbRbfp+6vgxuL8MGZxynqilsBC8LBR19yDyIFv/7YSfFHhd
-         zPkQ==
-X-Gm-Message-State: AOAM531idk48MF0WEhJ1vVAFZ/dRbc7Scg6oQMEIlhsCre/CIR6jlzss
-        ScdOgN6l68Hxsl2bV5iv304+yg==
-X-Google-Smtp-Source: ABdhPJzCdAERMdrEjkk3bVyLtyl+jMyTKe5MEdSUZQWrko89ztd+kwzLWjgykYkketLnht4xsCSQ0Q==
-X-Received: by 2002:ac2:4d52:: with SMTP id 18mr32810334lfp.550.1629884642112;
-        Wed, 25 Aug 2021 02:44:02 -0700 (PDT)
-Received: from cloudflare.com ([2a01:110f:480d:6f00:ff34:bf12:ef2:5071])
-        by smtp.gmail.com with ESMTPSA id g25sm691895lfv.62.2021.08.25.02.44.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Aug 2021 02:44:01 -0700 (PDT)
-References: <20210823030143.29937-1-po-hsu.lin@canonical.com>
-User-agent: mu4e 1.1.0; emacs 27.2
-From:   Jakub Sitnicki <jakub@cloudflare.com>
-To:     Po-Hsu Lin <po-hsu.lin@canonical.com>
-Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        hawk@kernel.org, kuba@kernel.org, davem@davemloft.net,
-        kpsingh@kernel.org, john.fastabend@gmail.com, yhs@fb.com,
-        songliubraving@fb.com, kafai@fb.com, andrii@kernel.org,
-        daniel@iogearbox.net, ast@kernel.org, skhan@linuxfoundation.org
-Subject: Re: [PATCH] selftests/bpf: Use kselftest skip code for skipped tests
-In-reply-to: <20210823030143.29937-1-po-hsu.lin@canonical.com>
-Date:   Wed, 25 Aug 2021 11:44:00 +0200
-Message-ID: <87h7fdg8pr.fsf@cloudflare.com>
+        id S239628AbhHYKKw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 25 Aug 2021 06:10:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34068 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238783AbhHYKKv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 25 Aug 2021 06:10:51 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 5BE0761176;
+        Wed, 25 Aug 2021 10:10:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1629886206;
+        bh=OSv0PWWhZVtTGTqPHk5I4aEOsasp+kDfKfr1GgHP/Jg=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=hVsPT+kAgICx6tBRqyIhV1hRk3fq1W7DSNR3HAPr5WuXl5eeKpe6pOHyp3VqvwQ+N
+         V2NcJFe7BRrX4E2rZW9V7IpHi87l3AwuzTSlIwr0GtiWQuR0C+NW1NStmGbAC8WtGk
+         17WSzEYastYu2FK5g/4nxI7RphiZGXc1o5vvfqJK+Bn2S3bJUueux+HYt5Q7JjN2ny
+         RAYPQYojThwaAWg6UuqqDpeDrHkkQ6uEc9jfxKUOtPC8rigejMj6CLuNajaMPQQI3p
+         h43ADJxrIs7x0vOkLUl4N6z7/Rf3WdnHcaDH0/VbhNEALssh4Ly4nIJw1td90EyvnF
+         ZmbQ7VbqWHZIw==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net v2 1/1] net: stmmac: fix kernel panic due to NULL pointer
+ dereference of buf->xdp
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <162988620630.3256.11386363919352017742.git-patchwork-notify@kernel.org>
+Date:   Wed, 25 Aug 2021 10:10:06 +0000
+References: <20210825005742.980267-1-yoong.siang.song@intel.com>
+In-Reply-To: <20210825005742.980267-1-yoong.siang.song@intel.com>
+To:     Song Yoong Siang <yoong.siang.song@intel.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net,
+        kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com,
+        peppe.cavallaro@st.com, alexandre.torgue@st.com,
+        joabreu@synopsys.com, mcoquelin.stm32@gmail.com,
+        boon.leong.ong@intel.com, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Aug 23, 2021 at 05:01 AM CEST, Po-Hsu Lin wrote:
-> There are several test cases in the bpf directory are still using
-> exit 0 when they need to be skipped. Use kselftest framework skip
-> code instead so it can help us to distinguish the return status.
->
-> Criterion to filter out what should be fixed in bpf directory:
->   grep -r "exit 0" -B1 | grep -i skip
->
-> This change might cause some false-positives if people are running
-> these test scripts directly and only checking their return codes,
-> which will change from 0 to 4. However I think the impact should be
-> small as most of our scripts here are already using this skip code.
-> And there will be no such issue if running them with the kselftest
-> framework.
->
-> Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
-> ---
->  tools/testing/selftests/bpf/test_bpftool_build.sh | 5 ++++-
->  tools/testing/selftests/bpf/test_xdp_meta.sh      | 5 ++++-
->  tools/testing/selftests/bpf/test_xdp_vlan.sh      | 7 +++++--
->  3 files changed, 13 insertions(+), 4 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/test_bpftool_build.sh b/tools/testing/selftests/bpf/test_bpftool_build.sh
-> index ac349a5..b6fab1e 100755
-> --- a/tools/testing/selftests/bpf/test_bpftool_build.sh
-> +++ b/tools/testing/selftests/bpf/test_bpftool_build.sh
-> @@ -1,6 +1,9 @@
->  #!/bin/bash
->  # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->  
-> +# Kselftest framework requirement - SKIP code is 4.
-> +ksft_skip=4
-> +
->  case $1 in
->  	-h|--help)
->  		echo -e "$0 [-j <n>]"
-> @@ -22,7 +25,7 @@ KDIR_ROOT_DIR=$(realpath $PWD/$SCRIPT_REL_DIR/../../../../)
->  cd $KDIR_ROOT_DIR
->  if [ ! -e tools/bpf/bpftool/Makefile ]; then
->  	echo -e "skip:    bpftool files not found!\n"
-> -	exit 0
-> +	exit $ksft_skip
->  fi
->  
->  ERROR=0
+Hello:
 
-This bit has been fixed a couple days ago by a similar change:
+This patch was applied to netdev/net.git (refs/heads/master):
 
-https://lore.kernel.org/bpf/20210820025549.28325-1-lizhijian@cn.fujitsu.com
+On Wed, 25 Aug 2021 08:57:42 +0800 you wrote:
+> Ensure a valid XSK buffer before proceed to free the xdp buffer.
+> 
+> The following kernel panic is observed without this patch:
+> 
+> RIP: 0010:xp_free+0x5/0x40
+> Call Trace:
+> stmmac_napi_poll_rxtx+0x332/0xb30 [stmmac]
+> ? stmmac_tx_timer+0x3c/0xb0 [stmmac]
+> net_rx_action+0x13d/0x3d0
+> __do_softirq+0xfc/0x2fb
+> ? smpboot_register_percpu_thread+0xe0/0xe0
+> run_ksoftirqd+0x32/0x70
+> smpboot_thread_fn+0x1d8/0x2c0
+> kthread+0x169/0x1a0
+> ? kthread_park+0x90/0x90
+> ret_from_fork+0x1f/0x30
+> 
+> [...]
 
-> diff --git a/tools/testing/selftests/bpf/test_xdp_meta.sh b/tools/testing/selftests/bpf/test_xdp_meta.sh
-> index 637fcf4..fd3f218 100755
-> --- a/tools/testing/selftests/bpf/test_xdp_meta.sh
-> +++ b/tools/testing/selftests/bpf/test_xdp_meta.sh
-> @@ -1,5 +1,8 @@
->  #!/bin/sh
->  
-> +# Kselftest framework requirement - SKIP code is 4.
-> +ksft_skip=4
-> +
->  cleanup()
->  {
->  	if [ "$?" = "0" ]; then
+Here is the summary with links:
+  - [net,v2,1/1] net: stmmac: fix kernel panic due to NULL pointer dereference of buf->xdp
+    https://git.kernel.org/netdev/net/c/2b9fff64f032
 
-Would consider making it read-only:
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-  readonly KSFT_SKIP=4
 
-[...]
