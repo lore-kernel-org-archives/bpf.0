@@ -2,193 +2,65 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A252C432BE
-	for <bpf@archiver.kernel.org>; Thu, 26 Aug 2021 19:43:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E25C2C4320A
+	for <bpf@archiver.kernel.org>; Thu, 26 Aug 2021 20:34:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F018560F4C
-	for <bpf@archiver.kernel.org>; Thu, 26 Aug 2021 19:43:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CA8FE60F91
+	for <bpf@archiver.kernel.org>; Thu, 26 Aug 2021 20:34:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243476AbhHZTnt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 26 Aug 2021 15:43:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:44899 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243503AbhHZTnt (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 26 Aug 2021 15:43:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1630006981;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cg3b6pCUYgk1DCEc/G+FSd+XekVAu5S9ccZ75etSNB8=;
-        b=AkYK2YxQHAxyo69U8XHC9X4RwLhXjPp4jzVROzSaIbid0Z3g3Y4q0yFndsblkYhsnSD+6q
-        8AO11e0qz1qUtRD2ZjZ1+ICFAfcspdEsSJQzFKwUb5DA5L7PKP/sArUZnIUpqJuiyGV5K3
-        +FdQDoPUmCxFIeZIjMB3RUV708AnXYQ=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-7-MgOu0cLYOUepSGsOr90-ZQ-1; Thu, 26 Aug 2021 15:41:54 -0400
-X-MC-Unique: MgOu0cLYOUepSGsOr90-ZQ-1
-Received: by mail-wr1-f70.google.com with SMTP id v18-20020adfe2920000b029013bbfb19640so1186161wri.17
-        for <bpf@vger.kernel.org>; Thu, 26 Aug 2021 12:41:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=cg3b6pCUYgk1DCEc/G+FSd+XekVAu5S9ccZ75etSNB8=;
-        b=VrorhrKr6CFgJ0D+e4l6+vQPk9wBDoWt9JI8IlXTUtaMQOVyc/V9naqewT90cP4kiK
-         PcmX8AWTnkh2Mu7k1nX6OLaTlQnhDNUJWIPqubwO1t/UTa4403oO9efIVIrSuAU1npAL
-         miMU4Hys++zHKtVlvGl3b9gJ143Eqm9YQZUQ7u6VzLShAAqV7YRzhsCQF4J25SwNQ8/z
-         BHSNv0deaHTfpdniZvRSscvn2p/s2cb+tg/ReIRulTGBPwkphK3WANPSIEhIt8t0SrDM
-         SlIjnhNbdhyLOPwXJwQ2ZW/b03TBc8Dcwi/ROcyeliVxovI8IOF9t8hUdT/qBTBd5qRN
-         twTA==
-X-Gm-Message-State: AOAM531JYaS9BJ7FISzRIcoMFI4I+SWOYJMQbKf2C7gIjsnF2rnGtlYb
-        Ijz2auxLTd2JE2RkJK9lO+yAUTatynRDE25JyTu4lskpOxMQVMCeEnaPXALlUx1WP6B7slE0BoB
-        yLptgVcRQgCwQ
-X-Received: by 2002:a7b:cb44:: with SMTP id v4mr5315777wmj.169.1630006913397;
-        Thu, 26 Aug 2021 12:41:53 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz9WybcY+dg6NCte2Tc5bpGkGSGSc32LlQkKDXkHz9yizHUZoqK2YAG3KJWGGtS9Cqwax+XXA==
-X-Received: by 2002:a7b:cb44:: with SMTP id v4mr5315763wmj.169.1630006913198;
-        Thu, 26 Aug 2021 12:41:53 -0700 (PDT)
-Received: from krava.redhat.com ([83.240.63.86])
-        by smtp.gmail.com with ESMTPSA id l2sm10371542wmi.1.2021.08.26.12.41.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Aug 2021 12:41:52 -0700 (PDT)
-From:   Jiri Olsa <jolsa@redhat.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>,
-        "Steven Rostedt (VMware)" <rostedt@goodmis.org>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>, Daniel Xu <dxu@dxuuu.xyz>,
-        Viktor Malik <vmalik@redhat.com>
-Subject: [PATCH bpf-next v4 24/27] selftests/bpf: Add fentry/fexit multi func test
-Date:   Thu, 26 Aug 2021 21:39:19 +0200
-Message-Id: <20210826193922.66204-25-jolsa@kernel.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210826193922.66204-1-jolsa@kernel.org>
-References: <20210826193922.66204-1-jolsa@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S243493AbhHZUep (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 26 Aug 2021 16:34:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36454 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229916AbhHZUeo (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 26 Aug 2021 16:34:44 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id DC9A260F91;
+        Thu, 26 Aug 2021 20:33:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1630010036;
+        bh=HcJnSY3xITwzNO2duOVAGRP0zMYM1V/J9YMW/ut7EuE=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=L6jEDJ62hPX8QqgmBTbgddsn/DMCkC3os2G2/Wx1yJ4uzmXZ+TdYY44Q3BJbdn0Z+
+         /sBO7H7WcrM0xAhMmjbTfXJaL/wP4mJwPvl4Cn6TKE2JhIZIktiYTyFUGFf31cx0g9
+         6csU6VVSS+irlqo2fBO8Zu9aZNTQuESJp5bxxloIFVg4ykmMJVdVpzWX9QDLkj1VcR
+         0IjfvWvOUO0bi+m48AGFPC4Jm/II4YoyOhwpHCRDdRBojTEXhUrsQm345maXbbaAE/
+         saG0I75w1fOfiTeB0LPsednG2B8uyAw/Q1NAD5np2M+rqrad7MaynCcRgAU0gZSDxv
+         iWjnX5GSWmAfA==
+Subject: Re: [GIT PULL] Networking for 5.14-rc8
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20210826191017.1345100-1-kuba@kernel.org>
+References: <20210826191017.1345100-1-kuba@kernel.org>
+X-PR-Tracked-List-Id: <bpf.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20210826191017.1345100-1-kuba@kernel.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-5.14-rc8
+X-PR-Tracked-Commit-Id: 9ebc2758d0bbed951511d1709be0717178ec2660
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 8a2cb8bd064ecb089995469076f3055fbfd0a4c9
+Message-Id: <163001003679.31497.10308151113469684476.pr-tracker-bot@kernel.org>
+Date:   Thu, 26 Aug 2021 20:33:56 +0000
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     torvalds@linux-foundation.org, kuba@kernel.org,
+        davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-can@vger.kernel.org, kvalo@codeaurora.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Adding selftest for fentry/fexit multi func tests that attaches
-to bpf_fentry_test* functions and checks argument values based
-on the processed function.
+The pull request you sent on Thu, 26 Aug 2021 12:10:17 -0700:
 
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
----
- tools/testing/selftests/bpf/Makefile          |  4 ++-
- .../bpf/prog_tests/multi_fentry_fexit_test.c  | 32 +++++++++++++++++++
- .../selftests/bpf/progs/multi_fentry_fexit.c  | 28 ++++++++++++++++
- 3 files changed, 63 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/multi_fentry_fexit_test.c
- create mode 100644 tools/testing/selftests/bpf/progs/multi_fentry_fexit.c
+> git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-5.14-rc8
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 8da3be0972de..6272d9c166f9 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -313,7 +313,8 @@ SKEL_BLACKLIST := btf__% test_pinning_invalid.c test_sk_assign.c
- 
- LINKED_SKELS := test_static_linked.skel.h linked_funcs.skel.h		\
- 		linked_vars.skel.h linked_maps.skel.h			\
--		multi_fentry_test.skel.h multi_fexit_test.skel.h
-+		multi_fentry_test.skel.h multi_fexit_test.skel.h	\
-+		multi_fentry_fexit_test.skel.h
- 
- LSKELS := kfunc_call_test.c fentry_test.c fexit_test.c fexit_sleep.c \
- 	test_ksyms_module.c test_ringbuf.c atomics.c trace_printk.c
-@@ -325,6 +326,7 @@ linked_vars.skel.h-deps := linked_vars1.o linked_vars2.o
- linked_maps.skel.h-deps := linked_maps1.o linked_maps2.o
- multi_fentry_test.skel.h-deps := multi_fentry.o multi_check.o
- multi_fexit_test.skel.h-deps := multi_fexit.o multi_check.o
-+multi_fentry_fexit_test.skel.h-deps := multi_fentry_fexit.o multi_check.o
- 
- LINKED_BPF_SRCS := $(patsubst %.o,%.c,$(foreach skel,$(LINKED_SKELS),$($(skel)-deps)))
- 
-diff --git a/tools/testing/selftests/bpf/prog_tests/multi_fentry_fexit_test.c b/tools/testing/selftests/bpf/prog_tests/multi_fentry_fexit_test.c
-new file mode 100644
-index 000000000000..d54abf36ab2f
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/multi_fentry_fexit_test.c
-@@ -0,0 +1,32 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
-+#include "multi_fentry_fexit_test.skel.h"
-+
-+void test_multi_fentry_fexit_test(void)
-+{
-+	DECLARE_LIBBPF_OPTS(bpf_link_update_opts, link_upd_opts);
-+	struct multi_fentry_fexit_test *skel = NULL;
-+	__u32 duration = 0, retval;
-+	int err, prog_fd;
-+
-+	skel = multi_fentry_fexit_test__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "fentry_multi_skel_load"))
-+		goto cleanup;
-+
-+	err = multi_fentry_fexit_test__attach(skel);
-+	if (!ASSERT_OK(err, "fentry_fexit_attach"))
-+		goto cleanup;
-+
-+	prog_fd = bpf_program__fd(skel->progs.test2);
-+	err = bpf_prog_test_run(prog_fd, 1, NULL, 0,
-+				NULL, NULL, &retval, &duration);
-+	ASSERT_OK(err, "test_run");
-+	ASSERT_EQ(retval, 0, "test_run");
-+
-+	ASSERT_EQ(skel->bss->test1_arg_result, 8, "test1_arg_result");
-+	ASSERT_EQ(skel->bss->test2_arg_result, 8, "test2_arg_result");
-+	ASSERT_EQ(skel->bss->test2_ret_result, 8, "test2_ret_result");
-+
-+cleanup:
-+	multi_fentry_fexit_test__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/multi_fentry_fexit.c b/tools/testing/selftests/bpf/progs/multi_fentry_fexit.c
-new file mode 100644
-index 000000000000..aac7df8c9211
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/multi_fentry_fexit.c
-@@ -0,0 +1,28 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+__u64 test1_arg_result = 0;
-+__u64 test2_arg_result = 0;
-+__u64 test2_ret_result = 0;
-+
-+__hidden extern void multi_arg_check(__u64 *ctx, __u64 *test_result);
-+__hidden extern void multi_ret_check(void *ctx, int ret, __u64 *test_result);
-+
-+SEC("fentry.multi/bpf_fentry_test*")
-+int BPF_PROG(test1, __u64 a, __u64 b, __u64 c, __u64 d, __u64 e, __u64 f)
-+{
-+	multi_arg_check(ctx, &test1_arg_result);
-+	return 0;
-+}
-+
-+SEC("fexit.multi/bpf_fentry_test*")
-+int BPF_PROG(test2, __u64 a, __u64 b, __u64 c, __u64 d, __u64 e, __u64 f, int ret)
-+{
-+	multi_arg_check(ctx, &test2_arg_result);
-+	multi_ret_check(ctx, ret, &test2_ret_result);
-+	return 0;
-+}
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/8a2cb8bd064ecb089995469076f3055fbfd0a4c9
+
+Thank you!
+
 -- 
-2.31.1
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
