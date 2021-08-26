@@ -2,129 +2,178 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 505AEC432BE
-	for <bpf@archiver.kernel.org>; Thu, 26 Aug 2021 19:40:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AF5DC4320A
+	for <bpf@archiver.kernel.org>; Thu, 26 Aug 2021 19:40:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3C70C610A6
-	for <bpf@archiver.kernel.org>; Thu, 26 Aug 2021 19:40:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 849C9610A7
+	for <bpf@archiver.kernel.org>; Thu, 26 Aug 2021 19:40:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243530AbhHZTk4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 26 Aug 2021 15:40:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47448 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243505AbhHZTk4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 26 Aug 2021 15:40:56 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8DBFC061757
+        id S243528AbhHZTk6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 26 Aug 2021 15:40:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:59873 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S243535AbhHZTk5 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 26 Aug 2021 15:40:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1630006809;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Cz5FUM/QUQ2HTCjVFzxMUjYkqvve+4iMlPHPGJoE+bY=;
+        b=g5TPky87oEMa902vleuwTw67ErNjaz9WlHlKdtcVGuSE9Jmldb9mIigb6JpDN80lvI/iGb
+        A9gOeocO1aM5ZdL1YEg4AH3KkonA/IWM6T2S9HEEQYVrxwfZN1qaTmy22N8b/mgoa0JDHb
+        5lCSJbUed1AzxgDsSE09GxvNHb08tH8=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-43-P8HyeHacNl6pwM4MzlpjfA-1; Thu, 26 Aug 2021 15:40:08 -0400
+X-MC-Unique: P8HyeHacNl6pwM4MzlpjfA-1
+Received: by mail-wr1-f69.google.com with SMTP id n18-20020adfe792000000b00156ae576abdso1190932wrm.9
         for <bpf@vger.kernel.org>; Thu, 26 Aug 2021 12:40:08 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id t1so3951273pgv.3
-        for <bpf@vger.kernel.org>; Thu, 26 Aug 2021 12:40:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=k7fw5yb8eI7rSXX+5TMSxeVyPX6JoNlXZembIfc+aPs=;
-        b=m8JocPcma0pgIcHKCXuSxPBsP3R4nU6iUpS4wIZXYi1vs+slCLX5cajPpZU8mFtHNz
-         3sEsUxAjAh86UPNSoWuE4rZMBK8LDC29ySVvhjYKp2qfmCjMHkUYihm+xzXMsgrVyi7W
-         +fnlVz0fQplASsdyO8SVXcPB0L3bp56kbd2lO+RMPkPFj/d2wd8DMI8uFqWgWSx2uRCB
-         /DkcGi/OBVsCuffxvBBt4VV7OM8xgKCaWp4nrlqctqKAHLT1z5BiN1vw2CW0x2VAHEJh
-         GD7ZVov4xIA3KXtfNRjuA62F0lM8BXZIY5irYTDBzouv2iVGAdGowHqI+DZo+fPbBB/b
-         482Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=k7fw5yb8eI7rSXX+5TMSxeVyPX6JoNlXZembIfc+aPs=;
-        b=ETEkpYojJEtoigJV7grcuawCyoDNQPHvJo1ILG25Dy2ECeysXmfhiil6yDwxtwOzeQ
-         5id8QaXAbHRPomQqZzjmkCBoV5kStspyKe9bMnpcNDklK4TnZXF4mF6EKw16wi2yjGkt
-         5IUm3mgXMWirXXOwfKzLnEnauLOBrBV1t7kI6EAPtsK6wajLNFCdHL+cYWc64d8iJGEn
-         xXTdTbdvyS+GS5jm8EIngCcm1TwSxz2OHDr5X910tqA1NOApz2oB2AqB2xIe69vN2sKa
-         MaNF+t/m3QLLZsDSuVaDJlZmSc4InXC97evGWLtwQW6WxD67Y3EDQYTK4k9jVPpd6Yzi
-         OxvA==
-X-Gm-Message-State: AOAM531U4jbuST8HG3XP/7AVKP8viYWVKDc0J/IiqAAtU76nIDH0VflX
-        T1peEfVbgmwechhKISM87i7NTKFCjyzQvFsX0vs=
-X-Google-Smtp-Source: ABdhPJye66ikZ1CqYbGZ5dPE9Wtkigdf+/itKCYn22RWSZUJKp5CND/ASnanIbSIf9qnzXQuFuOk7mHZt6lj66mK5Hw=
-X-Received: by 2002:aa7:8754:0:b0:3e2:1de:4f92 with SMTP id
- g20-20020aa78754000000b003e201de4f92mr5301434pfo.16.1630006808289; Thu, 26
- Aug 2021 12:40:08 -0700 (PDT)
-MIME-Version: 1.0
-References: <CACAyw9_y4QumOW35qpgTbLsJ532uGq-kVW-VESJzGyiZkypnvw@mail.gmail.com>
-In-Reply-To: <CACAyw9_y4QumOW35qpgTbLsJ532uGq-kVW-VESJzGyiZkypnvw@mail.gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 26 Aug 2021 12:39:57 -0700
-Message-ID: <CAADnVQ+nzJsaFWUXAghqs_UdwELZUPOFCvnJMVCKMUPnLOrzuQ@mail.gmail.com>
-Subject: Re: Concurrent BPF_PROG_TEST_RUN for XDP contend on dispatcher mutex
-To:     Lorenz Bauer <lmb@cloudflare.com>
-Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Cz5FUM/QUQ2HTCjVFzxMUjYkqvve+4iMlPHPGJoE+bY=;
+        b=W5ORW4crjXIULRR+Q9iatooD3v8fljc3S+pV+5rTVkqEWNq66eWGE+KHSoPlXj4XXt
+         Kh83KLPje6pg4XTAhV3NEpAEYM0Bbz6mATxpCVIGtw8ThG81Ty0LIhxATz1I3EGILrr+
+         IDbgvuLahBRYav3I14xwGVLssZYhnQEUV6LwslGvtsq5SemZqqHUIuNUmwpCNsWbKEB3
+         /sbRws6g+c7a2iMCOakRPDj3QXnWEmW94AyiUrFLXLEJ0AgC1M5I4hFes0iXbAlbTYr0
+         bPYijEXNtMG2aPj4mvAipMjvYq867JwHroHVzRE7FJtb0bPZo7gAXuxSkYEoIQKqE6Od
+         XJpw==
+X-Gm-Message-State: AOAM533RUtT8FoGU3TyPq4B7czBG8MycjSy/gNnKZiSJnuk/U8sqRuFz
+        OXPyBKANFZUOCmytY8gsqVYdtStlbZNwIVB7yACmC9SqsyT3eTl6Wsbdj1nJpomsPodNV5TTvfn
+        HdTiI4rcOPaOO
+X-Received: by 2002:adf:e4c5:: with SMTP id v5mr6082126wrm.1.1630006806980;
+        Thu, 26 Aug 2021 12:40:06 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJw+oapw3UzB0tUkEstf0tZaeuwgr3wd1znhLKDrE5AJuTWzq9xPA/RbcYKzFpfOJzGc1FS3SA==
+X-Received: by 2002:adf:e4c5:: with SMTP id v5mr6082103wrm.1.1630006806810;
+        Thu, 26 Aug 2021 12:40:06 -0700 (PDT)
+Received: from krava.redhat.com ([83.240.63.86])
+        by smtp.gmail.com with ESMTPSA id f2sm4002494wru.31.2021.08.26.12.40.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Aug 2021 12:40:06 -0700 (PDT)
+From:   Jiri Olsa <jolsa@redhat.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        kernel-team <kernel-team@cloudflare.com>,
-        bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Andrii Nakryiko <andriin@fb.com>,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>, Daniel Xu <dxu@dxuuu.xyz>,
+        Viktor Malik <vmalik@redhat.com>
+Subject: [PATCH bpf-next v4 07/27] ftrace: Add multi direct modify interface
+Date:   Thu, 26 Aug 2021 21:39:02 +0200
+Message-Id: <20210826193922.66204-8-jolsa@kernel.org>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20210826193922.66204-1-jolsa@kernel.org>
+References: <20210826193922.66204-1-jolsa@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Aug 26, 2021 at 4:09 AM Lorenz Bauer <lmb@cloudflare.com> wrote:
->
-> Hi,
->
-> One of the tests for our XDP-based load balancer has gotten quite
-> slow, so I dug in. Roughly, it simulates 1m distinct packets arriving
-> at the load balancer by calling BPF_PROG_TEST_RUN a million times.
->
->     distribution_test.go:40: 1000000 iterations
->     distribution_test.go:99: Coefficient of variation: 0.52%
-> --- PASS: TestLoadBalancerDistribution (0.00s)
->     --- PASS: TestLoadBalancerDistribution/32_endpoints (22.04s)
->
-> You can see that the test takes 20s. Running the same test with slight
-> variations in three threads results in this:
->
->     distribution_test.go:40: 1000000 iterations
-> === CONT  TestLoadBalancerDistribution/32_endpoints
->     distribution_test.go:99: Coefficient of variation: 0.60%
-> === CONT  TestLoadBalancerDistribution/64_endpoints
->     distribution_test.go:99: Coefficient of variation: 0.82%
-> === CONT  TestLoadBalancerDistribution/128_endpoints
->     distribution_test.go:99: Coefficient of variation: 1.24%
-> --- PASS: TestLoadBalancerDistribution (0.00s)
->     --- PASS: TestLoadBalancerDistribution/32_endpoints (55.61s)
->     --- PASS: TestLoadBalancerDistribution/64_endpoints (55.61s)
->     --- PASS: TestLoadBalancerDistribution/128_endpoints (55.61s)
->
-> It's pretty clear that something is serialising the threads. Digging
-> around in perf reveals that the culprit is bpf_prog_change_xdp called
-> from bpf_prog_test_run_xdp. The call was added in f23c4b3924d2 ("bpf:
-> Start using the BPF dispatcher in BPF_TEST_RUN").
->
-> Is there something we can do about this? Maybe only call into the
-> dispatcher when repeat > 1?
+Adding interface to modify registered direct function
+for ftrace_ops. Adding following function:
 
-Are you doing three parallel test_run commands
-with repeat=1 and doing this syscall 1m times?
-yeah, that would stress bpf_dispatcher_update() logic nicely :)
-3m accesses to the same mutex and flip flop of a single page
-with tlb flush and text_poke_bp.
-Can your test harness use test_run with repeat = 1m instead?
-Or it's not possible, since input data is different every time?
-I think avoiding xdp dispatcher for repeat=1 makes sense.
-Folks might be using this facility in similar fashion and
-paying the dispatcher penalty for a single run is unnecessary.
-While at it would be good to add the test_run specific xdp dispatcher.
-Since right now all netdevs share a single global xdp dispatcher.
-100 parallel xdp test_run threads will probably fail because
-they will reach BPF_DISPATCHER_MAX limit.
+   modify_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
 
-Bjorn,
-could you make such a change?
+The function changes the currently registered direct
+function for all attached functions.
 
-Other ideas?
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+---
+ include/linux/ftrace.h |  6 ++++++
+ kernel/trace/ftrace.c  | 43 ++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 49 insertions(+)
 
-Thanks!
+diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
+index 93d8f12e70b3..63ca0a424947 100644
+--- a/include/linux/ftrace.h
++++ b/include/linux/ftrace.h
+@@ -318,6 +318,8 @@ int ftrace_modify_direct_caller(struct ftrace_func_entry *entry,
+ unsigned long ftrace_find_rec_direct(unsigned long ip);
+ int register_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr);
+ int unregister_ftrace_direct_multi(struct ftrace_ops *ops);
++int modify_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr);
++
+ #else
+ # define ftrace_direct_func_count 0
+ static inline int register_ftrace_direct(unsigned long ip, unsigned long addr)
+@@ -356,6 +358,10 @@ int unregister_ftrace_direct_multi(struct ftrace_ops *ops)
+ {
+ 	return -ENODEV;
+ }
++int modify_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
++{
++	return -ENODEV;
++}
+ #endif /* CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS */
+ 
+ #ifndef CONFIG_HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+index 7243769493c9..59940a6a907c 100644
+--- a/kernel/trace/ftrace.c
++++ b/kernel/trace/ftrace.c
+@@ -5518,6 +5518,49 @@ int unregister_ftrace_direct_multi(struct ftrace_ops *ops)
+ 	return err;
+ }
+ EXPORT_SYMBOL_GPL(unregister_ftrace_direct_multi);
++
++int modify_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
++{
++	struct ftrace_hash *hash = ops->func_hash->filter_hash;
++	struct ftrace_func_entry *entry, *iter;
++	int i, size;
++	int err;
++
++	if (check_direct_multi(ops))
++		return -EINVAL;
++	if (!(ops->flags & FTRACE_OPS_FL_ENABLED))
++		return -EINVAL;
++
++	mutex_lock(&direct_mutex);
++	mutex_lock(&ftrace_lock);
++
++	/*
++	 * Shutdown the ops, change 'direct' pointer for each
++	 * ops entry in direct_functions hash and startup the
++	 * ops back again.
++	 */
++	err = ftrace_shutdown(ops, 0);
++	if (err)
++		goto out_unlock;
++
++	size = 1 << hash->size_bits;
++	for (i = 0; i < size; i++) {
++		hlist_for_each_entry(iter, &hash->buckets[i], hlist) {
++			entry = __ftrace_lookup_ip(direct_functions, iter->ip);
++			if (!entry)
++				continue;
++			entry->direct = addr;
++		}
++	}
++
++	err = ftrace_startup(ops, 0);
++
++ out_unlock:
++	mutex_unlock(&ftrace_lock);
++	mutex_unlock(&direct_mutex);
++	return err;
++}
++EXPORT_SYMBOL_GPL(modify_ftrace_direct_multi);
+ #endif /* CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS */
+ 
+ /**
+-- 
+2.31.1
+
