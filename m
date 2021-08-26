@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-19.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3427C432BE
-	for <bpf@archiver.kernel.org>; Thu, 26 Aug 2021 22:13:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B6C8AC4320A
+	for <bpf@archiver.kernel.org>; Thu, 26 Aug 2021 22:13:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8664B60FD9
-	for <bpf@archiver.kernel.org>; Thu, 26 Aug 2021 22:13:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 935C460FDC
+	for <bpf@archiver.kernel.org>; Thu, 26 Aug 2021 22:13:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243673AbhHZWOL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 26 Aug 2021 18:14:11 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:27776 "EHLO
+        id S243703AbhHZWOM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 26 Aug 2021 18:14:12 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:21286 "EHLO
         mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230400AbhHZWOL (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 26 Aug 2021 18:14:11 -0400
+        by vger.kernel.org with ESMTP id S230400AbhHZWOM (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 26 Aug 2021 18:14:12 -0400
 Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17QMAXlH003590
-        for <bpf@vger.kernel.org>; Thu, 26 Aug 2021 15:13:22 -0700
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17QMAI6n003091
+        for <bpf@vger.kernel.org>; Thu, 26 Aug 2021 15:13:23 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=XJe7pWNFHhVBR8nzVFLX3GIlYlAQPrmirhupC5SObi8=;
- b=WlLGQ3oXHjyDGA4VSZBe+lpcpa8WofL4O7Mj6K1/7QYn/sWyNaGfPf/7GKKsx+iJ0djK
- CG/4UJ/mqRB20SiqkAWFVrtiUx4vbmYePF1+Wssor6RuwzHDr2djjgEbdSZDhCLrsBmS
- AORSqe/WesFghVB+GVUuOOh2NSuvOuvQyLQ= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 3apc9s36xd-1
+ bh=qACHS+7T1hN9TVHbhW5Hn5UE9ZQUENGGKulLuyeIKgo=;
+ b=hU2nGDeOK1klJ6w+VMQ7H7kXi0V69Qftf6R6jaR4Diq78Qldc7UJ62yNj+LyNS94F16O
+ KF2tQ4rfWXOltZQvYWUDxCb/DR/7zEjnEz/yNApcNZqQkz5DGTS6qtAsuZ5PPUM5qc4b
+ m8KEkr41ioFJ1Jidvjw3NKpbm6W5h0gLlHQ= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 3apc9s36xc-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 26 Aug 2021 15:13:22 -0700
-Received: from intmgw001.05.ash7.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 26 Aug 2021 15:13:23 -0700
+Received: from intmgw002.06.ash9.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Thu, 26 Aug 2021 15:13:21 -0700
+ 15.1.2176.2; Thu, 26 Aug 2021 15:13:21 -0700
 Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id 77C2EE2EC444; Thu, 26 Aug 2021 15:13:15 -0700 (PDT)
+        id BDEDEE2EC453; Thu, 26 Aug 2021 15:13:19 -0700 (PDT)
 From:   Song Liu <songliubraving@fb.com>
 To:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
 CC:     <acme@kernel.org>, <peterz@infradead.org>, <mingo@redhat.com>,
         <kjain@linux.ibm.com>, <kernel-team@fb.com>,
         Song Liu <songliubraving@fb.com>
-Subject: [PATCH v2 bpf-next 1/3] perf: enable branch record for software events
-Date:   Thu, 26 Aug 2021 15:13:04 -0700
-Message-ID: <20210826221306.2280066-2-songliubraving@fb.com>
+Subject: [PATCH v2 bpf-next 3/3] selftests/bpf: add test for bpf_get_branch_snapshot
+Date:   Thu, 26 Aug 2021 15:13:06 -0700
+Message-ID: <20210826221306.2280066-4-songliubraving@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210826221306.2280066-1-songliubraving@fb.com>
 References: <20210826221306.2280066-1-songliubraving@fb.com>
@@ -55,12 +55,12 @@ Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-ORIG-GUID: GRdWz5eMCS2-EZavtII2ekfsDUBusepf
-X-Proofpoint-GUID: GRdWz5eMCS2-EZavtII2ekfsDUBusepf
+X-Proofpoint-ORIG-GUID: YIIMmyyfOG9Ne2yp7vzDwL5E9Nu3iycE
+X-Proofpoint-GUID: YIIMmyyfOG9Ne2yp7vzDwL5E9Nu3iycE
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
  definitions=2021-08-26_05:2021-08-26,2021-08-26 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- mlxlogscore=779 priorityscore=1501 phishscore=0 malwarescore=0
+ mlxlogscore=999 priorityscore=1501 phishscore=0 malwarescore=0
  suspectscore=0 bulkscore=0 impostorscore=0 adultscore=0 clxscore=1015
  mlxscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2107140000 definitions=main-2108260124
@@ -69,203 +69,285 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The typical way to access branch record (e.g. Intel LBR) is via hardware
-perf_event. For CPUs with FREEZE_LBRS_ON_PMI support, PMI could capture
-reliable LBR. On the other hand, LBR could also be useful in non-PMI
-scenario. For example, in kretprobe or bpf fexit program, LBR could
-provide a lot of information on what happened with the function. Add API
-to use branch record for software use.
-
-Note that, when the software event triggers, it is necessary to stop the
-branch record hardware asap. Therefore, static_call is used to remove som=
-e
-branch instructions in this process.
+This test uses bpf_get_branch_snapshot from a fexit program. The test use=
+s
+a target kernel function (bpf_fexit_loop_test1) and compares the record
+against kallsyms. If there isn't enough record matching kallsyms, the
+test fails.
 
 Signed-off-by: Song Liu <songliubraving@fb.com>
-
 ---
-Some data on intel_pmu_lbr_disable_all() and perf_pmu_disable().
+ net/bpf/test_run.c                            |  15 ++-
+ .../bpf/prog_tests/get_branch_snapshot.c      | 106 ++++++++++++++++++
+ .../selftests/bpf/progs/get_branch_snapshot.c |  41 +++++++
+ tools/testing/selftests/bpf/trace_helpers.c   |  30 +++++
+ tools/testing/selftests/bpf/trace_helpers.h   |   5 +
+ 5 files changed, 196 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/get_branch_sna=
+pshot.c
+ create mode 100644 tools/testing/selftests/bpf/progs/get_branch_snapshot=
+.c
 
-With this patch, when fexit program triggers, intel_pmu_lbr_disable_all i=
-s
-used to stop the LBR, and the LBR is stopped after 6 extra branch records
-(see the full trace below). If we replace intel_pmu_lbr_disable_all in
-intel_pmu_snapshot_branch_stack() with perf_pmu_disable, the LBR is stopp=
-ed
-after 19 extra branch records. This is still acceptable for systems with =
-32
-LBR entries. But for systems with fewer entries, all the entries before
-fexit are flushed. Therefore, I suggest we take the short cut and stop LB=
-R
-asap.
-
-
-LBR snapshot captured when we use intel_pmu_lbr_disable_all():
-
-ID: 0 from intel_pmu_lbr_disable_all.part.10+37 to intel_pmu_lbr_disable_=
-all.part.10+72
-ID: 1 from intel_pmu_lbr_disable_all.part.10+33 to intel_pmu_lbr_disable_=
-all.part.10+37
-ID: 2 from intel_pmu_snapshot_branch_stack+51 to intel_pmu_lbr_disable_al=
-l.part.10+0
-ID: 3 from __bpf_prog_enter+53 to intel_pmu_snapshot_branch_stack+0
-ID: 4 from __bpf_prog_enter+8 to __bpf_prog_enter+38
-ID: 5 from __brk_limit+473903158 to __bpf_prog_enter+0
-ID: 6 from bpf_fexit_loop_test1+22 to __brk_limit+473903139
-ID: 7 from bpf_fexit_loop_test1+20 to bpf_fexit_loop_test1+13
-ID: 8 from bpf_fexit_loop_test1+20 to bpf_fexit_loop_test1+13
-ID: 9 from bpf_fexit_loop_test1+20 to bpf_fexit_loop_test1+13
-
-
-LBR snapshot captured when we use perf_pmu_disable():
-
-ID: 0 from intel_pmu_lbr_disable_all+58 to intel_pmu_lbr_disable_all+93
-ID: 1 from intel_pmu_lbr_disable_all+54 to intel_pmu_lbr_disable_all+58
-ID: 2 from intel_pmu_disable_all+15 to intel_pmu_lbr_disable_all+0
-ID: 3 from intel_pmu_pebs_disable_all+30 to intel_pmu_disable_all+15
-ID: 4 from intel_pmu_disable_all+10 to intel_pmu_pebs_disable_all+0
-ID: 5 from __intel_pmu_disable_all+49 to intel_pmu_disable_all+10
-ID: 6 from intel_pmu_disable_all+5 to __intel_pmu_disable_all+0
-ID: 7 from x86_pmu_disable+61 to intel_pmu_disable_all+0
-ID: 8 from x86_pmu_disable+38 to x86_pmu_disable+41
-ID: 9 from __x86_indirect_thunk_rax+16 to x86_pmu_disable+0
-ID: 10 from __x86_indirect_thunk_rax+0 to __x86_indirect_thunk_rax+12
-ID: 11 from perf_pmu_disable.part.122+4 to __x86_indirect_thunk_rax+0
-ID: 12 from perf_pmu_disable+23 to perf_pmu_disable.part.122+0
-ID: 13 from intel_pmu_snapshot_branch_stack+45 to perf_pmu_disable+0
-ID: 14 from x86_get_pmu+35 to intel_pmu_snapshot_branch_stack+39
-ID: 15 from intel_pmu_snapshot_branch_stack+34 to x86_get_pmu+0
-ID: 16 from __bpf_prog_enter+53 to intel_pmu_snapshot_branch_stack+0
-ID: 17 from __bpf_prog_enter+8 to __bpf_prog_enter+38
-ID: 18 from __brk_limit+478056502 to __bpf_prog_enter+0
-ID: 19 from bpf_fexit_loop_test1+22 to __brk_limit+478056483
-ID: 20 from bpf_fexit_loop_test1+20 to bpf_fexit_loop_test1+13
-ID: 21 from bpf_fexit_loop_test1+20 to bpf_fexit_loop_test1+13
-
-
----
- arch/x86/events/intel/core.c |  5 ++++-
- arch/x86/events/intel/lbr.c  | 13 +++++++++++++
- arch/x86/events/perf_event.h |  2 ++
- include/linux/perf_event.h   | 29 +++++++++++++++++++++++++++++
- kernel/events/core.c         |  3 +++
- 5 files changed, 51 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
-index ac6fd2dabf6a2..a29649e7241cc 100644
---- a/arch/x86/events/intel/core.c
-+++ b/arch/x86/events/intel/core.c
-@@ -6283,8 +6283,11 @@ __init int intel_pmu_init(void)
- 			x86_pmu.lbr_nr =3D 0;
- 	}
-
--	if (x86_pmu.lbr_nr)
-+	if (x86_pmu.lbr_nr) {
- 		pr_cont("%d-deep LBR, ", x86_pmu.lbr_nr);
-+		static_call_update(perf_snapshot_branch_stack,
-+				   intel_pmu_snapshot_branch_stack);
-+	}
-
- 	intel_pmu_check_extra_regs(x86_pmu.extra_regs);
-
-diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
-index 9e6d6eaeb4cb6..7d4fe1d6e79ff 100644
---- a/arch/x86/events/intel/lbr.c
-+++ b/arch/x86/events/intel/lbr.c
-@@ -1862,3 +1862,16 @@ EXPORT_SYMBOL_GPL(x86_perf_get_lbr);
- struct event_constraint vlbr_constraint =3D
- 	__EVENT_CONSTRAINT(INTEL_FIXED_VLBR_EVENT, (1ULL << INTEL_PMC_IDX_FIXED=
-_VLBR),
- 			  FIXED_EVENT_FLAGS, 1, 0, PERF_X86_EVENT_LBR_SELECT);
-+
-+int intel_pmu_snapshot_branch_stack(struct perf_branch_snapshot *br_snap=
-shot)
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index 2eb0e55ef54d2..6cc179a532c9c 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -231,6 +231,18 @@ struct sock * noinline bpf_kfunc_call_test3(struct s=
+ock *sk)
+ 	return sk;
+ }
+=20
++noinline int bpf_fexit_loop_test1(int n)
 +{
-+	struct cpu_hw_events *cpuc =3D this_cpu_ptr(&cpu_hw_events);
++	int i, sum =3D 0;
 +
-+	intel_pmu_lbr_disable_all();
-+	intel_pmu_lbr_read();
-+	memcpy(br_snapshot->entries, cpuc->lbr_entries,
-+	       sizeof(struct perf_branch_entry) * x86_pmu.lbr_nr);
-+	br_snapshot->nr =3D x86_pmu.lbr_nr;
-+	intel_pmu_lbr_enable_all(false);
++	/* the primary goal of this test is to test LBR. Create a lot of
++	 * branches in the function, so we can catch it easily.
++	 */
++	for (i =3D 0; i < n; i++)
++		sum +=3D i;
++	return sum;
++}
++
+ __diag_pop();
+=20
+ ALLOW_ERROR_INJECTION(bpf_modify_return_test, ERRNO);
+@@ -293,7 +305,8 @@ int bpf_prog_test_run_tracing(struct bpf_prog *prog,
+ 		    bpf_fentry_test5(11, (void *)12, 13, 14, 15) !=3D 65 ||
+ 		    bpf_fentry_test6(16, (void *)17, 18, 19, (void *)20, 21) !=3D 111 =
+||
+ 		    bpf_fentry_test7((struct bpf_fentry_test_t *)0) !=3D 0 ||
+-		    bpf_fentry_test8(&arg) !=3D 0)
++		    bpf_fentry_test8(&arg) !=3D 0 ||
++		    bpf_fexit_loop_test1(101) !=3D 5050)
+ 			goto out;
+ 		break;
+ 	case BPF_MODIFY_RETURN:
+diff --git a/tools/testing/selftests/bpf/prog_tests/get_branch_snapshot.c=
+ b/tools/testing/selftests/bpf/prog_tests/get_branch_snapshot.c
+new file mode 100644
+index 0000000000000..9bb16826418fb
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/get_branch_snapshot.c
+@@ -0,0 +1,106 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2021 Facebook */
++#include <test_progs.h>
++#include "get_branch_snapshot.skel.h"
++
++static int *pfd_array;
++static int cpu_cnt;
++
++static int create_perf_events(void)
++{
++	struct perf_event_attr attr =3D {0};
++	int cpu;
++
++	/* create perf event */
++	attr.size =3D sizeof(attr);
++	attr.type =3D PERF_TYPE_RAW;
++	attr.config =3D 0x1b00;
++	attr.sample_type =3D PERF_SAMPLE_BRANCH_STACK;
++	attr.branch_sample_type =3D PERF_SAMPLE_BRANCH_KERNEL |
++		PERF_SAMPLE_BRANCH_USER | PERF_SAMPLE_BRANCH_ANY;
++
++	cpu_cnt =3D libbpf_num_possible_cpus();
++	pfd_array =3D malloc(sizeof(int) * cpu_cnt);
++	if (!pfd_array) {
++		cpu_cnt =3D 0;
++		return 1;
++	}
++
++	for (cpu =3D 0; cpu < libbpf_num_possible_cpus(); cpu++) {
++		pfd_array[cpu] =3D syscall(__NR_perf_event_open, &attr,
++					 -1, cpu, -1, PERF_FLAG_FD_CLOEXEC);
++		if (pfd_array[cpu] < 0)
++			break;
++	}
++
++	return cpu =3D=3D 0;
++}
++
++static void close_perf_events(void)
++{
++	int cpu =3D 0;
++	int fd;
++
++	while (cpu++ < cpu_cnt) {
++		fd =3D pfd_array[cpu];
++		if (fd < 0)
++			break;
++		close(fd);
++	}
++	free(pfd_array);
++}
++
++void test_get_branch_snapshot(void)
++{
++	struct get_branch_snapshot *skel;
++	int err, prog_fd;
++	__u32 retval;
++
++	if (create_perf_events()) {
++		test__skip();  /* system doesn't support LBR */
++		goto cleanup;
++	}
++
++	skel =3D get_branch_snapshot__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "get_branch_snapshot__open_and_load"))
++		goto cleanup;
++
++	err =3D kallsyms_find("bpf_fexit_loop_test1", &skel->bss->address_low);
++	if (!ASSERT_OK(err, "kallsyms_find"))
++		goto cleanup;
++
++	err =3D kallsyms_find_next("bpf_fexit_loop_test1", &skel->bss->address_=
+high);
++	if (!ASSERT_OK(err, "kallsyms_find_next"))
++		goto cleanup;
++
++	err =3D get_branch_snapshot__attach(skel);
++	if (!ASSERT_OK(err, "get_branch_snapshot__attach"))
++		goto cleanup;
++
++	prog_fd =3D bpf_program__fd(skel->progs.test1);
++	err =3D bpf_prog_test_run(prog_fd, 1, NULL, 0,
++				NULL, 0, &retval, NULL);
++
++	if (!ASSERT_OK(err, "bpf_prog_test_run"))
++		goto cleanup;
++
++	if (skel->bss->total_entries < 16) {
++		/* too few entries for the hit/waste test */
++		test__skip();
++		goto cleanup;
++	}
++
++	ASSERT_GT(skel->bss->test1_hits, 5, "find_test1_in_lbr");
++
++	/* Given we stop LBR in software, we will waste a few entries.
++	 * But we should try to waste as few as possibleentries. We are at
++	 * about 7 on x86_64 systems.
++	 * Add a check for < 10 so that we get heads-up when something
++	 * changes and wastes too many entries.
++	 */
++	ASSERT_LT(skel->bss->wasted_entries, 10, "check_wasted_entries");
++
++cleanup:
++	get_branch_snapshot__destroy(skel);
++	close_perf_events();
++}
+diff --git a/tools/testing/selftests/bpf/progs/get_branch_snapshot.c b/to=
+ols/testing/selftests/bpf/progs/get_branch_snapshot.c
+new file mode 100644
+index 0000000000000..9c944e7480b95
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/get_branch_snapshot.c
+@@ -0,0 +1,41 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2021 Facebook */
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++char _license[] SEC("license") =3D "GPL";
++
++__u64 test1_hits =3D 0;
++__u64 address_low =3D 0;
++__u64 address_high =3D 0;
++int wasted_entries =3D 0;
++long total_entries =3D 0;
++
++#define MAX_LBR_ENTRIES 32
++
++struct perf_branch_entry entries[MAX_LBR_ENTRIES] =3D {};
++
++
++static inline bool in_range(__u64 val)
++{
++	return (val >=3D address_low) && (val < address_high);
++}
++
++SEC("fexit/bpf_fexit_loop_test1")
++int BPF_PROG(test1, int n, int ret)
++{
++	long i;
++
++	total_entries =3D bpf_get_branch_snapshot(entries, sizeof(entries));
++
++	for (i =3D 0; i < MAX_LBR_ENTRIES; i++) {
++		if (i >=3D total_entries)
++			break;
++		if (in_range(entries[i].from) && in_range(entries[i].to))
++			test1_hits++;
++		else if (!test1_hits)
++			wasted_entries++;
++	}
 +	return 0;
 +}
-diff --git a/arch/x86/events/perf_event.h b/arch/x86/events/perf_event.h
-index e3ac05c97b5e5..0f4ca25d10bf1 100644
---- a/arch/x86/events/perf_event.h
-+++ b/arch/x86/events/perf_event.h
-@@ -1379,6 +1379,8 @@ void intel_pmu_pebs_data_source_skl(bool pmem);
-
- int intel_pmu_setup_lbr_filter(struct perf_event *event);
-
-+int intel_pmu_snapshot_branch_stack(struct perf_branch_snapshot *br_snap=
-shot);
-+
- void intel_pt_interrupt(void);
-
- int intel_bts_interrupt(void);
-diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-index fe156a8170aa3..f029eb4b2ce40 100644
---- a/include/linux/perf_event.h
-+++ b/include/linux/perf_event.h
-@@ -57,6 +57,7 @@ struct perf_guest_info_callbacks {
- #include <linux/cgroup.h>
- #include <linux/refcount.h>
- #include <linux/security.h>
-+#include <linux/static_call.h>
- #include <asm/local.h>
-
- struct perf_callchain_entry {
-@@ -1612,4 +1613,32 @@ extern void __weak arch_perf_update_userpage(struc=
-t perf_event *event,
- extern __weak u64 arch_perf_get_page_size(struct mm_struct *mm, unsigned=
- long addr);
- #endif
-
-+/*
-+ * Snapshot branch stack on software events.
-+ *
-+ * Branch stack can be very useful in understanding software events. For
-+ * example, when a long function, e.g. sys_perf_event_open, returns an
-+ * errno, it is not obvious why the function failed. Branch stack could
-+ * provide very helpful information in this type of scenarios.
-+ *
-+ * On software event, it is necessary to stop the hardware branch record=
-er
-+ * fast. Otherwise, the hardware register/buffer will be flushed with
-+ * entries af the triggering event. Therefore, static call is used to
-+ * stop the hardware recorder.
-+ *
-+ * To use the snapshot:
-+ * 1) After the event triggers, call perf_snapshot_branch_stack asap;
-+ * 2) On the same cpu, access the snapshot with perf_read_branch_snapsho=
-t;
+diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/=
+selftests/bpf/trace_helpers.c
+index e7a19b04d4eaf..2926a3b626821 100644
+--- a/tools/testing/selftests/bpf/trace_helpers.c
++++ b/tools/testing/selftests/bpf/trace_helpers.c
+@@ -117,6 +117,36 @@ int kallsyms_find(const char *sym, unsigned long lon=
+g *addr)
+ 	return err;
+ }
+=20
++/* find the address of the next symbol, this can be used to determine th=
+e
++ * end of a function
 + */
-+#define MAX_BRANCH_SNAPSHOT 32
++int kallsyms_find_next(const char *sym, unsigned long long *addr)
++{
++	char type, name[500];
++	unsigned long long value;
++	bool found =3D false;
++	int err =3D 0;
++	FILE *f;
 +
-+struct perf_branch_snapshot {
-+	unsigned int nr;
-+	struct perf_branch_entry entries[MAX_BRANCH_SNAPSHOT];
-+};
++	f =3D fopen("/proc/kallsyms", "r");
++	if (!f)
++		return -EINVAL;
 +
-+int dummy_perf_snapshot_branch_stack(struct perf_branch_snapshot *br_sna=
-pshot);
++	while (fscanf(f, "%llx %c %499s%*[^\n]\n", &value, &type, name) > 0) {
++		if (found) {
++			*addr =3D value;
++			goto out;
++		}
++		if (strcmp(name, sym) =3D=3D 0)
++			found =3D true;
++	}
++	err =3D -ENOENT;
 +
-+DECLARE_STATIC_CALL(perf_snapshot_branch_stack, dummy_perf_snapshot_bran=
-ch_stack);
++out:
++	fclose(f);
++	return err;
++}
 +
- #endif /* _LINUX_PERF_EVENT_H */
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 011cc5069b7ba..c53fe90e630ac 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -13437,3 +13437,6 @@ struct cgroup_subsys perf_event_cgrp_subsys =3D {
- 	.threaded	=3D true,
- };
- #endif /* CONFIG_CGROUP_PERF */
+ void read_trace_pipe(void)
+ {
+ 	int trace_fd;
+diff --git a/tools/testing/selftests/bpf/trace_helpers.h b/tools/testing/=
+selftests/bpf/trace_helpers.h
+index d907b445524d5..bc8ed86105d94 100644
+--- a/tools/testing/selftests/bpf/trace_helpers.h
++++ b/tools/testing/selftests/bpf/trace_helpers.h
+@@ -16,6 +16,11 @@ long ksym_get_addr(const char *name);
+ /* open kallsyms and find addresses on the fly, faster than load + searc=
+h. */
+ int kallsyms_find(const char *sym, unsigned long long *addr);
+=20
++/* find the address of the next symbol, this can be used to determine th=
+e
++ * end of a function
++ */
++int kallsyms_find_next(const char *sym, unsigned long long *addr);
 +
-+DEFINE_STATIC_CALL_NULL(perf_snapshot_branch_stack,
-+			dummy_perf_snapshot_branch_stack);
---
+ void read_trace_pipe(void);
+=20
+ ssize_t get_uprobe_offset(const void *addr, ssize_t base);
+--=20
 2.30.2
+
