@@ -2,258 +2,129 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99C7AC432BE
-	for <bpf@archiver.kernel.org>; Thu, 26 Aug 2021 19:40:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 505AEC432BE
+	for <bpf@archiver.kernel.org>; Thu, 26 Aug 2021 19:40:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 822826108F
-	for <bpf@archiver.kernel.org>; Thu, 26 Aug 2021 19:40:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3C70C610A6
+	for <bpf@archiver.kernel.org>; Thu, 26 Aug 2021 19:40:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243508AbhHZTkw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 26 Aug 2021 15:40:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:39352 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243507AbhHZTkv (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 26 Aug 2021 15:40:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1630006803;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jJQ/tMNBXaGFHSvueMGSUoswOun/bpw7UK/P+WAvXSI=;
-        b=B/u17cE6WAypTHOzp0YLTXxETYezaVPbhOn0FFdZdowrkGGJJiebWTl10XKYNuWJu7yFHT
-        4Yw3rgQs8B+EmXX9YbccuV9HVY1DecXWQ+s3iRRxuhGCZYXUqOFKExmjaJkjP955SSB3XS
-        N09kZdACRWv8v5z9AR+JM1o+LvnMTQQ=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-576-7fgcI2KENWO5jHuT76ir-Q-1; Thu, 26 Aug 2021 15:40:02 -0400
-X-MC-Unique: 7fgcI2KENWO5jHuT76ir-Q-1
-Received: by mail-wm1-f71.google.com with SMTP id j33-20020a05600c1c21b02902e6828f7a20so1124694wms.7
-        for <bpf@vger.kernel.org>; Thu, 26 Aug 2021 12:40:02 -0700 (PDT)
+        id S243530AbhHZTk4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 26 Aug 2021 15:40:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47448 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243505AbhHZTk4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 26 Aug 2021 15:40:56 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8DBFC061757
+        for <bpf@vger.kernel.org>; Thu, 26 Aug 2021 12:40:08 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id t1so3951273pgv.3
+        for <bpf@vger.kernel.org>; Thu, 26 Aug 2021 12:40:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=k7fw5yb8eI7rSXX+5TMSxeVyPX6JoNlXZembIfc+aPs=;
+        b=m8JocPcma0pgIcHKCXuSxPBsP3R4nU6iUpS4wIZXYi1vs+slCLX5cajPpZU8mFtHNz
+         3sEsUxAjAh86UPNSoWuE4rZMBK8LDC29ySVvhjYKp2qfmCjMHkUYihm+xzXMsgrVyi7W
+         +fnlVz0fQplASsdyO8SVXcPB0L3bp56kbd2lO+RMPkPFj/d2wd8DMI8uFqWgWSx2uRCB
+         /DkcGi/OBVsCuffxvBBt4VV7OM8xgKCaWp4nrlqctqKAHLT1z5BiN1vw2CW0x2VAHEJh
+         GD7ZVov4xIA3KXtfNRjuA62F0lM8BXZIY5irYTDBzouv2iVGAdGowHqI+DZo+fPbBB/b
+         482Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=jJQ/tMNBXaGFHSvueMGSUoswOun/bpw7UK/P+WAvXSI=;
-        b=rVCI83ZSVqEO686KjLoo/H6G6ZBzBiKs4fMZr3fvTRp88DKzhJACfJFKpm9OiVyxag
-         2lP8Ao//AT3Xmvza8KnDltat/U4ju9D3KFfDmXDp76YPfIZuXvu9JNpcf5d/9fexOSBc
-         bUrHLJIEkAwRKUQmHtvsku7c6HGlTG1DA8Bg1C00/j27ThW1Yydrmx6zWxn0HKwGhc1I
-         AAZjDe+g8YaW1u0eCJFI6bMstnyWuzqgkD4cX/egfdBB8UxFmDAeGVsrlYhYS7nWEhhU
-         QUssSAjUIGYD3IELvAOwOoWZeaFzY7HYcBhc/RzDiIfZSb6pGwKEn2hx/+EGrD6CU9Lc
-         +6JQ==
-X-Gm-Message-State: AOAM533nFrvu1oDIywS9ty6K9dc4larkg9UTYidGQFqNtHt7TI7Bj9MK
-        8cCFQr6C6nF8D39JJQVOCaIDE/Rznsv767/S7eAlaTk48NIrsXtJ/AZaPj3ca9jU9ccsQbfMMKp
-        vWovGUp6dKZuR
-X-Received: by 2002:a05:6000:259:: with SMTP id m25mr6083246wrz.53.1630006800787;
-        Thu, 26 Aug 2021 12:40:00 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwkPTBgsURejuxJTIjuestEHFAy+9/r3Y8oB2z0Dt6mIxe7/DOx/+W3andgX1YyrhGriFbOQw==
-X-Received: by 2002:a05:6000:259:: with SMTP id m25mr6083221wrz.53.1630006800591;
-        Thu, 26 Aug 2021 12:40:00 -0700 (PDT)
-Received: from krava.redhat.com ([83.240.63.86])
-        by smtp.gmail.com with ESMTPSA id t5sm2944929wra.95.2021.08.26.12.39.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Aug 2021 12:40:00 -0700 (PDT)
-From:   Jiri Olsa <jolsa@redhat.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>,
-        "Steven Rostedt (VMware)" <rostedt@goodmis.org>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>, Daniel Xu <dxu@dxuuu.xyz>,
-        Viktor Malik <vmalik@redhat.com>
-Subject: [PATCH bpf-next v4 06/27] ftrace: Add multi direct register/unregister interface
-Date:   Thu, 26 Aug 2021 21:39:01 +0200
-Message-Id: <20210826193922.66204-7-jolsa@kernel.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210826193922.66204-1-jolsa@kernel.org>
-References: <20210826193922.66204-1-jolsa@kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=k7fw5yb8eI7rSXX+5TMSxeVyPX6JoNlXZembIfc+aPs=;
+        b=ETEkpYojJEtoigJV7grcuawCyoDNQPHvJo1ILG25Dy2ECeysXmfhiil6yDwxtwOzeQ
+         5id8QaXAbHRPomQqZzjmkCBoV5kStspyKe9bMnpcNDklK4TnZXF4mF6EKw16wi2yjGkt
+         5IUm3mgXMWirXXOwfKzLnEnauLOBrBV1t7kI6EAPtsK6wajLNFCdHL+cYWc64d8iJGEn
+         xXTdTbdvyS+GS5jm8EIngCcm1TwSxz2OHDr5X910tqA1NOApz2oB2AqB2xIe69vN2sKa
+         MaNF+t/m3QLLZsDSuVaDJlZmSc4InXC97evGWLtwQW6WxD67Y3EDQYTK4k9jVPpd6Yzi
+         OxvA==
+X-Gm-Message-State: AOAM531U4jbuST8HG3XP/7AVKP8viYWVKDc0J/IiqAAtU76nIDH0VflX
+        T1peEfVbgmwechhKISM87i7NTKFCjyzQvFsX0vs=
+X-Google-Smtp-Source: ABdhPJye66ikZ1CqYbGZ5dPE9Wtkigdf+/itKCYn22RWSZUJKp5CND/ASnanIbSIf9qnzXQuFuOk7mHZt6lj66mK5Hw=
+X-Received: by 2002:aa7:8754:0:b0:3e2:1de:4f92 with SMTP id
+ g20-20020aa78754000000b003e201de4f92mr5301434pfo.16.1630006808289; Thu, 26
+ Aug 2021 12:40:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <CACAyw9_y4QumOW35qpgTbLsJ532uGq-kVW-VESJzGyiZkypnvw@mail.gmail.com>
+In-Reply-To: <CACAyw9_y4QumOW35qpgTbLsJ532uGq-kVW-VESJzGyiZkypnvw@mail.gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Thu, 26 Aug 2021 12:39:57 -0700
+Message-ID: <CAADnVQ+nzJsaFWUXAghqs_UdwELZUPOFCvnJMVCKMUPnLOrzuQ@mail.gmail.com>
+Subject: Re: Concurrent BPF_PROG_TEST_RUN for XDP contend on dispatcher mutex
+To:     Lorenz Bauer <lmb@cloudflare.com>
+Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        kernel-team <kernel-team@cloudflare.com>,
+        bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Adding interface to register multiple direct functions
-within single call. Adding following functions:
+On Thu, Aug 26, 2021 at 4:09 AM Lorenz Bauer <lmb@cloudflare.com> wrote:
+>
+> Hi,
+>
+> One of the tests for our XDP-based load balancer has gotten quite
+> slow, so I dug in. Roughly, it simulates 1m distinct packets arriving
+> at the load balancer by calling BPF_PROG_TEST_RUN a million times.
+>
+>     distribution_test.go:40: 1000000 iterations
+>     distribution_test.go:99: Coefficient of variation: 0.52%
+> --- PASS: TestLoadBalancerDistribution (0.00s)
+>     --- PASS: TestLoadBalancerDistribution/32_endpoints (22.04s)
+>
+> You can see that the test takes 20s. Running the same test with slight
+> variations in three threads results in this:
+>
+>     distribution_test.go:40: 1000000 iterations
+> === CONT  TestLoadBalancerDistribution/32_endpoints
+>     distribution_test.go:99: Coefficient of variation: 0.60%
+> === CONT  TestLoadBalancerDistribution/64_endpoints
+>     distribution_test.go:99: Coefficient of variation: 0.82%
+> === CONT  TestLoadBalancerDistribution/128_endpoints
+>     distribution_test.go:99: Coefficient of variation: 1.24%
+> --- PASS: TestLoadBalancerDistribution (0.00s)
+>     --- PASS: TestLoadBalancerDistribution/32_endpoints (55.61s)
+>     --- PASS: TestLoadBalancerDistribution/64_endpoints (55.61s)
+>     --- PASS: TestLoadBalancerDistribution/128_endpoints (55.61s)
+>
+> It's pretty clear that something is serialising the threads. Digging
+> around in perf reveals that the culprit is bpf_prog_change_xdp called
+> from bpf_prog_test_run_xdp. The call was added in f23c4b3924d2 ("bpf:
+> Start using the BPF dispatcher in BPF_TEST_RUN").
+>
+> Is there something we can do about this? Maybe only call into the
+> dispatcher when repeat > 1?
 
-  register_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
-  unregister_ftrace_direct_multi(struct ftrace_ops *ops)
+Are you doing three parallel test_run commands
+with repeat=1 and doing this syscall 1m times?
+yeah, that would stress bpf_dispatcher_update() logic nicely :)
+3m accesses to the same mutex and flip flop of a single page
+with tlb flush and text_poke_bp.
+Can your test harness use test_run with repeat = 1m instead?
+Or it's not possible, since input data is different every time?
+I think avoiding xdp dispatcher for repeat=1 makes sense.
+Folks might be using this facility in similar fashion and
+paying the dispatcher penalty for a single run is unnecessary.
+While at it would be good to add the test_run specific xdp dispatcher.
+Since right now all netdevs share a single global xdp dispatcher.
+100 parallel xdp test_run threads will probably fail because
+they will reach BPF_DISPATCHER_MAX limit.
 
-The register_ftrace_direct_multi registers direct function (addr)
-with all functions in ops filter. The ops filter can be updated
-before with ftrace_set_filter_ip calls.
+Bjorn,
+could you make such a change?
 
-All requested functions must not have direct function currently
-registered, otherwise register_ftrace_direct_multi will fail.
+Other ideas?
 
-The unregister_ftrace_direct_multi unregisters ops related direct
-functions.
-
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
----
- include/linux/ftrace.h |  10 ++++
- kernel/trace/ftrace.c  | 111 +++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 121 insertions(+)
-
-diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-index 9b218e59a608..93d8f12e70b3 100644
---- a/include/linux/ftrace.h
-+++ b/include/linux/ftrace.h
-@@ -316,6 +316,8 @@ int ftrace_modify_direct_caller(struct ftrace_func_entry *entry,
- 				unsigned long old_addr,
- 				unsigned long new_addr);
- unsigned long ftrace_find_rec_direct(unsigned long ip);
-+int register_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr);
-+int unregister_ftrace_direct_multi(struct ftrace_ops *ops);
- #else
- # define ftrace_direct_func_count 0
- static inline int register_ftrace_direct(unsigned long ip, unsigned long addr)
-@@ -346,6 +348,14 @@ static inline unsigned long ftrace_find_rec_direct(unsigned long ip)
- {
- 	return 0;
- }
-+int register_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
-+{
-+	return -ENODEV;
-+}
-+int unregister_ftrace_direct_multi(struct ftrace_ops *ops)
-+{
-+	return -ENODEV;
-+}
- #endif /* CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS */
- 
- #ifndef CONFIG_HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index c60217d81040..7243769493c9 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -5407,6 +5407,117 @@ int modify_ftrace_direct(unsigned long ip,
- 	return ret;
- }
- EXPORT_SYMBOL_GPL(modify_ftrace_direct);
-+
-+#define MULTI_FLAGS (FTRACE_OPS_FL_IPMODIFY | FTRACE_OPS_FL_DIRECT | \
-+		     FTRACE_OPS_FL_SAVE_REGS)
-+
-+static int check_direct_multi(struct ftrace_ops *ops)
-+{
-+	if (!(ops->flags & FTRACE_OPS_FL_INITIALIZED))
-+		return -EINVAL;
-+	if ((ops->flags & MULTI_FLAGS) != MULTI_FLAGS)
-+		return -EINVAL;
-+	return 0;
-+}
-+
-+int register_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
-+{
-+	struct ftrace_hash *hash, *free_hash = NULL;
-+	struct ftrace_func_entry *entry, *new;
-+	int err = -EBUSY, size, i;
-+
-+	if (ops->func || ops->trampoline)
-+		return -EINVAL;
-+	if (!(ops->flags & FTRACE_OPS_FL_INITIALIZED))
-+		return -EINVAL;
-+	if (ops->flags & FTRACE_OPS_FL_ENABLED)
-+		return -EINVAL;
-+
-+	hash = ops->func_hash->filter_hash;
-+	if (ftrace_hash_empty(hash))
-+		return -EINVAL;
-+
-+	mutex_lock(&direct_mutex);
-+
-+	/* Make sure requested entries are not already registered.. */
-+	size = 1 << hash->size_bits;
-+	for (i = 0; i < size; i++) {
-+		hlist_for_each_entry(entry, &hash->buckets[i], hlist) {
-+			if (ftrace_find_rec_direct(entry->ip))
-+				goto out_unlock;
-+		}
-+	}
-+
-+	/* ... and insert them to direct_functions hash. */
-+	err = -ENOMEM;
-+	for (i = 0; i < size; i++) {
-+		hlist_for_each_entry(entry, &hash->buckets[i], hlist) {
-+			new = ftrace_add_rec_direct(entry->ip, addr, &free_hash);
-+			if (!new)
-+				goto out_remove;
-+			entry->direct = addr;
-+		}
-+	}
-+
-+	ops->func = call_direct_funcs;
-+	ops->flags = MULTI_FLAGS;
-+	ops->trampoline = FTRACE_REGS_ADDR;
-+
-+	err = register_ftrace_function(ops);
-+
-+ out_remove:
-+	if (err) {
-+		for (i = 0; i < size; i++) {
-+			hlist_for_each_entry(entry, &hash->buckets[i], hlist) {
-+				new = __ftrace_lookup_ip(direct_functions, entry->ip);
-+				if (new) {
-+					remove_hash_entry(direct_functions, new);
-+					kfree(new);
-+				}
-+			}
-+		}
-+	}
-+
-+ out_unlock:
-+	mutex_unlock(&direct_mutex);
-+
-+	if (free_hash) {
-+		synchronize_rcu_tasks();
-+		free_ftrace_hash(free_hash);
-+	}
-+	return err;
-+}
-+EXPORT_SYMBOL_GPL(register_ftrace_direct_multi);
-+
-+int unregister_ftrace_direct_multi(struct ftrace_ops *ops)
-+{
-+	struct ftrace_hash *hash = ops->func_hash->filter_hash;
-+	struct ftrace_func_entry *entry, *new;
-+	int err, size, i;
-+
-+	if (check_direct_multi(ops))
-+		return -EINVAL;
-+	if (!(ops->flags & FTRACE_OPS_FL_ENABLED))
-+		return -EINVAL;
-+
-+	mutex_lock(&direct_mutex);
-+	err = unregister_ftrace_function(ops);
-+
-+	size = 1 << hash->size_bits;
-+	for (i = 0; i < size; i++) {
-+		hlist_for_each_entry(entry, &hash->buckets[i], hlist) {
-+			new = __ftrace_lookup_ip(direct_functions, entry->ip);
-+			if (new) {
-+				remove_hash_entry(direct_functions, new);
-+				kfree(new);
-+			}
-+		}
-+	}
-+
-+	mutex_unlock(&direct_mutex);
-+	return err;
-+}
-+EXPORT_SYMBOL_GPL(unregister_ftrace_direct_multi);
- #endif /* CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS */
- 
- /**
--- 
-2.31.1
-
+Thanks!
