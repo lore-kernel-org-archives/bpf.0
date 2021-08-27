@@ -2,316 +2,287 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-14.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 495E5C432BE
-	for <bpf@archiver.kernel.org>; Fri, 27 Aug 2021 20:55:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 653A4C4320A
+	for <bpf@archiver.kernel.org>; Fri, 27 Aug 2021 23:13:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3096D60F42
-	for <bpf@archiver.kernel.org>; Fri, 27 Aug 2021 20:55:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 422B460EB0
+	for <bpf@archiver.kernel.org>; Fri, 27 Aug 2021 23:13:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231346AbhH0U4n (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 27 Aug 2021 16:56:43 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:27660 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231751AbhH0U4n (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 27 Aug 2021 16:56:43 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17RKtXGT025853;
-        Fri, 27 Aug 2021 13:55:36 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=facebook; bh=Ng+KESeh9piRN0Wxh92AKmAzck6fuJc06o575uPc4ZI=;
- b=cS9sPV8xvBwT+wZuHrarHC6cDnr78AZ2jKbovDjO0+X1etrour0UYv9vIPEyTKEH+xL8
- ojNR2VrL6QoNGkwKSyMfPPEh8wDijHzIUerR/aXd1t4lrTdsYeRfKmBeETeJ3uezke+b
- 6P81nPuh5QzEzpS3nkJSSd5ApygaVnwj8rc= 
+        id S232396AbhH0XOE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 27 Aug 2021 19:14:04 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:29244 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S232252AbhH0XOE (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 27 Aug 2021 19:14:04 -0400
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.0.43/8.16.0.43) with SMTP id 17RN8sK8013985
+        for <bpf@vger.kernel.org>; Fri, 27 Aug 2021 16:13:14 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=iSbBmvN20EH37ifNr1eT7G0V6EdOzQVFVuFF2oqaxRo=;
+ b=Zvn3kQZ51yDIfT3YyrSOIoIpnw9XjO0KmiTpIciMovLpTO+Jc9V9j7o9vB6uSz5vTGSh
+ qLnB2Lk/SGoSWL6s21X5eBig+yUTCGu707prv7pv7Epd/71HHc+PRX33kvPmegSicoAD
+ HWXEjTJlIA68OJTaYVcEpF1USq3YZuIlqUQ= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 3aq1xd2bea-6
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 27 Aug 2021 13:55:36 -0700
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (100.104.31.183)
- by o365-in.thefacebook.com (100.104.35.174) with Microsoft SMTP Server
+        by m0001303.ppops.net with ESMTP id 3apmvtq4vc-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Fri, 27 Aug 2021 16:13:14 -0700
+Received: from intmgw002.48.prn1.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Fri, 27 Aug 2021 13:55:34 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BWS+Cqew0vJkPD/zYyaP1dP+xPwRMQnk7QG7poAyrbRIfGeDLcICiy4r65RmwiCHSOMQ2rgny8ulLK3b5KmHf/lDy0aXU7SrTPgjRSRlSdgjTNc1yxS7rP4lqejm6zCVSZSzHg8oRMlg2qHYtVDOnR2WyM0hysnWgjyQhWZxXoWuG6+/tYzH8pu8XYqEsAjlkvbB52waZ+cbIIDU33EthkEvFB0IqbTqjTbsv/b59P0VENL3yTdP7Lb0dpZ3w6kZ4oAtq7zM91js6BnzR3BgsaKKxdFObX7RxUGLF390TKae03MHNruGCmjvRKBF2pVjPqJ8lgb8fDtqEwUeSPVibw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Ng+KESeh9piRN0Wxh92AKmAzck6fuJc06o575uPc4ZI=;
- b=mT9FYsW4F3wQOgqEO2xE1pOck1ciEe6vXtB6VkXXm0ixHQ/XLl+TkQjthJlJJazf4qPnjX5k13L+nu30a6uJ9Nl5pcvtunk9/Y21oHAD479eJa8CX8cib2FvhEALMLKClHZsIZaHZ8g/wK6UeTC61voQRuOzZjGz8P3j1wqw0b9CtHkljaWR2/p9gH1Eczfd0U8NeGN2YFi0CnER0NxfXwPu0tJ9cw8QokxrzKWLC2qK9IpAM6fEQ50ElmjsBLm/HLYlSn2RUQnCChSph8V2m+jdhFLa15OUggn9685GFR3FFvM1RQKNy6GjmwUac8Wpxh2KJECVxaHd6Uco6Kv1gQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Authentication-Results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=fb.com;
-Received: from SA1PR15MB5016.namprd15.prod.outlook.com (2603:10b6:806:1db::19)
- by SA1PR15MB4981.namprd15.prod.outlook.com (2603:10b6:806:1d4::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4436.19; Fri, 27 Aug
- 2021 20:55:33 +0000
-Received: from SA1PR15MB5016.namprd15.prod.outlook.com
- ([fe80::3c1b:1a10:9708:7e36]) by SA1PR15MB5016.namprd15.prod.outlook.com
- ([fe80::3c1b:1a10:9708:7e36%7]) with mapi id 15.20.4457.020; Fri, 27 Aug 2021
- 20:55:33 +0000
-Date:   Fri, 27 Aug 2021 13:55:30 -0700
-From:   Martin KaFai Lau <kafai@fb.com>
-To:     KP Singh <kpsingh@kernel.org>
-CC:     <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Jann Horn <jannh@google.com>,
-        Florent Revest <revest@chromium.org>,
-        Brendan Jackman <jackmanb@chromium.org>
-Subject: Re: [PATCH bpf-next 1/2] bpf: Allow bpf_local_storage to be used by
- sleepable programs
-Message-ID: <20210827205530.zzqawd6wz52n65qh@kafai-mbp>
-References: <20210826235127.303505-1-kpsingh@kernel.org>
- <20210826235127.303505-2-kpsingh@kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20210826235127.303505-2-kpsingh@kernel.org>
-X-ClientProxiedBy: BY5PR17CA0014.namprd17.prod.outlook.com
- (2603:10b6:a03:1b8::27) To SA1PR15MB5016.namprd15.prod.outlook.com
- (2603:10b6:806:1db::19)
+ 15.1.2176.14; Fri, 27 Aug 2021 16:13:13 -0700
+Received: by devvm2661.vll0.facebook.com (Postfix, from userid 200310)
+        id 29C032B99AFC; Fri, 27 Aug 2021 16:13:08 -0700 (PDT)
+From:   Yucong Sun <fallentree@fb.com>
+To:     <andrii@kernel.org>
+CC:     <sunyucong@gmail.com>, <bpf@vger.kernel.org>
+Subject: [RFC 1/1] selftests/bpf: Add parallelism to test_progs
+Date:   Fri, 27 Aug 2021 16:13:07 -0700
+Message-ID: <20210827231307.3787723-2-fallentree@fb.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210827231307.3787723-1-fallentree@fb.com>
+References: <20210827231307.3787723-1-fallentree@fb.com>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from kafai-mbp (2620:10d:c090:400::5:d687) by BY5PR17CA0014.namprd17.prod.outlook.com (2603:10b6:a03:1b8::27) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4457.18 via Frontend Transport; Fri, 27 Aug 2021 20:55:31 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 03713977-fd49-4306-7bd3-08d9699d02d3
-X-MS-TrafficTypeDiagnostic: SA1PR15MB4981:
-X-Microsoft-Antispam-PRVS: <SA1PR15MB4981776FF0E6CA7D50CE7365D5C89@SA1PR15MB4981.namprd15.prod.outlook.com>
-X-FB-Source: Internal
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: wAveNl/NB4MWf60qBeUHd7BXDbnVDdmcubCwQ0ZwPjMVkNUMkU8qzvvxpldOgz/5bJLkJkPYX0vLTkG652Cu5yPvSjKcgvIBO32bHfr/pGPSdsY/f9Ll7PD1SxYb9ERO3Ra1u77FX2Vsns+SxVPdAUTULyUaEaDFS/rSXGUotWFI14KtQ+gbr5wQBn6QNI03uqpGs0KyRKxd7b7cOpi0aXWSY0aHjSbsQQGAwtot50ZpSF0AySM0u8m85MZn0s+z+Oms8e2j5yaFKVL+R3sHYrHQLmazNJ138gjiEk3rHNGRsJUtAZmAjUlrwgGvasZfB5G7OJojCneREe9orOd8i8cNWDDVPDIgjywG7DbYZ8Vt6Xs/3hhx3mC8oFlWoLXRLzSc+80J4IlwFZsswIpiockV7suBsYLb7D92VQ3kT72UK7+Mg/RS2mTSVPqtu2zQJrIz9WWvnPyMe16aHtnCcxwZd3GyDlWcxciG4gjBJISeESzaofDMZkjZ95f2GnFy3DnBA+k6atCRciOGdp/sgPmXCgAwYJUvieM6djcfq4HhP+p7quyUnYaOPgpI+ZypG2tq3Hkj3LGi2/X5AOwaYxjXPokWN6fV7V+Kqk6p1UnYdlcdEVZlHRV7NdpkrxX+5AzbddsAecdlK4zjerSXpQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB5016.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(376002)(396003)(39860400002)(366004)(136003)(83380400001)(2906002)(316002)(186003)(8936002)(9686003)(55016002)(86362001)(38100700002)(54906003)(6916009)(478600001)(33716001)(52116002)(66946007)(4326008)(6496006)(8676002)(5660300002)(66476007)(66556008)(1076003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?sP4ZjKK1Lb8QzTXw60EYcAeqJrhP4ZI9roZKISxcwSMeS4FInXs2M8ue5G4P?=
- =?us-ascii?Q?3uaS0n6tBeoyNIsc9GPbNfHvMmrDOheWuyPXUU5FnEV2dVza7u+kXgUEenj3?=
- =?us-ascii?Q?H8bocdpNM7NQnZJyIw/3oZkjPYwZGmGcI1ff8u3VgEIxQZ0RHgJcW0evoeVL?=
- =?us-ascii?Q?gCxFg4Ojgp8Agx+LPcrLZikSL37d9mGN9B7oIjbB33WRucJgxWFRe7gMzw1C?=
- =?us-ascii?Q?K56oT7VFS1rVLRCxHEapxU2C7kS2khADrjARJeOT02YefvuQpe4ja16sGxts?=
- =?us-ascii?Q?5Te5ZPmDr2YWVf7jiU+81FRJZS+HfHrPTCbVz5GeFkxWoy9CveRqpZ9MPL0i?=
- =?us-ascii?Q?7rODZ+hMfuN5My8yyhEYcTmafqU1Q9Y2g7pygQUm3fiXgG2xRQ/GCjEIPkbv?=
- =?us-ascii?Q?j2axuNkZpgT0oygKIwfsAduJ12heIqPN5c1BVhdBZvz4B3+6WzudGicQHVv/?=
- =?us-ascii?Q?7acOJ1Qd7qQxg4r8ZuPDLPFI6h3C87o4TPebwAeApkH0T/Or+eOu2BeKPlyB?=
- =?us-ascii?Q?fLfx4pIvjompuxafKWY3xZjRCB0r0RnMqkw/UvovaHvFGjb5WXqXsJYRqrPn?=
- =?us-ascii?Q?kFT/Z6If34slwPmH+kdfCdMW1fnJsjwkiFU06dJMIz6hp3fLMdxBrOxyAGAc?=
- =?us-ascii?Q?eoglyIRv60MFLYRadTl43WupwbE0GrOL/5A5NWH0VIbFynjGovO+lrw/SmpI?=
- =?us-ascii?Q?B6J9u80PrBiDI+KZlXbBcdbLVw38YfN4Kso3cZAh72Nt08YBeR16xdVdaAHI?=
- =?us-ascii?Q?ONO2erGPJFupJu1p7p6CGcUhau1+bpD7FxropAuITn1VOIAipEKruEpMUolq?=
- =?us-ascii?Q?joHw/9PKH5pQiiuY5kOM+w928Qo/yg58QuDUlxFeos3M2h8tWe3VrQYT+BjD?=
- =?us-ascii?Q?a1+tBkKx5cMuvI7KoB3yf95+ahPnkq/1LSSP5oT1nb0/43eZ352HdDPAAW9L?=
- =?us-ascii?Q?u/6O5G3MCSIK76kqmddxXOfxeTm5icpyOT5spnu7Ag3M9ri9JsCRzvEBjicB?=
- =?us-ascii?Q?2QOPAK2yJDVY71lief0Ve+jMYG2PkPFk4itEfqgW9BH372XqZbBnNFSuVt6n?=
- =?us-ascii?Q?RnBXEHW1l0s0ExbxQhKwu12VVUuaBqfuXsGrXEplCtuB7SMaJd5NKP6XdvXm?=
- =?us-ascii?Q?QXAxBBsXnT52uxZfVyPBtcAP6W8NOP0nQYSeCwtWuw28djZ6KFnGAeCouRnD?=
- =?us-ascii?Q?2DoWUNkLWyWChbu9dZJ4rZrTMqi7Api4A8d4dQRgaVKlp9BhwBDEbA+v2wtg?=
- =?us-ascii?Q?fJzBN3/l8+rSXZvJLO0YKcZW2X0rWtgznb3v0auIxJdV4K3B9sOsbO7S+BEd?=
- =?us-ascii?Q?FlAqmKmXHkwGMPdY8V1VculE8sRantvi3z2FPbLFc8UkEA=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 03713977-fd49-4306-7bd3-08d9699d02d3
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB5016.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Aug 2021 20:55:33.1535
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: YWYHqg+wYuQTcHAozJs2wWSeF8zsEdj/G233hReUMfFdfBiEFd7muMidAlfkYdYR
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR15MB4981
-X-OriginatorOrg: fb.com
-X-Proofpoint-ORIG-GUID: l0KBnEeudhkqGp6B-ERxi0yKG4516Gus
-X-Proofpoint-GUID: l0KBnEeudhkqGp6B-ERxi0yKG4516Gus
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-FB-Source: Intern
+X-Proofpoint-ORIG-GUID: FJStnRF57ffvxPbZLw2Ymmcfe2uPjteb
+X-Proofpoint-GUID: FJStnRF57ffvxPbZLw2Ymmcfe2uPjteb
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-08-27_06:2021-08-27,2021-08-27 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
- malwarescore=0 phishscore=0 spamscore=0 adultscore=0 clxscore=1011
- bulkscore=0 mlxlogscore=999 suspectscore=0 priorityscore=1501 mlxscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2107140000 definitions=main-2108270123
+ definitions=2021-08-27_07:2021-08-27,2021-08-27 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0 phishscore=0
+ clxscore=1015 mlxlogscore=969 malwarescore=0 spamscore=0 bulkscore=0
+ impostorscore=0 lowpriorityscore=0 mlxscore=0 priorityscore=1501
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2107140000 definitions=main-2108270138
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Aug 26, 2021 at 11:51:26PM +0000, KP Singh wrote:
-> Other maps like hashmaps are already available to sleepable programs.
-> Sleepable BPF programs run under trace RCU. Allow task, local and inode
-> storage to be used from sleepable programs.
-> 
-> The local storage code mostly runs under the programs RCU read section
-> (in __bpf_prog_enter{_sleepable} and __bpf_prog_exit{_sleepable})
-> (rcu_read_lock or rcu_read_lock_trace) with the exception the logic
-> where the map is freed.
-> 
-> After some discussions and help from Jann Horn, the following changes
-> were made:
-> 
-> bpf_local_storage{_elem} are freed with a kfree_rcu
-> wrapped with a call_rcu_tasks_trace callback instead of a direct
-> kfree_rcu which does not respect the trace RCU grace periods. The
-> callback frees the storage/selem with kfree_rcu which handles the normal
-> RCU grace period similar to BPF trampolines.
-> 
-> Update the synchronise_rcu to synchronize_rcu_mult in the map freeing
-> code to wait for trace RCU and normal RCU grace periods.
-> While this is an expensive operation, bpf_local_storage_map_free
-> is not called from within a BPF program, rather only called when the
-> owning object is being freed.
-> 
-> Update the dereferencing of the pointers to use rcu_derference_protected
-> (with either the trace or normal RCU locks held) and add warnings in the
-> beginning of the get and delete helpers.
-> 
-> Signed-off-by: KP Singh <kpsingh@kernel.org>
-> ---
->  include/linux/bpf_local_storage.h |  5 ++++
->  kernel/bpf/bpf_inode_storage.c    |  9 +++++--
->  kernel/bpf/bpf_local_storage.c    | 43 ++++++++++++++++++++++++-------
->  kernel/bpf/bpf_task_storage.c     |  6 ++++-
->  kernel/bpf/verifier.c             |  3 +++
->  net/core/bpf_sk_storage.c         |  8 +++++-
->  6 files changed, 61 insertions(+), 13 deletions(-)
-> 
-> diff --git a/include/linux/bpf_local_storage.h b/include/linux/bpf_local_storage.h
-> index 24496bc28e7b..8453488b334d 100644
-> --- a/include/linux/bpf_local_storage.h
-> +++ b/include/linux/bpf_local_storage.h
-> @@ -16,6 +16,9 @@
->  
->  #define BPF_LOCAL_STORAGE_CACHE_SIZE	16
->  
-> +#define bpf_local_storage_rcu_lock_held()			\
-> +	(rcu_read_lock_held() || rcu_read_lock_trace_held() ||	\
-> +		rcu_read_lock_bh_held())
-There is a similar test in hashtab.  May be renaming it to a more
-generic name such that it can be reused there?
+From: Yucong Sun <sunyucong@gmail.com>
 
-[ ... ]
+This patch adds "-p" parameter to test_progs, which will spawn workers an=
+d
+distribute tests evenly among all workers, speeding up execution.
 
-> diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storage.c
-> index b305270b7a4b..7760bc4e9565 100644
-> --- a/kernel/bpf/bpf_local_storage.c
-> +++ b/kernel/bpf/bpf_local_storage.c
-> @@ -11,6 +11,8 @@
->  #include <net/sock.h>
->  #include <uapi/linux/sock_diag.h>
->  #include <uapi/linux/btf.h>
-> +#include <linux/rcupdate_trace.h>
-> +#include <linux/rcupdate_wait.h>
->  
->  #define BPF_LOCAL_STORAGE_CREATE_FLAG_MASK (BPF_F_NO_PREALLOC | BPF_F_CLONE)
->  
-> @@ -81,6 +83,22 @@ bpf_selem_alloc(struct bpf_local_storage_map *smap, void *owner,
->  	return NULL;
->  }
->  
-> +void bpf_local_storage_free_rcu(struct rcu_head *rcu)
-> +{
-> +	struct bpf_local_storage *local_storage;
-> +
-> +	local_storage = container_of(rcu, struct bpf_local_storage, rcu);
-> +	kfree_rcu(local_storage, rcu);
-> +}
-> +
-> +static void bpf_selem_free_rcu(struct rcu_head *rcu)
-> +{
-> +	struct bpf_local_storage_elem *selem;
-> +
-> +	selem = container_of(rcu, struct bpf_local_storage_elem, rcu);
-> +	kfree_rcu(selem, rcu);
-> +}
-> +
->  /* local_storage->lock must be held and selem->local_storage == local_storage.
->   * The caller must ensure selem->smap is still valid to be
->   * dereferenced for its smap->elem_size and smap->cache_idx.
-> @@ -118,12 +136,12 @@ bool bpf_selem_unlink_storage_nolock(struct bpf_local_storage *local_storage,
->  		 *
->  		 * Although the unlock will be done under
->  		 * rcu_read_lock(),  it is more intutivie to
-> -		 * read if kfree_rcu(local_storage, rcu) is done
-> +		 * read if the freeing of the storage is done
->  		 * after the raw_spin_unlock_bh(&local_storage->lock).
->  		 *
->  		 * Hence, a "bool free_local_storage" is returned
-> -		 * to the caller which then calls the kfree_rcu()
-> -		 * after unlock.
-> +		 * to the caller which then calls then frees the storage after
-> +		 * all the RCU grace periods have expired.
->  		 */
->  	}
->  	hlist_del_init_rcu(&selem->snode);
-> @@ -131,7 +149,7 @@ bool bpf_selem_unlink_storage_nolock(struct bpf_local_storage *local_storage,
->  	    SDATA(selem))
->  		RCU_INIT_POINTER(local_storage->cache[smap->cache_idx], NULL);
->  
-> -	kfree_rcu(selem, rcu);
-> +	call_rcu_tasks_trace(&selem->rcu, bpf_selem_free_rcu);
-Although the common use case is usually storage_get() much more often
-than storage_delete(), do you aware any performance impact for
-the bpf prog that does a lot of storage_delete()?
+"-p" mode is optional, and works with all existing test selection mechani=
+sm,
+including "-l".
 
->  
->  	return free_local_storage;
->  }
-> @@ -154,7 +172,8 @@ static void __bpf_selem_unlink_storage(struct bpf_local_storage_elem *selem)
->  	raw_spin_unlock_irqrestore(&local_storage->lock, flags);
->  
->  	if (free_local_storage)
-> -		kfree_rcu(local_storage, rcu);
-> +		call_rcu_tasks_trace(&local_storage->rcu,
-> +				     bpf_local_storage_free_rcu);
->  }
->  
->  void bpf_selem_link_storage_nolock(struct bpf_local_storage *local_storage,
-> @@ -213,7 +232,8 @@ bpf_local_storage_lookup(struct bpf_local_storage *local_storage,
->  	struct bpf_local_storage_elem *selem;
->  
->  	/* Fast path (cache hit) */
-> -	sdata = rcu_dereference(local_storage->cache[smap->cache_idx]);
-> +	sdata = rcu_dereference_protected(local_storage->cache[smap->cache_idx],
-> +					  bpf_local_storage_rcu_lock_held());
-There are other places using rcu_dereference() also.
-e.g. in bpf_local_storage_update().
-Should they be changed also?
+Each worker print its own summary and exit with its own status, the main
+process will collect all status together and exit with a overall status.
+---
+ tools/testing/selftests/bpf/test_progs.c | 94 ++++++++++++++++++++++--
+ tools/testing/selftests/bpf/test_progs.h |  3 +
+ 2 files changed, 91 insertions(+), 6 deletions(-)
 
-[ ... ]
+diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/sel=
+ftests/bpf/test_progs.c
+index cc1cd240445d..740698360526 100644
+--- a/tools/testing/selftests/bpf/test_progs.c
++++ b/tools/testing/selftests/bpf/test_progs.c
+@@ -474,6 +474,7 @@ enum ARG_KEYS {
+ 	ARG_LIST_TEST_NAMES =3D 'l',
+ 	ARG_TEST_NAME_GLOB_ALLOWLIST =3D 'a',
+ 	ARG_TEST_NAME_GLOB_DENYLIST =3D 'd',
++	ARG_NUM_WORKERS =3D 'p',
+ };
+=20
+ static const struct argp_option opts[] =3D {
+@@ -494,7 +495,9 @@ static const struct argp_option opts[] =3D {
+ 	{ "allow", ARG_TEST_NAME_GLOB_ALLOWLIST, "NAMES", 0,
+ 	  "Run tests with name matching the pattern (supports '*' wildcard)." }=
+,
+ 	{ "deny", ARG_TEST_NAME_GLOB_DENYLIST, "NAMES", 0,
+-	  "Don't run tests with name matching the pattern (supports '*' wildcar=
+d)." },
++	    "Don't run tests with name matching the pattern (supports '*' wildc=
+ard)." },
++	{ "workers", ARG_NUM_WORKERS, "WORKERS", 0,
++	  "Number of workers to run in parallel, default to 1." },
+ 	{},
+ };
+=20
+@@ -661,6 +664,13 @@ static error_t parse_arg(int key, char *arg, struct =
+argp_state *state)
+ 	case ARG_LIST_TEST_NAMES:
+ 		env->list_test_names =3D true;
+ 		break;
++	case ARG_NUM_WORKERS:
++		env->workers =3D atoi(arg);
++		if (!env->workers) {
++			fprintf(stderr, "Invalid worker number, must be bigger than 1.");
++			return -1;
++		}
++		break;
+ 	case ARGP_KEY_ARG:
+ 		argp_usage(state);
+ 		break;
+@@ -694,6 +704,10 @@ static void stdio_hijack(void)
+ 	}
+=20
+ 	stderr =3D stdout;
++
++	/* force line buffering on stdio, so they interleave naturally. */
++	setvbuf(stdout, NULL, _IOLBF, 8192);
++	setvbuf(stderr, NULL, _IOLBF, 8192);
+ #endif
+ }
+=20
+@@ -798,14 +812,74 @@ int main(int argc, char **argv)
+ 		return -1;
+ 	}
+=20
+-	save_netns();
+-	stdio_hijack();
+ 	env.has_testmod =3D true;
+ 	if (!env.list_test_names && load_bpf_testmod()) {
+ 		fprintf(env.stderr, "WARNING! Selftests relying on bpf_testmod.ko will=
+ be skipped.\n");
+ 		env.has_testmod =3D false;
+ 	}
++
++	/* launch workers if requested */
++	env.worker_index =3D -1; /* main process */
++	if (env.workers) {
++		env.worker_pids =3D calloc(sizeof(__pid_t), env.workers);
++		fprintf(stdout, "Launching %d workers.\n", env.workers);
++		for(int i =3D 0; i < env.workers; i++) {
++			__pid_t pid =3D fork();
++			if (pid < 0) {
++				perror("Failed to fork worker");
++				return -1;
++			} else if (pid !=3D 0) {
++				env.worker_pids[i] =3D pid;
++			} else {
++				env.worker_index =3D i;
++				fprintf(stdout, "[%d] worker launched with pid %d.\n", i, getpid());
++				break;
++			}
++		}
++	}
++
++	/* If we have worker, here is the rest of the main process */
++	if (env.workers && env.worker_index =3D=3D -1)  {
++		int abnormal_exit_cnt =3D 0;
++		for(int i =3D 0; i < env.workers; i++) {
++			int status;
++			assert(waitpid(env.worker_pids[i], &status, 0) =3D=3D env.worker_pids=
+[i]);
++			if (WIFEXITED(status)) {
++				switch (WEXITSTATUS(status)) {
++				case EXIT_SUCCESS:
++					env.succ_cnt++;
++					break;
++					case EXIT_FAILURE:
++					env.fail_cnt++;
++					break;
++					case EXIT_NO_TEST:
++					env.skip_cnt++;
++					break;
++				}
++			} else {
++				abnormal_exit_cnt++;
++				env.fail_cnt++;
++			}
++		}
++		fprintf(stdout, "Worker Summary: %d SUCCESS, %d FAILED, %d IDLE",
++			env.succ_cnt, env.fail_cnt, env.skip_cnt);
++		fprintf(stdout, "\n");
++
++		goto main_out;
++	}
++
++	/* no worker, or inside each worker process */
++	// sigaction(SIGSEGV, &sigact, NULL); /* set crash handler again */
++
++	save_netns();
++	stdio_hijack();
++
+ 	for (i =3D 0; i < prog_test_cnt; i++) {
++		/* skip tests not assigned to this worker */
++		if (env.workers) {
++			if (i % env.workers !=3D env.worker_index)
++				continue;
++		}
+ 		struct prog_test_def *test =3D &prog_test_defs[i];
+=20
+ 		env.test =3D test;
+@@ -821,6 +895,8 @@ int main(int argc, char **argv)
+ 		}
+=20
+ 		if (env.list_test_names) {
++			if (env.worker_index !=3D -1)
++				fprintf(env.stdout, "[%d] ", env.worker_index);
+ 			fprintf(env.stdout, "%s\n", test->test_name);
+ 			env.succ_cnt++;
+ 			continue;
+@@ -835,6 +911,8 @@ int main(int argc, char **argv)
+=20
+ 		dump_test_log(test, test->error_cnt);
+=20
++		if (env.worker_index !=3D -1)
++			fprintf(env.stdout, "[%d] ", env.worker_index);
+ 		fprintf(env.stdout, "#%d %s:%s\n",
+ 			test->test_num, test->test_name,
+ 			test->error_cnt ? "FAIL" : (test->skip_cnt ? "SKIP" : "OK"));
+@@ -850,8 +928,6 @@ int main(int argc, char **argv)
+ 		if (test->need_cgroup_cleanup)
+ 			cleanup_cgroup_environment();
+ 	}
+-	if (!env.list_test_names && env.has_testmod)
+-		unload_bpf_testmod();
+ 	stdio_restore();
+=20
+ 	if (env.get_test_cnt) {
+@@ -862,17 +938,23 @@ int main(int argc, char **argv)
+ 	if (env.list_test_names)
+ 		goto out;
+=20
++	if (env.worker_index !=3D -1)
++		fprintf(env.stdout, "[%d] ", env.worker_index);
+ 	fprintf(stdout, "Summary: %d/%d PASSED, %d SKIPPED, %d FAILED\n",
+ 		env.succ_cnt, env.sub_succ_cnt, env.skip_cnt, env.fail_cnt);
+=20
+ out:
++	close(env.saved_netns_fd);
++main_out:
++	if (env.worker_index =3D=3D -1)
++		if (!env.list_test_names && env.has_testmod)
++			unload_bpf_testmod();
+ 	free_str_set(&env.test_selector.blacklist);
+ 	free_str_set(&env.test_selector.whitelist);
+ 	free(env.test_selector.num_set);
+ 	free_str_set(&env.subtest_selector.blacklist);
+ 	free_str_set(&env.subtest_selector.whitelist);
+ 	free(env.subtest_selector.num_set);
+-	close(env.saved_netns_fd);
+=20
+ 	if (env.succ_cnt + env.fail_cnt + env.skip_cnt =3D=3D 0)
+ 		return EXIT_NO_TEST;
+diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/sel=
+ftests/bpf/test_progs.h
+index c8c2bf878f67..c55274a3b767 100644
+--- a/tools/testing/selftests/bpf/test_progs.h
++++ b/tools/testing/selftests/bpf/test_progs.h
+@@ -82,6 +82,9 @@ struct test_env {
+ 	int skip_cnt; /* skipped tests */
+=20
+ 	int saved_netns_fd;
++	int workers; /* number of worker process */
++	__pid_t *worker_pids; /* array of worker pids */
++	int worker_index;
+ };
+=20
+ extern struct test_env env;
+--=20
+2.30.2
 
-> --- a/net/core/bpf_sk_storage.c
-> +++ b/net/core/bpf_sk_storage.c
-> @@ -13,6 +13,7 @@
->  #include <net/sock.h>
->  #include <uapi/linux/sock_diag.h>
->  #include <uapi/linux/btf.h>
-> +#include <linux/rcupdate_trace.h>
->  
->  DEFINE_BPF_STORAGE_CACHE(sk_cache);
->  
-> @@ -22,7 +23,8 @@ bpf_sk_storage_lookup(struct sock *sk, struct bpf_map *map, bool cacheit_lockit)
->  	struct bpf_local_storage *sk_storage;
->  	struct bpf_local_storage_map *smap;
->  
-> -	sk_storage = rcu_dereference(sk->sk_bpf_storage);
-> +	sk_storage = rcu_dereference_protected(sk->sk_bpf_storage,
-> +					       bpf_local_storage_rcu_lock_held());
->  	if (!sk_storage)
->  		return NULL;
->  
-> @@ -258,6 +260,7 @@ BPF_CALL_4(bpf_sk_storage_get, struct bpf_map *, map, struct sock *, sk,
->  {
->  	struct bpf_local_storage_data *sdata;
->  
-> +	WARN_ON_ONCE(!bpf_local_storage_rcu_lock_held());
->  	if (!sk || !sk_fullsock(sk) || flags > BPF_SK_STORAGE_GET_F_CREATE)
-sk is protected by rcu_read_lock here.
-Is it always safe to access it with the rcu_read_lock_trace alone ?
-
->  		return (unsigned long)NULL;
->  
