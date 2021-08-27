@@ -2,141 +2,160 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-23.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 94B69C432BE
-	for <bpf@archiver.kernel.org>; Fri, 27 Aug 2021 01:05:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51D0CC432BE
+	for <bpf@archiver.kernel.org>; Fri, 27 Aug 2021 07:25:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 793E260F91
-	for <bpf@archiver.kernel.org>; Fri, 27 Aug 2021 01:05:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2B5A460FDA
+	for <bpf@archiver.kernel.org>; Fri, 27 Aug 2021 07:25:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243916AbhH0BGS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 26 Aug 2021 21:06:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35738 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243853AbhH0BGS (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 26 Aug 2021 21:06:18 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2827C061757;
-        Thu, 26 Aug 2021 18:05:26 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id m4so2910412pll.0;
-        Thu, 26 Aug 2021 18:05:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=CJoF4Bgpjmz+E7bVdWY2k+bvCattJTFOGcI1X+RlV2A=;
-        b=Xw8hi+ZNH78UlcZDWdCmX6NKyyAA3smvcVS5KjVJWrErrTcr2LmjJL6ARgqTOrR15v
-         xLy0egSMc7lZTlT1MQQcSlhOwRjK8gjy3Wttkew03DA4S6VY7ytzQD+R1mAOBTMJT4j9
-         Ev1bjV8bwfvL4zmjLxRvRBef42hH6yB0Zlp5q6sd+P8mFlKpMtJfg7KsamNxPeEi6zkO
-         4oGveSMKQI5drBkNvkLTgifODCE3tNJhbQtsdkxMq67l6/xznsY8tvS2Hi6iSFW+hlbT
-         9eu/ZPcIzTLPZe9QRNFWxOXwB5DDDYFVZquqRhz2CjFrumFhGlZctUuf43irUiHYr+66
-         1Zcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=CJoF4Bgpjmz+E7bVdWY2k+bvCattJTFOGcI1X+RlV2A=;
-        b=UQAC7w9tf534eDFcXrK56sH9avGIp8MhSk4mWmghio8vYft7rUlVKaERIEB9N7OIIv
-         GF+rkc+MyjDujaIj6o5gwUrfY6iUSZFrJKmAsGpp1b6KXV23IIWZGJpynP7V64/UAnRw
-         +ya00KF0uA6B4fCrA6jk1lmW4yjB8R/qYag4oSYpMoDC7eDwLqtqJGWk2O9EuE4Rw8+/
-         9M+nrUI6u4wxaWppac0TNLWZ1jzK/rhKUPQ31Os/KvZyqIQiBVK164sLA15e9VHNF5No
-         F4C1dWvomKOAEwurX6ZMTmIckYzFRSDClToeJTaTqad3J8KzFtzZ+289NQ8hRW9b6Oa/
-         iuKg==
-X-Gm-Message-State: AOAM5309E2P6veNUJDAfbbaySWom8oSSCPb6KYKaiNWXLkZ9UqQanH7Z
-        Ye/x9ukfCJyfYBcuYmTegVM=
-X-Google-Smtp-Source: ABdhPJxOah0eBvELAOjhdzUXVYmB2Z/tYt7nhdTqVkdviWdPsuvJZFJ1Ehtt6xtuHJlfJ23Nay0SJA==
-X-Received: by 2002:a17:90a:b785:: with SMTP id m5mr20286683pjr.213.1630026326070;
-        Thu, 26 Aug 2021 18:05:26 -0700 (PDT)
-Received: from localhost ([2405:201:6014:d820:9cc6:d37f:c2fd:dc6])
-        by smtp.gmail.com with ESMTPSA id c15sm3975021pjr.22.2021.08.26.18.05.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Aug 2021 18:05:25 -0700 (PDT)
-Date:   Fri, 27 Aug 2021 06:35:23 +0530
-From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To:     KP Singh <kpsingh@kernel.org>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        id S244351AbhH0H0h (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 27 Aug 2021 03:26:37 -0400
+Received: from smtp-out1.suse.de ([195.135.220.28]:43460 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244307AbhH0H0g (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 27 Aug 2021 03:26:36 -0400
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id F2DF622351;
+        Fri, 27 Aug 2021 07:25:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1630049147; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=d3NbyDPPFSBrjV+S1BKlkMfLhsDNl8MMVaC+wVMU/B8=;
+        b=VThWRU8+9AASmKc/DZp1veiCzBC0DjuTiCqLxR2wUjsoBX7v6j/rU1AfigzMbns6H4DPMs
+        JNk5Xde4PjAP26FFbp4NCCW3guH3myoWWjcQHPVe84DM74vV1eGj983ovUcLoBZw/0snw9
+        a10T1uRTwPv/s1AeB64xsgdIBnAnmys=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1630049147;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=d3NbyDPPFSBrjV+S1BKlkMfLhsDNl8MMVaC+wVMU/B8=;
+        b=JTEZprgfqwYKiDPt7f7N/ZN39cMUxks56fBSCHQl2Vj9nVuCh5IzFQL7J5MOjpruD9+fup
+        6eSVBPvs5inzZBAg==
+Received: from kitsune.suse.cz (kitsune.suse.cz [10.100.12.127])
+        by relay2.suse.de (Postfix) with ESMTP id C4F44A3B91;
+        Fri, 27 Aug 2021 07:25:46 +0000 (UTC)
+From:   Michal Suchanek <msuchanek@suse.de>
+To:     bpf@vger.kernel.org
+Cc:     Patrick McCarty <patrick.mccarty@intel.com>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
-        Spencer Baugh <sbaugh@catern.com>,
-        Pavel Emelyanov <ovzxemul@gmail.com>,
-        Alexander Mihalicyn <alexander@mihalicyn.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Linux Security Module list 
-        <linux-security-module@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v2 1/5] bpf: Implement file local storage
-Message-ID: <20210827010523.4mty6oqzeuvadaml@apollo.localdomain>
-References: <20210826133913.627361-1-memxor@gmail.com>
- <20210826133913.627361-2-memxor@gmail.com>
- <20210826222347.3bf5q5ehdfnrblir@ast-mbp.dhcp.thefacebook.com>
- <CACYkzJ6G-E6X2hxwQfwqJ6Hgm-CbiNnY6h+xZRhO1AuOUu0NJA@mail.gmail.com>
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michal Suchanek <msuchanek@suse.de>
+Subject: [PATCH] libbpf: Fix build with latest gcc/binutils with LTO
+Date:   Fri, 27 Aug 2021 09:25:39 +0200
+Message-Id: <20210827072539.3399-1-msuchanek@suse.de>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACYkzJ6G-E6X2hxwQfwqJ6Hgm-CbiNnY6h+xZRhO1AuOUu0NJA@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Aug 27, 2021 at 05:43:41AM IST, KP Singh wrote:
-> On Fri, Aug 27, 2021 at 12:23 AM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Thu, Aug 26, 2021 at 07:09:09PM +0530, Kumar Kartikeya Dwivedi wrote:
-> > > +BPF_CALL_2(bpf_file_storage_delete, struct bpf_map *, map, struct file *, file)
-> > > +{
-> > > +     if (!file)
-> > > +             return -EINVAL;
-> > > +
-> > > +     return file_storage_delete(file, map);
-> > > +}
-> >
-> > It's exciting to see that file local storage is coming to life.
-> >
->
-> +1 Thanks for your work!
->
-> > What is the reason you've copy pasted inode_local_storage implementation,
-> > but didn't copy any comments?
-> > They were relevant there and just as relevant here.
-> > For example in the above *_storage_delete, the inode version would say:
-> >
-> > /* This helper must only called from where the inode is guaranteed
-> >  * to have a refcount and cannot be freed.
-> >  */
-> >
-> > That comment highlights the important restriction.
-> > The 'file' pointer should have similar restriction, right?
-> > But files are trickier than inodes in terms of refcnt.
-> > They are more similar to sockets,
-> > the socket_local_storage is doing refcount_inc_not_zero() in similar
->
-> Even the task_local_storage checks if the task is refcounted and going to
-> be around while we do a get / delete.
->
-> > case to make sure socket doesn't disappear.
-> >
->
-> Agreed, I would prefer if we also revisit inode_local_storage
-> in this respect pretty much because of what Alexei said.
-> One could end up with an inode (e.g. by walking pointers) in an LSM hook
-> whose life-cycle is not guaranteed in the current context.
->
-> This is generally not that big a deal with inodes because they are
-> not as ephemeral as tasks, sockets and files.
->
-> e.g. your userspace "_fd_" version of the helper does the right thing
-> by grabbing a
-> reference to the file and then dropping it once the storage is updated.
->
+From: Patrick McCarty <patrick.mccarty@intel.com>
 
-Thank you both of you for the comments. I will revisit this and inode_storage
-and get back to you, soon.
+After updating to binutils 2.35, the build began to fail with an
+assembler error. A bug was opened on the Red Hat Bugzilla a few days
+later for the same issue.
 
---
-Kartikeya
+Work around the problem by using the new `symver` attribute (introduced
+in GCC 10) as needed, instead of the `COMPAT_VERSION` and
+`DEFAULT_VERSION` macros, which expand to assembler directives.
+
+Fixes: https://github.com/libbpf/libbpf/issues/338
+Fixes: https://bugzilla.redhat.com/show_bug.cgi?id=1863059
+Fixes: https://bugzilla.opensuse.org/show_bug.cgi?id=1188749
+Signed-off-by: Patrick McCarty <patrick.mccarty@intel.com>
+Make the change conditional on GCC version
+Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+---
+ tools/lib/bpf/libbpf_internal.h | 23 +++++++++++++++++------
+ tools/lib/bpf/xsk.c             |  4 ++--
+ 2 files changed, 19 insertions(+), 8 deletions(-)
+
+diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
+index 016ca7cb4f8a..af0f3fb102c0 100644
+--- a/tools/lib/bpf/libbpf_internal.h
++++ b/tools/lib/bpf/libbpf_internal.h
+@@ -86,20 +86,31 @@
+ 	(offsetof(TYPE, FIELD) + sizeof(((TYPE *)0)->FIELD))
+ #endif
+ 
++#ifdef __GNUC__
++# if __GNUC__ >= 10
++#  define DEFAULT_VERSION(internal_name, api_name, version) \
++__attribute__((__symver__(#api_name "@@" #version)))
++#  define COMPAT_VERSION(internal_name, api_name, version) \
++__attribute__((__symver__(#api_name "@" #version)))
++# endif
++#endif
++
++#if !defined(COMPAT_VERSION) || !defined(DEFAULT_VERSION)
+ /* Symbol versioning is different between static and shared library.
+  * Properly versioned symbols are needed for shared library, but
+  * only the symbol of the new version is needed for static library.
+  */
+-#ifdef SHARED
+-# define COMPAT_VERSION(internal_name, api_name, version) \
++# ifdef SHARED
++#  define COMPAT_VERSION(internal_name, api_name, version) \
+ 	asm(".symver " #internal_name "," #api_name "@" #version);
+-# define DEFAULT_VERSION(internal_name, api_name, version) \
++#  define DEFAULT_VERSION(internal_name, api_name, version) \
+ 	asm(".symver " #internal_name "," #api_name "@@" #version);
+-#else
+-# define COMPAT_VERSION(internal_name, api_name, version)
+-# define DEFAULT_VERSION(internal_name, api_name, version) \
++# else
++#  define COMPAT_VERSION(internal_name, api_name, version)
++#  define DEFAULT_VERSION(internal_name, api_name, version) \
+ 	extern typeof(internal_name) api_name \
+ 	__attribute__((alias(#internal_name)));
++# endif
+ #endif
+ 
+ extern void libbpf_print(enum libbpf_print_level level,
+diff --git a/tools/lib/bpf/xsk.c b/tools/lib/bpf/xsk.c
+index e9b619aa0cdf..a2111696ba91 100644
+--- a/tools/lib/bpf/xsk.c
++++ b/tools/lib/bpf/xsk.c
+@@ -281,6 +281,7 @@ static int xsk_create_umem_rings(struct xsk_umem *umem, int fd,
+ 	return err;
+ }
+ 
++DEFAULT_VERSION(xsk_umem__create_v0_0_4, xsk_umem__create, LIBBPF_0.0.4)
+ int xsk_umem__create_v0_0_4(struct xsk_umem **umem_ptr, void *umem_area,
+ 			    __u64 size, struct xsk_ring_prod *fill,
+ 			    struct xsk_ring_cons *comp,
+@@ -345,6 +346,7 @@ struct xsk_umem_config_v1 {
+ 	__u32 frame_headroom;
+ };
+ 
++COMPAT_VERSION(xsk_umem__create_v0_0_2, xsk_umem__create, LIBBPF_0.0.2)
+ int xsk_umem__create_v0_0_2(struct xsk_umem **umem_ptr, void *umem_area,
+ 			    __u64 size, struct xsk_ring_prod *fill,
+ 			    struct xsk_ring_cons *comp,
+@@ -358,8 +360,6 @@ int xsk_umem__create_v0_0_2(struct xsk_umem **umem_ptr, void *umem_area,
+ 	return xsk_umem__create_v0_0_4(umem_ptr, umem_area, size, fill, comp,
+ 					&config);
+ }
+-COMPAT_VERSION(xsk_umem__create_v0_0_2, xsk_umem__create, LIBBPF_0.0.2)
+-DEFAULT_VERSION(xsk_umem__create_v0_0_4, xsk_umem__create, LIBBPF_0.0.4)
+ 
+ static enum xsk_prog get_xsk_prog(void)
+ {
+-- 
+2.31.1
+
