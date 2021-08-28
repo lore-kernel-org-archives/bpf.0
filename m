@@ -2,110 +2,165 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-19.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AD61C43214
-	for <bpf@archiver.kernel.org>; Fri, 27 Aug 2021 23:13:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E60AC432BE
+	for <bpf@archiver.kernel.org>; Sat, 28 Aug 2021 00:59:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E5F3860FC4
-	for <bpf@archiver.kernel.org>; Fri, 27 Aug 2021 23:13:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4147B61008
+	for <bpf@archiver.kernel.org>; Sat, 28 Aug 2021 00:59:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232252AbhH0XOF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 27 Aug 2021 19:14:05 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:18672 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S232392AbhH0XOF (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 27 Aug 2021 19:14:05 -0400
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.43/8.16.0.43) with SMTP id 17RN8sKA013985
-        for <bpf@vger.kernel.org>; Fri, 27 Aug 2021 16:13:15 -0700
+        id S232913AbhH1BAV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 27 Aug 2021 21:00:21 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:1808 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232903AbhH1BAV (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 27 Aug 2021 21:00:21 -0400
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17S0vfGn002315
+        for <bpf@vger.kernel.org>; Fri, 27 Aug 2021 17:59:31 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=8aj5pTvvkTqBwH+sZwrilAXQT4LsEGNEwGm6/PhWkuk=;
- b=Ch38oO6sNduqb1rMio2iet+9/HBH0e/10jQL8hSC/+wGBBOYI7b5VLFPWGcCNK9wb59T
- EOJk/7yoLcwHycU3amyyBnVqyLXf8XHNxClGrj7B2/MMo4SL+TnMF+Mjx9xkUpGbzOSh
- NIuR6rMpIp03jlAEprCvJQx06/6FM0ajcLc= 
+ content-type; s=facebook; bh=++JXxVWZ1PwGFLVj4ROQyqBFv2VzHv1++VmnjFu28is=;
+ b=UD2ncgjyC2mzaVtau6LMUIDlP2E87K6B0nlyRXVL/qaMPls8pmyz6xzYmZx4RrHXwCj+
+ WVvo/keaPqbpSLngQsv6eDfIL1LS0DVraT1tct+xBhY40VGd3FdULNF20+o0pciwRQjx
+ EFA1CCn/zS9S1UqrOjKcMwiH2o7XY69hN7Q= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0001303.ppops.net with ESMTP id 3apmvtq4vc-5
+        by mx0a-00082601.pphosted.com with ESMTP id 3aq70js99b-5
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 27 Aug 2021 16:13:15 -0700
-Received: from intmgw002.48.prn1.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 27 Aug 2021 17:59:31 -0700
+Received: from intmgw001.38.frc1.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Fri, 27 Aug 2021 16:13:14 -0700
-Received: by devvm2661.vll0.facebook.com (Postfix, from userid 200310)
-        id 271752B99AFB; Fri, 27 Aug 2021 16:13:08 -0700 (PDT)
-From:   Yucong Sun <fallentree@fb.com>
-To:     <andrii@kernel.org>
-CC:     <sunyucong@gmail.com>, <bpf@vger.kernel.org>,
-        Yucong Sun <fallentree@fb.com>
-Subject: [RFC 0/1] add parallelism to test_progs
-Date:   Fri, 27 Aug 2021 16:13:06 -0700
-Message-ID: <20210827231307.3787723-1-fallentree@fb.com>
+ 15.1.2176.14; Fri, 27 Aug 2021 17:59:29 -0700
+Received: by devvm2049.vll0.facebook.com (Postfix, from userid 197479)
+        id 31CDA2CBCD94; Fri, 27 Aug 2021 17:59:28 -0700 (PDT)
+From:   Neil Spring <ntspring@fb.com>
+To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <andrii@kernel.org>,
+        <daniel@iogearbox.net>
+CC:     Neil Spring <ntspring@fb.com>
+Subject: [PATCH bpf-next] bpf testing: permit ingress_ifindex in bpf_prog_test_run_xattr
+Date:   Fri, 27 Aug 2021 17:55:29 -0700
+Message-ID: <20210828005529.2814025-1-ntspring@fb.com>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-ORIG-GUID: vT5sXKLGn2FWDKJdKDR4AEj37liYarw1
-X-Proofpoint-GUID: vT5sXKLGn2FWDKJdKDR4AEj37liYarw1
+X-Proofpoint-ORIG-GUID: IkgymxfBfumhpdxq_5H1qMkCU-4Ht_sQ
+X-Proofpoint-GUID: IkgymxfBfumhpdxq_5H1qMkCU-4Ht_sQ
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
  definitions=2021-08-27_07:2021-08-27,2021-08-27 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0 phishscore=0
- clxscore=1015 mlxlogscore=482 malwarescore=0 spamscore=0 bulkscore=0
- impostorscore=0 lowpriorityscore=0 mlxscore=0 priorityscore=1501
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2107140000 definitions=main-2108270138
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ malwarescore=0 mlxscore=0 mlxlogscore=999 suspectscore=0 spamscore=0
+ adultscore=0 phishscore=0 bulkscore=0 impostorscore=0 priorityscore=1501
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2107140000 definitions=main-2108280004
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch added a optional "-p" to test_progs to run tests in multiple
-process, speeding up the tests.
+bpf_prog_test_run_xattr takes a struct __sk_buff, but did not permit
+that __skbuff to include an nonzero ingress_ifindex.
 
-Example:
+This patch updates to allow ingress_ifindex, convert the __sk_buff field =
+to
+sk_buff (skb_iif) and back, and test that the value is present from
+tested bpf.  The test sets an unlikely distinct value for ingress_ifindex
+(11) from ifindex (1), but that seems in keeping with the rest of the
+synthetic fields.
 
-time ./test_progs
-real    5m51.393s
-user    0m4.695s
-sys    5m48.055s
+Adding this support allows testing BPF that operates differently on
+incoming and outgoing skbs by discriminating on this field.
 
-time ./test_progs -p 16 (on a 8 core vm)
-real    3m45.673s
-user    0m4.434s
-sys    5m47.465s
+Signed-off-by: Neil Spring <ntspring@fb.com>
+---
+ net/bpf/test_run.c                               | 8 +++-----
+ tools/testing/selftests/bpf/prog_tests/skb_ctx.c | 5 +----
+ tools/testing/selftests/bpf/progs/test_skb_ctx.c | 4 ++++
+ 3 files changed, 8 insertions(+), 9 deletions(-)
 
-The feedback area I'm looking for :
-
-  1.Some tests are taking too long to run (for example:
-  bpf_verif_scale/pyperf* takes almost 80% of the total runtime). If we
-  need a work-stealing pool mechanism it would be a bigger change.
-
-  2. The tests output from workers are currently interleaved from all
-  workers, making it harder to read, one option would be redirect all
-  outputs onto pipes and have main process collect and print in sequence
-  for each worker finish, but that will make seeing real time progress
-  harder.
-
-  3. If main process want to collect tests results from worker, I plan
-  to have each worker writes a stats file to /tmp, or I can use IPC, any
-  preference?
-
-  4. Some tests would fail if run in parallel, I think we would need to
-  pin some tasks onto worker 0.
-
-Yucong Sun (1):
-  selftests/bpf: Add parallelism to test_progs
-
- tools/testing/selftests/bpf/test_progs.c | 94 ++++++++++++++++++++++--
- tools/testing/selftests/bpf/test_progs.h |  3 +
- 2 files changed, 91 insertions(+), 6 deletions(-)
-
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index 4b855af267b1..a322578efa5f 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -483,11 +483,7 @@ static int convert___skb_to_skb(struct sk_buff *skb,=
+ struct __sk_buff *__skb)
+ 		return -EINVAL;
+=20
+ 	/* priority is allowed */
+-
+-	if (!range_is_zero(__skb, offsetofend(struct __sk_buff, priority),
+-			   offsetof(struct __sk_buff, ifindex)))
+-		return -EINVAL;
+-
++	/* ingress_ifindex is allowed */
+ 	/* ifindex is allowed */
+=20
+ 	if (!range_is_zero(__skb, offsetofend(struct __sk_buff, ifindex),
+@@ -516,6 +512,7 @@ static int convert___skb_to_skb(struct sk_buff *skb, =
+struct __sk_buff *__skb)
+=20
+ 	skb->mark =3D __skb->mark;
+ 	skb->priority =3D __skb->priority;
++	skb->skb_iif =3D __skb->ingress_ifindex;
+ 	skb->tstamp =3D __skb->tstamp;
+ 	memcpy(&cb->data, __skb->cb, QDISC_CB_PRIV_LEN);
+=20
+@@ -545,6 +542,7 @@ static void convert_skb_to___skb(struct sk_buff *skb,=
+ struct __sk_buff *__skb)
+=20
+ 	__skb->mark =3D skb->mark;
+ 	__skb->priority =3D skb->priority;
++	__skb->ingress_ifindex =3D skb->skb_iif;
+ 	__skb->ifindex =3D skb->dev->ifindex;
+ 	__skb->tstamp =3D skb->tstamp;
+ 	memcpy(__skb->cb, &cb->data, QDISC_CB_PRIV_LEN);
+diff --git a/tools/testing/selftests/bpf/prog_tests/skb_ctx.c b/tools/tes=
+ting/selftests/bpf/prog_tests/skb_ctx.c
+index fafeddaad6a9..606da5335363 100644
+--- a/tools/testing/selftests/bpf/prog_tests/skb_ctx.c
++++ b/tools/testing/selftests/bpf/prog_tests/skb_ctx.c
+@@ -11,6 +11,7 @@ void test_skb_ctx(void)
+ 		.cb[3] =3D 4,
+ 		.cb[4] =3D 5,
+ 		.priority =3D 6,
++		.ingress_ifindex =3D 11,
+ 		.ifindex =3D 1,
+ 		.tstamp =3D 7,
+ 		.wire_len =3D 100,
+@@ -93,10 +94,6 @@ void test_skb_ctx(void)
+ 		   "ctx_out_priority",
+ 		   "skb->priority =3D=3D %d, expected %d\n",
+ 		   skb.priority, 7);
+-	CHECK_ATTR(skb.ifindex !=3D 1,
+-		   "ctx_out_ifindex",
+-		   "skb->ifindex =3D=3D %d, expected %d\n",
+-		   skb.ifindex, 1);
+ 	CHECK_ATTR(skb.tstamp !=3D 8,
+ 		   "ctx_out_tstamp",
+ 		   "skb->tstamp =3D=3D %lld, expected %d\n",
+diff --git a/tools/testing/selftests/bpf/progs/test_skb_ctx.c b/tools/tes=
+ting/selftests/bpf/progs/test_skb_ctx.c
+index b02ea589ce7e..bbd5a9c1c4df 100644
+--- a/tools/testing/selftests/bpf/progs/test_skb_ctx.c
++++ b/tools/testing/selftests/bpf/progs/test_skb_ctx.c
+@@ -25,6 +25,10 @@ int process(struct __sk_buff *skb)
+ 		return 1;
+ 	if (skb->gso_size !=3D 10)
+ 		return 1;
++	if (skb->ingress_ifindex !=3D 11)
++		return 1;
++	if (skb->ifindex !=3D 1)
++		return 1;
+=20
+ 	return 0;
+ }
 --=20
 2.30.2
 
