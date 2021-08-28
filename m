@@ -7,38 +7,38 @@ X-Spam-Status: No, score=-19.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23ECBC432BE
-	for <bpf@archiver.kernel.org>; Sat, 28 Aug 2021 05:20:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1BC8CC4320E
+	for <bpf@archiver.kernel.org>; Sat, 28 Aug 2021 05:20:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 08C1260F36
-	for <bpf@archiver.kernel.org>; Sat, 28 Aug 2021 05:20:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E6F2B60EBC
+	for <bpf@archiver.kernel.org>; Sat, 28 Aug 2021 05:20:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231828AbhH1FVZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 28 Aug 2021 01:21:25 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:7956 "EHLO
+        id S232523AbhH1FV0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 28 Aug 2021 01:21:26 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:10980 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232650AbhH1FVT (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sat, 28 Aug 2021 01:21:19 -0400
+        by vger.kernel.org with ESMTP id S232874AbhH1FVU (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sat, 28 Aug 2021 01:21:20 -0400
 Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17S5BSZs019527
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17S5BSZv019527
         for <bpf@vger.kernel.org>; Fri, 27 Aug 2021 22:20:30 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=ILZyEqCRwDm76XZE8oy1eHkT/ZLL0fZ/U2KBBxy/xZk=;
- b=pNFlp2iPFw86x/yYaaB/qJj/+nSCm6qfP1LSn0qEuZPpsaunrNgjtrqoEc01r35fIkb0
- 3ua5J2lncd5GKx6gUA84Ovlh09WAWVkqqK2vAShlgRr8h0qNhtAsJnWXmlhrdOMM6n1Q
- EP4Q7PJDndJzHeBfRA7AofofQ7wfp0IzWbY= 
+ bh=ggS2YXj1zpYNXrAy5OVy51eWkVxG9q9EVk6h1JnHn8U=;
+ b=PpMPUV/mMTsB5RFPtNlN1vUGMZY4FRiff2a0QY1BP+s3dDPGI60lLivwIcji8bKxKfvx
+ R5eZWLsRPSneh6VtXjsbJP9JbT+KAetxZjEGzQ4vvG/c5SDYxvUGTtQtcaufoasVcMvR
+ GHUllh5CBOml3kFItRhpkn5e+3uotR2tmQg= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 3apfpfterk-1
+        by mx0a-00082601.pphosted.com with ESMTP id 3apfpfterk-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 27 Aug 2021 22:20:29 -0700
-Received: from intmgw002.25.frc3.facebook.com (2620:10d:c085:208::11) by
+        for <bpf@vger.kernel.org>; Fri, 27 Aug 2021 22:20:30 -0700
+Received: from intmgw002.25.frc3.facebook.com (2620:10d:c085:108::4) by
  mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2176.2; Fri, 27 Aug 2021 22:20:29 -0700
 Received: by devbig030.frc3.facebook.com (Postfix, from userid 158236)
-        id E8D275BF0E16; Fri, 27 Aug 2021 22:20:16 -0700 (PDT)
+        id 56E2E5BF0E32; Fri, 27 Aug 2021 22:20:23 -0700 (PDT)
 From:   Dave Marchevsky <davemarchevsky@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
@@ -46,9 +46,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Yonghong Song <yhs@fb.com>, <netdev@vger.kernel.org>,
         Dave Marchevsky <davemarchevsky@fb.com>
-Subject: [PATCH v3 bpf-next 1/7] bpf: merge printk and seq_printf VARARG max macros
-Date:   Fri, 27 Aug 2021 22:20:00 -0700
-Message-ID: <20210828052006.1313788-2-davemarchevsky@fb.com>
+Subject: [PATCH v3 bpf-next 4/7] libbpf: use static const fmt string in __bpf_printk
+Date:   Fri, 27 Aug 2021 22:20:03 -0700
+Message-ID: <20210828052006.1313788-5-davemarchevsky@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210828052006.1313788-1-davemarchevsky@fb.com>
 References: <20210828052006.1313788-1-davemarchevsky@fb.com>
@@ -57,12 +57,12 @@ Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-ORIG-GUID: AIq-WuBOEWbHp0EHjMqyJWmd4dQIVZ07
-X-Proofpoint-GUID: AIq-WuBOEWbHp0EHjMqyJWmd4dQIVZ07
+X-Proofpoint-ORIG-GUID: TSSwe-_F6afxu9i3qA_DhINyY7TWDGZd
+X-Proofpoint-GUID: TSSwe-_F6afxu9i3qA_DhINyY7TWDGZd
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
  definitions=2021-08-28_01:2021-08-27,2021-08-28 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0
- suspectscore=0 clxscore=1015 bulkscore=0 mlxlogscore=999
+ suspectscore=0 clxscore=1015 bulkscore=0 mlxlogscore=972
  priorityscore=1501 impostorscore=0 adultscore=0 lowpriorityscore=0
  spamscore=0 mlxscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.12.0-2107140000 definitions=main-2108280031
@@ -71,83 +71,38 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-MAX_SNPRINTF_VARARGS and MAX_SEQ_PRINTF_VARARGS are used by bpf helpers
-bpf_snprintf and bpf_seq_printf to limit their varargs. Both call into
-bpf_bprintf_prepare for print formatting logic and have convenience
-macros in libbpf (BPF_SNPRINTF, BPF_SEQ_PRINTF) which use the same
-helper macros to convert varargs to a byte array.
-
-Changing shared functionality to support more varargs for either bpf
-helper would affect the other as well, so let's combine the _VARARGS
-macros to make this more obvious.
+The __bpf_printk convenience macro was using a 'char' fmt string holder
+as it predates support for globals in libbpf. Move to more efficient
+'static const char', but provide a fallback to the old way via
+BPF_NO_GLOBAL_DATA so users on old kernels can still use the macro.
 
 Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- include/linux/bpf.h      | 2 ++
- kernel/bpf/helpers.c     | 4 +---
- kernel/trace/bpf_trace.c | 4 +---
- 3 files changed, 4 insertions(+), 6 deletions(-)
+ tools/lib/bpf/bpf_helpers.h | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index f4c16f19f83e..be8d57e6e78a 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -2216,6 +2216,8 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke=
-_type t,
- struct btf_id_set;
- bool btf_id_set_contains(const struct btf_id_set *set, u32 id);
+diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
+index 5f087306cdfe..a1d5ec6f285c 100644
+--- a/tools/lib/bpf/bpf_helpers.h
++++ b/tools/lib/bpf/bpf_helpers.h
+@@ -216,10 +216,16 @@ enum libbpf_tristate {
+ 		     ___param, sizeof(___param));		\
+ })
 =20
-+#define MAX_BPRINTF_VARARGS		12
++#ifdef BPF_NO_GLOBAL_DATA
++#define BPF_PRINTK_FMT_TYPE char
++#else
++#define BPF_PRINTK_FMT_TYPE static const char
++#endif
 +
- int bpf_bprintf_prepare(char *fmt, u32 fmt_size, const u64 *raw_args,
- 			u32 **bin_buf, u32 num_args);
- void bpf_bprintf_cleanup(void);
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index c227b7d4f56c..0d969f8501e2 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -969,15 +969,13 @@ int bpf_bprintf_prepare(char *fmt, u32 fmt_size, co=
-nst u64 *raw_args,
- 	return err;
- }
-=20
--#define MAX_SNPRINTF_VARARGS		12
--
- BPF_CALL_5(bpf_snprintf, char *, str, u32, str_size, char *, fmt,
- 	   const void *, data, u32, data_len)
- {
- 	int err, num_args;
- 	u32 *bin_args;
-=20
--	if (data_len % 8 || data_len > MAX_SNPRINTF_VARARGS * 8 ||
-+	if (data_len % 8 || data_len > MAX_BPRINTF_VARARGS * 8 ||
- 	    (data_len && !data))
- 		return -EINVAL;
- 	num_args =3D data_len / 8;
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 8e2eb950aa82..10672ebc63b7 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -414,15 +414,13 @@ const struct bpf_func_proto *bpf_get_trace_printk_p=
-roto(void)
- 	return &bpf_trace_printk_proto;
- }
-=20
--#define MAX_SEQ_PRINTF_VARARGS		12
--
- BPF_CALL_5(bpf_seq_printf, struct seq_file *, m, char *, fmt, u32, fmt_s=
-ize,
- 	   const void *, data, u32, data_len)
- {
- 	int err, num_args;
- 	u32 *bin_args;
-=20
--	if (data_len & 7 || data_len > MAX_SEQ_PRINTF_VARARGS * 8 ||
-+	if (data_len & 7 || data_len > MAX_BPRINTF_VARARGS * 8 ||
- 	    (data_len && !data))
- 		return -EINVAL;
- 	num_args =3D data_len / 8;
+ /* Helper macro to print out debug messages */
+ #define __bpf_printk(fmt, ...)				\
+ ({							\
+-	char ____fmt[] =3D fmt;				\
++	BPF_PRINTK_FMT_TYPE ____fmt[] =3D fmt;		\
+ 	bpf_trace_printk(____fmt, sizeof(____fmt),	\
+ 			 ##__VA_ARGS__);		\
+ })
 --=20
 2.30.2
 
