@@ -5,41 +5,40 @@ X-Spam-Level:
 X-Spam-Status: No, score=-19.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 12357C43214
-	for <bpf@archiver.kernel.org>; Sat, 28 Aug 2021 05:20:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7469C432BE
+	for <bpf@archiver.kernel.org>; Sat, 28 Aug 2021 05:20:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F348360ED3
-	for <bpf@archiver.kernel.org>; Sat, 28 Aug 2021 05:20:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BB6E460EFE
+	for <bpf@archiver.kernel.org>; Sat, 28 Aug 2021 05:20:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233022AbhH1FV0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 28 Aug 2021 01:21:26 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:28986 "EHLO
+        id S232994AbhH1FVa (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 28 Aug 2021 01:21:30 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:35308 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232788AbhH1FVU (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sat, 28 Aug 2021 01:21:20 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17S5BXui010217
-        for <bpf@vger.kernel.org>; Fri, 27 Aug 2021 22:20:30 -0700
+        by vger.kernel.org with ESMTP id S232389AbhH1FV0 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sat, 28 Aug 2021 01:21:26 -0400
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17S5Agwi014354
+        for <bpf@vger.kernel.org>; Fri, 27 Aug 2021 22:20:36 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=vT5+8DwKkkdkYxp4nBoxvSIcL/yszYWPCZ0zcWcFKpA=;
- b=Ezoiml6R2meN3jTf04KcpRkrt8nm94U87clYeSD62QYzeVOekeMTtEvbt638B+OXGllz
- 753QoHCVSS68hxNCyTlzD4PmUlRFh8BHugSzQvXEGn9K0uaaNwl4u/+TEePw/aJUTSmz
- wnL3/jba4o5bWco9LtFG6MHEyug1CWkcUIQ= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 3aq1xd4afv-3
+ bh=8S9gZBnDcBQ1pCquTXlS/il6zMXDUMExSTT3aibAoII=;
+ b=WSGHT8R5ImwkXGGjF7ksXkP897dzuVmk8+jhuZ5jgWF9VkAKiKA9Lm9+n94cYs5Ru6UX
+ uP93PVEFeXS5uVqfc0Gt0ZNOy8c+7MKvTR5HcMAqY3/v4BlPmDHIrMWkl+s8Y1C133wG
+ LwT/fLyH1iW3x2mgiEUI5+HjpmtVetPWKSg= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 3aqbqxrnv7-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 27 Aug 2021 22:20:30 -0700
-Received: from intmgw002.25.frc3.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 27 Aug 2021 22:20:36 -0700
+Received: from intmgw001.25.frc3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Fri, 27 Aug 2021 22:20:29 -0700
+ 15.1.2176.14; Fri, 27 Aug 2021 22:20:34 -0700
 Received: by devbig030.frc3.facebook.com (Postfix, from userid 158236)
-        id 6AE6D5BF0E1A; Fri, 27 Aug 2021 22:20:19 -0700 (PDT)
+        id 288235BF0E50; Fri, 27 Aug 2021 22:20:28 -0700 (PDT)
 From:   Dave Marchevsky <davemarchevsky@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
@@ -47,9 +46,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Yonghong Song <yhs@fb.com>, <netdev@vger.kernel.org>,
         Dave Marchevsky <davemarchevsky@fb.com>
-Subject: [PATCH v3 bpf-next 3/7] libbpf: Modify bpf_printk to choose helper based on arg count
-Date:   Fri, 27 Aug 2021 22:20:02 -0700
-Message-ID: <20210828052006.1313788-4-davemarchevsky@fb.com>
+Subject: [PATCH v3 bpf-next 7/7] selftests/bpf: add trace_vprintk test prog
+Date:   Fri, 27 Aug 2021 22:20:06 -0700
+Message-ID: <20210828052006.1313788-8-davemarchevsky@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210828052006.1313788-1-davemarchevsky@fb.com>
 References: <20210828052006.1313788-1-davemarchevsky@fb.com>
@@ -58,113 +57,159 @@ Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-ORIG-GUID: DqCPckF8B_odSVjD41xkxLxd4Wvn2jiE
-X-Proofpoint-GUID: DqCPckF8B_odSVjD41xkxLxd4Wvn2jiE
+X-Proofpoint-GUID: eMsfV1bPWgxdynlIXeouu5G5yUe2wABB
+X-Proofpoint-ORIG-GUID: eMsfV1bPWgxdynlIXeouu5G5yUe2wABB
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
  definitions=2021-08-28_01:2021-08-27,2021-08-28 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
- malwarescore=0 phishscore=0 spamscore=0 adultscore=0 clxscore=1015
- bulkscore=0 mlxlogscore=999 suspectscore=0 priorityscore=1501 mlxscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0
+ clxscore=1015 impostorscore=0 bulkscore=0 malwarescore=0 mlxlogscore=999
+ lowpriorityscore=0 phishscore=0 spamscore=0 suspectscore=0 mlxscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2107140000 definitions=main-2108280031
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Instead of being a thin wrapper which calls into bpf_trace_printk,
-libbpf's bpf_printk convenience macro now chooses between
-bpf_trace_printk and bpf_trace_vprintk. If the arg count (excluding
-format string) is >3, use bpf_trace_vprintk, otherwise use the older
-helper.
+This commit adds a test prog for vprintk which confirms that:
+  * bpf_trace_vprintk is writing to dmesg
+  * __bpf_vprintk macro works as expected
+  * >3 args are printed
 
-The motivation behind this added complexity - instead of migrating
-entirely to bpf_trace_vprintk - is to maintain good developer experience
-for users compiling against new libbpf but running on older kernels.
-Users who are passing <=3D3 args to bpf_printk will see no change in thei=
-r
-bytecode.
-
-__bpf_vprintk functions similarly to BPF_SEQ_PRINTF and BPF_SNPRINTF
-macros elsewhere in the file - it allows use of bpf_trace_vprintk
-without manual conversion of varargs to u64 array. Previous
-implementation of bpf_printk macro is moved to __bpf_printk for use by
-the new implementation.
-
-This does change behavior of bpf_printk calls with >3 args in the "new
-libbpf, old kernels" scenario. Before this patch, attempting to use 4
-args to bpf_printk results in a compile-time error. After this patch,
-using bpf_printk with 4 args results in a trace_vprintk helper call
-being emitted and a load-time failure on older kernels.
+Approach and code are borrowed from trace_printk test.
 
 Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
 ---
- tools/lib/bpf/bpf_helpers.h | 45 ++++++++++++++++++++++++++++++-------
- 1 file changed, 37 insertions(+), 8 deletions(-)
+ tools/testing/selftests/bpf/Makefile          |  3 +-
+ .../selftests/bpf/prog_tests/trace_vprintk.c  | 65 +++++++++++++++++++
+ .../selftests/bpf/progs/trace_vprintk.c       | 25 +++++++
+ 3 files changed, 92 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/trace_vprintk.=
+c
+ create mode 100644 tools/testing/selftests/bpf/progs/trace_vprintk.c
 
-diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
-index b9987c3efa3c..5f087306cdfe 100644
---- a/tools/lib/bpf/bpf_helpers.h
-+++ b/tools/lib/bpf/bpf_helpers.h
-@@ -14,14 +14,6 @@
- #define __type(name, val) typeof(val) *name
- #define __array(name, val) typeof(val) *name[]
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftes=
+ts/bpf/Makefile
+index 866531c08e4f..0a4cdac7ea02 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -315,7 +315,8 @@ LINKED_SKELS :=3D test_static_linked.skel.h linked_fu=
+ncs.skel.h		\
+ 		linked_vars.skel.h linked_maps.skel.h
 =20
--/* Helper macro to print out debug messages */
--#define bpf_printk(fmt, ...)				\
--({							\
--	char ____fmt[] =3D fmt;				\
--	bpf_trace_printk(____fmt, sizeof(____fmt),	\
--			 ##__VA_ARGS__);		\
--})
--
- /*
-  * Helper macro to place programs, maps, license in
-  * different sections in elf_bpf file. Section names
-@@ -224,4 +216,41 @@ enum libbpf_tristate {
- 		     ___param, sizeof(___param));		\
- })
+ LSKELS :=3D kfunc_call_test.c fentry_test.c fexit_test.c fexit_sleep.c \
+-	test_ksyms_module.c test_ringbuf.c atomics.c trace_printk.c
++	test_ksyms_module.c test_ringbuf.c atomics.c trace_printk.c \
++	trace_vprintk.c
+ SKEL_BLACKLIST +=3D $$(LSKELS)
 =20
-+/* Helper macro to print out debug messages */
-+#define __bpf_printk(fmt, ...)				\
-+({							\
-+	char ____fmt[] =3D fmt;				\
-+	bpf_trace_printk(____fmt, sizeof(____fmt),	\
-+			 ##__VA_ARGS__);		\
-+})
+ test_static_linked.skel.h-deps :=3D test_static_linked1.o test_static_li=
+nked2.o
+diff --git a/tools/testing/selftests/bpf/prog_tests/trace_vprintk.c b/too=
+ls/testing/selftests/bpf/prog_tests/trace_vprintk.c
+new file mode 100644
+index 000000000000..9fc1d279b673
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/trace_vprintk.c
+@@ -0,0 +1,65 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2021 Facebook */
 +
-+/*
-+ * __bpf_vprintk wraps the bpf_trace_vprintk helper with variadic argume=
-nts
-+ * instead of an array of u64.
-+ */
-+#define __bpf_vprintk(fmt, args...)				\
-+({								\
-+	static const char ___fmt[] =3D fmt;			\
-+	unsigned long long ___param[___bpf_narg(args)];		\
-+								\
-+	_Pragma("GCC diagnostic push")				\
-+	_Pragma("GCC diagnostic ignored \"-Wint-conversion\"")	\
-+	___bpf_fill(___param, args);				\
-+	_Pragma("GCC diagnostic pop")				\
-+								\
-+	bpf_trace_vprintk(___fmt, sizeof(___fmt),		\
-+		     ___param, sizeof(___param));		\
-+})
++#include <test_progs.h>
 +
-+#define ___bpf_pick_printk(...) \
-+	___bpf_nth(_, ##__VA_ARGS__, __bpf_vprintk, __bpf_vprintk, __bpf_vprint=
-k,	\
-+		__bpf_vprintk, __bpf_vprintk, __bpf_vprintk, __bpf_vprintk,		\
-+		__bpf_vprintk, __bpf_vprintk, __bpf_printk, __bpf_printk,		\
-+		__bpf_printk, __bpf_printk)
++#include "trace_vprintk.lskel.h"
 +
-+#define bpf_printk(fmt, args...)		\
-+({						\
-+	___bpf_pick_printk(args)(fmt, args);	\
-+})
++#define TRACEBUF	"/sys/kernel/debug/tracing/trace_pipe"
++#define SEARCHMSG	"1,2,3,4,5,6,7,8,9,10"
 +
- #endif
++void test_trace_vprintk(void)
++{
++	int err =3D 0, iter =3D 0, found =3D 0;
++	struct trace_vprintk__bss *bss;
++	struct trace_vprintk *skel;
++	char *buf =3D NULL;
++	FILE *fp =3D NULL;
++	size_t buflen;
++
++	skel =3D trace_vprintk__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "trace_vprintk__open_and_load"))
++		goto cleanup;
++
++	bss =3D skel->bss;
++
++	err =3D trace_vprintk__attach(skel);
++	if (!ASSERT_OK(err, "trace_vprintk__attach"))
++		goto cleanup;
++
++	fp =3D fopen(TRACEBUF, "r");
++	if (!ASSERT_OK_PTR(fp, "fopen(TRACEBUF)"))
++		goto cleanup;
++
++	/* We do not want to wait forever if this test fails... */
++	fcntl(fileno(fp), F_SETFL, O_NONBLOCK);
++
++	/* wait for tracepoint to trigger */
++	usleep(1);
++	trace_vprintk__detach(skel);
++
++	if (!ASSERT_GT(bss->trace_vprintk_ran, 0, "bss->trace_vprintk_ran"))
++		goto cleanup;
++
++	if (!ASSERT_GT(bss->trace_vprintk_ret, 0, "bss->trace_vprintk_ret"))
++		goto cleanup;
++
++	/* verify our search string is in the trace buffer */
++	while (getline(&buf, &buflen, fp) >=3D 0 || errno =3D=3D EAGAIN) {
++		if (strstr(buf, SEARCHMSG) !=3D NULL)
++			found++;
++		if (found =3D=3D bss->trace_vprintk_ran)
++			break;
++		if (++iter > 1000)
++			break;
++	}
++
++	if (!ASSERT_EQ(found, bss->trace_vprintk_ran, "found"))
++		goto cleanup;
++
++cleanup:
++	trace_vprintk__destroy(skel);
++	free(buf);
++	if (fp)
++		fclose(fp);
++}
+diff --git a/tools/testing/selftests/bpf/progs/trace_vprintk.c b/tools/te=
+sting/selftests/bpf/progs/trace_vprintk.c
+new file mode 100644
+index 000000000000..255e2f018efe
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/trace_vprintk.c
+@@ -0,0 +1,25 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2021 Facebook */
++
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++char _license[] SEC("license") =3D "GPL";
++
++int trace_vprintk_ret =3D 0;
++int trace_vprintk_ran =3D 0;
++
++SEC("fentry/__x64_sys_nanosleep")
++int sys_enter(void *ctx)
++{
++	static const char one[] =3D "1";
++	static const char three[] =3D "3";
++	static const char five[] =3D "5";
++	static const char seven[] =3D "7";
++	static const char nine[] =3D "9";
++
++	trace_vprintk_ret =3D __bpf_vprintk("%s,%d,%s,%d,%s,%d,%s,%d,%s,%d %d\n=
+",
++		one, 2, three, 4, five, 6, seven, 8, nine, 10, ++trace_vprintk_ran);
++	return 0;
++}
 --=20
 2.30.2
 
