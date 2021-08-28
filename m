@@ -2,416 +2,201 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,
+	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 512ABC4320E
-	for <bpf@archiver.kernel.org>; Sat, 28 Aug 2021 07:51:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0382FC4320E
+	for <bpf@archiver.kernel.org>; Sat, 28 Aug 2021 16:40:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 31683610D0
-	for <bpf@archiver.kernel.org>; Sat, 28 Aug 2021 07:51:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D4D3B60E97
+	for <bpf@archiver.kernel.org>; Sat, 28 Aug 2021 16:40:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233391AbhH1Hwc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 28 Aug 2021 03:52:32 -0400
-Received: from mail-pf1-f175.google.com ([209.85.210.175]:46689 "EHLO
-        mail-pf1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230208AbhH1Hwb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 28 Aug 2021 03:52:31 -0400
-Received: by mail-pf1-f175.google.com with SMTP id m6so71302pfh.13;
-        Sat, 28 Aug 2021 00:51:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1wqL87jp9NAcmtPmdcijAMjQVRVrPdPqiMuKQlptPl0=;
-        b=sSzUCzJTvT8zOiBbIXtzKEUsGWIh01OjtgJ3ZSnm/W6KidBfJIEQUVm9YgBCCZ0B2G
-         3LfbwsJ15XwICuyk1HgdEu0/Pyj1XQkwg/ux7Lu8Ru6X8/UiVbIAWFItfe/zOpkHNKVh
-         +06JOyPpZqQ1NPTLrmyrOjex/JoI7+uKCr7/V5vSU7jk4n2Av3ThCrO5XL6UFS8uK5Nc
-         6HKTrJRSkA7Z2oU++uLlaqJ220PbEtKP1euuF3/je4xWcajRCXFFCkb/w4s5R9OCCN63
-         UUh2oikVfOsy2CXwyOXSbHzssy/W948m1ap0DSHavwvADMDYbdyoztY34nxKaeS6Rqrd
-         swTw==
-X-Gm-Message-State: AOAM530VIC8CCA206lUgyFCjgwEGdXevddSJS7sCr0xtxoXde5Z3pUNK
-        JrSQNqn7o7PNljdT5Bg+jYtV4u1eIDoiTaifQng=
-X-Google-Smtp-Source: ABdhPJzlWxQATFXoMY9VVsoEDSkf3mluUAWqH2Gb3/0mV7ZXmjgNJPsIbgwTwOCchGFF36dFdnXFPeS1zWZD/wBHykA=
-X-Received: by 2002:a62:7c55:0:b0:3f2:7ea0:93bc with SMTP id
- x82-20020a627c55000000b003f27ea093bcmr7902699pfc.36.1630137100882; Sat, 28
- Aug 2021 00:51:40 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210827163015.3141722-1-keescook@chromium.org> <20210827163015.3141722-3-keescook@chromium.org>
-In-Reply-To: <20210827163015.3141722-3-keescook@chromium.org>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Sat, 28 Aug 2021 16:51:29 +0900
-Message-ID: <CAMZ6RqJjD1_eZRnKEb8AvKOTua-WCRbATXEBbKWcD4mY9TD_hQ@mail.gmail.com>
-Subject: Re: [PATCH v3 2/5] treewide: Replace open-coded flex arrays in unions
-To:     Kees Cook <keescook@chromium.org>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Ayush Sawal <ayush.sawal@chelsio.com>,
-        Vinay Kumar Yadav <vinay.yadav@chelsio.com>,
-        Rohit Maheshwari <rohitm@chelsio.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Stanislaw Gruszka <stf_xl@wp.pl>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+        id S234528AbhH1Qlf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 28 Aug 2021 12:41:35 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:51334 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229726AbhH1Qla (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sat, 28 Aug 2021 12:41:30 -0400
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17SGVWPY031707;
+        Sat, 28 Aug 2021 09:40:23 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=1HhEGJYOS2Vzm2LjTk49+eQsHrwVthfKtI3DvNgNRVg=;
+ b=qgJab3BReleL9cKthdb9MpJhzz0/V18eZH84Y+FHrYnuxhgxIR+vVEcWtzEXBS5kjSK/
+ zmt32cMNTuvdaF0WIG31LHK+xlZEZAF0D4XPPynw56M3QkkkC2japD1XqouPR0fnqlWR
+ tpH9CmkhgJTqlKEjzZaEjKDEetL+asC2Fo0= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 3aqmt2gy1j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Sat, 28 Aug 2021 09:40:23 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (100.104.98.9) by
+ o365-in.thefacebook.com (100.104.94.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Sat, 28 Aug 2021 09:40:23 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bNJGRYimUtSwXiA22TgLXYchdT12ck4wF9Vo2+Ir3n5n2BtwsY3mmseeibYD0UxSXdeDtOBP37vobOzSWI1yb6A8C2Lhbd0JeG0EwYkrUb8gXhc3SfKY+WDtb3MXYsJ0cK0S/puwOSnaTdsLex9Mn3ItNgOhTarnxsMKLDoF3TSISxV+HZ7Hr1N+v0B+ClYsekuv2KLGOhdWol+4RWQeH1PAIxz/fkqFGSUSTG+NPYMZWgIJvwOf5KfdO2glvXg0SQjCleN01agq8icBRZsSDgKSKjlpcm0YDwDGaqm4Rpv1oQTveTRD47xBMjyVwLNTDwLgt9kon1nTf5PgvyR03A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1HhEGJYOS2Vzm2LjTk49+eQsHrwVthfKtI3DvNgNRVg=;
+ b=IkZaJanvA9N2wR9nX1tU0Yndz2uT9/4kvGANIk7dZ8G14DljZuwsDtTTejD+3w39rQ+1L+1VLJeIDFTiAqR2QRZB9KMwwFD0bpQUMwtUf8v5oq0cke/KIJyavcLKQP36HP/5eBrQh7MdimR6yMcbkoPaV5ylnjFWf8es69jzUh4HwHEiCvCgr2tdaZolcAZ3dgUMjwQThykCKP0jj/m2L8j8RbDZNgf8+G7DfG+KeBEuHfOO5NMEmjHMabXA/YBIK8jaT64UJOcuN+TDI2SeFFpmoMQuwuPnXLmoa8HWhdlm7BWkokiuv3YllEDHrAZv++rpPHy96WnMSrQrIuF1GQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Authentication-Results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none header.from=fb.com;
+Received: from DM6PR15MB4039.namprd15.prod.outlook.com (2603:10b6:5:2b2::20)
+ by DM6PR15MB2764.namprd15.prod.outlook.com (2603:10b6:5:1ae::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4457.20; Sat, 28 Aug
+ 2021 16:40:21 +0000
+Received: from DM6PR15MB4039.namprd15.prod.outlook.com
+ ([fe80::94f2:70b2:4b15:cbd6]) by DM6PR15MB4039.namprd15.prod.outlook.com
+ ([fe80::94f2:70b2:4b15:cbd6%7]) with mapi id 15.20.4457.023; Sat, 28 Aug 2021
+ 16:40:21 +0000
+Message-ID: <3da3377c-7f79-9e07-7deb-4fca6abae8fd@fb.com>
+Date:   Sat, 28 Aug 2021 12:40:17 -0400
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.0.3
+Subject: Re: [PATCH v3 bpf-next 4/7] libbpf: use static const fmt string in
+ __bpf_printk
+Content-Language: en-US
+To:     <bpf@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Mordechay Goodstein <mordechay.goodstein@intel.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>,
-        Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>,
-        linux-crypto@vger.kernel.org, ath10k@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev <netdev@vger.kernel.org>,
-        linux-scsi@vger.kernel.org, linux-can <linux-can@vger.kernel.org>,
-        bpf@vger.kernel.org, Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Keith Packard <keithp@keithp.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        clang-built-linux@googlegroups.com, linux-hardening@vger.kernel.org
+        Yonghong Song <yhs@fb.com>, <netdev@vger.kernel.org>
+References: <20210828052006.1313788-1-davemarchevsky@fb.com>
+ <20210828052006.1313788-5-davemarchevsky@fb.com>
+From:   Dave Marchevsky <davemarchevsky@fb.com>
+In-Reply-To: <20210828052006.1313788-5-davemarchevsky@fb.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MN2PR05CA0040.namprd05.prod.outlook.com
+ (2603:10b6:208:236::9) To DM6PR15MB4039.namprd15.prod.outlook.com
+ (2603:10b6:5:2b2::20)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [IPV6:2620:10d:c0a8:11e8::1060] (2620:10d:c091:480::1:1853) by MN2PR05CA0040.namprd05.prod.outlook.com (2603:10b6:208:236::9) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4478.10 via Frontend Transport; Sat, 28 Aug 2021 16:40:20 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 36e55c30-2311-41d0-0ac6-08d96a4286b7
+X-MS-TrafficTypeDiagnostic: DM6PR15MB2764:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <DM6PR15MB2764726BA3D8C618A3BE5709A0C99@DM6PR15MB2764.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ijQtqTZDOkiAG4sfAqY5QMx8WGfZ0iAwht+9yAxZgSMCxozp+igMNX9rmwVFrjY8ckokDPCN9A9WtDotRdnJc68PA44/cUhE37d/5i37CEvi5EK4J0YC5owQRLYv2LsYFwJN+VsrDe9rHZOJ9fnzgiF2rTeaOZXFLgX6ZRfp86rIfkPpb5IbCVtKDwrX64tLUlQCQEUbYfrMpDqRsv5u8T8jH2VjCqEk35dqTTpQcRlMNvksihviIHQkaV0JgqGHAWayD246cjBkrYlhQB1WzpFAGbeEp40kyGHBdenyWGbQ4p3pvh2+z3d5akpE7quc40dIvFu6jJhG2OZpiHFhTIDvn6jjHKsw1J6YJB9sbg8ELIFE+PQiMQkrHsCepsUe5hSfeG31sgnqjQkQcTj0b4O0CoWEkyIpl8fuSYpKoYhPx50sj3kN0zupHwnioKhsPhMNvA143sXaKuJBo6XIbIFXA1F2a7uyBbuAKcVrWd6msO9GgXbZj2dt6F0/zfHEXgrvmsQFUnzrTBXVibRxFdTj8qtal8lxyJVCzjVZtD0YUNbmDH8JKoTTG07VzPSZkUeAcX2eKjfTj5sFxtRbIL0dOydmqWQtKHgi6KhXYejQPxJ/LQn5xE+o9ck5By8W+TggbwUYma+ujRDWVJXI2yKomJDw1UsRERwvGn3W+fs/E/jV++1mJuQnICU698p2bC9DmHPYqRUVR/PLJCssbwCN83kXAaLUobV33GFWckQ=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR15MB4039.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(396003)(39860400002)(366004)(346002)(376002)(66946007)(5660300002)(4326008)(2906002)(53546011)(66476007)(66556008)(186003)(52116002)(316002)(6486002)(54906003)(478600001)(6916009)(8936002)(8676002)(2616005)(36756003)(31686004)(86362001)(38100700002)(31696002)(6666004)(83380400001)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dzMraWtmcEVWWjBJbjBRbVlrRm9Ta3BEY0FGcngzUHdnVGY0Z1Z0eEIwT0dF?=
+ =?utf-8?B?Q0JRWmNNSXpwbjArVDFRREw1aTRzazRGeFFzTnM4SllDb2dmNm1wN3N3aTBx?=
+ =?utf-8?B?YkM0SEdCd2FmcHVYdVFrb0lZZjhPVDdLU2pxUTFZaHJtTkRQTnl0NG5JbHd1?=
+ =?utf-8?B?YW9mcFlQOXhHVFp4NlhXbVEweEQ0Ym1oRVlCb29CSHNFbWlqVFRIalhxc0Zy?=
+ =?utf-8?B?N0RTU3puMkxWckdiNUNwKzBCR1RNUHN2ZGlSWEJHVUc0QmJ1RjdWbUpjNyt1?=
+ =?utf-8?B?djIrQlRrdjBrRElxMUJyZFV6MXYrTmk5MFF1aFI0Vjl6TUVUaUNJdWhodFNN?=
+ =?utf-8?B?QmMzc2hDRjFrTHpnZXo1VDZpVmUxQStGdzRmVi9QWjB6WG9Ec2hUTzZtMEZJ?=
+ =?utf-8?B?bThVSjRTM0pQQmVjdWFRK3JYb2dlSEM3THVrcXJtQTNRRWZteGo1dm9NV1JV?=
+ =?utf-8?B?VEE3MlFydkVwMDNkbDFBdjlDTzFUOVYyMVc3NUR0V3M0cE5EQmlCbThPSW5U?=
+ =?utf-8?B?YVFVeVc1cVFQYWZKM3BzTTd6WnZaaFZuRjJvWmZBckZHSTZaQ1Y0cmNTNy9p?=
+ =?utf-8?B?VmVRU0s3b2lVVE1aaTgxRk1DNTVFRXBNRGtUY21uL1Z3bFhkUUFPaCtMa2Na?=
+ =?utf-8?B?QmE1by9PS1pCa3FZcnIrblFOWUVmSUxubkZkMVhJTjhMamZSelJOTjVkNHlo?=
+ =?utf-8?B?SHJnMlNJWkZ2RHZuS050M09uN1RydlBIdlFvQ0Z3Tkl0QUZUT3R5VTNVUDFL?=
+ =?utf-8?B?VVVzTTFWK1orNEJYeHBZbmdhZHZ6eGRibDRTRjlzM3pDNTNTZ2I0TUhkbGh3?=
+ =?utf-8?B?dEtzY2s4SitUWVNXYzgzVnYwdWhHdVhFeU5iU0FCU3ZtVGcxVXBiR0l0TUMx?=
+ =?utf-8?B?cWh2eXlPSFZaSWtkMmJOczFPNGhNZUQydFZPdDY1Z3NYam4vUk9kQms3b09N?=
+ =?utf-8?B?MFZQaUlQb0tSZE9DWmcveno0VnVNeXIxclo5NWJ2blJSQmhLNXpCclVrWm9N?=
+ =?utf-8?B?MGxsOGdOWCtWaFI5S3Rvd0RFYW1qTnE5S3RiU2IzdXUrOHcycXNER1lUejd4?=
+ =?utf-8?B?RzdncDZGOTZNd00wNko0L2orVndiU0tRZlBEOHZ4TFRnVU1JcitnOVdlNFpX?=
+ =?utf-8?B?cUpsU0NaWkdEN1o0bDRjYUU0UzhlTkNnUHd0OHgrQytKZ2FKSU81bnR6Ylo1?=
+ =?utf-8?B?cVRHSlBoTHZsMHBVaGppdGNjWHhQb1NqL1VBV0xvNjd1K1plZWZPb0RMR3Fu?=
+ =?utf-8?B?NDVZZm9tYW1DUzY4eVV2M2U1VzZaN2lUT0VCVVBYVFIvaXlhM1VzaTl0Z093?=
+ =?utf-8?B?TTRaQkJHVEViZ2NsZUlNQklHQlk0UEJzNkJ5eFEwcEJBT3Vnd1psVytObWV4?=
+ =?utf-8?B?UEs5Ky9LUnJ1WXpRZ2xRd0gzc2cyQmZHdlBqS3N4Y3VNSk1HbjRzR3UwN2Qw?=
+ =?utf-8?B?M2dudUYzenpqVjYzU0xqeEw4Ti9NMHN5U25HM3Z1Si8rZVQ2Skw3L0xuRnR3?=
+ =?utf-8?B?SFkraXY0Y2ZVM3QzV2xzeHZwZjh2cktRQ3ZuYjUvMWRSUlkvZUYwenlOckcr?=
+ =?utf-8?B?ODNYVmU5T0VwVVdzUGxISkVaSkVvTGFTaUs4R3g3eitjallZNWh2b01BTjJk?=
+ =?utf-8?B?YXF2MTlnSnpBR3g5bHF2WUFpaTR4OXY2Qk51ZXdkMC9HTXRBRkthaGRtbVg3?=
+ =?utf-8?B?aFYzYjJZdUZjb25GSUtaeTVockNiRXhXalV0OWpZblMrb0RIVGdZMDhZUUxR?=
+ =?utf-8?B?NjBCRWV6NVR0bUVVdExtRGY5TWQ1eVdOUWRVc01hQ0hZMTk1ek8rQ1NiZU1a?=
+ =?utf-8?Q?L0QjTLLnytbwIkGXFcNoeMBLZr638bLKmHsRM=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 36e55c30-2311-41d0-0ac6-08d96a4286b7
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR15MB4039.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Aug 2021 16:40:21.1896
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1/QQfZuXa+d3Rfjmkh5EOH4klK8HrlDTKFD/4MlA5rKV5wEZZWbmwI0ho8fFTmIkqTIfcoubQNXjrRIBYrAfKQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR15MB2764
+X-OriginatorOrg: fb.com
+X-Proofpoint-ORIG-GUID: 0TjGZ2Y8KSy6qMdLpFE1wTMeJKC5v-Fk
+X-Proofpoint-GUID: 0TjGZ2Y8KSy6qMdLpFE1wTMeJKC5v-Fk
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-08-28_05:2021-08-27,2021-08-28 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
+ bulkscore=0 clxscore=1015 priorityscore=1501 adultscore=0 phishscore=0
+ lowpriorityscore=0 mlxlogscore=999 suspectscore=0 malwarescore=0
+ mlxscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2107140000 definitions=main-2108280108
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue. 28 Aug 2021 at 01:30, Kees Cook <keescook@chromium.org> wrote:
-> In support of enabling -Warray-bounds and -Wzero-length-bounds and
-> correctly handling run-time memcpy() bounds checking, replace all
-> open-coded flexible arrays (i.e. 0-element arrays) in unions with the
-> DECLARE_FLEX_ARRAY() helper macro.
->
-> This fixes warnings such as:
->
-> fs/hpfs/anode.c: In function 'hpfs_add_sector_to_btree':
-> fs/hpfs/anode.c:209:27: warning: array subscript 0 is outside the bounds of an interior zero-length array 'struct bplus_internal_node[0]' [-Wzero-length-bounds]
->   209 |    anode->btree.u.internal[0].down = cpu_to_le32(a);
->       |    ~~~~~~~~~~~~~~~~~~~~~~~^~~
-> In file included from fs/hpfs/hpfs_fn.h:26,
->                  from fs/hpfs/anode.c:10:
-> fs/hpfs/hpfs.h:412:32: note: while referencing 'internal'
->   412 |     struct bplus_internal_node internal[0]; /* (internal) 2-word entries giving
->       |                                ^~~~~~~~
->
-> drivers/net/can/usb/etas_es58x/es58x_fd.c: In function 'es58x_fd_tx_can_msg':
-> drivers/net/can/usb/etas_es58x/es58x_fd.c:360:35: warning: array subscript 65535 is outside the bounds of an interior zero-length array 'u8[0]' {aka 'unsigned char[]'} [-Wzero-length-bounds]
->   360 |  tx_can_msg = (typeof(tx_can_msg))&es58x_fd_urb_cmd->raw_msg[msg_len];
->       |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> In file included from drivers/net/can/usb/etas_es58x/es58x_core.h:22,
->                  from drivers/net/can/usb/etas_es58x/es58x_fd.c:17:
-> drivers/net/can/usb/etas_es58x/es58x_fd.h:231:6: note: while referencing 'raw_msg'
->   231 |   u8 raw_msg[0];
->       |      ^~~~~~~
->
-> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Ayush Sawal <ayush.sawal@chelsio.com>
-> Cc: Vinay Kumar Yadav <vinay.yadav@chelsio.com>
-> Cc: Rohit Maheshwari <rohitm@chelsio.com>
-> Cc: Herbert Xu <herbert@gondor.apana.org.au>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Kalle Valo <kvalo@codeaurora.org>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Stanislaw Gruszka <stf_xl@wp.pl>
-> Cc: Luca Coelho <luciano.coelho@intel.com>
-> Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
-> Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-> Cc: Alexei Starovoitov <ast@kernel.org>
-> Cc: Daniel Borkmann <daniel@iogearbox.net>
-> Cc: Andrii Nakryiko <andrii@kernel.org>
-> Cc: Martin KaFai Lau <kafai@fb.com>
-> Cc: Song Liu <songliubraving@fb.com>
-> Cc: Yonghong Song <yhs@fb.com>
-> Cc: John Fastabend <john.fastabend@gmail.com>
-> Cc: KP Singh <kpsingh@kernel.org>
-> Cc: Johannes Berg <johannes.berg@intel.com>
-> Cc: Mordechay Goodstein <mordechay.goodstein@intel.com>
-> Cc: Lee Jones <lee.jones@linaro.org>
-> Cc: Wolfgang Grandegger <wg@grandegger.com>
-> Cc: Marc Kleine-Budde <mkl@pengutronix.de>
-> Cc: Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>
-> Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> Cc: Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>
-> Cc: linux-crypto@vger.kernel.org
-> Cc: ath10k@lists.infradead.org
-> Cc: linux-wireless@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Cc: linux-scsi@vger.kernel.org
-> Cc: linux-can@vger.kernel.org
-> Cc: bpf@vger.kernel.org
-> Acked-by: Marc Kleine-Budde <mkl@pengutronix.de> # drivers/net/can/usb/etas_es58x/*
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+On 8/28/21 1:20 AM, Dave Marchevsky wrote:   
+> The __bpf_printk convenience macro was using a 'char' fmt string holder
+> as it predates support for globals in libbpf. Move to more efficient
+> 'static const char', but provide a fallback to the old way via
+> BPF_NO_GLOBAL_DATA so users on old kernels can still use the macro.
+> 
+> Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
 > ---
->  drivers/crypto/chelsio/chcr_crypto.h              | 14 +++++++++-----
->  drivers/net/can/usb/etas_es58x/es581_4.h          |  2 +-
->  drivers/net/can/usb/etas_es58x/es58x_fd.h         |  2 +-
->  drivers/net/wireless/ath/ath10k/htt.h             |  7 +++++--
->  drivers/net/wireless/intel/iwlegacy/commands.h    |  6 ++++--
->  drivers/net/wireless/intel/iwlwifi/dvm/commands.h |  6 ++++--
->  drivers/net/wireless/intel/iwlwifi/fw/api/tx.h    |  6 ++++--
->  drivers/scsi/aic94xx/aic94xx_sds.c                |  6 ++++--
->  fs/hpfs/hpfs.h                                    |  8 ++++----
->  include/linux/filter.h                            |  6 ++++--
->  include/scsi/sas.h                                | 12 ++++++++----
->  include/uapi/rdma/rdma_user_rxe.h                 |  4 ++--
->  include/uapi/sound/asoc.h                         |  4 ++--
->  13 files changed, 52 insertions(+), 31 deletions(-)
->
-> diff --git a/drivers/crypto/chelsio/chcr_crypto.h b/drivers/crypto/chelsio/chcr_crypto.h
-> index e89f9e0094b4..c7816c83e324 100644
-> --- a/drivers/crypto/chelsio/chcr_crypto.h
-> +++ b/drivers/crypto/chelsio/chcr_crypto.h
-> @@ -222,8 +222,10 @@ struct chcr_authenc_ctx {
->  };
->
->  struct __aead_ctx {
-> -       struct chcr_gcm_ctx gcm[0];
-> -       struct chcr_authenc_ctx authenc[];
-> +       union {
-> +               DECLARE_FLEX_ARRAY(struct chcr_gcm_ctx, gcm);
-> +               DECLARE_FLEX_ARRAY(struct chcr_authenc_ctx, authenc);
-> +       };
->  };
->
->  struct chcr_aead_ctx {
-> @@ -245,9 +247,11 @@ struct hmac_ctx {
->  };
->
->  struct __crypto_ctx {
-> -       struct hmac_ctx hmacctx[0];
-> -       struct ablk_ctx ablkctx[0];
-> -       struct chcr_aead_ctx aeadctx[];
-> +       union {
-> +               DECLARE_FLEX_ARRAY(struct hmac_ctx, hmacctx);
-> +               DECLARE_FLEX_ARRAY(struct ablk_ctx, ablkctx);
-> +               DECLARE_FLEX_ARRAY(struct chcr_aead_ctx, aeadctx);
-> +       };
->  };
->
->  struct chcr_context {
-> diff --git a/drivers/net/can/usb/etas_es58x/es581_4.h b/drivers/net/can/usb/etas_es58x/es581_4.h
-> index 4bc60a6df697..667ecb77168c 100644
-> --- a/drivers/net/can/usb/etas_es58x/es581_4.h
-> +++ b/drivers/net/can/usb/etas_es58x/es581_4.h
-> @@ -192,7 +192,7 @@ struct es581_4_urb_cmd {
->                 struct es581_4_rx_cmd_ret rx_cmd_ret;
->                 __le64 timestamp;
->                 u8 rx_cmd_ret_u8;
-> -               u8 raw_msg[0];
-> +               DECLARE_FLEX_ARRAY(u8, raw_msg);
->         } __packed;
->
->         __le16 reserved_for_crc16_do_not_use;
-> diff --git a/drivers/net/can/usb/etas_es58x/es58x_fd.h b/drivers/net/can/usb/etas_es58x/es58x_fd.h
-> index ee18a87e40c0..e33003f96e5e 100644
-> --- a/drivers/net/can/usb/etas_es58x/es58x_fd.h
-> +++ b/drivers/net/can/usb/etas_es58x/es58x_fd.h
-> @@ -228,7 +228,7 @@ struct es58x_fd_urb_cmd {
->                 struct es58x_fd_tx_ack_msg tx_ack_msg;
->                 __le64 timestamp;
->                 __le32 rx_cmd_ret_le32;
-> -               u8 raw_msg[0];
-> +               DECLARE_FLEX_ARRAY(u8, raw_msg);
->         } __packed;
->
->         __le16 reserved_for_crc16_do_not_use;
-> diff --git a/drivers/net/wireless/ath/ath10k/htt.h b/drivers/net/wireless/ath/ath10k/htt.h
-> index ec689e3ce48a..a6de08d3bf4a 100644
-> --- a/drivers/net/wireless/ath/ath10k/htt.h
-> +++ b/drivers/net/wireless/ath/ath10k/htt.h
-> @@ -1674,8 +1674,11 @@ struct htt_tx_fetch_ind {
->         __le32 token;
->         __le16 num_resp_ids;
->         __le16 num_records;
-> -       __le32 resp_ids[0]; /* ath10k_htt_get_tx_fetch_ind_resp_ids() */
-> -       struct htt_tx_fetch_record records[];
-> +       union {
-> +               /* ath10k_htt_get_tx_fetch_ind_resp_ids() */
-> +               DECLARE_FLEX_ARRAY(__le32, resp_ids);
-> +               DECLARE_FLEX_ARRAY(struct htt_tx_fetch_record, records);
-> +       };
->  } __packed;
->
->  static inline void *
-> diff --git a/drivers/net/wireless/intel/iwlegacy/commands.h b/drivers/net/wireless/intel/iwlegacy/commands.h
-> index 89c6671b32bc..4a97310f8fee 100644
-> --- a/drivers/net/wireless/intel/iwlegacy/commands.h
-> +++ b/drivers/net/wireless/intel/iwlegacy/commands.h
-> @@ -1408,8 +1408,10 @@ struct il3945_tx_cmd {
->          * MAC header goes here, followed by 2 bytes padding if MAC header
->          * length is 26 or 30 bytes, followed by payload data
->          */
-> -       u8 payload[0];
-> -       struct ieee80211_hdr hdr[];
-> +       union {
-> +               DECLARE_FLEX_ARRAY(u8, payload);
-> +               DECLARE_FLEX_ARRAY(struct ieee80211_hdr, hdr);
-> +       };
->  } __packed;
->
->  /*
-> diff --git a/drivers/net/wireless/intel/iwlwifi/dvm/commands.h b/drivers/net/wireless/intel/iwlwifi/dvm/commands.h
-> index 235c7a2e3483..75a4b8e26232 100644
-> --- a/drivers/net/wireless/intel/iwlwifi/dvm/commands.h
-> +++ b/drivers/net/wireless/intel/iwlwifi/dvm/commands.h
-> @@ -1251,8 +1251,10 @@ struct iwl_tx_cmd {
->          * MAC header goes here, followed by 2 bytes padding if MAC header
->          * length is 26 or 30 bytes, followed by payload data
->          */
-> -       u8 payload[0];
-> -       struct ieee80211_hdr hdr[];
-> +       union {
-> +               DECLARE_FLEX_ARRAY(u8, payload);
-> +               DECLARE_FLEX_ARRAY(struct ieee80211_hdr, hdr);
-> +       };
->  } __packed;
->
->  /*
-> diff --git a/drivers/net/wireless/intel/iwlwifi/fw/api/tx.h b/drivers/net/wireless/intel/iwlwifi/fw/api/tx.h
-> index 24e4a82a55da..66c5487e857e 100644
-> --- a/drivers/net/wireless/intel/iwlwifi/fw/api/tx.h
-> +++ b/drivers/net/wireless/intel/iwlwifi/fw/api/tx.h
-> @@ -713,8 +713,10 @@ struct iwl_mvm_compressed_ba_notif {
->         __le32 tx_rate;
->         __le16 tfd_cnt;
->         __le16 ra_tid_cnt;
-> -       struct iwl_mvm_compressed_ba_ratid ra_tid[0];
-> -       struct iwl_mvm_compressed_ba_tfd tfd[];
-> +       union {
-> +               DECLARE_FLEX_ARRAY(struct iwl_mvm_compressed_ba_ratid, ra_tid);
-> +               DECLARE_FLEX_ARRAY(struct iwl_mvm_compressed_ba_tfd, tfd);
-> +       };
->  } __packed; /* COMPRESSED_BA_RES_API_S_VER_4 */
->
->  /**
-> diff --git a/drivers/scsi/aic94xx/aic94xx_sds.c b/drivers/scsi/aic94xx/aic94xx_sds.c
-> index 46815e65f7a4..5def83c88f13 100644
-> --- a/drivers/scsi/aic94xx/aic94xx_sds.c
-> +++ b/drivers/scsi/aic94xx/aic94xx_sds.c
-> @@ -517,8 +517,10 @@ struct asd_ms_conn_map {
->         u8    num_nodes;
->         u8    usage_model_id;
->         u32   _resvd;
-> -       struct asd_ms_conn_desc conn_desc[0];
-> -       struct asd_ms_node_desc node_desc[];
-> +       union {
-> +               DECLARE_FLEX_ARRAY(struct asd_ms_conn_desc, conn_desc);
-> +               DECLARE_FLEX_ARRAY(struct asd_ms_node_desc, node_desc);
-> +       };
->  } __attribute__ ((packed));
->
->  struct asd_ctrla_phy_entry {
-> diff --git a/fs/hpfs/hpfs.h b/fs/hpfs/hpfs.h
-> index d92c4af3e1b4..281dec8f636b 100644
-> --- a/fs/hpfs/hpfs.h
-> +++ b/fs/hpfs/hpfs.h
-> @@ -409,10 +409,10 @@ struct bplus_header
->    __le16 first_free;                   /* offset from start of header to
->                                            first free node in array */
->    union {
-> -    struct bplus_internal_node internal[0]; /* (internal) 2-word entries giving
-> -                                              subtree pointers */
-> -    struct bplus_leaf_node external[0];            /* (external) 3-word entries giving
-> -                                              sector runs */
-> +       /* (internal) 2-word entries giving subtree pointers */
-> +       DECLARE_FLEX_ARRAY(struct bplus_internal_node, internal);
-> +       /* (external) 3-word entries giving sector runs */
-> +       DECLARE_FLEX_ARRAY(struct bplus_leaf_node, external);
->    } u;
->  };
->
-> diff --git a/include/linux/filter.h b/include/linux/filter.h
-> index 472f97074da0..5ca52bfa5868 100644
-> --- a/include/linux/filter.h
-> +++ b/include/linux/filter.h
-> @@ -572,8 +572,10 @@ struct bpf_prog {
->         struct bpf_prog_aux     *aux;           /* Auxiliary fields */
->         struct sock_fprog_kern  *orig_prog;     /* Original BPF program */
->         /* Instructions for interpreter */
-> -       struct sock_filter      insns[0];
-> -       struct bpf_insn         insnsi[];
-> +       union {
-> +               DECLARE_FLEX_ARRAY(struct sock_filter, insns);
-> +               DECLARE_FLEX_ARRAY(struct bpf_insn, insnsi);
-> +       };
->  };
->
->  struct sk_filter {
-> diff --git a/include/scsi/sas.h b/include/scsi/sas.h
-> index 4726c1bbec65..64154c1fed02 100644
-> --- a/include/scsi/sas.h
-> +++ b/include/scsi/sas.h
-> @@ -323,8 +323,10 @@ struct ssp_response_iu {
->         __be32 sense_data_len;
->         __be32 response_data_len;
->
-> -       u8     resp_data[0];
-> -       u8     sense_data[];
-> +       union {
-> +               DECLARE_FLEX_ARRAY(u8, resp_data);
-> +               DECLARE_FLEX_ARRAY(u8, sense_data);
-> +       };
->  } __attribute__ ((packed));
->
->  struct ssp_command_iu {
-> @@ -554,8 +556,10 @@ struct ssp_response_iu {
->         __be32 sense_data_len;
->         __be32 response_data_len;
->
-> -       u8     resp_data[0];
-> -       u8     sense_data[];
-> +       union {
-> +               DECLARE_FLEX_ARRAY(u8, resp_data);
-> +               DECLARE_FLEX_ARRAY(u8, sense_data);
-> +       };
->  } __attribute__ ((packed));
->
->  struct ssp_command_iu {
-> diff --git a/include/uapi/rdma/rdma_user_rxe.h b/include/uapi/rdma/rdma_user_rxe.h
-> index e283c2220aba..7f44d54bb0ab 100644
-> --- a/include/uapi/rdma/rdma_user_rxe.h
-> +++ b/include/uapi/rdma/rdma_user_rxe.h
-> @@ -141,8 +141,8 @@ struct rxe_dma_info {
->         __u32                   sge_offset;
->         __u32                   reserved;
->         union {
-> -               __u8            inline_data[0];
-> -               struct rxe_sge  sge[0];
-> +               __DECLARE_FLEX_ARRAY(__u8, inline_data);
-> +               __DECLARE_FLEX_ARRAY(struct rxe_sge, sge);
->         };
->  };
->
-> diff --git a/include/uapi/sound/asoc.h b/include/uapi/sound/asoc.h
-> index da61398b1f8f..053949287ce8 100644
-> --- a/include/uapi/sound/asoc.h
-> +++ b/include/uapi/sound/asoc.h
-> @@ -240,8 +240,8 @@ struct snd_soc_tplg_vendor_array {
->  struct snd_soc_tplg_private {
->         __le32 size;    /* in bytes of private data */
->         union {
-> -               char data[0];
-> -               struct snd_soc_tplg_vendor_array array[0];
-> +               __DECLARE_FLEX_ARRAY(char, data);
-> +               __DECLARE_FLEX_ARRAY(struct snd_soc_tplg_vendor_array, array);
->         };
->  } __attribute__((packed));
+>  tools/lib/bpf/bpf_helpers.h | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
+> index 5f087306cdfe..a1d5ec6f285c 100644
+> --- a/tools/lib/bpf/bpf_helpers.h
+> +++ b/tools/lib/bpf/bpf_helpers.h
+> @@ -216,10 +216,16 @@ enum libbpf_tristate {
+>  		     ___param, sizeof(___param));		\
+>  })
+>  
+> +#ifdef BPF_NO_GLOBAL_DATA
+> +#define BPF_PRINTK_FMT_TYPE char
+> +#else
+> +#define BPF_PRINTK_FMT_TYPE static const char
 
-Thanks for addressing all my remarks on the commit message.
+The reference_tracking prog test is failing as a result of this.
+Specifically, it fails to load bpf_sk_lookup_test0 prog, which 
+has a bpf_printk:
 
-FYI, I compared the assembly code before and after the patch:
-both give the same output (as expected).
+  47: (b4) w3 = 0
+  48: (18) r1 = 0x0
+  50: (b4) w2 = 7
+  51: (85) call bpf_trace_printk#6
+  R1 type=inv expected=fp, pkt, pkt_meta, map_key, map_value, mem, rdonly_buf, rdwr_buf
 
-Acked-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Setting BPF_NO_GLOBAL_DATA in the test results in a pass
+
+> +#endif
+> +
+>  /* Helper macro to print out debug messages */
+>  #define __bpf_printk(fmt, ...)				\
+>  ({							\
+> -	char ____fmt[] = fmt;				\
+> +	BPF_PRINTK_FMT_TYPE ____fmt[] = fmt;		\
+>  	bpf_trace_printk(____fmt, sizeof(____fmt),	\
+>  			 ##__VA_ARGS__);		\
+>  })
+> 
+
