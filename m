@@ -2,80 +2,154 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F3338C432BE
-	for <bpf@archiver.kernel.org>; Mon, 30 Aug 2021 18:08:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 127CCC4320E
+	for <bpf@archiver.kernel.org>; Mon, 30 Aug 2021 18:32:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D74BA60F5B
-	for <bpf@archiver.kernel.org>; Mon, 30 Aug 2021 18:08:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E55F860F5E
+	for <bpf@archiver.kernel.org>; Mon, 30 Aug 2021 18:32:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234085AbhH3SJE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 30 Aug 2021 14:09:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43954 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229839AbhH3SJE (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 30 Aug 2021 14:09:04 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54610C061575;
-        Mon, 30 Aug 2021 11:08:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=5nJ0B78IwLSywO3jWIuQ9w7tGOOIg6zRwu/EHc5ZzDg=; b=ZDXloUkb1RObwoIpzOvy2bgoSK
-        qU/4DqdaQdEXI2Nzt5VcKeHrBKGm56b1iJQl3hvI/o+n2l048zu4fUePr49KF8keRskUeimu2xNGE
-        mtPaKc4SwRaeLQ3qWntms3S4HdxUedEtZnyxyuUhUQ91ehStC0+VqIHE0iV2aibbhadebKy/jPWyP
-        5vvl+mPiVVZjed6kt016ulJagKSZQpPEHMawvV+aHdnd4efC1iJU1n/rwenuWYSICvOT69XsZ+tnd
-        M3cremX8Msu+t8yRrVHbdRSWONDHsbeBZzKA3cOcNxlJiOuNVAylbfSilLvS3K64+tcdmI6fDPG3L
-        QzPr5HOA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mKlgs-000Oe8-0Y; Mon, 30 Aug 2021 18:07:30 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        id S238578AbhH3Sdb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 30 Aug 2021 14:33:31 -0400
+Received: from smtp-relay-canonical-1.canonical.com ([185.125.188.121]:35886
+        "EHLO smtp-relay-canonical-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238572AbhH3Sdb (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 30 Aug 2021 14:33:31 -0400
+Received: from mussarela.. (201-69-234-220.dial-up.telesp.net.br [201.69.234.220])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 58EF43001F6;
-        Mon, 30 Aug 2021 20:07:24 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 4109C2C7F610C; Mon, 30 Aug 2021 20:07:24 +0200 (CEST)
-Date:   Mon, 30 Aug 2021 20:07:24 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Song Liu <songliubraving@fb.com>
-Cc:     "open list:BPF (Safe dynamic programs and tools)" 
-        <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        "acme@kernel.org" <acme@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "kjain@linux.ibm.com" <kjain@linux.ibm.com>,
-        Kernel Team <Kernel-team@fb.com>
-Subject: Re: [PATCH v2 bpf-next 1/3] perf: enable branch record for software
- events
-Message-ID: <YS0eXMd5Y5yV/m1m@hirez.programming.kicks-ass.net>
-References: <20210826221306.2280066-1-songliubraving@fb.com>
- <20210826221306.2280066-2-songliubraving@fb.com>
- <20210830102258.GI4353@worktop.programming.kicks-ass.net>
- <719D2DC2-CC5D-4C6A-94F4-DBCADDA291CC@fb.com>
+        (No client certificate requested)
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 6BDF040178;
+        Mon, 30 Aug 2021 18:32:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1630348356;
+        bh=YOEuV5J/RPEj6pgEhF8fmNriL/1isGdpZkkd9u+eMt0=;
+        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+         MIME-Version;
+        b=ZJ78aQe/EVIqfsnCcLGmg1aqNgxwnLMtRQmZ2X/lbJkR+77cAiLRl6CxOX3d4Bpf1
+         ICa6jG6xXIArLqt3LhszZW7Je5069Ih45kr0R6X4Q1VVYNHCkARuAwccTvS//Hd8gr
+         STdJ94tLzL5itm5aRa7bmaIsHftcDZq/Mp2MLZhPgaQba7vjctJ3KVswpTGyWP54D6
+         IGchXS0pUs7NMJrCmqGKN8dIYoGxyiB+/isCZFBpZrkXbGu0LBcVu0SodtQg/tnKOF
+         fUu8Yx68D3GF2eUWCHUuQDB1nAUpJkPHNSq46CFlW9/ZoK4VR2ORkoR/xJF3/I+zXR
+         u5S2pWUjcSVng==
+From:   Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+To:     stable@vger.kernel.org
+Cc:     bpf@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Pavel Machek <pavel@denx.de>,
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+Subject: [PATCH 4.14 1/4] bpf: Do not use ax register in interpreter on div/mod
+Date:   Mon, 30 Aug 2021 15:32:08 -0300
+Message-Id: <20210830183211.339054-2-cascardo@canonical.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210830183211.339054-1-cascardo@canonical.com>
+References: <20210830183211.339054-1-cascardo@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <719D2DC2-CC5D-4C6A-94F4-DBCADDA291CC@fb.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Aug 30, 2021 at 05:41:46PM +0000, Song Liu wrote:
-> DECLARE_STATIC_CALL(perf_snapshot_branch_stack,
->                    int (*)(struct perf_branch_snapshot *));
+From: Daniel Borkmann <daniel@iogearbox.net>
 
-> Something like 
-> 
-> typedef int (perf_snapshot_branch_stack_t)(struct perf_branch_snapshot *);
-> DECLARE_STATIC_CALL(perf_snapshot_branch_stack, perf_snapshot_branch_stack_t);
-> 
-> seems to work fine. 
+Partially undo old commit 144cd91c4c2b ("bpf: move tmp variable into ax
+register in interpreter"). The reason we need this here is because ax
+register will be used for holding temporary state for div/mod instruction
+which otherwise interpreter would corrupt. This will cause a small +8 byte
+stack increase for interpreter, but with the gain that we can use it from
+verifier rewrites as scratch register.
 
-Oh urg, indeed. It wants a function type, not a function pointer type.
-I've been bitten by that before. Go with the typedef, that's the sanest.
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Reviewed-by: John Fastabend <john.fastabend@gmail.com>
+[cascardo: This partial revert is needed in order to support using AX for
+the following two commits, as there is no JMP32 on 4.19.y]
+Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+---
+ kernel/bpf/core.c | 32 +++++++++++++++-----------------
+ 1 file changed, 15 insertions(+), 17 deletions(-)
+
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index e7211b0fa27c..30d871be9974 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -616,9 +616,6 @@ static int bpf_jit_blind_insn(const struct bpf_insn *from,
+ 	 * below.
+ 	 *
+ 	 * Constant blinding is only used by JITs, not in the interpreter.
+-	 * The interpreter uses AX in some occasions as a local temporary
+-	 * register e.g. in DIV or MOD instructions.
+-	 *
+ 	 * In restricted circumstances, the verifier can also use the AX
+ 	 * register for rewrites as long as they do not interfere with
+ 	 * the above cases!
+@@ -951,6 +948,7 @@ static unsigned int ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn,
+ 	u32 tail_call_cnt = 0;
+ 	void *ptr;
+ 	int off;
++	u64 tmp;
+ 
+ #define CONT	 ({ insn++; goto select_insn; })
+ #define CONT_JMP ({ insn++; goto select_insn; })
+@@ -1013,22 +1011,22 @@ static unsigned int ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn,
+ 	ALU64_MOD_X:
+ 		if (unlikely(SRC == 0))
+ 			return 0;
+-		div64_u64_rem(DST, SRC, &AX);
+-		DST = AX;
++		div64_u64_rem(DST, SRC, &tmp);
++		DST = tmp;
+ 		CONT;
+ 	ALU_MOD_X:
+ 		if (unlikely((u32)SRC == 0))
+ 			return 0;
+-		AX = (u32) DST;
+-		DST = do_div(AX, (u32) SRC);
++		tmp = (u32) DST;
++		DST = do_div(tmp, (u32) SRC);
+ 		CONT;
+ 	ALU64_MOD_K:
+-		div64_u64_rem(DST, IMM, &AX);
+-		DST = AX;
++		div64_u64_rem(DST, IMM, &tmp);
++		DST = tmp;
+ 		CONT;
+ 	ALU_MOD_K:
+-		AX = (u32) DST;
+-		DST = do_div(AX, (u32) IMM);
++		tmp = (u32) DST;
++		DST = do_div(tmp, (u32) IMM);
+ 		CONT;
+ 	ALU64_DIV_X:
+ 		if (unlikely(SRC == 0))
+@@ -1038,17 +1036,17 @@ static unsigned int ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn,
+ 	ALU_DIV_X:
+ 		if (unlikely((u32)SRC == 0))
+ 			return 0;
+-		AX = (u32) DST;
+-		do_div(AX, (u32) SRC);
+-		DST = (u32) AX;
++		tmp = (u32) DST;
++		do_div(tmp, (u32) SRC);
++		DST = (u32) tmp;
+ 		CONT;
+ 	ALU64_DIV_K:
+ 		DST = div64_u64(DST, IMM);
+ 		CONT;
+ 	ALU_DIV_K:
+-		AX = (u32) DST;
+-		do_div(AX, (u32) IMM);
+-		DST = (u32) AX;
++		tmp = (u32) DST;
++		do_div(tmp, (u32) IMM);
++		DST = (u32) tmp;
+ 		CONT;
+ 	ALU_END_TO_BE:
+ 		switch (IMM) {
+-- 
+2.30.2
+
