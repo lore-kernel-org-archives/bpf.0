@@ -8,57 +8,57 @@ X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0A1EC432BE
-	for <bpf@archiver.kernel.org>; Mon, 30 Aug 2021 22:05:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5DA3C432BE
+	for <bpf@archiver.kernel.org>; Mon, 30 Aug 2021 22:15:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9D0A760232
-	for <bpf@archiver.kernel.org>; Mon, 30 Aug 2021 22:05:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AB28360F57
+	for <bpf@archiver.kernel.org>; Mon, 30 Aug 2021 22:15:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232288AbhH3WGb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 30 Aug 2021 18:06:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42334 "EHLO
+        id S237415AbhH3WQB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 30 Aug 2021 18:16:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229887AbhH3WGb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 30 Aug 2021 18:06:31 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D30DC061575;
-        Mon, 30 Aug 2021 15:05:37 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id z18so31058882ybg.8;
-        Mon, 30 Aug 2021 15:05:37 -0700 (PDT)
+        with ESMTP id S230255AbhH3WQB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 30 Aug 2021 18:16:01 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49364C061575;
+        Mon, 30 Aug 2021 15:15:07 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id v19so17566484ybv.9;
+        Mon, 30 Aug 2021 15:15:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=3AI5mZl+BbVjezvyWOJjh9FI+0uPl+5gVobqJ+UruaM=;
-        b=YmxO9Acp8m7p1yf7GZsf4g+mJLtokK7wrLGrs8UtWUDUD1WjknuD0P/x/hKGhseJoy
-         qbl287mM2JhIDrCOAdN8CXUOwBJ4/YPzROOF4YbeuJJ21YIaU+r/aeGzpR+mwDibj9VZ
-         vnIaRD1zlLWUThIXRpeWeAIF/rwCjLQ7eAXxdQQNZNsx+r3sJFnqpk4BEYFAPRf9amME
-         stOGvWfR9ss/XXK7J/4gnLjhKE4nULVcu8PV8UVJOIcxJvtXb8fL+j+tD8NiY3e5Q0av
-         Fz9ISGG9SxxT+EJqKwJkE1bd9Bd+k49S/tnaA03UAqhvKY2FhpgqJJAn7B0MQd0ppuEE
-         3eSQ==
+        bh=ZFNvsjqGoOUvaOP1kexRv4qguktfVomTKA5112VDpAo=;
+        b=scQdVfYcAQVStZ2ycSE8XcE2y7omukO6oSDVj4IPGbtpT9EUIKlzs3u02kHT0Oy7+x
+         9IIFUlIZvMVbfjtkvFUxdTo9+uH2nK/ulqykXYC7dKosPhn1Ar/lpVo8a0cvUk8C0RzJ
+         p39BNZaxq9DzAgVUcmy4UPjL3SCxE0gdv+DJTT3aU8nR6gq0vS1M1vH314P05CTm10UC
+         GVFbaSLD1Du44opiIj0EzfqXfCEOl/VcoG6PD9EHgSb+pdVt/GsQUeijXSbFzJgnGWtZ
+         Kl+d8zXAXl4utwtas0b44QOin8fF41poWXIQxFUI8jniwNAUN6lGfb+aLh3suHhsy1W8
+         Mmpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=3AI5mZl+BbVjezvyWOJjh9FI+0uPl+5gVobqJ+UruaM=;
-        b=ZUtzwYq2FKvlC7yHyC98Iqb0UwX6jdgC5E+6qLUAUUT3S8gGygqE6Xm/ZkpoIBCSud
-         gE7T7CDR9iUmvAD2qje3HPDRICjs8jOi0d4Xeu1RqB64KVuZmYCpuEh7xtxJTxG8OP68
-         RT+re6Io+C9mjoFoK2M18yLriMqlwRA72TxvkoURpGmj5lzU1MXAuuUsL6K4H3AuzIGT
-         hMadAhDwhoqO4M2aSoSKUDJHGMdQAXKn8uYU5TCWuuFy3Jec8zOThJG9Vok8pxjUpmDG
-         UcGs6e5fMBNBmG89yG9ViRzDQe0oTn9P6ZBAeL3wDWT8AsZZbdpyaQk5gGk0ocUgk5IW
-         BPew==
-X-Gm-Message-State: AOAM5307YhTROHrE931tEYioqJwKECWPVDbQBg/l9kyWFU1By4NfIJgj
-        uHsEOMivBYPPxCcAiKITTqamZfPCNjKV6GRhR5c=
-X-Google-Smtp-Source: ABdhPJw84hvEHkHzKueTEuDlr1a8lDgNQTBp47BcH/A6g9xVGFdFIvui8Z1z9vSSf6TnCWzQvOobw/xRnajHkpQvIiQ=
-X-Received: by 2002:a25:ac7:: with SMTP id 190mr25051248ybk.260.1630361136478;
- Mon, 30 Aug 2021 15:05:36 -0700 (PDT)
+        bh=ZFNvsjqGoOUvaOP1kexRv4qguktfVomTKA5112VDpAo=;
+        b=WiTG4OqjjB/2U1umr9qS6ZuaZYVKcXprIaIVaL/GBqAWRRnnHhoxDYnFtlHtlBn/ta
+         EH0smXtGZALW4dj0S1aU7lWaS1BXaIHr360I0cC3O4yMobLOi+Axi4V9598Y/5Ic3cv7
+         FfeZKRcCoVo6ae7OnWD709KCRiU8g82U1RgsvSsirp8UkXrE/czerdIxpvOx7bKC4Gj8
+         cP+sz8zXPH7RO57cAcuCcC1hrIGfLvPNu8NSgT8C3mWU6yQj62suJ3aFGTXGfDSUozv8
+         Yf6pjpB3whSTL3SYe2ykCmqK8jZ5T3d26rEhKUCPPZaC+EJw1Qc9fnLSvuLqWbcUtTT1
+         dePQ==
+X-Gm-Message-State: AOAM531tBUc2Xnyz24qR6Sa2tXHvo41Lj9IVTV7rQpIXI7ZSrr7v5opr
+        mT8B2JErCqDDbr52h001zNOGlAO0bWGwf1rnJQI=
+X-Google-Smtp-Source: ABdhPJwaK0wRRyCPCTu5uynUif+6ia5s49XOmqYd+bu4Elir7aULt+9D2ZS3upSizmpPFWB6TaXmo5+cHbita0YLfbc=
+X-Received: by 2002:a25:16c6:: with SMTP id 189mr26345337ybw.27.1630361706519;
+ Mon, 30 Aug 2021 15:15:06 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210830214106.4142056-1-songliubraving@fb.com> <20210830214106.4142056-2-songliubraving@fb.com>
-In-Reply-To: <20210830214106.4142056-2-songliubraving@fb.com>
+References: <20210830214106.4142056-1-songliubraving@fb.com> <20210830214106.4142056-3-songliubraving@fb.com>
+In-Reply-To: <20210830214106.4142056-3-songliubraving@fb.com>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 30 Aug 2021 15:05:25 -0700
-Message-ID: <CAEf4BzZg3Ea5hsmJmvGB=Xkr3Ak7Op0Oo_VTRBAFEJYavdk1LQ@mail.gmail.com>
-Subject: Re: [PATCH v3 bpf-next 1/3] perf: enable branch record for software events
+Date:   Mon, 30 Aug 2021 15:14:55 -0700
+Message-ID: <CAEf4BzYuUTndYGb7-4q9=8s4PQUbTK+VHy=u9vOBqabZ08Yy-w@mail.gmail.com>
+Subject: Re: [PATCH v3 bpf-next 2/3] bpf: introduce helper bpf_get_branch_snapshot
 To:     Song Liu <songliubraving@fb.com>
 Cc:     bpf <bpf@vger.kernel.org>,
         open list <linux-kernel@vger.kernel.org>,
@@ -74,133 +74,97 @@ X-Mailing-List: bpf@vger.kernel.org
 
 On Mon, Aug 30, 2021 at 2:42 PM Song Liu <songliubraving@fb.com> wrote:
 >
-> The typical way to access branch record (e.g. Intel LBR) is via hardware
-> perf_event. For CPUs with FREEZE_LBRS_ON_PMI support, PMI could capture
-> reliable LBR. On the other hand, LBR could also be useful in non-PMI
-> scenario. For example, in kretprobe or bpf fexit program, LBR could
-> provide a lot of information on what happened with the function. Add API
-> to use branch record for software use.
->
-> Note that, when the software event triggers, it is necessary to stop the
-> branch record hardware asap. Therefore, static_call is used to remove some
-> branch instructions in this process.
+> Introduce bpf_get_branch_snapshot(), which allows tracing pogram to get
+> branch trace from hardware (e.g. Intel LBR). To use the feature, the
+> user need to create perf_event with proper branch_record filtering
+> on each cpu, and then calls bpf_get_branch_snapshot in the bpf function.
+> On Intel CPUs, VLBR event (raw event 0x1b00) can be use for this.
 >
 > Signed-off-by: Song Liu <songliubraving@fb.com>
 > ---
->  arch/x86/events/intel/core.c | 24 ++++++++++++++++++++++--
->  include/linux/perf_event.h   | 24 ++++++++++++++++++++++++
->  kernel/events/core.c         |  3 +++
->  3 files changed, 49 insertions(+), 2 deletions(-)
+>  include/linux/bpf.h            |  2 ++
+>  include/linux/filter.h         |  3 ++-
+>  include/uapi/linux/bpf.h       | 16 +++++++++++++
+>  kernel/bpf/trampoline.c        | 13 ++++++++++
+>  kernel/bpf/verifier.c          | 12 ++++++++++
+>  kernel/trace/bpf_trace.c       | 43 ++++++++++++++++++++++++++++++++++
+>  tools/include/uapi/linux/bpf.h | 16 +++++++++++++
+>  7 files changed, 104 insertions(+), 1 deletion(-)
 >
-> diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
-> index ac6fd2dabf6a2..d28d0e12c112c 100644
-> --- a/arch/x86/events/intel/core.c
-> +++ b/arch/x86/events/intel/core.c
-> @@ -2155,9 +2155,9 @@ static void __intel_pmu_disable_all(void)
->
->  static void intel_pmu_disable_all(void)
->  {
-> +       intel_pmu_lbr_disable_all();
->         __intel_pmu_disable_all();
->         intel_pmu_pebs_disable_all();
-> -       intel_pmu_lbr_disable_all();
->  }
->
->  static void __intel_pmu_enable_all(int added, bool pmi)
-> @@ -2186,6 +2186,20 @@ static void intel_pmu_enable_all(int added)
->         __intel_pmu_enable_all(added, false);
->  }
->
-> +static int
-> +intel_pmu_snapshot_branch_stack(struct perf_branch_snapshot *br_snapshot)
-> +{
-> +       struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
-> +
-> +       intel_pmu_disable_all();
-> +       intel_pmu_lbr_read();
-> +       memcpy(br_snapshot->entries, cpuc->lbr_entries,
-> +              sizeof(struct perf_branch_entry) * x86_pmu.lbr_nr);
-> +       br_snapshot->nr = x86_pmu.lbr_nr;
-> +       intel_pmu_enable_all(0);
-> +       return 0;
-> +}
-> +
->  /*
->   * Workaround for:
->   *   Intel Errata AAK100 (model 26)
-> @@ -6283,9 +6297,15 @@ __init int intel_pmu_init(void)
->                         x86_pmu.lbr_nr = 0;
+
+[...]
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 206c221453cfa..72e8b49da0bf9 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -6446,6 +6446,18 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+>                 env->prog->call_get_func_ip = true;
 >         }
 >
-> -       if (x86_pmu.lbr_nr)
-> +       if (x86_pmu.lbr_nr) {
->                 pr_cont("%d-deep LBR, ", x86_pmu.lbr_nr);
->
-> +               /* only support branch_stack snapshot for perfmon >= v2 */
-> +               if (x86_pmu.disable_all == intel_pmu_disable_all)
-> +                       static_call_update(perf_snapshot_branch_stack,
-> +                                          intel_pmu_snapshot_branch_stack);
+> +       if (func_id == BPF_FUNC_get_branch_snapshot) {
+> +               if (env->prog->aux->sleepable) {
+> +                       verbose(env, "sleepable progs cannot call get_branch_snapshot\n");
+> +                       return -ENOTSUPP;
+> +               }
+> +               if (!IS_ENABLED(CONFIG_PERF_EVENTS)) {
+> +                       verbose(env, "func %s#%d not supported without CONFIG_PERF_EVENTS\n",
+> +                               func_id_name(func_id), func_id);
+> +                       return -ENOTSUPP;
+> +               }
+> +               env->prog->call_get_branch = true;
 > +       }
-> +
->         intel_pmu_check_extra_regs(x86_pmu.extra_regs);
+>         if (changes_data)
+>                 clear_all_pkt_pointers(env);
+>         return 0;
+> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> index 8e2eb950aa829..a01f26b7877e6 100644
+> --- a/kernel/trace/bpf_trace.c
+> +++ b/kernel/trace/bpf_trace.c
+> @@ -1017,6 +1017,33 @@ static const struct bpf_func_proto bpf_get_attach_cookie_proto_pe = {
+>         .arg1_type      = ARG_PTR_TO_CTX,
+>  };
 >
->         /* Support full width counters using alternative MSR range */
-> diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-> index fe156a8170aa3..1f42e91668024 100644
-> --- a/include/linux/perf_event.h
-> +++ b/include/linux/perf_event.h
-> @@ -57,6 +57,7 @@ struct perf_guest_info_callbacks {
->  #include <linux/cgroup.h>
->  #include <linux/refcount.h>
->  #include <linux/security.h>
-> +#include <linux/static_call.h>
->  #include <asm/local.h>
->
->  struct perf_callchain_entry {
-> @@ -1612,4 +1613,27 @@ extern void __weak arch_perf_update_userpage(struct perf_event *event,
->  extern __weak u64 arch_perf_get_page_size(struct mm_struct *mm, unsigned long addr);
->  #endif
->
-> +/*
-> + * Snapshot branch stack on software events.
-> + *
-> + * Branch stack can be very useful in understanding software events. For
-> + * example, when a long function, e.g. sys_perf_event_open, returns an
-> + * errno, it is not obvious why the function failed. Branch stack could
-> + * provide very helpful information in this type of scenarios.
-> + *
-> + * On software event, it is necessary to stop the hardware branch recorder
-> + * fast. Otherwise, the hardware register/buffer will be flushed with
-> + * entries af the triggering event. Therefore, static call is used to
-> + * stop the hardware recorder.
-> + */
-> +#define MAX_BRANCH_SNAPSHOT 32
+> +BPF_CALL_2(bpf_get_branch_snapshot, void *, buf, u32, size)
 
-Can you please make it an enum instead? It will make this available as
-a constant in vmlinux.h nicely, without users having to #define it
-every time.
+I bet we'll need u64 flags over time, let's add it right now. It's
+similar to bpf_read_branch_records().
 
+> +{
+> +#ifdef CONFIG_PERF_EVENTS
+> +       u32 max_size;
 > +
-> +struct perf_branch_snapshot {
-> +       unsigned int nr;
-> +       struct perf_branch_entry entries[MAX_BRANCH_SNAPSHOT];
+> +       if (this_cpu_ptr(&bpf_perf_branch_snapshot)->nr == 0)
+> +               return -EOPNOTSUPP;
+> +
+> +       max_size = this_cpu_ptr(&bpf_perf_branch_snapshot)->nr *
+> +               sizeof(struct perf_branch_entry);
+> +       memcpy(buf, this_cpu_ptr(&bpf_perf_branch_snapshot)->entries,
+> +              min_t(u32, size, max_size));
+> +
+
+Check bpf_read_branch_records() implementation and it's argument
+validation logic. Let's keep them consistent (e.g., it enforces that
+size is a multiple of sizeof(struct perf_branch_entry)). Another
+difference is that bpf_read_branch_records() returns number of bytes
+filled, not number of records. That's consistent with accepting size
+as number of bytes. Let's stick to this convention then, so bytes
+everywhere.
+
+
+> +       return this_cpu_ptr(&bpf_perf_branch_snapshot)->nr;
+> +#else
+> +       return -EOPNOTSUPP;
+> +#endif
+> +}
+> +
+> +static const struct bpf_func_proto bpf_get_branch_snapshot_proto = {
+> +       .func           = bpf_get_branch_snapshot,
+> +       .gpl_only       = true,
+> +       .ret_type       = RET_INTEGER,
+> +       .arg1_type      = ARG_PTR_TO_UNINIT_MEM,
+> +       .arg2_type      = ARG_CONST_SIZE_OR_ZERO,
 > +};
 > +
-> +typedef int (perf_snapshot_branch_stack_t)(struct perf_branch_snapshot *);
-> +DECLARE_STATIC_CALL(perf_snapshot_branch_stack, perf_snapshot_branch_stack_t);
-> +
->  #endif /* _LINUX_PERF_EVENT_H */
-> diff --git a/kernel/events/core.c b/kernel/events/core.c
-> index 011cc5069b7ba..22807864e913b 100644
-> --- a/kernel/events/core.c
-> +++ b/kernel/events/core.c
-> @@ -13437,3 +13437,6 @@ struct cgroup_subsys perf_event_cgrp_subsys = {
->         .threaded       = true,
->  };
->  #endif /* CONFIG_CGROUP_PERF */
-> +
-> +DEFINE_STATIC_CALL_RET0(perf_snapshot_branch_stack,
-> +                       perf_snapshot_branch_stack_t);
-> --
-> 2.30.2
->
+
+[...]
