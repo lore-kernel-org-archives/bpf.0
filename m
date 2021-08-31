@@ -7,54 +7,54 @@ X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C935C432BE
-	for <bpf@archiver.kernel.org>; Tue, 31 Aug 2021 22:50:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 371DBC43214
+	for <bpf@archiver.kernel.org>; Tue, 31 Aug 2021 22:50:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 84B0861041
-	for <bpf@archiver.kernel.org>; Tue, 31 Aug 2021 22:50:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 222B661041
+	for <bpf@archiver.kernel.org>; Tue, 31 Aug 2021 22:50:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241012AbhHaWva (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S232759AbhHaWva (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Tue, 31 Aug 2021 18:51:30 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:45094 "EHLO
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:18354 "EHLO
         mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240987AbhHaWv3 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 31 Aug 2021 18:51:29 -0400
+        by vger.kernel.org with ESMTP id S240993AbhHaWva (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 31 Aug 2021 18:51:30 -0400
 Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17VMiZBl018602
-        for <bpf@vger.kernel.org>; Tue, 31 Aug 2021 15:50:33 -0700
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 17VMiZBm018602
+        for <bpf@vger.kernel.org>; Tue, 31 Aug 2021 15:50:34 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=facebook;
- bh=sJWTLjVMJIsRC6DChfceWvfHZ4BWMJKyk2C7pKbwk4w=;
- b=kgGZSj8zotXsYw/5ijbh7h17e+30FqKV6gNKi22h0GhqeV0HZszfuWjer+25JqsdvLJK
- 2OjL2LomoKm3R3a9xtFgNSxKHs/38ATMhnRBT4D+jQuEg03y/VqMH1GSGAX6+RdqCzsA
- MnSRsjd4ks/lkO3xRa00jDz5tahiiO0oe2Y= 
+ content-transfer-encoding : content-type; s=facebook;
+ bh=nMSV6xqe6sFUGXnI7CQMCJaerezXi2CyPcg+SS6JC2s=;
+ b=HwlczGvU99RMMqnaP4gY6dYbLQahTK4icazDMdN1t/vrv9jwmf41EpjjmDIfdn6B13B5
+ +d8QAXHs2XF/xNKBLQ4nKf0b+igHlyyTFwMtotOU0U5GJLnM0Wq97sXBlIvHMl3HkSUM
+ qGT1yo7iOwnYJL4IwedL7zgoKLWlZtROcc0= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 3asscrt39g-1
+        by mx0a-00082601.pphosted.com with ESMTP id 3asscrt39g-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 31 Aug 2021 15:50:33 -0700
-Received: from intmgw002.25.frc3.facebook.com (2620:10d:c085:108::4) by
+        for <bpf@vger.kernel.org>; Tue, 31 Aug 2021 15:50:34 -0700
+Received: from intmgw001.25.frc3.facebook.com (2620:10d:c085:208::11) by
  mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Tue, 31 Aug 2021 15:50:32 -0700
+ 15.1.2176.2; Tue, 31 Aug 2021 15:50:33 -0700
 Received: by devbig612.frc2.facebook.com (Postfix, from userid 115148)
-        id 759891C88BD9; Tue, 31 Aug 2021 15:50:29 -0700 (PDT)
+        id 6F74B1C88BCD; Tue, 31 Aug 2021 15:50:25 -0700 (PDT)
 From:   Joanne Koong <joannekoong@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Joanne Koong <joannekoong@fb.com>
-Subject: [PATCH bpf-next 5/5] bpf/benchs: Add benchmarks for comparing hashmap lookups with vs. without bloom filter
-Date:   Tue, 31 Aug 2021 15:50:05 -0700
-Message-ID: <20210831225005.2762202-6-joannekoong@fb.com>
+Subject: [PATCH bpf-next 2/5] libbpf: Allow the number of hashes in bloom filter maps to be configurable
+Date:   Tue, 31 Aug 2021 15:50:02 -0700
+Message-ID: <20210831225005.2762202-3-joannekoong@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210831225005.2762202-1-joannekoong@fb.com>
 References: <20210831225005.2762202-1-joannekoong@fb.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
+Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-GUID: XyMrikdYqzyc844ZK1TMIxfPNYnbXmOE
-X-Proofpoint-ORIG-GUID: XyMrikdYqzyc844ZK1TMIxfPNYnbXmOE
+X-Proofpoint-GUID: xH5ZKM4mlO7gZh_ccCs9yfcbpwvhDRfs
+X-Proofpoint-ORIG-GUID: xH5ZKM4mlO7gZh_ccCs9yfcbpwvhDRfs
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
  definitions=2021-08-31_09:2021-08-31,2021-08-31 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
@@ -67,301 +67,206 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch adds some benchmarks for comparing the performance of hashmap
-lookups without the bloom filter vs. hashmap lookups with the bloom filte=
-r.
-
-Checking the bloom filter first for whether the element exists should
-overall enable a higher throughput for hashmap lookups, since if the
-element does not exist in the bloom filter, we can avoid a costly lookup =
-in
-the hashmap.
-
-The benchmark results (running on 8 threads on a machine with one numa
-node, and taking the average of 3 runs) were as follows:
-1 hash function -
-	10k entries: 15% slower
-	50k entries: 25% faster
-	100k entries: 30% faster
-	500k entres: 50% faster
-	1 million entries: 55% faster
-	5 million entries: 40% faster
-
-2 hash functions -
-	10k entries: 20% slower
-	50k entries: 40% faster
-	100k entries: 50% faster
-	500k entres: 90% faster
-	1 million entries: 115% faster
-	5 million entries: 70% faster
-
-3 hash functions -
-	10k entries: 5% slower
-	50k entries: 15% faster
-	100k entries: 25% faster
-	500k entres: 180% faster
-	1 million entries: 200% faster
-	5 million entries: 140% faster
-
-4 hash functions -
-	10k entries: 20% slower
-	50k entries: 50% faster
-	100k entries: 60% faster
-	500k entres: 128% faster
-	1 million entries: 150% faster
-	5 million entries: 105% faster
-
-5 hash functions -
-	10k entries: 10% faster
-	50k entries: 25% faster
-	100k entries: 50% faster
-	500k entres: 100% faster
-	1 million entries: 120% faster
-	5 million entries: 170% faster
-
-6 hash functions -
-	10k entries: 1.5% faster
-	50k entries: 20% faster
-	100k entries: 25% faster
-	500k entres: 165% faster
-	1 million entries: 170% faster
-	5 million entries: 140% faster
-
-7 hash functions -
-	10k entries: 7% slower
-	50k entries: 5% faster
-	100k entries: 15% faster
-	500k entres: 145% faster
-	1 million entries: 155% faster
-	5 million entries: 120% faster
-
-8 hash functions -
-	10k entries: 15% slower
-	50k entries: 50% faster
-	100k entries: 60% faster
-	500k entres: 1305% faster
-	1 million entries: 135% faster
-	5 million entries: 105% faster
-
-9 hash functions -
-	10k entries: 25% slower
-	50k entries: 35% faster
-	100k entries: 60% faster
-	500k entres: 105% faster
-	1 million entries: 130% faster
-	5 million entries: 90% faster
-
-10 hash functions -
-	10k entries: 10% faster
-	50k entries: 30% faster
-	100k entries: 45% faster
-	500k entres: 90% faster
-	1 million entries: 105% faster
-	5 million entries: 140% faster
-
-The benchmark comparisions indicate that on average, using 3 hash functio=
-ns
-generally is one of the most optimal choices.
+This patch adds the libbpf infrastructure that will allow the user to
+specify the number of hash functions to use for the bloom filter map.
 
 Signed-off-by: Joanne Koong <joannekoong@fb.com>
 ---
- tools/testing/selftests/bpf/bench.c           | 22 ++++++++---
- .../bpf/benchs/bench_bloom_filter_map.c       | 39 +++++++++++++++++++
- .../bpf/benchs/run_bench_bloom_filter_map.sh  | 15 +++++++
- .../selftests/bpf/benchs/run_common.sh        | 12 ++++++
- 4 files changed, 83 insertions(+), 5 deletions(-)
+ tools/lib/bpf/bpf.c             |  2 ++
+ tools/lib/bpf/bpf.h             |  1 +
+ tools/lib/bpf/libbpf.c          | 32 +++++++++++++++++++++++++++++++-
+ tools/lib/bpf/libbpf.h          |  3 +++
+ tools/lib/bpf/libbpf.map        |  2 ++
+ tools/lib/bpf/libbpf_internal.h |  4 +++-
+ 6 files changed, 42 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/bench.c b/tools/testing/selftest=
-s/bpf/bench.c
-index 0bcbdb4405a3..7da1589a9fe0 100644
---- a/tools/testing/selftests/bpf/bench.c
-+++ b/tools/testing/selftests/bpf/bench.c
-@@ -92,20 +92,21 @@ void hits_drops_report_progress(int iter, struct benc=
-h_res *res, long delta_ns)
- 	printf("Iter %3d (%7.3lfus): ",
- 	       iter, (delta_ns - 1000000000) / 1000.0);
+diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+index 2401fad090c5..cc928c5b92a4 100644
+--- a/tools/lib/bpf/bpf.c
++++ b/tools/lib/bpf/bpf.c
+@@ -100,6 +100,8 @@ int bpf_create_map_xattr(const struct bpf_create_map_=
+attr *create_attr)
+ 	if (attr.map_type =3D=3D BPF_MAP_TYPE_STRUCT_OPS)
+ 		attr.btf_vmlinux_value_type_id =3D
+ 			create_attr->btf_vmlinux_value_type_id;
++	else if (attr.map_type =3D=3D BPF_MAP_TYPE_BLOOM_FILTER)
++		attr.nr_hashes =3D create_attr->nr_hashes;
+ 	else
+ 		attr.inner_map_fd =3D create_attr->inner_map_fd;
 =20
--	printf("hits %8.3lfM/s (%7.3lfM/prod), drops %8.3lfM/s\n",
--	       hits_per_sec, hits_per_prod, drops_per_sec);
-+	printf("hits %8.3lfM/s (%7.3lfM/prod), drops %8.3lfM/s, total operation=
-s %8.3lfM/s\n",
-+	       hits_per_sec, hits_per_prod, drops_per_sec, hits_per_sec + drops=
-_per_sec);
+diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+index 6fffb3cdf39b..ea29d6647e20 100644
+--- a/tools/lib/bpf/bpf.h
++++ b/tools/lib/bpf/bpf.h
+@@ -49,6 +49,7 @@ struct bpf_create_map_attr {
+ 	union {
+ 		__u32 inner_map_fd;
+ 		__u32 btf_vmlinux_value_type_id;
++		__u32 nr_hashes; /* used for bloom filter maps */
+ 	};
+ };
+=20
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 88d8825fc6f6..ac03404aeb57 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -377,6 +377,7 @@ struct bpf_map {
+ 	char *pin_path;
+ 	bool pinned;
+ 	bool reused;
++	__u32 nr_hashes; /* used for bloom filter maps */
+ };
+=20
+ enum extern_type {
+@@ -1290,6 +1291,11 @@ static bool bpf_map_type__is_map_in_map(enum bpf_m=
+ap_type type)
+ 	return false;
  }
 =20
- void hits_drops_report_final(struct bench_res res[], int res_cnt)
++static bool bpf_map_type__is_bloom_filter(enum bpf_map_type type)
++{
++	return type =3D=3D BPF_MAP_TYPE_BLOOM_FILTER;
++}
++
+ int bpf_object__section_size(const struct bpf_object *obj, const char *n=
+ame,
+ 			     __u32 *size)
  {
- 	int i;
--	double hits_mean =3D 0.0, drops_mean =3D 0.0;
--	double hits_stddev =3D 0.0, drops_stddev =3D 0.0;
-+	double hits_mean =3D 0.0, drops_mean =3D 0.0, total_ops_mean =3D 0.0;
-+	double hits_stddev =3D 0.0, drops_stddev =3D 0.0, total_ops_stddev =3D =
-0.0;
+@@ -2080,6 +2086,10 @@ int parse_btf_map_def(const char *map_name, struct=
+ btf *btf,
+ 			if (!get_map_field_int(map_name, btf, m, &map_def->map_flags))
+ 				return -EINVAL;
+ 			map_def->parts |=3D MAP_DEF_MAP_FLAGS;
++		} else if (strcmp(name, "nr_hashes") =3D=3D 0) {
++			if (!get_map_field_int(map_name, btf, m, &map_def->nr_hashes))
++				return -EINVAL;
++			map_def->parts |=3D MAP_DEF_NR_HASHES;
+ 		} else if (strcmp(name, "numa_node") =3D=3D 0) {
+ 			if (!get_map_field_int(map_name, btf, m, &map_def->numa_node))
+ 				return -EINVAL;
+@@ -2264,6 +2274,7 @@ static void fill_map_from_def(struct bpf_map *map, =
+const struct btf_map_def *def
+ 	map->numa_node =3D def->numa_node;
+ 	map->btf_key_type_id =3D def->key_type_id;
+ 	map->btf_value_type_id =3D def->value_type_id;
++	map->nr_hashes =3D def->nr_hashes;
 =20
- 	for (i =3D 0; i < res_cnt; i++) {
- 		hits_mean +=3D res[i].hits / 1000000.0 / (0.0 + res_cnt);
- 		drops_mean +=3D res[i].drops / 1000000.0 / (0.0 + res_cnt);
- 	}
-+	total_ops_mean =3D hits_mean + drops_mean;
+ 	if (def->parts & MAP_DEF_MAP_TYPE)
+ 		pr_debug("map '%s': found type =3D %u.\n", map->name, def->map_type);
+@@ -2288,6 +2299,8 @@ static void fill_map_from_def(struct bpf_map *map, =
+const struct btf_map_def *def
+ 		pr_debug("map '%s': found pinning =3D %u.\n", map->name, def->pinning)=
+;
+ 	if (def->parts & MAP_DEF_NUMA_NODE)
+ 		pr_debug("map '%s': found numa_node =3D %u.\n", map->name, def->numa_n=
+ode);
++	if (def->parts & MAP_DEF_NR_HASHES)
++		pr_debug("map '%s': found nr_hashes =3D %u.\n", map->name, def->nr_has=
+hes);
 =20
- 	if (res_cnt > 1)  {
- 		for (i =3D 0; i < res_cnt; i++) {
-@@ -115,14 +116,21 @@ void hits_drops_report_final(struct bench_res res[]=
-, int res_cnt)
- 			drops_stddev +=3D (drops_mean - res[i].drops / 1000000.0) *
- 					(drops_mean - res[i].drops / 1000000.0) /
- 					(res_cnt - 1.0);
-+			total_ops_stddev +=3D (total_ops_mean -
-+					(res[i].hits + res[i].drops) / 1000000.0) *
-+					(total_ops_mean - (res[i].hits + res[i].drops) / 1000000.0)
-+					/ (res_cnt - 1.0);
+ 	if (def->parts & MAP_DEF_INNER_MAP)
+ 		pr_debug("map '%s': found inner map definition.\n", map->name);
+@@ -3979,6 +3992,7 @@ int bpf_map__reuse_fd(struct bpf_map *map, int fd)
+ 	map->btf_key_type_id =3D info.btf_key_type_id;
+ 	map->btf_value_type_id =3D info.btf_value_type_id;
+ 	map->reused =3D true;
++	map->nr_hashes =3D info.nr_hashes;
+=20
+ 	return 0;
+=20
+@@ -4473,7 +4487,8 @@ static bool map_is_reuse_compat(const struct bpf_ma=
+p *map, int map_fd)
+ 		map_info.key_size =3D=3D map->def.key_size &&
+ 		map_info.value_size =3D=3D map->def.value_size &&
+ 		map_info.max_entries =3D=3D map->def.max_entries &&
+-		map_info.map_flags =3D=3D map->def.map_flags);
++		map_info.map_flags =3D=3D map->def.map_flags &&
++		map_info.nr_hashes =3D=3D map->nr_hashes);
+ }
+=20
+ static int
+@@ -4611,6 +4626,8 @@ static int bpf_object__create_map(struct bpf_object=
+ *obj, struct bpf_map *map, b
  		}
- 		hits_stddev =3D sqrt(hits_stddev);
- 		drops_stddev =3D sqrt(drops_stddev);
-+		total_ops_stddev =3D sqrt(total_ops_stddev);
+ 		if (map->inner_map_fd >=3D 0)
+ 			create_attr.inner_map_fd =3D map->inner_map_fd;
++	} else if (bpf_map_type__is_bloom_filter(def->type)) {
++		create_attr.nr_hashes =3D map->nr_hashes;
  	}
- 	printf("Summary: hits %8.3lf \u00B1 %5.3lfM/s (%7.3lfM/prod), ",
- 	       hits_mean, hits_stddev, hits_mean / env.producer_cnt);
--	printf("drops %8.3lf \u00B1 %5.3lfM/s\n",
-+	printf("drops %8.3lf \u00B1 %5.3lfM/s, ",
- 	       drops_mean, drops_stddev);
-+	printf("total operations %8.3lf \u00B1 %5.3lfM/s\n",
-+	       total_ops_mean, total_ops_stddev);
+=20
+ 	if (obj->gen_loader) {
+@@ -8560,6 +8577,19 @@ int bpf_map__set_numa_node(struct bpf_map *map, __=
+u32 numa_node)
+ 	return 0;
  }
 =20
- const char *argp_program_version =3D "benchmark";
-@@ -356,6 +364,8 @@ extern const struct bench bench_pb_libbpf;
- extern const struct bench bench_pb_custom;
- extern const struct bench bench_bloom_filter_map;
- extern const struct bench bench_bloom_filter_false_positive;
-+extern const struct bench bench_hashmap_without_bloom_filter;
-+extern const struct bench bench_hashmap_with_bloom_filter;
++__u32 bpf_map__nr_hashes(const struct bpf_map *map)
++{
++	return map->nr_hashes;
++}
++
++int bpf_map__set_nr_hashes(struct bpf_map *map, __u32 nr_hashes)
++{
++	if (map->fd >=3D 0)
++		return libbpf_err(-EBUSY);
++	map->nr_hashes =3D nr_hashes;
++	return 0;
++}
++
+ __u32 bpf_map__key_size(const struct bpf_map *map)
+ {
+ 	return map->def.key_size;
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index f177d897c5f7..497b84772be8 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -538,6 +538,9 @@ LIBBPF_API __u32 bpf_map__btf_value_type_id(const str=
+uct bpf_map *map);
+ /* get/set map if_index */
+ LIBBPF_API __u32 bpf_map__ifindex(const struct bpf_map *map);
+ LIBBPF_API int bpf_map__set_ifindex(struct bpf_map *map, __u32 ifindex);
++/* get/set nr_hashes. used for bloom filter maps */
++LIBBPF_API __u32 bpf_map__nr_hashes(const struct bpf_map *map);
++LIBBPF_API int bpf_map__set_nr_hashes(struct bpf_map *map, __u32 nr_hash=
+es);
 =20
- static const struct bench *benchs[] =3D {
- 	&bench_count_global,
-@@ -379,6 +389,8 @@ static const struct bench *benchs[] =3D {
- 	&bench_pb_custom,
- 	&bench_bloom_filter_map,
- 	&bench_bloom_filter_false_positive,
-+	&bench_hashmap_without_bloom_filter,
-+	&bench_hashmap_with_bloom_filter,
+ typedef void (*bpf_map_clear_priv_t)(struct bpf_map *, void *);
+ LIBBPF_API int bpf_map__set_priv(struct bpf_map *map, void *priv,
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index bbc53bb25f68..372c2478274f 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -385,4 +385,6 @@ LIBBPF_0.5.0 {
+ 		btf__load_vmlinux_btf;
+ 		btf_dump__dump_type_data;
+ 		libbpf_set_strict_mode;
++		bpf_map__nr_hashes;
++		bpf_map__set_nr_hashes;
+ } LIBBPF_0.4.0;
+diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_inter=
+nal.h
+index 533b0211f40a..501ae042980d 100644
+--- a/tools/lib/bpf/libbpf_internal.h
++++ b/tools/lib/bpf/libbpf_internal.h
+@@ -171,8 +171,9 @@ enum map_def_parts {
+ 	MAP_DEF_NUMA_NODE	=3D 0x080,
+ 	MAP_DEF_PINNING		=3D 0x100,
+ 	MAP_DEF_INNER_MAP	=3D 0x200,
++	MAP_DEF_NR_HASHES	=3D 0x400,
+=20
+-	MAP_DEF_ALL		=3D 0x3ff, /* combination of all above */
++	MAP_DEF_ALL		=3D 0x7ff, /* combination of all above */
  };
 =20
- static void setup_benchmark()
-diff --git a/tools/testing/selftests/bpf/benchs/bench_bloom_filter_map.c =
-b/tools/testing/selftests/bpf/benchs/bench_bloom_filter_map.c
-index dadca2a6e900..39b64116dfc3 100644
---- a/tools/testing/selftests/bpf/benchs/bench_bloom_filter_map.c
-+++ b/tools/testing/selftests/bpf/benchs/bench_bloom_filter_map.c
-@@ -241,6 +241,23 @@ static void hashmap_lookup_setup(void)
- 	}
- }
-=20
-+static void hashmap_no_bloom_filter_setup(void)
-+{
-+	struct bpf_link *link;
-+
-+	ctx.skel =3D setup_skeleton();
-+
-+	ctx.skel->data->hashmap_use_bloom_filter =3D false;
-+
-+	populate_maps();
-+
-+	link =3D bpf_program__attach(ctx.skel->progs.prog_bloom_filter_hashmap_=
-lookup);
-+	if (!link) {
-+		fprintf(stderr, "failed to attach program!\n");
-+		exit(1);
-+	}
-+}
-+
- static void measure(struct bench_res *res)
- {
- 	long total_hits =3D 0, total_drops =3D 0, total_false_hits =3D 0;
-@@ -342,3 +359,25 @@ const struct bench bench_bloom_filter_false_positive=
- =3D {
- 	.report_progress =3D false_hits_report_progress,
- 	.report_final =3D false_hits_report_final,
+ struct btf_map_def {
+@@ -186,6 +187,7 @@ struct btf_map_def {
+ 	__u32 map_flags;
+ 	__u32 numa_node;
+ 	__u32 pinning;
++	__u32 nr_hashes; /* used for bloom filter maps */
  };
-+
-+const struct bench bench_hashmap_without_bloom_filter =3D {
-+	.name =3D "hashmap-without-bloom-filter",
-+	.validate =3D validate,
-+	.setup =3D hashmap_no_bloom_filter_setup,
-+	.producer_thread =3D producer,
-+	.consumer_thread =3D consumer,
-+	.measure =3D measure,
-+	.report_progress =3D hits_drops_report_progress,
-+	.report_final =3D hits_drops_report_final,
-+};
-+
-+const struct bench bench_hashmap_with_bloom_filter =3D {
-+	.name =3D "hashmap-with-bloom-filter",
-+	.validate =3D validate,
-+	.setup =3D hashmap_lookup_setup,
-+	.producer_thread =3D producer,
-+	.consumer_thread =3D consumer,
-+	.measure =3D measure,
-+	.report_progress =3D hits_drops_report_progress,
-+	.report_final =3D hits_drops_report_final,
-+};
-diff --git a/tools/testing/selftests/bpf/benchs/run_bench_bloom_filter_ma=
-p.sh b/tools/testing/selftests/bpf/benchs/run_bench_bloom_filter_map.sh
-index 8f2de6e39313..53c14da00a3b 100755
---- a/tools/testing/selftests/bpf/benchs/run_bench_bloom_filter_map.sh
-+++ b/tools/testing/selftests/bpf/benchs/run_bench_bloom_filter_map.sh
-@@ -26,3 +26,18 @@ header "Bloom filter map, multi-producer contention"
- for t in 1 2 3 4 8 12 16 20 24 28 32 36 40 44 48 52; do
- 	summarize "$t threads - " "$($RUN_BENCH -p $t bloom-filter-map)"
- done
-+
-+header "Hashmap without bloom filter vs. hashmap with bloom filter (thro=
-ughput, 8 threads)"
-+for h in {1..10}; do
-+subtitle "# hashes: $h"
-+	for e in 10000 50000 75000 100000 250000 500000 750000 1000000 2500000 =
-5000000; do
-+		printf "%'d entries -\n" $e
-+		printf "\t"
-+		summarize_total "Hashmap without bloom filter: " \
-+			"$($RUN_BENCH --nr_hashes $h --nr_entries $e -p 8 hashmap-without-blo=
-om-filter)"
-+		printf "\t"
-+		summarize_total "Hashmap with bloom filter: " \
-+			"$($RUN_BENCH --nr_hashes $h --nr_entries $e -p 8 hashmap-with-bloom-=
-filter)"
-+	done
-+	printf "\n"
-+done
-diff --git a/tools/testing/selftests/bpf/benchs/run_common.sh b/tools/tes=
-ting/selftests/bpf/benchs/run_common.sh
-index 670f23b037c4..9a16be78b180 100644
---- a/tools/testing/selftests/bpf/benchs/run_common.sh
-+++ b/tools/testing/selftests/bpf/benchs/run_common.sh
-@@ -33,6 +33,11 @@ function percentage()
- 	echo "$*" | sed -E "s/.*Percentage\s=3D\s+([0-9]+\.[0-9]+).*/\1/"
- }
 =20
-+function total()
-+{
-+	echo "$*" | sed -E "s/.*total operations\s+([0-9]+\.[0-9]+ =C2=B1 [0-9]=
-+\.[0-9]+M\/s).*/\1/"
-+}
-+
- function summarize()
- {
- 	bench=3D"$1"
-@@ -46,3 +51,10 @@ function summarize_percentage()
- 	summary=3D$(echo $2 | tail -n1)
- 	printf "%-20s %s%%\n" "$bench" "$(percentage $summary)"
- }
-+
-+function summarize_total()
-+{
-+	bench=3D"$1"
-+	summary=3D$(echo $2 | tail -n1)
-+	printf "%-20s %s\n" "$bench" "$(total $summary)"
-+}
+ int parse_btf_map_def(const char *map_name, struct btf *btf,
 --=20
 2.30.2
 
