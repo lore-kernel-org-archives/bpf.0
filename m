@@ -2,113 +2,173 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-6.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F31BCC432BE
-	for <bpf@archiver.kernel.org>; Tue, 31 Aug 2021 00:38:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EBC6BC432BE
+	for <bpf@archiver.kernel.org>; Tue, 31 Aug 2021 01:56:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C39D861004
-	for <bpf@archiver.kernel.org>; Tue, 31 Aug 2021 00:38:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C785C6102A
+	for <bpf@archiver.kernel.org>; Tue, 31 Aug 2021 01:56:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239131AbhHaAjF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 30 Aug 2021 20:39:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48412 "EHLO
+        id S239312AbhHaB5P (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 30 Aug 2021 21:57:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231989AbhHaAjC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 30 Aug 2021 20:39:02 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B553AC061575;
-        Mon, 30 Aug 2021 17:38:07 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id e129so31633678yba.5;
-        Mon, 30 Aug 2021 17:38:07 -0700 (PDT)
+        with ESMTP id S239310AbhHaB5P (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 30 Aug 2021 21:57:15 -0400
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA226C06175F
+        for <bpf@vger.kernel.org>; Mon, 30 Aug 2021 18:56:20 -0700 (PDT)
+Received: by mail-qk1-x72a.google.com with SMTP id b64so18105191qkg.0
+        for <bpf@vger.kernel.org>; Mon, 30 Aug 2021 18:56:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dIoCwE46sRweXCxYQ2GXPb1y5Z88T5kmd3WMggOIQlM=;
-        b=C6WzzhEIa5tkiDWnP3ym+GCLUImj02sSwGurz0W6JfMrbtFPZjckdOW9JbSeAzdaAV
-         AtPwUXpxVShsYGTxB9UhtWr4Zo4iC/r6JQclZInmZOzxWasR5AIjU/XTJdJrs90McPzf
-         x+9AMAqZwJZcCQbEWXKMRq2K9VknG3kaOmIW0WbGC/Xw6WpK/44PuCR/Lk/+I0vooMAF
-         x5xVJur/sFD263w1kQ4uWX8MD5lFptG5mPh/5dDIRAaeJqD2blUDXXOuL9dqiRT8S/JH
-         h81OuB0R8f6GvLqu+imHUFaBNHZoFM5AxHo6IXJhUzkKiYV13YseDoZCy/SyD/ZJWh/u
-         AXgA==
+        d=mojatatu-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=kLE88EQebLxIb0eueAspM45JjD9ZYCctcMIOochu70g=;
+        b=iFQ5epuevHPR1kqaIGxM2ApjObna1lR81SjKMd2R1mWjvP98llgLloXKsZ0r1F2KkX
+         RcqC3HaeACXzYLERD8AmMfhbOGYR+GmofFlaicMvBmDltQPTEVZmrFlCRVnQoPBl2Z1h
+         YHzShPHTe2ucwkGG+HUYTYbFmNgJosEn3CczF47mSSty2O1FPIMd9W6Wk8iCPT4gU7OB
+         woSksUd/cQJM2m0VkT/9hQwuaVyHsYUVQOr2H08hzTPQFopNkZNHgAIbKvHxmFVDdPaf
+         DsQkJ3IKbIP1w2OZIGuXHDxObWAIOOq8UpwSCnswGEUSRC9OhiaUF/HGtKQTXOl1tBBo
+         h9PA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dIoCwE46sRweXCxYQ2GXPb1y5Z88T5kmd3WMggOIQlM=;
-        b=im2nGHqe3Wxb6BK1wTWSROYfYJ720G1zhyDF1un7Lg7Sco/vgWGm2w0ORXZSYBAGaI
-         OxcLg3ihOAI4olROppr/nDyyYORu/QS5jDnc8VhAWbAhWUWLwtFnXf1CZwawCKqc8BVW
-         kCwc69l+uWB20GaGs7ZyU8MTkDhzehe6pbRERFLXgtlh+/ZVWTk+hquYgYUM/LxyaKBY
-         MCrAfUOHW7IuAZMTM1ju8++N7FLKFubh5IJhlO/EHFPMvzKDSO71DZMtpqfamB20lcdf
-         GmfzymuDVP5dUG9JoFuUVpO50Hf4fqzylp8jrI3AHdyOmjsj0Lpijg07Xc8Ekb3W6cK7
-         ew+A==
-X-Gm-Message-State: AOAM533ZTJZmC5EiIa2fxkzwHbbBBx2EOa8AHGdbcEwQBXjE1aMnyEQi
-        DfA3xYcOlpRvbQjYpxtQpAY4XJyMy0Odv7pYKOEW2FuQ
-X-Google-Smtp-Source: ABdhPJxeMygX7oYWfVfD8GI1jlPX2zWgC/Q1jXddRHXB0y2VFfDm3QhGq4IOGRbcJ56FB2pcnlXuK2JkA+pjetlFZKA=
-X-Received: by 2002:a25:4941:: with SMTP id w62mr26991045yba.230.1630370286948;
- Mon, 30 Aug 2021 17:38:06 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=kLE88EQebLxIb0eueAspM45JjD9ZYCctcMIOochu70g=;
+        b=HgD6sXpQnW9i5cG9oOczIp4R2JZk5OtbtLQRLxUuBfL1hzC3uUSdFS7fPqWbBvSub1
+         9FmceA2Vaf5yDxPom7QodjdnJRU34dag/QgQhU+ct3NWwhbW8IuG5GkCkdjtzEBfNrMp
+         8eJ7Y4/+goI/84rZR+AFmVmj0hZH8Jrsk10Wm0b8aP2/2JY3wuuj1ThE+YJOtHKgpXoD
+         L4W5DRsZikYZFrCKadPXppQBaGblYMGkoMLHP8N/xgq6V8BiIyTvnnx4D8wyCiK/9OCn
+         2GcS1LHGQrMgEeR6HAFRkIs7joESSCZwYthvR1HobS/y9RomFU7kkcMxdw/MWUUTbUx+
+         zELQ==
+X-Gm-Message-State: AOAM532Gj5+cfKeBpaoOc8vhE9CafZ884xyHuAOAYR8HRGkk0LGulIz8
+        Qw6ktSXjeRZE4mKp7m+QCrnatz+I3mEtdQ==
+X-Google-Smtp-Source: ABdhPJzW9jFrTT47/g8jDjcZdgNt5Q2tdNzHqJKyqA+6ikPEHG4S2417Zt6bxF1hRbgmhNPYurdRCg==
+X-Received: by 2002:a37:a08e:: with SMTP id j136mr636291qke.195.1630374979859;
+        Mon, 30 Aug 2021 18:56:19 -0700 (PDT)
+Received: from [192.168.1.79] (bras-base-kntaon1617w-grc-28-184-148-47-47.dsl.bell.ca. [184.148.47.47])
+        by smtp.googlemail.com with ESMTPSA id g1sm9785586qti.56.2021.08.30.18.56.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 Aug 2021 18:56:19 -0700 (PDT)
+Subject: Re: [PATCH bpf-next v2 00/13] bpfilter
+To:     Dmitrii Banshchikov <me@ubique.spb.ru>, bpf@vger.kernel.org
+Cc:     ast@kernel.org, davem@davemloft.net, daniel@iogearbox.net,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        netdev@vger.kernel.org, rdna@fb.com
+References: <20210829183608.2297877-1-me@ubique.spb.ru>
+From:   Jamal Hadi Salim <jhs@mojatatu.com>
+Message-ID: <a4039e82-9184-45bf-6aee-e663766d655a@mojatatu.com>
+Date:   Mon, 30 Aug 2021 21:56:18 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-References: <20210828052006.1313788-1-davemarchevsky@fb.com> <20210828052006.1313788-5-davemarchevsky@fb.com>
-In-Reply-To: <20210828052006.1313788-5-davemarchevsky@fb.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 30 Aug 2021 17:37:56 -0700
-Message-ID: <CAEf4BzZMaWFWqmucCczJ8DtHjY6zsWizr7G7_O9Lc-uV_1yEKQ@mail.gmail.com>
-Subject: Re: [PATCH v3 bpf-next 4/7] libbpf: use static const fmt string in __bpf_printk
-To:     Dave Marchevsky <davemarchevsky@fb.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Yonghong Song <yhs@fb.com>, Networking <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210829183608.2297877-1-me@ubique.spb.ru>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Aug 27, 2021 at 10:20 PM Dave Marchevsky <davemarchevsky@fb.com> wrote:
->
-> The __bpf_printk convenience macro was using a 'char' fmt string holder
-> as it predates support for globals in libbpf. Move to more efficient
-> 'static const char', but provide a fallback to the old way via
-> BPF_NO_GLOBAL_DATA so users on old kernels can still use the macro.
->
-> Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
-> ---
->  tools/lib/bpf/bpf_helpers.h | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
-> index 5f087306cdfe..a1d5ec6f285c 100644
-> --- a/tools/lib/bpf/bpf_helpers.h
-> +++ b/tools/lib/bpf/bpf_helpers.h
-> @@ -216,10 +216,16 @@ enum libbpf_tristate {
->                      ___param, sizeof(___param));               \
->  })
->
-> +#ifdef BPF_NO_GLOBAL_DATA
-> +#define BPF_PRINTK_FMT_TYPE char
-> +#else
-> +#define BPF_PRINTK_FMT_TYPE static const char
-> +#endif
-> +
->  /* Helper macro to print out debug messages */
->  #define __bpf_printk(fmt, ...)                         \
->  ({                                                     \
-> -       char ____fmt[] = fmt;                           \
-> +       BPF_PRINTK_FMT_TYPE ____fmt[] = fmt;            \
+On 2021-08-29 2:35 p.m., Dmitrii Banshchikov wrote:
 
-personal preferences, of course, but I'd leave char right there (I
-think it makes it a bit more obvious what's going on right there), and
-s/BPF_PRINTK_FMT_TYPE/BPF_PRINTK_FMT_MOD/ and have it as either "" or
-"static const".
+[..]
 
->         bpf_trace_printk(____fmt, sizeof(____fmt),      \
->                          ##__VA_ARGS__);                \
->  })
-> --
-> 2.30.2
->
+> And here are some performance tests.
+> 
+> The environment consists of two machines(sender and receiver)
+> connected with 10Gbps link via switch.  The sender uses DPDK to
+> simulate QUIC packets(89 bytes long) from random IP. The switch
+> measures the generated traffic to be about 7066377568 bits/sec,
+> 9706553 packets/sec.
+> 
+> The receiver is a 2 socket 2680v3 + HT and uses either iptables,
+> nft or bpfilter to filter out UDP traffic.
+> 
+> Two tests were made. Two rulesets(default policy was to ACCEPT)
+> were used in each test:
+> 
+> ```
+> iptables -A INPUT -p udp -m udp --dport 1500 -j DROP
+> ```
+> and
+> ```
+> iptables -A INPUT -s 1.1.1.1/32 -p udp -m udp --dport 1000 -j DROP
+> iptables -A INPUT -s 2.2.2.2/32 -p udp -m udp --dport 2000 -j DROP
+> ...
+> iptables -A INPUT -s 31.31.31.31/32 -p udp -m udp --dport 31000 -j DROP
+> iptables -A INPUT -p udp -m udp --dport 1500 -j DROP
+> ```
+> 
+> The first test measures performance of the receiver via stress-ng
+> [3] in bogo-ops. The upper-bound(there are no firewall and no
+> traffic) value for bogo-ops is 8148-8210. The lower bound value
+> (there is traffic but no firewall) is 6567-6643.
+> The stress-ng command used: stress-ng -t60 -c48 --metrics-brief.
+> 
+> The second test measures the number the of dropped packets. The
+> receiver keeps only 1 CPU online and disables all
+> others(maxcpus=1 and set number of cores per socket to 1 in
+> BIOS). The number of the dropped packets is collected via
+> iptables-legacy -nvL, iptables -nvL and bpftool map dump id.
+> 
+> Test 1: bogo-ops(the more the better)
+>              iptables            nft        bpfilter
+>    1 rule:  6474-6554      6483-6515       7996-8008
+> 32 rules:  6374-6433      5761-5804       7997-8042
+> 
+> 
+> Test 2: number of dropped packets(the more the better)
+>              iptables            nft         bpfilter
+>    1 rule:  234M-241M           220M            900M+
+> 32 rules:  186M-196M        97M-98M            900M+
+> 
+> 
+> Please let me know if you see a gap in the testing environment.
+
+General perf testing will depend on the nature of the use case
+you are trying to target.
+What is the nature of the app? Is it just receiving packets and
+counting? Does it exemplify something something real in your
+network or is just purely benchmarking? Both are valid.
+What else can it do (eg are you interested in latency accounting etc)?
+What i have seen in practise for iptables deployments is a default
+drop and in general an accept list. Per ruleset IP address aggregation
+is typically achieved via ipset. So your mileage may vary...
+
+Having said that:
+Our testing[1] approach is typically for a worst case scenario.
+i.e we make sure you structure the rulesets such that all of the
+linear rulesets will be iterated and we eventually hit the default
+ruleset.
+We also try to reduce variability in the results. A lot of small
+things could affect your reproducibility, so we try to avoid them.
+For example, from what you described:
+You are sending from a random IP - that means each packet will hit
+a random ruleset (for the case of 32 rulesets). And some rules will
+likely be hit more often than others. The likelihood of reproducing the
+same results for multiple runs gets lower as you increase the number
+of rulesets.
+ From a collection perspective:
+Looking at the nature of the CPU utilization is important
+Softirq vs system calls vs user app.
+Your test workload seems to be very specific to ingress host.
+So in reality you are more constrained by kernel->user syscalls
+(which will be hidden if you are mostly dropping in the kernel
+as opposed to letting packets go to user space).
+
+Something is not clear from your email:
+You seem to indicate that no traffic was running in test 1.
+If so, why would 32 rulesets give different results than 1?
+
+cheers,
+jamal
+
+[1] https://netdevconf.info/0x15/session.html?Linux-ACL-Performance-Analysis
