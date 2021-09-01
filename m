@@ -2,62 +2,65 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A0F10C432BE
-	for <bpf@archiver.kernel.org>; Wed,  1 Sep 2021 19:44:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E04F0C432BE
+	for <bpf@archiver.kernel.org>; Wed,  1 Sep 2021 19:44:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 811C76109E
-	for <bpf@archiver.kernel.org>; Wed,  1 Sep 2021 19:44:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BEABA61074
+	for <bpf@archiver.kernel.org>; Wed,  1 Sep 2021 19:44:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343495AbhIATpt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 1 Sep 2021 15:45:49 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:51700 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1344065AbhIATps (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 1 Sep 2021 15:45:48 -0400
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 181JeKwV012639
-        for <bpf@vger.kernel.org>; Wed, 1 Sep 2021 12:44:51 -0700
+        id S1344401AbhIATpy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 1 Sep 2021 15:45:54 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:8304 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1344065AbhIATpx (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 1 Sep 2021 15:45:53 -0400
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.0.43/8.16.0.43) with SMTP id 181JiDBb013538
+        for <bpf@vger.kernel.org>; Wed, 1 Sep 2021 12:44:56 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=nKzOPfD528QlaHHJ5kaCxOiXUNj/fftSjm33cSHW0d8=;
- b=fT9BL8QgDOxy4ulVcl2/jl0KCb0FqMNcMVssGo5OM+NYUj1/4reLAzcjLzwDf2fPL1E7
- vi9DjAAYcIg6+cWASge/TPDZ7c/Zkc1P+vnehIIIJaUY3Mz2c30rCa/fJpM/rA7auJU+
- cLd6hTgSq+b6DEC7sC2KEi8FHA5Im59tSk4= 
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=6FZ1y9HK4dEBXSOD/iD4y7QxwAu2bTYeixuvk8S1xPM=;
+ b=Ou1FC+NdZMXPSuHF9Da37sdGowF0W2saKHMQic1g+576TvkO+QxmEtso3/efm3UF9jSI
+ NZjHYFc+39ILuumrtnYa8khe7KqDzXAwEQz8i9sTRH2a96p2aVrhbnctnC1npVnlGXr3
+ HQCVm7IgH+VE7rPApztAFjn8P5MLynqcbWk= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 3atdwtu35m-2
+        by m0001303.ppops.net with ESMTP id 3atdyh2smq-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 01 Sep 2021 12:44:50 -0700
-Received: from intmgw001.05.ash9.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 01 Sep 2021 12:44:56 -0700
+Received: from intmgw006.03.ash8.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Wed, 1 Sep 2021 12:44:49 -0700
+ 15.1.2308.14; Wed, 1 Sep 2021 12:44:54 -0700
 Received: by devvm3431.ftw0.facebook.com (Postfix, from userid 239838)
-        id 8612A9CDE3E1; Wed,  1 Sep 2021 12:44:42 -0700 (PDT)
+        id AAC4E9CDE3FF; Wed,  1 Sep 2021 12:44:44 -0700 (PDT)
 From:   Matt Smith <alastorze@fb.com>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <andriin@kernel.org>,
         <daniel@iogearbox.net>, <kernel-team@fb.com>
 CC:     Matt Smith <alastorze@fb.com>
-Subject: [PATCH v2 bpf-next 0/3] Bpf skeleton helper method
-Date:   Wed, 1 Sep 2021 12:44:36 -0700
-Message-ID: <20210901194439.3853238-1-alastorze@fb.com>
+Subject: [PATCH v2 bpf-next 2/3] bpftool: Provide a helper method for accessing bpf binary data
+Date:   Wed, 1 Sep 2021 12:44:38 -0700
+Message-ID: <20210901194439.3853238-3-alastorze@fb.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210901194439.3853238-1-alastorze@fb.com>
+References: <20210901194439.3853238-1-alastorze@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-GUID: srDjmHWH9F-2LOEh2e2-dXc-4IZF8wCl
-X-Proofpoint-ORIG-GUID: srDjmHWH9F-2LOEh2e2-dXc-4IZF8wCl
+X-Proofpoint-GUID: 2L25q7sqdIXsTdlJMFt_EEBjAT4Ps9Zj
+X-Proofpoint-ORIG-GUID: 2L25q7sqdIXsTdlJMFt_EEBjAT4Ps9Zj
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
  definitions=2021-09-01_05:2021-09-01,2021-09-01 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- mlxlogscore=848 mlxscore=0 spamscore=0 phishscore=0 bulkscore=0
- malwarescore=0 adultscore=0 clxscore=1015 suspectscore=0 impostorscore=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 malwarescore=0
+ phishscore=0 mlxlogscore=999 clxscore=1015 suspectscore=0 adultscore=0
+ priorityscore=1501 impostorscore=0 bulkscore=0 spamscore=0
  lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2108310000 definitions=main-2109010114
 X-FB-Internal: deliver
@@ -65,33 +68,98 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch series changes the type of bpf_object_skeleton->data
-to const void * and provides a helper method X__elf_bytes(size_t *sz)
-for accessing the raw binary data of the compiled embedded BPF object.
+This adds a binary method X_elf_bytes() which returns the binary data of
+the compiled bpf object.  It additionally sets the size of the return
+data to the provided size_t pointer argument.
 
-The type change enforces the previously implied behavior of immutability
-for this field while casting it to (void *) before assignment allows
-for compiling with previous versions of the libbpf headers without
-compiler warnings.
+The assignment to s->data is cast to void * to ensure no warning is
+issued if compiled with a previous version of libbpf where the
+bpf_object_skeleton field is void * instead of const void *
 
-The helper method allows easier access to the BPF binary object data
-and is leveraged to populate the skeleton field.  The inclusion of
-this helper method will allow users to get access to the data without
-needing to populate an entire skeleton first.
+Signed-off-by: Matt Smith <alastorze@fb.com>
+---
+ tools/bpf/bpftool/gen.c | 39 ++++++++++++++++++++++++---------------
+ 1 file changed, 24 insertions(+), 15 deletions(-)
 
-Checks are added in the third patch to validate the behavior of the
-added method
-
-Matt Smith (3):
-  libbpf: Change bpf_object_skelecton data field to const void*
-  bpftool: Provide a helper method for accessing bpf binary data
-  selftests/bpf: Add checks for X__elf_bytes skeleton helper
-
- tools/bpf/bpftool/gen.c                       | 39 ++++++++++++-------
- tools/lib/bpf/libbpf.h                        |  2 +-
- .../selftests/bpf/prog_tests/skeleton.c       |  7 ++++
- 3 files changed, 32 insertions(+), 16 deletions(-)
-
+diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
+index d40d92bbf0e4..f54dc4792fce 100644
+--- a/tools/bpf/bpftool/gen.c
++++ b/tools/bpf/bpftool/gen.c
+@@ -238,8 +238,8 @@ static void codegen(const char *template, ...)
+ 		} else if (c =3D=3D '\n') {
+ 			break;
+ 		} else {
+-			p_err("unrecognized character at pos %td in template '%s'",
+-			      src - template - 1, template);
++			p_err("unrecognized character at pos %td in template '%s': '%c'",
++			      src - template - 1, template, c);
+ 			free(s);
+ 			exit(-1);
+ 		}
+@@ -406,7 +406,7 @@ static void codegen_destroy(struct bpf_object *obj, c=
+onst char *obj_name)
+ 	}
+=20
+ 	bpf_object__for_each_map(map, obj) {
+-		const char * ident;
++		const char *ident;
+=20
+ 		ident =3D get_map_ident(map);
+ 		if (!ident)
+@@ -787,6 +787,9 @@ static int do_skeleton(int argc, char **argv)
+ 			free(obj);					    \n\
+ 		}							    \n\
+ 									    \n\
++		static inline const void *		\n\
++		%1$s__elf_bytes(size_t *sz);	\n\
++										\n\
+ 		static inline int					    \n\
+ 		%1$s__create_skeleton(struct %1$s *obj);		    \n\
+ 									    \n\
+@@ -943,25 +946,31 @@ static int do_skeleton(int argc, char **argv)
+ 	codegen("\
+ 		\n\
+ 									    \n\
+-			s->data_sz =3D %d;				    \n\
+-			s->data =3D (void *)\"\\				    \n\
+-		",
+-		file_sz);
+-
+-	/* embed contents of BPF object file */
+-	print_hex(obj_data, file_sz);
+-
+-	codegen("\
++			s->data =3D (void *)%2$s__elf_bytes(&s->data_sz);			    \n\
+ 		\n\
+-		\";							    \n\
+ 									    \n\
+ 			return 0;					    \n\
+ 		err:							    \n\
+ 			bpf_object__destroy_skeleton(s);		    \n\
+ 			return -ENOMEM;					    \n\
+ 		}							    \n\
+-									    \n\
+-		#endif /* %s */						    \n\
++										\n\
++		static inline const void *		\n\
++		%2$s__elf_bytes(size_t *sz)		\n\
++		{								\n\
++			*sz =3D %1$d;					\n\
++			return (const void *)\"\\	\n\
++		"
++		, file_sz, obj_name);
++
++	/* embed contents of BPF object file */
++	print_hex(obj_data, file_sz);
++
++	codegen("\
++		\n\
++		\";								\n\
++		}								\n\
++		#endif /* %s */					\n\
+ 		",
+ 		header_guard);
+ 	err =3D 0;
 --=20
 2.30.2
 
