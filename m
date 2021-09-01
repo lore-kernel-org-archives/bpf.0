@@ -8,63 +8,63 @@ X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F7F1C00143
-	for <bpf@archiver.kernel.org>; Wed,  1 Sep 2021 10:48:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86BE9C432BE
+	for <bpf@archiver.kernel.org>; Wed,  1 Sep 2021 10:48:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7067461053
-	for <bpf@archiver.kernel.org>; Wed,  1 Sep 2021 10:48:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6E3556101B
+	for <bpf@archiver.kernel.org>; Wed,  1 Sep 2021 10:48:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238955AbhIAKtS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 1 Sep 2021 06:49:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34138 "EHLO
+        id S239106AbhIAKtT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 1 Sep 2021 06:49:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238637AbhIAKtL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 1 Sep 2021 06:49:11 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8222AC0613A3;
-        Wed,  1 Sep 2021 03:48:13 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 79-20020a1c0452000000b002e6cf79e572so4431668wme.1;
-        Wed, 01 Sep 2021 03:48:13 -0700 (PDT)
+        with ESMTP id S238489AbhIAKtP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 1 Sep 2021 06:49:15 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12357C061575;
+        Wed,  1 Sep 2021 03:48:18 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id x6so3719080wrv.13;
+        Wed, 01 Sep 2021 03:48:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=sxkrSYD9cgbDYCmPJ3kUKrpYLNcLTg8gLS7WNJCmpuA=;
-        b=ovlix9wgmM4izcJ31H8cYytCWUUbnO/NoS5ARvY7xZGAdieIwaJCwmtt2RJWcgzpd5
-         pqgcCtRXZd5b8t8IhkItpCsbJ+BbnyvjQ0dJhmxqduWdaN+9F8+dp+6ENH41v086UmJm
-         I7Oc73dFeCSGNd36CdNgEqWnbb/sqORsOWgLfGDLwjTGk+4zov0UZQCcyZmvV6gY8jVD
-         KGkDarCYGlfgKKfusqiIMQ4yoGOS8qBWd6v1dxWv+eWGIxW3O3LzzSTxBD0UQE1/AJHr
-         jX0TQCNnkQ5svxQWR2TsNo14QcssMku075dZ2yhidRVbhKzRdbCsZ85HGsiCUVZs+T7a
-         bCuw==
+        bh=NNBaqyo/7ZhbzjZjrYIN9gMRh6tHWawhWi2LjamABiA=;
+        b=pljGBccuUErt3ueRXybMYmgik9fQ7/tphhojO49FYyUjMf36/z5X+3mg8RHjq+nRXS
+         VU4sFaEQxsRDhF5NCuH4gj1krDO6seeR2EfpI2OSTtpQ0PGTSyNtzsep2Sx7zb570bwI
+         e5mvd6OfkLN8MpYGywI5uI4qzDAnfxY1YKW4BKiuFQsAwFJUNr59ziItsmu6VZWgIUD1
+         SNPzLqQwbIpZNvCw5IlHEfqi6SRXQ3lN00ER6l2DqB9NFNKmGUO9R/mRbRs/S4PtSKMk
+         oUUe6B5PlAkqYy3opVn2aZFvChLM0KEj+m9MXcIv5PuhfJGEO5x+eTyauU+DajssVWmc
+         EfYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=sxkrSYD9cgbDYCmPJ3kUKrpYLNcLTg8gLS7WNJCmpuA=;
-        b=q+MnSUm/nJkDHuw/cktsU5hIAMD6EogSZF960nd8H76PCjMAm7pqvPMXcw1zg2VpRG
-         3o6XlPBhrJ3wUfdOGnjqGrwB503AnsQ9PK2hcZqmfwUD2DpsSJyETLucnjaCEwpaZwZ3
-         jh79c15+m0M3J/C6OqmYxPySLMNrUD1MYQEmVI72whljfjFz/bqDD0jAhzNNBbgAv5UO
-         jybZ8ZM27iAi4zXXV4xXtQB1FX9fZBj+perPKhkn0Z9RWG26WTIVQR/GbYygMQnelT5W
-         nBqYgoy8b/dci+6p9I4HipBSV/UW8CYFsVbYtvXHMEVDP4jr6eSBu7sW708w71X2gl6R
-         qDjw==
-X-Gm-Message-State: AOAM532UTu4+tiHTOHqQkKboh6IPDCe+tAojlqKC/qjiGF5vdomRnNG+
-        G137Cn1llPl4QQtMyUTy+Xh9CXrqJpODSi8t
-X-Google-Smtp-Source: ABdhPJym8pCk4iY6bd6hKxa3tF/rvfMh4DwpLqbGP1RkHYh1GkBBIsQdWsDYGVIwTJ3HQ1LIwEBaQA==
-X-Received: by 2002:a05:600c:a0b:: with SMTP id z11mr8974130wmp.147.1630493292131;
-        Wed, 01 Sep 2021 03:48:12 -0700 (PDT)
+        bh=NNBaqyo/7ZhbzjZjrYIN9gMRh6tHWawhWi2LjamABiA=;
+        b=Va1S9OB5P7MTenLBiT5BK8OkoMD3C5aZ93573+5Ttl6XWqoh1ZrReFNQG5Eo9X9EWf
+         9kX6jig/TYrNIxb/DXiLxBHNLTw0jVs7UaMPsUa3YxazQMVBybhSdfq2QYe2C8JnOicv
+         XewTvWj5bARXmpS+RelRCXtkaOoTzqSySpM/ySutCawjjmqgOxvstPPUEcqWkYkz4Csm
+         IsjTk1Veuf6vbE6gMTH57je+1UJ3Kd/0Ejysb0mI/dT/CcslrLDn4nyaLRBQ+t/RkOMj
+         0ro2q5r6VC0GGmj9ez82RcHnKeNb2aaaEF/D+jqaqhjM4w+phyByZcNGArkqpK+8o2Vk
+         oehA==
+X-Gm-Message-State: AOAM530Oj9URQSXUWhPqljuun/F4UdSFzhIuAn4DQnggxnmQj/opfgND
+        mrMUjETEt0oan2kKPLqdVFI=
+X-Google-Smtp-Source: ABdhPJzff36FiR1lyxEGLYDbVtmdcICN7U2yHFiuq8Mdgil7N4JHN52YTCjF/e2kza+Pwo/zidtoQw==
+X-Received: by 2002:a5d:44ca:: with SMTP id z10mr9534364wrr.298.1630493296676;
+        Wed, 01 Sep 2021 03:48:16 -0700 (PDT)
 Received: from localhost.localdomain (h-46-59-47-246.A165.priv.bahnhof.se. [46.59.47.246])
-        by smtp.gmail.com with ESMTPSA id r12sm21530843wrv.96.2021.09.01.03.48.10
+        by smtp.gmail.com with ESMTPSA id r12sm21530843wrv.96.2021.09.01.03.48.15
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 01 Sep 2021 03:48:11 -0700 (PDT)
+        Wed, 01 Sep 2021 03:48:16 -0700 (PDT)
 From:   Magnus Karlsson <magnus.karlsson@gmail.com>
 To:     magnus.karlsson@intel.com, bjorn@kernel.org, ast@kernel.org,
         daniel@iogearbox.net, netdev@vger.kernel.org,
         maciej.fijalkowski@intel.com
 Cc:     jonathan.lemon@gmail.com, ciara.loftus@intel.com,
         bpf@vger.kernel.org, yhs@fb.com, andrii@kernel.org
-Subject: [PATCH bpf-next 09/20] selftests: xsk: introduce rx_on and tx_on in ifobject
-Date:   Wed,  1 Sep 2021 12:47:21 +0200
-Message-Id: <20210901104732.10956-10-magnus.karlsson@gmail.com>
+Subject: [PATCH bpf-next 12/20] selftests: xsk: make xdp_flags and bind_flags local
+Date:   Wed,  1 Sep 2021 12:47:24 +0200
+Message-Id: <20210901104732.10956-13-magnus.karlsson@gmail.com>
 X-Mailer: git-send-email 2.29.0
 In-Reply-To: <20210901104732.10956-1-magnus.karlsson@gmail.com>
 References: <20210901104732.10956-1-magnus.karlsson@gmail.com>
@@ -76,145 +76,177 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Magnus Karlsson <magnus.karlsson@intel.com>
 
-Introduce rx_on and tx_on in the ifobject so that we can describe if
-the thread should create a socket with only tx, rx, or both. This
-eliminates some test specific if statements from the code. We can also
-eliminate the flow vector structure now as this is fully specified
-by the tx_on and rx_on variables.
+Make xdp_flags and bind_flags local instead of global by moving them
+into the interface object. These flags decide if the socket should be
+created in SKB mode or in DRV mode and therefore they are sticky and
+will survive a test_spec_reset. Since every test is first run in SKB
+mode then in DRV mode, this change only happens once. With this
+change, the configured_mode global variable can also be
+erradicated. The first test_spec_init() also becomes superfluous and
+can be eliminated.
 
 Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
 ---
- tools/testing/selftests/bpf/xdpxceiver.c | 34 ++++++++++--------------
- tools/testing/selftests/bpf/xdpxceiver.h | 10 ++-----
- 2 files changed, 16 insertions(+), 28 deletions(-)
+ tools/testing/selftests/bpf/xdpxceiver.c | 57 ++++++++++++------------
+ tools/testing/selftests/bpf/xdpxceiver.h |  6 +--
+ 2 files changed, 31 insertions(+), 32 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/xdpxceiver.c b/tools/testing/selftests/bpf/xdpxceiver.c
-index 9a98c45933c5..a896d5845c0e 100644
+index 06fa767191af..3a1afece7c2c 100644
 --- a/tools/testing/selftests/bpf/xdpxceiver.c
 +++ b/tools/testing/selftests/bpf/xdpxceiver.c
-@@ -278,14 +278,8 @@ static int xsk_configure_socket(struct xsk_socket_info *xsk, struct xsk_umem_inf
- 	cfg.xdp_flags = xdp_flags;
- 	cfg.bind_flags = xdp_bind_flags;
+@@ -112,9 +112,10 @@ static void __exit_with_error(int error, const char *file, const char *func, int
  
--	if (test_type != TEST_TYPE_BIDI) {
--		rxr = (ifobject->fv.vector == rx) ? &xsk->rx : NULL;
--		txr = (ifobject->fv.vector == tx) ? &xsk->tx : NULL;
--	} else {
--		rxr = &xsk->rx;
--		txr = &xsk->tx;
--	}
--
-+	txr = ifobject->tx_on ? &xsk->tx : NULL;
-+	rxr = ifobject->rx_on ? &xsk->rx : NULL;
- 	return xsk_socket__create(&xsk->xsk, ifobject->ifname, qid, umem->umem, rxr, txr, &cfg);
+ #define exit_with_error(error) __exit_with_error(error, __FILE__, __func__, __LINE__)
+ 
+-#define print_ksft_result(test)\
+-	(ksft_test_result_pass("PASS: %s %s\n", configured_mode ? "DRV" : "SKB", \
+-			       (test)->name))
++#define mode_string(test) (test)->ifobj_tx->xdp_flags & XDP_FLAGS_SKB_MODE ? "SKB" : "DRV"
++
++#define print_ksft_result(test)						\
++	(ksft_test_result_pass("PASS: %s %s\n", mode_string(test), (test)->name))
+ 
+ static void memset32_htonl(void *dest, u32 val, u32 size)
+ {
+@@ -275,8 +276,8 @@ static int xsk_configure_socket(struct xsk_socket_info *xsk, struct xsk_umem_inf
+ 	cfg.rx_size = xsk->rxqsize;
+ 	cfg.tx_size = XSK_RING_PROD__DEFAULT_NUM_DESCS;
+ 	cfg.libbpf_flags = 0;
+-	cfg.xdp_flags = xdp_flags;
+-	cfg.bind_flags = xdp_bind_flags;
++	cfg.xdp_flags = ifobject->xdp_flags;
++	cfg.bind_flags = ifobject->bind_flags;
+ 
+ 	txr = ifobject->tx_on ? &xsk->tx : NULL;
+ 	rxr = ifobject->rx_on ? &xsk->rx : NULL;
+@@ -333,7 +334,8 @@ static bool validate_interface(struct ifobject *ifobj)
+ 	return true;
  }
  
-@@ -395,10 +389,13 @@ static void __test_spec_init(struct test_spec *test, struct ifobject *ifobj_tx,
- 		ifobj->xsk = &ifobj->xsk_arr[0];
- 		ifobj->use_poll = false;
- 
--		if (i == tx)
--			ifobj->fv.vector = tx;
--		else
--			ifobj->fv.vector = rx;
-+		if (i == 0) {
-+			ifobj->rx_on = false;
-+			ifobj->tx_on = true;
-+		} else {
-+			ifobj->rx_on = true;
-+			ifobj->tx_on = false;
-+		}
- 
- 		for (j = 0; j < MAX_SOCKETS; j++) {
- 			memset(&ifobj->umem_arr[j], 0, sizeof(ifobj->umem_arr[j]));
-@@ -923,14 +920,10 @@ static void testapp_teardown(struct test_spec *test)
- static void swap_directions(struct ifobject **ifobj1, struct ifobject **ifobj2)
+-static void parse_command_line(struct test_spec *test, int argc, char **argv)
++static void parse_command_line(struct ifobject *ifobj_tx, struct ifobject *ifobj_rx, int argc,
++			       char **argv)
  {
- 	thread_func_t tmp_func_ptr = (*ifobj1)->func_ptr;
--	enum fvector tmp_vector = (*ifobj1)->fv.vector;
- 	struct ifobject *tmp_ifobj = (*ifobj1);
+ 	struct ifobject *ifobj;
+ 	u32 interface_nb = 0;
+@@ -351,9 +353,9 @@ static void parse_command_line(struct test_spec *test, int argc, char **argv)
+ 		switch (c) {
+ 		case 'i':
+ 			if (interface_nb == 0)
+-				ifobj = test->ifobj_tx;
++				ifobj = ifobj_tx;
+ 			else if (interface_nb == 1)
+-				ifobj = test->ifobj_rx;
++				ifobj = ifobj_rx;
+ 			else
+ 				break;
  
- 	(*ifobj1)->func_ptr = (*ifobj2)->func_ptr;
--	(*ifobj1)->fv.vector = (*ifobj2)->fv.vector;
--
- 	(*ifobj2)->func_ptr = tmp_func_ptr;
--	(*ifobj2)->fv.vector = tmp_vector;
+@@ -414,9 +416,24 @@ static void __test_spec_init(struct test_spec *test, struct ifobject *ifobj_tx,
+ }
  
- 	*ifobj1 = *ifobj2;
- 	*ifobj2 = tmp_ifobj;
-@@ -939,6 +932,8 @@ static void swap_directions(struct ifobject **ifobj1, struct ifobject **ifobj2)
- static void testapp_bidi(struct test_spec *test)
+ static void test_spec_init(struct test_spec *test, struct ifobject *ifobj_tx,
+-			   struct ifobject *ifobj_rx)
++			   struct ifobject *ifobj_rx, enum test_mode mode)
  {
- 	test_spec_set_name(test, "BIDIRECTIONAL");
-+	test->ifobj_tx->rx_on = true;
-+	test->ifobj_rx->tx_on = true;
- 	for (int i = 0; i < MAX_BIDI_ITER; i++) {
- 		print_verbose("Creating socket\n");
- 		testapp_validate_traffic(test);
-@@ -1012,7 +1007,7 @@ static void testapp_stats(struct test_spec *test)
++	u32 i;
++
+ 	memset(test, 0, sizeof(*test));
++
++	for (i = 0; i < MAX_INTERFACES; i++) {
++		struct ifobject *ifobj = i ? ifobj_rx : ifobj_tx;
++
++		ifobj->xdp_flags = XDP_FLAGS_UPDATE_IF_NOEXIST;
++		if (mode == TEST_MODE_SKB)
++			ifobj->xdp_flags |= XDP_FLAGS_SKB_MODE;
++		else
++			ifobj->xdp_flags |= XDP_FLAGS_DRV_MODE;
++
++		ifobj->bind_flags = XDP_USE_NEED_WAKEUP | XDP_COPY;
++	}
++
+ 	__test_spec_init(test, ifobj_tx, ifobj_rx);
+ }
  
- static void init_iface(struct ifobject *ifobj, const char *dst_mac, const char *src_mac,
- 		       const char *dst_ip, const char *src_ip, const u16 dst_port,
--		       const u16 src_port, enum fvector vector, thread_func_t func_ptr)
-+		       const u16 src_port, thread_func_t func_ptr)
- {
- 	struct in_addr ip;
- 
-@@ -1028,7 +1023,6 @@ static void init_iface(struct ifobject *ifobj, const char *dst_mac, const char *
- 	ifobj->dst_port = dst_port;
- 	ifobj->src_port = src_port;
- 
--	ifobj->fv.vector = vector;
+@@ -1011,27 +1028,13 @@ static void init_iface(struct ifobject *ifobj, const char *dst_mac, const char *
  	ifobj->func_ptr = func_ptr;
  }
  
-@@ -1144,9 +1138,9 @@ int main(int argc, char **argv)
- 		ksft_exit_xfail();
- 	}
+-static void run_pkt_test(struct test_spec *test, int mode, int type)
++static void run_pkt_test(struct test_spec *test, enum test_mode mode, enum test_type type)
+ {
+ 	test_type = type;
  
--	init_iface(ifobj_tx, MAC1, MAC2, IP1, IP2, UDP_PORT1, UDP_PORT2, tx,
-+	init_iface(ifobj_tx, MAC1, MAC2, IP1, IP2, UDP_PORT1, UDP_PORT2,
- 		   worker_testapp_validate_tx);
--	init_iface(ifobj_rx, MAC2, MAC1, IP2, IP1, UDP_PORT2, UDP_PORT1, rx,
-+	init_iface(ifobj_rx, MAC2, MAC1, IP2, IP1, UDP_PORT2, UDP_PORT1,
- 		   worker_testapp_validate_rx);
+ 	/* reset defaults after potential previous test */
+-	xdp_flags = XDP_FLAGS_UPDATE_IF_NOEXIST;
+ 	stat_test_type = -1;
  
- 	ksft_set_plan(TEST_MODE_MAX * TEST_TYPE_MAX);
+-	configured_mode = mode;
+-
+-	switch (mode) {
+-	case (TEST_MODE_SKB):
+-		xdp_flags |= XDP_FLAGS_SKB_MODE;
+-		break;
+-	case (TEST_MODE_DRV):
+-		xdp_flags |= XDP_FLAGS_DRV_MODE;
+-		break;
+-	default:
+-		break;
+-	}
+-
+ 	switch (test_type) {
+ 	case TEST_TYPE_STATS:
+ 		testapp_stats(test);
+@@ -1111,11 +1114,9 @@ int main(int argc, char **argv)
+ 	if (!ifobj_rx)
+ 		exit_with_error(ENOMEM);
+ 
+-	test_spec_init(&test, ifobj_tx, ifobj_rx);
+-
+ 	setlocale(LC_ALL, "");
+ 
+-	parse_command_line(&test, argc, argv);
++	parse_command_line(ifobj_tx, ifobj_rx, argc, argv);
+ 
+ 	if (!validate_interface(ifobj_tx) || !validate_interface(ifobj_rx)) {
+ 		usage(basename(argv[0]));
+@@ -1131,7 +1132,7 @@ int main(int argc, char **argv)
+ 
+ 	for (i = 0; i < TEST_MODE_MAX; i++)
+ 		for (j = 0; j < TEST_TYPE_MAX; j++) {
+-			test_spec_init(&test, ifobj_tx, ifobj_rx);
++			test_spec_init(&test, ifobj_tx, ifobj_rx, i);
+ 			run_pkt_test(&test, i, j);
+ 			usleep(USLEEP_MAX);
+ 		}
 diff --git a/tools/testing/selftests/bpf/xdpxceiver.h b/tools/testing/selftests/bpf/xdpxceiver.h
-index e02a4dd71bfb..03ff52897d7b 100644
+index c09b73fd9878..7ed16128f2ad 100644
 --- a/tools/testing/selftests/bpf/xdpxceiver.h
 +++ b/tools/testing/selftests/bpf/xdpxceiver.h
-@@ -100,13 +100,6 @@ struct xsk_socket_info {
- 	u32 rxqsize;
+@@ -68,14 +68,10 @@ enum stat_test_type {
+ 	STAT_TEST_TYPE_MAX
  };
  
--struct flow_vector {
--	enum fvector {
--		tx,
--		rx,
--	} vector;
--};
+-static int configured_mode;
+ static bool opt_pkt_dump;
+ static int test_type;
+ 
+ static bool opt_verbose;
 -
- struct pkt {
- 	u64 addr;
- 	u32 len;
-@@ -127,7 +120,6 @@ struct ifobject {
- 	struct xsk_socket_info *xsk_arr;
- 	struct xsk_umem_info *umem;
- 	struct xsk_umem_info *umem_arr;
--	struct flow_vector fv;
- 	thread_func_t func_ptr;
- 	struct pkt_stream *pkt_stream;
+-static u32 xdp_flags = XDP_FLAGS_UPDATE_IF_NOEXIST;
+-static u32 xdp_bind_flags = XDP_USE_NEED_WAKEUP | XDP_COPY;
+ static int stat_test_type;
+ 
+ struct xsk_umem_info {
+@@ -122,6 +118,8 @@ struct ifobject {
  	int ns_fd;
-@@ -135,6 +127,8 @@ struct ifobject {
+ 	u32 dst_ip;
  	u32 src_ip;
++	u32 xdp_flags;
++	u32 bind_flags;
  	u16 src_port;
  	u16 dst_port;
-+	bool tx_on;
-+	bool rx_on;
- 	bool use_poll;
- 	u8 dst_mac[ETH_ALEN];
- 	u8 src_mac[ETH_ALEN];
+ 	bool tx_on;
 -- 
 2.29.0
 
