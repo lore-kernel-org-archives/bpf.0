@@ -2,127 +2,153 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-6.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85952C432BE
-	for <bpf@archiver.kernel.org>; Wed,  1 Sep 2021 10:19:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E5DEC432BE
+	for <bpf@archiver.kernel.org>; Wed,  1 Sep 2021 10:42:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 63DAA6102A
-	for <bpf@archiver.kernel.org>; Wed,  1 Sep 2021 10:19:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6361E6101A
+	for <bpf@archiver.kernel.org>; Wed,  1 Sep 2021 10:42:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234365AbhIAKUN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 1 Sep 2021 06:20:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:39121 "EHLO
+        id S236926AbhIAKnG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 1 Sep 2021 06:43:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:39659 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233202AbhIAKUN (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 1 Sep 2021 06:20:13 -0400
+        by vger.kernel.org with ESMTP id S236914AbhIAKnG (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 1 Sep 2021 06:43:06 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1630491556;
+        s=mimecast20190719; t=1630492929;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=wpWcIICp9iFhNI7UaFnNLpQfUhXyL/9FmRy00EyVH9M=;
-        b=DlW2lpchp3KMv7z14pBZNAvF2RW1WGHS9Gz56PiyZ7QRP/38rDnbMKXDOT4RwmykPHPFRY
-        e8Px5JeJD1GMQN8DVxU41k7JEXRQ6Sa9sy5O18G/F3hrPiiE6kW6HOuXAeZTt7TtGkVGx+
-        9DLyYJabSMzbBZ5JlBI48f2lBpynNaA=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-410-S89BEOOsMB2W44wbgW9Bmg-1; Wed, 01 Sep 2021 06:19:15 -0400
-X-MC-Unique: S89BEOOsMB2W44wbgW9Bmg-1
-Received: by mail-ej1-f71.google.com with SMTP id x21-20020a170906135500b005d8d4900c5eso1192042ejb.4
-        for <bpf@vger.kernel.org>; Wed, 01 Sep 2021 03:19:15 -0700 (PDT)
+        bh=ylLWjea9xm9l8vXltLGPLEQyUT5/ObE17rwxNz68/Lo=;
+        b=EU2v7ckVO4lApfAluOQqthfVaMehHPnKrW0ZGDvOsoc34+CHWAZZuVWUdBNmI9GTtaCuUF
+        Ip3CPBJZrG9fqT6pYIvrpvnlDEmOwbr9DLM6bnqXpeGLbczVU2EVnJjLxmLI9vh0XNqEwz
+        HzeR4QAwEjHe9t+n6EenCeIWRO0tweU=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-37-OVsRTy5OO_KOQF-Mo7rVeQ-1; Wed, 01 Sep 2021 06:42:08 -0400
+X-MC-Unique: OVsRTy5OO_KOQF-Mo7rVeQ-1
+Received: by mail-ej1-f70.google.com with SMTP id m18-20020a170906849200b005c701c9b87cso1217128ejx.8
+        for <bpf@vger.kernel.org>; Wed, 01 Sep 2021 03:42:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version:content-transfer-encoding;
-        bh=wpWcIICp9iFhNI7UaFnNLpQfUhXyL/9FmRy00EyVH9M=;
-        b=lQJBwY+ujv9aFy/Gbm6s3KCmSS3IzWQXNtlgRWll5YWlkMRBuCV4U9p3btz10gEEEN
-         lvoRS7Lh1uiWUoFjzAKelpleHr/3BZoChDhiNwFIVWJP7ipRhcHHFp0f7Sy3DRWAqiv2
-         zG6Hx18qW+HAD1IKGC1yoJdaMq6rJOIT2CD8IFVrxcubOgndMX1GTu5BqFAK9h0VP0FG
-         59RxQoCeLYfJjfXKJOE3fPImSPguCuhsE+RiMMVi5sTfUCiOx7jZa1DCwTLPs4BCKpLI
-         cDylVpWQdsdBD4gzQzRIYnwSSBkdju4LbQA/XfDDXW1eoBoLRieutAOB1Z1Lr0iPevOw
-         SQUg==
-X-Gm-Message-State: AOAM530MoAhd9J2QyM3Ra/STILGrNPJuKIBlQN2GP+WOsv/OOUXPOTAx
-        bi5UCgmYI/JB9Ftj1L9D7n/Ym9AAeGO+FddOUXqefXj8Qv7uVhAqNg4XPvO17SmsOUttcApDdpM
-        zowv5dkaKZ2Zb
-X-Received: by 2002:aa7:dd12:: with SMTP id i18mr34270002edv.368.1630491553379;
-        Wed, 01 Sep 2021 03:19:13 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyhQ4jJFhhwKmYay1MqddeY0ug/WgBlq+tMJb5MGlx/WChGkb3G/0db9DFaJI8Jir9o1eUV9A==
-X-Received: by 2002:aa7:dd12:: with SMTP id i18mr34269944edv.368.1630491552468;
-        Wed, 01 Sep 2021 03:19:12 -0700 (PDT)
+         :message-id:mime-version;
+        bh=ylLWjea9xm9l8vXltLGPLEQyUT5/ObE17rwxNz68/Lo=;
+        b=BUB46cgI+sg9aDcTC1RGIMHSUST2i6aHdwwCLb15Q28ad99UlDP5mZ77Qxf4T+y/Zu
+         haj7Eor76w62D1GdVZqO3SobbOp5sLwVSrCyOgt2tY/NJPwR62P/GGGeL7qbOTpzHOrT
+         aJsIUwk9ipscnBm35cnAKPAPqruVJKzgY7GB3Ek6yXLutuWWnQT+l6rqepkN/rt5iNv+
+         tF1WYxCgoirJEKdIcCDo6rCvkXMGWMMg7XVl3TipGvC5QdlU0kQU9mC7rFdjoAKXEmiW
+         gY/15FnBeEVNqZISkLeYlaWywlA8/KA86rTUenpfOMH1ExjyySpTi/QmCoiMm2Y+oKqN
+         NL/g==
+X-Gm-Message-State: AOAM5338QiHiSLtUfyRTi5Nv0gnQZLnHQTFUKLEQCFCWbzs537YTn6Bt
+        DtzMjXpxLmDiagJs4ybURH3ANplp067H/QbCf9goy3UpSqiOKSeCmAM1uResVbIowYwFkm3KvGa
+        1mK+2zBAPo8uX
+X-Received: by 2002:aa7:d303:: with SMTP id p3mr35205730edq.184.1630492926496;
+        Wed, 01 Sep 2021 03:42:06 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzENHpT4hHuD6yibw7Jn0uczYDS8QbdS0pQ+oiQpD3G9ztZ+PedZLvTfOMVUd9pL4yx5Ce0xg==
+X-Received: by 2002:aa7:d303:: with SMTP id p3mr35205666edq.184.1630492925442;
+        Wed, 01 Sep 2021 03:42:05 -0700 (PDT)
 Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id m12sm9796758ejd.21.2021.09.01.03.19.11
+        by smtp.gmail.com with ESMTPSA id v13sm7036633ejx.72.2021.09.01.03.42.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Sep 2021 03:19:11 -0700 (PDT)
+        Wed, 01 Sep 2021 03:42:04 -0700 (PDT)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 898221800EB; Wed,  1 Sep 2021 12:19:10 +0200 (CEST)
+        id C3EF01800EB; Wed,  1 Sep 2021 12:42:03 +0200 (CEST)
 From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>
-Subject: Re: [PATCH bpf] libbpf: don't crash on object files with no symbol
- tables
-In-Reply-To: <CAEf4BzaCukRbk=wBY=jobyCKDpQma-41gH34D=iigpj_AO6Hiw@mail.gmail.com>
-References: <20210831165802.168776-1-toke@redhat.com>
- <CAEf4BzaCukRbk=wBY=jobyCKDpQma-41gH34D=iigpj_AO6Hiw@mail.gmail.com>
+To:     John Fastabend <john.fastabend@gmail.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Martin KaFai Lau <kafai@fb.com>
+Cc:     Linux Kernel Network Developers <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, Cong Wang <cong.wang@bytedance.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Jiri Pirko <jiri@resnulli.us>
+Subject: Re: [RFC Patch net-next] net_sched: introduce eBPF based Qdisc
+In-Reply-To: <612f137f4dc5c_152fe20891@john-XPS-13-9370.notmuch>
+References: <20210821010240.10373-1-xiyou.wangcong@gmail.com>
+ <20210824234700.qlteie6al3cldcu5@kafai-mbp>
+ <CAM_iQpWP_kvE58Z+363n+miTQYPYLn6U4sxMKVaDvuRvjJo_Tg@mail.gmail.com>
+ <612f137f4dc5c_152fe20891@john-XPS-13-9370.notmuch>
 X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Wed, 01 Sep 2021 12:19:10 +0200
-Message-ID: <874kb4vbs1.fsf@toke.dk>
+Date:   Wed, 01 Sep 2021 12:42:03 +0200
+Message-ID: <871r68vapw.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
+John Fastabend <john.fastabend@gmail.com> writes:
 
-> On Tue, Aug 31, 2021 at 9:58 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@re=
-dhat.com> wrote:
->>
->> If libbpf encounters an ELF file that has been stripped of its symbol
->> table, it will crash in bpf_object__add_programs() when trying to
->> dereference the obj->efile.symbols pointer. Add a check and return to av=
-oid
->> this.
->>
->> Fixes: 6245947c1b3c ("libbpf: Allow gaps in BPF program sections to supp=
-ort overriden weak functions")
->> Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
->> ---
->>  tools/lib/bpf/libbpf.c | 3 +++
->>  1 file changed, 3 insertions(+)
->>
->> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
->> index 6f5e2757bb3c..4cd102affeef 100644
->> --- a/tools/lib/bpf/libbpf.c
->> +++ b/tools/lib/bpf/libbpf.c
->> @@ -668,6 +668,9 @@ bpf_object__add_programs(struct bpf_object *obj, Elf=
-_Data *sec_data,
->>         const char *name;
->>         GElf_Sym sym;
->>
->> +       if (!symbols)
->> +               return -ENOENT;
->> +
+> Cong Wang wrote:
+>> On Tue, Aug 24, 2021 at 4:47 PM Martin KaFai Lau <kafai@fb.com> wrote:
+>> > Please explain more on this.  What is currently missing
+>> > to make qdisc in struct_ops possible?
+>> 
+>> I think you misunderstand this point. The reason why I avoid it is
+>> _not_ anything is missing, quite oppositely, it is because it requires
+>> a lot of work to implement a Qdisc with struct_ops approach, literally
+>> all those struct Qdisc_ops (not to mention struct Qdisc_class_ops).
+>> WIth current approach, programmers only need to implement two
+>> eBPF programs (enqueue and dequeue).
+>> 
+>> Thanks.
 >
-> The more logical place to do this check is in
-> bpf_object__elf_collect(). Can you add this there? We can also include
-> helpful error message.
+> Another idea. Rather than work with qdisc objects which creates all
+> these issues with how to work with existing interfaces, filters, etc.
+> Why not create an sk_buff map? Then this can be used from the existing
+> egress/ingress hooks independent of the actual qdisc being used.
 
-Sure, can do.
+I agree. In fact, I'm working on doing just this for XDP, and I see no
+reason why the map type couldn't be reused for skbs as well. Doing it
+this way has a couple of benefits:
 
-> But I'm also curious which Clang version is being used to cause no ELF
-> symbols being generated?
+- It leaves more flexibility to BPF: want a simple FIFO queue? just
+  implement that with a single queue map. Or do you want to build a full
+  hierarchical queueing structure? Just instantiate as many queue maps
+  as you need to achieve this. Etc.
 
-It's not Clang. I was debugging an issue with 'strip' mangling BPF
-object files and ran into this after trying to load an object file that
-had been run through a full 'strip bpf_object.o' (whereas 'strip -g
-bpf_object.o' works fine, except for that one bug I'm looking at).
+- The behaviour is defined entirely by BPF program behaviour, and does
+  not require setting up a qdisc hierarchy in addition to writing BPF
+  code.
+
+- It should be possible to structure the hooks in a way that allows
+  reusing queueing algorithm implementations between the qdisc and XDP
+  layers.
+
+> You mention skb should not be exposed to userspace? Why? Whats the
+> reason for this? Anyways we can make kernel only maps if we want or
+> scrub the data before passing it to userspace. We do this already in
+> some cases.
+
+Yup, that's my approach as well.
+
+> IMO it seems cleaner and more general to allow sk_buffs
+> to be stored in maps and pulled back out later for enqueue/dequeue.
+
+FWIW there's some gnarly details here (for instance, we need to make
+sure the BPF program doesn't leak packet references after they are
+dequeued from the map). My idea is to use a scheme similar to what we do
+for XDP_REDIRECT, where a helper sets some hidden variables and doesn't
+actually remove the packet from the queue until the BPF program exits
+(so the kernel can make sure things are accounted correctly).
+
+> I think one trick might be how to trigger the dequeue event on
+> transition from stopped to running net_device or other events like
+> this, but that could be solved with another program attached to
+> those events to kick the dequeue logic.
+
+This is actually easy in the qdisc case, I think: there's already a
+qdisc_dequeue() operation, which just needs to execute a BPF program
+that picks which packet to dequeue (by pulling it off a queue map). For
+XDP we do need a new hook, on driver TX completion or something like
+that. Details TBD. Also, we need a way to BPF to kick an idle interface
+and make it start transmitting; that way we can implement a traffic
+shaper (that delays packets) by using BPF timers :)
 
 -Toke
 
