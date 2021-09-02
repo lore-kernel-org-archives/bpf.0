@@ -4,40 +4,41 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB4BCC8302A
-	for <bpf@archiver.kernel.org>; Thu,  2 Sep 2021 17:20:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F066AC8302A
+	for <bpf@archiver.kernel.org>; Thu,  2 Sep 2021 17:20:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B6F0F60FE6
-	for <bpf@archiver.kernel.org>; Thu,  2 Sep 2021 17:20:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DCA5360FE6
+	for <bpf@archiver.kernel.org>; Thu,  2 Sep 2021 17:20:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242982AbhIBRVD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 2 Sep 2021 13:21:03 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:21992 "EHLO
+        id S1346575AbhIBRVF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 2 Sep 2021 13:21:05 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:57430 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1346565AbhIBRVD (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 2 Sep 2021 13:21:03 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 182HJ5IC006660
-        for <bpf@vger.kernel.org>; Thu, 2 Sep 2021 10:20:04 -0700
+        by vger.kernel.org with ESMTP id S1346571AbhIBRVE (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 2 Sep 2021 13:21:04 -0400
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 182HIwrV003911
+        for <bpf@vger.kernel.org>; Thu, 2 Sep 2021 10:20:06 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : content-type : content-transfer-encoding :
- mime-version; s=facebook; bh=33VCdYpStX0Sw+pn5ejIOQKBbirZXE8W/mvrljry0f4=;
- b=Rh6VhaOtPvPOPw7WG9+d6xCRhGbooigeF5IfnDucM0fB/rfMw7eDyDBwwgoU+5CBhhiP
- Y16hu38Fct6FkW2CY8YgqA8kdu77+ONGsDSFO0R0W69bjCau2O56bp5kFJo65sjjB8J9
- CvCCobgeqHaOxhGWPfxgRCPZt66uWSgVI4o= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 3atdxvbbdx-9
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=npoIg0hH/PLsSOOKa3cr7jFeeSikgJuTg/witRzt/oE=;
+ b=gSw8AUc2OakjwjxyNO1SAauuKUGh7WFE4298DybfwAX01iiwhteM73hCe9b/YSqfjrTV
+ rxZcAn0NiysK0mpukcPyzQTxtWE5jQ19aVCTPxrJf9olKYWfIzAWxaDlQLTNXTuEv25m
+ dazGNNTklkQKzcDITiNC3c43d+8RDfPee6o= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 3atdx7m4ex-17
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 02 Sep 2021 10:20:04 -0700
-Received: from intmgw002.25.frc3.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 02 Sep 2021 10:20:06 -0700
+Received: from intmgw001.37.frc1.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Thu, 2 Sep 2021 10:20:03 -0700
+ 15.1.2308.14; Thu, 2 Sep 2021 10:20:04 -0700
 Received: by devbig030.frc3.facebook.com (Postfix, from userid 158236)
-        id E74ED5FE2452; Thu,  2 Sep 2021 10:19:49 -0700 (PDT)
+        id 5FD195FE24A6; Thu,  2 Sep 2021 10:20:03 -0700 (PDT)
 From:   Dave Marchevsky <davemarchevsky@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
@@ -45,132 +46,120 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Yonghong Song <yhs@fb.com>, <netdev@vger.kernel.org>,
         Dave Marchevsky <davemarchevsky@fb.com>
-Subject: [PATCH v4 bpf-next 0/9] bpf: implement variadic printk helper
-Date:   Thu, 2 Sep 2021 10:19:20 -0700
-Message-ID: <20210902171929.3922667-1-davemarchevsky@fb.com>
+Subject: [PATCH v4 bpf-next 6/9] bpftool: only probe trace_vprintk feature in 'full' mode
+Date:   Thu, 2 Sep 2021 10:19:26 -0700
+Message-ID: <20210902171929.3922667-7-davemarchevsky@fb.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210902171929.3922667-1-davemarchevsky@fb.com>
+References: <20210902171929.3922667-1-davemarchevsky@fb.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-ORIG-GUID: oGkaD0WqXX0BDNJ1M6rmqoU2nXjhxEFw
-X-Proofpoint-GUID: oGkaD0WqXX0BDNJ1M6rmqoU2nXjhxEFw
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
+X-Proofpoint-GUID: W1gfk8IX5bw6_D1l5uMnu5IA2-Gy7qHk
+X-Proofpoint-ORIG-GUID: W1gfk8IX5bw6_D1l5uMnu5IA2-Gy7qHk
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
  definitions=2021-09-02_04:2021-09-02,2021-09-02 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015 bulkscore=0
- suspectscore=0 phishscore=0 mlxlogscore=999 impostorscore=0
- priorityscore=1501 malwarescore=0 mlxscore=0 spamscore=0 adultscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2108310000 definitions=main-2109020100
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=999
+ clxscore=1015 bulkscore=0 impostorscore=0 phishscore=0 malwarescore=0
+ spamscore=0 priorityscore=1501 suspectscore=0 adultscore=0
+ lowpriorityscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2108310000 definitions=main-2109020100
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This series introduces a new helper, bpf_trace_vprintk, which functions
-like bpf_trace_printk but supports > 3 arguments via a pseudo-vararg u64
-array. The bpf_printk libbpf convenience macro is modified to use
-bpf_trace_vprintk when > 3 varargs are passed, otherwise the previous
-behavior - using bpf_trace_printk - is retained.
+Since commit 368cb0e7cdb5e ("bpftool: Make probes which emit dmesg
+warnings optional"), some helpers aren't probed by bpftool unless
+`full` arg is added to `bpftool feature probe`.
 
-Helper functions and macros added during the implementation of
-bpf_seq_printf and bpf_snprintf do most of the heavy lifting for
-bpf_trace_vprintk. There's no novel format string wrangling here.
+bpf_trace_vprintk can emit dmesg warnings when probed, so include it.
 
-Usecase here is straightforward: Giving BPF program writers a more
-powerful printk will ease development of BPF programs, particularly
-during debugging and testing, where printk tends to be used.
+Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
+---
+ tools/bpf/bpftool/feature.c                 |  1 +
+ tools/testing/selftests/bpf/test_bpftool.py | 22 +++++++++------------
+ 2 files changed, 10 insertions(+), 13 deletions(-)
 
-This feature was proposed by Andrii in libbpf mirror's issue tracker
-[1].
-
-[1] https://github.com/libbpf/libbpf/issues/315
-
-v3 -> v4:
-* Add patch 2, which migrates reference_tracking prog_test away from=20
-  bpf_program__load. Could be placed a bit later in the series, but=20
-	wanted to keep the actual vprintk-related patches contiguous
-* Add patch 9, which adds a program w/ 0 fmt arg bpf_printk to vprintk
-  test
-* bpf_printk convenience macro isn't multiline anymore, so simplify [Andrii]
-* Add some comments to ___bpf_pick_printk to make it more obvious when
-  implementation switches from printk to vprintk [Andrii]
-* BPF_PRINTK_FMT_TYPE -> BPF_PRINTK_FMT_MOD for 'static const' fmt string
-  in printk wrapper macro [Andrii]
-	* checkpatch.pl doesn't like this, says "Macros with complex values=20
-	  should be enclosed in parentheses". Strange that it didn't have similar
-		complaints about v3's BPF_PRINTK_FMT_TYPE. Regardless, IMO the complaint
-		is not highlighting a real issue in the case of this macro.
-* Fix alignment of __bpf_vprintk and __bpf_pick_printk [Andrii]
-* rebase
-
-v2 -> v3:
-* Clean up patch 3's commit message [Alexei]
-* Add patch 4, which modifies __bpf_printk to use 'static const char' to
-  store fmt string with fallback for older kernels [Andrii]
-* rebase
-
-v1 -> v2:
-
-* Naming conversation seems to have gone in favor of keeping
-  bpf_trace_vprintk, names are unchanged
-
-* Patch 3 now modifies bpf_printk convenience macro to choose between
-  __bpf_printk and __bpf_vprintk 'implementation' macros based on arg
-  count. __bpf_vprintk is a renaming of bpf_vprintk convenience macro
-  from v1, __bpf_printk is the existing bpf_printk implementation.
-
-  This patch could use some scrutiny as I think current implementation
-  may regress developer experience in a specific case, turning a
-  compile-time error into a load-time error. Unclear to me how
-  common the case is, or whether the macro magic I chose is ideal.
-
-* char ___fmt[] to static const char ___fmt[] change was not done,
-  wanted to leave __bpf_printk 'implementation' macro unchanged for v2
-  to ease discussion of above point
-
-* Removed __always_inline from __set_printk_clr_event [Andrii]
-* Simplified bpf_trace_printk docstring to refer to other functions
-  instead of copy/pasting and avoid specifying 12 vararg limit [Andrii]
-* Migrated trace_printk selftest to use ASSERT_ instead of CHECK
-  * Adds new patch 5, previous patch 5 is now 6
-* Migrated trace_vprintk selftest to use ASSERT_ instead of CHECK,
-  open_and_load instead of separate open, load [Andrii]
-* Patch 2's commit message now correctly mentions trace_pipe instead of
-  dmesg [Andrii]
-
-Dave Marchevsky (9):
-  bpf: merge printk and seq_printf VARARG max macros
-  selftests/bpf: stop using bpf_program__load
-  bpf: add bpf_trace_vprintk helper
-  libbpf: Modify bpf_printk to choose helper based on arg count
-  libbpf: use static const fmt string in __bpf_printk
-  bpftool: only probe trace_vprintk feature in 'full' mode
-  selftests/bpf: Migrate prog_tests/trace_printk CHECKs to ASSERTs
-  selftests/bpf: add trace_vprintk test prog
-  selftests/bpf: Add test for bpf_printk w/ 0 fmt args
-
- include/linux/bpf.h                           |  3 +
- include/uapi/linux/bpf.h                      |  9 +++
- kernel/bpf/core.c                             |  5 ++
- kernel/bpf/helpers.c                          |  6 +-
- kernel/trace/bpf_trace.c                      | 54 ++++++++++++++-
- tools/bpf/bpftool/feature.c                   |  1 +
- tools/include/uapi/linux/bpf.h                |  9 +++
- tools/lib/bpf/bpf_helpers.h                   | 51 ++++++++++++---
- tools/testing/selftests/bpf/Makefile          |  3 +-
- .../bpf/prog_tests/reference_tracking.c       | 39 ++++++++---
- .../selftests/bpf/prog_tests/trace_printk.c   | 24 +++----
- .../selftests/bpf/prog_tests/trace_vprintk.c  | 65 +++++++++++++++++++
- .../selftests/bpf/progs/trace_vprintk.c       | 32 +++++++++
- tools/testing/selftests/bpf/test_bpftool.py   | 22 +++----
- 14 files changed, 272 insertions(+), 51 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/trace_vprintk.c
- create mode 100644 tools/testing/selftests/bpf/progs/trace_vprintk.c
-
+diff --git a/tools/bpf/bpftool/feature.c b/tools/bpf/bpftool/feature.c
+index 7f36385aa9e2..ade44577688e 100644
+--- a/tools/bpf/bpftool/feature.c
++++ b/tools/bpf/bpftool/feature.c
+@@ -624,6 +624,7 @@ probe_helpers_for_progtype(enum bpf_prog_type prog_ty=
+pe, bool supported_type,
+ 		 */
+ 		switch (id) {
+ 		case BPF_FUNC_trace_printk:
++		case BPF_FUNC_trace_vprintk:
+ 		case BPF_FUNC_probe_write_user:
+ 			if (!full_mode)
+ 				continue;
+diff --git a/tools/testing/selftests/bpf/test_bpftool.py b/tools/testing/=
+selftests/bpf/test_bpftool.py
+index 4fed2dc25c0a..1c2408ee1f5d 100644
+--- a/tools/testing/selftests/bpf/test_bpftool.py
++++ b/tools/testing/selftests/bpf/test_bpftool.py
+@@ -57,6 +57,11 @@ def default_iface(f):
+         return f(*args, iface, **kwargs)
+     return wrapper
+=20
++DMESG_EMITTING_HELPERS =3D [
++        "bpf_probe_write_user",
++        "bpf_trace_printk",
++        "bpf_trace_vprintk",
++    ]
+=20
+ class TestBpftool(unittest.TestCase):
+     @classmethod
+@@ -67,10 +72,7 @@ class TestBpftool(unittest.TestCase):
+=20
+     @default_iface
+     def test_feature_dev_json(self, iface):
+-        unexpected_helpers =3D [
+-            "bpf_probe_write_user",
+-            "bpf_trace_printk",
+-        ]
++        unexpected_helpers =3D DMESG_EMITTING_HELPERS
+         expected_keys =3D [
+             "syscall_config",
+             "program_types",
+@@ -94,10 +96,7 @@ class TestBpftool(unittest.TestCase):
+             bpftool_json(["feature", "probe"]),
+             bpftool_json(["feature"]),
+         ]
+-        unexpected_helpers =3D [
+-            "bpf_probe_write_user",
+-            "bpf_trace_printk",
+-        ]
++        unexpected_helpers =3D DMESG_EMITTING_HELPERS
+         expected_keys =3D [
+             "syscall_config",
+             "system_config",
+@@ -121,10 +120,7 @@ class TestBpftool(unittest.TestCase):
+             bpftool_json(["feature", "probe", "kernel", "full"]),
+             bpftool_json(["feature", "probe", "full"]),
+         ]
+-        expected_helpers =3D [
+-            "bpf_probe_write_user",
+-            "bpf_trace_printk",
+-        ]
++        expected_helpers =3D DMESG_EMITTING_HELPERS
+=20
+         for tc in test_cases:
+             # Check if expected helpers are included at least once in an=
+y
+@@ -157,7 +153,7 @@ class TestBpftool(unittest.TestCase):
+                 not_full_set.add(helper)
+=20
+         self.assertCountEqual(full_set - not_full_set,
+-                                {"bpf_probe_write_user", "bpf_trace_prin=
+tk"})
++                              set(DMESG_EMITTING_HELPERS))
+         self.assertCountEqual(not_full_set - full_set, set())
+=20
+     def test_feature_macros(self):
 --=20
 2.30.2
-
 
