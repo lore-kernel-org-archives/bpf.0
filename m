@@ -7,54 +7,54 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57A92C433FE
-	for <bpf@archiver.kernel.org>; Thu,  2 Sep 2021 18:52:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DB33C4332F
+	for <bpf@archiver.kernel.org>; Thu,  2 Sep 2021 18:52:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 42375610A0
-	for <bpf@archiver.kernel.org>; Thu,  2 Sep 2021 18:52:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 45861610A0
+	for <bpf@archiver.kernel.org>; Thu,  2 Sep 2021 18:52:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347213AbhIBSxz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 2 Sep 2021 14:53:55 -0400
+        id S1347210AbhIBSx4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 2 Sep 2021 14:53:56 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347210AbhIBSxr (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 2 Sep 2021 14:53:47 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5174DC061575
-        for <bpf@vger.kernel.org>; Thu,  2 Sep 2021 11:52:48 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a25so6699887ejv.6
-        for <bpf@vger.kernel.org>; Thu, 02 Sep 2021 11:52:48 -0700 (PDT)
+        with ESMTP id S1347237AbhIBSxx (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 2 Sep 2021 14:53:53 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55129C061764
+        for <bpf@vger.kernel.org>; Thu,  2 Sep 2021 11:52:52 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id q3so4402123edt.5
+        for <bpf@vger.kernel.org>; Thu, 02 Sep 2021 11:52:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=anyfinetworks-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=PoSasBp8FUxIYX3dqECHvXhlDjnUa++BQhLErp0Za5o=;
-        b=r4eSPdEW5uOWjUFSkkKRupcg3/VRTebHijmWQSPbCBsFvK99FLjOJ4Ilclrti07LHk
-         d1mJhpgaWJHMPzS3nv+52Xmftu3ke6ohJngVKV0rMcuFiA2ZFCDkjEKsBM2uTI8RXUMw
-         Zh3Hq5R/3hMm2O3hNg6DVE+JUp0G4M3zWjcttTVgC5nVVOx7cW3SFQyUgVstTAvLQ2XR
-         0uAGgoRUFTdum5O9woCP8XPB0aHx9pJpF7nKuT+vLZvcshlFSIQ2BN7P7W+SF2aQJ3sc
-         erBWn9uMx5vNskejdyPv3Xigav7eJmdZ9tarIMPOu/60RXMkb7xyECz/kOyMTnY4i+TG
-         eP9w==
+        bh=xE2vatG15Bdcp+TUUj34HoSwRJXtzL9QIOGhWGZdLqU=;
+        b=dAc3F1Sy7rI8V1OXc6APBRJzzt1ZbMG7WyWmajUal4fEcL/HCL//VgdByQ6ccrknwK
+         GWvx+cpRFIMzQs6ybskOyqF9RgBikADu9N64GMPZgF5ofzSk4s5swyBrBEwALsKoOakn
+         n0oZMIlOEfFdjkQaSPJdr3etEhxgR5xQmvumCUSz9+xcRjrc4NUuqx4lfW6Xf0XZpsz0
+         YbTYk+keCKRBGtxhzRtdQtmHsOpTqUgch7VV9fRG1zl43zipxgdRzrns9pKA0ixINLYG
+         oowUAr3X1HLcKwRoRe3ZweIvo+ET8Q2JRaMe8DLyajH0Kg3JosZE1WzeCmd+hdS4vdDk
+         hSjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=PoSasBp8FUxIYX3dqECHvXhlDjnUa++BQhLErp0Za5o=;
-        b=MsBFAWxVSe1bC3aa6LDw7jHM1sn/M15PNOdJJWCmNvwCAJEYN90DFEVGDrCKyCubiE
-         eegA5yCTtZ+gWaVyvqdlxnuzFDyOmsET15WWW2eJaE+QDYC+KIK0Ly4GQQYESp4/e/9G
-         yvJzMKHkW4DdOLRc6hMncEGuIAyOldV9aGqdh7t8OIWOwdHovcTiea0QPQwaUkkSN2+9
-         nSBDYVboeSoiiWUSmd6irjLlWDA449S+idhGtIuq4Z9ESuPVy7mvvRQYwlWZOr/ngObl
-         14/1dAOJEhp08i01RMYkaXbWuZXJYpA5bwE0aQIBFcyElAzqxiee6UBCfGQF8ZZWoJod
-         xNUg==
-X-Gm-Message-State: AOAM532Od/saeRxiLGixspJudkUrywEnUT2LNhWi8w8EY1yKg7uUAoOa
-        shwgWffJcCWS1JNo6NrxFbf7TQ==
-X-Google-Smtp-Source: ABdhPJyFhh/dQGREVXttN6PN7G6HJfwwLHedm8uL5JwUnBJRdOZskOWBVIf5g8D1nDf7uBC8BMnW6g==
-X-Received: by 2002:a17:906:ff0c:: with SMTP id zn12mr5348420ejb.114.1630608766969;
-        Thu, 02 Sep 2021 11:52:46 -0700 (PDT)
+        bh=xE2vatG15Bdcp+TUUj34HoSwRJXtzL9QIOGhWGZdLqU=;
+        b=alhaH3r6g5mFjuHbNuxfg8NaEJUK69u3Lj5NylQ4t8KoXxCc7elMEeJfeDbrNOq8X6
+         3jO7Yt3trNvniyD9w3p3FiHIb3MauE+6LLktS+99rSfouN0C9Ow6IIagfg4fMz2xe/Bv
+         ueMZzh3DGkDL/2A6IBjHNg51eDTjw5uLraicVV+01tKVgiKbDOjDNO6eQdKDzaGODkVr
+         yKfXzgadgL0pB2fyMWC0v+fthuf2Ztuq2A27mBdTTbQbZqBuY/dRt3a7VvUoBUl5xpZ/
+         lb5Hi9MZYFjj6tUQDsY2OBrQUBLtsO3Atvknbyzp8pCnSlRILTdx1BUS7/jxFxsB7pL1
+         407A==
+X-Gm-Message-State: AOAM532owFOV2VIfQEgfQ/caTlyHBPJlbyuhj37nsEBO4yxqqRvYx4l3
+        xVk2TcdabGIneAjVK//Su/mJhy4hpgJRVc8uAQw=
+X-Google-Smtp-Source: ABdhPJx0sqsXWSyLujF4eAF2W5CiTadxaemDaIfm64gvpVpZWtPVI/N4+1H1NeItVhfRfoU+Ibuwpg==
+X-Received: by 2002:aa7:dd93:: with SMTP id g19mr4884801edv.262.1630608770988;
+        Thu, 02 Sep 2021 11:52:50 -0700 (PDT)
 Received: from anpc2.lan (static-213-115-136-2.sme.telenor.se. [213.115.136.2])
-        by smtp.gmail.com with ESMTPSA id mb14sm1592235ejb.81.2021.09.02.11.52.46
+        by smtp.gmail.com with ESMTPSA id mb14sm1592235ejb.81.2021.09.02.11.52.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Sep 2021 11:52:46 -0700 (PDT)
+        Thu, 02 Sep 2021 11:52:50 -0700 (PDT)
 From:   Johan Almbladh <johan.almbladh@anyfinetworks.com>
 To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
         iii@linux.ibm.com
@@ -62,9 +62,9 @@ Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
         john.fastabend@gmail.com, kpsingh@kernel.org,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Subject: [PATCH bpf-next 09/13] bpf/tests: Add JMP tests with small offsets
-Date:   Thu,  2 Sep 2021 20:52:25 +0200
-Message-Id: <20210902185229.1840281-10-johan.almbladh@anyfinetworks.com>
+Subject: [PATCH bpf-next 13/13] bpf/tests: Add tail call limit test with external function call
+Date:   Thu,  2 Sep 2021 20:52:29 +0200
+Message-Id: <20210902185229.1840281-14-johan.almbladh@anyfinetworks.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210902185229.1840281-1-johan.almbladh@anyfinetworks.com>
 References: <20210902185229.1840281-1-johan.almbladh@anyfinetworks.com>
@@ -74,98 +74,106 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch adds a set of tests for JMP to verify that the JITed jump
-offset is calculated correctly. We pretend that the verifier has inserted
-any zero extensions to make the jump-over operations JIT to one
-instruction each, in order to control the exact JITed jump offset.
+This patch adds a tail call limit test where the program also emits
+a BPF_CALL to an external function prior to the tail call. Mainly
+testing that JITed programs preserve its internal register state, for
+example tail call count, across such external calls.
 
 Signed-off-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
 ---
- lib/test_bpf.c | 71 ++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 71 insertions(+)
+ lib/test_bpf.c | 51 +++++++++++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 48 insertions(+), 3 deletions(-)
 
 diff --git a/lib/test_bpf.c b/lib/test_bpf.c
-index 183ead9445ba..c3d772f663da 100644
+index f138c6fad5ec..33c3fcc4c9f8 100644
 --- a/lib/test_bpf.c
 +++ b/lib/test_bpf.c
-@@ -10707,6 +10707,77 @@ static struct bpf_test tests[] = {
- 		.fill_helper = bpf_fill_jmp32_jsle_reg,
- 		.nr_testruns = NR_PATTERN_RUNS,
+@@ -12257,6 +12257,20 @@ static struct tail_call_test tail_call_tests[] = {
+ 		},
+ 		.result = MAX_TAIL_CALL_CNT + 1,
  	},
-+	/* Short relative jumps */
 +	{
-+		"Short relative jump: offset=0",
-+		.u.insns_int = {
-+			BPF_ALU64_IMM(BPF_MOV, R0, 0),
-+			BPF_JMP_IMM(BPF_JEQ, R0, 0, 0),
++		"Tail call count preserved across function calls",
++		.insns = {
++			BPF_ALU64_IMM(BPF_ADD, R1, 1),
++			BPF_STX_MEM(BPF_DW, R10, R1, -8),
++			BPF_CALL_REL(0),
++			BPF_LDX_MEM(BPF_DW, R1, R10, -8),
++			BPF_ALU32_REG(BPF_MOV, R0, R1),
++			TAIL_CALL(0),
 +			BPF_EXIT_INSN(),
-+			BPF_ALU32_IMM(BPF_MOV, R0, -1),
 +		},
-+		INTERNAL | FLAG_NO_DATA | FLAG_VERIFIER_ZEXT,
-+		{ },
-+		{ { 0, 0 } },
++		.stack_depth = 8,
++		.result = MAX_TAIL_CALL_CNT + 1,
 +	},
-+	{
-+		"Short relative jump: offset=1",
-+		.u.insns_int = {
-+			BPF_ALU64_IMM(BPF_MOV, R0, 0),
-+			BPF_JMP_IMM(BPF_JEQ, R0, 0, 1),
-+			BPF_ALU32_IMM(BPF_ADD, R0, 1),
-+			BPF_EXIT_INSN(),
-+			BPF_ALU32_IMM(BPF_MOV, R0, -1),
-+		},
-+		INTERNAL | FLAG_NO_DATA | FLAG_VERIFIER_ZEXT,
-+		{ },
-+		{ { 0, 0 } },
-+	},
-+	{
-+		"Short relative jump: offset=2",
-+		.u.insns_int = {
-+			BPF_ALU64_IMM(BPF_MOV, R0, 0),
-+			BPF_JMP_IMM(BPF_JEQ, R0, 0, 2),
-+			BPF_ALU32_IMM(BPF_ADD, R0, 1),
-+			BPF_ALU32_IMM(BPF_ADD, R0, 1),
-+			BPF_EXIT_INSN(),
-+			BPF_ALU32_IMM(BPF_MOV, R0, -1),
-+		},
-+		INTERNAL | FLAG_NO_DATA | FLAG_VERIFIER_ZEXT,
-+		{ },
-+		{ { 0, 0 } },
-+	},
-+	{
-+		"Short relative jump: offset=3",
-+		.u.insns_int = {
-+			BPF_ALU64_IMM(BPF_MOV, R0, 0),
-+			BPF_JMP_IMM(BPF_JEQ, R0, 0, 3),
-+			BPF_ALU32_IMM(BPF_ADD, R0, 1),
-+			BPF_ALU32_IMM(BPF_ADD, R0, 1),
-+			BPF_ALU32_IMM(BPF_ADD, R0, 1),
-+			BPF_EXIT_INSN(),
-+			BPF_ALU32_IMM(BPF_MOV, R0, -1),
-+		},
-+		INTERNAL | FLAG_NO_DATA | FLAG_VERIFIER_ZEXT,
-+		{ },
-+		{ { 0, 0 } },
-+	},
-+	{
-+		"Short relative jump: offset=4",
-+		.u.insns_int = {
-+			BPF_ALU64_IMM(BPF_MOV, R0, 0),
-+			BPF_JMP_IMM(BPF_JEQ, R0, 0, 4),
-+			BPF_ALU32_IMM(BPF_ADD, R0, 1),
-+			BPF_ALU32_IMM(BPF_ADD, R0, 1),
-+			BPF_ALU32_IMM(BPF_ADD, R0, 1),
-+			BPF_ALU32_IMM(BPF_ADD, R0, 1),
-+			BPF_EXIT_INSN(),
-+			BPF_ALU32_IMM(BPF_MOV, R0, -1),
-+		},
-+		INTERNAL | FLAG_NO_DATA | FLAG_VERIFIER_ZEXT,
-+		{ },
-+		{ { 0, 0 } },
-+	},
- 	/* Staggered jump sequences, immediate */
  	{
- 		"Staggered jumps: JMP_JA",
+ 		"Tail call error path, NULL target",
+ 		.insns = {
+@@ -12279,6 +12293,29 @@ static struct tail_call_test tail_call_tests[] = {
+ 	},
+ };
+ 
++/*
++ * A test function to be called from a BPF program, clobbering a lot of
++ * CPU registers in the process. A JITed BPF program calling this function
++ * must save and restore any caller-saved registers it uses for internal
++ * state, for example the current tail call count.
++ */
++BPF_CALL_1(test_bpf_func, u64, arg)
++{
++	char buf[64];
++	long a = 0;
++	long b = 1;
++	long c = 2;
++	long d = 3;
++	long e = 4;
++	long f = 5;
++	long g = 6;
++	long h = 7;
++
++	return snprintf(buf, sizeof(buf),
++			"%ld %lu %lx %ld %lu %lx %ld %lu %x",
++			a, b, c, d, e, f, g, h, (int)arg);
++}
++
+ static void __init destroy_tail_call_tests(struct bpf_array *progs)
+ {
+ 	int i;
+@@ -12332,16 +12369,17 @@ static __init int prepare_tail_call_tests(struct bpf_array **pprogs)
+ 		for (i = 0; i < len; i++) {
+ 			struct bpf_insn *insn = &fp->insnsi[i];
+ 
+-			if (insn->imm != TAIL_CALL_MARKER)
+-				continue;
+-
+ 			switch (insn->code) {
+ 			case BPF_LD | BPF_DW | BPF_IMM:
++				if (insn->imm != TAIL_CALL_MARKER)
++					break;
+ 				insn[0].imm = (u32)(long)progs;
+ 				insn[1].imm = ((u64)(long)progs) >> 32;
+ 				break;
+ 
+ 			case BPF_ALU | BPF_MOV | BPF_K:
++				if (insn->imm != TAIL_CALL_MARKER)
++					break;
+ 				if (insn->off == TAIL_CALL_NULL)
+ 					insn->imm = ntests;
+ 				else if (insn->off == TAIL_CALL_INVALID)
+@@ -12349,6 +12387,13 @@ static __init int prepare_tail_call_tests(struct bpf_array **pprogs)
+ 				else
+ 					insn->imm = which + insn->off;
+ 				insn->off = 0;
++				break;
++
++			case BPF_JMP | BPF_CALL:
++				if (insn->src_reg != BPF_PSEUDO_CALL)
++					break;
++				*insn = BPF_EMIT_CALL(test_bpf_func);
++				break;
+ 			}
+ 		}
+ 
 -- 
 2.25.1
 
