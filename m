@@ -8,142 +8,168 @@ X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 84544C433EF
-	for <bpf@archiver.kernel.org>; Thu,  2 Sep 2021 23:05:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CCEAC433F5
+	for <bpf@archiver.kernel.org>; Thu,  2 Sep 2021 23:08:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 60C24610A1
-	for <bpf@archiver.kernel.org>; Thu,  2 Sep 2021 23:05:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1A6856108E
+	for <bpf@archiver.kernel.org>; Thu,  2 Sep 2021 23:08:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347832AbhIBXGw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 2 Sep 2021 19:06:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56284 "EHLO
+        id S1347847AbhIBXJ3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 2 Sep 2021 19:09:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347912AbhIBXGv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 2 Sep 2021 19:06:51 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF114C061575;
-        Thu,  2 Sep 2021 16:05:52 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id z18so6844927ybg.8;
-        Thu, 02 Sep 2021 16:05:52 -0700 (PDT)
+        with ESMTP id S232401AbhIBXJ2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 2 Sep 2021 19:09:28 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E60B2C061575;
+        Thu,  2 Sep 2021 16:08:29 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id c206so6816455ybb.12;
+        Thu, 02 Sep 2021 16:08:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=B86ESlgqkajdOaq6Bjknz3MFl+TpH2X5kP28d+2n8So=;
-        b=lYvOwRGs1vjxgzh2WiJKppW7pB8bP6jhUKVmxygCMpozFDZNEyAMVKo/i7mGirozQO
-         0TJ8iyTjDKmA9W7EpImHZvj43GWarqWpTo52VpHcC4fh/nNzj4RZcGT/Svl7LteP1YfR
-         B96yZ+UmqdzWapvpyoJg9Y8I0e8Xn2hlPvLTOQ5lE0WuuptYXKGU8nGNlydX7QDiIS9X
-         5xx60/JJf12hww9fvy/pteltfi0A5hcYSIJVjEYTq6kbRGJv+uKZShGdSJuqKTaa/g50
-         QzV9mhBiWZYQCh+R6sGkHqvPkIRx+Mx1IIKRm1lVz3TVNoCUxwzj/dGHBbFzvqO9nLDU
-         1Gkw==
+        bh=R7sG4e6kx+eb6tbyLRvdBOMvsMhepSQvJQ5aIgHSbio=;
+        b=Sz60IyBmHLmRuYj48mP1jyi245Chdlq6s5ky3Y5Wpx6PSKZZrVYlL18JZ8E+6Bj7AV
+         PWjqa4Zheflh0BdQqeb/NfSRo5wZ+w1Eim6aXsQkrJhnio3XMsY2bMfhs00ACXqJvTBH
+         H9mjQ2MQlw0U6k0LgPCeuRWhp33W3PV/rvbixCELM2znWp9lNVd1o+WRmSf0O9yJDJhl
+         VEMIXUOdUIDdqW3Zq/TbR4OVcH3Kb+aldcSttWftAD7b+1Vi9onZ4yHamI1K+yNIk9fL
+         Kx1toh7YLFxQHcOT+K1lU7egcpKdy7L0YQoqdrUwFNz49KiraagOHzvsIkd4em911wOo
+         Bt1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=B86ESlgqkajdOaq6Bjknz3MFl+TpH2X5kP28d+2n8So=;
-        b=qfS8OV1gZSEE1SVDrYUO7ShDLTK7FgRibP+ygbQQC6Od4duFZRvbAzeQ3Js/qr2iuF
-         s2BxsQeY8CASx0DzI/p8+tTOd2UQOrYRs7PRFtpVhBCoUckQipolPIs8IBBgpTZOBE/K
-         YfIzZCRZS64QQRpKbVZCJcYM6if37kYR8wZP19dRajKGLmVHJVZCmz3Csb0SbJsA6uNf
-         1bXyWJN9sg5zYJH5J/iYDCg/5rWLpcTCUcvPuKO1qeqgaZ8cZZEqYl3tzTfVjstGT+LN
-         jKowy00CSIO3rDu0gEbETxXGGBGoFkjIM/aKsVRA+T93P9TAh4ly45f4RKFofALa48fm
-         xwTw==
-X-Gm-Message-State: AOAM530JvEn3nM/8+d8lFxrtGaB5qTKmH1asEkSds8jjP+Fjclmu4X2p
-        pyTehB2oh+trJuqsVEs4SeAvt2cK9tIUfp+Itac=
-X-Google-Smtp-Source: ABdhPJysHZaAXCn7ljb1ZgUTt5qFYEkM2Ce4iInBur0+W1hWTONnSQgktIMzZ3lApaaxC8PXZp/Q9ygciQm2yWFKHp4=
-X-Received: by 2002:a25:bb13:: with SMTP id z19mr1085813ybg.347.1630623952207;
- Thu, 02 Sep 2021 16:05:52 -0700 (PDT)
+        bh=R7sG4e6kx+eb6tbyLRvdBOMvsMhepSQvJQ5aIgHSbio=;
+        b=DBg4o+eBN0Vlft48/CuakJZNFS7AO5Fq/boKHZ0gbXsaTXCTW8V6ZjvtoxZveT7JDu
+         NrC63e1ij9BKzC9l9HmWIIy4q+oIvr4DLp94kR0c20HHXYqJf0NAmhq03R5RyGqgK/Ib
+         TK97nIGgKdCDzFZ2fBQbrLUGwHYFQCsTc99ezTJqvAGplqnYjQIto3T1XoHJ7xeWHb8S
+         bpzyzohpFFAlGwPwO2IeUYGGX4Fx/ri36JrLO1osxuZc+SLv+mZtWu4mOWHaEJlmDcpc
+         XyKZGR58bkV1gmvdxL8nC76o+ySTTiUaDEtDUT8JF5ZxjB4tnexf10eC1Jn6n+2KyjFu
+         bKfw==
+X-Gm-Message-State: AOAM531XvkIOpifTs23iY+X7HH+XExfl6vv+oSv0MYWGTLwXgwULcxvl
+        L2I/vkvHqb6zVYGpvfi2yAS7kq/5RL81oAm/4ic=
+X-Google-Smtp-Source: ABdhPJyxbO7BJlN6R1tuBPuvAyeaezVDv3wNxOp8repPTINWeXsTpcc+dFjGZpog1To/Apfnvc6KAxwB86waVxCqOao=
+X-Received: by 2002:a05:6902:70b:: with SMTP id k11mr1035602ybt.510.1630624109105;
+ Thu, 02 Sep 2021 16:08:29 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210902165706.2812867-1-songliubraving@fb.com>
- <20210902165706.2812867-3-songliubraving@fb.com> <CAEf4BzZLSs3ejyVLPMORd_GPCYNE8Jz4M6=4wxzR576Vag-+-A@mail.gmail.com>
- <F7A1D3BF-357A-46FB-92EA-938DB99D8193@fb.com>
-In-Reply-To: <F7A1D3BF-357A-46FB-92EA-938DB99D8193@fb.com>
+References: <20210902171929.3922667-1-davemarchevsky@fb.com> <20210902171929.3922667-5-davemarchevsky@fb.com>
+In-Reply-To: <20210902171929.3922667-5-davemarchevsky@fb.com>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 2 Sep 2021 16:05:41 -0700
-Message-ID: <CAEf4BzbpibAeK-PDiu0TEgKXXuU4MbPdfaaBB057e7DS2G35-A@mail.gmail.com>
-Subject: Re: [PATCH v5 bpf-next 2/3] bpf: introduce helper bpf_get_branch_snapshot
-To:     Song Liu <songliubraving@fb.com>
-Cc:     bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Ziljstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Kernel Team <Kernel-team@fb.com>
+Date:   Thu, 2 Sep 2021 16:08:18 -0700
+Message-ID: <CAEf4BzZrGU99UjNv7WROH03HY06h4=keYOL1+fQjv5gnDSMUJA@mail.gmail.com>
+Subject: Re: [PATCH v4 bpf-next 4/9] libbpf: Modify bpf_printk to choose
+ helper based on arg count
+To:     Dave Marchevsky <davemarchevsky@fb.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Yonghong Song <yhs@fb.com>, Networking <netdev@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Sep 2, 2021 at 4:03 PM Song Liu <songliubraving@fb.com> wrote:
+On Thu, Sep 2, 2021 at 10:23 AM Dave Marchevsky <davemarchevsky@fb.com> wrote:
 >
+> Instead of being a thin wrapper which calls into bpf_trace_printk,
+> libbpf's bpf_printk convenience macro now chooses between
+> bpf_trace_printk and bpf_trace_vprintk. If the arg count (excluding
+> format string) is >3, use bpf_trace_vprintk, otherwise use the older
+> helper.
 >
+> The motivation behind this added complexity - instead of migrating
+> entirely to bpf_trace_vprintk - is to maintain good developer experience
+> for users compiling against new libbpf but running on older kernels.
+> Users who are passing <=3 args to bpf_printk will see no change in their
+> bytecode.
 >
-> > On Sep 2, 2021, at 3:53 PM, Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Thu, Sep 2, 2021 at 9:58 AM Song Liu <songliubraving@fb.com> wrote:
-> >>
-> >> Introduce bpf_get_branch_snapshot(), which allows tracing pogram to get
-> >> branch trace from hardware (e.g. Intel LBR). To use the feature, the
-> >> user need to create perf_event with proper branch_record filtering
-> >> on each cpu, and then calls bpf_get_branch_snapshot in the bpf function.
-> >> On Intel CPUs, VLBR event (raw event 0x1b00) can be use for this.
-> >>
-> >> Signed-off-by: Song Liu <songliubraving@fb.com>
-> >> ---
-> >> include/uapi/linux/bpf.h       | 22 ++++++++++++++++++++++
-> >> kernel/bpf/trampoline.c        |  3 ++-
-> >> kernel/trace/bpf_trace.c       | 33 +++++++++++++++++++++++++++++++++
-> >> tools/include/uapi/linux/bpf.h | 22 ++++++++++++++++++++++
-> >> 4 files changed, 79 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> >> index 791f31dd0abee..c986e6fad5bc0 100644
-> >> --- a/include/uapi/linux/bpf.h
-> >> +++ b/include/uapi/linux/bpf.h
-> >> @@ -4877,6 +4877,27 @@ union bpf_attr {
-> >>  *             Get the struct pt_regs associated with **task**.
-> >>  *     Return
-> >>  *             A pointer to struct pt_regs.
-> >> + *
-> >> + * long bpf_get_branch_snapshot(void *entries, u32 size, u64 flags)
-> >> + *     Description
-> >> + *             Get branch trace from hardware engines like Intel LBR. The
-> >> + *             branch trace is taken soon after the trigger point of the
-> >> + *             BPF program, so it may contain some entries after the
-> >
-> > This part is a leftover from previous design, so not relevant anymore?
+> __bpf_vprintk functions similarly to BPF_SEQ_PRINTF and BPF_SNPRINTF
+> macros elsewhere in the file - it allows use of bpf_trace_vprintk
+> without manual conversion of varargs to u64 array. Previous
+> implementation of bpf_printk macro is moved to __bpf_printk for use by
+> the new implementation.
 >
-> Hmm.. This is still relevant, but not very accurate. I guess we should
-> provide more information, like "For more information about branches before
-> the trigger point, this should be called early in the BPF program".
+> This does change behavior of bpf_printk calls with >3 args in the "new
+> libbpf, old kernels" scenario. Before this patch, attempting to use 4
+> args to bpf_printk results in a compile-time error. After this patch,
+> using bpf_printk with 4 args results in a trace_vprintk helper call
+> being emitted and a load-time failure on older kernels.
+>
+> Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
+> ---
 
-I read the part about "taken soon after the trigger point of BPF
-program" as a reference to previous implementation. So maybe let's
-clarify that because LBR is not frozen, from the time
-bpf_get_branch_snapshot() is called to when we actually capture LBRs
-we can waste few records due to internal kernel calls, so the user has
-to be aware of that.
+Minor nit below, otherwise looks good:
 
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+
+>  tools/lib/bpf/bpf_helpers.h | 45 ++++++++++++++++++++++++++++++-------
+>  1 file changed, 37 insertions(+), 8 deletions(-)
 >
-> Song
+> diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
+> index b9987c3efa3c..a7e73be6dac4 100644
+> --- a/tools/lib/bpf/bpf_helpers.h
+> +++ b/tools/lib/bpf/bpf_helpers.h
+> @@ -14,14 +14,6 @@
+>  #define __type(name, val) typeof(val) *name
+>  #define __array(name, val) typeof(val) *name[]
 >
+> -/* Helper macro to print out debug messages */
+> -#define bpf_printk(fmt, ...)                           \
+> -({                                                     \
+> -       char ____fmt[] = fmt;                           \
+> -       bpf_trace_printk(____fmt, sizeof(____fmt),      \
+> -                        ##__VA_ARGS__);                \
+> -})
+> -
+>  /*
+>   * Helper macro to place programs, maps, license in
+>   * different sections in elf_bpf file. Section names
+> @@ -224,4 +216,41 @@ enum libbpf_tristate {
+>                      ___param, sizeof(___param));               \
+>  })
 >
-> >
-> >> + *             trigger point. The user need to filter these entries
-> >> + *             accordingly.
-> >> + *
-> >> + *             The data is stored as struct perf_branch_entry into output
-> >> + *             buffer *entries*. *size* is the size of *entries* in bytes.
-> >> + *             *flags* is reserved for now and must be zero.
-> >> + *
-> >> + *     Return
-> >> + *             On success, number of bytes written to *buf*. On error, a
-> >> + *             negative value.
-> >> + *
-> >> + *             **-EINVAL** if arguments invalid or **size** not a multiple
-> >> + *             of **sizeof**\ (**struct perf_branch_entry**\ ).
-> >> + *
-> >> + *             **-ENOENT** if architecture does not support branch records.
-> >
-> > [...]
+> +/* Helper macro to print out debug messages */
+
+this comment probably should have been moved into the new bpf_printk() macro...
+
+> +#define __bpf_printk(fmt, ...)                         \
+> +({                                                     \
+> +       char ____fmt[] = fmt;                           \
+> +       bpf_trace_printk(____fmt, sizeof(____fmt),      \
+> +                        ##__VA_ARGS__);                \
+> +})
+> +
+> +/*
+> + * __bpf_vprintk wraps the bpf_trace_vprintk helper with variadic arguments
+> + * instead of an array of u64.
+> + */
+> +#define __bpf_vprintk(fmt, args...)                            \
+> +({                                                             \
+> +       static const char ___fmt[] = fmt;                       \
+> +       unsigned long long ___param[___bpf_narg(args)];         \
+> +                                                               \
+> +       _Pragma("GCC diagnostic push")                          \
+> +       _Pragma("GCC diagnostic ignored \"-Wint-conversion\"")  \
+> +       ___bpf_fill(___param, args);                            \
+> +       _Pragma("GCC diagnostic pop")                           \
+> +                                                               \
+> +       bpf_trace_vprintk(___fmt, sizeof(___fmt),               \
+> +                         ___param, sizeof(___param));          \
+> +})
+> +
+> +/* Use __bpf_printk when bpf_printk call has 3 or fewer fmt args
+> + * Otherwise use __bpf_vprintk
+> + */
+> +#define ___bpf_pick_printk(...) \
+> +       ___bpf_nth(_, ##__VA_ARGS__, __bpf_vprintk, __bpf_vprintk, __bpf_vprintk,       \
+> +                  __bpf_vprintk, __bpf_vprintk, __bpf_vprintk, __bpf_vprintk,          \
+> +                  __bpf_vprintk, __bpf_vprintk, __bpf_printk /*3*/, __bpf_printk /*2*/,\
+> +                  __bpf_printk /*1*/, __bpf_printk /*0*/)
+> +
+> +#define bpf_printk(fmt, args...) ___bpf_pick_printk(args)(fmt, ##args)
+> +
+>  #endif
+> --
+> 2.30.2
 >
