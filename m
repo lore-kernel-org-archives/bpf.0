@@ -2,182 +2,262 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DF87C83026
-	for <bpf@archiver.kernel.org>; Thu,  2 Sep 2021 16:57:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3DF0C83026
+	for <bpf@archiver.kernel.org>; Thu,  2 Sep 2021 16:57:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5B48561041
-	for <bpf@archiver.kernel.org>; Thu,  2 Sep 2021 16:57:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C82476108B
+	for <bpf@archiver.kernel.org>; Thu,  2 Sep 2021 16:57:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346534AbhIBQ6c (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 2 Sep 2021 12:58:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:29160 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1346521AbhIBQ60 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 2 Sep 2021 12:58:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1630601844;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Y8Q1kK8grLBRDrHjzp9sq1sAAV8774+oYHuiomT7vc8=;
-        b=fiUSZlf4l+bIpvTI9QLdOPrk5fvYOaffJ2+umQaNwZ0GP7/vXYLcWp7yDeV75kVfQJ5kSw
-        CySd9syAgx65IBWBDedSkO86+GLpdj+o7mPqv3D/84SHEYjf7I1ceP+f2zD4O0s91J6u5u
-        yLzVB9E49X4zAOk6qi/ON9WG9sTGP9k=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-475-MvrILhprOfqp9Lr3R8-hQA-1; Thu, 02 Sep 2021 12:57:23 -0400
-X-MC-Unique: MvrILhprOfqp9Lr3R8-hQA-1
-Received: by mail-ej1-f70.google.com with SMTP id x21-20020a170906135500b005d8d4900c5eso1244656ejb.4
-        for <bpf@vger.kernel.org>; Thu, 02 Sep 2021 09:57:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version:content-transfer-encoding;
-        bh=Y8Q1kK8grLBRDrHjzp9sq1sAAV8774+oYHuiomT7vc8=;
-        b=dTU0Y9o91L+n5g7qcGKvai9bdL1k82IMnGE/ptFvfRA6nV/zLtp+GSxL3SiEfwxQnJ
-         4XqiLDd/mPsi7g6pmtAIHRzASTSWgoqn7z2R34E+UUa+7vY1cNg8MrhSBHVC6Iu2IYre
-         2ZVhKBHMIHOKURqJvfIJ1bGPnI3IXlHkJI+GsZ5TwAI9bD4363ZDOs5nN7vTE8s9Sde2
-         Cx5kyy5OBjr3PeEixEIBUtDKzDO4ym0qpETGb9KhLJmVvYFzyNYb0sGfD5EyHueEkxWj
-         MP/1EXtS8NAL2NafFSfr6TajJzzW2Ma+NvOQkfTXjh1uWI3ciKwx5kz8AZnOscCNTHgx
-         dOLg==
-X-Gm-Message-State: AOAM532gu7bfiNLHnOMyvwAVEEvBo7aSS7FLpkCqx1zGqUInMWStVJ3X
-        XI+yWZ1QIViVrFUZvYj/Kw99jiGKOVKXSlZ4fuaOvMHxB7E8c5hqBkEPrkNiItC3ito6k4n7nCs
-        h+u76QRVqCG9C
-X-Received: by 2002:a17:906:3146:: with SMTP id e6mr4787466eje.296.1630601841271;
-        Thu, 02 Sep 2021 09:57:21 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwA7t1ufeC8Jy4UEBuz0UedPDZt+yymBf/BVOrjcuL/zq8TriQxH/MNambvq/MaIXWjPSEoGQ==
-X-Received: by 2002:a17:906:3146:: with SMTP id e6mr4787374eje.296.1630601839982;
-        Thu, 02 Sep 2021 09:57:19 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id bm1sm1494793ejb.38.2021.09.02.09.57.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Sep 2021 09:57:18 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id DC0211800EB; Thu,  2 Sep 2021 18:57:17 +0200 (CEST)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Martin KaFai Lau <kafai@fb.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        John Fastabend <john.fastabend@gmail.com>
-Cc:     Linux Kernel Network Developers <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Cong Wang <cong.wang@bytedance.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Jiri Pirko <jiri@resnulli.us>
-Subject: Re: [RFC Patch net-next] net_sched: introduce eBPF based Qdisc
-In-Reply-To: <20210901174543.xukawl7ylkqzbuax@kafai-mbp.dhcp.thefacebook.com>
-References: <20210821010240.10373-1-xiyou.wangcong@gmail.com>
- <20210824234700.qlteie6al3cldcu5@kafai-mbp>
- <CAM_iQpWP_kvE58Z+363n+miTQYPYLn6U4sxMKVaDvuRvjJo_Tg@mail.gmail.com>
- <612f137f4dc5c_152fe20891@john-XPS-13-9370.notmuch>
- <871r68vapw.fsf@toke.dk>
- <20210901174543.xukawl7ylkqzbuax@kafai-mbp.dhcp.thefacebook.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Thu, 02 Sep 2021 18:57:17 +0200
-Message-ID: <871r66ud8y.fsf@toke.dk>
+        id S1346523AbhIBQ6f (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 2 Sep 2021 12:58:35 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:37306 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1346516AbhIBQ6W (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 2 Sep 2021 12:58:22 -0400
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 182Gtj9O020120
+        for <bpf@vger.kernel.org>; Thu, 2 Sep 2021 09:57:23 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=/0SNO/tl7fkMxcdS7QOtMO4ma1eZ9m6ou00S4dB2Bjw=;
+ b=WBEPTjby6hMjf2najx82o4uFjIkrT1ctyBK53OmQ29Bx5XHJZDMYdjZ4FlEQTOwGxFb9
+ mPHhIiiJTjxZYWtGF6h7rBGxy+7vx/Ag2az6gPv0V+pTVA5/SuMaCJou7NjYrVTaVLFp
+ qCo9RMrTFIhLAkXu705trdZpBkm7VqbTCAE= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 3atdx7kw92-10
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Thu, 02 Sep 2021 09:57:23 -0700
+Received: from intmgw001.37.frc1.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.14; Thu, 2 Sep 2021 09:57:18 -0700
+Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
+        id AFF98FBB7C57; Thu,  2 Sep 2021 09:57:17 -0700 (PDT)
+From:   Song Liu <songliubraving@fb.com>
+To:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <acme@kernel.org>, <peterz@infradead.org>, <mingo@redhat.com>,
+        <kjain@linux.ibm.com>, <kernel-team@fb.com>,
+        Song Liu <songliubraving@fb.com>
+Subject: [PATCH v5 bpf-next 1/3] perf: enable branch record for software events
+Date:   Thu, 2 Sep 2021 09:57:04 -0700
+Message-ID: <20210902165706.2812867-2-songliubraving@fb.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210902165706.2812867-1-songliubraving@fb.com>
+References: <20210902165706.2812867-1-songliubraving@fb.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-FB-Source: Intern
+X-Proofpoint-GUID: CLAZgtt5jx-TysPc1GZ64lP72Sb4oR_J
+X-Proofpoint-ORIG-GUID: CLAZgtt5jx-TysPc1GZ64lP72Sb4oR_J
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-09-02_04:2021-09-02,2021-09-02 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=999
+ clxscore=1015 bulkscore=0 impostorscore=0 phishscore=0 malwarescore=0
+ spamscore=0 priorityscore=1501 suspectscore=0 adultscore=0
+ lowpriorityscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2108310000 definitions=main-2109020098
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Martin KaFai Lau <kafai@fb.com> writes:
+The typical way to access branch record (e.g. Intel LBR) is via hardware
+perf_event. For CPUs with FREEZE_LBRS_ON_PMI support, PMI could capture
+reliable LBR. On the other hand, LBR could also be useful in non-PMI
+scenario. For example, in kretprobe or bpf fexit program, LBR could
+provide a lot of information on what happened with the function. Add API
+to use branch record for software use.
 
-> On Wed, Sep 01, 2021 at 12:42:03PM +0200, Toke H=C3=B8iland-J=C3=B8rgense=
-n wrote:
->> John Fastabend <john.fastabend@gmail.com> writes:
->>=20
->> > Cong Wang wrote:
->> >> On Tue, Aug 24, 2021 at 4:47 PM Martin KaFai Lau <kafai@fb.com> wrote:
->> >> > Please explain more on this.  What is currently missing
->> >> > to make qdisc in struct_ops possible?
->> >>=20
->> >> I think you misunderstand this point. The reason why I avoid it is
->> >> _not_ anything is missing, quite oppositely, it is because it requires
->> >> a lot of work to implement a Qdisc with struct_ops approach, literally
->> >> all those struct Qdisc_ops (not to mention struct Qdisc_class_ops).
->> >> WIth current approach, programmers only need to implement two
->> >> eBPF programs (enqueue and dequeue).
-> _if_ it is using as a qdisc object/interface,
-> the patch "looks" easier because it obscures some of the ops/interface
-> from the bpf user.  The user will eventually ask for more flexibility
-> and then an on-par interface as the kernel's qdisc.  If there are some
-> common 'ops', the common bpf code can be shared as a library in userspace
-> or there is also kfunc call to call into the kernel implementation.
-> For existing kernel qdisc author,  it will be easier to use the same
-> interface also.
+Note that, when the software event triggers, it is necessary to stop the
+branch record hardware asap. Therefore, static_call is used to remove som=
+e
+branch instructions in this process.
 
-The question is if it's useful to provide the full struct_ops for
-qdiscs? Having it would allow a BPF program to implement that interface
-towards userspace (things like statistics, classes etc), but the
-question is if anyone is going to bother with that given the wealth of
-BPF-specific introspection tools already available?
+Signed-off-by: Song Liu <songliubraving@fb.com>
+---
+ arch/x86/events/intel/core.c | 26 +++++++++++++++++++++++---
+ arch/x86/events/intel/ds.c   |  8 --------
+ arch/x86/events/perf_event.h | 10 ++++++++--
+ include/linux/perf_event.h   | 23 +++++++++++++++++++++++
+ kernel/events/core.c         |  2 ++
+ 5 files changed, 56 insertions(+), 13 deletions(-)
 
-My hope is that we can (longer term) develop some higher-level tools to
-express queueing policies that can then generate the BPF code needed to
-implement them. Or as a start just some libraries to make this easier,
-which I think is also what you're hinting at here? :)
-
->> > Another idea. Rather than work with qdisc objects which creates all
->> > these issues with how to work with existing interfaces, filters, etc.
->> > Why not create an sk_buff map? Then this can be used from the existing
->> > egress/ingress hooks independent of the actual qdisc being used.
->>=20
->> I agree. In fact, I'm working on doing just this for XDP, and I see no
->> reason why the map type couldn't be reused for skbs as well. Doing it
->> this way has a couple of benefits:
->>=20
->> - It leaves more flexibility to BPF: want a simple FIFO queue? just
->>   implement that with a single queue map. Or do you want to build a full
->>   hierarchical queueing structure? Just instantiate as many queue maps
->>   as you need to achieve this. Etc.
-> Agree.  Regardless how the interface may look like,
-> I even think being able to queue/dequeue an skb into different bpf maps
-> should be the first thing to do here.  Looking forward to your patches.
-
-Thanks! Guess I should go work on them, then :D
-
->> - The behaviour is defined entirely by BPF program behaviour, and does
->>   not require setting up a qdisc hierarchy in addition to writing BPF
->>   code.
-> Interesting idea.  If it does not need to use the qdisc object/interface
-> and be able to do the qdisc hierarchy setup in a programmable way, it may
-> be nice.  It will be useful for the future patches to come with some
-> bpf prog examples to do that.
-
-Absolutely; we plan to include example algorithm implementations as well!
-
->> - It should be possible to structure the hooks in a way that allows
->>   reusing queueing algorithm implementations between the qdisc and XDP
->>   layers.
->>=20
->> > You mention skb should not be exposed to userspace? Why? Whats the
->> > reason for this? Anyways we can make kernel only maps if we want or
->> > scrub the data before passing it to userspace. We do this already in
->> > some cases.
->>=20
->> Yup, that's my approach as well.
->>=20
->> > IMO it seems cleaner and more general to allow sk_buffs
->> > to be stored in maps and pulled back out later for enqueue/dequeue.
->>=20
->> FWIW there's some gnarly details here (for instance, we need to make
->> sure the BPF program doesn't leak packet references after they are
->> dequeued from the map). My idea is to use a scheme similar to what we do
->> for XDP_REDIRECT, where a helper sets some hidden variables and doesn't
->> actually remove the packet from the queue until the BPF program exits
->> (so the kernel can make sure things are accounted correctly).
-> The verifier is tracking the sk's references.  Can it be reused to
-> track the skb's reference?
-
-I was vaguely aware that it does this, but have not looked at the
-details. Would be great if this was possible; will see how far I get
-with it, and iterate from there (with your help, hopefully :))
-
--Toke
+diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
+index 7011e87be6d03..d3422915969b9 100644
+--- a/arch/x86/events/intel/core.c
++++ b/arch/x86/events/intel/core.c
+@@ -2143,7 +2143,7 @@ static __initconst const u64 knl_hw_cache_extra_reg=
+s
+  * However, there are some cases which may change PEBS status, e.g. PMI
+  * throttle. The PEBS_ENABLE should be updated where the status changes.
+  */
+-static void __intel_pmu_disable_all(void)
++static __always_inline void __intel_pmu_disable_all(void)
+ {
+ 	struct cpu_hw_events *cpuc =3D this_cpu_ptr(&cpu_hw_events);
+=20
+@@ -2153,7 +2153,7 @@ static void __intel_pmu_disable_all(void)
+ 		intel_pmu_disable_bts();
+ }
+=20
+-static void intel_pmu_disable_all(void)
++static __always_inline void intel_pmu_disable_all(void)
+ {
+ 	__intel_pmu_disable_all();
+ 	intel_pmu_pebs_disable_all();
+@@ -2186,6 +2186,20 @@ static void intel_pmu_enable_all(int added)
+ 	__intel_pmu_enable_all(added, false);
+ }
+=20
++static int
++intel_pmu_snapshot_branch_stack(struct perf_branch_entry *entries, unsig=
+ned int cnt)
++{
++	struct cpu_hw_events *cpuc =3D this_cpu_ptr(&cpu_hw_events);
++
++	intel_pmu_disable_all();
++	intel_pmu_lbr_read();
++	cnt =3D min_t(unsigned int, cnt, x86_pmu.lbr_nr);
++
++	memcpy(entries, cpuc->lbr_entries, sizeof(struct perf_branch_entry) * c=
+nt);
++	intel_pmu_enable_all(0);
++	return cnt;
++}
++
+ /*
+  * Workaround for:
+  *   Intel Errata AAK100 (model 26)
+@@ -6283,9 +6297,15 @@ __init int intel_pmu_init(void)
+ 			x86_pmu.lbr_nr =3D 0;
+ 	}
+=20
+-	if (x86_pmu.lbr_nr)
++	if (x86_pmu.lbr_nr) {
+ 		pr_cont("%d-deep LBR, ", x86_pmu.lbr_nr);
+=20
++		/* only support branch_stack snapshot for perfmon >=3D v2 */
++		if (x86_pmu.disable_all =3D=3D intel_pmu_disable_all)
++			static_call_update(perf_snapshot_branch_stack,
++					   intel_pmu_snapshot_branch_stack);
++	}
++
+ 	intel_pmu_check_extra_regs(x86_pmu.extra_regs);
+=20
+ 	/* Support full width counters using alternative MSR range */
+diff --git a/arch/x86/events/intel/ds.c b/arch/x86/events/intel/ds.c
+index 8647713276a73..8a832986578a9 100644
+--- a/arch/x86/events/intel/ds.c
++++ b/arch/x86/events/intel/ds.c
+@@ -1296,14 +1296,6 @@ void intel_pmu_pebs_enable_all(void)
+ 		wrmsrl(MSR_IA32_PEBS_ENABLE, cpuc->pebs_enabled);
+ }
+=20
+-void intel_pmu_pebs_disable_all(void)
+-{
+-	struct cpu_hw_events *cpuc =3D this_cpu_ptr(&cpu_hw_events);
+-
+-	if (cpuc->pebs_enabled)
+-		wrmsrl(MSR_IA32_PEBS_ENABLE, 0);
+-}
+-
+ static int intel_pmu_pebs_fixup_ip(struct pt_regs *regs)
+ {
+ 	struct cpu_hw_events *cpuc =3D this_cpu_ptr(&cpu_hw_events);
+diff --git a/arch/x86/events/perf_event.h b/arch/x86/events/perf_event.h
+index e3ac05c97b5e5..171abbb359fe5 100644
+--- a/arch/x86/events/perf_event.h
++++ b/arch/x86/events/perf_event.h
+@@ -1240,6 +1240,14 @@ static inline bool intel_pmu_has_bts(struct perf_e=
+vent *event)
+ 	return intel_pmu_has_bts_period(event, hwc->sample_period);
+ }
+=20
++static __always_inline void intel_pmu_pebs_disable_all(void)
++{
++	struct cpu_hw_events *cpuc =3D this_cpu_ptr(&cpu_hw_events);
++
++	if (cpuc->pebs_enabled)
++		wrmsrl(MSR_IA32_PEBS_ENABLE, 0);
++}
++
+ int intel_pmu_save_and_restart(struct perf_event *event);
+=20
+ struct event_constraint *
+@@ -1314,8 +1322,6 @@ void intel_pmu_pebs_disable(struct perf_event *even=
+t);
+=20
+ void intel_pmu_pebs_enable_all(void);
+=20
+-void intel_pmu_pebs_disable_all(void);
+-
+ void intel_pmu_pebs_sched_task(struct perf_event_context *ctx, bool sche=
+d_in);
+=20
+ void intel_pmu_auto_reload_read(struct perf_event *event);
+diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
+index fe156a8170aa3..4fe11f4f896b1 100644
+--- a/include/linux/perf_event.h
++++ b/include/linux/perf_event.h
+@@ -57,6 +57,7 @@ struct perf_guest_info_callbacks {
+ #include <linux/cgroup.h>
+ #include <linux/refcount.h>
+ #include <linux/security.h>
++#include <linux/static_call.h>
+ #include <asm/local.h>
+=20
+ struct perf_callchain_entry {
+@@ -1612,4 +1613,26 @@ extern void __weak arch_perf_update_userpage(struc=
+t perf_event *event,
+ extern __weak u64 arch_perf_get_page_size(struct mm_struct *mm, unsigned=
+ long addr);
+ #endif
+=20
++/*
++ * Snapshot branch stack on software events.
++ *
++ * Branch stack can be very useful in understanding software events. For
++ * example, when a long function, e.g. sys_perf_event_open, returns an
++ * errno, it is not obvious why the function failed. Branch stack could
++ * provide very helpful information in this type of scenarios.
++ *
++ * On software event, it is necessary to stop the hardware branch record=
+er
++ * fast. Otherwise, the hardware register/buffer will be flushed with
++ * entries af the triggering event. Therefore, static call is used to
++ * stop the hardware recorder.
++ */
++
++/*
++ * cnt is the number of entries allocated for entries.
++ * Return number of entries copied to .
++ */
++typedef int (perf_snapshot_branch_stack_t)(struct perf_branch_entry *ent=
+ries,
++					   unsigned int cnt);
++DECLARE_STATIC_CALL(perf_snapshot_branch_stack, perf_snapshot_branch_sta=
+ck_t);
++
+ #endif /* _LINUX_PERF_EVENT_H */
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index 011cc5069b7ba..d32a3cf37eb90 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -13437,3 +13437,5 @@ struct cgroup_subsys perf_event_cgrp_subsys =3D {
+ 	.threaded	=3D true,
+ };
+ #endif /* CONFIG_CGROUP_PERF */
++
++DEFINE_STATIC_CALL_RET0(perf_snapshot_branch_stack, perf_snapshot_branch=
+_stack_t);
+--=20
+2.30.2
 
