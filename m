@@ -2,169 +2,182 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-6.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60ADAC83026
-	for <bpf@archiver.kernel.org>; Thu,  2 Sep 2021 16:57:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DF87C83026
+	for <bpf@archiver.kernel.org>; Thu,  2 Sep 2021 16:57:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3E19361041
-	for <bpf@archiver.kernel.org>; Thu,  2 Sep 2021 16:57:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5B48561041
+	for <bpf@archiver.kernel.org>; Thu,  2 Sep 2021 16:57:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346039AbhIBQ6P (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 2 Sep 2021 12:58:15 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:56230 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S232259AbhIBQ6P (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 2 Sep 2021 12:58:15 -0400
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.43/8.16.0.43) with SMTP id 182GqT9B003533
-        for <bpf@vger.kernel.org>; Thu, 2 Sep 2021 09:57:16 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : content-type : content-transfer-encoding :
- mime-version; s=facebook; bh=JfH3F4h9yjuZY4fXc+F2YZI5k+kzGOzFulOPWefUzpQ=;
- b=lJR7iNr164NtSL64JXfx7hULj5q17cWWnbfMC4p4OQvhPiVTgfO5ZDgfJkenAED3BG47
- Y4SHympPrM8HCGmzfZzbQ765YYu+1qL+olUZUrMkwcHw7v4t+cFgHhxeq/+PPpSInO62
- Hq7iUYOgYjr64x+QSG3XGvzrMNOUHl0Wtmg= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0001303.ppops.net with ESMTP id 3atdyhdc5b-8
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 02 Sep 2021 09:57:15 -0700
-Received: from intmgw001.06.ash9.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Thu, 2 Sep 2021 09:57:14 -0700
-Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id B912CFBB7C45; Thu,  2 Sep 2021 09:57:11 -0700 (PDT)
-From:   Song Liu <songliubraving@fb.com>
-To:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <acme@kernel.org>, <peterz@infradead.org>, <mingo@redhat.com>,
-        <kjain@linux.ibm.com>, <kernel-team@fb.com>,
-        Song Liu <songliubraving@fb.com>
-Subject: [PATCH v5 bpf-next 0/3] bpf: introduce bpf_get_branch_snapshot
-Date:   Thu, 2 Sep 2021 09:57:03 -0700
-Message-ID: <20210902165706.2812867-1-songliubraving@fb.com>
-X-Mailer: git-send-email 2.30.2
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-FB-Source: Intern
-X-Proofpoint-GUID: SmjsLUypbK7SBNra7Mx0BkR9KyDFHkOz
-X-Proofpoint-ORIG-GUID: SmjsLUypbK7SBNra7Mx0BkR9KyDFHkOz
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        id S1346534AbhIBQ6c (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 2 Sep 2021 12:58:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:29160 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1346521AbhIBQ60 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 2 Sep 2021 12:58:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1630601844;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Y8Q1kK8grLBRDrHjzp9sq1sAAV8774+oYHuiomT7vc8=;
+        b=fiUSZlf4l+bIpvTI9QLdOPrk5fvYOaffJ2+umQaNwZ0GP7/vXYLcWp7yDeV75kVfQJ5kSw
+        CySd9syAgx65IBWBDedSkO86+GLpdj+o7mPqv3D/84SHEYjf7I1ceP+f2zD4O0s91J6u5u
+        yLzVB9E49X4zAOk6qi/ON9WG9sTGP9k=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-475-MvrILhprOfqp9Lr3R8-hQA-1; Thu, 02 Sep 2021 12:57:23 -0400
+X-MC-Unique: MvrILhprOfqp9Lr3R8-hQA-1
+Received: by mail-ej1-f70.google.com with SMTP id x21-20020a170906135500b005d8d4900c5eso1244656ejb.4
+        for <bpf@vger.kernel.org>; Thu, 02 Sep 2021 09:57:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=Y8Q1kK8grLBRDrHjzp9sq1sAAV8774+oYHuiomT7vc8=;
+        b=dTU0Y9o91L+n5g7qcGKvai9bdL1k82IMnGE/ptFvfRA6nV/zLtp+GSxL3SiEfwxQnJ
+         4XqiLDd/mPsi7g6pmtAIHRzASTSWgoqn7z2R34E+UUa+7vY1cNg8MrhSBHVC6Iu2IYre
+         2ZVhKBHMIHOKURqJvfIJ1bGPnI3IXlHkJI+GsZ5TwAI9bD4363ZDOs5nN7vTE8s9Sde2
+         Cx5kyy5OBjr3PeEixEIBUtDKzDO4ym0qpETGb9KhLJmVvYFzyNYb0sGfD5EyHueEkxWj
+         MP/1EXtS8NAL2NafFSfr6TajJzzW2Ma+NvOQkfTXjh1uWI3ciKwx5kz8AZnOscCNTHgx
+         dOLg==
+X-Gm-Message-State: AOAM532gu7bfiNLHnOMyvwAVEEvBo7aSS7FLpkCqx1zGqUInMWStVJ3X
+        XI+yWZ1QIViVrFUZvYj/Kw99jiGKOVKXSlZ4fuaOvMHxB7E8c5hqBkEPrkNiItC3ito6k4n7nCs
+        h+u76QRVqCG9C
+X-Received: by 2002:a17:906:3146:: with SMTP id e6mr4787466eje.296.1630601841271;
+        Thu, 02 Sep 2021 09:57:21 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwA7t1ufeC8Jy4UEBuz0UedPDZt+yymBf/BVOrjcuL/zq8TriQxH/MNambvq/MaIXWjPSEoGQ==
+X-Received: by 2002:a17:906:3146:: with SMTP id e6mr4787374eje.296.1630601839982;
+        Thu, 02 Sep 2021 09:57:19 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id bm1sm1494793ejb.38.2021.09.02.09.57.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Sep 2021 09:57:18 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id DC0211800EB; Thu,  2 Sep 2021 18:57:17 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Martin KaFai Lau <kafai@fb.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        John Fastabend <john.fastabend@gmail.com>
+Cc:     Linux Kernel Network Developers <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, Cong Wang <cong.wang@bytedance.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Jiri Pirko <jiri@resnulli.us>
+Subject: Re: [RFC Patch net-next] net_sched: introduce eBPF based Qdisc
+In-Reply-To: <20210901174543.xukawl7ylkqzbuax@kafai-mbp.dhcp.thefacebook.com>
+References: <20210821010240.10373-1-xiyou.wangcong@gmail.com>
+ <20210824234700.qlteie6al3cldcu5@kafai-mbp>
+ <CAM_iQpWP_kvE58Z+363n+miTQYPYLn6U4sxMKVaDvuRvjJo_Tg@mail.gmail.com>
+ <612f137f4dc5c_152fe20891@john-XPS-13-9370.notmuch>
+ <871r68vapw.fsf@toke.dk>
+ <20210901174543.xukawl7ylkqzbuax@kafai-mbp.dhcp.thefacebook.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Thu, 02 Sep 2021 18:57:17 +0200
+Message-ID: <871r66ud8y.fsf@toke.dk>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-09-02_04:2021-09-02,2021-09-02 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 malwarescore=0
- phishscore=0 mlxlogscore=955 clxscore=1015 suspectscore=0 adultscore=0
- priorityscore=1501 impostorscore=0 bulkscore=0 spamscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2108310000 definitions=main-2109020098
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Changes v4 =3D> v5
-1. Modify perf_snapshot_branch_stack_t to save some memcpy. (Andrii)
-2. Minor fixes in selftests. (Andrii)
+Martin KaFai Lau <kafai@fb.com> writes:
 
-Changes v3 =3D> v4:
-1. Do not reshuffle intel_pmu_disable_all(). Use some inline to save LBR
-   entries. (Peter)
-2. Move static_call(perf_snapshot_branch_stack) to the helper. (Alexei)
-3. Add argument flags to bpf_get_branch_snapshot. (Andrii)
-4. Make MAX_BRANCH_SNAPSHOT an enum (Andrii). And rename it as
-   PERF_MAX_BRANCH_SNAPSHOT
-5. Make bpf_get_branch_snapshot similar to bpf_read_branch_records.
-   (Andrii)
-6. Move the test target function to bpf_testmod. Updated kallsyms_find_next
-   to work properly with modules. (Andrii)
+> On Wed, Sep 01, 2021 at 12:42:03PM +0200, Toke H=C3=B8iland-J=C3=B8rgense=
+n wrote:
+>> John Fastabend <john.fastabend@gmail.com> writes:
+>>=20
+>> > Cong Wang wrote:
+>> >> On Tue, Aug 24, 2021 at 4:47 PM Martin KaFai Lau <kafai@fb.com> wrote:
+>> >> > Please explain more on this.  What is currently missing
+>> >> > to make qdisc in struct_ops possible?
+>> >>=20
+>> >> I think you misunderstand this point. The reason why I avoid it is
+>> >> _not_ anything is missing, quite oppositely, it is because it requires
+>> >> a lot of work to implement a Qdisc with struct_ops approach, literally
+>> >> all those struct Qdisc_ops (not to mention struct Qdisc_class_ops).
+>> >> WIth current approach, programmers only need to implement two
+>> >> eBPF programs (enqueue and dequeue).
+> _if_ it is using as a qdisc object/interface,
+> the patch "looks" easier because it obscures some of the ops/interface
+> from the bpf user.  The user will eventually ask for more flexibility
+> and then an on-par interface as the kernel's qdisc.  If there are some
+> common 'ops', the common bpf code can be shared as a library in userspace
+> or there is also kfunc call to call into the kernel implementation.
+> For existing kernel qdisc author,  it will be easier to use the same
+> interface also.
 
-Changes v2 =3D> v3:
-1. Fix the use of static_call. (Peter)
-2. Limit the use to perfmon version >=3D 2. (Peter)
-3. Modify intel_pmu_snapshot_branch_stack() to use intel_pmu_disable_all
-   and intel_pmu_enable_all().
+The question is if it's useful to provide the full struct_ops for
+qdiscs? Having it would allow a BPF program to implement that interface
+towards userspace (things like statistics, classes etc), but the
+question is if anyone is going to bother with that given the wealth of
+BPF-specific introspection tools already available?
 
-Changes v1 =3D> v2:
-1. Rename the helper as bpf_get_branch_snapshot;
-2. Fix/simplify the use of static_call;
-3. Instead of percpu variables, let intel_pmu_snapshot_branch_stack output
-   branch records to an output argument of type perf_branch_snapshot.
+My hope is that we can (longer term) develop some higher-level tools to
+express queueing policies that can then generate the BPF code needed to
+implement them. Or as a start just some libraries to make this easier,
+which I think is also what you're hinting at here? :)
 
-Branch stack can be very useful in understanding software events. For
-example, when a long function, e.g. sys_perf_event_open, returns an errno,
-it is not obvious why the function failed. Branch stack could provide very
-helpful information in this type of scenarios.
+>> > Another idea. Rather than work with qdisc objects which creates all
+>> > these issues with how to work with existing interfaces, filters, etc.
+>> > Why not create an sk_buff map? Then this can be used from the existing
+>> > egress/ingress hooks independent of the actual qdisc being used.
+>>=20
+>> I agree. In fact, I'm working on doing just this for XDP, and I see no
+>> reason why the map type couldn't be reused for skbs as well. Doing it
+>> this way has a couple of benefits:
+>>=20
+>> - It leaves more flexibility to BPF: want a simple FIFO queue? just
+>>   implement that with a single queue map. Or do you want to build a full
+>>   hierarchical queueing structure? Just instantiate as many queue maps
+>>   as you need to achieve this. Etc.
+> Agree.  Regardless how the interface may look like,
+> I even think being able to queue/dequeue an skb into different bpf maps
+> should be the first thing to do here.  Looking forward to your patches.
 
-This set adds support to read branch stack with a new BPF helper
-bpf_get_branch_trace(). Currently, this is only supported in Intel systems.
-It is also possible to support the same feaure for PowerPC.
+Thanks! Guess I should go work on them, then :D
 
-The hardware that records the branch stace is not stopped automatically on
-software events. Therefore, it is necessary to stop it in software soon.
-Otherwise, the hardware buffers/registers will be flushed. One of the key
-design consideration in this set is to minimize the number of branch record
-entries between the event triggers and the hardware recorder is stopped.
-Based on this goal, current design is different from the discussions in
-original RFC [1]:
- 1) Static call is used when supported, to save function pointer
-    dereference;
- 2) intel_pmu_lbr_disable_all is used instead of perf_pmu_disable(),
-    because the latter uses about 10 entries before stopping LBR.
+>> - The behaviour is defined entirely by BPF program behaviour, and does
+>>   not require setting up a qdisc hierarchy in addition to writing BPF
+>>   code.
+> Interesting idea.  If it does not need to use the qdisc object/interface
+> and be able to do the qdisc hierarchy setup in a programmable way, it may
+> be nice.  It will be useful for the future patches to come with some
+> bpf prog examples to do that.
 
-With current code, on Intel CPU, LBR is stopped after 10 branch entries
-after fexit triggers:
+Absolutely; we plan to include example algorithm implementations as well!
 
-ID: 0 from intel_pmu_lbr_disable_all+58 to intel_pmu_lbr_disable_all+93
-ID: 1 from intel_pmu_lbr_disable_all+54 to intel_pmu_lbr_disable_all+58
-ID: 2 from intel_pmu_snapshot_branch_stack+88 to intel_pmu_lbr_disable_all+0
-ID: 3 from bpf_get_branch_snapshot+77 to intel_pmu_snapshot_branch_stack+0
-ID: 4 from __brk_limit+478052814 to bpf_get_branch_snapshot+0
-ID: 5 from __brk_limit+478036039 to __brk_limit+478052760
-ID: 6 from __bpf_prog_enter+34 to __brk_limit+478036027
-ID: 7 from migrate_disable+60 to __bpf_prog_enter+9
-ID: 8 from __bpf_prog_enter+4 to migrate_disable+0
-ID: 9 from __brk_limit+478036022 to __bpf_prog_enter+0
-ID: 10 from bpf_testmod_loop_test+22 to __brk_limit+478036003
-ID: 11 from bpf_testmod_loop_test+20 to bpf_testmod_loop_test+13
-ID: 12 from bpf_testmod_loop_test+20 to bpf_testmod_loop_test+13
-ID: 13 from bpf_testmod_loop_test+20 to bpf_testmod_loop_test+13
-...
+>> - It should be possible to structure the hooks in a way that allows
+>>   reusing queueing algorithm implementations between the qdisc and XDP
+>>   layers.
+>>=20
+>> > You mention skb should not be exposed to userspace? Why? Whats the
+>> > reason for this? Anyways we can make kernel only maps if we want or
+>> > scrub the data before passing it to userspace. We do this already in
+>> > some cases.
+>>=20
+>> Yup, that's my approach as well.
+>>=20
+>> > IMO it seems cleaner and more general to allow sk_buffs
+>> > to be stored in maps and pulled back out later for enqueue/dequeue.
+>>=20
+>> FWIW there's some gnarly details here (for instance, we need to make
+>> sure the BPF program doesn't leak packet references after they are
+>> dequeued from the map). My idea is to use a scheme similar to what we do
+>> for XDP_REDIRECT, where a helper sets some hidden variables and doesn't
+>> actually remove the packet from the queue until the BPF program exits
+>> (so the kernel can make sure things are accounted correctly).
+> The verifier is tracking the sk's references.  Can it be reused to
+> track the skb's reference?
 
-[1] https://lore.kernel.org/bpf/20210818012937.2522409-1-songliubraving@fb.=
-com/
+I was vaguely aware that it does this, but have not looked at the
+details. Would be great if this was possible; will see how far I get
+with it, and iterate from there (with your help, hopefully :))
 
-Song Liu (3):
-  perf: enable branch record for software events
-  bpf: introduce helper bpf_get_branch_snapshot
-  selftests/bpf: add test for bpf_get_branch_snapshot
+-Toke
 
- arch/x86/events/intel/core.c                  |  26 ++++-
- arch/x86/events/intel/ds.c                    |   8 --
- arch/x86/events/perf_event.h                  |  10 +-
- include/linux/perf_event.h                    |  23 ++++
- include/uapi/linux/bpf.h                      |  22 ++++
- kernel/bpf/trampoline.c                       |   3 +-
- kernel/events/core.c                          |   2 +
- kernel/trace/bpf_trace.c                      |  33 ++++++
- tools/include/uapi/linux/bpf.h                |  22 ++++
- .../selftests/bpf/bpf_testmod/bpf_testmod.c   |  19 +++-
- .../selftests/bpf/prog_tests/core_reloc.c     |  14 +--
- .../bpf/prog_tests/get_branch_snapshot.c      | 100 ++++++++++++++++++
- .../selftests/bpf/prog_tests/module_attach.c  |  39 -------
- .../selftests/bpf/progs/get_branch_snapshot.c |  40 +++++++
- tools/testing/selftests/bpf/test_progs.c      |  39 +++++++
- tools/testing/selftests/bpf/test_progs.h      |   2 +
- tools/testing/selftests/bpf/trace_helpers.c   |  37 +++++++
- tools/testing/selftests/bpf/trace_helpers.h   |   5 +
- 18 files changed, 378 insertions(+), 66 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/get_branch_snaps=
-hot.c
- create mode 100644 tools/testing/selftests/bpf/progs/get_branch_snapshot.c
-
---
-2.30.2
