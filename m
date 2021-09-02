@@ -2,526 +2,157 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-6.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26772C83028
-	for <bpf@archiver.kernel.org>; Thu,  2 Sep 2021 16:58:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A02B8C83026
+	for <bpf@archiver.kernel.org>; Thu,  2 Sep 2021 17:08:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0A8CA61051
-	for <bpf@archiver.kernel.org>; Thu,  2 Sep 2021 16:58:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8AF18610E6
+	for <bpf@archiver.kernel.org>; Thu,  2 Sep 2021 17:08:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234446AbhIBQ7s (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 2 Sep 2021 12:59:48 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:11200 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242920AbhIBQ7r (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 2 Sep 2021 12:59:47 -0400
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 182Gsu2J016964
-        for <bpf@vger.kernel.org>; Thu, 2 Sep 2021 09:58:48 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=/El0IQr1LJ6SFSGFMAWbAoaTpNDfABEeCtzh8Q8TxVU=;
- b=IP1r9QOJ9UVV7h9aFmgDVUWhDeSIJ+36rEHjnt0pzvLfpIJX3eXCve6h/+HYi25HMn6y
- D8zPU4p4anGZZ5m0iNqwULu0QybKoTWhiDy7I2wodaUk27CJIVmEOLsCOIr65eTeO98d
- 6LXN6/nhz/QeL1DoEmV0VorvWr4dOAT2WkM= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 3atdwu55c4-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 02 Sep 2021 09:58:48 -0700
-Received: from intmgw001.37.frc1.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Thu, 2 Sep 2021 09:57:29 -0700
-Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id 82294FBB7C5F; Thu,  2 Sep 2021 09:57:20 -0700 (PDT)
-From:   Song Liu <songliubraving@fb.com>
-To:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <acme@kernel.org>, <peterz@infradead.org>, <mingo@redhat.com>,
-        <kjain@linux.ibm.com>, <kernel-team@fb.com>,
+        id S1346533AbhIBRJH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 2 Sep 2021 13:09:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:50311 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1346538AbhIBRJG (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 2 Sep 2021 13:09:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1630602487;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=k+uDesInFuRexRO1lWLZaUErkyo/kRjkjvT+Y1LURy4=;
+        b=datXzIMANl2ChlfZqB7DpEUufuBP0s0RZMQ9XOi4U1j3Sq9lPVIzBKwr7mPU+Ivhkm8Ull
+        6LJYCsD5UOw81LeZBNari/m30ES9UJ6eWadRo9vyHFYcYuxnRP2Dj6T+qKKpxkN0KYAnXu
+        tXI9NxlXh250yTppr2V1mkE1+jkFdKo=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-498-MJGYJmFHOfOfmkayRM7kEQ-1; Thu, 02 Sep 2021 13:08:06 -0400
+X-MC-Unique: MJGYJmFHOfOfmkayRM7kEQ-1
+Received: by mail-ed1-f70.google.com with SMTP id ch11-20020a0564021bcb00b003c8021b61c4so1282645edb.23
+        for <bpf@vger.kernel.org>; Thu, 02 Sep 2021 10:08:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=k+uDesInFuRexRO1lWLZaUErkyo/kRjkjvT+Y1LURy4=;
+        b=FeSeHUw+Y7DCf94Qi0pwCg5VWZaTV98sEED0q6ZQhjHQWAcLlA62+FtrmQC+68zQyV
+         T2fipUNbzZ0ju9dsYXGItG9MroJFSXIrU0rzRVpfrvkApMDX8LolY4h8hddNRTRYRn4N
+         0hBMpMzHOuQmLHW5VsnWlN1o5l0i5IWUDGc8MV7aN9ZSgKE+H0dPqsLURmj2kuzkLxJS
+         q37ZkMxWWVVjYg7N+CAqfpvrIHNG57gbRpPG2TBL0KF6Ok+YqvEAobB2QxoraCjp/SIn
+         3KCbs86kQ5TcXsVGtpFe5SD8IpzMZwrPJI+o8D4C1WLUFcqUUzyNfQqfUHu0HVKKm4bJ
+         //Ng==
+X-Gm-Message-State: AOAM533+gwQz3S0rWout1pxwSUtvLEvmUuekroOEXB/1tx63Rnrmdiv/
+        E5B2GEmGxFg4jiUNcckd+acGU2n610QF3KzMN1CjNqS4eHBUEhQ5216O/H84R7Hh9X7b87I6HLB
+        A2/u5fxWTrCkn
+X-Received: by 2002:a05:6402:5c9:: with SMTP id n9mr4578890edx.336.1630602485539;
+        Thu, 02 Sep 2021 10:08:05 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyOoPh8tnGcT2vsuQ7eJoSy2dO8ioPhaKct5AHAGarbvs8SmNA5RgTEUllYMHRJj2aNiJ7aHA==
+X-Received: by 2002:a05:6402:5c9:: with SMTP id n9mr4578865edx.336.1630602485273;
+        Thu, 02 Sep 2021 10:08:05 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id jz16sm1399675ejc.34.2021.09.02.10.08.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Sep 2021 10:08:04 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 84BA61800EB; Thu,  2 Sep 2021 19:08:03 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>
-Subject: [PATCH v5 bpf-next 3/3] selftests/bpf: add test for bpf_get_branch_snapshot
-Date:   Thu, 2 Sep 2021 09:57:06 -0700
-Message-ID: <20210902165706.2812867-4-songliubraving@fb.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210902165706.2812867-1-songliubraving@fb.com>
-References: <20210902165706.2812867-1-songliubraving@fb.com>
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>, bpf <bpf@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v2] libbpf: ignore .eh_frame sections when
+ parsing elf files
+In-Reply-To: <a65e20f9-d554-761e-9a9e-8a9dfcf13919@fb.com>
+References: <20210826120953.11041-1-toke@redhat.com>
+ <CAEf4BzZ7dcYrGRgOczk-mLC_VcRW3rucj3TRgkRqLgKXFHgtog@mail.gmail.com>
+ <87lf4hvrgc.fsf@toke.dk> <a65e20f9-d554-761e-9a9e-8a9dfcf13919@fb.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Thu, 02 Sep 2021 19:08:03 +0200
+Message-ID: <87wnnysy6k.fsf@toke.dk>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-FB-Source: Intern
-X-Proofpoint-GUID: aQcWQ26eWup-HZDgN06GLpoohh03ezPk
-X-Proofpoint-ORIG-GUID: aQcWQ26eWup-HZDgN06GLpoohh03ezPk
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-09-02_04:2021-09-02,2021-09-02 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- mlxlogscore=999 mlxscore=0 spamscore=0 phishscore=0 bulkscore=0
- malwarescore=0 adultscore=0 clxscore=1015 suspectscore=0 impostorscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2108310000 definitions=main-2109020098
-X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This test uses bpf_get_branch_snapshot from a fexit program. The test use=
-s
-a target function (bpf_testmod_loop_test) and compares the record against
-kallsyms. If there isn't enough record matching kallsyms, the test fails.
+Yonghong Song <yhs@fb.com> writes:
 
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
-Signed-off-by: Song Liu <songliubraving@fb.com>
----
- .../selftests/bpf/bpf_testmod/bpf_testmod.c   |  19 +++-
- .../selftests/bpf/prog_tests/core_reloc.c     |  14 +--
- .../bpf/prog_tests/get_branch_snapshot.c      | 100 ++++++++++++++++++
- .../selftests/bpf/prog_tests/module_attach.c  |  39 -------
- .../selftests/bpf/progs/get_branch_snapshot.c |  40 +++++++
- tools/testing/selftests/bpf/test_progs.c      |  39 +++++++
- tools/testing/selftests/bpf/test_progs.h      |   2 +
- tools/testing/selftests/bpf/trace_helpers.c   |  37 +++++++
- tools/testing/selftests/bpf/trace_helpers.h   |   5 +
- 9 files changed, 243 insertions(+), 52 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/get_branch_sna=
-pshot.c
- create mode 100644 tools/testing/selftests/bpf/progs/get_branch_snapshot=
-.c
+> On 8/31/21 3:28 AM, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
+>> Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
+>>=20
+>>> On Thu, Aug 26, 2021 at 5:10 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@=
+redhat.com> wrote:
+>>>>
+>>>> When .eh_frame and .rel.eh_frame sections are present in BPF object fi=
+les,
+>>>> libbpf produces errors like this when loading the file:
+>>>>
+>>>> libbpf: elf: skipping unrecognized data section(32) .eh_frame
+>>>> libbpf: elf: skipping relo section(33) .rel.eh_frame for section(32) .=
+eh_frame
+>>>>
+>>>> It is possible to get rid of the .eh_frame section by adding
+>>>> -fno-asynchronous-unwind-tables to the compilation, but we have seen
+>>>> multiple examples of these sections appearing in BPF files in the wild,
+>>>> most recently in samples/bpf, fixed by:
+>>>> 5a0ae9872d5c ("bpf, samples: Add -fno-asynchronous-unwind-tables to BP=
+F Clang invocation")
+>>>>
+>>>> While the errors are technically harmless, they look odd and confuse u=
+sers.
+>>>
+>>> These warnings point out invalid set of compiler flags used for
+>>> compiling BPF object files, though. Which is a good thing and should
+>>> incentivize anyone getting those warnings to check and fix how they do
+>>> BPF compilation. Those .eh_frame sections shouldn't be present in BPF
+>>> object files at all, and that's what libbpf is trying to say.
+>>=20
+>> Apart from triggering that warning, what effect does this have, though?
+>> The programs seem to work just fine (as evidenced by the fact that
+>> samples/bpf has been built this way for years, for instance)...
+>>=20
+>> Also, how is a user supposed to go from that cryptic error message to
+>> figuring out that it has something to do with compiler flags?
+>>=20
+>>> I don't know exactly in which situations that .eh_frame section is
+>>> added, but looking at our selftests (and now samples/bpf as well),
+>>> where we use -target bpf, we don't need
+>>> -fno-asynchronous-unwind-tables at all.
+>>=20
+>> This seems to at least be compiler-dependent. We ran into this with
+>> bpftool as well (for the internal BPF programs it loads whenever it
+>> runs), which already had '-target bpf' in the Makefile. We're carrying
+>> an internal RHEL patch adding -fno-asynchronous-unwind-tables to the
+>> bpftool build to fix this...
+>
+> I haven't seen an instance of .eh_frame as well with -target bpf.
+> Do you have a reproducible test case? I would like to investigate
+> what is the possible cause and whether we could do something in llvm
+> to prevent its generatin. Thanks!
 
-diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c b/tool=
-s/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-index 141d8da687d21..50fc5561110a4 100644
---- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-@@ -13,6 +13,18 @@
-=20
- DEFINE_PER_CPU(int, bpf_testmod_ksym_percpu) =3D 123;
-=20
-+noinline int bpf_testmod_loop_test(int n)
-+{
-+	int i, sum =3D 0;
-+
-+	/* the primary goal of this test is to test LBR. Create a lot of
-+	 * branches in the function, so we can catch it easily.
-+	 */
-+	for (i =3D 0; i < n; i++)
-+		sum +=3D i;
-+	return sum;
-+}
-+
- noinline ssize_t
- bpf_testmod_test_read(struct file *file, struct kobject *kobj,
- 		      struct bin_attribute *bin_attr,
-@@ -24,7 +36,11 @@ bpf_testmod_test_read(struct file *file, struct kobjec=
-t *kobj,
- 		.len =3D len,
- 	};
-=20
--	trace_bpf_testmod_test_read(current, &ctx);
-+	/* This is always true. Use the check to make sure the compiler
-+	 * doesn't remove bpf_testmod_loop_test.
-+	 */
-+	if (bpf_testmod_loop_test(101) > 100)
-+		trace_bpf_testmod_test_read(current, &ctx);
-=20
- 	return -EIO; /* always fail */
- }
-@@ -71,4 +87,3 @@ module_exit(bpf_testmod_exit);
- MODULE_AUTHOR("Andrii Nakryiko");
- MODULE_DESCRIPTION("BPF selftests module");
- MODULE_LICENSE("Dual BSD/GPL");
--
-diff --git a/tools/testing/selftests/bpf/prog_tests/core_reloc.c b/tools/=
-testing/selftests/bpf/prog_tests/core_reloc.c
-index 4739b15b2a979..15d355af8d1d2 100644
---- a/tools/testing/selftests/bpf/prog_tests/core_reloc.c
-+++ b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
-@@ -30,7 +30,7 @@ static int duration =3D 0;
- 	.output_len =3D sizeof(struct core_reloc_module_output),		\
- 	.prog_sec_name =3D sec_name,					\
- 	.raw_tp_name =3D tp_name,						\
--	.trigger =3D trigger_module_test_read,				\
-+	.trigger =3D __trigger_module_test_read,				\
- 	.needs_testmod =3D true,						\
- }
-=20
-@@ -475,19 +475,11 @@ static int setup_type_id_case_failure(struct core_r=
-eloc_test_case *test)
- 	return 0;
- }
-=20
--static int trigger_module_test_read(const struct core_reloc_test_case *t=
-est)
-+static int __trigger_module_test_read(const struct core_reloc_test_case =
-*test)
- {
- 	struct core_reloc_module_output *exp =3D (void *)test->output;
--	int fd, err;
--
--	fd =3D open("/sys/kernel/bpf_testmod", O_RDONLY);
--	err =3D -errno;
--	if (CHECK(fd < 0, "testmod_file_open", "failed: %d\n", err))
--		return err;
--
--	read(fd, NULL, exp->len); /* request expected number of bytes */
--	close(fd);
-=20
-+	trigger_module_test_read(exp->len);
- 	return 0;
- }
-=20
-diff --git a/tools/testing/selftests/bpf/prog_tests/get_branch_snapshot.c=
- b/tools/testing/selftests/bpf/prog_tests/get_branch_snapshot.c
-new file mode 100644
-index 0000000000000..26af9b3d572e3
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/get_branch_snapshot.c
-@@ -0,0 +1,100 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2021 Facebook */
-+#include <test_progs.h>
-+#include "get_branch_snapshot.skel.h"
-+
-+static int *pfd_array;
-+static int cpu_cnt;
-+
-+static int create_perf_events(void)
-+{
-+	struct perf_event_attr attr =3D {0};
-+	int cpu;
-+
-+	/* create perf event */
-+	attr.size =3D sizeof(attr);
-+	attr.type =3D PERF_TYPE_RAW;
-+	attr.config =3D 0x1b00;
-+	attr.sample_type =3D PERF_SAMPLE_BRANCH_STACK;
-+	attr.branch_sample_type =3D PERF_SAMPLE_BRANCH_KERNEL |
-+		PERF_SAMPLE_BRANCH_USER | PERF_SAMPLE_BRANCH_ANY;
-+
-+	cpu_cnt =3D libbpf_num_possible_cpus();
-+	pfd_array =3D malloc(sizeof(int) * cpu_cnt);
-+	if (!pfd_array) {
-+		cpu_cnt =3D 0;
-+		return 1;
-+	}
-+
-+	for (cpu =3D 0; cpu < cpu_cnt; cpu++) {
-+		pfd_array[cpu] =3D syscall(__NR_perf_event_open, &attr,
-+					 -1, cpu, -1, PERF_FLAG_FD_CLOEXEC);
-+		if (pfd_array[cpu] < 0)
-+			break;
-+	}
-+
-+	return cpu =3D=3D 0;
-+}
-+
-+static void close_perf_events(void)
-+{
-+	int cpu =3D 0;
-+	int fd;
-+
-+	while (cpu++ < cpu_cnt) {
-+		fd =3D pfd_array[cpu];
-+		if (fd < 0)
-+			break;
-+		close(fd);
-+	}
-+	free(pfd_array);
-+}
-+
-+void test_get_branch_snapshot(void)
-+{
-+	struct get_branch_snapshot *skel =3D NULL;
-+	int err;
-+
-+	if (create_perf_events()) {
-+		test__skip();  /* system doesn't support LBR */
-+		goto cleanup;
-+	}
-+
-+	skel =3D get_branch_snapshot__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "get_branch_snapshot__open_and_load"))
-+		goto cleanup;
-+
-+	err =3D kallsyms_find("bpf_testmod_loop_test", &skel->bss->address_low)=
-;
-+	if (!ASSERT_OK(err, "kallsyms_find"))
-+		goto cleanup;
-+
-+	err =3D kallsyms_find_next("bpf_testmod_loop_test", &skel->bss->address=
-_high);
-+	if (!ASSERT_OK(err, "kallsyms_find_next"))
-+		goto cleanup;
-+
-+	err =3D get_branch_snapshot__attach(skel);
-+	if (!ASSERT_OK(err, "get_branch_snapshot__attach"))
-+		goto cleanup;
-+
-+	trigger_module_test_read(100);
-+
-+	if (skel->bss->total_entries < 16) {
-+		/* too few entries for the hit/waste test */
-+		test__skip();
-+		goto cleanup;
-+	}
-+
-+	ASSERT_GT(skel->bss->test1_hits, 1, "find_looptest_in_lbr");
-+
-+	/* Given we stop LBR in software, we will waste a few entries.
-+	 * But we should try to waste as few as possible entries. We are at
-+	 * about 11 on x86_64 systems.
-+	 * Add a check for < 15 so that we get heads-up when something
-+	 * changes and wastes too many entries.
-+	 */
-+	ASSERT_LT(skel->bss->wasted_entries, 15, "check_wasted_entries");
-+
-+cleanup:
-+	get_branch_snapshot__destroy(skel);
-+	close_perf_events();
-+}
-diff --git a/tools/testing/selftests/bpf/prog_tests/module_attach.c b/too=
-ls/testing/selftests/bpf/prog_tests/module_attach.c
-index d85a69b7ce449..1797a6e4d6d84 100644
---- a/tools/testing/selftests/bpf/prog_tests/module_attach.c
-+++ b/tools/testing/selftests/bpf/prog_tests/module_attach.c
-@@ -6,45 +6,6 @@
-=20
- static int duration;
-=20
--static int trigger_module_test_read(int read_sz)
--{
--	int fd, err;
--
--	fd =3D open("/sys/kernel/bpf_testmod", O_RDONLY);
--	err =3D -errno;
--	if (CHECK(fd < 0, "testmod_file_open", "failed: %d\n", err))
--		return err;
--
--	read(fd, NULL, read_sz);
--	close(fd);
--
--	return 0;
--}
--
--static int trigger_module_test_write(int write_sz)
--{
--	int fd, err;
--	char *buf =3D malloc(write_sz);
--
--	if (!buf)
--		return -ENOMEM;
--
--	memset(buf, 'a', write_sz);
--	buf[write_sz-1] =3D '\0';
--
--	fd =3D open("/sys/kernel/bpf_testmod", O_WRONLY);
--	err =3D -errno;
--	if (CHECK(fd < 0, "testmod_file_open", "failed: %d\n", err)) {
--		free(buf);
--		return err;
--	}
--
--	write(fd, buf, write_sz);
--	close(fd);
--	free(buf);
--	return 0;
--}
--
- static int delete_module(const char *name, int flags)
- {
- 	return syscall(__NR_delete_module, name, flags);
-diff --git a/tools/testing/selftests/bpf/progs/get_branch_snapshot.c b/to=
-ols/testing/selftests/bpf/progs/get_branch_snapshot.c
-new file mode 100644
-index 0000000000000..a1b139888048c
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/get_branch_snapshot.c
-@@ -0,0 +1,40 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2021 Facebook */
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+char _license[] SEC("license") =3D "GPL";
-+
-+__u64 test1_hits =3D 0;
-+__u64 address_low =3D 0;
-+__u64 address_high =3D 0;
-+int wasted_entries =3D 0;
-+long total_entries =3D 0;
-+
-+#define ENTRY_CNT 32
-+struct perf_branch_entry entries[ENTRY_CNT] =3D {};
-+
-+static inline bool in_range(__u64 val)
-+{
-+	return (val >=3D address_low) && (val < address_high);
-+}
-+
-+SEC("fexit/bpf_testmod_loop_test")
-+int BPF_PROG(test1, int n, int ret)
-+{
-+	long i;
-+
-+	total_entries =3D bpf_get_branch_snapshot(entries, sizeof(entries), 0);
-+	total_entries /=3D sizeof(struct perf_branch_entry);
-+
-+	for (i =3D 0; i < ENTRY_CNT; i++) {
-+		if (i >=3D total_entries)
-+			break;
-+		if (in_range(entries[i].from) && in_range(entries[i].to))
-+			test1_hits++;
-+		else if (!test1_hits)
-+			wasted_entries++;
-+	}
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/sel=
-ftests/bpf/test_progs.c
-index cc1cd240445d2..2ed01f615d20f 100644
---- a/tools/testing/selftests/bpf/test_progs.c
-+++ b/tools/testing/selftests/bpf/test_progs.c
-@@ -743,6 +743,45 @@ int cd_flavor_subdir(const char *exec_name)
- 	return chdir(flavor);
- }
-=20
-+int trigger_module_test_read(int read_sz)
-+{
-+	int fd, err;
-+
-+	fd =3D open("/sys/kernel/bpf_testmod", O_RDONLY);
-+	err =3D -errno;
-+	if (!ASSERT_GE(fd, 0, "testmod_file_open"))
-+		return err;
-+
-+	read(fd, NULL, read_sz);
-+	close(fd);
-+
-+	return 0;
-+}
-+
-+int trigger_module_test_write(int write_sz)
-+{
-+	int fd, err;
-+	char *buf =3D malloc(write_sz);
-+
-+	if (!buf)
-+		return -ENOMEM;
-+
-+	memset(buf, 'a', write_sz);
-+	buf[write_sz-1] =3D '\0';
-+
-+	fd =3D open("/sys/kernel/bpf_testmod", O_WRONLY);
-+	err =3D -errno;
-+	if (!ASSERT_GE(fd, 0, "testmod_file_open")) {
-+		free(buf);
-+		return err;
-+	}
-+
-+	write(fd, buf, write_sz);
-+	close(fd);
-+	free(buf);
-+	return 0;
-+}
-+
- #define MAX_BACKTRACE_SZ 128
- void crash_handler(int signum)
- {
-diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/sel=
-ftests/bpf/test_progs.h
-index c8c2bf878f67c..94bef0aa74cf5 100644
---- a/tools/testing/selftests/bpf/test_progs.h
-+++ b/tools/testing/selftests/bpf/test_progs.h
-@@ -291,6 +291,8 @@ int compare_map_keys(int map1_fd, int map2_fd);
- int compare_stack_ips(int smap_fd, int amap_fd, int stack_trace_len);
- int extract_build_id(char *build_id, size_t size);
- int kern_sync_rcu(void);
-+int trigger_module_test_read(int read_sz);
-+int trigger_module_test_write(int write_sz);
-=20
- #ifdef __x86_64__
- #define SYS_NANOSLEEP_KPROBE_NAME "__x64_sys_nanosleep"
-diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/=
-selftests/bpf/trace_helpers.c
-index e7a19b04d4eaf..5100a169b72b1 100644
---- a/tools/testing/selftests/bpf/trace_helpers.c
-+++ b/tools/testing/selftests/bpf/trace_helpers.c
-@@ -1,4 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
-+#include <ctype.h>
- #include <stdio.h>
- #include <stdlib.h>
- #include <string.h>
-@@ -117,6 +118,42 @@ int kallsyms_find(const char *sym, unsigned long lon=
-g *addr)
- 	return err;
- }
-=20
-+/* find the address of the next symbol of the same type, this can be use=
-d
-+ * to determine the end of a function.
-+ */
-+int kallsyms_find_next(const char *sym, unsigned long long *addr)
-+{
-+	char type, found_type, name[500];
-+	unsigned long long value;
-+	bool found =3D false;
-+	int err =3D 0;
-+	FILE *f;
-+
-+	f =3D fopen("/proc/kallsyms", "r");
-+	if (!f)
-+		return -EINVAL;
-+
-+	while (fscanf(f, "%llx %c %499s%*[^\n]\n", &value, &type, name) > 0) {
-+		/* Different types of symbols in kernel modules are mixed
-+		 * in /proc/kallsyms. Only return the next matching type.
-+		 * Use tolower() for type so that 'T' matches 't'.
-+		 */
-+		if (found && found_type =3D=3D tolower(type)) {
-+			*addr =3D value;
-+			goto out;
-+		}
-+		if (strcmp(name, sym) =3D=3D 0) {
-+			found =3D true;
-+			found_type =3D tolower(type);
-+		}
-+	}
-+	err =3D -ENOENT;
-+
-+out:
-+	fclose(f);
-+	return err;
-+}
-+
- void read_trace_pipe(void)
- {
- 	int trace_fd;
-diff --git a/tools/testing/selftests/bpf/trace_helpers.h b/tools/testing/=
-selftests/bpf/trace_helpers.h
-index d907b445524d5..bc8ed86105d94 100644
---- a/tools/testing/selftests/bpf/trace_helpers.h
-+++ b/tools/testing/selftests/bpf/trace_helpers.h
-@@ -16,6 +16,11 @@ long ksym_get_addr(const char *name);
- /* open kallsyms and find addresses on the fly, faster than load + searc=
-h. */
- int kallsyms_find(const char *sym, unsigned long long *addr);
-=20
-+/* find the address of the next symbol, this can be used to determine th=
-e
-+ * end of a function
-+ */
-+int kallsyms_find_next(const char *sym, unsigned long long *addr);
-+
- void read_trace_pipe(void);
-=20
- ssize_t get_uprobe_offset(const void *addr, ssize_t base);
---=20
-2.30.2
+We found this in the RHEL builds of bpftool. I don't think we're doing
+anything special, other than maybe building with a clang version that's
+a few versions behind:
+
+# clang --version
+clang version 11.0.0 (Red Hat 11.0.0-1.module+el8.4.0+8598+a071fcd5)
+Target: x86_64-unknown-linux-gnu
+Thread model: posix
+InstalledDir: /usr/bin
+
+So I suppose it may resolve itself once we upgrade LLVM?
+
+-Toke
 
