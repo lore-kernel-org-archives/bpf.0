@@ -5,40 +5,40 @@ X-Spam-Level:
 X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AFAB6C83029
-	for <bpf@archiver.kernel.org>; Thu,  2 Sep 2021 17:20:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1A4BC83028
+	for <bpf@archiver.kernel.org>; Thu,  2 Sep 2021 17:23:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8368D61058
-	for <bpf@archiver.kernel.org>; Thu,  2 Sep 2021 17:20:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7F37D60FE6
+	for <bpf@archiver.kernel.org>; Thu,  2 Sep 2021 17:23:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346601AbhIBRVK (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 2 Sep 2021 13:21:10 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:36746 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1346599AbhIBRVI (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 2 Sep 2021 13:21:08 -0400
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.43/8.16.0.43) with SMTP id 182HIrGA028071
-        for <bpf@vger.kernel.org>; Thu, 2 Sep 2021 10:20:09 -0700
+        id S1346564AbhIBRX6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 2 Sep 2021 13:23:58 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:12468 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1346499AbhIBRX6 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 2 Sep 2021 13:23:58 -0400
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 182HMp6j021623
+        for <bpf@vger.kernel.org>; Thu, 2 Sep 2021 10:22:59 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=e333MZPKrdeXE4/Rox3PaBZZVJu7gnktscTVql5OWoQ=;
- b=gzRNnEDgVmJ+69sNbIVmX/Rp9nBJXYVzOia/JXNJx24Oo2hS5cGklnN+EdxMwlVdpNk1
- FyDY7qHs5vRVGfmGsSwN4YRu7p19DCLP4Z9PKGmLX1FhudQuQbDjRNedhe50wSqoFb4M
- Z3rRfbT+wcPQCcOhHxFIpON4XTqvMa39YKw= 
+ bh=A703s80OCzWJhuJ4WRoud7sGEQlkBMLUoJ9S7q8raJE=;
+ b=kzcNS+kWyt6sQA4Gjduf3X9zOx2heR8lGvT4wEf/nC38fDE8dSl0QAbTjSILeFlnO2EJ
+ iX9NcMhmSz2eRc5y4oLZQzdCTHSNIlVX1fkV8BNrnsXJzpgzhBjC1D9828h5ApDM/YeS
+ KZzgk+wdsWdxjqfDP5WfpxGjiKZhnhhmHhU= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0001303.ppops.net with ESMTP id 3atdyhdkvv-3
+        by mx0a-00082601.pphosted.com with ESMTP id 3atdx7x41q-10
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 02 Sep 2021 10:20:09 -0700
+        for <bpf@vger.kernel.org>; Thu, 02 Sep 2021 10:22:59 -0700
 Received: from intmgw001.25.frc3.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Thu, 2 Sep 2021 10:20:03 -0700
+ 15.1.2308.14; Thu, 2 Sep 2021 10:22:56 -0700
 Received: by devbig030.frc3.facebook.com (Postfix, from userid 158236)
-        id 9E2C95FE246E; Thu,  2 Sep 2021 10:19:55 -0700 (PDT)
+        id 80CD45FE2487; Thu,  2 Sep 2021 10:19:59 -0700 (PDT)
 From:   Dave Marchevsky <davemarchevsky@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
@@ -46,9 +46,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Yonghong Song <yhs@fb.com>, <netdev@vger.kernel.org>,
         Dave Marchevsky <davemarchevsky@fb.com>
-Subject: [PATCH v4 bpf-next 2/9] selftests/bpf: stop using bpf_program__load
-Date:   Thu, 2 Sep 2021 10:19:22 -0700
-Message-ID: <20210902171929.3922667-3-davemarchevsky@fb.com>
+Subject: [PATCH v4 bpf-next 4/9] libbpf: Modify bpf_printk to choose helper based on arg count
+Date:   Thu, 2 Sep 2021 10:19:24 -0700
+Message-ID: <20210902171929.3922667-5-davemarchevsky@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210902171929.3922667-1-davemarchevsky@fb.com>
 References: <20210902171929.3922667-1-davemarchevsky@fb.com>
@@ -57,121 +57,114 @@ Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-GUID: PGTX-QjqvVfOgRYpXN48Cq1AkqEfs8zm
-X-Proofpoint-ORIG-GUID: PGTX-QjqvVfOgRYpXN48Cq1AkqEfs8zm
+X-Proofpoint-GUID: yu-IEXrImr5aZRnDZay57eF9lL4zOHA4
+X-Proofpoint-ORIG-GUID: yu-IEXrImr5aZRnDZay57eF9lL4zOHA4
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
  definitions=2021-09-02_04:2021-09-02,2021-09-02 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 malwarescore=0
- phishscore=0 mlxlogscore=999 clxscore=1015 suspectscore=0 adultscore=0
- priorityscore=1501 impostorscore=0 bulkscore=0 spamscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ adultscore=0 impostorscore=0 clxscore=1015 priorityscore=1501 bulkscore=0
+ spamscore=0 phishscore=0 malwarescore=0 mlxscore=0 suspectscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2108310000 definitions=main-2109020100
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-bpf_program__load is not supposed to be used directly. Replace it with
-bpf_object__ APIs for the reference_tracking prog_test, which is the
-last offender in bpf selftests.
+Instead of being a thin wrapper which calls into bpf_trace_printk,
+libbpf's bpf_printk convenience macro now chooses between
+bpf_trace_printk and bpf_trace_vprintk. If the arg count (excluding
+format string) is >3, use bpf_trace_vprintk, otherwise use the older
+helper.
 
-Some additional complexity is added for this test, namely the use of one
-bpf_object to iterate through progs, while a second bpf_object is
-created and opened/closed to test actual loading of progs. This is
-because the test was doing bpf_program__load then __unload to test
-loading of individual progs and same semantics with
-bpf_object__load/__unload result in failure to load an __unload-ed obj.
+The motivation behind this added complexity - instead of migrating
+entirely to bpf_trace_vprintk - is to maintain good developer experience
+for users compiling against new libbpf but running on older kernels.
+Users who are passing <=3D3 args to bpf_printk will see no change in thei=
+r
+bytecode.
+
+__bpf_vprintk functions similarly to BPF_SEQ_PRINTF and BPF_SNPRINTF
+macros elsewhere in the file - it allows use of bpf_trace_vprintk
+without manual conversion of varargs to u64 array. Previous
+implementation of bpf_printk macro is moved to __bpf_printk for use by
+the new implementation.
+
+This does change behavior of bpf_printk calls with >3 args in the "new
+libbpf, old kernels" scenario. Before this patch, attempting to use 4
+args to bpf_printk results in a compile-time error. After this patch,
+using bpf_printk with 4 args results in a trace_vprintk helper call
+being emitted and a load-time failure on older kernels.
 
 Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
 ---
- .../bpf/prog_tests/reference_tracking.c       | 39 +++++++++++++++----
- 1 file changed, 31 insertions(+), 8 deletions(-)
+ tools/lib/bpf/bpf_helpers.h | 45 ++++++++++++++++++++++++++++++-------
+ 1 file changed, 37 insertions(+), 8 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/reference_tracking.c =
-b/tools/testing/selftests/bpf/prog_tests/reference_tracking.c
-index 4e91f4d6466c..ded2dc8ddd79 100644
---- a/tools/testing/selftests/bpf/prog_tests/reference_tracking.c
-+++ b/tools/testing/selftests/bpf/prog_tests/reference_tracking.c
-@@ -1,6 +1,21 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
+diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
+index b9987c3efa3c..a7e73be6dac4 100644
+--- a/tools/lib/bpf/bpf_helpers.h
++++ b/tools/lib/bpf/bpf_helpers.h
+@@ -14,14 +14,6 @@
+ #define __type(name, val) typeof(val) *name
+ #define __array(name, val) typeof(val) *name[]
 =20
-+static void toggle_object_autoload_progs(const struct bpf_object *obj,
-+					 const char *title_load)
-+{
-+	struct bpf_program *prog;
+-/* Helper macro to print out debug messages */
+-#define bpf_printk(fmt, ...)				\
+-({							\
+-	char ____fmt[] =3D fmt;				\
+-	bpf_trace_printk(____fmt, sizeof(____fmt),	\
+-			 ##__VA_ARGS__);		\
+-})
+-
+ /*
+  * Helper macro to place programs, maps, license in
+  * different sections in elf_bpf file. Section names
+@@ -224,4 +216,41 @@ enum libbpf_tristate {
+ 		     ___param, sizeof(___param));		\
+ })
+=20
++/* Helper macro to print out debug messages */
++#define __bpf_printk(fmt, ...)				\
++({							\
++	char ____fmt[] =3D fmt;				\
++	bpf_trace_printk(____fmt, sizeof(____fmt),	\
++			 ##__VA_ARGS__);		\
++})
 +
-+	bpf_object__for_each_program(prog, obj) {
-+		const char *title =3D bpf_program__section_name(prog);
++/*
++ * __bpf_vprintk wraps the bpf_trace_vprintk helper with variadic argume=
+nts
++ * instead of an array of u64.
++ */
++#define __bpf_vprintk(fmt, args...)				\
++({								\
++	static const char ___fmt[] =3D fmt;			\
++	unsigned long long ___param[___bpf_narg(args)];		\
++								\
++	_Pragma("GCC diagnostic push")				\
++	_Pragma("GCC diagnostic ignored \"-Wint-conversion\"")	\
++	___bpf_fill(___param, args);				\
++	_Pragma("GCC diagnostic pop")				\
++								\
++	bpf_trace_vprintk(___fmt, sizeof(___fmt),		\
++			  ___param, sizeof(___param));		\
++})
 +
-+		if (!strcmp(title_load, title))
-+			bpf_program__set_autoload(prog, true);
-+		else
-+			bpf_program__set_autoload(prog, false);
-+	}
-+}
++/* Use __bpf_printk when bpf_printk call has 3 or fewer fmt args
++ * Otherwise use __bpf_vprintk
++ */
++#define ___bpf_pick_printk(...) \
++	___bpf_nth(_, ##__VA_ARGS__, __bpf_vprintk, __bpf_vprintk, __bpf_vprint=
+k,	\
++		   __bpf_vprintk, __bpf_vprintk, __bpf_vprintk, __bpf_vprintk,		\
++		   __bpf_vprintk, __bpf_vprintk, __bpf_printk /*3*/, __bpf_printk /*2*=
+/,\
++		   __bpf_printk /*1*/, __bpf_printk /*0*/)
 +
- void test_reference_tracking(void)
- {
- 	const char *file =3D "test_sk_lookup_kern.o";
-@@ -9,21 +24,21 @@ void test_reference_tracking(void)
- 		.object_name =3D obj_name,
- 		.relaxed_maps =3D true,
- 	);
--	struct bpf_object *obj;
-+	struct bpf_object *obj_iter, *obj =3D NULL;
- 	struct bpf_program *prog;
- 	__u32 duration =3D 0;
- 	int err =3D 0;
-=20
--	obj =3D bpf_object__open_file(file, &open_opts);
--	if (!ASSERT_OK_PTR(obj, "obj_open_file"))
-+	obj_iter =3D bpf_object__open_file(file, &open_opts);
-+	if (!ASSERT_OK_PTR(obj_iter, "obj_iter_open_file"))
- 		return;
-=20
--	if (CHECK(strcmp(bpf_object__name(obj), obj_name), "obj_name",
-+	if (CHECK(strcmp(bpf_object__name(obj_iter), obj_name), "obj_name",
- 		  "wrong obj name '%s', expected '%s'\n",
--		  bpf_object__name(obj), obj_name))
-+		  bpf_object__name(obj_iter), obj_name))
- 		goto cleanup;
-=20
--	bpf_object__for_each_program(prog, obj) {
-+	bpf_object__for_each_program(prog, obj_iter) {
- 		const char *title;
-=20
- 		/* Ignore .text sections */
-@@ -34,19 +49,27 @@ void test_reference_tracking(void)
- 		if (!test__start_subtest(title))
- 			continue;
-=20
-+		obj =3D bpf_object__open_file(file, &open_opts);
-+		if (!ASSERT_OK_PTR(obj, "obj_open_file"))
-+			goto cleanup;
++#define bpf_printk(fmt, args...) ___bpf_pick_printk(args)(fmt, ##args)
 +
-+		toggle_object_autoload_progs(obj, title);
- 		/* Expect verifier failure if test name has 'err' */
- 		if (strstr(title, "err_") !=3D NULL) {
- 			libbpf_print_fn_t old_print_fn;
-=20
- 			old_print_fn =3D libbpf_set_print(NULL);
--			err =3D !bpf_program__load(prog, "GPL", 0);
-+			err =3D !bpf_object__load(obj);
- 			libbpf_set_print(old_print_fn);
- 		} else {
--			err =3D bpf_program__load(prog, "GPL", 0);
-+			err =3D bpf_object__load(obj);
- 		}
- 		CHECK(err, title, "\n");
-+		bpf_object__close(obj);
-+		obj =3D NULL;
- 	}
-=20
- cleanup:
- 	bpf_object__close(obj);
-+	bpf_object__close(obj_iter);
- }
+ #endif
 --=20
 2.30.2
 
