@@ -7,38 +7,38 @@ X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B3C4C83029
-	for <bpf@archiver.kernel.org>; Thu,  2 Sep 2021 17:23:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AA841C83028
+	for <bpf@archiver.kernel.org>; Thu,  2 Sep 2021 17:23:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5F1936108B
-	for <bpf@archiver.kernel.org>; Thu,  2 Sep 2021 17:23:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8BE526108E
+	for <bpf@archiver.kernel.org>; Thu,  2 Sep 2021 17:23:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346471AbhIBRX7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 2 Sep 2021 13:23:59 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:63682 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1346560AbhIBRX6 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 2 Sep 2021 13:23:58 -0400
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 182HMojc031620
-        for <bpf@vger.kernel.org>; Thu, 2 Sep 2021 10:23:00 -0700
+        id S1346584AbhIBRYB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 2 Sep 2021 13:24:01 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:5616 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1346570AbhIBRYA (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 2 Sep 2021 13:24:00 -0400
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 182HLiXh010103
+        for <bpf@vger.kernel.org>; Thu, 2 Sep 2021 10:23:01 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=V8WCpNtwAKIJFq/PhcnI+8oSbBazu21w+tlc6lqnIBY=;
- b=GRZ2ibApHILIwNeLKWbWZoeA0Ql2vbD2TrOsVmLo3o7r/pV/Z6q5cZuzbrdDDtizd2nk
- fFvSh8la8y5wKhR9xRpCrZnoC4TuRLwDzkUgM4PFXhYVsUgPTxEW2O2ouVyFowmXBuJV
- BXm/TjJJfyPIw9TSIi0DoWbHjZiMe/1hW2I= 
+ bh=6gX/wkjz4vtaeulVpgKWOud0DL1t2r0JwoO1QsuOzQY=;
+ b=IrELEnWtvy3EhL6qoeaPei2iws8BARykasAciOWjWn8CtZg+4xnWEuuO3L9bLCVNJTXi
+ L85kSHkFmH69dTqXhxr8iFACt0I37r4nMZWN+l9WXIiTiKVm6xxe1Xkw4Hm62E8IP6r8
+ /nKJXnw/78oi2nEqzNwnlKKTXwbtmcH9OnE= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 3ate0345qg-9
+        by mx0a-00082601.pphosted.com with ESMTP id 3atdwu5de1-6
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 02 Sep 2021 10:23:00 -0700
+        for <bpf@vger.kernel.org>; Thu, 02 Sep 2021 10:23:01 -0700
 Received: from intmgw001.38.frc1.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2308.14; Thu, 2 Sep 2021 10:22:57 -0700
 Received: by devbig030.frc3.facebook.com (Postfix, from userid 158236)
-        id 651AF5FE2475; Thu,  2 Sep 2021 10:19:57 -0700 (PDT)
+        id 869125FE24AB; Thu,  2 Sep 2021 10:20:04 -0700 (PDT)
 From:   Dave Marchevsky <davemarchevsky@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
@@ -46,9 +46,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Yonghong Song <yhs@fb.com>, <netdev@vger.kernel.org>,
         Dave Marchevsky <davemarchevsky@fb.com>
-Subject: [PATCH v4 bpf-next 3/9] bpf: add bpf_trace_vprintk helper
-Date:   Thu, 2 Sep 2021 10:19:23 -0700
-Message-ID: <20210902171929.3922667-4-davemarchevsky@fb.com>
+Subject: [PATCH v4 bpf-next 7/9] selftests/bpf: Migrate prog_tests/trace_printk CHECKs to ASSERTs
+Date:   Thu, 2 Sep 2021 10:19:27 -0700
+Message-ID: <20210902171929.3922667-8-davemarchevsky@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210902171929.3922667-1-davemarchevsky@fb.com>
 References: <20210902171929.3922667-1-davemarchevsky@fb.com>
@@ -57,229 +57,102 @@ Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-ORIG-GUID: QgtSG3wt6iP-iP1DgVAZATvP0S00xXMb
-X-Proofpoint-GUID: QgtSG3wt6iP-iP1DgVAZATvP0S00xXMb
+X-Proofpoint-GUID: 3SMwYERGcuiOK5Qx6oTA_ZbIgG4xdBQg
+X-Proofpoint-ORIG-GUID: 3SMwYERGcuiOK5Qx6oTA_ZbIgG4xdBQg
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
  definitions=2021-09-02_04:2021-09-02,2021-09-02 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
- spamscore=0 clxscore=1015 malwarescore=0 phishscore=0 priorityscore=1501
- mlxscore=0 adultscore=0 bulkscore=0 lowpriorityscore=0 mlxlogscore=999
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
+ mlxlogscore=877 mlxscore=0 spamscore=0 phishscore=0 bulkscore=0
+ malwarescore=0 adultscore=0 clxscore=1015 suspectscore=0 impostorscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2108310000 definitions=main-2109020100
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This helper is meant to be "bpf_trace_printk, but with proper vararg
-support". Follow bpf_snprintf's example and take a u64 pseudo-vararg
-array. Write to /sys/kernel/debug/tracing/trace_pipe using the same
-mechanism as bpf_trace_printk.
+Guidance for new tests is to use ASSERT macros instead of CHECK. Since
+trace_vprintk test will borrow heavily from trace_printk's, migrate its
+CHECKs so it remains obvious that the two are closely related.
 
 Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
 Acked-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- include/linux/bpf.h            |  1 +
- include/uapi/linux/bpf.h       |  9 ++++++
- kernel/bpf/core.c              |  5 ++++
- kernel/bpf/helpers.c           |  2 ++
- kernel/trace/bpf_trace.c       | 52 +++++++++++++++++++++++++++++++++-
- tools/include/uapi/linux/bpf.h |  9 ++++++
- 6 files changed, 77 insertions(+), 1 deletion(-)
+ .../selftests/bpf/prog_tests/trace_printk.c   | 24 +++++++------------
+ 1 file changed, 9 insertions(+), 15 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index be8d57e6e78a..b6c45a6cbbba 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1088,6 +1088,7 @@ bool bpf_prog_array_compatible(struct bpf_array *ar=
-ray, const struct bpf_prog *f
- int bpf_prog_calc_tag(struct bpf_prog *fp);
+diff --git a/tools/testing/selftests/bpf/prog_tests/trace_printk.c b/tool=
+s/testing/selftests/bpf/prog_tests/trace_printk.c
+index d39bc00feb45..e47835f0a674 100644
+--- a/tools/testing/selftests/bpf/prog_tests/trace_printk.c
++++ b/tools/testing/selftests/bpf/prog_tests/trace_printk.c
+@@ -10,7 +10,7 @@
 =20
- const struct bpf_func_proto *bpf_get_trace_printk_proto(void);
-+const struct bpf_func_proto *bpf_get_trace_vprintk_proto(void);
-=20
- typedef unsigned long (*bpf_ctx_copy_t)(void *dst, const void *src,
- 					unsigned long off, unsigned long len);
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 791f31dd0abe..f171d4d33136 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -4877,6 +4877,14 @@ union bpf_attr {
-  *		Get the struct pt_regs associated with **task**.
-  *	Return
-  *		A pointer to struct pt_regs.
-+ *
-+ * u64 bpf_trace_vprintk(const char *fmt, u32 fmt_size, const void *data=
-, u32 data_len)
-+ *	Description
-+ *		Behaves like **bpf_trace_printk**\ () helper, but takes an array of =
-u64
-+ *		to format. Arguments are to be used as in **bpf_seq_printf**\ () hel=
-per.
-+ *	Return
-+ *		The number of bytes written to the buffer, or a negative error
-+ *		in case of failure.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -5055,6 +5063,7 @@ union bpf_attr {
- 	FN(get_func_ip),		\
- 	FN(get_attach_cookie),		\
- 	FN(task_pt_regs),		\
-+	FN(trace_vprintk),		\
- 	/* */
-=20
- /* integer value in 'imm' field of BPF_CALL instruction selects which he=
-lper
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 9f4636d021b1..6fddc13fe67f 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2357,6 +2357,11 @@ const struct bpf_func_proto * __weak bpf_get_trace=
-_printk_proto(void)
- 	return NULL;
- }
-=20
-+const struct bpf_func_proto * __weak bpf_get_trace_vprintk_proto(void)
-+{
-+	return NULL;
-+}
-+
- u64 __weak
- bpf_event_output(struct bpf_map *map, u64 flags, void *meta, u64 meta_si=
-ze,
- 		 void *ctx, u64 ctx_size, bpf_ctx_copy_t ctx_copy)
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 8f9f392c1322..2c604ff8c7fb 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -1435,6 +1435,8 @@ bpf_base_func_proto(enum bpf_func_id func_id)
- 		return &bpf_snprintf_proto;
- 	case BPF_FUNC_task_pt_regs:
- 		return &bpf_task_pt_regs_proto;
-+	case BPF_FUNC_trace_vprintk:
-+		return bpf_get_trace_vprintk_proto();
- 	default:
- 		return NULL;
- 	}
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 10672ebc63b7..ea8358b0c748 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -398,7 +398,7 @@ static const struct bpf_func_proto bpf_trace_printk_p=
-roto =3D {
- 	.arg2_type	=3D ARG_CONST_SIZE,
- };
-=20
--const struct bpf_func_proto *bpf_get_trace_printk_proto(void)
-+static void __set_printk_clr_event(void)
+ void test_trace_printk(void)
  {
- 	/*
- 	 * This program might be calling bpf_trace_printk,
-@@ -410,10 +410,58 @@ const struct bpf_func_proto *bpf_get_trace_printk_p=
-roto(void)
- 	 */
- 	if (trace_set_clr_event("bpf_trace", "bpf_trace_printk", 1))
- 		pr_warn_ratelimited("could not enable bpf_trace_printk events");
-+}
+-	int err, iter =3D 0, duration =3D 0, found =3D 0;
++	int err =3D 0, iter =3D 0, found =3D 0;
+ 	struct trace_printk__bss *bss;
+ 	struct trace_printk *skel;
+ 	char *buf =3D NULL;
+@@ -18,25 +18,24 @@ void test_trace_printk(void)
+ 	size_t buflen;
 =20
-+const struct bpf_func_proto *bpf_get_trace_printk_proto(void)
-+{
-+	__set_printk_clr_event();
- 	return &bpf_trace_printk_proto;
- }
+ 	skel =3D trace_printk__open();
+-	if (CHECK(!skel, "skel_open", "failed to open skeleton\n"))
++	if (!ASSERT_OK_PTR(skel, "trace_printk__open"))
+ 		return;
 =20
-+BPF_CALL_4(bpf_trace_vprintk, char *, fmt, u32, fmt_size, const void *, =
-data,
-+	   u32, data_len)
-+{
-+	static char buf[BPF_TRACE_PRINTK_SIZE];
-+	unsigned long flags;
-+	int ret, num_args;
-+	u32 *bin_args;
-+
-+	if (data_len & 7 || data_len > MAX_BPRINTF_VARARGS * 8 ||
-+	    (data_len && !data))
-+		return -EINVAL;
-+	num_args =3D data_len / 8;
-+
-+	ret =3D bpf_bprintf_prepare(fmt, fmt_size, data, &bin_args, num_args);
-+	if (ret < 0)
-+		return ret;
-+
-+	raw_spin_lock_irqsave(&trace_printk_lock, flags);
-+	ret =3D bstr_printf(buf, sizeof(buf), fmt, bin_args);
-+
-+	trace_bpf_trace_printk(buf);
-+	raw_spin_unlock_irqrestore(&trace_printk_lock, flags);
-+
-+	bpf_bprintf_cleanup();
-+
-+	return ret;
-+}
-+
-+static const struct bpf_func_proto bpf_trace_vprintk_proto =3D {
-+	.func		=3D bpf_trace_vprintk,
-+	.gpl_only	=3D true,
-+	.ret_type	=3D RET_INTEGER,
-+	.arg1_type	=3D ARG_PTR_TO_MEM,
-+	.arg2_type	=3D ARG_CONST_SIZE,
-+	.arg3_type	=3D ARG_PTR_TO_MEM_OR_NULL,
-+	.arg4_type	=3D ARG_CONST_SIZE_OR_ZERO,
-+};
-+
-+const struct bpf_func_proto *bpf_get_trace_vprintk_proto(void)
-+{
-+	__set_printk_clr_event();
-+	return &bpf_trace_vprintk_proto;
-+}
-+
- BPF_CALL_5(bpf_seq_printf, struct seq_file *, m, char *, fmt, u32, fmt_s=
-ize,
- 	   const void *, data, u32, data_len)
- {
-@@ -1130,6 +1178,8 @@ bpf_tracing_func_proto(enum bpf_func_id func_id, co=
-nst struct bpf_prog *prog)
- 		return &bpf_snprintf_proto;
- 	case BPF_FUNC_get_func_ip:
- 		return &bpf_get_func_ip_proto_tracing;
-+	case BPF_FUNC_trace_vprintk:
-+		return bpf_get_trace_vprintk_proto();
- 	default:
- 		return bpf_base_func_proto(func_id);
+-	ASSERT_EQ(skel->rodata->fmt[0], 'T', "invalid printk fmt string");
++	ASSERT_EQ(skel->rodata->fmt[0], 'T', "skel->rodata->fmt[0]");
+ 	skel->rodata->fmt[0] =3D 't';
+=20
+ 	err =3D trace_printk__load(skel);
+-	if (CHECK(err, "skel_load", "failed to load skeleton: %d\n", err))
++	if (!ASSERT_OK(err, "trace_printk__load"))
+ 		goto cleanup;
+=20
+ 	bss =3D skel->bss;
+=20
+ 	err =3D trace_printk__attach(skel);
+-	if (CHECK(err, "skel_attach", "skeleton attach failed: %d\n", err))
++	if (!ASSERT_OK(err, "trace_printk__attach"))
+ 		goto cleanup;
+=20
+ 	fp =3D fopen(TRACEBUF, "r");
+-	if (CHECK(fp =3D=3D NULL, "could not open trace buffer",
+-		  "error %d opening %s", errno, TRACEBUF))
++	if (!ASSERT_OK_PTR(fp, "fopen(TRACEBUF)"))
+ 		goto cleanup;
+=20
+ 	/* We do not want to wait forever if this test fails... */
+@@ -46,14 +45,10 @@ void test_trace_printk(void)
+ 	usleep(1);
+ 	trace_printk__detach(skel);
+=20
+-	if (CHECK(bss->trace_printk_ran =3D=3D 0,
+-		  "bpf_trace_printk never ran",
+-		  "ran =3D=3D %d", bss->trace_printk_ran))
++	if (!ASSERT_GT(bss->trace_printk_ran, 0, "bss->trace_printk_ran"))
+ 		goto cleanup;
+=20
+-	if (CHECK(bss->trace_printk_ret <=3D 0,
+-		  "bpf_trace_printk returned <=3D 0 value",
+-		  "got %d", bss->trace_printk_ret))
++	if (!ASSERT_GT(bss->trace_printk_ret, 0, "bss->trace_printk_ret"))
+ 		goto cleanup;
+=20
+ 	/* verify our search string is in the trace buffer */
+@@ -66,8 +61,7 @@ void test_trace_printk(void)
+ 			break;
  	}
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
-f.h
-index 791f31dd0abe..f171d4d33136 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -4877,6 +4877,14 @@ union bpf_attr {
-  *		Get the struct pt_regs associated with **task**.
-  *	Return
-  *		A pointer to struct pt_regs.
-+ *
-+ * u64 bpf_trace_vprintk(const char *fmt, u32 fmt_size, const void *data=
-, u32 data_len)
-+ *	Description
-+ *		Behaves like **bpf_trace_printk**\ () helper, but takes an array of =
-u64
-+ *		to format. Arguments are to be used as in **bpf_seq_printf**\ () hel=
-per.
-+ *	Return
-+ *		The number of bytes written to the buffer, or a negative error
-+ *		in case of failure.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -5055,6 +5063,7 @@ union bpf_attr {
- 	FN(get_func_ip),		\
- 	FN(get_attach_cookie),		\
- 	FN(task_pt_regs),		\
-+	FN(trace_vprintk),		\
- 	/* */
 =20
- /* integer value in 'imm' field of BPF_CALL instruction selects which he=
-lper
+-	if (CHECK(!found, "message from bpf_trace_printk not found",
+-		  "no instance of %s in %s", SEARCHMSG, TRACEBUF))
++	if (!ASSERT_EQ(found, bss->trace_printk_ran, "found"))
+ 		goto cleanup;
+=20
+ cleanup:
 --=20
 2.30.2
 
