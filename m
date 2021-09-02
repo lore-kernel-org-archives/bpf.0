@@ -2,189 +2,87 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=3.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A08EC4320A
-	for <bpf@archiver.kernel.org>; Thu,  2 Sep 2021 06:43:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B4C8AC432BE
+	for <bpf@archiver.kernel.org>; Thu,  2 Sep 2021 06:44:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 06CA2610C9
-	for <bpf@archiver.kernel.org>; Thu,  2 Sep 2021 06:43:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 946AC60F6C
+	for <bpf@archiver.kernel.org>; Thu,  2 Sep 2021 06:44:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233337AbhIBGot (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 2 Sep 2021 02:44:49 -0400
-Received: from mga17.intel.com ([192.55.52.151]:3053 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233285AbhIBGot (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 2 Sep 2021 02:44:49 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10094"; a="199220761"
-X-IronPort-AV: E=Sophos;i="5.84,371,1620716400"; 
-   d="scan'208";a="199220761"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2021 23:43:50 -0700
-X-IronPort-AV: E=Sophos;i="5.84,371,1620716400"; 
-   d="scan'208";a="688875241"
-Received: from unknown (HELO localhost.localdomain) ([10.102.102.63])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2021 23:43:48 -0700
-Date:   Wed, 1 Sep 2021 22:49:43 -0400
-From:   Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
-To:     Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        BPF-dev-list <bpf@vger.kernel.org>,
-        Magnus Karlsson <magnus.karlsson@gmail.com>,
-        William Tu <u9012063@gmail.com>, xdp-hints@xdp-project.net,
-        Zaremba Larysa <larysa.zaremba@intel.com>
-Subject: Re: XDP-hints: Howto support multiple BTF types per packet basis?
-Message-ID: <YTA7x6BIq85UWrYZ@localhost.localdomain>
-References: <60b12897d2e3f_1cf820896@john-XPS-13-9370.notmuch>
- <8735u3dv2l.fsf@toke.dk>
- <60b6cf5b6505e_38d6d208d8@john-XPS-13-9370.notmuch>
- <20210602091837.65ec197a@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
- <YNGU4GhL8fZ0ErzS@localhost.localdomain>
- <874kdqqfnm.fsf@toke.dk>
- <YNLxtsasQSv+YR1w@localhost.localdomain>
- <87mtrfmoyh.fsf@toke.dk>
- <YOa4JVEp20JolOp4@localhost.localdomain>
- <8735snvjp7.fsf@toke.dk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8735snvjp7.fsf@toke.dk>
+        id S233285AbhIBGpu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 2 Sep 2021 02:45:50 -0400
+Received: from smtp23.cstnet.cn ([159.226.251.23]:41632 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S241528AbhIBGpu (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 2 Sep 2021 02:45:50 -0400
+X-Greylist: delayed 438 seconds by postgrey-1.27 at vger.kernel.org; Thu, 02 Sep 2021 02:45:49 EDT
+Received: from localhost.localdomain (unknown [124.16.138.128])
+        by APP-03 (Coremail) with SMTP id rQCowABHyo0bcTBhmXLEAA--.41163S2;
+        Thu, 02 Sep 2021 14:37:15 +0800 (CST)
+From:   jiasheng <jiasheng@iscas.ac.cn>
+To:     bpf@vger.kernel.org
+Cc:     jiasheng <jiasheng@iscas.ac.cn>
+Subject: [PATCH] bpf: Add env_type_is_resolved() in front of env_stack_push() in btf_resolve()
+Date:   Thu,  2 Sep 2021 06:37:13 +0000
+Message-Id: <1630564633-552375-1-git-send-email-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.7.4
+X-CM-TRANSID: rQCowABHyo0bcTBhmXLEAA--.41163S2
+X-Coremail-Antispam: 1UD129KBjvdXoWruw4UKr4fArWUKw48uw4fuFg_yoWkArg_K3
+        W8uF1rGwsxKFsaya1jvw4furW2k3yYqFn7Za1aqFs8G3s8WF15Jrn8Xas3JrsrGrWkKrZF
+        vFZ8G3sIgF1avjkaLaAFLSUrUUUUob8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbgkYjsxI4VW3JwAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I
+        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
+        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0
+        cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I
+        8E87Iv6xkF7I0E14v26rxl6s0DM2kKe7AKxVWUtVW8ZwAS0I0E0xvYzxvE52x082IY62kv
+        0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUtVWrXwAv7VC2z2
+        80aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq
+        67IIx4CEVc8vx2IErcIFxwCY1x0262kKe7AKxVW8ZVWrXwCY02Avz4vE14v_GF1l42xK82
+        IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jw0_GFylx2Iq
+        xVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r
+        1Y6r17MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY
+        6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVW8JVW3JwCI42IY6I8E87Iv67
+        AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuY
+        vj4RC5l1UUUUU
+X-Originating-IP: [124.16.138.128]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Jul 09, 2021 at 12:57:08PM +0200, Toke Høiland-Jørgensen wrote:
-> Michal Swiatkowski <michal.swiatkowski@linux.intel.com> writes:
-> 
-> >> I would expect that the program would decide ahead-of-time which BTF IDs
-> >> it supports, by something like including the relevant structs from
-> >> vmlinux.h. And then we need the BTF ID encoded into the packet metadata
-> >> as well, so that it is possible to check at run-time which driver the
-> >> packet came from (since a packet can be redirected, so you may end up
-> >> having to deal with multiple formats in the same XDP program).
-> >> 
-> >> Which would allow you to write code like:
-> >> 
-> >> if (ctx->has_driver_meta) {
-> >>   /* this should be at a well-known position, like first (or last) in meta area */
-> >>   __u32 *meta_btf_id = ctx->data_meta;
-> >>   
-> >>   if (*meta_btf_id == BTF_ID_MLX5) {
-> >>     struct meta_mlx5 *meta = ctx->data_meta;
-> >>     /* do something with meta */
-> >>   } else if (meta_btf_id == BTF_ID_I40E) {
-> >>     struct meta_i40e *meta = ctx->data_meta;
-> >>     /* do something with meta */
-> >>   } /* etc */
-> >> }
-> >> 
-> >> and libbpf could do relocations based on the different meta structs,
-> >> even removing the code for the ones that don't exist on the running
-> >> kernel.
-> >
-> > This looks nice. In this case we need defintions of struct meta_mlx5 and
-> > struct meta_i40e at build time. How are we going to deliver this to bpf
-> > core app? This will be available in /sys/kernel/btf/mlx5 and
-> > /sys/kernel/btf/i40e (if drivers are loaded). Should we dump this to
-> > vmlinux.h? Or a developer of the xdp program should add this definition
-> > to his code?
-> 
-> Well, if the driver just defines the struct, the BTF for it will be
-> automatically part of the driver module BTF. BPF program developers
-> would need to include this in their programs somehow (similar to how
-> you'll need to get the type definitions from vmlinux.h today to use
-> CO-RE); how they do this is up to them. Since this is a compile-time
-> thing it will probably depend on the project (for instance, BCC includes
-> a copy of vmlinux.h in their source tree, but you can also just pick out
-> the structs you need).
-> 
-> > Maybe create another /sys/kernel/btf/hints with vmlinux and hints from
-> > all drivers which support hints?
-> 
-> It may be useful to have a way for the kernel to export all the hints
-> currently loaded, so libbpf can just use that when relocating. The
-> problem of course being that this will only include drivers that are
-> actually loaded, so users need to make sure to load all their network
-> drivers before loading any XDP programs. I think it would be better if
-> the loader could discover all modules *available* on the system, but I'm
-> not sure if there's a good way to do that.
-> 
-> > Previously in this thread someone mentioned this ___ use case in libbpf
-> > and proposed creating something like mega xdp hints structure with all
-> > available fields across all drivers. As I understand this could solve
-> > the problem about defining correct structure at build time. But how will
-> > it work when there will be more than one structures with the same name
-> > before ___? I mean:
-> > struct xdp_hints___mega defined only in core app
-> > struct xdp_hints___mlx5 available when mlx5 driver is loaded
-> > struct xdp_hints___i40e available when i40e driver is loaded
-> >
-> > When there will be only one driver loaded should libbpf do correct
-> > reallocation of fields? What will happen when both of the drivers are
-> > loaded?
-> 
-> I think we definitely need to make this easy for developers so they
-> don't have to go and manually track down the driver structs and write
-> the disambiguation code etc. I.e., the example code I included above
-> that checks the frame BTF ID and does the loading based on it should be
-> auto-generated. We already have some precedence for auto-generated code
-> in vmlinux.h and the bpftool skeletons. So maybe we could have a command
-> like 'bpftool gen_xdp_meta <fields>' which would go and lookup all the
-> available driver structs and generate a code helper function that will
-> extract the driver structs and generate the loader code? So that if,
-> say, you're interested in rxhash and tstamp you could do:
-> 
-> bpftool gen_xdp_meta rxhash tstamp > my_meta.h
-> 
-> which would then produce my_meta.h with content like:
-> 
-> struct my_meta { /* contains fields specified on the command line */
->   u32 rxhash;
->   u32 tstamp;
-> }
-> 
-> struct meta_mlx5 {/*generated from kernel BTF */};
-> struct meta_i40e {/*generated from kernel BTF */};
-> 
-> static inline int get_xdp_meta(struct xdp_md *ctx, struct my_meta *meta)
-> {
->  if (ctx->has_driver_meta) {
->    /* this should be at a well-known position, like first (or last) in meta area */
->    __u32 *meta_btf_id = ctx->data_meta;
->    
->    if (*meta_btf_id == BTF_ID_MLX5) {
->      struct meta_mlx5 *meta = ctx->data_meta;
->      my_meta->rxhash = meta->rxhash;
->      my_meta->tstamp = meta->tstamp;
->      return 0;
->    } else if (meta_btf_id == BTF_ID_I40E) {
->      struct meta_i40e *meta = ctx->data_meta;
->      my_meta->rxhash = meta->rxhash;
->      my_meta->tstamp = meta->tstamp;
->      return 0;
->    } /* etc */
->  }
->  return -ENOENT;
-> }
+We have found that in the complied files env_stack_push()
+appear more than 10 times, and under at least 90% circumstances
+that env_type_is_resolved() and env_stack_push() appear in pairs.
+For example, they appear together in the btf_modifier_resolve()
+of the file complie from 'kernel/bpf/btf.c'.
+But we have found that in the btf_resolve(), there is only
+env_stack_push() instead of the pair.
+Therefore, we consider that the env_type_is_resolved()
+might be forgotten.
 
-According to meta_btf_id. Do You have an idea how driver should fill this
-field? 
-hints->btf_id = btf_id_by_name("struct meta_i40e"); /* fill btf id at
-config time */
-btf_id_by_name will get module btf (or vmlinux btf) and search for
-correct name for each ids. Does this look correct?
+Signed-off-by: jiasheng <jiasheng@iscas.ac.cn>
+---
+ kernel/bpf/btf.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Is there any way in kernel to get btf id based on name or we have to
-write functions for this? I haven't seen code for this case, but maybe I
-missed it.
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index f982a9f0..454c249 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -4002,7 +4002,8 @@ static int btf_resolve(struct btf_verifier_env *env,
+ 	int err = 0;
+ 
+ 	env->resolve_mode = RESOLVE_TBD;
+-	env_stack_push(env, t, type_id);
++	if (env_type_is_resolved(env, type_id))
++		env_stack_push(env, t, type_id);
+ 	while (!err && (v = env_stack_peak(env))) {
+ 		env->log_type_id = v->type_id;
+ 		err = btf_type_ops(v->t)->resolve(env, v);
+-- 
+2.7.4
 
-> 
-> 
-> -Toke
-> 
