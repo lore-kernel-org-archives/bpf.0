@@ -2,133 +2,86 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.1 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A87EFC433F5
-	for <bpf@archiver.kernel.org>; Fri,  3 Sep 2021 08:23:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EE191C433EF
+	for <bpf@archiver.kernel.org>; Fri,  3 Sep 2021 08:28:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7E32360FD7
-	for <bpf@archiver.kernel.org>; Fri,  3 Sep 2021 08:23:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D514060FD7
+	for <bpf@archiver.kernel.org>; Fri,  3 Sep 2021 08:28:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348226AbhICIYJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 3 Sep 2021 04:24:09 -0400
-Received: from www62.your-server.de ([213.133.104.62]:44384 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348203AbhICIYH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 3 Sep 2021 04:24:07 -0400
-Received: from sslproxy06.your-server.de ([78.46.172.3])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1mM4TT-0005dx-Fd; Fri, 03 Sep 2021 10:22:59 +0200
-Received: from [85.5.47.65] (helo=linux.home)
-        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1mM4TT-000UbJ-6X; Fri, 03 Sep 2021 10:22:59 +0200
-Subject: Re: [PATCH bpf-next 1/2] bpf: add hardware timestamp field to
- __sk_buff
-To:     Vadim Fedorenko <vfedorenko@novek.ru>,
-        Martin KaFai Lau <kafai@fb.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, willemb@google.com
-References: <20210902221551.15566-1-vfedorenko@novek.ru>
- <20210902221551.15566-2-vfedorenko@novek.ru>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <fd2e2457-b3c2-81a4-481a-27555e4473dc@iogearbox.net>
-Date:   Fri, 3 Sep 2021 10:22:58 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S1348197AbhICI3b (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 3 Sep 2021 04:29:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40408 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348314AbhICI3N (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 3 Sep 2021 04:29:13 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B61A5C061760;
+        Fri,  3 Sep 2021 01:28:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=++jm6oY+bJJxusAX097iIXvKnGM0fjw8N41n/TI3ISY=; b=ils+FN/bFNcs+IBDKlS7DNCP2B
+        srlVriyw9vZaH9rLy2nFJVzSHspBEAWpe2fnOS4rTENRRQXMo+8pTpCk5Y47zVHQcd0GWqeD+wkN1
+        lMMJ6sJmcS7UIlHzZ3+LTqdAOsINinU6QMmhZxqlW+69vWGuCLrMskghcApastuTRlYhXkdwz6rOn
+        uO/uXt/JixCfNOeJEJZh/avEvp6q8faMW29OnbrLYC9h2ydadcU4UglVJTLk5b/dR+/Hfd2X1BOlb
+        fnZqFQ7qf2ZPgQ0/vbJWtj7YI+HO/MZrdDZ/gkK7S9LJc9vB7SZXfv1hKUTAkX9LY0EOM4mxMs63Q
+        /rj+GLHg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mM4YN-000JKU-HS; Fri, 03 Sep 2021 08:28:04 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6107630024D;
+        Fri,  3 Sep 2021 10:28:02 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 5225D28B658E6; Fri,  3 Sep 2021 10:28:02 +0200 (CEST)
+Date:   Fri, 3 Sep 2021 10:28:02 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Song Liu <songliubraving@fb.com>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org, acme@kernel.org,
+        mingo@redhat.com, kjain@linux.ibm.com, kernel-team@fb.com
+Subject: Re: [PATCH v5 bpf-next 2/3] bpf: introduce helper
+ bpf_get_branch_snapshot
+Message-ID: <YTHcki5RLZIIGqbk@hirez.programming.kicks-ass.net>
+References: <20210902165706.2812867-1-songliubraving@fb.com>
+ <20210902165706.2812867-3-songliubraving@fb.com>
 MIME-Version: 1.0
-In-Reply-To: <20210902221551.15566-2-vfedorenko@novek.ru>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.2/26282/Thu Sep  2 10:22:04 2021)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210902165706.2812867-3-songliubraving@fb.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 9/3/21 12:15 AM, Vadim Fedorenko wrote:
-> BPF programs may want to know hardware timestamps if NIC supports
-> such timestamping.
-> 
-> Expose this data as hwtstamp field of __sk_buff the same way as
-> gso_segs/gso_size.
-> 
-> Also update BPF_PROG_TEST_RUN tests of the feature.
-> 
-> Signed-off-by: Vadim Fedorenko <vfedorenko@novek.ru>
-> ---
->   include/uapi/linux/bpf.h       |  2 ++
->   net/core/filter.c              | 11 +++++++++++
->   tools/include/uapi/linux/bpf.h |  2 ++
->   3 files changed, 15 insertions(+)
-> 
-> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> index 791f31dd0abe..c7d05b49f557 100644
-> --- a/include/uapi/linux/bpf.h
-> +++ b/include/uapi/linux/bpf.h
-> @@ -5284,6 +5284,8 @@ struct __sk_buff {
->   	__u32 gso_segs;
->   	__bpf_md_ptr(struct bpf_sock *, sk);
->   	__u32 gso_size;
-> +	__u32 padding;		/* Padding, future use. */
-
-nit, instead of explicit padding field, just use: __u32 :32;
-
-Also please add test_verifier coverage for this in BPF selftests, meaning,
-the expectation would be in case someone tries to access the padding field
-with this patch that we get a 'bpf verifier is misconfigured' error given
-it would have no bpf_convert_ctx_access() translation. But it would be overall
-better to add this to bpf_skb_is_valid_access(), so we can reject access to
-the padding area right there instead.
-
-> +	__u64 hwtstamp;
->   };
->   
->   struct bpf_tunnel_key {
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 2e32cee2c469..1d8f8494d325 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -8884,6 +8884,17 @@ static u32 bpf_convert_ctx_access(enum bpf_access_type type,
->   				      si->dst_reg, si->src_reg,
->   				      offsetof(struct sk_buff, sk));
->   		break;
-> +	case offsetof(struct __sk_buff, hwtstamp):
-> +		BUILD_BUG_ON(sizeof_field(struct skb_shared_hwtstamps, hwtstamp) != 8);
-> +		BUILD_BUG_ON(offsetof(struct skb_shared_hwtstamps, hwtstamp) != 0);
+On Thu, Sep 02, 2021 at 09:57:05AM -0700, Song Liu wrote:
+> +BPF_CALL_3(bpf_get_branch_snapshot, void *, buf, u32, size, u64, flags)
+> +{
+> +#ifndef CONFIG_X86
+> +	return -ENOENT;
+> +#else
+> +	static const u32 br_entry_size = sizeof(struct perf_branch_entry);
+> +	u32 entry_cnt = size / br_entry_size;
 > +
-> +		insn = bpf_convert_shinfo_access(si, insn);
-> +		*insn++ = BPF_LDX_MEM(BPF_DW,
-> +				      si->dst_reg, si->dst_reg,
-> +				      bpf_target_off(struct skb_shared_info,
-> +						     hwtstamps, 8,
-> +						     target_size));
-> +		break;
->   	}
->   
->   	return insn - insn_buf;
-> diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-> index 791f31dd0abe..c7d05b49f557 100644
-> --- a/tools/include/uapi/linux/bpf.h
-> +++ b/tools/include/uapi/linux/bpf.h
-> @@ -5284,6 +5284,8 @@ struct __sk_buff {
->   	__u32 gso_segs;
->   	__bpf_md_ptr(struct bpf_sock *, sk);
->   	__u32 gso_size;
-> +	__u32 padding;		/* Padding, future use. */
-> +	__u64 hwtstamp;
->   };
->   
->   struct bpf_tunnel_key {
-> 
+> +	if (unlikely(flags))
+> +		return -EINVAL;
+> +
+> +	if (!buf || (size % br_entry_size != 0))
+> +		return -EINVAL;
+> +
+> +	entry_cnt = static_call(perf_snapshot_branch_stack)(buf, entry_cnt);
+> +
+> +	if (!entry_cnt)
+> +		return -ENOENT;
+> +
+> +	return entry_cnt * br_entry_size;
+> +#endif
+> +}
 
+Do we really need that CONFIG_X86 thing? Seems rather bad practise.
