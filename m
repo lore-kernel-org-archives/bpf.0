@@ -2,355 +2,127 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AC93BC433F5
-	for <bpf@archiver.kernel.org>; Fri,  3 Sep 2021 17:57:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E6E3C433F5
+	for <bpf@archiver.kernel.org>; Fri,  3 Sep 2021 23:44:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 846A160EBA
-	for <bpf@archiver.kernel.org>; Fri,  3 Sep 2021 17:57:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 229636102A
+	for <bpf@archiver.kernel.org>; Fri,  3 Sep 2021 23:44:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350034AbhICR6t (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 3 Sep 2021 13:58:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:22589 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1350005AbhICR6t (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 3 Sep 2021 13:58:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1630691868;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Twv1Frpa8K4MzmT8jpLTv8Z81z6nimrFuVhAjS15+48=;
-        b=XXZ2hPUCXX8i2nl8rdcEof2rIRUU+CM5PVxgWrsePs689FMurB1a2549pYKJZd4bLHIeYo
-        TCMZb4lqFNTOX0GD4Yb2yTpz9w5jXuQKujXhk4GVnUcYAnm+Wh5/J8mBqQxT1TltCVN21E
-        ZWXJ8JP6zXWUOY09GTap9C19arRssI4=
-Received: from mail-yb1-f198.google.com (mail-yb1-f198.google.com
- [209.85.219.198]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-56-PmCzd444PCiePl2NlXtGyA-1; Fri, 03 Sep 2021 13:57:47 -0400
-X-MC-Unique: PmCzd444PCiePl2NlXtGyA-1
-Received: by mail-yb1-f198.google.com with SMTP id v66-20020a25abc8000000b0059ef57c3386so48394ybi.1
-        for <bpf@vger.kernel.org>; Fri, 03 Sep 2021 10:57:47 -0700 (PDT)
+        id S1343523AbhICXpf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 3 Sep 2021 19:45:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52878 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236816AbhICXp3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 3 Sep 2021 19:45:29 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 941E8C061575
+        for <bpf@vger.kernel.org>; Fri,  3 Sep 2021 16:44:28 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id i24so688126pfo.12
+        for <bpf@vger.kernel.org>; Fri, 03 Sep 2021 16:44:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Xhqf9OXOWyWh29UmDJWsjhes633vEBDxVhEjuay2+iA=;
+        b=cvoezng5laklxmiPL9p5dJv72jMbcv7OErvcayTD9FENt/KyAHb8baBenPZYDZNxvw
+         O6eAIzlE0SkSXvWeTsCU5jAl26OygkrKbatYJqUgNbJXDlU6OQ24j0zbM1Bhtkm+XfU3
+         FPuRous0PFy3191pBBzLI8I4NMuoxoVLZGWi+l1vJSG9AyZ4ZlyowZ7yxHlNRqVJAfz6
+         f2gQ6dQ+BRUcmygBIMPONgeCqQk8jJSwpwXezQXyl3FQd1RrtGKRFF2DAFXqqbB0Zm6b
+         xWNZ1UCVfYSb5GnqD2YkGUTXJmV4pGV7clsbefc0sOcOJKk/70Du8fadKcHldn0Um9vc
+         xV0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Twv1Frpa8K4MzmT8jpLTv8Z81z6nimrFuVhAjS15+48=;
-        b=CClLBw73kQWeWL8Stfpq/89tdWRtyJRLgdyv044tjSNIQ8kiEvlYUDCwVPs9wW+w64
-         k0qeoMyxuplPqxq1uKneCWJbdYCakw0y1McvhVYf4d12J9jagMmxkVBgP4uM2bWDFJQr
-         HL6hVcZ3Fq6cl9TdhSN6Yt6No8y+AnGWLqK3Nnf4p8az+auRKfd5CDalzneeXoq3TCs8
-         cJUxSh5UHn5E173I/BD0GnGaqXRj/JpTCpshZDl6zPOjnldMPXXOLGPGtbxI7+xmdL/E
-         SXSmeNJe27fkOGJiOnTl4Fn4JcQOM0f9KPt8NlAl8IZjMqzD1P0lgIiRFGvu/92PtLzg
-         FCgg==
-X-Gm-Message-State: AOAM5317EYYrru3XpMuImA8rV0/NHoV5/pcQpvnxmz+RsBGGf33dX54s
-        8B1VQx1zcQgWRmFg8Kmpv1Feshtb2UlaGCFhh8/bP9Fv1D/NLwFL/M4W5JDm89wfmYGgf2JUNO3
-        v0sv8pVyQcfwe7wvoZUghHl7dXM92
-X-Received: by 2002:a25:27c1:: with SMTP id n184mr368393ybn.496.1630691866944;
-        Fri, 03 Sep 2021 10:57:46 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwnmvzaERUxcreGEzkqeG0FqvGW198r8CZnCmObJT/+i91Ku1HeyVDtgchE4FBRvysamLeDes030dILckwE19E=
-X-Received: by 2002:a25:27c1:: with SMTP id n184mr368345ybn.496.1630691866589;
- Fri, 03 Sep 2021 10:57:46 -0700 (PDT)
+        bh=Xhqf9OXOWyWh29UmDJWsjhes633vEBDxVhEjuay2+iA=;
+        b=Ow2WJUUfAz8yyyNMg/CPaU0qmFgCdsl3M1Mtr2SzUhdqQ9Dhccy0Tyxc8JWQ4ZSaoI
+         B0ejbmnqy5l2Iu17355/kly5XCqhu8xkUq1vkTSAFJrniIIsMJN3CZh88+O00sx9nlxT
+         8Be7Ry4X0mfwtLkb/s+nAWvsDxGMqlvCkxWRlI172dnYjuAmZhCpbG538nJmLIHqOABF
+         e/0xCnVBQzBlgi0+9qhZeBGw9iEly2gk6K8u1rV4i2Fx/j3wXU78DfJsLvHhSosJAoj2
+         NWZE4TRQTCMU0HciZ5Uq10NqY87eJo4SSG7Hqic+9rC3HtDsnIwenGJSEdG3CsM8oYZj
+         mQaw==
+X-Gm-Message-State: AOAM530Z/fmq8zh/cADx/Yw1re7i65pubyBV6pZ1NjX6rSxwQ2GzfHOB
+        +je7rXpTWcPru1x9b3rlXa2d0il3tKcnEQGXPYk=
+X-Google-Smtp-Source: ABdhPJyKGJ/LfrFH330bIUDhvgmQr9e7/3ERpcpflv6CV0eeMGVX9JjqeZjAukp8JQndR/68+4DR66DDHSsqk6krXuY=
+X-Received: by 2002:a05:6a00:8c3:b0:3fd:4333:897 with SMTP id
+ s3-20020a056a0008c300b003fd43330897mr1179225pfu.67.1630712668085; Fri, 03 Sep
+ 2021 16:44:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1629473233.git.lorenzo@kernel.org> <14b99bc75ce0f8d4968208fb0b420a054e45433e.1629473234.git.lorenzo@kernel.org>
- <612ecb262b05_6b87208c0@john-XPS-13-9370.notmuch>
-In-Reply-To: <612ecb262b05_6b87208c0@john-XPS-13-9370.notmuch>
-From:   Lorenzo Bianconi <lorenzo.bianconi@redhat.com>
-Date:   Fri, 3 Sep 2021 19:57:35 +0200
-Message-ID: <CAJ0CqmW+LuUvwiV_iuog60H1mkne5edgpWGt5Pyd9uMRaCA0BA@mail.gmail.com>
-Subject: Re: [PATCH v12 bpf-next 17/18] net: xdp: introduce
- bpf_xdp_adjust_data helper
-To:     John Fastabend <john.fastabend@gmail.com>
-Cc:     Lorenzo Bianconi <lorenzo@kernel.org>,
-        BPF-dev-list <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "Agroskin, Shay" <shayagr@amazon.com>,
-        David Ahern <dsahern@kernel.org>,
-        Jesper Brouer <brouer@redhat.com>,
-        Eelco Chaudron <echaudro@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        Saeed Mahameed <saeed@kernel.org>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
-        "Sarkar, Tirthendu" <tirthendu.sarkar@intel.com>,
-        Toke Hoiland Jorgensen <toke@redhat.com>
+References: <20210825184745.2680830-1-fallentree@fb.com> <CAADnVQJz8LUTsm_azd4JE0n5Q4Me0Lze6hmsqNYfAKMeA44_fQ@mail.gmail.com>
+ <CAJygYd24KySBLCL2rRofGqdPkQzonxBfihRxLQ=O8Xg=AWAowA@mail.gmail.com>
+ <CAJygYd3M1E3N9C02WCmPD6_i9miXaCe=OP-M32QTnOXOajBPZA@mail.gmail.com>
+ <CAADnVQJB3GKKr1hMWHNKYhoo8CzrDQ83LEnO8c+ntOBtEkjApA@mail.gmail.com>
+ <CAM_iQpVw-5dG8Na9e851bQy2_BcpZQ5QK+r554NZsP0_dbzwNw@mail.gmail.com>
+ <CAM_iQpUG30QL03Uh9D_ACy_29TLWG+YfDO9_GvcqzW2f0TbpYw@mail.gmail.com> <CAJygYd2f8S5Oq_B8724p-3rQvXaJKMBGgBKLS_0R7fxTew2oeA@mail.gmail.com>
+In-Reply-To: <CAJygYd2f8S5Oq_B8724p-3rQvXaJKMBGgBKLS_0R7fxTew2oeA@mail.gmail.com>
+From:   Cong Wang <xiyou.wangcong@gmail.com>
+Date:   Fri, 3 Sep 2021 16:44:16 -0700
+Message-ID: <CAM_iQpWt8F18_B5b9cYyT7Ri3sua2T2B5ztEGg2h3v9u2-i+Fg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: reduce more flakyness in sockmap_listen
+To:     "sunyucong@gmail.com" <sunyucong@gmail.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Jiang Wang <jiang.wang@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Yucong Sun <fallentree@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+On Wed, Sep 1, 2021 at 8:35 PM sunyucong@gmail.com <sunyucong@gmail.com> wrote:
 >
-> Lorenzo Bianconi wrote:
-> > For XDP frames split over multiple buffers, the xdp_md->data and
-> > xdp_md->data_end pointers will point to the start and end of the first
-> > fragment only. bpf_xdp_adjust_data can be used to access subsequent
-> > fragments by moving the data pointers. To use, an XDP program can call
-> > this helper with the byte offset of the packet payload that
-> > it wants to access; the helper will move xdp_md->data and xdp_md ->data_end
-> > so they point to the requested payload offset and to the end of the
-> > fragment containing this byte offset, and return the byte offset of the
-> > start of the fragment.
-> > To move back to the beginning of the packet, simply call the
-> > helper with an offset of '0'.
-> > Note also that the helpers that modify the packet boundaries
-> > (bpf_xdp_adjust_head(), bpf_xdp_adjust_tail() and
-> > bpf_xdp_adjust_meta()) will fail if the pointers have been
-> > moved; it is the responsibility of the BPF program to move them
-> > back before using these helpers.
->
-> I'm ok with this for a first iteration I guess with more work we
-> can make the helpers use the updated pointers though.
->
+> On Wed, Sep 1, 2021 at 9:33 PM Cong Wang <xiyou.wangcong@gmail.com> wrote:
 > >
-> > Suggested-by: John Fastabend <john.fastabend@gmail.com>
-> > Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+> > On Tue, Aug 31, 2021 at 12:33 PM Cong Wang <xiyou.wangcong@gmail.com> wrote:
+> > > Like I mentioned before, I suspect there is some delay in one of
+> > > the queues on the way or there is a worker wakeup latency.
+> > > I will try adding some tracepoints to see if I can capture it.
+> > >
+> >
+> > I tried to revert this patch locally to reproduce the EAGAIN
+> > failure, but even after repeating the sockmap_listen test hundreds
+> > of times, I didn't see any failure here.
+> >
+> > If you are still interested in this issue, I'd suggest you adding some
+> > tracepoints to see what happens to kworker or the packet queues.
+> >
+> > It does not look like a sockmap bug, otherwise I would be able to
+> > reproduce it here.
+> >
 >
-> Overall looks good couple small nits/questions below. Thanks!
+> Cong, the issue is not that read() sometimes returns EAGAIN.
 >
-> > ---
-> >  include/net/xdp.h              |  8 +++++
-> >  include/uapi/linux/bpf.h       | 32 ++++++++++++++++++
-> >  net/bpf/test_run.c             |  8 +++++
-> >  net/core/filter.c              | 62 +++++++++++++++++++++++++++++++++-
-> >  tools/include/uapi/linux/bpf.h | 32 ++++++++++++++++++
-> >  5 files changed, 141 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/include/net/xdp.h b/include/net/xdp.h
-> > index cdaecf8d4d61..ce4764c7cd40 100644
-> > --- a/include/net/xdp.h
-> > +++ b/include/net/xdp.h
-> > @@ -82,6 +82,11 @@ struct xdp_buff {
-> >       struct xdp_txq_info *txq;
-> >       u32 frame_sz; /* frame size to deduce data_hard_end/reserved tailroom*/
-> >       u16 flags; /* supported values defined in xdp_flags */
-> > +     /* xdp multi-buff metadata used for frags iteration */
-> > +     struct {
-> > +             u16 headroom;   /* frame headroom: data - data_hard_start */
-> > +             u16 headlen;    /* first buffer length: data_end - data */
-> > +     } mb;
-> >  };
-> >
-> >  static __always_inline bool xdp_buff_is_mb(struct xdp_buff *xdp)
-> > @@ -127,6 +132,9 @@ xdp_prepare_buff(struct xdp_buff *xdp, unsigned char *hard_start,
-> >       xdp->data = data;
-> >       xdp->data_end = data + data_len;
-> >       xdp->data_meta = meta_valid ? data : data + 1;
-> > +     /* mb metadata for frags iteration */
-> > +     xdp->mb.headroom = headroom;
-> > +     xdp->mb.headlen = data_len;
-> >  }
-> >
-> >  /* Reserve memory area at end-of data area.
-> > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> > index 9e2c3b12ea49..a7b5185a718a 100644
-> > --- a/include/uapi/linux/bpf.h
-> > +++ b/include/uapi/linux/bpf.h
-> > @@ -4877,6 +4877,37 @@ union bpf_attr {
-> >   *           Get the total size of a given xdp buff (linear and paged area)
-> >   *   Return
-> >   *           The total size of a given xdp buffer.
-> > + *
-> > + * long bpf_xdp_adjust_data(struct xdp_buff *xdp_md, u32 offset)
-> > + *   Description
-> > + *           For XDP frames split over multiple buffers, the
-> > + *           *xdp_md*\ **->data** and*xdp_md *\ **->data_end** pointers
->                                        ^^^^
-> missing space?
+> It is that when using select on the redirected socket,  it will hang forever.
 
-ack, right. I will fix it.
+Hmm? We don't use any select(), do we? Before your patch, I used
+a for loop. With your patch, it is a loop with usleep().
 
->
-> > + *           will point to the start and end of the first fragment only.
-> > + *           This helper can be used to access subsequent fragments by
-> > + *           moving the data pointers. To use, an XDP program can call
-> > + *           this helper with the byte offset of the packet payload that
-> > + *           it wants to access; the helper will move *xdp_md*\ **->data**
-> > + *           and *xdp_md *\ **->data_end** so they point to the requested
-> > + *           payload offset and to the end of the fragment containing this
-> > + *           byte offset, and return the byte offset of the start of the
-> > + *           fragment.
-> > + *           To move back to the beginning of the packet, simply call the
-> > + *           helper with an offset of '0'.
-> > + *           Note also that the helpers that modify the packet boundaries
-> > + *           (*bpf_xdp_adjust_head()*, *bpf_xdp_adjust_tail()* and
-> > + *           *bpf_xdp_adjust_meta()*) will fail if the pointers have been
-> > + *           moved; it is the responsibility of the BPF program to move them
-> > + *           back before using these helpers.
-> > + *
-> > + *           A call to this helper is susceptible to change the underlying
-> > + *           packet buffer. Therefore, at load time, all checks on pointers
-> > + *           previously done by the verifier are invalidated and must be
-> > + *           performed again, if the helper is used in combination with
-> > + *           direct packet access.
-> > + *   Return
-> > + *           offset between the beginning of the current fragment and
-> > + *           original *xdp_md*\ **->data** on success, or a negative error
-> > + *           in case of failure.
-> >   */
-> >  #define __BPF_FUNC_MAPPER(FN)                \
-> >       FN(unspec),                     \
-> > @@ -5055,6 +5086,7 @@ union bpf_attr {
-> >       FN(get_func_ip),                \
-> >       FN(get_attach_cookie),          \
-> >       FN(xdp_get_buff_len),           \
-> > +     FN(xdp_adjust_data),            \
-> >       /* */
-> >
-> >  /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-> > diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-> > index 869dcf23a1ca..f09c2c8c0d6c 100644
-> > --- a/net/bpf/test_run.c
-> > +++ b/net/bpf/test_run.c
-> > @@ -757,6 +757,8 @@ static int xdp_convert_md_to_buff(struct xdp_md *xdp_md, struct xdp_buff *xdp)
-> >       }
-> >
-> >       xdp->data = xdp->data_meta + xdp_md->data;
-> > +     xdp->mb.headroom = xdp->data - xdp->data_hard_start;
-> > +     xdp->mb.headlen = xdp->data_end - xdp->data;
-> >       return 0;
-> >
-> >  free_dev:
-> > @@ -871,6 +873,12 @@ int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
-> >       if (ret)
-> >               goto out;
-> >
-> > +     /* data pointers need to be reset after frag iteration */
-> > +     if (unlikely(xdp.data_hard_start + xdp.mb.headroom != xdp.data)) {
-> > +             ret = -EFAULT;
-> > +             goto out;
-> > +     }
-> > +
-> >       size = xdp.data_end - xdp.data_meta + sinfo->xdp_frags_size;
-> >       ret = bpf_test_finish(kattr, uattr, xdp.data_meta, sinfo, size,
-> >                             retval, duration);
-> > diff --git a/net/core/filter.c b/net/core/filter.c
-> > index 2122c00c680f..ed2a6632adce 100644
-> > --- a/net/core/filter.c
-> > +++ b/net/core/filter.c
-> > @@ -3827,6 +3827,10 @@ BPF_CALL_2(bpf_xdp_adjust_head, struct xdp_buff *, xdp, int, offset)
-> >       void *data_start = xdp_frame_end + metalen;
-> >       void *data = xdp->data + offset;
-> >
-> > +     /* data pointers need to be reset after frag iteration */
-> > +     if (unlikely(xdp->data_hard_start + xdp->mb.headroom != xdp->data))
-> > +             return -EINVAL;
->
-> -EFAULT? It might be nice if error code is different from below
-> for debugging?
+Actually I just reproduced this EAGAIN issue here. I ran `git revert`
+but it didn't actually revert your patch for some reason, so I had to
+manually remove those usleep() and finally reproduced it.
 
-ack, I will fix it in v13
+I used strace -ttt to get the time spent on 100 times of read(), it is
+about 0.2ms in total. However, runqslower shows the kworker wakeup
+latency can be 10+ms:
 
->
-> > +
-> >       if (unlikely(data < data_start ||
-> >                    data > xdp->data_end - ETH_HLEN))
-> >               return -EINVAL;
-> > @@ -3836,6 +3840,9 @@ BPF_CALL_2(bpf_xdp_adjust_head, struct xdp_buff *, xdp, int, offset)
-> >                       xdp->data_meta, metalen);
-> >       xdp->data_meta += offset;
-> >       xdp->data = data;
-> > +     /* update metada for multi-buff frag iteration */
-> > +     xdp->mb.headroom = xdp->data - xdp->data_hard_start;
-> > +     xdp->mb.headlen = xdp->data_end - xdp->data;
-> >
-> >       return 0;
-> >  }
-> > @@ -3910,6 +3917,10 @@ BPF_CALL_2(bpf_xdp_adjust_tail, struct xdp_buff *, xdp, int, offset)
-> >       void *data_hard_end = xdp_data_hard_end(xdp); /* use xdp->frame_sz */
-> >       void *data_end = xdp->data_end + offset;
-> >
-> > +     /* data pointer needs to be reset after frag iteration */
-> > +     if (unlikely(xdp->data + xdp->mb.headlen != xdp->data_end))
-> > +             return -EINVAL;
->
-> EFAULT?
+19:29:16 kworker/2:0      19836           14071
+19:29:18 kworker/1:0      19836           14369
+19:29:20 ksoftirqd/2      19794           12731
+19:29:20 kworker/2:0      23              11059
+19:29:21 kworker/1:0      19836           11020
 
-ack, I will fix it in v13
+So clearly repeating read() for 100 times is too far away from the worst
+delay. And the wakeup latency is only part of the packet latency, so in
+other words, in the worst scenario a packet can be delayed for more
+than 10ms, which is roughly 5000 times of read().
 
->
-> > +
-> >       if (unlikely(xdp_buff_is_mb(xdp)))
-> >               return bpf_xdp_mb_adjust_tail(xdp, offset);
-> >
-> > @@ -3949,6 +3960,10 @@ BPF_CALL_2(bpf_xdp_adjust_meta, struct xdp_buff *, xdp, int, offset)
-> >       void *meta = xdp->data_meta + offset;
-> >       unsigned long metalen = xdp->data - meta;
-> >
-> > +     /* data pointer needs to be reset after frag iteration */
-> > +     if (unlikely(xdp->data_hard_start + xdp->mb.headroom != xdp->data))
-> > +             return -EINVAL;
->
-> same comment.
+Anyway, this is a not a bug in sockmap, it is a problem of not using
+blocking mode in sockmap_listen tests.
 
-ack, I will fix it in v13
-
->
-> >       if (xdp_data_meta_unsupported(xdp))
-> >               return -ENOTSUPP;
-> >       if (unlikely(meta < xdp_frame_end ||
-> > @@ -3970,6 +3985,48 @@ static const struct bpf_func_proto bpf_xdp_adjust_meta_proto = {
-> >       .arg2_type      = ARG_ANYTHING,
-> >  };
-> >
-> > +BPF_CALL_2(bpf_xdp_adjust_data, struct xdp_buff *, xdp, u32, offset)
-> > +{
-> > +     struct skb_shared_info *sinfo = xdp_get_shared_info_from_buff(xdp);
-> > +     u32 base_offset = xdp->mb.headlen;
-> > +     int i;
-> > +
-> > +     if (!xdp_buff_is_mb(xdp) || offset > sinfo->xdp_frags_size)
-> > +             return -EINVAL;
->
-> Do we need to error this? If its not mb we can just return the same
-> as offset==0?
-
-ack, we can check do something like:
-
-u32 max_offset = xdp->mb.headlen;
-
-if (xdp_buff_is_mb(xdp))
-   max_offset += sinfo->xdp_frags_size;
-
-if (offset > max_offset)
-   return -EINVAL;
-
-what do you think?
-
-Regards,
-Lorenzo
-
->
-> > +
-> > +     if (offset < xdp->mb.headlen) {
-> > +             /* linear area */
-> > +             xdp->data = xdp->data_hard_start + xdp->mb.headroom + offset;
-> > +             xdp->data_end = xdp->data_hard_start + xdp->mb.headroom +
-> > +                             xdp->mb.headlen;
-> > +             return 0;
-> > +     }
-> > +
-> > +     for (i = 0; i < sinfo->nr_frags; i++) {
-> > +             /* paged area */
-> > +             skb_frag_t *frag = &sinfo->frags[i];
-> > +             unsigned int size = skb_frag_size(frag);
-> > +
-> > +             if (offset < base_offset + size) {
-> > +                     u8 *addr = skb_frag_address(frag);
-> > +
-> > +                     xdp->data = addr + offset - base_offset;
-> > +                     xdp->data_end = addr + size;
-> > +                     break;
-> > +             }
-> > +             base_offset += size;
-> > +     }
-> > +     return base_offset;
-> > +}
->
-
+Thanks.
