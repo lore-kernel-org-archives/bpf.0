@@ -2,129 +2,399 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39708C433F5
-	for <bpf@archiver.kernel.org>; Fri,  3 Sep 2021 16:51:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DAE08C433F5
+	for <bpf@archiver.kernel.org>; Fri,  3 Sep 2021 16:57:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 175A360F92
-	for <bpf@archiver.kernel.org>; Fri,  3 Sep 2021 16:51:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B727D610CC
+	for <bpf@archiver.kernel.org>; Fri,  3 Sep 2021 16:57:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236364AbhICQwl (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 3 Sep 2021 12:52:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43538 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230187AbhICQwk (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 3 Sep 2021 12:52:40 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6760C061575;
-        Fri,  3 Sep 2021 09:51:40 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id c206so11155373ybb.12;
-        Fri, 03 Sep 2021 09:51:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=idwDNbH9Wo5Pci3iRQ8ors3jpFQBSSL6bTxgZX7Cc/8=;
-        b=DKE9nLlWSUOxRlyu+tVrpndtb8H9vBjqtSM/j++9gc3jidyTis6Kdb/3AMX2R3fypJ
-         OC5IBwWIsY62dmtGvHvQlCqieLDPFqVfR41QMC+riJULOJO3BMP//M7x+u3nergv4lAZ
-         0Z5wx3oq4BTyxapS+zKzpA7rlEu6KOZwEelyvqo73Hntb31nalLqoQ3hobAinV0aud/E
-         CNBIFe7TWZDj438BEKwXpWDfeokfkTgTq81nVzRKYQ4rdmcKK5YeBa1lUuG0lCs4z8xE
-         AjSwnxv+BgXCpL2nFmaNgHzybwyNX7q2z4jeTd7TOW7q0KVGK9EPi3l2LmcjSCKxeknR
-         5zYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=idwDNbH9Wo5Pci3iRQ8ors3jpFQBSSL6bTxgZX7Cc/8=;
-        b=gCirFejT8n1dMO5gBmUzfraFszZm4gbsyOL31cQOtmEZ1XnQ8yeDUnS2jWjsfqdb3z
-         jCb0AKcM69C+Zh553swRfAKD/Cp0vflqAEqvwIg6uaVC4p2YDmKBt0APA4K9fo90X3Ts
-         tIRAf5RAnb7e3KCH4MPae1jJ8xnJPPs3lmPTv5p5GqHRbEKiRbylYNlo7RmhLhjjRkWn
-         qaY29extBNFaCT+QFn1Qc+yd+eQKLkuHxlNc3Q9YcPh6tYjOhmcrNC5DUCEh8IdCNX0z
-         kV+JubJStGasG2IIX0NWep6KgZ/afURXSnpwe1pwQXw55TjqdX/W5RMiaFoEXwvDk/S/
-         eCCg==
-X-Gm-Message-State: AOAM533LI3PAUNzhdutZL42fspKT81nh8cpNirqiTQ4mH+nLNtZdpSc+
-        Bc06a4EUwWiWufoKZy7pGYW6UXjOAFu10eMoFYE=
-X-Google-Smtp-Source: ABdhPJwEf6iJS9+pCeC+HwaYztN89WrvtY7/BT6uo8708nAfmVai0k8G+L5mAPn2SD0CoAZ317OM/QKDekKYlRCuhwQ=
-X-Received: by 2002:a5b:7c4:: with SMTP id t4mr7819ybq.368.1630687900091; Fri,
- 03 Sep 2021 09:51:40 -0700 (PDT)
+        id S1349923AbhICQ6x (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 3 Sep 2021 12:58:53 -0400
+Received: from mga14.intel.com ([192.55.52.115]:13117 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230187AbhICQ6x (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 3 Sep 2021 12:58:53 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10096"; a="219169049"
+X-IronPort-AV: E=Sophos;i="5.85,265,1624345200"; 
+   d="scan'208";a="219169049"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2021 09:57:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.85,265,1624345200"; 
+   d="scan'208";a="534211828"
+Received: from ipd-test105-dell.igk.intel.com (HELO localhost.localdomain) ([10.102.20.173])
+  by FMSMGA003.fm.intel.com with ESMTP; 03 Sep 2021 09:57:46 -0700
+Date:   Fri, 3 Sep 2021 20:58:23 +0200
+From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To:     Magnus Karlsson <magnus.karlsson@gmail.com>
+Cc:     magnus.karlsson@intel.com, bjorn@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, netdev@vger.kernel.org,
+        jonathan.lemon@gmail.com, ciara.loftus@intel.com,
+        bpf@vger.kernel.org, yhs@fb.com, andrii@kernel.org
+Subject: Re: [PATCH bpf-next 19/20] selftests: xsk: add tests for invalid xsk
+ descriptors
+Message-ID: <YTJwT8QBAELMO0T1@localhost.localdomain>
+References: <20210901104732.10956-1-magnus.karlsson@gmail.com>
+ <20210901104732.10956-20-magnus.karlsson@gmail.com>
 MIME-Version: 1.0
-References: <20210902090925.2010528-1-jean-philippe@linaro.org>
- <CAADnVQKwHXw7fLGpJBJBb_MW+d1Gzexo2wk9QwE2v3fy=kHDRA@mail.gmail.com> <YTIWNRqZ/HmHgcaE@larix>
-In-Reply-To: <YTIWNRqZ/HmHgcaE@larix>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 3 Sep 2021 09:51:29 -0700
-Message-ID: <CAEf4BzYqfykri6kF=KM8eQrJb3O0HLahB2ZqA-N_8TfmsZCr8g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix build of task_pt_regs tests
- for arm64
-To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Daniel Xu <dxu@dxuuu.xyz>,
-        bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210901104732.10956-20-magnus.karlsson@gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Sep 3, 2021 at 5:31 AM Jean-Philippe Brucker
-<jean-philippe@linaro.org> wrote:
->
-> On Thu, Sep 02, 2021 at 12:13:40PM -0700, Alexei Starovoitov wrote:
-> > On Thu, Sep 2, 2021 at 2:08 AM Jean-Philippe Brucker
-> > <jean-philippe@linaro.org> wrote:
-> > >
-> > > struct pt_regs is not exported to userspace on all archs. arm64 and s390
-> > > export "user_pt_regs" instead, which causes build failure at the moment:
-> > >
-> > >   progs/test_task_pt_regs.c:8:16: error: variable has incomplete type 'struct pt_regs'
-> > >   struct pt_regs current_regs = {};
-> >
-> > Right, which is 'bpf_user_pt_regs_t'.
-> > It's defined for all archs and arm64/s390/ppc/risv define it
-> > differently from pt_regs.
-> >
-> > >
-> > > Use the multi-arch macros defined by tools/lib/bpf/bpf_tracing.h to copy
-> > > the pt_regs into a locally-defined struct.
-> > >
-> > > Copying the user_pt_regs struct on arm64 wouldn't work because the
-> > > struct is too large and the compiler complains about using too much
-> > > stack.
-> >
-> > That's a different issue.
->
-> It does work when doing an implicit copy (current_regs = *regs) rather
-> than using __builtin_memcpy(). Don't know why but I'll take it.
->
-> > I think the cleaner fix would be to make the test use
-> > bpf_user_pt_regs_t instead.
->
-> Right, although that comes with another complication. We end up including
-> tools/include/uapi/asm/bpf_perf_event.h which requires the compiler
-> builtins "__aarch64__", "__s390__", etc. Those are not defined with
-> "clang -target bpf" so I have to add them to the command line.
-> I'll resend with your suggestion but this patch is simpler.
->
+On Wed, Sep 01, 2021 at 12:47:31PM +0200, Magnus Karlsson wrote:
+> From: Magnus Karlsson <magnus.karlsson@intel.com>
+> 
+> Add tests for invalid xsk descriptors in the Tx ring. A number of
+> handcrafted nasty invalid descriptors are created and submitted to the
+> tx ring to check that they are validated correctly. Corener case valid
 
-The test doesn't care about struct pt_regs type itself, it only cares
-to check that contents of captured pt_regs are the same.
+Corner
 
-We can use CO-RE to check whether user_pt_regs or pt_regs exists in
-the kernel. We can also use bpf_core_type_size() to know exactly how
-many bytes we want to capture. And then just use
-bpf_probe_read_kernel() as memcpy() equivalent to capture bytes. This
-should work on all architectures.
+> ones are also sent. The tests are run for both aligned and unaligned
+> mode.
+> 
+> pkt_stream_set() is introduced to be able to create a hand-crafted
+> packet stream where every single packet is specified in detail.
+> 
+> Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
+> ---
+>  tools/testing/selftests/bpf/xdpxceiver.c | 143 ++++++++++++++++++++---
+>  tools/testing/selftests/bpf/xdpxceiver.h |   7 +-
+>  2 files changed, 131 insertions(+), 19 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/xdpxceiver.c b/tools/testing/selftests/bpf/xdpxceiver.c
+> index d085033afd53..a4f6ce3a6b14 100644
+> --- a/tools/testing/selftests/bpf/xdpxceiver.c
+> +++ b/tools/testing/selftests/bpf/xdpxceiver.c
+> @@ -46,6 +46,8 @@
+>   *       then remove xsk sockets from queue 0 on both veth interfaces and
+>   *       finally run a traffic on queues ids 1
+>   *    g. unaligned mode
+> + *    h. tests for invalid and corner case Tx descriptors so that the correct ones
+> + *       are discarded and let through, respectively.
+>   *
+>   * Total tests: 12
+>   *
+> @@ -394,7 +396,7 @@ static void __test_spec_init(struct test_spec *test, struct ifobject *ifobj_tx,
+>  		for (j = 0; j < MAX_SOCKETS; j++) {
+>  			memset(&ifobj->umem_arr[j], 0, sizeof(ifobj->umem_arr[j]));
+>  			memset(&ifobj->xsk_arr[j], 0, sizeof(ifobj->xsk_arr[j]));
+> -			ifobj->umem_arr[j].num_frames = DEFAULT_PKT_CNT / 4;
+> +			ifobj->umem_arr[j].num_frames = DEFAULT_UMEM_BUFFERS;
+>  			ifobj->umem_arr[j].frame_size = XSK_UMEM__DEFAULT_FRAME_SIZE;
+>  			ifobj->xsk_arr[j].rxqsize = XSK_RING_CONS__DEFAULT_NUM_DESCS;
+>  		}
+> @@ -450,6 +452,16 @@ static struct pkt *pkt_stream_get_pkt(struct pkt_stream *pkt_stream, u32 pkt_nb)
+>  	return &pkt_stream->pkts[pkt_nb];
+>  }
+>  
+> +static struct pkt *pkt_stream_get_next_rx_pkt(struct pkt_stream *pkt_stream)
+> +{
+> +	while (pkt_stream->rx_pkt_nb < pkt_stream->nb_pkts) {
+> +		if (pkt_stream->pkts[pkt_stream->rx_pkt_nb].valid)
+> +			return &pkt_stream->pkts[pkt_stream->rx_pkt_nb++];
+> +		pkt_stream->rx_pkt_nb++;
+> +	}
+> +	return NULL;
+> +}
+> +
+>  static void pkt_stream_delete(struct pkt_stream *pkt_stream)
+>  {
+>  	free(pkt_stream->pkts);
+> @@ -465,17 +477,31 @@ static void pkt_stream_restore_default(struct test_spec *test)
+>  	test->ifobj_rx->pkt_stream = test->pkt_stream_default;
+>  }
+>  
+> -static struct pkt_stream *pkt_stream_generate(struct xsk_umem_info *umem, u32 nb_pkts, u32 pkt_len)
+> +static struct pkt_stream *__pkt_stream_alloc(u32 nb_pkts)
+>  {
+>  	struct pkt_stream *pkt_stream;
+> -	u32 i;
+>  
+> -	pkt_stream = malloc(sizeof(*pkt_stream));
+> +	pkt_stream = calloc(1, sizeof(*pkt_stream));
 
-> Thanks,
-> Jean
+So with that probably my previous comment about use_addr_for_fill being
+not set is not relevant.
+
+>  	if (!pkt_stream)
+> -		exit_with_error(ENOMEM);
+> +		return NULL;
+>  
+>  	pkt_stream->pkts = calloc(nb_pkts, sizeof(*pkt_stream->pkts));
+> -	if (!pkt_stream->pkts)
+> +	if (!pkt_stream->pkts) {
+> +		free(pkt_stream);
+> +		return NULL;
+> +	}
+> +
+> +	pkt_stream->nb_pkts = nb_pkts;
+> +	return pkt_stream;
+> +}
+> +
+> +static struct pkt_stream *pkt_stream_generate(struct xsk_umem_info *umem, u32 nb_pkts, u32 pkt_len)
+> +{
+> +	struct pkt_stream *pkt_stream;
+> +	u32 i;
+> +
+> +	pkt_stream = __pkt_stream_alloc(nb_pkts);
+> +	if (!pkt_stream)
+>  		exit_with_error(ENOMEM);
+>  
+>  	pkt_stream->nb_pkts = nb_pkts;
+> @@ -525,6 +551,26 @@ static void pkt_stream_replace_half(struct test_spec *test, u32 pkt_len, u32 off
+>  	test->ifobj_rx->pkt_stream = pkt_stream;
+>  }
+>  
+> +static void pkt_stream_set(struct test_spec *test, struct pkt *pkts, u32 nb_pkts)
+
+This is still a generation of pkt stream, can we name this is as:
+pkt_stream_generate_custom or is this too long? WDYT?
+
+> +{
+> +	struct pkt_stream *pkt_stream;
+> +	u32 i;
+> +
+> +	pkt_stream = __pkt_stream_alloc(nb_pkts);
+> +	if (!pkt_stream)
+> +		exit_with_error(ENOMEM);
+> +
+> +	test->ifobj_tx->pkt_stream = pkt_stream;
+> +	test->ifobj_rx->pkt_stream = pkt_stream;
+> +
+> +	for (i = 0; i < nb_pkts; i++) {
+> +		pkt_stream->pkts[i].addr = pkts[i].addr;
+> +		pkt_stream->pkts[i].len = pkts[i].len;
+> +		pkt_stream->pkts[i].payload = i;
+> +		pkt_stream->pkts[i].valid = pkts[i].valid;
+> +	}
+> +}
+> +
+>  static struct pkt *pkt_generate(struct ifobject *ifobject, u32 pkt_nb)
+>  {
+>  	struct pkt *pkt = pkt_stream_get_pkt(ifobject->pkt_stream, pkt_nb);
+> @@ -535,6 +581,8 @@ static struct pkt *pkt_generate(struct ifobject *ifobject, u32 pkt_nb)
+>  
+>  	if (!pkt)
+>  		return NULL;
+> +	if (!pkt->valid || pkt->len < PKT_SIZE)
+> +		return pkt;
+>  
+>  	data = xsk_umem__get_data(ifobject->umem->buffer, pkt->addr);
+>  	udp_hdr = (struct udphdr *)(data + sizeof(struct ethhdr) + sizeof(struct iphdr));
+> @@ -596,19 +644,24 @@ static bool is_pkt_valid(struct pkt *pkt, void *buffer, u64 addr, u32 len)
+>  		return false;
+>  	}
+>  
+> +	if (len < PKT_SIZE) {
+> +		/*Do not try to verify packets that are smaller than minimun size. */
+
+minimum
+
+> +		return true;
+> +	}
+> +
+> +	if (pkt->len != len) {
+> +		ksft_test_result_fail
+> +			("ERROR: [%s] expected length [%d], got length [%d]\n",
+> +			 __func__, pkt->len, len);
+> +		return false;
+> +	}
+> +
+>  	if (iphdr->version == IP_PKT_VER && iphdr->tos == IP_PKT_TOS) {
+>  		u32 seqnum = ntohl(*((u32 *)(data + PKT_HDR_SIZE)));
+>  
+>  		if (opt_pkt_dump)
+>  			pkt_dump(data, PKT_SIZE);
+>  
+> -		if (pkt->len != len) {
+> -			ksft_test_result_fail
+> -				("ERROR: [%s] expected length [%d], got length [%d]\n",
+> -					__func__, pkt->len, len);
+> -			return false;
+> -		}
+> -
+>  		if (pkt->payload != seqnum) {
+>  			ksft_test_result_fail
+>  				("ERROR: [%s] expected seqnum [%d], got seqnum [%d]\n",
+> @@ -645,6 +698,15 @@ static void complete_pkts(struct xsk_socket_info *xsk, int batch_size)
+>  
+>  	rcvd = xsk_ring_cons__peek(&xsk->umem->cq, batch_size, &idx);
+>  	if (rcvd) {
+> +		if (rcvd > xsk->outstanding_tx) {
+> +			u64 addr = *xsk_ring_cons__comp_addr(&xsk->umem->cq, idx + rcvd - 1);
+> +
+> +			ksft_test_result_fail("ERROR: [%s] Too many packets completed\n",
+> +					      __func__);
+> +			ksft_print_msg("Last completion address: %llx\n", addr);
+> +			return;
+> +		}
+> +
+>  		xsk_ring_cons__release(&xsk->umem->cq, rcvd);
+>  		xsk->outstanding_tx -= rcvd;
+>  	}
+> @@ -653,11 +715,10 @@ static void complete_pkts(struct xsk_socket_info *xsk, int batch_size)
+>  static void receive_pkts(struct pkt_stream *pkt_stream, struct xsk_socket_info *xsk,
+>  			 struct pollfd *fds)
+>  {
+> -	u32 idx_rx = 0, idx_fq = 0, rcvd, i, pkt_count = 0;
+> -	struct pkt *pkt;
+> +	struct pkt *pkt = pkt_stream_get_next_rx_pkt(pkt_stream);
+> +	u32 idx_rx = 0, idx_fq = 0, rcvd, i;
+>  	int ret;
+>  
+> -	pkt = pkt_stream_get_pkt(pkt_stream, pkt_count++);
+>  	while (pkt) {
+>  		rcvd = xsk_ring_cons__peek(&xsk->rx, BATCH_SIZE, &idx_rx);
+>  		if (!rcvd) {
+> @@ -685,13 +746,21 @@ static void receive_pkts(struct pkt_stream *pkt_stream, struct xsk_socket_info *
+>  			const struct xdp_desc *desc = xsk_ring_cons__rx_desc(&xsk->rx, idx_rx++);
+>  			u64 addr = desc->addr, orig;
+>  
+> +			if (!pkt) {
+> +				ksft_test_result_fail("ERROR: [%s] Received too many packets.\n",
+> +						      __func__);
+> +				ksft_print_msg("Last packet has addr: %llx len: %u\n",
+> +					       addr, desc->len);
+> +				return;
+> +			}
+> +
+>  			orig = xsk_umem__extract_addr(addr);
+>  			addr = xsk_umem__add_offset_to_addr(addr);
+>  			if (!is_pkt_valid(pkt, xsk->umem->buffer, addr, desc->len))
+>  				return;
+>  
+>  			*xsk_ring_prod__fill_addr(&xsk->umem->fq, idx_fq++) = orig;
+> -			pkt = pkt_stream_get_pkt(pkt_stream, pkt_count++);
+> +			pkt = pkt_stream_get_next_rx_pkt(pkt_stream);
+>  		}
+>  
+>  		xsk_ring_prod__submit(&xsk->umem->fq, rcvd);
+> @@ -875,6 +944,7 @@ static void testapp_cleanup_xsk_res(struct ifobject *ifobj)
+>  {
+>  	print_verbose("Destroying socket\n");
+>  	xsk_socket__delete(ifobj->xsk->xsk);
+> +	munmap(ifobj->umem->buffer, ifobj->umem->num_frames * ifobj->umem->frame_size);
+>  	xsk_umem__delete(ifobj->umem->umem);
+>  }
+>  
+> @@ -1118,6 +1188,33 @@ static bool testapp_unaligned(struct test_spec *test)
+>  	return true;
+>  }
+>  
+> +static void testapp_inv_desc(struct test_spec *test)
+
+I'd say that speaking out whole 'invalid' word wouldn't hurt us here.
+
+> +{
+> +	struct pkt pkts[] = {{0, 0, 0, true}, /* Zero packet length and zero address allowed */
+
+Above looks a bit weird, maybe this should be formatted same as the lines
+below:
+
+	struct pkt pkts[] = {
+		/* Zero packet length and zero address allowed */
+			     {0, 0, 0, true},
+
+> +		/* Zero packet length allowed */
+> +			     {0x1000, 0, 0, true},
+> +		/* Straddling the start of umem */
+> +			     {-2, PKT_SIZE, 0, false},
+> +		/* Packet too large */
+> +			     {0x2000, XSK_UMEM__INVALID_FRAME_SIZE, 0, false},
+> +		/* After umem ends */
+> +			     {UMEM_SIZE, PKT_SIZE, 0, false},
+> +		/* Straddle the end of umem */
+> +			     {UMEM_SIZE - PKT_SIZE / 2, PKT_SIZE, 0, false},
+> +		/* Straddle a page boundrary */
+> +			     {0x3000 - PKT_SIZE / 2, PKT_SIZE, 0, false},
+> +		/* Valid packet for synch so that something is received */
+> +			     {0x4000, PKT_SIZE, 0, true}};
+> +
+> +	if (test->ifobj_tx->umem->unaligned_mode) {
+> +		/* Crossing a page boundrary allowed */
+> +		pkts[6].valid = true;
+> +	}
+> +	pkt_stream_set(test, pkts, ARRAY_SIZE(pkts));
+> +	testapp_validate_traffic(test);
+> +	pkt_stream_restore_default(test);
+> +}
+> +
+>  static void init_iface(struct ifobject *ifobj, const char *dst_mac, const char *src_mac,
+>  		       const char *dst_ip, const char *src_ip, const u16 dst_port,
+>  		       const u16 src_port, thread_func_t func_ptr)
+> @@ -1159,7 +1256,7 @@ static void run_pkt_test(struct test_spec *test, enum test_mode mode, enum test_
+>  	case TEST_TYPE_BPF_RES:
+>  		testapp_bpf_res(test);
+>  		break;
+> -	case TEST_TYPE_NOPOLL:
+> +	case TEST_TYPE_RUN_TO_COMPLETION:
+
+I think that you were updating some comment around it on previous patches
+and it probably belongs to this one.
+
+>  		test_spec_set_name(test, "RUN_TO_COMPLETION");
+>  		testapp_validate_traffic(test);
+>  		break;
+> @@ -1169,6 +1266,16 @@ static void run_pkt_test(struct test_spec *test, enum test_mode mode, enum test_
+>  		test_spec_set_name(test, "POLL");
+>  		testapp_validate_traffic(test);
+>  		break;
+> +	case TEST_TYPE_ALIGNED_INV_DESC:
+> +		test_spec_set_name(test, "ALIGNED_INV_DESC");
+> +		testapp_inv_desc(test);
+> +		break;
+> +	case TEST_TYPE_UNALIGNED_INV_DESC:
+> +		test_spec_set_name(test, "UNALIGNED_INV_DESC");
+> +		test->ifobj_tx->umem->unaligned_mode = true;
+> +		test->ifobj_rx->umem->unaligned_mode = true;
+> +		testapp_inv_desc(test);
+> +		break;
+>  	case TEST_TYPE_UNALIGNED:
+>  		if (!testapp_unaligned(test))
+>  			return;
+> diff --git a/tools/testing/selftests/bpf/xdpxceiver.h b/tools/testing/selftests/bpf/xdpxceiver.h
+> index 129801eb013c..2d9efb89ea28 100644
+> --- a/tools/testing/selftests/bpf/xdpxceiver.h
+> +++ b/tools/testing/selftests/bpf/xdpxceiver.h
+> @@ -38,6 +38,8 @@
+>  #define BATCH_SIZE 8
+>  #define POLL_TMOUT 1000
+>  #define DEFAULT_PKT_CNT (4 * 1024)
+> +#define DEFAULT_UMEM_BUFFERS (DEFAULT_PKT_CNT / 4)
+> +#define UMEM_SIZE (DEFAULT_UMEM_BUFFERS * XSK_UMEM__DEFAULT_FRAME_SIZE)
+>  #define RX_FULL_RXQSIZE 32
+>  #define DEFAULT_OFFSET 256
+>  #define XSK_UMEM__INVALID_FRAME_SIZE (XSK_UMEM__DEFAULT_FRAME_SIZE + 1)
+> @@ -51,9 +53,11 @@ enum test_mode {
+>  };
+>  
+>  enum test_type {
+> -	TEST_TYPE_NOPOLL,
+> +	TEST_TYPE_RUN_TO_COMPLETION,
+>  	TEST_TYPE_POLL,
+>  	TEST_TYPE_UNALIGNED,
+> +	TEST_TYPE_ALIGNED_INV_DESC,
+> +	TEST_TYPE_UNALIGNED_INV_DESC,
+>  	TEST_TYPE_TEARDOWN,
+>  	TEST_TYPE_BIDI,
+>  	TEST_TYPE_STATS,
+> @@ -104,6 +108,7 @@ struct pkt {
+>  
+>  struct pkt_stream {
+>  	u32 nb_pkts;
+> +	u32 rx_pkt_nb;
+>  	struct pkt *pkts;
+>  	bool use_addr_for_fill;
+>  };
+> -- 
+> 2.29.0
+> 
