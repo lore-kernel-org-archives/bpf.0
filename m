@@ -2,180 +2,117 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-6.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B3B55C433F5
-	for <bpf@archiver.kernel.org>; Sat,  4 Sep 2021 10:56:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD7A6C433F5
+	for <bpf@archiver.kernel.org>; Sat,  4 Sep 2021 23:01:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8768060E76
-	for <bpf@archiver.kernel.org>; Sat,  4 Sep 2021 10:56:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 63DB160524
+	for <bpf@archiver.kernel.org>; Sat,  4 Sep 2021 23:01:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351106AbhIDK5I (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 4 Sep 2021 06:57:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58734 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351100AbhIDK5H (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 4 Sep 2021 06:57:07 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363C5C061575;
-        Sat,  4 Sep 2021 03:56:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=HbnGaf0bnPZtgz30+mN/ev5Nx/MTJPwie3Aor7OwJtk=; b=OfdoP1UUmRFGKnW5MiBcbKdHmh
-        1gHGW4nZXLEjKgtCMqYzBfmWTMCPsF2R+08DMPa9pRVj+hyfxfikjx9VxLIRm0ZH0YIEXsyExvAtf
-        15R4onfs3kzAWfDtQUgSt2P7sCV+wUKm5Tm9sh5OREsa9fGNsAmXiVu7m4NG7vUwwX0DgdbAs38mD
-        hC6Y3rNJGPp5uoHD7rQTi1S60oUdGi9LKq+eka5x5R+M6nkwciSDtVFak3bKvmI4Hb/LfPJYX+KtP
-        Ei65lOdmzJilyRor/vqghmiYyt0EgnEG8qTA+/RwAuE8FoxXiKclFwBXNEY7ZBPBm1XbW/CpouHpC
-        4VGzqMfg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mMTKc-005GWI-9s; Sat, 04 Sep 2021 10:55:38 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 9D405986283; Sat,  4 Sep 2021 12:55:29 +0200 (CEST)
-Date:   Sat, 4 Sep 2021 12:55:29 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Song Liu <songliubraving@fb.com>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Kernel Team <kernel-team@fb.com>
-Subject: Re: [PATCH v5 bpf-next 2/3] bpf: introduce helper
- bpf_get_branch_snapshot
-Message-ID: <20210904105529.GA5106@worktop.programming.kicks-ass.net>
-References: <20210902165706.2812867-1-songliubraving@fb.com>
- <20210902165706.2812867-3-songliubraving@fb.com>
- <YTHhOy1gqr44C1bI@hirez.programming.kicks-ass.net>
- <CAEf4BzZ0eq1iFh1oVwTZ7+bQkb=pJShgDWzUSAp41sk30iQunQ@mail.gmail.com>
- <20210904102430.GD4323@worktop.programming.kicks-ass.net>
+        id S232111AbhIDXCX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 4 Sep 2021 19:02:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:29718 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229481AbhIDXCX (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sat, 4 Sep 2021 19:02:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1630796480;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uNhzLsF4iRWK4KsXwkGsahNdu3Yt13aVCLJA26yT90U=;
+        b=LKI3g4I+Pe6lnpwcQ/7iD4hMt53t18nxMbeihHKMCL1AGDUU0wdXQem3D3ZOs+WywdKCHq
+        dMajALImuk/ECkePBUkbaw4ylmvFpmxozrQiFB+HL8rDFcncGdBvTQMBhjz7rSRP27E1AN
+        LqlpDlBBQAixcmh4qkkJuzg8j28gyVE=
+Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com
+ [209.85.161.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-14-6JQt9OY9MOaa87o-wJmOXQ-1; Sat, 04 Sep 2021 19:01:19 -0400
+X-MC-Unique: 6JQt9OY9MOaa87o-wJmOXQ-1
+Received: by mail-oo1-f72.google.com with SMTP id w9-20020a4aca09000000b0028b7adc5bd2so1898004ooq.11
+        for <bpf@vger.kernel.org>; Sat, 04 Sep 2021 16:01:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=uNhzLsF4iRWK4KsXwkGsahNdu3Yt13aVCLJA26yT90U=;
+        b=QdYrJCj8Se6IWwQh0QQJhmOvHp8oKHlySryQyKH2U3egNRorBYtF67z/8eZEHceylE
+         aPg/tQyD7P2aV0KK+XkigtuvjedzpiEJYtVha6uhdvRM75NEgRstD5OjKhptfkjlEUYO
+         KP/RSD19vs+kXycnqSG6a+vhJ7NQ00Y+irjbyMPFUJB+1j7SOw1t4unJWdtWuMxOD3XE
+         J0YhyGaBFowza8RyibOHTNzIqL166AKfvIWLCcM0wPxNNhJyPArNRxk9RNdVyNN2GSCb
+         TAS+/gH8SuBCLTtAodX++vzdoPyO9TA/HMU85bDcvhGwjVw1Fsmz+j6Ar9W4WBM+0n8c
+         PhpQ==
+X-Gm-Message-State: AOAM531IDT5AAvrTuPkbI1RU/8gcazOwroeHVhThSRAWkF3Ylw5m0j+7
+        KE6OLpB2p2nnDEexcAb1D6MGU86ZLt4+87o4iLocoQHuN/Dj0AggA7b9ettCkmmkx9rKCd9besJ
+        vOwL6G2VKgSgs
+X-Received: by 2002:aca:f189:: with SMTP id p131mr4014157oih.128.1630796478483;
+        Sat, 04 Sep 2021 16:01:18 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJw1y6WtwxTzsPd1+RG3rtgXo0yUpy4975hviEF9fX0AdiAL/t5/DD8MaFp8ZPnY4qXfMSfhXw==
+X-Received: by 2002:aca:f189:: with SMTP id p131mr4014132oih.128.1630796478273;
+        Sat, 04 Sep 2021 16:01:18 -0700 (PDT)
+Received: from treble ([2600:1700:6e32:6c00::15])
+        by smtp.gmail.com with ESMTPSA id bi41sm691621oib.54.2021.09.04.16.01.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Sep 2021 16:01:17 -0700 (PDT)
+Date:   Sat, 4 Sep 2021 16:01:13 -0700
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Song Liu <songliubraving@fb.com>,
+        "open list:BPF (Safe dynamic programs and tools)" 
+        <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        "acme@kernel.org" <acme@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "kjain@linux.ibm.com" <kjain@linux.ibm.com>,
+        Kernel Team <Kernel-team@fb.com>, jbaron@akamai.com,
+        rostedt@goodmis.org, ardb@kernel.org
+Subject: Re: [PATCH v2 bpf-next 1/3] perf: enable branch record for software
+ events
+Message-ID: <20210904230113.cpjota2sttx2w7aa@treble>
+References: <20210826221306.2280066-1-songliubraving@fb.com>
+ <20210826221306.2280066-2-songliubraving@fb.com>
+ <20210830102258.GI4353@worktop.programming.kicks-ass.net>
+ <719D2DC2-CC5D-4C6A-94F4-DBCADDA291CC@fb.com>
+ <YS0eXMd5Y5yV/m1m@hirez.programming.kicks-ass.net>
+ <YS+0eIeAJsRRArk4@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210904102430.GD4323@worktop.programming.kicks-ass.net>
+In-Reply-To: <YS+0eIeAJsRRArk4@hirez.programming.kicks-ass.net>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sat, Sep 04, 2021 at 12:24:30PM +0200, Peter Zijlstra wrote:
-> On Fri, Sep 03, 2021 at 10:10:16AM -0700, Andrii Nakryiko wrote:
-> > > I suppose you have to have this helper function because the JIT cannot
-> > > emit static_call()... although in this case one could cheat and simply
-> > > emit a call to static_call_query() and not bother with dynamic updates
-> > > (because there aren't any).
+On Wed, Sep 01, 2021 at 07:12:24PM +0200, Peter Zijlstra wrote:
+> On Mon, Aug 30, 2021 at 08:07:24PM +0200, Peter Zijlstra wrote:
+> > On Mon, Aug 30, 2021 at 05:41:46PM +0000, Song Liu wrote:
+> > > DECLARE_STATIC_CALL(perf_snapshot_branch_stack,
+> > >                    int (*)(struct perf_branch_snapshot *));
 > > 
-> > If that's safe, let's do it.
+> > > Something like 
+> > > 
+> > > typedef int (perf_snapshot_branch_stack_t)(struct perf_branch_snapshot *);
+> > > DECLARE_STATIC_CALL(perf_snapshot_branch_stack, perf_snapshot_branch_stack_t);
+> > > 
+> > > seems to work fine. 
+> > 
+> > Oh urg, indeed. It wants a function type, not a function pointer type.
+> > I've been bitten by that before. Go with the typedef, that's the sanest.
 > 
-> I'll try and remember to look into static_call_lock(), a means of
-> forever denying future static_call_update() calls. That should make this
-> more obvious.
+> The below is the best I can make of it... it's a little inconsistent and
+> somewhat tricky, but at least the compiler yells hard if you get it
+> wrong.
+> 
+> I can *almost* get to: DEFINE_STATIC_CALL(foo, &func), except for
+> ARCH_DEFINE_STATIC_CALL_TRAMP() which needs the actual function name
+> string for the ASM :-(
+> 
+> The rest can do with a function pointer type and have it work.
 
-A little something like so I suppose.... we don't really have spare
-bits in the !INLINE case :/
+Seems reasonable to me.
 
+-- 
+Josh
 
----
-diff --git a/include/linux/static_call.h b/include/linux/static_call.h
-index 3e56a9751c06..b0feccd56d37 100644
---- a/include/linux/static_call.h
-+++ b/include/linux/static_call.h
-@@ -174,6 +174,10 @@ struct static_call_tramp_key {
- 	s32 key;
- };
- 
-+extern void __static_call_lock(struct static_call_key *key);
-+
-+#define static_call_lock(name) __static_call_lock(&STATIC_CALL_KEY(name))
-+
- extern void __static_call_update(struct static_call_key *key, void *tramp, void *func);
- extern int static_call_mod_init(struct module *mod);
- extern int static_call_text_reserved(void *start, void *end);
-@@ -215,6 +219,8 @@ extern long __static_call_return0(void);
- 
- #elif defined(CONFIG_HAVE_STATIC_CALL)
- 
-+#define static_call_lock(name)
-+
- static inline int static_call_init(void) { return 0; }
- 
- #define __DEFINE_STATIC_CALL(name, _func, _func_init)			\
-@@ -268,6 +274,8 @@ static inline long __static_call_return0(void)
- 
- #else /* Generic implementation */
- 
-+#define static_call_lock(name)
-+
- static inline int static_call_init(void) { return 0; }
- 
- static inline long __static_call_return0(void)
-diff --git a/include/linux/static_call_types.h b/include/linux/static_call_types.h
-index 5a00b8b2cf9f..e40a3b595c4a 100644
---- a/include/linux/static_call_types.h
-+++ b/include/linux/static_call_types.h
-@@ -62,6 +62,7 @@ struct static_call_key {
- 	void *func;
- 	union {
- 		/* bit 0: 0 = mods, 1 = sites */
-+		/* but 1: locked */
- 		unsigned long type;
- 		struct static_call_mod *mods;
- 		struct static_call_site *sites;
-diff --git a/kernel/static_call.c b/kernel/static_call.c
-index 43ba0b1e0edb..a1ba93fbad29 100644
---- a/kernel/static_call.c
-+++ b/kernel/static_call.c
-@@ -104,6 +104,11 @@ static inline bool static_call_key_has_mods(struct static_call_key *key)
- 	return !(key->type & 1);
- }
- 
-+static inline bool static_call_key_is_locked(struct static_call_key *key)
-+{
-+	return !!(key->type & 2);
-+}
-+
- static inline struct static_call_mod *static_call_key_next(struct static_call_key *key)
- {
- 	if (!static_call_key_has_mods(key))
-@@ -117,7 +122,7 @@ static inline struct static_call_site *static_call_key_sites(struct static_call_
- 	if (static_call_key_has_mods(key))
- 		return NULL;
- 
--	return (struct static_call_site *)(key->type & ~1);
-+	return (struct static_call_site *)(key->type & ~3);
- }
- 
- void __static_call_update(struct static_call_key *key, void *tramp, void *func)
-@@ -125,6 +130,9 @@ void __static_call_update(struct static_call_key *key, void *tramp, void *func)
- 	struct static_call_site *site, *stop;
- 	struct static_call_mod *site_mod, first;
- 
-+	if (WARN_ON_ONCE(static_call_key_is_locked(key)))
-+		return;
-+
- 	cpus_read_lock();
- 	static_call_lock();
- 
-@@ -418,6 +426,18 @@ static void static_call_del_module(struct module *mod)
- 	}
- }
- 
-+void __static_call_lock(struct static_call_key *key)
-+{
-+	cpus_read_lock();
-+	static_call_lock();
-+
-+	WARN_ON_ONCE(static_call_key_is_locked(key));
-+	key->type |= 2;
-+
-+	static_call_unlock();
-+	cpus_read_unlock();
-+}
-+
- static int static_call_module_notify(struct notifier_block *nb,
- 				     unsigned long val, void *data)
- {
