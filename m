@@ -8,63 +8,63 @@ X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F12FC433EF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C3FB4C433F5
 	for <bpf@archiver.kernel.org>; Tue,  7 Sep 2021 07:20:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3AD586109D
+	by mail.kernel.org (Postfix) with ESMTP id AFFF061108
 	for <bpf@archiver.kernel.org>; Tue,  7 Sep 2021 07:20:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239699AbhIGHVL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 7 Sep 2021 03:21:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57470 "EHLO
+        id S240047AbhIGHVM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 7 Sep 2021 03:21:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239541AbhIGHVH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 7 Sep 2021 03:21:07 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52869C061757;
-        Tue,  7 Sep 2021 00:20:01 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id n5so12904844wro.12;
-        Tue, 07 Sep 2021 00:20:01 -0700 (PDT)
+        with ESMTP id S239792AbhIGHVK (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 7 Sep 2021 03:21:10 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57FF4C061796;
+        Tue,  7 Sep 2021 00:20:04 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id n14-20020a05600c3b8e00b002f8bd2f8ab6so987624wms.5;
+        Tue, 07 Sep 2021 00:20:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=0ixB0LYGzpliqsf1socDA0N46Acr6XB3D+s9pcpc6tY=;
-        b=f45BEuV8EW9FLA2cJAS50EdseHazTx0PAx5dovOPvOkj7KYl8e2fDECeG6UI2fJ7KO
-         jCRZGYAZ2MAESSXAjfK9hKPFRg0pFLz770G9b/PTg5d81dU/4tElCY98+PSd77nviiRF
-         8FKaJ4qwjseyI8Jr0025U5X/jJAR01j/TNZEutDfAflJqbw4MbPNCpZWeO+gSdOTGXEZ
-         H7quauTDbkOTOpgB4ZCbDweg+PzSbpgTYYV8EAD+BzdYj5rjhubcyCLBJLSGkCDih4ah
-         8DkPtJ7jDmAhAVtFMst5AZqQuNchEXPG1wGy9Dmz1wNG/anNWMBq34tC6TtcLBqqgauF
-         3gSg==
+        bh=sxkrSYD9cgbDYCmPJ3kUKrpYLNcLTg8gLS7WNJCmpuA=;
+        b=gIka95ViF4uxeTGQNA8iWtKTpxg2UsrQzGQ9sImr2Z/Q8yClsunHt0cI87H23rdOP2
+         UW/bqaGpSWYHQ+sFxac+RrA654oapp1axe9s0ZcLPY5jZRnN9kPYre1ppr11YOQrQDj8
+         UhN6KdTeL8bWejKwH8miChXmpwAyLTMgY3OzC86UlHAIekDsXFqLyFdnq7SwRI/QERo6
+         TZgi8UTo837o94eISh4VDLiLigfEOX6qNrQZdhLYn5edYe7kjp0RKh3WOQE/xq9xMlA3
+         tQjeNQxSt1LWB0X282lmFXQoaig5rr5Dk5TGcfUT/ho956egEV8A/7HGGeCzljgo5cWs
+         0cFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=0ixB0LYGzpliqsf1socDA0N46Acr6XB3D+s9pcpc6tY=;
-        b=PQKN8/SLdeJipUvmzDjGFcYyqNlJG97n8NwGlzU0Zr7O3JGTrAR/xPsbyytppnl+pt
-         EI8VsHbSZSN3Y5BiKUGuBVo6D40Ed/nDBSQLhmhg6GXN2tGPY3+q/5brj/7xon86JDu5
-         o7d4AoSKEG5qdSjizffN4Kv7OpWUcdaYjzoV3Wqf/W3gQeDE1ps1WwcG2i58xPuZ4AK3
-         VW3xZXZ4kO/h9JfWnwZR8R5O1drIh0Ey7sUDSr0fUCe1/9lsiob3zomCvbTq9ag+W4Dp
-         f1Mju8Kn38yplpKvZl42jHDjTHg3CTRkIsz+07MyJATAnVTdMqJRak+2ECxHw92mVBpM
-         h8sA==
-X-Gm-Message-State: AOAM531nNPbE2qLRU/ybXsY+pl5U8IuH2fH0zUIJxA4ACTK07bD8GLoS
-        jk2iSNZ8H6AtVXXHkqgCAdo=
-X-Google-Smtp-Source: ABdhPJwgbkrQSVvMzKvoA8wJ/407ujkLDpqKSLd0KOAeNXA5MHvLgDX9FK9klgJDYtE1RVhYqUZ/hQ==
-X-Received: by 2002:adf:ec81:: with SMTP id z1mr16862708wrn.181.1630999199854;
-        Tue, 07 Sep 2021 00:19:59 -0700 (PDT)
+        bh=sxkrSYD9cgbDYCmPJ3kUKrpYLNcLTg8gLS7WNJCmpuA=;
+        b=EnsepqxEKzONiqGIWjHDQKqXVtLB37C+blHTLnswP3zmgxTW2kTBKSOkh86txRYTcW
+         /fywoEFSR17vVo1Y/jkLi2aE6yONPf4Lvzurzuh3reyvmZdoELyNMVGc9o4YDVKuVyAR
+         CH3AY75dysZH/pbZILnUzGPJfATeHL72+IeAQPOprdqKRo33ewSOyznRVwZlP+PHUcPG
+         4E2IO11j2QuZtqdD9a35qcqNLRch2AonlTm168FOT9+fbsIVGhQWFbyAaREKjFcSiQig
+         7HPdVyklP6E7POEcgnliK8UxmcGsFP2pcqclVGOxgamRqjgIYxWsZ+uqtuMs6LP/maS3
+         w8Cg==
+X-Gm-Message-State: AOAM530xnCoJbYevO54izrWXFxfOBgbR0mccIXWWw+/+fdO4KR96mjCF
+        dfI+P0MucM1fn8AJlIcdZIk=
+X-Google-Smtp-Source: ABdhPJy36tCGZ9KWhWOEgloj8u8OcW2PWjfC3kKQR5eYAhPrpCrxBx6lTFgpuLOoIDupiBBKB5ThiA==
+X-Received: by 2002:a7b:c1cf:: with SMTP id a15mr2443424wmj.85.1630999202977;
+        Tue, 07 Sep 2021 00:20:02 -0700 (PDT)
 Received: from localhost.localdomain (h-46-59-47-246.A165.priv.bahnhof.se. [46.59.47.246])
-        by smtp.gmail.com with ESMTPSA id k16sm722941wrd.47.2021.09.07.00.19.58
+        by smtp.gmail.com with ESMTPSA id k16sm722941wrd.47.2021.09.07.00.20.01
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 07 Sep 2021 00:19:59 -0700 (PDT)
+        Tue, 07 Sep 2021 00:20:02 -0700 (PDT)
 From:   Magnus Karlsson <magnus.karlsson@gmail.com>
 To:     magnus.karlsson@intel.com, bjorn@kernel.org, ast@kernel.org,
         daniel@iogearbox.net, netdev@vger.kernel.org,
         maciej.fijalkowski@intel.com
 Cc:     jonathan.lemon@gmail.com, ciara.loftus@intel.com,
         bpf@vger.kernel.org, yhs@fb.com, andrii@kernel.org
-Subject: [PATCH bpf-next v2 07/20] selftests: xsx: introduce test name in test spec
-Date:   Tue,  7 Sep 2021 09:19:15 +0200
-Message-Id: <20210907071928.9750-8-magnus.karlsson@gmail.com>
+Subject: [PATCH bpf-next v2 09/20] selftests: xsk: introduce rx_on and tx_on in ifobject
+Date:   Tue,  7 Sep 2021 09:19:17 +0200
+Message-Id: <20210907071928.9750-10-magnus.karlsson@gmail.com>
 X-Mailer: git-send-email 2.29.0
 In-Reply-To: <20210907071928.9750-1-magnus.karlsson@gmail.com>
 References: <20210907071928.9750-1-magnus.karlsson@gmail.com>
@@ -76,186 +76,145 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Magnus Karlsson <magnus.karlsson@intel.com>
 
-Introduce the test name in the test specification. This so we can set
-the name locally in the test function and simplify the logic for
-printing out test results.
+Introduce rx_on and tx_on in the ifobject so that we can describe if
+the thread should create a socket with only tx, rx, or both. This
+eliminates some test specific if statements from the code. We can also
+eliminate the flow vector structure now as this is fully specified
+by the tx_on and rx_on variables.
 
 Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
 ---
- tools/testing/selftests/bpf/xdpxceiver.c | 49 ++++++++++++++----------
- tools/testing/selftests/bpf/xdpxceiver.h |  2 +
- 2 files changed, 31 insertions(+), 20 deletions(-)
+ tools/testing/selftests/bpf/xdpxceiver.c | 34 ++++++++++--------------
+ tools/testing/selftests/bpf/xdpxceiver.h | 10 ++-----
+ 2 files changed, 16 insertions(+), 28 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/xdpxceiver.c b/tools/testing/selftests/bpf/xdpxceiver.c
-index 79cf082a7581..8ef58081d4d2 100644
+index 9a98c45933c5..a896d5845c0e 100644
 --- a/tools/testing/selftests/bpf/xdpxceiver.c
 +++ b/tools/testing/selftests/bpf/xdpxceiver.c
-@@ -112,13 +112,9 @@ static void __exit_with_error(int error, const char *file, const char *func, int
+@@ -278,14 +278,8 @@ static int xsk_configure_socket(struct xsk_socket_info *xsk, struct xsk_umem_inf
+ 	cfg.xdp_flags = xdp_flags;
+ 	cfg.bind_flags = xdp_bind_flags;
  
- #define exit_with_error(error) __exit_with_error(error, __FILE__, __func__, __LINE__)
- 
--#define print_ksft_result(void)\
--	(ksft_test_result_pass("PASS: %s %s %s%s%s%s\n", configured_mode ? "DRV" : "SKB",\
--			       test_type == TEST_TYPE_POLL ? "POLL" : "NOPOLL",\
--			       test_type == TEST_TYPE_TEARDOWN ? "Socket Teardown" : "",\
--			       test_type == TEST_TYPE_BIDI ? "Bi-directional Sockets" : "",\
--			       test_type == TEST_TYPE_STATS ? "Stats" : "",\
--			       test_type == TEST_TYPE_BPF_RES ? "BPF RES" : ""))
-+#define print_ksft_result(test)\
-+	(ksft_test_result_pass("PASS: %s %s\n", configured_mode ? "DRV" : "SKB", \
-+			       (test)->name))
- 
- static void memset32_htonl(void *dest, u32 val, u32 size)
- {
-@@ -428,6 +424,11 @@ static void test_spec_reset(struct test_spec *test)
- 	__test_spec_init(test, test->ifobj_tx, test->ifobj_rx);
- }
- 
-+static void test_spec_set_name(struct test_spec *test, const char *name)
-+{
-+	strncpy(test->name, name, MAX_TEST_NAME_SIZE);
-+}
-+
- static struct pkt *pkt_stream_get_pkt(struct pkt_stream *pkt_stream, u32 pkt_nb)
- {
- 	if (pkt_nb >= pkt_stream->nb_pkts)
-@@ -880,8 +881,6 @@ static void testapp_validate_traffic(struct test_spec *test)
- {
- 	struct ifobject *ifobj_tx = test->ifobj_tx;
- 	struct ifobject *ifobj_rx = test->ifobj_rx;
--	bool bidi = test_type == TEST_TYPE_BIDI;
--	bool bpf = test_type == TEST_TYPE_BPF_RES;
- 	struct pkt_stream *pkt_stream;
- 
- 	if (pthread_barrier_init(&barr, NULL, 2))
-@@ -907,21 +906,17 @@ static void testapp_validate_traffic(struct test_spec *test)
- 
- 	pthread_join(t1, NULL);
- 	pthread_join(t0, NULL);
+-	if (test_type != TEST_TYPE_BIDI) {
+-		rxr = (ifobject->fv.vector == rx) ? &xsk->rx : NULL;
+-		txr = (ifobject->fv.vector == tx) ? &xsk->tx : NULL;
+-	} else {
+-		rxr = &xsk->rx;
+-		txr = &xsk->tx;
+-	}
 -
--	if (!(test_type == TEST_TYPE_TEARDOWN) && !bidi && !bpf && !(test_type == TEST_TYPE_STATS))
--		print_ksft_result();
++	txr = ifobject->tx_on ? &xsk->tx : NULL;
++	rxr = ifobject->rx_on ? &xsk->rx : NULL;
+ 	return xsk_socket__create(&xsk->xsk, ifobject->ifname, qid, umem->umem, rxr, txr, &cfg);
  }
  
- static void testapp_teardown(struct test_spec *test)
- {
- 	int i;
+@@ -395,10 +389,13 @@ static void __test_spec_init(struct test_spec *test, struct ifobject *ifobj_tx,
+ 		ifobj->xsk = &ifobj->xsk_arr[0];
+ 		ifobj->use_poll = false;
  
-+	test_spec_set_name(test, "TEARDOWN");
- 	for (i = 0; i < MAX_TEARDOWN_ITER; i++) {
- 		testapp_validate_traffic(test);
- 		test_spec_reset(test);
- 	}
--
--	print_ksft_result();
- }
+-		if (i == tx)
+-			ifobj->fv.vector = tx;
+-		else
+-			ifobj->fv.vector = rx;
++		if (i == 0) {
++			ifobj->rx_on = false;
++			ifobj->tx_on = true;
++		} else {
++			ifobj->rx_on = true;
++			ifobj->tx_on = false;
++		}
  
+ 		for (j = 0; j < MAX_SOCKETS; j++) {
+ 			memset(&ifobj->umem_arr[j], 0, sizeof(ifobj->umem_arr[j]));
+@@ -923,14 +920,10 @@ static void testapp_teardown(struct test_spec *test)
  static void swap_directions(struct ifobject **ifobj1, struct ifobject **ifobj2)
-@@ -942,6 +937,7 @@ static void swap_directions(struct ifobject **ifobj1, struct ifobject **ifobj2)
+ {
+ 	thread_func_t tmp_func_ptr = (*ifobj1)->func_ptr;
+-	enum fvector tmp_vector = (*ifobj1)->fv.vector;
+ 	struct ifobject *tmp_ifobj = (*ifobj1);
  
+ 	(*ifobj1)->func_ptr = (*ifobj2)->func_ptr;
+-	(*ifobj1)->fv.vector = (*ifobj2)->fv.vector;
+-
+ 	(*ifobj2)->func_ptr = tmp_func_ptr;
+-	(*ifobj2)->fv.vector = tmp_vector;
+ 
+ 	*ifobj1 = *ifobj2;
+ 	*ifobj2 = tmp_ifobj;
+@@ -939,6 +932,8 @@ static void swap_directions(struct ifobject **ifobj1, struct ifobject **ifobj2)
  static void testapp_bidi(struct test_spec *test)
  {
-+	test_spec_set_name(test, "BIDIRECTIONAL");
+ 	test_spec_set_name(test, "BIDIRECTIONAL");
++	test->ifobj_tx->rx_on = true;
++	test->ifobj_rx->tx_on = true;
  	for (int i = 0; i < MAX_BIDI_ITER; i++) {
  		print_verbose("Creating socket\n");
  		testapp_validate_traffic(test);
-@@ -953,8 +949,6 @@ static void testapp_bidi(struct test_spec *test)
- 	}
- 
- 	swap_directions(&test->ifobj_rx, &test->ifobj_tx);
--
--	print_ksft_result();
- }
- 
- static void swap_xsk_resources(struct ifobject *ifobj_tx, struct ifobject *ifobj_rx)
-@@ -973,6 +967,7 @@ static void testapp_bpf_res(struct test_spec *test)
- {
- 	int i;
- 
-+	test_spec_set_name(test, "BPF_RES");
- 	for (i = 0; i < MAX_BPF_ITER; i++) {
- 		print_verbose("Creating socket\n");
- 		testapp_validate_traffic(test);
-@@ -980,8 +975,6 @@ static void testapp_bpf_res(struct test_spec *test)
- 			swap_xsk_resources(test->ifobj_tx, test->ifobj_rx);
- 		second_step = true;
- 	}
--
--	print_ksft_result();
- }
- 
- static void testapp_stats(struct test_spec *test)
-@@ -992,21 +985,28 @@ static void testapp_stats(struct test_spec *test)
- 
- 		switch (stat_test_type) {
- 		case STAT_TEST_RX_DROPPED:
-+			test_spec_set_name(test, "STAT_RX_DROPPED");
- 			test->ifobj_rx->umem->frame_headroom = test->ifobj_rx->umem->frame_size -
- 				XDP_PACKET_HEADROOM - 1;
- 			break;
- 		case STAT_TEST_RX_FULL:
-+			test_spec_set_name(test, "STAT_RX_FULL");
- 			test->ifobj_rx->xsk->rxqsize = RX_FULL_RXQSIZE;
- 			break;
- 		case STAT_TEST_TX_INVALID:
-+			test_spec_set_name(test, "STAT_TX_INVALID");
- 			continue;
-+		case STAT_TEST_RX_FILL_EMPTY:
-+			test_spec_set_name(test, "STAT_RX_FILL_EMPTY");
-+			break;
- 		default:
- 			break;
- 		}
- 		testapp_validate_traffic(test);
- 	}
- 
--	print_ksft_result();
-+	/* To only see the whole stat set being completed unless an individual test fails. */
-+	test_spec_set_name(test, "STATS");
- }
+@@ -1012,7 +1007,7 @@ static void testapp_stats(struct test_spec *test)
  
  static void init_iface(struct ifobject *ifobj, const char *dst_mac, const char *src_mac,
-@@ -1066,10 +1066,19 @@ static void run_pkt_test(struct test_spec *test, int mode, int type)
- 	case TEST_TYPE_BPF_RES:
- 		testapp_bpf_res(test);
- 		break;
--	default:
-+	case TEST_TYPE_NOPOLL:
-+		test_spec_set_name(test, "RUN_TO_COMPLETION");
-+		testapp_validate_traffic(test);
-+		break;
-+	case TEST_TYPE_POLL:
-+		test_spec_set_name(test, "POLL");
- 		testapp_validate_traffic(test);
- 		break;
-+	default:
-+		break;
- 	}
-+
-+	print_ksft_result(test);
+ 		       const char *dst_ip, const char *src_ip, const u16 dst_port,
+-		       const u16 src_port, enum fvector vector, thread_func_t func_ptr)
++		       const u16 src_port, thread_func_t func_ptr)
+ {
+ 	struct in_addr ip;
+ 
+@@ -1028,7 +1023,6 @@ static void init_iface(struct ifobject *ifobj, const char *dst_mac, const char *
+ 	ifobj->dst_port = dst_port;
+ 	ifobj->src_port = src_port;
+ 
+-	ifobj->fv.vector = vector;
+ 	ifobj->func_ptr = func_ptr;
  }
  
- static struct ifobject *ifobject_create(void)
+@@ -1144,9 +1138,9 @@ int main(int argc, char **argv)
+ 		ksft_exit_xfail();
+ 	}
+ 
+-	init_iface(ifobj_tx, MAC1, MAC2, IP1, IP2, UDP_PORT1, UDP_PORT2, tx,
++	init_iface(ifobj_tx, MAC1, MAC2, IP1, IP2, UDP_PORT1, UDP_PORT2,
+ 		   worker_testapp_validate_tx);
+-	init_iface(ifobj_rx, MAC2, MAC1, IP2, IP1, UDP_PORT2, UDP_PORT1, rx,
++	init_iface(ifobj_rx, MAC2, MAC1, IP2, IP1, UDP_PORT2, UDP_PORT1,
+ 		   worker_testapp_validate_rx);
+ 
+ 	ksft_set_plan(TEST_MODE_MAX * TEST_TYPE_MAX);
 diff --git a/tools/testing/selftests/bpf/xdpxceiver.h b/tools/testing/selftests/bpf/xdpxceiver.h
-index bfd14190abfc..15eab31b3b32 100644
+index e02a4dd71bfb..03ff52897d7b 100644
 --- a/tools/testing/selftests/bpf/xdpxceiver.h
 +++ b/tools/testing/selftests/bpf/xdpxceiver.h
-@@ -22,6 +22,7 @@
- #define MAX_INTERFACES_NAMESPACE_CHARS 10
- #define MAX_SOCKS 1
- #define MAX_SOCKETS 2
-+#define MAX_TEST_NAME_SIZE 32
- #define MAX_TEARDOWN_ITER 10
- #define MAX_BIDI_ITER 2
- #define MAX_BPF_ITER 2
-@@ -141,6 +142,7 @@ struct ifobject {
- struct test_spec {
- 	struct ifobject *ifobj_tx;
- 	struct ifobject *ifobj_rx;
-+	char name[MAX_TEST_NAME_SIZE];
+@@ -100,13 +100,6 @@ struct xsk_socket_info {
+ 	u32 rxqsize;
  };
  
- /*threads*/
+-struct flow_vector {
+-	enum fvector {
+-		tx,
+-		rx,
+-	} vector;
+-};
+-
+ struct pkt {
+ 	u64 addr;
+ 	u32 len;
+@@ -127,7 +120,6 @@ struct ifobject {
+ 	struct xsk_socket_info *xsk_arr;
+ 	struct xsk_umem_info *umem;
+ 	struct xsk_umem_info *umem_arr;
+-	struct flow_vector fv;
+ 	thread_func_t func_ptr;
+ 	struct pkt_stream *pkt_stream;
+ 	int ns_fd;
+@@ -135,6 +127,8 @@ struct ifobject {
+ 	u32 src_ip;
+ 	u16 src_port;
+ 	u16 dst_port;
++	bool tx_on;
++	bool rx_on;
+ 	bool use_poll;
+ 	u8 dst_mac[ETH_ALEN];
+ 	u8 src_mac[ETH_ALEN];
 -- 
 2.29.0
 
