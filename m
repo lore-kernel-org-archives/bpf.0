@@ -2,186 +2,283 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F3423C433F5
-	for <bpf@archiver.kernel.org>; Tue,  7 Sep 2021 06:26:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D80E9C433F5
+	for <bpf@archiver.kernel.org>; Tue,  7 Sep 2021 07:19:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CCD0F60F92
-	for <bpf@archiver.kernel.org>; Tue,  7 Sep 2021 06:26:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BBD9C6103E
+	for <bpf@archiver.kernel.org>; Tue,  7 Sep 2021 07:19:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229482AbhIGG2E (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 7 Sep 2021 02:28:04 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:16752 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230222AbhIGG2E (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 7 Sep 2021 02:28:04 -0400
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 1876OCYS008405
-        for <bpf@vger.kernel.org>; Mon, 6 Sep 2021 23:26:57 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=DH1HGdvc01RuTfkuqTNuctHgmKGQJXLgkwsP86K4S3w=;
- b=kfFPrJiiTOHYzc79nHWEVfG4olND7TEWAqX5E2KRkLWEWmVPn6o6+oL9ltTy9qpYyq6d
- j8mbta1T0oB5oSBWav5tO/gFFj1hXfK7N4Vq2wH/Qza1kPkeb/xbFU2nWk/zTdgUSRwv
- ODp2t8ysS8VYxiHw+JRHZPV47QmTvOgo2Js= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 3awwxp1e73-8
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 06 Sep 2021 23:26:57 -0700
-Received: from intmgw001.38.frc1.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Mon, 6 Sep 2021 23:26:53 -0700
-Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id E23AC6D800CF; Mon,  6 Sep 2021 23:26:50 -0700 (PDT)
-From:   Yonghong Song <yhs@fb.com>
-To:     <bpf@vger.kernel.org>, <linux-mm@kvack.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
-        Luigi Rizzo <lrizzo@google.com>
-Subject: [PATCH mm] mm/mmap: relax mmap_assert_locked() for find_vma()
-Date:   Mon, 6 Sep 2021 23:26:50 -0700
-Message-ID: <20210907062650.1309736-1-yhs@fb.com>
-X-Mailer: git-send-email 2.30.2
+        id S238488AbhIGHVA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 7 Sep 2021 03:21:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57422 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238034AbhIGHU6 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 7 Sep 2021 03:20:58 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C5FC061757;
+        Tue,  7 Sep 2021 00:19:52 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id b6so12929506wrh.10;
+        Tue, 07 Sep 2021 00:19:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=P+ZLmHK8o50h7H6ArsMpxYYv/GLFJ6igApJFpx/tb64=;
+        b=KkVWZAF1zhdwmeu+C9McplfxnU5DxZubMQksSB5OnR4MylFEZov7V4yZ3nyQ6mHA5/
+         vs6bvJrrPjbCH59HPbCkWFKoHOVNJqIYcZHBw0+tdl6ObtOUoQ+qGCVdtoe8rE+DAecO
+         719ivmjfbaf0CIu1SKJ0mnARehEqDH7tTN6Yrt3f4qP989HyXw/iYaYA7Z1PVFeHAUGs
+         C2mfKXZjdtMYz3nvNlFUGxQyNwWHyY6+MPV5U7FQD7avB0w9uStiz0mv2akhLUKJXN9f
+         Dthywv2cylvJhu4Y6C+yaeVCVRWs6MEJiO/25iMVxJt7FYAj7fnZdBqsMfcM5PPzMyLm
+         6a9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=P+ZLmHK8o50h7H6ArsMpxYYv/GLFJ6igApJFpx/tb64=;
+        b=mA1MqQkHEQtFisZoCITlqNzbaJet0pIVE9KDPbYKa2spl49Sw88j3Mj5TGWEr4jWyn
+         FtALLj/qW6TEL9JCmKaGVumzb98rNvH/Qc/8oPODZnlTn0luCzhvnFC6ruhFvpXR8eaf
+         tTsINyjP67CDiKMntm5DmBgEUt0GSFJcLUCrai5fuuM9rrgDnecGDI7ztkU8q++/nuQ8
+         StRVNTxCz5oAKiPDdiyD50k/E67vYgTtV1m2BzVcgNZWIXxwDW8lCKGDYYh44R/GmQZb
+         F08rSCncXEo8V/LWnNhv+fOzR+U+R20OEpur+blILbpQSM/DTqiKajKc9xD9usLhf2Zz
+         hcrQ==
+X-Gm-Message-State: AOAM530bj/EHgt1TSXoLi89X8nlCCPHv+TyKOXftyD6GnF8z0ahhcBOz
+        X2OqyGc/PqeONPMlCwK4PnY=
+X-Google-Smtp-Source: ABdhPJwR2kcbrkIsldAQJovGlFgv+hNg/WXfPQiMXhkeIkk9tpMDCxYHjbJJOPXXEDYHVPIj4qiSnA==
+X-Received: by 2002:adf:b60f:: with SMTP id f15mr11541266wre.257.1630999190886;
+        Tue, 07 Sep 2021 00:19:50 -0700 (PDT)
+Received: from localhost.localdomain (h-46-59-47-246.A165.priv.bahnhof.se. [46.59.47.246])
+        by smtp.gmail.com with ESMTPSA id k16sm722941wrd.47.2021.09.07.00.19.49
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 07 Sep 2021 00:19:50 -0700 (PDT)
+From:   Magnus Karlsson <magnus.karlsson@gmail.com>
+To:     magnus.karlsson@intel.com, bjorn@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, netdev@vger.kernel.org,
+        maciej.fijalkowski@intel.com
+Cc:     jonathan.lemon@gmail.com, ciara.loftus@intel.com,
+        bpf@vger.kernel.org, yhs@fb.com, andrii@kernel.org
+Subject: [PATCH bpf-next v2 01/20] selftests: xsk: simplify xsk and umem arrays
+Date:   Tue,  7 Sep 2021 09:19:09 +0200
+Message-Id: <20210907071928.9750-2-magnus.karlsson@gmail.com>
+X-Mailer: git-send-email 2.29.0
+In-Reply-To: <20210907071928.9750-1-magnus.karlsson@gmail.com>
+References: <20210907071928.9750-1-magnus.karlsson@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-FB-Source: Intern
-X-Proofpoint-GUID: 2CL0F3ICkVoNZu2F3XGMlipSKOt57xH9
-X-Proofpoint-ORIG-GUID: 2CL0F3ICkVoNZu2F3XGMlipSKOt57xH9
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-09-07_02:2021-09-03,2021-09-07 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0
- lowpriorityscore=0 phishscore=0 spamscore=0 clxscore=1015 suspectscore=0
- adultscore=0 mlxlogscore=999 bulkscore=0 malwarescore=0 impostorscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2108310000 definitions=main-2109070042
-X-FB-Internal: deliver
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Current bpf-next bpf selftest "get_stack_raw_tp" triggered the warning:
+From: Magnus Karlsson <magnus.karlsson@intel.com>
 
-  [ 1411.304463] WARNING: CPU: 3 PID: 140 at include/linux/mmap_lock.h:16=
-4 find_vma+0x47/0xa0
-  [ 1411.304469] Modules linked in: bpf_testmod(O) [last unloaded: bpf_te=
-stmod]
-  [ 1411.304476] CPU: 3 PID: 140 Comm: systemd-journal Tainted: G        =
-W  O      5.14.0+ #53
-  [ 1411.304479] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), B=
-IOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
-  [ 1411.304481] RIP: 0010:find_vma+0x47/0xa0
-  [ 1411.304484] Code: de 48 89 ef e8 ba f5 fe ff 48 85 c0 74 2e 48 83 c4=
- 08 5b 5d c3 48 8d bf 28 01 00 00 be ff ff ff ff e8 2d 9f d8 00 85 c0 75 =
-d4 <0f> 0b 48 89 de 48 8
-  [ 1411.304487] RSP: 0018:ffffabd440403db8 EFLAGS: 00010246
-  [ 1411.304490] RAX: 0000000000000000 RBX: 00007f00ad80a0e0 RCX: 0000000=
-000000000
-  [ 1411.304492] RDX: 0000000000000001 RSI: ffffffff9776b144 RDI: fffffff=
-f977e1b0e
-  [ 1411.304494] RBP: ffff9cf5c2f50000 R08: ffff9cf5c3eb25d8 R09: 0000000=
-0fffffffe
-  [ 1411.304496] R10: 0000000000000001 R11: 00000000ef974e19 R12: ffff9cf=
-5c39ae0e0
-  [ 1411.304498] R13: 0000000000000000 R14: 0000000000000000 R15: ffff9cf=
-5c39ae0e0
-  [ 1411.304501] FS:  00007f00ae754780(0000) GS:ffff9cf5fba00000(0000) kn=
-lGS:0000000000000000
-  [ 1411.304504] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-  [ 1411.304506] CR2: 000000003e34343c CR3: 0000000103a98005 CR4: 0000000=
-000370ee0
-  [ 1411.304508] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000=
-000000000
-  [ 1411.304510] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000=
-000000400
-  [ 1411.304512] Call Trace:
-  [ 1411.304517]  stack_map_get_build_id_offset+0x17c/0x260
-  [ 1411.304528]  __bpf_get_stack+0x18f/0x230
-  [ 1411.304541]  bpf_get_stack_raw_tp+0x5a/0x70
-  [ 1411.305752] RAX: 0000000000000000 RBX: 5541f689495641d7 RCX: 0000000=
-000000000
-  [ 1411.305756] RDX: 0000000000000001 RSI: ffffffff9776b144 RDI: fffffff=
-f977e1b0e
-  [ 1411.305758] RBP: ffff9cf5c02b2f40 R08: ffff9cf5ca7606c0 R09: ffffcbd=
-43ee02c04
-  [ 1411.306978]  bpf_prog_32007c34f7726d29_bpf_prog1+0xaf/0xd9c
-  [ 1411.307861] R10: 0000000000000001 R11: 0000000000000044 R12: ffff9cf=
-5c2ef60e0
-  [ 1411.307865] R13: 0000000000000005 R14: 0000000000000000 R15: ffff9cf=
-5c2ef6108
-  [ 1411.309074]  bpf_trace_run2+0x8f/0x1a0
-  [ 1411.309891] FS:  00007ff485141700(0000) GS:ffff9cf5fae00000(0000) kn=
-lGS:0000000000000000
-  [ 1411.309896] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-  [ 1411.311221]  syscall_trace_enter.isra.20+0x161/0x1f0
-  [ 1411.311600] CR2: 00007ff48514d90e CR3: 0000000107114001 CR4: 0000000=
-000370ef0
-  [ 1411.312291]  do_syscall_64+0x15/0x80
-  [ 1411.312941] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000=
-000000000
-  [ 1411.313803]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-  [ 1411.314223] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000=
-000000400
-  [ 1411.315082] RIP: 0033:0x7f00ad80a0e0
-  [ 1411.315626] Call Trace:
-  [ 1411.315632]  stack_map_get_build_id_offset+0x17c/0x260
+Simplify the xsk_info and umem_info allocation by allocating them
+upfront in an array, instead of allocating an array of pointers to
+future creations of these. Allocating them upfront also has the
+advantage that configuration information can be stored in these
+structures instead of relying on global variables. With the previous
+structure, xsk_info and umem_info were created too late to be able to
+store most configuration information. This will be used to eliminate
+most global variables in later patches in this series.
 
-To reproduce, first build `test_progs` binary:
-  make -C tools/testing/selftests/bpf -j60
-and then run the binary at tools/testing/selftests/bpf directory:
-  ./test_progs -t get_stack_raw_tp
-
-The warning is due to commit 5b78ed24e8ec("mm/pagemap: add mmap_assert_lo=
-cked() annotations to find_vma*()")
-which added mmap_assert_locked() in find_vma() function. The mmap_assert_=
-locked() function
-asserts that mm->mmap_lock needs to be held. But this is not the case for
-bpf_get_stack() or bpf_get_stackid() helper (kernel/bpf/stackmap.c), whic=
-h
-uses mmap_read_trylock_non_owner() instead. Since mm->mmap_lock is not he=
-ld
-in bpf_get_stack[id]() use case, the above warning is emitted during test=
- run.
-
-This patch fixed the issue by replacing mmap_assert_locked() with rwsem_i=
-s_locked(&mm->mmap_lock)
-in find_vma().
-
-Cc: Luigi Rizzo <lrizzo@google.com>
-Fixes: 5b78ed24e8ec("mm/pagemap: add mmap_assert_locked() annotations to =
-find_vma*()")
-Signed-off-by: Yonghong Song <yhs@fb.com>
+Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
 ---
- mm/mmap.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/bpf/xdpxceiver.c | 78 ++++++++++--------------
+ tools/testing/selftests/bpf/xdpxceiver.h |  5 +-
+ 2 files changed, 34 insertions(+), 49 deletions(-)
 
-Alternatively we could add a bool argument to find_vma to indicate whethe=
-r
-mm->mmap_lock has been held or not. But I would like to report and try th=
-e
-simpler solution first.
-
-diff --git a/mm/mmap.c b/mm/mmap.c
-index 88dcc5c25225..8c78b85475b1 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -2275,7 +2275,7 @@ struct vm_area_struct *find_vma(struct mm_struct *m=
-m, unsigned long addr)
- 	struct rb_node *rb_node;
- 	struct vm_area_struct *vma;
-=20
--	mmap_assert_locked(mm);
-+	VM_BUG_ON_MM(!rwsem_is_locked(&mm->mmap_lock), mm);
- 	/* Check the cache first. */
- 	vma =3D vmacache_find(mm, addr);
- 	if (likely(vma))
---=20
-2.30.2
+diff --git a/tools/testing/selftests/bpf/xdpxceiver.c b/tools/testing/selftests/bpf/xdpxceiver.c
+index f53ce2683f8d..9639d8da516d 100644
+--- a/tools/testing/selftests/bpf/xdpxceiver.c
++++ b/tools/testing/selftests/bpf/xdpxceiver.c
+@@ -235,7 +235,7 @@ static void gen_udp_csum(struct udphdr *udp_hdr, struct iphdr *ip_hdr)
+ 	    udp_csum(ip_hdr->saddr, ip_hdr->daddr, UDP_PKT_SIZE, IPPROTO_UDP, (u16 *)udp_hdr);
+ }
+ 
+-static void xsk_configure_umem(struct ifobject *data, void *buffer, u64 size, int idx)
++static int xsk_configure_umem(struct xsk_umem_info *umem, void *buffer, u64 size, int idx)
+ {
+ 	struct xsk_umem_config cfg = {
+ 		.fill_size = XSK_RING_PROD__DEFAULT_NUM_DESCS,
+@@ -244,21 +244,15 @@ static void xsk_configure_umem(struct ifobject *data, void *buffer, u64 size, in
+ 		.frame_headroom = frame_headroom,
+ 		.flags = XSK_UMEM__DEFAULT_FLAGS
+ 	};
+-	struct xsk_umem_info *umem;
+ 	int ret;
+ 
+-	umem = calloc(1, sizeof(struct xsk_umem_info));
+-	if (!umem)
+-		exit_with_error(errno);
+-
+ 	ret = xsk_umem__create(&umem->umem, buffer, size,
+ 			       &umem->fq, &umem->cq, &cfg);
+ 	if (ret)
+-		exit_with_error(-ret);
++		return ret;
+ 
+ 	umem->buffer = buffer;
+-
+-	data->umem_arr[idx] = umem;
++	return 0;
+ }
+ 
+ static void xsk_populate_fill_ring(struct xsk_umem_info *umem)
+@@ -274,19 +268,14 @@ static void xsk_populate_fill_ring(struct xsk_umem_info *umem)
+ 	xsk_ring_prod__submit(&umem->fq, XSK_RING_PROD__DEFAULT_NUM_DESCS);
+ }
+ 
+-static int xsk_configure_socket(struct ifobject *ifobject, int idx)
++static int xsk_configure_socket(struct xsk_socket_info *xsk, struct xsk_umem_info *umem,
++				struct ifobject *ifobject, u32 qid)
+ {
+ 	struct xsk_socket_config cfg;
+-	struct xsk_socket_info *xsk;
+ 	struct xsk_ring_cons *rxr;
+ 	struct xsk_ring_prod *txr;
+-	int ret;
+ 
+-	xsk = calloc(1, sizeof(struct xsk_socket_info));
+-	if (!xsk)
+-		exit_with_error(errno);
+-
+-	xsk->umem = ifobject->umem;
++	xsk->umem = umem;
+ 	cfg.rx_size = rxqsize;
+ 	cfg.tx_size = XSK_RING_PROD__DEFAULT_NUM_DESCS;
+ 	cfg.libbpf_flags = 0;
+@@ -301,14 +290,7 @@ static int xsk_configure_socket(struct ifobject *ifobject, int idx)
+ 		txr = &xsk->tx;
+ 	}
+ 
+-	ret = xsk_socket__create(&xsk->xsk, ifobject->ifname, idx,
+-				 ifobject->umem->umem, rxr, txr, &cfg);
+-	if (ret)
+-		return 1;
+-
+-	ifobject->xsk_arr[idx] = xsk;
+-
+-	return 0;
++	return xsk_socket__create(&xsk->xsk, ifobject->ifname, qid, umem->umem, rxr, txr, &cfg);
+ }
+ 
+ static struct option long_options[] = {
+@@ -756,8 +738,7 @@ static void thread_common_ops(struct ifobject *ifobject, void *bufs)
+ 	u64 umem_sz = num_frames * XSK_UMEM__DEFAULT_FRAME_SIZE;
+ 	int mmap_flags = MAP_PRIVATE | MAP_ANONYMOUS | MAP_NORESERVE;
+ 	size_t mmap_sz = umem_sz;
+-	int ctr = 0;
+-	int ret;
++	int ctr = 0, ret;
+ 
+ 	ifobject->ns_fd = switch_namespace(ifobject->nsname);
+ 
+@@ -769,31 +750,34 @@ static void thread_common_ops(struct ifobject *ifobject, void *bufs)
+ 		exit_with_error(errno);
+ 
+ 	while (ctr++ < SOCK_RECONF_CTR) {
+-		xsk_configure_umem(ifobject, bufs, umem_sz, 0);
+-		ifobject->umem = ifobject->umem_arr[0];
+-		ret = xsk_configure_socket(ifobject, 0);
++		ret = xsk_configure_umem(&ifobject->umem_arr[0], bufs, umem_sz, 0);
++		if (ret)
++			exit_with_error(-ret);
++
++		ret = xsk_configure_socket(&ifobject->xsk_arr[0], &ifobject->umem_arr[0],
++					   ifobject, 0);
+ 		if (!ret)
+ 			break;
+ 
+ 		/* Retry Create Socket if it fails as xsk_socket__create() is asynchronous */
+-		usleep(USLEEP_MAX);
+ 		if (ctr >= SOCK_RECONF_CTR)
+ 			exit_with_error(-ret);
++		usleep(USLEEP_MAX);
+ 	}
+ 
+-	ifobject->umem = ifobject->umem_arr[0];
+-	ifobject->xsk = ifobject->xsk_arr[0];
+-
+ 	if (test_type == TEST_TYPE_BPF_RES) {
+-		xsk_configure_umem(ifobject, (u8 *)bufs + umem_sz, umem_sz, 1);
+-		ifobject->umem = ifobject->umem_arr[1];
+-		ret = xsk_configure_socket(ifobject, 1);
++		ret = xsk_configure_umem(&ifobject->umem_arr[1], (u8 *)bufs + umem_sz, umem_sz, 1);
++		if (ret)
++			exit_with_error(-ret);
++
++		ret = xsk_configure_socket(&ifobject->xsk_arr[1], &ifobject->umem_arr[1],
++					   ifobject, 1);
++		if (ret)
++			exit_with_error(-ret);
+ 	}
+ 
+-	ifobject->umem = ifobject->umem_arr[0];
+-	ifobject->xsk = ifobject->xsk_arr[0];
+-	print_verbose("Interface [%s] vector [%s]\n",
+-		      ifobject->ifname, ifobject->fv.vector == tx ? "Tx" : "Rx");
++	ifobject->umem = &ifobject->umem_arr[0];
++	ifobject->xsk = &ifobject->xsk_arr[0];
+ }
+ 
+ static bool testapp_is_test_two_stepped(void)
+@@ -941,10 +925,10 @@ static void swap_xsk_res(void)
+ 	xsk_umem__delete(ifdict_tx->umem->umem);
+ 	xsk_socket__delete(ifdict_rx->xsk->xsk);
+ 	xsk_umem__delete(ifdict_rx->umem->umem);
+-	ifdict_tx->umem = ifdict_tx->umem_arr[1];
+-	ifdict_tx->xsk = ifdict_tx->xsk_arr[1];
+-	ifdict_rx->umem = ifdict_rx->umem_arr[1];
+-	ifdict_rx->xsk = ifdict_rx->xsk_arr[1];
++	ifdict_tx->umem = &ifdict_tx->umem_arr[1];
++	ifdict_tx->xsk = &ifdict_tx->xsk_arr[1];
++	ifdict_rx->umem = &ifdict_rx->umem_arr[1];
++	ifdict_rx->xsk = &ifdict_rx->xsk_arr[1];
+ }
+ 
+ static void testapp_bpf_res(void)
+@@ -1071,11 +1055,11 @@ static struct ifobject *ifobject_create(void)
+ 	if (!ifobj)
+ 		return NULL;
+ 
+-	ifobj->xsk_arr = calloc(2, sizeof(struct xsk_socket_info *));
++	ifobj->xsk_arr = calloc(MAX_SOCKETS, sizeof(*ifobj->xsk_arr));
+ 	if (!ifobj->xsk_arr)
+ 		goto out_xsk_arr;
+ 
+-	ifobj->umem_arr = calloc(2, sizeof(struct xsk_umem_info *));
++	ifobj->umem_arr = calloc(MAX_SOCKETS, sizeof(*ifobj->umem_arr));
+ 	if (!ifobj->umem_arr)
+ 		goto out_umem_arr;
+ 
+diff --git a/tools/testing/selftests/bpf/xdpxceiver.h b/tools/testing/selftests/bpf/xdpxceiver.h
+index 7e49b9fbe25e..de80516ac6c2 100644
+--- a/tools/testing/selftests/bpf/xdpxceiver.h
++++ b/tools/testing/selftests/bpf/xdpxceiver.h
+@@ -21,6 +21,7 @@
+ #define MAX_INTERFACE_NAME_CHARS 7
+ #define MAX_INTERFACES_NAMESPACE_CHARS 10
+ #define MAX_SOCKS 1
++#define MAX_SOCKETS 2
+ #define MAX_TEARDOWN_ITER 10
+ #define MAX_BIDI_ITER 2
+ #define MAX_BPF_ITER 2
+@@ -119,9 +120,9 @@ struct ifobject {
+ 	char ifname[MAX_INTERFACE_NAME_CHARS];
+ 	char nsname[MAX_INTERFACES_NAMESPACE_CHARS];
+ 	struct xsk_socket_info *xsk;
+-	struct xsk_socket_info **xsk_arr;
+-	struct xsk_umem_info **umem_arr;
++	struct xsk_socket_info *xsk_arr;
+ 	struct xsk_umem_info *umem;
++	struct xsk_umem_info *umem_arr;
+ 	void *(*func_ptr)(void *arg);
+ 	struct flow_vector fv;
+ 	struct pkt_stream *pkt_stream;
+-- 
+2.29.0
 
