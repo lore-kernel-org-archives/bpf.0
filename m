@@ -2,104 +2,364 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CFEDC433EF
-	for <bpf@archiver.kernel.org>; Tue,  7 Sep 2021 22:23:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 36DF5C4332F
+	for <bpf@archiver.kernel.org>; Tue,  7 Sep 2021 22:23:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6A2646112F
-	for <bpf@archiver.kernel.org>; Tue,  7 Sep 2021 22:23:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 19B7961101
+	for <bpf@archiver.kernel.org>; Tue,  7 Sep 2021 22:23:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348078AbhIGWZC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 7 Sep 2021 18:25:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39810 "EHLO
+        id S1348198AbhIGWZE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 7 Sep 2021 18:25:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240866AbhIGWY5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 7 Sep 2021 18:24:57 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68876C061575
-        for <bpf@vger.kernel.org>; Tue,  7 Sep 2021 15:23:50 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id j13so25582edv.13
-        for <bpf@vger.kernel.org>; Tue, 07 Sep 2021 15:23:50 -0700 (PDT)
+        with ESMTP id S1347901AbhIGWZB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 7 Sep 2021 18:25:01 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7F97C061796
+        for <bpf@vger.kernel.org>; Tue,  7 Sep 2021 15:23:53 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id i6so98657edu.1
+        for <bpf@vger.kernel.org>; Tue, 07 Sep 2021 15:23:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=anyfinetworks-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=iSAVXuQHVYqkBfCzECbIyafToN/+xfGCAmaG2XA6/Jc=;
-        b=x9YlaDHS3ZJ+/8geUZQAIDQ3CVZDTIsbZgbaSRQAzcUlD+jFmrQ2ENv1IO8DrrOALy
-         mm+PYCCl/Hgj6tdtcS9HhAP1kXbsz4VjbDdZzf62uSwvkGx91zmJXwLsYCv0eqHtiy89
-         S/8d2in9m9y4xSP6NkCU+ztTfAUrqhvljyp7Mdm+jD1bQN9ic4uCmp1J5Ak3WbEZjKlU
-         3zX4F8bqrgMxP16Qnb9JwFIlwSdadDUkgvuXd5g/5XJUIAukNvrkzBccGYUwa1a+LmiN
-         OzIjJBGNEMpsDm/FGyQwVEBlMbJ8Wa/6dQM9hWnQi15Uz6dg7uUi1q4S+vqagz9R/4UC
-         JJ5g==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=LkH/sO56VAlmNRIplGiQQoew4M/S2hYPzrsnrhPWCOU=;
+        b=tQve5sZ+7lgtm+hWfWn9aZIDi3EB95iR99D8qW7UA/Hw9g4RJvfKzuGUWoOSaGtOWV
+         hyPvYkO6Ct/xqirTUJhgF1al19rndV5IwSow3NmwjN8GPZGtMQN38uqJsoDc+P5x/da4
+         1jzmJ51vvaWJpUmRVCI86yYYWZf6A0YBVRdxhZO+3hwlLNA2oe9+rJdxAn3wN2gj6DK6
+         k9TV9g7eMKySrwjwejw+WFX9tSxfDNvNajHy3HFpkHLJueDbmydLB0Zh9ElnCiZDsjQK
+         KAqy2jV7wJnn/1Dvs80gpXavvWm4SLcPwIPQKOeR0eCRV2bbQAV5hCZo1vMVUmONE7Zf
+         jY7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=iSAVXuQHVYqkBfCzECbIyafToN/+xfGCAmaG2XA6/Jc=;
-        b=KNlc/M6fB7hM1haHCHlB4UNblxkWfrIEq5rXJT8OntiU50Qoh4SXivuRAEblFyXDsX
-         oBlJU4H0ai9GxOHFr+UVD66923yOPl4hJpsTlZBc3Pp1m4zxdSbJAtU/T1B+xF35xCHN
-         yDcDEvljZ36B2IpMzb3AbC8w68cBlQzb3Gjr3lWwaWGeUQvQYqtiqziveQ8GaHxLAHKN
-         eZ0KjFeKzC0jpvdh4K4Rq9irVRs0adyWzp//0gIsrApqBDkqIykJHhl5Mb+LpmQ0hgCI
-         l/iWnfuzTtqNzVTvfC23HLAkSo68ZrubEtsyhYUTGMaA7vCh7fK77XM4S7AC3ygMbnXY
-         bVKg==
-X-Gm-Message-State: AOAM5339iJkS6+9tMB90alMxO04kkXKohdyzXPMXj58sM+gbEfmnh5LO
-        rImk3/7lVQjIkdeFhspwfq+UsDNcX4wAmanIwWo=
-X-Google-Smtp-Source: ABdhPJySKnc7m7Nf8TU4fjrsZwxbCMv1kIl0E/jlTFjRQdt2EGRC+2UncbYh/QBkqg9WnWZzANdF2Q==
-X-Received: by 2002:a05:6402:1cbb:: with SMTP id cz27mr523878edb.334.1631053429007;
-        Tue, 07 Sep 2021 15:23:49 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=LkH/sO56VAlmNRIplGiQQoew4M/S2hYPzrsnrhPWCOU=;
+        b=XV9WHqZjdQSnbtYC26EE7zXxemncqLH1hSzWXB8IRfMyfQEAS3zgaJdtB9jiS5+r9R
+         jk3X/MyeFuJb5ReOA2+rUNSQoLZzlfYiS7H8xazEDdGpA+Nt1KQSlAK4PaoD9UPtqy27
+         DJRngWYirxRfbFxVZTW21SoHAHMyRV1V1/Dt3JaZubSuboqQjbSOhFdyEqqjzWK5aDaT
+         VciI0yyCtcL66JmNNQIEbDR4OcJj72w+skYjAuslcQv53ulPYPboGvsBqZGgYi6cjQ7N
+         F0JhohvkCKfib02nu0r5aJ3cdKcG2UokpmqOi0Wm/7zHg7JhFNGBVnG4zHPunzETGxyO
+         2urg==
+X-Gm-Message-State: AOAM531e1iZ7FUpN0lJ80C9RoKMpT/15HQTZZiPvnnWyVy6jaQxHazd4
+        0mQWV/2EOywbFqdW4t6tU44AFw==
+X-Google-Smtp-Source: ABdhPJx62kWnqtc7039/ABnoKyGbW56/yla4SNzWfnBXj0QXEBAGiY04V91svwVLs3sVlT0uKRxYlw==
+X-Received: by 2002:a05:6402:350d:: with SMTP id b13mr529314edd.1.1631053431973;
+        Tue, 07 Sep 2021 15:23:51 -0700 (PDT)
 Received: from anpc2.lan (static-213-115-136-2.sme.telenor.se. [213.115.136.2])
-        by smtp.gmail.com with ESMTPSA id gb24sm71772ejc.53.2021.09.07.15.23.47
+        by smtp.gmail.com with ESMTPSA id gb24sm71772ejc.53.2021.09.07.15.23.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Sep 2021 15:23:48 -0700 (PDT)
+        Tue, 07 Sep 2021 15:23:51 -0700 (PDT)
 From:   Johan Almbladh <johan.almbladh@anyfinetworks.com>
 To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
 Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
         john.fastabend@gmail.com, kpsingh@kernel.org, iii@linux.ibm.com,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Subject: [PATCH bpf-next v2 00/13] bpf/tests: Extend JIT test suite coverage
-Date:   Wed,  8 Sep 2021 00:23:26 +0200
-Message-Id: <20210907222339.4130924-1-johan.almbladh@anyfinetworks.com>
+Subject: [PATCH bpf-next v2 03/13] bpf/tests: Add exhaustive tests of ALU shift values
+Date:   Wed,  8 Sep 2021 00:23:29 +0200
+Message-Id: <20210907222339.4130924-4-johan.almbladh@anyfinetworks.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210907222339.4130924-1-johan.almbladh@anyfinetworks.com>
+References: <20210907222339.4130924-1-johan.almbladh@anyfinetworks.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch set adds a number of new tests to the test_bpf.ko test suite.
-The tests are intended to verify the correctness of eBPF JITs.
+This patch adds a set of tests for ALU64 and ALU32 shift operations to
+verify correctness for all possible values of the shift value. Mainly
+intended for JIT testing.
 
-Changes since v1:
-* Fixed ASCII diagram of staggered jump test pattern (6/13).
-* Fixed R0 initialization issue found by kbuild CI. Add comment on
-  diagnostics/debugging instead of setting R0 to the current
-  instruction index (3,4,7/13).
+Signed-off-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
+---
+ lib/test_bpf.c | 260 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 260 insertions(+)
 
-Link: https://lore.kernel.org/bpf/20210902185229.1840281-1-johan.almbladh@anyfinetworks.com/
-
-Johan Almbladh (13):
-  bpf/tests: Allow different number of runs per test case
-  bpf/tests: Reduce memory footprint of test suite
-  bpf/tests: Add exhaustive tests of ALU shift values
-  bpf/tests: Add exhaustive tests of ALU operand magnitudes
-  bpf/tests: Add exhaustive tests of JMP operand magnitudes
-  bpf/tests: Add staggered JMP and JMP32 tests
-  bpf/tests: Add exhaustive test of LD_IMM64 immediate magnitudes
-  bpf/tests: Add test case flag for verifier zero-extension
-  bpf/tests: Add JMP tests with small offsets
-  bpf/tests: Add JMP tests with degenerate conditional
-  bpf/tests: Expand branch conversion JIT test
-  bpf/tests: Add more BPF_END byte order conversion tests
-  bpf/tests: Add tail call limit test with external function call
-
- lib/test_bpf.c | 3316 +++++++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 3274 insertions(+), 42 deletions(-)
-
+diff --git a/lib/test_bpf.c b/lib/test_bpf.c
+index f0651dc6450b..f76472c050a7 100644
+--- a/lib/test_bpf.c
++++ b/lib/test_bpf.c
+@@ -497,6 +497,168 @@ static int bpf_fill_long_jmp(struct bpf_test *self)
+ 	return 0;
+ }
+ 
++static int __bpf_ld_imm64(struct bpf_insn insns[2], u8 reg, s64 imm64)
++{
++	struct bpf_insn tmp[] = {BPF_LD_IMM64(reg, imm64)};
++
++	memcpy(insns, tmp, sizeof(tmp));
++	return 2;
++}
++
++/* Test an ALU shift operation for all valid shift values */
++static int __bpf_fill_alu_shift(struct bpf_test *self, u8 op,
++				u8 mode, bool alu32)
++{
++	static const s64 regs[] = {
++		0x0123456789abcdefLL, /* dword > 0, word < 0 */
++		0xfedcba9876543210LL, /* dowrd < 0, word > 0 */
++		0xfedcba0198765432LL, /* dowrd < 0, word < 0 */
++		0x0123458967abcdefLL, /* dword > 0, word > 0 */
++	};
++	int bits = alu32 ? 32 : 64;
++	int len = (2 + 7 * bits) * ARRAY_SIZE(regs) + 3;
++	struct bpf_insn *insn;
++	int imm, k;
++	int i = 0;
++
++	insn = kmalloc_array(len, sizeof(*insn), GFP_KERNEL);
++	if (!insn)
++		return -ENOMEM;
++
++	insn[i++] = BPF_ALU64_IMM(BPF_MOV, R0, 0);
++
++	for (k = 0; k < ARRAY_SIZE(regs); k++) {
++		s64 reg = regs[k];
++
++		i += __bpf_ld_imm64(&insn[i], R3, reg);
++
++		for (imm = 0; imm < bits; imm++) {
++			u64 val;
++
++			/* Perform operation */
++			insn[i++] = BPF_ALU64_REG(BPF_MOV, R1, R3);
++			insn[i++] = BPF_ALU64_IMM(BPF_MOV, R2, imm);
++			if (alu32) {
++				if (mode == BPF_K)
++					insn[i++] = BPF_ALU32_IMM(op, R1, imm);
++				else
++					insn[i++] = BPF_ALU32_REG(op, R1, R2);
++				switch (op) {
++				case BPF_LSH:
++					val = (u32)reg << imm;
++					break;
++				case BPF_RSH:
++					val = (u32)reg >> imm;
++					break;
++				case BPF_ARSH:
++					val = (u32)reg >> imm;
++					if (imm > 0 && (reg & 0x80000000))
++						val |= ~(u32)0 << (32 - imm);
++					break;
++				}
++			} else {
++				if (mode == BPF_K)
++					insn[i++] = BPF_ALU64_IMM(op, R1, imm);
++				else
++					insn[i++] = BPF_ALU64_REG(op, R1, R2);
++				switch (op) {
++				case BPF_LSH:
++					val = (u64)reg << imm;
++					break;
++				case BPF_RSH:
++					val = (u64)reg >> imm;
++					break;
++				case BPF_ARSH:
++					val = (u64)reg >> imm;
++					if (imm > 0 && reg < 0)
++						val |= ~(u64)0 << (64 - imm);
++					break;
++				}
++			}
++
++			/*
++			 * When debugging a JIT that fails this test, one
++			 * can write the immediate value to R0 here to find
++			 * out which operand values that fail.
++			 */
++
++			/* Load reference and check the result */
++			i += __bpf_ld_imm64(&insn[i], R4, val);
++			insn[i++] = BPF_JMP_REG(BPF_JEQ, R1, R4, 1);
++			insn[i++] = BPF_EXIT_INSN();
++		}
++	}
++
++	insn[i++] = BPF_ALU64_IMM(BPF_MOV, R0, 1);
++	insn[i++] = BPF_EXIT_INSN();
++
++	self->u.ptr.insns = insn;
++	self->u.ptr.len = len;
++	BUG_ON(i > len);
++
++	return 0;
++}
++
++static int bpf_fill_alu_lsh_imm(struct bpf_test *self)
++{
++	return __bpf_fill_alu_shift(self, BPF_LSH, BPF_K, false);
++}
++
++static int bpf_fill_alu_rsh_imm(struct bpf_test *self)
++{
++	return __bpf_fill_alu_shift(self, BPF_RSH, BPF_K, false);
++}
++
++static int bpf_fill_alu_arsh_imm(struct bpf_test *self)
++{
++	return __bpf_fill_alu_shift(self, BPF_ARSH, BPF_K, false);
++}
++
++static int bpf_fill_alu_lsh_reg(struct bpf_test *self)
++{
++	return __bpf_fill_alu_shift(self, BPF_LSH, BPF_X, false);
++}
++
++static int bpf_fill_alu_rsh_reg(struct bpf_test *self)
++{
++	return __bpf_fill_alu_shift(self, BPF_RSH, BPF_X, false);
++}
++
++static int bpf_fill_alu_arsh_reg(struct bpf_test *self)
++{
++	return __bpf_fill_alu_shift(self, BPF_ARSH, BPF_X, false);
++}
++
++static int bpf_fill_alu32_lsh_imm(struct bpf_test *self)
++{
++	return __bpf_fill_alu_shift(self, BPF_LSH, BPF_K, true);
++}
++
++static int bpf_fill_alu32_rsh_imm(struct bpf_test *self)
++{
++	return __bpf_fill_alu_shift(self, BPF_RSH, BPF_K, true);
++}
++
++static int bpf_fill_alu32_arsh_imm(struct bpf_test *self)
++{
++	return __bpf_fill_alu_shift(self, BPF_ARSH, BPF_K, true);
++}
++
++static int bpf_fill_alu32_lsh_reg(struct bpf_test *self)
++{
++	return __bpf_fill_alu_shift(self, BPF_LSH, BPF_X, true);
++}
++
++static int bpf_fill_alu32_rsh_reg(struct bpf_test *self)
++{
++	return __bpf_fill_alu_shift(self, BPF_RSH, BPF_X, true);
++}
++
++static int bpf_fill_alu32_arsh_reg(struct bpf_test *self)
++{
++	return __bpf_fill_alu_shift(self, BPF_ARSH, BPF_X, true);
++}
++
+ static struct bpf_test tests[] = {
+ 	{
+ 		"TAX",
+@@ -8414,6 +8576,104 @@ static struct bpf_test tests[] = {
+ 		{},
+ 		{ { 0, 2 } },
+ 	},
++	/* Exhaustive test of ALU64 shift operations */
++	{
++		"ALU64_LSH_K: all shift values",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu_lsh_imm,
++	},
++	{
++		"ALU64_RSH_K: all shift values",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu_rsh_imm,
++	},
++	{
++		"ALU64_ARSH_K: all shift values",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu_arsh_imm,
++	},
++	{
++		"ALU64_LSH_X: all shift values",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu_lsh_reg,
++	},
++	{
++		"ALU64_RSH_X: all shift values",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu_rsh_reg,
++	},
++	{
++		"ALU64_ARSH_X: all shift values",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu_arsh_reg,
++	},
++	/* Exhaustive test of ALU32 shift operations */
++	{
++		"ALU32_LSH_K: all shift values",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu32_lsh_imm,
++	},
++	{
++		"ALU32_RSH_K: all shift values",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu32_rsh_imm,
++	},
++	{
++		"ALU32_ARSH_K: all shift values",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu32_arsh_imm,
++	},
++	{
++		"ALU32_LSH_X: all shift values",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu32_lsh_reg,
++	},
++	{
++		"ALU32_RSH_X: all shift values",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu32_rsh_reg,
++	},
++	{
++		"ALU32_ARSH_X: all shift values",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu32_arsh_reg,
++	},
+ };
+ 
+ static struct net_device dev;
 -- 
 2.25.1
 
