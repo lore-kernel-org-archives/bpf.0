@@ -7,63 +7,63 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CFC13C433EF
-	for <bpf@archiver.kernel.org>; Tue,  7 Sep 2021 22:24:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F85FC433F5
+	for <bpf@archiver.kernel.org>; Tue,  7 Sep 2021 22:24:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BA63461106
-	for <bpf@archiver.kernel.org>; Tue,  7 Sep 2021 22:24:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E7FE961104
+	for <bpf@archiver.kernel.org>; Tue,  7 Sep 2021 22:24:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348390AbhIGWZG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 7 Sep 2021 18:25:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39830 "EHLO
+        id S1348486AbhIGWZH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 7 Sep 2021 18:25:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347875AbhIGWZB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 7 Sep 2021 18:25:01 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9054CC0613D9
-        for <bpf@vger.kernel.org>; Tue,  7 Sep 2021 15:23:52 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id mf2so5574ejb.9
-        for <bpf@vger.kernel.org>; Tue, 07 Sep 2021 15:23:52 -0700 (PDT)
+        with ESMTP id S1348091AbhIGWZC (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 7 Sep 2021 18:25:02 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78A92C0617AD
+        for <bpf@vger.kernel.org>; Tue,  7 Sep 2021 15:23:54 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id eb14so57124edb.8
+        for <bpf@vger.kernel.org>; Tue, 07 Sep 2021 15:23:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=anyfinetworks-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=hsJRd+5H/xBdXI0ewID2C2LPT2CelRazFOfPu6EBp7o=;
-        b=KnQcCDG4joN/ogi3ID8wzVS6karwjlbEwsmI67W1We6ekzxA3sSe4MG1ZhP+xhqgyw
-         cZanzYaFXh5Yf+Vulpsi9QJaER1febT1m84fhk8aor7I2gF026jU55KOMvl1X/29ixJs
-         DYQr7J/6PZZTwGmaf6IR1g3GBroXDSzV9SNw0fkL/KoLy0K41fmRPL36YT069rAbNiop
-         w6gjyJqZ8ON6Uu3m2K2tSF0wn8dMfG3FCwGNRQIm7SESUaISV5vfX8tT6bpj41che9cI
-         RiRpW0vE4Lkyc1oaewfKsLW5ha0oUtkn8JGhzOPgujhTfDTS0WbIIgx/zjqkhjzA3fPD
-         F5Uw==
+        bh=ch5Oo1oq8i1LcY9ozSfNlxFm0FOEnR5Hv+KS3NKiJvg=;
+        b=VN8VE94cysfKu//qVGAZCdglLsljT0DLn5EdDSCyiRskhwndrJUa6G6w55XuQDsnbN
+         nDG03jLFZJXxtZMTtHJi0uYjIBhh4fkjCOKLcR4h18bI1ceEmr0LBLZ5u16+nBK2shzk
+         wpTL4y1G4v+xBgGwO9z1nhiIcl/fzZ6O2ujxlO+6W9xHCDqaoO4WfqmpxTLiYjlmjVBH
+         FioawrK/OP3PtzmtwDYeEjTVdapK82xap9laEFP0/+sL/u/xLibFONh/waKqc6Jg4eWX
+         HtR4TciZ5t+IyEjZEfBqdAOFnqpkA9h1Ge+9c1Irx63JCArL3yUfs7WsbJzqb27tZNO6
+         Qqsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=hsJRd+5H/xBdXI0ewID2C2LPT2CelRazFOfPu6EBp7o=;
-        b=KeTUfqffrEG4ZhnA8ZsCNJnt16SvPekwArnqSlCwDYVlNsJqIL9iywjIjqLrlwhrVp
-         iDWkLfE9DjglRRoDxx1aBaQfBPQ7n8lDuEFrJvsb11jLGJzcftCRRiN2o82Y7T7ZbsJ4
-         BWZ9ngMUpEQsg74i1a46PnVhI4O21NmgY63qFdFmwDI38EJXhH+0YwWRyOpf3jknzh7r
-         wjVW0Jut429jXXixMGFFdI7keCHq63OL03fXRj09roQ/SkiKHoneZHbz+LzqqiiDCt0R
-         wab3u+n4H1v6HmQ1j6QPh8b0saFR8gvVD/YtpJP9ENGkOr5vdEMSlGApAPWW9QbC7/4b
-         tpQg==
-X-Gm-Message-State: AOAM533xqxBb0ptYeQBhFH6h7i7CwNHHgTuLxTSOUoDE7s/vWYVlkbQ7
-        7BPf6Q1JczvlKWs3R18LR7dm9g==
-X-Google-Smtp-Source: ABdhPJzSWwoZYW+9Of+HubxRBa+2Uw7JHyRAXZP30LZNmKsw14bmsUh43lowozO/j0JJTmMgynmOFA==
-X-Received: by 2002:a17:906:4482:: with SMTP id y2mr621958ejo.484.1631053430981;
-        Tue, 07 Sep 2021 15:23:50 -0700 (PDT)
+        bh=ch5Oo1oq8i1LcY9ozSfNlxFm0FOEnR5Hv+KS3NKiJvg=;
+        b=uNmdp/Nwe46YzoX+kDtUr+JAxP3pet0RLUVTS5HxVxKGVJ6bjEU/h213AOKCDZXbD2
+         2z8YQ4/y/usV3m/th2zHt8D7esE9WSfD2+IwXI79Oc5JBgfHJ2bZpkqLnbOp6tCmWeJ2
+         KeY3b+xc8xbrBYOsqfxWfaen0OECZN9vX/AeDQrxek/bj2i4HAfr8qFA9zPoiKivwFyA
+         ZJMBoKafXSRByxsqZhjawx2e0bC6s/+/U/R7KuvroD/KGTd5H976vBTWI/PRv4Aq6OdE
+         2QQpbmEsA247Hh/d4a2hGphzelIS5R23+6i+1Wx9110kqiJque62O0m6pZX6liXdnau5
+         oNUg==
+X-Gm-Message-State: AOAM532IIFLvYbKJogfoOeyph+z9OO2YbaqfdfemKub058IFd73xf11r
+        vRpml4RQTbkl9CEwZcX4C9diau9k7xZiW8Nb+Gg=
+X-Google-Smtp-Source: ABdhPJzDUpSeuKwRJcZ81gJmPxBR4vE/+7X0KywCvCrvPxih76lXtBKZDn3QTQ4mXi0sWXYHQ9u89Q==
+X-Received: by 2002:aa7:c408:: with SMTP id j8mr528045edq.280.1631053433031;
+        Tue, 07 Sep 2021 15:23:53 -0700 (PDT)
 Received: from anpc2.lan (static-213-115-136-2.sme.telenor.se. [213.115.136.2])
-        by smtp.gmail.com with ESMTPSA id gb24sm71772ejc.53.2021.09.07.15.23.50
+        by smtp.gmail.com with ESMTPSA id gb24sm71772ejc.53.2021.09.07.15.23.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Sep 2021 15:23:50 -0700 (PDT)
+        Tue, 07 Sep 2021 15:23:52 -0700 (PDT)
 From:   Johan Almbladh <johan.almbladh@anyfinetworks.com>
 To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
 Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
         john.fastabend@gmail.com, kpsingh@kernel.org, iii@linux.ibm.com,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Subject: [PATCH bpf-next v2 02/13] bpf/tests: Reduce memory footprint of test suite
-Date:   Wed,  8 Sep 2021 00:23:28 +0200
-Message-Id: <20210907222339.4130924-3-johan.almbladh@anyfinetworks.com>
+Subject: [PATCH bpf-next v2 04/13] bpf/tests: Add exhaustive tests of ALU operand magnitudes
+Date:   Wed,  8 Sep 2021 00:23:30 +0200
+Message-Id: <20210907222339.4130924-5-johan.almbladh@anyfinetworks.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210907222339.4130924-1-johan.almbladh@anyfinetworks.com>
 References: <20210907222339.4130924-1-johan.almbladh@anyfinetworks.com>
@@ -73,74 +73,809 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The test suite used to call any fill_helper callbacks to generate eBPF
-program data for all test cases at once. This caused ballooning memory
-requirements as more extensive test cases were added. Now the each
-fill_helper is called before the test is run and the allocated memory
-released afterwards, before the next test case is processed.
+This patch adds a set of tests for ALU64 and ALU32 arithmetic and bitwise
+logical operations to verify correctness for all possible magnitudes of
+the register and immediate operands. Mainly intended for JIT testing.
+
+The patch introduces a pattern generator that can be used to drive
+extensive tests of different kinds of operations. It is parameterized
+to allow tuning of the operand combinations to test.
 
 Signed-off-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
 ---
- lib/test_bpf.c | 26 ++++++++++++--------------
- 1 file changed, 12 insertions(+), 14 deletions(-)
+ lib/test_bpf.c | 772 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 772 insertions(+)
 
 diff --git a/lib/test_bpf.c b/lib/test_bpf.c
-index c8bd3e9ab10a..f0651dc6450b 100644
+index f76472c050a7..7992004bc876 100644
 --- a/lib/test_bpf.c
 +++ b/lib/test_bpf.c
-@@ -8694,8 +8694,6 @@ static __init int find_test_index(const char *test_name)
- 
- static __init int prepare_bpf_tests(void)
- {
--	int i;
--
- 	if (test_id >= 0) {
- 		/*
- 		 * if a test_id was specified, use test_range to
-@@ -8739,23 +8737,11 @@ static __init int prepare_bpf_tests(void)
- 		}
- 	}
- 
--	for (i = 0; i < ARRAY_SIZE(tests); i++) {
--		if (tests[i].fill_helper &&
--		    tests[i].fill_helper(&tests[i]) < 0)
--			return -ENOMEM;
--	}
--
- 	return 0;
+@@ -659,6 +659,451 @@ static int bpf_fill_alu32_arsh_reg(struct bpf_test *self)
+ 	return __bpf_fill_alu_shift(self, BPF_ARSH, BPF_X, true);
  }
  
- static __init void destroy_bpf_tests(void)
- {
--	int i;
--
--	for (i = 0; i < ARRAY_SIZE(tests); i++) {
--		if (tests[i].fill_helper)
--			kfree(tests[i].u.ptr.insns);
--	}
- }
- 
- static bool exclude_test(int test_id)
-@@ -8959,7 +8945,19 @@ static __init int test_bpf(void)
- 
- 		pr_info("#%d %s ", i, tests[i].descr);
- 
-+		if (tests[i].fill_helper &&
-+		    tests[i].fill_helper(&tests[i]) < 0) {
-+			pr_cont("FAIL to prog_fill\n");
-+			continue;
-+		}
++/*
++ * Common operand pattern generator for exhaustive power-of-two magnitudes
++ * tests. The block size parameters can be adjusted to increase/reduce the
++ * number of combinatons tested and thereby execution speed and memory
++ * footprint.
++ */
 +
- 		fp = generate_filter(i, &err);
++static inline s64 value(int msb, int delta, int sign)
++{
++	return sign * (1LL << msb) + delta;
++}
 +
-+		if (tests[i].fill_helper) {
-+			kfree(tests[i].u.ptr.insns);
-+			tests[i].u.ptr.insns = NULL;
-+		}
++static int __bpf_fill_pattern(struct bpf_test *self, void *arg,
++			      int dbits, int sbits, int block1, int block2,
++			      int (*emit)(struct bpf_test*, void*,
++					  struct bpf_insn*, s64, s64))
++{
++	static const int sgn[][2] = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
++	struct bpf_insn *insns;
++	int di, si, bt, db, sb;
++	int count, len, k;
++	int extra = 1 + 2;
++	int i = 0;
 +
- 		if (fp == NULL) {
- 			if (err == 0) {
- 				pass_cnt++;
++	/* Total number of iterations for the two pattern */
++	count = (dbits - 1) * (sbits - 1) * block1 * block1 * ARRAY_SIZE(sgn);
++	count += (max(dbits, sbits) - 1) * block2 * block2 * ARRAY_SIZE(sgn);
++
++	/* Compute the maximum number of insns and allocate the buffer */
++	len = extra + count * (*emit)(self, arg, NULL, 0, 0);
++	insns = kmalloc_array(len, sizeof(*insns), GFP_KERNEL);
++	if (!insns)
++		return -ENOMEM;
++
++	/* Add head instruction(s) */
++	insns[i++] = BPF_ALU64_IMM(BPF_MOV, R0, 0);
++
++	/*
++	 * Pattern 1: all combinations of power-of-two magnitudes and sign,
++	 * and with a block of contiguous values around each magnitude.
++	 */
++	for (di = 0; di < dbits - 1; di++)                 /* Dst magnitudes */
++		for (si = 0; si < sbits - 1; si++)         /* Src magnitudes */
++			for (k = 0; k < ARRAY_SIZE(sgn); k++) /* Sign combos */
++				for (db = -(block1 / 2);
++				     db < (block1 + 1) / 2; db++)
++					for (sb = -(block1 / 2);
++					     sb < (block1 + 1) / 2; sb++) {
++						s64 dst, src;
++
++						dst = value(di, db, sgn[k][0]);
++						src = value(si, sb, sgn[k][1]);
++						i += (*emit)(self, arg,
++							     &insns[i],
++							     dst, src);
++					}
++	/*
++	 * Pattern 2: all combinations for a larger block of values
++	 * for each power-of-two magnitude and sign, where the magnitude is
++	 * the same for both operands.
++	 */
++	for (bt = 0; bt < max(dbits, sbits) - 1; bt++)        /* Magnitude   */
++		for (k = 0; k < ARRAY_SIZE(sgn); k++)         /* Sign combos */
++			for (db = -(block2 / 2); db < (block2 + 1) / 2; db++)
++				for (sb = -(block2 / 2);
++				     sb < (block2 + 1) / 2; sb++) {
++					s64 dst, src;
++
++					dst = value(bt % dbits, db, sgn[k][0]);
++					src = value(bt % sbits, sb, sgn[k][1]);
++					i += (*emit)(self, arg, &insns[i],
++						     dst, src);
++				}
++
++	/* Append tail instructions */
++	insns[i++] = BPF_ALU64_IMM(BPF_MOV, R0, 1);
++	insns[i++] = BPF_EXIT_INSN();
++	BUG_ON(i > len);
++
++	self->u.ptr.insns = insns;
++	self->u.ptr.len = i;
++
++	return 0;
++}
++
++/*
++ * Block size parameters used in pattern tests below. une as needed to
++ * increase/reduce the number combinations tested, see following examples.
++ *        block   values per operand MSB
++ * ----------------------------------------
++ *           0     none
++ *           1     (1 << MSB)
++ *           2     (1 << MSB) + [-1, 0]
++ *           3     (1 << MSB) + [-1, 0, 1]
++ */
++#define PATTERN_BLOCK1 1
++#define PATTERN_BLOCK2 5
++
++/* Number of test runs for a pattern test */
++#define NR_PATTERN_RUNS 1
++
++/*
++ * Exhaustive tests of ALU operations for all combinations of power-of-two
++ * magnitudes of the operands, both for positive and negative values. The
++ * test is designed to verify e.g. the JMP and JMP32 operations for JITs that
++ * emit different code depending on the magnitude of the immediate value.
++ */
++
++static bool __bpf_alu_result(u64 *res, u64 v1, u64 v2, u8 op)
++{
++	*res = 0;
++	switch (op) {
++	case BPF_MOV:
++		*res = v2;
++		break;
++	case BPF_AND:
++		*res = v1 & v2;
++		break;
++	case BPF_OR:
++		*res = v1 | v2;
++		break;
++	case BPF_XOR:
++		*res = v1 ^ v2;
++		break;
++	case BPF_ADD:
++		*res = v1 + v2;
++		break;
++	case BPF_SUB:
++		*res = v1 - v2;
++		break;
++	case BPF_MUL:
++		*res = v1 * v2;
++		break;
++	case BPF_DIV:
++		if (v2 == 0)
++			return false;
++		*res = div64_u64(v1, v2);
++		break;
++	case BPF_MOD:
++		if (v2 == 0)
++			return false;
++		div64_u64_rem(v1, v2, res);
++		break;
++	}
++	return true;
++}
++
++static int __bpf_emit_alu64_imm(struct bpf_test *self, void *arg,
++				struct bpf_insn *insns, s64 dst, s64 imm)
++{
++	int op = *(int *)arg;
++	int i = 0;
++	u64 res;
++
++	if (!insns)
++		return 7;
++
++	if (__bpf_alu_result(&res, dst, (s32)imm, op)) {
++		i += __bpf_ld_imm64(&insns[i], R1, dst);
++		i += __bpf_ld_imm64(&insns[i], R3, res);
++		insns[i++] = BPF_ALU64_IMM(op, R1, imm);
++		insns[i++] = BPF_JMP_REG(BPF_JEQ, R1, R3, 1);
++		insns[i++] = BPF_EXIT_INSN();
++	}
++
++	return i;
++}
++
++static int __bpf_emit_alu32_imm(struct bpf_test *self, void *arg,
++				struct bpf_insn *insns, s64 dst, s64 imm)
++{
++	int op = *(int *)arg;
++	int i = 0;
++	u64 res;
++
++	if (!insns)
++		return 7;
++
++	if (__bpf_alu_result(&res, (u32)dst, (u32)imm, op)) {
++		i += __bpf_ld_imm64(&insns[i], R1, dst);
++		i += __bpf_ld_imm64(&insns[i], R3, (u32)res);
++		insns[i++] = BPF_ALU32_IMM(op, R1, imm);
++		insns[i++] = BPF_JMP_REG(BPF_JEQ, R1, R3, 1);
++		insns[i++] = BPF_EXIT_INSN();
++	}
++
++	return i;
++}
++
++static int __bpf_emit_alu64_reg(struct bpf_test *self, void *arg,
++				struct bpf_insn *insns, s64 dst, s64 src)
++{
++	int op = *(int *)arg;
++	int i = 0;
++	u64 res;
++
++	if (!insns)
++		return 9;
++
++	if (__bpf_alu_result(&res, dst, src, op)) {
++		i += __bpf_ld_imm64(&insns[i], R1, dst);
++		i += __bpf_ld_imm64(&insns[i], R2, src);
++		i += __bpf_ld_imm64(&insns[i], R3, res);
++		insns[i++] = BPF_ALU64_REG(op, R1, R2);
++		insns[i++] = BPF_JMP_REG(BPF_JEQ, R1, R3, 1);
++		insns[i++] = BPF_EXIT_INSN();
++	}
++
++	return i;
++}
++
++static int __bpf_emit_alu32_reg(struct bpf_test *self, void *arg,
++				struct bpf_insn *insns, s64 dst, s64 src)
++{
++	int op = *(int *)arg;
++	int i = 0;
++	u64 res;
++
++	if (!insns)
++		return 9;
++
++	if (__bpf_alu_result(&res, (u32)dst, (u32)src, op)) {
++		i += __bpf_ld_imm64(&insns[i], R1, dst);
++		i += __bpf_ld_imm64(&insns[i], R2, src);
++		i += __bpf_ld_imm64(&insns[i], R3, (u32)res);
++		insns[i++] = BPF_ALU32_REG(op, R1, R2);
++		insns[i++] = BPF_JMP_REG(BPF_JEQ, R1, R3, 1);
++		insns[i++] = BPF_EXIT_INSN();
++	}
++
++	return i;
++}
++
++static int __bpf_fill_alu64_imm(struct bpf_test *self, int op)
++{
++	return __bpf_fill_pattern(self, &op, 64, 32,
++				  PATTERN_BLOCK1, PATTERN_BLOCK2,
++				  &__bpf_emit_alu64_imm);
++}
++
++static int __bpf_fill_alu32_imm(struct bpf_test *self, int op)
++{
++	return __bpf_fill_pattern(self, &op, 64, 32,
++				  PATTERN_BLOCK1, PATTERN_BLOCK2,
++				  &__bpf_emit_alu32_imm);
++}
++
++static int __bpf_fill_alu64_reg(struct bpf_test *self, int op)
++{
++	return __bpf_fill_pattern(self, &op, 64, 64,
++				  PATTERN_BLOCK1, PATTERN_BLOCK2,
++				  &__bpf_emit_alu64_reg);
++}
++
++static int __bpf_fill_alu32_reg(struct bpf_test *self, int op)
++{
++	return __bpf_fill_pattern(self, &op, 64, 64,
++				  PATTERN_BLOCK1, PATTERN_BLOCK2,
++				  &__bpf_emit_alu32_reg);
++}
++
++/* ALU64 immediate operations */
++static int bpf_fill_alu64_mov_imm(struct bpf_test *self)
++{
++	return __bpf_fill_alu64_imm(self, BPF_MOV);
++}
++
++static int bpf_fill_alu64_and_imm(struct bpf_test *self)
++{
++	return __bpf_fill_alu64_imm(self, BPF_AND);
++}
++
++static int bpf_fill_alu64_or_imm(struct bpf_test *self)
++{
++	return __bpf_fill_alu64_imm(self, BPF_OR);
++}
++
++static int bpf_fill_alu64_xor_imm(struct bpf_test *self)
++{
++	return __bpf_fill_alu64_imm(self, BPF_XOR);
++}
++
++static int bpf_fill_alu64_add_imm(struct bpf_test *self)
++{
++	return __bpf_fill_alu64_imm(self, BPF_ADD);
++}
++
++static int bpf_fill_alu64_sub_imm(struct bpf_test *self)
++{
++	return __bpf_fill_alu64_imm(self, BPF_SUB);
++}
++
++static int bpf_fill_alu64_mul_imm(struct bpf_test *self)
++{
++	return __bpf_fill_alu64_imm(self, BPF_MUL);
++}
++
++static int bpf_fill_alu64_div_imm(struct bpf_test *self)
++{
++	return __bpf_fill_alu64_imm(self, BPF_DIV);
++}
++
++static int bpf_fill_alu64_mod_imm(struct bpf_test *self)
++{
++	return __bpf_fill_alu64_imm(self, BPF_MOD);
++}
++
++/* ALU32 immediate operations */
++static int bpf_fill_alu32_mov_imm(struct bpf_test *self)
++{
++	return __bpf_fill_alu32_imm(self, BPF_MOV);
++}
++
++static int bpf_fill_alu32_and_imm(struct bpf_test *self)
++{
++	return __bpf_fill_alu32_imm(self, BPF_AND);
++}
++
++static int bpf_fill_alu32_or_imm(struct bpf_test *self)
++{
++	return __bpf_fill_alu32_imm(self, BPF_OR);
++}
++
++static int bpf_fill_alu32_xor_imm(struct bpf_test *self)
++{
++	return __bpf_fill_alu32_imm(self, BPF_XOR);
++}
++
++static int bpf_fill_alu32_add_imm(struct bpf_test *self)
++{
++	return __bpf_fill_alu32_imm(self, BPF_ADD);
++}
++
++static int bpf_fill_alu32_sub_imm(struct bpf_test *self)
++{
++	return __bpf_fill_alu32_imm(self, BPF_SUB);
++}
++
++static int bpf_fill_alu32_mul_imm(struct bpf_test *self)
++{
++	return __bpf_fill_alu32_imm(self, BPF_MUL);
++}
++
++static int bpf_fill_alu32_div_imm(struct bpf_test *self)
++{
++	return __bpf_fill_alu32_imm(self, BPF_DIV);
++}
++
++static int bpf_fill_alu32_mod_imm(struct bpf_test *self)
++{
++	return __bpf_fill_alu32_imm(self, BPF_MOD);
++}
++
++/* ALU64 register operations */
++static int bpf_fill_alu64_mov_reg(struct bpf_test *self)
++{
++	return __bpf_fill_alu64_reg(self, BPF_MOV);
++}
++
++static int bpf_fill_alu64_and_reg(struct bpf_test *self)
++{
++	return __bpf_fill_alu64_reg(self, BPF_AND);
++}
++
++static int bpf_fill_alu64_or_reg(struct bpf_test *self)
++{
++	return __bpf_fill_alu64_reg(self, BPF_OR);
++}
++
++static int bpf_fill_alu64_xor_reg(struct bpf_test *self)
++{
++	return __bpf_fill_alu64_reg(self, BPF_XOR);
++}
++
++static int bpf_fill_alu64_add_reg(struct bpf_test *self)
++{
++	return __bpf_fill_alu64_reg(self, BPF_ADD);
++}
++
++static int bpf_fill_alu64_sub_reg(struct bpf_test *self)
++{
++	return __bpf_fill_alu64_reg(self, BPF_SUB);
++}
++
++static int bpf_fill_alu64_mul_reg(struct bpf_test *self)
++{
++	return __bpf_fill_alu64_reg(self, BPF_MUL);
++}
++
++static int bpf_fill_alu64_div_reg(struct bpf_test *self)
++{
++	return __bpf_fill_alu64_reg(self, BPF_DIV);
++}
++
++static int bpf_fill_alu64_mod_reg(struct bpf_test *self)
++{
++	return __bpf_fill_alu64_reg(self, BPF_MOD);
++}
++
++/* ALU32 register operations */
++static int bpf_fill_alu32_mov_reg(struct bpf_test *self)
++{
++	return __bpf_fill_alu32_reg(self, BPF_MOV);
++}
++
++static int bpf_fill_alu32_and_reg(struct bpf_test *self)
++{
++	return __bpf_fill_alu32_reg(self, BPF_AND);
++}
++
++static int bpf_fill_alu32_or_reg(struct bpf_test *self)
++{
++	return __bpf_fill_alu32_reg(self, BPF_OR);
++}
++
++static int bpf_fill_alu32_xor_reg(struct bpf_test *self)
++{
++	return __bpf_fill_alu32_reg(self, BPF_XOR);
++}
++
++static int bpf_fill_alu32_add_reg(struct bpf_test *self)
++{
++	return __bpf_fill_alu32_reg(self, BPF_ADD);
++}
++
++static int bpf_fill_alu32_sub_reg(struct bpf_test *self)
++{
++	return __bpf_fill_alu32_reg(self, BPF_SUB);
++}
++
++static int bpf_fill_alu32_mul_reg(struct bpf_test *self)
++{
++	return __bpf_fill_alu32_reg(self, BPF_MUL);
++}
++
++static int bpf_fill_alu32_div_reg(struct bpf_test *self)
++{
++	return __bpf_fill_alu32_reg(self, BPF_DIV);
++}
++
++static int bpf_fill_alu32_mod_reg(struct bpf_test *self)
++{
++	return __bpf_fill_alu32_reg(self, BPF_MOD);
++}
++
+ static struct bpf_test tests[] = {
+ 	{
+ 		"TAX",
+@@ -8674,6 +9119,333 @@ static struct bpf_test tests[] = {
+ 		{ { 0, 1 } },
+ 		.fill_helper = bpf_fill_alu32_arsh_reg,
+ 	},
++	/* ALU64 immediate magnitudes */
++	{
++		"ALU64_MOV_K: all immediate value magnitudes",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu64_mov_imm,
++		.nr_testruns = NR_PATTERN_RUNS,
++	},
++	{
++		"ALU64_AND_K: all immediate value magnitudes",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu64_and_imm,
++		.nr_testruns = NR_PATTERN_RUNS,
++	},
++	{
++		"ALU64_OR_K: all immediate value magnitudes",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu64_or_imm,
++		.nr_testruns = NR_PATTERN_RUNS,
++	},
++	{
++		"ALU64_XOR_K: all immediate value magnitudes",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu64_xor_imm,
++		.nr_testruns = NR_PATTERN_RUNS,
++	},
++	{
++		"ALU64_ADD_K: all immediate value magnitudes",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu64_add_imm,
++		.nr_testruns = NR_PATTERN_RUNS,
++	},
++	{
++		"ALU64_SUB_K: all immediate value magnitudes",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu64_sub_imm,
++		.nr_testruns = NR_PATTERN_RUNS,
++	},
++	{
++		"ALU64_MUL_K: all immediate value magnitudes",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu64_mul_imm,
++		.nr_testruns = NR_PATTERN_RUNS,
++	},
++	{
++		"ALU64_DIV_K: all immediate value magnitudes",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu64_div_imm,
++		.nr_testruns = NR_PATTERN_RUNS,
++	},
++	{
++		"ALU64_MOD_K: all immediate value magnitudes",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu64_mod_imm,
++		.nr_testruns = NR_PATTERN_RUNS,
++	},
++	/* ALU32 immediate magnitudes */
++	{
++		"ALU32_MOV_K: all immediate value magnitudes",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu32_mov_imm,
++		.nr_testruns = NR_PATTERN_RUNS,
++	},
++	{
++		"ALU32_AND_K: all immediate value magnitudes",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu32_and_imm,
++		.nr_testruns = NR_PATTERN_RUNS,
++	},
++	{
++		"ALU32_OR_K: all immediate value magnitudes",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu32_or_imm,
++		.nr_testruns = NR_PATTERN_RUNS,
++	},
++	{
++		"ALU32_XOR_K: all immediate value magnitudes",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu32_xor_imm,
++		.nr_testruns = NR_PATTERN_RUNS,
++	},
++	{
++		"ALU32_ADD_K: all immediate value magnitudes",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu32_add_imm,
++		.nr_testruns = NR_PATTERN_RUNS,
++	},
++	{
++		"ALU32_SUB_K: all immediate value magnitudes",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu32_sub_imm,
++		.nr_testruns = NR_PATTERN_RUNS,
++	},
++	{
++		"ALU32_MUL_K: all immediate value magnitudes",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu32_mul_imm,
++		.nr_testruns = NR_PATTERN_RUNS,
++	},
++	{
++		"ALU32_DIV_K: all immediate value magnitudes",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu32_div_imm,
++		.nr_testruns = NR_PATTERN_RUNS,
++	},
++	{
++		"ALU32_MOD_K: all immediate value magnitudes",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu32_mod_imm,
++	},
++	/* ALU64 register magnitudes */
++	{
++		"ALU64_MOV_X: all register value magnitudes",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu64_mov_reg,
++		.nr_testruns = NR_PATTERN_RUNS,
++	},
++	{
++		"ALU64_AND_X: all register value magnitudes",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu64_and_reg,
++		.nr_testruns = NR_PATTERN_RUNS,
++	},
++	{
++		"ALU64_OR_X: all register value magnitudes",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu64_or_reg,
++		.nr_testruns = NR_PATTERN_RUNS,
++	},
++	{
++		"ALU64_XOR_X: all register value magnitudes",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu64_xor_reg,
++		.nr_testruns = NR_PATTERN_RUNS,
++	},
++	{
++		"ALU64_ADD_X: all register value magnitudes",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu64_add_reg,
++		.nr_testruns = NR_PATTERN_RUNS,
++	},
++	{
++		"ALU64_SUB_X: all register value magnitudes",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu64_sub_reg,
++		.nr_testruns = NR_PATTERN_RUNS,
++	},
++	{
++		"ALU64_MUL_X: all register value magnitudes",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu64_mul_reg,
++		.nr_testruns = NR_PATTERN_RUNS,
++	},
++	{
++		"ALU64_DIV_X: all register value magnitudes",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu64_div_reg,
++		.nr_testruns = NR_PATTERN_RUNS,
++	},
++	{
++		"ALU64_MOD_X: all register value magnitudes",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu64_mod_reg,
++		.nr_testruns = NR_PATTERN_RUNS,
++	},
++	/* ALU32 register magnitudes */
++	{
++		"ALU32_MOV_X: all register value magnitudes",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu32_mov_reg,
++		.nr_testruns = NR_PATTERN_RUNS,
++	},
++	{
++		"ALU32_AND_X: all register value magnitudes",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu32_and_reg,
++		.nr_testruns = NR_PATTERN_RUNS,
++	},
++	{
++		"ALU32_OR_X: all register value magnitudes",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu32_or_reg,
++		.nr_testruns = NR_PATTERN_RUNS,
++	},
++	{
++		"ALU32_XOR_X: all register value magnitudes",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu32_xor_reg,
++		.nr_testruns = NR_PATTERN_RUNS,
++	},
++	{
++		"ALU32_ADD_X: all register value magnitudes",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu32_add_reg,
++		.nr_testruns = NR_PATTERN_RUNS,
++	},
++	{
++		"ALU32_SUB_X: all register value magnitudes",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu32_sub_reg,
++		.nr_testruns = NR_PATTERN_RUNS,
++	},
++	{
++		"ALU32_MUL_X: all register value magnitudes",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu32_mul_reg,
++		.nr_testruns = NR_PATTERN_RUNS,
++	},
++	{
++		"ALU32_DIV_X: all register value magnitudes",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu32_div_reg,
++		.nr_testruns = NR_PATTERN_RUNS,
++	},
++	{
++		"ALU32_MOD_X: all register value magnitudes",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu32_mod_reg,
++		.nr_testruns = NR_PATTERN_RUNS,
++	},
+ };
+ 
+ static struct net_device dev;
 -- 
 2.25.1
 
