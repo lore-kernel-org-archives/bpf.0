@@ -2,116 +2,217 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no
+X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 12912C433FE
-	for <bpf@archiver.kernel.org>; Wed,  8 Sep 2021 14:44:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2E25C433EF
+	for <bpf@archiver.kernel.org>; Wed,  8 Sep 2021 14:59:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E075361158
-	for <bpf@archiver.kernel.org>; Wed,  8 Sep 2021 14:43:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D3E2F61164
+	for <bpf@archiver.kernel.org>; Wed,  8 Sep 2021 14:59:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232842AbhIHOpG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 8 Sep 2021 10:45:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35022 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229968AbhIHOpG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 8 Sep 2021 10:45:06 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48923C061575
-        for <bpf@vger.kernel.org>; Wed,  8 Sep 2021 07:43:58 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id t19so4688473ejr.8
-        for <bpf@vger.kernel.org>; Wed, 08 Sep 2021 07:43:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Uabt4pKuf2kBSNv+i0qvyQ7gGTLuhCK/E/pLJaOpcUI=;
-        b=led/LN2yMve9BoUBIhjG1AHu8ACK+rW3hw3Oy1SqXgFlTum0aLIn44Ifb94ULoUILi
-         /Ap+SMj84d9jHlUHsmU3N/jEJnRo3r4LujzdvhLMfNv9EuMvXo1U/cjibCcKzgxTG8Xo
-         ETBTWXFNAXQfMufWeNSNmqLfOXVrLl58/DN1jVyXZCIgRFnBsQUEVYR5HzAlplPCkyaY
-         w/1Yaj1LBm1YT5+4UNem7fMi93GV2RMOnTOCEJuY85zy3SqERXhm54SHzuvKe9KZ8Rtz
-         HN7Zq4kIGs/Cpx969P0qpx3DsZfxCJK48FZt5+M0SU3LAymtvVV+KB663T8+DDMaQ83f
-         5SRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Uabt4pKuf2kBSNv+i0qvyQ7gGTLuhCK/E/pLJaOpcUI=;
-        b=22u5PDl/DCyk3+2oWbq2rBwvEPxuiMUVmfqPGj7Ux/5stC685zyhX8AWV6fhMOqFZE
-         MTRAYbJkpVXFZJtL91agZPp6fI9ph3B5ZQfQCO63+uEe6C4DahRs2PSXUaMOoKiF1ave
-         YeBk/pSkY9/wzGnOqnNp8yXxNqVLVihzNR7RFB+b/u6P9ywZZqbSBzal6U3xOJc/YORN
-         8hMxf5zHOmQHb6a7Z4mVTVEgKDL2aDJ9S8xnO8dL2XRIt8efc8YP4uxqTsxsdpKBDDei
-         avujsP+t5iqVkE+7czjDCyhVUzczK0K0YpHskujd+mvr8IoaLfui9SyDhlg8jkLpPXqD
-         BFXw==
-X-Gm-Message-State: AOAM5320jEeuu54Fx8PIEC/wPodT5kTr+WngqaXpoEmWKHvG5C61vUMv
-        eUR3gwR1cK3zegKoqRv4Fft1FvLZIKoR9NWm2FnVIA==
-X-Google-Smtp-Source: ABdhPJwsIEqxGFffEBu189b/kMWOmdnA7n6KsndujfJWWNRveBZQSPJvlyjTExPZGsFlfiO7K/AhKS/FBYW3YXZXQA8=
-X-Received: by 2002:a17:906:584b:: with SMTP id h11mr197985ejs.209.1631112235567;
- Wed, 08 Sep 2021 07:43:55 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210908044427.3632119-1-yhs@fb.com> <ebcddf07-f329-05fa-8fdc-b2b9d6b0127b@iogearbox.net>
- <20210908135326.GZ1200268@ziepe.ca> <YTjFcek5B3ltYtG3@hirez.programming.kicks-ass.net>
-In-Reply-To: <YTjFcek5B3ltYtG3@hirez.programming.kicks-ass.net>
-From:   Luigi Rizzo <lrizzo@google.com>
-Date:   Wed, 8 Sep 2021 16:43:43 +0200
-Message-ID: <CAMOZA0+FofdYMivrBR14snb6Xo_i6BV7gVX1dGCtJa=ue3VqEQ@mail.gmail.com>
-Subject: Re: [PATCH mm/bpf v2] mm: bpf: add find_vma_no_check() without
- lockdep_assert on mm->mmap_lock
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
+        id S1351951AbhIHPAL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 8 Sep 2021 11:00:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59108 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1347994AbhIHPAK (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 8 Sep 2021 11:00:10 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7AC1F61154;
+        Wed,  8 Sep 2021 14:59:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1631113142;
+        bh=daJWLkNc7RzTtuIc5F7JfUkVrbDyqcaJn+pUKDZsze8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=PN8GOegnY4QkUBJ0sKw5Exv3kfq2eRjsFbuDM8KAUJWQ56vbMyoblodeODVnMM2Xc
+         8XZyYMPLEq3tvfd+IWHr6vcj5sWjFCxARgasb5e2o3PMt2iu11t1hJJKdDzpo8XZ4l
+         9Bao2y3HG8RTZXd9sUhZZoUN/ZfIQcO+RNJciJjU8gHD42HfwCjnDX+kUCKA/JdIMj
+         vm3wEfcze4D/yp7UwBNpCodzft4w0ZOOIdfDXlIygcUadfnls4SPq8lQIpyP0RN3DI
+         0QAM5ZbO8PX7R3oR6UPc7yOGSgmV9YlGwjobCZD/RD/fyfa0JmZEY55WNeWuXCH5Fe
+         UK6JdTIvnxWvA==
+Received: by mail.kernel.org with local (Exim 4.94.2)
+        (envelope-from <mchehab@kernel.org>)
+        id 1mNz2S-006r3d-Gy; Wed, 08 Sep 2021 16:59:00 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Anton Vorontsov <anton@enomsg.org>,
+        Colin Cross <ccross@android.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Michel Lespinasse <walken@google.com>,
-        Yonghong Song <yhs@fb.com>, bpf <bpf@vger.kernel.org>,
-        linux-mm@kvack.org, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, kernel-team@fb.com,
-        Liam Howlett <liam.howlett@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        Tony Luck <tony.luck@intel.com>, Yonghong Song <yhs@fb.com>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH 1/9] scripts: get_abi.pl: Check for missing symbols at the ABI specs
+Date:   Wed,  8 Sep 2021 16:58:48 +0200
+Message-Id: <02050f2ec03b75edc9a72a3842710df02943750e.1631112725.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <cover.1631112725.git.mchehab+huawei@kernel.org>
+References: <cover.1631112725.git.mchehab+huawei@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Sep 8, 2021 at 4:16 PM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Wed, Sep 08, 2021 at 10:53:26AM -0300, Jason Gunthorpe wrote:
-> > On Wed, Sep 08, 2021 at 02:20:17PM +0200, Daniel Borkmann wrote:
-> >
-> > > > The warning is due to commit 5b78ed24e8ec("mm/pagemap: add mmap_assert_locked() annotations to find_vma*()")
-> > > > which added mmap_assert_locked() in find_vma() function. The mmap_assert_locked() function
-> > > > asserts that mm->mmap_lock needs to be held. But this is not the case for
-> > > > bpf_get_stack() or bpf_get_stackid() helper (kernel/bpf/stackmap.c), which
-> > > > uses mmap_read_trylock_non_owner() instead. Since mm->mmap_lock is not held
-> > > > in bpf_get_stack[id]() use case, the above warning is emitted during test run.
-...
-> > > Luigi / Liam / Andrew, if the below looks reasonable to you, any objections to route the
-> > > fix with your ACKs via bpf tree to Linus (or strong preference via -mm fixes)?
-> >
-> > Michel added this remark along with the mmap_read_trylock_non_owner:
-> >
-> >     It's still not ideal that bpf/stackmap subverts the lock ownership in this
-> >     way.  Thanks to Peter Zijlstra for suggesting this API as the least-ugly
-> >     way of addressing this in the short term.
-> >
-> > Subverting lockdep and then adding more and more core MM APIs to
-> > support this seems quite a bit more ugly than originally expected.
-> >
-> > Michel's original idea to split out the lockdep abuse and put it only
-> > in BPF is probably better. Obtain the mmap_read_trylock normally as
-> > owner and then release ownership only before triggering the work. At
-> > least lockdep will continue to work properly for the find_vma.
->
-> The only right solution to all of this is the below. That function
-> downright subverts all the locking rules we have. Spreading the hacks
-> any further than that one function is absolutely unacceptable.
+Check for the symbols that exists under /sys but aren't
+defined at Documentation/ABI.
 
-I'd be inclined to agree that we should not introduce hacks around
-locking rules. I don't know enough about the constraints of
-bpf/stackmap, how much of a performance penalty do we pay with Peter's
-patch,
-and ow often one is expected to call this function ?
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+ scripts/get_abi.pl | 88 ++++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 86 insertions(+), 2 deletions(-)
 
-cheers
-luigi
+diff --git a/scripts/get_abi.pl b/scripts/get_abi.pl
+index d7aa82094296..31b2fdf1f318 100755
+--- a/scripts/get_abi.pl
++++ b/scripts/get_abi.pl
+@@ -13,7 +13,9 @@ my $help = 0;
+ my $man = 0;
+ my $debug = 0;
+ my $enable_lineno = 0;
++my $show_warnings = 1;
+ my $prefix="Documentation/ABI";
++my $sysfs_prefix="/sys";
+ 
+ #
+ # If true, assumes that the description is formatted with ReST
+@@ -36,7 +38,7 @@ pod2usage(2) if (scalar @ARGV < 1 || @ARGV > 2);
+ 
+ my ($cmd, $arg) = @ARGV;
+ 
+-pod2usage(2) if ($cmd ne "search" && $cmd ne "rest" && $cmd ne "validate");
++pod2usage(2) if ($cmd ne "search" && $cmd ne "rest" && $cmd ne "validate" && $cmd ne "undefined");
+ pod2usage(2) if ($cmd eq "search" && !$arg);
+ 
+ require Data::Dumper if ($debug);
+@@ -50,6 +52,8 @@ my %symbols;
+ sub parse_error($$$$) {
+ 	my ($file, $ln, $msg, $data) = @_;
+ 
++	return if (!$show_warnings);
++
+ 	$data =~ s/\s+$/\n/;
+ 
+ 	print STDERR "Warning: file $file#$ln:\n\t$msg";
+@@ -521,11 +525,86 @@ sub search_symbols {
+ 	}
+ }
+ 
++# Exclude /sys/kernel/debug and /sys/kernel/tracing from the search path
++sub skip_debugfs {
++	if (($File::Find::dir =~ m,^/sys/kernel,)) {
++		return grep {!/(debug|tracing)/ } @_;
++	}
++
++	if (($File::Find::dir =~ m,^/sys/fs,)) {
++		return grep {!/(pstore|bpf|fuse)/ } @_;
++	}
++
++	return @_
++}
++
++my %leaf;
++
++my $escape_symbols = qr { ([\x01-\x08\x0e-\x1f\x21-\x29\x2b-\x2d\x3a-\x40\x7b-\xff]) }x;
++sub parse_existing_sysfs {
++	my $file = $File::Find::name;
++
++	my $mode = (stat($file))[2];
++	return if ($mode & S_IFDIR);
++
++	my $leave = $file;
++	$leave =~ s,.*/,,;
++
++	if (defined($leaf{$leave})) {
++		# FIXME: need to check if the path makes sense
++		my $what = $leaf{$leave};
++
++		$what =~ s/,/ /g;
++
++		$what =~ s/\<[^\>]+\>/.*/g;
++		$what =~ s/\{[^\}]+\}/.*/g;
++		$what =~ s/\[[^\]]+\]/.*/g;
++		$what =~ s,/\.\.\./,/.*/,g;
++		$what =~ s,/\*/,/.*/,g;
++
++		$what =~ s/\s+/ /g;
++
++		# Escape all other symbols
++		$what =~ s/$escape_symbols/\\$1/g;
++
++		foreach my $i (split / /,$what) {
++			if ($file =~ m#^$i$#) {
++#				print "$file: $i: OK!\n";
++				return;
++			}
++		}
++
++		print "$file: $leave is defined at $what\n";
++
++		return;
++	}
++
++	print "$file not found.\n";
++}
++
++sub undefined_symbols {
++	foreach my $what (sort keys %data) {
++		my $leave = $what;
++		$leave =~ s,.*/,,;
++
++		if (defined($leaf{$leave})) {
++			$leaf{$leave} .= " " . $what;
++		} else {
++			$leaf{$leave} = $what;
++		}
++	}
++
++	find({wanted =>\&parse_existing_sysfs, preprocess =>\&skip_debugfs, no_chdir => 1}, $sysfs_prefix);
++}
++
+ # Ensure that the prefix will always end with a slash
+ # While this is not needed for find, it makes the patch nicer
+ # with --enable-lineno
+ $prefix =~ s,/?$,/,;
+ 
++if ($cmd eq "undefined" || $cmd eq "search") {
++	$show_warnings = 0;
++}
+ #
+ # Parses all ABI files located at $prefix dir
+ #
+@@ -536,7 +615,9 @@ print STDERR Data::Dumper->Dump([\%data], [qw(*data)]) if ($debug);
+ #
+ # Handles the command
+ #
+-if ($cmd eq "search") {
++if ($cmd eq "undefined") {
++	undefined_symbols;
++} elsif ($cmd eq "search") {
+ 	search_symbols;
+ } else {
+ 	if ($cmd eq "rest") {
+@@ -575,6 +656,9 @@ B<rest>                  - output the ABI in ReST markup language
+ 
+ B<validate>              - validate the ABI contents
+ 
++B<undefined>             - existing symbols at the system that aren't
++                           defined at Documentation/ABI
++
+ =back
+ 
+ =head1 OPTIONS
+-- 
+2.31.1
+
