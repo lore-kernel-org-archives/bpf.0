@@ -2,194 +2,132 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.9 required=3.0 tests=BAYES_00,DKIM_ADSP_ALL,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BAAADC00306
-	for <bpf@archiver.kernel.org>; Wed,  8 Sep 2021 19:13:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1FB6AC433F5
+	for <bpf@archiver.kernel.org>; Wed,  8 Sep 2021 19:42:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A7216610C8
-	for <bpf@archiver.kernel.org>; Wed,  8 Sep 2021 19:13:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EB1A061168
+	for <bpf@archiver.kernel.org>; Wed,  8 Sep 2021 19:42:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350536AbhIHTOo (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 8 Sep 2021 15:14:44 -0400
-Received: from home.keithp.com ([63.227.221.253]:36086 "EHLO elaine.keithp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241184AbhIHTO3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 8 Sep 2021 15:14:29 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by elaine.keithp.com (Postfix) with ESMTP id 7C6753F30892;
-        Wed,  8 Sep 2021 12:05:49 -0700 (PDT)
-X-Virus-Scanned: Debian amavisd-new at keithp.com
-Received: from elaine.keithp.com ([127.0.0.1])
-        by localhost (elaine.keithp.com [127.0.0.1]) (amavisd-new, port 10024)
-        with LMTP id pQrw0rspp1ef; Wed,  8 Sep 2021 12:05:48 -0700 (PDT)
-Received: from keithp.com (168-103-156-98.tukw.qwest.net [168.103.156.98])
-        by elaine.keithp.com (Postfix) with ESMTPSA id 6A82E3F30882;
-        Wed,  8 Sep 2021 12:05:48 -0700 (PDT)
-Received: by keithp.com (Postfix, from userid 1000)
-        id 54D1D1E6012A; Wed,  8 Sep 2021 12:06:09 -0700 (PDT)
-From:   Keith Packard <keithpac@amazon.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Abbott Liu <liuwenliang@huawei.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Ben Segall <bsegall@google.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        bpf@vger.kernel.org, Christoph Lameter <cl@linux.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dennis Zhou <dennis@kernel.org>, devicetree@vger.kernel.org,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jason Wang <jasowang@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joe Perches <joe@perches.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Keith Packard <keithpac@amazon.com>,
-        KP Singh <kpsingh@kernel.org>, kvm@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mm@kvack.org, Manivannan Sadhasivam <mani@kernel.org>,
-        Marc Zyngier <maz@kernel.org>, Martin KaFai Lau <kafai@fb.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>, netdev@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nick Desaulniers <ndesaulniers@gooogle.com>,
-        Nicolas Pitre <nico@fluxnic.net>,
+        id S235623AbhIHTn0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 8 Sep 2021 15:43:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47122 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235043AbhIHTnZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 8 Sep 2021 15:43:25 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91801C061575
+        for <bpf@vger.kernel.org>; Wed,  8 Sep 2021 12:42:15 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id q3so1963032plx.4
+        for <bpf@vger.kernel.org>; Wed, 08 Sep 2021 12:42:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Dni15f1tCT7s1fOHKECtIQ4c2/SZ21RvMTRgafcCVTY=;
+        b=Ej3KOl9APylvSh54Mxl+3OPkbmXGQzqmo9BScSYGEhoTCCbR6c9/LSvH54g55nwHNK
+         Gf59vmgJF7q2TUULOIDDHZWW0lMlXbPVgSr9E9TYoxBHHexzyNfeXp+kT3TtR8CUscIQ
+         uSIf9EbBaCjObcHU7bze3KANFwSQzqLzSyD4gRFFpLKV1R/grG+gXyhRFmK8jGjJblFm
+         VaCf2Qtu/Z31qXOsCeTP8/iaMdFg+pAsXVLzbCh8+r0ZotPPw83nx7d5PT0eXPkw2S00
+         Y1Xn1itAwXluCOXBWYrBhKsJm9QEO/fnLAXIJmueCe4J7nZLyUUWis1QRy+kr3+uy0P0
+         fOBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Dni15f1tCT7s1fOHKECtIQ4c2/SZ21RvMTRgafcCVTY=;
+        b=VBeU2FAMVLI631xcwXQwrK7FSOycLFnVGLwA5/iNlxsfmzSzfOy79v+RcQ5QmIzp3S
+         N/xcU02cF/cF3/tsUn5N2YQbe0wiNwCNUjCam7sKD5zSKo5KmJ3rrHABkUc+aOo+pRnF
+         BEbK4FlsAeEPU7MobwJ9U2loTzmOaoOFakRn7LyDDmp8V7Y6s7H++Sl4st3BcLVioTdr
+         v8eWK6wrd+cHUBUee4W6KvoXC3QTlegstnNaL7Sai8T17fHO3NaYfe44U6uN7cNC5AZV
+         vWOqd0QQRt3syHOV/wWqbklh0BMzWrE9mDXAGMd5VMBxA/epbNyIQCF3NLwSVVEIoSKM
+         +FQA==
+X-Gm-Message-State: AOAM530tKudgytcjiTQZ3ze5VoKDH+VRyZyr53L+6fulmoBAjVV6gKLb
+        mtBx5xS8DzAdSCEmg/vStBI=
+X-Google-Smtp-Source: ABdhPJyBCgURFWv1g0LAUL0tI9eWUL4WrTtjUKKdNQpQHZcLS7n9XhD4L02ZjjKbe0Hkz9AfgJ7D/A==
+X-Received: by 2002:a17:90b:4f8f:: with SMTP id qe15mr5971935pjb.37.1631130135096;
+        Wed, 08 Sep 2021 12:42:15 -0700 (PDT)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:500::4:97c5])
+        by smtp.gmail.com with ESMTPSA id h8sm17894pfr.219.2021.09.08.12.42.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Sep 2021 12:42:14 -0700 (PDT)
+Date:   Wed, 8 Sep 2021 12:42:12 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Liam Howlett <liam.howlett@oracle.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Luigi Rizzo <lrizzo@google.com>, Yonghong Song <yhs@fb.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Song Liu <songliubraving@fb.com>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tejun Heo <tj@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        virtualization@lists.linux-foundation.org,
-        "Wolfram Sang (Renesas)" <wsa+renesas@sang-engineering.com>,
-        YiFei Zhu <yifeifz2@illinois.edu>, Yonghong Song <yhs@fb.com>
-Subject: [PATCH v4 2/7] ARM: Pass task to secondary_start_kernel
-Date:   Wed,  8 Sep 2021 12:06:00 -0700
-Message-Id: <20210908190605.419064-3-keithpac@amazon.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20210908190605.419064-1-keithpac@amazon.com>
-References: <id:20210907220038.91021-1-keithpac@amazon.com>
- <20210908190605.419064-1-keithpac@amazon.com>
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Michel Lespinasse <walken@google.com>,
+        bpf <bpf@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        "kernel-team@fb.com" <kernel-team@fb.com>
+Subject: Re: [PATCH mm/bpf v2] mm: bpf: add find_vma_no_check() without
+ lockdep_assert on mm->mmap_lock
+Message-ID: <20210908194212.ku7ysko4e4ecca2t@ast-mbp.dhcp.thefacebook.com>
+References: <20210908135326.GZ1200268@ziepe.ca>
+ <YTjFcek5B3ltYtG3@hirez.programming.kicks-ass.net>
+ <CAMOZA0+FofdYMivrBR14snb6Xo_i6BV7gVX1dGCtJa=ue3VqEQ@mail.gmail.com>
+ <20210908151230.m2zyslt4qrufm4bv@revolver>
+ <f5328a05-ed3c-a868-9240-1b0852e01406@fb.com>
+ <CAMOZA0+2KLgYTXDZHGUYFnYezee=_hH6kFVM+-n2ZQuFTfh6yg@mail.gmail.com>
+ <20210908172118.n2f4w7epm6hh62zf@ast-mbp.dhcp.thefacebook.com>
+ <20210908105259.c47dcc4e4371ebb5e147ee6e@linux-foundation.org>
+ <20210908180258.yjh62e5oouckar5b@ast-mbp.dhcp.thefacebook.com>
+ <20210908184342.r3bwp7v24a6tnslg@revolver>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210908184342.r3bwp7v24a6tnslg@revolver>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This avoids needing to compute the task pointer in this function,
-allowing it to be used as the source of identification in the future.
+On Wed, Sep 08, 2021 at 06:43:49PM +0000, Liam Howlett wrote:
+> * Alexei Starovoitov <alexei.starovoitov@gmail.com> [210908 14:03]:
+> > On Wed, Sep 08, 2021 at 10:52:59AM -0700, Andrew Morton wrote:
+> > > On Wed, 8 Sep 2021 10:21:18 -0700 Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+> > > 
+> > > > > Again I am ignorant on the details so if you can clarify the following
+> > > > > it may help me and others to better understand the problem:
+> > > > > 
+> > > > > 1. Peter's patch appears to just take the same "fallback" path
+> > > > >    that would be taken if the trylock failed.
+> > > > >    Is this really a breakage or just loss of performance ?
+> > > > >    I would expect the latter, since it is called "fallback".
+> > > > 
+> > > > As Yonghong explained it's a user space breakage.
+> > > > User space tooling expects build_id to be available 99.999% of the time
+> > > > and that's what users observed in practice.
+> > > > They've built a bunch of tools on top of this feature.
+> > > > The data from these tools goes into various datacenter tables
+> > > > and humans analyze it later.
+> > > > So Peter's proposal is not acceptable. We don't want to get yelled at.
+> > > > 
+> > > 
+> > > I'm not understanding.  Peter said "this patch merely removes a
+> > > performance tweak" and you and Yonghong said "it breaks userspace". 
+> > > These assertions are contradictory!
+> > 
+> > Peter said:
+> > "The only sane approach is making the vma tree lockless, but so far the
+> >  bpf people have resisted doing the right thing because they've been
+> >  allowed to get away with these atrocities.
+> > "
+> > which is partially true.
+> > bpf folks didn't resist it. There is work ongoing to make it lockless.
+> > It just takes an long time. I don't see how bpf folks can speed it up
+> > any further.
+> 
+> What work are you doing on a lockless vma tree?  I've been working on
+> the maple tree and would like to hear what you've come up with.
 
-Signed-off-by: Keith Packard <keithpac@amazon.com>
----
- arch/arm/include/asm/smp.h   | 3 ++-
- arch/arm/kernel/head-nommu.S | 1 +
- arch/arm/kernel/head.S       | 1 +
- arch/arm/kernel/smp.c        | 8 +++++---
- 4 files changed, 9 insertions(+), 4 deletions(-)
-
-diff --git a/arch/arm/include/asm/smp.h b/arch/arm/include/asm/smp.h
-index 86a7fd721556..d43b64635d77 100644
---- a/arch/arm/include/asm/smp.h
-+++ b/arch/arm/include/asm/smp.h
-@@ -48,7 +48,7 @@ extern void set_smp_ipi_range(int ipi_base, int nr_ipi);
-  * Called from platform specific assembly code, this is the
-  * secondary CPU entry point.
-  */
--asmlinkage void secondary_start_kernel(unsigned int cpu);
-+asmlinkage void secondary_start_kernel(unsigned int cpu, struct task_struct *task);
- 
- 
- /*
-@@ -62,6 +62,7 @@ struct secondary_data {
- 	unsigned long swapper_pg_dir;
- 	void *stack;
- 	unsigned int cpu;
-+	struct task_struct *task;
- };
- extern struct secondary_data secondary_data;
- extern void secondary_startup(void);
-diff --git a/arch/arm/kernel/head-nommu.S b/arch/arm/kernel/head-nommu.S
-index 5aa8ef42717f..218715c135ed 100644
---- a/arch/arm/kernel/head-nommu.S
-+++ b/arch/arm/kernel/head-nommu.S
-@@ -115,6 +115,7 @@ ENTRY(secondary_startup)
- 	ret	r12
- 1:	bl	__after_proc_init
- 	ldr	r0, [r7, #16]			@ set up cpu number
-+	ldr	r1, [r7, #20]			@ set up task pointer
- 	ldr	sp, [r7, #12]			@ set up the stack pointer
- 	mov	fp, #0
- 	b	secondary_start_kernel
-diff --git a/arch/arm/kernel/head.S b/arch/arm/kernel/head.S
-index 0e541af738e2..4a6cb0b0808b 100644
---- a/arch/arm/kernel/head.S
-+++ b/arch/arm/kernel/head.S
-@@ -395,6 +395,7 @@ ENDPROC(secondary_startup_arm)
- ENTRY(__secondary_switched)
- 	ldr_l	r7, secondary_data + 12		@ get secondary_data.stack
- 	ldr_l	r0, secondary_data + 16		@ get secondary_data.cpu
-+	ldr_l	r1, secondary_data + 20		@ get secondary_data.task
- 	mov	sp, r7
- 	mov	fp, #0
- 	b	secondary_start_kernel
-diff --git a/arch/arm/kernel/smp.c b/arch/arm/kernel/smp.c
-index 55cb1689a4b3..5e999f1f1aea 100644
---- a/arch/arm/kernel/smp.c
-+++ b/arch/arm/kernel/smp.c
-@@ -154,6 +154,7 @@ int __cpu_up(unsigned int cpu, struct task_struct *idle)
- 	secondary_data.swapper_pg_dir = get_arch_pgd(swapper_pg_dir);
- #endif
- 	secondary_data.cpu = cpu;
-+	secondary_data.task = idle;
- 	sync_cache_w(&secondary_data);
- 
- 	/*
-@@ -375,13 +376,14 @@ void arch_cpu_idle_dead(void)
- 	 * to be repeated to undo the effects of taking the CPU offline.
- 	 */
- 	__asm__("mov	r0, %1\n"
-+	"	mov	r1, %2\n"
- 	"	mov	sp, %0\n"
- 	"	mov	fp, #0\n"
- 	"	b	secondary_start_kernel"
- 		:
- 		: "r" (task_stack_page(current) + THREAD_SIZE - 8),
--		  "r" (cpu)
--		: "r0");
-+		  "r" (cpu), "r" (current)
-+		: "r0", "r1");
- }
- #endif /* CONFIG_HOTPLUG_CPU */
- 
-@@ -404,7 +406,7 @@ static void smp_store_cpu_info(unsigned int cpuid)
-  * This is the secondary CPU boot entry.  We're using this CPUs
-  * idle thread stack, but a set of temporary page tables.
-  */
--asmlinkage void secondary_start_kernel(unsigned int cpu)
-+asmlinkage void secondary_start_kernel(unsigned int cpu, struct task_struct *task)
- {
- 	struct mm_struct *mm = &init_mm;
- 
--- 
-2.33.0
-
+Mainly cheering Michel and Paul from sidelines.
+imo any approach would be better than the current state.
