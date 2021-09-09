@@ -2,136 +2,249 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C71FC433F5
-	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 20:43:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DA0BC433FE
+	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 20:43:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3CA646115A
-	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 20:43:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 068CF611B0
+	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 20:43:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345157AbhIIUoi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 9 Sep 2021 16:44:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46042 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245195AbhIIUof (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 9 Sep 2021 16:44:35 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E67BCC061574
-        for <bpf@vger.kernel.org>; Thu,  9 Sep 2021 13:43:25 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id ay33so3368726qkb.10
-        for <bpf@vger.kernel.org>; Thu, 09 Sep 2021 13:43:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=M3UFQorvVSo3/tUCryHPXj+x6ylAAB1KI4plMq+wx2Y=;
-        b=f2w9HwLW1IDAlYW024ZPaUGks2+BkLC306ZVg5hSlKZTqib2hX0seUGddCmbcISMnm
-         wN/BGAQFF/ev6R+XylSioVANBGCIkylt3f/TPVGis8T4CZ4mI2IxV7+Irtra2+r/GgYL
-         wD5Y/wv/Z5jHC/HYAg4+pA2bSZEsUYcNZZX+wpzvBSd6mhBjKVL3sL2zUIWocQPuoSrZ
-         QXTTweDYNVTQ5EFY2u1CEVEFAdxroOu++bUyBQEdBUQrWkiOwO2OSq3bCgADAKY4iO6N
-         iBg9DD73OWsKfBKrmAmqT/p1ATP5ZkqoFHSZyeISxbKJkEHl0iVY9uVggLG6kIHpRJ1f
-         wkFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=M3UFQorvVSo3/tUCryHPXj+x6ylAAB1KI4plMq+wx2Y=;
-        b=6cIatYp1kksYnR8t7GCmCr0W6OxfHYcJc6KnmcHuF1IKlTu5SxfgbYRJ9CGFahMYWT
-         a9eS9L15pEhOm8z7HAT/MZlEMs7u60Xvv5TkqLE1wk4T+QmVA7N7Yi0WYT4916rNZodV
-         75CDHLg7ChTKo03DULB2wnroQ3O9992t82Pj49Au8QkagmfBC+AHO61i2PbJv+N9bc5m
-         fS5qTVomvGzmddL6Ce2BVlPaqOBEEtLQCRwDMBTR62ozWUcu9c1wp4cmtL+HEJW4judJ
-         Zxv4e4NXfgFXJlqNvSNOD7kvGRDbLb8w3RBy81T5HLLQ5JRKwD26PJS33yQqDumT9gwl
-         7Eug==
-X-Gm-Message-State: AOAM531b6a91kfO3ZvVg8Qxcn/PtX5vfJ3TdVoVEx3X+CyR2+iBqs3OS
-        YadSiflUsYBWFFjNqmfyc11OLCdBSkcgig==
-X-Google-Smtp-Source: ABdhPJwtwnujJAKfIZFPiJyhLFoCaYo31hIBpC/ZqvbP7kqkdDBB22ke2k0BOnI28xYZfLoyG/IwgQ==
-X-Received: by 2002:a37:f90c:: with SMTP id l12mr4569224qkj.514.1631220205063;
-        Thu, 09 Sep 2021 13:43:25 -0700 (PDT)
-Received: from localhost.localdomain (cpe-104-162-105-43.nyc.res.rr.com. [104.162.105.43])
-        by smtp.gmail.com with ESMTPSA id l13sm1772877qtr.67.2021.09.09.13.43.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Sep 2021 13:43:24 -0700 (PDT)
-From:   grantseltzer <grantseltzer@gmail.com>
-To:     andrii@kernel.org
-Cc:     bpf@vger.kernel.org, grantseltzer@gmail.com
-Subject: [PATCH bpf-next] libbpf: Add sphinx code documentation comments
-Date:   Thu,  9 Sep 2021 16:43:12 -0400
-Message-Id: <20210909204312.197814-1-grantseltzer@gmail.com>
-X-Mailer: git-send-email 2.31.1
+        id S1345635AbhIIUpB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 9 Sep 2021 16:45:01 -0400
+Received: from www62.your-server.de ([213.133.104.62]:59740 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245195AbhIIUpA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 9 Sep 2021 16:45:00 -0400
+Received: from 65.47.5.85.dynamic.wline.res.cust.swisscom.ch ([85.5.47.65] helo=localhost)
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1mOQtc-00010n-Td; Thu, 09 Sep 2021 22:43:44 +0200
+From:   Daniel Borkmann <daniel@iogearbox.net>
+To:     bpf@vger.kernel.org
+Cc:     netdev@vger.kernel.org, tj@kernel.org, davem@davemloft.net,
+        m@lambda.lt, alexei.starovoitov@gmail.com, andrii@kernel.org,
+        sdf@google.com, Daniel Borkmann <daniel@iogearbox.net>
+Subject: [PATCH bpf v2 2/3] bpf, selftests: Add cgroup v1 net_cls classid helpers
+Date:   Thu,  9 Sep 2021 22:43:41 +0200
+Message-Id: <c96039c3febb268b6c17fcbc32cfa80e103c2bc6.1631219956.git.daniel@iogearbox.net>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <f36377d0c40cce0cdeaff50031c268bc640d94f0.1631219956.git.daniel@iogearbox.net>
+References: <f36377d0c40cce0cdeaff50031c268bc640d94f0.1631219956.git.daniel@iogearbox.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.2/26289/Thu Sep  9 10:20:35 2021)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Grant Seltzer <grantseltzer@gmail.com>
+Minimal set of helpers for net_cls classid cgroupv1 management in order
+to set an id, join from a process, initiate setup and teardown. cgroupv2
+helpers are left as-is, but reused where possible.
 
-This adds comments above five functions in btf.h which document
-their uses. These comments are of a format that doxygen and sphinx
-can pick up and render. These are rendered by libbpf.readthedocs.org
-
-Signed-off-by: Grant Seltzer <grantseltzer@gmail.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/lib/bpf/btf.h | 36 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ tools/testing/selftests/bpf/cgroup_helpers.c | 118 +++++++++++++++++--
+ tools/testing/selftests/bpf/cgroup_helpers.h |  16 ++-
+ 2 files changed, 122 insertions(+), 12 deletions(-)
 
-diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
-index 4a711f990904..f928e57c238c 100644
---- a/tools/lib/bpf/btf.h
-+++ b/tools/lib/bpf/btf.h
-@@ -30,11 +30,47 @@ enum btf_endianness {
- 	BTF_BIG_ENDIAN = 1,
- };
+diff --git a/tools/testing/selftests/bpf/cgroup_helpers.c b/tools/testing/selftests/bpf/cgroup_helpers.c
+index 033051717ba5..1fa92dbe9460 100644
+--- a/tools/testing/selftests/bpf/cgroup_helpers.c
++++ b/tools/testing/selftests/bpf/cgroup_helpers.c
+@@ -12,27 +12,35 @@
+ #include <unistd.h>
+ #include <ftw.h>
  
-+/**
-+ * @brief **btf__free** frees all data of the BTF representation
-+ * @param btf
-+ * @return void
-+ */
- LIBBPF_API void btf__free(struct btf *btf);
+-
+ #include "cgroup_helpers.h"
  
-+/**
-+ * @brief **btf__new** creates a representation of a BTF section
-+ * (struct btf) from the raw bytes of that section
-+ * @param data raw bytes
-+ * @param size length of raw bytes
-+ * @return struct btf*
-+ */
- LIBBPF_API struct btf *btf__new(const void *data, __u32 size);
+ /*
+  * To avoid relying on the system setup, when setup_cgroup_env is called
+- * we create a new mount namespace, and cgroup namespace. The cgroup2
+- * root is mounted at CGROUP_MOUNT_PATH
+- *
+- * Unfortunately, most people don't have cgroupv2 enabled at this point in time.
+- * It's easier to create our own mount namespace and manage it ourselves.
++ * we create a new mount namespace, and cgroup namespace. The cgroupv2
++ * root is mounted at CGROUP_MOUNT_PATH. Unfortunately, most people don't
++ * have cgroupv2 enabled at this point in time. It's easier to create our
++ * own mount namespace and manage it ourselves. We assume /mnt exists.
+  *
+- * We assume /mnt exists.
++ * Related cgroupv1 helpers are named *classid*(), since we only use the
++ * net_cls controller for tagging net_cls.classid. We assume the default
++ * mount under /sys/fs/cgroup/net_cls exists which should be the case for
++ * the vast majority of users.
+  */
+ 
+ #define WALK_FD_LIMIT			16
++
+ #define CGROUP_MOUNT_PATH		"/mnt"
++#define NETCLS_MOUNT_PATH		"/sys/fs/cgroup/net_cls"
+ #define CGROUP_WORK_DIR			"/cgroup-test-work-dir"
++
+ #define format_cgroup_path(buf, path) \
+ 	snprintf(buf, sizeof(buf), "%s%s%s", CGROUP_MOUNT_PATH, \
+ 		 CGROUP_WORK_DIR, path)
+ 
++#define format_classid_path(buf)				\
++	snprintf(buf, sizeof(buf), "%s%s", NETCLS_MOUNT_PATH,	\
++		 CGROUP_WORK_DIR)
++
+ /**
+  * enable_all_controllers() - Enable all available cgroup v2 controllers
+  *
+@@ -139,8 +147,7 @@ static int nftwfunc(const char *filename, const struct stat *statptr,
+ 	return 0;
+ }
+ 
+-
+-static int join_cgroup_from_top(char *cgroup_path)
++static int join_cgroup_from_top(const char *cgroup_path)
+ {
+ 	char cgroup_procs_path[PATH_MAX + 1];
+ 	pid_t pid = getpid();
+@@ -313,3 +320,96 @@ int cgroup_setup_and_join(const char *path) {
+ 	}
+ 	return cg_fd;
+ }
 +
 +/**
-+ * @brief **btf__new_split** creates a representation of a BTF section
-+ * (struct btf) from a combination of raw bytes and a btf struct
-+ * where the btf struct provides a basic set of types and strings,
-+ * while the raw data adds its own new types and strings
-+ * @param data raw bytes
-+ * @param size length of raw bytes
-+ * @param base_btf the base btf representation
-+ * @return struct btf*
++ * setup_classid_environment() - Setup the cgroupv1 net_cls environment
++ *
++ * After calling this function, cleanup_classid_environment should be called
++ * once testing is complete.
++ *
++ * This function will print an error to stderr and return 1 if it is unable
++ * to setup the cgroup environment. If setup is successful, 0 is returned.
 + */
- LIBBPF_API struct btf *btf__new_split(const void *data, __u32 size, struct btf *base_btf);
++int setup_classid_environment(void)
++{
++	char cgroup_workdir[PATH_MAX + 1];
++
++	format_classid_path(cgroup_workdir);
++	cleanup_classid_environment();
++
++	if (mkdir(cgroup_workdir, 0777) && errno != EEXIST) {
++		log_err("mkdir cgroup work dir");
++		return 1;
++	}
++
++	return 0;
++}
 +
 +/**
-+ * @brief **btf__new_empty** creates an unpopulated representation of
-+ * a BTF section
-+ * @return struct btf*
++ * set_classid() - Set a cgroupv1 net_cls classid
++ * @id: the numeric classid
++ *
++ * Writes the passed classid into the cgroup work dir's net_cls.classid
++ * file in order to later on trigger socket tagging.
++ *
++ * On success, it returns 0, otherwise on failure it returns 1. If there
++ * is a failure, it prints the error to stderr.
 + */
- LIBBPF_API struct btf *btf__new_empty(void);
++int set_classid(unsigned int id)
++{
++	char cgroup_workdir[PATH_MAX - 42];
++	char cgroup_classid_path[PATH_MAX + 1];
++	int fd, rc = 0;
++
++	format_classid_path(cgroup_workdir);
++	snprintf(cgroup_classid_path, sizeof(cgroup_classid_path),
++		 "%s/net_cls.classid", cgroup_workdir);
++
++	fd = open(cgroup_classid_path, O_WRONLY);
++	if (fd < 0) {
++		log_err("Opening cgroup classid: %s", cgroup_classid_path);
++		return 1;
++	}
++
++	if (dprintf(fd, "%u\n", id) < 0) {
++		log_err("Setting cgroup classid");
++		rc = 1;
++	}
++
++	close(fd);
++	return rc;
++}
 +
 +/**
-+ * @brief **btf__new_empty_split** creates an unpopulated
-+ * representation of a BTF section except with a base BTF
-+ * ontop of which split BTF should be based
-+ * @return struct btf*q
++ * join_classid() - Join a cgroupv1 net_cls classid
++ *
++ * This function expects the cgroup work dir to be already created, as we
++ * join it here. This causes the process sockets to be tagged with the given
++ * net_cls classid.
++ *
++ * On success, it returns 0, otherwise on failure it returns 1.
 + */
- LIBBPF_API struct btf *btf__new_empty_split(struct btf *base_btf);
++int join_classid(void)
++{
++	char cgroup_workdir[PATH_MAX + 1];
++
++	format_classid_path(cgroup_workdir);
++	return join_cgroup_from_top(cgroup_workdir);
++}
++
++/**
++ * cleanup_classid_environment() - Cleanup the cgroupv1 net_cls environment
++ *
++ * At call time, it moves the calling process to the root cgroup, and then
++ * runs the deletion process.
++ *
++ * On failure, it will print an error to stderr, and try to continue.
++ */
++void cleanup_classid_environment(void)
++{
++	char cgroup_workdir[PATH_MAX + 1];
++
++	format_classid_path(cgroup_workdir);
++	join_cgroup_from_top(NETCLS_MOUNT_PATH);
++	nftw(cgroup_workdir, nftwfunc, WALK_FD_LIMIT, FTW_DEPTH | FTW_MOUNT);
++}
+diff --git a/tools/testing/selftests/bpf/cgroup_helpers.h b/tools/testing/selftests/bpf/cgroup_helpers.h
+index 5fe3d88e4f0d..629da3854b3e 100644
+--- a/tools/testing/selftests/bpf/cgroup_helpers.h
++++ b/tools/testing/selftests/bpf/cgroup_helpers.h
+@@ -1,6 +1,7 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+ #ifndef __CGROUP_HELPERS_H
+ #define __CGROUP_HELPERS_H
++
+ #include <errno.h>
+ #include <string.h>
  
- LIBBPF_API struct btf *btf__parse(const char *path, struct btf_ext **btf_ext);
+@@ -8,12 +9,21 @@
+ #define log_err(MSG, ...) fprintf(stderr, "(%s:%d: errno: %s) " MSG "\n", \
+ 	__FILE__, __LINE__, clean_errno(), ##__VA_ARGS__)
+ 
+-
++/* cgroupv2 related */
+ int cgroup_setup_and_join(const char *path);
+ int create_and_get_cgroup(const char *path);
++unsigned long long get_cgroup_id(const char *path);
++
+ int join_cgroup(const char *path);
++
+ int setup_cgroup_environment(void);
+ void cleanup_cgroup_environment(void);
+-unsigned long long get_cgroup_id(const char *path);
+ 
+-#endif
++/* cgroupv1 related */
++int set_classid(unsigned int id);
++int join_classid(void);
++
++int setup_classid_environment(void);
++void cleanup_classid_environment(void);
++
++#endif /* __CGROUP_HELPERS_H */
 -- 
-2.31.1
+2.21.0
 
