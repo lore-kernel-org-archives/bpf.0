@@ -2,102 +2,91 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A14EDC433F5
-	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 13:30:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A1CBC433F5
+	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 13:36:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 885E561059
-	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 13:30:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 65F2361059
+	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 13:36:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347482AbhIINcC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 9 Sep 2021 09:32:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53470 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1358414AbhIINHT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 9 Sep 2021 09:07:19 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 25C28632B6;
-        Thu,  9 Sep 2021 12:00:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631188834;
-        bh=hVX1NLfmiO5DBcHd5zjH1jrDUSe5miIXW6d7LkFnJX8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=swD++nSxxKKRuq6gdPfIo5TDct4N+4mwQdVfScAxeVYSpy5ypFLpysVCaszM6P8vy
-         6kLTSZrOXD0s9O7hylie4qfVIfgp5d7mmPOFF7iJU5J4doh8/OBfyIa5YEI8BmKNp8
-         fnJC7gKW0YXX7k+BLo9CqrTQSQnINsn2ZcpnuhEdTMz9YB5+8WiHTzpCrHWlsAM+qS
-         Y6/0BpeedAD/1YQ4B0jF+Ck4HXPfzMY4auY5698o8SiFT6xbM32fzwqCK4WhwXToYj
-         lAWnX7tqR1XS0ucrq4Z51nCNg1xtKZWx3OW1KYAnbXnRafUMffxiVzyfk8IXNJ3v4I
-         fb2GCu9ZpyDpQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Johan Almbladh <johan.almbladh@anyfinetworks.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 14/48] bpf/tests: Do not PASS tests without actually testing the result
-Date:   Thu,  9 Sep 2021 07:59:41 -0400
-Message-Id: <20210909120015.150411-14-sashal@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210909120015.150411-1-sashal@kernel.org>
-References: <20210909120015.150411-1-sashal@kernel.org>
+        id S1351107AbhIINhL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 9 Sep 2021 09:37:11 -0400
+Received: from mail-ed1-f54.google.com ([209.85.208.54]:47028 "EHLO
+        mail-ed1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355892AbhIINdJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 9 Sep 2021 09:33:09 -0400
+Received: by mail-ed1-f54.google.com with SMTP id j13so2656932edv.13
+        for <bpf@vger.kernel.org>; Thu, 09 Sep 2021 06:31:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=I5+aT377LpweaJxo8y40u82o1xDS2ZChVCugghsh6kg=;
+        b=fcURRixg1R2nvWpz6f9jf0A332EfLinka23PMnCvzQGsOljgmzx89gOEiNFnKmtFuX
+         7MnkWpdAwHOrjRsJV42uNqipaWfTfWbE4ANINd0yZO3re9SlBztcd1HJpZBo0h0ZJyeY
+         WBdG9/8b+xK2zyEULsRkKA7R+pOOHJ15Fvf8/lUmgc7TfpbbPeAOnhiB8QKjF4L9fr6R
+         HTsF3ZiJeNheh+tgaUS7bPyAumKLOsAuvqVRV+YzzRTRYk4q6gtnZFKKke5rvq+LFt4H
+         cH+URhS899KkXWxV6nPkecehLFrtwmb4J3k59ops0gq5TPoSyDi0+L5kuamgz9AmhOH4
+         zlUA==
+X-Gm-Message-State: AOAM533bG0fgBXT4JEmcmFSZIqmxZMHWsTdpgrYSPdvJqfd6S6gbpTQm
+        7h0NicJyouJ0uTVazy+Z2c35gb/oc1Q=
+X-Google-Smtp-Source: ABdhPJwUWbaupzU3iiFXPS9499hkNzPXQ9/FuOr7ufOOpiIYbKJjCjJqzAKjCX5nGwLQSs/HK03JsA==
+X-Received: by 2002:aa7:cb55:: with SMTP id w21mr3089427edt.378.1631194318781;
+        Thu, 09 Sep 2021 06:31:58 -0700 (PDT)
+Received: from msft-t490s.. (mob-83-225-149-177.net.vodafone.it. [83.225.149.177])
+        by smtp.gmail.com with ESMTPSA id am3sm959030ejc.74.2021.09.09.06.31.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Sep 2021 06:31:58 -0700 (PDT)
+From:   Matteo Croce <mcroce@linux.microsoft.com>
+To:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Subject: [RFC bpf 0/2] bpf: kernel CO-RE relocation
+Date:   Thu,  9 Sep 2021 15:31:51 +0200
+Message-Id: <20210909133153.48994-1-mcroce@linux.microsoft.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Johan Almbladh <johan.almbladh@anyfinetworks.com>
+From: Matteo Croce <mcroce@microsoft.com>
 
-[ Upstream commit 2b7e9f25e590726cca76700ebdb10e92a7a72ca1 ]
+This series is a preliminary work to move the CO-RE relocations in the kernel.
+This is the first step to have signed BPF files, since userspace instruction
+patching makes any verification ineffective.
 
-Each test case can have a set of sub-tests, where each sub-test can
-run the cBPF/eBPF test snippet with its own data_size and expected
-result. Before, the end of the sub-test array was indicated by both
-data_size and result being zero. However, most or all of the internal
-eBPF tests has a data_size of zero already. When such a test also had
-an expected value of zero, the test was never run but reported as
-PASS anyway.
+The first patch just copies the relocation code from tools/lib/bpf/,
+the second one refactors the whole code so to build it in kernel.
+It builds with a single warning, which can be suppressed by switching to
+dynamic allocation:
 
-Now the test runner always runs the first sub-test, regardless of the
-data_size and result values. The sub-test array zero-termination only
-applies for any additional sub-tests.
+  kernel/bpf/relo_core.c: In function 'bpf_core_apply_relo_insn':
+  kernel/bpf/relo_core.c:1457:1: warning: the frame size of 2776 bytes is larger than 1024 bytes [-Wframe-larger-than=]
 
-There are other ways fix it of course, but this solution at least
-removes the surprise of eBPF tests with a zero result always succeeding.
+To really use this code and do the the relocations done in kernel, we will
+need an API to pass the relocation informations along the BPF file, so don't
+consider this patches for inclusion, but just as a first step toward the
+full work.
 
-Signed-off-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Link: https://lore.kernel.org/bpf/20210721103822.3755111-1-johan.almbladh@anyfinetworks.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- lib/test_bpf.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+Matteo Croce (2):
+  btf: copy relo_core from tools to kernel
+  btf: adapt relo_core for kernel compilation
 
-diff --git a/lib/test_bpf.c b/lib/test_bpf.c
-index ed2ebf677457..0c62275630fa 100644
---- a/lib/test_bpf.c
-+++ b/lib/test_bpf.c
-@@ -5744,7 +5744,14 @@ static int run_one(const struct bpf_prog *fp, struct bpf_test *test)
- 		u64 duration;
- 		u32 ret;
- 
--		if (test->test[i].data_size == 0 &&
-+		/*
-+		 * NOTE: Several sub-tests may be present, in which case
-+		 * a zero {data_size, result} tuple indicates the end of
-+		 * the sub-test array. The first test is always run,
-+		 * even if both data_size and result happen to be zero.
-+		 */
-+		if (i > 0 &&
-+		    test->test[i].data_size == 0 &&
- 		    test->test[i].result == 0)
- 			break;
- 
+ include/linux/btf.h    |   65 ++
+ kernel/bpf/Makefile    |    1 +
+ kernel/bpf/btf.c       |   45 +-
+ kernel/bpf/relo_core.c | 1457 ++++++++++++++++++++++++++++++++++++++++
+ kernel/bpf/relo_core.h |  100 +++
+ 5 files changed, 1630 insertions(+), 38 deletions(-)
+ create mode 100644 kernel/bpf/relo_core.c
+ create mode 100644 kernel/bpf/relo_core.h
+
 -- 
-2.30.2
+2.31.1
 
