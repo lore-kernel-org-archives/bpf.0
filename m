@@ -2,429 +2,128 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 495EEC43217
-	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 12:17:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E943C433F5
+	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 12:22:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2AD5661132
-	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 12:17:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 478CD61179
+	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 12:22:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350592AbhIIMSD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 9 Sep 2021 08:18:03 -0400
-Received: from www62.your-server.de ([213.133.104.62]:42148 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352310AbhIIMOx (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 9 Sep 2021 08:14:53 -0400
-Received: from 65.47.5.85.dynamic.wline.res.cust.swisscom.ch ([85.5.47.65] helo=localhost)
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1mOIvx-0007GM-6m; Thu, 09 Sep 2021 14:13:37 +0200
-From:   Daniel Borkmann <daniel@iogearbox.net>
-To:     bpf@vger.kernel.org
-Cc:     netdev@vger.kernel.org, tj@kernel.org, davem@davemloft.net,
-        m@lambda.lt, alexei.starovoitov@gmail.com, andrii@kernel.org,
-        Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf 1/3] bpf, cgroups: Fix cgroup v2 fallback on v1/v2 mixed mode
-Date:   Thu,  9 Sep 2021 14:13:25 +0200
-Message-Id: <1e9ee1059ddb0ad7cd2c5f9eeaa26606f9d5fbbf.1631189197.git.daniel@iogearbox.net>
-X-Mailer: git-send-email 2.21.0
+        id S1344956AbhIIMXh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 9 Sep 2021 08:23:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53658 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1347513AbhIIMRI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 9 Sep 2021 08:17:08 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5336861A86;
+        Thu,  9 Sep 2021 11:49:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1631188190;
+        bh=fXUm+1P8jqrO3JjwbNQzdbjMaWrfv6nz8zqrQTyzUZY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=n+cOCDr7SfRl5eDJOowGC/xxNstZ/6M1YOQQMfFMv/cdPrgcw414oH/oIV1oYJqAl
+         /4JaMkL0lAYkWS2KXvOzMaEJEiHSxP74sb4OYXdS0qJKXFuaNQ4E6W7gCQkzIBu4C+
+         irYWlUbH8BcHw9WqaM7kyfwynMe2csiirZw1RZokq8a0eLBwu9MaQPQiLRM57nAd+I
+         7odO+W0Tem5eY+Gtm1xxfG4lBHdRqXQrKM+F6pSH6TIetEGNipsLgUDF/HPmvU3zW5
+         8qcZOMKVJ8EPQZQwyDcn32TzPG2LgmMkbEfoftzkxCJ+7ScGqFpfFOPxhifL5Q58J7
+         4N3D+8mVE1Ahg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Yucong Sun <fallentree@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.13 150/219] selftests/bpf: Correctly display subtest skip status
+Date:   Thu,  9 Sep 2021 07:45:26 -0400
+Message-Id: <20210909114635.143983-150-sashal@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210909114635.143983-1-sashal@kernel.org>
+References: <20210909114635.143983-1-sashal@kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.2/26289/Thu Sep  9 10:20:35 2021)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Fix cgroup v1 interference when non-root cgroup v2 BPF programs are used.
-Back in the days, commit bd1060a1d671 ("sock, cgroup: add sock->sk_cgroup")
-embedded per-socket cgroup information into sock->sk_cgrp_data and in order
-to save 8 bytes in struct sock made both mutually exclusive, that is, when
-cgroup v1 socket tagging (e.g. net_cls/net_prio) is used, then cgroup v2
-falls back to the root cgroup in sock_cgroup_ptr() (&cgrp_dfl_root.cgrp).
+From: Yucong Sun <fallentree@fb.com>
 
-The assumption made was "there is no reason to mix the two and this is in line
-with how legacy and v2 compatibility is handled" as stated in bd1060a1d671.
-However, with Kubernetes more widely supporting cgroups v2 as well nowadays,
-this assumption no longer holds, and the possibility of the v1/v2 mixed mode
-with the v2 root fallback being hit becomes a real security issue.
+[ Upstream commit f667d1d66760fcb27aee6c9964eefde39a464afe ]
 
-Many of the cgroup v2 BPF programs are also used for policy enforcement, just
-to pick _one_ example, that is, to programmatically deny socket related system
-calls like connect(2) or bind(2). A v2 root fallback would implicitly cause
-a policy bypass for the affected Pods.
+In skip_account(), test->skip_cnt is set to 0 at the end, this makes next print
+statement never display SKIP status for the subtest. This patch moves the
+accounting logic after the print statement, fixing the issue.
 
-In production environments, we have recently seen this case due to various
-circumstances: i) a different 3rd party agent and/or ii) a container runtime
-such as [0] in the user's environment configuring legacy cgroup v1 net_cls
-tags, which triggered implicitly mentioned root fallback. Another case is
-Kubernetes projects like kind [1] which create Kubernetes nodes in a container
-and also add cgroup namespaces to the mix, meaning programs which are attached
-to the cgroup v2 root of the cgroup namespace get attached to a non-root
-cgroup v2 path from init namespace point of view. And the latter's root is
-out of reach for agents on a kind Kubernetes node to configure. Meaning, any
-entity on the node setting cgroup v1 net_cls tag will trigger the bypass
-despite cgroup v2 BPF programs attached to the namespace root.
+This patch also added SKIP status display for normal tests.
 
-Generally, this mutual exclusiveness does not hold anymore in today's user
-environments and makes cgroup v2 usage from BPF side fragile and unreliable.
-This fix adds proper struct cgroup pointer for the cgroup v2 case to struct
-sock_cgroup_data in order to address these issues; this implicitly also fixes
-the tradeoffs being made back then with regards to races and refcount leaks
-as stated in bd1060a1d671, and removes the fallback, so that cgroup v2 BPF
-programs always operate as expected.
-
-  [0] https://github.com/nestybox/sysbox/
-  [1] https://kind.sigs.k8s.io/
-
-Fixes: bd1060a1d671 ("sock, cgroup: add sock->sk_cgroup")
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Cc: David S. Miller <davem@davemloft.net>
-Cc: Tejun Heo <tj@kernel.org>
-Cc: Martynas Pumputis <m@lambda.lt>
+Signed-off-by: Yucong Sun <fallentree@fb.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Link: https://lore.kernel.org/bpf/20210817044732.3263066-3-fallentree@fb.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/cgroup-defs.h  | 107 +++++++++--------------------------
- include/linux/cgroup.h       |  22 +------
- kernel/cgroup/cgroup.c       |  50 ++++------------
- net/core/netclassid_cgroup.c |   7 +--
- net/core/netprio_cgroup.c    |  10 +---
- 5 files changed, 41 insertions(+), 155 deletions(-)
+ tools/testing/selftests/bpf/test_progs.c | 25 ++++++++++++------------
+ 1 file changed, 13 insertions(+), 12 deletions(-)
 
-diff --git a/include/linux/cgroup-defs.h b/include/linux/cgroup-defs.h
-index e1c705fdfa7c..44446025741f 100644
---- a/include/linux/cgroup-defs.h
-+++ b/include/linux/cgroup-defs.h
-@@ -752,107 +752,54 @@ static inline void cgroup_threadgroup_change_end(struct task_struct *tsk) {}
-  * sock_cgroup_data is embedded at sock->sk_cgrp_data and contains
-  * per-socket cgroup information except for memcg association.
-  *
-- * On legacy hierarchies, net_prio and net_cls controllers directly set
-- * attributes on each sock which can then be tested by the network layer.
-- * On the default hierarchy, each sock is associated with the cgroup it was
-- * created in and the networking layer can match the cgroup directly.
-- *
-- * To avoid carrying all three cgroup related fields separately in sock,
-- * sock_cgroup_data overloads (prioidx, classid) and the cgroup pointer.
-- * On boot, sock_cgroup_data records the cgroup that the sock was created
-- * in so that cgroup2 matches can be made; however, once either net_prio or
-- * net_cls starts being used, the area is overridden to carry prioidx and/or
-- * classid.  The two modes are distinguished by whether the lowest bit is
-- * set.  Clear bit indicates cgroup pointer while set bit prioidx and
-- * classid.
-- *
-- * While userland may start using net_prio or net_cls at any time, once
-- * either is used, cgroup2 matching no longer works.  There is no reason to
-- * mix the two and this is in line with how legacy and v2 compatibility is
-- * handled.  On mode switch, cgroup references which are already being
-- * pointed to by socks may be leaked.  While this can be remedied by adding
-- * synchronization around sock_cgroup_data, given that the number of leaked
-- * cgroups is bound and highly unlikely to be high, this seems to be the
-- * better trade-off.
-+ * On legacy hierarchies, net_prio and net_cls controllers directly
-+ * set attributes on each sock which can then be tested by the network
-+ * layer. On the default hierarchy, each sock is associated with the
-+ * cgroup it was created in and the networking layer can match the
-+ * cgroup directly.
-  */
- struct sock_cgroup_data {
--	union {
--#ifdef __LITTLE_ENDIAN
--		struct {
--			u8	is_data : 1;
--			u8	no_refcnt : 1;
--			u8	unused : 6;
--			u8	padding;
--			u16	prioidx;
--			u32	classid;
--		} __packed;
--#else
--		struct {
--			u32	classid;
--			u16	prioidx;
--			u8	padding;
--			u8	unused : 6;
--			u8	no_refcnt : 1;
--			u8	is_data : 1;
--		} __packed;
-+	struct cgroup	*cgroup; /* v2 */
-+#if defined(CONFIG_CGROUP_NET_CLASSID)
-+	u32		classid; /* v1 */
-+#endif
-+#if defined(CONFIG_CGROUP_NET_PRIO)
-+	u16		prioidx; /* v1 */
- #endif
--		u64		val;
--	};
- };
+diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
+index 6396932b97e2..9ed13187136c 100644
+--- a/tools/testing/selftests/bpf/test_progs.c
++++ b/tools/testing/selftests/bpf/test_progs.c
+@@ -148,18 +148,18 @@ void test__end_subtest()
+ 	struct prog_test_def *test = env.test;
+ 	int sub_error_cnt = test->error_cnt - test->old_error_cnt;
  
--/*
-- * There's a theoretical window where the following accessors race with
-- * updaters and return part of the previous pointer as the prioidx or
-- * classid.  Such races are short-lived and the result isn't critical.
-- */
- static inline u16 sock_cgroup_prioidx(const struct sock_cgroup_data *skcd)
- {
--	/* fallback to 1 which is always the ID of the root cgroup */
--	return (skcd->is_data & 1) ? skcd->prioidx : 1;
-+#if defined(CONFIG_CGROUP_NET_PRIO)
-+	return READ_ONCE(skcd->prioidx);
-+#else
-+	return 1;
-+#endif
- }
+-	if (sub_error_cnt)
+-		env.fail_cnt++;
+-	else if (test->skip_cnt == 0)
+-		env.sub_succ_cnt++;
+-	skip_account();
+-
+ 	dump_test_log(test, sub_error_cnt);
  
- static inline u32 sock_cgroup_classid(const struct sock_cgroup_data *skcd)
- {
--	/* fallback to 0 which is the unconfigured default classid */
--	return (skcd->is_data & 1) ? skcd->classid : 0;
-+#if defined(CONFIG_CGROUP_NET_CLASSID)
-+	return READ_ONCE(skcd->classid);
-+#else
-+	return 0;
-+#endif
- }
+ 	fprintf(env.stdout, "#%d/%d %s:%s\n",
+ 	       test->test_num, test->subtest_num, test->subtest_name,
+ 	       sub_error_cnt ? "FAIL" : (test->skip_cnt ? "SKIP" : "OK"));
  
--/*
-- * If invoked concurrently, the updaters may clobber each other.  The
-- * caller is responsible for synchronization.
-- */
- static inline void sock_cgroup_set_prioidx(struct sock_cgroup_data *skcd,
- 					   u16 prioidx)
- {
--	struct sock_cgroup_data skcd_buf = {{ .val = READ_ONCE(skcd->val) }};
--
--	if (sock_cgroup_prioidx(&skcd_buf) == prioidx)
--		return;
--
--	if (!(skcd_buf.is_data & 1)) {
--		skcd_buf.val = 0;
--		skcd_buf.is_data = 1;
--	}
--
--	skcd_buf.prioidx = prioidx;
--	WRITE_ONCE(skcd->val, skcd_buf.val);	/* see sock_cgroup_ptr() */
-+#if defined(CONFIG_CGROUP_NET_PRIO)
-+	WRITE_ONCE(skcd->prioidx, prioidx);
-+#endif
- }
- 
- static inline void sock_cgroup_set_classid(struct sock_cgroup_data *skcd,
- 					   u32 classid)
- {
--	struct sock_cgroup_data skcd_buf = {{ .val = READ_ONCE(skcd->val) }};
--
--	if (sock_cgroup_classid(&skcd_buf) == classid)
--		return;
--
--	if (!(skcd_buf.is_data & 1)) {
--		skcd_buf.val = 0;
--		skcd_buf.is_data = 1;
--	}
--
--	skcd_buf.classid = classid;
--	WRITE_ONCE(skcd->val, skcd_buf.val);	/* see sock_cgroup_ptr() */
-+#if defined(CONFIG_CGROUP_NET_CLASSID)
-+	WRITE_ONCE(skcd->classid, classid);
-+#endif
- }
- 
- #else	/* CONFIG_SOCK_CGROUP_DATA */
-diff --git a/include/linux/cgroup.h b/include/linux/cgroup.h
-index 7bf60454a313..a7e79ad7c9b0 100644
---- a/include/linux/cgroup.h
-+++ b/include/linux/cgroup.h
-@@ -829,33 +829,13 @@ static inline void cgroup_account_cputime_field(struct task_struct *task,
-  */
- #ifdef CONFIG_SOCK_CGROUP_DATA
- 
--#if defined(CONFIG_CGROUP_NET_PRIO) || defined(CONFIG_CGROUP_NET_CLASSID)
--extern spinlock_t cgroup_sk_update_lock;
--#endif
--
--void cgroup_sk_alloc_disable(void);
- void cgroup_sk_alloc(struct sock_cgroup_data *skcd);
- void cgroup_sk_clone(struct sock_cgroup_data *skcd);
- void cgroup_sk_free(struct sock_cgroup_data *skcd);
- 
- static inline struct cgroup *sock_cgroup_ptr(struct sock_cgroup_data *skcd)
- {
--#if defined(CONFIG_CGROUP_NET_PRIO) || defined(CONFIG_CGROUP_NET_CLASSID)
--	unsigned long v;
--
--	/*
--	 * @skcd->val is 64bit but the following is safe on 32bit too as we
--	 * just need the lower ulong to be written and read atomically.
--	 */
--	v = READ_ONCE(skcd->val);
--
--	if (v & 3)
--		return &cgrp_dfl_root.cgrp;
--
--	return (struct cgroup *)(unsigned long)v ?: &cgrp_dfl_root.cgrp;
--#else
--	return (struct cgroup *)(unsigned long)skcd->val;
--#endif
-+	return READ_ONCE(skcd->cgroup);
- }
- 
- #else	/* CONFIG_CGROUP_DATA */
-diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-index 881ce1470beb..15ad5c8b24a8 100644
---- a/kernel/cgroup/cgroup.c
-+++ b/kernel/cgroup/cgroup.c
-@@ -6572,74 +6572,44 @@ int cgroup_parse_float(const char *input, unsigned dec_shift, s64 *v)
-  */
- #ifdef CONFIG_SOCK_CGROUP_DATA
- 
--#if defined(CONFIG_CGROUP_NET_PRIO) || defined(CONFIG_CGROUP_NET_CLASSID)
--
--DEFINE_SPINLOCK(cgroup_sk_update_lock);
--static bool cgroup_sk_alloc_disabled __read_mostly;
--
--void cgroup_sk_alloc_disable(void)
--{
--	if (cgroup_sk_alloc_disabled)
--		return;
--	pr_info("cgroup: disabling cgroup2 socket matching due to net_prio or net_cls activation\n");
--	cgroup_sk_alloc_disabled = true;
--}
--
--#else
--
--#define cgroup_sk_alloc_disabled	false
--
--#endif
--
- void cgroup_sk_alloc(struct sock_cgroup_data *skcd)
- {
--	if (cgroup_sk_alloc_disabled) {
--		skcd->no_refcnt = 1;
--		return;
--	}
--
- 	/* Don't associate the sock with unrelated interrupted task's cgroup. */
- 	if (in_interrupt())
- 		return;
- 
- 	rcu_read_lock();
--
- 	while (true) {
- 		struct css_set *cset;
- 
- 		cset = task_css_set(current);
- 		if (likely(cgroup_tryget(cset->dfl_cgrp))) {
--			skcd->val = (unsigned long)cset->dfl_cgrp;
-+			WRITE_ONCE(skcd->cgroup, cset->dfl_cgrp);
- 			cgroup_bpf_get(cset->dfl_cgrp);
- 			break;
- 		}
- 		cpu_relax();
- 	}
--
- 	rcu_read_unlock();
- }
- 
- void cgroup_sk_clone(struct sock_cgroup_data *skcd)
- {
--	if (skcd->val) {
--		if (skcd->no_refcnt)
--			return;
--		/*
--		 * We might be cloning a socket which is left in an empty
--		 * cgroup and the cgroup might have already been rmdir'd.
--		 * Don't use cgroup_get_live().
--		 */
--		cgroup_get(sock_cgroup_ptr(skcd));
--		cgroup_bpf_get(sock_cgroup_ptr(skcd));
--	}
-+	struct cgroup *cgrp = sock_cgroup_ptr(skcd);
++	if (sub_error_cnt)
++		env.fail_cnt++;
++	else if (test->skip_cnt == 0)
++		env.sub_succ_cnt++;
++	skip_account();
 +
-+	/*
-+	 * We might be cloning a socket which is left in an empty
-+	 * cgroup and the cgroup might have already been rmdir'd.
-+	 * Don't use cgroup_get_live().
-+	 */
-+	cgroup_get(cgrp);
-+	cgroup_bpf_get(cgrp);
+ 	free(test->subtest_name);
+ 	test->subtest_name = NULL;
  }
+@@ -783,17 +783,18 @@ int main(int argc, char **argv)
+ 			test__end_subtest();
  
- void cgroup_sk_free(struct sock_cgroup_data *skcd)
- {
- 	struct cgroup *cgrp = sock_cgroup_ptr(skcd);
+ 		test->tested = true;
+-		if (test->error_cnt)
+-			env.fail_cnt++;
+-		else
+-			env.succ_cnt++;
+-		skip_account();
  
--	if (skcd->no_refcnt)
--		return;
- 	cgroup_bpf_put(cgrp);
- 	cgroup_put(cgrp);
- }
-diff --git a/net/core/netclassid_cgroup.c b/net/core/netclassid_cgroup.c
-index b49c57d35a88..1a6a86693b74 100644
---- a/net/core/netclassid_cgroup.c
-+++ b/net/core/netclassid_cgroup.c
-@@ -71,11 +71,8 @@ static int update_classid_sock(const void *v, struct file *file, unsigned n)
- 	struct update_classid_context *ctx = (void *)v;
- 	struct socket *sock = sock_from_file(file);
+ 		dump_test_log(test, test->error_cnt);
  
--	if (sock) {
--		spin_lock(&cgroup_sk_update_lock);
-+	if (sock)
- 		sock_cgroup_set_classid(&sock->sk->sk_cgrp_data, ctx->classid);
--		spin_unlock(&cgroup_sk_update_lock);
--	}
- 	if (--ctx->batch == 0) {
- 		ctx->batch = UPDATE_CLASSID_BATCH;
- 		return n + 1;
-@@ -121,8 +118,6 @@ static int write_classid(struct cgroup_subsys_state *css, struct cftype *cft,
- 	struct css_task_iter it;
- 	struct task_struct *p;
- 
--	cgroup_sk_alloc_disable();
--
- 	cs->classid = (u32)value;
- 
- 	css_task_iter_start(css, 0, &it);
-diff --git a/net/core/netprio_cgroup.c b/net/core/netprio_cgroup.c
-index 99a431c56f23..8456dfbe2eb4 100644
---- a/net/core/netprio_cgroup.c
-+++ b/net/core/netprio_cgroup.c
-@@ -207,8 +207,6 @@ static ssize_t write_priomap(struct kernfs_open_file *of,
- 	if (!dev)
- 		return -ENODEV;
- 
--	cgroup_sk_alloc_disable();
--
- 	rtnl_lock();
- 
- 	ret = netprio_set_prio(of_css(of), dev, prio);
-@@ -221,12 +219,10 @@ static ssize_t write_priomap(struct kernfs_open_file *of,
- static int update_netprio(const void *v, struct file *file, unsigned n)
- {
- 	struct socket *sock = sock_from_file(file);
--	if (sock) {
--		spin_lock(&cgroup_sk_update_lock);
+ 		fprintf(env.stdout, "#%d %s:%s\n",
+ 			test->test_num, test->test_name,
+-			test->error_cnt ? "FAIL" : "OK");
++			test->error_cnt ? "FAIL" : (test->skip_cnt ? "SKIP" : "OK"));
 +
-+	if (sock)
- 		sock_cgroup_set_prioidx(&sock->sk->sk_cgrp_data,
- 					(unsigned long)v);
--		spin_unlock(&cgroup_sk_update_lock);
--	}
- 	return 0;
- }
++		if (test->error_cnt)
++			env.fail_cnt++;
++		else
++			env.succ_cnt++;
++		skip_account();
  
-@@ -235,8 +231,6 @@ static void net_prio_attach(struct cgroup_taskset *tset)
- 	struct task_struct *p;
- 	struct cgroup_subsys_state *css;
- 
--	cgroup_sk_alloc_disable();
--
- 	cgroup_taskset_for_each(p, css, tset) {
- 		void *v = (void *)(unsigned long)css->id;
- 
+ 		reset_affinity();
+ 		restore_netns();
 -- 
-2.21.0
+2.30.2
 
