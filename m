@@ -5,42 +5,41 @@ X-Spam-Level:
 X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2440C433EF
-	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 12:35:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BFB8C433F5
+	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 12:36:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C6405610FF
-	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 12:35:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5ED7A60E94
+	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 12:36:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237109AbhIIMgQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 9 Sep 2021 08:36:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38910 "EHLO mail.kernel.org"
+        id S1353024AbhIIMgK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 9 Sep 2021 08:36:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38736 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1353008AbhIIMdh (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 9 Sep 2021 08:33:37 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9456D6136A;
-        Thu,  9 Sep 2021 11:53:25 +0000 (UTC)
+        id S1353734AbhIIM3R (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 9 Sep 2021 08:29:17 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B7B6261241;
+        Thu,  9 Sep 2021 11:52:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631188406;
-        bh=35mbzRvU6JfJ7yvh2CXrenvC6BWUwLp9YJcEV3nMwhw=;
+        s=k20201202; t=1631188352;
+        bh=h6FqXYCR30wR/rITiby2miwzaK5galCFD9iDPMZKP1M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=INgbKlQsnZQ6uX41DDDeMN9xgLfIgPrjZVvubig5oKhI0EZJMz6bbAizA9LaDR2+i
-         UVcucFE+HcbxG2t2X/lilzOY3XC2rNm/h5knVsHME0dT2/a6n/UdF0OlR8GKC7zbgo
-         WX6NBpQiNODhIY2fETdNbNAUo3B6+yjJ+TvrB7nmtJ7hdTykqqF6YKm4ufWoA56QpS
-         9Rt6NSCi1i16Q5OwpjyABBZQyfQiHGHAuvqOs+HIQT2mlO72ohUQk7RaKiA0YkOMMr
-         cp3NTYg5xb0pEg445Gh/xU2fVYkMImt9vthz/h/s7oDae5svWMjoZ79R366hvyjEd4
-         /gXylCIAfE5Jg==
+        b=D7vQiGDkrqhEBMmEy2TO1WnILD1omFVqBKoJORW2F+nzUMPOfKs4bU37EKCqutgtv
+         JVDQaaXXeUTtHht698QkVDB7Sfm73RtAGEwotflhMqpNid8dvVsrdp6ZBEoDX3ch4Q
+         9AbTTnEnaiMuljSeX+qTW2DC9ZCl/8JqSiq/a0dA4u0K7Lm7Kf9rukJsMJeo+DDYP3
+         3R8eqtbT+Vv4ngWXP4xNNTckcQxDsBYhDyhQdVEMOEYafEPYA4CCcbqPxYteC+H/XM
+         cOp2Je/KhChmTmVGeSH5rXCFXGGGwdXaaoqdCU9ZpVS9q6FNrjRKu0gqfTnl8Jtsam
+         Sj1Lvygtj/Nig==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jussi Maki <joamaki@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+Cc:     Juhee Kang <claudiajkang@gmail.com>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 099/176] selftests/bpf: Fix xdp_tx.c prog section name
-Date:   Thu,  9 Sep 2021 07:50:01 -0400
-Message-Id: <20210909115118.146181-99-sashal@kernel.org>
+        Yonghong Song <yhs@fb.com>, Sasha Levin <sashal@kernel.org>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 058/176] samples: bpf: Fix tracex7 error raised on the missing argument
+Date:   Thu,  9 Sep 2021 07:49:20 -0400
+Message-Id: <20210909115118.146181-58-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210909115118.146181-1-sashal@kernel.org>
 References: <20210909115118.146181-1-sashal@kernel.org>
@@ -52,50 +51,71 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Jussi Maki <joamaki@gmail.com>
+From: Juhee Kang <claudiajkang@gmail.com>
 
-[ Upstream commit 95413846cca37f20000dd095cf6d91f8777129d7 ]
+[ Upstream commit 7d07006f05922b95518be403f08ef8437b67aa32 ]
 
-The program type cannot be deduced from 'tx' which causes an invalid
-argument error when trying to load xdp_tx.o using the skeleton.
-Rename the section name to "xdp" so that libbpf can deduce the type.
+The current behavior of 'tracex7' doesn't consist with other bpf samples
+tracex{1..6}. Other samples do not require any argument to run with, but
+tracex7 should be run with btrfs device argument. (it should be executed
+with test_override_return.sh)
 
-Signed-off-by: Jussi Maki <joamaki@gmail.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
-Link: https://lore.kernel.org/bpf/20210731055738.16820-7-joamaki@gmail.com
+Currently, tracex7 doesn't have any description about how to run this
+program and raises an unexpected error. And this result might be
+confusing since users might not have a hunch about how to run this
+program.
+
+    // Current behavior
+    # ./tracex7
+    sh: 1: Syntax error: word unexpected (expecting ")")
+    // Fixed behavior
+    # ./tracex7
+    ERROR: Run with the btrfs device argument!
+
+In order to fix this error, this commit adds logic to report a message
+and exit when running this program with a missing argument.
+
+Additionally in test_override_return.sh, there is a problem with
+multiple directory(tmpmnt) creation. So in this commit adds a line with
+removing the directory with every execution.
+
+Signed-off-by: Juhee Kang <claudiajkang@gmail.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Acked-by: Yonghong Song <yhs@fb.com>
+Link: https://lore.kernel.org/bpf/20210727041056.23455-1-claudiajkang@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/progs/xdp_tx.c   | 2 +-
- tools/testing/selftests/bpf/test_xdp_veth.sh | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ samples/bpf/test_override_return.sh | 1 +
+ samples/bpf/tracex7_user.c          | 5 +++++
+ 2 files changed, 6 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/xdp_tx.c b/tools/testing/selftests/bpf/progs/xdp_tx.c
-index 94e6c2b281cb..5f725c720e00 100644
---- a/tools/testing/selftests/bpf/progs/xdp_tx.c
-+++ b/tools/testing/selftests/bpf/progs/xdp_tx.c
-@@ -3,7 +3,7 @@
- #include <linux/bpf.h>
- #include <bpf/bpf_helpers.h>
+diff --git a/samples/bpf/test_override_return.sh b/samples/bpf/test_override_return.sh
+index e68b9ee6814b..35db26f736b9 100755
+--- a/samples/bpf/test_override_return.sh
++++ b/samples/bpf/test_override_return.sh
+@@ -1,5 +1,6 @@
+ #!/bin/bash
  
--SEC("tx")
-+SEC("xdp")
- int xdp_tx(struct xdp_md *xdp)
- {
- 	return XDP_TX;
-diff --git a/tools/testing/selftests/bpf/test_xdp_veth.sh b/tools/testing/selftests/bpf/test_xdp_veth.sh
-index ba8ffcdaac30..995278e684b6 100755
---- a/tools/testing/selftests/bpf/test_xdp_veth.sh
-+++ b/tools/testing/selftests/bpf/test_xdp_veth.sh
-@@ -108,7 +108,7 @@ ip link set dev veth2 xdp pinned $BPF_DIR/progs/redirect_map_1
- ip link set dev veth3 xdp pinned $BPF_DIR/progs/redirect_map_2
++rm -r tmpmnt
+ rm -f testfile.img
+ dd if=/dev/zero of=testfile.img bs=1M seek=1000 count=1
+ DEVICE=$(losetup --show -f testfile.img)
+diff --git a/samples/bpf/tracex7_user.c b/samples/bpf/tracex7_user.c
+index fdcd6580dd73..8be7ce18d3ba 100644
+--- a/samples/bpf/tracex7_user.c
++++ b/samples/bpf/tracex7_user.c
+@@ -14,6 +14,11 @@ int main(int argc, char **argv)
+ 	int ret = 0;
+ 	FILE *f;
  
- ip -n ns1 link set dev veth11 xdp obj xdp_dummy.o sec xdp_dummy
--ip -n ns2 link set dev veth22 xdp obj xdp_tx.o sec tx
-+ip -n ns2 link set dev veth22 xdp obj xdp_tx.o sec xdp
- ip -n ns3 link set dev veth33 xdp obj xdp_dummy.o sec xdp_dummy
- 
- trap cleanup EXIT
++	if (!argv[1]) {
++		fprintf(stderr, "ERROR: Run with the btrfs device argument!\n");
++		return 0;
++	}
++
+ 	snprintf(filename, sizeof(filename), "%s_kern.o", argv[0]);
+ 	obj = bpf_object__open_file(filename, NULL);
+ 	if (libbpf_get_error(obj)) {
 -- 
 2.30.2
 
