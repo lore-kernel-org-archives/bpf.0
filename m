@@ -7,39 +7,42 @@ X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 328FAC4332F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 830E3C43217
 	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 13:15:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1AC4D61208
+	by mail.kernel.org (Postfix) with ESMTP id 5F54161186
 	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 13:15:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356045AbhIINOL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 9 Sep 2021 09:14:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42432 "EHLO mail.kernel.org"
+        id S1356246AbhIINOX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 9 Sep 2021 09:14:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43766 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1357490AbhIINBD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 9 Sep 2021 09:01:03 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BD10B6140A;
-        Thu,  9 Sep 2021 11:59:19 +0000 (UTC)
+        id S1355911AbhIINDp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 9 Sep 2021 09:03:45 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9FB9F6140F;
+        Thu,  9 Sep 2021 11:59:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631188760;
-        bh=YtbVEEC4Fc8VxrXVU+a9hOu8LZW9VwEKLu2s/O2098E=;
+        s=k20201202; t=1631188799;
+        bh=dhMsRfuZVwhSZ56t3qLAGsartIx3boKk4d89WZH9zXc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZIZbwVNLKBkz7yBiFZ1lsG/Qppa4lMuGxBFJYuHDV46NG0MI2p4RSwLkNPn9xGLjM
-         sq24PbqOyumWELQGdqm59nYoFXRST/wkXKnc5gkOBwHN+9OghCG5i3Oc8AzTwsljX7
-         orOqAuV1yzPDulhgcAXjaa0FntzHMx5khO4hWzQ92PHfOYsETEuokDz4HEk7wa2KX6
-         sOXfxdxl3Q2KbVMHlCCQkEkQtNDjHyK2c7vfoVgs10/06NDvT86FJlIcQcJCBgFSOw
-         /rwpdEP1qpv/wGFggjBhk04ZSgJZT6hwBdK3pd+qeaCnvBwb/E4qzb9NwI9jFgnc7T
-         HIXtINbYpjX/A==
+        b=VVSFnYlWQ/ucppI5Xs1VEv9Ejd+8fgDTJvqE7EhKO9X6Sueu0kY9jhNN3jQ6ySZtC
+         1a6XgVi/LmlfLMZGxom5h4MPGG6o/jJAeIKqsJJPrUF44R8YU4UiZnQyiD43pnotwX
+         9Vcw5FV2YsatdGG+2DUwSiYqlJxfps3DvweDShZXVoFwhgwEmcPX9jwUgOg8+Mo2GA
+         OoLv/OU+2H3lvkO8wlqEuxqA4UDQqHCICYCUBY71hh6jT8MAAdbLpCAjrB2qtgzmKJ
+         rvU06lbtRlX4QdYso11E3t4k8ByKpMupcO96WtO6GVliGGlfe2d3BBOLqdzNIi8Kyj
+         LSWO+niYMi2kw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Johan Almbladh <johan.almbladh@anyfinetworks.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+Cc:     Li Zhijian <lizhijian@cn.fujitsu.com>,
+        kernel test robot <lkp@intel.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Song Liu <songliubraving@fb.com>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 15/59] bpf/tests: Fix copy-and-paste error in double word test
-Date:   Thu,  9 Sep 2021 07:58:16 -0400
-Message-Id: <20210909115900.149795-15-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 47/59] selftests/bpf: Enlarge select() timeout for test_maps
+Date:   Thu,  9 Sep 2021 07:58:48 -0400
+Message-Id: <20210909115900.149795-47-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210909115900.149795-1-sashal@kernel.org>
 References: <20210909115900.149795-1-sashal@kernel.org>
@@ -51,36 +54,55 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Johan Almbladh <johan.almbladh@anyfinetworks.com>
+From: Li Zhijian <lizhijian@cn.fujitsu.com>
 
-[ Upstream commit ae7f47041d928b1a2f28717d095b4153c63cbf6a ]
+[ Upstream commit 2d82d73da35b72b53fe0d96350a2b8d929d07e42 ]
 
-This test now operates on DW as stated instead of W, which was
-already covered by another test.
+0Day robot observed that it's easily timeout on a heavy load host.
+-------------------
+ # selftests: bpf: test_maps
+ # Fork 1024 tasks to 'test_update_delete'
+ # Fork 1024 tasks to 'test_update_delete'
+ # Fork 100 tasks to 'test_hashmap'
+ # Fork 100 tasks to 'test_hashmap_percpu'
+ # Fork 100 tasks to 'test_hashmap_sizes'
+ # Fork 100 tasks to 'test_hashmap_walk'
+ # Fork 100 tasks to 'test_arraymap'
+ # Fork 100 tasks to 'test_arraymap_percpu'
+ # Failed sockmap unexpected timeout
+ not ok 3 selftests: bpf: test_maps # exit=1
+ # selftests: bpf: test_lru_map
+ # nr_cpus:8
+-------------------
+Since this test will be scheduled by 0Day to a random host that could have
+only a few cpus(2-8), enlarge the timeout to avoid a false NG report.
 
-Signed-off-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Link: https://lore.kernel.org/bpf/20210721104058.3755254-1-johan.almbladh@anyfinetworks.com
+In practice, i tried to pin it to only one cpu by 'taskset 0x01 ./test_maps',
+and knew 10S is likely enough, but i still perfer to a larger value 30.
+
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Acked-by: Song Liu <songliubraving@fb.com>
+Link: https://lore.kernel.org/bpf/20210820015556.23276-2-lizhijian@cn.fujitsu.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- lib/test_bpf.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/bpf/test_maps.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/lib/test_bpf.c b/lib/test_bpf.c
-index 75ebf2bbc2ee..4aa88ba8238c 100644
---- a/lib/test_bpf.c
-+++ b/lib/test_bpf.c
-@@ -4395,8 +4395,8 @@ static struct bpf_test tests[] = {
- 		.u.insns_int = {
- 			BPF_LD_IMM64(R0, 0),
- 			BPF_LD_IMM64(R1, 0xffffffffffffffffLL),
--			BPF_STX_MEM(BPF_W, R10, R1, -40),
--			BPF_LDX_MEM(BPF_W, R0, R10, -40),
-+			BPF_STX_MEM(BPF_DW, R10, R1, -40),
-+			BPF_LDX_MEM(BPF_DW, R0, R10, -40),
- 			BPF_EXIT_INSN(),
- 		},
- 		INTERNAL,
+diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/selftests/bpf/test_maps.c
+index 96c6238a4a1f..3f503ad37a2b 100644
+--- a/tools/testing/selftests/bpf/test_maps.c
++++ b/tools/testing/selftests/bpf/test_maps.c
+@@ -730,7 +730,7 @@ static void test_sockmap(int tasks, void *data)
+ 
+ 		FD_ZERO(&w);
+ 		FD_SET(sfd[3], &w);
+-		to.tv_sec = 1;
++		to.tv_sec = 30;
+ 		to.tv_usec = 0;
+ 		s = select(sfd[3] + 1, &w, NULL, NULL, &to);
+ 		if (s == -1) {
 -- 
 2.30.2
 
