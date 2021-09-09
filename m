@@ -7,63 +7,63 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE3CAC4332F
-	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 14:45:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07A34C43217
+	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 14:45:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D670061242
-	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 14:45:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E4D3161242
+	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 14:45:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348798AbhIIOqM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 9 Sep 2021 10:46:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47184 "EHLO
+        id S240777AbhIIOqN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 9 Sep 2021 10:46:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347720AbhIIOqC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 9 Sep 2021 10:46:02 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05AC7C05BD2A
-        for <bpf@vger.kernel.org>; Thu,  9 Sep 2021 07:33:20 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id q3so2972775edt.5
-        for <bpf@vger.kernel.org>; Thu, 09 Sep 2021 07:33:19 -0700 (PDT)
+        with ESMTP id S1345197AbhIIOqD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 9 Sep 2021 10:46:03 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B7EC05BD2F
+        for <bpf@vger.kernel.org>; Thu,  9 Sep 2021 07:33:23 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id g22so2933278edy.12
+        for <bpf@vger.kernel.org>; Thu, 09 Sep 2021 07:33:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=anyfinetworks-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=VZ/cPc+HBBfNYmV8Vu/gOGq5qn13KsrfaisPWpux7Uw=;
-        b=RDQzPibccQJxS+HzdBZtc/rJnHPJ8XY0Y50WKgapciQMnDQ+wFfT7baFYQDJLOqr0f
-         WF7ScO9XpnCta0qNyUSAvRfSU4xl7xxjHAfmlLi5zCEYvD0kaWJd5JTyyNZNRKIahOA9
-         n0Y4duckfr65sNFSWORzzlrJBOw+eyovOF/MHPsehjmhYheaqLZem1Rr6gvFVu5kkvHQ
-         zu4+JBq/B3RyxgPZ5JPtg03hLQmHokotTIS3qOlTGjwDukwsnCjceI4BrCx4CK3mhfbV
-         0sT5RCD/JCjm3qFd4NvEGttPmLfYAwN2UKf7GFfyFgWbp4mP/q518JfcCepSFwAsUSGj
-         fleg==
+        bh=XfMLrua0MdTHFZoz901/cpqoFG6QjfNV3NlQ/D/QR3U=;
+        b=0KPvJhRv5+Q9Wa/mLPFEkj4+tuCNRTUVOUirnNXJlnQMttNlVuITyduMTRoCad2hcw
+         Wc+nUahSElbfLJxOE7eDRiRaG83GpaQPkhpHmxvLP9E7Hydaw1JLkVll7FXJqt13EQgo
+         uyChnh498a49Z5dGheT8R5ZrMWqYbmP7MX9jMv9S3l8emKNl9WJ4dPfYA4iGUjX6d441
+         p3lFAJwknXRB3CazY7jOVBlf4KEtazQJRTJbOD2vef8CLExn+trCV3yeX1Qk7GBLqjA4
+         /3XCzaAONP6Zc6zkGhG0N45nXh8K5aYDRqD4IueFKQS9+9dfY8RYP2ejU+UUY1ds9ODc
+         PViw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=VZ/cPc+HBBfNYmV8Vu/gOGq5qn13KsrfaisPWpux7Uw=;
-        b=F0/x3M8YpvScRGAeYODyFVaDHl2O40spyeVQrMUcNL+9w+iowMOBfCChuUdtXiUvoK
-         3TocYMHb0fbFjEmvCqLjNoQ0cZBuKaypOTmXQvm8paxtyLvambQUlBVY6+L0T7NQvHda
-         JU7PYNxyy4nxgoL4uPk8lfE0bS2ToQoDOkQbVcV19rM691r9R2Atzu5VqGpoRKFsbwpy
-         897RefoYoWu2t5o3hVPiyeEziu57PcLijJYkTFaTH12avzBxDBsimkh3bELTHvGy+73q
-         JtB5bd4somqBtL1M7PiaW9NMElAOJLhfiXoigToTE6uBsoT9EoXAqDsAk0UfICKlijuK
-         eaOQ==
-X-Gm-Message-State: AOAM532OBDthHRC7OZQJAaFncdKPBjgULfclr9kX1s9H/KQfVfCUdAI6
-        IiVfKi6SU2PoCTOHdoE0HkS7Jg==
-X-Google-Smtp-Source: ABdhPJzvEsnLp+QNvkvJmFZqUjCKarguxeJsFtkG0t/DL+3U3dJw2wi3WfIoeuHCp4TnpWIeJfSTwA==
-X-Received: by 2002:aa7:cc08:: with SMTP id q8mr3401605edt.225.1631197998497;
-        Thu, 09 Sep 2021 07:33:18 -0700 (PDT)
+        bh=XfMLrua0MdTHFZoz901/cpqoFG6QjfNV3NlQ/D/QR3U=;
+        b=q7zJ4TJ2DD7Xg5MTaJ18YWl1GtV6/AJvpcz5QvNYHFbghOwXZn88HUiMdWUhCtxpJd
+         DYPk3aEAju95ZDf8MO94YJCGLwR4jVC4G7UIjVzL5m69Nw0qwGRJLXyhfeuU60Qtscgc
+         yZY/+yJosNBe6Yb1X6FRpeGEg+jPA1qv7XgY9rrr7pTg5d+oe45/z3HIpZBTVYfDwr1R
+         3Dlzq8flr+Qx1fNpOEY6BfgY7rEuft9e+c+K4vzDZAjTOo1o68QOCMd/hUfRGs/vsdwk
+         1s0DBkm8ZiHbcXjnIfT763SOul58pFfLdnLK8RpgDlemDqWbxCMzyNFpnKHO39pHVNQW
+         yw3A==
+X-Gm-Message-State: AOAM5308MmNlXrnaNWQX+owzP4J/rYgrdDs0aqBWSi0ht1TPsyczIODv
+        LGK1b1hNNQSpWs1mBsudlSuw6g==
+X-Google-Smtp-Source: ABdhPJyGTRQVFnswNEwqITlB1YkEkuKin0eZC2VnQvU7840ZuslIUG5mt6HaPbuDSq3SeRoqk11rTA==
+X-Received: by 2002:aa7:c744:: with SMTP id c4mr3577741eds.0.1631198001581;
+        Thu, 09 Sep 2021 07:33:21 -0700 (PDT)
 Received: from anpc2.lan (static-213-115-136-2.sme.telenor.se. [213.115.136.2])
-        by smtp.gmail.com with ESMTPSA id bj10sm1030909ejb.17.2021.09.09.07.33.17
+        by smtp.gmail.com with ESMTPSA id bj10sm1030909ejb.17.2021.09.09.07.33.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Sep 2021 07:33:18 -0700 (PDT)
+        Thu, 09 Sep 2021 07:33:21 -0700 (PDT)
 From:   Johan Almbladh <johan.almbladh@anyfinetworks.com>
 To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
 Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
         john.fastabend@gmail.com, kpsingh@kernel.org, iii@linux.ibm.com,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Subject: [PATCH bpf-next v3 05/13] bpf/tests: Add exhaustive tests of JMP operand magnitudes
-Date:   Thu,  9 Sep 2021 16:32:55 +0200
-Message-Id: <20210909143303.811171-6-johan.almbladh@anyfinetworks.com>
+Subject: [PATCH bpf-next v3 08/13] bpf/tests: Add test case flag for verifier zero-extension
+Date:   Thu,  9 Sep 2021 16:32:58 +0200
+Message-Id: <20210909143303.811171-9-johan.almbladh@anyfinetworks.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210909143303.811171-1-johan.almbladh@anyfinetworks.com>
 References: <20210909143303.811171-1-johan.almbladh@anyfinetworks.com>
@@ -73,819 +73,36 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch adds a set of tests for conditional JMP and JMP32 operations to
-verify correctness for all possible magnitudes of the immediate and
-register operands. Mainly intended for JIT testing.
+This patch adds a new flag to indicate that the verified did insert
+zero-extensions, even though the verifier is not being run for any
+of the tests.
 
 Signed-off-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
 ---
- lib/test_bpf.c | 779 +++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 779 insertions(+)
+ lib/test_bpf.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/lib/test_bpf.c b/lib/test_bpf.c
-index 7992004bc876..e7ea8472c3d1 100644
+index 6a04447171c7..26f7c244c78a 100644
 --- a/lib/test_bpf.c
 +++ b/lib/test_bpf.c
-@@ -1104,6 +1104,384 @@ static int bpf_fill_alu32_mod_reg(struct bpf_test *self)
- 	return __bpf_fill_alu32_reg(self, BPF_MOD);
- }
+@@ -52,6 +52,7 @@
+ #define FLAG_NO_DATA		BIT(0)
+ #define FLAG_EXPECTED_FAIL	BIT(1)
+ #define FLAG_SKB_FRAG		BIT(2)
++#define FLAG_VERIFIER_ZEXT	BIT(3)
  
-+
-+/*
-+ * Exhaustive tests of JMP operations for all combinations of power-of-two
-+ * magnitudes of the operands, both for positive and negative values. The
-+ * test is designed to verify e.g. the JMP and JMP32 operations for JITs that
-+ * emit different code depending on the magnitude of the immediate value.
-+ */
-+
-+static bool __bpf_match_jmp_cond(s64 v1, s64 v2, u8 op)
-+{
-+	switch (op) {
-+	case BPF_JSET:
-+		return !!(v1 & v2);
-+	case BPF_JEQ:
-+		return v1 == v2;
-+	case BPF_JNE:
-+		return v1 != v2;
-+	case BPF_JGT:
-+		return (u64)v1 > (u64)v2;
-+	case BPF_JGE:
-+		return (u64)v1 >= (u64)v2;
-+	case BPF_JLT:
-+		return (u64)v1 < (u64)v2;
-+	case BPF_JLE:
-+		return (u64)v1 <= (u64)v2;
-+	case BPF_JSGT:
-+		return v1 > v2;
-+	case BPF_JSGE:
-+		return v1 >= v2;
-+	case BPF_JSLT:
-+		return v1 < v2;
-+	case BPF_JSLE:
-+		return v1 <= v2;
-+	}
-+	return false;
-+}
-+
-+static int __bpf_emit_jmp_imm(struct bpf_test *self, void *arg,
-+			      struct bpf_insn *insns, s64 dst, s64 imm)
-+{
-+	int op = *(int *)arg;
-+
-+	if (insns) {
-+		bool match = __bpf_match_jmp_cond(dst, (s32)imm, op);
-+		int i = 0;
-+
-+		insns[i++] = BPF_ALU32_IMM(BPF_MOV, R0, match);
-+
-+		i += __bpf_ld_imm64(&insns[i], R1, dst);
-+		insns[i++] = BPF_JMP_IMM(op, R1, imm, 1);
-+		if (!match)
-+			insns[i++] = BPF_JMP_IMM(BPF_JA, 0, 0, 1);
-+		insns[i++] = BPF_EXIT_INSN();
-+
-+		return i;
-+	}
-+
-+	return 5 + 1;
-+}
-+
-+static int __bpf_emit_jmp32_imm(struct bpf_test *self, void *arg,
-+				struct bpf_insn *insns, s64 dst, s64 imm)
-+{
-+	int op = *(int *)arg;
-+
-+	if (insns) {
-+		bool match = __bpf_match_jmp_cond((s32)dst, (s32)imm, op);
-+		int i = 0;
-+
-+		i += __bpf_ld_imm64(&insns[i], R1, dst);
-+		insns[i++] = BPF_JMP32_IMM(op, R1, imm, 1);
-+		if (!match)
-+			insns[i++] = BPF_JMP_IMM(BPF_JA, 0, 0, 1);
-+		insns[i++] = BPF_EXIT_INSN();
-+
-+		return i;
-+	}
-+
-+	return 5;
-+}
-+
-+static int __bpf_emit_jmp_reg(struct bpf_test *self, void *arg,
-+			      struct bpf_insn *insns, s64 dst, s64 src)
-+{
-+	int op = *(int *)arg;
-+
-+	if (insns) {
-+		bool match = __bpf_match_jmp_cond(dst, src, op);
-+		int i = 0;
-+
-+		i += __bpf_ld_imm64(&insns[i], R1, dst);
-+		i += __bpf_ld_imm64(&insns[i], R2, src);
-+		insns[i++] = BPF_JMP_REG(op, R1, R2, 1);
-+		if (!match)
-+			insns[i++] = BPF_JMP_IMM(BPF_JA, 0, 0, 1);
-+		insns[i++] = BPF_EXIT_INSN();
-+
-+		return i;
-+	}
-+
-+	return 7;
-+}
-+
-+static int __bpf_emit_jmp32_reg(struct bpf_test *self, void *arg,
-+				struct bpf_insn *insns, s64 dst, s64 src)
-+{
-+	int op = *(int *)arg;
-+
-+	if (insns) {
-+		bool match = __bpf_match_jmp_cond((s32)dst, (s32)src, op);
-+		int i = 0;
-+
-+		i += __bpf_ld_imm64(&insns[i], R1, dst);
-+		i += __bpf_ld_imm64(&insns[i], R2, src);
-+		insns[i++] = BPF_JMP32_REG(op, R1, R2, 1);
-+		if (!match)
-+			insns[i++] = BPF_JMP_IMM(BPF_JA, 0, 0, 1);
-+		insns[i++] = BPF_EXIT_INSN();
-+
-+		return i;
-+	}
-+
-+	return 7;
-+}
-+
-+static int __bpf_fill_jmp_imm(struct bpf_test *self, int op)
-+{
-+	return __bpf_fill_pattern(self, &op, 64, 32,
-+				  PATTERN_BLOCK1, PATTERN_BLOCK2,
-+				  &__bpf_emit_jmp_imm);
-+}
-+
-+static int __bpf_fill_jmp32_imm(struct bpf_test *self, int op)
-+{
-+	return __bpf_fill_pattern(self, &op, 64, 32,
-+				  PATTERN_BLOCK1, PATTERN_BLOCK2,
-+				  &__bpf_emit_jmp32_imm);
-+}
-+
-+static int __bpf_fill_jmp_reg(struct bpf_test *self, int op)
-+{
-+	return __bpf_fill_pattern(self, &op, 64, 64,
-+				  PATTERN_BLOCK1, PATTERN_BLOCK2,
-+				  &__bpf_emit_jmp_reg);
-+}
-+
-+static int __bpf_fill_jmp32_reg(struct bpf_test *self, int op)
-+{
-+	return __bpf_fill_pattern(self, &op, 64, 64,
-+				  PATTERN_BLOCK1, PATTERN_BLOCK2,
-+				  &__bpf_emit_jmp32_reg);
-+}
-+
-+/* JMP immediate tests */
-+static int bpf_fill_jmp_jset_imm(struct bpf_test *self)
-+{
-+	return __bpf_fill_jmp_imm(self, BPF_JSET);
-+}
-+
-+static int bpf_fill_jmp_jeq_imm(struct bpf_test *self)
-+{
-+	return __bpf_fill_jmp_imm(self, BPF_JEQ);
-+}
-+
-+static int bpf_fill_jmp_jne_imm(struct bpf_test *self)
-+{
-+	return __bpf_fill_jmp_imm(self, BPF_JNE);
-+}
-+
-+static int bpf_fill_jmp_jgt_imm(struct bpf_test *self)
-+{
-+	return __bpf_fill_jmp_imm(self, BPF_JGT);
-+}
-+
-+static int bpf_fill_jmp_jge_imm(struct bpf_test *self)
-+{
-+	return __bpf_fill_jmp_imm(self, BPF_JGE);
-+}
-+
-+static int bpf_fill_jmp_jlt_imm(struct bpf_test *self)
-+{
-+	return __bpf_fill_jmp_imm(self, BPF_JLT);
-+}
-+
-+static int bpf_fill_jmp_jle_imm(struct bpf_test *self)
-+{
-+	return __bpf_fill_jmp_imm(self, BPF_JLE);
-+}
-+
-+static int bpf_fill_jmp_jsgt_imm(struct bpf_test *self)
-+{
-+	return __bpf_fill_jmp_imm(self, BPF_JSGT);
-+}
-+
-+static int bpf_fill_jmp_jsge_imm(struct bpf_test *self)
-+{
-+	return __bpf_fill_jmp_imm(self, BPF_JSGE);
-+}
-+
-+static int bpf_fill_jmp_jslt_imm(struct bpf_test *self)
-+{
-+	return __bpf_fill_jmp_imm(self, BPF_JSLT);
-+}
-+
-+static int bpf_fill_jmp_jsle_imm(struct bpf_test *self)
-+{
-+	return __bpf_fill_jmp_imm(self, BPF_JSLE);
-+}
-+
-+/* JMP32 immediate tests */
-+static int bpf_fill_jmp32_jset_imm(struct bpf_test *self)
-+{
-+	return __bpf_fill_jmp32_imm(self, BPF_JSET);
-+}
-+
-+static int bpf_fill_jmp32_jeq_imm(struct bpf_test *self)
-+{
-+	return __bpf_fill_jmp32_imm(self, BPF_JEQ);
-+}
-+
-+static int bpf_fill_jmp32_jne_imm(struct bpf_test *self)
-+{
-+	return __bpf_fill_jmp32_imm(self, BPF_JNE);
-+}
-+
-+static int bpf_fill_jmp32_jgt_imm(struct bpf_test *self)
-+{
-+	return __bpf_fill_jmp32_imm(self, BPF_JGT);
-+}
-+
-+static int bpf_fill_jmp32_jge_imm(struct bpf_test *self)
-+{
-+	return __bpf_fill_jmp32_imm(self, BPF_JGE);
-+}
-+
-+static int bpf_fill_jmp32_jlt_imm(struct bpf_test *self)
-+{
-+	return __bpf_fill_jmp32_imm(self, BPF_JLT);
-+}
-+
-+static int bpf_fill_jmp32_jle_imm(struct bpf_test *self)
-+{
-+	return __bpf_fill_jmp32_imm(self, BPF_JLE);
-+}
-+
-+static int bpf_fill_jmp32_jsgt_imm(struct bpf_test *self)
-+{
-+	return __bpf_fill_jmp32_imm(self, BPF_JSGT);
-+}
-+
-+static int bpf_fill_jmp32_jsge_imm(struct bpf_test *self)
-+{
-+	return __bpf_fill_jmp32_imm(self, BPF_JSGE);
-+}
-+
-+static int bpf_fill_jmp32_jslt_imm(struct bpf_test *self)
-+{
-+	return __bpf_fill_jmp32_imm(self, BPF_JSLT);
-+}
-+
-+static int bpf_fill_jmp32_jsle_imm(struct bpf_test *self)
-+{
-+	return __bpf_fill_jmp32_imm(self, BPF_JSLE);
-+}
-+
-+/* JMP register tests */
-+static int bpf_fill_jmp_jset_reg(struct bpf_test *self)
-+{
-+	return __bpf_fill_jmp_reg(self, BPF_JSET);
-+}
-+
-+static int bpf_fill_jmp_jeq_reg(struct bpf_test *self)
-+{
-+	return __bpf_fill_jmp_reg(self, BPF_JEQ);
-+}
-+
-+static int bpf_fill_jmp_jne_reg(struct bpf_test *self)
-+{
-+	return __bpf_fill_jmp_reg(self, BPF_JNE);
-+}
-+
-+static int bpf_fill_jmp_jgt_reg(struct bpf_test *self)
-+{
-+	return __bpf_fill_jmp_reg(self, BPF_JGT);
-+}
-+
-+static int bpf_fill_jmp_jge_reg(struct bpf_test *self)
-+{
-+	return __bpf_fill_jmp_reg(self, BPF_JGE);
-+}
-+
-+static int bpf_fill_jmp_jlt_reg(struct bpf_test *self)
-+{
-+	return __bpf_fill_jmp_reg(self, BPF_JLT);
-+}
-+
-+static int bpf_fill_jmp_jle_reg(struct bpf_test *self)
-+{
-+	return __bpf_fill_jmp_reg(self, BPF_JLE);
-+}
-+
-+static int bpf_fill_jmp_jsgt_reg(struct bpf_test *self)
-+{
-+	return __bpf_fill_jmp_reg(self, BPF_JSGT);
-+}
-+
-+static int bpf_fill_jmp_jsge_reg(struct bpf_test *self)
-+{
-+	return __bpf_fill_jmp_reg(self, BPF_JSGE);
-+}
-+
-+static int bpf_fill_jmp_jslt_reg(struct bpf_test *self)
-+{
-+	return __bpf_fill_jmp_reg(self, BPF_JSLT);
-+}
-+
-+static int bpf_fill_jmp_jsle_reg(struct bpf_test *self)
-+{
-+	return __bpf_fill_jmp_reg(self, BPF_JSLE);
-+}
-+
-+/* JMP32 register tests */
-+static int bpf_fill_jmp32_jset_reg(struct bpf_test *self)
-+{
-+	return __bpf_fill_jmp32_reg(self, BPF_JSET);
-+}
-+
-+static int bpf_fill_jmp32_jeq_reg(struct bpf_test *self)
-+{
-+	return __bpf_fill_jmp32_reg(self, BPF_JEQ);
-+}
-+
-+static int bpf_fill_jmp32_jne_reg(struct bpf_test *self)
-+{
-+	return __bpf_fill_jmp32_reg(self, BPF_JNE);
-+}
-+
-+static int bpf_fill_jmp32_jgt_reg(struct bpf_test *self)
-+{
-+	return __bpf_fill_jmp32_reg(self, BPF_JGT);
-+}
-+
-+static int bpf_fill_jmp32_jge_reg(struct bpf_test *self)
-+{
-+	return __bpf_fill_jmp32_reg(self, BPF_JGE);
-+}
-+
-+static int bpf_fill_jmp32_jlt_reg(struct bpf_test *self)
-+{
-+	return __bpf_fill_jmp32_reg(self, BPF_JLT);
-+}
-+
-+static int bpf_fill_jmp32_jle_reg(struct bpf_test *self)
-+{
-+	return __bpf_fill_jmp32_reg(self, BPF_JLE);
-+}
-+
-+static int bpf_fill_jmp32_jsgt_reg(struct bpf_test *self)
-+{
-+	return __bpf_fill_jmp32_reg(self, BPF_JSGT);
-+}
-+
-+static int bpf_fill_jmp32_jsge_reg(struct bpf_test *self)
-+{
-+	return __bpf_fill_jmp32_reg(self, BPF_JSGE);
-+}
-+
-+static int bpf_fill_jmp32_jslt_reg(struct bpf_test *self)
-+{
-+	return __bpf_fill_jmp32_reg(self, BPF_JSLT);
-+}
-+
-+static int bpf_fill_jmp32_jsle_reg(struct bpf_test *self)
-+{
-+	return __bpf_fill_jmp32_reg(self, BPF_JSLE);
-+}
-+
-+
- static struct bpf_test tests[] = {
- 	{
- 		"TAX",
-@@ -9281,6 +9659,7 @@ static struct bpf_test tests[] = {
- 		{ },
- 		{ { 0, 1 } },
- 		.fill_helper = bpf_fill_alu32_mod_imm,
-+		.nr_testruns = NR_PATTERN_RUNS,
- 	},
- 	/* ALU64 register magnitudes */
- 	{
-@@ -9446,6 +9825,406 @@ static struct bpf_test tests[] = {
- 		.fill_helper = bpf_fill_alu32_mod_reg,
- 		.nr_testruns = NR_PATTERN_RUNS,
- 	},
-+	/* JMP immediate magnitudes */
-+	{
-+		"JMP_JSET_K: all immediate value magnitudes",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_jmp_jset_imm,
-+		.nr_testruns = NR_PATTERN_RUNS,
-+	},
-+	{
-+		"JMP_JEQ_K: all immediate value magnitudes",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_jmp_jeq_imm,
-+		.nr_testruns = NR_PATTERN_RUNS,
-+	},
-+	{
-+		"JMP_JNE_K: all immediate value magnitudes",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_jmp_jne_imm,
-+		.nr_testruns = NR_PATTERN_RUNS,
-+	},
-+	{
-+		"JMP_JGT_K: all immediate value magnitudes",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_jmp_jgt_imm,
-+		.nr_testruns = NR_PATTERN_RUNS,
-+	},
-+	{
-+		"JMP_JGE_K: all immediate value magnitudes",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_jmp_jge_imm,
-+		.nr_testruns = NR_PATTERN_RUNS,
-+	},
-+	{
-+		"JMP_JLT_K: all immediate value magnitudes",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_jmp_jlt_imm,
-+		.nr_testruns = NR_PATTERN_RUNS,
-+	},
-+	{
-+		"JMP_JLE_K: all immediate value magnitudes",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_jmp_jle_imm,
-+		.nr_testruns = NR_PATTERN_RUNS,
-+	},
-+	{
-+		"JMP_JSGT_K: all immediate value magnitudes",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_jmp_jsgt_imm,
-+		.nr_testruns = NR_PATTERN_RUNS,
-+	},
-+	{
-+		"JMP_JSGE_K: all immediate value magnitudes",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_jmp_jsge_imm,
-+		.nr_testruns = NR_PATTERN_RUNS,
-+	},
-+	{
-+		"JMP_JSLT_K: all immediate value magnitudes",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_jmp_jslt_imm,
-+		.nr_testruns = NR_PATTERN_RUNS,
-+	},
-+	{
-+		"JMP_JSLE_K: all immediate value magnitudes",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_jmp_jsle_imm,
-+		.nr_testruns = NR_PATTERN_RUNS,
-+	},
-+	/* JMP register magnitudes */
-+	{
-+		"JMP_JSET_X: all register value magnitudes",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_jmp_jset_reg,
-+		.nr_testruns = NR_PATTERN_RUNS,
-+	},
-+	{
-+		"JMP_JEQ_X: all register value magnitudes",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_jmp_jeq_reg,
-+		.nr_testruns = NR_PATTERN_RUNS,
-+	},
-+	{
-+		"JMP_JNE_X: all register value magnitudes",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_jmp_jne_reg,
-+		.nr_testruns = NR_PATTERN_RUNS,
-+	},
-+	{
-+		"JMP_JGT_X: all register value magnitudes",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_jmp_jgt_reg,
-+		.nr_testruns = NR_PATTERN_RUNS,
-+	},
-+	{
-+		"JMP_JGE_X: all register value magnitudes",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_jmp_jge_reg,
-+		.nr_testruns = NR_PATTERN_RUNS,
-+	},
-+	{
-+		"JMP_JLT_X: all register value magnitudes",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_jmp_jlt_reg,
-+		.nr_testruns = NR_PATTERN_RUNS,
-+	},
-+	{
-+		"JMP_JLE_X: all register value magnitudes",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_jmp_jle_reg,
-+		.nr_testruns = NR_PATTERN_RUNS,
-+	},
-+	{
-+		"JMP_JSGT_X: all register value magnitudes",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_jmp_jsgt_reg,
-+		.nr_testruns = NR_PATTERN_RUNS,
-+	},
-+	{
-+		"JMP_JSGE_X: all register value magnitudes",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_jmp_jsge_reg,
-+		.nr_testruns = NR_PATTERN_RUNS,
-+	},
-+	{
-+		"JMP_JSLT_X: all register value magnitudes",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_jmp_jslt_reg,
-+		.nr_testruns = NR_PATTERN_RUNS,
-+	},
-+	{
-+		"JMP_JSLE_X: all register value magnitudes",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_jmp_jsle_reg,
-+		.nr_testruns = NR_PATTERN_RUNS,
-+	},
-+	/* JMP32 immediate magnitudes */
-+	{
-+		"JMP32_JSET_K: all immediate value magnitudes",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_jmp32_jset_imm,
-+		.nr_testruns = NR_PATTERN_RUNS,
-+	},
-+	{
-+		"JMP32_JEQ_K: all immediate value magnitudes",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_jmp32_jeq_imm,
-+		.nr_testruns = NR_PATTERN_RUNS,
-+	},
-+	{
-+		"JMP32_JNE_K: all immediate value magnitudes",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_jmp32_jne_imm,
-+		.nr_testruns = NR_PATTERN_RUNS,
-+	},
-+	{
-+		"JMP32_JGT_K: all immediate value magnitudes",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_jmp32_jgt_imm,
-+		.nr_testruns = NR_PATTERN_RUNS,
-+	},
-+	{
-+		"JMP32_JGE_K: all immediate value magnitudes",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_jmp32_jge_imm,
-+		.nr_testruns = NR_PATTERN_RUNS,
-+	},
-+	{
-+		"JMP32_JLT_K: all immediate value magnitudes",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_jmp32_jlt_imm,
-+		.nr_testruns = NR_PATTERN_RUNS,
-+	},
-+	{
-+		"JMP32_JLE_K: all immediate value magnitudes",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_jmp32_jle_imm,
-+		.nr_testruns = NR_PATTERN_RUNS,
-+	},
-+	{
-+		"JMP32_JSGT_K: all immediate value magnitudes",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_jmp32_jsgt_imm,
-+		.nr_testruns = NR_PATTERN_RUNS,
-+	},
-+	{
-+		"JMP32_JSGE_K: all immediate value magnitudes",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_jmp32_jsge_imm,
-+		.nr_testruns = NR_PATTERN_RUNS,
-+	},
-+	{
-+		"JMP32_JSLT_K: all immediate value magnitudes",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_jmp32_jslt_imm,
-+		.nr_testruns = NR_PATTERN_RUNS,
-+	},
-+	{
-+		"JMP32_JSLE_K: all immediate value magnitudes",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_jmp32_jsle_imm,
-+		.nr_testruns = NR_PATTERN_RUNS,
-+	},
-+	/* JMP32 register magnitudes */
-+	{
-+		"JMP32_JSET_X: all register value magnitudes",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_jmp32_jset_reg,
-+		.nr_testruns = NR_PATTERN_RUNS,
-+	},
-+	{
-+		"JMP32_JEQ_X: all register value magnitudes",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_jmp32_jeq_reg,
-+		.nr_testruns = NR_PATTERN_RUNS,
-+	},
-+	{
-+		"JMP32_JNE_X: all register value magnitudes",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_jmp32_jne_reg,
-+		.nr_testruns = NR_PATTERN_RUNS,
-+	},
-+	{
-+		"JMP32_JGT_X: all register value magnitudes",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_jmp32_jgt_reg,
-+		.nr_testruns = NR_PATTERN_RUNS,
-+	},
-+	{
-+		"JMP32_JGE_X: all register value magnitudes",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_jmp32_jge_reg,
-+		.nr_testruns = NR_PATTERN_RUNS,
-+	},
-+	{
-+		"JMP32_JLT_X: all register value magnitudes",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_jmp32_jlt_reg,
-+		.nr_testruns = NR_PATTERN_RUNS,
-+	},
-+	{
-+		"JMP32_JLE_X: all register value magnitudes",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_jmp32_jle_reg,
-+		.nr_testruns = NR_PATTERN_RUNS,
-+	},
-+	{
-+		"JMP32_JSGT_X: all register value magnitudes",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_jmp32_jsgt_reg,
-+		.nr_testruns = NR_PATTERN_RUNS,
-+	},
-+	{
-+		"JMP32_JSGE_X: all register value magnitudes",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_jmp32_jsge_reg,
-+		.nr_testruns = NR_PATTERN_RUNS,
-+	},
-+	{
-+		"JMP32_JSLT_X: all register value magnitudes",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_jmp32_jslt_reg,
-+		.nr_testruns = NR_PATTERN_RUNS,
-+	},
-+	{
-+		"JMP32_JSLE_X: all register value magnitudes",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_jmp32_jsle_reg,
-+		.nr_testruns = NR_PATTERN_RUNS,
-+	},
- };
+ enum {
+ 	CLASSIC  = BIT(6),	/* Old BPF instructions only. */
+@@ -11280,6 +11281,8 @@ static struct bpf_prog *generate_filter(int which, int *err)
+ 		fp->type = BPF_PROG_TYPE_SOCKET_FILTER;
+ 		memcpy(fp->insnsi, fptr, fp->len * sizeof(struct bpf_insn));
+ 		fp->aux->stack_depth = tests[which].stack_depth;
++		fp->aux->verifier_zext = !!(tests[which].aux &
++					    FLAG_VERIFIER_ZEXT);
  
- static struct net_device dev;
+ 		/* We cannot error here as we don't need type compatibility
+ 		 * checks.
 -- 
 2.30.2
 
