@@ -2,100 +2,269 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BE79AC433EF
-	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 12:16:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2859DC433FE
+	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 12:16:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A9809610E9
-	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 12:16:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 16739611AF
+	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 12:16:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350392AbhIIMSA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1350458AbhIIMSA (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Thu, 9 Sep 2021 08:18:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52712 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1350883AbhIIMOO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 9 Sep 2021 08:14:14 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8A4C961A54;
-        Thu,  9 Sep 2021 11:49:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631188151;
-        bh=35mbzRvU6JfJ7yvh2CXrenvC6BWUwLp9YJcEV3nMwhw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=e53XPLNa4zM/0aIsg7RalaLPEUTJnn78SQ1L4uWeL6Y+kaGNtSjUkQPv6GLYaJ/Vt
-         ySuPu9XW0H2q4HP0nPhgq8/XF1NkipIt6HUXuK0mCjTcLffBKnv31O5FagyDQDX92c
-         iT61BM2xRHt2SJz0Gp2gkp0JdGgguycOEFQNNaPJeFESk+DjRE/YkgG0lgnq9dFFaA
-         MWPc9BwB1WEaPZpMZNrN4Fp3AUlq+u6IT+n4Z6xA+/cvrZgAGIKP6Ii3K6TFflnz/Y
-         fn3uz4YFfX1y7vwRlm7fiYoFxqSptDrINip0eqBFLzgrSPatYM4Ec9xNvZo/9OKjj6
-         SBk6jO/YnEE4w==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jussi Maki <joamaki@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.13 120/219] selftests/bpf: Fix xdp_tx.c prog section name
-Date:   Thu,  9 Sep 2021 07:44:56 -0400
-Message-Id: <20210909114635.143983-120-sashal@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210909114635.143983-1-sashal@kernel.org>
-References: <20210909114635.143983-1-sashal@kernel.org>
+Received: from www62.your-server.de ([213.133.104.62]:42144 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352293AbhIIMOx (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 9 Sep 2021 08:14:53 -0400
+Received: from 65.47.5.85.dynamic.wline.res.cust.swisscom.ch ([85.5.47.65] helo=localhost)
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1mOIvy-0007Ge-4o; Thu, 09 Sep 2021 14:13:38 +0200
+From:   Daniel Borkmann <daniel@iogearbox.net>
+To:     bpf@vger.kernel.org
+Cc:     netdev@vger.kernel.org, tj@kernel.org, davem@davemloft.net,
+        m@lambda.lt, alexei.starovoitov@gmail.com, andrii@kernel.org,
+        Daniel Borkmann <daniel@iogearbox.net>
+Subject: [PATCH bpf 3/3] bpf, selftests: Add test case for mixed cgroup v1/v2
+Date:   Thu,  9 Sep 2021 14:13:27 +0200
+Message-Id: <927d7018430735bf32eda96e66e3ad32ab7636d3.1631189197.git.daniel@iogearbox.net>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <1e9ee1059ddb0ad7cd2c5f9eeaa26606f9d5fbbf.1631189197.git.daniel@iogearbox.net>
+References: <1e9ee1059ddb0ad7cd2c5f9eeaa26606f9d5fbbf.1631189197.git.daniel@iogearbox.net>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.2/26289/Thu Sep  9 10:20:35 2021)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Jussi Maki <joamaki@gmail.com>
+Minimal selftest which implements a small BPF policy program to the
+connect(2) hook which rejects TCP connection requests to port 60123
+with EPERM. This is being attached to a non-root cgroup v2 path. The
+test asserts that this works under cgroup v2-only and under a mixed
+cgroup v1/v2 environment where net_classid is set in the former case.
 
-[ Upstream commit 95413846cca37f20000dd095cf6d91f8777129d7 ]
+Before fix:
 
-The program type cannot be deduced from 'tx' which causes an invalid
-argument error when trying to load xdp_tx.o using the skeleton.
-Rename the section name to "xdp" so that libbpf can deduce the type.
+  # ./test_progs -t cgroup_v1v2
+  test_cgroup_v1v2:PASS:server_fd 0 nsec
+  test_cgroup_v1v2:PASS:client_fd 0 nsec
+  test_cgroup_v1v2:PASS:cgroup_fd 0 nsec
+  test_cgroup_v1v2:PASS:server_fd 0 nsec
+  run_test:PASS:skel_open 0 nsec
+  run_test:PASS:prog_attach 0 nsec
+  test_cgroup_v1v2:PASS:cgroup-v2-only 0 nsec
+  run_test:PASS:skel_open 0 nsec
+  run_test:PASS:prog_attach 0 nsec
+  run_test:PASS:join_classid 0 nsec
+  (network_helpers.c:219: errno: None) Unexpected success to connect to server
+  test_cgroup_v1v2:FAIL:cgroup-v1v2 unexpected error: -1 (errno 0)
+  #27 cgroup_v1v2:FAIL
+  Summary: 0/0 PASSED, 0 SKIPPED, 1 FAILED
 
-Signed-off-by: Jussi Maki <joamaki@gmail.com>
+After fix:
+
+  # ./test_progs -t cgroup_v1v2
+  #27 cgroup_v1v2:OK
+  Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
-Link: https://lore.kernel.org/bpf/20210731055738.16820-7-joamaki@gmail.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/progs/xdp_tx.c   | 2 +-
- tools/testing/selftests/bpf/test_xdp_veth.sh | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/bpf/network_helpers.c | 27 +++++--
+ tools/testing/selftests/bpf/network_helpers.h |  1 +
+ .../selftests/bpf/prog_tests/cgroup_v1v2.c    | 79 +++++++++++++++++++
+ .../selftests/bpf/progs/connect4_dropper.c    | 26 ++++++
+ 4 files changed, 127 insertions(+), 6 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_v1v2.c
+ create mode 100644 tools/testing/selftests/bpf/progs/connect4_dropper.c
 
-diff --git a/tools/testing/selftests/bpf/progs/xdp_tx.c b/tools/testing/selftests/bpf/progs/xdp_tx.c
-index 94e6c2b281cb..5f725c720e00 100644
---- a/tools/testing/selftests/bpf/progs/xdp_tx.c
-+++ b/tools/testing/selftests/bpf/progs/xdp_tx.c
-@@ -3,7 +3,7 @@
- #include <linux/bpf.h>
- #include <bpf/bpf_helpers.h>
+diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
+index 7e9f6375757a..6db1af8fdee7 100644
+--- a/tools/testing/selftests/bpf/network_helpers.c
++++ b/tools/testing/selftests/bpf/network_helpers.c
+@@ -208,11 +208,26 @@ int fastopen_connect(int server_fd, const char *data, unsigned int data_len,
  
--SEC("tx")
-+SEC("xdp")
- int xdp_tx(struct xdp_md *xdp)
+ static int connect_fd_to_addr(int fd,
+ 			      const struct sockaddr_storage *addr,
+-			      socklen_t addrlen)
++			      socklen_t addrlen, const bool must_fail)
  {
- 	return XDP_TX;
-diff --git a/tools/testing/selftests/bpf/test_xdp_veth.sh b/tools/testing/selftests/bpf/test_xdp_veth.sh
-index ba8ffcdaac30..995278e684b6 100755
---- a/tools/testing/selftests/bpf/test_xdp_veth.sh
-+++ b/tools/testing/selftests/bpf/test_xdp_veth.sh
-@@ -108,7 +108,7 @@ ip link set dev veth2 xdp pinned $BPF_DIR/progs/redirect_map_1
- ip link set dev veth3 xdp pinned $BPF_DIR/progs/redirect_map_2
+-	if (connect(fd, (const struct sockaddr *)addr, addrlen)) {
+-		log_err("Failed to connect to server");
+-		return -1;
++	int ret;
++
++	errno = 0;
++	ret = connect(fd, (const struct sockaddr *)addr, addrlen);
++	if (must_fail) {
++		if (!ret) {
++			log_err("Unexpected success to connect to server");
++			return -1;
++		}
++		if (errno != EPERM) {
++			log_err("Unexpected error from connect to server");
++			return -1;
++		}
++	} else {
++		if (ret) {
++			log_err("Failed to connect to server");
++			return -1;
++		}
+ 	}
  
- ip -n ns1 link set dev veth11 xdp obj xdp_dummy.o sec xdp_dummy
--ip -n ns2 link set dev veth22 xdp obj xdp_tx.o sec tx
-+ip -n ns2 link set dev veth22 xdp obj xdp_tx.o sec xdp
- ip -n ns3 link set dev veth33 xdp obj xdp_dummy.o sec xdp_dummy
+ 	return 0;
+@@ -257,7 +272,7 @@ int connect_to_fd_opts(int server_fd, const struct network_helper_opts *opts)
+ 		       strlen(opts->cc) + 1))
+ 		goto error_close;
  
- trap cleanup EXIT
+-	if (connect_fd_to_addr(fd, &addr, addrlen))
++	if (connect_fd_to_addr(fd, &addr, addrlen, opts->must_fail))
+ 		goto error_close;
+ 
+ 	return fd;
+@@ -289,7 +304,7 @@ int connect_fd_to_fd(int client_fd, int server_fd, int timeout_ms)
+ 		return -1;
+ 	}
+ 
+-	if (connect_fd_to_addr(client_fd, &addr, len))
++	if (connect_fd_to_addr(client_fd, &addr, len, false))
+ 		return -1;
+ 
+ 	return 0;
+diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
+index da7e132657d5..d198181a5648 100644
+--- a/tools/testing/selftests/bpf/network_helpers.h
++++ b/tools/testing/selftests/bpf/network_helpers.h
+@@ -20,6 +20,7 @@ typedef __u16 __sum16;
+ struct network_helper_opts {
+ 	const char *cc;
+ 	int timeout_ms;
++	bool must_fail;
+ };
+ 
+ /* ipv4 test vector */
+diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_v1v2.c b/tools/testing/selftests/bpf/prog_tests/cgroup_v1v2.c
+new file mode 100644
+index 000000000000..ab3b9bc5e6d1
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/cgroup_v1v2.c
+@@ -0,0 +1,79 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <test_progs.h>
++
++#include "connect4_dropper.skel.h"
++
++#include "cgroup_helpers.h"
++#include "network_helpers.h"
++
++static int run_test(int cgroup_fd, int server_fd, bool classid)
++{
++	struct network_helper_opts opts = {
++		.must_fail = true,
++	};
++	struct connect4_dropper *skel;
++	int fd, err = 0;
++
++	skel = connect4_dropper__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel_open"))
++		return -1;
++
++	skel->links.connect_v4_dropper =
++		bpf_program__attach_cgroup(skel->progs.connect_v4_dropper,
++					   cgroup_fd);
++	if (!ASSERT_OK_PTR(skel->links.connect_v4_dropper, "prog_attach")) {
++		err = -1;
++		goto out;
++	}
++
++	if (classid && !ASSERT_OK(join_classid(), "join_classid")) {
++		err = -1;
++		goto out;
++	}
++
++	fd = connect_to_fd_opts(server_fd, &opts);
++	if (fd < 0)
++		err = -1;
++	else
++		close(fd);
++out:
++	connect4_dropper__destroy(skel);
++	return err;
++}
++
++void test_cgroup_v1v2(void)
++{
++	struct network_helper_opts opts = {};
++	int server_fd, client_fd, cgroup_fd;
++	static const int port = 60123;
++
++	/* Step 1: Check base connectivity works without any BPF. */
++	server_fd = start_server(AF_INET, SOCK_STREAM, NULL, port, 0);
++	if (!ASSERT_GE(server_fd, 0, "server_fd"))
++		return;
++	client_fd = connect_to_fd_opts(server_fd, &opts);
++	if (!ASSERT_GE(client_fd, 0, "client_fd")) {
++		close(server_fd);
++		return;
++	}
++	close(client_fd);
++	close(server_fd);
++
++	/* Step 2: Check BPF policy prog attached to cgroups drops connectivity. */
++	cgroup_fd = test__join_cgroup("/connect_dropper");
++	if (!ASSERT_GE(cgroup_fd, 0, "cgroup_fd"))
++		return;
++	server_fd = start_server(AF_INET, SOCK_STREAM, NULL, port, 0);
++	if (!ASSERT_GE(server_fd, 0, "server_fd")) {
++		close(cgroup_fd);
++		return;
++	}
++	ASSERT_OK(run_test(cgroup_fd, server_fd, false), "cgroup-v2-only");
++	setup_classid_environment();
++	set_classid(42);
++	ASSERT_OK(run_test(cgroup_fd, server_fd, true), "cgroup-v1v2");
++	cleanup_classid_environment();
++	close(server_fd);
++	close(cgroup_fd);
++}
+diff --git a/tools/testing/selftests/bpf/progs/connect4_dropper.c b/tools/testing/selftests/bpf/progs/connect4_dropper.c
+new file mode 100644
+index 000000000000..b565d997810a
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/connect4_dropper.c
+@@ -0,0 +1,26 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <string.h>
++
++#include <linux/stddef.h>
++#include <linux/bpf.h>
++
++#include <sys/socket.h>
++
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_endian.h>
++
++#define VERDICT_REJECT	0
++#define VERDICT_PROCEED	1
++
++SEC("cgroup/connect4")
++int connect_v4_dropper(struct bpf_sock_addr *ctx)
++{
++	if (ctx->type != SOCK_STREAM)
++		return VERDICT_PROCEED;
++	if (ctx->user_port == bpf_htons(60123))
++		return VERDICT_REJECT;
++	return VERDICT_PROCEED;
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
-2.30.2
+2.21.0
 
