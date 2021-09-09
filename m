@@ -2,85 +2,117 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93606C433EF
-	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 13:41:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C8AF3C433F5
+	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 13:52:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7C72761207
-	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 13:41:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ACEB361074
+	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 13:52:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353815AbhIINmM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 9 Sep 2021 09:42:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58618 "EHLO mail.kernel.org"
+        id S1354206AbhIINxQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 9 Sep 2021 09:53:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38060 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1356614AbhIIMzd (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 9 Sep 2021 08:55:33 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 49BED613D2;
-        Thu,  9 Sep 2021 11:58:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631188690;
-        bh=BZvm1toZ3Z9QlyIH9RMnJNT1diE06Fi3/45GUdOHi9k=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Xk0/nyqvCn1QfSLE8Woty1BbZfxXsFBnQaNYiTiTyf6VMVMhhrILhoIoZvU2Xu5OK
-         7qxIZgBiDwdHgJhu5laH+WjDAr49RPh0Aa31qFmW7pdoUbcUjeZ4+aDbxwexPDPIsM
-         QPJxFSsxJIAMvvn2JKSMjO/leeUA0av30TFEDtyJFMbw2TgmNmC9RH9Re1mCy7gHKL
-         /deKQX46l3pqElg78JoTCIFGd73WbvLSWbwsP1ee9OmuQAnD95jDy67KX9YC/XQlTU
-         1aiuJve5npcTtEFYDgp/DPGAKuMHsUG07kPpSBaRIyjuCOmfYcQ8GTg9SujxofB6aR
-         EtFeswrivXhnQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Johan Almbladh <johan.almbladh@anyfinetworks.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Yonghong Song <yhs@fb.com>, Sasha Levin <sashal@kernel.org>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 35/74] bpf: Fix off-by-one in tail call count limiting
-Date:   Thu,  9 Sep 2021 07:56:47 -0400
-Message-Id: <20210909115726.149004-35-sashal@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210909115726.149004-1-sashal@kernel.org>
-References: <20210909115726.149004-1-sashal@kernel.org>
+        id S238647AbhIINwN (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 9 Sep 2021 09:52:13 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C66B460041;
+        Thu,  9 Sep 2021 13:51:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1631195463;
+        bh=9nVW5b9CIZO8paiwj2IcNBcJlmc8azfXpVGaorx2PoM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=0CRAFxiZS4HATnPqHRQ5opfDmDlB+Dfo989YpBV2bc+BAk91QDpOyEA7mJViyEfFt
+         uymiKP/rVMkYOAQesVKHWRqffJbnGMAtNYbvqo6pJLA/NkuAhbCGNBuAGj9+ThYXe7
+         4mXgoU/5ftg5CrUHR7D3+mdcd1d8IffjeUw2qBKE=
+Date:   Thu, 9 Sep 2021 15:51:00 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Anton Vorontsov <anton@enomsg.org>,
+        Colin Cross <ccross@android.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        Tony Luck <tony.luck@intel.com>, Yonghong Song <yhs@fb.com>,
+        bpf@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH 0/9] get_abi.pl: Check for missing symbols at the ABI
+ specs
+Message-ID: <YToRRMhYfdnzFyMB@kroah.com>
+References: <cover.1631112725.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1631112725.git.mchehab+huawei@kernel.org>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Johan Almbladh <johan.almbladh@anyfinetworks.com>
+On Wed, Sep 08, 2021 at 04:58:47PM +0200, Mauro Carvalho Chehab wrote:
+> Hi Greg,
+> 
+> Sometime ago, I discussed with Jonathan Cameron about providing 
+> a way check that the ABI documentation is incomplete.
+> 
+> While it would be doable to validate the ABI by searching __ATTR and 
+> similar macros around the driver, this would probably be very complex
+> and would take a while to parse.
+> 
+> So, I ended by implementing a new feature at scripts/get_abi.pl
+> which does a check on the sysfs contents of a running system:
+> it reads everything under /sys and reads the entire ABI from
+> Documentation/ABI. It then warns for symbols that weren't found,
+> optionally showing possible candidates that might be misdefined.
+> 
+> I opted to place it on 3 patches:
+> 
+> The first patch adds the basic logic. It runs really quicky (up to 2
+> seconds), but it doesn't use sysfs softlinks.
+> 
+> Patch 2 adds support for also parsing softlinks. It slows the logic,
+> with now takes ~40 seconds to run on my desktop (and ~23
+> seconds on a HiKey970 ARM board). There are space there for
+> performance improvements, by using a more sophisticated
+> algorithm, at the expense of making the code harder to
+> understand. I ended opting to use a simple implementation
+> for now, as ~40 seconds sounds acceptable on my eyes.
+> 
+> Patch 3 adds an optional parameter to allow filtering the results
+> using a regex given by the user.
+> 
+> One of the problems with the current ABI definitions is that several
+> symbols define wildcards, on non-standard ways. The more commonly
+> wildcards used there are:
+> 
+> 	<foo>
+> 	{foo}
+> 	[foo]
+> 	X
+> 	Y
+> 	Z
+> 	/.../
+> 
+> The script converts the above wildcards into (somewhat relaxed)
+> regexes.
+> 
+> There's one place using  "(some description)". This one is harder to
+> parse, as parenthesis are used by the parsing regexes. As this happens
+> only on one file, patch 4 addresses such case.
+> 
+> Patch 5 to 9 fix some other ABI troubles I identified.
+> 
+> In long term, perhaps the better would be to just use regex on What:
+> fields, as this would avoid extra heuristics at get_abi.pl, but this is
+> OOT from this patch, and would mean a large number of changes.
 
-[ Upstream commit b61a28cf11d61f512172e673b8f8c4a6c789b425 ]
+This is cool stuff, thanks for doing this!
 
-Before, the interpreter allowed up to MAX_TAIL_CALL_CNT + 1 tail calls.
-Now precisely MAX_TAIL_CALL_CNT is allowed, which is in line with the
-behavior of the x86 JITs.
+I'll look at it more once 5.15-rc1 is out, thanks.
 
-Signed-off-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Acked-by: Yonghong Song <yhs@fb.com>
-Link: https://lore.kernel.org/bpf/20210728164741.350370-1-johan.almbladh@anyfinetworks.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- kernel/bpf/core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index d2b6d2459aad..b4a35c11bc92 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -1198,7 +1198,7 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn, u64 *stack)
- 
- 		if (unlikely(index >= array->map.max_entries))
- 			goto out;
--		if (unlikely(tail_call_cnt > MAX_TAIL_CALL_CNT))
-+		if (unlikely(tail_call_cnt >= MAX_TAIL_CALL_CNT))
- 			goto out;
- 
- 		tail_call_cnt++;
--- 
-2.30.2
-
+greg k-h
