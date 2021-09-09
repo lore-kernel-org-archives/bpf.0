@@ -7,42 +7,42 @@ X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CE44C433F5
-	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 13:22:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E27BEC43217
+	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 13:22:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3B6BF60F6C
-	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 13:22:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CC90761026
+	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 13:22:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357019AbhIINXL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 9 Sep 2021 09:23:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56232 "EHLO mail.kernel.org"
+        id S1357034AbhIINXM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 9 Sep 2021 09:23:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35418 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1358648AbhIINJN (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 9 Sep 2021 09:09:13 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 69A20632C0;
-        Thu,  9 Sep 2021 12:00:51 +0000 (UTC)
+        id S1358507AbhIINLR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 9 Sep 2021 09:11:17 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E53586139D;
+        Thu,  9 Sep 2021 12:01:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631188852;
-        bh=HXg2EAsfswgdaMEqXNZyPHVaUwaK6K60ROOA+Oof4n4=;
+        s=k20201202; t=1631188891;
+        bh=dzAigAepBsLS1JtEPhZgzE3+YL6NfLUinqhExcTXxbQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S00XlqBLggCjw8ObQQUCfsO0AotaXVAdb0TJiDBLykqdc7UfED0CufLCCVbnr9me+
-         eFbpHbGwmqtMRdAnrho52IwASLKam2VjN9iKTiXGvopA270ZvAYiJRQTk82vZ70Pmy
-         nQzfq5Yd/1ZG9tNlm4NPui4ZxxNW5iRLfW7v2UVPSG/9X71OCfojT7I9aXO7Jx4ADk
-         6e3k5G3amfNAHKfJbw8Hq7LS0gi8jTCdxoYOUHHL2ojYHaOmG/82IcJweTiP3xLjU2
-         /bXkZFfkGSSQ02Dws+wGKtbOpwfFRCuPFb7Z1iL+FQ3wpuYGnowV6CKq2q2XB7AOlY
-         1rE94ZZRfJ2zA==
+        b=qPjF9ttSd+FkUdanIZyvgUM4eRFR+lODWk2ffMf6XVkbxFZScqsmNl/xxsSQn2WMk
+         vuP1XzXU3MCKYfGsnW+URbzOprtutNZsjcVSPODuktSgRxwCLKmnNlGfSISWEnMC1u
+         AhPFWC3HQHDPhbWED8bYqmv2IWPvyyiF8a1QxVoD6du9ADi8PcUhazfyBbBSJUpt6E
+         0eSLKgYf3mOPuff4sbDLkoDdNQzYgwLHckHdOHCP4FsYQxti9s1EwpnpeY+6359uoK
+         CeWNNFcNV2T98u9AIA51aYtFTnXgvlvEzQeqFxyfh2gM2Z610jI7slCFGoF+/ON2lF
+         wriPaoFIp9Flw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Johan Almbladh <johan.almbladh@anyfinetworks.com>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Yonghong Song <yhs@fb.com>, Sasha Levin <sashal@kernel.org>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 29/48] bpf: Fix off-by-one in tail call count limiting
-Date:   Thu,  9 Sep 2021 07:59:56 -0400
-Message-Id: <20210909120015.150411-29-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.4 11/35] bpf/tests: Do not PASS tests without actually testing the result
+Date:   Thu,  9 Sep 2021 08:00:52 -0400
+Message-Id: <20210909120116.150912-11-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210909120015.150411-1-sashal@kernel.org>
-References: <20210909120015.150411-1-sashal@kernel.org>
+In-Reply-To: <20210909120116.150912-1-sashal@kernel.org>
+References: <20210909120116.150912-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -53,34 +53,51 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Johan Almbladh <johan.almbladh@anyfinetworks.com>
 
-[ Upstream commit b61a28cf11d61f512172e673b8f8c4a6c789b425 ]
+[ Upstream commit 2b7e9f25e590726cca76700ebdb10e92a7a72ca1 ]
 
-Before, the interpreter allowed up to MAX_TAIL_CALL_CNT + 1 tail calls.
-Now precisely MAX_TAIL_CALL_CNT is allowed, which is in line with the
-behavior of the x86 JITs.
+Each test case can have a set of sub-tests, where each sub-test can
+run the cBPF/eBPF test snippet with its own data_size and expected
+result. Before, the end of the sub-test array was indicated by both
+data_size and result being zero. However, most or all of the internal
+eBPF tests has a data_size of zero already. When such a test also had
+an expected value of zero, the test was never run but reported as
+PASS anyway.
+
+Now the test runner always runs the first sub-test, regardless of the
+data_size and result values. The sub-test array zero-termination only
+applies for any additional sub-tests.
+
+There are other ways fix it of course, but this solution at least
+removes the surprise of eBPF tests with a zero result always succeeding.
 
 Signed-off-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Acked-by: Yonghong Song <yhs@fb.com>
-Link: https://lore.kernel.org/bpf/20210728164741.350370-1-johan.almbladh@anyfinetworks.com
+Link: https://lore.kernel.org/bpf/20210721103822.3755111-1-johan.almbladh@anyfinetworks.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/bpf/core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ lib/test_bpf.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index df2ebce927ec..3e1d03512a4f 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -774,7 +774,7 @@ static unsigned int __bpf_prog_run(void *ctx, const struct bpf_insn *insn)
+diff --git a/lib/test_bpf.c b/lib/test_bpf.c
+index 7db8d06006d8..cf2880d2ce3f 100644
+--- a/lib/test_bpf.c
++++ b/lib/test_bpf.c
+@@ -5399,7 +5399,14 @@ static int run_one(const struct bpf_prog *fp, struct bpf_test *test)
+ 		u64 duration;
+ 		u32 ret;
  
- 		if (unlikely(index >= array->map.max_entries))
- 			goto out;
--		if (unlikely(tail_call_cnt > MAX_TAIL_CALL_CNT))
-+		if (unlikely(tail_call_cnt >= MAX_TAIL_CALL_CNT))
- 			goto out;
+-		if (test->test[i].data_size == 0 &&
++		/*
++		 * NOTE: Several sub-tests may be present, in which case
++		 * a zero {data_size, result} tuple indicates the end of
++		 * the sub-test array. The first test is always run,
++		 * even if both data_size and result happen to be zero.
++		 */
++		if (i > 0 &&
++		    test->test[i].data_size == 0 &&
+ 		    test->test[i].result == 0)
+ 			break;
  
- 		tail_call_cnt++;
 -- 
 2.30.2
 
