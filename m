@@ -2,179 +2,128 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 48B2BC433EF
-	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 11:52:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B2EAAC433EF
+	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 11:55:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 30A2F61B31
-	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 11:52:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9A3A261C13
+	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 11:55:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243129AbhIILxT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 9 Sep 2021 07:53:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:29299 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240792AbhIILvK (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 9 Sep 2021 07:51:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1631188200;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RKfLJTAdYC2Y9GCkgvCCUXZUeq0mgeJOjy8yY6oupzQ=;
-        b=UW6AKKbbUFLu7KJnjtdZoYnQPfHeJy5+sqEaCNp2H7o78x0cJWRhZBbUYCRtyoEa3U3ZHQ
-        RLb1/+VhJYmVgn1kKrUY5ZsJp3zZ6wUo9j5uvFY6jYD1CmACEaes+1KXCFycSI5BBndIHP
-        Pst+DKVLDlUcvSqNuN+D0Henh64uPTw=
-Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
- [209.85.208.199]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-200-mvnsfEaHNvWlcGnr25GDgg-1; Thu, 09 Sep 2021 07:49:59 -0400
-X-MC-Unique: mvnsfEaHNvWlcGnr25GDgg-1
-Received: by mail-lj1-f199.google.com with SMTP id 192-20020a2e05c90000b02901b91e6a0ebaso627239ljf.13
-        for <bpf@vger.kernel.org>; Thu, 09 Sep 2021 04:49:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:cc:subject:to:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=RKfLJTAdYC2Y9GCkgvCCUXZUeq0mgeJOjy8yY6oupzQ=;
-        b=H7Ia3cQLRWn1AkH7dTKiGQKM3P4a7QHvsACuGPmKdqZZqQtb1dITAHxef/7bMr+EGu
-         vOT6j50cp9A01/wXhjCtgPnFbfTIw2RNdUAqYIRFvxitYPGj1HkN3AuwBp4NDQEG0V4Q
-         MGON2aUFEW3JcaGZ9aDrI9G5uOpo34nL3S7o5Pg4kT72nyzfEW9W0ILabtAkkCkhl9I0
-         jODUISwwjNxVIPKsYbn2R1A5JP0UOaxHvsDHrgLAEnVubvSiL7SQGGHfdthRJq8axsn9
-         Wd9BWwWaD3bxQIwqCK59oQmLK0mwBMT+FkBhRzKfke0ItsdlnujHyNn+pHaOuSA+viHD
-         Sa8g==
-X-Gm-Message-State: AOAM530RvN5da/DiKLWZL6UtNX9jT/dysB64HhyAQfVC/WgLfVEKMZbW
-        shDNHHsNVaNvPAx5WSf29Wxur7BUToGPyVMIrNkur4Hha4AoVtTL+3llrhuApF3Oo0yqwGEUgah
-        xg42Uz/IBRf+D5pa3hRxFe9dMutN0Sfai3tKI+SeYNaOS7JxDoLe+JbWWB3tOTn8=
-X-Received: by 2002:a2e:22c1:: with SMTP id i184mr1949089lji.89.1631188197752;
-        Thu, 09 Sep 2021 04:49:57 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz34yVkVFly2lKRUz3Skw91yuJ8Zn8SuJWptdAhy+rymLtvnXvn9lAbezazF8CfkxsLTbZMFQ==
-X-Received: by 2002:a2e:22c1:: with SMTP id i184mr1949056lji.89.1631188197447;
-        Thu, 09 Sep 2021 04:49:57 -0700 (PDT)
-Received: from [192.168.42.238] (87-59-106-155-cable.dk.customer.tdc.net. [87.59.106.155])
-        by smtp.gmail.com with ESMTPSA id t30sm173712lfg.289.2021.09.09.04.49.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Sep 2021 04:49:56 -0700 (PDT)
-From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
-X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
-Cc:     brouer@redhat.com, ast@kernel.org, daniel@iogearbox.net,
-        hawk@kernel.org, john.fastabend@gmail.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH net 0/2] sfc: fallback for lack of xdp tx queues
-To:     =?UTF-8?B?w43DsWlnbyBIdWd1ZXQ=?= <ihuguet@redhat.com>,
-        ecree.xilinx@gmail.com, habetsm.xilinx@gmail.com,
-        davem@davemloft.net, kuba@kernel.org,
-        Ivan Babrou <ivan@cloudflare.com>,
-        Marek Majkowski <marek@cloudflare.com>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        Toke Hoiland Jorgensen <toke@redhat.com>,
-        Freysteinn Alfredsson <Freysteinn.Alfredsson@kau.se>
-References: <20210909092846.18217-1-ihuguet@redhat.com>
-Message-ID: <d36c51ae-1832-effa-ee5c-fdebdeec5c5c@redhat.com>
-Date:   Thu, 9 Sep 2021 13:49:55 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S242081AbhIIL42 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 9 Sep 2021 07:56:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34238 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S243678AbhIILyW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 9 Sep 2021 07:54:22 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 06D8F6103D;
+        Thu,  9 Sep 2021 11:44:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1631187888;
+        bh=Jh5NE7jztA+6OO7D91sSydLB1UH+UHC6Tmy4Sbywk7U=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=LaYLZAM/DeVf0FYCw8rJjJgxPL4NfLy/U3TfhiI50HKrnKYNcGgvh4TdHm5CI5xzk
+         Px99QriOrD4jNAreDmzOXSATgDfGkb23Ad0qf1tbzI/mkmPkiZEW46xYzOP0kqRX63
+         Kzv6XaQaU/tK2sOat4Weh5B8w3d+8NXQkPg3Z/Vgqj0gA24wHsz1itlual3VKUj3NH
+         Vkvptw2k9GoR0Q/lZUXE4wjECrZboJPUp/vE7/Rwe5ZvJbg8pl0LymwKSvc8Rxjs7p
+         fdXyd412kIyVd/xtraCvGZtXhJbBd879l+ddWh24yaMK1AV7Mo97IOnyA29cgv9q7V
+         yczcJzpkhH75Q==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Yucong Sun <fallentree@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.14 170/252] selftests/bpf: Correctly display subtest skip status
+Date:   Thu,  9 Sep 2021 07:39:44 -0400
+Message-Id: <20210909114106.141462-170-sashal@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210909114106.141462-1-sashal@kernel.org>
+References: <20210909114106.141462-1-sashal@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20210909092846.18217-1-ihuguet@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+From: Yucong Sun <fallentree@fb.com>
 
-Great work Huguet, patches LGTM, I would ACK but they have already been 
-applied:
+[ Upstream commit f667d1d66760fcb27aee6c9964eefde39a464afe ]
 
-Here is the summary with links:
-   - [net,1/2] sfc: fallback for lack of xdp tx queues
-     https://git.kernel.org/netdev/net/c/415446185b93
-   - [net,2/2] sfc: last resort fallback for lack of xdp tx queues
-     https://git.kernel.org/netdev/net/c/6215b608a8c4
+In skip_account(), test->skip_cnt is set to 0 at the end, this makes next print
+statement never display SKIP status for the subtest. This patch moves the
+accounting logic after the print statement, fixing the issue.
 
-Cloudflare (cc) heads-up for these improvements.
+This patch also added SKIP status display for normal tests.
 
-And heads-up to Toke and Frey on patch 2/2, as it creates push-back via 
-TX queue stop/restart logic (see kernel API netif_tx_queue_stopped).
-XDP currently doesn't handle this well, but I hope to see XDP queueing 
-work from your side to improve the situation ;-)
+Signed-off-by: Yucong Sun <fallentree@fb.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Link: https://lore.kernel.org/bpf/20210817044732.3263066-3-fallentree@fb.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/testing/selftests/bpf/test_progs.c | 25 ++++++++++++------------
+ 1 file changed, 13 insertions(+), 12 deletions(-)
 
-
-On 09/09/2021 11.28, Íñigo Huguet wrote:
-> If there are not enough hardware resources to allocate one tx queue per
-> CPU for XDP, XDP_TX and XDP_REDIRECT actions were unavailable, and using
-> them resulted each time with the packet being drop and this message in
-> the logs: XDP TX failed (-22)
-> 
-> These patches implement 2 fallback solutions for 2 different situations
-> that might happen:
-> 1. There are not enough free resources for all the tx queues, but there
->     are some free resources available
-> 2. There are not enough free resources at all for tx queues.
-> 
-> Both solutions are based in sharing tx queues, using __netif_tx_lock for
-> synchronization. In the second case, as there are not XDP TX queues to
-> share, network stack queues are used instead, but since we're taking
-> __netif_tx_lock, concurrent access to the queues is correctly protected.
-> 
-> The solution for this second case might affect performance both of XDP
-> traffic and normal traffice due to lock contention if both are used
-> intensively. That's why I call it a "last resort" fallback: it's not a
-> desirable situation, but at least we have XDP TX working.
-> 
-> Some tests has shown good results and indicate that the non-fallback
-> case is not being damaged by this changes. They are also promising for
-> the fallback cases. This is the test:
-> 1. From another machine, send high amount of packets with pktgen, script
->     samples/pktgen/pktgen_sample04_many_flows.sh
-> 2. In the tested machine, run samples/bpf/xdp_rxq_info with arguments
->     "-a XDP_TX --swapmac" and see the results
-> 3. In the tested machine, run also pktgen_sample04 to create high TX
->     normal traffic, and see how xdp_rxq_info results vary
-> 
-> Note that this test doesn't check the worst situations for the fallback
-> solutions because XDP_TX will only be executed from the same CPUs that
-> are processed by sfc, and not from every CPU in the system, so the
-> performance drop due to the highest locking contention doesn't happen.
-> I'd like to test that, as well, but I don't have access right now to a
-> proper environment.
-> 
-> Test results:
-> 
-> Without doing TX:
-> Before changes: ~2,900,000 pps
-> After changes, 1 queues/core: ~2,900,000 pps
-> After changes, 2 queues/core: ~2,900,000 pps
-> After changes, 8 queues/core: ~2,900,000 pps
-> After changes, borrowing from network stack: ~2,900,000 pps
-> 
-> With multiflow TX at the same time:
-> Before changes: ~1,700,000 - 2,900,000 pps
-> After changes, 1 queues/core: ~1,700,000 - 2,900,000 pps
-> After changes, 2 queues/core: ~1,700,000 pps
-> After changes, 8 queues/core: ~1,700,000 pps
-> After changes, borrowing from network stack: 1,150,000 pps
-> 
-> Sporadic "XDP TX failed (-5)" warnings are shown when running xdp program
-> and pktgen simultaneously. This was expected because XDP doesn't have any
-> buffering system if the NIC is under very high pressure. Thousands of
-> these warnings are shown in the case of borrowing net stack queues. As I
-> said before, this was also expected.
-> 
-> 
-> Íñigo Huguet (2):
->    sfc: fallback for lack of xdp tx queues
->    sfc: last resort fallback for lack of xdp tx queues
-> 
->   drivers/net/ethernet/sfc/efx_channels.c | 98 ++++++++++++++++++-------
->   drivers/net/ethernet/sfc/net_driver.h   |  8 ++
->   drivers/net/ethernet/sfc/tx.c           | 29 ++++++--
->   3 files changed, 99 insertions(+), 36 deletions(-)
-> 
+diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
+index 6f103106a39b..bfbf2277b61a 100644
+--- a/tools/testing/selftests/bpf/test_progs.c
++++ b/tools/testing/selftests/bpf/test_progs.c
+@@ -148,18 +148,18 @@ void test__end_subtest()
+ 	struct prog_test_def *test = env.test;
+ 	int sub_error_cnt = test->error_cnt - test->old_error_cnt;
+ 
+-	if (sub_error_cnt)
+-		env.fail_cnt++;
+-	else if (test->skip_cnt == 0)
+-		env.sub_succ_cnt++;
+-	skip_account();
+-
+ 	dump_test_log(test, sub_error_cnt);
+ 
+ 	fprintf(env.stdout, "#%d/%d %s:%s\n",
+ 	       test->test_num, test->subtest_num, test->subtest_name,
+ 	       sub_error_cnt ? "FAIL" : (test->skip_cnt ? "SKIP" : "OK"));
+ 
++	if (sub_error_cnt)
++		env.fail_cnt++;
++	else if (test->skip_cnt == 0)
++		env.sub_succ_cnt++;
++	skip_account();
++
+ 	free(test->subtest_name);
+ 	test->subtest_name = NULL;
+ }
+@@ -786,17 +786,18 @@ int main(int argc, char **argv)
+ 			test__end_subtest();
+ 
+ 		test->tested = true;
+-		if (test->error_cnt)
+-			env.fail_cnt++;
+-		else
+-			env.succ_cnt++;
+-		skip_account();
+ 
+ 		dump_test_log(test, test->error_cnt);
+ 
+ 		fprintf(env.stdout, "#%d %s:%s\n",
+ 			test->test_num, test->test_name,
+-			test->error_cnt ? "FAIL" : "OK");
++			test->error_cnt ? "FAIL" : (test->skip_cnt ? "SKIP" : "OK"));
++
++		if (test->error_cnt)
++			env.fail_cnt++;
++		else
++			env.succ_cnt++;
++		skip_account();
+ 
+ 		reset_affinity();
+ 		restore_netns();
+-- 
+2.30.2
 
