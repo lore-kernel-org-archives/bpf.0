@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5AD3C433F5
-	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 13:02:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 015B1C433F5
+	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 13:15:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8D58A611B0
-	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 13:02:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D4AA460F93
+	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 13:15:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352567AbhIINDx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 9 Sep 2021 09:03:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43764 "EHLO mail.kernel.org"
+        id S1356178AbhIINOK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 9 Sep 2021 09:14:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46262 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1357166AbhIIM7p (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 9 Sep 2021 08:59:45 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C591B6327C;
-        Thu,  9 Sep 2021 11:59:08 +0000 (UTC)
+        id S1357496AbhIINBD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 9 Sep 2021 09:01:03 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F269C6326E;
+        Thu,  9 Sep 2021 11:59:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631188749;
-        bh=V6ijfqFBdOhmQm49dXWo4Zqqkv+oDbwVPN0UeuYElyY=;
+        s=k20201202; t=1631188761;
+        bh=sD6Zjz4XgFnTkzsdkW1tFoWkAVvIfgF0vNhuksybvbs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ro+AciKr8tk9t2cSw2avhKhmQYyAC3/l3eAUw1C8uzwpQU8DnJTA9djRKDvhVwl3N
-         zND2+nvXA0RRMwfTjgAO54opu6hr/xN2TwRycn7U+hMgZg+uTrr1z/yzpmTSob1fvX
-         CdoxTjt3roUmOTiuxnX/b6GDIjGCFhfHxxU6zLXwSfB/PVTkuzxbyarpW6ra8S9+sS
-         Rbj2e3luP38itzieGGsNVyR6n1K9C3Izc5+mFuffsWPGt+D0EbA9r6nhqyODCcf48/
-         pGvRqfAU8h6aKfmxFdvEY7EONYt9iNz3C8dA5FZcv8r/li8DmOt92rItaEQH86nIXa
-         C5qQ1i0jIP+Yw==
+        b=tPpFxxfD6hgdwsJV/WqZVWVVXeV1K0i3QjyYhkVL67Xj3FVVIH4KmTVw9G/C/ylWI
+         T8Us8E2fob6iZII07yAXSpIGpqoRAFcKkzHbVrrnk0GjwJoSQ87mwcFE7pbnTMU+rB
+         2K6FaPGc5PaOTPahccEO/Gq/GLB2vKoT0myWkdiS5mV91n0bn68O4sFQcX6B41aK1V
+         B5BFRjJPBfVp3J4rXk41NhrFNa4l/HHOLfwU5RXdKiwm6TrINyqXa2KAJd1RUSiUlv
+         wHGsQAWcmwA1HoI3RyMMc+5j3TwsG7JEFjm2WkwFzZ1jN/Cha1Z8gEaFcXQyzBayq7
+         PHVGTHwaYYuBw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Yajun Deng <yajun.deng@linux.dev>, Yonghong Song <yhs@fb.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+Cc:     Johan Almbladh <johan.almbladh@anyfinetworks.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 07/59] netlink: Deal with ESRCH error in nlmsg_notify()
-Date:   Thu,  9 Sep 2021 07:58:08 -0400
-Message-Id: <20210909115900.149795-7-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 16/59] bpf/tests: Do not PASS tests without actually testing the result
+Date:   Thu,  9 Sep 2021 07:58:17 -0400
+Message-Id: <20210909115900.149795-16-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210909115900.149795-1-sashal@kernel.org>
 References: <20210909115900.149795-1-sashal@kernel.org>
@@ -51,66 +51,52 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Yajun Deng <yajun.deng@linux.dev>
+From: Johan Almbladh <johan.almbladh@anyfinetworks.com>
 
-[ Upstream commit fef773fc8110d8124c73a5e6610f89e52814637d ]
+[ Upstream commit 2b7e9f25e590726cca76700ebdb10e92a7a72ca1 ]
 
-Yonghong Song report:
-The bpf selftest tc_bpf failed with latest bpf-next.
-The following is the command to run and the result:
-$ ./test_progs -n 132
-[   40.947571] bpf_testmod: loading out-of-tree module taints kernel.
-test_tc_bpf:PASS:test_tc_bpf__open_and_load 0 nsec
-test_tc_bpf:PASS:bpf_tc_hook_create(BPF_TC_INGRESS) 0 nsec
-test_tc_bpf:PASS:bpf_tc_hook_create invalid hook.attach_point 0 nsec
-test_tc_bpf_basic:PASS:bpf_obj_get_info_by_fd 0 nsec
-test_tc_bpf_basic:PASS:bpf_tc_attach 0 nsec
-test_tc_bpf_basic:PASS:handle set 0 nsec
-test_tc_bpf_basic:PASS:priority set 0 nsec
-test_tc_bpf_basic:PASS:prog_id set 0 nsec
-test_tc_bpf_basic:PASS:bpf_tc_attach replace mode 0 nsec
-test_tc_bpf_basic:PASS:bpf_tc_query 0 nsec
-test_tc_bpf_basic:PASS:handle set 0 nsec
-test_tc_bpf_basic:PASS:priority set 0 nsec
-test_tc_bpf_basic:PASS:prog_id set 0 nsec
-libbpf: Kernel error message: Failed to send filter delete notification
-test_tc_bpf_basic:FAIL:bpf_tc_detach unexpected error: -3 (errno 3)
-test_tc_bpf:FAIL:test_tc_internal ingress unexpected error: -3 (errno 3)
+Each test case can have a set of sub-tests, where each sub-test can
+run the cBPF/eBPF test snippet with its own data_size and expected
+result. Before, the end of the sub-test array was indicated by both
+data_size and result being zero. However, most or all of the internal
+eBPF tests has a data_size of zero already. When such a test also had
+an expected value of zero, the test was never run but reported as
+PASS anyway.
 
-The failure seems due to the commit
-    cfdf0d9ae75b ("rtnetlink: use nlmsg_notify() in rtnetlink_send()")
+Now the test runner always runs the first sub-test, regardless of the
+data_size and result values. The sub-test array zero-termination only
+applies for any additional sub-tests.
 
-Deal with ESRCH error in nlmsg_notify() even the report variable is zero.
+There are other ways fix it of course, but this solution at least
+removes the surprise of eBPF tests with a zero result always succeeding.
 
-Reported-by: Yonghong Song <yhs@fb.com>
-Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
-Link: https://lore.kernel.org/r/20210719051816.11762-1-yajun.deng@linux.dev
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Link: https://lore.kernel.org/bpf/20210721103822.3755111-1-johan.almbladh@anyfinetworks.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netlink/af_netlink.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ lib/test_bpf.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
-index 140bec3568ec..955041c54702 100644
---- a/net/netlink/af_netlink.c
-+++ b/net/netlink/af_netlink.c
-@@ -2476,13 +2476,15 @@ int nlmsg_notify(struct sock *sk, struct sk_buff *skb, u32 portid,
- 		/* errors reported via destination sk->sk_err, but propagate
- 		 * delivery errors if NETLINK_BROADCAST_ERROR flag is set */
- 		err = nlmsg_multicast(sk, skb, exclude_portid, group, flags);
-+		if (err == -ESRCH)
-+			err = 0;
- 	}
+diff --git a/lib/test_bpf.c b/lib/test_bpf.c
+index 4aa88ba8238c..9a8f957ad86e 100644
+--- a/lib/test_bpf.c
++++ b/lib/test_bpf.c
+@@ -6306,7 +6306,14 @@ static int run_one(const struct bpf_prog *fp, struct bpf_test *test)
+ 		u64 duration;
+ 		u32 ret;
  
- 	if (report) {
- 		int err2;
- 
- 		err2 = nlmsg_unicast(sk, skb, portid);
--		if (!err || err == -ESRCH)
-+		if (!err)
- 			err = err2;
- 	}
+-		if (test->test[i].data_size == 0 &&
++		/*
++		 * NOTE: Several sub-tests may be present, in which case
++		 * a zero {data_size, result} tuple indicates the end of
++		 * the sub-test array. The first test is always run,
++		 * even if both data_size and result happen to be zero.
++		 */
++		if (i > 0 &&
++		    test->test[i].data_size == 0 &&
+ 		    test->test[i].result == 0)
+ 			break;
  
 -- 
 2.30.2
