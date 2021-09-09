@@ -5,44 +5,44 @@ X-Spam-Level:
 X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64EFEC433F5
-	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 12:50:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CABDFC4332F
+	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 12:56:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 516A660ED8
-	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 12:50:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B81C560555
+	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 12:56:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354543AbhIIMvK (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 9 Sep 2021 08:51:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55942 "EHLO mail.kernel.org"
+        id S1355223AbhIIM6B (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 9 Sep 2021 08:58:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57774 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1355287AbhIIMpF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 9 Sep 2021 08:45:05 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 21D2B6138B;
-        Thu,  9 Sep 2021 11:55:57 +0000 (UTC)
+        id S1356153AbhIIMxL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 9 Sep 2021 08:53:11 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 437C0611C6;
+        Thu,  9 Sep 2021 11:57:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631188558;
-        bh=9yQVsBKhkMPV/1QFKagHMGFQ/CidzBP1nHpUmOc3MUg=;
+        s=k20201202; t=1631188657;
+        bh=CKGk5DMQB0Ej3NiAMtZARtfrYAtpgmsWv53+pidWk+8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GVj2Mna4kbexd+wr6ZXmRwlAmerFqECdvebzQuRxjMy0r7T4UzmGoc3VYGn8Nu5vf
-         tfu62ctZvsQr6SR3KQGp/Fq0p1KRgHFfYKH8V1Iex6PT3daODppUjN8R2OEUR0FyBC
-         LSzuz8sQeqxR3Rgheq+PDWnUkltD4X1K5wSBXtQtjCI0QW/fJpUkr3XpAvyxizecsa
-         rM9osEGdZ6qhEOV2E60n+T+Xgl32R1gqfML3HspBAplI5zRcg5Rcs7xbdEwV9GP9uA
-         yzaGjonxFNnwzkN501PTjCSM5g2ivs99M7JlIYm/y0eRYcvGioaVuRdMjkOSjh5VjQ
-         zlPkr8irDDzxQ==
+        b=XuvESiycJyVPHZmMx/qkFEIYeZmdLjXI2Jr7yNXK5h0IrcQDhnpFzmkLYCkiWFbZx
+         DBSk1DPC6uYOpnNDf9Rfb162HsKYus7tOphFGJI78kaCTlaZAJdL1ifA2oXzOTJl4M
+         JL519gRBc7WZe0yLa2l1iq9+HWUUVkduAIgiZXHS9KZ7aGz3l2ia0VkzJqbsH4yUdt
+         NbW/lmc8ws1W7lWodWFOXlFV1t3G2+typ9IGFblksqXv2lR1ccouuEG0Ctiq2cFoEv
+         60wetk3QDCls7cuFWkp+QiZ2c/RNsWel1g6Hn+L9P46MZq6rZQgfG5WA4DXC4FLJ4I
+         l3GMBBalv33Zg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Juhee Kang <claudiajkang@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Yonghong Song <yhs@fb.com>, Sasha Levin <sashal@kernel.org>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 040/109] samples: bpf: Fix tracex7 error raised on the missing argument
-Date:   Thu,  9 Sep 2021 07:53:57 -0400
-Message-Id: <20210909115507.147917-40-sashal@kernel.org>
+Cc:     Yajun Deng <yajun.deng@linux.dev>, Yonghong Song <yhs@fb.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 08/74] netlink: Deal with ESRCH error in nlmsg_notify()
+Date:   Thu,  9 Sep 2021 07:56:20 -0400
+Message-Id: <20210909115726.149004-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210909115507.147917-1-sashal@kernel.org>
-References: <20210909115507.147917-1-sashal@kernel.org>
+In-Reply-To: <20210909115726.149004-1-sashal@kernel.org>
+References: <20210909115726.149004-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -51,71 +51,67 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Juhee Kang <claudiajkang@gmail.com>
+From: Yajun Deng <yajun.deng@linux.dev>
 
-[ Upstream commit 7d07006f05922b95518be403f08ef8437b67aa32 ]
+[ Upstream commit fef773fc8110d8124c73a5e6610f89e52814637d ]
 
-The current behavior of 'tracex7' doesn't consist with other bpf samples
-tracex{1..6}. Other samples do not require any argument to run with, but
-tracex7 should be run with btrfs device argument. (it should be executed
-with test_override_return.sh)
+Yonghong Song report:
+The bpf selftest tc_bpf failed with latest bpf-next.
+The following is the command to run and the result:
+$ ./test_progs -n 132
+[   40.947571] bpf_testmod: loading out-of-tree module taints kernel.
+test_tc_bpf:PASS:test_tc_bpf__open_and_load 0 nsec
+test_tc_bpf:PASS:bpf_tc_hook_create(BPF_TC_INGRESS) 0 nsec
+test_tc_bpf:PASS:bpf_tc_hook_create invalid hook.attach_point 0 nsec
+test_tc_bpf_basic:PASS:bpf_obj_get_info_by_fd 0 nsec
+test_tc_bpf_basic:PASS:bpf_tc_attach 0 nsec
+test_tc_bpf_basic:PASS:handle set 0 nsec
+test_tc_bpf_basic:PASS:priority set 0 nsec
+test_tc_bpf_basic:PASS:prog_id set 0 nsec
+test_tc_bpf_basic:PASS:bpf_tc_attach replace mode 0 nsec
+test_tc_bpf_basic:PASS:bpf_tc_query 0 nsec
+test_tc_bpf_basic:PASS:handle set 0 nsec
+test_tc_bpf_basic:PASS:priority set 0 nsec
+test_tc_bpf_basic:PASS:prog_id set 0 nsec
+libbpf: Kernel error message: Failed to send filter delete notification
+test_tc_bpf_basic:FAIL:bpf_tc_detach unexpected error: -3 (errno 3)
+test_tc_bpf:FAIL:test_tc_internal ingress unexpected error: -3 (errno 3)
 
-Currently, tracex7 doesn't have any description about how to run this
-program and raises an unexpected error. And this result might be
-confusing since users might not have a hunch about how to run this
-program.
+The failure seems due to the commit
+    cfdf0d9ae75b ("rtnetlink: use nlmsg_notify() in rtnetlink_send()")
 
-    // Current behavior
-    # ./tracex7
-    sh: 1: Syntax error: word unexpected (expecting ")")
-    // Fixed behavior
-    # ./tracex7
-    ERROR: Run with the btrfs device argument!
+Deal with ESRCH error in nlmsg_notify() even the report variable is zero.
 
-In order to fix this error, this commit adds logic to report a message
-and exit when running this program with a missing argument.
-
-Additionally in test_override_return.sh, there is a problem with
-multiple directory(tmpmnt) creation. So in this commit adds a line with
-removing the directory with every execution.
-
-Signed-off-by: Juhee Kang <claudiajkang@gmail.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Acked-by: Yonghong Song <yhs@fb.com>
-Link: https://lore.kernel.org/bpf/20210727041056.23455-1-claudiajkang@gmail.com
+Reported-by: Yonghong Song <yhs@fb.com>
+Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
+Link: https://lore.kernel.org/r/20210719051816.11762-1-yajun.deng@linux.dev
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- samples/bpf/test_override_return.sh | 1 +
- samples/bpf/tracex7_user.c          | 5 +++++
- 2 files changed, 6 insertions(+)
+ net/netlink/af_netlink.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/samples/bpf/test_override_return.sh b/samples/bpf/test_override_return.sh
-index e68b9ee6814b..35db26f736b9 100755
---- a/samples/bpf/test_override_return.sh
-+++ b/samples/bpf/test_override_return.sh
-@@ -1,5 +1,6 @@
- #!/bin/bash
+diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
+index ac3fe507bc1c..b0fd268ed65e 100644
+--- a/net/netlink/af_netlink.c
++++ b/net/netlink/af_netlink.c
+@@ -2498,13 +2498,15 @@ int nlmsg_notify(struct sock *sk, struct sk_buff *skb, u32 portid,
+ 		/* errors reported via destination sk->sk_err, but propagate
+ 		 * delivery errors if NETLINK_BROADCAST_ERROR flag is set */
+ 		err = nlmsg_multicast(sk, skb, exclude_portid, group, flags);
++		if (err == -ESRCH)
++			err = 0;
+ 	}
  
-+rm -r tmpmnt
- rm -f testfile.img
- dd if=/dev/zero of=testfile.img bs=1M seek=1000 count=1
- DEVICE=$(losetup --show -f testfile.img)
-diff --git a/samples/bpf/tracex7_user.c b/samples/bpf/tracex7_user.c
-index ea6dae78f0df..2ed13e9f3fcb 100644
---- a/samples/bpf/tracex7_user.c
-+++ b/samples/bpf/tracex7_user.c
-@@ -13,6 +13,11 @@ int main(int argc, char **argv)
- 	char command[256];
- 	int ret;
+ 	if (report) {
+ 		int err2;
  
-+	if (!argv[1]) {
-+		fprintf(stderr, "ERROR: Run with the btrfs device argument!\n");
-+		return 0;
-+	}
-+
- 	snprintf(filename, sizeof(filename), "%s_kern.o", argv[0]);
+ 		err2 = nlmsg_unicast(sk, skb, portid);
+-		if (!err || err == -ESRCH)
++		if (!err)
+ 			err = err2;
+ 	}
  
- 	if (load_bpf_file(filename)) {
 -- 
 2.30.2
 
