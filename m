@@ -5,41 +5,44 @@ X-Spam-Level:
 X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 640AEC4332F
-	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 12:56:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7152EC433FE
+	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 13:02:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 537A2604D1
-	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 12:56:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5CDA26115B
+	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 13:02:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355989AbhIIM6F (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 9 Sep 2021 08:58:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58650 "EHLO mail.kernel.org"
+        id S1355168AbhIINDt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 9 Sep 2021 09:03:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59100 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244313AbhIIMxe (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 9 Sep 2021 08:53:34 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 917B863249;
-        Thu,  9 Sep 2021 11:57:48 +0000 (UTC)
+        id S1354775AbhIIM5p (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 9 Sep 2021 08:57:45 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A06FF6326B;
+        Thu,  9 Sep 2021 11:58:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631188669;
-        bh=AJpXbpPOr7yKBsBlNIWWsMTSvBZzIz7cDKjO3sAlSOo=;
+        s=k20201202; t=1631188722;
+        bh=wtYZpUR5UUmcBvfskmay22fPqc54pjkmo3kW35NdeoE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Fo+0K3u7hRewWv9+IVw7NIPWDTUwPkZ8EPefVxnAlvlfRh5qfpk0YUJ7QDoEkxzUy
-         MXER7VEwbJHxLARdhZZ0966lFDzc5qD0jmXQ8A6qYwtpWBHxi3wK0kV655EhsYxFmf
-         j14B27sDyLfjKGypmPUZTbbHHvwayOwJJXdw89UEbMhU1BRF953nqaPSgMor+ZqdJa
-         gGma8Lo2M58Qus11ZzIoZrAMIV0wYzA5Rk8kC0IocvlZy4Yrjx+yuHW3gCO3BuaBAv
-         HADko+IKIqmAMmlpe8b84kll+AVnn+YBlcyWnieWw/PckIiTIyDr6H7I+uMRR51btU
-         WOGi9tWchnnlQ==
+        b=iyuv7Glcz+hA7DDAHfjXod6Q5aaO0Cx8p8o0hfEsgTjCKfKFQIuzlOQpLDhojnr4e
+         mTxcc7FsBTU4xiUmCghZGQqz2d5VvLKPZxgFfAjDhz3MMPaNx3lGCfcB9TAdZ64eGG
+         Rz31opYr2JNNybAQoI65xB+FDRV/f96Nsf70UNt4v5pww39n2uExGW/FEDtr9/1CiS
+         itilsa9G6/rmPjwVHkCgEcQde6khY79Bt47sKURGa8XCEX2nbhZScrWecA08e+TUkP
+         NfDHhhAR3FBCQ6P2si+7Vrp5gPwdZ+0Af5qfqoCAjuITK2/tsTBT/mCZd54TEs4vZh
+         XobCcqAHReZmg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Johan Almbladh <johan.almbladh@anyfinetworks.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+Cc:     Li Zhijian <lizhijian@cn.fujitsu.com>,
+        kernel test robot <lkp@intel.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Song Liu <songliubraving@fb.com>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 18/74] bpf/tests: Do not PASS tests without actually testing the result
-Date:   Thu,  9 Sep 2021 07:56:30 -0400
-Message-Id: <20210909115726.149004-18-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 61/74] selftests/bpf: Enlarge select() timeout for test_maps
+Date:   Thu,  9 Sep 2021 07:57:13 -0400
+Message-Id: <20210909115726.149004-61-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210909115726.149004-1-sashal@kernel.org>
 References: <20210909115726.149004-1-sashal@kernel.org>
@@ -51,53 +54,55 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Johan Almbladh <johan.almbladh@anyfinetworks.com>
+From: Li Zhijian <lizhijian@cn.fujitsu.com>
 
-[ Upstream commit 2b7e9f25e590726cca76700ebdb10e92a7a72ca1 ]
+[ Upstream commit 2d82d73da35b72b53fe0d96350a2b8d929d07e42 ]
 
-Each test case can have a set of sub-tests, where each sub-test can
-run the cBPF/eBPF test snippet with its own data_size and expected
-result. Before, the end of the sub-test array was indicated by both
-data_size and result being zero. However, most or all of the internal
-eBPF tests has a data_size of zero already. When such a test also had
-an expected value of zero, the test was never run but reported as
-PASS anyway.
+0Day robot observed that it's easily timeout on a heavy load host.
+-------------------
+ # selftests: bpf: test_maps
+ # Fork 1024 tasks to 'test_update_delete'
+ # Fork 1024 tasks to 'test_update_delete'
+ # Fork 100 tasks to 'test_hashmap'
+ # Fork 100 tasks to 'test_hashmap_percpu'
+ # Fork 100 tasks to 'test_hashmap_sizes'
+ # Fork 100 tasks to 'test_hashmap_walk'
+ # Fork 100 tasks to 'test_arraymap'
+ # Fork 100 tasks to 'test_arraymap_percpu'
+ # Failed sockmap unexpected timeout
+ not ok 3 selftests: bpf: test_maps # exit=1
+ # selftests: bpf: test_lru_map
+ # nr_cpus:8
+-------------------
+Since this test will be scheduled by 0Day to a random host that could have
+only a few cpus(2-8), enlarge the timeout to avoid a false NG report.
 
-Now the test runner always runs the first sub-test, regardless of the
-data_size and result values. The sub-test array zero-termination only
-applies for any additional sub-tests.
+In practice, i tried to pin it to only one cpu by 'taskset 0x01 ./test_maps',
+and knew 10S is likely enough, but i still perfer to a larger value 30.
 
-There are other ways fix it of course, but this solution at least
-removes the surprise of eBPF tests with a zero result always succeeding.
-
-Signed-off-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Link: https://lore.kernel.org/bpf/20210721103822.3755111-1-johan.almbladh@anyfinetworks.com
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Acked-by: Song Liu <songliubraving@fb.com>
+Link: https://lore.kernel.org/bpf/20210820015556.23276-2-lizhijian@cn.fujitsu.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- lib/test_bpf.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/test_maps.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/lib/test_bpf.c b/lib/test_bpf.c
-index 98074a3bc161..49d79079e8b3 100644
---- a/lib/test_bpf.c
-+++ b/lib/test_bpf.c
-@@ -6687,7 +6687,14 @@ static int run_one(const struct bpf_prog *fp, struct bpf_test *test)
- 		u64 duration;
- 		u32 ret;
+diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/selftests/bpf/test_maps.c
+index 4e202217fae1..87ba89df9802 100644
+--- a/tools/testing/selftests/bpf/test_maps.c
++++ b/tools/testing/selftests/bpf/test_maps.c
+@@ -796,7 +796,7 @@ static void test_sockmap(int tasks, void *data)
  
--		if (test->test[i].data_size == 0 &&
-+		/*
-+		 * NOTE: Several sub-tests may be present, in which case
-+		 * a zero {data_size, result} tuple indicates the end of
-+		 * the sub-test array. The first test is always run,
-+		 * even if both data_size and result happen to be zero.
-+		 */
-+		if (i > 0 &&
-+		    test->test[i].data_size == 0 &&
- 		    test->test[i].result == 0)
- 			break;
- 
+ 		FD_ZERO(&w);
+ 		FD_SET(sfd[3], &w);
+-		to.tv_sec = 1;
++		to.tv_sec = 30;
+ 		to.tv_usec = 0;
+ 		s = select(sfd[3] + 1, &w, NULL, NULL, &to);
+ 		if (s == -1) {
 -- 
 2.30.2
 
