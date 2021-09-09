@@ -2,229 +2,91 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61844C4332F
-	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 14:45:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B92B8C433F5
+	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 14:47:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4BE606120E
-	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 14:45:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A458A61186
+	for <bpf@archiver.kernel.org>; Thu,  9 Sep 2021 14:47:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243931AbhIIOqS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 9 Sep 2021 10:46:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47476 "EHLO
+        id S239419AbhIIOsS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 9 Sep 2021 10:48:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348042AbhIIOqF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 9 Sep 2021 10:46:05 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC42C05BD34
-        for <bpf@vger.kernel.org>; Thu,  9 Sep 2021 07:33:27 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id h9so4038362ejs.4
-        for <bpf@vger.kernel.org>; Thu, 09 Sep 2021 07:33:27 -0700 (PDT)
+        with ESMTP id S239137AbhIIOsJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 9 Sep 2021 10:48:09 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDD28C0698DE;
+        Thu,  9 Sep 2021 07:39:20 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id z4so2908640wrr.6;
+        Thu, 09 Sep 2021 07:39:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=anyfinetworks-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=oagsNrHkckWAjyNMa7DFQkqODS/sdAoBZjxZqIVeja0=;
-        b=Dzz3xdk4vcazJaaj1MscB4wmPgMQtubS2MKKUICGQoVInKRVO+tE5BFRtW1eHfo2pS
-         0kiMAp/7h9PM1cddaoduJgtfJB2TQiKFTf5RYGvciGTmFFROisPaze2BX5H4e1Q+jKpq
-         DKdPRPWJ8A28u0M5oavCxX7vAVVKQuoj0d1U4WXeq/4FuYtOYSvrgTDHi7K4ySbMmgix
-         WzXDP9x7MwWqU6wXUC+fXJ9zcr6y3ExyY6idhmTMGiLSFq0LdtX2Ya9BkCBHcvELpYdN
-         042x3IjYAERjH3OcRFTT66LEQ0egN3RbqCzgClareWKpNmfDg8inMlMARve1x6Y6pASa
-         MmNA==
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Nn30ccIH4JoWD6yLd4SqcwwQB1qB1pHSCA5yIkmN8mQ=;
+        b=fR1EXGC+uJQQ64WeKXfdo3uxWGtDr7y/vk/GRzYs3SYdxIkhM+8f2DoUN7ER/DckyK
+         fvnT7CeJxWFJ8fHx9EU4sPELcZfjZ6o3FSC1/4sq8ZJHV1xUY3QCX2N3XyHNhfWm5muB
+         OIPJwdaC6bFvjMynm7lm4UlqJgUGeZc3XcBYJGKJfLERneQX1l54SxFNtPW6d6Y4Ue5A
+         9K6E+i2btsG8QBgEOcaXJCMDvekIQf2sylYn4BQrfOa1yGRsFHxHxktEXeq22yDSiHlj
+         TwUMPjimUpMOWDVF3cdZ0DpmQxeJ9PKjLKjfFez2WtpQRAC3Udevzfv7ft84mrCNMk46
+         dW3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=oagsNrHkckWAjyNMa7DFQkqODS/sdAoBZjxZqIVeja0=;
-        b=f/5e2WF6MQVJ7PKkjltptbmLag9o9ohEtjS/JLhZgoPyZ6elN/995du7CB3u3j7I1+
-         mh8vab2nYcWW32Ubgg4NNRzdTMoDVCS5VNJAZyNyC2KZI51aIziktmfTp0tzESEYAXjs
-         AKTep49JkTIyCZphz+Pxze8yux5js2AjNS0ndK1VQ+rGB9+45x6Fi0xW2FN6Rdv0Sy3K
-         cpiJpGSCYE6CWMsIZ9FQxWAdjIVbSJo4cAQGJpoLRco7UpWat1PDnY6CmPNTAso3bV2P
-         4N+y4N5XftazOIFqtXX4lo8QDZp5nL7NAgRBwQlXQu6m85ZhQqvKxSJW25v28goX69L9
-         XN7w==
-X-Gm-Message-State: AOAM531qCfQPoP8FTVCshhxfvPeCC8KAkJ6ySEUNG/DTftRpCKFFoHCQ
-        Xyffzw0VD3hsK81epDT1T8h1OD/qrlnh1tcK
-X-Google-Smtp-Source: ABdhPJwNPbJR5mAe6/xGjqWWD0oVpyx94yvVvHjyimKi3vi/xr97vw+Rh48ubnVp7RPSKPOxyibUDA==
-X-Received: by 2002:a17:907:7601:: with SMTP id jx1mr3673597ejc.69.1631198006135;
-        Thu, 09 Sep 2021 07:33:26 -0700 (PDT)
-Received: from anpc2.lan (static-213-115-136-2.sme.telenor.se. [213.115.136.2])
-        by smtp.gmail.com with ESMTPSA id bj10sm1030909ejb.17.2021.09.09.07.33.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Sep 2021 07:33:25 -0700 (PDT)
-From:   Johan Almbladh <johan.almbladh@anyfinetworks.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
-Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, iii@linux.ibm.com,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Subject: [PATCH bpf-next v3 12/13] bpf/tests: Add more BPF_END byte order conversion tests
-Date:   Thu,  9 Sep 2021 16:33:02 +0200
-Message-Id: <20210909143303.811171-13-johan.almbladh@anyfinetworks.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210909143303.811171-1-johan.almbladh@anyfinetworks.com>
-References: <20210909143303.811171-1-johan.almbladh@anyfinetworks.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Nn30ccIH4JoWD6yLd4SqcwwQB1qB1pHSCA5yIkmN8mQ=;
+        b=AZOWlVIUfihLI837B3qRhD0zUV7bk4pCa14+GkKeJqvkJs4W8fHWsjey7ZiZuPpl7i
+         2khQ9vtpoALz+9335MD2exvVvNLr888+JJGQSrjK+LutjteoxXxdORD5B9xmqGEmixW5
+         EhkbddNEgB3Xro/5tIwYKYgS73dz6gahMf30HI5k/JiL/KP2a4waQ8saI9A2TZMJI3Lm
+         SdjQDquTRNJB01/EJ/C7FCs5iTRUUk9zXxNDNtgMUkpmksGz+7m85dYBj4wIOqgPazz7
+         MY5M7WJpTGeIJxoGI7LQDIverTKOCxuq/byj+M3CXGyIoj/B7y2HJ0DYGbrO/E/Yq7kd
+         byWg==
+X-Gm-Message-State: AOAM532nWQj2XL0xbGvbqPhLlTbcKSFZOia3TWSmd4JfLbj3XPKj+q1J
+        gDIiXR8wSMQLWblL+sBsDtw4Qe3XAmKPAw==
+X-Google-Smtp-Source: ABdhPJwrxlwFsCmqwVWSXKZgDNYjJYVLduuehkklCjsdf37obwJjiX6yDFHueOSCYQQ/Q8IoMhNsmA==
+X-Received: by 2002:a5d:4488:: with SMTP id j8mr4044189wrq.260.1631198359342;
+        Thu, 09 Sep 2021 07:39:19 -0700 (PDT)
+Received: from [80.5.213.92] (cpc108963-cmbg20-2-0-cust347.5-4.cable.virginm.net. [80.5.213.92])
+        by smtp.gmail.com with ESMTPSA id n4sm1724249wme.31.2021.09.09.07.39.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Sep 2021 07:39:18 -0700 (PDT)
+Subject: Re: [PATCH net 0/2] sfc: fallback for lack of xdp tx queues
+To:     =?UTF-8?B?w43DsWlnbyBIdWd1ZXQ=?= <ihuguet@redhat.com>,
+        habetsm.xilinx@gmail.com, davem@davemloft.net, kuba@kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+        john.fastabend@gmail.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+References: <20210909092846.18217-1-ihuguet@redhat.com>
+From:   Edward Cree <ecree.xilinx@gmail.com>
+Message-ID: <5233eedf-42a7-f938-67cd-e7acc5f3bbce@gmail.com>
+Date:   Thu, 9 Sep 2021 15:39:17 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
+In-Reply-To: <20210909092846.18217-1-ihuguet@redhat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch adds tests of the high 32 bits of 64-bit BPF_END conversions.
+On 09/09/2021 10:28, Íñigo Huguet wrote:
+> Íñigo Huguet (2):
+>   sfc: fallback for lack of xdp tx queues
+>   sfc: last resort fallback for lack of xdp tx queues
+Patches LGTM, thanks for working on this.
 
-It also adds a mirrored set of tests where the source bytes are reversed.
-The MSB of each byte is now set on the high word instead, possibly
-affecting sign-extension during conversion in a different way. Mainly
-for JIT testing.
+However, I would like to grumble a bit about process: firstly I would
+ have thought this was more net-next than net material.
+Secondly and more importantly, I would really have liked to have had
+ more than 72 minutes to review this before it was applied.  Dave, I
+ realise you never sleep, but the rest of us occasionally have to :P
 
-Signed-off-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
----
- lib/test_bpf.c | 122 +++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 122 insertions(+)
-
-diff --git a/lib/test_bpf.c b/lib/test_bpf.c
-index a515f9b670c9..7475abfd2186 100644
---- a/lib/test_bpf.c
-+++ b/lib/test_bpf.c
-@@ -6748,6 +6748,67 @@ static struct bpf_test tests[] = {
- 		{ },
- 		{ { 0, (u32) cpu_to_be64(0x0123456789abcdefLL) } },
- 	},
-+	{
-+		"ALU_END_FROM_BE 64: 0x0123456789abcdef >> 32 -> 0x01234567",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x0123456789abcdefLL),
-+			BPF_ENDIAN(BPF_FROM_BE, R0, 64),
-+			BPF_ALU64_IMM(BPF_RSH, R0, 32),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, (u32) (cpu_to_be64(0x0123456789abcdefLL) >> 32) } },
-+	},
-+	/* BPF_ALU | BPF_END | BPF_FROM_BE, reversed */
-+	{
-+		"ALU_END_FROM_BE 16: 0xfedcba9876543210 -> 0x3210",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0xfedcba9876543210ULL),
-+			BPF_ENDIAN(BPF_FROM_BE, R0, 16),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0,  cpu_to_be16(0x3210) } },
-+	},
-+	{
-+		"ALU_END_FROM_BE 32: 0xfedcba9876543210 -> 0x76543210",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0xfedcba9876543210ULL),
-+			BPF_ENDIAN(BPF_FROM_BE, R0, 32),
-+			BPF_ALU64_REG(BPF_MOV, R1, R0),
-+			BPF_ALU64_IMM(BPF_RSH, R1, 32),
-+			BPF_ALU32_REG(BPF_ADD, R0, R1), /* R1 = 0 */
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, cpu_to_be32(0x76543210) } },
-+	},
-+	{
-+		"ALU_END_FROM_BE 64: 0xfedcba9876543210 -> 0x76543210",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0xfedcba9876543210ULL),
-+			BPF_ENDIAN(BPF_FROM_BE, R0, 64),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, (u32) cpu_to_be64(0xfedcba9876543210ULL) } },
-+	},
-+	{
-+		"ALU_END_FROM_BE 64: 0xfedcba9876543210 >> 32 -> 0xfedcba98",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0xfedcba9876543210ULL),
-+			BPF_ENDIAN(BPF_FROM_BE, R0, 64),
-+			BPF_ALU64_IMM(BPF_RSH, R0, 32),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, (u32) (cpu_to_be64(0xfedcba9876543210ULL) >> 32) } },
-+	},
- 	/* BPF_ALU | BPF_END | BPF_FROM_LE */
- 	{
- 		"ALU_END_FROM_LE 16: 0x0123456789abcdef -> 0xefcd",
-@@ -6785,6 +6846,67 @@ static struct bpf_test tests[] = {
- 		{ },
- 		{ { 0, (u32) cpu_to_le64(0x0123456789abcdefLL) } },
- 	},
-+	{
-+		"ALU_END_FROM_LE 64: 0x0123456789abcdef >> 32 -> 0xefcdab89",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0x0123456789abcdefLL),
-+			BPF_ENDIAN(BPF_FROM_LE, R0, 64),
-+			BPF_ALU64_IMM(BPF_RSH, R0, 32),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, (u32) (cpu_to_le64(0x0123456789abcdefLL) >> 32) } },
-+	},
-+	/* BPF_ALU | BPF_END | BPF_FROM_LE, reversed */
-+	{
-+		"ALU_END_FROM_LE 16: 0xfedcba9876543210 -> 0x1032",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0xfedcba9876543210ULL),
-+			BPF_ENDIAN(BPF_FROM_LE, R0, 16),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0,  cpu_to_le16(0x3210) } },
-+	},
-+	{
-+		"ALU_END_FROM_LE 32: 0xfedcba9876543210 -> 0x10325476",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0xfedcba9876543210ULL),
-+			BPF_ENDIAN(BPF_FROM_LE, R0, 32),
-+			BPF_ALU64_REG(BPF_MOV, R1, R0),
-+			BPF_ALU64_IMM(BPF_RSH, R1, 32),
-+			BPF_ALU32_REG(BPF_ADD, R0, R1), /* R1 = 0 */
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, cpu_to_le32(0x76543210) } },
-+	},
-+	{
-+		"ALU_END_FROM_LE 64: 0xfedcba9876543210 -> 0x10325476",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0xfedcba9876543210ULL),
-+			BPF_ENDIAN(BPF_FROM_LE, R0, 64),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, (u32) cpu_to_le64(0xfedcba9876543210ULL) } },
-+	},
-+	{
-+		"ALU_END_FROM_LE 64: 0xfedcba9876543210 >> 32 -> 0x98badcfe",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R0, 0xfedcba9876543210ULL),
-+			BPF_ENDIAN(BPF_FROM_LE, R0, 64),
-+			BPF_ALU64_IMM(BPF_RSH, R0, 32),
-+			BPF_EXIT_INSN(),
-+		},
-+		INTERNAL,
-+		{ },
-+		{ { 0, (u32) (cpu_to_le64(0xfedcba9876543210ULL) >> 32) } },
-+	},
- 	/* BPF_ST(X) | BPF_MEM | BPF_B/H/W/DW */
- 	{
- 		"ST_MEM_B: Store/Load byte: max negative",
--- 
-2.30.2
-
+-ed
