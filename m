@@ -2,262 +2,240 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 651ECC433EF
-	for <bpf@archiver.kernel.org>; Fri, 10 Sep 2021 10:42:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AD8DC433F5
+	for <bpf@archiver.kernel.org>; Fri, 10 Sep 2021 10:54:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 421496054F
-	for <bpf@archiver.kernel.org>; Fri, 10 Sep 2021 10:42:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5104361100
+	for <bpf@archiver.kernel.org>; Fri, 10 Sep 2021 10:54:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232392AbhIJKn2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 10 Sep 2021 06:43:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34352 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232360AbhIJKn0 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 10 Sep 2021 06:43:26 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4097C061574;
-        Fri, 10 Sep 2021 03:42:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=DXrJBxKcsbepOR9WSPVVjIBdjJnJxeIocqbecuTYqnY=; b=sZCILqfSU5B2cA/LvNr+NVQ3b1
-        WXIZhbzbI6+KLNgARqJ2ZGIA7Ng+uwxf21W2m6YUmeIdg4IeK7V1poYVBhcnbG7QBDhQugjNp70HI
-        Qb5tixqfFRSyqlmLOrq4ouQu+IYysbURbekJlNDzb1mmUXCLI5RdAMU28QHLSo+347J0+1g7CN9L/
-        HwHz/sCTZv5gqsXPSazUJUDp6HGN3tHrDngCciW2YAyrt+3RGcdm7uViNDyDcquXDQyDDkwQFBWv+
-        k2xWdX7juqR6QPp7SdHy/SZvFGBoQO8UkqHPr8VnQphwVpcLDpjq7DvMht+7G4seWS2u9ff/RUvFg
-        VHMdQy6A==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mOdxk-00AvCi-Mc; Fri, 10 Sep 2021 10:41:03 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 29435300047;
-        Fri, 10 Sep 2021 12:40:51 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 078BF2BC05F1B; Fri, 10 Sep 2021 12:40:51 +0200 (CEST)
-Date:   Fri, 10 Sep 2021 12:40:50 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Song Liu <songliubraving@fb.com>
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org, acme@kernel.org,
-        mingo@redhat.com, kjain@linux.ibm.com, kernel-team@fb.com,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>
-Subject: Re: [PATCH v6 bpf-next 1/3] perf: enable branch record for software
- events
-Message-ID: <YTs2MpaI7iofckJI@hirez.programming.kicks-ass.net>
-References: <20210907202802.3675104-1-songliubraving@fb.com>
- <20210907202802.3675104-2-songliubraving@fb.com>
+        id S232430AbhIJKzx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 10 Sep 2021 06:55:53 -0400
+Received: from mga06.intel.com ([134.134.136.31]:15469 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232415AbhIJKzw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 10 Sep 2021 06:55:52 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10102"; a="282070490"
+X-IronPort-AV: E=Sophos;i="5.85,282,1624345200"; 
+   d="scan'208";a="282070490"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2021 03:54:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.85,282,1624345200"; 
+   d="scan'208";a="694739832"
+Received: from ipd-test105-dell.igk.intel.com (HELO localhost.localdomain) ([10.102.20.173])
+  by fmsmga006.fm.intel.com with ESMTP; 10 Sep 2021 03:54:34 -0700
+Date:   Fri, 10 Sep 2021 14:54:24 +0200
+From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To:     Magnus Karlsson <magnus.karlsson@gmail.com>
+Cc:     magnus.karlsson@intel.com, bjorn@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, netdev@vger.kernel.org,
+        jonathan.lemon@gmail.com, ciara.loftus@intel.com,
+        bpf@vger.kernel.org, yhs@fb.com, andrii@kernel.org
+Subject: Re: [PATCH bpf-next v2 00/20] selftests: xsk: facilitate adding tests
+Message-ID: <YTtVgAO0X3Qva3J2@localhost.localdomain>
+References: <20210907071928.9750-1-magnus.karlsson@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210907202802.3675104-2-songliubraving@fb.com>
+In-Reply-To: <20210907071928.9750-1-magnus.karlsson@gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Sep 07, 2021 at 01:28:00PM -0700, Song Liu wrote:
+On Tue, Sep 07, 2021 at 09:19:08AM +0200, Magnus Karlsson wrote:
+> This patch set facilitates adding new tests as well as describing
+> existing ones in the xsk selftests suite and adds 3 new test suites at
+> the end. The idea is to isolate the run-time that executes the test
+> from the actual implementation of the test. Today, implementing a test
+> amounts to adding test specific if-statements all around the run-time,
+> which is not scalable or amenable for reuse. This patch set instead
+> introduces a test specification that is the only thing that a test
+> fills in. The run-time then gets this specification and acts upon it
+> completely unaware of what test it is executing. This way, we can get
+> rid of all test specific if-statements from the run-time and the
+> implementation of the test can be contained in a single function. This
+> hopefully makes it easier to add tests and for users to understand
+> what the test accomplishes.
+> 
+> As a recap of what the run-time does: each test is based on the
+> run-time launching two threads and connecting a veth link between the
+> two threads. Each thread opens an AF_XDP socket on that veth interface
+> and one of them sends traffic that the other one receives and
+> validates. Each thread has its own umem. Note that this behavior is
+> not changed by this patch set.
+> 
+> A test specification consists of several items. Most importantly:
+> 
+> * Two packet streams. One for Tx thread that specifies what traffic to
+>   send and one for the Rx thread that specifies what that thread
+>   should receive. If it receives exactly what is specified, the test
+>   passes, otherwise it fails. A packet stream can also specify what
+>   buffers in the umem that should be used by the Rx and Tx threads.
+> 
+> * What kind of AF_XDP sockets it should create and bind to what
+>   interfaces
+> 
+> * How many times it should repeat the socket creation and destruction
+> 
+> * The name of the test
+> 
+> The interface for the test spec is the following:
+> 
+> void test_spec_init(struct test_spec *test, struct ifobject *ifobj_tx,
+>                     struct ifobject *ifobj_rx, enum test_mode mode);
+> 
+> /* Reset everything but the interface specifications and the mode */
+> void test_spec_reset(struct test_spec *test);
+> 
+> void test_spec_set_name(struct test_spec *test, const char *name);
+> 
+> 
+> Packet streams have the following interfaces:
+> 
+> struct pkt *pkt_stream_get_pkt(struct pkt_stream *pkt_stream, u32 pkt_nb)
+> 
+> struct pkt *pkt_stream_get_next_rx_pkt(struct pkt_stream *pkt_stream)
+> 
+> struct pkt_stream *pkt_stream_generate(struct xsk_umem_info *umem,
+>                                        u32 nb_pkts, u32 pkt_len);
+> 
+> void pkt_stream_delete(struct pkt_stream *pkt_stream);
+> 
+> struct pkt_stream *pkt_stream_clone(struct xsk_umem_info *umem,
+>                                     struct pkt_stream *pkt_stream);
+> 
+> /* Replaces all packets in the stream*/
+> void pkt_stream_replace(struct test_spec *test, u32 nb_pkts, u32 pkt_len);
+> 
+> /* Replaces every other packet in the stream */
+> void pkt_stream_replace_half(struct test_spec *test, u32 pkt_len, u32 offset);
+> 
+> /* For creating custom made packet streams */
+> void pkt_stream_generate_custom(struct test_spec *test, struct pkt *pkts,
+>                                 u32 nb_pkts);
+> 
+> /* Restores the default packet stream */
+> void pkt_stream_restore_default(struct test_spec *test);
+> 
+> 
+> A test can then then in the most basic case described like this
+> (provided the test specification has been created before calling the
+> function):
+> 
+> static bool testapp_aligned(struct test_spec *test)
+> {
+>         test_spec_set_name(test, "RUN_TO_COMPLETION");
+>         testapp_validate_traffic(test);
+> }
+> 
+> Running the same test in unaligned mode would then look like this:
+> 
+> static bool testapp_unaligned(struct test_spec *test)
+> {
+>         if (!hugepages_present(test->ifobj_tx)) {
+>                 ksft_test_result_skip("No 2M huge pages present.\n");
+>                 return false;
+>         }
+> 
+>         test_spec_set_name(test, "UNALIGNED_MODE");
+>         test->ifobj_tx->umem->unaligned_mode = true;
+>         test->ifobj_rx->umem->unaligned_mode = true;
+>         /* Let half of the packets straddle a buffer boundrary */
+>         pkt_stream_replace_half(test, PKT_SIZE,
+>                                 XSK_UMEM__DEFAULT_FRAME_SIZE - 32);
+> 	/* Populate fill ring with addresses in the packet stream */
+>         test->ifobj_rx->pkt_stream->use_addr_for_fill = true;
+>         testapp_validate_traffic(test);
+> 
+>         pkt_stream_restore_default(test);
+> 	return true;
+> }
+> 
+> 3 of the last 4 patches in the set add 3 new test suites, one for
+> unaligned mode, one for testing the rejection of tricky invalid
+> descriptors plus the acceptance of some valid ones in the Tx ring, and
+> one for testing 2K frame sizes (the default is 4K).
+> 
+> What is left to do for follow-up patches:
+> 
+> * Convert the statistics tests to the new framework.
+> 
+> * Implement a way of registering new tests without having the enum
+>   test_type. Once this has been done (together with the previous
+>   bullet), all the test types can be dropped from the header
+>   file. This means that we should be able to add tests by just writing
+>   a single function with a new test specification, which is one of the
+>   goals.
+> 
+> * Introduce functions for manipulating parts of the test or interface
+>   spec instead of direct manipulations such as
+>   test->ifobj_rx->pkt_stream->use_addr_for_fill = true; which is kind
+>   of awkward.
+> 
+> * Move the run-time and its interface to its own .c and .h files. Then
+>   we can have all the tests in a separate file.
+> 
+> * Better error reporting if a test fails. Today it does not state what
+>   test fails and might not continue execute the rest of the tests due
+>   to this failure. Failures are not propagated upwards through the
+>   functions so a failed test will also be a passed test, which messes
+>   up the stats counting. This needs to be changed.
+> 
+> * Add option to run specific test instead of all of them
+> 
+> * Introduce pacing of sent packets so that they are never dropped
+>   by the receiver even if it is stalled for some reason. If you run
+>   the current tests on a heavily loaded system, they might fail in SKB
+>   mode due to packets being dropped by the driver on Tx. Though I have
+>   never seen it, it might happen.
+> 
+> v1 -> v2:
+> 
+> * Fixed a number of spelling errors [Maciej]
+> * Fixed use after free bug in pkt_stream_replace() [Maciej]
+> * pkt_stream_set -> pkt_stream_generate_custom [Maciej]
+> * Fixed formatting problem in testapp_invalid_desc() [Maciej]
+> 
+> Thanks: Magnus
 
-> +static int
-> +intel_pmu_snapshot_branch_stack(struct perf_branch_entry *entries, unsigned int cnt)
-> +{
-> +	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
-> +	unsigned long flags;
-> +
-> +	local_irq_save(flags);
-> +	intel_pmu_disable_all();
-> +	intel_pmu_lbr_read();
-> +	cnt = min_t(unsigned int, cnt, x86_pmu.lbr_nr);
-> +
-> +	memcpy(entries, cpuc->lbr_entries, sizeof(struct perf_branch_entry) * cnt);
-> +	intel_pmu_enable_all(0);
-> +	local_irq_restore(flags);
-> +	return cnt;
-> +}
+I like the flexibility that this set is bringing to xdpxceiver.
+Went through the v2 and this LGTM.
 
-So elsewhere you state:
+Acked-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
-+       /* Given we stop LBR in software, we will waste a few entries.
-+        * But we should try to waste as few as possible entries. We are at
-+        * about 11 on x86_64 systems.
-+        * Add a check for < 15 so that we get heads-up when something
-+        * changes and wastes too many entries.
-+        */
-+       ASSERT_LT(skel->bss->wasted_entries, 15, "check_wasted_entries");
-
-Which is atrocious.. so I disassembled the new function to get horrible
-crap. The below seems to cure that.
-
----
---- a/arch/x86/events/intel/core.c
-+++ b/arch/x86/events/intel/core.c
-@@ -2143,19 +2143,19 @@ static __initconst const u64 knl_hw_cach
-  * However, there are some cases which may change PEBS status, e.g. PMI
-  * throttle. The PEBS_ENABLE should be updated where the status changes.
-  */
--static __always_inline void __intel_pmu_disable_all(void)
-+static __always_inline void __intel_pmu_disable_all(bool bts)
- {
- 	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
- 
- 	wrmsrl(MSR_CORE_PERF_GLOBAL_CTRL, 0);
- 
--	if (test_bit(INTEL_PMC_IDX_FIXED_BTS, cpuc->active_mask))
-+	if (bts && test_bit(INTEL_PMC_IDX_FIXED_BTS, cpuc->active_mask))
- 		intel_pmu_disable_bts();
- }
- 
- static __always_inline void intel_pmu_disable_all(void)
- {
--	__intel_pmu_disable_all();
-+	__intel_pmu_disable_all(true);
- 	intel_pmu_pebs_disable_all();
- 	intel_pmu_lbr_disable_all();
- }
-@@ -2186,14 +2186,12 @@ static void intel_pmu_enable_all(int add
- 	__intel_pmu_enable_all(added, false);
- }
- 
--static int
--intel_pmu_snapshot_branch_stack(struct perf_branch_entry *entries, unsigned int cnt)
-+static noinline int
-+__intel_pmu_snapshot_branch_stack(struct perf_branch_entry *entries,
-+				  unsigned int cnt, unsigned long flags)
- {
- 	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
--	unsigned long flags;
- 
--	local_irq_save(flags);
--	intel_pmu_disable_all();
- 	intel_pmu_lbr_read();
- 	cnt = min_t(unsigned int, cnt, x86_pmu.lbr_nr);
- 
-@@ -2203,6 +2201,36 @@ intel_pmu_snapshot_branch_stack(struct p
- 	return cnt;
- }
- 
-+static int
-+intel_pmu_snapshot_branch_stack(struct perf_branch_entry *entries, unsigned int cnt)
-+{
-+	unsigned long flags;
-+
-+	/* must not have branches... */
-+	local_irq_save(flags);
-+	__intel_pmu_disable_all(false); /* we don't care about BTS */
-+	__intel_pmu_pebs_disable_all();
-+	__intel_pmu_lbr_disable();
-+	/*            ... until here */
-+
-+	return __intel_pmu_snapshot_branch_stack(entries, cnt, flags);
-+}
-+
-+static int
-+intel_pmu_snapshot_arch_branch_stack(struct perf_branch_entry *entries, unsigned int cnt)
-+{
-+	unsigned long flags;
-+
-+	/* must not have branches... */
-+	local_irq_save(flags);
-+	__intel_pmu_disable_all(false); /* we don't care about BTS */
-+	__intel_pmu_pebs_disable_all();
-+	__intel_pmu_arch_lbr_disable();
-+	/*            ... until here */
-+
-+	return __intel_pmu_snapshot_branch_stack(entries, cnt, flags);
-+}
-+
- /*
-  * Workaround for:
-  *   Intel Errata AAK100 (model 26)
-@@ -2946,7 +2974,7 @@ static int intel_pmu_handle_irq(struct p
- 		apic_write(APIC_LVTPC, APIC_DM_NMI);
- 	intel_bts_disable_local();
- 	cpuc->enabled = 0;
--	__intel_pmu_disable_all();
-+	__intel_pmu_disable_all(true);
- 	handled = intel_pmu_drain_bts_buffer();
- 	handled += intel_bts_interrupt();
- 	status = intel_pmu_get_status();
-@@ -6304,9 +6332,15 @@ __init int intel_pmu_init(void)
- 		pr_cont("%d-deep LBR, ", x86_pmu.lbr_nr);
- 
- 		/* only support branch_stack snapshot for perfmon >= v2 */
--		if (x86_pmu.disable_all == intel_pmu_disable_all)
--			static_call_update(perf_snapshot_branch_stack,
--					   intel_pmu_snapshot_branch_stack);
-+		if (x86_pmu.disable_all == intel_pmu_disable_all) {
-+			if (boot_cpu_has(X86_FEATURE_ARCH_LBR)) {
-+				static_call_update(perf_snapshot_branch_stack,
-+						   intel_pmu_snapshot_arch_branch_stack);
-+			} else {
-+				static_call_update(perf_snapshot_branch_stack,
-+						   intel_pmu_snapshot_branch_stack);
-+			}
-+		}
- 	}
- 
- 	intel_pmu_check_extra_regs(x86_pmu.extra_regs);
---- a/arch/x86/events/intel/ds.c
-+++ b/arch/x86/events/intel/ds.c
-@@ -1296,6 +1296,14 @@ void intel_pmu_pebs_enable_all(void)
- 		wrmsrl(MSR_IA32_PEBS_ENABLE, cpuc->pebs_enabled);
- }
- 
-+void intel_pmu_pebs_disable_all(void)
-+{
-+	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
-+
-+	if (cpuc->pebs_enabled)
-+		__intel_pmu_pebs_disable_all();
-+}
-+
- static int intel_pmu_pebs_fixup_ip(struct pt_regs *regs)
- {
- 	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
---- a/arch/x86/events/perf_event.h
-+++ b/arch/x86/events/perf_event.h
-@@ -1240,12 +1240,23 @@ static inline bool intel_pmu_has_bts(str
- 	return intel_pmu_has_bts_period(event, hwc->sample_period);
- }
- 
--static __always_inline void intel_pmu_pebs_disable_all(void)
-+static __always_inline void __intel_pmu_pebs_disable_all(void)
- {
--	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
-+	wrmsrl(MSR_IA32_PEBS_ENABLE, 0);
-+}
- 
--	if (cpuc->pebs_enabled)
--		wrmsrl(MSR_IA32_PEBS_ENABLE, 0);
-+static __always_inline void __intel_pmu_arch_lbr_disable(void)
-+{
-+	wrmsrl(MSR_ARCH_LBR_CTL, 0);
-+}
-+
-+static __always_inline void __intel_pmu_lbr_disable(void)
-+{
-+	u64 debugctl;
-+
-+	rdmsrl(MSR_IA32_DEBUGCTLMSR, debugctl);
-+	debugctl &= ~(DEBUGCTLMSR_LBR | DEBUGCTLMSR_FREEZE_LBRS_ON_PMI);
-+	wrmsrl(MSR_IA32_DEBUGCTLMSR, debugctl);
- }
- 
- int intel_pmu_save_and_restart(struct perf_event *event);
-@@ -1322,6 +1333,8 @@ void intel_pmu_pebs_disable(struct perf_
- 
- void intel_pmu_pebs_enable_all(void);
- 
-+void intel_pmu_pebs_disable_all(void);
-+
- void intel_pmu_pebs_sched_task(struct perf_event_context *ctx, bool sched_in);
- 
- void intel_pmu_auto_reload_read(struct perf_event *event);
-
+> 
+> Magnus Karlsson (20):
+>   selftests: xsk: simplify xsk and umem arrays
+>   selftests: xsk: introduce type for thread function
+>   selftests: xsk: introduce test specifications
+>   selftests: xsk: move num_frames and frame_headroom to xsk_umem_info
+>   selftests: xsk: move rxqsize into xsk_socket_info
+>   selftests: xsk: make frame_size configurable
+>   selftests: xsx: introduce test name in test spec
+>   selftests: xsk: add use_poll to ifobject
+>   selftests: xsk: introduce rx_on and tx_on in ifobject
+>   selftests: xsk: replace second_step global variable
+>   selftests: xsk: specify number of sockets to create
+>   selftests: xsk: make xdp_flags and bind_flags local
+>   selftests: xsx: make pthreads local scope
+>   selftests: xsk: eliminate MAX_SOCKS define
+>   selftests: xsk: allow for invalid packets
+>   selftests: xsk: introduce replacing the default packet stream
+>   selftests: xsk: add test for unaligned mode
+>   selftests: xsk: eliminate test specific if-statement in test runner
+>   selftests: xsk: add tests for invalid xsk descriptors
+>   selftests: xsk: add tests for 2K frame size
+> 
+>  tools/testing/selftests/bpf/xdpxceiver.c | 872 +++++++++++++++--------
+>  tools/testing/selftests/bpf/xdpxceiver.h |  66 +-
+>  2 files changed, 608 insertions(+), 330 deletions(-)
+> 
+> 
+> base-commit: 27151f177827d478508e756c7657273261aaf8a9
+> --
+> 2.29.0
