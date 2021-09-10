@@ -2,240 +2,145 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-10.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AD8DC433F5
-	for <bpf@archiver.kernel.org>; Fri, 10 Sep 2021 10:54:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E70BBC433F5
+	for <bpf@archiver.kernel.org>; Fri, 10 Sep 2021 11:16:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5104361100
-	for <bpf@archiver.kernel.org>; Fri, 10 Sep 2021 10:54:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BCBED60F45
+	for <bpf@archiver.kernel.org>; Fri, 10 Sep 2021 11:16:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232430AbhIJKzx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 10 Sep 2021 06:55:53 -0400
-Received: from mga06.intel.com ([134.134.136.31]:15469 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232415AbhIJKzw (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 10 Sep 2021 06:55:52 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10102"; a="282070490"
-X-IronPort-AV: E=Sophos;i="5.85,282,1624345200"; 
-   d="scan'208";a="282070490"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2021 03:54:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.85,282,1624345200"; 
-   d="scan'208";a="694739832"
-Received: from ipd-test105-dell.igk.intel.com (HELO localhost.localdomain) ([10.102.20.173])
-  by fmsmga006.fm.intel.com with ESMTP; 10 Sep 2021 03:54:34 -0700
-Date:   Fri, 10 Sep 2021 14:54:24 +0200
-From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     Magnus Karlsson <magnus.karlsson@gmail.com>
-Cc:     magnus.karlsson@intel.com, bjorn@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, netdev@vger.kernel.org,
-        jonathan.lemon@gmail.com, ciara.loftus@intel.com,
-        bpf@vger.kernel.org, yhs@fb.com, andrii@kernel.org
-Subject: Re: [PATCH bpf-next v2 00/20] selftests: xsk: facilitate adding tests
-Message-ID: <YTtVgAO0X3Qva3J2@localhost.localdomain>
-References: <20210907071928.9750-1-magnus.karlsson@gmail.com>
+        id S232665AbhIJLSD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 10 Sep 2021 07:18:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:21220 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232662AbhIJLSD (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 10 Sep 2021 07:18:03 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1631272611;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KhW6lv8OKl3JGjPb0UK3/lNvMXBnjiEjWe2PmfSiYnI=;
+        b=IBABTqVmARxw7YVL1JZmkX37iI/HEXiGvnDEP7eSwOwK5GI0RGa3ZSgBA/tXhRrRsdilwU
+        XZh4CwFCFoLYWc+LyxmnCL8U//25m4jy7Cjd3s7cSDshkna3bTfNk31iN6KikrLIuHpr+S
+        i/uHCN7asr3405rVZk7o0rIh2K9Csx0=
+Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
+ [209.85.208.197]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-168-qEw8aawjPvqHc7Mk4etdQQ-1; Fri, 10 Sep 2021 07:16:50 -0400
+X-MC-Unique: qEw8aawjPvqHc7Mk4etdQQ-1
+Received: by mail-lj1-f197.google.com with SMTP id v2-20020a2e2f02000000b001dc7ee2a7b8so719510ljv.20
+        for <bpf@vger.kernel.org>; Fri, 10 Sep 2021 04:16:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:cc:subject:to:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=KhW6lv8OKl3JGjPb0UK3/lNvMXBnjiEjWe2PmfSiYnI=;
+        b=NHySY/fruvqmVbqWjZwVg0jcMtMigzoBT4VaQbC3lzwLHgwxceMmdvBFkxKusHQynt
+         4sqmYuEgY7C0MJ7VZkh1GxH5noafRSDzKcfVNZvEY6gO2vnTpwLQW+FDFst/sRiA6ZNx
+         n32qeFdU2e42P/5/2VF+/APL+fnDRzN/3Hvt+5hR+S6P6PtDzg8DD+Zxpa+6n/H9LseO
+         Li+AI5HOng+otSboHRvOkTJtJtc4NNd1Y3ZyIjYEf+SMO+zsbDydlTdbGmxgjjEMDitN
+         EtlHwZLFUd8Ardi8eBpdy+SgfUYsbdn9epRXaFPm7Kc6tr0gP9CdC/JGLteQC3bsBQ9z
+         eoYw==
+X-Gm-Message-State: AOAM533GC7a3OTwbFJyUh59k4qJpocxgi5kvSrrbXWQwJivCFqdEOOG1
+        h6absOqELNkByB+vtUTPUFqkM7QsgdXinjDfNYHKL7OqmnIpptzWKXlhluX91XYsSA8m68dv477
+        bZH90S39ED9pL
+X-Received: by 2002:a05:6512:2249:: with SMTP id i9mr3432145lfu.219.1631272609201;
+        Fri, 10 Sep 2021 04:16:49 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzH59BTrtM3dOTuC2ud0FCBAi8NLgaYur2PMsOqbkfm5Sp/MKqxhOdAgBgLurc1d1SzcgHpYQ==
+X-Received: by 2002:a05:6512:2249:: with SMTP id i9mr3432122lfu.219.1631272608969;
+        Fri, 10 Sep 2021 04:16:48 -0700 (PDT)
+Received: from [192.168.42.238] (87-59-106-155-cable.dk.customer.tdc.net. [87.59.106.155])
+        by smtp.gmail.com with ESMTPSA id m28sm534168ljc.46.2021.09.10.04.16.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Sep 2021 04:16:48 -0700 (PDT)
+From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
+X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
+Cc:     brouer@redhat.com,
+        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        BPF-dev-list <bpf@vger.kernel.org>,
+        Magnus Karlsson <magnus.karlsson@gmail.com>,
+        William Tu <u9012063@gmail.com>, xdp-hints@xdp-project.net,
+        Zaremba Larysa <larysa.zaremba@intel.com>,
+        Jiri Olsa <jolsa@redhat.com>
+Subject: Re: XDP-hints: Howto support multiple BTF types per packet basis?
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+References: <60b6cf5b6505e_38d6d208d8@john-XPS-13-9370.notmuch>
+ <20210602091837.65ec197a@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+ <YNGU4GhL8fZ0ErzS@localhost.localdomain> <874kdqqfnm.fsf@toke.dk>
+ <YNLxtsasQSv+YR1w@localhost.localdomain> <87mtrfmoyh.fsf@toke.dk>
+ <YOa4JVEp20JolOp4@localhost.localdomain> <8735snvjp7.fsf@toke.dk>
+ <YTA7x6BIq85UWrYZ@localhost.localdomain>
+ <190d8d21-f11d-bb83-58aa-08e86e0006d9@redhat.com>
+ <YTcGUbRpvWK+633g@localhost.localdomain>
+ <936bfbdf-e194-b676-d28a-acf526120155@redhat.com>
+ <CAEf4BzabVVPgRB9V=DAFjzYSx-q59bmBsQQAupKYWy5eUxqVkw@mail.gmail.com>
+Message-ID: <2ed2a06c-6796-229d-05d4-9a6464330e9e@redhat.com>
+Date:   Fri, 10 Sep 2021 13:16:46 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210907071928.9750-1-magnus.karlsson@gmail.com>
+In-Reply-To: <CAEf4BzabVVPgRB9V=DAFjzYSx-q59bmBsQQAupKYWy5eUxqVkw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Sep 07, 2021 at 09:19:08AM +0200, Magnus Karlsson wrote:
-> This patch set facilitates adding new tests as well as describing
-> existing ones in the xsk selftests suite and adds 3 new test suites at
-> the end. The idea is to isolate the run-time that executes the test
-> from the actual implementation of the test. Today, implementing a test
-> amounts to adding test specific if-statements all around the run-time,
-> which is not scalable or amenable for reuse. This patch set instead
-> introduces a test specification that is the only thing that a test
-> fills in. The run-time then gets this specification and acts upon it
-> completely unaware of what test it is executing. This way, we can get
-> rid of all test specific if-statements from the run-time and the
-> implementation of the test can be contained in a single function. This
-> hopefully makes it easier to add tests and for users to understand
-> what the test accomplishes.
-> 
-> As a recap of what the run-time does: each test is based on the
-> run-time launching two threads and connecting a veth link between the
-> two threads. Each thread opens an AF_XDP socket on that veth interface
-> and one of them sends traffic that the other one receives and
-> validates. Each thread has its own umem. Note that this behavior is
-> not changed by this patch set.
-> 
-> A test specification consists of several items. Most importantly:
-> 
-> * Two packet streams. One for Tx thread that specifies what traffic to
->   send and one for the Rx thread that specifies what that thread
->   should receive. If it receives exactly what is specified, the test
->   passes, otherwise it fails. A packet stream can also specify what
->   buffers in the umem that should be used by the Rx and Tx threads.
-> 
-> * What kind of AF_XDP sockets it should create and bind to what
->   interfaces
-> 
-> * How many times it should repeat the socket creation and destruction
-> 
-> * The name of the test
-> 
-> The interface for the test spec is the following:
-> 
-> void test_spec_init(struct test_spec *test, struct ifobject *ifobj_tx,
->                     struct ifobject *ifobj_rx, enum test_mode mode);
-> 
-> /* Reset everything but the interface specifications and the mode */
-> void test_spec_reset(struct test_spec *test);
-> 
-> void test_spec_set_name(struct test_spec *test, const char *name);
-> 
-> 
-> Packet streams have the following interfaces:
-> 
-> struct pkt *pkt_stream_get_pkt(struct pkt_stream *pkt_stream, u32 pkt_nb)
-> 
-> struct pkt *pkt_stream_get_next_rx_pkt(struct pkt_stream *pkt_stream)
-> 
-> struct pkt_stream *pkt_stream_generate(struct xsk_umem_info *umem,
->                                        u32 nb_pkts, u32 pkt_len);
-> 
-> void pkt_stream_delete(struct pkt_stream *pkt_stream);
-> 
-> struct pkt_stream *pkt_stream_clone(struct xsk_umem_info *umem,
->                                     struct pkt_stream *pkt_stream);
-> 
-> /* Replaces all packets in the stream*/
-> void pkt_stream_replace(struct test_spec *test, u32 nb_pkts, u32 pkt_len);
-> 
-> /* Replaces every other packet in the stream */
-> void pkt_stream_replace_half(struct test_spec *test, u32 pkt_len, u32 offset);
-> 
-> /* For creating custom made packet streams */
-> void pkt_stream_generate_custom(struct test_spec *test, struct pkt *pkts,
->                                 u32 nb_pkts);
-> 
-> /* Restores the default packet stream */
-> void pkt_stream_restore_default(struct test_spec *test);
-> 
-> 
-> A test can then then in the most basic case described like this
-> (provided the test specification has been created before calling the
-> function):
-> 
-> static bool testapp_aligned(struct test_spec *test)
-> {
->         test_spec_set_name(test, "RUN_TO_COMPLETION");
->         testapp_validate_traffic(test);
-> }
-> 
-> Running the same test in unaligned mode would then look like this:
-> 
-> static bool testapp_unaligned(struct test_spec *test)
-> {
->         if (!hugepages_present(test->ifobj_tx)) {
->                 ksft_test_result_skip("No 2M huge pages present.\n");
->                 return false;
->         }
-> 
->         test_spec_set_name(test, "UNALIGNED_MODE");
->         test->ifobj_tx->umem->unaligned_mode = true;
->         test->ifobj_rx->umem->unaligned_mode = true;
->         /* Let half of the packets straddle a buffer boundrary */
->         pkt_stream_replace_half(test, PKT_SIZE,
->                                 XSK_UMEM__DEFAULT_FRAME_SIZE - 32);
-> 	/* Populate fill ring with addresses in the packet stream */
->         test->ifobj_rx->pkt_stream->use_addr_for_fill = true;
->         testapp_validate_traffic(test);
-> 
->         pkt_stream_restore_default(test);
-> 	return true;
-> }
-> 
-> 3 of the last 4 patches in the set add 3 new test suites, one for
-> unaligned mode, one for testing the rejection of tricky invalid
-> descriptors plus the acceptance of some valid ones in the Tx ring, and
-> one for testing 2K frame sizes (the default is 4K).
-> 
-> What is left to do for follow-up patches:
-> 
-> * Convert the statistics tests to the new framework.
-> 
-> * Implement a way of registering new tests without having the enum
->   test_type. Once this has been done (together with the previous
->   bullet), all the test types can be dropped from the header
->   file. This means that we should be able to add tests by just writing
->   a single function with a new test specification, which is one of the
->   goals.
-> 
-> * Introduce functions for manipulating parts of the test or interface
->   spec instead of direct manipulations such as
->   test->ifobj_rx->pkt_stream->use_addr_for_fill = true; which is kind
->   of awkward.
-> 
-> * Move the run-time and its interface to its own .c and .h files. Then
->   we can have all the tests in a separate file.
-> 
-> * Better error reporting if a test fails. Today it does not state what
->   test fails and might not continue execute the rest of the tests due
->   to this failure. Failures are not propagated upwards through the
->   functions so a failed test will also be a passed test, which messes
->   up the stats counting. This needs to be changed.
-> 
-> * Add option to run specific test instead of all of them
-> 
-> * Introduce pacing of sent packets so that they are never dropped
->   by the receiver even if it is stalled for some reason. If you run
->   the current tests on a heavily loaded system, they might fail in SKB
->   mode due to packets being dropped by the driver on Tx. Though I have
->   never seen it, it might happen.
-> 
-> v1 -> v2:
-> 
-> * Fixed a number of spelling errors [Maciej]
-> * Fixed use after free bug in pkt_stream_replace() [Maciej]
-> * pkt_stream_set -> pkt_stream_generate_custom [Maciej]
-> * Fixed formatting problem in testapp_invalid_desc() [Maciej]
-> 
-> Thanks: Magnus
 
-I like the flexibility that this set is bringing to xdpxceiver.
-Went through the v2 and this LGTM.
 
-Acked-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+On 09/09/2021 20.19, Andrii Nakryiko wrote:
+> Depending on what IDs we are talking about (sorry, I don't follow this
+> thread very closely, so if you are curious about some aspects of BTF
+> or libbpf APIs, it would be good to have a specific questions with
+> some context). BTF as kernel object has it's own ID allocated through
+> idr, so yes, they are unique. so vmlinux BTF object will have it's own
+> ID, while each module's BTF will have it's own.
+> 
+> But if we are talking about BTF type IDs, that's entirely different
+> thing. BTF type IDs start from 1 (0 is reserved for special 'VOID'
+> type) all the way to number of types in vmlinux BTF. Then each module
+> extends vmlinx BTF starting at N + 1 and going to N + M, where N is
+> number of BTF types in vmlinux BTF and M is number of added types in
+> module BTF.
+> 
+> So in that regard each module has BTF type IDs that are overlapping
+> with other modules, which is why for unique fetching of BTF types from
+> modules you also need BTF object FD or ID of a module BTF, and then
+> BTF type ID within that module. But as I said, I didn't follow along
+> closely, so not sure if I'm answering the right question, sorry.
 
-> 
-> Magnus Karlsson (20):
->   selftests: xsk: simplify xsk and umem arrays
->   selftests: xsk: introduce type for thread function
->   selftests: xsk: introduce test specifications
->   selftests: xsk: move num_frames and frame_headroom to xsk_umem_info
->   selftests: xsk: move rxqsize into xsk_socket_info
->   selftests: xsk: make frame_size configurable
->   selftests: xsx: introduce test name in test spec
->   selftests: xsk: add use_poll to ifobject
->   selftests: xsk: introduce rx_on and tx_on in ifobject
->   selftests: xsk: replace second_step global variable
->   selftests: xsk: specify number of sockets to create
->   selftests: xsk: make xdp_flags and bind_flags local
->   selftests: xsx: make pthreads local scope
->   selftests: xsk: eliminate MAX_SOCKS define
->   selftests: xsk: allow for invalid packets
->   selftests: xsk: introduce replacing the default packet stream
->   selftests: xsk: add test for unaligned mode
->   selftests: xsk: eliminate test specific if-statement in test runner
->   selftests: xsk: add tests for invalid xsk descriptors
->   selftests: xsk: add tests for 2K frame size
-> 
->  tools/testing/selftests/bpf/xdpxceiver.c | 872 +++++++++++++++--------
->  tools/testing/selftests/bpf/xdpxceiver.h |  66 +-
->  2 files changed, 608 insertions(+), 330 deletions(-)
-> 
-> 
-> base-commit: 27151f177827d478508e756c7657273261aaf8a9
-> --
-> 2.29.0
+Thanks for answering.  This N vmlinux IDs + M module IDs was important 
+to know, thanks for correcting my understanding on this, as this does 
+affect our ideas for using BTF for XDP-hints.
+
+This "just" means that the BTF ID will be per driver.  I think we can 
+still make this work, as the AF_XDP userspace program will already need 
+to bind to a device.  Thus, we can still send a simple btf_id in 
+metadata, and AF_XDP prog will just have device-map with expected 
+btf_id's from this device (to validate if it knows howto decode contents).
+It is slightly more annoying for my xdp_frame + cpumap use-case, as it 
+can get XDP_REDIRECT'ed frames from many net_devices, but we do have 
+xdp_frame->dev_rx (net_device) avail, so I can resolve this.
+
+--Jesper
+
+Finding some random BTF ID in two module and notice they point to 
+different types.
+
+  # bpftool btf dump file /sys/kernel/btf/ixgbe | grep 95905
+  [95905] FUNC 'ixgbe_set_rx_mode' type_id=95829 linkage=static
+
+  # bpftool btf dump file /sys/kernel/btf/igc | grep 95905
+  [95905] FUNC 'igc_ethtool_get_link_ksettings' type_id=95904 linkage=static
+
+
