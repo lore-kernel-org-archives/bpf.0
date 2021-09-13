@@ -2,192 +2,248 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39761C433EF
-	for <bpf@archiver.kernel.org>; Mon, 13 Sep 2021 15:35:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 39E05C433EF
+	for <bpf@archiver.kernel.org>; Mon, 13 Sep 2021 15:36:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1CC9F6103B
-	for <bpf@archiver.kernel.org>; Mon, 13 Sep 2021 15:35:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1BF026103B
+	for <bpf@archiver.kernel.org>; Mon, 13 Sep 2021 15:36:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241430AbhIMPgM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 13 Sep 2021 11:36:12 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:44280 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235347AbhIMPfx (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 13 Sep 2021 11:35:53 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.0.43) with SMTP id 18DF7CZ2026680;
-        Mon, 13 Sep 2021 08:33:57 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : to : cc :
- references : from : message-id : date : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=facebook;
- bh=UxMaJbZdLdOjea8LgFZRqICBPpo7hwVcAyafOhAkykA=;
- b=fhdTFgUoTKivocSiMtM95jLeR1w+VfjTcGs851XHmtIKkjxjzObqVB2RyZRr6GU1UmBz
- FqMW+YFiarnTTrLQnZ45H5XQep0yKa0qp/GV8z173UnY+bdHwaBJPWcT9TandI7qy/hZ
- zWxSIS5HioxNuIiKlQeqIFsjKLE2fCwre2E= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 3b1k9rnfuv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 13 Sep 2021 08:33:56 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (100.104.98.9) by
- o365-in.thefacebook.com (100.104.94.198) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Mon, 13 Sep 2021 08:33:55 -0700
+        id S240330AbhIMPhb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 13 Sep 2021 11:37:31 -0400
+Received: from mx0a-0064b401.pphosted.com ([205.220.166.238]:62880 "EHLO
+        mx0a-0064b401.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241053AbhIMPh3 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 13 Sep 2021 11:37:29 -0400
+Received: from pps.filterd (m0250810.ppops.net [127.0.0.1])
+        by mx0a-0064b401.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18DFWk6u015226;
+        Mon, 13 Sep 2021 08:35:59 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references :
+ content-transfer-encoding : content-type : mime-version; s=PPS06212021;
+ bh=34FZp8QcNQGX7/H2kt6f38q+ycMsfFnOwwBK+1woWH8=;
+ b=EjM6oBGAHLVLqnCJrO/2OBbgUd6Ty7fYfZj2XFEZp7c7eHFNjPDXPZSVqOO1NfjskI/K
+ yNE61dm2QeiTG4fPY0OiN+o09Q6fS6mLfUtrosnv7jcEBfy+yg9f+AaYNfDUYmGba4Rm
+ ITB952caoTYXkIutyYnBKB0kslJGfhC5eR2MWCcmKGA628ePd2qsexjvHZ/BO66t1bKs
+ 4dLBJsi+p3+D3+MMSnkqERQL1usTEHSz7RbzuTtCq6Hr/llHRPFAcCHRdiKhC7DDLwmH
+ DxkQLd9MOO6udsHygtk+Z+5mZXmqEfGmuFhNXcPt2rS/ItX8YZrnDggwpWlMN9m6QbPj Zw== 
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2173.outbound.protection.outlook.com [104.47.59.173])
+        by mx0a-0064b401.pphosted.com with ESMTP id 3b1kfn0pky-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Sep 2021 08:35:59 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=B5MtAPZ3P5NNjKSvdmW89Q5JhjlfZ9dc3o3QGx+pckL0Oz2x6AH55U6PpeUi0Wiecia4fVyXkT/50s4vTeZMLJNwXmjJiHx7pwqlnGfo/L0DwtqJi2yHRU1y1NM1wbrd3rBrj88lA8gK37tBtl8zob311K9GWPw3vWnN7kyqSL+N8+Rsu2xnT4SpLb5Jnpkl6JNXHUkr77Gdhg8LuHiZe3JD8Od7JtVH5ylXkA3h00bXkywQnlSCEkCepNW/B0gUcJsjgUhY70c5iG4WRJkEayW3r47sGshURVJSrmITym+3hnHOgBCFNkIQMgDLdZVYfDUeI35Dh0ojzczsk3/M3A==
+ b=Jxo+vSGwzCcB8DXukR4YvXWobxkL+Av++tLh/Nw2Hg0MyUcJgf5d6CYS8SjThbhF7qy+8+ltOGu7ovkYeaEC6KYXgxy4Og0C2KyzBlSXhoaRrDyUSZqMIT9YT6p+6LuF6G8fJXpDmXmXEmkji/FJMKm/uu1AmjmEHJ6vdUQaaiE/cAEtnkRWOoiJE5v+S+gXbZ1z3WVNc10gnSqhWRNpwssC10MSxUKcE9UTR7VjCdLx/AVi0w+IQsNx9sGDK71ehvIW0buOTHbcjz7hkucnJfGYxChnqXf2Qu1RM68UQObZsr0Y/KkVz2M4FDmsYMYdhFKzdzqRgDwPu6TiGWFoMw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
- bh=UxMaJbZdLdOjea8LgFZRqICBPpo7hwVcAyafOhAkykA=;
- b=YvD4qtIOyIJ6g+OX5Kdu3/7FUtu+iuz+kYgilBBP+fGosb9WedZRbigxPori2f6qNqPgHEZ0iKvvIZQVDzyHnTMNAHfu219tQCHTvgJuWNWr8+JbFqe5hagNIEeLD6cFem41ZlMmf0eFIQQAx5ST7gu1mAqOvDqgMgoqnXvxoTMeI9zBdQKbcfzJl2gV7G+96qI8TLY/OQO6Axdi6jCyIxGdZSmxOEDriHseL8eUmJ+ourPkl+PJtJdRzgKCPnDsYZFNTcb6JAx3bmi90KAt5AZ9gmVu4NrVBtw9T7kFV9YjK+q70Y3i+g19L9RJTiMZK+Ca10+2a4za65aypRj/xA==
+ bh=34FZp8QcNQGX7/H2kt6f38q+ycMsfFnOwwBK+1woWH8=;
+ b=c2yFMX9oA4UA0VlFWunlIL5luFgci99v0Jt0ky6PYlxCSeG/276kmfBWuEnPXbOTmxUDPsyfTJDJNH5427u2JBvTJRsPjX2i88iGkuPEcylJ+gbxDtHxihLdnU9i+K6fbjOXC1e7eXsQR8inBSzauhO97EfxtVGzE7BLSL7PqSvFv3crsSH9XwAuopvrSo8/kzdPW4Fn4/cQOxETyYoOe8aduRMrhrNEiWTfpeWMxthYRIFiYYw6NwRk/YqLLxLOjGEka7Y/ITk3PEKgKaurNQwH9KIf8dRbD96XnNS4yNc/65w/Tn13hUVOHnJFBw49X5TvZkB1yBqB10imN8a0RQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
+ smtp.mailfrom=windriver.com; dmarc=pass action=none
+ header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
 Authentication-Results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none header.from=fb.com;
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by SA0PR15MB3790.namprd15.prod.outlook.com (2603:10b6:806:86::16) with
+ header.d=none;vger.kernel.org; dmarc=none action=none
+ header.from=windriver.com;
+Received: from DM4PR11MB5327.namprd11.prod.outlook.com (2603:10b6:5:392::22)
+ by DM4PR11MB5549.namprd11.prod.outlook.com (2603:10b6:5:388::7) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4500.16; Mon, 13 Sep
- 2021 15:33:54 +0000
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::51ef:4b41:5aea:3f75]) by SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::51ef:4b41:5aea:3f75%6]) with mapi id 15.20.4500.019; Mon, 13 Sep 2021
- 15:33:54 +0000
-Subject: Re: [PATCH] bpf: fix kmalloc bug in bpf_check
-To:     Dongliang Mu <mudongliangabcd@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Willy Tarreau <w@1wt.eu>
-CC:     <syzbot+f3e749d4c662818ae439@syzkaller.appspotmail.com>,
-        <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20210913110246.2955737-1-mudongliangabcd@gmail.com>
-From:   Yonghong Song <yhs@fb.com>
-Message-ID: <4f260295-b7a2-92ad-3bb0-06074288dd23@fb.com>
-Date:   Mon, 13 Sep 2021 08:33:51 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.14.0
-In-Reply-To: <20210913110246.2955737-1-mudongliangabcd@gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-X-ClientProxiedBy: BY5PR16CA0030.namprd16.prod.outlook.com
- (2603:10b6:a03:1a0::43) To SN6PR1501MB2064.namprd15.prod.outlook.com
- (2603:10b6:805:d::27)
-Received: from [IPv6:2620:10d:c085:21e8::132d] (2620:10d:c090:400::5:a3) by BY5PR16CA0030.namprd16.prod.outlook.com (2603:10b6:a03:1a0::43) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4500.14 via Frontend Transport; Mon, 13 Sep 2021 15:33:53 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4500.17; Mon, 13 Sep
+ 2021 15:35:58 +0000
+Received: from DM4PR11MB5327.namprd11.prod.outlook.com
+ ([fe80::952a:bdc6:20c3:94cb]) by DM4PR11MB5327.namprd11.prod.outlook.com
+ ([fe80::952a:bdc6:20c3:94cb%7]) with mapi id 15.20.4500.019; Mon, 13 Sep 2021
+ 15:35:58 +0000
+From:   Ovidiu Panait <ovidiu.panait@windriver.com>
+To:     stable@vger.kernel.org
+Cc:     bpf@vger.kernel.org, daniel@iogearbox.net
+Subject: [PATCH 4.19 02/13] bpf: correct slot_type marking logic to allow more stack slot sharing
+Date:   Mon, 13 Sep 2021 18:35:26 +0300
+Message-Id: <20210913153537.2162465-3-ovidiu.panait@windriver.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210913153537.2162465-1-ovidiu.panait@windriver.com>
+References: <20210913153537.2162465-1-ovidiu.panait@windriver.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: VI1PR10CA0095.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:803:28::24) To DM4PR11MB5327.namprd11.prod.outlook.com
+ (2603:10b6:5:392::22)
+MIME-Version: 1.0
+Received: from otp-linux03.wrs.com (46.97.150.20) by VI1PR10CA0095.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:803:28::24) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4500.14 via Frontend Transport; Mon, 13 Sep 2021 15:35:57 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5548c946-dc59-4797-f158-08d976cbe530
-X-MS-TrafficTypeDiagnostic: SA0PR15MB3790:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <SA0PR15MB37904F24133643F93DF3011AD3D99@SA0PR15MB3790.namprd15.prod.outlook.com>
-X-FB-Source: Internal
-X-MS-Oob-TLC-OOBClassifiers: OLM:3276;
+X-MS-Office365-Filtering-Correlation-Id: 993ccacf-e8c3-42b5-385b-08d976cc2f08
+X-MS-TrafficTypeDiagnostic: DM4PR11MB5549:
+X-Microsoft-Antispam-PRVS: <DM4PR11MB5549BEF70217F6EC1CBE9DAEFED99@DM4PR11MB5549.namprd11.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:1360;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +eQH3sCZJa81UqSttYfFknqorvJLfqXJdwfS8f4/0AFNgDBblMla7Fe+s9mgl56j3q+UtWtwFI3OL9S5WJ2SvGS9oN7v2IPBTYtp7NJPg3Vp0ZLPgLw7r0ea59/7gkVnKIwUZHBXZr/Lc8sWIQp0CEM49vPDhf7WpxSne/5tenAa9wsSDkuUZZd2l+kyzc2T2Y1xMlR/Pk9KS4In1KFM78uG1ycboJ/ifNo6GlZ5lCuXXP466vVZbVz/aPbbGMUgaDmoB2QQASv/PyywKYKauH12vbx91Xd20wq6YHu50eeM+mzIZHhyVjCJlH3P4hNuwkZLRa/E7BdyQ7buxhNqmGTyGol6X140QDEELuixfbCTqum7vpo5WpDYoRVbhkcl9SghJ99sb3w28CO6G2n1L2pPEa6Q8vdhd1q7TF/nFJU5zwsJdMrjgA0Sk83GOnGvlQ97IKrkdYh08x9uQK1epQOYE2u2LDfps3vZ77iB2iJCqlhnQXkq1Z0d4AkQDlO1bTnsXYq/NZnfFu/rOmVxPM2PjTYu8y11dEz15x+gbYnzGS7N1PSY4A/b9TpBCp1zSbB38j/EP+BamNQ9jFrk1fZp13TgWmL42wDI+w4R0p674NTa0xrKIvHE3G4zNNqpTM/vQwnlt1o/Zic993Y3gsf9bTq5wdvgRv/aeTOVNgblfMd+IKfxDENY3wtyZEmucexMGeLTukIlRU/oNIuFdxEVzZUDzwXWZnlaz+32LOqOx/Dbjve+wc4xLRppvIywm3SI6xGQoUpnFJC26aNgGD4kmTfuY4o7wvmZ/YXzNTiTFYOQR1cPVCcCQQs/R0TyNIgKJstm8nyWMNkc4aF/Kw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(366004)(39860400002)(346002)(376002)(136003)(52116002)(5660300002)(478600001)(110136005)(53546011)(966005)(2906002)(186003)(31696002)(316002)(2616005)(8936002)(4326008)(83380400001)(8676002)(66556008)(66476007)(38100700002)(86362001)(66946007)(7416002)(31686004)(6486002)(36756003)(781001)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: HFvRZH/SWjLQYUFewjwN9LHr08s1FZT8ClCltm43WzF30Y+oEUBiLMaPNh80aWIVjWclgZWhesYPOEkjDicO8J4SwXnKeDCdAPMEuf7FuSKhssefGV/LT4J9AAKRS9z8oKrQBpnkFNFr469JxZmO8PBdu0JC8WvKi7KDWEvaQYV7FbkY8Lci+ua+f57uKUgF0jDbm/x2O6E2zhR3MuKMAuLBLXjRkF04yTXRCj2/DC6w/YlunL5h8Yu8Zt4eF9duHoupxohO1DALDLbZ0BtRURSj9xwz8aj0kqz4AYYRotoF5DNX2+IdfO9meRacrtdod40NRgPLaDX+dpJAOvHvBkDOZ8iCzOD+FjbfhrNzI5JWtcy9hm4aodwfj7tJLZhSgC26zuhauj9h41MYkNVDYhcHzCCfsa5ZBXgxzyIRZ7zm2aEwbyzsd5Co1wINkynirHI4r0E+7kCQIV6AhQx+ZV4UCZddC2fHGnSSLGYGfqhXc++c83UD0A8F+s1RZ95R+TZ621BY3opbZN8AGYv3yEeYXju3CeOjmp5ot5cfA7HbuZItlC6Kh4C9VmGVb6D9rFfqzJIm/kkH8hwChmNCXLfKj0zm4bpeKEG9pka0lfqy5SGoZZRWNoMJX5uOeXtgUZLOA0pSo4yLIENVtAbY78l2ir87iF2Zkb0t/J8EuEg5VqPYVAtjsnwwaU+mdkJx
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5327.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(396003)(366004)(39850400004)(136003)(376002)(478600001)(26005)(83380400001)(186003)(38350700002)(2616005)(8936002)(38100700002)(44832011)(52116002)(8676002)(6916009)(5660300002)(6506007)(956004)(86362001)(316002)(36756003)(2906002)(4326008)(1076003)(66946007)(6666004)(66476007)(66556008)(6512007)(6486002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cVpQMHBLWDBqNmtXNjk1S3NYczlZN1UrRlloVDVDeTRoalN1WjBhdkpPdDI4?=
- =?utf-8?B?OEVHUlhYejZJRytsbGdONXFkbzAvZGJZbHk1a3FHempSbktKbFlzUjNPWHJQ?=
- =?utf-8?B?cTZhQllsQkV4YVcyTDR2dHFkWkp1V2RaSHdmZS90ZTNmVjdJVmRqQ3RNU3Aw?=
- =?utf-8?B?Y1puaXZodnhSdmpOTTRFenlndkdaRlFLOHhISlhMY3hZcVNlcWdiWkRvQWM2?=
- =?utf-8?B?NGhQdjJYZHEzZXQwUUF2dWtKTHZqeHo2dER0SGVmY3JOZXFzVHExYjA3emQx?=
- =?utf-8?B?MTYwM08zM3JicC9XZUZVaXZkbDdBSDA4SHV3UjYvRk9FeW82dGhGdlhZMWJV?=
- =?utf-8?B?NmZUVThpQTJERkVvT2lTd09RQmZXNHdJS3JUckQ3MHU3MjdhVm40dUdPWTVY?=
- =?utf-8?B?QVVJLzM3QjQzSDFjMkNvV2xNVE9oYU55b0RDenF4K2o4dFZtMnVwRVRwVzhF?=
- =?utf-8?B?VVhLNnh0Ymhxb3VyeTNYcFptTFNvUnFvT3FhM3FCM3kyK1YyNlFrQkVMMVUw?=
- =?utf-8?B?ZERLV1IyNldrVEFncVcxNlIrRlVMbER5RlBhQXNTWDhmSWRUdko1TnNQNnpy?=
- =?utf-8?B?S3VRMFJscktnRHlLMDR6bVZrL0NaV25LQ0phS0tjdmJQZVhzYmsvQ093WDRv?=
- =?utf-8?B?NmNCcTJGRXZ4SENVeUErYmdpR0owZmVSdHkxRWtGS2hrUTRONndSSVV1b2tq?=
- =?utf-8?B?cTN1WDNqVlVvakJZWWlTZGRSMEZ2dklzVVlFMkFCMTEzUVliTURzUWNKNjNt?=
- =?utf-8?B?cHRpRy9VOXNqTk9jTFRpZFVtMkg4WnpBL2taM0NVUWVyQllTNmFiUEg4ODBi?=
- =?utf-8?B?VHZPK0VueUwxbFlSQ0RxZFhKODFwVW5NL3BFbFl2S3lWcVY4VCtTK29qT3BJ?=
- =?utf-8?B?OFVuWm1NY3dNSStpaHJEWEZiRUtYNXp1R1o2QVYyanRtV2l6K1Z0SFJkYk10?=
- =?utf-8?B?YVVJSkNxdnFSRlF6RVUrWXY4dU14ME9pTEdSMnVmMzBZeWlmN0gvdkZEOCtC?=
- =?utf-8?B?RVB4SDd3Z2pKQVJTazg5VExHNUF0Skt1R1RENkd5ZnY5ZEMzVTlqYXZHdEFD?=
- =?utf-8?B?NTRSMDdZOGljQ1FkY243RmlKSVcxZWtBNEhic3k1T3JIdmx2SWE4ZlUvbzBj?=
- =?utf-8?B?b0dwRC8zZmdGZVJsY2hreFZHdC9jRGZ1bnZYUjZSNFhKaWV3bndWaUVwVVRF?=
- =?utf-8?B?dTJQa3ZrMGtqeVZMQTR1cWswelNXdW0xQ0JyTFVIVkpBbS8xRmFITGpjUjJz?=
- =?utf-8?B?L1JXZENxZGhqWGQxLzRUaUhqK09LT2NQaTJEWGZsZjhiOTh1MUs5aTZyMHlL?=
- =?utf-8?B?azJHVm91WmxVeUhZVHUvcUZnMXJ3L05jeGRxcGExcjluT0NxRFNUeUpXNnhI?=
- =?utf-8?B?WjA5RWpSUUNudVpuKzAwYXVMWFVrRzNndVd3cCtIMFZmQ1FxbHVJNkZEcGkv?=
- =?utf-8?B?dEhxOVhaVDRFb3hBRXZMcytXa0hWVmtLYnJ3U2VUY2Z3ZmlIQmhtZmlHSkMv?=
- =?utf-8?B?Y3JGZzMvSkZRd05TczJ6VW1nenJtYUJZOWR4UTVWcXg0Sm9yTFhpQmZRTHRZ?=
- =?utf-8?B?TDBDMmUvY1BjTzRTUEFqYnRmVURqeTVpUmIwdjlSbDErb3N1M0hQVGFiMTdP?=
- =?utf-8?B?K203ZHEzQlRhUWVwMmVCWUI3dGZjZG9QcVUrRzJBNUZpUFI5OE1ScmlUcDdV?=
- =?utf-8?B?L3JGd3lzWmcwc1FXeTFYRTlHczVUeGJaZG9wY3k2ckdpY2NCMHhMQWp2U1Jn?=
- =?utf-8?B?V3RnaTdqS2xTVW1KdldtVFV4QTdBbm9ac2ljSU41dG1KYnNKV1Azc09iZDlU?=
- =?utf-8?B?bkl3eTN6MDl6U2lPUUtXZz09?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5548c946-dc59-4797-f158-08d976cbe530
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?WnRydPktcREcWyIaai6HAoXDgwus7ACtnoiYX6rBjkc8C4yFq8IRus3lZ2H7?=
+ =?us-ascii?Q?5MERkbmUh++31Dd5vVzjLAdtgSjuPj1wrGispTJB0evQSJKxuWvi9Dua+IHk?=
+ =?us-ascii?Q?n0rjeQtS+nn3KDp7kY2V6J6d2Ynaanh2z0ZlYd2qUi8wt9axSAlRly84o1xo?=
+ =?us-ascii?Q?vxSNcJdX9UFaVzrbtq+wc6cqBI0MC6COa1IKpIxk7gH1UyAdfKYpRa0VVxRj?=
+ =?us-ascii?Q?MPVkw1gE2ErTJ+3FgpaUTF8uzGcUoY1zJL8B86396bM8pRsjjQJwHxVFPU2Q?=
+ =?us-ascii?Q?JUBkiBH+hdDSJ0LAlMnqsPdl+wOblOaQRYVkyT+/iSl7y0UzkJDyj1T+gkmh?=
+ =?us-ascii?Q?ldMH5vFe2mUuKHgTu66jU7Hc0tf/Eg0yCIdMuNjTKnLmW1EEyIv1P1A4LpsY?=
+ =?us-ascii?Q?vH+nmPXrpeUbI9lkZm2P8fhb6xIMvfnwfrjDNzxgFCzIjbiWo1OkYlWbyU3C?=
+ =?us-ascii?Q?Uzi1vwMQHVksDn4P3LGsxOBd2D7CnAJdob5TDdII9AFTwfP5Dz4q+buzBKoj?=
+ =?us-ascii?Q?T8zI4LhSZvLpBcEPYMb2xKJCQ2ljPawi27dGoiwzXEGZcxTx4hy42UjKrF1m?=
+ =?us-ascii?Q?rjrH3U93ZfWxzmH48nCa/98FbrLKZoGMcJtvdKriYOhbshumnUOeTSixtFWd?=
+ =?us-ascii?Q?uJJgJEKdWSnlF82QTRpWTutLJ7VU1mGKN8ZUlFLLO0F2+QkRshbpePC0PUFM?=
+ =?us-ascii?Q?P8pYdF7Xdcq8vL/P/CdymBAoQopAnbD/jNre5vXbwLAOTQ77spw+iZjQ64iS?=
+ =?us-ascii?Q?xElrgcWchhtNtXcplBcStCj9oyN16Ul/58s9SLZ9nUymLd6EH94GDIUkxcJe?=
+ =?us-ascii?Q?XVAaGNrDlfEmUgjm3YNZwOWTKY/eWJhUZ9+vz/BWdDUzHvgxY9tUidCcD6VL?=
+ =?us-ascii?Q?ziEAGC0dMyFAmfsqdfwyotDGuf/BY+08t2aEzrXtNfqOPF2gxp0tgsdiY5i/?=
+ =?us-ascii?Q?2T/1UgepXhHFaxWMPDPXqn2nZrTuq1CC+Sq0Mt9WTschGMMk3HTn82Lg0Vv8?=
+ =?us-ascii?Q?zPE4JUfEIrA7euo2X+wBPSjrKcd3GEs9qkatJcHGQryjyCLUUdBv8gqqNj3o?=
+ =?us-ascii?Q?s0FJaAQ5uMbXUJrOa2Qy0txIpl2e8/ARdPt6L9wXbmwlHSbmFlm8ZqszmA7R?=
+ =?us-ascii?Q?dzmv+yVcQp8EK4+vqvuB4ORFBbuQ1KfwSmtxH+gb0nUBwmIgb9nRAVLLWucI?=
+ =?us-ascii?Q?MZJqvJXPQSuGJn/HmrwapdcHhiOXMJVrgbtvNQFzZw/r6jAjHbTvI85s062i?=
+ =?us-ascii?Q?aEhPrggLXK0t4Y2fUCZS9v7ITimMQCnRCYUiLn9eRoc8vl+QrEV1AIQjSWa3?=
+ =?us-ascii?Q?YMz0zvKXQ1JWTR7F++yg8Dpt?=
+X-OriginatorOrg: windriver.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 993ccacf-e8c3-42b5-385b-08d976cc2f08
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5327.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Sep 2021 15:33:54.7093
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Sep 2021 15:35:58.5463
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: wxJ+FWDumLR07O5oXWoxpWaIYOE3aQCqEoYEIom5Socsi9UCrkogubatLORFoCXw
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR15MB3790
-X-OriginatorOrg: fb.com
-X-Proofpoint-GUID: Si5HtcKs9-eGH7JRocPIHAMSpb_EBsRP
-X-Proofpoint-ORIG-GUID: Si5HtcKs9-eGH7JRocPIHAMSpb_EBsRP
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6WgASMZiDEZriB1fGZZxrMZQV9c+4ekpgcYo+9rdIbOCZKwQAg9m/UlLVHOlu/0r850QvwrIDhK3X5B8WhyP5Z7Nj6+tQxN1EscFTotCEUE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5549
+X-Proofpoint-ORIG-GUID: Gno-mZy5kEcAWbB85lDKklgdImDmfTzw
+X-Proofpoint-GUID: Gno-mZy5kEcAWbB85lDKklgdImDmfTzw
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
  definitions=2021-09-13_07,2021-09-09_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0 bulkscore=0
- spamscore=0 lowpriorityscore=0 mlxlogscore=999 clxscore=1011
- priorityscore=1501 phishscore=0 impostorscore=0 mlxscore=0 malwarescore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ mlxlogscore=999 impostorscore=0 clxscore=1015 phishscore=0 suspectscore=0
+ adultscore=0 bulkscore=0 spamscore=0 mlxscore=0 lowpriorityscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2109030001 definitions=main-2109130103
-X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+From: Jiong Wang <jiong.wang@netronome.com>
 
+commit 0bae2d4d62d523f06ff1a8e88ce38b45400acd28 upstream.
 
-On 9/13/21 4:02 AM, Dongliang Mu wrote:
-> Since 7661809d493b ("mm: don't allow oversized kvmalloc() calls
-> ") does not allow oversized kvmalloc, it triggers a kmalloc bug warning
-> at bpf_check.
-> 
-> Fix it by adding a sanity check in th check_btf_line.
-> 
-> Reported-by: syzbot+f3e749d4c662818ae439@syzkaller.appspotmail.com
-> Fixes: 7661809d493b ("mm: don't allow oversized kvmalloc() calls")
-> Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+Verifier is supposed to support sharing stack slot allocated to ptr with
+SCALAR_VALUE for privileged program. However this doesn't happen for some
+cases.
 
-Thanks for the fix. A similar patch has been proposed here:
-https://lore.kernel.org/bpf/20210911005557.45518-1-cuibixuan@huawei.com/
+The reason is verifier is not clearing slot_type STACK_SPILL for all bytes,
+it only clears part of them, while verifier is using:
 
-> ---
->   kernel/bpf/verifier.c | 3 +++
->   1 file changed, 3 insertions(+)
-> 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 047ac4b4703b..3c5a79f78bc5 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -9913,6 +9913,9 @@ static int check_btf_line(struct bpf_verifier_env *env,
->   	if (!nr_linfo)
->   		return 0;
->   
-> +	if (nr_linfo > INT_MAX/sizeof(struct bpf_line_info))
-> +		return -EINVAL;
-> +
->   	rec_size = attr->line_info_rec_size;
->   	if (rec_size < MIN_BPF_LINEINFO_SIZE ||
->   	    rec_size > MAX_LINEINFO_REC_SIZE ||
-> 
+  slot_type[0] == STACK_SPILL
+
+as a convention to check one slot is ptr type.
+
+So, the consequence of partial clearing slot_type is verifier could treat a
+partially overridden ptr slot, which should now be a SCALAR_VALUE slot,
+still as ptr slot, and rejects some valid programs.
+
+Before this patch, test_xdp_noinline.o under bpf selftests, bpf_lxc.o and
+bpf_netdev.o under Cilium bpf repo, when built with -mattr=+alu32 are
+rejected due to this issue. After this patch, they all accepted.
+
+There is no processed insn number change before and after this patch on
+Cilium bpf programs.
+
+Reviewed-by: Jakub Kicinski <jakub.kicinski@netronome.com>
+Signed-off-by: Jiong Wang <jiong.wang@netronome.com>
+Reviewed-by: Daniel Borkmann <daniel@iogearbox.net>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+[OP: adjusted context for 4.19]
+Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
+---
+ kernel/bpf/verifier.c                       |  5 +++
+ tools/testing/selftests/bpf/test_verifier.c | 34 +++++++++++++++++++--
+ 2 files changed, 37 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index a5259ff30073..b6f008dcb30c 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -1039,6 +1039,10 @@ static int check_stack_write(struct bpf_verifier_env *env,
+ 
+ 		/* regular write of data into stack destroys any spilled ptr */
+ 		state->stack[spi].spilled_ptr.type = NOT_INIT;
++		/* Mark slots as STACK_MISC if they belonged to spilled ptr. */
++		if (state->stack[spi].slot_type[0] == STACK_SPILL)
++			for (i = 0; i < BPF_REG_SIZE; i++)
++				state->stack[spi].slot_type[i] = STACK_MISC;
+ 
+ 		/* only mark the slot as written if all 8 bytes were written
+ 		 * otherwise read propagation may incorrectly stop too soon
+@@ -1056,6 +1060,7 @@ static int check_stack_write(struct bpf_verifier_env *env,
+ 		    register_is_null(&cur->regs[value_regno]))
+ 			type = STACK_ZERO;
+ 
++		/* Mark slots affected by this stack write. */
+ 		for (i = 0; i < size; i++)
+ 			state->stack[spi].slot_type[(slot - i) % BPF_REG_SIZE] =
+ 				type;
+diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
+index c7d17781dbfe..6b9ed915c6b0 100644
+--- a/tools/testing/selftests/bpf/test_verifier.c
++++ b/tools/testing/selftests/bpf/test_verifier.c
+@@ -956,15 +956,45 @@ static struct bpf_test tests[] = {
+ 			BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_1, -8),
+ 			/* mess up with R1 pointer on stack */
+ 			BPF_ST_MEM(BPF_B, BPF_REG_10, -7, 0x23),
+-			/* fill back into R0 should fail */
++			/* fill back into R0 is fine for priv.
++			 * R0 now becomes SCALAR_VALUE.
++			 */
+ 			BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_10, -8),
++			/* Load from R0 should fail. */
++			BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_0, 8),
+ 			BPF_EXIT_INSN(),
+ 		},
+ 		.errstr_unpriv = "attempt to corrupt spilled",
+-		.errstr = "corrupted spill",
++		.errstr = "R0 invalid mem access 'inv",
+ 		.result = REJECT,
+ 		.flags = F_NEEDS_EFFICIENT_UNALIGNED_ACCESS,
+ 	},
++	{
++		"check corrupted spill/fill, LSB",
++		.insns = {
++			BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_1, -8),
++			BPF_ST_MEM(BPF_H, BPF_REG_10, -8, 0xcafe),
++			BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_10, -8),
++			BPF_EXIT_INSN(),
++		},
++		.errstr_unpriv = "attempt to corrupt spilled",
++		.result_unpriv = REJECT,
++		.result = ACCEPT,
++		.retval = POINTER_VALUE,
++	},
++	{
++		"check corrupted spill/fill, MSB",
++		.insns = {
++			BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_1, -8),
++			BPF_ST_MEM(BPF_W, BPF_REG_10, -4, 0x12345678),
++			BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_10, -8),
++			BPF_EXIT_INSN(),
++		},
++		.errstr_unpriv = "attempt to corrupt spilled",
++		.result_unpriv = REJECT,
++		.result = ACCEPT,
++		.retval = POINTER_VALUE,
++	},
+ 	{
+ 		"invalid src register in STX",
+ 		.insns = {
+-- 
+2.25.1
+
