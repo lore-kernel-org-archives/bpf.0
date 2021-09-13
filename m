@@ -2,88 +2,274 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 560A3C433F5
-	for <bpf@archiver.kernel.org>; Mon, 13 Sep 2021 23:01:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 570E3C433EF
+	for <bpf@archiver.kernel.org>; Mon, 13 Sep 2021 23:11:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 36847610CC
-	for <bpf@archiver.kernel.org>; Mon, 13 Sep 2021 23:01:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4202C61130
+	for <bpf@archiver.kernel.org>; Mon, 13 Sep 2021 23:11:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349363AbhIMXC5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 13 Sep 2021 19:02:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51026 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243387AbhIMXCu (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 13 Sep 2021 19:02:50 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C305C061224
-        for <bpf@vger.kernel.org>; Mon, 13 Sep 2021 15:54:57 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id j10-20020a17090a94ca00b00181f17b7ef7so636703pjw.2
-        for <bpf@vger.kernel.org>; Mon, 13 Sep 2021 15:54:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=eJMCKfM6ky3/rtWTiE8UDQTfsaqc02RyNfdo1PKZIzA=;
-        b=Wn+SpxK/ROJe838NFCMpeW2cD8imN+Oove6iOwMrpmUZhpXvA8WN+v+un9CGKXEb1w
-         PbBXJK6qbHl4y0NGFjiT9zoz7YRFiCev4gXtvNbdosOoz6fC9w/igatY/UhOS12cMBgR
-         XXJMYpqKQ/hOTgcxaSsN+77Pe0mF0RNf9IYCSGgrBTByxg1I+xBDq4qFewovCDjvJ8CL
-         esCY+SS4rp9yb1ZqdrzDvTQoS3+ZaIhIQ7ZMwj1yrWAfJPqxtvreYLYPpJHd0f1q6gGs
-         xr4gRl3FKH/MWis0bcX+4cKXwOTg2y3pUDQ9Baapd+yhD7o+/PKyEh7wOHL/OLXHfz/Y
-         uWkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eJMCKfM6ky3/rtWTiE8UDQTfsaqc02RyNfdo1PKZIzA=;
-        b=iPG4Xg/oTTL2n8l9A46kuJG9zNDprpP7gCmllwnLjrbTkM+ZmHzpN6vT2Hoar3Djuj
-         xCWPpzOXA5trcraAOw98XMclJWm0Ov1zkgCo+t2rsE/YFgtiumR95O1/2liyPBpDJH3F
-         Tf24iVsGg8oYH3QPDuJPYajztv1uqHmxAe/+It8bsJz95RLLqO40ujZv7JrtntVtD75b
-         25P3ZGmPyhZI7VA8CE4uIeBKs4Ubl7Lnjz9EXdPYPToXRtfTmbofeTEZNlJf42zn08I6
-         2dlI4Wt3qc+/JK+zV8R+slJ9X6XiD+IBXT5X4N5IbZEYrsGtyNcd0mHbdcg8rQnKyJ/G
-         MINw==
-X-Gm-Message-State: AOAM530cABMgWthM29KSfWKIE/1Zm3sAi8DcP8ZFeDyRvf0DFvqowfI/
-        AgJlcscJxXS7dcTW+TwU5pqcmn/FIFXu8XAe4HU=
-X-Google-Smtp-Source: ABdhPJwT9eZQJnVbYct3M7bd+M3P+hKBsDZ8u1WKvKLS+Jo2J6SIwp1Pr1IbwtJTQGdamSV8li2fxmxySKLibhyAaig=
-X-Received: by 2002:a17:90a:450d:: with SMTP id u13mr2037087pjg.138.1631573696678;
- Mon, 13 Sep 2021 15:54:56 -0700 (PDT)
+        id S1343951AbhIMXM0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 13 Sep 2021 19:12:26 -0400
+Received: from www62.your-server.de ([213.133.104.62]:42368 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349432AbhIMXL6 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 13 Sep 2021 19:11:58 -0400
+Received: from 65.47.5.85.dynamic.wline.res.cust.swisscom.ch ([85.5.47.65] helo=localhost)
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1mPv3T-000EhP-Kz; Tue, 14 Sep 2021 01:08:03 +0200
+From:   Daniel Borkmann <daniel@iogearbox.net>
+To:     bpf@vger.kernel.org
+Cc:     netdev@vger.kernel.org, tj@kernel.org, davem@davemloft.net,
+        m@lambda.lt, alexei.starovoitov@gmail.com, andrii@kernel.org,
+        sdf@google.com, Daniel Borkmann <daniel@iogearbox.net>
+Subject: [PATCH bpf v4 2/3] bpf, selftests: Add cgroup v1 net_cls classid helpers
+Date:   Tue, 14 Sep 2021 01:07:58 +0200
+Message-Id: <20210913230759.2313-2-daniel@iogearbox.net>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20210913230759.2313-1-daniel@iogearbox.net>
+References: <20210913230759.2313-1-daniel@iogearbox.net>
 MIME-Version: 1.0
-References: <20210913222309.3220849-1-andrii@kernel.org>
-In-Reply-To: <20210913222309.3220849-1-andrii@kernel.org>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Mon, 13 Sep 2021 15:54:45 -0700
-Message-ID: <CAADnVQJ2qd095mvj3z9u9BXQYCe2OTDn4=Gsu9nv1tjFHc2yqQ@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next] libbpf: make libbpf_version.h non-auto-generated
-To:     Andrii Nakryiko <andrii@kernel.org>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.2/26293/Mon Sep 13 10:23:39 2021)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Sep 13, 2021 at 3:23 PM Andrii Nakryiko <andrii@kernel.org> wrote:
->
-> Turn previously auto-generated libbpf_version.h header into a normal
-> header file. This prevents various tricky Makefile integration issues,
-> simplifies the overall build process, but also allows to further extend
-> it with some more versioning-related APIs in the future.
->
-> To prevent accidental out-of-sync versions as defined by libbpf.map and
-> libbpf_version.h, Makefile checks their consistency at build time.
->
-> Simultaneously with this change bump libbpf.map to v0.6.
->
-> Also undo adding libbpf's output directory into include path for
-> kernel/bpf/preload, bpftool, and resolve_btfids, which is not necessary
-> because libbpf_version.h is just a normal header like any other.
->
-> Fixes: 0b46b7550560 ("libbpf: Add LIBBPF_DEPRECATED_SINCE macro for scheduling API deprecations")
-> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Minimal set of helpers for net_cls classid cgroupv1 management in order
+to set an id, join from a process, initiate setup and teardown. cgroupv2
+helpers are left as-is, but reused where possible.
 
-Applied and reverted my earlier fix with FORCE.
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ v2 -> v3:
+  - Extend setup_classid_environment to mount if net_cls is not present
+    as caught by BPF CI
+ v3 -> v4:
+  - Also had to mount tmpfs to get CI eventually working
+
+ tools/testing/selftests/bpf/cgroup_helpers.c | 137 +++++++++++++++++--
+ tools/testing/selftests/bpf/cgroup_helpers.h |  16 ++-
+ 2 files changed, 141 insertions(+), 12 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/cgroup_helpers.c b/tools/testing/selftests/bpf/cgroup_helpers.c
+index 033051717ba5..f3daa44a8266 100644
+--- a/tools/testing/selftests/bpf/cgroup_helpers.c
++++ b/tools/testing/selftests/bpf/cgroup_helpers.c
+@@ -12,27 +12,36 @@
+ #include <unistd.h>
+ #include <ftw.h>
+ 
+-
+ #include "cgroup_helpers.h"
+ 
+ /*
+  * To avoid relying on the system setup, when setup_cgroup_env is called
+- * we create a new mount namespace, and cgroup namespace. The cgroup2
+- * root is mounted at CGROUP_MOUNT_PATH
+- *
+- * Unfortunately, most people don't have cgroupv2 enabled at this point in time.
+- * It's easier to create our own mount namespace and manage it ourselves.
++ * we create a new mount namespace, and cgroup namespace. The cgroupv2
++ * root is mounted at CGROUP_MOUNT_PATH. Unfortunately, most people don't
++ * have cgroupv2 enabled at this point in time. It's easier to create our
++ * own mount namespace and manage it ourselves. We assume /mnt exists.
+  *
+- * We assume /mnt exists.
++ * Related cgroupv1 helpers are named *classid*(), since we only use the
++ * net_cls controller for tagging net_cls.classid. We assume the default
++ * mount under /sys/fs/cgroup/net_cls, which should be the case for the
++ * vast majority of users.
+  */
+ 
+ #define WALK_FD_LIMIT			16
++
+ #define CGROUP_MOUNT_PATH		"/mnt"
++#define CGROUP_MOUNT_DFLT		"/sys/fs/cgroup"
++#define NETCLS_MOUNT_PATH		CGROUP_MOUNT_DFLT "/net_cls"
+ #define CGROUP_WORK_DIR			"/cgroup-test-work-dir"
++
+ #define format_cgroup_path(buf, path) \
+ 	snprintf(buf, sizeof(buf), "%s%s%s", CGROUP_MOUNT_PATH, \
+ 		 CGROUP_WORK_DIR, path)
+ 
++#define format_classid_path(buf)				\
++	snprintf(buf, sizeof(buf), "%s%s", NETCLS_MOUNT_PATH,	\
++		 CGROUP_WORK_DIR)
++
+ /**
+  * enable_all_controllers() - Enable all available cgroup v2 controllers
+  *
+@@ -139,8 +148,7 @@ static int nftwfunc(const char *filename, const struct stat *statptr,
+ 	return 0;
+ }
+ 
+-
+-static int join_cgroup_from_top(char *cgroup_path)
++static int join_cgroup_from_top(const char *cgroup_path)
+ {
+ 	char cgroup_procs_path[PATH_MAX + 1];
+ 	pid_t pid = getpid();
+@@ -313,3 +321,114 @@ int cgroup_setup_and_join(const char *path) {
+ 	}
+ 	return cg_fd;
+ }
++
++/**
++ * setup_classid_environment() - Setup the cgroupv1 net_cls environment
++ *
++ * After calling this function, cleanup_classid_environment should be called
++ * once testing is complete.
++ *
++ * This function will print an error to stderr and return 1 if it is unable
++ * to setup the cgroup environment. If setup is successful, 0 is returned.
++ */
++int setup_classid_environment(void)
++{
++	char cgroup_workdir[PATH_MAX + 1];
++
++	format_classid_path(cgroup_workdir);
++
++	if (mount("tmpfs", CGROUP_MOUNT_DFLT, "tmpfs", 0, NULL) &&
++	    errno != EBUSY) {
++		log_err("mount cgroup base");
++		return 1;
++	}
++
++	if (mkdir(NETCLS_MOUNT_PATH, 0777) && errno != EEXIST) {
++		log_err("mkdir cgroup net_cls");
++		return 1;
++	}
++
++	if (mount("net_cls", NETCLS_MOUNT_PATH, "cgroup", 0, "net_cls") &&
++	    errno != EBUSY) {
++		log_err("mount cgroup net_cls");
++		return 1;
++	}
++
++	cleanup_classid_environment();
++
++	if (mkdir(cgroup_workdir, 0777) && errno != EEXIST) {
++		log_err("mkdir cgroup work dir");
++		return 1;
++	}
++
++	return 0;
++}
++
++/**
++ * set_classid() - Set a cgroupv1 net_cls classid
++ * @id: the numeric classid
++ *
++ * Writes the passed classid into the cgroup work dir's net_cls.classid
++ * file in order to later on trigger socket tagging.
++ *
++ * On success, it returns 0, otherwise on failure it returns 1. If there
++ * is a failure, it prints the error to stderr.
++ */
++int set_classid(unsigned int id)
++{
++	char cgroup_workdir[PATH_MAX - 42];
++	char cgroup_classid_path[PATH_MAX + 1];
++	int fd, rc = 0;
++
++	format_classid_path(cgroup_workdir);
++	snprintf(cgroup_classid_path, sizeof(cgroup_classid_path),
++		 "%s/net_cls.classid", cgroup_workdir);
++
++	fd = open(cgroup_classid_path, O_WRONLY);
++	if (fd < 0) {
++		log_err("Opening cgroup classid: %s", cgroup_classid_path);
++		return 1;
++	}
++
++	if (dprintf(fd, "%u\n", id) < 0) {
++		log_err("Setting cgroup classid");
++		rc = 1;
++	}
++
++	close(fd);
++	return rc;
++}
++
++/**
++ * join_classid() - Join a cgroupv1 net_cls classid
++ *
++ * This function expects the cgroup work dir to be already created, as we
++ * join it here. This causes the process sockets to be tagged with the given
++ * net_cls classid.
++ *
++ * On success, it returns 0, otherwise on failure it returns 1.
++ */
++int join_classid(void)
++{
++	char cgroup_workdir[PATH_MAX + 1];
++
++	format_classid_path(cgroup_workdir);
++	return join_cgroup_from_top(cgroup_workdir);
++}
++
++/**
++ * cleanup_classid_environment() - Cleanup the cgroupv1 net_cls environment
++ *
++ * At call time, it moves the calling process to the root cgroup, and then
++ * runs the deletion process.
++ *
++ * On failure, it will print an error to stderr, and try to continue.
++ */
++void cleanup_classid_environment(void)
++{
++	char cgroup_workdir[PATH_MAX + 1];
++
++	format_classid_path(cgroup_workdir);
++	join_cgroup_from_top(NETCLS_MOUNT_PATH);
++	nftw(cgroup_workdir, nftwfunc, WALK_FD_LIMIT, FTW_DEPTH | FTW_MOUNT);
++}
+diff --git a/tools/testing/selftests/bpf/cgroup_helpers.h b/tools/testing/selftests/bpf/cgroup_helpers.h
+index 5fe3d88e4f0d..629da3854b3e 100644
+--- a/tools/testing/selftests/bpf/cgroup_helpers.h
++++ b/tools/testing/selftests/bpf/cgroup_helpers.h
+@@ -1,6 +1,7 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+ #ifndef __CGROUP_HELPERS_H
+ #define __CGROUP_HELPERS_H
++
+ #include <errno.h>
+ #include <string.h>
+ 
+@@ -8,12 +9,21 @@
+ #define log_err(MSG, ...) fprintf(stderr, "(%s:%d: errno: %s) " MSG "\n", \
+ 	__FILE__, __LINE__, clean_errno(), ##__VA_ARGS__)
+ 
+-
++/* cgroupv2 related */
+ int cgroup_setup_and_join(const char *path);
+ int create_and_get_cgroup(const char *path);
++unsigned long long get_cgroup_id(const char *path);
++
+ int join_cgroup(const char *path);
++
+ int setup_cgroup_environment(void);
+ void cleanup_cgroup_environment(void);
+-unsigned long long get_cgroup_id(const char *path);
+ 
+-#endif
++/* cgroupv1 related */
++int set_classid(unsigned int id);
++int join_classid(void);
++
++int setup_classid_environment(void);
++void cleanup_classid_environment(void);
++
++#endif /* __CGROUP_HELPERS_H */
+-- 
+2.27.0
+
