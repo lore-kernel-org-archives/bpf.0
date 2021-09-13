@@ -2,73 +2,116 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,LOCALPART_IN_SUBJECT,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CAA5C433F5
-	for <bpf@archiver.kernel.org>; Mon, 13 Sep 2021 15:41:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BE914C433F5
+	for <bpf@archiver.kernel.org>; Mon, 13 Sep 2021 15:49:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 84CD3610A2
-	for <bpf@archiver.kernel.org>; Mon, 13 Sep 2021 15:41:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A335A610A6
+	for <bpf@archiver.kernel.org>; Mon, 13 Sep 2021 15:49:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245163AbhIMPmY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 13 Sep 2021 11:42:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32976 "EHLO
+        id S1344193AbhIMPvG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 13 Sep 2021 11:51:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242449AbhIMPmU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 13 Sep 2021 11:42:20 -0400
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F247EC025243
-        for <bpf@vger.kernel.org>; Mon, 13 Sep 2021 08:03:44 -0700 (PDT)
-Received: by mail-vs1-xe36.google.com with SMTP id l9so8712857vsb.8
-        for <bpf@vger.kernel.org>; Mon, 13 Sep 2021 08:03:44 -0700 (PDT)
+        with ESMTP id S1343968AbhIMPvD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 13 Sep 2021 11:51:03 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24C13C028BA5;
+        Mon, 13 Sep 2021 08:36:41 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id i21so22029511ejd.2;
+        Mon, 13 Sep 2021 08:36:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=yFrXwE1QgNweyFQEjFRyquhl24AehQMld6/MpS9y62g=;
-        b=FdzA5lte+TIsp/Ag9FVg03qd9Sumqt/lQ7z4Gv4ZTd4n1eFPPOkg2b8sH+yN3/xE0D
-         LQzhs+8UD0mkChZCIF0OOw3WItrv6BDjHf0keHpxJYfYUmbcFDBLDcv1zh285DouNxEE
-         Z746TkJInwnyUt/P+xS1ewSTpoVEiJpDuSKYzUBfUEmdGKKDjs1NHwUBBXhvpzP470bw
-         mYd/dTBXvuiAmBV0rAvOU4wCVzqCVupgED2cx7B+imyBJ88mIzK3Zrbw53KsmW1dolhH
-         WfS3UkoL9s4MsueoLvAeE54pVqDDQoXstyKBfIZuT6+J0P98rlF0rYS/5Hk2u2Kp4+xT
-         xS9g==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XSYbOa1IizAHpslHQQmvn+2hEv67SUo9KMqNHAVVr/c=;
+        b=IxOMxIVUf83SESPCmeqzWMSc4EeNXdU8BXuhAkjBidOQoIdoll6j+53llXrD43nPhY
+         I2eXyZrkJGWwMhwkXz93mb3uaxsfQNQnbQsOk1JeaCPuMxligG62v6r7GZq4uaGA35Xu
+         1BbR0b98NQFNbk7NZsM+GFVfKTlNdtaKh4wnvB35i8bFC30T1EZejxaQDQ2AAx+Pikmu
+         KJy+munhXsVw8Jy0PBPZeVXQ2ObvAkd7FxH4JF0wBLuGtnWjj0VTZNd+Ut6HL8xmRETT
+         0GpZ39BRFsKQOpc9Vmm9ZRuI6KejeiqU7xglX+7XZG2XufPXSBYoj1eNPyjlIa4ni0pi
+         HPQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=yFrXwE1QgNweyFQEjFRyquhl24AehQMld6/MpS9y62g=;
-        b=czo7FVM2pWoWkn+aiPWWcjd8Lysm2mObkdu0rQYODLwbN56qGl8LUN7/zIykmIfRk2
-         I3PHKknjZ+rTwqrc8xiZqtMEZPChtJCVXe0i8ZH/Kgo+G7w7WgLcxNfyQtGk18njd9cV
-         gj6J4WnFSWGoXfChMUTgy+x0+RQZ7CxDrkN3FvQeWUTXpsUanHJAW63MWsI3Y/V8gs/1
-         M8ie+VmtdVoIvaXlV2rr9adV39PfTRG94WuFn39hocqiI2F8F3pr3AguuGCjFaYdHrfT
-         d6Dm7c4+KTUzX9u7/7jnW0gSuR0RpQrNQABM9tvIMLbGexl6buPQo3/mOelIOQuMVh1W
-         QTYQ==
-X-Gm-Message-State: AOAM533gkCto9htPIHWTqvzC6znFbDu08I+IA75I+lfd5CoUzGC5LEJ8
-        ktrtHuVb5SrLNxSYbMS7R3BjQjry+wsUyfV+kK+McCF4CQ==
-X-Google-Smtp-Source: ABdhPJyijC37xSD741ip8Y+m/OZviOPJPNQYqmaSvDUWzf37kj1MtYO/uuu3lFKerYVms/NqRXvqqaL47C7eCi23VUY=
-X-Received: by 2002:a05:6102:1d4:: with SMTP id s20mr1697537vsq.3.1631545424093;
- Mon, 13 Sep 2021 08:03:44 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XSYbOa1IizAHpslHQQmvn+2hEv67SUo9KMqNHAVVr/c=;
+        b=CzSU5xYi2KtLOR0k0YJ/hzbUPksk5vN6mQ09bb0NZoJxrGQZBRBB3Yw9T6/rTyEJ6C
+         snn7I+NrhcrCkhHCc3UKADcfKk3UcZ7LG5ByBiuXtvCd1yiazSV8wAKVS38C3p94VuFq
+         ge4Sw6d0P73JuVTEJ/KD/SZOPwqwe7Ho0PNt83oxvIs65YXFge8wHBjlps2jPXNDhw6o
+         Bw1JplG2qNtYD/LdffSIVLPiEQrXqszQN0a7tHoJpQ6o2zlbb4QR+tmd2N+3XuqiP2aq
+         lsrmZHkeF5lMBX6C8ShzNNIqs8WCDa4w4dlVZIHIhQQHC4FEO0yl6zdYbTGyAIEFd2WY
+         0yLA==
+X-Gm-Message-State: AOAM531zOFFHzS6KofOKL8PfopcwI2dD8+tFfTEzw7/zRurmjmLj9M5T
+        8aQvY7mQyG/n4TQgex4HUn60Zjp/KZV8F/Wl2gSqepbvlsgmBQ==
+X-Google-Smtp-Source: ABdhPJwLjo74lSFVZD71/d7P98WZS5j01e79q+eKxJkyr1M9XahZtYihosk2ZYxZhu5WqY6L9VLpLIz+gNMHPXFlBxw=
+X-Received: by 2002:a17:906:7250:: with SMTP id n16mr13223849ejk.147.1631547400206;
+ Mon, 13 Sep 2021 08:36:40 -0700 (PDT)
 MIME-Version: 1.0
-From:   Tal Lossos <tallossos@gmail.com>
-Date:   Mon, 13 Sep 2021 18:03:33 +0300
-Message-ID: <CAO15rP=00cCXkyV83JQq0xwgcFviKn0y92ggtos52qHZO01dhg@mail.gmail.com>
-Subject: bpf: bpf helper with locks
-To:     bpf <bpf@vger.kernel.org>
-Cc:     yhs@fb.com
+References: <20210913110246.2955737-1-mudongliangabcd@gmail.com> <4f260295-b7a2-92ad-3bb0-06074288dd23@fb.com>
+In-Reply-To: <4f260295-b7a2-92ad-3bb0-06074288dd23@fb.com>
+From:   Dongliang Mu <mudongliangabcd@gmail.com>
+Date:   Mon, 13 Sep 2021 23:36:13 +0800
+Message-ID: <CAD-N9QWPUtFRr4XYJG4zAi_fhB1aLsnHsHu0GsfLyC3RamabNw@mail.gmail.com>
+Subject: Re: [PATCH] bpf: fix kmalloc bug in bpf_check
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Willy Tarreau <w@1wt.eu>,
+        syzbot+f3e749d4c662818ae439@syzkaller.appspotmail.com,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+        bpf@vger.kernel.org, linux-kernel <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello!
-I was planning on writing a bpf helper that calls a kernel function
-which has locks in it.
-While researching about it I've encountered this mail:
-https://lists.linuxfoundation.org/pipermail/iovisor-dev/2017-October/001137.html
-Is this still relevant? If not, do I need to do something special in
-order to implement it? or can I implement it just like any other bpf
-helper.
+On Mon, Sep 13, 2021 at 11:34 PM Yonghong Song <yhs@fb.com> wrote:
+>
+>
+>
+> On 9/13/21 4:02 AM, Dongliang Mu wrote:
+> > Since 7661809d493b ("mm: don't allow oversized kvmalloc() calls
+> > ") does not allow oversized kvmalloc, it triggers a kmalloc bug warning
+> > at bpf_check.
+> >
+> > Fix it by adding a sanity check in th check_btf_line.
+> >
+> > Reported-by: syzbot+f3e749d4c662818ae439@syzkaller.appspotmail.com
+> > Fixes: 7661809d493b ("mm: don't allow oversized kvmalloc() calls")
+> > Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+>
+> Thanks for the fix. A similar patch has been proposed here:
+> https://lore.kernel.org/bpf/20210911005557.45518-1-cuibixuan@huawei.com/
 
-Thanks.
+OK, I see. Let's ignore this patch.
+
+>
+> > ---
+> >   kernel/bpf/verifier.c | 3 +++
+> >   1 file changed, 3 insertions(+)
+> >
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index 047ac4b4703b..3c5a79f78bc5 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+> > @@ -9913,6 +9913,9 @@ static int check_btf_line(struct bpf_verifier_env *env,
+> >       if (!nr_linfo)
+> >               return 0;
+> >
+> > +     if (nr_linfo > INT_MAX/sizeof(struct bpf_line_info))
+> > +             return -EINVAL;
+> > +
+> >       rec_size = attr->line_info_rec_size;
+> >       if (rec_size < MIN_BPF_LINEINFO_SIZE ||
+> >           rec_size > MAX_LINEINFO_REC_SIZE ||
+> >
