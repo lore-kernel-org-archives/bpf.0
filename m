@@ -2,280 +2,434 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-21.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D388AC433EF
-	for <bpf@archiver.kernel.org>; Mon, 13 Sep 2021 15:36:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B081DC433EF
+	for <bpf@archiver.kernel.org>; Mon, 13 Sep 2021 15:40:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B86C160249
-	for <bpf@archiver.kernel.org>; Mon, 13 Sep 2021 15:36:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 99F80610CF
+	for <bpf@archiver.kernel.org>; Mon, 13 Sep 2021 15:40:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245413AbhIMPhw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 13 Sep 2021 11:37:52 -0400
-Received: from mx0b-0064b401.pphosted.com ([205.220.178.238]:47132 "EHLO
-        mx0b-0064b401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243429AbhIMPhn (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 13 Sep 2021 11:37:43 -0400
-Received: from pps.filterd (m0250811.ppops.net [127.0.0.1])
-        by mx0a-0064b401.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18DFXNT4020098;
-        Mon, 13 Sep 2021 15:36:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references :
- content-transfer-encoding : content-type : mime-version; s=PPS06212021;
- bh=xcHYzsc9Nn8OrRnv+7C53Turqnm6DqOG8nJIQTKrxus=;
- b=W9oEz85Xq52CL88LmcTzyzKUdpfKive69mRhigi6gw/FgS5iQ3dHpqtaI/IUx9H1vZc1
- b0FQNkZdykhB58oQ7d60b3KHTqlMdSi2JXdif0hPBBk9wWLBhEmop6Tx3himWBe4ZYd/
- yxyO9WeIZW3M9rALCeLRl1s7XN+HzZnxHKE2xmDLhPVRtn83aGwOEfcVBPbfs77IvERy
- a/Hg215b4gbdA0+xlbjYh57BWr+BaqgZwoncSU1VicBcXun9REto14PmCtwjA+qJ7ezh
- 34TPebS4zljI/UdEvkoStULq5KxLudWMToSjdvi5ZNk5q2iCOkfNstvJKb2NSKyltRtT eg== 
-Received: from nam02-dm3-obe.outbound.protection.outlook.com (mail-dm3nam07lp2048.outbound.protection.outlook.com [104.47.56.48])
-        by mx0a-0064b401.pphosted.com with ESMTP id 3b28v1g11n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Sep 2021 15:36:12 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SJnJYba3GHX0imvb0wpmaaUuYBQkjziwiraWiNYt+NwD1FmCjJJZehiMSU5SR7NmpRRPTdOkdr8sYCi7ZW4aQ3zlTF2iteGnVee5x6BIw7nYHBQqmurXrv+hKYdwk6wEh98LsqKi2aEo380k6U9F0IOvYrEqsZaFR41GdWtXHlP/LLhvyOq3A5RfammUsreQRwkrv6L5RydDmSp0RRbRWv1uiRKhRn9npjgH6hEpYwF4L6hDpem4vOEc43l5qYE+MGZJjSyjrpO+IDHEWmANOXmgkQ2ditshwh/3mbnqphWgAsHeqKiYEJy1Z6jkisCjg3E+LU17+3UEG8F57DWMQw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
- bh=xcHYzsc9Nn8OrRnv+7C53Turqnm6DqOG8nJIQTKrxus=;
- b=fvPlPTrkIKGG6WoZBVYmD3Ryzns4q5EGWbIVXwgCsEI5O8PJaI+eNVcojNMLj8d270N+VvmtkKucFP4dbVCk5Mu4O7F8D4k1qlc6li6F4JvZNUh9n1WRnFoQ4twwsWQPMciI/lL5LvLO5F2JBXY4C48MJvZHho8xEhjqRYsh5BVRqFQVD/tMm3fSww4CIhtH4dtFgBnsXAD4BKcV5MArpuL2fnXpT3jnAb7JgnYQ6tbvWaeafnnCnZoo2Q+FBfaFaLNiiAUZvmrwi3HKabRRvfmIzsHtaLtqvA7a/8IrNUbftz4pkdIcClAl0hESY96QcD3gONjA6kUwI2x65aD4SQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=windriver.com; dmarc=pass action=none
- header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
-Authentication-Results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none
- header.from=windriver.com;
-Received: from DM4PR11MB5327.namprd11.prod.outlook.com (2603:10b6:5:392::22)
- by DM5PR1101MB2201.namprd11.prod.outlook.com (2603:10b6:4:51::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4500.15; Mon, 13 Sep
- 2021 15:36:11 +0000
-Received: from DM4PR11MB5327.namprd11.prod.outlook.com
- ([fe80::952a:bdc6:20c3:94cb]) by DM4PR11MB5327.namprd11.prod.outlook.com
- ([fe80::952a:bdc6:20c3:94cb%7]) with mapi id 15.20.4500.019; Mon, 13 Sep 2021
- 15:36:11 +0000
-From:   Ovidiu Panait <ovidiu.panait@windriver.com>
-To:     stable@vger.kernel.org
-Cc:     bpf@vger.kernel.org, daniel@iogearbox.net
-Subject: [PATCH 4.19 12/13] bpf: verifier: Allocate idmap scratch in verifier env
-Date:   Mon, 13 Sep 2021 18:35:36 +0300
-Message-Id: <20210913153537.2162465-13-ovidiu.panait@windriver.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210913153537.2162465-1-ovidiu.panait@windriver.com>
-References: <20210913153537.2162465-1-ovidiu.panait@windriver.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: VI1PR10CA0095.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:803:28::24) To DM4PR11MB5327.namprd11.prod.outlook.com
- (2603:10b6:5:392::22)
+        id S232948AbhIMPlt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 13 Sep 2021 11:41:49 -0400
+Received: from www62.your-server.de ([213.133.104.62]:40290 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241709AbhIMPlm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 13 Sep 2021 11:41:42 -0400
+Received: from 65.47.5.85.dynamic.wline.res.cust.swisscom.ch ([85.5.47.65] helo=localhost)
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1mPo47-000C0d-Nv; Mon, 13 Sep 2021 17:40:15 +0200
+From:   Daniel Borkmann <daniel@iogearbox.net>
+To:     bpf@vger.kernel.org
+Cc:     netdev@vger.kernel.org, tj@kernel.org, davem@davemloft.net,
+        m@lambda.lt, alexei.starovoitov@gmail.com, andrii@kernel.org,
+        sdf@google.com, Daniel Borkmann <daniel@iogearbox.net>
+Subject: [PATCH bpf v3 1/3] bpf, cgroups: Fix cgroup v2 fallback on v1/v2 mixed mode
+Date:   Mon, 13 Sep 2021 17:40:08 +0200
+Message-Id: <d9744c5af3d9ad3a74de2a209caca81ff76c3d42.1631547359.git.daniel@iogearbox.net>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Received: from otp-linux03.wrs.com (46.97.150.20) by VI1PR10CA0095.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:803:28::24) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4500.14 via Frontend Transport; Mon, 13 Sep 2021 15:36:09 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 243d65a0-20a4-4de0-e138-08d976cc3663
-X-MS-TrafficTypeDiagnostic: DM5PR1101MB2201:
-X-Microsoft-Antispam-PRVS: <DM5PR1101MB2201A678035F145D8DEFB1F4FED99@DM5PR1101MB2201.namprd11.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:3173;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: D36vtYvrgkbQ0A1oUrpYXoh0A3pEjIJGdQ1DhxFqJsTNwrlsZsHPT4RgZ9KDvHTwwHHnSiQEKXcVn4h3y6KeEWI11vA1UvzhGIDHqeBzIl/JSKu5Oxq3ZjM34IjbqM5lTjetkmRiUWJOPcZg89HCl7MN1ya7aWGYT7n2DMXwfwyEudQ+VSi/1f+SbyFonWqEuEdWYsYNF7++7lisaxpAL79wnVbmnAv/U8GgzXF27NEciJ5h5kJccDYRqKGKCBY0wLtoOpN2JIYCvUur3HU9gDyn3/9+vsShlkXDAgvwmhROvDD2gNsrBZ2IvpOoY9LwYvpnFX4Xk5+65sSpteHSC2HHiC5o+bU4rFIbR5szQ9ipbd+dHUJrnHdr99lCuRK7qByfZE7hF3QV53AtQfY/JkFfpMkc1wb6oQnE4I7rBoIQTfYX5CjM+CY9vCRo5UgxZjs2walieePE08TpOZeg2tihuwLXnQaep/FJb3th6HGLhFh7VIcd6bDVMrxQPegVsAMsMx8sVMMMadtcjRELDUpJfQr78z7Vf403Q4IKtm+lHSbxA7T5PA/3B3MeOCo6nEiKfMFfj+IGs8v8y8Ks6poiurSUai4ucn+aX6XZTnobfguXrEwBy6vXF+evUwmyrv7toZ+Dn1fODxc87eakBZm/lrwcG+SsBa9clauyQ82zrr3ab2uFh+85wUDxveeSiVo/52XOLLHEf5OIEVi19suvMj8sbLxPO+HKpxwB/LEVeKIlWNHB/H/XptRd9cXUQC8Y0uMlZAN9xo9x3PG/e4uLuXEurCNVEE4LE8n40Lw=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5327.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(136003)(366004)(39850400004)(376002)(346002)(52116002)(6916009)(316002)(6486002)(38350700002)(6666004)(86362001)(5660300002)(2616005)(4326008)(8936002)(26005)(38100700002)(6512007)(6506007)(956004)(83380400001)(478600001)(1076003)(36756003)(186003)(44832011)(966005)(66476007)(2906002)(8676002)(66946007)(66556008);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?oBZLfTyz66wkn31RJPtQXA/sCM7kWLtSmdBnriHVfzi9f1vPr5cYNeR+8KNv?=
- =?us-ascii?Q?3UTBwUwrl1PsY4kp9Q7gt4aIhKSaguBItM0MudDiPscTa7MmpDmbP1JO2Msp?=
- =?us-ascii?Q?4sZWqzC89V212J9BRnAjmLCgXidUvZSjuf+Ks2zEhBuhb248fvJOYEDZ6oNM?=
- =?us-ascii?Q?AzGIPoYlFrseLyedU1+sUmypowGi9LpZ6pPeuAkr4Trll328Pv02BfS9ta2h?=
- =?us-ascii?Q?ctaGk8pSX0BdjRHb9EivJ/RkIblG0gKNetInQAb9FRWQ5w3i2tK3R9mc3y7t?=
- =?us-ascii?Q?5nj/9QVGmX+VXFNJyzt5sU0GaxI4Zsne59rH5zh0vI8u5gCYcYjhrG+Kq2yZ?=
- =?us-ascii?Q?fXKbTwkdjomhGpzCwvqKSejW5efkfW2RznJB0RzvP0bd3YBdq0MZUFim9FoM?=
- =?us-ascii?Q?BqF98tU2yB9P9uYOBr+n+a2bbMVuhwHEJ7HlrMTlF4quKaJI1harlvEIDqkM?=
- =?us-ascii?Q?AMrj/EVrKRhv4b3t1JYuyQpaCpjKoQnm+QvcnU6irWAdVV75am4/qzpWBUZq?=
- =?us-ascii?Q?vSz+j+67J4w8N4hAsxDFzS2x2s2qV6TLRBe/FWpDhqUA5M25zan3e/yvnDWL?=
- =?us-ascii?Q?3aHBGbJc4gkXgqZYqut+GuXiZD5Fe1ok+lq8muUl1wofbUwcNLiZUwN5wboa?=
- =?us-ascii?Q?WG1k6+dLhQGbu2MO8n6tbyM3kKTm7TdPgiOh/Z9nM5YQAb20MMzPB7bVw0K1?=
- =?us-ascii?Q?fpMEvqmLfdiwkjBxURIMWPnOX0oeg3mcrUL+QIMLXBwd2ar7YqlUw93rf65b?=
- =?us-ascii?Q?GuBLpuj4k5LZQQFBsNifG21kSVoHcHa38cj9jCc3BB4+picQ5Lre4ZAaE/Vr?=
- =?us-ascii?Q?/yI9hyvTFCrtrapuqAYjpS89q4G2Lgog9xMW/2I0dLfO0tGeJ3HJrJR67sNF?=
- =?us-ascii?Q?nhCdENMOlU8R5ScJbFw6uaMkdo6SaO22VUKzx25hfY32nZMiIGLpSWfdj70P?=
- =?us-ascii?Q?CW9Xt/PkVeF4FI9aFgjlfUZJRTXVLxG+Upimnfi+b1xb/cChBEv7JYVd+Cz2?=
- =?us-ascii?Q?u4lRIbhRtno+T0kiDBoHu4Nfb5hpgPODKrFgUFrPdsso/9eYenVtFhiaOqVr?=
- =?us-ascii?Q?SzfBrxi3gfAFkhHspCS5J8tIGcGWut8d3wvIogS+uAhJPqBNKDNV5smQxUMy?=
- =?us-ascii?Q?Q+b9mukBAQ7Cs23lOWEYB4ugQKqPjxYRhbcJYIM7cBP5OXPvIUzu9b5HMoIn?=
- =?us-ascii?Q?5UAZJN3pnIqJpLRd4ZueobS/6+zAtPM2djTfKrqrdzAgWPZBT1yFrySvJtJo?=
- =?us-ascii?Q?5zWSU7VO7YIlohyHBBftckD+Cm+8SDzI9m7nZHLNwETKhnDLb0Qh4AwI238G?=
- =?us-ascii?Q?IkiFBFu471o01B+vdXNK9NPu?=
-X-OriginatorOrg: windriver.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 243d65a0-20a4-4de0-e138-08d976cc3663
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5327.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Sep 2021 15:36:11.3062
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: cM1yMNBUpgygKwbBDBLartG3Wh0sytXZrrgfSj1Oaww49sklkeh9qoLr94cvnXwSp4lk/AMq+hz2Te8HvyGGg3B1Uoe0bCWtaki7afUZNQo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR1101MB2201
-X-Proofpoint-ORIG-GUID: 7Q7OH4iqfggoNFBo2neDieSKyD23VV2M
-X-Proofpoint-GUID: 7Q7OH4iqfggoNFBo2neDieSKyD23VV2M
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
- definitions=2021-09-13_07,2021-09-09_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
- priorityscore=1501 malwarescore=0 adultscore=0 mlxlogscore=819
- impostorscore=0 lowpriorityscore=0 bulkscore=0 phishscore=0 suspectscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2109030001 definitions=main-2109130103
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.2/26293/Mon Sep 13 10:23:39 2021)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Lorenz Bauer <lmb@cloudflare.com>
+Fix cgroup v1 interference when non-root cgroup v2 BPF programs are used.
+Back in the days, commit bd1060a1d671 ("sock, cgroup: add sock->sk_cgroup")
+embedded per-socket cgroup information into sock->sk_cgrp_data and in order
+to save 8 bytes in struct sock made both mutually exclusive, that is, when
+cgroup v1 socket tagging (e.g. net_cls/net_prio) is used, then cgroup v2
+falls back to the root cgroup in sock_cgroup_ptr() (&cgrp_dfl_root.cgrp).
 
-commit c9e73e3d2b1eb1ea7ff068e05007eec3bd8ef1c9 upstream.
+The assumption made was "there is no reason to mix the two and this is in line
+with how legacy and v2 compatibility is handled" as stated in bd1060a1d671.
+However, with Kubernetes more widely supporting cgroups v2 as well nowadays,
+this assumption no longer holds, and the possibility of the v1/v2 mixed mode
+with the v2 root fallback being hit becomes a real security issue.
 
-func_states_equal makes a very short lived allocation for idmap,
-probably because it's too large to fit on the stack. However the
-function is called quite often, leading to a lot of alloc / free
-churn. Replace the temporary allocation with dedicated scratch
-space in struct bpf_verifier_env.
+Many of the cgroup v2 BPF programs are also used for policy enforcement, just
+to pick _one_ example, that is, to programmatically deny socket related system
+calls like connect(2) or bind(2). A v2 root fallback would implicitly cause
+a policy bypass for the affected Pods.
 
-Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Acked-by: Edward Cree <ecree.xilinx@gmail.com>
-Link: https://lore.kernel.org/bpf/20210429134656.122225-4-lmb@cloudflare.com
-[OP: adjusted context for 4.19]
-Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
+In production environments, we have recently seen this case due to various
+circumstances: i) a different 3rd party agent and/or ii) a container runtime
+such as [0] in the user's environment configuring legacy cgroup v1 net_cls
+tags, which triggered implicitly mentioned root fallback. Another case is
+Kubernetes projects like kind [1] which create Kubernetes nodes in a container
+and also add cgroup namespaces to the mix, meaning programs which are attached
+to the cgroup v2 root of the cgroup namespace get attached to a non-root
+cgroup v2 path from init namespace point of view. And the latter's root is
+out of reach for agents on a kind Kubernetes node to configure. Meaning, any
+entity on the node setting cgroup v1 net_cls tag will trigger the bypass
+despite cgroup v2 BPF programs attached to the namespace root.
+
+Generally, this mutual exclusiveness does not hold anymore in today's user
+environments and makes cgroup v2 usage from BPF side fragile and unreliable.
+This fix adds proper struct cgroup pointer for the cgroup v2 case to struct
+sock_cgroup_data in order to address these issues; this implicitly also fixes
+the trade-offs being made back then with regards to races and refcount leaks
+as stated in bd1060a1d671, and removes the fallback, so that cgroup v2 BPF
+programs always operate as expected.
+
+  [0] https://github.com/nestybox/sysbox/
+  [1] https://kind.sigs.k8s.io/
+
+Fixes: bd1060a1d671 ("sock, cgroup: add sock->sk_cgroup")
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: Stanislav Fomichev <sdf@google.com>
+Acked-by: Tejun Heo <tj@kernel.org>
+Cc: David S. Miller <davem@davemloft.net>
+Cc: Martynas Pumputis <m@lambda.lt>
 ---
- include/linux/bpf_verifier.h |  8 +++++++
- kernel/bpf/verifier.c        | 42 +++++++++++-------------------------
- 2 files changed, 21 insertions(+), 29 deletions(-)
+ v1 -> v2:
+   - Remove unneeded READ_ONCE()/WRITE_ONCE() pair around skcd->cgroup,
+     thanks Stanislav!
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index e64ac93f7f4c..729c65b320d4 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -127,6 +127,13 @@ struct bpf_func_state {
- 	struct bpf_stack_state *stack;
+ include/linux/cgroup-defs.h  | 107 +++++++++--------------------------
+ include/linux/cgroup.h       |  22 +------
+ kernel/cgroup/cgroup.c       |  50 ++++------------
+ net/core/netclassid_cgroup.c |   7 +--
+ net/core/netprio_cgroup.c    |  10 +---
+ 5 files changed, 41 insertions(+), 155 deletions(-)
+
+diff --git a/include/linux/cgroup-defs.h b/include/linux/cgroup-defs.h
+index e1c705fdfa7c..db2e147e069f 100644
+--- a/include/linux/cgroup-defs.h
++++ b/include/linux/cgroup-defs.h
+@@ -752,107 +752,54 @@ static inline void cgroup_threadgroup_change_end(struct task_struct *tsk) {}
+  * sock_cgroup_data is embedded at sock->sk_cgrp_data and contains
+  * per-socket cgroup information except for memcg association.
+  *
+- * On legacy hierarchies, net_prio and net_cls controllers directly set
+- * attributes on each sock which can then be tested by the network layer.
+- * On the default hierarchy, each sock is associated with the cgroup it was
+- * created in and the networking layer can match the cgroup directly.
+- *
+- * To avoid carrying all three cgroup related fields separately in sock,
+- * sock_cgroup_data overloads (prioidx, classid) and the cgroup pointer.
+- * On boot, sock_cgroup_data records the cgroup that the sock was created
+- * in so that cgroup2 matches can be made; however, once either net_prio or
+- * net_cls starts being used, the area is overridden to carry prioidx and/or
+- * classid.  The two modes are distinguished by whether the lowest bit is
+- * set.  Clear bit indicates cgroup pointer while set bit prioidx and
+- * classid.
+- *
+- * While userland may start using net_prio or net_cls at any time, once
+- * either is used, cgroup2 matching no longer works.  There is no reason to
+- * mix the two and this is in line with how legacy and v2 compatibility is
+- * handled.  On mode switch, cgroup references which are already being
+- * pointed to by socks may be leaked.  While this can be remedied by adding
+- * synchronization around sock_cgroup_data, given that the number of leaked
+- * cgroups is bound and highly unlikely to be high, this seems to be the
+- * better trade-off.
++ * On legacy hierarchies, net_prio and net_cls controllers directly
++ * set attributes on each sock which can then be tested by the network
++ * layer. On the default hierarchy, each sock is associated with the
++ * cgroup it was created in and the networking layer can match the
++ * cgroup directly.
+  */
+ struct sock_cgroup_data {
+-	union {
+-#ifdef __LITTLE_ENDIAN
+-		struct {
+-			u8	is_data : 1;
+-			u8	no_refcnt : 1;
+-			u8	unused : 6;
+-			u8	padding;
+-			u16	prioidx;
+-			u32	classid;
+-		} __packed;
+-#else
+-		struct {
+-			u32	classid;
+-			u16	prioidx;
+-			u8	padding;
+-			u8	unused : 6;
+-			u8	no_refcnt : 1;
+-			u8	is_data : 1;
+-		} __packed;
++	struct cgroup	*cgroup; /* v2 */
++#ifdef CONFIG_CGROUP_NET_CLASSID
++	u32		classid; /* v1 */
++#endif
++#ifdef CONFIG_CGROUP_NET_PRIO
++	u16		prioidx; /* v1 */
+ #endif
+-		u64		val;
+-	};
  };
  
-+struct bpf_id_pair {
-+	u32 old;
-+	u32 cur;
-+};
-+
-+/* Maximum number of register states that can exist at once */
-+#define BPF_ID_MAP_SIZE (MAX_BPF_REG + MAX_BPF_STACK / BPF_REG_SIZE)
- #define MAX_CALL_FRAMES 8
- struct bpf_verifier_state {
- 	/* call stack tracking */
-@@ -213,6 +220,7 @@ struct bpf_verifier_env {
- 	struct bpf_insn_aux_data *insn_aux_data; /* array of per-insn state */
- 	struct bpf_verifier_log log;
- 	struct bpf_subprog_info subprog_info[BPF_MAX_SUBPROGS + 1];
-+	struct bpf_id_pair idmap_scratch[BPF_ID_MAP_SIZE];
- 	u32 subprog_cnt;
- };
- 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index d38ec3266a84..883fb762d93c 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -4783,13 +4783,6 @@ static bool range_within(struct bpf_reg_state *old,
- 	       old->smax_value >= cur->smax_value;
+-/*
+- * There's a theoretical window where the following accessors race with
+- * updaters and return part of the previous pointer as the prioidx or
+- * classid.  Such races are short-lived and the result isn't critical.
+- */
+ static inline u16 sock_cgroup_prioidx(const struct sock_cgroup_data *skcd)
+ {
+-	/* fallback to 1 which is always the ID of the root cgroup */
+-	return (skcd->is_data & 1) ? skcd->prioidx : 1;
++#ifdef CONFIG_CGROUP_NET_PRIO
++	return READ_ONCE(skcd->prioidx);
++#else
++	return 1;
++#endif
  }
  
--/* Maximum number of register states that can exist at once */
--#define ID_MAP_SIZE	(MAX_BPF_REG + MAX_BPF_STACK / BPF_REG_SIZE)
--struct idpair {
--	u32 old;
--	u32 cur;
--};
+ static inline u32 sock_cgroup_classid(const struct sock_cgroup_data *skcd)
+ {
+-	/* fallback to 0 which is the unconfigured default classid */
+-	return (skcd->is_data & 1) ? skcd->classid : 0;
++#ifdef CONFIG_CGROUP_NET_CLASSID
++	return READ_ONCE(skcd->classid);
++#else
++	return 0;
++#endif
+ }
+ 
+-/*
+- * If invoked concurrently, the updaters may clobber each other.  The
+- * caller is responsible for synchronization.
+- */
+ static inline void sock_cgroup_set_prioidx(struct sock_cgroup_data *skcd,
+ 					   u16 prioidx)
+ {
+-	struct sock_cgroup_data skcd_buf = {{ .val = READ_ONCE(skcd->val) }};
 -
- /* If in the old state two registers had the same id, then they need to have
-  * the same id in the new state as well.  But that id could be different from
-  * the old state, so we need to track the mapping from old to new ids.
-@@ -4800,11 +4793,11 @@ struct idpair {
-  * So we look through our idmap to see if this old id has been seen before.  If
-  * so, we require the new id to match; otherwise, we add the id pair to the map.
-  */
--static bool check_ids(u32 old_id, u32 cur_id, struct idpair *idmap)
-+static bool check_ids(u32 old_id, u32 cur_id, struct bpf_id_pair *idmap)
- {
- 	unsigned int i;
- 
--	for (i = 0; i < ID_MAP_SIZE; i++) {
-+	for (i = 0; i < BPF_ID_MAP_SIZE; i++) {
- 		if (!idmap[i].old) {
- 			/* Reached an empty slot; haven't seen this id before */
- 			idmap[i].old = old_id;
-@@ -4821,7 +4814,7 @@ static bool check_ids(u32 old_id, u32 cur_id, struct idpair *idmap)
- 
- /* Returns true if (rold safe implies rcur safe) */
- static bool regsafe(struct bpf_reg_state *rold, struct bpf_reg_state *rcur,
--		    struct idpair *idmap)
-+		    struct bpf_id_pair *idmap)
- {
- 	bool equal;
- 
-@@ -4925,7 +4918,7 @@ static bool regsafe(struct bpf_reg_state *rold, struct bpf_reg_state *rcur,
- 
- static bool stacksafe(struct bpf_func_state *old,
- 		      struct bpf_func_state *cur,
--		      struct idpair *idmap)
-+		      struct bpf_id_pair *idmap)
- {
- 	int i, spi;
- 
-@@ -5011,29 +5004,20 @@ static bool stacksafe(struct bpf_func_state *old,
-  * whereas register type in current state is meaningful, it means that
-  * the current state will reach 'bpf_exit' instruction safely
-  */
--static bool func_states_equal(struct bpf_func_state *old,
-+static bool func_states_equal(struct bpf_verifier_env *env, struct bpf_func_state *old,
- 			      struct bpf_func_state *cur)
- {
--	struct idpair *idmap;
--	bool ret = false;
- 	int i;
- 
--	idmap = kcalloc(ID_MAP_SIZE, sizeof(struct idpair), GFP_KERNEL);
--	/* If we failed to allocate the idmap, just say it's not safe */
--	if (!idmap)
--		return false;
-+	memset(env->idmap_scratch, 0, sizeof(env->idmap_scratch));
-+	for (i = 0; i < MAX_BPF_REG; i++)
-+		if (!regsafe(&old->regs[i], &cur->regs[i], env->idmap_scratch))
-+			return false;
- 
--	for (i = 0; i < MAX_BPF_REG; i++) {
--		if (!regsafe(&old->regs[i], &cur->regs[i], idmap))
--			goto out_free;
+-	if (sock_cgroup_prioidx(&skcd_buf) == prioidx)
+-		return;
+-
+-	if (!(skcd_buf.is_data & 1)) {
+-		skcd_buf.val = 0;
+-		skcd_buf.is_data = 1;
 -	}
-+	if (!stacksafe(old, cur, env->idmap_scratch))
-+		return false;
- 
--	if (!stacksafe(old, cur, idmap))
--		goto out_free;
--	ret = true;
--out_free:
--	kfree(idmap);
--	return ret;
-+	return true;
+-
+-	skcd_buf.prioidx = prioidx;
+-	WRITE_ONCE(skcd->val, skcd_buf.val);	/* see sock_cgroup_ptr() */
++#ifdef CONFIG_CGROUP_NET_PRIO
++	WRITE_ONCE(skcd->prioidx, prioidx);
++#endif
  }
  
- static bool states_equal(struct bpf_verifier_env *env,
-@@ -5057,7 +5041,7 @@ static bool states_equal(struct bpf_verifier_env *env,
- 	for (i = 0; i <= old->curframe; i++) {
- 		if (old->frame[i]->callsite != cur->frame[i]->callsite)
- 			return false;
--		if (!func_states_equal(old->frame[i], cur->frame[i]))
-+		if (!func_states_equal(env, old->frame[i], cur->frame[i]))
- 			return false;
+ static inline void sock_cgroup_set_classid(struct sock_cgroup_data *skcd,
+ 					   u32 classid)
+ {
+-	struct sock_cgroup_data skcd_buf = {{ .val = READ_ONCE(skcd->val) }};
+-
+-	if (sock_cgroup_classid(&skcd_buf) == classid)
+-		return;
+-
+-	if (!(skcd_buf.is_data & 1)) {
+-		skcd_buf.val = 0;
+-		skcd_buf.is_data = 1;
+-	}
+-
+-	skcd_buf.classid = classid;
+-	WRITE_ONCE(skcd->val, skcd_buf.val);	/* see sock_cgroup_ptr() */
++#ifdef CONFIG_CGROUP_NET_CLASSID
++	WRITE_ONCE(skcd->classid, classid);
++#endif
+ }
+ 
+ #else	/* CONFIG_SOCK_CGROUP_DATA */
+diff --git a/include/linux/cgroup.h b/include/linux/cgroup.h
+index 7bf60454a313..75c151413fda 100644
+--- a/include/linux/cgroup.h
++++ b/include/linux/cgroup.h
+@@ -829,33 +829,13 @@ static inline void cgroup_account_cputime_field(struct task_struct *task,
+  */
+ #ifdef CONFIG_SOCK_CGROUP_DATA
+ 
+-#if defined(CONFIG_CGROUP_NET_PRIO) || defined(CONFIG_CGROUP_NET_CLASSID)
+-extern spinlock_t cgroup_sk_update_lock;
+-#endif
+-
+-void cgroup_sk_alloc_disable(void);
+ void cgroup_sk_alloc(struct sock_cgroup_data *skcd);
+ void cgroup_sk_clone(struct sock_cgroup_data *skcd);
+ void cgroup_sk_free(struct sock_cgroup_data *skcd);
+ 
+ static inline struct cgroup *sock_cgroup_ptr(struct sock_cgroup_data *skcd)
+ {
+-#if defined(CONFIG_CGROUP_NET_PRIO) || defined(CONFIG_CGROUP_NET_CLASSID)
+-	unsigned long v;
+-
+-	/*
+-	 * @skcd->val is 64bit but the following is safe on 32bit too as we
+-	 * just need the lower ulong to be written and read atomically.
+-	 */
+-	v = READ_ONCE(skcd->val);
+-
+-	if (v & 3)
+-		return &cgrp_dfl_root.cgrp;
+-
+-	return (struct cgroup *)(unsigned long)v ?: &cgrp_dfl_root.cgrp;
+-#else
+-	return (struct cgroup *)(unsigned long)skcd->val;
+-#endif
++	return skcd->cgroup;
+ }
+ 
+ #else	/* CONFIG_CGROUP_DATA */
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index 881ce1470beb..8afa8690d288 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -6572,74 +6572,44 @@ int cgroup_parse_float(const char *input, unsigned dec_shift, s64 *v)
+  */
+ #ifdef CONFIG_SOCK_CGROUP_DATA
+ 
+-#if defined(CONFIG_CGROUP_NET_PRIO) || defined(CONFIG_CGROUP_NET_CLASSID)
+-
+-DEFINE_SPINLOCK(cgroup_sk_update_lock);
+-static bool cgroup_sk_alloc_disabled __read_mostly;
+-
+-void cgroup_sk_alloc_disable(void)
+-{
+-	if (cgroup_sk_alloc_disabled)
+-		return;
+-	pr_info("cgroup: disabling cgroup2 socket matching due to net_prio or net_cls activation\n");
+-	cgroup_sk_alloc_disabled = true;
+-}
+-
+-#else
+-
+-#define cgroup_sk_alloc_disabled	false
+-
+-#endif
+-
+ void cgroup_sk_alloc(struct sock_cgroup_data *skcd)
+ {
+-	if (cgroup_sk_alloc_disabled) {
+-		skcd->no_refcnt = 1;
+-		return;
+-	}
+-
+ 	/* Don't associate the sock with unrelated interrupted task's cgroup. */
+ 	if (in_interrupt())
+ 		return;
+ 
+ 	rcu_read_lock();
+-
+ 	while (true) {
+ 		struct css_set *cset;
+ 
+ 		cset = task_css_set(current);
+ 		if (likely(cgroup_tryget(cset->dfl_cgrp))) {
+-			skcd->val = (unsigned long)cset->dfl_cgrp;
++			skcd->cgroup = cset->dfl_cgrp;
+ 			cgroup_bpf_get(cset->dfl_cgrp);
+ 			break;
+ 		}
+ 		cpu_relax();
  	}
- 	return true;
+-
+ 	rcu_read_unlock();
+ }
+ 
+ void cgroup_sk_clone(struct sock_cgroup_data *skcd)
+ {
+-	if (skcd->val) {
+-		if (skcd->no_refcnt)
+-			return;
+-		/*
+-		 * We might be cloning a socket which is left in an empty
+-		 * cgroup and the cgroup might have already been rmdir'd.
+-		 * Don't use cgroup_get_live().
+-		 */
+-		cgroup_get(sock_cgroup_ptr(skcd));
+-		cgroup_bpf_get(sock_cgroup_ptr(skcd));
+-	}
++	struct cgroup *cgrp = sock_cgroup_ptr(skcd);
++
++	/*
++	 * We might be cloning a socket which is left in an empty
++	 * cgroup and the cgroup might have already been rmdir'd.
++	 * Don't use cgroup_get_live().
++	 */
++	cgroup_get(cgrp);
++	cgroup_bpf_get(cgrp);
+ }
+ 
+ void cgroup_sk_free(struct sock_cgroup_data *skcd)
+ {
+ 	struct cgroup *cgrp = sock_cgroup_ptr(skcd);
+ 
+-	if (skcd->no_refcnt)
+-		return;
+ 	cgroup_bpf_put(cgrp);
+ 	cgroup_put(cgrp);
+ }
+diff --git a/net/core/netclassid_cgroup.c b/net/core/netclassid_cgroup.c
+index b49c57d35a88..1a6a86693b74 100644
+--- a/net/core/netclassid_cgroup.c
++++ b/net/core/netclassid_cgroup.c
+@@ -71,11 +71,8 @@ static int update_classid_sock(const void *v, struct file *file, unsigned n)
+ 	struct update_classid_context *ctx = (void *)v;
+ 	struct socket *sock = sock_from_file(file);
+ 
+-	if (sock) {
+-		spin_lock(&cgroup_sk_update_lock);
++	if (sock)
+ 		sock_cgroup_set_classid(&sock->sk->sk_cgrp_data, ctx->classid);
+-		spin_unlock(&cgroup_sk_update_lock);
+-	}
+ 	if (--ctx->batch == 0) {
+ 		ctx->batch = UPDATE_CLASSID_BATCH;
+ 		return n + 1;
+@@ -121,8 +118,6 @@ static int write_classid(struct cgroup_subsys_state *css, struct cftype *cft,
+ 	struct css_task_iter it;
+ 	struct task_struct *p;
+ 
+-	cgroup_sk_alloc_disable();
+-
+ 	cs->classid = (u32)value;
+ 
+ 	css_task_iter_start(css, 0, &it);
+diff --git a/net/core/netprio_cgroup.c b/net/core/netprio_cgroup.c
+index 99a431c56f23..8456dfbe2eb4 100644
+--- a/net/core/netprio_cgroup.c
++++ b/net/core/netprio_cgroup.c
+@@ -207,8 +207,6 @@ static ssize_t write_priomap(struct kernfs_open_file *of,
+ 	if (!dev)
+ 		return -ENODEV;
+ 
+-	cgroup_sk_alloc_disable();
+-
+ 	rtnl_lock();
+ 
+ 	ret = netprio_set_prio(of_css(of), dev, prio);
+@@ -221,12 +219,10 @@ static ssize_t write_priomap(struct kernfs_open_file *of,
+ static int update_netprio(const void *v, struct file *file, unsigned n)
+ {
+ 	struct socket *sock = sock_from_file(file);
+-	if (sock) {
+-		spin_lock(&cgroup_sk_update_lock);
++
++	if (sock)
+ 		sock_cgroup_set_prioidx(&sock->sk->sk_cgrp_data,
+ 					(unsigned long)v);
+-		spin_unlock(&cgroup_sk_update_lock);
+-	}
+ 	return 0;
+ }
+ 
+@@ -235,8 +231,6 @@ static void net_prio_attach(struct cgroup_taskset *tset)
+ 	struct task_struct *p;
+ 	struct cgroup_subsys_state *css;
+ 
+-	cgroup_sk_alloc_disable();
+-
+ 	cgroup_taskset_for_each(p, css, tset) {
+ 		void *v = (void *)(unsigned long)css->id;
+ 
 -- 
-2.25.1
+2.21.0
 
