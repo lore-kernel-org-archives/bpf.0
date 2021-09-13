@@ -2,39 +2,37 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-21.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BA02C43217
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E232C4332F
 	for <bpf@archiver.kernel.org>; Mon, 13 Sep 2021 23:11:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4FA3A6113B
+	by mail.kernel.org (Postfix) with ESMTP id 3633761130
 	for <bpf@archiver.kernel.org>; Mon, 13 Sep 2021 23:11:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349710AbhIMXMc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 13 Sep 2021 19:12:32 -0400
-Received: from www62.your-server.de ([213.133.104.62]:42372 "EHLO
+        id S1349141AbhIMXM3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 13 Sep 2021 19:12:29 -0400
+Received: from www62.your-server.de ([213.133.104.62]:42370 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349481AbhIMXL7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1349616AbhIMXL7 (ORCPT <rfc822;bpf@vger.kernel.org>);
         Mon, 13 Sep 2021 19:11:59 -0400
 Received: from 65.47.5.85.dynamic.wline.res.cust.swisscom.ch ([85.5.47.65] helo=localhost)
         by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
         (Exim 4.92.3)
         (envelope-from <daniel@iogearbox.net>)
-        id 1mPv3U-000EhX-8k; Tue, 14 Sep 2021 01:08:04 +0200
+        id 1mPv3T-000EhL-5K; Tue, 14 Sep 2021 01:08:03 +0200
 From:   Daniel Borkmann <daniel@iogearbox.net>
 To:     bpf@vger.kernel.org
 Cc:     netdev@vger.kernel.org, tj@kernel.org, davem@davemloft.net,
         m@lambda.lt, alexei.starovoitov@gmail.com, andrii@kernel.org,
         sdf@google.com, Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf v4 3/3] bpf, selftests: Add test case for mixed cgroup v1/v2
-Date:   Tue, 14 Sep 2021 01:07:59 +0200
-Message-Id: <20210913230759.2313-3-daniel@iogearbox.net>
+Subject: [PATCH bpf v4 1/3] bpf, cgroups: Fix cgroup v2 fallback on v1/v2 mixed mode
+Date:   Tue, 14 Sep 2021 01:07:57 +0200
+Message-Id: <20210913230759.2313-1-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20210913230759.2313-1-daniel@iogearbox.net>
-References: <20210913230759.2313-1-daniel@iogearbox.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Authenticated-Sender: daniel@iogearbox.net
@@ -43,229 +41,395 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Minimal selftest which implements a small BPF policy program to the
-connect(2) hook which rejects TCP connection requests to port 60123
-with EPERM. This is being attached to a non-root cgroup v2 path. The
-test asserts that this works under cgroup v2-only and under a mixed
-cgroup v1/v2 environment where net_classid is set in the former case.
+Fix cgroup v1 interference when non-root cgroup v2 BPF programs are used.
+Back in the days, commit bd1060a1d671 ("sock, cgroup: add sock->sk_cgroup")
+embedded per-socket cgroup information into sock->sk_cgrp_data and in order
+to save 8 bytes in struct sock made both mutually exclusive, that is, when
+cgroup v1 socket tagging (e.g. net_cls/net_prio) is used, then cgroup v2
+falls back to the root cgroup in sock_cgroup_ptr() (&cgrp_dfl_root.cgrp).
 
-Before fix:
+The assumption made was "there is no reason to mix the two and this is in line
+with how legacy and v2 compatibility is handled" as stated in bd1060a1d671.
+However, with Kubernetes more widely supporting cgroups v2 as well nowadays,
+this assumption no longer holds, and the possibility of the v1/v2 mixed mode
+with the v2 root fallback being hit becomes a real security issue.
 
-  # ./test_progs -t cgroup_v1v2
-  test_cgroup_v1v2:PASS:server_fd 0 nsec
-  test_cgroup_v1v2:PASS:client_fd 0 nsec
-  test_cgroup_v1v2:PASS:cgroup_fd 0 nsec
-  test_cgroup_v1v2:PASS:server_fd 0 nsec
-  run_test:PASS:skel_open 0 nsec
-  run_test:PASS:prog_attach 0 nsec
-  test_cgroup_v1v2:PASS:cgroup-v2-only 0 nsec
-  run_test:PASS:skel_open 0 nsec
-  run_test:PASS:prog_attach 0 nsec
-  run_test:PASS:join_classid 0 nsec
-  (network_helpers.c:219: errno: None) Unexpected success to connect to server
-  test_cgroup_v1v2:FAIL:cgroup-v1v2 unexpected error: -1 (errno 0)
-  #27 cgroup_v1v2:FAIL
-  Summary: 0/0 PASSED, 0 SKIPPED, 1 FAILED
+Many of the cgroup v2 BPF programs are also used for policy enforcement, just
+to pick _one_ example, that is, to programmatically deny socket related system
+calls like connect(2) or bind(2). A v2 root fallback would implicitly cause
+a policy bypass for the affected Pods.
 
-After fix:
+In production environments, we have recently seen this case due to various
+circumstances: i) a different 3rd party agent and/or ii) a container runtime
+such as [0] in the user's environment configuring legacy cgroup v1 net_cls
+tags, which triggered implicitly mentioned root fallback. Another case is
+Kubernetes projects like kind [1] which create Kubernetes nodes in a container
+and also add cgroup namespaces to the mix, meaning programs which are attached
+to the cgroup v2 root of the cgroup namespace get attached to a non-root
+cgroup v2 path from init namespace point of view. And the latter's root is
+out of reach for agents on a kind Kubernetes node to configure. Meaning, any
+entity on the node setting cgroup v1 net_cls tag will trigger the bypass
+despite cgroup v2 BPF programs attached to the namespace root.
 
-  # ./test_progs -t cgroup_v1v2
-  #27 cgroup_v1v2:OK
-  Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+Generally, this mutual exclusiveness does not hold anymore in today's user
+environments and makes cgroup v2 usage from BPF side fragile and unreliable.
+This fix adds proper struct cgroup pointer for the cgroup v2 case to struct
+sock_cgroup_data in order to address these issues; this implicitly also fixes
+the tradeoffs being made back then with regards to races and refcount leaks
+as stated in bd1060a1d671, and removes the fallback, so that cgroup v2 BPF
+programs always operate as expected.
 
+  [0] https://github.com/nestybox/sysbox/
+  [1] https://kind.sigs.k8s.io/
+
+Fixes: bd1060a1d671 ("sock, cgroup: add sock->sk_cgroup")
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
+Acked-by: Stanislav Fomichev <sdf@google.com>
+Acked-by: Tejun Heo <tj@kernel.org>
+Cc: David S. Miller <davem@davemloft.net>
+Cc: Martynas Pumputis <m@lambda.lt>
 ---
- tools/testing/selftests/bpf/network_helpers.c | 27 +++++--
- tools/testing/selftests/bpf/network_helpers.h |  1 +
- .../selftests/bpf/prog_tests/cgroup_v1v2.c    | 79 +++++++++++++++++++
- .../selftests/bpf/progs/connect4_dropper.c    | 26 ++++++
- 4 files changed, 127 insertions(+), 6 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_v1v2.c
- create mode 100644 tools/testing/selftests/bpf/progs/connect4_dropper.c
+ v1 -> v2:
+   - Remove unneeded READ_ONCE()/WRITE_ONCE() pair around skcd->cgroup,
+     thanks Stanislav!
 
-diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
-index 7e9f6375757a..6db1af8fdee7 100644
---- a/tools/testing/selftests/bpf/network_helpers.c
-+++ b/tools/testing/selftests/bpf/network_helpers.c
-@@ -208,11 +208,26 @@ int fastopen_connect(int server_fd, const char *data, unsigned int data_len,
- 
- static int connect_fd_to_addr(int fd,
- 			      const struct sockaddr_storage *addr,
--			      socklen_t addrlen)
-+			      socklen_t addrlen, const bool must_fail)
- {
--	if (connect(fd, (const struct sockaddr *)addr, addrlen)) {
--		log_err("Failed to connect to server");
--		return -1;
-+	int ret;
-+
-+	errno = 0;
-+	ret = connect(fd, (const struct sockaddr *)addr, addrlen);
-+	if (must_fail) {
-+		if (!ret) {
-+			log_err("Unexpected success to connect to server");
-+			return -1;
-+		}
-+		if (errno != EPERM) {
-+			log_err("Unexpected error from connect to server");
-+			return -1;
-+		}
-+	} else {
-+		if (ret) {
-+			log_err("Failed to connect to server");
-+			return -1;
-+		}
- 	}
- 
- 	return 0;
-@@ -257,7 +272,7 @@ int connect_to_fd_opts(int server_fd, const struct network_helper_opts *opts)
- 		       strlen(opts->cc) + 1))
- 		goto error_close;
- 
--	if (connect_fd_to_addr(fd, &addr, addrlen))
-+	if (connect_fd_to_addr(fd, &addr, addrlen, opts->must_fail))
- 		goto error_close;
- 
- 	return fd;
-@@ -289,7 +304,7 @@ int connect_fd_to_fd(int client_fd, int server_fd, int timeout_ms)
- 		return -1;
- 	}
- 
--	if (connect_fd_to_addr(client_fd, &addr, len))
-+	if (connect_fd_to_addr(client_fd, &addr, len, false))
- 		return -1;
- 
- 	return 0;
-diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
-index da7e132657d5..d198181a5648 100644
---- a/tools/testing/selftests/bpf/network_helpers.h
-+++ b/tools/testing/selftests/bpf/network_helpers.h
-@@ -20,6 +20,7 @@ typedef __u16 __sum16;
- struct network_helper_opts {
- 	const char *cc;
- 	int timeout_ms;
-+	bool must_fail;
+ include/linux/cgroup-defs.h  | 107 +++++++++--------------------------
+ include/linux/cgroup.h       |  22 +------
+ kernel/cgroup/cgroup.c       |  50 ++++------------
+ net/core/netclassid_cgroup.c |   7 +--
+ net/core/netprio_cgroup.c    |  10 +---
+ 5 files changed, 41 insertions(+), 155 deletions(-)
+
+diff --git a/include/linux/cgroup-defs.h b/include/linux/cgroup-defs.h
+index e1c705fdfa7c..db2e147e069f 100644
+--- a/include/linux/cgroup-defs.h
++++ b/include/linux/cgroup-defs.h
+@@ -752,107 +752,54 @@ static inline void cgroup_threadgroup_change_end(struct task_struct *tsk) {}
+  * sock_cgroup_data is embedded at sock->sk_cgrp_data and contains
+  * per-socket cgroup information except for memcg association.
+  *
+- * On legacy hierarchies, net_prio and net_cls controllers directly set
+- * attributes on each sock which can then be tested by the network layer.
+- * On the default hierarchy, each sock is associated with the cgroup it was
+- * created in and the networking layer can match the cgroup directly.
+- *
+- * To avoid carrying all three cgroup related fields separately in sock,
+- * sock_cgroup_data overloads (prioidx, classid) and the cgroup pointer.
+- * On boot, sock_cgroup_data records the cgroup that the sock was created
+- * in so that cgroup2 matches can be made; however, once either net_prio or
+- * net_cls starts being used, the area is overridden to carry prioidx and/or
+- * classid.  The two modes are distinguished by whether the lowest bit is
+- * set.  Clear bit indicates cgroup pointer while set bit prioidx and
+- * classid.
+- *
+- * While userland may start using net_prio or net_cls at any time, once
+- * either is used, cgroup2 matching no longer works.  There is no reason to
+- * mix the two and this is in line with how legacy and v2 compatibility is
+- * handled.  On mode switch, cgroup references which are already being
+- * pointed to by socks may be leaked.  While this can be remedied by adding
+- * synchronization around sock_cgroup_data, given that the number of leaked
+- * cgroups is bound and highly unlikely to be high, this seems to be the
+- * better trade-off.
++ * On legacy hierarchies, net_prio and net_cls controllers directly
++ * set attributes on each sock which can then be tested by the network
++ * layer. On the default hierarchy, each sock is associated with the
++ * cgroup it was created in and the networking layer can match the
++ * cgroup directly.
+  */
+ struct sock_cgroup_data {
+-	union {
+-#ifdef __LITTLE_ENDIAN
+-		struct {
+-			u8	is_data : 1;
+-			u8	no_refcnt : 1;
+-			u8	unused : 6;
+-			u8	padding;
+-			u16	prioidx;
+-			u32	classid;
+-		} __packed;
+-#else
+-		struct {
+-			u32	classid;
+-			u16	prioidx;
+-			u8	padding;
+-			u8	unused : 6;
+-			u8	no_refcnt : 1;
+-			u8	is_data : 1;
+-		} __packed;
++	struct cgroup	*cgroup; /* v2 */
++#ifdef CONFIG_CGROUP_NET_CLASSID
++	u32		classid; /* v1 */
++#endif
++#ifdef CONFIG_CGROUP_NET_PRIO
++	u16		prioidx; /* v1 */
+ #endif
+-		u64		val;
+-	};
  };
  
- /* ipv4 test vector */
-diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_v1v2.c b/tools/testing/selftests/bpf/prog_tests/cgroup_v1v2.c
-new file mode 100644
-index 000000000000..ab3b9bc5e6d1
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/cgroup_v1v2.c
-@@ -0,0 +1,79 @@
-+// SPDX-License-Identifier: GPL-2.0
+-/*
+- * There's a theoretical window where the following accessors race with
+- * updaters and return part of the previous pointer as the prioidx or
+- * classid.  Such races are short-lived and the result isn't critical.
+- */
+ static inline u16 sock_cgroup_prioidx(const struct sock_cgroup_data *skcd)
+ {
+-	/* fallback to 1 which is always the ID of the root cgroup */
+-	return (skcd->is_data & 1) ? skcd->prioidx : 1;
++#ifdef CONFIG_CGROUP_NET_PRIO
++	return READ_ONCE(skcd->prioidx);
++#else
++	return 1;
++#endif
+ }
+ 
+ static inline u32 sock_cgroup_classid(const struct sock_cgroup_data *skcd)
+ {
+-	/* fallback to 0 which is the unconfigured default classid */
+-	return (skcd->is_data & 1) ? skcd->classid : 0;
++#ifdef CONFIG_CGROUP_NET_CLASSID
++	return READ_ONCE(skcd->classid);
++#else
++	return 0;
++#endif
+ }
+ 
+-/*
+- * If invoked concurrently, the updaters may clobber each other.  The
+- * caller is responsible for synchronization.
+- */
+ static inline void sock_cgroup_set_prioidx(struct sock_cgroup_data *skcd,
+ 					   u16 prioidx)
+ {
+-	struct sock_cgroup_data skcd_buf = {{ .val = READ_ONCE(skcd->val) }};
+-
+-	if (sock_cgroup_prioidx(&skcd_buf) == prioidx)
+-		return;
+-
+-	if (!(skcd_buf.is_data & 1)) {
+-		skcd_buf.val = 0;
+-		skcd_buf.is_data = 1;
+-	}
+-
+-	skcd_buf.prioidx = prioidx;
+-	WRITE_ONCE(skcd->val, skcd_buf.val);	/* see sock_cgroup_ptr() */
++#ifdef CONFIG_CGROUP_NET_PRIO
++	WRITE_ONCE(skcd->prioidx, prioidx);
++#endif
+ }
+ 
+ static inline void sock_cgroup_set_classid(struct sock_cgroup_data *skcd,
+ 					   u32 classid)
+ {
+-	struct sock_cgroup_data skcd_buf = {{ .val = READ_ONCE(skcd->val) }};
+-
+-	if (sock_cgroup_classid(&skcd_buf) == classid)
+-		return;
+-
+-	if (!(skcd_buf.is_data & 1)) {
+-		skcd_buf.val = 0;
+-		skcd_buf.is_data = 1;
+-	}
+-
+-	skcd_buf.classid = classid;
+-	WRITE_ONCE(skcd->val, skcd_buf.val);	/* see sock_cgroup_ptr() */
++#ifdef CONFIG_CGROUP_NET_CLASSID
++	WRITE_ONCE(skcd->classid, classid);
++#endif
+ }
+ 
+ #else	/* CONFIG_SOCK_CGROUP_DATA */
+diff --git a/include/linux/cgroup.h b/include/linux/cgroup.h
+index 7bf60454a313..75c151413fda 100644
+--- a/include/linux/cgroup.h
++++ b/include/linux/cgroup.h
+@@ -829,33 +829,13 @@ static inline void cgroup_account_cputime_field(struct task_struct *task,
+  */
+ #ifdef CONFIG_SOCK_CGROUP_DATA
+ 
+-#if defined(CONFIG_CGROUP_NET_PRIO) || defined(CONFIG_CGROUP_NET_CLASSID)
+-extern spinlock_t cgroup_sk_update_lock;
+-#endif
+-
+-void cgroup_sk_alloc_disable(void);
+ void cgroup_sk_alloc(struct sock_cgroup_data *skcd);
+ void cgroup_sk_clone(struct sock_cgroup_data *skcd);
+ void cgroup_sk_free(struct sock_cgroup_data *skcd);
+ 
+ static inline struct cgroup *sock_cgroup_ptr(struct sock_cgroup_data *skcd)
+ {
+-#if defined(CONFIG_CGROUP_NET_PRIO) || defined(CONFIG_CGROUP_NET_CLASSID)
+-	unsigned long v;
+-
+-	/*
+-	 * @skcd->val is 64bit but the following is safe on 32bit too as we
+-	 * just need the lower ulong to be written and read atomically.
+-	 */
+-	v = READ_ONCE(skcd->val);
+-
+-	if (v & 3)
+-		return &cgrp_dfl_root.cgrp;
+-
+-	return (struct cgroup *)(unsigned long)v ?: &cgrp_dfl_root.cgrp;
+-#else
+-	return (struct cgroup *)(unsigned long)skcd->val;
+-#endif
++	return skcd->cgroup;
+ }
+ 
+ #else	/* CONFIG_CGROUP_DATA */
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index 881ce1470beb..8afa8690d288 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -6572,74 +6572,44 @@ int cgroup_parse_float(const char *input, unsigned dec_shift, s64 *v)
+  */
+ #ifdef CONFIG_SOCK_CGROUP_DATA
+ 
+-#if defined(CONFIG_CGROUP_NET_PRIO) || defined(CONFIG_CGROUP_NET_CLASSID)
+-
+-DEFINE_SPINLOCK(cgroup_sk_update_lock);
+-static bool cgroup_sk_alloc_disabled __read_mostly;
+-
+-void cgroup_sk_alloc_disable(void)
+-{
+-	if (cgroup_sk_alloc_disabled)
+-		return;
+-	pr_info("cgroup: disabling cgroup2 socket matching due to net_prio or net_cls activation\n");
+-	cgroup_sk_alloc_disabled = true;
+-}
+-
+-#else
+-
+-#define cgroup_sk_alloc_disabled	false
+-
+-#endif
+-
+ void cgroup_sk_alloc(struct sock_cgroup_data *skcd)
+ {
+-	if (cgroup_sk_alloc_disabled) {
+-		skcd->no_refcnt = 1;
+-		return;
+-	}
+-
+ 	/* Don't associate the sock with unrelated interrupted task's cgroup. */
+ 	if (in_interrupt())
+ 		return;
+ 
+ 	rcu_read_lock();
+-
+ 	while (true) {
+ 		struct css_set *cset;
+ 
+ 		cset = task_css_set(current);
+ 		if (likely(cgroup_tryget(cset->dfl_cgrp))) {
+-			skcd->val = (unsigned long)cset->dfl_cgrp;
++			skcd->cgroup = cset->dfl_cgrp;
+ 			cgroup_bpf_get(cset->dfl_cgrp);
+ 			break;
+ 		}
+ 		cpu_relax();
+ 	}
+-
+ 	rcu_read_unlock();
+ }
+ 
+ void cgroup_sk_clone(struct sock_cgroup_data *skcd)
+ {
+-	if (skcd->val) {
+-		if (skcd->no_refcnt)
+-			return;
+-		/*
+-		 * We might be cloning a socket which is left in an empty
+-		 * cgroup and the cgroup might have already been rmdir'd.
+-		 * Don't use cgroup_get_live().
+-		 */
+-		cgroup_get(sock_cgroup_ptr(skcd));
+-		cgroup_bpf_get(sock_cgroup_ptr(skcd));
+-	}
++	struct cgroup *cgrp = sock_cgroup_ptr(skcd);
 +
-+#include <test_progs.h>
++	/*
++	 * We might be cloning a socket which is left in an empty
++	 * cgroup and the cgroup might have already been rmdir'd.
++	 * Don't use cgroup_get_live().
++	 */
++	cgroup_get(cgrp);
++	cgroup_bpf_get(cgrp);
+ }
+ 
+ void cgroup_sk_free(struct sock_cgroup_data *skcd)
+ {
+ 	struct cgroup *cgrp = sock_cgroup_ptr(skcd);
+ 
+-	if (skcd->no_refcnt)
+-		return;
+ 	cgroup_bpf_put(cgrp);
+ 	cgroup_put(cgrp);
+ }
+diff --git a/net/core/netclassid_cgroup.c b/net/core/netclassid_cgroup.c
+index b49c57d35a88..1a6a86693b74 100644
+--- a/net/core/netclassid_cgroup.c
++++ b/net/core/netclassid_cgroup.c
+@@ -71,11 +71,8 @@ static int update_classid_sock(const void *v, struct file *file, unsigned n)
+ 	struct update_classid_context *ctx = (void *)v;
+ 	struct socket *sock = sock_from_file(file);
+ 
+-	if (sock) {
+-		spin_lock(&cgroup_sk_update_lock);
++	if (sock)
+ 		sock_cgroup_set_classid(&sock->sk->sk_cgrp_data, ctx->classid);
+-		spin_unlock(&cgroup_sk_update_lock);
+-	}
+ 	if (--ctx->batch == 0) {
+ 		ctx->batch = UPDATE_CLASSID_BATCH;
+ 		return n + 1;
+@@ -121,8 +118,6 @@ static int write_classid(struct cgroup_subsys_state *css, struct cftype *cft,
+ 	struct css_task_iter it;
+ 	struct task_struct *p;
+ 
+-	cgroup_sk_alloc_disable();
+-
+ 	cs->classid = (u32)value;
+ 
+ 	css_task_iter_start(css, 0, &it);
+diff --git a/net/core/netprio_cgroup.c b/net/core/netprio_cgroup.c
+index 99a431c56f23..8456dfbe2eb4 100644
+--- a/net/core/netprio_cgroup.c
++++ b/net/core/netprio_cgroup.c
+@@ -207,8 +207,6 @@ static ssize_t write_priomap(struct kernfs_open_file *of,
+ 	if (!dev)
+ 		return -ENODEV;
+ 
+-	cgroup_sk_alloc_disable();
+-
+ 	rtnl_lock();
+ 
+ 	ret = netprio_set_prio(of_css(of), dev, prio);
+@@ -221,12 +219,10 @@ static ssize_t write_priomap(struct kernfs_open_file *of,
+ static int update_netprio(const void *v, struct file *file, unsigned n)
+ {
+ 	struct socket *sock = sock_from_file(file);
+-	if (sock) {
+-		spin_lock(&cgroup_sk_update_lock);
 +
-+#include "connect4_dropper.skel.h"
-+
-+#include "cgroup_helpers.h"
-+#include "network_helpers.h"
-+
-+static int run_test(int cgroup_fd, int server_fd, bool classid)
-+{
-+	struct network_helper_opts opts = {
-+		.must_fail = true,
-+	};
-+	struct connect4_dropper *skel;
-+	int fd, err = 0;
-+
-+	skel = connect4_dropper__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_open"))
-+		return -1;
-+
-+	skel->links.connect_v4_dropper =
-+		bpf_program__attach_cgroup(skel->progs.connect_v4_dropper,
-+					   cgroup_fd);
-+	if (!ASSERT_OK_PTR(skel->links.connect_v4_dropper, "prog_attach")) {
-+		err = -1;
-+		goto out;
-+	}
-+
-+	if (classid && !ASSERT_OK(join_classid(), "join_classid")) {
-+		err = -1;
-+		goto out;
-+	}
-+
-+	fd = connect_to_fd_opts(server_fd, &opts);
-+	if (fd < 0)
-+		err = -1;
-+	else
-+		close(fd);
-+out:
-+	connect4_dropper__destroy(skel);
-+	return err;
-+}
-+
-+void test_cgroup_v1v2(void)
-+{
-+	struct network_helper_opts opts = {};
-+	int server_fd, client_fd, cgroup_fd;
-+	static const int port = 60123;
-+
-+	/* Step 1: Check base connectivity works without any BPF. */
-+	server_fd = start_server(AF_INET, SOCK_STREAM, NULL, port, 0);
-+	if (!ASSERT_GE(server_fd, 0, "server_fd"))
-+		return;
-+	client_fd = connect_to_fd_opts(server_fd, &opts);
-+	if (!ASSERT_GE(client_fd, 0, "client_fd")) {
-+		close(server_fd);
-+		return;
-+	}
-+	close(client_fd);
-+	close(server_fd);
-+
-+	/* Step 2: Check BPF policy prog attached to cgroups drops connectivity. */
-+	cgroup_fd = test__join_cgroup("/connect_dropper");
-+	if (!ASSERT_GE(cgroup_fd, 0, "cgroup_fd"))
-+		return;
-+	server_fd = start_server(AF_INET, SOCK_STREAM, NULL, port, 0);
-+	if (!ASSERT_GE(server_fd, 0, "server_fd")) {
-+		close(cgroup_fd);
-+		return;
-+	}
-+	ASSERT_OK(run_test(cgroup_fd, server_fd, false), "cgroup-v2-only");
-+	setup_classid_environment();
-+	set_classid(42);
-+	ASSERT_OK(run_test(cgroup_fd, server_fd, true), "cgroup-v1v2");
-+	cleanup_classid_environment();
-+	close(server_fd);
-+	close(cgroup_fd);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/connect4_dropper.c b/tools/testing/selftests/bpf/progs/connect4_dropper.c
-new file mode 100644
-index 000000000000..b565d997810a
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/connect4_dropper.c
-@@ -0,0 +1,26 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <string.h>
-+
-+#include <linux/stddef.h>
-+#include <linux/bpf.h>
-+
-+#include <sys/socket.h>
-+
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_endian.h>
-+
-+#define VERDICT_REJECT	0
-+#define VERDICT_PROCEED	1
-+
-+SEC("cgroup/connect4")
-+int connect_v4_dropper(struct bpf_sock_addr *ctx)
-+{
-+	if (ctx->type != SOCK_STREAM)
-+		return VERDICT_PROCEED;
-+	if (ctx->user_port == bpf_htons(60123))
-+		return VERDICT_REJECT;
-+	return VERDICT_PROCEED;
-+}
-+
-+char _license[] SEC("license") = "GPL";
++	if (sock)
+ 		sock_cgroup_set_prioidx(&sock->sk->sk_cgrp_data,
+ 					(unsigned long)v);
+-		spin_unlock(&cgroup_sk_update_lock);
+-	}
+ 	return 0;
+ }
+ 
+@@ -235,8 +231,6 @@ static void net_prio_attach(struct cgroup_taskset *tset)
+ 	struct task_struct *p;
+ 	struct cgroup_subsys_state *css;
+ 
+-	cgroup_sk_alloc_disable();
+-
+ 	cgroup_taskset_for_each(p, css, tset) {
+ 		void *v = (void *)(unsigned long)css->id;
+ 
 -- 
 2.27.0
 
