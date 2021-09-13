@@ -8,40 +8,40 @@ X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45F24C433EF
-	for <bpf@archiver.kernel.org>; Mon, 13 Sep 2021 15:36:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B17FCC433F5
+	for <bpf@archiver.kernel.org>; Mon, 13 Sep 2021 15:36:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2FAA261051
-	for <bpf@archiver.kernel.org>; Mon, 13 Sep 2021 15:36:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9C9A960F26
+	for <bpf@archiver.kernel.org>; Mon, 13 Sep 2021 15:36:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244021AbhIMPhp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 13 Sep 2021 11:37:45 -0400
-Received: from mx0b-0064b401.pphosted.com ([205.220.178.238]:40908 "EHLO
+        id S244118AbhIMPhq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 13 Sep 2021 11:37:46 -0400
+Received: from mx0b-0064b401.pphosted.com ([205.220.178.238]:40888 "EHLO
         mx0b-0064b401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229926AbhIMPhh (ORCPT
+        by vger.kernel.org with ESMTP id S241059AbhIMPhh (ORCPT
         <rfc822;bpf@vger.kernel.org>); Mon, 13 Sep 2021 11:37:37 -0400
 Received: from pps.filterd (m0250812.ppops.net [127.0.0.1])
-        by mx0a-0064b401.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18DFWGwf016966;
+        by mx0a-0064b401.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18DFWGwg016966;
         Mon, 13 Sep 2021 15:36:10 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references :
  content-transfer-encoding : content-type : mime-version; s=PPS06212021;
- bh=WNsFSyfgbY7j9WL7LmAOr2lR9R3fIemNDgddZ+uJTWc=;
- b=RidFtmy5sjV4mHMayDitft4CjViFBUxBVC71ylpkI6H1ryURhNyJ+QePDhDAqbw/pOcp
- m11PoTI1do6f06LIjk2PSIwvurx2wwMI8GJJ/oX0LgomWzN6AinDkdFJ3tz2YusnJ9RC
- s2WAz5T0KkfwbJQ4YAorBSPR6DkqkORAPNZEIFIlybowEvjThTgzQd5z/8FPgkqWt4K7
- HpjrK1nNGafcjlzaolOw2vk9NdbeyqPWKx4dtmiT8LfW6wMkPyDsFexppUz1r+9kKOut
- +WzyUfm6oJV4p7q5+y4PNAjs9AammSZpjNDFC3cjZ6eS9crA/u9p+/9dsEeXtFeMBVx/ LQ== 
+ bh=mteNhSHB5F2WrjqyGdyxY6XvhUEeuyEt61mitW6Sxhs=;
+ b=b0f+EAd2lN1YXrhPOWLajyIJFDH1e+9LnJrLYF1N4ajSfRrZoS6+teR0hRU3zOMceQyd
+ vAUBk61Yh/Zu3CWvZ+RfBclRARwvaX6kbs6H4+LIflCVGoNG791l4Yl1bMEtm9I6RPOe
+ QicZRkzjwhcA5z/PeS0WkoaHcXJ92p0h9JvXL5yMAmCjgKEawoC2Anv2vW5dPBV5E2UJ
+ rLP8bttxl/3jDnR6AOv4p35oLp+2ohgq++xBy3d+WJVOuZOH+XEF1vr/8HedPgU+cBfk
+ jD0m4qA19q4kLCT0AqD2NwslSdR6XSYkVFmYcT2EvaU8SgVwi117wjBhcNUa7dCtv/5J yQ== 
 Received: from nam02-dm3-obe.outbound.protection.outlook.com (mail-dm3nam07lp2040.outbound.protection.outlook.com [104.47.56.40])
-        by mx0a-0064b401.pphosted.com with ESMTP id 3b26m1854b-2
+        by mx0a-0064b401.pphosted.com with ESMTP id 3b26m1854b-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Sep 2021 15:36:09 +0000
+        Mon, 13 Sep 2021 15:36:10 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=P4cKUs3+gSVdu3R7iafiKsqer0ML8+/QNdILm2Nxb0uq0vdNFZOTTK+ada6eLSkpv62i2V3gLwy9uOyuudr5qCbU2KxdpkUV6emfUWxpDUMX9VBQO+KdU32Rkl8uW9CitrCwgkS19rIOCt7QOVztLxtXjUxB50RQNNjRbQn7OSkSkN3cFBuvHNSjkXup4aMiTsX3MVRe11SwWA3YIWBfN8MHL2ySfyayh0IxVkXPzzcoGVoe/7yWJ4R5Xylmrcsa5SeEgBOCtformjPdBW8W9+eSkpZQxVPSbdEykiFe4BziblaY+zr+QDB3NkNbFAFVKaZjgOz6EMs2XsuU3oEMrA==
+ b=GSKX3B1wLt2Tqz8dEyml1GVFPWFcQh9LAU1hXEGnwG9AqtRgfd6PJ15BjQ3/oVU1OEXojWrBZWZQ6iYm05e8umP6JSDcp42J6qU310gdLfYBiAY8NEwT+d4LsTIxHF4wSbYujSEqNGUo6OhuYObquQjNp/+7DPZHYiFtKw+nIq0I9nTQ4ACyDPTwOovbeqUXnvI7HmLB+04uI2Ln4D7yTTGN3q09wJ4eapYnnp0aRuknJVdGRg/wFji70vNLeXANBbJhqYAXukgRjM8nR6S9iSbyh1yu1Z26cEjGS3vFzTGFJt+7fpR5QQN6KNwXHPvvG/2cYYTVWKFhU2x3SQIOrA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
- bh=WNsFSyfgbY7j9WL7LmAOr2lR9R3fIemNDgddZ+uJTWc=;
- b=fXBQHlOi0UJBq+FodKbaPYBwoBoYr2umqyEzk5KXucP2zf2RZSR6CXM3ea0y0yrfXFes6j+cBDXzWZ8L6nl0ytcma08X5fbGfyCAiwxroj8FXvegMWmVZ7JDBg2eBi4bCIf8l8QCnUPfttLMkMIMsi/n14dBtIXESc71g2Wo3Gdh2V44pEFmVo3vjn4hCPvmAMZrhE6BYFwvcBXdH7Dz8mecOxRYXkmXvuzswzJnYrwZKVhJCv6S1KyfNTCAgZMFxYCw70rMi4m6Rd5gs1yStQvswDIuaO/4cl5jP4sU0PIUMRsQYM84sv/mADQLJqN0T/hUNoylpGWc/c4Sdpor2A==
+ bh=mteNhSHB5F2WrjqyGdyxY6XvhUEeuyEt61mitW6Sxhs=;
+ b=hc+1vFMTPd4AjzhSoCwkh7KTT5hn/D85EtIJFibrbPmRFGT0LCuC7XUE6jkiBqtglG0X8CGc4wli9HEARSsYdPy5XyZihi05AH7HEHP9M3DYmXG7cUJ9e6Z4hnHlKxzxJtgoWCVhA0FHNoaZGofpIntbwwd1fyrkeBn4XHT+E/0RyaEwJ8BnJ0m1pPXo8icDm6tS1wGuERJVF3OZ0Q8fY/MTxttzKKzAbBgxiulgTr8BtnDQNW3EAHmFE9cndUbacFJ4lHA2+jGInMK1hrbdXRkIZ8lb0dh07HXhnD9wwqMI2qLNfvXUxwkJlgwDK+wCIqurAo3I9DwXPrHengKNSw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=windriver.com; dmarc=pass action=none
  header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
@@ -52,17 +52,17 @@ Received: from DM4PR11MB5327.namprd11.prod.outlook.com (2603:10b6:5:392::22)
  by DM5PR1101MB2201.namprd11.prod.outlook.com (2603:10b6:4:51::22) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4500.15; Mon, 13 Sep
- 2021 15:36:06 +0000
+ 2021 15:36:08 +0000
 Received: from DM4PR11MB5327.namprd11.prod.outlook.com
  ([fe80::952a:bdc6:20c3:94cb]) by DM4PR11MB5327.namprd11.prod.outlook.com
  ([fe80::952a:bdc6:20c3:94cb%7]) with mapi id 15.20.4500.019; Mon, 13 Sep 2021
- 15:36:06 +0000
+ 15:36:08 +0000
 From:   Ovidiu Panait <ovidiu.panait@windriver.com>
 To:     stable@vger.kernel.org
 Cc:     bpf@vger.kernel.org, daniel@iogearbox.net
-Subject: [PATCH 4.19 08/13] bpf: track spill/fill of constants
-Date:   Mon, 13 Sep 2021 18:35:32 +0300
-Message-Id: <20210913153537.2162465-9-ovidiu.panait@windriver.com>
+Subject: [PATCH 4.19 10/13] bpf: Introduce BPF nospec instruction for mitigating Spectre v4
+Date:   Mon, 13 Sep 2021 18:35:34 +0300
+Message-Id: <20210913153537.2162465-11-ovidiu.panait@windriver.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210913153537.2162465-1-ovidiu.panait@windriver.com>
 References: <20210913153537.2162465-1-ovidiu.panait@windriver.com>
@@ -72,54 +72,54 @@ X-ClientProxiedBy: VI1PR10CA0095.EURPRD10.PROD.OUTLOOK.COM
  (2603:10a6:803:28::24) To DM4PR11MB5327.namprd11.prod.outlook.com
  (2603:10b6:5:392::22)
 MIME-Version: 1.0
-Received: from otp-linux03.wrs.com (46.97.150.20) by VI1PR10CA0095.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:803:28::24) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4500.14 via Frontend Transport; Mon, 13 Sep 2021 15:36:04 +0000
+Received: from otp-linux03.wrs.com (46.97.150.20) by VI1PR10CA0095.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:803:28::24) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4500.14 via Frontend Transport; Mon, 13 Sep 2021 15:36:07 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 02f070a7-87a7-454c-3d03-08d976cc335d
+X-MS-Office365-Filtering-Correlation-Id: 4af51a2d-3b5e-4302-0088-08d976cc34e2
 X-MS-TrafficTypeDiagnostic: DM5PR1101MB2201:
-X-Microsoft-Antispam-PRVS: <DM5PR1101MB22015717B9C2E20941CDAAB8FED99@DM5PR1101MB2201.namprd11.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:3826;
+X-Microsoft-Antispam-PRVS: <DM5PR1101MB22011DE81D88C39B8BE9167CFED99@DM5PR1101MB2201.namprd11.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:229;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WJHpNUKX/VNoOoteKSML+D2SwpK3+I1DC/BhAIiWNSGcFO5RwvyfNlXRObtuSacn0dp9KHbcztzZ+FIfLT2lG9vbrlwrVeaSzJsQWDwZ9nMCD5acArCf54H4U6kLVSQVGKN+ja9IRz7EVcu3UAHm9UNKUO94ay8jwy7+h8JKRKwZlyvMBM1rvdUL7yuJ0r+V7Qolqp0OQIEsII9XV0zsPLob39HyswBk4HAgGN1sa+ZJFjUd3yAts9K/qPlxKUmcHtiCW41bYVztf0G7Xl9mZ4qLHshGBBqjwWRxGAKHO/T9oUkkCOUC0H4pqj3FLEgvxvXUhtdcGMY3Dc/5E19ZrDiPoFZlMVh4Lw8rPcqmwd0S9vcDXdRlWwKQG8scWn/xe3pUcVe2Jf/RpvZadKW2Jjr0pgevxbsVLZzFQabD6atSs6bCHh2jpgucEpZfU6J2XZdWDJAupyIzVYG0CtSsK66XZYyLaaLxN7U60MBraDYZDKfBLLyxqS+XaxtOOL4d83aQ4u0+ta7clli3+XR7Plmnb/fIYyRtGX1LTB30yb8YXdV/dF7bnV1BsMY6fgbmbqn2ZKJNoiE30e5NsGflTbQVeDtvc7b/Rimeu8GaZKjxeW45jPqJEHYv4hhP6x7DvXRx234TElMmRbQNqVVyknpq30LZkJzA5NefuRYq3iQI4Wj4JnePEIzxg+jZLbazZMsB0jpU/FJb/ROkZKpAnA==
+X-Microsoft-Antispam-Message-Info: FtWp3/3grlsP7fiW8uibOM1jbTCOrySykhlPduedfUS5N6eqphRRaGTQsThoSxuQUrJKDTc7aC2GZk889iTIe+Wfa1VVPWwCQfkN6RYjDadNxj9fQYHUuBr02VSaJzmHMDR3HnQE0enQEDUPgQDiPo6id8ghtJcCR1CMSASAGMNpxxuvx7t+T/DRSPL43F7o1A12MXUYpf5a05FMdjaFEOGtT8pWWQADT3+TxQOrxU/iX03+Subqw1uM4ov10VeLzpzqA5DsPPyMg4f1K5zRH3pvey2AmydVTQKL9RrjIWB4ZjZK3B4DNQRnGS1YsGE3Tl2JiMIEkpl3yRRi2ZiR2WzLDjqF4N0FXBXKFlxwmlsSFnMPG6QBCgJFa8xUb9En7AL47/eMQ1cCKXM6hTykGhwjQ0gk0grMCJagYT+VbS32EdAbcv2Yf+0NQr36hvPazEO8cAbuebZqb25crsUay79Fbi5jZb2IpqvbuDPfUiMtmTtR8a9Dn0rl+4NalRx43OkMU0bRN1vIPZhgyPyc8XTSU1I+V5ABV641YZwn74rOZqUv69LWQDITJtOnoM0t6z0MZ3+YjygIvljOpbJAf56QkdhNS9P7YqU5+TlN4vzzhJtlqG8gph0gxTwCsb2Usv9CgX7YRbxjLMpacMUASKFwZXHRVuEEHgUufNi4jtUoV6b8m5BSg4JKGmLYa794uU/rChKriDre+icVGzEOKA==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5327.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(136003)(366004)(39850400004)(376002)(346002)(52116002)(6916009)(316002)(6486002)(38350700002)(6666004)(86362001)(5660300002)(2616005)(4326008)(8936002)(26005)(38100700002)(6512007)(6506007)(956004)(83380400001)(478600001)(1076003)(36756003)(186003)(44832011)(66476007)(2906002)(8676002)(66946007)(66556008);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ijzzxHOT6+hWihnwFE57hSD1xobmdW6FXSAfTc8ClRGjwtK3V+wI/XiJmjLf?=
- =?us-ascii?Q?DvR38hxSWFiJvLf6yyWEuVNDL1WVlDK262JFnovxTfykhgHqZxpVRAonI+/R?=
- =?us-ascii?Q?/7Q5+9rpiiULy+S9wTaHRcSRtTamWa32D2OXKGAo3NBPwqUQkfMdBPIfdbLq?=
- =?us-ascii?Q?zTPN1IBbfpolM1eqTxRRqQcGKjsQnheIldTuAz/8I+v/yHCRHv5cDm9j8v10?=
- =?us-ascii?Q?273LSSGvIXeSsUa1E1TDj9iO16YaO5eCVz2c2xqi8/s/ozjBW0ZWxCaedJUd?=
- =?us-ascii?Q?sXTq29s63oPjkw21q9sifeA7mtqqxeuNixLQXNN1DRbIiNLL1ZpTN9fpDLrA?=
- =?us-ascii?Q?x/WVRUuAOPq7eN8ZHcy9pf1acHdU8G5J6kE4U/MKYSfCSq3vL12u7FKSOW3w?=
- =?us-ascii?Q?kog3tyRuTkYIGJzDvsa6TUIzDQYcJrfmJMsskUFelsBEzSE7DKobEJijW0KW?=
- =?us-ascii?Q?mHSOGJgF5dYpG3RNW5xXDEQYPDOlNRQ5fV1wT+meuJgj4pNaC/OrI8eRC5+2?=
- =?us-ascii?Q?nP4LaKTtprIM/aWs3Xfi01eGW3+2Id/oVEYIS5JP0BrF88N7OUzSit1c37uu?=
- =?us-ascii?Q?hPA0hnEMd7VdIo8U5Z6JAXpJn/ffsUxTidJ4ra7ykyuSEQARTV1hrSyLnMiV?=
- =?us-ascii?Q?sFZyQvq1YeFDda9/n4aXydu18Dtuwa3FS5mn1K5Zklxtfae+ccwjwZafpPaO?=
- =?us-ascii?Q?aGaS03n4BsXw7iIzAztrmrBGwi06yDEUIlo+x52PXVtM/DfW9jex3VTUTrYU?=
- =?us-ascii?Q?d38/JroUB7oEuM3qCRRw4gFZ/5wpU2fKlQB6zmdPU1cNt+tn3ZssvQKEXM6Z?=
- =?us-ascii?Q?fPbAllwutKoDkHAJyV+IlpSs20XyDvlg40jC8bvYQ9NgQko/zWhru3rIogz6?=
- =?us-ascii?Q?ZRZWwCHGqpEQk6nF019FkqiCHwOE36Rc5l9PgXnFd1sB3lzD8omqFjYKdGBN?=
- =?us-ascii?Q?+bMNv6nlhv8jtIGUrMf8l5v+X0vlAqmulqVT/q8eTwsfNAMnSVVg7qd+vMlu?=
- =?us-ascii?Q?17OLkdg5GGVUfzUk+jpzr+ORrkXaFU3Ri+I8xdXlpVtWNNN1Fccs5DkpA4oV?=
- =?us-ascii?Q?qEbrNJKtzxvLagKRldVkRHlwXVB1FU8LRTiGQHbhOgzZxLtI1RSpMJd9eGUU?=
- =?us-ascii?Q?OAzImFN7/D1e51vNNTDr8lcdc6rRnfHUO12V5gHydn/VzgR6GjaeWbz6pB+I?=
- =?us-ascii?Q?1gnXrMvdAUtFGfJlOX1WiGSqtD/j2NjzpBa/l1ozz3ujVBtegmXcJ1mQaCyL?=
- =?us-ascii?Q?T2gBLEPz+HrNO8657kHH0MhXVxL9aT8KQFM9OxIn29EoOpvgtRvXjRF1p4iL?=
- =?us-ascii?Q?UgHtMzI7IKdsFJfrGKWIRJXz?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?5OJeizZV6tUhQbNsHM+OPKO6iPeASsGb3NLbyOiyKrwkWJfh3Mj7JqblIt1n?=
+ =?us-ascii?Q?0tV5n+XruVvzfcjLSXpvSZL5p2BddxTK/+qfk9KMu3JZEY4DPxOo5h7uu7Nh?=
+ =?us-ascii?Q?rstBCcVtIMPS8hNidME69UAdrjm6eOtQnaCNn7EtpMn+Bg6PPycS3A00FHvI?=
+ =?us-ascii?Q?YhunW3gsm61SPUGp2PCmrw+qrRd9baqwwazVYetRQZOnFCC/1AfDRRPcqObJ?=
+ =?us-ascii?Q?3khkm0Gk1zmU0f6vR+9S7BWFZGbW0jHMF9eMfzqeJcKWoUv5C+eMlTEqLUla?=
+ =?us-ascii?Q?QJpzKDPWDB5G0rVVspHFKryFa674iottX9Y2ehgZlZXxAzl10+5ce7iyfbFJ?=
+ =?us-ascii?Q?n5bOb1E0fbbXtnpy4cwu4DICHr3WNX8PBfp7kway6yBaT5kTMaTuUOfZRexG?=
+ =?us-ascii?Q?Ews2Qy59zc2bUCxZg1DoGXKVVkcbCJd33K2t0L7pXT1nydM0lswhYpE9gtJp?=
+ =?us-ascii?Q?RrnmVcV052w9Q6gWoI0IzsD6rbuisw9v65ZX1jKmaM1re8MY79mDvRqB6L9w?=
+ =?us-ascii?Q?RHISB9xKjI4tfA/hd0c1rcFyS1lM0SkA4zqCcJf4A1QtC9nP/3bRum6T8tIu?=
+ =?us-ascii?Q?Oa1R75q4QfMzLUA9/atDeSgZRlOe1iccCp8kwHH2qNq3XMvy1SO7wD2eBz9D?=
+ =?us-ascii?Q?VDIaNE6SHECxKN33be9PlwskYUgp1jzPOL5ggGCf2eb8RQsS1qAm6sfhedAY?=
+ =?us-ascii?Q?KIkE3XR8EhZUE7DeKiEokhZcEKrp51WyEyULIRlZPOdxLhLlahFSe+UBfpx9?=
+ =?us-ascii?Q?JNnmHV5dVaCF+AEEzKLv0l7vP2/KtKbdXejNQryHEpc5tr8CS4Tbsa4F8sQR?=
+ =?us-ascii?Q?oJ2pGwFvfaRLZ4HlcsGHtqSrGZ+2foccn7LJl8Zo1E09852yG7QUWhJAXL9U?=
+ =?us-ascii?Q?kOGFamSyqC7KsUCRhWeT7jCmHB4j689PL5VkUN2CVdlJhazKgcIV0rYbq2VJ?=
+ =?us-ascii?Q?umCWw9p33Ay/l7J5bgXkby0/LgcQ+57F9PHyyDI5K5seLYz/Z/icWzo8Difd?=
+ =?us-ascii?Q?QagtrM1obedsUlBbh2yjquURDh+l81eoDuXhtqB5u2FFgG9nrPF37TZ8fAHv?=
+ =?us-ascii?Q?mXU9jZuCszIkGvsu98gykHVx5biO196LRgQQUZGL968FhwcRzdzyVl5ym0ur?=
+ =?us-ascii?Q?Ikp6ii7EKWeZgAqRQVE9Sjm/bxiy0ltBOVe2ly6c+DLZxb3n9s8G0IxTno0s?=
+ =?us-ascii?Q?x4bvKL7SUBLtsD5d/AOweO9JQajxbHJMlVeQBB/YqzaV0XXN4bXnOBg7Cu/k?=
+ =?us-ascii?Q?V2HXOtcyUnWZzIweERO/JtU44f+c7Nd0Rd4ERCxerun/wiUEZ8BZmG2S2JO8?=
+ =?us-ascii?Q?1TddhdWLkhJPfl0VKAjmkGFu?=
 X-OriginatorOrg: windriver.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 02f070a7-87a7-454c-3d03-08d976cc335d
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4af51a2d-3b5e-4302-0088-08d976cc34e2
 X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5327.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Sep 2021 15:36:05.9667
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Sep 2021 15:36:08.3821
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +mRhuDTKdmr7Ff/sdKC+kM+u6CMQeOo3tna6Iu//VBWGf9LVg31gJFWOBsf/Z/JMNDDTZnmDjRoN/TZzvmimYuVkdsHmtuDPAuuW/KrWmu0=
+X-MS-Exchange-CrossTenant-UserPrincipalName: zU5qcklWL43LMxe6B1f4KkuH05ZwNjwV432fNGqo8VSmgAJCY3JCIKOa9LSfcCj3JkQguimoEHF+vF68GW6naUFzdOMNnU5VVS//Jp2nLMU=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR1101MB2201
-X-Proofpoint-GUID: VJ5Iw4rb49tQRFPNWD_mdA4qgSTBrRb4
-X-Proofpoint-ORIG-GUID: VJ5Iw4rb49tQRFPNWD_mdA4qgSTBrRb4
+X-Proofpoint-GUID: n2qKqqFN5Ea6Gca2u8hEFZCe86tJbFLY
+X-Proofpoint-ORIG-GUID: n2qKqqFN5Ea6Gca2u8hEFZCe86tJbFLY
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
  definitions=2021-09-13_07,2021-09-09_01,2020-04-07_01
@@ -132,275 +132,288 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Alexei Starovoitov <ast@kernel.org>
+From: Daniel Borkmann <daniel@iogearbox.net>
 
-commit f7cf25b2026dc8441e0fa3a202c2aa8a56211e30 upstream.
+commit f5e81d1117501546b7be050c5fbafa6efd2c722c upstream.
 
-Compilers often spill induction variables into the stack,
-hence it is necessary for the verifier to track scalar values
-of the registers through stack slots.
+In case of JITs, each of the JIT backends compiles the BPF nospec instruction
+/either/ to a machine instruction which emits a speculation barrier /or/ to
+/no/ machine instruction in case the underlying architecture is not affected
+by Speculative Store Bypass or has different mitigations in place already.
 
-Also few bpf programs were incorrectly rejected in the past,
-since the verifier was not able to track such constants while
-they were used to compute offsets into packet headers.
+This covers both x86 and (implicitly) arm64: In case of x86, we use 'lfence'
+instruction for mitigation. In case of arm64, we rely on the firmware mitigation
+as controlled via the ssbd kernel parameter. Whenever the mitigation is enabled,
+it works for all of the kernel code with no need to provide any additional
+instructions here (hence only comment in arm64 JIT). Other archs can follow
+as needed. The BPF nospec instruction is specifically targeting Spectre v4
+since i) we don't use a serialization barrier for the Spectre v1 case, and
+ii) mitigation instructions for v1 and v4 might be different on some archs.
 
-Tracking constants through the stack significantly decreases
-the chances of state pruning, since two different constants
-are considered to be different by state equivalency.
-End result that cilium tests suffer serious degradation in the number
-of states processed and corresponding verification time increase.
+The BPF nospec is required for a future commit, where the BPF verifier does
+annotate intermediate BPF programs with speculation barriers.
 
-                     before  after
-bpf_lb-DLB_L3.o      1838    6441
-bpf_lb-DLB_L4.o      3218    5908
-bpf_lb-DUNKNOWN.o    1064    1064
-bpf_lxc-DDROP_ALL.o  26935   93790
-bpf_lxc-DUNKNOWN.o   34439   123886
-bpf_netdev.o         9721    31413
-bpf_overlay.o        6184    18561
-bpf_lxc_jit.o        39389   359445
-
-After further debugging turned out that cillium progs are
-getting hurt by clang due to the same constant tracking issue.
-Newer clang generates better code by spilling less to the stack.
-Instead it keeps more constants in the registers which
-hurts state pruning since the verifier already tracks constants
-in the registers:
-                  old clang  new clang
-                         (no spill/fill tracking introduced by this patch)
-bpf_lb-DLB_L3.o      1838    1923
-bpf_lb-DLB_L4.o      3218    3077
-bpf_lb-DUNKNOWN.o    1064    1062
-bpf_lxc-DDROP_ALL.o  26935   166729
-bpf_lxc-DUNKNOWN.o   34439   174607
-bpf_netdev.o         9721    8407
-bpf_overlay.o        6184    5420
-bpf_lcx_jit.o        39389   39389
-
-The final table is depressing:
-                  old clang  old clang    new clang  new clang
-                           const spill/fill        const spill/fill
-bpf_lb-DLB_L3.o      1838    6441          1923      8128
-bpf_lb-DLB_L4.o      3218    5908          3077      6707
-bpf_lb-DUNKNOWN.o    1064    1064          1062      1062
-bpf_lxc-DDROP_ALL.o  26935   93790         166729    380712
-bpf_lxc-DUNKNOWN.o   34439   123886        174607    440652
-bpf_netdev.o         9721    31413         8407      31904
-bpf_overlay.o        6184    18561         5420      23569
-bpf_lxc_jit.o        39389   359445        39389     359445
-
-Tracking constants in the registers hurts state pruning already.
-Adding tracking of constants through stack hurts pruning even more.
-The later patch address this general constant tracking issue
-with coarse/precise logic.
-
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Acked-by: Andrii Nakryiko <andriin@fb.com>
+Co-developed-by: Piotr Krysiuk <piotras@gmail.com>
+Co-developed-by: Benedict Schlueter <benedict.schlueter@rub.de>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-[OP: - drop verbose_linfo() calls, as the function is not implemented in 4.19
-     - adjust mark_reg_read() calls to match the prototype in 4.19]
+Signed-off-by: Piotr Krysiuk <piotras@gmail.com>
+Signed-off-by: Benedict Schlueter <benedict.schlueter@rub.de>
+Acked-by: Alexei Starovoitov <ast@kernel.org>
+[OP: adjusted context for 4.19, drop riscv and ppc32 changes]
 Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
 ---
- kernel/bpf/verifier.c | 86 +++++++++++++++++++++++++++++++------------
- 1 file changed, 63 insertions(+), 23 deletions(-)
+ arch/arm/net/bpf_jit_32.c         |  3 +++
+ arch/arm64/net/bpf_jit_comp.c     | 13 +++++++++++++
+ arch/mips/net/ebpf_jit.c          |  3 +++
+ arch/powerpc/net/bpf_jit_comp64.c |  6 ++++++
+ arch/s390/net/bpf_jit_comp.c      |  5 +++++
+ arch/sparc/net/bpf_jit_comp_64.c  |  3 +++
+ arch/x86/net/bpf_jit_comp.c       |  7 +++++++
+ arch/x86/net/bpf_jit_comp32.c     |  6 ++++++
+ include/linux/filter.h            | 15 +++++++++++++++
+ kernel/bpf/core.c                 | 18 +++++++++++++++++-
+ kernel/bpf/disasm.c               | 16 +++++++++-------
+ 11 files changed, 87 insertions(+), 8 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 3168f331258e..ce051c0b9a54 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -963,6 +963,23 @@ static bool register_is_null(struct bpf_reg_state *reg)
- 	return reg->type == SCALAR_VALUE && tnum_equals_const(reg->var_off, 0);
- }
- 
-+static bool register_is_const(struct bpf_reg_state *reg)
-+{
-+	return reg->type == SCALAR_VALUE && tnum_is_const(reg->var_off);
-+}
-+
-+static void save_register_state(struct bpf_func_state *state,
-+				int spi, struct bpf_reg_state *reg)
-+{
-+	int i;
-+
-+	state->stack[spi].spilled_ptr = *reg;
-+	state->stack[spi].spilled_ptr.live |= REG_LIVE_WRITTEN;
-+
-+	for (i = 0; i < BPF_REG_SIZE; i++)
-+		state->stack[spi].slot_type[i] = STACK_SPILL;
-+}
-+
- /* check_stack_read/write functions track spill/fill of registers,
-  * stack boundary and alignment are checked in check_mem_access()
-  */
-@@ -972,7 +989,7 @@ static int check_stack_write(struct bpf_verifier_env *env,
- {
- 	struct bpf_func_state *cur; /* state of the current function */
- 	int i, slot = -off - 1, spi = slot / BPF_REG_SIZE, err;
--	enum bpf_reg_type type;
-+	struct bpf_reg_state *reg = NULL;
- 
- 	err = realloc_func_state(state, round_up(slot + 1, BPF_REG_SIZE),
- 				 true);
-@@ -989,27 +1006,36 @@ static int check_stack_write(struct bpf_verifier_env *env,
- 	}
- 
- 	cur = env->cur_state->frame[env->cur_state->curframe];
--	if (value_regno >= 0 &&
--	    is_spillable_regtype((type = cur->regs[value_regno].type))) {
-+	if (value_regno >= 0)
-+		reg = &cur->regs[value_regno];
- 
-+	if (reg && size == BPF_REG_SIZE && register_is_const(reg) &&
-+	    !register_is_null(reg) && env->allow_ptr_leaks) {
-+		save_register_state(state, spi, reg);
-+	} else if (reg && is_spillable_regtype(reg->type)) {
- 		/* register containing pointer is being spilled into stack */
- 		if (size != BPF_REG_SIZE) {
- 			verbose(env, "invalid size of register spill\n");
- 			return -EACCES;
+diff --git a/arch/arm/net/bpf_jit_32.c b/arch/arm/net/bpf_jit_32.c
+index 328ced7bfaf2..79b12e744537 100644
+--- a/arch/arm/net/bpf_jit_32.c
++++ b/arch/arm/net/bpf_jit_32.c
+@@ -1578,6 +1578,9 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx)
+ 		rn = arm_bpf_get_reg32(src_lo, tmp2[1], ctx);
+ 		emit_ldx_r(dst, rn, off, ctx, BPF_SIZE(code));
+ 		break;
++	/* speculation barrier */
++	case BPF_ST | BPF_NOSPEC:
++		break;
+ 	/* ST: *(size *)(dst + off) = imm */
+ 	case BPF_ST | BPF_MEM | BPF_W:
+ 	case BPF_ST | BPF_MEM | BPF_H:
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index 7f0258ed1f5f..6876e8205042 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -685,6 +685,19 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx)
  		}
+ 		break;
  
--		if (state != cur && type == PTR_TO_STACK) {
-+		if (state != cur && reg->type == PTR_TO_STACK) {
- 			verbose(env, "cannot spill pointers to stack into stack frame of the caller\n");
- 			return -EINVAL;
++	/* speculation barrier */
++	case BPF_ST | BPF_NOSPEC:
++		/*
++		 * Nothing required here.
++		 *
++		 * In case of arm64, we rely on the firmware mitigation of
++		 * Speculative Store Bypass as controlled via the ssbd kernel
++		 * parameter. Whenever the mitigation is enabled, it works
++		 * for all of the kernel code with no need to provide any
++		 * additional instructions.
++		 */
++		break;
++
+ 	/* ST: *(size *)(dst + off) = imm */
+ 	case BPF_ST | BPF_MEM | BPF_W:
+ 	case BPF_ST | BPF_MEM | BPF_H:
+diff --git a/arch/mips/net/ebpf_jit.c b/arch/mips/net/ebpf_jit.c
+index 3832c4628608..947a7172c814 100644
+--- a/arch/mips/net/ebpf_jit.c
++++ b/arch/mips/net/ebpf_jit.c
+@@ -1282,6 +1282,9 @@ static int build_one_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
  		}
+ 		break;
  
--		/* save register state */
--		state->stack[spi].spilled_ptr = cur->regs[value_regno];
--		state->stack[spi].spilled_ptr.live |= REG_LIVE_WRITTEN;
-+		if (!env->allow_ptr_leaks) {
-+			bool sanitize = false;
- 
--		for (i = 0; i < BPF_REG_SIZE; i++) {
--			if (state->stack[spi].slot_type[i] == STACK_MISC &&
--			    !env->allow_ptr_leaks) {
-+			if (state->stack[spi].slot_type[0] == STACK_SPILL &&
-+			    register_is_const(&state->stack[spi].spilled_ptr))
-+				sanitize = true;
-+			for (i = 0; i < BPF_REG_SIZE; i++)
-+				if (state->stack[spi].slot_type[i] == STACK_MISC) {
-+					sanitize = true;
-+					break;
-+				}
-+			if (sanitize) {
- 				int *poff = &env->insn_aux_data[insn_idx].sanitize_stack_off;
- 				int soff = (-spi - 1) * BPF_REG_SIZE;
- 
-@@ -1032,8 +1058,8 @@ static int check_stack_write(struct bpf_verifier_env *env,
- 				}
- 				*poff = soff;
++	case BPF_ST | BPF_NOSPEC: /* speculation barrier */
++		break;
++
+ 	case BPF_ST | BPF_B | BPF_MEM:
+ 	case BPF_ST | BPF_H | BPF_MEM:
+ 	case BPF_ST | BPF_W | BPF_MEM:
+diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
+index 7e3ab477f67f..e7d56ddba43a 100644
+--- a/arch/powerpc/net/bpf_jit_comp64.c
++++ b/arch/powerpc/net/bpf_jit_comp64.c
+@@ -596,6 +596,12 @@ static int bpf_jit_build_body(struct bpf_prog *fp, u32 *image,
  			}
--			state->stack[spi].slot_type[i] = STACK_SPILL;
- 		}
-+		save_register_state(state, spi, reg);
- 	} else {
- 		u8 type = STACK_MISC;
+ 			break;
  
-@@ -1056,8 +1082,7 @@ static int check_stack_write(struct bpf_verifier_env *env,
- 			state->stack[spi].spilled_ptr.live |= REG_LIVE_WRITTEN;
- 
- 		/* when we zero initialize stack slots mark them as such */
--		if (value_regno >= 0 &&
--		    register_is_null(&cur->regs[value_regno]))
-+		if (reg && register_is_null(reg))
- 			type = STACK_ZERO;
- 
- 		/* Mark slots affected by this stack write. */
-@@ -1075,6 +1100,7 @@ static int check_stack_read(struct bpf_verifier_env *env,
- 	struct bpf_verifier_state *vstate = env->cur_state;
- 	struct bpf_func_state *state = vstate->frame[vstate->curframe];
- 	int i, slot = -off - 1, spi = slot / BPF_REG_SIZE;
-+	struct bpf_reg_state *reg;
- 	u8 *stype;
- 
- 	if (reg_state->allocated_stack <= slot) {
-@@ -1083,11 +1109,20 @@ static int check_stack_read(struct bpf_verifier_env *env,
- 		return -EACCES;
- 	}
- 	stype = reg_state->stack[spi].slot_type;
-+	reg = &reg_state->stack[spi].spilled_ptr;
- 
- 	if (stype[0] == STACK_SPILL) {
- 		if (size != BPF_REG_SIZE) {
--			verbose(env, "invalid size of register spill\n");
--			return -EACCES;
-+			if (reg->type != SCALAR_VALUE) {
-+				verbose(env, "invalid size of register fill\n");
-+				return -EACCES;
-+			}
-+			if (value_regno >= 0) {
-+				mark_reg_unknown(env, state->regs, value_regno);
-+				state->regs[value_regno].live |= REG_LIVE_WRITTEN;
-+			}
-+			mark_reg_read(env, reg, reg->parent);
-+			return 0;
- 		}
- 		for (i = 1; i < BPF_REG_SIZE; i++) {
- 			if (stype[(slot - i) % BPF_REG_SIZE] != STACK_SPILL) {
-@@ -1098,16 +1133,14 @@ static int check_stack_read(struct bpf_verifier_env *env,
- 
- 		if (value_regno >= 0) {
- 			/* restore register state from stack */
--			state->regs[value_regno] = reg_state->stack[spi].spilled_ptr;
-+			state->regs[value_regno] = *reg;
- 			/* mark reg as written since spilled pointer state likely
- 			 * has its liveness marks cleared by is_state_visited()
- 			 * which resets stack/reg liveness for state transitions
- 			 */
- 			state->regs[value_regno].live |= REG_LIVE_WRITTEN;
- 		}
--		mark_reg_read(env, &reg_state->stack[spi].spilled_ptr,
--			      reg_state->stack[spi].spilled_ptr.parent);
--		return 0;
-+		mark_reg_read(env, reg, reg->parent);
- 	} else {
- 		int zeros = 0;
- 
-@@ -1122,8 +1155,7 @@ static int check_stack_read(struct bpf_verifier_env *env,
- 				off, i, size);
- 			return -EACCES;
- 		}
--		mark_reg_read(env, &reg_state->stack[spi].spilled_ptr,
--			      reg_state->stack[spi].spilled_ptr.parent);
-+		mark_reg_read(env, reg, reg->parent);
- 		if (value_regno >= 0) {
- 			if (zeros == size) {
- 				/* any size read into register is zero extended,
-@@ -1136,8 +1168,8 @@ static int check_stack_read(struct bpf_verifier_env *env,
- 			}
- 			state->regs[value_regno].live |= REG_LIVE_WRITTEN;
- 		}
--		return 0;
- 	}
-+	return 0;
- }
- 
- static int check_stack_access(struct bpf_verifier_env *env,
-@@ -1790,7 +1822,7 @@ static int check_stack_boundary(struct bpf_verifier_env *env, int regno,
- {
- 	struct bpf_reg_state *reg = cur_regs(env) + regno;
- 	struct bpf_func_state *state = func(env, reg);
--	int err, min_off, max_off, i, slot, spi;
-+	int err, min_off, max_off, i, j, slot, spi;
- 
- 	if (reg->type != PTR_TO_STACK) {
- 		/* Allow zero-byte read from NULL, regardless of pointer type */
-@@ -1878,6 +1910,14 @@ static int check_stack_boundary(struct bpf_verifier_env *env, int regno,
- 			*stype = STACK_MISC;
- 			goto mark;
- 		}
-+		if (state->stack[spi].slot_type[0] == STACK_SPILL &&
-+		    state->stack[spi].spilled_ptr.type == SCALAR_VALUE) {
-+			__mark_reg_unknown(&state->stack[spi].spilled_ptr);
-+			for (j = 0; j < BPF_REG_SIZE; j++)
-+				state->stack[spi].slot_type[j] = STACK_MISC;
-+			goto mark;
-+		}
++		/*
++		 * BPF_ST NOSPEC (speculation barrier)
++		 */
++		case BPF_ST | BPF_NOSPEC:
++			break;
 +
- err:
- 		if (tnum_is_const(reg->var_off)) {
- 			verbose(env, "invalid indirect read from stack off %d+%d size %d\n",
+ 		/*
+ 		 * BPF_ST(X)
+ 		 */
+diff --git a/arch/s390/net/bpf_jit_comp.c b/arch/s390/net/bpf_jit_comp.c
+index e42354b15e0b..2a36845dcbc0 100644
+--- a/arch/s390/net/bpf_jit_comp.c
++++ b/arch/s390/net/bpf_jit_comp.c
+@@ -883,6 +883,11 @@ static noinline int bpf_jit_insn(struct bpf_jit *jit, struct bpf_prog *fp, int i
+ 			break;
+ 		}
+ 		break;
++	/*
++	 * BPF_NOSPEC (speculation barrier)
++	 */
++	case BPF_ST | BPF_NOSPEC:
++		break;
+ 	/*
+ 	 * BPF_ST(X)
+ 	 */
+diff --git a/arch/sparc/net/bpf_jit_comp_64.c b/arch/sparc/net/bpf_jit_comp_64.c
+index ec4da4dc98f1..1bb1e64d4377 100644
+--- a/arch/sparc/net/bpf_jit_comp_64.c
++++ b/arch/sparc/net/bpf_jit_comp_64.c
+@@ -1261,6 +1261,9 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx)
+ 		emit(opcode | RS1(src) | rs2 | RD(dst), ctx);
+ 		break;
+ 	}
++	/* speculation barrier */
++	case BPF_ST | BPF_NOSPEC:
++		break;
+ 	/* ST: *(size *)(dst + off) = imm */
+ 	case BPF_ST | BPF_MEM | BPF_W:
+ 	case BPF_ST | BPF_MEM | BPF_H:
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index 924ca27a6139..81c3d4b4c7e2 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -731,6 +731,13 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
+ 			}
+ 			break;
+ 
++			/* speculation barrier */
++		case BPF_ST | BPF_NOSPEC:
++			if (boot_cpu_has(X86_FEATURE_XMM2))
++				/* Emit 'lfence' */
++				EMIT3(0x0F, 0xAE, 0xE8);
++			break;
++
+ 			/* ST: *(u8*)(dst_reg + off) = imm */
+ 		case BPF_ST | BPF_MEM | BPF_B:
+ 			if (is_ereg(dst_reg))
+diff --git a/arch/x86/net/bpf_jit_comp32.c b/arch/x86/net/bpf_jit_comp32.c
+index adee990abab1..f48300988bc2 100644
+--- a/arch/x86/net/bpf_jit_comp32.c
++++ b/arch/x86/net/bpf_jit_comp32.c
+@@ -1683,6 +1683,12 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
+ 			i++;
+ 			break;
+ 		}
++		/* speculation barrier */
++		case BPF_ST | BPF_NOSPEC:
++			if (boot_cpu_has(X86_FEATURE_XMM2))
++				/* Emit 'lfence' */
++				EMIT3(0x0F, 0xAE, 0xE8);
++			break;
+ 		/* ST: *(u8*)(dst_reg + off) = imm */
+ 		case BPF_ST | BPF_MEM | BPF_H:
+ 		case BPF_ST | BPF_MEM | BPF_B:
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 7c84762cb59e..e981bd92a4e3 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -64,6 +64,11 @@ struct sock_reuseport;
+ /* unused opcode to mark call to interpreter with arguments */
+ #define BPF_CALL_ARGS	0xe0
+ 
++/* unused opcode to mark speculation barrier for mitigating
++ * Speculative Store Bypass
++ */
++#define BPF_NOSPEC	0xc0
++
+ /* As per nm, we expose JITed images as text (code) section for
+  * kallsyms. That way, tools like perf can find it to match
+  * addresses.
+@@ -354,6 +359,16 @@ struct sock_reuseport;
+ 		.off   = 0,					\
+ 		.imm   = 0 })
+ 
++/* Speculation barrier */
++
++#define BPF_ST_NOSPEC()						\
++	((struct bpf_insn) {					\
++		.code  = BPF_ST | BPF_NOSPEC,			\
++		.dst_reg = 0,					\
++		.src_reg = 0,					\
++		.off   = 0,					\
++		.imm   = 0 })
++
+ /* Internal classic blocks for direct assignment */
+ 
+ #define __BPF_STMT(CODE, K)					\
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index d2b6d2459aad..341402bc1202 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -33,6 +33,7 @@
+ #include <linux/rcupdate.h>
+ #include <linux/perf_event.h>
+ 
++#include <asm/barrier.h>
+ #include <asm/unaligned.h>
+ 
+ /* Registers */
+@@ -1050,6 +1051,7 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn, u64 *stack)
+ 		/* Non-UAPI available opcodes. */
+ 		[BPF_JMP | BPF_CALL_ARGS] = &&JMP_CALL_ARGS,
+ 		[BPF_JMP | BPF_TAIL_CALL] = &&JMP_TAIL_CALL,
++		[BPF_ST  | BPF_NOSPEC] = &&ST_NOSPEC,
+ 	};
+ #undef BPF_INSN_3_LBL
+ #undef BPF_INSN_2_LBL
+@@ -1356,7 +1358,21 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn, u64 *stack)
+ 	JMP_EXIT:
+ 		return BPF_R0;
+ 
+-	/* STX and ST and LDX*/
++	/* ST, STX and LDX*/
++	ST_NOSPEC:
++		/* Speculation barrier for mitigating Speculative Store Bypass.
++		 * In case of arm64, we rely on the firmware mitigation as
++		 * controlled via the ssbd kernel parameter. Whenever the
++		 * mitigation is enabled, it works for all of the kernel code
++		 * with no need to provide any additional instructions here.
++		 * In case of x86, we use 'lfence' insn for mitigation. We
++		 * reuse preexisting logic from Spectre v1 mitigation that
++		 * happens to produce the required code on x86 for v4 as well.
++		 */
++#ifdef CONFIG_X86
++		barrier_nospec();
++#endif
++		CONT;
+ #define LDST(SIZEOP, SIZE)						\
+ 	STX_MEM_##SIZEOP:						\
+ 		*(SIZE *)(unsigned long) (DST + insn->off) = SRC;	\
+diff --git a/kernel/bpf/disasm.c b/kernel/bpf/disasm.c
+index d6b76377cb6e..cbd75dd5992e 100644
+--- a/kernel/bpf/disasm.c
++++ b/kernel/bpf/disasm.c
+@@ -171,15 +171,17 @@ void print_bpf_insn(const struct bpf_insn_cbs *cbs,
+ 		else
+ 			verbose(cbs->private_data, "BUG_%02x\n", insn->code);
+ 	} else if (class == BPF_ST) {
+-		if (BPF_MODE(insn->code) != BPF_MEM) {
++		if (BPF_MODE(insn->code) == BPF_MEM) {
++			verbose(cbs->private_data, "(%02x) *(%s *)(r%d %+d) = %d\n",
++				insn->code,
++				bpf_ldst_string[BPF_SIZE(insn->code) >> 3],
++				insn->dst_reg,
++				insn->off, insn->imm);
++		} else if (BPF_MODE(insn->code) == 0xc0 /* BPF_NOSPEC, no UAPI */) {
++			verbose(cbs->private_data, "(%02x) nospec\n", insn->code);
++		} else {
+ 			verbose(cbs->private_data, "BUG_st_%02x\n", insn->code);
+-			return;
+ 		}
+-		verbose(cbs->private_data, "(%02x) *(%s *)(r%d %+d) = %d\n",
+-			insn->code,
+-			bpf_ldst_string[BPF_SIZE(insn->code) >> 3],
+-			insn->dst_reg,
+-			insn->off, insn->imm);
+ 	} else if (class == BPF_LDX) {
+ 		if (BPF_MODE(insn->code) != BPF_MEM) {
+ 			verbose(cbs->private_data, "BUG_ldx_%02x\n", insn->code);
 -- 
 2.25.1
 
