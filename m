@@ -2,116 +2,160 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BE914C433F5
-	for <bpf@archiver.kernel.org>; Mon, 13 Sep 2021 15:49:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 100F1C433EF
+	for <bpf@archiver.kernel.org>; Mon, 13 Sep 2021 15:51:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A335A610A6
-	for <bpf@archiver.kernel.org>; Mon, 13 Sep 2021 15:49:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E51E360555
+	for <bpf@archiver.kernel.org>; Mon, 13 Sep 2021 15:51:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344193AbhIMPvG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 13 Sep 2021 11:51:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34496 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343968AbhIMPvD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 13 Sep 2021 11:51:03 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24C13C028BA5;
-        Mon, 13 Sep 2021 08:36:41 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id i21so22029511ejd.2;
-        Mon, 13 Sep 2021 08:36:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XSYbOa1IizAHpslHQQmvn+2hEv67SUo9KMqNHAVVr/c=;
-        b=IxOMxIVUf83SESPCmeqzWMSc4EeNXdU8BXuhAkjBidOQoIdoll6j+53llXrD43nPhY
-         I2eXyZrkJGWwMhwkXz93mb3uaxsfQNQnbQsOk1JeaCPuMxligG62v6r7GZq4uaGA35Xu
-         1BbR0b98NQFNbk7NZsM+GFVfKTlNdtaKh4wnvB35i8bFC30T1EZejxaQDQ2AAx+Pikmu
-         KJy+munhXsVw8Jy0PBPZeVXQ2ObvAkd7FxH4JF0wBLuGtnWjj0VTZNd+Ut6HL8xmRETT
-         0GpZ39BRFsKQOpc9Vmm9ZRuI6KejeiqU7xglX+7XZG2XufPXSBYoj1eNPyjlIa4ni0pi
-         HPQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XSYbOa1IizAHpslHQQmvn+2hEv67SUo9KMqNHAVVr/c=;
-        b=CzSU5xYi2KtLOR0k0YJ/hzbUPksk5vN6mQ09bb0NZoJxrGQZBRBB3Yw9T6/rTyEJ6C
-         snn7I+NrhcrCkhHCc3UKADcfKk3UcZ7LG5ByBiuXtvCd1yiazSV8wAKVS38C3p94VuFq
-         ge4Sw6d0P73JuVTEJ/KD/SZOPwqwe7Ho0PNt83oxvIs65YXFge8wHBjlps2jPXNDhw6o
-         Bw1JplG2qNtYD/LdffSIVLPiEQrXqszQN0a7tHoJpQ6o2zlbb4QR+tmd2N+3XuqiP2aq
-         lsrmZHkeF5lMBX6C8ShzNNIqs8WCDa4w4dlVZIHIhQQHC4FEO0yl6zdYbTGyAIEFd2WY
-         0yLA==
-X-Gm-Message-State: AOAM531zOFFHzS6KofOKL8PfopcwI2dD8+tFfTEzw7/zRurmjmLj9M5T
-        8aQvY7mQyG/n4TQgex4HUn60Zjp/KZV8F/Wl2gSqepbvlsgmBQ==
-X-Google-Smtp-Source: ABdhPJwLjo74lSFVZD71/d7P98WZS5j01e79q+eKxJkyr1M9XahZtYihosk2ZYxZhu5WqY6L9VLpLIz+gNMHPXFlBxw=
-X-Received: by 2002:a17:906:7250:: with SMTP id n16mr13223849ejk.147.1631547400206;
- Mon, 13 Sep 2021 08:36:40 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210913110246.2955737-1-mudongliangabcd@gmail.com> <4f260295-b7a2-92ad-3bb0-06074288dd23@fb.com>
-In-Reply-To: <4f260295-b7a2-92ad-3bb0-06074288dd23@fb.com>
-From:   Dongliang Mu <mudongliangabcd@gmail.com>
-Date:   Mon, 13 Sep 2021 23:36:13 +0800
-Message-ID: <CAD-N9QWPUtFRr4XYJG4zAi_fhB1aLsnHsHu0GsfLyC3RamabNw@mail.gmail.com>
-Subject: Re: [PATCH] bpf: fix kmalloc bug in bpf_check
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+        id S245243AbhIMPwv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 13 Sep 2021 11:52:51 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:47780 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S245366AbhIMPwm (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 13 Sep 2021 11:52:42 -0400
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.1.2/8.16.0.43) with SMTP id 18DF4LbB025505
+        for <bpf@vger.kernel.org>; Mon, 13 Sep 2021 08:51:25 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : content-type : content-transfer-encoding :
+ mime-version; s=facebook; bh=KS8f6Q6ixnmoOVZg3nFdHUHQEapbW318b/XHh06i90s=;
+ b=dPNmqipWetqJ3WPDLyJtHWDamzdshdoS3Exm6MQrNaGBt1TErPBOotTp6Pure1k39pRt
+ Qz16FqsJebmb0+GcS/As+dTo75V//k7BXi2fbJ5TUsMeD7ODy5P6ZzZuZ+xcmWPYdeoF
+ gGakuDub9Qdo8G55oLE+qsecUXQmW0gwONc= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0001303.ppops.net with ESMTP id 3b215pjw0r-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Mon, 13 Sep 2021 08:51:25 -0700
+Received: from intmgw001.25.frc3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.14; Mon, 13 Sep 2021 08:51:23 -0700
+Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
+        id 8681C7278F1B; Mon, 13 Sep 2021 08:51:22 -0700 (PDT)
+From:   Yonghong Song <yhs@fb.com>
+To:     <bpf@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Willy Tarreau <w@1wt.eu>,
-        syzbot+f3e749d4c662818ae439@syzkaller.appspotmail.com,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
-        bpf@vger.kernel.org, linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
+Subject: [PATCH bpf-next v2 00/11] bpf: add support for new btf kind BTF_KIND_TAG
+Date:   Mon, 13 Sep 2021 08:51:22 -0700
+Message-ID: <20210913155122.3722704-1-yhs@fb.com>
+X-Mailer: git-send-email 2.30.2
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-FB-Source: Intern
+X-Proofpoint-GUID: IeiF2UAbDBdcwEixIDHjaDLz_ar6YrdU
+X-Proofpoint-ORIG-GUID: IeiF2UAbDBdcwEixIDHjaDLz_ar6YrdU
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
+ definitions=2021-09-13_07,2021-09-09_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
+ mlxlogscore=859 spamscore=0 bulkscore=0 impostorscore=0 adultscore=0
+ suspectscore=0 mlxscore=0 priorityscore=1501 clxscore=1015
+ lowpriorityscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2109030001 definitions=main-2109130103
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Sep 13, 2021 at 11:34 PM Yonghong Song <yhs@fb.com> wrote:
->
->
->
-> On 9/13/21 4:02 AM, Dongliang Mu wrote:
-> > Since 7661809d493b ("mm: don't allow oversized kvmalloc() calls
-> > ") does not allow oversized kvmalloc, it triggers a kmalloc bug warning
-> > at bpf_check.
-> >
-> > Fix it by adding a sanity check in th check_btf_line.
-> >
-> > Reported-by: syzbot+f3e749d4c662818ae439@syzkaller.appspotmail.com
-> > Fixes: 7661809d493b ("mm: don't allow oversized kvmalloc() calls")
-> > Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
->
-> Thanks for the fix. A similar patch has been proposed here:
-> https://lore.kernel.org/bpf/20210911005557.45518-1-cuibixuan@huawei.com/
+LLVM14 added support for a new C attribute ([1])
+  __attribute__((btf_tag("arbitrary_str")))
+This attribute will be emitted to dwarf ([2]) and pahole
+will convert it to BTF. Or for bpf target, this
+attribute will be emitted to BTF directly ([3], [4]).
+The attribute is intended to provide additional
+information for
+  - struct/union type or struct/union member
+  - static/global variables
+  - static/global function or function parameter.
 
-OK, I see. Let's ignore this patch.
+This new attribute can be used to add attributes
+to kernel codes, e.g., pre- or post- conditions,
+allow/deny info, or any other info in which only
+the kernel is interested. Such attributes will
+be processed by clang frontend and emitted to
+dwarf, converting to BTF by pahole. Ultimiately
+the verifier can use these information for
+verification purpose.
 
->
-> > ---
-> >   kernel/bpf/verifier.c | 3 +++
-> >   1 file changed, 3 insertions(+)
-> >
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index 047ac4b4703b..3c5a79f78bc5 100644
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
-> > @@ -9913,6 +9913,9 @@ static int check_btf_line(struct bpf_verifier_env *env,
-> >       if (!nr_linfo)
-> >               return 0;
-> >
-> > +     if (nr_linfo > INT_MAX/sizeof(struct bpf_line_info))
-> > +             return -EINVAL;
-> > +
-> >       rec_size = attr->line_info_rec_size;
-> >       if (rec_size < MIN_BPF_LINEINFO_SIZE ||
-> >           rec_size > MAX_LINEINFO_REC_SIZE ||
-> >
+The new attribute can also be used for bpf
+programs, e.g., tagging with __user attributes
+for function parameters, specifying global
+function preconditions, etc. Such information
+may help verifier to detect user program
+bugs.
+
+After this series, pahole dwarf->btf converter
+will be enhanced to support new llvm tag
+for btf_tag attribute. With pahole support,
+we will then try to add a few real use case,
+e.g., __user/__rcu tagging, allow/deny list,
+some kernel function precondition, etc,
+in the kernel.
+
+In the rest of the series, Patches 1-2 had
+kernel support. Patches 3-4 added
+libbpf support. Patch 5 added bpftool
+support. Patches 6-10 added various selftests.
+Patch 11 added documentation for the new kind.
+
+  [1] https://reviews.llvm.org/D106614
+  [2] https://reviews.llvm.org/D106621
+  [3] https://reviews.llvm.org/D106622
+  [4] https://reviews.llvm.org/D109560
+
+Changelog:
+  v1 -> v2:
+    - BTF ELF format changed in llvm ([4] above),
+      so cross-board change to use the new format.
+    - Clarified in commit message that BTF_KIND_TAG
+      is not emitted by bpftool btf dump format c.
+    - Fix various comments from Andrii.
+
+Yonghong Song (11):
+  btf: change BTF_KIND_* macros to enums
+  bpf: support for new btf kind BTF_KIND_TAG
+  libbpf: rename btf_{hash,equal}_int to btf_{hash,equal}_int_tag
+  libbpf: add support for BTF_KIND_TAG
+  bpftool: add support for BTF_KIND_TAG
+  selftests/bpf: test libbpf API function btf__add_tag()
+  selftests/bpf: change NAME_NTH/IS_NAME_NTH for BTF_KIND_TAG format
+  selftests/bpf: add BTF_KIND_TAG unit tests
+  selftests/bpf: test BTF_KIND_TAG for deduplication
+  selftests/bpf: add a test with a bpf program with btf_tag attributes
+  docs/bpf: add documentation for BTF_KIND_TAG
+
+ Documentation/bpf/btf.rst                     |  27 +-
+ include/uapi/linux/btf.h                      |  52 +--
+ kernel/bpf/btf.c                              | 120 +++++++
+ tools/bpf/bpftool/btf.c                       |  12 +
+ tools/include/uapi/linux/btf.h                |  52 +--
+ tools/lib/bpf/btf.c                           |  85 ++++-
+ tools/lib/bpf/btf.h                           |  15 +
+ tools/lib/bpf/btf_dump.c                      |   3 +
+ tools/lib/bpf/libbpf.c                        |  31 +-
+ tools/lib/bpf/libbpf.map                      |   5 +
+ tools/lib/bpf/libbpf_internal.h               |   2 +
+ tools/testing/selftests/bpf/btf_helpers.c     |   7 +-
+ tools/testing/selftests/bpf/prog_tests/btf.c  | 318 ++++++++++++++++--
+ .../selftests/bpf/prog_tests/btf_tag.c        |  14 +
+ .../selftests/bpf/prog_tests/btf_write.c      |  21 ++
+ tools/testing/selftests/bpf/progs/tag.c       |  39 +++
+ tools/testing/selftests/bpf/test_btf.h        |   3 +
+ 17 files changed, 736 insertions(+), 70 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/btf_tag.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tag.c
+
+--=20
+2.30.2
+
