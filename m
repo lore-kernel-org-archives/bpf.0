@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BEFC1C433FE
-	for <bpf@archiver.kernel.org>; Mon, 13 Sep 2021 15:52:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 40112C433F5
+	for <bpf@archiver.kernel.org>; Mon, 13 Sep 2021 15:52:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A61C360F9B
-	for <bpf@archiver.kernel.org>; Mon, 13 Sep 2021 15:52:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 27EFE60F9B
+	for <bpf@archiver.kernel.org>; Mon, 13 Sep 2021 15:52:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243695AbhIMPxR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 13 Sep 2021 11:53:17 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:16848 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243337AbhIMPxK (ORCPT
+        id S244807AbhIMPxS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 13 Sep 2021 11:53:18 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:47540 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S244551AbhIMPxK (ORCPT
         <rfc822;bpf@vger.kernel.org>); Mon, 13 Sep 2021 11:53:10 -0400
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.0.43) with SMTP id 18DF4klw008917
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.0.43) with SMTP id 18DF56W0014477
         for <bpf@vger.kernel.org>; Mon, 13 Sep 2021 08:51:53 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=AoubTLSrqDVjsk41fGmHPL6JuiIOb0TDifRuv77zc6Y=;
- b=WUGaB+Iin86XpWccjyhMyyRB2NqGgSs/+tRdKmRUm/BXL0PsIYvzppkC2MRDrsDD5u6E
- kTRCAeO7GTwLCKBsWaQl3vKvRSxFCk9oBaIDBhbzGLaJhEgDn3SlR6139f9ekND5iT/a
- VglxPGwQxCQsUw+J+0OUdBrEfOJHMDn5QXY= 
+ bh=28VJ10Z+eSw1xnnp1vygxI4sjGr1JlObrqe5+oV+l8A=;
+ b=RDJ2ivVTdESAAeDnzO/cvf1djxG2+x5OSXuQ1MNu9DXAtXzjgACnUvf17SeEbwqGZ9BH
+ /0I41mXK2fbVS/qP+8xKR+ChFI5RQuStTq9TjMZzICZVTbiGAd+UCXBoF3e7mWnxETlN
+ V+heFMmzPwulX+px+necWlUPmnofExw7ePs= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 3b1wh83q3h-4
+        by mx0a-00082601.pphosted.com with ESMTP id 3b1vfcux2e-7
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
         for <bpf@vger.kernel.org>; Mon, 13 Sep 2021 08:51:53 -0700
-Received: from intmgw001.06.ash9.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+Received: from intmgw006.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2308.14; Mon, 13 Sep 2021 08:51:50 -0700
 Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id F23667278FB6; Mon, 13 Sep 2021 08:51:39 -0700 (PDT)
+        id 7CC367279073; Mon, 13 Sep 2021 08:51:50 -0700 (PDT)
 From:   Yonghong Song <yhs@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next v2 03/11] libbpf: rename btf_{hash,equal}_int to btf_{hash,equal}_int_tag
-Date:   Mon, 13 Sep 2021 08:51:39 -0700
-Message-ID: <20210913155139.3724979-1-yhs@fb.com>
+Subject: [PATCH bpf-next v2 05/11] bpftool: add support for BTF_KIND_TAG
+Date:   Mon, 13 Sep 2021 08:51:50 -0700
+Message-ID: <20210913155150.3727112-1-yhs@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210913155122.3722704-1-yhs@fb.com>
 References: <20210913155122.3722704-1-yhs@fb.com>
@@ -55,93 +55,73 @@ Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-ORIG-GUID: IinSKfVSd7K9h0klXMP9r4JOhcFBR9CS
-X-Proofpoint-GUID: IinSKfVSd7K9h0klXMP9r4JOhcFBR9CS
+X-Proofpoint-GUID: _MRB44QWRmDVC3t9Izqc0DjqDcG5MX5Q
+X-Proofpoint-ORIG-GUID: _MRB44QWRmDVC3t9Izqc0DjqDcG5MX5Q
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
  definitions=2021-09-13_07,2021-09-09_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0 phishscore=0
- clxscore=1015 mlxlogscore=433 suspectscore=0 spamscore=0 bulkscore=0
- mlxscore=0 impostorscore=0 malwarescore=0 lowpriorityscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0
+ clxscore=1015 mlxscore=0 lowpriorityscore=0 impostorscore=0 adultscore=0
+ spamscore=0 mlxlogscore=999 priorityscore=1501 suspectscore=0 bulkscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2109030001 definitions=main-2109130103
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch renames functions btf_{hash,equal}_int() to
-btf_{hash,equal}_int_tag() so they can be reused for
-BTF_KIND_TAG support. There is no functionality change for
-this patch.
+Added bpftool support to dump BTF_KIND_TAG information.
+The new bpftool will be used in later patches to dump
+btf in the test bpf program object file.
 
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
+Currently, the tags are not emitted with
+  bpftool btf dump file <path> format c
+and they are silently ignored.  The tag information is
+mostly used in the kernel for verification purpose and the kernel
+uses its own btf to check. With adding these tags
+to vmlinux.h, tags will be encoded in program's btf but
+they will not be used by the kernel, at least for now.
+So let us delay adding these tags to format C header files
+until there is a real need.
+
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- tools/lib/bpf/btf.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ tools/bpf/bpftool/btf.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index 77dc24d58302..7cb6ebf1be37 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -3256,8 +3256,8 @@ static bool btf_equal_common(struct btf_type *t1, s=
-truct btf_type *t2)
- 	       t1->size =3D=3D t2->size;
- }
-=20
--/* Calculate type signature hash of INT. */
--static long btf_hash_int(struct btf_type *t)
-+/* Calculate type signature hash of INT or TAG. */
-+static long btf_hash_int_tag(struct btf_type *t)
+diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
+index f7e5ff3586c9..49743ad96851 100644
+--- a/tools/bpf/bpftool/btf.c
++++ b/tools/bpf/bpftool/btf.c
+@@ -37,6 +37,7 @@ static const char * const btf_kind_str[NR_BTF_KINDS] =3D=
  {
- 	__u32 info =3D *(__u32 *)(t + 1);
- 	long h;
-@@ -3267,8 +3267,8 @@ static long btf_hash_int(struct btf_type *t)
- 	return h;
- }
+ 	[BTF_KIND_VAR]		=3D "VAR",
+ 	[BTF_KIND_DATASEC]	=3D "DATASEC",
+ 	[BTF_KIND_FLOAT]	=3D "FLOAT",
++	[BTF_KIND_TAG]		=3D "TAG",
+ };
 =20
--/* Check structural equality of two INTs. */
--static bool btf_equal_int(struct btf_type *t1, struct btf_type *t2)
-+/* Check structural equality of two INTs or TAGs. */
-+static bool btf_equal_int_tag(struct btf_type *t1, struct btf_type *t2)
- {
- 	__u32 info1, info2;
-=20
-@@ -3535,7 +3535,7 @@ static int btf_dedup_prep(struct btf_dedup *d)
- 			h =3D btf_hash_common(t);
- 			break;
- 		case BTF_KIND_INT:
--			h =3D btf_hash_int(t);
-+			h =3D btf_hash_int_tag(t);
- 			break;
- 		case BTF_KIND_ENUM:
- 			h =3D btf_hash_enum(t);
-@@ -3593,11 +3593,11 @@ static int btf_dedup_prim_type(struct btf_dedup *=
-d, __u32 type_id)
- 		return 0;
-=20
- 	case BTF_KIND_INT:
--		h =3D btf_hash_int(t);
-+		h =3D btf_hash_int_tag(t);
- 		for_each_dedup_cand(d, hash_entry, h) {
- 			cand_id =3D (__u32)(long)hash_entry->value;
- 			cand =3D btf_type_by_id(d->btf, cand_id);
--			if (btf_equal_int(t, cand)) {
-+			if (btf_equal_int_tag(t, cand)) {
- 				new_id =3D cand_id;
- 				break;
- 			}
-@@ -3881,7 +3881,7 @@ static int btf_dedup_is_equiv(struct btf_dedup *d, =
-__u32 cand_id,
-=20
- 	switch (cand_kind) {
- 	case BTF_KIND_INT:
--		return btf_equal_int(cand_type, canon_type);
-+		return btf_equal_int_tag(cand_type, canon_type);
-=20
- 	case BTF_KIND_ENUM:
- 		if (d->opts.dont_resolve_fwds)
+ struct btf_attach_table {
+@@ -347,6 +348,17 @@ static int dump_btf_type(const struct btf *btf, __u3=
+2 id,
+ 			printf(" size=3D%u", t->size);
+ 		break;
+ 	}
++	case BTF_KIND_TAG: {
++		const struct btf_tag *tag =3D (const void *)(t + 1);
++
++		if (json_output) {
++			jsonw_uint_field(w, "type_id", t->type);
++			jsonw_int_field(w, "component_idx", tag->component_idx);
++		} else {
++			printf(" type_id=3D%u component_idx=3D%d", t->type, tag->component_id=
+x);
++		}
++		break;
++	}
+ 	default:
+ 		break;
+ 	}
 --=20
 2.30.2
 
