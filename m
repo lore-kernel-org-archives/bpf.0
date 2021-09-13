@@ -2,133 +2,130 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B224C433F5
-	for <bpf@archiver.kernel.org>; Mon, 13 Sep 2021 19:32:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E600DC433EF
+	for <bpf@archiver.kernel.org>; Mon, 13 Sep 2021 19:39:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 38C4561103
-	for <bpf@archiver.kernel.org>; Mon, 13 Sep 2021 19:32:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CBCFD61103
+	for <bpf@archiver.kernel.org>; Mon, 13 Sep 2021 19:39:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241481AbhIMTd4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 13 Sep 2021 15:33:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60102 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235290AbhIMTdp (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 13 Sep 2021 15:33:45 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF409C061574
-        for <bpf@vger.kernel.org>; Mon, 13 Sep 2021 12:32:29 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id w6so6540364pll.3
-        for <bpf@vger.kernel.org>; Mon, 13 Sep 2021 12:32:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zL4zqjWIj9mhPAiQe4v76KOD2s7l6T9rD3Ta2ItiX4Q=;
-        b=cA7PUcvu7ZutOT7ZYIkjv9hW/ejFOHfQgz4yxJZR9lJzQWexSL1fmscVIeq7RNxVYm
-         EtpoR6edagfYlegJnNUw4XDw6hggelh/nbQm1hnU209RRI7fz7vGcL763aF13thV9uex
-         SbLjxGAf4lHim6vjSfkt+DIeI+s5GnkwLrUCPZaJN+p0v805g2BmJmEJLK0sv5kfjDyh
-         GIElptmjh65ojHuOTMZnTcvCm+nYy88O0wX3Ue66MbsQJQfzmy5nWWDTc7KhJMPfjfKz
-         hOh2op2OrTlqyPuAL/oRgFmbuo7mf9b8LFbuV2+9BhHSudiqe+80pJ2obDa1jUxBoKTn
-         RCcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zL4zqjWIj9mhPAiQe4v76KOD2s7l6T9rD3Ta2ItiX4Q=;
-        b=mxzWs6nJ8XAtancWkkJl0p+xis6KSCN0w0/lpFL46q6EISpYI9jsR/ethtLtbLOI43
-         U/plF5euFieDePOUb6+2v3ByriNh2QCjL/EWe7L1qG3wWnPbNtoygu5k8kXcDMIDSnul
-         Y5wUjwA9wDVVtDGrwOObXQbPG0fGd3JUqcfSL5xCk6f+S2OXvaTomkfVo4xz8Ua+uWRp
-         ja8m9JPwkcY0BF4SMgxn8IaUKRSyIyoPhpCBO5VlExuFFvXCaFCL3X9Nl0ORWVE+Gipo
-         aMJUCiou+U9d5EumJI3T+gOY9MS2JE0TJ88l0U7FPJM0WZA+5fczN0hhWLEl5rNgJKjX
-         sUyw==
-X-Gm-Message-State: AOAM530a2beQY56deJ9HF8h27JQENy47sLqY6Jz/HV6vaeLZx3imj216
-        /C2KUznmeBWl99ojS6bG+OnPh1kC4m9iF7I7euo=
-X-Google-Smtp-Source: ABdhPJzR2TdvlyZ8qkW80SK4fV/T43hGLvn9qIU/dMPXaFj38EY9hSo2Ohlv2UaISw1WQfyYD7ZDTa3l4baiEgtyj8c=
-X-Received: by 2002:a17:902:710e:b0:139:3bd:59b9 with SMTP id
- a14-20020a170902710e00b0013903bd59b9mr11729045pll.3.1631561549292; Mon, 13
- Sep 2021 12:32:29 -0700 (PDT)
+        id S242137AbhIMTk2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 13 Sep 2021 15:40:28 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:22446 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S240113AbhIMTk1 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 13 Sep 2021 15:40:27 -0400
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.1.2/8.16.0.43) with SMTP id 18DH3fTd029793
+        for <bpf@vger.kernel.org>; Mon, 13 Sep 2021 12:39:10 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=wnoKC8xQSinmrk9DgyXT9dgYfyRtzDGpPgCt2UgCypk=;
+ b=lUPiNwDGkXnuPgPjMD7UDRprhCmfjw8bGpYhxFH5KyoyC5i53P1bA9rC0wN0fgQBz8tz
+ YbbW+zrA3tMRg6+WRpNkHd05M9QEQPbqGlGIm78Es4Daj+mN76D7daZfAvrNBRuvblzz
+ 5K9txhWHAtLvnvrws1WRSAoyA/zXelke+Vs= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by m0001303.ppops.net with ESMTP id 3b215pmg4h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Mon, 13 Sep 2021 12:39:10 -0700
+Received: from intmgw001.05.prn6.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.14; Mon, 13 Sep 2021 12:39:08 -0700
+Received: by devvm2661.vll0.facebook.com (Postfix, from userid 200310)
+        id 717B037AD02A; Mon, 13 Sep 2021 12:39:07 -0700 (PDT)
+From:   Yucong Sun <fallentree@fb.com>
+To:     <andrii@kernel.org>
+CC:     <bpf@vger.kernel.org>, Yucong Sun <sunyucong@gmail.com>
+Subject: [PATCH v4 bpf-next 2/3] selftests/bpf: add per worker cgroup suffix
+Date:   Mon, 13 Sep 2021 12:39:05 -0700
+Message-ID: <20210913193906.2813357-2-fallentree@fb.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210913193906.2813357-1-fallentree@fb.com>
+References: <20210913193906.2813357-1-fallentree@fb.com>
 MIME-Version: 1.0
-References: <20210908213226.1871016-1-andrii@kernel.org> <af17df18-73ae-ad25-0803-3dc37a4cc02c@iogearbox.net>
- <CAEf4BzZcfy9f2E2ADvaV5PDXRMxsupePGPdu12ZRjE2wh3Hn1w@mail.gmail.com>
- <CAEf4BzZqc7txCoiV-F0_+oMB9GMv4BTapnef5V1XZk8CC=LpHA@mail.gmail.com>
- <4287e56e-a91a-1f39-5dae-14ecabe537db@iogearbox.net> <CAEf4BzaNSG1w_CuYVoK7WSntKsr4mzTr99K6jPVeSm_-2cbwZw@mail.gmail.com>
- <CAJygYd0GpmGL43PjvtCkTpmF-+VS81h6K9nF5SQoTMQ1WP0vUQ@mail.gmail.com> <CAEf4BzYF7r6BvgB6tiVfDYKk3Yf92=E=CcX7CVkj4ANFU4T6cw@mail.gmail.com>
-In-Reply-To: <CAEf4BzYF7r6BvgB6tiVfDYKk3Yf92=E=CcX7CVkj4ANFU4T6cw@mail.gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Mon, 13 Sep 2021 12:32:18 -0700
-Message-ID: <CAADnVQKq5-ku4J3-nVf3bDLbxHwfHEPDZSCrcG+SXbP3VmPP1A@mail.gmail.com>
-Subject: Re: [PATCH v3 bpf-next] libbpf: add LIBBPF_DEPRECATED_SINCE macro for
- scheduling API deprecations
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     "sunyucong@gmail.com" <sunyucong@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Kernel Team <kernel-team@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-FB-Source: Intern
+X-Proofpoint-GUID: DIghdR9i_p0p5psYeiRyT3Q4K7b2XWUy
+X-Proofpoint-ORIG-GUID: DIghdR9i_p0p5psYeiRyT3Q4K7b2XWUy
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
+ definitions=2021-09-13_09,2021-09-09_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
+ mlxlogscore=569 spamscore=0 bulkscore=0 impostorscore=0 adultscore=0
+ suspectscore=0 mlxscore=0 priorityscore=1501 clxscore=1015
+ lowpriorityscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2109030001 definitions=main-2109130117
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Sep 13, 2021 at 11:13 AM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Mon, Sep 13, 2021 at 7:29 AM sunyucong@gmail.com <sunyucong@gmail.com> wrote:
-> >
-> > I ran into the same issue
-> >
-> >   DESCEND objtool
-> >   DESCEND bpf/resolve_btfids
-> >   CALL    scripts/atomic/check-atomics.sh
-> >   CALL    scripts/checksyscalls.sh
-> >   CHK     include/generated/compile.h
-> >   CC      kernel/rseq.o
-> >   CC [U]  kernel/bpf/preload/iterators/iterators.o
-> > In file included from ./tools/lib/bpf/libbpf.h:20,
-> >                  from kernel/bpf/preload/iterators/iterators.c:10:
-> > ./tools/lib/bpf/libbpf_common.h:13:10: fatal error: libbpf_version.h:
-> > No such file or directory
-> >    13 | #include "libbpf_version.h"
-> >       |          ^~~~~~~~~~~~~~~~~~
-> > compilation terminated.
-> > make[3]: *** [scripts/Makefile.userprogs:43:
-> > kernel/bpf/preload/iterators/iterators.o] Error 1
-> > make[2]: *** [scripts/Makefile.build:540: kernel/bpf/preload] Error 2
-> > make[1]: *** [scripts/Makefile.build:540: kernel/bpf] Error 2
-> > make[1]: *** Waiting for unfinished jobs....
-> > make: *** [Makefile:1872: kernel] Error 2
-> > make: *** Waiting for unfinished jobs....
-> >
-> >
-> > And I tried `make clean` in tools/lib/bpf , which didn't solve the
->
-> make clean in tools/lib/bpf won't help, you'd need to clean kernel/bpf/preload
->
-> > issue, had to do a full clean.  To me it seems we should add
-> > "libbpf_version.h" along with LIBBPF_A  in kernel/bpf/preload/Makefile
->
-> LIBBPF_A should force generation of libbpf_version.h, so there is no
-> need to add libbpf_version.h explicitly. I wonder if maybe adding
-> FORCE would help, like this:
->
-> $(LIBBPF_A): FORCE
->    ...
->
-> If you can still repro this, can you please try that? You might need
-> to also have
->
-> .PHONY: FORCE
-> FORCE:
->
-> in that file for this to work. It should force calling into libbpf's
-> Makefile, even if Kbuild believes LIBBPF_A is up to date.
+From: Yucong Sun <sunyucong@gmail.com>
 
-I've hit this issue as well and could easily repro.
-The (LIBBPF_A): FORCE fixed it for me and I pushed this one liner to bpf-next.
-The later hunk wasn't necessary.
+This patch allows each worker to use a unique cgroup base directory, thus
+allowing tests that uses cgroups to run concurrently.
+
+Signed-off-by: Yucong Sun <sunyucong@gmail.com>
+---
+ tools/testing/selftests/bpf/cgroup_helpers.c | 5 +++--
+ tools/testing/selftests/bpf/cgroup_helpers.h | 1 +
+ tools/testing/selftests/bpf/test_progs.c     | 5 +++++
+ 3 files changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/cgroup_helpers.c b/tools/testing=
+/selftests/bpf/cgroup_helpers.c
+index 033051717ba5..a0429f0d6db2 100644
+--- a/tools/testing/selftests/bpf/cgroup_helpers.c
++++ b/tools/testing/selftests/bpf/cgroup_helpers.c
+@@ -29,9 +29,10 @@
+ #define WALK_FD_LIMIT			16
+ #define CGROUP_MOUNT_PATH		"/mnt"
+ #define CGROUP_WORK_DIR			"/cgroup-test-work-dir"
++const char *CGROUP_WORK_DIR_SUFFIX =3D "";
+ #define format_cgroup_path(buf, path) \
+-	snprintf(buf, sizeof(buf), "%s%s%s", CGROUP_MOUNT_PATH, \
+-		 CGROUP_WORK_DIR, path)
++	snprintf(buf, sizeof(buf), "%s%s%s%s", CGROUP_MOUNT_PATH, \
++	CGROUP_WORK_DIR, CGROUP_WORK_DIR_SUFFIX, path)
+=20
+ /**
+  * enable_all_controllers() - Enable all available cgroup v2 controllers
+diff --git a/tools/testing/selftests/bpf/cgroup_helpers.h b/tools/testing=
+/selftests/bpf/cgroup_helpers.h
+index 5fe3d88e4f0d..5657aba02161 100644
+--- a/tools/testing/selftests/bpf/cgroup_helpers.h
++++ b/tools/testing/selftests/bpf/cgroup_helpers.h
+@@ -16,4 +16,5 @@ int setup_cgroup_environment(void);
+ void cleanup_cgroup_environment(void);
+ unsigned long long get_cgroup_id(const char *path);
+=20
++extern const char *CGROUP_WORK_DIR_SUFFIX;
+ #endif
+diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/sel=
+ftests/bpf/test_progs.c
+index c542e2d2f893..f0eeb17c348d 100644
+--- a/tools/testing/selftests/bpf/test_progs.c
++++ b/tools/testing/selftests/bpf/test_progs.c
+@@ -1076,6 +1076,11 @@ int server_main(void)
+=20
+ int worker_main(int sock)
+ {
++	static char suffix[16];
++
++	sprintf(suffix, "%d", env.worker_index);
++	CGROUP_WORK_DIR_SUFFIX =3D suffix;
++
+ 	save_netns();
+=20
+ 	while (true) {
+--=20
+2.30.2
+
