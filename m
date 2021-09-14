@@ -2,83 +2,117 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A21CC433F5
-	for <bpf@archiver.kernel.org>; Tue, 14 Sep 2021 03:47:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F296C433EF
+	for <bpf@archiver.kernel.org>; Tue, 14 Sep 2021 04:09:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 28A11610A6
-	for <bpf@archiver.kernel.org>; Tue, 14 Sep 2021 03:47:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 07F1860F9F
+	for <bpf@archiver.kernel.org>; Tue, 14 Sep 2021 04:09:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239156AbhINDtB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 13 Sep 2021 23:49:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59218 "EHLO
+        id S231570AbhINEK0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 14 Sep 2021 00:10:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239107AbhINDtB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 13 Sep 2021 23:49:01 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2295C061574
-        for <bpf@vger.kernel.org>; Mon, 13 Sep 2021 20:47:44 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id a93so25173213ybi.1
-        for <bpf@vger.kernel.org>; Mon, 13 Sep 2021 20:47:44 -0700 (PDT)
+        with ESMTP id S229807AbhINEK0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 14 Sep 2021 00:10:26 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D5AAC061762
+        for <bpf@vger.kernel.org>; Mon, 13 Sep 2021 21:09:09 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id s11so25092692yba.11
+        for <bpf@vger.kernel.org>; Mon, 13 Sep 2021 21:09:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=anyfinetworks-com.20150623.gappssmtp.com; s=20150623;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=kvRhVVCBVmTld8Xr7W9nsB3L7knHeam0iofkM+gkE8U=;
-        b=KSZXCdj7Z0Mj3k4z1fXFQljtl+E5pbRjcVc63ZyvBlw7CKCYO2JxQvQD3x/MiPl5Ob
-         l0zjEZGA/Of7osUqwZqiOevQL9lvC1MlIsoOzuzuH/elczbHSuKoHpXCCARGpupnYGMp
-         oW7yo89JnyjaNdU21uEZXnvzA1fIoB1dWQ1rgpTQjyo26dGCt92DUfgOrcy/3UMqnRvy
-         UsKWvEWTdN5KUQzm88f82vhUlf2OQzwAdxfP8oLLTeYyapyeVA0VPZTqNPZRTdDFDHhK
-         e0ye1zsYk/W//qWimfK2IH8xD4RJRUpZrUwz8XSEWGmluWg1o1nwOZ5IASTOJRSSNYhK
-         WC7A==
+        bh=6dUT5DvFbbYMaoEPiPLDAN+5dOCe4J7gs07f/JQLEu4=;
+        b=J/wx5v2jZ0Heo5oVWltVNHdeOQREYdrh2D95/smvODoPomwE/csFmxg4onKdso9qR9
+         EfFBXL2wHjX1fBOUF67wimCgII2bIWFK8xZZw9tKLsWuQKwo8wrM8VqjTjWQ6Akf5uLH
+         nakQ4kSYuhEzwfLHPkW07LWmQ+sFlPMRzk+e4VzdoyRoEfRHoKSn82FIfkehZ1DAZ8u6
+         ClhYEb4jsK8xm8n1xVWO8yKChQslWMK0fcZuyPY9s0t69ybkZiGM6UZNDz0dD5Pj7D+I
+         Tk8Gh2p99gRTr9qH6v+wxLr8R92WMubX4N3Vn0y579w9XX2sQnkWRqgvTxb0WEk8CuW5
+         BwBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=kvRhVVCBVmTld8Xr7W9nsB3L7knHeam0iofkM+gkE8U=;
-        b=UlvxdxfZ6vb5ttZqMEQhIKPVSJyPDHzFOG5lIqOnavbOMZHRPM5LQWqvc3KjwsYmum
-         cv7neBhBnXXmegfTwvUuGg8m4L6H3I0ONjl4M60Ol5YFZHhu6cAnHG3FSgW0PdNWEbzr
-         +SeoPbMOCU/UZE8qjIUoNc3zzqDTYw6WiwcxhWfqPXSsXzb6dbhKdH5WpXHS6Z8holcT
-         M2d/mYLrVW4Kq+e5xbAZhOBrHjql0EHCbCYbkviCYMmXx+k5BpNX7ovopJiWSrzWdoSV
-         3u0xxDhFbOjdMGLWp3Uwprs+k7h7UZUIs7AGff2LSX+6weZiFJ/lWEAQd6sA8EIOKE6L
-         VkRQ==
-X-Gm-Message-State: AOAM532fKIHaixzN5cuvtHPHdAVoHCCixOO/9yehr1nHcte2O6O0vCL3
-        K7PUt+z1wboG8MwqNpXH1C4KfmiElDgcm1iou1b9tn0a
-X-Google-Smtp-Source: ABdhPJwv1YnhLSsc7i65g12nNZW8vclgUgzYHqYWwZga0BSNkJQ3s6iO3B9sFdDtN3HywVqaWTkz2aETvPaBjTgNMVE=
-X-Received: by 2002:a25:afcd:: with SMTP id d13mr19963317ybj.504.1631591264087;
- Mon, 13 Sep 2021 20:47:44 -0700 (PDT)
+        bh=6dUT5DvFbbYMaoEPiPLDAN+5dOCe4J7gs07f/JQLEu4=;
+        b=3e5zJivHxs7ex3n7YZZwHzQFqv00QNd6wyv55/KTRql4IjWYwFj4Ii9AVsnQSOsYRL
+         JzJ7/5P2fr2o28rzpQXWBu4+OXGZpvfnpSstBJgDQfym3Gc7gyk8oYxhv8C1CGBaqFNd
+         JCxPd/d6g2XmO1FjUtiT1dEXTuAuEAC2DoPCdtXvotmmGJMkEsSCIknzoXzS/doKGx3q
+         Wn072TiFNRlYCLqHi8Sk1FpuxSpLM9Yi4ND7xuR0llwmIJhZ6/W+4g0HQLgttBYetd75
+         QogErLcCmSll9gtfkhXPFGwIhTwooAp0HyVQ16jrNcXXWq/FgKgJprzSqg6EHHynZazN
+         Q1Gw==
+X-Gm-Message-State: AOAM533E5eu+YvxDulZ91zCbgn1sU6LTo3c7NUGq6p9y53KD05leMN8n
+        +Dvd0LF5+F1oepno1Y8Pzt/a/1S8SBgsZdFegr0ARA==
+X-Google-Smtp-Source: ABdhPJwCJhxawTUBec5yEZ7/qBFch1DFW9upEUAhpY7/jiLL7TbDR3W7kx6NFnU6+YjlrxyJbW4uxU2Pvw4nyFWW368=
+X-Received: by 2002:a25:b904:: with SMTP id x4mr18387519ybj.48.1631592548588;
+ Mon, 13 Sep 2021 21:09:08 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAGnuNNuenDT4Y_UHsny6BK_b1+g2joePAdapdn7aLCi99Rh3bg@mail.gmail.com>
-In-Reply-To: <CAGnuNNuenDT4Y_UHsny6BK_b1+g2joePAdapdn7aLCi99Rh3bg@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 13 Sep 2021 20:47:33 -0700
-Message-ID: <CAEf4BzZokm=_5vdf3sCccTf2Enf0-kwij7dusykcgtWPkM=95g@mail.gmail.com>
-Subject: Re: Read process VM from kernel
-To:     Gabriele <phoenix1987@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>
+References: <20210909114106.141462-1-sashal@kernel.org> <20210909114106.141462-101-sashal@kernel.org>
+In-Reply-To: <20210909114106.141462-101-sashal@kernel.org>
+From:   Johan Almbladh <johan.almbladh@anyfinetworks.com>
+Date:   Tue, 14 Sep 2021 06:08:57 +0200
+Message-ID: <CAM1=_QQUi2diFeB+CnMx1-1zdtp4uUMLCO7f5adcMB29UjD1pQ@mail.gmail.com>
+Subject: Re: [PATCH AUTOSEL 5.14 101/252] bpf: Fix off-by-one in tail call
+ count limiting
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Yonghong Song <yhs@fb.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sat, Sep 11, 2021 at 2:05 AM Gabriele <phoenix1987@gmail.com> wrote:
->
-> Hi there
->
-> I recently started playing around with libbpf and I was wondering if
-> it is possible to read a process' VM from the kernel side. In
-> user-space one could use process_vm_read, but I haven't been able to
-> find an equivalent BPF API for that.
+Sasha,
 
-Currently only current process's memory (in which BPF program is
-running) can be read with bpf_probe_read_user(). I don't think there
-is anything that allows reading some other process' data like
-process_vm_read allows.
+This patch should not be applied to any of the stable kernels. It was
+reverted in f9dabe016b63 ("bpf: Undo off-by-one in interpreter tail
+call count limit").
 
+I don't think it will pass the CI selftests so maybe it wouldn't be
+applied anyway, but nevertheless I want to inform you about it.
+
+Johan
+
+On Thu, Sep 9, 2021 at 1:43 PM Sasha Levin <sashal@kernel.org> wrote:
 >
-> Cheers,
-> Gab
+> From: Johan Almbladh <johan.almbladh@anyfinetworks.com>
+>
+> [ Upstream commit b61a28cf11d61f512172e673b8f8c4a6c789b425 ]
+>
+> Before, the interpreter allowed up to MAX_TAIL_CALL_CNT + 1 tail calls.
+> Now precisely MAX_TAIL_CALL_CNT is allowed, which is in line with the
+> behavior of the x86 JITs.
+>
+> Signed-off-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
+> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> Acked-by: Yonghong Song <yhs@fb.com>
+> Link: https://lore.kernel.org/bpf/20210728164741.350370-1-johan.almbladh@anyfinetworks.com
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> ---
+>  kernel/bpf/core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index 0a28a8095d3e..82af6279992d 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -1564,7 +1564,7 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
+>
+>                 if (unlikely(index >= array->map.max_entries))
+>                         goto out;
+> -               if (unlikely(tail_call_cnt > MAX_TAIL_CALL_CNT))
+> +               if (unlikely(tail_call_cnt >= MAX_TAIL_CALL_CNT))
+>                         goto out;
+>
+>                 tail_call_cnt++;
+> --
+> 2.30.2
+>
