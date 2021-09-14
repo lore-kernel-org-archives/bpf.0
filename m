@@ -3,117 +3,123 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 58945C433FE
-	for <bpf@archiver.kernel.org>; Tue, 14 Sep 2021 14:44:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 111BDC433FE
+	for <bpf@archiver.kernel.org>; Tue, 14 Sep 2021 14:46:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 41A3A610CE
-	for <bpf@archiver.kernel.org>; Tue, 14 Sep 2021 14:44:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E364D610A2
+	for <bpf@archiver.kernel.org>; Tue, 14 Sep 2021 14:46:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234020AbhINOqM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 14 Sep 2021 10:46:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38100 "EHLO mail.kernel.org"
+        id S234540AbhINOrh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 14 Sep 2021 10:47:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40238 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234454AbhINOoD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 14 Sep 2021 10:44:03 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 394EF603E8;
-        Tue, 14 Sep 2021 14:42:42 +0000 (UTC)
+        id S234717AbhINOrV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 14 Sep 2021 10:47:21 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 41308610F9;
+        Tue, 14 Sep 2021 14:46:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631630565;
-        bh=TUCsxly137sqYFrcw/nhrPHVZpvyjgU/5fxaIE/rkoA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SfdvhyAXdrfDz/ean1GBuf2G+Sb0a8z85QZ6YotOejjwe827lMbyt8diZxcwnboEG
-         /xWmp9KavjsczacvC4LdcMp1VlYDEhdz7+Irr0r98gg2mYf6tpt28EExDgJrnNLzA0
-         THaL1yAkSuswO30oKwqi3PuNuGOJyYD1U1z68QfctN9fKSAGsS52GFJ3VKvcto7fma
-         Ho3X71JVagSyEokQ/5tt4kGogpj9qB2bIYorOPtU4VCfZKPGesGCxOxWyBjWvnEQ86
-         ce6u1DBFLpQvdSJ4CQEcZG18BomkuhJnQIyAOSWeZE3gJ9lOb9OnsvlMog0swjbij3
-         0XEdZZ/nHVh1Q==
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Ingo Molnar <mingo@kernel.org>
-Cc:     X86 ML <x86@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>,
-        Daniel Xu <dxu@dxuuu.xyz>, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, kuba@kernel.org, mingo@redhat.com,
-        ast@kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>, kernel-team@fb.com,
-        yhs@fb.com, linux-ia64@vger.kernel.org,
-        Abhishek Sagar <sagar.abhishek@gmail.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Paul McKenney <paulmck@kernel.org>
-Subject: [PATCH -tip v11 26/27] tracing: Show kretprobe unknown indicator only for kretprobe_trampoline
-Date:   Tue, 14 Sep 2021 23:42:40 +0900
-Message-Id: <163163056044.489837.794883849706638013.stgit@devnote2>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <163163030719.489837.2236069935502195491.stgit@devnote2>
-References: <163163030719.489837.2236069935502195491.stgit@devnote2>
-User-Agent: StGit/0.19
+        s=k20201202; t=1631630763;
+        bh=oM1TtWAjabDkiMw1w01I1Lf0mlPagSUVskiqnyRZEMM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=FXLsFmCsYaZzUEFDCp+afoqQRUTV+EmxW4mvJHtIKONMxRohAmvOreC2W8q9lCXtS
+         Af7NcBatGOI2nGqM42Mwf6D0E+q2b0RXMMgcoXsn/oKlybE/vmYMz6CI5CvWzPpswn
+         Ulj9ECPWCnW3UyaEE/1IveiQYO04f6uOmTMGTiK1TBo3tB0P8dvMDTAPtJXuwaPZgi
+         dehIoIsjUSLPjxLHRdaVPYLPRzGFOBDaYF/Yzak4SIp9tVd+xoBQpjtBcyFBLeWlfW
+         jJjsVSqeKdBJwye35nfKILg2Qw9ZfF4HTb0PpKZ2fUTBHVifkstoKJbpe7U97F+fQs
+         eeIdlCB+4zmsQ==
+Received: by mail.kernel.org with local (Exim 4.94.2)
+        (envelope-from <mchehab@kernel.org>)
+        id 1mQ9hB-000Kz3-9K; Tue, 14 Sep 2021 16:46:01 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Anton Vorontsov <anton@enomsg.org>,
+        Colin Cross <ccross@android.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        Tony Luck <tony.luck@intel.com>, Yonghong Song <yhs@fb.com>,
+        bpf@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH v2 0/5] get_abi.pl: Check for missing symbols at the ABI  specs
+Date:   Tue, 14 Sep 2021 16:45:53 +0200
+Message-Id: <cover.1631629987.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-ftrace shows "[unknown/kretprobe'd]" indicator all addresses in the
-kretprobe_trampoline, but the modified address by kretprobe should
-be only kretprobe_trampoline+0.
+Hi Greg,
 
-Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
-Acked-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
-Tested-by: Andrii Nakryiko <andrii@kernel.org>
----
- kernel/trace/trace_output.c |   17 ++++-------------
- 1 file changed, 4 insertions(+), 13 deletions(-)
+That's the second version of the logic added at get_abi.pl meant to
+validate ABI definitions.
 
-diff --git a/kernel/trace/trace_output.c b/kernel/trace/trace_output.c
-index 5a5949c659d0..3547e7176ff7 100644
---- a/kernel/trace/trace_output.c
-+++ b/kernel/trace/trace_output.c
-@@ -8,6 +8,7 @@
- #include <linux/module.h>
- #include <linux/mutex.h>
- #include <linux/ftrace.h>
-+#include <linux/kprobes.h>
- #include <linux/sched/clock.h>
- #include <linux/sched/mm.h>
- 
-@@ -346,22 +347,12 @@ int trace_output_call(struct trace_iterator *iter, char *name, char *fmt, ...)
- }
- EXPORT_SYMBOL_GPL(trace_output_call);
- 
--#ifdef CONFIG_KRETPROBES
--static inline const char *kretprobed(const char *name)
-+static inline const char *kretprobed(const char *name, unsigned long addr)
- {
--	static const char tramp_name[] = "__kretprobe_trampoline";
--	int size = sizeof(tramp_name);
+While it would be doable to validate the ABI by searching __ATTR and
+similar macros around the driver, this would probably be very complex
+and would take a while to parse.
+
+Instead, let's add a new feature at scripts/get_abi.pl which does
+check the real ABI found at the sysfs contents of a running system
+with Documentation/ABI.
+
+patch 1 changes get_abi.pl logic to handle multiple What: lines, in
+order to make the script more robust;
+
+patch 2 adds the basic logic. It runs really quicky (up to 2
+seconds), but it doesn't use sysfs softlinks.
+
+Patch 3 adds support for parsing softlinks. It makes the script a
+lot slower, making it take a couple of minutes to process the entire
+sysfs files. It could be optimized in the future by using a graph,
+but, for now, let's keep it simple.
+
+Patch 4 adds an optional parameter to allow filtering the results
+using a regex given by the user. When this parameter is used
+(which should be the normal usecase), it will only try to find softlinks
+if the sysfs node matches a regex.
+
+Patch 5 improves the report by avoiding it to ignore What: that
+ends with a wildcard.
+
+While this series is independent, if you wanna test, I recommend to
+apply first this series:
+
+	https://lore.kernel.org/lkml/cover.1631629496.git.mchehab+huawei@kernel.org/T/#t
+
+As it fix some bad What: descriptions, and some wildcard ambiquities.
+
 -
--	if (strncmp(tramp_name, name, size) == 0)
-+	if (is_kretprobe_trampoline(addr))
- 		return "[unknown/kretprobe'd]";
- 	return name;
- }
--#else
--static inline const char *kretprobed(const char *name)
--{
--	return name;
--}
--#endif /* CONFIG_KRETPROBES */
- 
- void
- trace_seq_print_sym(struct trace_seq *s, unsigned long address, bool offset)
-@@ -374,7 +365,7 @@ trace_seq_print_sym(struct trace_seq *s, unsigned long address, bool offset)
- 		sprint_symbol(str, address);
- 	else
- 		kallsyms_lookup(address, NULL, NULL, NULL, str);
--	name = kretprobed(str);
-+	name = kretprobed(str, address);
- 
- 	if (name && strlen(name)) {
- 		trace_seq_puts(s, name);
+
+v2:
+  - multiple What: for the same description are now properly handled;
+  - some special cases are now better handled;
+  - some bugs got fixed.
+
+The full series, with the ABI changes and some ABI improvements can be found
+at:
+	https://git.kernel.org/pub/scm/linux/kernel/git/mchehab/devel.git/commit/?h=get_undefined&id=1838d8fb149170f6c19feda0645d6c3157f46f4f
+
+Mauro Carvalho Chehab (5):
+  scripts: get_abi.pl: Better handle multiple What parameters
+  scripts: get_abi.pl: Check for missing symbols at the ABI specs
+  scripts: get_abi.pl: detect softlinks
+  scripts: get_abi.pl: add an option to filter undefined results
+  scripts: get_abi.pl: don't skip what that ends with wildcards
+
+ scripts/get_abi.pl | 258 +++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 252 insertions(+), 6 deletions(-)
+
+-- 
+2.31.1
+
 
