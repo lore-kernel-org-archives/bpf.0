@@ -2,117 +2,137 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F296C433EF
-	for <bpf@archiver.kernel.org>; Tue, 14 Sep 2021 04:09:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96D00C433EF
+	for <bpf@archiver.kernel.org>; Tue, 14 Sep 2021 04:09:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 07F1860F9F
-	for <bpf@archiver.kernel.org>; Tue, 14 Sep 2021 04:09:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7DF3560F9F
+	for <bpf@archiver.kernel.org>; Tue, 14 Sep 2021 04:09:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231570AbhINEK0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 14 Sep 2021 00:10:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35896 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229807AbhINEK0 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 14 Sep 2021 00:10:26 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D5AAC061762
-        for <bpf@vger.kernel.org>; Mon, 13 Sep 2021 21:09:09 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id s11so25092692yba.11
-        for <bpf@vger.kernel.org>; Mon, 13 Sep 2021 21:09:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=anyfinetworks-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6dUT5DvFbbYMaoEPiPLDAN+5dOCe4J7gs07f/JQLEu4=;
-        b=J/wx5v2jZ0Heo5oVWltVNHdeOQREYdrh2D95/smvODoPomwE/csFmxg4onKdso9qR9
-         EfFBXL2wHjX1fBOUF67wimCgII2bIWFK8xZZw9tKLsWuQKwo8wrM8VqjTjWQ6Akf5uLH
-         nakQ4kSYuhEzwfLHPkW07LWmQ+sFlPMRzk+e4VzdoyRoEfRHoKSn82FIfkehZ1DAZ8u6
-         ClhYEb4jsK8xm8n1xVWO8yKChQslWMK0fcZuyPY9s0t69ybkZiGM6UZNDz0dD5Pj7D+I
-         Tk8Gh2p99gRTr9qH6v+wxLr8R92WMubX4N3Vn0y579w9XX2sQnkWRqgvTxb0WEk8CuW5
-         BwBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6dUT5DvFbbYMaoEPiPLDAN+5dOCe4J7gs07f/JQLEu4=;
-        b=3e5zJivHxs7ex3n7YZZwHzQFqv00QNd6wyv55/KTRql4IjWYwFj4Ii9AVsnQSOsYRL
-         JzJ7/5P2fr2o28rzpQXWBu4+OXGZpvfnpSstBJgDQfym3Gc7gyk8oYxhv8C1CGBaqFNd
-         JCxPd/d6g2XmO1FjUtiT1dEXTuAuEAC2DoPCdtXvotmmGJMkEsSCIknzoXzS/doKGx3q
-         Wn072TiFNRlYCLqHi8Sk1FpuxSpLM9Yi4ND7xuR0llwmIJhZ6/W+4g0HQLgttBYetd75
-         QogErLcCmSll9gtfkhXPFGwIhTwooAp0HyVQ16jrNcXXWq/FgKgJprzSqg6EHHynZazN
-         Q1Gw==
-X-Gm-Message-State: AOAM533E5eu+YvxDulZ91zCbgn1sU6LTo3c7NUGq6p9y53KD05leMN8n
-        +Dvd0LF5+F1oepno1Y8Pzt/a/1S8SBgsZdFegr0ARA==
-X-Google-Smtp-Source: ABdhPJwCJhxawTUBec5yEZ7/qBFch1DFW9upEUAhpY7/jiLL7TbDR3W7kx6NFnU6+YjlrxyJbW4uxU2Pvw4nyFWW368=
-X-Received: by 2002:a25:b904:: with SMTP id x4mr18387519ybj.48.1631592548588;
- Mon, 13 Sep 2021 21:09:08 -0700 (PDT)
+        id S232197AbhINEKh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 14 Sep 2021 00:10:37 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:43084 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232991AbhINEKf (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 14 Sep 2021 00:10:35 -0400
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.0.43) with SMTP id 18DM9YVm014544
+        for <bpf@vger.kernel.org>; Mon, 13 Sep 2021 21:09:18 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : content-type : content-transfer-encoding :
+ mime-version; s=facebook; bh=Va2GtmOyYTTBLpPuyHZFgFCpabrF607cxBCSO67Sq4o=;
+ b=KR24R5vD0wga1S2KQbiFTkVqYJgXBomS6ulwXLxFqnnbCqhAGaK5Aka6ZazXOX0sL4rL
+ 0H4fzMBf0Nu0z3kCvNDiWr+jSRjRA30KKxfeVQmu38HnJdIPNl8K9etddGt24yRN7mDw
+ tHZF8SXDXqesRH5naPd0BW2zr68EpNVJ7ZE= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 3b1vfcywbp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Mon, 13 Sep 2021 21:09:18 -0700
+Received: from intmgw001.25.frc3.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.14; Mon, 13 Sep 2021 21:09:16 -0700
+Received: by devbig612.frc2.facebook.com (Postfix, from userid 115148)
+        id 8A9AA25C5B58; Mon, 13 Sep 2021 21:09:13 -0700 (PDT)
+From:   Joanne Koong <joannekoong@fb.com>
+To:     <bpf@vger.kernel.org>
+CC:     <Kernel-team@fb.com>, Joanne Koong <joannekoong@fb.com>
+Subject: [PATCH v2 bpf-next 0/4] Implement bloom filter map
+Date:   Mon, 13 Sep 2021 21:04:29 -0700
+Message-ID: <20210914040433.3184308-1-joannekoong@fb.com>
+X-Mailer: git-send-email 2.30.2
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-FB-Source: Intern
+X-Proofpoint-GUID: OkaGSkZMX0kFOiC1dCHWqYKwiP3uJ03d
+X-Proofpoint-ORIG-GUID: OkaGSkZMX0kFOiC1dCHWqYKwiP3uJ03d
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 1 URL was un-rewritten
 MIME-Version: 1.0
-References: <20210909114106.141462-1-sashal@kernel.org> <20210909114106.141462-101-sashal@kernel.org>
-In-Reply-To: <20210909114106.141462-101-sashal@kernel.org>
-From:   Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Date:   Tue, 14 Sep 2021 06:08:57 +0200
-Message-ID: <CAM1=_QQUi2diFeB+CnMx1-1zdtp4uUMLCO7f5adcMB29UjD1pQ@mail.gmail.com>
-Subject: Re: [PATCH AUTOSEL 5.14 101/252] bpf: Fix off-by-one in tail call
- count limiting
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Yonghong Song <yhs@fb.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Content-Type: text/plain; charset="UTF-8"
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
+ definitions=2021-09-13_09,2021-09-09_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0
+ clxscore=1015 mlxscore=0 lowpriorityscore=0 impostorscore=0 adultscore=0
+ spamscore=0 mlxlogscore=992 priorityscore=1501 suspectscore=0 bulkscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2109030001 definitions=main-2109140024
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Sasha,
+This patchset adds a new kind of bpf map: the bloom filter map.
+Bloom filters are a space-efficient probabilistic data structure
+used to quickly test whether an element exists in a set.
+For a brief overview about how bloom filters work,
+https://en.wikipedia.org/wiki/Bloom_filter
+may be helpful.
 
-This patch should not be applied to any of the stable kernels. It was
-reverted in f9dabe016b63 ("bpf: Undo off-by-one in interpreter tail
-call count limit").
+One example use-case is an application leveraging a bloom filter
+map to determine whether a computationally expensive hashmap
+lookup can be avoided. If the element was not found in the bloom
+filter map, the hashmap lookup can be skipped.
 
-I don't think it will pass the CI selftests so maybe it wouldn't be
-applied anyway, but nevertheless I want to inform you about it.
+This patchset includes benchmarks for testing out the performance of
+the bloom filter for different entry sizes and different number of
+hash functions used, as well as comparisons for hashmap lookups
+with vs. without the bloom filter.
 
-Johan
+v1 -> v2:
+* Remove libbpf changes, and pass the number of hash functions through
+map_flags instead.
+* Default to using 5 hash functions if no number of hash functions
+is specified.
+* Use set_bit instead of spinlocks in the bloom filter bitmap. This
+improved the speed significantly. For example, using 5 hash functions
+with 100k entries, there was roughly a 35% speed increase.
+* Use jhash2 (instead of jhash) for u32-aligned value sizes. This
+increased the speed by roughly 5 to 15%. When using jhash2 on value
+sizes non-u32 aligned (truncating any remainder bits), there was not
+a noticeable difference.
+* Add test for using the bloom filter as an inner map.
+* Reran the benchmarks, updated the commit messages to correspond to
+the new results.
 
-On Thu, Sep 9, 2021 at 1:43 PM Sasha Levin <sashal@kernel.org> wrote:
->
-> From: Johan Almbladh <johan.almbladh@anyfinetworks.com>
->
-> [ Upstream commit b61a28cf11d61f512172e673b8f8c4a6c789b425 ]
->
-> Before, the interpreter allowed up to MAX_TAIL_CALL_CNT + 1 tail calls.
-> Now precisely MAX_TAIL_CALL_CNT is allowed, which is in line with the
-> behavior of the x86 JITs.
->
-> Signed-off-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
-> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-> Acked-by: Yonghong Song <yhs@fb.com>
-> Link: https://lore.kernel.org/bpf/20210728164741.350370-1-johan.almbladh@anyfinetworks.com
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
->  kernel/bpf/core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index 0a28a8095d3e..82af6279992d 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -1564,7 +1564,7 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
->
->                 if (unlikely(index >= array->map.max_entries))
->                         goto out;
-> -               if (unlikely(tail_call_cnt > MAX_TAIL_CALL_CNT))
-> +               if (unlikely(tail_call_cnt >= MAX_TAIL_CALL_CNT))
->                         goto out;
->
->                 tail_call_cnt++;
-> --
-> 2.30.2
->
+Joanne Koong (4):
+  bpf: Add bloom filter map implementation
+  selftests/bpf: Add bloom filter map test cases
+  bpf/benchs: Add benchmark test for bloom filter maps
+  bpf/benchs: Add benchmarks for comparing hashmap lookups with vs.
+    without bloom filter
+
+ include/linux/bpf_types.h                     |   1 +
+ include/uapi/linux/bpf.h                      |  10 +
+ kernel/bpf/Makefile                           |   2 +-
+ kernel/bpf/bloom_filter.c                     | 205 +++++++++
+ kernel/bpf/syscall.c                          |  14 +-
+ kernel/bpf/verifier.c                         |  19 +-
+ tools/include/uapi/linux/bpf.h                |  10 +
+ tools/testing/selftests/bpf/Makefile          |   4 +-
+ tools/testing/selftests/bpf/bench.c           |  57 ++-
+ tools/testing/selftests/bpf/bench.h           |   3 +
+ .../bpf/benchs/bench_bloom_filter_map.c       | 393 ++++++++++++++++++
+ .../bpf/benchs/run_bench_bloom_filter_map.sh  |  43 ++
+ .../bpf/benchs/run_bench_ringbufs.sh          |  30 +-
+ .../selftests/bpf/benchs/run_common.sh        |  60 +++
+ .../bpf/prog_tests/bloom_filter_map.c         | 177 ++++++++
+ .../selftests/bpf/progs/bloom_filter_map.c    | 156 +++++++
+ 16 files changed, 1144 insertions(+), 40 deletions(-)
+ create mode 100644 kernel/bpf/bloom_filter.c
+ create mode 100644 tools/testing/selftests/bpf/benchs/bench_bloom_filter_m=
+ap.c
+ create mode 100755 tools/testing/selftests/bpf/benchs/run_bench_bloom_filt=
+er_map.sh
+ create mode 100644 tools/testing/selftests/bpf/benchs/run_common.sh
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/bloom_filter_map=
+.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bloom_filter_map.c
+
+--=20
+2.30.2
+
