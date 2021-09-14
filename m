@@ -2,182 +2,218 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E897C433F5
-	for <bpf@archiver.kernel.org>; Tue, 14 Sep 2021 09:19:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC581C4332F
+	for <bpf@archiver.kernel.org>; Tue, 14 Sep 2021 10:29:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EC0FC61056
-	for <bpf@archiver.kernel.org>; Tue, 14 Sep 2021 09:19:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A5FCA610FB
+	for <bpf@archiver.kernel.org>; Tue, 14 Sep 2021 10:29:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231809AbhINJUy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 14 Sep 2021 05:20:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50170 "EHLO
+        id S231614AbhINKaQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 14 Sep 2021 06:30:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231361AbhINJUi (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 14 Sep 2021 05:20:38 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2A5C0613CF
-        for <bpf@vger.kernel.org>; Tue, 14 Sep 2021 02:19:19 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id q3so18807841edt.5
-        for <bpf@vger.kernel.org>; Tue, 14 Sep 2021 02:19:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=anyfinetworks-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=/cnrIrM7g/uJKhfp+dzP29PUmgqyu/MxCbDo7R/V/lo=;
-        b=zILMdvWaZpQbmnu84QnqgwxlGq3MvEn+WV9+Nuk6a3bURVSOhkXaLm7pDYVJhdSVFU
-         EGskyxUO6xSjCYjk9n92yhP4hfOmNhNipUwLSVF46EUMcNDCEUWfMcUBFFMYDKu5TOxn
-         PcpKAXDLrDPnAo08cyie7bEyV69dIK5euGbrHpGsoaVUiIF0i+/S6cs8bWG7zvLOs4rK
-         IdJAao0Zzv2E55SeHcFiZZP4BlpYaXncTJKCvF99TVcMTKkHv3IR3eenUnZRygyh/Qn9
-         RHpnzCO0VtfFi7FOMyv/GlSVJQwNfR4ExYLL4/6vjUvTeLT5seZVBHdNQD9kaRZtwfzV
-         mSqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=/cnrIrM7g/uJKhfp+dzP29PUmgqyu/MxCbDo7R/V/lo=;
-        b=sdcXcL9u0DhAqyYNDXgMNJ5pRJeq0AfY2ijkzDWpzDSMaIJvNr7+U78AqyOF7R4onx
-         6ErdJSIBR+V48qARWmUcY6/Kr8XSNyhlegP36jIWJPPu6ISmkSPGXmVohuQMl+ib0uyJ
-         t1seHqDBu8RoomYR9UE8kUrTKXwS4SZOLHoUrBbFA9MKEU44wgFNiaTAdcEkjKC5qLbz
-         qokUZnhAh35wfowWFtwZH7kcNqTxFMJVYKS/hA68kteVd0NYRxk7KrwCo/2AF2IpIBrQ
-         BGoyhH5EySNTTk4Oa22Z6ZjuPNXORRXnHSDtB7UC5cLB5s09+tYSJCR5KbbTjjpAEIR2
-         iHpQ==
-X-Gm-Message-State: AOAM531kuYAMPGt+CdnxQ5z0kncC4clFdG9sO/1sXXldEMILdEMS8nfi
-        5C/+VaG2w5PQUXGVXW29he2xgg==
-X-Google-Smtp-Source: ABdhPJxbQJTk1TFZplzKCCUuWHgLiQ4RJ942jUDc6Lf6Yuiex98Who8KPgEfOD3ixlylqpruSUiYBQ==
-X-Received: by 2002:a05:6402:646:: with SMTP id u6mr17838621edx.127.1631611158184;
-        Tue, 14 Sep 2021 02:19:18 -0700 (PDT)
-Received: from anpc2.lan (static-213-115-136-2.sme.telenor.se. [213.115.136.2])
-        by smtp.gmail.com with ESMTPSA id h10sm4615915ede.28.2021.09.14.02.19.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Sep 2021 02:19:17 -0700 (PDT)
-From:   Johan Almbladh <johan.almbladh@anyfinetworks.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
-Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, iii@linux.ibm.com,
-        paul@cilium.io, yangtiezhu@loongson.cn, netdev@vger.kernel.org,
-        bpf@vger.kernel.org,
-        Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Subject: [PATCH bpf v4 13/14] bpf/tests: Fix error in tail call limit tests
-Date:   Tue, 14 Sep 2021 11:18:41 +0200
-Message-Id: <20210914091842.4186267-14-johan.almbladh@anyfinetworks.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210914091842.4186267-1-johan.almbladh@anyfinetworks.com>
-References: <20210914091842.4186267-1-johan.almbladh@anyfinetworks.com>
+        with ESMTP id S229591AbhINKaP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 14 Sep 2021 06:30:15 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7647FC061760;
+        Tue, 14 Sep 2021 03:28:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=AkAmP+XwbC3u2EnOmWg1+d8TikSHpIOHKHRYg4gt8m4=; b=foLIYWAOURNP6S9e3efY4E2F63
+        /ox7MO547cQ0+xsln+MJfQULrWJ3p8DKN6l1dYf0D2gYrzNijDm0oJupoPwgLFjDKxNHJx82oZ8ea
+        Vx2NaDdVnJ+mGD/aME4xaVWc+g/zGrJyh7t0UXvIvzkaRH8aTb1ut08L+/jQ2YS9fCQ3WP8gAZV71
+        JNB5NeMRR3ImOff6K1MWJTb2mpaxLMaEC0Cc4fxlz3YKggS9uuHjzeOkVbRsJZyPzTLA10doxV47p
+        7LCBYC3gln9qFgg0U7JKAnlgz9zo6Jkqx7tZcPnbIZO4bUSeMrJbUvl74P3qckqsjcdymZEPcJeBu
+        4Gut303g==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mQ5g7-0037U7-35; Tue, 14 Sep 2021 10:28:39 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6F2E2300255;
+        Tue, 14 Sep 2021 12:28:37 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 579792D0615D5; Tue, 14 Sep 2021 12:28:37 +0200 (CEST)
+Date:   Tue, 14 Sep 2021 12:28:37 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     =?utf-8?B?546L6LSH?= <yun.wang@linux.alibaba.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
+        <linux-perf-users@vger.kernel.org>,
+        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
+        <linux-kernel@vger.kernel.org>,
+        "open list:BPF (Safe dynamic programs and tools)" 
+        <netdev@vger.kernel.org>,
+        "open list:BPF (Safe dynamic programs and tools)" 
+        <bpf@vger.kernel.org>
+Subject: Re: [RFC PATCH] perf: fix panic by mark recursion inside
+ perf_log_throttle
+Message-ID: <YUB5VchM3a/MiZpX@hirez.programming.kicks-ass.net>
+References: <ff979a43-045a-dc56-64d1-2c31dd4db381@linux.alibaba.com>
+ <20210910153839.GH4323@worktop.programming.kicks-ass.net>
+ <f38987a5-dc36-a20d-8c5e-81e8ead5b4dc@linux.alibaba.com>
+ <YT8m2B6D2yWc5Umq@hirez.programming.kicks-ass.net>
+ <3fb7c51f-696b-da70-1965-1dda9910cb14@linux.alibaba.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <3fb7c51f-696b-da70-1965-1dda9910cb14@linux.alibaba.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch fixes an error in the tail call limit test that caused the
-test to fail on for x86-64 JIT. Previously, the register R0 was used to
-report the total number of tail calls made. However, after a tail call
-fall-through, the value of the R0 register is undefined. Now, all tail
-call error path tests instead use context state to store the count.
+On Tue, Sep 14, 2021 at 09:58:44AM +0800, 王贇 wrote:
+> On 2021/9/13 下午6:24, Peter Zijlstra wrote:
 
-Fixes: 874be05f525e ("bpf, tests: Add tail call test suite")
-Reported-by: Paul Chaignon <paul@cilium.io>
-Reported-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-Signed-off-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
----
- lib/test_bpf.c | 37 +++++++++++++++++++++++++++----------
- 1 file changed, 27 insertions(+), 10 deletions(-)
+> > I'm confused tho; where does the #DF come from? Because taking a #PF
+> > from NMI should be perfectly fine.
+> > 
+> > AFAICT that callchain is something like:
+> > 
+> > 	NMI
+> > 	  perf_event_nmi_handler()
+> > 	    (part of the chain is missing here)
+> > 	      perf_log_throttle()
+> > 	        perf_output_begin() /* events/ring_buffer.c */
+> > 		  rcu_read_lock()
+> > 		    rcu_lock_acquire()
+> > 		      lock_acquire()
+> > 		        trace_lock_acquire() --> perf_trace_foo
+> > 
+> > 			  ...
+> > 			    perf_callchain()
+> > 			      perf_callchain_user()
+> > 			        #PF (fully expected during a userspace callchain)
+> > 				  (some stuff, until the first __fentry)
+> > 				    perf_trace_function_call
+> > 				      perf_trace_buf_alloc()
+> > 				        perf_swevent_get_recursion_context()
+> > 					  *BOOM*
+> > 
+> > Now, supposedly we then take another #PF from get_recursion_context() or
+> > something, but that doesn't make sense. That should just work...
+> > 
+> > Can you figure out what's going wrong there? going with the RIP, this
+> > almost looks like 'swhash->recursion' goes splat, but again that makes
+> > no sense, that's a per-cpu variable.
+> 
+> That's true, I actually have tried several approach to avoid the issue, but
+> it trigger panic as long as we access 'swhash->recursion', the array should
+> be accessible but somehow broken, that's why I consider this a suspected
+> stack overflow, since nmi repeated and trace seems very long, but just a
+> suspect...
 
-diff --git a/lib/test_bpf.c b/lib/test_bpf.c
-index 7475abfd2186..ddb9a8089d2e 100644
---- a/lib/test_bpf.c
-+++ b/lib/test_bpf.c
-@@ -12179,10 +12179,15 @@ static __init int test_bpf(void)
- struct tail_call_test {
- 	const char *descr;
- 	struct bpf_insn insns[MAX_INSNS];
-+	int flags;
- 	int result;
- 	int stack_depth;
- };
+You can simply increase the exception stack size to test this:
+
+diff --git a/arch/x86/include/asm/page_64_types.h b/arch/x86/include/asm/page_64_types.h
+index a8d4ad856568..e9e2c3ba5923 100644
+--- a/arch/x86/include/asm/page_64_types.h
++++ b/arch/x86/include/asm/page_64_types.h
+@@ -15,7 +15,7 @@
+ #define THREAD_SIZE_ORDER	(2 + KASAN_STACK_ORDER)
+ #define THREAD_SIZE  (PAGE_SIZE << THREAD_SIZE_ORDER)
  
-+/* Flags that can be passed to tail call test cases */
-+#define FLAG_NEED_STATE		BIT(0)
-+#define FLAG_RESULT_IN_STATE	BIT(1)
+-#define EXCEPTION_STACK_ORDER (0 + KASAN_STACK_ORDER)
++#define EXCEPTION_STACK_ORDER (1 + KASAN_STACK_ORDER)
+ #define EXCEPTION_STKSZ (PAGE_SIZE << EXCEPTION_STACK_ORDER)
+ 
+ #define IRQ_STACK_ORDER (2 + KASAN_STACK_ORDER)
+
+
+
+Also, something like this might be useful:
+
+
+diff --git a/arch/x86/include/asm/stacktrace.h b/arch/x86/include/asm/stacktrace.h
+index f248eb2ac2d4..4dfdbb9395eb 100644
+--- a/arch/x86/include/asm/stacktrace.h
++++ b/arch/x86/include/asm/stacktrace.h
+@@ -33,6 +33,8 @@ bool in_task_stack(unsigned long *stack, struct task_struct *task,
+ 
+ bool in_entry_stack(unsigned long *stack, struct stack_info *info);
+ 
++bool in_exception_stack_guard(unsigned long *stack);
 +
- /*
-  * Magic marker used in test snippets for tail calls below.
-  * BPF_LD/MOV to R2 and R2 with this immediate value is replaced
-@@ -12252,32 +12257,38 @@ static struct tail_call_test tail_call_tests[] = {
- 	{
- 		"Tail call error path, max count reached",
- 		.insns = {
--			BPF_ALU64_IMM(BPF_ADD, R1, 1),
--			BPF_ALU64_REG(BPF_MOV, R0, R1),
-+			BPF_LDX_MEM(BPF_W, R2, R1, 0),
-+			BPF_ALU64_IMM(BPF_ADD, R2, 1),
-+			BPF_STX_MEM(BPF_W, R1, R2, 0),
- 			TAIL_CALL(0),
- 			BPF_EXIT_INSN(),
- 		},
--		.result = MAX_TAIL_CALL_CNT + 1,
-+		.flags = FLAG_NEED_STATE | FLAG_RESULT_IN_STATE,
-+		.result = (MAX_TAIL_CALL_CNT + 1 + 1) * MAX_TESTRUNS,
- 	},
- 	{
- 		"Tail call error path, NULL target",
- 		.insns = {
--			BPF_ALU64_IMM(BPF_MOV, R0, -1),
-+			BPF_LDX_MEM(BPF_W, R2, R1, 0),
-+			BPF_ALU64_IMM(BPF_ADD, R2, 1),
-+			BPF_STX_MEM(BPF_W, R1, R2, 0),
- 			TAIL_CALL(TAIL_CALL_NULL),
--			BPF_ALU64_IMM(BPF_MOV, R0, 1),
- 			BPF_EXIT_INSN(),
- 		},
--		.result = 1,
-+		.flags = FLAG_NEED_STATE | FLAG_RESULT_IN_STATE,
-+		.result = MAX_TESTRUNS,
- 	},
- 	{
- 		"Tail call error path, index out of range",
- 		.insns = {
--			BPF_ALU64_IMM(BPF_MOV, R0, -1),
-+			BPF_LDX_MEM(BPF_W, R2, R1, 0),
-+			BPF_ALU64_IMM(BPF_ADD, R2, 1),
-+			BPF_STX_MEM(BPF_W, R1, R2, 0),
- 			TAIL_CALL(TAIL_CALL_INVALID),
--			BPF_ALU64_IMM(BPF_MOV, R0, 1),
- 			BPF_EXIT_INSN(),
- 		},
--		.result = 1,
-+		.flags = FLAG_NEED_STATE | FLAG_RESULT_IN_STATE,
-+		.result = MAX_TESTRUNS,
- 	},
- };
+ int get_stack_info(unsigned long *stack, struct task_struct *task,
+ 		   struct stack_info *info, unsigned long *visit_mask);
+ bool get_stack_info_noinstr(unsigned long *stack, struct task_struct *task,
+diff --git a/arch/x86/kernel/dumpstack_64.c b/arch/x86/kernel/dumpstack_64.c
+index 5601b95944fa..056cf4f31599 100644
+--- a/arch/x86/kernel/dumpstack_64.c
++++ b/arch/x86/kernel/dumpstack_64.c
+@@ -126,6 +126,39 @@ static __always_inline bool in_exception_stack(unsigned long *stack, struct stac
+ 	return true;
+ }
  
-@@ -12383,6 +12394,8 @@ static __init int test_tail_calls(struct bpf_array *progs)
- 	for (i = 0; i < ARRAY_SIZE(tail_call_tests); i++) {
- 		struct tail_call_test *test = &tail_call_tests[i];
- 		struct bpf_prog *fp = progs->ptrs[i];
-+		int *data = NULL;
-+		int state = 0;
- 		u64 duration;
- 		int ret;
++noinstr bool in_exception_stack_guard(unsigned long *stack)
++{
++	unsigned long begin, end, stk = (unsigned long)stack;
++	const struct estack_pages *ep;
++	unsigned int k;
++
++	BUILD_BUG_ON(N_EXCEPTION_STACKS != 6);
++
++	begin = (unsigned long)__this_cpu_read(cea_exception_stacks);
++	/*
++	 * Handle the case where stack trace is collected _before_
++	 * cea_exception_stacks had been initialized.
++	 */
++	if (!begin)
++		return false;
++
++	end = begin + sizeof(struct cea_exception_stacks);
++	/* Bail if @stack is outside the exception stack area. */
++	if (stk < begin || stk >= end)
++		return false;
++
++	/* Calc page offset from start of exception stacks */
++	k = (stk - begin) >> PAGE_SHIFT;
++	/* Lookup the page descriptor */
++	ep = &estack_pages[k];
++	/* Guard page? */
++	if (!ep->size)
++		return true;
++
++	return false;
++}
++
++
+ static __always_inline bool in_irq_stack(unsigned long *stack, struct stack_info *info)
+ {
+ 	unsigned long *end = (unsigned long *)this_cpu_read(hardirq_stack_ptr);
+diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
+index a58800973aed..8b043ed02c0d 100644
+--- a/arch/x86/kernel/traps.c
++++ b/arch/x86/kernel/traps.c
+@@ -459,6 +459,9 @@ DEFINE_IDTENTRY_DF(exc_double_fault)
+ 		handle_stack_overflow("kernel stack overflow (double-fault)",
+ 				      regs, address);
+ 	}
++
++	if (in_exception_stack_guard((void *)address))
++		pr_emerg("PANIC: exception stack guard: 0x%lx\n", address);
+ #endif
  
-@@ -12399,7 +12412,11 @@ static __init int test_tail_calls(struct bpf_array *progs)
- 		if (fp->jited)
- 			jit_cnt++;
- 
--		ret = __run_one(fp, NULL, MAX_TESTRUNS, &duration);
-+		if (test->flags & FLAG_NEED_STATE)
-+			data = &state;
-+		ret = __run_one(fp, data, MAX_TESTRUNS, &duration);
-+		if (test->flags & FLAG_RESULT_IN_STATE)
-+			ret = state;
- 		if (ret == test->result) {
- 			pr_cont("%lld PASS", duration);
- 			pass_cnt++;
--- 
-2.30.2
-
+ 	pr_emerg("PANIC: double fault, error_code: 0x%lx\n", error_code);
