@@ -2,207 +2,143 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 06BC9C433F5
-	for <bpf@archiver.kernel.org>; Tue, 14 Sep 2021 19:52:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02CF6C433F5
+	for <bpf@archiver.kernel.org>; Tue, 14 Sep 2021 20:17:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D54B861108
-	for <bpf@archiver.kernel.org>; Tue, 14 Sep 2021 19:52:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D0F036113B
+	for <bpf@archiver.kernel.org>; Tue, 14 Sep 2021 20:17:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231490AbhINTxi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 14 Sep 2021 15:53:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58672 "EHLO
+        id S232990AbhINUSi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 14 Sep 2021 16:18:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229906AbhINTxi (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 14 Sep 2021 15:53:38 -0400
-Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD68C061574
-        for <bpf@vger.kernel.org>; Tue, 14 Sep 2021 12:52:20 -0700 (PDT)
-Received: by mail-ua1-x933.google.com with SMTP id c33so133356uae.9
-        for <bpf@vger.kernel.org>; Tue, 14 Sep 2021 12:52:20 -0700 (PDT)
+        with ESMTP id S232545AbhINUSi (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 14 Sep 2021 16:18:38 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FD61C061574
+        for <bpf@vger.kernel.org>; Tue, 14 Sep 2021 13:17:20 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id u21so193453qtw.8
+        for <bpf@vger.kernel.org>; Tue, 14 Sep 2021 13:17:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CB0E7AHyr+CRMt/SqpjRdSp9UL+UD55eZuTyY9l3b0w=;
-        b=UybhZ6uKXCZJbyXROd2fqG/29rO1S3He3A2reyEQlRVZFLaqGuigOborN/1V4cWl99
-         KUN+SxXLSWPNKqEorstvGWk7Mi6Mi8ki8wE+kdi76vSMoZLi5jbFRsKTxzWCTy/vtDfn
-         K3UoB4uRAuPohFG1ks51sv0t7Y6Z+1ZjFiuUXPav5dZnP07neI0ka65tP+jp2V3c6k+x
-         X5FU1FLPPamaEznZz4jDv8kXu4EAVwZteVMVYZCfSoPGcCZkiVRC9cAfj0QgCvn2JaXh
-         /8iHH0ZjaF+IvuR58u8F6wc3lDH8GlorVxmY17AuSQ+5gHMPU7Cy5sMjdtKPwgGfK0dM
-         fXcQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kQFQy/KvGd2y0WYUINio473PFDIyYZyeyVoFb6izMr0=;
+        b=jpcNq4pNyJP/N3IDIyRCb+v35s8NmMrFyXETzPAx939U+izFslEGpk+4O68JRyiOQ6
+         i4E0Uw0nFQ/SjijFbQgBQ52elxSZiB3WaqV9sQwYr7hsTSAAIT1nxsTneEmd2CFssYAr
+         BsPOVR7jFNpRWYqzh0w60tm4JHXaD6gQN+c46phWySFAqEbbWmmsgshaQo8jN+KhjBid
+         szjLr0fqevKHujYrR0JjKBeVYnmKkdrWUvnwYgUc7WcfRZDw9pSnzDRfzF0h+Wg/N60D
+         FkgWVz0XTBuwZszjJzyYvAmsYmuA2Yg9/b4X7FVf1TpUZ164JzvM1Veh1+OOSmBGDHxK
+         JDtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CB0E7AHyr+CRMt/SqpjRdSp9UL+UD55eZuTyY9l3b0w=;
-        b=KXxjtN/E7tNxEhlbZIF4f6HNU8Me/5LULhQ92P4ONN5dtvXRonE7TxRE6XUaBLQBN7
-         6RsLry59tuIqu7VpxUgR9p94hXhYmRYgbdC0PwEHljBUrQnVv7kDaRMebN3834UoTqsL
-         VIieMf8zz6dUxsVC4vfyXFGsoj9Q2tTioayf3beOvm1NLWSPiqWqTJQYZ8001qqRqLQt
-         sIpRBRzsp+7rg1YVUGesKn3nZ05i7qhGpnOIN5d1T0COyaRNAUO/lh+xfnpKfnOEaNKf
-         uhPz+zf9UDRDMf1Z01nKlkb6pBdwITvEohcY8P6G2HbXByZIs+i/ZjStFtBgkisw2VMi
-         aCqg==
-X-Gm-Message-State: AOAM5313ucBh1yZ2rifp9gms68CG6se23Kny/+COUWvnvI1OSeSZ1s8j
-        l3DbKOHpA8hxqYjQeoAlvUfbKuR6Hu6bwLfhKvA=
-X-Google-Smtp-Source: ABdhPJxemEjpUZDbNoXuGCUFS7NgjovESpzeFmlqrqUT46BGkiYCrUH9WxsNVDDG9AcKzKs1+3WFvGJRKKb68XAUqr0=
-X-Received: by 2002:ab0:28d2:: with SMTP id g18mr6334339uaq.40.1631649139039;
- Tue, 14 Sep 2021 12:52:19 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kQFQy/KvGd2y0WYUINio473PFDIyYZyeyVoFb6izMr0=;
+        b=Z/LgXZW7DLBmwJrEml+BXlpYEv4sJMtKeaPuLMMXk+yp1E36h6sxofKkTr6utgLtJm
+         RcTAOc4j42VsfsbSy4VflKqD+ngVU1Bs7E3k5TFJ6g7L+Kc4WOy7AcTrQ4zD8ofEnP2Q
+         THn2kgg8z/i34+UyyiZf/ktBNs9F9tKnewn8pxI9j1jdngGtSPKh7qXxU2SwbaIETjnY
+         hhdwQxYW33wP8PDpqa5iYhwxWlsYfcDU7cT2J1jkgYgQ1kXE6qP2X+7KhW8CK1LyK/Mb
+         ELddtnTceHUWjWQnA+z1JBsHrJY0OnzfFDuEHWc+R5n9IPXuV+kHMx2ojlsIhAa87jum
+         eq5A==
+X-Gm-Message-State: AOAM531b7Uff5EMDCxFkL64m88mlrO880vc5ftLsqpL0c6hKMI2FUqua
+        IMqUHG5XUTO2vFcnwuZQUE4=
+X-Google-Smtp-Source: ABdhPJxo2TWLwh7dzv8lmE4XiUX2DF/aVQ5pwFkCvfiRzLr0XeEHayc3J7LgThrBNLMtU3wX16d3Zg==
+X-Received: by 2002:ac8:6e88:: with SMTP id c8mr6710885qtv.241.1631650639581;
+        Tue, 14 Sep 2021 13:17:19 -0700 (PDT)
+Received: from localhost.localdomain (cpe-104-162-105-43.nyc.res.rr.com. [104.162.105.43])
+        by smtp.gmail.com with ESMTPSA id g1sm8357311qkd.89.2021.09.14.13.17.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Sep 2021 13:17:19 -0700 (PDT)
+From:   grantseltzer <grantseltzer@gmail.com>
+To:     andrii@kernel.org
+Cc:     bpf@vger.kernel.org, grantseltzer@gmail.com
+Subject: [PATCH bpf-next v2] Add sphinx code documentation comments
+Date:   Tue, 14 Sep 2021 16:16:43 -0400
+Message-Id: <20210914201642.98734-1-grantseltzer@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20210909204312.197814-1-grantseltzer@gmail.com> <CAEf4BzZQi9QTRaZgvn7ip=DcoCL2qgeQBAjOTptnZ+3_kOPxHg@mail.gmail.com>
-In-Reply-To: <CAEf4BzZQi9QTRaZgvn7ip=DcoCL2qgeQBAjOTptnZ+3_kOPxHg@mail.gmail.com>
-From:   Grant Seltzer Richman <grantseltzer@gmail.com>
-Date:   Tue, 14 Sep 2021 15:52:07 -0400
-Message-ID: <CAO658oVTaLstBBm3th8kUwOH8D=0mAGo6A-B87yChBrhzD1ehw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] libbpf: Add sphinx code documentation comments
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Sep 13, 2021 at 11:46 PM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Thu, Sep 9, 2021 at 1:43 PM grantseltzer <grantseltzer@gmail.com> wrote:
-> >
-> > From: Grant Seltzer <grantseltzer@gmail.com>
-> >
-> > This adds comments above five functions in btf.h which document
-> > their uses. These comments are of a format that doxygen and sphinx
-> > can pick up and render. These are rendered by libbpf.readthedocs.org
-> >
-> > Signed-off-by: Grant Seltzer <grantseltzer@gmail.com>
-> > ---
-> >  tools/lib/bpf/btf.h | 36 ++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 36 insertions(+)
-> >
->
-> It's nice that you provided a test instance of readthedocs.io site, it
-> made it much easier to look at how all this is rendered. Thanks!
->
-> I'm no technical writer, but left some thoughts below. It would be
-> great to get more help documenting all the APIs and important libbpf
-> objects from people that are good at succinctly explaining concepts.
+From: Grant Seltzer <grantseltzer@gmail.com>
 
-For sure! Once we have these doc comments we can point to them as
-examples. I'm going to write a blog post and advertise to people to
-see how they can contribute.
+This adds comments above five functions in btf.h which document
+their uses. These comments are of a format that doxygen and sphinx
+can pick up and render. These are rendered by libbpf.readthedocs.org
 
-> This is a great start!
->
-> > diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
-> > index 4a711f990904..f928e57c238c 100644
-> > --- a/tools/lib/bpf/btf.h
-> > +++ b/tools/lib/bpf/btf.h
-> > @@ -30,11 +30,47 @@ enum btf_endianness {
-> >         BTF_BIG_ENDIAN = 1,
-> >  };
-> >
-> > +/**
-> > + * @brief **btf__free** frees all data of the BTF representation
->
-> I'd like to propose that we add () for all functions, I've been
-> roughly following this convention throughout commit messages and
-> comments in the code, I think it's makes it a bit clearer that we are
-> talking about functions
->
-> > + * @param btf
->
-> seems like the format is "<arg_name> <description of the argument>" so
-> in this case it should be something like
->
-> @param btf BTF object to free
->
-> > + * @return void
->
-> do we need @return if the function is returning void? What if we just
-> omit @return for such cases?
->
-> > + */
-> >  LIBBPF_API void btf__free(struct btf *btf);
-> >
-> > +/**
-> > + * @brief **btf__new** creates a representation of a BTF section
-> > + * (struct btf) from the raw bytes of that section
->
-> is there some way to cross reference to other types/functions? E.g.,
-> how do we make `struct btf` a link to its description?
+Signed-off-by: Grant Seltzer <grantseltzer@gmail.com>
+---
+ tools/lib/bpf/btf.h | 37 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-Yes we can cross reference against other members that are in the
-generated documentation (my v2 patch will have this), but not ones
-that aren't present. `struct btf` is not because it's in btf.c and not
-btf.h. It's a little messy to have documentation from both as it leads
-to some generation of non-API functions and duplication. One way of
-getting around that mess is to explicitly name
-functions/variables/defines/types that we want to have in
-documentation but that's not automatically maintained.
+diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
+index 4a711f990904..05e06f0136e3 100644
+--- a/tools/lib/bpf/btf.h
++++ b/tools/lib/bpf/btf.h
+@@ -1,5 +1,6 @@
+ /* SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause) */
+ /* Copyright (c) 2018 Facebook */
++/*! \file */
+ 
+ #ifndef __LIBBPF_BTF_H
+ #define __LIBBPF_BTF_H
+@@ -30,11 +31,47 @@ enum btf_endianness {
+ 	BTF_BIG_ENDIAN = 1,
+ };
+ 
++/**
++ * @brief **btf__free()** frees all data of a BTF object.
++ * @param btf BTF object to free
++ * @return void
++ */
+ LIBBPF_API void btf__free(struct btf *btf);
+ 
++/**
++ * @brief **btf__new()** creates a new instance of a BTF object.
++ * from the raw bytes of an ELF's BTF section
++ * @param data raw bytes
++ * @param size length of raw bytes
++ * @return new instance of BTF object which has to be eventually freed 
++ * with **btf__free()**
++ */
+ LIBBPF_API struct btf *btf__new(const void *data, __u32 size);
++
++/**
++ * @brief **btf__new_split()** create a new instance of a BTF object from 
++ * the provided raw data bytes. It takes another BTF instance, **base_btf**, 
++ * which serves as a base BTF, which is extended by types in a newly created
++ * BTF instance.
++ * @param data raw bytes
++ * @param size length of raw bytes
++ * @param base_btf the base btf object
++ * @return struct btf *
++ */
+ LIBBPF_API struct btf *btf__new_split(const void *data, __u32 size, struct btf *base_btf);
++
++/**
++ * @brief **btf__new_empty()** creates an unpopulated BTF object.
++ * @return struct btf *
++ */
+ LIBBPF_API struct btf *btf__new_empty(void);
++
++/**
++ * @brief **btf__new_empty_split()** creates an unpopulated
++ * BTF object from an ELF BTF section except with a base BTF
++ * on top of which split BTF should be based.
++ * @return struct btf *
++ */
+ LIBBPF_API struct btf *btf__new_empty_split(struct btf *base_btf);
+ 
+ LIBBPF_API struct btf *btf__parse(const char *path, struct btf_ext **btf_ext);
+-- 
+2.31.1
 
-For this example, is there a reason that `struct btf` is defined in
-btf.c and not btf.h? Would it be possible to have all struct
-definitions in header files?
-
->
-> > + * @param data raw bytes
-> > + * @param size length of raw bytes
-> > + * @return struct btf*
->
->
-> @return new instance of BTF object which has to be eventually freed
-> with **btf__free()**?
->
-> > + */
-> >  LIBBPF_API struct btf *btf__new(const void *data, __u32 size);
-> > +
-> > +/**
-> > + * @brief **btf__new_split** creates a representation of a BTF section
->
-> "representation of a BTF section" seems a bit mouthful. And it's not a
-> representation, it's a BTF object that allows to perform a lot of
-> stuff with BTF type information. So maybe let's describe it as
->
-> **btf__new_split()** create a new instance of BTF object from provided
-> raw data bytes. It takes another BTF instance, **base_btf**, which
-> serves as a base BTF, which is extended by types in a newly created
-> BTF instance.
->
-> > + * (struct btf) from a combination of raw bytes and a btf struct
-> > + * where the btf struct provides a basic set of types and strings,
-> > + * while the raw data adds its own new types and strings
-> > + * @param data raw bytes
-> > + * @param size length of raw bytes
-> > + * @param base_btf the base btf representation
->
-> same here, "representation" sounds kind of weird and wrong here
->
-> > + * @return struct btf*
-> > + */
-> >  LIBBPF_API struct btf *btf__new_split(const void *data, __u32 size, struct btf *base_btf);
-> > +
-> > +/**
-> > + * @brief **btf__new_empty** creates an unpopulated representation of
-> > + * a BTF section
-> > + * @return struct btf*
-> > + */
-> >  LIBBPF_API struct btf *btf__new_empty(void);
-> > +
-> > +/**
-> > + * @brief **btf__new_empty_split** creates an unpopulated
-> > + * representation of a BTF section except with a base BTF
-> > + * ontop of which split BTF should be based
->
-> typo: on top
->
-> > + * @return struct btf*q
-> > + */
-> >  LIBBPF_API struct btf *btf__new_empty_split(struct btf *base_btf);
-> >
-> >  LIBBPF_API struct btf *btf__parse(const char *path, struct btf_ext **btf_ext);
-> > --
-> > 2.31.1
-> >
