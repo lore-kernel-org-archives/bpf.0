@@ -8,54 +8,54 @@ X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C95A7C4332F
-	for <bpf@archiver.kernel.org>; Tue, 14 Sep 2021 12:38:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BABE3C433FE
+	for <bpf@archiver.kernel.org>; Tue, 14 Sep 2021 12:38:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B151F60FED
-	for <bpf@archiver.kernel.org>; Tue, 14 Sep 2021 12:38:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A4029610A6
+	for <bpf@archiver.kernel.org>; Tue, 14 Sep 2021 12:38:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232909AbhINMjc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 14 Sep 2021 08:39:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40152 "EHLO
+        id S232690AbhINMje (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 14 Sep 2021 08:39:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232902AbhINMja (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 14 Sep 2021 08:39:30 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B74C0613C1;
-        Tue, 14 Sep 2021 05:38:10 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id 17so12590296pgp.4;
-        Tue, 14 Sep 2021 05:38:10 -0700 (PDT)
+        with ESMTP id S232937AbhINMjd (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 14 Sep 2021 08:39:33 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7C06C061574;
+        Tue, 14 Sep 2021 05:38:15 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id v1so8082155plo.10;
+        Tue, 14 Sep 2021 05:38:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=yU4+xx6iAwgsGxgz5Ht4AFD9WjITvbQsNdCqZ6ULtK4=;
-        b=C8+gBjG8gvVycJFtB7zCILzp77d7RShKQD2jaimyINWujoTBuZ2CTnoFdV6asYKcUZ
-         e/4ZDEXnQ4oyewRWjBiX4sULtUhgVZ7VxQmoqlq2Qd6wauIbZeaGG+bjQBMoDMJyqwue
-         Ysy9jyEUumjsisI2NaBRSdocijhsXP5AwgboHXWPzZQfEq2HGlPrLPY09nK/Jy8Eud6v
-         Qh40jBxlRmz/SKLI1OUiEU+rIXfG8IkcMzS2XtpwC7+TFztxXyz5G7oJ74lv8JyXBPM7
-         r9w2/UbaZLQEhhfvXIG9ACy3+vM0qU1I4E/xs1WYDWGxT9yXTD/TBHVHXV9PLlHl5TIo
-         FwMg==
+        bh=hBFUZiw6zxf4pUKWQiQT11iEjQyVaR1toou8fKVqzJw=;
+        b=YeAfWMtchwQfhWC7kL+ghw7be+SBhtzT0PSa1lKdsXAwUAgb2n6HPiaOeZ0iWrLOtW
+         7wfsncn2D5XMIL+wGGxwxLm9GveA/t5Ak/fZC/e5vIqVJe8rS8m82XFTAvWGOVYGidHe
+         vtjOJjFNJxYu0tbC2UO1gFK9b4+OuYUmavSe1+cXw1OS6vLuxr3M9m3EGSaxY0csdBGi
+         RPurR2NzXngjyzE/KMm9XD+saRAZcvLm/Uge+YmNEsabZ6zwb7G0IZjpEalOJHI+1pHC
+         Hck63BfE716ayTDjePqQhQmNIsOl3jhoIooILuhu507NRYLbPiGRNtHWE5EzGX6d1S/n
+         w0Qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=yU4+xx6iAwgsGxgz5Ht4AFD9WjITvbQsNdCqZ6ULtK4=;
-        b=eIuDYAItGyhEKJTHMaHjJ8K2UwXWw9VYRL/xd+oehoLsDtgjs2/8B2v6XzaB82TFFx
-         ymYfHpUrrkJtgVezUlNHvP3HPqa+j4uMrdeRlHN7TfdlmCa5d/Gv2wsVONdC1LKyYij3
-         hj8sstF3+D1SmU3yW6X7O69AV5UIbStZMZ1OtFiYCGMferZhpjhlV0GQVduehX/6lbOt
-         S+7f1DRlbgmXUTwKazAMshRWA5kLSeA3HORrLddfi7yI4X+G8bGjPLk8QHnIf9vidoai
-         BhLx0jsvMA7XnlfT96pyLPjYJhFOzWcb8qlcSb7TnuEZwTG1OP4gzgpuQZ2bJCmkHjrO
-         mnxA==
-X-Gm-Message-State: AOAM533+GyNNBu37e2DNE68SIx821kj2sCACqD+QhU79jEkk/MRlGPur
-        d/fhAee0w+APhTt38YeTuenpoO4OOgnnfA==
-X-Google-Smtp-Source: ABdhPJwXEgJUgD8L7WqLCR+jmsAzNCoZX5BPHOTUKm6XgG5EVVS1sK8T9hfbtq96byx/YrhHRC9r+w==
-X-Received: by 2002:a62:6d07:0:b0:40a:33cd:d3ea with SMTP id i7-20020a626d07000000b0040a33cdd3eamr4441713pfc.61.1631623089404;
-        Tue, 14 Sep 2021 05:38:09 -0700 (PDT)
+        bh=hBFUZiw6zxf4pUKWQiQT11iEjQyVaR1toou8fKVqzJw=;
+        b=XVGjJudUpvcCGb20sbQn9bSZe9DwztU0uHm/gPr68JohAP9PFRTqea7yaqKhKY9Vd5
+         iMUuFmXHK9nie7FRkzPCpHqNSuxXS85o8Mi4V/mAbIAPbmupls3i5Gw4q5ucojD6hyv9
+         arweuniHC+/E4ZrZSDZ+yJdF4Pvp1l63IfcDvKQGwjSN+8ivyE0VBBngl0iBzXFindNo
+         P9ByedrsEEy5rghbRSsdzhm7E7Xirls/ikP52aYLB2qY29Hrao+gIGc+kodkSgdcAvha
+         Ov2R8UPFMWtboqnyzy/2rfqWw9ID9tzQjTgUvWmho1IV9sdk6TKBp0jW5XvxTAsGTMgs
+         6jxA==
+X-Gm-Message-State: AOAM531Qab1Z/kShB+7VK8zh+E0MiWhbsE//n9B7h7Ll5FXTtdrGggXk
+        irjMeMKP8qIAcIsZe+c+Ak4aNqekkmEgBA==
+X-Google-Smtp-Source: ABdhPJzX72bxMhcDvNcWPTP2qi2JplW7H194IQ06bcsBBd+nQOGAksif2c8MMb2kKzWHXo2aMpWlfg==
+X-Received: by 2002:a17:90a:4d8d:: with SMTP id m13mr1883197pjh.190.1631623095243;
+        Tue, 14 Sep 2021 05:38:15 -0700 (PDT)
 Received: from localhost ([2405:201:6014:d058:a28d:3909:6ed5:29e7])
-        by smtp.gmail.com with ESMTPSA id z8sm10040931pfa.113.2021.09.14.05.38.08
+        by smtp.gmail.com with ESMTPSA id mi18sm1893661pjb.15.2021.09.14.05.38.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Sep 2021 05:38:09 -0700 (PDT)
+        Tue, 14 Sep 2021 05:38:15 -0700 (PDT)
 From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To:     bpf@vger.kernel.org
 Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
@@ -67,89 +67,45 @@ Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
         Jesper Dangaard Brouer <brouer@redhat.com>,
         =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
         netdev@vger.kernel.org
-Subject: [PATCH bpf-next v2 04/10] tools: Allow specifying base BTF file in resolve_btfids
-Date:   Tue, 14 Sep 2021 18:07:43 +0530
-Message-Id: <20210914123750.460750-5-memxor@gmail.com>
+Subject: [PATCH bpf-next v2 06/10] bpf: Bump MAX_BPF_STACK size to 768 bytes
+Date:   Tue, 14 Sep 2021 18:07:45 +0530
+Message-Id: <20210914123750.460750-7-memxor@gmail.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20210914123750.460750-1-memxor@gmail.com>
 References: <20210914123750.460750-1-memxor@gmail.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2098; h=from:subject; bh=kZhRM1Uo6vUje4gN/WsUjSsDNLJ5u0WuItuVyu5D9Zk=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBhQJdWDhwehFEbRic2pkL2wCQ10r1eCg0KKIKoWVSG lKYtwOmJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCYUCXVgAKCRBM4MiGSL8RymBXD/ 49y4gvzxmoWUtayiH1hrKzBuVcNgBJogUNJYKJAoZIeUGsAvseQhwIB+UN2ojkb5ONSX4gPRd8IJ5A jc2tOe3f0+KmWcyiGHKfEecS35Ef4gHoTSZhBrjuH20lbZ7qt3qCg4laqNZ9t1XnHmApAD0Ovh48xf fvrQh1gvtUXn0jDuFdZoyeVWAoeDasoL+sdxcM013eK/58Va923mLwKBXCtZvmyBJG8JkR39XuLq2W 9Plm2k1nd3WsjTZBrGyqPkl6UgDHFTSuj4mvKiKHx/LHJUFNpe27H61owKQgBkrcxf6ISPbOQER8Vw sf7tkmsi8bxfq4O2iLtqK4AsSM7JuS5WOsilIOxSf4RNpJGvJtRLkB1kzG4RPJW9Qvo33MLgWhcGIi VitHZe7ds0E19aaLTLAfsMVhgRKwlCuVDIRFa3EFaKreNkeGdO1fbAiUXbHHI1Rjx9OecGbE1RkmU7 HgW7RbVfSdOb1/MozuG1TftIYKBovBR16ITuvi8wfNyvbEZWX4cNHt31BcnrQ7BF5TN4qwKGSMItcy 8kvJHI0WWVJk0miZ0BXr7/Y6TmdEG1EV1Ks4IfWxbu5D5QI6gVWaX1XBs/7PtygUv9JhqeLBZh0TeC WCbHj14V03iHHZf3HEMXo7S69dEiXf+2tc7RZvbq/gu3TnVuNtLd1S9m7kmw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=912; h=from:subject; bh=B19ILwR6K3rnkHTsjQYwJPYCeDgJJfCXMOYYCnC9Rck=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBhQJdW3LKRLbzT7lxBhQPvK4fFFNC2ILXCx90krbkD YYg+LBWJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCYUCXVgAKCRBM4MiGSL8RymO/D/ 96CbCCvvSNET6IxUjrLbI/OHXI2yo5UeZ9puFOxSgPOyhxx005s/C8bVWtAEllZvdh/htmO7rc+7uq oGEOGHG9DU0XhjcgaMIvbKwQHQ/PDX9DXcigUGbDqND6Ysf98qRMwVKExMaF9GQ795L2nG0JMoGv0j zRjdrl/iB+dh/Bp6eOmBDlgpNb+JyqHRjQqhp5HbCeMr2DKR+yMvxwVlXbWz3sUKlTqXHnwisMqXes Bn16rdhSA9CzBKEAcj1efIy/6S7tqBAW/55lFw4WP4ZLvgH7QtpIBNRQvdFOkHfL7YDXsbQXA1YiZT rNEm6ftxqkjZKEB39U6mAauKLQo0S7Wmmm1JqwBUlr7J7WjfLipxFu/rpbBzsKeqhQ+EPn2Tvxr4cK KvqJC69uVy3+bKQqjcB99oCPsdXZOU0/QINqjODE6qVJv0z5TrsNWcYBlWoDp6OUPNEUMznhsjQRcR Dnti5q2dRrKu1nNzErCgDG0a1cb4MGeCdYJFzumLGXLRiT6MZQaC8OoDPl8hLZeLSZ8Nd8YLA2si+y 878myrCUx7l73qoEXI0uDoQHJaC1UIGDLB6qyEZF4XTZF6PhUH8NorzbydEV0h2OJ4+Zxm4Mid26GG 9Hdmumq5x5u5eb87OZ8n9VV4Qexd2U7aMb+2CC08LiMON2YHxkp7YDYsxk7g==
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This commits allows specifying the base BTF for resolving btf id
-lists/sets during link time in the resolve_btfids tool. The base BTF is
-set to NULL if no path is passed. This allows resolving BTF ids for
-module kernel objects.
+Increase the maximum stack size accessible to BPF program to 768 bytes.
+This is done so that gen_loader can use 94 additional fds for kfunc BTFs
+that it passes in to fd_array from the remaining space available for the
+loader_stack struct to expand.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- tools/bpf/resolve_btfids/main.c | 19 +++++++++++++++++--
- 1 file changed, 17 insertions(+), 2 deletions(-)
+ include/linux/filter.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
-index de6365b53c9c..206e1120082f 100644
---- a/tools/bpf/resolve_btfids/main.c
-+++ b/tools/bpf/resolve_btfids/main.c
-@@ -89,6 +89,7 @@ struct btf_id {
- struct object {
- 	const char *path;
- 	const char *btf;
-+	const char *base_btf_path;
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 4a93c12543ee..b214189ece62 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -82,8 +82,8 @@ struct ctl_table_header;
+  */
+ #define BPF_SYM_ELF_TYPE	't'
  
- 	struct {
- 		int		 fd;
-@@ -477,16 +478,27 @@ static int symbols_resolve(struct object *obj)
- 	int nr_structs  = obj->nr_structs;
- 	int nr_unions   = obj->nr_unions;
- 	int nr_funcs    = obj->nr_funcs;
-+	struct btf *base_btf = NULL;
- 	int err, type_id;
- 	struct btf *btf;
- 	__u32 nr_types;
+-/* BPF program can access up to 512 bytes of stack space. */
+-#define MAX_BPF_STACK	512
++/* BPF program can access up to 768 bytes of stack space. */
++#define MAX_BPF_STACK	768
  
--	btf = btf__parse(obj->btf ?: obj->path, NULL);
-+	if (obj->base_btf_path) {
-+		base_btf = btf__parse(obj->base_btf_path, NULL);
-+		err = libbpf_get_error(base_btf);
-+		if (err) {
-+			pr_err("FAILED: load base BTF from %s: %s\n",
-+			       obj->base_btf_path, strerror(-err));
-+			return -1;
-+		}
-+	}
-+
-+	btf = btf__parse_split(obj->btf ?: obj->path, base_btf);
- 	err = libbpf_get_error(btf);
- 	if (err) {
- 		pr_err("FAILED: load BTF from %s: %s\n",
- 			obj->btf ?: obj->path, strerror(-err));
--		return -1;
-+		goto out;
- 	}
+ /* Helper macros for filter block array initializers. */
  
- 	err = -1;
-@@ -545,6 +557,7 @@ static int symbols_resolve(struct object *obj)
- 
- 	err = 0;
- out:
-+	btf__free(base_btf);
- 	btf__free(btf);
- 	return err;
- }
-@@ -697,6 +710,8 @@ int main(int argc, const char **argv)
- 			   "BTF data"),
- 		OPT_BOOLEAN(0, "no-fail", &no_fail,
- 			   "do not fail if " BTF_IDS_SECTION " section is not found"),
-+		OPT_STRING('s', "base-btf", &obj.base_btf_path, "file",
-+			   "path of file providing base BTF data"),
- 		OPT_END()
- 	};
- 	int err = -1;
 -- 
 2.33.0
 
