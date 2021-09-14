@@ -7,54 +7,54 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 69A03C433EF
-	for <bpf@archiver.kernel.org>; Tue, 14 Sep 2021 09:19:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F39CC4332F
+	for <bpf@archiver.kernel.org>; Tue, 14 Sep 2021 09:19:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4E74761056
-	for <bpf@archiver.kernel.org>; Tue, 14 Sep 2021 09:19:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8C73961056
+	for <bpf@archiver.kernel.org>; Tue, 14 Sep 2021 09:19:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231756AbhINJUv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 14 Sep 2021 05:20:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50218 "EHLO
+        id S231795AbhINJUx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 14 Sep 2021 05:20:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231347AbhINJUg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 14 Sep 2021 05:20:36 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 723B7C061764
-        for <bpf@vger.kernel.org>; Tue, 14 Sep 2021 02:19:17 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id kt8so27333192ejb.13
-        for <bpf@vger.kernel.org>; Tue, 14 Sep 2021 02:19:17 -0700 (PDT)
+        with ESMTP id S230479AbhINJUi (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 14 Sep 2021 05:20:38 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B756AC0613D8
+        for <bpf@vger.kernel.org>; Tue, 14 Sep 2021 02:19:20 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id o20so16722048ejd.7
+        for <bpf@vger.kernel.org>; Tue, 14 Sep 2021 02:19:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=anyfinetworks-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=bZ4d4moRuYQOPcUHsALGapinp23JEkolRmFsfJkl6gk=;
-        b=11eO2ZFZmdpK1BvkVtVOFscDsknZfKUB8cpgVyFYtwAp5l2poL8xIiaH+W+3+nLkml
-         BC7Xl+b6KMGHdrRAFqLmNTGlnXcxsSflepdUL4ymZtCQl6VHHUuAJxqDTFHxAx1XH7VJ
-         0Z5IzNsiPNO1ZsbLO4O3HMbGYqLSc9W4jA2lpL/b57Lb6gxEQXwofw1a6wnD1/qILpc1
-         DnS9864jHgXJUv45KTkarfRJ+9FPD1h1/cG/9j8b5hQQ8agyPx3y8MC4iOgDtYAgmByd
-         0iNs+ngqVp4W+ejXMifTViSTl+tF8+dKEHDL9seUnr9M5NTcQpbywG+IdhJk/OhgRPit
-         41Sg==
+        bh=wuSu4wyeQe544QYrvabdyuLRDzOBYBuIdaBFG7YY+kM=;
+        b=nSMM0JwGDd1OMdMdAzUtzmgNs6tnzkFC0D8Qpt7vGmebsAETRQgOzuYwb7T4oip1AT
+         XIR/dKntRBIjIjvBrTGk6Zicpr/12JHIeUtpIaIkP1IoPjL56mvJh0dw+O41ZtOOcXTx
+         I3Iallzij8EFydCDrNWUA+iQAChGiUjfX7OaYv8LklqeRO1mL1q6V2x3Y8cUvTLrAXYM
+         VzxuRhMEM0vQk2sUJOkpuzSl0w0B2JMGHyzRYSc7Lla7sWpf0HB9HB29oNpzMCyKrPvL
+         uSFOAGayBJfYEONws0XdL9FilwjhYMG7krdj6vbiJWLknJy/cJVU+mtI529jyXNqHJ0U
+         oQ0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=bZ4d4moRuYQOPcUHsALGapinp23JEkolRmFsfJkl6gk=;
-        b=GW3/7X2UVf886CoCyEE3/WQ0QvwGDV1DKsvND2h+aDk4nYdhUBVphmRUHXDY7LILzs
-         PuMcgoXdrVghEJ514bCW3GyOwnaS8HIs8qqaJ4njqg2+mAkVdMRA4BOpb7SsEq8ciQCF
-         FbHTHu+mTptH/DbEzUU3YOKpkodw5uS5PjSatPTJKsHoTDxWrRH8dxMynaXbyK8FzmJ2
-         EerUrbt3yIHipQZP9IwxlMaJHLGonN0DEFMeLUoLyHcyhTk2Ey8pi3F7z5fOOwtSxI+s
-         Ewx8jx8G61H2D2kDZALX8gpBMxooRIzJfEXby7pnOVuoxfwvUZVozMAQ+9Pi3tNdg1FW
-         XHBQ==
-X-Gm-Message-State: AOAM533iFhvm3iKPTltkf9hqqq9pgUoHqfo3IDAxI5SDnCOA07QM1W/s
-        tUU1OnykFA5DW2ERpEFzsegXmA==
-X-Google-Smtp-Source: ABdhPJzx00jR05HZdPAyRirS5xoqJpu+vg1TI18vD52+e8hf4/QG41S2GdT3dVN9zaf1tQkyXbJ52A==
-X-Received: by 2002:a17:906:558f:: with SMTP id y15mr17863115ejp.572.1631611156063;
-        Tue, 14 Sep 2021 02:19:16 -0700 (PDT)
+        bh=wuSu4wyeQe544QYrvabdyuLRDzOBYBuIdaBFG7YY+kM=;
+        b=b/UBhR67c3IwDDQexdRlM0YXRLi7ra/NfWLhbLi2srpApo+tkJQo1jgC4F2tr9bXx+
+         b2c525xyIzIXabNnKKMzPgeYMZAxqVv7yR1GXMJwa2eNLnr1FRm1P9gT9jOhty1ZYNAQ
+         IlLe4l0/6oURrKQbvg6P87XREHjNrFELaMmaYztN4uwt7iHeatguwHf1OPmdM423lhQq
+         3he7C0hpCKZAKwNFiOeXal/6hfkqWUFceZpuNad1bpYEcsosMVIzFd7a8KXkZ18WQ/sn
+         yhwFuS4v4WoqtsTAZHS+b1gS34jNuBPZLG8xZEic5be1/PcKVOeYPwxL0HTY6DYe/w0z
+         TbXQ==
+X-Gm-Message-State: AOAM533xVMuKPprjRbbCI38MdgYbqsIFmi/UmYU1AeM/0S6X4Uir0d9U
+        lkTwbxo5lBh8VRRzjtafTrUr1IKC1AmAfCY+
+X-Google-Smtp-Source: ABdhPJwnxnO4rtzZQcp0bxDzK5ItJcRigcy3k/hTReYfP1lUVoqUp9JGjOiKTsWEICVNLqONWL6CUg==
+X-Received: by 2002:a17:906:2ed1:: with SMTP id s17mr18489299eji.261.1631611159370;
+        Tue, 14 Sep 2021 02:19:19 -0700 (PDT)
 Received: from anpc2.lan (static-213-115-136-2.sme.telenor.se. [213.115.136.2])
-        by smtp.gmail.com with ESMTPSA id h10sm4615915ede.28.2021.09.14.02.19.15
+        by smtp.gmail.com with ESMTPSA id h10sm4615915ede.28.2021.09.14.02.19.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Sep 2021 02:19:15 -0700 (PDT)
+        Tue, 14 Sep 2021 02:19:18 -0700 (PDT)
 From:   Johan Almbladh <johan.almbladh@anyfinetworks.com>
 To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
 Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
@@ -62,9 +62,9 @@ Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
         paul@cilium.io, yangtiezhu@loongson.cn, netdev@vger.kernel.org,
         bpf@vger.kernel.org,
         Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Subject: [PATCH bpf v4 11/14] bpf/tests: Expand branch conversion JIT test
-Date:   Tue, 14 Sep 2021 11:18:39 +0200
-Message-Id: <20210914091842.4186267-12-johan.almbladh@anyfinetworks.com>
+Subject: [PATCH bpf v4 14/14] bpf/tests: Add tail call limit test with external function call
+Date:   Tue, 14 Sep 2021 11:18:42 +0200
+Message-Id: <20210914091842.4186267-15-johan.almbladh@anyfinetworks.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210914091842.4186267-1-johan.almbladh@anyfinetworks.com>
 References: <20210914091842.4186267-1-johan.almbladh@anyfinetworks.com>
@@ -74,182 +74,142 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch expands the branch conversion test introduced by 66e5eb84
-("bpf, tests: Add branch conversion JIT test"). The test now includes
-a JMP with maximum eBPF offset. This triggers branch conversion for the
-64-bit MIPS JIT. Additional variants are also added for cases when the
-branch is taken or not taken.
+This patch adds a tail call limit test where the program also emits
+a BPF_CALL to an external function prior to the tail call. Mainly
+testing that JITed programs preserve its internal register state, for
+example tail call count, across such external calls.
 
 Signed-off-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
 ---
- lib/test_bpf.c | 125 +++++++++++++++++++++++++++++++++++--------------
- 1 file changed, 91 insertions(+), 34 deletions(-)
+ lib/test_bpf.c | 86 ++++++++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 83 insertions(+), 3 deletions(-)
 
 diff --git a/lib/test_bpf.c b/lib/test_bpf.c
-index ae261667ca0a..a515f9b670c9 100644
+index ddb9a8089d2e..99783088dcd0 100644
 --- a/lib/test_bpf.c
 +++ b/lib/test_bpf.c
-@@ -463,47 +463,79 @@ static int bpf_fill_stxdw(struct bpf_test *self)
- 	return __bpf_fill_stxdw(self, BPF_DW);
- }
+@@ -12207,6 +12207,30 @@ struct tail_call_test {
+ 		     offset, TAIL_CALL_MARKER),	       \
+ 	BPF_JMP_IMM(BPF_TAIL_CALL, 0, 0, 0)
  
--static int bpf_fill_long_jmp(struct bpf_test *self)
-+static int __bpf_ld_imm64(struct bpf_insn insns[2], u8 reg, s64 imm64)
- {
--	unsigned int len = BPF_MAXINSNS;
--	struct bpf_insn *insn;
-+	struct bpf_insn tmp[] = {BPF_LD_IMM64(reg, imm64)};
-+
-+	memcpy(insns, tmp, sizeof(tmp));
-+	return 2;
-+}
-+
 +/*
-+ * Branch conversion tests. Complex operations can expand to a lot
-+ * of instructions when JITed. This in turn may cause jump offsets
-+ * to overflow the field size of the native instruction, triggering
-+ * a branch conversion mechanism in some JITs.
++ * A test function to be called from a BPF program, clobbering a lot of
++ * CPU registers in the process. A JITed BPF program calling this function
++ * must save and restore any caller-saved registers it uses for internal
++ * state, for example the current tail call count.
 + */
-+static int __bpf_fill_max_jmp(struct bpf_test *self, int jmp, int imm)
++BPF_CALL_1(bpf_test_func, u64, arg)
 +{
-+	struct bpf_insn *insns;
-+	int len = S16_MAX + 5;
- 	int i;
- 
--	insn = kmalloc_array(len, sizeof(*insn), GFP_KERNEL);
--	if (!insn)
-+	insns = kmalloc_array(len, sizeof(*insns), GFP_KERNEL);
-+	if (!insns)
- 		return -ENOMEM;
- 
--	insn[0] = BPF_ALU64_IMM(BPF_MOV, R0, 1);
--	insn[1] = BPF_JMP_IMM(BPF_JEQ, R0, 1, len - 2 - 1);
-+	i = __bpf_ld_imm64(insns, R1, 0x0123456789abcdefULL);
-+	insns[i++] = BPF_ALU64_IMM(BPF_MOV, R0, 1);
-+	insns[i++] = BPF_JMP_IMM(jmp, R0, imm, S16_MAX);
-+	insns[i++] = BPF_ALU64_IMM(BPF_MOV, R0, 2);
-+	insns[i++] = BPF_EXIT_INSN();
- 
--	/*
--	 * Fill with a complex 64-bit operation that expands to a lot of
--	 * instructions on 32-bit JITs. The large jump offset can then
--	 * overflow the conditional branch field size, triggering a branch
--	 * conversion mechanism in some JITs.
--	 *
--	 * Note: BPF_MAXINSNS of ALU64 MUL is enough to trigger such branch
--	 * conversion on the 32-bit MIPS JIT. For other JITs, the instruction
--	 * count and/or operation may need to be modified to trigger the
--	 * branch conversion.
--	 */
--	for (i = 2; i < len - 1; i++)
--		insn[i] = BPF_ALU64_IMM(BPF_MUL, R0, (i << 16) + i);
-+	while (i < len - 1) {
-+		static const int ops[] = {
-+			BPF_LSH, BPF_RSH, BPF_ARSH, BPF_ADD,
-+			BPF_SUB, BPF_MUL, BPF_DIV, BPF_MOD,
-+		};
-+		int op = ops[(i >> 1) % ARRAY_SIZE(ops)];
- 
--	insn[len - 1] = BPF_EXIT_INSN();
-+		if (i & 1)
-+			insns[i++] = BPF_ALU32_REG(op, R0, R1);
-+		else
-+			insns[i++] = BPF_ALU64_REG(op, R0, R1);
-+	}
- 
--	self->u.ptr.insns = insn;
-+	insns[i++] = BPF_EXIT_INSN();
-+	self->u.ptr.insns = insns;
- 	self->u.ptr.len = len;
-+	BUG_ON(i != len);
- 
- 	return 0;
- }
- 
--static int __bpf_ld_imm64(struct bpf_insn insns[2], u8 reg, s64 imm64)
-+/* Branch taken by runtime decision */
-+static int bpf_fill_max_jmp_taken(struct bpf_test *self)
- {
--	struct bpf_insn tmp[] = {BPF_LD_IMM64(reg, imm64)};
-+	return __bpf_fill_max_jmp(self, BPF_JEQ, 1);
-+}
- 
--	memcpy(insns, tmp, sizeof(tmp));
--	return 2;
-+/* Branch not taken by runtime decision */
-+static int bpf_fill_max_jmp_not_taken(struct bpf_test *self)
-+{
-+	return __bpf_fill_max_jmp(self, BPF_JEQ, 0);
-+}
++	char buf[64];
++	long a = 0;
++	long b = 1;
++	long c = 2;
++	long d = 3;
++	long e = 4;
++	long f = 5;
++	long g = 6;
++	long h = 7;
 +
-+/* Branch always taken, known at JIT time */
-+static int bpf_fill_max_jmp_always_taken(struct bpf_test *self)
-+{
-+	return __bpf_fill_max_jmp(self, BPF_JGE, 0);
++	return snprintf(buf, sizeof(buf),
++			"%ld %lu %lx %ld %lu %lx %ld %lu %x",
++			a, b, c, d, e, f, g, h, (int)arg);
 +}
++#define BPF_FUNC_test_func __BPF_FUNC_MAX_ID
 +
-+/* Branch never taken, known at JIT time */
-+static int bpf_fill_max_jmp_never_taken(struct bpf_test *self)
-+{
-+	return __bpf_fill_max_jmp(self, BPF_JLT, 0);
- }
+ /*
+  * Tail call tests. Each test case may call any other test in the table,
+  * including itself, specified as a relative index offset from the calling
+@@ -12266,6 +12290,28 @@ static struct tail_call_test tail_call_tests[] = {
+ 		.flags = FLAG_NEED_STATE | FLAG_RESULT_IN_STATE,
+ 		.result = (MAX_TAIL_CALL_CNT + 1 + 1) * MAX_TESTRUNS,
+ 	},
++	{
++		"Tail call count preserved across function calls",
++		.insns = {
++			BPF_LDX_MEM(BPF_W, R2, R1, 0),
++			BPF_ALU64_IMM(BPF_ADD, R2, 1),
++			BPF_STX_MEM(BPF_W, R1, R2, 0),
++			BPF_STX_MEM(BPF_DW, R10, R1, -8),
++			BPF_CALL_REL(BPF_FUNC_get_numa_node_id),
++			BPF_CALL_REL(BPF_FUNC_ktime_get_ns),
++			BPF_CALL_REL(BPF_FUNC_ktime_get_boot_ns),
++			BPF_CALL_REL(BPF_FUNC_ktime_get_coarse_ns),
++			BPF_CALL_REL(BPF_FUNC_jiffies64),
++			BPF_CALL_REL(BPF_FUNC_test_func),
++			BPF_LDX_MEM(BPF_DW, R1, R10, -8),
++			BPF_ALU32_REG(BPF_MOV, R0, R1),
++			TAIL_CALL(0),
++			BPF_EXIT_INSN(),
++		},
++		.stack_depth = 8,
++		.flags = FLAG_NEED_STATE | FLAG_RESULT_IN_STATE,
++		.result = (MAX_TAIL_CALL_CNT + 1 + 1) * MAX_TESTRUNS,
++	},
+ 	{
+ 		"Tail call error path, NULL target",
+ 		.insns = {
+@@ -12344,17 +12390,19 @@ static __init int prepare_tail_call_tests(struct bpf_array **pprogs)
+ 		/* Relocate runtime tail call offsets and addresses */
+ 		for (i = 0; i < len; i++) {
+ 			struct bpf_insn *insn = &fp->insnsi[i];
+-
+-			if (insn->imm != TAIL_CALL_MARKER)
+-				continue;
++			long addr = 0;
  
- /* Test an ALU shift operation for all valid shift values */
-@@ -8653,14 +8685,6 @@ static struct bpf_test tests[] = {
- 		{ },
- 		{ { 0, 1 } },
- 	},
--	{	/* Mainly checking JIT here. */
--		"BPF_MAXINSNS: Very long conditional jump",
--		{ },
--		INTERNAL | FLAG_NO_DATA,
--		{ },
--		{ { 0, 1 } },
--		.fill_helper = bpf_fill_long_jmp,
--	},
- 	{
- 		"JMP_JA: Jump, gap, jump, ...",
- 		{ },
-@@ -11009,6 +11033,39 @@ static struct bpf_test tests[] = {
- 		{ },
- 		{ { 0, 0 } },
- 	},
-+	/* Conditional branch conversions */
-+	{
-+		"Long conditional jump: taken at runtime",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_max_jmp_taken,
-+	},
-+	{
-+		"Long conditional jump: not taken at runtime",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 2 } },
-+		.fill_helper = bpf_fill_max_jmp_not_taken,
-+	},
-+	{
-+		"Long conditional jump: always taken, known at JIT time",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_max_jmp_always_taken,
-+	},
-+	{
-+		"Long conditional jump: never taken, known at JIT time",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 2 } },
-+		.fill_helper = bpf_fill_max_jmp_never_taken,
-+	},
- 	/* Staggered jump sequences, immediate */
- 	{
- 		"Staggered jumps: JMP_JA",
+ 			switch (insn->code) {
+ 			case BPF_LD | BPF_DW | BPF_IMM:
++				if (insn->imm != TAIL_CALL_MARKER)
++					break;
+ 				insn[0].imm = (u32)(long)progs;
+ 				insn[1].imm = ((u64)(long)progs) >> 32;
+ 				break;
+ 
+ 			case BPF_ALU | BPF_MOV | BPF_K:
++				if (insn->imm != TAIL_CALL_MARKER)
++					break;
+ 				if (insn->off == TAIL_CALL_NULL)
+ 					insn->imm = ntests;
+ 				else if (insn->off == TAIL_CALL_INVALID)
+@@ -12362,6 +12410,38 @@ static __init int prepare_tail_call_tests(struct bpf_array **pprogs)
+ 				else
+ 					insn->imm = which + insn->off;
+ 				insn->off = 0;
++				break;
++
++			case BPF_JMP | BPF_CALL:
++				if (insn->src_reg != BPF_PSEUDO_CALL)
++					break;
++				switch (insn->imm) {
++				case BPF_FUNC_get_numa_node_id:
++					addr = (long)&numa_node_id;
++					break;
++				case BPF_FUNC_ktime_get_ns:
++					addr = (long)&ktime_get_ns;
++					break;
++				case BPF_FUNC_ktime_get_boot_ns:
++					addr = (long)&ktime_get_boot_fast_ns;
++					break;
++				case BPF_FUNC_ktime_get_coarse_ns:
++					addr = (long)&ktime_get_coarse_ns;
++					break;
++				case BPF_FUNC_jiffies64:
++					addr = (long)&get_jiffies_64;
++					break;
++				case BPF_FUNC_test_func:
++					addr = (long)&bpf_test_func;
++					break;
++				default:
++					err = -EFAULT;
++					goto out_err;
++				}
++				*insn = BPF_EMIT_CALL(BPF_CAST_CALL(addr));
++				if ((long)__bpf_call_base + insn->imm != addr)
++					*insn = BPF_JMP_A(0); /* Skip: NOP */
++				break;
+ 			}
+ 		}
+ 
 -- 
 2.30.2
 
