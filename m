@@ -2,34 +2,33 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3956BC433F5
-	for <bpf@archiver.kernel.org>; Wed, 15 Sep 2021 03:23:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8062FC433F5
+	for <bpf@archiver.kernel.org>; Wed, 15 Sep 2021 03:23:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2263E61214
-	for <bpf@archiver.kernel.org>; Wed, 15 Sep 2021 03:23:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6457C6121E
+	for <bpf@archiver.kernel.org>; Wed, 15 Sep 2021 03:23:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229957AbhIODZM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 14 Sep 2021 23:25:12 -0400
-Received: from szxga02-in.huawei.com ([45.249.212.188]:9871 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229758AbhIODZM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 14 Sep 2021 23:25:12 -0400
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4H8QRx5Hw6z8yX3;
-        Wed, 15 Sep 2021 11:19:25 +0800 (CST)
+        id S235738AbhIODZP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 14 Sep 2021 23:25:15 -0400
+Received: from szxga08-in.huawei.com ([45.249.212.255]:16202 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235700AbhIODZP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 14 Sep 2021 23:25:15 -0400
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4H8QWy6qxgz1DH0g;
+        Wed, 15 Sep 2021 11:22:54 +0800 (CST)
 Received: from dggpeml500025.china.huawei.com (7.185.36.35) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.8; Wed, 15 Sep 2021 11:23:52 +0800
+ 15.1.2308.8; Wed, 15 Sep 2021 11:23:51 +0800
 Received: from huawei.com (10.175.124.27) by dggpeml500025.china.huawei.com
  (7.185.36.35) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.8; Wed, 15 Sep
- 2021 11:23:51 +0800
+ 2021 11:23:50 +0800
 From:   Hou Tao <houtao1@huawei.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -37,12 +36,10 @@ To:     Alexei Starovoitov <ast@kernel.org>,
         Martin KaFai Lau <kafai@fb.com>
 CC:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
         <houtao1@huawei.com>
-Subject: [RFC PATCH bpf-next 2/3] selftests/bpf: call dummy struct_ops in bpf_testmode
-Date:   Wed, 15 Sep 2021 11:37:52 +0800
-Message-ID: <20210915033753.1201597-3-houtao1@huawei.com>
+Subject: [RFC PATCH bpf-next 0/3] introduce dummy BPF STRUCT_OPS
+Date:   Wed, 15 Sep 2021 11:37:50 +0800
+Message-ID: <20210915033753.1201597-1-houtao1@huawei.com>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210915033753.1201597-1-houtao1@huawei.com>
-References: <20210915033753.1201597-1-houtao1@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -54,207 +51,50 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The dummy BPF STRUCT_OPS in kernel, in order to test it, we need
-provide a way to call its method and return state to userspace.
+Hi,
 
-So a new sysfs file /sys/kernel/bpf_test/dummy_ops_ctl is created.
-Its expected input is: "test_case_name [optinal_integer_state]",
-When the content is written to the file, the specific method of
-dummy struct_ops will be called and the returned state will be checked.
+Currently the test of BPF STRUCT_OPS depends on the specific bpf
+implementation of tcp_congestion_ops, but it can not cover all
+basic functionalities (e.g, return value handling), so introduce
+a dummy BPF STRUCT_OPS for test purpose.
 
-Now only two test cases are added: one to check the return value of
-init() method, another to check the value returned by pointer
-assignment.
+The test procedure works in the following way:
+(1) write to newly-created /sys/kernel/bpf_test/dummy_ops_ctl
+The format is "test_case_N [option_integer_return]".
 
-It may be better to split the dummy struct_ops related code into
-a separated file.
+(2) test_case_N in bpf_testmod.ko will be call dummy_ops method
+It will call bpf_get_dummy_ops() first to get the dummy_ops,
+call its method, and check the return value of the method. If
+the method succeeds and its return value is expected, the write
+succeeds, else it fails.
 
-Signed-off-by: Hou Tao <houtao1@huawei.com>
----
- .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 152 +++++++++++++++++-
- 1 file changed, 150 insertions(+), 2 deletions(-)
+But there is one concerns: the format of dummy_ops_ctl is too
+simply. It can only check a integer state update from dummy_ops
+method. If multiple states are updated in a dummy struct_ops
+method, it can not verify these updates are expected in
+bpf_testmod.ko. Are such test is needed here ?
 
-diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-index 141d8da687d2..1286758b999c 100644
---- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-@@ -6,11 +6,22 @@
- #include <linux/percpu-defs.h>
- #include <linux/sysfs.h>
- #include <linux/tracepoint.h>
-+#include <linux/string.h>
-+#include <linux/bpf_dummy_ops.h>
- #include "bpf_testmod.h"
- 
- #define CREATE_TRACE_POINTS
- #include "bpf_testmod-events.h"
- 
-+typedef int (*dummy_ops_test_fn)(struct bpf_dummy_ops *ops,
-+				 const char *buf, size_t cnt);
-+struct dummy_ops_test {
-+	const char *name;
-+	dummy_ops_test_fn fn;
-+};
-+
-+static struct kobject *bpf_test_kobj;
-+
- DEFINE_PER_CPU(int, bpf_testmod_ksym_percpu) = 123;
- 
- noinline ssize_t
-@@ -55,14 +66,151 @@ static struct bin_attribute bin_attr_bpf_testmod_file __ro_after_init = {
- 	.write = bpf_testmod_test_write,
- };
- 
-+static int dummy_ops_chk_ret(struct bpf_dummy_ops *ops,
-+			     const char *buf, size_t cnt)
-+{
-+	int exp;
-+	int err;
-+
-+	if (cnt <= 1)
-+		return -EINVAL;
-+
-+	if (kstrtoint(buf + 1, 0, &exp))
-+		return -EINVAL;
-+
-+	err = ops->init(NULL);
-+	if (err != exp)
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
-+static int dummy_ops_chk_ret_by_ptr(struct bpf_dummy_ops *ops,
-+				    const char *buf, size_t cnt)
-+{
-+	int exp;
-+	int err;
-+	struct bpf_dummy_ops_state state;
-+
-+	if (cnt <= 1)
-+		return -EINVAL;
-+
-+	if (kstrtoint(buf + 1, 0, &exp))
-+		return -EINVAL;
-+
-+	memset(&state, 0, sizeof(state));
-+	err = ops->init(&state);
-+	if (err || state.val != exp)
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
-+static const struct dummy_ops_test tests[] = {
-+	{.name = "init_1", .fn = dummy_ops_chk_ret},
-+	{.name = "init_2", .fn = dummy_ops_chk_ret_by_ptr},
-+};
-+
-+static const struct dummy_ops_test *dummy_ops_find_test(const char *buf,
-+							size_t cnt)
-+{
-+	char *c;
-+	size_t nm_len;
-+	unsigned int i;
-+
-+	/*
-+	 * There may be test-specific string (e.g, return value)
-+	 * after the name of test. The delimiter is one space.
-+	 */
-+	c = strchr(buf, ' ');
-+	if (c)
-+		nm_len = c - buf;
-+	else
-+		nm_len = cnt;
-+	for (i = 0; i < ARRAY_SIZE(tests); i++) {
-+		if (nm_len >= strlen(tests[i].name) &&
-+		    !strncmp(buf, tests[i].name, nm_len))
-+			return &tests[i];
-+	}
-+
-+	return NULL;
-+}
-+
-+static ssize_t dummy_ops_ctl_store(struct kobject *kobj,
-+				   struct kobj_attribute *attr,
-+				   const char *buf, size_t cnt)
-+{
-+	struct bpf_dummy_ops *ops = bpf_get_dummy_ops();
-+	const struct dummy_ops_test *test;
-+	size_t nm_len;
-+	int err;
-+
-+	/* dummy struct_ops is disabled, so always return success */
-+	if (!ops)
-+		return cnt;
-+	if (IS_ERR(ops))
-+		return PTR_ERR(ops);
-+
-+	test = dummy_ops_find_test(buf, cnt);
-+	if (!test) {
-+		err = -EINVAL;
-+		goto out;
-+	}
-+
-+	nm_len = strlen(test->name);
-+	err = test->fn(ops, buf + nm_len, cnt - nm_len);
-+	if (!err)
-+		err = cnt;
-+out:
-+	bpf_put_dummy_ops(ops);
-+	return err;
-+}
-+
-+static struct kobj_attribute dummy_ops_ctl = __ATTR_WO(dummy_ops_ctl);
-+
-+static struct attribute *bpf_test_attrs[] = {
-+	&dummy_ops_ctl.attr,
-+	NULL,
-+};
-+
-+static const struct attribute_group bpf_test_attr_group = {
-+	.attrs = bpf_test_attrs,
-+};
-+
- static int bpf_testmod_init(void)
- {
--	return sysfs_create_bin_file(kernel_kobj, &bin_attr_bpf_testmod_file);
-+	int err;
-+
-+	bpf_test_kobj = kobject_create_and_add("bpf_test", kernel_kobj);
-+	if (!bpf_test_kobj) {
-+		err = -ENOMEM;
-+		goto out;
-+	}
-+
-+	err = sysfs_create_group(bpf_test_kobj, &bpf_test_attr_group);
-+	if (err)
-+		goto put_out;
-+
-+	err = sysfs_create_bin_file(kernel_kobj, &bin_attr_bpf_testmod_file);
-+	if (err)
-+		goto rm_grp_out;
-+
-+	return 0;
-+
-+rm_grp_out:
-+	sysfs_remove_group(bpf_test_kobj, &bpf_test_attr_group);
-+put_out:
-+	kobject_put(bpf_test_kobj);
-+	bpf_test_kobj = NULL;
-+out:
-+	return err;
- }
- 
- static void bpf_testmod_exit(void)
- {
--	return sysfs_remove_bin_file(kernel_kobj, &bin_attr_bpf_testmod_file);
-+	sysfs_remove_bin_file(kernel_kobj, &bin_attr_bpf_testmod_file);
-+	sysfs_remove_group(bpf_test_kobj, &bpf_test_attr_group);
-+	kobject_put(bpf_test_kobj);
- }
- 
- module_init(bpf_testmod_init);
+Any comments are welcome.
+
+Hou Tao (3):
+  bpf: add dummy BPF STRUCT_OPS for test purpose
+  selftests/bpf: call dummy struct_ops in bpf_testmode
+  selftests/bpf: add test for BPF STRUCT_OPS
+
+ include/linux/bpf_dummy_ops.h                 |  28 +++
+ kernel/bpf/Kconfig                            |   7 +
+ kernel/bpf/Makefile                           |   2 +
+ kernel/bpf/bpf_dummy_struct_ops.c             | 173 ++++++++++++++++++
+ kernel/bpf/bpf_struct_ops_types.h             |   4 +
+ .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 152 ++++++++++++++-
+ .../selftests/bpf/prog_tests/bpf_dummy_ops.c  |  95 ++++++++++
+ .../selftests/bpf/progs/bpf_dummy_ops.c       |  34 ++++
+ 8 files changed, 493 insertions(+), 2 deletions(-)
+ create mode 100644 include/linux/bpf_dummy_ops.h
+ create mode 100644 kernel/bpf/bpf_dummy_struct_ops.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/bpf_dummy_ops.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_dummy_ops.c
+
 -- 
 2.29.2
 
