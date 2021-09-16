@@ -6,37 +6,37 @@ X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A355C433EF
-	for <bpf@archiver.kernel.org>; Thu, 16 Sep 2021 01:58:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CBC0C433EF
+	for <bpf@archiver.kernel.org>; Thu, 16 Sep 2021 01:58:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4126D611CA
-	for <bpf@archiver.kernel.org>; Thu, 16 Sep 2021 01:58:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 31EF4611CA
+	for <bpf@archiver.kernel.org>; Thu, 16 Sep 2021 01:58:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbhIPCAM convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 15 Sep 2021 22:00:12 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:54870 "EHLO
+        id S233367AbhIPCAO convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 15 Sep 2021 22:00:14 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:63046 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S233367AbhIPCAL (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 15 Sep 2021 22:00:11 -0400
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.1.2/8.16.1.2) with SMTP id 18FM3sCY012484
-        for <bpf@vger.kernel.org>; Wed, 15 Sep 2021 18:58:51 -0700
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0001303.ppops.net with ESMTP id 3b3jkac8vv-1
+        by vger.kernel.org with ESMTP id S233565AbhIPCAN (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 15 Sep 2021 22:00:13 -0400
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.1.2/8.16.1.2) with SMTP id 18FM3pjb005875
+        for <bpf@vger.kernel.org>; Wed, 15 Sep 2021 18:58:53 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0089730.ppops.net with ESMTP id 3b36fg01y3-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 15 Sep 2021 18:58:51 -0700
-Received: from intmgw002.25.frc3.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 15 Sep 2021 18:58:53 -0700
+Received: from intmgw001.46.prn1.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Wed, 15 Sep 2021 18:58:50 -0700
+ 15.1.2308.14; Wed, 15 Sep 2021 18:58:52 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 0BB49422A273; Wed, 15 Sep 2021 18:58:40 -0700 (PDT)
+        id 287F3422A281; Wed, 15 Sep 2021 18:58:45 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 1/7] libbpf: use pre-setup sec_def in libbpf_find_attach_btf_id()
-Date:   Wed, 15 Sep 2021 18:58:30 -0700
-Message-ID: <20210916015836.1248906-2-andrii@kernel.org>
+Subject: [PATCH bpf-next 3/7] libbpf: deprecated bpf_object_open_opts.relaxed_core_relocs
+Date:   Wed, 15 Sep 2021 18:58:32 -0700
+Message-ID: <20210916015836.1248906-4-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210916015836.1248906-1-andrii@kernel.org>
 References: <20210916015836.1248906-1-andrii@kernel.org>
@@ -45,62 +45,41 @@ Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-GUID: imL9lUvbEeP4tJ1QOoavPZImiCGthFD6
-X-Proofpoint-ORIG-GUID: imL9lUvbEeP4tJ1QOoavPZImiCGthFD6
+X-Proofpoint-ORIG-GUID: OayOR1LjF7eFsBu_YDLqkw8IfkjiSEYJ
+X-Proofpoint-GUID: OayOR1LjF7eFsBu_YDLqkw8IfkjiSEYJ
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
  definitions=2021-09-15_07,2021-09-15_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0 mlxscore=0
- lowpriorityscore=0 suspectscore=0 clxscore=1015 priorityscore=1501
- impostorscore=0 spamscore=0 adultscore=0 malwarescore=0 phishscore=0
- mlxlogscore=700 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2109030001 definitions=main-2109160011
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=947
+ lowpriorityscore=0 clxscore=1015 suspectscore=0 bulkscore=0
+ impostorscore=0 phishscore=0 malwarescore=0 mlxscore=0 spamscore=0
+ priorityscore=1501 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2109030001 definitions=main-2109160010
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Don't perform another search for sec_def inside
-libbpf_find_attach_btf_id(), as each recognized bpf_program already has
-prog->sec_def set.
-
-Also remove unnecessary NULL check for prog->sec_name, as it can never
-be NULL.
+It's relevant and hasn't been doing anything for a long while now.
+Deprecated it.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/lib/bpf/libbpf.c | 14 +++++---------
- 1 file changed, 5 insertions(+), 9 deletions(-)
+ tools/lib/bpf/libbpf.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 62a43c408d73..5ba11b249e9b 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -8461,19 +8461,15 @@ static int libbpf_find_attach_btf_id(struct bpf_program *prog, int *btf_obj_fd,
- {
- 	enum bpf_attach_type attach_type = prog->expected_attach_type;
- 	__u32 attach_prog_fd = prog->attach_prog_fd;
--	const char *name = prog->sec_name, *attach_name;
--	const struct bpf_sec_def *sec = NULL;
-+	const char *attach_name;
- 	int err = 0;
- 
--	if (!name)
--		return -EINVAL;
--
--	sec = find_sec_def(name);
--	if (!sec || !sec->is_attach_btf) {
--		pr_warn("failed to identify BTF ID based on ELF section name '%s'\n", name);
-+	if (!prog->sec_def || !prog->sec_def->is_attach_btf) {
-+		pr_warn("failed to identify BTF ID based on ELF section name '%s'\n",
-+			prog->sec_name);
- 		return -ESRCH;
- 	}
--	attach_name = name + sec->len;
-+	attach_name = prog->sec_name + prog->sec_def->len;
- 
- 	/* BPF program's BTF ID */
- 	if (attach_prog_fd) {
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index 2f6f0e15d1e7..7111e8d651de 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -83,6 +83,7 @@ struct bpf_object_open_opts {
+ 	 * Non-relocatable instructions are replaced with invalid ones to
+ 	 * prevent accidental errors.
+ 	 * */
++	LIBBPF_DEPRECATED_SINCE(0, 6, "field has no effect")
+ 	bool relaxed_core_relocs;
+ 	/* maps that set the 'pinning' attribute in their definition will have
+ 	 * their pin_path attribute set to a file in this directory, and be
 -- 
 2.30.2
 
