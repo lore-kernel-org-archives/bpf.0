@@ -2,134 +2,92 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DE246C4321E
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DFF7C4332F
 	for <bpf@archiver.kernel.org>; Thu, 16 Sep 2021 09:56:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CBBE4611CA
-	for <bpf@archiver.kernel.org>; Thu, 16 Sep 2021 09:56:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EDC7F61185
+	for <bpf@archiver.kernel.org>; Thu, 16 Sep 2021 09:56:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237169AbhIPJ5g (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 16 Sep 2021 05:57:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58044 "EHLO mail.kernel.org"
+        id S237151AbhIPJ5f (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 16 Sep 2021 05:57:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58054 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236073AbhIPJ4s (ORCPT <rfc822;bpf@vger.kernel.org>);
+        id S236221AbhIPJ4s (ORCPT <rfc822;bpf@vger.kernel.org>);
         Thu, 16 Sep 2021 05:56:48 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2D6596120F;
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 422DE61246;
         Thu, 16 Sep 2021 09:55:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1631786126;
-        bh=75WrKbSFBKg3yzGt07IbXwPNTFQ0wIIFH/Or+OVz1tk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=uF5yJPv/qiKbXXEFvin6OmfsjMRrph3HNOgVM4VP8l98VyCCn6ZiDH4Vz9ThIa3nO
-         /R3BLqZrexnLqAhaLqqje35cJvGT4N3rzjw+tJcda+Ho3iJSy3WwY5wVLASpoPMaG0
-         BdVfOxuhSoKonDNgYiYNAV5b+jhnTDG3G0iRsZjuDNsSqouJPu1+uSll78aJKox5Ns
-         KwHB376rUBOCM9pslwyGU8l8WVSDWBaAmSdRQHZs7Vn9W0IUzd/0QWauFDPCMtQEHo
-         PeyD1wssHY2MBiz2gKKjgNgw/LEq0+KlatdR8BlJsvdBjXO7hPlAu8a1uYbkmb9sPv
-         1LdRPeVp9uZAg==
+        bh=SoojYHvRGcHq15wi1lokm8T7b2MKM9WukjphpKpCLUU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=qNqk8O4PX1qXimy6EWm5bQoVNFiVTR5H3v6A43glANGoBIWoKM/8Tzvig7E5moXtT
+         l1/0IqcfiTwxlPZGO9wQDDYvh3G2dFW673LPfUvSG8FhJtXWgsm6McLgJvTassg1/W
+         BRTx36XZrifByAfgOmkfwtP48stDuKpUH/8WXzDdGjiD5d02DZkg78B09ZBW4HVo/y
+         6YM74V+b1EdkuM4VUaHeZrwlFQkb7kcBVsOLBwJjcw6dsHrWypnIk0vOGF78UF0V1I
+         Q6fNOtbAUT+CU4A1HKWmaABEXYsBFawsegShcjzQU8oVZG9ssnEDAtBOOW47npnz5m
+         0h07Tuz/vydlA==
 Received: by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1mQo72-001vTH-32; Thu, 16 Sep 2021 11:55:24 +0200
+        id 1mQo72-001vTw-Gk; Thu, 16 Sep 2021 11:55:24 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
         Jonathan Corbet <corbet@lwn.net>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Evgeniy Polyakov <zbr@ioremap.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        David Ahern <dsahern@gmail.com>,
         Jakub Kicinski <kuba@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>, Martin KaFai Lau <kafai@fb.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Roman Gushchin <guro@fb.com>, Shuah Khan <shuah@kernel.org>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        bpf@vger.kernel.org, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-mmc@vger.kernel.org,
-        linux-omap@vger.kernel.org, netdev@vger.kernel.org,
-        sparmaintainer@unisys.com
-Subject: [PATCH v2 00/23] Fix some issues at documentation
-Date:   Thu, 16 Sep 2021 11:54:59 +0200
-Message-Id: <cover.1631785820.git.mchehab+huawei@kernel.org>
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH v2 10/23] bpftool: update bpftool-cgroup.rst reference
+Date:   Thu, 16 Sep 2021 11:55:09 +0200
+Message-Id: <9e9f62ab09c26736338545f9aa27c0e825517a32.1631785820.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <cover.1631785820.git.mchehab+huawei@kernel.org>
+References: <cover.1631785820.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi John,
+The file name: Documentation/bpftool-cgroup.rst
+should be, instead: tools/bpf/bpftool/Documentation/bpftool-cgroup.rst.
 
-Please ignore the previous series I sent today [1].  I forgot that I had
-already submitted a first version of this series.
+Update its cross-reference accordingly.
 
-[1]  https://lore.kernel.org/all/cover.1631783482.git.mchehab+huawei@kernel.org/
-
-
-The first patch in this series fix a bad character used instead of
-a "(c)" UTF-8 symbol.
-
-The remaining ones fix several broken references to files
-under Documentation/, several due to DT schema conversions
-from .txt to .yaml.
-
+Fixes: a2b5944fb4e0 ("selftests/bpf: Check consistency between bpftool source, doc, completion")
+Fixes: 5ccda64d38cc ("bpftool: implement cgroup bpf operations")
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
+ tools/testing/selftests/bpf/test_bpftool_synctypes.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-v2:
-   - Added a couple of extra fixes;
-   - merged two patches touching mtd-physmap.yaml;
-   - added missing tags (acked-by/reviewed-by) received after v1.
-v1: https://lore.kernel.org/all/cover.1626947923.git.mchehab+huawei@kernel.org/
-
-
-
-Mauro Carvalho Chehab (23):
-  visorbus: fix a copyright symbol that was bad encoded
-  dt-bindings: net: dsa: sja1105: update nxp,sja1105.yaml reference
-  dt-bindings: arm: mediatek: mmsys: update mediatek,mmsys.yaml
-    reference
-  dt-bindings: w1: update w1-gpio.yaml reference
-  dt-bindings: mmc: update mmc-card.yaml reference
-  libbpf: update index.rst reference
-  docs: accounting: update delay-accounting.rst reference
-  tools: bpftool: update bpftool-prog.rst reference
-  tools: bpftool: update bpftool-map.rst reference
-  bpftool: update bpftool-cgroup.rst reference
-  MAINTAINERS: update arm,vic.yaml reference
-  MAINTAINERS: update aspeed,i2c.yaml reference
-  MAINTAINERS: update faraday,ftrtc010.yaml reference
-  MAINTAINERS: update fsl,fec.yaml reference
-  MAINTAINERS: update ti,sci.yaml reference
-  MAINTAINERS: update intel,ixp46x-rng.yaml reference
-  MAINTAINERS: update nxp,imx8-jpeg.yaml reference
-  MAINTAINERS: update gemini.yaml reference
-  MAINTAINERS: update brcm,unimac-mdio.yaml reference
-  MAINTAINERS: update chipone,icn8318.yaml reference
-  MAINTAINERS: update silergy,sy8106a.yaml reference
-  MAINTAINERS: update mtd-physmap.yaml reference
-  MAINTAINERS: update ti,am654-hbmc.yaml reference
-
- Documentation/admin-guide/sysctl/kernel.rst   |  2 +-
- Documentation/bpf/index.rst                   |  2 +-
- .../display/mediatek/mediatek,disp.txt        |  2 +-
- Documentation/networking/dsa/sja1105.rst      |  2 +-
- Documentation/w1/masters/w1-gpio.rst          |  2 +-
- MAINTAINERS                                   | 28 +++++++++----------
- drivers/mmc/host/omap_hsmmc.c                 |  2 +-
- drivers/visorbus/visorbus_main.c              |  2 +-
- .../selftests/bpf/test_bpftool_synctypes.py   |  6 ++--
- 9 files changed, 24 insertions(+), 24 deletions(-)
-
+diff --git a/tools/testing/selftests/bpf/test_bpftool_synctypes.py b/tools/testing/selftests/bpf/test_bpftool_synctypes.py
+index 2d7eb683bd5a..c974abd4db13 100755
+--- a/tools/testing/selftests/bpf/test_bpftool_synctypes.py
++++ b/tools/testing/selftests/bpf/test_bpftool_synctypes.py
+@@ -392,7 +392,7 @@ class ManCgroupExtractor(ManPageExtractor):
+     """
+     An extractor for bpftool-cgroup.rst.
+     """
+-    filename = os.path.join(BPFTOOL_DIR, 'Documentation/bpftool-cgroup.rst')
++    filename = os.path.join(BPFTOOL_DIR, 'tools/bpf/bpftool/Documentation/bpftool-cgroup.rst')
+ 
+     def get_attach_types(self):
+         return self.get_rst_list('ATTACH_TYPE')
 -- 
 2.31.1
-
 
