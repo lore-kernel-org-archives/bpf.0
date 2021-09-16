@@ -2,116 +2,89 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AADCBC43217
-	for <bpf@archiver.kernel.org>; Thu, 16 Sep 2021 08:03:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 747DDC433FE
+	for <bpf@archiver.kernel.org>; Thu, 16 Sep 2021 09:14:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9511C6120F
-	for <bpf@archiver.kernel.org>; Thu, 16 Sep 2021 08:03:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 438F461248
+	for <bpf@archiver.kernel.org>; Thu, 16 Sep 2021 09:14:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234970AbhIPIFQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 16 Sep 2021 04:05:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43024 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234982AbhIPIFF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 16 Sep 2021 04:05:05 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D206EC061764;
-        Thu, 16 Sep 2021 01:03:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=fpa9ttX7CF1WZpIhVuTpbNvQaQpZawGIXndIWrx5+jI=; b=da246jrz6odDZwWz+BVZfJ4yVr
-        kc2G1ZX29712svPo5vvsUWoJLZigW9CJuhX7+ms5NojlbOnq5+ioReV+ThkFGQoEUiN8dZYakN3vq
-        ZuVIm6a4pv0BeeUNgMThsJE09igsaVqzNbXmskExLG2bsRAkirGVP1oF6sJvmjGjvKpGIb5fjIfhI
-        HaJSE0EjAA7uNnvtbzAGlwnzOrZe+OSSytjVBZ3a5tXmk0HWZtLSfWQ4v582RlMKNMghoht4bUQW7
-        0zj9WYRHhfc/6QWWSkx4HGKz4qVGhI5WpcmoaiV4S/vaoxJMyd2z8D+p8/LLITI15kT2+WfIfO0i7
-        WEQgbzqQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mQmMZ-003bgn-QM; Thu, 16 Sep 2021 08:03:20 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5C822300093;
-        Thu, 16 Sep 2021 10:03:19 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 4348E2CD48C44; Thu, 16 Sep 2021 10:03:19 +0200 (CEST)
-Date:   Thu, 16 Sep 2021 10:03:19 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     =?utf-8?B?546L6LSH?= <yun.wang@linux.alibaba.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
+        id S235500AbhIPJPm (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 16 Sep 2021 05:15:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40852 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235383AbhIPJPl (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 16 Sep 2021 05:15:41 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5099861209;
+        Thu, 16 Sep 2021 09:14:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1631783661;
+        bh=83vkFWOnmUdHmvdZYCb71ZYm+RoKY7l/VWT0C4zUsJ4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=E+lyG1uloXhex9KJPzmERJ3/tNtAQeJV7eTNB8mZFXHv/gDwyyG+pYEv5ko8Dkn1T
+         UMNuZZPpEshs5pCUZ7dcLyjqwghAlh3HAtVR4RT0OUXRJOKKdtWKKw3G03zLGrAJTX
+         uVemPgyMaJuyNEermSBMcxsXQ9EWFuHa4RWSoYekzz8LdOE7sgx3RTQ6cYj1Dp0VAa
+         SeqEBrQipxYXiBpSXd63V5XTrzJKB5fuGD/0M/4MLWEfgzr03F7HZ7/7FqB3GmXJxm
+         XEHuflOkrFQttorRbUDFr8/CWGtkV89b1gAuwQwLTlhsrNqxdrMDb6vR6Wv+bDbePu
+         7x/XuJ4YYU2xA==
+Received: by mail.kernel.org with local (Exim 4.94.2)
+        (envelope-from <mchehab@kernel.org>)
+        id 1mQnTH-001sKx-Fd; Thu, 16 Sep 2021 11:14:19 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Grant Seltzer <grantseltzer@gmail.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
-        <linux-perf-users@vger.kernel.org>,
-        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
-        <linux-kernel@vger.kernel.org>,
-        "open list:BPF (Safe dynamic programs and tools)" 
-        <netdev@vger.kernel.org>,
-        "open list:BPF (Safe dynamic programs and tools)" 
-        <bpf@vger.kernel.org>, jroedel@suse.de, x86@kernel.org
-Subject: Re: [PATCH] x86/dumpstack/64: Add guard pages to stack_info
-Message-ID: <YUL6R5AH6WNxu5sH@hirez.programming.kicks-ass.net>
-References: <ff979a43-045a-dc56-64d1-2c31dd4db381@linux.alibaba.com>
- <20210910153839.GH4323@worktop.programming.kicks-ass.net>
- <f38987a5-dc36-a20d-8c5e-81e8ead5b4dc@linux.alibaba.com>
- <YT8m2B6D2yWc5Umq@hirez.programming.kicks-ass.net>
- <3fb7c51f-696b-da70-1965-1dda9910cb14@linux.alibaba.com>
- <YUB5VchM3a/MiZpX@hirez.programming.kicks-ass.net>
- <3f26f7a2-0a09-056a-3a7a-4795b6723b60@linux.alibaba.com>
- <YUIOgmOfnOqPrE+z@hirez.programming.kicks-ass.net>
- <76de02b7-4d87-4a3a-e4d4-048829749887@linux.alibaba.com>
- <YUL5j/lY0mtx4NMq@hirez.programming.kicks-ass.net>
+        KP Singh <kpsingh@kernel.org>, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH 06/24] libbpf: update index.rst reference
+Date:   Thu, 16 Sep 2021 11:13:59 +0200
+Message-Id: <ae12f5de645a2ae07f183babe6615bdf0384f9a8.1631783482.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <cover.1631783482.git.mchehab+huawei@kernel.org>
+References: <cover.1631783482.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <YUL5j/lY0mtx4NMq@hirez.programming.kicks-ass.net>
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Sep 16, 2021 at 10:00:15AM +0200, Peter Zijlstra wrote:
-> On Thu, Sep 16, 2021 at 11:47:49AM +0800, 王贇 wrote:
-> 
-> > I did some debug and found the issue, we are missing:
-> > 
-> > @@ -122,7 +137,10 @@ static __always_inline bool in_exception_stack(unsigned long *stack, struct stac
-> >         info->type      = ep->type;
-> >         info->begin     = (unsigned long *)begin;
-> >         info->end       = (unsigned long *)end;
-> > -       info->next_sp   = (unsigned long *)regs->sp;
-> > +
-> > +       if (!(ep->type & STACK_TYPE_GUARD))
-> > +               info->next_sp   = (unsigned long *)regs->sp;
-> > +
-> >         return true;
-> >  }
-> > 
-> > as the guard page are not working as real stack I guess?
-> 
-> Correct, but I thought I put if (type & GUARD) terminators in all paths
-> that ended up caring about ->next_sp. Clearly I seem to have missed one
-> :/
-> 
-> Let me try and figure out where that happens.
+Changeset d20b41115ad5 ("libbpf: Rename libbpf documentation index file")
+renamed: Documentation/bpf/libbpf/libbpf.rst
+to: Documentation/bpf/libbpf/index.rst.
 
-Oh, I'm an idiot... yes it tries to read regs the stack, but clearly
-that won't work for the guard page.
+Update its cross-reference accordingly.
+
+Fixes: d20b41115ad5 ("libbpf: Rename libbpf documentation index file")
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+ Documentation/bpf/index.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Documentation/bpf/index.rst b/Documentation/bpf/index.rst
+index 1ceb5d704a97..817a201a1282 100644
+--- a/Documentation/bpf/index.rst
++++ b/Documentation/bpf/index.rst
+@@ -15,7 +15,7 @@ that goes into great technical depth about the BPF Architecture.
+ libbpf
+ ======
+ 
+-Documentation/bpf/libbpf/libbpf.rst is a userspace library for loading and interacting with bpf programs.
++Documentation/bpf/libbpf/index.rst is a userspace library for loading and interacting with bpf programs.
+ 
+ BPF Type Format (BTF)
+ =====================
+-- 
+2.31.1
+
