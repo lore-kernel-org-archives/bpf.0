@@ -4,165 +4,304 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B7A0C4332F
-	for <bpf@archiver.kernel.org>; Thu, 16 Sep 2021 16:27:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E9BDFC433F5
+	for <bpf@archiver.kernel.org>; Thu, 16 Sep 2021 16:27:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 83BE16124B
-	for <bpf@archiver.kernel.org>; Thu, 16 Sep 2021 16:27:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CBBB76152B
+	for <bpf@archiver.kernel.org>; Thu, 16 Sep 2021 16:27:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242460AbhIPQ20 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 16 Sep 2021 12:28:26 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:46528 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241904AbhIPQ0Z (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 16 Sep 2021 12:26:25 -0400
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18GFguOj013873
-        for <bpf@vger.kernel.org>; Thu, 16 Sep 2021 09:25:05 -0700
+        id S242466AbhIPQ21 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 16 Sep 2021 12:28:27 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:38508 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S241918AbhIPQ01 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 16 Sep 2021 12:26:27 -0400
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.1.2/8.16.1.2) with SMTP id 18GFgvmi028087
+        for <bpf@vger.kernel.org>; Thu, 16 Sep 2021 09:25:06 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=facebook;
- bh=2cu7M1XN333AkrNxBZ+o94KMysrS0P569VxSX016dYs=;
- b=MmSzQSdYuaRZErA8QQfKCZ53aYn18ZMDL8gL52P/NhIrjfjtNqMwVirmE67jRFNTL9mm
- MucMu6kpamO+SU8TJUBSLs5UAoyPOol6159hKnVHnqvh7LCGeQmoJ/vY89C/CL8RoeHw
- 51zu/nFJvjeWwCIngsKYyrHW0Kui7SYlLSA= 
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=I5fkErTvZrkiVI6NbzLcumqoZjkORUv3EO++1kQRzZs=;
+ b=D9SljK0EcOKqOWh0eoKaggHLnjdCdjhvLrE8T7n6JLEqNCRl2utlgWro2nOM5L3fY+54
+ e3EodqLr5GFMoQCXD9mUICLLn05Wf1IYYaTkvCbPIxHi8y2BSmJb58QCKtOKuBL4Gw+G
+ iUrmfkBjvRH3o0163SLxE1P+qJxIDxK03X8= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 3b47j40x4p-9
+        by m0089730.ppops.net with ESMTP id 3b42vxttgx-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 16 Sep 2021 09:25:04 -0700
-Received: from intmgw001.46.prn1.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 16 Sep 2021 09:25:06 -0700
+Received: from intmgw002.48.prn1.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Thu, 16 Sep 2021 09:25:03 -0700
+ 15.1.2308.14; Thu, 16 Sep 2021 09:25:04 -0700
 Received: by devvm3388.prn0.facebook.com (Postfix, from userid 111017)
-        id 24B69BE68AA8; Thu, 16 Sep 2021 09:25:02 -0700 (PDT)
+        id 3080EBE68AAC; Thu, 16 Sep 2021 09:25:02 -0700 (PDT)
 From:   Roman Gushchin <guro@fb.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>
 CC:     Mel Gorman <mgorman@techsingularity.net>, <bpf@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, Roman Gushchin <guro@fb.com>
-Subject: [PATCH rfc 0/6] Scheduler BPF
-Date:   Thu, 16 Sep 2021 09:24:45 -0700
-Message-ID: <20210916162451.709260-1-guro@fb.com>
+Subject: [PATCH rfc 2/6] bpf: sched: add convenient helpers to identify sched entities
+Date:   Thu, 16 Sep 2021 09:24:47 -0700
+Message-ID: <20210916162451.709260-3-guro@fb.com>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210915213550.3696532-1-guro@fb.com>
+In-Reply-To: <20210916162451.709260-1-guro@fb.com>
 References: <20210915213550.3696532-1-guro@fb.com>
+ <20210916162451.709260-1-guro@fb.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-ORIG-GUID: vpH0i9WiJUK0nruaU4LW9Caxrzw4MqRE
-X-Proofpoint-GUID: vpH0i9WiJUK0nruaU4LW9Caxrzw4MqRE
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
+X-Proofpoint-GUID: -1obUGZkUac_MnMQ9poMh6taHHsHMkMx
+X-Proofpoint-ORIG-GUID: -1obUGZkUac_MnMQ9poMh6taHHsHMkMx
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
  definitions=2021-09-16_04,2021-09-16_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0 adultscore=0
- mlxlogscore=824 bulkscore=0 malwarescore=0 suspectscore=0 mlxscore=0
- spamscore=0 priorityscore=1501 clxscore=1015 lowpriorityscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
+ suspectscore=0 priorityscore=1501 mlxlogscore=865 adultscore=0
+ malwarescore=0 clxscore=1015 phishscore=0 bulkscore=0 lowpriorityscore=0
+ mlxscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2109030001 definitions=main-2109160098
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-There is a long history of distro people, system administrators, and
-application owners tuning the CFS settings in /proc/sys, which are now
-in debugfs. Looking at what these settings actually did, it ended up
-boiling down to changing the likelihood of task preemption, or
-disabling it by setting the wakeup_granularity_ns to more than half of
-the latency_ns. The other settings didn't really do much for
-performance.
+This patch adds 3 helpers useful for dealing with sched entities:
+  u64 bpf_sched_entity_to_tgidpid(struct sched_entity *se);
+  u64 bpf_sched_entity_to_cgrpid(struct sched_entity *se);
+  long bpf_sched_entity_belongs_to_cgrp(struct sched_entity *se, u64 cgrp=
+id);
 
-In other words, some our workloads benefit by having long running tasks
-preempted by tasks handling short running requests, and some workloads
-that run only short term requests which benefit from never being preempted.
+Sched entity is a basic structure used by the scheduler to represent
+schedulable objects: tasks and cgroups (if CONFIG_FAIR_GROUP_SCHED
+is enabled). It will be passed as an argument to many bpf hooks, so
+scheduler bpf programs need a convenient way to deal with it.
 
-This leads to a few observations and ideas:
-- Different workloads want different policies. Being able to configure
-  the policy per workload could be useful.
-- A workload that benefits from not being preempted itself could still
-  benefit from preempting (low priority) background system tasks.
-- It would be useful to quickly (and safely) experiment with different
-  policies in production, without having to shut down applications or reboot
-  systems, to determine what the policies for different workloads should be.
-- Only a few workloads are large and sensitive enough to merit their own
-  policy tweaks. CFS by itself should be good enough for everything else,
-  and we probably do not want policy tweaks to be a replacement for anything
-  CFS does.
+bpf_sched_entity_to_tgidpid() and bpf_sched_entity_to_cgrpid() are
+useful to identify a sched entity in userspace terms (pid, tgid and
+cgroup id). bpf_sched_entity_belongs_to_cgrp() allows to check whether
+a sched entity belongs to sub-tree of a cgroup. It allows to write
+cgroup-specific scheduler policies even without enabling the cgroup
+cpu controller.
 
-This leads to BPF hooks, which have been successfully used in various
-kernel subsystems to provide a way for external code to (safely)
-change a few kernel decisions. BPF tooling makes this pretty easy to do,
-and the people deploying BPF scripts are already quite used to updating them
-for new kernel versions.
+Signed-off-by: Roman Gushchin <guro@fb.com>
+---
+ include/uapi/linux/bpf.h       | 23 +++++++++++
+ kernel/sched/bpf_sched.c       | 74 ++++++++++++++++++++++++++++++++++
+ scripts/bpf_doc.py             |  2 +
+ tools/include/uapi/linux/bpf.h | 23 +++++++++++
+ 4 files changed, 122 insertions(+)
 
-This patchset aims to start a discussion about potential applications of BPF
-to the scheduler. It also aims to land some very basic BPF infrastructure
-necessary to add new BPF hooks to the scheduler, a minimal set of useful
-helpers, corresponding libbpf changes, etc.
-
-Our very first experiments with using BPF in CFS look very promising. We're
-at a very early stage, however already have seen a nice latency and ~1% RPS
-wins for our (Facebook's) main web workload.
-
-As I know, Google is working on a more radical approach [2]: they aim to mo=
-ve
-the scheduling code into userspace. It seems that their core motivation is
-somewhat similar: to make the scheduler changes easier to develop, validate
-and deploy. Even though their approach is different, they also use BPF for
-speeding up some hot paths. I think the suggested infrastructure can serve
-their purpose too.
-
-An example of an userspace part, which loads some simple hooks is available
-here [3]. It's very simple, provided only to simplify playing with the prov=
-ided
-kernel patches.
-
-
-[1] c722f35b513f ("sched/fair: Bring back select_idle_smt(), but differentl=
-y")
-[2] Google's ghOSt: https://linuxplumbersconf.org/event/11/contributions/95=
-4/
-[3] https://github.com/rgushchin/atc
-
-
-Roman Gushchin (6):
-  bpf: sched: basic infrastructure for scheduler bpf
-  bpf: sched: add convenient helpers to identify sched entities
-  bpf: sched: introduce bpf_sched_enable()
-  sched: cfs: add bpf hooks to control wakeup and tick preemption
-  libbpf: add support for scheduler bpf programs
-  bpftool: recognize scheduler programs
-
- include/linux/bpf_sched.h       |  53 ++++++++++++
- include/linux/bpf_types.h       |   3 +
- include/linux/sched_hook_defs.h |   4 +
- include/uapi/linux/bpf.h        |  25 ++++++
- kernel/bpf/btf.c                |   1 +
- kernel/bpf/syscall.c            |  21 ++++-
- kernel/bpf/trampoline.c         |   1 +
- kernel/bpf/verifier.c           |   9 ++-
- kernel/sched/Makefile           |   1 +
- kernel/sched/bpf_sched.c        | 138 ++++++++++++++++++++++++++++++++
- kernel/sched/fair.c             |  27 +++++++
- scripts/bpf_doc.py              |   2 +
- tools/bpf/bpftool/common.c      |   1 +
- tools/bpf/bpftool/prog.c        |   1 +
- tools/include/uapi/linux/bpf.h  |  25 ++++++
- tools/lib/bpf/libbpf.c          |  27 ++++++-
- tools/lib/bpf/libbpf.h          |   4 +
- tools/lib/bpf/libbpf.map        |   3 +
- 18 files changed, 341 insertions(+), 5 deletions(-)
- create mode 100644 include/linux/bpf_sched.h
- create mode 100644 include/linux/sched_hook_defs.h
- create mode 100644 kernel/sched/bpf_sched.c
-
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 6dfbebb8fc8f..199e4a92820d 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -4900,6 +4900,26 @@ union bpf_attr {
+  *		**-EINVAL** if *flags* is not zero.
+  *
+  *		**-ENOENT** if architecture does not support branch records.
++ *
++ * u64 bpf_sched_entity_to_tgidpid(struct sched_entity *se)
++ *	Description
++ *		Return task's encoded tgid and pid if the sched entity is a task.
++ *	Return
++ *		Tgid and pid encoded as tgid << 32 \| pid, if *se* is a task. (u64)-=
+1 otherwise.
++ *
++ * u64 bpf_sched_entity_to_cgrpid(struct sched_entity *se)
++ *	Description
++ *		Return cgroup id if the given sched entity is a cgroup.
++ *	Return
++ *		Cgroup id, if *se* is a cgroup. (u64)-1 otherwise.
++ *
++ * long bpf_sched_entity_belongs_to_cgrp(struct sched_entity *se, u64 cg=
+rpid)
++ *	Description
++ *		Checks whether the sched entity belongs to a cgroup or
++ *		it's sub-tree. It doesn't require a cgroup CPU controller
++ *		to be enabled.
++ *	Return
++ *		1 if the sched entity belongs to a cgroup, 0 otherwise.
+  */
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+@@ -5079,6 +5099,9 @@ union bpf_attr {
+ 	FN(get_attach_cookie),		\
+ 	FN(task_pt_regs),		\
+ 	FN(get_branch_snapshot),	\
++	FN(sched_entity_to_tgidpid),	\
++	FN(sched_entity_to_cgrpid),	\
++	FN(sched_entity_belongs_to_cgrp),	\
+ 	/* */
+=20
+ /* integer value in 'imm' field of BPF_CALL instruction selects which he=
+lper
+diff --git a/kernel/sched/bpf_sched.c b/kernel/sched/bpf_sched.c
+index 2f05c186cfd0..ead691dc6e85 100644
+--- a/kernel/sched/bpf_sched.c
++++ b/kernel/sched/bpf_sched.c
+@@ -42,12 +42,86 @@ int bpf_sched_verify_prog(struct bpf_verifier_log *vl=
+og,
+ 	return 0;
+ }
+=20
++BPF_CALL_1(bpf_sched_entity_to_tgidpid, struct sched_entity *, se)
++{
++	if (entity_is_task(se)) {
++		struct task_struct *task =3D task_of(se);
++
++		return (u64) task->tgid << 32 | task->pid;
++	} else {
++		return (u64) -1;
++	}
++}
++
++BPF_CALL_1(bpf_sched_entity_to_cgrpid, struct sched_entity *, se)
++{
++#ifdef CONFIG_FAIR_GROUP_SCHED
++	if (!entity_is_task(se))
++		return cgroup_id(se->cfs_rq->tg->css.cgroup);
++#endif
++	return (u64) -1;
++}
++
++BPF_CALL_2(bpf_sched_entity_belongs_to_cgrp, struct sched_entity *, se,
++	   u64, cgrpid)
++{
++#ifdef CONFIG_CGROUPS
++	struct cgroup *cgrp;
++	int level;
++
++	if (entity_is_task(se))
++		cgrp =3D task_dfl_cgroup(task_of(se));
++#ifdef CONFIG_FAIR_GROUP_SCHED
++	else
++		cgrp =3D se->cfs_rq->tg->css.cgroup;
++#endif
++
++	for (level =3D cgrp->level; level; level--)
++		if (cgrp->ancestor_ids[level] =3D=3D cgrpid)
++			return 1;
++#endif
++	return 0;
++}
++
++BTF_ID_LIST_SINGLE(btf_sched_entity_ids, struct, sched_entity)
++
++static const struct bpf_func_proto bpf_sched_entity_to_tgidpid_proto =3D=
+ {
++	.func		=3D bpf_sched_entity_to_tgidpid,
++	.gpl_only	=3D false,
++	.ret_type	=3D RET_INTEGER,
++	.arg1_type	=3D ARG_PTR_TO_BTF_ID,
++	.arg1_btf_id	=3D &btf_sched_entity_ids[0],
++};
++
++static const struct bpf_func_proto bpf_sched_entity_to_cgrpid_proto =3D =
+{
++	.func		=3D bpf_sched_entity_to_cgrpid,
++	.gpl_only	=3D false,
++	.ret_type	=3D RET_INTEGER,
++	.arg1_type	=3D ARG_PTR_TO_BTF_ID,
++	.arg1_btf_id	=3D &btf_sched_entity_ids[0],
++};
++
++static const struct bpf_func_proto bpf_sched_entity_belongs_to_cgrp_prot=
+o =3D {
++	.func		=3D bpf_sched_entity_belongs_to_cgrp,
++	.gpl_only	=3D false,
++	.ret_type	=3D RET_INTEGER,
++	.arg1_type	=3D ARG_PTR_TO_BTF_ID,
++	.arg1_btf_id	=3D &btf_sched_entity_ids[0],
++	.arg2_type	=3D ARG_ANYTHING,
++};
++
+ static const struct bpf_func_proto *
+ bpf_sched_func_proto(enum bpf_func_id func_id, const struct bpf_prog *pr=
+og)
+ {
+ 	switch (func_id) {
+ 	case BPF_FUNC_trace_printk:
+ 		return bpf_get_trace_printk_proto();
++	case BPF_FUNC_sched_entity_to_tgidpid:
++		return &bpf_sched_entity_to_tgidpid_proto;
++	case BPF_FUNC_sched_entity_to_cgrpid:
++		return &bpf_sched_entity_to_cgrpid_proto;
++	case BPF_FUNC_sched_entity_belongs_to_cgrp:
++		return &bpf_sched_entity_belongs_to_cgrp_proto;
+ 	default:
+ 		return NULL;
+ 	}
+diff --git a/scripts/bpf_doc.py b/scripts/bpf_doc.py
+index 00ac7b79cddb..84019ba5b67b 100755
+--- a/scripts/bpf_doc.py
++++ b/scripts/bpf_doc.py
+@@ -548,6 +548,7 @@ class PrinterHelpers(Printer):
+             'struct socket',
+             'struct file',
+             'struct bpf_timer',
++            'struct sched_entity',
+     ]
+     known_types =3D {
+             '...',
+@@ -596,6 +597,7 @@ class PrinterHelpers(Printer):
+             'struct socket',
+             'struct file',
+             'struct bpf_timer',
++            'struct sched_entity',
+     }
+     mapped_types =3D {
+             'u8': '__u8',
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
+f.h
+index 6dfbebb8fc8f..199e4a92820d 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -4900,6 +4900,26 @@ union bpf_attr {
+  *		**-EINVAL** if *flags* is not zero.
+  *
+  *		**-ENOENT** if architecture does not support branch records.
++ *
++ * u64 bpf_sched_entity_to_tgidpid(struct sched_entity *se)
++ *	Description
++ *		Return task's encoded tgid and pid if the sched entity is a task.
++ *	Return
++ *		Tgid and pid encoded as tgid << 32 \| pid, if *se* is a task. (u64)-=
+1 otherwise.
++ *
++ * u64 bpf_sched_entity_to_cgrpid(struct sched_entity *se)
++ *	Description
++ *		Return cgroup id if the given sched entity is a cgroup.
++ *	Return
++ *		Cgroup id, if *se* is a cgroup. (u64)-1 otherwise.
++ *
++ * long bpf_sched_entity_belongs_to_cgrp(struct sched_entity *se, u64 cg=
+rpid)
++ *	Description
++ *		Checks whether the sched entity belongs to a cgroup or
++ *		it's sub-tree. It doesn't require a cgroup CPU controller
++ *		to be enabled.
++ *	Return
++ *		1 if the sched entity belongs to a cgroup, 0 otherwise.
+  */
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+@@ -5079,6 +5099,9 @@ union bpf_attr {
+ 	FN(get_attach_cookie),		\
+ 	FN(task_pt_regs),		\
+ 	FN(get_branch_snapshot),	\
++	FN(sched_entity_to_tgidpid),	\
++	FN(sched_entity_to_cgrpid),	\
++	FN(sched_entity_belongs_to_cgrp),	\
+ 	/* */
+=20
+ /* integer value in 'imm' field of BPF_CALL instruction selects which he=
+lper
 --=20
 2.31.1
 
