@@ -2,99 +2,85 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 41624C433F5
-	for <bpf@archiver.kernel.org>; Fri, 17 Sep 2021 16:02:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 151FDC433EF
+	for <bpf@archiver.kernel.org>; Fri, 17 Sep 2021 16:10:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 24C7C6112E
-	for <bpf@archiver.kernel.org>; Fri, 17 Sep 2021 16:02:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E398961216
+	for <bpf@archiver.kernel.org>; Fri, 17 Sep 2021 16:10:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243330AbhIQQDq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 17 Sep 2021 12:03:46 -0400
-Received: from pegase2.c-s.fr ([93.17.235.10]:60339 "EHLO pegase2.c-s.fr"
+        id S229890AbhIQQLc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 17 Sep 2021 12:11:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53548 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229890AbhIQQDp (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 17 Sep 2021 12:03:45 -0400
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4H9zHK4mhlz9sTL;
-        Fri, 17 Sep 2021 18:02:21 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id coLvZUmcxDrI; Fri, 17 Sep 2021 18:02:21 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4H9zHK3tmvz9sSX;
-        Fri, 17 Sep 2021 18:02:21 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 702578B799;
-        Fri, 17 Sep 2021 18:02:21 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id AkNN26PrTgUl; Fri, 17 Sep 2021 18:02:21 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.202.36])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 2A60E8B768;
-        Fri, 17 Sep 2021 18:02:20 +0200 (CEST)
-Subject: Re: [PATCH v2 1/8] bpf powerpc: Remove unused SEEN_STACK
-To:     Hari Bathini <hbathini@linux.ibm.com>, naveen.n.rao@linux.ibm.com,
-        mpe@ellerman.id.au, ast@kernel.org, daniel@iogearbox.net
-Cc:     paulus@samba.org, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org,
-        Ravi Bangoria <ravi.bangoria@linux.ibm.com>
-References: <20210917153047.177141-1-hbathini@linux.ibm.com>
- <20210917153047.177141-2-hbathini@linux.ibm.com>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-Message-ID: <c14c6111-ffe3-f8e9-f9d3-5a5f101096ba@csgroup.eu>
-Date:   Fri, 17 Sep 2021 18:02:18 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S240185AbhIQQLb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 17 Sep 2021 12:11:31 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id DB64061212;
+        Fri, 17 Sep 2021 16:10:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1631895008;
+        bh=VRsQBviTr6s946tbfZg17fNfnUqHErYSmRigkoPwBPI=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=NM/0WeudiYnqrEimRHM0YN6R09Zg2EOiwHgzuqeXUkaAsOCUPp4OKSsS2YE9V67BR
+         eAge2JhV5VT/wG5MttEEjT8K08Xh5MtkAfUL2xuC5c3TZ9+q1CC34t2RrAWRQyhv/m
+         v3PWYXk/mWWzyybqDMmOo0ch03V/Xa5p1RLJVv+7A58QfuKdIgb2iWMUDbDnajZRH5
+         gmRIHTLYCzA5k6kCy6mg7RWfUhAeb4V7/AJI8MNH8RIj7UAxRCsIR2WI3d4Wu9vqzd
+         JbugbaA+nnM2IlwwNbNUWgKngGUOhKcIYx8IMFljytvcKVNVB0+K1g5DzFPILBvqGh
+         PWgkZldvWkP3g==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <20210917153047.177141-2-hbathini@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr-FR
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next 0/7] Improve set_attach_target() and deprecate
+ open_opts.attach_prog_fd
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <163189500885.20217.13882482710541336384.git-patchwork-notify@kernel.org>
+Date:   Fri, 17 Sep 2021 16:10:08 +0000
+References: <20210916015836.1248906-1-andrii@kernel.org>
+In-Reply-To: <20210916015836.1248906-1-andrii@kernel.org>
+To:     Andrii Nakryiko <andrii@kernel.org>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        kernel-team@fb.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+Hello:
+
+This series was applied to bpf/bpf-next.git (refs/heads/master):
+
+On Wed, 15 Sep 2021 18:58:29 -0700 you wrote:
+> This patch set deprecates bpf_object_open_opts.attach_prog_fd (in libbpf 0.7+)
+> by extending bpf_program__set_attach_target() to support some more flexible
+> scenarios. Existing fexit_bpf2bpf selftest is updated accordingly to not use
+> deprecated APIs.
+> 
+> While at it, also deprecate no-op relaxed_core_relocs option (they are always
+> "relaxed").
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next,1/7] libbpf: use pre-setup sec_def in libbpf_find_attach_btf_id()
+    https://git.kernel.org/bpf/bpf-next/c/f11f86a3931b
+  - [bpf-next,2/7] selftests/bpf: stop using relaxed_core_relocs which has no effect
+    https://git.kernel.org/bpf/bpf-next/c/23a7baaa9388
+  - [bpf-next,3/7] libbpf: deprecated bpf_object_open_opts.relaxed_core_relocs
+    https://git.kernel.org/bpf/bpf-next/c/277641859e83
+  - [bpf-next,4/7] libbpf: allow skipping attach_func_name in bpf_program__set_attach_target()
+    https://git.kernel.org/bpf/bpf-next/c/2d5ec1c66e25
+  - [bpf-next,5/7] selftests/bpf: switch fexit_bpf2bpf selftest to set_attach_target() API
+    https://git.kernel.org/bpf/bpf-next/c/60aed22076b0
+  - [bpf-next,6/7] libbpf: schedule open_opts.attach_prog_fd deprecation since v0.7
+    https://git.kernel.org/bpf/bpf-next/c/91b555d73e53
+  - [bpf-next,7/7] libbpf: constify all high-level program attach APIs
+    https://git.kernel.org/bpf/bpf-next/c/942025c9f37e
+
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-Le 17/09/2021 à 17:30, Hari Bathini a écrit :
-> From: Ravi Bangoria <ravi.bangoria@linux.ibm.com>
-> 
-> SEEN_STACK is unused on PowerPC. Remove it. Also, have
-> SEEN_TAILCALL use 0x40000000.
-> 
-> Signed-off-by: Ravi Bangoria <ravi.bangoria@linux.ibm.com>
-
-Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-
-> ---
-> 
-> * No changes in v2.
-> 
-> 
->   arch/powerpc/net/bpf_jit.h | 3 +--
->   1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/arch/powerpc/net/bpf_jit.h b/arch/powerpc/net/bpf_jit.h
-> index 99fad093f43e..d6267e93027a 100644
-> --- a/arch/powerpc/net/bpf_jit.h
-> +++ b/arch/powerpc/net/bpf_jit.h
-> @@ -116,8 +116,7 @@ static inline bool is_nearbranch(int offset)
->   #define COND_LE		(CR0_GT | COND_CMP_FALSE)
->   
->   #define SEEN_FUNC	0x20000000 /* might call external helpers */
-> -#define SEEN_STACK	0x40000000 /* uses BPF stack */
-> -#define SEEN_TAILCALL	0x80000000 /* uses tail calls */
-> +#define SEEN_TAILCALL	0x40000000 /* uses tail calls */
->   
->   #define SEEN_VREG_MASK	0x1ff80000 /* Volatile registers r3-r12 */
->   #define SEEN_NVREG_MASK	0x0003ffff /* Non volatile registers r14-r31 */
-> 
