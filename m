@@ -2,159 +2,183 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E9156C433F5
-	for <bpf@archiver.kernel.org>; Sat, 18 Sep 2021 09:52:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7FBAC433EF
+	for <bpf@archiver.kernel.org>; Sat, 18 Sep 2021 11:53:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D3F5C60FBF
-	for <bpf@archiver.kernel.org>; Sat, 18 Sep 2021 09:52:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B3F3561260
+	for <bpf@archiver.kernel.org>; Sat, 18 Sep 2021 11:53:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244052AbhIRJxr (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 18 Sep 2021 05:53:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54628 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243499AbhIRJxq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 18 Sep 2021 05:53:46 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8B3F36127C;
-        Sat, 18 Sep 2021 09:52:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631958742;
-        bh=chE0EwEyFLVgeK91ZaRsMFr0q3GXSbTjQji/CWReA4o=;
-        h=From:To:Cc:Subject:Date:From;
-        b=F7LsHblk8kibVjke9F4qRsRbuXdKGZhsooGevq7y51p9Dd89TQIU6DVX99TH4ODWS
-         EADfQA9+wiUv22xq472rz/3A0hKodUSVPaheglwLjxUu+YhLXck1WhlOGW/iLYlXoX
-         BZpB+we+smu1ddXVArP0DkOXMOpskmSpFD/4TxhxSJ99BNU6NaKEsTbTuUe3Jbpkc3
-         hX+ir9h6F8WbEucTkj4R1vtRrO+lEQfoEzQYJDMu4jOJDIZDuCSlmcg5sm7qdjEuco
-         U0IA2dfb69JX+H4CpegbS4cjnKMoA9SJC616s5MKd7OrwUoVKyfQPsStX1qJa3gifE
-         F7Tzz5XawncBA==
-Received: by mail.kernel.org with local (Exim 4.94.2)
-        (envelope-from <mchehab@kernel.org>)
-        id 1mRX1A-003b0n-FQ; Sat, 18 Sep 2021 11:52:20 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
+        id S239282AbhIRLzI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 18 Sep 2021 07:55:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:43036 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239264AbhIRLzG (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sat, 18 Sep 2021 07:55:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1631966023;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VnaGaXjjCBEiLXCmjPcYkqMcparcCyC5+vT8sErhl7o=;
+        b=CRqlcx9kfciJf3tjUZjPU4rwqPCDf7TwQaw61kG4SL6lJ3cxk88uu7OaRu35yRqzX4RIzp
+        PKVJBJOp1osMz9k7+PX5+HjPTi3/Man8oZVjn+V4q4DL8iiftTBBD994WbimpxByhjPX+V
+        DL9P37VibPUajsxyrFfgf9XTKVH4nXQ=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-155-8S4nEJA_PkCNzd1uB5XIhw-1; Sat, 18 Sep 2021 07:53:42 -0400
+X-MC-Unique: 8S4nEJA_PkCNzd1uB5XIhw-1
+Received: by mail-ed1-f69.google.com with SMTP id h24-20020a50cdd8000000b003d8005fe2f8so7475812edj.6
+        for <bpf@vger.kernel.org>; Sat, 18 Sep 2021 04:53:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=VnaGaXjjCBEiLXCmjPcYkqMcparcCyC5+vT8sErhl7o=;
+        b=vyMDKA8t0+heFvm6hIip10zGHxzdo66fyXAqXOkUDxjg2IEj2bWjHWJFqJ6GPxlVV1
+         UQOnN6w1TlyTqIAXFtgEdX1DvWCrdeGuKKfxZV1YgnDK/bIvNAdmIaVM5ZQofcMJ76pA
+         rKFScRnYbZBJ97Aj1bl1ZxmO23TVly85DWBlDm9jUkHYdk4qGuZIXSIp0siWYxmGdIne
+         oG9NF3kqIhckrFOPwVyw1651idbA70RjnzWFZZfdKzpMSeRYJlgZRTfNrDe6oiribLMF
+         ZAgr/s3OJgV9cEebTgZgHbYACmqHg0Fzalw97XkEl1O/cIKgfbCNWF2oPn//doCK1PX1
+         NQfQ==
+X-Gm-Message-State: AOAM532nkoVp5AxQRf1KWm2h0GMelZKMCUF9+VY2iGBxKZl2P4kahIIQ
+        M8az8eQhimsR/WJiE1M47Cj+t1MausyxGfzTBhjvuqSi1kfDuP7lMBd70TPJ+QCz/tHLKjcgu/o
+        uvGF0XMtK0LtT
+X-Received: by 2002:a17:906:e20e:: with SMTP id gf14mr17982269ejb.244.1631966019762;
+        Sat, 18 Sep 2021 04:53:39 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwgqhI8Z18WdXPURotA3MO5BAt6pN98WCRAzL6H6OzvHGIh3wQK9uB4CUWrnkbr3wAj1UpyUw==
+X-Received: by 2002:a17:906:e20e:: with SMTP id gf14mr17982161ejb.244.1631966017953;
+        Sat, 18 Sep 2021 04:53:37 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id o23sm4116079eds.75.2021.09.18.04.53.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Sep 2021 04:53:37 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 44D5F18034A; Sat, 18 Sep 2021 13:53:35 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     John Fastabend <john.fastabend@gmail.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     Lorenzo Bianconi <lorenzo@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        Lorenzo Bianconi <lorenzo.bianconi@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, shayagr@amazon.com,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        Tony Luck <tony.luck@intel.com>, Yonghong Song <yhs@fb.com>,
-        bpf@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH v3 0/7] get_abi.pl: Check for missing symbols at the ABI  specs
-Date:   Sat, 18 Sep 2021 11:52:10 +0200
-Message-Id: <cover.1631957565.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.31.1
+        David Ahern <dsahern@kernel.org>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Eelco Chaudron <echaudro@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        Saeed Mahameed <saeed@kernel.org>,
+        "Fijalkowski, Maciej" <maciej.fijalkowski@intel.com>,
+        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
+        tirthendu.sarkar@intel.com
+Subject: Re: [PATCH v14 bpf-next 00/18] mvneta: introduce XDP multi-buffer
+ support
+In-Reply-To: <614511bc3408b_8d5120862@john-XPS-13-9370.notmuch>
+References: <cover.1631289870.git.lorenzo@kernel.org>
+ <20210916095539.4696ae27@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <YUSrWiWh57Ys7UdB@lore-desk>
+ <20210917113310.4be9b586@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <CAADnVQL15NAqbswXedF0r2om8SOiMQE80OSjbyCA56s-B4y8zA@mail.gmail.com>
+ <20210917120053.1ec617c2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <CAADnVQKbrkOxfNoixUx-RLJEWULJLyhqjZ=M_X2cFG_APwNyCg@mail.gmail.com>
+ <614511bc3408b_8d5120862@john-XPS-13-9370.notmuch>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Sat, 18 Sep 2021 13:53:35 +0200
+Message-ID: <8735q25ccg.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi Greg,
+John Fastabend <john.fastabend@gmail.com> writes:
 
-Add a new feature at get_abi.pl to optionally check for existing symbols
-under /sys that won't match a "What:" inside Documentation/ABI.
+> Alexei Starovoitov wrote:
+>> On Fri, Sep 17, 2021 at 12:00 PM Jakub Kicinski <kuba@kernel.org> wrote:
+>> >
+>> > On Fri, 17 Sep 2021 11:43:07 -0700 Alexei Starovoitov wrote:
+>> > > > If bpf_xdp_load_bytes() / bpf_xdp_store_bytes() works for most we
+>> > > > can start with that. In all honesty I don't know what the exact
+>> > > > use cases for looking at data are, either. I'm primarily worried
+>> > > > about exposing the kernel internals too early.
+>> > >
+>> > > I don't mind the xdp equivalent of skb_load_bytes,
+>> > > but skb_header_pointer() idea is superior.
+>> > > When we did xdp with data/data_end there was no refine_retval_range
+>> > > concept in the verifier (iirc or we just missed that opportunity).
+>> > > We'd need something more advanced: a pointer with valid range
+>> > > refined by input argument 'len' or NULL.
+>> > > The verifier doesn't have such thing yet, but it fits as a combination of
+>> > > value_or_null plus refine_retval_range.
+>> > > The bpf_xdp_header_pointer() and bpf_skb_header_pointer()
+>> > > would probably simplify bpf programs as well.
+>> > > There would be no need to deal with data/data_end.
+>> >
+>> > What are your thoughts on inlining? Can we inline the common case
+>> > of the header being in the "head"? Otherwise data/end comparisons
+>> > would be faster.
+>> 
+>> Yeah. It can be inlined by the verifier.
+>> It would still look like a call from bpf prog pov with llvm doing spill/fill
+>> of scratched regs, but it's minor.
+>> 
+>> Also we can use the same bpf_header_pointer(ctx, ...)
+>> helper for both xdp and skb program types. They will have different
+>> implementation underneath, but this might make possible writing bpf
+>> programs that could work in both xdp and skb context.
+>> I believe cilium has fancy macros to achieve that.
+>
+> Hi,
+>
+> First a header_pointer() logic that works across skb and xdp seems like
+> a great idea to me. I wonder though if instead of doing the copy
+> into a new buffer for offset past the initial frag like what is done in
+> skb_header_pointer could we just walk the frags and point at the new offset.
+> This is what we do on the socket side with bpf_msg_pull-data() for example.
+> For XDP it should also work. The skb case would depend on clone state
+> and things so might be a bit more tricky there.
+>
+> This has the advantage of only doing the copy when its necessary. This
+> can be useful for example when reading the tail of an IPsec packet. With
+> blind copy most packets will get hit with a copy. By just writing the
+> pkt->data and pkt->data_end we can avoid this case.
+>
+> Lorenz originally implemented something similar earlier and we had the
+> refine retval logic. It failed on no-alu32 for some reason we could
+> revisit. I didn't mind the current help returning with data pointer set
+> to the start of the frag so we stopped following up on it.
+>
+> I agree though the current implementation puts a lot on the BPF writer.
+> So getting both cases covered, I want to take pains in my BPF prog
+> to avoid copies and I just want these bytes handled behind a single
+> helper seems good to me.
 
-Such feature is very useful to detect missing documentation for ABI.
+I'm OK with a bpf_header_pointer()-type helper - I quite like the
+in-kernel version of this for SKBs, so replicating it as a BPF helper
+would be great. But I'm a little worried about taking a performance hit.
 
-This series brings a major speedup, plus it fixes a few border cases when
-matching regexes that end with a ".*" or \d+.
+I.e., if you do:
 
-patch 1 changes get_abi.pl logic to handle multiple What: lines, in
-order to make the script more robust;
+ptr = bpf_header_pointer(pkt, offset, len, stack_ptr)
+*ptr = xxx;
 
-patch 2 adds the basic logic. It runs really quicky (up to 2
-seconds), but it doesn't use sysfs softlinks.
+then, if the helper ended up copying the data into the stack pointer,
+you didn't actually change anything in the packet, so you need to do a
+writeback.
 
-Patch 3 adds support for parsing softlinks. It makes the script a
-lot slower, making it take a couple of minutes to process the entire
-sysfs files. It could be optimized in the future by using a graph,
-but, for now, let's keep it simple.
+Jakub suggested up-thread that this should be done with some kind of
+flush() helper. But you don't know whether the header_pointer()-helper
+copied the data, so you always need to call the flush() helper, which
+will incur overhead. If the verifier can in-line the helpers that will
+lower it, but will it be enough to make it negligible?
 
-Patch 4 adds an optional parameter to allow filtering the results
-using a regex given by the user. When this parameter is used
-(which should be the normal usecase), it will only try to find softlinks
-if the sysfs node matches a regex.
-
-Patch 5 improves the report by avoiding it to ignore What: that
-ends with a wildcard.
-
-Patch 6 is a minor speedup.  On a Dell Precision 5820, after patch 6, 
-results are:
-
-	$ time ./scripts/get_abi.pl undefined |sort >undefined && cat undefined| perl -ne 'print "$1\n" if (m#.*/(\S+) not found#)'|sort|uniq -c|sort -nr >undefined_symbols; wc -l undefined; wc -l undefined_symbols
-
-	real	2m35.563s
-	user	2m34.346s
-	sys	0m1.220s
-	7595 undefined
-	896 undefined_symbols
-
-Patch 7 makes a *huge* speedup: it basically switches a linear O(n^3)
-search for links by a logic which handle symlinks using BFS. It
-also addresses a border case that was making 'msi-irqs/\d+' regex to
-be misparsed. 
-
-After patch 7, it is 11 times faster:
-
-	$ time ./scripts/get_abi.pl undefined |sort >undefined && cat undefined| perl -ne 'print "$1\n" if (m#.*/(\S+) not found#)'|sort|uniq -c|sort -nr >undefined_symbols; wc -l undefined; wc -l undefined_symbols
-
-	real	0m14.137s
-	user	0m12.795s
-	sys	0m1.348s
-	7030 undefined
-	794 undefined_symbols
-
-(the difference on the number of undefined symbols are due to the fix for
-it to properly handle 'msi-irqs/\d+' regex)
-
--
-
-While this series is independent from Documentation/ABI changes, it
-works best when applied from this tree, which also contain ABI fixes
-and a couple of additions of frequent missed symbols on my machine:
-
-    https://git.kernel.org/pub/scm/linux/kernel/git/mchehab/devel.git/log/?h=get_undefined_abi_v3
-
--
-
-v3:
-  - Fixed parse issues with 'msi-irqs/\d+' regex;
-  - Added a BFS graph logic to solve symlinks at sysfs;
-
-v2:
-  - multiple What: for the same description are now properly handled;
-  - some special cases are now better handled;
-  - some bugs got fixed.
-
-The full series, with the ABI changes and some ABI improvements can be found
-at:
-	https://git.kernel.org/pub/scm/linux/kernel/git/mchehab/devel.git/commit/?h=get_undefined&id=1838d8fb149170f6c19feda0645d6c3157f46f4f
-
-
-
-Mauro Carvalho Chehab (7):
-  scripts: get_abi.pl: Better handle multiple What parameters
-  scripts: get_abi.pl: Check for missing symbols at the ABI specs
-  scripts: get_abi.pl: detect softlinks
-  scripts: get_abi.pl: add an option to filter undefined results
-  scripts: get_abi.pl: don't skip what that ends with wildcards
-  scripts: get_abi.pl: Ignore fs/cgroup sysfs nodes earlier
-  scripts: get_abi.pl: add a graph to speedup the undefined algorithm
-
- scripts/get_abi.pl | 327 ++++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 320 insertions(+), 7 deletions(-)
-
--- 
-2.31.1
-
+-Toke
 
