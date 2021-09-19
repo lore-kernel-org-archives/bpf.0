@@ -2,129 +2,216 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-17.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FB50C433FE
-	for <bpf@archiver.kernel.org>; Sun, 19 Sep 2021 12:56:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 99873C433F5
+	for <bpf@archiver.kernel.org>; Sun, 19 Sep 2021 17:31:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 440FD60FC2
-	for <bpf@archiver.kernel.org>; Sun, 19 Sep 2021 12:56:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 767A46101C
+	for <bpf@archiver.kernel.org>; Sun, 19 Sep 2021 17:31:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232838AbhISM6Q (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 19 Sep 2021 08:58:16 -0400
-Received: from mout.perfora.net ([74.208.4.194]:40169 "EHLO mout.perfora.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232394AbhISM6H (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 19 Sep 2021 08:58:07 -0400
-Received: from localhost.localdomain ([81.221.236.183]) by mrelay.perfora.net
- (mreueus004 [74.208.5.2]) with ESMTPSA (Nemesis) id 1Mk0iC-1nCFXq27NA-00kNtD;
- Sun, 19 Sep 2021 14:55:51 +0200
-From:   Marcel Ziswiler <marcel@ziswiler.com>
-To:     linux-arm-kernel@lists.infradead.org
-List-Id: <soc.lore.kernel.org>
-Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Fabio Estevam <festevam@gmail.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Li Yang <leoyang.li@nxp.com>, Marek Vasut <marex@denx.de>,
-        Martin KaFai Lau <kafai@fb.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Olof Johansson <olof@lixom.net>,
-        Otavio Salvador <otavio@ossystems.com.br>,
-        Pascal Zimmermann <pzimmermann@dh-electronics.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        Stefan Riedmueller <s.riedmueller@phytec.de>,
-        Tim Harvey <tharvey@gateworks.com>, Yonghong Song <yhs@fb.com>,
-        bpf@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        soc@kernel.org
-Subject: [PATCH v3 0/9] ARM: prepare and add colibri imx6ull 1gb (emmc) support
-Date:   Sun, 19 Sep 2021 14:55:27 +0200
-Message-Id: <20210919125536.117743-1-marcel@ziswiler.com>
-X-Mailer: git-send-email 2.26.2
+        id S230387AbhISRdM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 19 Sep 2021 13:33:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56046 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230333AbhISRdM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 19 Sep 2021 13:33:12 -0400
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35FFAC061574
+        for <bpf@vger.kernel.org>; Sun, 19 Sep 2021 10:31:47 -0700 (PDT)
+Received: by mail-qk1-x72a.google.com with SMTP id p4so34723495qki.3
+        for <bpf@vger.kernel.org>; Sun, 19 Sep 2021 10:31:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rYUbarQJT0yTtnfJmEi1rpA5dUBOkR6SLDGUXd8qF+I=;
+        b=iH9qjCPTgMzYp3h1RRelF6oThGdbXyJkObO4jtGOT0fb42RhnMj0+tkyYIJk4RK8f4
+         7mtm7cticclFiB+cGnV4pTuTu5gKG8B6UJg8cf8VvlzLfR38Em2yzyNnQV2+UNzuX8fc
+         xlP8DbrCjB904iDOC6R10iHMuOw4cNc4Yx8B+q2kcLsjFP2mSt3rTjN5U6N8DAvn1sDJ
+         oGvMflMKlNSCA79YbJ+jWBSlFbSHD0pZCpt6sc6BSr++VCqTqskH4NEpe+11CJZn4CM/
+         1we0fSOY2mkt+UWQ7mbjLdfcbqvTw7jXyykrUhukl8V4zQ2hyJk4ZmXlS7lvASWXT1a8
+         Ct2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rYUbarQJT0yTtnfJmEi1rpA5dUBOkR6SLDGUXd8qF+I=;
+        b=NdZuee1SZJFV3RmQCm6sVNhzLpQNNJTxbM7diQvy9PGsLBBjfaM8Butt9YG+1v4QlU
+         BD0WvsmfuUund17zEV1zVGIA+QYr5VZp7lyxyOCktceAeMOovQJj7dEHQDx4Gqckr10a
+         AedcphndAcXq9EbNMQ81crsdyKEeN6t3gWKKQefSoCeSecnAf2E52cUCe4a4xGNxfg1h
+         7h9Jway1mEL1/Q5aL7AoSE9Q6p/hhkBdBOer9XDNW/U0X0AOXgF6iNsQzC6L/oyrKNsk
+         /l555h08lD/m09OyhB7K3mgdfipmprDo3e2f6pJVZ1hIwUx5n/u5LpwhC4JpzLMdZHII
+         mcqA==
+X-Gm-Message-State: AOAM531AAkswkHWOHjQmMEPf0NjsBNrJuDRGkXDY8E67jSldnjOAvfMY
+        S9eOIJ02fm9CxVozgS1aJUW3QiOoHNB9B/ppsXo=
+X-Google-Smtp-Source: ABdhPJwUcBuEQmEoliwQQeAKtom0Xt7Uk5RdpcB3z5Q9HV8rTWQKKUlcu9EHNVcdXlDpe2hXhIE3MNECLodf+MtMYhc=
+X-Received: by 2002:a05:6902:724:: with SMTP id l4mr24139958ybt.433.1632072706308;
+ Sun, 19 Sep 2021 10:31:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:yuHgL3suxeZmdwsdlRvLWnSFvJn72p/B2Q+ZQMEX0ze4w1sIYue
- y5CCiA2Zjt4hqEwc22z/ciodKapEGTsgjSZShBuM/nYLBbNnaXur+tYDPaHdgJvqz8WYdZx
- HRtEiZYYcRkwUx+8TzP8GU0gXZmwORQYNE4dom17cic0jOMbzX+lEu3b9EqtdIeg5a3ap2p
- U+nLna7CUpHhSTMhHZiLw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:4pLuSYrx7r0=:D+0o56dgmtQTlUwxMTBXpY
- ej4Vj3DrdFy5Bhcy4iFBN7UFMLXF9p1ZktceuqBkqPU19t5/ppDxw9gyEH6QLAEYREb98lxUa
- cyDFqVcrrDDyaMOEOEfX0a1BaRY/Dvif7lLLC1YjDCGVkmcbf/gblePOSIrZRxufHz2L2evAu
- JflJaNUyw0cdADJQIW972jMipMhMsk64sb+VWu6ixoqrL7detfBONhFMumoDD8FAb4NdksdIg
- V2zRLtd+Zhy+pzIqjNbmqOAFy0Qn6Vq7bcJ1fE9m6ChhfLIIYjB7WPCHc659wZfI8pSNHIKaj
- XPL97aaQ5Pp/9Zdxeg6yjtVYD/ydii98KQcTrexBTRG3/Qx1MkfJFI9oEgHKRzAtl5mH56TiN
- E0JHZ0PpwGuX4NEgVFtPkrPpVGR58o61rWrNkDFG7DQz4Q3kJ5v5a2ASsKrCGvbHebz9FEZ7K
- Ynxh0oxZUaS1Dg9edMivS/pbpQeQAw1RBmIrFfAmUXyJZaKCcrBfWsUiqMnRWwaBE6xXydv4p
- Na/W/W1k2c2zKsqAD+6N6a2EurymF55/h1qcC5c6HJzGKR/jY53vwnN7q9bZ2lGp/IvIV8jOD
- j5nYHpcMmhSSecsD65++pwq+rcehlTMi+jpQTh6wMPu9Wn5TynHXzDDL8nQY0s/7oh53/AI8i
- Fs4wcOjae1pFtdWUXTLtInwlRKrBM+72kCU/1VovrGBb1asGARcsapPh6z9Gv9XIx5epPbwmg
- PNPt8pT4f8FEOVkKeA/Hq235+0pNcsbo+2OqGg==
+References: <20210917061020.821711-1-andrii@kernel.org> <20210917061020.821711-9-andrii@kernel.org>
+ <YUTP20fF5wx0LbxQ@google.com> <CAEf4BzYV1YpYojN4STU=wB9G19n_JdXoMsxFeSkM43GeS6ATMg@mail.gmail.com>
+ <YUUgj5kR1XA48Z3n@google.com> <CAEf4BzYg3Tdv3KjmwNYu=81ig=KeLOGvqA+zH_nC_VmJ3M6hjg@mail.gmail.com>
+ <YUUnHw3OjnTPD8Ii@google.com>
+In-Reply-To: <YUUnHw3OjnTPD8Ii@google.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Sun, 19 Sep 2021 10:31:35 -0700
+Message-ID: <CAEf4BzaPzryfEuRRLNvu2r8OcY0Noc7bbyacfZwRHzr+w0Ca4Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 8/9] libbpf: add opt-in strict BPF program
+ section name handling logic
+To:     Stanislav Fomichev <sdf@google.com>
+Cc:     Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+On Fri, Sep 17, 2021 at 4:39 PM <sdf@google.com> wrote:
+>
+> On 09/17, Andrii Nakryiko wrote:
+> > On Fri, Sep 17, 2021 at 4:11 PM <sdf@google.com> wrote:
+> > >
+> > > On 09/17, Andrii Nakryiko wrote:
+> > > > On Fri, Sep 17, 2021 at 10:26 AM <sdf@google.com> wrote:
+> > > > >
+> > > > > On 09/16, Andrii Nakryiko wrote:
+> > > > > > Implement strict ELF section name handling for BPF programs. It
+> > > > utilizes
+> > > > > > `libbpf_set_strict_mode()` framework and adds new flag:
+> > > > > > LIBBPF_STRICT_SEC_NAME.
+> > > > >
+> > > > > > If this flag is set, libbpf will enforce exact section name
+> > matching
+> > > > for
+> > > > > > a lot of program types that previously allowed just partial prefix
+> > > > > > match. E.g., if previously SEC("xdp_whatever_i_want") was
+> > allowed, now
+> > > > > > in strict mode only SEC("xdp") will be accepted, which makes
+> > SEC("")
+> > > > > > definitions cleaner and more structured. SEC() now won't be used
+> > as
+> > > > yet
+> > > > > > another way to uniquely encode BPF program identifier (for that
+> > > > > > C function name is better and is guaranteed to be unique within
+> > > > > > bpf_object). Now SEC() is strictly BPF program type and,
+> > depending on
+> > > > > > program type, extra load/attach parameter specification.
+> > > > >
+> > > > > > Libbpf completely supports multiple BPF programs in the same ELF
+> > > > > > section, so multiple BPF programs of the same type/specification
+> > > > easily
+> > > > > > co-exist together within the same bpf_object scope.
+> > > > >
+> > > > > > Additionally, a new (for now internal) convention is introduced:
+> > > > section
+> > > > > > name that can be a stand-alone exact BPF program type
+> > specificator,
+> > > > but
+> > > > > > also could have extra parameters after '/' delimiter. An example
+> > of
+> > > > such
+> > > > > > section is "struct_ops", which can be specified by itself, but
+> > also
+> > > > > > allows to specify the intended operation to be attached to, e.g.,
+> > > > > > "struct_ops/dctcp_init". Note, that "struct_ops_some_op" is not
+> > > > allowed.
+> > > > > > Such section definition is specified as "struct_ops+".
+> > > > >
+> > > > > > This change is part of libbpf 1.0 effort ([0], [1]).
+> > > > >
+> > > > > >    [0] Closes: https://github.com/libbpf/libbpf/issues/271
+> > > > > >    [1]
+> > > > > >
+> > > >
+> > https://github.com/libbpf/libbpf/wiki/Libbpf:-the-road-to-v1.0#stricter-and-more-uniform-bpf-program-section-name-sec-handling
+> > > > >
+> > > > > > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> > > > > > ---
+> > > > > >   tools/lib/bpf/libbpf.c        | 135
+> > > > ++++++++++++++++++++++------------
+> > > > > >   tools/lib/bpf/libbpf_legacy.h |   9 +++
+> > > > > >   2 files changed, 98 insertions(+), 46 deletions(-)
+> > > > >
+>
+> > [...]
+>
+> > > > > > +     /*
+> > > > > > +      * Enforce strict BPF program section (SEC()) names.
+> > > > > > +      * E.g., while prefiously SEC("xdp_whatever") or
+> > > > SEC("perf_event_blah")
+> > > > > > were
+> > > > > > +      * allowed, with LIBBPF_STRICT_SEC_PREFIX this will become
+> > > > > > +      * unrecognized by libbpf and would have to be just
+> > SEC("xdp")
+> > > > and
+> > > > > > +      * SEC("xdp") and SEC("perf_event").
+> > > > > > +      */
+> > > > > > +     LIBBPF_STRICT_SEC_NAME = 0x04,
+> > > > >
+> > > > > To clarify: I'm assuming, as discussed, we'll still support that
+> > old,
+> > > > > non-conforming naming in libbpf 1.0, right? It just won't be enabled
+> > > > > by default.
+> > >
+> > > > No, we won't. All those opt-in strict flags will be turned on
+> > > > permanently in libbpf 1.0. But I'm adding an ability to provide custom
+> > > > callbacks to handle whatever (reasonable) BPF program section names.
+> > > > So if someone has a real important case needing custom handling, it's
+> > > > not a big problem to implement that logic on their own. If someone is
+> > > > just resisting making their code conforming, well... Stay on the old
+> > > > fixed version, write a callback, or just do the mechanical rename, how
+> > > > hard can that be? We are dropping bpf_program__find_program_by_title()
+> > > > in libbpf 1.0, that API is meaningless with multiple programs per
+> > > > section, so you'd have to update your logic to either skeleton or
+> > > > bpf_program__find_program_by_name() anyways.
+> > >
+> > > I see. I was assuming some of them would stay, iirc Toke also was asking
+> > > for this one to stay (or was it the old maps format?). FTR, I'm not
+> > > resisting any changes, I'm willing to invest some time to update our
+> > > callers, just trying to understand what my options are. We do have some
+> > > cases where we depend on the section names, so maybe I should just
+> > > switch from bpf_program__title to bpf_program__name (and do appropriate
+> > > renaming).
+>
+> > Switching to name over title (section name) is a good idea for sure.
+>
+> > >
+> > > RE skeleton: I'm not too eager to adopt it, I'll wait for version 2 :-)
+>
+> > Honest curiosity, what's wrong with the current version of skeleton?
+> > Can you please expand on this?
+>
+> Nothing wrong, I'm just joking, but I guess we went with a different path
+> long time ago where we ship .o more-or-less independently and it's hard to
+> adopt skeletons at this point (where .o is bundled with the userspace part).
+> We also ship several .o's compiled for different kernel versions because
+> prior to BTF we didn't have a good way todo '#ifdef KERNEL_X_Y_Z' and
+> some of that still lives on (but probably should die eventually).
 
+We also have some applications with "old model", though they've used
+their custom embedding logic to not distribute separate .o files. We
+are working on switching them to BPF skeletons this half, though. Note
+that BPF skeleton generation logic recently added a way to get raw ELF
+bytes without necessarily instantiating the skeleton itself (see
+<xxx>__elf_bytes()). There are also plans to add small C++
+constructor/destructor shims to make it harder for C++ apps to miss
+the need to destroy the skeleton, which helps with BPF skeleton
+adoption in C++ applications.
 
-Clean-up imx_v6_v7_defconfig and then add support for the new Colibri
-iMX6ULL 1GB (eMMC) which builds on the success of the existing Colibri
-iMX6ULL SKUs using raw NAND but replaces this with more RAM (1 GB) and
-an eMMC (4 GB).
+>
+> Maybe we should do some talk on some conference on the way we ship
+> bpf to the fleet. Again, it's not like we don't like to change anything
+> here, but there is some existing "legacy" infra that has some
+> assumptions that might not easy to change in a short period of time.
 
-Changes in v3:
-- Add Fabio's reviewed-by. Thanks!
-- Added fixes tag as pointed out by Stefan and Fabio. Thanks!
-- Add Rob's ack. Thanks!
-
-Changes in v2:
-- New patch cleaning-up dt-bindings documentation.
-- Fix indentation.
-- Use latest agreed upon SPDX-License-Identifier GPL-2.0+ OR MIT.
-- Drop AG in our copyright statement as recommended by our legal.
-- New patch documenting dt-bindings.
-
-Marcel Ziswiler (8):
-  ARM: imx_v6_v7_defconfig: enable mtd physmap
-  ARM: imx_v6_v7_defconfig: enable fb
-  ARM: imx_v6_v7_defconfig: change snd soc tlv320aic3x to i2c variant
-  ARM: imx_v6_v7_defconfig: rebuild default configuration
-  ARM: imx_v6_v7_defconfig: build imx sdma driver as module
-  ARM: imx_v6_v7_defconfig: enable bpf syscall and cgroup bpf
-  dt-bindings: arm: fsl: clean-up all toradex boards/modules
-  dt-bindings: arm: fsl: add toradex,colibri-imx6ull-emmc
-
-Max Krummenacher (1):
-  ARM: dts: colibri-imx6ull-emmc: add device tree
-
- .../devicetree/bindings/arm/fsl.yaml          |  87 ++++----
- arch/arm/boot/dts/Makefile                    |   1 +
- .../boot/dts/imx6ull-colibri-emmc-eval-v3.dts |  17 ++
- .../dts/imx6ull-colibri-emmc-nonwifi.dtsi     | 185 ++++++++++++++++++
- arch/arm/boot/dts/imx6ull-colibri.dtsi        |  32 ++-
- arch/arm/configs/imx_v6_v7_defconfig          |  46 ++---
- 6 files changed, 299 insertions(+), 69 deletions(-)
- create mode 100644 arch/arm/boot/dts/imx6ull-colibri-emmc-eval-v3.dts
- create mode 100644 arch/arm/boot/dts/imx6ull-colibri-emmc-nonwifi.dtsi
-
--- 
-2.26.2
-
+Sure, some sort of lighting talk would be interesting. The problem is
+that there needs to be a persistent and energetic initiative to break
+all assumptions and switch to newer (arguably, better) ways. Doesn't
+happen by itself ;)
