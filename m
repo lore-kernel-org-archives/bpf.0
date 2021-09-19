@@ -2,75 +2,110 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 483BAC433FE
-	for <bpf@archiver.kernel.org>; Sun, 19 Sep 2021 11:50:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98284C433F5
+	for <bpf@archiver.kernel.org>; Sun, 19 Sep 2021 12:56:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 265406127B
-	for <bpf@archiver.kernel.org>; Sun, 19 Sep 2021 11:50:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 78BDB610A3
+	for <bpf@archiver.kernel.org>; Sun, 19 Sep 2021 12:56:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231516AbhISLvd (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 19 Sep 2021 07:51:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56024 "EHLO mail.kernel.org"
+        id S229961AbhISM6Q (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 19 Sep 2021 08:58:16 -0400
+Received: from mout.perfora.net ([74.208.4.196]:38849 "EHLO mout.perfora.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231466AbhISLvc (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 19 Sep 2021 07:51:32 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 6284C61268;
-        Sun, 19 Sep 2021 11:50:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632052207;
-        bh=ComAMMGuJQJEhC0LzKm5dX7oKih/blEy79qTprwCFho=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=bthcNXbXUrYiaQDbBmjfxW9rz7cC1RcHYyQdq+C5dPLUxwzlUAjMCIWIQyjyjzz5y
-         ru+nLeBGMQwkbJtm79/aTCUk+AS5vjkh9EaIqFJAvcspXArYRvN+PLl5+JJpVBjNJ3
-         8fND+TFcfLlb+MaJ0Wd0di+9LQ1iQgP2i2TMyH8Bg97Ibc5m3RfRyouw8WrzhnuyLl
-         6AHbI7JoYF35C+AoOnPx1uLcK4C9fBG3I/bM0FGaiXGtgjmgE2DzMXkejvOakSjk9A
-         u+fP+p0yZRY0koAa7jr/iIcsoVrHKsSbA1Xy34mWQG3O0Vz4lCQsHlQMBkHK1HZupq
-         QPqQxvwRvgRuQ==
-Content-Type: text/plain; charset="utf-8"
+        id S232657AbhISM6G (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 19 Sep 2021 08:58:06 -0400
+Received: from localhost.localdomain ([81.221.236.183]) by mrelay.perfora.net
+ (mreueus004 [74.208.5.2]) with ESMTPSA (Nemesis) id 1MeTLU-1n0BFb0iWK-00aRCp;
+ Sun, 19 Sep 2021 14:56:07 +0200
+From:   Marcel Ziswiler <marcel@ziswiler.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Martin KaFai Lau <kafai@fb.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pascal Zimmermann <pzimmermann@dh-electronics.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH v3 6/9] ARM: imx_v6_v7_defconfig: enable bpf syscall and cgroup bpf
+Date:   Sun, 19 Sep 2021 14:55:33 +0200
+Message-Id: <20210919125536.117743-7-marcel@ziswiler.com>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20210919125536.117743-1-marcel@ziswiler.com>
+References: <20210919125536.117743-1-marcel@ziswiler.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] virtio_net: use netdev_warn_once to output warn when
- without enough queues
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163205220732.27306.11268526915086415647.git-patchwork-notify@kernel.org>
-Date:   Sun, 19 Sep 2021 11:50:07 +0000
-References: <20210918060615.8508-1-xuanzhuo@linux.alibaba.com>
-In-Reply-To: <20210918060615.8508-1-xuanzhuo@linux.alibaba.com>
-To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Cc:     netdev@vger.kernel.org, mst@redhat.com, jasowang@redhat.com,
-        davem@davemloft.net, kuba@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
-        virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
+X-Provags-ID: V03:K1:+VBnRis98zcdV6WVmH3U6Ds8PFwpf7Oa04080dUQcU2SoolRPbK
+ SBs4+ojGeBqo4XnJfm0B5x/x3KKktm1s7e8X8Q5q/3wT2A1pCMWDb4iuy3nWz1jwWzFyFCm
+ 4jXNqisBRjhplwLzBJLzpjL72fQP+Q8HS4N1aX2aekh1bGJiMe36txRvbKimZ2TYueuj5nO
+ QXLlcj0A9F6/PKBjwg9jg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:v1wr9QEbVnU=:tquITxXuvT4ruWgyYvyhnX
+ l4JWoVUSBRleA96u8Am+Rpso/bnbh/10jkvEL7P5p9y4px/UhoOoT24DnzXM+Sm7+eLeFffDS
+ 2jxTEmf6qyWMvdIPC2qoa9a1LBpJ6YhYFW/0qZfcSSnicDYT4/AYvGg/FTgTuv97uJn3xZ88b
+ jr0qb1PqBdAYUNTNibWPySxsIck3EGYBbg6F2Yui85ZMh+uWRZm5DM7raCvU0j39diIjwHvLd
+ anaMoxVF0SEtNG6P26OO/h5EwNGPAKo61Midw1oVfe9jXTu0i6jfuFOAubE8sdg+wmDAXTBXx
+ N7RdqJGbvbh1vXOwgLwgumSJggRnhECQ4BLBwl8TcJyOSJAfUJQ8HQ03qWoRgzlxpRBihAHvU
+ aOqqOJsel/z3RWHWtEsGSahe3Iiz0quXr29nGzYWGGZu6wTCVZavIVPwBEyUkU4dzYq+oSvJs
+ mWBbAUxW43Wi0aHMQ5YxPyXqEUaYesAw1uJXCXxdFdGsLhgoxxHV6GpPpa8od9bNhqr1BZDhs
+ vkDwGdzoz9MTqNkHtvne8+Fx9HiMQQrTEdN/v0IqZW3RY+WboTxVTNEz3+rmSllmRJYvLa4CI
+ +nAElaSFrfVKYTCjUWn07aTnchEGWbxiA0ZsCTZVuo3wuRviiAsLv08KtiyLw4PvM4VkfYiFW
+ U4l7kMxYQm5zLYkXSDT1T/BtnBNV6VEDVedjn2bqZopmN8omwg7r9i9wQD6SGz0ISPefuWue8
+ mzTamRoRRd3akTCUm1FI8GI9VNlC4Jp1ha5qdw==
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
+From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-This patch was applied to netdev/net-next.git (refs/heads/master):
+Enable CONFIG_BPF_SYSCALL and CONFIG_CGROUP_BPF to allow for systemd
+interoperability. This avoids the following failure on boot:
 
-On Sat, 18 Sep 2021 14:06:15 +0800 you wrote:
-> This warning is output when virtnet does not have enough queues, but it
-> only needs to be printed once to inform the user of this situation. It
-> is not necessary to print it every time. If the user loads xdp
-> frequently, this log appears too much.
-> 
-> Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-> 
-> [...]
+[   10.615914] systemd[1]: system-getty.slice: unit configures an IP
+ firewall, but the local system does not support BPF/cgroup firewalling.
 
-Here is the summary with links:
-  - [net-next] virtio_net: use netdev_warn_once to output warn when without enough queues
-    https://git.kernel.org/netdev/net-next/c/9ce4e3d6d856
+Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Reviewed-by: Fabio Estevam <festevam@gmail.com>
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+---
 
+Changes in v3:
+- Add Fabio's reviewed-by. Thanks!
+
+ arch/arm/configs/imx_v6_v7_defconfig | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/arm/configs/imx_v6_v7_defconfig b/arch/arm/configs/imx_v6_v7_defconfig
+index c0008b7faf2ce..3e58c76763563 100644
+--- a/arch/arm/configs/imx_v6_v7_defconfig
++++ b/arch/arm/configs/imx_v6_v7_defconfig
+@@ -2,11 +2,13 @@ CONFIG_KERNEL_LZO=y
+ CONFIG_SYSVIPC=y
+ CONFIG_NO_HZ=y
+ CONFIG_HIGH_RES_TIMERS=y
++CONFIG_BPF_SYSCALL=y
+ CONFIG_PREEMPT_VOLUNTARY=y
+ CONFIG_IKCONFIG=y
+ CONFIG_IKCONFIG_PROC=y
+ CONFIG_LOG_BUF_SHIFT=18
+ CONFIG_CGROUPS=y
++CONFIG_CGROUP_BPF=y
+ CONFIG_RELAY=y
+ CONFIG_BLK_DEV_INITRD=y
+ CONFIG_EXPERT=y
+-- 
+2.26.2
 
