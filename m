@@ -2,130 +2,118 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 59CBCC4332F
-	for <bpf@archiver.kernel.org>; Mon, 20 Sep 2021 15:11:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7788CC433EF
+	for <bpf@archiver.kernel.org>; Mon, 20 Sep 2021 15:38:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4264160ED7
-	for <bpf@archiver.kernel.org>; Mon, 20 Sep 2021 15:11:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5D9AB610A3
+	for <bpf@archiver.kernel.org>; Mon, 20 Sep 2021 15:38:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241299AbhITPNK (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 20 Sep 2021 11:13:10 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:21194 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241263AbhITPNF (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 20 Sep 2021 11:13:05 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18KALalf031423
-        for <bpf@vger.kernel.org>; Mon, 20 Sep 2021 08:11:39 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=tSHVhq/Ytx9xEbm3hRA0+Mli0C2HqF26tqgeTIebAL8=;
- b=iKT+xALjJKpRwvv9YTrQU62QZUWnPhqfmbOAaQupnsbZxNPnzCjNuqLQygYRHAiO/bkE
- EHDPkesWcagq0YbIxeI5Mpf3zeiIvLYuBifflnrhUI2vV9Q6++t8Kt3PBRIDqbi3B339
- XK5wMOHlhJpXX5EmRGga0M8z2x3nzh0s9Lo= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 3b6f2rbvhu-12
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 20 Sep 2021 08:11:39 -0700
-Received: from intmgw001.37.frc1.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Mon, 20 Sep 2021 08:11:35 -0700
-Received: by devbig030.frc3.facebook.com (Postfix, from userid 158236)
-        id E36A16E18CD3; Mon, 20 Sep 2021 08:11:27 -0700 (PDT)
-From:   Dave Marchevsky <davemarchevsky@fb.com>
-To:     <bpf@vger.kernel.org>
-CC:     <netdev@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        id S231645AbhITPjZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 20 Sep 2021 11:39:25 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:60066 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237313AbhITPjZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 20 Sep 2021 11:39:25 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 18KFbXDV047343;
+        Mon, 20 Sep 2021 10:37:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1632152253;
+        bh=m8/oyTnbOL/hoQNXxgC/ec52PrS/GRlMDgPzmOaD8mg=;
+        h=From:To:CC:Subject:Date;
+        b=NJeYQd1srPBz066/+cvmDF9qcxhqHM9cCt6Vup4db+8ndZdj7k2RVzSbIOngOKea1
+         bn46E+8Xp/wiHFVhXCpId4BE2nNiczq/p8Oqtxionhl1vB2yMuyIdrZ/JihUy8oe2G
+         dSUEnqdww0RAu3lv6qJn6z7ePHMNAr+di04+W/+0=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 18KFbW2N012097
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 20 Sep 2021 10:37:32 -0500
+Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 20
+ Sep 2021 10:37:32 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Mon, 20 Sep 2021 10:37:32 -0500
+Received: from gsaswath-HP-ProBook-640-G5.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 18KFbPJi104098;
+        Mon, 20 Sep 2021 10:37:26 -0500
+From:   Aswath Govindraju <a-govindraju@ti.com>
+CC:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Lokesh Vutla <lokeshvutla@ti.com>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Yonghong Song <yhs@fb.com>,
-        Dave Marchevsky <davemarchevsky@fb.com>
-Subject: [RFC PATCH bpf-next 2/2] selftests/bpf: add verif_stats test
-Date:   Mon, 20 Sep 2021 08:11:12 -0700
-Message-ID: <20210920151112.3770991-3-davemarchevsky@fb.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210920151112.3770991-1-davemarchevsky@fb.com>
-References: <20210920151112.3770991-1-davemarchevsky@fb.com>
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
+Subject: [PATCH v3 0/6] CAN: Add support for CAN in AM65,J721e and AM64
+Date:   Mon, 20 Sep 2021 21:07:17 +0530
+Message-ID: <20210920153724.20203-1-a-govindraju@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
 Content-Type: text/plain
-X-FB-Source: Intern
-X-Proofpoint-ORIG-GUID: ofKQYWw1AnMyp2uVQCk-T5lJBaR_4hHv
-X-Proofpoint-GUID: ofKQYWw1AnMyp2uVQCk-T5lJBaR_4hHv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
- definitions=2021-09-20_07,2021-09-20_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 suspectscore=0 mlxlogscore=746
- impostorscore=0 priorityscore=1501 bulkscore=0 adultscore=0 malwarescore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2109030001 definitions=main-2109200098
-X-FB-Internal: deliver
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-verif_stats fields were added to response of bpf_obj_get_info_by_fd
-call on a prog. Confirm that they're being populated by loading a simple
-program and asking for its info.
+The following series of patches add support for CAN in SoC's AM65, J721e
+and AM64.
 
-Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
----
- .../selftests/bpf/prog_tests/verif_stats.c    | 34 +++++++++++++++++++
- 1 file changed, 34 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/verif_stats.c
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/verif_stats.c b/tools=
-/testing/selftests/bpf/prog_tests/verif_stats.c
-new file mode 100644
-index 000000000000..7bd9ccb0efb8
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/verif_stats.c
-@@ -0,0 +1,34 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2021 Facebook */
-+
-+#include <test_progs.h>
-+
-+#include "trace_vprintk.lskel.h"
-+
-+void test_verif_stats(void)
-+{
-+	__u32 len =3D sizeof(struct bpf_prog_info);
-+	struct bpf_prog_info info =3D {};
-+	struct trace_vprintk *skel;
-+	int err;
-+
-+	skel =3D trace_vprintk__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "trace_vprintk__open_and_load"))
-+		goto cleanup;
-+
-+	if (!ASSERT_GT(skel->progs.sys_enter.prog_fd, 0, "sys_enter_fd > 0"))
-+		goto cleanup;
-+
-+	err =3D bpf_obj_get_info_by_fd(skel->progs.sys_enter.prog_fd, &info, &l=
-en);
-+	if (!ASSERT_OK(err, "bpf_obj_get_info_by_fd"))
-+		goto cleanup;
-+
-+	if (!ASSERT_GT(info.verif_stats.insn_processed, 0, "verif_stats.insn_pr=
-ocessed"))
-+		goto cleanup;
-+
-+	if (!ASSERT_GT(info.verif_stats.total_states, 0, "verif_stats.total_sta=
-tes"))
-+		goto cleanup;
-+
-+cleanup:
-+	trace_vprintk__destroy(skel);
-+}
---=20
-2.30.2
+The following series is dependent on,
+https://patchwork.kernel.org/project/netdevbpf/patch/20210920123344.2320-1-a-govindraju@ti.com/
+
+changes since v2 -
+- correct the dtbs_check errors. clock names order and interrupts
+  property added in the dt bindings
+- added support for main mcan instances on common processor board
+  for j721e
+- rebased the series on top of latest linux-next head
+
+changes since v1 -
+- changed the message ram configuration to use the maximum value
+  in each field, for better performance.
+
+Aswath Govindraju (3):
+  arm64: dts: ti: am654-base-board/am65-iot2050-common: Disable mcan
+    nodes
+  arm64: dts: ti: k3-am64-main: Add support for MCAN
+  arm64: dts: ti: k3-am642-evm/sk: Add support for main domain mcan
+    nodes in EVM and disable them on SK
+
+Faiz Abbas (3):
+  arm64: dts: ti: k3-am65-mcu: Add Support for MCAN
+  arm64: dts: ti: k3-j721e: Add support for MCAN nodes
+  arm64: dts: ti: k3-j721e-common-proc-board: Add support for mcu and
+    main mcan nodes
+
+ arch/arm64/boot/dts/ti/k3-am64-main.dtsi      |  28 +++
+ arch/arm64/boot/dts/ti/k3-am642-evm.dts       |  40 ++++
+ arch/arm64/boot/dts/ti/k3-am642-sk.dts        |   8 +
+ .../boot/dts/ti/k3-am65-iot2050-common.dtsi   |   8 +
+ arch/arm64/boot/dts/ti/k3-am65-mcu.dtsi       |  30 +++
+ .../arm64/boot/dts/ti/k3-am654-base-board.dts |   8 +
+ .../dts/ti/k3-j721e-common-proc-board.dts     | 155 ++++++++++++++
+ arch/arm64/boot/dts/ti/k3-j721e-main.dtsi     | 196 ++++++++++++++++++
+ .../boot/dts/ti/k3-j721e-mcu-wakeup.dtsi      |  28 +++
+ 9 files changed, 501 insertions(+)
+
+-- 
+2.17.1
 
