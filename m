@@ -2,37 +2,66 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B24FC433F5
-	for <bpf@archiver.kernel.org>; Mon, 20 Sep 2021 18:51:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 43334C433F5
+	for <bpf@archiver.kernel.org>; Mon, 20 Sep 2021 21:03:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 07CCB611AE
-	for <bpf@archiver.kernel.org>; Mon, 20 Sep 2021 18:51:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2EBEC61019
+	for <bpf@archiver.kernel.org>; Mon, 20 Sep 2021 21:03:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385985AbhITSxC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 20 Sep 2021 14:53:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38258 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1385893AbhITSwh (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 20 Sep 2021 14:52:37 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2D955611AE;
-        Mon, 20 Sep 2021 18:02:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632160937;
-        bh=as2gxVfvnJaxy4koQagKxvEP7kyTEN8JfpEklpWnlp0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Q0n9A9GEUlQmIbkRUHCSHnVJseX4zDUujb6T+1aOhk/8Vo33P7W1mnucZEQ+50qh0
-         jYxG+4nqRxyVT3rJXI10DHLC24Qzl9fZwh5KxETz5mRMkxS9dXqtJaHYi4Y0PQtS71
-         AMLIcj5y7I/nTZ4YnuqAq3JzBUn/+N16P8vTKVzkPPPEB4rOoSje8ZfhxDCXNBjy9d
-         ZkMVDtNRwywAQhndFj57TErGvkVYuQzg4GSYkEm5kSc/mwPz/xK0y/iNcZD9ko6cNI
-         BZXtgpm+mcbG/VFvlUFeVmosB4BD+AJl1WE+VusgFJaHKLPjXXPUMD2ezLMMVQ0eb1
-         q79Wm7dDsZbdQ==
-Date:   Mon, 20 Sep 2021 11:02:16 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdlbnNlbg==?= <toke@redhat.com>
+        id S232066AbhITVFW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 20 Sep 2021 17:05:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:55569 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233511AbhITVDW (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 20 Sep 2021 17:03:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1632171714;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FJhRY3ScCS/OW3g/SnAzyATsFxCUBetBM+BcPbwPq1A=;
+        b=Ig9od6hSHj+Qq/98u4oxKqL1PU/QgfyCSMFdbqHoq3dd6dQOcjmFBVHOepX/MuFBUwnNod
+        Xj1dIdKt132HbYk6o2tCJsQ2F73te1BXJftaasqIJOG5l+HBzzCOeV1PjldroLOq3nY0/L
+        nO5gtwuBvefyzmZWsJKfu4WWshby3Xk=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-550-07HDg6xfOh-PI6zMkIQvFA-1; Mon, 20 Sep 2021 17:01:53 -0400
+X-MC-Unique: 07HDg6xfOh-PI6zMkIQvFA-1
+Received: by mail-ed1-f71.google.com with SMTP id o23-20020a509b17000000b003d739e2931dso15214355edi.4
+        for <bpf@vger.kernel.org>; Mon, 20 Sep 2021 14:01:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=FJhRY3ScCS/OW3g/SnAzyATsFxCUBetBM+BcPbwPq1A=;
+        b=MiqgyJPx+rONGmPYDtux2SPBqTDv0JX/EW6HLeTofE6Q4KBWZbPYUEkOXiDOSvwkqs
+         6+VYO2WlR/5Cp3v7uNH0I9hf2vtZ0l11pQs0R0k3JWZuhk6c/SE6MTPxe1myItGC8v/J
+         dm9666XR+WTTEWEzq+V1PEqt3xfZLuGKv85NroDw11sJOVEKLxjQKysLp7fSQ7IeDbJa
+         LkNZrSmfERnLrJMplUnWN6UYK+TDMTWO284d8gEon8ydQ9KVeeMBMfc++hP+EJqv+C6k
+         XiymPd8apvKq16geI7F1MQdA0crKoe1JXG5gjOG335+osUbZc5eNWXh22O96zLq9kQl7
+         i8QA==
+X-Gm-Message-State: AOAM531NOVEAtLxtiFc3LDPg6xw5xwo5dijyNMCMh6jOY2SLiCmQRFNJ
+        R2uL8Y389JDKZBbJQPVxOEKX08wMqRbocp6BAuzexDwa2T4CDNSVMQGpO54XWzz3MNZNWxq8sqq
+        fRyIS2llisd89
+X-Received: by 2002:a17:906:5acb:: with SMTP id x11mr29714563ejs.514.1632171710988;
+        Mon, 20 Sep 2021 14:01:50 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwsrOkvmwXPPtt6w9FAHvV7gkFkoag2FKG/BEtVNHX9WDhrUGDvH76vd0eBRRdpEvhdQF7SIA==
+X-Received: by 2002:a17:906:5acb:: with SMTP id x11mr29714442ejs.514.1632171709572;
+        Mon, 20 Sep 2021 14:01:49 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id 90sm7471394edc.36.2021.09.20.14.01.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Sep 2021 14:01:49 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 8016D18034A; Mon, 20 Sep 2021 23:01:48 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Jakub Kicinski <kuba@kernel.org>
 Cc:     John Fastabend <john.fastabend@gmail.com>,
         Alexei Starovoitov <alexei.starovoitov@gmail.com>,
         Lorenzo Bianconi <lorenzo@kernel.org>,
@@ -53,94 +82,114 @@ Cc:     John Fastabend <john.fastabend@gmail.com>,
         tirthendu.sarkar@intel.com
 Subject: Re: [PATCH v14 bpf-next 00/18] mvneta: introduce XDP multi-buffer
  support
-Message-ID: <20210920110216.4c54c9a3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <8735q25ccg.fsf@toke.dk>
+In-Reply-To: <20210920110216.4c54c9a3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 References: <cover.1631289870.git.lorenzo@kernel.org>
-        <20210916095539.4696ae27@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <YUSrWiWh57Ys7UdB@lore-desk>
-        <20210917113310.4be9b586@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <CAADnVQL15NAqbswXedF0r2om8SOiMQE80OSjbyCA56s-B4y8zA@mail.gmail.com>
-        <20210917120053.1ec617c2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <CAADnVQKbrkOxfNoixUx-RLJEWULJLyhqjZ=M_X2cFG_APwNyCg@mail.gmail.com>
-        <614511bc3408b_8d5120862@john-XPS-13-9370.notmuch>
-        <8735q25ccg.fsf@toke.dk>
+ <20210916095539.4696ae27@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <YUSrWiWh57Ys7UdB@lore-desk>
+ <20210917113310.4be9b586@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <CAADnVQL15NAqbswXedF0r2om8SOiMQE80OSjbyCA56s-B4y8zA@mail.gmail.com>
+ <20210917120053.1ec617c2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <CAADnVQKbrkOxfNoixUx-RLJEWULJLyhqjZ=M_X2cFG_APwNyCg@mail.gmail.com>
+ <614511bc3408b_8d5120862@john-XPS-13-9370.notmuch>
+ <8735q25ccg.fsf@toke.dk>
+ <20210920110216.4c54c9a3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Mon, 20 Sep 2021 23:01:48 +0200
+Message-ID: <87lf3r3qrn.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sat, 18 Sep 2021 13:53:35 +0200 Toke H=C3=B8iland-J=C3=B8rgensen wrote:
-> I'm OK with a bpf_header_pointer()-type helper - I quite like the
-> in-kernel version of this for SKBs, so replicating it as a BPF helper
-> would be great. But I'm a little worried about taking a performance hit.
->=20
-> I.e., if you do:
->=20
-> ptr =3D bpf_header_pointer(pkt, offset, len, stack_ptr)
-> *ptr =3D xxx;
->=20
-> then, if the helper ended up copying the data into the stack pointer,
-> you didn't actually change anything in the packet, so you need to do a
-> writeback.
->=20
-> Jakub suggested up-thread that this should be done with some kind of
-> flush() helper. But you don't know whether the header_pointer()-helper
-> copied the data, so you always need to call the flush() helper, which
-> will incur overhead. If the verifier can in-line the helpers that will
-> lower it, but will it be enough to make it negligible?
+Jakub Kicinski <kuba@kernel.org> writes:
 
-Depends on the assumptions the program otherwise makes, right?
+> On Sat, 18 Sep 2021 13:53:35 +0200 Toke H=C3=B8iland-J=C3=B8rgensen wrote:
+>> I'm OK with a bpf_header_pointer()-type helper - I quite like the
+>> in-kernel version of this for SKBs, so replicating it as a BPF helper
+>> would be great. But I'm a little worried about taking a performance hit.
+>>=20
+>> I.e., if you do:
+>>=20
+>> ptr =3D bpf_header_pointer(pkt, offset, len, stack_ptr)
+>> *ptr =3D xxx;
+>>=20
+>> then, if the helper ended up copying the data into the stack pointer,
+>> you didn't actually change anything in the packet, so you need to do a
+>> writeback.
+>>=20
+>> Jakub suggested up-thread that this should be done with some kind of
+>> flush() helper. But you don't know whether the header_pointer()-helper
+>> copied the data, so you always need to call the flush() helper, which
+>> will incur overhead. If the verifier can in-line the helpers that will
+>> lower it, but will it be enough to make it negligible?
+>
+> Depends on the assumptions the program otherwise makes, right?
+>
+> For reading I'd expect a *layout-independent* TC program would=20
+> replace approximately:
+>
+> ptr =3D <some_ptr>;
+> if (ptr + CONST >=3D md->ptr_end)
+> 	if (bpf_pull_data(md, off + CONST))
+> 		return DROP;
+> 	ptr =3D <some_ptr>;
+> 	if (ptr + CONST >=3D md->ptr_end)
+> 		return DROP; /* da hell? */
+> }
+>
+> With this (pre-inlining):
+>
+> ptr =3D bpf_header_pointer(md, offset, len, stack);
+> if (!ptr)
+> 	return DROP;
+>
+> Post-inlining (assuming static validation of args to prevent wraps):
+>
+> if (md->ptr + args->off + args->len < md->ptr_end)
+> 	ptr =3D md->ptr + args->off;
+> else
+> 	ptr =3D __bpf_header_pointer(md, offset, len, stack);
+> if (!ptr)
+> 	return DROP;
+>
+> But that's based on guesswork so perhaps I'm off base.
 
-For reading I'd expect a *layout-independent* TC program would=20
-replace approximately:
+Yeah, that's more or less what I was thinking...
 
-ptr =3D <some_ptr>;
-if (ptr + CONST >=3D md->ptr_end)
-	if (bpf_pull_data(md, off + CONST))
-		return DROP;
-	ptr =3D <some_ptr>;
-	if (ptr + CONST >=3D md->ptr_end)
-		return DROP; /* da hell? */
-}
+> Regarding the flush() I was expecting that most progs will not modify
+> the packet (or at least won't modify most headers they load) so no
+> point paying the price of tracking changes auto-magically.
 
-With this (pre-inlining):
+... but I guess my mental model assumed that packet writes would be just
+as frequent as reads, in which case it would be a win if you could amend
+your example like:
 
-ptr =3D bpf_header_pointer(md, offset, len, stack);
-if (!ptr)
-	return DROP;
+> In fact I don't think there is anything infra can do better for
+> flushing than the prog itself:
+>
+> 	bool mod =3D false;
+>
+> 	ptr =3D bpf_header_pointer(...);
+> 	...
+> 	if (some_cond(...)) {
+> 		change_packet(...);
+> 		mod =3D true;
+> 	}
+> 	...
+> 	if (mod)
 
-Post-inlining (assuming static validation of args to prevent wraps):
+to have an additional check like:
 
-if (md->ptr + args->off + args->len < md->ptr_end)
-	ptr =3D md->ptr + args->off;
-else
-	ptr =3D __bpf_header_pointer(md, offset, len, stack);
-if (!ptr)
-	return DROP;
+if (mod && ptr =3D=3D stack)
 
-But that's based on guesswork so perhaps I'm off base.
+(or something to that effect). No?
 
+-Toke
 
-Regarding the flush() I was expecting that most progs will not modify
-the packet (or at least won't modify most headers they load) so no
-point paying the price of tracking changes auto-magically.
+> 		bpf_header_pointer_flush();
+>
+>
+> is simple enough.. to me.
 
-In fact I don't think there is anything infra can do better for
-flushing than the prog itself:
-
-	bool mod =3D false;
-
-	ptr =3D bpf_header_pointer(...);
-	...
-	if (some_cond(...)) {
-		change_packet(...);
-		mod =3D true;
-	}
-	...
-	if (mod)
-		bpf_header_pointer_flush();
-
-
-is simple enough.. to me.
