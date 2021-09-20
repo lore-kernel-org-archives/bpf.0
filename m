@@ -2,131 +2,131 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1162C433FE
-	for <bpf@archiver.kernel.org>; Mon, 20 Sep 2021 14:51:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76FA7C433EF
+	for <bpf@archiver.kernel.org>; Mon, 20 Sep 2021 15:11:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A6723610F9
-	for <bpf@archiver.kernel.org>; Mon, 20 Sep 2021 14:51:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 56F1760EDF
+	for <bpf@archiver.kernel.org>; Mon, 20 Sep 2021 15:11:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241157AbhITOwc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 20 Sep 2021 10:52:32 -0400
-Received: from mout.perfora.net ([74.208.4.197]:50803 "EHLO mout.perfora.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240883AbhITOwQ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 20 Sep 2021 10:52:16 -0400
-Received: from toolbox.cardiotech.int ([81.221.236.183]) by mrelay.perfora.net
- (mreueus004 [74.208.5.2]) with ESMTPSA (Nemesis) id 1Mlebm-1nAlzH1HYg-00iiwu;
- Mon, 20 Sep 2021 16:49:53 +0200
-From:   Marcel Ziswiler <marcel@ziswiler.com>
-To:     linux-arm-kernel@lists.infradead.org
-List-Id: <soc.lore.kernel.org>
-Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
+        id S232462AbhITPNB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 20 Sep 2021 11:13:01 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:58336 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232118AbhITPNA (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 20 Sep 2021 11:13:00 -0400
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18KALmaZ019090
+        for <bpf@vger.kernel.org>; Mon, 20 Sep 2021 08:11:33 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=facebook; bh=9/8mcYEeeNNKtnM5oQISRIsSerLVdZaWFVzA7XmsXB0=;
+ b=d23QMmtbEryMCxQ+3RPfeOojdOzxlg8XHpKJH4RjNXOh7p2O/mZJcgHGSluPFu820vdw
+ g7XRGwDp9a6ELU58Y/Jj5qtsZ4hhx7wi9ycKI4/FW9L5hZyubLti0wRea7Vj5Zj03dwQ
+ P6AkdUWlyNdlJubaVgZK59OVwVG9nXTDNno= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 3b6d2k46w0-18
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Mon, 20 Sep 2021 08:11:33 -0700
+Received: from intmgw002.25.frc3.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.14; Mon, 20 Sep 2021 08:11:29 -0700
+Received: by devbig030.frc3.facebook.com (Postfix, from userid 158236)
+        id 64A146E18CB8; Mon, 20 Sep 2021 08:11:22 -0700 (PDT)
+From:   Dave Marchevsky <davemarchevsky@fb.com>
+To:     <bpf@vger.kernel.org>
+CC:     <netdev@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Fabio Estevam <festevam@gmail.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Li Yang <leoyang.li@nxp.com>, Marek Vasut <marex@denx.de>,
-        Martin KaFai Lau <kafai@fb.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Olof Johansson <olof@lixom.net>,
-        Otavio Salvador <otavio@ossystems.com.br>,
-        Pascal Zimmermann <pzimmermann@dh-electronics.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        Stefan Riedmueller <s.riedmueller@phytec.de>,
-        Tim Harvey <tharvey@gateworks.com>, Yonghong Song <yhs@fb.com>,
-        bpf@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        soc@kernel.org
-Subject: [PATCH v4 0/9] ARM: prepare and add colibri imx6ull 1gb (emmc) support
-Date:   Mon, 20 Sep 2021 16:49:29 +0200
-Message-Id: <20210920144938.314588-1-marcel@ziswiler.com>
-X-Mailer: git-send-email 2.26.2
+        Andrii Nakryiko <andrii@kernel.org>,
+        Yonghong Song <yhs@fb.com>,
+        Dave Marchevsky <davemarchevsky@fb.com>
+Subject: [RFC PATCH bpf-next 0/2] bpf: keep track of prog verification stats
+Date:   Mon, 20 Sep 2021 08:11:10 -0700
+Message-ID: <20210920151112.3770991-1-davemarchevsky@fb.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:W6WlD/PhwB5NKuiFUpbq9zYXddxkmRhEsbCoDh36Mxeat1DlEON
- baYPgNMQaaOYRUD+sjfJeTz3qWJ01lWwfhmedyQgI81Cc9YzB8yAvWb8UxLBabvhAcu0Mkh
- 6meI6GczvELssYAKhp0LPVMZ63JDbHWphKK8GMUEb4nYy6D/+Uiu3wv7ubFJQkwgXZB72L4
- qHcmClI6P8P2DPy7I9raA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:0npW3v9eBkk=:KYQSawvhWHVPhlqfYWAzeX
- zOK7+7ySLA9b0HdYea0hY+vHNh2EH5t5HAf1MJu/1luyhmjsFjmA4xAq7W1zpGSr7spPmyL57
- HQEMrZVjI2pbEGKad6Z4kCr9OQdJ7X0WMUIva9GcogKlEcnCaEg1JSRJ2rCHfwRTN7unBbXW6
- oK8M+z06biE7Lm0mfO2E/gBl8P8cU00HOLjN71NPhkndUW5avCXaAgnYzRqi1ovBr2Iqgbfkc
- Tg9+aY2vlvt9eqbflEKgz8yvPo+dLkMp519Mm9eNLWFT9pw2EQTKorK0njhy8za/lxXEgp9EJ
- 8BiwRdxscZnGPWRCbxk8395r7s1bsr5PU6bLl2wT9Xat3DGPPl3iIDiZhNYlk4K3hiMvxVPcR
- X5Fpnx8qwtQZnj7UaOs8NFTcmGYsujamupIzkDRM6Q6MwivKVHNMAHbP86EbiNmrbPNmyn/pI
- UIjHlASeWULAcRAuAUp14PUI53qHJ1A+qL5s7SUsfTUdP+lLzwvewTeYLbnLLIIgx1TjKSaDY
- o9t8SHTUN44B49oBPo14yg/Qlzn7EzdnJrGCsU99Bjb5xkX5XkydumMuozCrRMYR3d6xM0rpF
- Pr80aH4hPaqKVauv892c/i4zrAs/BWmjH92wL2JqFWACLrn2p7cyTUmstlwvSHVhZLo+0d13J
- Oldr9nLrIGuGYakMSmIucmD7LGakCZshBNhj12D191do5ou0zQ9qBCs9mZdwPxpMuP+DM4Fd5
- gTdElzTYNgYxaMJgPn+d8OgpgiawbszJbKIkVA==
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-FB-Source: Intern
+X-Proofpoint-ORIG-GUID: ohjpW2XbQrBljk0Qdr1YjMtJ6hfuntYJ
+X-Proofpoint-GUID: ohjpW2XbQrBljk0Qdr1YjMtJ6hfuntYJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
+ definitions=2021-09-20_07,2021-09-20_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
+ mlxlogscore=999 bulkscore=0 phishscore=0 impostorscore=0 adultscore=0
+ mlxscore=0 lowpriorityscore=0 suspectscore=0 priorityscore=1501
+ clxscore=1015 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2109030001 definitions=main-2109200098
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+The verifier currently logs some useful statistics in
+print_verification_stats. Although the text log is an effective feedback
+tool for an engineer iterating on a single application, it would also be
+useful to enable tracking these stats in a more structured form for
+fleetwide or historical analysis, which this patchset attempts to do.
+
+A concrete motivating usecase which came up in recent weeks:
+
+A team owns a complex BPF program, with various folks extending its
+functionality over the years. An engineer tries to make a relatively
+simple addition but encounters "BPF program is too large. Processed
+1000001 insn".=20
+
+Their changes bumped the processed insns from 700k to over the limit and
+there's no obvious way to simplify. They must now consider a large
+refactor in order to incorporate the new feature. What if there was some
+previous change which bumped processed insns from 200k->700k which
+_could_ be modified to stress verifier less? Tracking historical
+verifier stats for each version of the program over the years would
+reduce manual work necessary to find such a change.
 
 
-Clean-up imx_v6_v7_defconfig and then add support for the new Colibri
-iMX6ULL 1GB (eMMC) which builds on the success of the existing Colibri
-iMX6ULL SKUs using raw NAND but replaces this with more RAM (1 GB) and
-an eMMC (4 GB).
+Although parsing the text log could work for this scenario, a solution
+that's resilient to log format and other verifier changes would be
+preferable.
 
-Changes in v4:
-- Fix dt_binding_check line too long warnings as pointed out by Rob.
+This patchset adds a bpf_prog_verif_stats struct - containing the same
+data logged by print_verification_stats - which can be retrieved as part
+of bpf_prog_info. Looking for general feedback on approach and a few
+specific areas before fleshing it out further:
 
-Changes in v3:
-- Add Fabio's reviewed-by. Thanks!
-- Added fixes tag as pointed out by Stefan and Fabio. Thanks!
-- Add Rob's ack. Thanks!
+* None of my usecases require storing verif_stats for the lifetime of a
+  loaded prog, but adding to bpf_prog_aux felt more correct than trying
+  to pass verif_stats back as part of BPF_PROG_LOAD
+* The verif_stats are probably not generally useful enough to warrant
+  inclusion in fdinfo, but hoping to get confirmation before removing
+  that change in patch 1
+* processed_insn, verification_time, and total_states are immediately
+  useful for me, rest were added for parity with
+	print_verification_stats. Can remove.
+* Perhaps a version field would be useful in verif_stats in case future
+  verifier changes make some current stats meaningless
+* Note: stack_depth stat was intentionally skipped to keep patch 1
+  simple. Will add if approach looks good.
 
-Changes in v2:
-- New patch cleaning-up dt-bindings documentation.
-- Fix indentation.
-- Use latest agreed upon SPDX-License-Identifier GPL-2.0+ OR MIT.
-- Drop AG in our copyright statement as recommended by our legal.
-- New patch documenting dt-bindings.
+Dave Marchevsky (2):
+  bpf: add verifier stats to bpf_prog_info and fdinfo
+  selftests/bpf: add verif_stats test
 
-Marcel Ziswiler (8):
-  ARM: imx_v6_v7_defconfig: enable mtd physmap
-  ARM: imx_v6_v7_defconfig: enable fb
-  ARM: imx_v6_v7_defconfig: change snd soc tlv320aic3x to i2c variant
-  ARM: imx_v6_v7_defconfig: rebuild default configuration
-  ARM: imx_v6_v7_defconfig: build imx sdma driver as module
-  ARM: imx_v6_v7_defconfig: enable bpf syscall and cgroup bpf
-  dt-bindings: arm: fsl: clean-up all toradex boards/modules
-  dt-bindings: arm: fsl: add toradex,colibri-imx6ull-emmc
+ include/linux/bpf.h                           |  1 +
+ include/uapi/linux/bpf.h                      | 10 ++++++
+ kernel/bpf/syscall.c                          | 20 +++++++++--
+ kernel/bpf/verifier.c                         | 13 +++++++
+ tools/include/uapi/linux/bpf.h                | 10 ++++++
+ .../selftests/bpf/prog_tests/verif_stats.c    | 34 +++++++++++++++++++
+ 6 files changed, 86 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/verif_stats.c
 
-Max Krummenacher (1):
-  ARM: dts: colibri-imx6ull-emmc: add device tree
-
- .../devicetree/bindings/arm/fsl.yaml          |  87 ++++----
- arch/arm/boot/dts/Makefile                    |   1 +
- .../boot/dts/imx6ull-colibri-emmc-eval-v3.dts |  17 ++
- .../dts/imx6ull-colibri-emmc-nonwifi.dtsi     | 185 ++++++++++++++++++
- arch/arm/boot/dts/imx6ull-colibri.dtsi        |  32 ++-
- arch/arm/configs/imx_v6_v7_defconfig          |  46 ++---
- 6 files changed, 299 insertions(+), 69 deletions(-)
- create mode 100644 arch/arm/boot/dts/imx6ull-colibri-emmc-eval-v3.dts
- create mode 100644 arch/arm/boot/dts/imx6ull-colibri-emmc-nonwifi.dtsi
-
--- 
-2.26.2
+--=20
+2.30.2
 
