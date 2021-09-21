@@ -2,294 +2,216 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-22.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	UPPERCASE_50_75,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3323C433EF
-	for <bpf@archiver.kernel.org>; Mon, 20 Sep 2021 23:45:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1ABC1C433FE
+	for <bpf@archiver.kernel.org>; Tue, 21 Sep 2021 01:31:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8B37561244
-	for <bpf@archiver.kernel.org>; Mon, 20 Sep 2021 23:45:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D13FA60F43
+	for <bpf@archiver.kernel.org>; Tue, 21 Sep 2021 01:31:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236783AbhITXrT convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Mon, 20 Sep 2021 19:47:19 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:53848 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237730AbhITXpS (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 20 Sep 2021 19:45:18 -0400
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18KHwKY8028513
-        for <bpf@vger.kernel.org>; Mon, 20 Sep 2021 16:43:50 -0700
+        id S229730AbhIUBdK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 20 Sep 2021 21:33:10 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:8802 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230079AbhIUBcq (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 20 Sep 2021 21:32:46 -0400
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18KHwN90014546
+        for <bpf@vger.kernel.org>; Mon, 20 Sep 2021 18:31:18 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=3wZL20nAF2XEAAnrU623v+gAeIHh8UoyyXAllPrQ+cg=;
+ b=m8ThAiHcA1Ky0kg2QQlYRQ5OmkYUzY0NFBedUHWjXlEn0gruvV7Z20Eewj8wAGHS0I8n
+ HFu120/npRGSJkVgIE7tFy+hoSkA39j1PCDEiRqY1PZwHP/bAu7fASk6JdORVwp0oFtH
+ SWlrznaNAczWp0HcAQjF0k2dJarMP4mMh+Q= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 3b6kt65vue-4
+        by mx0a-00082601.pphosted.com with ESMTP id 3b6f2rf9pt-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 20 Sep 2021 16:43:50 -0700
-Received: from intmgw001.27.prn2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Mon, 20 Sep 2021 18:31:18 -0700
+Received: from intmgw006.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Mon, 20 Sep 2021 16:43:48 -0700
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 42C39488203C; Mon, 20 Sep 2021 16:43:39 -0700 (PDT)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH v2 bpf-next 8/9] libbpf: add opt-in strict BPF program section name handling logic
-Date:   Mon, 20 Sep 2021 16:43:19 -0700
-Message-ID: <20210920234320.3312820-9-andrii@kernel.org>
+ 15.1.2308.14; Mon, 20 Sep 2021 18:31:16 -0700
+Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
+        id B00132940D2A; Mon, 20 Sep 2021 18:31:09 -0700 (PDT)
+From:   Martin KaFai Lau <kafai@fb.com>
+To:     <bpf@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
+        Yonghong Song <yhs@fb.com>
+Subject: [PATCH bpf-next 1/4] bpf: Check the other end of slot_type for STACK_SPILL
+Date:   Mon, 20 Sep 2021 18:31:09 -0700
+Message-ID: <20210921013109.1036209-1-kafai@fb.com>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210920234320.3312820-1-andrii@kernel.org>
-References: <20210920234320.3312820-1-andrii@kernel.org>
+In-Reply-To: <20210921013102.1035356-1-kafai@fb.com>
+References: <20210921013102.1035356-1-kafai@fb.com>
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-ORIG-GUID: TPInbTHooRUuYHLQX50hnqKjLEw9fNul
-X-Proofpoint-GUID: TPInbTHooRUuYHLQX50hnqKjLEw9fNul
-Content-Transfer-Encoding: 8BIT
+X-Proofpoint-ORIG-GUID: _G_ibi-xUJzNLKlO74imP2Ycfzif_G40
+X-Proofpoint-GUID: _G_ibi-xUJzNLKlO74imP2Ycfzif_G40
+Content-Transfer-Encoding: quoted-printable
 X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
- definitions=2021-09-20_07,2021-09-20_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
- malwarescore=0 bulkscore=0 adultscore=0 clxscore=1015 mlxscore=0
- suspectscore=0 priorityscore=1501 spamscore=0 mlxlogscore=999 phishscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2109030001 definitions=main-2109200138
+ definitions=2021-09-20_11,2021-09-20_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 suspectscore=0 mlxlogscore=999
+ impostorscore=0 priorityscore=1501 bulkscore=0 adultscore=0 malwarescore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2109030001 definitions=main-2109210006
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Implement strict ELF section name handling for BPF programs. It utilizes
-`libbpf_set_strict_mode()` framework and adds new flag: LIBBPF_STRICT_SEC_NAME.
+Every 8 bytes of the stack is tracked by a bpf_stack_state.
+Within each bpf_stack_state, there is a 'u8 slot_type[8]' to track
+the type of each byte.  Verifier tests slot_type[0] =3D=3D STACK_SPILL
+to decide if the spilled reg state is saved.  Verifier currently only
+saves the reg state if the whole 8 bytes are spilled to the stack,
+so checking the slot_type[7] is the same as checking slot_type[0].
 
-If this flag is set, libbpf will enforce exact section name matching for
-a lot of program types that previously allowed just partial prefix
-match. E.g., if previously SEC("xdp_whatever_i_want") was allowed, now
-in strict mode only SEC("xdp") will be accepted, which makes SEC("")
-definitions cleaner and more structured. SEC() now won't be used as yet
-another way to uniquely encode BPF program identifier (for that
-C function name is better and is guaranteed to be unique within
-bpf_object). Now SEC() is strictly BPF program type and, depending on
-program type, extra load/attach parameter specification.
+The later patch will allow verifier to save the bounded scalar
+reg also for <8 bytes spill.  There is a llvm patch [1] to ensure
+the <8 bytes spill will be 8-byte aligned,  so checking
+slot_type[7] instead of slot_type[0] is required.
 
-Libbpf completely supports multiple BPF programs in the same ELF
-section, so multiple BPF programs of the same type/specification easily
-co-exist together within the same bpf_object scope.
+While at it, this patch refactors the slot_type[0] =3D=3D STACK_SPILL
+test into a new function is_spilled_reg() and change the
+slot_type[0] check to slot_type[7] check in there also.
 
-Additionally, a new (for now internal) convention is introduced: section
-name that can be a stand-alone exact BPF program type specificator, but
-also could have extra parameters after '/' delimiter. An example of such
-section is "struct_ops", which can be specified by itself, but also
-allows to specify the intended operation to be attached to, e.g.,
-"struct_ops/dctcp_init". Note, that "struct_ops_some_op" is not allowed.
-Such section definition is specified as "struct_ops+".
+[1] https://reviews.llvm.org/D109073
 
-This change is part of libbpf 1.0 effort ([0], [1]).
-
-  [0] Closes: https://github.com/libbpf/libbpf/issues/271
-  [1] https://github.com/libbpf/libbpf/wiki/Libbpf:-the-road-to-v1.0#stricter-and-more-uniform-bpf-program-section-name-sec-handling
-
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Martin KaFai Lau <kafai@fb.com>
 ---
- tools/lib/bpf/libbpf.c        | 135 ++++++++++++++++++++++------------
- tools/lib/bpf/libbpf_legacy.h |   9 +++
- 2 files changed, 98 insertions(+), 46 deletions(-)
+ kernel/bpf/verifier.c | 30 +++++++++++++++++++-----------
+ 1 file changed, 19 insertions(+), 11 deletions(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 56082865ceff..f0846f609e26 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -232,6 +232,7 @@ enum sec_def_flags {
- 	SEC_ATTACHABLE_OPT = SEC_ATTACHABLE | SEC_EXP_ATTACH_OPT,
- 	SEC_ATTACH_BTF = 4,
- 	SEC_SLEEPABLE = 8,
-+	SEC_SLOPPY_PFX = 16, /* allow non-strict prefix matching */
- };
- 
- struct bpf_sec_def {
-@@ -7976,15 +7977,15 @@ static struct bpf_link *attach_lsm(const struct bpf_program *prog, long cookie);
- static struct bpf_link *attach_iter(const struct bpf_program *prog, long cookie);
- 
- static const struct bpf_sec_def section_defs[] = {
--	SEC_DEF("socket",		SOCKET_FILTER, 0, SEC_NONE),
--	SEC_DEF("sk_reuseport/migrate",	SK_REUSEPORT, BPF_SK_REUSEPORT_SELECT_OR_MIGRATE, SEC_ATTACHABLE),
--	SEC_DEF("sk_reuseport",		SK_REUSEPORT, BPF_SK_REUSEPORT_SELECT, SEC_ATTACHABLE),
-+	SEC_DEF("socket",		SOCKET_FILTER, 0, SEC_SLOPPY_PFX),
-+	SEC_DEF("sk_reuseport/migrate",	SK_REUSEPORT, BPF_SK_REUSEPORT_SELECT_OR_MIGRATE, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
-+	SEC_DEF("sk_reuseport",		SK_REUSEPORT, BPF_SK_REUSEPORT_SELECT, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
- 	SEC_DEF("kprobe/",		KPROBE,	0, SEC_NONE, attach_kprobe),
- 	SEC_DEF("uprobe/",		KPROBE,	0, SEC_NONE),
- 	SEC_DEF("kretprobe/",		KPROBE, 0, SEC_NONE, attach_kprobe),
- 	SEC_DEF("uretprobe/",		KPROBE, 0, SEC_NONE),
--	SEC_DEF("classifier",		SCHED_CLS, 0, SEC_NONE),
--	SEC_DEF("action",		SCHED_ACT, 0, SEC_NONE),
-+	SEC_DEF("classifier",		SCHED_CLS, 0, SEC_SLOPPY_PFX),
-+	SEC_DEF("action",		SCHED_ACT, 0, SEC_SLOPPY_PFX),
- 	SEC_DEF("tracepoint/",		TRACEPOINT, 0, SEC_NONE, attach_tp),
- 	SEC_DEF("tp/",			TRACEPOINT, 0, SEC_NONE, attach_tp),
- 	SEC_DEF("raw_tracepoint/",	RAW_TRACEPOINT, 0, SEC_NONE, attach_raw_tp),
-@@ -8003,44 +8004,44 @@ static const struct bpf_sec_def section_defs[] = {
- 	SEC_DEF("syscall",		SYSCALL, 0, SEC_SLEEPABLE),
- 	SEC_DEF("xdp_devmap/",		XDP, BPF_XDP_DEVMAP, SEC_ATTACHABLE),
- 	SEC_DEF("xdp_cpumap/",		XDP, BPF_XDP_CPUMAP, SEC_ATTACHABLE),
--	SEC_DEF("xdp",			XDP, BPF_XDP, SEC_ATTACHABLE_OPT),
--	SEC_DEF("perf_event",		PERF_EVENT, 0, SEC_NONE),
--	SEC_DEF("lwt_in",		LWT_IN, 0, SEC_NONE),
--	SEC_DEF("lwt_out",		LWT_OUT, 0, SEC_NONE),
--	SEC_DEF("lwt_xmit",		LWT_XMIT, 0, SEC_NONE),
--	SEC_DEF("lwt_seg6local",	LWT_SEG6LOCAL, 0, SEC_NONE),
--	SEC_DEF("cgroup_skb/ingress",	CGROUP_SKB, BPF_CGROUP_INET_INGRESS, SEC_ATTACHABLE_OPT),
--	SEC_DEF("cgroup_skb/egress",	CGROUP_SKB, BPF_CGROUP_INET_EGRESS, SEC_ATTACHABLE_OPT),
--	SEC_DEF("cgroup/skb",		CGROUP_SKB, 0, SEC_NONE),
--	SEC_DEF("cgroup/sock_create",	CGROUP_SOCK, BPF_CGROUP_INET_SOCK_CREATE, SEC_ATTACHABLE),
--	SEC_DEF("cgroup/sock_release",	CGROUP_SOCK, BPF_CGROUP_INET_SOCK_RELEASE, SEC_ATTACHABLE),
--	SEC_DEF("cgroup/sock",		CGROUP_SOCK, BPF_CGROUP_INET_SOCK_CREATE, SEC_ATTACHABLE_OPT),
--	SEC_DEF("cgroup/post_bind4",	CGROUP_SOCK, BPF_CGROUP_INET4_POST_BIND, SEC_ATTACHABLE),
--	SEC_DEF("cgroup/post_bind6",	CGROUP_SOCK, BPF_CGROUP_INET6_POST_BIND, SEC_ATTACHABLE),
--	SEC_DEF("cgroup/dev",		CGROUP_DEVICE, BPF_CGROUP_DEVICE, SEC_ATTACHABLE_OPT),
--	SEC_DEF("sockops",		SOCK_OPS, BPF_CGROUP_SOCK_OPS, SEC_ATTACHABLE_OPT),
--	SEC_DEF("sk_skb/stream_parser",	SK_SKB, BPF_SK_SKB_STREAM_PARSER, SEC_ATTACHABLE_OPT),
--	SEC_DEF("sk_skb/stream_verdict",SK_SKB, BPF_SK_SKB_STREAM_VERDICT, SEC_ATTACHABLE_OPT),
--	SEC_DEF("sk_skb",		SK_SKB, 0, SEC_NONE),
--	SEC_DEF("sk_msg",		SK_MSG, BPF_SK_MSG_VERDICT, SEC_ATTACHABLE_OPT),
--	SEC_DEF("lirc_mode2",		LIRC_MODE2, BPF_LIRC_MODE2, SEC_ATTACHABLE_OPT),
--	SEC_DEF("flow_dissector",	FLOW_DISSECTOR, BPF_FLOW_DISSECTOR, SEC_ATTACHABLE_OPT),
--	SEC_DEF("cgroup/bind4",		CGROUP_SOCK_ADDR, BPF_CGROUP_INET4_BIND, SEC_ATTACHABLE),
--	SEC_DEF("cgroup/bind6",		CGROUP_SOCK_ADDR, BPF_CGROUP_INET6_BIND, SEC_ATTACHABLE),
--	SEC_DEF("cgroup/connect4",	CGROUP_SOCK_ADDR, BPF_CGROUP_INET4_CONNECT, SEC_ATTACHABLE),
--	SEC_DEF("cgroup/connect6",	CGROUP_SOCK_ADDR, BPF_CGROUP_INET6_CONNECT, SEC_ATTACHABLE),
--	SEC_DEF("cgroup/sendmsg4",	CGROUP_SOCK_ADDR, BPF_CGROUP_UDP4_SENDMSG, SEC_ATTACHABLE),
--	SEC_DEF("cgroup/sendmsg6",	CGROUP_SOCK_ADDR, BPF_CGROUP_UDP6_SENDMSG, SEC_ATTACHABLE),
--	SEC_DEF("cgroup/recvmsg4",	CGROUP_SOCK_ADDR, BPF_CGROUP_UDP4_RECVMSG, SEC_ATTACHABLE),
--	SEC_DEF("cgroup/recvmsg6",	CGROUP_SOCK_ADDR, BPF_CGROUP_UDP6_RECVMSG, SEC_ATTACHABLE),
--	SEC_DEF("cgroup/getpeername4",	CGROUP_SOCK_ADDR, BPF_CGROUP_INET4_GETPEERNAME, SEC_ATTACHABLE),
--	SEC_DEF("cgroup/getpeername6",	CGROUP_SOCK_ADDR, BPF_CGROUP_INET6_GETPEERNAME, SEC_ATTACHABLE),
--	SEC_DEF("cgroup/getsockname4",	CGROUP_SOCK_ADDR, BPF_CGROUP_INET4_GETSOCKNAME, SEC_ATTACHABLE),
--	SEC_DEF("cgroup/getsockname6",	CGROUP_SOCK_ADDR, BPF_CGROUP_INET6_GETSOCKNAME, SEC_ATTACHABLE),
--	SEC_DEF("cgroup/sysctl",	CGROUP_SYSCTL, BPF_CGROUP_SYSCTL, SEC_ATTACHABLE),
--	SEC_DEF("cgroup/getsockopt",	CGROUP_SOCKOPT, BPF_CGROUP_GETSOCKOPT, SEC_ATTACHABLE),
--	SEC_DEF("cgroup/setsockopt",	CGROUP_SOCKOPT, BPF_CGROUP_SETSOCKOPT, SEC_ATTACHABLE),
--	SEC_DEF("struct_ops",		STRUCT_OPS, 0, SEC_NONE),
-+	SEC_DEF("xdp",			XDP, BPF_XDP, SEC_ATTACHABLE_OPT | SEC_SLOPPY_PFX),
-+	SEC_DEF("perf_event",		PERF_EVENT, 0, SEC_SLOPPY_PFX),
-+	SEC_DEF("lwt_in",		LWT_IN, 0, SEC_SLOPPY_PFX),
-+	SEC_DEF("lwt_out",		LWT_OUT, 0, SEC_SLOPPY_PFX),
-+	SEC_DEF("lwt_xmit",		LWT_XMIT, 0, SEC_SLOPPY_PFX),
-+	SEC_DEF("lwt_seg6local",	LWT_SEG6LOCAL, 0, SEC_SLOPPY_PFX),
-+	SEC_DEF("cgroup_skb/ingress",	CGROUP_SKB, BPF_CGROUP_INET_INGRESS, SEC_ATTACHABLE_OPT | SEC_SLOPPY_PFX),
-+	SEC_DEF("cgroup_skb/egress",	CGROUP_SKB, BPF_CGROUP_INET_EGRESS, SEC_ATTACHABLE_OPT | SEC_SLOPPY_PFX),
-+	SEC_DEF("cgroup/skb",		CGROUP_SKB, 0, SEC_SLOPPY_PFX),
-+	SEC_DEF("cgroup/sock_create",	CGROUP_SOCK, BPF_CGROUP_INET_SOCK_CREATE, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
-+	SEC_DEF("cgroup/sock_release",	CGROUP_SOCK, BPF_CGROUP_INET_SOCK_RELEASE, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
-+	SEC_DEF("cgroup/sock",		CGROUP_SOCK, BPF_CGROUP_INET_SOCK_CREATE, SEC_ATTACHABLE_OPT | SEC_SLOPPY_PFX),
-+	SEC_DEF("cgroup/post_bind4",	CGROUP_SOCK, BPF_CGROUP_INET4_POST_BIND, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
-+	SEC_DEF("cgroup/post_bind6",	CGROUP_SOCK, BPF_CGROUP_INET6_POST_BIND, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
-+	SEC_DEF("cgroup/dev",		CGROUP_DEVICE, BPF_CGROUP_DEVICE, SEC_ATTACHABLE_OPT | SEC_SLOPPY_PFX),
-+	SEC_DEF("sockops",		SOCK_OPS, BPF_CGROUP_SOCK_OPS, SEC_ATTACHABLE_OPT | SEC_SLOPPY_PFX),
-+	SEC_DEF("sk_skb/stream_parser",	SK_SKB, BPF_SK_SKB_STREAM_PARSER, SEC_ATTACHABLE_OPT | SEC_SLOPPY_PFX),
-+	SEC_DEF("sk_skb/stream_verdict",SK_SKB, BPF_SK_SKB_STREAM_VERDICT, SEC_ATTACHABLE_OPT | SEC_SLOPPY_PFX),
-+	SEC_DEF("sk_skb",		SK_SKB, 0, SEC_SLOPPY_PFX),
-+	SEC_DEF("sk_msg",		SK_MSG, BPF_SK_MSG_VERDICT, SEC_ATTACHABLE_OPT | SEC_SLOPPY_PFX),
-+	SEC_DEF("lirc_mode2",		LIRC_MODE2, BPF_LIRC_MODE2, SEC_ATTACHABLE_OPT | SEC_SLOPPY_PFX),
-+	SEC_DEF("flow_dissector",	FLOW_DISSECTOR, BPF_FLOW_DISSECTOR, SEC_ATTACHABLE_OPT | SEC_SLOPPY_PFX),
-+	SEC_DEF("cgroup/bind4",		CGROUP_SOCK_ADDR, BPF_CGROUP_INET4_BIND, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
-+	SEC_DEF("cgroup/bind6",		CGROUP_SOCK_ADDR, BPF_CGROUP_INET6_BIND, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
-+	SEC_DEF("cgroup/connect4",	CGROUP_SOCK_ADDR, BPF_CGROUP_INET4_CONNECT, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
-+	SEC_DEF("cgroup/connect6",	CGROUP_SOCK_ADDR, BPF_CGROUP_INET6_CONNECT, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
-+	SEC_DEF("cgroup/sendmsg4",	CGROUP_SOCK_ADDR, BPF_CGROUP_UDP4_SENDMSG, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
-+	SEC_DEF("cgroup/sendmsg6",	CGROUP_SOCK_ADDR, BPF_CGROUP_UDP6_SENDMSG, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
-+	SEC_DEF("cgroup/recvmsg4",	CGROUP_SOCK_ADDR, BPF_CGROUP_UDP4_RECVMSG, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
-+	SEC_DEF("cgroup/recvmsg6",	CGROUP_SOCK_ADDR, BPF_CGROUP_UDP6_RECVMSG, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
-+	SEC_DEF("cgroup/getpeername4",	CGROUP_SOCK_ADDR, BPF_CGROUP_INET4_GETPEERNAME, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
-+	SEC_DEF("cgroup/getpeername6",	CGROUP_SOCK_ADDR, BPF_CGROUP_INET6_GETPEERNAME, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
-+	SEC_DEF("cgroup/getsockname4",	CGROUP_SOCK_ADDR, BPF_CGROUP_INET4_GETSOCKNAME, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
-+	SEC_DEF("cgroup/getsockname6",	CGROUP_SOCK_ADDR, BPF_CGROUP_INET6_GETSOCKNAME, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
-+	SEC_DEF("cgroup/sysctl",	CGROUP_SYSCTL, BPF_CGROUP_SYSCTL, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
-+	SEC_DEF("cgroup/getsockopt",	CGROUP_SOCKOPT, BPF_CGROUP_GETSOCKOPT, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
-+	SEC_DEF("cgroup/setsockopt",	CGROUP_SOCKOPT, BPF_CGROUP_SETSOCKOPT, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
-+	SEC_DEF("struct_ops+",		STRUCT_OPS, 0, SEC_NONE),
- 	SEC_DEF("sk_lookup/",		SK_LOOKUP, BPF_SK_LOOKUP, SEC_ATTACHABLE),
- };
- 
-@@ -8048,11 +8049,53 @@ static const struct bpf_sec_def section_defs[] = {
- 
- static const struct bpf_sec_def *find_sec_def(const char *sec_name)
- {
--	int i, n = ARRAY_SIZE(section_defs);
-+	const struct bpf_sec_def *sec_def;
-+	enum sec_def_flags sec_flags;
-+	int i, n = ARRAY_SIZE(section_defs), len;
-+	bool strict = libbpf_mode & LIBBPF_STRICT_SEC_NAME;
- 
- 	for (i = 0; i < n; i++) {
--		if (str_has_pfx(sec_name, section_defs[i].sec))
--			return &section_defs[i];
-+		sec_def = &section_defs[i];
-+		sec_flags = sec_def->cookie;
-+		len = strlen(sec_def->sec);
-+
-+		/* "type/" always has to have proper SEC("type/extras") form */
-+		if (sec_def->sec[len - 1] == '/') {
-+			if (str_has_pfx(sec_name, sec_def->sec))
-+				return sec_def;
-+			continue;
-+		}
-+
-+		/* "type+" means it can be either exact SEC("type") or
-+		 * well-formed SEC("type/extras") with proper '/' separator
-+		 */
-+		if (sec_def->sec[len - 1] == '+') {
-+			len--;
-+			/* not even a prefix */
-+			if (strncmp(sec_name, sec_def->sec, len) != 0)
-+				continue;
-+			/* exact match or has '/' separator */
-+			if (sec_name[len] == '\0' || sec_name[len] == '/')
-+				return sec_def;
-+			continue;
-+		}
-+
-+		/* SEC_SLOPPY_PFX definitions are allowed to be just prefix
-+		 * matches, unless strict section name mode
-+		 * (LIBBPF_STRICT_SEC_NAME) is enabled, in which case the
-+		 * match has to be exact.
-+		 */
-+		if ((sec_flags & SEC_SLOPPY_PFX) && !strict)  {
-+			if (str_has_pfx(sec_name, sec_def->sec))
-+				return sec_def;
-+			continue;
-+		}
-+
-+		/* Definitions not marked SEC_SLOPPY_PFX (e.g.,
-+		 * SEC("syscall")) are exact matches in both modes.
-+		 */
-+		if (strcmp(sec_name, sec_def->sec) == 0)
-+			return sec_def;
- 	}
- 	return NULL;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index e76b55917905..2ad2a12c5482 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -612,6 +612,14 @@ static const char *kernel_type_name(const struct btf* =
+btf, u32 id)
+ 	return btf_name_by_offset(btf, btf_type_by_id(btf, id)->name_off);
  }
-diff --git a/tools/lib/bpf/libbpf_legacy.h b/tools/lib/bpf/libbpf_legacy.h
-index df0d03dcffab..74e6f860f703 100644
---- a/tools/lib/bpf/libbpf_legacy.h
-+++ b/tools/lib/bpf/libbpf_legacy.h
-@@ -46,6 +46,15 @@ enum libbpf_strict_mode {
- 	 */
- 	LIBBPF_STRICT_DIRECT_ERRS = 0x02,
- 
-+	/*
-+	 * Enforce strict BPF program section (SEC()) names.
-+	 * E.g., while prefiously SEC("xdp_whatever") or SEC("perf_event_blah") were
-+	 * allowed, with LIBBPF_STRICT_SEC_PREFIX this will become
-+	 * unrecognized by libbpf and would have to be just SEC("xdp") and
-+	 * SEC("xdp") and SEC("perf_event").
-+	 */
-+	LIBBPF_STRICT_SEC_NAME = 0x04,
+=20
++/* The reg state of a pointer or a bounded scalar was saved when
++ * it was spilled to the stack.
++ */
++static bool is_spilled_reg(const struct bpf_stack_state *stack)
++{
++	return stack->slot_type[BPF_REG_SIZE - 1] =3D=3D STACK_SPILL;
++}
 +
- 	__LIBBPF_STRICT_LAST,
- };
- 
--- 
+ static void print_verifier_state(struct bpf_verifier_env *env,
+ 				 const struct bpf_func_state *state)
+ {
+@@ -717,7 +725,7 @@ static void print_verifier_state(struct bpf_verifier_en=
+v *env,
+ 			continue;
+ 		verbose(env, " fp%d", (-i - 1) * BPF_REG_SIZE);
+ 		print_liveness(env, state->stack[i].spilled_ptr.live);
+-		if (state->stack[i].slot_type[0] =3D=3D STACK_SPILL) {
++		if (is_spilled_reg(&state->stack[i])) {
+ 			reg =3D &state->stack[i].spilled_ptr;
+ 			t =3D reg->type;
+ 			verbose(env, "=3D%s", reg_type_str[t]);
+@@ -2373,7 +2381,7 @@ static void mark_all_scalars_precise(struct bpf_verif=
+ier_env *env,
+ 				reg->precise =3D true;
+ 			}
+ 			for (j =3D 0; j < func->allocated_stack / BPF_REG_SIZE; j++) {
+-				if (func->stack[j].slot_type[0] !=3D STACK_SPILL)
++				if (!is_spilled_reg(&func->stack[j]))
+ 					continue;
+ 				reg =3D &func->stack[j].spilled_ptr;
+ 				if (reg->type !=3D SCALAR_VALUE)
+@@ -2415,7 +2423,7 @@ static int __mark_chain_precision(struct bpf_verifier=
+_env *env, int regno,
+ 	}
+=20
+ 	while (spi >=3D 0) {
+-		if (func->stack[spi].slot_type[0] !=3D STACK_SPILL) {
++		if (!is_spilled_reg(&func->stack[spi])) {
+ 			stack_mask =3D 0;
+ 			break;
+ 		}
+@@ -2514,7 +2522,7 @@ static int __mark_chain_precision(struct bpf_verifier=
+_env *env, int regno,
+ 				return 0;
+ 			}
+=20
+-			if (func->stack[i].slot_type[0] !=3D STACK_SPILL) {
++			if (!is_spilled_reg(&func->stack[i])) {
+ 				stack_mask &=3D ~(1ull << i);
+ 				continue;
+ 			}
+@@ -2713,7 +2721,7 @@ static int check_stack_write_fixed_off(struct bpf_ver=
+ifier_env *env,
+ 		/* regular write of data into stack destroys any spilled ptr */
+ 		state->stack[spi].spilled_ptr.type =3D NOT_INIT;
+ 		/* Mark slots as STACK_MISC if they belonged to spilled ptr. */
+-		if (state->stack[spi].slot_type[0] =3D=3D STACK_SPILL)
++		if (is_spilled_reg(&state->stack[spi]))
+ 			for (i =3D 0; i < BPF_REG_SIZE; i++)
+ 				state->stack[spi].slot_type[i] =3D STACK_MISC;
+=20
+@@ -2923,7 +2931,7 @@ static int check_stack_read_fixed_off(struct bpf_veri=
+fier_env *env,
+ 	stype =3D reg_state->stack[spi].slot_type;
+ 	reg =3D &reg_state->stack[spi].spilled_ptr;
+=20
+-	if (stype[0] =3D=3D STACK_SPILL) {
++	if (is_spilled_reg(&reg_state->stack[spi])) {
+ 		if (size !=3D BPF_REG_SIZE) {
+ 			if (reg->type !=3D SCALAR_VALUE) {
+ 				verbose_linfo(env, env->insn_idx, "; ");
+@@ -4514,11 +4522,11 @@ static int check_stack_range_initialized(
+ 			goto mark;
+ 		}
+=20
+-		if (state->stack[spi].slot_type[0] =3D=3D STACK_SPILL &&
++		if (is_spilled_reg(&state->stack[spi]) &&
+ 		    state->stack[spi].spilled_ptr.type =3D=3D PTR_TO_BTF_ID)
+ 			goto mark;
+=20
+-		if (state->stack[spi].slot_type[0] =3D=3D STACK_SPILL &&
++		if (is_spilled_reg(&state->stack[spi]) &&
+ 		    (state->stack[spi].spilled_ptr.type =3D=3D SCALAR_VALUE ||
+ 		     env->allow_ptr_leaks)) {
+ 			if (clobber) {
+@@ -10356,9 +10364,9 @@ static bool stacksafe(struct bpf_verifier_env *env,=
+ struct bpf_func_state *old,
+ 			 * return false to continue verification of this path
+ 			 */
+ 			return false;
+-		if (i % BPF_REG_SIZE)
++		if (i % BPF_REG_SIZE !=3D BPF_REG_SIZE - 1)
+ 			continue;
+-		if (old->stack[spi].slot_type[0] !=3D STACK_SPILL)
++		if (!is_spilled_reg(&old->stack[spi]))
+ 			continue;
+ 		if (!regsafe(env, &old->stack[spi].spilled_ptr,
+ 			     &cur->stack[spi].spilled_ptr, idmap))
+@@ -10565,7 +10573,7 @@ static int propagate_precision(struct bpf_verifier_=
+env *env,
+ 	}
+=20
+ 	for (i =3D 0; i < state->allocated_stack / BPF_REG_SIZE; i++) {
+-		if (state->stack[i].slot_type[0] !=3D STACK_SPILL)
++		if (!is_spilled_reg(&state->stack[i]))
+ 			continue;
+ 		state_reg =3D &state->stack[i].spilled_ptr;
+ 		if (state_reg->type !=3D SCALAR_VALUE ||
+--=20
 2.30.2
 
