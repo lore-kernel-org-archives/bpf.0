@@ -2,372 +2,152 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 07050C433F5
-	for <bpf@archiver.kernel.org>; Tue, 21 Sep 2021 21:05:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A4A4C433F5
+	for <bpf@archiver.kernel.org>; Tue, 21 Sep 2021 21:05:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C7B6F611BD
-	for <bpf@archiver.kernel.org>; Tue, 21 Sep 2021 21:05:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0FB7961186
+	for <bpf@archiver.kernel.org>; Tue, 21 Sep 2021 21:05:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232982AbhIUVGx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 21 Sep 2021 17:06:53 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:63428 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232718AbhIUVGx (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 21 Sep 2021 17:06:53 -0400
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18LHC7Sf011146
-        for <bpf@vger.kernel.org>; Tue, 21 Sep 2021 14:05:24 -0700
+        id S232981AbhIUVHC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 21 Sep 2021 17:07:02 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:15960 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232718AbhIUVHB (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 21 Sep 2021 17:07:01 -0400
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18LHA1H8020969
+        for <bpf@vger.kernel.org>; Tue, 21 Sep 2021 14:05:32 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=L316+TEwRU4isDazapftaYkgLTscK323/uV8/pplwDI=;
- b=FT3BD0ESQOzOsi6ODhRrw2MQBPEPaX/4qLByGBPyKN/wGN6alCdcbT/qFZtEwD9Knx7S
- zxszYu8qnIozH7DRcCqEMsWsF2A/NlK44TS8NHpXeAntdrx6tSRCgZyHD2Cf8eiVBIU8
- aRLXrH73MjHPgk6TyJAdvaXmnLF6xGRurUE= 
+ : date : message-id : content-type : content-transfer-encoding :
+ mime-version; s=facebook; bh=30+gXXvkNRZwBmM+QUEMzcWZad0B3FYUW4IDlH0C76A=;
+ b=Hku7LgZ0rOgZUcao178/AmNLvhbNzO9ZyF1DRwyW/ntIiKnD7fCTgc4riUrHC4nsqO4l
+ K/lwDvvFSEBrtYPQpuQKAXG1FgNi64BoKMtxRPWht0Hpg7UMnrVuVvAFhQ0iI0+dzlsG
+ +4bMecPjUHO/cb4VTwBJStDZxutTq/UBiNk= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 3b6xyhh5cm-1
+        by mx0a-00082601.pphosted.com with ESMTP id 3b79q5nc32-10
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 21 Sep 2021 14:05:24 -0700
-Received: from intmgw001.37.frc1.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 21 Sep 2021 14:05:32 -0700
+Received: from intmgw001.25.frc3.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Tue, 21 Sep 2021 14:05:23 -0700
+ 15.1.2308.14; Tue, 21 Sep 2021 14:04:47 -0700
 Received: by devbig612.frc2.facebook.com (Postfix, from userid 115148)
-        id 0FF162AC13CC; Tue, 21 Sep 2021 14:05:14 -0700 (PDT)
+        id 4ACE82AC130F; Tue, 21 Sep 2021 14:04:46 -0700 (PDT)
 From:   Joanne Koong <joannekoong@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     <Kernel-team@fb.com>, Joanne Koong <joannekoong@fb.com>
-Subject: [PATCH v3 bpf-next 3/5] selftests/bpf: Add bloom filter map test cases
-Date:   Tue, 21 Sep 2021 14:02:23 -0700
-Message-ID: <20210921210225.4095056-4-joannekoong@fb.com>
+Subject: [PATCH v3 bpf-next 0/5] Implement bloom filter map
+Date:   Tue, 21 Sep 2021 14:02:20 -0700
+Message-ID: <20210921210225.4095056-1-joannekoong@fb.com>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210921210225.4095056-1-joannekoong@fb.com>
-References: <20210921210225.4095056-1-joannekoong@fb.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-ORIG-GUID: qByvBt7GzB8HCERbgSLU9av1ToP3yWXf
-X-Proofpoint-GUID: qByvBt7GzB8HCERbgSLU9av1ToP3yWXf
+X-Proofpoint-GUID: TLE6rmngUTfvNuXrKvm_-V3Mu35SGOG9
+X-Proofpoint-ORIG-GUID: TLE6rmngUTfvNuXrKvm_-V3Mu35SGOG9
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 1 URL was un-rewritten
+MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
  definitions=2021-09-21_06,2021-09-20_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
- malwarescore=0 bulkscore=0 mlxlogscore=972 adultscore=0 priorityscore=1501
- suspectscore=0 clxscore=1015 mlxscore=0 lowpriorityscore=0 phishscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
+ impostorscore=0 bulkscore=0 phishscore=0 mlxlogscore=894 clxscore=1015
+ spamscore=0 mlxscore=0 suspectscore=0 malwarescore=0 adultscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2109030001 definitions=main-2109210125
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch adds test cases for bpf bloom filter maps. They include tests
-checking against invalid operations by userspace, tests for using the blo=
-om
-filter map as an inner map, and a bpf program that queries the bloom filt=
-er
-map for values added by a userspace program.
+This patchset adds a new kind of bpf map: the bloom filter map.
+Bloom filters are a space-efficient probabilistic data structure
+used to quickly test whether an element exists in a set.
+For a brief overview about how bloom filters work,
+https://en.wikipedia.org/wiki/Bloom_filter
+may be helpful.
 
-Signed-off-by: Joanne Koong <joannekoong@fb.com>
----
- .../bpf/prog_tests/bloom_filter_map.c         | 177 ++++++++++++++++++
- .../selftests/bpf/progs/bloom_filter_map.c    |  83 ++++++++
- 2 files changed, 260 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/bloom_filter_m=
+One example use-case is an application leveraging a bloom filter
+map to determine whether a computationally expensive hashmap
+lookup can be avoided. If the element was not found in the bloom
+filter map, the hashmap lookup can be skipped.
+
+This patchset includes benchmarks for testing the performance of
+the bloom filter for different entry sizes and different number of
+hash functions used, as well as comparisons for hashmap lookups
+with vs. without the bloom filter.
+
+v2 -> v3:
+* Add libbpf changes for supporting nr_hash_funcs, instead of passing the
+number of hash functions through map_flags.
+* Separate the hashing logic in kernel/bpf/bloom_filter.c into a helper
+function
+
+v1 -> v2:
+* Remove libbpf changes, and pass the number of hash functions through
+map_flags instead.
+* Default to using 5 hash functions if no number of hash functions
+is specified.
+* Use set_bit instead of spinlocks in the bloom filter bitmap. This
+improved the speed significantly. For example, using 5 hash functions
+with 100k entries, there was roughly a 35% speed increase.
+* Use jhash2 (instead of jhash) for u32-aligned value sizes. This
+increased the speed by roughly 5 to 15%. When using jhash2 on value
+sizes non-u32 aligned (truncating any remainder bits), there was not
+a noticeable difference.
+* Add test for using the bloom filter as an inner map.
+* Reran the benchmarks, updated the commit messages to correspond to
+the new results.
+
+
+Joanne Koong (5):
+  bpf: Add bloom filter map implementation
+  libbpf: Allow the number of hashes in bloom filter maps to be
+    configurable
+  selftests/bpf: Add bloom filter map test cases
+  bpf/benchs: Add benchmark test for bloom filter maps
+  bpf/benchs: Add benchmarks for comparing hashmap lookups with vs.
+    without bloom filter
+
+ include/linux/bpf_types.h                     |   1 +
+ include/uapi/linux/bpf.h                      |   6 +-
+ kernel/bpf/Makefile                           |   2 +-
+ kernel/bpf/bloom_filter.c                     | 185 +++++++++
+ kernel/bpf/syscall.c                          |  14 +-
+ kernel/bpf/verifier.c                         |  19 +-
+ tools/include/uapi/linux/bpf.h                |   6 +-
+ tools/lib/bpf/bpf.c                           |   2 +
+ tools/lib/bpf/bpf.h                           |   1 +
+ tools/lib/bpf/libbpf.c                        |  32 +-
+ tools/lib/bpf/libbpf.h                        |   2 +
+ tools/lib/bpf/libbpf.map                      |   1 +
+ tools/lib/bpf/libbpf_internal.h               |   4 +-
+ tools/testing/selftests/bpf/Makefile          |   4 +-
+ tools/testing/selftests/bpf/bench.c           |  57 ++-
+ tools/testing/selftests/bpf/bench.h           |   3 +
+ .../bpf/benchs/bench_bloom_filter_map.c       | 384 ++++++++++++++++++
+ .../bpf/benchs/run_bench_bloom_filter_map.sh  |  43 ++
+ .../bpf/benchs/run_bench_ringbufs.sh          |  30 +-
+ .../selftests/bpf/benchs/run_common.sh        |  60 +++
+ .../bpf/prog_tests/bloom_filter_map.c         | 177 ++++++++
+ .../selftests/bpf/progs/bloom_filter_map.c    | 157 +++++++
+ 22 files changed, 1142 insertions(+), 48 deletions(-)
+ create mode 100644 kernel/bpf/bloom_filter.c
+ create mode 100644 tools/testing/selftests/bpf/benchs/bench_bloom_filter_m=
 ap.c
+ create mode 100755 tools/testing/selftests/bpf/benchs/run_bench_bloom_filt=
+er_map.sh
+ create mode 100644 tools/testing/selftests/bpf/benchs/run_common.sh
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/bloom_filter_map=
+.c
  create mode 100644 tools/testing/selftests/bpf/progs/bloom_filter_map.c
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bloom_filter_map.c b/=
-tools/testing/selftests/bpf/prog_tests/bloom_filter_map.c
-new file mode 100644
-index 000000000000..134705d74a66
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/bloom_filter_map.c
-@@ -0,0 +1,177 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2021 Facebook */
-+
-+#include <sys/syscall.h>
-+#include <test_progs.h>
-+#include "bloom_filter_map.skel.h"
-+
-+static void test_bloom_filter_map_fail(void)
-+{
-+	struct bpf_create_map_attr xattr =3D {
-+		.name =3D "bloom_filter_map",
-+		.map_type =3D BPF_MAP_TYPE_BLOOM_FILTER,
-+		.max_entries =3D 100,
-+		.value_size =3D sizeof(__u32),
-+		.nr_hash_funcs =3D 3,
-+	};
-+	__u32 value;
-+	int fd, err;
-+
-+	/* Invalid key size */
-+	xattr.key_size =3D 4;
-+	fd =3D bpf_create_map_xattr(&xattr);
-+	if (!ASSERT_LT(fd, 0, "bpf_create_map bloom filter invalid key size"))
-+		close(fd);
-+	xattr.key_size =3D 0;
-+
-+	/* Invalid value size */
-+	xattr.value_size =3D 0;
-+	fd =3D bpf_create_map_xattr(&xattr);
-+	if (!ASSERT_LT(fd, 0, "bpf_create_map bloom filter invalid value size")=
-)
-+		close(fd);
-+	xattr.value_size =3D sizeof(__u32);
-+
-+	/* Invalid max entries size */
-+	xattr.max_entries =3D 0;
-+	fd =3D bpf_create_map_xattr(&xattr);
-+	if (!ASSERT_LT(fd, 0, "bpf_create_map bloom filter invalid max entries =
-size"))
-+		close(fd);
-+	xattr.max_entries =3D 100;
-+
-+	/* Bloom filter maps do not support BPF_F_NO_PREALLOC */
-+	xattr.map_flags =3D BPF_F_NO_PREALLOC;
-+	fd =3D bpf_create_map_xattr(&xattr);
-+	if (!ASSERT_LT(fd, 0, "bpf_create_map bloom filter invalid flags"))
-+		close(fd);
-+	xattr.map_flags =3D 0;
-+
-+	fd =3D bpf_create_map_xattr(&xattr);
-+	if (!ASSERT_GE(fd, 0, "bpf_create_map bloom filter"))
-+		return;
-+
-+	/* Test invalid flags */
-+	err =3D bpf_map_update_elem(fd, NULL, &value, -1);
-+	ASSERT_EQ(err, -EINVAL, "bpf_map_update_elem bloom filter invalid flags=
-");
-+
-+	err =3D bpf_map_update_elem(fd, NULL, &value, BPF_EXIST);
-+	ASSERT_EQ(err, -EINVAL, "bpf_map_update_elem bloom filter invalid flags=
-");
-+
-+	err =3D bpf_map_update_elem(fd, NULL, &value, BPF_F_LOCK);
-+	ASSERT_EQ(err, -EINVAL, "bpf_map_update_elem bloom filter invalid flags=
-");
-+
-+	err =3D bpf_map_update_elem(fd, NULL, &value, BPF_NOEXIST);
-+	ASSERT_EQ(err, -EINVAL, "bpf_map_update_elem bloom filter invalid flags=
-");
-+
-+	err =3D bpf_map_update_elem(fd, NULL, &value, 10000);
-+	ASSERT_EQ(err, -EINVAL, "bpf_map_update_elem bloom filter invalid flags=
-");
-+
-+	close(fd);
-+}
-+
-+static void bloom_filter_map(struct bloom_filter_map *skel)
-+{
-+	const int map_size =3D bpf_map__max_entries(skel->maps.map_random_data)=
-;
-+	int err, map_random_data_fd, map_bloom_filter_fd, i;
-+	__u64 val;
-+	struct bpf_link *link;
-+
-+	map_random_data_fd =3D bpf_map__fd(skel->maps.map_random_data);
-+	map_bloom_filter_fd =3D bpf_map__fd(skel->maps.map_bloom_filter);
-+
-+	/* Generate random values and add them to the maps */
-+	for (i =3D 0; i < map_size; i++) {
-+		val =3D rand();
-+		err =3D bpf_map_update_elem(map_random_data_fd, &i, &val, BPF_ANY);
-+		if (!ASSERT_OK(err, "Add random value to map_random_data"))
-+			continue;
-+
-+		err =3D bpf_map_update_elem(map_bloom_filter_fd, NULL, &val, 0);
-+		if (!ASSERT_OK(err, "Add random value to map_bloom_filter"))
-+			return;
-+	}
-+
-+	link =3D bpf_program__attach(skel->progs.prog_bloom_filter);
-+	if (!ASSERT_OK_PTR(link, "link"))
-+		return;
-+
-+	syscall(SYS_getpgid);
-+
-+	ASSERT_EQ(skel->bss->error, 0, "error");
-+
-+	bpf_link__destroy(link);
-+}
-+
-+static void bloom_filter_inner_map(struct bloom_filter_map *skel)
-+{
-+	const int map_size =3D bpf_map__max_entries(skel->maps.map_random_data)=
-;
-+	int outer_map_fd, inner_map_fd, map_random_data_fd, err, i, key =3D 0;
-+	struct bpf_create_map_attr xattr =3D {
-+		.name =3D "bloom_filter_inner_map",
-+		.map_type =3D BPF_MAP_TYPE_BLOOM_FILTER,
-+		.max_entries =3D map_size,
-+		.value_size =3D sizeof(__u64),
-+	};
-+	struct bpf_link *link;
-+	__u64 val;
-+
-+	/* Create a bloom filter map that will be used as the inner map */
-+	inner_map_fd =3D bpf_create_map_xattr(&xattr);
-+	if (!ASSERT_GE(inner_map_fd, 0, "bpf_create_map bloom filter map as inn=
-er map"))
-+		return;
-+
-+	/* Generate random values and add them to the maps */
-+	map_random_data_fd =3D bpf_map__fd(skel->maps.map_random_data);
-+	for (i =3D 0; i < map_size; i++) {
-+		val =3D rand();
-+		err =3D bpf_map_update_elem(map_random_data_fd, &i, &val, BPF_ANY);
-+		if (!ASSERT_OK(err, "Add random value to map_random_data"))
-+			continue;
-+
-+		err =3D bpf_map_update_elem(inner_map_fd, NULL, &val, 0);
-+		if (!ASSERT_OK(err, "Add random value to inner_map_fd"))
-+			goto done;
-+	}
-+
-+	outer_map_fd =3D bpf_map__fd(skel->maps.outer_map);
-+	/* Add the bloom filter map to the outer map */
-+	err =3D bpf_map_update_elem(outer_map_fd, &key, &inner_map_fd, 0);
-+	if (!ASSERT_OK(err, "Add bloom filter map to outer map"))
-+		goto done;
-+
-+	/* Attach the bloom_filter_inner_map prog */
-+	link =3D bpf_program__attach(skel->progs.prog_bloom_filter_inner_map);
-+	if (!ASSERT_OK_PTR(link, "link"))
-+		goto delete_inner_map;
-+
-+	syscall(SYS_getpgid);
-+
-+	ASSERT_EQ(skel->bss->error, 0, "error");
-+
-+	bpf_link__destroy(link);
-+
-+delete_inner_map:
-+	/* Ensure the inner bloom filter map can be deleted */
-+	err =3D bpf_map_delete_elem(outer_map_fd, &key);
-+	ASSERT_OK(err, "Delete inner bloom filter map");
-+
-+done:
-+	close(inner_map_fd);
-+}
-+
-+void test_bloom_filter_map(void)
-+{
-+	struct bloom_filter_map *skel;
-+
-+	test_bloom_filter_map_fail();
-+
-+	skel =3D bloom_filter_map__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "bloom_filter_map__open_and_load"))
-+		goto cleanup;
-+
-+	bloom_filter_map(skel);
-+
-+	bloom_filter_inner_map(skel);
-+
-+cleanup:
-+	bloom_filter_map__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/bloom_filter_map.c b/tools=
-/testing/selftests/bpf/progs/bloom_filter_map.c
-new file mode 100644
-index 000000000000..5925d8dce4ec
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/bloom_filter_map.c
-@@ -0,0 +1,83 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2021 Facebook */
-+
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+
-+char _license[] SEC("license") =3D "GPL";
-+
-+struct bpf_map;
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1000);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} map_random_data SEC(".maps");
-+
-+struct map_bloom_filter_type {
-+	__uint(type, BPF_MAP_TYPE_BLOOM_FILTER);
-+	__uint(key_size, 0);
-+	__uint(value_size, sizeof(__u64));
-+	__uint(max_entries, 1000);
-+	__uint(nr_hash_funcs, 3);
-+} map_bloom_filter SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY_OF_MAPS);
-+	__uint(max_entries, 1);
-+	__uint(key_size, sizeof(int));
-+	__uint(value_size, sizeof(int));
-+	__array(values, struct map_bloom_filter_type);
-+} outer_map SEC(".maps");
-+
-+struct callback_ctx {
-+	struct map_bloom_filter_type *map;
-+};
-+
-+int error =3D 0;
-+
-+static __u64
-+check_elem(struct bpf_map *map, __u32 *key, __u64 *val,
-+	   struct callback_ctx *data)
-+{
-+	int err;
-+
-+	err =3D bpf_map_peek_elem(data->map, val);
-+	if (err) {
-+		error |=3D 1;
-+		return 1; /* stop the iteration */
-+	}
-+
-+	return 0;
-+}
-+
-+SEC("fentry/__x64_sys_getpgid")
-+int prog_bloom_filter(void *ctx)
-+{
-+	struct callback_ctx data;
-+
-+	data.map =3D &map_bloom_filter;
-+	bpf_for_each_map_elem(&map_random_data, check_elem, &data, 0);
-+
-+	return 0;
-+}
-+
-+SEC("fentry/__x64_sys_getpgid")
-+int prog_bloom_filter_inner_map(void *ctx)
-+{
-+	struct map_bloom_filter_type *inner_map;
-+	struct callback_ctx data;
-+	int key =3D 0;
-+
-+	inner_map =3D bpf_map_lookup_elem(&outer_map, &key);
-+	if (!inner_map) {
-+		error |=3D 2;
-+		return 0;
-+	}
-+
-+	data.map =3D inner_map;
-+	bpf_for_each_map_elem(&map_random_data, check_elem, &data, 0);
-+
-+	return 0;
-+}
 --=20
 2.30.2
 
