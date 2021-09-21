@@ -7,108 +7,90 @@ X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CC8D1C433F5
-	for <bpf@archiver.kernel.org>; Tue, 21 Sep 2021 01:59:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 190E8C433F5
+	for <bpf@archiver.kernel.org>; Tue, 21 Sep 2021 03:25:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B4206610A8
-	for <bpf@archiver.kernel.org>; Tue, 21 Sep 2021 01:59:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F28A761159
+	for <bpf@archiver.kernel.org>; Tue, 21 Sep 2021 03:25:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240789AbhIUCAz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 20 Sep 2021 22:00:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35176 "EHLO
+        id S232378AbhIUD0o (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 20 Sep 2021 23:26:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238530AbhIUB5o (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 20 Sep 2021 21:57:44 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DAF5C08EA79;
-        Mon, 20 Sep 2021 17:57:28 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id p12-20020a17090adf8c00b0019c959bc795so1288465pjv.1;
-        Mon, 20 Sep 2021 17:57:28 -0700 (PDT)
+        with ESMTP id S1352137AbhIUClV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 20 Sep 2021 22:41:21 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 774E3C0613DE
+        for <bpf@vger.kernel.org>; Mon, 20 Sep 2021 19:32:37 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id z14-20020a17090a8b8e00b0019cc29ceef1so906888pjn.1
+        for <bpf@vger.kernel.org>; Mon, 20 Sep 2021 19:32:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=C9T7fESSoh8+qjTExbEsMsHHmHa36v14/SiTrX3dtRw=;
-        b=mXASDEFNIGC0eSTUEscsDYNYA9zANDrE+S0bOJRaggwZ1NhfSQwmw9uPHLVAKJHv+J
-         2I7arLLj4XOU0/EDQiLFIVJStjjnh8p/LcjdceKLqN6ciBi0pzZ7P9fJHySVpX0u20mh
-         T3AUNjtHM3GoDk3/GUphVR3LgVTOd17rTKCXuCsPjwqfmoan5p/1r/KU4bj2lQb1oUFb
-         z1r6iB5/+L9WlGhPKZd0qtzifEqVtyp3n/rfRpteJOOYBAP3b8EKe7eoT6lGA0v+X+h+
-         I08wQTCXQHHbiK77DeXEXt2l7CKQ1F2ocgFLCz18jpOgRxLkGcIokoaF3t4vH6vwYyAE
-         Xoog==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Kh9m4MsiS5aI2YIIkSc7q5nTUFUakrir8LRIIqVUNec=;
+        b=Wk0DGPRtV9aFleftAiyyoOdH1EdwsyP4fwPNPCzbT8Ucs/Tvmj379NjXAU7E6NGDJN
+         H5CSmVObGptPI0ivz+G+pRMrWy06hhikY77FGYMpmOy+eQLbI4i0ut1w2guhUYRyhK1E
+         CT3aRnkF20s9FDWigHhDtfssDZcCDIWjV2zgTJ3EnxqksCV6gbsqFGUW4rxhWdRExF62
+         ++RdnTYZ+pglknIFbIsa3y+tO9VE9xHt31MjFE1qB1ofGZFOorDVR9mI8Z4VYY2ssrPs
+         Y47/Nnd7BPE9uhtTP6wq43fUfs7zStFcdvRHg19+Cv9VfR+ml8AL5ojR2dXtj1eufRyT
+         2V2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=C9T7fESSoh8+qjTExbEsMsHHmHa36v14/SiTrX3dtRw=;
-        b=FnR4hGVfKRUw25IWK1PZrPlMdUs+3onDvJUAMceOj9ah9iz57jMWW+tt6wKywtn/av
-         AQSXFU9LATmNHcDx7VwI1OjiLiEa1ApYrmeJGW2TT3WC3zMzPhRDnvjrIBzMUU5UX6AS
-         OgwYjGwOrjbXgpZzalt5mXLXlXKWwZlbQEwww2aDMWI/N1gr3g3pwwmSDg+vuT8eJS4O
-         I7fZ17asxyGWMHIhavfHSaMwGdz2ID8iCOykcayTriatHpVJ+t3qZwwdO9aEVX6tSJgg
-         wmuiqfKEmNfwINtV97Sr+wa/SOq6QOLH3iEjWjJo/L5iJiF27ZGVA+GYKj2ANT3Tvi2H
-         vw0Q==
-X-Gm-Message-State: AOAM5339LsT0OmWQniku8IaFTUay2IQrolM+6OrmggSSOFshRpulXegN
-        kK6l9vjy+H4iOI7OskZiNsrWqyr2CQBeS4sl2sY=
-X-Google-Smtp-Source: ABdhPJw4P8dRm8NXYPBPr2wdBJLrwhcA0M6gNgU5Ej1o01V80YKOSbEzSHpNcdKsGz4mZz4FrzsEVTX3IErnCjdR0Dw=
-X-Received: by 2002:a17:902:7246:b0:138:a6ed:66cc with SMTP id
- c6-20020a170902724600b00138a6ed66ccmr25566330pll.22.1632185847754; Mon, 20
- Sep 2021 17:57:27 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210920141526.3940002-1-memxor@gmail.com> <20210920141526.3940002-9-memxor@gmail.com>
-In-Reply-To: <20210920141526.3940002-9-memxor@gmail.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Kh9m4MsiS5aI2YIIkSc7q5nTUFUakrir8LRIIqVUNec=;
+        b=rCJq1okTePtI25keIP11D5+HG/3HsxArDt9YoCbAPejkXjLkueMaIBJFdh+Dy3O++M
+         CwNCT/GfB3cye55a6P9cR1E95b3QQoZnbWP9w32zBaxanXfZ3KIthgJLZtjsf311WTm6
+         jbPMiIEAxSVrUwQTNktlCiGJ+tA2g0n4TJmBiuiRT0YbGQMuuDxuiSjrWQrFSDOT8HIW
+         FB846UqaC5mMY1Sbf/xsdIyaRyLIe5rxooMwq4SNxTJ6BLpl1IUIi2k1yqYC0GT+gmkQ
+         WN9yl+FBNbQ58YhxdO89xf1CwvRSpulGxXVm5fFIO6VyLpYeawl1zJ/uQT3grZ0c4qET
+         rNfA==
+X-Gm-Message-State: AOAM5319jhB1OACfYGgl+hsGwC9Vp+DJNtbaISfI0+2zS1RujbmW0QZ8
+        3uO/P/7YErpofssNB7fSdUwDREyBTKs=
+X-Google-Smtp-Source: ABdhPJwOQXMO44hgiyNrJoKo9lAr8TxDvL5PGwbadBLGgY6jPjZNaZfIm1mTAfCvMugKO6/hQCMeKQ==
+X-Received: by 2002:a17:902:d202:b0:13a:709b:dfb0 with SMTP id t2-20020a170902d20200b0013a709bdfb0mr25550666ply.34.1632191556751;
+        Mon, 20 Sep 2021 19:32:36 -0700 (PDT)
+Received: from ast-mbp ([2620:10d:c090:400::5:e78f])
+        by smtp.gmail.com with ESMTPSA id a4sm625683pjd.48.2021.09.20.19.32.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Sep 2021 19:32:36 -0700 (PDT)
+Date:   Mon, 20 Sep 2021 19:32:34 -0700
 From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Mon, 20 Sep 2021 17:57:16 -0700
-Message-ID: <CAADnVQKjoCLNYBwDvLjgG9cYxrZyhw1Bgvm0yzH0gUWQLNtZnw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 08/11] libbpf: Update gen_loader to emit
- BTF_KIND_FUNC relocations
-To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+To:     Martin KaFai Lau <kafai@fb.com>
+Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
-        Network Development <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com,
+        Yonghong Song <yhs@fb.com>
+Subject: Re: [PATCH bpf-next 3/4] bpf: selftest: A bpf prog that has a 32bit
+ scalar spill
+Message-ID: <20210921023234.pjnby3s4q4o4agwe@ast-mbp>
+References: <20210921013102.1035356-1-kafai@fb.com>
+ <20210921013122.1037548-1-kafai@fb.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210921013122.1037548-1-kafai@fb.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Sep 20, 2021 at 7:15 AM Kumar Kartikeya Dwivedi
-<memxor@gmail.com> wrote:
->
-> This change updates the BPF syscall loader to relocate BTF_KIND_FUNC
-> relocations, with support for weak kfunc relocations. The next commit
-> adds bpftool supports to set up the fd_array_sz parameter for light
-> skeleton.
->
-> A second map for keeping fds is used instead of adding fds to existing
-> loader.map because of following reasons:
+On Mon, Sep 20, 2021 at 06:31:22PM -0700, Martin KaFai Lau wrote:
+> It is a simplified example that can trigger a 32bit scalar spill.
+> The const scalar is refilled and added to a skb->data later.
+> Since the reg state of the 32bit scalar spill is not saved now,
+> adding the refilled reg to skb->data and then comparing it with
+> skb->data_end cannot verify the skb->data access.
+> 
+> With the earlier verifier patch and the llvm patch [1].  The verifier
+> can correctly verify the bpf prog.
 
-but it complicates signing bpf progs a lot.
+Let's land llvm patch and wait until CI picks up the new llvm build?
+Please add a comment to selftests/bpf/README.rst that describes
+the failing test when llvm is old.
+I'm guessing there is no easier way to reliably skip the test
+in such situation, since failure to load might be the result
+of some future changes.
+llvm version check won't work either.
 
-> If reserving an area for map and BTF fds, we would waste the remaining
-> of (MAX_USED_MAPS + MAX_KFUNC_DESCS) * sizeof(int), which in most cases
-> will be unused by the program. Also, we must place some limit on the
-> amount of map and BTF fds a program can possibly open.
-
-That is just (256 + 64)*4 bytes of data. Really not much.
-I wouldn't worry about reserving this space.
-
-> If setting gen->fd_array to first map_fd offset, and then just finding
-> the offset relative to this (for later BTF fds), such that they can be
-> packed without wasting space, we run the risk of unnecessarily running
-> out of valid offset for emit_relo stage (for kfuncs), because gen map
-> creation and relocation stages are separated by other steps that can add
-> lots of data (including bpf_object__populate_internal_map). It is also
-> prone to break silently if features are added between map and BTF fd
-> emits that possibly add more data (just ~128KB to break BTF fd, since
-> insn->off allows for INT16_MAX (32767) * 4 bytes).
-
-I don't follow this logic.
-
-> Both of these issues are compounded by the fact that data map is shared
-> by all programs, so it is easy to end up with invalid offset for BTF fd.
-
-I don't follow this either. There is only one map and one program.
-What sharing are you talking about?
+the patch 2 looks correct to me. I couldn't spot any issue with the logic.
