@@ -2,215 +2,221 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51777C433EF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F9ACC433FE
 	for <bpf@archiver.kernel.org>; Tue, 21 Sep 2021 01:59:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 35C8361175
+	by mail.kernel.org (Postfix) with ESMTP id 506E761177
 	for <bpf@archiver.kernel.org>; Tue, 21 Sep 2021 01:59:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240737AbhIUCAx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 20 Sep 2021 22:00:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32928 "EHLO
+        id S237156AbhIUCAz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 20 Sep 2021 22:00:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237156AbhIUBwr (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 20 Sep 2021 21:52:47 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC3AAC0386FC
-        for <bpf@vger.kernel.org>; Mon, 20 Sep 2021 16:21:21 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id 73so43472023qki.4
-        for <bpf@vger.kernel.org>; Mon, 20 Sep 2021 16:21:21 -0700 (PDT)
+        with ESMTP id S238300AbhIUB5U (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 20 Sep 2021 21:57:20 -0400
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2328AC08EA3B;
+        Mon, 20 Sep 2021 17:29:35 -0700 (PDT)
+Received: by mail-qk1-x72a.google.com with SMTP id a10so48856786qka.12;
+        Mon, 20 Sep 2021 17:29:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=znh9ggZizMwDhKAV9Ni97xVIQID9gP6YfoS3LZVvffg=;
-        b=N8ZSpG7C6mN0SQeR7680td5NGAFslnD4wwN1QolFW95kOU8f01aiVDII1nd96YX0zq
-         tYEjYTSEJ69SGgfilLKPpOyt3hXuZkdSr64beccuZjyCmSlymxCAQAJYB2FZEGIJvcKW
-         E8W6p1KVv9DIc0xoYDs5/5cT6YmnWNSj6NEVr57t9Ab8ULlVDvRVnRvUlSUVuSlFOfGo
-         /A17gnCaG8Mm/oSu5/UhTPQg9hNrL2i4vnXzlyXKdCoYzUn4Jw2SnvGH4oKACYAPBTzA
-         6qny694uMuIWjVF8+pyYtiZUdqnJ7l/bM2cc1JUs7nP/Ycxq/LwTn0m9LJHdQ+uWFull
-         Gm5w==
+        bh=9WYHA1ADIeAF/q+IrRzT7f6TG2iOmFIT5qhHb1WD4SY=;
+        b=n52RGfSr/euWak3WMYkjsIVhjNPZlL9PHi0lVToVGqRB2zIGd5xZEbbo4eN5eNyVV1
+         BB5QBycs/Av78KwofVqFEm8uilNBCCUvoAAF2ejT2TzwQ361DtmNMHZpSv6iyI2He2Ar
+         moypjbo9kIFZqd7U7aJuCF0ouBI7AyeHnbsAx/blG5soI8zlrvdkc3tpClwoHogUNWwZ
+         7qP8myAm0jQ6x/PcnhBwB4vrnCE3H8JTXsut8LKuUkZ2ZYbhazGF6lggC40dPeTk2IJs
+         R/NytqG7cL14YBgGIBj2fie0l15I2OI+dfCPBluQvvRt+7OhhvFObRlTVbirjHKU3pur
+         Bmqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=znh9ggZizMwDhKAV9Ni97xVIQID9gP6YfoS3LZVvffg=;
-        b=bXhE6JEcGPDR77YZO+52D+VJ+U+xtyFQUJ6UldZidKSlj6S3DNv6ScHANdwWQlUexp
-         /FaPKKlaDdn+p2UdPRwuBQbBAHmt1ALgrLA2qOkpdXPrjMQkbqt3052bqJzA+RBlEbd0
-         vBtnlN/4VUjoy/lzPjJ1TU42Qr835KdLLxYQbqUB75Be0vyXGxFcbz2ArxvaNbXQ2O95
-         sJgV++F5HfiiDXCmYKtAoOhNEp5FfljAbwMZWOXOfHHeMXlZsRxCtg9H+Gm9qvmrpXoq
-         fOwJ1ebLuVE0ygIWxL/uBYfrIVi3mgbGnX6yOON5u7R93/aK2scZxtcvLyvtChtxUdKp
-         NsxA==
-X-Gm-Message-State: AOAM530gQ0WAZUs2SPrRCSGcY/moBsVBHcsNUIPqFuiCn8ryPP5ge9m8
-        S5iS2z1Xs1Z/RrfDmVBcct9biDO9LqSuResFxGw=
-X-Google-Smtp-Source: ABdhPJyVoVQBXjUMvWz68EcBWd22uXQ3Tvd7Y1AoPTM616Y5BbvZ0Xo5IDxlKWuYzMIQ8VLDPZe3peiKekUOdyxEKI4=
-X-Received: by 2002:a25:47c4:: with SMTP id u187mr37048023yba.225.1632180080962;
- Mon, 20 Sep 2021 16:21:20 -0700 (PDT)
+        bh=9WYHA1ADIeAF/q+IrRzT7f6TG2iOmFIT5qhHb1WD4SY=;
+        b=GPzn7saM/04n927WGGOvn9QxbY0lj4GLkFBjYq56E2Nt+QwxE8wfBvIHb/YaeEuAFn
+         giz2BMqDztoJ2h0KthlojXkyi69lAR2WW2BcfHQ7YXKpsYLUU37/oYjboNrW/COlvpc6
+         E5+Ddpl2gaXcbxpHuoR0PlyV78feADi985ioCuX6bKHqiX7sqY62A8kSHamRGkKr6zpM
+         QkQ6n7Bd36KkOL2KxlmVHy8QMEXHr+0DLAop7ZVrBFPB/CChSPu7ii+RfFaRQWfuVWGm
+         i5Qw12Dh/4ajq0gqGbLO+WfjCqvueWuDUYPpaJj7tHaSfJ6jFxEpj4reUf6JomUzTK5e
+         XrQg==
+X-Gm-Message-State: AOAM530UEUD9dwxbPV81UA9D5iQpDPvFsnrxt0ECF0xIJrvApK9rBIt1
+        dbxRobeEtRPvCtiXE2r5WOFCRgAQqObP2opkbzw=
+X-Google-Smtp-Source: ABdhPJxhi2CU0vH8WHBEzspNdMxMDmR2S+HWuaOF+Bv4B3Rv/eYkTGup5dhDdUKEqSk76GqZxi5OpnwLkJaYt5CB6eI=
+X-Received: by 2002:a25:1bc5:: with SMTP id b188mr34253077ybb.267.1632184173982;
+ Mon, 20 Sep 2021 17:29:33 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210914040433.3184308-1-joannekoong@fb.com> <20210914040433.3184308-2-joannekoong@fb.com>
- <20210917170130.njmm3dm65ftd76vo@ast-mbp> <CAEf4BzaA2QCmcc0nZqNbAqMdabqhjE5X_Nh59QjP8kd=iGH5GA@mail.gmail.com>
- <17d7b319-01d0-163e-57b6-c385d38cc9ad@fb.com>
-In-Reply-To: <17d7b319-01d0-163e-57b6-c385d38cc9ad@fb.com>
+References: <20210920141526.3940002-1-memxor@gmail.com>
+In-Reply-To: <20210920141526.3940002-1-memxor@gmail.com>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 20 Sep 2021 16:21:09 -0700
-Message-ID: <CAEf4BzYRZM7Oi_CY=trjvefkavt5dwfF-Zu2GKihhfpeopGAnw@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next 1/4] bpf: Add bloom filter map implementation
-To:     Joanne Koong <joannekoong@fb.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        bpf <bpf@vger.kernel.org>, Kernel Team <Kernel-team@fb.com>
+Date:   Mon, 20 Sep 2021 17:29:22 -0700
+Message-ID: <CAEf4Bzb1zRX1=VsMtQF9Kee=OGbtcgSrvPT3UhoAz5vsvL=WOA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 00/11] Support kernel module function calls
+ from eBPF
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        Networking <netdev@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Sep 20, 2021 at 3:52 PM Joanne Koong <joannekoong@fb.com> wrote:
+On Mon, Sep 20, 2021 at 7:15 AM Kumar Kartikeya Dwivedi
+<memxor@gmail.com> wrote:
 >
-> My previous email replied to Alexei's email before I saw Andrii's new
-> email, so please
-> feel free to disregard my previous email.
+> This set enables kernel module function calls, and also modifies verifier logic
+> to permit invalid kernel function calls as long as they are pruned as part of
+> dead code elimination. This is done to provide better runtime portability for
+> BPF objects, which can conditionally disable parts of code that are pruned later
+> by the verifier (e.g. const volatile vars, kconfig options). libbpf
+> modifications are made along with kernel changes to support module function
+> calls. The set includes gen_loader support for emitting kfunc relocations.
+>
+> It also converts TCP congestion control objects to use the module kfunc support
+> instead of relying on IS_BUILTIN ifdef.
+>
+> Changelog:
+> ----------
+> v3 -> v4
 
-Never got that reply of yours. Alexei's email arrived a few hours
-after I've already replied to you. It was a time warp anomaly :)
+Please use vmtest.sh locally to test everything. That should help to
+avoid breaking our CI ([0]):
 
->
-> On 9/20/21 1:58 PM, Andrii Nakryiko wrote:
->
-> > On Fri, Sep 17, 2021 at 6:08 PM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> >> On Mon, Sep 13, 2021 at 09:04:30PM -0700, Joanne Koong wrote:
-> >>> +
-> >>> +/* For bloom filter maps, the next 4 bits represent how many hashes to use.
-> >>> + * The maximum number of hash functions supported is 15. If this is not set,
-> >>> + * the default number of hash functions used will be 5.
-> >>> + */
-> >>> +     BPF_F_BLOOM_FILTER_HASH_BIT_1 = (1U << 13),
-> >>> +     BPF_F_BLOOM_FILTER_HASH_BIT_2 = (1U << 14),
-> >>> +     BPF_F_BLOOM_FILTER_HASH_BIT_3 = (1U << 15),
-> >>> +     BPF_F_BLOOM_FILTER_HASH_BIT_4 = (1U << 16),
-> >> The bit selection is unintuitive.
-> >> Since key_size has to be zero may be used that instead to indicate the number of hash
-> >> functions in the rare case when 5 is not good enough?
-> > Hm... I was initially thinking about proposing something like that,
-> > but it felt a bit ugly at the time. But now thinking about this a bit
-> > more, I think this would be a bit more meaningful if we change the
-> > terminology a bit. Instead of saying that Bloom filter has values and
-> > no keys, we actually have keys and no values. So all those bytes that
-> > are hashed are treated as keys (which is actually how sets are
-> > implemented on top of maps, where you have keys and no values, or at
-> > least the value is always true).
-> >
-> > So with that we'll have key/key_size to specify number of bytes that
-> > needs to be hashed (and it's type info). And then we can squint a bit
-> > and say that number of hashes are specified by value_size, as in
-> > values are those nr_hash bits that we set in Bloom filter.
-> >
-> > Still a bit of terminology stretch, but won't necessitate those
-> > specialized fields just for Bloom filter map. But if default value is
-> > going to be good enough for most cases and most cases won't need to
-> > adjust number of hashes, this seems to be pretty clean to me.
->
-> With having bloom filter map keys instead of values,  I think this would
-> lead to messier code in the kernel for handling map_lookup_elem
-> and map_update_elem calls, due to the fact that the bloom filter map
-> is a non-associative map and the current APIs for non-associative map types
-> (peek_elem/push_elem/pop_elem) all have the map data as the value and
-> not the key.
->
-> For example, for map_update_elem, the API from the eBPF program side is
->
-> int (*map_update_elem)(struct bpf_map *map, void *key, void *value, u64
-> flags);
->
-> This would require us to either
->
-> a) Add some custom logic in syscall.c so that we bypass the
-> copy_from_bpfptr call on
-> bloom filter map values (necessary because memcpying 0 bytes still
-> requires the src pointer
-> to be valid), which would allow us to pass in a NULL value
->
-> b) Add a new function like
->
-> int (*map_push_key)(struct bpf_map *map, void *key, u64 flags)
->
-> that eBPF programs can call instead of map_update_elem.
->
-> or
->
-> c) Try to repurpose the existing map_push_elem API by passing in the key
-> instead of the value,
-> which would lead to inconsistent use of the API
->
-> I think if we could change the non-associative map types (currently only
-> stack maps and queue
-> maps, I believe) to have their data be a key instead of a value, and
-> have the pop/peek APIs use
-> keys instead of values, then this would be cleaner, since we could then
-> just use the existing peek/pop
-> APIs.
+  test_ksyms_module_libbpf:PASS:test_ksyms_module_libbpf__open 0 nsec
+  test_ksyms_module_libbpf:PASS:bpf_program__set_autoload false
+load_fail1 0 nsec
+  test_ksyms_module_libbpf:PASS:bpf_program__set_autoload false
+load_fail2 0 nsec
+  libbpf: load bpf program failed: Invalid argument
+  libbpf: -- BEGIN DUMP LOG ---
+  libbpf:
+  kernel btf_id 81786 is not a function
+  processed 0 insns (limit 1000000) max_states_per_insn 0 total_states
+0 peak_states 0 mark_read 0
 
-I don't think we can change existing map APIs anymore, unfortunately.
+  libbpf: -- END LOG --
+  libbpf: failed to load program 'handler'
+  libbpf: failed to load object 'test_ksyms_module_libbpf'
+  libbpf: failed to load BPF skeleton 'test_ksyms_module_libbpf': -4007
+  test_ksyms_module_libbpf:FAIL:test_ksyms_module_libbpf__load
+unexpected error: -4007 (errno 4007)
+  #66 ksyms_module_libbpf:FAIL
 
+  test_module_attach:PASS:skel_open 0 nsec
+  test_module_attach:PASS:set_attach_target 0 nsec
+  libbpf: load bpf program failed: Invalid argument
+  libbpf: -- BEGIN DUMP LOG ---
+  libbpf:
+  attach_btf_id 81768 is invalid
+  processed 0 insns (limit 1000000) max_states_per_insn 0 total_states
+0 peak_states 0 mark_read 0
+
+  libbpf: -- END LOG --
+  libbpf: failed to load program 'handle_tp_btf'
+  libbpf: failed to load object 'test_module_attach'
+  libbpf: failed to load BPF skeleton 'test_module_attach': -4007
+  test_module_attach:FAIL:skel_load failed to load skeleton
+  #81 module_attach:FAIL
+
+  [0] https://github.com/kernel-patches/bpf/pull/1807/checks?check_run_id=3652765027
+
+
+> v3: https://lore.kernel.org/bpf/20210915050943.679062-1-memxor@gmail.com
 >
-> >> Or use inner_map_fd since there is no possibility of having an inner map in bloomfilter.
-> >> It could be a union:
-> >>      __u32   max_entries;    /* max number of entries in a map */
-> >>      __u32   map_flags;      /* BPF_MAP_CREATE related
-> >>                               * flags defined above.
-> >>                               */
-> >>      union {
-> >>         __u32  inner_map_fd;   /* fd pointing to the inner map */
-> >>         __u32  nr_hash_funcs;  /* or number of hash functions */
-> >>      };
-> > This works as well. A bit more Bloom filter-only terminology
-> > throughout UAPI and libbpf, but I'd be fine with that as well.
-> >
-> Great, it looks like this is the consensus - I will go with this option
-> for v3!
-> >>      __u32   numa_node;      /* numa node */
-> >>
-> >>> +struct bpf_bloom_filter {
-> >>> +     struct bpf_map map;
-> >>> +     u32 bit_array_mask;
-> >>> +     u32 hash_seed;
-> >>> +     /* If the size of the values in the bloom filter is u32 aligned,
-> >>> +      * then it is more performant to use jhash2 as the underlying hash
-> >>> +      * function, else we use jhash. This tracks the number of u32s
-> >>> +      * in an u32-aligned value size. If the value size is not u32 aligned,
-> >>> +      * this will be 0.
-> >>> +      */
-> >>> +     u32 aligned_u32_count;
-> >> what is the performance difference?
-> >> May be we enforce 4-byte sized value for simplicity?
-> > This might be a bit too surprising, especially if keys are just some
-> > strings, where people might not expect that it has to 4-byte multiple
-> > size. And debugging this without extra tooling (like retsnoop) is
-> > going to be nightmarish.
-> >
-> > If the performance diff is huge and that if/else logic is
-> > unacceptable, we can also internally pad with up to 3 zero bytes and
-> > include those into the hash.
-> I think the if/else logic is unavoidable if we support non 4-byte
-> aligned value sizes,
-> unless we are okay with truncating any remainder bytes of non 4-byte
-> aligned values
-> and stipulating that a bloom filter map value size has to be greater
-> than 4 bytes (these
-> conditions would allow us to use jhash2 for every value without an
-> if/else check). If we
-> internally pad, we will have to pad on every update and lookup, which
-> would also
-> require an if/else.
-> Thanks for the comments and reviews, Alexei and Andrii. They are much
-> appreciated!
-
-I don't think truncation is an option. And I also forgot that we don't
-really store values, so there is nothing to pad, really. So yeah, I'd
-keep it as is, especially if that is not expensive (which I assume
-it's not). As I mentioned before, that logic can be encapsulated in a
-dedicated helper function and reused in a few places.
+>  * Address comments from Alexei
+>    * Drop MAX_BPF_STACK change, instead move map_fd and BTF fd to BPF array map
+>      and pass fd_array using BPF_PSEUDO_MAP_IDX_VALUE
+>  * Address comments from Andrii
+>    * Fix selftest to store to variable for observing function call instead of
+>      printk and polluting CI logs
+>  * Drop use of raw_tp for testing, instead reuse classifier based prog_test_run
+>  * Drop index + 1 based insn->off convention for kfunc module calls
+>  * Expand selftests to cover more corner cases
+>  * Misc cleanups
+>
+> v2 -> v3
+> v2: https://lore.kernel.org/bpf/20210914123750.460750-1-memxor@gmail.com
+>
+>  * Fix issues pointed out by Kernel Test Robot
+>  * Fix find_kfunc_desc to also take offset into consideration when comparing
+>
+> RFC v1 -> v2
+> v1: https://lore.kernel.org/bpf/20210830173424.1385796-1-memxor@gmail.com
+>
+>  * Address comments from Alexei
+>    * Reuse fd_array instead of introducing kfunc_btf_fds array
+>    * Take btf and module reference as needed, instead of preloading
+>    * Add BTF_KIND_FUNC relocation support to gen_loader infrastructure
+>  * Address comments from Andrii
+>    * Drop hashmap in libbpf for finding index of existing BTF in fd_array
+>    * Preserve invalid kfunc calls only when the symbol is weak
+>  * Adjust verifier selftests
+>
+> Kumar Kartikeya Dwivedi (11):
+>   bpf: Introduce BPF support for kernel module function calls
+>   bpf: Be conservative while processing invalid kfunc calls
+>   bpf: btf: Introduce helpers for dynamic BTF set registration
+>   tools: Allow specifying base BTF file in resolve_btfids
+>   bpf: Enable TCP congestion control kfunc from modules
+>   libbpf: Support kernel module function calls
+>   libbpf: Resolve invalid weak kfunc calls with imm = 0, off = 0
+>   libbpf: Update gen_loader to emit BTF_KIND_FUNC relocations
+>   tools: bpftool: Add separate fd_array map support for light skeleton
+>   libbpf: Fix skel_internal.h to set errno on loader retval < 0
+>   bpf: selftests: Add selftests for module kfunc support
+>
+>  include/linux/bpf.h                           |   8 +-
+>  include/linux/bpf_verifier.h                  |   2 +
+>  include/linux/bpfptr.h                        |   1 +
+>  include/linux/btf.h                           |  37 +++
+>  kernel/bpf/btf.c                              |  56 +++++
+>  kernel/bpf/core.c                             |   4 +
+>  kernel/bpf/verifier.c                         | 220 ++++++++++++++---
+>  net/bpf/test_run.c                            |   7 +-
+>  net/ipv4/bpf_tcp_ca.c                         |  36 +--
+>  net/ipv4/tcp_bbr.c                            |  28 ++-
+>  net/ipv4/tcp_cubic.c                          |  26 +-
+>  net/ipv4/tcp_dctcp.c                          |  26 +-
+>  scripts/Makefile.modfinal                     |   1 +
+>  tools/bpf/bpftool/gen.c                       |   3 +-
+>  tools/bpf/bpftool/prog.c                      |   1 +
+>  tools/bpf/resolve_btfids/main.c               |  19 +-
+>  tools/lib/bpf/bpf.c                           |   1 +
+>  tools/lib/bpf/bpf_gen_internal.h              |  16 +-
+>  tools/lib/bpf/gen_loader.c                    | 222 +++++++++++++++---
+>  tools/lib/bpf/libbpf.c                        |  83 +++++--
+>  tools/lib/bpf/libbpf.h                        |   1 +
+>  tools/lib/bpf/libbpf_internal.h               |   1 +
+>  tools/lib/bpf/skel_internal.h                 |  33 ++-
+>  tools/testing/selftests/bpf/Makefile          |   5 +-
+>  .../selftests/bpf/bpf_testmod/bpf_testmod.c   |  26 +-
+>  .../selftests/bpf/prog_tests/ksyms_module.c   |  52 ++--
+>  .../bpf/prog_tests/ksyms_module_libbpf.c      |  44 ++++
+>  .../selftests/bpf/progs/test_ksyms_module.c   |  41 +++-
+>  .../bpf/progs/test_ksyms_module_fail.c        |  29 +++
+>  .../progs/test_ksyms_module_fail_toomany.c    |  19 ++
+>  .../bpf/progs/test_ksyms_module_libbpf.c      |  71 ++++++
+>  .../bpf/progs/test_ksyms_module_util.h        |  48 ++++
+>  32 files changed, 1014 insertions(+), 153 deletions(-)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/ksyms_module_libbpf.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/test_ksyms_module_fail.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/test_ksyms_module_fail_toomany.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/test_ksyms_module_libbpf.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/test_ksyms_module_util.h
+>
+> --
+> 2.33.0
+>
