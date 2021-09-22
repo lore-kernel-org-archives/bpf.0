@@ -8,63 +8,63 @@ X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4D65C433FE
-	for <bpf@archiver.kernel.org>; Wed, 22 Sep 2021 07:57:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9DA9C433EF
+	for <bpf@archiver.kernel.org>; Wed, 22 Sep 2021 07:57:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CC9AD60F6B
-	for <bpf@archiver.kernel.org>; Wed, 22 Sep 2021 07:57:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C78E460F6B
+	for <bpf@archiver.kernel.org>; Wed, 22 Sep 2021 07:57:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233537AbhIVH6i (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S233371AbhIVH6i (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Wed, 22 Sep 2021 03:58:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49140 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233553AbhIVH6b (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 22 Sep 2021 03:58:31 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1EB5C0613DF;
-        Wed, 22 Sep 2021 00:56:58 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id d6so4018880wrc.11;
-        Wed, 22 Sep 2021 00:56:58 -0700 (PDT)
+        with ESMTP id S233576AbhIVH6c (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 22 Sep 2021 03:58:32 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B38E9C061756;
+        Wed, 22 Sep 2021 00:57:00 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id t8so4149915wrq.4;
+        Wed, 22 Sep 2021 00:57:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=tBzKMAyVJb7YNM6Gm5Xf+XBoiFAs3cTnmjv86MR3naQ=;
-        b=bjaxiGRjxfMFZ02bSC0igQ3URkBT4mALFICOcaHtVKrgzs4xLT+dPuKG50Gqhk4O0M
-         16ou3YB9AYKN1WwZ9CFvLbCrIhFuxdCOkjQwCzPtHAfT1YR2zpJY720pASXBSi7lOZoF
-         Xssi3eIpu+Tb8tAuLnVpxWVhV35of9Sx1ILg7w9QEdMNrTwRy6TK8fv7v6XApLupVAEv
-         YAw3UbQwkMpuqWOf01A3FB3fT2g4xzkl5IcDkZoZH/bvDTTXKwXSJJIx4Uz5IIz4DFQm
-         aFy4wBFK0Hlir7ag7Jl4Lw/wuF4StiBk/zEkoVpM53td3Ikg6zwDmK0GKivDcEoTLXaW
-         eArQ==
+        bh=7TPYhOCF8e9ZbNJvShxEf3njID0tCx4Sal9hKxfcg5w=;
+        b=WZPcqWJbgPjbr/SvJLus7OSOi6H7o+ptD7dtypW3tetjzk18WjoLMOILlgVb+trGA1
+         3sjH2iCxoxfbJNGFRLD8z/1hDaDBLb4OX5M8WY+83Yrl02IbbiZYF2HXSlhu/F4rrC7M
+         wc+3KiYHAnP3nCi5Fi9GWh+zpwui2gta1p4jyjiPZlQa9eH2uJLbmt/qwBemxR5Ui45y
+         rlTx6h1Yhso1H/5+thEP7IPykBWvBhSr9Gl6eoizATj6XlUfAb28HiPiPpl+K522EgKL
+         lrjfC3PHHkieguPrG3gzCjori5LScNu4aGCalOwo1YI+WSfKBignkYlyV5W6R32XzrNz
+         Bu8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=tBzKMAyVJb7YNM6Gm5Xf+XBoiFAs3cTnmjv86MR3naQ=;
-        b=hqnrik4W1ybVwB1EmqMRCQEq46uKe3vvoIhUiaTRNmuEWE3p+hk22485RYWLFnDmr/
-         o5JdSNOt1nuFFbXZ6pdT4Xsh+zDzCPPx3LCabzq8LIv1yJBxn9fkGGqCsjK/QQ8DTGD0
-         BHDCvVz5IbMPFdi2fXXy4Gn20B9/puE2g8tB4mRSlU+kwbPrHqjN66hnZWj41F2aL7op
-         Ev0b09f5GYqsiZ5T7QxDueRE0DpPsCF+ioRoki0SgbcH/PisbVNg1o/2mH1S4txiZZvM
-         mek6amMeNb2URoJ48kaODnKkz4kvWQbNc9xaTUsnrpLuWU39NdHqfGgti/FT1tJNOwZ5
-         YhSA==
-X-Gm-Message-State: AOAM531KLQ0tuvoFECLdfwJsWqWDWKTmK97jzBeA0fSkReSbvAPseNeY
-        o/hyEncJ+NAq9Qq9yyp8Cx0=
-X-Google-Smtp-Source: ABdhPJwOrZQoysvFQu7Q4tsN4oyAmRsD/BzsBhq39109Ck4nOLYf6LH2/fljXEdCaCADRdu7rFAHVA==
-X-Received: by 2002:a05:600c:3790:: with SMTP id o16mr8880604wmr.157.1632297417219;
-        Wed, 22 Sep 2021 00:56:57 -0700 (PDT)
+        bh=7TPYhOCF8e9ZbNJvShxEf3njID0tCx4Sal9hKxfcg5w=;
+        b=Lt1ttzEkysE4xT9cDwLJLTyECaXuc2RDRXLfn1b3DTubp061sRuRI9Og47R5XIAYak
+         VWG8EkeeulnVhi/Xw3Rb9k7owfUu08bkigKBXgSQaojpGOCTEaWiRq3JyonXeGSCiaGM
+         qHCBF/6y9er+A3wCy8coe8Db+5adpKL2HH5phphqEoLDfc3BOTZB0mhs9NXLeIXTWq9J
+         kGorFpz5yacctVuV5+TdaCNGMsf/Jyoh6fEKnGr1YH0Turc77r1iid7dzbuZvBvtoqW0
+         KnNJ/E//ZOO2JjtWMdC783yIG+0Tlg3x4+Csk8eO3YX2rCDk0Ajwjz73sAeGwU2NHyZC
+         TK0g==
+X-Gm-Message-State: AOAM530//qOXv8lfZWgUfVpX3+sIJd55m7VYd6S+jvgcHaHTm93DbWbB
+        hg2AdkTlwjrBXJAXfYEo7mY=
+X-Google-Smtp-Source: ABdhPJyg6XpUonCaiocRGATWsanEjo7HghbxozdpALCXDoxv4f6yojzo+NvIvMrDxl6yAtcIcxOWqw==
+X-Received: by 2002:a7b:c442:: with SMTP id l2mr9153675wmi.131.1632297414488;
+        Wed, 22 Sep 2021 00:56:54 -0700 (PDT)
 Received: from localhost.localdomain (h-46-59-47-246.A165.priv.bahnhof.se. [46.59.47.246])
-        by smtp.gmail.com with ESMTPSA id j7sm1673087wrr.27.2021.09.22.00.56.55
+        by smtp.gmail.com with ESMTPSA id j7sm1673087wrr.27.2021.09.22.00.56.53
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 22 Sep 2021 00:56:56 -0700 (PDT)
+        Wed, 22 Sep 2021 00:56:54 -0700 (PDT)
 From:   Magnus Karlsson <magnus.karlsson@gmail.com>
 To:     magnus.karlsson@intel.com, bjorn@kernel.org, ast@kernel.org,
         daniel@iogearbox.net, netdev@vger.kernel.org,
         maciej.fijalkowski@intel.com, ciara.loftus@intel.com
 Cc:     jonathan.lemon@gmail.com, bpf@vger.kernel.org,
         anthony.l.nguyen@intel.com
-Subject: [PATCH bpf-next 11/13] selftests: xsk: add single packet test
-Date:   Wed, 22 Sep 2021 09:56:11 +0200
-Message-Id: <20210922075613.12186-12-magnus.karlsson@gmail.com>
+Subject: [PATCH bpf-next 09/13] selftests: xsk: fix socket creation retry
+Date:   Wed, 22 Sep 2021 09:56:09 +0200
+Message-Id: <20210922075613.12186-10-magnus.karlsson@gmail.com>
 X-Mailer: git-send-email 2.29.0
 In-Reply-To: <20210922075613.12186-1-magnus.karlsson@gmail.com>
 References: <20210922075613.12186-1-magnus.karlsson@gmail.com>
@@ -76,61 +76,44 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Magnus Karlsson <magnus.karlsson@intel.com>
 
-Add a test where a single packet is sent and received. This might
-sound like a silly test, but since many of the interfaces in xsk are
-batched, it is important to be able to validate that we did not break
-something as fundamental as just receiving single packets, instead of
-batches of packets at high speed.
+The socket creation retry unnecessarily registered the umem once for
+every retry. No reason to do this. It wastes memory and it might lead
+to too many pages being locked at some point and the failure of a
+test.
 
 Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
 ---
- tools/testing/selftests/bpf/xdpxceiver.c | 13 +++++++++++++
- tools/testing/selftests/bpf/xdpxceiver.h |  1 +
- 2 files changed, 14 insertions(+)
+ tools/testing/selftests/bpf/xdpxceiver.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/xdpxceiver.c b/tools/testing/selftests/bpf/xdpxceiver.c
-index 597fbe206026..3beea7531c8e 100644
+index c5c68b860ae0..aa5660dc0699 100644
 --- a/tools/testing/selftests/bpf/xdpxceiver.c
 +++ b/tools/testing/selftests/bpf/xdpxceiver.c
-@@ -1217,6 +1217,15 @@ static bool testapp_unaligned(struct test_spec *test)
- 	return true;
- }
+@@ -919,18 +919,17 @@ static void thread_common_ops(struct test_spec *test, struct ifobject *ifobject)
+ 		u64 umem_sz = ifobject->umem->num_frames * ifobject->umem->frame_size;
+ 		u32 ctr = 0;
+ 		void *bufs;
++		int ret;
  
-+static void testapp_single_pkt(struct test_spec *test)
-+{
-+	struct pkt pkts[] = {{0x1000, PKT_SIZE, 0, true}};
-+
-+	pkt_stream_generate_custom(test, pkts, ARRAY_SIZE(pkts));
-+	testapp_validate_traffic(test);
-+	pkt_stream_restore_default(test);
-+}
-+
- static void testapp_invalid_desc(struct test_spec *test)
- {
- 	struct pkt pkts[] = {
-@@ -1298,6 +1307,10 @@ static void run_pkt_test(struct test_spec *test, enum test_mode mode, enum test_
- 		test_spec_set_name(test, "RUN_TO_COMPLETION");
- 		testapp_validate_traffic(test);
- 		break;
-+	case TEST_TYPE_RUN_TO_COMPLETION_SINGLE_PKT:
-+		test_spec_set_name(test, "RUN_TO_COMPLETION_SINGLE_PKT");
-+		testapp_single_pkt(test);
-+		break;
- 	case TEST_TYPE_RUN_TO_COMPLETION_2K_FRAME:
- 		test_spec_set_name(test, "RUN_TO_COMPLETION_2K_FRAME_SIZE");
- 		test->ifobj_tx->umem->frame_size = 2048;
-diff --git a/tools/testing/selftests/bpf/xdpxceiver.h b/tools/testing/selftests/bpf/xdpxceiver.h
-index 00790c976f4f..d075192c95f8 100644
---- a/tools/testing/selftests/bpf/xdpxceiver.h
-+++ b/tools/testing/selftests/bpf/xdpxceiver.h
-@@ -55,6 +55,7 @@ enum test_mode {
- enum test_type {
- 	TEST_TYPE_RUN_TO_COMPLETION,
- 	TEST_TYPE_RUN_TO_COMPLETION_2K_FRAME,
-+	TEST_TYPE_RUN_TO_COMPLETION_SINGLE_PKT,
- 	TEST_TYPE_POLL,
- 	TEST_TYPE_UNALIGNED,
- 	TEST_TYPE_ALIGNED_INV_DESC,
+ 		bufs = mmap(NULL, umem_sz, PROT_READ | PROT_WRITE, mmap_flags, -1, 0);
+ 		if (bufs == MAP_FAILED)
+ 			exit_with_error(errno);
+ 
+-		while (ctr++ < SOCK_RECONF_CTR) {
+-			int ret;
+-
+-			ret = xsk_configure_umem(&ifobject->umem_arr[i], bufs, umem_sz);
+-			if (ret)
+-				exit_with_error(-ret);
++		ret = xsk_configure_umem(&ifobject->umem_arr[i], bufs, umem_sz);
++		if (ret)
++			exit_with_error(-ret);
+ 
++		while (ctr++ < SOCK_RECONF_CTR) {
+ 			ret = xsk_configure_socket(&ifobject->xsk_arr[i], &ifobject->umem_arr[i],
+ 						   ifobject, i);
+ 			if (!ret)
 -- 
 2.29.0
 
