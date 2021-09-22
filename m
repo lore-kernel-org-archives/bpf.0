@@ -6,38 +6,38 @@ X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79DFAC4332F
-	for <bpf@archiver.kernel.org>; Wed, 22 Sep 2021 23:41:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EC10C433EF
+	for <bpf@archiver.kernel.org>; Wed, 22 Sep 2021 23:41:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6527C611C4
-	for <bpf@archiver.kernel.org>; Wed, 22 Sep 2021 23:41:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7144A611C4
+	for <bpf@archiver.kernel.org>; Wed, 22 Sep 2021 23:41:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230145AbhIVXm6 convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 22 Sep 2021 19:42:58 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:2780 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238497AbhIVXm5 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 22 Sep 2021 19:42:57 -0400
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18MKlbJM025494
-        for <bpf@vger.kernel.org>; Wed, 22 Sep 2021 16:41:27 -0700
+        id S238497AbhIVXnA convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 22 Sep 2021 19:43:00 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:26324 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238477AbhIVXm7 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 22 Sep 2021 19:42:59 -0400
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18MKleXS011266
+        for <bpf@vger.kernel.org>; Wed, 22 Sep 2021 16:41:28 -0700
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 3b7q61ryc3-2
+        by mx0a-00082601.pphosted.com with ESMTP id 3b7q54gxd1-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 22 Sep 2021 16:41:27 -0700
+        for <bpf@vger.kernel.org>; Wed, 22 Sep 2021 16:41:28 -0700
 Received: from intmgw003.48.prn1.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Wed, 22 Sep 2021 16:41:24 -0700
+ 15.1.2308.14; Wed, 22 Sep 2021 16:41:27 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id D5E934B32F3C; Wed, 22 Sep 2021 16:41:21 -0700 (PDT)
+        id EA96C4B32F40; Wed, 22 Sep 2021 16:41:25 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
         Dave Marchevsky <davemarchevsky@fb.com>
-Subject: [PATCH v3 bpf-next 3/9] selftests/bpf: normalize all the rest SEC() uses
-Date:   Wed, 22 Sep 2021 16:41:07 -0700
-Message-ID: <20210922234113.1965663-4-andrii@kernel.org>
+Subject: [PATCH v3 bpf-next 5/9] libbpf: reduce reliance of attach_fns on sec_def internals
+Date:   Wed, 22 Sep 2021 16:41:09 -0700
+Message-ID: <20210922234113.1965663-6-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210922234113.1965663-1-andrii@kernel.org>
 References: <20210922234113.1965663-1-andrii@kernel.org>
@@ -46,388 +46,192 @@ Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-ORIG-GUID: df4aMgvuA-1QXBnLIBwPNl62VvLJGOZR
-X-Proofpoint-GUID: df4aMgvuA-1QXBnLIBwPNl62VvLJGOZR
+X-Proofpoint-ORIG-GUID: S_6pwuJw7BOpibs-SO144J8bdJV84Pmf
+X-Proofpoint-GUID: S_6pwuJw7BOpibs-SO144J8bdJV84Pmf
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
  definitions=2021-09-22_09,2021-09-22_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
- priorityscore=1501 impostorscore=0 mlxlogscore=999 bulkscore=0 spamscore=0
- mlxscore=0 lowpriorityscore=0 suspectscore=0 malwarescore=0 phishscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0
+ mlxlogscore=999 priorityscore=1501 adultscore=0 clxscore=1015 phishscore=0
+ malwarescore=0 bulkscore=0 suspectscore=0 impostorscore=0 mlxscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2109200000 definitions=main-2109220150
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Normalize all the other non-conforming SEC() usages across all
-selftests. This is in preparation for libbpf to start to enforce
-stricter SEC() rules in libbpf 1.0 mode.
+Move closer to not relying on bpf_sec_def internals that won't be part
+of public API, when pluggable SEC() handlers will be allowed. Drop
+pre-calculated prefix length, and in various helpers don't rely on this
+prefix length availability. Also minimize reliance on knowing
+bpf_sec_def's prefix for few places where section prefix shortcuts are
+supported (e.g., tp vs tracepoint, raw_tp vs raw_tracepoint).
+
+Given checking some string for having a given string-constant prefix is
+such a common operation and so annoying to be done with pure C code, add
+a small macro helper, str_has_pfx(), and reuse it throughout libbpf.c
+where prefix comparison is performed. With __builtin_constant_p() it's
+possible to have a convenient helper that checks some string for having
+a given prefix, where prefix is either string literal (or compile-time
+known string due to compiler optimization) or just a runtime string
+pointer, which is quite convenient and saves a lot of typing and string
+literal duplication.
 
 Acked-by: Dave Marchevsky <davemarchevsky@fb.com>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- .../selftests/bpf/prog_tests/flow_dissector.c |  4 +--
- .../selftests/bpf/prog_tests/sockopt_multi.c  | 30 +++++++++----------
- tools/testing/selftests/bpf/progs/bpf_flow.c  |  3 +-
- .../bpf/progs/cg_storage_multi_isolated.c     |  4 +--
- .../bpf/progs/cg_storage_multi_shared.c       |  4 +--
- .../selftests/bpf/progs/sockopt_multi.c       |  5 ++--
- .../selftests/bpf/progs/test_cgroup_link.c    |  4 +--
- .../bpf/progs/test_misc_tcp_hdr_options.c     |  2 +-
- .../selftests/bpf/progs/test_sk_lookup.c      |  6 ++--
- .../selftests/bpf/progs/test_sockmap_listen.c |  2 +-
- .../progs/test_sockmap_skb_verdict_attach.c   |  2 +-
- .../bpf/progs/test_tcp_check_syncookie_kern.c |  2 +-
- .../bpf/progs/test_tcp_hdr_options.c          |  2 +-
- .../selftests/bpf/test_tcp_check_syncookie.sh |  2 +-
- 14 files changed, 35 insertions(+), 37 deletions(-)
+ tools/lib/bpf/libbpf.c          | 41 ++++++++++++++++++---------------
+ tools/lib/bpf/libbpf_internal.h |  7 ++++++
+ 2 files changed, 30 insertions(+), 18 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
-index 225714f71ac6..ac54e3f91d42 100644
---- a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
-+++ b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
-@@ -458,9 +458,9 @@ static int init_prog_array(struct bpf_object *obj, struct bpf_map *prog_array)
- 		return -1;
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 88275cb6e7e6..32cb63f6410b 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -226,7 +226,6 @@ typedef struct bpf_link *(*attach_fn_t)(const struct bpf_program *prog, long coo
  
- 	for (i = 0; i < bpf_map__def(prog_array)->max_entries; i++) {
--		snprintf(prog_name, sizeof(prog_name), "flow_dissector/%i", i);
-+		snprintf(prog_name, sizeof(prog_name), "flow_dissector_%d", i);
- 
--		prog = bpf_object__find_program_by_title(obj, prog_name);
-+		prog = bpf_object__find_program_by_name(obj, prog_name);
- 		if (!prog)
- 			return -1;
- 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockopt_multi.c b/tools/testing/selftests/bpf/prog_tests/sockopt_multi.c
-index 51fac975b316..bc34f7773444 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockopt_multi.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockopt_multi.c
-@@ -2,7 +2,7 @@
- #include <test_progs.h>
- #include "cgroup_helpers.h"
- 
--static int prog_attach(struct bpf_object *obj, int cgroup_fd, const char *title)
-+static int prog_attach(struct bpf_object *obj, int cgroup_fd, const char *title, const char *name)
- {
- 	enum bpf_attach_type attach_type;
+ struct bpf_sec_def {
+ 	const char *sec;
+-	size_t len;
  	enum bpf_prog_type prog_type;
-@@ -15,23 +15,23 @@ static int prog_attach(struct bpf_object *obj, int cgroup_fd, const char *title)
- 		return -1;
+ 	enum bpf_attach_type expected_attach_type;
+ 	bool is_exp_attach_type_optional;
+@@ -1671,7 +1670,7 @@ static int bpf_object__process_kconfig_line(struct bpf_object *obj,
+ 	void *ext_val;
+ 	__u64 num;
+ 
+-	if (strncmp(buf, "CONFIG_", 7))
++	if (!str_has_pfx(buf, "CONFIG_"))
+ 		return 0;
+ 
+ 	sep = strchr(buf, '=');
+@@ -2919,7 +2918,7 @@ static Elf_Data *elf_sec_data(const struct bpf_object *obj, Elf_Scn *scn)
+ static bool is_sec_name_dwarf(const char *name)
+ {
+ 	/* approximation, but the actual list is too long */
+-	return strncmp(name, ".debug_", sizeof(".debug_") - 1) == 0;
++	return str_has_pfx(name, ".debug_");
+ }
+ 
+ static bool ignore_elf_section(GElf_Shdr *hdr, const char *name)
+@@ -2941,7 +2940,7 @@ static bool ignore_elf_section(GElf_Shdr *hdr, const char *name)
+ 	if (is_sec_name_dwarf(name))
+ 		return true;
+ 
+-	if (strncmp(name, ".rel", sizeof(".rel") - 1) == 0) {
++	if (str_has_pfx(name, ".rel")) {
+ 		name += sizeof(".rel") - 1;
+ 		/* DWARF section relocations */
+ 		if (is_sec_name_dwarf(name))
+@@ -6890,8 +6889,7 @@ static int bpf_object__resolve_externs(struct bpf_object *obj,
+ 			if (err)
+ 				return err;
+ 			pr_debug("extern (kcfg) %s=0x%x\n", ext->name, kver);
+-		} else if (ext->type == EXT_KCFG &&
+-			   strncmp(ext->name, "CONFIG_", 7) == 0) {
++		} else if (ext->type == EXT_KCFG && str_has_pfx(ext->name, "CONFIG_")) {
+ 			need_config = true;
+ 		} else if (ext->type == EXT_KSYM) {
+ 			if (ext->ksym.type_id)
+@@ -7955,7 +7953,6 @@ void bpf_program__set_expected_attach_type(struct bpf_program *prog,
+ 			  attachable, attach_btf)			    \
+ 	{								    \
+ 		.sec = string,						    \
+-		.len = sizeof(string) - 1,				    \
+ 		.prog_type = ptype,					    \
+ 		.expected_attach_type = eatype,				    \
+ 		.is_exp_attach_type_optional = eatype_optional,		    \
+@@ -7986,7 +7983,6 @@ void bpf_program__set_expected_attach_type(struct bpf_program *prog,
+ 
+ #define SEC_DEF(sec_pfx, ptype, ...) {					    \
+ 	.sec = sec_pfx,							    \
+-	.len = sizeof(sec_pfx) - 1,					    \
+ 	.prog_type = BPF_PROG_TYPE_##ptype,				    \
+ 	.preload_fn = libbpf_preload_prog,				    \
+ 	__VA_ARGS__							    \
+@@ -8160,10 +8156,8 @@ static const struct bpf_sec_def *find_sec_def(const char *sec_name)
+ 	int i, n = ARRAY_SIZE(section_defs);
+ 
+ 	for (i = 0; i < n; i++) {
+-		if (strncmp(sec_name,
+-			    section_defs[i].sec, section_defs[i].len))
+-			continue;
+-		return &section_defs[i];
++		if (str_has_pfx(sec_name, section_defs[i].sec))
++			return &section_defs[i];
  	}
- 
--	prog = bpf_object__find_program_by_title(obj, title);
-+	prog = bpf_object__find_program_by_name(obj, name);
- 	if (!prog) {
--		log_err("Failed to find %s BPF program", title);
-+		log_err("Failed to find %s BPF program", name);
- 		return -1;
+ 	return NULL;
+ }
+@@ -8517,7 +8511,7 @@ static int libbpf_find_attach_btf_id(struct bpf_program *prog, int *btf_obj_fd,
+ 			prog->sec_name);
+ 		return -ESRCH;
  	}
+-	attach_name = prog->sec_name + prog->sec_def->len;
++	attach_name = prog->sec_name + strlen(prog->sec_def->sec);
  
- 	err = bpf_prog_attach(bpf_program__fd(prog), cgroup_fd,
- 			      attach_type, BPF_F_ALLOW_MULTI);
- 	if (err) {
--		log_err("Failed to attach %s BPF program", title);
-+		log_err("Failed to attach %s BPF program", name);
- 		return -1;
- 	}
+ 	/* BPF program's BTF ID */
+ 	if (attach_prog_fd) {
+@@ -9477,8 +9471,11 @@ static struct bpf_link *attach_kprobe(const struct bpf_program *prog, long cooki
+ 	char *func;
+ 	int n, err;
  
- 	return 0;
+-	func_name = prog->sec_name + prog->sec_def->len;
+-	opts.retprobe = strcmp(prog->sec_def->sec, "kretprobe/") == 0;
++	opts.retprobe = str_has_pfx(prog->sec_name, "kretprobe/");
++	if (opts.retprobe)
++		func_name = prog->sec_name + sizeof("kretprobe/") - 1;
++	else
++		func_name = prog->sec_name + sizeof("kprobe/") - 1;
+ 
+ 	n = sscanf(func_name, "%m[a-zA-Z0-9_.]+%li", &func, &offset);
+ 	if (n < 1) {
+@@ -9760,8 +9757,11 @@ static struct bpf_link *attach_tp(const struct bpf_program *prog, long cookie)
+ 	if (!sec_name)
+ 		return libbpf_err_ptr(-ENOMEM);
+ 
+-	/* extract "tp/<category>/<name>" */
+-	tp_cat = sec_name + prog->sec_def->len;
++	/* extract "tp/<category>/<name>" or "tracepoint/<category>/<name>" */
++	if (str_has_pfx(prog->sec_name, "tp/"))
++		tp_cat = sec_name + sizeof("tp/") - 1;
++	else
++		tp_cat = sec_name + sizeof("tracepoint/") - 1;
+ 	tp_name = strchr(tp_cat, '/');
+ 	if (!tp_name) {
+ 		free(sec_name);
+@@ -9807,7 +9807,12 @@ struct bpf_link *bpf_program__attach_raw_tracepoint(const struct bpf_program *pr
+ 
+ static struct bpf_link *attach_raw_tp(const struct bpf_program *prog, long cookie)
+ {
+-	const char *tp_name = prog->sec_name + prog->sec_def->len;
++	const char *tp_name;
++
++	if (str_has_pfx(prog->sec_name, "raw_tp/"))
++		tp_name = prog->sec_name + sizeof("raw_tp/") - 1;
++	else
++		tp_name = prog->sec_name + sizeof("raw_tracepoint/") - 1;
+ 
+ 	return bpf_program__attach_raw_tracepoint(prog, tp_name);
  }
+diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
+index ceb0c98979bc..ec79400517d4 100644
+--- a/tools/lib/bpf/libbpf_internal.h
++++ b/tools/lib/bpf/libbpf_internal.h
+@@ -89,6 +89,13 @@
+ 	(offsetof(TYPE, FIELD) + sizeof(((TYPE *)0)->FIELD))
+ #endif
  
--static int prog_detach(struct bpf_object *obj, int cgroup_fd, const char *title)
-+static int prog_detach(struct bpf_object *obj, int cgroup_fd, const char *title, const char *name)
- {
- 	enum bpf_attach_type attach_type;
- 	enum bpf_prog_type prog_type;
-@@ -42,7 +42,7 @@ static int prog_detach(struct bpf_object *obj, int cgroup_fd, const char *title)
- 	if (err)
- 		return -1;
- 
--	prog = bpf_object__find_program_by_title(obj, title);
-+	prog = bpf_object__find_program_by_name(obj, name);
- 	if (!prog)
- 		return -1;
- 
-@@ -89,7 +89,7 @@ static int run_getsockopt_test(struct bpf_object *obj, int cg_parent,
- 	 * - child:  0x80 -> 0x90
- 	 */
- 
--	err = prog_attach(obj, cg_child, "cgroup/getsockopt/child");
-+	err = prog_attach(obj, cg_child, "cgroup/getsockopt", "_getsockopt_child");
- 	if (err)
- 		goto detach;
- 
-@@ -113,7 +113,7 @@ static int run_getsockopt_test(struct bpf_object *obj, int cg_parent,
- 	 * - parent: 0x90 -> 0xA0
- 	 */
- 
--	err = prog_attach(obj, cg_parent, "cgroup/getsockopt/parent");
-+	err = prog_attach(obj, cg_parent, "cgroup/getsockopt", "_getsockopt_parent");
- 	if (err)
- 		goto detach;
- 
-@@ -157,7 +157,7 @@ static int run_getsockopt_test(struct bpf_object *obj, int cg_parent,
- 	 * - parent: unexpected 0x40, EPERM
- 	 */
- 
--	err = prog_detach(obj, cg_child, "cgroup/getsockopt/child");
-+	err = prog_detach(obj, cg_child, "cgroup/getsockopt", "_getsockopt_child");
- 	if (err) {
- 		log_err("Failed to detach child program");
- 		goto detach;
-@@ -198,8 +198,8 @@ static int run_getsockopt_test(struct bpf_object *obj, int cg_parent,
- 	}
- 
- detach:
--	prog_detach(obj, cg_child, "cgroup/getsockopt/child");
--	prog_detach(obj, cg_parent, "cgroup/getsockopt/parent");
-+	prog_detach(obj, cg_child, "cgroup/getsockopt", "_getsockopt_child");
-+	prog_detach(obj, cg_parent, "cgroup/getsockopt", "_getsockopt_parent");
- 
- 	return err;
- }
-@@ -236,7 +236,7 @@ static int run_setsockopt_test(struct bpf_object *obj, int cg_parent,
- 
- 	/* Attach child program and make sure it adds 0x10. */
- 
--	err = prog_attach(obj, cg_child, "cgroup/setsockopt");
-+	err = prog_attach(obj, cg_child, "cgroup/setsockopt", "_setsockopt");
- 	if (err)
- 		goto detach;
- 
-@@ -263,7 +263,7 @@ static int run_setsockopt_test(struct bpf_object *obj, int cg_parent,
- 
- 	/* Attach parent program and make sure it adds another 0x10. */
- 
--	err = prog_attach(obj, cg_parent, "cgroup/setsockopt");
-+	err = prog_attach(obj, cg_parent, "cgroup/setsockopt", "_setsockopt");
- 	if (err)
- 		goto detach;
- 
-@@ -289,8 +289,8 @@ static int run_setsockopt_test(struct bpf_object *obj, int cg_parent,
- 	}
- 
- detach:
--	prog_detach(obj, cg_child, "cgroup/setsockopt");
--	prog_detach(obj, cg_parent, "cgroup/setsockopt");
-+	prog_detach(obj, cg_child, "cgroup/setsockopt", "_setsockopt");
-+	prog_detach(obj, cg_parent, "cgroup/setsockopt", "_setsockopt");
- 
- 	return err;
- }
-diff --git a/tools/testing/selftests/bpf/progs/bpf_flow.c b/tools/testing/selftests/bpf/progs/bpf_flow.c
-index 95a5a0778ed7..f266c757b3df 100644
---- a/tools/testing/selftests/bpf/progs/bpf_flow.c
-+++ b/tools/testing/selftests/bpf/progs/bpf_flow.c
-@@ -19,9 +19,8 @@
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_endian.h>
- 
--int _version SEC("version") = 1;
- #define PROG(F) PROG_(F, _##F)
--#define PROG_(NUM, NAME) SEC("flow_dissector/"#NUM) int bpf_func##NAME
-+#define PROG_(NUM, NAME) SEC("flow_dissector") int flow_dissector_##NUM
- 
- /* These are the identifiers of the BPF programs that will be used in tail
-  * calls. Name is limited to 16 characters, with the terminating character and
-diff --git a/tools/testing/selftests/bpf/progs/cg_storage_multi_isolated.c b/tools/testing/selftests/bpf/progs/cg_storage_multi_isolated.c
-index a25373002055..3f81ff92184c 100644
---- a/tools/testing/selftests/bpf/progs/cg_storage_multi_isolated.c
-+++ b/tools/testing/selftests/bpf/progs/cg_storage_multi_isolated.c
-@@ -20,7 +20,7 @@ struct {
- 
- __u32 invocations = 0;
- 
--SEC("cgroup_skb/egress/1")
-+SEC("cgroup_skb/egress")
- int egress1(struct __sk_buff *skb)
- {
- 	struct cgroup_value *ptr_cg_storage =
-@@ -32,7 +32,7 @@ int egress1(struct __sk_buff *skb)
- 	return 1;
- }
- 
--SEC("cgroup_skb/egress/2")
-+SEC("cgroup_skb/egress")
- int egress2(struct __sk_buff *skb)
- {
- 	struct cgroup_value *ptr_cg_storage =
-diff --git a/tools/testing/selftests/bpf/progs/cg_storage_multi_shared.c b/tools/testing/selftests/bpf/progs/cg_storage_multi_shared.c
-index a149f33bc533..d662db27fe4a 100644
---- a/tools/testing/selftests/bpf/progs/cg_storage_multi_shared.c
-+++ b/tools/testing/selftests/bpf/progs/cg_storage_multi_shared.c
-@@ -20,7 +20,7 @@ struct {
- 
- __u32 invocations = 0;
- 
--SEC("cgroup_skb/egress/1")
-+SEC("cgroup_skb/egress")
- int egress1(struct __sk_buff *skb)
- {
- 	struct cgroup_value *ptr_cg_storage =
-@@ -32,7 +32,7 @@ int egress1(struct __sk_buff *skb)
- 	return 1;
- }
- 
--SEC("cgroup_skb/egress/2")
-+SEC("cgroup_skb/egress")
- int egress2(struct __sk_buff *skb)
- {
- 	struct cgroup_value *ptr_cg_storage =
-diff --git a/tools/testing/selftests/bpf/progs/sockopt_multi.c b/tools/testing/selftests/bpf/progs/sockopt_multi.c
-index 9d8c212dde9f..177a59069dae 100644
---- a/tools/testing/selftests/bpf/progs/sockopt_multi.c
-+++ b/tools/testing/selftests/bpf/progs/sockopt_multi.c
-@@ -4,9 +4,8 @@
- #include <bpf/bpf_helpers.h>
- 
- char _license[] SEC("license") = "GPL";
--__u32 _version SEC("version") = 1;
- 
--SEC("cgroup/getsockopt/child")
-+SEC("cgroup/getsockopt")
- int _getsockopt_child(struct bpf_sockopt *ctx)
- {
- 	__u8 *optval_end = ctx->optval_end;
-@@ -29,7 +28,7 @@ int _getsockopt_child(struct bpf_sockopt *ctx)
- 	return 1;
- }
- 
--SEC("cgroup/getsockopt/parent")
-+SEC("cgroup/getsockopt")
- int _getsockopt_parent(struct bpf_sockopt *ctx)
- {
- 	__u8 *optval_end = ctx->optval_end;
-diff --git a/tools/testing/selftests/bpf/progs/test_cgroup_link.c b/tools/testing/selftests/bpf/progs/test_cgroup_link.c
-index 77e47b9e4446..4faba88e45a5 100644
---- a/tools/testing/selftests/bpf/progs/test_cgroup_link.c
-+++ b/tools/testing/selftests/bpf/progs/test_cgroup_link.c
-@@ -6,14 +6,14 @@
- int calls = 0;
- int alt_calls = 0;
- 
--SEC("cgroup_skb/egress1")
-+SEC("cgroup_skb/egress")
- int egress(struct __sk_buff *skb)
- {
- 	__sync_fetch_and_add(&calls, 1);
- 	return 1;
- }
- 
--SEC("cgroup_skb/egress2")
-+SEC("cgroup_skb/egress")
- int egress_alt(struct __sk_buff *skb)
- {
- 	__sync_fetch_and_add(&alt_calls, 1);
-diff --git a/tools/testing/selftests/bpf/progs/test_misc_tcp_hdr_options.c b/tools/testing/selftests/bpf/progs/test_misc_tcp_hdr_options.c
-index 6077a025092c..2c121c5d66a7 100644
---- a/tools/testing/selftests/bpf/progs/test_misc_tcp_hdr_options.c
-+++ b/tools/testing/selftests/bpf/progs/test_misc_tcp_hdr_options.c
-@@ -293,7 +293,7 @@ static int handle_passive_estab(struct bpf_sock_ops *skops)
- 	return check_active_hdr_in(skops);
- }
- 
--SEC("sockops/misc_estab")
-+SEC("sockops")
- int misc_estab(struct bpf_sock_ops *skops)
- {
- 	int true_val = 1;
-diff --git a/tools/testing/selftests/bpf/progs/test_sk_lookup.c b/tools/testing/selftests/bpf/progs/test_sk_lookup.c
-index ac6f7f205e25..6c4d32c56765 100644
---- a/tools/testing/selftests/bpf/progs/test_sk_lookup.c
-+++ b/tools/testing/selftests/bpf/progs/test_sk_lookup.c
-@@ -84,13 +84,13 @@ int lookup_drop(struct bpf_sk_lookup *ctx)
- 	return SK_DROP;
- }
- 
--SEC("sk_reuseport/reuse_pass")
-+SEC("sk_reuseport")
- int reuseport_pass(struct sk_reuseport_md *ctx)
- {
- 	return SK_PASS;
- }
- 
--SEC("sk_reuseport/reuse_drop")
-+SEC("sk_reuseport")
- int reuseport_drop(struct sk_reuseport_md *ctx)
- {
- 	return SK_DROP;
-@@ -194,7 +194,7 @@ int select_sock_a_no_reuseport(struct bpf_sk_lookup *ctx)
- 	return err ? SK_DROP : SK_PASS;
- }
- 
--SEC("sk_reuseport/select_sock_b")
-+SEC("sk_reuseport")
- int select_sock_b(struct sk_reuseport_md *ctx)
- {
- 	__u32 key = KEY_SERVER_B;
-diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_listen.c b/tools/testing/selftests/bpf/progs/test_sockmap_listen.c
-index a1cc58b10c7c..00f1456aaeda 100644
---- a/tools/testing/selftests/bpf/progs/test_sockmap_listen.c
-+++ b/tools/testing/selftests/bpf/progs/test_sockmap_listen.c
-@@ -56,7 +56,7 @@ int prog_stream_verdict(struct __sk_buff *skb)
- 	return verdict;
- }
- 
--SEC("sk_skb/skb_verdict")
-+SEC("sk_skb")
- int prog_skb_verdict(struct __sk_buff *skb)
- {
- 	unsigned int *count;
-diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_skb_verdict_attach.c b/tools/testing/selftests/bpf/progs/test_sockmap_skb_verdict_attach.c
-index 2d31f66e4f23..3c69aa971738 100644
---- a/tools/testing/selftests/bpf/progs/test_sockmap_skb_verdict_attach.c
-+++ b/tools/testing/selftests/bpf/progs/test_sockmap_skb_verdict_attach.c
-@@ -9,7 +9,7 @@ struct {
- 	__type(value, __u64);
- } sock_map SEC(".maps");
- 
--SEC("sk_skb/skb_verdict")
-+SEC("sk_skb")
- int prog_skb_verdict(struct __sk_buff *skb)
- {
- 	return SK_DROP;
-diff --git a/tools/testing/selftests/bpf/progs/test_tcp_check_syncookie_kern.c b/tools/testing/selftests/bpf/progs/test_tcp_check_syncookie_kern.c
-index fac7ef99f9a6..6be6d12cc729 100644
---- a/tools/testing/selftests/bpf/progs/test_tcp_check_syncookie_kern.c
-+++ b/tools/testing/selftests/bpf/progs/test_tcp_check_syncookie_kern.c
-@@ -148,7 +148,7 @@ static __always_inline void check_syncookie(void *ctx, void *data,
- 	bpf_sk_release(sk);
- }
- 
--SEC("clsact/check_syncookie")
-+SEC("classifier")
- int check_syncookie_clsact(struct __sk_buff *skb)
- {
- 	check_syncookie(skb, (void *)(long)skb->data,
-diff --git a/tools/testing/selftests/bpf/progs/test_tcp_hdr_options.c b/tools/testing/selftests/bpf/progs/test_tcp_hdr_options.c
-index 678bd0fad29e..5f4e87ee949a 100644
---- a/tools/testing/selftests/bpf/progs/test_tcp_hdr_options.c
-+++ b/tools/testing/selftests/bpf/progs/test_tcp_hdr_options.c
-@@ -594,7 +594,7 @@ static int handle_parse_hdr(struct bpf_sock_ops *skops)
- 	return CG_OK;
- }
- 
--SEC("sockops/estab")
-+SEC("sockops")
- int estab(struct bpf_sock_ops *skops)
- {
- 	int true_val = 1;
-diff --git a/tools/testing/selftests/bpf/test_tcp_check_syncookie.sh b/tools/testing/selftests/bpf/test_tcp_check_syncookie.sh
-index fed765157c53..47c6ff7b519b 100755
---- a/tools/testing/selftests/bpf/test_tcp_check_syncookie.sh
-+++ b/tools/testing/selftests/bpf/test_tcp_check_syncookie.sh
-@@ -76,7 +76,7 @@ DIR=$(dirname $0)
- TEST_IF=lo
- MAX_PING_TRIES=5
- BPF_PROG_OBJ="${DIR}/test_tcp_check_syncookie_kern.o"
--CLSACT_SECTION="clsact/check_syncookie"
-+CLSACT_SECTION="classifier"
- XDP_SECTION="xdp"
- BPF_PROG_ID=0
- PROG="${DIR}/test_tcp_check_syncookie_user"
++/* Check whether a string `str` has prefix `pfx`, regardless if `pfx` is
++ * a string literal known at compilation time or char * pointer known only at
++ * runtime.
++ */
++#define str_has_pfx(str, pfx) \
++	(strncmp(str, pfx, __builtin_constant_p(pfx) ? sizeof(pfx) - 1 : strlen(pfx)) == 0)
++
+ /* Symbol versioning is different between static and shared library.
+  * Properly versioned symbols are needed for shared library, but
+  * only the symbol of the new version is needed for static library.
 -- 
 2.30.2
 
