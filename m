@@ -2,404 +2,295 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-22.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	UPPERCASE_50_75,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46931C433F5
-	for <bpf@archiver.kernel.org>; Wed, 22 Sep 2021 23:41:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00AD0C433EF
+	for <bpf@archiver.kernel.org>; Wed, 22 Sep 2021 23:41:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3035D61131
-	for <bpf@archiver.kernel.org>; Wed, 22 Sep 2021 23:41:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D27CD61131
+	for <bpf@archiver.kernel.org>; Wed, 22 Sep 2021 23:41:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238501AbhIVXnE convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 22 Sep 2021 19:43:04 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:42470 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238500AbhIVXnE (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 22 Sep 2021 19:43:04 -0400
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18MKlOjC000379
-        for <bpf@vger.kernel.org>; Wed, 22 Sep 2021 16:41:34 -0700
+        id S238502AbhIVXnI convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 22 Sep 2021 19:43:08 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:27568 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S238477AbhIVXnI (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 22 Sep 2021 19:43:08 -0400
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.1.2/8.16.1.2) with SMTP id 18MMxuX2002705
+        for <bpf@vger.kernel.org>; Wed, 22 Sep 2021 16:41:37 -0700
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 3b8629kre5-4
+        by m0089730.ppops.net with ESMTP id 3b8ds5r6b2-5
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 22 Sep 2021 16:41:33 -0700
-Received: from intmgw002.46.prn1.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 22 Sep 2021 16:41:37 -0700
+Received: from intmgw003.48.prn1.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Wed, 22 Sep 2021 16:41:31 -0700
+ 15.1.2308.14; Wed, 22 Sep 2021 16:41:35 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 04CC14B32F42; Wed, 22 Sep 2021 16:41:27 -0700 (PDT)
+        id 1D8804B32F4C; Wed, 22 Sep 2021 16:41:32 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH v3 bpf-next 6/9] libbpf: refactor ELF section handler definitions
-Date:   Wed, 22 Sep 2021 16:41:10 -0700
-Message-ID: <20210922234113.1965663-7-andrii@kernel.org>
+Subject: [PATCH v3 bpf-next 8/9] libbpf: add opt-in strict BPF program section name handling logic
+Date:   Wed, 22 Sep 2021 16:41:12 -0700
+Message-ID: <20210922234113.1965663-9-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210922234113.1965663-1-andrii@kernel.org>
 References: <20210922234113.1965663-1-andrii@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-ORIG-GUID: vIkn6QghA3uKRpNTy5zZiTb3VsAg08fH
-X-Proofpoint-GUID: vIkn6QghA3uKRpNTy5zZiTb3VsAg08fH
+X-Proofpoint-GUID: rN8JFKWNIKDygrIFTGKlULlniBprRFyR
+X-Proofpoint-ORIG-GUID: rN8JFKWNIKDygrIFTGKlULlniBprRFyR
+Content-Transfer-Encoding: 8BIT
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
  definitions=2021-09-22_09,2021-09-22_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
- suspectscore=0 lowpriorityscore=0 mlxlogscore=999 phishscore=0 bulkscore=0
- priorityscore=1501 adultscore=0 malwarescore=0 clxscore=1015 mlxscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0
+ priorityscore=1501 phishscore=0 mlxscore=0 mlxlogscore=999 clxscore=1015
+ impostorscore=0 lowpriorityscore=0 adultscore=0 suspectscore=0
+ malwarescore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2109200000 definitions=main-2109220150
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Refactor ELF section handler definitions table to use a set of flags and
-unified SEC_DEF() macro. This allows for more succinct and table-like
-set of definitions, and allows to more easily extend the logic without
-adding more verbosity (this is utilized in later patches in the series).
+Implement strict ELF section name handling for BPF programs. It utilizes
+`libbpf_set_strict_mode()` framework and adds new flag: LIBBPF_STRICT_SEC_NAME.
 
-This approach is also making libbpf-internal program pre-load callback
-not rely on bpf_sec_def definition, which demonstrates that future
-pluggable ELF section handlers will be able to achieve similar level of
-integration without libbpf having to expose extra types and APIs.
+If this flag is set, libbpf will enforce exact section name matching for
+a lot of program types that previously allowed just partial prefix
+match. E.g., if previously SEC("xdp_whatever_i_want") was allowed, now
+in strict mode only SEC("xdp") will be accepted, which makes SEC("")
+definitions cleaner and more structured. SEC() now won't be used as yet
+another way to uniquely encode BPF program identifier (for that
+C function name is better and is guaranteed to be unique within
+bpf_object). Now SEC() is strictly BPF program type and, depending on
+program type, extra load/attach parameter specification.
 
-For starters, update SEC_DEF() definitions and make them more succinct.
-Also convert BPF_PROG_SEC() and BPF_APROG_COMPAT() definitions to
-a common SEC_DEF() use.
+Libbpf completely supports multiple BPF programs in the same ELF
+section, so multiple BPF programs of the same type/specification easily
+co-exist together within the same bpf_object scope.
+
+Additionally, a new (for now internal) convention is introduced: section
+name that can be a stand-alone exact BPF program type specificator, but
+also could have extra parameters after '/' delimiter. An example of such
+section is "struct_ops", which can be specified by itself, but also
+allows to specify the intended operation to be attached to, e.g.,
+"struct_ops/dctcp_init". Note, that "struct_ops_some_op" is not allowed.
+Such section definition is specified as "struct_ops+".
+
+This change is part of libbpf 1.0 effort ([0], [1]).
+
+  [0] Closes: https://github.com/libbpf/libbpf/issues/271
+  [1] https://github.com/libbpf/libbpf/wiki/Libbpf:-the-road-to-v1.0#stricter-and-more-uniform-bpf-program-section-name-sec-handling
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/lib/bpf/libbpf.c | 193 ++++++++++++++++++-----------------------
- 1 file changed, 83 insertions(+), 110 deletions(-)
+ tools/lib/bpf/libbpf.c        | 136 ++++++++++++++++++++++------------
+ tools/lib/bpf/libbpf_legacy.h |   9 +++
+ 2 files changed, 99 insertions(+), 46 deletions(-)
 
 diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 32cb63f6410b..aca646b15edd 100644
+index 2d5b39d055a4..a2b3856ad23f 100644
 --- a/tools/lib/bpf/libbpf.c
 +++ b/tools/lib/bpf/libbpf.c
-@@ -224,19 +224,35 @@ typedef int (*init_fn_t)(struct bpf_program *prog, long cookie);
- typedef int (*preload_fn_t)(struct bpf_program *prog, struct bpf_prog_load_params *attr, long cookie);
- typedef struct bpf_link *(*attach_fn_t)(const struct bpf_program *prog, long cookie);
- 
-+/* stored as sec_def->cookie for all libbpf-supported SEC()s */
-+enum sec_def_flags {
-+	SEC_NONE = 0,
-+	/* expected_attach_type is optional, if kernel doesn't support that */
-+	SEC_EXP_ATTACH_OPT = 1,
-+	/* legacy, only used by libbpf_get_type_names() and
-+	 * libbpf_attach_type_by_name(), not used by libbpf itself at all.
-+	 * This used to be associated with cgroup (and few other) BPF programs
-+	 * that were attachable through BPF_PROG_ATTACH command. Pretty
-+	 * meaningless nowadays, though.
-+	 */
-+	SEC_ATTACHABLE = 2,
-+	SEC_ATTACHABLE_OPT = SEC_ATTACHABLE | SEC_EXP_ATTACH_OPT,
-+	/* attachment target is specified through BTF ID in either kernel or
-+	 * other BPF program's BTF object */
-+	SEC_ATTACH_BTF = 4,
-+	/* BPF program type allows sleeping/blocking in kernel */
-+	SEC_SLEEPABLE = 8,
-+};
-+
- struct bpf_sec_def {
- 	const char *sec;
- 	enum bpf_prog_type prog_type;
- 	enum bpf_attach_type expected_attach_type;
--	bool is_exp_attach_type_optional;
--	bool is_attachable;
--	bool is_attach_btf;
--	bool is_sleepable;
-+	long cookie;
- 
- 	init_fn_t init_fn;
- 	preload_fn_t preload_fn;
- 	attach_fn_t attach_fn;
--	long cookie;
+@@ -242,6 +242,8 @@ enum sec_def_flags {
+ 	SEC_ATTACH_BTF = 4,
+ 	/* BPF program type allows sleeping/blocking in kernel */
+ 	SEC_SLEEPABLE = 8,
++	/* allow non-strict prefix matching */
++	SEC_SLOPPY_PFX = 16,
  };
  
- /*
-@@ -6099,26 +6115,30 @@ static int bpf_object__sanitize_prog(struct bpf_object *obj, struct bpf_program
- 	return 0;
- }
- 
--static int libbpf_find_attach_btf_id(struct bpf_program *prog, int *btf_obj_fd, int *btf_type_id);
-+static int libbpf_find_attach_btf_id(struct bpf_program *prog, const char *attach_name,
-+				     int *btf_obj_fd, int *btf_type_id);
- 
- /* this is called as prog->sec_def->preload_fn for libbpf-supported sec_defs */
- static int libbpf_preload_prog(struct bpf_program *prog,
- 			       struct bpf_prog_load_params *attr, long cookie)
- {
-+	enum sec_def_flags def = cookie;
-+
- 	/* old kernels might not support specifying expected_attach_type */
--	if (prog->sec_def->is_exp_attach_type_optional &&
--	    !kernel_supports(prog->obj, FEAT_EXP_ATTACH_TYPE))
-+	if ((def & SEC_EXP_ATTACH_OPT) && !kernel_supports(prog->obj, FEAT_EXP_ATTACH_TYPE))
- 		attr->expected_attach_type = 0;
- 
--	if (prog->sec_def->is_sleepable)
-+	if (def & SEC_SLEEPABLE)
- 		attr->prog_flags |= BPF_F_SLEEPABLE;
- 
- 	if ((prog->type == BPF_PROG_TYPE_TRACING ||
- 	     prog->type == BPF_PROG_TYPE_LSM ||
- 	     prog->type == BPF_PROG_TYPE_EXT) && !prog->attach_btf_id) {
- 		int btf_obj_fd = 0, btf_type_id = 0, err;
-+		const char *attach_name;
- 
--		err = libbpf_find_attach_btf_id(prog, &btf_obj_fd, &btf_type_id);
-+		attach_name = strchr(prog->sec_name, '/') + 1;
-+		err = libbpf_find_attach_btf_id(prog, attach_name, &btf_obj_fd, &btf_type_id);
- 		if (err)
- 			return err;
- 
-@@ -7955,15 +7975,14 @@ void bpf_program__set_expected_attach_type(struct bpf_program *prog,
- 		.sec = string,						    \
- 		.prog_type = ptype,					    \
- 		.expected_attach_type = eatype,				    \
--		.is_exp_attach_type_optional = eatype_optional,		    \
--		.is_attachable = attachable,				    \
--		.is_attach_btf = attach_btf,				    \
-+		.cookie = (long) (					    \
-+			(eatype_optional ? SEC_EXP_ATTACH_OPT : 0) |   \
-+			(attachable ? SEC_ATTACHABLE : 0) |		    \
-+			(attach_btf ? SEC_ATTACH_BTF : 0)		    \
-+		),							    \
- 		.preload_fn = libbpf_preload_prog,			    \
- 	}
- 
--/* Programs that can NOT be attached. */
--#define BPF_PROG_SEC(string, ptype) BPF_PROG_SEC_IMPL(string, ptype, 0, 0, 0, 0)
--
- /* Programs that can be attached. */
- #define BPF_APROG_SEC(string, ptype, atype) \
- 	BPF_PROG_SEC_IMPL(string, ptype, atype, true, 1, 0)
-@@ -7976,14 +7995,11 @@ void bpf_program__set_expected_attach_type(struct bpf_program *prog,
- #define BPF_PROG_BTF(string, ptype, eatype) \
- 	BPF_PROG_SEC_IMPL(string, ptype, eatype, false, 0, 1)
- 
--/* Programs that can be attached but attach type can't be identified by section
-- * name. Kept for backward compatibility.
-- */
--#define BPF_APROG_COMPAT(string, ptype) BPF_PROG_SEC(string, ptype)
--
--#define SEC_DEF(sec_pfx, ptype, ...) {					    \
-+#define SEC_DEF(sec_pfx, ptype, atype, flags, ...) {			    \
- 	.sec = sec_pfx,							    \
- 	.prog_type = BPF_PROG_TYPE_##ptype,				    \
-+	.expected_attach_type = atype,					    \
-+	.cookie = (long)(flags),					    \
- 	.preload_fn = libbpf_preload_prog,				    \
- 	__VA_ARGS__							    \
- }
-@@ -7996,92 +8012,49 @@ static struct bpf_link *attach_lsm(const struct bpf_program *prog, long cookie);
+ struct bpf_sec_def {
+@@ -7986,15 +7988,15 @@ static struct bpf_link *attach_lsm(const struct bpf_program *prog, long cookie);
  static struct bpf_link *attach_iter(const struct bpf_program *prog, long cookie);
  
  static const struct bpf_sec_def section_defs[] = {
--	BPF_PROG_SEC("socket",			BPF_PROG_TYPE_SOCKET_FILTER),
-+	SEC_DEF("socket",		SOCKET_FILTER, 0, SEC_NONE),
- 	BPF_EAPROG_SEC("sk_reuseport/migrate",	BPF_PROG_TYPE_SK_REUSEPORT,
- 						BPF_SK_REUSEPORT_SELECT_OR_MIGRATE),
- 	BPF_EAPROG_SEC("sk_reuseport",		BPF_PROG_TYPE_SK_REUSEPORT,
- 						BPF_SK_REUSEPORT_SELECT),
--	SEC_DEF("kprobe/", KPROBE,
--		.attach_fn = attach_kprobe),
--	BPF_PROG_SEC("uprobe/",			BPF_PROG_TYPE_KPROBE),
--	SEC_DEF("kretprobe/", KPROBE,
--		.attach_fn = attach_kprobe),
--	BPF_PROG_SEC("uretprobe/",		BPF_PROG_TYPE_KPROBE),
--	BPF_PROG_SEC("classifier",		BPF_PROG_TYPE_SCHED_CLS),
--	BPF_PROG_SEC("action",			BPF_PROG_TYPE_SCHED_ACT),
--	SEC_DEF("tracepoint/", TRACEPOINT,
--		.attach_fn = attach_tp),
--	SEC_DEF("tp/", TRACEPOINT,
--		.attach_fn = attach_tp),
--	SEC_DEF("raw_tracepoint/", RAW_TRACEPOINT,
--		.attach_fn = attach_raw_tp),
--	SEC_DEF("raw_tp/", RAW_TRACEPOINT,
--		.attach_fn = attach_raw_tp),
--	SEC_DEF("tp_btf/", TRACING,
--		.expected_attach_type = BPF_TRACE_RAW_TP,
--		.is_attach_btf = true,
--		.attach_fn = attach_trace),
--	SEC_DEF("fentry/", TRACING,
--		.expected_attach_type = BPF_TRACE_FENTRY,
--		.is_attach_btf = true,
--		.attach_fn = attach_trace),
--	SEC_DEF("fmod_ret/", TRACING,
--		.expected_attach_type = BPF_MODIFY_RETURN,
--		.is_attach_btf = true,
--		.attach_fn = attach_trace),
--	SEC_DEF("fexit/", TRACING,
--		.expected_attach_type = BPF_TRACE_FEXIT,
--		.is_attach_btf = true,
--		.attach_fn = attach_trace),
--	SEC_DEF("fentry.s/", TRACING,
--		.expected_attach_type = BPF_TRACE_FENTRY,
--		.is_attach_btf = true,
--		.is_sleepable = true,
--		.attach_fn = attach_trace),
--	SEC_DEF("fmod_ret.s/", TRACING,
--		.expected_attach_type = BPF_MODIFY_RETURN,
--		.is_attach_btf = true,
--		.is_sleepable = true,
--		.attach_fn = attach_trace),
--	SEC_DEF("fexit.s/", TRACING,
--		.expected_attach_type = BPF_TRACE_FEXIT,
--		.is_attach_btf = true,
--		.is_sleepable = true,
--		.attach_fn = attach_trace),
--	SEC_DEF("freplace/", EXT,
--		.is_attach_btf = true,
--		.attach_fn = attach_trace),
--	SEC_DEF("lsm/", LSM,
--		.is_attach_btf = true,
--		.expected_attach_type = BPF_LSM_MAC,
--		.attach_fn = attach_lsm),
--	SEC_DEF("lsm.s/", LSM,
--		.is_attach_btf = true,
--		.is_sleepable = true,
--		.expected_attach_type = BPF_LSM_MAC,
--		.attach_fn = attach_lsm),
--	SEC_DEF("iter/", TRACING,
--		.expected_attach_type = BPF_TRACE_ITER,
--		.is_attach_btf = true,
--		.attach_fn = attach_iter),
--	SEC_DEF("syscall", SYSCALL,
--		.is_sleepable = true),
-+	SEC_DEF("kprobe/",		KPROBE,	0, SEC_NONE, attach_kprobe),
-+	SEC_DEF("uprobe/",		KPROBE,	0, SEC_NONE),
-+	SEC_DEF("kretprobe/",		KPROBE, 0, SEC_NONE, attach_kprobe),
-+	SEC_DEF("uretprobe/",		KPROBE, 0, SEC_NONE),
-+	SEC_DEF("classifier",		SCHED_CLS, 0, SEC_NONE),
-+	SEC_DEF("action",		SCHED_ACT, 0, SEC_NONE),
-+	SEC_DEF("tracepoint/",		TRACEPOINT, 0, SEC_NONE, attach_tp),
-+	SEC_DEF("tp/",			TRACEPOINT, 0, SEC_NONE, attach_tp),
-+	SEC_DEF("raw_tracepoint/",	RAW_TRACEPOINT, 0, SEC_NONE, attach_raw_tp),
-+	SEC_DEF("raw_tp/",		RAW_TRACEPOINT, 0, SEC_NONE, attach_raw_tp),
-+	SEC_DEF("tp_btf/",		TRACING, BPF_TRACE_RAW_TP, SEC_ATTACH_BTF, attach_trace),
-+	SEC_DEF("fentry/",		TRACING, BPF_TRACE_FENTRY, SEC_ATTACH_BTF, attach_trace),
-+	SEC_DEF("fmod_ret/",		TRACING, BPF_MODIFY_RETURN, SEC_ATTACH_BTF, attach_trace),
-+	SEC_DEF("fexit/",		TRACING, BPF_TRACE_FEXIT, SEC_ATTACH_BTF, attach_trace),
-+	SEC_DEF("fentry.s/",		TRACING, BPF_TRACE_FENTRY, SEC_ATTACH_BTF | SEC_SLEEPABLE, attach_trace),
-+	SEC_DEF("fmod_ret.s/",		TRACING, BPF_MODIFY_RETURN, SEC_ATTACH_BTF | SEC_SLEEPABLE, attach_trace),
-+	SEC_DEF("fexit.s/",		TRACING, BPF_TRACE_FEXIT, SEC_ATTACH_BTF | SEC_SLEEPABLE, attach_trace),
-+	SEC_DEF("freplace/",		EXT, 0, SEC_ATTACH_BTF, attach_trace),
-+	SEC_DEF("lsm/",			LSM, BPF_LSM_MAC, SEC_ATTACH_BTF, attach_lsm),
-+	SEC_DEF("lsm.s/",		LSM, BPF_LSM_MAC, SEC_ATTACH_BTF | SEC_SLEEPABLE, attach_lsm),
-+	SEC_DEF("iter/",		TRACING, BPF_TRACE_ITER, SEC_ATTACH_BTF, attach_iter),
-+	SEC_DEF("syscall",		SYSCALL, 0, SEC_SLEEPABLE),
- 	BPF_EAPROG_SEC("xdp_devmap/",		BPF_PROG_TYPE_XDP,
- 						BPF_XDP_DEVMAP),
- 	BPF_EAPROG_SEC("xdp_cpumap/",		BPF_PROG_TYPE_XDP,
- 						BPF_XDP_CPUMAP),
- 	BPF_APROG_SEC("xdp",			BPF_PROG_TYPE_XDP,
- 						BPF_XDP),
--	BPF_PROG_SEC("perf_event",		BPF_PROG_TYPE_PERF_EVENT),
--	BPF_PROG_SEC("lwt_in",			BPF_PROG_TYPE_LWT_IN),
--	BPF_PROG_SEC("lwt_out",			BPF_PROG_TYPE_LWT_OUT),
--	BPF_PROG_SEC("lwt_xmit",		BPF_PROG_TYPE_LWT_XMIT),
--	BPF_PROG_SEC("lwt_seg6local",		BPF_PROG_TYPE_LWT_SEG6LOCAL),
-+	SEC_DEF("perf_event",		PERF_EVENT, 0, SEC_NONE),
-+	SEC_DEF("lwt_in",		LWT_IN, 0, SEC_NONE),
-+	SEC_DEF("lwt_out",		LWT_OUT, 0, SEC_NONE),
-+	SEC_DEF("lwt_xmit",		LWT_XMIT, 0, SEC_NONE),
-+	SEC_DEF("lwt_seg6local",	LWT_SEG6LOCAL, 0, SEC_NONE),
- 	BPF_APROG_SEC("cgroup_skb/ingress",	BPF_PROG_TYPE_CGROUP_SKB,
- 						BPF_CGROUP_INET_INGRESS),
- 	BPF_APROG_SEC("cgroup_skb/egress",	BPF_PROG_TYPE_CGROUP_SKB,
- 						BPF_CGROUP_INET_EGRESS),
--	BPF_APROG_COMPAT("cgroup/skb",		BPF_PROG_TYPE_CGROUP_SKB),
-+	SEC_DEF("cgroup/skb",		CGROUP_SKB, 0, SEC_NONE),
- 	BPF_EAPROG_SEC("cgroup/sock_create",	BPF_PROG_TYPE_CGROUP_SOCK,
- 						BPF_CGROUP_INET_SOCK_CREATE),
- 	BPF_EAPROG_SEC("cgroup/sock_release",	BPF_PROG_TYPE_CGROUP_SOCK,
-@@ -8100,7 +8073,7 @@ static const struct bpf_sec_def section_defs[] = {
- 						BPF_SK_SKB_STREAM_PARSER),
- 	BPF_APROG_SEC("sk_skb/stream_verdict",	BPF_PROG_TYPE_SK_SKB,
- 						BPF_SK_SKB_STREAM_VERDICT),
--	BPF_APROG_COMPAT("sk_skb",		BPF_PROG_TYPE_SK_SKB),
-+	SEC_DEF("sk_skb",		SK_SKB, 0, SEC_NONE),
- 	BPF_APROG_SEC("sk_msg",			BPF_PROG_TYPE_SK_MSG,
- 						BPF_SK_MSG_VERDICT),
- 	BPF_APROG_SEC("lirc_mode2",		BPF_PROG_TYPE_LIRC_MODE2,
-@@ -8137,16 +8110,14 @@ static const struct bpf_sec_def section_defs[] = {
- 						BPF_CGROUP_GETSOCKOPT),
- 	BPF_EAPROG_SEC("cgroup/setsockopt",	BPF_PROG_TYPE_CGROUP_SOCKOPT,
- 						BPF_CGROUP_SETSOCKOPT),
--	BPF_PROG_SEC("struct_ops",		BPF_PROG_TYPE_STRUCT_OPS),
-+	SEC_DEF("struct_ops",		STRUCT_OPS, 0, SEC_NONE),
- 	BPF_EAPROG_SEC("sk_lookup/",		BPF_PROG_TYPE_SK_LOOKUP,
- 						BPF_SK_LOOKUP),
+-	SEC_DEF("socket",		SOCKET_FILTER, 0, SEC_NONE),
+-	SEC_DEF("sk_reuseport/migrate",	SK_REUSEPORT, BPF_SK_REUSEPORT_SELECT_OR_MIGRATE, SEC_ATTACHABLE),
+-	SEC_DEF("sk_reuseport",		SK_REUSEPORT, BPF_SK_REUSEPORT_SELECT, SEC_ATTACHABLE),
++	SEC_DEF("socket",		SOCKET_FILTER, 0, SEC_NONE | SEC_SLOPPY_PFX),
++	SEC_DEF("sk_reuseport/migrate",	SK_REUSEPORT, BPF_SK_REUSEPORT_SELECT_OR_MIGRATE, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
++	SEC_DEF("sk_reuseport",		SK_REUSEPORT, BPF_SK_REUSEPORT_SELECT, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
+ 	SEC_DEF("kprobe/",		KPROBE,	0, SEC_NONE, attach_kprobe),
+ 	SEC_DEF("uprobe/",		KPROBE,	0, SEC_NONE),
+ 	SEC_DEF("kretprobe/",		KPROBE, 0, SEC_NONE, attach_kprobe),
+ 	SEC_DEF("uretprobe/",		KPROBE, 0, SEC_NONE),
+-	SEC_DEF("classifier",		SCHED_CLS, 0, SEC_NONE),
+-	SEC_DEF("action",		SCHED_ACT, 0, SEC_NONE),
++	SEC_DEF("classifier",		SCHED_CLS, 0, SEC_NONE | SEC_SLOPPY_PFX),
++	SEC_DEF("action",		SCHED_ACT, 0, SEC_NONE | SEC_SLOPPY_PFX),
+ 	SEC_DEF("tracepoint/",		TRACEPOINT, 0, SEC_NONE, attach_tp),
+ 	SEC_DEF("tp/",			TRACEPOINT, 0, SEC_NONE, attach_tp),
+ 	SEC_DEF("raw_tracepoint/",	RAW_TRACEPOINT, 0, SEC_NONE, attach_raw_tp),
+@@ -8013,44 +8015,44 @@ static const struct bpf_sec_def section_defs[] = {
+ 	SEC_DEF("syscall",		SYSCALL, 0, SEC_SLEEPABLE),
+ 	SEC_DEF("xdp_devmap/",		XDP, BPF_XDP_DEVMAP, SEC_ATTACHABLE),
+ 	SEC_DEF("xdp_cpumap/",		XDP, BPF_XDP_CPUMAP, SEC_ATTACHABLE),
+-	SEC_DEF("xdp",			XDP, BPF_XDP, SEC_ATTACHABLE_OPT),
+-	SEC_DEF("perf_event",		PERF_EVENT, 0, SEC_NONE),
+-	SEC_DEF("lwt_in",		LWT_IN, 0, SEC_NONE),
+-	SEC_DEF("lwt_out",		LWT_OUT, 0, SEC_NONE),
+-	SEC_DEF("lwt_xmit",		LWT_XMIT, 0, SEC_NONE),
+-	SEC_DEF("lwt_seg6local",	LWT_SEG6LOCAL, 0, SEC_NONE),
+-	SEC_DEF("cgroup_skb/ingress",	CGROUP_SKB, BPF_CGROUP_INET_INGRESS, SEC_ATTACHABLE_OPT),
+-	SEC_DEF("cgroup_skb/egress",	CGROUP_SKB, BPF_CGROUP_INET_EGRESS, SEC_ATTACHABLE_OPT),
+-	SEC_DEF("cgroup/skb",		CGROUP_SKB, 0, SEC_NONE),
+-	SEC_DEF("cgroup/sock_create",	CGROUP_SOCK, BPF_CGROUP_INET_SOCK_CREATE, SEC_ATTACHABLE),
+-	SEC_DEF("cgroup/sock_release",	CGROUP_SOCK, BPF_CGROUP_INET_SOCK_RELEASE, SEC_ATTACHABLE),
+-	SEC_DEF("cgroup/sock",		CGROUP_SOCK, BPF_CGROUP_INET_SOCK_CREATE, SEC_ATTACHABLE_OPT),
+-	SEC_DEF("cgroup/post_bind4",	CGROUP_SOCK, BPF_CGROUP_INET4_POST_BIND, SEC_ATTACHABLE),
+-	SEC_DEF("cgroup/post_bind6",	CGROUP_SOCK, BPF_CGROUP_INET6_POST_BIND, SEC_ATTACHABLE),
+-	SEC_DEF("cgroup/dev",		CGROUP_DEVICE, BPF_CGROUP_DEVICE, SEC_ATTACHABLE_OPT),
+-	SEC_DEF("sockops",		SOCK_OPS, BPF_CGROUP_SOCK_OPS, SEC_ATTACHABLE_OPT),
+-	SEC_DEF("sk_skb/stream_parser",	SK_SKB, BPF_SK_SKB_STREAM_PARSER, SEC_ATTACHABLE_OPT),
+-	SEC_DEF("sk_skb/stream_verdict",SK_SKB, BPF_SK_SKB_STREAM_VERDICT, SEC_ATTACHABLE_OPT),
+-	SEC_DEF("sk_skb",		SK_SKB, 0, SEC_NONE),
+-	SEC_DEF("sk_msg",		SK_MSG, BPF_SK_MSG_VERDICT, SEC_ATTACHABLE_OPT),
+-	SEC_DEF("lirc_mode2",		LIRC_MODE2, BPF_LIRC_MODE2, SEC_ATTACHABLE_OPT),
+-	SEC_DEF("flow_dissector",	FLOW_DISSECTOR, BPF_FLOW_DISSECTOR, SEC_ATTACHABLE_OPT),
+-	SEC_DEF("cgroup/bind4",		CGROUP_SOCK_ADDR, BPF_CGROUP_INET4_BIND, SEC_ATTACHABLE),
+-	SEC_DEF("cgroup/bind6",		CGROUP_SOCK_ADDR, BPF_CGROUP_INET6_BIND, SEC_ATTACHABLE),
+-	SEC_DEF("cgroup/connect4",	CGROUP_SOCK_ADDR, BPF_CGROUP_INET4_CONNECT, SEC_ATTACHABLE),
+-	SEC_DEF("cgroup/connect6",	CGROUP_SOCK_ADDR, BPF_CGROUP_INET6_CONNECT, SEC_ATTACHABLE),
+-	SEC_DEF("cgroup/sendmsg4",	CGROUP_SOCK_ADDR, BPF_CGROUP_UDP4_SENDMSG, SEC_ATTACHABLE),
+-	SEC_DEF("cgroup/sendmsg6",	CGROUP_SOCK_ADDR, BPF_CGROUP_UDP6_SENDMSG, SEC_ATTACHABLE),
+-	SEC_DEF("cgroup/recvmsg4",	CGROUP_SOCK_ADDR, BPF_CGROUP_UDP4_RECVMSG, SEC_ATTACHABLE),
+-	SEC_DEF("cgroup/recvmsg6",	CGROUP_SOCK_ADDR, BPF_CGROUP_UDP6_RECVMSG, SEC_ATTACHABLE),
+-	SEC_DEF("cgroup/getpeername4",	CGROUP_SOCK_ADDR, BPF_CGROUP_INET4_GETPEERNAME, SEC_ATTACHABLE),
+-	SEC_DEF("cgroup/getpeername6",	CGROUP_SOCK_ADDR, BPF_CGROUP_INET6_GETPEERNAME, SEC_ATTACHABLE),
+-	SEC_DEF("cgroup/getsockname4",	CGROUP_SOCK_ADDR, BPF_CGROUP_INET4_GETSOCKNAME, SEC_ATTACHABLE),
+-	SEC_DEF("cgroup/getsockname6",	CGROUP_SOCK_ADDR, BPF_CGROUP_INET6_GETSOCKNAME, SEC_ATTACHABLE),
+-	SEC_DEF("cgroup/sysctl",	CGROUP_SYSCTL, BPF_CGROUP_SYSCTL, SEC_ATTACHABLE),
+-	SEC_DEF("cgroup/getsockopt",	CGROUP_SOCKOPT, BPF_CGROUP_GETSOCKOPT, SEC_ATTACHABLE),
+-	SEC_DEF("cgroup/setsockopt",	CGROUP_SOCKOPT, BPF_CGROUP_SETSOCKOPT, SEC_ATTACHABLE),
+-	SEC_DEF("struct_ops",		STRUCT_OPS, 0, SEC_NONE),
++	SEC_DEF("xdp",			XDP, BPF_XDP, SEC_ATTACHABLE_OPT | SEC_SLOPPY_PFX),
++	SEC_DEF("perf_event",		PERF_EVENT, 0, SEC_NONE | SEC_SLOPPY_PFX),
++	SEC_DEF("lwt_in",		LWT_IN, 0, SEC_NONE | SEC_SLOPPY_PFX),
++	SEC_DEF("lwt_out",		LWT_OUT, 0, SEC_NONE | SEC_SLOPPY_PFX),
++	SEC_DEF("lwt_xmit",		LWT_XMIT, 0, SEC_NONE | SEC_SLOPPY_PFX),
++	SEC_DEF("lwt_seg6local",	LWT_SEG6LOCAL, 0, SEC_NONE | SEC_SLOPPY_PFX),
++	SEC_DEF("cgroup_skb/ingress",	CGROUP_SKB, BPF_CGROUP_INET_INGRESS, SEC_ATTACHABLE_OPT | SEC_SLOPPY_PFX),
++	SEC_DEF("cgroup_skb/egress",	CGROUP_SKB, BPF_CGROUP_INET_EGRESS, SEC_ATTACHABLE_OPT | SEC_SLOPPY_PFX),
++	SEC_DEF("cgroup/skb",		CGROUP_SKB, 0, SEC_NONE | SEC_SLOPPY_PFX),
++	SEC_DEF("cgroup/sock_create",	CGROUP_SOCK, BPF_CGROUP_INET_SOCK_CREATE, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
++	SEC_DEF("cgroup/sock_release",	CGROUP_SOCK, BPF_CGROUP_INET_SOCK_RELEASE, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
++	SEC_DEF("cgroup/sock",		CGROUP_SOCK, BPF_CGROUP_INET_SOCK_CREATE, SEC_ATTACHABLE_OPT | SEC_SLOPPY_PFX),
++	SEC_DEF("cgroup/post_bind4",	CGROUP_SOCK, BPF_CGROUP_INET4_POST_BIND, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
++	SEC_DEF("cgroup/post_bind6",	CGROUP_SOCK, BPF_CGROUP_INET6_POST_BIND, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
++	SEC_DEF("cgroup/dev",		CGROUP_DEVICE, BPF_CGROUP_DEVICE, SEC_ATTACHABLE_OPT | SEC_SLOPPY_PFX),
++	SEC_DEF("sockops",		SOCK_OPS, BPF_CGROUP_SOCK_OPS, SEC_ATTACHABLE_OPT | SEC_SLOPPY_PFX),
++	SEC_DEF("sk_skb/stream_parser",	SK_SKB, BPF_SK_SKB_STREAM_PARSER, SEC_ATTACHABLE_OPT | SEC_SLOPPY_PFX),
++	SEC_DEF("sk_skb/stream_verdict",SK_SKB, BPF_SK_SKB_STREAM_VERDICT, SEC_ATTACHABLE_OPT | SEC_SLOPPY_PFX),
++	SEC_DEF("sk_skb",		SK_SKB, 0, SEC_NONE | SEC_SLOPPY_PFX),
++	SEC_DEF("sk_msg",		SK_MSG, BPF_SK_MSG_VERDICT, SEC_ATTACHABLE_OPT | SEC_SLOPPY_PFX),
++	SEC_DEF("lirc_mode2",		LIRC_MODE2, BPF_LIRC_MODE2, SEC_ATTACHABLE_OPT | SEC_SLOPPY_PFX),
++	SEC_DEF("flow_dissector",	FLOW_DISSECTOR, BPF_FLOW_DISSECTOR, SEC_ATTACHABLE_OPT | SEC_SLOPPY_PFX),
++	SEC_DEF("cgroup/bind4",		CGROUP_SOCK_ADDR, BPF_CGROUP_INET4_BIND, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
++	SEC_DEF("cgroup/bind6",		CGROUP_SOCK_ADDR, BPF_CGROUP_INET6_BIND, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
++	SEC_DEF("cgroup/connect4",	CGROUP_SOCK_ADDR, BPF_CGROUP_INET4_CONNECT, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
++	SEC_DEF("cgroup/connect6",	CGROUP_SOCK_ADDR, BPF_CGROUP_INET6_CONNECT, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
++	SEC_DEF("cgroup/sendmsg4",	CGROUP_SOCK_ADDR, BPF_CGROUP_UDP4_SENDMSG, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
++	SEC_DEF("cgroup/sendmsg6",	CGROUP_SOCK_ADDR, BPF_CGROUP_UDP6_SENDMSG, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
++	SEC_DEF("cgroup/recvmsg4",	CGROUP_SOCK_ADDR, BPF_CGROUP_UDP4_RECVMSG, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
++	SEC_DEF("cgroup/recvmsg6",	CGROUP_SOCK_ADDR, BPF_CGROUP_UDP6_RECVMSG, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
++	SEC_DEF("cgroup/getpeername4",	CGROUP_SOCK_ADDR, BPF_CGROUP_INET4_GETPEERNAME, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
++	SEC_DEF("cgroup/getpeername6",	CGROUP_SOCK_ADDR, BPF_CGROUP_INET6_GETPEERNAME, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
++	SEC_DEF("cgroup/getsockname4",	CGROUP_SOCK_ADDR, BPF_CGROUP_INET4_GETSOCKNAME, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
++	SEC_DEF("cgroup/getsockname6",	CGROUP_SOCK_ADDR, BPF_CGROUP_INET6_GETSOCKNAME, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
++	SEC_DEF("cgroup/sysctl",	CGROUP_SYSCTL, BPF_CGROUP_SYSCTL, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
++	SEC_DEF("cgroup/getsockopt",	CGROUP_SOCKOPT, BPF_CGROUP_GETSOCKOPT, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
++	SEC_DEF("cgroup/setsockopt",	CGROUP_SOCKOPT, BPF_CGROUP_SETSOCKOPT, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
++	SEC_DEF("struct_ops+",		STRUCT_OPS, 0, SEC_NONE),
+ 	SEC_DEF("sk_lookup/",		SK_LOOKUP, BPF_SK_LOOKUP, SEC_ATTACHABLE),
  };
  
- #undef BPF_PROG_SEC_IMPL
--#undef BPF_PROG_SEC
- #undef BPF_APROG_SEC
- #undef BPF_EAPROG_SEC
--#undef BPF_APROG_COMPAT
- #undef SEC_DEF
+@@ -8058,11 +8060,53 @@ static const struct bpf_sec_def section_defs[] = {
  
- #define MAX_TYPE_NAME_SIZE 32
-@@ -8174,8 +8145,15 @@ static char *libbpf_get_type_names(bool attach_type)
- 	buf[0] = '\0';
- 	/* Forge string buf with all available names */
- 	for (i = 0; i < ARRAY_SIZE(section_defs); i++) {
--		if (attach_type && !section_defs[i].is_attachable)
--			continue;
-+		const struct bpf_sec_def *sec_def = &section_defs[i];
-+
-+		if (attach_type) {
-+			if (sec_def->preload_fn != libbpf_preload_prog)
-+				continue;
-+
-+			if (!(sec_def->cookie & SEC_ATTACHABLE))
-+				continue;
-+		}
- 
- 		if (strlen(buf) + strlen(section_defs[i].sec) + 2 > len) {
- 			free(buf);
-@@ -8499,20 +8477,13 @@ static int find_kernel_btf_id(struct bpf_object *obj, const char *attach_name,
- 	return -ESRCH;
- }
- 
--static int libbpf_find_attach_btf_id(struct bpf_program *prog, int *btf_obj_fd, int *btf_type_id)
-+static int libbpf_find_attach_btf_id(struct bpf_program *prog, const char *attach_name,
-+				     int *btf_obj_fd, int *btf_type_id)
+ static const struct bpf_sec_def *find_sec_def(const char *sec_name)
  {
- 	enum bpf_attach_type attach_type = prog->expected_attach_type;
- 	__u32 attach_prog_fd = prog->attach_prog_fd;
--	const char *attach_name;
- 	int err = 0;
+-	int i, n = ARRAY_SIZE(section_defs);
++	const struct bpf_sec_def *sec_def;
++	enum sec_def_flags sec_flags;
++	int i, n = ARRAY_SIZE(section_defs), len;
++	bool strict = libbpf_mode & LIBBPF_STRICT_SEC_NAME;
  
--	if (!prog->sec_def || !prog->sec_def->is_attach_btf) {
--		pr_warn("failed to identify BTF ID based on ELF section name '%s'\n",
--			prog->sec_name);
--		return -ESRCH;
--	}
--	attach_name = prog->sec_name + strlen(prog->sec_def->sec);
--
- 	/* BPF program's BTF ID */
- 	if (attach_prog_fd) {
- 		err = libbpf_find_prog_btf_id(attach_name, attach_prog_fd);
-@@ -8562,7 +8533,9 @@ int libbpf_attach_type_by_name(const char *name,
- 		return libbpf_err(-EINVAL);
+ 	for (i = 0; i < n; i++) {
+-		if (str_has_pfx(sec_name, section_defs[i].sec))
+-			return &section_defs[i];
++		sec_def = &section_defs[i];
++		sec_flags = sec_def->cookie;
++		len = strlen(sec_def->sec);
++
++		/* "type/" always has to have proper SEC("type/extras") form */
++		if (sec_def->sec[len - 1] == '/') {
++			if (str_has_pfx(sec_name, sec_def->sec))
++				return sec_def;
++			continue;
++		}
++
++		/* "type+" means it can be either exact SEC("type") or
++		 * well-formed SEC("type/extras") with proper '/' separator
++		 */
++		if (sec_def->sec[len - 1] == '+') {
++			len--;
++			/* not even a prefix */
++			if (strncmp(sec_name, sec_def->sec, len) != 0)
++				continue;
++			/* exact match or has '/' separator */
++			if (sec_name[len] == '\0' || sec_name[len] == '/')
++				return sec_def;
++			continue;
++		}
++
++		/* SEC_SLOPPY_PFX definitions are allowed to be just prefix
++		 * matches, unless strict section name mode
++		 * (LIBBPF_STRICT_SEC_NAME) is enabled, in which case the
++		 * match has to be exact.
++		 */
++		if ((sec_flags & SEC_SLOPPY_PFX) && !strict)  {
++			if (str_has_pfx(sec_name, sec_def->sec))
++				return sec_def;
++			continue;
++		}
++
++		/* Definitions not marked SEC_SLOPPY_PFX (e.g.,
++		 * SEC("syscall")) are exact matches in both modes.
++		 */
++		if (strcmp(sec_name, sec_def->sec) == 0)
++			return sec_def;
  	}
+ 	return NULL;
+ }
+diff --git a/tools/lib/bpf/libbpf_legacy.h b/tools/lib/bpf/libbpf_legacy.h
+index df0d03dcffab..74e6f860f703 100644
+--- a/tools/lib/bpf/libbpf_legacy.h
++++ b/tools/lib/bpf/libbpf_legacy.h
+@@ -46,6 +46,15 @@ enum libbpf_strict_mode {
+ 	 */
+ 	LIBBPF_STRICT_DIRECT_ERRS = 0x02,
  
--	if (!sec_def->is_attachable)
-+	if (sec_def->preload_fn != libbpf_preload_prog)
-+		return libbpf_err(-EINVAL);
-+	if (!(sec_def->cookie & SEC_ATTACHABLE))
- 		return libbpf_err(-EINVAL);
++	/*
++	 * Enforce strict BPF program section (SEC()) names.
++	 * E.g., while prefiously SEC("xdp_whatever") or SEC("perf_event_blah") were
++	 * allowed, with LIBBPF_STRICT_SEC_PREFIX this will become
++	 * unrecognized by libbpf and would have to be just SEC("xdp") and
++	 * SEC("xdp") and SEC("perf_event").
++	 */
++	LIBBPF_STRICT_SEC_NAME = 0x04,
++
+ 	__LIBBPF_STRICT_LAST,
+ };
  
- 	*attach_type = sec_def->expected_attach_type;
 -- 
 2.30.2
 
