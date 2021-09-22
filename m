@@ -2,51 +2,52 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.0 required=3.0 tests=BAYES_00,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35350C433F5
-	for <bpf@archiver.kernel.org>; Wed, 22 Sep 2021 20:32:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D477CC433F5
+	for <bpf@archiver.kernel.org>; Wed, 22 Sep 2021 20:32:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1914C61019
-	for <bpf@archiver.kernel.org>; Wed, 22 Sep 2021 20:32:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BF0AC61019
+	for <bpf@archiver.kernel.org>; Wed, 22 Sep 2021 20:32:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237636AbhIVUeH convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 22 Sep 2021 16:34:07 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:46566 "EHLO
+        id S237626AbhIVUeM convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 22 Sep 2021 16:34:12 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:38890 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237626AbhIVUeH (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 22 Sep 2021 16:34:07 -0400
+        by vger.kernel.org with ESMTP id S237309AbhIVUeM (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 22 Sep 2021 16:34:12 -0400
 Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18MIlNgV022611
-        for <bpf@vger.kernel.org>; Wed, 22 Sep 2021 13:32:36 -0700
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18MIlMSh022555
+        for <bpf@vger.kernel.org>; Wed, 22 Sep 2021 13:32:41 -0700
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 3b86h0tj14-3
+        by mx0a-00082601.pphosted.com with ESMTP id 3b86h0tj2d-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 22 Sep 2021 13:32:36 -0700
-Received: from intmgw002.25.frc3.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 22 Sep 2021 13:32:41 -0700
+Received: from intmgw002.25.frc3.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Wed, 22 Sep 2021 13:32:32 -0700
+ 15.1.2308.14; Wed, 22 Sep 2021 13:32:40 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id A6AA54B04EB7; Wed, 22 Sep 2021 13:32:27 -0700 (PDT)
+        id D691A4B04ECE; Wed, 22 Sep 2021 13:32:35 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <kafai@fb.com>, <joannekoong@fb.com>,
         Andrii Nakryiko <andrii@kernel.org>
-Subject: [PATCH RFC bpf-next 0/4] bpf_jhash_mem() and BPF Bloom filter implementation
-Date:   Wed, 22 Sep 2021 13:32:20 -0700
-Message-ID: <20210922203224.912809-1-andrii@kernel.org>
+Subject: [PATCH RFC bpf-next 4/4] selftests/bpf: integrate custom Bloom filter impl into benchs
+Date:   Wed, 22 Sep 2021 13:32:24 -0700
+Message-ID: <20210922203224.912809-5-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
-Content-Type: text/plain; charset="UTF-8"
-X-FB-Internal: Safe
-X-FB-Source: Intern
-X-Proofpoint-GUID: SKCUED4akGWkh_EdjCojnUbRo0esyHkP
-X-Proofpoint-ORIG-GUID: SKCUED4akGWkh_EdjCojnUbRo0esyHkP
-Content-Transfer-Encoding: 8BIT
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+In-Reply-To: <20210922203224.912809-1-andrii@kernel.org>
+References: <20210922203224.912809-1-andrii@kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-FB-Source: Intern
+X-Proofpoint-GUID: 00hB6rqB0fh8-Bg6Vb5JCJuWIKML8LPU
+X-Proofpoint-ORIG-GUID: 00hB6rqB0fh8-Bg6Vb5JCJuWIKML8LPU
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
  definitions=2021-09-22_08,2021-09-22_01,2020-04-07_01
@@ -60,331 +61,329 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This is a quick experiment on adding a hashing helper and buliding Bloom
-filter with pure BPF code with no extra kernel functionality (beyond generic
-hashing helper).
+Add user-space integration parts.
 
-This is based on top of Joanne's series [0].
-
-Patch 1 adds bpf_jhash_mem() helper. Patch 2 fixes existing benchmark to
-report valid and consistent benchmark results and reduce amount of overhead
-that stats counting itself causes. Patch 3 contains BPF-side implementation of
-Bloom filter based on global variables. Patch 4 completes the integration on
-user-space side. I split patch 3 and 4 to not distract from BPF-side changes.
-
-Note that "Hashmap without bloom filter vs. hashmap with bloom filter"
-benchmark is still spending lots of time in just generating random values on
-BPF side, and it would be nice to optimize that and make it more reproducible
-to compare different implementations. But I ran out of steam for doing that,
-especially that I'm not sure this changes anything.
-
-The same benchmark also checks only short 8-byte keys, which is a valid use
-case, but not the only probably one, so would be nice to have that extended as
-well.
-
-
-For reference, here are full benchmark results comparing in-kernel Bloom filter
-and custom BPF-implemented Bloom filter. I shortened the set of different
-combinations tested to reduce amount of time to wait for results.
-
-The results for "Hashmap without bloom filter vs. hashmap with bloom filter"
-are quite confusing, though. I spent a bit of time to try to find
-discrepancies. I confirmed that both implementations function correctly and
-match 100% of time in terms of positives/negatives. Pure Bloom filter reading
-benchmarks show a pretty small gap in performance with custom BPF
-implementation losing. The "Hashmap without bloom filter vs. hashmap with bloom
-filter" benchmark shows much bigger difference, though, which I wasn't able to
-completely explain, to be entirely honest.
-
-It's probably worth spending some more time investigating this, but I ran out
-of self-alloted time for this.
-
-
-Bloom filter map
-================
-        # threads: 1, # hashes: 1
-10,000 entries -
-        Total operations:    50.854 ± 0.134M/s (drops 0.000 ± 0.000M/s)
-        False positive rate:  31.36%
-        [CUSTOM] Total operations:  49.391 ± 0.123M/s (drops 0.000 ± 0.000M/s)
-        [CUSTOM] False positive rate:  31.37%
-100,000 entries -
-        Total operations:    50.969 ± 0.049M/s (drops 0.000 ± 0.000M/s)
-        False positive rate:  24.04%
-        [CUSTOM] Total operations:  49.135 ± 1.579M/s (drops 0.000 ± 0.000M/s)
-        [CUSTOM] False positive rate:  24.04%
-1,000,000 entries -
-        Total operations:    48.474 ± 1.619M/s (drops 0.000 ± 0.000M/s)
-        False positive rate:  27.50%
-        [CUSTOM] Total operations:  46.088 ± 0.776M/s (drops 0.000 ± 0.000M/s)
-        [CUSTOM] False positive rate:  27.50%
-
-        # threads: 1, # hashes: 3
-10,000 entries -
-        Total operations:    25.136 ± 0.011M/s (drops 0.000 ± 0.000M/s)
-        False positive rate:  4.71%
-        [CUSTOM] Total operations:  24.115 ± 0.014M/s (drops 0.000 ± 0.000M/s)
-        [CUSTOM] False positive rate:  4.77%
-100,000 entries -
-        Total operations:    25.045 ± 0.120M/s (drops 0.000 ± 0.000M/s)
-        False positive rate:  7.67%
-        [CUSTOM] Total operations:  23.028 ± 0.042M/s (drops 0.000 ± 0.000M/s)
-        [CUSTOM] False positive rate:  7.65%
-1,000,000 entries -
-        Total operations:    18.712 ± 0.406M/s (drops 0.000 ± 0.000M/s)
-        False positive rate:  2.64%
-        [CUSTOM] Total operations:  18.100 ± 0.422M/s (drops 0.000 ± 0.000M/s)
-        [CUSTOM] False positive rate:  2.64%
-
-        # threads: 1, # hashes: 5
-10,000 entries -
-        Total operations:    16.672 ± 0.011M/s (drops 0.000 ± 0.000M/s)
-        False positive rate:  0.32%
-        [CUSTOM] Total operations:  15.318 ± 0.014M/s (drops 0.000 ± 0.000M/s)
-        [CUSTOM] False positive rate:  0.32%
-100,000 entries -
-        Total operations:    16.540 ± 0.121M/s (drops 0.000 ± 0.000M/s)
-        False positive rate:  0.78%
-        [CUSTOM] Total operations:  15.189 ± 0.045M/s (drops 0.000 ± 0.000M/s)
-        [CUSTOM] False positive rate:  0.78%
-1,000,000 entries -
-        Total operations:    11.781 ± 0.192M/s (drops 0.000 ± 0.000M/s)
-        False positive rate:  1.79%
-        [CUSTOM] Total operations:  11.651 ± 0.012M/s (drops 0.000 ± 0.000M/s)
-        [CUSTOM] False positive rate:  1.79%
-
-        # threads: 1, # hashes: 10
-10,000 entries -
-        Total operations:    9.038 ± 0.052M/s (drops 0.000 ± 0.000M/s)
-        False positive rate:  0.00%
-        [CUSTOM] Total operations:  8.620 ± 0.008M/s (drops 0.000 ± 0.000M/s)
-        [CUSTOM] False positive rate:  0.00%
-100,000 entries -
-        Total operations:    8.076 ± 0.027M/s (drops 0.000 ± 0.000M/s)
-        False positive rate:  0.01%
-        [CUSTOM] Total operations:  7.261 ± 0.007M/s (drops 0.000 ± 0.000M/s)
-        [CUSTOM] False positive rate:  0.01%
-1,000,000 entries -
-        Total operations:    6.263 ± 0.041M/s (drops 0.000 ± 0.000M/s)
-        False positive rate:  0.03%
-        [CUSTOM] Total operations:  6.173 ± 0.013M/s (drops 0.000 ± 0.000M/s)
-        [CUSTOM] False positive rate:  0.03%
-
-        # threads: 4, # hashes: 1
-10,000 entries -
-        Total operations:    203.453 ± 0.161M/s (drops 0.000 ± 0.000M/s)
-        False positive rate:  31.28%
-        [CUSTOM] Total operations:  197.959 ± 0.051M/s (drops 0.000 ± 0.000M/s)
-        [CUSTOM] False positive rate:  31.34%
-100,000 entries -
-        Total operations:    203.887 ± 0.155M/s (drops 0.000 ± 0.000M/s)
-        False positive rate:  24.07%
-        [CUSTOM] Total operations:  197.476 ± 1.796M/s (drops 0.000 ± 0.000M/s)
-        [CUSTOM] False positive rate:  24.09%
-1,000,000 entries -
-        Total operations:    189.259 ± 0.473M/s (drops 0.000 ± 0.000M/s)
-        False positive rate:  27.50%
-        [CUSTOM] Total operations:  185.157 ± 0.346M/s (drops 0.000 ± 0.000M/s)
-        [CUSTOM] False positive rate:  27.48%
-
-        # threads: 4, # hashes: 3
-10,000 entries -
-        Total operations:    100.394 ± 0.062M/s (drops 0.000 ± 0.000M/s)
-        False positive rate:  4.76%
-        [CUSTOM] Total operations:  93.896 ± 0.104M/s (drops 0.000 ± 0.000M/s)
-        [CUSTOM] False positive rate:  4.75%
-100,000 entries -
-        Total operations:    100.382 ± 0.155M/s (drops 0.000 ± 0.000M/s)
-        False positive rate:  7.62%
-        [CUSTOM] Total operations:  93.460 ± 0.145M/s (drops 0.000 ± 0.000M/s)
-        [CUSTOM] False positive rate:  7.65%
-1,000,000 entries -
-        Total operations:    71.424 ± 0.710M/s (drops 0.000 ± 0.000M/s)
-        False positive rate:  2.65%
-        [CUSTOM] Total operations:  72.546 ± 0.228M/s (drops 0.000 ± 0.000M/s)
-        [CUSTOM] False positive rate:  2.65%
-
-        # threads: 4, # hashes: 5
-10,000 entries -
-        Total operations:    66.652 ± 0.116M/s (drops 0.000 ± 0.000M/s)
-        False positive rate:  0.32%
-        [CUSTOM] Total operations:  60.790 ± 0.454M/s (drops 0.000 ± 0.000M/s)
-        [CUSTOM] False positive rate:  0.33%
-100,000 entries -
-        Total operations:    66.401 ± 0.090M/s (drops 0.000 ± 0.000M/s)
-        False positive rate:  0.78%
-        [CUSTOM] Total operations:  61.066 ± 0.069M/s (drops 0.000 ± 0.000M/s)
-        [CUSTOM] False positive rate:  0.77%
-1,000,000 entries -
-        Total operations:    48.299 ± 0.369M/s (drops 0.000 ± 0.000M/s)
-        False positive rate:  1.79%
-        [CUSTOM] Total operations:  47.401 ± 0.347M/s (drops 0.000 ± 0.000M/s)
-        [CUSTOM] False positive rate:  1.79%
-
-        # threads: 4, # hashes: 10
-10,000 entries -
-        Total operations:    36.273 ± 0.030M/s (drops 0.000 ± 0.000M/s)
-        False positive rate:  0.00%
-        [CUSTOM] Total operations:  34.464 ± 0.073M/s (drops 0.000 ± 0.000M/s)
-        [CUSTOM] False positive rate:  0.00%
-100,000 entries -
-        Total operations:    32.525 ± 0.047M/s (drops 0.000 ± 0.000M/s)
-        False positive rate:  0.01%
-        [CUSTOM] Total operations:  29.516 ± 0.110M/s (drops 0.000 ± 0.000M/s)
-        [CUSTOM] False positive rate:  0.01%
-1,000,000 entries -
-        Total operations:    25.515 ± 0.405M/s (drops 0.000 ± 0.000M/s)
-        False positive rate:  0.03%
-        [CUSTOM] Total operations:  24.566 ± 0.189M/s (drops 0.000 ± 0.000M/s)
-        [CUSTOM] False positive rate:  0.03%
-
-        # threads: 8, # hashes: 1
-10,000 entries -
-        Total operations:    406.129 ± 2.262M/s (drops 0.000 ± 0.000M/s)
-        False positive rate:  31.45%
-        [CUSTOM] Total operations:  384.758 ± 0.379M/s (drops 0.000 ± 0.000M/s)
-        [CUSTOM] False positive rate:  31.24%
-100,000 entries -
-        Total operations:    407.817 ± 0.793M/s (drops 0.000 ± 0.000M/s)
-        False positive rate:  24.05%
-        [CUSTOM] Total operations:  394.745 ± 1.302M/s (drops 0.000 ± 0.000M/s)
-        [CUSTOM] False positive rate:  24.05%
-1,000,000 entries -
-        Total operations:    383.159 ± 0.289M/s (drops 0.000 ± 0.000M/s)
-        False positive rate:  27.49%
-        [CUSTOM] Total operations:  371.173 ± 0.454M/s (drops 0.000 ± 0.000M/s)
-        [CUSTOM] False positive rate:  27.49%
-
-        # threads: 8, # hashes: 3
-10,000 entries -
-        Total operations:    201.079 ± 0.183M/s (drops 0.000 ± 0.000M/s)
-        False positive rate:  4.69%
-        [CUSTOM] Total operations:  187.658 ± 0.544M/s (drops 0.000 ± 0.000M/s)
-        [CUSTOM] False positive rate:  4.74%
-100,000 entries -
-        Total operations:    199.826 ± 0.972M/s (drops 0.000 ± 0.000M/s)
-        False positive rate:  7.63%
-        [CUSTOM] Total operations:  185.415 ± 0.358M/s (drops 0.000 ± 0.000M/s)
-        [CUSTOM] False positive rate:  7.62%
-1,000,000 entries -
-        Total operations:    148.589 ± 1.320M/s (drops 0.000 ± 0.000M/s)
-        False positive rate:  2.65%
-        [CUSTOM] Total operations:  142.591 ± 4.825M/s (drops 0.000 ± 0.000M/s)
-        [CUSTOM] False positive rate:  2.64%
-
-        # threads: 8, # hashes: 5
-10,000 entries -
-        Total operations:    133.306 ± 0.468M/s (drops 0.000 ± 0.000M/s)
-        False positive rate:  0.32%
-        [CUSTOM] Total operations:  127.377 ± 0.271M/s (drops 0.000 ± 0.000M/s)
-        [CUSTOM] False positive rate:  0.32%
-100,000 entries -
-        Total operations:    132.915 ± 0.364M/s (drops 0.000 ± 0.000M/s)
-        False positive rate:  0.78%
-        [CUSTOM] Total operations:  123.722 ± 3.169M/s (drops 0.000 ± 0.000M/s)
-        [CUSTOM] False positive rate:  0.77%
-1,000,000 entries -
-        Total operations:    94.803 ± 3.240M/s (drops 0.000 ± 0.000M/s)
-        False positive rate:  1.79%
-        [CUSTOM] Total operations:  95.670 ± 2.624M/s (drops 0.000 ± 0.000M/s)
-        [CUSTOM] False positive rate:  1.79%
-
-        # threads: 8, # hashes: 10
-10,000 entries -
-        Total operations:    72.517 ± 0.083M/s (drops 0.000 ± 0.000M/s)
-        False positive rate:  0.00%
-        [CUSTOM] Total operations:  65.803 ± 0.069M/s (drops 0.000 ± 0.000M/s)
-        [CUSTOM] False positive rate:  0.00%
-100,000 entries -
-        Total operations:    65.533 ± 0.148M/s (drops 0.000 ± 0.000M/s)
-        False positive rate:  0.01%
-        [CUSTOM] Total operations:  59.908 ± 2.841M/s (drops 0.000 ± 0.000M/s)
-        [CUSTOM] False positive rate:  0.01%
-1,000,000 entries -
-        Total operations:    50.937 ± 0.105M/s (drops 0.000 ± 0.000M/s)
-        False positive rate:  0.03%
-        [CUSTOM] Total operations:  47.526 ± 1.044M/s (drops 0.000 ± 0.000M/s)
-        [CUSTOM] False positive rate:  0.03%
-
-
-Hashmap without bloom filter vs. hashmap with bloom filter (throughput, 8 threads)
-==================================================================================
-        # hashes: 1
-10,000 entries -
-        Hashmap without bloom filter:  123.919 ± 0.458M/s
-        Hashmap with bloom filter:  124.588 ± 0.450M/s
-        [CUSTOM] Hashmap with bloom filter:  106.838 ± 0.114M/s
-100,000 entries -
-        Hashmap without bloom filter:  93.708 ± 0.715M/s
-        Hashmap with bloom filter:  131.686 ± 1.272M/s
-        [CUSTOM] Hashmap with bloom filter:  105.649 ± 0.278M/s
-1,000,000 entries -
-        Hashmap without bloom filter:  40.040 ± 0.677M/s
-        Hashmap with bloom filter:  67.250 ± 0.506M/s
-        [CUSTOM] Hashmap with bloom filter:  58.356 ± 0.541M/s
-
-        # hashes: 3
-10,000 entries -
-        Hashmap without bloom filter:  123.882 ± 0.077M/s
-        Hashmap with bloom filter:  152.423 ± 0.061M/s
-        [CUSTOM] Hashmap with bloom filter:  126.021 ± 0.115M/s
-100,000 entries -
-        Hashmap without bloom filter:  94.291 ± 0.986M/s
-        Hashmap with bloom filter:  127.944 ± 0.825M/s
-        [CUSTOM] Hashmap with bloom filter:  106.943 ± 0.827M/s
-1,000,000 entries -
-        Hashmap without bloom filter:  40.183 ± 0.382M/s
-        Hashmap with bloom filter:  125.224 ± 0.266M/s
-        [CUSTOM] Hashmap with bloom filter:  89.717 ± 0.158M/s
-
-        # hashes: 5
-10,000 entries -
-        Hashmap without bloom filter:  120.510 ± 0.351M/s
-        Hashmap with bloom filter:  170.138 ± 0.088M/s
-        [CUSTOM] Hashmap with bloom filter:  136.006 ± 0.324M/s
-100,000 entries -
-        Hashmap without bloom filter:  94.774 ± 0.191M/s
-        Hashmap with bloom filter:  145.559 ± 0.687M/s
-        [CUSTOM] Hashmap with bloom filter:  117.073 ± 0.382M/s
-1,000,000 entries -
-        Hashmap without bloom filter:  40.004 ± 0.492M/s
-        Hashmap with bloom filter:  96.916 ± 0.148M/s
-        [CUSTOM] Hashmap with bloom filter:  78.485 ± 0.289M/s
-
-        # hashes: 10
-10,000 entries -
-        Hashmap without bloom filter:  124.034 ± 0.245M/s
-        Hashmap with bloom filter:  169.757 ± 0.336M/s
-        [CUSTOM] Hashmap with bloom filter:  134.634 ± 0.276M/s
-100,000 entries -
-        Hashmap without bloom filter:  94.872 ± 0.195M/s
-        Hashmap with bloom filter:  141.107 ± 0.780M/s
-        [CUSTOM] Hashmap with bloom filter:  109.279 ± 0.330M/s
-1,000,000 entries -
-        Hashmap without bloom filter:  40.215 ± 0.396M/s
-        Hashmap with bloom filter:  98.084 ± 0.267M/s
-        [CUSTOM] Hashmap with bloom filter:  78.579 ± 0.046M/s
-
-
-  [0] https://patchwork.kernel.org/project/netdevbpf/list/?series=550585&state=*
-
-Andrii Nakryiko (4):
-  bpf: add bpf_jhash_mem BPF helper
-  selftests/bpf: fix and optimize bloom filter bench
-  selftests/bpf: implement custom Bloom filter purely in BPF
-  selftests/bpf: integrate custom Bloom filter impl into benchs
-
- include/uapi/linux/bpf.h                      |   8 +
- kernel/bpf/helpers.c                          |  23 +++
- tools/include/uapi/linux/bpf.h                |   8 +
- tools/testing/selftests/bpf/Makefile          |   2 +-
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
  tools/testing/selftests/bpf/bench.c           |   6 +
- .../bpf/benchs/bench_bloom_filter_map.c       | 153 +++++++++++++++++-
- .../bpf/benchs/run_bench_bloom_filter_map.sh  |  22 +--
+ .../bpf/benchs/bench_bloom_filter_map.c       | 121 +++++++++++++++++-
+ .../bpf/benchs/run_bench_bloom_filter_map.sh  |  22 ++--
  .../selftests/bpf/benchs/run_common.sh        |   2 +-
- .../selftests/bpf/progs/bloom_filter_map.c    | 125 ++++++++++++--
- 9 files changed, 317 insertions(+), 32 deletions(-)
+ 4 files changed, 135 insertions(+), 16 deletions(-)
 
+diff --git a/tools/testing/selftests/bpf/bench.c b/tools/testing/selftests/bpf/bench.c
+index 7da1589a9fe0..ab03b259b76f 100644
+--- a/tools/testing/selftests/bpf/bench.c
++++ b/tools/testing/selftests/bpf/bench.c
+@@ -363,9 +363,12 @@ extern const struct bench bench_rb_custom;
+ extern const struct bench bench_pb_libbpf;
+ extern const struct bench bench_pb_custom;
+ extern const struct bench bench_bloom_filter_map;
++extern const struct bench bench_custom_bloom_filter_map;
+ extern const struct bench bench_bloom_filter_false_positive;
++extern const struct bench bench_custom_bloom_filter_false_positive;
+ extern const struct bench bench_hashmap_without_bloom_filter;
+ extern const struct bench bench_hashmap_with_bloom_filter;
++extern const struct bench bench_hashmap_with_custom_bloom_filter;
+ 
+ static const struct bench *benchs[] = {
+ 	&bench_count_global,
+@@ -388,9 +391,12 @@ static const struct bench *benchs[] = {
+ 	&bench_pb_libbpf,
+ 	&bench_pb_custom,
+ 	&bench_bloom_filter_map,
++	&bench_custom_bloom_filter_map,
+ 	&bench_bloom_filter_false_positive,
++	&bench_custom_bloom_filter_false_positive,
+ 	&bench_hashmap_without_bloom_filter,
+ 	&bench_hashmap_with_bloom_filter,
++	&bench_hashmap_with_custom_bloom_filter,
+ };
+ 
+ static void setup_benchmark()
+diff --git a/tools/testing/selftests/bpf/benchs/bench_bloom_filter_map.c b/tools/testing/selftests/bpf/benchs/bench_bloom_filter_map.c
+index 4f53cd9fb099..c0ccfbaacef7 100644
+--- a/tools/testing/selftests/bpf/benchs/bench_bloom_filter_map.c
++++ b/tools/testing/selftests/bpf/benchs/bench_bloom_filter_map.c
+@@ -95,11 +95,18 @@ static void *map_prepare_thread(void *arg)
+ {
+ 	int err, random_data_fd, bloom_filter_fd, hashmap_fd;
+ 	__u64 i, val;
++	struct bpf_link *link;
+ 
+ 	bloom_filter_fd = bpf_map__fd(ctx.skel->maps.map_bloom_filter);
+ 	random_data_fd = bpf_map__fd(ctx.skel->maps.map_random_data);
+ 	hashmap_fd = bpf_map__fd(ctx.skel->maps.hashmap);
+ 
++	link = bpf_program__attach(ctx.skel->progs.prog_custom_bloom_filter_add);
++	if (libbpf_get_error(link)) {
++		fprintf(stderr, "failed to attach program!\n");
++		exit(1);
++	}
++
+ 	while (true) {
+ 		i = __atomic_add_fetch(&ctx.next_map_idx, 1, __ATOMIC_RELAXED);
+ 		if (i > args.nr_entries)
+@@ -135,8 +142,13 @@ static void *map_prepare_thread(void *arg)
+ 			fprintf(stderr, "failed to add elem to bloom_filter: %d\n", -errno);
+ 			break;
+ 		}
++
++		ctx.skel->bss->bloom_val = val;
++		trigger_bpf_program();
+ 	}
+ 
++	bpf_link__destroy(link);
++
+ 	pthread_mutex_lock(&ctx.map_done_mtx);
+ 	pthread_cond_signal(&ctx.map_done);
+ 	pthread_mutex_unlock(&ctx.map_done_mtx);
+@@ -146,7 +158,7 @@ static void *map_prepare_thread(void *arg)
+ 
+ static void populate_maps(void)
+ {
+-	unsigned int nr_cpus = bpf_num_possible_cpus();
++	unsigned int nr_cpus = 1; // bpf_num_possible_cpus();
+ 	pthread_t map_thread;
+ 	int i, err;
+ 
+@@ -167,10 +179,10 @@ static void populate_maps(void)
+ 		exit(1);
+ }
+ 
+-static struct bloom_filter_map *setup_skeleton(void)
++static struct bloom_filter_map *setup_skeleton()
+ {
+ 	struct bloom_filter_map *skel;
+-	int err;
++	int err, i, bloom_sz;
+ 
+ 	setup_libbpf();
+ 
+@@ -204,10 +216,17 @@ static struct bloom_filter_map *setup_skeleton(void)
+ 		exit(1);
+ 	}
+ 
+-	if (bloom_filter_map__load(skel)) {
+-		fprintf(stderr, "failed to load skeleton\n");
+-		exit(1);
++	skel->rodata->bloom_hash_cnt = args.nr_hash_funcs;
++	skel->rodata->bloom_seed = /* 0; */ rand();
++
++	bloom_sz = (long)args.nr_hash_funcs * args.nr_entries / 5 * 7;
++	for (i = 64; i < bloom_sz; i *= 2) {
+ 	}
++	bloom_sz = i / 64;
++	skel->rodata->bloom_mask = bloom_sz - 1;
++
++	//printf("SET BLOOM SZ TO %d NR_ENTRIES %d HASH CNT %d \n", bloom_sz, args.nr_entries, args.nr_hash_funcs);
++
+ 
+ 	return skel;
+ }
+@@ -218,6 +237,11 @@ static void bloom_filter_map_setup(void)
+ 
+ 	ctx.skel = setup_skeleton();
+ 
++	if (bloom_filter_map__load(ctx.skel)) {
++		fprintf(stderr, "failed to load skeleton\n");
++		exit(1);
++	}
++
+ 	populate_maps();
+ 
+ 	link = bpf_program__attach(ctx.skel->progs.prog_bloom_filter);
+@@ -227,12 +251,59 @@ static void bloom_filter_map_setup(void)
+ 	}
+ }
+ 
++static void custom_bloom_filter_map_setup(void)
++{
++	struct bpf_link *link;
++
++	ctx.skel = setup_skeleton();
++
++	if (bloom_filter_map__load(ctx.skel)) {
++		fprintf(stderr, "failed to load skeleton\n");
++		exit(1);
++	}
++
++	populate_maps();
++
++	link = bpf_program__attach(ctx.skel->progs.prog_custom_bloom_filter);
++	if (!link) {
++		fprintf(stderr, "failed to attach program!\n");
++		exit(1);
++	}
++}
++
+ static void hashmap_lookup_setup(void)
+ {
+ 	struct bpf_link *link;
+ 
+ 	ctx.skel = setup_skeleton();
+ 
++	if (bloom_filter_map__load(ctx.skel)) {
++		fprintf(stderr, "failed to load skeleton\n");
++		exit(1);
++	}
++
++	populate_maps();
++
++	link = bpf_program__attach(ctx.skel->progs.prog_bloom_filter_hashmap_lookup);
++	if (!link) {
++		fprintf(stderr, "failed to attach program!\n");
++		exit(1);
++	}
++}
++static void hashmap_lookup_custom_setup(void)
++{
++	struct bpf_link *link;
++
++	ctx.skel = setup_skeleton();
++
++	ctx.skel->rodata->hashmap_use_bloom_filter = false;
++	ctx.skel->rodata->hashmap_use_custom_bloom_filter = true;
++
++	if (bloom_filter_map__load(ctx.skel)) {
++		fprintf(stderr, "failed to load skeleton\n");
++		exit(1);
++	}
++
+ 	populate_maps();
+ 
+ 	link = bpf_program__attach(ctx.skel->progs.prog_bloom_filter_hashmap_lookup);
+@@ -250,6 +321,11 @@ static void hashmap_no_bloom_filter_setup(void)
+ 
+ 	ctx.skel->rodata->hashmap_use_bloom_filter = false;
+ 
++	if (bloom_filter_map__load(ctx.skel)) {
++		fprintf(stderr, "failed to load skeleton\n");
++		exit(1);
++	}
++
+ 	populate_maps();
+ 
+ 	link = bpf_program__attach(ctx.skel->progs.prog_bloom_filter_hashmap_lookup);
+@@ -378,6 +454,17 @@ const struct bench bench_bloom_filter_map = {
+ 	.report_final = hits_drops_report_final,
+ };
+ 
++const struct bench bench_custom_bloom_filter_map = {
++	.name = "custom-bloom-filter-map",
++	.validate = validate,
++	.setup = custom_bloom_filter_map_setup,
++	.producer_thread = producer,
++	.consumer_thread = consumer,
++	.measure = measure,
++	.report_progress = hits_drops_report_progress,
++	.report_final = hits_drops_report_final,
++};
++
+ const struct bench bench_bloom_filter_false_positive = {
+ 	.name = "bloom-filter-false-positive",
+ 	.validate = validate,
+@@ -389,6 +476,17 @@ const struct bench bench_bloom_filter_false_positive = {
+ 	.report_final = false_hits_report_final,
+ };
+ 
++const struct bench bench_custom_bloom_filter_false_positive = {
++	.name = "custom-bloom-filter-false-positive",
++	.validate = validate,
++	.setup = hashmap_lookup_custom_setup,
++	.producer_thread = producer,
++	.consumer_thread = consumer,
++	.measure = measure,
++	.report_progress = false_hits_report_progress,
++	.report_final = false_hits_report_final,
++};
++
+ const struct bench bench_hashmap_without_bloom_filter = {
+ 	.name = "hashmap-without-bloom-filter",
+ 	.validate = validate,
+@@ -410,3 +508,14 @@ const struct bench bench_hashmap_with_bloom_filter = {
+ 	.report_progress = hits_drops_report_progress,
+ 	.report_final = hits_drops_report_final,
+ };
++
++const struct bench bench_hashmap_with_custom_bloom_filter = {
++	.name = "hashmap-with-custom-bloom-filter",
++	.validate = validate,
++	.setup = hashmap_lookup_custom_setup,
++	.producer_thread = producer,
++	.consumer_thread = consumer,
++	.measure = measure,
++	.report_progress = hits_drops_report_progress,
++	.report_final = hits_drops_report_final,
++};
+diff --git a/tools/testing/selftests/bpf/benchs/run_bench_bloom_filter_map.sh b/tools/testing/selftests/bpf/benchs/run_bench_bloom_filter_map.sh
+index 239c040b7aaa..ea2c2fff3f40 100755
+--- a/tools/testing/selftests/bpf/benchs/run_bench_bloom_filter_map.sh
++++ b/tools/testing/selftests/bpf/benchs/run_bench_bloom_filter_map.sh
+@@ -7,9 +7,9 @@ set -eufo pipefail
+ 
+ header "Bloom filter map"
+ for t in 1 4 8; do
+-for h in {1..10}; do
++for h in 1 3 5 10; do
+ subtitle "# threads: $t, # hashes: $h"
+-	for e in 10000 50000 75000 100000 250000 500000 750000 1000000 2500000 5000000; do
++	for e in 10000 100000 1000000; do
+ 		printf "%'d entries -\n" $e
+ 		printf "\t"
+ 		summarize "Total operations: " \
+@@ -17,20 +17,21 @@ subtitle "# threads: $t, # hashes: $h"
+ 		printf "\t"
+ 		summarize_percentage "False positive rate: " \
+ 			"$($RUN_BENCH -p $t --nr_hash_funcs $h --nr_entries $e bloom-filter-false-positive)"
++		printf "\t"
++		summarize "[CUSTOM] Total operations: " \
++			"$($RUN_BENCH -p $t --nr_hash_funcs $h --nr_entries $e custom-bloom-filter-map)"
++		printf "\t"
++		summarize_percentage "[CUSTOM] False positive rate: " \
++			"$($RUN_BENCH -p $t --nr_hash_funcs $h --nr_entries $e custom-bloom-filter-false-positive)"
+ 	done
+ 	printf "\n"
+ done
+ done
+ 
+-header "Bloom filter map, multi-producer contention"
+-for t in 1 2 3 4 8 12 16 20 24 28 32 36 40 44 48 52; do
+-	summarize "$t threads - " "$($RUN_BENCH -p $t bloom-filter-map)"
+-done
+-
+ header "Hashmap without bloom filter vs. hashmap with bloom filter (throughput, 8 threads)"
+-for h in {1..10}; do
++for h in 1 3 5 10; do
+ subtitle "# hashes: $h"
+-	for e in 10000 50000 75000 100000 250000 500000 750000 1000000 2500000 5000000; do
++	for e in 10000 100000 1000000; do
+ 		printf "%'d entries -\n" $e
+ 		printf "\t"
+ 		summarize_total "Hashmap without bloom filter: " \
+@@ -38,6 +39,9 @@ subtitle "# hashes: $h"
+ 		printf "\t"
+ 		summarize_total "Hashmap with bloom filter: " \
+ 			"$($RUN_BENCH --nr_hash_funcs $h --nr_entries $e -p 8 hashmap-with-bloom-filter)"
++		printf "\t"
++		summarize_total "[CUSTOM] Hashmap with bloom filter: " \
++			"$($RUN_BENCH --nr_hash_funcs $h --nr_entries $e -p 8 hashmap-with-custom-bloom-filter)"
+ 	done
+ 	printf "\n"
+ done
+diff --git a/tools/testing/selftests/bpf/benchs/run_common.sh b/tools/testing/selftests/bpf/benchs/run_common.sh
+index 9a16be78b180..961d25374150 100644
+--- a/tools/testing/selftests/bpf/benchs/run_common.sh
++++ b/tools/testing/selftests/bpf/benchs/run_common.sh
+@@ -1,7 +1,7 @@
+ #!/bin/bash
+ # SPDX-License-Identifier: GPL-2.0
+ 
+-RUN_BENCH="sudo ./bench -w3 -d10 -a"
++RUN_BENCH="sudo ./bench -w1 -d5 -a"
+ 
+ function header()
+ {
 -- 
 2.30.2
 
