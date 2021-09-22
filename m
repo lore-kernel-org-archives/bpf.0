@@ -8,63 +8,63 @@ X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0840BC433FE
-	for <bpf@archiver.kernel.org>; Wed, 22 Sep 2021 07:57:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C709CC433EF
+	for <bpf@archiver.kernel.org>; Wed, 22 Sep 2021 07:57:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E3B7A61178
-	for <bpf@archiver.kernel.org>; Wed, 22 Sep 2021 07:57:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B062560F6B
+	for <bpf@archiver.kernel.org>; Wed, 22 Sep 2021 07:57:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233524AbhIVH6a (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 Sep 2021 03:58:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49142 "EHLO
+        id S233482AbhIVH6h (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 Sep 2021 03:58:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233529AbhIVH6Z (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 22 Sep 2021 03:58:25 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E42EC061764;
-        Wed, 22 Sep 2021 00:56:54 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id d6so4018427wrc.11;
-        Wed, 22 Sep 2021 00:56:54 -0700 (PDT)
+        with ESMTP id S233519AbhIVH6a (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 22 Sep 2021 03:58:30 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38EF0C0613D9;
+        Wed, 22 Sep 2021 00:56:57 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id u18so4135194wrg.5;
+        Wed, 22 Sep 2021 00:56:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=xQ3j+gm5mNnCepQPddJli3oJUFEqEk+hChC7iEMm+lI=;
-        b=lsfUb5G3CL0IrrysqvkMIwaMQHITP3EgDKts7TSyUv5bCiL2qNHvgjE2Mi8Lk+BbxU
-         0QGtDX6waiQg+WemoP+mNS7jwA2047+G5OE5k/LrU/5Wwl1dKo8HybtrDyXbxRuquN2X
-         nIKLFjiVqnDOluio5v1bFfiAxbwfWwrwryHe0aNPWotHHwPHJfqS7pQoXZS71G/TkEun
-         BHZ6umHwaLn03khYdTHxYQGBtPOckIzoE2eZka5eeu1VJhKpzbeEeNKB6EhKb5ud4L9Q
-         fneky6lcDv7VZDpgSj5iu8Eb5spmbuJmFFRvdr+sWKdxbiIy+HhKzs8i+mFphy0ww74J
-         vQ5Q==
+        bh=N8P5TsrKa5fKsa9esmtHOEyefOPkA8rjZDUUJkReKLQ=;
+        b=k2hvLXZogT6OLWQJ+GqmVeM1gvG/wj343Tsyhi00hAjSm8fJ1v6V+YeKmiFyKbcA1d
+         wnaMWJqB74yEPkI5zIPF4X7wRL6HWglv2VUznLg3FyfnElR2g9sjlddQkxzi8emDVCqJ
+         L85Ze1s022Lip9p0BUWFR4S9OJEyLZqkmDbu6JnUCX5PY0M4UGvguQOZ69rh6083JV/n
+         2GDwA1ElWuatuyEOeqL4ykkmS+OdPIPgrNE/aRv63HzcN4dsJJV49d5mBrXY0YgdrsQJ
+         jk8Lxf3hXDuJXViDm7e7pGfUgoHI5QHDPGJcCzP7uelCQeTrGaysKBC7J8NRvDBIjPYl
+         bO7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=xQ3j+gm5mNnCepQPddJli3oJUFEqEk+hChC7iEMm+lI=;
-        b=58CjedX3ytsZ8wF/RcgGaOT3/EaDMf1Rslw0MBi38mv5dsZWDZBCQ0ordbI5f1kzM/
-         lnPzv1FSIMbyL6CfiVUK7+yKMWE7kLJUuov7h7ao1IpCMrQckUw5k3cRyjzR+XCC0UWB
-         NYt93aVYzV/gTIQH0KHN2trdaZpBKigwyjBvVje6GRN4iSjB+Tx1Z8POKobdRMkAqkp9
-         9JYSsyVReVNmVfEbEL3O5mdEbetY28wF7rCcSwsvoHqaISwZtenSsBgkyONyJhyIhEko
-         +SWe4oEgKVDmm7PsZMRP80eVlz5ElVlKMzYUTQ/1OyFKfEH+qT83NwynF3pOHXVNodD1
-         vr5w==
-X-Gm-Message-State: AOAM531nA7JVNO2u9TJ6qGPdrtoAtUYYDYVxvj65FRodKxf8LIITVmn0
-        pWzeXVhpYQSDSodaiWuvl2sffdrA0PVZxBBM
-X-Google-Smtp-Source: ABdhPJwr2VxXkWj+COfMFQCm5bl0XbNkutfiZCQ2ACfWw0Aw4hKes1cyPjWda/ftH9aqStXC2XimNQ==
-X-Received: by 2002:adf:ebcd:: with SMTP id v13mr39800269wrn.400.1632297413029;
-        Wed, 22 Sep 2021 00:56:53 -0700 (PDT)
+        bh=N8P5TsrKa5fKsa9esmtHOEyefOPkA8rjZDUUJkReKLQ=;
+        b=XiK8ut2wm1OOQ3Z1jwRR9SvzGh8FCbgRnx0yunr3U6UCYYaneXiPrUQYeLnHG2XELH
+         hPYpUad937CDmLrXWjR0pn5015t5kDFmEYJdcNT+NTX8/fWFyi/Nneku/I9cu2Oy31mY
+         mH68WFYy4rGdB/Bva4EFNqKryf6KQo1/Jj/Z5bCuzIFp9+kbTtf6eprFmfh29Que5XY3
+         WDjlAO0oNj2umsxL4VRJA31ol3nGBPkEaogEBvXMNrmF4fvaXMAyJP+IOzJMB7C/5WCP
+         lWxqMJW20qzwtTh84PcCnBxUMcBYBhTQu/q6V2Cywxfv8/svmq2N1E+h1/DjuMEyubZp
+         VNqw==
+X-Gm-Message-State: AOAM5321DZC33iqVR2BRuGVzHYYKvCEJyJNGy6o+uenaPJktTqvn+ABI
+        xeSUEtgoUy7T84z+slmVsLiT71slkOAYAfVW
+X-Google-Smtp-Source: ABdhPJwTLZfi22224IECGQ8mf9z+HXjs4kJQfyvKK4FZNIXbo6+U3GJEzchnsyWFlaar+VoM8pstkg==
+X-Received: by 2002:a05:6000:11c6:: with SMTP id i6mr39368603wrx.177.1632297415828;
+        Wed, 22 Sep 2021 00:56:55 -0700 (PDT)
 Received: from localhost.localdomain (h-46-59-47-246.A165.priv.bahnhof.se. [46.59.47.246])
-        by smtp.gmail.com with ESMTPSA id j7sm1673087wrr.27.2021.09.22.00.56.51
+        by smtp.gmail.com with ESMTPSA id j7sm1673087wrr.27.2021.09.22.00.56.54
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 22 Sep 2021 00:56:52 -0700 (PDT)
+        Wed, 22 Sep 2021 00:56:55 -0700 (PDT)
 From:   Magnus Karlsson <magnus.karlsson@gmail.com>
 To:     magnus.karlsson@intel.com, bjorn@kernel.org, ast@kernel.org,
         daniel@iogearbox.net, netdev@vger.kernel.org,
         maciej.fijalkowski@intel.com, ciara.loftus@intel.com
 Cc:     jonathan.lemon@gmail.com, bpf@vger.kernel.org,
         anthony.l.nguyen@intel.com
-Subject: [PATCH bpf-next 08/13] selftests: xsk: put the same buffer only once in the fill ring
-Date:   Wed, 22 Sep 2021 09:56:08 +0200
-Message-Id: <20210922075613.12186-9-magnus.karlsson@gmail.com>
+Subject: [PATCH bpf-next 10/13] selftests: xsk: introduce pacing of traffic
+Date:   Wed, 22 Sep 2021 09:56:10 +0200
+Message-Id: <20210922075613.12186-11-magnus.karlsson@gmail.com>
 X-Mailer: git-send-email 2.29.0
 In-Reply-To: <20210922075613.12186-1-magnus.karlsson@gmail.com>
 References: <20210922075613.12186-1-magnus.karlsson@gmail.com>
@@ -76,60 +76,143 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Magnus Karlsson <magnus.karlsson@intel.com>
 
-Fix a problem where the fill ring was populated with too many
-entries. If number of buffers in the umem was smaller than the fill
-ring size, the code used to loop over from the beginning of the umem
-and start putting the same buffers in again. This is racy indeed as a
-later packet can be received overwriting an earlier one before the Rx
-thread manages to validate it.
+Introduce pacing of traffic so that the Tx thread can never send more
+packets than the receiver has processed plus the number of packets it
+can have in its umem. So at any point in time, the number of in flight
+packets (not processed by the Rx thread) are less than or equal to the
+number of packets that can be held in the Rx thread's umem.
+
+The batch size is also increased to improve running time.
 
 Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
 ---
- tools/testing/selftests/bpf/xdpxceiver.c | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
+ tools/testing/selftests/bpf/xdpxceiver.c | 29 +++++++++++++++++++-----
+ tools/testing/selftests/bpf/xdpxceiver.h |  7 +++++-
+ 2 files changed, 29 insertions(+), 7 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/xdpxceiver.c b/tools/testing/selftests/bpf/xdpxceiver.c
-index 97591e2a69f7..c5c68b860ae0 100644
+index aa5660dc0699..597fbe206026 100644
 --- a/tools/testing/selftests/bpf/xdpxceiver.c
 +++ b/tools/testing/selftests/bpf/xdpxceiver.c
-@@ -977,13 +977,18 @@ static void *worker_testapp_validate_tx(void *arg)
+@@ -384,6 +384,7 @@ static void __test_spec_init(struct test_spec *test, struct ifobject *ifobj_tx,
+ 		ifobj->umem = &ifobj->umem_arr[0];
+ 		ifobj->xsk = &ifobj->xsk_arr[0];
+ 		ifobj->use_poll = false;
++		ifobj->pacing_on = true;
+ 		ifobj->pkt_stream = test->pkt_stream_default;
  
- static void xsk_populate_fill_ring(struct xsk_umem_info *umem, struct pkt_stream *pkt_stream)
+ 		if (i == 0) {
+@@ -724,6 +725,7 @@ static void receive_pkts(struct pkt_stream *pkt_stream, struct xsk_socket_info *
  {
--	u32 idx = 0, i;
-+	u32 idx = 0, i, buffers_to_fill;
+ 	struct pkt *pkt = pkt_stream_get_next_rx_pkt(pkt_stream);
+ 	u32 idx_rx = 0, idx_fq = 0, rcvd, i;
++	u32 total = 0;
  	int ret;
  
--	ret = xsk_ring_prod__reserve(&umem->fq, XSK_RING_PROD__DEFAULT_NUM_DESCS, &idx);
--	if (ret != XSK_RING_PROD__DEFAULT_NUM_DESCS)
-+	if (umem->num_frames < XSK_RING_PROD__DEFAULT_NUM_DESCS)
-+		buffers_to_fill = umem->num_frames;
-+	else
-+		buffers_to_fill = XSK_RING_PROD__DEFAULT_NUM_DESCS;
+ 	while (pkt) {
+@@ -772,6 +774,13 @@ static void receive_pkts(struct pkt_stream *pkt_stream, struct xsk_socket_info *
+ 
+ 		xsk_ring_prod__submit(&xsk->umem->fq, rcvd);
+ 		xsk_ring_cons__release(&xsk->rx, rcvd);
 +
-+	ret = xsk_ring_prod__reserve(&umem->fq, buffers_to_fill, &idx);
-+	if (ret != buffers_to_fill)
- 		exit_with_error(ENOSPC);
--	for (i = 0; i < XSK_RING_PROD__DEFAULT_NUM_DESCS; i++) {
-+	for (i = 0; i < buffers_to_fill; i++) {
- 		u64 addr;
- 
- 		if (pkt_stream->use_addr_for_fill) {
-@@ -993,12 +998,12 @@ static void xsk_populate_fill_ring(struct xsk_umem_info *umem, struct pkt_stream
- 				break;
- 			addr = pkt->addr;
- 		} else {
--			addr = (i % umem->num_frames) * umem->frame_size + DEFAULT_OFFSET;
-+			addr = i * umem->frame_size + DEFAULT_OFFSET;
- 		}
- 
- 		*xsk_ring_prod__fill_addr(&umem->fq, idx++) = addr;
++		pthread_mutex_lock(&pacing_mutex);
++		pkts_in_flight -= rcvd;
++		total += rcvd;
++		if (pkts_in_flight < umem->num_frames)
++			pthread_cond_signal(&pacing_cond);
++		pthread_mutex_unlock(&pacing_mutex);
  	}
--	xsk_ring_prod__submit(&umem->fq, XSK_RING_PROD__DEFAULT_NUM_DESCS);
-+	xsk_ring_prod__submit(&umem->fq, buffers_to_fill);
  }
  
- static void *worker_testapp_validate_rx(void *arg)
+@@ -797,10 +806,19 @@ static u32 __send_pkts(struct ifobject *ifobject, u32 pkt_nb)
+ 			valid_pkts++;
+ 	}
+ 
++	pthread_mutex_lock(&pacing_mutex);
++	pkts_in_flight += valid_pkts;
++	if (ifobject->pacing_on && pkts_in_flight >= ifobject->umem->num_frames - BATCH_SIZE) {
++		kick_tx(xsk);
++		pthread_cond_wait(&pacing_cond, &pacing_mutex);
++	}
++	pthread_mutex_unlock(&pacing_mutex);
++
+ 	xsk_ring_prod__submit(&xsk->tx, i);
+ 	xsk->outstanding_tx += valid_pkts;
+-	complete_pkts(xsk, BATCH_SIZE);
++	complete_pkts(xsk, i);
+ 
++	usleep(10);
+ 	return i;
+ }
+ 
+@@ -819,8 +837,6 @@ static void send_pkts(struct ifobject *ifobject)
+ 	fds.events = POLLOUT;
+ 
+ 	while (pkt_cnt < ifobject->pkt_stream->nb_pkts) {
+-		u32 sent;
+-
+ 		if (ifobject->use_poll) {
+ 			int ret;
+ 
+@@ -832,9 +848,7 @@ static void send_pkts(struct ifobject *ifobject)
+ 				continue;
+ 		}
+ 
+-		sent = __send_pkts(ifobject, pkt_cnt);
+-		pkt_cnt += sent;
+-		usleep(10);
++		pkt_cnt += __send_pkts(ifobject, pkt_cnt);
+ 	}
+ 
+ 	wait_for_tx_completion(ifobject->xsk);
+@@ -1043,6 +1057,7 @@ static void testapp_validate_traffic(struct test_spec *test)
+ 
+ 	test->current_step++;
+ 	pkt_stream_reset(ifobj_rx->pkt_stream);
++	pkts_in_flight = 0;
+ 
+ 	/*Spawn RX thread */
+ 	pthread_create(&t0, NULL, ifobj_rx->func_ptr, test);
+@@ -1126,6 +1141,8 @@ static void testapp_stats(struct test_spec *test)
+ 	for (i = 0; i < STAT_TEST_TYPE_MAX; i++) {
+ 		test_spec_reset(test);
+ 		stat_test_type = i;
++		/* No or few packets will be received so cannot pace packets */
++		test->ifobj_tx->pacing_on = false;
+ 
+ 		switch (stat_test_type) {
+ 		case STAT_TEST_RX_DROPPED:
+diff --git a/tools/testing/selftests/bpf/xdpxceiver.h b/tools/testing/selftests/bpf/xdpxceiver.h
+index 5ac4a5e64744..00790c976f4f 100644
+--- a/tools/testing/selftests/bpf/xdpxceiver.h
++++ b/tools/testing/selftests/bpf/xdpxceiver.h
+@@ -35,7 +35,7 @@
+ #define UDP_PKT_DATA_SIZE (UDP_PKT_SIZE - sizeof(struct udphdr))
+ #define USLEEP_MAX 10000
+ #define SOCK_RECONF_CTR 10
+-#define BATCH_SIZE 8
++#define BATCH_SIZE 64
+ #define POLL_TMOUT 1000
+ #define DEFAULT_PKT_CNT (4 * 1024)
+ #define DEFAULT_UMEM_BUFFERS (DEFAULT_PKT_CNT / 4)
+@@ -136,6 +136,7 @@ struct ifobject {
+ 	bool tx_on;
+ 	bool rx_on;
+ 	bool use_poll;
++	bool pacing_on;
+ 	u8 dst_mac[ETH_ALEN];
+ 	u8 src_mac[ETH_ALEN];
+ };
+@@ -151,5 +152,9 @@ struct test_spec {
+ };
+ 
+ pthread_barrier_t barr;
++pthread_mutex_t pacing_mutex = PTHREAD_MUTEX_INITIALIZER;
++pthread_cond_t pacing_cond = PTHREAD_COND_INITIALIZER;
++
++u32 pkts_in_flight;
+ 
+ #endif				/* XDPXCEIVER_H */
 -- 
 2.29.0
 
