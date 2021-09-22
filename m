@@ -2,388 +2,249 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D477CC433F5
-	for <bpf@archiver.kernel.org>; Wed, 22 Sep 2021 20:32:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AF3C7C433EF
+	for <bpf@archiver.kernel.org>; Wed, 22 Sep 2021 20:44:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BF0AC61019
-	for <bpf@archiver.kernel.org>; Wed, 22 Sep 2021 20:32:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8B54E6109E
+	for <bpf@archiver.kernel.org>; Wed, 22 Sep 2021 20:44:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237626AbhIVUeM convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 22 Sep 2021 16:34:12 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:38890 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237309AbhIVUeM (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 22 Sep 2021 16:34:12 -0400
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18MIlMSh022555
-        for <bpf@vger.kernel.org>; Wed, 22 Sep 2021 13:32:41 -0700
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 3b86h0tj2d-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 22 Sep 2021 13:32:41 -0700
-Received: from intmgw002.25.frc3.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Wed, 22 Sep 2021 13:32:40 -0700
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id D691A4B04ECE; Wed, 22 Sep 2021 13:32:35 -0700 (PDT)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
-CC:     <kafai@fb.com>, <joannekoong@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>
-Subject: [PATCH RFC bpf-next 4/4] selftests/bpf: integrate custom Bloom filter impl into benchs
-Date:   Wed, 22 Sep 2021 13:32:24 -0700
-Message-ID: <20210922203224.912809-5-andrii@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210922203224.912809-1-andrii@kernel.org>
-References: <20210922203224.912809-1-andrii@kernel.org>
+        id S237555AbhIVUqM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 Sep 2021 16:46:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59782 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237592AbhIVUqM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 22 Sep 2021 16:46:12 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3040DC061574
+        for <bpf@vger.kernel.org>; Wed, 22 Sep 2021 13:44:42 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id 138so14065252qko.10
+        for <bpf@vger.kernel.org>; Wed, 22 Sep 2021 13:44:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=odiZ4TGZ51oc/Z5KxMEuh+3bD+Eap+cpLjwQ2kkD440=;
+        b=DmAiSgdx6IjRnpATCr5WfSiZg4H/9wz81nNPzmRbEQLLFwpFCp8SfGZ/AqO3ZkPRZE
+         Djf9d6NV50U1bMTH93e/JBtr8B4Q3sXqIa+E/CRClPQsKQ2p9R4rdnRb3J9tFYE5nif5
+         4FPkk/KtltQvlsy95r6ljibHMUw4yVSHvqatZHXcTwzRPmXIZkxTN6+g16M1I4YcAtw2
+         o4GMOIh2XixsQ9o99nTu4EkEW1nqWfV68zvvKz6LRCcZ/fTQewazSh143PLJX+orEYQl
+         I8njqb3tZ1KiTLHU2Cj/cX2zWpxWN8lpfSRoIlmLDDkvBBC4Rk2cGRpsqY+pDqDCFYHu
+         t+oQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=odiZ4TGZ51oc/Z5KxMEuh+3bD+Eap+cpLjwQ2kkD440=;
+        b=UD+oR79XXd1np9X9c/w0Ll3tb0BJUFgF/OrEUlXFmROUZG9w4upLTpEthfiJGwe1ZD
+         YqRtyi3XCw4Vj/IU/ytz/7qapK/HSnuKS4L6yAxDrjRbrQLzfVKMWs4DVnNujh/I5TeM
+         YokcFXNS3p6Uk7IXB6cchyWk10aufJcjMWNli1fsIAA4diEC4yVApL2O5+pdL3duY+cP
+         BvsGIf0V6ebE3aa72wb6yn0awQEA/XWVFfuPuHrcPIvgE0NgjBiOP5/SsQ6CBC0qaNVN
+         BukYzK8FozYZoO6iriXxuBnmkTiLfvxUUJN+QCegESJqlrZDN9OpJFRmncNAqMOl3iXB
+         /rTw==
+X-Gm-Message-State: AOAM5305KK03BgU2JK+aXvfQJoEUmeIgfPhCSCyRIEaw3bcWKk5p7hyE
+        uuKIGCMOo8cDjE/tj69aIOqa5NRvRhawi/wFC+jdrwiQBfo=
+X-Google-Smtp-Source: ABdhPJwGgYJdq4hN+OvgO96a6ZsUWUgII9a3jMd+gFOEoDpZ1DEfzEsbk4oET34GdSBcfvjOtvC8NLEacQJ8xUbG0C4=
+X-Received: by 2002:a25:840d:: with SMTP id u13mr1259136ybk.455.1632343481212;
+ Wed, 22 Sep 2021 13:44:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-FB-Source: Intern
-X-Proofpoint-GUID: 00hB6rqB0fh8-Bg6Vb5JCJuWIKML8LPU
-X-Proofpoint-ORIG-GUID: 00hB6rqB0fh8-Bg6Vb5JCJuWIKML8LPU
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
- definitions=2021-09-22_08,2021-09-22_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015 mlxscore=0
- spamscore=0 lowpriorityscore=0 phishscore=0 priorityscore=1501
- mlxlogscore=999 adultscore=0 bulkscore=0 impostorscore=0 suspectscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2109200000 definitions=main-2109220133
-X-FB-Internal: deliver
+References: <20210921210225.4095056-1-joannekoong@fb.com> <20210921210225.4095056-2-joannekoong@fb.com>
+ <CAEf4BzZfeGGv+gBbfBJq5W8eQESgdqeNaByk-agOgMaB8BjQhA@mail.gmail.com> <517a137d-66aa-8aa8-a064-fad8ae0c7fa8@fb.com>
+In-Reply-To: <517a137d-66aa-8aa8-a064-fad8ae0c7fa8@fb.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 22 Sep 2021 13:44:30 -0700
+Message-ID: <CAEf4BzYpMx6YLs3LJWuNxV2FW_jWQjji8o04jcrK+Pv3SbQz6g@mail.gmail.com>
+Subject: Re: [PATCH v3 bpf-next 1/5] bpf: Add bloom filter map implementation
+To:     Joanne Koong <joannekoong@fb.com>
+Cc:     bpf <bpf@vger.kernel.org>, Kernel Team <Kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add user-space integration parts.
+On Wed, Sep 22, 2021 at 12:06 PM Joanne Koong <joannekoong@fb.com> wrote:
+>
+>
+> On 9/21/21 4:44 PM, Andrii Nakryiko wrote:
+> > On Tue, Sep 21, 2021 at 2:30 PM Joanne Koong <joannekoong@fb.com> wrote:
+> >> Bloom filters are a space-efficient probabilistic data structure
+> >> used to quickly test whether an element exists in a set.
+> >> In a bloom filter, false positives are possible whereas false
+> >> negatives should never be.
+> >>
+> >> This patch adds a bloom filter map for bpf programs.
+> >> The bloom filter map supports peek (determining whether an element
+> >> is present in the map) and push (adding an element to the map)
+> >> operations.These operations are exposed to userspace applications
+> >> through the already existing syscalls in the following way:
+> >>
+> >> BPF_MAP_LOOKUP_ELEM -> peek
+> >> BPF_MAP_UPDATE_ELEM -> push
+> >>
+> >> The bloom filter map does not have keys, only values. In light of
+> >> this, the bloom filter map's API matches that of queue stack maps:
+> >> user applications use BPF_MAP_LOOKUP_ELEM/BPF_MAP_UPDATE_ELEM
+> >> which correspond internally to bpf_map_peek_elem/bpf_map_push_elem,
+> >> and bpf programs must use the bpf_map_peek_elem and bpf_map_push_elem
+> >> APIs to query or add an element to the bloom filter map. When the
+> >> bloom filter map is created, it must be created with a key_size of 0.
+> >>
+> >> For updates, the user will pass in the element to add to the map
+> >> as the value, with a NULL key. For lookups, the user will pass in the
+> >> element to query in the map as the value. In the verifier layer, this
+> >> requires us to modify the argument type of a bloom filter's
+> >> BPF_FUNC_map_peek_elem call to ARG_PTR_TO_MAP_VALUE; as well, in
+> >> the syscall layer, we need to copy over the user value so that in
+> >> bpf_map_peek_elem, we know which specific value to query.
+> >>
+> >> A few things to please take note of:
+> >>   * If there are any concurrent lookups + updates, the user is
+> >> responsible for synchronizing this to ensure no false negative lookups
+> >> occur.
+> >>   * The number of hashes to use for the bloom filter is configurable from
+> >> userspace. If no number is specified, the default used will be 5 hash
+> >> functions. The benchmarks later in this patchset can help compare the
+> >> performance of using different number of hashes on different entry
+> >> sizes. In general, using more hashes decreases the speed of a lookup,
+> >> but increases the false positive rate of an element being detected in the
+> >> bloom filter.
+> >>   * Deleting an element in the bloom filter map is not supported.
+> >>   * The bloom filter map may be used as an inner map.
+> >>   * The "max_entries" size that is specified at map creation time is used to
+> >> approximate a reasonable bitmap size for the bloom filter, and is not
+> >> otherwise strictly enforced. If the user wishes to insert more entries into
+> >> the bloom filter than "max_entries", they may do so but they should be
+> >> aware that this may lead to a higher false positive rate.
+> >>
+> >> Signed-off-by: Joanne Koong <joannekoong@fb.com>
+> >> ---
+> >>   include/linux/bpf_types.h      |   1 +
+> >>   include/uapi/linux/bpf.h       |   1 +
+> >>   kernel/bpf/Makefile            |   2 +-
+> >>   kernel/bpf/bloom_filter.c      | 185 +++++++++++++++++++++++++++++++++
+> >>   kernel/bpf/syscall.c           |  14 ++-
+> >>   kernel/bpf/verifier.c          |  19 +++-
+> >>   tools/include/uapi/linux/bpf.h |   1 +
+> >>   7 files changed, 217 insertions(+), 6 deletions(-)
+> >>   create mode 100644 kernel/bpf/bloom_filter.c
+> >>
+> > See some stylistic nitpicking below (and not a nitpicking about BTF).
+> >
+> > But I just wanted to say that I'm a bit amazed by how much special
+> > casing this BLOOM_FILTER map requires in syscall.c and verifier.c. I
+> > still believe that starting with a BPF helper for hashing would be a
+> > better approach, but oh well.
+> >
+> > [...]
+> I liked your comment on v1 regarding using a BPF helper and I agree with
+> the benefits
+> you outlined. I'm curious to see what the performance differences
+> between that approach
+> and this one end up being, if any. I plan to test out the BPF helper
+> approach in a few weeks,
+> and if the performance is comparable or better, I am definitely open to
+> reverting this code
+> and just going with the BPF helper approach :)
 
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- tools/testing/selftests/bpf/bench.c           |   6 +
- .../bpf/benchs/bench_bloom_filter_map.c       | 121 +++++++++++++++++-
- .../bpf/benchs/run_bench_bloom_filter_map.sh  |  22 ++--
- .../selftests/bpf/benchs/run_common.sh        |   2 +-
- 4 files changed, 135 insertions(+), 16 deletions(-)
+I got curious myself yesterday and spent the evening trying this out.
+There is slight performance regression in pure bloom filter querying
+performance. More confusingly, with such a small difference in bloom
+filter performance, there is a much more noticeable difference in the
+hybrid bloom+hashmap benchmark. I don't know how to explain the
+difference. It might be just the multiplying effect of small perf
+differences due to subsequent hashmap lookup. TBH, we are talking
+about millions of operations per second, and I don't think in practice
+it will matter much. It's like XDP microbenchmarks, where as soon as
+you start doing something useful that overhead trumps whatever small
+overhead BPF/XDP/bloom filter causes. But I'm not going to argue about
+that here :)
 
-diff --git a/tools/testing/selftests/bpf/bench.c b/tools/testing/selftests/bpf/bench.c
-index 7da1589a9fe0..ab03b259b76f 100644
---- a/tools/testing/selftests/bpf/bench.c
-+++ b/tools/testing/selftests/bpf/bench.c
-@@ -363,9 +363,12 @@ extern const struct bench bench_rb_custom;
- extern const struct bench bench_pb_libbpf;
- extern const struct bench bench_pb_custom;
- extern const struct bench bench_bloom_filter_map;
-+extern const struct bench bench_custom_bloom_filter_map;
- extern const struct bench bench_bloom_filter_false_positive;
-+extern const struct bench bench_custom_bloom_filter_false_positive;
- extern const struct bench bench_hashmap_without_bloom_filter;
- extern const struct bench bench_hashmap_with_bloom_filter;
-+extern const struct bench bench_hashmap_with_custom_bloom_filter;
- 
- static const struct bench *benchs[] = {
- 	&bench_count_global,
-@@ -388,9 +391,12 @@ static const struct bench *benchs[] = {
- 	&bench_pb_libbpf,
- 	&bench_pb_custom,
- 	&bench_bloom_filter_map,
-+	&bench_custom_bloom_filter_map,
- 	&bench_bloom_filter_false_positive,
-+	&bench_custom_bloom_filter_false_positive,
- 	&bench_hashmap_without_bloom_filter,
- 	&bench_hashmap_with_bloom_filter,
-+	&bench_hashmap_with_custom_bloom_filter,
- };
- 
- static void setup_benchmark()
-diff --git a/tools/testing/selftests/bpf/benchs/bench_bloom_filter_map.c b/tools/testing/selftests/bpf/benchs/bench_bloom_filter_map.c
-index 4f53cd9fb099..c0ccfbaacef7 100644
---- a/tools/testing/selftests/bpf/benchs/bench_bloom_filter_map.c
-+++ b/tools/testing/selftests/bpf/benchs/bench_bloom_filter_map.c
-@@ -95,11 +95,18 @@ static void *map_prepare_thread(void *arg)
- {
- 	int err, random_data_fd, bloom_filter_fd, hashmap_fd;
- 	__u64 i, val;
-+	struct bpf_link *link;
- 
- 	bloom_filter_fd = bpf_map__fd(ctx.skel->maps.map_bloom_filter);
- 	random_data_fd = bpf_map__fd(ctx.skel->maps.map_random_data);
- 	hashmap_fd = bpf_map__fd(ctx.skel->maps.hashmap);
- 
-+	link = bpf_program__attach(ctx.skel->progs.prog_custom_bloom_filter_add);
-+	if (libbpf_get_error(link)) {
-+		fprintf(stderr, "failed to attach program!\n");
-+		exit(1);
-+	}
-+
- 	while (true) {
- 		i = __atomic_add_fetch(&ctx.next_map_idx, 1, __ATOMIC_RELAXED);
- 		if (i > args.nr_entries)
-@@ -135,8 +142,13 @@ static void *map_prepare_thread(void *arg)
- 			fprintf(stderr, "failed to add elem to bloom_filter: %d\n", -errno);
- 			break;
- 		}
-+
-+		ctx.skel->bss->bloom_val = val;
-+		trigger_bpf_program();
- 	}
- 
-+	bpf_link__destroy(link);
-+
- 	pthread_mutex_lock(&ctx.map_done_mtx);
- 	pthread_cond_signal(&ctx.map_done);
- 	pthread_mutex_unlock(&ctx.map_done_mtx);
-@@ -146,7 +158,7 @@ static void *map_prepare_thread(void *arg)
- 
- static void populate_maps(void)
- {
--	unsigned int nr_cpus = bpf_num_possible_cpus();
-+	unsigned int nr_cpus = 1; // bpf_num_possible_cpus();
- 	pthread_t map_thread;
- 	int i, err;
- 
-@@ -167,10 +179,10 @@ static void populate_maps(void)
- 		exit(1);
- }
- 
--static struct bloom_filter_map *setup_skeleton(void)
-+static struct bloom_filter_map *setup_skeleton()
- {
- 	struct bloom_filter_map *skel;
--	int err;
-+	int err, i, bloom_sz;
- 
- 	setup_libbpf();
- 
-@@ -204,10 +216,17 @@ static struct bloom_filter_map *setup_skeleton(void)
- 		exit(1);
- 	}
- 
--	if (bloom_filter_map__load(skel)) {
--		fprintf(stderr, "failed to load skeleton\n");
--		exit(1);
-+	skel->rodata->bloom_hash_cnt = args.nr_hash_funcs;
-+	skel->rodata->bloom_seed = /* 0; */ rand();
-+
-+	bloom_sz = (long)args.nr_hash_funcs * args.nr_entries / 5 * 7;
-+	for (i = 64; i < bloom_sz; i *= 2) {
- 	}
-+	bloom_sz = i / 64;
-+	skel->rodata->bloom_mask = bloom_sz - 1;
-+
-+	//printf("SET BLOOM SZ TO %d NR_ENTRIES %d HASH CNT %d \n", bloom_sz, args.nr_entries, args.nr_hash_funcs);
-+
- 
- 	return skel;
- }
-@@ -218,6 +237,11 @@ static void bloom_filter_map_setup(void)
- 
- 	ctx.skel = setup_skeleton();
- 
-+	if (bloom_filter_map__load(ctx.skel)) {
-+		fprintf(stderr, "failed to load skeleton\n");
-+		exit(1);
-+	}
-+
- 	populate_maps();
- 
- 	link = bpf_program__attach(ctx.skel->progs.prog_bloom_filter);
-@@ -227,12 +251,59 @@ static void bloom_filter_map_setup(void)
- 	}
- }
- 
-+static void custom_bloom_filter_map_setup(void)
-+{
-+	struct bpf_link *link;
-+
-+	ctx.skel = setup_skeleton();
-+
-+	if (bloom_filter_map__load(ctx.skel)) {
-+		fprintf(stderr, "failed to load skeleton\n");
-+		exit(1);
-+	}
-+
-+	populate_maps();
-+
-+	link = bpf_program__attach(ctx.skel->progs.prog_custom_bloom_filter);
-+	if (!link) {
-+		fprintf(stderr, "failed to attach program!\n");
-+		exit(1);
-+	}
-+}
-+
- static void hashmap_lookup_setup(void)
- {
- 	struct bpf_link *link;
- 
- 	ctx.skel = setup_skeleton();
- 
-+	if (bloom_filter_map__load(ctx.skel)) {
-+		fprintf(stderr, "failed to load skeleton\n");
-+		exit(1);
-+	}
-+
-+	populate_maps();
-+
-+	link = bpf_program__attach(ctx.skel->progs.prog_bloom_filter_hashmap_lookup);
-+	if (!link) {
-+		fprintf(stderr, "failed to attach program!\n");
-+		exit(1);
-+	}
-+}
-+static void hashmap_lookup_custom_setup(void)
-+{
-+	struct bpf_link *link;
-+
-+	ctx.skel = setup_skeleton();
-+
-+	ctx.skel->rodata->hashmap_use_bloom_filter = false;
-+	ctx.skel->rodata->hashmap_use_custom_bloom_filter = true;
-+
-+	if (bloom_filter_map__load(ctx.skel)) {
-+		fprintf(stderr, "failed to load skeleton\n");
-+		exit(1);
-+	}
-+
- 	populate_maps();
- 
- 	link = bpf_program__attach(ctx.skel->progs.prog_bloom_filter_hashmap_lookup);
-@@ -250,6 +321,11 @@ static void hashmap_no_bloom_filter_setup(void)
- 
- 	ctx.skel->rodata->hashmap_use_bloom_filter = false;
- 
-+	if (bloom_filter_map__load(ctx.skel)) {
-+		fprintf(stderr, "failed to load skeleton\n");
-+		exit(1);
-+	}
-+
- 	populate_maps();
- 
- 	link = bpf_program__attach(ctx.skel->progs.prog_bloom_filter_hashmap_lookup);
-@@ -378,6 +454,17 @@ const struct bench bench_bloom_filter_map = {
- 	.report_final = hits_drops_report_final,
- };
- 
-+const struct bench bench_custom_bloom_filter_map = {
-+	.name = "custom-bloom-filter-map",
-+	.validate = validate,
-+	.setup = custom_bloom_filter_map_setup,
-+	.producer_thread = producer,
-+	.consumer_thread = consumer,
-+	.measure = measure,
-+	.report_progress = hits_drops_report_progress,
-+	.report_final = hits_drops_report_final,
-+};
-+
- const struct bench bench_bloom_filter_false_positive = {
- 	.name = "bloom-filter-false-positive",
- 	.validate = validate,
-@@ -389,6 +476,17 @@ const struct bench bench_bloom_filter_false_positive = {
- 	.report_final = false_hits_report_final,
- };
- 
-+const struct bench bench_custom_bloom_filter_false_positive = {
-+	.name = "custom-bloom-filter-false-positive",
-+	.validate = validate,
-+	.setup = hashmap_lookup_custom_setup,
-+	.producer_thread = producer,
-+	.consumer_thread = consumer,
-+	.measure = measure,
-+	.report_progress = false_hits_report_progress,
-+	.report_final = false_hits_report_final,
-+};
-+
- const struct bench bench_hashmap_without_bloom_filter = {
- 	.name = "hashmap-without-bloom-filter",
- 	.validate = validate,
-@@ -410,3 +508,14 @@ const struct bench bench_hashmap_with_bloom_filter = {
- 	.report_progress = hits_drops_report_progress,
- 	.report_final = hits_drops_report_final,
- };
-+
-+const struct bench bench_hashmap_with_custom_bloom_filter = {
-+	.name = "hashmap-with-custom-bloom-filter",
-+	.validate = validate,
-+	.setup = hashmap_lookup_custom_setup,
-+	.producer_thread = producer,
-+	.consumer_thread = consumer,
-+	.measure = measure,
-+	.report_progress = hits_drops_report_progress,
-+	.report_final = hits_drops_report_final,
-+};
-diff --git a/tools/testing/selftests/bpf/benchs/run_bench_bloom_filter_map.sh b/tools/testing/selftests/bpf/benchs/run_bench_bloom_filter_map.sh
-index 239c040b7aaa..ea2c2fff3f40 100755
---- a/tools/testing/selftests/bpf/benchs/run_bench_bloom_filter_map.sh
-+++ b/tools/testing/selftests/bpf/benchs/run_bench_bloom_filter_map.sh
-@@ -7,9 +7,9 @@ set -eufo pipefail
- 
- header "Bloom filter map"
- for t in 1 4 8; do
--for h in {1..10}; do
-+for h in 1 3 5 10; do
- subtitle "# threads: $t, # hashes: $h"
--	for e in 10000 50000 75000 100000 250000 500000 750000 1000000 2500000 5000000; do
-+	for e in 10000 100000 1000000; do
- 		printf "%'d entries -\n" $e
- 		printf "\t"
- 		summarize "Total operations: " \
-@@ -17,20 +17,21 @@ subtitle "# threads: $t, # hashes: $h"
- 		printf "\t"
- 		summarize_percentage "False positive rate: " \
- 			"$($RUN_BENCH -p $t --nr_hash_funcs $h --nr_entries $e bloom-filter-false-positive)"
-+		printf "\t"
-+		summarize "[CUSTOM] Total operations: " \
-+			"$($RUN_BENCH -p $t --nr_hash_funcs $h --nr_entries $e custom-bloom-filter-map)"
-+		printf "\t"
-+		summarize_percentage "[CUSTOM] False positive rate: " \
-+			"$($RUN_BENCH -p $t --nr_hash_funcs $h --nr_entries $e custom-bloom-filter-false-positive)"
- 	done
- 	printf "\n"
- done
- done
- 
--header "Bloom filter map, multi-producer contention"
--for t in 1 2 3 4 8 12 16 20 24 28 32 36 40 44 48 52; do
--	summarize "$t threads - " "$($RUN_BENCH -p $t bloom-filter-map)"
--done
--
- header "Hashmap without bloom filter vs. hashmap with bloom filter (throughput, 8 threads)"
--for h in {1..10}; do
-+for h in 1 3 5 10; do
- subtitle "# hashes: $h"
--	for e in 10000 50000 75000 100000 250000 500000 750000 1000000 2500000 5000000; do
-+	for e in 10000 100000 1000000; do
- 		printf "%'d entries -\n" $e
- 		printf "\t"
- 		summarize_total "Hashmap without bloom filter: " \
-@@ -38,6 +39,9 @@ subtitle "# hashes: $h"
- 		printf "\t"
- 		summarize_total "Hashmap with bloom filter: " \
- 			"$($RUN_BENCH --nr_hash_funcs $h --nr_entries $e -p 8 hashmap-with-bloom-filter)"
-+		printf "\t"
-+		summarize_total "[CUSTOM] Hashmap with bloom filter: " \
-+			"$($RUN_BENCH --nr_hash_funcs $h --nr_entries $e -p 8 hashmap-with-custom-bloom-filter)"
- 	done
- 	printf "\n"
- done
-diff --git a/tools/testing/selftests/bpf/benchs/run_common.sh b/tools/testing/selftests/bpf/benchs/run_common.sh
-index 9a16be78b180..961d25374150 100644
---- a/tools/testing/selftests/bpf/benchs/run_common.sh
-+++ b/tools/testing/selftests/bpf/benchs/run_common.sh
-@@ -1,7 +1,7 @@
- #!/bin/bash
- # SPDX-License-Identifier: GPL-2.0
- 
--RUN_BENCH="sudo ./bench -w3 -d10 -a"
-+RUN_BENCH="sudo ./bench -w1 -d5 -a"
- 
- function header()
- {
--- 
-2.30.2
+I just sent and RFC patch set to demonstrate the approach and compare
+with your results. They are not in Patchworks yet, but they are on
+lore for those following along ([0]).
 
+While doing that I found a problem with the way you implemented
+benchmark measuring. I've also optimized few stats collecting parts.
+Please take a look at the RFC. If anything, it would be good to
+incorporate those fixes.
+
+It would also be good to add benchmark that test keys bigger than 8
+bytes, as mentioned before. I haven't found that in your benchmark.
+Also, they way benchmark is implemented right now, it spends lots of
+(measured) time doing stuff like generating random values on the fly.
+There is also no control over the ratio of hits and misses. It feels
+like the benchmark is over-optimizing for happy case of bloom filter
+having a true negative and thus proceeding very fast. There are barely
+any hits at all (they don't even register in the benchmark).
+
+It also turned out that you don't benchmark updating Bloom filter from
+BPF program side. Was that intentional or you anticipate that in
+practice that won't be necessary? I was curious to compare those
+results because the rely on BPF atomics, but I didn't go all the way
+to add them.
+
+
+  [0] https://lore.kernel.org/bpf/20210922203224.912809-1-andrii@kernel.org/T/#t
+
+> >> +
+> >> +static inline u32 hash(struct bpf_bloom_filter *bloom_filter, void *value,
+> >> +                      u64 value_size, u32 index)
+> >> +{
+> >> +       if (bloom_filter->aligned_u32_count)
+> >> +               return jhash2(value, bloom_filter->aligned_u32_count,
+> >> +                             bloom_filter->hash_seed + index) &
+> >> +                       bloom_filter->bit_array_mask;
+> >> +
+> >> +       return jhash(value, value_size, bloom_filter->hash_seed + index) &
+> >> +               bloom_filter->bit_array_mask;
+> > stylistic nit, but this feels way to dense text-wise, this seems
+> > easier to follow
+> >
+> > u32 h;
+> >
+> > if (bloom_filter->aligned_u32_count)
+> >      h = jhash2(...);
+> > else
+> >      h = jhash(...);
+> > return h & bloom_filter->bit_array_mask;
+> >
+> > WDYT?
+> I think this sounds great! I will make these changes for v4.
+
+great
+
+> >> +}
+> >> +
+
+[...]
+
+> >> +
+> >> +static int bloom_filter_map_btf_id;
+> >> +const struct bpf_map_ops bloom_filter_map_ops = {
+> >> +       .map_meta_equal = bpf_map_meta_equal,
+> >> +       .map_alloc = bloom_filter_map_alloc,
+> >> +       .map_free = bloom_filter_map_free,
+> >> +       .map_push_elem = bloom_filter_map_push_elem,
+> >> +       .map_peek_elem = bloom_filter_map_peek_elem,
+> >> +       .map_lookup_elem = bloom_filter_map_lookup_elem,
+> >> +       .map_update_elem = bloom_filter_map_update_elem,
+> >> +       .map_delete_elem = bloom_filter_map_delete_elem,
+> >> +       .map_get_next_key = bloom_filter_map_get_next_key,
+> >> +       .map_check_btf = map_check_no_btf,
+> > can you please implement basically a no-op callback here to allow
+> > specifying btf_value_id, there is no good reason to restrict this new
+> > map to not allow BTF type being specified for its value
+> Sounds great, will add this in v4.
+
+cool, we should try to support BTF for all new maps
+
+
+> >> +       .map_btf_name = "bpf_bloom_filter",
+> >> +       .map_btf_id = &bloom_filter_map_btf_id,
+> >> +};
+> > [...]
