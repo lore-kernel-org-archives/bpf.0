@@ -7,258 +7,283 @@ X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6EB30C433F5
-	for <bpf@archiver.kernel.org>; Wed, 22 Sep 2021 00:50:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B6852C433F5
+	for <bpf@archiver.kernel.org>; Wed, 22 Sep 2021 00:53:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 572AA6112F
-	for <bpf@archiver.kernel.org>; Wed, 22 Sep 2021 00:50:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8D29360F43
+	for <bpf@archiver.kernel.org>; Wed, 22 Sep 2021 00:53:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229971AbhIVAwA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 21 Sep 2021 20:52:00 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:6422 "EHLO
+        id S229973AbhIVAy5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 21 Sep 2021 20:54:57 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:1962 "EHLO
         mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229480AbhIVAwA (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 21 Sep 2021 20:52:00 -0400
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18LLFSAp017018
-        for <bpf@vger.kernel.org>; Tue, 21 Sep 2021 17:50:30 -0700
+        by vger.kernel.org with ESMTP id S229480AbhIVAy5 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 21 Sep 2021 20:54:57 -0400
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18LLFulp013334
+        for <bpf@vger.kernel.org>; Tue, 21 Sep 2021 17:53:27 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=G6JlfMaj3ieCK0PRofb89XlBrM0Xdtah7XuApqlYmoY=;
- b=AugJxqFiTREsTs8toXkWheBLD0lhZ61d7SgibGtVnBfpyIP/oi9F8G2I92dhQcFJqHyf
- CHjLsJJoM6QGUcfe9q+Coe838NHtgv27AOvtxSJTqpdG62fP5O84TXegqMfFfW847Snq
- nmAvQsvm3lZozSjagf1NherxsAl0dUoq6sA= 
+ : date : message-id : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=J+Y35pJLVB8iKljp+wn6W8IHV7LMC5bZ8fLbhIwGaDs=;
+ b=X39v0iXPtDx5oDSceKrlqJdOOo4WRxadlXv+aZN5ExaRXr+VlDFwV5Vkoj/okj8VWk/C
+ wRJuDxlHTbc6xatAU+tRbpU8LbwFnEDrlYwInJ7+N9LVp1tm9pyZizw8i5TeQOPxW/bS
+ dpbfjQfPDVMWJ+rmaxHhaVHp+aaimlcnvlo= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 3b7q5491qe-7
+        by mx0a-00082601.pphosted.com with ESMTP id 3b7q5bh1jf-7
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 21 Sep 2021 17:50:30 -0700
+        for <bpf@vger.kernel.org>; Tue, 21 Sep 2021 17:53:27 -0700
 Received: from intmgw001.06.ash9.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Tue, 21 Sep 2021 17:49:54 -0700
+ 15.1.2308.14; Tue, 21 Sep 2021 17:49:53 -0700
 Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id B545129406A6; Tue, 21 Sep 2021 17:49:53 -0700 (PDT)
+        id 33DB329416FF; Tue, 21 Sep 2021 17:49:41 -0700 (PDT)
 From:   Martin KaFai Lau <kafai@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
         Yonghong Song <yhs@fb.com>
-Subject: [PATCH v2 bpf-next 4/4] bpf: selftest: Add verifier tests for <8-byte scalar spill and refill
-Date:   Tue, 21 Sep 2021 17:49:53 -0700
-Message-ID: <20210922004953.627183-1-kafai@fb.com>
+Subject: [PATCH v2 bpf-next 2/4] bpf: Support <8-byte scalar spill and refill
+Date:   Tue, 21 Sep 2021 17:49:41 -0700
+Message-ID: <20210922004941.625398-1-kafai@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210922004928.622871-1-kafai@fb.com>
 References: <20210922004928.622871-1-kafai@fb.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-ORIG-GUID: -zO4aItii8eTjGyoyAsdYvOCqwUiiRBF
-X-Proofpoint-GUID: -zO4aItii8eTjGyoyAsdYvOCqwUiiRBF
+X-Proofpoint-ORIG-GUID: TVXN6NFVSURr_Ss9aYos4Y9hawosdp7-
+X-Proofpoint-GUID: TVXN6NFVSURr_Ss9aYos4Y9hawosdp7-
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
  definitions=2021-09-21_07,2021-09-20_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0
- mlxlogscore=999 priorityscore=1501 adultscore=0 clxscore=1015 phishscore=0
- malwarescore=0 bulkscore=0 suspectscore=0 impostorscore=0 mlxscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=999
+ lowpriorityscore=0 adultscore=0 phishscore=0 bulkscore=0 suspectscore=0
+ mlxscore=0 clxscore=1015 impostorscore=0 malwarescore=0 priorityscore=1501
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2109200000 definitions=main-2109220003
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch adds a few verifier tests for <8-byte spill and refill.
+The verifier currently does not save the reg state when
+spilling <8byte bounded scalar to the stack.  The bpf program
+will be incorrectly rejected when this scalar is refilled to
+the reg and then used to offset into a packet header.
+The later patch has a simplified bpf prog from a real use case
+to demonstrate this case.  The current work around is
+to reparse the packet again such that this offset scalar
+is close to where the packet data will be accessed to
+avoid the spill.  Thus, the header is parsed twice.
+
+The llvm patch [1] will align the <8bytes spill to
+the 8-byte stack address.  This can simplify the verifier
+support by avoiding to store multiple reg states for
+each 8 byte stack slot.
+
+This patch changes the verifier to save the reg state when
+spilling <8bytes scalar to the stack.  This reg state saving
+is limited to spill aligned to the 8-byte stack address.
+The current refill logic has already called coerce_reg_to_size(),
+so coerce_reg_to_size() is not called on state->stack[spi].spilled_ptr
+during spill.
+
+When refilling in check_stack_read_fixed_off(),  it checks
+the refill size is the same as the number of bytes marked with
+STACK_SPILL before restoring the reg state.  When restoring
+the reg state to state->regs[dst_regno], it needs
+to avoid the state->regs[dst_regno].subreg_def being
+over written because it has been marked by the check_reg_arg()
+earlier [check_mem_access() is called after check_reg_arg() in
+do_check()].  Reordering check_mem_access() and check_reg_arg()
+will need a lot of changes in test_verifier's tests because
+of the difference in verifier's error message.  Thus, the
+patch here is to save the state->regs[dst_regno].subreg_def
+first in check_stack_read_fixed_off().
+
+There are cases that the verifier needs to scrub the spilled slot
+from STACK_SPILL to STACK_MISC.  After this patch the spill is not always
+in 8 bytes now, so it can no longer assume the other 7 bytes are always
+marked as STACK_SPILL.  In particular, the scrub needs to avoid marking
+an uninitialized byte from STACK_INVALID to STACK_MISC.  Otherwise, the
+verifier will incorrectly accept bpf program reading uninitialized bytes
+from the stack.  A new helper scrub_spilled_slot() is created for this
+purpose.
+
+[1]: https://reviews.llvm.org/D109073
 
 Signed-off-by: Martin KaFai Lau <kafai@fb.com>
 ---
- .../selftests/bpf/verifier/spill_fill.c       | 161 ++++++++++++++++++
- 1 file changed, 161 insertions(+)
+ kernel/bpf/verifier.c | 67 +++++++++++++++++++++++++++++++++----------
+ 1 file changed, 52 insertions(+), 15 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/verifier/spill_fill.c b/tools/te=
-sting/selftests/bpf/verifier/spill_fill.c
-index 0b943897aaf6..c9991c3f3bd2 100644
---- a/tools/testing/selftests/bpf/verifier/spill_fill.c
-+++ b/tools/testing/selftests/bpf/verifier/spill_fill.c
-@@ -104,3 +104,164 @@
- 	.result =3D ACCEPT,
- 	.retval =3D POINTER_VALUE,
- },
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 2ad2a12c5482..7a8351604f67 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -620,6 +620,12 @@ static bool is_spilled_reg(const struct bpf_stack_stat=
+e *stack)
+ 	return stack->slot_type[BPF_REG_SIZE - 1] =3D=3D STACK_SPILL;
+ }
+=20
++static void scrub_spilled_slot(u8 *stype)
 +{
-+	"Spill and refill a u32 const scalar.  Offset to skb->data",
-+	.insns =3D {
-+	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1,
-+		    offsetof(struct __sk_buff, data)),
-+	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1,
-+		    offsetof(struct __sk_buff, data_end)),
-+	/* r4 =3D 20 */
-+	BPF_MOV32_IMM(BPF_REG_4, 20),
-+	/* *(u32 *)(r10 -8) =3D r4 */
-+	BPF_STX_MEM(BPF_W, BPF_REG_10, BPF_REG_4, -8),
-+	/* r4 =3D *(u32 *)(r10 -8) */
-+	BPF_LDX_MEM(BPF_W, BPF_REG_4, BPF_REG_10, -8),
-+	/* r0 =3D r2 */
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_2),
-+	/* r0 +=3D r4 R0=3Dpkt R2=3Dpkt R3=3Dpkt_end R4=3Dinv20 */
-+	BPF_ALU64_REG(BPF_ADD, BPF_REG_0, BPF_REG_4),
-+	/* if (r0 > r3) R0=3Dpkt,off=3D20 R2=3Dpkt R3=3Dpkt_end R4=3Dinv20 */
-+	BPF_JMP_REG(BPF_JGT, BPF_REG_0, BPF_REG_3, 1),
-+	/* r0 =3D *(u32 *)r2 R0=3Dpkt,off=3D20,r=3D20 R2=3Dpkt,r=3D20 R3=3Dpkt_=
-end R4=3Dinv20 */
-+	BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_2, 0),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result =3D ACCEPT,
-+	.prog_type =3D BPF_PROG_TYPE_SCHED_CLS,
-+},
-+{
-+	"Spill a u32 const, refill from another half of the uninit u32 from the=
- stack",
-+	.insns =3D {
-+	/* r4 =3D 20 */
-+	BPF_MOV32_IMM(BPF_REG_4, 20),
-+	/* *(u32 *)(r10 -8) =3D r4 */
-+	BPF_STX_MEM(BPF_W, BPF_REG_10, BPF_REG_4, -8),
-+	/* r4 =3D *(u32 *)(r10 -4) fp-8=3D????rrrr*/
-+	BPF_LDX_MEM(BPF_W, BPF_REG_4, BPF_REG_10, -4),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result =3D REJECT,
-+	.errstr =3D "invalid read from stack off -4+0 size 4",
-+	.prog_type =3D BPF_PROG_TYPE_SCHED_CLS,
-+},
-+{
-+	"Spill a u32 const scalar.  Refill as u16.  Offset to skb->data",
-+	.insns =3D {
-+	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1,
-+		    offsetof(struct __sk_buff, data)),
-+	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1,
-+		    offsetof(struct __sk_buff, data_end)),
-+	/* r4 =3D 20 */
-+	BPF_MOV32_IMM(BPF_REG_4, 20),
-+	/* *(u32 *)(r10 -8) =3D r4 */
-+	BPF_STX_MEM(BPF_W, BPF_REG_10, BPF_REG_4, -8),
-+	/* r4 =3D *(u16 *)(r10 -8) */
-+	BPF_LDX_MEM(BPF_H, BPF_REG_4, BPF_REG_10, -8),
-+	/* r0 =3D r2 */
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_2),
-+	/* r0 +=3D r4 R0=3Dpkt R2=3Dpkt R3=3Dpkt_end R4=3Dinv,umax=3D65535 */
-+	BPF_ALU64_REG(BPF_ADD, BPF_REG_0, BPF_REG_4),
-+	/* if (r0 > r3) R0=3Dpkt,umax=3D65535 R2=3Dpkt R3=3Dpkt_end R4=3Dinv,um=
-ax=3D65535 */
-+	BPF_JMP_REG(BPF_JGT, BPF_REG_0, BPF_REG_3, 1),
-+	/* r0 =3D *(u32 *)r2 R0=3Dpkt,umax=3D65535 R2=3Dpkt R3=3Dpkt_end R4=3Di=
-nv20 */
-+	BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_2, 0),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result =3D REJECT,
-+	.errstr =3D "invalid access to packet",
-+	.prog_type =3D BPF_PROG_TYPE_SCHED_CLS,
-+},
-+{
-+	"Spill a u32 const scalar.  Refill as u16 from fp-6.  Offset to skb->da=
-ta",
-+	.insns =3D {
-+	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1,
-+		    offsetof(struct __sk_buff, data)),
-+	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1,
-+		    offsetof(struct __sk_buff, data_end)),
-+	/* r4 =3D 20 */
-+	BPF_MOV32_IMM(BPF_REG_4, 20),
-+	/* *(u32 *)(r10 -8) =3D r4 */
-+	BPF_STX_MEM(BPF_W, BPF_REG_10, BPF_REG_4, -8),
-+	/* r4 =3D *(u16 *)(r10 -6) */
-+	BPF_LDX_MEM(BPF_H, BPF_REG_4, BPF_REG_10, -6),
-+	/* r0 =3D r2 */
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_2),
-+	/* r0 +=3D r4 R0=3Dpkt R2=3Dpkt R3=3Dpkt_end R4=3Dinv,umax=3D65535 */
-+	BPF_ALU64_REG(BPF_ADD, BPF_REG_0, BPF_REG_4),
-+	/* if (r0 > r3) R0=3Dpkt,umax=3D65535 R2=3Dpkt R3=3Dpkt_end R4=3Dinv,um=
-ax=3D65535 */
-+	BPF_JMP_REG(BPF_JGT, BPF_REG_0, BPF_REG_3, 1),
-+	/* r0 =3D *(u32 *)r2 R0=3Dpkt,umax=3D65535 R2=3Dpkt R3=3Dpkt_end R4=3Di=
-nv20 */
-+	BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_2, 0),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result =3D REJECT,
-+	.errstr =3D "invalid access to packet",
-+	.prog_type =3D BPF_PROG_TYPE_SCHED_CLS,
-+},
-+{
-+	"Spill and refill a u32 const scalar at non 8byte aligned stack addr.  =
-Offset to skb->data",
-+	.insns =3D {
-+	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1,
-+		    offsetof(struct __sk_buff, data)),
-+	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1,
-+		    offsetof(struct __sk_buff, data_end)),
-+	/* r4 =3D 20 */
-+	BPF_MOV32_IMM(BPF_REG_4, 20),
-+	/* *(u32 *)(r10 -8) =3D r4 */
-+	BPF_STX_MEM(BPF_W, BPF_REG_10, BPF_REG_4, -8),
-+	/* *(u32 *)(r10 -4) =3D r4 */
-+	BPF_STX_MEM(BPF_W, BPF_REG_10, BPF_REG_4, -4),
-+	/* r4 =3D *(u32 *)(r10 -4),  */
-+	BPF_LDX_MEM(BPF_W, BPF_REG_4, BPF_REG_10, -4),
-+	/* r0 =3D r2 */
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_2),
-+	/* r0 +=3D r4 R0=3Dpkt R2=3Dpkt R3=3Dpkt_end R4=3Dinv,umax=3DU32_MAX */
-+	BPF_ALU64_REG(BPF_ADD, BPF_REG_0, BPF_REG_4),
-+	/* if (r0 > r3) R0=3Dpkt,umax=3DU32_MAX R2=3Dpkt R3=3Dpkt_end R4=3Dinv =
-*/
-+	BPF_JMP_REG(BPF_JGT, BPF_REG_0, BPF_REG_3, 1),
-+	/* r0 =3D *(u32 *)r2 R0=3Dpkt,umax=3DU32_MAX R2=3Dpkt R3=3Dpkt_end R4=3D=
-inv */
-+	BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_2, 0),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result =3D REJECT,
-+	.errstr =3D "invalid access to packet",
-+	.prog_type =3D BPF_PROG_TYPE_SCHED_CLS,
-+},
-+{
-+	"Spill and refill a umax=3D40 bounded scalar.  Offset to skb->data",
-+	.insns =3D {
-+	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1,
-+		    offsetof(struct __sk_buff, data)),
-+	BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_1,
-+		    offsetof(struct __sk_buff, data_end)),
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_4, BPF_REG_1,
-+		    offsetof(struct __sk_buff, tstamp)),
-+	BPF_JMP_IMM(BPF_JLE, BPF_REG_4, 40, 2),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	/* *(u32 *)(r10 -8) =3D r4 R4=3Dinv,umax=3D40 */
-+	BPF_STX_MEM(BPF_W, BPF_REG_10, BPF_REG_4, -8),
-+	/* r4 =3D (*u32 *)(r10 - 8) */
-+	BPF_LDX_MEM(BPF_W, BPF_REG_4, BPF_REG_10, -8),
-+	/* r2 +=3D r4 R2=3Dpkt R4=3Dinv,umax=3D40 */
-+	BPF_ALU64_REG(BPF_ADD, BPF_REG_2, BPF_REG_4),
-+	/* r0 =3D r2 R2=3Dpkt,umax=3D40 R4=3Dinv,umax=3D40 */
-+	BPF_MOV64_REG(BPF_REG_0, BPF_REG_2),
-+	/* r2 +=3D 20 R0=3Dpkt,umax=3D40 R2=3Dpkt,umax=3D40 */
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, 20),
-+	/* if (r2 > r3) R0=3Dpkt,umax=3D40 R2=3Dpkt,off=3D20,umax=3D40 */
-+	BPF_JMP_REG(BPF_JGT, BPF_REG_2, BPF_REG_3, 1),
-+	/* r0 =3D *(u32 *)r0 R0=3Dpkt,r=3D20,umax=3D40 R2=3Dpkt,off=3D20,r=3D20=
-,umax=3D40 */
-+	BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_0, 0),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.result =3D ACCEPT,
-+	.prog_type =3D BPF_PROG_TYPE_SCHED_CLS,
-+},
++	if (*stype !=3D STACK_INVALID)
++		*stype =3D STACK_MISC;
++}
++
+ static void print_verifier_state(struct bpf_verifier_env *env,
+ 				 const struct bpf_func_state *state)
+ {
+@@ -2634,15 +2640,21 @@ static bool __is_pointer_value(bool allow_ptr_leaks,
+ }
+=20
+ static void save_register_state(struct bpf_func_state *state,
+-				int spi, struct bpf_reg_state *reg)
++				int spi, struct bpf_reg_state *reg,
++				int size)
+ {
+ 	int i;
+=20
+ 	state->stack[spi].spilled_ptr =3D *reg;
+-	state->stack[spi].spilled_ptr.live |=3D REG_LIVE_WRITTEN;
++	if (size =3D=3D BPF_REG_SIZE)
++		state->stack[spi].spilled_ptr.live |=3D REG_LIVE_WRITTEN;
+=20
+-	for (i =3D 0; i < BPF_REG_SIZE; i++)
+-		state->stack[spi].slot_type[i] =3D STACK_SPILL;
++	for (i =3D BPF_REG_SIZE; i > BPF_REG_SIZE - size; i--)
++		state->stack[spi].slot_type[i - 1] =3D STACK_SPILL;
++
++	/* size < 8 bytes spill */
++	for (; i; i--)
++		scrub_spilled_slot(&state->stack[spi].slot_type[i - 1]);
+ }
+=20
+ /* check_stack_{read,write}_fixed_off functions track spill/fill of regist=
+ers,
+@@ -2689,7 +2701,7 @@ static int check_stack_write_fixed_off(struct bpf_ver=
+ifier_env *env,
+ 			env->insn_aux_data[insn_idx].sanitize_stack_spill =3D true;
+ 	}
+=20
+-	if (reg && size =3D=3D BPF_REG_SIZE && register_is_bounded(reg) &&
++	if (reg && !(off % BPF_REG_SIZE) && register_is_bounded(reg) &&
+ 	    !register_is_null(reg) && env->bpf_capable) {
+ 		if (dst_reg !=3D BPF_REG_FP) {
+ 			/* The backtracking logic can only recognize explicit
+@@ -2702,7 +2714,7 @@ static int check_stack_write_fixed_off(struct bpf_ver=
+ifier_env *env,
+ 			if (err)
+ 				return err;
+ 		}
+-		save_register_state(state, spi, reg);
++		save_register_state(state, spi, reg, size);
+ 	} else if (reg && is_spillable_regtype(reg->type)) {
+ 		/* register containing pointer is being spilled into stack */
+ 		if (size !=3D BPF_REG_SIZE) {
+@@ -2714,7 +2726,7 @@ static int check_stack_write_fixed_off(struct bpf_ver=
+ifier_env *env,
+ 			verbose(env, "cannot spill pointers to stack into stack frame of the ca=
+ller\n");
+ 			return -EINVAL;
+ 		}
+-		save_register_state(state, spi, reg);
++		save_register_state(state, spi, reg, size);
+ 	} else {
+ 		u8 type =3D STACK_MISC;
+=20
+@@ -2723,7 +2735,7 @@ static int check_stack_write_fixed_off(struct bpf_ver=
+ifier_env *env,
+ 		/* Mark slots as STACK_MISC if they belonged to spilled ptr. */
+ 		if (is_spilled_reg(&state->stack[spi]))
+ 			for (i =3D 0; i < BPF_REG_SIZE; i++)
+-				state->stack[spi].slot_type[i] =3D STACK_MISC;
++				scrub_spilled_slot(&state->stack[spi].slot_type[i]);
+=20
+ 		/* only mark the slot as written if all 8 bytes were written
+ 		 * otherwise read propagation may incorrectly stop too soon
+@@ -2926,23 +2938,50 @@ static int check_stack_read_fixed_off(struct bpf_ve=
+rifier_env *env,
+ 	struct bpf_func_state *state =3D vstate->frame[vstate->curframe];
+ 	int i, slot =3D -off - 1, spi =3D slot / BPF_REG_SIZE;
+ 	struct bpf_reg_state *reg;
+-	u8 *stype;
++	u8 *stype, type;
+=20
+ 	stype =3D reg_state->stack[spi].slot_type;
+ 	reg =3D &reg_state->stack[spi].spilled_ptr;
+=20
+ 	if (is_spilled_reg(&reg_state->stack[spi])) {
+ 		if (size !=3D BPF_REG_SIZE) {
++			u8 scalar_size =3D 0;
++
+ 			if (reg->type !=3D SCALAR_VALUE) {
+ 				verbose_linfo(env, env->insn_idx, "; ");
+ 				verbose(env, "invalid size of register fill\n");
+ 				return -EACCES;
+ 			}
+-			if (dst_regno >=3D 0) {
++
++			mark_reg_read(env, reg, reg->parent, REG_LIVE_READ64);
++			if (dst_regno < 0)
++				return 0;
++
++			for (i =3D BPF_REG_SIZE; i > 0 && stype[i - 1] =3D=3D STACK_SPILL; i--)
++				scalar_size++;
++
++			if (!(off % BPF_REG_SIZE) && size =3D=3D scalar_size) {
++				/* The earlier check_reg_arg() has decided the
++				 * subreg_def for this insn.  Save it first.
++				 */
++				s32 subreg_def =3D state->regs[dst_regno].subreg_def;
++
++				state->regs[dst_regno] =3D *reg;
++				state->regs[dst_regno].subreg_def =3D subreg_def;
++			} else {
++				for (i =3D 0; i < size; i++) {
++					type =3D stype[(slot - i) % BPF_REG_SIZE];
++					if (type =3D=3D STACK_SPILL)
++						continue;
++					if (type =3D=3D STACK_MISC)
++						continue;
++					verbose(env, "invalid read from stack off %d+%d size %d\n",
++						off, i, size);
++					return -EACCES;
++				}
+ 				mark_reg_unknown(env, state->regs, dst_regno);
+-				state->regs[dst_regno].live |=3D REG_LIVE_WRITTEN;
+ 			}
+-			mark_reg_read(env, reg, reg->parent, REG_LIVE_READ64);
++			state->regs[dst_regno].live |=3D REG_LIVE_WRITTEN;
+ 			return 0;
+ 		}
+ 		for (i =3D 1; i < BPF_REG_SIZE; i++) {
+@@ -2973,8 +3012,6 @@ static int check_stack_read_fixed_off(struct bpf_veri=
+fier_env *env,
+ 		}
+ 		mark_reg_read(env, reg, reg->parent, REG_LIVE_READ64);
+ 	} else {
+-		u8 type;
+-
+ 		for (i =3D 0; i < size; i++) {
+ 			type =3D stype[(slot - i) % BPF_REG_SIZE];
+ 			if (type =3D=3D STACK_MISC)
+@@ -4532,7 +4569,7 @@ static int check_stack_range_initialized(
+ 			if (clobber) {
+ 				__mark_reg_unknown(env, &state->stack[spi].spilled_ptr);
+ 				for (j =3D 0; j < BPF_REG_SIZE; j++)
+-					state->stack[spi].slot_type[j] =3D STACK_MISC;
++					scrub_spilled_slot(&state->stack[spi].slot_type[j]);
+ 			}
+ 			goto mark;
+ 		}
 --=20
 2.30.2
 
