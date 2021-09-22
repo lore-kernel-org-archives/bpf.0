@@ -2,288 +2,179 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,
+	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B6852C433F5
-	for <bpf@archiver.kernel.org>; Wed, 22 Sep 2021 00:53:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D8ABC433EF
+	for <bpf@archiver.kernel.org>; Wed, 22 Sep 2021 01:00:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8D29360F43
-	for <bpf@archiver.kernel.org>; Wed, 22 Sep 2021 00:53:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2F03961184
+	for <bpf@archiver.kernel.org>; Wed, 22 Sep 2021 01:00:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbhIVAy5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 21 Sep 2021 20:54:57 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:1962 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229480AbhIVAy5 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 21 Sep 2021 20:54:57 -0400
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18LLFulp013334
-        for <bpf@vger.kernel.org>; Tue, 21 Sep 2021 17:53:27 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : content-type :
+        id S230519AbhIVBCP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 21 Sep 2021 21:02:15 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:7568 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231143AbhIVBCO (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 21 Sep 2021 21:02:14 -0400
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18LLFgev005669;
+        Tue, 21 Sep 2021 18:00:33 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
  content-transfer-encoding : mime-version; s=facebook;
- bh=J+Y35pJLVB8iKljp+wn6W8IHV7LMC5bZ8fLbhIwGaDs=;
- b=X39v0iXPtDx5oDSceKrlqJdOOo4WRxadlXv+aZN5ExaRXr+VlDFwV5Vkoj/okj8VWk/C
- wRJuDxlHTbc6xatAU+tRbpU8LbwFnEDrlYwInJ7+N9LVp1tm9pyZizw8i5TeQOPxW/bS
- dpbfjQfPDVMWJ+rmaxHhaVHp+aaimlcnvlo= 
+ bh=vg/AvGOTa43CZAqaVRSHHyLVrp4mPEahPaLrVC765a4=;
+ b=Z4NmKxqKPCgYH4iliR8ORLsDKFQ3eJtI+gBzD8e+v0e+kAdVw/jSnkiJOU2lpcQa1tyd
+ K5qeAa9PTG/o+fwvz+ulAhUQl2eq8afC22aa97q+7J+q4I8vjlb2PFz2yFgfWkC90Z1/
+ gGfRUQEk00IKHbKaT4KQvTRHSL0AMe/1v38= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 3b7q5bh1jf-7
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 21 Sep 2021 17:53:27 -0700
-Received: from intmgw001.06.ash9.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+        by mx0a-00082601.pphosted.com with ESMTP id 3b7q5816qv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 21 Sep 2021 18:00:33 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (100.104.98.9) by
+ o365-in.thefacebook.com (100.104.94.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Tue, 21 Sep 2021 17:49:53 -0700
-Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id 33DB329416FF; Tue, 21 Sep 2021 17:49:41 -0700 (PDT)
-From:   Martin KaFai Lau <kafai@fb.com>
-To:     <bpf@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
-        Yonghong Song <yhs@fb.com>
-Subject: [PATCH v2 bpf-next 2/4] bpf: Support <8-byte scalar spill and refill
-Date:   Tue, 21 Sep 2021 17:49:41 -0700
-Message-ID: <20210922004941.625398-1-kafai@fb.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210922004928.622871-1-kafai@fb.com>
-References: <20210922004928.622871-1-kafai@fb.com>
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-FB-Source: Intern
-X-Proofpoint-ORIG-GUID: TVXN6NFVSURr_Ss9aYos4Y9hawosdp7-
-X-Proofpoint-GUID: TVXN6NFVSURr_Ss9aYos4Y9hawosdp7-
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+ 15.1.2308.14; Tue, 21 Sep 2021 18:00:32 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Pe6hB1AIrNUBXsl4Xj8zkD0muDM8ot8Shs9IpMatyB5U3oZw3+tdpmoXowkII+9sTWMrtuyjfV7Mj22RZ5sBPfh7hTdRiLwVADagyogvtGmd4JPpIPgWwn1vJHl7Wa21Ru1iSn6BtJRtATNL7SK6xvtfwSoGLvZSZsA+PEJ5yT35rLXpadnS5vDgZ0Pkjl7MpjRdK5g40NruEqhRtRooTlAQ4Bou2h0ien9/mqxBErWXyrsLxe+nQjNol/r2tDAzOnhEtD6QRA5lTsIl9hkFlRfn6NBrHi3vlpRisAkQntno/tsIXTEVdZSISANnMyGdfNg0VVEXSePrQjPqUrpNPw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version;
+ bh=vg/AvGOTa43CZAqaVRSHHyLVrp4mPEahPaLrVC765a4=;
+ b=HHQSrP8lqH5lB1lsaAEWCiFpOZbwuGsHVnKXCZrhWWenPPQEhFHmeWInfMIoZUjf1XOLzCUGMG4Fk683UbRGpXIiir+K5TtLZAfNuDU36Fy+MqqrzL/stFmf5Matok0t/qpFpjydxw7SFdDBA81HaLIaC6exK4Eed8VYpiI7+Y4pwUCnrKftn98ojzAODJAD8uptNxL1mKWaO7946Uug4TVYy9nZWRDL0SGDpi9imTVoRjOV57Cr9T3Q52Zqi2+nUdvb71C/UK1hAKrOiC7Uh7gt8dhpy+EMgKWT3fZiALvP2s9hddaDKNC2f9ZIdode9B0M2LJ9tC0dCPnNtTWK7Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Authentication-Results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=fb.com;
+Received: from DM6PR15MB4039.namprd15.prod.outlook.com (2603:10b6:5:2b2::20)
+ by DM6PR15MB3546.namprd15.prod.outlook.com (2603:10b6:5:1f8::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4523.17; Wed, 22 Sep
+ 2021 01:00:31 +0000
+Received: from DM6PR15MB4039.namprd15.prod.outlook.com
+ ([fe80::94f2:70b2:4b15:cbd6]) by DM6PR15MB4039.namprd15.prod.outlook.com
+ ([fe80::94f2:70b2:4b15:cbd6%9]) with mapi id 15.20.4523.018; Wed, 22 Sep 2021
+ 01:00:31 +0000
+Message-ID: <630a3e62-c91f-d862-684c-619bb703d6d2@fb.com>
+Date:   Tue, 21 Sep 2021 21:00:29 -0400
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.1.1
+Subject: Re: [PATCH v2 bpf-next 5/9] libbpf: reduce reliance of attach_fns on
+ sec_def internals
+Content-Language: en-US
+To:     Andrii Nakryiko <andrii@kernel.org>, <bpf@vger.kernel.org>,
+        <ast@kernel.org>, <daniel@iogearbox.net>
+CC:     <kernel-team@fb.com>
+References: <20210920234320.3312820-1-andrii@kernel.org>
+ <20210920234320.3312820-6-andrii@kernel.org>
+From:   Dave Marchevsky <davemarchevsky@fb.com>
+In-Reply-To: <20210920234320.3312820-6-andrii@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BLAPR03CA0107.namprd03.prod.outlook.com
+ (2603:10b6:208:32a::22) To DM6PR15MB4039.namprd15.prod.outlook.com
+ (2603:10b6:5:2b2::20)
 MIME-Version: 1.0
+Received: from [IPV6:2620:10d:c0a8:11c1::12b6] (2620:10d:c091:480::1:d228) by BLAPR03CA0107.namprd03.prod.outlook.com (2603:10b6:208:32a::22) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4523.14 via Frontend Transport; Wed, 22 Sep 2021 01:00:30 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ecbe932e-1027-405d-69f4-08d97d645fe3
+X-MS-TrafficTypeDiagnostic: DM6PR15MB3546:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <DM6PR15MB3546F7D883794EB8F8E54D79A0A29@DM6PR15MB3546.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:1013;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 626n797cfGwdTyUp9wsdaziWKk4RCo+2PP7euD/i5kYLIytSkUEJorNjbAxEF9sv82+mwSupCRe5+wSe3eDR1UNZlTFxRyyF9RKKEiaDb6zmJmYL9d2lof4qrebf8Z1ybYH1lIIye5Fimjt50SPURz09D/b2wIK/dE2QBjbQVbMbfWVrzeckC3/lc+IB/BEM6JQRUuEkTYSii4f9BWBbw6MUOQ0wkYzlTKKmaKV/yf/26RpLo+xuR7GGdow3J2I2JRYohE5Jr2/cK8GIorbMCvVafiQHTIO/VBemnFG4/f7iX6+LGHmS1R4dA0lYWGEXrOqTeIsayqo0G0g6j1Za3tf89h/9MDDBc9KGICRSdrT6J7x5UtTLNwgQ13aHIGnhV4YLuV0d562a+GMGRMalgFqEodximRSaTqx3fnThOJVZgCorZLMryfB3csWAnecdUyjHfuwEAtDoETRsTy4SdSZ4jxhv7zEwTmiGwPRlA1XywggnHbWVuxk8Ja8tPn8d2e4IW7n+S9Y+nmjKCTmnrGkYfG+/NlguOEvaaa32GD0zyckNrpCgy2AZxmA++dguAmPmR3qkBaGZQRQtVCWWQauPO3Xv6BNh0pikr+e3TENqzJEqDOaY5GuLY1sFduBY2RurROZ1CTx1a/zA6SeRxv7BzmVv4iePiBJeWH2Ysp3XilTg34NLwS4R/NyfQmOzRFjU7BDluPmQUCWLZ/2mEhbYq7BJhk/0ki0bCvFkvhs=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR15MB4039.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(53546011)(186003)(66476007)(508600001)(4326008)(316002)(83380400001)(5660300002)(2906002)(66946007)(66556008)(31696002)(8936002)(86362001)(38100700002)(6486002)(2616005)(8676002)(36756003)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SlNURFJNMXhTcFg3TXR4L0dTZ0NQNFFLYk9HeEhkMEY3Z0x1TnpENTRrYzBM?=
+ =?utf-8?B?aVoxVkpWSXp3by8vSUs1eXZRUWhhcVlydk5LbXZPdzJpUFV1YjVuNGVQUkxX?=
+ =?utf-8?B?RkZjdEJMYVRNWmtOZUNuUldxc1A0VTZ6aWNvR2NrVTVTbFV0QWdHYjdCZGcx?=
+ =?utf-8?B?VnpzSFRsbjcxN3BRUlp2cExaU2J4eGYyL2ltYzZoSUNOeGJteWFrVW1ZWWRz?=
+ =?utf-8?B?ZFJxUmRaaWFycjRtRDZxb2dnbDYyanVJWkdMYjNQcHdlSEdJOXlxbERRRmZq?=
+ =?utf-8?B?WmlXelQ3VTlXREhLTzFvSnlwSDl3RzYzQVJac2lTTmZ5T3lHZXFSY2IvTDBR?=
+ =?utf-8?B?ZjRSVFlISWdtQlFjY0Jkc3ltTExTdlYvQWN4TFJSZHdrcjJIcloweUxVeEta?=
+ =?utf-8?B?SjYrdWp4VktiNnhmbEYxUGNJRVlPSks2UVJaVkN0UUt3OEM2ZXFNdDdhOWRY?=
+ =?utf-8?B?bWFsUDZlUXE3aUYxSzVBM3d1cDFLaDJTY1g4aEo1V2lSZ1hkWkw3MmJFeHg3?=
+ =?utf-8?B?YndWMmVLdlhDT3VRVVlHSEhkeU1wL3lBdWM3QktFZnIrUGN6T0tVa2JROUUz?=
+ =?utf-8?B?eVBaZjlXblhHNVFGWUMzc0NxVFlxLy90d0hjbXl6eGJ0RU1VcGdSSUtxdGNa?=
+ =?utf-8?B?M0I4VmlJc2tQM0xQNzM0SktzTmx3a2g4bE9EenhQMjFyYVJUbmp4UUNBMmtC?=
+ =?utf-8?B?cDVRbXNRNWdITEZYRnJ5ZUhWdDU1OERCaWZOa3RqU2ZiSHdMcTVhZzJla29v?=
+ =?utf-8?B?OFJPNk1Eb3hWK1ZrNENFanVreTRIMjB5Q3VSY1ZIdzZ1MlZweHhia1R5S3RV?=
+ =?utf-8?B?VldzdHBmLzRIVjdMTlVkZ0tKRStKYmJDQWszaHdZOFNQeW5ERDZ0cWpqaURp?=
+ =?utf-8?B?VEhpVGpTcENQMC9xSkpJSDZyR2RoOWxlZ1h6bU1DZkFKS2ZDbEYyaGpydmFq?=
+ =?utf-8?B?SmNWOTQ5WmkzSXlrNnhkdnVtdXJObytVSHJkcVYxL0FIVVJkN1JtMWFnazcx?=
+ =?utf-8?B?NjgwSGJzRWpEOXVUL1l4S0dUaWVMTC9OVm9URmUvWVpwYnNCWTlvY3QvelFm?=
+ =?utf-8?B?OThINVlmWGpNVnZ1LzVDbTk5TEJTandUYTNZNHFpaVExc2lBa25VWW16cXJK?=
+ =?utf-8?B?U1RtV0JOSWNKL1djczFCVy9TMWo5d0tTeU5IZi9MbmRmRkt6cUwzTXNOcXhu?=
+ =?utf-8?B?MWY0N1pYUmJyTGtlam5TMU44WjJZdG5MRGtnc3cydGtIektCVVJmdmM3S2Jz?=
+ =?utf-8?B?ZGdkMFgrZm1MbFRTb2xyWjlMQUdQWlViN0lGWnpaS2VqcFlMQmdSS2ZBQm1i?=
+ =?utf-8?B?UFpPVGFZV2M0QkVuUnVwTUorSGRudU54Nk5idGRJbjlGRG0zS1pMYUZjMG8v?=
+ =?utf-8?B?OS9FTUVJbU8rbzZvM0FSRUw5NnJjZHhGRVFvNVA2THNNUXR4REJQQU0xOW1n?=
+ =?utf-8?B?UnJSMUloUlNDVUNydmM2eUlnMmdMUVIxTWYxUUVqNWp2STFTRkJvY0x2UVhC?=
+ =?utf-8?B?VTJvM1grWjdxMHpjeDhNNTRpQWlaa1NXRm14OUJiWmMySElKYUNncUFmcEV3?=
+ =?utf-8?B?RjllVnJjbGl3RlBuTk4yWjlyMjcyaWFZcEcyMUxiUzNqTjFIWDVBUkU0S1Jh?=
+ =?utf-8?B?anRXalZjdjU2QVRra3FGTHFnTzc4UlBNekJINFlBUU1ZcXdIZzBBdzhsLzBZ?=
+ =?utf-8?B?andGRXZIVmhNQk5TU3NwNlAybFVuV1B6by9Rcmw1YUMrdStDT2MyMUpuY1Q5?=
+ =?utf-8?B?UENsaUlnN0Y3eEgvam01RnVDeGRBS2o3OWx6K04vQnZ6NlhkWUFkQzhHWVpi?=
+ =?utf-8?B?OG8rWmpVT0dYNkFHenVJdz09?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: ecbe932e-1027-405d-69f4-08d97d645fe3
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR15MB4039.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Sep 2021 01:00:31.0478
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Ws3un/2dW2FWE6Z6cDDOwuIYS+kEtnqgY4+mTyO4G5ozo6Sg64XAoNbvzPmjNVm5xkTZhuK/i6i4a8mji9Y36g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR15MB3546
+X-OriginatorOrg: fb.com
+X-Proofpoint-ORIG-GUID: RZvG7xHpAFTBVY4clzqpwSx3Dn--YXPG
+X-Proofpoint-GUID: RZvG7xHpAFTBVY4clzqpwSx3Dn--YXPG
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
  definitions=2021-09-21_07,2021-09-20_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=999
- lowpriorityscore=0 adultscore=0 phishscore=0 bulkscore=0 suspectscore=0
- mlxscore=0 clxscore=1015 impostorscore=0 malwarescore=0 priorityscore=1501
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2109200000 definitions=main-2109220003
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=0
+ phishscore=0 malwarescore=0 mlxlogscore=999 lowpriorityscore=0 spamscore=0
+ impostorscore=0 clxscore=1015 mlxscore=0 adultscore=0 bulkscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2109200000 definitions=main-2109220005
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The verifier currently does not save the reg state when
-spilling <8byte bounded scalar to the stack.  The bpf program
-will be incorrectly rejected when this scalar is refilled to
-the reg and then used to offset into a packet header.
-The later patch has a simplified bpf prog from a real use case
-to demonstrate this case.  The current work around is
-to reparse the packet again such that this offset scalar
-is close to where the packet data will be accessed to
-avoid the spill.  Thus, the header is parsed twice.
+On 9/20/21 7:43 PM, Andrii Nakryiko wrote:   
+> Move closer to not relying on bpf_sec_def internals that won't be part
+> of public API, when pluggable SEC() handlers will be allowed. Drop
+> pre-calculated prefix length, and in various helpers don't rely on this
+> prefix length availability. Also minimize reliance on knowing
+> bpf_sec_def's prefix for few places where section prefix shortcuts are
+> supported (e.g., tp vs tracepoint, raw_tp vs raw_tracepoint).
+> 
+> Given checking some string for having a given string-constant prefix is
+> such a common operation and so annoying to be done with pure C code, add
+> a small macro helper, str_has_pfx(), and reuse it throughout libbpf.c
+> where prefix comparison is performed. With __builtin_constant_p() it's
+> possible to have a convenient helper that checks some string for having
+> a given prefix, where prefix is either string literal (or compile-time
+> known string due to compiler optimization) or just a runtime string
+> pointer, which is quite convenient and saves a lot of typing and string
+> literal duplication.
+> 
+> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> ---
 
-The llvm patch [1] will align the <8bytes spill to
-the 8-byte stack address.  This can simplify the verifier
-support by avoiding to store multiple reg states for
-each 8 byte stack slot.
+Acked-by: Dave Marchevsky <davemarchevsky@fb.com>
 
-This patch changes the verifier to save the reg state when
-spilling <8bytes scalar to the stack.  This reg state saving
-is limited to spill aligned to the 8-byte stack address.
-The current refill logic has already called coerce_reg_to_size(),
-so coerce_reg_to_size() is not called on state->stack[spi].spilled_ptr
-during spill.
+>  tools/lib/bpf/libbpf.c          | 41 ++++++++++++++++++---------------
+>  tools/lib/bpf/libbpf_internal.h |  7 ++++++
+>  2 files changed, 30 insertions(+), 18 deletions(-)
+> 
 
-When refilling in check_stack_read_fixed_off(),  it checks
-the refill size is the same as the number of bytes marked with
-STACK_SPILL before restoring the reg state.  When restoring
-the reg state to state->regs[dst_regno], it needs
-to avoid the state->regs[dst_regno].subreg_def being
-over written because it has been marked by the check_reg_arg()
-earlier [check_mem_access() is called after check_reg_arg() in
-do_check()].  Reordering check_mem_access() and check_reg_arg()
-will need a lot of changes in test_verifier's tests because
-of the difference in verifier's error message.  Thus, the
-patch here is to save the state->regs[dst_regno].subreg_def
-first in check_stack_read_fixed_off().
-
-There are cases that the verifier needs to scrub the spilled slot
-from STACK_SPILL to STACK_MISC.  After this patch the spill is not always
-in 8 bytes now, so it can no longer assume the other 7 bytes are always
-marked as STACK_SPILL.  In particular, the scrub needs to avoid marking
-an uninitialized byte from STACK_INVALID to STACK_MISC.  Otherwise, the
-verifier will incorrectly accept bpf program reading uninitialized bytes
-from the stack.  A new helper scrub_spilled_slot() is created for this
-purpose.
-
-[1]: https://reviews.llvm.org/D109073
-
-Signed-off-by: Martin KaFai Lau <kafai@fb.com>
----
- kernel/bpf/verifier.c | 67 +++++++++++++++++++++++++++++++++----------
- 1 file changed, 52 insertions(+), 15 deletions(-)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 2ad2a12c5482..7a8351604f67 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -620,6 +620,12 @@ static bool is_spilled_reg(const struct bpf_stack_stat=
-e *stack)
- 	return stack->slot_type[BPF_REG_SIZE - 1] =3D=3D STACK_SPILL;
- }
-=20
-+static void scrub_spilled_slot(u8 *stype)
-+{
-+	if (*stype !=3D STACK_INVALID)
-+		*stype =3D STACK_MISC;
-+}
-+
- static void print_verifier_state(struct bpf_verifier_env *env,
- 				 const struct bpf_func_state *state)
- {
-@@ -2634,15 +2640,21 @@ static bool __is_pointer_value(bool allow_ptr_leaks,
- }
-=20
- static void save_register_state(struct bpf_func_state *state,
--				int spi, struct bpf_reg_state *reg)
-+				int spi, struct bpf_reg_state *reg,
-+				int size)
- {
- 	int i;
-=20
- 	state->stack[spi].spilled_ptr =3D *reg;
--	state->stack[spi].spilled_ptr.live |=3D REG_LIVE_WRITTEN;
-+	if (size =3D=3D BPF_REG_SIZE)
-+		state->stack[spi].spilled_ptr.live |=3D REG_LIVE_WRITTEN;
-=20
--	for (i =3D 0; i < BPF_REG_SIZE; i++)
--		state->stack[spi].slot_type[i] =3D STACK_SPILL;
-+	for (i =3D BPF_REG_SIZE; i > BPF_REG_SIZE - size; i--)
-+		state->stack[spi].slot_type[i - 1] =3D STACK_SPILL;
-+
-+	/* size < 8 bytes spill */
-+	for (; i; i--)
-+		scrub_spilled_slot(&state->stack[spi].slot_type[i - 1]);
- }
-=20
- /* check_stack_{read,write}_fixed_off functions track spill/fill of regist=
-ers,
-@@ -2689,7 +2701,7 @@ static int check_stack_write_fixed_off(struct bpf_ver=
-ifier_env *env,
- 			env->insn_aux_data[insn_idx].sanitize_stack_spill =3D true;
- 	}
-=20
--	if (reg && size =3D=3D BPF_REG_SIZE && register_is_bounded(reg) &&
-+	if (reg && !(off % BPF_REG_SIZE) && register_is_bounded(reg) &&
- 	    !register_is_null(reg) && env->bpf_capable) {
- 		if (dst_reg !=3D BPF_REG_FP) {
- 			/* The backtracking logic can only recognize explicit
-@@ -2702,7 +2714,7 @@ static int check_stack_write_fixed_off(struct bpf_ver=
-ifier_env *env,
- 			if (err)
- 				return err;
- 		}
--		save_register_state(state, spi, reg);
-+		save_register_state(state, spi, reg, size);
- 	} else if (reg && is_spillable_regtype(reg->type)) {
- 		/* register containing pointer is being spilled into stack */
- 		if (size !=3D BPF_REG_SIZE) {
-@@ -2714,7 +2726,7 @@ static int check_stack_write_fixed_off(struct bpf_ver=
-ifier_env *env,
- 			verbose(env, "cannot spill pointers to stack into stack frame of the ca=
-ller\n");
- 			return -EINVAL;
- 		}
--		save_register_state(state, spi, reg);
-+		save_register_state(state, spi, reg, size);
- 	} else {
- 		u8 type =3D STACK_MISC;
-=20
-@@ -2723,7 +2735,7 @@ static int check_stack_write_fixed_off(struct bpf_ver=
-ifier_env *env,
- 		/* Mark slots as STACK_MISC if they belonged to spilled ptr. */
- 		if (is_spilled_reg(&state->stack[spi]))
- 			for (i =3D 0; i < BPF_REG_SIZE; i++)
--				state->stack[spi].slot_type[i] =3D STACK_MISC;
-+				scrub_spilled_slot(&state->stack[spi].slot_type[i]);
-=20
- 		/* only mark the slot as written if all 8 bytes were written
- 		 * otherwise read propagation may incorrectly stop too soon
-@@ -2926,23 +2938,50 @@ static int check_stack_read_fixed_off(struct bpf_ve=
-rifier_env *env,
- 	struct bpf_func_state *state =3D vstate->frame[vstate->curframe];
- 	int i, slot =3D -off - 1, spi =3D slot / BPF_REG_SIZE;
- 	struct bpf_reg_state *reg;
--	u8 *stype;
-+	u8 *stype, type;
-=20
- 	stype =3D reg_state->stack[spi].slot_type;
- 	reg =3D &reg_state->stack[spi].spilled_ptr;
-=20
- 	if (is_spilled_reg(&reg_state->stack[spi])) {
- 		if (size !=3D BPF_REG_SIZE) {
-+			u8 scalar_size =3D 0;
-+
- 			if (reg->type !=3D SCALAR_VALUE) {
- 				verbose_linfo(env, env->insn_idx, "; ");
- 				verbose(env, "invalid size of register fill\n");
- 				return -EACCES;
- 			}
--			if (dst_regno >=3D 0) {
-+
-+			mark_reg_read(env, reg, reg->parent, REG_LIVE_READ64);
-+			if (dst_regno < 0)
-+				return 0;
-+
-+			for (i =3D BPF_REG_SIZE; i > 0 && stype[i - 1] =3D=3D STACK_SPILL; i--)
-+				scalar_size++;
-+
-+			if (!(off % BPF_REG_SIZE) && size =3D=3D scalar_size) {
-+				/* The earlier check_reg_arg() has decided the
-+				 * subreg_def for this insn.  Save it first.
-+				 */
-+				s32 subreg_def =3D state->regs[dst_regno].subreg_def;
-+
-+				state->regs[dst_regno] =3D *reg;
-+				state->regs[dst_regno].subreg_def =3D subreg_def;
-+			} else {
-+				for (i =3D 0; i < size; i++) {
-+					type =3D stype[(slot - i) % BPF_REG_SIZE];
-+					if (type =3D=3D STACK_SPILL)
-+						continue;
-+					if (type =3D=3D STACK_MISC)
-+						continue;
-+					verbose(env, "invalid read from stack off %d+%d size %d\n",
-+						off, i, size);
-+					return -EACCES;
-+				}
- 				mark_reg_unknown(env, state->regs, dst_regno);
--				state->regs[dst_regno].live |=3D REG_LIVE_WRITTEN;
- 			}
--			mark_reg_read(env, reg, reg->parent, REG_LIVE_READ64);
-+			state->regs[dst_regno].live |=3D REG_LIVE_WRITTEN;
- 			return 0;
- 		}
- 		for (i =3D 1; i < BPF_REG_SIZE; i++) {
-@@ -2973,8 +3012,6 @@ static int check_stack_read_fixed_off(struct bpf_veri=
-fier_env *env,
- 		}
- 		mark_reg_read(env, reg, reg->parent, REG_LIVE_READ64);
- 	} else {
--		u8 type;
--
- 		for (i =3D 0; i < size; i++) {
- 			type =3D stype[(slot - i) % BPF_REG_SIZE];
- 			if (type =3D=3D STACK_MISC)
-@@ -4532,7 +4569,7 @@ static int check_stack_range_initialized(
- 			if (clobber) {
- 				__mark_reg_unknown(env, &state->stack[spi].spilled_ptr);
- 				for (j =3D 0; j < BPF_REG_SIZE; j++)
--					state->stack[spi].slot_type[j] =3D STACK_MISC;
-+					scrub_spilled_slot(&state->stack[spi].slot_type[j]);
- 			}
- 			goto mark;
- 		}
---=20
-2.30.2
-
+[...]
