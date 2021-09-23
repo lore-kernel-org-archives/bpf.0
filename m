@@ -2,98 +2,118 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B6451C433FE
-	for <bpf@archiver.kernel.org>; Thu, 23 Sep 2021 08:40:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DCFFC433EF
+	for <bpf@archiver.kernel.org>; Thu, 23 Sep 2021 09:16:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 93C7961216
-	for <bpf@archiver.kernel.org>; Thu, 23 Sep 2021 08:40:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 794CD60C40
+	for <bpf@archiver.kernel.org>; Thu, 23 Sep 2021 09:16:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239977AbhIWImZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 23 Sep 2021 04:42:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:20310 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239825AbhIWImU (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 23 Sep 2021 04:42:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1632386449;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc; bh=9dF2fUEZWycIGwZ53hEpFFIfueXLgIP+J7ThTRLO4uA=;
-        b=X3dGoJWXT8vpC+dJH7rvd+P6axvKWZqLM8ypkC8h85FVbo0kTN6qUP8P/hwRaYzGAe3Xvl
-        nPyzJ+uE4osvhn7zKuvqoJCHJVVrf+xCcQiq6TaA/FHtkk1la/IZK+enpZ46QdmhpN2hdw
-        7MehlI0BUtGZR+ZOdxWDCs2pF0wQIlc=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-553-NDmQ4V0aOGuX1Ft4LpDTpA-1; Thu, 23 Sep 2021 04:40:47 -0400
-X-MC-Unique: NDmQ4V0aOGuX1Ft4LpDTpA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2A53ECC622;
-        Thu, 23 Sep 2021 08:40:46 +0000 (UTC)
-Received: from griffin.upir.cz (unknown [10.40.194.136])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 94FD860BF4;
-        Thu, 23 Sep 2021 08:40:44 +0000 (UTC)
-From:   Jiri Benc <jbenc@redhat.com>
-To:     bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+        id S240130AbhIWJS2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 Sep 2021 05:18:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59136 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240127AbhIWJS2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 23 Sep 2021 05:18:28 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A3DC061756
+        for <bpf@vger.kernel.org>; Thu, 23 Sep 2021 02:16:56 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id t10so24050948lfd.8
+        for <bpf@vger.kernel.org>; Thu, 23 Sep 2021 02:16:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=N3z3fvFblHbwGyNeEifaiutquQQndab42p3+bEZbPaY=;
+        b=ehYZ35FbL06/k33gaQlumer+Y2K7w4b/gsgRH+nLaLoAJ+RfIvIxoeqGixJ5ddCyJV
+         EFArqVGJrVUMgBDanVzNwroPXrRRqJ8z50QkBda1aV4lsV2q71o3Go11h8qznW7MgGmW
+         JTyx2v03oqMz/jpxDvVZunxlkTv8TBwgFM/v8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=N3z3fvFblHbwGyNeEifaiutquQQndab42p3+bEZbPaY=;
+        b=UL7/EToVNBQIJMXYB46+rpVteTnaEUZUTwNbX/JJxVEwKXEZnrtO83pHkYfc28BbxS
+         ZYg1dpk2s3bsw5hHH4VMRX+CsyGw0GESKiTPxt6dbKbS8Sgq+FRo/ZU4Gl4fQLJ40oJB
+         asqCeb/AcQ+O8qqExlTEY7fHq8Pct3yXTxYBjghuuZ+JgEHcbtW62j9B+XpwvUiVFuWY
+         VTnfDkHbGKYDQas/Cr/vBsBRZ4qJe+X5sr+XG1lN8X7SaSOagIVzEppPKhy2787VjMk3
+         pMr2ZT4uv2M6e5UQ9h369TDQzKOY4oXNISgM13B0bSMYvAEbPzIjxYq+xv7stgH7L98B
+         xYLA==
+X-Gm-Message-State: AOAM531uNqBEGKPZTcEpb7GeYJlp0CVf+kkl3i7FhbYby2s/8f0q08ld
+        /TOFkfed7YmqO9+5nVR4vFFi1qWfFLYeEAL8fqLqEA==
+X-Google-Smtp-Source: ABdhPJzqPeVApolQp+pqhbBjiqtmMN89VCPBxfINWN/SFzs8PHHKJz9EX1giY+md8Rj7nAR5+bkAHWWROOurBDH6bI0=
+X-Received: by 2002:a2e:7c0b:: with SMTP id x11mr3973430ljc.298.1632388614819;
+ Thu, 23 Sep 2021 02:16:54 -0700 (PDT)
+MIME-Version: 1.0
+References: <CACAyw9_TjUMu1s46X3jE3ubcszAW3yoj39ADADOFseL0x96MeQ@mail.gmail.com>
+ <CAADnVQKxmNDET97wfi-k7L_ot9WXDX7CnqPNe=wK=rXpQJDcyg@mail.gmail.com>
+ <CACAyw9_1s2ZCBWTHvT-rGufW+-m3F722GvhHb_rSR3mEr2gfGA@mail.gmail.com>
+ <CABEBQi=WfdJ-h+5+fgFXOptDWSk2Oe_V85gR90G2V+PQh9ME0A@mail.gmail.com>
+ <CAADnVQKX+ngPV=ZD9+Mm-odr=g-Neqm21TtxZ_rHpt+ybs-8RQ@mail.gmail.com>
+ <CABEBQi=aZNfOdPH1999sfpD_dvSiOnhnudH3d=XEuQ=0q_bBCA@mail.gmail.com>
+ <CACAyw99oxFvPFCvN5HovoOnJxdKzqbRvfSMCm0Ds-jh3A4XT5Q@mail.gmail.com> <97d6e8ab-7a02-f317-81ed-6f45d26ad3c6@iogearbox.net>
+In-Reply-To: <97d6e8ab-7a02-f317-81ed-6f45d26ad3c6@iogearbox.net>
+From:   Lorenz Bauer <lmb@cloudflare.com>
+Date:   Thu, 23 Sep 2021 10:16:43 +0100
+Message-ID: <CACAyw9-Ha9RQC_VijJAE02mCX3E09vmDji__Ts8YrsSH4cGiyg@mail.gmail.com>
+Subject: Re: bpf_jit_limit close shave
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Frank Hofmann <fhofmann@cloudflare.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Peter Oskolkov <posk@google.com>, netdev@vger.kernel.org
-Subject: [PATCH bpf] selftests: bpf: test_lwt_ip_encap: really disable rp_filter
-Date:   Thu, 23 Sep 2021 10:40:22 +0200
-Message-Id: <b1cdd9d469f09ea6e01e9c89a6071c79b7380f89.1632386362.git.jbenc@redhat.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+        kernel-team <kernel-team@cloudflare.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-It's not enough to set net.ipv4.conf.all.rp_filter=0, that does not override
-a greater rp_filter value on the individual interfaces. We also need to set
-net.ipv4.conf.default.rp_filter=0 before creating the interfaces. That way,
-they'll also get their own rp_filter value of zero.
+On Wed, 22 Sept 2021 at 22:51, Daniel Borkmann <daniel@iogearbox.net> wrote:
+>
+> On 9/22/21 1:07 PM, Lorenz Bauer wrote:
+> > On Wed, 22 Sept 2021 at 09:20, Frank Hofmann <fhofmann@cloudflare.com> wrote:
+> >>
+> >>> That jit limit is not there on older kernels and doesn't apply to root.
+> >>> How would you notice such a kernel bug in such conditions?
+> >>
+> >> I'm talking about bpf_jit_current - it's an "overall gauge" for
+> >> allocation, priv and unpriv. I understood Lorenz' note as "change it
+> >> so it only tracks unpriv BPF mem usage - since we'll never act on
+> >> privileged usage anyway"
+> >
+> > Yes, that was my suggestion indeed. What Frank is saying: it looks
+> > like our leak of JIT memory is due to a privileged process. By
+> > exempting privileged processes it would be even harder to notice /
+> > debug. That's true, and brings me back to my question: what is
+> > different about JIT memory that we can't do a better limit?
+>
+> The knob with the limit was basically added back then as a band-aid to avoid
+> unprivileged BPF JIT (cBPF or eBPF) eating up all the module memory to the
+> point where we cannot even load kernel modules anymore. Given that memory
+> resource is global, we added the bpf_jit_limit / bpf_jit_current acounting
+> as a fix/heuristic via ede95a63b5e8 ("bpf: add bpf_jit_limit knob to restrict
+> unpriv allocations"). If we wouldn't account for root, how would such detection
+> proposal work otherwise to block unprivileged? I don't think it's feasible to
+> only account the latter given privileged progs might have occupied most of the
+> budget already.
 
-Fixes: 0fde56e4385b0 ("selftests: bpf: add test_lwt_ip_encap selftest")
-Signed-off-by: Jiri Benc <jbenc@redhat.com>
----
- tools/testing/selftests/bpf/test_lwt_ip_encap.sh | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+Thanks, that was the part I was missing. JITed BPF programs are
+treated like modules (why?). There is a limited space reserved for
+kernel modules.
 
-diff --git a/tools/testing/selftests/bpf/test_lwt_ip_encap.sh b/tools/testing/selftests/bpf/test_lwt_ip_encap.sh
-index 59ea56945e6c..b497bb85b667 100755
---- a/tools/testing/selftests/bpf/test_lwt_ip_encap.sh
-+++ b/tools/testing/selftests/bpf/test_lwt_ip_encap.sh
-@@ -112,6 +112,14 @@ setup()
- 	ip netns add "${NS2}"
- 	ip netns add "${NS3}"
- 
-+	# rp_filter gets confused by what these tests are doing, so disable it
-+	ip netns exec ${NS1} sysctl -wq net.ipv4.conf.all.rp_filter=0
-+	ip netns exec ${NS2} sysctl -wq net.ipv4.conf.all.rp_filter=0
-+	ip netns exec ${NS3} sysctl -wq net.ipv4.conf.all.rp_filter=0
-+	ip netns exec ${NS1} sysctl -wq net.ipv4.conf.default.rp_filter=0
-+	ip netns exec ${NS2} sysctl -wq net.ipv4.conf.default.rp_filter=0
-+	ip netns exec ${NS3} sysctl -wq net.ipv4.conf.default.rp_filter=0
-+
- 	ip link add veth1 type veth peer name veth2
- 	ip link add veth3 type veth peer name veth4
- 	ip link add veth5 type veth peer name veth6
-@@ -236,11 +244,6 @@ setup()
- 	ip -netns ${NS1} -6 route add ${IPv6_GRE}/128 dev veth5 via ${IPv6_6} ${VRF}
- 	ip -netns ${NS2} -6 route add ${IPv6_GRE}/128 dev veth7 via ${IPv6_8} ${VRF}
- 
--	# rp_filter gets confused by what these tests are doing, so disable it
--	ip netns exec ${NS1} sysctl -wq net.ipv4.conf.all.rp_filter=0
--	ip netns exec ${NS2} sysctl -wq net.ipv4.conf.all.rp_filter=0
--	ip netns exec ${NS3} sysctl -wq net.ipv4.conf.all.rp_filter=0
--
- 	TMPFILE=$(mktemp /tmp/test_lwt_ip_encap.XXXXXX)
- 
- 	sleep 1  # reduce flakiness
+How does the knob solve the "can't load a new module" problem if our
+suggestion / preference is to steer people towards CAP_BPF anyways
+(since unpriv BPF is trouble)? Over time all BPF will be privileged
+and we're in the same mess again?
+
+Lorenz
+
 -- 
-2.18.1
+Lorenz Bauer  |  Systems Engineer
+6th Floor, County Hall/The Riverside Building, SE1 7PB, UK
 
+www.cloudflare.com
