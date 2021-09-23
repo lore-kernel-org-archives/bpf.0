@@ -2,300 +2,218 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+X-Spam-Status: No, score=-7.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F0949C433F5
-	for <bpf@archiver.kernel.org>; Thu, 23 Sep 2021 12:41:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D670C433EF
+	for <bpf@archiver.kernel.org>; Thu, 23 Sep 2021 12:59:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D38016054F
-	for <bpf@archiver.kernel.org>; Thu, 23 Sep 2021 12:41:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 719FE610C8
+	for <bpf@archiver.kernel.org>; Thu, 23 Sep 2021 12:59:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240960AbhIWMm7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 23 Sep 2021 08:42:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51578 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241135AbhIWMl0 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 23 Sep 2021 08:41:26 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1D11961019;
-        Thu, 23 Sep 2021 12:39:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632400795;
-        bh=i/MlA+05kp1QHBGIQjfOz4c92wgg61yiJOjckwvYlOo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=W903lODKUlO0PoXIsIV2AFdPy9t4wAI79PWuze/4IwJjn7c+6f+4UvnUsQ9cqZqYP
-         Er0rrlSf1LxmQHodzBL1YLKpCHchNA02xZtx/pSATMagOa+VfC6oChR8zP2ORqHgod
-         nmYmq8X5ilb19DFcknbPsZB1u5FAFwmHNc6GPiGp4izZXytX0RIZ3MJ7W6L46tvogG
-         +lanYLpi2WVfVEf2QrjdJYJ5MfwD1YCLJcz3haJhQ6PAutf7n2S2NsA7BvCSOG+L2U
-         O4HlxkXq4juEH2XIRZaIJjGP7hXRFY4+6d80u+vJ60AJj0QhIDjrSBIyZ9T29h1ihh
-         Wzw+VIWsbBG7g==
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Jiri Olsa <jolsa@redhat.com>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [RFC PATCH] tracing/kprobe: Support $$args for function entry
-Date:   Thu, 23 Sep 2021 21:39:52 +0900
-Message-Id: <163240079198.34105.7585817231870405021.stgit@devnote2>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <163240078318.34105.12819521680435948398.stgit@devnote2>
-References: <163240078318.34105.12819521680435948398.stgit@devnote2>
-User-Agent: StGit/0.19
+        id S241095AbhIWNBH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 Sep 2021 09:01:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:33841 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235776AbhIWNBH (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 23 Sep 2021 09:01:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1632401975;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nj7KuKQYyiNPqoiOH3lAtPIlrtQ842d5NqTukqLDM40=;
+        b=Bk4VZD4+vc3Hp30vETuBMAZnB//deYCsla0LergCFSwq9sSw6JHCWJHnMIscS3nVrHBJE1
+        I+mZNahh8okGYebavwVvsOP2Q3r08pi0orYWZZNu5HgFl55Ys57lN201elyS2AfZmtW8JH
+        42DTQHBQGyWsRKpyVMiV0eFrzOSLVlQ=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-389-lQIxAZ26Pg-Abbh23omNYA-1; Thu, 23 Sep 2021 08:59:34 -0400
+X-MC-Unique: lQIxAZ26Pg-Abbh23omNYA-1
+Received: by mail-ed1-f71.google.com with SMTP id r23-20020a50d697000000b003d824845066so6713437edi.8
+        for <bpf@vger.kernel.org>; Thu, 23 Sep 2021 05:59:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=nj7KuKQYyiNPqoiOH3lAtPIlrtQ842d5NqTukqLDM40=;
+        b=E6qRUye6EmFFPRkWXGmJ3COubMU5Zctf2J8zvX86NP7ABGFIlU9ZM3wNxElbQYawlz
+         F8czaaRYNuToHJCg/FLuA9CRf80PZgSxQiw4INZgbe5tTxK0iGGeV2pF09WYSNfin+HQ
+         MF1GFla2Cso6GFcsOUhfDqXm2pqAFDWKj0hZu9exn5Im2QrwfwWTddqW65HYmirZl9L2
+         /DmlQCiTcelhcHAUdquTNAwehVX5dx9c0CcuQmrl/OZlcyxbN1+u+qeGD6Y+OvWL4ut1
+         0xWZH4mUPrn/+O52ct3ipGRn6UNgoBlzzL8PzHcKc1hCunn8enDVqz8UXBDbxprDcWvC
+         +3tg==
+X-Gm-Message-State: AOAM530MB7Zigf08t4KU1sP8qG55xiyrz/1xOMwUT4udENdOdj4U7/6P
+        ZIOKSxcIvxw+GAowI6UdyD+qrnF6DT6JV7H2ItRrURnaNzinms/jNSjRyO+gAW7qgq5MmkSVM65
+        QY3X8As3RY9Dg
+X-Received: by 2002:a17:906:1299:: with SMTP id k25mr4919129ejb.139.1632401972032;
+        Thu, 23 Sep 2021 05:59:32 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzSEtfMW1r8x50L+dOj8aW76eBRZceTqQrafMa7fbJkbDfsPJfnlypgYDX7Y7inLV8GPuGt/A==
+X-Received: by 2002:a17:906:1299:: with SMTP id k25mr4919025ejb.139.1632401970857;
+        Thu, 23 Sep 2021 05:59:30 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id u4sm2949465ejc.19.2021.09.23.05.59.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Sep 2021 05:59:30 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 28E06180274; Thu, 23 Sep 2021 14:59:29 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Lorenz Bauer <lmb@cloudflare.com>
+Cc:     Lorenzo Bianconi <lbianconi@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+Subject: Re: Redux: Backwards compatibility for XDP multi-buff
+In-Reply-To: <CACAyw99+KvsJGeqNE09VWHrZk9wKbQTg3h1h2LRmJADD5En2nQ@mail.gmail.com>
+References: <87o88l3oc4.fsf@toke.dk>
+ <CACAyw99+KvsJGeqNE09VWHrZk9wKbQTg3h1h2LRmJADD5En2nQ@mail.gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Thu, 23 Sep 2021 14:59:29 +0200
+Message-ID: <87tuibzbv2.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Support $$args fetch arg for function entry. This uses
-BTF for finding the function argument. Thus it depends
-on CONFIG_BPF_SYSCALL.
+Lorenz Bauer <lmb@cloudflare.com> writes:
 
-/sys/kernel/tracing # echo 'p vfs_read $$args' >> kprobe_events
-/sys/kernel/tracing # cat kprobe_events
-p:kprobes/p_vfs_read_0 vfs_read file=$arg1:x64 buf=$arg2:x64 count=$arg3:u64 pos=$arg4:x64
+> On Tue, 21 Sept 2021 at 17:06, Toke H=C3=B8iland-J=C3=B8rgensen <toke@red=
+hat.com> wrote:
+>>
+>> Hi Lorenz (Cc. the other people who participated in today's discussion)
+>>
+>> Following our discussion at the LPC session today, I dug up my previous
+>> summary of the issue and some possible solutions[0]. Seems no on
+>> actually replied last time, which is why we went with the "do nothing"
+>> approach, I suppose. I'm including the full text of the original email
+>> below; please take a look, and let's see if we can converge on a
+>> consensus here.
+>
+> Hi Toke,
+>
+> Thanks for looping me in again. A bit of context what XDP at
+> Cloudflare looks like:
+>
+> * We have a chain of XDP programs attached to a real network device.
+> This implements DDoS protection and L4 load balancing. This is
+> maintained by the team I am on.
+> * We have hundreds of network namespaces with veth that have XDP
+> attached to them. Traffic is routed from the root namespace into
+> these. This is maintained by the Magic Transit team, see this talk
+> from last year's LPC [1]
+> I'll try to summarise what I've picked up from the thread and add my
+> own 2c. Options being considered:
+>
+> 1. Make sure mb-aware and mb-unaware programs don't mix.
 
-Note that $$args must be used without argument name.
+I think I would rather state this as "make sure mb-unaware programs
+never encounter an mb frame". The programs can mix just fine in a
+single-buffer world since mb-aware programs are backwards compatible.
+All the multibuf helpers will also do the right thing even if there's
+only a single buffer in a given packet.
 
-Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
----
- kernel/trace/trace_kprobe.c |   60 ++++++++++++++++++++++++-
- kernel/trace/trace_probe.c  |  105 +++++++++++++++++++++++++++++++++++++++++++
- kernel/trace/trace_probe.h  |    5 ++
- 3 files changed, 168 insertions(+), 2 deletions(-)
+> This could either be in the form of a sysctl or a dynamic property
+> similar to a refcount. We'd need to discern mb-aware from mb-unaware
+> somehow, most easily via a new program type. This means recompiling
+> existing programs (but then we expect that to be necessary anyways).
 
-diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
-index 3dd4fb719aa3..fe88ee8c8cd8 100644
---- a/kernel/trace/trace_kprobe.c
-+++ b/kernel/trace/trace_kprobe.c
-@@ -712,6 +712,58 @@ static int trace_kprobe_module_callback(struct notifier_block *nb,
- 	return NOTIFY_DONE;
- }
- 
-+#ifdef CONFIG_BPF_SYSCALL
-+
-+static int trace_kprobe_parse_btf_args(struct trace_kprobe *tk, int i,
-+				       const char *arg, unsigned int flags)
-+{
-+	struct trace_probe *tp = &tk->tp;
-+	static struct btf *btf;
-+	const struct btf_type *t;
-+	const struct btf_param *args;
-+	s32 id, nargs;
-+	int ret;
-+
-+	if (!(flags & TPARG_FL_FENTRY))
-+		return -EINVAL;
-+	if (!tk->symbol)
-+		return -EINVAL;
-+
-+	if (!btf)
-+		btf = btf_parse_vmlinux();
-+
-+	id = btf_find_by_name_kind(btf, tk->symbol, BTF_KIND_FUNC);
-+	if (id <= 0)
-+		return -ENOENT;
-+
-+	/* Get BTF_KIND_FUNC type */
-+	t = btf_type_by_id(btf, id);
-+	if (!btf_type_is_func(t))
-+		return -ENOENT;
-+
-+	/* The type of BTF_KIND_FUNC is BTF_KIND_FUNC_PROTO */
-+	t = btf_type_by_id(btf, t->type);
-+	if (!btf_type_is_func_proto(t))
-+		return -ENOENT;
-+
-+	args = (const struct btf_param *)(t + 1);
-+	nargs = btf_type_vlen(t);
-+	for (i = 0; i < nargs; i++) {
-+		ret = traceprobe_parse_btf_arg(tp, i, btf, &args[i]);
-+		if (ret < 0)
-+			break;
-+	}
-+
-+	return ret;
-+}
-+#else
-+static int trace_kprobe_parse_btf_args(struct trace_kprobe *tk, int i,
-+				       const char *arg, unsigned int flags)
-+{
-+	return -EOPNOTSUPP;
-+}
-+#endif
-+
- static struct notifier_block trace_kprobe_module_nb = {
- 	.notifier_call = trace_kprobe_module_callback,
- 	.priority = 1	/* Invoked after kprobe module callback */
-@@ -733,12 +785,13 @@ static int __trace_kprobe_create(int argc, const char *argv[])
- 	 *  $stack	: fetch stack address
- 	 *  $stackN	: fetch Nth of stack (N:0-)
- 	 *  $comm       : fetch current task comm
-+	 *  $$args	: fetch parameters using BTF
- 	 *  @ADDR	: fetch memory at ADDR (ADDR should be in kernel)
- 	 *  @SYM[+|-offs] : fetch memory at SYM +|- offs (SYM is a data symbol)
- 	 *  %REG	: fetch register REG
- 	 * Dereferencing memory fetch:
- 	 *  +|-offs(ARG) : fetch memory at ARG +|- offs address.
--	 * Alias name of args:
-+	 * Alias name of args (except for $$args) :
- 	 *  NAME=FETCHARG : set NAME as alias of FETCHARG.
- 	 * Type of args:
- 	 *  FETCHARG:TYPE : use TYPE instead of unsigned long.
-@@ -877,7 +930,10 @@ static int __trace_kprobe_create(int argc, const char *argv[])
- 	/* parse arguments */
- 	for (i = 0; i < argc && i < MAX_TRACE_ARGS; i++) {
- 		trace_probe_log_set_index(i + 2);
--		ret = traceprobe_parse_probe_arg(&tk->tp, i, argv[i], flags);
-+		if (strcmp(argv[i], "$$args") == 0)
-+			ret = trace_kprobe_parse_btf_args(tk, i, argv[i], flags);
-+		else
-+			ret = traceprobe_parse_probe_arg(&tk->tp, i, argv[i], flags);
- 		if (ret)
- 			goto error;	/* This can be -ENOMEM */
- 	}
-diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
-index 2fe104109525..bbac261b1688 100644
---- a/kernel/trace/trace_probe.c
-+++ b/kernel/trace/trace_probe.c
-@@ -765,6 +765,111 @@ static int traceprobe_conflict_field_name(const char *name,
- 	return 0;
- }
- 
-+#ifdef CONFIG_BPF_SYSCALL
-+
-+static u32 btf_type_int(const struct btf_type *t)
-+{
-+	return *(u32 *)(t + 1);
-+}
-+
-+static const char *traceprobe_type_from_btf(struct btf *btf, s32 id)
-+{
-+	const struct btf_type *t;
-+	u32 intdata;
-+	s32 tid;
-+
-+	/* TODO: const char * could be converted as a string */
-+	t = btf_type_skip_modifiers(btf, id, &tid);
-+
-+	switch (BTF_INFO_KIND(t->info)) {
-+	case BTF_KIND_ENUM:
-+		/* enum is "int", so convert to "s32" */
-+		return "s32";
-+	case BTF_KIND_PTR:
-+		/* pointer will be converted to "x??" */
-+		if (IS_ENABLED(CONFIG_64BIT))
-+			return "x64";
-+		else
-+			return "x32";
-+	case BTF_KIND_INT:
-+		intdata = btf_type_int(t);
-+		if (BTF_INT_ENCODING(intdata) & BTF_INT_SIGNED) {
-+			switch (BTF_INT_BITS(intdata)) {
-+			case 8:
-+				return "s8";
-+			case 16:
-+				return "s16";
-+			case 32:
-+				return "s32";
-+			case 64:
-+				return "s64";
-+			}
-+		} else {	/* unsigned */
-+			switch (BTF_INT_BITS(intdata)) {
-+			case 8:
-+				return "u8";
-+			case 16:
-+				return "u16";
-+			case 32:
-+				return "u32";
-+			case 64:
-+				return "u64";
-+			}
-+		}
-+	}
-+
-+	/* Default type */
-+	if (IS_ENABLED(CONFIG_64BIT))
-+		return "x64";
-+	else
-+		return "x32";
-+}
-+
-+int traceprobe_parse_btf_arg(struct trace_probe *tp, int i, struct btf *btf,
-+			     const struct btf_param *arg)
-+{
-+	struct probe_arg *parg = &tp->args[i];
-+	const char *name, *tname;
-+	char *body;
-+	int ret;
-+
-+	tp->nr_args++;
-+	name = btf_name_by_offset(btf, arg->name_off);
-+	parg->name = kstrdup(name, GFP_KERNEL);
-+	if (!parg->name)
-+		return -ENOMEM;
-+
-+	if (!is_good_name(parg->name)) {
-+		trace_probe_log_err(0, BAD_ARG_NAME);
-+		return -EINVAL;
-+	}
-+	if (traceprobe_conflict_field_name(parg->name, tp->args, i)) {
-+		trace_probe_log_err(0, USED_ARG_NAME);
-+		return -EINVAL;
-+	}
-+
-+	/*
-+	 * Since probe event needs an appropriate command for dyn_event interface,
-+	 * convert BTF type to corresponding fetch-type string.
-+	 */
-+	tname = traceprobe_type_from_btf(btf, arg->type);
-+	if (tname)
-+		body = kasprintf(GFP_KERNEL, "$arg%d:%s", i + 1, tname);
-+	else
-+		body = kasprintf(GFP_KERNEL, "$arg%d", i + 1);
-+
-+	if (!body)
-+		return -ENOMEM;
-+	/* Parse fetch argument */
-+	ret = traceprobe_parse_probe_arg_body(body, &tp->size, parg,
-+				TPARG_FL_KERNEL | TPARG_FL_FENTRY, 0);
-+
-+	kfree(body);
-+
-+	return ret;
-+}
-+#endif
-+
- int traceprobe_parse_probe_arg(struct trace_probe *tp, int i, const char *arg,
- 				unsigned int flags)
- {
-diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
-index 355c78a930f8..857b946afe29 100644
---- a/kernel/trace/trace_probe.h
-+++ b/kernel/trace/trace_probe.h
-@@ -23,6 +23,7 @@
- #include <linux/limits.h>
- #include <linux/uaccess.h>
- #include <linux/bitops.h>
-+#include <linux/btf.h>
- #include <asm/bitsperlong.h>
- 
- #include "trace.h"
-@@ -359,6 +360,10 @@ int trace_probe_create(const char *raw_command, int (*createfn)(int, const char
- 
- extern int traceprobe_parse_probe_arg(struct trace_probe *tp, int i,
- 				const char *argv, unsigned int flags);
-+#ifdef CONFIG_BPF_SYSCALL
-+int traceprobe_parse_btf_arg(struct trace_probe *tp, int i, struct btf *btf,
-+			     const struct btf_param *arg);
-+#endif
- 
- extern int traceprobe_update_arg(struct probe_arg *arg);
- extern void traceprobe_free_probe_arg(struct probe_arg *arg);
+Small nit here: while in most cases this property will  probably be set
+by recompilation, the loader can override it as well. So if you have a
+non-mb-aware program that you know won't break in an mb-setting (because
+it doesn't care about packet length, etc), your loader could just mark
+it as 'mb-aware'.
+
+Command-line loaders like xdp-loader and 'ip' would probably need a
+manual override switch to do this for the case where you have an old XDP
+program that you still want to run even though you've enabled MB mode.
+
+> We'd also have to be able to indicate "mb-awareness" for freplace
+> programs.
+>
+> The implementation complexity seems OK, but operator UX is not good:
+> it's not possible to slowly migrate a system to mb-awareness, it has
+> to happen in one fell swoop.
+
+I don't think it has to be quite that bleak :)
+
+Specifically, there is no reason to block mb-aware programs from loading
+even when the multi-buffer mode is disabled. So a migration plan would
+look something like:
+
+1. Start out with the mb-sysctl toggled off. This will make the system
+   behave like it does today, i.e., XDP programs won't load on
+   interfaces with large MTUs.
+
+2. Start porting all your XDP programs to make them mb-aware, and switch
+   their program type as you do. In many cases this is just a matter of
+   checking that the programs don't care about packet length. While this
+   is ongoing you will have a mix of mb-aware and non-mb-aware programs
+   running, but there will be no actual mb frames.
+
+3. Once all your programs have been ported and marked as such, flip the
+   sysctl. This will make the system start refusing to load any XDP
+   programs that are not mb-aware.
+
+4. Actually raise the MTU of your interfaces :)
+
+> 2. Add a compatibility shim for mb-unaware programs receiving an mb frame.
+>
+> We'd still need a way to indicate "MB-OK", but it could be a piece of
+> metadata on a bpf_prog. Whatever code dispatches to an XDP program
+> would have to include a prologue that linearises the xdp_buff if
+> necessary which implies allocating memory. I don't know how hard it is
+> to implement this.
+
+I think it would be somewhat non-trivial, and more importantly would
+absolutely slaughter performance. And if you're using XDP, presumably
+you care about that, so I'm not sure we're doing anyone any favours by
+implementing such a compatibility layer?
+
+> There is also the question of freplace: do we extend linearising to
+> them, or do they have to support MB?
+
+Well, today freplace programs just inherit the type of whatever they are
+attaching to, so we'd have to go out of our way to block this. I think
+logically it would be up to whatever loader is attaching freplace
+programs, because that's the one that knows the semantics. E.g.,
+something like libxdp that uses freplace to chain load programs would
+have to make sure that the dispatcher program is only marked as mb-aware
+if *all* the constituent programs are.
+
+> You raised an interesting point: couldn't we hit programs that can't
+> handle data_end - data being above a certain length? I think we (=3D
+> Cloudflare) actually have one of those, since we in some cases need to
+> traverse the entire buffer to calculate a checksum (we encapsulate
+> UDPv4 in IPv6, don't ask). Turns out it's actually really hard to
+> calculate the checksum on a variable length packet in BPF so we've had
+> to introduce limits. However, this case isn't too important: we made
+> this choice consciously, knowing that MTU changes would break it.
+
+Yeah, for this I think you're on your own ;)
+
+> Other than that I like this option a lot: mb-aware and mb-unaware
+> programs can co-exist, at the cost of performance. This allows
+> gradually migrating to our stack so that it can handle jumbo frames.
+
+See above re: coexisting.
+
+> 3. Make non-linearity invisible to the BPF program
+>
+> Something I've wished for often is that I didn't have to deal with
+> nonlinearity at all, based on my experience with cls_redirect [2].
+> It's really hard to write a BPF program that handles non-linear skb,
+> especially when you have to call adjust_head, etc. which invalidates
+> packet buffers. This is probably impossible, but maybe someone has a
+> crazy idea? :)
+
+With the other helpers that we started discussing, I don't think you
+have to? I.e., with an xdp_load_bytes() or an xdp_data_pointer()-type
+helper that works across fragment boundaries I think you'd be fine, no?
+
+-Toke
 
