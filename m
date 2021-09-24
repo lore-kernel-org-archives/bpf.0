@@ -2,168 +2,100 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7123DC433EF
-	for <bpf@archiver.kernel.org>; Fri, 24 Sep 2021 02:59:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CD1DC433F5
+	for <bpf@archiver.kernel.org>; Fri, 24 Sep 2021 09:56:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4F5A961100
-	for <bpf@archiver.kernel.org>; Fri, 24 Sep 2021 02:59:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2D47961211
+	for <bpf@archiver.kernel.org>; Fri, 24 Sep 2021 09:56:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234930AbhIXDAh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 23 Sep 2021 23:00:37 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:28390 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S230123AbhIXDAg (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 23 Sep 2021 23:00:36 -0400
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.1.2/8.16.1.2) with SMTP id 18NNe2v3027464
-        for <bpf@vger.kernel.org>; Thu, 23 Sep 2021 19:59:03 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : content-type : content-transfer-encoding :
- mime-version; s=facebook; bh=Jf8HUtAaPN0Vj8gjqMPx5UMvBuoAblzRm7i0B2hPAik=;
- b=BMkWV2T17rbLpLxRYiu8YSZipJWd1dcC7Zy+E/LPq6gZW9gxDjDo5NGxyhO/SeHTIXpW
- J0BZ1RFUY6gWm7TmnEQKvtAxTGj8fG43aaTSERXATLm8BuDw4qGi88R+3fg4E86qbzFQ
- 9wN9Q3X+v41ah5qK85Ok0LAW2JNACUuBOPw= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0001303.ppops.net with ESMTP id 3b93em0u4g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 23 Sep 2021 19:59:03 -0700
-Received: from intmgw001.05.ash7.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Thu, 23 Sep 2021 19:59:03 -0700
-Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-        id 4CDE4394E1D; Thu, 23 Sep 2021 19:58:56 -0700 (PDT)
-From:   Yonghong Song <yhs@fb.com>
-To:     <bpf@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next] selftests/bpf: fix btf_dump __int128 test failure with clang build kernel
-Date:   Thu, 23 Sep 2021 19:58:56 -0700
-Message-ID: <20210924025856.2192476-1-yhs@fb.com>
+        id S245349AbhIXJ5v (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 24 Sep 2021 05:57:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60078 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245329AbhIXJ5u (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 24 Sep 2021 05:57:50 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32001C061756
+        for <bpf@vger.kernel.org>; Fri, 24 Sep 2021 02:56:17 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id t8so25693987wrq.4
+        for <bpf@vger.kernel.org>; Fri, 24 Sep 2021 02:56:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8OaYmp305ehIjxObH1n+1np51IociiH7SmbrwDZZ6jA=;
+        b=dSDIjyzW4fYRhjjOMblgat6lrCCmhpKHUCeM3zDLzkaSdrLNtDMp6ytkatKdlZlHJt
+         Ql5ntcefbmCj7saQbYspqgTPKmM6wb93sVKlXqutPZZaBrjXRGJLq5kqWKdONXPUJYDB
+         FRCZu8Ye2tz52fzovhANhn58kAG3zM3FIjCwk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8OaYmp305ehIjxObH1n+1np51IociiH7SmbrwDZZ6jA=;
+        b=BtINwkLePqY/Bbsm5U5KYQJL3rN5o3HUmdDdm2ppYvzGXcYWEIGF+XepO0CTkgnSua
+         rdEHpBLt8Kf0Cpt+oo2Hq7AQPCeRtkQud7lkqyxBYFNYMJa9/G9RNg8Zepv80wr+18Yj
+         UcO94v3p3kyy5PR+k/ibphKqlHBBas+Q9V9alT6AFcQo9ssFGMEDRziK8+4AmnMvCsTM
+         5ibhnklVQ15EGmumRXlEI95Ihca71NxYSc/yL1dpICc39RG4H9hsBsCLnpfQmdbS0M4y
+         V1XRu9bu9O6bUcVwLlVQGeh+FCkEUU7+xQI4k9Jja2zzzDo9tn1KyQSm/TU6skGUyviA
+         XPtA==
+X-Gm-Message-State: AOAM531hBL3WSo5MAPsofs7kqievUnf+4g6InJ/h5akgdrKIqbSH5l1I
+        sXdGC9MRk8g1bUMPfUp+Z+6jhw==
+X-Google-Smtp-Source: ABdhPJz3OYnepK5UMSKnkJNgitEVJ2cxRSxVD810n3eZaUJJbybqMB1g3SWKHgCq9eDnA5coFxXpKw==
+X-Received: by 2002:a5d:4985:: with SMTP id r5mr10708455wrq.397.1632477375807;
+        Fri, 24 Sep 2021 02:56:15 -0700 (PDT)
+Received: from antares.. (1.8.8.f.e.b.b.b.5.6.9.e.c.8.5.0.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:58c:e965:bbbe:f881])
+        by smtp.gmail.com with ESMTPSA id v20sm7871106wra.73.2021.09.24.02.56.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Sep 2021 02:56:15 -0700 (PDT)
+From:   Lorenz Bauer <lmb@cloudflare.com>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     kernel-team@cloudflare.com, Lorenz Bauer <lmb@cloudflare.com>,
+        linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH bpf-next 0/4] Fix up bpf_jit_limit some more
+Date:   Fri, 24 Sep 2021 10:55:38 +0100
+Message-Id: <20210924095542.33697-1-lmb@cloudflare.com>
 X-Mailer: git-send-email 2.30.2
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-FB-Source: Intern
-X-Proofpoint-GUID: D8z1ZTTgyteHhpNYNoB30KFb0ZViq3bu
-X-Proofpoint-ORIG-GUID: D8z1ZTTgyteHhpNYNoB30KFb0ZViq3bu
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
- definitions=2021-09-23_07,2021-09-23_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- adultscore=0 phishscore=0 impostorscore=0 mlxlogscore=953 spamscore=0
- bulkscore=0 priorityscore=1501 suspectscore=0 mlxscore=0 clxscore=1015
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2109230001 definitions=main-2109240014
-X-FB-Internal: deliver
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-With clang build kernel (adding LLVM=3D1 to kernel and selftests/bpf build
-command line), I hit the following test failure:
+Some more cleanups around bpf_jit_limit to make it readable via sysctl.
 
-  $ ./test_progs -t btf_dump
-  ...
-  btf_dump_data:PASS:ensure expected/actual match 0 nsec
-  btf_dump_data:FAIL:find type id unexpected find type id: actual -2 < expe=
-cted 0
-  btf_dump_data:FAIL:find type id unexpected find type id: actual -2 < expe=
-cted 0
-  test_btf_dump_int_data:FAIL:dump __int128 unexpected error: -2 (errno 2)
-  #15/9 btf_dump/btf_dump: int_data:FAIL
+Things I'm not sure about:
+* Is it OK to expose atomic_long_t bpf_jit_limit like this? The sysctl code
+  isn't atomic, but maybe it's fine because it's read only.
+* All of the JIT related sysctls are quite restrictive, you have to have
+  CAP_SYS_ADMIN / CAP_BPF _and_ be root as well. This makes it problematic
+  to scrape these to expose them as metrics. Can we relax this somewhat?
 
-Further analysis showed gcc build kernel has type "__int128" in dwarf/BTF
-and it doesn't exist in clang build kernel. Code searching for kernel code
-found the following:
-  arch/s390/include/asm/types.h:  unsigned __int128 pair;
-  crypto/ecc.c:   unsigned __int128 m =3D (unsigned __int128)left * right;
-  include/linux/math64.h: return (u64)(((unsigned __int128)a * mul) >> shif=
-t);
-  include/linux/math64.h: return (u64)(((unsigned __int128)a * mul) >> shif=
-t);
-  lib/ubsan.h:typedef __int128 s_max;
-  lib/ubsan.h:typedef unsigned __int128 u_max;
+Lorenz
 
-In my case, CONFIG_UBSAN is not enabled. Even if we only have "unsigned __i=
-nt128"
-in the code, somehow gcc still put "__int128" in dwarf while clang didn't.
-Hence current test works fine for gcc but not for clang.
+Lorenz Bauer (4):
+  bpf: define bpf_jit_alloc_exec_limit for riscv JIT
+  bpf: define bpf_jit_alloc_exec_limit for arm64 JIT
+  bpf: prevent increasing bpf_jit_limit above max
+  bpf: export bpf_jit_current
 
-Enabling CONFIG_UBSAN is an option to provide __int128 type into dwarf
-reliably for both gcc and clang, but not everybody enables CONFIG_UBSAN
-in their kernel build. So the best choice is to use "unsigned __int128" type
-which is available in both clang and gcc build kernels. But clang and gcc
-dwarf encoded names for "unsigned __int128" are different:
+ arch/arm64/net/bpf_jit_comp.c | 5 +++++
+ arch/riscv/net/bpf_jit_core.c | 5 +++++
+ include/linux/filter.h        | 2 ++
+ kernel/bpf/core.c             | 7 ++++---
+ net/core/sysctl_net_core.c    | 9 ++++++++-
+ 5 files changed, 24 insertions(+), 4 deletions(-)
 
-  [$ ~] cat t.c
-  unsigned __int128 a;
-  [$ ~] gcc -g -c t.c && llvm-dwarfdump t.o | grep __int128
-                  DW_AT_type      (0x00000031 "__int128 unsigned")
-                  DW_AT_name      ("__int128 unsigned")
-  [$ ~] clang -g -c t.c && llvm-dwarfdump t.o | grep __int128
-                  DW_AT_type      (0x00000033 "unsigned __int128")
-                  DW_AT_name      ("unsigned __int128")
-
-The test change in this patch tries to test type name before
-doing actual test.
-
-Signed-off-by: Yonghong Song <yhs@fb.com>
----
- .../selftests/bpf/prog_tests/btf_dump.c       | 27 ++++++++++++++-----
- 1 file changed, 21 insertions(+), 6 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf_dump.c b/tools/test=
-ing/selftests/bpf/prog_tests/btf_dump.c
-index 52ccf0cf35e1..87f9df653e4e 100644
---- a/tools/testing/selftests/bpf/prog_tests/btf_dump.c
-+++ b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
-@@ -358,12 +358,27 @@ static void test_btf_dump_int_data(struct btf *btf, s=
-truct btf_dump *d,
- 	TEST_BTF_DUMP_DATA_OVER(btf, d, NULL, str, int, sizeof(int)-1, "", 1);
-=20
- #ifdef __SIZEOF_INT128__
--	TEST_BTF_DUMP_DATA(btf, d, NULL, str, __int128, BTF_F_COMPACT,
--			   "(__int128)0xffffffffffffffff",
--			   0xffffffffffffffff);
--	ASSERT_OK(btf_dump_data(btf, d, "__int128", NULL, 0, &i, 16, str,
--				"(__int128)0xfffffffffffffffffffffffffffffffe"),
--		  "dump __int128");
-+	/* gcc encode unsigned __int128 type with name "__int128 unsigned" in dwa=
-rf,
-+	 * and clang encode it with name "unsigned __int128" in dwarf.
-+	 * Do an availability test for either variant before doing actual test.
-+	 */
-+	if (btf__find_by_name(btf, "unsigned __int128") > 0) {
-+		TEST_BTF_DUMP_DATA(btf, d, NULL, str, unsigned __int128, BTF_F_COMPACT,
-+				   "(unsigned __int128)0xffffffffffffffff",
-+				   0xffffffffffffffff);
-+		ASSERT_OK(btf_dump_data(btf, d, "unsigned __int128", NULL, 0, &i, 16, st=
-r,
-+					"(unsigned __int128)0xfffffffffffffffffffffffffffffffe"),
-+			  "dump unsigned __int128");
-+	} else if (btf__find_by_name(btf, "__int128 unsigned") > 0) {
-+		TEST_BTF_DUMP_DATA(btf, d, NULL, str, __int128 unsigned, BTF_F_COMPACT,
-+				   "(__int128 unsigned)0xffffffffffffffff",
-+				   0xffffffffffffffff);
-+		ASSERT_OK(btf_dump_data(btf, d, "__int128 unsigned", NULL, 0, &i, 16, st=
-r,
-+					"(__int128 unsigned)0xfffffffffffffffffffffffffffffffe"),
-+			  "dump unsigned __int128");
-+	} else {
-+		ASSERT_TRUE(false, "unsigned_int128_not_found");
-+	}
- #endif
- }
-=20
---=20
+-- 
 2.30.2
 
