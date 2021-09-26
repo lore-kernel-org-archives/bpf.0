@@ -2,123 +2,102 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 526B3C433FE
-	for <bpf@archiver.kernel.org>; Sun, 26 Sep 2021 07:18:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C006C433EF
+	for <bpf@archiver.kernel.org>; Sun, 26 Sep 2021 12:56:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3CAC960EE0
-	for <bpf@archiver.kernel.org>; Sun, 26 Sep 2021 07:18:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 497F761019
+	for <bpf@archiver.kernel.org>; Sun, 26 Sep 2021 12:56:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231271AbhIZHUB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 26 Sep 2021 03:20:01 -0400
-Received: from szxga08-in.huawei.com ([45.249.212.255]:20153 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231231AbhIZHTz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 26 Sep 2021 03:19:55 -0400
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4HHHBw3bBRz1DHCy;
-        Sun, 26 Sep 2021 15:16:56 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.8; Sun, 26 Sep 2021 15:18:11 +0800
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.8; Sun, 26 Sep 2021 15:18:10 +0800
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-To:     <arnd@arndb.de>, <linux-arch@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
-        <rostedt@goodmis.org>, <mingo@redhat.com>, <davem@davemloft.net>,
-        <ast@kernel.org>, <ryabinin.a.a@gmail.com>,
-        <akpm@linux-foundation.org>
-CC:     <mpe@ellerman.id.au>, <benh@kernel.crashing.org>,
-        <paulus@samba.org>, <bpf@vger.kernel.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: [PATCH v3 6/9] sections: Provide internal __is_kernel() and __is_kernel_text() helper
-Date:   Sun, 26 Sep 2021 15:20:45 +0800
-Message-ID: <20210926072048.190336-7-wangkefeng.wang@huawei.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20210926072048.190336-1-wangkefeng.wang@huawei.com>
-References: <20210926072048.190336-1-wangkefeng.wang@huawei.com>
+        id S231447AbhIZM5p (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 26 Sep 2021 08:57:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56916 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231446AbhIZM5p (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 26 Sep 2021 08:57:45 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE6FBC061570
+        for <bpf@vger.kernel.org>; Sun, 26 Sep 2021 05:56:08 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id k17so13197454pff.8
+        for <bpf@vger.kernel.org>; Sun, 26 Sep 2021 05:56:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nc1PQKV8z+TD4YUNfkfw0SyfgPKahgHeXxrW4JMWJGg=;
+        b=eQucCqQv2JA2C2k6rCgW+Vrm1TSxVCPo4jLLxrFqLTS13hGDVafx4PSLlnf2G5+cNA
+         4Tb9XJMUFFHE0aWm2PiwZ6Ueic27TZgbwkmUN9voZodMXSA9TGLUY+j5WvehdwHtFRxw
+         3bb1vPHJq5LMsQ3ljNlQG5BSJaPeLKp5jl59qF87RFmmxaOidLXxYSCVZeBt94BkIoQU
+         /VYTTvmlL70TtXNynmInq6cq+ikfz9mJJ2A2A8mlitwYKjhNcpnXtzGJ5rPxIHiUvITt
+         IYnGWrhJJK971NtfjiTkyC/fJ9nscQvwbhquYcW0lQkuGSMsyxq/VXeAty3CJpBg6PZS
+         lizw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nc1PQKV8z+TD4YUNfkfw0SyfgPKahgHeXxrW4JMWJGg=;
+        b=GGhHDJmT9ggb/Gp6RfWHdyFTy3WIJ3LQ5PhqLfWLPmi5D27HKtAggO2zyXDlUiFqK6
+         NS/mac65P5/ZsvXrhM2KO2/9QZA4tQHD98JCYX748o7qRoOkHWv0cocbCAtz/4anyuZu
+         zIHDfnA8RQeohdCsNygB+tXHPNzKbtlVfpDoPkbo6zflTruJWzt4j241O66Ikt8qant7
+         JPHO1MTUrKBMZsYkh3eAANoBJyhAQjOPPtsiM8bLpxIdIKrniKsuxQ1am7bphuWFDZUg
+         gdkjhZcAajDhgAMy7VxemGHCpocSD84K9923AICKvCBLIFXPNqoqT0ACD+g4tOSVM0Lm
+         uU2g==
+X-Gm-Message-State: AOAM530y8SVF7BugoMt0W1EXkXXknyYJcHdoMgNHNiMQrGjFSo5J+xVy
+        QeUEJ7bE9oaPlu7NKKRUB50yqDxDcZAr7A==
+X-Google-Smtp-Source: ABdhPJzp138tlZN9J3RigWJfmZJ92dIVSun74ZekursBY9p+7Jfc2faEe7HHlY7AohOyZ/Ap5NWT0A==
+X-Received: by 2002:a63:a74a:: with SMTP id w10mr12028443pgo.213.1632660968079;
+        Sun, 26 Sep 2021 05:56:08 -0700 (PDT)
+Received: from localhost ([2405:201:6014:d058:a28d:3909:6ed5:29e7])
+        by smtp.gmail.com with ESMTPSA id e24sm13964773pfn.8.2021.09.26.05.56.07
+        for <bpf@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Sep 2021 05:56:07 -0700 (PDT)
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To:     bpf@vger.kernel.org
+Subject: [PATCH bpf-next] samples: bpf: avoid name collision with kernel enum values
+Date:   Sun, 26 Sep 2021 18:26:05 +0530
+Message-Id: <20210926125605.1101605-1-memxor@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-An internal __is_kernel() helper which only check the kernel address ranges,
-and an internal __is_kernel_text() helper which only check text section ranges.
+In xdp_redirect_map_multi.bpf.c, on newer kernels samples compilation
+fails when vmlinux.h is generated from a kernel supporting broadcast for
+devmap. Hence, avoid naming collisions to prevent build failure.
 
-Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+Fixes: a29b3ca17ee6 (samples: bpf: Convert xdp_redirect_map_multi_kern.o to XDP samples helper)
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- include/asm-generic/sections.h | 29 +++++++++++++++++++++++++++++
- include/linux/kallsyms.h       |  4 ++--
- 2 files changed, 31 insertions(+), 2 deletions(-)
+ samples/bpf/xdp_redirect_map_multi.bpf.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/include/asm-generic/sections.h b/include/asm-generic/sections.h
-index 811583ca8bd0..a7abeadddc7a 100644
---- a/include/asm-generic/sections.h
-+++ b/include/asm-generic/sections.h
-@@ -186,4 +186,33 @@ static inline bool is_kernel_inittext(unsigned long addr)
- 	       addr < (unsigned long)_einittext;
+diff --git a/samples/bpf/xdp_redirect_map_multi.bpf.c b/samples/bpf/xdp_redirect_map_multi.bpf.c
+index 8f59d430cb64..c6361e70c829 100644
+--- a/samples/bpf/xdp_redirect_map_multi.bpf.c
++++ b/samples/bpf/xdp_redirect_map_multi.bpf.c
+@@ -6,8 +6,8 @@
+ #include "xdp_sample_shared.h"
+
+ enum {
+-	BPF_F_BROADCAST		= (1ULL << 3),
+-	BPF_F_EXCLUDE_INGRESS	= (1ULL << 4),
++	__BPF_F_BROADCAST	= (1ULL << 3),
++	__BPF_F_EXCLUDE_INGRESS	= (1ULL << 4),
+ };
+
+ struct {
+@@ -43,7 +43,8 @@ static int xdp_redirect_map(struct xdp_md *ctx, void *forward_map)
+ 	NO_TEAR_INC(rec->processed);
+
+ 	return bpf_redirect_map(forward_map, 0,
+-				BPF_F_BROADCAST | BPF_F_EXCLUDE_INGRESS);
++				__BPF_F_BROADCAST |
++				__BPF_F_EXCLUDE_INGRESS);
  }
- 
-+/**
-+ * __is_kernel_text - checks if the pointer address is located in the
-+ *                    .text section
-+ *
-+ * @addr: address to check
-+ *
-+ * Returns: true if the address is located in .text, false otherwise.
-+ * Note: an internal helper, only check the range of _stext to _etext.
-+ */
-+static inline bool __is_kernel_text(unsigned long addr)
-+{
-+	return addr >= (unsigned long)_stext &&
-+	       addr < (unsigned long)_etext;
-+}
-+
-+/**
-+ * __is_kernel - checks if the pointer address is located in the kernel range
-+ *
-+ * @addr: address to check
-+ *
-+ * Returns: true if the address is located in the kernel range, false otherwise.
-+ * Note: an internal helper, only check the range of _stext to _end.
-+ */
-+static inline bool __is_kernel(unsigned long addr)
-+{
-+	return addr >= (unsigned long)_stext &&
-+	       addr < (unsigned long)_end;
-+}
-+
- #endif /* _ASM_GENERIC_SECTIONS_H_ */
-diff --git a/include/linux/kallsyms.h b/include/linux/kallsyms.h
-index 8a9d329c927c..5fb17dd4b6fa 100644
---- a/include/linux/kallsyms.h
-+++ b/include/linux/kallsyms.h
-@@ -26,14 +26,14 @@ struct module;
- 
- static inline int is_kernel_text(unsigned long addr)
- {
--	if ((addr >= (unsigned long)_stext && addr < (unsigned long)_etext))
-+	if (__is_kernel_text(addr))
- 		return 1;
- 	return in_gate_area_no_mm(addr);
- }
- 
- static inline int is_kernel(unsigned long addr)
- {
--	if (addr >= (unsigned long)_stext && addr < (unsigned long)_end)
-+	if (__is_kernel(addr))
- 		return 1;
- 	return in_gate_area_no_mm(addr);
- }
--- 
-2.26.2
+
+ SEC("xdp")
+--
+2.33.0
 
