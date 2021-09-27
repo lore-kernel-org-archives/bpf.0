@@ -2,54 +2,54 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95020C433EF
-	for <bpf@archiver.kernel.org>; Mon, 27 Sep 2021 15:00:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C940BC43217
+	for <bpf@archiver.kernel.org>; Mon, 27 Sep 2021 15:00:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7C79960F4A
-	for <bpf@archiver.kernel.org>; Mon, 27 Sep 2021 15:00:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B1CD160FF2
+	for <bpf@archiver.kernel.org>; Mon, 27 Sep 2021 15:00:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235059AbhI0PCQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 27 Sep 2021 11:02:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36394 "EHLO
+        id S234945AbhI0PCT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 27 Sep 2021 11:02:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235060AbhI0PBx (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 27 Sep 2021 11:01:53 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35952C06177A;
-        Mon, 27 Sep 2021 08:00:12 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id n2so11939367plk.12;
-        Mon, 27 Sep 2021 08:00:12 -0700 (PDT)
+        with ESMTP id S234996AbhI0PCC (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 27 Sep 2021 11:02:02 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03DBEC061740;
+        Mon, 27 Sep 2021 08:00:18 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id s75so1540117pgs.5;
+        Mon, 27 Sep 2021 08:00:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=JgNyFr51slssP3bhc3yykZKy36rLj3siDcsI+KkBHs4=;
-        b=qPbXuG4bTnnni4lEo7J3b4TZubygDchx6c/mHMVPjjwqqevV40RG7FjN+8BrXAgiWO
-         8KKSj6DjCD8iim722xL1YK2kMHY7imWzIhwV/130B7rmR+JnfHBYGnq9m+ljEfJd2mTo
-         xcCsipTe0DaKtvEF6Bw/rtC7ZOCvVmH8sZvG3GC3Nm6zvCVMNKTQS7WMsoxOLpSKve5d
-         V+OtWZT4YIcm/2trSDd2tblUs6boD8+x50p1elFWgD4SP6ALjSsFZWK/0143kj9UtPKr
-         0zREsOn6krzn7vDInW3IeaSCIpHeiCJbTNsPL+F/FMhh1hycL2hLyrtCBUvJ/uTzYzrN
-         TuVA==
+        bh=HAo200QE9/huK+nWNKe5juvI7U/KIFLH0A3znfnQYDM=;
+        b=G4uzPoyz5U7he4rqhKyzV9PdfXoNM1wZUs9RQGDfCHDLwAzq/vYuMWIBC39lPiDEzY
+         GfA2kFxAnm2afuHzfq19koDb0fCItoQ9fdYdixMtSBnkW1d0UW0xB+NzUpolJbMQx2DI
+         oYi03lP7Trn0sMQBjao+lbE6Ro9rG+5HnsAyU6UUqoaF96FNddLEWS85DGzPrxsA0Hzz
+         GiQa7ZXaOBDd0mSibtEvYgQok9OKVX4ZFjxRa1uSYvaqb8wY/pUrR3Eus3XzvN0cgY85
+         dJAEYlba6JhZ/TywAcziGWSZT7lA3BoVgMUqbt0xLJHQDBv4WO3xWYhFppNhv7lFtDky
+         xLFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=JgNyFr51slssP3bhc3yykZKy36rLj3siDcsI+KkBHs4=;
-        b=icZBh23Q6zW/mR0er/TLlzCogUXbqaknba15vLSU0eDQch7zpWdLw0b0t15NH2JR9p
-         Zb6oSVJ/DHLjRJhvaNgyx9rbbRsqBiap03VWLbUOremI2BRudTK+anIikxvPbtCJiKU6
-         BpjIphrZv3jTSyVp1AzLy4xKIZX2KCnE0pebDzLP4cXJoe8FkhFdY9mWlfOPhoFllD87
-         6dJAzqPDB8/whxQ8F4V9t5isYVzQ3BVlyNN9z6OvILxea4Yy1oerHa6Gnp2AyRe0MDOR
-         cm5EZQuaU5Tp7V/cbIjxFBDQj6X6Qty5gBPpLMAkEdFAc8zbPxt1MEK7itbvq55XZzZZ
-         7Ubw==
-X-Gm-Message-State: AOAM532sDglCV9ts5iHNXZaMv81LWoNdQMvGUwN/vyiijenaNgj/iMNW
-        T2lw7Ih5Z9SRz+851ywfT2HaFli3TcI=
-X-Google-Smtp-Source: ABdhPJxp1HIVz3BceARgXwzQZSfy3TNdv4hzf+EbV/5qck3DLWTozynqWe2eFB42jwByOvBRZRzmew==
-X-Received: by 2002:a17:902:c184:b0:13e:2e49:8a92 with SMTP id d4-20020a170902c18400b0013e2e498a92mr284757pld.2.1632754810714;
-        Mon, 27 Sep 2021 08:00:10 -0700 (PDT)
+        bh=HAo200QE9/huK+nWNKe5juvI7U/KIFLH0A3znfnQYDM=;
+        b=olBX06XC+eZxmTc3Ty6UqAwX2gYZFMpWDlKYcbgHi4hZQ3lAfGvJI6WCvwvkSycpGF
+         AsP6At5t2oxzcapyM+pJ7wAOvosRUYrkYhDJRkARwnLqIkQWJlZI6PkdrPKjJzihLSkO
+         LdyUxbdmnPb5DCLVpMxu/ET3pxk2Ds1YBFn4fknwdZQd+5wvwQ5eobnUUkksHu2rh9IJ
+         PdfK1z3mpI4OwpTkcZnImpt1ZLo+CGaW4s2YDxkcSjkKHvY0N69iAMneOkteYVmf/9pY
+         RYbs1cPmdz4N9TA3ki9MV90khLdpwbKQfY42mIwEUPAgr81FUOGuOr0MEe28WRlke1ms
+         H89Q==
+X-Gm-Message-State: AOAM533zna6GetSJh8gRNvkXO5aCDyEZmUrYwOuUBfOl7kNguuRlsRO6
+        hlrppR7p8KYvhYSWlGu9nzOpc45GYRo=
+X-Google-Smtp-Source: ABdhPJyqk7wr4DiStlyvCNzbEhOxLauKxA0qxSBVRSKDs33S0cxej4mdoOkpEvKpy6Ril6TGG/cksA==
+X-Received: by 2002:a62:2587:0:b0:44b:2d81:8520 with SMTP id l129-20020a622587000000b0044b2d818520mr100916pfl.43.1632754817176;
+        Mon, 27 Sep 2021 08:00:17 -0700 (PDT)
 Received: from localhost ([2405:201:6014:d058:a28d:3909:6ed5:29e7])
-        by smtp.gmail.com with ESMTPSA id g27sm18214183pfk.173.2021.09.27.08.00.09
+        by smtp.gmail.com with ESMTPSA id x13sm17450357pfp.133.2021.09.27.08.00.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Sep 2021 08:00:10 -0700 (PDT)
+        Mon, 27 Sep 2021 08:00:16 -0700 (PDT)
 From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To:     bpf@vger.kernel.org
 Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
@@ -61,61 +61,59 @@ Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
         Jesper Dangaard Brouer <brouer@redhat.com>,
         =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
         netdev@vger.kernel.org
-Subject: [PATCH bpf-next v5 08/12] libbpf: Make gen_loader data aligned.
-Date:   Mon, 27 Sep 2021 20:29:37 +0530
-Message-Id: <20210927145941.1383001-9-memxor@gmail.com>
+Subject: [PATCH bpf-next v5 10/12] libbpf: Fix skel_internal.h to set errno on loader retval < 0
+Date:   Mon, 27 Sep 2021 20:29:39 +0530
+Message-Id: <20210927145941.1383001-11-memxor@gmail.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20210927145941.1383001-1-memxor@gmail.com>
 References: <20210927145941.1383001-1-memxor@gmail.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1157; i=memxor@gmail.com; h=from:subject; bh=BpTAouLmASMkUTTW2rl1vdawRxwdtufN6uz0MPaNZ7o=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBhUdxPnHrX6N9UhfkxogwpVC7f85lVGqZtHZurK6Xl H0Khi6iJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCYVHcTwAKCRBM4MiGSL8Ryn/JEA CK113XGjkFqRU4jQYtao3vB8BLO1tw7GBpl1fxYOB9GGUIYL1Zo9YhY93dH1Ok4K2Ff3ix9HqB3/Y3 TJd38C5uprNpTQnmi7TokRgQHOb+jkSpckLrqPQAiUq0UlgV4wmOQj1+kxkNK6LU+u1hkvIxUV0bFP d4RB1FGpnK4dIPtP63v5W32g7h2vLKSniu/GkJonV85AdgOzcwMIcZeSG+4Ly9sPjpVWh3rKoOzmXc A1LlcdbjbCswocu8v7BKrCojZ04FLop8PBY1GiKb62H6hyBNAaWN39M4ZGlUwOaePOgsVkXWqfWp2S zqFzIpqyKWtcpJMW90HW+CgzfGrwAO37pqjw1V/ijm73stRAZqowCRCOmlaOEQSKo3EgObutwxBsP3 TOqE81an4Y6jGuU+QCYceG19u97IaQARTMQi2ChFpOQUno0UXc7FPFYIjKfI38DIBBQs9sDI4R/vyJ xbmgOq2PmaiD35fkpJSM8913wQl542qmY+UVzoDef9AsRJzg3FwPaKg8lJJVU04QZA54+aIe2iCRMz NaOk1dDu8YuL+16hjTk2AREjIDICI5UZIZo6mGDsAqLgciahIY/Ne2GyLLrJeMGrXH4xhWlQoVQb+V 8ZNdBwUgpfnPFrnHMEe27Up9gJDIJoEfytqfmUfA2Lpl3c56CsmRZmHUn5pw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1647; h=from:subject; bh=PVTKS+rfPpxdSU9d74iSymeJVwfhEWVxpXAvuJFJ9qs=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBhUdxPrACVEi7CiY1lhZ+7KHtZuFVP74ebqAo6CHjW 2E6erlWJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCYVHcTwAKCRBM4MiGSL8RyvLkD/ 44fEfgf6NG+0oe9IJLBj4cCxNZ5Zsfu2h0U4i2h24cw6PYDoSzrGjwvnMRsEDfUQliloPhwU5zT/zI J+U6jFNkxQ1WfCKksOHKbDaiGdWHxFAr9OzqQuIs6JD5Dvla9FntOa/aCPP2eAl54gd2E0NOt9li+J g2phHQhrofK690XQJRmb5302zDf/fHa6LX+nefl8bxVRWQuYx4zSOsEy7lHYqtXyHwTEPYrEBf43Wt +IoRpkWeEM88z2ciLkeQhMhghXtI4kvCX4+uMwgpNDQ5mthpV1Ch+PaPZAmYcMqlD5x2c3938ZIRdA YC5Sf2iTpN++d9CC239Io112EAW0cahlQw9GlI9uFJR9bITdb5BrYeisJveOOphy8JAbEd7zCHDkDa iiu8Ue3uKDvJry6VY2baeOzYYOnNfH3PtjIwqgywDoPfVATRyp3FskJFLgYvNcx9LW5b+yGHyqOf9P Dy/te3xFSEeMEb28PcM7DJBuJ7TuUz+V8c9qDSziXB2WbwO3cbpiXmiOjPxZpLp/vmGAgsw5ebUzAP /7sMP49qhEmUwI175tqWGG86CrmA7Lg15Yl3pf9FUQYNf63AtaR/JdoX74UOpQOeqmejyKL6s547+o yTNpLlfMic+rl43Fuuvp0Drk0rPhKm6xi6oRUs31gLlfX4VlEc+IpazALcqg==
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Alexei Starovoitov <ast@kernel.org>
+When the loader indicates an internal error (result of a checked bpf
+system call), it returns the result in attr.test.retval. However, tests
+that rely on ASSERT_OK_PTR on NULL (returned from light skeleton) may
+miss that NULL denotes an error if errno is set to 0. This would result
+in skel pointer being NULL, while ASSERT_OK_PTR returning 1, leading to
+a SEGV on dereference of skel, because libbpf_get_error relies on the
+assumption that errno is always set in case of error for ptr == NULL.
 
-Align gen_loader data to 8 byte boundary to make sure union bpf_attr,
-bpf_insns and other structs are aligned.
+In particular, this was observed for the ksyms_module test. When
+executed using `./test_progs -t ksyms`, prior tests manipulated errno
+and the test didn't crash when it failed at ksyms_module load, while
+using `./test_progs -t ksyms_module` crashed due to errno being
+untouched.
 
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Fixes: 67234743736a (libbpf: Generate loader program out of BPF ELF file.)
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- tools/lib/bpf/gen_loader.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ tools/lib/bpf/skel_internal.h | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
-index 8df718a6b142..80087b13877f 100644
---- a/tools/lib/bpf/gen_loader.c
-+++ b/tools/lib/bpf/gen_loader.c
-@@ -5,6 +5,7 @@
- #include <string.h>
- #include <errno.h>
- #include <linux/filter.h>
-+#include <sys/param.h>
- #include "btf.h"
- #include "bpf.h"
- #include "libbpf.h"
-@@ -135,13 +136,17 @@ void bpf_gen__init(struct bpf_gen *gen, int log_level)
- 
- static int add_data(struct bpf_gen *gen, const void *data, __u32 size)
- {
-+	__u32 size8 = roundup(size, 8);
-+	__u64 zero = 0;
- 	void *prev;
- 
--	if (realloc_data_buf(gen, size))
-+	if (realloc_data_buf(gen, size8))
- 		return 0;
- 	prev = gen->data_cur;
- 	memcpy(gen->data_cur, data, size);
- 	gen->data_cur += size;
-+	memcpy(gen->data_cur, &zero, size8 - size);
-+	gen->data_cur += size8 - size;
- 	return prev - gen->data_start;
- }
- 
+diff --git a/tools/lib/bpf/skel_internal.h b/tools/lib/bpf/skel_internal.h
+index b22b50c1b173..9cf66702fa8d 100644
+--- a/tools/lib/bpf/skel_internal.h
++++ b/tools/lib/bpf/skel_internal.h
+@@ -105,10 +105,12 @@ static inline int bpf_load_and_run(struct bpf_load_and_run_opts *opts)
+ 	err = skel_sys_bpf(BPF_PROG_RUN, &attr, sizeof(attr));
+ 	if (err < 0 || (int)attr.test.retval < 0) {
+ 		opts->errstr = "failed to execute loader prog";
+-		if (err < 0)
++		if (err < 0) {
+ 			err = -errno;
+-		else
++		} else {
+ 			err = (int)attr.test.retval;
++			errno = -err;
++		}
+ 		goto out;
+ 	}
+ 	err = 0;
 -- 
 2.33.0
 
