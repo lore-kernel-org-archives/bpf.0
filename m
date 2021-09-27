@@ -2,131 +2,119 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB6DFC433F5
-	for <bpf@archiver.kernel.org>; Sun, 26 Sep 2021 20:34:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B667C433EF
+	for <bpf@archiver.kernel.org>; Mon, 27 Sep 2021 11:33:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8B52E60F44
-	for <bpf@archiver.kernel.org>; Sun, 26 Sep 2021 20:34:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2626C60F58
+	for <bpf@archiver.kernel.org>; Mon, 27 Sep 2021 11:33:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbhIZUfu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 26 Sep 2021 16:35:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43746 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230040AbhIZUft (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 26 Sep 2021 16:35:49 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 067A2C061570;
-        Sun, 26 Sep 2021 13:34:12 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id pf3-20020a17090b1d8300b0019e081aa87bso11745483pjb.0;
-        Sun, 26 Sep 2021 13:34:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:subject:message-id:mime-version:content-disposition
-         :content-transfer-encoding;
-        bh=Ah83D4oj0M/ZPbuDGbaur+I2bIn3iVKDa23KqXHEA1A=;
-        b=MUvkwAw/J+JbJHhJu0xo7GVfmp6M77SaST9nJ6breN47wOtF87717R0gX2vViCAbOf
-         2UMo0i0nB7RA+gplPcnYCTxgpY9MRr4XVIUpSnUnRI3yryx/I1sYtpM7h+bKRQyjwkdt
-         4wv/a1DOrMaWzWDCvYTFDwEW/HOUeS8B2dRWh5LVttYTdIe+zB7Z5ni+Cq252p9in/Th
-         lsGKyONyrqpCC/jUvEQ13sg+Xq6fBgx6bp7ZFUzSp+zqErGHPh/SxQGXb+dDhpl+qv2H
-         qPad3VvWBEPYMyU9cPKGFxkkw4BDDjwKNFwsHOj5FZqFpL9WSQNR/A0SVkilXbuiGX9u
-         fGPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
-         :content-disposition:content-transfer-encoding;
-        bh=Ah83D4oj0M/ZPbuDGbaur+I2bIn3iVKDa23KqXHEA1A=;
-        b=eo96Dm8JetjvUPAw11cNbD7bGbsZgQQhOx8h2M2F0s/6xXOTYEQiUj/xY13X+HvIGO
-         H3UdB5G2fqqFlkt8fwsLIoAdpAKHhIip/2tKhAUp0zbLbXoWa7NZaavSZlFhQFlKbirA
-         7qWj+eTJpB7D2/L+3LvICoN096ecTIE7hCrS8lITZQ36RmXOaBY7N3f7ojP3AEtuHWKr
-         X+uaY/f28Ja8f2Gg13NV88YE3l+Cu9PIy2zAGBrBP150FVPgYtlJenyVWWa5xVxkk92W
-         35h/zmoBMHr1/lTlJQga6qSKq/omF+mWhMWQZTkiGAOLfFwXTQoBZmjG+0zf/VniYT9d
-         yAJg==
-X-Gm-Message-State: AOAM532/hDzT/NNtUnDT9XNapI5vLtJBCBGd+5/L6LfyBwPqum1iwbJ3
-        c6WqBGZXCy1yIkdkugzZvsv7hAdt8yo=
-X-Google-Smtp-Source: ABdhPJzaL2wRw+PRl+hEe0bgART6GV0PgRMVqbxvEXhkXyrpOuDbBHMYlMCn4gzSkKH3mxn0yJMbeA==
-X-Received: by 2002:a17:902:6e02:b0:13a:41f5:1666 with SMTP id u2-20020a1709026e0200b0013a41f51666mr19411180plk.39.1632688452104;
-        Sun, 26 Sep 2021 13:34:12 -0700 (PDT)
-Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::5:3e55])
-        by smtp.gmail.com with ESMTPSA id 26sm18727150pgx.72.2021.09.26.13.34.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Sep 2021 13:34:11 -0700 (PDT)
-Date:   Sun, 26 Sep 2021 13:34:09 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     bpf@vger.kernel.org
-Subject: Happy birthday BPF!
-Message-ID: <20210926203409.kn3gzz2eaodflels@ast-mbp.dhcp.thefacebook.com>
+        id S234013AbhI0LfO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 27 Sep 2021 07:35:14 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:45416 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233948AbhI0LfO (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 27 Sep 2021 07:35:14 -0400
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18RBQov0027164;
+        Mon, 27 Sep 2021 07:33:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=Zh4ocPd5zq01wbH2VJDNCfT88s0EYVFeCQkN48p09Rc=;
+ b=HFxbLZtALlzLcIV513Gw+sxVwvyBy56n2YzyuwSn5PhVx+r78j+XpSTou4uCQxcVZnoE
+ ORBmrmCvRSJjDV+Ccv2/aAl0E0LKSqjtC7pEVYkcfhGs2gARhJrtNmpcMZLACj1l3H9e
+ wiOzzrnbeakRimBQKGiZG/vgljuMDfDH40vFu6QUIrDqxXQm0raGWFyPpAM+xNskL32L
+ cit9eG4DTS9wNpPPnwq/OiGUy3QfNwVJL1bvIFM7kz7dvrsv4WGOaJ2SSB2cnUlgVe2w
+ xizeUAt1Oo/0G6wIHGgXQzOY2Vejlh581H5hmUOcXLZvcVfbDeJx89csV2wfHViBPvSe YA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3bagv81unu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Sep 2021 07:33:18 -0400
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 18RBQVOH012751;
+        Mon, 27 Sep 2021 07:33:18 -0400
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3bagv81umx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Sep 2021 07:33:17 -0400
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 18RBVJoX026969;
+        Mon, 27 Sep 2021 11:33:15 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma01fra.de.ibm.com with ESMTP id 3b9ud9b7y5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Sep 2021 11:33:15 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 18RBXBwa2294488
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 27 Sep 2021 11:33:11 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2EF8442094;
+        Mon, 27 Sep 2021 11:33:11 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7804D4205C;
+        Mon, 27 Sep 2021 11:33:10 +0000 (GMT)
+Received: from sig-9-145-45-184.uk.ibm.com (unknown [9.145.45.184])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 27 Sep 2021 11:33:10 +0000 (GMT)
+Message-ID: <e9665315bc2f244d50d026863476e72e3d9b8067.camel@linux.ibm.com>
+Subject: Re: [PATCH RESEND bpf] bpf, s390: Fix potential memory leak about
+ jit_data
+From:   Ilya Leoshkevich <iii@linux.ibm.com>
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>
+Cc:     Yauheni Kaliuta <yauheni.kaliuta@redhat.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>
+Date:   Mon, 27 Sep 2021 13:33:10 +0200
+In-Reply-To: <1632726374-7154-1-git-send-email-yangtiezhu@loongson.cn>
+References: <1632726374-7154-1-git-send-email-yangtiezhu@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: giYAHGJqTgpQ3DQJ2HWE-ISyvY6pZDkS
+X-Proofpoint-ORIG-GUID: hgcrE1P2X7C_h_hUHBTq5OFZJdaEnIUq
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
+ definitions=2021-09-27_04,2021-09-24_02,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 mlxlogscore=944 malwarescore=0 phishscore=0 adultscore=0
+ spamscore=0 impostorscore=0 priorityscore=1501 mlxscore=0 bulkscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2109230001 definitions=main-2109270079
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Today BPF is 7 years old. On Sep 26, 2014
-the commit 99c55f7d47c0 ("bpf: introduce BPF syscall and maps")
-introduced the BPF system call. I’m very proud to say that BPF has grown from a
-Linux curiosity to a cornerstone of the way many technologies are built, but
-that hasn’t come without a fair amount of growing pain. 
+On Mon, 2021-09-27 at 15:06 +0800, Tiezhu Yang wrote:
+> Make sure to free jit_data through kfree() in the error path.
+> 
+> Fixes: 1c8f9b91c456 ("bpf: s390: add JIT support for multi-function
+> programs")
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> ---
+> 
+> RESEND due to the following reason:
+> [Can not connect to recipient's server because of unstable
+> network or firewall filter. rcpt handle timeout, last handle
+> info: Can not connect to vger.kernel.org]
+> 
+>  arch/s390/net/bpf_jit_comp.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-We’ve been able to scale significantly by treating the first BPF
-implementations of runtime and tool chain as the reference, but with Windows
-and a number of new tool chains and libraries coming into the picture, we need
-to reconsider this approach to ensure that we avoid fragmentation and lose
-interoperability. Specific examples of potential divergence are all over the
-place. Libbpf equivalent libraries have been reimplemented at least twice in
-golang and rust. GCC and LLVM have BPF backends that are similar but not
-equivalent. There are implementations of BPF in DPDK and other user space
-frameworks. BPF can run in the Netronome NIC and was prototyped in HW for
-inclusion into general purpose CPUs. There are several verifiers (in the Linux
-Kernel, PREVAIL in user space, and experimental ExoBPF). There are many JITs
-for different architectures inside the Linux Kernel and in user space. BPF
-programs can be written in C, Rust, bpftrace, and various assembly languages.
+Nice catch, thanks!
 
-This diversity is a sign of healthy and rapidly growing ecosystem, but it leads
-to a confusing user experience. BPF implementations compete with each other.
-Despite books about BPF and pretty complete documentation at
-https://ebpf.io/what-is-ebpf, developers and users complain that the
-documentation is spread around.
+Acked-by: Ilya Leoshkevich <iii@linux.ibm.com>
 
-In response, we collectively created the BPF Foundation and BPF Steering
-Committee (out of the most active BPF developers) to strengthen the
-collaboration. Moving forward, we must all focus on maximizing growth while
-maintaining interoperability. While we will maintain the Linux kernel, libbpf,
-and LLVM as the reference implementations, it's not our goal to force every
-user to embrace each part of the reference stack. Hopefully the committee will
-add a bit of formal structure to coordinate collaboration.
-
-More specifically, these implementations define the de-facto standard for
-various parts of the BPF ecosystem:
-- The Linux Kernel verifier defines BPF instruction set, BTF format,
-  map and program types, helpers, hook points.
-- The libbpf defines ELF file format and CO-RE features.
-- The LLVM defines BPF C language.
-
-7 year old BPF is mature enough to put the standards before the implementations.
-
-For example:
-The kernel verifier shouldn't be a gatekeeper of new instructions in BPF. GCC
-added SDIV instruction. It's not implemented by LLVM and will be rejected by
-the verifier, but such new instruction has all rights to be a part of BPF
-instruction set standard even when some implementations don't support it. The
-BPF steering committee (BSC) could make such a vote.
-Can GCC continue inventing instructions without ever talking to BSC ? Sure, but
-once BSC agrees to this extension of the standard (whether it's a new
-instruction or new C language attribute((btf_tag))) it will give a technical
-direction to the whole BPF ecosystem. The creation of BSC hopefully will
-provide implementations a way to collaborate instead of competing for BPF
-users.
-
-If you are interested in joining this collaboration, there are many ways to
-reach developers in the Linux BPF community:
-- The bpf@vger mailing list was an excellent place for the collaboration
-  and probably should continue to be such a place.
-- When email is too slow the discussion can move to BPF office hours
-  (zoom call every Thursday at 9am PST).
-- There are Linux Plumbers and LSFMMBPF conferences to amplify the reach.
-- BPF slack channel https://ebpf.io/slack.
-
-Linux, Windows, Rust, Golang, GCC, LLVM folks,
-cheers to BPF birthday !
