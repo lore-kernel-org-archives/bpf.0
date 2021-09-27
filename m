@@ -2,125 +2,123 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83B69C433EF
-	for <bpf@archiver.kernel.org>; Mon, 27 Sep 2021 12:44:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 904C6C433F5
+	for <bpf@archiver.kernel.org>; Mon, 27 Sep 2021 13:34:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 66377610A2
-	for <bpf@archiver.kernel.org>; Mon, 27 Sep 2021 12:44:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6E7F461058
+	for <bpf@archiver.kernel.org>; Mon, 27 Sep 2021 13:34:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234376AbhI0Mpk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 27 Sep 2021 08:45:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:24724 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234331AbhI0Mpj (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 27 Sep 2021 08:45:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1632746641;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xCEkzTLMibk3xPIz3Pcj0fZ0+zGBST1JsRpoKv0nibs=;
-        b=UzeozqdNPIzm1kXFMngeJJEs7nM3tWwdy0xnE9AmmSjmhk7DBxo5T3wj9FQuorKL0YtKK7
-        wz+4wJPn7hymkffoj3+Qo8ik7klRgLMzu1HyI5uTM5lzp0bjKox9c4dWE7JlFLcpWoUoRR
-        cF+/gaPJ/MNXMuwhpVq/OwMK+W6yki4=
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
- [209.85.167.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-451-ev1H1H8vP66OwPSxYa6UXA-1; Mon, 27 Sep 2021 08:44:00 -0400
-X-MC-Unique: ev1H1H8vP66OwPSxYa6UXA-1
-Received: by mail-lf1-f70.google.com with SMTP id r193-20020a19c1ca000000b003fc8f43caa6so15720692lff.17
-        for <bpf@vger.kernel.org>; Mon, 27 Sep 2021 05:44:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:cc:subject:to:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=xCEkzTLMibk3xPIz3Pcj0fZ0+zGBST1JsRpoKv0nibs=;
-        b=ijjbbW+W0NIcHMVU5mDi6BJYRBdiqpRnGKs7j4Bghzbjc9a3g/JX3iD/71w/Ttxh/5
-         CE87/3yLVLymFHIbiZPNbU08NSYNrA/VqxWPco8ckYrUTab42HmOrUoGnPC1vUcgyzbM
-         /hM0bcTXqO8ebi7xgNlQBY7yxaHl26riZxpngEsworjQgIxMjV28AVDWkcSiQ8663dcM
-         AK6hFhRHSUJ2KVmhWMBEr+PHrB6Vt8OTMU6VVpjBPLIdxmJD7i1GO6/edjYCMsz31NWY
-         NenKY9HRoEIIrct0ANMGCVhSlqtpdvhcYalPTl7iP+FB+EDtYXCWV/kb6UFhAbQfwIzd
-         nAoQ==
-X-Gm-Message-State: AOAM530E1BPfMksEfFIWMX4L7kWk9nJa/lWSPeKsS8sdrsE0skznCYrU
-        j/G/9Yj2FwRFhNN5/XZpbq7ODrGqv4dGq4LKiLx4wGmE5xXF3FR4swe3mpDxweC1bQPrC1fxj9E
-        qfjLuMx+sgqN/2jXG5+j4tGhsvrcGEMwMUVKDOfZ1xGvAv8A4c1BmHJHtFNHIFFQ=
-X-Received: by 2002:a05:651c:150b:: with SMTP id e11mr29426739ljf.289.1632746638559;
-        Mon, 27 Sep 2021 05:43:58 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxvC/qpgu6RCW8/2TmGNJ1qj7w8OhMytXfe7vwWXFkcdU80AADG+PBuDJ1VeSLz4SjDTKMyAQ==
-X-Received: by 2002:a05:651c:150b:: with SMTP id e11mr29426708ljf.289.1632746638285;
-        Mon, 27 Sep 2021 05:43:58 -0700 (PDT)
-Received: from [192.168.42.238] (87-59-106-155-cable.dk.customer.tdc.net. [87.59.106.155])
-        by smtp.gmail.com with ESMTPSA id j1sm1592734lfr.248.2021.09.27.05.43.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Sep 2021 05:43:57 -0700 (PDT)
-From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
-X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
-Cc:     brouer@redhat.com,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Zvi Effron <zeffron@riotgames.com>,
-        Lorenz Bauer <lmb@cloudflare.com>,
-        Lorenzo Bianconi <lbianconi@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>
-Subject: Re: Redux: Backwards compatibility for XDP multi-buff
-To:     Jakub Kicinski <kuba@kernel.org>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vu?= =?UTF-8?Q?sen?= 
-        <toke@redhat.com>
-References: <87o88l3oc4.fsf@toke.dk>
- <CAC1LvL1xgFMjjE+3wHH79_9rumwjNqDAS2Yg2NpSvmewHsYScA@mail.gmail.com>
- <87ilyt3i0y.fsf@toke.dk>
- <CAADnVQKi_u6yZnsxEagNTv-XWXtLPpXwURJH0FnGFRgt6weiww@mail.gmail.com>
- <87czp13718.fsf@toke.dk>
- <20210921155118.439c0aa9@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <87mto41isy.fsf@toke.dk>
- <20210923064634.636ef48a@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-Message-ID: <7e47e065-f9b2-4b98-923d-94f5a9484a83@redhat.com>
-Date:   Mon, 27 Sep 2021 14:43:56 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S234103AbhI0NgY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 27 Sep 2021 09:36:24 -0400
+Received: from www62.your-server.de ([213.133.104.62]:47212 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234500AbhI0NgY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 27 Sep 2021 09:36:24 -0400
+Received: from sslproxy02.your-server.de ([78.47.166.47])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1mUqmH-0004tz-Hv; Mon, 27 Sep 2021 15:34:41 +0200
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1mUqmH-0001qc-9p; Mon, 27 Sep 2021 15:34:41 +0200
+Subject: Re: [PATCH bpf-next 4/4] bpf: export bpf_jit_current
+To:     Lorenz Bauer <lmb@cloudflare.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     kernel-team@cloudflare.com, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20210924095542.33697-1-lmb@cloudflare.com>
+ <20210924095542.33697-5-lmb@cloudflare.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <a076398b-f1da-c939-3c71-ac157ad96939@iogearbox.net>
+Date:   Mon, 27 Sep 2021 15:34:40 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <20210923064634.636ef48a@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20210924095542.33697-5-lmb@cloudflare.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.3/26305/Mon Sep 27 11:04:42 2021)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-
-On 23/09/2021 15.46, Jakub Kicinski wrote:
-> Let me make a general statement that we can't build large systems
-> without division of responsibilities. Device specific logic has to
-> be left to the driver. It's up to veth to apply its extra rules.
+On 9/24/21 11:55 AM, Lorenz Bauer wrote:
+> Expose bpf_jit_current as a read only value via sysctl.
 > 
-> As Zvi said, tho, this can be left for later. IMHO initial patches can
-> drop all mb frames on redirect in the core, so we can make progress.
+> Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
+> ---
+>   include/linux/filter.h     | 1 +
+>   kernel/bpf/core.c          | 3 +--
+>   net/core/sysctl_net_core.c | 7 +++++++
+>   3 files changed, 9 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/linux/filter.h b/include/linux/filter.h
+> index ef03ff34234d..b2143ad5ce00 100644
+> --- a/include/linux/filter.h
+> +++ b/include/linux/filter.h
+> @@ -1052,6 +1052,7 @@ extern int bpf_jit_harden;
+>   extern int bpf_jit_kallsyms;
+>   extern long bpf_jit_limit;
+>   extern long bpf_jit_limit_max;
+> +extern atomic_long_t bpf_jit_current;
+>   
+>   typedef void (*bpf_jit_fill_hole_t)(void *area, unsigned int size);
+>   
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index e844a2a4c99a..93f95e9ee8be 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -525,6 +525,7 @@ int bpf_jit_kallsyms __read_mostly = IS_BUILTIN(CONFIG_BPF_JIT_DEFAULT_ON);
+>   int bpf_jit_harden   __read_mostly;
+>   long bpf_jit_limit   __read_mostly;
+>   long bpf_jit_limit_max __read_mostly;
+> +atomic_long_t bpf_jit_current __read_mostly;
+>   
+>   static void
+>   bpf_prog_ksym_set_addr(struct bpf_prog *prog)
+> @@ -800,8 +801,6 @@ int bpf_jit_add_poke_descriptor(struct bpf_prog *prog,
+>   	return slot;
+>   }
+>   
+> -static atomic_long_t bpf_jit_current;
+> -
+>   /* Can be overridden by an arch's JIT compiler if it has a custom,
+>    * dedicated BPF backend memory area, or if neither of the two
+>    * below apply.
+> diff --git a/net/core/sysctl_net_core.c b/net/core/sysctl_net_core.c
+> index 5f88526ad61c..674aac163b84 100644
+> --- a/net/core/sysctl_net_core.c
+> +++ b/net/core/sysctl_net_core.c
+> @@ -421,6 +421,13 @@ static struct ctl_table net_core_table[] = {
+>   		.extra1		= &long_one,
+>   		.extra2		= &bpf_jit_limit_max,
+>   	},
+> +	{
+> +		.procname	= "bpf_jit_current",
+> +		.data		= &bpf_jit_current,
+> +		.maxlen		= sizeof(long),
+> +		.mode		= 0400,
+> +		.proc_handler	= proc_dolongvec_minmax_bpf_restricted,
 
-I agree that for *initial* patchset for REDIRECT (func calling 
-ndo_xdp_xmit) it can drop MB frames on redirect in the core, when the 
-drivers ndo_xdp_xmit doesn't support this.
-BUT only so we can make progress.
+Overall series looks good to me. The only nit I would have is that the above could (in theory)
+be subject to atomic_long_t vs long type confusion. I would rather prefer to have a small handler
+which properly reads out the atomic_long_t and then passes it onwards as a temporary/plain long
+to user space.
 
-As soon as possible (preferably in same kernel release) a follow-up 
-patchset should make a serious attempt at updating all drivers 
-ndo_xdp_xmit to support multi-buffer (MB).
+Thanks,
+Daniel
 
-As MB use the same/compatible layout as skb_shared_info, it should be a 
-fairly small effort to update drivers, for *transmitting* multi-buff. As 
-drivers already support this for normal SKBs.
-
-It will be a larger effort to support XDP multi-buff on RX, as often the 
-RX-loop need to be adjusted/reordered to "delay" calling XDP-prog until 
-all fragments have been "collected".  And MTU check adjusted.
-
-This imply that the driver net_device xdp_features need two feature bits 
-for this MB feature.
-IMHO it makes sense to detangle RX and TX, as IMHO we should allow MB 
-frames to be TX redirect out a driver that have an old non-MB aware 
-XDP-prog loaded.
-
---Jesper
+> +	},
+>   #endif
+>   	{
+>   		.procname	= "netdev_tstamp_prequeue",
+> 
 
