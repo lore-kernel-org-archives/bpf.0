@@ -2,101 +2,97 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B3388C433F5
-	for <bpf@archiver.kernel.org>; Tue, 28 Sep 2021 13:44:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E9B1BC433EF
+	for <bpf@archiver.kernel.org>; Tue, 28 Sep 2021 13:53:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 98EFA60FF2
-	for <bpf@archiver.kernel.org>; Tue, 28 Sep 2021 13:44:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CA69C611BD
+	for <bpf@archiver.kernel.org>; Tue, 28 Sep 2021 13:53:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240906AbhI1Nqg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 28 Sep 2021 09:46:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:31402 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233878AbhI1Nqf (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 28 Sep 2021 09:46:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1632836695;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1uDIYeK6IvFBGTTFBUuK5l1aEpXuys5Md5LPuKhoKjg=;
-        b=KnNFdEVATzNzJJuOCUcACpwz9ntNZJ8XJB5P5al0H/xLXAF0ZSGZZDtKtZp8xIgCthMt1a
-        JIjgTL5/ilsXjWTYreZr7K6SL+1NLrcVIwGpzVL8eW+dPZpWTQaWFZb3E4xu7rXeWtcUZO
-        ZrbJJB4eCsemTxrRVV5EFerDY7ScaVg=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-317-Okq4-cxXN9Gk9Hofk75Exw-1; Tue, 28 Sep 2021 09:44:54 -0400
-X-MC-Unique: Okq4-cxXN9Gk9Hofk75Exw-1
-Received: by mail-ed1-f72.google.com with SMTP id s18-20020a508d12000000b003da7a7161d5so6394932eds.8
-        for <bpf@vger.kernel.org>; Tue, 28 Sep 2021 06:44:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:in-reply-to:references:date
-         :message-id:mime-version:content-transfer-encoding;
-        bh=1uDIYeK6IvFBGTTFBUuK5l1aEpXuys5Md5LPuKhoKjg=;
-        b=FBoPpZGmE1SnPZVDw2JtOsmX4c64C6bVKKO4U/YwGGCTpz6TqrwgWulmm4WOA0pVyX
-         FjYDgdSsSQ/QikMYi0Sic/Qv9oBnzWIbsm8OfCiMw1Dzs2XaYw2vYW088jw6Vl6zysl9
-         uVIZOPtyeOeHm4RFXXVuKmFVXDYa0guAeaokazNT2Erigv3d49vpUvDev9SFi0b7nhnW
-         G3B0JF58JR9uTZdDCKo5ZbdMhPC03sGcDe+CZnWqtj/y0oiUkp5YspGjg8efDOUjblbO
-         wYvFTF5dkEBcikiAHMiP+UvC7zKLmQR7hd2ezaxGLjf1xcF4B/EU9wcuDbfCzwZTLTBL
-         2oNQ==
-X-Gm-Message-State: AOAM532dc8slCAuhlACfh7UL6rtiugzGzydpjjbNt9qS8yYFYEMPz4v1
-        nVu4y2G2GBGZfcjncwk8761RGVezoh9sYYa04Tl7LIy0UuT3VtXzvhDyeRYQNzQfW1UrkOQCpEC
-        vXuCBWtaZ5PXn
-X-Received: by 2002:a17:906:abcc:: with SMTP id kq12mr6760154ejb.107.1632836692403;
-        Tue, 28 Sep 2021 06:44:52 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzXqkRRZFHw+n6HoKSsUGXYApsiz4sOLe0LoHczA3PcnDKS1nIrFkKZ9PXo4zAyrhJVcBv9Hw==
-X-Received: by 2002:a17:906:abcc:: with SMTP id kq12mr6760130ejb.107.1632836692163;
-        Tue, 28 Sep 2021 06:44:52 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id o15sm10531925ejj.10.2021.09.28.06.44.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Sep 2021 06:44:51 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id E56FD18034A; Tue, 28 Sep 2021 15:44:49 +0200 (CEST)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
-Subject: Re: [PATCH bpf v2] samples: bpf: Fix vmlinux.h generation for XDP
- samples
-In-Reply-To: <20210928054608.1799021-1-memxor@gmail.com>
-References: <20210928054608.1799021-1-memxor@gmail.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Tue, 28 Sep 2021 15:44:49 +0200
-Message-ID: <874ka4ke5q.fsf@toke.dk>
+        id S241028AbhI1NzU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 28 Sep 2021 09:55:20 -0400
+Received: from szxga01-in.huawei.com ([45.249.212.187]:12960 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240973AbhI1NzT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 28 Sep 2021 09:55:19 -0400
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4HJgtC197PzVyql;
+        Tue, 28 Sep 2021 21:52:19 +0800 (CST)
+Received: from dggpeml500025.china.huawei.com (7.185.36.35) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.8; Tue, 28 Sep 2021 21:53:37 +0800
+Received: from huawei.com (10.175.124.27) by dggpeml500025.china.huawei.com
+ (7.185.36.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.8; Tue, 28 Sep
+ 2021 21:53:36 +0800
+From:   Hou Tao <houtao1@huawei.com>
+To:     Alexei Starovoitov <ast@kernel.org>
+CC:     Yonghong Song <yhs@fb.com>, Daniel Borkmann <daniel@iogearbox.net>,
+        "Andrii Nakryiko" <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <houtao1@huawei.com>
+Subject: [PATCH bpf-next v3 0/3] add support for writable bare tracepoint
+Date:   Tue, 28 Sep 2021 22:07:31 +0800
+Message-ID: <20210928140734.1274261-1-houtao1@huawei.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.124.27]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500025.china.huawei.com (7.185.36.35)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Kumar Kartikeya Dwivedi <memxor@gmail.com> writes:
+Hi,
 
-> Generate vmlinux.h only from the in-tree vmlinux, and remove enum
-> declarations that would cause a build failure in case of version
-> mismatches.
->
-> There are now two options when building the samples:
-> 1. Compile the kernel to use in-tree vmlinux for vmlinux.h
-> 2. Override VMLINUX_BTF for samples using something like this:
->    make VMLINUX_BTF=3D/sys/kernel/btf/vmlinux -C samples/bpf
->
-> This change was tested with relative builds, e.g. cases like:
->  * make O=3Dbuild -C samples/bpf
->  * make KBUILD_OUTPUT=3Dbuild -C samples/bpf
->  * make -C samples/bpf
->  * cd samples/bpf && make
->
-> When a suitable VMLINUX_BTF is not found, the following message is
-> printed:
-> /home/kkd/src/linux/samples/bpf/Makefile:333: *** Cannot find a vmlinux
-> for VMLINUX_BTF at any of "  ./vmlinux", build the kernel or set
-> VMLINUX_BTF variable.  Stop.
->
-> Cc: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
-> Fixes: 384b6b3bbf0d (samples: bpf: Add vmlinux.h generation support)
-> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+The patchset series supports writable context for bare tracepoint.
 
-Acked-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+The main idea comes from patchset "writable contexts for bpf raw
+tracepoints" [1], but it only supports normal tracepoint with
+associated trace event under tracefs. Now we have one use case
+in which we will add bare tracepoint in VFS layer, and update
+file::f_mode for specific files. The reason using bare tracepoint
+is that it doesn't form a ABI and we can change it freely. So
+add support for it in BPF.
+
+Comments are always welcome.
+
+[1]: https://lore.kernel.org/lkml/20190426184951.21812-1-mmullins@fb.com
+
+Change log:
+v3:
+  * use raw_tp.w instead of raw_tp_writable as section
+    name of writable tp
+  * use ASSERT_XXX() instead of CHECK()
+  * define a common macro for "/sys/kernel/bpf_testmod"
+
+v2: https://www.spinics.net/lists/bpf/msg46356.html 
+  * rebase on bpf-next tree
+  * address comments from Yonghong Song
+  * rename bpf_testmode_test_writable_ctx::ret as early_ret to reflect
+    its purpose better.
+
+v1: https://www.spinics.net/lists/bpf/msg46221.html
+
+Hou Tao (3):
+  bpf: support writable context for bare tracepoint
+  libbpf: support detecting and attaching of writable tracepoint program
+  bpf/selftests: add test for writable bare tracepoint
+
+ include/trace/bpf_probe.h                     | 19 +++++++---
+ tools/lib/bpf/libbpf.c                        |  4 +++
+ .../bpf/bpf_testmod/bpf_testmod-events.h      | 15 ++++++++
+ .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 10 ++++++
+ .../selftests/bpf/bpf_testmod/bpf_testmod.h   |  5 +++
+ .../selftests/bpf/prog_tests/module_attach.c  | 35 +++++++++++++++++++
+ .../selftests/bpf/progs/test_module_attach.c  | 14 ++++++++
+ tools/testing/selftests/bpf/test_progs.c      |  4 +--
+ tools/testing/selftests/bpf/test_progs.h      |  2 ++
+ 9 files changed, 102 insertions(+), 6 deletions(-)
+
+-- 
+2.29.2
 
