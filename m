@@ -2,232 +2,194 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 857C1C433F5
-	for <bpf@archiver.kernel.org>; Tue, 28 Sep 2021 16:56:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 54C27C433EF
+	for <bpf@archiver.kernel.org>; Tue, 28 Sep 2021 16:56:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6F1F76124B
-	for <bpf@archiver.kernel.org>; Tue, 28 Sep 2021 16:56:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 379EF61159
+	for <bpf@archiver.kernel.org>; Tue, 28 Sep 2021 16:56:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241923AbhI1Q6T convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Tue, 28 Sep 2021 12:58:19 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:11176 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S241925AbhI1Q6P (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 28 Sep 2021 12:58:15 -0400
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.1.2/8.16.1.2) with SMTP id 18SD7wlK010727
-        for <bpf@vger.kernel.org>; Tue, 28 Sep 2021 09:56:35 -0700
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0089730.ppops.net with ESMTP id 3bc3nj1vu4-16
+        id S241921AbhI1Q6U convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Tue, 28 Sep 2021 12:58:20 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:52842 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241934AbhI1Q6Q (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 28 Sep 2021 12:58:16 -0400
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18SAt4hQ006465
+        for <bpf@vger.kernel.org>; Tue, 28 Sep 2021 09:56:36 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 3bc1qgaw3r-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 28 Sep 2021 09:56:35 -0700
-Received: from intmgw001.05.prn6.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 28 Sep 2021 09:56:36 -0700
+Received: from intmgw001.46.prn1.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Tue, 28 Sep 2021 09:56:33 -0700
+ 15.1.2308.14; Tue, 28 Sep 2021 09:56:35 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id D3BC450F9F27; Tue, 28 Sep 2021 09:20:50 -0700 (PDT)
+        id 166EB50F9AC7; Tue, 28 Sep 2021 09:20:37 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
-        Dave Marchevsky <davemarchevsky@fb.com>
-Subject: [PATCH v4 bpf-next 06/10] libbpf: reduce reliance of attach_fns on sec_def internals
-Date:   Tue, 28 Sep 2021 09:19:42 -0700
-Message-ID: <20210928161946.2512801-7-andrii@kernel.org>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>
+Subject: [PATCH v4 bpf-next 00/10] libbpf: stricter BPF program section name handling
+Date:   Tue, 28 Sep 2021 09:19:36 -0700
+Message-ID: <20210928161946.2512801-1-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210928161946.2512801-1-andrii@kernel.org>
-References: <20210928161946.2512801-1-andrii@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-ORIG-GUID: Hi5tLn80g-XJk288OPU-tfGxm-HJbzy3
-X-Proofpoint-GUID: Hi5tLn80g-XJk288OPU-tfGxm-HJbzy3
+X-Proofpoint-ORIG-GUID: 8GuuuQsVpBnVFxQsbTQQLNy2KTnkTT73
+X-Proofpoint-GUID: 8GuuuQsVpBnVFxQsbTQQLNy2KTnkTT73
+Content-Transfer-Encoding: 8BIT
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
  definitions=2021-09-28_05,2021-09-28_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- priorityscore=1501 suspectscore=0 mlxscore=0 mlxlogscore=999 phishscore=0
- clxscore=1015 impostorscore=0 spamscore=0 bulkscore=0 adultscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2109230001 definitions=main-2109280099
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
+ suspectscore=0 spamscore=0 phishscore=0 bulkscore=0 clxscore=1015
+ mlxlogscore=999 mlxscore=0 priorityscore=1501 adultscore=0
+ lowpriorityscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2109230001 definitions=main-2109280099
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Move closer to not relying on bpf_sec_def internals that won't be part
-of public API, when pluggable SEC() handlers will be allowed. Drop
-pre-calculated prefix length, and in various helpers don't rely on this
-prefix length availability. Also minimize reliance on knowing
-bpf_sec_def's prefix for few places where section prefix shortcuts are
-supported (e.g., tp vs tracepoint, raw_tp vs raw_tracepoint).
+Implement opt-in stricter BPF program section name (SEC()) handling logic. For
+a lot of supported ELF section names, enforce exact section name match with no
+arbitrary characters added at the end. See patch #9 for more details.
 
-Given checking some string for having a given string-constant prefix is
-such a common operation and so annoying to be done with pure C code, add
-a small macro helper, str_has_pfx(), and reuse it throughout libbpf.c
-where prefix comparison is performed. With __builtin_constant_p() it's
-possible to have a convenient helper that checks some string for having
-a given prefix, where prefix is either string literal (or compile-time
-known string due to compiler optimization) or just a runtime string
-pointer, which is quite convenient and saves a lot of typing and string
-literal duplication.
+To allow this, patches #2 through #4 clean up and preventively fix selftests,
+normalizing existing SEC() usage across multiple selftests. While at it, those
+patches also reduce the amount of remaining bpf_object__find_program_by_title()
+uses, which should be completely removed soon, given it's an API with
+ambiguous semantics and will be deprecated and eventually removed in libbpf 1.0.
 
-Acked-by: Dave Marchevsky <davemarchevsky@fb.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- tools/lib/bpf/libbpf.c          | 41 ++++++++++++++++++---------------
- tools/lib/bpf/libbpf_internal.h |  7 ++++++
- 2 files changed, 30 insertions(+), 18 deletions(-)
+Patch #1 also introduces SEC("tc") as an alias for SEC("classifier"). "tc" is
+a better and less misleading name, so patch #3 replaces all classifier* uses
+with nice and short SEC("tc").
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index d4d56536dc4b..f87ffd4d7eab 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -226,7 +226,6 @@ typedef struct bpf_link *(*attach_fn_t)(const struct bpf_program *prog, long coo
- 
- struct bpf_sec_def {
- 	const char *sec;
--	size_t len;
- 	enum bpf_prog_type prog_type;
- 	enum bpf_attach_type expected_attach_type;
- 	bool is_exp_attach_type_optional;
-@@ -1671,7 +1670,7 @@ static int bpf_object__process_kconfig_line(struct bpf_object *obj,
- 	void *ext_val;
- 	__u64 num;
- 
--	if (strncmp(buf, "CONFIG_", 7))
-+	if (!str_has_pfx(buf, "CONFIG_"))
- 		return 0;
- 
- 	sep = strchr(buf, '=');
-@@ -2920,7 +2919,7 @@ static Elf_Data *elf_sec_data(const struct bpf_object *obj, Elf_Scn *scn)
- static bool is_sec_name_dwarf(const char *name)
- {
- 	/* approximation, but the actual list is too long */
--	return strncmp(name, ".debug_", sizeof(".debug_") - 1) == 0;
-+	return str_has_pfx(name, ".debug_");
- }
- 
- static bool ignore_elf_section(GElf_Shdr *hdr, const char *name)
-@@ -2942,7 +2941,7 @@ static bool ignore_elf_section(GElf_Shdr *hdr, const char *name)
- 	if (is_sec_name_dwarf(name))
- 		return true;
- 
--	if (strncmp(name, ".rel", sizeof(".rel") - 1) == 0) {
-+	if (str_has_pfx(name, ".rel")) {
- 		name += sizeof(".rel") - 1;
- 		/* DWARF section relocations */
- 		if (is_sec_name_dwarf(name))
-@@ -6891,8 +6890,7 @@ static int bpf_object__resolve_externs(struct bpf_object *obj,
- 			if (err)
- 				return err;
- 			pr_debug("extern (kcfg) %s=0x%x\n", ext->name, kver);
--		} else if (ext->type == EXT_KCFG &&
--			   strncmp(ext->name, "CONFIG_", 7) == 0) {
-+		} else if (ext->type == EXT_KCFG && str_has_pfx(ext->name, "CONFIG_")) {
- 			need_config = true;
- 		} else if (ext->type == EXT_KSYM) {
- 			if (ext->ksym.type_id)
-@@ -7956,7 +7954,6 @@ void bpf_program__set_expected_attach_type(struct bpf_program *prog,
- 			  attachable, attach_btf)			    \
- 	{								    \
- 		.sec = string,						    \
--		.len = sizeof(string) - 1,				    \
- 		.prog_type = ptype,					    \
- 		.expected_attach_type = eatype,				    \
- 		.is_exp_attach_type_optional = eatype_optional,		    \
-@@ -7987,7 +7984,6 @@ void bpf_program__set_expected_attach_type(struct bpf_program *prog,
- 
- #define SEC_DEF(sec_pfx, ptype, ...) {					    \
- 	.sec = sec_pfx,							    \
--	.len = sizeof(sec_pfx) - 1,					    \
- 	.prog_type = BPF_PROG_TYPE_##ptype,				    \
- 	.preload_fn = libbpf_preload_prog,				    \
- 	__VA_ARGS__							    \
-@@ -8162,10 +8158,8 @@ static const struct bpf_sec_def *find_sec_def(const char *sec_name)
- 	int i, n = ARRAY_SIZE(section_defs);
- 
- 	for (i = 0; i < n; i++) {
--		if (strncmp(sec_name,
--			    section_defs[i].sec, section_defs[i].len))
--			continue;
--		return &section_defs[i];
-+		if (str_has_pfx(sec_name, section_defs[i].sec))
-+			return &section_defs[i];
- 	}
- 	return NULL;
- }
-@@ -8519,7 +8513,7 @@ static int libbpf_find_attach_btf_id(struct bpf_program *prog, int *btf_obj_fd,
- 			prog->sec_name);
- 		return -ESRCH;
- 	}
--	attach_name = prog->sec_name + prog->sec_def->len;
-+	attach_name = prog->sec_name + strlen(prog->sec_def->sec);
- 
- 	/* BPF program's BTF ID */
- 	if (attach_prog_fd) {
-@@ -9479,8 +9473,11 @@ static struct bpf_link *attach_kprobe(const struct bpf_program *prog, long cooki
- 	char *func;
- 	int n, err;
- 
--	func_name = prog->sec_name + prog->sec_def->len;
--	opts.retprobe = strcmp(prog->sec_def->sec, "kretprobe/") == 0;
-+	opts.retprobe = str_has_pfx(prog->sec_name, "kretprobe/");
-+	if (opts.retprobe)
-+		func_name = prog->sec_name + sizeof("kretprobe/") - 1;
-+	else
-+		func_name = prog->sec_name + sizeof("kprobe/") - 1;
- 
- 	n = sscanf(func_name, "%m[a-zA-Z0-9_.]+%li", &func, &offset);
- 	if (n < 1) {
-@@ -9762,8 +9759,11 @@ static struct bpf_link *attach_tp(const struct bpf_program *prog, long cookie)
- 	if (!sec_name)
- 		return libbpf_err_ptr(-ENOMEM);
- 
--	/* extract "tp/<category>/<name>" */
--	tp_cat = sec_name + prog->sec_def->len;
-+	/* extract "tp/<category>/<name>" or "tracepoint/<category>/<name>" */
-+	if (str_has_pfx(prog->sec_name, "tp/"))
-+		tp_cat = sec_name + sizeof("tp/") - 1;
-+	else
-+		tp_cat = sec_name + sizeof("tracepoint/") - 1;
- 	tp_name = strchr(tp_cat, '/');
- 	if (!tp_name) {
- 		free(sec_name);
-@@ -9809,7 +9809,12 @@ struct bpf_link *bpf_program__attach_raw_tracepoint(const struct bpf_program *pr
- 
- static struct bpf_link *attach_raw_tp(const struct bpf_program *prog, long cookie)
- {
--	const char *tp_name = prog->sec_name + prog->sec_def->len;
-+	const char *tp_name;
-+
-+	if (str_has_pfx(prog->sec_name, "raw_tp/"))
-+		tp_name = prog->sec_name + sizeof("raw_tp/") - 1;
-+	else
-+		tp_name = prog->sec_name + sizeof("raw_tracepoint/") - 1;
- 
- 	return bpf_program__attach_raw_tracepoint(prog, tp_name);
- }
-diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
-index ceb0c98979bc..ec79400517d4 100644
---- a/tools/lib/bpf/libbpf_internal.h
-+++ b/tools/lib/bpf/libbpf_internal.h
-@@ -89,6 +89,13 @@
- 	(offsetof(TYPE, FIELD) + sizeof(((TYPE *)0)->FIELD))
- #endif
- 
-+/* Check whether a string `str` has prefix `pfx`, regardless if `pfx` is
-+ * a string literal known at compilation time or char * pointer known only at
-+ * runtime.
-+ */
-+#define str_has_pfx(str, pfx) \
-+	(strncmp(str, pfx, __builtin_constant_p(pfx) ? sizeof(pfx) - 1 : strlen(pfx)) == 0)
-+
- /* Symbol versioning is different between static and shared library.
-  * Properly versioned symbols are needed for shared library, but
-  * only the symbol of the new version is needed for static library.
+Last patch is also fixing "sk_lookup/" definition to not require and not allow
+extra "/blah" parts after it, which serve no meaning.
+
+All the other patches are gradual internal libbpf changes to:
+  - allow this optional strict logic for ELF section name handling;
+  - allow new use case (for now for "struct_ops", but that could be extended
+    to, say, freplace definitions), in which it can be used stand-alone to
+    specify just type (SEC("struct_ops")), or also accept extra parameters
+    which can be utilized by libbpf to either get more data or double-check
+    valid use (e.g., SEC("struct_ops/dctcp_init") to specify desired
+    struct_ops operation that is supposed to be implemented);
+  - get libbpf's internal logic ready to allow other libraries and
+    applications to specify their custom handlers for ELF section name for BPF
+    programs. All the pieces are in place, the only thing preventing making
+    this as public libbpf API is reliance on internal type for specifying BPF
+    program load attributes. The work is planned to revamp related low-level
+    libbpf APIs, at which point it will be possible to just re-use such new
+    types for coordination between libbpf and custom handlers.
+
+These changes are a part of libbpf 1.0 effort ([0]). They are also intended to
+be applied on top of the previous preparatory series [1], so currently CI will
+be failing to apply them to bpf-next until that patch set is landed. Once it
+is landed, kernel-patches daemon will automatically retest this patch set.
+
+  [0] https://github.com/libbpf/libbpf/wiki/Libbpf:-the-road-to-v1.0#stricter-and-more-uniform-bpf-program-section-name-sec-handling
+  [1] https://patchwork.kernel.org/project/netdevbpf/list/?series=547675&state=*
+
+v3->v4:
+  - replace SEC("classifier*") with SEC("tc") (Daniel);
+v2->v3:
+  - applied acks, addressed most feedback, added comments to new flags (Dave);
+v1->v2:
+  - rebase onto latest bpf-next and resolve merge conflicts w/ Dave's changes.
+
+Andrii Nakryiko (10):
+  libbpf: add "tc" SEC_DEF which is a better name for "classifier"
+  selftests/bpf: normalize XDP section names in selftests
+  selftests/bpf: switch SEC("classifier*") usage to a strict SEC("tc")
+  selftests/bpf: normalize all the rest SEC() uses
+  libbpf: refactor internal sec_def handling to enable pluggability
+  libbpf: reduce reliance of attach_fns on sec_def internals
+  libbpf: refactor ELF section handler definitions
+  libbpf: complete SEC() table unification for
+    BPF_APROG_SEC/BPF_EAPROG_SEC
+  libbpf: add opt-in strict BPF program section name handling logic
+  selftests/bpf: switch sk_lookup selftests to strict SEC("sk_lookup")
+    use
+
+ tools/lib/bpf/libbpf.c                        | 518 +++++++++---------
+ tools/lib/bpf/libbpf_internal.h               |   7 +
+ tools/lib/bpf/libbpf_legacy.h                 |   9 +
+ .../selftests/bpf/prog_tests/flow_dissector.c |   4 +-
+ .../bpf/prog_tests/reference_tracking.c       |  23 +-
+ .../selftests/bpf/prog_tests/sk_assign.c      |   2 +-
+ .../selftests/bpf/prog_tests/sockopt_multi.c  |  30 +-
+ .../selftests/bpf/prog_tests/tailcalls.c      |  58 +-
+ tools/testing/selftests/bpf/progs/bpf_flow.c  |   3 +-
+ .../bpf/progs/cg_storage_multi_isolated.c     |   4 +-
+ .../bpf/progs/cg_storage_multi_shared.c       |   4 +-
+ .../bpf/progs/for_each_array_map_elem.c       |   2 +-
+ .../bpf/progs/for_each_hash_map_elem.c        |   2 +-
+ .../selftests/bpf/progs/kfunc_call_test.c     |   4 +-
+ .../bpf/progs/kfunc_call_test_subprog.c       |   2 +-
+ .../testing/selftests/bpf/progs/skb_pkt_end.c |   2 +-
+ .../selftests/bpf/progs/sockopt_multi.c       |   5 +-
+ tools/testing/selftests/bpf/progs/tailcall1.c |   7 +-
+ tools/testing/selftests/bpf/progs/tailcall2.c |  23 +-
+ tools/testing/selftests/bpf/progs/tailcall3.c |   7 +-
+ tools/testing/selftests/bpf/progs/tailcall4.c |   7 +-
+ tools/testing/selftests/bpf/progs/tailcall5.c |   7 +-
+ tools/testing/selftests/bpf/progs/tailcall6.c |   6 +-
+ .../selftests/bpf/progs/tailcall_bpf2bpf1.c   |   7 +-
+ .../selftests/bpf/progs/tailcall_bpf2bpf2.c   |   7 +-
+ .../selftests/bpf/progs/tailcall_bpf2bpf3.c   |  11 +-
+ .../selftests/bpf/progs/tailcall_bpf2bpf4.c   |  15 +-
+ .../bpf/progs/test_btf_skc_cls_ingress.c      |   2 +-
+ .../selftests/bpf/progs/test_cgroup_link.c    |   4 +-
+ .../selftests/bpf/progs/test_check_mtu.c      |  12 +-
+ .../selftests/bpf/progs/test_cls_redirect.c   |   2 +-
+ .../selftests/bpf/progs/test_global_data.c    |   2 +-
+ .../selftests/bpf/progs/test_global_func1.c   |   2 +-
+ .../selftests/bpf/progs/test_global_func3.c   |   2 +-
+ .../selftests/bpf/progs/test_global_func5.c   |   2 +-
+ .../selftests/bpf/progs/test_global_func6.c   |   2 +-
+ .../selftests/bpf/progs/test_global_func7.c   |   2 +-
+ .../selftests/bpf/progs/test_map_in_map.c     |   2 +-
+ .../bpf/progs/test_misc_tcp_hdr_options.c     |   2 +-
+ .../selftests/bpf/progs/test_pkt_access.c     |   2 +-
+ .../selftests/bpf/progs/test_pkt_md_access.c  |   4 +-
+ .../selftests/bpf/progs/test_sk_assign.c      |   3 +-
+ .../selftests/bpf/progs/test_sk_lookup.c      |  44 +-
+ .../selftests/bpf/progs/test_sk_lookup_kern.c |  37 +-
+ .../selftests/bpf/progs/test_skb_helpers.c    |   2 +-
+ .../selftests/bpf/progs/test_sockmap_listen.c |   2 +-
+ .../progs/test_sockmap_skb_verdict_attach.c   |   2 +-
+ .../selftests/bpf/progs/test_sockmap_update.c |   2 +-
+ .../testing/selftests/bpf/progs/test_tc_bpf.c |   2 +-
+ .../selftests/bpf/progs/test_tc_neigh.c       |   6 +-
+ .../selftests/bpf/progs/test_tc_neigh_fib.c   |   6 +-
+ .../selftests/bpf/progs/test_tc_peer.c        |  10 +-
+ .../bpf/progs/test_tcp_check_syncookie_kern.c |   4 +-
+ .../bpf/progs/test_tcp_hdr_options.c          |   2 +-
+ tools/testing/selftests/bpf/progs/test_xdp.c  |   2 +-
+ .../bpf/progs/test_xdp_adjust_tail_grow.c     |   2 +-
+ .../bpf/progs/test_xdp_adjust_tail_shrink.c   |   4 +-
+ .../bpf/progs/test_xdp_devmap_helpers.c       |   2 +-
+ .../selftests/bpf/progs/test_xdp_link.c       |   2 +-
+ .../selftests/bpf/progs/test_xdp_loop.c       |   2 +-
+ .../selftests/bpf/progs/test_xdp_noinline.c   |   4 +-
+ .../bpf/progs/test_xdp_with_cpumap_helpers.c  |   4 +-
+ .../bpf/progs/test_xdp_with_devmap_helpers.c  |   4 +-
+ tools/testing/selftests/bpf/progs/xdp_dummy.c |   2 +-
+ .../bpf/progs/xdp_redirect_multi_kern.c       |   4 +-
+ .../testing/selftests/bpf/progs/xdping_kern.c |   4 +-
+ .../selftests/bpf/test_tcp_check_syncookie.sh |   4 +-
+ .../selftests/bpf/test_xdp_redirect.sh        |   4 +-
+ .../selftests/bpf/test_xdp_redirect_multi.sh  |   2 +-
+ tools/testing/selftests/bpf/test_xdp_veth.sh  |   4 +-
+ tools/testing/selftests/bpf/xdping.c          |   5 +-
+ 71 files changed, 496 insertions(+), 499 deletions(-)
+
 -- 
 2.30.2
 
