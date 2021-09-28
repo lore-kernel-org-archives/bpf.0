@@ -2,55 +2,55 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 92184C433F5
-	for <bpf@archiver.kernel.org>; Tue, 28 Sep 2021 16:55:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 857C1C433F5
+	for <bpf@archiver.kernel.org>; Tue, 28 Sep 2021 16:56:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 700E4611C7
-	for <bpf@archiver.kernel.org>; Tue, 28 Sep 2021 16:55:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6F1F76124B
+	for <bpf@archiver.kernel.org>; Tue, 28 Sep 2021 16:56:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241903AbhI1Q5e convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Tue, 28 Sep 2021 12:57:34 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:23298 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241894AbhI1Q5Z (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 28 Sep 2021 12:57:25 -0400
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18SA3jKO027929
-        for <bpf@vger.kernel.org>; Tue, 28 Sep 2021 09:55:45 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 3bbu82vxum-19
+        id S241923AbhI1Q6T convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Tue, 28 Sep 2021 12:58:19 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:11176 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S241925AbhI1Q6P (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 28 Sep 2021 12:58:15 -0400
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.1.2/8.16.1.2) with SMTP id 18SD7wlK010727
+        for <bpf@vger.kernel.org>; Tue, 28 Sep 2021 09:56:35 -0700
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by m0089730.ppops.net with ESMTP id 3bc3nj1vu4-16
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 28 Sep 2021 09:55:45 -0700
-Received: from intmgw001.27.prn2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 28 Sep 2021 09:56:35 -0700
+Received: from intmgw001.05.prn6.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Tue, 28 Sep 2021 09:55:38 -0700
+ 15.1.2308.14; Tue, 28 Sep 2021 09:56:33 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 10BA750F9056; Mon, 27 Sep 2021 23:20:48 -0700 (PDT)
+        id D3BC450F9F27; Tue, 28 Sep 2021 09:20:50 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
         Dave Marchevsky <davemarchevsky@fb.com>
 Subject: [PATCH v4 bpf-next 06/10] libbpf: reduce reliance of attach_fns on sec_def internals
-Date:   Mon, 27 Sep 2021 23:20:30 -0700
-Message-ID: <20210928062034.1800660-7-andrii@kernel.org>
+Date:   Tue, 28 Sep 2021 09:19:42 -0700
+Message-ID: <20210928161946.2512801-7-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210928062034.1800660-1-andrii@kernel.org>
-References: <20210928062034.1800660-1-andrii@kernel.org>
+In-Reply-To: <20210928161946.2512801-1-andrii@kernel.org>
+References: <20210928161946.2512801-1-andrii@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-GUID: 0E2AMWnAiMwJkWSfLgWsJDR-tx--O5E6
-X-Proofpoint-ORIG-GUID: 0E2AMWnAiMwJkWSfLgWsJDR-tx--O5E6
+X-Proofpoint-ORIG-GUID: Hi5tLn80g-XJk288OPU-tfGxm-HJbzy3
+X-Proofpoint-GUID: Hi5tLn80g-XJk288OPU-tfGxm-HJbzy3
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
  definitions=2021-09-28_05,2021-09-28_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
- suspectscore=0 impostorscore=0 mlxlogscore=999 bulkscore=0 adultscore=0
- lowpriorityscore=0 clxscore=1034 mlxscore=0 spamscore=0 priorityscore=1501
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ priorityscore=1501 suspectscore=0 mlxscore=0 mlxlogscore=999 phishscore=0
+ clxscore=1015 impostorscore=0 spamscore=0 bulkscore=0 adultscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2109230001 definitions=main-2109280099
 X-FB-Internal: deliver
 Precedence: bulk
