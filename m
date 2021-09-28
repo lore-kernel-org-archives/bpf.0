@@ -2,38 +2,37 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8225AC433EF
-	for <bpf@archiver.kernel.org>; Tue, 28 Sep 2021 16:57:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D3B3C433EF
+	for <bpf@archiver.kernel.org>; Tue, 28 Sep 2021 16:57:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6328261262
-	for <bpf@archiver.kernel.org>; Tue, 28 Sep 2021 16:57:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 595B761262
+	for <bpf@archiver.kernel.org>; Tue, 28 Sep 2021 16:57:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241874AbhI1Q7M convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Tue, 28 Sep 2021 12:59:12 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:49546 "EHLO
+        id S241933AbhI1Q7T convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Tue, 28 Sep 2021 12:59:19 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:55152 "EHLO
         mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240975AbhI1Q7M (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 28 Sep 2021 12:59:12 -0400
+        by vger.kernel.org with ESMTP id S240975AbhI1Q7S (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 28 Sep 2021 12:59:18 -0400
 Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18SBJhuo026365
-        for <bpf@vger.kernel.org>; Tue, 28 Sep 2021 09:57:32 -0700
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18SBK3hF026677
+        for <bpf@vger.kernel.org>; Tue, 28 Sep 2021 09:57:38 -0700
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 3bc22wtkee-12
+        by mx0a-00082601.pphosted.com with ESMTP id 3bc22wtkeb-13
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 28 Sep 2021 09:57:32 -0700
-Received: from intmgw002.46.prn1.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 28 Sep 2021 09:57:38 -0700
+Received: from intmgw001.27.prn2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Tue, 28 Sep 2021 09:56:37 -0700
+ 15.1.2308.14; Tue, 28 Sep 2021 09:56:35 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 34EE550F9D5F; Tue, 28 Sep 2021 09:20:48 -0700 (PDT)
+        id 9E9B850F9C99; Tue, 28 Sep 2021 09:20:44 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
-        Dave Marchevsky <davemarchevsky@fb.com>
-Subject: [PATCH v4 bpf-next 05/10] libbpf: refactor internal sec_def handling to enable pluggability
-Date:   Tue, 28 Sep 2021 09:19:41 -0700
-Message-ID: <20210928161946.2512801-6-andrii@kernel.org>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>
+Subject: [PATCH v4 bpf-next 03/10] selftests/bpf: switch SEC("classifier*") usage to a strict SEC("tc")
+Date:   Tue, 28 Sep 2021 09:19:39 -0700
+Message-ID: <20210928161946.2512801-4-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210928161946.2512801-1-andrii@kernel.org>
 References: <20210928161946.2512801-1-andrii@kernel.org>
@@ -42,8 +41,8 @@ Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-GUID: emR7ghalkNJeWh6_fdFXDA5vDR6_MNpd
-X-Proofpoint-ORIG-GUID: emR7ghalkNJeWh6_fdFXDA5vDR6_MNpd
+X-Proofpoint-GUID: HBVpe6GtqUfpgwKWLI2BgjK8NkkyfTeS
+X-Proofpoint-ORIG-GUID: HBVpe6GtqUfpgwKWLI2BgjK8NkkyfTeS
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
  definitions=2021-09-28_05,2021-09-28_01,2020-04-07_01
@@ -57,331 +56,1246 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Refactor internals of libbpf to allow adding custom SEC() handling logic
-easily from outside of libbpf. To that effect, each SEC()-handling
-registration sets mandatory program type/expected attach type for
-a given prefix and can provide three callbacks called at different
-points of BPF program lifetime:
+Convert all SEC("classifier*") uses to a new and strict SEC("tc")
+section name. In reference_tracking selftests switch from ambiguous
+searching by program title (section name) to non-ambiguous searching by
+name in some selftests, getting closer to completely removing
+bpf_object__find_program_by_title().
 
-  - init callback for right after bpf_program is initialized and
-  prog_type/expected_attach_type is set. This happens during
-  bpf_object__open() step, close to the very end of constructing
-  bpf_object, so all the libbpf APIs for querying and updating
-  bpf_program properties should be available;
-
-  - pre-load callback is called right before BPF_PROG_LOAD command is
-  called in the kernel. This callbacks has ability to set both
-  bpf_program properties, as well as program load attributes, overriding
-  and augmenting the standard libbpf handling of them;
-
-  - optional auto-attach callback, which makes a given SEC() handler
-  support auto-attachment of a BPF program through bpf_program__attach()
-  API and/or BPF skeletons <skel>__attach() method.
-
-Each callbacks gets a `long cookie` parameter passed in, which is
-specified during SEC() handling. This can be used by callbacks to lookup
-whatever additional information is necessary.
-
-This is not yet completely ready to be exposed to the outside world,
-mainly due to non-public nature of struct bpf_prog_load_params. Instead
-of making it part of public API, we'll wait until the planned low-level
-libbpf API improvements for BPF_PROG_LOAD and other typical bpf()
-syscall APIs, at which point we'll have a public, probably OPTS-based,
-way to fully specify BPF program load parameters, which will be used as
-an interface for custom pre-load callbacks.
-
-But this change itself is already a good first step to unify the BPF
-program hanling logic even within the libbpf itself. As one example, all
-the extra per-program type handling (sleepable bit, attach_btf_id
-resolution, unsetting optional expected attach type) is now more obvious
-and is gathered in one place.
-
-Acked-by: Dave Marchevsky <davemarchevsky@fb.com>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/lib/bpf/libbpf.c | 129 +++++++++++++++++++++++++++--------------
- 1 file changed, 87 insertions(+), 42 deletions(-)
+ .../bpf/prog_tests/reference_tracking.c       | 23 ++++----
+ .../selftests/bpf/prog_tests/sk_assign.c      |  2 +-
+ .../selftests/bpf/prog_tests/tailcalls.c      | 58 +++++++++----------
+ .../bpf/progs/for_each_array_map_elem.c       |  2 +-
+ .../bpf/progs/for_each_hash_map_elem.c        |  2 +-
+ .../selftests/bpf/progs/kfunc_call_test.c     |  4 +-
+ .../bpf/progs/kfunc_call_test_subprog.c       |  2 +-
+ .../testing/selftests/bpf/progs/skb_pkt_end.c |  2 +-
+ tools/testing/selftests/bpf/progs/tailcall1.c |  7 +--
+ tools/testing/selftests/bpf/progs/tailcall2.c | 23 ++++----
+ tools/testing/selftests/bpf/progs/tailcall3.c |  7 +--
+ tools/testing/selftests/bpf/progs/tailcall4.c |  7 +--
+ tools/testing/selftests/bpf/progs/tailcall5.c |  7 +--
+ tools/testing/selftests/bpf/progs/tailcall6.c |  6 +-
+ .../selftests/bpf/progs/tailcall_bpf2bpf1.c   |  7 +--
+ .../selftests/bpf/progs/tailcall_bpf2bpf2.c   |  7 +--
+ .../selftests/bpf/progs/tailcall_bpf2bpf3.c   | 11 ++--
+ .../selftests/bpf/progs/tailcall_bpf2bpf4.c   | 15 +++--
+ .../bpf/progs/test_btf_skc_cls_ingress.c      |  2 +-
+ .../selftests/bpf/progs/test_check_mtu.c      | 12 ++--
+ .../selftests/bpf/progs/test_cls_redirect.c   |  2 +-
+ .../selftests/bpf/progs/test_global_data.c    |  2 +-
+ .../selftests/bpf/progs/test_global_func1.c   |  2 +-
+ .../selftests/bpf/progs/test_global_func3.c   |  2 +-
+ .../selftests/bpf/progs/test_global_func5.c   |  2 +-
+ .../selftests/bpf/progs/test_global_func6.c   |  2 +-
+ .../selftests/bpf/progs/test_global_func7.c   |  2 +-
+ .../selftests/bpf/progs/test_pkt_access.c     |  2 +-
+ .../selftests/bpf/progs/test_pkt_md_access.c  |  4 +-
+ .../selftests/bpf/progs/test_sk_assign.c      |  3 +-
+ .../selftests/bpf/progs/test_sk_lookup_kern.c | 37 ++++++------
+ .../selftests/bpf/progs/test_skb_helpers.c    |  2 +-
+ .../selftests/bpf/progs/test_sockmap_update.c |  2 +-
+ .../testing/selftests/bpf/progs/test_tc_bpf.c |  2 +-
+ .../selftests/bpf/progs/test_tc_neigh.c       |  6 +-
+ .../selftests/bpf/progs/test_tc_neigh_fib.c   |  6 +-
+ .../selftests/bpf/progs/test_tc_peer.c        | 10 ++--
+ .../bpf/progs/test_tcp_check_syncookie_kern.c |  2 +-
+ .../selftests/bpf/test_tcp_check_syncookie.sh |  2 +-
+ 39 files changed, 141 insertions(+), 157 deletions(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 0bcd0a4c867a..d4d56536dc4b 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -220,7 +220,9 @@ struct reloc_desc {
+diff --git a/tools/testing/selftests/bpf/prog_tests/reference_tracking.c b/tools/testing/selftests/bpf/prog_tests/reference_tracking.c
+index ded2dc8ddd79..873323fb18ba 100644
+--- a/tools/testing/selftests/bpf/prog_tests/reference_tracking.c
++++ b/tools/testing/selftests/bpf/prog_tests/reference_tracking.c
+@@ -2,14 +2,14 @@
+ #include <test_progs.h>
  
- struct bpf_sec_def;
- 
--typedef struct bpf_link *(*attach_fn_t)(const struct bpf_program *prog);
-+typedef int (*init_fn_t)(struct bpf_program *prog, long cookie);
-+typedef int (*preload_fn_t)(struct bpf_program *prog, struct bpf_prog_load_params *attr, long cookie);
-+typedef struct bpf_link *(*attach_fn_t)(const struct bpf_program *prog, long cookie);
- 
- struct bpf_sec_def {
- 	const char *sec;
-@@ -231,7 +233,11 @@ struct bpf_sec_def {
- 	bool is_attachable;
- 	bool is_attach_btf;
- 	bool is_sleepable;
-+
-+	init_fn_t init_fn;
-+	preload_fn_t preload_fn;
- 	attach_fn_t attach_fn;
-+	long cookie;
- };
- 
- /*
-@@ -6095,6 +6101,44 @@ static int bpf_object__sanitize_prog(struct bpf_object *obj, struct bpf_program
- 	return 0;
- }
- 
-+static int libbpf_find_attach_btf_id(struct bpf_program *prog, int *btf_obj_fd, int *btf_type_id);
-+
-+/* this is called as prog->sec_def->preload_fn for libbpf-supported sec_defs */
-+static int libbpf_preload_prog(struct bpf_program *prog,
-+			       struct bpf_prog_load_params *attr, long cookie)
-+{
-+	/* old kernels might not support specifying expected_attach_type */
-+	if (prog->sec_def->is_exp_attach_type_optional &&
-+	    !kernel_supports(prog->obj, FEAT_EXP_ATTACH_TYPE))
-+		attr->expected_attach_type = 0;
-+
-+	if (prog->sec_def->is_sleepable)
-+		attr->prog_flags |= BPF_F_SLEEPABLE;
-+
-+	if ((prog->type == BPF_PROG_TYPE_TRACING ||
-+	     prog->type == BPF_PROG_TYPE_LSM ||
-+	     prog->type == BPF_PROG_TYPE_EXT) && !prog->attach_btf_id) {
-+		int btf_obj_fd = 0, btf_type_id = 0, err;
-+
-+		err = libbpf_find_attach_btf_id(prog, &btf_obj_fd, &btf_type_id);
-+		if (err)
-+			return err;
-+
-+		/* cache resolved BTF FD and BTF type ID in the prog */
-+		prog->attach_btf_obj_fd = btf_obj_fd;
-+		prog->attach_btf_id = btf_type_id;
-+
-+		/* but by now libbpf common logic is not utilizing
-+		 * prog->atach_btf_obj_fd/prog->attach_btf_id anymore because
-+		 * this callback is called after attrs were populated by
-+		 * libbpf, so this callback has to update attr explicitly here
-+		 */
-+		attr->attach_btf_obj_fd = btf_obj_fd;
-+		attr->attach_btf_id = btf_type_id;
-+	}
-+	return 0;
-+}
-+
- static int
- load_program(struct bpf_program *prog, struct bpf_insn *insns, int insns_cnt,
- 	     char *license, __u32 kern_version, int *pfd)
-@@ -6103,7 +6147,7 @@ load_program(struct bpf_program *prog, struct bpf_insn *insns, int insns_cnt,
- 	char *cp, errmsg[STRERR_BUFSIZE];
- 	size_t log_buf_size = 0;
- 	char *log_buf = NULL;
--	int btf_fd, ret;
-+	int btf_fd, ret, err;
- 
- 	if (prog->type == BPF_PROG_TYPE_UNSPEC) {
- 		/*
-@@ -6119,22 +6163,15 @@ load_program(struct bpf_program *prog, struct bpf_insn *insns, int insns_cnt,
- 		return -EINVAL;
- 
- 	load_attr.prog_type = prog->type;
--	/* old kernels might not support specifying expected_attach_type */
--	if (!kernel_supports(prog->obj, FEAT_EXP_ATTACH_TYPE) && prog->sec_def &&
--	    prog->sec_def->is_exp_attach_type_optional)
--		load_attr.expected_attach_type = 0;
--	else
--		load_attr.expected_attach_type = prog->expected_attach_type;
-+	load_attr.expected_attach_type = prog->expected_attach_type;
- 	if (kernel_supports(prog->obj, FEAT_PROG_NAME))
- 		load_attr.name = prog->name;
- 	load_attr.insns = insns;
- 	load_attr.insn_cnt = insns_cnt;
- 	load_attr.license = license;
- 	load_attr.attach_btf_id = prog->attach_btf_id;
--	if (prog->attach_prog_fd)
--		load_attr.attach_prog_fd = prog->attach_prog_fd;
--	else
--		load_attr.attach_btf_obj_fd = prog->attach_btf_obj_fd;
-+	load_attr.attach_prog_fd = prog->attach_prog_fd;
-+	load_attr.attach_btf_obj_fd = prog->attach_btf_obj_fd;
- 	load_attr.attach_btf_id = prog->attach_btf_id;
- 	load_attr.kern_version = kern_version;
- 	load_attr.prog_ifindex = prog->prog_ifindex;
-@@ -6153,6 +6190,16 @@ load_program(struct bpf_program *prog, struct bpf_insn *insns, int insns_cnt,
- 	load_attr.log_level = prog->log_level;
- 	load_attr.prog_flags = prog->prog_flags;
- 
-+	/* adjust load_attr if sec_def provides custom preload callback */
-+	if (prog->sec_def && prog->sec_def->preload_fn) {
-+		err = prog->sec_def->preload_fn(prog, &load_attr, prog->sec_def->cookie);
-+		if (err < 0) {
-+			pr_warn("prog '%s': failed to prepare load attributes: %d\n",
-+				prog->name, err);
-+			return err;
-+		}
-+	}
-+
- 	if (prog->obj->gen_loader) {
- 		bpf_gen__prog_load(prog->obj->gen_loader, &load_attr,
- 				   prog - prog->obj->programs);
-@@ -6268,8 +6315,6 @@ static int bpf_program__record_externs(struct bpf_program *prog)
- 	return 0;
- }
- 
--static int libbpf_find_attach_btf_id(struct bpf_program *prog, int *btf_obj_fd, int *btf_type_id);
--
- int bpf_program__load(struct bpf_program *prog, char *license, __u32 kern_ver)
- {
- 	int err = 0, fd, i;
-@@ -6279,19 +6324,6 @@ int bpf_program__load(struct bpf_program *prog, char *license, __u32 kern_ver)
- 		return libbpf_err(-EINVAL);
- 	}
- 
--	if ((prog->type == BPF_PROG_TYPE_TRACING ||
--	     prog->type == BPF_PROG_TYPE_LSM ||
--	     prog->type == BPF_PROG_TYPE_EXT) && !prog->attach_btf_id) {
--		int btf_obj_fd = 0, btf_type_id = 0;
--
--		err = libbpf_find_attach_btf_id(prog, &btf_obj_fd, &btf_type_id);
--		if (err)
--			return libbpf_err(err);
--
--		prog->attach_btf_obj_fd = btf_obj_fd;
--		prog->attach_btf_id = btf_type_id;
--	}
--
- 	if (prog->instances.nr < 0 || !prog->instances.fds) {
- 		if (prog->preprocessor) {
- 			pr_warn("Internal error: can't load program '%s'\n",
-@@ -6401,6 +6433,7 @@ static const struct bpf_sec_def *find_sec_def(const char *sec_name);
- static int bpf_object_init_progs(struct bpf_object *obj, const struct bpf_object_open_opts *opts)
+ static void toggle_object_autoload_progs(const struct bpf_object *obj,
+-					 const char *title_load)
++					 const char *name_load)
  {
  	struct bpf_program *prog;
-+	int err;
  
  	bpf_object__for_each_program(prog, obj) {
- 		prog->sec_def = find_sec_def(prog->sec_name);
-@@ -6411,8 +6444,6 @@ static int bpf_object_init_progs(struct bpf_object *obj, const struct bpf_object
+-		const char *title = bpf_program__section_name(prog);
++		const char *name = bpf_program__name(prog);
+ 
+-		if (!strcmp(title_load, title))
++		if (!strcmp(name_load, name))
+ 			bpf_program__set_autoload(prog, true);
+ 		else
+ 			bpf_program__set_autoload(prog, false);
+@@ -39,23 +39,19 @@ void test_reference_tracking(void)
+ 		goto cleanup;
+ 
+ 	bpf_object__for_each_program(prog, obj_iter) {
+-		const char *title;
++		const char *name;
+ 
+-		/* Ignore .text sections */
+-		title = bpf_program__section_name(prog);
+-		if (strstr(title, ".text") != NULL)
+-			continue;
+-
+-		if (!test__start_subtest(title))
++		name = bpf_program__name(prog);
++		if (!test__start_subtest(name))
  			continue;
+ 
+ 		obj = bpf_object__open_file(file, &open_opts);
+ 		if (!ASSERT_OK_PTR(obj, "obj_open_file"))
+ 			goto cleanup;
+ 
+-		toggle_object_autoload_progs(obj, title);
++		toggle_object_autoload_progs(obj, name);
+ 		/* Expect verifier failure if test name has 'err' */
+-		if (strstr(title, "err_") != NULL) {
++		if (strncmp(name, "err_", sizeof("err_") - 1) == 0) {
+ 			libbpf_print_fn_t old_print_fn;
+ 
+ 			old_print_fn = libbpf_set_print(NULL);
+@@ -64,7 +60,8 @@ void test_reference_tracking(void)
+ 		} else {
+ 			err = bpf_object__load(obj);
  		}
- 
--		if (prog->sec_def->is_sleepable)
--			prog->prog_flags |= BPF_F_SLEEPABLE;
- 		bpf_program__set_type(prog, prog->sec_def->prog_type);
- 		bpf_program__set_expected_attach_type(prog, prog->sec_def->expected_attach_type);
- 
-@@ -6422,6 +6453,18 @@ static int bpf_object_init_progs(struct bpf_object *obj, const struct bpf_object
- 		    prog->sec_def->prog_type == BPF_PROG_TYPE_EXT)
- 			prog->attach_prog_fd = OPTS_GET(opts, attach_prog_fd, 0);
- #pragma GCC diagnostic pop
+-		CHECK(err, title, "\n");
++		ASSERT_OK(err, name);
 +
-+		/* sec_def can have custom callback which should be called
-+		 * after bpf_program is initialized to adjust its properties
-+		 */
-+		if (prog->sec_def->init_fn) {
-+			err = prog->sec_def->init_fn(prog, prog->sec_def->cookie);
-+			if (err < 0) {
-+				pr_warn("prog '%s': failed to initialize: %d\n",
-+					prog->name, err);
-+				return err;
-+			}
-+		}
+ 		bpf_object__close(obj);
+ 		obj = NULL;
  	}
+diff --git a/tools/testing/selftests/bpf/prog_tests/sk_assign.c b/tools/testing/selftests/bpf/prog_tests/sk_assign.c
+index 3a469099f30d..1d272e05188e 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sk_assign.c
++++ b/tools/testing/selftests/bpf/prog_tests/sk_assign.c
+@@ -48,7 +48,7 @@ configure_stack(void)
+ 		return false;
+ 	sprintf(tc_cmd, "%s %s %s %s", "tc filter add dev lo ingress bpf",
+ 		       "direct-action object-file ./test_sk_assign.o",
+-		       "section classifier/sk_assign_test",
++		       "section tc",
+ 		       (env.verbosity < VERBOSE_VERY) ? " 2>/dev/null" : "verbose");
+ 	if (CHECK(system(tc_cmd), "BPF load failed;",
+ 		  "run with -vv for more info\n"))
+diff --git a/tools/testing/selftests/bpf/prog_tests/tailcalls.c b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
+index 7bf3a7a97d7b..9825f1f7bfcc 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tailcalls.c
++++ b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
+@@ -21,7 +21,7 @@ static void test_tailcall_1(void)
+ 	if (CHECK_FAIL(err))
+ 		return;
  
+-	prog = bpf_object__find_program_by_title(obj, "classifier");
++	prog = bpf_object__find_program_by_name(obj, "entry");
+ 	if (CHECK_FAIL(!prog))
+ 		goto out;
+ 
+@@ -38,9 +38,9 @@ static void test_tailcall_1(void)
+ 		goto out;
+ 
+ 	for (i = 0; i < bpf_map__def(prog_array)->max_entries; i++) {
+-		snprintf(prog_name, sizeof(prog_name), "classifier/%i", i);
++		snprintf(prog_name, sizeof(prog_name), "classifier_%d", i);
+ 
+-		prog = bpf_object__find_program_by_title(obj, prog_name);
++		prog = bpf_object__find_program_by_name(obj, prog_name);
+ 		if (CHECK_FAIL(!prog))
+ 			goto out;
+ 
+@@ -70,9 +70,9 @@ static void test_tailcall_1(void)
+ 	      err, errno, retval);
+ 
+ 	for (i = 0; i < bpf_map__def(prog_array)->max_entries; i++) {
+-		snprintf(prog_name, sizeof(prog_name), "classifier/%i", i);
++		snprintf(prog_name, sizeof(prog_name), "classifier_%d", i);
+ 
+-		prog = bpf_object__find_program_by_title(obj, prog_name);
++		prog = bpf_object__find_program_by_name(obj, prog_name);
+ 		if (CHECK_FAIL(!prog))
+ 			goto out;
+ 
+@@ -92,9 +92,9 @@ static void test_tailcall_1(void)
+ 
+ 	for (i = 0; i < bpf_map__def(prog_array)->max_entries; i++) {
+ 		j = bpf_map__def(prog_array)->max_entries - 1 - i;
+-		snprintf(prog_name, sizeof(prog_name), "classifier/%i", j);
++		snprintf(prog_name, sizeof(prog_name), "classifier_%d", j);
+ 
+-		prog = bpf_object__find_program_by_title(obj, prog_name);
++		prog = bpf_object__find_program_by_name(obj, prog_name);
+ 		if (CHECK_FAIL(!prog))
+ 			goto out;
+ 
+@@ -159,7 +159,7 @@ static void test_tailcall_2(void)
+ 	if (CHECK_FAIL(err))
+ 		return;
+ 
+-	prog = bpf_object__find_program_by_title(obj, "classifier");
++	prog = bpf_object__find_program_by_name(obj, "entry");
+ 	if (CHECK_FAIL(!prog))
+ 		goto out;
+ 
+@@ -176,9 +176,9 @@ static void test_tailcall_2(void)
+ 		goto out;
+ 
+ 	for (i = 0; i < bpf_map__def(prog_array)->max_entries; i++) {
+-		snprintf(prog_name, sizeof(prog_name), "classifier/%i", i);
++		snprintf(prog_name, sizeof(prog_name), "classifier_%d", i);
+ 
+-		prog = bpf_object__find_program_by_title(obj, prog_name);
++		prog = bpf_object__find_program_by_name(obj, prog_name);
+ 		if (CHECK_FAIL(!prog))
+ 			goto out;
+ 
+@@ -233,7 +233,7 @@ static void test_tailcall_count(const char *which)
+ 	if (CHECK_FAIL(err))
+ 		return;
+ 
+-	prog = bpf_object__find_program_by_title(obj, "classifier");
++	prog = bpf_object__find_program_by_name(obj, "entry");
+ 	if (CHECK_FAIL(!prog))
+ 		goto out;
+ 
+@@ -249,7 +249,7 @@ static void test_tailcall_count(const char *which)
+ 	if (CHECK_FAIL(map_fd < 0))
+ 		goto out;
+ 
+-	prog = bpf_object__find_program_by_title(obj, "classifier/0");
++	prog = bpf_object__find_program_by_name(obj, "classifier_0");
+ 	if (CHECK_FAIL(!prog))
+ 		goto out;
+ 
+@@ -329,7 +329,7 @@ static void test_tailcall_4(void)
+ 	if (CHECK_FAIL(err))
+ 		return;
+ 
+-	prog = bpf_object__find_program_by_title(obj, "classifier");
++	prog = bpf_object__find_program_by_name(obj, "entry");
+ 	if (CHECK_FAIL(!prog))
+ 		goto out;
+ 
+@@ -354,9 +354,9 @@ static void test_tailcall_4(void)
+ 		return;
+ 
+ 	for (i = 0; i < bpf_map__def(prog_array)->max_entries; i++) {
+-		snprintf(prog_name, sizeof(prog_name), "classifier/%i", i);
++		snprintf(prog_name, sizeof(prog_name), "classifier_%d", i);
+ 
+-		prog = bpf_object__find_program_by_title(obj, prog_name);
++		prog = bpf_object__find_program_by_name(obj, prog_name);
+ 		if (CHECK_FAIL(!prog))
+ 			goto out;
+ 
+@@ -417,7 +417,7 @@ static void test_tailcall_5(void)
+ 	if (CHECK_FAIL(err))
+ 		return;
+ 
+-	prog = bpf_object__find_program_by_title(obj, "classifier");
++	prog = bpf_object__find_program_by_name(obj, "entry");
+ 	if (CHECK_FAIL(!prog))
+ 		goto out;
+ 
+@@ -442,9 +442,9 @@ static void test_tailcall_5(void)
+ 		return;
+ 
+ 	for (i = 0; i < bpf_map__def(prog_array)->max_entries; i++) {
+-		snprintf(prog_name, sizeof(prog_name), "classifier/%i", i);
++		snprintf(prog_name, sizeof(prog_name), "classifier_%d", i);
+ 
+-		prog = bpf_object__find_program_by_title(obj, prog_name);
++		prog = bpf_object__find_program_by_name(obj, prog_name);
+ 		if (CHECK_FAIL(!prog))
+ 			goto out;
+ 
+@@ -503,7 +503,7 @@ static void test_tailcall_bpf2bpf_1(void)
+ 	if (CHECK_FAIL(err))
+ 		return;
+ 
+-	prog = bpf_object__find_program_by_title(obj, "classifier");
++	prog = bpf_object__find_program_by_name(obj, "entry");
+ 	if (CHECK_FAIL(!prog))
+ 		goto out;
+ 
+@@ -521,9 +521,9 @@ static void test_tailcall_bpf2bpf_1(void)
+ 
+ 	/* nop -> jmp */
+ 	for (i = 0; i < bpf_map__def(prog_array)->max_entries; i++) {
+-		snprintf(prog_name, sizeof(prog_name), "classifier/%i", i);
++		snprintf(prog_name, sizeof(prog_name), "classifier_%d", i);
+ 
+-		prog = bpf_object__find_program_by_title(obj, prog_name);
++		prog = bpf_object__find_program_by_name(obj, prog_name);
+ 		if (CHECK_FAIL(!prog))
+ 			goto out;
+ 
+@@ -587,7 +587,7 @@ static void test_tailcall_bpf2bpf_2(void)
+ 	if (CHECK_FAIL(err))
+ 		return;
+ 
+-	prog = bpf_object__find_program_by_title(obj, "classifier");
++	prog = bpf_object__find_program_by_name(obj, "entry");
+ 	if (CHECK_FAIL(!prog))
+ 		goto out;
+ 
+@@ -603,7 +603,7 @@ static void test_tailcall_bpf2bpf_2(void)
+ 	if (CHECK_FAIL(map_fd < 0))
+ 		goto out;
+ 
+-	prog = bpf_object__find_program_by_title(obj, "classifier/0");
++	prog = bpf_object__find_program_by_name(obj, "classifier_0");
+ 	if (CHECK_FAIL(!prog))
+ 		goto out;
+ 
+@@ -665,7 +665,7 @@ static void test_tailcall_bpf2bpf_3(void)
+ 	if (CHECK_FAIL(err))
+ 		return;
+ 
+-	prog = bpf_object__find_program_by_title(obj, "classifier");
++	prog = bpf_object__find_program_by_name(obj, "entry");
+ 	if (CHECK_FAIL(!prog))
+ 		goto out;
+ 
+@@ -682,9 +682,9 @@ static void test_tailcall_bpf2bpf_3(void)
+ 		goto out;
+ 
+ 	for (i = 0; i < bpf_map__def(prog_array)->max_entries; i++) {
+-		snprintf(prog_name, sizeof(prog_name), "classifier/%i", i);
++		snprintf(prog_name, sizeof(prog_name), "classifier_%d", i);
+ 
+-		prog = bpf_object__find_program_by_title(obj, prog_name);
++		prog = bpf_object__find_program_by_name(obj, prog_name);
+ 		if (CHECK_FAIL(!prog))
+ 			goto out;
+ 
+@@ -762,7 +762,7 @@ static void test_tailcall_bpf2bpf_4(bool noise)
+ 	if (CHECK_FAIL(err))
+ 		return;
+ 
+-	prog = bpf_object__find_program_by_title(obj, "classifier");
++	prog = bpf_object__find_program_by_name(obj, "entry");
+ 	if (CHECK_FAIL(!prog))
+ 		goto out;
+ 
+@@ -779,9 +779,9 @@ static void test_tailcall_bpf2bpf_4(bool noise)
+ 		goto out;
+ 
+ 	for (i = 0; i < bpf_map__def(prog_array)->max_entries; i++) {
+-		snprintf(prog_name, sizeof(prog_name), "classifier/%i", i);
++		snprintf(prog_name, sizeof(prog_name), "classifier_%d", i);
+ 
+-		prog = bpf_object__find_program_by_title(obj, prog_name);
++		prog = bpf_object__find_program_by_name(obj, prog_name);
+ 		if (CHECK_FAIL(!prog))
+ 			goto out;
+ 
+diff --git a/tools/testing/selftests/bpf/progs/for_each_array_map_elem.c b/tools/testing/selftests/bpf/progs/for_each_array_map_elem.c
+index 75e8e1069fe7..df918b2469da 100644
+--- a/tools/testing/selftests/bpf/progs/for_each_array_map_elem.c
++++ b/tools/testing/selftests/bpf/progs/for_each_array_map_elem.c
+@@ -47,7 +47,7 @@ check_percpu_elem(struct bpf_map *map, __u32 *key, __u64 *val,
+ 
+ u32 arraymap_output = 0;
+ 
+-SEC("classifier")
++SEC("tc")
+ int test_pkt_access(struct __sk_buff *skb)
+ {
+ 	struct callback_ctx data;
+diff --git a/tools/testing/selftests/bpf/progs/for_each_hash_map_elem.c b/tools/testing/selftests/bpf/progs/for_each_hash_map_elem.c
+index 913dd91aafff..276994d5c0c7 100644
+--- a/tools/testing/selftests/bpf/progs/for_each_hash_map_elem.c
++++ b/tools/testing/selftests/bpf/progs/for_each_hash_map_elem.c
+@@ -78,7 +78,7 @@ int hashmap_output = 0;
+ int hashmap_elems = 0;
+ int percpu_map_elems = 0;
+ 
+-SEC("classifier")
++SEC("tc")
+ int test_pkt_access(struct __sk_buff *skb)
+ {
+ 	struct callback_ctx data;
+diff --git a/tools/testing/selftests/bpf/progs/kfunc_call_test.c b/tools/testing/selftests/bpf/progs/kfunc_call_test.c
+index 470f8723e463..8a8cf59017aa 100644
+--- a/tools/testing/selftests/bpf/progs/kfunc_call_test.c
++++ b/tools/testing/selftests/bpf/progs/kfunc_call_test.c
+@@ -8,7 +8,7 @@ extern int bpf_kfunc_call_test2(struct sock *sk, __u32 a, __u32 b) __ksym;
+ extern __u64 bpf_kfunc_call_test1(struct sock *sk, __u32 a, __u64 b,
+ 				  __u32 c, __u64 d) __ksym;
+ 
+-SEC("classifier")
++SEC("tc")
+ int kfunc_call_test2(struct __sk_buff *skb)
+ {
+ 	struct bpf_sock *sk = skb->sk;
+@@ -23,7 +23,7 @@ int kfunc_call_test2(struct __sk_buff *skb)
+ 	return bpf_kfunc_call_test2((struct sock *)sk, 1, 2);
+ }
+ 
+-SEC("classifier")
++SEC("tc")
+ int kfunc_call_test1(struct __sk_buff *skb)
+ {
+ 	struct bpf_sock *sk = skb->sk;
+diff --git a/tools/testing/selftests/bpf/progs/kfunc_call_test_subprog.c b/tools/testing/selftests/bpf/progs/kfunc_call_test_subprog.c
+index 5fbd9e232d44..c1fdecabeabf 100644
+--- a/tools/testing/selftests/bpf/progs/kfunc_call_test_subprog.c
++++ b/tools/testing/selftests/bpf/progs/kfunc_call_test_subprog.c
+@@ -33,7 +33,7 @@ int __noinline f1(struct __sk_buff *skb)
+ 	return (__u32)bpf_kfunc_call_test1((struct sock *)sk, 1, 2, 3, 4);
+ }
+ 
+-SEC("classifier")
++SEC("tc")
+ int kfunc_call_test1(struct __sk_buff *skb)
+ {
+ 	return f1(skb);
+diff --git a/tools/testing/selftests/bpf/progs/skb_pkt_end.c b/tools/testing/selftests/bpf/progs/skb_pkt_end.c
+index 7f2eaa2f89f8..992b7861003a 100644
+--- a/tools/testing/selftests/bpf/progs/skb_pkt_end.c
++++ b/tools/testing/selftests/bpf/progs/skb_pkt_end.c
+@@ -25,7 +25,7 @@ static INLINE struct iphdr *get_iphdr(struct __sk_buff *skb)
+ 	return ip;
+ }
+ 
+-SEC("classifier/cls")
++SEC("tc")
+ int main_prog(struct __sk_buff *skb)
+ {
+ 	struct iphdr *ip = NULL;
+diff --git a/tools/testing/selftests/bpf/progs/tailcall1.c b/tools/testing/selftests/bpf/progs/tailcall1.c
+index 7115bcefbe8a..8159a0b4a69a 100644
+--- a/tools/testing/selftests/bpf/progs/tailcall1.c
++++ b/tools/testing/selftests/bpf/progs/tailcall1.c
+@@ -11,8 +11,8 @@ struct {
+ } jmp_table SEC(".maps");
+ 
+ #define TAIL_FUNC(x) 				\
+-	SEC("classifier/" #x)			\
+-	int bpf_func_##x(struct __sk_buff *skb)	\
++	SEC("tc")				\
++	int classifier_##x(struct __sk_buff *skb)	\
+ 	{					\
+ 		return x;			\
+ 	}
+@@ -20,7 +20,7 @@ TAIL_FUNC(0)
+ TAIL_FUNC(1)
+ TAIL_FUNC(2)
+ 
+-SEC("classifier")
++SEC("tc")
+ int entry(struct __sk_buff *skb)
+ {
+ 	/* Multiple locations to make sure we patch
+@@ -45,4 +45,3 @@ int entry(struct __sk_buff *skb)
+ }
+ 
+ char __license[] SEC("license") = "GPL";
+-int _version SEC("version") = 1;
+diff --git a/tools/testing/selftests/bpf/progs/tailcall2.c b/tools/testing/selftests/bpf/progs/tailcall2.c
+index 0431e4fe7efd..a5ff53e61702 100644
+--- a/tools/testing/selftests/bpf/progs/tailcall2.c
++++ b/tools/testing/selftests/bpf/progs/tailcall2.c
+@@ -10,41 +10,41 @@ struct {
+ 	__uint(value_size, sizeof(__u32));
+ } jmp_table SEC(".maps");
+ 
+-SEC("classifier/0")
+-int bpf_func_0(struct __sk_buff *skb)
++SEC("tc")
++int classifier_0(struct __sk_buff *skb)
+ {
+ 	bpf_tail_call_static(skb, &jmp_table, 1);
  	return 0;
-@@ -7919,6 +7962,7 @@ void bpf_program__set_expected_attach_type(struct bpf_program *prog,
- 		.is_exp_attach_type_optional = eatype_optional,		    \
- 		.is_attachable = attachable,				    \
- 		.is_attach_btf = attach_btf,				    \
-+		.preload_fn = libbpf_preload_prog,			    \
+ }
+ 
+-SEC("classifier/1")
+-int bpf_func_1(struct __sk_buff *skb)
++SEC("tc")
++int classifier_1(struct __sk_buff *skb)
+ {
+ 	bpf_tail_call_static(skb, &jmp_table, 2);
+ 	return 1;
+ }
+ 
+-SEC("classifier/2")
+-int bpf_func_2(struct __sk_buff *skb)
++SEC("tc")
++int classifier_2(struct __sk_buff *skb)
+ {
+ 	return 2;
+ }
+ 
+-SEC("classifier/3")
+-int bpf_func_3(struct __sk_buff *skb)
++SEC("tc")
++int classifier_3(struct __sk_buff *skb)
+ {
+ 	bpf_tail_call_static(skb, &jmp_table, 4);
+ 	return 3;
+ }
+ 
+-SEC("classifier/4")
+-int bpf_func_4(struct __sk_buff *skb)
++SEC("tc")
++int classifier_4(struct __sk_buff *skb)
+ {
+ 	bpf_tail_call_static(skb, &jmp_table, 3);
+ 	return 4;
+ }
+ 
+-SEC("classifier")
++SEC("tc")
+ int entry(struct __sk_buff *skb)
+ {
+ 	bpf_tail_call_static(skb, &jmp_table, 0);
+@@ -56,4 +56,3 @@ int entry(struct __sk_buff *skb)
+ }
+ 
+ char __license[] SEC("license") = "GPL";
+-int _version SEC("version") = 1;
+diff --git a/tools/testing/selftests/bpf/progs/tailcall3.c b/tools/testing/selftests/bpf/progs/tailcall3.c
+index 910858fe078a..f60bcd7b8d4b 100644
+--- a/tools/testing/selftests/bpf/progs/tailcall3.c
++++ b/tools/testing/selftests/bpf/progs/tailcall3.c
+@@ -12,15 +12,15 @@ struct {
+ 
+ int count = 0;
+ 
+-SEC("classifier/0")
+-int bpf_func_0(struct __sk_buff *skb)
++SEC("tc")
++int classifier_0(struct __sk_buff *skb)
+ {
+ 	count++;
+ 	bpf_tail_call_static(skb, &jmp_table, 0);
+ 	return 1;
+ }
+ 
+-SEC("classifier")
++SEC("tc")
+ int entry(struct __sk_buff *skb)
+ {
+ 	bpf_tail_call_static(skb, &jmp_table, 0);
+@@ -28,4 +28,3 @@ int entry(struct __sk_buff *skb)
+ }
+ 
+ char __license[] SEC("license") = "GPL";
+-int _version SEC("version") = 1;
+diff --git a/tools/testing/selftests/bpf/progs/tailcall4.c b/tools/testing/selftests/bpf/progs/tailcall4.c
+index bd4be135c39d..a56bbc2313ca 100644
+--- a/tools/testing/selftests/bpf/progs/tailcall4.c
++++ b/tools/testing/selftests/bpf/progs/tailcall4.c
+@@ -13,8 +13,8 @@ struct {
+ int selector = 0;
+ 
+ #define TAIL_FUNC(x)				\
+-	SEC("classifier/" #x)			\
+-	int bpf_func_##x(struct __sk_buff *skb)	\
++	SEC("tc")				\
++	int classifier_##x(struct __sk_buff *skb)	\
+ 	{					\
+ 		return x;			\
  	}
+@@ -22,7 +22,7 @@ TAIL_FUNC(0)
+ TAIL_FUNC(1)
+ TAIL_FUNC(2)
  
- /* Programs that can NOT be attached. */
-@@ -7945,15 +7989,16 @@ void bpf_program__set_expected_attach_type(struct bpf_program *prog,
- 	.sec = sec_pfx,							    \
- 	.len = sizeof(sec_pfx) - 1,					    \
- 	.prog_type = BPF_PROG_TYPE_##ptype,				    \
-+	.preload_fn = libbpf_preload_prog,				    \
- 	__VA_ARGS__							    \
- }
- 
--static struct bpf_link *attach_kprobe(const struct bpf_program *prog);
--static struct bpf_link *attach_tp(const struct bpf_program *prog);
--static struct bpf_link *attach_raw_tp(const struct bpf_program *prog);
--static struct bpf_link *attach_trace(const struct bpf_program *prog);
--static struct bpf_link *attach_lsm(const struct bpf_program *prog);
--static struct bpf_link *attach_iter(const struct bpf_program *prog);
-+static struct bpf_link *attach_kprobe(const struct bpf_program *prog, long cookie);
-+static struct bpf_link *attach_tp(const struct bpf_program *prog, long cookie);
-+static struct bpf_link *attach_raw_tp(const struct bpf_program *prog, long cookie);
-+static struct bpf_link *attach_trace(const struct bpf_program *prog, long cookie);
-+static struct bpf_link *attach_lsm(const struct bpf_program *prog, long cookie);
-+static struct bpf_link *attach_iter(const struct bpf_program *prog, long cookie);
- 
- static const struct bpf_sec_def section_defs[] = {
- 	BPF_PROG_SEC("socket",			BPF_PROG_TYPE_SOCKET_FILTER),
-@@ -9425,7 +9470,7 @@ struct bpf_link *bpf_program__attach_kprobe(const struct bpf_program *prog,
- 	return bpf_program__attach_kprobe_opts(prog, func_name, &opts);
- }
- 
--static struct bpf_link *attach_kprobe(const struct bpf_program *prog)
-+static struct bpf_link *attach_kprobe(const struct bpf_program *prog, long cookie)
+-SEC("classifier")
++SEC("tc")
+ int entry(struct __sk_buff *skb)
  {
- 	DECLARE_LIBBPF_OPTS(bpf_kprobe_opts, opts);
- 	unsigned long offset = 0;
-@@ -9708,7 +9753,7 @@ struct bpf_link *bpf_program__attach_tracepoint(const struct bpf_program *prog,
- 	return bpf_program__attach_tracepoint_opts(prog, tp_category, tp_name, NULL);
+ 	bpf_tail_call(skb, &jmp_table, selector);
+@@ -30,4 +30,3 @@ int entry(struct __sk_buff *skb)
  }
  
--static struct bpf_link *attach_tp(const struct bpf_program *prog)
-+static struct bpf_link *attach_tp(const struct bpf_program *prog, long cookie)
+ char __license[] SEC("license") = "GPL";
+-int _version SEC("version") = 1;
+diff --git a/tools/testing/selftests/bpf/progs/tailcall5.c b/tools/testing/selftests/bpf/progs/tailcall5.c
+index adf30a33064e..8d03496eb6ca 100644
+--- a/tools/testing/selftests/bpf/progs/tailcall5.c
++++ b/tools/testing/selftests/bpf/progs/tailcall5.c
+@@ -13,8 +13,8 @@ struct {
+ int selector = 0;
+ 
+ #define TAIL_FUNC(x)				\
+-	SEC("classifier/" #x)			\
+-	int bpf_func_##x(struct __sk_buff *skb)	\
++	SEC("tc")				\
++	int classifier_##x(struct __sk_buff *skb)	\
+ 	{					\
+ 		return x;			\
+ 	}
+@@ -22,7 +22,7 @@ TAIL_FUNC(0)
+ TAIL_FUNC(1)
+ TAIL_FUNC(2)
+ 
+-SEC("classifier")
++SEC("tc")
+ int entry(struct __sk_buff *skb)
  {
- 	char *sec_name, *tp_cat, *tp_name;
- 	struct bpf_link *link;
-@@ -9762,7 +9807,7 @@ struct bpf_link *bpf_program__attach_raw_tracepoint(const struct bpf_program *pr
- 	return link;
+ 	int idx = 0;
+@@ -37,4 +37,3 @@ int entry(struct __sk_buff *skb)
  }
  
--static struct bpf_link *attach_raw_tp(const struct bpf_program *prog)
-+static struct bpf_link *attach_raw_tp(const struct bpf_program *prog, long cookie)
+ char __license[] SEC("license") = "GPL";
+-int _version SEC("version") = 1;
+diff --git a/tools/testing/selftests/bpf/progs/tailcall6.c b/tools/testing/selftests/bpf/progs/tailcall6.c
+index 0f4a811cc028..d77b8abd62f3 100644
+--- a/tools/testing/selftests/bpf/progs/tailcall6.c
++++ b/tools/testing/selftests/bpf/progs/tailcall6.c
+@@ -12,8 +12,8 @@ struct {
+ 
+ int count, which;
+ 
+-SEC("classifier/0")
+-int bpf_func_0(struct __sk_buff *skb)
++SEC("tc")
++int classifier_0(struct __sk_buff *skb)
  {
- 	const char *tp_name = prog->sec_name + prog->sec_def->len;
- 
-@@ -9809,12 +9854,12 @@ struct bpf_link *bpf_program__attach_lsm(const struct bpf_program *prog)
- 	return bpf_program__attach_btf_id(prog);
+ 	count++;
+ 	if (__builtin_constant_p(which))
+@@ -22,7 +22,7 @@ int bpf_func_0(struct __sk_buff *skb)
+ 	return 1;
  }
  
--static struct bpf_link *attach_trace(const struct bpf_program *prog)
-+static struct bpf_link *attach_trace(const struct bpf_program *prog, long cookie)
+-SEC("classifier")
++SEC("tc")
+ int entry(struct __sk_buff *skb)
  {
- 	return bpf_program__attach_trace(prog);
+ 	if (__builtin_constant_p(which))
+diff --git a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf1.c b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf1.c
+index 0103f3dd9f02..8c91428deb90 100644
+--- a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf1.c
++++ b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf1.c
+@@ -10,8 +10,8 @@ struct {
+ } jmp_table SEC(".maps");
+ 
+ #define TAIL_FUNC(x) 				\
+-	SEC("classifier/" #x)			\
+-	int bpf_func_##x(struct __sk_buff *skb)	\
++	SEC("tc")				\
++	int classifier_##x(struct __sk_buff *skb)	\
+ 	{					\
+ 		return x;			\
+ 	}
+@@ -26,7 +26,7 @@ int subprog_tail(struct __sk_buff *skb)
+ 	return skb->len * 2;
  }
  
--static struct bpf_link *attach_lsm(const struct bpf_program *prog)
-+static struct bpf_link *attach_lsm(const struct bpf_program *prog, long cookie)
+-SEC("classifier")
++SEC("tc")
+ int entry(struct __sk_buff *skb)
  {
- 	return bpf_program__attach_lsm(prog);
- }
-@@ -9945,7 +9990,7 @@ bpf_program__attach_iter(const struct bpf_program *prog,
- 	return link;
+ 	bpf_tail_call_static(skb, &jmp_table, 1);
+@@ -35,4 +35,3 @@ int entry(struct __sk_buff *skb)
  }
  
--static struct bpf_link *attach_iter(const struct bpf_program *prog)
-+static struct bpf_link *attach_iter(const struct bpf_program *prog, long cookie)
+ char __license[] SEC("license") = "GPL";
+-int _version SEC("version") = 1;
+diff --git a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf2.c b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf2.c
+index 3cc4c12817b5..ce97d141daee 100644
+--- a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf2.c
++++ b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf2.c
+@@ -22,14 +22,14 @@ int subprog_tail(struct __sk_buff *skb)
+ 
+ int count = 0;
+ 
+-SEC("classifier/0")
+-int bpf_func_0(struct __sk_buff *skb)
++SEC("tc")
++int classifier_0(struct __sk_buff *skb)
  {
- 	return bpf_program__attach_iter(prog, NULL);
- }
-@@ -9955,7 +10000,7 @@ struct bpf_link *bpf_program__attach(const struct bpf_program *prog)
- 	if (!prog->sec_def || !prog->sec_def->attach_fn)
- 		return libbpf_err_ptr(-ESRCH);
- 
--	return prog->sec_def->attach_fn(prog);
-+	return prog->sec_def->attach_fn(prog, prog->sec_def->cookie);
+ 	count++;
+ 	return subprog_tail(skb);
  }
  
- static int bpf_link__detach_struct_ops(struct bpf_link *link)
+-SEC("classifier")
++SEC("tc")
+ int entry(struct __sk_buff *skb)
+ {
+ 	bpf_tail_call_static(skb, &jmp_table, 0);
+@@ -38,4 +38,3 @@ int entry(struct __sk_buff *skb)
+ }
+ 
+ char __license[] SEC("license") = "GPL";
+-int _version SEC("version") = 1;
+diff --git a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf3.c b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf3.c
+index 0d5482bea6c9..7fab39a3bb12 100644
+--- a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf3.c
++++ b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf3.c
+@@ -33,23 +33,23 @@ int subprog_tail(struct __sk_buff *skb)
+ 	return skb->len * 2;
+ }
+ 
+-SEC("classifier/0")
+-int bpf_func_0(struct __sk_buff *skb)
++SEC("tc")
++int classifier_0(struct __sk_buff *skb)
+ {
+ 	volatile char arr[128] = {};
+ 
+ 	return subprog_tail2(skb);
+ }
+ 
+-SEC("classifier/1")
+-int bpf_func_1(struct __sk_buff *skb)
++SEC("tc")
++int classifier_1(struct __sk_buff *skb)
+ {
+ 	volatile char arr[128] = {};
+ 
+ 	return skb->len * 3;
+ }
+ 
+-SEC("classifier")
++SEC("tc")
+ int entry(struct __sk_buff *skb)
+ {
+ 	volatile char arr[128] = {};
+@@ -58,4 +58,3 @@ int entry(struct __sk_buff *skb)
+ }
+ 
+ char __license[] SEC("license") = "GPL";
+-int _version SEC("version") = 1;
+diff --git a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf4.c b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf4.c
+index e89368a50b97..b67e8022d500 100644
+--- a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf4.c
++++ b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf4.c
+@@ -50,30 +50,29 @@ int subprog_tail(struct __sk_buff *skb)
+ 	return skb->len;
+ }
+ 
+-SEC("classifier/1")
+-int bpf_func_1(struct __sk_buff *skb)
++SEC("tc")
++int classifier_1(struct __sk_buff *skb)
+ {
+ 	return subprog_tail_2(skb);
+ }
+ 
+-SEC("classifier/2")
+-int bpf_func_2(struct __sk_buff *skb)
++SEC("tc")
++int classifier_2(struct __sk_buff *skb)
+ {
+ 	count++;
+ 	return subprog_tail_2(skb);
+ }
+ 
+-SEC("classifier/0")
+-int bpf_func_0(struct __sk_buff *skb)
++SEC("tc")
++int classifier_0(struct __sk_buff *skb)
+ {
+ 	return subprog_tail_1(skb);
+ }
+ 
+-SEC("classifier")
++SEC("tc")
+ int entry(struct __sk_buff *skb)
+ {
+ 	return subprog_tail(skb);
+ }
+ 
+ char __license[] SEC("license") = "GPL";
+-int _version SEC("version") = 1;
+diff --git a/tools/testing/selftests/bpf/progs/test_btf_skc_cls_ingress.c b/tools/testing/selftests/bpf/progs/test_btf_skc_cls_ingress.c
+index 9a6b85dd52d2..e2bea4da194b 100644
+--- a/tools/testing/selftests/bpf/progs/test_btf_skc_cls_ingress.c
++++ b/tools/testing/selftests/bpf/progs/test_btf_skc_cls_ingress.c
+@@ -145,7 +145,7 @@ static int handle_ip6_tcp(struct ipv6hdr *ip6h, struct __sk_buff *skb)
+ 	return TC_ACT_OK;
+ }
+ 
+-SEC("classifier/ingress")
++SEC("tc")
+ int cls_ingress(struct __sk_buff *skb)
+ {
+ 	struct ipv6hdr *ip6h;
+diff --git a/tools/testing/selftests/bpf/progs/test_check_mtu.c b/tools/testing/selftests/bpf/progs/test_check_mtu.c
+index 71184af57749..2ec1de11a3ae 100644
+--- a/tools/testing/selftests/bpf/progs/test_check_mtu.c
++++ b/tools/testing/selftests/bpf/progs/test_check_mtu.c
+@@ -153,7 +153,7 @@ int xdp_input_len_exceed(struct xdp_md *ctx)
+ 	return retval;
+ }
+ 
+-SEC("classifier")
++SEC("tc")
+ int tc_use_helper(struct __sk_buff *ctx)
+ {
+ 	int retval = BPF_OK; /* Expected retval on successful test */
+@@ -172,7 +172,7 @@ int tc_use_helper(struct __sk_buff *ctx)
+ 	return retval;
+ }
+ 
+-SEC("classifier")
++SEC("tc")
+ int tc_exceed_mtu(struct __sk_buff *ctx)
+ {
+ 	__u32 ifindex = GLOBAL_USER_IFINDEX;
+@@ -196,7 +196,7 @@ int tc_exceed_mtu(struct __sk_buff *ctx)
+ 	return retval;
+ }
+ 
+-SEC("classifier")
++SEC("tc")
+ int tc_exceed_mtu_da(struct __sk_buff *ctx)
+ {
+ 	/* SKB Direct-Access variant */
+@@ -223,7 +223,7 @@ int tc_exceed_mtu_da(struct __sk_buff *ctx)
+ 	return retval;
+ }
+ 
+-SEC("classifier")
++SEC("tc")
+ int tc_minus_delta(struct __sk_buff *ctx)
+ {
+ 	int retval = BPF_OK; /* Expected retval on successful test */
+@@ -245,7 +245,7 @@ int tc_minus_delta(struct __sk_buff *ctx)
+ 	return retval;
+ }
+ 
+-SEC("classifier")
++SEC("tc")
+ int tc_input_len(struct __sk_buff *ctx)
+ {
+ 	int retval = BPF_OK; /* Expected retval on successful test */
+@@ -265,7 +265,7 @@ int tc_input_len(struct __sk_buff *ctx)
+ 	return retval;
+ }
+ 
+-SEC("classifier")
++SEC("tc")
+ int tc_input_len_exceed(struct __sk_buff *ctx)
+ {
+ 	int retval = BPF_DROP; /* Fail */
+diff --git a/tools/testing/selftests/bpf/progs/test_cls_redirect.c b/tools/testing/selftests/bpf/progs/test_cls_redirect.c
+index e2a5acc4785c..2833ad722cb7 100644
+--- a/tools/testing/selftests/bpf/progs/test_cls_redirect.c
++++ b/tools/testing/selftests/bpf/progs/test_cls_redirect.c
+@@ -928,7 +928,7 @@ static INLINING verdict_t process_ipv6(buf_t *pkt, metrics_t *metrics)
+ 	}
+ }
+ 
+-SEC("classifier/cls_redirect")
++SEC("tc")
+ int cls_redirect(struct __sk_buff *skb)
+ {
+ 	metrics_t *metrics = get_global_metrics();
+diff --git a/tools/testing/selftests/bpf/progs/test_global_data.c b/tools/testing/selftests/bpf/progs/test_global_data.c
+index 1319be1c54ba..719e314ef3e4 100644
+--- a/tools/testing/selftests/bpf/progs/test_global_data.c
++++ b/tools/testing/selftests/bpf/progs/test_global_data.c
+@@ -68,7 +68,7 @@ static struct foo struct3 = {
+ 		bpf_map_update_elem(&result_##map, &key, var, 0);	\
+ 	} while (0)
+ 
+-SEC("classifier/static_data_load")
++SEC("tc")
+ int load_static_data(struct __sk_buff *skb)
+ {
+ 	static const __u64 bar = ~0;
+diff --git a/tools/testing/selftests/bpf/progs/test_global_func1.c b/tools/testing/selftests/bpf/progs/test_global_func1.c
+index 880260f6d536..7b42dad187b8 100644
+--- a/tools/testing/selftests/bpf/progs/test_global_func1.c
++++ b/tools/testing/selftests/bpf/progs/test_global_func1.c
+@@ -38,7 +38,7 @@ int f3(int val, struct __sk_buff *skb, int var)
+ 	return skb->ifindex * val * var;
+ }
+ 
+-SEC("classifier/test")
++SEC("tc")
+ int test_cls(struct __sk_buff *skb)
+ {
+ 	return f0(1, skb) + f1(skb) + f2(2, skb) + f3(3, skb, 4);
+diff --git a/tools/testing/selftests/bpf/progs/test_global_func3.c b/tools/testing/selftests/bpf/progs/test_global_func3.c
+index 86f0ecb304fc..01bf8275dfd6 100644
+--- a/tools/testing/selftests/bpf/progs/test_global_func3.c
++++ b/tools/testing/selftests/bpf/progs/test_global_func3.c
+@@ -54,7 +54,7 @@ int f8(struct __sk_buff *skb)
+ }
+ #endif
+ 
+-SEC("classifier/test")
++SEC("tc")
+ int test_cls(struct __sk_buff *skb)
+ {
+ #ifndef NO_FN8
+diff --git a/tools/testing/selftests/bpf/progs/test_global_func5.c b/tools/testing/selftests/bpf/progs/test_global_func5.c
+index 260c25b827ef..9248d03e0d06 100644
+--- a/tools/testing/selftests/bpf/progs/test_global_func5.c
++++ b/tools/testing/selftests/bpf/progs/test_global_func5.c
+@@ -24,7 +24,7 @@ int f3(int val, struct __sk_buff *skb)
+ 	return skb->ifindex * val;
+ }
+ 
+-SEC("classifier/test")
++SEC("tc")
+ int test_cls(struct __sk_buff *skb)
+ {
+ 	return f1(skb) + f2(2, skb) + f3(3, skb);
+diff --git a/tools/testing/selftests/bpf/progs/test_global_func6.c b/tools/testing/selftests/bpf/progs/test_global_func6.c
+index 69e19c64e10b..af8c78bdfb25 100644
+--- a/tools/testing/selftests/bpf/progs/test_global_func6.c
++++ b/tools/testing/selftests/bpf/progs/test_global_func6.c
+@@ -24,7 +24,7 @@ int f3(int val, struct __sk_buff *skb)
+ 	return skb->ifindex * val;
+ }
+ 
+-SEC("classifier/test")
++SEC("tc")
+ int test_cls(struct __sk_buff *skb)
+ {
+ 	return f1(skb) + f2(2, skb) + f3(3, skb);
+diff --git a/tools/testing/selftests/bpf/progs/test_global_func7.c b/tools/testing/selftests/bpf/progs/test_global_func7.c
+index 309b3f6136bd..6cb8e2f5254c 100644
+--- a/tools/testing/selftests/bpf/progs/test_global_func7.c
++++ b/tools/testing/selftests/bpf/progs/test_global_func7.c
+@@ -10,7 +10,7 @@ void foo(struct __sk_buff *skb)
+ 	skb->tc_index = 0;
+ }
+ 
+-SEC("classifier/test")
++SEC("tc")
+ int test_cls(struct __sk_buff *skb)
+ {
+ 	foo(skb);
+diff --git a/tools/testing/selftests/bpf/progs/test_pkt_access.c b/tools/testing/selftests/bpf/progs/test_pkt_access.c
+index 852051064507..3cfd88141ddc 100644
+--- a/tools/testing/selftests/bpf/progs/test_pkt_access.c
++++ b/tools/testing/selftests/bpf/progs/test_pkt_access.c
+@@ -97,7 +97,7 @@ int test_pkt_write_access_subprog(struct __sk_buff *skb, __u32 off)
+ 	return 0;
+ }
+ 
+-SEC("classifier/test_pkt_access")
++SEC("tc")
+ int test_pkt_access(struct __sk_buff *skb)
+ {
+ 	void *data_end = (void *)(long)skb->data_end;
+diff --git a/tools/testing/selftests/bpf/progs/test_pkt_md_access.c b/tools/testing/selftests/bpf/progs/test_pkt_md_access.c
+index 610c74ea9f64..d1839366f3e1 100644
+--- a/tools/testing/selftests/bpf/progs/test_pkt_md_access.c
++++ b/tools/testing/selftests/bpf/progs/test_pkt_md_access.c
+@@ -7,8 +7,6 @@
+ #include <linux/pkt_cls.h>
+ #include <bpf/bpf_helpers.h>
+ 
+-int _version SEC("version") = 1;
+-
+ #if  __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+ #define TEST_FIELD(TYPE, FIELD, MASK)					\
+ 	{								\
+@@ -27,7 +25,7 @@ int _version SEC("version") = 1;
+ 	}
+ #endif
+ 
+-SEC("classifier/test_pkt_md_access")
++SEC("tc")
+ int test_pkt_md_access(struct __sk_buff *skb)
+ {
+ 	TEST_FIELD(__u8,  len, 0xFF);
+diff --git a/tools/testing/selftests/bpf/progs/test_sk_assign.c b/tools/testing/selftests/bpf/progs/test_sk_assign.c
+index 1ecd987005d2..02f79356d5eb 100644
+--- a/tools/testing/selftests/bpf/progs/test_sk_assign.c
++++ b/tools/testing/selftests/bpf/progs/test_sk_assign.c
+@@ -36,7 +36,6 @@ struct {
+ 	.pinning = PIN_GLOBAL_NS,
+ };
+ 
+-int _version SEC("version") = 1;
+ char _license[] SEC("license") = "GPL";
+ 
+ /* Fill 'tuple' with L3 info, and attempt to find L4. On fail, return NULL. */
+@@ -159,7 +158,7 @@ handle_tcp(struct __sk_buff *skb, struct bpf_sock_tuple *tuple, bool ipv4)
+ 	return ret;
+ }
+ 
+-SEC("classifier/sk_assign_test")
++SEC("tc")
+ int bpf_sk_assign_test(struct __sk_buff *skb)
+ {
+ 	struct bpf_sock_tuple *tuple, ln = {0};
+diff --git a/tools/testing/selftests/bpf/progs/test_sk_lookup_kern.c b/tools/testing/selftests/bpf/progs/test_sk_lookup_kern.c
+index 8249075f088f..40f161480a2f 100644
+--- a/tools/testing/selftests/bpf/progs/test_sk_lookup_kern.c
++++ b/tools/testing/selftests/bpf/progs/test_sk_lookup_kern.c
+@@ -15,7 +15,6 @@
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_endian.h>
+ 
+-int _version SEC("version") = 1;
+ char _license[] SEC("license") = "GPL";
+ 
+ /* Fill 'tuple' with L3 info, and attempt to find L4. On fail, return NULL. */
+@@ -53,8 +52,8 @@ static struct bpf_sock_tuple *get_tuple(void *data, __u64 nh_off,
+ 	return result;
+ }
+ 
+-SEC("classifier/sk_lookup_success")
+-int bpf_sk_lookup_test0(struct __sk_buff *skb)
++SEC("tc")
++int sk_lookup_success(struct __sk_buff *skb)
+ {
+ 	void *data_end = (void *)(long)skb->data_end;
+ 	void *data = (void *)(long)skb->data;
+@@ -79,8 +78,8 @@ int bpf_sk_lookup_test0(struct __sk_buff *skb)
+ 	return sk ? TC_ACT_OK : TC_ACT_UNSPEC;
+ }
+ 
+-SEC("classifier/sk_lookup_success_simple")
+-int bpf_sk_lookup_test1(struct __sk_buff *skb)
++SEC("tc")
++int sk_lookup_success_simple(struct __sk_buff *skb)
+ {
+ 	struct bpf_sock_tuple tuple = {};
+ 	struct bpf_sock *sk;
+@@ -91,8 +90,8 @@ int bpf_sk_lookup_test1(struct __sk_buff *skb)
+ 	return 0;
+ }
+ 
+-SEC("classifier/err_use_after_free")
+-int bpf_sk_lookup_uaf(struct __sk_buff *skb)
++SEC("tc")
++int err_use_after_free(struct __sk_buff *skb)
+ {
+ 	struct bpf_sock_tuple tuple = {};
+ 	struct bpf_sock *sk;
+@@ -106,8 +105,8 @@ int bpf_sk_lookup_uaf(struct __sk_buff *skb)
+ 	return family;
+ }
+ 
+-SEC("classifier/err_modify_sk_pointer")
+-int bpf_sk_lookup_modptr(struct __sk_buff *skb)
++SEC("tc")
++int err_modify_sk_pointer(struct __sk_buff *skb)
+ {
+ 	struct bpf_sock_tuple tuple = {};
+ 	struct bpf_sock *sk;
+@@ -121,8 +120,8 @@ int bpf_sk_lookup_modptr(struct __sk_buff *skb)
+ 	return 0;
+ }
+ 
+-SEC("classifier/err_modify_sk_or_null_pointer")
+-int bpf_sk_lookup_modptr_or_null(struct __sk_buff *skb)
++SEC("tc")
++int err_modify_sk_or_null_pointer(struct __sk_buff *skb)
+ {
+ 	struct bpf_sock_tuple tuple = {};
+ 	struct bpf_sock *sk;
+@@ -135,8 +134,8 @@ int bpf_sk_lookup_modptr_or_null(struct __sk_buff *skb)
+ 	return 0;
+ }
+ 
+-SEC("classifier/err_no_release")
+-int bpf_sk_lookup_test2(struct __sk_buff *skb)
++SEC("tc")
++int err_no_release(struct __sk_buff *skb)
+ {
+ 	struct bpf_sock_tuple tuple = {};
+ 
+@@ -144,8 +143,8 @@ int bpf_sk_lookup_test2(struct __sk_buff *skb)
+ 	return 0;
+ }
+ 
+-SEC("classifier/err_release_twice")
+-int bpf_sk_lookup_test3(struct __sk_buff *skb)
++SEC("tc")
++int err_release_twice(struct __sk_buff *skb)
+ {
+ 	struct bpf_sock_tuple tuple = {};
+ 	struct bpf_sock *sk;
+@@ -156,8 +155,8 @@ int bpf_sk_lookup_test3(struct __sk_buff *skb)
+ 	return 0;
+ }
+ 
+-SEC("classifier/err_release_unchecked")
+-int bpf_sk_lookup_test4(struct __sk_buff *skb)
++SEC("tc")
++int err_release_unchecked(struct __sk_buff *skb)
+ {
+ 	struct bpf_sock_tuple tuple = {};
+ 	struct bpf_sock *sk;
+@@ -173,8 +172,8 @@ void lookup_no_release(struct __sk_buff *skb)
+ 	bpf_sk_lookup_tcp(skb, &tuple, sizeof(tuple), BPF_F_CURRENT_NETNS, 0);
+ }
+ 
+-SEC("classifier/err_no_release_subcall")
+-int bpf_sk_lookup_test5(struct __sk_buff *skb)
++SEC("tc")
++int err_no_release_subcall(struct __sk_buff *skb)
+ {
+ 	lookup_no_release(skb);
+ 	return 0;
+diff --git a/tools/testing/selftests/bpf/progs/test_skb_helpers.c b/tools/testing/selftests/bpf/progs/test_skb_helpers.c
+index bb3fbf1a29e3..507215791c5b 100644
+--- a/tools/testing/selftests/bpf/progs/test_skb_helpers.c
++++ b/tools/testing/selftests/bpf/progs/test_skb_helpers.c
+@@ -14,7 +14,7 @@ struct {
+ 
+ char _license[] SEC("license") = "GPL";
+ 
+-SEC("classifier/test_skb_helpers")
++SEC("tc")
+ int test_skb_helpers(struct __sk_buff *skb)
+ {
+ 	struct task_struct *task;
+diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_update.c b/tools/testing/selftests/bpf/progs/test_sockmap_update.c
+index 9d0c9f28cab2..6d64ea536e3d 100644
+--- a/tools/testing/selftests/bpf/progs/test_sockmap_update.c
++++ b/tools/testing/selftests/bpf/progs/test_sockmap_update.c
+@@ -24,7 +24,7 @@ struct {
+ 	__type(value, __u64);
+ } dst_sock_hash SEC(".maps");
+ 
+-SEC("classifier/copy_sock_map")
++SEC("tc")
+ int copy_sock_map(void *ctx)
+ {
+ 	struct bpf_sock *sk;
+diff --git a/tools/testing/selftests/bpf/progs/test_tc_bpf.c b/tools/testing/selftests/bpf/progs/test_tc_bpf.c
+index 18a3a7ed924a..d28ca8d1f3d0 100644
+--- a/tools/testing/selftests/bpf/progs/test_tc_bpf.c
++++ b/tools/testing/selftests/bpf/progs/test_tc_bpf.c
+@@ -5,7 +5,7 @@
+ 
+ /* Dummy prog to test TC-BPF API */
+ 
+-SEC("classifier")
++SEC("tc")
+ int cls(struct __sk_buff *skb)
+ {
+ 	return 0;
+diff --git a/tools/testing/selftests/bpf/progs/test_tc_neigh.c b/tools/testing/selftests/bpf/progs/test_tc_neigh.c
+index 0c93d326a663..3e32ea375ab4 100644
+--- a/tools/testing/selftests/bpf/progs/test_tc_neigh.c
++++ b/tools/testing/selftests/bpf/progs/test_tc_neigh.c
+@@ -70,7 +70,7 @@ static __always_inline bool is_remote_ep_v6(struct __sk_buff *skb,
+ 	return v6_equal(ip6h->daddr, addr);
+ }
+ 
+-SEC("classifier/chk_egress")
++SEC("tc")
+ int tc_chk(struct __sk_buff *skb)
+ {
+ 	void *data_end = ctx_ptr(skb->data_end);
+@@ -83,7 +83,7 @@ int tc_chk(struct __sk_buff *skb)
+ 	return !raw[0] && !raw[1] && !raw[2] ? TC_ACT_SHOT : TC_ACT_OK;
+ }
+ 
+-SEC("classifier/dst_ingress")
++SEC("tc")
+ int tc_dst(struct __sk_buff *skb)
+ {
+ 	__u8 zero[ETH_ALEN * 2];
+@@ -108,7 +108,7 @@ int tc_dst(struct __sk_buff *skb)
+ 	return bpf_redirect_neigh(IFINDEX_SRC, NULL, 0, 0);
+ }
+ 
+-SEC("classifier/src_ingress")
++SEC("tc")
+ int tc_src(struct __sk_buff *skb)
+ {
+ 	__u8 zero[ETH_ALEN * 2];
+diff --git a/tools/testing/selftests/bpf/progs/test_tc_neigh_fib.c b/tools/testing/selftests/bpf/progs/test_tc_neigh_fib.c
+index f7ab69cf018e..ec4cce19362d 100644
+--- a/tools/testing/selftests/bpf/progs/test_tc_neigh_fib.c
++++ b/tools/testing/selftests/bpf/progs/test_tc_neigh_fib.c
+@@ -75,7 +75,7 @@ static __always_inline int fill_fib_params_v6(struct __sk_buff *skb,
+ 	return 0;
+ }
+ 
+-SEC("classifier/chk_egress")
++SEC("tc")
+ int tc_chk(struct __sk_buff *skb)
+ {
+ 	void *data_end = ctx_ptr(skb->data_end);
+@@ -143,13 +143,13 @@ static __always_inline int tc_redir(struct __sk_buff *skb)
+ /* these are identical, but keep them separate for compatibility with the
+  * section names expected by test_tc_redirect.sh
+  */
+-SEC("classifier/dst_ingress")
++SEC("tc")
+ int tc_dst(struct __sk_buff *skb)
+ {
+ 	return tc_redir(skb);
+ }
+ 
+-SEC("classifier/src_ingress")
++SEC("tc")
+ int tc_src(struct __sk_buff *skb)
+ {
+ 	return tc_redir(skb);
+diff --git a/tools/testing/selftests/bpf/progs/test_tc_peer.c b/tools/testing/selftests/bpf/progs/test_tc_peer.c
+index fe818cd5f010..365eacb5dc34 100644
+--- a/tools/testing/selftests/bpf/progs/test_tc_peer.c
++++ b/tools/testing/selftests/bpf/progs/test_tc_peer.c
+@@ -16,31 +16,31 @@ volatile const __u32 IFINDEX_DST;
+ static const __u8 src_mac[] = {0x00, 0x11, 0x22, 0x33, 0x44, 0x55};
+ static const __u8 dst_mac[] = {0x00, 0x22, 0x33, 0x44, 0x55, 0x66};
+ 
+-SEC("classifier/chk_egress")
++SEC("tc")
+ int tc_chk(struct __sk_buff *skb)
+ {
+ 	return TC_ACT_SHOT;
+ }
+ 
+-SEC("classifier/dst_ingress")
++SEC("tc")
+ int tc_dst(struct __sk_buff *skb)
+ {
+ 	return bpf_redirect_peer(IFINDEX_SRC, 0);
+ }
+ 
+-SEC("classifier/src_ingress")
++SEC("tc")
+ int tc_src(struct __sk_buff *skb)
+ {
+ 	return bpf_redirect_peer(IFINDEX_DST, 0);
+ }
+ 
+-SEC("classifier/dst_ingress_l3")
++SEC("tc")
+ int tc_dst_l3(struct __sk_buff *skb)
+ {
+ 	return bpf_redirect(IFINDEX_SRC, 0);
+ }
+ 
+-SEC("classifier/src_ingress_l3")
++SEC("tc")
+ int tc_src_l3(struct __sk_buff *skb)
+ {
+ 	__u16 proto = skb->protocol;
+diff --git a/tools/testing/selftests/bpf/progs/test_tcp_check_syncookie_kern.c b/tools/testing/selftests/bpf/progs/test_tcp_check_syncookie_kern.c
+index fac7ef99f9a6..cd747cd93dbe 100644
+--- a/tools/testing/selftests/bpf/progs/test_tcp_check_syncookie_kern.c
++++ b/tools/testing/selftests/bpf/progs/test_tcp_check_syncookie_kern.c
+@@ -148,7 +148,7 @@ static __always_inline void check_syncookie(void *ctx, void *data,
+ 	bpf_sk_release(sk);
+ }
+ 
+-SEC("clsact/check_syncookie")
++SEC("tc")
+ int check_syncookie_clsact(struct __sk_buff *skb)
+ {
+ 	check_syncookie(skb, (void *)(long)skb->data,
+diff --git a/tools/testing/selftests/bpf/test_tcp_check_syncookie.sh b/tools/testing/selftests/bpf/test_tcp_check_syncookie.sh
+index fed765157c53..6413c1472554 100755
+--- a/tools/testing/selftests/bpf/test_tcp_check_syncookie.sh
++++ b/tools/testing/selftests/bpf/test_tcp_check_syncookie.sh
+@@ -76,7 +76,7 @@ DIR=$(dirname $0)
+ TEST_IF=lo
+ MAX_PING_TRIES=5
+ BPF_PROG_OBJ="${DIR}/test_tcp_check_syncookie_kern.o"
+-CLSACT_SECTION="clsact/check_syncookie"
++CLSACT_SECTION="tc"
+ XDP_SECTION="xdp"
+ BPF_PROG_ID=0
+ PROG="${DIR}/test_tcp_check_syncookie_user"
 -- 
 2.30.2
 
