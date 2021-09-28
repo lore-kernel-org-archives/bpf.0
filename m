@@ -2,95 +2,84 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1580FC433F5
-	for <bpf@archiver.kernel.org>; Tue, 28 Sep 2021 16:37:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93DACC433FE
+	for <bpf@archiver.kernel.org>; Tue, 28 Sep 2021 16:55:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DF3CD61262
-	for <bpf@archiver.kernel.org>; Tue, 28 Sep 2021 16:37:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 78C616128C
+	for <bpf@archiver.kernel.org>; Tue, 28 Sep 2021 16:55:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240644AbhI1QjN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 28 Sep 2021 12:39:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54254 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230251AbhI1QjM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 28 Sep 2021 12:39:12 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E22CC06161C
-        for <bpf@vger.kernel.org>; Tue, 28 Sep 2021 09:37:33 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id l6so14558417plh.9
-        for <bpf@vger.kernel.org>; Tue, 28 Sep 2021 09:37:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=925DsTITSDrLBVejcK4ZMI1WGCmiSTqn2qBxeYov1qA=;
-        b=FvqEHKQ0M2BzhsLcCfllYLsHeK+YQM+7nzFQ+zmLgDFSaKWH1z7i8W/zaXPqATT2nr
-         C478PIVHkTFwswrBU5CoQsc3R9s+8p9T3JwnZPnL9LkB8RBwW6zQihz15mTMZbbSdkMF
-         XBqaqxu9TnzsAANXMnnd7PbC/6QywSzEJLWqd3umBn2kGiPZAsPfTdFkYRDIkOZ6iRoF
-         NiUW25ANG22M2P3n6Jyx+NvhEtvUg4ho/rTf01fqNgFpIw9s5mKJc2B0H6q8Y85K0Cr/
-         t3iRZtK3/sw6XtKaHUeoOEClnZoHRMnDPNH7LE3KKNFY0clKt2Nwu4F9ZEwZk2bE9toT
-         QL1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=925DsTITSDrLBVejcK4ZMI1WGCmiSTqn2qBxeYov1qA=;
-        b=M+OXkuxc6mOZY7pIN21I6pzNJsWQyzccn6hvDQIR+KeVdXtJhOLrvXcQnbDovrVKji
-         ZJy/MW4T83L1bkFojr1uFGtTNxYx/MbFryW2jWMZxWuS91w3r8mHkcVYky/R/RDTRXKJ
-         wyzNkN3zSi5KASNA9yk9/78TZKwn8rDtz9YHz4BMRL1X9IsE0pB67rjK/PBAgvyRptmC
-         K7vLm0FqKj6d9el7UTaHFmbTASHZAeqvNLN5wFOyvF2mADnul2Q1k1LhzTqqCAaq6r0z
-         xno5C33hgmt1wjlRbgNTIrhb/hjwjU6BLwCDAcR6YlhHNoBjlShXuashzgl8zMrnjj15
-         aGUg==
-X-Gm-Message-State: AOAM532bOUxLr7R7cbBQyGUmHkR6knZU+ekvDHOIEuWoSnm6q6IRlDa3
-        QHyRFpYxQPmfd8OEKXUcp4c=
-X-Google-Smtp-Source: ABdhPJxRydWFoDvLIX77H5tc/6mpISKhw/EA22QSPp6QnX9Oh099DxBfjx04eDLPx7gL6PNt3LpprA==
-X-Received: by 2002:a17:903:2308:b0:13d:ec2a:2e07 with SMTP id d8-20020a170903230800b0013dec2a2e07mr5984093plh.3.1632847052570;
-        Tue, 28 Sep 2021 09:37:32 -0700 (PDT)
-Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:500::6:e195])
-        by smtp.gmail.com with ESMTPSA id w30sm3098134pjj.30.2021.09.28.09.37.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Sep 2021 09:37:32 -0700 (PDT)
-Date:   Tue, 28 Sep 2021 09:37:30 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Matteo Croce <mcroce@linux.microsoft.com>
-Cc:     davem@davemloft.net, daniel@iogearbox.net, andrii@kernel.org,
-        john.fastabend@gmail.com, lmb@cloudflare.com, mcroce@microsoft.com,
-        bpf@vger.kernel.org, kernel-team@fb.com
-Subject: Re: [PATCH RFC bpf-next 01/10] bpf: Prepare relo_core.c for kernel
- duty.
-Message-ID: <20210928163730.7v7ovjhk7kxputny@ast-mbp.dhcp.thefacebook.com>
-References: <20210917215721.43491-1-alexei.starovoitov@gmail.com>
- <20210917215721.43491-2-alexei.starovoitov@gmail.com>
- <20210928164515.46fad888@linux.microsoft.com>
+        id S229795AbhI1Q5Q convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Tue, 28 Sep 2021 12:57:16 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:38030 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S241894AbhI1Q5P (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 28 Sep 2021 12:57:15 -0400
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.1.2/8.16.1.2) with SMTP id 18SA8DSE030540
+        for <bpf@vger.kernel.org>; Tue, 28 Sep 2021 09:55:35 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0001303.ppops.net with ESMTP id 3bby1j3pk7-13
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Tue, 28 Sep 2021 09:55:34 -0700
+Received: from intmgw001.38.frc1.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.14; Tue, 28 Sep 2021 09:55:30 -0700
+Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
+        id B9B0C50F8F63; Mon, 27 Sep 2021 23:20:38 -0700 (PDT)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>
+Subject: [PATCH v4 bpf-next 01/10] libbpf: add "tc" SEC_DEF which is a better name for "classifier"
+Date:   Mon, 27 Sep 2021 23:20:25 -0700
+Message-ID: <20210928062034.1800660-2-andrii@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210928062034.1800660-1-andrii@kernel.org>
+References: <20210928062034.1800660-1-andrii@kernel.org>
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-FB-Source: Intern
+X-Proofpoint-GUID: k-twlaPCDcTDu7gsqM6D-PKh_5CZ8eZw
+X-Proofpoint-ORIG-GUID: k-twlaPCDcTDu7gsqM6D-PKh_5CZ8eZw
+Content-Transfer-Encoding: 8BIT
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210928164515.46fad888@linux.microsoft.com>
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
+ definitions=2021-09-28_05,2021-09-28_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 phishscore=0
+ bulkscore=0 clxscore=1015 adultscore=0 malwarescore=0 spamscore=0
+ mlxlogscore=999 priorityscore=1501 lowpriorityscore=0 suspectscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2109230001 definitions=main-2109280099
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Sep 28, 2021 at 04:45:15PM +0200, Matteo Croce wrote:
-> On Fri, 17 Sep 2021 14:57:12 -0700
-> Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
-> 
-> > From: Alexei Starovoitov <ast@kernel.org>
-> > 
-> > Make relo_core.c to be compiled with kernel and with libbpf.
-> > 
-> > Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-> > ---
-> 
-> I give it a try with a sample co-re program.
+As argued in [0], add "tc" ELF section definition for SCHED_CLS BPF
+program type. "classifier" is a misleading terminology and should be
+migrated away from.
 
-Thanks for testing!
+  [0] https://lore.kernel.org/bpf/270e27b1-e5be-5b1c-b343-51bd644d0747@iogearbox.net/
 
-> I don't know how much of them will stay in the final work, but the
-> debug prints are borked because of the printk trailing \n.
-...
-> -	libbpf_print(level, "[%u] %s %s", type_id, btf_kind_str(t), str_is_empty(s) ? "<anon>" : s);
-> +	libbpf_print(level, KERN_CONT "[%u] %s %s", type_id, btf_kind_str(t), str_is_empty(s) ? "<anon>" : s);
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ tools/lib/bpf/libbpf.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Right. It's a known limitation of helper approach.
-Currently I'm refactoring all the prints to go through the verifier log.
-So all messages will be neat and clean :)
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 453148fe8b4b..0bcd0a4c867a 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -7968,6 +7968,7 @@ static const struct bpf_sec_def section_defs[] = {
+ 		.attach_fn = attach_kprobe),
+ 	BPF_PROG_SEC("uretprobe/",		BPF_PROG_TYPE_KPROBE),
+ 	BPF_PROG_SEC("classifier",		BPF_PROG_TYPE_SCHED_CLS),
++	BPF_PROG_SEC("tc",			BPF_PROG_TYPE_SCHED_CLS),
+ 	BPF_PROG_SEC("action",			BPF_PROG_TYPE_SCHED_ACT),
+ 	SEC_DEF("tracepoint/", TRACEPOINT,
+ 		.attach_fn = attach_tp),
+-- 
+2.30.2
+
