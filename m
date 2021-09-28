@@ -2,38 +2,38 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E038C4332F
-	for <bpf@archiver.kernel.org>; Tue, 28 Sep 2021 16:55:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1AEAC433EF
+	for <bpf@archiver.kernel.org>; Tue, 28 Sep 2021 16:55:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EC7426124B
-	for <bpf@archiver.kernel.org>; Tue, 28 Sep 2021 16:55:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ABB4B6124B
+	for <bpf@archiver.kernel.org>; Tue, 28 Sep 2021 16:55:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241900AbhI1Q5T convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Tue, 28 Sep 2021 12:57:19 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:60360 "EHLO
+        id S241781AbhI1Q5V convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Tue, 28 Sep 2021 12:57:21 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:11762 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241781AbhI1Q5S (ORCPT
+        by vger.kernel.org with ESMTP id S241899AbhI1Q5S (ORCPT
         <rfc822;bpf@vger.kernel.org>); Tue, 28 Sep 2021 12:57:18 -0400
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18SA3jKG027929
-        for <bpf@vger.kernel.org>; Tue, 28 Sep 2021 09:55:38 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 3bbu82vxum-11
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18SEVBhh013548
+        for <bpf@vger.kernel.org>; Tue, 28 Sep 2021 09:55:37 -0700
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 3bc4vn16hq-5
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 28 Sep 2021 09:55:38 -0700
-Received: from intmgw001.38.frc1.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 28 Sep 2021 09:55:36 -0700
+Received: from intmgw002.25.frc3.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Tue, 28 Sep 2021 09:55:30 -0700
+ 15.1.2308.14; Tue, 28 Sep 2021 09:55:33 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 0C10C50F8F6E; Mon, 27 Sep 2021 23:20:40 -0700 (PDT)
+        id 14FAC50F90E2; Mon, 27 Sep 2021 23:20:52 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
         Dave Marchevsky <davemarchevsky@fb.com>
-Subject: [PATCH v4 bpf-next 02/10] selftests/bpf: normalize XDP section names in selftests
-Date:   Mon, 27 Sep 2021 23:20:26 -0700
-Message-ID: <20210928062034.1800660-3-andrii@kernel.org>
+Subject: [PATCH v4 bpf-next 08/10] libbpf: complete SEC() table unification for BPF_APROG_SEC/BPF_EAPROG_SEC
+Date:   Mon, 27 Sep 2021 23:20:32 -0700
+Message-ID: <20210928062034.1800660-9-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210928062034.1800660-1-andrii@kernel.org>
 References: <20210928062034.1800660-1-andrii@kernel.org>
@@ -42,354 +42,205 @@ Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-GUID: byJ7SkiA1BAxsYtTn1LM2f2aGMjaxPuz
-X-Proofpoint-ORIG-GUID: byJ7SkiA1BAxsYtTn1LM2f2aGMjaxPuz
+X-Proofpoint-GUID: sdCgLdJ_-NaPZD0RkyqCMTuVBb-cY9u_
+X-Proofpoint-ORIG-GUID: sdCgLdJ_-NaPZD0RkyqCMTuVBb-cY9u_
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
  definitions=2021-09-28_05,2021-09-28_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
- suspectscore=0 impostorscore=0 mlxlogscore=967 bulkscore=0 adultscore=0
- lowpriorityscore=0 clxscore=1015 mlxscore=0 spamscore=0 priorityscore=1501
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
+ impostorscore=0 suspectscore=0 adultscore=0 clxscore=1015 mlxlogscore=999
+ phishscore=0 mlxscore=0 bulkscore=0 lowpriorityscore=0 malwarescore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2109230001 definitions=main-2109280099
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Convert almost all SEC("xdp_blah") uses to strict SEC("xdp") to comply
-with strict libbpf 1.0 logic of exact section name match for XDP program
-types. There is only one exception, which is only tested through
-iproute2 and defines multiple XDP programs within the same BPF object.
-Given iproute2 still works in non-strict libbpf mode and it doesn't have
-means to specify XDP programs by its name (not section name/title),
-leave that single file alone for now until iproute2 gains lookup by
-function/program name.
+Complete SEC() table refactoring towards unified form by rewriting
+BPF_APROG_SEC and BPF_EAPROG_SEC definitions with
+SEC_DEF(SEC_ATTACHABLE_OPT) (for optional expected_attach_type) and
+SEC_DEF(SEC_ATTACHABLE) (mandatory expected_attach_type), respectively.
+Drop BPF_APROG_SEC, BPF_EAPROG_SEC, and BPF_PROG_SEC_IMPL macros after
+that, leaving SEC_DEF() macro as the only one used.
 
 Acked-by: Dave Marchevsky <davemarchevsky@fb.com>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/testing/selftests/bpf/progs/test_map_in_map.c          | 2 +-
- .../selftests/bpf/progs/test_tcp_check_syncookie_kern.c      | 2 +-
- tools/testing/selftests/bpf/progs/test_xdp.c                 | 2 +-
- .../testing/selftests/bpf/progs/test_xdp_adjust_tail_grow.c  | 2 +-
- .../selftests/bpf/progs/test_xdp_adjust_tail_shrink.c        | 4 +---
- tools/testing/selftests/bpf/progs/test_xdp_devmap_helpers.c  | 2 +-
- tools/testing/selftests/bpf/progs/test_xdp_link.c            | 2 +-
- tools/testing/selftests/bpf/progs/test_xdp_loop.c            | 2 +-
- tools/testing/selftests/bpf/progs/test_xdp_noinline.c        | 4 ++--
- .../selftests/bpf/progs/test_xdp_with_cpumap_helpers.c       | 4 ++--
- .../selftests/bpf/progs/test_xdp_with_devmap_helpers.c       | 4 ++--
- tools/testing/selftests/bpf/progs/xdp_dummy.c                | 2 +-
- tools/testing/selftests/bpf/progs/xdp_redirect_multi_kern.c  | 4 ++--
- tools/testing/selftests/bpf/progs/xdping_kern.c              | 4 ++--
- tools/testing/selftests/bpf/test_tcp_check_syncookie.sh      | 2 +-
- tools/testing/selftests/bpf/test_xdp_redirect.sh             | 4 ++--
- tools/testing/selftests/bpf/test_xdp_redirect_multi.sh       | 2 +-
- tools/testing/selftests/bpf/test_xdp_veth.sh                 | 4 ++--
- tools/testing/selftests/bpf/xdping.c                         | 5 ++---
- 19 files changed, 27 insertions(+), 30 deletions(-)
+ tools/lib/bpf/libbpf.c | 136 +++++++++++------------------------------
+ 1 file changed, 35 insertions(+), 101 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/test_map_in_map.c b/tools/testing/selftests/bpf/progs/test_map_in_map.c
-index 1cfeb940cf9f..5f0e0bfc151e 100644
---- a/tools/testing/selftests/bpf/progs/test_map_in_map.c
-+++ b/tools/testing/selftests/bpf/progs/test_map_in_map.c
-@@ -23,7 +23,7 @@ struct {
- 	__uint(value_size, sizeof(__u32));
- } mim_hash SEC(".maps");
- 
--SEC("xdp_mimtest")
-+SEC("xdp")
- int xdp_mimtest0(struct xdp_md *ctx)
- {
- 	int value = 123;
-diff --git a/tools/testing/selftests/bpf/progs/test_tcp_check_syncookie_kern.c b/tools/testing/selftests/bpf/progs/test_tcp_check_syncookie_kern.c
-index 47cbe2eeae43..fac7ef99f9a6 100644
---- a/tools/testing/selftests/bpf/progs/test_tcp_check_syncookie_kern.c
-+++ b/tools/testing/selftests/bpf/progs/test_tcp_check_syncookie_kern.c
-@@ -156,7 +156,7 @@ int check_syncookie_clsact(struct __sk_buff *skb)
- 	return TC_ACT_OK;
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 954c135a8adf..4ba67dff6b0d 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -7970,32 +7970,6 @@ void bpf_program__set_expected_attach_type(struct bpf_program *prog,
+ 	prog->expected_attach_type = type;
  }
  
--SEC("xdp/check_syncookie")
-+SEC("xdp")
- int check_syncookie_xdp(struct xdp_md *ctx)
- {
- 	check_syncookie(ctx, (void *)(long)ctx->data,
-diff --git a/tools/testing/selftests/bpf/progs/test_xdp.c b/tools/testing/selftests/bpf/progs/test_xdp.c
-index 31f9bce37491..e6aa2fc6ce6b 100644
---- a/tools/testing/selftests/bpf/progs/test_xdp.c
-+++ b/tools/testing/selftests/bpf/progs/test_xdp.c
-@@ -210,7 +210,7 @@ static __always_inline int handle_ipv6(struct xdp_md *xdp)
- 	return XDP_TX;
- }
- 
--SEC("xdp_tx_iptunnel")
-+SEC("xdp")
- int _xdp_tx_iptunnel(struct xdp_md *xdp)
- {
- 	void *data_end = (void *)(long)xdp->data_end;
-diff --git a/tools/testing/selftests/bpf/progs/test_xdp_adjust_tail_grow.c b/tools/testing/selftests/bpf/progs/test_xdp_adjust_tail_grow.c
-index 3d66599eee2e..199c61b7d062 100644
---- a/tools/testing/selftests/bpf/progs/test_xdp_adjust_tail_grow.c
-+++ b/tools/testing/selftests/bpf/progs/test_xdp_adjust_tail_grow.c
-@@ -2,7 +2,7 @@
- #include <linux/bpf.h>
- #include <bpf/bpf_helpers.h>
- 
--SEC("xdp_adjust_tail_grow")
-+SEC("xdp")
- int _xdp_adjust_tail_grow(struct xdp_md *xdp)
- {
- 	void *data_end = (void *)(long)xdp->data_end;
-diff --git a/tools/testing/selftests/bpf/progs/test_xdp_adjust_tail_shrink.c b/tools/testing/selftests/bpf/progs/test_xdp_adjust_tail_shrink.c
-index 22065a9cfb25..b7448253d135 100644
---- a/tools/testing/selftests/bpf/progs/test_xdp_adjust_tail_shrink.c
-+++ b/tools/testing/selftests/bpf/progs/test_xdp_adjust_tail_shrink.c
-@@ -9,9 +9,7 @@
- #include <linux/if_ether.h>
- #include <bpf/bpf_helpers.h>
- 
--int _version SEC("version") = 1;
+-#define BPF_PROG_SEC_IMPL(string, ptype, eatype, eatype_optional,	    \
+-			  attachable, attach_btf)			    \
+-	{								    \
+-		.sec = string,						    \
+-		.prog_type = ptype,					    \
+-		.expected_attach_type = eatype,				    \
+-		.cookie = (long) (					    \
+-			(eatype_optional ? SEC_EXP_ATTACH_OPT : 0) |   \
+-			(attachable ? SEC_ATTACHABLE : 0) |		    \
+-			(attach_btf ? SEC_ATTACH_BTF : 0)		    \
+-		),							    \
+-		.preload_fn = libbpf_preload_prog,			    \
+-	}
 -
--SEC("xdp_adjust_tail_shrink")
-+SEC("xdp")
- int _xdp_adjust_tail_shrink(struct xdp_md *xdp)
- {
- 	void *data_end = (void *)(long)xdp->data_end;
-diff --git a/tools/testing/selftests/bpf/progs/test_xdp_devmap_helpers.c b/tools/testing/selftests/bpf/progs/test_xdp_devmap_helpers.c
-index b360ba2bd441..807bf895f42c 100644
---- a/tools/testing/selftests/bpf/progs/test_xdp_devmap_helpers.c
-+++ b/tools/testing/selftests/bpf/progs/test_xdp_devmap_helpers.c
-@@ -5,7 +5,7 @@
- #include <linux/bpf.h>
- #include <bpf/bpf_helpers.h>
+-/* Programs that can be attached. */
+-#define BPF_APROG_SEC(string, ptype, atype) \
+-	BPF_PROG_SEC_IMPL(string, ptype, atype, true, 1, 0)
+-
+-/* Programs that must specify expected attach type at load time. */
+-#define BPF_EAPROG_SEC(string, ptype, eatype) \
+-	BPF_PROG_SEC_IMPL(string, ptype, eatype, false, 1, 0)
+-
+-/* Programs that use BTF to identify attach point */
+-#define BPF_PROG_BTF(string, ptype, eatype) \
+-	BPF_PROG_SEC_IMPL(string, ptype, eatype, false, 0, 1)
+-
+ #define SEC_DEF(sec_pfx, ptype, atype, flags, ...) {			    \
+ 	.sec = sec_pfx,							    \
+ 	.prog_type = BPF_PROG_TYPE_##ptype,				    \
+@@ -8014,10 +7988,8 @@ static struct bpf_link *attach_iter(const struct bpf_program *prog, long cookie)
  
--SEC("xdp_dm_log")
-+SEC("xdp")
- int xdpdm_devlog(struct xdp_md *ctx)
- {
- 	char fmt[] = "devmap redirect: dev %u -> dev %u len %u\n";
-diff --git a/tools/testing/selftests/bpf/progs/test_xdp_link.c b/tools/testing/selftests/bpf/progs/test_xdp_link.c
-index eb93ea95d1d8..ee7d6ac0f615 100644
---- a/tools/testing/selftests/bpf/progs/test_xdp_link.c
-+++ b/tools/testing/selftests/bpf/progs/test_xdp_link.c
-@@ -5,7 +5,7 @@
+ static const struct bpf_sec_def section_defs[] = {
+ 	SEC_DEF("socket",		SOCKET_FILTER, 0, SEC_NONE),
+-	BPF_EAPROG_SEC("sk_reuseport/migrate",	BPF_PROG_TYPE_SK_REUSEPORT,
+-						BPF_SK_REUSEPORT_SELECT_OR_MIGRATE),
+-	BPF_EAPROG_SEC("sk_reuseport",		BPF_PROG_TYPE_SK_REUSEPORT,
+-						BPF_SK_REUSEPORT_SELECT),
++	SEC_DEF("sk_reuseport/migrate",	SK_REUSEPORT, BPF_SK_REUSEPORT_SELECT_OR_MIGRATE, SEC_ATTACHABLE),
++	SEC_DEF("sk_reuseport",		SK_REUSEPORT, BPF_SK_REUSEPORT_SELECT, SEC_ATTACHABLE),
+ 	SEC_DEF("kprobe/",		KPROBE,	0, SEC_NONE, attach_kprobe),
+ 	SEC_DEF("uprobe/",		KPROBE,	0, SEC_NONE),
+ 	SEC_DEF("kretprobe/",		KPROBE, 0, SEC_NONE, attach_kprobe),
+@@ -8041,87 +8013,49 @@ static const struct bpf_sec_def section_defs[] = {
+ 	SEC_DEF("lsm.s/",		LSM, BPF_LSM_MAC, SEC_ATTACH_BTF | SEC_SLEEPABLE, attach_lsm),
+ 	SEC_DEF("iter/",		TRACING, BPF_TRACE_ITER, SEC_ATTACH_BTF, attach_iter),
+ 	SEC_DEF("syscall",		SYSCALL, 0, SEC_SLEEPABLE),
+-	BPF_EAPROG_SEC("xdp_devmap/",		BPF_PROG_TYPE_XDP,
+-						BPF_XDP_DEVMAP),
+-	BPF_EAPROG_SEC("xdp_cpumap/",		BPF_PROG_TYPE_XDP,
+-						BPF_XDP_CPUMAP),
+-	BPF_APROG_SEC("xdp",			BPF_PROG_TYPE_XDP,
+-						BPF_XDP),
++	SEC_DEF("xdp_devmap/",		XDP, BPF_XDP_DEVMAP, SEC_ATTACHABLE),
++	SEC_DEF("xdp_cpumap/",		XDP, BPF_XDP_CPUMAP, SEC_ATTACHABLE),
++	SEC_DEF("xdp",			XDP, BPF_XDP, SEC_ATTACHABLE_OPT),
+ 	SEC_DEF("perf_event",		PERF_EVENT, 0, SEC_NONE),
+ 	SEC_DEF("lwt_in",		LWT_IN, 0, SEC_NONE),
+ 	SEC_DEF("lwt_out",		LWT_OUT, 0, SEC_NONE),
+ 	SEC_DEF("lwt_xmit",		LWT_XMIT, 0, SEC_NONE),
+ 	SEC_DEF("lwt_seg6local",	LWT_SEG6LOCAL, 0, SEC_NONE),
+-	BPF_APROG_SEC("cgroup_skb/ingress",	BPF_PROG_TYPE_CGROUP_SKB,
+-						BPF_CGROUP_INET_INGRESS),
+-	BPF_APROG_SEC("cgroup_skb/egress",	BPF_PROG_TYPE_CGROUP_SKB,
+-						BPF_CGROUP_INET_EGRESS),
++	SEC_DEF("cgroup_skb/ingress",	CGROUP_SKB, BPF_CGROUP_INET_INGRESS, SEC_ATTACHABLE_OPT),
++	SEC_DEF("cgroup_skb/egress",	CGROUP_SKB, BPF_CGROUP_INET_EGRESS, SEC_ATTACHABLE_OPT),
+ 	SEC_DEF("cgroup/skb",		CGROUP_SKB, 0, SEC_NONE),
+-	BPF_EAPROG_SEC("cgroup/sock_create",	BPF_PROG_TYPE_CGROUP_SOCK,
+-						BPF_CGROUP_INET_SOCK_CREATE),
+-	BPF_EAPROG_SEC("cgroup/sock_release",	BPF_PROG_TYPE_CGROUP_SOCK,
+-						BPF_CGROUP_INET_SOCK_RELEASE),
+-	BPF_APROG_SEC("cgroup/sock",		BPF_PROG_TYPE_CGROUP_SOCK,
+-						BPF_CGROUP_INET_SOCK_CREATE),
+-	BPF_EAPROG_SEC("cgroup/post_bind4",	BPF_PROG_TYPE_CGROUP_SOCK,
+-						BPF_CGROUP_INET4_POST_BIND),
+-	BPF_EAPROG_SEC("cgroup/post_bind6",	BPF_PROG_TYPE_CGROUP_SOCK,
+-						BPF_CGROUP_INET6_POST_BIND),
+-	BPF_APROG_SEC("cgroup/dev",		BPF_PROG_TYPE_CGROUP_DEVICE,
+-						BPF_CGROUP_DEVICE),
+-	BPF_APROG_SEC("sockops",		BPF_PROG_TYPE_SOCK_OPS,
+-						BPF_CGROUP_SOCK_OPS),
+-	BPF_APROG_SEC("sk_skb/stream_parser",	BPF_PROG_TYPE_SK_SKB,
+-						BPF_SK_SKB_STREAM_PARSER),
+-	BPF_APROG_SEC("sk_skb/stream_verdict",	BPF_PROG_TYPE_SK_SKB,
+-						BPF_SK_SKB_STREAM_VERDICT),
++	SEC_DEF("cgroup/sock_create",	CGROUP_SOCK, BPF_CGROUP_INET_SOCK_CREATE, SEC_ATTACHABLE),
++	SEC_DEF("cgroup/sock_release",	CGROUP_SOCK, BPF_CGROUP_INET_SOCK_RELEASE, SEC_ATTACHABLE),
++	SEC_DEF("cgroup/sock",		CGROUP_SOCK, BPF_CGROUP_INET_SOCK_CREATE, SEC_ATTACHABLE_OPT),
++	SEC_DEF("cgroup/post_bind4",	CGROUP_SOCK, BPF_CGROUP_INET4_POST_BIND, SEC_ATTACHABLE),
++	SEC_DEF("cgroup/post_bind6",	CGROUP_SOCK, BPF_CGROUP_INET6_POST_BIND, SEC_ATTACHABLE),
++	SEC_DEF("cgroup/dev",		CGROUP_DEVICE, BPF_CGROUP_DEVICE, SEC_ATTACHABLE_OPT),
++	SEC_DEF("sockops",		SOCK_OPS, BPF_CGROUP_SOCK_OPS, SEC_ATTACHABLE_OPT),
++	SEC_DEF("sk_skb/stream_parser",	SK_SKB, BPF_SK_SKB_STREAM_PARSER, SEC_ATTACHABLE_OPT),
++	SEC_DEF("sk_skb/stream_verdict",SK_SKB, BPF_SK_SKB_STREAM_VERDICT, SEC_ATTACHABLE_OPT),
+ 	SEC_DEF("sk_skb",		SK_SKB, 0, SEC_NONE),
+-	BPF_APROG_SEC("sk_msg",			BPF_PROG_TYPE_SK_MSG,
+-						BPF_SK_MSG_VERDICT),
+-	BPF_APROG_SEC("lirc_mode2",		BPF_PROG_TYPE_LIRC_MODE2,
+-						BPF_LIRC_MODE2),
+-	BPF_APROG_SEC("flow_dissector",		BPF_PROG_TYPE_FLOW_DISSECTOR,
+-						BPF_FLOW_DISSECTOR),
+-	BPF_EAPROG_SEC("cgroup/bind4",		BPF_PROG_TYPE_CGROUP_SOCK_ADDR,
+-						BPF_CGROUP_INET4_BIND),
+-	BPF_EAPROG_SEC("cgroup/bind6",		BPF_PROG_TYPE_CGROUP_SOCK_ADDR,
+-						BPF_CGROUP_INET6_BIND),
+-	BPF_EAPROG_SEC("cgroup/connect4",	BPF_PROG_TYPE_CGROUP_SOCK_ADDR,
+-						BPF_CGROUP_INET4_CONNECT),
+-	BPF_EAPROG_SEC("cgroup/connect6",	BPF_PROG_TYPE_CGROUP_SOCK_ADDR,
+-						BPF_CGROUP_INET6_CONNECT),
+-	BPF_EAPROG_SEC("cgroup/sendmsg4",	BPF_PROG_TYPE_CGROUP_SOCK_ADDR,
+-						BPF_CGROUP_UDP4_SENDMSG),
+-	BPF_EAPROG_SEC("cgroup/sendmsg6",	BPF_PROG_TYPE_CGROUP_SOCK_ADDR,
+-						BPF_CGROUP_UDP6_SENDMSG),
+-	BPF_EAPROG_SEC("cgroup/recvmsg4",	BPF_PROG_TYPE_CGROUP_SOCK_ADDR,
+-						BPF_CGROUP_UDP4_RECVMSG),
+-	BPF_EAPROG_SEC("cgroup/recvmsg6",	BPF_PROG_TYPE_CGROUP_SOCK_ADDR,
+-						BPF_CGROUP_UDP6_RECVMSG),
+-	BPF_EAPROG_SEC("cgroup/getpeername4",	BPF_PROG_TYPE_CGROUP_SOCK_ADDR,
+-						BPF_CGROUP_INET4_GETPEERNAME),
+-	BPF_EAPROG_SEC("cgroup/getpeername6",	BPF_PROG_TYPE_CGROUP_SOCK_ADDR,
+-						BPF_CGROUP_INET6_GETPEERNAME),
+-	BPF_EAPROG_SEC("cgroup/getsockname4",	BPF_PROG_TYPE_CGROUP_SOCK_ADDR,
+-						BPF_CGROUP_INET4_GETSOCKNAME),
+-	BPF_EAPROG_SEC("cgroup/getsockname6",	BPF_PROG_TYPE_CGROUP_SOCK_ADDR,
+-						BPF_CGROUP_INET6_GETSOCKNAME),
+-	BPF_EAPROG_SEC("cgroup/sysctl",		BPF_PROG_TYPE_CGROUP_SYSCTL,
+-						BPF_CGROUP_SYSCTL),
+-	BPF_EAPROG_SEC("cgroup/getsockopt",	BPF_PROG_TYPE_CGROUP_SOCKOPT,
+-						BPF_CGROUP_GETSOCKOPT),
+-	BPF_EAPROG_SEC("cgroup/setsockopt",	BPF_PROG_TYPE_CGROUP_SOCKOPT,
+-						BPF_CGROUP_SETSOCKOPT),
++	SEC_DEF("sk_msg",		SK_MSG, BPF_SK_MSG_VERDICT, SEC_ATTACHABLE_OPT),
++	SEC_DEF("lirc_mode2",		LIRC_MODE2, BPF_LIRC_MODE2, SEC_ATTACHABLE_OPT),
++	SEC_DEF("flow_dissector",	FLOW_DISSECTOR, BPF_FLOW_DISSECTOR, SEC_ATTACHABLE_OPT),
++	SEC_DEF("cgroup/bind4",		CGROUP_SOCK_ADDR, BPF_CGROUP_INET4_BIND, SEC_ATTACHABLE),
++	SEC_DEF("cgroup/bind6",		CGROUP_SOCK_ADDR, BPF_CGROUP_INET6_BIND, SEC_ATTACHABLE),
++	SEC_DEF("cgroup/connect4",	CGROUP_SOCK_ADDR, BPF_CGROUP_INET4_CONNECT, SEC_ATTACHABLE),
++	SEC_DEF("cgroup/connect6",	CGROUP_SOCK_ADDR, BPF_CGROUP_INET6_CONNECT, SEC_ATTACHABLE),
++	SEC_DEF("cgroup/sendmsg4",	CGROUP_SOCK_ADDR, BPF_CGROUP_UDP4_SENDMSG, SEC_ATTACHABLE),
++	SEC_DEF("cgroup/sendmsg6",	CGROUP_SOCK_ADDR, BPF_CGROUP_UDP6_SENDMSG, SEC_ATTACHABLE),
++	SEC_DEF("cgroup/recvmsg4",	CGROUP_SOCK_ADDR, BPF_CGROUP_UDP4_RECVMSG, SEC_ATTACHABLE),
++	SEC_DEF("cgroup/recvmsg6",	CGROUP_SOCK_ADDR, BPF_CGROUP_UDP6_RECVMSG, SEC_ATTACHABLE),
++	SEC_DEF("cgroup/getpeername4",	CGROUP_SOCK_ADDR, BPF_CGROUP_INET4_GETPEERNAME, SEC_ATTACHABLE),
++	SEC_DEF("cgroup/getpeername6",	CGROUP_SOCK_ADDR, BPF_CGROUP_INET6_GETPEERNAME, SEC_ATTACHABLE),
++	SEC_DEF("cgroup/getsockname4",	CGROUP_SOCK_ADDR, BPF_CGROUP_INET4_GETSOCKNAME, SEC_ATTACHABLE),
++	SEC_DEF("cgroup/getsockname6",	CGROUP_SOCK_ADDR, BPF_CGROUP_INET6_GETSOCKNAME, SEC_ATTACHABLE),
++	SEC_DEF("cgroup/sysctl",	CGROUP_SYSCTL, BPF_CGROUP_SYSCTL, SEC_ATTACHABLE),
++	SEC_DEF("cgroup/getsockopt",	CGROUP_SOCKOPT, BPF_CGROUP_GETSOCKOPT, SEC_ATTACHABLE),
++	SEC_DEF("cgroup/setsockopt",	CGROUP_SOCKOPT, BPF_CGROUP_SETSOCKOPT, SEC_ATTACHABLE),
+ 	SEC_DEF("struct_ops",		STRUCT_OPS, 0, SEC_NONE),
+-	BPF_EAPROG_SEC("sk_lookup/",		BPF_PROG_TYPE_SK_LOOKUP,
+-						BPF_SK_LOOKUP),
++	SEC_DEF("sk_lookup/",		SK_LOOKUP, BPF_SK_LOOKUP, SEC_ATTACHABLE),
+ };
  
- char LICENSE[] SEC("license") = "GPL";
+-#undef BPF_PROG_SEC_IMPL
+-#undef BPF_APROG_SEC
+-#undef BPF_EAPROG_SEC
+-#undef SEC_DEF
+-
+ #define MAX_TYPE_NAME_SIZE 32
  
--SEC("xdp/handler")
-+SEC("xdp")
- int xdp_handler(struct xdp_md *xdp)
- {
- 	return 0;
-diff --git a/tools/testing/selftests/bpf/progs/test_xdp_loop.c b/tools/testing/selftests/bpf/progs/test_xdp_loop.c
-index fcabcda30ba3..27eb52dda92c 100644
---- a/tools/testing/selftests/bpf/progs/test_xdp_loop.c
-+++ b/tools/testing/selftests/bpf/progs/test_xdp_loop.c
-@@ -206,7 +206,7 @@ static __always_inline int handle_ipv6(struct xdp_md *xdp)
- 	return XDP_TX;
- }
- 
--SEC("xdp_tx_iptunnel")
-+SEC("xdp")
- int _xdp_tx_iptunnel(struct xdp_md *xdp)
- {
- 	void *data_end = (void *)(long)xdp->data_end;
-diff --git a/tools/testing/selftests/bpf/progs/test_xdp_noinline.c b/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
-index 3a67921f62b5..596c4e71bf3a 100644
---- a/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
-+++ b/tools/testing/selftests/bpf/progs/test_xdp_noinline.c
-@@ -797,7 +797,7 @@ static int process_packet(void *data, __u64 off, void *data_end,
- 	return XDP_DROP;
- }
- 
--SEC("xdp-test-v4")
-+SEC("xdp")
- int balancer_ingress_v4(struct xdp_md *ctx)
- {
- 	void *data = (void *)(long)ctx->data;
-@@ -816,7 +816,7 @@ int balancer_ingress_v4(struct xdp_md *ctx)
- 		return XDP_DROP;
- }
- 
--SEC("xdp-test-v6")
-+SEC("xdp")
- int balancer_ingress_v6(struct xdp_md *ctx)
- {
- 	void *data = (void *)(long)ctx->data;
-diff --git a/tools/testing/selftests/bpf/progs/test_xdp_with_cpumap_helpers.c b/tools/testing/selftests/bpf/progs/test_xdp_with_cpumap_helpers.c
-index 59ee4f182ff8..532025057711 100644
---- a/tools/testing/selftests/bpf/progs/test_xdp_with_cpumap_helpers.c
-+++ b/tools/testing/selftests/bpf/progs/test_xdp_with_cpumap_helpers.c
-@@ -12,13 +12,13 @@ struct {
- 	__uint(max_entries, 4);
- } cpu_map SEC(".maps");
- 
--SEC("xdp_redir")
-+SEC("xdp")
- int xdp_redir_prog(struct xdp_md *ctx)
- {
- 	return bpf_redirect_map(&cpu_map, 1, 0);
- }
- 
--SEC("xdp_dummy")
-+SEC("xdp")
- int xdp_dummy_prog(struct xdp_md *ctx)
- {
- 	return XDP_PASS;
-diff --git a/tools/testing/selftests/bpf/progs/test_xdp_with_devmap_helpers.c b/tools/testing/selftests/bpf/progs/test_xdp_with_devmap_helpers.c
-index 0ac086497722..1e6b9c38ea6d 100644
---- a/tools/testing/selftests/bpf/progs/test_xdp_with_devmap_helpers.c
-+++ b/tools/testing/selftests/bpf/progs/test_xdp_with_devmap_helpers.c
-@@ -9,7 +9,7 @@ struct {
- 	__uint(max_entries, 4);
- } dm_ports SEC(".maps");
- 
--SEC("xdp_redir")
-+SEC("xdp")
- int xdp_redir_prog(struct xdp_md *ctx)
- {
- 	return bpf_redirect_map(&dm_ports, 1, 0);
-@@ -18,7 +18,7 @@ int xdp_redir_prog(struct xdp_md *ctx)
- /* invalid program on DEVMAP entry;
-  * SEC name means expected attach type not set
-  */
--SEC("xdp_dummy")
-+SEC("xdp")
- int xdp_dummy_prog(struct xdp_md *ctx)
- {
- 	return XDP_PASS;
-diff --git a/tools/testing/selftests/bpf/progs/xdp_dummy.c b/tools/testing/selftests/bpf/progs/xdp_dummy.c
-index ea25e8881992..d988b2e0cee8 100644
---- a/tools/testing/selftests/bpf/progs/xdp_dummy.c
-+++ b/tools/testing/selftests/bpf/progs/xdp_dummy.c
-@@ -4,7 +4,7 @@
- #include <linux/bpf.h>
- #include <bpf/bpf_helpers.h>
- 
--SEC("xdp_dummy")
-+SEC("xdp")
- int xdp_dummy_prog(struct xdp_md *ctx)
- {
- 	return XDP_PASS;
-diff --git a/tools/testing/selftests/bpf/progs/xdp_redirect_multi_kern.c b/tools/testing/selftests/bpf/progs/xdp_redirect_multi_kern.c
-index 880debcbcd65..8395782b6e0a 100644
---- a/tools/testing/selftests/bpf/progs/xdp_redirect_multi_kern.c
-+++ b/tools/testing/selftests/bpf/progs/xdp_redirect_multi_kern.c
-@@ -34,7 +34,7 @@ struct {
- 	__uint(max_entries, 128);
- } mac_map SEC(".maps");
- 
--SEC("xdp_redirect_map_multi")
-+SEC("xdp")
- int xdp_redirect_map_multi_prog(struct xdp_md *ctx)
- {
- 	void *data_end = (void *)(long)ctx->data_end;
-@@ -63,7 +63,7 @@ int xdp_redirect_map_multi_prog(struct xdp_md *ctx)
- }
- 
- /* The following 2 progs are for 2nd devmap prog testing */
--SEC("xdp_redirect_map_ingress")
-+SEC("xdp")
- int xdp_redirect_map_all_prog(struct xdp_md *ctx)
- {
- 	return bpf_redirect_map(&map_egress, 0,
-diff --git a/tools/testing/selftests/bpf/progs/xdping_kern.c b/tools/testing/selftests/bpf/progs/xdping_kern.c
-index 6b9ca40bd1f4..4ad73847b8a5 100644
---- a/tools/testing/selftests/bpf/progs/xdping_kern.c
-+++ b/tools/testing/selftests/bpf/progs/xdping_kern.c
-@@ -86,7 +86,7 @@ static __always_inline int icmp_check(struct xdp_md *ctx, int type)
- 	return XDP_TX;
- }
- 
--SEC("xdpclient")
-+SEC("xdp")
- int xdping_client(struct xdp_md *ctx)
- {
- 	void *data_end = (void *)(long)ctx->data_end;
-@@ -150,7 +150,7 @@ int xdping_client(struct xdp_md *ctx)
- 	return XDP_TX;
- }
- 
--SEC("xdpserver")
-+SEC("xdp")
- int xdping_server(struct xdp_md *ctx)
- {
- 	void *data_end = (void *)(long)ctx->data_end;
-diff --git a/tools/testing/selftests/bpf/test_tcp_check_syncookie.sh b/tools/testing/selftests/bpf/test_tcp_check_syncookie.sh
-index 9b3617d770a5..fed765157c53 100755
---- a/tools/testing/selftests/bpf/test_tcp_check_syncookie.sh
-+++ b/tools/testing/selftests/bpf/test_tcp_check_syncookie.sh
-@@ -77,7 +77,7 @@ TEST_IF=lo
- MAX_PING_TRIES=5
- BPF_PROG_OBJ="${DIR}/test_tcp_check_syncookie_kern.o"
- CLSACT_SECTION="clsact/check_syncookie"
--XDP_SECTION="xdp/check_syncookie"
-+XDP_SECTION="xdp"
- BPF_PROG_ID=0
- PROG="${DIR}/test_tcp_check_syncookie_user"
- 
-diff --git a/tools/testing/selftests/bpf/test_xdp_redirect.sh b/tools/testing/selftests/bpf/test_xdp_redirect.sh
-index c033850886f4..57c8db9972a6 100755
---- a/tools/testing/selftests/bpf/test_xdp_redirect.sh
-+++ b/tools/testing/selftests/bpf/test_xdp_redirect.sh
-@@ -52,8 +52,8 @@ test_xdp_redirect()
- 		return 0
- 	fi
- 
--	ip -n ns1 link set veth11 $xdpmode obj xdp_dummy.o sec xdp_dummy &> /dev/null
--	ip -n ns2 link set veth22 $xdpmode obj xdp_dummy.o sec xdp_dummy &> /dev/null
-+	ip -n ns1 link set veth11 $xdpmode obj xdp_dummy.o sec xdp &> /dev/null
-+	ip -n ns2 link set veth22 $xdpmode obj xdp_dummy.o sec xdp &> /dev/null
- 	ip link set dev veth1 $xdpmode obj test_xdp_redirect.o sec redirect_to_222 &> /dev/null
- 	ip link set dev veth2 $xdpmode obj test_xdp_redirect.o sec redirect_to_111 &> /dev/null
- 
-diff --git a/tools/testing/selftests/bpf/test_xdp_redirect_multi.sh b/tools/testing/selftests/bpf/test_xdp_redirect_multi.sh
-index 1538373157e3..351955c2bdfd 100755
---- a/tools/testing/selftests/bpf/test_xdp_redirect_multi.sh
-+++ b/tools/testing/selftests/bpf/test_xdp_redirect_multi.sh
-@@ -88,7 +88,7 @@ setup_ns()
- 		# Add a neigh entry for IPv4 ping test
- 		ip -n ns$i neigh add 192.0.2.253 lladdr 00:00:00:00:00:01 dev veth0
- 		ip -n ns$i link set veth0 $mode obj \
--			xdp_dummy.o sec xdp_dummy &> /dev/null || \
-+			xdp_dummy.o sec xdp &> /dev/null || \
- 			{ test_fail "Unable to load dummy xdp" && exit 1; }
- 		IFACES="$IFACES veth$i"
- 		veth_mac[$i]=$(ip link show veth$i | awk '/link\/ether/ {print $2}')
-diff --git a/tools/testing/selftests/bpf/test_xdp_veth.sh b/tools/testing/selftests/bpf/test_xdp_veth.sh
-index 995278e684b6..a3a1eaee26ea 100755
---- a/tools/testing/selftests/bpf/test_xdp_veth.sh
-+++ b/tools/testing/selftests/bpf/test_xdp_veth.sh
-@@ -107,9 +107,9 @@ ip link set dev veth1 xdp pinned $BPF_DIR/progs/redirect_map_0
- ip link set dev veth2 xdp pinned $BPF_DIR/progs/redirect_map_1
- ip link set dev veth3 xdp pinned $BPF_DIR/progs/redirect_map_2
- 
--ip -n ns1 link set dev veth11 xdp obj xdp_dummy.o sec xdp_dummy
-+ip -n ns1 link set dev veth11 xdp obj xdp_dummy.o sec xdp
- ip -n ns2 link set dev veth22 xdp obj xdp_tx.o sec xdp
--ip -n ns3 link set dev veth33 xdp obj xdp_dummy.o sec xdp_dummy
-+ip -n ns3 link set dev veth33 xdp obj xdp_dummy.o sec xdp
- 
- trap cleanup EXIT
- 
-diff --git a/tools/testing/selftests/bpf/xdping.c b/tools/testing/selftests/bpf/xdping.c
-index 842d9155d36c..79a3453dab25 100644
---- a/tools/testing/selftests/bpf/xdping.c
-+++ b/tools/testing/selftests/bpf/xdping.c
-@@ -178,9 +178,8 @@ int main(int argc, char **argv)
- 		return 1;
- 	}
- 
--	main_prog = bpf_object__find_program_by_title(obj,
--						      server ? "xdpserver" :
--							       "xdpclient");
-+	main_prog = bpf_object__find_program_by_name(obj,
-+						     server ? "xdping_server" : "xdping_client");
- 	if (main_prog)
- 		prog_fd = bpf_program__fd(main_prog);
- 	if (!main_prog || prog_fd < 0) {
+ static const struct bpf_sec_def *find_sec_def(const char *sec_name)
 -- 
 2.30.2
 
