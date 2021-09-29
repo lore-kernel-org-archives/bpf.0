@@ -2,117 +2,191 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 71583C433EF
-	for <bpf@archiver.kernel.org>; Wed, 29 Sep 2021 11:05:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A2515C433EF
+	for <bpf@archiver.kernel.org>; Wed, 29 Sep 2021 11:19:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4C731613CE
-	for <bpf@archiver.kernel.org>; Wed, 29 Sep 2021 11:05:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7A4E8613CE
+	for <bpf@archiver.kernel.org>; Wed, 29 Sep 2021 11:19:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245640AbhI2LH3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 29 Sep 2021 07:07:29 -0400
-Received: from mail-wr1-f43.google.com ([209.85.221.43]:43773 "EHLO
-        mail-wr1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245638AbhI2LH2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 29 Sep 2021 07:07:28 -0400
-Received: by mail-wr1-f43.google.com with SMTP id x20so3524129wrg.10
-        for <bpf@vger.kernel.org>; Wed, 29 Sep 2021 04:05:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version;
-        bh=u/GRJSRDNaRjaqe7aITj2N6LmSMTr6ZHtHD11ND2M0M=;
-        b=HBwUkTn9c4x6yfEzxJQCwlah1iy/E3ZohU1lnm9Sbk+ZXKqzOgvDIsrAJq5FGyxJby
-         g3892WVMu/BxiU+4gVFYgSOcQqmUGAiCjJ/HdPrHJD+TGjC9sZ3mQnzf0aHT2Bu1EzzZ
-         s/XFufBle+4EDv3o3a1rgl+9SVbWtjqwg4m6PvHRIT8Pcn3IS3Qbep9ye1RVSGJ5VXJl
-         fO/Bo1gtUWdMIidKdC4r4xGqsWu/mSshF0SP/8ApojkZsuNDKMujPxylgO1Z0F6Ub+wI
-         5FE1jmB9mq4vhptVDl79VU80P5998enb0eTdh/9SUzAitJw6SISHRiIqxED4MxnZsw6g
-         pjDQ==
-X-Gm-Message-State: AOAM533Vd0Mrc1Pdzr/f6z/2FiLpppE4KTfBcySiJlpr7cVCL9QcG2GD
-        fAMCYCV5fpa9ujpNK4KnaPw=
-X-Google-Smtp-Source: ABdhPJw5xDZjQSxWyEMreel/9vUHX0mXjw68/OIm42Qa0YYWwROwJX7UlkwbrTwP/aEeJazaSsRoWg==
-X-Received: by 2002:a05:6000:18a:: with SMTP id p10mr5823149wrx.161.1632913546936;
-        Wed, 29 Sep 2021 04:05:46 -0700 (PDT)
-Received: from localhost ([137.220.125.106])
-        by smtp.gmail.com with ESMTPSA id h18sm1890485wrs.75.2021.09.29.04.05.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Sep 2021 04:05:46 -0700 (PDT)
-Message-ID: <ed448659f66f2142151b34e6af9c98b46abdaaf0.camel@debian.org>
-Subject: Re: [PATCH] samples/bpf: relicense bpf_insn.h as GPL-2.0-only OR
- BSD-2-Clause
-From:   Luca Boccassi <bluca@debian.org>
-To:     =?ISO-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@gmail.com>,
-        "Karlsson, Magnus" <magnus.karlsson@intel.com>
-Cc:     bpf <bpf@vger.kernel.org>,
-        "Mcnamara, John" <john.mcnamara@intel.com>
-Date:   Wed, 29 Sep 2021 12:05:44 +0100
-In-Reply-To: <CAJ+HfNjsJZx62ZnA9Gi-rCuL=yBVLKZke7J+ruQFHAAKarpk=g@mail.gmail.com>
-References: <20210923000540.47344-1-luca.boccassi@gmail.com>
-         <1aa77fde2f7f4637d9eae7807c5c55063d6a4066.camel@debian.org>
-         <CAJ+HfNjsJZx62ZnA9Gi-rCuL=yBVLKZke7J+ruQFHAAKarpk=g@mail.gmail.com>
-Content-Type: multipart/signed; micalg="pgp-sha512";
-        protocol="application/pgp-signature"; boundary="=-FF3UljuYtNQTG73l1hL2"
-User-Agent: Evolution 3.38.3-1+plugin 
+        id S244891AbhI2LVY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 29 Sep 2021 07:21:24 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:46856 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S231859AbhI2LVX (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 29 Sep 2021 07:21:23 -0400
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 18T9IOwq006524;
+        Wed, 29 Sep 2021 07:19:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=ZoJdAtpCEWzoSowubQOrMKgOMVDWlKEkESqs4WoVx/E=;
+ b=NTOHyBBEUCwAgOBEIXT5xpyCEaD65QJz90sv1/AbczCD4yF4JkRffiwHdFOvjMHQXUXg
+ fDHboKujJY7v0WHYwp5FzN3Tz4MXTdLD29SaBfdbbLvbf4CuszRjd0J/Z9oOOzNUI10f
+ UhlMCUVDEG3kS/E6cUGsqESnFI7/Pz0pCrBUFcOjRmSvk+jG4rePzbuakuY81enQq9Uk
+ jD1PFdmX5+dQgMCDj29F39N2tGaUZdtGQEfhrA68SiVOMgPdLFEvvA0B81VGaDbqk7da
+ h5eEbrdR3uAjPIxQpts07FMDkk7MppNfj/UGpW1APcPRVTniiLVeTgG61l3AwpuBA2uM 3g== 
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3bckhpd5mm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 29 Sep 2021 07:19:22 -0400
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 18TBDNmT021997;
+        Wed, 29 Sep 2021 11:19:19 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma06fra.de.ibm.com with ESMTP id 3b9u1k58av-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 29 Sep 2021 11:19:19 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 18TBJGPu44564852
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 29 Sep 2021 11:19:16 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E30D04206C;
+        Wed, 29 Sep 2021 11:19:15 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 353E642070;
+        Wed, 29 Sep 2021 11:19:11 +0000 (GMT)
+Received: from hbathini-workstation.ibm.com.com (unknown [9.43.83.199])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 29 Sep 2021 11:19:10 +0000 (GMT)
+From:   Hari Bathini <hbathini@linux.ibm.com>
+To:     naveen.n.rao@linux.ibm.com, christophe.leroy@csgroup.eu,
+        mpe@ellerman.id.au, ast@kernel.org, daniel@iogearbox.net
+Cc:     paulus@samba.org, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org,
+        Ravi Bangoria <ravi.bangoria@linux.ibm.com>
+Subject: [PATCH v4 2/8] bpf powerpc: Remove extra_pass from bpf_jit_build_body()
+Date:   Wed, 29 Sep 2021 16:48:49 +0530
+Message-Id: <20210929111855.50254-3-hbathini@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20210929111855.50254-1-hbathini@linux.ibm.com>
+References: <20210929111855.50254-1-hbathini@linux.ibm.com>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: wQBT_bCuPssj2pqOqV-Nm4pYeKqsLRwu
+X-Proofpoint-GUID: wQBT_bCuPssj2pqOqV-Nm4pYeKqsLRwu
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
+ definitions=2021-09-29_04,2021-09-29_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 bulkscore=0
+ adultscore=0 clxscore=1015 priorityscore=1501 malwarescore=0
+ impostorscore=0 mlxscore=0 spamscore=0 suspectscore=0 lowpriorityscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2109230001 definitions=main-2109290068
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+From: Ravi Bangoria <ravi.bangoria@linux.ibm.com>
 
---=-FF3UljuYtNQTG73l1hL2
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In case of extra_pass, usual JIT passes are always skipped. So,
+extra_pass is always false while calling bpf_jit_build_body() and
+can be removed.
 
-On Wed, 2021-09-29 at 13:01 +0200, Bj=C3=B6rn T=C3=B6pel wrote:
-> On Tue, 28 Sept 2021 at 17:44, Luca Boccassi <bluca@debian.org> wrote:
-> >=20
->=20
-> [...]
->=20
-> >=20
-> > Gentle ping. Bj=C3=B6rn and Joe, would be great to hear from you on the
-> > above. TIA!
-> >=20
->=20
-> Luca, apologies for the slow response. I'm no longer at Intel, and I'm
-> not sure if an Intel-person needs to do anything? Magnus, do you know?
->=20
-> FWIW:
-> Acked-by: Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org>
+Signed-off-by: Ravi Bangoria <ravi.bangoria@linux.ibm.com>
+---
 
-No worries! Unless you had an arrangement in place that made you the
-copyright owner of that contribution (eg: it was done in spare time,
-etc), then yes we'd need an ack to the relicense from an intel.com
-email address to be above board.
+* No changes in v4.
 
-John, is this something you could help with, using your manager hat?
-Full context:
 
-https://lore.kernel.org/bpf/20210923000540.47344-1-luca.boccassi@gmail.com/=
-T/#u
+ arch/powerpc/net/bpf_jit.h        | 2 +-
+ arch/powerpc/net/bpf_jit_comp.c   | 6 +++---
+ arch/powerpc/net/bpf_jit_comp32.c | 4 ++--
+ arch/powerpc/net/bpf_jit_comp64.c | 4 ++--
+ 4 files changed, 8 insertions(+), 8 deletions(-)
 
---=20
-Kind regards,
-Luca Boccassi
+diff --git a/arch/powerpc/net/bpf_jit.h b/arch/powerpc/net/bpf_jit.h
+index d6267e93027a..411c63d945c7 100644
+--- a/arch/powerpc/net/bpf_jit.h
++++ b/arch/powerpc/net/bpf_jit.h
+@@ -166,7 +166,7 @@ static inline void bpf_clear_seen_register(struct codegen_context *ctx, int i)
+ 
+ void bpf_jit_emit_func_call_rel(u32 *image, struct codegen_context *ctx, u64 func);
+ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, struct codegen_context *ctx,
+-		       u32 *addrs, bool extra_pass);
++		       u32 *addrs);
+ void bpf_jit_build_prologue(u32 *image, struct codegen_context *ctx);
+ void bpf_jit_build_epilogue(u32 *image, struct codegen_context *ctx);
+ void bpf_jit_realloc_regs(struct codegen_context *ctx);
+diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
+index 53aefee3fe70..c5c9e8ad1de7 100644
+--- a/arch/powerpc/net/bpf_jit_comp.c
++++ b/arch/powerpc/net/bpf_jit_comp.c
+@@ -149,7 +149,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
+ 	cgctx.stack_size = round_up(fp->aux->stack_depth, 16);
+ 
+ 	/* Scouting faux-generate pass 0 */
+-	if (bpf_jit_build_body(fp, 0, &cgctx, addrs, false)) {
++	if (bpf_jit_build_body(fp, 0, &cgctx, addrs)) {
+ 		/* We hit something illegal or unsupported. */
+ 		fp = org_fp;
+ 		goto out_addrs;
+@@ -162,7 +162,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
+ 	 */
+ 	if (cgctx.seen & SEEN_TAILCALL) {
+ 		cgctx.idx = 0;
+-		if (bpf_jit_build_body(fp, 0, &cgctx, addrs, false)) {
++		if (bpf_jit_build_body(fp, 0, &cgctx, addrs)) {
+ 			fp = org_fp;
+ 			goto out_addrs;
+ 		}
+@@ -210,7 +210,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
+ 		/* Now build the prologue, body code & epilogue for real. */
+ 		cgctx.idx = 0;
+ 		bpf_jit_build_prologue(code_base, &cgctx);
+-		bpf_jit_build_body(fp, code_base, &cgctx, addrs, extra_pass);
++		bpf_jit_build_body(fp, code_base, &cgctx, addrs);
+ 		bpf_jit_build_epilogue(code_base, &cgctx);
+ 
+ 		if (bpf_jit_enable > 1)
+diff --git a/arch/powerpc/net/bpf_jit_comp32.c b/arch/powerpc/net/bpf_jit_comp32.c
+index beb12cbc8c29..b60b59426a24 100644
+--- a/arch/powerpc/net/bpf_jit_comp32.c
++++ b/arch/powerpc/net/bpf_jit_comp32.c
+@@ -266,7 +266,7 @@ static void bpf_jit_emit_tail_call(u32 *image, struct codegen_context *ctx, u32
+ 
+ /* Assemble the body code between the prologue & epilogue */
+ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, struct codegen_context *ctx,
+-		       u32 *addrs, bool extra_pass)
++		       u32 *addrs)
+ {
+ 	const struct bpf_insn *insn = fp->insnsi;
+ 	int flen = fp->len;
+@@ -860,7 +860,7 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, struct codegen_context *
+ 		case BPF_JMP | BPF_CALL:
+ 			ctx->seen |= SEEN_FUNC;
+ 
+-			ret = bpf_jit_get_func_addr(fp, &insn[i], extra_pass,
++			ret = bpf_jit_get_func_addr(fp, &insn[i], false,
+ 						    &func_addr, &func_addr_fixed);
+ 			if (ret < 0)
+ 				return ret;
+diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
+index b87a63dba9c8..2a87da50d9a4 100644
+--- a/arch/powerpc/net/bpf_jit_comp64.c
++++ b/arch/powerpc/net/bpf_jit_comp64.c
+@@ -272,7 +272,7 @@ static void bpf_jit_emit_tail_call(u32 *image, struct codegen_context *ctx, u32
+ 
+ /* Assemble the body code between the prologue & epilogue */
+ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, struct codegen_context *ctx,
+-		       u32 *addrs, bool extra_pass)
++		       u32 *addrs)
+ {
+ 	const struct bpf_insn *insn = fp->insnsi;
+ 	int flen = fp->len;
+@@ -769,7 +769,7 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, struct codegen_context *
+ 		case BPF_JMP | BPF_CALL:
+ 			ctx->seen |= SEEN_FUNC;
+ 
+-			ret = bpf_jit_get_func_addr(fp, &insn[i], extra_pass,
++			ret = bpf_jit_get_func_addr(fp, &insn[i], false,
+ 						    &func_addr, &func_addr_fixed);
+ 			if (ret < 0)
+ 				return ret;
+-- 
+2.31.1
 
---=-FF3UljuYtNQTG73l1hL2
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEErCSqx93EIPGOymuRKGv37813JB4FAmFUSIgACgkQKGv37813
-JB6kAQ/9EqGjFwh9MdqbN+CNZdmXPQa0zIjX4mTHpWPZZPCJsDQQ0rKBgI/JOufc
-ujBjXk486ul1eaZgjTQl7uV4bNyJ9FEpVyvHJ4LtjjXD3Xpxu0NYkZDOTFNS7Oty
-qT5OXQ+bAJnOM6UyVFX4fZ9flGsiC7UpFm3HRLdMUHW0ZlOfeiTVxEwQn7L+Us35
-X/vz6XzgJOkB5aEd51G3vGkl99c7g/pOdsemx7KtwUfYASfVOWv+6UFmaQFX6b+k
-2kwl08G7fBbCXqOIk7WDs/yVbf26jqWNPb26XXEAnI2jqUmSxgd3/YbnaAJZdjDK
-HPEgDhah9Le8UhCDOm56n+qEC4Io6AnkwXXOFrkv0GbmKXYI+J3YLB/lBP6PZRrC
-rE9Y9QJKbo53SysTM3x7rwSxUmOmSXElDDsfkIRCwlKDt2dIh0wRqoBXUsCihXT2
-xnK6drRoGBPsU4L7/4qeU1OqO6EOOuVGwBiOLWzcQBZTh+htk2RZqzHKwOhP7a8+
-2HwR3dlkk9bXYbgZljFGNa0Kn7J4zfI+0ztQdV8ipLls5uxS3SuxoUrDXSVSXTRw
-/c+iKtG9Hc0EvSps2LYSU4pzSmfKbVpCJ+wswu0nPMNVZONx/cPweAZW7GF/Xu7I
-y2V487yDDJJwDRw/VspbsE+773YTNWBZW1iRRegvWIUcaCjupVk=
-=SOh0
------END PGP SIGNATURE-----
-
---=-FF3UljuYtNQTG73l1hL2--
