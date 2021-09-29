@@ -2,71 +2,83 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 901DDC433F5
-	for <bpf@archiver.kernel.org>; Wed, 29 Sep 2021 10:00:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61E90C433EF
+	for <bpf@archiver.kernel.org>; Wed, 29 Sep 2021 10:13:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6F73E61409
-	for <bpf@archiver.kernel.org>; Wed, 29 Sep 2021 10:00:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4371F6135E
+	for <bpf@archiver.kernel.org>; Wed, 29 Sep 2021 10:13:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245250AbhI2KBs (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 29 Sep 2021 06:01:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42284 "EHLO mail.kernel.org"
+        id S245315AbhI2KPQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 29 Sep 2021 06:15:16 -0400
+Received: from mga11.intel.com ([192.55.52.93]:22647 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S245247AbhI2KBr (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 29 Sep 2021 06:01:47 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id B966F613CD;
-        Wed, 29 Sep 2021 10:00:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632909606;
-        bh=ckY2GL0Q7QnX1zQI1hAF2j2bVYDBNxOCBll9Fod9thk=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=g0Nc9b6vkSmSCUI0hspxh3u3c2JEHg0gLJtEK1o/EkaTvOQXCWoNi4+T1dgLQDyoS
-         gLtpioHv7V0TF1OHQ33vxjQqjVfPEb7t25gO++wBiheo8L4BGQfzZnu9fFJJ2XGSR5
-         dMJkrXqzJHX1vB2SIKfizw+8gdhTv6exL8s5c5g/arIptnMBbInU7CTDgu8FAx34+i
-         WjL3+moA6eYkN35jszggeW3myTm4JAWSY+AWBIEzAWOVsTpQd2Peg4K6ymJ0XRn0Av
-         cxKZSCX/WztoaPzuclqS7ava+l08MUg0VDZMKRIBCbgbVQUGbEfCkZHmNSGBbVFpUd
-         fyyfDAzMvliKA==
-Content-Type: text/plain; charset="utf-8"
+        id S245330AbhI2KPP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 29 Sep 2021 06:15:15 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10121"; a="221702740"
+X-IronPort-AV: E=Sophos;i="5.85,332,1624345200"; 
+   d="scan'208";a="221702740"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2021 03:13:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.85,332,1624345200"; 
+   d="scan'208";a="554726505"
+Received: from boxer.igk.intel.com (HELO boxer) ([10.102.20.173])
+  by FMSMGA003.fm.intel.com with ESMTP; 29 Sep 2021 03:13:32 -0700
+Date:   Wed, 29 Sep 2021 14:14:57 +0200
+From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To:     Magnus Karlsson <magnus.karlsson@gmail.com>
+Cc:     magnus.karlsson@intel.com, bjorn@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, netdev@vger.kernel.org,
+        jonathan.lemon@gmail.com, nathan@kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH bpf-next] xsk: fix clang build error in __xp_alloc
+Message-ID: <YVRYwRc9iUXuP8/v@boxer>
+References: <20210929061403.8587-1-magnus.karlsson@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net 1/1] ixgbe: Fix NULL pointer dereference in
- ixgbe_xdp_setup
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163290960669.9595.16080686564264021241.git-patchwork-notify@kernel.org>
-Date:   Wed, 29 Sep 2021 10:00:06 +0000
-References: <20210928222359.3380825-1-anthony.l.nguyen@intel.com>
-In-Reply-To: <20210928222359.3380825-1-anthony.l.nguyen@intel.com>
-To:     Tony Nguyen <anthony.l.nguyen@intel.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, zhoufeng.zf@bytedance.com,
-        netdev@vger.kernel.org, maciej.fijalkowski@intel.com,
-        magnus.karlsson@intel.com, ast@kernel.org, daniel@iogearbox.net,
-        hawk@kernel.org, john.fastabend@gmail.com, bpf@vger.kernel.org,
-        sandeep.penigalapati@intel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210929061403.8587-1-magnus.karlsson@gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (refs/heads/master):
-
-On Tue, 28 Sep 2021 15:23:59 -0700 you wrote:
-> From: Feng Zhou <zhoufeng.zf@bytedance.com>
+On Wed, Sep 29, 2021 at 08:14:03AM +0200, Magnus Karlsson wrote:
+> From: Magnus Karlsson <magnus.karlsson@intel.com>
 > 
-> The ixgbe driver currently generates a NULL pointer dereference with
-> some machine (online cpus < 63). This is due to the fact that the
-> maximum value of num_xdp_queues is nr_cpu_ids. Code is in
-> "ixgbe_set_rss_queues"".
+> Fix a build error with clang in __xp_alloc().
 > 
-> [...]
+> net/xdp/xsk_buff_pool.c:465:15: error: variable 'xskb' is uninitialized
+> when used here [-Werror,-Wuninitialized]
+>                         xp_release(xskb);
+>                                    ^~~~
+> 
+> This is correctly detected by clang, but not gcc. In fact, the
+> xp_release() statement should not be there at all in the refactored
+> code, so just remove it.
 
-Here is the summary with links:
-  - [net,1/1] ixgbe: Fix NULL pointer dereference in ixgbe_xdp_setup
-    https://git.kernel.org/netdev/net/c/513e605d7a9c
+Acked-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+> 
+> Fixes: 94033cd8e73b ("xsk: Optimize for aligned case")
+> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
+> ---
+>  net/xdp/xsk_buff_pool.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
+> index 96b14e51ba7e..90c4e1e819d3 100644
+> --- a/net/xdp/xsk_buff_pool.c
+> +++ b/net/xdp/xsk_buff_pool.c
+> @@ -462,7 +462,6 @@ static struct xdp_buff_xsk *__xp_alloc(struct xsk_buff_pool *pool)
+>  	for (;;) {
+>  		if (!xskq_cons_peek_addr_unchecked(pool->fq, &addr)) {
+>  			pool->fq->queue_empty_descs++;
+> -			xp_release(xskb);
+>  			return NULL;
+>  		}
+>  
+> 
+> base-commit: 72e1781a5de9e3ee804e24f7ce9a7dd85596fc51
+> -- 
+> 2.29.0
+> 
