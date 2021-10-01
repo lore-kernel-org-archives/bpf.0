@@ -2,162 +2,106 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CC1C9C433FE
-	for <bpf@archiver.kernel.org>; Fri,  1 Oct 2021 22:03:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 661DDC433F5
+	for <bpf@archiver.kernel.org>; Fri,  1 Oct 2021 22:03:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B36C861A8E
-	for <bpf@archiver.kernel.org>; Fri,  1 Oct 2021 22:03:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4B7A961A8E
+	for <bpf@archiver.kernel.org>; Fri,  1 Oct 2021 22:03:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355800AbhJAWFM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 1 Oct 2021 18:05:12 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:14690 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1355791AbhJAWFL (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 1 Oct 2021 18:05:11 -0400
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.1.2/8.16.1.2) with SMTP id 191LseSm010699
-        for <bpf@vger.kernel.org>; Fri, 1 Oct 2021 15:03:26 -0700
+        id S1355812AbhJAWFN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 1 Oct 2021 18:05:13 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:11150 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1355802AbhJAWFM (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 1 Oct 2021 18:05:12 -0400
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 191Lthft001212
+        for <bpf@vger.kernel.org>; Fri, 1 Oct 2021 15:03:28 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=zp1idubUTRum9FSHHvkx4YbZs9QHOAp0J8Zc0jBWTBw=;
- b=TqT0zt+yfSTF9ZbKdJP6B6ipAAqgVtrvTbHajMJWzSlovE4ScOFey+4B6URNBARM5b0s
- vX1VU1Okem/gl3uW047avWqN/WOPFrYQZfLN6k2KmcTF9GhjCl0kAkqp5QLd3rhp2LBK
- OWgJCHlD2RmVZC+bZUzsYOzjCb54igJT9ps= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0001303.ppops.net with ESMTP id 3beamxg1x5-1
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=facebook; bh=H5ZHUYFEhbidodW/G8tkR5W9D7fiUi+8DDuSlnbpc0o=;
+ b=ZOFvMHbm+5pfZRyUVkSZ9u5ErBcoK8yOgAx80VeLoISLgHb9e0r8Zp+4Yr4y6hlYqPpL
+ 7wLQIlMQt0WT79vLeyT1szs4EyIvBVOS22Ocjsp/uTVg+qc/xmhtf41bj8QfT/HNx77w
+ nx4WRZtwY3f70cUJSkfRATpRm3ZVwYtNIuE= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 3be92w8q8g-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 01 Oct 2021 15:03:26 -0700
-Received: from intmgw001.38.frc1.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 01 Oct 2021 15:03:28 -0700
+Received: from intmgw002.25.frc3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Fri, 1 Oct 2021 15:03:25 -0700
+ 15.1.2308.14; Fri, 1 Oct 2021 15:03:26 -0700
 Received: by devbig612.frc2.facebook.com (Postfix, from userid 115148)
-        id DB2A4312DE58; Fri,  1 Oct 2021 15:03:23 -0700 (PDT)
+        id 4280F312DE4A; Fri,  1 Oct 2021 15:03:17 -0700 (PDT)
 From:   Joanne Koong <joannekoong@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     <kafai@fb.com>, <netdev@vger.kernel.org>, <Kernel-team@fb.com>,
         Joanne Koong <joannekoong@fb.com>
-Subject: [PATCH bpf-next v1 2/3] bpf/selftests: Rename test_tcp_hdr_options to test_sockops_tcp_hdr_options
-Date:   Fri, 1 Oct 2021 14:58:57 -0700
-Message-ID: <20211001215858.1132715-3-joannekoong@fb.com>
+Subject: [PATCH bpf-next v1 0/3] Add XDP support for bpf_load_hdr_opt
+Date:   Fri, 1 Oct 2021 14:58:55 -0700
+Message-ID: <20211001215858.1132715-1-joannekoong@fb.com>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211001215858.1132715-1-joannekoong@fb.com>
-References: <20211001215858.1132715-1-joannekoong@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-GUID: VQJEvJ65N7PL4BtVY8I27JZViOcxDxfb
-X-Proofpoint-ORIG-GUID: VQJEvJ65N7PL4BtVY8I27JZViOcxDxfb
+X-Proofpoint-ORIG-GUID: 36Abbdz7yMM52_JeGbjZNPLVCynRM2eS
+X-Proofpoint-GUID: 36Abbdz7yMM52_JeGbjZNPLVCynRM2eS
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
  definitions=2021-10-01_05,2021-10-01_02,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
- priorityscore=1501 malwarescore=0 suspectscore=0 lowpriorityscore=0
- adultscore=0 mlxlogscore=977 phishscore=0 clxscore=1015 mlxscore=0
- bulkscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2109230001 definitions=main-2110010154
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 phishscore=0
+ clxscore=1015 mlxlogscore=266 malwarescore=0 spamscore=0 impostorscore=0
+ bulkscore=0 adultscore=0 lowpriorityscore=0 suspectscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2109230001 definitions=main-2110010153
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently, tcp_hdr_options is only supported for sockops type programs.
-This patchset adds xdp tcp_hdr_options support. To more easily
-differentiate between these two tests, this patch does the following
-renames (with  no functional changes):
+Currently, bpf_sockops programs have been using bpf_load_hdr_opt() to
+parse the tcp header option. It will be useful to allow other bpf prog
+types to have a similar way of handling tcp hdr options.
 
-test_tcp_hdr_options -> test_sockops_tcp_hdr_options
-test_misc_tcp_hdr_options -> test_sockops_misc_tcp_hdr_options
+This series adds XDP support for bpf_load_hdr_opt(). At a high level,
+these patches are:
 
-The next patch will add xdp_test_tcp_hdr_options.
+1/3 patch - Add functionality for xdp bpf_load_hdr_opt in net/core.
 
-Signed-off-by: Joanne Koong <joannekoong@fb.com>
----
- ...hdr_options.c =3D> sockops_tcp_hdr_options.c} | 18 +++++++++---------
- ...s.c =3D> test_sockops_misc_tcp_hdr_options.c} |  0
- ...ptions.c =3D> test_sockops_tcp_hdr_options.c} |  0
- 3 files changed, 9 insertions(+), 9 deletions(-)
+2/3 patch - Rename existing test_tcp_hdr_options to test_sockops_tcp_hdr_=
+options.
+
+3/3 patch - Add tests for xdp bpf_load_hdr_opt (test_xdp_tcp_hdr_options)=
+.
+
+Joanne Koong (3):
+  bpf/xdp: Add bpf_load_hdr_opt support for xdp
+  bpf/selftests: Rename test_tcp_hdr_options to
+    test_sockops_tcp_hdr_options
+  bpf/selftests: Add xdp bpf_load_tcp_hdr_options tests
+
+ include/uapi/linux/bpf.h                      |  26 ++-
+ net/core/filter.c                             |  88 ++++++--
+ tools/include/uapi/linux/bpf.h                |  26 ++-
+ ...dr_options.c =3D> sockops_tcp_hdr_options.c} |  18 +-
+ .../bpf/prog_tests/xdp_tcp_hdr_options.c      | 158 ++++++++++++++
+ ....c =3D> test_sockops_misc_tcp_hdr_options.c} |   0
+ ...tions.c =3D> test_sockops_tcp_hdr_options.c} |   0
+ .../bpf/progs/test_xdp_tcp_hdr_options.c      | 198 ++++++++++++++++++
+ 8 files changed, 468 insertions(+), 46 deletions(-)
  rename tools/testing/selftests/bpf/prog_tests/{tcp_hdr_options.c =3D> so=
 ckops_tcp_hdr_options.c} (96%)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp_tcp_hdr_op=
+tions.c
  rename tools/testing/selftests/bpf/progs/{test_misc_tcp_hdr_options.c =3D=
 > test_sockops_misc_tcp_hdr_options.c} (100%)
  rename tools/testing/selftests/bpf/progs/{test_tcp_hdr_options.c =3D> te=
 st_sockops_tcp_hdr_options.c} (100%)
+ create mode 100644 tools/testing/selftests/bpf/progs/test_xdp_tcp_hdr_op=
+tions.c
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/tcp_hdr_options.c b/t=
-ools/testing/selftests/bpf/prog_tests/sockops_tcp_hdr_options.c
-similarity index 96%
-rename from tools/testing/selftests/bpf/prog_tests/tcp_hdr_options.c
-rename to tools/testing/selftests/bpf/prog_tests/sockops_tcp_hdr_options.=
-c
-index 1fa772079967..f8fb12f4c1ed 100644
---- a/tools/testing/selftests/bpf/prog_tests/tcp_hdr_options.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockops_tcp_hdr_options.c
-@@ -12,8 +12,8 @@
- #include "cgroup_helpers.h"
- #include "network_helpers.h"
- #include "test_tcp_hdr_options.h"
--#include "test_tcp_hdr_options.skel.h"
--#include "test_misc_tcp_hdr_options.skel.h"
-+#include "test_sockops_tcp_hdr_options.skel.h"
-+#include "test_sockops_misc_tcp_hdr_options.skel.h"
-=20
- #define LO_ADDR6 "::1"
- #define CG_NAME "/tcpbpf-hdr-opt-test"
-@@ -25,8 +25,8 @@ static struct bpf_test_option exp_active_fin_in;
- static struct hdr_stg exp_passive_hdr_stg;
- static struct hdr_stg exp_active_hdr_stg =3D { .active =3D true, };
-=20
--static struct test_misc_tcp_hdr_options *misc_skel;
--static struct test_tcp_hdr_options *skel;
-+static struct test_sockops_misc_tcp_hdr_options *misc_skel;
-+static struct test_sockops_tcp_hdr_options *skel;
- static int lport_linum_map_fd;
- static int hdr_stg_map_fd;
- static __u32 duration;
-@@ -570,15 +570,15 @@ static struct test tests[] =3D {
- 	DEF_TEST(misc),
- };
-=20
--void test_tcp_hdr_options(void)
-+void test_sockops_tcp_hdr_options(void)
- {
- 	int i;
-=20
--	skel =3D test_tcp_hdr_options__open_and_load();
-+	skel =3D test_sockops_tcp_hdr_options__open_and_load();
- 	if (CHECK(!skel, "open and load skel", "failed"))
- 		return;
-=20
--	misc_skel =3D test_misc_tcp_hdr_options__open_and_load();
-+	misc_skel =3D test_sockops_misc_tcp_hdr_options__open_and_load();
- 	if (CHECK(!misc_skel, "open and load misc test skel", "failed"))
- 		goto skel_destroy;
-=20
-@@ -600,6 +600,6 @@ void test_tcp_hdr_options(void)
-=20
- 	close(cg_fd);
- skel_destroy:
--	test_misc_tcp_hdr_options__destroy(misc_skel);
--	test_tcp_hdr_options__destroy(skel);
-+	test_sockops_misc_tcp_hdr_options__destroy(misc_skel);
-+	test_sockops_tcp_hdr_options__destroy(skel);
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_misc_tcp_hdr_options.=
-c b/tools/testing/selftests/bpf/progs/test_sockops_misc_tcp_hdr_options.c
-similarity index 100%
-rename from tools/testing/selftests/bpf/progs/test_misc_tcp_hdr_options.c
-rename to tools/testing/selftests/bpf/progs/test_sockops_misc_tcp_hdr_opt=
-ions.c
-diff --git a/tools/testing/selftests/bpf/progs/test_tcp_hdr_options.c b/t=
-ools/testing/selftests/bpf/progs/test_sockops_tcp_hdr_options.c
-similarity index 100%
-rename from tools/testing/selftests/bpf/progs/test_tcp_hdr_options.c
-rename to tools/testing/selftests/bpf/progs/test_sockops_tcp_hdr_options.=
-c
 --=20
 2.30.2
 
