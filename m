@@ -2,209 +2,150 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6305EC433F5
-	for <bpf@archiver.kernel.org>; Fri,  1 Oct 2021 03:36:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 935BCC433F5
+	for <bpf@archiver.kernel.org>; Fri,  1 Oct 2021 09:04:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 408B5604DA
-	for <bpf@archiver.kernel.org>; Fri,  1 Oct 2021 03:36:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6D1C561A84
+	for <bpf@archiver.kernel.org>; Fri,  1 Oct 2021 09:04:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230346AbhJADhz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 30 Sep 2021 23:37:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45394 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230389AbhJADhy (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 30 Sep 2021 23:37:54 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B72BC06176A;
-        Thu, 30 Sep 2021 20:36:11 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id dj4so30622552edb.5;
-        Thu, 30 Sep 2021 20:36:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jkp98q2ixpv2/VB9hqcJl2RHzO1J0JRn3M5buNc2nMU=;
-        b=DovXkrN/rEmoX6kPkslXaKGObhyDRIbHo65GlK4pUJ4BXkN3mLqguDkwH9C3rMzdkc
-         HBoIpZDQx2u3lBK+K3hEMbphH7pgx9n9JotlDOKI0PKC+zkjgG7oPebZLkdzwMKsgOO7
-         iqa9+RMO0xlVxz3i3i7cj9wgq5Eaj9vSdnWDO0RmbVLAIYPpCZjZf/LIuYecv0mNP7YU
-         Y7fqcbS48QR1TSJnOku9ygQKx6oE7BeQmrI9ut9VUZw6rjmGb1petKtHB2HKhp8m7n3B
-         TDFKPggJDQ76BE3cHYUTv4aVCz/MaeGDomXKwXKCwxKgfUbENTBMXYKcMONXg/ovu3MG
-         yNBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jkp98q2ixpv2/VB9hqcJl2RHzO1J0JRn3M5buNc2nMU=;
-        b=N69ZpmPtiDVGm4Vb7varO68oWKQ+3MGvRjVZE8uU8H3LyqpP5x+ATztl4PG0AcMDAN
-         PcRDUKOYp9UfZ0EwSxxDZroAkEqKET6O/H8lSX5T4iOxRwWP1gMV/Kuye2ZfJ+jh+6lL
-         6WSjkoq2ysyd0ws5OZqlUovM5UVy/1Iq/rnBfKIk2ES7O/HZCD008ukAvEKDDP3lXhTB
-         ZPG6VK2fWlqDM7DLUuh1vslO9G3KNY6oeQ/BrI3bNyCIf0FRHCf1H2ZRPE9g2kKQxT0K
-         AGxqMYUIbqbIaEEjwVYDC3SHqL42v8Q1HOvoxPiFAhfpsXsm2K6aihGaRvfDX0wgaMhS
-         88wQ==
-X-Gm-Message-State: AOAM532YWON2HtjprF+EQ2UFsj6wLHGTGrEu7nIoI01GgZFn3KyOIz8Q
-        lf5Ti8nIdnhsHoNnF8cPw1+iEUpdc/WqhiRIdHY=
-X-Google-Smtp-Source: ABdhPJwsDYJ8byhhcHm8xfuPYA6x0kXOPmO17k4AVIKoWo6GLOjlH+ncR3nrdUmtJSLP2IN4CjxTj2yLH28aYG0nDqo=
-X-Received: by 2002:a17:906:3383:: with SMTP id v3mr3653540eja.213.1633059369746;
- Thu, 30 Sep 2021 20:36:09 -0700 (PDT)
+        id S1352574AbhJAJFq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 1 Oct 2021 05:05:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48210 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229681AbhJAJFp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 1 Oct 2021 05:05:45 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4ADE061A51;
+        Fri,  1 Oct 2021 09:04:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1633079041;
+        bh=iwd69jO+HUZ5Wr9iGcz1eQEUZyYDvXgW0N/7XTUzUms=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=owffkWakkynFhh0RZ7OilXtduRA5POi9p25zNXAgUcF6GyG+F2s970xLfmME8gkf4
+         XSvX2yUzl3meXbMj6SdsglCB/Z8rZVkShLzFNnC5Cgb0j1ZgoWuDHBtDqOXXU5WBtY
+         bHn0f4oFJp9oVbupt+BuW4n4fMQoEv5ZkT7AmdcW8+IngA7Q1PNOgi9yBA6rl6LtHB
+         /KMcluDYSfunFmWzBq7s/98kXBUUPOKxIGOIoaAXuX9ERmRlA0R7MXUztCkKbPrAex
+         9O5y1UJ+MJNZ/mJ4Os0DeHpSbo4Vu/dF7yTh3qZH9l3XVJQyfIogd0IsPCm4DXr6Pa
+         iTkO8zbm3Jz6w==
+Date:   Fri, 1 Oct 2021 11:03:58 +0200
+From:   Lorenzo Bianconi <lorenzo@kernel.org>
+To:     Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Lorenz Bauer <lmb@cloudflare.com>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Lorenzo Bianconi <lorenzo.bianconi@redhat.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, shayagr@amazon.com,
+        John Fastabend <john.fastabend@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Eelco Chaudron <echaudro@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        Saeed Mahameed <saeed@kernel.org>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
+        tirthendu.sarkar@intel.com
+Subject: Re: [PATCH v14 bpf-next 00/18] mvneta: introduce XDP multi-buffer
+ support
+Message-ID: <YVbO/kit/mjWTrv6@lore-desk>
+References: <cover.1631289870.git.lorenzo@kernel.org>
+ <20210916095539.4696ae27@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <CACAyw9-8t8RpJgJUTd7u6bOLnJ1xQsgK7z37QrL9T1FUaJ7WNQ@mail.gmail.com>
+ <87v92jinv7.fsf@toke.dk>
+ <CACAyw99S9v658UyiKz3ad4kja7rDNfYv+9VOXZHCUOtam_C8Wg@mail.gmail.com>
+ <CAADnVQ+XXGUxzqMdbPMYf+t_ViDkqvGDdogrmv-wH-dckzujLw@mail.gmail.com>
+ <20210929122229.1d0c4960@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <87mtnvi0bc.fsf@toke.dk>
 MIME-Version: 1.0
-References: <20210915213550.3696532-1-guro@fb.com> <20210916162451.709260-1-guro@fb.com>
- <20210916162451.709260-5-guro@fb.com>
-In-Reply-To: <20210916162451.709260-5-guro@fb.com>
-From:   Barry Song <21cnbao@gmail.com>
-Date:   Fri, 1 Oct 2021 16:35:58 +1300
-Message-ID: <CAGsJ_4xr0Xg3B1seT5_kcb26ZQgWaakR8QGOB-N62wehfXkt_Q@mail.gmail.com>
-Subject: Re: [PATCH rfc 4/6] sched: cfs: add bpf hooks to control wakeup and
- tick preemption
-To:     Roman Gushchin <guro@fb.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mel Gorman <mgorman@techsingularity.net>, bpf@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="88BAqEkjHIrKkCZm"
+Content-Disposition: inline
+In-Reply-To: <87mtnvi0bc.fsf@toke.dk>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Sep 17, 2021 at 4:36 AM Roman Gushchin <guro@fb.com> wrote:
->
-> This patch adds 3 hooks to control wakeup and tick preemption:
->   cfs_check_preempt_tick
->   cfs_check_preempt_wakeup
->   cfs_wakeup_preempt_entity
->
-> The first one allows to force or suppress a preemption from a tick
-> context. An obvious usage example is to minimize the number of
-> non-voluntary context switches and decrease an associated latency
-> penalty by (conditionally) providing tasks or task groups an extended
-> execution slice. It can be used instead of tweaking
-> sysctl_sched_min_granularity.
->
-> The second one is called from the wakeup preemption code and allows
-> to redefine whether a newly woken task should preempt the execution
-> of the current task. This is useful to minimize a number of
-> preemptions of latency sensitive tasks. To some extent it's a more
-> flexible analog of a sysctl_sched_wakeup_granularity.
 
-This reminds me of Mel's recent work which might be relevant:
-sched/fair: Scale wakeup granularity relative to nr_running
-https://lore.kernel.org/lkml/20210920142614.4891-3-mgorman@techsingularity.net/
+--88BAqEkjHIrKkCZm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->
-> The third one is similar, but it tweaks the wakeup_preempt_entity()
-> function, which is called not only from a wakeup context, but also
-> from pick_next_task(), which allows to influence the decision on which
-> task will be running next.
->
-> It's a place for a discussion whether we need both these hooks or only
-> one of them: the second is more powerful, but depends more on the
-> current implementation. In any case, bpf hooks are not an ABI, so it's
-> not a deal breaker.
+> Jakub Kicinski <kuba@kernel.org> writes:
+>=20
+> > On Wed, 29 Sep 2021 11:54:46 -0700 Alexei Starovoitov wrote:
+> >> I'm missing something. Why do we need a separate flush() helper?
+> >> Can't we do:
+> >> char buf[64], *p;
+> >> p =3D xdp_mb_pointer(ctx, flags, off, len, buf);
+> >> read/write p[]
+> >> if (p =3D=3D buf)
+> >>     xdp_store_bytes(ctx, off, buf, len, flags);
+> >
+> > Sure we can. That's what I meant by "leave the checking to the program".
+> > It's bike shedding at this point.
+>=20
+> Yeah, let's discuss the details once we have a patch :)
+>=20
+> -Toke
+>=20
 
-I am also curious if similar hook can benefit
-newidle_balance/sched_migration_cost
-tuning things in this thread:
-https://lore.kernel.org/lkml/ef3b3e55-8be9-595f-6d54-886d13a7e2fd@hisilicon.com/
+Hi,
 
-It seems those static values are not universal. different topology might need
-different settings.  but dynamically tuning them in the kernel seems to be
-extremely difficult.
+I implemented the xdp_mb_pointer/xdp_mb_pointer_flush logic here (according=
+ to
+current discussion):
+https://github.com/LorenzoBianconi/bpf-next/commit/a5c61c0fa6cb05bab8caebd9=
+6aca5fbbd9510867
 
->
-> The idea of the wakeup_preempt_entity hook belongs to Rik van Riel. He
-> also contributed a lot to the whole patchset by proving his ideas,
-> recommendations and a feedback for earlier (non-public) versions.
->
-> Signed-off-by: Roman Gushchin <guro@fb.com>
-> ---
->  include/linux/bpf_sched.h       |  1 +
->  include/linux/sched_hook_defs.h |  4 +++-
->  kernel/sched/fair.c             | 27 +++++++++++++++++++++++++++
->  3 files changed, 31 insertions(+), 1 deletion(-)
->
-> diff --git a/include/linux/bpf_sched.h b/include/linux/bpf_sched.h
-> index 6e773aecdff7..5c238aeb853c 100644
-> --- a/include/linux/bpf_sched.h
-> +++ b/include/linux/bpf_sched.h
-> @@ -40,6 +40,7 @@ static inline RET bpf_sched_##NAME(__VA_ARGS__)       \
->  {                                              \
->         return DEFAULT;                         \
->  }
-> +#include <linux/sched_hook_defs.h>
->  #undef BPF_SCHED_HOOK
->
->  static inline bool bpf_sched_enabled(void)
-> diff --git a/include/linux/sched_hook_defs.h b/include/linux/sched_hook_defs.h
-> index 14344004e335..f075b32698cd 100644
-> --- a/include/linux/sched_hook_defs.h
-> +++ b/include/linux/sched_hook_defs.h
-> @@ -1,2 +1,4 @@
->  /* SPDX-License-Identifier: GPL-2.0 */
-> -BPF_SCHED_HOOK(int, 0, dummy, void)
-> +BPF_SCHED_HOOK(int, 0, cfs_check_preempt_tick, struct sched_entity *curr, unsigned long delta_exec)
-> +BPF_SCHED_HOOK(int, 0, cfs_check_preempt_wakeup, struct task_struct *curr, struct task_struct *p)
-> +BPF_SCHED_HOOK(int, 0, cfs_wakeup_preempt_entity, struct sched_entity *curr, struct sched_entity *se)
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index ff69f245b939..35ea8911b25c 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -21,6 +21,7 @@
->   *  Copyright (C) 2007 Red Hat, Inc., Peter Zijlstra
->   */
->  #include "sched.h"
-> +#include <linux/bpf_sched.h>
->
->  /*
->   * Targeted preemption latency for CPU-bound tasks:
-> @@ -4447,6 +4448,16 @@ check_preempt_tick(struct cfs_rq *cfs_rq, struct sched_entity *curr)
->
->         ideal_runtime = sched_slice(cfs_rq, curr);
->         delta_exec = curr->sum_exec_runtime - curr->prev_sum_exec_runtime;
-> +
-> +       if (bpf_sched_enabled()) {
-> +               int ret = bpf_sched_cfs_check_preempt_tick(curr, delta_exec);
-> +
-> +               if (ret < 0)
-> +                       return;
-> +               else if (ret > 0)
-> +                       resched_curr(rq_of(cfs_rq));
-> +       }
-> +
->         if (delta_exec > ideal_runtime) {
->                 resched_curr(rq_of(cfs_rq));
->                 /*
-> @@ -7083,6 +7094,13 @@ wakeup_preempt_entity(struct sched_entity *curr, struct sched_entity *se)
->  {
->         s64 gran, vdiff = curr->vruntime - se->vruntime;
->
-> +       if (bpf_sched_enabled()) {
-> +               int ret = bpf_sched_cfs_wakeup_preempt_entity(curr, se);
-> +
-> +               if (ret)
-> +                       return ret;
-> +       }
-> +
->         if (vdiff <= 0)
->                 return -1;
->
-> @@ -7168,6 +7186,15 @@ static void check_preempt_wakeup(struct rq *rq, struct task_struct *p, int wake_
->             likely(!task_has_idle_policy(p)))
->                 goto preempt;
->
-> +       if (bpf_sched_enabled()) {
-> +               int ret = bpf_sched_cfs_check_preempt_wakeup(current, p);
-> +
-> +               if (ret < 0)
-> +                       return;
-> +               else if (ret > 0)
-> +                       goto preempt;
-> +       }
-> +
->         /*
->          * Batch and idle tasks do not preempt non-idle tasks (their preemption
->          * is driven by the tick):
-> --
-> 2.31.1
->
+For the moment I have only defined two utility routines and I have not expo=
+rted
+them in ebpf helpers since I need to check what are missing bits in the ver=
+ifier
+code (but afaik this would be orthogonal with respect to the "helper code"):
+- bpf_xdp_pointer --> xdp_mb_pointer
+- bpf_xdp_copy_buf --> xdp_mb_pointer_flush
 
-Thanks
-barry
+In order to test them I have defined two new ebpf helpers (they use
+bpf_xdp_pointer/bpf_xdp_copy_buf internally):
+- bpf_xdp_load_bytes
+- bpf_xdp_store_bytes
+
+In order to test bpf_xdp_load_bytes/bpf_xdp_store_bytes +
+bpf_xdp_pointer/bpf_xdp_copy_buf I added some selftests here:
+https://github.com/LorenzoBianconi/bpf-next/commit/5661a491a890c00db744f288=
+4b7ee3a6d0319384
+
+Can you please check if the code above is aligned to current requirements o=
+r if
+it is missing something?
+If this code it is fine, I guess we have two option here:
+- integrate the commits above in xdp multi-buff series (posting v15) and wo=
+rk on
+  the verfier code in parallel (if xdp_mb_pointer helper is not required fr=
+om day0)
+- integrate verfier changes in xdp multi-buff series, drop bpf_xdp_load_byt=
+es
+  helper (probably we will still need bpf_xdp_store_bytes) and introduce
+  bpf_xdp_pointer as new ebpf helper.
+
+I am fine both ways. If we decide for the second option I would need some
+guidance on verifier changes since I am not so familiar with that code.
+
+Regards,
+Lorenzo
+
+--88BAqEkjHIrKkCZm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCYVbO/gAKCRA6cBh0uS2t
+rJ8JAP9D2kamqTzQ+NFNbMWI7liuogHec6NtoHZLAXQFh7SyugEAogNjLCtZ4jbP
+fYNYLuqqmWHBppry7h3u8tRUhjT9mwU=
+=FrL+
+-----END PGP SIGNATURE-----
+
+--88BAqEkjHIrKkCZm--
