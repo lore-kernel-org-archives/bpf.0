@@ -2,54 +2,54 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E09E5C43217
-	for <bpf@archiver.kernel.org>; Fri,  1 Oct 2021 13:05:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C9CDC4321E
+	for <bpf@archiver.kernel.org>; Fri,  1 Oct 2021 13:05:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C55C761A83
-	for <bpf@archiver.kernel.org>; Fri,  1 Oct 2021 13:05:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 08E7E61AA3
+	for <bpf@archiver.kernel.org>; Fri,  1 Oct 2021 13:05:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354515AbhJANHA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 1 Oct 2021 09:07:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34280 "EHLO
+        id S1354497AbhJANG5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 1 Oct 2021 09:06:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354073AbhJANGv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1354147AbhJANGv (ORCPT <rfc822;bpf@vger.kernel.org>);
         Fri, 1 Oct 2021 09:06:51 -0400
 Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2903C061786
-        for <bpf@vger.kernel.org>; Fri,  1 Oct 2021 06:04:08 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id b8so47317edk.2
-        for <bpf@vger.kernel.org>; Fri, 01 Oct 2021 06:04:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 786A8C061775
+        for <bpf@vger.kernel.org>; Fri,  1 Oct 2021 06:04:17 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id g7so33804937edv.1
+        for <bpf@vger.kernel.org>; Fri, 01 Oct 2021 06:04:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=anyfinetworks-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ZpFHmDqOoyhA3jAK5s9z4k6+KE4kULIDGqlgShg+6uQ=;
-        b=L4vDK+ih8jWxlpASn6qUuBl5+sEwkSFACj0AGmdvkq2Kve4JP7zQT8e2Ma+JuPR/ST
-         B55u84/BjxgodDg99H0Cjv4y5W6ocP/VSqzMFHGe/EnERNmZlCEdF3gmiCyRkGxLGBZi
-         H+SBoJMyJiV50Hr3DewCsr1/leGJ/YqT5k9FLiBDDDo18uwFHPhm+Z+ASrJDN340Uacm
-         EA6j93FFBXwoz4rhKgOZLgFMigJeV/UD4pLpnUD80yc7H4auJYGBF7mqiYZ1eaB/pUeh
-         x3sPci9qKVAHWYOm8Bh5MXmMQHbFDZaSPO6bKUAe4pTlYAPjQEmoy6j4ZwRnf/+cL27z
-         vHkg==
+        bh=1dyBuNYzpYckrS6HbYo2UriEXk3AJ+jSdp87B70JRTg=;
+        b=HNqKx+ZGamiEvqIRVIhBXRul+X41vt7idhdmzZ2tqvQXSDhu1Y/8QY9s/4Btj1xNA2
+         sMRVJZ09fxzvGcPcPVdmxa5ts//bpPWe1x0PX6dTiIqvLxv9Y045HTJuqxjU53hopRmF
+         NRfRgu6VCWnVI7DcTv6Q2t8qc3G/9Y8jTYy0OzHzBXj2Nt+rWOcv96n3qIXxf0JECfkB
+         QMVkWIz60UFkwCBNXcvLPG1s/e9CZnEjt+lzFqQYo3g3Z+AgA9q/jwcqJE+jbrP+4iPI
+         tJA3YyyQEl/CkVIkszb3/fAliu5P/YK1pDithnVEDtVMvbb3TDpSmIKhIK8qej+w4Unk
+         HhIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ZpFHmDqOoyhA3jAK5s9z4k6+KE4kULIDGqlgShg+6uQ=;
-        b=bcbPe3g61ZBw9giCpK/o4ZM9Zw/uiZhRllJaud+yx6qUX9JZbzRQaF1KE+c/X/SmyE
-         aoLB+LeJuRhxVuIFUtzIeRb1MFGIUXdXBO49NHIEa2rp6BucreGTNy9/4Du+rinIvZYN
-         MhZN+tDQfYmT+2NcVxglB9SzD7ywemBQxulAQ7wmtdYF+8fwjWBJj1+YQRF7DojlhI2m
-         CeBLByLvlmqUQH4kgtamaUK4VKmGSF0TGbrVPEr0gfmwKICoP2i/6lwtlrpKEl9aNMxa
-         5WBfXFhjxqVzQ2QHDMLs3Vs+eeENulZNmH55Lm9iQjy5QhZNGFXON50CFjfKteMqavCU
-         1Jag==
-X-Gm-Message-State: AOAM533v5nXZDEsNkVFEwq3h26QkyVb01ibkoCP4fut2MQby5GTMrVX6
-        igs0zDmY2PglsPRLvouIn064Kg==
-X-Google-Smtp-Source: ABdhPJxcEfLmyOyLtCXDlOSGa86W59p/xC3GMO/nSeijab3YMNHaWotVUKxIj7xl+htVS0qa/XfKOw==
-X-Received: by 2002:a17:906:3fd7:: with SMTP id k23mr6102451ejj.176.1633093446347;
-        Fri, 01 Oct 2021 06:04:06 -0700 (PDT)
+        bh=1dyBuNYzpYckrS6HbYo2UriEXk3AJ+jSdp87B70JRTg=;
+        b=DbHT4ODW7b280e80xQ17+gDgBBUR5fT29awETQojKQVdjbdk4u7Mnf6hl1WWSFEL2E
+         E2ECv8x82C+i9y05ln9UrvsJUddLDRFtjzr5fLel4szT1Fx/5vYv7cJqgLMGoD6n6/dN
+         t72HnbW9O4IcwgsYzFi6vBvWRGjUUY5tlwSJjg3Sw0YUaQ1pf+cZ14Uiige+bT5xzm3q
+         suT4N2l6uNDrzHVI6T6lLmW7VdDmAh1ulRtEpAj95Scdt9ZmvqgopR1NDbis4+hWZA6s
+         BezCjb+GxGAK/alK881WNLWl652nBz2YOo7LrNv1Dn0BcPNhLeKirG8sAN7kE0CNOCEs
+         8DFw==
+X-Gm-Message-State: AOAM532jFbQB3mSZcAh8vhtZfH7Z9KVi5RIxI2erK/qEE5gJjz9tMVBo
+        8BlLYRi/p6unH4w8Trzvxc3Ssw==
+X-Google-Smtp-Source: ABdhPJzUUJNfhTVTRaRNPEHw3vr+IXFQKIy7lZ1UXp50ZegUvxV75vx2AXRWvT6bjkHNGrJyIi9/dQ==
+X-Received: by 2002:a17:906:318b:: with SMTP id 11mr6364683ejy.493.1633093448772;
+        Fri, 01 Oct 2021 06:04:08 -0700 (PDT)
 Received: from anpc2.lan (static-213-115-136-2.sme.telenor.se. [213.115.136.2])
-        by smtp.gmail.com with ESMTPSA id p22sm2920279ejl.90.2021.10.01.06.04.05
+        by smtp.gmail.com with ESMTPSA id p22sm2920279ejl.90.2021.10.01.06.04.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Oct 2021 06:04:06 -0700 (PDT)
+        Fri, 01 Oct 2021 06:04:08 -0700 (PDT)
 From:   Johan Almbladh <johan.almbladh@anyfinetworks.com>
 To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
 Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
@@ -57,9 +57,9 @@ Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
         paul@cilium.io, yangtiezhu@loongson.cn, netdev@vger.kernel.org,
         bpf@vger.kernel.org,
         Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Subject: [PATCH bpf-next 07/10] bpf/tests: Add exhaustive tests of ALU register combinations
-Date:   Fri,  1 Oct 2021 15:03:45 +0200
-Message-Id: <20211001130348.3670534-8-johan.almbladh@anyfinetworks.com>
+Subject: [PATCH bpf-next 09/10] bpf/tests: Add test of ALU shifts with operand register aliasing
+Date:   Fri,  1 Oct 2021 15:03:47 +0200
+Message-Id: <20211001130348.3670534-10-johan.almbladh@anyfinetworks.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211001130348.3670534-1-johan.almbladh@anyfinetworks.com>
 References: <20211001130348.3670534-1-johan.almbladh@anyfinetworks.com>
@@ -69,876 +69,270 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch replaces the current register combination test with new
-exhaustive tests. Before, only a subset of register combinations was
-tested for ALU64 DIV. Now, all combinatons of operand registers are
-tested, including the case when they are the same, and for all ALU32
-and ALU64 operations.
+This patch adds a tests of ALU32 and ALU64 LSH/RSH/ARSH operations for the
+case when the two operands are the same register. Mainly intended to test
+JITs that implement ALU64 shifts with 32-bit CPU instructions.
+
+Also renamed related helper functions for consistency with the new tests.
 
 Signed-off-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
 ---
- lib/test_bpf.c | 834 ++++++++++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 763 insertions(+), 71 deletions(-)
+ lib/test_bpf.c | 162 +++++++++++++++++++++++++++++++++++++++++++++----
+ 1 file changed, 149 insertions(+), 13 deletions(-)
 
 diff --git a/lib/test_bpf.c b/lib/test_bpf.c
-index 919323a3b69f..924bf4c9783c 100644
+index 40db4cee4f51..dfcbdff714b6 100644
 --- a/lib/test_bpf.c
 +++ b/lib/test_bpf.c
-@@ -1130,6 +1130,381 @@ static int bpf_fill_alu32_mod_reg(struct bpf_test *self)
- 	return __bpf_fill_alu32_reg(self, BPF_MOD);
+@@ -660,37 +660,37 @@ static int __bpf_fill_alu_shift(struct bpf_test *self, u8 op,
+ 
+ 	self->u.ptr.insns = insn;
+ 	self->u.ptr.len = len;
+-	BUG_ON(i > len);
++	BUG_ON(i != len);
+ 
+ 	return 0;
+ }
+ 
+-static int bpf_fill_alu_lsh_imm(struct bpf_test *self)
++static int bpf_fill_alu64_lsh_imm(struct bpf_test *self)
+ {
+ 	return __bpf_fill_alu_shift(self, BPF_LSH, BPF_K, false);
+ }
+ 
+-static int bpf_fill_alu_rsh_imm(struct bpf_test *self)
++static int bpf_fill_alu64_rsh_imm(struct bpf_test *self)
+ {
+ 	return __bpf_fill_alu_shift(self, BPF_RSH, BPF_K, false);
+ }
+ 
+-static int bpf_fill_alu_arsh_imm(struct bpf_test *self)
++static int bpf_fill_alu64_arsh_imm(struct bpf_test *self)
+ {
+ 	return __bpf_fill_alu_shift(self, BPF_ARSH, BPF_K, false);
+ }
+ 
+-static int bpf_fill_alu_lsh_reg(struct bpf_test *self)
++static int bpf_fill_alu64_lsh_reg(struct bpf_test *self)
+ {
+ 	return __bpf_fill_alu_shift(self, BPF_LSH, BPF_X, false);
+ }
+ 
+-static int bpf_fill_alu_rsh_reg(struct bpf_test *self)
++static int bpf_fill_alu64_rsh_reg(struct bpf_test *self)
+ {
+ 	return __bpf_fill_alu_shift(self, BPF_RSH, BPF_X, false);
+ }
+ 
+-static int bpf_fill_alu_arsh_reg(struct bpf_test *self)
++static int bpf_fill_alu64_arsh_reg(struct bpf_test *self)
+ {
+ 	return __bpf_fill_alu_shift(self, BPF_ARSH, BPF_X, false);
+ }
+@@ -725,6 +725,86 @@ static int bpf_fill_alu32_arsh_reg(struct bpf_test *self)
+ 	return __bpf_fill_alu_shift(self, BPF_ARSH, BPF_X, true);
  }
  
 +/*
-+ * Test JITs that implement complex ALU operations as function
-+ * calls, and must re-arrange operands for argument passing.
++ * Test an ALU register shift operation for all valid shift values
++ * for the case when the source and destination are the same.
 + */
-+static int __bpf_fill_alu_imm_regs(struct bpf_test *self, u8 op, bool alu32)
++static int __bpf_fill_alu_shift_same_reg(struct bpf_test *self, u8 op,
++					 bool alu32)
 +{
-+	int len = 2 + 10 * 10;
-+	struct bpf_insn *insns;
-+	u64 dst, res;
++	int bits = alu32 ? 32 : 64;
++	int len = 3 + 6 * bits;
++	struct bpf_insn *insn;
 +	int i = 0;
-+	u32 imm;
-+	int rd;
++	u64 val;
 +
-+	insns = kmalloc_array(len, sizeof(*insns), GFP_KERNEL);
-+	if (!insns)
++	insn = kmalloc_array(len, sizeof(*insn), GFP_KERNEL);
++	if (!insn)
 +		return -ENOMEM;
 +
-+	/* Operand and result values according to operation */
-+	if (alu32)
-+		dst = 0x76543210U;
-+	else
-+		dst = 0x7edcba9876543210ULL;
-+	imm = 0x01234567U;
++	insn[i++] = BPF_ALU64_IMM(BPF_MOV, R0, 0);
 +
-+	if (op == BPF_LSH || op == BPF_RSH || op == BPF_ARSH)
-+		imm &= 31;
++	for (val = 0; val < bits; val++) {
++		u64 res;
 +
-+	__bpf_alu_result(&res, dst, imm, op);
-+
-+	if (alu32)
-+		res = (u32)res;
-+
-+	/* Check all operand registers */
-+	for (rd = R0; rd <= R9; rd++) {
-+		i += __bpf_ld_imm64(&insns[i], rd, dst);
-+
++		/* Perform operation */
++		insn[i++] = BPF_ALU64_IMM(BPF_MOV, R1, val);
 +		if (alu32)
-+			insns[i++] = BPF_ALU32_IMM(op, rd, imm);
++			insn[i++] = BPF_ALU32_REG(op, R1, R1);
 +		else
-+			insns[i++] = BPF_ALU64_IMM(op, rd, imm);
++			insn[i++] = BPF_ALU64_REG(op, R1, R1);
 +
-+		insns[i++] = BPF_JMP32_IMM(BPF_JEQ, rd, res, 2);
-+		insns[i++] = BPF_MOV64_IMM(R0, __LINE__);
-+		insns[i++] = BPF_EXIT_INSN();
++		/* Compute the reference result */
++		__bpf_alu_result(&res, val, val, op);
++		if (alu32)
++			res = (u32)res;
++		i += __bpf_ld_imm64(&insn[i], R2, res);
 +
-+		insns[i++] = BPF_ALU64_IMM(BPF_RSH, rd, 32);
-+		insns[i++] = BPF_JMP32_IMM(BPF_JEQ, rd, res >> 32, 2);
-+		insns[i++] = BPF_MOV64_IMM(R0, __LINE__);
-+		insns[i++] = BPF_EXIT_INSN();
++		/* Check the actual result */
++		insn[i++] = BPF_JMP_REG(BPF_JEQ, R1, R2, 1);
++		insn[i++] = BPF_EXIT_INSN();
 +	}
 +
-+	insns[i++] = BPF_MOV64_IMM(R0, 1);
-+	insns[i++] = BPF_EXIT_INSN();
++	insn[i++] = BPF_ALU64_IMM(BPF_MOV, R0, 1);
++	insn[i++] = BPF_EXIT_INSN();
 +
-+	self->u.ptr.insns = insns;
++	self->u.ptr.insns = insn;
 +	self->u.ptr.len = len;
 +	BUG_ON(i != len);
 +
 +	return 0;
 +}
 +
-+/* ALU64 K registers */
-+static int bpf_fill_alu64_mov_imm_regs(struct bpf_test *self)
++static int bpf_fill_alu64_lsh_same_reg(struct bpf_test *self)
 +{
-+	return __bpf_fill_alu_imm_regs(self, BPF_MOV, false);
++	return __bpf_fill_alu_shift_same_reg(self, BPF_LSH, false);
 +}
 +
-+static int bpf_fill_alu64_and_imm_regs(struct bpf_test *self)
++static int bpf_fill_alu64_rsh_same_reg(struct bpf_test *self)
 +{
-+	return __bpf_fill_alu_imm_regs(self, BPF_AND, false);
++	return __bpf_fill_alu_shift_same_reg(self, BPF_RSH, false);
 +}
 +
-+static int bpf_fill_alu64_or_imm_regs(struct bpf_test *self)
++static int bpf_fill_alu64_arsh_same_reg(struct bpf_test *self)
 +{
-+	return __bpf_fill_alu_imm_regs(self, BPF_OR, false);
++	return __bpf_fill_alu_shift_same_reg(self, BPF_ARSH, false);
 +}
 +
-+static int bpf_fill_alu64_xor_imm_regs(struct bpf_test *self)
++static int bpf_fill_alu32_lsh_same_reg(struct bpf_test *self)
 +{
-+	return __bpf_fill_alu_imm_regs(self, BPF_XOR, false);
++	return __bpf_fill_alu_shift_same_reg(self, BPF_LSH, true);
 +}
 +
-+static int bpf_fill_alu64_lsh_imm_regs(struct bpf_test *self)
++static int bpf_fill_alu32_rsh_same_reg(struct bpf_test *self)
 +{
-+	return __bpf_fill_alu_imm_regs(self, BPF_LSH, false);
++	return __bpf_fill_alu_shift_same_reg(self, BPF_RSH, true);
 +}
 +
-+static int bpf_fill_alu64_rsh_imm_regs(struct bpf_test *self)
++static int bpf_fill_alu32_arsh_same_reg(struct bpf_test *self)
 +{
-+	return __bpf_fill_alu_imm_regs(self, BPF_RSH, false);
-+}
-+
-+static int bpf_fill_alu64_arsh_imm_regs(struct bpf_test *self)
-+{
-+	return __bpf_fill_alu_imm_regs(self, BPF_ARSH, false);
-+}
-+
-+static int bpf_fill_alu64_add_imm_regs(struct bpf_test *self)
-+{
-+	return __bpf_fill_alu_imm_regs(self, BPF_ADD, false);
-+}
-+
-+static int bpf_fill_alu64_sub_imm_regs(struct bpf_test *self)
-+{
-+	return __bpf_fill_alu_imm_regs(self, BPF_SUB, false);
-+}
-+
-+static int bpf_fill_alu64_mul_imm_regs(struct bpf_test *self)
-+{
-+	return __bpf_fill_alu_imm_regs(self, BPF_MUL, false);
-+}
-+
-+static int bpf_fill_alu64_div_imm_regs(struct bpf_test *self)
-+{
-+	return __bpf_fill_alu_imm_regs(self, BPF_DIV, false);
-+}
-+
-+static int bpf_fill_alu64_mod_imm_regs(struct bpf_test *self)
-+{
-+	return __bpf_fill_alu_imm_regs(self, BPF_MOD, false);
-+}
-+
-+/* ALU32 K registers */
-+static int bpf_fill_alu32_mov_imm_regs(struct bpf_test *self)
-+{
-+	return __bpf_fill_alu_imm_regs(self, BPF_MOV, true);
-+}
-+
-+static int bpf_fill_alu32_and_imm_regs(struct bpf_test *self)
-+{
-+	return __bpf_fill_alu_imm_regs(self, BPF_AND, true);
-+}
-+
-+static int bpf_fill_alu32_or_imm_regs(struct bpf_test *self)
-+{
-+	return __bpf_fill_alu_imm_regs(self, BPF_OR, true);
-+}
-+
-+static int bpf_fill_alu32_xor_imm_regs(struct bpf_test *self)
-+{
-+	return __bpf_fill_alu_imm_regs(self, BPF_XOR, true);
-+}
-+
-+static int bpf_fill_alu32_lsh_imm_regs(struct bpf_test *self)
-+{
-+	return __bpf_fill_alu_imm_regs(self, BPF_LSH, true);
-+}
-+
-+static int bpf_fill_alu32_rsh_imm_regs(struct bpf_test *self)
-+{
-+	return __bpf_fill_alu_imm_regs(self, BPF_RSH, true);
-+}
-+
-+static int bpf_fill_alu32_arsh_imm_regs(struct bpf_test *self)
-+{
-+	return __bpf_fill_alu_imm_regs(self, BPF_ARSH, true);
-+}
-+
-+static int bpf_fill_alu32_add_imm_regs(struct bpf_test *self)
-+{
-+	return __bpf_fill_alu_imm_regs(self, BPF_ADD, true);
-+}
-+
-+static int bpf_fill_alu32_sub_imm_regs(struct bpf_test *self)
-+{
-+	return __bpf_fill_alu_imm_regs(self, BPF_SUB, true);
-+}
-+
-+static int bpf_fill_alu32_mul_imm_regs(struct bpf_test *self)
-+{
-+	return __bpf_fill_alu_imm_regs(self, BPF_MUL, true);
-+}
-+
-+static int bpf_fill_alu32_div_imm_regs(struct bpf_test *self)
-+{
-+	return __bpf_fill_alu_imm_regs(self, BPF_DIV, true);
-+}
-+
-+static int bpf_fill_alu32_mod_imm_regs(struct bpf_test *self)
-+{
-+	return __bpf_fill_alu_imm_regs(self, BPF_MOD, true);
-+}
-+
-+/*
-+ * Test JITs that implement complex ALU operations as function
-+ * calls, and must re-arrange operands for argument passing.
-+ */
-+static int __bpf_fill_alu_reg_pairs(struct bpf_test *self, u8 op, bool alu32)
-+{
-+	int len = 2 + 10 * 10 * 12;
-+	u64 dst, src, res, same;
-+	struct bpf_insn *insns;
-+	int rd, rs;
-+	int i = 0;
-+
-+	insns = kmalloc_array(len, sizeof(*insns), GFP_KERNEL);
-+	if (!insns)
-+		return -ENOMEM;
-+
-+	/* Operand and result values according to operation */
-+	if (alu32) {
-+		dst = 0x76543210U;
-+		src = 0x01234567U;
-+	} else {
-+		dst = 0x7edcba9876543210ULL;
-+		src = 0x0123456789abcdefULL;
-+	}
-+
-+	if (op == BPF_LSH || op == BPF_RSH || op == BPF_ARSH)
-+		src &= 31;
-+
-+	__bpf_alu_result(&res, dst, src, op);
-+	__bpf_alu_result(&same, src, src, op);
-+
-+	if (alu32) {
-+		res = (u32)res;
-+		same = (u32)same;
-+	}
-+
-+	/* Check all combinations of operand registers */
-+	for (rd = R0; rd <= R9; rd++) {
-+		for (rs = R0; rs <= R9; rs++) {
-+			u64 val = rd == rs ? same : res;
-+
-+			i += __bpf_ld_imm64(&insns[i], rd, dst);
-+			i += __bpf_ld_imm64(&insns[i], rs, src);
-+
-+			if (alu32)
-+				insns[i++] = BPF_ALU32_REG(op, rd, rs);
-+			else
-+				insns[i++] = BPF_ALU64_REG(op, rd, rs);
-+
-+			insns[i++] = BPF_JMP32_IMM(BPF_JEQ, rd, val, 2);
-+			insns[i++] = BPF_MOV64_IMM(R0, __LINE__);
-+			insns[i++] = BPF_EXIT_INSN();
-+
-+			insns[i++] = BPF_ALU64_IMM(BPF_RSH, rd, 32);
-+			insns[i++] = BPF_JMP32_IMM(BPF_JEQ, rd, val >> 32, 2);
-+			insns[i++] = BPF_MOV64_IMM(R0, __LINE__);
-+			insns[i++] = BPF_EXIT_INSN();
-+		}
-+	}
-+
-+	insns[i++] = BPF_MOV64_IMM(R0, 1);
-+	insns[i++] = BPF_EXIT_INSN();
-+
-+	self->u.ptr.insns = insns;
-+	self->u.ptr.len = len;
-+	BUG_ON(i != len);
-+
-+	return 0;
-+}
-+
-+/* ALU64 X register combinations */
-+static int bpf_fill_alu64_mov_reg_pairs(struct bpf_test *self)
-+{
-+	return __bpf_fill_alu_reg_pairs(self, BPF_MOV, false);
-+}
-+
-+static int bpf_fill_alu64_and_reg_pairs(struct bpf_test *self)
-+{
-+	return __bpf_fill_alu_reg_pairs(self, BPF_AND, false);
-+}
-+
-+static int bpf_fill_alu64_or_reg_pairs(struct bpf_test *self)
-+{
-+	return __bpf_fill_alu_reg_pairs(self, BPF_OR, false);
-+}
-+
-+static int bpf_fill_alu64_xor_reg_pairs(struct bpf_test *self)
-+{
-+	return __bpf_fill_alu_reg_pairs(self, BPF_XOR, false);
-+}
-+
-+static int bpf_fill_alu64_lsh_reg_pairs(struct bpf_test *self)
-+{
-+	return __bpf_fill_alu_reg_pairs(self, BPF_LSH, false);
-+}
-+
-+static int bpf_fill_alu64_rsh_reg_pairs(struct bpf_test *self)
-+{
-+	return __bpf_fill_alu_reg_pairs(self, BPF_RSH, false);
-+}
-+
-+static int bpf_fill_alu64_arsh_reg_pairs(struct bpf_test *self)
-+{
-+	return __bpf_fill_alu_reg_pairs(self, BPF_ARSH, false);
-+}
-+
-+static int bpf_fill_alu64_add_reg_pairs(struct bpf_test *self)
-+{
-+	return __bpf_fill_alu_reg_pairs(self, BPF_ADD, false);
-+}
-+
-+static int bpf_fill_alu64_sub_reg_pairs(struct bpf_test *self)
-+{
-+	return __bpf_fill_alu_reg_pairs(self, BPF_SUB, false);
-+}
-+
-+static int bpf_fill_alu64_mul_reg_pairs(struct bpf_test *self)
-+{
-+	return __bpf_fill_alu_reg_pairs(self, BPF_MUL, false);
-+}
-+
-+static int bpf_fill_alu64_div_reg_pairs(struct bpf_test *self)
-+{
-+	return __bpf_fill_alu_reg_pairs(self, BPF_DIV, false);
-+}
-+
-+static int bpf_fill_alu64_mod_reg_pairs(struct bpf_test *self)
-+{
-+	return __bpf_fill_alu_reg_pairs(self, BPF_MOD, false);
-+}
-+
-+/* ALU32 X register combinations */
-+static int bpf_fill_alu32_mov_reg_pairs(struct bpf_test *self)
-+{
-+	return __bpf_fill_alu_reg_pairs(self, BPF_MOV, true);
-+}
-+
-+static int bpf_fill_alu32_and_reg_pairs(struct bpf_test *self)
-+{
-+	return __bpf_fill_alu_reg_pairs(self, BPF_AND, true);
-+}
-+
-+static int bpf_fill_alu32_or_reg_pairs(struct bpf_test *self)
-+{
-+	return __bpf_fill_alu_reg_pairs(self, BPF_OR, true);
-+}
-+
-+static int bpf_fill_alu32_xor_reg_pairs(struct bpf_test *self)
-+{
-+	return __bpf_fill_alu_reg_pairs(self, BPF_XOR, true);
-+}
-+
-+static int bpf_fill_alu32_lsh_reg_pairs(struct bpf_test *self)
-+{
-+	return __bpf_fill_alu_reg_pairs(self, BPF_LSH, true);
-+}
-+
-+static int bpf_fill_alu32_rsh_reg_pairs(struct bpf_test *self)
-+{
-+	return __bpf_fill_alu_reg_pairs(self, BPF_RSH, true);
-+}
-+
-+static int bpf_fill_alu32_arsh_reg_pairs(struct bpf_test *self)
-+{
-+	return __bpf_fill_alu_reg_pairs(self, BPF_ARSH, true);
-+}
-+
-+static int bpf_fill_alu32_add_reg_pairs(struct bpf_test *self)
-+{
-+	return __bpf_fill_alu_reg_pairs(self, BPF_ADD, true);
-+}
-+
-+static int bpf_fill_alu32_sub_reg_pairs(struct bpf_test *self)
-+{
-+	return __bpf_fill_alu_reg_pairs(self, BPF_SUB, true);
-+}
-+
-+static int bpf_fill_alu32_mul_reg_pairs(struct bpf_test *self)
-+{
-+	return __bpf_fill_alu_reg_pairs(self, BPF_MUL, true);
-+}
-+
-+static int bpf_fill_alu32_div_reg_pairs(struct bpf_test *self)
-+{
-+	return __bpf_fill_alu_reg_pairs(self, BPF_DIV, true);
-+}
-+
-+static int bpf_fill_alu32_mod_reg_pairs(struct bpf_test *self)
-+{
-+	return __bpf_fill_alu_reg_pairs(self, BPF_MOD, true);
++	return __bpf_fill_alu_shift_same_reg(self, BPF_ARSH, true);
 +}
 +
  /*
-  * Exhaustive tests of atomic operations for all power-of-two operand
-  * magnitudes, both for positive and negative values.
-@@ -3737,77 +4112,6 @@ static struct bpf_test tests[] = {
+  * Common operand pattern generator for exhaustive power-of-two magnitudes
+  * tests. The block size parameters can be adjusted to increase/reduce the
+@@ -11788,7 +11868,7 @@ static struct bpf_test tests[] = {
+ 		INTERNAL | FLAG_NO_DATA,
  		{ },
- 		{ { 0, -1 } }
+ 		{ { 0, 1 } },
+-		.fill_helper = bpf_fill_alu_lsh_imm,
++		.fill_helper = bpf_fill_alu64_lsh_imm,
  	},
--	{
--		/*
--		 * Test 32-bit JITs that implement complex ALU64 operations as
--		 * function calls R0 = f(R1, R2), and must re-arrange operands.
--		 */
--#define NUMER 0xfedcba9876543210ULL
--#define DENOM 0x0123456789abcdefULL
--		"ALU64_DIV X: Operand register permutations",
--		.u.insns_int = {
--			/* R0 / R2 */
--			BPF_LD_IMM64(R0, NUMER),
--			BPF_LD_IMM64(R2, DENOM),
--			BPF_ALU64_REG(BPF_DIV, R0, R2),
--			BPF_JMP_IMM(BPF_JEQ, R0, NUMER / DENOM, 1),
--			BPF_EXIT_INSN(),
--			/* R1 / R0 */
--			BPF_LD_IMM64(R1, NUMER),
--			BPF_LD_IMM64(R0, DENOM),
--			BPF_ALU64_REG(BPF_DIV, R1, R0),
--			BPF_JMP_IMM(BPF_JEQ, R1, NUMER / DENOM, 1),
--			BPF_EXIT_INSN(),
--			/* R0 / R1 */
--			BPF_LD_IMM64(R0, NUMER),
--			BPF_LD_IMM64(R1, DENOM),
--			BPF_ALU64_REG(BPF_DIV, R0, R1),
--			BPF_JMP_IMM(BPF_JEQ, R0, NUMER / DENOM, 1),
--			BPF_EXIT_INSN(),
--			/* R2 / R0 */
--			BPF_LD_IMM64(R2, NUMER),
--			BPF_LD_IMM64(R0, DENOM),
--			BPF_ALU64_REG(BPF_DIV, R2, R0),
--			BPF_JMP_IMM(BPF_JEQ, R2, NUMER / DENOM, 1),
--			BPF_EXIT_INSN(),
--			/* R2 / R1 */
--			BPF_LD_IMM64(R2, NUMER),
--			BPF_LD_IMM64(R1, DENOM),
--			BPF_ALU64_REG(BPF_DIV, R2, R1),
--			BPF_JMP_IMM(BPF_JEQ, R2, NUMER / DENOM, 1),
--			BPF_EXIT_INSN(),
--			/* R1 / R2 */
--			BPF_LD_IMM64(R1, NUMER),
--			BPF_LD_IMM64(R2, DENOM),
--			BPF_ALU64_REG(BPF_DIV, R1, R2),
--			BPF_JMP_IMM(BPF_JEQ, R1, NUMER / DENOM, 1),
--			BPF_EXIT_INSN(),
--			/* R1 / R1 */
--			BPF_LD_IMM64(R1, NUMER),
--			BPF_ALU64_REG(BPF_DIV, R1, R1),
--			BPF_JMP_IMM(BPF_JEQ, R1, 1, 1),
--			BPF_EXIT_INSN(),
--			/* R2 / R2 */
--			BPF_LD_IMM64(R2, DENOM),
--			BPF_ALU64_REG(BPF_DIV, R2, R2),
--			BPF_JMP_IMM(BPF_JEQ, R2, 1, 1),
--			BPF_EXIT_INSN(),
--			/* R3 / R4 */
--			BPF_LD_IMM64(R3, NUMER),
--			BPF_LD_IMM64(R4, DENOM),
--			BPF_ALU64_REG(BPF_DIV, R3, R4),
--			BPF_JMP_IMM(BPF_JEQ, R3, NUMER / DENOM, 1),
--			BPF_EXIT_INSN(),
--			/* Successful return */
--			BPF_LD_IMM64(R0, 1),
--			BPF_EXIT_INSN(),
--		},
--		INTERNAL,
--		{ },
--		{ { 0, 1 } },
--#undef NUMER
--#undef DENOM
--	},
- #ifdef CONFIG_32BIT
  	{
- 		"INT: 32-bit context pointer word order and zero-extension",
-@@ -10849,6 +11153,394 @@ static struct bpf_test tests[] = {
- 	BPF_JMP32_REG_ZEXT(JSLT),
- 	BPF_JMP32_REG_ZEXT(JSLE),
- #undef BPF_JMP2_REG_ZEXT
-+	/* ALU64 K register combinations */
-+	{
-+		"ALU64_MOV_K: registers",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu64_mov_imm_regs,
-+	},
-+	{
-+		"ALU64_AND_K: registers",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu64_and_imm_regs,
-+	},
-+	{
-+		"ALU64_OR_K: registers",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu64_or_imm_regs,
-+	},
-+	{
-+		"ALU64_XOR_K: registers",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu64_xor_imm_regs,
-+	},
-+	{
-+		"ALU64_LSH_K: registers",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu64_lsh_imm_regs,
-+	},
-+	{
-+		"ALU64_RSH_K: registers",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu64_rsh_imm_regs,
-+	},
-+	{
-+		"ALU64_ARSH_K: registers",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu64_arsh_imm_regs,
-+	},
-+	{
-+		"ALU64_ADD_K: registers",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu64_add_imm_regs,
-+	},
-+	{
-+		"ALU64_SUB_K: registers",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu64_sub_imm_regs,
-+	},
-+	{
-+		"ALU64_MUL_K: registers",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu64_mul_imm_regs,
-+	},
-+	{
-+		"ALU64_DIV_K: registers",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu64_div_imm_regs,
-+	},
-+	{
-+		"ALU64_MOD_K: registers",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu64_mod_imm_regs,
-+	},
-+	/* ALU32 K registers */
-+	{
-+		"ALU32_MOV_K: registers",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu32_mov_imm_regs,
-+	},
-+	{
-+		"ALU32_AND_K: registers",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu32_and_imm_regs,
-+	},
-+	{
-+		"ALU32_OR_K: registers",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu32_or_imm_regs,
-+	},
-+	{
-+		"ALU32_XOR_K: registers",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu32_xor_imm_regs,
-+	},
-+	{
-+		"ALU32_LSH_K: registers",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu32_lsh_imm_regs,
-+	},
-+	{
-+		"ALU32_RSH_K: registers",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu32_rsh_imm_regs,
-+	},
-+	{
-+		"ALU32_ARSH_K: registers",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu32_arsh_imm_regs,
-+	},
-+	{
-+		"ALU32_ADD_K: registers",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu32_add_imm_regs,
-+	},
-+	{
-+		"ALU32_SUB_K: registers",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu32_sub_imm_regs,
-+	},
-+	{
-+		"ALU32_MUL_K: registers",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu32_mul_imm_regs,
-+	},
-+	{
-+		"ALU32_DIV_K: registers",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu32_div_imm_regs,
-+	},
-+	{
-+		"ALU32_MOD_K: registers",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu32_mod_imm_regs,
-+	},
-+	/* ALU64 X register combinations */
-+	{
-+		"ALU64_MOV_X: register combinations",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu64_mov_reg_pairs,
-+	},
-+	{
-+		"ALU64_AND_X: register combinations",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu64_and_reg_pairs,
-+	},
-+	{
-+		"ALU64_OR_X: register combinations",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu64_or_reg_pairs,
-+	},
-+	{
-+		"ALU64_XOR_X: register combinations",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu64_xor_reg_pairs,
-+	},
-+	{
-+		"ALU64_LSH_X: register combinations",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu64_lsh_reg_pairs,
-+	},
-+	{
-+		"ALU64_RSH_X: register combinations",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu64_rsh_reg_pairs,
-+	},
-+	{
-+		"ALU64_ARSH_X: register combinations",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu64_arsh_reg_pairs,
-+	},
-+	{
-+		"ALU64_ADD_X: register combinations",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu64_add_reg_pairs,
-+	},
-+	{
-+		"ALU64_SUB_X: register combinations",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu64_sub_reg_pairs,
-+	},
-+	{
-+		"ALU64_MUL_X: register combinations",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu64_mul_reg_pairs,
-+	},
-+	{
-+		"ALU64_DIV_X: register combinations",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu64_div_reg_pairs,
-+	},
-+	{
-+		"ALU64_MOD_X: register combinations",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu64_mod_reg_pairs,
-+	},
-+	/* ALU32 X register combinations */
-+	{
-+		"ALU32_MOV_X: register combinations",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu32_mov_reg_pairs,
-+	},
-+	{
-+		"ALU32_AND_X: register combinations",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu32_and_reg_pairs,
-+	},
-+	{
-+		"ALU32_OR_X: register combinations",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu32_or_reg_pairs,
-+	},
-+	{
-+		"ALU32_XOR_X: register combinations",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu32_xor_reg_pairs,
-+	},
-+	{
-+		"ALU32_LSH_X: register combinations",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu32_lsh_reg_pairs,
-+	},
-+	{
-+		"ALU32_RSH_X: register combinations",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu32_rsh_reg_pairs,
-+	},
-+	{
-+		"ALU32_ARSH_X: register combinations",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu32_arsh_reg_pairs,
-+	},
-+	{
-+		"ALU32_ADD_X: register combinations",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu32_add_reg_pairs,
-+	},
-+	{
-+		"ALU32_SUB_X: register combinations",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu32_sub_reg_pairs,
-+	},
-+	{
-+		"ALU32_MUL_X: register combinations",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu32_mul_reg_pairs,
-+	},
-+	{
-+		"ALU32_DIV_X: register combinations",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu32_div_reg_pairs,
-+	},
-+	{
-+		"ALU32_MOD_X register combinations",
-+		{ },
-+		INTERNAL,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_alu32_mod_reg_pairs,
-+	},
- 	/* Exhaustive test of ALU64 shift operations */
+ 		"ALU64_RSH_K: all shift values",
+@@ -11796,7 +11876,7 @@ static struct bpf_test tests[] = {
+ 		INTERNAL | FLAG_NO_DATA,
+ 		{ },
+ 		{ { 0, 1 } },
+-		.fill_helper = bpf_fill_alu_rsh_imm,
++		.fill_helper = bpf_fill_alu64_rsh_imm,
+ 	},
  	{
- 		"ALU64_LSH_K: all shift values",
+ 		"ALU64_ARSH_K: all shift values",
+@@ -11804,7 +11884,7 @@ static struct bpf_test tests[] = {
+ 		INTERNAL | FLAG_NO_DATA,
+ 		{ },
+ 		{ { 0, 1 } },
+-		.fill_helper = bpf_fill_alu_arsh_imm,
++		.fill_helper = bpf_fill_alu64_arsh_imm,
+ 	},
+ 	{
+ 		"ALU64_LSH_X: all shift values",
+@@ -11812,7 +11892,7 @@ static struct bpf_test tests[] = {
+ 		INTERNAL | FLAG_NO_DATA,
+ 		{ },
+ 		{ { 0, 1 } },
+-		.fill_helper = bpf_fill_alu_lsh_reg,
++		.fill_helper = bpf_fill_alu64_lsh_reg,
+ 	},
+ 	{
+ 		"ALU64_RSH_X: all shift values",
+@@ -11820,7 +11900,7 @@ static struct bpf_test tests[] = {
+ 		INTERNAL | FLAG_NO_DATA,
+ 		{ },
+ 		{ { 0, 1 } },
+-		.fill_helper = bpf_fill_alu_rsh_reg,
++		.fill_helper = bpf_fill_alu64_rsh_reg,
+ 	},
+ 	{
+ 		"ALU64_ARSH_X: all shift values",
+@@ -11828,7 +11908,7 @@ static struct bpf_test tests[] = {
+ 		INTERNAL | FLAG_NO_DATA,
+ 		{ },
+ 		{ { 0, 1 } },
+-		.fill_helper = bpf_fill_alu_arsh_reg,
++		.fill_helper = bpf_fill_alu64_arsh_reg,
+ 	},
+ 	/* Exhaustive test of ALU32 shift operations */
+ 	{
+@@ -11879,6 +11959,62 @@ static struct bpf_test tests[] = {
+ 		{ { 0, 1 } },
+ 		.fill_helper = bpf_fill_alu32_arsh_reg,
+ 	},
++	/*
++	 * Exhaustive test of ALU64 shift operations when
++	 * source and destination register are the same.
++	 */
++	{
++		"ALU64_LSH_X: all shift values with the same register",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu64_lsh_same_reg,
++	},
++	{
++		"ALU64_RSH_X: all shift values with the same register",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu64_rsh_same_reg,
++	},
++	{
++		"ALU64_ARSH_X: all shift values with the same register",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu64_arsh_same_reg,
++	},
++	/*
++	 * Exhaustive test of ALU32 shift operations when
++	 * source and destination register are the same.
++	 */
++	{
++		"ALU32_LSH_X: all shift values with the same register",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu32_lsh_same_reg,
++	},
++	{
++		"ALU32_RSH_X: all shift values with the same register",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu32_rsh_same_reg,
++	},
++	{
++		"ALU32_ARSH_X: all shift values with the same register",
++		{ },
++		INTERNAL | FLAG_NO_DATA,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_alu32_arsh_same_reg,
++	},
+ 	/* ALU64 immediate magnitudes */
+ 	{
+ 		"ALU64_MOV_K: all immediate value magnitudes",
 -- 
 2.30.2
 
