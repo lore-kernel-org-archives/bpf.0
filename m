@@ -2,63 +2,63 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F832C433F5
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EE3EBC433FE
 	for <bpf@archiver.kernel.org>; Fri,  1 Oct 2021 11:13:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 470D761881
+	by mail.kernel.org (Postfix) with ESMTP id D4F4161A82
 	for <bpf@archiver.kernel.org>; Fri,  1 Oct 2021 11:13:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353289AbhJALPT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 1 Oct 2021 07:15:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35040 "EHLO
+        id S1353772AbhJALPV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 1 Oct 2021 07:15:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353771AbhJALLQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1353775AbhJALLQ (ORCPT <rfc822;bpf@vger.kernel.org>);
         Fri, 1 Oct 2021 07:11:16 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B973C06177F
-        for <bpf@vger.kernel.org>; Fri,  1 Oct 2021 04:09:29 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id b192-20020a1c1bc9000000b0030cfaf18864so6465814wmb.4
-        for <bpf@vger.kernel.org>; Fri, 01 Oct 2021 04:09:29 -0700 (PDT)
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596C9C0613E4
+        for <bpf@vger.kernel.org>; Fri,  1 Oct 2021 04:09:31 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id j10-20020a1c230a000000b0030d523b6693so365333wmj.2
+        for <bpf@vger.kernel.org>; Fri, 01 Oct 2021 04:09:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=isovalent-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=RpjwrVd2fRDSeptVCei7DoM+TRRc5Wynujd2MS0EFUo=;
-        b=OqOImDOtI4DDSRl+4PIAo1tHd8w2W1iB9cGQmeUc3S+t4y2S6QDqGG1MbMExG4ACn8
-         V62IIoE1HSm29XHrwhNZHhb1jbAQssR5KvF4n8O1skxTUXX5lDYTeKLjDFv/X9t6iK9F
-         0cs2XNmI6v2Wa3ZuU3f8ruRmnz7IaX2H7W5zPfPMMsOY2sjQbxb0ZYsn7AIScBSStiRW
-         hnkF4g6teX1yiwit285qbtC7d6DPmIV3lLsbbsR7sxF3dZ5sWSORmxcCC/0zAjIWY06y
-         KyPcIVZ9ry94PL4xm8LWFrGyGt4uytnL/xdKpjpoz7aZu/70rNG6+/Vk7LIi/oFPNGfK
-         VZng==
+        bh=6qPlM6MAUchBkbCWCD/H91DQxecPf+FzubhRu6ucuSs=;
+        b=rLhqDBYADo0gATH024esrjLIO6v4kz2Njm1FM5OFb6ic311kGVTISD76FxNOfhlH5U
+         4N0Dh9lBc3wbNCSCi01Gf39Y6j+xsAEqya/Uiz+fWCN+p9p41YVKOZk2mu0y9Q8UIQGj
+         7ku2+EDb0RZhnYZtSg6ep9SNLpFRTYfcBjrWCM6DzqL2jNIyfEAws9KRh7ADVevEC7wA
+         Zf3CDBlSVAX8S60Lbute8Q5LMYoS05ieZMPE8uNNHmbp7GXR+oDwD0l/s3AB+iZqlBPY
+         LbzXOu6rG4Ze67aH/dr0duSumV34/5gJO3GbOeP8OgJ6coJfkzgNrlZIDaPW557X5xG0
+         Pqag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=RpjwrVd2fRDSeptVCei7DoM+TRRc5Wynujd2MS0EFUo=;
-        b=G1Q2LyFAN7z93k+nltqM68Hmvh2QsXjtk2RPYWMwQnv4sNT63hhJy7+w0WAuEIfklz
-         P7KKwYGm0h1hJYQHeEAsMxOGVyMJzuDJLisxcUvdcniL9skUW5KA0FDRENcdVxnSfZfp
-         6efEW0MUEcWscKw/Y8+CWU2KwUrsYmNEHxUG1dsrzJaQTAHJ1Ju+pdZif/k8d80JlTfk
-         5J5DO33WY7IVzD7czmYj0Telobtr76+H9LusajU24V+t2hYa9QerRtSqEvNxF4y90Mke
-         JvnHRaOQNO4BXkuu+KLUkFYuJk7mRbItV8bcA3EE8rMI02G0v3vtWjpZ4Fu3and78a2d
-         SQrQ==
-X-Gm-Message-State: AOAM530TeDGhIDKrMR0hnEEEk/CYb9nsIbnIOCEAgbavzID0zSgGvhVO
-        b4ndolqJA0IYcWxF9T5tinQOHg==
-X-Google-Smtp-Source: ABdhPJyHbLVPxeCHmUZH4hIbe7h7G69gmZR9BZKlybxKixsGC8lSs3YSwFFJd9hEccLYHvBB+vwGfg==
-X-Received: by 2002:a05:600c:4e93:: with SMTP id f19mr3808416wmq.185.1633086568140;
-        Fri, 01 Oct 2021 04:09:28 -0700 (PDT)
+        bh=6qPlM6MAUchBkbCWCD/H91DQxecPf+FzubhRu6ucuSs=;
+        b=jYy9ALRKFR5GSr1xYnkzudVfbDtk0vSQHq3vw5zWsyZdKhtV4sz0e2V+bCv/eg0wW8
+         S1rj71byK++wA76RSYWgP+250XdPKT++1aiYECXlm9/QUF6PJGxE4SxMCzPBFVCjXTpp
+         WcOc1DGUPg7aB0lBktPABSXvjPhzXSX19f70jqx0Ko7tuNPs+ETpKFRxR/Q878D5Cg5Z
+         Ws8wJFpHaeDpk7Y10u5+gewRexZY8XMn9qN78mtlPBd75J1GdZQoJlEYfLggymujYlu0
+         pJktFOY24JinmjZS+AHvTJAti62/3dwfeIh9jhfRowI+hBp5GiYyb2sVzhwyQaQrEqZh
+         megA==
+X-Gm-Message-State: AOAM533LVG7c2RsIKArKPKcQYRURimguz1MUsugA6aqto42gCDMUlmfp
+        i6NA/fjuyusMJcu3MYVa7cNlFg==
+X-Google-Smtp-Source: ABdhPJwy+/LZz9UiprvlfvSX72rL4WmZrFEfo85Hi/fvLGC14Sb7muPYWu7R2pd34j/dCs6+v4rB2w==
+X-Received: by 2002:a05:600c:510a:: with SMTP id o10mr3737710wms.81.1633086569927;
+        Fri, 01 Oct 2021 04:09:29 -0700 (PDT)
 Received: from localhost.localdomain ([149.86.91.69])
-        by smtp.gmail.com with ESMTPSA id v17sm5903271wro.34.2021.10.01.04.09.27
+        by smtp.gmail.com with ESMTPSA id v17sm5903271wro.34.2021.10.01.04.09.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Oct 2021 04:09:27 -0700 (PDT)
+        Fri, 01 Oct 2021 04:09:29 -0700 (PDT)
 From:   Quentin Monnet <quentin@isovalent.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         Quentin Monnet <quentin@isovalent.com>
-Subject: [PATCH bpf-next v2 7/9] samples/bpf: install libbpf headers when building
-Date:   Fri,  1 Oct 2021 12:08:54 +0100
-Message-Id: <20211001110856.14730-8-quentin@isovalent.com>
+Subject: [PATCH bpf-next v2 9/9] selftests/bpf: better clean up for runqslower in test_bpftool_build.sh
+Date:   Fri,  1 Oct 2021 12:08:56 +0100
+Message-Id: <20211001110856.14730-10-quentin@isovalent.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211001110856.14730-1-quentin@isovalent.com>
 References: <20211001110856.14730-1-quentin@isovalent.com>
@@ -68,109 +68,59 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-API headers from libbpf should not be accessed directly from the source
-directory. Instead, they should be exported with "make install_headers".
-Make sure that samples/bpf/Makefile installs the headers properly when
-building.
+The script test_bpftool_build.sh attempts to build bpftool in the
+various supported ways, to make sure nothing breaks.
 
-The object compiled from and exported by libbpf are now placed into a
-subdirectory of sample/bpf/ instead of remaining in tools/lib/bpf/. We
-attempt to remove this directory on "make clean". However, the "clean"
-target re-enters the samples/bpf/ directory from the root of the
-repository ("$(MAKE) -C ../../ M=$(CURDIR) clean"), in such a way that
-$(srctree) and $(src) are not defined, making it impossible to use
-$(LIBBPF_OUTPUT) and $(LIBBPF_DESTDIR) in the recipe. So we only attempt
-to clean $(CURDIR)/libbpf, which is the default value.
+One of those ways is to run "make tools/bpf" from the root of the kernel
+repository. This command builds bpftool, along with the other tools
+under tools/bpf, and runqslower in particular. After running the
+command and upon a successful bpftool build, the script attempts to
+cleanup the generated objects. However, after building with this target
+and in the case of runqslower, the files are not cleaned up as expected.
 
-We also change the output directory for bpftool, to place the generated
-objects under samples/bpf/bpftool/ instead of building in bpftool's
-directory directly. Doing so, we make sure bpftool reuses the libbpf
-library previously compiled and installed.
+This is because the "tools/bpf" target sets $(OUTPUT) to
+.../tools/bpf/runqslower/ when building the tool, causing the object
+files to be placed directly under the runqslower directory. But when
+running "cd tools/bpf; make clean", the value for $(OUTPUT) is set to
+".output" (relative to the runqslower directory) by runqslower's
+Makefile, and this is where the Makefile looks for files to clean up.
+
+We cannot easily fix in the root Makefile (where "tools/bpf" is defined)
+or in tools/scripts/Makefile.include (setting $(OUTPUT)), where changing
+the way the output variables are passed would likely have consequences
+elsewhere. We could change runqslower's Makefile to build in the
+repository instead of in a dedicated ".output/", but doing so just to
+accommodate a test script doesn't sound great. Instead, let's just make
+sure that we clean up runqslower properly by adding the correct command
+to the script.
+
+This will attempt to clean runqslower twice: the first try with command
+"cd tools/bpf; make clean" will search for tools/bpf/runqslower/.output
+and fail to clean it (but will still clean the other tools, in
+particular bpftool), the second one (added in this commit) sets the
+$(OUTPUT) variable like for building with the "tool/bpf" target and
+should succeed.
 
 Signed-off-by: Quentin Monnet <quentin@isovalent.com>
 ---
- samples/bpf/Makefile | 36 ++++++++++++++++++++++++++----------
- 1 file changed, 26 insertions(+), 10 deletions(-)
+ tools/testing/selftests/bpf/test_bpftool_build.sh | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
-index 4dc20be5fb96..7de602c2c705 100644
---- a/samples/bpf/Makefile
-+++ b/samples/bpf/Makefile
-@@ -59,7 +59,11 @@ tprogs-y += xdp_redirect
- tprogs-y += xdp_monitor
+diff --git a/tools/testing/selftests/bpf/test_bpftool_build.sh b/tools/testing/selftests/bpf/test_bpftool_build.sh
+index b03a87571592..1453a53ed547 100755
+--- a/tools/testing/selftests/bpf/test_bpftool_build.sh
++++ b/tools/testing/selftests/bpf/test_bpftool_build.sh
+@@ -90,6 +90,10 @@ echo -e "... through kbuild\n"
  
- # Libbpf dependencies
--LIBBPF = $(TOOLS_PATH)/lib/bpf/libbpf.a
-+LIBBPF_SRC = $(TOOLS_PATH)/lib/bpf
-+LIBBPF_OUTPUT = $(abspath $(BPF_SAMPLES_PATH))/libbpf
-+LIBBPF_DESTDIR = $(LIBBPF_OUTPUT)
-+LIBBPF_INCLUDE = $(LIBBPF_DESTDIR)/include
-+LIBBPF = $(LIBBPF_OUTPUT)/libbpf.a
+ if [ -f ".config" ] ; then
+ 	make_and_clean tools/bpf
++	## "make tools/bpf" sets $(OUTPUT) to ...tools/bpf/runqslower for
++	## runqslower, but the default (used for the "clean" target) is .output.
++	## Let's make sure we clean runqslower's directory properly.
++	make -C tools/bpf/runqslower OUTPUT=${KDIR_ROOT_DIR}/tools/bpf/runqslower/ clean
  
- CGROUP_HELPERS := ../../tools/testing/selftests/bpf/cgroup_helpers.o
- TRACE_HELPERS := ../../tools/testing/selftests/bpf/trace_helpers.o
-@@ -198,7 +202,7 @@ TPROGS_CFLAGS += -Wstrict-prototypes
- 
- TPROGS_CFLAGS += -I$(objtree)/usr/include
- TPROGS_CFLAGS += -I$(srctree)/tools/testing/selftests/bpf/
--TPROGS_CFLAGS += -I$(srctree)/tools/lib/
-+TPROGS_CFLAGS += -I$(LIBBPF_INCLUDE)
- TPROGS_CFLAGS += -I$(srctree)/tools/include
- TPROGS_CFLAGS += -I$(srctree)/tools/perf
- TPROGS_CFLAGS += -DHAVE_ATTR_TEST=0
-@@ -268,16 +272,28 @@ all:
- clean:
- 	$(MAKE) -C ../../ M=$(CURDIR) clean
- 	@find $(CURDIR) -type f -name '*~' -delete
-+	@/bin/rm -rf $(CURDIR)/libbpf $(CURDIR)/bpftool
- 
--$(LIBBPF): FORCE
-+$(LIBBPF): FORCE | $(LIBBPF_OUTPUT) $(LIBBPF_INCLUDE)
- # Fix up variables inherited from Kbuild that tools/ build system won't like
--	$(MAKE) -C $(dir $@) RM='rm -rf' EXTRA_CFLAGS="$(TPROGS_CFLAGS)" \
--		LDFLAGS=$(TPROGS_LDFLAGS) srctree=$(BPF_SAMPLES_PATH)/../../ O=
-+	$(MAKE) -C $(LIBBPF_SRC) RM='rm -rf' EXTRA_CFLAGS="$(TPROGS_CFLAGS)" \
-+		LDFLAGS=$(TPROGS_LDFLAGS) srctree=$(BPF_SAMPLES_PATH)/../../ \
-+		O= OUTPUT=$(LIBBPF_OUTPUT)/ DESTDIR=$(LIBBPF_DESTDIR) prefix= \
-+		$@ install_headers
- 
- BPFTOOLDIR := $(TOOLS_PATH)/bpf/bpftool
--BPFTOOL := $(BPFTOOLDIR)/bpftool
--$(BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile)
--	    $(MAKE) -C $(BPFTOOLDIR) srctree=$(BPF_SAMPLES_PATH)/../../
-+BPFTOOL_OUTPUT := $(abspath $(BPF_SAMPLES_PATH))/bpftool
-+BPFTOOL := $(BPFTOOL_OUTPUT)/bpftool
-+$(BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile) \
-+	    | $(BPFTOOL_OUTPUT)
-+	    $(MAKE) -C $(BPFTOOLDIR) srctree=$(BPF_SAMPLES_PATH)/../../ \
-+		OUTPUT=$(BPFTOOL_OUTPUT)/ \
-+		LIBBPF_OUTPUT=$(LIBBPF_OUTPUT) \
-+		LIBBPF_DESTDIR=$(LIBBPF_DESTDIR)
-+
-+$(LIBBPF_OUTPUT) $(LIBBPF_INCLUDE) $(BPFTOOL_OUTPUT):
-+	$(call msg,MKDIR,$@)
-+	$(Q)mkdir -p $@
- 
- $(obj)/syscall_nrs.h:	$(obj)/syscall_nrs.s FORCE
- 	$(call filechk,offsets,__SYSCALL_NRS_H__)
-@@ -367,7 +383,7 @@ $(obj)/%.bpf.o: $(src)/%.bpf.c $(obj)/vmlinux.h $(src)/xdp_sample.bpf.h $(src)/x
- 	$(Q)$(CLANG) -g -O2 -target bpf -D__TARGET_ARCH_$(SRCARCH) \
- 		-Wno-compare-distinct-pointer-types -I$(srctree)/include \
- 		-I$(srctree)/samples/bpf -I$(srctree)/tools/include \
--		-I$(srctree)/tools/lib $(CLANG_SYS_INCLUDES) \
-+		-I$(LIBBPF_INCLUDE) $(CLANG_SYS_INCLUDES) \
- 		-c $(filter %.bpf.c,$^) -o $@
- 
- LINKED_SKELS := xdp_redirect_cpu.skel.h xdp_redirect_map_multi.skel.h \
-@@ -404,7 +420,7 @@ $(obj)/%.o: $(src)/%.c
- 	@echo "  CLANG-bpf " $@
- 	$(Q)$(CLANG) $(NOSTDINC_FLAGS) $(LINUXINCLUDE) $(BPF_EXTRA_CFLAGS) \
- 		-I$(obj) -I$(srctree)/tools/testing/selftests/bpf/ \
--		-I$(srctree)/tools/lib/ \
-+		-I$(LIBBPF_INCLUDE) \
- 		-D__KERNEL__ -D__BPF_TRACING__ -Wno-unused-value -Wno-pointer-sign \
- 		-D__TARGET_ARCH_$(SRCARCH) -Wno-compare-distinct-pointer-types \
- 		-Wno-gnu-variable-sized-type-not-at-end \
+ 	## $OUTPUT is overwritten in kbuild Makefile, and thus cannot be passed
+ 	## down from toplevel Makefile to bpftool's Makefile.
 -- 
 2.30.2
 
