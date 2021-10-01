@@ -2,80 +2,90 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9AF6C433EF
-	for <bpf@archiver.kernel.org>; Fri,  1 Oct 2021 18:35:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E8E1C433F5
+	for <bpf@archiver.kernel.org>; Fri,  1 Oct 2021 18:59:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A961A61ABE
-	for <bpf@archiver.kernel.org>; Fri,  1 Oct 2021 18:35:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3E78B61AAB
+	for <bpf@archiver.kernel.org>; Fri,  1 Oct 2021 18:59:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355680AbhJAShT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 1 Oct 2021 14:37:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42894 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1355797AbhJAShO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 1 Oct 2021 14:37:14 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AE89A61A7D;
-        Fri,  1 Oct 2021 18:35:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633113330;
-        bh=CFY8rWfSbLSFLzHuVSiOyly9QkUwNhS5Ga01Vncxabc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=NrPeTy36ORB8Dhe80oz1WIvELeyb8061TCPN9NAN+hsfz6ZRoFl8I7hO5IcU/511w
-         SZuXuN+seRirF2ebw1b+7COzAlsyXaeWfV1dsqtNyJ9Lz1VdAYw96ATUqYuusNNKnu
-         wAGs6pTZRjKqShV0nJTvdFhHowrysv6dqLWXgBI+xEYluNCVmRpnziNWlHghh49/C+
-         euCoNifLNev0O7ri2rgun/LOIwqorrk9x+JeBoP4UOOBgt6pZrkys2BYqqSUCHZ6xP
-         9LZwCnkbA0WJCZARriOUu6R+4QrS70+ZtNaxi94KKXyidQeU1RosJ4H9vzbvr/QSCD
-         tIw/saul02CGg==
-Date:   Fri, 1 Oct 2021 11:35:28 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Lorenzo Bianconi <lorenzo@kernel.org>
-Cc:     Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdlbnNlbg==?= <toke@redhat.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Lorenz Bauer <lmb@cloudflare.com>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Lorenzo Bianconi <lorenzo.bianconi@redhat.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, shayagr@amazon.com,
-        John Fastabend <john.fastabend@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Eelco Chaudron <echaudro@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        Saeed Mahameed <saeed@kernel.org>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
-        tirthendu.sarkar@intel.com
-Subject: Re: [PATCH v14 bpf-next 00/18] mvneta: introduce XDP multi-buffer
- support
-Message-ID: <20211001113528.79f35460@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <YVbO/kit/mjWTrv6@lore-desk>
-References: <cover.1631289870.git.lorenzo@kernel.org>
-        <20210916095539.4696ae27@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <CACAyw9-8t8RpJgJUTd7u6bOLnJ1xQsgK7z37QrL9T1FUaJ7WNQ@mail.gmail.com>
-        <87v92jinv7.fsf@toke.dk>
-        <CACAyw99S9v658UyiKz3ad4kja7rDNfYv+9VOXZHCUOtam_C8Wg@mail.gmail.com>
-        <CAADnVQ+XXGUxzqMdbPMYf+t_ViDkqvGDdogrmv-wH-dckzujLw@mail.gmail.com>
-        <20210929122229.1d0c4960@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <87mtnvi0bc.fsf@toke.dk>
-        <YVbO/kit/mjWTrv6@lore-desk>
+        id S1354962AbhJATA6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 1 Oct 2021 15:00:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60850 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229464AbhJATA6 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 1 Oct 2021 15:00:58 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EE8FC061775
+        for <bpf@vger.kernel.org>; Fri,  1 Oct 2021 11:59:14 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id 75so10278349pga.3
+        for <bpf@vger.kernel.org>; Fri, 01 Oct 2021 11:59:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=h4m2iyk14ScAutetRY9OfGr8w9vRIrIp+GXTOsp+ccE=;
+        b=n2NVl++3dv8GewD9qh2u90dyayuU85yp8yI64rh9X1d1a7Lt09yMbngRcmKVQP+eC6
+         8Qz15Lw69v9Jw2PtjixRxAPyAYN0zzhk8PysunZzddpGwOKH/e1jcTA34HmFh0lGvYuD
+         ZsWSFfI3IZmX+gYftJ1Eg5YMeUHBpxJLAYldtwGTQsyo6sCX8AU9US4WDLva522+SBkW
+         FiSdrhYP7XCKvg+4/NVDRJlDrocr77WDhwTH49PPxHL4PSDB1WaYEywUHosH8pSJvu0H
+         iJqpcEnYC1vRXxON2ZWmwipmuQXmgsjYPAOdt9PZOpWvGgSvtZJG4r9E44NL7UyZ/e4r
+         l7aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=h4m2iyk14ScAutetRY9OfGr8w9vRIrIp+GXTOsp+ccE=;
+        b=aPoYfT+vwsvojmXOVT4L3xbF4V4qdrMMUN+WiOXBJ81AKrPpaScGfDEmrjvSxibt9I
+         xHsvqnfGMlTaijBD3quVe9FK7ZtBmFMuGHNJ8RA0Y5nuHS87AVk0D3UMz0ADqPtyKx6+
+         KhgRLZTp593UmfPL9iPz/mndwZLJz0Gg0wVmHrvULLLCveKe2tQXtx263mYy7cHMX3dl
+         WiNrJrNT9zAlSqYHlFRmJzJjqYWCcKrsUmy9R5mOZeboOpJbi26RCZpq0kGLQ0Ig/wNx
+         3/6YFdEMsrfKcxxMFmBOav+sLtdv/MeLjxA5o6EtagazaCRCK7gWOMBNNREZ66TXbuNv
+         sxcw==
+X-Gm-Message-State: AOAM531TmyNHZNjFJWZthD4pS2u4BqXhsPvHron4s1BAXZgQHcDg8N6r
+        +0k4nMbBg1TaIIH9M0ShRpsSWHUz9pC/RA==
+X-Google-Smtp-Source: ABdhPJwOKOCEvVPO9e1/eTHu7RNqSeLfuvwtFa+0YJLL0fNF2lqyAqAoGAXwL+j+4bilzNWRzzyZXg==
+X-Received: by 2002:a63:ce57:: with SMTP id r23mr11049287pgi.271.1633114753316;
+        Fri, 01 Oct 2021 11:59:13 -0700 (PDT)
+Received: from andriin-mbp.thefacebook.com ([2620:10d:c090:500::2:d9ef])
+        by smtp.gmail.com with ESMTPSA id k1sm6272729pjj.54.2021.10.01.11.59.12
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 01 Oct 2021 11:59:13 -0700 (PDT)
+From:   andrii.nakryiko@gmail.com
+X-Google-Original-From: andrii@kernel.org
+To:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net
+Cc:     andrii@kernel.org, kernel-team@fb.com
+Subject: [PATCH bpf] libbpf: fix memory leak in strset
+Date:   Fri,  1 Oct 2021 11:59:10 -0700
+Message-Id: <20211001185910.86492-1-andrii@kernel.org>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, 1 Oct 2021 11:03:58 +0200 Lorenzo Bianconi wrote:
-> Can you please check if the code above is aligned to current requirements or if
-> it is missing something?
-> If this code it is fine, I guess we have two option here:
-> - integrate the commits above in xdp multi-buff series (posting v15) and work on
->   the verfier code in parallel (if xdp_mb_pointer helper is not required from day0)
-> - integrate verfier changes in xdp multi-buff series, drop bpf_xdp_load_bytes
->   helper (probably we will still need bpf_xdp_store_bytes) and introduce
->   bpf_xdp_pointer as new ebpf helper.
+From: Andrii Nakryiko <andrii@kernel.org>
 
-It wasn't clear to me that we wanted bpf_xdp_load_bytes() to exist.
-But FWIW no preference here.
+Free struct strset itself, not just its internal parts.
+
+Fixes: 90d76d3ececc ("libbpf: Extract internal set-of-strings datastructure APIs")
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ tools/lib/bpf/strset.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tools/lib/bpf/strset.c b/tools/lib/bpf/strset.c
+index 1fb8b49de1d6..ea655318153f 100644
+--- a/tools/lib/bpf/strset.c
++++ b/tools/lib/bpf/strset.c
+@@ -88,6 +88,7 @@ void strset__free(struct strset *set)
+ 
+ 	hashmap__free(set->strs_hash);
+ 	free(set->strs_data);
++	free(set);
+ }
+ 
+ size_t strset__data_size(const struct strset *set)
+-- 
+2.30.2
+
