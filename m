@@ -2,54 +2,54 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 257F2C433EF
-	for <bpf@archiver.kernel.org>; Fri,  1 Oct 2021 13:05:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BB67CC433EF
+	for <bpf@archiver.kernel.org>; Fri,  1 Oct 2021 13:05:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0A10761A8E
-	for <bpf@archiver.kernel.org>; Fri,  1 Oct 2021 13:05:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A1C0161A8B
+	for <bpf@archiver.kernel.org>; Fri,  1 Oct 2021 13:05:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354109AbhJANGv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 1 Oct 2021 09:06:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34088 "EHLO
+        id S1353935AbhJANGy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 1 Oct 2021 09:06:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354173AbhJANGD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 1 Oct 2021 09:06:03 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 432B8C0613E5
-        for <bpf@vger.kernel.org>; Fri,  1 Oct 2021 06:03:59 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id bd28so34453488edb.9
-        for <bpf@vger.kernel.org>; Fri, 01 Oct 2021 06:03:59 -0700 (PDT)
+        with ESMTP id S1354285AbhJANGa (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 1 Oct 2021 09:06:30 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E79DC0613EE
+        for <bpf@vger.kernel.org>; Fri,  1 Oct 2021 06:04:05 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id r18so34436424edv.12
+        for <bpf@vger.kernel.org>; Fri, 01 Oct 2021 06:04:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=anyfinetworks-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Jw9IUMaLywJloQik8I5Go3bAQFQF2YDMapxftvHW9ss=;
-        b=kL2uqYRQ2DVtojeTq45f2PBUCs/JXBOYH0ZwK8Hfc2IXN7XA4Hqq5tcw+M/hSqfiXN
-         Y3/VRbCBvw+Pjo+kfDnIKtI3KmDbh+ucB5dej+lwpi97aoX8mvdHKvoQgbisctbT5CEt
-         BVmfsMrbV55wU0vIvK3l1yt4YhuVzXjk6uIPOqvroOzAibAIsUYHNQy9cBn7wSVwPg7f
-         gFzFhwTQfz+rJHM0ikSrFhloNT333EeEWi284vZfKSGIQK1EVAoacjypl9YPwpbw4Mi8
-         9ZFnos4j8jcKN5c3nQZDZA42diEPI0bQN+inwWP+tpNI4Xlnt/PRPLUuIpS3KxqjM/sY
-         7tWw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=a6y4JSy406Wu+PL5pFim+RuAZbB2EbfKD2rlF0TOar4=;
+        b=RzpiLocflVSAD7CChVeRqlnX4KIPe8PDNEC+u6+IUU3ez+0g/3JZa0oyT2EHegTfol
+         XRq62uP4Yyrs2xsKClcNp+rDh8CAzRMYCHZpMM/uI1e6u4vf/dfJ3d/456kmgg8RJ+m8
+         rEwEq66lgQbQn8k6fVKHrgm5SOgbyUtYLtJJC97RjspN/iA1ZpnTDm/GDQVQyH7Aas3i
+         K9X/qy8dvj9VUCNz3nbxFvd1CWLYgqyrfFPLq+avzg3QPSamtzeC8B7k/EO2uMAM3jzU
+         ZSh11RPz+XxTNCKxfkXCQa1DsjVUrrwzmJpgVz71Y6HsVm59TECvq/hhAWVQ+rFpc5lH
+         baQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Jw9IUMaLywJloQik8I5Go3bAQFQF2YDMapxftvHW9ss=;
-        b=oq7qFNA02ghcFbRFjY+ldhWnri8LYPMIogAj0yR7uMTr2LALHJWDTzKDkmqaeSAO9b
-         FnKCYFUeggFHvsxlpoXsUZxQAQqDZkZxVQqPWYuzSfTjVK6lxUcTs/1o7s3xCOCcbOvl
-         bneAaOsBbkLQ9rqVfN0X7U6WAT0wlsp9ka7bTSL9Ve/3Sln3XNUT90UpPVrBk8vdZvYe
-         ShqdW3dSO0VZXwgn5FqpC+TH4zp4QTO4UrjmrP+RXxGBsEzw0UQH04oHgkkAs4biQQks
-         qLG/BxLPivAVDuR1eKr742Bexz67FtPWUqhLLH/ltaSzSZ2N7ROCuN390HeD2I+99c/W
-         3rvA==
-X-Gm-Message-State: AOAM531stZcAGzBYYXjz8GhZilJNhtzJj9ZcO3R1E8tHYiSw9spE8i7B
-        ny2CDI7+SD6a2JG2zt6JjgoIng==
-X-Google-Smtp-Source: ABdhPJwuOTrl9CV5KOgJa7gOtxUuQMDtwaAPUEqH9sxYW38UFTjXcrHMs0X9p1BIGX0ZvtcWv66ZGA==
-X-Received: by 2002:a17:906:8aa7:: with SMTP id mu39mr6081129ejc.298.1633093437608;
-        Fri, 01 Oct 2021 06:03:57 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=a6y4JSy406Wu+PL5pFim+RuAZbB2EbfKD2rlF0TOar4=;
+        b=cVKs2KYJYV9XHF9Z9vUwdYLvf8F8TedaGN/odTaZbuMrskHPAFVPHgcxL9ke4XkXAa
+         SrZvGe8qv5juM6W6bQt5+VccSm+uAr8uaqveVFxgb5M4vKdAVpvPBHY8IUWEUtyV2NVa
+         45Btclaq8/Nhn79Y3HfMixEksdBV/lvwMV3alasO4T9LXeiycEb0veORm/XCPOnKRY4o
+         FLZThZTGPj6yVfaMWO20gmh+FyB66gIHlBGys3OlzSc8NPWb/9ouIhZoHjhjWyRVbIjZ
+         IF/272jLXXdiTTHF20wFrZf7WCRoY6I+V6/+xuT5IW79+WBu6RFcEvrunpMxyXDEGRFA
+         D9lA==
+X-Gm-Message-State: AOAM531MNMg6QQRjW3WE8uWDtd25132tfQIZGjbhqnx+6f5DtXR7i9x8
+        yhL6NKR2CIbEdJAlB6tOmkwxXw==
+X-Google-Smtp-Source: ABdhPJwj3yV8GHKjigIxa2Jnn7+zh39UAhWAy3pPE2urx3c414BWuJS1mfT237HxRD5wmYkPrqREjg==
+X-Received: by 2002:a50:8282:: with SMTP id 2mr14038488edg.98.1633093442602;
+        Fri, 01 Oct 2021 06:04:02 -0700 (PDT)
 Received: from anpc2.lan (static-213-115-136-2.sme.telenor.se. [213.115.136.2])
-        by smtp.gmail.com with ESMTPSA id p22sm2920279ejl.90.2021.10.01.06.03.56
+        by smtp.gmail.com with ESMTPSA id p22sm2920279ejl.90.2021.10.01.06.04.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Oct 2021 06:03:57 -0700 (PDT)
+        Fri, 01 Oct 2021 06:04:02 -0700 (PDT)
 From:   Johan Almbladh <johan.almbladh@anyfinetworks.com>
 To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
 Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
@@ -57,39 +57,181 @@ Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
         paul@cilium.io, yangtiezhu@loongson.cn, netdev@vger.kernel.org,
         bpf@vger.kernel.org,
         Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Subject: [PATCH bpf-next 00/10] bpf/tests: Extend eBPF JIT test suite
-Date:   Fri,  1 Oct 2021 15:03:38 +0200
-Message-Id: <20211001130348.3670534-1-johan.almbladh@anyfinetworks.com>
+Subject: [PATCH bpf-next 04/10] bpf/tests: Add tests to check source register zero-extension
+Date:   Fri,  1 Oct 2021 15:03:42 +0200
+Message-Id: <20211001130348.3670534-5-johan.almbladh@anyfinetworks.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211001130348.3670534-1-johan.almbladh@anyfinetworks.com>
+References: <20211001130348.3670534-1-johan.almbladh@anyfinetworks.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch set adds a number of new tests to the test_bpf.ko test suite.
-The new tests focus on the behaviour of operations with different
-combinations of register operands, and in particular, when two or more
-register operands are in fact the same register. It also verifies things
-like a src register not being zero-extended in-place in ALU32 operations,
-and that operations implemented with function calls do not clobber any
-other eBPF registers.
+This patch adds tests to check that the source register is preserved when
+zero-extending a 32-bit value. In particular, it checks that the source
+operand is not zero-extended in-place.
 
-Johan Almbladh (10):
-  bpf/tests: Add tests of BPF_LDX and BPF_STX with small sizes
-  bpf/tests: Add zero-extension checks in BPF_ATOMIC tests
-  bpf/tests: Add exhaustive tests of BPF_ATOMIC magnitudes
-  bpf/tests: Add tests to check source register zero-extension
-  bpf/tests: Add more tests for ALU and ATOMIC register clobbering
-  bpf/tests: Minor restructuring of ALU tests
-  bpf/tests: Add exhaustive tests of ALU register combinations
-  bpf/tests: Add exhaustive tests of BPF_ATOMIC register combinations
-  bpf/tests: Add test of ALU shifts with operand register aliasing
-  bpf/tests: Add test of LDX_MEM with operand aliasing
+Signed-off-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
+---
+ lib/test_bpf.c | 143 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 143 insertions(+)
 
- lib/test_bpf.c | 2803 ++++++++++++++++++++++++++++++++++++++++++++----
- 1 file changed, 2571 insertions(+), 232 deletions(-)
-
+diff --git a/lib/test_bpf.c b/lib/test_bpf.c
+index 84efb23e09d0..c7db90112ef0 100644
+--- a/lib/test_bpf.c
++++ b/lib/test_bpf.c
+@@ -10586,6 +10586,149 @@ static struct bpf_test tests[] = {
+ 		{},
+ 		{ { 0, 2 } },
+ 	},
++	/* Checking that ALU32 src is not zero extended in place */
++#define BPF_ALU32_SRC_ZEXT(op)					\
++	{							\
++		"ALU32_" #op "_X: src preserved in zext",	\
++		.u.insns_int = {				\
++			BPF_LD_IMM64(R1, 0x0123456789acbdefULL),\
++			BPF_LD_IMM64(R2, 0xfedcba9876543210ULL),\
++			BPF_ALU64_REG(BPF_MOV, R0, R1),		\
++			BPF_ALU32_REG(BPF_##op, R2, R1),	\
++			BPF_ALU64_REG(BPF_SUB, R0, R1),		\
++			BPF_ALU64_REG(BPF_MOV, R1, R0),		\
++			BPF_ALU64_IMM(BPF_RSH, R1, 32),		\
++			BPF_ALU64_REG(BPF_OR, R0, R1),		\
++			BPF_EXIT_INSN(),			\
++		},						\
++		INTERNAL,					\
++		{ },						\
++		{ { 0, 0 } },					\
++	}
++	BPF_ALU32_SRC_ZEXT(MOV),
++	BPF_ALU32_SRC_ZEXT(AND),
++	BPF_ALU32_SRC_ZEXT(OR),
++	BPF_ALU32_SRC_ZEXT(XOR),
++	BPF_ALU32_SRC_ZEXT(ADD),
++	BPF_ALU32_SRC_ZEXT(SUB),
++	BPF_ALU32_SRC_ZEXT(MUL),
++	BPF_ALU32_SRC_ZEXT(DIV),
++	BPF_ALU32_SRC_ZEXT(MOD),
++#undef BPF_ALU32_SRC_ZEXT
++	/* Checking that ATOMIC32 src is not zero extended in place */
++#define BPF_ATOMIC32_SRC_ZEXT(op)					\
++	{								\
++		"ATOMIC_W_" #op ": src preserved in zext",		\
++		.u.insns_int = {					\
++			BPF_LD_IMM64(R0, 0x0123456789acbdefULL),	\
++			BPF_ALU64_REG(BPF_MOV, R1, R0),			\
++			BPF_ST_MEM(BPF_W, R10, -4, 0),			\
++			BPF_ATOMIC_OP(BPF_W, BPF_##op, R10, R1, -4),	\
++			BPF_ALU64_REG(BPF_SUB, R0, R1),			\
++			BPF_ALU64_REG(BPF_MOV, R1, R0),			\
++			BPF_ALU64_IMM(BPF_RSH, R1, 32),			\
++			BPF_ALU64_REG(BPF_OR, R0, R1),			\
++			BPF_EXIT_INSN(),				\
++		},							\
++		INTERNAL,						\
++		{ },							\
++		{ { 0, 0 } },						\
++		.stack_depth = 8,					\
++	}
++	BPF_ATOMIC32_SRC_ZEXT(ADD),
++	BPF_ATOMIC32_SRC_ZEXT(AND),
++	BPF_ATOMIC32_SRC_ZEXT(OR),
++	BPF_ATOMIC32_SRC_ZEXT(XOR),
++#undef BPF_ATOMIC32_SRC_ZEXT
++	/* Checking that CMPXCHG32 src is not zero extended in place */
++	{
++		"ATOMIC_W_CMPXCHG: src preserved in zext",
++		.u.insns_int = {
++			BPF_LD_IMM64(R1, 0x0123456789acbdefULL),
++			BPF_ALU64_REG(BPF_MOV, R2, R1),
++			BPF_ALU64_REG(BPF_MOV, R0, 0),
++			BPF_ST_MEM(BPF_W, R10, -4, 0),
++			BPF_ATOMIC_OP(BPF_W, BPF_CMPXCHG, R10, R1, -4),
++			BPF_ALU64_REG(BPF_SUB, R1, R2),
++			BPF_ALU64_REG(BPF_MOV, R2, R1),
++			BPF_ALU64_IMM(BPF_RSH, R2, 32),
++			BPF_ALU64_REG(BPF_OR, R1, R2),
++			BPF_ALU64_REG(BPF_MOV, R0, R1),
++			BPF_EXIT_INSN(),
++		},
++		INTERNAL,
++		{ },
++		{ { 0, 0 } },
++		.stack_depth = 8,
++	},
++	/* Checking that JMP32 immediate src is not zero extended in place */
++#define BPF_JMP32_IMM_ZEXT(op)					\
++	{							\
++		"JMP32_" #op "_K: operand preserved in zext",	\
++		.u.insns_int = {				\
++			BPF_LD_IMM64(R0, 0x0123456789acbdefULL),\
++			BPF_ALU64_REG(BPF_MOV, R1, R0),		\
++			BPF_JMP32_IMM(BPF_##op, R0, 1234, 1),	\
++			BPF_JMP_A(0), /* Nop */			\
++			BPF_ALU64_REG(BPF_SUB, R0, R1),		\
++			BPF_ALU64_REG(BPF_MOV, R1, R0),		\
++			BPF_ALU64_IMM(BPF_RSH, R1, 32),		\
++			BPF_ALU64_REG(BPF_OR, R0, R1),		\
++			BPF_EXIT_INSN(),			\
++		},						\
++		INTERNAL,					\
++		{ },						\
++		{ { 0, 0 } },					\
++	}
++	BPF_JMP32_IMM_ZEXT(JEQ),
++	BPF_JMP32_IMM_ZEXT(JNE),
++	BPF_JMP32_IMM_ZEXT(JSET),
++	BPF_JMP32_IMM_ZEXT(JGT),
++	BPF_JMP32_IMM_ZEXT(JGE),
++	BPF_JMP32_IMM_ZEXT(JLT),
++	BPF_JMP32_IMM_ZEXT(JLE),
++	BPF_JMP32_IMM_ZEXT(JSGT),
++	BPF_JMP32_IMM_ZEXT(JSGE),
++	BPF_JMP32_IMM_ZEXT(JSGT),
++	BPF_JMP32_IMM_ZEXT(JSLT),
++	BPF_JMP32_IMM_ZEXT(JSLE),
++#undef BPF_JMP2_IMM_ZEXT
++	/* Checking that JMP32 dst & src are not zero extended in place */
++#define BPF_JMP32_REG_ZEXT(op)					\
++	{							\
++		"JMP32_" #op "_X: operands preserved in zext",	\
++		.u.insns_int = {				\
++			BPF_LD_IMM64(R0, 0x0123456789acbdefULL),\
++			BPF_LD_IMM64(R1, 0xfedcba9876543210ULL),\
++			BPF_ALU64_REG(BPF_MOV, R2, R0),		\
++			BPF_ALU64_REG(BPF_MOV, R3, R1),		\
++			BPF_JMP32_IMM(BPF_##op, R0, R1, 1),	\
++			BPF_JMP_A(0), /* Nop */			\
++			BPF_ALU64_REG(BPF_SUB, R0, R2),		\
++			BPF_ALU64_REG(BPF_SUB, R1, R3),		\
++			BPF_ALU64_REG(BPF_OR, R0, R1),		\
++			BPF_ALU64_REG(BPF_MOV, R1, R0),		\
++			BPF_ALU64_IMM(BPF_RSH, R1, 32),		\
++			BPF_ALU64_REG(BPF_OR, R0, R1),		\
++			BPF_EXIT_INSN(),			\
++		},						\
++		INTERNAL,					\
++		{ },						\
++		{ { 0, 0 } },					\
++	}
++	BPF_JMP32_REG_ZEXT(JEQ),
++	BPF_JMP32_REG_ZEXT(JNE),
++	BPF_JMP32_REG_ZEXT(JSET),
++	BPF_JMP32_REG_ZEXT(JGT),
++	BPF_JMP32_REG_ZEXT(JGE),
++	BPF_JMP32_REG_ZEXT(JLT),
++	BPF_JMP32_REG_ZEXT(JLE),
++	BPF_JMP32_REG_ZEXT(JSGT),
++	BPF_JMP32_REG_ZEXT(JSGE),
++	BPF_JMP32_REG_ZEXT(JSGT),
++	BPF_JMP32_REG_ZEXT(JSLT),
++	BPF_JMP32_REG_ZEXT(JSLE),
++#undef BPF_JMP2_REG_ZEXT
+ 	/* Exhaustive test of ALU64 shift operations */
+ 	{
+ 		"ALU64_LSH_K: all shift values",
 -- 
 2.30.2
 
