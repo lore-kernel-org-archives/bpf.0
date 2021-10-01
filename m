@@ -2,287 +2,103 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9FFBAC433F5
-	for <bpf@archiver.kernel.org>; Fri,  1 Oct 2021 13:05:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8AA41C433EF
+	for <bpf@archiver.kernel.org>; Fri,  1 Oct 2021 13:43:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 85E9561AA8
-	for <bpf@archiver.kernel.org>; Fri,  1 Oct 2021 13:05:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7084861262
+	for <bpf@archiver.kernel.org>; Fri,  1 Oct 2021 13:43:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231447AbhJANHe (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 1 Oct 2021 09:07:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34088 "EHLO
+        id S1354153AbhJANpB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 1 Oct 2021 09:45:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353957AbhJANGv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 1 Oct 2021 09:06:51 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEFFFC061782
-        for <bpf@vger.kernel.org>; Fri,  1 Oct 2021 06:04:07 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id r18so34436935edv.12
-        for <bpf@vger.kernel.org>; Fri, 01 Oct 2021 06:04:07 -0700 (PDT)
+        with ESMTP id S1354146AbhJANpA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 1 Oct 2021 09:45:00 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A153C06177C
+        for <bpf@vger.kernel.org>; Fri,  1 Oct 2021 06:43:16 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id l13so8949753qtv.3
+        for <bpf@vger.kernel.org>; Fri, 01 Oct 2021 06:43:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=anyfinetworks-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=FX3awPb6VAt2eZU+efm5xZi4nnLa1upqR/daiKl0/CY=;
-        b=1JaOw38bwLZcOUNtgfWT+mTbFWe80hsyJrOcdE4t5ubu3U70vSCC5DvTc3QFJ1CSgQ
-         MBBR6xdJFokiKQaPx3lbww2CIZa5pZ+Ka0iv4u+At6OYzkNE/lpHghb91NxMUpf7bfMY
-         f9tYZVbHpVHhJT8Vg6FtFlKWbCnxe5qx8ZynNWH9rF9Q+K+gf2Ss1pPlmr/Gl+vnmhZJ
-         aPdhxr3BI66cTqRS2fTRcZMyWvrHlw/iUOHkP+sT+i+fXXlfZCpmLxZPXZInbjc6w0UC
-         GLw6eG63kpcDCQIoA3SW0OwsFmhy1F2q32e7gvfOnS/8ly3zFKlv41RijLEBTj3dBEkI
-         NonQ==
+        d=mojatatu-com.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=cf4KervmgbYPewbFXW0H0LrSdYd5Nbh/NaFrqSsod4Y=;
+        b=3Hqx4iJoDMd/CbstYyPKbtUv5iaeGCpZ57vqdgLGDE88xLSq+bB1vN3HhmM3qunXk2
+         RGfhlmLBWn9fHHH3XFZjMn1aCK4rlwgZzbT0oLEZ48DD4uiiiNaAoxzc84NCFIg5t4Mh
+         tbmqATbs2+LHirwbBoQk6zzDCohSeWTej6haXlZe9q/fOv6doKfcW25U1pnsmaNdpKsp
+         meHp6BVNTZCxqy8lH6QDsNpHBzvvs+3SsopkLPfDPQLxrQRKVxggWWpI+sHeUc8tb+Yz
+         DiFA0U9dq8Nrlj8I83sGM7JxArPjsmkS9TCL4RLHoCcu0Ub2L8ZnR5grPW+2Q2KmCiQ/
+         5xCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=FX3awPb6VAt2eZU+efm5xZi4nnLa1upqR/daiKl0/CY=;
-        b=JowYCdNV0znVTgqX52tLgTAa5FAWx/u59eRKJgFsNWsZiveU+RnjtFx2AxAt+K4/Cv
-         mY4XUwlH9zzbM5bFKq237EVL4+aCCLQOZ3NF4HTEaL/YDhvBl+76Owh9MIBRA1HiNj2E
-         mXummKX39FwOaKUmeXrATjCYDmM0coVbedDCaLf+m3Yh6YcjpEdBolnH4DhfE4OAgD2D
-         XAmh3aKYTCnpkQ+rki2b9QYVDth1laJVN465X6f9oBczw7MY30fY80oR/AGacVLmE1SC
-         VgRjjQje/NvW4Y7p0MtxNe7OZaan/1PH5YmddYEUyDKlPKUQ+xHQt5qD0PgmIf/lzK8w
-         WotQ==
-X-Gm-Message-State: AOAM530SbqHFVsPNqVQRaQKepOwbTrkqBSt2089tebC1l6pHBx/P4+u1
-        DmgDEa9bW0kwDowAJcRDthsSBA==
-X-Google-Smtp-Source: ABdhPJytKybAbDURYKoq+8eKzkF3v/ljvBrmTADi+GnUiyn3ezfuZ0Ic8Cv+wm+Zyc+x5FUwLU1uAQ==
-X-Received: by 2002:a17:906:660f:: with SMTP id b15mr6147768ejp.491.1633093445070;
-        Fri, 01 Oct 2021 06:04:05 -0700 (PDT)
-Received: from anpc2.lan (static-213-115-136-2.sme.telenor.se. [213.115.136.2])
-        by smtp.gmail.com with ESMTPSA id p22sm2920279ejl.90.2021.10.01.06.04.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Oct 2021 06:04:04 -0700 (PDT)
-From:   Johan Almbladh <johan.almbladh@anyfinetworks.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
-Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, iii@linux.ibm.com,
-        paul@cilium.io, yangtiezhu@loongson.cn, netdev@vger.kernel.org,
-        bpf@vger.kernel.org,
-        Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Subject: [PATCH bpf-next 06/10] bpf/tests: Minor restructuring of ALU tests
-Date:   Fri,  1 Oct 2021 15:03:44 +0200
-Message-Id: <20211001130348.3670534-7-johan.almbladh@anyfinetworks.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211001130348.3670534-1-johan.almbladh@anyfinetworks.com>
-References: <20211001130348.3670534-1-johan.almbladh@anyfinetworks.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=cf4KervmgbYPewbFXW0H0LrSdYd5Nbh/NaFrqSsod4Y=;
+        b=tFZ29bTM/0us98H2/dcLwxpPv9z7dKRK0QOWCGIQbFXVQHhoOF8pbWXY3f8feinsoq
+         3mOyhh2+b3w+P62+Zmz70xnIKFj8O9KM/nlKrA2EAearSbP5FjCjkGfDEC/PpxPMPpYA
+         vJwe764i25+7AHGr6VKujX+f4X/tDz+iH4zQGv2Mk2lq8LQdfCiAVJ1vTnNNANXgRppq
+         PuSykT3E68XMWOIbgPwbvJbTpE8guB+YOjzTUB2v4a4OmgWR9v3cbyM35tvfi0NcJ6ha
+         ljeMwdoNpi2oDNOZdMqVBiWriVfsJfwpbdILN1TbJC1y5Rf6F9A5+hhJrBE4crY3OZh3
+         lhEQ==
+X-Gm-Message-State: AOAM533zWhDfQ8rhMiWZy3UGsuAH8VFT5A/AucM3Iri8Mh3KORQF7VEs
+        fs5o6UNuzHh23X50GYWy4BecCwHy85KCJQ==
+X-Google-Smtp-Source: ABdhPJxtCkBgpFlKSAej/LLmct64vIxRBmKGIpMEhIWICJ6X3uIis+5Y29rgb65pLMVd0YPuDNViIA==
+X-Received: by 2002:a05:622a:181:: with SMTP id s1mr13423984qtw.47.1633095795595;
+        Fri, 01 Oct 2021 06:43:15 -0700 (PDT)
+Received: from [192.168.1.173] (bras-base-kntaon1617w-grc-33-142-112-185-132.dsl.bell.ca. [142.112.185.132])
+        by smtp.googlemail.com with ESMTPSA id y22sm3453660qkp.9.2021.10.01.06.43.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 Oct 2021 06:43:14 -0700 (PDT)
+Subject: Re: [RFC Patch net-next v2] net_sched: introduce eBPF based Qdisc
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>
+Cc:     Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, Cong Wang <cong.wang@bytedance.com>,
+        Jiri Pirko <jiri@resnulli.us>
+References: <20210913231108.19762-1-xiyou.wangcong@gmail.com>
+ <CAADnVQJFbCmzoFM8GGHyLWULSmX75=67Tu0EnTOOoVfH4gE+HA@mail.gmail.com>
+ <CAM_iQpX2prCpPDmO1U0A_wyJi_LS4wmd9MQiFKiqQT8NfGNNnw@mail.gmail.com>
+ <CAADnVQJJHLuaymMEdDowharvyJr+6ta2Tg9XAR3aM+4=ysu+bg@mail.gmail.com>
+ <CAM_iQpUCtXRWhMqSaoymZ6OqOywb-k4R1_mLYsLCTm7ABJ5k_A@mail.gmail.com>
+ <CAADnVQJcUspoBzk9Tt3Rx_OH7-MB+m1xw+vq2k2SozYZMmpurg@mail.gmail.com>
+ <CAM_iQpVaVvaEn2ORfyZQ-FN56pCdE4YPa0r2E+VgyZzvEP31cQ@mail.gmail.com>
+ <CAADnVQJX8OpXhQ66jVSN1ws8tav5R8yCERr6eaS9POA+QhRx-A@mail.gmail.com>
+From:   Jamal Hadi Salim <jhs@mojatatu.com>
+Message-ID: <6d648f13-756f-0e3e-b617-5f9244d733b7@mojatatu.com>
+Date:   Fri, 1 Oct 2021 09:43:13 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQJX8OpXhQ66jVSN1ws8tav5R8yCERr6eaS9POA+QhRx-A@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch moves the ALU LSH/RSH/ARSH reference computations into the
-common reference value function. Also fix typo in constants so they
-now have the intended values.
+On 2021-09-29 4:57 p.m., Alexei Starovoitov wrote:
 
-Signed-off-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
----
- lib/test_bpf.c | 137 +++++++++++++++++++++++--------------------------
- 1 file changed, 65 insertions(+), 72 deletions(-)
+> Applying queuing discipline to non-skb context may be not your target
+> but it's a reasonable and practical request to have.
 
-diff --git a/lib/test_bpf.c b/lib/test_bpf.c
-index 201f34060eef..919323a3b69f 100644
---- a/lib/test_bpf.c
-+++ b/lib/test_bpf.c
-@@ -538,6 +538,57 @@ static int bpf_fill_max_jmp_never_taken(struct bpf_test *self)
- 	return __bpf_fill_max_jmp(self, BPF_JLT, 0);
- }
- 
-+/* ALU result computation used in tests */
-+static bool __bpf_alu_result(u64 *res, u64 v1, u64 v2, u8 op)
-+{
-+	*res = 0;
-+	switch (op) {
-+	case BPF_MOV:
-+		*res = v2;
-+		break;
-+	case BPF_AND:
-+		*res = v1 & v2;
-+		break;
-+	case BPF_OR:
-+		*res = v1 | v2;
-+		break;
-+	case BPF_XOR:
-+		*res = v1 ^ v2;
-+		break;
-+	case BPF_LSH:
-+		*res = v1 << v2;
-+		break;
-+	case BPF_RSH:
-+		*res = v1 >> v2;
-+		break;
-+	case BPF_ARSH:
-+		*res = v1 >> v2;
-+		if (v2 > 0 && v1 > S64_MAX)
-+			*res |= ~0ULL << (64 - v2);
-+		break;
-+	case BPF_ADD:
-+		*res = v1 + v2;
-+		break;
-+	case BPF_SUB:
-+		*res = v1 - v2;
-+		break;
-+	case BPF_MUL:
-+		*res = v1 * v2;
-+		break;
-+	case BPF_DIV:
-+		if (v2 == 0)
-+			return false;
-+		*res = div64_u64(v1, v2);
-+		break;
-+	case BPF_MOD:
-+		if (v2 == 0)
-+			return false;
-+		div64_u64_rem(v1, v2, res);
-+		break;
-+	}
-+	return true;
-+}
-+
- /* Test an ALU shift operation for all valid shift values */
- static int __bpf_fill_alu_shift(struct bpf_test *self, u8 op,
- 				u8 mode, bool alu32)
-@@ -576,37 +627,19 @@ static int __bpf_fill_alu_shift(struct bpf_test *self, u8 op,
- 					insn[i++] = BPF_ALU32_IMM(op, R1, imm);
- 				else
- 					insn[i++] = BPF_ALU32_REG(op, R1, R2);
--				switch (op) {
--				case BPF_LSH:
--					val = (u32)reg << imm;
--					break;
--				case BPF_RSH:
--					val = (u32)reg >> imm;
--					break;
--				case BPF_ARSH:
--					val = (u32)reg >> imm;
--					if (imm > 0 && (reg & 0x80000000))
--						val |= ~(u32)0 << (32 - imm);
--					break;
--				}
-+
-+				if (op == BPF_ARSH)
-+					reg = (s32)reg;
-+				else
-+					reg = (u32)reg;
-+				__bpf_alu_result(&val, reg, imm, op);
-+				val = (u32)val;
- 			} else {
- 				if (mode == BPF_K)
- 					insn[i++] = BPF_ALU64_IMM(op, R1, imm);
- 				else
- 					insn[i++] = BPF_ALU64_REG(op, R1, R2);
--				switch (op) {
--				case BPF_LSH:
--					val = (u64)reg << imm;
--					break;
--				case BPF_RSH:
--					val = (u64)reg >> imm;
--					break;
--				case BPF_ARSH:
--					val = (u64)reg >> imm;
--					if (imm > 0 && reg < 0)
--						val |= ~(u64)0 << (64 - imm);
--					break;
--				}
-+				__bpf_alu_result(&val, reg, imm, op);
- 			}
- 
- 			/*
-@@ -799,46 +832,6 @@ static int __bpf_fill_pattern(struct bpf_test *self, void *arg,
-  * test is designed to verify e.g. the ALU and ALU64 operations for JITs that
-  * emit different code depending on the magnitude of the immediate value.
-  */
--
--static bool __bpf_alu_result(u64 *res, u64 v1, u64 v2, u8 op)
--{
--	*res = 0;
--	switch (op) {
--	case BPF_MOV:
--		*res = v2;
--		break;
--	case BPF_AND:
--		*res = v1 & v2;
--		break;
--	case BPF_OR:
--		*res = v1 | v2;
--		break;
--	case BPF_XOR:
--		*res = v1 ^ v2;
--		break;
--	case BPF_ADD:
--		*res = v1 + v2;
--		break;
--	case BPF_SUB:
--		*res = v1 - v2;
--		break;
--	case BPF_MUL:
--		*res = v1 * v2;
--		break;
--	case BPF_DIV:
--		if (v2 == 0)
--			return false;
--		*res = div64_u64(v1, v2);
--		break;
--	case BPF_MOD:
--		if (v2 == 0)
--			return false;
--		div64_u64_rem(v1, v2, res);
--		break;
--	}
--	return true;
--}
--
- static int __bpf_emit_alu64_imm(struct bpf_test *self, void *arg,
- 				struct bpf_insn *insns, s64 dst, s64 imm)
- {
-@@ -7881,7 +7874,7 @@ static struct bpf_test tests[] = {
- 		"BPF_ATOMIC | BPF_DW, BPF_CMPXCHG: Test successful return",
- 		.u.insns_int = {
- 			BPF_LD_IMM64(R1, 0x0123456789abcdefULL),
--			BPF_LD_IMM64(R2, 0xfecdba9876543210ULL),
-+			BPF_LD_IMM64(R2, 0xfedcba9876543210ULL),
- 			BPF_ALU64_REG(BPF_MOV, R0, R1),
- 			BPF_STX_MEM(BPF_DW, R10, R1, -40),
- 			BPF_ATOMIC_OP(BPF_DW, BPF_CMPXCHG, R10, R2, -40),
-@@ -7898,7 +7891,7 @@ static struct bpf_test tests[] = {
- 		"BPF_ATOMIC | BPF_DW, BPF_CMPXCHG: Test successful store",
- 		.u.insns_int = {
- 			BPF_LD_IMM64(R1, 0x0123456789abcdefULL),
--			BPF_LD_IMM64(R2, 0xfecdba9876543210ULL),
-+			BPF_LD_IMM64(R2, 0xfedcba9876543210ULL),
- 			BPF_ALU64_REG(BPF_MOV, R0, R1),
- 			BPF_STX_MEM(BPF_DW, R10, R0, -40),
- 			BPF_ATOMIC_OP(BPF_DW, BPF_CMPXCHG, R10, R2, -40),
-@@ -7916,7 +7909,7 @@ static struct bpf_test tests[] = {
- 		"BPF_ATOMIC | BPF_DW, BPF_CMPXCHG: Test failure return",
- 		.u.insns_int = {
- 			BPF_LD_IMM64(R1, 0x0123456789abcdefULL),
--			BPF_LD_IMM64(R2, 0xfecdba9876543210ULL),
-+			BPF_LD_IMM64(R2, 0xfedcba9876543210ULL),
- 			BPF_ALU64_REG(BPF_MOV, R0, R1),
- 			BPF_ALU64_IMM(BPF_ADD, R0, 1),
- 			BPF_STX_MEM(BPF_DW, R10, R1, -40),
-@@ -7934,7 +7927,7 @@ static struct bpf_test tests[] = {
- 		"BPF_ATOMIC | BPF_DW, BPF_CMPXCHG: Test failure store",
- 		.u.insns_int = {
- 			BPF_LD_IMM64(R1, 0x0123456789abcdefULL),
--			BPF_LD_IMM64(R2, 0xfecdba9876543210ULL),
-+			BPF_LD_IMM64(R2, 0xfedcba9876543210ULL),
- 			BPF_ALU64_REG(BPF_MOV, R0, R1),
- 			BPF_ALU64_IMM(BPF_ADD, R0, 1),
- 			BPF_STX_MEM(BPF_DW, R10, R1, -40),
-@@ -7953,11 +7946,11 @@ static struct bpf_test tests[] = {
- 		"BPF_ATOMIC | BPF_DW, BPF_CMPXCHG: Test side effects",
- 		.u.insns_int = {
- 			BPF_LD_IMM64(R1, 0x0123456789abcdefULL),
--			BPF_LD_IMM64(R2, 0xfecdba9876543210ULL),
-+			BPF_LD_IMM64(R2, 0xfedcba9876543210ULL),
- 			BPF_ALU64_REG(BPF_MOV, R0, R1),
- 			BPF_STX_MEM(BPF_DW, R10, R1, -40),
- 			BPF_ATOMIC_OP(BPF_DW, BPF_CMPXCHG, R10, R2, -40),
--			BPF_LD_IMM64(R0, 0xfecdba9876543210ULL),
-+			BPF_LD_IMM64(R0, 0xfedcba9876543210ULL),
- 			BPF_JMP_REG(BPF_JNE, R0, R2, 1),
- 			BPF_ALU64_REG(BPF_SUB, R0, R2),
- 			BPF_EXIT_INSN(),
--- 
-2.30.2
 
+While i agree that it is useful to deal with queues and scheduling
+for other buffer contexts, it certainly not the same infrastructure
+wise to deal with sending a context to user space vs dealing with
+the qdisc environment. There are a lot of corner cases of dealing with
+the mix of hard and softirqs, non-work conserving modes, multiflow
+funneling and locking etc that have been refined over the years that
+are incorporated into the tc + netdev infra.
+The approach that Cong took of just reusing that infra will take
+advantage of those learnings. The only thing that is variable between
+the different qdiscs is the enqueue/dequeue algos (which is where
+Cong is sticking the ebpf hooks). To me that looks like a very
+good starting point as i dont believe you can come up with one size
+fits all without excessive over-engineering (which seems to defeat
+the purpose of ebpf).
+
+cheers,
+jamal
