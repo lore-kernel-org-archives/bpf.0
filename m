@@ -2,54 +2,54 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 49102C433FE
-	for <bpf@archiver.kernel.org>; Fri,  1 Oct 2021 13:05:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BE45CC433F5
+	for <bpf@archiver.kernel.org>; Fri,  1 Oct 2021 13:05:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 32F1C61A8F
-	for <bpf@archiver.kernel.org>; Fri,  1 Oct 2021 13:05:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A520161AAA
+	for <bpf@archiver.kernel.org>; Fri,  1 Oct 2021 13:05:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354490AbhJANG5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 1 Oct 2021 09:06:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34286 "EHLO
+        id S1354157AbhJANG7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 1 Oct 2021 09:06:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354134AbhJANGv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1354097AbhJANGv (ORCPT <rfc822;bpf@vger.kernel.org>);
         Fri, 1 Oct 2021 09:06:51 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54529C06178C
-        for <bpf@vger.kernel.org>; Fri,  1 Oct 2021 06:04:13 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id bd28so34456017edb.9
-        for <bpf@vger.kernel.org>; Fri, 01 Oct 2021 06:04:13 -0700 (PDT)
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 283A3C06178A
+        for <bpf@vger.kernel.org>; Fri,  1 Oct 2021 06:04:10 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id r18so34437328edv.12
+        for <bpf@vger.kernel.org>; Fri, 01 Oct 2021 06:04:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=anyfinetworks-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=5zYB8mqtE+ygJzihZK4VFYuXUtlev0s60JUhGV9c/Wg=;
-        b=erH8r8HMaLwfNhcglVlsRt48YRykCk/HyR8bgmz5zhINC7Cvrz9kUo71KZD7CQZm8p
-         CKDqPvJBgoMLOtLsCL3p75pUS5T63GkvrOD+jKAISfhpWZ3GFPFPAdjaIr/NEQ+bfy92
-         JKoBBFVy7sDRsfneNH9k1udTEV0Jae2hKmUMm8D1p0toxKLLtyuYv1OkqzU2zWZcpMcv
-         7GKC9yKN95uUeroae2ZRgu7Yk8pg6FxtfEmSPCF4Ibc4CREwEV+y62FlBhbAPt+y1CKv
-         jW4eyRq0GF7wAF3ANTlo28+I7o1Za/IlJT9YvW5ZR36QZBSSgUUPBBCRu2PjMIFG0duz
-         tgog==
+        bh=ERLGDhV2pBfoTQi2z5jcvKZZQA7s+VbF/uLzKflc344=;
+        b=aAstHToN9+sA+adJ1X952a4pZ4qmf3+gkfbgZIILdNhAGgi2a5/T/snvVfjcC+nXsL
+         +SAgQ+mH7K1erqJG5tssiQhpSTKV6lgvnAo1K5DD69lchLyV56HyieCgExvv3otQEkDD
+         9v22d9r4nrfGBXbJ2YmfTh5tFbK5mOW0sv6gA/FhpcJQVeeUSnUiaguljFZnRNJry9ce
+         oweXiAtbJiTcf6uN4jpHFaPMy8hvhEF8qtuGt3vCr8jPUEKDkt+Ao6BIhPznWwHJdwns
+         KDge8yU4kgvVKT4kJpFecW4M+6B6NJIJiCcd48vCT67n995c0YwCG6cixwka41o2yFYx
+         dZjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=5zYB8mqtE+ygJzihZK4VFYuXUtlev0s60JUhGV9c/Wg=;
-        b=VLxyRNBl1CmEOOYps4CL/RUKeLGzoNbKRvLeaOTbvIeqeKIYEm+Neqr9QT/aBNpu1L
-         5+anIjwAzpWYmsGqiuDe6lmlsuX3CoSYY5MaY8y7zDf2kXk53yMaX2edkcmC6ipIRcTv
-         xQF08DBy8AM+ti1CJekrlZB8ypXtLDKf40ZHraXNDa9QrHeKhww9o02sO21JZjxm3gEf
-         jCfuGBWHDeJsIAtnoqgStCU4A0ACiS8NM0xvjLvNb1tQ0r1RLg+RF6oVuK7ZIi4kZ8D/
-         WwLy0LUpG8v68V1R2y+448sIipYAUrcNbSEZB5zJF4/yrlspX3AGuOZymCx8K7zDemCM
-         BHTg==
-X-Gm-Message-State: AOAM532x4yDkDO1EpHysKcUtis9jfkQab58TegN78S4jjC3cHtXs8Zlx
-        cjcSXOwMr8RY6Xbmo/AUZreIXQ==
-X-Google-Smtp-Source: ABdhPJzurTk3eXztmQhe69eT45MuApqyv5juzkQJqOdeF+jvXaaptb5Cp5FYqlWek6bVH/OhOxobTg==
-X-Received: by 2002:a17:906:36d6:: with SMTP id b22mr5978897ejc.387.1633093451801;
-        Fri, 01 Oct 2021 06:04:11 -0700 (PDT)
+        bh=ERLGDhV2pBfoTQi2z5jcvKZZQA7s+VbF/uLzKflc344=;
+        b=ccuUuvZAu/R6NOpdBMI42aUkgWKDn1rRaJExlL6exBewrVGqShDjs/So6MhpJEQmgj
+         CW/ejm+oWn7z6apIVGWNt43tSjrDeiL6bZwBbi55MOb4m69hx99dV+nVLJ7lB62vDfhm
+         eDcOJVgffjWhLHaSZ2mp46a8c/w0ONwT+p0DFhMFFufW5XS29R+1f7G/wP2Q1QAVBurd
+         e4/tkj19qbjUlLw6Ai6wTKENKFzSuiTxXsT7SSLilguMg3PRuu+CvZFNjeoVAkCEbmPY
+         fthFCdD6nkRFN5GGaknKD5XXFGPkYGJzG4irIMaKYE5VYTbyscmQsE2LeflXpX7KELMC
+         aRQQ==
+X-Gm-Message-State: AOAM530ZAqxrVsLKBNiXgIkqo10gr+0k+wYL9Zb1mNpZ4hHRkVzcgTcT
+        pnnA2sYQld6XLFLhV7HpPIi8yg==
+X-Google-Smtp-Source: ABdhPJyGVFnd8U3qrHZwUay8HgFmSidD3IJKVnC0zV5GSx37zcmn6/e2W3oRssJdmSRsNXPG/15NNA==
+X-Received: by 2002:a17:906:4c4a:: with SMTP id d10mr6264672ejw.391.1633093447628;
+        Fri, 01 Oct 2021 06:04:07 -0700 (PDT)
 Received: from anpc2.lan (static-213-115-136-2.sme.telenor.se. [213.115.136.2])
-        by smtp.gmail.com with ESMTPSA id p22sm2920279ejl.90.2021.10.01.06.04.10
+        by smtp.gmail.com with ESMTPSA id p22sm2920279ejl.90.2021.10.01.06.04.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Oct 2021 06:04:11 -0700 (PDT)
+        Fri, 01 Oct 2021 06:04:07 -0700 (PDT)
 From:   Johan Almbladh <johan.almbladh@anyfinetworks.com>
 To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
 Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
@@ -57,9 +57,9 @@ Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
         paul@cilium.io, yangtiezhu@loongson.cn, netdev@vger.kernel.org,
         bpf@vger.kernel.org,
         Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Subject: [PATCH bpf-next 10/10] bpf/tests: Add test of LDX_MEM with operand aliasing
-Date:   Fri,  1 Oct 2021 15:03:48 +0200
-Message-Id: <20211001130348.3670534-11-johan.almbladh@anyfinetworks.com>
+Subject: [PATCH bpf-next 08/10] bpf/tests: Add exhaustive tests of BPF_ATOMIC register combinations
+Date:   Fri,  1 Oct 2021 15:03:46 +0200
+Message-Id: <20211001130348.3670534-9-johan.almbladh@anyfinetworks.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211001130348.3670534-1-johan.almbladh@anyfinetworks.com>
 References: <20211001130348.3670534-1-johan.almbladh@anyfinetworks.com>
@@ -69,84 +69,454 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch adds a set of tests of BPF_LDX_MEM where both operand registers
-are the same register. Mainly testing 32-bit JITs that may load a 64-bit
-value in two 32-bit loads, and must not overwrite the address register.
+This patch adds tests of all register combinations for BPF_ATOMIC
+operations on both BPF_W and BPF_DW sizes.
 
 Signed-off-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
 ---
- lib/test_bpf.c | 58 ++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 58 insertions(+)
+ lib/test_bpf.c | 422 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 422 insertions(+)
 
 diff --git a/lib/test_bpf.c b/lib/test_bpf.c
-index dfcbdff714b6..b9fc330fc83b 100644
+index 924bf4c9783c..40db4cee4f51 100644
 --- a/lib/test_bpf.c
 +++ b/lib/test_bpf.c
-@@ -11133,6 +11133,64 @@ static struct bpf_test tests[] = {
- 		{},
- 		{ { 0, 2 } },
+@@ -1805,6 +1805,246 @@ static int bpf_fill_cmpxchg32(struct bpf_test *self)
+ 				  &__bpf_emit_cmpxchg32);
+ }
+ 
++/*
++ * Test JITs that implement ATOMIC operations as function calls or
++ * other primitives, and must re-arrange operands for argument passing.
++ */
++static int __bpf_fill_atomic_reg_pairs(struct bpf_test *self, u8 width, u8 op)
++{
++	struct bpf_insn *insn;
++	int len = 2 + 34 * 10 * 10;
++	u64 mem, upd, res;
++	int rd, rs, i = 0;
++
++	insn = kmalloc_array(len, sizeof(*insn), GFP_KERNEL);
++	if (!insn)
++		return -ENOMEM;
++
++	/* Operand and memory values */
++	if (width == BPF_DW) {
++		mem = 0x0123456789abcdefULL;
++		upd = 0xfedcba9876543210ULL;
++	} else { /* BPF_W */
++		mem = 0x01234567U;
++		upd = 0x76543210U;
++	}
++
++	/* Memory updated according to operation */
++	switch (op) {
++	case BPF_XCHG:
++		res = upd;
++		break;
++	case BPF_CMPXCHG:
++		res = mem;
++		break;
++	default:
++		__bpf_alu_result(&res, mem, upd, BPF_OP(op));
++	}
++
++	/* Test all operand registers */
++	for (rd = R0; rd <= R9; rd++) {
++		for (rs = R0; rs <= R9; rs++) {
++			u64 cmp, src;
++
++			/* Initialize value in memory */
++			i += __bpf_ld_imm64(&insn[i], R0, mem);
++			insn[i++] = BPF_STX_MEM(width, R10, R0, -8);
++
++			/* Initialize registers in order */
++			i += __bpf_ld_imm64(&insn[i], R0, ~mem);
++			i += __bpf_ld_imm64(&insn[i], rs, upd);
++			insn[i++] = BPF_MOV64_REG(rd, R10);
++
++			/* Perform atomic operation */
++			insn[i++] = BPF_ATOMIC_OP(width, op, rd, rs, -8);
++			if (op == BPF_CMPXCHG && width == BPF_W)
++				insn[i++] = BPF_ZEXT_REG(R0);
++
++			/* Check R0 register value */
++			if (op == BPF_CMPXCHG)
++				cmp = mem;  /* Expect value from memory */
++			else if (R0 == rd || R0 == rs)
++				cmp = 0;    /* Aliased, checked below */
++			else
++				cmp = ~mem; /* Expect value to be preserved */
++			if (cmp) {
++				insn[i++] = BPF_JMP32_IMM(BPF_JEQ, R0,
++							   (u32)cmp, 2);
++				insn[i++] = BPF_MOV32_IMM(R0, __LINE__);
++				insn[i++] = BPF_EXIT_INSN();
++				insn[i++] = BPF_ALU64_IMM(BPF_RSH, R0, 32);
++				insn[i++] = BPF_JMP32_IMM(BPF_JEQ, R0,
++							   cmp >> 32, 2);
++				insn[i++] = BPF_MOV32_IMM(R0, __LINE__);
++				insn[i++] = BPF_EXIT_INSN();
++			}
++
++			/* Check source register value */
++			if (rs == R0 && op == BPF_CMPXCHG)
++				src = 0;   /* Aliased with R0, checked above */
++			else if (rs == rd && (op == BPF_CMPXCHG ||
++					      !(op & BPF_FETCH)))
++				src = 0;   /* Aliased with rd, checked below */
++			else if (op == BPF_CMPXCHG)
++				src = upd; /* Expect value to be preserved */
++			else if (op & BPF_FETCH)
++				src = mem; /* Expect fetched value from mem */
++			else /* no fetch */
++				src = upd; /* Expect value to be preserved */
++			if (src) {
++				insn[i++] = BPF_JMP32_IMM(BPF_JEQ, rs,
++							   (u32)src, 2);
++				insn[i++] = BPF_MOV32_IMM(R0, __LINE__);
++				insn[i++] = BPF_EXIT_INSN();
++				insn[i++] = BPF_ALU64_IMM(BPF_RSH, rs, 32);
++				insn[i++] = BPF_JMP32_IMM(BPF_JEQ, rs,
++							   src >> 32, 2);
++				insn[i++] = BPF_MOV32_IMM(R0, __LINE__);
++				insn[i++] = BPF_EXIT_INSN();
++			}
++
++			/* Check destination register value */
++			if (!(rd == R0 && op == BPF_CMPXCHG) &&
++			    !(rd == rs && (op & BPF_FETCH))) {
++				insn[i++] = BPF_JMP_REG(BPF_JEQ, rd, R10, 2);
++				insn[i++] = BPF_MOV32_IMM(R0, __LINE__);
++				insn[i++] = BPF_EXIT_INSN();
++			}
++
++			/* Check value in memory */
++			if (rs != rd) {                  /* No aliasing */
++				i += __bpf_ld_imm64(&insn[i], R1, res);
++			} else if (op == BPF_XCHG) {     /* Aliased, XCHG */
++				insn[i++] = BPF_MOV64_REG(R1, R10);
++			} else if (op == BPF_CMPXCHG) {  /* Aliased, CMPXCHG */
++				i += __bpf_ld_imm64(&insn[i], R1, mem);
++			} else {                        /* Aliased, ALU oper */
++				i += __bpf_ld_imm64(&insn[i], R1, mem);
++				insn[i++] = BPF_ALU64_REG(BPF_OP(op), R1, R10);
++			}
++
++			insn[i++] = BPF_LDX_MEM(width, R0, R10, -8);
++			if (width == BPF_DW)
++				insn[i++] = BPF_JMP_REG(BPF_JEQ, R0, R1, 2);
++			else /* width == BPF_W */
++				insn[i++] = BPF_JMP32_REG(BPF_JEQ, R0, R1, 2);
++			insn[i++] = BPF_MOV32_IMM(R0, __LINE__);
++			insn[i++] = BPF_EXIT_INSN();
++		}
++	}
++
++	insn[i++] = BPF_MOV64_IMM(R0, 1);
++	insn[i++] = BPF_EXIT_INSN();
++
++	self->u.ptr.insns = insn;
++	self->u.ptr.len = i;
++	BUG_ON(i > len);
++
++	return 0;
++}
++
++/* 64-bit atomic register tests */
++static int bpf_fill_atomic64_add_reg_pairs(struct bpf_test *self)
++{
++	return __bpf_fill_atomic_reg_pairs(self, BPF_DW, BPF_ADD);
++}
++
++static int bpf_fill_atomic64_and_reg_pairs(struct bpf_test *self)
++{
++	return __bpf_fill_atomic_reg_pairs(self, BPF_DW, BPF_AND);
++}
++
++static int bpf_fill_atomic64_or_reg_pairs(struct bpf_test *self)
++{
++	return __bpf_fill_atomic_reg_pairs(self, BPF_DW, BPF_OR);
++}
++
++static int bpf_fill_atomic64_xor_reg_pairs(struct bpf_test *self)
++{
++	return __bpf_fill_atomic_reg_pairs(self, BPF_DW, BPF_XOR);
++}
++
++static int bpf_fill_atomic64_add_fetch_reg_pairs(struct bpf_test *self)
++{
++	return __bpf_fill_atomic_reg_pairs(self, BPF_DW, BPF_ADD | BPF_FETCH);
++}
++
++static int bpf_fill_atomic64_and_fetch_reg_pairs(struct bpf_test *self)
++{
++	return __bpf_fill_atomic_reg_pairs(self, BPF_DW, BPF_AND | BPF_FETCH);
++}
++
++static int bpf_fill_atomic64_or_fetch_reg_pairs(struct bpf_test *self)
++{
++	return __bpf_fill_atomic_reg_pairs(self, BPF_DW, BPF_OR | BPF_FETCH);
++}
++
++static int bpf_fill_atomic64_xor_fetch_reg_pairs(struct bpf_test *self)
++{
++	return __bpf_fill_atomic_reg_pairs(self, BPF_DW, BPF_XOR | BPF_FETCH);
++}
++
++static int bpf_fill_atomic64_xchg_reg_pairs(struct bpf_test *self)
++{
++	return __bpf_fill_atomic_reg_pairs(self, BPF_DW, BPF_XCHG);
++}
++
++static int bpf_fill_atomic64_cmpxchg_reg_pairs(struct bpf_test *self)
++{
++	return __bpf_fill_atomic_reg_pairs(self, BPF_DW, BPF_CMPXCHG);
++}
++
++/* 32-bit atomic register tests */
++static int bpf_fill_atomic32_add_reg_pairs(struct bpf_test *self)
++{
++	return __bpf_fill_atomic_reg_pairs(self, BPF_W, BPF_ADD);
++}
++
++static int bpf_fill_atomic32_and_reg_pairs(struct bpf_test *self)
++{
++	return __bpf_fill_atomic_reg_pairs(self, BPF_W, BPF_AND);
++}
++
++static int bpf_fill_atomic32_or_reg_pairs(struct bpf_test *self)
++{
++	return __bpf_fill_atomic_reg_pairs(self, BPF_W, BPF_OR);
++}
++
++static int bpf_fill_atomic32_xor_reg_pairs(struct bpf_test *self)
++{
++	return __bpf_fill_atomic_reg_pairs(self, BPF_W, BPF_XOR);
++}
++
++static int bpf_fill_atomic32_add_fetch_reg_pairs(struct bpf_test *self)
++{
++	return __bpf_fill_atomic_reg_pairs(self, BPF_W, BPF_ADD | BPF_FETCH);
++}
++
++static int bpf_fill_atomic32_and_fetch_reg_pairs(struct bpf_test *self)
++{
++	return __bpf_fill_atomic_reg_pairs(self, BPF_W, BPF_AND | BPF_FETCH);
++}
++
++static int bpf_fill_atomic32_or_fetch_reg_pairs(struct bpf_test *self)
++{
++	return __bpf_fill_atomic_reg_pairs(self, BPF_W, BPF_OR | BPF_FETCH);
++}
++
++static int bpf_fill_atomic32_xor_fetch_reg_pairs(struct bpf_test *self)
++{
++	return __bpf_fill_atomic_reg_pairs(self, BPF_W, BPF_XOR | BPF_FETCH);
++}
++
++static int bpf_fill_atomic32_xchg_reg_pairs(struct bpf_test *self)
++{
++	return __bpf_fill_atomic_reg_pairs(self, BPF_W, BPF_XCHG);
++}
++
++static int bpf_fill_atomic32_cmpxchg_reg_pairs(struct bpf_test *self)
++{
++	return __bpf_fill_atomic_reg_pairs(self, BPF_W, BPF_CMPXCHG);
++}
++
+ /*
+  * Test the two-instruction 64-bit immediate load operation for all
+  * power-of-two magnitudes of the immediate operand. For each MSB, a block
+@@ -11976,6 +12216,188 @@ static struct bpf_test tests[] = {
+ 		{ { 0, 1 } },
+ 		.fill_helper = bpf_fill_ld_imm64,
  	},
-+	/* BPF_LDX_MEM with operand aliasing */
++	/* 64-bit ATOMIC register combinations */
 +	{
-+		"LDX_MEM_B: operand register aliasing",
-+		.u.insns_int = {
-+			BPF_ST_MEM(BPF_B, R10, -8, 123),
-+			BPF_MOV64_REG(R0, R10),
-+			BPF_LDX_MEM(BPF_B, R0, R0, -8),
-+			BPF_EXIT_INSN(),
-+		},
++		"ATOMIC_DW_ADD: register combinations",
++		{ },
 +		INTERNAL,
 +		{ },
-+		{ { 0, 123 } },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_atomic64_add_reg_pairs,
 +		.stack_depth = 8,
 +	},
 +	{
-+		"LDX_MEM_H: operand register aliasing",
-+		.u.insns_int = {
-+			BPF_ST_MEM(BPF_H, R10, -8, 12345),
-+			BPF_MOV64_REG(R0, R10),
-+			BPF_LDX_MEM(BPF_H, R0, R0, -8),
-+			BPF_EXIT_INSN(),
-+		},
++		"ATOMIC_DW_AND: register combinations",
++		{ },
 +		INTERNAL,
 +		{ },
-+		{ { 0, 12345 } },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_atomic64_and_reg_pairs,
 +		.stack_depth = 8,
 +	},
 +	{
-+		"LDX_MEM_W: operand register aliasing",
-+		.u.insns_int = {
-+			BPF_ST_MEM(BPF_W, R10, -8, 123456789),
-+			BPF_MOV64_REG(R0, R10),
-+			BPF_LDX_MEM(BPF_W, R0, R0, -8),
-+			BPF_EXIT_INSN(),
-+		},
++		"ATOMIC_DW_OR: register combinations",
++		{ },
 +		INTERNAL,
 +		{ },
-+		{ { 0, 123456789 } },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_atomic64_or_reg_pairs,
 +		.stack_depth = 8,
 +	},
 +	{
-+		"LDX_MEM_DW: operand register aliasing",
-+		.u.insns_int = {
-+			BPF_LD_IMM64(R1, 0x123456789abcdefULL),
-+			BPF_STX_MEM(BPF_DW, R10, R1, -8),
-+			BPF_MOV64_REG(R0, R10),
-+			BPF_LDX_MEM(BPF_DW, R0, R0, -8),
-+			BPF_ALU64_REG(BPF_SUB, R0, R1),
-+			BPF_MOV64_REG(R1, R0),
-+			BPF_ALU64_IMM(BPF_RSH, R1, 32),
-+			BPF_ALU64_REG(BPF_OR, R0, R1),
-+			BPF_EXIT_INSN(),
-+		},
++		"ATOMIC_DW_XOR: register combinations",
++		{ },
 +		INTERNAL,
 +		{ },
-+		{ { 0, 0 } },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_atomic64_xor_reg_pairs,
 +		.stack_depth = 8,
 +	},
- 	/*
- 	 * Register (non-)clobbering tests for the case where a JIT implements
- 	 * complex ALU or ATOMIC operations via function calls. If so, the
++	{
++		"ATOMIC_DW_ADD_FETCH: register combinations",
++		{ },
++		INTERNAL,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_atomic64_add_fetch_reg_pairs,
++		.stack_depth = 8,
++	},
++	{
++		"ATOMIC_DW_AND_FETCH: register combinations",
++		{ },
++		INTERNAL,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_atomic64_and_fetch_reg_pairs,
++		.stack_depth = 8,
++	},
++	{
++		"ATOMIC_DW_OR_FETCH: register combinations",
++		{ },
++		INTERNAL,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_atomic64_or_fetch_reg_pairs,
++		.stack_depth = 8,
++	},
++	{
++		"ATOMIC_DW_XOR_FETCH: register combinations",
++		{ },
++		INTERNAL,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_atomic64_xor_fetch_reg_pairs,
++		.stack_depth = 8,
++	},
++	{
++		"ATOMIC_DW_XCHG: register combinations",
++		{ },
++		INTERNAL,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_atomic64_xchg_reg_pairs,
++		.stack_depth = 8,
++	},
++	{
++		"ATOMIC_DW_CMPXCHG: register combinations",
++		{ },
++		INTERNAL,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_atomic64_cmpxchg_reg_pairs,
++		.stack_depth = 8,
++	},
++	/* 32-bit ATOMIC register combinations */
++	{
++		"ATOMIC_W_ADD: register combinations",
++		{ },
++		INTERNAL,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_atomic32_add_reg_pairs,
++		.stack_depth = 8,
++	},
++	{
++		"ATOMIC_W_AND: register combinations",
++		{ },
++		INTERNAL,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_atomic32_and_reg_pairs,
++		.stack_depth = 8,
++	},
++	{
++		"ATOMIC_W_OR: register combinations",
++		{ },
++		INTERNAL,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_atomic32_or_reg_pairs,
++		.stack_depth = 8,
++	},
++	{
++		"ATOMIC_W_XOR: register combinations",
++		{ },
++		INTERNAL,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_atomic32_xor_reg_pairs,
++		.stack_depth = 8,
++	},
++	{
++		"ATOMIC_W_ADD_FETCH: register combinations",
++		{ },
++		INTERNAL,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_atomic32_add_fetch_reg_pairs,
++		.stack_depth = 8,
++	},
++	{
++		"ATOMIC_W_AND_FETCH: register combinations",
++		{ },
++		INTERNAL,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_atomic32_and_fetch_reg_pairs,
++		.stack_depth = 8,
++	},
++	{
++		"ATOMIC_W_OR_FETCH: register combinations",
++		{ },
++		INTERNAL,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_atomic32_or_fetch_reg_pairs,
++		.stack_depth = 8,
++	},
++	{
++		"ATOMIC_W_XOR_FETCH: register combinations",
++		{ },
++		INTERNAL,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_atomic32_xor_fetch_reg_pairs,
++		.stack_depth = 8,
++	},
++	{
++		"ATOMIC_W_XCHG: register combinations",
++		{ },
++		INTERNAL,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_atomic32_xchg_reg_pairs,
++		.stack_depth = 8,
++	},
++	{
++		"ATOMIC_W_CMPXCHG: register combinations",
++		{ },
++		INTERNAL,
++		{ },
++		{ { 0, 1 } },
++		.fill_helper = bpf_fill_atomic32_cmpxchg_reg_pairs,
++		.stack_depth = 8,
++	},
+ 	/* 64-bit ATOMIC magnitudes */
+ 	{
+ 		"ATOMIC_DW_ADD: all operand magnitudes",
 -- 
 2.30.2
 
