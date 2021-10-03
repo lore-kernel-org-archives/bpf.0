@@ -2,189 +2,71 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F7C5C4332F
-	for <bpf@archiver.kernel.org>; Sun,  3 Oct 2021 19:22:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 25D1CC433F5
+	for <bpf@archiver.kernel.org>; Sun,  3 Oct 2021 22:49:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2536D61359
-	for <bpf@archiver.kernel.org>; Sun,  3 Oct 2021 19:22:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F0461611F2
+	for <bpf@archiver.kernel.org>; Sun,  3 Oct 2021 22:49:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231641AbhJCTYZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 3 Oct 2021 15:24:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47320 "EHLO
+        id S231794AbhJCWvl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 3 Oct 2021 18:51:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231592AbhJCTYV (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 3 Oct 2021 15:24:21 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1802AC06178C
-        for <bpf@vger.kernel.org>; Sun,  3 Oct 2021 12:22:27 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id s24so11641925wmh.4
-        for <bpf@vger.kernel.org>; Sun, 03 Oct 2021 12:22:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=PA0i/EWwJwh7+reEqVeD2J7wmdkqQ95NhaVeS0zBeog=;
-        b=0R6Iuol4Fwq/n1XZasMMQyznY0SFEY8VkqquoZCK0wjsLs/mG92kd3100/N8+4TpBV
-         WWjgsgaDwJ5uPr9Du/ouJzN1cqvSjLAHpVjRGYJtrZ4UF9yUo+hssAIOgMppxVkvhprE
-         bcg3BhKoFWcSoy2tuI5qsa3XaILWy8KtKiiajV5cSs0R/snc7yo7EcvGzAhB0hR/K/JD
-         obUjS5HUeaWgw+gbNTpXmTLQ5EF4/8S3dV+reTbf+OaG8vYW7kCIFI9kdvQsqHXYPoZl
-         36lHMBmGOHV5bYsQCZaAjziA9wB9FoT9wecDl3ZszAVKl/psxLZLpjqOKyznn6iQqf6F
-         vWLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=PA0i/EWwJwh7+reEqVeD2J7wmdkqQ95NhaVeS0zBeog=;
-        b=fZol9JVNFJrpP1BSbNuic48QWcBEX6nbPAOpCocG/Ibh+ST99dF5ZoQs9DYRcbsWDC
-         nJcjhZIdN/i26wcF5wIZNChL1C14j7dL+2WmaOKA6hEzOAA8arcfh3ZBgpc9atHFfLly
-         6g+c5AJydKm5jbwO75Fb1V2h1JveXZRWACv3YWD829xICExv2XgMxRT5t4PoAhcZfDqV
-         KuRpFx5KbMF8rtxGDCVGomsK3lPj+1F/HezdjjXzi80XvXFU8c+rV5v+rDFCDrA3XB72
-         O1p58xZzMMvium6sfiBdKOZr1HRIbp1Ac85IyC5nuwe+8IDT00KnH9bUaq8XGtORJVzI
-         Y4+A==
-X-Gm-Message-State: AOAM530X/DQkwBtXZxumNMNPmIZpMWirfQYIbXrHv7b3V90v3JmdAZON
-        w65vJrBsN6EWZ4YpLbEN7PSDRw==
-X-Google-Smtp-Source: ABdhPJw9WVzu/MVXgYizR19j/KlOGlVbUDgPvTF07y19xxZUN4PcyRR/SxBBBJjJ3anl0lV2ACkbLg==
-X-Received: by 2002:a05:600c:2193:: with SMTP id e19mr15219521wme.38.1633288945690;
-        Sun, 03 Oct 2021 12:22:25 -0700 (PDT)
-Received: from localhost.localdomain ([149.86.88.77])
-        by smtp.gmail.com with ESMTPSA id d3sm14124642wrb.36.2021.10.03.12.22.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Oct 2021 12:22:25 -0700 (PDT)
-From:   Quentin Monnet <quentin@isovalent.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Quentin Monnet <quentin@isovalent.com>
-Subject: [PATCH bpf-next v3 07/10] samples/bpf: install libbpf headers when building
-Date:   Sun,  3 Oct 2021 20:22:05 +0100
-Message-Id: <20211003192208.6297-8-quentin@isovalent.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211003192208.6297-1-quentin@isovalent.com>
-References: <20211003192208.6297-1-quentin@isovalent.com>
+        with ESMTP id S231778AbhJCWvl (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 3 Oct 2021 18:51:41 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C06C0613EC;
+        Sun,  3 Oct 2021 15:49:53 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HMzZ14jyGz4xLs;
+        Mon,  4 Oct 2021 09:49:45 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1633301386;
+        bh=zP1VM0NrmazED+mwceU1HnKdXINf8/vpTVx3UebDtIE=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=T2hsChMtZ/7+iRIYzxPdJ+YHXsKTnwEyFhms7tYvfrp1oALOM1IpV+LS8ZN5VgSz5
+         GAjL7F33eqAilMCrep9gUIiBqbOwzF0wfU27o14Ry00jYoUEkrGe1hDK423L7kMAkQ
+         BCQ005V6Wj9TPyVxpkaadgaogfFGT3VR/6Vx3kl7YoRQoWiYFlZbpDeW5+iz5ty0r1
+         733x2KTEl6GfySnQCLCEQo2bogCD3DBzbhQqh9qgluHCpBdjsTKU6pf9bRQndY3Y7N
+         /oG7xZ+ccw9Lg8ctfK9YdTWLARk2YHkpQj5bGmyu5tEPRFcl7PAqqWtnXL7Sc3rL9n
+         nz08MBdP7XNXw==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        naveen.n.rao@linux.ibm.com, christophe.leroy@csgroup.eu,
+        ast@kernel.org
+Cc:     paulus@samba.org, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH v4 0/8] bpf powerpc: Add BPF_PROBE_MEM support in
+ powerpc JIT compiler
+In-Reply-To: <88b59272-e3f7-30ba-dda0-c4a6b42c0029@iogearbox.net>
+References: <20210929111855.50254-1-hbathini@linux.ibm.com>
+ <88b59272-e3f7-30ba-dda0-c4a6b42c0029@iogearbox.net>
+Date:   Mon, 04 Oct 2021 09:49:44 +1100
+Message-ID: <87o885raev.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-API headers from libbpf should not be accessed directly from the source
-directory. Instead, they should be exported with "make install_headers".
-Make sure that samples/bpf/Makefile installs the headers properly when
-building.
+Daniel Borkmann <daniel@iogearbox.net> writes:
+> On 9/29/21 1:18 PM, Hari Bathini wrote:
+>> Patch #1 & #2 are simple cleanup patches. Patch #3 refactors JIT
+>> compiler code with the aim to simplify adding BPF_PROBE_MEM support.
+>> Patch #4 introduces PPC_RAW_BRANCH() macro instead of open coding
+>> branch instruction. Patch #5 & #7 add BPF_PROBE_MEM support for PPC64
+>> & PPC32 JIT compilers respectively. Patch #6 & #8 handle bad userspace
+>> pointers for PPC64 & PPC32 cases respectively.
+>
+> Michael, are you planning to pick up the series or shall we route via bpf-next?
 
-The object compiled from and exported by libbpf are now placed into a
-subdirectory of sample/bpf/ instead of remaining in tools/lib/bpf/. We
-attempt to remove this directory on "make clean". However, the "clean"
-target re-enters the samples/bpf/ directory from the root of the
-repository ("$(MAKE) -C ../../ M=$(CURDIR) clean"), in such a way that
-$(srctree) and $(src) are not defined, making it impossible to use
-$(LIBBPF_OUTPUT) and $(LIBBPF_DESTDIR) in the recipe. So we only attempt
-to clean $(CURDIR)/libbpf, which is the default value.
+Yeah I'll plan to take it, unless you think there is a strong reason it
+needs to go via the bpf tree (doesn't look like it from the diffstat).
 
-Add a dependency on libbpf's headers for the $(TRACE_HELPERS).
-
-We also change the output directory for bpftool, to place the generated
-objects under samples/bpf/bpftool/ instead of building in bpftool's
-directory directly. Doing so, we make sure bpftool reuses the libbpf
-library previously compiled and installed.
-
-Signed-off-by: Quentin Monnet <quentin@isovalent.com>
----
- samples/bpf/Makefile | 41 +++++++++++++++++++++++++++++++----------
- 1 file changed, 31 insertions(+), 10 deletions(-)
-
-diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
-index 4dc20be5fb96..d5566c9e0c69 100644
---- a/samples/bpf/Makefile
-+++ b/samples/bpf/Makefile
-@@ -59,7 +59,11 @@ tprogs-y += xdp_redirect
- tprogs-y += xdp_monitor
- 
- # Libbpf dependencies
--LIBBPF = $(TOOLS_PATH)/lib/bpf/libbpf.a
-+LIBBPF_SRC = $(TOOLS_PATH)/lib/bpf
-+LIBBPF_OUTPUT = $(abspath $(BPF_SAMPLES_PATH))/libbpf
-+LIBBPF_DESTDIR = $(LIBBPF_OUTPUT)
-+LIBBPF_INCLUDE = $(LIBBPF_DESTDIR)/include
-+LIBBPF = $(LIBBPF_OUTPUT)/libbpf.a
- 
- CGROUP_HELPERS := ../../tools/testing/selftests/bpf/cgroup_helpers.o
- TRACE_HELPERS := ../../tools/testing/selftests/bpf/trace_helpers.o
-@@ -198,7 +202,7 @@ TPROGS_CFLAGS += -Wstrict-prototypes
- 
- TPROGS_CFLAGS += -I$(objtree)/usr/include
- TPROGS_CFLAGS += -I$(srctree)/tools/testing/selftests/bpf/
--TPROGS_CFLAGS += -I$(srctree)/tools/lib/
-+TPROGS_CFLAGS += -I$(LIBBPF_INCLUDE)
- TPROGS_CFLAGS += -I$(srctree)/tools/include
- TPROGS_CFLAGS += -I$(srctree)/tools/perf
- TPROGS_CFLAGS += -DHAVE_ATTR_TEST=0
-@@ -268,16 +272,28 @@ all:
- clean:
- 	$(MAKE) -C ../../ M=$(CURDIR) clean
- 	@find $(CURDIR) -type f -name '*~' -delete
-+	@$(RM) -r $(CURDIR)/libbpf $(CURDIR)/bpftool
- 
--$(LIBBPF): FORCE
-+$(LIBBPF): FORCE | $(LIBBPF_OUTPUT)
- # Fix up variables inherited from Kbuild that tools/ build system won't like
--	$(MAKE) -C $(dir $@) RM='rm -rf' EXTRA_CFLAGS="$(TPROGS_CFLAGS)" \
--		LDFLAGS=$(TPROGS_LDFLAGS) srctree=$(BPF_SAMPLES_PATH)/../../ O=
-+	$(MAKE) -C $(LIBBPF_SRC) RM='rm -rf' EXTRA_CFLAGS="$(TPROGS_CFLAGS)" \
-+		LDFLAGS=$(TPROGS_LDFLAGS) srctree=$(BPF_SAMPLES_PATH)/../../ \
-+		O= OUTPUT=$(LIBBPF_OUTPUT)/ DESTDIR=$(LIBBPF_DESTDIR) prefix= \
-+		$@ install_headers
- 
- BPFTOOLDIR := $(TOOLS_PATH)/bpf/bpftool
--BPFTOOL := $(BPFTOOLDIR)/bpftool
--$(BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile)
--	    $(MAKE) -C $(BPFTOOLDIR) srctree=$(BPF_SAMPLES_PATH)/../../
-+BPFTOOL_OUTPUT := $(abspath $(BPF_SAMPLES_PATH))/bpftool
-+BPFTOOL := $(BPFTOOL_OUTPUT)/bpftool
-+$(BPFTOOL): $(LIBBPF) $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile) \
-+	    | $(BPFTOOL_OUTPUT)
-+	    $(MAKE) -C $(BPFTOOLDIR) srctree=$(BPF_SAMPLES_PATH)/../../ \
-+		OUTPUT=$(BPFTOOL_OUTPUT)/ \
-+		LIBBPF_OUTPUT=$(LIBBPF_OUTPUT)/ \
-+		LIBBPF_DESTDIR=$(LIBBPF_DESTDIR)/
-+
-+$(LIBBPF_OUTPUT) $(BPFTOOL_OUTPUT):
-+	$(call msg,MKDIR,$@)
-+	$(Q)mkdir -p $@
- 
- $(obj)/syscall_nrs.h:	$(obj)/syscall_nrs.s FORCE
- 	$(call filechk,offsets,__SYSCALL_NRS_H__)
-@@ -309,6 +325,11 @@ verify_target_bpf: verify_cmds
- $(BPF_SAMPLES_PATH)/*.c: verify_target_bpf $(LIBBPF)
- $(src)/*.c: verify_target_bpf $(LIBBPF)
- 
-+libbpf_hdrs: $(LIBBPF)
-+$(obj)/$(TRACE_HELPERS): libbpf_hdrs
-+
-+.PHONY: libbpf_hdrs
-+
- $(obj)/xdp_redirect_cpu_user.o: $(obj)/xdp_redirect_cpu.skel.h
- $(obj)/xdp_redirect_map_multi_user.o: $(obj)/xdp_redirect_map_multi.skel.h
- $(obj)/xdp_redirect_map_user.o: $(obj)/xdp_redirect_map.skel.h
-@@ -367,7 +388,7 @@ $(obj)/%.bpf.o: $(src)/%.bpf.c $(obj)/vmlinux.h $(src)/xdp_sample.bpf.h $(src)/x
- 	$(Q)$(CLANG) -g -O2 -target bpf -D__TARGET_ARCH_$(SRCARCH) \
- 		-Wno-compare-distinct-pointer-types -I$(srctree)/include \
- 		-I$(srctree)/samples/bpf -I$(srctree)/tools/include \
--		-I$(srctree)/tools/lib $(CLANG_SYS_INCLUDES) \
-+		-I$(LIBBPF_INCLUDE) $(CLANG_SYS_INCLUDES) \
- 		-c $(filter %.bpf.c,$^) -o $@
- 
- LINKED_SKELS := xdp_redirect_cpu.skel.h xdp_redirect_map_multi.skel.h \
-@@ -404,7 +425,7 @@ $(obj)/%.o: $(src)/%.c
- 	@echo "  CLANG-bpf " $@
- 	$(Q)$(CLANG) $(NOSTDINC_FLAGS) $(LINUXINCLUDE) $(BPF_EXTRA_CFLAGS) \
- 		-I$(obj) -I$(srctree)/tools/testing/selftests/bpf/ \
--		-I$(srctree)/tools/lib/ \
-+		-I$(LIBBPF_INCLUDE) \
- 		-D__KERNEL__ -D__BPF_TRACING__ -Wno-unused-value -Wno-pointer-sign \
- 		-D__TARGET_ARCH_$(SRCARCH) -Wno-compare-distinct-pointer-types \
- 		-Wno-gnu-variable-sized-type-not-at-end \
--- 
-2.30.2
-
+cheers
