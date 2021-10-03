@@ -2,101 +2,208 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A0710C433FE
-	for <bpf@archiver.kernel.org>; Sat,  2 Oct 2021 22:25:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 04D26C433F5
+	for <bpf@archiver.kernel.org>; Sun,  3 Oct 2021 07:54:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 842E261B46
-	for <bpf@archiver.kernel.org>; Sat,  2 Oct 2021 22:25:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C8E6961B31
+	for <bpf@archiver.kernel.org>; Sun,  3 Oct 2021 07:54:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234139AbhJBWNr (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 2 Oct 2021 18:13:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53088 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234135AbhJBWNq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 2 Oct 2021 18:13:46 -0400
-Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 639B2C0613EC
-        for <bpf@vger.kernel.org>; Sat,  2 Oct 2021 15:12:00 -0700 (PDT)
-Received: by mail-vs1-xe2a.google.com with SMTP id v4so742520vsg.12
-        for <bpf@vger.kernel.org>; Sat, 02 Oct 2021 15:12:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SsvscJ402dii9bAJeiyjIQz+HyfgmN4Yk1LeCVUSwDM=;
-        b=Tei7YHAW2GP4SiEaqa1QWrHo1rwW2wXUVlg2yAJ55ELT7palkeOzTXhIrPVT6MCPgO
-         bIktr+nDhCnMFWV9xeOA6exWHD/lYtYqxCnLlRR0kBvvQEylyhxirqk8TH/AQanPTj3c
-         p0wHNEpVkPi7HhFIPxofKB1vm0382zxBLfmCb9P+BP56wMRAtyAPYry/0IQqdTMQ1F/t
-         MdTd0hpxrenW5RzRJ0jelSjgo2UxolQiKCQvTK5+OPX/i+3zcYdJU0S05peljgSdy+K8
-         82Kw0lbTt+l4XunmQKNWfXAMcwROg8iIs9IhlnrDxe/nt5dqXLOoNJlfjrAUMgo27DID
-         jZ9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SsvscJ402dii9bAJeiyjIQz+HyfgmN4Yk1LeCVUSwDM=;
-        b=nRgocCB1NQgTBryNk6Jc+PiRnYQxbxUju6cxtO21PhZTBhA/TEzPaeh2e3uyztqquj
-         /ewn8t1eOhtBMqgbIfADnv52iCH9KAHNRD5YwtebSvBzlQYMwYs6iEmvyxV/6mWfZSUF
-         PIG2GOcqafbbfBQB4SIQsMYpVnGjU8ozpFNuerPy6vwbrHqXqyZGlC4ZosxchrpeLV1r
-         X6WqyXwQM0Q/6z8V7mYoeFcTdCNFO/fxifxHoI4fccSLquSw9wLa6ZYtAwNRPcdkUCgF
-         8/Q6jmrV9y69YGTA00hXfuzcliN7gCRQV30O5ZLA6fgjh7ejCSObU/9rFWWfxIB/XlQS
-         6f3g==
-X-Gm-Message-State: AOAM533UwHXJamf8q2pE5qf7kSrb7VEYxyjvvRbRtO5io1iYR+RTWCte
-        v8T+h5DV3Db635B1q9jkknwCtwFkYD6y+w1vUlR5sTh7Tx/CHw==
-X-Google-Smtp-Source: ABdhPJxSiewjc5fxuicPfqjS/DGDqEJyacHtrPcYgxr6POZ3CGJWUri2UCSIznykYgJnFj7AT1mMjmkiGyW1qZoDkKU=
-X-Received: by 2002:a05:6102:192:: with SMTP id r18mr9243859vsq.0.1633212719460;
- Sat, 02 Oct 2021 15:11:59 -0700 (PDT)
-MIME-Version: 1.0
-References: <20211001110856.14730-1-quentin@isovalent.com> <20211001110856.14730-7-quentin@isovalent.com>
- <CAEf4BzYm_QTq+u5tUp71+wY+JAaiUApv35tSqFUEyc81yOeUzw@mail.gmail.com> <CACdoK4LL91u-JK1fZ3XvkrTXsKBVsN-y1Js4QSPkWyS51KPB8Q@mail.gmail.com>
-In-Reply-To: <CACdoK4LL91u-JK1fZ3XvkrTXsKBVsN-y1Js4QSPkWyS51KPB8Q@mail.gmail.com>
-From:   Quentin Monnet <quentin@isovalent.com>
-Date:   Sat, 2 Oct 2021 23:11:48 +0100
-Message-ID: <CACdoK4K4-x4+ZWXyB697Kn8RK5AyoCST+V7Lhtk_Kaqm5uQ6wg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 6/9] bpf: iterators: install libbpf headers
- when building
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
+        id S229785AbhJCH4c (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 3 Oct 2021 03:56:32 -0400
+Received: from pegase2.c-s.fr ([93.17.235.10]:58617 "EHLO pegase2.c-s.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229567AbhJCH4a (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 3 Oct 2021 03:56:30 -0400
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4HMbjD08vbz9sVT;
+        Sun,  3 Oct 2021 09:54:40 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id JcCDKZRFI_SV; Sun,  3 Oct 2021 09:54:39 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4HMbjC6895z9sVS;
+        Sun,  3 Oct 2021 09:54:39 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id BD1338B76D;
+        Sun,  3 Oct 2021 09:54:39 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id R6Tmec_Vzw1m; Sun,  3 Oct 2021 09:54:39 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (po18950.idsi0.si.c-s.fr [192.168.203.204])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 01B908B765;
+        Sun,  3 Oct 2021 09:54:38 +0200 (CEST)
+Subject: Re: [PATCH 2/9] powerpc/bpf: Validate branch ranges
+To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Johan Almbladh <johan.almbladh@anyfinetworks.com>
+Cc:     bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+References: <cover.1633104510.git.naveen.n.rao@linux.vnet.ibm.com>
+ <d4a44c52712468b805cbf5c244b3c9ba0f802ab8.1633104510.git.naveen.n.rao@linux.vnet.ibm.com>
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+Message-ID: <213cac08-b0d2-447f-8448-ab31cc7b1d47@csgroup.eu>
+Date:   Sun, 3 Oct 2021 09:54:27 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
+MIME-Version: 1.0
+In-Reply-To: <d4a44c52712468b805cbf5c244b3c9ba0f802ab8.1633104510.git.naveen.n.rao@linux.vnet.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: fr-FR
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sat, 2 Oct 2021 at 21:27, Quentin Monnet <quentin@isovalent.com> wrote:
->
-> On Sat, 2 Oct 2021 at 00:20, Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Fri, Oct 1, 2021 at 4:09 AM Quentin Monnet <quentin@isovalent.com> wrote:
-> > >
-> > > API headers from libbpf should not be accessed directly from the
-> > > library's source directory. Instead, they should be exported with "make
-> > > install_headers". Let's make sure that bpf/preload/iterators/Makefile
-> > > installs the headers properly when building.
->
-> > >
-> > > -$(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(OUTPUT)
-> > > +$(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile)            \
-> > > +          | $(LIBBPF_OUTPUT) $(LIBBPF_INCLUDE)
-> >
-> > Would it make sense for libbpf's Makefile to create include and output
-> > directories on its own? We wouldn't need to have these order-only
-> > dependencies everywhere, right?
->
-> Good point, I'll have a look at it.
-> Quentin
 
-So libbpf already creates the include (and parent $(DESTDIR))
-directory, so I can get rid of the related dependencies. But I don't
-see an easy solution for the output directory for the object files.
-The issue is that libbpf's Makefile includes
-tools/scripts/Makefile.include, which checks $(OUTPUT) and errors out
-if the directory does not exist. This prevents us from creating the
-directory as part of the regular targets. We could create it
-unconditionally before running any target, but it's ugly; and I don't
-see any simple workaround.
 
-So I'll remove the deps on $(LIBBPF_INCLUDE) and keep the ones on
-$(LIBBPF_OUTPUT).
+Le 01/10/2021 à 23:14, Naveen N. Rao a écrit :
+> Add checks to ensure that we never emit branch instructions with
+> truncated branch offsets.
+> 
+> Suggested-by: Michael Ellerman <mpe@ellerman.id.au>
+> Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+> ---
+>   arch/powerpc/net/bpf_jit.h        | 26 ++++++++++++++++++++------
+>   arch/powerpc/net/bpf_jit_comp.c   |  6 +++++-
+>   arch/powerpc/net/bpf_jit_comp32.c |  8 ++++++--
+>   arch/powerpc/net/bpf_jit_comp64.c |  8 ++++++--
+>   4 files changed, 37 insertions(+), 11 deletions(-)
+> 
+> diff --git a/arch/powerpc/net/bpf_jit.h b/arch/powerpc/net/bpf_jit.h
+> index 935ea95b66359e..7e9b978b768ed9 100644
+> --- a/arch/powerpc/net/bpf_jit.h
+> +++ b/arch/powerpc/net/bpf_jit.h
+> @@ -24,16 +24,30 @@
+>   #define EMIT(instr)		PLANT_INSTR(image, ctx->idx, instr)
+>   
+>   /* Long jump; (unconditional 'branch') */
+> -#define PPC_JMP(dest)		EMIT(PPC_INST_BRANCH |			      \
+> -				     (((dest) - (ctx->idx * 4)) & 0x03fffffc))
+> +#define PPC_JMP(dest)							      \
+> +	do {								      \
+> +		long offset = (long)(dest) - (ctx->idx * 4);		      \
+> +		if (!is_offset_in_branch_range(offset)) {		      \
+> +			pr_err_ratelimited("Branch offset 0x%lx (@%u) out of range\n", offset, ctx->idx);			\
+
+Does it really deserves a KERN_ERR ?
+Isn't that something that can trigger with a userland request ?
+
+> +			return -ERANGE;					      \
+> +		}							      \
+> +		EMIT(PPC_INST_BRANCH | (offset & 0x03fffffc));		      \
+> +	} while (0)
+> +
+>   /* blr; (unconditional 'branch' with link) to absolute address */
+>   #define PPC_BL_ABS(dest)	EMIT(PPC_INST_BL |			      \
+>   				     (((dest) - (unsigned long)(image + ctx->idx)) & 0x03fffffc))
+>   /* "cond" here covers BO:BI fields. */
+> -#define PPC_BCC_SHORT(cond, dest)	EMIT(PPC_INST_BRANCH_COND |	      \
+> -					     (((cond) & 0x3ff) << 16) |	      \
+> -					     (((dest) - (ctx->idx * 4)) &     \
+> -					      0xfffc))
+> +#define PPC_BCC_SHORT(cond, dest)					      \
+> +	do {								      \
+> +		long offset = (long)(dest) - (ctx->idx * 4);		      \
+> +		if (!is_offset_in_cond_branch_range(offset)) {		      \
+> +			pr_err_ratelimited("Conditional branch offset 0x%lx (@%u) out of range\n", offset, ctx->idx);		\
+
+Same
+
+> +			return -ERANGE;					      \
+> +		}							      \
+> +		EMIT(PPC_INST_BRANCH_COND | (((cond) & 0x3ff) << 16) | (offset & 0xfffc));					\
+> +	} while (0)
+> +
+>   /* Sign-extended 32-bit immediate load */
+>   #define PPC_LI32(d, i)		do {					      \
+>   		if ((int)(uintptr_t)(i) >= -32768 &&			      \
+> diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
+> index 53aefee3fe70be..fcbf7a917c566e 100644
+> --- a/arch/powerpc/net/bpf_jit_comp.c
+> +++ b/arch/powerpc/net/bpf_jit_comp.c
+> @@ -210,7 +210,11 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
+>   		/* Now build the prologue, body code & epilogue for real. */
+>   		cgctx.idx = 0;
+>   		bpf_jit_build_prologue(code_base, &cgctx);
+> -		bpf_jit_build_body(fp, code_base, &cgctx, addrs, extra_pass);
+> +		if (bpf_jit_build_body(fp, code_base, &cgctx, addrs, extra_pass)) {
+> +			bpf_jit_binary_free(bpf_hdr);
+> +			fp = org_fp;
+> +			goto out_addrs;
+> +		}
+>   		bpf_jit_build_epilogue(code_base, &cgctx);
+>   
+>   		if (bpf_jit_enable > 1)
+> diff --git a/arch/powerpc/net/bpf_jit_comp32.c b/arch/powerpc/net/bpf_jit_comp32.c
+> index beb12cbc8c2994..a74d52204f8da2 100644
+> --- a/arch/powerpc/net/bpf_jit_comp32.c
+> +++ b/arch/powerpc/net/bpf_jit_comp32.c
+> @@ -200,7 +200,7 @@ void bpf_jit_emit_func_call_rel(u32 *image, struct codegen_context *ctx, u64 fun
+>   	}
+>   }
+>   
+> -static void bpf_jit_emit_tail_call(u32 *image, struct codegen_context *ctx, u32 out)
+> +static int bpf_jit_emit_tail_call(u32 *image, struct codegen_context *ctx, u32 out)
+>   {
+>   	/*
+>   	 * By now, the eBPF program has already setup parameters in r3-r6
+> @@ -261,7 +261,9 @@ static void bpf_jit_emit_tail_call(u32 *image, struct codegen_context *ctx, u32
+>   	bpf_jit_emit_common_epilogue(image, ctx);
+>   
+>   	EMIT(PPC_RAW_BCTR());
+> +
+>   	/* out: */
+> +	return 0;
+>   }
+>   
+>   /* Assemble the body code between the prologue & epilogue */
+> @@ -1090,7 +1092,9 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, struct codegen_context *
+>   		 */
+>   		case BPF_JMP | BPF_TAIL_CALL:
+>   			ctx->seen |= SEEN_TAILCALL;
+> -			bpf_jit_emit_tail_call(image, ctx, addrs[i + 1]);
+> +			ret = bpf_jit_emit_tail_call(image, ctx, addrs[i + 1]);
+> +			if (ret < 0)
+> +				return ret;
+>   			break;
+>   
+>   		default:
+> diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
+> index b87a63dba9c8fb..f06c62089b1457 100644
+> --- a/arch/powerpc/net/bpf_jit_comp64.c
+> +++ b/arch/powerpc/net/bpf_jit_comp64.c
+> @@ -206,7 +206,7 @@ void bpf_jit_emit_func_call_rel(u32 *image, struct codegen_context *ctx, u64 fun
+>   	EMIT(PPC_RAW_BCTRL());
+>   }
+>   
+> -static void bpf_jit_emit_tail_call(u32 *image, struct codegen_context *ctx, u32 out)
+> +static int bpf_jit_emit_tail_call(u32 *image, struct codegen_context *ctx, u32 out)
+>   {
+>   	/*
+>   	 * By now, the eBPF program has already setup parameters in r3, r4 and r5
+> @@ -267,7 +267,9 @@ static void bpf_jit_emit_tail_call(u32 *image, struct codegen_context *ctx, u32
+>   	bpf_jit_emit_common_epilogue(image, ctx);
+>   
+>   	EMIT(PPC_RAW_BCTR());
+> +
+>   	/* out: */
+> +	return 0;
+>   }
+>   
+>   /* Assemble the body code between the prologue & epilogue */
+> @@ -993,7 +995,9 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, struct codegen_context *
+>   		 */
+>   		case BPF_JMP | BPF_TAIL_CALL:
+>   			ctx->seen |= SEEN_TAILCALL;
+> -			bpf_jit_emit_tail_call(image, ctx, addrs[i + 1]);
+> +			ret = bpf_jit_emit_tail_call(image, ctx, addrs[i + 1]);
+> +			if (ret < 0)
+> +				return ret;
+>   			break;
+>   
+>   		default:
+> 
