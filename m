@@ -2,54 +2,54 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 33A75C433FE
-	for <bpf@archiver.kernel.org>; Tue,  5 Oct 2021 16:54:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CDD8C433EF
+	for <bpf@archiver.kernel.org>; Tue,  5 Oct 2021 16:54:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1DC8961163
-	for <bpf@archiver.kernel.org>; Tue,  5 Oct 2021 16:54:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 86C2F61381
+	for <bpf@archiver.kernel.org>; Tue,  5 Oct 2021 16:54:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236723AbhJEQ4Z (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 5 Oct 2021 12:56:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52262 "EHLO
+        id S236696AbhJEQ4X (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 5 Oct 2021 12:56:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236701AbhJEQ4W (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 5 Oct 2021 12:56:22 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42AC4C061765
-        for <bpf@vger.kernel.org>; Tue,  5 Oct 2021 09:54:31 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id p11so1311043edy.10
-        for <bpf@vger.kernel.org>; Tue, 05 Oct 2021 09:54:31 -0700 (PDT)
+        with ESMTP id S236646AbhJEQ4U (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 5 Oct 2021 12:56:20 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D645EC061768
+        for <bpf@vger.kernel.org>; Tue,  5 Oct 2021 09:54:28 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id r18so1327269edv.12
+        for <bpf@vger.kernel.org>; Tue, 05 Oct 2021 09:54:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=anyfinetworks-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=sSpYqWckQN5De4SWAzfiTyGMwb6xlhm08Y9d5cl4EUw=;
-        b=MOvmVT7UML8WRbH713BepTaRHyQHiaXPJIM3OD89/a22DC2OqqC5Rl9gWPfdK9DfU6
-         Vi4lBbgW6SbZxrNeC8isx4sE/XovAI1hhqLFXDeeBhagEcCe+JhQYnZ0FaAfubDJq9KG
-         5i7J20pdHFepGnCrmIaj1xgKKserwW8DC7yJCjTW4/3HzOgHXblfpdftJ5B4Um9Oo/dS
-         /tXg7ycG/U+mTzDFvreNXbG86nY65V077DwmNP2fer8gItwRTbOzXFv8fktUFlKZvb7s
-         oKgZ5RM44lWGeaW7GE9soqGpjF/vIejEf/Znjcxk6sV8Bq/ONwJTV0gna0ChXejUik78
-         TW3Q==
+        bh=LD7Z+TLIrmtNAWV6kbp0mN2OI+qotO+Iamv8BwzM+do=;
+        b=X+mLmO3AwNSbaqjbpzAS7119QfklxaGZP1Cdaq/D8djryhZRD7tJvEkEDRRzN6iJah
+         FOGO2lrMiz9yFUSI/qZDNlMy9E4NUx/S8ZsqvVAh8Pw5UUn8xObFl/gfXmyULjF0c7j4
+         +nFZyrrQFYevFUwju9CzxTafO0TAmWTVDkjTvWUjlpuILGMaGpf94AqmU66IPumX/+SE
+         W+DSjfelWUP+pq1O7AE13KPEcjJFOFf1fyhjsEvmvFBg3xowDSfxy3qgN04jcUyntsld
+         AUvzkHiQ6WBODwEXF6XGukZZRVRCRtPcoMHdeM1uykXfg5YqWZXqrB8cbOzKkWjFGZS5
+         dcQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=sSpYqWckQN5De4SWAzfiTyGMwb6xlhm08Y9d5cl4EUw=;
-        b=58ffA3JT3ccgN6yWDTyhWDoHHqbQ2rIMmzOB3ciKHzj5lUlwZ9rPQp1VRjLTHE3s6o
-         sqcOu5r7LY9CITJvAP+Vg+WMaFwr6lIHLxQdbGdZAV8WoAtFXEkRYPzXPYeLD9Tp3XbJ
-         wHnTA1PgKwCq620PMFyjofQwpTRKiMZbqaIzRcCwhSeLSiY58s8swrIk7wloVTa0pIVK
-         BCr/C8+iHhn8IDhfEAfLqkb0NNajzVg1PtzaUAeDK9qfxdLEkNlmtdsBxonD2genA3nO
-         aieeZviBiu90O4CN/1DOJe2P1T9f4PprdOFVlKU23+yyGeQqB6Nnm31OPlDRMoINbQq4
-         z2Zg==
-X-Gm-Message-State: AOAM531x2tjfAPQ293endtQOmDsJOkpFDkBU/4bHnCCCMcIqWa6iHg0L
-        52Bn4TZPpWVi8rQmQQqXJWi06w==
-X-Google-Smtp-Source: ABdhPJymACqQ2ebs/0N/U/cqsCfD/8+UQOpr/BvPCRCJvuTrrAHCHhtX9K1IgbT8JjgEO5UGvXYcMQ==
-X-Received: by 2002:a17:906:180a:: with SMTP id v10mr26094184eje.112.1633452869832;
-        Tue, 05 Oct 2021 09:54:29 -0700 (PDT)
+        bh=LD7Z+TLIrmtNAWV6kbp0mN2OI+qotO+Iamv8BwzM+do=;
+        b=TPlllVifmWfaHlwyBWL58j/ibwJAUpS/kxlHJo8QA8Ym/rGgDkNa6yt4zZvJotXdxU
+         IWxvpqzfj4u7LAKy1UBZ2yICA5d9Mle9LxHuAgXUX5diBteLbV9/fBGtn9W/9C30J5wB
+         8PbhBGNSppiYX2sVtcYb32H76+I/IYghzTZCvaPegZEzPA7/UWJszISQYX/c2bWaWarq
+         0NCGN/tnMtaJaljmpmZuu3AUu19dB5YsY0b9sxJvq7gBRdN6Vg0ycD65j54HZIys4q1n
+         mrfgcit2bwdJ7BZJTQB2jvrBTlReALKl9/oHB+QI9ygibLkHZxxy9GVmAVMeEvRGDqKf
+         LRGA==
+X-Gm-Message-State: AOAM530/CiB31l3AQlPu94yfdFLMBCVuhlEyhTNJGRMynoG2ZWZeIcXJ
+        wSjoGlQVG+CPREwDBt+Z4OmbXA==
+X-Google-Smtp-Source: ABdhPJyGtHc06pWaX7BHhK9HOH98mjOUGWZO6jzmsjOcauCgjehmrzqivb8xa/lZdEPajMIjSExkQg==
+X-Received: by 2002:a17:906:82c8:: with SMTP id a8mr14692776ejy.384.1633452867223;
+        Tue, 05 Oct 2021 09:54:27 -0700 (PDT)
 Received: from anpc2.lan (static-213-115-136-2.sme.telenor.se. [213.115.136.2])
-        by smtp.gmail.com with ESMTPSA id x16sm3447818ejj.8.2021.10.05.09.54.28
+        by smtp.gmail.com with ESMTPSA id x16sm3447818ejj.8.2021.10.05.09.54.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Oct 2021 09:54:29 -0700 (PDT)
+        Tue, 05 Oct 2021 09:54:26 -0700 (PDT)
 From:   Johan Almbladh <johan.almbladh@anyfinetworks.com>
 To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
         paulburton@kernel.org
@@ -60,9 +60,9 @@ Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
         tony.ambardar@gmail.com, bpf@vger.kernel.org,
         linux-mips@vger.kernel.org, netdev@vger.kernel.org,
         Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Subject: [PATCH 6/7] mips: bpf: Enable eBPF JITs
-Date:   Tue,  5 Oct 2021 18:54:07 +0200
-Message-Id: <20211005165408.2305108-7-johan.almbladh@anyfinetworks.com>
+Subject: [PATCH 4/7] mips: bpf: Add new eBPF JIT for 64-bit MIPS
+Date:   Tue,  5 Oct 2021 18:54:05 +0200
+Message-Id: <20211005165408.2305108-5-johan.almbladh@anyfinetworks.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211005165408.2305108-1-johan.almbladh@anyfinetworks.com>
 References: <20211005165408.2305108-1-johan.almbladh@anyfinetworks.com>
@@ -72,73 +72,1073 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch enables the new eBPF JITs for 32-bit and 64-bit MIPS. It also
-disables the old cBPF JIT to so cBPF programs are converted to use the
-new JIT.
-
-Workarounds for R4000 CPU errata are not implemented by the JIT, so the
-JIT is disabled if any of those workarounds are configured.
+This is an implementation on of an eBPF JIT for 64-bit MIPS III-V and
+MIPS64r1-r6. It uses the same framework introduced by the 32-bit JIT.
 
 Signed-off-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
 ---
- MAINTAINERS            | 1 +
- arch/mips/Kconfig      | 6 ++++--
- arch/mips/net/Makefile | 5 +++--
- 3 files changed, 8 insertions(+), 4 deletions(-)
+ arch/mips/net/bpf_jit_comp64.c | 1052 ++++++++++++++++++++++++++++++++
+ 1 file changed, 1052 insertions(+)
+ create mode 100644 arch/mips/net/bpf_jit_comp64.c
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 76e0fdcdd877..407cd4235995 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3422,6 +3422,7 @@ S:	Supported
- F:	arch/arm64/net/
- 
- BPF JIT for MIPS (32-BIT AND 64-BIT)
-+M:	Johan Almbladh <johan.almbladh@anyfinetworks.com>
- M:	Paul Burton <paulburton@kernel.org>
- L:	netdev@vger.kernel.org
- L:	bpf@vger.kernel.org
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 771ca53af06d..38468f47aa5e 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -57,7 +57,6 @@ config MIPS
- 	select HAVE_ARCH_TRACEHOOK
- 	select HAVE_ARCH_TRANSPARENT_HUGEPAGE if CPU_SUPPORTS_HUGEPAGES
- 	select HAVE_ASM_MODVERSIONS
--	select HAVE_CBPF_JIT if !64BIT && !CPU_MICROMIPS
- 	select HAVE_CONTEXT_TRACKING
- 	select HAVE_TIF_NOHZ
- 	select HAVE_C_RECORDMCOUNT
-@@ -65,7 +64,10 @@ config MIPS
- 	select HAVE_DEBUG_STACKOVERFLOW
- 	select HAVE_DMA_CONTIGUOUS
- 	select HAVE_DYNAMIC_FTRACE
--	select HAVE_EBPF_JIT if 64BIT && !CPU_MICROMIPS && TARGET_ISA_REV >= 2
-+	select HAVE_EBPF_JIT if !CPU_MICROMIPS && \
-+				!CPU_DADDI_WORKAROUNDS && \
-+				!CPU_R4000_WORKAROUNDS && \
-+				!CPU_R4400_WORKAROUNDS
- 	select HAVE_EXIT_THREAD
- 	select HAVE_FAST_GUP
- 	select HAVE_FTRACE_MCOUNT_RECORD
-diff --git a/arch/mips/net/Makefile b/arch/mips/net/Makefile
-index e057ee4ba75e..602bf242b13f 100644
---- a/arch/mips/net/Makefile
-+++ b/arch/mips/net/Makefile
-@@ -2,9 +2,10 @@
- # MIPS networking code
- 
- obj-$(CONFIG_MIPS_CBPF_JIT) += bpf_jit.o bpf_jit_asm.o
-+obj-$(CONFIG_MIPS_EBPF_JIT) += bpf_jit_comp.o
- 
- ifeq ($(CONFIG_32BIT),y)
--        obj-$(CONFIG_MIPS_EBPF_JIT) += bpf_jit_comp.o bpf_jit_comp32.o
-+        obj-$(CONFIG_MIPS_EBPF_JIT) += bpf_jit_comp32.o
- else
--        obj-$(CONFIG_MIPS_EBPF_JIT) += ebpf_jit.o
-+        obj-$(CONFIG_MIPS_EBPF_JIT) += bpf_jit_comp64.o
- endif
+diff --git a/arch/mips/net/bpf_jit_comp64.c b/arch/mips/net/bpf_jit_comp64.c
+new file mode 100644
+index 000000000000..ca49d3ef7ff4
+--- /dev/null
++++ b/arch/mips/net/bpf_jit_comp64.c
+@@ -0,0 +1,1052 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Just-In-Time compiler for eBPF bytecode on MIPS.
++ * Implementation of JIT functions for 64-bit CPUs.
++ *
++ * Copyright (c) 2021 Anyfi Networks AB.
++ * Author: Johan Almbladh <johan.almbladh@gmail.com>
++ *
++ * Based on code and ideas from
++ * Copyright (c) 2017 Cavium, Inc.
++ * Copyright (c) 2017 Shubham Bansal <illusionist.neo@gmail.com>
++ * Copyright (c) 2011 Mircea Gherzan <mgherzan@gmail.com>
++ */
++
++#include <linux/errno.h>
++#include <linux/filter.h>
++#include <linux/bpf.h>
++#include <asm/cpu-features.h>
++#include <asm/isa-rev.h>
++#include <asm/uasm.h>
++
++#include "bpf_jit_comp.h"
++
++/* MIPS t0-t3 are not available in the n64 ABI */
++#undef MIPS_R_T0
++#undef MIPS_R_T1
++#undef MIPS_R_T2
++#undef MIPS_R_T3
++
++/* Stack is 16-byte aligned in n64 ABI */
++#define MIPS_STACK_ALIGNMENT 16
++
++/* Extra 64-bit eBPF registers used by JIT */
++#define JIT_REG_TC (MAX_BPF_JIT_REG + 0)
++#define JIT_REG_ZX (MAX_BPF_JIT_REG + 1)
++
++/* Number of prologue bytes to skip when doing a tail call */
++#define JIT_TCALL_SKIP 4
++
++/* Callee-saved CPU registers that the JIT must preserve */
++#define JIT_CALLEE_REGS   \
++	(BIT(MIPS_R_S0) | \
++	 BIT(MIPS_R_S1) | \
++	 BIT(MIPS_R_S2) | \
++	 BIT(MIPS_R_S3) | \
++	 BIT(MIPS_R_S4) | \
++	 BIT(MIPS_R_S5) | \
++	 BIT(MIPS_R_S6) | \
++	 BIT(MIPS_R_S7) | \
++	 BIT(MIPS_R_GP) | \
++	 BIT(MIPS_R_FP) | \
++	 BIT(MIPS_R_RA))
++
++/* Caller-saved CPU registers available for JIT use */
++#define JIT_CALLER_REGS	  \
++	(BIT(MIPS_R_A5) | \
++	 BIT(MIPS_R_A6) | \
++	 BIT(MIPS_R_A7))
++/*
++ * Mapping of 64-bit eBPF registers to 64-bit native MIPS registers.
++ * MIPS registers t4 - t7 may be used by the JIT as temporary registers.
++ * MIPS registers t8 - t9 are reserved for single-register common functions.
++ */
++static const u8 bpf2mips64[] = {
++	/* Return value from in-kernel function, and exit value from eBPF */
++	[BPF_REG_0] = MIPS_R_V0,
++	/* Arguments from eBPF program to in-kernel function */
++	[BPF_REG_1] = MIPS_R_A0,
++	[BPF_REG_2] = MIPS_R_A1,
++	[BPF_REG_3] = MIPS_R_A2,
++	[BPF_REG_4] = MIPS_R_A3,
++	[BPF_REG_5] = MIPS_R_A4,
++	/* Callee-saved registers that in-kernel function will preserve */
++	[BPF_REG_6] = MIPS_R_S0,
++	[BPF_REG_7] = MIPS_R_S1,
++	[BPF_REG_8] = MIPS_R_S2,
++	[BPF_REG_9] = MIPS_R_S3,
++	/* Read-only frame pointer to access the eBPF stack */
++	[BPF_REG_FP] = MIPS_R_FP,
++	/* Temporary register for blinding constants */
++	[BPF_REG_AX] = MIPS_R_AT,
++	/* Tail call count register, caller-saved */
++	[JIT_REG_TC] = MIPS_R_A5,
++	/* Constant for register zero-extension */
++	[JIT_REG_ZX] = MIPS_R_V1,
++};
++
++/*
++ * MIPS 32-bit operations on 64-bit registers generate a sign-extended
++ * result. However, the eBPF ISA mandates zero-extension, so we rely on the
++ * verifier to add that for us (emit_zext_ver). In addition, ALU arithmetic
++ * operations, right shift and byte swap require properly sign-extended
++ * operands or the result is unpredictable. We emit explicit sign-extensions
++ * in those cases.
++ */
++
++/* Sign extension */
++static void emit_sext(struct jit_context *ctx, u8 dst, u8 src)
++{
++	emit(ctx, sll, dst, src, 0);
++	clobber_reg(ctx, dst);
++}
++
++/* Zero extension */
++static void emit_zext(struct jit_context *ctx, u8 dst)
++{
++	if (cpu_has_mips64r2 || cpu_has_mips64r6) {
++		emit(ctx, dinsu, dst, MIPS_R_ZERO, 32, 32);
++	} else {
++		emit(ctx, and, dst, dst, bpf2mips64[JIT_REG_ZX]);
++		access_reg(ctx, JIT_REG_ZX); /* We need the ZX register */
++	}
++	clobber_reg(ctx, dst);
++}
++
++/* Zero extension, if verifier does not do it for us  */
++static void emit_zext_ver(struct jit_context *ctx, u8 dst)
++{
++	if (!ctx->program->aux->verifier_zext)
++		emit_zext(ctx, dst);
++}
++
++/* dst = imm (64-bit) */
++static void emit_mov_i64(struct jit_context *ctx, u8 dst, u64 imm64)
++{
++	if (imm64 >= 0xffffffffffff8000ULL || imm64 < 0x8000ULL) {
++		emit(ctx, daddiu, dst, MIPS_R_ZERO, (s16)imm64);
++	} else if (imm64 >= 0xffffffff80000000ULL ||
++		   (imm64 < 0x80000000 && imm64 > 0xffff)) {
++		emit(ctx, lui, dst, (s16)(imm64 >> 16));
++		emit(ctx, ori, dst, dst, (u16)imm64 & 0xffff);
++	} else {
++		u8 acc = MIPS_R_ZERO;
++		int k;
++
++		for (k = 0; k < 4; k++) {
++			u16 half = imm64 >> (48 - 16 * k);
++
++			if (acc == dst)
++				emit(ctx, dsll, dst, dst, 16);
++
++			if (half) {
++				emit(ctx, ori, dst, acc, half);
++				acc = dst;
++			}
++		}
++	}
++	clobber_reg(ctx, dst);
++}
++
++/* ALU immediate operation (64-bit) */
++static void emit_alu_i64(struct jit_context *ctx, u8 dst, s32 imm, u8 op)
++{
++	switch (BPF_OP(op)) {
++	/* dst = dst | imm */
++	case BPF_OR:
++		emit(ctx, ori, dst, dst, (u16)imm);
++		break;
++	/* dst = dst ^ imm */
++	case BPF_XOR:
++		emit(ctx, xori, dst, dst, (u16)imm);
++		break;
++	/* dst = -dst */
++	case BPF_NEG:
++		emit(ctx, dsubu, dst, MIPS_R_ZERO, dst);
++		break;
++	/* dst = dst << imm */
++	case BPF_LSH:
++		emit(ctx, dsll_safe, dst, dst, imm);
++		break;
++	/* dst = dst >> imm */
++	case BPF_RSH:
++		emit(ctx, dsrl_safe, dst, dst, imm);
++		break;
++	/* dst = dst >> imm (arithmetic) */
++	case BPF_ARSH:
++		emit(ctx, dsra_safe, dst, dst, imm);
++		break;
++	/* dst = dst + imm */
++	case BPF_ADD:
++		emit(ctx, daddiu, dst, dst, imm);
++		break;
++	/* dst = dst - imm */
++	case BPF_SUB:
++		emit(ctx, daddiu, dst, dst, -imm);
++		break;
++	default:
++		/* Width-generic operations */
++		emit_alu_i(ctx, dst, imm, op);
++	}
++	clobber_reg(ctx, dst);
++}
++
++/* ALU register operation (64-bit) */
++static void emit_alu_r64(struct jit_context *ctx, u8 dst, u8 src, u8 op)
++{
++	switch (BPF_OP(op)) {
++	/* dst = dst << src */
++	case BPF_LSH:
++		emit(ctx, dsllv, dst, dst, src);
++		break;
++	/* dst = dst >> src */
++	case BPF_RSH:
++		emit(ctx, dsrlv, dst, dst, src);
++		break;
++	/* dst = dst >> src (arithmetic) */
++	case BPF_ARSH:
++		emit(ctx, dsrav, dst, dst, src);
++		break;
++	/* dst = dst + src */
++	case BPF_ADD:
++		emit(ctx, daddu, dst, dst, src);
++		break;
++	/* dst = dst - src */
++	case BPF_SUB:
++		emit(ctx, dsubu, dst, dst, src);
++		break;
++	/* dst = dst * src */
++	case BPF_MUL:
++		if (cpu_has_mips64r6) {
++			emit(ctx, dmulu, dst, dst, src);
++		} else {
++			emit(ctx, dmultu, dst, src);
++			emit(ctx, mflo, dst);
++		}
++		break;
++	/* dst = dst / src */
++	case BPF_DIV:
++		if (cpu_has_mips64r6) {
++			emit(ctx, ddivu_r6, dst, dst, src);
++		} else {
++			emit(ctx, ddivu, dst, src);
++			emit(ctx, mflo, dst);
++		}
++		break;
++	/* dst = dst % src */
++	case BPF_MOD:
++		if (cpu_has_mips64r6) {
++			emit(ctx, dmodu, dst, dst, src);
++		} else {
++			emit(ctx, ddivu, dst, src);
++			emit(ctx, mfhi, dst);
++		}
++		break;
++	default:
++		/* Width-generic operations */
++		emit_alu_r(ctx, dst, src, op);
++	}
++	clobber_reg(ctx, dst);
++}
++
++/* Swap sub words in a register double word */
++static void emit_swap_r64(struct jit_context *ctx, u8 dst, u8 mask, u32 bits)
++{
++	u8 tmp = MIPS_R_T9;
++
++	emit(ctx, and, tmp, dst, mask);  /* tmp = dst & mask  */
++	emit(ctx, dsll, tmp, tmp, bits); /* tmp = tmp << bits */
++	emit(ctx, dsrl, dst, dst, bits); /* dst = dst >> bits */
++	emit(ctx, and, dst, dst, mask);  /* dst = dst & mask  */
++	emit(ctx, or, dst, dst, tmp);    /* dst = dst | tmp   */
++}
++
++/* Swap bytes and truncate a register double word, word or half word */
++static void emit_bswap_r64(struct jit_context *ctx, u8 dst, u32 width)
++{
++	switch (width) {
++	/* Swap bytes in a double word */
++	case 64:
++		if (cpu_has_mips64r2 || cpu_has_mips64r6) {
++			emit(ctx, dsbh, dst, dst);
++			emit(ctx, dshd, dst, dst);
++		} else {
++			u8 t1 = MIPS_R_T6;
++			u8 t2 = MIPS_R_T7;
++
++			emit(ctx, dsll32, t2, dst, 0);  /* t2 = dst << 32    */
++			emit(ctx, dsrl32, dst, dst, 0); /* dst = dst >> 32   */
++			emit(ctx, or, dst, dst, t2);    /* dst = dst | t2    */
++
++			emit(ctx, ori, t2, MIPS_R_ZERO, 0xffff);
++			emit(ctx, dsll32, t1, t2, 0);   /* t1 = t2 << 32     */
++			emit(ctx, or, t1, t1, t2);      /* t1 = t1 | t2      */
++			emit_swap_r64(ctx, dst, t1, 16);/* dst = swap16(dst) */
++
++			emit(ctx, lui, t2, 0xff);       /* t2 = 0x00ff0000   */
++			emit(ctx, ori, t2, t2, 0xff);   /* t2 = t2 | 0x00ff  */
++			emit(ctx, dsll32, t1, t2, 0);   /* t1 = t2 << 32     */
++			emit(ctx, or, t1, t1, t2);      /* t1 = t1 | t2      */
++			emit_swap_r64(ctx, dst, t1, 8); /* dst = swap8(dst)  */
++		}
++		break;
++	/* Swap bytes in a half word */
++	/* Swap bytes in a word */
++	case 32:
++	case 16:
++		emit_sext(ctx, dst, dst);
++		emit_bswap_r(ctx, dst, width);
++		if (cpu_has_mips64r2 || cpu_has_mips64r6)
++			emit_zext(ctx, dst);
++		break;
++	}
++	clobber_reg(ctx, dst);
++}
++
++/* Truncate a register double word, word or half word */
++static void emit_trunc_r64(struct jit_context *ctx, u8 dst, u32 width)
++{
++	switch (width) {
++	case 64:
++		break;
++	/* Zero-extend a word */
++	case 32:
++		emit_zext(ctx, dst);
++		break;
++	/* Zero-extend a half word */
++	case 16:
++		emit(ctx, andi, dst, dst, 0xffff);
++		break;
++	}
++	clobber_reg(ctx, dst);
++}
++
++/* Load operation: dst = *(size*)(src + off) */
++static void emit_ldx(struct jit_context *ctx, u8 dst, u8 src, s16 off, u8 size)
++{
++	switch (size) {
++	/* Load a byte */
++	case BPF_B:
++		emit(ctx, lbu, dst, off, src);
++		break;
++	/* Load a half word */
++	case BPF_H:
++		emit(ctx, lhu, dst, off, src);
++		break;
++	/* Load a word */
++	case BPF_W:
++		emit(ctx, lwu, dst, off, src);
++		break;
++	/* Load a double word */
++	case BPF_DW:
++		emit(ctx, ld, dst, off, src);
++		break;
++	}
++	clobber_reg(ctx, dst);
++}
++
++/* Store operation: *(size *)(dst + off) = src */
++static void emit_stx(struct jit_context *ctx, u8 dst, u8 src, s16 off, u8 size)
++{
++	switch (size) {
++	/* Store a byte */
++	case BPF_B:
++		emit(ctx, sb, src, off, dst);
++		break;
++	/* Store a half word */
++	case BPF_H:
++		emit(ctx, sh, src, off, dst);
++		break;
++	/* Store a word */
++	case BPF_W:
++		emit(ctx, sw, src, off, dst);
++		break;
++	/* Store a double word */
++	case BPF_DW:
++		emit(ctx, sd, src, off, dst);
++		break;
++	}
++}
++
++/* Atomic read-modify-write */
++static void emit_atomic_r64(struct jit_context *ctx,
++			    u8 dst, u8 src, s16 off, u8 code)
++{
++	u8 t1 = MIPS_R_T6;
++	u8 t2 = MIPS_R_T7;
++
++	emit(ctx, lld, t1, off, dst);
++	switch (code) {
++	case BPF_ADD:
++	case BPF_ADD | BPF_FETCH:
++		emit(ctx, daddu, t2, t1, src);
++		break;
++	case BPF_AND:
++	case BPF_AND | BPF_FETCH:
++		emit(ctx, and, t2, t1, src);
++		break;
++	case BPF_OR:
++	case BPF_OR | BPF_FETCH:
++		emit(ctx, or, t2, t1, src);
++		break;
++	case BPF_XOR:
++	case BPF_XOR | BPF_FETCH:
++		emit(ctx, xor, t2, t1, src);
++		break;
++	case BPF_XCHG:
++		emit(ctx, move, t2, src);
++		break;
++	}
++	emit(ctx, scd, t2, off, dst);
++	emit(ctx, beqz, t2, -16);
++	emit(ctx, nop); /* Delay slot */
++
++	if (code & BPF_FETCH) {
++		emit(ctx, move, src, t1);
++		clobber_reg(ctx, src);
++	}
++}
++
++/* Atomic compare-and-exchange */
++static void emit_cmpxchg_r64(struct jit_context *ctx, u8 dst, u8 src, s16 off)
++{
++	u8 r0 = bpf2mips64[BPF_REG_0];
++	u8 t1 = MIPS_R_T6;
++	u8 t2 = MIPS_R_T7;
++
++	emit(ctx, lld, t1, off, dst);
++	emit(ctx, bne, t1, r0, 12);
++	emit(ctx, move, t2, src);      /* Delay slot */
++	emit(ctx, scd, t2, off, dst);
++	emit(ctx, beqz, t2, -20);
++	emit(ctx, move, r0, t1);      /* Delay slot */
++
++	clobber_reg(ctx, r0);
++}
++
++/* Function call */
++static int emit_call(struct jit_context *ctx, const struct bpf_insn *insn)
++{
++	u8 zx = bpf2mips64[JIT_REG_ZX];
++	u8 tmp = MIPS_R_T6;
++	bool fixed;
++	u64 addr;
++
++	/* Decode the call address */
++	if (bpf_jit_get_func_addr(ctx->program, insn, false,
++				  &addr, &fixed) < 0)
++		return -1;
++	if (!fixed)
++		return -1;
++
++	/* Push caller-saved registers on stack */
++	push_regs(ctx, ctx->clobbered & JIT_CALLER_REGS, 0, 0);
++
++	/* Emit function call */
++	emit_mov_i64(ctx, tmp, addr);
++	emit(ctx, jalr, MIPS_R_RA, tmp);
++	emit(ctx, nop); /* Delay slot */
++
++	/* Restore caller-saved registers */
++	pop_regs(ctx, ctx->clobbered & JIT_CALLER_REGS, 0, 0);
++
++	/* Re-initialize the JIT zero-extension register if accessed */
++	if (ctx->accessed & BIT(JIT_REG_ZX)) {
++		emit(ctx, daddiu, zx, MIPS_R_ZERO, -1);
++		emit(ctx, dsrl32, zx, zx, 0);
++	}
++
++	clobber_reg(ctx, MIPS_R_RA);
++	clobber_reg(ctx, MIPS_R_V0);
++	clobber_reg(ctx, MIPS_R_V1);
++	return 0;
++}
++
++/* Function tail call */
++static int emit_tail_call(struct jit_context *ctx)
++{
++	u8 ary = bpf2mips64[BPF_REG_2];
++	u8 ind = bpf2mips64[BPF_REG_3];
++	u8 tcc = bpf2mips64[JIT_REG_TC];
++	u8 tmp = MIPS_R_T6;
++	int off;
++
++	/*
++	 * Tail call:
++	 * eBPF R1 - function argument (context ptr), passed in a0-a1
++	 * eBPF R2 - ptr to object with array of function entry points
++	 * eBPF R3 - array index of function to be called
++	 */
++
++	/* if (ind >= ary->map.max_entries) goto out */
++	off = offsetof(struct bpf_array, map.max_entries);
++	if (off > 0x7fff)
++		return -1;
++	emit(ctx, lwu, tmp, off, ary);            /* tmp = ary->map.max_entrs*/
++	emit(ctx, sltu, tmp, ind, tmp);           /* tmp = ind < t1          */
++	emit(ctx, beqz, tmp, get_offset(ctx, 1)); /* PC += off(1) if tmp == 0*/
++
++	/* if (--TCC < 0) goto out */
++	emit(ctx, daddiu, tcc, tcc, -1);          /* tcc-- (delay slot)      */
++	emit(ctx, bltz, tcc, get_offset(ctx, 1)); /* PC += off(1) if tcc < 0 */
++						  /* (next insn delay slot)  */
++	/* prog = ary->ptrs[ind] */
++	off = offsetof(struct bpf_array, ptrs);
++	if (off > 0x7fff)
++		return -1;
++	emit(ctx, dsll, tmp, ind, 3);             /* tmp = ind << 3          */
++	emit(ctx, daddu, tmp, tmp, ary);          /* tmp += ary              */
++	emit(ctx, ld, tmp, off, tmp);             /* tmp = *(tmp + off)      */
++
++	/* if (prog == 0) goto out */
++	emit(ctx, beqz, tmp, get_offset(ctx, 1)); /* PC += off(1) if tmp == 0*/
++	emit(ctx, nop);                           /* Delay slot              */
++
++	/* func = prog->bpf_func + 8 (prologue skip offset) */
++	off = offsetof(struct bpf_prog, bpf_func);
++	if (off > 0x7fff)
++		return -1;
++	emit(ctx, ld, tmp, off, tmp);                /* tmp = *(tmp + off)   */
++	emit(ctx, daddiu, tmp, tmp, JIT_TCALL_SKIP); /* tmp += skip (4)      */
++
++	/* goto func */
++	build_epilogue(ctx, tmp);
++	access_reg(ctx, JIT_REG_TC);
++	return 0;
++}
++
++/*
++ * Stack frame layout for a JITed program (stack grows down).
++ *
++ * Higher address  : Previous stack frame      :
++ *                 +===========================+  <--- MIPS sp before call
++ *                 | Callee-saved registers,   |
++ *                 | including RA and FP       |
++ *                 +---------------------------+  <--- eBPF FP (MIPS fp)
++ *                 | Local eBPF variables      |
++ *                 | allocated by program      |
++ *                 +---------------------------+
++ *                 | Reserved for caller-saved |
++ *                 | registers                 |
++ * Lower address   +===========================+  <--- MIPS sp
++ */
++
++/* Build program prologue to set up the stack and registers */
++void build_prologue(struct jit_context *ctx)
++{
++	u8 fp = bpf2mips64[BPF_REG_FP];
++	u8 tc = bpf2mips64[JIT_REG_TC];
++	u8 zx = bpf2mips64[JIT_REG_ZX];
++	int stack, saved, locals, reserved;
++
++	/*
++	 * The first instruction initializes the tail call count register.
++	 * On a tail call, the calling function jumps into the prologue
++	 * after this instruction.
++	 */
++	emit(ctx, addiu, tc, MIPS_R_ZERO, min(MAX_TAIL_CALL_CNT + 1, 0xffff));
++
++	/* === Entry-point for tail calls === */
++
++	/*
++	 * If the eBPF frame pointer and tail call count registers were
++	 * accessed they must be preserved. Mark them as clobbered here
++	 * to save and restore them on the stack as needed.
++	 */
++	if (ctx->accessed & BIT(BPF_REG_FP))
++		clobber_reg(ctx, fp);
++	if (ctx->accessed & BIT(JIT_REG_TC))
++		clobber_reg(ctx, tc);
++	if (ctx->accessed & BIT(JIT_REG_ZX))
++		clobber_reg(ctx, zx);
++
++	/* Compute the stack space needed for callee-saved registers */
++	saved = hweight32(ctx->clobbered & JIT_CALLEE_REGS) * sizeof(u64);
++	saved = ALIGN(saved, MIPS_STACK_ALIGNMENT);
++
++	/* Stack space used by eBPF program local data */
++	locals = ALIGN(ctx->program->aux->stack_depth, MIPS_STACK_ALIGNMENT);
++
++	/*
++	 * If we are emitting function calls, reserve extra stack space for
++	 * caller-saved registers needed by the JIT. The required space is
++	 * computed automatically during resource usage discovery (pass 1).
++	 */
++	reserved = ctx->stack_used;
++
++	/* Allocate the stack frame */
++	stack = ALIGN(saved + locals + reserved, MIPS_STACK_ALIGNMENT);
++	if (stack)
++		emit(ctx, daddiu, MIPS_R_SP, MIPS_R_SP, -stack);
++
++	/* Store callee-saved registers on stack */
++	push_regs(ctx, ctx->clobbered & JIT_CALLEE_REGS, 0, stack - saved);
++
++	/* Initialize the eBPF frame pointer if accessed */
++	if (ctx->accessed & BIT(BPF_REG_FP))
++		emit(ctx, daddiu, fp, MIPS_R_SP, stack - saved);
++
++	/* Initialize the ePF JIT zero-extension register if accessed */
++	if (ctx->accessed & BIT(JIT_REG_ZX)) {
++		emit(ctx, daddiu, zx, MIPS_R_ZERO, -1);
++		emit(ctx, dsrl32, zx, zx, 0);
++	}
++
++	ctx->saved_size = saved;
++	ctx->stack_size = stack;
++}
++
++/* Build the program epilogue to restore the stack and registers */
++void build_epilogue(struct jit_context *ctx, int dest_reg)
++{
++	/* Restore callee-saved registers from stack */
++	pop_regs(ctx, ctx->clobbered & JIT_CALLEE_REGS, 0,
++		 ctx->stack_size - ctx->saved_size);
++
++	/* Release the stack frame */
++	if (ctx->stack_size)
++		emit(ctx, daddiu, MIPS_R_SP, MIPS_R_SP, ctx->stack_size);
++
++	/* Jump to return address and sign-extend the 32-bit return value */
++	emit(ctx, jr, dest_reg);
++	emit(ctx, sll, MIPS_R_V0, MIPS_R_V0, 0); /* Delay slot */
++}
++
++/* Build one eBPF instruction */
++int build_insn(const struct bpf_insn *insn, struct jit_context *ctx)
++{
++	u8 dst = bpf2mips64[insn->dst_reg];
++	u8 src = bpf2mips64[insn->src_reg];
++	u8 res = bpf2mips64[BPF_REG_0];
++	u8 code = insn->code;
++	s16 off = insn->off;
++	s32 imm = insn->imm;
++	s32 val, rel;
++	u8 alu, jmp;
++
++	switch (code) {
++	/* ALU operations */
++	/* dst = imm */
++	case BPF_ALU | BPF_MOV | BPF_K:
++		emit_mov_i(ctx, dst, imm);
++		emit_zext_ver(ctx, dst);
++		break;
++	/* dst = src */
++	case BPF_ALU | BPF_MOV | BPF_X:
++		if (imm == 1) {
++			/* Special mov32 for zext */
++			emit_zext(ctx, dst);
++		} else {
++			emit_mov_r(ctx, dst, src);
++			emit_zext_ver(ctx, dst);
++		}
++		break;
++	/* dst = -dst */
++	case BPF_ALU | BPF_NEG:
++		emit_sext(ctx, dst, dst);
++		emit_alu_i(ctx, dst, 0, BPF_NEG);
++		emit_zext_ver(ctx, dst);
++		break;
++	/* dst = dst & imm */
++	/* dst = dst | imm */
++	/* dst = dst ^ imm */
++	/* dst = dst << imm */
++	case BPF_ALU | BPF_OR | BPF_K:
++	case BPF_ALU | BPF_AND | BPF_K:
++	case BPF_ALU | BPF_XOR | BPF_K:
++	case BPF_ALU | BPF_LSH | BPF_K:
++		if (!valid_alu_i(BPF_OP(code), imm)) {
++			emit_mov_i(ctx, MIPS_R_T4, imm);
++			emit_alu_r(ctx, dst, MIPS_R_T4, BPF_OP(code));
++		} else if (rewrite_alu_i(BPF_OP(code), imm, &alu, &val)) {
++			emit_alu_i(ctx, dst, val, alu);
++		}
++		emit_zext_ver(ctx, dst);
++		break;
++	/* dst = dst >> imm */
++	/* dst = dst >> imm (arithmetic) */
++	/* dst = dst + imm */
++	/* dst = dst - imm */
++	/* dst = dst * imm */
++	/* dst = dst / imm */
++	/* dst = dst % imm */
++	case BPF_ALU | BPF_RSH | BPF_K:
++	case BPF_ALU | BPF_ARSH | BPF_K:
++	case BPF_ALU | BPF_ADD | BPF_K:
++	case BPF_ALU | BPF_SUB | BPF_K:
++	case BPF_ALU | BPF_MUL | BPF_K:
++	case BPF_ALU | BPF_DIV | BPF_K:
++	case BPF_ALU | BPF_MOD | BPF_K:
++		if (!valid_alu_i(BPF_OP(code), imm)) {
++			emit_sext(ctx, dst, dst);
++			emit_mov_i(ctx, MIPS_R_T4, imm);
++			emit_alu_r(ctx, dst, MIPS_R_T4, BPF_OP(code));
++		} else if (rewrite_alu_i(BPF_OP(code), imm, &alu, &val)) {
++			emit_sext(ctx, dst, dst);
++			emit_alu_i(ctx, dst, val, alu);
++		}
++		emit_zext_ver(ctx, dst);
++		break;
++	/* dst = dst & src */
++	/* dst = dst | src */
++	/* dst = dst ^ src */
++	/* dst = dst << src */
++	case BPF_ALU | BPF_AND | BPF_X:
++	case BPF_ALU | BPF_OR | BPF_X:
++	case BPF_ALU | BPF_XOR | BPF_X:
++	case BPF_ALU | BPF_LSH | BPF_X:
++		emit_alu_r(ctx, dst, src, BPF_OP(code));
++		emit_zext_ver(ctx, dst);
++		break;
++	/* dst = dst >> src */
++	/* dst = dst >> src (arithmetic) */
++	/* dst = dst + src */
++	/* dst = dst - src */
++	/* dst = dst * src */
++	/* dst = dst / src */
++	/* dst = dst % src */
++	case BPF_ALU | BPF_RSH | BPF_X:
++	case BPF_ALU | BPF_ARSH | BPF_X:
++	case BPF_ALU | BPF_ADD | BPF_X:
++	case BPF_ALU | BPF_SUB | BPF_X:
++	case BPF_ALU | BPF_MUL | BPF_X:
++	case BPF_ALU | BPF_DIV | BPF_X:
++	case BPF_ALU | BPF_MOD | BPF_X:
++		emit_sext(ctx, dst, dst);
++		emit_sext(ctx, MIPS_R_T4, src);
++		emit_alu_r(ctx, dst, MIPS_R_T4, BPF_OP(code));
++		emit_zext_ver(ctx, dst);
++		break;
++	/* dst = imm (64-bit) */
++	case BPF_ALU64 | BPF_MOV | BPF_K:
++		emit_mov_i(ctx, dst, imm);
++		break;
++	/* dst = src (64-bit) */
++	case BPF_ALU64 | BPF_MOV | BPF_X:
++		emit_mov_r(ctx, dst, src);
++		break;
++	/* dst = -dst (64-bit) */
++	case BPF_ALU64 | BPF_NEG:
++		emit_alu_i64(ctx, dst, 0, BPF_NEG);
++		break;
++	/* dst = dst & imm (64-bit) */
++	/* dst = dst | imm (64-bit) */
++	/* dst = dst ^ imm (64-bit) */
++	/* dst = dst << imm (64-bit) */
++	/* dst = dst >> imm (64-bit) */
++	/* dst = dst >> imm ((64-bit, arithmetic) */
++	/* dst = dst + imm (64-bit) */
++	/* dst = dst - imm (64-bit) */
++	/* dst = dst * imm (64-bit) */
++	/* dst = dst / imm (64-bit) */
++	/* dst = dst % imm (64-bit) */
++	case BPF_ALU64 | BPF_AND | BPF_K:
++	case BPF_ALU64 | BPF_OR | BPF_K:
++	case BPF_ALU64 | BPF_XOR | BPF_K:
++	case BPF_ALU64 | BPF_LSH | BPF_K:
++	case BPF_ALU64 | BPF_RSH | BPF_K:
++	case BPF_ALU64 | BPF_ARSH | BPF_K:
++	case BPF_ALU64 | BPF_ADD | BPF_K:
++	case BPF_ALU64 | BPF_SUB | BPF_K:
++	case BPF_ALU64 | BPF_MUL | BPF_K:
++	case BPF_ALU64 | BPF_DIV | BPF_K:
++	case BPF_ALU64 | BPF_MOD | BPF_K:
++		if (!valid_alu_i(BPF_OP(code), imm)) {
++			emit_mov_i(ctx, MIPS_R_T4, imm);
++			emit_alu_r64(ctx, dst, MIPS_R_T4, BPF_OP(code));
++		} else if (rewrite_alu_i(BPF_OP(code), imm, &alu, &val)) {
++			emit_alu_i64(ctx, dst, val, alu);
++		}
++		break;
++	/* dst = dst & src (64-bit) */
++	/* dst = dst | src (64-bit) */
++	/* dst = dst ^ src (64-bit) */
++	/* dst = dst << src (64-bit) */
++	/* dst = dst >> src (64-bit) */
++	/* dst = dst >> src (64-bit, arithmetic) */
++	/* dst = dst + src (64-bit) */
++	/* dst = dst - src (64-bit) */
++	/* dst = dst * src (64-bit) */
++	/* dst = dst / src (64-bit) */
++	/* dst = dst % src (64-bit) */
++	case BPF_ALU64 | BPF_AND | BPF_X:
++	case BPF_ALU64 | BPF_OR | BPF_X:
++	case BPF_ALU64 | BPF_XOR | BPF_X:
++	case BPF_ALU64 | BPF_LSH | BPF_X:
++	case BPF_ALU64 | BPF_RSH | BPF_X:
++	case BPF_ALU64 | BPF_ARSH | BPF_X:
++	case BPF_ALU64 | BPF_ADD | BPF_X:
++	case BPF_ALU64 | BPF_SUB | BPF_X:
++	case BPF_ALU64 | BPF_MUL | BPF_X:
++	case BPF_ALU64 | BPF_DIV | BPF_X:
++	case BPF_ALU64 | BPF_MOD | BPF_X:
++		emit_alu_r64(ctx, dst, src, BPF_OP(code));
++		break;
++	/* dst = htole(dst) */
++	/* dst = htobe(dst) */
++	case BPF_ALU | BPF_END | BPF_FROM_LE:
++	case BPF_ALU | BPF_END | BPF_FROM_BE:
++		if (BPF_SRC(code) ==
++#ifdef __BIG_ENDIAN
++		    BPF_FROM_LE
++#else
++		    BPF_FROM_BE
++#endif
++		    )
++			emit_bswap_r64(ctx, dst, imm);
++		else
++			emit_trunc_r64(ctx, dst, imm);
++		break;
++	/* dst = imm64 */
++	case BPF_LD | BPF_IMM | BPF_DW:
++		emit_mov_i64(ctx, dst, (u32)imm | ((u64)insn[1].imm << 32));
++		return 1;
++	/* LDX: dst = *(size *)(src + off) */
++	case BPF_LDX | BPF_MEM | BPF_W:
++	case BPF_LDX | BPF_MEM | BPF_H:
++	case BPF_LDX | BPF_MEM | BPF_B:
++	case BPF_LDX | BPF_MEM | BPF_DW:
++		emit_ldx(ctx, dst, src, off, BPF_SIZE(code));
++		break;
++	/* ST: *(size *)(dst + off) = imm */
++	case BPF_ST | BPF_MEM | BPF_W:
++	case BPF_ST | BPF_MEM | BPF_H:
++	case BPF_ST | BPF_MEM | BPF_B:
++	case BPF_ST | BPF_MEM | BPF_DW:
++		emit_mov_i(ctx, MIPS_R_T4, imm);
++		emit_stx(ctx, dst, MIPS_R_T4, off, BPF_SIZE(code));
++		break;
++	/* STX: *(size *)(dst + off) = src */
++	case BPF_STX | BPF_MEM | BPF_W:
++	case BPF_STX | BPF_MEM | BPF_H:
++	case BPF_STX | BPF_MEM | BPF_B:
++	case BPF_STX | BPF_MEM | BPF_DW:
++		emit_stx(ctx, dst, src, off, BPF_SIZE(code));
++		break;
++	/* Speculation barrier */
++	case BPF_ST | BPF_NOSPEC:
++		break;
++	/* Atomics */
++	case BPF_STX | BPF_ATOMIC | BPF_W:
++	case BPF_STX | BPF_ATOMIC | BPF_DW:
++		switch (imm) {
++		case BPF_ADD:
++		case BPF_ADD | BPF_FETCH:
++		case BPF_AND:
++		case BPF_AND | BPF_FETCH:
++		case BPF_OR:
++		case BPF_OR | BPF_FETCH:
++		case BPF_XOR:
++		case BPF_XOR | BPF_FETCH:
++		case BPF_XCHG:
++			if (BPF_SIZE(code) == BPF_DW) {
++				emit_atomic_r64(ctx, dst, src, off, imm);
++			} else if (imm & BPF_FETCH) {
++				u8 tmp = dst;
++
++				if (src == dst) { /* Don't overwrite dst */
++					emit_mov_r(ctx, MIPS_R_T4, dst);
++					tmp = MIPS_R_T4;
++				}
++				emit_sext(ctx, src, src);
++				emit_atomic_r(ctx, tmp, src, off, imm);
++				emit_zext_ver(ctx, src);
++			} else { /* 32-bit, no fetch */
++				emit_sext(ctx, MIPS_R_T4, src);
++				emit_atomic_r(ctx, dst, MIPS_R_T4, off, imm);
++			}
++			break;
++		case BPF_CMPXCHG:
++			if (BPF_SIZE(code) == BPF_DW) {
++				emit_cmpxchg_r64(ctx, dst, src, off);
++			} else {
++				u8 tmp = res;
++
++				if (res == dst)   /* Don't overwrite dst */
++					tmp = MIPS_R_T4;
++				emit_sext(ctx, tmp, res);
++				emit_sext(ctx, MIPS_R_T5, src);
++				emit_cmpxchg_r(ctx, dst, MIPS_R_T5, tmp, off);
++				if (res == dst)   /* Restore result */
++					emit_mov_r(ctx, res, MIPS_R_T4);
++				/* Result zext inserted by verifier */
++			}
++			break;
++		default:
++			goto notyet;
++		}
++		break;
++	/* PC += off if dst == src */
++	/* PC += off if dst != src */
++	/* PC += off if dst & src */
++	/* PC += off if dst > src */
++	/* PC += off if dst >= src */
++	/* PC += off if dst < src */
++	/* PC += off if dst <= src */
++	/* PC += off if dst > src (signed) */
++	/* PC += off if dst >= src (signed) */
++	/* PC += off if dst < src (signed) */
++	/* PC += off if dst <= src (signed) */
++	case BPF_JMP32 | BPF_JEQ | BPF_X:
++	case BPF_JMP32 | BPF_JNE | BPF_X:
++	case BPF_JMP32 | BPF_JSET | BPF_X:
++	case BPF_JMP32 | BPF_JGT | BPF_X:
++	case BPF_JMP32 | BPF_JGE | BPF_X:
++	case BPF_JMP32 | BPF_JLT | BPF_X:
++	case BPF_JMP32 | BPF_JLE | BPF_X:
++	case BPF_JMP32 | BPF_JSGT | BPF_X:
++	case BPF_JMP32 | BPF_JSGE | BPF_X:
++	case BPF_JMP32 | BPF_JSLT | BPF_X:
++	case BPF_JMP32 | BPF_JSLE | BPF_X:
++		if (off == 0)
++			break;
++		setup_jmp_r(ctx, dst == src, BPF_OP(code), off, &jmp, &rel);
++		emit_sext(ctx, MIPS_R_T4, dst); /* Sign-extended dst */
++		emit_sext(ctx, MIPS_R_T5, src); /* Sign-extended src */
++		emit_jmp_r(ctx, MIPS_R_T4, MIPS_R_T5, rel, jmp);
++		if (finish_jmp(ctx, jmp, off) < 0)
++			goto toofar;
++		break;
++	/* PC += off if dst == imm */
++	/* PC += off if dst != imm */
++	/* PC += off if dst & imm */
++	/* PC += off if dst > imm */
++	/* PC += off if dst >= imm */
++	/* PC += off if dst < imm */
++	/* PC += off if dst <= imm */
++	/* PC += off if dst > imm (signed) */
++	/* PC += off if dst >= imm (signed) */
++	/* PC += off if dst < imm (signed) */
++	/* PC += off if dst <= imm (signed) */
++	case BPF_JMP32 | BPF_JEQ | BPF_K:
++	case BPF_JMP32 | BPF_JNE | BPF_K:
++	case BPF_JMP32 | BPF_JSET | BPF_K:
++	case BPF_JMP32 | BPF_JGT | BPF_K:
++	case BPF_JMP32 | BPF_JGE | BPF_K:
++	case BPF_JMP32 | BPF_JLT | BPF_K:
++	case BPF_JMP32 | BPF_JLE | BPF_K:
++	case BPF_JMP32 | BPF_JSGT | BPF_K:
++	case BPF_JMP32 | BPF_JSGE | BPF_K:
++	case BPF_JMP32 | BPF_JSLT | BPF_K:
++	case BPF_JMP32 | BPF_JSLE | BPF_K:
++		if (off == 0)
++			break;
++		setup_jmp_i(ctx, imm, 32, BPF_OP(code), off, &jmp, &rel);
++		emit_sext(ctx, MIPS_R_T4, dst); /* Sign-extended dst */
++		if (valid_jmp_i(jmp, imm)) {
++			emit_jmp_i(ctx, MIPS_R_T4, imm, rel, jmp);
++		} else {
++			/* Move large immediate to register, sign-extended */
++			emit_mov_i(ctx, MIPS_R_T5, imm);
++			emit_jmp_r(ctx, MIPS_R_T4, MIPS_R_T5, rel, jmp);
++		}
++		if (finish_jmp(ctx, jmp, off) < 0)
++			goto toofar;
++		break;
++	/* PC += off if dst == src */
++	/* PC += off if dst != src */
++	/* PC += off if dst & src */
++	/* PC += off if dst > src */
++	/* PC += off if dst >= src */
++	/* PC += off if dst < src */
++	/* PC += off if dst <= src */
++	/* PC += off if dst > src (signed) */
++	/* PC += off if dst >= src (signed) */
++	/* PC += off if dst < src (signed) */
++	/* PC += off if dst <= src (signed) */
++	case BPF_JMP | BPF_JEQ | BPF_X:
++	case BPF_JMP | BPF_JNE | BPF_X:
++	case BPF_JMP | BPF_JSET | BPF_X:
++	case BPF_JMP | BPF_JGT | BPF_X:
++	case BPF_JMP | BPF_JGE | BPF_X:
++	case BPF_JMP | BPF_JLT | BPF_X:
++	case BPF_JMP | BPF_JLE | BPF_X:
++	case BPF_JMP | BPF_JSGT | BPF_X:
++	case BPF_JMP | BPF_JSGE | BPF_X:
++	case BPF_JMP | BPF_JSLT | BPF_X:
++	case BPF_JMP | BPF_JSLE | BPF_X:
++		if (off == 0)
++			break;
++		setup_jmp_r(ctx, dst == src, BPF_OP(code), off, &jmp, &rel);
++		emit_jmp_r(ctx, dst, src, rel, jmp);
++		if (finish_jmp(ctx, jmp, off) < 0)
++			goto toofar;
++		break;
++	/* PC += off if dst == imm */
++	/* PC += off if dst != imm */
++	/* PC += off if dst & imm */
++	/* PC += off if dst > imm */
++	/* PC += off if dst >= imm */
++	/* PC += off if dst < imm */
++	/* PC += off if dst <= imm */
++	/* PC += off if dst > imm (signed) */
++	/* PC += off if dst >= imm (signed) */
++	/* PC += off if dst < imm (signed) */
++	/* PC += off if dst <= imm (signed) */
++	case BPF_JMP | BPF_JEQ | BPF_K:
++	case BPF_JMP | BPF_JNE | BPF_K:
++	case BPF_JMP | BPF_JSET | BPF_K:
++	case BPF_JMP | BPF_JGT | BPF_K:
++	case BPF_JMP | BPF_JGE | BPF_K:
++	case BPF_JMP | BPF_JLT | BPF_K:
++	case BPF_JMP | BPF_JLE | BPF_K:
++	case BPF_JMP | BPF_JSGT | BPF_K:
++	case BPF_JMP | BPF_JSGE | BPF_K:
++	case BPF_JMP | BPF_JSLT | BPF_K:
++	case BPF_JMP | BPF_JSLE | BPF_K:
++		if (off == 0)
++			break;
++		setup_jmp_i(ctx, imm, 64, BPF_OP(code), off, &jmp, &rel);
++		if (valid_jmp_i(jmp, imm)) {
++			emit_jmp_i(ctx, dst, imm, rel, jmp);
++		} else {
++			/* Move large immediate to register */
++			emit_mov_i(ctx, MIPS_R_T4, imm);
++			emit_jmp_r(ctx, dst, MIPS_R_T4, rel, jmp);
++		}
++		if (finish_jmp(ctx, jmp, off) < 0)
++			goto toofar;
++		break;
++	/* PC += off */
++	case BPF_JMP | BPF_JA:
++		if (off == 0)
++			break;
++		if (emit_ja(ctx, off) < 0)
++			goto toofar;
++		break;
++	/* Tail call */
++	case BPF_JMP | BPF_TAIL_CALL:
++		if (emit_tail_call(ctx) < 0)
++			goto invalid;
++		break;
++	/* Function call */
++	case BPF_JMP | BPF_CALL:
++		if (emit_call(ctx, insn) < 0)
++			goto invalid;
++		break;
++	/* Function return */
++	case BPF_JMP | BPF_EXIT:
++		/*
++		 * Optimization: when last instruction is EXIT
++		 * simply continue to epilogue.
++		 */
++		if (ctx->bpf_index == ctx->program->len - 1)
++			break;
++		if (emit_exit(ctx) < 0)
++			goto toofar;
++		break;
++
++	default:
++invalid:
++		pr_err_once("unknown opcode %02x\n", code);
++		return -EINVAL;
++notyet:
++		pr_info_once("*** NOT YET: opcode %02x ***\n", code);
++		return -EFAULT;
++toofar:
++		pr_info_once("*** TOO FAR: jump at %u opcode %02x ***\n",
++			     ctx->bpf_index, code);
++		return -E2BIG;
++	}
++	return 0;
++}
 -- 
 2.30.2
 
