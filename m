@@ -2,54 +2,54 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 611D9C43217
-	for <bpf@archiver.kernel.org>; Tue,  5 Oct 2021 16:54:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA803C4167B
+	for <bpf@archiver.kernel.org>; Tue,  5 Oct 2021 16:54:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4CF8261163
-	for <bpf@archiver.kernel.org>; Tue,  5 Oct 2021 16:54:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CF8BC61381
+	for <bpf@archiver.kernel.org>; Tue,  5 Oct 2021 16:54:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236667AbhJEQ4U (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 5 Oct 2021 12:56:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52232 "EHLO
+        id S236700AbhJEQ4Y (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 5 Oct 2021 12:56:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236646AbhJEQ4Q (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 5 Oct 2021 12:56:16 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D37CC06174E
-        for <bpf@vger.kernel.org>; Tue,  5 Oct 2021 09:54:26 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id x7so1277960edd.6
-        for <bpf@vger.kernel.org>; Tue, 05 Oct 2021 09:54:25 -0700 (PDT)
+        with ESMTP id S236655AbhJEQ4U (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 5 Oct 2021 12:56:20 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB14FC06174E
+        for <bpf@vger.kernel.org>; Tue,  5 Oct 2021 09:54:29 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id g8so1336211edt.7
+        for <bpf@vger.kernel.org>; Tue, 05 Oct 2021 09:54:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=anyfinetworks-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=fk/QQrhvhWl250xqim6BP5LgFJXVKgL6oVVyy4HUcfw=;
-        b=G570B2PDZ3/zdJ99HDzFrC8qRpbniSiXKaCIxSgzflaXdJedTNsBuPysNIJ6MbrmQ0
-         19UNZ/YgIRWgWHzlUuCspP7P2dZ+owuCK1e78xpHQjNiqLyG/ymCnJEuxPdJfFGux7XD
-         RThWYPTuXhz2scNJbJEXcC0oMA42f88wY5qvq9ESroAbyBAbopN5PuZXILHZPQxHhWWZ
-         OwEflE3WOizjGftt1iwjW8L27MikeDVY+fdJJClueH0ismx7su7CjbQuSYzen1fIZbDG
-         XB1nmjK5iHK1GnWKR3rBi2+8jguhUX6Me8CGNf+R5VHbR6Zlg99ZswtWCiz2gPkdcH3Y
-         Dzqg==
+        bh=jZCUs6oz7uxuE4qpQlLwb6/vYygWhEpO6czCit9ehLM=;
+        b=x2XTO9o8XUh8aPibb/iAxiyqH19Jte0iwcptS0QfG1f01B/NJFOgxsNF5w3y8VfOP+
+         zehxDErShCl1/ohrxCamU4yuXU3VwGI/F1icl+XAZErqZDYC4HKI09ickHRY0beX1Voa
+         l+y1sQoLt/vc1h+aHm+rRtIj/5boQ5pwn20E07RzXroH27765bL+MLXIPzu1DgyXAASY
+         +0X5gpvj4jIYM14T2XFfyrj/sQKqoRF//ddzvCbGhWpKe+vqkydJUqqI6Tzv07/Fv8OE
+         A7MU0MG078qo2SgaEG2sdE2lYyCCrBbhlYS0mYKdwpk7jaFiARZRVyJSgmfgGS0KRlXb
+         nT2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=fk/QQrhvhWl250xqim6BP5LgFJXVKgL6oVVyy4HUcfw=;
-        b=dG8LFf7bjAyPSAav1mmdI1ZEk38kqS44L3aAtHmnlqMrTrU/giPw08ETlaisznfrMN
-         eYB1I9ff+wZHs4+37VD208QzQ7y9uvQphFJwrlEwaznzhiloZt/UxBD6QHThYRZsJ3lP
-         ByVa9Z+OyNUvs47hJEmyC7Q8PbPSogu9RcW40H+nv/UT2WaExq/pzEmpG9zBy+DNrhpL
-         eRUopW3k0WU+JZdWF1B1Qx5G3qSxqGDOC6raCgu0nqwO/l7OGZ0Uj/XWD1X/HZiMNUly
-         xTY9NKeaX6qgxJO8mKJwuHc5IgifW52TcpgN74QrAMHoU1RbYDd56l0KbD1uMi+JevIE
-         6+sw==
-X-Gm-Message-State: AOAM531y1xSexX7p3D6W7p6J6OUZf9TmB6j55XuPhpZMb8DEvXjPVtxs
-        BMT5OEHjLhJtrjpkn1e6WrGgOw==
-X-Google-Smtp-Source: ABdhPJyyPI5stv7KN0YLvTZoYccWLo7ht3abgf9z8XoF2WaCVEcyc4fBItT34ciGJddcxFarUqBXfg==
-X-Received: by 2002:a17:906:7a50:: with SMTP id i16mr15609210ejo.507.1633452864191;
-        Tue, 05 Oct 2021 09:54:24 -0700 (PDT)
+        bh=jZCUs6oz7uxuE4qpQlLwb6/vYygWhEpO6czCit9ehLM=;
+        b=HqOEGIEfw07No7s4/KEnesv+3dcaR9zx01xPxPr+ceO+EquM8Z+0D1Nxn9SFT1Y/Tj
+         HqfTGZpfQMeyj5bbjeDo69cYeGFX0WNnqdnBHzGnf7bLugKeAIR2YCX5rI2e58FqLy6f
+         bKrtWEVj7L165zrnvCCXkA+sby3t1lq9UnURTQWE/zohf4oVot8QnFPgB8l1MmlihDLv
+         5f3kZVk9A5lsfB64mdP95haaO/UOfcYHQszY0Y4Nai7mSBr1vsBTFBhTUmuIsBQrXlni
+         09yCfWQ5nIEY2Kbw8VKPwTcj065FWDrW2Buat77xEW2zRnxYYoDN2c1lzobi7R8WwSZB
+         AnEA==
+X-Gm-Message-State: AOAM531OpPZa+0kx2VZ4tDRhMuPY3HJXArM6bEaG1qS+XkuGT3Gr8ILE
+        f1FAcp/XTirIYxgWc8jdQZ0YVw==
+X-Google-Smtp-Source: ABdhPJw0lZh1jAjTAMy1L1DDIcVnOOvcPqa9FhYwTfwPI31NcVe6ac2w7cdOMcqCuD2kXLJJMZOdrA==
+X-Received: by 2002:a17:906:7c4:: with SMTP id m4mr26232268ejc.553.1633452868479;
+        Tue, 05 Oct 2021 09:54:28 -0700 (PDT)
 Received: from anpc2.lan (static-213-115-136-2.sme.telenor.se. [213.115.136.2])
-        by smtp.gmail.com with ESMTPSA id x16sm3447818ejj.8.2021.10.05.09.54.23
+        by smtp.gmail.com with ESMTPSA id x16sm3447818ejj.8.2021.10.05.09.54.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Oct 2021 09:54:23 -0700 (PDT)
+        Tue, 05 Oct 2021 09:54:28 -0700 (PDT)
 From:   Johan Almbladh <johan.almbladh@anyfinetworks.com>
 To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
         paulburton@kernel.org
@@ -60,9 +60,9 @@ Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
         tony.ambardar@gmail.com, bpf@vger.kernel.org,
         linux-mips@vger.kernel.org, netdev@vger.kernel.org,
         Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Subject: [PATCH 2/7] mips: uasm: Add workaround for Loongson-2F nop CPU errata
-Date:   Tue,  5 Oct 2021 18:54:03 +0200
-Message-Id: <20211005165408.2305108-3-johan.almbladh@anyfinetworks.com>
+Subject: [PATCH 5/7] mips: bpf: Add JIT workarounds for CPU errata
+Date:   Tue,  5 Oct 2021 18:54:06 +0200
+Message-Id: <20211005165408.2305108-6-johan.almbladh@anyfinetworks.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211005165408.2305108-1-johan.almbladh@anyfinetworks.com>
 References: <20211005165408.2305108-1-johan.almbladh@anyfinetworks.com>
@@ -72,36 +72,148 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch implements a workaround for the Loongson-2F nop in generated,
-code, if the existing option CONFIG_CPU_NOP_WORKAROUND is set. Before,
-the binutils option -mfix-loongson2f-nop was enabled, but no workaround
-was done when emitting MIPS code. Now, the nop pseudo instruction is
-emitted as "or ax,ax,zero" instead of the default "sll zero,zero,0". This
-is consistent with the workaround implemented by binutils.
+This patch adds workarounds for the following CPU errata to the MIPS
+eBPF JIT, if enabled in the kernel configuration.
 
-Link: https://sourceware.org/legacy-ml/binutils/2009-11/msg00387.html
+  - R10000 ll/sc weak ordering
+  - Loongson-3 ll/sc weak ordering
+  - Loongson-2F jump hang
+
+The Loongson-2F nop errata is implemented in uasm, which the JIT uses,
+so no additional mitigations are needed for that.
 
 Signed-off-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
 ---
- arch/mips/include/asm/uasm.h | 4 ++++
- 1 file changed, 4 insertions(+)
+ arch/mips/net/bpf_jit_comp.c   |  6 ++++--
+ arch/mips/net/bpf_jit_comp.h   | 26 +++++++++++++++++++++++++-
+ arch/mips/net/bpf_jit_comp64.c | 10 ++++++----
+ 3 files changed, 35 insertions(+), 7 deletions(-)
 
-diff --git a/arch/mips/include/asm/uasm.h b/arch/mips/include/asm/uasm.h
-index 5efa4e2dc9ab..296bcf31abb5 100644
---- a/arch/mips/include/asm/uasm.h
-+++ b/arch/mips/include/asm/uasm.h
-@@ -249,7 +249,11 @@ static inline void uasm_l##lb(struct uasm_label **lab, u32 *addr)	\
- #define uasm_i_bnezl(buf, rs, off) uasm_i_bnel(buf, rs, 0, off)
- #define uasm_i_ehb(buf) uasm_i_sll(buf, 0, 0, 3)
- #define uasm_i_move(buf, a, b) UASM_i_ADDU(buf, a, 0, b)
-+#ifdef CONFIG_CPU_NOP_WORKAROUNDS
-+#define uasm_i_nop(buf) uasm_i_or(buf, 1, 1, 0)
-+#else
- #define uasm_i_nop(buf) uasm_i_sll(buf, 0, 0, 0)
-+#endif
- #define uasm_i_ssnop(buf) uasm_i_sll(buf, 0, 0, 1)
+diff --git a/arch/mips/net/bpf_jit_comp.c b/arch/mips/net/bpf_jit_comp.c
+index 7eb95fc57710..b17130d510d4 100644
+--- a/arch/mips/net/bpf_jit_comp.c
++++ b/arch/mips/net/bpf_jit_comp.c
+@@ -404,6 +404,7 @@ void emit_alu_r(struct jit_context *ctx, u8 dst, u8 src, u8 op)
+ /* Atomic read-modify-write (32-bit) */
+ void emit_atomic_r(struct jit_context *ctx, u8 dst, u8 src, s16 off, u8 code)
+ {
++	LLSC_sync(ctx);
+ 	emit(ctx, ll, MIPS_R_T9, off, dst);
+ 	switch (code) {
+ 	case BPF_ADD:
+@@ -427,7 +428,7 @@ void emit_atomic_r(struct jit_context *ctx, u8 dst, u8 src, s16 off, u8 code)
+ 		break;
+ 	}
+ 	emit(ctx, sc, MIPS_R_T8, off, dst);
+-	emit(ctx, beqz, MIPS_R_T8, -16);
++	emit(ctx, LLSC_beqz, MIPS_R_T8, -16 - LLSC_offset);
+ 	emit(ctx, nop); /* Delay slot */
  
- static inline void uasm_i_drotr_safe(u32 **p, unsigned int a1,
+ 	if (code & BPF_FETCH) {
+@@ -439,11 +440,12 @@ void emit_atomic_r(struct jit_context *ctx, u8 dst, u8 src, s16 off, u8 code)
+ /* Atomic compare-and-exchange (32-bit) */
+ void emit_cmpxchg_r(struct jit_context *ctx, u8 dst, u8 src, u8 res, s16 off)
+ {
++	LLSC_sync(ctx);
+ 	emit(ctx, ll, MIPS_R_T9, off, dst);
+ 	emit(ctx, bne, MIPS_R_T9, res, 12);
+ 	emit(ctx, move, MIPS_R_T8, src);     /* Delay slot */
+ 	emit(ctx, sc, MIPS_R_T8, off, dst);
+-	emit(ctx, beqz, MIPS_R_T8, -20);
++	emit(ctx, LLSC_beqz, MIPS_R_T8, -20 - LLSC_offset);
+ 	emit(ctx, move, res, MIPS_R_T9);     /* Delay slot */
+ 	clobber_reg(ctx, res);
+ }
+diff --git a/arch/mips/net/bpf_jit_comp.h b/arch/mips/net/bpf_jit_comp.h
+index 44787cf377dd..6f3a7b07294b 100644
+--- a/arch/mips/net/bpf_jit_comp.h
++++ b/arch/mips/net/bpf_jit_comp.h
+@@ -87,7 +87,7 @@ struct jit_context {
+ };
+ 
+ /* Emit the instruction if the JIT memory space has been allocated */
+-#define emit(ctx, func, ...)					\
++#define __emit(ctx, func, ...)					\
+ do {								\
+ 	if ((ctx)->target != NULL) {				\
+ 		u32 *p = &(ctx)->target[ctx->jit_index];	\
+@@ -95,6 +95,30 @@ do {								\
+ 	}							\
+ 	(ctx)->jit_index++;					\
+ } while (0)
++#define emit(...) __emit(__VA_ARGS__)
++
++/* Workaround for R10000 ll/sc errata */
++#ifdef CONFIG_WAR_R10000
++#define LLSC_beqz	beqzl
++#else
++#define LLSC_beqz	beqz
++#endif
++
++/* Workaround for Loongson-3 ll/sc errata */
++#ifdef CONFIG_CPU_LOONGSON3_WORKAROUNDS
++#define LLSC_sync(ctx)	emit(ctx, sync, 0)
++#define LLSC_offset	4
++#else
++#define LLSC_sync(ctx)
++#define LLSC_offset	0
++#endif
++
++/* Workaround for Loongson-2F jump errata */
++#ifdef CONFIG_CPU_JUMP_WORKAROUNDS
++#define JALR_MASK	0xffffffffcfffffffULL
++#else
++#define JALR_MASK	(~0ULL)
++#endif
+ 
+ /*
+  * Mark a BPF register as accessed, it needs to be
+diff --git a/arch/mips/net/bpf_jit_comp64.c b/arch/mips/net/bpf_jit_comp64.c
+index ca49d3ef7ff4..1f1f7b87f213 100644
+--- a/arch/mips/net/bpf_jit_comp64.c
++++ b/arch/mips/net/bpf_jit_comp64.c
+@@ -375,6 +375,7 @@ static void emit_atomic_r64(struct jit_context *ctx,
+ 	u8 t1 = MIPS_R_T6;
+ 	u8 t2 = MIPS_R_T7;
+ 
++	LLSC_sync(ctx);
+ 	emit(ctx, lld, t1, off, dst);
+ 	switch (code) {
+ 	case BPF_ADD:
+@@ -398,7 +399,7 @@ static void emit_atomic_r64(struct jit_context *ctx,
+ 		break;
+ 	}
+ 	emit(ctx, scd, t2, off, dst);
+-	emit(ctx, beqz, t2, -16);
++	emit(ctx, LLSC_beqz, t2, -16 - LLSC_offset);
+ 	emit(ctx, nop); /* Delay slot */
+ 
+ 	if (code & BPF_FETCH) {
+@@ -414,12 +415,13 @@ static void emit_cmpxchg_r64(struct jit_context *ctx, u8 dst, u8 src, s16 off)
+ 	u8 t1 = MIPS_R_T6;
+ 	u8 t2 = MIPS_R_T7;
+ 
++	LLSC_sync(ctx);
+ 	emit(ctx, lld, t1, off, dst);
+ 	emit(ctx, bne, t1, r0, 12);
+ 	emit(ctx, move, t2, src);      /* Delay slot */
+ 	emit(ctx, scd, t2, off, dst);
+-	emit(ctx, beqz, t2, -20);
+-	emit(ctx, move, r0, t1);      /* Delay slot */
++	emit(ctx, LLSC_beqz, t2, -20 - LLSC_offset);
++	emit(ctx, move, r0, t1);       /* Delay slot */
+ 
+ 	clobber_reg(ctx, r0);
+ }
+@@ -443,7 +445,7 @@ static int emit_call(struct jit_context *ctx, const struct bpf_insn *insn)
+ 	push_regs(ctx, ctx->clobbered & JIT_CALLER_REGS, 0, 0);
+ 
+ 	/* Emit function call */
+-	emit_mov_i64(ctx, tmp, addr);
++	emit_mov_i64(ctx, tmp, addr & JALR_MASK);
+ 	emit(ctx, jalr, MIPS_R_RA, tmp);
+ 	emit(ctx, nop); /* Delay slot */
+ 
 -- 
 2.30.2
 
