@@ -2,54 +2,54 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E7CA7C433FE
-	for <bpf@archiver.kernel.org>; Tue,  5 Oct 2021 08:32:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DA29C433EF
+	for <bpf@archiver.kernel.org>; Tue,  5 Oct 2021 08:32:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CDFFC611F2
-	for <bpf@archiver.kernel.org>; Tue,  5 Oct 2021 08:32:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7FACF611F2
+	for <bpf@archiver.kernel.org>; Tue,  5 Oct 2021 08:32:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233449AbhJEIdx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 5 Oct 2021 04:33:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44862 "EHLO
+        id S233285AbhJEIea (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 5 Oct 2021 04:34:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233460AbhJEIdv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 5 Oct 2021 04:33:51 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 431FBC061755;
-        Tue,  5 Oct 2021 01:32:01 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id np13so3527450pjb.4;
-        Tue, 05 Oct 2021 01:32:01 -0700 (PDT)
+        with ESMTP id S232108AbhJEIe3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 5 Oct 2021 04:34:29 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50A1FC061745;
+        Tue,  5 Oct 2021 01:32:39 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id g14so16824395pfm.1;
+        Tue, 05 Oct 2021 01:32:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=raomSAqq/0SNS5jx0FmmwAcCbX5cgON15ayIk5USH+k=;
-        b=hbof3e598NnjQTLsseHPXr0JhjjW+mKHGxdc3ae3XF1e2LgFS+T34g41CRf6dYseEL
-         L3ZyiqTYYSXWz8CCc7rCONfPMUTb0byWzftp7MJgzWvzNJDSRHW2p/4Nz+hQusTp2bcr
-         LJbUKPgavN7rhoqSwJcfHLUWKeM/XllEPiEMvUMNlZG1ZlXJdNSvumUg6VSCoStrARYa
-         4XVzQNhLsP6rZ0tvm+Cq8UrhhyOtjIs4+ycyyfg7Znlw0EFDtg2VnGJTRc1wyPhRWLaQ
-         Uo7SVTzcRQpixrJBvsyxyS+lQAPm/Xiv9KcaYV9yzLi7YpOL2kAI7g9f2B8V/hpgukOE
-         8vvQ==
+        bh=oB80oYMulhrt43Nc7h4b8WTmJ925bEkBYiIlwoCVavE=;
+        b=LgU8mqTxrXP9w5FDf88vbtQB9pIkvHyP7Snhffc78rg77kw1jneS0Sy7xl5qFPvSpD
+         IEXqLMHsQvmL8Xh0eh5EbfhUgR06klJAs6a4bBHMTpfqktP7HfLTny/NBLAqMwXBGmC5
+         t+ROAI14vIpQpsHOH4QDgAz1e3pNCqdtzLM98HdCyrLSlfGmvk5QrmNtH8mccgCzO13I
+         Om5erayhNB9sS/ul8EcqUCkw1NwmE6crq4qIWNSIxMWF3ae7w/oFgYfGKwQCkW9oVSsW
+         HuMqyE14TgXm7+b9PMCG8kbC7flvvRWJlkYvHBpynpl+IzvK38i6WZLAGq+Rce5vKYuB
+         EWug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=raomSAqq/0SNS5jx0FmmwAcCbX5cgON15ayIk5USH+k=;
-        b=D5cGKoGCIEuaS5IaAkO0vRbDmsUBXFO3s5TA8A5cGdnjKtrzo/ULxoqSfKSjCSX5jq
-         CRZq8UzoWNZiUzufsBaJ/g1Krea5M4zB3AvbVKBdC9laNR4Y0AGS3phzyt5Hk3Ktza4M
-         d00uM9v2eZda+fJCIXiGi5hwAkG0Y6GK8wRCpBp/chd6jRLr+tAdLzszVD54eyk1DRao
-         f3xLvET95KnHqBaZlFKbWDe+/+40mL8C2wNScR0miyoCRZPZV+rNzWvwee4NXlOR4VrQ
-         SgnD+H7+G2JrYPHbICsKrAGDgL5umxykOntHn5Wh2YTBIZ6Blw71Gt3BWgj9WyexCJRX
-         9LQA==
-X-Gm-Message-State: AOAM532gMK776PLmhwWRyu6CPbfdTzexxBG0ceuC2+KCWyinAJ4J+dsJ
-        MkWUcJfVR3HQTFdSLrpQWayTBBEiIollLA==
-X-Google-Smtp-Source: ABdhPJxlNiWNVI/6/Rqd2XUpaETVGe7ea05cNnZ37AKZA9CCKX40im3MSK3H8YVsMN+CP6KLeAWewQ==
-X-Received: by 2002:a17:90b:4f88:: with SMTP id qe8mr2220996pjb.223.1633422720675;
-        Tue, 05 Oct 2021 01:32:00 -0700 (PDT)
+        bh=oB80oYMulhrt43Nc7h4b8WTmJ925bEkBYiIlwoCVavE=;
+        b=CIkjmJVk65mWiFnxsfskbvwRAhg1ehLxExzr3xDOy4R/NH9/ZPw/N9uVQs6l7+3tru
+         dY9ljidW05fcWvCpvSsN98R2H2mAYrCbNG0x/67emL9EdEz9rOM3phBk2w6zmAomKOvT
+         0JcyJ6tNk/BVpxsu2e/QuJl12Tq2162cXT6ubNowkH/rr2oQapUhV39FAq7NC6EkGpVJ
+         5k9Pyaj1GV1OxbC86utjfqVaDaFa5Y57IJ0fbyphvtvriTAmqTdfZf13lzsHGjjUyES/
+         GOD6dpXJ5AVTne6f82lphhKjWo2N3cMPPyzyazQ5XljwbCvEWzKcaj+vJ50nQAwXLwq7
+         nOrg==
+X-Gm-Message-State: AOAM5337DhUSYMp+9pH8lHfI9Wn9AVx4HS3yiHpZoRZK5V6f8CqwnH9m
+        gtW+ERX8jj2oeH1T/P3lnaE=
+X-Google-Smtp-Source: ABdhPJwadmGEPkjSjq1bvQexkQA0RWI7UEAOIDW4pkpcLRXMENbOdsYnuFGNaqU/vrA8TFzFq61suA==
+X-Received: by 2002:a05:6a00:98b:b0:44b:df34:c17b with SMTP id u11-20020a056a00098b00b0044bdf34c17bmr29657149pfg.34.1633422758941;
+        Tue, 05 Oct 2021 01:32:38 -0700 (PDT)
 Received: from localhost.localdomain ([2001:470:e92d:10:78ba:4bcc:a59a:2284])
-        by smtp.gmail.com with ESMTPSA id a15sm4941257pfg.53.2021.10.05.01.31.59
+        by smtp.gmail.com with ESMTPSA id a15sm4941257pfg.53.2021.10.05.01.32.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Oct 2021 01:32:00 -0700 (PDT)
+        Tue, 05 Oct 2021 01:32:38 -0700 (PDT)
 From:   Tony Ambardar <tony.ambardar@gmail.com>
 X-Google-Original-From: Tony Ambardar <Tony.Ambardar@gmail.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
@@ -69,9 +69,9 @@ Cc:     Tony Ambardar <Tony.Ambardar@gmail.com>, netdev@vger.kernel.org,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>
-Subject: [RFC PATCH bpf-next v2 13/16] MIPS: eBPF64: support BPF_JMP32 conditionals
-Date:   Tue,  5 Oct 2021 01:26:57 -0700
-Message-Id: <8af45dc454a5f1dcf024e9b511bb65b8600c65be.1633392335.git.Tony.Ambardar@gmail.com>
+Subject: [RFC PATCH bpf-next v2 15/16] MIPS: uasm: Enable muhu opcode for MIPS R6
+Date:   Tue,  5 Oct 2021 01:26:59 -0700
+Message-Id: <a5746ac3dc8d972d8aa3e8be7142f9449014772b.1633392335.git.Tony.Ambardar@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1633392335.git.Tony.Ambardar@gmail.com>
 References: <cover.1625970383.git.Tony.Ambardar@gmail.com> <cover.1633392335.git.Tony.Ambardar@gmail.com>
@@ -81,325 +81,73 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Simplify BPF_JGT/JLE/JSGT/JSLE and related code by dropping unneeded usage
-of MIPS_R_T8/T9 registers and jump-around branches, and extra comparison
-arithmetic. Also reorganize var declarations and add 'bpf_class' helper
-constant.
+Enable the 'muhu' instruction, complementing the existing 'mulu', needed
+to implement a MIPS32 BPF JIT.
 
-Implement BPF_JMP32 branches using sign or zero-extended temporaries as
-needed for comparisons. This enables JITing of many more BPF programs, and
-provides greater test coverage by e.g. 'test_verifier'.
+Also fix a typo in the existing definition of 'dmulu'.
 
 Signed-off-by: Tony Ambardar <Tony.Ambardar@gmail.com>
 ---
- arch/mips/net/ebpf_jit_comp64.c | 206 +++++++++++++++++++-------------
- 1 file changed, 122 insertions(+), 84 deletions(-)
+ arch/mips/include/asm/uasm.h | 1 +
+ arch/mips/mm/uasm-mips.c     | 4 +++-
+ arch/mips/mm/uasm.c          | 3 ++-
+ 3 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/arch/mips/net/ebpf_jit_comp64.c b/arch/mips/net/ebpf_jit_comp64.c
-index c38d93d37ce3..842e516ce749 100644
---- a/arch/mips/net/ebpf_jit_comp64.c
-+++ b/arch/mips/net/ebpf_jit_comp64.c
-@@ -167,12 +167,13 @@ static int gen_imm_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- int build_one_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 		   int this_idx, int exit_idx)
- {
--	int src, dst, r, td, ts, mem_off, b_off;
-+	const int bpf_class = BPF_CLASS(insn->code);
-+	const int bpf_op = BPF_OP(insn->code);
- 	bool need_swap, did_move, cmp_eq;
- 	unsigned int target = 0;
-+	int src, dst, r, td, ts;
-+	int mem_off, b_off;
- 	u64 t64;
--	s64 t64s;
--	int bpf_op = BPF_OP(insn->code);
- 
- 	switch (insn->code) {
- 	case BPF_ALU64 | BPF_ADD | BPF_K: /* ALU64_IMM */
-@@ -500,7 +501,9 @@ int build_one_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 		}
- 		break;
- 	case BPF_JMP | BPF_JEQ | BPF_K: /* JMP_IMM */
--	case BPF_JMP | BPF_JNE | BPF_K: /* JMP_IMM */
-+	case BPF_JMP | BPF_JNE | BPF_K:
-+	case BPF_JMP32 | BPF_JEQ | BPF_K: /* JMP_IMM */
-+	case BPF_JMP32 | BPF_JNE | BPF_K:
- 		cmp_eq = (bpf_op == BPF_JEQ);
- 		dst = ebpf_to_mips_reg(ctx, insn, REG_DST_FP_OK);
- 		if (dst < 0)
-@@ -511,6 +514,16 @@ int build_one_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 			gen_imm_to_reg(insn, MIPS_R_AT, ctx);
- 			src = MIPS_R_AT;
- 		}
-+		if (bpf_class == BPF_JMP32) {
-+			emit_instr(ctx, move, MIPS_R_T8, dst);
-+			emit_instr(ctx, dinsu, MIPS_R_T8, MIPS_R_ZERO, 32, 32);
-+			dst = MIPS_R_T8;
-+			if (src != MIPS_R_ZERO) {
-+				emit_instr(ctx, move, MIPS_R_T9, src);
-+				emit_instr(ctx, dinsu, MIPS_R_T9, MIPS_R_ZERO, 32, 32);
-+				src = MIPS_R_T9;
-+			}
-+		}
- 		goto jeq_common;
- 	case BPF_JMP | BPF_JEQ | BPF_X: /* JMP_REG */
- 	case BPF_JMP | BPF_JNE | BPF_X:
-@@ -523,18 +536,46 @@ int build_one_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 	case BPF_JMP | BPF_JGT | BPF_X:
- 	case BPF_JMP | BPF_JGE | BPF_X:
- 	case BPF_JMP | BPF_JSET | BPF_X:
-+	case BPF_JMP32 | BPF_JEQ | BPF_X: /* JMP_REG */
-+	case BPF_JMP32 | BPF_JNE | BPF_X:
-+	case BPF_JMP32 | BPF_JSLT | BPF_X:
-+	case BPF_JMP32 | BPF_JSLE | BPF_X:
-+	case BPF_JMP32 | BPF_JSGT | BPF_X:
-+	case BPF_JMP32 | BPF_JSGE | BPF_X:
-+	case BPF_JMP32 | BPF_JLT | BPF_X:
-+	case BPF_JMP32 | BPF_JLE | BPF_X:
-+	case BPF_JMP32 | BPF_JGT | BPF_X:
-+	case BPF_JMP32 | BPF_JGE | BPF_X:
-+	case BPF_JMP32 | BPF_JSET | BPF_X:
- 		src = ebpf_to_mips_reg(ctx, insn, REG_SRC_FP_OK);
- 		dst = ebpf_to_mips_reg(ctx, insn, REG_DST_FP_OK);
- 		if (src < 0 || dst < 0)
- 			return -EINVAL;
- 		td = get_reg_val_type(ctx, this_idx, insn->dst_reg);
- 		ts = get_reg_val_type(ctx, this_idx, insn->src_reg);
--		if (td == REG_32BIT && ts != REG_32BIT) {
--			emit_instr(ctx, sll, MIPS_R_AT, src, 0);
--			src = MIPS_R_AT;
--		} else if (ts == REG_32BIT && td != REG_32BIT) {
--			emit_instr(ctx, sll, MIPS_R_AT, dst, 0);
--			dst = MIPS_R_AT;
-+		if (bpf_class == BPF_JMP) {
-+			if (td == REG_32BIT && ts != REG_32BIT) {
-+				emit_instr(ctx, sll, MIPS_R_AT, src, 0);
-+				src = MIPS_R_AT;
-+			} else if (ts == REG_32BIT && td != REG_32BIT) {
-+				emit_instr(ctx, sll, MIPS_R_AT, dst, 0);
-+				dst = MIPS_R_AT;
-+			}
-+		} else { /* BPF_JMP32 */
-+			if (bpf_op == BPF_JSGT || bpf_op == BPF_JSLT ||
-+			    bpf_op == BPF_JSGE || bpf_op == BPF_JSLE) {
-+				emit_instr(ctx, sll, MIPS_R_T8, dst, 0);
-+				emit_instr(ctx, sll, MIPS_R_T9, src, 0);
-+				dst = MIPS_R_T8;
-+				src = MIPS_R_T9;
-+			} else {
-+				emit_instr(ctx, move, MIPS_R_T8, dst);
-+				emit_instr(ctx, move, MIPS_R_T9, src);
-+				emit_instr(ctx, dinsu, MIPS_R_T8, MIPS_R_ZERO, 32, 32);
-+				emit_instr(ctx, dinsu, MIPS_R_T9, MIPS_R_ZERO, 32, 32);
-+				dst = MIPS_R_T8;
-+				src = MIPS_R_T9;
-+			}
- 		}
- 		if (bpf_op == BPF_JSET) {
- 			emit_instr(ctx, and, MIPS_R_AT, dst, src);
-@@ -542,48 +583,20 @@ int build_one_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 			dst = MIPS_R_AT;
- 			src = MIPS_R_ZERO;
- 		} else if (bpf_op == BPF_JSGT || bpf_op == BPF_JSLE) {
--			emit_instr(ctx, dsubu, MIPS_R_AT, dst, src);
--			if ((insn + 1)->code == (BPF_JMP | BPF_EXIT) && insn->off == 1) {
--				b_off = b_imm(exit_idx, ctx);
--				if (is_bad_offset(b_off))
--					return -E2BIG;
--				if (bpf_op == BPF_JSGT)
--					emit_instr(ctx, blez, MIPS_R_AT, b_off);
--				else
--					emit_instr(ctx, bgtz, MIPS_R_AT, b_off);
--				emit_instr(ctx, nop);
--				return 2; /* We consumed the exit. */
--			}
--			b_off = b_imm(this_idx + insn->off + 1, ctx);
--			if (is_bad_offset(b_off))
--				return -E2BIG;
--			if (bpf_op == BPF_JSGT)
--				emit_instr(ctx, bgtz, MIPS_R_AT, b_off);
--			else
--				emit_instr(ctx, blez, MIPS_R_AT, b_off);
--			emit_instr(ctx, nop);
--			break;
-+			/* swap dst and src to simplify comparison */
-+			emit_instr(ctx, slt, MIPS_R_AT, src, dst);
-+			cmp_eq = bpf_op == BPF_JSLE;
-+			dst = MIPS_R_AT;
-+			src = MIPS_R_ZERO;
- 		} else if (bpf_op == BPF_JSGE || bpf_op == BPF_JSLT) {
- 			emit_instr(ctx, slt, MIPS_R_AT, dst, src);
- 			cmp_eq = bpf_op == BPF_JSGE;
- 			dst = MIPS_R_AT;
- 			src = MIPS_R_ZERO;
- 		} else if (bpf_op == BPF_JGT || bpf_op == BPF_JLE) {
--			/* dst or src could be AT */
--			emit_instr(ctx, dsubu, MIPS_R_T8, dst, src);
--			emit_instr(ctx, sltu, MIPS_R_AT, dst, src);
--			/* SP known to be non-zero, movz becomes boolean not */
--			if (MIPS_ISA_REV >= 6) {
--				emit_instr(ctx, seleqz, MIPS_R_T9,
--						MIPS_R_SP, MIPS_R_T8);
--			} else {
--				emit_instr(ctx, movz, MIPS_R_T9,
--						MIPS_R_SP, MIPS_R_T8);
--				emit_instr(ctx, movn, MIPS_R_T9,
--						MIPS_R_ZERO, MIPS_R_T8);
--			}
--			emit_instr(ctx, or, MIPS_R_AT, MIPS_R_T9, MIPS_R_AT);
--			cmp_eq = bpf_op == BPF_JGT;
-+			/* swap dst and src to simplify comparison */
-+			emit_instr(ctx, sltu, MIPS_R_AT, src, dst);
-+			cmp_eq = bpf_op == BPF_JLE;
- 			dst = MIPS_R_AT;
- 			src = MIPS_R_ZERO;
- 		} else if (bpf_op == BPF_JGE || bpf_op == BPF_JLT) {
-@@ -650,14 +663,20 @@ int build_one_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 		}
- 		break;
- 	case BPF_JMP | BPF_JSGT | BPF_K: /* JMP_IMM */
--	case BPF_JMP | BPF_JSGE | BPF_K: /* JMP_IMM */
--	case BPF_JMP | BPF_JSLT | BPF_K: /* JMP_IMM */
--	case BPF_JMP | BPF_JSLE | BPF_K: /* JMP_IMM */
--		cmp_eq = (bpf_op == BPF_JSGE);
-+	case BPF_JMP | BPF_JSGE | BPF_K:
-+	case BPF_JMP | BPF_JSLT | BPF_K:
-+	case BPF_JMP | BPF_JSLE | BPF_K:
-+	case BPF_JMP32 | BPF_JSGT | BPF_K: /* JMP_IMM */
-+	case BPF_JMP32 | BPF_JSGE | BPF_K:
-+	case BPF_JMP32 | BPF_JSLT | BPF_K:
-+	case BPF_JMP32 | BPF_JSLE | BPF_K:
- 		dst = ebpf_to_mips_reg(ctx, insn, REG_DST_FP_OK);
- 		if (dst < 0)
- 			return dst;
--
-+		if (bpf_class == BPF_JMP32) {
-+			emit_instr(ctx, sll, MIPS_R_T8, dst, 0);
-+			dst = MIPS_R_T8;
-+		}
- 		if (insn->imm == 0) {
- 			if ((insn + 1)->code == (BPF_JMP | BPF_EXIT) && insn->off == 1) {
- 				b_off = b_imm(exit_idx, ctx);
-@@ -700,26 +719,24 @@ int build_one_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 			emit_instr(ctx, nop);
- 			break;
- 		}
--		/*
--		 * only "LT" compare available, so we must use imm + 1
--		 * to generate "GT" and imm -1 to generate LE
--		 */
--		if (bpf_op == BPF_JSGT)
--			t64s = insn->imm + 1;
--		else if (bpf_op == BPF_JSLE)
--			t64s = insn->imm + 1;
--		else
--			t64s = insn->imm;
- 
--		cmp_eq = bpf_op == BPF_JSGT || bpf_op == BPF_JSGE;
--		if (t64s >= S16_MIN && t64s <= S16_MAX) {
--			emit_instr(ctx, slti, MIPS_R_AT, dst, (int)t64s);
--			src = MIPS_R_AT;
--			dst = MIPS_R_ZERO;
--			goto jeq_common;
-+		gen_imm_to_reg(insn, MIPS_R_T9, ctx);
-+		src = MIPS_R_T9;
-+		cmp_eq = bpf_op == BPF_JSLE || bpf_op == BPF_JSGE;
-+		switch (bpf_op) {
-+		case BPF_JSGE:
-+			emit_instr(ctx, slt, MIPS_R_AT, dst, src);
-+			break;
-+		case BPF_JSLT:
-+			emit_instr(ctx, slt, MIPS_R_AT, dst, src);
-+			break;
-+		case BPF_JSGT:
-+			emit_instr(ctx, slt, MIPS_R_AT, src, dst);
-+			break;
-+		case BPF_JSLE:
-+			emit_instr(ctx, slt, MIPS_R_AT, src, dst);
-+			break;
- 		}
--		emit_const_to_reg(ctx, MIPS_R_AT, (u64)t64s);
--		emit_instr(ctx, slt, MIPS_R_AT, dst, MIPS_R_AT);
- 		src = MIPS_R_AT;
- 		dst = MIPS_R_ZERO;
- 		goto jeq_common;
-@@ -728,33 +745,52 @@ int build_one_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 	case BPF_JMP | BPF_JGE | BPF_K:
- 	case BPF_JMP | BPF_JLT | BPF_K:
- 	case BPF_JMP | BPF_JLE | BPF_K:
--		cmp_eq = (bpf_op == BPF_JGE);
-+	case BPF_JMP32 | BPF_JGT | BPF_K:
-+	case BPF_JMP32 | BPF_JGE | BPF_K:
-+	case BPF_JMP32 | BPF_JLT | BPF_K:
-+	case BPF_JMP32 | BPF_JLE | BPF_K:
- 		dst = ebpf_to_mips_reg(ctx, insn, REG_DST_FP_OK);
- 		if (dst < 0)
- 			return dst;
--		/*
--		 * only "LT" compare available, so we must use imm + 1
--		 * to generate "GT" and imm -1 to generate LE
--		 */
--		if (bpf_op == BPF_JGT)
--			t64s = (u64)(u32)(insn->imm) + 1;
--		else if (bpf_op == BPF_JLE)
--			t64s = (u64)(u32)(insn->imm) + 1;
--		else
--			t64s = (u64)(u32)(insn->imm);
--
--		cmp_eq = bpf_op == BPF_JGT || bpf_op == BPF_JGE;
-+		if (bpf_class == BPF_JMP32) {
-+			emit_instr(ctx, move, MIPS_R_T8, dst);
-+			gen_zext_insn(MIPS_R_T8, true, ctx);
-+			dst = MIPS_R_T8;
-+		}
-+		gen_imm_to_reg(insn, MIPS_R_T9, ctx);
-+		if (bpf_class == BPF_JMP32 && insn->imm < 0)
-+			gen_zext_insn(MIPS_R_T9, true, ctx);
-+		src = MIPS_R_T9;
- 
--		emit_const_to_reg(ctx, MIPS_R_AT, (u64)t64s);
--		emit_instr(ctx, sltu, MIPS_R_AT, dst, MIPS_R_AT);
-+		cmp_eq = bpf_op == BPF_JLE || bpf_op == BPF_JGE;
-+		switch (bpf_op) {
-+		case BPF_JGE:
-+			emit_instr(ctx, sltu, MIPS_R_AT, dst, src);
-+			break;
-+		case BPF_JLT:
-+			emit_instr(ctx, sltu, MIPS_R_AT, dst, src);
-+			break;
-+		case BPF_JGT:
-+			emit_instr(ctx, sltu, MIPS_R_AT, src, dst);
-+			break;
-+		case BPF_JLE:
-+			emit_instr(ctx, sltu, MIPS_R_AT, src, dst);
-+			break;
-+		}
- 		src = MIPS_R_AT;
- 		dst = MIPS_R_ZERO;
- 		goto jeq_common;
- 
- 	case BPF_JMP | BPF_JSET | BPF_K: /* JMP_IMM */
-+	case BPF_JMP32 | BPF_JSET | BPF_K: /* JMP_IMM */
- 		dst = ebpf_to_mips_reg(ctx, insn, REG_DST_FP_OK);
- 		if (dst < 0)
- 			return dst;
-+		if (bpf_class == BPF_JMP32) {
-+			emit_instr(ctx, move, MIPS_R_T8, dst);
-+			emit_instr(ctx, dinsu, MIPS_R_T8, MIPS_R_ZERO, 32, 32);
-+			dst = MIPS_R_T8;
-+		}
- 
- 		if (ctx->use_bbit_insns && hweight32((u32)insn->imm) == 1) {
- 			if ((insn + 1)->code == (BPF_JMP | BPF_EXIT) && insn->off == 1) {
-@@ -774,6 +810,8 @@ int build_one_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 		}
- 		t64 = (u32)insn->imm;
- 		emit_const_to_reg(ctx, MIPS_R_AT, t64);
-+		if (bpf_class == BPF_JMP32)
-+			emit_instr(ctx, dinsu, MIPS_R_AT, MIPS_R_ZERO, 32, 32);
- 		emit_instr(ctx, and, MIPS_R_AT, dst, MIPS_R_AT);
- 		src = MIPS_R_AT;
- 		dst = MIPS_R_ZERO;
+diff --git a/arch/mips/include/asm/uasm.h b/arch/mips/include/asm/uasm.h
+index f7effca791a5..5efa4e2dc9ab 100644
+--- a/arch/mips/include/asm/uasm.h
++++ b/arch/mips/include/asm/uasm.h
+@@ -145,6 +145,7 @@ Ip_u1(_mtlo);
+ Ip_u3u1u2(_mul);
+ Ip_u1u2(_multu);
+ Ip_u3u1u2(_mulu);
++Ip_u3u1u2(_muhu);
+ Ip_u3u1u2(_nor);
+ Ip_u3u1u2(_or);
+ Ip_u2u1u3(_ori);
+diff --git a/arch/mips/mm/uasm-mips.c b/arch/mips/mm/uasm-mips.c
+index 7154a1d99aad..e15c6700cd08 100644
+--- a/arch/mips/mm/uasm-mips.c
++++ b/arch/mips/mm/uasm-mips.c
+@@ -90,7 +90,7 @@ static const struct insn insn_table[insn_invalid] = {
+ 				RS | RT | RD},
+ 	[insn_dmtc0]	= {M(cop0_op, dmtc_op, 0, 0, 0, 0), RT | RD | SET},
+ 	[insn_dmultu]	= {M(spec_op, 0, 0, 0, 0, dmultu_op), RS | RT},
+-	[insn_dmulu]	= {M(spec_op, 0, 0, 0, dmult_dmul_op, dmultu_op),
++	[insn_dmulu]	= {M(spec_op, 0, 0, 0, dmultu_dmulu_op, dmultu_op),
+ 				RS | RT | RD},
+ 	[insn_drotr]	= {M(spec_op, 1, 0, 0, 0, dsrl_op), RT | RD | RE},
+ 	[insn_drotr32]	= {M(spec_op, 1, 0, 0, 0, dsrl32_op), RT | RD | RE},
+@@ -150,6 +150,8 @@ static const struct insn insn_table[insn_invalid] = {
+ 	[insn_mtlo]	= {M(spec_op, 0, 0, 0, 0, mtlo_op), RS},
+ 	[insn_mulu]	= {M(spec_op, 0, 0, 0, multu_mulu_op, multu_op),
+ 				RS | RT | RD},
++	[insn_muhu]	= {M(spec_op, 0, 0, 0, multu_muhu_op, multu_op),
++				RS | RT | RD},
+ #ifndef CONFIG_CPU_MIPSR6
+ 	[insn_mul]	= {M(spec2_op, 0, 0, 0, 0, mul_op), RS | RT | RD},
+ #else
+diff --git a/arch/mips/mm/uasm.c b/arch/mips/mm/uasm.c
+index 81dd226d6b6b..125140979d62 100644
+--- a/arch/mips/mm/uasm.c
++++ b/arch/mips/mm/uasm.c
+@@ -59,7 +59,7 @@ enum opcode {
+ 	insn_lddir, insn_ldpte, insn_ldx, insn_lh, insn_lhu, insn_ll, insn_lld,
+ 	insn_lui, insn_lw, insn_lwu, insn_lwx, insn_mfc0, insn_mfhc0, insn_mfhi,
+ 	insn_mflo, insn_modu, insn_movn, insn_movz, insn_mtc0, insn_mthc0,
+-	insn_mthi, insn_mtlo, insn_mul, insn_multu, insn_mulu, insn_nor,
++	insn_mthi, insn_mtlo, insn_mul, insn_multu, insn_mulu, insn_muhu, insn_nor,
+ 	insn_or, insn_ori, insn_pref, insn_rfe, insn_rotr, insn_sb, insn_sc,
+ 	insn_scd, insn_seleqz, insn_selnez, insn_sd, insn_sh, insn_sll,
+ 	insn_sllv, insn_slt, insn_slti, insn_sltiu, insn_sltu, insn_sra,
+@@ -344,6 +344,7 @@ I_u1(_mtlo)
+ I_u3u1u2(_mul)
+ I_u1u2(_multu)
+ I_u3u1u2(_mulu)
++I_u3u1u2(_muhu)
+ I_u3u1u2(_nor)
+ I_u3u1u2(_or)
+ I_u2u1u3(_ori)
 -- 
 2.25.1
 
